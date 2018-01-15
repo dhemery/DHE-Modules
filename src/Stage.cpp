@@ -1,4 +1,5 @@
 #include "DHEModules.hpp"
+#include "dsp/digital.hpp"
 
 #define H_KNOB 27
 #define V_KNOB_SPACING 55
@@ -15,48 +16,72 @@
 #define H_PORT_LEFT 13
 #define H_PORT_RIGHT (H_PORT_LEFT + H_PORT_SPACING)
 
+#define MAX_DURATION 10.0
+
 struct Stage : Module {
 	enum ParamIds {
 		TIME_PARAM,
+    SUSTAIN_PARAM,
     CURVE_PARAM,
-    END_PARAM,
 		NUM_PARAMS
 	};
 	enum InputIds {
-    IN_INPUT,
-    OVERRIDE_INPUT,
-    TRIGGER_INPUT,
+    E_IN,
+    T_IN,
+    G_IN,
 		NUM_INPUTS
 	};
 	enum OutputIds {
-    OUT_OUTPUT,
-    EOC_OUTPUT,
-    ACTIVE_OUTPUT,
+    E_OUT,
+    T_OUT,
+    G_OUT,
 		NUM_OUTPUTS
 	};
 	enum LightIds {
 		NUM_LIGHTS
 	};
 
-	float phase = 0.0;
-	float blinkPhase = 0.0;
-
-	Stage() : Module(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS) {}
+	Stage() : Module(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS) {
+    trigger.setThresholds(0.0, 1.0);
+  }
 	void step() override;
 
-	// For more advanced Module features, read Rack's engine.hpp header file
-	// - toJson, fromJson: serialization of internal data
-	// - onSampleRateChange: event triggered by a change of sample rate
-	// - onReset, onRandomize, onCreate, onDelete: implements special behavior when user clicks these from the context menu
+  SchmittTrigger trigger;
+  bool running = false;
+  bool passingThru = false;
+  float envelope = 0.0;
+  int remainingSteps = 0;
+  float out = 0.0;
+  float delta = 0.0;
 };
 
-
 void Stage::step() {
-  outputs[OUT_OUTPUT].value = params[TIME_PARAM].value;
-  outputs[EOC_OUTPUT].value = params[CURVE_PARAM].value;
-  outputs[ACTIVE_OUTPUT].value = params[END_PARAM].value;
-}
+  float sustain = params[SUSTAIN_PARAM].value;
+  float envelopeIn = inputs[E_IN].value;
+  passingThru = inputs[G_IN].value > 1.0;
 
+  if(!running && trigger.process(inputs[T_IN].value)) {
+    running = true;
+    remainingSteps = params[TIME_PARAM].value * engineGetSampleRate();
+    envelope = envelopeIn;
+    delta = (sustain - envelope) / (float) remainingSteps;
+  }
+
+  if(remainingSteps > 0) {
+    remainingSteps--;
+    envelope += delta;
+  } else {
+    envelope = sustain;
+    running = false;
+  }
+
+  out = passingThru ? envelopeIn : envelope;
+  bool active = passingThru || running;
+
+  outputs[E_OUT].value = out;
+  outputs[T_OUT].value = !active ? 5.0 : -5.0;
+  outputs[G_OUT].value = active ? 5.0 : -5.0;
+}
 
 StageWidget::StageWidget() {
 	Stage *module = new Stage();
@@ -76,14 +101,15 @@ StageWidget::StageWidget() {
 	addChild(createScrew<ScrewSilver>(Vec(box.size.x - 2 * RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
 
   addParam(createParam<RoundBlackKnob>(Vec(H_KNOB, V_KNOB_TOP), module, Stage::TIME_PARAM, 0, 10.0, 0.0));
-  addParam(createParam<RoundBlackKnob>(Vec(H_KNOB, V_KNOB_MIDDLE), module, Stage::CURVE_PARAM, -3.0, 3.0, 0.0));
-  addParam(createParam<RoundBlackKnob>(Vec(H_KNOB, V_KNOB_BOTTOM), module, Stage::END_PARAM, -5.0, 5.0, 0.0));
+  addParam(createParam<RoundBlackKnob>(Vec(H_KNOB, V_KNOB_MIDDLE), module, Stage::SUSTAIN_PARAM, -5.0, 5.0, 0.0));
+  addParam(createParam<RoundBlackKnob>(Vec(H_KNOB, V_KNOB_BOTTOM), module, Stage::CURVE_PARAM, -3.0, 3.0, 0.0));
 
-  addInput(createInput<PJ301MPort>(Vec(H_PORT_LEFT, V_PORT_TOP), module, Stage::OVERRIDE_INPUT));
-  addInput(createInput<PJ301MPort>(Vec(H_PORT_LEFT, V_PORT_MIDDLE), module, Stage::TRIGGER_INPUT));
-  addInput(createInput<PJ301MPort>(Vec(H_PORT_LEFT, V_PORT_BOTTOM), module, Stage::IN_INPUT));
 
-  addOutput(createOutput<PJ301MPort>(Vec(H_PORT_RIGHT, V_PORT_TOP), module, Stage::ACTIVE_OUTPUT));
-  addOutput(createOutput<PJ301MPort>(Vec(H_PORT_RIGHT, V_PORT_MIDDLE), module, Stage::EOC_OUTPUT));
-  addOutput(createOutput<PJ301MPort>(Vec(H_PORT_RIGHT, V_PORT_BOTTOM), module, Stage::OUT_OUTPUT));
+  addInput(createInput<PJ301MPort>(Vec(H_PORT_LEFT, V_PORT_TOP), module, Stage::E_IN));
+  addInput(createInput<PJ301MPort>(Vec(H_PORT_LEFT, V_PORT_MIDDLE), module, Stage::T_IN));
+  addInput(createInput<PJ301MPort>(Vec(H_PORT_LEFT, V_PORT_BOTTOM), module,Stage::G_IN));
+
+  addOutput(createOutput<PJ301MPort>(Vec(H_PORT_RIGHT, V_PORT_TOP), module, Stage::E_OUT));
+  addOutput(createOutput<PJ301MPort>(Vec(H_PORT_RIGHT, V_PORT_MIDDLE), module, Stage::T_OUT));
+  addOutput(createOutput<PJ301MPort>(Vec(H_PORT_RIGHT, V_PORT_BOTTOM), module, Stage::G_OUT));
 }
