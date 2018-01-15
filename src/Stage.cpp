@@ -1,7 +1,13 @@
 #include "DHEModules.hpp"
 
-#define V_PORT_SPACING 40
-#define V_PORT_TOP 235
+#define H_KNOB 27
+#define V_KNOB_SPACING 55
+#define V_KNOB_TOP 57
+#define V_KNOB_MIDDLE (V_KNOB_TOP + V_KNOB_SPACING)
+#define V_KNOB_BOTTOM (V_KNOB_MIDDLE + V_KNOB_SPACING)
+
+#define V_PORT_SPACING 43
+#define V_PORT_TOP 234
 #define V_PORT_MIDDLE (V_PORT_TOP + V_PORT_SPACING)
 #define V_PORT_BOTTOM (V_PORT_MIDDLE + V_PORT_SPACING)
 
@@ -69,9 +75,9 @@ StageWidget::StageWidget() {
 	addChild(createScrew<ScrewSilver>(Vec(RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
 	addChild(createScrew<ScrewSilver>(Vec(box.size.x - 2 * RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
 
-  addParam(createParam<RoundBlackKnob>(Vec(28, 57), module, Stage::TIME_PARAM, 0, 10.0, 0.0));
-  addParam(createParam<RoundBlackKnob>(Vec(28, 97), module, Stage::CURVE_PARAM, -3.0, 3.0, 0.0));
-  addParam(createParam<RoundBlackKnob>(Vec(28, 137), module, Stage::END_PARAM, -5.0, 5.0, 0.0));
+  addParam(createParam<RoundBlackKnob>(Vec(H_KNOB, V_KNOB_TOP), module, Stage::TIME_PARAM, 0, 10.0, 0.0));
+  addParam(createParam<RoundBlackKnob>(Vec(H_KNOB, V_KNOB_MIDDLE), module, Stage::CURVE_PARAM, -3.0, 3.0, 0.0));
+  addParam(createParam<RoundBlackKnob>(Vec(H_KNOB, V_KNOB_BOTTOM), module, Stage::END_PARAM, -5.0, 5.0, 0.0));
 
   addInput(createInput<PJ301MPort>(Vec(H_PORT_LEFT, V_PORT_TOP), module, Stage::OVERRIDE_INPUT));
   addInput(createInput<PJ301MPort>(Vec(H_PORT_LEFT, V_PORT_MIDDLE), module, Stage::TRIGGER_INPUT));
