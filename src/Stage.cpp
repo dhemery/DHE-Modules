@@ -73,7 +73,7 @@ void Stage::step() {
   float passingThru = inputs[PASSTHROUGH_GATE_IN].value > 1.0;
 
   if(ramp.running()) {
-    float duration = powf(1.0 - params[RATE_PARAM].value, DURATION_CURVE_EXPONENT) * DURATION_SCALE;
+    float duration = powf(params[RATE_PARAM].value, DURATION_CURVE_EXPONENT) * DURATION_SCALE;
     ramp.step(duration);
     if(!ramp.running()) eocPulse.trigger(END_OF_CYCLE_PULSE_LENGTH);
   } else if (trigger.process(inputs[TRIGGER_IN].value)) {
@@ -93,7 +93,7 @@ void Stage::step() {
 float Stage::envelopeValue() {
   float envelopeScale = params[LEVEL_PARAM].value - envelopeOffset;
   float curve = params[CURVE_PARAM].value;
-  float curvature = curve > 0.0 ? 1.0 / (curve + 1) : 1 - curve;
+  float curvature = curve < 0.0 ? -1.0 / (curve - 1.0) : curve + 1.0;
   return powf(ramp.value, curvature) * envelopeScale + envelopeOffset;
 }
 
