@@ -12,6 +12,8 @@
 #define RATE_KNOB_MAX 0.88913970
 #define RATE_KNOB_MIN (1.0-RATE_KNOB_MAX)
 
+#define CURVE_MAX 4.0
+
 #define PULSE_TIME 0.005
 
 struct Ramp {
@@ -58,6 +60,7 @@ struct Stage : Module {
     trigger.setThresholds(0.0, 1.0);
   }
 	void step() override;
+  float envelopeValue();
 
   Ramp ramp;
   SchmittTrigger trigger;
@@ -78,13 +81,25 @@ void Stage::step() {
     ramp.start();
   }
 
-  float envelopeScale = params[LEVEL_PARAM].value - envelopeOffset;
-  float out = passingThru ? envelopeIn : ramp.value * envelopeScale + envelopeOffset;
+  float out = passingThru ? envelopeIn : envelopeValue();
   bool active = passingThru || ramp.running();
 
   outputs[ENVELOPE_OUT].value = out;
   outputs[END_OF_CYCLE_TRIGGER_OUT].value = eocPulse.process(1.0/engineGetSampleRate());
   outputs[ACTIVE_GATE_OUT].value = active ? 5.0 : -5.0;
+}
+
+float Stage::envelopeValue() {
+  float envelopeScale = params[LEVEL_PARAM].value - envelopeOffset;
+  float envelopeExponent;
+  float curve = -params[CURVE_PARAM].value;
+  if(curve < 0.0) {
+    envelopeExponent = -1.0 / (curve - 1);
+  }
+  else {
+    envelopeExponent = curve + 1;
+  }
+  return powf(ramp.value, envelopeExponent) * envelopeScale + envelopeOffset;
 }
 
 #define ROGAN_P3_KNOB_SIZE 34.3
@@ -138,7 +153,7 @@ StageWidget::StageWidget() {
 
   addParam(createParam<RoundBlackKnob>(Vec(H_KNOB, V_KNOB_TOP), module, Stage::RATE_PARAM, RATE_KNOB_MIN, RATE_KNOB_MAX, 0.5));
   addParam(createParam<RoundBlackKnob>(Vec(H_KNOB, V_KNOB_MIDDLE), module, Stage::LEVEL_PARAM, -5.0, 5.0, 0.0));
-  addParam(createParam<RoundBlackKnob>(Vec(H_KNOB, V_KNOB_BOTTOM), module, Stage::CURVE_PARAM, -3.0, 3.0, 0.0));
+  addParam(createParam<RoundBlackKnob>(Vec(H_KNOB, V_KNOB_BOTTOM), module, Stage::CURVE_PARAM, -(CURVE_MAX), CURVE_MAX, 0.0));
 
   addInput(createInput<PJ301MPort>(Vec(H_PORT_LEFT, V_PORT_TOP), module, Stage::ENVELOPE_IN));
   addInput(createInput<PJ301MPort>(Vec(H_PORT_LEFT, V_PORT_MIDDLE), module, Stage::TRIGGER_IN));
