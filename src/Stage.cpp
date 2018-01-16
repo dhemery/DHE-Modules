@@ -1,26 +1,38 @@
 #include "DHEModules.hpp"
 #include "dsp/digital.hpp"
+#include "util.hpp"
 
-#define H_KNOB 27
-#define V_KNOB_SPACING 55
-#define V_KNOB_TOP 57
-#define V_KNOB_MIDDLE (V_KNOB_TOP + V_KNOB_SPACING)
-#define V_KNOB_BOTTOM (V_KNOB_MIDDLE + V_KNOB_SPACING)
+// TODO: Switch for slow, medium, and fast ramp speed
+// These constants yield ramp durations of:
+//    knob fully ccw  : .002417s
+//    knob dead center: 1s
+//    knob fully cw   : 10s
+#define DURATION_CURVE_EXPONENT 4.0
+#define DURATION_SCALE 16.0
+#define DURATION_KNOB_MAX 0.88913970
+#define DURATION_KNOB_MIN (1.0-DURATION_KNOB_MAX)
 
-#define V_PORT_SPACING 43
-#define V_PORT_TOP 234
-#define V_PORT_MIDDLE (V_PORT_TOP + V_PORT_SPACING)
-#define V_PORT_BOTTOM (V_PORT_MIDDLE + V_PORT_SPACING)
+struct Ramp {
+  float delta = 0.00001;
+  float value = 1.0;
 
-#define H_PORT_SPACING 38
-#define H_PORT_LEFT 13
-#define H_PORT_RIGHT (H_PORT_LEFT + H_PORT_SPACING)
+  void start(float duration) {
+    value = 0.0;
+    delta = 0.5 / (duration * engineGetSampleRate());
+  }
 
-#define MAX_DURATION 10.0
+  void step() {
+    value = clampf(value + delta, 0.0, 1.0);
+  }
+
+  bool running() {
+    return value < 1.0;
+  }
+};
 
 struct Stage : Module {
 	enum ParamIds {
-		TIME_PARAM,
+		DURATION_PARAM,
     SUSTAIN_PARAM,
     CURVE_PARAM,
 		NUM_PARAMS
@@ -46,42 +58,47 @@ struct Stage : Module {
   }
 	void step() override;
 
+  Ramp ramp;
   SchmittTrigger trigger;
-  bool running = false;
-  bool passingThru = false;
-  float envelope = 0.0;
-  int remainingSteps = 0;
-  float out = 0.0;
-  float delta = 0.0;
+  float envelopeOffset;
+  float envelopeScale;
 };
 
 void Stage::step() {
-  float sustain = params[SUSTAIN_PARAM].value;
   float envelopeIn = inputs[E_IN].value;
-  passingThru = inputs[G_IN].value > 1.0;
+  float passingThru = inputs[G_IN].value > 1.0;
 
-  if(!running && trigger.process(inputs[T_IN].value)) {
-    running = true;
-    remainingSteps = params[TIME_PARAM].value * engineGetSampleRate();
-    envelope = envelopeIn;
-    delta = (sustain - envelope) / (float) remainingSteps;
+  if(ramp.running()) {
+    ramp.step();
+  } else if (trigger.process(inputs[T_IN].value)) {
+    float duration = powf(params[DURATION_PARAM].value, DURATION_CURVE_EXPONENT) * DURATION_SCALE;
+    ramp.start(duration);
+    envelopeOffset = envelopeIn;
+    envelopeScale = params[SUSTAIN_PARAM].value - envelopeOffset;
   }
 
-  if(remainingSteps > 0) {
-    remainingSteps--;
-    envelope += delta;
-  } else {
-    envelope = sustain;
-    running = false;
-  }
-
-  out = passingThru ? envelopeIn : envelope;
-  bool active = passingThru || running;
+  float out = passingThru ? envelopeIn : ramp.value * envelopeScale + envelopeOffset;
+  bool active = passingThru || ramp.running();
 
   outputs[E_OUT].value = out;
   outputs[T_OUT].value = !active ? 5.0 : -5.0;
   outputs[G_OUT].value = active ? 5.0 : -5.0;
 }
+
+#define H_KNOB 27
+#define V_KNOB_SPACING 55
+#define V_KNOB_TOP 57
+#define V_KNOB_MIDDLE (V_KNOB_TOP + V_KNOB_SPACING)
+#define V_KNOB_BOTTOM (V_KNOB_MIDDLE + V_KNOB_SPACING)
+
+#define V_PORT_SPACING 43
+#define V_PORT_TOP 234
+#define V_PORT_MIDDLE (V_PORT_TOP + V_PORT_SPACING)
+#define V_PORT_BOTTOM (V_PORT_MIDDLE + V_PORT_SPACING)
+
+#define H_PORT_SPACING 38
+#define H_PORT_LEFT 13
+#define H_PORT_RIGHT (H_PORT_LEFT + H_PORT_SPACING)
 
 StageWidget::StageWidget() {
 	Stage *module = new Stage();
@@ -100,7 +117,7 @@ StageWidget::StageWidget() {
 	addChild(createScrew<ScrewSilver>(Vec(RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
 	addChild(createScrew<ScrewSilver>(Vec(box.size.x - 2 * RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
 
-  addParam(createParam<RoundBlackKnob>(Vec(H_KNOB, V_KNOB_TOP), module, Stage::TIME_PARAM, 0, 10.0, 0.0));
+  addParam(createParam<RoundBlackKnob>(Vec(H_KNOB, V_KNOB_TOP), module, Stage::DURATION_PARAM, DURATION_KNOB_MIN, DURATION_KNOB_MAX, 0.5));
   addParam(createParam<RoundBlackKnob>(Vec(H_KNOB, V_KNOB_MIDDLE), module, Stage::SUSTAIN_PARAM, -5.0, 5.0, 0.0));
   addParam(createParam<RoundBlackKnob>(Vec(H_KNOB, V_KNOB_BOTTOM), module, Stage::CURVE_PARAM, -3.0, 3.0, 0.0));
 
