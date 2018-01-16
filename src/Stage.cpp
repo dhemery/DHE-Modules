@@ -39,15 +39,15 @@ struct Stage : Module {
 		NUM_PARAMS
 	};
 	enum InputIds {
-    E_IN,
-    T_IN,
-    G_IN,
+    ENVELOPE_IN,
+    TRIGGER_IN,
+    PASSTHROUGH_GATE_IN,
 		NUM_INPUTS
 	};
 	enum OutputIds {
-    E_OUT,
-    T_OUT,
-    G_OUT,
+    ENVELOPE_OUT,
+    END_OF_CYCLE_TRIGGER_OUT,
+    ACTIVE_GATE_OUT,
 		NUM_OUTPUTS
 	};
 	enum LightIds {
@@ -63,18 +63,17 @@ struct Stage : Module {
   SchmittTrigger trigger;
   PulseGenerator eocPulse;
   float envelopeOffset;
-  float envelopeScale;
 };
 
 void Stage::step() {
-  float envelopeIn = inputs[E_IN].value;
-  float passingThru = inputs[G_IN].value > 1.0;
+  float envelopeIn = inputs[ENVELOPE_IN].value;
+  float passingThru = inputs[PASSTHROUGH_GATE_IN].value > 1.0;
 
   if(ramp.running()) {
     float duration = powf(1.0 - params[RATE_PARAM].value, DURATION_CURVE_EXPONENT) * DURATION_SCALE;
     ramp.step(duration);
     if(!ramp.running()) eocPulse.trigger(PULSE_TIME);
-  } else if (trigger.process(inputs[T_IN].value)) {
+  } else if (trigger.process(inputs[TRIGGER_IN].value)) {
     envelopeOffset = envelopeIn;
     ramp.start();
   }
@@ -83,9 +82,9 @@ void Stage::step() {
   float out = passingThru ? envelopeIn : ramp.value * envelopeScale + envelopeOffset;
   bool active = passingThru || ramp.running();
 
-  outputs[E_OUT].value = out;
-  outputs[T_OUT].value = eocPulse.process(1.0/engineGetSampleRate());
-  outputs[G_OUT].value = active ? 5.0 : -5.0;
+  outputs[ENVELOPE_OUT].value = out;
+  outputs[END_OF_CYCLE_TRIGGER_OUT].value = eocPulse.process(1.0/engineGetSampleRate());
+  outputs[ACTIVE_GATE_OUT].value = active ? 5.0 : -5.0;
 }
 
 #define WIDGET_HP 6
@@ -102,9 +101,9 @@ void Stage::step() {
 #define V_PORT_BOTTOM (V_PORT_MIDDLE + V_PORT_SPACING)
 
 #define PORT_WIDTH 23.0
-#define H_PORT_INSET 25.0
-#define H_PORT_LEFT (H_PORT_INSET-PORT_WIDTH/2.0)
-#define H_PORT_RIGHT (WIDGET_WIDTH-H_PORT_INSET-PORT_WIDTH/2.0)
+#define H_PORTRIGGERSET 25.0
+#define H_PORT_LEFT (H_PORTRIGGERSET-PORT_WIDTH/2.0)
+#define H_PORT_RIGHT (WIDGET_WIDTH-H_PORTRIGGERSET-PORT_WIDTH/2.0)
 
 StageWidget::StageWidget() {
 	Stage *module = new Stage();
@@ -137,12 +136,11 @@ StageWidget::StageWidget() {
   addParam(createParam<RoundBlackKnob>(Vec(H_KNOB, V_KNOB_MIDDLE), module, Stage::LEVEL_PARAM, -5.0, 5.0, 0.0));
   addParam(createParam<RoundBlackKnob>(Vec(H_KNOB, V_KNOB_BOTTOM), module, Stage::CURVE_PARAM, -3.0, 3.0, 0.0));
 
+  addInput(createInput<PJ301MPort>(Vec(H_PORT_LEFT, V_PORT_TOP), module, Stage::ENVELOPE_IN));
+  addInput(createInput<PJ301MPort>(Vec(H_PORT_LEFT, V_PORT_MIDDLE), module, Stage::TRIGGER_IN));
+  addInput(createInput<PJ301MPort>(Vec(H_PORT_LEFT, V_PORT_BOTTOM), module,Stage::PASSTHROUGH_GATE_IN));
 
-  addInput(createInput<PJ301MPort>(Vec(H_PORT_LEFT, V_PORT_TOP), module, Stage::E_IN));
-  addInput(createInput<PJ301MPort>(Vec(H_PORT_LEFT, V_PORT_MIDDLE), module, Stage::T_IN));
-  addInput(createInput<PJ301MPort>(Vec(H_PORT_LEFT, V_PORT_BOTTOM), module,Stage::G_IN));
-
-  addOutput(createOutput<PJ301MPort>(Vec(H_PORT_RIGHT, V_PORT_TOP), module, Stage::E_OUT));
-  addOutput(createOutput<PJ301MPort>(Vec(H_PORT_RIGHT, V_PORT_MIDDLE), module, Stage::T_OUT));
-  addOutput(createOutput<PJ301MPort>(Vec(H_PORT_RIGHT, V_PORT_BOTTOM), module, Stage::G_OUT));
+  addOutput(createOutput<PJ301MPort>(Vec(H_PORT_RIGHT, V_PORT_TOP), module, Stage::ENVELOPE_OUT));
+  addOutput(createOutput<PJ301MPort>(Vec(H_PORT_RIGHT, V_PORT_MIDDLE), module, Stage::END_OF_CYCLE_TRIGGER_OUT));
+  addOutput(createOutput<PJ301MPort>(Vec(H_PORT_RIGHT, V_PORT_BOTTOM), module, Stage::ACTIVE_GATE_OUT));
 }
