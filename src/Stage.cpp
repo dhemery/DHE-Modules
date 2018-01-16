@@ -13,15 +13,14 @@
 #define DURATION_KNOB_MIN (1.0-DURATION_KNOB_MAX)
 
 struct Ramp {
-  float delta = 0.00001;
   float value = 1.0;
 
-  void start(float duration) {
+  void start() {
     value = 0.0;
-    delta = 0.5 / (duration * engineGetSampleRate());
   }
 
-  void step() {
+  void step(float duration) {
+    float delta = 0.5 / (duration * engineGetSampleRate());
     value = clampf(value + delta, 0.0, 1.0);
   }
 
@@ -69,14 +68,14 @@ void Stage::step() {
   float passingThru = inputs[G_IN].value > 1.0;
 
   if(ramp.running()) {
-    ramp.step();
-  } else if (trigger.process(inputs[T_IN].value)) {
     float duration = powf(params[DURATION_PARAM].value, DURATION_CURVE_EXPONENT) * DURATION_SCALE;
-    ramp.start(duration);
+    ramp.step(duration);
+  } else if (trigger.process(inputs[T_IN].value)) {
     envelopeOffset = envelopeIn;
-    envelopeScale = params[SUSTAIN_PARAM].value - envelopeOffset;
+    ramp.start();
   }
 
+  float envelopeScale = params[SUSTAIN_PARAM].value - envelopeOffset;
   float out = passingThru ? envelopeIn : ramp.value * envelopeScale + envelopeOffset;
   bool active = passingThru || ramp.running();
 
