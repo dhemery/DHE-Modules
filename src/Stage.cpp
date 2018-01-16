@@ -84,7 +84,9 @@ void Stage::step() {
   outputs[G_OUT].value = active ? 5.0 : -5.0;
 }
 
-#define H_KNOB 27
+#define WIDGET_HP 6
+#define WIDGET_WIDTH (WIDGET_HP * RACK_GRID_WIDTH)
+#define H_KNOB 26
 #define V_KNOB_SPACING 55
 #define V_KNOB_TOP 57
 #define V_KNOB_MIDDLE (V_KNOB_TOP + V_KNOB_SPACING)
@@ -95,14 +97,15 @@ void Stage::step() {
 #define V_PORT_MIDDLE (V_PORT_TOP + V_PORT_SPACING)
 #define V_PORT_BOTTOM (V_PORT_MIDDLE + V_PORT_SPACING)
 
-#define H_PORT_SPACING 38
-#define H_PORT_LEFT 13
-#define H_PORT_RIGHT (H_PORT_LEFT + H_PORT_SPACING)
+#define PORT_WIDTH 23.0
+#define H_PORT_INSET 25.0
+#define H_PORT_LEFT (H_PORT_INSET-PORT_WIDTH/2.0)
+#define H_PORT_RIGHT (WIDGET_WIDTH-H_PORT_INSET-PORT_WIDTH/2.0)
 
 StageWidget::StageWidget() {
 	Stage *module = new Stage();
 	setModule(module);
-	box.size = Vec(6 * RACK_GRID_WIDTH, RACK_GRID_HEIGHT);
+	box.size = Vec(WIDGET_WIDTH, RACK_GRID_HEIGHT);
 
 	{
 		SVGPanel *panel = new SVGPanel();
@@ -113,7 +116,7 @@ StageWidget::StageWidget() {
 
 	addChild(createScrew<ScrewSilver>(Vec(RACK_GRID_WIDTH, 0)));
 	addChild(createScrew<ScrewSilver>(Vec(box.size.x - 2 * RACK_GRID_WIDTH, 0)));
-	addChild(createScrew<ScrewSilver>(Vec(RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
+	addChild(createScrew<ScrewBlack>(Vec(RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
 	addChild(createScrew<ScrewSilver>(Vec(box.size.x - 2 * RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
 
   addParam(createParam<RoundBlackKnob>(Vec(H_KNOB, V_KNOB_TOP), module, Stage::RATE_PARAM, RATE_KNOB_MIN, RATE_KNOB_MAX, 0.5));
