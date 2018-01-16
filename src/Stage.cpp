@@ -69,7 +69,7 @@ struct Stage : Module {
 };
 
 void Stage::step() {
-  float envelopeIn = inputs[ENVELOPE_IN].value;
+  float envelopeIn = clampf(inputs[ENVELOPE_IN].value, 0.0, 10.0);
   float passingThru = inputs[PASSTHROUGH_GATE_IN].value > 1.0;
 
   if(ramp.running()) {
@@ -147,7 +147,7 @@ StageWidget::StageWidget() {
   }
 
   addParam(createParam<RoundBlackKnob>(Vec(H_KNOB, V_KNOB_TOP), module, Stage::RATE_PARAM, RATE_KNOB_MIN, RATE_KNOB_MAX, 0.5));
-  addParam(createParam<RoundBlackKnob>(Vec(H_KNOB, V_KNOB_MIDDLE), module, Stage::LEVEL_PARAM, -5.0, 5.0, 0.0));
+  addParam(createParam<RoundBlackKnob>(Vec(H_KNOB, V_KNOB_MIDDLE), module, Stage::LEVEL_PARAM, -0.0, 10.0, 0.0));
   addParam(createParam<RoundBlackKnob>(Vec(H_KNOB, V_KNOB_BOTTOM), module, Stage::CURVE_PARAM, -(CURVE_MAX), CURVE_MAX, 0.0));
 
   addInput(createInput<PJ301MPort>(Vec(H_PORT_LEFT, V_PORT_TOP), module, Stage::ENVELOPE_IN));
