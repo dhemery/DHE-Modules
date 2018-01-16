@@ -9,8 +9,8 @@
 //    knob fully cw   : 10s
 #define DURATION_CURVE_EXPONENT 4.0
 #define DURATION_SCALE 16.0
-#define DURATION_KNOB_MAX 0.88913970
-#define DURATION_KNOB_MIN (1.0-DURATION_KNOB_MAX)
+#define RATE_KNOB_MAX 0.88913970
+#define RATE_KNOB_MIN (1.0-RATE_KNOB_MAX)
 
 struct Ramp {
   float value = 1.0;
@@ -31,8 +31,8 @@ struct Ramp {
 
 struct Stage : Module {
 	enum ParamIds {
-		DURATION_PARAM,
-    SUSTAIN_PARAM,
+		RATE_PARAM,
+    LEVEL_PARAM,
     CURVE_PARAM,
 		NUM_PARAMS
 	};
@@ -68,14 +68,14 @@ void Stage::step() {
   float passingThru = inputs[G_IN].value > 1.0;
 
   if(ramp.running()) {
-    float duration = powf(params[DURATION_PARAM].value, DURATION_CURVE_EXPONENT) * DURATION_SCALE;
+    float duration = powf(1.0 - params[RATE_PARAM].value, DURATION_CURVE_EXPONENT) * DURATION_SCALE;
     ramp.step(duration);
   } else if (trigger.process(inputs[T_IN].value)) {
     envelopeOffset = envelopeIn;
     ramp.start();
   }
 
-  float envelopeScale = params[SUSTAIN_PARAM].value - envelopeOffset;
+  float envelopeScale = params[LEVEL_PARAM].value - envelopeOffset;
   float out = passingThru ? envelopeIn : ramp.value * envelopeScale + envelopeOffset;
   bool active = passingThru || ramp.running();
 
@@ -116,8 +116,8 @@ StageWidget::StageWidget() {
 	addChild(createScrew<ScrewSilver>(Vec(RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
 	addChild(createScrew<ScrewSilver>(Vec(box.size.x - 2 * RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
 
-  addParam(createParam<RoundBlackKnob>(Vec(H_KNOB, V_KNOB_TOP), module, Stage::DURATION_PARAM, DURATION_KNOB_MIN, DURATION_KNOB_MAX, 0.5));
-  addParam(createParam<RoundBlackKnob>(Vec(H_KNOB, V_KNOB_MIDDLE), module, Stage::SUSTAIN_PARAM, -5.0, 5.0, 0.0));
+  addParam(createParam<RoundBlackKnob>(Vec(H_KNOB, V_KNOB_TOP), module, Stage::RATE_PARAM, RATE_KNOB_MIN, RATE_KNOB_MAX, 0.5));
+  addParam(createParam<RoundBlackKnob>(Vec(H_KNOB, V_KNOB_MIDDLE), module, Stage::LEVEL_PARAM, -5.0, 5.0, 0.0));
   addParam(createParam<RoundBlackKnob>(Vec(H_KNOB, V_KNOB_BOTTOM), module, Stage::CURVE_PARAM, -3.0, 3.0, 0.0));
 
 
