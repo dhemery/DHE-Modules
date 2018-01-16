@@ -12,6 +12,8 @@
 #define RATE_KNOB_MAX 0.88913970
 #define RATE_KNOB_MIN (1.0-RATE_KNOB_MAX)
 
+#define PULSE_TIME 0.005
+
 struct Ramp {
   float value = 1.0;
 
@@ -59,6 +61,7 @@ struct Stage : Module {
 
   Ramp ramp;
   SchmittTrigger trigger;
+  PulseGenerator eocPulse;
   float envelopeOffset;
   float envelopeScale;
 };
@@ -70,6 +73,7 @@ void Stage::step() {
   if(ramp.running()) {
     float duration = powf(1.0 - params[RATE_PARAM].value, DURATION_CURVE_EXPONENT) * DURATION_SCALE;
     ramp.step(duration);
+    if(!ramp.running()) eocPulse.trigger(PULSE_TIME);
   } else if (trigger.process(inputs[T_IN].value)) {
     envelopeOffset = envelopeIn;
     ramp.start();
@@ -80,7 +84,7 @@ void Stage::step() {
   bool active = passingThru || ramp.running();
 
   outputs[E_OUT].value = out;
-  outputs[T_OUT].value = !active ? 5.0 : -5.0;
+  outputs[T_OUT].value = eocPulse.process(1.0/engineGetSampleRate());
   outputs[G_OUT].value = active ? 5.0 : -5.0;
 }
 
