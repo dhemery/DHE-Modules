@@ -7,14 +7,14 @@
 //    knob fully ccw  : .002417s
 //    knob dead center: 1s
 //    knob fully cw   : 10s
-#define DURATION_CURVE_EXPONENT 4.0
-#define DURATION_SCALE 16.0
-#define RATE_KNOB_MAX 0.88913970
+#define DURATION_CURVE_EXPONENT (4.0)
+#define DURATION_SCALE (16.0)
+#define RATE_KNOB_MAX (0.88913970)
 #define RATE_KNOB_MIN (1.0-RATE_KNOB_MAX)
 
 #define CURVE_MAX 4.0
 
-#define PULSE_TIME 0.005
+#define END_OF_CYCLE_PULSE_LENGTH (1e-3)
 
 struct Ramp {
   float value = 1.0;
@@ -75,7 +75,7 @@ void Stage::step() {
   if(ramp.running()) {
     float duration = powf(1.0 - params[RATE_PARAM].value, DURATION_CURVE_EXPONENT) * DURATION_SCALE;
     ramp.step(duration);
-    if(!ramp.running()) eocPulse.trigger(PULSE_TIME);
+    if(!ramp.running()) eocPulse.trigger(END_OF_CYCLE_PULSE_LENGTH);
   } else if (trigger.process(inputs[TRIGGER_IN].value)) {
     envelopeOffset = envelopeIn;
     ramp.start();
@@ -83,23 +83,18 @@ void Stage::step() {
 
   float out = passingThru ? envelopeIn : envelopeValue();
   bool active = passingThru || ramp.running();
+  bool sendEndOfCyclePulse =  eocPulse.process(1.0/engineGetSampleRate());
 
   outputs[ENVELOPE_OUT].value = out;
-  outputs[END_OF_CYCLE_TRIGGER_OUT].value = eocPulse.process(1.0/engineGetSampleRate());
+  outputs[END_OF_CYCLE_TRIGGER_OUT].value = sendEndOfCyclePulse ? 10.0 : 0;
   outputs[ACTIVE_GATE_OUT].value = active ? 5.0 : -5.0;
 }
 
 float Stage::envelopeValue() {
   float envelopeScale = params[LEVEL_PARAM].value - envelopeOffset;
-  float envelopeExponent;
-  float curve = -params[CURVE_PARAM].value;
-  if(curve < 0.0) {
-    envelopeExponent = -1.0 / (curve - 1);
-  }
-  else {
-    envelopeExponent = curve + 1;
-  }
-  return powf(ramp.value, envelopeExponent) * envelopeScale + envelopeOffset;
+  float curve = params[CURVE_PARAM].value;
+  float curvature = curve > 0.0 ? 1.0 / (curve + 1) : 1 - curve;
+  return powf(ramp.value, curvature) * envelopeScale + envelopeOffset;
 }
 
 #define ROGAN_P3_KNOB_SIZE 34.3
