@@ -12,45 +12,58 @@ Stage::Stage() : Module(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS) {
 
 void Stage::step() {
     float inputVoltage = clampf(inputs[ENVELOPE_IN].value, 0.0, 10.0);
-    float wasDeferring = deferring;
-    deferring = inputs[DEFER_GATE_IN].value > 1.0;
-    if(wasDeferring && !deferring) {
-        // DEFER gate went low after previous step
-        startVoltage = inputVoltage;
-    }
+    bool wasDeferring = deferGate.isHigh();
+    deferGate.process(inputs[DEFER_GATE_IN].value);
 
-    if (deferring) {
+    if (deferGate.isHigh() && !wasDeferring) {
         ramp.stop();
-    } else {
-        if (ramp.running) {
-            ramp.step(duration());
-            if (!ramp.running) {
-                // Ramp completed during this step, so start the EOC pulse.
-                eocPulse.trigger(EOC_PULSE_LENGTH);
-            }
-        }
-        if (trigger.process(inputs[TRIGGER_IN].value)) {
-            startVoltage = inputVoltage;
-            ramp.start();
-        }
+    } else if (wasDeferring && !deferGate.isHigh()) {
+        hold(inputVoltage);
     }
 
-    bool active = deferring || ramp.running;
-    bool pulsingEoC = eocPulse.process(1.0 / engineGetSampleRate());
+    if (!deferGate.isHigh()) {
+        if (ramp.running)
+            advanceEnvelope();
+        if (triggered())
+            startEnvelope(inputVoltage);
+    }
 
-    outputs[ENVELOPE_OUT].value = deferring ? inputVoltage : envelopeVoltage();
-    outputs[EOC_TRIGGER_OUT].value = pulsingEoC ? TRIGGER_HI : TRIGGER_LO;
-    outputs[ACTIVE_GATE_OUT].value = active ? GATE_HI : GATE_LO;
+    outputs[STAGE_OUT].value = stageOutVoltage(inputVoltage);
+    outputs[EOC_TRIGGER_OUT].value = eocTriggerOutVoltage();
+    outputs[ACTIVE_GATE_OUT].value = activeGateOutVoltage();
+}
+
+float Stage::activeGateOutVoltage() {
+    return deferGate.isHigh() || ramp.running ? GATE_HI : GATE_LO;
+}
+
+void Stage::advanceEnvelope() {
+    float duration =
+        powf(params[DURATION_KNOB].value, DURATION_KNOB_CURVATURE) *
+        DURATION_SCALE;
+    ramp.step(duration, eocPulse);
 }
 
 float Stage::envelopeVoltage() {
-    float envelopeScale = params[LEVEL_KNOB].value - startVoltage;
+    float envelopeScale = params[LEVEL_KNOB].value - holdVoltage;
     float shape = params[SHAPE_KNOB].value;
     float curvature = shape < 0.0 ? -1.0 / (shape - 1.0) : shape + 1.0;
-    return powf(ramp.value, curvature) * envelopeScale + startVoltage;
+    return powf(ramp.value, curvature) * envelopeScale + holdVoltage;
 }
 
-float Stage::duration() {
-    return powf(params[DURATION_KNOB].value, DURATION_KNOB_CURVATURE) *
-           DURATION_SCALE;
+float Stage::eocTriggerOutVoltage() {
+    return eocPulse.process(1.0 / engineGetSampleRate()) ? TRIGGER_HI
+                                                         : TRIGGER_LO;
 }
+
+void Stage::hold(float newHoldVoltage) { holdVoltage = newHoldVoltage; }
+
+float Stage::stageOutVoltage(float deferredVoltage) {
+    return deferGate.isHigh() ? deferredVoltage : envelopeVoltage();
+}
+
+void Stage::startEnvelope(float startVoltage) {
+    hold(startVoltage);
+    ramp.start();
+}
+bool Stage::triggered() { return trigger.process(inputs[TRIGGER_IN].value); }

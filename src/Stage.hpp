@@ -24,18 +24,24 @@ struct Stage : Module {
   private:
     Ramp ramp;
     SchmittTrigger trigger;
+    SchmittTrigger deferGate;
     PulseGenerator eocPulse;
-    float startVoltage;
-    bool deferring;
+    float holdVoltage;
 
+    float activeGateOutVoltage();
+    void advanceEnvelope();
+    float eocTriggerOutVoltage();
     float envelopeVoltage();
-    float duration();
+    void hold(float holdVoltage);
+    float stageOutVoltage(float deferredVoltage);
+    void startEnvelope(float startVoltage);
+    bool triggered();
 
   public:
     enum ParamIds { DURATION_KNOB, LEVEL_KNOB, SHAPE_KNOB, NUM_PARAMS };
     enum InputIds { ENVELOPE_IN, TRIGGER_IN, DEFER_GATE_IN, NUM_INPUTS };
     enum OutputIds {
-        ENVELOPE_OUT,
+        STAGE_OUT,
         EOC_TRIGGER_OUT,
         ACTIVE_GATE_OUT,
         NUM_OUTPUTS

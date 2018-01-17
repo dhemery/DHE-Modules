@@ -66,7 +66,7 @@ StageWidget::StageWidget() {
                                      Stage::DEFER_GATE_IN));
 
     addOutput(createOutput<PJ301MPort>(Vec(H_PORT_RIGHT, V_PORT_TOP), module,
-                                       Stage::ENVELOPE_OUT));
+                                       Stage::STAGE_OUT));
     addOutput(createOutput<PJ301MPort>(Vec(H_PORT_RIGHT, V_PORT_MIDDLE), module,
                                        Stage::EOC_TRIGGER_OUT));
     addOutput(createOutput<PJ301MPort>(Vec(H_PORT_RIGHT, V_PORT_BOTTOM), module,
