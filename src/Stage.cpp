@@ -14,25 +14,33 @@ void Stage::step() {
     float inputVoltage = clampf(inputs[ENVELOPE_IN].value, 0.0, 10.0);
     float deferring = inputs[DEFER_GATE_IN].value > 1.0;
 
-    if (ramp.running) {
-        ramp.step(duration());
-        if (!ramp.running) { // Ramp completed during this step
-            eocPulse.trigger(EOC_PULSE_LENGTH);
+    if (deferring) {
+        if (ramp.running) {
+            ramp.stop();
         }
-    } else if (trigger.process(inputs[TRIGGER_IN].value)) {
-        envelopeOffset = inputVoltage;
-        ramp.start();
+    } else {
+        if (ramp.running) {
+            ramp.step(duration());
+            if (!ramp.running) {
+                // Ramp completed during this step, so start the EOC pulse.
+                eocPulse.trigger(EOC_PULSE_LENGTH);
+            }
+        }
+        if (trigger.process(inputs[TRIGGER_IN].value)) {
+            envelopeOffset = inputVoltage;
+            ramp.start();
+        }
     }
 
     bool active = deferring || ramp.running;
     bool pulsingEoC = eocPulse.process(1.0 / engineGetSampleRate());
 
-    outputs[ENVELOPE_OUT].value = deferring ? inputVoltage : envelopeValue();
+    outputs[ENVELOPE_OUT].value = deferring ? inputVoltage : envelopeVoltage();
     outputs[EOC_TRIGGER_OUT].value = pulsingEoC ? TRIGGER_HI : TRIGGER_LO;
     outputs[ACTIVE_GATE_OUT].value = active ? GATE_HI : GATE_LO;
 }
 
-float Stage::envelopeValue() {
+float Stage::envelopeVoltage() {
     float envelopeScale = params[LEVEL_KNOB].value - envelopeOffset;
     float shape = params[SHAPE_KNOB].value;
     float curvature = shape < 0.0 ? -1.0 / (shape - 1.0) : shape + 1.0;
@@ -40,5 +48,6 @@ float Stage::envelopeValue() {
 }
 
 float Stage::duration() {
-    return powf(params[DURATION_KNOB].value, DURATION_KNOB_CURVATURE) * DURATION_SCALE;
+    return powf(params[DURATION_KNOB].value, DURATION_KNOB_CURVATURE) *
+           DURATION_SCALE;
 }

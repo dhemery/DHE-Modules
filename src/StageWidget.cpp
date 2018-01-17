@@ -1,5 +1,5 @@
-#include "Stage.hpp"
 #include "DHEModules.hpp"
+#include "Stage.hpp"
 
 #define ROGAN_P3_KNOB_SIZE 34.3
 #define ROUND_BLACK_KNOB_SIZE 38.0
@@ -49,9 +49,9 @@ StageWidget::StageWidget() {
             addChild(createScrew<ScrewSilver>(screwPositions[i]));
     }
 
-    addParam(createParam<RoundBlackKnob>(Vec(H_KNOB, V_KNOB_TOP), module,
-                                         Stage::DURATION_KNOB, DURATION_KNOB_MIN,
-                                         DURATION_KNOB_MAX, 0.5));
+    addParam(createParam<RoundBlackKnob>(
+        Vec(H_KNOB, V_KNOB_TOP), module, Stage::DURATION_KNOB,
+        DURATION_KNOB_MIN, DURATION_KNOB_MAX, 0.5));
     addParam(createParam<RoundBlackKnob>(Vec(H_KNOB, V_KNOB_MIDDLE), module,
                                          Stage::LEVEL_KNOB, 0.0, 10.0, 0.0));
     addParam(createParam<RoundBlackKnob>(Vec(H_KNOB, V_KNOB_BOTTOM), module,

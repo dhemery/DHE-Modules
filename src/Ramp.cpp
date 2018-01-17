@@ -5,11 +5,14 @@
 using namespace rack;
 
 void Ramp::start() {
-    reset();
+    value = 0.0;
     running = true;
 }
 
-void Ramp::reset() { value = 0.0; }
+void Ramp::stop() {
+    value = 0.0;
+    running = false;
+}
 
 void Ramp::step(float duration) {
     if (!running)

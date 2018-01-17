@@ -1,7 +1,7 @@
 #pragma once
 #include "Ramp.hpp"
-#include "rack.hpp"
 #include "dsp/digital.hpp"
+#include "rack.hpp"
 
 using namespace rack;
 
@@ -27,7 +27,7 @@ struct Stage : Module {
     PulseGenerator eocPulse;
     float envelopeOffset;
 
-    float envelopeValue();
+    float envelopeVoltage();
     float duration();
 
   public:
