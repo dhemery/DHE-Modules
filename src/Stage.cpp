@@ -12,12 +12,15 @@ Stage::Stage() : Module(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS) {
 
 void Stage::step() {
     float inputVoltage = clampf(inputs[ENVELOPE_IN].value, 0.0, 10.0);
-    float deferring = inputs[DEFER_GATE_IN].value > 1.0;
+    float wasDeferring = deferring;
+    deferring = inputs[DEFER_GATE_IN].value > 1.0;
+    if(wasDeferring && !deferring) {
+        // DEFER gate went low after previous step
+        startVoltage = inputVoltage;
+    }
 
     if (deferring) {
-        if (ramp.running) {
-            ramp.stop();
-        }
+        ramp.stop();
     } else {
         if (ramp.running) {
             ramp.step(duration());
@@ -27,7 +30,7 @@ void Stage::step() {
             }
         }
         if (trigger.process(inputs[TRIGGER_IN].value)) {
-            envelopeOffset = inputVoltage;
+            startVoltage = inputVoltage;
             ramp.start();
         }
     }
@@ -41,10 +44,10 @@ void Stage::step() {
 }
 
 float Stage::envelopeVoltage() {
-    float envelopeScale = params[LEVEL_KNOB].value - envelopeOffset;
+    float envelopeScale = params[LEVEL_KNOB].value - startVoltage;
     float shape = params[SHAPE_KNOB].value;
     float curvature = shape < 0.0 ? -1.0 / (shape - 1.0) : shape + 1.0;
-    return powf(ramp.value, curvature) * envelopeScale + envelopeOffset;
+    return powf(ramp.value, curvature) * envelopeScale + startVoltage;
 }
 
 float Stage::duration() {

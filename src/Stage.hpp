@@ -25,7 +25,8 @@ struct Stage : Module {
     Ramp ramp;
     SchmittTrigger trigger;
     PulseGenerator eocPulse;
-    float envelopeOffset;
+    float startVoltage;
+    bool deferring;
 
     float envelopeVoltage();
     float duration();
