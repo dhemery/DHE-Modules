@@ -1,24 +1,34 @@
 #include "Ramp.hpp"
-#include "engine.hpp"
 #include "math.hpp"
 
-using namespace rack;
+namespace DHE {
+Ramp::Ramp(std::function<float()> delta, std::function<void()> eoc) {
+    this->eoc = eoc;
+    this->delta = delta;
+    stop();
+}
 
 void Ramp::start() {
-    value = 0.0;
-    running = true;
+    _value = 0.0;
+    _running = true;
 }
 
 void Ramp::stop() {
-    value = 0.0;
-    running = false;
+    _value = 0.0;
+    _running = false;
 }
 
-void Ramp::step(float duration, PulseGenerator &eoc) {
-    if (!running)
+void Ramp::step() {
+    if (!isRunning())
         return;
-    float delta = 0.5 / (duration * engineGetSampleRate());
-    value = clampf(value + delta, 0.0, 1.0);
-    running = value < 1.0;
-    if (!running) eoc.trigger(1e-3);
+    _value = rack::clampf(_value + delta(), 0.0, 1.0);
+    _running = _value < 1.0;
+    if (!isRunning())
+        eoc();
 }
+
+bool Ramp::isRunning() { return _running; }
+
+float Ramp::value() { return _value; }
+
+} // namespace DHE

@@ -1,31 +1,26 @@
 #include "Stage.hpp"
-#include "rack.hpp"
 
 #define TRIGGER_HI (10.0)
 #define TRIGGER_LO (0.0)
 #define GATE_HI (5.0)
 #define GATE_LO (-5.0)
 
-Stage::Stage() : Module(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS) {
-    trigger.setThresholds(0.0, 1.0);
-}
+namespace DHE {
+
+Stage::Stage()
+    : Module(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS),
+      ramp([&]() { return rampStepSize(); },
+           [&]() { eocPulse.trigger(1e-3); }) {}
 
 void Stage::step() {
-    float inputVoltage = clampf(inputs[ENVELOPE_IN].value, 0.0, 10.0);
-    bool wasDeferring = deferGate.isHigh();
-    deferGate.process(inputs[DEFER_GATE_IN].value);
+    float inputVoltage = rack::clampf(inputs[ENVELOPE_IN].value, 0.0, 10.0);
 
-    if (deferGate.isHigh() && !wasDeferring) {
-        ramp.stop();
-    } else if (wasDeferring && !deferGate.isHigh()) {
-        hold(inputVoltage);
-    }
+    deferLatch.process(inputs[DEFER_GATE_IN].value, [&]() { ramp.stop(); },
+                       [&]() { hold(inputVoltage); });
 
-    if (!deferGate.isHigh()) {
-        if (ramp.running)
-            advanceEnvelope();
-        if (triggered())
-            startEnvelope(inputVoltage);
+    if (deferLatch.isLow()) {
+        ramp.step();
+        startEnvelopeIfTriggered(inputVoltage);
     }
 
     outputs[STAGE_OUT].value = stageOutVoltage(inputVoltage);
@@ -34,36 +29,38 @@ void Stage::step() {
 }
 
 float Stage::activeGateOutVoltage() {
-    return deferGate.isHigh() || ramp.running ? GATE_HI : GATE_LO;
+    return deferLatch.isHigh() || ramp.isRunning() ? GATE_HI : GATE_LO;
 }
 
-void Stage::advanceEnvelope() {
+float Stage::eocTriggerOutVoltage() {
+    return eocPulse.process(1.0 / rack::engineGetSampleRate()) ? TRIGGER_HI
+                                                               : TRIGGER_LO;
+}
+
+void Stage::hold(float newHoldVoltage) { holdVoltage = newHoldVoltage; }
+
+float Stage::stageOutVoltage(float deferredVoltage) {
+    return deferLatch.isHigh() ? deferredVoltage : envelopeVoltage();
+}
+
+float Stage::rampStepSize() {
     float duration =
         powf(params[DURATION_KNOB].value, DURATION_KNOB_CURVATURE) *
         DURATION_SCALE;
-    ramp.step(duration, eocPulse);
+    return 0.5 / (duration * rack::engineGetSampleRate());
 }
 
 float Stage::envelopeVoltage() {
     float envelopeScale = params[LEVEL_KNOB].value - holdVoltage;
     float shape = params[SHAPE_KNOB].value;
     float curvature = shape < 0.0 ? -1.0 / (shape - 1.0) : shape + 1.0;
-    return powf(ramp.value, curvature) * envelopeScale + holdVoltage;
+    return powf(ramp.value(), curvature) * envelopeScale + holdVoltage;
 }
 
-float Stage::eocTriggerOutVoltage() {
-    return eocPulse.process(1.0 / engineGetSampleRate()) ? TRIGGER_HI
-                                                         : TRIGGER_LO;
+void Stage::startEnvelopeIfTriggered(float startVoltage) {
+    trigger.process(inputs[TRIGGER_IN].value, [&]() {
+        hold(startVoltage);
+        ramp.start();
+    });
 }
-
-void Stage::hold(float newHoldVoltage) { holdVoltage = newHoldVoltage; }
-
-float Stage::stageOutVoltage(float deferredVoltage) {
-    return deferGate.isHigh() ? deferredVoltage : envelopeVoltage();
-}
-
-void Stage::startEnvelope(float startVoltage) {
-    hold(startVoltage);
-    ramp.start();
-}
-bool Stage::triggered() { return trigger.process(inputs[TRIGGER_IN].value); }
+} // namespace DHE

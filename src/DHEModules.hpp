@@ -1,10 +1,10 @@
 #pragma once
 #include "rack.hpp"
 
-using namespace rack;
+extern rack::Plugin *plugin;
 
-extern Plugin *plugin;
-
-struct StageWidget : ModuleWidget {
-	StageWidget();
+namespace DHE {
+struct StageWidget : rack::ModuleWidget {
+    StageWidget();
 };
+} // namespace DHE

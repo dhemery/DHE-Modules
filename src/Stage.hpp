@@ -1,9 +1,8 @@
 #pragma once
+#include "Latch.hpp"
 #include "Ramp.hpp"
 #include "dsp/digital.hpp"
 #include "rack.hpp"
-
-using namespace rack;
 
 // TODO: Switch for slow, medium, and fast ramp
 // These constants yield ramp durations of:
@@ -19,35 +18,31 @@ using namespace rack;
 
 #define EOC_PULSE_LENGTH (1e-3)
 
-struct Stage : Module {
+namespace DHE {
 
-  private:
-    Ramp ramp;
-    SchmittTrigger trigger;
-    SchmittTrigger deferGate;
-    PulseGenerator eocPulse;
-    float holdVoltage;
-
-    float activeGateOutVoltage();
-    void advanceEnvelope();
-    float eocTriggerOutVoltage();
-    float envelopeVoltage();
-    void hold(float holdVoltage);
-    float stageOutVoltage(float deferredVoltage);
-    void startEnvelope(float startVoltage);
-    bool triggered();
-
-  public:
+struct Stage : rack::Module {
     enum ParamIds { DURATION_KNOB, LEVEL_KNOB, SHAPE_KNOB, NUM_PARAMS };
     enum InputIds { ENVELOPE_IN, TRIGGER_IN, DEFER_GATE_IN, NUM_INPUTS };
-    enum OutputIds {
-        STAGE_OUT,
-        EOC_TRIGGER_OUT,
-        ACTIVE_GATE_OUT,
-        NUM_OUTPUTS
-    };
+    enum OutputIds { STAGE_OUT, EOC_TRIGGER_OUT, ACTIVE_GATE_OUT, NUM_OUTPUTS };
     enum LightIds { NUM_LIGHTS };
 
     Stage();
     void step() override;
+
+  private:
+    rack::PulseGenerator eocPulse;
+    Ramp ramp;
+    Latch trigger;
+    Latch deferLatch;
+    float holdVoltage;
+
+    void hold(float holdVoltage);
+
+    void startEnvelopeIfTriggered(float startVoltage);
+    float rampStepSize();
+    float envelopeVoltage();
+    float activeGateOutVoltage();
+    float eocTriggerOutVoltage();
+    float stageOutVoltage(float deferredVoltage);
 };
+} // namespace DHE
