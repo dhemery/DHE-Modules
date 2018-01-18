@@ -23,6 +23,9 @@
 #define H_PORT_LEFT (H_PORT_INSET - PORT_WIDTH / 2.0)
 #define H_PORT_RIGHT (WIDGET_WIDTH - H_PORT_INSET - PORT_WIDTH / 2.0)
 
+using namespace DHE;
+using namespace rack;
+
 StageWidget::StageWidget() {
     Stage *module = new Stage();
     setModule(module);

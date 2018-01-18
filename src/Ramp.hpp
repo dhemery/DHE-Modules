@@ -1,6 +1,7 @@
 #pragma once
-#include "dsp/digital.hpp"
-using namespace rack;
+#include <functional>
+
+namespace DHE {
 
 // A linear ramp that progresses from 0 to 1.
 // When the ramp reaches 1, it remains at 1
@@ -18,7 +19,8 @@ struct Ramp {
     // Advances the ramp value by an amount that,
     // at the engine's current sample rate, would
     // transition from 0 to 1 over the given duration
-    // (in seconds). Triggers eoc if this step advances
-    // the value to 1.
-    void step(float duration, PulseGenerator &eoc);
+    // (in seconds). Calls the given function if the
+    // value advances from less than 1 to 1.
+    void step(float duration, std::function<void()> onEOC);
 };
+} // namespace DHE

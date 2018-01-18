@@ -2,8 +2,7 @@
 #include "engine.hpp"
 #include "math.hpp"
 
-using namespace rack;
-
+namespace DHE {
 void Ramp::start() {
     value = 0.0;
     running = true;
@@ -14,11 +13,14 @@ void Ramp::stop() {
     running = false;
 }
 
-void Ramp::step(float duration, PulseGenerator &eoc) {
+void Ramp::step(float duration, std::function<void()> onEOC) {
     if (!running)
         return;
-    float delta = 0.5 / (duration * engineGetSampleRate());
-    value = clampf(value + delta, 0.0, 1.0);
+    float delta = 0.5 / (duration * rack::engineGetSampleRate());
+    value = rack::clampf(value + delta, 0.0, 1.0);
     running = value < 1.0;
-    if (!running) eoc.trigger(1e-3);
+    if (!running)
+        onEOC();
 }
+
+} // namespace DHE
