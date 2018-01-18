@@ -29,7 +29,7 @@ void Stage::step() {
 }
 
 float Stage::activeGateOutVoltage() {
-    return deferLatch.isHigh() || ramp.running ? GATE_HI : GATE_LO;
+    return deferLatch.isHigh() || ramp.isRunning() ? GATE_HI : GATE_LO;
 }
 
 float Stage::eocTriggerOutVoltage() {
@@ -53,7 +53,7 @@ float Stage::envelopeVoltage() {
     float envelopeScale = params[LEVEL_KNOB].value - holdVoltage;
     float shape = params[SHAPE_KNOB].value;
     float curvature = shape < 0.0 ? -1.0 / (shape - 1.0) : shape + 1.0;
-    return powf(ramp.value, curvature) * envelopeScale + holdVoltage;
+    return powf(ramp.value(), curvature) * envelopeScale + holdVoltage;
 }
 
 void Stage::startEnvelopeIfTriggered(float startVoltage) {

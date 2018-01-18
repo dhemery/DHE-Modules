@@ -56,7 +56,7 @@ StageWidget::StageWidget() {
         Vec(H_KNOB, V_KNOB_TOP), module, Stage::DURATION_KNOB,
         DURATION_KNOB_MIN, DURATION_KNOB_MAX, 0.5));
     addParam(createParam<RoundBlackKnob>(Vec(H_KNOB, V_KNOB_MIDDLE), module,
-                                         Stage::LEVEL_KNOB, 0.0, 10.0, 0.0));
+                                         Stage::LEVEL_KNOB, 0.0, 10.0, 5.0));
     addParam(createParam<RoundBlackKnob>(Vec(H_KNOB, V_KNOB_BOTTOM), module,
                                          Stage::SHAPE_KNOB, -(SHAPE_KNOB_MAX),
                                          SHAPE_KNOB_MAX, 0.0));

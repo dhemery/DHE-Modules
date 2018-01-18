@@ -2,24 +2,33 @@
 #include "math.hpp"
 
 namespace DHE {
-Ramp::Ramp(std::function<float()> delta, std::function<void()> onEoC) { this->onEoC = onEoC; this->delta = delta; }
+Ramp::Ramp(std::function<float()> delta, std::function<void()> eoc) {
+    this->eoc = eoc;
+    this->delta = delta;
+    stop();
+}
+
 void Ramp::start() {
-    value = 0.0;
-    running = true;
+    _value = 0.0;
+    _running = true;
 }
 
 void Ramp::stop() {
-    value = 0.0;
-    running = false;
+    _value = 0.0;
+    _running = false;
 }
 
 void Ramp::step() {
-    if (!running)
+    if (!isRunning())
         return;
-    value = rack::clampf(value + delta(), 0.0, 1.0);
-    running = value < 1.0;
-    if (!running)
-        onEoC();
+    _value = rack::clampf(_value + delta(), 0.0, 1.0);
+    _running = _value < 1.0;
+    if (!isRunning())
+        eoc();
 }
+
+bool Ramp::isRunning() { return _running; }
+
+float Ramp::value() { return _value; }
 
 } // namespace DHE
