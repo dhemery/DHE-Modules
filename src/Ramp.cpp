@@ -2,7 +2,7 @@
 #include "math.hpp"
 
 namespace DHE {
-Ramp::Ramp(std::function<void()> onEoC) { this->onEoC = onEoC; }
+Ramp::Ramp(std::function<float()> delta, std::function<void()> onEoC) { this->onEoC = onEoC; this->delta = delta; }
 void Ramp::start() {
     value = 0.0;
     running = true;
@@ -13,7 +13,7 @@ void Ramp::stop() {
     running = false;
 }
 
-void Ramp::step(std::function<float()> delta) {
+void Ramp::step() {
     if (!running)
         return;
     value = rack::clampf(value + delta(), 0.0, 1.0);

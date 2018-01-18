@@ -40,7 +40,6 @@ struct Stage : rack::Module {
 
     void startEnvelopeIfTriggered(float startVoltage);
     float rampStepSize();
-    float duration();
     float envelopeVoltage();
     float activeGateOutVoltage();
     float eocTriggerOutVoltage();

@@ -9,7 +9,8 @@ namespace DHE {
 
 Stage::Stage()
     : Module(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS),
-      ramp([&]() { eocPulse.trigger(1e-3); }) {}
+      ramp([&]() { return rampStepSize(); },
+           [&]() { eocPulse.trigger(1e-3); }) {}
 
 void Stage::step() {
     float inputVoltage = rack::clampf(inputs[ENVELOPE_IN].value, 0.0, 10.0);
@@ -18,7 +19,7 @@ void Stage::step() {
                        [&]() { hold(inputVoltage); });
 
     if (deferLatch.isLow()) {
-        ramp.step([&]() { return rampStepSize(); });
+        ramp.step();
         startEnvelopeIfTriggered(inputVoltage);
     }
 
@@ -42,13 +43,10 @@ float Stage::stageOutVoltage(float deferredVoltage) {
     return deferLatch.isHigh() ? deferredVoltage : envelopeVoltage();
 }
 
-float Stage::duration() {
-    return powf(params[DURATION_KNOB].value, DURATION_KNOB_CURVATURE) *
-           DURATION_SCALE;
-}
-
 float Stage::rampStepSize() {
-    return 0.5 / (duration() * rack::engineGetSampleRate());
+    float duration = powf(params[DURATION_KNOB].value, DURATION_KNOB_CURVATURE) *
+           DURATION_SCALE;
+    return 0.5 / (duration * rack::engineGetSampleRate());
 }
 
 float Stage::envelopeVoltage() {
