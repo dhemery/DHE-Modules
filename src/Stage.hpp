@@ -30,10 +30,10 @@ struct Stage : rack::Module {
     void step() override;
 
   private:
+    rack::PulseGenerator eocPulse;
     Ramp ramp;
     Latch trigger;
     Latch deferLatch;
-    rack::PulseGenerator eocPulse;
     float holdVoltage;
 
     void hold(float holdVoltage);

@@ -25,7 +25,7 @@ Latch::Event Latch::process(float in) {
 }
 
 void Latch::process(float in, std::function<void()> onRise) {
-    process(in, onRise, []() {});
+    process(in, onRise, []() {}, []() {});
 }
 
 void Latch::process(float in, std::function<void()> onRise,
