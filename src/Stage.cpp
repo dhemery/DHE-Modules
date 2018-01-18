@@ -18,7 +18,7 @@ void Stage::step() {
                        [&]() { hold(inputVoltage); });
 
     if (deferLatch.isLow()) {
-        advanceEnvelopeIfRunning();
+        ramp.step([&]() { return rampStepSize(); });
         startEnvelopeIfTriggered(inputVoltage);
     }
 
@@ -42,17 +42,13 @@ float Stage::stageOutVoltage(float deferredVoltage) {
     return deferLatch.isHigh() ? deferredVoltage : envelopeVoltage();
 }
 
-void Stage::advanceEnvelopeIfRunning() {
-    if (ramp.running)
-        advanceEnvelope();
+float Stage::duration() {
+    return powf(params[DURATION_KNOB].value, DURATION_KNOB_CURVATURE) *
+           DURATION_SCALE;
 }
 
-void Stage::advanceEnvelope() {
-    float duration =
-        powf(params[DURATION_KNOB].value, DURATION_KNOB_CURVATURE) *
-        DURATION_SCALE;
-    float step = 0.5 / (duration * rack::engineGetSampleRate());
-    ramp.step(step);
+float Stage::rampStepSize() {
+    return 0.5 / (duration() * rack::engineGetSampleRate());
 }
 
 float Stage::envelopeVoltage() {

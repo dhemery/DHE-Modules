@@ -38,10 +38,9 @@ struct Stage : rack::Module {
 
     void hold(float holdVoltage);
 
-    void advanceEnvelopeIfRunning();
-    void advanceEnvelope();
     void startEnvelopeIfTriggered(float startVoltage);
-
+    float rampStepSize();
+    float duration();
     float envelopeVoltage();
     float activeGateOutVoltage();
     float eocTriggerOutVoltage();

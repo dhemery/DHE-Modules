@@ -26,6 +26,6 @@ struct Ramp {
     // transition from 0 to 1 over the given duration
     // (in seconds). Calls the EoC function this advances the ramp from
     // less than 1 to 1, the onEoC function is called.
-    void step(float duration);
+    void step(std::function<float()> deltaSupplier);
 };
 } // namespace DHE

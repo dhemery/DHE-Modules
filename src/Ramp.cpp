@@ -13,10 +13,10 @@ void Ramp::stop() {
     running = false;
 }
 
-void Ramp::step(float delta) {
+void Ramp::step(std::function<float()> delta) {
     if (!running)
         return;
-    value = rack::clampf(value + delta, 0.0, 1.0);
+    value = rack::clampf(value + delta(), 0.0, 1.0);
     running = value < 1.0;
     if (!running)
         onEoC();
