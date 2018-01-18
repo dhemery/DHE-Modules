@@ -51,7 +51,8 @@ void Stage::advanceEnvelope() {
     float duration =
         powf(params[DURATION_KNOB].value, DURATION_KNOB_CURVATURE) *
         DURATION_SCALE;
-    ramp.step(duration);
+    float step = 0.5 / (duration * rack::engineGetSampleRate());
+    ramp.step(step);
 }
 
 float Stage::envelopeVoltage() {
