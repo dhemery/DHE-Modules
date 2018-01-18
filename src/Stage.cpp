@@ -44,8 +44,9 @@ float Stage::stageOutVoltage(float deferredVoltage) {
 }
 
 float Stage::rampStepSize() {
-    float duration = powf(params[DURATION_KNOB].value, DURATION_KNOB_CURVATURE) *
-           DURATION_SCALE;
+    float duration =
+        powf(params[DURATION_KNOB].value, DURATION_KNOB_CURVATURE) *
+        DURATION_SCALE;
     return 0.5 / (duration * rack::engineGetSampleRate());
 }
 

@@ -24,7 +24,8 @@ struct Ramp {
 
     bool isRunning();
     float value();
-private:
+
+  private:
     std::function<void()> eoc;
     std::function<float()> delta;
     bool _running;

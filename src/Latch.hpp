@@ -45,4 +45,4 @@ struct Latch {
     float _high;
     State _state = UNKNOWN;
 };
-}
+} // namespace DHE
