@@ -34,12 +34,11 @@ namespace DHE {
     }
 
     void Stage::advanceEnvelope() {
-        if (trigger.process(inputs[TRIGGER_IN].value) == Latch::RISE) {
+        if (trigger.isLow()) ramp.step();
+        trigger.process(inputs[TRIGGER_IN].value, [&]() {
             inPort.freeze();
             ramp.start();
-        } else {
-            ramp.step();
-        }
+        });
     }
 
     float Stage::activeGateOutVoltage() {

@@ -4,41 +4,20 @@
 
 namespace DHE {
     struct Latch {
-        enum Event {
-            NOCHANGE, RISE, FALL
-        };
         enum State {
             UNKNOWN, LOW, HIGH
         };
 
-        // Constructs a latch with a low threshold of 0,
-        // a high threshold of 1, and initial state of UNKNOWN.
-        Latch();
-
         // Constructs a latch with the given thresholds
         // and an initial state of UNKNOWN.
-        Latch(float low, float high);
+        Latch(float low = 0.0f, float high = 0.1f);
 
         // Resets the latch to UNKNOWN state.
         void reset();
 
-        // Updates the latch and returns the resulting event.
-        Event process(float value);
-
         // Updates the latch and calls the function if the latch
         // rose from UNKNOWN or LOW to HIGH.
-        void process(float value, const std::function<void()> &onRise);
-
-        // Updates the latch and calls one of the functions
-        // if the relevant event occurred.
-        void process(float value, const std::function<void()> &onRise,
-                     const std::function<void()> &onFall);
-
-        // Updates the latch and calls the function associated
-        // with the resulting event.
-        void process(float value, const std::function<void()> &onRise,
-                     const std::function<void()> &onFall,
-                     const std::function<void()> &onNoChange);
+        void process(float value, const std::function<void()> &onRise = [](){}, const std::function<void()> &onFall = [](){}, const std::function<void()> &onNoChange= [](){});
 
         bool isHigh();
 
