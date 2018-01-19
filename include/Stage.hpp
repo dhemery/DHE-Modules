@@ -4,6 +4,7 @@
 #include "Ramp.hpp"
 #include "dsp/digital.hpp"
 #include "rack.hpp"
+#include "Freezer.hpp"
 
 // TODO: Switch for slow, medium, and fast ramp
 // These constants yield ramp durations of:
@@ -42,9 +43,7 @@ namespace DHE {
         Ramp ramp;
         Latch trigger;
         Latch deferLatch;
-        float holdVoltage;
-
-        void hold(float holdVoltage);
+        Freezer inPort;
 
         float rampStepSize();
 
@@ -54,8 +53,7 @@ namespace DHE {
 
         float eocTriggerOutVoltage();
 
-        float stageOutVoltage(float deferredVoltage);
-
-        void advanceEnvelope(float inputVoltage);
+        float stageOutVoltage();
+        void advanceEnvelope();
     };
 } // namespace DHE

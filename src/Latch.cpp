@@ -1,3 +1,4 @@
+#include <util.hpp>
 #include "Latch.hpp"
 
 namespace DHE {
@@ -39,8 +40,10 @@ namespace DHE {
         switch (process(in)) {
             case RISE:
                 onRise();
+                break;
             case FALL:
                 onFall();
+                break;
             default:
                 onNoChange();
         }

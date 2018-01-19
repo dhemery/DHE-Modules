@@ -5,35 +5,41 @@
 #define GATE_HI (5.0f)
 #define GATE_LO (-5.0f)
 
-namespace DHE {
 
+namespace DHE {
     Stage::Stage()
             : Module(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS),
               ramp([&]() { return rampStepSize(); },
-                   [&]() { eocPulse.trigger(1e-3); }) {}
+                   [&]() { eocPulse.trigger(1e-3); }),
+              inPort([&]() { return rack::clampf(inputs[ENVELOPE_IN].value, 0.0f, 10.0f); }) {
+    }
 
     void Stage::step() {
-        float inputVoltage = rack::clampf(inputs[ENVELOPE_IN].value, 0.0, 10.0);
-
-        deferLatch.process(inputs[DEFER_GATE_IN].value, [&]() { ramp.stop(); },
-                           [&]() { hold(inputVoltage); });
+        deferLatch.process(inputs[DEFER_GATE_IN].value,
+                           [&]() {
+                               ramp.stop();
+                               inPort.follow();
+                           },
+                           [&]() {
+                               inPort.freeze();
+                           });
 
         if (deferLatch.isLow()) {
-            advanceEnvelope(inputVoltage);
+            advanceEnvelope();
         }
 
-        outputs[STAGE_OUT].value = stageOutVoltage(inputVoltage);
+        outputs[STAGE_OUT].value = stageOutVoltage();
         outputs[EOC_TRIGGER_OUT].value = eocTriggerOutVoltage();
         outputs[ACTIVE_GATE_OUT].value = activeGateOutVoltage();
     }
 
-    void Stage::advanceEnvelope(float inputVoltage) {
-        if(trigger.process(inputs[TRIGGER_IN].value) == Latch::RISE) {
-                hold(inputVoltage);
-                ramp.start();
-            } else {
-                ramp.step();
-            }
+    void Stage::advanceEnvelope() {
+        if (trigger.process(inputs[TRIGGER_IN].value) == Latch::RISE) {
+            inPort.freeze();
+            ramp.start();
+        } else {
+            ramp.step();
+        }
     }
 
     float Stage::activeGateOutVoltage() {
@@ -45,30 +51,28 @@ namespace DHE {
                                                                     : TRIGGER_LO;
     }
 
-    void Stage::hold(float newHoldVoltage) { holdVoltage = newHoldVoltage; }
-
-    float Stage::stageOutVoltage(float deferredVoltage) {
-        return deferLatch.isHigh() ? deferredVoltage : envelopeVoltage();
+    float Stage::stageOutVoltage() {
+        return deferLatch.isHigh() ? inPort.value() : envelopeVoltage();
     }
 
     float Stage::rampStepSize() {
         float duration =
                 powf(params[DURATION_KNOB].value, DURATION_KNOB_CURVATURE) *
                 DURATION_SCALE;
-        return 0.5f / (duration * rack::engineGetSampleRate());
+        return 1.0f / (duration * rack::engineGetSampleRate());
     }
 
     float Stage::envelopeVoltage() {
         float progress = ramp.value();
         if (progress == 0.0)
-            return holdVoltage;
+            return inPort.value();
         float targetVoltage = params[LEVEL_KNOB].value;
         if (progress == 1.0)
             return targetVoltage;
-        float envelopeScale = targetVoltage - holdVoltage;
+        float envelopeScale = targetVoltage - inPort.value();
         float shape = params[SHAPE_KNOB].value;
         float curve = shape < 0.0f ? 1.0f - powf(1.0f - progress, 1.0f - shape) : powf(progress, shape + 1.0f);
-        return curve * envelopeScale + holdVoltage;
+        return curve * envelopeScale + inPort.value();
     }
 
 } // namespace DHE

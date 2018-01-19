@@ -1,9 +1,9 @@
 cmake_minimum_required(VERSION 3.9)
 project(DHE_Modules DESCRIPTION "DHE Modules for VCV Rack")
 
-if(NOT CMAKE_BUILD_TYPE)
+if (NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE Release)
-endif()
+endif ()
 
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -stdlib=libc++")
@@ -26,4 +26,4 @@ add_library(plugin SHARED
         include/Ramp.hpp
         src/Stage.cpp
         include/Stage.hpp
-        src/StageWidget.cpp)
+        src/StageWidget.cpp src/Freezer.cpp include/Freezer.hpp)
