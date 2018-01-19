@@ -4,7 +4,7 @@
 
 namespace DHE {
 
-    // In follower mode, a freezer yield's the supplier's value.
+    // In follower mode, a freezer yields the supplier's value.
     // In frozen mode, a freezer yields a stored value.
     struct Freezer {
         explicit Freezer(const std::function<float()> &supplier);
