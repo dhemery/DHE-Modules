@@ -19,13 +19,21 @@ namespace DHE {
                            [&]() { hold(inputVoltage); });
 
         if (deferLatch.isLow()) {
-            ramp.step();
-            startEnvelopeIfTriggered(inputVoltage);
+            advanceEnvelope(inputVoltage);
         }
 
         outputs[STAGE_OUT].value = stageOutVoltage(inputVoltage);
         outputs[EOC_TRIGGER_OUT].value = eocTriggerOutVoltage();
         outputs[ACTIVE_GATE_OUT].value = activeGateOutVoltage();
+    }
+
+    void Stage::advanceEnvelope(float inputVoltage) {
+        if(trigger.process(inputs[TRIGGER_IN].value) == Latch::RISE) {
+                hold(inputVoltage);
+                ramp.start();
+            } else {
+                ramp.step();
+            }
     }
 
     float Stage::activeGateOutVoltage() {
@@ -34,7 +42,7 @@ namespace DHE {
 
     float Stage::eocTriggerOutVoltage() {
         return eocPulse.process(1.0f / rack::engineGetSampleRate()) ? TRIGGER_HI
-                                                                   : TRIGGER_LO;
+                                                                    : TRIGGER_LO;
     }
 
     void Stage::hold(float newHoldVoltage) { holdVoltage = newHoldVoltage; }
@@ -63,10 +71,4 @@ namespace DHE {
         return curve * envelopeScale + holdVoltage;
     }
 
-    void Stage::startEnvelopeIfTriggered(float startVoltage) {
-        trigger.process(inputs[TRIGGER_IN].value, [&]() {
-            hold(startVoltage);
-            ramp.start();
-        });
-    }
 } // namespace DHE

@@ -46,8 +46,6 @@ namespace DHE {
 
         void hold(float holdVoltage);
 
-        void startEnvelopeIfTriggered(float startVoltage);
-
         float rampStepSize();
 
         float envelopeVoltage();
@@ -57,5 +55,7 @@ namespace DHE {
         float eocTriggerOutVoltage();
 
         float stageOutVoltage(float deferredVoltage);
+
+        void advanceEnvelope(float inputVoltage);
     };
 } // namespace DHE
