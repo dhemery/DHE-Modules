@@ -2,33 +2,33 @@
 #include "math.hpp"
 
 namespace DHE {
-    Ramp::Ramp(const std::function<float()> &step, const std::function<void()> &onEndOfCycle) {
-        cycleEnded = onEndOfCycle;
-        delta = step;
+    Ramp::Ramp(const std::function<float()> &phaseIncrementSupplier, const std::function<void()> &onEndOfCycle) {
+        _onEndOfCycle = onEndOfCycle;
+        _phaseIncrement = phaseIncrementSupplier;
         stop();
     }
 
     void Ramp::start() {
-        progress = 0.0;
-        running = true;
+        _phase = 0.0;
+        _running = true;
     }
 
     void Ramp::stop() {
-        progress = 0.0;
-        running = false;
+        _phase = 0.0;
+        _running = false;
     }
 
     void Ramp::step() {
-        if (!running)
+        if (!_running)
             return;
-        progress = rack::clampf(progress + delta(), 0.0, 1.0);
-        running = progress < 1.0;
-        if (!running)
-            cycleEnded();
+        _phase = rack::clampf(_phase + _phaseIncrement(), 0.0, 1.0);
+        _running = _phase < 1.0;
+        if (!_running)
+            _onEndOfCycle();
     }
 
-    bool Ramp::isRunning() { return running; }
+    bool Ramp::isRunning() { return _running; }
 
-    float Ramp::value() { return progress; }
+    float Ramp::phase() { return _phase; }
 
 } // namespace DHE

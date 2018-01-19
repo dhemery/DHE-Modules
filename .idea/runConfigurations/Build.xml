@@ -3,7 +3,7 @@
     <envs />
     <method>
       <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="false" />
-      <option name="RunConfigurationTask" enabled="true" run_configuration_name="Make Plugin" run_configuration_type="MAKEFILE_TARGET_RUN_CONFIGURATION" />
+      <option name="RunConfigurationTask" enabled="true" />
     </method>
   </configuration>
 </component>

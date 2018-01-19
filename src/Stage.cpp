@@ -63,15 +63,15 @@ namespace DHE {
     }
 
     float Stage::envelopeVoltage() {
-        float progress = ramp.value();
-        if (progress == 0.0)
+        float phase = ramp.phase();
+        if (phase == 0.0)
             return inPort.value();
         float targetVoltage = params[LEVEL_KNOB].value;
-        if (progress == 1.0)
+        if (phase == 1.0)
             return targetVoltage;
         float envelopeScale = targetVoltage - inPort.value();
         float shape = params[SHAPE_KNOB].value;
-        float curve = shape < 0.0f ? 1.0f - powf(1.0f - progress, 1.0f - shape) : powf(progress, shape + 1.0f);
+        float curve = shape < 0.0f ? 1.0f - powf(1.0f - phase, 1.0f - shape) : powf(phase, shape + 1.0f);
         return curve * envelopeScale + inPort.value();
     }
 
