@@ -37,10 +37,10 @@ StageWidget::StageWidget() {
     addChild(panel);
 
     Vec screwPositions[] = {
-        Vec(RACK_GRID_WIDTH, 0), Vec(box.size.x - 2 * RACK_GRID_WIDTH, 0),
-        Vec(RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH),
-        Vec(box.size.x - 2 * RACK_GRID_WIDTH,
-            RACK_GRID_HEIGHT - RACK_GRID_WIDTH)};
+            Vec(RACK_GRID_WIDTH, 0), Vec(box.size.x - 2 * RACK_GRID_WIDTH, 0),
+            Vec(RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH),
+            Vec(box.size.x - 2 * RACK_GRID_WIDTH,
+                RACK_GRID_HEIGHT - RACK_GRID_WIDTH)};
 
     int screwCount = sizeof(screwPositions) / sizeof(*screwPositions);
     int blackScrew = rand() % screwCount;
@@ -53,8 +53,8 @@ StageWidget::StageWidget() {
     }
 
     addParam(createParam<RoundBlackKnob>(
-        Vec(H_KNOB, V_KNOB_TOP), module, Stage::DURATION_KNOB,
-        DURATION_KNOB_MIN, DURATION_KNOB_MAX, 0.5));
+            Vec(H_KNOB, V_KNOB_TOP), module, Stage::DURATION_KNOB,
+            DURATION_KNOB_MIN, DURATION_KNOB_MAX, 0.5));
     addParam(createParam<RoundBlackKnob>(Vec(H_KNOB, V_KNOB_MIDDLE), module,
                                          Stage::LEVEL_KNOB, 0.0, 10.0, 5.0));
     addParam(createParam<RoundBlackKnob>(Vec(H_KNOB, V_KNOB_BOTTOM), module,
