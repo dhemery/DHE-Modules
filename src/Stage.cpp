@@ -18,22 +18,19 @@ static float scaled(float f, float min, float max) {
 
 namespace DHE {
     Stage::Stage()
-            : Module(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS),
-              ramp([this]() { return rampStepSize(); },
-                   [this]() { eocPulse.trigger(1e-3); }),
-              stageIn([this]() { return envelopeIn(); }) {
+            : Module(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS) {
         deferGate = FlipFlop::latch(
                 [this]() { return inputs[DEFER_GATE_IN].value; },
                 [this]() { defer(); },
                 [this]() { resume(); });
         envelopeTrigger = FlipFlop::trigger(
                 [this]() { return inputs[TRIGGER_IN].value; },
-                [this]() { if (deferGate->isLow()) startEnvelope(); });
+                [this]() { if (deferGate->isLow()) envelopeStart(); });
     }
 
     void Stage::step() {
         deferGate->step();
-        advanceEnvelope();
+        envelopeStep();
 
         outputs[STAGE_OUT].value = deferGate->isHigh() ? stageIn.value() : envelopeOut();
         outputs[EOC_TRIGGER_OUT].value = gate(eocPulse.process(rack::engineGetSampleTime()));
@@ -53,10 +50,6 @@ namespace DHE {
 
     float Stage::shape() const { return params[SHAPE_KNOB].value; }
 
-    float Stage::envelopeOut() {
-        return scaled(shaped(ramp.phase(), shape()), stageIn.value(), level());
-    }
-
     void Stage::defer() {
         ramp.stop();
         stageIn.follow();
@@ -67,14 +60,17 @@ namespace DHE {
         stageIn.freeze();
     }
 
-    void Stage::startEnvelope() {
+    void Stage::envelopeStart() {
         stageIn.freeze();
         ramp.start();
     }
 
-    void Stage::advanceEnvelope() {
+    void Stage::envelopeStep() {
         if (deferGate->isLow()) ramp.step();
         envelopeTrigger->step();
+    }
+    float Stage::envelopeOut() {
+        return scaled(shaped(ramp.phase(), shape()), stageIn.value(), level());
     }
 
     float Stage::rampStepSize() const {

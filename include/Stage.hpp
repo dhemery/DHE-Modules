@@ -39,24 +39,37 @@ namespace DHE {
         void step() override;
 
     private:
-        Ramp ramp;
-        float rampStepSize() const;
-        float envelopeOut();
-        void startEnvelope();
-        void advanceEnvelope();
-        rack::PulseGenerator eocPulse;
+        Ramp ramp = Ramp([this]() { return rampStepSize(); },
+                         [this]() { eocPulse.trigger(1e-3); });
 
-        Freezer stageIn;
+        Freezer stageIn = Freezer([this]() { return envelopeIn(); });
+
         std::unique_ptr<FlipFlop> envelopeTrigger;
         std::unique_ptr<FlipFlop> deferGate;
 
         float duration() const;
+
         float level() const;
+
         float shape() const;
 
         void defer();
+
         void resume();
 
         float envelopeIn() const;
+
+
+        // TODO: Create pulse generator that calls a consumer when it rises or falls
+        rack::PulseGenerator eocPulse;
+
+        // TODO: Move the following envelope stuff to Envelope class
+        float rampStepSize() const;
+
+        float envelopeOut();
+
+        void envelopeStart();
+
+        void envelopeStep();
     };
 } // namespace DHE
