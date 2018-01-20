@@ -5,7 +5,7 @@
 #include "dsp/digital.hpp"
 #include "rack.hpp"
 #include "Freezer.hpp"
-#include "BinaryOutput.hpp"
+#include "SwitchedOutput.hpp"
 
 // TODO: Switch for slow, medium, and fast ramp
 // These constants yield ramp durations of:
@@ -44,8 +44,9 @@ namespace DHE {
         Ramp ramp;
         std::unique_ptr<FlipFlop> envelopeTrigger;
         std::unique_ptr<FlipFlop> deferGate;
-        std::unique_ptr<BinaryOutput> activeGateOut;
-        std::unique_ptr<BinaryOutput> endOfCycleOut;
+        std::unique_ptr<SwitchedOutput> activeGateOut;
+        std::unique_ptr<SwitchedOutput> endOfCycleOut;
+        std::unique_ptr<SwitchedOutput> stageOut;
 
         Freezer inPort;
 

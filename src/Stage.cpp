@@ -13,16 +13,16 @@ namespace DHE {
         envelopeTrigger = FlipFlop::trigger(
                 [this]() { return inputs[TRIGGER_IN].value; },
                 [this]() { if(deferGate->isLow()) startEnvelope(); });
-        activeGateOut = BinaryOutput::gate(outputs[ACTIVE_GATE_OUT]);
-        endOfCycleOut = BinaryOutput::pulse(outputs[EOC_TRIGGER_OUT]);
+        activeGateOut = SwitchedOutput::gate(outputs[ACTIVE_GATE_OUT]);
+        endOfCycleOut = SwitchedOutput::pulse(outputs[EOC_TRIGGER_OUT]);
+        stageOut = SwitchedOutput::choosing(outputs[STAGE_OUT], [this]() { return inPort.value(); }, [this]() { return envelopeVoltage(); });
     }
 
     void Stage::step() {
         deferGate->step();
         advanceEnvelope();
 
-        outputs[STAGE_OUT].value = stageOutVoltage();
-
+        stageOut->send(deferGate->isHigh());
         endOfCycleOut->send(eocPulse.process(rack::engineGetSampleTime()));
         activeGateOut->send(deferGate->isHigh() || ramp.isRunning());
     }
@@ -44,10 +44,6 @@ namespace DHE {
     void Stage::advanceEnvelope() {
         if (deferGate->isLow()) ramp.step();
         envelopeTrigger->step();
-    }
-
-    float Stage::stageOutVoltage() {
-        return deferGate->isHigh() ? inPort.value() : envelopeVoltage();
     }
 
     float Stage::rampStepSize() {
