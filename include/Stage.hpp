@@ -5,7 +5,6 @@
 #include "dsp/digital.hpp"
 #include "rack.hpp"
 #include "Freezer.hpp"
-#include "SwitchedOutput.hpp"
 
 // TODO: Switch for slow, medium, and fast ramp
 // These constants yield ramp durations of:
@@ -40,25 +39,23 @@ namespace DHE {
         void step() override;
 
     private:
-        rack::PulseGenerator eocPulse;
-        Ramp ramp;
+        Freezer stageIn;
         std::unique_ptr<FlipFlop> envelopeTrigger;
         std::unique_ptr<FlipFlop> deferGate;
-        std::unique_ptr<SwitchedOutput> activeGateOut;
-        std::unique_ptr<SwitchedOutput> endOfCycleOut;
-        std::unique_ptr<SwitchedOutput> stageOut;
 
-        Freezer inPort;
+        float duration();
+        float level();
 
         void defer();
         void resume();
-        void startEnvelope();
 
+        Ramp ramp;
+        float envelopeStartVoltage;
         float rampStepSize();
-
-        float envelopeVoltage();
-
+        void startEnvelope();
         void advanceEnvelope();
+        rack::PulseGenerator eocPulse;
+        float envelopeOut();
 
     };
 } // namespace DHE
