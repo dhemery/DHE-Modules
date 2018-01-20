@@ -50,7 +50,7 @@ namespace DHE {
         float duration =
                 powf(params[DURATION_KNOB].value, DURATION_KNOB_CURVATURE) *
                 DURATION_SCALE;
-        return 1.0f / (duration * rack::engineGetSampleRate());
+        return rack::engineGetSampleTime() / duration;
     }
 
     float Stage::envelopeVoltage() {
