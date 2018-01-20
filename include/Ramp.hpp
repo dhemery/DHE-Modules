@@ -24,9 +24,9 @@ namespace DHE {
         // effect.
         void step();
 
-        bool isRunning();
+        bool isRunning() const;
 
-        float phase();
+        float phase() const;
 
     private:
         std::function<void()> _onEndOfCycle;

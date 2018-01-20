@@ -27,8 +27,8 @@ namespace DHE {
             _onEndOfCycle();
     }
 
-    bool Ramp::isRunning() { return _running; }
+    bool Ramp::isRunning() const { return _running; }
 
-    float Ramp::phase() { return _phase; }
+    float Ramp::phase() const { return _phase; }
 
 } // namespace DHE

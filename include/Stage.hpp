@@ -39,23 +39,24 @@ namespace DHE {
         void step() override;
 
     private:
+        Ramp ramp;
+        float rampStepSize() const;
+        float envelopeOut();
+        void startEnvelope();
+        void advanceEnvelope();
+        rack::PulseGenerator eocPulse;
+
         Freezer stageIn;
         std::unique_ptr<FlipFlop> envelopeTrigger;
         std::unique_ptr<FlipFlop> deferGate;
 
-        float duration();
-        float level();
+        float duration() const;
+        float level() const;
+        float shape() const;
 
         void defer();
         void resume();
 
-        Ramp ramp;
-        float envelopeStartVoltage;
-        float rampStepSize();
-        void startEnvelope();
-        void advanceEnvelope();
-        rack::PulseGenerator eocPulse;
-        float envelopeOut();
-
+        float envelopeIn() const;
     };
 } // namespace DHE

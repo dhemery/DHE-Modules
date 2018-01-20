@@ -1,7 +1,19 @@
 #include "Stage.hpp"
 
 static float gate(bool state) {
-    return 0;
+    return state ? 10.0f : 0.0f;
+}
+
+static float unipolar(float f) {
+    return rack::clampf(f, 0.0f, 10.0f);
+}
+
+static float shaped(float phase, float shape) {
+    return shape < 0.0f ? 1.0f - powf(1.0f - phase, 1.0f - shape) : powf(phase, shape + 1.0f);
+}
+
+static float scaled(float f, float min, float max) {
+    return f * (max - min) + min;
 }
 
 namespace DHE {
@@ -9,7 +21,7 @@ namespace DHE {
             : Module(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS),
               ramp([this]() { return rampStepSize(); },
                    [this]() { eocPulse.trigger(1e-3); }),
-              stageIn([this]() { return rack::clampf(inputs[ENVELOPE_IN].value, 0.0f, 10.0f); }) {
+              stageIn([this]() { return envelopeIn(); }) {
         deferGate = FlipFlop::latch(
                 [this]() { return inputs[DEFER_GATE_IN].value; },
                 [this]() { defer(); },
@@ -28,25 +40,32 @@ namespace DHE {
         outputs[ACTIVE_GATE_OUT].value = gate(deferGate->isHigh() || ramp.isRunning());
     }
 
-    float Stage::duration() {
+    float Stage::envelopeIn() const { return unipolar(inputs[ENVELOPE_IN].value); }
+
+    float Stage::duration() const {
         return powf(params[DURATION_KNOB].value, DURATION_KNOB_CURVATURE) *
                DURATION_SCALE;
     }
 
-    float Stage::level() {
+    float Stage::level() const {
         return params[LEVEL_KNOB].value;
     }
 
+    float Stage::shape() const { return params[SHAPE_KNOB].value; }
+
+    float Stage::envelopeOut() {
+        return scaled(shaped(ramp.phase(), shape()), stageIn.value(), level());
+    }
 
     void Stage::defer() {
         ramp.stop();
         stageIn.follow();
     }
 
+
     void Stage::resume() {
         stageIn.freeze();
     }
-
 
     void Stage::startEnvelope() {
         stageIn.freeze();
@@ -58,21 +77,8 @@ namespace DHE {
         envelopeTrigger->step();
     }
 
-    float Stage::rampStepSize() {
+    float Stage::rampStepSize() const {
         return rack::engineGetSampleTime() / duration();
-    }
-
-    float Stage::envelopeOut() {
-        float phase = ramp.phase();
-        if (phase == 0.0)
-            return stageIn.value();
-        float targetVoltage = level();
-        if (phase == 1.0)
-            return targetVoltage;
-        float envelopeScale = targetVoltage - stageIn.value();
-        float shape = params[SHAPE_KNOB].value;
-        float curve = shape < 0.0f ? 1.0f - powf(1.0f - phase, 1.0f - shape) : powf(phase, shape + 1.0f);
-        return curve * envelopeScale + stageIn.value();
     }
 
 } // namespace DHE
