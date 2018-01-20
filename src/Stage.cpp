@@ -12,37 +12,46 @@ namespace DHE {
               ramp([&]() { return rampStepSize(); },
                    [&]() { eocPulse.trigger(1e-3); }),
               inPort([&]() { return rack::clampf(inputs[ENVELOPE_IN].value, 0.0f, 10.0f); }) {
+        deferGate = FlipFlop::latch(
+                [&]() { return inputs[DEFER_GATE_IN].value; },
+                [this]() { defer(); },
+                [this]() { resume(); });
+        envelopeTrigger = FlipFlop::trigger(
+                [&]() { return inputs[TRIGGER_IN].value; },
+                [this]() { startEnvelope(); }
+        );
     }
 
     void Stage::step() {
-        deferLatch.process(inputs[DEFER_GATE_IN].value,
-                           [&]() {
-                               ramp.stop();
-                               inPort.follow();
-                           },
-                           [&]() {
-                               inPort.freeze();
-                           });
-
-        if (deferLatch.isLow()) {
-            advanceEnvelope();
-        }
+        deferGate->step();
+        advanceEnvelope();
 
         outputs[STAGE_OUT].value = stageOutVoltage();
         outputs[EOC_TRIGGER_OUT].value = eocTriggerOutVoltage();
         outputs[ACTIVE_GATE_OUT].value = activeGateOutVoltage();
     }
 
+    void Stage::startEnvelope() {
+        inPort.freeze();
+        ramp.start();
+    }
+
+    void Stage::defer() {
+        ramp.stop();
+        inPort.follow();
+    }
+
+    void Stage::resume() {
+        inPort.freeze();
+    }
+
     void Stage::advanceEnvelope() {
-        if (trigger.isLow()) ramp.step();
-        trigger.process(inputs[TRIGGER_IN].value, [&]() {
-            inPort.freeze();
-            ramp.start();
-        });
+        if (deferGate->isLow()) ramp.step();
+        envelopeTrigger->step();
     }
 
     float Stage::activeGateOutVoltage() {
-        return (deferLatch.isHigh() || ramp.isRunning()) ? GATE_HI : GATE_LO;
+        return (deferGate->isHigh() || ramp.isRunning()) ? GATE_HI : GATE_LO;
     }
 
     float Stage::eocTriggerOutVoltage() {
@@ -51,7 +60,7 @@ namespace DHE {
     }
 
     float Stage::stageOutVoltage() {
-        return deferLatch.isHigh() ? inPort.value() : envelopeVoltage();
+        return deferGate->isHigh() ? inPort.value() : envelopeVoltage();
     }
 
     float Stage::rampStepSize() {

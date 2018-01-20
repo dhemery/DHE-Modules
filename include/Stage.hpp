@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Latch.hpp"
+#include "FlipFlop.hpp"
 #include "Ramp.hpp"
 #include "dsp/digital.hpp"
 #include "rack.hpp"
@@ -41,9 +41,13 @@ namespace DHE {
     private:
         rack::PulseGenerator eocPulse;
         Ramp ramp;
-        Latch trigger;
-        Latch deferLatch;
+        std::unique_ptr<FlipFlop> envelopeTrigger;
+        std::unique_ptr<FlipFlop> deferGate;
         Freezer inPort;
+
+        void defer();
+        void resume();
+        void startEnvelope();
 
         float rampStepSize();
 
