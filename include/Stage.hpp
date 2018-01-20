@@ -58,7 +58,6 @@ namespace DHE {
 
         float envelopeVoltage();
 
-        float stageOutVoltage();
         void advanceEnvelope();
 
     };
