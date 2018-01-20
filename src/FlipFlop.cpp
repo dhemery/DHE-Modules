@@ -9,6 +9,7 @@ namespace DHE {
                        const std::function<void()> &onFall,
                        const std::function<void()> &onNoChange
     ) {
+        this->signal = signal;
         this->lowThreshold = lowThreshold;
         this->highThreshold = highThreshold;
         this->onRise = onRise;

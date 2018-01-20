@@ -1,25 +1,20 @@
 #include "Stage.hpp"
 
-#define TRIGGER_HI (10.0f)
-#define TRIGGER_LO (0.0f)
-#define GATE_HI (5.0f)
-#define GATE_LO (-5.0f)
-
-
 namespace DHE {
     Stage::Stage()
             : Module(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS),
-              ramp([&]() { return rampStepSize(); },
-                   [&]() { eocPulse.trigger(1e-3); }),
-              inPort([&]() { return rack::clampf(inputs[ENVELOPE_IN].value, 0.0f, 10.0f); }) {
+              ramp([this]() { return rampStepSize(); },
+                   [this]() { eocPulse.trigger(1e-3); }),
+              inPort([this]() { return rack::clampf(inputs[ENVELOPE_IN].value, 0.0f, 10.0f); }) {
         deferGate = FlipFlop::latch(
-                [&]() { return inputs[DEFER_GATE_IN].value; },
+                [this]() { return inputs[DEFER_GATE_IN].value; },
                 [this]() { defer(); },
                 [this]() { resume(); });
         envelopeTrigger = FlipFlop::trigger(
-                [&]() { return inputs[TRIGGER_IN].value; },
-                [this]() { startEnvelope(); }
-        );
+                [this]() { return inputs[TRIGGER_IN].value; },
+                [this]() { if(deferGate->isLow()) startEnvelope(); });
+        activeGateOut = BinaryOutput::gate(outputs[ACTIVE_GATE_OUT]);
+        endOfCycleOut = BinaryOutput::pulse(outputs[EOC_TRIGGER_OUT]);
     }
 
     void Stage::step() {
@@ -27,8 +22,9 @@ namespace DHE {
         advanceEnvelope();
 
         outputs[STAGE_OUT].value = stageOutVoltage();
-        outputs[EOC_TRIGGER_OUT].value = eocTriggerOutVoltage();
-        outputs[ACTIVE_GATE_OUT].value = activeGateOutVoltage();
+
+        endOfCycleOut->send(eocPulse.process(rack::engineGetSampleTime()));
+        activeGateOut->send(deferGate->isHigh() || ramp.isRunning());
     }
 
     void Stage::startEnvelope() {
@@ -48,15 +44,6 @@ namespace DHE {
     void Stage::advanceEnvelope() {
         if (deferGate->isLow()) ramp.step();
         envelopeTrigger->step();
-    }
-
-    float Stage::activeGateOutVoltage() {
-        return (deferGate->isHigh() || ramp.isRunning()) ? GATE_HI : GATE_LO;
-    }
-
-    float Stage::eocTriggerOutVoltage() {
-        return eocPulse.process(1.0f / rack::engineGetSampleRate()) ? TRIGGER_HI
-                                                                    : TRIGGER_LO;
     }
 
     float Stage::stageOutVoltage() {

@@ -26,4 +26,4 @@ add_library(plugin SHARED
         include/Ramp.hpp
         src/Stage.cpp
         include/Stage.hpp
-        src/StageWidget.cpp src/Freezer.cpp include/Freezer.hpp)
+        src/StageWidget.cpp src/Freezer.cpp include/Freezer.hpp include/BinaryOutput.hpp src/BinaryOutput.cpp)
