@@ -6,6 +6,8 @@
 #include "rack.hpp"
 #include "Freezer.hpp"
 
+#include <memory>
+
 // TODO: Switch for slow, medium, and fast ramp
 // These constants yield ramp durations of:
 //    knob fully ccw  : .002417s
