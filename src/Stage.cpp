@@ -11,12 +11,16 @@
 #define DURATION_SQUEEZED_MIN (1.0f - DURATION_SQUEEZED_MAX)
 #define ENVELOPE_CURVATURE_MAX 4.0f
 
-inline float gate(bool state) {
+inline float boolToGateVoltage(bool state) {
     return state ? 10.0f : 0.0f;
 }
 
-inline float unipolar(float f) {
+inline float clampedToUnipolarVoltage(float f) {
     return rack::clampf(f, 0.0f, 10.0f);
+}
+
+inline float normalizedToUnipolarVoltage(float f) {
+    return f * 10.0f;
 }
 
 inline float shaped(float phase, float shape) {
@@ -34,11 +38,11 @@ namespace DHE {
         envelopeTrigger.step();
 
         outputs[STAGE_OUT].value = deferGate.isHigh() ? stageInputFollower.value() : envelopeOut();
-        outputs[EOC_TRIGGER_OUT].value = gate(eocPulse.process(rack::engineGetSampleTime()));
-        outputs[ACTIVE_GATE_OUT].value = gate(deferGate.isHigh() || ramp.isRunning());
+        outputs[EOC_TRIGGER_OUT].value = boolToGateVoltage(eocPulse.process(rack::engineGetSampleTime()));
+        outputs[ACTIVE_GATE_OUT].value = boolToGateVoltage(deferGate.isHigh() || ramp.isRunning());
     }
 
-    float Stage::stageIn() const { return unipolar(inputs[STAGE_IN].value); }
+    float Stage::stageIn() const { return clampedToUnipolarVoltage(inputs[STAGE_IN].value); }
 
     float Stage::duration() const {
         float knob = params[DURATION_KNOB].value;
@@ -48,7 +52,7 @@ namespace DHE {
     }
 
     float Stage::level() const {
-        return params[LEVEL_KNOB].value;
+        return normalizedToUnipolarVoltage(params[LEVEL_KNOB].value);
     }
 
     float Stage::shape() const {
