@@ -22,6 +22,9 @@
 
 namespace DHE {
 
+    /**
+     *
+     */
     struct Stage : rack::Module {
         enum ParamIds {
             DURATION_KNOB, LEVEL_KNOB, SHAPE_KNOB, NUM_PARAMS
@@ -36,18 +39,21 @@ namespace DHE {
             NUM_LIGHTS
         };
 
-        Stage();
+        Stage() : Module(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS) {}
 
         void step() override;
 
     private:
         Ramp ramp = Ramp([this]() { return rampStepSize(); },
                          [this]() { eocPulse.trigger(1e-3); });
-
         Freezer stageIn = Freezer([this]() { return envelopeIn(); });
-
-        std::unique_ptr<FlipFlop> envelopeTrigger;
-        std::unique_ptr<FlipFlop> deferGate;
+        FlipFlop deferGate = FlipFlop(
+                [this]() { return inputs[DEFER_GATE_IN].value; },
+                [this]() { defer(); },
+                [this]() { resume(); });
+        FlipFlop envelopeTrigger = FlipFlop(
+                [this]() { return inputs[TRIGGER_IN].value; },
+                [this]() { if (deferGate.isLow()) envelopeStart(); });
 
         float duration() const;
 
@@ -60,7 +66,6 @@ namespace DHE {
         void resume();
 
         float envelopeIn() const;
-
 
         // TODO: Create pulse generator that calls a consumer when it rises or falls
         rack::PulseGenerator eocPulse;

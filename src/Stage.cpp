@@ -1,3 +1,4 @@
+#include <cmath>
 #include "Stage.hpp"
 
 static float gate(bool state) {
@@ -9,7 +10,7 @@ static float unipolar(float f) {
 }
 
 static float shaped(float phase, float shape) {
-    return shape < 0.0f ? 1.0f - powf(1.0f - phase, 1.0f - shape) : powf(phase, shape + 1.0f);
+    return shape < 0.0f ? 1.0f - pow(1.0f - phase, 1.0f - shape) : pow(phase, shape + 1.0f);
 }
 
 static float scaled(float f, float min, float max) {
@@ -17,30 +18,19 @@ static float scaled(float f, float min, float max) {
 }
 
 namespace DHE {
-    Stage::Stage()
-            : Module(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS) {
-        deferGate = FlipFlop::latch(
-                [this]() { return inputs[DEFER_GATE_IN].value; },
-                [this]() { defer(); },
-                [this]() { resume(); });
-        envelopeTrigger = FlipFlop::trigger(
-                [this]() { return inputs[TRIGGER_IN].value; },
-                [this]() { if (deferGate->isLow()) envelopeStart(); });
-    }
-
     void Stage::step() {
-        deferGate->step();
+        deferGate.step();
         envelopeStep();
 
-        outputs[STAGE_OUT].value = deferGate->isHigh() ? stageIn.value() : envelopeOut();
+        outputs[STAGE_OUT].value = deferGate.isHigh() ? stageIn.value() : envelopeOut();
         outputs[EOC_TRIGGER_OUT].value = gate(eocPulse.process(rack::engineGetSampleTime()));
-        outputs[ACTIVE_GATE_OUT].value = gate(deferGate->isHigh() || ramp.isRunning());
+        outputs[ACTIVE_GATE_OUT].value = gate(deferGate.isHigh() || ramp.isRunning());
     }
 
     float Stage::envelopeIn() const { return unipolar(inputs[ENVELOPE_IN].value); }
 
     float Stage::duration() const {
-        return powf(params[DURATION_KNOB].value, DURATION_KNOB_CURVATURE) *
+        return pow(params[DURATION_KNOB].value, DURATION_KNOB_CURVATURE) *
                DURATION_SCALE;
     }
 
@@ -66,8 +56,8 @@ namespace DHE {
     }
 
     void Stage::envelopeStep() {
-        if (deferGate->isLow()) ramp.step();
-        envelopeTrigger->step();
+        if (deferGate.isLow()) ramp.step();
+        envelopeTrigger.step();
     }
     float Stage::envelopeOut() {
         return scaled(shaped(ramp.phase(), shape()), stageIn.value(), level());

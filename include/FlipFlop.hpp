@@ -13,18 +13,15 @@ namespace DHE {
         // and reacts to changes in state.
         FlipFlop(const std::function<float()> &signal,
                  float lowThreshold, float highThreshold,
-                 const std::function<void()> &onRise,
-                 const std::function<void()> &onFall,
-                 const std::function<void()> &onNoChange);
+                 const std::function<void()> &onRise = [](){},
+                 const std::function<void()> &onFall = [](){},
+                 const std::function<void()> &onNoChange = [](){});
 
-        // Creates a new trigger: a flip-flop that
-        // fires onRise() when the state changes to HIGH.
-        static std::unique_ptr<FlipFlop> trigger(const std::function<float()> &signal, const std::function<void()> &onRise);
-
-        // Creates a new latch: a flip-flop that
-        // fires onRise() when the state changes to HIGH
-        // and fires onFall() when the state changes to LOW.
-        static std::unique_ptr<FlipFlop> latch(const std::function<float()> &signal, const std::function<void()> &onRise, const std::function<void()> &onFall);
+        FlipFlop(const std::function<float()> &signal,
+                 const std::function<void()> &onRise = [](){},
+                 const std::function<void()> &onFall = [](){},
+                 const std::function<void()> &onNoChange = [](){})
+        : FlipFlop(signal, 0.0f, 1.0f, onRise, onFall, onNoChange){}
 
         // Evaluates the signal and sets the state accordingly.
         // Fires onRise() if the state changed to HIGH.

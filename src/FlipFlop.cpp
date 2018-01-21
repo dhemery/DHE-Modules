@@ -32,14 +32,4 @@ namespace DHE {
     bool FlipFlop::isHigh() { return _state == HIGH; }
 
     bool FlipFlop::isLow() { return _state == LOW; }
-
-    std::unique_ptr<FlipFlop> FlipFlop::trigger(const std::function<float()> &signal, const std::function<void()> &onRise) {
-        return std::unique_ptr<FlipFlop> {new FlipFlop(signal, 0.0f, 0.1f, onRise, [](){}, [](){})};
-    }
-
-    std::unique_ptr<FlipFlop> FlipFlop::latch(const std::function<float()> &signal, const std::function<void()> &onRise,
-                                              const std::function<void()> &onFall) {
-        return std::unique_ptr<FlipFlop> {new FlipFlop(signal, 0.0f, 0.1f, onRise, onFall, [](){})};
-    }
-
 } // namespace DHE
