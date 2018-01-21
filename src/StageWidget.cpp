@@ -62,7 +62,7 @@ StageWidget::StageWidget() {
                                          SHAPE_KNOB_MAX, 0.0));
 
     addInput(createInput<PJ301MPort>(Vec(H_PORT_LEFT, V_PORT_TOP), module,
-                                     Stage::ENVELOPE_IN));
+                                     Stage::STAGE_IN));
     addInput(createInput<PJ301MPort>(Vec(H_PORT_LEFT, V_PORT_MIDDLE), module,
                                      Stage::TRIGGER_IN));
     addInput(createInput<PJ301MPort>(Vec(H_PORT_LEFT, V_PORT_BOTTOM), module,

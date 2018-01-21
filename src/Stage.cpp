@@ -1,20 +1,20 @@
 #include <cmath>
 #include "Stage.hpp"
 
-static float gate(bool state) {
+inline float gate(bool state) {
     return state ? 10.0f : 0.0f;
 }
 
-static float unipolar(float f) {
+inline float unipolar(float f) {
     return rack::clampf(f, 0.0f, 10.0f);
 }
 
-static float shaped(float phase, float shape) {
+inline float shaped(float phase, float shape) {
     return shape < 0.0f ? 1.0f - pow(1.0f - phase, 1.0f - shape) : pow(phase, shape + 1.0f);
 }
 
-static float scaled(float f, float min, float max) {
-    return f * (max - min) + min;
+inline float scaled(float f, float min, float max) {
+    return rack::crossf(min, max, f);
 }
 
 namespace DHE {
@@ -22,16 +22,15 @@ namespace DHE {
         deferGate.step();
         envelopeStep();
 
-        outputs[STAGE_OUT].value = deferGate.isHigh() ? stageIn.value() : envelopeOut();
+        outputs[STAGE_OUT].value = deferGate.isHigh() ? stageInputFollower.value() : envelopeOut();
         outputs[EOC_TRIGGER_OUT].value = gate(eocPulse.process(rack::engineGetSampleTime()));
         outputs[ACTIVE_GATE_OUT].value = gate(deferGate.isHigh() || ramp.isRunning());
     }
 
-    float Stage::envelopeIn() const { return unipolar(inputs[ENVELOPE_IN].value); }
+    float Stage::stageIn() const { return unipolar(inputs[STAGE_IN].value); }
 
     float Stage::duration() const {
-        return pow(params[DURATION_KNOB].value, DURATION_KNOB_CURVATURE) *
-               DURATION_SCALE;
+        return pow(params[DURATION_KNOB].value, DURATION_KNOB_CURVATURE) * DURATION_SCALE;
     }
 
     float Stage::level() const {
@@ -42,16 +41,15 @@ namespace DHE {
 
     void Stage::defer() {
         ramp.stop();
-        stageIn.follow();
+        stageInputFollower.follow();
     }
 
-
     void Stage::resume() {
-        stageIn.freeze();
+        stageInputFollower.pause();
     }
 
     void Stage::envelopeStart() {
-        stageIn.freeze();
+        stageInputFollower.pause();
         ramp.start();
     }
 
@@ -59,8 +57,9 @@ namespace DHE {
         if (deferGate.isLow()) ramp.step();
         envelopeTrigger.step();
     }
+
     float Stage::envelopeOut() {
-        return scaled(shaped(ramp.phase(), shape()), stageIn.value(), level());
+        return scaled(shaped(ramp.phase(), shape()), stageInputFollower.value(), level());
     }
 
     float Stage::rampStepSize() const {

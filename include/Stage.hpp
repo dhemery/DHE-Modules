@@ -4,7 +4,7 @@
 #include "Ramp.hpp"
 #include "dsp/digital.hpp"
 #include "rack.hpp"
-#include "Freezer.hpp"
+#include "Follower.hpp"
 
 #include <memory>
 
@@ -30,7 +30,7 @@ namespace DHE {
             DURATION_KNOB, LEVEL_KNOB, SHAPE_KNOB, NUM_PARAMS
         };
         enum InputIds {
-            ENVELOPE_IN, TRIGGER_IN, DEFER_GATE_IN, NUM_INPUTS
+            STAGE_IN, TRIGGER_IN, DEFER_GATE_IN, NUM_INPUTS
         };
         enum OutputIds {
             STAGE_OUT, EOC_TRIGGER_OUT, ACTIVE_GATE_OUT, NUM_OUTPUTS
@@ -46,7 +46,7 @@ namespace DHE {
     private:
         Ramp ramp = Ramp([this]() { return rampStepSize(); },
                          [this]() { eocPulse.trigger(1e-3); });
-        Freezer stageIn = Freezer([this]() { return envelopeIn(); });
+        Follower stageInputFollower = Follower([this]() { return stageIn(); });
         FlipFlop deferGate = FlipFlop(
                 [this]() { return inputs[DEFER_GATE_IN].value; },
                 [this]() { defer(); },
@@ -65,7 +65,7 @@ namespace DHE {
 
         void resume();
 
-        float envelopeIn() const;
+        float stageIn() const;
 
         // TODO: Create pulse generator that calls a consumer when it rises or falls
         rack::PulseGenerator eocPulse;

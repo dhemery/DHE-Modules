@@ -4,29 +4,49 @@
 
 namespace DHE {
 
-    // A ramp whose phase progresses from 0 to 1. When the phase reaches 1,
-    // further positive increments have no effect.
+    /**
+     * A ramp whose phase progresses from 0 to 1. When the phase reaches 1,
+     * further positive increments have no effect.
+     */
     struct Ramp {
-        // Constructs a ramp that advances in increments supplied by the supplier,
-        // and that calls onEndOfCycle() at the end of each step that advances
-        // the phase to 1.
+        /**
+         * Constructs a ramp that advances from 0 to 1 in increments supplied
+         * by the supplier, and that calls onEndOfCycle() at the end of each
+         * step that advances the phase to 1.
+         *
+         * @param phaseIncrementSupplier called on each step to obtain the increment to advance the phase
+         * @param onEndOfCycle called if a step advances the phase to 1
+         */
+        //
         Ramp(const std::function<float()> &phaseIncrementSupplier, const std::function<void()> &onEndOfCycle);
 
-        // Starts the ramp at phase 0.
-        void start();
+        /**
+         * Starts the ramp at phase 0.
+         */
+        void start() {
+            _phase = 0.0;
+            _running = true;
+        }
 
-        // Stops the ramp at phase 0.
-        void stop();
+        /**
+         * Stops the ramp at phase 0.
+         */
+        void stop() {
+            _phase = 0.0;
+            _running = false;
+        }
 
-        // Advances the phase by the supplied increment, to a maximum phase of 1.
-        // If the phase advances to 1, the ramp stops running with phase==1 and
-        // calls onEndOfCycle(). If the ramp is not running, this function has no
-        // effect.
+        /**
+         * Advances the phase by the supplied increment, to a maximum phase of 1.
+         * If the phase advances to 1, the ramp stops running with phase == 1 and
+         * calls onEndOfCycle(). If the ramp is not running, this function has no
+         * effect.
+         */
         void step();
 
-        bool isRunning() const;
+        bool isRunning() const { return _running; }
 
-        float phase() const;
+        float phase() const { return _phase; }
 
     private:
         std::function<void()> _onEndOfCycle;

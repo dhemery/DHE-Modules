@@ -8,16 +8,6 @@ namespace DHE {
         stop();
     }
 
-    void Ramp::start() {
-        _phase = 0.0;
-        _running = true;
-    }
-
-    void Ramp::stop() {
-        _phase = 0.0;
-        _running = false;
-    }
-
     void Ramp::step() {
         if (!_running)
             return;
@@ -26,9 +16,4 @@ namespace DHE {
         if (!_running)
             _onEndOfCycle();
     }
-
-    bool Ramp::isRunning() const { return _running; }
-
-    float Ramp::phase() const { return _phase; }
-
 } // namespace DHE
