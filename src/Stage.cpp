@@ -20,10 +20,6 @@ inline float clampedToUnipolarVoltage(float f) {
     return rack::clampf(f, 0.0f, 10.0f);
 }
 
-inline float normalizedToUnipolarVoltage(float f) {
-    return f * 10.0f;
-}
-
 inline float shaped(float phase, float shape) {
     return shape >= 0.0f ? pow(phase, shape + 1.0f) : 1.0f - shaped(1.0f - phase, -shape);
 }
@@ -33,6 +29,7 @@ inline float scaled(float f, float min, float max) {
 }
 
 namespace DHE {
+
     void Stage::step() {
         deferGate.step();
         if (deferGate.isLow()) ramp.step();
@@ -53,11 +50,12 @@ namespace DHE {
     }
 
     float Stage::level() const {
-        return normalizedToUnipolarVoltage(params[LEVEL_KNOB].value);
+        DHE::ValueScale unipolarVoltage(0.0f, 10.0f);
+        return unipolarVoltage.scale(params[LEVEL_KNOB].value);
     }
 
     float Stage::shape() const {
-        ValueScale shapeScale = ValueScale(-ENVELOPE_CURVATURE_MAX, ENVELOPE_CURVATURE_MAX);
+        ValueScale shapeScale(-ENVELOPE_CURVATURE_MAX, ENVELOPE_CURVATURE_MAX);
         return shapeScale.scale(params[SHAPE_KNOB].value);
     }
 
