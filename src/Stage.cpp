@@ -29,9 +29,20 @@ namespace DHE {
     }
 
     float Stage::stageIn() const { return unipolar(inputs[STAGE_IN].value); }
+    // These constants yield ramp durations of:
+    //    knob fully ccw  : .002417s
+    //    knob dead center: 1s
+    //    knob fully cw   : 10s
+#define DURATION_KNOB_CURVATURE (4.0f)
+#define DURATION_KNOB_MAX (0.88913970f)
+#define DURATION_KNOB_MIN (1.0f - DURATION_KNOB_MAX)
+#define DURATION_SCALE (16.0f)
 
     float Stage::duration() const {
-        return pow(params[DURATION_KNOB].value, DURATION_KNOB_CURVATURE) * DURATION_SCALE;
+        float knob = params[DURATION_KNOB].value;
+        float squeezed = scaled(knob, DURATION_KNOB_MIN, DURATION_KNOB_MAX);
+        float curved = shaped(squeezed, DURATION_KNOB_CURVATURE);
+        return scaled(curved, 0.0f, DURATION_SCALE);
     }
 
     float Stage::level() const {

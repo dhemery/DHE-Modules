@@ -9,14 +9,6 @@
 #include <memory>
 
 // TODO: Switch for slow, medium, and fast ramp
-// These constants yield ramp durations of:
-//    knob fully ccw  : .002417s
-//    knob dead center: 1s
-//    knob fully cw   : 10s
-#define DURATION_KNOB_CURVATURE (4.0f)
-#define DURATION_KNOB_MAX (0.88913970f)
-#define DURATION_KNOB_MIN (1.0f - DURATION_KNOB_MAX)
-#define DURATION_SCALE (16.0f)
 
 #define SHAPE_KNOB_MAX 4.0f
 

@@ -51,26 +51,17 @@ StageWidget::StageWidget() {
             addChild(createScrew<ScrewSilver>(screwPositions[i]));
     }
 
-    addParam(createParam<RoundBlackKnob>(
-            Vec(H_KNOB, V_KNOB_TOP), module, Stage::DURATION_KNOB,
-            DURATION_KNOB_MIN, DURATION_KNOB_MAX, 0.5));
-    addParam(createParam<RoundBlackKnob>(Vec(H_KNOB, V_KNOB_MIDDLE), module,
-                                         Stage::LEVEL_KNOB, 0.0, 10.0, 5.0));
+    addParam(createParam<RoundBlackKnob>(Vec(H_KNOB, V_KNOB_TOP), module, Stage::DURATION_KNOB, 0.0f, 1.0f, 0.5f));
+    addParam(createParam<RoundBlackKnob>(Vec(H_KNOB, V_KNOB_MIDDLE), module, Stage::LEVEL_KNOB, 0.0, 10.0, 5.0));
     addParam(createParam<RoundBlackKnob>(Vec(H_KNOB, V_KNOB_BOTTOM), module,
                                          Stage::SHAPE_KNOB, -(SHAPE_KNOB_MAX),
                                          SHAPE_KNOB_MAX, 0.0));
 
-    addInput(createInput<PJ301MPort>(Vec(H_PORT_LEFT, V_PORT_TOP), module,
-                                     Stage::STAGE_IN));
-    addInput(createInput<PJ301MPort>(Vec(H_PORT_LEFT, V_PORT_MIDDLE), module,
-                                     Stage::TRIGGER_IN));
-    addInput(createInput<PJ301MPort>(Vec(H_PORT_LEFT, V_PORT_BOTTOM), module,
-                                     Stage::DEFER_GATE_IN));
+    addInput(createInput<PJ301MPort>(Vec(H_PORT_LEFT, V_PORT_TOP), module, Stage::STAGE_IN));
+    addInput(createInput<PJ301MPort>(Vec(H_PORT_LEFT, V_PORT_MIDDLE), module, Stage::TRIGGER_IN));
+    addInput(createInput<PJ301MPort>(Vec(H_PORT_LEFT, V_PORT_BOTTOM), module, Stage::DEFER_GATE_IN));
 
-    addOutput(createOutput<PJ301MPort>(Vec(H_PORT_RIGHT, V_PORT_TOP), module,
-                                       Stage::STAGE_OUT));
-    addOutput(createOutput<PJ301MPort>(Vec(H_PORT_RIGHT, V_PORT_MIDDLE), module,
-                                       Stage::EOC_TRIGGER_OUT));
-    addOutput(createOutput<PJ301MPort>(Vec(H_PORT_RIGHT, V_PORT_BOTTOM), module,
-                                       Stage::ACTIVE_GATE_OUT));
+    addOutput(createOutput<PJ301MPort>(Vec(H_PORT_RIGHT, V_PORT_TOP), module, Stage::STAGE_OUT));
+    addOutput(createOutput<PJ301MPort>(Vec(H_PORT_RIGHT, V_PORT_MIDDLE), module, Stage::EOC_TRIGGER_OUT));
+    addOutput(createOutput<PJ301MPort>(Vec(H_PORT_RIGHT, V_PORT_BOTTOM), module, Stage::ACTIVE_GATE_OUT));
 }
