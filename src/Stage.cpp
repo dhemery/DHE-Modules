@@ -47,7 +47,7 @@ namespace DHE {
     float Stage::duration() const {
         float knob = params[DURATION_KNOB].value;
         float squeezed = scaled(knob, DURATION_SQUEEZED_MIN, DURATION_SQUEEZED_MAX);
-        float curved = shaped(squeezed, DURATION_CURVATURE);
+        float curved = pow(squeezed, DURATION_CURVATURE);
         return scaled(curved, 0.0f, DURATION_SCALE);
     }
 
