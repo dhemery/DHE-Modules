@@ -9,16 +9,23 @@ namespace DHE {
      * further positive increments have no effect.
      */
     struct Ramp {
-        /**
+        /*!
          * Constructs a ramp that advances from 0 to 1 in increments supplied
          * by the supplier, and that calls onEndOfCycle() at the end of each
          * step that advances the phase to 1.
+         *
+         * A newly constructed ramp is stopped at phase 0.
          *
          * @param phaseIncrementSupplier called on each step to obtain the increment to advance the phase
          * @param onEndOfCycle called if a step advances the phase to 1
          */
         //
-        Ramp(const std::function<float()> &phaseIncrementSupplier, const std::function<void()> &onEndOfCycle);
+        Ramp(const std::function<float()> &phaseIncrementSupplier, const std::function<void()> &onEndOfCycle) {
+            _onEndOfCycle = onEndOfCycle;
+            _phaseIncrement = phaseIncrementSupplier;
+            _running = false;
+            _phase = 0;
+        }
 
         /**
          * Starts the ramp at phase 0.
@@ -28,7 +35,7 @@ namespace DHE {
             _running = true;
         }
 
-        /**
+        /*!
          * Stops the ramp at phase 0.
          */
         void stop() {
@@ -51,7 +58,7 @@ namespace DHE {
     private:
         std::function<void()> _onEndOfCycle;
         std::function<float()> _phaseIncrement;
-        bool _running;
-        float _phase;
+        bool _running{};
+        float _phase{};
     };
 } // namespace DHE

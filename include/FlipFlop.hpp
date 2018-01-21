@@ -26,8 +26,8 @@ namespace DHE {
          * @param onNoChange called if a step yields no change in state
          */
         FlipFlop(const std::function<float()> &signal, float lowThreshold, float highThreshold,
-                           const std::function<void()> &onRise, const std::function<void()> &onFall,
-                           const std::function<void()> &onNoChange) {
+                 const std::function<void()> &onRise, const std::function<void()> &onFall,
+                 const std::function<void()> &onNoChange) {
             this->signal = signal;
             this->lowThreshold = lowThreshold;
             this->highThreshold = highThreshold;
@@ -45,8 +45,7 @@ namespace DHE {
          * @param onFall called if a step yields a falling edge
          * @param onNoChange called if a step yields no change in state
          */
-        explicit FlipFlop(const std::function<float()> &signal,
-                          const std::function<void()> &onRise = []() {},
+        explicit FlipFlop(const std::function<float()> &signal, const std::function<void()> &onRise = []() {},
                           const std::function<void()> &onFall = []() {},
                           const std::function<void()> &onNoChange = []() {})
                 : FlipFlop(signal, 0.0f, 1.0f, onRise, onFall, onNoChange) {}

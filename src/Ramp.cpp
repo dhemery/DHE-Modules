@@ -2,12 +2,6 @@
 #include "math.hpp"
 
 namespace DHE {
-    Ramp::Ramp(const std::function<float()> &phaseIncrementSupplier, const std::function<void()> &onEndOfCycle) {
-        _onEndOfCycle = onEndOfCycle;
-        _phaseIncrement = phaseIncrementSupplier;
-        stop();
-    }
-
     void Ramp::step() {
         if (!_running)
             return;
