@@ -10,7 +10,6 @@
 
 // TODO: Switch for slow, medium, and fast ramp
 
-#define SHAPE_KNOB_MAX 4.0f
 
 namespace DHE {
 

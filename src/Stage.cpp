@@ -1,6 +1,16 @@
 #include <cmath>
 #include "Stage.hpp"
 
+// These constants yield ramp durations of:
+//    knob fully ccw  : .002417s
+//    knob dead center: 1s
+//    knob fully cw   : 10s
+#define DURATION_CURVATURE (4.0f)
+#define DURATION_SCALE (16.0f)
+#define DURATION_SQUEEZED_MAX (0.88913970f)
+#define DURATION_SQUEEZED_MIN (1.0f - DURATION_SQUEEZED_MAX)
+#define ENVELOPE_CURVATURE_MAX 4.0f
+
 inline float gate(bool state) {
     return state ? 10.0f : 0.0f;
 }
@@ -29,19 +39,11 @@ namespace DHE {
     }
 
     float Stage::stageIn() const { return unipolar(inputs[STAGE_IN].value); }
-    // These constants yield ramp durations of:
-    //    knob fully ccw  : .002417s
-    //    knob dead center: 1s
-    //    knob fully cw   : 10s
-#define DURATION_KNOB_CURVATURE (4.0f)
-#define DURATION_KNOB_MAX (0.88913970f)
-#define DURATION_KNOB_MIN (1.0f - DURATION_KNOB_MAX)
-#define DURATION_SCALE (16.0f)
 
     float Stage::duration() const {
         float knob = params[DURATION_KNOB].value;
-        float squeezed = scaled(knob, DURATION_KNOB_MIN, DURATION_KNOB_MAX);
-        float curved = shaped(squeezed, DURATION_KNOB_CURVATURE);
+        float squeezed = scaled(knob, DURATION_SQUEEZED_MIN, DURATION_SQUEEZED_MAX);
+        float curved = shaped(squeezed, DURATION_CURVATURE);
         return scaled(curved, 0.0f, DURATION_SCALE);
     }
 
@@ -49,7 +51,9 @@ namespace DHE {
         return params[LEVEL_KNOB].value;
     }
 
-    float Stage::shape() const { return params[SHAPE_KNOB].value; }
+    float Stage::shape() const {
+        return scaled(params[SHAPE_KNOB].value, -ENVELOPE_CURVATURE_MAX, ENVELOPE_CURVATURE_MAX);
+    }
 
     void Stage::defer() {
         ramp.stop();
