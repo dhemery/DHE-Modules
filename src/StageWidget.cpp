@@ -1,7 +1,6 @@
 #include "DHEModules.hpp"
 #include "Stage.hpp"
 
-#define ROGAN_P3_KNOB_SIZE 34.3
 #define ROUND_BLACK_KNOB_SIZE 38.0f
 #define WIDGET_HP 6
 #define WIDGET_WIDTH (WIDGET_HP * RACK_GRID_WIDTH)

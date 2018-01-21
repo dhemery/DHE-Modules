@@ -10,7 +10,7 @@ inline float unipolar(float f) {
 }
 
 inline float shaped(float phase, float shape) {
-    return shape < 0.0f ? 1.0f - pow(1.0f - phase, 1.0f - shape) : pow(phase, shape + 1.0f);
+    return shape >= 0.0f ? pow(phase, shape + 1.0f) : 1.0f - shaped(1.0f - phase, -shape);
 }
 
 inline float scaled(float f, float min, float max) {
