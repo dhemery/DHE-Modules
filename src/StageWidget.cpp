@@ -1,3 +1,4 @@
+#include <random>
 #include "DHEModules.hpp"
 #include "Stage.hpp"
 
@@ -42,7 +43,9 @@ StageWidget::StageWidget() {
                 RACK_GRID_HEIGHT - RACK_GRID_WIDTH)};
 
     int screwCount = sizeof(screwPositions) / sizeof(*screwPositions);
-    int blackScrew = rand() % screwCount;
+    std::default_random_engine generator;
+    std::uniform_int_distribution<int> aScrew(0, 3);
+    int blackScrew = aScrew(generator);
 
     for (int i = 0; i < screwCount; i++) {
         if (i == blackScrew)
