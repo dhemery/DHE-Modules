@@ -44,7 +44,7 @@ namespace DHE {
         void step() override;
 
     private:
-        Ramp ramp = Ramp([this]() { return rampStepSize(); },
+        Ramp ramp = Ramp([this]() { return rack::engineGetSampleTime() / duration(); },
                          [this]() { eocPulse.trigger(1e-3); });
         Follower stageInputFollower = Follower([this]() { return stageIn(); });
         FlipFlop deferGate = FlipFlop(
@@ -71,12 +71,9 @@ namespace DHE {
         rack::PulseGenerator eocPulse;
 
         // TODO: Move the following envelope stuff to Envelope class
-        float rampStepSize() const;
 
         float envelopeOut();
 
         void envelopeStart();
-
-        void envelopeStep();
     };
 } // namespace DHE

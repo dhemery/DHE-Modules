@@ -20,7 +20,8 @@ inline float scaled(float f, float min, float max) {
 namespace DHE {
     void Stage::step() {
         deferGate.step();
-        envelopeStep();
+        if (deferGate.isLow()) ramp.step();
+        envelopeTrigger.step();
 
         outputs[STAGE_OUT].value = deferGate.isHigh() ? stageInputFollower.value() : envelopeOut();
         outputs[EOC_TRIGGER_OUT].value = gate(eocPulse.process(rack::engineGetSampleTime()));
@@ -53,17 +54,7 @@ namespace DHE {
         ramp.start();
     }
 
-    void Stage::envelopeStep() {
-        if (deferGate.isLow()) ramp.step();
-        envelopeTrigger.step();
-    }
-
     float Stage::envelopeOut() {
         return scaled(shaped(ramp.phase(), shape()), stageInputFollower.value(), level());
     }
-
-    float Stage::rampStepSize() const {
-        return rack::engineGetSampleTime() / duration();
-    }
-
 } // namespace DHE
