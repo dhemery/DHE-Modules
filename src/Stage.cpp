@@ -1,4 +1,5 @@
 #include <cmath>
+#include <ValueScale.hpp>
 #include "Stage.hpp"
 
 // These constants yield ramp durations of:
@@ -56,7 +57,8 @@ namespace DHE {
     }
 
     float Stage::shape() const {
-        return scaled(params[SHAPE_KNOB].value, -ENVELOPE_CURVATURE_MAX, ENVELOPE_CURVATURE_MAX);
+        ValueScale shapeScale = ValueScale(-ENVELOPE_CURVATURE_MAX, ENVELOPE_CURVATURE_MAX);
+        return shapeScale.scale(params[SHAPE_KNOB].value);
     }
 
     void Stage::defer() {
