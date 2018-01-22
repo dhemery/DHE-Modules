@@ -1,9 +1,9 @@
 #pragma once
 
-#include "FlipFlop.hpp"
-#include "Ramp.hpp"
 #include "dsp/digital.hpp"
 #include "rack.hpp"
+#include "FlipFlop.hpp"
+#include "Ramp.hpp"
 #include "Follower.hpp"
 
 #include <memory>

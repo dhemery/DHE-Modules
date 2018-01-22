@@ -1,11 +1,10 @@
 #include "Stage.hpp"
-#include <StageWidget.hpp>
+#include "StageWidget.hpp"
 
 namespace DHE {
     using namespace rack;
     StageWidget::StageWidget() : Widget(new Stage(), 4, "res/Stage Skinny.svg") {
         createScrews(SCREW_H_INSET, SCREW_V_INSET);
-
 
         addParam(createParam<RoundBlackKnob>(Vec(H_KNOB, V_KNOB_TOP), module, Stage::DURATION_KNOB, 0.0f,
                                                    1.0f, 0.5f));

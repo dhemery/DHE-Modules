@@ -15,3 +15,4 @@ void init(rack::Plugin *p) {
     p->addModel(rack::createModel<DHE::StageWidget>(DHE::MANUFACTURER, DHE::Stage::SLUG, DHE::Stage::NAME,
                                                     rack::ENVELOPE_GENERATOR_TAG));
 }
+/**/
