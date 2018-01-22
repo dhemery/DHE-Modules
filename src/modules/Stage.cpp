@@ -17,12 +17,8 @@ inline float boolToGateVoltage(bool state) {
     return state ? 10.0f : 0.0f;
 }
 
-inline float shaped(float phase, float shape) {
-    return shape >= 0.0f ? pow(phase, shape + 1.0f) : 1.0f - shaped(1.0f - phase, -shape);
-}
-
-inline float scaled(float f, float min, float max) {
-    return rack::crossf(min, max, f);
+inline float curved(float phase, float shape) {
+    return shape >= 0.0f ? pow(phase, shape + 1.0f) : 1.0f - curved(1.0f - phase, -shape);
 }
 
 namespace DHE {
@@ -59,8 +55,8 @@ namespace DHE {
         std::function<float(float)> squeezed(scalingToRange(DURATION_SQUEEZED_MIN, DURATION_SQUEEZED_MAX));
         std::function<float(float)> curved([](float f) { return pow(f, DURATION_CURVATURE); });
         std::function<float(float)> scaled(scalingToRange(0.0f, DURATION_SCALE));
-        float duration = scaled(curved(squeezed(knob)));
-        return rack::engineGetSampleTime() / duration;
+        std::function<float(float)> phaseIncrementFor([](float f) { return rack::engineGetSampleTime() / f; });
+        return phaseIncrementFor(scaled(curved(squeezed(knob))));
     }
 
     float Stage::level() const {
@@ -89,6 +85,8 @@ namespace DHE {
     }
 
     float Stage::envelopeOut() {
-        return scaled(shaped(ramp.phase(), shape()), stageInputFollower.value(), level());
+        std::function<float(float)> scaled(scalingToRange(stageInputFollower.value(), level()));
+        std::function<float(float)> shaped([this](float f){ return curved(f, shape()); });
+        return scaled(shaped(ramp.phase()));
     }
 } // namespace DHE
