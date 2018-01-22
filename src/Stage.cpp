@@ -1,6 +1,6 @@
 #include <cmath>
-#include <ValueScale.hpp>
 #include "Stage.hpp"
+#include "Functions.hpp"
 
 // These constants yield ramp durations of:
 //    knob fully ccw  : .002417s
@@ -14,10 +14,6 @@
 
 inline float boolToGateVoltage(bool state) {
     return state ? 10.0f : 0.0f;
-}
-
-inline float clampedToUnipolarVoltage(float f) {
-    return rack::clampf(f, 0.0f, 10.0f);
 }
 
 inline float shaped(float phase, float shape) {
@@ -40,25 +36,23 @@ namespace DHE {
         outputs[ACTIVE_GATE_OUT].value = boolToGateVoltage(deferGate.isHigh() || ramp.isRunning());
     }
 
-    float Stage::stageIn() const { return clampedToUnipolarVoltage(inputs[STAGE_IN].value); }
+    float Stage::stageIn() const { return inputs[STAGE_IN].value; }
 
     float Stage::duration() const {
         float knob = params[DURATION_KNOB].value;
-        ValueScale squeezer(DURATION_SQUEEZED_MIN, DURATION_SQUEEZED_MAX);
-        float squeezed = squeezer.scale(knob);
-        float curved = pow(squeezed, DURATION_CURVATURE);
-        ValueScale durationScale(0.0f, DURATION_SCALE);
-        return durationScale.scale(curved);
+        std::function<float(float)> squeezed(scalingToRange(DURATION_SQUEEZED_MIN, DURATION_SQUEEZED_MAX));
+        std::function<float(float)> curved([](float f) { return pow(f, DURATION_CURVATURE); });
+        std::function<float(float)> scaled(scalingToRange(0.0f, DURATION_SCALE));
+        return scaled(curved(squeezed(knob)));
     }
 
     float Stage::level() const {
-        DHE::ValueScale unipolarVoltage(0.0f, 10.0f);
-        return unipolarVoltage.scale(params[LEVEL_KNOB].value);
+        return toUnipolarVoltage(params[LEVEL_KNOB].value);
     }
 
     float Stage::shape() const {
-        ValueScale shapeScale(-ENVELOPE_CURVATURE_MAX, ENVELOPE_CURVATURE_MAX);
-        return shapeScale.scale(params[SHAPE_KNOB].value);
+        std::function<float(float)> toShape(scalingToRange(-ENVELOPE_CURVATURE_MAX, ENVELOPE_CURVATURE_MAX));
+        return toShape(params[SHAPE_KNOB].value);
     }
 
     void Stage::defer() {
