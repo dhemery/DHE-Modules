@@ -29,7 +29,7 @@ namespace DHE {
     const std::string Stage::NAME = Stage::SLUG;
 
     Stage::Stage() : Module(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS),
-              ramp(Ramp([this]() { return rack::engineGetSampleTime() / duration(); },
+              ramp(Ramp([this]() { return phaseIncrement(); },
                         [this]() { eocPulse.trigger(1e-3); })),
               stageInputFollower([this]() { return stageIn(); }),
               deferGate([this]() { return inputs[DEFER_GATE_IN].value; }),
@@ -52,12 +52,13 @@ namespace DHE {
 
     float Stage::stageIn() const { return inputs[STAGE_IN].value; }
 
-    float Stage::duration() const {
+    float Stage::phaseIncrement() const {
         float knob = params[DURATION_KNOB].value;
         std::function<float(float)> squeezed(scalingToRange(DURATION_SQUEEZED_MIN, DURATION_SQUEEZED_MAX));
         std::function<float(float)> curved([](float f) { return pow(f, DURATION_CURVATURE); });
         std::function<float(float)> scaled(scalingToRange(0.0f, DURATION_SCALE));
-        return scaled(curved(squeezed(knob)));
+        float duration = scaled(curved(squeezed(knob)));
+        return rack::engineGetSampleTime() / duration;
     }
 
     float Stage::level() const {

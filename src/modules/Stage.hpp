@@ -60,5 +60,7 @@ namespace DHE {
         float envelopeOut();
 
         void startEnvelope();
+
+        float phaseIncrement() const;
     };
 } // namespace DHE
