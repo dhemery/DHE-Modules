@@ -36,12 +36,13 @@ namespace DHE {
               envelopeTrigger([this]() { return inputs[TRIGGER_IN].value; }) {
         deferGate.onRisingEdge([this]() { defer(); });
         deferGate.onFallingEdge([this]() { resume(); });
-        envelopeTrigger.onRisingEdge([this]() { if (deferGate.isLow()) envelopeStart(); });
+
+        envelopeTrigger.onRisingEdge([this]() { startEnvelope(); });
     }
 
     void Stage::step() {
         deferGate.step();
-        if (deferGate.isLow()) ramp.step();
+        ramp.step();
         envelopeTrigger.step();
 
         outputs[STAGE_OUT].value = deferGate.isHigh() ? stageInputFollower.value() : envelopeOut();
@@ -69,15 +70,17 @@ namespace DHE {
     }
 
     void Stage::defer() {
+        envelopeTrigger.pause();
         ramp.stop();
         stageInputFollower.follow();
     }
 
     void Stage::resume() {
         stageInputFollower.pause();
+        envelopeTrigger.resume();
     }
 
-    void Stage::envelopeStart() {
+    void Stage::startEnvelope() {
         stageInputFollower.pause();
         ramp.start();
     }

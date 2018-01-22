@@ -59,6 +59,6 @@ namespace DHE {
 
         float envelopeOut();
 
-        void envelopeStart();
+        void startEnvelope();
     };
 } // namespace DHE
