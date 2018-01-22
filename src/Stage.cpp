@@ -25,6 +25,8 @@ inline float scaled(float f, float min, float max) {
 }
 
 namespace DHE {
+    const std::string Stage::SLUG = "Stage";
+    const std::string Stage::NAME = Stage::SLUG;
 
     void Stage::step() {
         deferGate.step();

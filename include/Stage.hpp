@@ -12,11 +12,11 @@
 
 
 namespace DHE {
-
-    /**
-     *
-     */
     struct Stage : rack::Module {
+
+        static const std::string SLUG;
+        static const std::string NAME;
+
         enum ParamIds {
             DURATION_KNOB, LEVEL_KNOB, SHAPE_KNOB, NUM_PARAMS
         };
@@ -40,7 +40,8 @@ namespace DHE {
                           [this]() { resume(); }),
                   envelopeTrigger(
                           [this]() { return inputs[TRIGGER_IN].value; },
-                          [this]() { if (deferGate.isLow()) envelopeStart(); }) {}
+                          [this]() { if (deferGate.isLow()) envelopeStart(); }) {
+        }
 
         void step() override;
 

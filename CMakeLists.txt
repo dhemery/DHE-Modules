@@ -26,4 +26,4 @@ add_library(plugin SHARED
         include/Ramp.hpp
         src/Stage.cpp
         include/Stage.hpp
-        src/StageWidget.cpp include/Follower.hpp include/Functions.hpp)
+        src/StageWidget.cpp include/Follower.hpp include/Functions.hpp include/StageWidget.hpp)
