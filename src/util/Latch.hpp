@@ -8,9 +8,9 @@ namespace DHE {
     class Latch {
 
     public:
-        bool isHigh() { return state == HIGH; }
+        bool isHigh() const { return state == HIGH; }
 
-        bool isLow() { return state == LOW; }
+        bool isLow() const { return state == LOW; }
 
         /**
          * Suspends firing events.
@@ -27,7 +27,7 @@ namespace DHE {
         }
 
         /**
-         * Registers the action to be called on each rising edge.
+         * Registers an action to be called on each rising edge.
          * @param action called on each rising edge
          */
         void onRisingEdge(const std::function<void()> &action) {
@@ -35,7 +35,7 @@ namespace DHE {
         }
 
         /**
-         * Registers the action to be called on each falling edge.
+         * Registers an action to be called on each falling edge.
          * @param action called on each falling edge
          */
         void onFallingEdge(const std::function<void()> &action) {
@@ -43,7 +43,7 @@ namespace DHE {
         }
 
         /**
-         * Registers the action to be called when the latch is set to its current state.
+         * Registers an action to be called when the latch is set to its current state.
          * @param action called on when the latch is set to its current state
          */
         void onNoChange(const std::function<void()> &action) {

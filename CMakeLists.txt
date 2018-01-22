@@ -23,7 +23,6 @@ add_library(plugin SHARED
         src/modules/DHEModules.cpp
         src/modules/DHEModules.hpp
         src/util/DFlipFlop.hpp
-        src/util/Ramp.cpp
         src/util/Ramp.hpp
         src/modules/Stage.cpp
         src/modules/Stage.hpp

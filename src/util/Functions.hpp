@@ -3,8 +3,7 @@
 #include <functional>
 
 namespace DHE {
-    inline float
-    scaleToRange(float normalized, float min, float max) {
+    inline float scaleToRange(float normalized, float min, float max) {
         return normalized * (max - min) + min;
     }
 
@@ -13,13 +12,17 @@ namespace DHE {
         return [&](float normalized) { return scaleToRange(normalized, min(), max()); };
     }
 
-    inline std::function<float(float)>
-    scalingToRange(float min, float max) {
+    inline std::function<float(float)> scalingToRange(float min, float max) {
         return [=](float normalized) { return scaleToRange(normalized, min, max); };
     }
 
-    inline float
-    toUnipolarVoltage(float normalized) {
+    inline float toUnipolarVoltage(float normalized) {
         return scaleToRange(normalized, 0.0f, 10.0f);
+    }
+
+    inline float clamp(float in, float low, float high) {
+        if (in < low) return low;
+        if (in > high) return high;
+        return in;
     }
 }

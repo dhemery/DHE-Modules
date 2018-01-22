@@ -3,6 +3,7 @@
 #include <functional>
 #include <utility>
 #include "DLatch.hpp"
+#include "Functions.hpp"
 
 namespace DHE {
 
@@ -19,12 +20,11 @@ namespace DHE {
          * A newly constructed ramp is stopped at phase 0.
          *
          * @param phaseIncrementSupplier called on each step to obtain the increment to advance the phase
-         * @param onEndOfCycle called if a step advances the phase to 1
          */
         //
-        Ramp(std::function<float()> phaseIncrementSupplier, std::function<void()> onEndOfCycle) :
-                _onEndOfCycle(std::move(onEndOfCycle)),
-                _phaseIncrement(std::move(phaseIncrementSupplier)){
+        Ramp(std::function<float()> phaseIncrementSupplier) :
+                phaseIncrement(std::move(phaseIncrementSupplier)){
+            stop();
         }
 
         /**
@@ -32,7 +32,8 @@ namespace DHE {
          */
         void start() {
             _phase = 0.0;
-            _running = true;
+            running.resume();
+            running.set();
         }
 
         /*!
@@ -40,26 +41,40 @@ namespace DHE {
          */
         void stop() {
             _phase = 0.0;
-            _running = false;
+            running.pause();
+            running.reset();
         }
 
         /**
          * Advances the phase by the supplied increment to a maximum phase of 1.
-         * If the phase advances to 1, the ramp stops running with phase == 1 and
-         * calls onEndOfCycle(). If the ramp is not running, this function has no
-         * effect.
+         * If the phase advances to 1, the ramp stops running and fires endOfCycle.
+         * If the ramp is not running, this function has no effect.
          */
-        void step();
+        void step() {
+            if (!isRunning()) return;
 
-        bool isRunning() const { return _running; }
+            _phase = clamp(_phase + phaseIncrement(), 0.0, 1.0);
+
+            if (_phase >= 1.0f) running.reset();
+        }
+
+        bool isRunning() const { return running.isHigh(); }
 
         float phase() const { return _phase; }
 
+
+        /**
+         * Registers an action to be called when the ramp phase advances to 1.
+         * @param action called when the ramp phase advances to 1
+         */
+        void onEndOfCycle(const std::function<void()> &action) {
+            running.onFallingEdge(action);
+        }
+
+
     private:
-        DLatch generating{};
-        std::function<void()> _onEndOfCycle;
-        std::function<float()> _phaseIncrement;
-        bool _running = false;
+        DLatch running;
+        std::function<float()> phaseIncrement;
         float _phase = 0.0f;
     };
 } // namespace DHE

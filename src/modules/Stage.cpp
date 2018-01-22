@@ -30,8 +30,7 @@ namespace DHE {
     const std::string Stage::NAME = Stage::SLUG;
 
     Stage::Stage() : Module(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS),
-              ramp(Ramp([this]() { return phaseIncrement(); },
-                        [this]() { eocPulse.trigger(1e-3); })),
+              ramp(Ramp([this]() { return phaseIncrement(); })),
               stageInputFollower([this]() { return stageIn(); }),
               deferGate([this]() { return inputs[DEFER_GATE_IN].value; }),
               envelopeTrigger([this]() { return inputs[TRIGGER_IN].value; }) {
@@ -39,6 +38,8 @@ namespace DHE {
         deferGate.onFallingEdge([this]() { resume(); });
 
         envelopeTrigger.onRisingEdge([this]() { startEnvelope(); });
+
+        ramp.onEndOfCycle([this]() { eocPulse.trigger(1e-3); });
     }
 
     void Stage::step() {
