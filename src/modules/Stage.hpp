@@ -30,16 +30,7 @@ namespace DHE {
             NUM_LIGHTS
         };
 
-        Stage() : Module(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS),
-                  ramp(Ramp([this]() { return rack::engineGetSampleTime() / duration(); },
-                            [this]() { eocPulse.trigger(1e-3); })),
-                  stageInputFollower([this]() { return stageIn(); }),
-                  deferGate([this]() { return inputs[DEFER_GATE_IN].value; }),
-                  envelopeTrigger([this]() { return inputs[TRIGGER_IN].value; }) {
-                deferGate.onRisingEdge([this]() { defer(); });
-                deferGate.onFallingEdge([this]() { resume(); });
-                envelopeTrigger.onRisingEdge([this]() { if (deferGate.isLow()) envelopeStart(); });
-        }
+        Stage();
 
         void step() override;
 
