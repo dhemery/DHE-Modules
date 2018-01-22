@@ -13,10 +13,6 @@
 #define DURATION_SQUEEZED_MIN (1.0f - DURATION_SQUEEZED_MAX)
 #define ENVELOPE_CURVATURE_MAX 4.0f
 
-inline float boolToGateVoltage(bool state) {
-    return state ? 10.0f : 0.0f;
-}
-
 inline float curved(float phase, float shape) {
     return shape >= 0.0f ? pow(phase, shape + 1.0f) : 1.0f - curved(1.0f - phase, -shape);
 }
@@ -44,8 +40,8 @@ namespace DHE {
         envelopeTrigger.step();
 
         outputs[STAGE_OUT].value = deferGate.isHigh() ? stageInputFollower.value() : envelopeOut();
-        outputs[EOC_TRIGGER_OUT].value = boolToGateVoltage(eocPulse.process(rack::engineGetSampleTime()));
-        outputs[ACTIVE_GATE_OUT].value = boolToGateVoltage(deferGate.isHigh() || ramp.isRunning());
+        outputs[EOC_TRIGGER_OUT].value = toUnipolarVoltage(eocPulse.process(rack::engineGetSampleTime()));
+        outputs[ACTIVE_GATE_OUT].value = toUnipolarVoltage(deferGate.isHigh() || ramp.isRunning());
     }
 
     float Stage::stageIn() const { return inputs[STAGE_IN].value; }
