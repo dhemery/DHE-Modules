@@ -2,6 +2,7 @@
 
 #include <functional>
 #include <memory>
+#include <utility>
 
 namespace DHE {
 
@@ -25,16 +26,15 @@ namespace DHE {
          * @param onFall called if a step yields a falling edge
          * @param onNoChange called if a step yields no change in state
          */
-        FlipFlop(const std::function<float()> &signal, float lowThreshold, float highThreshold,
-                 const std::function<void()> &onRise, const std::function<void()> &onFall,
-                 const std::function<void()> &onNoChange) {
-            this->signal = signal;
-            this->lowThreshold = lowThreshold;
-            this->highThreshold = highThreshold;
-            this->onRise = onRise;
-            this->onFall = onFall;
-            this->onNoChange = onNoChange;
-        }
+        FlipFlop(std::function<float()> signal, float lowThreshold, float highThreshold,
+                 std::function<void()> onRise, std::function<void()> onFall,
+                 std::function<void()> onNoChange) :
+                signal(std::move(signal)),
+                lowThreshold(lowThreshold),
+                highThreshold(highThreshold),
+                onRise(std::move(onRise)),
+                onFall(std::move(onFall)),
+                onNoChange(std::move(onNoChange)) {}
 
         /**
          * Creates a flip-flop with the given reaction functions, a low
@@ -64,10 +64,10 @@ namespace DHE {
         bool isLow() { return state == LOW; }
 
     private:
-        float lowThreshold;
-        float highThreshold;
         State state = UNKNOWN;
         std::function<float()> signal;
+        float lowThreshold;
+        float highThreshold;
         std::function<void()> onRise;
         std::function<void()> onFall;
         std::function<void()> onNoChange;

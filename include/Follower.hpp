@@ -1,6 +1,7 @@
 #pragma once
 
 #include <functional>
+#include <utility>
 
 namespace DHE {
 
@@ -16,9 +17,9 @@ namespace DHE {
          * Creates a follower supplied by the given function.
          * @param supplier the function whose values to follow
          */
-        explicit Follower(const std::function<float()> &supplier) {
-            suppliedValue = supplier;
-            storedValue = suppliedValue();
+        explicit Follower(std::function<float()> supplier) :
+                suppliedValue(std::move(supplier)),
+                storedValue(supplier()) {
         }
 
         /**

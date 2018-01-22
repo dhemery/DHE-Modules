@@ -1,6 +1,7 @@
 #pragma once
 
 #include <functional>
+#include <utility>
 
 namespace DHE {
 
@@ -20,11 +21,9 @@ namespace DHE {
          * @param onEndOfCycle called if a step advances the phase to 1
          */
         //
-        Ramp(const std::function<float()> &phaseIncrementSupplier, const std::function<void()> &onEndOfCycle) {
-            _onEndOfCycle = onEndOfCycle;
-            _phaseIncrement = phaseIncrementSupplier;
-            _running = false;
-            _phase = 0;
+        Ramp(std::function<float()> phaseIncrementSupplier, std::function<void()> onEndOfCycle) :
+                _onEndOfCycle(std::move(onEndOfCycle)),
+                _phaseIncrement(std::move(phaseIncrementSupplier)) {
         }
 
         /**
@@ -58,7 +57,7 @@ namespace DHE {
     private:
         std::function<void()> _onEndOfCycle;
         std::function<float()> _phaseIncrement;
-        bool _running{};
-        float _phase{};
+        bool _running = false;
+        float _phase = 0.0f;
     };
 } // namespace DHE
