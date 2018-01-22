@@ -22,8 +22,7 @@ include_directories(
 add_library(plugin SHARED
         src/modules/DHEModules.cpp
         src/modules/DHEModules.hpp
-        src/util/FlipFlop.cpp
-        src/util/FlipFlop.hpp
+        src/util/DFlipFlop.hpp
         src/util/Ramp.cpp
         src/util/Ramp.hpp
         src/modules/Stage.cpp

@@ -2,6 +2,7 @@
 
 #include <functional>
 #include <utility>
+#include "DLatch.hpp"
 
 namespace DHE {
 
@@ -23,7 +24,7 @@ namespace DHE {
         //
         Ramp(std::function<float()> phaseIncrementSupplier, std::function<void()> onEndOfCycle) :
                 _onEndOfCycle(std::move(onEndOfCycle)),
-                _phaseIncrement(std::move(phaseIncrementSupplier)) {
+                _phaseIncrement(std::move(phaseIncrementSupplier)){
         }
 
         /**
@@ -43,7 +44,7 @@ namespace DHE {
         }
 
         /**
-         * Advances the phase by the supplied increment, to a maximum phase of 1.
+         * Advances the phase by the supplied increment to a maximum phase of 1.
          * If the phase advances to 1, the ramp stops running with phase == 1 and
          * calls onEndOfCycle(). If the ramp is not running, this function has no
          * effect.
@@ -55,6 +56,7 @@ namespace DHE {
         float phase() const { return _phase; }
 
     private:
+        DLatch generating{};
         std::function<void()> _onEndOfCycle;
         std::function<float()> _phaseIncrement;
         bool _running = false;

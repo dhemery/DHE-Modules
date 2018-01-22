@@ -2,7 +2,7 @@
 
 #include "dsp/digital.hpp"
 #include "rack.hpp"
-#include "FlipFlop.hpp"
+#include "DFlipFlop.hpp"
 #include "Ramp.hpp"
 #include "Follower.hpp"
 
@@ -37,8 +37,8 @@ namespace DHE {
     private:
         Ramp ramp;
         Follower stageInputFollower;
-        FlipFlop deferGate;
-        FlipFlop envelopeTrigger;
+        DFlipFlop deferGate;
+        DFlipFlop envelopeTrigger;
 
         float duration() const;
 
