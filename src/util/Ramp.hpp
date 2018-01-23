@@ -4,27 +4,41 @@
 #include <utility>
 #include "DLatch.hpp"
 #include "Functions.hpp"
+#include "engine.hpp"
 
 namespace DHE {
 
 /**
- * A ramp whose phase progresses from 0 to 1. When the phase reaches 1,
- * further positive increments have no effect.
+ * A ramp that advances its phase from 0 to 1 over time. When the phase reaches 1,
+ * further steps have no effect.
  */
 struct Ramp {
     /*!
-     * Constructs a ramp that advances from 0 to 1 in increments supplied
-     * by the supplier, and that calls onEndOfCycle() at the end of each
-     * step that advances the phase to 1.
+     * Constructs a ramp that advances from 0 to 1 over the duration obtained
+     * from the duration supplier, and that fires onEndOfCycle when the phase
+     * advances to 1.
+     *
+     * Each step advances the phase as if the current duration were constant.
      *
      * A newly constructed ramp is stopped at phase 0.
      *
-     * @param phaseIncrementSupplier called on each step to obtain the increment to advance the phase
+     * @param durationSupplier called on each step to obtain the ramp duration
      */
-    //
-    explicit Ramp(std::function<float()> phaseIncrementSupplier) :
-            phaseIncrement(std::move(phaseIncrementSupplier)) {
+    explicit Ramp(std::function<float()> durationSupplier)
+            : duration(durationSupplier) {
         stop();
+    }
+
+    /*!
+     * Constructs a ramp that advances from 0 to 1 over the given duration, and that
+     * fires onEndOfCycle when the phase advances to 1.
+     *
+     * A newly constructed ramp is stopped at phase 0.
+     *
+     * @param duration the duration over which to advance the phase to 1
+     */
+    Ramp(float duration, std::function<float()> stepUnitIncrement) :
+            Ramp([&]() { return duration; }) {
     }
 
     /**
@@ -53,7 +67,7 @@ struct Ramp {
     void step() {
         if (!isRunning()) return;
 
-        progress = clamp(progress + phaseIncrement(), 0.0, 1.0);
+        progress = clamp(progress + rack::engineGetSampleTime() / duration(), 0.0, 1.0);
 
         if (progress >= 1.0f) running.reset();
     }
@@ -71,8 +85,8 @@ struct Ramp {
     }
 
 private:
-    DLatch running{};
-    std::function<float()> phaseIncrement;
     float progress = 0.0f;
+    DLatch running{};
+    std::function<float()> duration;
 };
 } // namespace DHE

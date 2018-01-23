@@ -16,11 +16,11 @@ inline float curved(float phase, float shape) {
 }
 
 namespace DHE {
-const char* Stage::SLUG = "Stage";
-const char* Stage::NAME = Stage::SLUG;
+const char *Stage::SLUG = "Stage";
+const char *Stage::NAME = Stage::SLUG;
 
 Stage::Stage() : Module(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS),
-                 ramp(Ramp([this]() { return phaseIncrement(); })),
+                 ramp([this]() { return duration(); }),
                  stageInputFollower([this]() { return stageIn(); }),
                  deferGate([this]() { return inputs[DEFER_GATE_IN].value; }),
                  envelopeTrigger([this]() { return inputs[TRIGGER_IN].value; }) {
@@ -45,12 +45,16 @@ void Stage::step() {
 float Stage::stageIn() const { return inputs[STAGE_IN].value; }
 
 float Stage::phaseIncrement() const {
+    std::function<float(float)> phaseIncrementFor([](float f) { return rack::engineGetSampleTime() / f; });
+    return phaseIncrementFor(duration());
+}
+
+float Stage::duration() const {
     float knob = params[DURATION_KNOB].value;
     std::function<float(float)> squeezed(scalingToRange(DURATION_SQUEEZED_MIN, DURATION_SQUEEZED_MAX));
     std::function<float(float)> curved([](float f) { return pow(f, DURATION_CURVATURE); });
     std::function<float(float)> scaled(scalingToRange(0.0f, DURATION_SCALE));
-    std::function<float(float)> phaseIncrementFor([](float f) { return rack::engineGetSampleTime() / f; });
-    return phaseIncrementFor(scaled(curved(squeezed(knob))));
+    return scaled(curved(squeezed(knob)));
 }
 
 float Stage::level() const {
