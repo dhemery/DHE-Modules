@@ -3,16 +3,18 @@
 #include "gui/Widget.hpp"
 
 namespace DHE {
+
 struct StageWidget : public Widget {
 
     // Per widget
     constexpr static const float WIDGET_HP = 4;
     constexpr static const float WIDGET_WIDTH = WIDGET_HP * RACK_GRID_WIDTH;
+    constexpr static const float WIDGET_CENTER = WIDGET_WIDTH / 2.0f;
     constexpr static const float SCREW_H_INSET = 7.5f;
     constexpr static const float SCREW_V_INSET = 0.0f;
 
-    constexpr static const float KNOB_SIZE = Widget::ROUND_BLACK_KNOB_DIAMETER;
-    constexpr static const float H_KNOB = WIDGET_WIDTH / 2.0f - KNOB_SIZE / 2.0f;
+    constexpr static const float KNOB_RADIUS = Widget::ROUND_BLACK_KNOB_DIAMETER / 2.0f;
+    constexpr static const float H_KNOB = WIDGET_CENTER - KNOB_RADIUS;
 
     constexpr static const float V_KNOB_SPACING = 55.0f;
     constexpr static const float V_KNOB_TOP = 57.0f;
@@ -24,8 +26,8 @@ struct StageWidget : public Widget {
     constexpr static const float V_PORT_BOTTOM = V_PORT_MIDDLE + V_PORT_SPACING;
 
     constexpr static const float H_PORT_INSET = RACK_GRID_WIDTH;
-    constexpr static const float H_PORT_LEFT = H_PORT_INSET - Widget::PORT_DIAMETER / 2.0f;
-    constexpr static const float H_PORT_RIGHT = WIDGET_WIDTH - H_PORT_INSET - Widget::PORT_DIAMETER / 2.0f;
+    constexpr static const float H_PORT_LEFT = H_PORT_INSET - Widget::PORT_RADIUS;
+    constexpr static const float H_PORT_RIGHT = WIDGET_WIDTH - H_PORT_INSET - Widget::PORT_RADIUS - 2.0f;
 
     StageWidget();
 };
