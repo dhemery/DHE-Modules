@@ -23,7 +23,7 @@ struct Ramp {
      * Constructs a ramp that calls the supplier on each step and advances the
      * phase at the resulting rate.
      *
-     * The newly constructed ramp is stopped at phase 0.
+     * The newly constructed ramp is at phase 0 and inactive.
      *
      * @param rateSupplier supplies the rate at which to advance the phase on each step
      */
@@ -33,10 +33,10 @@ struct Ramp {
     }
 
     /*!
-     * Constructs a ramp that advances from 0 to 1 at the specified rate (in
-     * inverse seconds, or Hertz).
+     * Constructs a ramp that advances at a fixed rate (in inverse seconds, or
+     * Hertz).
      *
-     * The newly constructed ramp is stopped at phase 0.
+     * The newly constructed ramp is at phase 0 and inactive.
      *
      * @param rate the rate (inverse seconds, or Hertz) at which to advance the phase
      */
@@ -67,7 +67,7 @@ struct Ramp {
     }
 
     /**
-     * Advances the phase by at the rate supplied by the rate supplier.
+     * Advances the phase at the ramp's current rate.
      *
      * If the phase advances to 1, the ramp fires endOfCycle and becomes
      * inactive.
@@ -94,8 +94,8 @@ struct Ramp {
     /**
      * Returns the ramp's phase.
      *
-     * If the ramp is active, the phase indicates how far the ramp has advanced
-     * since it was started.
+     * If the ramp is active, the phase indicates the ramp's progress
+     * from 0 to 1.
      *
      * If the ramp is inactive, the phase is 1 (if the ramp became inactive by
      * completing its advancement) or 0 (if the ramp was stopped).
