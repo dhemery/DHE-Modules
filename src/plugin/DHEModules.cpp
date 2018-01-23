@@ -1,7 +1,7 @@
 #include "rack.hpp"
 #include "DHEModules.hpp"
-#include "StageWidget.hpp"
-#include "Stage.hpp"
+#include "stage/StageWidget.hpp"
+#include "stage/Stage.hpp"
 
 rack::Plugin *plugin;
 

@@ -1,7 +1,8 @@
 #include <cmath>
 #include "Stage.hpp"
-#include "Functions.hpp"
-#include "DLatch.hpp"
+#include "util/Functions.hpp"
+#include "util/DLatch.hpp"
+#include "util/Ramp.hpp"
 
 // These constants yield ramp durations of:
 //    knob fully ccw  : .002417s

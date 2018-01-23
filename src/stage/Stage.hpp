@@ -1,12 +1,12 @@
 #pragma once
 
+#include <memory>
+
 #include "dsp/digital.hpp"
 #include "rack.hpp"
-#include "DFlipFlop.hpp"
-#include "Ramp.hpp"
-#include "Follower.hpp"
-
-#include <memory>
+#include "util/DFlipFlop.hpp"
+#include "util/Ramp.hpp"
+#include "util/Follower.hpp"
 
 // TODO: Switch for slow, medium, and fast ramp
 

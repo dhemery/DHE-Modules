@@ -13,17 +13,15 @@ set(CMAKE_CXX_FLAGS_DEBUG "-g")
 set(CMAKE_CXX_FLAGS_RELEASE "-O3")
 
 include_directories(
-        src/gui
-        src/modules
-        src/util
+        src
         ../../include
         ../../dep/include)
 
 add_library(plugin SHARED
-        src/modules/DHEModules.cpp
-        src/modules/DHEModules.hpp
+        src/plugin/DHEModules.cpp
+        src/plugin/DHEModules.hpp
         src/util/DFlipFlop.hpp
         src/util/Ramp.hpp
-        src/modules/Stage.cpp
-        src/modules/Stage.hpp
-        src/gui/StageWidget.cpp src/util/Follower.hpp src/util/Functions.hpp src/gui/StageWidget.hpp)
+        src/stage/Stage.cpp
+        src/stage/Stage.hpp
+        src/stage/StageWidget.cpp src/util/Follower.hpp src/util/Functions.hpp src/stage/StageWidget.hpp)
