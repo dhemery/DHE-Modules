@@ -9,49 +9,43 @@
 namespace DHE {
 
 /**
- * A ramp that advances from 0 to 1 over a specified duration.
+ * A ramp that advances its phase from 0 to 1 at a specified rate (in inverse
+ * seconds, or Hertz).
  *
- * On each step, the ramp's phase advances by the proportion of the duration
- * that has passed since the previous step.
- *
- * To determine the amount of time that has passed between steps, the ramp
- * calls rack::engineGetSampleTime().
- *
- * To advance the ramp according to the passage of real time, call its step()
- * exactly once per Rack audio frame.
+ * The ramp uses Rack's audio engine as a clock to determine the passage of
+ * time. To advance the ramp at rates that match the passage of real time, call
+ * the ramp's step() function exactly once per Rack audio frame.
  *
  * When the phase advances to 1, the ramp fires endOfCycle and stops advancing.
  */
 struct Ramp {
     /*!
-     * Constructs a ramp that advances from 0 to 1 over the duration obtained
-     * from the duration supplier, and that fires onEndOfCycle when the phase
-     * advances to 1.
+     * Constructs a ramp that calls the supplier on each step and advances the
+     * phase at the resulting rate.
      *
-     * Each step advances the phase by the proportion of the current duration
-     * that has passed since the previous step.
+     * The newly constructed ramp is stopped at phase 0.
      *
-     * A newly constructed ramp is stopped at phase 0.
-     *
-     * @param durationSupplier called on each step to obtain the current ramp duration
+     * @param rateSupplier supplies the rate at which to advance the phase on each step
      */
-    explicit Ramp(std::function<float()> durationSupplier)
-            : duration{std::move(durationSupplier)} {
+    explicit Ramp(std::function<float()> rateSupplier)
+            : rate{std::move(rateSupplier)} {
         stop();
     }
 
     /*!
-     * Constructs a ramp that advances from 0 to 1 over the given duration
-     * (in seconds), and that fires onEndOfCycle when the phase advances to 1.
+     * Constructs a ramp that advances from 0 to 1 at the specified rate (in
+     * inverse seconds, or Hertz).
      *
-     * A newly constructed ramp is stopped at phase 0.
+     * The newly constructed ramp is stopped at phase 0.
      *
-     * @param duration the duration over which to advance the phase to 1
+     * @param rate the rate (inverse seconds, or Hertz) at which to advance the phase
      */
-    explicit Ramp(float duration) :  Ramp([=]() { return duration; }) {}
+    explicit Ramp(float rate) :  Ramp([=]() { return rate; }) {}
 
     /**
-     * Starts the ramp at phase 0.
+     * Activates the ramp at phase 0.
+     *
+     * Subsequent calls to step() will advance the phase.
      */
     void start() {
         progress = 0.0;
@@ -60,7 +54,11 @@ struct Ramp {
     }
 
     /*!
-     * Stops the ramp at phase 0.
+     * Deactivates the ramp at phase 0.
+     *
+     * Subsequent calls to step() will not advance the phase.
+     *
+     * Stopping the ramp does not fire an endOfCycle event.
      */
     void stop() {
         progress = 0.0;
@@ -69,28 +67,45 @@ struct Ramp {
     }
 
     /**
-     * Advances the phase by the amount that would advance from 0 to 1 over the duration
-     * supplied by the duration supplier.
+     * Advances the phase by at the rate supplied by the rate supplier.
      *
-     * If the phase advances to 1, the ramp stops running and fires endOfCycle.
-     * If the ramp is not running, this function has no effect.
+     * If the phase advances to 1, the ramp fires endOfCycle and becomes
+     * inactive.
+     *
+     * If the ramp is inactive, this function has no effect.
      */
     void step() {
         if (!isActive()) return;
 
-        progress = clamp(progress + rack::engineGetSampleTime() / duration(), 0.0, 1.0);
+        progress = clamp(progress + rate() * rack::engineGetSampleTime(), 0.0, 1.0);
 
         if (progress >= 1.0f) {
             active.reset();
         };
     }
 
+    /**
+     * Indicates whether the ramp is active.
+     *
+     * @return whether the ramp is active
+     */
     bool isActive() const { return active.isHigh(); }
 
+    /**
+     * Returns the ramp's phase.
+     *
+     * If the ramp is active, the phase indicates how far the ramp has advanced
+     * since it was started.
+     *
+     * If the ramp is inactive, the phase is 1 (if the ramp became inactive by
+     * completing its advancement) or 0 (if the ramp was stopped).
+     *
+     * @return the ramp's phase
+     */
     float phase() const { return progress; }
 
     /**
-     * Registers an action to be called when the ramp phase advances to 1.
+     * Registers an action to be called when the ramp's phase advances to 1.
      * @param action called when the ramp phase advances to 1
      */
     void onEndOfCycle(const std::function<void()> &action) {
@@ -100,6 +115,6 @@ struct Ramp {
 private:
     float progress = 0.0f;
     DLatch active{};
-    std::function<float()> duration;
+    std::function<float()> rate;
 };
 } // namespace DHE
