@@ -18,8 +18,8 @@ struct Follower {
      * @param supplier the function whose values to follow
      */
     explicit Follower(std::function<float()> supplier) :
-            suppliedValue(std::move(supplier)),
-            storedValue(supplier()) {
+            suppliedValue{std::move(supplier)},
+            storedValue{supplier()} {
     }
 
     /**

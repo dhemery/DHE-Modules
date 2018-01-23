@@ -15,15 +15,15 @@ public:
     /**
      * Suspends firing events.
      */
-    void pause() {
-        running = false;
+    void suspendFiring() {
+        firingEvents = false;
     }
 
     /**
      * Resumes firing events.
      */
-    void resume() {
-        running = true;
+    void resumeFiring() {
+        firingEvents = true;
     }
 
     /**
@@ -65,13 +65,13 @@ protected:
     }
 
 private:
-    bool running = true;
+    bool firingEvents = true;
     std::vector<std::function<void()>> risingEdge;
     std::vector<std::function<void()>> fallingEdge;
     std::vector<std::function<void()>> noChange;
 
     void fire(std::vector<std::function<void()>> &actions) {
-        if (!running) return;
+        if (!firingEvents) return;
         for (auto &&action : actions) action();
     }
 };

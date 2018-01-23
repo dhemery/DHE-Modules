@@ -21,10 +21,10 @@ struct DFlipFlop : public Latch {
      * @param lowThreshold signal value at or below which the flip-flop state is LOW
      * @param highThreshold signal value at or above which the flip-flop state is HIGH
      */
-    DFlipFlop(std::function<float()> signal, float lowThreshold, float highThreshold) : signal(std::move(signal)),
-                                                                                        lowThreshold(lowThreshold),
-                                                                                        highThreshold(
-                                                                                                highThreshold) {}
+    DFlipFlop(std::function<float()> signal, float lowThreshold, float highThreshold)
+            : signal{std::move(signal)},
+              lowThreshold{lowThreshold},
+              highThreshold{highThreshold} {}
 
     /**
      * Creates a flip-flop that compares the given signal to a low threshold of 0
@@ -32,7 +32,8 @@ struct DFlipFlop : public Latch {
      *
      * @param signal called on each step to obtain the signal to evaluate
      */
-    explicit DFlipFlop(std::function<float()> signal) : DFlipFlop(std::move(signal), 0.0f, 1.0f) {};
+    explicit DFlipFlop(std::function<float()> signal)
+            : DFlipFlop{std::move(signal), 0.0f, 1.0f} {};
 
     /**
      * Sets the state by comparing the signal to the thresholds.

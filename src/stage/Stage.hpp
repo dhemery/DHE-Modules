@@ -34,10 +34,11 @@ struct Stage : rack::Module {
     void step() override;
 
 private:
-    Ramp ramp;
-    Follower stageInputFollower;
     DFlipFlop deferGate;
+    Ramp endOfCyclePulse;
+    Ramp envelopeRamp;
     DFlipFlop envelopeTrigger;
+    Follower stageInputFollower;
 
     float level() const;
 
@@ -49,16 +50,12 @@ private:
 
     float stageIn() const;
 
-    // TODO: Create pulse generator that calls a consumer when it rises or falls
-    rack::PulseGenerator eocPulse;
 
     // TODO: Move the following envelope stuff to Envelope class
 
     float envelopeOut();
 
     void startEnvelope();
-
-    float phaseIncrement() const;
 
     float duration() const;
 };

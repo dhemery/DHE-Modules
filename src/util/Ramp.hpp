@@ -9,8 +9,18 @@
 namespace DHE {
 
 /**
- * A ramp that advances its phase from 0 to 1 over time. When the phase reaches 1,
- * further steps have no effect.
+ * A ramp that advances from 0 to 1 over a specified duration.
+ *
+ * On each step, the ramp's phase advances by the proportion of the duration
+ * that has passed since the previous step.
+ *
+ * To determine the amount of time that has passed between steps, the ramp
+ * calls rack::engineGetSampleTime().
+ *
+ * To advance the ramp according to the passage of real time, call its step()
+ * exactly once per Rack audio frame.
+ *
+ * When the phase advances to 1, the ramp fires endOfCycle and stops advancing.
  */
 struct Ramp {
     /*!
@@ -18,36 +28,35 @@ struct Ramp {
      * from the duration supplier, and that fires onEndOfCycle when the phase
      * advances to 1.
      *
-     * Each step advances the phase as if the current duration were constant.
+     * Each step advances the phase by the proportion of the current duration
+     * that has passed since the previous step.
      *
      * A newly constructed ramp is stopped at phase 0.
      *
-     * @param durationSupplier called on each step to obtain the ramp duration
+     * @param durationSupplier called on each step to obtain the current ramp duration
      */
     explicit Ramp(std::function<float()> durationSupplier)
-            : duration(durationSupplier) {
+            : duration{std::move(durationSupplier)} {
         stop();
     }
 
     /*!
-     * Constructs a ramp that advances from 0 to 1 over the given duration, and that
-     * fires onEndOfCycle when the phase advances to 1.
+     * Constructs a ramp that advances from 0 to 1 over the given duration
+     * (in seconds), and that fires onEndOfCycle when the phase advances to 1.
      *
      * A newly constructed ramp is stopped at phase 0.
      *
      * @param duration the duration over which to advance the phase to 1
      */
-    Ramp(float duration, std::function<float()> stepUnitIncrement) :
-            Ramp([&]() { return duration; }) {
-    }
+    explicit Ramp(float duration) :  Ramp([=]() { return duration; }) {}
 
     /**
      * Starts the ramp at phase 0.
      */
     void start() {
         progress = 0.0;
-        running.resume();
-        running.set();
+        active.resumeFiring();
+        active.set();
     }
 
     /*!
@@ -55,24 +64,28 @@ struct Ramp {
      */
     void stop() {
         progress = 0.0;
-        running.pause();
-        running.reset();
+        active.suspendFiring();
+        active.reset();
     }
 
     /**
-     * Advances the phase by the supplied increment to a maximum phase of 1.
+     * Advances the phase by the amount that would advance from 0 to 1 over the duration
+     * supplied by the duration supplier.
+     *
      * If the phase advances to 1, the ramp stops running and fires endOfCycle.
      * If the ramp is not running, this function has no effect.
      */
     void step() {
-        if (!isRunning()) return;
+        if (!isActive()) return;
 
         progress = clamp(progress + rack::engineGetSampleTime() / duration(), 0.0, 1.0);
 
-        if (progress >= 1.0f) running.reset();
+        if (progress >= 1.0f) {
+            active.reset();
+        };
     }
 
-    bool isRunning() const { return running.isHigh(); }
+    bool isActive() const { return active.isHigh(); }
 
     float phase() const { return progress; }
 
@@ -81,12 +94,12 @@ struct Ramp {
      * @param action called when the ramp phase advances to 1
      */
     void onEndOfCycle(const std::function<void()> &action) {
-        running.onFallingEdge(action);
+        active.onFallingEdge(action);
     }
 
 private:
     float progress = 0.0f;
-    DLatch running{};
+    DLatch active{};
     std::function<float()> duration;
 };
 } // namespace DHE

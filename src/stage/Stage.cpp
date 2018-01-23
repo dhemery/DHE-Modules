@@ -20,34 +20,31 @@ const char *Stage::SLUG = "Stage";
 const char *Stage::NAME = Stage::SLUG;
 
 Stage::Stage() : Module(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS),
-                 ramp([this]() { return duration(); }),
-                 stageInputFollower([this]() { return stageIn(); }),
-                 deferGate([this]() { return inputs[DEFER_GATE_IN].value; }),
-                 envelopeTrigger([this]() { return inputs[TRIGGER_IN].value; }) {
+                 deferGate{[this]() { return inputs[DEFER_GATE_IN].value; }},
+                 endOfCyclePulse{1e-3},
+                 envelopeRamp{[this]() { return duration(); }},
+                 envelopeTrigger{[this]() { return inputs[TRIGGER_IN].value; }},
+                 stageInputFollower{[this]() { return stageIn(); }} {
     deferGate.onRisingEdge([this]() { defer(); });
     deferGate.onFallingEdge([this]() { resume(); });
 
     envelopeTrigger.onRisingEdge([this]() { startEnvelope(); });
 
-    ramp.onEndOfCycle([this]() { eocPulse.trigger(1e-3); });
+    envelopeRamp.onEndOfCycle([this]() { endOfCyclePulse.start(); });
 }
 
 void Stage::step() {
     deferGate.step();
-    ramp.step();
+    envelopeRamp.step();
     envelopeTrigger.step();
+    endOfCyclePulse.step();
 
     outputs[STAGE_OUT].value = deferGate.isHigh() ? stageInputFollower.value() : envelopeOut();
-    outputs[EOC_TRIGGER_OUT].value = toUnipolarVoltage(eocPulse.process(rack::engineGetSampleTime()));
-    outputs[ACTIVE_GATE_OUT].value = toUnipolarVoltage(deferGate.isHigh() || ramp.isRunning());
+    outputs[EOC_TRIGGER_OUT].value = toUnipolarVoltage(endOfCyclePulse.isActive());
+    outputs[ACTIVE_GATE_OUT].value = toUnipolarVoltage(deferGate.isHigh() || envelopeRamp.isActive());
 }
 
 float Stage::stageIn() const { return inputs[STAGE_IN].value; }
-
-float Stage::phaseIncrement() const {
-    std::function<float(float)> phaseIncrementFor([](float f) { return rack::engineGetSampleTime() / f; });
-    return phaseIncrementFor(duration());
-}
 
 float Stage::duration() const {
     float knob = params[DURATION_KNOB].value;
@@ -67,24 +64,24 @@ float Stage::shape() const {
 }
 
 void Stage::defer() {
-    envelopeTrigger.pause();
-    ramp.stop();
+    envelopeTrigger.suspendFiring();
+    envelopeRamp.stop();
     stageInputFollower.follow();
 }
 
 void Stage::resume() {
     stageInputFollower.pause();
-    envelopeTrigger.resume();
+    envelopeTrigger.resumeFiring();
 }
 
 void Stage::startEnvelope() {
     stageInputFollower.pause();
-    ramp.start();
+    envelopeRamp.start();
 }
 
 float Stage::envelopeOut() {
     std::function<float(float)> scaled(scalingToRange(stageInputFollower.value(), level()));
     std::function<float(float)> shaped([this](float f) { return curved(f, shape()); });
-    return scaled(shaped(ramp.phase()));
+    return scaled(shaped(envelopeRamp.phase()));
 }
 } // namespace DHE
