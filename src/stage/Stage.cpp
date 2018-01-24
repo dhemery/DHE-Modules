@@ -1,5 +1,6 @@
 #include <cmath>
 #include "Stage.hpp"
+#include "engine.hpp"
 
 // These constants yield ramp durations of:
 //    knob fully ccw  : .002417s
@@ -21,8 +22,8 @@ const char *Stage::NAME = Stage::SLUG;
 
 Stage::Stage() : Module(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS),
                  deferGate{[this]() { return inputs[DEFER_GATE_IN].value; }},
-                 endOfCyclePulse{1000.0},
-                 envelopeRamp{[this]() { return rate(); }},
+                 endOfCyclePulse{1000.0, &rack::engineGetSampleTime},
+                 envelopeRamp{[this]() { return rate(); }, &rack::engineGetSampleTime},
                  envelopeTrigger{[this]() { return inputs[TRIGGER_IN].value; }},
                  stageInputFollower{[this]() { return stageIn(); }} {
     deferGate.onRisingEdge([this]() { defer(); });
