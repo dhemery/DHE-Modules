@@ -57,6 +57,6 @@ private:
 
     void startEnvelope();
 
-    float rate() const;
+    float duration() const;
 };
 } // namespace DHE
