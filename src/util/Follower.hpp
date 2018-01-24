@@ -45,7 +45,7 @@ struct Follower {
      * @return the supplied value if the follower is following,
      * otherwise the stored value.
      */
-    float value() {
+    float value() const {
         return following ? suppliedValue() : storedValue;
     }
 
