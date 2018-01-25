@@ -133,6 +133,6 @@ public:
 private:
   float progress = 0.0f;
   DLatch active{};
-  std::function<float()> phaseIncrement;
+  const std::function<float()> phaseIncrement;
 };
 } // namespace DHE
