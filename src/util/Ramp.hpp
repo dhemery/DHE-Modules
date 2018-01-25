@@ -23,8 +23,10 @@ public:
    * @param phaseIncrementSupplier supplies the amount to advance the phase on
    * each step
    */
-  Ramp(const std::function<float()> &phaseIncrementSupplier)
-      : phaseIncrement(phaseIncrementSupplier) {}
+  explicit Ramp(std::function<float()> phaseIncrementSupplier)
+      : phaseIncrement{std::move(phaseIncrementSupplier)} {
+    stop();
+  }
 
   /*!
    * Constructs a ramp that advances its phase in steps of size:
@@ -39,8 +41,7 @@ public:
    * @param stepDurationSupplier supplies the duration of each step
    */
   Ramp(const std::function<float()> &rampDurationSupplier, const std::function<float()> &stepDurationSupplier)
-      : Ramp([=]() { return stepDurationSupplier()/rampDurationSupplier(); }) {
-    stop();
+      : Ramp{[=]{ return stepDurationSupplier()/rampDurationSupplier(); }} {
   }
 
   /*!
@@ -57,8 +58,7 @@ public:
    * @param stepDurationSupplier supplies the duration of each step
    */
   Ramp(float rampDuration, const std::function<float()> &stepDurationSupplier)
-      : Ramp([=]() { return rampDuration; },
-             stepDurationSupplier) {}
+      : Ramp{[=]{ return stepDurationSupplier()/rampDuration; }} {}
 
   /**
    * Activates the ramp at phase 0.
