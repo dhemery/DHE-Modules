@@ -25,6 +25,6 @@ StageWidget::StageWidget() : Widget(new Stage(), 4, "res/Stage Skinny.svg") {
   installOutput<rack::PJ301MPort>(Stage::EOC_TRIGGER_OUT, rightPortX, topPortY + portSpacing);
   installOutput<rack::PJ301MPort>(Stage::ACTIVE_GATE_OUT, rightPortX, topPortY + 2 * portSpacing);
 
-  createScrews(13.0f, 7.5f);
+  installScrews(13.0f, 7.5f);
 }
 }

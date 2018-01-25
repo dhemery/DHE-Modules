@@ -20,7 +20,7 @@ Widget::Widget(rack::Module *module, int hp, const char *background) {
   addChild(panel);
 }
 
-void Widget::createScrews(float leftX, float topY) {
+void Widget::installScrews(float leftX, float topY) {
   float rightX = width() - leftX;
   float bottomY = height() - topY;
   std::vector<rack::Vec> screwPositions {
