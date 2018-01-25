@@ -18,8 +18,8 @@ struct Follower {
      * @param supplier the function whose values to follow
      */
     explicit Follower(std::function<float()> supplier) :
-            suppliedValue{std::move(supplier)},
-            storedValue{supplier()} {
+            supplied{std::move(supplier)},
+            stored{supplier()} {
     }
 
     /**
@@ -27,7 +27,7 @@ struct Follower {
      * value() yield the stored value.
      */
     void pause() {
-        storedValue = suppliedValue();
+        stored = supplied();
         following = false;
     }
 
@@ -46,12 +46,12 @@ struct Follower {
      * otherwise the stored value.
      */
     float value() const {
-        return following ? suppliedValue() : storedValue;
+        return following ? supplied() : stored;
     }
 
 private:
     bool following = false;
-    std::function<float()> suppliedValue;
-    float storedValue;
+    const std::function<float()> supplied;
+    float stored;
 };
 }
