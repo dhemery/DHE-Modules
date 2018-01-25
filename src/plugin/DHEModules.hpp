@@ -5,5 +5,5 @@
 extern rack::Plugin *plugin;
 
 namespace DHE {
-constexpr static const char *MANUFACTURER = "DHE-Modules";
+static constexpr char const *MANUFACTURER = "DHE-Modules";
 };

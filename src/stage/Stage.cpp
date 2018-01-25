@@ -12,8 +12,6 @@
 #define ENVELOPE_CURVATURE_MAX 4.0f
 
 namespace DHE {
-const char *Stage::SLUG = "Stage";
-const char *Stage::NAME = Stage::SLUG;
 
 Stage::Stage() : Module(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS),
                  deferGate{[this]() { return inputs[DEFER_GATE_IN].value; }},

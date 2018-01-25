@@ -2,27 +2,41 @@
 #include "StageWidget.hpp"
 
 namespace DHE {
-using namespace rack;
+static constexpr int WIDGET_HP = 4;
+static constexpr int WIDGET_WIDTH = WIDGET_HP*RACK_GRID_WIDTH;
+static constexpr float WIDGET_CENTER = WIDGET_WIDTH/2.0f;
+static constexpr float SCREW_H_INSET = 7.5f;
+static constexpr float SCREW_V_INSET = 0.0f;
 
-StageWidget::StageWidget() : Widget(new Stage(), 4, "res/Stage Skinny.svg") {
-    createScrews(SCREW_H_INSET, SCREW_V_INSET);
+static constexpr float KNOB_RADIUS = Widget::ROUND_BLACK_KNOB_DIAMETER/2.0f;
+static constexpr float H_KNOB = WIDGET_CENTER - KNOB_RADIUS;
 
-    addParam(createParam<RoundBlackKnob>(Vec(H_KNOB, V_KNOB_TOP), module, Stage::DURATION_KNOB, 0.0f,
-                                         1.0f, 0.5f));
-    addParam(createParam<RoundBlackKnob>(Vec(H_KNOB, V_KNOB_MIDDLE), module, Stage::LEVEL_KNOB, 0.0,
-                                         1.0f, 0.5f));
-    addParam(createParam<RoundBlackKnob>(Vec(H_KNOB, V_KNOB_BOTTOM), module, Stage::SHAPE_KNOB, 0.0f,
-                                         1.0f, 0.5f));
+static constexpr float V_KNOB_SPACING = 55.0f;
+static constexpr float V_KNOB_TOP = 57.0f;
+static constexpr float V_KNOB_MIDDLE = V_KNOB_TOP + V_KNOB_SPACING;
+static constexpr float V_KNOB_BOTTOM = V_KNOB_MIDDLE + V_KNOB_SPACING;
+static constexpr float V_PORT_SPACING = 43.0f;
+static constexpr float V_PORT_TOP = 234.0f;
+static constexpr float V_PORT_MIDDLE = V_PORT_TOP + V_PORT_SPACING;
+static constexpr float V_PORT_BOTTOM = V_PORT_MIDDLE + V_PORT_SPACING;
 
-    addInput(createInput<PJ301MPort>(Vec(H_PORT_LEFT, V_PORT_TOP), module, Stage::STAGE_IN));
-    addInput(createInput<PJ301MPort>(Vec(H_PORT_LEFT, V_PORT_MIDDLE), module, Stage::TRIGGER_IN));
-    addInput(createInput<PJ301MPort>(Vec(H_PORT_LEFT, V_PORT_BOTTOM), module, Stage::DEFER_GATE_IN));
+static constexpr float H_PORT_INSET = RACK_GRID_WIDTH;
+static constexpr float H_PORT_LEFT = H_PORT_INSET - Widget::PORT_RADIUS;
+static constexpr float H_PORT_RIGHT = WIDGET_WIDTH - H_PORT_INSET - Widget::PORT_RADIUS - 2.0f;
 
-    addOutput(createOutput<PJ301MPort>(Vec(H_PORT_RIGHT, V_PORT_TOP), module, Stage::STAGE_OUT));
-    addOutput(
-            createOutput<PJ301MPort>(Vec(H_PORT_RIGHT, V_PORT_MIDDLE), module, Stage::EOC_TRIGGER_OUT));
-    addOutput(
-            createOutput<PJ301MPort>(Vec(H_PORT_RIGHT, V_PORT_BOTTOM), module, Stage::ACTIVE_GATE_OUT));
+StageWidget::StageWidget() : Widget(new Stage(), WIDGET_WIDTH, "res/Stage Skinny.svg") {
+  createScrews(SCREW_H_INSET, SCREW_V_INSET);
+
+  installParam<rack::RoundBlackKnob>(Stage::DURATION_KNOB, H_KNOB, V_KNOB_TOP);
+  installParam<rack::RoundBlackKnob>(Stage::LEVEL_KNOB, H_KNOB, V_KNOB_MIDDLE);
+  installParam<rack::RoundBlackKnob>(Stage::SHAPE_KNOB, H_KNOB, V_KNOB_BOTTOM);
+
+  installInput<rack::PJ301MPort>(Stage::STAGE_IN, H_PORT_LEFT, V_PORT_TOP);
+  installInput<rack::PJ301MPort>(Stage::TRIGGER_IN, H_PORT_LEFT, V_PORT_MIDDLE);
+  installInput<rack::PJ301MPort>(Stage::DEFER_GATE_IN, H_PORT_LEFT, V_PORT_BOTTOM);
+
+  installOutput<rack::PJ301MPort>(Stage::STAGE_OUT, H_PORT_RIGHT, V_PORT_TOP);
+  installOutput<rack::PJ301MPort>(Stage::EOC_TRIGGER_OUT, H_PORT_RIGHT, V_PORT_MIDDLE);
+  installOutput<rack::PJ301MPort>(Stage::ACTIVE_GATE_OUT, H_PORT_RIGHT, V_PORT_BOTTOM);
 }
-
 }

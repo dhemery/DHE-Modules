@@ -8,13 +8,10 @@
 #include "util/Ramp.hpp"
 #include "util/Follower.hpp"
 
-// TODO: Switch for slow, medium, and fast ramp
-
-
 namespace DHE {
 struct Stage : rack::Module {
-  static const char *SLUG;
-  static const char *NAME;
+  static constexpr char const *SLUG {"Stage"};
+  static constexpr char const *NAME {SLUG};
 
   enum ParamIds {
     DURATION_KNOB, LEVEL_KNOB, SHAPE_KNOB, NUM_PARAMS
@@ -42,9 +39,9 @@ private:
 
   void defer();
   void resume();
-  float stageIn() const;
-  float envelopeOut() const;
-  void startEnvelope();
   float duration() const;
+  float stageIn() const;
+  void startEnvelope();
+  float envelopeOut() const;
 };
 } // namespace DHE
