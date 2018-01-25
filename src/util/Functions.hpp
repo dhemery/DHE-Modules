@@ -1,5 +1,6 @@
 #pragma once
 
+#include <cmath>
 #include <functional>
 
 namespace DHE {
@@ -25,15 +26,4 @@ inline float toUnipolarVoltage(float normalized) {
 
 inline float toUnipolarVoltage(bool state) {
   return state ? 10.0f : 0.0f;
-}
-
-inline std::function<float(float)>
-scalingToRange(const std::function<float()> &min, const std::function<float()> &max) {
-  return [&](float normalized) { return scaleToRange(normalized, min(), max()); };
-}
-
-inline std::function<float(float)> scalingToRange(float min, float max) {
-  return [=](float normalized) { return scaleToRange(normalized, min, max); };
-}
-
 }
