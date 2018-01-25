@@ -8,18 +8,9 @@ namespace DHE {
 class Widget : public rack::ModuleWidget {
 
 public:
-  static constexpr float SCREW_DIAMETER = 15.0f;
-
   Widget(rack::Module *module, int widgetHP, const char *background);
 
   void createScrews(float horizontal_inset, float vertical_inset);
-
-  template<class T>
-  void installParam(int index, float x, float y) {
-    rack::ParamWidget *param = rack::createParam<T>(rack::Vec(x, y), module, index, 0.0f, 1.0f, 0.5f);
-    moveTo(param->box, x, y);
-    addParam(param);
-  }
 
   template<class T>
   void installInput(int index, float x, float y) {
@@ -35,8 +26,39 @@ public:
     addOutput(output);
   }
 
+  template<class T>
+  void installParam(int index, float x, float y) {
+    rack::ParamWidget *param = rack::createParam<T>(rack::Vec(x, y), module, index, 0.0f, 1.0f, 0.5f);
+    moveTo(param->box, x, y);
+    addParam(param);
+  }
+
+  template<class T>
+  void installScrew(rack::Vec pos) {
+    rack::Widget *widget = rack::createScrew<T>(rack::Vec(0, 0));
+    moveTo(widget->box, pos);
+    addChild(widget);
+  }
+
+  void moveTo(rack::Rect &box, rack::Vec pos) {
+    box.pos = pos.minus(box.size.div(2));
+  }
+
   void moveTo(rack::Rect &box, float x, float y) {
-    box.pos = rack::Vec(x, y).minus(box.size.div(2)); }
+    moveTo(box, rack::Vec(x, y));
+  }
+
+  float width() {
+    return box.size.x;
+  }
+
+  float height() {
+    return box.size.y;
+  }
+
+  rack::Vec center() {
+    return box.getCenter();
+  }
 };
 
 }

@@ -20,27 +20,27 @@ Widget::Widget(rack::Module *module, int hp, const char *background) {
   addChild(panel);
 }
 
-void Widget::createScrews(float horizontal_inset, float vertical_inset) {
-  float right = rack::Widget::box.size.x - horizontal_inset - SCREW_DIAMETER;
-  float bottom = RACK_GRID_HEIGHT - vertical_inset - SCREW_DIAMETER;
-  rack::Vec screwPositions[] = {
-      rack::Vec(horizontal_inset, vertical_inset),
-      rack::Vec(right, vertical_inset),
-      rack::Vec(horizontal_inset, bottom),
-      rack::Vec(right, bottom)};
+void Widget::createScrews(float leftX, float topY) {
+  float rightX = width() - leftX;
+  float bottomY = height() - topY;
+  std::vector<rack::Vec> screwPositions {
+      rack::Vec(leftX, topY),
+      rack::Vec(leftX, bottomY),
+      rack::Vec(rightX, topY),
+      rack::Vec(rightX, bottomY)
+  };
 
-  int screwCount = sizeof(screwPositions)/sizeof(*screwPositions);
+  unsigned long screwCount = screwPositions.size();
   std::minstd_rand generator;
   std::uniform_int_distribution<int> aScrew(0, 3);
-  int blackScrew = aScrew(generator);
+  unsigned long blackScrew = aScrew(generator);
 
-  for (int i = 0; i < screwCount; i++) {
+  for (unsigned long i = 0; i < screwCount; i++) {
     if (i==blackScrew) {
-      rack::Widget *screw = rack::createScrew<rack::ScrewBlack>(screwPositions[i]);
-      rack::Widget::addChild(screw);
-    } else
-      rack::Widget::addChild(rack::createScrew<rack::ScrewSilver>(screwPositions[i]));
+      installScrew<rack::ScrewBlack>(screwPositions[i]);
+    } else {
+      installScrew<rack::ScrewSilver>(screwPositions[i]);
+    }
   }
 }
-
 }
