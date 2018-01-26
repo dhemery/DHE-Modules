@@ -61,7 +61,7 @@ float Stage::duration() const {
 }
 
 float Stage::shape() const {
-  return scaleToRange(params[SHAPE_KNOB].value, -1.0f, 1.0f);
+  return sigmoid(scaleToRange(params[SHAPE_KNOB].value, -1.0f, 1.0f), -0.65f);
 }
 
 float Stage::envelopeOut() const {

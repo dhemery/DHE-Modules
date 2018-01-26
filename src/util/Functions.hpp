@@ -21,11 +21,11 @@ inline float scaleToRange(float normalized, float min, float max) {
   return normalized * (max - min) + min;
 }
 
-inline float sigmoid(float position, float curvature) {
-  float precision = 1e-3f;
+inline float sigmoid(float x, float curvature) {
+  float precision = 1e-4f;
   float maxCurvature = 1.0f - precision;
   float k = clamp(curvature, -maxCurvature, maxCurvature);
-  float x = clamp(position, -1.0f, 1.0f);
+  x = clamp(x, -1.0f, 1.0f);
   return (x - x * k) / (k - abs(x) * 2.0f * k + 1.0f);
 }
 
