@@ -61,21 +61,11 @@ float Stage::duration() const {
 }
 
 float Stage::shape() const {
-  float shape = params[SHAPE_KNOB].value;
-
-  // TODO: Find a way to taper while we're still in the [0,1] range, before scaling.
-  // Make the knob less sensitive in the middle by applying an inverted S taper.
-  float distanceFromCenter = abs(shape - 0.5f);
-  float sensitivity = distanceFromCenter + 0.5f;
-  float sensitivityReduction = 2.5f;
-  float invertedSTaper = pow(sensitivity, sensitivityReduction);
-
-  float scaled = scaleToRange(shape, -ENVELOPE_CURVATURE_MAX, ENVELOPE_CURVATURE_MAX);
-  return invertedSTaper * scaled;
+  return scaleToRange(params[SHAPE_KNOB].value, -1.0f, 1.0f);
 }
 
 float Stage::envelopeOut() const {
-  float curved = curve(envelopeRamp.phase(), shape());
+  float curved = sigmoid(envelopeRamp.phase(), shape());
   float level = params[LEVEL_KNOB].value;
   return scaleToRange(curved, stageInputFollower.value(), toUnipolarVoltage(level));
 }
