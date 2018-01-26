@@ -43,5 +43,6 @@ private:
   float stageIn() const;
   void startEnvelope();
   float envelopeOut() const;
+  float shape() const;
 };
 } // namespace DHE

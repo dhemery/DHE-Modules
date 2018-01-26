@@ -9,7 +9,7 @@
 #define DURATION_SCALE (16.0f)
 #define DURATION_SQUEEZED_MAX (0.88913970f)
 #define DURATION_SQUEEZED_MIN (1.0f - DURATION_SQUEEZED_MAX)
-#define ENVELOPE_CURVATURE_MAX 4.0f
+#define ENVELOPE_CURVATURE_MAX 10.0f
 
 namespace DHE {
 
@@ -60,11 +60,24 @@ float Stage::duration() const {
   return scaleToRange(curved, 0.0f, DURATION_SCALE);
 }
 
+float Stage::shape() const {
+  float shape = params[SHAPE_KNOB].value;
+
+  // TODO: Find a way to taper while we're still in the [0,1] range, before scaling.
+  // Make the knob less sensitive in the middle by applying an inverted S taper.
+  float distanceFromCenter = abs(shape - 0.5f);
+  float sensitivity = distanceFromCenter + 0.5f;
+  float sensitivityReduction = 2.5f;
+  float invertedSTaper = pow(sensitivity, sensitivityReduction);
+
+  float scaled = scaleToRange(shape, -ENVELOPE_CURVATURE_MAX, ENVELOPE_CURVATURE_MAX);
+  return invertedSTaper * scaled;
+}
+
 float Stage::envelopeOut() const {
-  float level = toUnipolarVoltage(params[LEVEL_KNOB].value);
-  float curvature = scaleToRange(params[SHAPE_KNOB].value, -ENVELOPE_CURVATURE_MAX, ENVELOPE_CURVATURE_MAX);
-  float curved = curve(envelopeRamp.phase(), curvature);
-  return scaleToRange(curved, stageInputFollower.value(), level);
+  float curved = curve(envelopeRamp.phase(), shape());
+  float level = params[LEVEL_KNOB].value;
+  return scaleToRange(curved, stageInputFollower.value(), toUnipolarVoltage(level));
 }
 
 float Stage::stageIn() const { return inputs[STAGE_IN].value; }
