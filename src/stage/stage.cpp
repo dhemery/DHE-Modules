@@ -13,6 +13,9 @@ Stage::Stage() : Module(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS),
   deferGate.onFallingEdge([this] { resume(); });
 
   envelopeTrigger.onRisingEdge([this] { startEnvelope(); });
+  envelopeTrigger.onRisingEdge([this] {
+    rack::debug("shape %f", shape());
+  });
 
   envelopeRamp.onEndOfCycle([this] { endOfCyclePulse.start(); });
 }
@@ -52,9 +55,9 @@ float Stage::duration() const {
 }
 
 float Stage::shape() const {
-  static constexpr float shapeKnobCurvature = -0.65f;
+  static constexpr float curvature{-0.65f};
 
-  return sigmoid(BIPOLAR_NORMAL.scale(params[SHAPE_KNOB].value, -1.0f, 1.0f), shapeKnobCurvature);
+  return sigmoid(BIPOLAR_NORMAL.scale(params[SHAPE_KNOB].value), curvature);
 }
 
 float Stage::envelopeOut() const {
