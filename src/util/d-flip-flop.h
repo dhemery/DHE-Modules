@@ -20,13 +20,13 @@ struct DFlipFlop : public Latch {
    * Creates a flip-flop that compares the given signal to the given thresholds.
    *
    * @param signal called on each step to obtain the value to evaluate
-   * @param lowThreshold signal value at or below which the flip-flop state is LOW
-   * @param highThreshold signal value at or above which the flip-flop state is HIGH
+   * @param low_threshold signal value at or below which the flip-flop state is LOW
+   * @param high_threshold signal value at or above which the flip-flop state is HIGH
    */
-  DFlipFlop(std::function<float()> signal, float lowThreshold, float highThreshold)
+  DFlipFlop(std::function<float()> signal, float low_threshold, float high_threshold)
       : signal{std::move(signal)},
-        lowThreshold{lowThreshold},
-        highThreshold{highThreshold} {}
+        low_threshold{low_threshold},
+        high_threshold{high_threshold} {}
 
   /**
    * Creates a flip-flop that compares the given signal to a low threshold of 0
@@ -39,23 +39,23 @@ struct DFlipFlop : public Latch {
 
   /**
    * Sets the state by comparing the signal to the thresholds.
-   * - Fires risingEdge if the state changed to HIGH.
-   * - Fires fallingEdge if the state changed to LOW.
-   * - Fires noChange if the state did not change.
+   * - Fires rising-edge if the state changed to HIGH.
+   * - Fires falling-edge if the state changed to LOW.
+   * - Fires no-change if the state did not change.
    */
   void step() {
-    if (signal() >= highThreshold)
-      setState(HIGH);
-    else if (signal() <= lowThreshold)
-      setState(LOW);
+    if (signal() >= high_threshold)
+      set_state(HIGH);
+    else if (signal() <= low_threshold)
+      set_state(LOW);
     else
-      setState(state);
+      set_state(state);
   }
 
 private:
   const std::function<float()> signal;
-  const float lowThreshold;
-  const float highThreshold;
+  const float low_threshold;
+  const float high_threshold;
 };
 } // namespace DHE
 #endif

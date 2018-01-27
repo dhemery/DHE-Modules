@@ -32,7 +32,7 @@ struct Range {
     return scaled;
   }
 
-  float clampToNormal(float scaled) const {
+  float clamp_to_normal(float scaled) const {
     return normalize(clamp(scaled));
   }
 };

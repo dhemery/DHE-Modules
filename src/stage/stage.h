@@ -33,13 +33,13 @@ struct Stage : rack::Module {
   void step() override;
 
 private:
-  DFlipFlop deferGate;
-  Ramp endOfCyclePulse;
-  Ramp envelopeRamp;
-  DFlipFlop envelopeTrigger;
-  Follower stageInputFollower;
+  DFlipFlop defer_gate;
+  Ramp end_of_cycle_pulse;
+  Ramp envelope_ramp;
+  DFlipFlop envelope_trigger;
+  Follower stage_input_follower;
 
-  float stageIn() const;
+  float stage_input() const;
   float duration() const;
   float level() const;
   float shape() const;
@@ -47,8 +47,8 @@ private:
   void defer();
   void resume();
 
-  void startEnvelope();
-  float envelopeOut() const;
+  void start_envelope();
+  float envelope_out() const;
 };
 } // namespace DHE
 #endif

@@ -9,46 +9,46 @@ namespace DHE {
 class Latch {
 
 public:
-  bool isHigh() const { return state==HIGH; }
+  bool is_high() const { return state==HIGH; }
 
-  bool isLow() const { return state==LOW; }
+  bool is_low() const { return state==LOW; }
 
   /**
    * Suspends firing events.
    */
-  void suspendFiring() {
-    firingEvents = false;
+  void suspend_firing() {
+    firing_events = false;
   }
 
   /**
    * Resumes firing events.
    */
-  void resumeFiring() {
-    firingEvents = true;
+  void resume_firing() {
+    firing_events = true;
   }
 
   /**
    * Registers an action to be called on each rising edge.
    * @param action called on each rising edge
    */
-  void onRisingEdge(const std::function<void()> &action) {
-    risingEdge.push_back(action);
+  void on_rising_edge(const std::function<void()> &action) {
+    rising_edge_actions.push_back(action);
   }
 
   /**
    * Registers an action to be called on each falling edge.
    * @param action called on each falling edge
    */
-  void onFallingEdge(const std::function<void()> &action) {
-    fallingEdge.push_back(action);
+  void on_falling_edge(const std::function<void()> &action) {
+    falling_edge_actions.push_back(action);
   }
 
   /**
    * Registers an action to be called when the latch is set to its current state.
    * @param action called on when the latch is set to its current state
    */
-  void onNoChange(const std::function<void()> &action) {
-    noChange.push_back(action);
+  void on_no_change(const std::function<void()> &action) {
+    no_change_actions.push_back(action);
   }
 
 protected:
@@ -56,23 +56,23 @@ protected:
     UNKNOWN, LOW, HIGH
   } state = UNKNOWN;
 
-  void setState(State newState) {
+  void set_state(State newState) {
     if (state==newState) {
-      fire(noChange);
+      fire(no_change_actions);
     } else {
       state = newState;
-      fire(state==HIGH ? risingEdge : fallingEdge);
+      fire(state==HIGH ? rising_edge_actions : falling_edge_actions);
     }
   }
 
 private:
-  bool firingEvents = true;
-  std::vector<std::function<void()>> risingEdge;
-  std::vector<std::function<void()>> fallingEdge;
-  std::vector<std::function<void()>> noChange;
+  bool firing_events = true;
+  std::vector<std::function<void()>> rising_edge_actions;
+  std::vector<std::function<void()>> falling_edge_actions;
+  std::vector<std::function<void()>> no_change_actions;
 
   void fire(std::vector<std::function<void()>> &actions) {
-    if (!firingEvents)
+    if (!firing_events)
       return;
     for (auto &&action : actions)
       action();

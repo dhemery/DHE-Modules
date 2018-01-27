@@ -17,14 +17,14 @@ struct DLatch : Latch {
    * - Fires risingEdge if the latch was LOW or in an unknown state.
    * - Fires noChange if the latch was already HIGH.
    */
-  void set() { setState(HIGH); }
+  void set() { set_state(HIGH); }
 
   /**
    * Sets the latch LOW.
    * - Fires fallingEdge if the latch was HIGH or in an unknown state.
    * - Fires noChange if the latch was already LOW.
    */
-  void reset() { setState(LOW); }
+  void reset() { set_state(LOW); }
 };
 }
 #endif

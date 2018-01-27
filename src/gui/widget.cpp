@@ -10,9 +10,9 @@
 extern rack::Plugin *plugin;
 
 namespace DHE {
-Widget::Widget(rack::Module *module, int hp, const char *background) {
+Widget::Widget(rack::Module *module, int widget_hp, const char *background) {
   setModule(module);
-  box.size = rack::Vec(hp*RACK_GRID_WIDTH, RACK_GRID_HEIGHT);
+  box.size = rack::Vec(widget_hp*RACK_GRID_WIDTH, RACK_GRID_HEIGHT);
 
   auto *panel = new rack::SVGPanel();
   panel->box.size = box.size;
@@ -20,7 +20,7 @@ Widget::Widget(rack::Module *module, int hp, const char *background) {
   addChild(panel);
 }
 
-void Widget::installScrews(float leftX, float topY) {
+void Widget::install_screws(float leftX, float topY) {
   float rightX = width() - leftX;
   float bottomY = height() - topY;
   std::vector<rack::Vec> screwPositions{
@@ -37,9 +37,9 @@ void Widget::installScrews(float leftX, float topY) {
 
   for (unsigned long i = 0; i < screwCount; i++) {
     if (i==blackScrew) {
-      installScrew<rack::ScrewBlack>(screwPositions[i]);
+      install_screw<rack::ScrewBlack>(screwPositions[i]);
     } else {
-      installScrew<rack::ScrewSilver>(screwPositions[i]);
+      install_screw<rack::ScrewSilver>(screwPositions[i]);
     }
   }
 }
