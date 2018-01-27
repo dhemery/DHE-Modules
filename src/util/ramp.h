@@ -2,8 +2,8 @@
 
 #include <functional>
 #include <utility>
-#include "DLatch.hpp"
-#include "Functions.hpp"
+#include "d-latch.h"
+#include "functions.h"
 
 namespace DHE {
 

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "gui/Widget.hpp"
+#include "gui/widget.h"
 
 namespace DHE {
 

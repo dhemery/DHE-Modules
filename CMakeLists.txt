@@ -18,10 +18,8 @@ include_directories(
         ../../dep/include)
 
 add_library(plugin SHARED
-        src/plugin/DHEModules.cpp
-        src/plugin/DHEModules.hpp
-        src/util/DFlipFlop.hpp
-        src/util/Ramp.hpp
-        src/stage/Stage.cpp
-        src/stage/Stage.hpp
-        src/stage/StageWidget.cpp src/util/Follower.hpp src/util/Functions.hpp src/stage/StageWidget.hpp)
+        src/plugin/dhe-modules.cpp
+        src/plugin/dhe-modules.h
+        src/stage/stage.cpp
+        src/stage/stage.h
+        src/stage/stage-widget.cpp src/stage/stage-widget.h)

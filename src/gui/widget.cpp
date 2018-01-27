@@ -5,7 +5,7 @@
 #include "math.hpp"
 #include "plugin.hpp"
 #include "rack.hpp"
-#include "Widget.hpp"
+#include "widget.h"
 
 extern rack::Plugin *plugin;
 

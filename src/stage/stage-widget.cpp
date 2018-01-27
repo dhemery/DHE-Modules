@@ -1,5 +1,5 @@
-#include "Stage.hpp"
-#include "StageWidget.hpp"
+#include "stage.h"
+#include "stage-widget.h"
 
 namespace DHE {
 

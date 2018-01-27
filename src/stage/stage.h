@@ -4,14 +4,15 @@
 
 #include "dsp/digital.hpp"
 #include "rack.hpp"
-#include "util/DFlipFlop.hpp"
-#include "util/Ramp.hpp"
-#include "util/Follower.hpp"
+
+#include "util/d-flip-flop.h"
+#include "util/ramp.h"
+#include "util/follower.h"
 
 namespace DHE {
 struct Stage : rack::Module {
-  static constexpr char const *SLUG {"Stage"};
-  static constexpr char const *NAME {SLUG};
+  static constexpr char const *SLUG{"Stage"};
+  static constexpr char const *NAME{SLUG};
 
   enum ParamIds {
     DURATION_KNOB, LEVEL_KNOB, SHAPE_KNOB, NUM_PARAMS

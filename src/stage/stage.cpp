@@ -1,31 +1,20 @@
 #include <cmath>
-#include "Stage.hpp"
-
-// These constants yield ramp durations of:
-//    knob fully ccw  : .002417s
-//    knob dead center: 1s
-//    knob fully cw   : 10s
-#define DURATION_SCALE (16.0f)
-#define DURATION_SQUEEZED_MAX (0.88913970f)
-#define DURATION_SQUEEZED_MIN (1.0f - DURATION_SQUEEZED_MAX)
+#include "stage.h"
 
 namespace DHE {
 
 Stage::Stage() : Module(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS),
-                 deferGate{[this]() { return inputs[DEFER_GATE_IN].value; }},
+                 deferGate{[this] { return inputs[DEFER_GATE_IN].value; }},
                  endOfCyclePulse{1e-3, &rack::engineGetSampleTime},
-                 envelopeRamp{[this]() { return duration(); }, &rack::engineGetSampleTime},
-                 envelopeTrigger{[this]() { return inputs[TRIGGER_IN].value; }},
-                 stageInputFollower{[this]() { return stageIn(); }} {
-  deferGate.onRisingEdge([this]() { defer(); });
-  deferGate.onFallingEdge([this]() { resume(); });
+                 envelopeRamp{[this] { return duration(); }, &rack::engineGetSampleTime},
+                 envelopeTrigger{[this] { return inputs[TRIGGER_IN].value; }},
+                 stageInputFollower{[this] { return stageIn(); }} {
+  deferGate.onRisingEdge([this] { defer(); });
+  deferGate.onFallingEdge([this] { resume(); });
 
-  envelopeTrigger.onRisingEdge([this]() { startEnvelope(); });
-  envelopeTrigger.onRisingEdge(
-      [this]() { rack::debug("DUR %f", duration()); }
-  );
+  envelopeTrigger.onRisingEdge([this] { startEnvelope(); });
 
-  envelopeRamp.onEndOfCycle([this]() { endOfCyclePulse.start(); });
+  envelopeRamp.onEndOfCycle([this] { endOfCyclePulse.start(); });
 }
 
 void Stage::step() {

@@ -4,7 +4,8 @@
 #include <memory>
 #include <utility>
 #include <vector>
-#include "Latch.hpp"
+
+#include "latch.h"
 
 namespace DHE {
 
