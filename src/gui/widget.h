@@ -1,4 +1,5 @@
-#pragma once
+#ifndef DHE_GUI_WIDGET_H
+#define DHE_GUI_WIDGET_H
 
 #include "app.hpp"
 #include "engine.hpp"
@@ -63,3 +64,4 @@ public:
 };
 
 }
+#endif

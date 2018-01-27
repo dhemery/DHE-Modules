@@ -1,7 +1,9 @@
-#pragma once
+#ifndef DHE_UTIL_RAMP_H
+#define DHE_UTIL_RAMP_H
 
 #include <functional>
 #include <utility>
+
 #include "d-latch.h"
 #include "functions.h"
 
@@ -41,7 +43,7 @@ public:
    * @param stepDurationSupplier supplies the duration of each step
    */
   Ramp(const std::function<float()> &rampDurationSupplier, const std::function<float()> &stepDurationSupplier)
-      : Ramp{[=]{ return stepDurationSupplier()/rampDurationSupplier(); }} {
+      : Ramp{[=] { return stepDurationSupplier()/rampDurationSupplier(); }} {
   }
 
   /*!
@@ -58,7 +60,7 @@ public:
    * @param stepDurationSupplier supplies the duration of each step
    */
   Ramp(float rampDuration, const std::function<float()> &stepDurationSupplier)
-      : Ramp{[=]{ return stepDurationSupplier()/rampDuration; }} {}
+      : Ramp{[=] { return stepDurationSupplier()/rampDuration; }} {}
 
   /**
    * Activates the ramp at phase 0.
@@ -136,3 +138,4 @@ private:
   const std::function<float()> phaseIncrement;
 };
 } // namespace DHE
+#endif

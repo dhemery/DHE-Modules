@@ -1,4 +1,5 @@
-#pragma once
+#ifndef DHE_STAGE_STAGE_H
+#define DHE_STAGE_STAGE_H
 
 #include <memory>
 
@@ -50,3 +51,4 @@ private:
   float envelopeOut() const;
 };
 } // namespace DHE
+#endif

@@ -1,4 +1,5 @@
-#pragma once
+#ifndef DHE_STAGE_STAGE_WIDGET_H
+#define DHE_STAGE_STAGE_WIDGET_H
 
 #include "gui/widget.h"
 
@@ -8,3 +9,4 @@ struct StageWidget : public Widget {
   StageWidget();
 };
 }
+#endif
