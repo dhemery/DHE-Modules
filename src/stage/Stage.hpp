@@ -37,12 +37,15 @@ private:
   DFlipFlop envelopeTrigger;
   Follower stageInputFollower;
 
+  float stageIn() const;
+  float duration() const;
+  float level() const;
+  float shape() const;
+
   void defer();
   void resume();
-  float duration() const;
-  float stageIn() const;
+
   void startEnvelope();
   float envelopeOut() const;
-  float shape() const;
 };
 } // namespace DHE

@@ -5,11 +5,9 @@
 //    knob fully ccw  : .002417s
 //    knob dead center: 1s
 //    knob fully cw   : 10s
-#define DURATION_CURVATURE (4.0f)
 #define DURATION_SCALE (16.0f)
 #define DURATION_SQUEEZED_MAX (0.88913970f)
 #define DURATION_SQUEEZED_MIN (1.0f - DURATION_SQUEEZED_MAX)
-#define ENVELOPE_CURVATURE_MAX 10.0f
 
 namespace DHE {
 
@@ -23,6 +21,9 @@ Stage::Stage() : Module(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS),
   deferGate.onFallingEdge([this]() { resume(); });
 
   envelopeTrigger.onRisingEdge([this]() { startEnvelope(); });
+  envelopeTrigger.onRisingEdge(
+      [this]() { rack::debug("DUR %f", duration()); }
+  );
 
   envelopeRamp.onEndOfCycle([this]() { endOfCyclePulse.start(); });
 }
@@ -55,20 +56,25 @@ void Stage::startEnvelope() {
 }
 
 float Stage::duration() const {
-  float squeezed = scaleToRange(params[DURATION_KNOB].value, DURATION_SQUEEZED_MIN, DURATION_SQUEEZED_MAX);
-  float curved = pow(squeezed, DURATION_CURVATURE);
-  return scaleToRange(curved, 0.0f, DURATION_SCALE);
+  static constexpr float minDuration{1e-3f};
+  static constexpr float maxDuration{10.0f};
+  static constexpr float durationCurvature{0.8f}; // Gives ~1s at center position
+
+  return scaleToRange(sigmoid(params[DURATION_KNOB].value, durationCurvature), minDuration, maxDuration);
 }
 
 float Stage::shape() const {
-  return sigmoid(scaleToRange(params[SHAPE_KNOB].value, -1.0f, 1.0f), -0.65f);
+  static constexpr float shapeKnobCurvature = -0.65f;
+
+  return sigmoid(scaleToRange(params[SHAPE_KNOB].value, -1.0f, 1.0f), shapeKnobCurvature);
 }
 
 float Stage::envelopeOut() const {
-  float curved = sigmoid(envelopeRamp.phase(), shape());
-  float level = params[LEVEL_KNOB].value;
-  return scaleToRange(curved, stageInputFollower.value(), toUnipolarVoltage(level));
+  float shaped = sigmoid(envelopeRamp.phase(), shape());
+  return scaleToRange(shaped, stageInputFollower.value(), level());
 }
+
+float Stage::level() const { return toUnipolarVoltage(params[LEVEL_KNOB].value); }
 
 float Stage::stageIn() const { return inputs[STAGE_IN].value; }
 } // namespace DHE
