@@ -11,8 +11,8 @@
 namespace DHE {
 
 /**
- * A latch determines its state by comparing the incoming signal to the specified
- * thresholds.
+ * A flip-flop is a latch determines its own state by comparing the incoming
+ * signal to the specified thresholds.
  */
 struct DFlipFlop : public Latch {
 

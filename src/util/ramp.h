@@ -12,7 +12,7 @@ namespace DHE {
 /**
  * A ramp that advances its phase from 0 to 1 in increments.
  *
- * When the phase advances to 1, the ramp fires endOfCycle and stops advancing.
+ * When the phase advances to 1, the ramp fires end-of-cycle and stops advancing.
  */
 class Ramp {
 public:
