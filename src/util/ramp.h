@@ -5,7 +5,7 @@
 #include <utility>
 
 #include "d-latch.h"
-#include "functions.h"
+#include "sigmoid.h"
 
 namespace DHE {
 
@@ -97,7 +97,7 @@ public:
     if (!isActive())
       return;
 
-    progress = clamp(progress + phaseIncrement(), 0.0, 1.0);
+    progress = NORMAL.clamp(progress + phaseIncrement());
 
     if (progress >= 1.0f) {
       active.reset();

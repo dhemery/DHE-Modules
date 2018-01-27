@@ -24,8 +24,8 @@ void Stage::step() {
   endOfCyclePulse.step();
 
   outputs[STAGE_OUT].value = deferGate.isHigh() ? stageInputFollower.value() : envelopeOut();
-  outputs[EOC_TRIGGER_OUT].value = toUnipolarVoltage(endOfCyclePulse.isActive());
-  outputs[ACTIVE_GATE_OUT].value = toUnipolarVoltage(deferGate.isHigh() || envelopeRamp.isActive());
+  outputs[EOC_TRIGGER_OUT].value = UNIPOLAR_VOLTAGE.scale(endOfCyclePulse.isActive());
+  outputs[ACTIVE_GATE_OUT].value = UNIPOLAR_VOLTAGE.scale(deferGate.isHigh() || envelopeRamp.isActive());
 }
 
 void Stage::defer() {
@@ -45,25 +45,24 @@ void Stage::startEnvelope() {
 }
 
 float Stage::duration() const {
-  static constexpr float minDuration{1e-3f};
-  static constexpr float maxDuration{10.0f};
-  static constexpr float durationCurvature{0.8f}; // Gives ~1s at center position
+  static const Range range{1e-3, 10.0f};
+  static constexpr float curvature{0.8f}; // Gives ~1s at center position
 
-  return scaleToRange(sigmoid(params[DURATION_KNOB].value, durationCurvature), minDuration, maxDuration);
+  return range.scale(sigmoid(params[DURATION_KNOB].value, curvature));
 }
 
 float Stage::shape() const {
   static constexpr float shapeKnobCurvature = -0.65f;
 
-  return sigmoid(scaleToRange(params[SHAPE_KNOB].value, -1.0f, 1.0f), shapeKnobCurvature);
+  return sigmoid(BIPOLAR_NORMAL.scale(params[SHAPE_KNOB].value, -1.0f, 1.0f), shapeKnobCurvature);
 }
 
 float Stage::envelopeOut() const {
   float shaped = sigmoid(envelopeRamp.phase(), shape());
-  return scaleToRange(shaped, stageInputFollower.value(), level());
+  return Range::scale(shaped, stageInputFollower.value(), level());
 }
 
-float Stage::level() const { return toUnipolarVoltage(params[LEVEL_KNOB].value); }
+float Stage::level() const { return UNIPOLAR_VOLTAGE.scale(params[LEVEL_KNOB].value); }
 
 float Stage::stageIn() const { return inputs[STAGE_IN].value; }
 } // namespace DHE
