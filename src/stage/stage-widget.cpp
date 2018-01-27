@@ -3,7 +3,7 @@
 
 namespace DHE {
 
-StageWidget::StageWidget() : Widget(new Stage(), 4, "res/Stage Skinny.svg") {
+StageWidget::StageWidget() : Widget(new Stage(), 4, "res/Stage.svg") {
   float widgetRightEdge = this->box.size.x;
 
   float topKnobY = 75.0f;
