@@ -13,9 +13,6 @@ Stage::Stage() : Module(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS),
   defer_gate.on_falling_edge([this] { resume(); });
 
   envelope_trigger.on_rising_edge([this] { start_envelope(); });
-  envelope_trigger.on_rising_edge([this] {
-    rack::debug("shape %f", shape());
-  });
 
   envelope_ramp.on_end_of_cycle([this] { end_of_cycle_pulse.start(); });
 }
