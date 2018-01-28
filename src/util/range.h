@@ -37,9 +37,9 @@ struct Range {
   }
 };
 
-extern const Range NORMAL;
-extern const Range BIPOLAR_NORMAL;
-extern const Range UNIPOLAR_VOLTAGE;
-extern const Range BIPOLAR_VOLTAGE;
+const Range NORMAL{0.0f, 1.0f};
+const Range BIPOLAR_NORMAL{-1.0f, 1.0f};
+const Range UNIPOLAR_VOLTAGE{0.0f, 10.0f};
+const Range BIPOLAR_VOLTAGE{-5.0f, 5.0f};
 }
 #endif

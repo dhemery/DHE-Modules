@@ -15,10 +15,3 @@ void init(rack::Plugin *p) {
   p->addModel(rack::createModel<DHE::StageWidget>(DHE::MANUFACTURER, DHE::Stage::SLUG, DHE::Stage::NAME,
                                                   rack::ENVELOPE_GENERATOR_TAG));
 }
-
-namespace DHE {
-const Range NORMAL{0.0f, 1.0f};
-const Range BIPOLAR_NORMAL{-1.0f, 1.0f};
-const Range UNIPOLAR_VOLTAGE{0.0f, 10.0f};
-const Range BIPOLAR_VOLTAGE{-5.0f, 5.0f};
-}
