@@ -6,7 +6,7 @@ namespace DHE {
 struct Range {
   float min, max;
 
-  Range(float min, float max) : min(min), max(max) {}
+  Range(float min, float max) noexcept : min(min), max(max) {}
 
   static float scale(float normalized, float min, float max) {
     return normalized * (max - min) + min;
