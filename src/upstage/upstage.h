@@ -23,7 +23,7 @@ struct Upstage : rack::Module {
   };
 
   enum LightIds {
-    NUM_LIGHTS
+    TRIG_LIGHT, WAIT_LIGHT, NUM_LIGHTS
   };
 
   Upstage();

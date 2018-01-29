@@ -14,8 +14,9 @@ UpstageWidget::UpstageWidget() : Widget(new Upstage(), 4, "res/Upstage.svg") {
 
   install_param<rack::RoundBlackKnob>(Upstage::LEVEL_KNOB, center_x, upper_top_y);
   install_button<rack::LEDButton>(Upstage::WAIT_BUTTON, left_x, upper_top_y + upper_spacing);
+  install_light<rack::MediumLight<rack::GreenLight>>(Upstage::WAIT_LIGHT, left_x, upper_top_y + upper_spacing);
   install_button<rack::LEDButton>(Upstage::TRIG_BUTTON, right_x, upper_top_y + upper_spacing);
-
+  install_light<rack::MediumLight<rack::GreenLight>>(Upstage::TRIG_LIGHT, right_x, upper_top_y + upper_spacing);
 
   float lower_top_y = 245.0f;
   float lower_spacing = 43.0f;

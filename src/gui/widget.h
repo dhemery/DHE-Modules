@@ -46,6 +46,13 @@ public:
   }
 
   template<class T>
+  void install_light(int index, float x, float y, float initial = 0.5f) {
+    rack::ModuleLightWidget *light = rack::createLight<T>(rack::Vec(x, y), module, index);
+    moveTo(light->box, x, y);
+    addChild(light);
+  }
+
+  template<class T>
   void install_button(int index, float x, float y) {
     install_param<T>(index, x, y, 0.0f);
   }
