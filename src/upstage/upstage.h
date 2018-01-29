@@ -5,7 +5,9 @@
 #ifndef DHE_UPSTAGE_UPSTAGE_H
 #define DHE_UPSTAGE_UPSTAGE_H
 
-#include <engine.hpp>
+#include <algorithm>
+
+#include "engine.hpp"
 #include "util/range.h"
 
 namespace DHE {
@@ -17,30 +19,37 @@ struct Upstage : rack::Module {
     LEVEL_KNOB, TRIG_BUTTON, WAIT_BUTTON, NUM_PARAMS
   };
   enum InputIds {
-    TRIG_IN, WAIT_GATE_IN, NUM_INPUTS
+    TRIG_INPUT, WAIT_INPUT, NUM_INPUTS
   };
   enum OutputIds {
-    TRIG_OUT, ENVELOPE_OUT, NUM_OUTPUTS
+    TRIG_OUTPUT, OUT_OUTPUT, NUM_OUTPUTS
   };
-
   enum LightIds {
-    TRIG_LIGHT, WAIT_LIGHT, NUM_LIGHTS
+    TRIG_BUTTON_LIGHT, WAIT_BUTTON_LIGHT, NUM_LIGHTS
   };
 
-  Upstage();
-  void step() override;
+  Upstage() : Module(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS) {}
+
+  void step() override {
+    lights[TRIG_BUTTON_LIGHT].value = trigger_button_is_pressed();
+    lights[WAIT_BUTTON_LIGHT].value = wait_button_is_pressed();
+
+    outputs[TRIG_OUTPUT].value = trigger_out_voltage();
+    outputs[OUT_OUTPUT].value = level_knob_voltage();
+  }
 
 private:
 
-  bool is_sending_triggers() const { return wait_port_in() < 1.0f && wait_button_in() < 1.0f; }
-  float level_knob_in() const { return this->params[LEVEL_KNOB].value; }
-  float level_knob_voltage() const { return UNIPOLAR_VOLTAGE.scale(level_knob_in()); }
-  float trigger_button_in() const { return params[TRIG_BUTTON].value; }
-  float trigger_button_voltage() const { return UNIPOLAR_VOLTAGE.scale(trigger_button_in()); }
-  float trigger_port_in() const { return inputs[TRIG_IN].value; }
-  float trigger_port_out() const { return std::max(trigger_port_in(), trigger_button_voltage()); }
-  float wait_button_in() const { return params[WAIT_BUTTON].value; }
-  float wait_port_in() const { return inputs[WAIT_GATE_IN].value; }
+  bool is_sending_triggers() const { return wait_port_in() < 1.0f and not wait_button_is_pressed(); }
+  float level_knob_rotation() const { return this->params[LEVEL_KNOB].value; }
+  float level_knob_voltage() const { return UNIPOLAR_VOLTAGE.scale(level_knob_rotation()); }
+  bool trigger_button_is_pressed() const { return params[TRIG_BUTTON].value > 0.0f; }
+  float trigger_button_voltage() const { return UNIPOLAR_VOLTAGE.scale(trigger_button_is_pressed()); }
+  float trigger_port_in() const { return inputs[TRIG_INPUT].value; }
+  float trigger_out_voltage() const { return is_sending_triggers() ? trigger_voltage() : 0.0f; }
+  float trigger_voltage() const { return std::max(trigger_port_in(), trigger_button_voltage()); }
+  bool wait_button_is_pressed() const { return params[WAIT_BUTTON].value > 0.0f; }
+  float wait_port_in() const { return inputs[WAIT_INPUT].value; }
 };
 
 }
