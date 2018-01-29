@@ -46,8 +46,8 @@ public:
   }
 
   template<class T>
-  void install_button(int index, float x, float y, bool state) {
-    install_param<T>(index, x, y, state ? 1.0f : 0.0f);
+  void install_button(int index, float x, float y) {
+    install_param<T>(index, x, y, 0.0f);
   }
 
   template<class T>

@@ -15,17 +15,18 @@ UpstageWidget::UpstageWidget() : Widget(new Upstage(), 4, "res/Upstage.svg") {
 
   install_param<rack::RoundBlackKnob>(Upstage::LEVEL_KNOB, center_x, upper_top_y);
   install_input<rack::PJ301MPort>(Upstage::LEVEL_CV, center_x, upper_top_y + upper_spacing);
-  install_button<rack::LEDButton>(Upstage::TRIG_BUTTON, left_x, upper_top_y + 2 * upper_spacing, false);
-  install_button<rack::LEDButton>(Upstage::WAIT_BUTTON, right_x, upper_top_y + 2 * upper_spacing, true);
+  install_button<rack::LEDButton>(Upstage::TRIG_BUTTON, center_x, upper_top_y + 2 * upper_spacing);
 
-  float lower_top_y = 288.0f;
+  float lower_top_y = 245.0f;
   float lower_spacing = 43.0f;
 
-  install_input<rack::PJ301MPort>(Upstage::TRIG_IN, left_x, lower_top_y);
-  install_output<rack::PJ301MPort>(Upstage::TRIG_OUT, right_x, lower_top_y);
+  install_input<rack::PJ301MPort>(Upstage::WAIT_GATE_IN, left_x, lower_top_y);
+  install_button<rack::LEDButton>(Upstage::WAIT_BUTTON, right_x, lower_top_y);
 
-  install_input<rack::PJ301MPort>(Upstage::WAIT_GATE_IN, left_x, lower_top_y + lower_spacing);
-  install_output<rack::PJ301MPort>(Upstage::OUT, right_x, lower_top_y + lower_spacing);
+  install_input<rack::PJ301MPort>(Upstage::TRIG_IN, left_x, lower_top_y + lower_spacing);
+  install_output<rack::PJ301MPort>(Upstage::TRIG_OUT, right_x, lower_top_y + lower_spacing);
+
+  install_output<rack::PJ301MPort>(Upstage::OUT, right_x, lower_top_y + 2 * lower_spacing);
 
   install_screws(13.0f, 7.5f);
 }
