@@ -22,4 +22,4 @@ add_library(plugin SHARED
         src/plugin/dhe-modules.h
         src/stage/stage.cpp
         src/stage/stage.h
-        src/stage/stage-widget.cpp src/stage/stage-widget.h src/util/range.h)
+        src/stage/stage-widget.cpp src/stage/stage-widget.h src/util/range.h src/upstage/upstage.cpp src/upstage/upstage.h)

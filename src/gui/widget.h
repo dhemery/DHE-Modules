@@ -39,11 +39,17 @@ public:
   }
 
   template<class T>
-  void install_param(int index, float x, float y) {
-    rack::ParamWidget *param = rack::createParam<T>(rack::Vec(x, y), module, index, 0.0f, 1.0f, 0.5f);
+  void install_param(int index, float x, float y, float initial = 0.5f) {
+    rack::ParamWidget *param = rack::createParam<T>(rack::Vec(x, y), module, index, 0.0f, 1.0f, initial);
     moveTo(param->box, x, y);
     addParam(param);
   }
+
+  template<class T>
+  void install_button(int index, float x, float y, bool state) {
+    install_param<T>(index, x, y, state ? 1.0f : 0.0f);
+  }
+
   template<class T>
   void install_screw(rack::Vec pos) {
     rack::Widget *widget = rack::createScrew<T>(rack::Vec(0, 0));
