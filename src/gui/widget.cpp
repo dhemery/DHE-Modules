@@ -32,7 +32,7 @@ void Widget::install_screws(float leftX, float topY) {
 
   unsigned long screwCount = screwPositions.size();
   std::minstd_rand generator;
-  std::uniform_int_distribution<int> aScrew(0, 3);
+  std::uniform_int_distribution<unsigned long> aScrew(0, 3);
   unsigned long blackScrew = aScrew(generator);
 
   for (unsigned long i = 0; i < screwCount; i++) {

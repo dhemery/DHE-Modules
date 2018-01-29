@@ -23,7 +23,7 @@ void Stage::step() {
   envelope_trigger.step();
   end_of_cycle_pulse.step();
 
-  outputs[STAGE_OUT].value = defer_gate.is_high() ? stage_input_follower.value() : envelope_out();
+  outputs[ENVELOPE_OUT].value = defer_gate.is_high() ? stage_input_follower.value() : envelope_out();
   outputs[EOC_TRIGGER_OUT].value = UNIPOLAR_VOLTAGE.scale(end_of_cycle_pulse.is_active());
   outputs[ACTIVE_GATE_OUT].value = UNIPOLAR_VOLTAGE.scale(defer_gate.is_high() || envelope_ramp.is_active());
 }
@@ -64,5 +64,5 @@ float Stage::envelope_out() const {
 
 float Stage::level() const { return UNIPOLAR_VOLTAGE.scale(params[LEVEL_KNOB].value); }
 
-float Stage::stage_input() const { return inputs[STAGE_IN].value; }
+float Stage::stage_input() const { return inputs[ENVELOPE_IN].value; }
 } // namespace DHE

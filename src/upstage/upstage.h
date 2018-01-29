@@ -13,13 +13,13 @@ struct Upstage : rack::Module {
   static constexpr char const *NAME{SLUG};
 
   enum ParamIds {
-    LEVEL_KNOB, POLARITY_SWITCH, TRIG_BUTTON, WAIT_BUTTON, NUM_PARAMS
+    LEVEL_KNOB, TRIG_BUTTON, WAIT_BUTTON, NUM_PARAMS
   };
   enum InputIds {
-    LEVEL_CV, TRIG_IN, WAIT_GATE_IN, NUM_INPUTS
+    TRIG_IN, WAIT_GATE_IN, NUM_INPUTS
   };
   enum OutputIds {
-    OUT, TRIG_OUT, NUM_OUTPUTS
+    TRIG_OUT, ENVELOPE_OUT, NUM_OUTPUTS
   };
 
   enum LightIds {

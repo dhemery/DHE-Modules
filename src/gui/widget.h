@@ -55,7 +55,6 @@ public:
     rack::Widget *widget = rack::createScrew<T>(rack::Vec(0, 0));
     moveTo(widget->box, pos);
     addChild(widget);
-
   }
 
   void install_screws(float leftX, float topY);
