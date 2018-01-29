@@ -13,7 +13,7 @@ void Upstage::step() {
   lights[TRIG_LIGHT].value = trigger_button_in();
   lights[WAIT_LIGHT].value = wait_button_in();
 
-  outputs[TRIG_OUT].value = is_sending_triggers() ? trigger_out_voltage() : 0.0f;
+  outputs[TRIG_OUT].value = is_sending_triggers() ? trigger_port_out() : 0.0f;
   outputs[ENVELOPE_OUT].value = level_knob_voltage();
 }
 }
