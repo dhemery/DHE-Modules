@@ -13,7 +13,6 @@
 namespace DHE {
 struct Stage : rack::Module {
   static constexpr char const *SLUG{"Stage"};
-  static constexpr char const *NAME{SLUG};
 
   enum ParamIds {
     DURATION_KNOB, LEVEL_KNOB, SHAPE_KNOB, NUM_PARAMS

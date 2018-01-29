@@ -3,7 +3,6 @@
 //
 
 #include <algorithm>
-#include "util/range.h"
 #include "upstage.h"
 
 namespace DHE {
@@ -11,15 +10,10 @@ namespace DHE {
 Upstage::Upstage() : Module(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS) {}
 
 void Upstage::step() {
-  outputs[ENVELOPE_OUT].value = UNIPOLAR_VOLTAGE.scale(params[LEVEL_KNOB].value);
-  lights[TRIG_LIGHT].value = params[TRIG_BUTTON].value;
-  lights[WAIT_LIGHT].value = params[WAIT_BUTTON].value;
+  lights[TRIG_LIGHT].value = trigger_button_in();
+  lights[WAIT_LIGHT].value = wait_button_in();
 
-  if (inputs[WAIT_GATE_IN].value >= 1.0f || params[WAIT_BUTTON].value >= 1.0f)
-    outputs[TRIG_OUT].value = 0.0f;
-  else
-    outputs[TRIG_OUT].value = std::max(
-        UNIPOLAR_VOLTAGE.clamp(inputs[TRIG_IN].value),
-        UNIPOLAR_VOLTAGE.scale(params[TRIG_BUTTON].value));
+  outputs[TRIG_OUT].value = is_sending_triggers() ? trigger_out_voltage() : 0.0f;
+  outputs[ENVELOPE_OUT].value = level_knob_voltage();
 }
 }
