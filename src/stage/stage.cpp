@@ -4,11 +4,11 @@
 namespace DHE {
 
 Stage::Stage() : Module(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS),
-                 defer_gate{[this] { return inputs[DEFER_GATE_IN].value; }},
+                 defer_gate{[this] { return inputs[DEFER_INPUT].value; }},
                  end_of_cycle_pulse{1e-3, &rack::engineGetSampleTime},
                  envelope_ramp{[this] { return duration(); }, &rack::engineGetSampleTime},
-                 envelope_trigger{[this] { return inputs[TRIGGER_IN].value; }},
-                 stage_input_follower{[this] { return stage_input(); }} {
+                 envelope_trigger{[this] { return inputs[TRIG_INPUT].value; }},
+                 stage_input_follower{[this] { return inputs[IN_INPUT].value; }} {
   defer_gate.on_rising_edge([this] { defer(); });
   defer_gate.on_falling_edge([this] { resume(); });
 
@@ -23,9 +23,9 @@ void Stage::step() {
   envelope_trigger.step();
   end_of_cycle_pulse.step();
 
-  outputs[ENVELOPE_OUT].value = defer_gate.is_high() ? stage_input_follower.value() : envelope_out();
-  outputs[EOC_TRIGGER_OUT].value = UNIPOLAR_VOLTAGE.scale(end_of_cycle_pulse.is_active());
-  outputs[ACTIVE_GATE_OUT].value = UNIPOLAR_VOLTAGE.scale(defer_gate.is_high() || envelope_ramp.is_active());
+  outputs[OUT_OUTPUT].value = out_voltage();
+  outputs[EOC_OUTPUT].value = eoc_out_voltage();
+  outputs[ACTIVE_OUTPUT].value = active_out_voltage();
 }
 
 void Stage::defer() {
@@ -48,21 +48,16 @@ float Stage::duration() const {
   static const Range range{1e-3, 10.0f};
   static constexpr float curvature{0.8f}; // Gives ~1s at center position
 
-  return range.scale(sigmoid(params[DURATION_KNOB].value, curvature));
+  return range.scale(sigmoid(duration_knob_rotation(), curvature));
 }
 
 float Stage::shape() const {
-  static constexpr float curvature{-0.65f};
-
-  return sigmoid(BIPOLAR_NORMAL.scale(params[SHAPE_KNOB].value), curvature);
+  static constexpr float shape_curvature{-0.65f};
+  return sigmoid(shape_position(), shape_curvature);
 }
 
-float Stage::envelope_out() const {
+float Stage::envelope_voltage() const {
   float shaped = sigmoid(envelope_ramp.phase(), shape());
-  return Range::scale(shaped, stage_input_follower.value(), level());
+  return Range::scale(shaped, stage_input_follower.value(), level_knob_voltage());
 }
-
-float Stage::level() const { return UNIPOLAR_VOLTAGE.scale(params[LEVEL_KNOB].value); }
-
-float Stage::stage_input() const { return inputs[ENVELOPE_IN].value; }
 } // namespace DHE

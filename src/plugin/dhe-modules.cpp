@@ -13,8 +13,8 @@ void init(rack::Plugin *p) {
   p->website = "https://github.com/dhemery/DHE-Modules";
   p->manual = "https://github.com/dhemery/DHE-Modules/wiki";
 
-  p->addModel(rack::createModel<DHE::StageWidget>(DHE::MANUFACTURER, DHE::Stage::SLUG, DHE::Stage::NAME,
+  p->addModel(rack::createModel<DHE::StageWidget>(DHE::MANUFACTURER, DHE::Stage::SLUG, DHE::Stage::SLUG,
                                                   rack::ENVELOPE_GENERATOR_TAG));
-  p->addModel(rack::createModel<DHE::UpstageWidget>(DHE::MANUFACTURER, DHE::Upstage::SLUG, DHE::Upstage::NAME,
+  p->addModel(rack::createModel<DHE::UpstageWidget>(DHE::MANUFACTURER, DHE::Upstage::SLUG, DHE::Upstage::SLUG,
                                                   rack::ENVELOPE_GENERATOR_TAG));
 }
