@@ -45,9 +45,9 @@ struct DFlipFlop : public Latch {
    */
   void step() {
     if (signal() >= high_threshold)
-      set_state(HIGH);
+      set_state(State::HIGH);
     else if (signal() <= low_threshold)
-      set_state(LOW);
+      set_state(State::LOW);
     else
       set_state(state);
   }

@@ -9,9 +9,9 @@ namespace DHE {
 class Latch {
 
 public:
-  bool is_high() const { return state==HIGH; }
+  bool is_high() const { return state==State::HIGH; }
 
-  bool is_low() const { return state==LOW; }
+  bool is_low() const { return state==State::LOW; }
 
   /**
    * Suspends firing events.
@@ -52,16 +52,16 @@ public:
   }
 
 protected:
-  enum State {
+  enum class State {
     UNKNOWN, LOW, HIGH
-  } state = UNKNOWN;
+  } state = State::UNKNOWN;
 
   void set_state(State newState) {
     if (state==newState) {
       fire(no_change_actions);
     } else {
       state = newState;
-      fire(state==HIGH ? rising_edge_actions : falling_edge_actions);
+      fire(state==State::HIGH ? rising_edge_actions : falling_edge_actions);
     }
   }
 
