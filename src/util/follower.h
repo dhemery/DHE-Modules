@@ -20,7 +20,7 @@ struct Follower {
    */
   explicit Follower(std::function<float()> supplier) :
       supplied{std::move(supplier)},
-      stored{supplier()} {
+      stored{supplied()} {
   }
 
   /**
