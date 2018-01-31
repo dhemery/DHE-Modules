@@ -5,6 +5,7 @@
 
 #include "dsp/digital.hpp"
 #include "rack.hpp"
+#include "plugin.hpp"
 
 #include "util/d-flip-flop.h"
 #include "util/ramp.h"
@@ -12,8 +13,6 @@
 
 namespace DHE {
 struct Stage : rack::Module {
-  static constexpr char const *SLUG{"Stage"};
-
   enum ParamIds {
     DURATION_KNOB, LEVEL_KNOB, SHAPE_KNOB, NUM_PARAMS
   };

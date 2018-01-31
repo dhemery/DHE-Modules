@@ -13,8 +13,6 @@
 namespace DHE {
 
 struct Upstage : rack::Module {
-  static constexpr char const *SLUG{"Upstage"};
-
   enum ParamIds {
     LEVEL_KNOB, TRIG_BUTTON, WAIT_BUTTON, NUM_PARAMS
   };
