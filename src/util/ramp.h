@@ -42,8 +42,8 @@ public:
    * @param ramp_duration_supplier supplies the duration of the ramp
    * @param step_duration_supplier supplies the duration of each step
    */
-  Ramp(const std::function<float()> &ramp_duration_supplier, const std::function<float()> &step_duration_supplier)
-      : Ramp{[=] { return step_duration_supplier()/ramp_duration_supplier(); }} {
+  Ramp(std::function<float()> ramp_duration_supplier, std::function<float()> step_duration_supplier)
+      : Ramp{[step_duration_supplier, ramp_duration_supplier] { return step_duration_supplier()/ramp_duration_supplier(); }} {
   }
 
   /*!
@@ -59,8 +59,8 @@ public:
    * @param ramp_duration the duration of the ramp
    * @param step_duration_supplier supplies the duration of each step
    */
-  Ramp(float ramp_duration, const std::function<float()> &step_duration_supplier)
-      : Ramp{[=] { return step_duration_supplier()/ramp_duration; }} {}
+  Ramp(float ramp_duration, std::function<float()> step_duration_supplier)
+      : Ramp{[ramp_duration, step_duration_supplier] { return step_duration_supplier()/ramp_duration; }} {}
 
   /**
    * Activates the ramp at phase 0.
@@ -128,8 +128,8 @@ public:
    * Registers an action to be called when the ramp's phase advances to 1.
    * @param action called when the ramp phase advances to 1
    */
-  void on_end_of_cycle(const std::function<void()> &action) {
-    active.on_falling_edge(action);
+  void on_end_of_cycle(std::function<void()> action) {
+    active.on_falling_edge(std::move(action));
   }
 
 private:

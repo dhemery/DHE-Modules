@@ -31,24 +31,24 @@ public:
    * Registers an action to be called on each rising edge.
    * @param action called on each rising edge
    */
-  void on_rising_edge(const std::function<void()> &action) {
-    rising_edge_actions.push_back(action);
+  void on_rising_edge(std::function<void()> action) {
+    rising_edge_actions.push_back(std::move(action));
   }
 
   /**
    * Registers an action to be called on each falling edge.
    * @param action called on each falling edge
    */
-  void on_falling_edge(const std::function<void()> &action) {
-    falling_edge_actions.push_back(action);
+  void on_falling_edge(std::function<void()> action) {
+    falling_edge_actions.push_back(std::move(action));
   }
 
   /**
    * Registers an action to be called when the latch is set to its current state.
    * @param action called on when the latch is set to its current state
    */
-  void on_no_change(const std::function<void()> &action) {
-    no_change_actions.push_back(action);
+  void on_no_change(std::function<void()> action) {
+    no_change_actions.push_back(std::move(action));
   }
 
 protected:
@@ -74,7 +74,7 @@ private:
   void fire(std::vector<std::function<void()>> &actions) {
     if (!firing_events)
       return;
-    for (auto &&action : actions)
+    for (const auto &action : actions)
       action();
   }
 };

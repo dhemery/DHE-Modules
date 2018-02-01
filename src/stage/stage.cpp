@@ -31,7 +31,7 @@ void Stage::step() {
 void Stage::defer() {
   envelope_trigger.suspend_firing();
   envelope_ramp.stop();
-  stage_input_follower.follow();
+  stage_input_follower.resume();
 }
 
 void Stage::resume() {

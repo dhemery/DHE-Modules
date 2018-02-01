@@ -8,51 +8,52 @@ namespace DHE {
 
 /**
  * A follower operates in one of two modes: following and paused.
- * While following, a follower yields the supplied value.
- * While paused, it yields the value it stored when it paused.
+ * While following, a follower yields the supplied signal.
+ * While paused, it yields the signal value it stored when it paused.
  *
  * A newly constructed follower is paused.
  */
 struct Follower {
+
   /**
-   * Creates a follower supplied by the given function.
-   * @param supplier the function whose values to follow
+   * Creates a follower that follows the supplied signal.
+   * @param signal supplies the signal whose values to follow
    */
-  explicit Follower(std::function<float()> supplier) :
-      supplied{std::move(supplier)},
-      stored{supplied()} {
+  explicit Follower(std::function<float()> signal) :
+      signal{std::move(signal)},
+      stored{this->signal()} {
   }
 
   /**
-   * Stores the supplied value and pauses. Subsequent calls to
-   * value() yield the stored value.
+   * Stores the supplied signal value and pauses. Subsequent calls to
+   * value() yield the stored signal value.
    */
   void pause() {
-    stored = supplied();
+    stored = signal();
     following = false;
   }
 
   /**
-   * Begins following the supplier. Subsequent calls to value()
-   * yield the supplied value.
+   * Resumes following the supplied signal. Subsequent calls to value()
+   * yield the supplied signal value.
    */
-  void follow() {
+  void resume() {
     following = true;
   }
 
   /**
-   * Returns the supplied value if the follower is in follower mode.
-  // Otherwise returns the value stored by the previous pause().
-   * @return the supplied value if the follower is following,
-   * otherwise the stored value.
+   * Returns the supplied signal value if the follower is in follower mode.
+  // Otherwise returns the signal value stored by the previous pause().
+   * @return the supplied signal value if the follower is following,
+   * otherwise the stored signal value.
    */
   float value() const {
-    return following ? supplied() : stored;
+    return following ? signal() : stored;
   }
 
 private:
   bool following = false;
-  const std::function<float()> supplied;
+  const std::function<float()> signal;
   float stored;
 };
 }

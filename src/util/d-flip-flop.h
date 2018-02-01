@@ -15,9 +15,8 @@ namespace DHE {
  * signal to the specified thresholds.
  */
 struct DFlipFlop : public Latch {
-
   /**
-   * Creates a flip-flop that compares the given signal to the given thresholds.
+   * Creates a flip-flop that compares the supplied signal to the given thresholds.
    *
    * @param signal called on each step to obtain the value to evaluate
    * @param low_threshold signal value at or below which the flip-flop state is LOW
@@ -34,14 +33,14 @@ struct DFlipFlop : public Latch {
    *
    * @param signal called on each step to obtain the signal to evaluate
    */
-  explicit DFlipFlop(const std::function<float()> &signal)
+  explicit DFlipFlop(std::function<float()> signal)
       : DFlipFlop{signal, 0.0f, 1.0f} {}
 
   /**
    * Sets the state by comparing the signal to the thresholds.
-   * - Fires rising-edge if the state changed to HIGH.
-   * - Fires falling-edge if the state changed to LOW.
-   * - Fires no-change if the state did not change.
+   * - Fires 'rising edge' if the state changed to HIGH.
+   * - Fires 'falling edge' if the state changed to LOW.
+   * - Fires 'no change' if the state did not change.
    */
   void step() {
     if (signal() >= high_threshold)
