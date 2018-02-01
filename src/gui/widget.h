@@ -7,8 +7,6 @@
 #include "rack.hpp"
 
 namespace DHE {
-static constexpr float MAX_SCREW_INSET{RACK_GRID_WIDTH*1.5f};
-
 class Widget : public rack::ModuleWidget {
 
 public:
@@ -16,14 +14,14 @@ public:
   Widget(rack::Module *module, int widget_hp, const char *background);
 
   rack::Vec center() {
-    return box.getCenter();
+  return box.getCenter();
   }
 
-  float height() {
+  float height() const {
     return box.size.y;
   }
 
-  float width() {
+  float width() const {
     return box.size.x;
   }
 
@@ -36,21 +34,21 @@ public:
 
   template<class T>
   void install_output(int index, float x, float y) {
-    auto output{rack::createOutput<T>(rack::Vec(0, 0), module, index)};
+    auto output{rack::createOutput<T>({0, 0}, module, index)};
     moveTo(output->box, x, y);
     addOutput(output);
   }
 
   template<class T>
   void install_param(int index, float x, float y, float initial = 0.5f) {
-    auto param{rack::createParam<T>(rack::Vec(x, y), module, index, 0.0f, 1.0f, initial)};
+    auto param{rack::createParam<T>({x, y}, module, index, 0.0f, 1.0f, initial)};
     moveTo(param->box, x, y);
     addParam(param);
   }
 
   template<class T>
   void install_light(int index, float x, float y, float initial = 0.5f) {
-    auto light{rack::createLight<T>(rack::Vec(x, y), module, index)};
+    auto light{rack::createLight<T>({x, y}, module, index)};
     moveTo(light->box, x, y);
     addChild(light);
   }
@@ -62,20 +60,20 @@ public:
 
   template<class T>
   void install_screw(rack::Vec pos) {
-    auto widget{rack::createScrew<T>(rack::Vec(0, 0))};
+    auto widget{rack::createScrew<T>({0, 0})};
     moveTo(widget->box, pos);
     addChild(widget);
   }
 
-  void install_screws();
-
   static void moveTo(rack::Rect &box, rack::Vec pos) {
-    box.pos = pos.minus(box.size.div(2));
+    box.pos = pos.minus(box.size.mult(0.5f));
   }
 
   static void moveTo(rack::Rect &box, float x, float y) {
-    moveTo(box, rack::Vec(x, y));
+    moveTo(box, {x, y});
   }
+
+  void install_screws();
 };
 
 }
