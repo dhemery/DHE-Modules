@@ -11,7 +11,7 @@
 namespace DHE {
 
 /**
- * A flip-flop is a latch determines its own state by comparing the incoming
+ * A flip-flop is a latch determines its own state by comparing the supplied
  * signal to the specified thresholds.
  */
 struct DFlipFlop : public Latch {
@@ -28,8 +28,8 @@ struct DFlipFlop : public Latch {
         high_threshold{high_threshold} {}
 
   /**
-   * Creates a flip-flop that compares the given signal to a low threshold of 0
-   * and a high threshold of 1.
+   * Creates a flip-flop that compares the supplied signal to a low threshold
+   * of 0 and a high threshold of 1.
    *
    * @param signal called on each step to obtain the signal to evaluate
    */

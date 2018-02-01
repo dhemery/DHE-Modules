@@ -29,28 +29,28 @@ public:
 
   template<class T>
   void install_input(int index, float x, float y) {
-    rack::Port *input = rack::createInput<T>(rack::Vec(x, y), module, index);
+    auto input{rack::createInput<T>(rack::Vec(x, y), module, index)};
     moveTo(input->box, x, y);
     addInput(input);
   }
 
   template<class T>
   void install_output(int index, float x, float y) {
-    rack::Port *output = rack::createOutput<T>(rack::Vec(0, 0), module, index);
+    auto output{rack::createOutput<T>(rack::Vec(0, 0), module, index)};
     moveTo(output->box, x, y);
     addOutput(output);
   }
 
   template<class T>
   void install_param(int index, float x, float y, float initial = 0.5f) {
-    rack::ParamWidget *param = rack::createParam<T>(rack::Vec(x, y), module, index, 0.0f, 1.0f, initial);
+    auto param{rack::createParam<T>(rack::Vec(x, y), module, index, 0.0f, 1.0f, initial)};
     moveTo(param->box, x, y);
     addParam(param);
   }
 
   template<class T>
   void install_light(int index, float x, float y, float initial = 0.5f) {
-    rack::ModuleLightWidget *light = rack::createLight<T>(rack::Vec(x, y), module, index);
+    auto light{rack::createLight<T>(rack::Vec(x, y), module, index)};
     moveTo(light->box, x, y);
     addChild(light);
   }
@@ -62,7 +62,7 @@ public:
 
   template<class T>
   void install_screw(rack::Vec pos) {
-    rack::Widget *widget = rack::createScrew<T>(rack::Vec(0, 0));
+    auto widget{rack::createScrew<T>(rack::Vec(0, 0))};
     moveTo(widget->box, pos);
     addChild(widget);
   }

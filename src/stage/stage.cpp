@@ -53,11 +53,13 @@ float Stage::duration() const {
 
 float Stage::shape() const {
   static constexpr float shape_curvature{-0.65f};
+
   return sigmoid(shape_position(), shape_curvature);
 }
 
 float Stage::envelope_voltage() const {
-  float shaped = sigmoid(envelope_ramp.phase(), shape());
+  auto shaped{sigmoid(envelope_ramp.phase(), shape())};
+
   return Range::scale(shaped, stage_input_follower.value(), level_knob_voltage());
 }
 } // namespace DHE

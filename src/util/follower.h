@@ -17,16 +17,16 @@ struct Follower {
 
   /**
    * Creates a follower that follows the supplied signal.
-   * @param signal supplies the signal whose values to follow
+   * @param signal supplies the signal to follow
    */
   explicit Follower(std::function<float()> signal) :
       signal{std::move(signal)},
-      stored{this->signal()} {
-  }
+      stored{this->signal()},
+      following{false} {}
 
   /**
-   * Stores the supplied signal value and pauses. Subsequent calls to
-   * value() yield the stored signal value.
+   * Stores the value of the supplied signal and pauses. Subsequent calls to
+   * value() yield the stored value.
    */
   void pause() {
     stored = signal();
@@ -43,18 +43,18 @@ struct Follower {
 
   /**
    * Returns the supplied signal value if the follower is in follower mode.
-  // Otherwise returns the signal value stored by the previous pause().
+  // Otherwise returns the value stored by the previous pause().
    * @return the supplied signal value if the follower is following,
-   * otherwise the stored signal value.
+   * otherwise the stored value.
    */
   float value() const {
     return following ? signal() : stored;
   }
 
 private:
-  bool following = false;
   const std::function<float()> signal;
   float stored;
+  bool following;
 };
 }
 #endif

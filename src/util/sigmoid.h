@@ -9,11 +9,13 @@
 namespace DHE {
 
 inline float sigmoid(float x, float curvature) {
-  static constexpr float precision{1e-4f};
-  static constexpr float max_curvature{1.0f - precision};
-  static const Range curvature_range{-max_curvature, max_curvature};
+  static constexpr auto precision{1e-4f};
+  static constexpr auto max_curvature{1.0f - precision};
+  static const auto curvature_range = Range{-max_curvature, max_curvature};
+
   curvature = curvature_range.clamp(curvature);
   x = BIPOLAR_NORMAL.clamp(x);
+
   return (x - x*curvature)/(curvature - abs(x)*2.0f*curvature + 1.0f);
 }
 }

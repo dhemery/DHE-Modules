@@ -9,7 +9,7 @@ struct Range {
   Range(float min, float max) noexcept : min(min), max(max) {}
 
   static float scale(float normalized, float min, float max) {
-    return normalized * (max - min) + min;
+    return normalized*(max - min) + min;
   }
 
   float scale(float normalized) const {
@@ -21,7 +21,7 @@ struct Range {
   }
 
   float normalize(float scaled) const {
-    return (scaled - min) / (max - min);
+    return (scaled - min)/(max - min);
   }
 
   float clamp(float scaled) const {

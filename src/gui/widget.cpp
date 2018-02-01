@@ -23,7 +23,7 @@ Widget::Widget(rack::Module *module, int widget_hp, const char *background) {
 }
 
 void Widget::install_screws() {
-  auto left_x{std::min(width() / 4, MAX_SCREW_INSET)}; // One HP from edge
+  auto left_x{std::min(width()/4, MAX_SCREW_INSET)}; // One HP from edge
   auto top_y{7.5f}; // Screw touches top of module
 
   auto right_x = width() - left_x;
