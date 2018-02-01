@@ -39,7 +39,5 @@ StageWidget::StageWidget() : Widget(new Stage(), 4, "res/Stage.svg") {
   row++;
   install_input<rack::PJ301MPort>(Stage::IN_INPUT, left_port_x, top_port_y + row*row_spacing);
   install_output<rack::PJ301MPort>(Stage::OUT_OUTPUT, right_port_x, top_port_y + row*row_spacing);
-
-  install_screws(13.0f, 7.5f);
 }
 }

@@ -42,7 +42,5 @@ UpstageWidget::UpstageWidget() : Widget(new Upstage(), 4, "res/Upstage.svg") {
 
   row++;
   install_output<rack::PJ301MPort>(Upstage::OUT_OUTPUT, right_x, top_y + row * row_spacing);
-
-  install_screws(13.0f, 7.5f);
 }
 }

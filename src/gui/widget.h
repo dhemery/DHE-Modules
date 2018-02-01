@@ -7,9 +7,12 @@
 #include "rack.hpp"
 
 namespace DHE {
+static constexpr float MAX_SCREW_INSET{RACK_GRID_WIDTH*1.5f};
+
 class Widget : public rack::ModuleWidget {
 
 public:
+
   Widget(rack::Module *module, int widget_hp, const char *background);
 
   rack::Vec center() {
@@ -64,7 +67,7 @@ public:
     addChild(widget);
   }
 
-  void install_screws(float leftX, float topY);
+  void install_screws();
 
   static void moveTo(rack::Rect &box, rack::Vec pos) {
     box.pos = pos.minus(box.size.div(2));

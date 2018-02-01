@@ -18,29 +18,34 @@ Widget::Widget(rack::Module *module, int widget_hp, const char *background) {
   panel->box.size = box.size;
   panel->setBackground(rack::SVG::load(rack::assetPlugin(plugin, background)));
   addChild(panel);
+
+  install_screws();
 }
 
-void Widget::install_screws(float leftX, float topY) {
-  float rightX = width() - leftX;
-  float bottomY = height() - topY;
-  std::vector<rack::Vec> screwPositions{
-      rack::Vec(leftX, topY),
-      rack::Vec(leftX, bottomY),
-      rack::Vec(rightX, topY),
-      rack::Vec(rightX, bottomY)
+void Widget::install_screws() {
+  auto left_x{std::min(width() / 4, MAX_SCREW_INSET)}; // One HP from edge
+  auto top_y{7.5f}; // Screw touches top of module
+
+  auto right_x = width() - left_x;
+  auto bottom_y = height() - top_y;
+  std::vector<rack::Vec> screw_positions{
+      rack::Vec(left_x, top_y),
+      rack::Vec(left_x, bottom_y),
+      rack::Vec(right_x, top_y),
+      rack::Vec(right_x, bottom_y)
   };
 
-  unsigned long screwCount = screwPositions.size();
+  auto screw_count = screw_positions.size();
   std::random_device rd;
-  std::uniform_int_distribution<unsigned long> aScrew{0, 3};
+  auto zero_through_three = std::uniform_int_distribution<unsigned long>{0, 3};
 
-  unsigned long blackScrew = aScrew(rd);
+  auto black_screw_index = zero_through_three(rd);
 
-  for (unsigned long i = 0; i < screwCount; i++) {
-    if (i==blackScrew) {
-      install_screw<rack::ScrewBlack>(screwPositions[i]);
+  for (auto i = 0UL; i < screw_count; i++) {
+    if (i==black_screw_index) {
+      install_screw<rack::ScrewBlack>(screw_positions[i]);
     } else {
-      install_screw<rack::ScrewSilver>(screwPositions[i]);
+      install_screw<rack::ScrewSilver>(screw_positions[i]);
     }
   }
 }
