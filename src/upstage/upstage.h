@@ -8,7 +8,7 @@
 #include <algorithm>
 #include <engine.hpp>
 
-#include "util/range.h"
+#include "util/interval.h"
 
 namespace DHE {
 
@@ -40,10 +40,10 @@ private:
   bool is_sending_triggers() const { return wait_port_in() < 1.0f and not wait_button_is_pressed(); }
   float level_cv_in() const { return inputs[LEVEL_CV_INPUT].value; }
   float level_knob_rotation() const { return params[LEVEL_KNOB].value; }
-  float level_knob_voltage() const { return UNIPOLAR_VOLTAGE.scale(level_knob_rotation()); }
-  float level_voltage() const { return UNIPOLAR_VOLTAGE.clamp(level_knob_voltage() + level_cv_in()); }
+  float level_knob_voltage() const { return UNIPOLAR_CV.scale(level_knob_rotation()); }
+  float level_voltage() const { return UNIPOLAR_CV.clamp(level_knob_voltage() + level_cv_in()); }
   bool trigger_button_is_pressed() const { return params[TRIG_BUTTON].value > 0.0f; }
-  float trigger_button_voltage() const { return UNIPOLAR_VOLTAGE.scale(trigger_button_is_pressed()); }
+  float trigger_button_voltage() const { return UNIPOLAR_CV.scale(trigger_button_is_pressed()); }
   float trigger_port_in() const { return inputs[TRIG_INPUT].value; }
   float trigger_out_voltage() const { return is_sending_triggers() ? trigger_voltage() : 0.0f; }
   float trigger_voltage() const { return std::max(trigger_port_in(), trigger_button_voltage()); }

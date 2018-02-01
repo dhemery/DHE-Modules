@@ -48,7 +48,7 @@ void Stage::start_envelope() {
 }
 
 float Stage::duration() const {
-  static const Range range{1e-3, 10.0f};
+  static const Interval range{1e-3, 10.0f};
   static constexpr float curvature{0.8f}; // Gives ~1s at center position
 
   return range.scale(sigmoid(duration_knob_rotation(), curvature));
@@ -63,6 +63,6 @@ float Stage::shape() const {
 float Stage::envelope_voltage() const {
   auto shaped{sigmoid(envelope_ramp.phase(), shape())};
 
-  return Range::scale(shaped, stage_input_follower.value(), level_knob_voltage());
+  return Interval::scale(shaped, stage_input_follower.value(), level_knob_voltage());
 }
 } // namespace DHE

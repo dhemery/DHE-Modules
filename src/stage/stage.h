@@ -45,12 +45,12 @@ private:
   void start_envelope();
   float envelope_voltage() const;
 
-  float active_out_voltage() const { return UNIPOLAR_VOLTAGE.scale(is_active()); }
+  float active_out_voltage() const { return UNIPOLAR_CV.scale(is_active()); }
   float duration_knob_rotation() const { return params[DURATION_KNOB].value; }
-  float eoc_out_voltage() const { return UNIPOLAR_VOLTAGE.scale(end_of_cycle_pulse.is_active()); }
+  float eoc_out_voltage() const { return UNIPOLAR_CV.scale(end_of_cycle_pulse.is_active()); }
   bool is_active() const { return defer_gate.is_high() || envelope_ramp.is_active(); }
   float level_knob_rotation() const { return params[LEVEL_KNOB].value; }
-  float level_knob_voltage() const { return UNIPOLAR_VOLTAGE.scale(level_knob_rotation()); }
+  float level_knob_voltage() const { return UNIPOLAR_CV.scale(level_knob_rotation()); }
   float out_voltage() const { return defer_gate.is_high() ? stage_input_follower.value() : envelope_voltage(); }
   float shape_knob_rotation() const { return params[SHAPE_KNOB].value; }
   float shape_position() const { return BIPOLAR_NORMAL.scale(shape_knob_rotation()); }
