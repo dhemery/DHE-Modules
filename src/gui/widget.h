@@ -1,10 +1,9 @@
 #ifndef DHE_GUI_WIDGET_H
 #define DHE_GUI_WIDGET_H
 
-#include "app.hpp"
-#include "engine.hpp"
-#include "math.hpp"
-#include "rack.hpp"
+#include <app.hpp>
+#include <math.hpp>
+#include <rack.hpp>
 
 namespace DHE {
 class Widget : public rack::ModuleWidget {
@@ -14,7 +13,7 @@ public:
   Widget(rack::Module *module, int widget_hp, const char *background);
 
   rack::Vec center() {
-  return box.getCenter();
+    return box.getCenter();
   }
 
   float height() const {
@@ -27,7 +26,7 @@ public:
 
   template<class T>
   void install_input(int index, float x, float y) {
-    auto input{rack::createInput<T>(rack::Vec(x, y), module, index)};
+    auto input{rack::createInput<T>({x, y}, module, index)};
     moveTo(input->box, x, y);
     addInput(input);
   }
@@ -47,7 +46,7 @@ public:
   }
 
   template<class T>
-  void install_light(int index, float x, float y, float initial = 0.5f) {
+  void install_light(int index, float x, float y, float initial = 0.f) {
     auto light{rack::createLight<T>({x, y}, module, index)};
     moveTo(light->box, x, y);
     addChild(light);
@@ -64,14 +63,9 @@ public:
     moveTo(widget->box, pos);
     addChild(widget);
   }
+  static void moveTo(rack::Rect &box, rack::Vec pos);
 
-  static void moveTo(rack::Rect &box, rack::Vec pos) {
-    box.pos = pos.minus(box.size.mult(0.5f));
-  }
-
-  static void moveTo(rack::Rect &box, float x, float y) {
-    moveTo(box, {x, y});
-  }
+  static void moveTo(rack::Rect &box, float x, float y);
 
   void install_screws();
 };

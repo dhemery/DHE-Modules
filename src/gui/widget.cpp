@@ -1,10 +1,11 @@
 #include <random>
-#include "asset.hpp"
-#include "components.hpp"
-#include "engine.hpp"
-#include "math.hpp"
-#include "plugin.hpp"
-#include "rack.hpp"
+
+#include <app.hpp>
+#include <components.hpp>
+#include <engine.hpp>
+#include <math.hpp>
+#include <plugin.hpp>
+
 #include "widget.h"
 
 extern rack::Plugin *plugin;
@@ -12,7 +13,7 @@ extern rack::Plugin *plugin;
 namespace DHE {
 Widget::Widget(rack::Module *module, int widget_hp, const char *background) {
   setModule(module);
-  box.size = rack::Vec(widget_hp*RACK_GRID_WIDTH, RACK_GRID_HEIGHT);
+  box.size = rack::Vec{(float) widget_hp*RACK_GRID_WIDTH, (float) RACK_GRID_HEIGHT};
 
   auto *panel = new rack::SVGPanel();
   panel->box.size = box.size;
@@ -50,5 +51,13 @@ void Widget::install_screws() {
       install_screw<rack::ScrewSilver>(screw_positions[screw_index]);
     }
   }
+}
+
+void Widget::moveTo(rack::Rect &box, rack::Vec pos) {
+  box.pos = pos.minus(box.size.mult(0.5f));
+}
+
+void Widget::moveTo(rack::Rect &box, float x, float y) {
+  moveTo(box, {x, y});
 }
 }

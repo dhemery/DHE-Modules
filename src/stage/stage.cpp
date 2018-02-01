@@ -1,4 +1,7 @@
 #include <cmath>
+
+#include <engine.hpp>
+
 #include "stage.h"
 
 namespace DHE {

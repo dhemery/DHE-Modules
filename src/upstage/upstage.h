@@ -6,8 +6,8 @@
 #define DHE_UPSTAGE_UPSTAGE_H
 
 #include <algorithm>
+#include <engine.hpp>
 
-#include "engine.hpp"
 #include "util/range.h"
 
 namespace DHE {

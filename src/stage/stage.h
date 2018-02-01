@@ -3,9 +3,7 @@
 
 #include <memory>
 
-#include "dsp/digital.hpp"
-#include "rack.hpp"
-#include "plugin.hpp"
+#include <engine.hpp>
 
 #include "util/d-flip-flop.h"
 #include "util/ramp.h"
