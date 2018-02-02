@@ -8,7 +8,13 @@ See the [DHE Modules Wiki](https://github.com/dhemery/DHE-Modules/wiki/) for det
 
 Modules include:
 `
-- [Stage](https://github.com/dhemery/DHE-Modules/wiki/Stage): A chainable, single stage envelope generator with shape control.
-- [Upstage](https://github.com/dhemery/DHE-Modules/wiki/Upstage): Level knob, trigger button, and other features to start a Stage chain.
+- [Stage](https://github.com/dhemery/DHE-Modules/wiki/Stage): A chainable, single stage envelope generator.
+- [Upstage](https://github.com/dhemery/DHE-Modules/wiki/Upstage): Controls to enhance a chain of Stage modules.
 
-![An Upstage and four Stages](https://raw.githubusercontent.com/wiki/dhemery/DHE-Modules/images/loop-continue.png)
+![Stage and Upstage](https://raw.githubusercontent.com/wiki/dhemery/DHE-Modules/images/splash.png)
+
+With Stage and Upstage,
+you can create a wide variety
+of [Single-Stage Envelopes](https://github.com/dhemery/DHE-Modules/wiki/Single-Stage-Envelopes)
+and [Multi-Stage Envelopes](https://github.com/dhemery/DHE-Modules/wiki/Multi-Stage-Envelopes).
+
