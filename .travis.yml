@@ -3,17 +3,27 @@ cache:
   directories:
     - /tmp/Rack
 before_cache:
-    - rm -fr /tmp/Rack/plugins/DHE-Modules
+  - rm -fr /tmp/Rack/plugins/DHE-Modules
 matrix:
   include:
     - os: linux
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - g++-7
+      env:
+        - MATRIX_EVAL="CC=gcc-7 && CXX=g++-7"
     - os: osx
       osx_image: xcode9.2
+      compiler: clang++
+before_install:
+  - eval "${MATRIX_EVAL}"
 install:
 before_script:
   - git clone https://github.com/VCVRack/Rack.git /tmp/Rack || cd /tmp/Rack && git pull
   - cd /tmp/Rack
-  - git branch
   - make dep > /dev/null
   - make
   - rm -rf /tmp/Rack/plugins/DHE-Modules || true
