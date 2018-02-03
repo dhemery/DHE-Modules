@@ -4,18 +4,17 @@ cache:
     - /tmp/Rack
 before_cache:
   - rm -fr /tmp/Rack/plugins/DHE-Modules
-- os: linux
-  addons:
-    apt:
-      sources:
-        - ubuntu-toolchain-r-test
-      packages:
-        - g++-7
-        - xrandr-dev
-  compiler: g++-7
-before_install:
-  - eval "${MATRIX_EVAL}"
-install:
+matrix:
+  include:
+    - os: linux
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - g++-7
+            - xrandr-dev
+      compiler: g++-7
 before_script:
   - git clone https://github.com/VCVRack/Rack.git /tmp/Rack || cd /tmp/Rack && git pull
   - cd /tmp/Rack
