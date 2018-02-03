@@ -7,14 +7,27 @@ before_cache:
 matrix:
   include:
     - os: linux
+      compiler: g++-7
       addons:
         apt:
           sources:
             - ubuntu-toolchain-r-test
           packages:
             - g++-7
+            - librtlsdr-dev
+            - libx11-dev
             - libxrandr-dev
-      compiler: g++-7
+            - libxinerama-dev
+            - libxcursor-dev
+            - libgl1-mesa-dev
+            - libglu1-mesa-dev
+            - zlib1g-dev
+            - libasound2-dev
+            - libgtk2.0-dev
+            - unzip
+            - libudev-dev
+            - libusb-dev
+            - libusb-1.0-0-dev
 before_script:
   - git clone https://github.com/VCVRack/Rack.git /tmp/Rack || cd /tmp/Rack && git pull
   - cd /tmp/Rack
