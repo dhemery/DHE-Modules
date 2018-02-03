@@ -16,7 +16,7 @@ inline float sigmoid(float x, float curvature) {
   curvature = curvature_range.clamp(curvature);
   x = BIPOLAR_NORMAL.clamp(x);
 
-  return (x - x*curvature)/(curvature - std::fabs(x)*2.0f*curvature + 1.0f);
+  return (x - x*curvature)/(curvature - std::abs(x)*2.0f*curvature + 1.0f);
 }
 }
 #endif
