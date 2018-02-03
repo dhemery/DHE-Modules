@@ -38,6 +38,7 @@ before_script:
   - git clone https://github.com/VCVRack/Rack.git /tmp/Rack || cd /tmp/Rack && git pull
   - cd /tmp/Rack
   - make dep > /dev/null
+  - git submodule update --init --recursive
   - make
   - rm -rf /tmp/Rack/plugins/DHE-Modules || true
   - cp -r $TRAVIS_BUILD_DIR /tmp/Rack/plugins/DHE-Modules
