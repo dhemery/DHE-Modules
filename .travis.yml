@@ -20,3 +20,4 @@ before_script:
   - cp -r $TRAVIS_BUILD_DIR /tmp/Rack/plugins/DHE-Modules
 script:
   - cd /tmp/Rack/plugins/DHE-Modules && VERSION=0.0.0 make dist
+
