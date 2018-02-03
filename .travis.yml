@@ -13,7 +13,7 @@ matrix:
             - ubuntu-toolchain-r-test
           packages:
             - g++-7
-            - xrandr-dev
+            - x11-xserver-utils
       compiler: g++-7
 before_script:
   - git clone https://github.com/VCVRack/Rack.git /tmp/Rack || cd /tmp/Rack && git pull
