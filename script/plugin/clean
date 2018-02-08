@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+cd "$(dirname "$0")/../.."
+. script/environment
+
+rm -rf ${VCV_PLUGIN_DIR}

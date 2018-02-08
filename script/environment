@@ -1,0 +1,57 @@
+#!/usr/bin/env bash
+
+set -o errexit
+set -o nounset
+
+export VCV_DEBUG="${VCV_DEBUG:-0}"
+
+if (( VCV_DEBUG >= 3 )) ; then
+    set -o xtrace
+fi
+
+if [[ -n ${VCV_ENVIRONMENT-} ]]
+then
+    exit
+fi
+
+if [[ -n ${TRAVIS-} ]] ; then
+    VCV_BUILD_TAG="${TRAVIS_TAG-}"
+    VCV_PLUGIN_CHECKOUT_DIR="${TRAVIS_BUILD_DIR}"
+    VCV_PLUGIN_ARCH_NAME="lin"
+    export CC=gcc-7
+    export CXX=g++-7
+elif [[ -n ${APPVEYOR-} ]] ; then
+    if [[ ${MSYSTEM:-} != "MINGW64"  ]] ; then
+        echo "You must set MSYSTEM=MINGW64 before running this script on AppVeyor"
+        exit 1
+    fi
+    VCV_BUILD_TAG="${APPVEYOR_REPO_TAG_NAME-}"
+    VCV_PLUGIN_CHECKOUT_DIR="${APPVEYOR_BUILD_FOLDER}"
+    VCV_PLUGIN_ARCH_NAME="win"
+else
+    echo "This script must be run on Travis CI or AppVeyor"
+    exit 1
+fi
+
+export VCV_BUILD_TAG=${VCV_BUILD_TAG:-notag}
+
+export VCV_RACK_DIR="/tmp/Rack"
+export VCV_RACK_PLUGINS_DIR="${VCV_RACK_DIR}/plugins"
+
+export VCV_PLUGIN_CHECKOUT_DIR
+export VCV_PLUGIN_NAME=DHE-Modules
+export VCV_PLUGIN_ZIP_FILE_NAME="${VCV_PLUGIN_NAME}-${VCV_BUILD_TAG}-${VCV_PLUGIN_ARCH_NAME}.zip"
+
+export VCV_PLUGIN_ARTIFACT_DIR="${VCV_PLUGIN_CHECKOUT_DIR}/artifacts"
+export VCV_PLUGIN_ARTIFACT_FILE="${VCV_PLUGIN_ARTIFACT_DIR}/${VCV_PLUGIN_ZIP_FILE_NAME}"
+export VCV_PLUGIN_DIR="${VCV_RACK_PLUGINS_DIR}/${VCV_PLUGIN_NAME}"
+export VCV_PLUGIN_DIST_DIR="${VCV_PLUGIN_DIR}/dist"
+export VCV_PLUGIN_DIST_FILE="${VCV_PLUGIN_DIST_DIR}/${VCV_PLUGIN_ZIP_FILE_NAME}"
+
+export VCV_PLUGIN_ENVIRONMENT=ESTABLISHED
+
+if (( VCV_DEBUG >= 2 )) ; then
+    env | sort
+fi
+
+set -o xtrace
