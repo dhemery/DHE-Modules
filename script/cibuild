@@ -1,0 +1,57 @@
+#!/usr/bin/env bash
+set -o errexit
+set -o nounset
+
+if [[ -n ${TRAVIS-} ]]; then
+    export VCV_BUILD_TAG="${TRAVIS_TAG-}"
+    export VCV_PLUGIN_CHECKOUT_DIR="${TRAVIS_BUILD_DIR}"
+    export VCV_PLUGIN_ARCH_NAME="lin"
+
+    export CC=gcc-7
+    export CXX=g++-7
+elif [[ -n ${APPVEYOR-} ]]; then
+    if [[ ${MSYSTEM:-} != "MINGW64" ]]; then
+        echo "To run this script on AppVeyor you must set MSYSTEM=MINGW64"
+        exit 1
+    fi
+
+    pacman -S --noconfirm zip unzip mingw-w64-x86_64-cmake
+
+    export VCV_BUILD_TAG="${APPVEYOR_REPO_TAG_NAME-}"
+    export VCV_PLUGIN_CHECKOUT_DIR="${APPVEYOR_BUILD_FOLDER}"
+    export VCV_PLUGIN_ARCH_NAME="win"
+fi
+
+export VCV_BUILD_TAG="${VCV_BUILD_TAG:-notag}"
+export VCV_RACK_DIR="/tmp/Rack"
+export VCV_RACK_PLUGINS_DIR="${VCV_RACK_DIR}/plugins"
+
+export VCV_PLUGIN_NAME=DHE-Modules
+export VCV_PLUGIN_ZIP_FILE_NAME="${VCV_PLUGIN_NAME}-${VCV_BUILD_TAG}-${VCV_PLUGIN_ARCH_NAME}.zip"
+
+export VCV_PLUGIN_ARTIFACT_DIR="${VCV_PLUGIN_CHECKOUT_DIR}/artifacts"
+export VCV_PLUGIN_ARTIFACT_FILE="${VCV_PLUGIN_ARTIFACT_DIR}/${VCV_PLUGIN_ZIP_FILE_NAME}"
+export VCV_PLUGIN_DIR="${VCV_RACK_PLUGINS_DIR}/${VCV_PLUGIN_NAME}"
+export VCV_PLUGIN_DIST_DIR="${VCV_PLUGIN_DIR}/dist"
+export VCV_PLUGIN_DIST_FILE="${VCV_PLUGIN_DIST_DIR}/${VCV_PLUGIN_ZIP_FILE_NAME}"
+
+env | sort
+
+set -o xtrace
+
+git clone https://github.com/VCVRack/Rack.git "${VCV_RACK_DIR}" || true
+cd "${VCV_RACK_DIR}"
+git pull
+git submodule update --init --recursive
+make dep > /dev/null
+make
+
+cp -r "${VCV_PLUGIN_CHECKOUT_DIR}" "${VCV_PLUGIN_DIR}"
+cd "${VCV_PLUGIN_DIR}"
+make dist VERSION="${VCV_BUILD_TAG}"
+
+mkdir -p "${VCV_PLUGIN_ARTIFACT_DIR}"
+mv "${VCV_PLUGIN_DIST_FILE}" "${VCV_PLUGIN_ARTIFACT_DIR}"
+
+# Remove plugin code so CI server won't cache it when it caches /tmp/Rack
+rm -rf "${VCV_PLUGIN_DIR}"

@@ -1,46 +1,22 @@
 version: 1.0.{build}
 image: Visual Studio 2017
 test: off
+
 environment:
   MSYSTEM: MINGW64
+
 artifacts:
   - path: artifacts\*.zip
+
 cache:
   - /tmp/Rack
-
-# Don't deploy until I can find a way to merge Linux (Travis CI) and Windows
-# (AppVeyor) deployments on GitHub releases, independent of which one deploys
-# first. Probably a custom script using the GitHub Releases API.
-#
-#deploy:
-#  artifact: artifacts\*.zip
-#  auth_token:
-#    secure: ZjRdQdGgYiAQ9KSL6ASADjK5cZMYPKAN5NwTJZFFP5tS/GN/8p6acKLfjF2WCg/E
-#  description: Draft Release (AppVeyor) of $(APPVEYOR_REPO_TAG_NAME)
-#  draft: true
-#  force_update: true
-#  on:
-#    appveyor_repo_tag: true
-#  provider: GitHub
-#  release: Draft Release (AppVeyor) of $(APPVEYOR_REPO_TAG_NAME)
-#  tag:  $(APPVEYOR_REPO_TAG_NAME)
 
 install:
 - set PATH=C:\msys64\usr\bin;%PATH%
 - set HOME=%APPVEYOR_BUILD_FOLDER%
-- bash -l script/plugin/clean
-- bash -l script/rack/checkout
-- bash -l script/rack/build
 
 build_script:
-- bash -l script/plugin/build
-
-after_build:
-- bash -l script/plugin/clean
-
-on_failure:
-- set VCV_DEBUG=2
-- bash -l script/environment
+- bash -l script/cibuild
 
 on_finish:
 - pwd

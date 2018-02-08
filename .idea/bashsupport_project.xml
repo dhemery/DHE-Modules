@@ -24,7 +24,9 @@
         <option value="TRAVIS_BUILD_DIR" />
         <option value="TRAVIS_TAG" />
         <option value="VCVRACK_BUILD_DIR" />
+        <option value="VCV_BUILD_TAG" />
         <option value="VCV_DEBUG" />
+        <option value="VCV_ENVIRONMENT" />
         <option value="VCV_PLUGIN_ARTIFACT_DIR" />
         <option value="VCV_PLUGIN_CHECKOUT_DIR" />
         <option value="VCV_PLUGIN_DIR" />

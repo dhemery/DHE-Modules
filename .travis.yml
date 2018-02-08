@@ -38,18 +38,5 @@ cache:
   directories:
   - /tmp/Rack
 
-before_install:
-- script/plugin/clean
-
-install:
-- script/rack/checkout
-- script/rack/build
-
 script:
-- script/plugin/build
-
-before_cache:
-- script/plugin/clean
-
-after_failure:
-- VCV_DEBUG=2 script/environment
+- script/cibuild
