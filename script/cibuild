@@ -48,7 +48,7 @@ make
 
 cp -r "${VCV_PLUGIN_CHECKOUT_DIR}" "${VCV_PLUGIN_DIR}"
 cd "${VCV_PLUGIN_DIR}"
-make dist VERSION="${VCV_BUILD_TAG}"
+make clean test dist VERSION="${VCV_BUILD_TAG}"
 
 mkdir -p "${VCV_PLUGIN_ARTIFACT_DIR}"
 mv "${VCV_PLUGIN_DIST_FILE}" "${VCV_PLUGIN_ARTIFACT_DIR}"

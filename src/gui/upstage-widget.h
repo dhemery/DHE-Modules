@@ -1,7 +1,7 @@
 #ifndef DHE_STAGE_UPSTAGE_WIDGET_H
 #define DHE_STAGE_UPSTAGE_WIDGET_H
 
-#include "gui/widget.h"
+#include "widget.h"
 
 namespace DHE {
 

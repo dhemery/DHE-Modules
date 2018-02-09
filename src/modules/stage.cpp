@@ -6,10 +6,11 @@
 
 namespace DHE {
 
-Stage::Stage() : Module(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS),
+Stage::Stage(std::function<float()> sample_time_supplier)
+    : Module(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS),
                  defer_gate{[this] { return inputs[DEFER_INPUT].value; }},
-                 end_of_cycle_pulse{1e-3, &rack::engineGetSampleTime},
-                 envelope_ramp{[this] { return duration(); }, &rack::engineGetSampleTime},
+                 end_of_cycle_pulse{1e-3, sample_time_supplier},
+                 envelope_ramp{[this] { return duration(); }, sample_time_supplier},
                  envelope_trigger{[this] { return inputs[TRIG_INPUT].value; }},
                  stage_input_follower{[this] { return inputs[IN_INPUT].value; }} {
   defer_gate.on_rising_edge([this] { defer(); });

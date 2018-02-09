@@ -25,7 +25,7 @@ struct Stage : rack::Module {
     NUM_LIGHTS
   };
 
-  Stage();
+  Stage(std::function<float()> sample_time_supplier);
 
   void step() override;
 

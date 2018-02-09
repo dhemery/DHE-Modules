@@ -1,5 +1,5 @@
-#include "stage/stage-widget.h"
-#include "upstage/upstage-widget.h"
+#include "gui/stage-widget.h"
+#include "gui/upstage-widget.h"
 
 rack::Plugin *plugin;
 

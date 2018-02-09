@@ -1,4 +1,4 @@
-#include "upstage.h"
+#include "modules/upstage.h"
 #include "upstage-widget.h"
 
 namespace DHE {
