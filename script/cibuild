@@ -6,6 +6,7 @@ if [[ -n ${TRAVIS-} ]]; then
     export VCV_BUILD_TAG="${TRAVIS_TAG-}"
     export VCV_PLUGIN_CHECKOUT_DIR="${TRAVIS_BUILD_DIR}"
     export VCV_PLUGIN_ARCH_NAME="lin"
+    export VCV_BUILD_CACHE_ROOT=/tmp
 
     export CC=gcc-7
     export CXX=g++-7
@@ -20,10 +21,11 @@ elif [[ -n ${APPVEYOR-} ]]; then
     export VCV_BUILD_TAG="${APPVEYOR_REPO_TAG_NAME-}"
     export VCV_PLUGIN_CHECKOUT_DIR="${APPVEYOR_BUILD_FOLDER}"
     export VCV_PLUGIN_ARCH_NAME="win"
+    export VCV_BUILD_CACHE_ROOT="C:\projects"
 fi
 
 export VCV_BUILD_TAG="${VCV_BUILD_TAG:-notag}"
-export VCV_RACK_DIR="/tmp/Rack"
+export VCV_RACK_DIR="${VCV_BUILD_CACHE_ROOT}/Rack"
 export VCV_RACK_PLUGINS_DIR="${VCV_RACK_DIR}/plugins"
 
 export VCV_PLUGIN_NAME=DHE-Modules
