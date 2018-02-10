@@ -1,4 +1,4 @@
-#include "catch.hpp"
+#include "catch/catch.hpp"
 #include "util/follower.h"
 
 TEST_CASE("Follower") {

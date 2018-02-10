@@ -1,12 +1,7 @@
 cmake_minimum_required(VERSION 3.9)
-project(DHE_Modules DESCRIPTION "DHE Modules for VCV Rack")
+project(DHE_Modules DESCRIPTION "DHE Modules for VCV Rack" VERSION 0.0.0)
 
 set(CMAKE_OSX_DEPLOYMENT_TARGET 10.7)
-set(CMAKE_CXX_STANDARD 11)
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -stdlib=libc++")
-set(CMAKE_CXX_FLAGS_DEBUG "-g")
-set(CMAKE_CXX_FLAGS_RELEASE "-O3")
-set(CMAKE_SHARED_LINKER_FLAGS "-undefined dynamic_lookup -shared")
 
 add_library(rack INTERFACE)
 target_include_directories(rack
@@ -14,14 +9,26 @@ target_include_directories(rack
         ../../include
         ../../dep/include
         )
+target_compile_features(rack INTERFACE cxx_std_11)
+target_compile_options(rack INTERFACE -stdlib=libc++)
 
-add_library(modules
+add_library(modules STATIC
         src/modules/stage.cpp
         src/modules/stage.h
         src/modules/upstage.h
+        src/util/d-flip-flop.h
+        src/util/d-latch.h
+        src/util/follower.h
+        src/util/interval.h
+        src/util/latch.h
+        src/util/ramp.h
+        src/util/sigmoid.h
         )
 target_include_directories(modules PUBLIC src)
-target_link_libraries(modules PUBLIC rack)
+target_link_libraries(modules
+        INTERFACE -stdlib=libc++
+        PUBLIC rack
+        )
 
 add_library(plugin SHARED
         src/gui/stage-widget.cpp
@@ -33,16 +40,18 @@ add_library(plugin SHARED
         src/plugin/dhe-modules.cpp
         src/plugin/dhe-modules.h
         )
-target_include_directories(plugin PUBLIC src)
-target_link_libraries(plugin PUBLIC rack modules)
-
-add_library(catch INTERFACE)
-target_include_directories(catch INTERFACE lib/catch)
+target_link_libraries(plugin
+        INTERFACE -stdlib=libc++
+        PUBLIC modules rack
+        PRIVATE "-undefined dynamic_lookup"
+        )
 
 add_executable(tests
+        test/catch/catch.hpp
         test/runner/main.cpp
         test/follower-tests.cpp
         test/stage-tests.cpp
         test/upstage-tests.cpp
         )
-target_link_libraries(tests modules catch)
+target_include_directories(tests PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/test)
+target_link_libraries(tests modules)

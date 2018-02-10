@@ -1,8 +1,0 @@
-<component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="Build" type="CMakeRunConfiguration" factoryName="Application" singleton="true" PROGRAM_PARAMS="run" WORKING_DIR="file://$PROJECT_DIR$/../.." PASS_PARENT_ENVS_2="true" CONFIG_NAME="Debug" RUN_PATH="/usr/bin/make" EXPLICIT_BUILD_TARGET_NAME="all">
-    <envs />
-    <method>
-      <option name="RunConfigurationTask" enabled="true" run_configuration_name="Plugin" run_configuration_type="MAKEFILE_TARGET_RUN_CONFIGURATION" />
-    </method>
-  </configuration>
-</component>
