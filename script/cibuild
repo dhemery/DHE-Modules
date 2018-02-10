@@ -54,6 +54,3 @@ make clean test dist VERSION="${VCV_BUILD_TAG}"
 
 mkdir -p "${VCV_PLUGIN_ARTIFACT_DIR}"
 mv "${VCV_PLUGIN_DIST_FILE}" "${VCV_PLUGIN_ARTIFACT_DIR}"
-
-# Remove plugin code so CI server won't cache it when it caches /tmp/Rack
-rm -rf "${VCV_PLUGIN_DIR}"

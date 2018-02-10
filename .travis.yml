@@ -40,3 +40,6 @@ cache:
 
 script:
 - script/cibuild
+
+before_cache:
+- rm -rf /tmp/Rack/plugins/DHE-Modules

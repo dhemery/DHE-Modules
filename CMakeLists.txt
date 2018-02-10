@@ -8,26 +8,41 @@ set(CMAKE_CXX_FLAGS_DEBUG "-g")
 set(CMAKE_CXX_FLAGS_RELEASE "-O3")
 set(CMAKE_SHARED_LINKER_FLAGS "-undefined dynamic_lookup -shared")
 
-FILE(GLOB MODULE_SOURCES
-        src/modules/*
-        src/util/*)
-FILE(GLOB GUI_SOURCES
-        src/gui/*)
-FILE(GLOB PLUGIN_SOURCES
-        src/plugin/*)
-FILE(GLOB TEST_SOURCES
-        test/*)
-
-include_directories(
-        src
+add_library(rack INTERFACE)
+target_include_directories(rack
+        INTERFACE
         ../../include
-        ../../dep/include)
+        ../../dep/include
+        )
+
+add_library(modules
+        src/modules/stage.cpp
+        src/modules/stage.h
+        src/modules/upstage.h
+        )
+target_include_directories(modules PUBLIC src)
+target_link_libraries(modules PUBLIC rack)
+
 add_library(plugin SHARED
-        ${MODULE_SOURCES}
-        ${GUI_SOURCES}
-        ${PLUGIN_SOURCES})
+        src/gui/stage-widget.cpp
+        src/gui/stage-widget.h
+        src/gui/upstage-widget.cpp
+        src/gui/upstage-widget.h
+        src/gui/widget.cpp
+        src/gui/widget.h
+        src/plugin/dhe-modules.cpp
+        src/plugin/dhe-modules.h
+        )
+target_include_directories(plugin PUBLIC src)
+target_link_libraries(plugin PUBLIC rack modules)
+
+add_library(catch INTERFACE)
+target_include_directories(catch INTERFACE lib/catch)
 
 add_executable(tests
-        ${TEST_SOURCES}
-        ${MODULE_SOURCES})
-target_link_libraries(tests)
+        test/runner/main.cpp
+        test/follower-tests.cpp
+        test/stage-tests.cpp
+        test/upstage-tests.cpp
+        )
+target_link_libraries(tests modules catch)
