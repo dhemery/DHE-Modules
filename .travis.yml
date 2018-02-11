@@ -11,14 +11,9 @@ matrix:
         - g++-7
         - libasound2-dev
         - libgtk2.0-dev
-        - librtlsdr-dev
-        - libudev-dev
-        - libusb-dev
-        - libusb-1.0-0-dev
         - libxcursor-dev
         - libxinerama-dev
         - libxrandr-dev
-
 deploy:
   api_key:
     secure: R2+en4oAitDc1CI3k01fco1GTphIJn7DEA4nq4P3du5R7Xf3F3QnlUZ9BPe3tEr9430r8JFSOdsV/CZexuJMPIppdjIZ2iu3N43diRcrbN8/i5+H8UMy9OayTeB7Y/rzlolPoFg/B3gYAaEhG8iwczm6a5J91UjwPdDv6R0ELaVBwYtrqsI2/pH3GDXR2nj0Sr4lan7E6+zby50cbx6NSNZgqC0DD9BddUy7wS+/ITBtCRP9/9CH/8c3cSTqTwYZeRKNhh0xA9x3wcKh8JHo8Bi2eb0XjQbqKf2qRn80B2+DrmLEDMKWkR0nRBRS2Q7MS41VI6JnNiDGDmg4uv0SvAB5HQcolWk/wRErHD3yDQY8iwMwGT0/x5k4BHzKMLUHpW1sTX494e8g12aGH4POAaR1KYLB6gjdmY1XZLfqDU85/JiU0Vm8+qoRg9+Dh27eU/ci2NnK4u/8/F37awnYcQo18/kqxQWQOruJH9iE1RT8LZLUvbVb0lr300ESxa0P2CN4i9wWsWMu3MlLN4v91/1GuwF7CPpkp8ECZXEY1zoqXiqFUUqxENjyR4wjKpPmQwG4HFVa9yLb4ScqAq48CcwFLJC4rQDRhLO17OcWCHw0bRyxtuqRzWbJ9x9BHacN9b8lPlVvEgYYB0yBbaFfpEBXJr5BAxz7riXbcEBYnpc=

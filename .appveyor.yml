@@ -14,9 +14,7 @@ cache:
 install:
 - set PATH=C:\msys64\usr\bin;%PATH%
 - set HOME=%APPVEYOR_BUILD_FOLDER%
+- pacman -S --noconfirm zip unzip mingw-w64-x86_64-cmake
 
 build_script:
 - bash -l script/cibuild
-
-on_finish:
-- pwd

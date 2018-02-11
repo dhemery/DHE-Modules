@@ -1,0 +1,195 @@
+{
+  "version": "",
+  "modules": [
+    {
+      "plugin": "Fundamental",
+      "model": "Scope",
+      "pos": [
+        480.0,
+        0.0
+      ],
+      "params": [
+        0.0,
+        -1.7699992656707764,
+        0.0,
+        0.0,
+        -6.3149986267089844,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "data": {
+        "lissajous": 0,
+        "external": 0
+      }
+    },
+    {
+      "plugin": "DHE-Modules",
+      "model": "Stage",
+      "pos": [
+        225.0,
+        0.0
+      ],
+      "params": [
+        1.0,
+        0.19850006699562073,
+        0.5
+      ]
+    },
+    {
+      "plugin": "DHE-Modules",
+      "model": "Stage",
+      "pos": [
+        285.0,
+        0.0
+      ],
+      "params": [
+        0.0,
+        0.78649979829788208,
+        0.5
+      ]
+    },
+    {
+      "plugin": "DHE-Modules",
+      "model": "Stage",
+      "pos": [
+        345.0,
+        0.0
+      ],
+      "params": [
+        0.67299920320510864,
+        0.80600035190582275,
+        0.5
+      ]
+    },
+    {
+      "plugin": "DHE-Modules",
+      "model": "Stage",
+      "pos": [
+        405.0,
+        0.0
+      ],
+      "params": [
+        0.30150002241134644,
+        0.20000004768371582,
+        0.5
+      ]
+    },
+    {
+      "plugin": "DHE-Modules",
+      "model": "Upstage",
+      "pos": [
+        165.0,
+        0.0
+      ],
+      "params": [
+        0.5,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "plugin": "Fundamental",
+      "model": "LFO",
+      "pos": [
+        0.0,
+        0.0
+      ],
+      "params": [
+        1.0,
+        1.0,
+        1.4780008792877197,
+        0.0,
+        0.5,
+        0.0,
+        0.0
+      ]
+    }
+  ],
+  "wires": [
+    {
+      "outputModuleId": 1,
+      "outputId": 0,
+      "inputModuleId": 2,
+      "inputId": 0
+    },
+    {
+      "outputModuleId": 2,
+      "outputId": 0,
+      "inputModuleId": 3,
+      "inputId": 0
+    },
+    {
+      "outputModuleId": 3,
+      "outputId": 0,
+      "inputModuleId": 4,
+      "inputId": 0
+    },
+    {
+      "outputModuleId": 1,
+      "outputId": 1,
+      "inputModuleId": 2,
+      "inputId": 1
+    },
+    {
+      "outputModuleId": 2,
+      "outputId": 1,
+      "inputModuleId": 3,
+      "inputId": 1
+    },
+    {
+      "outputModuleId": 3,
+      "outputId": 1,
+      "inputModuleId": 4,
+      "inputId": 1
+    },
+    {
+      "outputModuleId": 1,
+      "outputId": 2,
+      "inputModuleId": 2,
+      "inputId": 2
+    },
+    {
+      "outputModuleId": 2,
+      "outputId": 2,
+      "inputModuleId": 3,
+      "inputId": 2
+    },
+    {
+      "outputModuleId": 3,
+      "outputId": 2,
+      "inputModuleId": 4,
+      "inputId": 2
+    },
+    {
+      "outputModuleId": 4,
+      "outputId": 2,
+      "inputModuleId": 0,
+      "inputId": 0
+    },
+    {
+      "outputModuleId": 5,
+      "outputId": 0,
+      "inputModuleId": 1,
+      "inputId": 1
+    },
+    {
+      "outputModuleId": 4,
+      "outputId": 2,
+      "inputModuleId": 1,
+      "inputId": 2
+    },
+    {
+      "outputModuleId": 6,
+      "outputId": 3,
+      "inputModuleId": 5,
+      "inputId": 2
+    },
+    {
+      "outputModuleId": 4,
+      "outputId": 0,
+      "inputModuleId": 5,
+      "inputId": 1
+    }
+  ]
+}

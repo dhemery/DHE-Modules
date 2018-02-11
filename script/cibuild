@@ -16,8 +16,6 @@ elif [[ -n ${APPVEYOR-} ]]; then
         exit 1
     fi
 
-    pacman -S --noconfirm zip unzip mingw-w64-x86_64-cmake
-
     export VCV_BUILD_TAG="${APPVEYOR_REPO_TAG_NAME-}"
     export VCV_PLUGIN_CHECKOUT_DIR="${APPVEYOR_BUILD_FOLDER}"
     export VCV_PLUGIN_ARCH_NAME="win"

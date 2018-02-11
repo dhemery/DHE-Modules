@@ -14,7 +14,7 @@ DISTRIBUTABLES += $(wildcard LICENSE*) res
 
 include ../../plugin.mk
 
-run: clean all
+run:
 	make -C ../.. run
 
 MODULE_OBJECTS = $(patsubst %, build/%.o, $(MODULE_SOURCES))
