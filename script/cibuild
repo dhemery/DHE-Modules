@@ -2,53 +2,37 @@
 set -o errexit
 set -o nounset
 
-if [[ -n ${TRAVIS-} ]]; then
-    export VCV_BUILD_TAG="${TRAVIS_TAG-}"
-    export VCV_PLUGIN_CHECKOUT_DIR="${TRAVIS_BUILD_DIR}"
-    export VCV_PLUGIN_ARCH_NAME="lin"
-    export VCV_BUILD_CACHE_ROOT=/tmp
+echo "MSYSTEM=${MSYSTEM}"
 
-    export CC=gcc-7
-    export CXX=g++-7
-elif [[ -n ${APPVEYOR-} ]]; then
-    if [[ ${MSYSTEM:-} != "MINGW64" ]]; then
-        echo "To run this script on AppVeyor you must set MSYSTEM=MINGW64"
-        exit 1
-    fi
+export VCV_BUILD_DIR="C:\projects"
+export VCV_BUILD_TAG="${APPVEYOR_REPO_TAG_NAME:-notag}"
+export VCV_CHECKOUT_DIR="${APPVEYOR_BUILD_FOLDER}"
 
-    export VCV_BUILD_TAG="${APPVEYOR_REPO_TAG_NAME-}"
-    export VCV_PLUGIN_CHECKOUT_DIR="${APPVEYOR_BUILD_FOLDER}"
-    export VCV_PLUGIN_ARCH_NAME="win"
-    export VCV_BUILD_CACHE_ROOT="C:\projects"
-fi
-
-export VCV_BUILD_TAG="${VCV_BUILD_TAG:-notag}"
-export VCV_RACK_DIR="${VCV_BUILD_CACHE_ROOT}/Rack"
-export VCV_RACK_PLUGINS_DIR="${VCV_RACK_DIR}/plugins"
+export VCV_RACK_BUILD_DIR="${VCV_BUILD_DIR}/Rack"
+export VCV_RACK_PLUGINS_DIR="${VCV_RACK_BUILD_DIR}/plugins"
 
 export VCV_PLUGIN_NAME=DHE-Modules
-export VCV_PLUGIN_ZIP_FILE_NAME="${VCV_PLUGIN_NAME}-${VCV_BUILD_TAG}-${VCV_PLUGIN_ARCH_NAME}.zip"
-
-export VCV_PLUGIN_ARTIFACT_DIR="${VCV_PLUGIN_CHECKOUT_DIR}/artifacts"
-export VCV_PLUGIN_ARTIFACT_FILE="${VCV_PLUGIN_ARTIFACT_DIR}/${VCV_PLUGIN_ZIP_FILE_NAME}"
-export VCV_PLUGIN_DIR="${VCV_RACK_PLUGINS_DIR}/${VCV_PLUGIN_NAME}"
-export VCV_PLUGIN_DIST_DIR="${VCV_PLUGIN_DIR}/dist"
-export VCV_PLUGIN_DIST_FILE="${VCV_PLUGIN_DIST_DIR}/${VCV_PLUGIN_ZIP_FILE_NAME}"
+export VCV_PLUGIN_ARTIFACT_DIR="${VCV_CHECKOUT_DIR}/artifacts"
+export VCV_PLUGIN_ARTIFACT_FILE_NAME="${VCV_PLUGIN_NAME}-${VCV_BUILD_TAG}-win.zip"
+export VCV_PLUGIN_ARTIFACT_FILE_PATH="${VCV_PLUGIN_ARTIFACT_DIR}/${VCV_PLUGIN_ARTIFACT_FILE_NAME}"
+export VCV_PLUGIN_BUILD_DIR="${VCV_RACK_PLUGINS_DIR}/${VCV_PLUGIN_NAME}"
+export VCV_PLUGIN_DIST_DIR="${VCV_PLUGIN_BUILD_DIR}/dist"
+export VCV_PLUGIN_DIST_FILE_PATH="${VCV_PLUGIN_DIST_DIR}/${VCV_PLUGIN_ARTIFACT_FILE_NAME}"
 
 env | sort
 
 set -o xtrace
 
-git clone https://github.com/VCVRack/Rack.git "${VCV_RACK_DIR}" || true
-cd "${VCV_RACK_DIR}"
+git clone https://github.com/VCVRack/Rack.git "${VCV_RACK_BUILD_DIR}" || true
+cd "${VCV_RACK_BUILD_DIR}"
 git pull
 git submodule update --init --recursive
 make dep > /dev/null
 make
 
-cp -r "${VCV_PLUGIN_CHECKOUT_DIR}" "${VCV_PLUGIN_DIR}"
-cd "${VCV_PLUGIN_DIR}"
+cp -r "${VCV_CHECKOUT_DIR}" "${VCV_PLUGIN_BUILD_DIR}"
+cd "${VCV_PLUGIN_BUILD_DIR}"
 make clean test dist VERSION="${VCV_BUILD_TAG}"
 
 mkdir -p "${VCV_PLUGIN_ARTIFACT_DIR}"
-mv "${VCV_PLUGIN_DIST_FILE}" "${VCV_PLUGIN_ARTIFACT_DIR}"
+mv "${VCV_PLUGIN_DIST_FILE_PATH}" "${VCV_PLUGIN_ARTIFACT_DIR}"
