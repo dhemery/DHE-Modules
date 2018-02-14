@@ -9,7 +9,7 @@ artifacts:
   - path: dist\*.zip
 
 cache:
-  - /tmp/Rack
+  - c:\tmp\Rack
 
 install:
 - set PATH=C:\msys64\usr\bin;%PATH%

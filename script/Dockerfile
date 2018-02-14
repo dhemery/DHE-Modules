@@ -28,8 +28,9 @@ RUN apt-get update \
   wget \
   zip \
   zlib1g-dev \
-  && apt-get clean \
-  && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+  && add-apt-repository -yr ppa:ubuntu-toolchain-r/test \
+  && apt-get autoremove --purge \
+  && apt-get clean
 
 ENV VCV_BUILD_DIR=/plugin \
     VCV_INSTALL_DIR=/out \
