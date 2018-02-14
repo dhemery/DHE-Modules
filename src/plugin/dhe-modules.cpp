@@ -15,9 +15,6 @@ static rack::Model *createModel(std::string moduleSlug, TTag... tags) {
 }
 
 void init(rack::Plugin *p) {
-  rack::debug(">>>init()");
-  rack::debug("   modelStage name: %s", modelStage->name.c_str());
-  rack::debug("   modelUpstage name: %s", modelUpstage->name.c_str());
   plugin = p;
   p->slug = "DHE-Modules";
   p->version = TOSTRING(VERSION);
@@ -25,7 +22,6 @@ void init(rack::Plugin *p) {
   p->manual = "https://github.com/dhemery/DHE-Modules/wiki";
   p->addModel(modelStage);
   p->addModel(modelUpstage);
-  rack::debug("<<<init()");
 }
 
 rack::Model *modelStage = DHE::createModel<DHE::Stage, DHE::StageWidget, rack::ModelTag>("Stage", rack::ENVELOPE_GENERATOR_TAG);
