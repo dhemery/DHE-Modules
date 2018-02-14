@@ -7,6 +7,8 @@ RUN apt-get update \
   && add-apt-repository -y ppa:ubuntu-toolchain-r/test \
   && apt-get update \
   && apt-get install -y \
+  autoconf \
+  automake \
   cmake \
   curl \
   g++-7 \
@@ -15,6 +17,7 @@ RUN apt-get update \
   libgl1-mesa-dev \
   libglu1-mesa-dev \
   libgtk2.0-dev \
+  libtool \
   libudev-dev \
   libxcursor-dev \
   libxinerama-dev\
