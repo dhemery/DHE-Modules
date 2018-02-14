@@ -24,15 +24,21 @@
         <option value="TRAVIS_BUILD_DIR" />
         <option value="TRAVIS_TAG" />
         <option value="VCVRACK_BUILD_DIR" />
+        <option value="VCV_BUILD_COMMIT" />
+        <option value="VCV_BUILD_DIR" />
         <option value="VCV_BUILD_TAG" />
         <option value="VCV_DEBUG" />
         <option value="VCV_ENVIRONMENT" />
         <option value="VCV_PLUGIN_ARTIFACT_DIR" />
+        <option value="VCV_PLUGIN_BUILD_DIR" />
         <option value="VCV_PLUGIN_CHECKOUT_DIR" />
+        <option value="VCV_PLUGIN_COMMIT" />
         <option value="VCV_PLUGIN_DIR" />
         <option value="VCV_PLUGIN_DIST_FILE" />
         <option value="VCV_PLUGIN_ENVIRONMENT" />
+        <option value="VCV_PLUGIN_NAME" />
         <option value="VCV_PLUGIN_TAG" />
+        <option value="VCV_RACK_BUILD_DIR" />
         <option value="VCV_RACK_DIR" />
       </set>
     </option>

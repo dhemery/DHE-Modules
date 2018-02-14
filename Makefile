@@ -1,5 +1,5 @@
 SLUG = DHE-Modules
-VERSION = no-version
+VERSION = 0.5.0
 
 FLAGS += -I./src
 CFLAGS +=

@@ -1,0 +1,19 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="linux-docker/Dockerfile" type="docker-deploy" factoryName="dockerfile" singleton="true" server-name="Docker">
+    <deployment type="dockerfile">
+      <settings>
+        <option name="JSONFilePath" value="" />
+        <option name="command" value="" />
+        <option name="commandLineOptions" value="-v `pwd`/linux-dist" />
+        <option name="containerName" value="dhe-modules-linux" />
+        <option name="entrypoint" value="" />
+        <option name="imageTag" value="rack:v0.5" />
+        <option name="sourceFilePath" value="$PROJECT_DIR$/linux-docker/Dockerfile" />
+        <option name="startBrowserSettings">
+          <browser url="http://127.0.0.1" />
+        </option>
+      </settings>
+    </deployment>
+    <method />
+  </configuration>
+</component>

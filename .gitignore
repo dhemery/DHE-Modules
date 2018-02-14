@@ -114,3 +114,4 @@ CTestTestfile.cmake
 !/Makefile
 /dist
 /build
+/linux-dist
