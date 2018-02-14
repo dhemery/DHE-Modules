@@ -2,7 +2,6 @@
 #define DHE_GUI_WIDGET_H
 
 #include <app.hpp>
-#include <rack.hpp>
 #include <util/math.hpp>
 
 namespace DHE {

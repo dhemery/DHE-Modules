@@ -1,3 +1,5 @@
+#include <componentlibrary.hpp>
+
 #include "modules/upstage.h"
 #include "upstage-widget.h"
 

@@ -1,3 +1,5 @@
+#include <componentlibrary.hpp>
+
 #include "modules/stage.h"
 #include "stage-widget.h"
 
