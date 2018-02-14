@@ -1,0 +1,51 @@
+FROM ubuntu
+
+LABEL maintainer="dale@dhemery.com"
+
+RUN apt-get update \
+  && apt-get install -y software-properties-common \
+  && add-apt-repository -y ppa:ubuntu-toolchain-r/test \
+  && apt-get update \
+  && apt-get install -y \
+  cmake \
+  curl \
+  g++-7 \
+  git \
+  libasound2-dev \
+  libgl1-mesa-dev \
+  libglu1-mesa-dev \
+  libgtk2.0-dev \
+  libudev-dev \
+  libxcursor-dev \
+  libxinerama-dev\
+  libxrandr-dev \
+  make \
+  tar \
+  unzip \
+  wget \
+  zip \
+  zlib1g-dev \
+  && apt-get clean \
+  && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
+ENV VCV_BUILD_DIR=/plugin \
+    VCV_INSTALL_DIR=/out \
+    VCV_PLUGIN_NAME=DHE-Modules
+
+WORKDIR ${VCV_BUILD_DIR}
+
+COPY build-rack.sh .
+
+ENV VCV_RACK_COMMIT=master \
+    VCV_RACK_DIR=${VCV_BUILD_DIR}/Rack
+
+RUN ./build-rack.sh
+
+COPY build-plugin.sh .
+
+ENV VCV_PLUGIN_COMMIT=master \
+    VCV_PLUGIN_DIR=${VCV_BUILD_DIR}/${VCV_PLUGIN_NAME}
+
+CMD ./linux-build.sh
+
+VOLUME ${VCV_INSTALL_DIR}

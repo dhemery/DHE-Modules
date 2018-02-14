@@ -2,14 +2,13 @@
 #define DHE_GUI_WIDGET_H
 
 #include <app.hpp>
-#include <math.hpp>
 #include <rack.hpp>
+#include <util/math.hpp>
 
 namespace DHE {
 class Widget : public rack::ModuleWidget {
 
 public:
-
   Widget(rack::Module *module, int widget_hp, const char *background);
 
   rack::Vec center() {
@@ -26,28 +25,28 @@ public:
 
   template<class T>
   void install_input(int index, float x, float y) {
-    auto input{rack::createInput<T>({x, y}, module, index)};
+    auto input{rack::Port::create<T>({x, y}, rack::Port::INPUT, module, index)};
     moveTo(input->box, x, y);
     addInput(input);
   }
 
   template<class T>
   void install_output(int index, float x, float y) {
-    auto output{rack::createOutput<T>({0, 0}, module, index)};
+    auto output{rack::Port::create<T>({0, 0}, rack::Port::OUTPUT, module, index)};
     moveTo(output->box, x, y);
     addOutput(output);
   }
 
   template<class T>
   void install_param(int index, float x, float y, float initial = 0.5f) {
-    auto param{rack::createParam<T>({x, y}, module, index, 0.0f, 1.0f, initial)};
+    auto param{rack::ParamWidget::create<T>({x, y}, module, index, 0.0f, 1.0f, initial)};
     moveTo(param->box, x, y);
     addParam(param);
   }
 
   template<class T>
   void install_light(int index, float x, float y, float initial = 0.f) {
-    auto light{rack::createLight<T>({x, y}, module, index)};
+    auto light{rack::ModuleLightWidget::create<T>({x, y}, module, index)};
     moveTo(light->box, x, y);
     addChild(light);
   }
@@ -59,7 +58,7 @@ public:
 
   template<class T>
   void install_screw(rack::Vec pos) {
-    auto widget{rack::createScrew<T>({0, 0})};
+    auto widget{rack::Widget::create<T>({0, 0})};
     moveTo(widget->box, pos);
     addChild(widget);
   }

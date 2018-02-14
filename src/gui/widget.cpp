@@ -1,19 +1,17 @@
 #include <random>
 
 #include <app.hpp>
-#include <components.hpp>
+#include <componentlibrary.hpp>
 #include <engine.hpp>
-#include <math.hpp>
-#include <plugin.hpp>
 
 #include "widget.h"
 
 extern rack::Plugin *plugin;
 
 namespace DHE {
-Widget::Widget(rack::Module *module, int widget_hp, const char *background) {
-  setModule(module);
-  box.size = rack::Vec{(float) widget_hp*RACK_GRID_WIDTH, (float) RACK_GRID_HEIGHT};
+Widget::Widget(rack::Module *module, int widget_hp, const char *background)
+  : rack::ModuleWidget(module) {
+  box.size = rack::Vec{(float) widget_hp*rack::RACK_GRID_WIDTH, rack::RACK_GRID_HEIGHT};
 
   auto *panel = new rack::SVGPanel();
   panel->box.size = box.size;
@@ -24,7 +22,7 @@ Widget::Widget(rack::Module *module, int widget_hp, const char *background) {
 }
 
 void Widget::install_screws() {
-  static constexpr float max_screw_inset{RACK_GRID_WIDTH*1.5f};
+  static const float max_screw_inset{rack::RACK_GRID_WIDTH*1.5f};
   static constexpr float top_y{7.5f}; // Screw touches top and bottom of module
 
   auto left_x{std::min(width()/4, max_screw_inset)}; // One HP from edge

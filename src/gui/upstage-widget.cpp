@@ -3,7 +3,7 @@
 
 namespace DHE {
 
-UpstageWidget::UpstageWidget() : Widget(new Upstage(), 4, "res/Upstage.svg") {
+UpstageWidget::UpstageWidget(rack::Module *module) : Widget(module, 4, "res/Upstage.svg") {
   auto widget_right_edge{this->box.size.x};
   auto center_x{widget_right_edge/2.0f};
 

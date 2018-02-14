@@ -3,7 +3,7 @@
 
 namespace DHE {
 
-StageWidget::StageWidget() : Widget(new Stage(&rack::engineGetSampleTime), 4, "res/Stage.svg") {
+StageWidget::StageWidget(rack::Module *module) : Widget(module, 4, "res/Stage.svg") {
   auto widget_right_edge{this->box.size.x};
 
   auto top_knob_y{75.0f};

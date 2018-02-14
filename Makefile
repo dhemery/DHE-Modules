@@ -1,6 +1,6 @@
 SLUG = DHE-Modules
-VERSION = 0.5.1-beta.1
-RACK_DIR ?= ../..
+VERSION = 0.6.0
+RACK_DIR ?= ../Rack
 
 FLAGS += -I./src
 CFLAGS +=
@@ -15,8 +15,9 @@ DISTRIBUTABLES += $(wildcard LICENSE*) res
 
 include $(RACK_DIR)/plugin.mk
 
-run:
-	make -C ../.. run
+run: dist
+	cp -R dist/DHE-Modules $(RACK_DIR)/plugins
+	make -C $(RACK_DIR) run
 
 MODULE_OBJECTS = $(patsubst %, build/%.o, $(MODULE_SOURCES))
 

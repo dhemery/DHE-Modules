@@ -6,7 +6,7 @@
 namespace DHE {
 
 struct StageWidget : public Widget {
-  StageWidget();
+  StageWidget(rack::Module *module);
 };
 }
 #endif

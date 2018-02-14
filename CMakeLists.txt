@@ -6,8 +6,8 @@ set(CMAKE_OSX_DEPLOYMENT_TARGET 10.7)
 add_library(rack INTERFACE)
 target_include_directories(rack
         INTERFACE
-        ../../include
-        ../../dep/include
+        ../Rack/include
+        ../Rack/dep/include
         )
 target_compile_features(rack INTERFACE cxx_std_11)
 target_compile_options(rack INTERFACE -stdlib=libc++)
