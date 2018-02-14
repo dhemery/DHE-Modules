@@ -18,5 +18,5 @@ git checkout ${VCV_RACK_COMMIT}
 git pull
 git submodule update --init --recursive
 
-make dep #> /dev/null
+make dep > /dev/null
 make

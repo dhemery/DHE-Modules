@@ -11,7 +11,7 @@ RUN apt-get update \
   automake \
   cmake \
   curl \
-  g++-7 \
+  gcc \
   git \
   libasound2-dev \
   libgl1-mesa-dev \
