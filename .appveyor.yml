@@ -6,18 +6,14 @@ environment:
   MSYSTEM: MINGW64
 
 artifacts:
-  - path: artifacts\*.zip
+  - path: dist\*.zip
 
 cache:
-  - C:\projects\Rack
+  - %APPVEYOR_BUILD_FOLDER%\..\Rack
 
 install:
 - set PATH=C:\msys64\usr\bin;%PATH%
-- set HOME=%APPVEYOR_BUILD_FOLDER%
 - pacman -S --noconfirm zip unzip mingw-w64-x86_64-cmake
 
 build_script:
-- bash -l script/cibuild
-
-on_success:
-- rm -rf C:\projects\Rack\plugins\DHE-Modules
+- bash -l %APPVEYOR_BUILD_FOLDER%\script\appveyor-build.sh
