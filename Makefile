@@ -1,5 +1,6 @@
 SLUG = DHE-Modules
-VERSION = 0.5.0
+VERSION = 0.5.1-beta.1
+RACK_DIR ?= ../..
 
 FLAGS += -I./src
 CFLAGS +=
@@ -12,7 +13,7 @@ SOURCES = $(MODULE_SOURCES) $(PLUGIN_SOURCES)
 
 DISTRIBUTABLES += $(wildcard LICENSE*) res
 
-include ../../plugin.mk
+include $(RACK_DIR)/plugin.mk
 
 run:
 	make -C ../.. run
@@ -29,4 +30,3 @@ build/test/runner/main: $(TEST_OBJECTS) $(MODULE_OBJECTS)
 
 test: build/test/runner/main
 	$<
-
