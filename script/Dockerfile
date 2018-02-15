@@ -3,10 +3,10 @@ FROM ubuntu
 LABEL maintainer="dale@dhemery.com"
 
 RUN apt-get update \
-  && apt-get install -y --no-install-recommends  software-properties-common \
+  && apt-get install -y --no-install-recommends software-properties-common \
   && add-apt-repository -y ppa:ubuntu-toolchain-r/test \
   && apt-get update \
-  && apt-get install --no-install-recommends  -y \
+  && apt-get install -y --no-install-recommends \
   autoconf \
   automake \
   cmake \
