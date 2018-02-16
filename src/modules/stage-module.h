@@ -59,7 +59,6 @@ private:
   float duration_knob() const { return params[DURATION_KNOB].value; }
   float level_knob() const { return params[LEVEL_KNOB].value; }
   float shape_knob() const { return params[SHAPE_KNOB].value; }
-  float shape_position() const { return BIPOLAR_NORMAL.scale(shape_knob()); }
 };
 }
 #endif
