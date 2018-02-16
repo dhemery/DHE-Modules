@@ -2,12 +2,10 @@
 
 #include "booster-stage-module.h"
 #include "booster-stage-widget.h"
-#include "widget.h"
 
 namespace DHE {
 
 BoosterStageWidget::BoosterStageWidget(rack::Module *module) : Widget(module, 8, "res/BoosterStage.svg") {
-  constexpr float _1hp = 5.08f;
   auto widget_right_edge{this->box.size.x};
 
   auto top_knob_y{mm_to_pixels(25.f)};
@@ -21,12 +19,12 @@ BoosterStageWidget::BoosterStageWidget(rack::Module *module) : Widget(module, 8,
   auto row{0};
   install_input<rack::PJ301MPort>(BoosterStageModule::LEVEL_CV, left_x, top_knob_y + row*row_spacing);
   install_param<rack::RoundBlackKnob>(BoosterStageModule::LEVEL_KNOB, center_x, top_knob_y + row*row_spacing);
-  install_param<rack::CKSS>(BoosterStageModule::LEVEL_SWITCH, right_x, top_knob_y + row*row_spacing);
+  install_param<rack::CKSS>(BoosterStageModule::LEVEL_SWITCH, right_x, top_knob_y + row*row_spacing, 0.f);
 
   row++;
   install_input<rack::PJ301MPort>(BoosterStageModule::SHAPE_CV, left_x, top_knob_y + row*row_spacing);
   install_param<rack::RoundBlackKnob>(BoosterStageModule::SHAPE_KNOB, center_x, top_knob_y + row*row_spacing);
-  install_param<rack::CKSS>(BoosterStageModule::SHAPE_SWITCH, right_x, top_knob_y + row*row_spacing);
+  install_param<rack::CKSS>(BoosterStageModule::SHAPE_SWITCH, right_x, top_knob_y + row*row_spacing, 0.f);
 
   row++;
   install_input<rack::PJ301MPort>(BoosterStageModule::DURATION_CV, left_x, top_knob_y + row*row_spacing);

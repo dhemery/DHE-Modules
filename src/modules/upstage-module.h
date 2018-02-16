@@ -31,13 +31,7 @@ struct UpstageModule : rack::Module {
     NUM_LIGHTS
   };
 
-  void step() override {
-    controller.step();
-    set_trigger_button_light();
-    set_wait_button_light();
-  }
-
-  float level() const { return UNIPOLAR_CV.scale(level_knob_rotation()); }
+  float level() const { return UNIPOLAR_CV.scale(level_knob()); }
   float level_cv() const { return inputs[LEVEL_CV_INPUT].value; }
 
   void send_trigger(float f) { outputs[TRIG_OUTPUT].value = f; }
@@ -45,12 +39,19 @@ struct UpstageModule : rack::Module {
 
   float wait_in() const { return inputs[WAIT_INPUT].value; }
   float trigger_in() const { return inputs[TRIG_INPUT].value; }
+
   bool trigger_button_is_pressed() const { return params[TRIG_BUTTON].value > 0.0f; }
   bool wait_button_is_pressed() const { return params[WAIT_BUTTON].value > 0.0f; }
 
+  void step() override {
+    controller.step();
+    set_trigger_button_light();
+    set_wait_button_light();
+  }
+
 private:
   UpstageController<UpstageModule> controller;
-  float level_knob_rotation() const { return params[LEVEL_KNOB].value; }
+  float level_knob() const { return params[LEVEL_KNOB].value; }
   void set_trigger_button_light() { lights[TRIG_BUTTON_LIGHT].value = UNIPOLAR_CV.scale(trigger_button_is_pressed()); }
   void set_wait_button_light() { lights[WAIT_BUTTON_LIGHT].value = UNIPOLAR_CV.scale(wait_button_is_pressed()); }
 };

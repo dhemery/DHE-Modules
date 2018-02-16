@@ -29,49 +29,47 @@ struct BoosterStageModule : rack::Module {
       : Module{NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS},
         controller{this} {}
 
-  void step() override {
-    controller.step();
-  }
-
-  float level() const { return UNIPOLAR_CV.scale(level_knob_rotation()); }
+  float level() const { return UNIPOLAR_CV.scale(level_knob()); }
 
   float duration() const {
-    static const Interval range{1e-3, 10.0f};
     static constexpr float curvature{0.8f}; // Gives ~1s at center position
+    static constexpr Interval duration_knob_range{1e-3, 10.0f};
 
-    return range.scale(sigmoid(duration_knob_rotation(), curvature));
+    return duration_knob_range.scale(sigmoid(duration_knob(), curvature));
   }
 
   float shape() const {
     static constexpr float shape_curvature{-0.65f};
 
-    return sigmoid(shape_position(), shape_curvature);
+    return sigmoid(BIPOLAR_NORMAL.scale(shape_knob()), shape_curvature);
   }
 
-  float defer_in() { return inputs[DEFER_INPUT].value; }
-  float trigger_in() { return inputs[TRIG_INPUT].value; }
-  float stage_in() { return inputs[IN_INPUT].value; }
+  float defer_in() const { return inputs[DEFER_INPUT].value; }
+  float trigger_in() const { return inputs[TRIG_INPUT].value; }
+  float stage_in() const { return inputs[IN_INPUT].value; }
 
-  void send_eoc(float f) {
-    outputs[EOC_OUTPUT].value = f;
-  }
 
-  void send_stage(float f) {
-    outputs[OUT_OUTPUT].value = f;
-  }
-
-  void send_active(float f) {
-    outputs[ACTIVE_OUTPUT].value = f;
-  }
+  void send_eoc(float f) { outputs[EOC_OUTPUT].value = f; }
+  void send_stage(float f) { outputs[OUT_OUTPUT].value = f; }
+  void send_active(float f) { outputs[ACTIVE_OUTPUT].value = f; }
 
   float sample_time() const { return rack::engineGetSampleTime(); }
+  void step() override { controller.step(); }
 
 private:
   StageController<BoosterStageModule> controller;
-  float duration_knob_rotation() const { return params[DURATION_KNOB].value; }
-  float level_knob_rotation() const { return params[LEVEL_KNOB].value; }
-  float shape_knob_rotation() const { return params[SHAPE_KNOB].value; }
-  float shape_position() const { return BIPOLAR_NORMAL.scale(shape_knob_rotation()); }
+
+  float level_knob() const { return params[LEVEL_KNOB].value; }
+  float level_cv() const { return inputs[LEVEL_CV].value; }
+  float level_switch() const { return params[LEVEL_SWITCH].value; }
+
+  float duration_knob() const { return params[DURATION_KNOB].value; }
+  float duration_cv() const { return inputs[DURATION_CV].value; }
+  float duration_switch() const { return params[DURATION_SWITCH].value; }
+
+  float shape_knob() const { return params[SHAPE_KNOB].value; }
+  float shape_cv() const { return inputs[SHAPE_CV].value; }
+  float shape_switch() const { return params[SHAPE_SWITCH].value; }
 };
-} // namespace DHE
+}
 #endif
