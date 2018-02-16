@@ -29,7 +29,10 @@ struct BoosterStageModule : rack::Module {
       : Module{NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS},
         controller{this} {}
 
-  float level() const { return UNIPOLAR_CV.scale(level_knob()); }
+  float level() const {
+    Interval level_range = level_switch () > 0.1f ? UNIPOLAR_CV : BIPOLAR_CV;
+    return level_range.scale(level_knob());
+  }
 
   float duration() const {
     static constexpr float curvature{0.8f}; // Gives ~1s at center position
