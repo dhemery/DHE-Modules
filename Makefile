@@ -7,9 +7,7 @@ CFLAGS +=
 CXXFLAGS +=
 LDFLAGS +=
 
-PLUGIN_SOURCES = $(wildcard src/plugin/*.cpp src/gui/*.cpp)
-MODULE_SOURCES = $(wildcard src/modules/*.cpp src/util/*.cpp)
-SOURCES = $(MODULE_SOURCES) $(PLUGIN_SOURCES)
+SOURCES = $(wildcard src/*/*.cpp)
 
 DISTRIBUTABLES += $(wildcard LICENSE*) res
 
@@ -26,7 +24,7 @@ TEST_OBJECTS = $(patsubst %, build/%.o, $(TEST_SOURCES))
 
 $(TEST_OBJECTS): FLAGS+= -I./test
 
-build/test/runner/main: $(TEST_OBJECTS) $(MODULE_OBJECTS)
+build/test/runner/main: $(TEST_OBJECTS)
 	$(CXX) -o $@ $^
 
 test: build/test/runner/main

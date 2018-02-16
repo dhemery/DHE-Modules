@@ -1,8 +1,9 @@
 #include <catch/catch.hpp>
-#include <modules/stage.h>
+#include "controllers/stage-controller.h"
+#include "fake-stage-model.h"
 
-TEST_CASE("Stage") {
-  float sample_time{1.f / 44100.f};
+TEST_CASE("Stage Controller") {
+  auto model = DHE::FakeStageModel{};
 
-  DHE::Stage stage{[] { return 0.0001;}};
+  DHE::StageController<DHE::FakeStageModel> stage{&model};
 }

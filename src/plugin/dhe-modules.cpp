@@ -1,15 +1,14 @@
-#include <modules/stage.h>
-#include <modules/upstage.h>
 #include "dhe-modules.h"
-#include "gui/stage-widget.h"
-#include "gui/upstage-widget.h"
+#include "modules/stage-widget.h"
+#include "modules/upstage-widget.h"
+#include "modules/stage-module.h"
+#include "modules/upstage-module.h"
 
 rack::Plugin *plugin;
 
 namespace DHE {
 template<typename TModel, typename TWidget, typename... TTag>
 static rack::Model *createModel(std::string moduleSlug, TTag... tags) {
-  rack::debug(">>>createModel(%s)", moduleSlug.c_str());
   return rack::Model::create<TModel, TWidget>("DHE-Modules", moduleSlug, moduleSlug, tags...);
 }
 }
@@ -24,6 +23,6 @@ void init(rack::Plugin *p) {
   p->addModel(modelUpstage);
 }
 
-rack::Model *modelStage = DHE::createModel<DHE::Stage, DHE::StageWidget, rack::ModelTag>("Stage", rack::ENVELOPE_GENERATOR_TAG);
-rack::Model *modelUpstage = DHE::createModel<DHE::Upstage, DHE::UpstageWidget, rack::ModelTag>("Upstage", rack::ENVELOPE_GENERATOR_TAG);
+rack::Model *modelStage = DHE::createModel<DHE::StageModule, DHE::StageWidget, rack::ModelTag>("Stage", rack::ENVELOPE_GENERATOR_TAG);
+rack::Model *modelUpstage = DHE::createModel<DHE::UpstageModule, DHE::UpstageWidget, rack::ModelTag>("Upstage", rack::ENVELOPE_GENERATOR_TAG);
 

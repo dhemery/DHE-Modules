@@ -1,5 +1,5 @@
-#ifndef DHE_GUI_WIDGET_H
-#define DHE_GUI_WIDGET_H
+#ifndef DHE_MODULES_MODULES_WIDGET_H
+#define DHE_MODULES_MODULES_WIDGET_H
 
 #include <app.hpp>
 #include <util/math.hpp>
