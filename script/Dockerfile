@@ -45,9 +45,10 @@ ENV VCV_RACK_COMMIT=master \
 
 RUN ./build-rack.sh
 
+COPY linux-build.sh .
 COPY build-plugin.sh .
 
-ENV VCV_PLUGIN_COMMIT=master \
+ENV VCV_PLUGIN_COMMIT=dale-only/mvc \
     VCV_PLUGIN_DIR=${VCV_BUILD_DIR}/${VCV_PLUGIN_NAME}
 
 CMD ./linux-build.sh
