@@ -43,6 +43,8 @@ struct StageModule : rack::Module {
     return sigmoid(BIPOLAR_NORMAL.scale(shape_knob()), shape_curvature);
   }
 
+  Interval shape_range() const { return NORMAL; }
+
   float defer_in() { return inputs[DEFER_INPUT].value; }
   float trigger_in() { return inputs[TRIG_INPUT].value; }
   float stage_in() { return inputs[IN_INPUT].value; }

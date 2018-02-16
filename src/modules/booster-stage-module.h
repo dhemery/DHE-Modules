@@ -34,6 +34,8 @@ struct BoosterStageModule : rack::Module {
     return level_range.scale(level_knob());
   }
 
+  Interval shape_range() const { return shape_switch() < 0.2f ? NORMAL : BIPOLAR_NORMAL; }
+
   float duration() const {
     static constexpr float curvature{0.8f}; // Gives ~1s at center position
     static constexpr Interval duration_knob_range{1e-3, 10.0f};
