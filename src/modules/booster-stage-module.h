@@ -8,10 +8,12 @@ namespace DHE {
 struct BoosterStageModule : rack::Module {
   enum ParamIds {
     DURATION_KNOB, LEVEL_KNOB, SHAPE_KNOB,
+    LEVEL_SWITCH, SHAPE_SWITCH, DURATION_SWITCH,
     NUM_PARAMS
   };
   enum InputIds {
     IN_INPUT, TRIG_INPUT, DEFER_INPUT,
+    LEVEL_CV, DURATION_CV, SHAPE_CV,
     NUM_INPUTS
   };
   enum OutputIds {

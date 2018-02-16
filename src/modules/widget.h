@@ -22,6 +22,11 @@ public:
     return box.size.x;
   }
 
+  float mm_to_pixels(float mm) {
+    constexpr float pixels_per_mm = 380.f / 128.5f;
+    return mm * pixels_per_mm;
+  }
+
   template<class T>
   void install_input(int index, float x, float y) {
     auto input{rack::Port::create<T>({x, y}, rack::Port::INPUT, module, index)};
