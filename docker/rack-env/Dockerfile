@@ -1,7 +1,4 @@
 FROM ubuntu
-
-LABEL maintainer="dale@dhemery.com"
-
 RUN apt-get update \
   && apt-get install -y --no-install-recommends software-properties-common \
   && add-apt-repository -y ppa:ubuntu-toolchain-r/test \
@@ -31,26 +28,3 @@ RUN apt-get update \
   && add-apt-repository -yr ppa:ubuntu-toolchain-r/test \
   && apt-get autoremove --purge \
   && apt-get clean
-
-ENV VCV_BUILD_DIR=/plugin \
-    VCV_INSTALL_DIR=/out \
-    VCV_PLUGIN_NAME=DHE-Modules
-
-WORKDIR ${VCV_BUILD_DIR}
-
-COPY build-rack.sh .
-
-ENV VCV_RACK_COMMIT=master \
-    VCV_RACK_DIR=${VCV_BUILD_DIR}/Rack
-
-RUN ./build-rack.sh
-
-COPY linux-build.sh .
-COPY build-plugin.sh .
-
-ENV VCV_PLUGIN_COMMIT=dale-only/mvc \
-    VCV_PLUGIN_DIR=${VCV_BUILD_DIR}/${VCV_PLUGIN_NAME}
-
-CMD ./linux-build.sh
-
-VOLUME ${VCV_INSTALL_DIR}

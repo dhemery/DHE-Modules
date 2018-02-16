@@ -10,8 +10,7 @@
 #
 #   Which Rack commit to build.
 
-mkdir -p "${VCV_RACK_DIR}"
-
+mkdir -p "${VCV_RACK_DIR}" \
 git clone -n https://github.com/VCVRack/Rack.git "${VCV_RACK_DIR}" || true
 cd "${VCV_RACK_DIR}"
 git checkout ${VCV_RACK_COMMIT}

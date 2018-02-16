@@ -12,5 +12,16 @@ export VCV_HOME_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 env | sort
 
-. "${VCV_HOME_DIR}/build-rack.sh"
-. "${VCV_HOME_DIR}/build-plugin.sh"
+mkdir -p "${VCV_RACK_DIR}" \
+git clone -n https://github.com/VCVRack/Rack.git "${VCV_RACK_DIR}" || true
+cd "${VCV_RACK_DIR}"
+git checkout ${VCV_RACK_COMMIT}
+git pull
+git submodule update --init --recursive
+
+make dep > /dev/null
+make
+
+cd "${VCV_PLUGIN_DIR}"
+
+make clean test dist RACK_DIR="${VCV_RACK_DIR}"
