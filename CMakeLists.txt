@@ -15,6 +15,9 @@ target_compile_options(rack INTERFACE -stdlib=libc++)
 add_library(plugin SHARED
         src/controllers/stage-controller.h
         src/controllers/upstage-controller.h
+        src/modules/booster-stage-module.h
+        src/modules/booster-stage-widget.cpp
+        src/modules/booster-stage-widget.h
         src/modules/stage-module.h
         src/modules/stage-widget.cpp
         src/modules/stage-widget.h

@@ -84,4 +84,4 @@ private:
 
 }
 
-#endif //DHE_MODULES_STAGE_CONTROLLER_H
+#endif
