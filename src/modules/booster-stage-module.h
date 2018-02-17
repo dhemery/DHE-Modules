@@ -37,10 +37,21 @@ struct BoosterStageModule : rack::Module {
   Interval shape_range() const { return shape_switch() < 0.2f ? NORMAL : BIPOLAR_NORMAL; }
 
   float duration() const {
-    static constexpr float curvature{0.8f}; // Gives ~1s at center position
-    static constexpr Interval duration_knob_range{1e-3, 10.0f};
+    static constexpr float curvature{0.8f};
 
-    return duration_knob_range.scale(sigmoid(duration_knob(), curvature));
+    return duration_range().scale(sigmoid(duration_knob(), curvature));
+  }
+
+  Interval duration_range() const {
+    static constexpr auto medium_duration = Interval{1e-3, 10.0f};
+    static constexpr auto short_duration = Interval{medium_duration.lower_bound / 10.f, medium_duration.upper_bound / 10.f};
+    static constexpr auto long_duration = Interval{medium_duration.lower_bound * 10.f, medium_duration.upper_bound * 10.f};
+    if (duration_switch() < 0.2f) {
+      return short_duration;
+    } else if (duration_switch() > 0.8f) {
+      return long_duration;
+    }
+    return medium_duration;
   }
 
   float shape() const {
