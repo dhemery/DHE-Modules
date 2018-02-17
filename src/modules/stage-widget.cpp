@@ -15,13 +15,13 @@ StageWidget::StageWidget(rack::Module *module) : Widget(module, 4, "res/Stage.sv
   auto row_spacing{knob_spacing};
 
   auto row{0};
-  install_param<rack::RoundBlackKnob>(StageModule::LEVEL_KNOB, knob_x, top_knob_y + row*row_spacing);
+  install_knob<rack::RoundBlackKnob>(StageModule::LEVEL_KNOB, knob_x, top_knob_y + row*row_spacing);
 
   row++;
-  install_param<rack::RoundBlackKnob>(StageModule::SHAPE_KNOB, knob_x, top_knob_y + row*row_spacing);
+  install_knob<rack::RoundBlackKnob>(StageModule::SHAPE_KNOB, knob_x, top_knob_y + row*row_spacing);
 
   row++;
-  install_param<rack::RoundBlackKnob>(StageModule::DURATION_KNOB, knob_x, top_knob_y + row*row_spacing);
+  install_knob<rack::RoundBlackKnob>(StageModule::DURATION_KNOB, knob_x, top_knob_y + row*row_spacing);
 
   auto top_port_y{245.0f};
   auto port_spacing{43.0f};

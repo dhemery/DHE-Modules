@@ -34,8 +34,6 @@ struct BoosterStageModule : rack::Module {
     return level_range.scale(level_knob());
   }
 
-  Interval shape_range() const { return shape_switch() < 0.2f ? NORMAL : BIPOLAR_NORMAL; }
-
   float duration() const {
     static constexpr float curvature{0.8f};
 
@@ -43,9 +41,11 @@ struct BoosterStageModule : rack::Module {
   }
 
   Interval duration_range() const {
-    static constexpr auto medium_duration = Interval{1e-3, 10.0f};
-    static constexpr auto short_duration = Interval{medium_duration.lower_bound / 10.f, medium_duration.upper_bound / 10.f};
-    static constexpr auto long_duration = Interval{medium_duration.lower_bound * 10.f, medium_duration.upper_bound * 10.f};
+    static constexpr auto short_duration = Interval{1e-4, 1.f};
+    static constexpr auto medium_scale = 10.f;
+    static constexpr auto long_scale = 100.f;
+    static constexpr auto medium_duration = Interval{short_duration.lower_bound * medium_scale, short_duration.upper_bound * medium_scale};
+    static constexpr auto long_duration = Interval{short_duration.lower_bound * long_scale, short_duration.upper_bound * long_scale};
     if (duration_switch() < 0.2f) {
       return short_duration;
     } else if (duration_switch() > 0.8f) {
@@ -59,6 +59,8 @@ struct BoosterStageModule : rack::Module {
 
     return sigmoid(BIPOLAR_NORMAL.scale(shape_knob()), shape_curvature);
   }
+
+  Interval shape_range() const { return shape_switch() < 0.2f ? NORMAL : BIPOLAR_NORMAL; }
 
   float defer_in() const { return inputs[DEFER_INPUT].value; }
   float trigger_in() const { return inputs[TRIG_INPUT].value; }

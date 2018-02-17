@@ -22,9 +22,9 @@ public:
     return box.size.x;
   }
 
-  float mm_to_pixels(float mm) {
-    constexpr float pixels_per_mm = 380.f / 128.5f;
-    return mm * pixels_per_mm;
+  template<class T>
+  void install_button(int index, float x, float y, bool on = false) {
+    install_param<T>(index, x, y, 0.f, 1.f, on ? 1.f : 0.f);
   }
 
   template<class T>
@@ -35,17 +35,8 @@ public:
   }
 
   template<class T>
-  void install_output(int index, float x, float y) {
-    auto output{rack::Port::create<T>({0, 0}, rack::Port::OUTPUT, module, index)};
-    moveTo(output->box, x, y);
-    addOutput(output);
-  }
-
-  template<class T>
-  void install_param(int index, float x, float y, float initial = 0.5f) {
-    auto param{rack::ParamWidget::create<T>({x, y}, module, index, 0.0f, 1.0f, initial)};
-    moveTo(param->box, x, y);
-    addParam(param);
+  void install_knob(int index, float x, float y) {
+    install_param<T>(index, x, y, 0.f, 1.f, 0.5f);
   }
 
   template<class T>
@@ -56,8 +47,17 @@ public:
   }
 
   template<class T>
-  void install_button(int index, float x, float y) {
-    install_param<T>(index, x, y, 0.0f);
+  void install_output(int index, float x, float y) {
+    auto output{rack::Port::create<T>({0, 0}, rack::Port::OUTPUT, module, index)};
+    moveTo(output->box, x, y);
+    addOutput(output);
+  }
+
+  template<class T>
+  void install_param(int index, float x, float y, float low, float high, float initial) {
+    auto param{rack::ParamWidget::create<T>({x, y}, module, index, low, high, initial)};
+    moveTo(param->box, x, y);
+    addParam(param);
   }
 
   template<class T>
@@ -65,6 +65,11 @@ public:
     auto widget{rack::Widget::create<T>({0, 0})};
     moveTo(widget->box, pos);
     addChild(widget);
+  }
+
+  template<class T>
+  void install_switch(int index, float x, float y, int max = 1, int initial = 0) {
+    install_param<T>(index, x, y, 0.f, (float) max, (float) initial);
   }
   static void moveTo(rack::Rect &box, rack::Vec pos);
 

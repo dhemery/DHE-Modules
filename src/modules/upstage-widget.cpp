@@ -18,7 +18,7 @@ UpstageWidget::UpstageWidget(rack::Module *module) : Widget(module, 4, "res/Upst
   auto row_spacing{upper_spacing};
 
   auto row{0};
-  install_param<rack::RoundBlackKnob>(UpstageModule::LEVEL_KNOB, center_x, top_y + row*row_spacing);
+  install_knob<rack::RoundBlackKnob>(UpstageModule::LEVEL_KNOB, center_x, top_y + row*row_spacing);
 
   row++;
   install_input<rack::PJ301MPort>(UpstageModule::LEVEL_CV_INPUT, center_x, top_y + row*row_spacing);
