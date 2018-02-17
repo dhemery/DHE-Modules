@@ -16,27 +16,27 @@ StageWidget::StageWidget(rack::Module *module) : Widget(module, 4, "res/Stage.sv
   auto row_spacing{18.5f};
 
   auto row{0};
-  install_knob<rack::RoundBlackKnob>(StageModule::LEVEL_KNOB, center_x, top_row_y + row*row_spacing);
+  install_knob<rack::RoundBlackKnob>(StageModule::LEVEL_KNOB, {center_x, top_row_y + row*row_spacing});
 
   row++;
-  install_knob<rack::RoundBlackKnob>(StageModule::SHAPE_KNOB, center_x, top_row_y + row*row_spacing);
+  install_knob<rack::RoundBlackKnob>(StageModule::SHAPE_KNOB, {center_x, top_row_y + row*row_spacing});
 
   row++;
-  install_knob<rack::RoundBlackKnob>(StageModule::DURATION_KNOB, center_x, top_row_y + row*row_spacing);
+  install_knob<rack::RoundBlackKnob>(StageModule::DURATION_KNOB, {center_x, top_row_y + row*row_spacing});
 
   top_row_y = 82.f;
   row_spacing = 15.f;
 
   row = 0;
-  install_input<rack::PJ301MPort>(StageModule::DEFER_INPUT, left_x, top_row_y + row*row_spacing);
-  install_output<rack::PJ301MPort>(StageModule::ACTIVE_OUTPUT, right_x, top_row_y + row*row_spacing);
+  install_input<rack::PJ301MPort>(StageModule::DEFER_INPUT, {left_x, top_row_y + row*row_spacing});
+  install_output<rack::PJ301MPort>(StageModule::ACTIVE_OUTPUT, {right_x, top_row_y + row*row_spacing});
 
   row++;
-  install_input<rack::PJ301MPort>(StageModule::TRIG_INPUT, left_x, top_row_y + row*row_spacing);
-  install_output<rack::PJ301MPort>(StageModule::EOC_OUTPUT, right_x, top_row_y + row*row_spacing);
+  install_input<rack::PJ301MPort>(StageModule::TRIG_INPUT, {left_x, top_row_y + row*row_spacing});
+  install_output<rack::PJ301MPort>(StageModule::EOC_OUTPUT, {right_x, top_row_y + row*row_spacing});
 
   row++;
-  install_input<rack::PJ301MPort>(StageModule::IN_INPUT, left_x, top_row_y + row*row_spacing);
-  install_output<rack::PJ301MPort>(StageModule::OUT_OUTPUT, right_x, top_row_y + row*row_spacing);
+  install_input<rack::PJ301MPort>(StageModule::IN_INPUT, {left_x, top_row_y + row*row_spacing});
+  install_output<rack::PJ301MPort>(StageModule::OUT_OUTPUT, {right_x, top_row_y + row*row_spacing});
 }
 }

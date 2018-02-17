@@ -16,33 +16,33 @@ BoosterStageWidget::BoosterStageWidget(rack::Module *module) : Widget(module, 8,
   auto row_spacing{18.5f};
 
   auto row{0};
-  install_input<rack::PJ301MPort>(BoosterStageModule::LEVEL_CV, left_x, top_row_y + row*row_spacing);
-  install_knob<rack::RoundBlackKnob>(BoosterStageModule::LEVEL_KNOB, center_x, top_row_y + row*row_spacing);
-  install_switch<rack::CKSS>(BoosterStageModule::LEVEL_SWITCH, right_x, top_row_y + row*row_spacing);
+  install_input<rack::PJ301MPort>(BoosterStageModule::LEVEL_CV, {left_x, top_row_y + row*row_spacing});
+  install_knob<rack::RoundBlackKnob>(BoosterStageModule::LEVEL_KNOB, {center_x, top_row_y + row*row_spacing});
+  install_switch<rack::CKSS>(BoosterStageModule::LEVEL_SWITCH, {right_x, top_row_y + row*row_spacing});
 
   row++;
-  install_input<rack::PJ301MPort>(BoosterStageModule::SHAPE_CV, left_x, top_row_y + row*row_spacing);
-  install_knob<rack::RoundBlackKnob>(BoosterStageModule::SHAPE_KNOB, center_x, top_row_y + row*row_spacing);
-  install_switch<rack::CKSS>(BoosterStageModule::SHAPE_SWITCH, right_x, top_row_y + row*row_spacing);
+  install_input<rack::PJ301MPort>(BoosterStageModule::SHAPE_CV, {left_x, top_row_y + row*row_spacing});
+  install_knob<rack::RoundBlackKnob>(BoosterStageModule::SHAPE_KNOB, {center_x, top_row_y + row*row_spacing});
+  install_switch<rack::CKSS>(BoosterStageModule::SHAPE_SWITCH, {right_x, top_row_y + row*row_spacing});
 
   row++;
-  install_input<rack::PJ301MPort>(BoosterStageModule::DURATION_CV, left_x, top_row_y + row*row_spacing);
-  install_knob<rack::RoundBlackKnob>(BoosterStageModule::DURATION_KNOB, center_x, top_row_y + row*row_spacing);
-  install_switch<rack::CKSSThree>(BoosterStageModule::DURATION_SWITCH, right_x, top_row_y + row*row_spacing, 2, 1);
+  install_input<rack::PJ301MPort>(BoosterStageModule::DURATION_CV, {left_x, top_row_y + row*row_spacing});
+  install_knob<rack::RoundBlackKnob>(BoosterStageModule::DURATION_KNOB, {center_x, top_row_y + row*row_spacing});
+  install_switch<rack::CKSSThree>(BoosterStageModule::DURATION_SWITCH, {right_x, top_row_y + row*row_spacing}, 2, 1);
 
   top_row_y = 82.f;
   row_spacing = 15.f;
 
   row = 0;
-  install_input<rack::PJ301MPort>(BoosterStageModule::DEFER_INPUT, left_x, top_row_y + row*row_spacing);
-  install_output<rack::PJ301MPort>(BoosterStageModule::ACTIVE_OUTPUT, right_x, top_row_y + row*row_spacing);
+  install_input<rack::PJ301MPort>(BoosterStageModule::DEFER_INPUT, {left_x, top_row_y + row*row_spacing});
+  install_output<rack::PJ301MPort>(BoosterStageModule::ACTIVE_OUTPUT, {right_x, top_row_y + row*row_spacing});
 
   row++;
-  install_input<rack::PJ301MPort>(BoosterStageModule::TRIG_INPUT, left_x, top_row_y + row*row_spacing);
-  install_output<rack::PJ301MPort>(BoosterStageModule::EOC_OUTPUT, right_x, top_row_y + row*row_spacing);
+  install_input<rack::PJ301MPort>(BoosterStageModule::TRIG_INPUT, {left_x, top_row_y + row*row_spacing});
+  install_output<rack::PJ301MPort>(BoosterStageModule::EOC_OUTPUT, {right_x, top_row_y + row*row_spacing});
 
   row++;
-  install_input<rack::PJ301MPort>(BoosterStageModule::IN_INPUT, left_x, top_row_y + row*row_spacing);
-  install_output<rack::PJ301MPort>(BoosterStageModule::OUT_OUTPUT, right_x, top_row_y + row*row_spacing);
+  install_input<rack::PJ301MPort>(BoosterStageModule::IN_INPUT, {left_x, top_row_y + row*row_spacing});
+  install_output<rack::PJ301MPort>(BoosterStageModule::OUT_OUTPUT, {right_x, top_row_y + row*row_spacing});
 }
 }

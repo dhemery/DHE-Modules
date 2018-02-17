@@ -62,7 +62,7 @@ void Widget::install_screws() {
   }
 }
 
-void Widget::moveTo(rack::Rect &box, rack::Vec pos) {
-  box.pos = pos.minus(box.size.mult(0.5f));
+void Widget::moveTo(rack::Rect &box, rack::Vec center) {
+  box.pos = center.minus(box.size.mult(0.5f));
 }
 }

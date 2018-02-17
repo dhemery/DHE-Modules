@@ -19,56 +19,56 @@ public:
   }
 
   template<class T>
-  void install_button(int index, float x, float y, bool on = false) {
-    install_param<T>(index, x, y, 0.f, 1.f, on ? 1.f : 0.f);
+  void install_button(int index, rack::Vec center, bool on = false) {
+    install_param<T>(index, center, 0.f, 1.f, on ? 1.f : 0.f);
   }
 
   template<class T>
-  void install_input(int index, float x, float y) {
+  void install_input(int index, rack::Vec center) {
     auto input{rack::Port::create<T>({0, 0}, rack::Port::INPUT, module, index)};
-    moveTo(input->box, rack::mm2px({x, y}));
+    moveTo(input->box, rack::mm2px(center));
     addInput(input);
   }
 
   template<class T>
-  void install_knob(int index, float x, float y) {
-    install_param<T>(index, x, y, 0.f, 1.f, 0.5f);
+  void install_knob(int index, rack::Vec center) {
+    install_param<T>(index, center, 0.f, 1.f, 0.5f);
   }
 
   template<class T>
-  void install_light(int index, float x, float y, float initial = 0.f) {
+  void install_light(int index, rack::Vec center) {
     auto light{rack::ModuleLightWidget::create<T>({0, 0}, module, index)};
-    moveTo(light->box, rack::mm2px({x, y}));
+    moveTo(light->box, rack::mm2px(center));
     addChild(light);
   }
 
   template<class T>
-  void install_output(int index, float x, float y) {
+  void install_output(int index, rack::Vec center) {
     auto output{rack::Port::create<T>({0, 0}, rack::Port::OUTPUT, module, index)};
-    moveTo(output->box, rack::mm2px({x, y}));
+    moveTo(output->box, rack::mm2px(center));
     addOutput(output);
   }
 
   template<class T>
-  void install_param(int index, float x, float y, float low, float high, float initial) {
+  void install_param(int index, rack::Vec center, float low, float high, float initial) {
     auto param{rack::ParamWidget::create<T>({0, 0}, module, index, low, high, initial)};
-    moveTo(param->box, rack::mm2px({x, y}));
+    moveTo(param->box, rack::mm2px(center));
     addParam(param);
   }
 
   template<class T>
-  void install_screw(rack::Vec pos) {
+  void install_screw(rack::Vec center) {
     auto widget{rack::Widget::create<T>({0, 0})};
-    moveTo(widget->box, rack::mm2px(pos));
+    moveTo(widget->box, rack::mm2px(center));
     addChild(widget);
   }
 
   template<class T>
-  void install_switch(int index, float x, float y, int max = 1, int initial = 0) {
-    install_param<T>(index, x, y, 0.f, (float) max, (float) initial);
+  void install_switch(int index, rack::Vec center, int max_position = 1, int initial_position = 0) {
+    install_param<T>(index, center, 0.f, (float) max_position, (float) initial_position);
   }
 
-  static void moveTo(rack::Rect &box, rack::Vec pos);
+  static void moveTo(rack::Rect &box, rack::Vec center);
 
   void install_screws();
 };
