@@ -10,16 +10,12 @@ class Widget : public rack::ModuleWidget {
 public:
   Widget(rack::Module *module, int widget_hp, const char *background);
 
-  rack::Vec center() {
-    return box.getCenter();
-  }
-
   float height() const {
-    return box.size.y;
+    return box.size.y*MM_PER_IN/SVG_DPI;
   }
 
   float width() const {
-    return box.size.x;
+    return box.size.x*MM_PER_IN/SVG_DPI;
   }
 
   template<class T>
@@ -71,9 +67,9 @@ public:
   void install_switch(int index, float x, float y, int max = 1, int initial = 0) {
     install_param<T>(index, x, y, 0.f, (float) max, (float) initial);
   }
-  static void moveTo(rack::Rect &box, rack::Vec pos);
+  static void moveTo(rack::Rect &box_px, rack::Vec pos_mm);
 
-  static void moveTo(rack::Rect &box, float x, float y);
+  static void moveTo(rack::Rect &box_px, float x_mm, float y_mm);
 
   void install_screws();
 };

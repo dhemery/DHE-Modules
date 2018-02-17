@@ -22,18 +22,29 @@ Widget::Widget(rack::Module *module, int widget_hp, const char *background)
 }
 
 void Widget::install_screws() {
-  static const float max_screw_inset{rack::RACK_GRID_WIDTH*1.5f};
-  static constexpr float top_y{7.5f}; // Screw touches top and bottom of module
 
-  auto left_x{std::min(width()/4, max_screw_inset)}; // One HP from edge
-  auto right_x{width() - left_x};
-  auto bottom_y{height() - top_y};
+  auto screw_diameter{rack::RACK_GRID_WIDTH*MM_PER_IN/SVG_DPI};
+  auto screw_radius{screw_diameter/2.f};
+
+  auto top{screw_radius};
+  auto bottom{height() - top};
+
+  auto max_screw_inset{screw_diameter*1.5f};
+  auto left{std::min(width()/4.f, max_screw_inset)};
+  auto right{width() - left};
+
+  rack::debug("width  %f", width());
+  rack::debug("height %f", height());
+  rack::debug("top    %f", top);
+  rack::debug("right  %f", right);
+  rack::debug("bottom %f", bottom);
+  rack::debug("left   %f", left);
 
   auto screw_positions = std::vector<rack::Vec>{
-      {left_x, top_y},
-      {left_x, bottom_y},
-      {right_x, top_y},
-      {right_x, bottom_y}
+      {left, top},
+      {left, bottom},
+      {right, top},
+      {right, bottom}
   };
 
   std::random_device rd;
@@ -51,11 +62,11 @@ void Widget::install_screws() {
   }
 }
 
-void Widget::moveTo(rack::Rect &box, rack::Vec pos) {
-  box.pos = pos.minus(box.size.mult(0.5f));
+void Widget::moveTo(rack::Rect &box_px, rack::Vec pos_mm) {
+  box_px.pos = rack::mm2px(pos_mm).minus(box_px.size.mult(0.5f));
 }
 
-void Widget::moveTo(rack::Rect &box, float x, float y) {
-  moveTo(box, {x, y});
+void Widget::moveTo(rack::Rect &box_px, float x_mm, float y_mm) {
+  moveTo(box_px, {x_mm, y_mm});
 }
 }
