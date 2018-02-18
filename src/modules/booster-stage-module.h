@@ -32,30 +32,27 @@ struct BoosterStageModule : rack::Module {
 
   BoosterStageModule()
       : Module{NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS},
-        level{
-            [this] { return params[LEVEL_KNOB].value; },
-            [this] { return inputs[LEVEL_CV].value; },
-            [this] { return params[LEVEL_SWITCH].value > 0.5f ? UNIPOLAR_CV : BIPOLAR_CV; }
-        },
-        duration{
-            [this] { return params[DURATION_KNOB].value; },
-            [this] { return inputs[DURATION_CV].value; },
-            [this] {
-              auto duration_switch{params[DURATION_SWITCH].value};
-              return duration_switch < 0.5f ? SHORT_DURATION :
-                     duration_switch < 1.5f ? MEDIUM_DURATION : LONG_DURATION;
-            }
-        },
-        shape{
-            [this] { return params[SHAPE_KNOB].value; },
-            [this] { return inputs[SHAPE_CV].value; },
-            [this] { return params[SHAPE_SWITCH].value < 0.5f ? 0 : 1; }
-        },
-        controller{this} {}
-
-  LevelControl level;
-  DurationControl duration;
-  ShapeControl shape;
+        controller{
+            this,
+            LevelControl{
+                [this] { return params[LEVEL_KNOB].value; },
+                [this] { return inputs[LEVEL_CV].value; },
+                [this] { return params[LEVEL_SWITCH].value > 0.5f ? UNIPOLAR_CV : BIPOLAR_CV; }
+            },
+            DurationControl{
+                [this] { return params[DURATION_KNOB].value; },
+                [this] { return inputs[DURATION_CV].value; },
+                [this] {
+                  auto duration_switch{params[DURATION_SWITCH].value};
+                  return duration_switch < 0.5f ? SHORT_DURATION :
+                         duration_switch < 1.5f ? MEDIUM_DURATION : LONG_DURATION;
+                }
+            },
+            ShapeControl{
+                [this] { return params[SHAPE_KNOB].value; },
+                [this] { return inputs[SHAPE_CV].value; },
+                [this] { return params[SHAPE_SWITCH].value < 0.5f ? 0 : 1; }
+            }} {}
 
   float defer_in() const { return inputs[DEFER_INPUT].value; }
   float trigger_in() const { return inputs[TRIG_INPUT].value; }

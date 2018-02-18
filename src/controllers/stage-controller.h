@@ -4,16 +4,22 @@
 #include <util/d-flip-flop.h>
 #include <util/ramp.h>
 #include <util/follower.h>
+#include "level-control.h"
 
 namespace DHE {
 
 template<typename TModule>
 struct StageController {
-  explicit StageController(TModule *module)
+  explicit StageController(TModule *module, LevelControl level,
+                           DurationControl duration,
+                           ShapeControl shape)
       : module{module},
+        level{level},
+        duration{duration},
+        shape{shape},
         defer_gate{[this] { return defer_in(); }},
         end_of_cycle_pulse{1e-3, [this] { return sample_time(); }},
-        envelope_ramp{[this] { return duration(); }, [this] { return sample_time(); }},
+        envelope_ramp{[this] { return this->duration(); }, [this] { return sample_time(); }},
         envelope_trigger{[this] { return trigger_in(); }},
         stage_input_follower{[this] { return stage_in(); }} {
     defer_gate.on_rising_edge([this] { defer(); });
@@ -37,15 +43,14 @@ struct StageController {
 
 private:
   TModule *module;
+  LevelControl level;
+  DurationControl duration;
+  ShapeControl shape;
   DFlipFlop defer_gate;
   Ramp end_of_cycle_pulse;
   Ramp envelope_ramp;
   DFlipFlop envelope_trigger;
   Follower stage_input_follower;
-
-  float duration() const { return module->duration(); }
-  float level() const { return module->level(); }
-  float shape(float x) const { return module->shape(x); }
 
   float defer_in() const { return module->defer_in(); }
   float stage_in() const { return module->stage_in(); }

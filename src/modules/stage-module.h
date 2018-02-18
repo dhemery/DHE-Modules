@@ -28,15 +28,10 @@ struct StageModule : rack::Module {
 
   StageModule()
       : Module{NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS},
-        level{[this] { return params[LEVEL_KNOB].value; }},
-        duration{[this] { return params[DURATION_KNOB].value; }},
-        shape{[this] { return params[SHAPE_KNOB].value; }},
-        controller{this} {}
-
-
-  LevelControl level;
-  DurationControl duration;
-  ShapeControl shape;
+        controller{this,
+                   LevelControl{[this] { return params[LEVEL_KNOB].value; }},
+                   DurationControl{[this] { return params[DURATION_KNOB].value; }},
+                   ShapeControl{[this] { return params[SHAPE_KNOB].value; }}} {}
 
   float defer_in() { return inputs[DEFER_INPUT].value; }
   float trigger_in() { return inputs[TRIG_INPUT].value; }
@@ -50,7 +45,7 @@ struct StageModule : rack::Module {
   float sample_time() const { return rack::engineGetSampleTime(); }
 
 private:
-  StageController<StageModule> controller;
+  StageController <StageModule> controller;
 };
 }
 #endif
