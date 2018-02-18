@@ -4,6 +4,7 @@
 #include <functional>
 #include <util/interval.h>
 #include <util/sigmoid.h>
+#include <util/modulation.h>
 
 namespace DHE {
 
@@ -23,7 +24,7 @@ struct DurationControl {
     static constexpr auto curvature{0.8f};
     auto range = range_switch() < 0.5f ? SHORT_DURATION :
                  range_switch() < 1.5f ? MEDIUM_DURATION : LONG_DURATION;
-    return range.scale(sigmoid(rotation(), curvature));
+    return range.scale(sigmoid(modulated(rotation(), cv()), curvature));
   }
 
   const std::function<float()> rotation;
