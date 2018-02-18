@@ -14,20 +14,21 @@ constexpr auto LONG_DURATION = Interval{SHORT_DURATION.lower_bound * 100.f, SHOR
 struct DurationControl {
   DurationControl(std::function<float()> rotation,
                   std::function<float()> cv = [] { return 0.f; },
-                  std::function<const Interval()> range = []() -> const Interval { return MEDIUM_DURATION; })
+                  std::function<float()> range_switch = [] { return 1.f; })
       : rotation{std::move(rotation)},
         cv{std::move(cv)},
-        range{std::move(range)} {}
+        range_switch{std::move(range_switch)} {}
 
   float operator()() const {
-    static constexpr float curvature{0.8f};
-
-    return range().scale(sigmoid(rotation(), curvature));
+    static constexpr auto curvature{0.8f};
+    auto range = range_switch() < 0.5f ? SHORT_DURATION :
+                 range_switch() < 1.5f ? MEDIUM_DURATION : LONG_DURATION;
+    return range.scale(sigmoid(rotation(), curvature));
   }
 
   const std::function<float()> rotation;
   const std::function<float()> cv;
-  const std::function<const Interval()> range;
+  const std::function<float()> range_switch;
 };
 
 }
