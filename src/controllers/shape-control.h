@@ -19,7 +19,7 @@ struct ShapeControl {
     static constexpr auto shape_curvature{-0.65f};
     auto is_sigmoid = shape_switch() > 0.5f;
     auto sign{is_sigmoid ? -1.f : 1.f};
-    auto k = sign * sigmoid(BIPOLAR_NORMAL.scale(rotation()), shape_curvature);
+    auto k = sign * sigmoid(BIPOLAR_NORMAL.scale(modulated(rotation(), cv())), shape_curvature);
     auto range = is_sigmoid ? BIPOLAR_NORMAL : NORMAL;
     auto shaped{sigmoid(range.scale(x), k)};
     return range.normalize(shaped);
