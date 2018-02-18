@@ -24,10 +24,8 @@ struct ModulatedLevelControl : public LevelControl<TOwner> {
         cv{owner->inputs[cv]} {}
 
   float operator()() const override {
-    if (this->cv.active) {
-      return (this->cv.value + UNIPOLAR_CV.center()) * this->knob.value;
-    }
-    return UNIPOLAR_CV.scale(this->knob.value);
+    auto modulation = this->cv.active ? cv.value : 0.f;
+    return UNIPOLAR_CV.scale(this->knob.value) + modulation;
   }
 
   const rack::Input &cv;
@@ -40,12 +38,9 @@ struct ScalableLevelControl : public ModulatedLevelControl<TOwner> {
         scale_switch{owner->params[scale_switch]} {}
 
   float operator()() const override {
+    auto modulation = this->cv.active ? this->cv.value : 0.f;
     auto range = scale_switch.value < 0.2f ? BIPOLAR_CV : UNIPOLAR_CV;
-
-    if (this->cv.active) {
-      return (this->cv.value + range.center()) * this->knob.value;
-    }
-    return range.scale(this->knob.value);
+    return range.scale(this->knob.value) + modulation;
   }
 
   const rack::Param &scale_switch;
