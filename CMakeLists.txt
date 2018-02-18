@@ -13,6 +13,7 @@ target_compile_features(rack INTERFACE cxx_std_11)
 target_compile_options(rack INTERFACE -stdlib=libc++)
 
 add_library(plugin SHARED
+        src/controllers/level-control.h
         src/controllers/stage-controller.h
         src/controllers/upstage-controller.h
         src/modules/booster-stage-module.h
@@ -35,7 +36,7 @@ add_library(plugin SHARED
         src/util/sigmoid.h
         src/plugin/dhe-modules.cpp
         src/plugin/dhe-modules.h
-        src/controllers/level-control.h)
+        )
 target_link_libraries(plugin
         PUBLIC -stdlib=libc++
         PUBLIC rack
