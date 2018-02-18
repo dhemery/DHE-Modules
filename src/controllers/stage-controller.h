@@ -1,10 +1,12 @@
 #ifndef DHE_MODULES_CONTROLLERS_STAGE_CONTROLLER_H
 #define DHE_MODULES_CONTROLLERS_STAGE_CONTROLLER_H
 
-#include <util/d-flip-flop.h>
-#include <util/ramp.h>
-#include <util/follower.h>
+#include "util/d-flip-flop.h"
+#include "util/ramp.h"
+#include "util/follower.h"
+#include "duration-control.h"
 #include "level-control.h"
+#include "shape-control.h"
 
 namespace DHE {
 
