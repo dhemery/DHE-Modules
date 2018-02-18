@@ -7,14 +7,13 @@
 namespace DHE {
 
 struct ModulatedControl {
-  ModulatedControl(
-      std::function<float()> rotation,
-      std::function<float()> cv = [] { return 0.f; })
-      : rotation{std::move(rotation)},
+  ModulatedControl(std::function<float()> normalized_input,
+                   std::function<float()> cv = [] { return 0.f; })
+      : rotation{std::move(normalized_input)},
         cv{std::move(cv)} {}
 
   float operator()() const {
-    return NORMAL.clamp(rotation() + cv() * 1e-1f);
+    return NORMAL.clamp(rotation() + cv()*1e-1f);
   }
 
   const std::function<float()> rotation;
