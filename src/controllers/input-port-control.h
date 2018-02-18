@@ -9,20 +9,14 @@ namespace DHE {
 static constexpr auto DEFAULT_INPUT_PORT_BUTTON = [] { return 0.f; };
 
 struct InputPortControl {
-  InputPortControl(std::function<float()> port)
-      : port{port},
-        button{DEFAULT_INPUT_PORT_BUTTON},
-        light{[](float) {}},
-        range{UNIPOLAR_CV} {}
+  explicit InputPortControl(std::function<float()> input)
+      : InputPortControl{std::move(input), DEFAULT_INPUT_PORT_BUTTON, [](float) {}, UNIPOLAR_CV} {}
 
   InputPortControl(std::function<float()> port, std::function<float()> button, std::function<void(float)> light)
-      : port{std::move(port)},
-        button{std::move(button)},
-        light{std::move(light)},
-        range{UNIPOLAR_CV} {}
+      : InputPortControl(std::move(port), std::move(button), std::move(light), UNIPOLAR_CV) {}
 
   InputPortControl(std::function<float()> port, std::function<float()> button, std::function<void(float)> light, Interval range)
-      : port{std::move(port)},
+      : input{std::move(port)},
         button{std::move(button)},
         light{std::move(light)},
         range{range} {}
@@ -30,10 +24,10 @@ struct InputPortControl {
   float operator()() const {
     float scaled_button = range.scale(button());
     light(scaled_button);
-    return range.clamp(std::max(port(), scaled_button));
+    return range.clamp(std::max(input(), scaled_button));
   }
 
-  const std::function<float()> port;
+  const std::function<float()> input;
   const std::function<float()> button;
   const std::function<void(float)> light;
   const Interval range;

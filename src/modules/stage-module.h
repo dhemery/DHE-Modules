@@ -15,11 +15,11 @@ struct StageModule : rack::Module {
     NUM_PARAMS
   };
   enum InputIds {
-    IN_INPUT, TRIG_INPUT, DEFER_INPUT,
+    STAGE_IN, TRIG_IN, DEFER_IN,
     NUM_INPUTS
   };
   enum OutputIds {
-    OUT_OUTPUT, EOC_OUTPUT, ACTIVE_OUTPUT,
+    STAGE_OUT, EOC_OUT, ACTIVE_OUT,
     NUM_OUTPUTS
   };
 
@@ -30,24 +30,22 @@ struct StageModule : rack::Module {
   StageModule()
       : Module{NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS},
         controller{
-            this,
+            [] { return rack::engineGetSampleTime(); },
             LevelControl{[this] { return params[LEVEL_KNOB].value; }},
             DurationControl{[this] { return params[DURATION_KNOB].value; }},
             ShapeControl{[this] { return params[SHAPE_KNOB].value; }},
-            InputPortControl{[this] { return inputs[DEFER_INPUT].value; }},
-            InputPortControl{[this] { return inputs[TRIG_INPUT].value; }},
-            InputPortControl{[this] { return inputs[IN_INPUT].value; }}
+            InputPortControl{[this] { return inputs[DEFER_IN].value; }},
+            InputPortControl{[this] { return inputs[TRIG_IN].value; }},
+            InputPortControl{[this] { return inputs[STAGE_IN].value; }},
+            OutputPortControl{[this](float f) { outputs[ACTIVE_OUT].value = f; }},
+            OutputPortControl{[this](float f) { outputs[EOC_OUT].value = f; }},
+            OutputPortControl{[this](float f) { outputs[STAGE_OUT].value = f; }}
         } {}
 
-  void send_eoc(float f) { outputs[EOC_OUTPUT].value = f; }
-  void send_stage(float f) { outputs[OUT_OUTPUT].value = f; }
-  void send_active(float f) { outputs[ACTIVE_OUTPUT].value = f; }
-
   void step() override { controller.step(); }
-  float sample_time() const { return rack::engineGetSampleTime(); }
 
 private:
-  StageController <StageModule> controller;
+  StageController controller;
 };
 }
 #endif

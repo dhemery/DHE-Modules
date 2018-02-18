@@ -28,15 +28,15 @@ StageWidget::StageWidget(rack::Module *module) : Widget(module, 4, "res/Stage.sv
   row_spacing = 15.f;
 
   row = 0;
-  install_input<rack::PJ301MPort>(StageModule::DEFER_INPUT, {left_x, top_row_y + row*row_spacing});
-  install_output<rack::PJ301MPort>(StageModule::ACTIVE_OUTPUT, {right_x, top_row_y + row*row_spacing});
+  install_input<rack::PJ301MPort>(StageModule::DEFER_IN, {left_x, top_row_y + row*row_spacing});
+  install_output<rack::PJ301MPort>(StageModule::ACTIVE_OUT, {right_x, top_row_y + row*row_spacing});
 
   row++;
-  install_input<rack::PJ301MPort>(StageModule::TRIG_INPUT, {left_x, top_row_y + row*row_spacing});
-  install_output<rack::PJ301MPort>(StageModule::EOC_OUTPUT, {right_x, top_row_y + row*row_spacing});
+  install_input<rack::PJ301MPort>(StageModule::TRIG_IN, {left_x, top_row_y + row*row_spacing});
+  install_output<rack::PJ301MPort>(StageModule::EOC_OUT, {right_x, top_row_y + row*row_spacing});
 
   row++;
-  install_input<rack::PJ301MPort>(StageModule::IN_INPUT, {left_x, top_row_y + row*row_spacing});
-  install_output<rack::PJ301MPort>(StageModule::OUT_OUTPUT, {right_x, top_row_y + row*row_spacing});
+  install_input<rack::PJ301MPort>(StageModule::STAGE_IN, {left_x, top_row_y + row*row_spacing});
+  install_output<rack::PJ301MPort>(StageModule::STAGE_OUT, {right_x, top_row_y + row*row_spacing});
 }
 }

@@ -1,39 +1,42 @@
 #ifndef DHE_MODULES_CONTROLLERS_STAGE_CONTROLLER_H
 #define DHE_MODULES_CONTROLLERS_STAGE_CONTROLLER_H
 
+#include <utility>
+
 #include "util/d-flip-flop.h"
 #include "util/ramp.h"
 #include "util/follower.h"
 #include "duration-control.h"
-#include "level-control.h"
-#include "shape-control.h"
 #include "input-port-control.h"
+#include "level-control.h"
+#include "output-port-control.h"
+#include "shape-control.h"
 
 namespace DHE {
 
-template<typename TModule>
 struct StageController {
   StageController(
-      TModule *module,
+      std::function<float()> sample_time,
       LevelControl level,
       DurationControl duration,
       ShapeControl shape,
       InputPortControl defer_in,
       InputPortControl trigger_in,
-      InputPortControl stage_in
+      InputPortControl stage_in,
+      OutputPortControl active_out,
+      OutputPortControl eoc_out,
+      OutputPortControl stage_out
   )
-      : module{module},
-        level{level},
-        duration{duration},
+      : level{level},
         shape{shape},
-        defer_in{defer_in},
-        trigger_in{trigger_in},
-        stage_in{stage_in},
-        defer_gate{[this] { return this->defer_in(); }},
-        end_of_cycle_pulse{1e-3, [this] { return sample_time(); }},
-        envelope_ramp{[this] { return this->duration(); }, [this] { return sample_time(); }},
-        envelope_trigger{[this] { return this->trigger_in(); }},
-        stage_input_follower{[this] { return this->stage_in(); }} {
+        send_active{active_out},
+        send_eoc{eoc_out},
+        send_stage{stage_out},
+        defer_gate{defer_in},
+        end_of_cycle_pulse{1e-3, sample_time},
+        envelope_ramp{duration, sample_time},
+        envelope_trigger{trigger_in},
+        stage_input_follower{stage_in} {
     defer_gate.on_rising_edge([this] { defer(); });
     defer_gate.on_falling_edge([this] { resume(); });
 
@@ -48,28 +51,22 @@ struct StageController {
     envelope_trigger.step();
     end_of_cycle_pulse.step();
 
-    module->send_stage(stage_out());
-    module->send_eoc(eoc_out());
-    module->send_active(active_out());
+    send_active(UNIPOLAR_CV.scale(is_active()));
+    send_eoc(UNIPOLAR_CV.scale(end_of_cycle_pulse.is_active()));
+    send_stage(defer_gate.is_high() ? stage_input_follower.value() : envelope_voltage());
   }
 
 private:
-  TModule *module;
   LevelControl level;
-  DurationControl duration;
   ShapeControl shape;
-  InputPortControl defer_in;
-  InputPortControl trigger_in;
-  InputPortControl stage_in;
+  OutputPortControl send_active;
+  OutputPortControl send_eoc;
+  OutputPortControl send_stage;
   DFlipFlop defer_gate;
   Ramp end_of_cycle_pulse;
   Ramp envelope_ramp;
   DFlipFlop envelope_trigger;
   Follower stage_input_follower;
-
-  float active_out() const { return UNIPOLAR_CV.scale(is_active()); }
-  float eoc_out() const { return UNIPOLAR_CV.scale(end_of_cycle_pulse.is_active()); }
-  float stage_out() const { return defer_gate.is_high() ? stage_input_follower.value() : envelope_voltage(); }
 
   void defer() {
     envelope_trigger.suspend_firing();
@@ -93,8 +90,6 @@ private:
   }
 
   bool is_active() const { return defer_gate.is_high() || envelope_ramp.is_active(); }
-
-  float sample_time() const { return module->sample_time(); }
 };
 
 }

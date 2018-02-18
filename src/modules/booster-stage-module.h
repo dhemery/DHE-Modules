@@ -1,5 +1,4 @@
-#ifndef DHE_MODULES_MODULES_BOOSTER_STAGE_MODULE_H
-#define DHE_MODULES_MODULES_BOOSTER_STAGE_MODULE_H
+#pragma once
 
 #include <engine.hpp>
 #include <controllers/duration-control.h>
@@ -17,12 +16,12 @@ struct BoosterStageModule : rack::Module {
     NUM_PARAMS
   };
   enum InputIds {
-    IN_INPUT, TRIG_INPUT, DEFER_INPUT,
+    STAGE_IN, TRIG_IN, DEFER_IN,
     LEVEL_CV, DURATION_CV, SHAPE_CV,
     NUM_INPUTS
   };
   enum OutputIds {
-    OUT_OUTPUT, EOC_OUTPUT, ACTIVE_OUTPUT,
+    STAGE_OUT, EOC_OUT, ACTIVE_OUT,
     NUM_OUTPUTS
   };
 
@@ -34,7 +33,7 @@ struct BoosterStageModule : rack::Module {
   BoosterStageModule()
       : Module{NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS},
         controller{
-            this,
+            [] { return rack::engineGetSampleTime(); },
             LevelControl{
                 [this] { return params[LEVEL_KNOB].value; },
                 [this] { return inputs[LEVEL_CV].value; },
@@ -51,29 +50,32 @@ struct BoosterStageModule : rack::Module {
                 [this] { return params[SHAPE_SWITCH].value; }
             },
             InputPortControl{
-                [this] { return inputs[DEFER_INPUT].value; },
+                [this] { return inputs[DEFER_IN].value; },
                 [this] { return params[DEFER_BUTTON].value; },
-                [this] (float f) { lights[DEFER_BUTTON_LIGHT].value = f; }
+                [this](float f) { lights[DEFER_BUTTON_LIGHT].value = f; }
             },
             InputPortControl{
-                [this] { return inputs[TRIG_INPUT].value; },
+                [this] { return inputs[TRIG_IN].value; },
                 [this] { return params[TRIG_BUTTON].value; },
-                [this] (float f) { lights[TRIG_BUTTON_LIGHT].value = f; }
+                [this](float f) { lights[TRIG_BUTTON_LIGHT].value = f; }
             },
-            InputPortControl{[this] { return inputs[IN_INPUT].value; }}
+            InputPortControl{[this] { return inputs[STAGE_IN].value; }},
+            OutputPortControl{
+                [this](float f) { outputs[ACTIVE_OUT].value = f; },
+                [this] { return params[ACTIVE_BUTTON].value; },
+                [this](float f) { lights[ACTIVE_BUTTON_LIGHT].value = f; }
+            },
+            OutputPortControl{
+                [this](float f) { outputs[EOC_OUT].value = f; },
+                [this] { return params[EOC_BUTTON].value; },
+                [this](float f) { lights[EOC_BUTTON_LIGHT].value = f; }
+            },
+            OutputPortControl{[this](float f) { outputs[STAGE_OUT].value = f; }}
         } {}
 
-  float stage_in() const { return inputs[IN_INPUT].value; }
-
-  void send_eoc(float f) { outputs[EOC_OUTPUT].value = f; }
-  void send_stage(float f) { outputs[OUT_OUTPUT].value = f; }
-  void send_active(float f) { outputs[ACTIVE_OUTPUT].value = f; }
-
-  float sample_time() const { return rack::engineGetSampleTime(); }
   void step() override { controller.step(); }
 
 private:
-  StageController<BoosterStageModule> controller;
+  StageController controller;
 };
 }
-#endif
