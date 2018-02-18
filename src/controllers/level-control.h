@@ -3,6 +3,7 @@
 
 #include <functional>
 #include <util/interval.h>
+#include <util/modulation.h>
 
 namespace DHE {
 
@@ -16,7 +17,7 @@ struct LevelControl {
 
   float operator()() const {
     auto range = range_switch() < 0.5 ? BIPOLAR_CV : UNIPOLAR_CV;
-    return range.scale(rotation()) + cv();
+    return range.scale(modulated(rotation(), cv()));
   }
 
   const std::function<float()> rotation;
