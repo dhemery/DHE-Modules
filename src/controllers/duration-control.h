@@ -7,7 +7,7 @@
 #include "modulated-control.h"
 
 namespace DHE {
-static constexpr auto MEDIUM_DURATION_MAX = 1.0f;
+static constexpr auto MEDIUM_DURATION_MAX = 10.0f;
 static constexpr auto DURATION_KNOB_MAX_TO_MIN_RATIO = 1000.f;
 static constexpr auto MEDIUM_DURATION_MIN = MEDIUM_DURATION_MAX/DURATION_KNOB_MAX_TO_MIN_RATIO;
 static constexpr auto MEDIUM_DURATION = Interval{MEDIUM_DURATION_MIN, MEDIUM_DURATION_MAX};

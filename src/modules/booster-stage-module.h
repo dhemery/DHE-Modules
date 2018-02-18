@@ -3,9 +3,10 @@
 
 #include <engine.hpp>
 #include <controllers/duration-control.h>
+#include "controllers/level-control.h"
+#include "controllers/input-port-control.h"
 #include <controllers/shape-control.h>
 #include "controllers/stage-controller.h"
-#include "controllers/level-control.h"
 
 namespace DHE {
 struct BoosterStageModule : rack::Module {
@@ -48,7 +49,13 @@ struct BoosterStageModule : rack::Module {
                 [this] { return params[SHAPE_KNOB].value; },
                 [this] { return inputs[SHAPE_CV].value; },
                 [this] { return params[SHAPE_SWITCH].value; }
-            }} {}
+            },
+            InputPortControl{
+                [this] { return inputs[TRIG_INPUT].value; },
+                [this] { return params[TRIG_BUTTON].value; },
+                [this] (float f) { lights[TRIG_BUTTON_LIGHT].value = f; }
+            }
+        } {}
 
   float defer_in() const { return inputs[DEFER_INPUT].value; }
   float trigger_in() const { return inputs[TRIG_INPUT].value; }

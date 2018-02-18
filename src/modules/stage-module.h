@@ -3,6 +3,7 @@
 
 #include <engine.hpp>
 #include "controllers/duration-control.h"
+#include "controllers/input-port-control.h"
 #include "controllers/level-control.h"
 #include "controllers/shape-control.h"
 #include "controllers/stage-controller.h"
@@ -28,10 +29,13 @@ struct StageModule : rack::Module {
 
   StageModule()
       : Module{NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS},
-        controller{this,
-                   LevelControl{[this] { return params[LEVEL_KNOB].value; }},
-                   DurationControl{[this] { return params[DURATION_KNOB].value; }},
-                   ShapeControl{[this] { return params[SHAPE_KNOB].value; }}} {}
+        controller{
+            this,
+            LevelControl{[this] { return params[LEVEL_KNOB].value; }},
+            DurationControl{[this] { return params[DURATION_KNOB].value; }},
+            ShapeControl{[this] { return params[SHAPE_KNOB].value; }},
+            InputPortControl{[this] { return inputs[TRIG_INPUT].value; }}
+        } {}
 
   float defer_in() { return inputs[DEFER_INPUT].value; }
   float trigger_in() { return inputs[TRIG_INPUT].value; }
