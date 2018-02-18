@@ -6,14 +6,17 @@
 #include <engine.hpp>
 #include "util/interval.h"
 #include "controllers/upstage-controller.h"
-#include "level-control.h"
+#include "controllers/level-control.h"
 
 namespace DHE {
 
 struct UpstageModule : rack::Module {
   UpstageModule()
       : rack::Module{NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS},
-        level{this, LEVEL_KNOB, LEVEL_CV_INPUT},
+        level{
+            [this] { return params[LEVEL_KNOB].value; },
+            [this] { return inputs[LEVEL_CV_INPUT].value; }
+        },
         controller{this} {}
 
   enum ParamIds {
@@ -33,7 +36,7 @@ struct UpstageModule : rack::Module {
     NUM_LIGHTS
   };
 
-  ModulatedLevelControl<UpstageModule> level;
+  LevelControl level;
 
   void send_trigger(float f) { outputs[TRIG_OUTPUT].value = f; }
   void send_level(float f) { outputs[OUT_OUTPUT].value = f; }
