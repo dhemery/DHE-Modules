@@ -35,7 +35,7 @@ add_library(plugin SHARED
         src/util/sigmoid.h
         src/plugin/dhe-modules.cpp
         src/plugin/dhe-modules.h
-        )
+        src/modules/level-control.h)
 target_link_libraries(plugin
         PUBLIC -stdlib=libc++
         PUBLIC rack

@@ -3,6 +3,7 @@
 
 #include <engine.hpp>
 #include "controllers/stage-controller.h"
+#include "level-control.h"
 
 namespace DHE {
 struct BoosterStageModule : rack::Module {
@@ -29,12 +30,10 @@ struct BoosterStageModule : rack::Module {
 
   BoosterStageModule()
       : Module{NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS},
+        level{this, LEVEL_KNOB, LEVEL_CV, LEVEL_SWITCH, BIPOLAR_CV, UNIPOLAR_CV},
         controller{this} {}
 
-  float level() const {
-    Interval level_range = level_switch () > 0.1f ? UNIPOLAR_CV : BIPOLAR_CV;
-    return level_range.scale(level_knob());
-  }
+  ScalableLevelControl<BoosterStageModule> level;
 
   float duration() const {
     static constexpr float curvature{0.8f};

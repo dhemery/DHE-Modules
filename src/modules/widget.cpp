@@ -33,13 +33,6 @@ void Widget::install_screws() {
   auto left{std::min(width()/4.f, max_screw_inset)};
   auto right{width() - left};
 
-  rack::debug("width  %f", width());
-  rack::debug("height %f", height());
-  rack::debug("top    %f", top);
-  rack::debug("right  %f", right);
-  rack::debug("bottom %f", bottom);
-  rack::debug("left   %f", left);
-
   auto screw_positions = std::vector<rack::Vec>{
       {left, top},
       {left, bottom},

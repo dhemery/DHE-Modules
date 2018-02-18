@@ -3,6 +3,7 @@
 
 #include <engine.hpp>
 #include "controllers/stage-controller.h"
+#include "level-control.h"
 
 namespace DHE {
 struct StageModule : rack::Module {
@@ -25,10 +26,11 @@ struct StageModule : rack::Module {
 
   StageModule()
       : Module{NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS},
+        level{this, LEVEL_KNOB},
         controller{this} {}
 
 
-  float level() const { return UNIPOLAR_CV.scale(level_knob()); }
+  LevelControl<StageModule> level;
 
   float duration() const {
     static constexpr float curvature{0.8f}; // Gives ~1s at center position
@@ -59,7 +61,6 @@ struct StageModule : rack::Module {
 private:
   StageController<StageModule> controller;
   float duration_knob() const { return params[DURATION_KNOB].value; }
-  float level_knob() const { return params[LEVEL_KNOB].value; }
   float shape_knob() const { return params[SHAPE_KNOB].value; }
 };
 }
