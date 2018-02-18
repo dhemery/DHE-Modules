@@ -59,7 +59,8 @@ struct BoosterStageModule : rack::Module {
                 [this] { return inputs[TRIG_INPUT].value; },
                 [this] { return params[TRIG_BUTTON].value; },
                 [this] (float f) { lights[TRIG_BUTTON_LIGHT].value = f; }
-            }
+            },
+            InputPortControl{[this] { return inputs[IN_INPUT].value; }}
         } {}
 
   float stage_in() const { return inputs[IN_INPUT].value; }

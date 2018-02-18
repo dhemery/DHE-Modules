@@ -13,13 +13,14 @@ namespace DHE {
 
 template<typename TModule>
 struct StageController {
-  explicit StageController(
+  StageController(
       TModule *module,
       LevelControl level,
       DurationControl duration,
       ShapeControl shape,
       InputPortControl defer_in,
-      InputPortControl trigger_in
+      InputPortControl trigger_in,
+      InputPortControl stage_in
   )
       : module{module},
         level{level},
@@ -27,11 +28,12 @@ struct StageController {
         shape{shape},
         defer_in{defer_in},
         trigger_in{trigger_in},
+        stage_in{stage_in},
         defer_gate{[this] { return this->defer_in(); }},
         end_of_cycle_pulse{1e-3, [this] { return sample_time(); }},
         envelope_ramp{[this] { return this->duration(); }, [this] { return sample_time(); }},
         envelope_trigger{[this] { return this->trigger_in(); }},
-        stage_input_follower{[this] { return stage_in(); }} {
+        stage_input_follower{[this] { return this->stage_in(); }} {
     defer_gate.on_rising_edge([this] { defer(); });
     defer_gate.on_falling_edge([this] { resume(); });
 
@@ -58,13 +60,12 @@ private:
   ShapeControl shape;
   InputPortControl defer_in;
   InputPortControl trigger_in;
+  InputPortControl stage_in;
   DFlipFlop defer_gate;
   Ramp end_of_cycle_pulse;
   Ramp envelope_ramp;
   DFlipFlop envelope_trigger;
   Follower stage_input_follower;
-
-  float stage_in() const { return module->stage_in(); }
 
   float active_out() const { return UNIPOLAR_CV.scale(is_active()); }
   float eoc_out() const { return UNIPOLAR_CV.scale(end_of_cycle_pulse.is_active()); }
