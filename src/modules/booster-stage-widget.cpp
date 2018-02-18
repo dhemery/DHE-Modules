@@ -11,6 +11,8 @@ BoosterStageWidget::BoosterStageWidget(rack::Module *module) : Widget(module, 8,
   auto left_x{7.f};
   auto center_x{widget_right_edge / 2.f};
   auto right_x{widget_right_edge - left_x};
+  auto center_left_x = left_x + (right_x - left_x) / 3.f;
+  auto center_right_x = right_x - (right_x - left_x) / 3.f;
 
   auto top_row_y{25.f};
   auto row_spacing{18.5f};
@@ -35,10 +37,18 @@ BoosterStageWidget::BoosterStageWidget(rack::Module *module) : Widget(module, 8,
 
   row = 0;
   install_input<rack::PJ301MPort>(BoosterStageModule::DEFER_INPUT, {left_x, top_row_y + row*row_spacing});
+  install_button<rack::LEDButton>(BoosterStageModule::DEFER_BUTTON, {center_left_x, top_row_y + row*row_spacing});
+  install_light<rack::MediumLight<rack::GreenLight>>(BoosterStageModule::DEFER_BUTTON_LIGHT, {center_left_x, top_row_y + row*row_spacing});
+  install_button<rack::LEDButton>(BoosterStageModule::ACTIVE_BUTTON, {center_right_x, top_row_y + row*row_spacing});
+  install_light<rack::MediumLight<rack::GreenLight>>(BoosterStageModule::ACTIVE_BUTTON_LIGHT, {center_right_x, top_row_y + row*row_spacing});
   install_output<rack::PJ301MPort>(BoosterStageModule::ACTIVE_OUTPUT, {right_x, top_row_y + row*row_spacing});
 
   row++;
   install_input<rack::PJ301MPort>(BoosterStageModule::TRIG_INPUT, {left_x, top_row_y + row*row_spacing});
+  install_button<rack::LEDButton>(BoosterStageModule::TRIG_BUTTON, {center_left_x, top_row_y + row*row_spacing});
+  install_light<rack::MediumLight<rack::GreenLight>>(BoosterStageModule::TRIG_BUTTON_LIGHT, {center_left_x, top_row_y + row*row_spacing});
+  install_button<rack::LEDButton>(BoosterStageModule::EOC_BUTTON, {center_right_x, top_row_y + row*row_spacing});
+  install_light<rack::MediumLight<rack::GreenLight>>(BoosterStageModule::EOC_BUTTON_LIGHT, {center_right_x, top_row_y + row*row_spacing});
   install_output<rack::PJ301MPort>(BoosterStageModule::EOC_OUTPUT, {right_x, top_row_y + row*row_spacing});
 
   row++;

@@ -9,6 +9,7 @@ struct BoosterStageModule : rack::Module {
   enum ParamIds {
     DURATION_KNOB, LEVEL_KNOB, SHAPE_KNOB,
     LEVEL_SWITCH, SHAPE_SWITCH, DURATION_SWITCH,
+    DEFER_BUTTON, TRIG_BUTTON, ACTIVE_BUTTON, EOC_BUTTON,
     NUM_PARAMS
   };
   enum InputIds {
@@ -22,6 +23,7 @@ struct BoosterStageModule : rack::Module {
   };
 
   enum LightIds {
+    DEFER_BUTTON_LIGHT, TRIG_BUTTON_LIGHT, ACTIVE_BUTTON_LIGHT, EOC_BUTTON_LIGHT,
     NUM_LIGHTS
   };
 
