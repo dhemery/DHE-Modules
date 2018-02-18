@@ -46,7 +46,7 @@ private:
   float duration() const { return module->duration(); }
   float level() const { return module->level(); }
   float shape() const { return module->shape(); }
-  Interval shape_range() const { return module->shape_range(); }
+  Interval shape_range() const { return module->shape.range(); }
 
   float defer_in() const { return module->defer_in(); }
   float stage_in() const { return module->stage_in(); }

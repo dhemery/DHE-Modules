@@ -2,6 +2,8 @@
 #define DHE_MODULES_MODULES_BOOSTER_STAGE_MODULE_H
 
 #include <engine.hpp>
+#include <controllers/duration-control.h>
+#include <controllers/shape-control.h>
 #include "controllers/stage-controller.h"
 #include "controllers/level-control.h"
 
@@ -33,43 +35,27 @@ struct BoosterStageModule : rack::Module {
         level{
             [this] { return params[LEVEL_KNOB].value; },
             [this] { return inputs[LEVEL_CV].value; },
-            [this] { return params[LEVEL_SWITCH].value > 0.5f; }
-
+            [this] { return params[LEVEL_SWITCH].value > 0.5f ? UNIPOLAR_CV : BIPOLAR_CV; }
+        },
+        duration{
+            [this] { return params[DURATION_KNOB].value; },
+            [this] { return inputs[DURATION_CV].value; },
+            [this] {
+              auto duration_switch{params[DURATION_SWITCH].value};
+              return duration_switch < 0.5f ? SHORT_DURATION :
+                     duration_switch < 1.5f ? MEDIUM_DURATION : LONG_DURATION;
+            }
+        },
+        shape{
+            [this] { return params[SHAPE_KNOB].value; },
+            [this] { return inputs[SHAPE_CV].value; },
+            [this] { return params[SHAPE_SWITCH].value < 0.5f ? 0 : 1; }
         },
         controller{this} {}
 
   LevelControl level;
-
-  float duration() const {
-    static constexpr float curvature{0.8f};
-
-    return duration_range().scale(sigmoid(duration_knob(), curvature));
-  }
-
-  Interval duration_range() const {
-    static constexpr auto short_duration = Interval{1e-4, 1.f};
-    static constexpr auto medium_scale = 10.f;
-    static constexpr auto long_scale = 100.f;
-    static constexpr auto medium_duration = Interval{short_duration.lower_bound * medium_scale, short_duration.upper_bound * medium_scale};
-    static constexpr auto long_duration = Interval{short_duration.lower_bound * long_scale, short_duration.upper_bound * long_scale};
-    if (duration_switch() < 0.2f) {
-      return short_duration;
-    } else if (duration_switch() > 1.8f) {
-      return long_duration;
-    }
-    return medium_duration;
-  }
-
-  float shape() const {
-    static constexpr float shape_curvature{-0.65f};
-    auto factor{shape_switch() < 0.5 ? 1.f : -1.f};
-
-    return factor * sigmoid(BIPOLAR_NORMAL.scale(shape_knob()), shape_curvature);
-  }
-
-  Interval shape_range() const {
-    return shape_switch() < 0.5f ? NORMAL : BIPOLAR_NORMAL.invert();
-  }
+  DurationControl duration;
+  ShapeControl shape;
 
   float defer_in() const { return inputs[DEFER_INPUT].value; }
   float trigger_in() const { return inputs[TRIG_INPUT].value; }
@@ -84,18 +70,6 @@ struct BoosterStageModule : rack::Module {
 
 private:
   StageController<BoosterStageModule> controller;
-
-  float level_knob() const { return params[LEVEL_KNOB].value; }
-  float level_cv() const { return inputs[LEVEL_CV].value; }
-  float level_switch() const { return params[LEVEL_SWITCH].value; }
-
-  float duration_knob() const { return params[DURATION_KNOB].value; }
-  float duration_cv() const { return inputs[DURATION_CV].value; }
-  float duration_switch() const { return params[DURATION_SWITCH].value; }
-
-  float shape_knob() const { return params[SHAPE_KNOB].value; }
-  float shape_cv() const { return inputs[SHAPE_CV].value; }
-  float shape_switch() const { return params[SHAPE_SWITCH].value; }
 };
 }
 #endif

@@ -6,7 +6,7 @@
 namespace DHE {
 
 struct BoosterStageWidget : public Widget {
-  BoosterStageWidget(rack::Module *module);
+  explicit BoosterStageWidget(rack::Module *module);
 };
 }
 #endif

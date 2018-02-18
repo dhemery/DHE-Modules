@@ -2,8 +2,10 @@
 #define DHE_MODULES_MODULES_STAGE_MODULE_H
 
 #include <engine.hpp>
-#include "controllers/stage-controller.h"
+#include "controllers/duration-control.h"
 #include "controllers/level-control.h"
+#include "controllers/shape-control.h"
+#include "controllers/stage-controller.h"
 
 namespace DHE {
 struct StageModule : rack::Module {
@@ -27,25 +29,14 @@ struct StageModule : rack::Module {
   StageModule()
       : Module{NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS},
         level{[this] { return params[LEVEL_KNOB].value; }},
+        duration{[this] { return params[DURATION_KNOB].value; }},
+        shape{[this] { return params[SHAPE_KNOB].value; }},
         controller{this} {}
 
 
   LevelControl level;
-
-  float duration() const {
-    static constexpr float curvature{0.8f}; // Gives ~1s at center position
-    static constexpr Interval duration_knob_range{1e-3, 10.0f};
-
-    return duration_knob_range.scale(sigmoid(duration_knob(), curvature));
-  }
-
-  float shape() const {
-    static constexpr float shape_curvature{-0.65f};
-
-    return sigmoid(BIPOLAR_NORMAL.scale(shape_knob()), shape_curvature);
-  }
-
-  Interval shape_range() const { return NORMAL; }
+  DurationControl duration;
+  ShapeControl shape;
 
   float defer_in() { return inputs[DEFER_INPUT].value; }
   float trigger_in() { return inputs[TRIG_INPUT].value; }
@@ -60,8 +51,6 @@ struct StageModule : rack::Module {
 
 private:
   StageController<StageModule> controller;
-  float duration_knob() const { return params[DURATION_KNOB].value; }
-  float shape_knob() const { return params[SHAPE_KNOB].value; }
 };
 }
 #endif

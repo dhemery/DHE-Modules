@@ -13,6 +13,7 @@ target_compile_features(rack INTERFACE cxx_std_11)
 target_compile_options(rack INTERFACE -stdlib=libc++)
 
 add_library(plugin SHARED
+        src/controllers/duration-control.h
         src/controllers/level-control.h
         src/controllers/stage-controller.h
         src/controllers/upstage-controller.h

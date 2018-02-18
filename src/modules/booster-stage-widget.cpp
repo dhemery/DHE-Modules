@@ -20,7 +20,7 @@ BoosterStageWidget::BoosterStageWidget(rack::Module *module) : Widget(module, 8,
   auto row{0};
   install_input<rack::PJ301MPort>(BoosterStageModule::LEVEL_CV, {left_x, top_row_y + row*row_spacing});
   install_knob<rack::RoundBlackKnob>(BoosterStageModule::LEVEL_KNOB, {center_x, top_row_y + row*row_spacing});
-  install_switch<rack::CKSS>(BoosterStageModule::LEVEL_SWITCH, {right_x, top_row_y + row*row_spacing});
+  install_switch<rack::CKSS>(BoosterStageModule::LEVEL_SWITCH, {right_x, top_row_y + row*row_spacing}, 1, 1);
 
   row++;
   install_input<rack::PJ301MPort>(BoosterStageModule::SHAPE_CV, {left_x, top_row_y + row*row_spacing});
