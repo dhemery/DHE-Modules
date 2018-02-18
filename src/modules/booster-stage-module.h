@@ -30,7 +30,7 @@ struct BoosterStageModule : rack::Module {
 
   BoosterStageModule()
       : Module{NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS},
-        level{this, LEVEL_KNOB, LEVEL_CV, LEVEL_SWITCH, BIPOLAR_CV, UNIPOLAR_CV},
+        level{this, LEVEL_KNOB, LEVEL_CV, LEVEL_SWITCH},
         controller{this} {}
 
   ScalableLevelControl<BoosterStageModule> level;
@@ -49,7 +49,7 @@ struct BoosterStageModule : rack::Module {
     static constexpr auto long_duration = Interval{short_duration.lower_bound * long_scale, short_duration.upper_bound * long_scale};
     if (duration_switch() < 0.2f) {
       return short_duration;
-    } else if (duration_switch() > 0.8f) {
+    } else if (duration_switch() > 1.8f) {
       return long_duration;
     }
     return medium_duration;
@@ -57,16 +57,18 @@ struct BoosterStageModule : rack::Module {
 
   float shape() const {
     static constexpr float shape_curvature{-0.65f};
+    auto factor{shape_switch() < 0.5 ? 1.f : -1.f};
 
-    return sigmoid(BIPOLAR_NORMAL.scale(shape_knob()), shape_curvature);
+    return factor * sigmoid(BIPOLAR_NORMAL.scale(shape_knob()), shape_curvature);
   }
 
-  Interval shape_range() const { return shape_switch() < 0.2f ? NORMAL : BIPOLAR_NORMAL; }
+  Interval shape_range() const {
+    return shape_switch() < 0.5f ? NORMAL : BIPOLAR_NORMAL.invert();
+  }
 
   float defer_in() const { return inputs[DEFER_INPUT].value; }
   float trigger_in() const { return inputs[TRIG_INPUT].value; }
   float stage_in() const { return inputs[IN_INPUT].value; }
-
 
   void send_eoc(float f) { outputs[EOC_OUTPUT].value = f; }
   void send_stage(float f) { outputs[OUT_OUTPUT].value = f; }

@@ -33,7 +33,7 @@ struct UpstageModule : rack::Module {
     NUM_LIGHTS
   };
 
-  CVLevelControl<UpstageModule> level;
+  ModulatedLevelControl<UpstageModule> level;
 
   void send_trigger(float f) { outputs[TRIG_OUTPUT].value = f; }
   void send_level(float f) { outputs[OUT_OUTPUT].value = f; }

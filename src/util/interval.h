@@ -32,6 +32,14 @@ struct Interval {
       return upper_bound;
     return f;
   }
+
+  float center() const {
+    return lower_bound + (upper_bound - lower_bound) * 0.5f;
+  }
+
+  Interval invert() const {
+    return {upper_bound, lower_bound};
+  }
 };
 
 constexpr auto NORMAL = Interval{0.0f, 1.0f};
