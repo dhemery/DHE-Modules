@@ -13,11 +13,13 @@ namespace DHE {
 struct UpstageModule : rack::Module {
   UpstageModule()
       : rack::Module{NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS},
-        level{
-            [this] { return params[LEVEL_KNOB].value; },
-            [this] { return inputs[LEVEL_CV_INPUT].value; }
-        },
-        controller{this} {}
+        controller{
+            this,
+            LevelControl{
+                [this] { return params[LEVEL_KNOB].value; },
+                [this] { return inputs[LEVEL_CV_INPUT].value; }
+            }
+        } {}
 
   enum ParamIds {
     LEVEL_KNOB, TRIG_BUTTON, WAIT_BUTTON,
@@ -35,8 +37,6 @@ struct UpstageModule : rack::Module {
     TRIG_BUTTON_LIGHT, WAIT_BUTTON_LIGHT,
     NUM_LIGHTS
   };
-
-  LevelControl level;
 
   void send_trigger(float f) { outputs[TRIG_OUTPUT].value = f; }
   void send_level(float f) { outputs[OUT_OUTPUT].value = f; }

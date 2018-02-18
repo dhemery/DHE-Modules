@@ -2,14 +2,18 @@
 #define DHE_MODULES_CONTROLLERS_UPSTAGE_CONTROLLER_H
 
 #include <algorithm>
+#include <utility>
 
 #include "util/interval.h"
+#include "controllers/level-control.h"
 
 namespace DHE {
 
 template<typename TModule>
-struct UpstageController{
-  explicit UpstageController(TModule *module) : module{module}{}
+struct UpstageController {
+  explicit UpstageController(TModule *module, LevelControl level)
+      : module{module},
+        level{std::move(level)} {}
 
   void step() {
     module->send_trigger(trigger_out_voltage());
@@ -18,8 +22,7 @@ struct UpstageController{
 
 private:
   TModule *module;
-
-  float level() const { return module->level(); }
+  LevelControl level;
 
   float trigger_in() const { return module->trigger_in(); }
 
