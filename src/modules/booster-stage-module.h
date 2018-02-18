@@ -51,14 +51,17 @@ struct BoosterStageModule : rack::Module {
                 [this] { return params[SHAPE_SWITCH].value; }
             },
             InputPortControl{
+                [this] { return inputs[DEFER_INPUT].value; },
+                [this] { return params[DEFER_BUTTON].value; },
+                [this] (float f) { lights[DEFER_BUTTON_LIGHT].value = f; }
+            },
+            InputPortControl{
                 [this] { return inputs[TRIG_INPUT].value; },
                 [this] { return params[TRIG_BUTTON].value; },
                 [this] (float f) { lights[TRIG_BUTTON_LIGHT].value = f; }
             }
         } {}
 
-  float defer_in() const { return inputs[DEFER_INPUT].value; }
-  float trigger_in() const { return inputs[TRIG_INPUT].value; }
   float stage_in() const { return inputs[IN_INPUT].value; }
 
   void send_eoc(float f) { outputs[EOC_OUTPUT].value = f; }

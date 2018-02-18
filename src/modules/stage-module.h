@@ -34,11 +34,10 @@ struct StageModule : rack::Module {
             LevelControl{[this] { return params[LEVEL_KNOB].value; }},
             DurationControl{[this] { return params[DURATION_KNOB].value; }},
             ShapeControl{[this] { return params[SHAPE_KNOB].value; }},
+            InputPortControl{[this] { return inputs[DEFER_INPUT].value; }},
             InputPortControl{[this] { return inputs[TRIG_INPUT].value; }}
         } {}
 
-  float defer_in() { return inputs[DEFER_INPUT].value; }
-  float trigger_in() { return inputs[TRIG_INPUT].value; }
   float stage_in() { return inputs[IN_INPUT].value; }
 
   void send_eoc(float f) { outputs[EOC_OUTPUT].value = f; }
