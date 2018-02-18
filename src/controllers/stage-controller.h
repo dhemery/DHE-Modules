@@ -45,8 +45,7 @@ private:
 
   float duration() const { return module->duration(); }
   float level() const { return module->level(); }
-  float shape() const { return module->shape(); }
-  Interval shape_range() const { return module->shape.range(); }
+  float shape(float x) const { return module->shape(x); }
 
   float defer_in() const { return module->defer_in(); }
   float stage_in() const { return module->stage_in(); }
@@ -73,10 +72,8 @@ private:
   }
 
   float envelope_voltage() const {
-    const Interval &range = shape_range();
-    auto shaped{sigmoid(range.scale(envelope_ramp.phase()), shape())};
-
-    return Interval::scale(range.normalize(shaped), stage_input_follower.value(), level());
+    auto range = Interval{stage_input_follower.value(), level()};
+    return range.scale(shape(envelope_ramp.phase()));
   }
 
   bool is_active() const { return defer_gate.is_high() || envelope_ramp.is_active(); }

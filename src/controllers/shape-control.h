@@ -9,21 +9,20 @@ namespace DHE {
 
 struct ShapeControl {
   ShapeControl(std::function<float()> rotation,
-                  std::function<float()> cv = [] { return 0.f; },
-                  std::function<int()> inflections = []() { return 0; })
+               std::function<float()> cv = [] { return 0.f; },
+               std::function<int()> inflections = []() { return 0; })
       : rotation{std::move(rotation)},
         cv{std::move(cv)},
         inflections{std::move(inflections)} {}
 
-  float operator()() const {
-    static constexpr float shape_curvature{-0.65f};
-    auto factor{inflections() == 0 ? 1.f : -1.f};
-
-    return factor * sigmoid(BIPOLAR_NORMAL.scale(rotation()), shape_curvature);
-  }
-
-  Interval range() const {
-    return inflections() == 0 ? NORMAL : BIPOLAR_NORMAL;
+  float operator()(float x) const {
+    static constexpr auto shape_curvature{-0.65f};
+    auto is_sigmoid = inflections() == 1;
+    auto sign{is_sigmoid ? -1.f : 1.f};
+    auto k = sign * sigmoid(BIPOLAR_NORMAL.scale(rotation()), shape_curvature);
+    auto range = is_sigmoid ? BIPOLAR_NORMAL : NORMAL;
+    auto shaped{sigmoid(range.scale(x), k)};
+    return range.normalize(shaped);
   }
 
   const std::function<float()> rotation;
