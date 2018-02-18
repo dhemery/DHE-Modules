@@ -7,26 +7,34 @@
 #include "modulated-control.h"
 
 namespace DHE {
-
-constexpr auto SHORT_DURATION = Interval{1e-4, 1.0f};
-constexpr auto MEDIUM_DURATION = Interval{SHORT_DURATION.lower_bound*10.f, SHORT_DURATION.upper_bound*10.f};
-constexpr auto LONG_DURATION = Interval{SHORT_DURATION.lower_bound*100.f, SHORT_DURATION.upper_bound*100.f};
+static constexpr auto MEDIUM_DURATION_MAX = 1.0f;
+static constexpr auto DURATION_KNOB_MAX_TO_MIN_RATIO = 1000.f;
+static constexpr auto MEDIUM_DURATION_MIN = MEDIUM_DURATION_MAX/DURATION_KNOB_MAX_TO_MIN_RATIO;
+static constexpr auto MEDIUM_DURATION = Interval{MEDIUM_DURATION_MIN, MEDIUM_DURATION_MAX};
+static constexpr auto DURATION_SCALE_STEP = 10.f;
+static constexpr auto SHORT_DURATION = Interval{MEDIUM_DURATION_MIN/DURATION_SCALE_STEP, MEDIUM_DURATION_MAX/DURATION_SCALE_STEP};
+static constexpr auto LONG_DURATION = Interval{MEDIUM_DURATION_MIN*DURATION_SCALE_STEP, MEDIUM_DURATION_MAX*DURATION_SCALE_STEP};
+static constexpr auto DURATION_KNOB_CURVATURE = 0.8f; // Yields ~1/10 of max at center position
+static constexpr auto DEFAULT_DURATION_RANGE_SWITCH = [] { return 1.f; };
 
 struct DurationControl {
+  explicit DurationControl(std::function<float()> rotation)
+      : modulated_rotation{std::move(rotation)},
+        range_switch{DEFAULT_DURATION_RANGE_SWITCH} {}
+
   DurationControl(std::function<float()> rotation,
-                  std::function<float()> cv = [] { return 0.f; },
-                  std::function<float()> range_switch = [] { return 1.f; })
-      : modulated_duration{std::move(rotation), std::move(cv)},
+                  std::function<float()> cv,
+                  std::function<float()> range_switch = DEFAULT_DURATION_RANGE_SWITCH)
+      : modulated_rotation{std::move(rotation), std::move(cv)},
         range_switch{std::move(range_switch)} {}
 
   float operator()() const {
-    static constexpr auto curvature{0.8f};
     auto range = range_switch() < 0.5f ? SHORT_DURATION :
                  range_switch() < 1.5f ? MEDIUM_DURATION : LONG_DURATION;
-    return range.scale(sigmoid(modulated_duration(), curvature));
+    return range.scale(sigmoid(modulated_rotation(), DURATION_KNOB_CURVATURE));
   }
 
-  const ModulatedControl modulated_duration;
+  const ModulatedControl modulated_rotation;
   const std::function<float()> range_switch;
 };
 

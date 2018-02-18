@@ -6,14 +6,18 @@
 
 namespace DHE {
 
+
 struct ModulatedControl {
+  static constexpr auto DEFAULT_CV = 0.f;
+  static constexpr auto CV_NORMALIZATION_FACTOR = 1e-1f;
+
   ModulatedControl(std::function<float()> normalized_input,
-                   std::function<float()> cv = [] { return 0.f; })
+                   std::function<float()> cv = [] { return DEFAULT_CV; })
       : rotation{std::move(normalized_input)},
         cv{std::move(cv)} {}
 
   float operator()() const {
-    return NORMAL.clamp(rotation() + cv()*1e-1f);
+    return NORMAL.clamp(rotation() + cv()*CV_NORMALIZATION_FACTOR);
   }
 
   const std::function<float()> rotation;
