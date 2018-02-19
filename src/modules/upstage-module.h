@@ -11,26 +11,16 @@
 namespace DHE {
 
 struct UpstageModule : rack::Module {
-  UpstageModule()
-      : rack::Module{NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS},
-        controller{
-            this,
-            LevelControl{
-                [this] { return params[LEVEL_KNOB].value; },
-                [this] { return inputs[LEVEL_CV_INPUT].value; }
-            }
-        } {}
-
   enum ParamIds {
     LEVEL_KNOB, TRIG_BUTTON, WAIT_BUTTON,
     NUM_PARAMS
   };
   enum InputIds {
-    TRIG_INPUT, WAIT_INPUT, LEVEL_CV_INPUT,
+    TRIG_IN, WAIT_IN, LEVEL_CV_INPUT,
     NUM_INPUTS
   };
   enum OutputIds {
-    TRIG_OUTPUT, OUT_OUTPUT,
+    TRIG_OUT, STAGE_OUT,
     NUM_OUTPUTS
   };
   enum LightIds {
@@ -38,25 +28,33 @@ struct UpstageModule : rack::Module {
     NUM_LIGHTS
   };
 
-  void send_trigger(float f) { outputs[TRIG_OUTPUT].value = f; }
-  void send_level(float f) { outputs[OUT_OUTPUT].value = f; }
-
-  float wait_in() const { return inputs[WAIT_INPUT].value; }
-  float trigger_in() const { return inputs[TRIG_INPUT].value; }
-
-  bool trigger_button_is_pressed() const { return params[TRIG_BUTTON].value > 0.0f; }
-  bool wait_button_is_pressed() const { return params[WAIT_BUTTON].value > 0.0f; }
+  UpstageModule()
+      : rack::Module{NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS},
+        controller{
+            LevelControl{
+                [this] { return params[LEVEL_KNOB].value; },
+                [this] { return inputs[LEVEL_CV_INPUT].value; }
+            },
+            InputPortControl{
+                [this] { return inputs[WAIT_IN].value; },
+                [this] { return params[WAIT_BUTTON].value; },
+                [this] (float f){ lights[WAIT_BUTTON_LIGHT].value = f; }
+            },
+            InputPortControl{
+                [this] { return inputs[TRIG_IN].value; },
+                [this] { return params[TRIG_BUTTON].value; },
+                [this] (float f){ lights[TRIG_BUTTON_LIGHT].value = f; }
+            },
+            OutputPortControl{[this] (float f){ outputs[TRIG_OUT].value = f; }},
+            OutputPortControl{[this] (float f){ outputs[STAGE_OUT].value = f; }}
+        } {}
 
   void step() override {
     controller.step();
-    set_trigger_button_light();
-    set_wait_button_light();
   }
 
 private:
-  UpstageController<UpstageModule> controller;
-  void set_trigger_button_light() { lights[TRIG_BUTTON_LIGHT].value = UNIPOLAR_CV.scale(trigger_button_is_pressed()); }
-  void set_wait_button_light() { lights[WAIT_BUTTON_LIGHT].value = UNIPOLAR_CV.scale(wait_button_is_pressed()); }
+  UpstageController controller;
 };
 
 }

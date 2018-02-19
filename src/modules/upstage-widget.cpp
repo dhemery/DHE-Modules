@@ -31,13 +31,13 @@ UpstageWidget::UpstageWidget(rack::Module *module) : Widget(module, 4, "res/Upst
   row_spacing = 15.f;
 
   row = 0;
-  install_input<rack::PJ301MPort>(UpstageModule::WAIT_INPUT, {left_x, top_row_y + row*row_spacing});
+  install_input<rack::PJ301MPort>(UpstageModule::WAIT_IN, {left_x, top_row_y + row*row_spacing});
 
   row++;
-  install_input<rack::PJ301MPort>(UpstageModule::TRIG_INPUT, {left_x, top_row_y + row*row_spacing});
-  install_output<rack::PJ301MPort>(UpstageModule::TRIG_OUTPUT, {right_x, top_row_y + row*row_spacing});
+  install_input<rack::PJ301MPort>(UpstageModule::TRIG_IN, {left_x, top_row_y + row*row_spacing});
+  install_output<rack::PJ301MPort>(UpstageModule::TRIG_OUT, {right_x, top_row_y + row*row_spacing});
 
   row++;
-  install_output<rack::PJ301MPort>(UpstageModule::OUT_OUTPUT, {right_x, top_row_y + row*row_spacing});
+  install_output<rack::PJ301MPort>(UpstageModule::STAGE_OUT, {right_x, top_row_y + row*row_spacing});
 }
 }

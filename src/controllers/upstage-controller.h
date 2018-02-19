@@ -5,31 +5,36 @@
 #include <utility>
 
 #include "util/interval.h"
-#include "controllers/level-control.h"
+#include "input-port-control.h"
+#include "level-control.h"
+#include "output-port-control.h"
 
 namespace DHE {
 
-template<typename TModule>
 struct UpstageController {
-  explicit UpstageController(TModule *module, LevelControl level)
-      : module{module},
-        level{std::move(level)} {}
+  explicit UpstageController(
+      LevelControl level,
+      InputPortControl wait_in,
+      InputPortControl trigger_in,
+      OutputPortControl trigger_out,
+      OutputPortControl stage_out)
+      : level{std::move(level)},
+        wait_in{wait_in},
+        trigger_in{trigger_in},
+        trigger_out{trigger_out},
+        stage_out{stage_out} {}
 
   void step() {
-    module->send_trigger(trigger_out_voltage());
-    module->send_level(level());
+    trigger_out(wait_in() < 0.5 ? trigger_in() : 0.f);
+    stage_out(level());
   }
 
 private:
-  TModule *module;
   LevelControl level;
-
-  float trigger_in() const { return module->trigger_in(); }
-
-  bool is_sending_triggers() const { return module->wait_in() < 1.0f and not module->wait_button_is_pressed(); }
-  float trigger_button_voltage() const { return UNIPOLAR_CV.scale(module->trigger_button_is_pressed()); }
-  float trigger_out_voltage() const { return is_sending_triggers() ? trigger_voltage() : 0.0f; }
-  float trigger_voltage() const { return std::max(trigger_in(), trigger_button_voltage()); }
+  InputPortControl wait_in;
+  InputPortControl trigger_in;
+  OutputPortControl trigger_out;
+  OutputPortControl stage_out;
 };
 
 }
