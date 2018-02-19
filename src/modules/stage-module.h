@@ -35,10 +35,10 @@ struct StageModule : rack::Module {
             ShapeControl{[this] { return params[SHAPE_KNOB].value; }},
             InputPortControl{[this] { return inputs[DEFER_IN].value; }},
             InputPortControl{[this] { return inputs[TRIG_IN].value; }},
-            InputPortControl{[this] { return inputs[STAGE_IN].value; }},
+            [this] { return inputs[STAGE_IN].value; },
             OutputPortControl{[this](float f) { outputs[ACTIVE_OUT].value = f; }},
             OutputPortControl{[this](float f) { outputs[EOC_OUT].value = f; }},
-            OutputPortControl{[this](float f) { outputs[STAGE_OUT].value = f; }}
+            [this](float f) { outputs[STAGE_OUT].value = f; }
         } {}
 
   void step() override { controller.step(); }

@@ -16,7 +16,7 @@ struct UpstageController {
       InputPortControl wait_in,
       InputPortControl trigger_in,
       OutputPortControl trigger_out,
-      OutputPortControl stage_out)
+      std::function<void(float)> stage_out)
       : level{std::move(level)},
         wait_in{std::move(wait_in)},
         trigger_in{std::move(trigger_in)},
@@ -34,7 +34,7 @@ private:
   InputPortControl wait_in;
   InputPortControl trigger_in;
   OutputPortControl trigger_out;
-  OutputPortControl stage_out;
+  std::function<void(float)> stage_out;
 };
 
 }

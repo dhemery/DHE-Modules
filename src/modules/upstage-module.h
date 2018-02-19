@@ -49,7 +49,7 @@ struct UpstageModule : rack::Module {
                 }
             },
             OutputPortControl{[this](float f) { outputs[TRIG_OUT].value = f; }},
-            OutputPortControl{[this](float f) { outputs[STAGE_OUT].value = f; }}
+            [this](float f) { outputs[STAGE_OUT].value = f; }
         } {}
 
   void step() override {

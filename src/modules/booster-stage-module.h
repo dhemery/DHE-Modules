@@ -63,7 +63,7 @@ struct BoosterStageModule : rack::Module {
                     [this](float f) { lights[TRIG_BUTTON_LIGHT].value = f; }
                 }
             },
-            InputPortControl{[this] { return inputs[STAGE_IN].value; }},
+            [this] { return inputs[STAGE_IN].value; },
             OutputPortControl{
                 [this](float f) { outputs[ACTIVE_OUT].value = f; },
                 ButtonControl{
@@ -78,7 +78,7 @@ struct BoosterStageModule : rack::Module {
                     [this](float f) { lights[EOC_BUTTON_LIGHT].value = f; }
                 }
             },
-            OutputPortControl{[this](float f) { outputs[STAGE_OUT].value = f; }}
+            [this](float f) { outputs[STAGE_OUT].value = f; }
         } {}
 
   void step() override { controller.step(); }

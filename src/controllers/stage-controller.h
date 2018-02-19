@@ -21,10 +21,10 @@ struct StageController {
       ShapeControl shape,
       InputPortControl defer_in,
       InputPortControl trigger_in,
-      InputPortControl stage_in,
+      std::function<float()> stage_in,
       OutputPortControl active_out,
       OutputPortControl eoc_out,
-      OutputPortControl stage_out
+      std::function<void(float)> stage_out
   )
       : level{std::move(level)},
         shape{std::move(shape)},
@@ -60,7 +60,7 @@ private:
   ShapeControl shape;
   OutputPortControl send_active;
   OutputPortControl send_eoc;
-  OutputPortControl send_stage;
+  std::function<void(float)> send_stage;
   DFlipFlop defer_gate;
   Ramp end_of_cycle_pulse;
   Ramp envelope_ramp;
