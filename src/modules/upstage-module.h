@@ -12,6 +12,7 @@ namespace DHE {
 struct UpstageModule : rack::Module {
   enum ParamIds {
     LEVEL_KNOB, TRIG_BUTTON, WAIT_BUTTON,
+    LEVEL_SWITCH,
     NUM_PARAMS
   };
   enum InputIds {
@@ -32,7 +33,8 @@ struct UpstageModule : rack::Module {
         controller{
             LevelControl{
                 [this] { return params[LEVEL_KNOB].value; },
-                [this] { return inputs[LEVEL_CV_INPUT].value; }
+                [this] { return inputs[LEVEL_CV_INPUT].value; },
+                [this] { return params[LEVEL_SWITCH].value; }
             },
             InputPortControl{
                 [this] { return inputs[WAIT_IN].value; },

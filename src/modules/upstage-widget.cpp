@@ -38,6 +38,7 @@ UpstageWidget::UpstageWidget(rack::Module *module) : Widget(module, 4, "res/Upst
   install_output<rack::PJ301MPort>(UpstageModule::TRIG_OUT, {right_x, top_row_y + row*row_spacing});
 
   row++;
+  install_switch<rack::CKSS>(UpstageModule::LEVEL_SWITCH, {left_x, top_row_y + row*row_spacing}, 1, 1);
   install_output<rack::PJ301MPort>(UpstageModule::STAGE_OUT, {right_x, top_row_y + row*row_spacing});
 }
 }
