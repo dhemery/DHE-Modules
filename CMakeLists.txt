@@ -37,7 +37,7 @@ add_library(plugin SHARED
         src/util/sigmoid.h
         src/plugin/dhe-modules.cpp
         src/plugin/dhe-modules.h
-        src/controllers/modulated-control.h src/controllers/input-port-control.h)
+        src/controllers/modulated-control.h src/controllers/input-port-control.h src/controllers/button-control.h)
 target_link_libraries(plugin
         PUBLIC -stdlib=libc++
         PUBLIC rack

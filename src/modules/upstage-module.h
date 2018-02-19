@@ -37,16 +37,20 @@ struct UpstageModule : rack::Module {
             },
             InputPortControl{
                 [this] { return inputs[WAIT_IN].value; },
-                [this] { return params[WAIT_BUTTON].value; },
-                [this] (float f){ lights[WAIT_BUTTON_LIGHT].value = f; }
+                ButtonControl{
+                    [this] { return params[WAIT_BUTTON].value; },
+                    [this](float f) { lights[WAIT_BUTTON_LIGHT].value = f; }
+                }
             },
             InputPortControl{
                 [this] { return inputs[TRIG_IN].value; },
-                [this] { return params[TRIG_BUTTON].value; },
-                [this] (float f){ lights[TRIG_BUTTON_LIGHT].value = f; }
+                ButtonControl {
+                    [this] { return params[TRIG_BUTTON].value; },
+                    [this](float f) { lights[TRIG_BUTTON_LIGHT].value = f; }
+                }
             },
-            OutputPortControl{[this] (float f){ outputs[TRIG_OUT].value = f; }},
-            OutputPortControl{[this] (float f){ outputs[STAGE_OUT].value = f; }}
+            OutputPortControl{[this](float f) { outputs[TRIG_OUT].value = f; }},
+            OutputPortControl{[this](float f) { outputs[STAGE_OUT].value = f; }}
         } {}
 
   void step() override {
