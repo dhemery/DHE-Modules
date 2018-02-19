@@ -1,6 +1,6 @@
 SLUG = DHE-Modules
 VERSION = 0.6.0
-RACK_DIR ?= ../Rack
+RACK_DIR ?= ../..
 
 FLAGS += -I./src
 CFLAGS +=
