@@ -26,16 +26,16 @@ struct StageController {
       OutputPortControl eoc_out,
       OutputPortControl stage_out
   )
-      : level{level},
-        shape{shape},
-        send_active{active_out},
-        send_eoc{eoc_out},
-        send_stage{stage_out},
-        defer_gate{defer_in},
+      : level{std::move(level)},
+        shape{std::move(shape)},
+        send_active{std::move(active_out)},
+        send_eoc{std::move(eoc_out)},
+        send_stage{std::move(stage_out)},
+        defer_gate{std::move(defer_in)},
         end_of_cycle_pulse{1e-3, sample_time},
         envelope_ramp{duration, sample_time},
-        envelope_trigger{trigger_in},
-        stage_input_follower{stage_in} {
+        envelope_trigger{std::move(trigger_in)},
+        stage_input_follower{std::move(stage_in)} {
     defer_gate.on_rising_edge([this] { defer(); });
     defer_gate.on_falling_edge([this] { resume(); });
 
