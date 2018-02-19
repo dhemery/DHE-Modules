@@ -1,5 +1,4 @@
-#ifndef DHE_MODULES_CONTROLLERS_DURATION_CONTROL_H
-#define DHE_MODULES_CONTROLLERS_DURATION_CONTROL_H
+#pragma once
 
 #include <functional>
 #include <util/interval.h>
@@ -39,5 +38,3 @@ struct DurationControl {
 };
 
 }
-
-#endif

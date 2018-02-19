@@ -54,7 +54,7 @@ add_executable(tests
         test/follower-tests.cpp
         test/stage-tests.cpp
         test/upstage-tests.cpp
-        test/fake-stage-model.h)
+        )
 target_compile_features(tests PUBLIC cxx_std_11)
 target_compile_options(tests PUBLIC -stdlib=libc++)
 target_include_directories(tests PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/test ${CMAKE_CURRENT_SOURCE_DIR}/src)

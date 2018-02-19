@@ -10,7 +10,7 @@ extern rack::Plugin *plugin;
 
 namespace DHE {
 Widget::Widget(rack::Module *module, int widget_hp, const char *background)
-  : rack::ModuleWidget(module) {
+    : rack::ModuleWidget(module) {
   box.size = rack::Vec{(float) widget_hp*rack::RACK_GRID_WIDTH, rack::RACK_GRID_HEIGHT};
 
   auto *panel = new rack::SVGPanel();

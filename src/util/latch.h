@@ -1,5 +1,4 @@
-#ifndef DHE_UTIL_LATCH_H
-#define DHE_UTIL_LATCH_H
+#pragma once
 
 #include <functional>
 #include <vector>
@@ -79,4 +78,3 @@ private:
   }
 };
 }
-#endif

@@ -9,10 +9,10 @@ BoosterStageWidget::BoosterStageWidget(rack::Module *module) : Widget(module, 8,
   auto widget_right_edge{width()};
 
   auto left_x{7.f};
-  auto center_x{widget_right_edge / 2.f};
+  auto center_x{widget_right_edge/2.f};
   auto right_x{widget_right_edge - left_x};
-  auto center_left_x = left_x + (right_x - left_x) / 3.f;
-  auto center_right_x = right_x - (right_x - left_x) / 3.f;
+  auto center_left_x = left_x + (right_x - left_x)/3.f;
+  auto center_right_x = right_x - (right_x - left_x)/3.f;
 
   auto top_row_y{25.f};
   auto row_spacing{18.5f};

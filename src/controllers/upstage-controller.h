@@ -1,5 +1,4 @@
-#ifndef DHE_MODULES_CONTROLLERS_UPSTAGE_CONTROLLER_H
-#define DHE_MODULES_CONTROLLERS_UPSTAGE_CONTROLLER_H
+#pragma once
 
 #include <algorithm>
 #include <utility>
@@ -25,7 +24,8 @@ struct UpstageController {
         stage_out{stage_out} {}
 
   void step() {
-    trigger_out(wait_in() < 0.5 ? trigger_in() : 0.f);
+    trigger_out(wait_in() > 0.5f ? 0.f : trigger_in());
+    trigger_in(); // To set the light
     stage_out(level());
   }
 
@@ -38,4 +38,3 @@ private:
 };
 
 }
-#endif

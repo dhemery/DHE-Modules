@@ -1,5 +1,4 @@
-#ifndef DHE_UTIL_FUNCTIONS_H
-#define DHE_UTIL_FUNCTIONS_H
+#pragma once
 
 #include <cmath>
 #include <functional>
@@ -19,4 +18,3 @@ inline float sigmoid(float x, float curvature) {
   return (x - x*curvature)/(curvature - std::abs(x)*2.0f*curvature + 1.0f);
 }
 }
-#endif

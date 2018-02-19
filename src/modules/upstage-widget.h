@@ -1,5 +1,4 @@
-#ifndef DHE_MODULES_MODULES_UPSTAGE_WIDGET_H
-#define DHE_MODULES_MODULES_UPSTAGE_WIDGET_H
+#pragma once
 
 #include "widget.h"
 
@@ -9,4 +8,3 @@ struct UpstageWidget : public Widget {
   explicit UpstageWidget(rack::Module *module);
 };
 }
-#endif

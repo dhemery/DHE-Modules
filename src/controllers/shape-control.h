@@ -1,5 +1,4 @@
-#ifndef DHE_MODULES_CONTROLLERS_SHAPE_CONTROL_H
-#define DHE_MODULES_CONTROLLERS_SHAPE_CONTROL_H
+#pragma once
 
 #include <functional>
 #include <util/interval.h>
@@ -36,5 +35,3 @@ struct ShapeControl {
 };
 
 }
-
-#endif

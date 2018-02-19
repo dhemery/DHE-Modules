@@ -1,5 +1,4 @@
-#ifndef DHE_UTIL_D_FLIP_FLOP_H
-#define DHE_UTIL_D_FLIP_FLOP_H
+#pragma once
 
 #include <functional>
 #include <memory>
@@ -56,5 +55,4 @@ private:
   const float low_threshold;
   const float high_threshold;
 };
-} // namespace DHE
-#endif
+}

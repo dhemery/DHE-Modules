@@ -4,12 +4,13 @@
 #include <util/interval.h>
 #include <algorithm>
 #include <utility>
+#include "button-control.h"
 
 namespace DHE {
 
 struct OutputPortControl {
   explicit OutputPortControl(std::function<void(float)> output, ButtonControl button = {})
-  : send{std::move(output)}, button{std::move(button)} {}
+      : send{std::move(output)}, button{std::move(button)} {}
 
   void operator()(float f) {
     send(button() ? UNIPOLAR_CV.scale(true) : UNIPOLAR_CV.clamp(f));

@@ -1,5 +1,4 @@
-#ifndef DHE_MODULES_CONTROLLERS_STAGE_CONTROLLER_H
-#define DHE_MODULES_CONTROLLERS_STAGE_CONTROLLER_H
+#pragma once
 
 #include <utility>
 
@@ -93,5 +92,3 @@ private:
 };
 
 }
-
-#endif

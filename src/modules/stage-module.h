@@ -1,5 +1,4 @@
-#ifndef DHE_MODULES_MODULES_STAGE_MODULE_H
-#define DHE_MODULES_MODULES_STAGE_MODULE_H
+#pragma once
 
 #include <engine.hpp>
 #include "controllers/duration-control.h"
@@ -48,4 +47,3 @@ private:
   StageController controller;
 };
 }
-#endif

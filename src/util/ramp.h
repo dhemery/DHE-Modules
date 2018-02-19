@@ -1,5 +1,4 @@
-#ifndef DHE_UTIL_RAMP_H
-#define DHE_UTIL_RAMP_H
+#pragma once
 
 #include <functional>
 #include <utility>
@@ -137,5 +136,4 @@ private:
   DLatch active{};
   const std::function<float()> phase_increment;
 };
-} // namespace DHE
-#endif
+}

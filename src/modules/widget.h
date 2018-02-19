@@ -1,5 +1,4 @@
-#ifndef DHE_MODULES_MODULES_WIDGET_H
-#define DHE_MODULES_MODULES_WIDGET_H
+#pragma once
 
 #include <app.hpp>
 #include <util/math.hpp>
@@ -74,4 +73,3 @@ public:
 };
 
 }
-#endif

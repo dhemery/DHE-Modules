@@ -1,5 +1,4 @@
-#ifndef DHE_MODULES_MODULES_UPSTAGE_MODULE_H
-#define DHE_MODULES_MODULES_UPSTAGE_MODULE_H
+#pragma once
 
 #include <algorithm>
 
@@ -62,4 +61,3 @@ private:
 };
 
 }
-#endif

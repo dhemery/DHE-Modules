@@ -1,5 +1,4 @@
-#ifndef DHE_MODULES_MODULES_STAGE_WIDGET_H
-#define DHE_MODULES_MODULES_STAGE_WIDGET_H
+#pragma once
 
 #include "widget.h"
 
@@ -9,4 +8,3 @@ struct StageWidget : public Widget {
   explicit StageWidget(rack::Module *module);
 };
 }
-#endif

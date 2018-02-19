@@ -1,5 +1,4 @@
-#ifndef DHE_UTIL_FOLLOWER_H
-#define DHE_UTIL_FOLLOWER_H
+#pragma once
 
 #include <functional>
 #include <utility>
@@ -57,4 +56,3 @@ private:
   bool following;
 };
 }
-#endif

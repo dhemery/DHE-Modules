@@ -1,5 +1,4 @@
-#ifndef DHE_UTIL_RANGE_H
-#define DHE_UTIL_RANGE_H
+#pragma once
 
 namespace DHE {
 
@@ -34,7 +33,7 @@ struct Interval {
   }
 
   float center() const {
-    return lower_bound + (upper_bound - lower_bound) * 0.5f;
+    return lower_bound + (upper_bound - lower_bound)*0.5f;
   }
 
   Interval invert() const {
@@ -47,4 +46,3 @@ constexpr auto BIPOLAR_NORMAL = Interval{-1.0f, 1.0f};
 constexpr auto UNIPOLAR_CV = Interval{0.0f, 10.0f};
 constexpr auto BIPOLAR_CV = Interval{-5.0f, 5.0f};
 }
-#endif

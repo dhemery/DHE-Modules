@@ -9,7 +9,7 @@ UpstageWidget::UpstageWidget(rack::Module *module) : Widget(module, 4, "res/Upst
   auto widget_right_edge{width()};
 
   auto left_x{5.5f};
-  auto center_x{widget_right_edge / 2.f};
+  auto center_x{widget_right_edge/2.f};
   auto right_x{widget_right_edge - left_x};
 
   auto top_row_y{25.f};

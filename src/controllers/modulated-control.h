@@ -1,11 +1,9 @@
-#ifndef DHE_MODULES_CONTROLLERS_MODULATED_CONTROL_H
-#define DHE_MODULES_CONTROLLERS_MODULATED_CONTROL_H
+#pragma once
 
 #include <functional>
 #include <util/interval.h>
 
 namespace DHE {
-
 
 struct ModulatedControl {
   static constexpr auto DEFAULT_CV = 0.f;
@@ -26,4 +24,3 @@ struct ModulatedControl {
 };
 
 }
-#endif

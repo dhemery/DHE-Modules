@@ -1,5 +1,4 @@
-#ifndef DHE_MODULES_CONTROLLERS_LEVEL_CONTROL_H
-#define DHE_MODULES_CONTROLLERS_LEVEL_CONTROL_H
+#pragma once
 
 #include <functional>
 #include <util/interval.h>
@@ -29,5 +28,3 @@ struct LevelControl {
 };
 
 }
-
-#endif
