@@ -5,14 +5,15 @@
 #include <engine.hpp>
 
 #include "util/interval.h"
-#include "controllers/sport-controller.h"
+#include "controllers/sj-controller.h"
 #include "controllers/shape-control.h"
 
 namespace DHE {
 
-struct SportModule : rack::Module {
+struct SJModule : rack::Module {
   enum ParamIds {
     SHAPE_KNOB, SHAPE_SWITCH,
+    TRIM_KNOB,
     NUM_PARAMS
   };
   enum InputIds {
@@ -27,7 +28,7 @@ struct SportModule : rack::Module {
     NUM_LIGHTS
   };
 
-  SportModule()
+  SJModule()
       : rack::Module{NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS},
         controller{
             ShapeControl{
@@ -36,7 +37,9 @@ struct SportModule : rack::Module {
                 [this] { return params[SHAPE_SWITCH].value; }
             },
             [this] { return inputs[SPORT_IN].value; },
-            [this](float f) { outputs[SPORT_OUT].value = f; }
+            [this](
+                float f
+            ) { outputs[SPORT_OUT].value = f; }
         } {}
 
   void step() override {

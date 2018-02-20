@@ -25,14 +25,14 @@ add_library(plugin SHARED
         src/controllers/level-control.h
         src/controllers/modulated-control.h
         src/controllers/stage-controller.h
-        src/controllers/sport-controller.h
+        src/controllers/sj-controller.h
         src/controllers/upstage-controller.h
         src/modules/booster-stage-module.h
         src/modules/booster-stage-widget.cpp
         src/modules/booster-stage-widget.h
-        src/modules/sport-module.h
-        src/modules/sport-widget.cpp
-        src/modules/sport-module.h
+        src/modules/sj-module.h
+        src/modules/sj-widget.cpp
+        src/modules/sj-module.h
         src/modules/stage-widget.cpp
         src/modules/stage-widget.h
         src/modules/upstage-module.h

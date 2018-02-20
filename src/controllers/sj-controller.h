@@ -12,7 +12,7 @@ struct SportController {
       ShapeControl shape,
       std::function<float()> sport_in,
       std::function<void(float)> sport_out)
-      : shape{std::move(shape)},
+      : shape{shape},
         sport_in{std::move(sport_in)},
         sport_out{std::move(sport_out)} {}
 
