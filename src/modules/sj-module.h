@@ -5,6 +5,7 @@
 #include <engine.hpp>
 
 #include "util/interval.h"
+#include <controllers/attenuverter.h>
 #include "controllers/sj-controller.h"
 #include "controllers/shape-control.h"
 
@@ -33,7 +34,10 @@ struct SJModule : rack::Module {
         controller{
             ShapeControl{
                 [this] { return params[SHAPE_KNOB].value; },
-                [this] { return inputs[SHAPE_CV].value; },
+                Attenuverter{
+                  [this] { return inputs[SHAPE_CV].value; },
+                  [this] { return params[TRIM_KNOB].value; }
+                },
                 [this] { return params[SHAPE_SWITCH].value; }
             },
             [this] { return inputs[SPORT_IN].value; },
