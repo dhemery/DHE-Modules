@@ -2,19 +2,28 @@ cmake_minimum_required(VERSION 3.9)
 project(DHE_Modules DESCRIPTION "DHE Modules for VCV Rack" VERSION 0.0.0)
 
 set(CMAKE_OSX_DEPLOYMENT_TARGET 10.7)
+if (DEFINED ENV{RACK_DIR})
+    set(RACK_DIR "$ENV{RACK_DIR}")
+endif (DEFINED ENV{RACK_DIR})
+if (NOT DEFINED RACK_DIR)
+    set(RACK_DIR ../..)
+endif (NOT DEFINED RACK_DIR)
 
 add_library(rack INTERFACE)
 target_include_directories(rack
         INTERFACE
-        ../Rack/include
-        ../Rack/dep/include
+        ${RACK_DIR}/include
+        ${RACK_DIR}/dep/include
         )
 target_compile_features(rack INTERFACE cxx_std_11)
 target_compile_options(rack INTERFACE -stdlib=libc++)
 
 add_library(plugin SHARED
+        src/controllers/button-control.h
         src/controllers/duration-control.h
+        src/controllers/input-port-control.h
         src/controllers/level-control.h
+        src/controllers/modulated-control.h
         src/controllers/stage-controller.h
         src/controllers/upstage-controller.h
         src/modules/booster-stage-module.h
@@ -28,6 +37,8 @@ add_library(plugin SHARED
         src/modules/upstage-widget.h
         src/modules/widget.cpp
         src/modules/widget.h
+        src/plugin/dhe-modules.cpp
+        src/plugin/dhe-modules.h
         src/util/d-flip-flop.h
         src/util/d-latch.h
         src/util/follower.h
@@ -35,9 +46,7 @@ add_library(plugin SHARED
         src/util/latch.h
         src/util/ramp.h
         src/util/sigmoid.h
-        src/plugin/dhe-modules.cpp
-        src/plugin/dhe-modules.h
-        src/controllers/modulated-control.h src/controllers/input-port-control.h src/controllers/button-control.h)
+        )
 target_link_libraries(plugin
         PUBLIC -stdlib=libc++
         PUBLIC rack
