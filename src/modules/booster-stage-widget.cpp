@@ -38,17 +38,17 @@ BoosterStageWidget::BoosterStageWidget(rack::Module *module) : Widget(module, 8,
   row = 0;
   install_input<rack::PJ301MPort>(BoosterStageModule::DEFER_IN, {left_x, top_row_y + row*row_spacing});
   install_button<rack::LEDButton>(BoosterStageModule::DEFER_BUTTON, {center_left_x, top_row_y + row*row_spacing});
-  install_light<rack::MediumLight<rack::GreenLight>>(BoosterStageModule::DEFER_BUTTON_LIGHT, {center_left_x, top_row_y + row*row_spacing});
+  install_light<rack::MediumLight<rack::RedLight>>(BoosterStageModule::DEFER_BUTTON_LIGHT, {center_left_x, top_row_y + row*row_spacing});
   install_button<rack::LEDButton>(BoosterStageModule::ACTIVE_BUTTON, {center_right_x, top_row_y + row*row_spacing});
-  install_light<rack::MediumLight<rack::GreenLight>>(BoosterStageModule::ACTIVE_BUTTON_LIGHT, {center_right_x, top_row_y + row*row_spacing});
+  install_light<rack::MediumLight<rack::RedLight>>(BoosterStageModule::ACTIVE_BUTTON_LIGHT, {center_right_x, top_row_y + row*row_spacing});
   install_output<rack::PJ301MPort>(BoosterStageModule::ACTIVE_OUT, {right_x, top_row_y + row*row_spacing});
 
   row++;
   install_input<rack::PJ301MPort>(BoosterStageModule::TRIG_IN, {left_x, top_row_y + row*row_spacing});
   install_button<rack::LEDButton>(BoosterStageModule::TRIG_BUTTON, {center_left_x, top_row_y + row*row_spacing});
-  install_light<rack::MediumLight<rack::GreenLight>>(BoosterStageModule::TRIG_BUTTON_LIGHT, {center_left_x, top_row_y + row*row_spacing});
+  install_light<rack::MediumLight<rack::RedLight>>(BoosterStageModule::TRIG_BUTTON_LIGHT, {center_left_x, top_row_y + row*row_spacing});
   install_button<rack::LEDButton>(BoosterStageModule::EOC_BUTTON, {center_right_x, top_row_y + row*row_spacing});
-  install_light<rack::MediumLight<rack::GreenLight>>(BoosterStageModule::EOC_BUTTON_LIGHT, {center_right_x, top_row_y + row*row_spacing});
+  install_light<rack::MediumLight<rack::RedLight>>(BoosterStageModule::EOC_BUTTON_LIGHT, {center_right_x, top_row_y + row*row_spacing});
   install_output<rack::PJ301MPort>(BoosterStageModule::EOC_OUT, {right_x, top_row_y + row*row_spacing});
 
   row++;
