@@ -7,8 +7,8 @@
 
 namespace DHE {
 
-struct SportController {
-  explicit SportController(
+struct SwaveController {
+  SwaveController(
       ShapeControl shape,
       std::function<float()> sport_in,
       std::function<void(float)> sport_out)

@@ -6,12 +6,12 @@
 
 #include "util/interval.h"
 #include <controllers/attenuverter.h>
-#include "controllers/sj-controller.h"
+#include "controllers/swave-controller.h"
 #include "controllers/shape-control.h"
 
 namespace DHE {
 
-struct SJModule : rack::Module {
+struct SwaveModule : rack::Module {
   enum ParamIds {
     SHAPE_KNOB, SHAPE_SWITCH,
     TRIM_KNOB,
@@ -29,7 +29,7 @@ struct SJModule : rack::Module {
     NUM_LIGHTS
   };
 
-  SJModule()
+  SwaveModule()
       : rack::Module{NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS},
         controller{
             ShapeControl{
@@ -51,7 +51,7 @@ struct SJModule : rack::Module {
   }
 
 private:
-  SportController controller;
+  SwaveController controller;
 };
 
 }
