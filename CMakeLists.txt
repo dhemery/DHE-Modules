@@ -38,8 +38,8 @@ add_library(plugin SHARED
         src/modules/upstage-module.h
         src/modules/upstage-widget.cpp
         src/modules/upstage-widget.h
-        src/modules/widget.cpp
-        src/modules/widget.h
+        src/modules/module-widget.cpp
+        src/modules/module-widget.h
         src/plugin/dhe-modules.cpp
         src/plugin/dhe-modules.h
         src/util/d-flip-flop.h

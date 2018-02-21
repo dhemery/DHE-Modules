@@ -4,10 +4,10 @@
 #include <util/math.hpp>
 
 namespace DHE {
-class Widget : public rack::ModuleWidget {
+class ModuleWidget : public rack::ModuleWidget {
 
 public:
-  Widget(rack::Module *module, int widget_hp, const char *background);
+  ModuleWidget(rack::Module *module, int widget_hp, const char *background);
 
   float height() const {
     return box.size.y*MM_PER_IN/SVG_DPI;

@@ -4,12 +4,12 @@
 #include <componentlibrary.hpp>
 #include <engine.hpp>
 
-#include "widget.h"
+#include "module-widget.h"
 
 extern rack::Plugin *plugin;
 
 namespace DHE {
-Widget::Widget(rack::Module *module, int widget_hp, const char *background)
+ModuleWidget::ModuleWidget(rack::Module *module, int widget_hp, const char *background)
     : rack::ModuleWidget(module) {
   box.size = rack::Vec{(float) widget_hp*rack::RACK_GRID_WIDTH, rack::RACK_GRID_HEIGHT};
 
@@ -21,7 +21,7 @@ Widget::Widget(rack::Module *module, int widget_hp, const char *background)
   install_screws();
 }
 
-void Widget::install_screws() {
+void ModuleWidget::install_screws() {
 
   auto screw_diameter{rack::RACK_GRID_WIDTH*MM_PER_IN/SVG_DPI};
   auto screw_radius{screw_diameter/2.f};
@@ -55,7 +55,7 @@ void Widget::install_screws() {
   }
 }
 
-void Widget::moveTo(rack::Rect &box, rack::Vec center) {
+void ModuleWidget::moveTo(rack::Rect &box, rack::Vec center) {
   box.pos = center.minus(box.size.mult(0.5f));
 }
 }

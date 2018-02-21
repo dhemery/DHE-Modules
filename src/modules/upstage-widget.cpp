@@ -5,7 +5,7 @@
 
 namespace DHE {
 
-UpstageWidget::UpstageWidget(rack::Module *module) : Widget(module, 4, "res/Upstage.svg") {
+UpstageWidget::UpstageWidget(rack::Module *module) : ModuleWidget(module, 4, "res/Upstage.svg") {
   auto widget_right_edge{width()};
 
   auto left_x{5.5f};

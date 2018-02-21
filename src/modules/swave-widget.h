@@ -1,10 +1,10 @@
 #pragma once
 
-#include "widget.h"
+#include "module-widget.h"
 
 namespace DHE {
 
-struct SwaveWidget : public Widget {
+struct SwaveWidget : public ModuleWidget {
   explicit SwaveWidget(rack::Module *module);
 };
 }

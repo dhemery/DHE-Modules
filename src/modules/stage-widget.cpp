@@ -5,7 +5,7 @@
 
 namespace DHE {
 
-StageWidget::StageWidget(rack::Module *module) : Widget(module, 4, "res/Stage.svg") {
+StageWidget::StageWidget(rack::Module *module) : ModuleWidget(module, 4, "res/Stage.svg") {
   auto widget_right_edge{width()};
 
   auto left_x{5.5f};

@@ -1,10 +1,10 @@
 #pragma once
 
-#include "widget.h"
+#include "module-widget.h"
 
 namespace DHE {
 
-struct UpstageWidget : public Widget {
+struct UpstageWidget : public ModuleWidget {
   explicit UpstageWidget(rack::Module *module);
 };
 }

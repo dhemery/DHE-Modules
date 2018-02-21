@@ -5,7 +5,7 @@
 
 namespace DHE {
 
-SwaveWidget::SwaveWidget(rack::Module *module) : Widget(module, 4, "res/Swave.svg") {
+SwaveWidget::SwaveWidget(rack::Module *module) : ModuleWidget(module, 4, "res/Swave.svg") {
   auto widget_right_edge{width()};
 
   auto left_x{5.5f};

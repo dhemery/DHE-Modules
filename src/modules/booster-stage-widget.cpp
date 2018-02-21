@@ -5,7 +5,7 @@
 
 namespace DHE {
 
-BoosterStageWidget::BoosterStageWidget(rack::Module *module) : Widget(module, 8, "res/BoosterStage.svg") {
+BoosterStageWidget::BoosterStageWidget(rack::Module *module) : ModuleWidget(module, 8, "res/BoosterStage.svg") {
   auto widget_right_edge{width()};
 
   auto left_x{7.f};
