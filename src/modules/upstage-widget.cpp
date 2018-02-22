@@ -1,9 +1,17 @@
+#include <asset.hpp>
 #include <componentlibrary.hpp>
 
 #include "upstage-module.h"
 #include "upstage-widget.h"
 
 namespace DHE {
+
+struct UpstageButtonDark : rack::SVGSwitch, rack::MomentarySwitch {
+  UpstageButtonDark() {
+    addFrame(rack::SVG::load(rack::assetPlugin(plugin, "res/UpstageButtonDark_0.svg")));
+    addFrame(rack::SVG::load(rack::assetPlugin(plugin, "res/UpstageButtonDark_1.svg")));
+  }
+};
 
 UpstageWidget::UpstageWidget(rack::Module *module) : ModuleWidget(module, 4, "res/Upstage.svg") {
   auto widget_right_edge{width()};
@@ -23,10 +31,8 @@ UpstageWidget::UpstageWidget(rack::Module *module) : ModuleWidget(module, 4, "re
   install_switch<rack::CKSS>(UpstageModule::LEVEL_SWITCH, {right_x, top_row_y + row*row_spacing}, 1, 1);
 
   row++;
-  install_button<rack::LEDButton>(UpstageModule::WAIT_BUTTON, {left_x, top_row_y + row*row_spacing});
-  install_light<rack::MediumLight<rack::GreenLight>>(UpstageModule::WAIT_BUTTON_LIGHT, {left_x, top_row_y + row*row_spacing});
-  install_button<rack::LEDButton>(UpstageModule::TRIG_BUTTON, {right_x, top_row_y + row*row_spacing});
-  install_light<rack::MediumLight<rack::GreenLight>>(UpstageModule::TRIG_BUTTON_LIGHT, {right_x, top_row_y + row*row_spacing});
+  install_switch<UpstageButtonDark>(UpstageModule::WAIT_BUTTON, {left_x, top_row_y + row*row_spacing});
+  install_switch<UpstageButtonDark>(UpstageModule::TRIG_BUTTON, {right_x, top_row_y + row*row_spacing});
 
   top_row_y = 82.f;
   row_spacing = 15.f;

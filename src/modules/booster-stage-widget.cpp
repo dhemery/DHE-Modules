@@ -1,9 +1,25 @@
+#include <asset.hpp>
 #include <componentlibrary.hpp>
 
+#include "plugin/dhe-modules.h"
 #include "booster-stage-module.h"
 #include "booster-stage-widget.h"
 
 namespace DHE {
+
+struct BoosterStageButtonDark : rack::SVGSwitch, rack::MomentarySwitch {
+  BoosterStageButtonDark() {
+    addFrame(rack::SVG::load(rack::assetPlugin(plugin, "res/BoosterStageButtonDark_0.svg")));
+    addFrame(rack::SVG::load(rack::assetPlugin(plugin, "res/BoosterStageButtonDark_1.svg")));
+  }
+};
+
+struct BoosterStageButtonLight : rack::SVGSwitch, rack::MomentarySwitch {
+  BoosterStageButtonLight() {
+    addFrame(rack::SVG::load(rack::assetPlugin(plugin, "res/BoosterStageButtonLight_0.svg")));
+    addFrame(rack::SVG::load(rack::assetPlugin(plugin, "res/BoosterStageButtonLight_1.svg")));
+  }
+};
 
 BoosterStageWidget::BoosterStageWidget(rack::Module *module) : ModuleWidget(module, 8, "res/BoosterStage.svg") {
   auto widget_right_edge{width()};
@@ -37,18 +53,14 @@ BoosterStageWidget::BoosterStageWidget(rack::Module *module) : ModuleWidget(modu
 
   row = 0;
   install_input<rack::PJ301MPort>(BoosterStageModule::DEFER_IN, {left_x, top_row_y + row*row_spacing});
-  install_button<rack::LEDButton>(BoosterStageModule::DEFER_BUTTON, {center_left_x, top_row_y + row*row_spacing});
-  install_light<rack::MediumLight<rack::RedLight>>(BoosterStageModule::DEFER_BUTTON_LIGHT, {center_left_x, top_row_y + row*row_spacing});
-  install_button<rack::LEDButton>(BoosterStageModule::ACTIVE_BUTTON, {center_right_x, top_row_y + row*row_spacing});
-  install_light<rack::MediumLight<rack::RedLight>>(BoosterStageModule::ACTIVE_BUTTON_LIGHT, {center_right_x, top_row_y + row*row_spacing});
+  install_switch<BoosterStageButtonDark>(BoosterStageModule::DEFER_BUTTON, {center_left_x, top_row_y + row*row_spacing});
+  install_switch<BoosterStageButtonLight>(BoosterStageModule::ACTIVE_BUTTON, {center_right_x, top_row_y + row*row_spacing});
   install_output<rack::PJ301MPort>(BoosterStageModule::ACTIVE_OUT, {right_x, top_row_y + row*row_spacing});
 
   row++;
   install_input<rack::PJ301MPort>(BoosterStageModule::TRIG_IN, {left_x, top_row_y + row*row_spacing});
-  install_button<rack::LEDButton>(BoosterStageModule::TRIG_BUTTON, {center_left_x, top_row_y + row*row_spacing});
-  install_light<rack::MediumLight<rack::RedLight>>(BoosterStageModule::TRIG_BUTTON_LIGHT, {center_left_x, top_row_y + row*row_spacing});
-  install_button<rack::LEDButton>(BoosterStageModule::EOC_BUTTON, {center_right_x, top_row_y + row*row_spacing});
-  install_light<rack::MediumLight<rack::RedLight>>(BoosterStageModule::EOC_BUTTON_LIGHT, {center_right_x, top_row_y + row*row_spacing});
+  install_switch<BoosterStageButtonDark>(BoosterStageModule::TRIG_BUTTON, {center_left_x, top_row_y + row*row_spacing});
+  install_switch<BoosterStageButtonLight>(BoosterStageModule::EOC_BUTTON, {center_right_x, top_row_y + row*row_spacing});
   install_output<rack::PJ301MPort>(BoosterStageModule::EOC_OUT, {right_x, top_row_y + row*row_spacing});
 
   row++;
