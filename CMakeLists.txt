@@ -44,7 +44,7 @@ add_library(plugin SHARED
         src/plugin/dhe-modules.h
         src/util/d-flip-flop.h
         src/util/d-latch.h
-        src/util/follower.h
+        src/util/track-and-hold-amplifier.h
         src/util/interval.h
         src/util/latch.h
         src/util/ramp.h
@@ -60,10 +60,10 @@ target_include_directories(plugin PUBLIC src)
 add_executable(tests
         src/controllers/upstage-controller.h
         src/controllers/stage-controller.h
-        src/util/follower.h
+        src/util/track-and-hold-amplifier.h
         test/catch/catch.hpp
         test/runner/main.cpp
-        test/follower-tests.cpp
+        test/track-and-hold-amplifier-tests.cpp
         test/stage-tests.cpp
         test/upstage-tests.cpp
         )

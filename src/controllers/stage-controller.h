@@ -4,7 +4,7 @@
 
 #include "util/d-flip-flop.h"
 #include "util/ramp.h"
-#include "util/follower.h"
+#include "util/track-and-hold-amplifier.h"
 #include "duration-control.h"
 #include "input-port-control.h"
 #include "level-control.h"
@@ -65,21 +65,21 @@ private:
   Ramp end_of_cycle_pulse;
   Ramp envelope_ramp;
   DFlipFlop envelope_trigger;
-  Follower stage_input_follower;
+  TrackAndHoldAmplifier stage_input_follower;
 
   void defer() {
     envelope_trigger.suspend_firing();
     envelope_ramp.stop();
-    stage_input_follower.resume();
+    stage_input_follower.track();
   }
 
   void resume() {
-    stage_input_follower.pause();
+    stage_input_follower.hold();
     envelope_trigger.resume_firing();
   }
 
   void start_envelope() {
-    stage_input_follower.pause();
+    stage_input_follower.hold();
     envelope_ramp.start();
   }
 
