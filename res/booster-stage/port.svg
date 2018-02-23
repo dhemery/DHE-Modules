@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="27px" height="27px" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:1.5;">
+    <g transform="matrix(0.0295276,0,0,0.0295276,-357.077,-69.4193)">
+        <g transform="matrix(1.09916,0,0,1.67861,-961.987,-55.2037)">
+            <g id="Port" transform="matrix(0.946153,0,0,0.598823,383.399,-729.874)">
+                <rect x="12148.2" y="3613.44" width="865.407" height="895.353" style="fill:none;"/>
+                <g id="Sleeve" transform="matrix(2.0201,0,0,2.09,10669.4,1130.83)">
+                    <circle cx="946.25" cy="1402.06" r="185.187" style="fill:rgb(255,240,240);stroke:rgb(153,0,0);stroke-width:11.75px;"/>
+                </g>
+                <g id="Ring" transform="matrix(1.4549,0,0,1.50525,11204.2,1950.68)">
+                    <circle cx="946.25" cy="1402.06" r="185.187" style="fill:rgb(255,240,240);stroke:rgb(153,0,0);stroke-width:16.32px;"/>
+                </g>
+                <g id="Tip" transform="matrix(0.896984,0,0,0.928022,11732.1,2759.98)">
+                    <circle cx="946.25" cy="1402.06" r="185.187" style="fill:rgb(153,0,0);"/>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

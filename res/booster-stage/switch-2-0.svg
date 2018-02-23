@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="11px" height="20px" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:1.5;">
+    <g transform="matrix(0.0295276,0,0,0.0295276,-290.581,-32.5689)">
+        <g transform="matrix(1.09916,0,0,1.67861,-961.987,-55.2037)">
+            <g id="Switch2.0" transform="matrix(0.909786,0,0,0.595731,875.202,32.8866)">
+                <g>
+                    <g id="Switch2.01" serif:id="Switch2.0" transform="matrix(0.706267,0,0,0.511251,9432.45,-661.069)">
+                        <path d="M1039.31,3558.37C1039.31,3525.99 1020.27,3499.69 996.828,3499.69L657.013,3499.69C633.569,3499.69 614.536,3525.99 614.536,3558.37L614.536,4614.61C614.536,4646.99 633.569,4673.28 657.013,4673.28L996.828,4673.28C1020.27,4673.28 1039.31,4646.99 1039.31,4614.61L1039.31,3558.37Z" style="fill:rgb(255,240,240);stroke:rgb(153,0,0);stroke-width:81.1px;"/>
+                    </g>
+                    <g id="Lever" transform="matrix(1,0,0,1,6629.81,-4634.35)">
+                        <g id="Switch-Knurl" serif:id="Switch Knurl" transform="matrix(1,0,0,1,-4.54747e-13,199.989)">
+                            <g transform="matrix(1.4648,0,0,1.4648,-1560.87,-2600.83)">
+                                <circle cx="3309.34" cy="5939.94" r="8.534" style="fill:rgb(153,0,0);"/>
+                            </g>
+                            <g transform="matrix(0.152717,0,0,1,3055.59,3406.12)">
+                                <path d="M1513.11,2693.89L2822.72,2693.89" style="fill:none;stroke:rgb(153,0,0);stroke-width:34.95px;stroke-linecap:butt;"/>
+                            </g>
+                            <g transform="matrix(1.4648,0,0,1.4648,-1360.87,-2600.83)">
+                                <circle cx="3309.34" cy="5939.94" r="8.534" style="fill:rgb(153,0,0);"/>
+                            </g>
+                        </g>
+                        <g id="Switch-Knurl1" serif:id="Switch Knurl" transform="matrix(1,0,0,1,-9.09495e-13,149.989)">
+                            <g transform="matrix(1.4648,0,0,1.4648,-1560.87,-2600.83)">
+                                <circle cx="3309.34" cy="5939.94" r="8.534" style="fill:rgb(153,0,0);"/>
+                            </g>
+                            <g transform="matrix(0.152717,0,0,1,3055.59,3406.12)">
+                                <path d="M1513.11,2693.89L2822.72,2693.89" style="fill:none;stroke:rgb(153,0,0);stroke-width:34.95px;stroke-linecap:butt;"/>
+                            </g>
+                            <g transform="matrix(1.4648,0,0,1.4648,-1360.87,-2600.83)">
+                                <circle cx="3309.34" cy="5939.94" r="8.534" style="fill:rgb(153,0,0);"/>
+                            </g>
+                        </g>
+                        <g id="Switch-Knurl2" serif:id="Switch Knurl" transform="matrix(1,0,0,1,-9.09495e-13,99.989)">
+                            <g transform="matrix(1.4648,0,0,1.4648,-1560.87,-2600.83)">
+                                <circle cx="3309.34" cy="5939.94" r="8.534" style="fill:rgb(153,0,0);"/>
+                            </g>
+                            <g transform="matrix(0.152717,0,0,1,3055.59,3406.12)">
+                                <path d="M1513.11,2693.89L2822.72,2693.89" style="fill:none;stroke:rgb(153,0,0);stroke-width:34.95px;stroke-linecap:butt;"/>
+                            </g>
+                            <g transform="matrix(1.4648,0,0,1.4648,-1360.87,-2600.83)">
+                                <circle cx="3309.34" cy="5939.94" r="8.534" style="fill:rgb(153,0,0);"/>
+                            </g>
+                        </g>
+                        <g id="Switch-Knurl3" serif:id="Switch Knurl" transform="matrix(1,0,0,1,-9.09495e-13,49.989)">
+                            <g transform="matrix(1.4648,0,0,1.4648,-1560.87,-2600.83)">
+                                <circle cx="3309.34" cy="5939.94" r="8.534" style="fill:rgb(153,0,0);"/>
+                            </g>
+                            <g transform="matrix(0.152717,0,0,1,3055.59,3406.12)">
+                                <path d="M1513.11,2693.89L2822.72,2693.89" style="fill:none;stroke:rgb(153,0,0);stroke-width:34.95px;stroke-linecap:butt;"/>
+                            </g>
+                            <g transform="matrix(1.4648,0,0,1.4648,-1360.87,-2600.83)">
+                                <circle cx="3309.34" cy="5939.94" r="8.534" style="fill:rgb(153,0,0);"/>
+                            </g>
+                        </g>
+                        <g id="Switch-Knurl4" serif:id="Switch Knurl">
+                            <g transform="matrix(1.4648,0,0,1.4648,-1560.87,-2600.83)">
+                                <circle cx="3309.34" cy="5939.94" r="8.534" style="fill:rgb(153,0,0);"/>
+                            </g>
+                            <g transform="matrix(0.152717,0,0,1,3055.59,3406.12)">
+                                <path d="M1513.11,2693.89L2822.72,2693.89" style="fill:none;stroke:rgb(153,0,0);stroke-width:34.95px;stroke-linecap:butt;"/>
+                            </g>
+                            <g transform="matrix(1.4648,0,0,1.4648,-1360.87,-2600.83)">
+                                <circle cx="3309.34" cy="5939.94" r="8.534" style="fill:rgb(153,0,0);"/>
+                            </g>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

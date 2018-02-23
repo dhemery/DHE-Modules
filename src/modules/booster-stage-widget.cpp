@@ -9,62 +9,93 @@ namespace DHE {
 
 struct BoosterStageButtonDark : rack::SVGSwitch, rack::MomentarySwitch {
   BoosterStageButtonDark() {
-    addFrame(rack::SVG::load(rack::assetPlugin(plugin, "res/BoosterStageButtonDark_0.svg")));
-    addFrame(rack::SVG::load(rack::assetPlugin(plugin, "res/BoosterStageButtonDark_1.svg")));
+    addFrame(rack::SVG::load(rack::assetPlugin(plugin, "res/booster-stage/button-dark-0.svg")));
+    addFrame(rack::SVG::load(rack::assetPlugin(plugin, "res/booster-stage/button-dark-1.svg")));
   }
 };
 
 struct BoosterStageButtonLight : rack::SVGSwitch, rack::MomentarySwitch {
   BoosterStageButtonLight() {
-    addFrame(rack::SVG::load(rack::assetPlugin(plugin, "res/BoosterStageButtonLight_0.svg")));
-    addFrame(rack::SVG::load(rack::assetPlugin(plugin, "res/BoosterStageButtonLight_1.svg")));
+    addFrame(rack::SVG::load(rack::assetPlugin(plugin, "res/booster-stage/button-light-0.svg")));
+    addFrame(rack::SVG::load(rack::assetPlugin(plugin, "res/booster-stage/button-light-1.svg")));
   }
 };
 
-BoosterStageWidget::BoosterStageWidget(rack::Module *module) : ModuleWidget(module, 8, "res/BoosterStage.svg") {
+struct BoosterStagePort : rack::SVGPort {
+  BoosterStagePort() {
+    background->svg = rack::SVG::load(assetPlugin(plugin, "res/booster-stage/port.svg"));
+    background->wrap();
+    box.size = background->box.size;
+  }
+};
+
+struct BoosterStageKnobLarge : rack::RoundKnob {
+  BoosterStageKnobLarge() {
+    setSVG(rack::SVG::load(rack::assetPlugin(plugin, "res/booster-stage/knob-l.svg")));
+    box.size = rack::mm2px(rack::Vec(13, 13));
+  }
+};
+
+struct BoosterStageSwitch2 : rack::SVGSwitch, rack::ToggleSwitch {
+  BoosterStageSwitch2() {
+    addFrame(rack::SVG::load(rack::assetPlugin(plugin, "res/booster-stage/switch-2-0.svg")));
+    addFrame(rack::SVG::load(rack::assetPlugin(plugin, "res/booster-stage/switch-2-1.svg")));
+  }
+};
+
+struct BoosterStageSwitch3 : rack::SVGSwitch, rack::ToggleSwitch {
+  BoosterStageSwitch3() {
+    addFrame(rack::SVG::load(rack::assetPlugin(plugin, "res/booster-stage/switch-3-0.svg")));
+    addFrame(rack::SVG::load(rack::assetPlugin(plugin, "res/booster-stage/switch-3-1.svg")));
+    addFrame(rack::SVG::load(rack::assetPlugin(plugin, "res/booster-stage/switch-3-2.svg")));
+  }
+};
+
+BoosterStageWidget::BoosterStageWidget(rack::Module *module) : ModuleWidget(module, 8, "res/booster-stage/panel.svg") {
   auto width{8.f * 5.08f};
 
   auto left_x{width/6.f};
   auto center_x{width/2.f};
   auto right_x{width - left_x};
-  auto center_left_x = left_x + (right_x - left_x)/3.f;
-  auto center_right_x = right_x - (right_x - left_x)/3.f;
+  auto button_port_distance{7.891f};
+  auto center_left_x = left_x + button_port_distance;
+  auto center_right_x = right_x - button_port_distance;
 
   auto top_row_y{25.f};
   auto row_spacing{18.5f};
 
   auto row{0};
-  install_input<rack::PJ301MPort>(BoosterStageModule::LEVEL_CV, {left_x, top_row_y + row*row_spacing});
-  install_knob<rack::RoundBlackKnob>(BoosterStageModule::LEVEL_KNOB, {center_x, top_row_y + row*row_spacing});
-  install_switch<rack::CKSS>(BoosterStageModule::LEVEL_SWITCH, {right_x, top_row_y + row*row_spacing}, 1, 1);
+  install_input<BoosterStagePort>(BoosterStageModule::LEVEL_CV, {left_x, top_row_y + row*row_spacing});
+  install_knob<BoosterStageKnobLarge>(BoosterStageModule::LEVEL_KNOB, {center_x, top_row_y + row*row_spacing});
+  install_switch<BoosterStageSwitch2>(BoosterStageModule::LEVEL_SWITCH, {right_x, top_row_y + row*row_spacing}, 1, 1);
 
   row++;
-  install_input<rack::PJ301MPort>(BoosterStageModule::SHAPE_CV, {left_x, top_row_y + row*row_spacing});
-  install_knob<rack::RoundBlackKnob>(BoosterStageModule::SHAPE_KNOB, {center_x, top_row_y + row*row_spacing});
-  install_switch<rack::CKSS>(BoosterStageModule::SHAPE_SWITCH, {right_x, top_row_y + row*row_spacing});
+  install_input<BoosterStagePort>(BoosterStageModule::SHAPE_CV, {left_x, top_row_y + row*row_spacing});
+  install_knob<BoosterStageKnobLarge>(BoosterStageModule::SHAPE_KNOB, {center_x, top_row_y + row*row_spacing});
+  install_switch<BoosterStageSwitch2>(BoosterStageModule::SHAPE_SWITCH, {right_x, top_row_y + row*row_spacing});
 
   row++;
-  install_input<rack::PJ301MPort>(BoosterStageModule::DURATION_CV, {left_x, top_row_y + row*row_spacing});
-  install_knob<rack::RoundBlackKnob>(BoosterStageModule::DURATION_KNOB, {center_x, top_row_y + row*row_spacing});
-  install_switch<rack::CKSSThree>(BoosterStageModule::DURATION_SWITCH, {right_x, top_row_y + row*row_spacing}, 2, 1);
+  install_input<BoosterStagePort>(BoosterStageModule::DURATION_CV, {left_x, top_row_y + row*row_spacing});
+  install_knob<BoosterStageKnobLarge>(BoosterStageModule::DURATION_KNOB, {center_x, top_row_y + row*row_spacing});
+  install_switch<BoosterStageSwitch3>(BoosterStageModule::DURATION_SWITCH, {right_x, top_row_y + row*row_spacing}, 2, 1);
 
   top_row_y = 82.f;
   row_spacing = 15.f;
 
   row = 0;
-  install_input<rack::PJ301MPort>(BoosterStageModule::DEFER_IN, {left_x, top_row_y + row*row_spacing});
+  install_input<BoosterStagePort>(BoosterStageModule::DEFER_IN, {left_x, top_row_y + row*row_spacing});
   install_switch<BoosterStageButtonDark>(BoosterStageModule::DEFER_BUTTON, {center_left_x, top_row_y + row*row_spacing});
   install_switch<BoosterStageButtonLight>(BoosterStageModule::ACTIVE_BUTTON, {center_right_x, top_row_y + row*row_spacing});
-  install_output<rack::PJ301MPort>(BoosterStageModule::ACTIVE_OUT, {right_x, top_row_y + row*row_spacing});
+  install_output<BoosterStagePort>(BoosterStageModule::ACTIVE_OUT, {right_x, top_row_y + row*row_spacing});
 
   row++;
-  install_input<rack::PJ301MPort>(BoosterStageModule::TRIG_IN, {left_x, top_row_y + row*row_spacing});
+  install_input<BoosterStagePort>(BoosterStageModule::TRIG_IN, {left_x, top_row_y + row*row_spacing});
   install_switch<BoosterStageButtonDark>(BoosterStageModule::TRIG_BUTTON, {center_left_x, top_row_y + row*row_spacing});
   install_switch<BoosterStageButtonLight>(BoosterStageModule::EOC_BUTTON, {center_right_x, top_row_y + row*row_spacing});
-  install_output<rack::PJ301MPort>(BoosterStageModule::EOC_OUT, {right_x, top_row_y + row*row_spacing});
+  install_output<BoosterStagePort>(BoosterStageModule::EOC_OUT, {right_x, top_row_y + row*row_spacing});
 
   row++;
-  install_input<rack::PJ301MPort>(BoosterStageModule::STAGE_IN, {left_x, top_row_y + row*row_spacing});
-  install_output<rack::PJ301MPort>(BoosterStageModule::STAGE_OUT, {right_x, top_row_y + row*row_spacing});
+  install_input<BoosterStagePort>(BoosterStageModule::STAGE_IN, {left_x, top_row_y + row*row_spacing});
+  install_output<BoosterStagePort>(BoosterStageModule::STAGE_OUT, {right_x, top_row_y + row*row_spacing});
 }
 }
