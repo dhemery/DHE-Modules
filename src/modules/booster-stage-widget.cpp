@@ -22,11 +22,11 @@ struct BoosterStageButtonLight : rack::SVGSwitch, rack::MomentarySwitch {
 };
 
 BoosterStageWidget::BoosterStageWidget(rack::Module *module) : ModuleWidget(module, 8, "res/BoosterStage.svg") {
-  auto widget_right_edge{width()};
+  auto width{8.f * 5.08f};
 
-  auto left_x{7.f};
-  auto center_x{widget_right_edge/2.f};
-  auto right_x{widget_right_edge - left_x};
+  auto left_x{width/6.f};
+  auto center_x{width/2.f};
+  auto right_x{width - left_x};
   auto center_left_x = left_x + (right_x - left_x)/3.f;
   auto center_right_x = right_x - (right_x - left_x)/3.f;
 
