@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="39px" height="39px" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:1.5;">
+    <g transform="matrix(0.0295276,0,0,0.0295276,-295.571,-79.9311)">
+        <g transform="matrix(1.09916,0,0,1.67861,-961.987,-55.2037)">
+            <g id="Knob.L" transform="matrix(0.909786,0,0,0.595731,-3083.28,-341.229)">
+                <g>
+                    <g>
+                        <g transform="matrix(0.663084,0,0,0.72944,14009.3,2935.43)">
+                            <ellipse cx="1511.67" cy="1439.59" rx="980.268" ry="891.116" style="fill:rgb(153,0,0);"/>
+                        </g>
+                        <g transform="matrix(1,0,0,0.923099,13500,2656.64)">
+                            <path d="M1511.67,1439.59L1511.67,789.594" style="fill:none;stroke:rgb(255,240,240);stroke-width:77.94px;"/>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

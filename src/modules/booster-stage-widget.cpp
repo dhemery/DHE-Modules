@@ -9,15 +9,15 @@ namespace DHE {
 
 struct BoosterStageButtonDark : rack::SVGSwitch, rack::MomentarySwitch {
   BoosterStageButtonDark() {
-    addFrame(rack::SVG::load(rack::assetPlugin(plugin, "res/booster-stage/button-dark-0.svg")));
-    addFrame(rack::SVG::load(rack::assetPlugin(plugin, "res/booster-stage/button-dark-1.svg")));
+    addFrame(rack::SVG::load(rack::assetPlugin(plugin, "res/booster-stage/button-dark-off.svg")));
+    addFrame(rack::SVG::load(rack::assetPlugin(plugin, "res/booster-stage/button-dark-on.svg")));
   }
 };
 
 struct BoosterStageButtonLight : rack::SVGSwitch, rack::MomentarySwitch {
   BoosterStageButtonLight() {
-    addFrame(rack::SVG::load(rack::assetPlugin(plugin, "res/booster-stage/button-light-0.svg")));
-    addFrame(rack::SVG::load(rack::assetPlugin(plugin, "res/booster-stage/button-light-1.svg")));
+    addFrame(rack::SVG::load(rack::assetPlugin(plugin, "res/booster-stage/button-light-off.svg")));
+    addFrame(rack::SVG::load(rack::assetPlugin(plugin, "res/booster-stage/button-light-on.svg")));
   }
 };
 
@@ -31,23 +31,23 @@ struct BoosterStagePort : rack::SVGPort {
 
 struct BoosterStageKnobLarge : rack::RoundKnob {
   BoosterStageKnobLarge() {
-    setSVG(rack::SVG::load(rack::assetPlugin(plugin, "res/booster-stage/knob-l.svg")));
+    setSVG(rack::SVG::load(rack::assetPlugin(plugin, "res/booster-stage/knob-large.svg")));
     box.size = rack::mm2px(rack::Vec(13, 13));
   }
 };
 
 struct BoosterStageSwitch2 : rack::SVGSwitch, rack::ToggleSwitch {
   BoosterStageSwitch2() {
-    addFrame(rack::SVG::load(rack::assetPlugin(plugin, "res/booster-stage/switch-2-0.svg")));
-    addFrame(rack::SVG::load(rack::assetPlugin(plugin, "res/booster-stage/switch-2-1.svg")));
+    addFrame(rack::SVG::load(rack::assetPlugin(plugin, "res/booster-stage/switch-2-low.svg")));
+    addFrame(rack::SVG::load(rack::assetPlugin(plugin, "res/booster-stage/switch-2-high.svg")));
   }
 };
 
 struct BoosterStageSwitch3 : rack::SVGSwitch, rack::ToggleSwitch {
   BoosterStageSwitch3() {
-    addFrame(rack::SVG::load(rack::assetPlugin(plugin, "res/booster-stage/switch-3-0.svg")));
-    addFrame(rack::SVG::load(rack::assetPlugin(plugin, "res/booster-stage/switch-3-1.svg")));
-    addFrame(rack::SVG::load(rack::assetPlugin(plugin, "res/booster-stage/switch-3-2.svg")));
+    addFrame(rack::SVG::load(rack::assetPlugin(plugin, "res/booster-stage/switch-3-low.svg")));
+    addFrame(rack::SVG::load(rack::assetPlugin(plugin, "res/booster-stage/switch-3-mid.svg")));
+    addFrame(rack::SVG::load(rack::assetPlugin(plugin, "res/booster-stage/switch-3-high.svg")));
   }
 };
 

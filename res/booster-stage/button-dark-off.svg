@@ -1,10 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 <svg width="18px" height="18px" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:1.41421;">
-    <g transform="matrix(0.0295276,0,0,0.0295276,-323.386,-71.2205)">
+    <g transform="matrix(0.0295276,0,0,0.0295276,-371.191,-49.4882)">
         <g transform="matrix(1.09916,0,0,1.67861,-961.987,-55.2037)">
-            <g id="Button.Dark.0" transform="matrix(47.2963,0,0,30.2314,9648.86,218.464)">
-                <ellipse cx="30.951" cy="47.32" rx="5.771" ry="5.912" style="fill:rgb(153,0,0);"/>
+            <g id="Btn.D.Off" transform="matrix(0.909786,0,0,0.595731,-2682.72,702.768)">
+                <g>
+                    <g transform="matrix(51.9862,0,0,50.7466,15173.3,-1549.04)">
+                        <ellipse cx="30.951" cy="47.32" rx="5.771" ry="5.912" style="fill:rgb(153,0,0);"/>
+                    </g>
+                </g>
             </g>
         </g>
     </g>
