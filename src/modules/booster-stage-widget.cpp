@@ -32,7 +32,7 @@ struct BoosterStagePort : rack::SVGPort {
 struct BoosterStageKnobLarge : rack::RoundKnob {
   BoosterStageKnobLarge() {
     setSVG(rack::SVG::load(rack::assetPlugin(plugin, "res/booster-stage/knob-large.svg")));
-    box.size = rack::mm2px(rack::Vec(13, 13));
+    box.size = rack::Vec(39.f, 39.f);
   }
 };
 
