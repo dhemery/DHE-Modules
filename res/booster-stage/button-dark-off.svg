@@ -1,15 +1,5 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg width="18px" height="18px" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:1.41421;">
-    <g transform="matrix(0.0295276,0,0,0.0295276,-371.191,-49.4882)">
-        <g transform="matrix(1.09916,0,0,1.67861,-961.987,-55.2037)">
-            <g id="Btn.D.Off" transform="matrix(0.909786,0,0,0.595731,-2682.72,702.768)">
-                <g>
-                    <g transform="matrix(51.9862,0,0,50.7466,15173.3,-1549.04)">
-                        <ellipse cx="30.951" cy="47.32" rx="5.771" ry="5.912" style="fill:rgb(153,0,0);"/>
-                    </g>
-                </g>
-            </g>
-        </g>
-    </g>
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="6mm" height="6mm" viewBox="0 0 6 6">
+  <g transform="translate(3 3)" stroke-width="1" stroke="#990000" fill="#990000">
+    <circle r="2.5"/>
+  </g>
 </svg>
