@@ -1,5 +1,5 @@
 <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="13mm" height="13mm" viewBox="-6.5 -6.5 13 13">
-  <g stroke="#f0fff0" fill="#008800">
+  <g stroke="rgb(240,255,240)" fill="rgb(0,136,0)">
     <circle r="50%" stroke-opacity="0"/>
     <line y2="-5.75" stroke-width=".75" stroke-linecap="round"/>
   </g>
