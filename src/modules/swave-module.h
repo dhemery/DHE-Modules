@@ -13,16 +13,16 @@ namespace DHE {
 
 struct SwaveModule : rack::Module {
   enum ParamIds {
-    SHAPE_KNOB, SHAPE_SWITCH,
+    CURVE_KNOB, SHAPE_SWITCH,
     TRIM_KNOB,
     NUM_PARAMS
   };
   enum InputIds {
-    SHAPE_CV, SPORT_IN,
+    CURVE_CV, SWAVE_IN,
     NUM_INPUTS
   };
   enum OutputIds {
-    SPORT_OUT,
+    SWAVE_OUT,
     NUM_OUTPUTS
   };
   enum LightIds {
@@ -33,17 +33,17 @@ struct SwaveModule : rack::Module {
       : rack::Module{NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS},
         controller{
             ShapeControl{
-                [this] { return params[SHAPE_KNOB].value; },
+                [this] { return params[CURVE_KNOB].value; },
                 Attenuverter{
-                  [this] { return inputs[SHAPE_CV].value; },
+                  [this] { return inputs[CURVE_CV].value; },
                   [this] { return params[TRIM_KNOB].value; }
                 },
                 [this] { return params[SHAPE_SWITCH].value; }
             },
-            [this] { return inputs[SPORT_IN].value; },
+            [this] { return inputs[SWAVE_IN].value; },
             [this](
                 float f
-            ) { outputs[SPORT_OUT].value = f; }
+            ) { outputs[SWAVE_OUT].value = f; }
         } {}
 
   void step() override {
