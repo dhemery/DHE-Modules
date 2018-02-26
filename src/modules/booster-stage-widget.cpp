@@ -21,18 +21,17 @@ struct BoosterStageButtonLight : rack::SVGSwitch, rack::MomentarySwitch {
   }
 };
 
+struct BoosterStageKnobLarge : rack::RoundKnob {
+  BoosterStageKnobLarge() {
+    setSVG(rack::SVG::load(rack::assetPlugin(plugin, "res/booster-stage/knob-large.svg")));
+  }
+};
+
 struct BoosterStagePort : rack::SVGPort {
   BoosterStagePort() {
     background->svg = rack::SVG::load(assetPlugin(plugin, "res/booster-stage/port.svg"));
     background->wrap();
     box.size = background->box.size;
-  }
-};
-
-struct BoosterStageKnobLarge : rack::RoundKnob {
-  BoosterStageKnobLarge() {
-    setSVG(rack::SVG::load(rack::assetPlugin(plugin, "res/booster-stage/knob-large.svg")));
-    box.size = rack::Vec(39.f, 39.f);
   }
 };
 

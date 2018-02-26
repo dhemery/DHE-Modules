@@ -8,12 +8,34 @@ namespace DHE {
 
 struct UpstageButtonDark : rack::SVGSwitch, rack::MomentarySwitch {
   UpstageButtonDark() {
-    addFrame(rack::SVG::load(rack::assetPlugin(plugin, "res/UpstageButtonDark_0.svg")));
-    addFrame(rack::SVG::load(rack::assetPlugin(plugin, "res/UpstageButtonDark_1.svg")));
+    addFrame(rack::SVG::load(rack::assetPlugin(plugin, "res/upstage/button-dark-off.svg")));
+    addFrame(rack::SVG::load(rack::assetPlugin(plugin, "res/upstage/button-dark-on.svg")));
   }
 };
 
-UpstageWidget::UpstageWidget(rack::Module *module) : ModuleWidget(module, 4, "res/Upstage.svg") {
+struct UpstageKnobLarge : rack::RoundKnob {
+  UpstageKnobLarge() {
+    setSVG(rack::SVG::load(rack::assetPlugin(plugin, "res/upstage/knob-large.svg")));
+  }
+};
+
+struct UpstagePort : rack::SVGPort {
+  UpstagePort() {
+    background->svg = rack::SVG::load(assetPlugin(plugin, "res/upstage/port.svg"));
+    background->wrap();
+    box.size = background->box.size;
+  }
+};
+
+struct UpstageSwitch2 : rack::SVGSwitch, rack::ToggleSwitch {
+  UpstageSwitch2() {
+    addFrame(rack::SVG::load(rack::assetPlugin(plugin, "res/upstage/switch-2-low.svg")));
+    addFrame(rack::SVG::load(rack::assetPlugin(plugin, "res/upstage/switch-2-high.svg")));
+  }
+};
+
+
+UpstageWidget::UpstageWidget(rack::Module *module) : ModuleWidget(module, 4, "res/upstage/panel.svg") {
   auto widget_right_edge{width()};
 
   auto left_x{5.5f};
@@ -24,11 +46,11 @@ UpstageWidget::UpstageWidget(rack::Module *module) : ModuleWidget(module, 4, "re
   auto row_spacing{18.5f};
 
   auto row{0};
-  install_knob<rack::RoundBlackKnob>(UpstageModule::LEVEL_KNOB, {center_x, top_row_y + row*row_spacing});
+  install_knob<UpstageKnobLarge>(UpstageModule::LEVEL_KNOB, {center_x, top_row_y + row*row_spacing});
 
   row++;
-  install_input<rack::PJ301MPort>(UpstageModule::LEVEL_CV_INPUT, {left_x, top_row_y + row*row_spacing});
-  install_switch<rack::CKSS>(UpstageModule::LEVEL_SWITCH, {right_x, top_row_y + row*row_spacing}, 1, 1);
+  install_input<UpstagePort>(UpstageModule::LEVEL_CV_INPUT, {left_x, top_row_y + row*row_spacing});
+  install_switch<UpstageSwitch2>(UpstageModule::LEVEL_SWITCH, {right_x, top_row_y + row*row_spacing}, 1, 1);
 
   row++;
   install_switch<UpstageButtonDark>(UpstageModule::WAIT_BUTTON, {left_x, top_row_y + row*row_spacing});
@@ -38,13 +60,13 @@ UpstageWidget::UpstageWidget(rack::Module *module) : ModuleWidget(module, 4, "re
   row_spacing = 15.f;
 
   row = 0;
-  install_input<rack::PJ301MPort>(UpstageModule::WAIT_IN, {left_x, top_row_y + row*row_spacing});
+  install_input<UpstagePort>(UpstageModule::WAIT_IN, {left_x, top_row_y + row*row_spacing});
 
   row++;
-  install_input<rack::PJ301MPort>(UpstageModule::TRIG_IN, {left_x, top_row_y + row*row_spacing});
-  install_output<rack::PJ301MPort>(UpstageModule::TRIG_OUT, {right_x, top_row_y + row*row_spacing});
+  install_input<UpstagePort>(UpstageModule::TRIG_IN, {left_x, top_row_y + row*row_spacing});
+  install_output<UpstagePort>(UpstageModule::TRIG_OUT, {right_x, top_row_y + row*row_spacing});
 
   row++;
-  install_output<rack::PJ301MPort>(UpstageModule::STAGE_OUT, {right_x, top_row_y + row*row_spacing});
+  install_output<UpstagePort>(UpstageModule::STAGE_OUT, {right_x, top_row_y + row*row_spacing});
 }
 }
