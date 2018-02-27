@@ -1,0 +1,9 @@
+---
+---
+{% assign dark_color = "rgb(153,0,0)" %}
+{% assign foreground_color = dark_color %}
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="6mm" height="6mm" viewBox="0 0 6 6">
+  <g stroke="{{ foreground_color }}" fill="{{ foreground_color }}">
+    <circle r="2.5" transform="translate(3 3)" stroke-width="1"/>
+  </g>
+</svg>
