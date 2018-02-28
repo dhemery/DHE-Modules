@@ -1,0 +1,4 @@
+---
+layout: booster-stage
+---
+{% include knob/large.svg %}

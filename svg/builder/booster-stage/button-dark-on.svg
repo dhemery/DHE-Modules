@@ -1,10 +1,4 @@
 ---
+layout: booster-stage
 ---
-{% assign dark_color = "rgb(153,0,0)" %}
-{% assign fill = dark_color %}
-{% assign stroke = dark_color %}
-<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="6mm" height="6mm" viewBox="0 0 6 6">
-  <g stroke="{{ stroke }}" fill="{{ fill }}">
-    <circle r="2.5" transform="translate(3 3)" stroke-width="1"/>
-  </g>
-</svg>
+{% include button/dark-on.svg %}

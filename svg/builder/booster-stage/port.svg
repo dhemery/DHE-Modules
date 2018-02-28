@@ -1,0 +1,4 @@
+---
+layout: booster-stage
+---
+{% include port.svg shadow_color=layout.dark_color metal_color=layout.light_color %}

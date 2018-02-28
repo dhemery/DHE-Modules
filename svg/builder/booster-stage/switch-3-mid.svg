@@ -1,0 +1,4 @@
+---
+layout: booster-stage
+---
+{% include switch/3-mid.svg %}
