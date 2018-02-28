@@ -1,0 +1,1 @@
+{% include label.svg size=9 color=page.color text=page.text %}
