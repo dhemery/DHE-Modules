@@ -1,0 +1,1 @@
+<text style="fill:{{ include.color }};font-family:Proxima Nova;font-weight:bold;font-size:{{ include.size }}px">{{ include.text }}</text>

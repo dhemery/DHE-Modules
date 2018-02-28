@@ -1,0 +1,4 @@
+---
+text: "BOOSTER STAGE"
+---
+{% include label/plugin.svg %}
