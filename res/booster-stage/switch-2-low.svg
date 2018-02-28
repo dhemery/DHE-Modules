@@ -1,12 +1,64 @@
-<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="9.5mm" height="9.5mm" viewBox="-4.75 -4.75 9.5 9.5">
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<svg width="3.5mm" height="6.5mm"
+  viewBox="-1.75 -3.25 3.5 6.5">
   <g fill="none" stroke="rgb(153,0,0)">
-    <rect x="-1.5" y="-3" width="3" height="6" rx=".25" ry=".25" stroke-width=".5"/>
-    <g stroke-width=".25" stroke-linecap="round" transform="translate(-1 1.375)">
-      <line x1=".1" x2="1.9" y1="-1" y2="-1"/>
-      <line x1=".1" x2="1.9" y1="-.5" y2="-.5"/>
-      <line x1=".1" x2="1.9"/>
-      <line x1=".1" x2="1.9" y1=".5" y2=".5"/>
-      <line x1=".1" x2="1.9" y1="1" y2="1"/>
+
+    <rect x="-1.5" y="-3.0"
+      width="3.0" height="6.0"
+      rx="0.25" ry="0.25"
+      stroke-width="0.5"/>
+
+    <g stroke-width="0.25" stroke-linecap="round">
+      
+      
+      <line x1="-1.0" x2="1.0" y1="0.375" y2="0.375"/>
+      
+      
+      <line x1="-1.0" x2="1.0" y1="0.875" y2="0.875"/>
+      
+      
+      <line x1="-1.0" x2="1.0" y1="1.375" y2="1.375"/>
+      
+      
+      <line x1="-1.0" x2="1.0" y1="1.875" y2="1.875"/>
+      
+      
+      <line x1="-1.0" x2="1.0" y1="2.375" y2="2.375"/>
+      
     </g>
   </g>
+</svg>
+
+
+
 </svg>

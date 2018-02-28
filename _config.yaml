@@ -1,5 +1,5 @@
-source: svg/builder
-destination: svg/built
+source: svg-builder
+destination: res
 defaults:
   -
     scope:

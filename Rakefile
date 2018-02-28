@@ -7,4 +7,4 @@ end
 
 task default: :svg
 
-CLEAN.include 'svg/built'
+CLEAN.include 'res'

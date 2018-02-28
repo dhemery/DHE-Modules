@@ -1,9 +1,13 @@
-<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="8.4mm" height="8.4mm" viewBox="-4.2 -4.2 8.4 8.4">
-  <g stroke="rgb(0,136,0)" fill="rgb(240,255,240)">
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg">
+<svg width="8.4mm" height="8.4mm" viewBox="-4.2 -4.2 8.4 8.4">
+  <g stroke="rgb(0,153,0)" fill="rgb(240,255,240)">
     <g stroke-width=".25">
       <circle r="4"/>
       <circle r="2.9"/>
-      <circle r=".9" stroke-width="1.8"/>
+      <circle r="1.8" fill="rgb(0,153,0)"/>
     </g>
   </g>
+</svg>
+
+
 </svg>

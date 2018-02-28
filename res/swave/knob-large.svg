@@ -1,6 +1,17 @@
-<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="13mm" height="13mm" viewBox="-6.5 -6.5 13 13">
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg">
+
+
+
+
+
+
+<svg width="13.0mm" height="13.0mm" viewBox="-6.5 -6.5 13.0 13.0">
   <g stroke="rgb(255,242,230)" fill="rgb(255,68,0)">
-    <circle r="50%" stroke-opacity="0"/>
-    <line y2="-5.75" stroke-width=".75" stroke-linecap="round"/>
+    <circle r="6.5" stroke="none"/>
+    <line y2="-5.75" stroke-width="0.75" stroke-linecap="round"/>
   </g>
+</svg>
+
+
+
 </svg>
