@@ -1,4 +1,3 @@
 ---
-layout: booster-stage
 ---
 {% include switch/2-high.svg %}

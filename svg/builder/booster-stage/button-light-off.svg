@@ -1,4 +1,3 @@
 ---
-layout: booster-stage
 ---
 {% include button/light-off.svg %}

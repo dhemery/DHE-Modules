@@ -1,2 +1,8 @@
 source: svg/builder
 destination: svg/built
+defaults:
+  -
+    scope:
+      path: "booster-stage"
+    values:
+      layout: "booster-stage"
