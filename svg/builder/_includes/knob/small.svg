@@ -1,6 +1,6 @@
 {% include knob.svg
   diameter=9.0
   pointer_width=0.75
-  color=layout.dark_color
-  pointer_color=layout.light_color
+  color=page.dark_color
+  pointer_color=page.light_color
 %}

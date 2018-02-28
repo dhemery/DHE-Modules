@@ -1,6 +1,0 @@
----
-layout: svg
-dark_color: rgb(153,0,0)
-light_color: rgb(255,240,240)
----
-{{ content }}

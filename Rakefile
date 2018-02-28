@@ -6,3 +6,5 @@ task :svg do
 end
 
 task default: :svg
+
+CLEAN.include 'svg/built'

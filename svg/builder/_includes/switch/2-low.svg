@@ -1,1 +1,1 @@
-{% include switch.svg height=6.0 width=3.0 color=layout.dark_color position=-1.0 %}
+{% include switch.svg height=6.0 width=3.0 color=page.dark_color position=-1.0 %}

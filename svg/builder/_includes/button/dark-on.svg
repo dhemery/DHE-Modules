@@ -1,1 +1,1 @@
-{% include button.svg color=layout.dark_color state_color=layout.light_color %}
+{% include button.svg color=page.dark_color state_color=page.light_color %}

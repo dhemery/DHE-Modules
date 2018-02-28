@@ -3,6 +3,18 @@ destination: svg/built
 defaults:
   -
     scope:
+      path: ""
+    values:
+      layout: svg
+  -
+    scope:
       path: "booster-stage"
     values:
-      layout: "booster-stage"
+      dark_color: "rgb(153,0,0)"
+      light_color: "rgb(255,240,240)"
+  -
+    scope:
+      path: "swave"
+    values:
+      dark_color: "rgb(255,68,0)"
+      light_color: "rgb(255,242,230)"
