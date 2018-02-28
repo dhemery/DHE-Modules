@@ -8,19 +8,25 @@ defaults:
       layout: svg
   -
     scope:
-      path: "booster-stage"
+      path: booster-stage
     values:
-      dark_color: "rgb(153,0,0)"
-      light_color: "rgb(255,240,240)"
+      dark_color: rgb(153,0,0)
+      light_color: rgb(255,240,240)
   -
     scope:
-      path: "swave"
-    values:
-      dark_color: "rgb(255,68,0)"
-      light_color: "rgb(255,242,230)"
-  -
-    scope:
-      path: "stage"
+      path: stage
     values:
       dark_color: rgb(0,153,0)
       light_color: rgb(240,255,240)
+  -
+    scope:
+      path: swave
+    values:
+      dark_color: rgb(255,68,0)
+      light_color: rgb(255,242,230)
+  -
+    scope:
+      path: upstage
+    values:
+      dark_color: rgb(0,77,153)
+      light_color: rgb(230,255,230)
