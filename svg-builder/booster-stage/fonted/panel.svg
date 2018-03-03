@@ -6,11 +6,11 @@ title: BOOSTER STAGE
 {% assign left_x = page.width | divided_by:6.0 %}
 {% assign right_x = page.width | minus:left_x %}
 
-{% include box/port-in.svg x=left_x y="82.0" label="DEFER" %}
-{% include box/port-out.svg x=right_x y="82.0" label="ACTIVE" %}
+{% include box/port-button-in.svg x=left_x y="82.0" label="DEFER" %}
+{% include box/port-button-out.svg x=right_x y="82.0" label="ACTIVE" %}
 
-{% include box/port-in.svg x=left_x y="97.0" label="TRIG" %}
-{% include box/port-out.svg x=right_x y="97.0" label="EOC" %}
+{% include box/port-button-in.svg x=left_x y="97.0" label="TRIG" %}
+{% include box/port-button-out.svg x=right_x y="97.0" label="EOC" %}
 
 {% include box/port-in.svg x=left_x y="112.0" label="IN" %}
 {% include box/port-out.svg x=right_x y="112.0" label="OUT" %}

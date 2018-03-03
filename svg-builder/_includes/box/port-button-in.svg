@@ -1,11 +1,12 @@
-{% assign text_color = include.text_color %}
-{% assign fill_color = include.fill_color %}
+{% assign text_color = page.dark_color %}
+{% assign fill_color = page.light_color %}
 {% assign label = include.label %}
 {% assign port_x = include.x | times:2.9527559055 %}
 {% assign port_y = include.y | times:2.9527559055 %}
 {% assign stroke_width = 0.5 | times:2.9527559055 %}
 {% assign padding = 1.0 | times:2.9527559055 %}
 {% assign port_diameter = 8.4 | times:2.9527559055 %}
+{% assign button_diameter = 6.0 | times:2.9527559055 %}
 
 {% assign stroke_inset = stroke_width | divided_by:2.0 %}
 {% assign label_height = 7.0 %}
@@ -13,7 +14,7 @@
 
 {% assign box_left = port_x | minus:port_radius | minus:padding | minus:stroke_offset %}
 {% assign box_top = port_y | minus:port_radius | minus:padding | minus:label_height | minus:padding | minus:stroke_offset %}
-{% assign box_width = stroke_offset | plus:padding | plus:port_diameter | plus:padding | plus:stroke_offset %}
+{% assign box_width = stroke_offset | plus:padding | plus:port_diameter | plus:padding | plus:button_diameter | plus:padding | plus:stroke_offset %}
 {% assign box_height = stroke_offset | plus:padding | plus:label_height | plus:padding | plus:port_diameter | plus:padding | plus:stroke_offset %}
 {% assign label_y = port_y | minus:port_radius | minus:padding %}
 
