@@ -5,10 +5,16 @@ title: BOOSTER STAGE
 ---
 {% assign left_x = page.width | divided_by:6.0 %}
 {% assign right_x = page.width | minus:left_x %}
+{% assign center_x = page.width | divided_by:2.0 %}
 
-{{ page | cv_port_box: left_x, 25 }}
+{{ page | cv_port_box: left_x, 25.0 }}
+{{ page | labeled_large_knob: center_x, 25.0, "LEVEL" }}
+
 {{ page | cv_port_box: left_x, 43.5 }}
-{{ page | cv_port_box: left_x, 62 }}
+{{ page | labeled_large_knob: center_x, 43.5, "CURVE" }}
+
+{{ page | cv_port_box: left_x, 62.0 }}
+{{ page | labeled_large_knob: center_x, 62.0, "DURATION" }}
 
 {% include box/port-button-in.svg x=left_x y="82.0" label="DEFER" %}
 {% include box/port-button-out.svg x=right_x y="82.0" label="ACTIVE" %}

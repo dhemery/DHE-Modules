@@ -10,20 +10,26 @@
 
 
 
+
         <rect x="3.907480314944999" y="50.106955380405" width="32.18503936995" height="39.804461942070006"
           stroke-width="1.47637795275" rx="2.9527559055" ry="2.9527559055"
           stroke="none" fill="none"/>
         <text text-anchor="middle" fill="rgb(153,0,0)" x="19.99999999992" y="58.4645669289" style="font-family:Proxima Nova;font-weight:bold;font-size:7.0px">CV</text>
+<text text-anchor="middle" fill="rgb(153,0,0)" x="59.99999999976" y="51.67322834625" style="font-family:Proxima Nova;font-weight:bold;font-size:9.0px">LEVEL</text>
+
 
         <rect x="3.907480314944999" y="104.73293963215501" width="32.18503936995" height="39.804461942070006"
           stroke-width="1.47637795275" rx="2.9527559055" ry="2.9527559055"
           stroke="none" fill="none"/>
         <text text-anchor="middle" fill="rgb(153,0,0)" x="19.99999999992" y="113.09055118065001" style="font-family:Proxima Nova;font-weight:bold;font-size:7.0px">CV</text>
+<text text-anchor="middle" fill="rgb(153,0,0)" x="59.99999999976" y="106.29921259800001" style="font-family:Proxima Nova;font-weight:bold;font-size:9.0px">CURVE</text>
+
 
         <rect x="3.907480314944999" y="159.35892388390502" width="32.18503936995" height="39.80446194206999"
           stroke-width="1.47637795275" rx="2.9527559055" ry="2.9527559055"
           stroke="none" fill="none"/>
         <text text-anchor="middle" fill="rgb(153,0,0)" x="19.99999999992" y="167.7165354324" style="font-family:Proxima Nova;font-weight:bold;font-size:7.0px">CV</text>
+<text text-anchor="middle" fill="rgb(153,0,0)" x="59.99999999976" y="160.92519684975002" style="font-family:Proxima Nova;font-weight:bold;font-size:9.0px">DURATION</text>
 
 
 
