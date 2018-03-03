@@ -1,6 +1,0 @@
----
-layout: panel
-hp: 8
----
-
-{% include box/port-in.svg x="7" y="112.0" %}

@@ -1,8 +1,12 @@
 ---
 ---
-{% assign height=128.5 %}
-{% assign width=page.hp | times:5.08 %}
-<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="{{ width }}mm" height="{{ height }}mm" viewbox="0 0 {{ width }} {{ height }}">
-<rect x="0" y="0" width="{{ width }}" height="{{ height }}" stroke="{{ page.dark_color }}" fill="{{ page.light_color }}" stroke-width="1" />
-{{ content }}
+{% assign height = 128.5 | times:2.9527559055 %}
+{% assign width = page.width | times:2.9527559055 %}
+{% assign center_x = width | divided_by:2.0 %}
+{% assign plugin_label_inset = 9.0 | times:2.9527559055 %}
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="{{ width }}" height="{{ height }}"  viewbox="0 0 {{ width }} {{ height }}">
+  <rect x="0" y="0" width="{{ width }}" height="{{ height }}" stroke="{{ page.dark_color }}" fill="{{ page.light_color }}" stroke-width="1"/>
+  <text  text-anchor="middle" fill="{{ page.dark_color }}" x="{{ center_x }}" y="{{ plugin_label_inset }}" style="font-family:Proxima Nova;font-weight:bold;font-size:12px">{{ page.title }}</text>
+  <text  alignment-baseline="hanging" text-anchor="middle" fill="{{ page.dark_color }}" x="{{ center_x }}" y="{{ height | minus:plugin_label_inset }}" style="font-family:Proxima Nova;font-weight:bold;font-size:12px">DHE</text>
+  {{ content }}
 </svg>

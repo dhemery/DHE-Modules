@@ -1,0 +1,68 @@
+
+
+
+
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="119.99999999952" height="379.42913385675"  viewbox="0 0 119.99999999952 379.42913385675">
+  <rect x="0" y="0" width="119.99999999952" height="379.42913385675" stroke="rgb(153,0,0)" fill="rgb(255,240,240)" stroke-width="1"/>
+  <text  text-anchor="middle" fill="rgb(153,0,0)" x="59.99999999976" y="26.5748031495" style="font-family:Proxima Nova;font-weight:bold;font-size:12px">BOOSTER STAGE</text>
+  <text  alignment-baseline="hanging" text-anchor="middle" fill="rgb(153,0,0)" x="59.99999999976" y="352.85433070725" style="font-family:Proxima Nova;font-weight:bold;font-size:12px">DHE</text>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<rect x="3.907480314846576" y="304.663385825525"
+  width="32.18503936995"
+  height="42.13779527545"
+  rx="2.9527559055" ry="2.9527559055"
+  stroke="rgb(153,0,0)" fill="rgb(255,240,240)"
+  stroke-width="1.47637795275"/>
+
+<text  text-anchor="middle" fill="rgb(153,0,0)" x="19.999999999821576" y="315.3543307074" style="font-family:Proxima Nova;font-weight:bold;font-size:7.0px">IN</text>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<rect x="83.90748031472343" y="304.663385825525"
+  width="32.18503936995"
+  height="42.13779527545"
+  rx="2.9527559055" ry="2.9527559055"
+  stroke="rgb(153,0,0)" fill="rgb(153,0,0)"
+  stroke-width="1.47637795275"/>
+
+<text  text-anchor="middle" fill="rgb(255,240,240)" x="99.99999999969843" y="315.3543307074" style="font-family:Proxima Nova;font-weight:bold;font-size:7.0px">OUT</text>
+
+
+
+</svg>

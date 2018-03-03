@@ -1,0 +1,8 @@
+---
+layout: panel
+width: 40.64
+title: BOOSTER STAGE
+---
+
+{% include box/port-in.svg x="6.7733333333" y="112.0" label="IN" %}
+{% include box/port-out.svg x="33.8666666667" y="112.0" label="OUT" %}

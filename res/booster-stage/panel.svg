@@ -1,31 +1,157 @@
-
-
-<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="40.64mm" height="128.5mm" viewbox="0 0 40.64 128.5">
-<rect x="0" y="0" width="40.64" height="128.5" stroke="rgb(153,0,0)" fill="rgb(255,240,240)" stroke-width="1" />
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<rect x="1.55" y="103.55"
-  width="10.9"
-  height="13.9"
-  rx="1" ry="1"
-  stroke="rgb(153,0,0)" fill="none"
-  stroke-width="0.5"/>
-
-<text  text-anchor="middle" fill="rgb(153,0,0)" x="7" y="106.8" style="font-family:Proxima Nova;font-weight:bold;font-size:2.0pt">IN</text>
-
-
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   id="svg16"
+   viewbox="0 0 119.99999999952 379.42913385675"
+   height="379.42913385675"
+   width="119.99999999952"
+   version="1.1">
+  <metadata
+     id="metadata22">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs20" />
+  <rect
+     id="rect2"
+     stroke-width="1"
+     fill="rgb(255,240,240)"
+     stroke="rgb(153,0,0)"
+     height="379.42913385675"
+     width="119.99999999952"
+     y="0"
+     x="0" />
+  <g
+     id="text4"
+     style="font-weight:bold;font-size:12px;font-family:'Proxima Nova';text-anchor:middle;fill:#990000"
+     aria-label="BOOSTER STAGE">
+    <path
+       id="path24"
+       style="font-weight:bold;font-size:12px;font-family:'Proxima Nova';text-anchor:middle;fill:#990000"
+       d="m 13.307625,26.574802 h 4.344 c 1.524,0 2.328,-0.96 2.328,-2.16 0,-1.008 -0.684,-1.836 -1.536,-1.968 0.756,-0.156 1.38,-0.828 1.38,-1.836 0,-1.068 -0.78,-2.04 -2.304,-2.04 h -4.212 z m 1.704,-4.8 v -1.74 h 2.136 c 0.576,0 0.936,0.372 0.936,0.876 0,0.504 -0.36,0.864 -0.936,0.864 z m 0,3.324 v -1.86 h 2.196 c 0.672,0 1.032,0.432 1.032,0.936 0,0.576 -0.384,0.924 -1.032,0.924 z" />
+    <path
+       id="path26"
+       style="font-weight:bold;font-size:12px;font-family:'Proxima Nova';text-anchor:middle;fill:#990000"
+       d="m 20.868937,22.578802 c 0,2.412 1.764,4.14 4.176,4.14 2.424,0 4.188,-1.728 4.188,-4.14 0,-2.412 -1.764,-4.14 -4.188,-4.14 -2.412,0 -4.176,1.728 -4.176,4.14 z m 6.612,0 c 0,1.488 -0.959999,2.628 -2.436,2.628 -1.476,0 -2.424,-1.14 -2.424,-2.628 0,-1.5 0.948,-2.628 2.424,-2.628 1.476001,0 2.436,1.128 2.436,2.628 z" />
+    <path
+       id="path28"
+       style="font-weight:bold;font-size:12px;font-family:'Proxima Nova';text-anchor:middle;fill:#990000"
+       d="m 30.056437,22.578802 c 0,2.412 1.764,4.14 4.176001,4.14 2.423999,0 4.187999,-1.728 4.187999,-4.14 0,-2.412 -1.764,-4.14 -4.187999,-4.14 -2.412001,0 -4.176001,1.728 -4.176001,4.14 z m 6.612,0 c 0,1.488 -0.959999,2.628 -2.435999,2.628 -1.476001,0 -2.424001,-1.14 -2.424001,-2.628 0,-1.5 0.948,-2.628 2.424001,-2.628 1.476,0 2.435999,1.128 2.435999,2.628 z" />
+    <path
+       id="path30"
+       style="font-weight:bold;font-size:12px;font-family:'Proxima Nova';text-anchor:middle;fill:#990000"
+       d="m 39.087938,25.446802 c 0.744,0.756 1.848,1.272 3.384,1.272 2.159999,0 3.204,-1.104 3.204,-2.568 0,-1.812 -1.680001,-2.208 -3,-2.52 -0.864001,-0.204 -1.596001,-0.372 -1.596001,-0.888 0,-0.48 0.408,-0.804 1.14,-0.804 0.816001,0 1.68,0.276 2.328001,0.876 l 0.947999,-1.248 c -0.791999,-0.732 -1.848,-1.116 -3.12,-1.116 -1.884,0 -3.036,1.104 -3.036,2.436 0,1.824 1.68,2.184 2.988,2.484 0.876001,0.216 1.620001,0.384 1.620001,0.972 0,0.456 -0.456001,0.888 -1.392001,0.888 -1.104,0 -1.979999,-0.492 -2.543999,-1.08 z" />
+    <path
+       id="path32"
+       style="font-weight:bold;font-size:12px;font-family:'Proxima Nova';text-anchor:middle;fill:#990000"
+       d="m 48.5775,26.574802 h 1.716 v -6.504 h 2.328 v -1.5 h -6.384 v 1.5 h 2.34 z" />
+    <path
+       id="path34"
+       style="font-weight:bold;font-size:12px;font-family:'Proxima Nova';text-anchor:middle;fill:#990000"
+       d="m 53.713875,26.574802 h 5.664 v -1.5 h -3.96 v -1.812 h 3.876 v -1.5 h -3.876 v -1.692 h 3.96 v -1.5 h -5.664 z" />
+    <path
+       id="path36"
+       style="font-weight:bold;font-size:12px;font-family:'Proxima Nova';text-anchor:middle;fill:#990000"
+       d="m 65.245688,26.574802 h 1.956 l -1.800001,-3.048 c 0.864,-0.204 1.752001,-0.96 1.752001,-2.376 0,-1.488 -1.02,-2.58 -2.688,-2.58 h -3.744 v 8.004 h 1.704 v -2.844 h 1.247999 z m 0.167999,-5.424 c 0,0.672 -0.515999,1.08 -1.199999,1.08 h -1.788 v -2.16 h 1.788 c 0.684,0 1.199999,0.408 1.199999,1.08 z" />
+    <path
+       id="path38"
+       style="font-weight:bold;font-size:12px;font-family:'Proxima Nova';text-anchor:middle;fill:#990000"
+       d="m 70.962937,25.446802 c 0.744,0.756 1.848,1.272 3.384,1.272 2.16,0 3.204001,-1.104 3.204001,-2.568 0,-1.812 -1.680001,-2.208 -3,-2.52 -0.864001,-0.204 -1.596001,-0.372 -1.596001,-0.888 0,-0.48 0.408,-0.804 1.14,-0.804 0.816001,0 1.68,0.276 2.328001,0.876 l 0.947999,-1.248 c -0.792,-0.732 -1.848,-1.116 -3.119999,-1.116 -1.884,0 -3.036,1.104 -3.036,2.436 0,1.824 1.679999,2.184 2.988,2.484 0.875999,0.216 1.619999,0.384 1.619999,0.972 0,0.456 -0.455999,0.888 -1.392,0.888 -1.104,0 -1.98,-0.492 -2.543999,-1.08 z" />
+    <path
+       id="path40"
+       style="font-weight:bold;font-size:12px;font-family:'Proxima Nova';text-anchor:middle;fill:#990000"
+       d="m 80.4525,26.574802 h 1.716 v -6.504 h 2.328 v -1.5 h -6.384 v 1.5 h 2.34 z" />
+    <path
+       id="path42"
+       style="font-weight:bold;font-size:12px;font-family:'Proxima Nova';text-anchor:middle;fill:#990000"
+       d="m 90.335437,26.574802 h 1.944 l -3.084,-8.004 h -2.135999 l -3.096001,8.004 h 1.944 l 0.504001,-1.356 h 3.431999 z m -2.208,-6.3 1.248001,3.444 h -2.496001 z" />
+    <path
+       id="path44"
+       style="font-weight:bold;font-size:12px;font-family:'Proxima Nova';text-anchor:middle;fill:#990000"
+       d="m 92.236125,22.578802 c 0,2.52 1.92,4.152 4.26,4.152 1.452,0 2.592,-0.6 3.408,-1.512 v -3.072 h -3.816 v 1.488 h 2.112 v 0.96 c -0.324,0.3 -0.996,0.612 -1.704,0.612 -1.452,0 -2.508,-1.116 -2.508,-2.628 0,-1.512 1.056,-2.628 2.508,-2.628 0.852,0 1.536,0.48 1.896,1.044 l 1.416,-0.768 c -0.6,-0.948 -1.644,-1.788 -3.312,-1.788 -2.34,0 -4.26,1.608 -4.26,4.14 z" />
+    <path
+       id="path46"
+       style="font-weight:bold;font-size:12px;font-family:'Proxima Nova';text-anchor:middle;fill:#990000"
+       d="m 101.26856,26.574802 h 5.664 v -1.5 h -3.96 v -1.812 h 3.876 v -1.5 h -3.876 v -1.692 h 3.96 v -1.5 h -5.664 z" />
+  </g>
+  <g
+     id="text6"
+     style="font-weight:bold;font-size:12px;font-family:'Proxima Nova';text-anchor:middle;fill:#990000"
+     aria-label="DHE">
+    <path
+       id="path49"
+       style="font-weight:bold;font-size:12px;font-family:'Proxima Nova';text-anchor:middle;fill:#990000"
+       d="m 48.592781,352.85434 h 3.156 c 2.508,0 4.248,-1.584 4.248,-3.996 0,-2.412 -1.74,-4.008 -4.248,-4.008 h -3.156 z m 1.704,-1.5 v -5.004 h 1.452 c 1.644,0 2.508,1.092 2.508,2.508 0,1.356 -0.924,2.496 -2.508,2.496 z" />
+    <path
+       id="path51"
+       style="font-weight:bold;font-size:12px;font-family:'Proxima Nova';text-anchor:middle;fill:#990000"
+       d="m 62.701781,352.85434 h 1.716 v -8.004 h -1.716 v 3.144 h -3.78 v -3.144 h -1.704 v 8.004 h 1.704 v -3.36 h 3.78 z" />
+    <path
+       id="path53"
+       style="font-weight:bold;font-size:12px;font-family:'Proxima Nova';text-anchor:middle;fill:#990000"
+       d="m 65.983406,352.85434 h 5.664 v -1.5 h -3.96 v -1.812 h 3.876 v -1.5 h -3.876 v -1.692 h 3.96 v -1.5 h -5.664 z" />
+  </g>
+  <rect
+     id="rect8"
+     stroke-width="1.47637795275"
+     fill="rgb(255,240,240)"
+     stroke="rgb(153,0,0)"
+     ry="2.9527559055"
+     rx="2.9527559055"
+     height="42.13779527545"
+     width="32.18503936995"
+     y="304.663385825525"
+     x="3.907480314846576" />
+  <g
+     id="text10"
+     style="font-weight:bold;font-size:7px;font-family:'Proxima Nova';text-anchor:middle;fill:#990000"
+     aria-label="IN">
+    <path
+       id="path56"
+       style="font-weight:bold;font-size:7px;font-family:'Proxima Nova';text-anchor:middle;fill:#990000"
+       d="m 16.955164,315.35434 h 0.994 v -4.669 h -0.994 z" />
+    <path
+       id="path58"
+       style="font-weight:bold;font-size:7px;font-family:'Proxima Nova';text-anchor:middle;fill:#990000"
+       d="m 22.089227,315.35434 h 0.959 v -4.669 h -0.994 v 2.933 l -2.163,-2.933 h -1.022 v 4.669 h 0.994 v -3.045 z" />
+  </g>
+  <rect
+     id="rect12"
+     stroke-width="1.47637795275"
+     fill="rgb(153,0,0)"
+     stroke="rgb(153,0,0)"
+     ry="2.9527559055"
+     rx="2.9527559055"
+     height="42.13779527545"
+     width="32.18503936995"
+     y="304.663385825525"
+     x="83.90748031472343" />
+  <g
+     id="text14"
+     style="font-weight:bold;font-size:7px;font-family:'Proxima Nova';text-anchor:middle;fill:#fff0f0"
+     aria-label="OUT">
+    <path
+       id="path61"
+       style="font-weight:bold;font-size:7px;font-family:'Proxima Nova';text-anchor:middle;fill:#fff0f0"
+       d="m 92.957727,313.02334 c 0,1.407 1.029,2.415 2.436,2.415 1.414,0 2.443,-1.008 2.443,-2.415 0,-1.407 -1.029,-2.415 -2.443,-2.415 -1.407,0 -2.436,1.008 -2.436,2.415 z m 3.857,0 c 0,0.868 -0.56,1.533 -1.421,1.533 -0.861,0 -1.414,-0.665 -1.414,-1.533 0,-0.875 0.553,-1.533 1.414,-1.533 0.861,0 1.421,0.658 1.421,1.533 z" />
+    <path
+       id="path63"
+       style="font-weight:bold;font-size:7px;font-family:'Proxima Nova';text-anchor:middle;fill:#fff0f0"
+       d="m 98.541102,313.49234 c 0,1.148 0.686,1.946 2.106998,1.946 1.421,0 2.107,-0.791 2.107,-1.953 v -2.8 h -1.015 v 2.772 c 0,0.651 -0.371,1.099 -1.092,1.099 -0.720998,0 -1.098998,-0.448 -1.098998,-1.099 v -2.772 h -1.008 z" />
+    <path
+       id="path65"
+       style="font-weight:bold;font-size:7px;font-family:'Proxima Nova';text-anchor:middle;fill:#fff0f0"
+       d="m 104.74605,315.35434 h 1.001 v -3.794 h 1.358 v -0.875 h -3.724 v 0.875 h 1.365 z" />
+  </g>
 </svg>

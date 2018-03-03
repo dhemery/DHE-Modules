@@ -1,0 +1,39 @@
+{% assign text_color = include.text_color %}
+{% assign fill_color = include.fill_color %}
+{% assign label = include.label %}
+{% assign port_x = include.x | times:2.9527559055 %}
+{% assign port_y = include.y | times:2.9527559055 %}
+{% assign stroke_width = 0.5 | times:2.9527559055 %}
+{% assign padding = 1.0 | times:2.9527559055 %}
+{% assign port_diameter = 8.4 | times:2.9527559055 %}
+{% assign label_height = 7.0 %}
+
+{% assign port_radius = port_diameter | divided_by:2.0 %}
+{% comment %}
+  box width =
+  port diameter
+  + padding on each side
+  + stroke_width
+{% endcomment %}
+{% assign box_width = port_diameter | plus:padding | plus:padding | plus:stroke_width %}
+{% assign box_offset = box_width | divided_by:2.0 %}
+{% assign box_left = port_x | minus:box_offset %}
+{% comment %}
+  box height =
+  port diameter
+  + padding top and bottom
+  + label height
+  + padding above label
+  + stroke_width
+{% endcomment %}
+{% assign box_height = box_width | plus:padding | plus:label_height %}
+{% assign box_top = port_y | minus:box_offset | minus:label_height | minus:padding %}
+{% assign label_y = port_y | minus:port_radius | minus:padding %}
+<rect x="{{ box_left }}" y="{{ box_top }}"
+  width="{{ box_width }}"
+  height="{{ box_height }}"
+  rx="{{ stroke_width | times:2.0 }}" ry="{{ stroke_width | times:2.0 }}"
+  stroke="{{ page.dark_color }}" fill="{{ fill_color }}"
+  stroke-width="{{ stroke_width }}"/>
+
+<text  text-anchor="middle" fill="{{ text_color }}" x="{{ port_x }}" y="{{ label_y }}" style="font-family:Proxima Nova;font-weight:bold;font-size:{{ label_height }}px">{{ label }}</text>
