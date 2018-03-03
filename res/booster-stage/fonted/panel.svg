@@ -29,9 +29,11 @@
 
 
 
-<rect x="4.64566929132" y="216.8188976369"
+
+
+<rect x="4.64566929132" y="219.1498976369"
   width="51.3779527557"
-  height="40.6614173227"
+  height="38.3304173227"
   rx="2.9527559055" ry="2.9527559055"
   stroke="rgb(153,0,0)" fill="rgb(255,240,240)"
   stroke-width="1.47637795275"/>
@@ -58,16 +60,17 @@
 
 
 
-<rect x="63.9763779525" y="216.8188976369"
+
+
+<rect x="63.9763779525" y="219.1498976369"
   width="51.3779527557"
-  height="40.6614173227"
+  height="38.3304173227"
   rx="2.9527559055" ry="2.9527559055"
   stroke="rgb(153,0,0)" fill="rgb(153,0,0)"
   stroke-width="1.47637795275"/>
 
 <text  text-anchor="middle" fill="rgb(255,240,240)" x="99.9999999996" y="226.7716535424" style="font-family:Proxima Nova;font-weight:bold;font-size:7.0px">ACTIVE</text>
 
-<line x1="63.9763779525" x2="115.3543307082" y1="219.7716535424" y2="219.7716535424" stroke="blue" stroke-width="1px "/>
 
 
 
@@ -90,9 +93,10 @@
 
 
 
-<rect x="4.64566929132" y="261.1102362194"
+
+<rect x="4.64566929132" y="263.4412362194"
   width="51.3779527557"
-  height="40.6614173227"
+  height="38.3304173227"
   rx="2.9527559055" ry="2.9527559055"
   stroke="rgb(153,0,0)" fill="rgb(255,240,240)"
   stroke-width="1.47637795275"/>
@@ -119,16 +123,17 @@
 
 
 
-<rect x="63.9763779525" y="261.1102362194"
+
+
+<rect x="63.9763779525" y="263.4412362194"
   width="51.3779527557"
-  height="40.6614173227"
+  height="38.3304173227"
   rx="2.9527559055" ry="2.9527559055"
   stroke="rgb(153,0,0)" fill="rgb(153,0,0)"
   stroke-width="1.47637795275"/>
 
 <text  text-anchor="middle" fill="rgb(255,240,240)" x="99.9999999996" y="271.0629921249" style="font-family:Proxima Nova;font-weight:bold;font-size:7.0px">EOC</text>
 
-<line x1="63.9763779525" x2="115.3543307082" y1="264.0629921249" y2="264.0629921249" stroke="blue" stroke-width="1px "/>
 
 
 
@@ -150,14 +155,16 @@
 
 
 
-<rect x="4.64566929132" y="305.4015748019"
+
+
+<rect x="4.64566929132" y="307.7325748019"
   width="30.7086614172"
-  height="40.6614173227"
+  height="38.3304173227"
   rx="2.9527559055" ry="2.9527559055"
-  stroke="rgb(153,0,0)" fill="rgb(255,240,240)"
+  stroke="rgb(153,0,0)" fill="rgb(153,0,0)"
   stroke-width="1.47637795275"/>
 
-<text  text-anchor="middle" fill="rgb(153,0,0)" x="19.99999999992" y="315.3543307074" style="font-family:Proxima Nova;font-weight:bold;font-size:7.0px">IN</text>
+<text  text-anchor="middle" fill="rgb(255,240,240)" x="19.99999999992" y="315.3543307074" style="font-family:Proxima Nova;font-weight:bold;font-size:7.0px">IN</text>
 
 
 
@@ -179,9 +186,12 @@
 
 
 
-<rect x="84.645669291" y="305.4015748019"
+
+
+
+<rect x="84.645669291" y="307.7325748019"
   width="30.7086614172"
-  height="40.6614173227"
+  height="38.3304173227"
   rx="2.9527559055" ry="2.9527559055"
   stroke="rgb(153,0,0)" fill="rgb(153,0,0)"
   stroke-width="1.47637795275"/>

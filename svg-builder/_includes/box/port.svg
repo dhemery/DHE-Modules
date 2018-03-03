@@ -1,14 +1,17 @@
-{% assign text_color = include.text_color %}
-{% assign fill_color = include.fill_color %}
+{% assign ascent_ratio = 0.667 %}
+{% assign text_color = page.light_color %}
+{% assign fill_color = page.dark_color %}
 {% assign label = include.label %}
 {% assign port_x = include.x | times:2.9527559055 %}
 {% assign port_y = include.y | times:2.9527559055 %}
 {% assign stroke_width = 0.5 | times:2.9527559055 %}
 {% assign padding = 1.0 | times:2.9527559055 %}
 {% assign port_diameter = 8.4 | times:2.9527559055 %}
+{% assign button_diameter = 6.0 | times:2.9527559055 %}
 
 {% assign stroke_inset = stroke_width | divided_by:2.0 %}
-{% assign label_height = 7.0 %}
+{% assign font_size = 7.0 %}
+{% assign label_height = font_size | times:ascent_ratio %}
 {% assign port_radius = port_diameter | divided_by:2.0 %}
 
 {% assign box_left = port_x | minus:port_radius | minus:padding | minus:stroke_offset %}
@@ -24,4 +27,4 @@
   stroke="{{ page.dark_color }}" fill="{{ fill_color }}"
   stroke-width="{{ stroke_width }}"/>
 
-<text  text-anchor="middle" fill="{{ text_color }}" x="{{ port_x }}" y="{{ label_y }}" style="font-family:Proxima Nova;font-weight:bold;font-size:{{ label_height }}px">{{ label }}</text>
+<text  text-anchor="middle" fill="{{ text_color }}" x="{{ port_x }}" y="{{ label_y }}" style="font-family:Proxima Nova;font-weight:bold;font-size:{{ font_size }}px">{{ label }}</text>
