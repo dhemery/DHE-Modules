@@ -1,5 +1,6 @@
 module Jekyll
   module Filters
+    PX_PER_HP = 15.0
     PX_PER_MM = 2.9527559055
     def mm_to_px(mm)
       mm * PX_PER_MM
@@ -16,6 +17,7 @@ module Jekyll
     LARGE_KNOB_DIAMETER = mm_to_px(13.0)
     SMALL_LABEL_FONT_SIZE = 7.0 # px
     LARGE_LABEL_FONT_SIZE = 9.0 # px
+    PLUGIN_LABEL_FONT_SIZE = 12.0 # px
 
     class RoundControl
       def initialize(x, y, diameter)
@@ -188,35 +190,60 @@ module Jekyll
       PortButtonBox.new(x_px, y_px, direction, border, background, label, label_color)
     end
 
-    def cv_port_box(page, x_mm, y_mm)
+    def cv(page, x_mm, y_mm)
       port_box(x_mm, y_mm, "none", "none", "CV", page["dark_color"])
     end
 
-    def in_port_button_box(page, x_mm, y_mm, label)
+    def in_port_button(page, x_mm, y_mm, label)
       port_button_box(x_mm, y_mm, :right, page["dark_color"], page["light_color"], label, page["dark_color"])
     end
 
-    def out_port_button_box(page, x_mm, y_mm, label)
+    def out_port_button(page, x_mm, y_mm, label)
       port_button_box(x_mm, y_mm, :left, page["dark_color"], page["dark_color"], label, page["light_color"])
     end
 
-    def in_port_box(page, x_mm, y_mm, label)
+    def in_port(page, x_mm, y_mm, label)
       port_box(x_mm, y_mm, page["dark_color"], page["light_color"], label, page["dark_color"])
     end
 
-    def out_port_box(page, x_mm, y_mm, label)
+    def out_port(page, x_mm, y_mm, label)
       port_box(x_mm, y_mm, page["dark_color"], page["dark_color"], label, page["light_color"])
     end
 
-    def labeled_large_knob(page, x_mm, y_mm, label)
+    def large_knob(page, x_mm, y_mm, label)
       labeled_round_control(x_mm, y_mm, LARGE_KNOB_DIAMETER, label, page['dark_color'], LARGE_LABEL_FONT_SIZE)
     end
 
-    def labeled_switch(page, x_mm, y_mm, top_label, bottom_label, right_label = nil)
+    def switch(page, x_mm, y_mm, top_label, bottom_label, right_label = nil)
       height = right_label ? SWITCH_3_HEIGHT : SWITCH_2_HEIGHT
       x_px = Filters::mm_to_px(x_mm)
       y_px = Filters::mm_to_px(y_mm)
       LabeledRectangularControl.new(x_px, y_px, SWITCH_WIDTH, height, page['dark_color'], top_label, bottom_label, right_label)
+    end
+
+    class Panel
+      HEIGHT = Filters::mm_to_px(128.7)
+      PLUGIN_LABEL_INSET = Filters::mm_to_px(9.0)
+
+      def initialize(width, name, color, background)
+        @width = width
+        @color = color
+        @background = background
+        center_x = width / 2.0
+        @plugin_name = Label.new(center_x, PLUGIN_LABEL_INSET, name, color, PLUGIN_LABEL_FONT_SIZE, :above)
+        @plugin_author = Label.new(center_x, HEIGHT - PLUGIN_LABEL_INSET, "DHE", color, PLUGIN_LABEL_FONT_SIZE, :below)
+      end
+
+      def to_liquid
+        %Q[<rect x="0" y="0" width="#{@width}" height="#{HEIGHT}" stroke="#{@color}" fill="#{@background}" stroke-width="1"/>] +
+        @plugin_name.to_liquid +
+        @plugin_author.to_liquid
+      end
+    end
+
+    def module_panel(page, width_hp)
+      width_px = width_hp * PX_PER_HP
+      Panel.new(width_px, page['title'], page['dark_color'], page['light_color'])
     end
   end
 end

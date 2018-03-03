@@ -7,23 +7,23 @@ title: BOOSTER STAGE
 {% assign right_x = page.width | minus:left_x %}
 {% assign center_x = page.width | divided_by:2.0 %}
 
-{{ page | cv_port_box: left_x, 25.0 }}
-{{ page | labeled_large_knob: center_x, 25.0, "LEVEL" }}
-{{ page | labeled_switch: right_x, 25.0, "UNI", "BI" }}
+{{ page | cv: left_x, 25.0 }}
+{{ page | large_knob: center_x, 25.0, "LEVEL" }}
+{{ page | switch: right_x, 25.0, "UNI", "BI" }}
 
-{{ page | cv_port_box: left_x, 43.5 }}
-{{ page | labeled_large_knob: center_x, 43.5, "CURVE" }}
-{{ page | labeled_switch: right_x, 43.5, "S", "J" }}
+{{ page | cv: left_x, 43.5 }}
+{{ page | large_knob: center_x, 43.5, "CURVE" }}
+{{ page | switch: right_x, 43.5, "S", "J" }}
 
-{{ page | cv_port_box: left_x, 62.0 }}
-{{ page | labeled_large_knob: center_x, 62.0, "DURATION" }}
-{{ page | labeled_switch: right_x, 62.0, "100", "1", "10" }}
+{{ page | cv: left_x, 62.0 }}
+{{ page | large_knob: center_x, 62.0, "DURATION" }}
+{{ page | switch: right_x, 62.0, "100", "1", "10" }}
 
-{{ page | in_port_button_box: left_x, 82, "DEFER" }}
-{{ page | out_port_button_box: right_x, 82, "ACTIVE" }}
+{{ page | in_port_button: left_x, 82, "DEFER" }}
+{{ page | out_port_button: right_x, 82, "ACTIVE" }}
 
-{{ page | in_port_button_box: left_x, 97, "TRIG" }}
-{{ page | out_port_button_box: right_x, 97, "EOC" }}
+{{ page | in_port_button: left_x, 97, "TRIG" }}
+{{ page | out_port_button: right_x, 97, "EOC" }}
 
-{{ page | in_port_box: left_x, 112.0, "IN" }}
-{{ page | out_port_box: right_x, 112.0, "OUT" }}
+{{ page | in_port: left_x, 112.0, "IN" }}
+{{ page | out_port: right_x, 112.0, "OUT" }}

@@ -28,8 +28,8 @@
      stroke-width="1"
      fill="rgb(255,240,240)"
      stroke="rgb(153,0,0)"
-     height="379.42913385675"
-     width="119.99999999952"
+     height="380.01968503784997"
+     width="120.0"
      y="0"
      x="0" />
   <g
@@ -87,20 +87,20 @@
   </g>
   <g
      id="text6"
-     style="font-weight:bold;font-size:12px;font-family:'Proxima Nova';text-anchor:middle;fill:#990000"
+     style="font-weight:bold;font-size:12px;font-family:'Proxima Nova';dominant-baseline:hanging;text-anchor:middle;fill:#990000"
      aria-label="DHE">
     <path
        id="path97"
-       style="font-weight:bold;font-size:12px;font-family:'Proxima Nova';text-anchor:middle;fill:#990000"
-       d="m 48.592781,352.85434 h 3.156 c 2.508,0 4.248,-1.584 4.248,-3.996 0,-2.412 -1.74,-4.008 -4.248,-4.008 h -3.156 z m 1.704,-1.5 v -5.004 h 1.452 c 1.644,0 2.508,1.092 2.508,2.508 0,1.356 -0.924,2.496 -2.508,2.496 z" />
+       style="font-weight:bold;font-size:12px;font-family:'Proxima Nova';dominant-baseline:hanging;text-anchor:middle;fill:#990000"
+       d="m 48.592781,361.02889 h 3.156 c 2.508,0 4.248,-1.584 4.248,-3.996 0,-2.412 -1.74,-4.008 -4.248,-4.008 h -3.156 z m 1.704,-1.5 v -5.004 h 1.452 c 1.644,0 2.508,1.092 2.508,2.508 0,1.356 -0.924,2.496 -2.508,2.496 z" />
     <path
        id="path99"
-       style="font-weight:bold;font-size:12px;font-family:'Proxima Nova';text-anchor:middle;fill:#990000"
-       d="m 62.701781,352.85434 h 1.716 v -8.004 h -1.716 v 3.144 h -3.78 v -3.144 h -1.704 v 8.004 h 1.704 v -3.36 h 3.78 z" />
+       style="font-weight:bold;font-size:12px;font-family:'Proxima Nova';dominant-baseline:hanging;text-anchor:middle;fill:#990000"
+       d="m 62.701781,361.02889 h 1.716 v -8.004 h -1.716 v 3.144 h -3.78 v -3.144 h -1.704 v 8.004 h 1.704 v -3.36 h 3.78 z" />
     <path
        id="path101"
-       style="font-weight:bold;font-size:12px;font-family:'Proxima Nova';text-anchor:middle;fill:#990000"
-       d="m 65.983406,352.85434 h 5.664 v -1.5 h -3.96 v -1.812 h 3.876 v -1.5 h -3.876 v -1.692 h 3.96 v -1.5 h -5.664 z" />
+       style="font-weight:bold;font-size:12px;font-family:'Proxima Nova';dominant-baseline:hanging;text-anchor:middle;fill:#990000"
+       d="m 65.983406,361.02889 h 5.664 v -1.5 h -3.96 v -1.812 h 3.876 v -1.5 h -3.876 v -1.692 h 3.96 v -1.5 h -5.664 z" />
   </g>
   <rect
      id="rect8"
