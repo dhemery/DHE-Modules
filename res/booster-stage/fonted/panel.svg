@@ -136,16 +136,14 @@
 
 
 
-        <rect x="3.907480314944999" y="306.99438582552506" width="32.185039369950005" height="39.80679527545"
+        <rect x="3.907480314944999" y="306.996719158905" width="32.18503936995" height="39.80446194207002"
           stroke-width="1.47637795275" rx="2.9527559055" ry="2.9527559055"
           stroke="rgb(153,0,0)" fill="rgb(255,240,240)"/>
-          <text text-anchor="middle" fill="rgb(153,0,0)" x="19.99999999992" y="315.35433070740004" style="font-family:Proxima Nova;font-weight:bold;font-size:7.0px">IN</text>
-        
+        <text text-anchor="middle" fill="rgb(153,0,0)" x="19.99999999992" y="315.35433070740004" style="font-family:Proxima Nova;font-weight:bold;font-size:7.0px">IN</text>
 
-        <rect x="83.907480314625" y="306.99438582552506" width="32.185039369950005" height="39.80679527545"
+        <rect x="83.907480314625" y="306.996719158905" width="32.185039369950005" height="39.80446194207002"
           stroke-width="1.47637795275" rx="2.9527559055" ry="2.9527559055"
           stroke="rgb(153,0,0)" fill="rgb(153,0,0)"/>
-          <text text-anchor="middle" fill="rgb(255,240,240)" x="99.9999999996" y="315.35433070740004" style="font-family:Proxima Nova;font-weight:bold;font-size:7.0px">OUT</text>
-        
+        <text text-anchor="middle" fill="rgb(255,240,240)" x="99.9999999996" y="315.35433070740004" style="font-family:Proxima Nova;font-weight:bold;font-size:7.0px">OUT</text>
 
 </svg>

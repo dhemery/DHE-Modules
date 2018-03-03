@@ -15,7 +15,7 @@ task panels: [:svg] do
   sh '/Applications/Inkscape.app/Contents/Resources/script', '-T', '-l', booster_stage_panel.to_s, booster_stage_fonted_panel.to_s
 end
 
-task default: :svg
+task default: :panels
 
 CLEAN.include 'res'
 
