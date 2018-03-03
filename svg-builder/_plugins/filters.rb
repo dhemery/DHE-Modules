@@ -103,11 +103,15 @@ module Jekyll
       PortBox.new(x_px, y_px, border, background, label, label_color)
     end
 
-    def in_port_box(label, x_mm, y_mm, page)
+    def cv_port_box(page, x_mm, y_mm)
+      port_box(x_mm, y_mm, "none", "none", "CV", page["dark_color"])
+    end
+
+    def in_port_box(page, x_mm, y_mm, label)
       port_box(x_mm, y_mm, page["dark_color"], page["light_color"], label, page["dark_color"])
     end
 
-    def out_port_box(label, x, y, page)
+    def out_port_box(page, x, y, label)
       port_box(x, y, page["dark_color"], page["dark_color"], label, page["light_color"])
     end
   end
