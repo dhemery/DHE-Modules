@@ -1,0 +1,36 @@
+{% assign label="IN" %}
+{% assign port_x = include.x %}
+{% assign port_y = include.y %}
+{% assign stroke_width = 0.5 %}
+{% assign padding = 1.0 %}
+{% assign port_diameter = 8.4 %}
+{% assign port_radius = port_diameter | divided_by:2.0 %}
+{% comment %}
+  box width =
+  port diameter
+  + padding on each side
+  + stroke_width
+{% endcomment %}
+{% assign label_height = 2.0 %}
+{% assign box_width = port_diameter | plus:padding | plus:padding | plus:stroke_width %}
+{% assign box_offset = box_width | divided_by:2.0 %}
+{% assign box_left = port_x | minus:box_offset %}
+{% comment %}
+  box height =
+  port diameter
+  + padding top and bottom
+  + label height
+  + padding above label
+  + stroke_width
+{% endcomment %}
+{% assign box_height = box_width | plus:padding | plus:label_height %}
+{% assign box_top = port_y | minus:box_offset | minus:label_height | minus:padding %}
+{% assign label_y = port_y | minus:port_radius | minus:padding %}
+<rect x="{{ box_left }}" y="{{ box_top }}"
+  width="{{ box_width }}"
+  height="{{ box_height }}"
+  rx="1" ry="1"
+  stroke="{{ page.dark_color}}" fill="none"
+  stroke-width="{{ stroke_width }}"/>
+
+<text  text-anchor="middle" fill="{{ page.dark_color }}" x="{{ port_x }}" y="{{ label_y }}" style="font-family:Proxima Nova;font-weight:bold;font-size:{{ label_height }}pt">{{ label }}</text>
