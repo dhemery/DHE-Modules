@@ -16,11 +16,11 @@ title: BOOSTER STAGE
 {{ page | cv_port_box: left_x, 62.0 }}
 {{ page | labeled_large_knob: center_x, 62.0, "DURATION" }}
 
-{% include box/port-button-in.svg x=left_x y="82.0" label="DEFER" %}
-{% include box/port-button-out.svg x=right_x y="82.0" label="ACTIVE" %}
+{{ page | in_port_button_box: left_x, 82, "DEFER" }}
+{{ page | out_port_button_box: right_x, 82, "ACTIVE" }}
 
-{% include box/port-button-in.svg x=left_x y="97.0" label="TRIG" %}
-{% include box/port-button-out.svg x=right_x y="97.0" label="EOC" %}
+{{ page | in_port_button_box: left_x, 97, "TRIG" }}
+{{ page | out_port_button_box: right_x, 97, "EOC" }}
 
 {{ page | in_port_box: left_x, 112.0, "IN" }}
 {{ page | out_port_box: right_x, 112.0, "OUT" }}

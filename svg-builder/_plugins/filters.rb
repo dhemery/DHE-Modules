@@ -7,7 +7,10 @@ module Jekyll
     module_function :mm_to_px
 
     PORT_DIAMETER = mm_to_px(8.4)
-    LARGE_KNOB_DIAMETER = mm_to_px(13)
+    PORT_RADIUS = PORT_DIAMETER / 2.0
+    BUTTON_DIAMETER = mm_to_px(6.0)
+    BUTTON_RADIUS = BUTTON_DIAMETER / 2.0
+    LARGE_KNOB_DIAMETER = mm_to_px(13.0)
     SMALL_LABEL_FONT_SIZE = 7.0 # px
     LARGE_LABEL_FONT_SIZE = 9.0 # px
 
@@ -99,6 +102,23 @@ module Jekyll
       end
     end
 
+    class PortButtonBox
+      PORT_BUTTON_DISTANCE = PORT_RADIUS + BUTTON_RADIUS + Box::PADDING
+      def initialize(x, y, direction, border, background, label_text, label_color)
+        button_x = direction == :right ? x + PORT_BUTTON_DISTANCE : x - PORT_BUTTON_DISTANCE
+        port = RoundControl.new(x, y, PORT_DIAMETER)
+        button = RoundControl.new(button_x, y, BUTTON_DIAMETER)
+        right = direction == :right ? button.right : port.right
+        left = direction == :left ? button.left : port.left
+        @label = Label.new(x, port.top - Box::PADDING, label_text, label_color, SMALL_LABEL_FONT_SIZE)
+        @box = Box.new(@label.top, right, port.bottom, left, border, background)
+      end
+
+      def to_liquid
+        @box.to_liquid + @label.to_liquid
+      end
+    end
+
     class LabeledRoundControl
       def initialize(x, y, diameter, text, color, font_size)
         control = RoundControl.new(x, y, diameter)
@@ -122,8 +142,22 @@ module Jekyll
       PortBox.new(x_px, y_px, border, background, label, label_color)
     end
 
+    def port_button_box(x_mm, y_mm, direction, border, background, label, label_color)
+      x_px = Filters::mm_to_px(x_mm)
+      y_px = Filters::mm_to_px(y_mm)
+      PortButtonBox.new(x_px, y_px, direction, border, background, label, label_color)
+    end
+
     def cv_port_box(page, x_mm, y_mm)
       port_box(x_mm, y_mm, "none", "none", "CV", page["dark_color"])
+    end
+
+    def in_port_button_box(page, x_mm, y_mm, label)
+      port_button_box(x_mm, y_mm, :right, page["dark_color"], page["light_color"], label, page["dark_color"])
+    end
+
+    def out_port_button_box(page, x_mm, y_mm, label)
+      port_button_box(x_mm, y_mm, :left, page["dark_color"], page["dark_color"], label, page["light_color"])
     end
 
     def in_port_box(page, x_mm, y_mm, label)
