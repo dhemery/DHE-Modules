@@ -51,7 +51,7 @@ struct BoosterStageSwitch3 : rack::SVGSwitch, rack::ToggleSwitch {
 };
 
 BoosterStageWidget::BoosterStageWidget(rack::Module *module) : ModuleWidget(module, 8, "res/booster-stage/panel.svg") {
-  auto width{8.f * 5.08f};
+  auto width = 8.f * 5.08f;
 
   auto left_x = width/6.f;
   auto center_x = width/2.f;
@@ -63,7 +63,7 @@ BoosterStageWidget::BoosterStageWidget(rack::Module *module) : ModuleWidget(modu
   auto top_row_y = 25.f;
   auto row_spacing = 18.5f;
 
-  auto row{0};
+  auto row = 0;
   install_input<BoosterStagePort>(BoosterStageModule::LEVEL_CV, {left_x, top_row_y + row*row_spacing});
   install_knob<BoosterStageKnobLarge>(BoosterStageModule::LEVEL_KNOB, {center_x, top_row_y + row*row_spacing});
   install_switch<BoosterStageSwitch2>(BoosterStageModule::LEVEL_SWITCH, {right_x, top_row_y + row*row_spacing}, 1, 1);

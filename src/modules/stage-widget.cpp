@@ -22,16 +22,16 @@ struct StageKnobLarge : rack::RoundKnob {
 };
 
 StageWidget::StageWidget(rack::Module *module) : ModuleWidget(module, 4, "res/stage/panel.svg") {
-  auto widget_right_edge{width()};
+  auto widget_right_edge = width();
 
-  auto left_x{16.f / 3.f};
-  auto center_x{widget_right_edge/2.f};
-  auto right_x{widget_right_edge - left_x};
+  auto left_x = 16.f / 3.f;
+  auto center_x = widget_right_edge/2.f;
+  auto right_x = widget_right_edge - left_x;
 
-  auto top_row_y{25.f};
-  auto row_spacing{18.5f};
+  auto top_row_y = 25.f;
+  auto row_spacing = 18.5f;
 
-  auto row{0};
+  auto row = 0;
   install_knob<StageKnobLarge>(StageModule::LEVEL_KNOB, {center_x, top_row_y + row*row_spacing});
 
   row++;

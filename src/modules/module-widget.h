@@ -19,7 +19,7 @@ public:
 
   template<class T>
   void install_input(int index, rack::Vec center) {
-    auto input{rack::Port::create<T>({0, 0}, rack::Port::INPUT, module, index)};
+    auto input = rack::Port::create<T>({0, 0}, rack::Port::INPUT, module, index);
     moveTo(input->box, rack::mm2px(center));
     addInput(input);
   }
@@ -31,21 +31,21 @@ public:
 
   template<class T>
   void install_output(int index, rack::Vec center) {
-    auto output{rack::Port::create<T>({0, 0}, rack::Port::OUTPUT, module, index)};
+    auto output = rack::Port::create<T>({0, 0}, rack::Port::OUTPUT, module, index);
     moveTo(output->box, rack::mm2px(center));
     addOutput(output);
   }
 
   template<class T>
   void install_param(int index, rack::Vec center, float low, float high, float initial) {
-    auto param{rack::ParamWidget::create<T>({0, 0}, module, index, low, high, initial)};
+    auto param = rack::ParamWidget::create<T>({0, 0}, module, index, low, high, initial);
     moveTo(param->box, rack::mm2px(center));
     addParam(param);
   }
 
   template<class T>
   void install_screw(rack::Vec center) {
-    auto widget{rack::Widget::create<T>({0, 0})};
+    auto widget = rack::Widget::create<T>({0, 0});
     moveTo(widget->box, rack::mm2px(center));
     addChild(widget);
   }
