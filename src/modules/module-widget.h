@@ -18,11 +18,6 @@ public:
   }
 
   template<class T>
-  void install_button(int index, rack::Vec center, bool on = false) {
-    install_param<T>(index, center, 0.f, 1.f, on ? 1.f : 0.f);
-  }
-
-  template<class T>
   void install_input(int index, rack::Vec center) {
     auto input{rack::Port::create<T>({0, 0}, rack::Port::INPUT, module, index)};
     moveTo(input->box, rack::mm2px(center));
@@ -32,13 +27,6 @@ public:
   template<class T>
   void install_knob(int index, rack::Vec center) {
     install_param<T>(index, center, 0.f, 1.f, 0.5f);
-  }
-
-  template<class T>
-  void install_light(int index, rack::Vec center) {
-    auto light{rack::ModuleLightWidget::create<T>({0, 0}, module, index)};
-    moveTo(light->box, rack::mm2px(center));
-    addChild(light);
   }
 
   template<class T>

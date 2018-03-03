@@ -23,15 +23,15 @@ ModuleWidget::ModuleWidget(rack::Module *module, int widget_hp, const char *back
 
 void ModuleWidget::install_screws() {
 
-  auto screw_diameter{rack::RACK_GRID_WIDTH*MM_PER_IN/SVG_DPI};
-  auto screw_radius{screw_diameter/2.f};
+  auto screw_diameter = rack::RACK_GRID_WIDTH*MM_PER_IN/SVG_DPI;
+  auto screw_radius = screw_diameter/2.f;
 
-  auto top{screw_radius};
-  auto bottom{height() - top};
+  auto top = screw_radius;
+  auto bottom = height() - top;
 
-  auto max_screw_inset{screw_diameter*1.5f};
-  auto left{std::min(width()/4.f, max_screw_inset)};
-  auto right{width() - left};
+  auto max_screw_inset = screw_diameter*1.5f;
+  auto left = std::min(width()/4.f, max_screw_inset);
+  auto right = width() - left;
 
   auto screw_positions = std::vector<rack::Vec>{
       {left, top},
@@ -40,18 +40,14 @@ void ModuleWidget::install_screws() {
       {right, bottom}
   };
 
-  std::random_device rd;
-  auto screw_count = screw_positions.size();
-  auto zero_through_three = std::uniform_int_distribution<unsigned long>{0, 3};
+  std::shuffle(screw_positions.begin(), screw_positions.end(), std::mt19937(std::random_device()()));
 
-  auto black_screw_index = zero_through_three(rd);
+  install_screw<rack::ScrewBlack>(screw_positions.back());
 
-  for (auto screw_index = 0UL; screw_index < screw_count; screw_index++) {
-    if (screw_index==black_screw_index) {
-      install_screw<rack::ScrewBlack>(screw_positions[screw_index]);
-    } else {
-      install_screw<rack::ScrewSilver>(screw_positions[screw_index]);
-    }
+  screw_positions.pop_back();
+
+  for(auto p : screw_positions) {
+    install_screw<rack::ScrewSilver>(p);
   }
 }
 
