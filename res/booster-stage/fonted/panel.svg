@@ -136,68 +136,16 @@
 
 
 
+        <rect x="3.907480314944999" y="306.99438582552506" width="32.185039369950005" height="39.80679527545"
+          stroke-width="1.47637795275" rx="2.9527559055" ry="2.9527559055"
+          stroke="rgb(153,0,0)" fill="rgb(255,240,240)"/>
+          <text text-anchor="middle" fill="rgb(153,0,0)" x="19.99999999992" y="315.35433070740004" style="font-family:Proxima Nova;font-weight:bold;font-size:7.0px">IN</text>
+        
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<rect x="4.64566929132" y="307.7325748019"
-  width="30.7086614172"
-  height="38.3304173227"
-  rx="2.9527559055" ry="2.9527559055"
-  stroke="rgb(153,0,0)" fill="rgb(153,0,0)"
-  stroke-width="1.47637795275"/>
-
-<text  text-anchor="middle" fill="rgb(255,240,240)" x="19.99999999992" y="315.3543307074" style="font-family:Proxima Nova;font-weight:bold;font-size:7.0px">IN</text>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<rect x="84.645669291" y="307.7325748019"
-  width="30.7086614172"
-  height="38.3304173227"
-  rx="2.9527559055" ry="2.9527559055"
-  stroke="rgb(153,0,0)" fill="rgb(153,0,0)"
-  stroke-width="1.47637795275"/>
-
-<text  text-anchor="middle" fill="rgb(255,240,240)" x="99.9999999996" y="315.3543307074" style="font-family:Proxima Nova;font-weight:bold;font-size:7.0px">OUT</text>
-
-
+        <rect x="83.907480314625" y="306.99438582552506" width="32.185039369950005" height="39.80679527545"
+          stroke-width="1.47637795275" rx="2.9527559055" ry="2.9527559055"
+          stroke="rgb(153,0,0)" fill="rgb(153,0,0)"/>
+          <text text-anchor="middle" fill="rgb(255,240,240)" x="99.9999999996" y="315.35433070740004" style="font-family:Proxima Nova;font-weight:bold;font-size:7.0px">OUT</text>
+        
 
 </svg>

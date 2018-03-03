@@ -12,5 +12,5 @@ title: BOOSTER STAGE
 {% include box/port-button-in.svg x=left_x y="97.0" label="TRIG" %}
 {% include box/port-button-out.svg x=right_x y="97.0" label="EOC" %}
 
-{% include box/port-in.svg x=left_x y="112.0" label="IN" %}
-{% include box/port-out.svg x=right_x y="112.0" label="OUT" %}
+{{ "IN" | in_port_box: left_x, 112.0, page }}
+{{ "OUT" | out_port_box: right_x, 112.0, page }}
