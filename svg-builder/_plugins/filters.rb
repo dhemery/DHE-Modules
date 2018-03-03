@@ -10,6 +10,9 @@ module Jekyll
     PORT_RADIUS = PORT_DIAMETER / 2.0
     BUTTON_DIAMETER = mm_to_px(6.0)
     BUTTON_RADIUS = BUTTON_DIAMETER / 2.0
+    SWITCH_WIDTH = mm_to_px(3.0)
+    SWITCH_2_HEIGHT = mm_to_px(6.0)
+    SWITCH_3_HEIGHT = mm_to_px(9.0)
     LARGE_KNOB_DIAMETER = mm_to_px(13.0)
     SMALL_LABEL_FONT_SIZE = 7.0 # px
     LARGE_LABEL_FONT_SIZE = 9.0 # px
@@ -46,21 +49,40 @@ module Jekyll
     class Label
       ASCENT_RATIO = 0.66666666666 # For Proxima Nova font
 
-      def initialize(center_x, bottom, text, color, size)
-        @center_x = center_x
-        @bottom = bottom
-        @text = text
+      def initialize(x, y, text, color, size, alignment = :above)
+        @x = x
+        @y = y
+        @text = text.upcase
         @color = color
         @size = size
         @height = @size * ASCENT_RATIO
+        @alignment = alignment
+        case @alignment
+        when :above
+          @baseline = "baseline"
+          @anchor = "middle"
+        when :below
+          @baseline = "hanging"
+          @anchor = "middle"
+        when :right
+          @baseline = "middle"
+          @anchor = "start"
+        end
       end
 
       def top
-        @bottom - @height
+        case @alignment
+        when :above
+          @y - @height
+        when :below
+          @y
+        when :right
+          @y - @height / 2.0
+        end
       end
 
       def to_liquid
-        %Q[<text text-anchor="middle" fill="#{@color}" x="#{@center_x}" y="#{@bottom}" style="font-family:Proxima Nova;font-weight:bold;font-size:#{@size}px">#{@text.upcase}</text>]
+        %Q[<text dominant-baseline="#{@baseline}" text-anchor="#{@anchor}" fill="#{@color}" x="#{@x}" y="#{@y}" style="font-family:Proxima Nova;font-weight:bold;font-size:#{@size}px">#{@text}</text>]
       end
     end
 
@@ -130,6 +152,24 @@ module Jekyll
       end
     end
 
+    class LabeledRectangularControl
+      def initialize(x, y, width, height, color, top_label, bottom_label, right_label)
+        top = y - height / 2.0
+        bottom = y + height / 2.0
+        left = x - width / 2.0
+        right = x + width / 2.0
+        @labels = [
+          Label.new(x, top - Box::PADDING, top_label, color, SMALL_LABEL_FONT_SIZE, :above),
+          Label.new(x, bottom + Box::PADDING, bottom_label, color, SMALL_LABEL_FONT_SIZE, :below)
+        ]
+        @labels << Label.new(right + Box::PADDING / 2.0, y, right_label, color, SMALL_LABEL_FONT_SIZE, :right) if right_label
+      end
+
+      def to_liquid
+        @labels.map(&:to_liquid).join
+      end
+    end
+
     def labeled_round_control(x_mm, y_mm, diameter, label, color, font_size)
       x_px = Filters::mm_to_px(x_mm)
       y_px = Filters::mm_to_px(y_mm)
@@ -170,6 +210,13 @@ module Jekyll
 
     def labeled_large_knob(page, x_mm, y_mm, label)
       labeled_round_control(x_mm, y_mm, LARGE_KNOB_DIAMETER, label, page['dark_color'], LARGE_LABEL_FONT_SIZE)
+    end
+
+    def labeled_switch(page, x_mm, y_mm, top_label, bottom_label, right_label = nil)
+      height = right_label ? SWITCH_3_HEIGHT : SWITCH_2_HEIGHT
+      x_px = Filters::mm_to_px(x_mm)
+      y_px = Filters::mm_to_px(y_mm)
+      LabeledRectangularControl.new(x_px, y_px, SWITCH_WIDTH, height, page['dark_color'], top_label, bottom_label, right_label)
     end
   end
 end
