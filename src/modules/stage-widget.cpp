@@ -24,7 +24,7 @@ struct StageKnobLarge : rack::RoundKnob {
 StageWidget::StageWidget(rack::Module *module) : ModuleWidget(module, 4, "res/stage/panel.svg") {
   auto widget_right_edge = width();
 
-  auto left_x = 16.f / 3.f;
+  auto left_x = 5.3f;
   auto center_x = widget_right_edge/2.f;
   auto right_x = widget_right_edge - left_x;
 

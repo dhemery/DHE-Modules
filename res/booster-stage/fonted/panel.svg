@@ -8,59 +8,59 @@
 <rect x="0" y="0" width="120.0" height="380.01968503784997" stroke="rgb(153,0,0)" fill="rgb(255,240,240)" stroke-width="1"/><text dominant-baseline="baseline" text-anchor="middle" fill="rgb(153,0,0)" x="60.0" y="26.5748031495" style="font-family:Proxima Nova;font-weight:bold;font-size:12.0px">BOOSTER STAGE</text><text dominant-baseline="hanging" text-anchor="middle" fill="rgb(153,0,0)" x="60.0" y="353.44488188835" style="font-family:Proxima Nova;font-weight:bold;font-size:12.0px">DHE</text>
 
 
-        <rect x="3.907480314944999" y="50.106955380405" width="32.18503936995" height="39.804461942070006"
-          stroke-width="1.47637795275" rx="2.9527559055" ry="2.9527559055"
+        <rect x="4.128937007857499" y="50.328412073317494" width="31.742125984125" height="39.36154855624501"
+          stroke-width="1.033464566925" rx="3.0" ry="3.0"
           stroke="none" fill="none"/>
         <text dominant-baseline="baseline" text-anchor="middle" fill="rgb(153,0,0)" x="19.99999999992" y="58.4645669289" style="font-family:Proxima Nova;font-weight:bold;font-size:7.0px">CV</text>
 <text dominant-baseline="baseline" text-anchor="middle" fill="rgb(153,0,0)" x="59.99999999976" y="51.67322834625" style="font-family:Proxima Nova;font-weight:bold;font-size:9.0px">LEVEL</text>
-<text dominant-baseline="baseline" text-anchor="middle" fill="rgb(153,0,0)" x="99.9999999996" y="62.00787401550001" style="font-family:Proxima Nova;font-weight:bold;font-size:7.0px">UNI</text><text dominant-baseline="hanging" text-anchor="middle" fill="rgb(153,0,0)" x="99.9999999996" y="85.6299212595" style="font-family:Proxima Nova;font-weight:bold;font-size:7.0px">BI</text>
+<text dominant-baseline="baseline" text-anchor="middle" fill="rgb(153,0,0)" x="99.9999999996" y="61.491141732037505" style="font-family:Proxima Nova;font-weight:bold;font-size:7.0px">UNI</text><text dominant-baseline="hanging" text-anchor="middle" fill="rgb(153,0,0)" x="99.9999999996" y="86.1466535429625" style="font-family:Proxima Nova;font-weight:bold;font-size:7.0px">BI</text>
 
 
-        <rect x="3.907480314944999" y="104.73293963215501" width="32.18503936995" height="39.804461942070006"
-          stroke-width="1.47637795275" rx="2.9527559055" ry="2.9527559055"
+        <rect x="4.128937007857499" y="104.9543963250675" width="31.742125984125" height="39.361548556245"
+          stroke-width="1.033464566925" rx="3.0" ry="3.0"
           stroke="none" fill="none"/>
         <text dominant-baseline="baseline" text-anchor="middle" fill="rgb(153,0,0)" x="19.99999999992" y="113.09055118065001" style="font-family:Proxima Nova;font-weight:bold;font-size:7.0px">CV</text>
 <text dominant-baseline="baseline" text-anchor="middle" fill="rgb(153,0,0)" x="59.99999999976" y="106.29921259800001" style="font-family:Proxima Nova;font-weight:bold;font-size:9.0px">CURVE</text>
-<text dominant-baseline="baseline" text-anchor="middle" fill="rgb(153,0,0)" x="99.9999999996" y="116.63385826725002" style="font-family:Proxima Nova;font-weight:bold;font-size:7.0px">S</text><text dominant-baseline="hanging" text-anchor="middle" fill="rgb(153,0,0)" x="99.9999999996" y="140.25590551125" style="font-family:Proxima Nova;font-weight:bold;font-size:7.0px">J</text>
+<text dominant-baseline="baseline" text-anchor="middle" fill="rgb(153,0,0)" x="99.9999999996" y="116.11712598378752" style="font-family:Proxima Nova;font-weight:bold;font-size:7.0px">S</text><text dominant-baseline="hanging" text-anchor="middle" fill="rgb(153,0,0)" x="99.9999999996" y="140.7726377947125" style="font-family:Proxima Nova;font-weight:bold;font-size:7.0px">J</text>
 
 
-        <rect x="3.907480314944999" y="159.35892388390502" width="32.18503936995" height="39.80446194206999"
-          stroke-width="1.47637795275" rx="2.9527559055" ry="2.9527559055"
+        <rect x="4.128937007857499" y="159.58038057681753" width="31.742125984125" height="39.36154855624497"
+          stroke-width="1.033464566925" rx="3.0" ry="3.0"
           stroke="none" fill="none"/>
         <text dominant-baseline="baseline" text-anchor="middle" fill="rgb(153,0,0)" x="19.99999999992" y="167.7165354324" style="font-family:Proxima Nova;font-weight:bold;font-size:7.0px">CV</text>
 <text dominant-baseline="baseline" text-anchor="middle" fill="rgb(153,0,0)" x="59.99999999976" y="160.92519684975002" style="font-family:Proxima Nova;font-weight:bold;font-size:9.0px">DURATION</text>
-<text dominant-baseline="baseline" text-anchor="middle" fill="rgb(153,0,0)" x="99.9999999996" y="166.83070866075002" style="font-family:Proxima Nova;font-weight:bold;font-size:7.0px">100</text><text dominant-baseline="hanging" text-anchor="middle" fill="rgb(153,0,0)" x="99.9999999996" y="199.31102362125" style="font-family:Proxima Nova;font-weight:bold;font-size:7.0px">1</text><text dominant-baseline="middle" text-anchor="start" fill="rgb(153,0,0)" x="105.9055118106" y="183.070866141" style="font-family:Proxima Nova;font-weight:bold;font-size:7.0px">10</text>
+<text dominant-baseline="baseline" text-anchor="middle" fill="rgb(153,0,0)" x="99.9999999996" y="166.31397637728753" style="font-family:Proxima Nova;font-weight:bold;font-size:7.0px">100</text><text dominant-baseline="hanging" text-anchor="middle" fill="rgb(153,0,0)" x="99.9999999996" y="199.8277559047125" style="font-family:Proxima Nova;font-weight:bold;font-size:7.0px">1</text><text dominant-baseline="middle" text-anchor="start" fill="rgb(153,0,0)" x="106.4222440940625" y="183.070866141" style="font-family:Proxima Nova;font-weight:bold;font-size:7.0px">10</text>
 
 
-        <rect x="3.907480314944999" y="218.41404199390502" width="52.85433070845" height="39.80446194207002"
-          stroke-width="1.47637795275" rx="2.9527559055" ry="2.9527559055"
+        <rect x="4.128937007857499" y="218.63549868681753" width="52.411417322625" height="39.361548556245"
+          stroke-width="1.033464566925" rx="3.0" ry="3.0"
           stroke="rgb(153,0,0)" fill="rgb(255,240,240)"/>
         <text dominant-baseline="baseline" text-anchor="middle" fill="rgb(153,0,0)" x="19.99999999992" y="226.7716535424" style="font-family:Proxima Nova;font-weight:bold;font-size:7.0px">DEFER</text>
 
-        <rect x="63.238188976125" y="218.41404199390502" width="52.85433070845001" height="39.80446194207002"
-          stroke-width="1.47637795275" rx="2.9527559055" ry="2.9527559055"
+        <rect x="63.4596456690375" y="218.63549868681753" width="52.41141732262501" height="39.361548556245"
+          stroke-width="1.033464566925" rx="3.0" ry="3.0"
           stroke="rgb(153,0,0)" fill="rgb(153,0,0)"/>
         <text dominant-baseline="baseline" text-anchor="middle" fill="rgb(255,240,240)" x="99.9999999996" y="226.7716535424" style="font-family:Proxima Nova;font-weight:bold;font-size:7.0px">ACTIVE</text>
 
 
-        <rect x="3.907480314944999" y="262.705380576405" width="52.85433070845" height="39.80446194207002"
-          stroke-width="1.47637795275" rx="2.9527559055" ry="2.9527559055"
+        <rect x="4.128937007857499" y="262.9268372693175" width="52.411417322625" height="39.361548556245"
+          stroke-width="1.033464566925" rx="3.0" ry="3.0"
           stroke="rgb(153,0,0)" fill="rgb(255,240,240)"/>
         <text dominant-baseline="baseline" text-anchor="middle" fill="rgb(153,0,0)" x="19.99999999992" y="271.0629921249" style="font-family:Proxima Nova;font-weight:bold;font-size:7.0px">TRIG</text>
 
-        <rect x="63.238188976125" y="262.705380576405" width="52.85433070845001" height="39.80446194207002"
-          stroke-width="1.47637795275" rx="2.9527559055" ry="2.9527559055"
+        <rect x="63.4596456690375" y="262.9268372693175" width="52.41141732262501" height="39.361548556245"
+          stroke-width="1.033464566925" rx="3.0" ry="3.0"
           stroke="rgb(153,0,0)" fill="rgb(153,0,0)"/>
         <text dominant-baseline="baseline" text-anchor="middle" fill="rgb(255,240,240)" x="99.9999999996" y="271.0629921249" style="font-family:Proxima Nova;font-weight:bold;font-size:7.0px">EOC</text>
 
 
-        <rect x="3.907480314944999" y="306.996719158905" width="32.18503936995" height="39.80446194207002"
-          stroke-width="1.47637795275" rx="2.9527559055" ry="2.9527559055"
+        <rect x="4.128937007857499" y="307.21817585181753" width="31.742125984125" height="39.361548556245"
+          stroke-width="1.033464566925" rx="3.0" ry="3.0"
           stroke="rgb(153,0,0)" fill="rgb(255,240,240)"/>
         <text dominant-baseline="baseline" text-anchor="middle" fill="rgb(153,0,0)" x="19.99999999992" y="315.35433070740004" style="font-family:Proxima Nova;font-weight:bold;font-size:7.0px">IN</text>
 
-        <rect x="83.907480314625" y="306.996719158905" width="32.185039369950005" height="39.80446194207002"
-          stroke-width="1.47637795275" rx="2.9527559055" ry="2.9527559055"
+        <rect x="84.1289370075375" y="307.21817585181753" width="31.74212598412501" height="39.361548556245"
+          stroke-width="1.033464566925" rx="3.0" ry="3.0"
           stroke="rgb(153,0,0)" fill="rgb(153,0,0)"/>
         <text dominant-baseline="baseline" text-anchor="middle" fill="rgb(255,240,240)" x="99.9999999996" y="315.35433070740004" style="font-family:Proxima Nova;font-weight:bold;font-size:7.0px">OUT</text>
 

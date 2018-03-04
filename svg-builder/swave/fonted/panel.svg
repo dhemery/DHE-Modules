@@ -6,6 +6,7 @@ title: SWAVE
 {% assign left_x = 5.3 %}
 {% assign right_x = page.width | minus:left_x %}
 {% assign center_x = page.width | divided_by:2.0 %}
+{% assign side_padding_ratio = 0.2 %}
 
 {{ page | panel: 4.0 }}
 
@@ -15,5 +16,5 @@ title: SWAVE
 
 {{ page | small_knob: center_x, 62.0, "-/+" }}
 
-{{ page | in_port: left_x, 112.0, "IN", 0.1 }}
-{{ page | out_port: right_x, 112.0, "OUT", 0.1 }}
+{{ page | in_port: left_x, 112.0, "IN", side_padding_ratio }}
+{{ page | out_port: right_x, 112.0, "OUT", side_padding_ratio }}

@@ -6,7 +6,7 @@
 {% assign switch_origin_x = 0.0 | minus:switch_width | divided_by:2.0 %}
 {% assign switch_origin_y = 0.0 | minus:switch_height | divided_by:2.0 %}
 
-{% assign switch_stroke_width = 0.5 %}
+{% assign switch_stroke_width = 0.35 %}
 {% assign switch_inset = switch_stroke_width | divided_by:2.0 %}
 {% assign switch_interior_width = switch_width | minus:switch_stroke_width %}
 {% assign switch_interior_height = switch_height | minus:switch_stroke_width %}
@@ -17,7 +17,7 @@
 {% assign view_origin_x = switch_origin_x | minus:switch_inset %}
 {% assign view_origin_y = switch_origin_y | minus:switch_inset %}
 
-{% assign knurl_stroke_width = switch_stroke_width | divided_by:2.0 %}
+{% assign knurl_stroke_width = 0.25 %}
 {% assign knurl_inset = knurl_stroke_width | times:2.0 %}
 {% assign knurl_length = switch_interior_width | minus:knurl_inset %}
 {% assign knurl_left = 0.0 | minus:knurl_length | divided_by:2.0 %}

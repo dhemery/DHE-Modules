@@ -1,0 +1,45 @@
+
+
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="59.99999999976" height="379.42913385675"  viewbox="0 0 59.99999999976 379.42913385675">
+  
+
+
+
+
+<rect x="0" y="0" width="60.0" height="380.01968503784997" stroke="rgb(0,77,153)" fill="rgb(230,255,230)" stroke-width="1"/><text dominant-baseline="baseline" text-anchor="middle" fill="rgb(0,77,153)" x="30.0" y="26.5748031495" style="font-family:Proxima Nova;font-weight:bold;font-size:12.0px">UPSTAGE</text><text dominant-baseline="hanging" text-anchor="middle" fill="rgb(0,77,153)" x="30.0" y="353.44488188835" style="font-family:Proxima Nova;font-weight:bold;font-size:12.0px">DHE</text>
+
+<text dominant-baseline="baseline" text-anchor="middle" fill="rgb(0,77,153)" x="29.99999999988" y="51.67322834625" style="font-family:Proxima Nova;font-weight:bold;font-size:9.0px">LEVEL</text>
+
+        <rect x="-0.22145669291250158" y="104.9543963250675" width="31.742125984124996" height="39.361548556245"
+          stroke-width="1.033464566925" rx="3.0" ry="3.0"
+          stroke="none" fill="none"/>
+        <text dominant-baseline="baseline" text-anchor="middle" fill="rgb(0,77,153)" x="15.64960629915" y="113.09055118065001" style="font-family:Proxima Nova;font-weight:bold;font-size:7.0px">CV</text>
+<text dominant-baseline="baseline" text-anchor="middle" fill="rgb(0,77,153)" x="44.35039370061" y="116.11712598378752" style="font-family:Proxima Nova;font-weight:bold;font-size:7.0px">UNI</text><text dominant-baseline="hanging" text-anchor="middle" fill="rgb(0,77,153)" x="44.35039370061" y="140.7726377947125" style="font-family:Proxima Nova;font-weight:bold;font-size:7.0px">BI</text>
+
+<text dominant-baseline="baseline" text-anchor="middle" fill="rgb(0,77,153)" x="15.64960629915" y="171.25984251900002" style="font-family:Proxima Nova;font-weight:bold;font-size:7.0px">WAIT</text>
+<text dominant-baseline="baseline" text-anchor="middle" fill="rgb(0,77,153)" x="44.35039370061" y="171.25984251900002" style="font-family:Proxima Nova;font-weight:bold;font-size:7.0px">TRIG</text>
+
+
+        <rect x="2.1407480314874987" y="218.63549868681753" width="27.017716535325" height="39.361548556245"
+          stroke-width="1.033464566925" rx="3.0" ry="3.0"
+          stroke="rgb(0,77,153)" fill="rgb(230,255,230)"/>
+        <text dominant-baseline="baseline" text-anchor="middle" fill="rgb(0,77,153)" x="15.64960629915" y="226.7716535424" style="font-family:Proxima Nova;font-weight:bold;font-size:7.0px">WAIT</text>
+
+
+        <rect x="2.1407480314874987" y="262.9268372693175" width="27.017716535325" height="39.361548556245"
+          stroke-width="1.033464566925" rx="3.0" ry="3.0"
+          stroke="rgb(0,77,153)" fill="rgb(230,255,230)"/>
+        <text dominant-baseline="baseline" text-anchor="middle" fill="rgb(0,77,153)" x="15.64960629915" y="271.0629921249" style="font-family:Proxima Nova;font-weight:bold;font-size:7.0px">TRIG</text>
+
+        <rect x="30.8415354329475" y="262.9268372693175" width="27.017716535325004" height="39.361548556245"
+          stroke-width="1.033464566925" rx="3.0" ry="3.0"
+          stroke="rgb(0,77,153)" fill="rgb(0,77,153)"/>
+        <text dominant-baseline="baseline" text-anchor="middle" fill="rgb(230,255,230)" x="44.35039370061" y="271.0629921249" style="font-family:Proxima Nova;font-weight:bold;font-size:7.0px">TRIG</text>
+
+
+        <rect x="30.8415354329475" y="307.21817585181753" width="27.017716535325004" height="39.361548556245"
+          stroke-width="1.033464566925" rx="3.0" ry="3.0"
+          stroke="rgb(0,77,153)" fill="rgb(0,77,153)"/>
+        <text dominant-baseline="baseline" text-anchor="middle" fill="rgb(230,255,230)" x="44.35039370061" y="315.35433070740004" style="font-family:Proxima Nova;font-weight:bold;font-size:7.0px">OUT</text>
+
+</svg>

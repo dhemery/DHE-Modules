@@ -90,10 +90,10 @@ module Jekyll
     end
 
     class Box
-      STROKE_WIDTH = Filters::mm_to_px(0.5)
+      STROKE_WIDTH = Filters::mm_to_px(0.35)
       PADDING = Filters::mm_to_px(1.0)
-      STROKE_INSET = STROKE_WIDTH / 2
-      CORNER_RADIUS = STROKE_WIDTH * 2
+      STROKE_INSET = STROKE_WIDTH / 2.0
+      CORNER_RADIUS = 3.0
 
       def initialize(top, right, bottom, left, border, background, side_padding)
         @top = top - PADDING - STROKE_INSET
@@ -150,10 +150,10 @@ module Jekyll
         left = x - width / 2.0
         right = x + width / 2.0
         @labels = [
-          Label.new(x, top - Box::PADDING, top_label, color, SMALL_LABEL_FONT_SIZE, :above),
-          Label.new(x, bottom + Box::PADDING, bottom_label, color, SMALL_LABEL_FONT_SIZE, :below)
+          Label.new(x, top - Box::PADDING - Box::STROKE_INSET, top_label, color, SMALL_LABEL_FONT_SIZE, :above),
+          Label.new(x, bottom + Box::PADDING + Box::STROKE_INSET, bottom_label, color, SMALL_LABEL_FONT_SIZE, :below)
         ]
-        @labels << Label.new(right + Box::PADDING / 2.0, y, right_label, color, SMALL_LABEL_FONT_SIZE, :right) if right_label
+        @labels << Label.new(right + Box::PADDING / 2.0 + Box::STROKE_INSET, y, right_label, color, SMALL_LABEL_FONT_SIZE, :right) if right_label
       end
 
       def to_liquid
@@ -194,6 +194,10 @@ module Jekyll
       x_px = Filters::mm_to_px(x_mm)
       y_px = Filters::mm_to_px(y_mm)
       PortBox.new(x_px, y_px, border, background, label, label_color, button, side_padding)
+    end
+
+    def button(page, x_mm, y_mm, label)
+      labeled_round_control(x_mm, y_mm, BUTTON_DIAMETER, label, page['dark_color'], SMALL_LABEL_FONT_SIZE)
     end
 
     def cv(page, x_mm, y_mm)

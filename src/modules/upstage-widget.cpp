@@ -38,7 +38,7 @@ struct UpstageSwitch2 : rack::SVGSwitch, rack::ToggleSwitch {
 UpstageWidget::UpstageWidget(rack::Module *module) : ModuleWidget(module, 4, "res/upstage/panel.svg") {
   auto widget_right_edge = width();
 
-  auto left_x = 5.5f;
+  auto left_x = 5.3f;
   auto center_x = widget_right_edge/2.f;
   auto right_x = widget_right_edge - left_x;
 

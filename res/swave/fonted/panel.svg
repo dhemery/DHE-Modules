@@ -5,26 +5,27 @@
 
 
 
+
 <rect x="0" y="0" width="60.0" height="380.01968503784997" stroke="rgb(255,68,0)" fill="rgb(255,242,230)" stroke-width="1"/><text dominant-baseline="baseline" text-anchor="middle" fill="rgb(255,68,0)" x="30.0" y="26.5748031495" style="font-family:Proxima Nova;font-weight:bold;font-size:12.0px">SWAVE</text><text dominant-baseline="hanging" text-anchor="middle" fill="rgb(255,68,0)" x="30.0" y="353.44488188835" style="font-family:Proxima Nova;font-weight:bold;font-size:12.0px">DHE</text>
 
 <text dominant-baseline="baseline" text-anchor="middle" fill="rgb(255,68,0)" x="29.99999999988" y="51.67322834625" style="font-family:Proxima Nova;font-weight:bold;font-size:9.0px">CURVE</text>
 
-        <rect x="-0.4429133858250016" y="104.73293963215501" width="32.18503936995" height="39.804461942070006"
-          stroke-width="1.47637795275" rx="2.9527559055" ry="2.9527559055"
+        <rect x="-0.22145669291250158" y="104.9543963250675" width="31.742125984124996" height="39.361548556245"
+          stroke-width="1.033464566925" rx="3.0" ry="3.0"
           stroke="none" fill="none"/>
         <text dominant-baseline="baseline" text-anchor="middle" fill="rgb(255,68,0)" x="15.64960629915" y="113.09055118065001" style="font-family:Proxima Nova;font-weight:bold;font-size:7.0px">CV</text>
-<text dominant-baseline="baseline" text-anchor="middle" fill="rgb(255,68,0)" x="44.35039370061" y="116.63385826725002" style="font-family:Proxima Nova;font-weight:bold;font-size:7.0px">S</text><text dominant-baseline="hanging" text-anchor="middle" fill="rgb(255,68,0)" x="44.35039370061" y="140.25590551125" style="font-family:Proxima Nova;font-weight:bold;font-size:7.0px">J</text>
+<text dominant-baseline="baseline" text-anchor="middle" fill="rgb(255,68,0)" x="44.35039370061" y="116.11712598378752" style="font-family:Proxima Nova;font-weight:bold;font-size:7.0px">S</text><text dominant-baseline="hanging" text-anchor="middle" fill="rgb(255,68,0)" x="44.35039370061" y="140.7726377947125" style="font-family:Proxima Nova;font-weight:bold;font-size:7.0px">J</text>
 
 <text dominant-baseline="baseline" text-anchor="middle" fill="rgb(255,68,0)" x="29.99999999988" y="166.83070866075002" style="font-family:Proxima Nova;font-weight:bold;font-size:7.0px">-/+</text>
 
 
-        <rect x="2.2145669291249983" y="306.996719158905" width="26.870078740049998" height="39.80446194207002"
-          stroke-width="1.47637795275" rx="2.9527559055" ry="2.9527559055"
+        <rect x="2.1407480314874987" y="307.21817585181753" width="27.017716535325" height="39.361548556245"
+          stroke-width="1.033464566925" rx="3.0" ry="3.0"
           stroke="rgb(255,68,0)" fill="rgb(255,242,230)"/>
         <text dominant-baseline="baseline" text-anchor="middle" fill="rgb(255,68,0)" x="15.64960629915" y="315.35433070740004" style="font-family:Proxima Nova;font-weight:bold;font-size:7.0px">IN</text>
 
-        <rect x="30.915354330585" y="306.996719158905" width="26.87007874005" height="39.80446194207002"
-          stroke-width="1.47637795275" rx="2.9527559055" ry="2.9527559055"
+        <rect x="30.8415354329475" y="307.21817585181753" width="27.017716535325004" height="39.361548556245"
+          stroke-width="1.033464566925" rx="3.0" ry="3.0"
           stroke="rgb(255,68,0)" fill="rgb(255,68,0)"/>
         <text dominant-baseline="baseline" text-anchor="middle" fill="rgb(255,242,230)" x="44.35039370061" y="315.35433070740004" style="font-family:Proxima Nova;font-weight:bold;font-size:7.0px">OUT</text>
 
