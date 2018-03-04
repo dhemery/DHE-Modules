@@ -7,6 +7,8 @@ title: BOOSTER STAGE
 {% assign right_x = page.width | minus:left_x %}
 {% assign center_x = page.width | divided_by:2.0 %}
 
+{{ page | module_panel: 8.0 }}
+
 {{ page | cv: left_x, 25.0 }}
 {{ page | large_knob: center_x, 25.0, "LEVEL" }}
 {{ page | switch: right_x, 25.0, "UNI", "BI" }}

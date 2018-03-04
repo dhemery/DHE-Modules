@@ -15,6 +15,7 @@ module Jekyll
     SWITCH_2_HEIGHT = mm_to_px(6.0)
     SWITCH_3_HEIGHT = mm_to_px(9.0)
     LARGE_KNOB_DIAMETER = mm_to_px(13.0)
+    SMALL_KNOB_DIAMETER = mm_to_px(9.0)
     SMALL_LABEL_FONT_SIZE = 7.0 # px
     LARGE_LABEL_FONT_SIZE = 9.0 # px
     PLUGIN_LABEL_FONT_SIZE = 12.0 # px
@@ -217,6 +218,10 @@ module Jekyll
 
     def large_knob(page, x_mm, y_mm, label)
       labeled_round_control(x_mm, y_mm, LARGE_KNOB_DIAMETER, label, page['dark_color'], LARGE_LABEL_FONT_SIZE)
+    end
+
+    def small_knob(page, x_mm, y_mm, label)
+      labeled_round_control(x_mm, y_mm, SMALL_KNOB_DIAMETER, label, page['dark_color'], SMALL_LABEL_FONT_SIZE)
     end
 
     def switch(page, x_mm, y_mm, top_label, bottom_label, right_label = nil)
