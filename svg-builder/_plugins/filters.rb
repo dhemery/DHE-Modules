@@ -95,10 +95,10 @@ module Jekyll
       STROKE_INSET = STROKE_WIDTH / 2
       CORNER_RADIUS = STROKE_WIDTH * 2
 
-      def initialize(top, right, bottom, left, border, background)
+      def initialize(top, right, bottom, left, border, background, side_padding)
         @top = top - PADDING - STROKE_INSET
-        @left = left - PADDING - STROKE_INSET
-        @right = right + PADDING + STROKE_INSET
+        @left = left - PADDING*side_padding - STROKE_INSET
+        @right = right + PADDING*side_padding + STROKE_INSET
         @bottom = bottom + PADDING + STROKE_INSET
         @width = @right - @left
         @height = @bottom - @top
@@ -117,14 +117,14 @@ module Jekyll
 
     class PortBox
       BUTTON_EXTRA = BUTTON_DIAMETER + Box::PADDING
-      def initialize(x, y, border, background, label_text, label_color, button)
+      def initialize(x, y, border, background, label_text, label_color, button, side_padding)
         port = RoundControl.new(x, y, PORT_DIAMETER)
         right = port.right
         left = port.left
         right += BUTTON_EXTRA if button == :right
         left -= BUTTON_EXTRA if button == :left
         @label = Label.new(x, port.top - Box::PADDING, label_text, label_color, SMALL_LABEL_FONT_SIZE)
-        @box = Box.new(@label.top, right, port.bottom, left, border, background)
+        @box = Box.new(@label.top, right, port.bottom, left, border, background, side_padding)
       end
 
       def to_liquid
@@ -190,30 +190,30 @@ module Jekyll
       RoundControlLabel.new(x_px, y_px, diameter, label, color, font_size)
     end
 
-    def port_box(x_mm, y_mm, border, background, label, label_color, button = :none)
+    def port_box(x_mm, y_mm, border, background, label, label_color, button, side_padding)
       x_px = Filters::mm_to_px(x_mm)
       y_px = Filters::mm_to_px(y_mm)
-      PortBox.new(x_px, y_px, border, background, label, label_color, button)
+      PortBox.new(x_px, y_px, border, background, label, label_color, button, side_padding)
     end
 
     def cv(page, x_mm, y_mm)
-      port_box(x_mm, y_mm, "none", "none", "CV", page["dark_color"],)
+      port_box(x_mm, y_mm, "none", "none", "CV", page["dark_color"], :none, 1.0)
     end
 
-    def in_port_button(page, x_mm, y_mm, label)
-      port_box(x_mm, y_mm, page["dark_color"], page["light_color"], label, page["dark_color"], :right)
+    def in_port_button(page, x_mm, y_mm, label, side_padding = 1.0)
+      port_box(x_mm, y_mm, page["dark_color"], page["light_color"], label, page["dark_color"], :right, side_padding)
     end
 
-    def out_port_button(page, x_mm, y_mm, label)
-      port_box(x_mm, y_mm, page["dark_color"], page["dark_color"], label, page["light_color"], :left)
+    def out_port_button(page, x_mm, y_mm, label, side_padding = 1.0)
+      port_box(x_mm, y_mm, page["dark_color"], page["dark_color"], label, page["light_color"], :left, side_padding)
     end
 
-    def in_port(page, x_mm, y_mm, label)
-      port_box(x_mm, y_mm, page["dark_color"], page["light_color"], label, page["dark_color"])
+    def in_port(page, x_mm, y_mm, label, side_padding = 1.0)
+      port_box(x_mm, y_mm, page["dark_color"], page["light_color"], label, page["dark_color"], :none, side_padding)
     end
 
-    def out_port(page, x_mm, y_mm, label)
-      port_box(x_mm, y_mm, page["dark_color"], page["dark_color"], label, page["light_color"])
+    def out_port(page, x_mm, y_mm, label, side_padding = 1.0)
+      port_box(x_mm, y_mm, page["dark_color"], page["dark_color"], label, page["light_color"], :none, side_padding)
     end
 
     def large_knob(page, x_mm, y_mm, label)
