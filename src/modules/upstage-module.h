@@ -24,7 +24,6 @@ struct UpstageModule : rack::Module {
     NUM_OUTPUTS
   };
   enum LightIds {
-    TRIG_BUTTON_LIGHT, WAIT_BUTTON_LIGHT,
     NUM_LIGHTS
   };
 
@@ -38,17 +37,11 @@ struct UpstageModule : rack::Module {
             },
             InputPortControl{
                 [this] { return inputs[WAIT_IN].value; },
-                ButtonControl{
-                    [this] { return params[WAIT_BUTTON].value; },
-                    [this](float f) { lights[WAIT_BUTTON_LIGHT].value = f; }
-                }
+                ButtonControl{[this] { return params[WAIT_BUTTON].value; }}
             },
             InputPortControl{
                 [this] { return inputs[TRIG_IN].value; },
-                ButtonControl {
-                    [this] { return params[TRIG_BUTTON].value; },
-                    [this](float f) { lights[TRIG_BUTTON_LIGHT].value = f; }
-                }
+                ButtonControl {[this] { return params[TRIG_BUTTON].value; }}
             },
             OutputPortControl{[this](float f) { outputs[TRIG_OUT].value = f; }},
             [this](float f) { outputs[STAGE_OUT].value = f; }

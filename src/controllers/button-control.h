@@ -7,23 +7,15 @@
 namespace DHE {
 
 static constexpr auto ALWAYS_OFF = [] { return 0.f; };
-static constexpr auto UNLIT = [](float f) {};
 
 struct ButtonControl {
-  ButtonControl(
-      std::function<float()> button = ALWAYS_OFF,
-      std::function<void(float)> light = UNLIT)
-      : button{std::move(button)},
-        light{std::move(light)} {}
+  explicit ButtonControl(std::function<float()> button = ALWAYS_OFF) : button{std::move(button)}{}
 
   bool operator()() {
-    auto is_on = button() > 0.5;
-    light(UNIPOLAR_CV.scale(is_on));
-    return is_on;
+    return button() > 0.5;
   }
 
   const std::function<float()> button;
-  const std::function<void(float)> light;
 };
 
 }

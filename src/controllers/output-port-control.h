@@ -9,7 +9,7 @@
 namespace DHE {
 
 struct OutputPortControl {
-  explicit OutputPortControl(std::function<void(float)> output, ButtonControl button = {})
+  explicit OutputPortControl(std::function<void(float)> output, std::function<bool()> button = [] { return false; })
       : send{std::move(output)}, button{std::move(button)} {}
 
   void operator()(float f) {
@@ -17,7 +17,7 @@ struct OutputPortControl {
   }
 
   const std::function<void(float)> send;
-  ButtonControl button;
+  const std::function<bool()> button;
 };
 
 }

@@ -51,32 +51,20 @@ struct BoosterStageModule : rack::Module {
             },
             InputPortControl{
                 [this] { return inputs[DEFER_IN].value; },
-                ButtonControl{
-                    [this] { return params[DEFER_BUTTON].value; },
-                    [this](float f) { lights[DEFER_BUTTON_LIGHT].value = f; }
-                }
+                ButtonControl{[this] { return params[DEFER_BUTTON].value; }}
             },
             InputPortControl{
                 [this] { return inputs[TRIG_IN].value; },
-                ButtonControl{
-                    [this] { return params[TRIG_BUTTON].value; },
-                    [this](float f) { lights[TRIG_BUTTON_LIGHT].value = f; }
-                }
+                ButtonControl{[this] { return params[TRIG_BUTTON].value; }}
             },
             [this] { return inputs[STAGE_IN].value; },
             OutputPortControl{
                 [this](float f) { outputs[ACTIVE_OUT].value = f; },
-                ButtonControl{
-                    [this] { return params[ACTIVE_BUTTON].value; },
-                    [this](float f) { lights[ACTIVE_BUTTON_LIGHT].value = f; }
-                }
+                ButtonControl{[this] { return params[ACTIVE_BUTTON].value; }}
             },
             OutputPortControl{
                 [this](float f) { outputs[EOC_OUT].value = f; },
-                ButtonControl{
-                    [this] { return params[EOC_BUTTON].value; },
-                    [this](float f) { lights[EOC_BUTTON_LIGHT].value = f; }
-                }
+                ButtonControl{[this] { return params[EOC_BUTTON].value; }}
             },
             [this](float f) { outputs[STAGE_OUT].value = f; }
         } {}

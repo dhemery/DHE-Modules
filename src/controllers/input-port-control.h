@@ -9,7 +9,7 @@
 namespace DHE {
 
 struct InputPortControl {
-  explicit InputPortControl(std::function<float()> input, ButtonControl button = {})
+  explicit InputPortControl(std::function<float()> input, std::function<bool()> button = [] { return false; })
       : input{std::move(input)},
         button{std::move(button)} {}
 
@@ -18,7 +18,7 @@ struct InputPortControl {
   }
 
   const std::function<float()> input;
-  ButtonControl button;
+  const std::function<bool()> button;
 };
 
 }
