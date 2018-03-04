@@ -29,9 +29,10 @@
 
 
 
+
 <svg width="3.35mm" height="9.35mm"
   viewBox="-1.675 -4.675 3.35 9.35">
-  <g fill="none" stroke="rgb(153,0,0)">
+  <g fill="rgb(255,240,240)" stroke="rgb(153,0,0)">
 
     <rect x="-1.5" y="-4.5"
       width="3.0" height="9.0"

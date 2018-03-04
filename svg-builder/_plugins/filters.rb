@@ -243,6 +243,14 @@ module Jekyll
       width_px = width_hp * PX_PER_HP
       Panel.new(width_px, page['title'], page['dark_color'], page['light_color'])
     end
+
+    def connector(page, x1_mm, y1_mm, x2_mm, y2_mm)
+      x1 = Filters::mm_to_px(x1_mm)
+      y1 = Filters::mm_to_px(y1_mm)
+      x2 = Filters::mm_to_px(x2_mm)
+      y2 = Filters::mm_to_px(y2_mm)
+      %Q[<line x1="#{x1}" y1="#{y1}" x2="#{x2}" y2="#{y2}" stroke="#{page['dark_color']}" stroke-width="#{Box::STROKE_WIDTH}" />]
+    end
   end
 end
 

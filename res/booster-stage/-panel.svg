@@ -7,6 +7,7 @@
 
 <rect x="0" y="0" width="120.0" height="380.01968503784997" stroke="rgb(153,0,0)" fill="rgb(255,240,240)" stroke-width="1"/><text dominant-baseline="baseline" text-anchor="middle" fill="rgb(153,0,0)" x="60.0" y="26.5748031495" style="font-family:Proxima Nova;font-weight:bold;font-size:12.0px">BOOSTER STAGE</text><text dominant-baseline="hanging" text-anchor="middle" fill="rgb(153,0,0)" x="60.0" y="353.44488188835" style="font-family:Proxima Nova;font-weight:bold;font-size:12.0px">DHE</text>
 
+<line x1="19.99999999992" y1="73.8188976375" x2="99.9999999996" y2="73.8188976375" stroke="rgb(153,0,0)" stroke-width="1.033464566925" />
 
         <rect x="4.128937007857499" y="50.328412073317494" width="31.742125984125" height="39.36154855624501"
           stroke-width="1.033464566925" rx="3.0" ry="3.0"
@@ -15,6 +16,7 @@
 <text dominant-baseline="baseline" text-anchor="middle" fill="rgb(153,0,0)" x="59.99999999976" y="51.67322834625" style="font-family:Proxima Nova;font-weight:bold;font-size:9.0px">LEVEL</text>
 <text dominant-baseline="baseline" text-anchor="middle" fill="rgb(153,0,0)" x="99.9999999996" y="61.491141732037505" style="font-family:Proxima Nova;font-weight:bold;font-size:7.0px">UNI</text><text dominant-baseline="hanging" text-anchor="middle" fill="rgb(153,0,0)" x="99.9999999996" y="86.1466535429625" style="font-family:Proxima Nova;font-weight:bold;font-size:7.0px">BI</text>
 
+<line x1="19.99999999992" y1="128.44488188925" x2="99.9999999996" y2="128.44488188925" stroke="rgb(153,0,0)" stroke-width="1.033464566925" />
 
         <rect x="4.128937007857499" y="104.9543963250675" width="31.742125984125" height="39.361548556245"
           stroke-width="1.033464566925" rx="3.0" ry="3.0"
@@ -23,6 +25,7 @@
 <text dominant-baseline="baseline" text-anchor="middle" fill="rgb(153,0,0)" x="59.99999999976" y="106.29921259800001" style="font-family:Proxima Nova;font-weight:bold;font-size:9.0px">CURVE</text>
 <text dominant-baseline="baseline" text-anchor="middle" fill="rgb(153,0,0)" x="99.9999999996" y="116.11712598378752" style="font-family:Proxima Nova;font-weight:bold;font-size:7.0px">S</text><text dominant-baseline="hanging" text-anchor="middle" fill="rgb(153,0,0)" x="99.9999999996" y="140.7726377947125" style="font-family:Proxima Nova;font-weight:bold;font-size:7.0px">J</text>
 
+<line x1="19.99999999992" y1="183.070866141" x2="99.9999999996" y2="183.070866141" stroke="rgb(153,0,0)" stroke-width="1.033464566925" />
 
         <rect x="4.128937007857499" y="159.58038057681753" width="31.742125984125" height="39.36154855624497"
           stroke-width="1.033464566925" rx="3.0" ry="3.0"

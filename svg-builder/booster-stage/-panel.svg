@@ -9,14 +9,17 @@ title: BOOSTER STAGE
 
 {{ page | panel: 8.0 }}
 
+{{ page | connector: left_x, 25.0, right_x, 25.0 }}
 {{ page | cv: left_x, 25.0 }}
 {{ page | large_knob: center_x, 25.0, "LEVEL" }}
 {{ page | switch: right_x, 25.0, "UNI", "BI" }}
 
+{{ page | connector: left_x, 43.5, right_x, 43.5 }}
 {{ page | cv: left_x, 43.5 }}
 {{ page | large_knob: center_x, 43.5, "CURVE" }}
 {{ page | shape_switch: right_x, 43.5 }}
 
+{{ page | connector: left_x, 62.0, right_x, 62.0 }}
 {{ page | cv: left_x, 62.0 }}
 {{ page | large_knob: center_x, 62.0, "DURATION" }}
 {{ page | switch: right_x, 62.0, "100", "1", "10" }}
