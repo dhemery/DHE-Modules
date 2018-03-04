@@ -7,11 +7,11 @@ title: SWAVE
 {% assign right_x = page.width | minus:left_x %}
 {% assign center_x = page.width | divided_by:2.0 %}
 
-{{ page | module_panel: 4.0 }}
+{{ page | panel: 4.0 }}
 
 {{ page | large_knob: center_x, 25.0, "Curve" }}
 {{ page | cv: left_x, 43.5 }}
-{{ page | switch: right_x, 43.5, "S", "J" }}
+{{ page | shape_switch: right_x, 43.5 }}
 
 {{ page | small_knob: center_x, 62.0, "-/+" }}
 

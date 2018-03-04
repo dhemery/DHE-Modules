@@ -224,6 +224,10 @@ module Jekyll
       labeled_round_control(x_mm, y_mm, SMALL_KNOB_DIAMETER, label, page['dark_color'], SMALL_LABEL_FONT_SIZE)
     end
 
+    def shape_switch(page, x_mm, y_mm)
+      switch(page, x_mm, y_mm, "S", "J")
+    end
+
     def switch(page, x_mm, y_mm, top_label, bottom_label, right_label = nil)
       height = right_label ? SWITCH_3_HEIGHT : SWITCH_2_HEIGHT
       x_px = Filters::mm_to_px(x_mm)
@@ -231,7 +235,7 @@ module Jekyll
       RectangularControlLabels.new(x_px, y_px, SWITCH_WIDTH, height, page['dark_color'], top_label, bottom_label, right_label)
     end
 
-    def module_panel(page, width_hp)
+    def panel(page, width_hp)
       width_px = width_hp * PX_PER_HP
       Panel.new(width_px, page['title'], page['dark_color'], page['light_color'])
     end

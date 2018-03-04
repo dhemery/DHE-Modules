@@ -7,7 +7,7 @@ title: BOOSTER STAGE
 {% assign right_x = page.width | minus:left_x %}
 {% assign center_x = page.width | divided_by:2.0 %}
 
-{{ page | module_panel: 8.0 }}
+{{ page | panel: 8.0 }}
 
 {{ page | cv: left_x, 25.0 }}
 {{ page | large_knob: center_x, 25.0, "LEVEL" }}
@@ -15,7 +15,7 @@ title: BOOSTER STAGE
 
 {{ page | cv: left_x, 43.5 }}
 {{ page | large_knob: center_x, 43.5, "CURVE" }}
-{{ page | switch: right_x, 43.5, "S", "J" }}
+{{ page | shape_switch: right_x, 43.5 }}
 
 {{ page | cv: left_x, 62.0 }}
 {{ page | large_knob: center_x, 62.0, "DURATION" }}
