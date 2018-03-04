@@ -36,7 +36,7 @@
           stroke="rgb(153,0,0)" fill="rgb(255,240,240)"/>
         <text dominant-baseline="baseline" text-anchor="middle" fill="rgb(153,0,0)" x="19.99999999992" y="226.7716535424" style="font-family:Proxima Nova;font-weight:bold;font-size:7.0px">DEFER</text>
 
-        <rect x="63.238188976125016" y="218.41404199390502" width="52.85433070844999" height="39.80446194207002"
+        <rect x="63.238188976125" y="218.41404199390502" width="52.85433070845001" height="39.80446194207002"
           stroke-width="1.47637795275" rx="2.9527559055" ry="2.9527559055"
           stroke="rgb(153,0,0)" fill="rgb(153,0,0)"/>
         <text dominant-baseline="baseline" text-anchor="middle" fill="rgb(255,240,240)" x="99.9999999996" y="226.7716535424" style="font-family:Proxima Nova;font-weight:bold;font-size:7.0px">ACTIVE</text>
@@ -47,7 +47,7 @@
           stroke="rgb(153,0,0)" fill="rgb(255,240,240)"/>
         <text dominant-baseline="baseline" text-anchor="middle" fill="rgb(153,0,0)" x="19.99999999992" y="271.0629921249" style="font-family:Proxima Nova;font-weight:bold;font-size:7.0px">TRIG</text>
 
-        <rect x="63.238188976125016" y="262.705380576405" width="52.85433070844999" height="39.80446194207002"
+        <rect x="63.238188976125" y="262.705380576405" width="52.85433070845001" height="39.80446194207002"
           stroke-width="1.47637795275" rx="2.9527559055" ry="2.9527559055"
           stroke="rgb(153,0,0)" fill="rgb(153,0,0)"/>
         <text dominant-baseline="baseline" text-anchor="middle" fill="rgb(255,240,240)" x="99.9999999996" y="271.0629921249" style="font-family:Proxima Nova;font-weight:bold;font-size:7.0px">EOC</text>

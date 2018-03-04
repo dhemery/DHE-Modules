@@ -115,25 +115,13 @@ module Jekyll
     end
 
     class PortBox
-      def initialize(x, y, border, background, label_text, label_color)
+      BUTTON_EXTRA = BUTTON_DIAMETER + Box::PADDING
+      def initialize(x, y, border, background, label_text, label_color, button)
         port = RoundControl.new(x, y, PORT_DIAMETER)
-        @label = Label.new(x, port.top - Box::PADDING, label_text, label_color, SMALL_LABEL_FONT_SIZE)
-        @box = Box.new(@label.top, port.right, port.bottom, port.left, border, background)
-      end
-
-      def to_liquid
-        @box.to_liquid + @label.to_liquid
-      end
-    end
-
-    class PortButtonBox
-      PORT_BUTTON_DISTANCE = PORT_RADIUS + BUTTON_RADIUS + Box::PADDING
-      def initialize(x, y, direction, border, background, label_text, label_color)
-        button_x = direction == :right ? x + PORT_BUTTON_DISTANCE : x - PORT_BUTTON_DISTANCE
-        port = RoundControl.new(x, y, PORT_DIAMETER)
-        button = RoundControl.new(button_x, y, BUTTON_DIAMETER)
-        right = direction == :right ? button.right : port.right
-        left = direction == :left ? button.left : port.left
+        right = port.right
+        left = port.left
+        right += BUTTON_EXTRA if button == :right
+        left -= BUTTON_EXTRA if button == :left
         @label = Label.new(x, port.top - Box::PADDING, label_text, label_color, SMALL_LABEL_FONT_SIZE)
         @box = Box.new(@label.top, right, port.bottom, left, border, background)
       end
@@ -143,7 +131,7 @@ module Jekyll
       end
     end
 
-    class LabeledRoundControl
+    class RoundControlLabel
       def initialize(x, y, diameter, text, color, font_size)
         control = RoundControl.new(x, y, diameter)
         @label = Label.new(x, control.top - Box::PADDING, text, color, font_size)
@@ -154,7 +142,7 @@ module Jekyll
       end
     end
 
-    class LabeledRectangularControl
+    class RectangularControlLabels
       def initialize(x, y, width, height, color, top_label, bottom_label, right_label)
         top = y - height / 2.0
         bottom = y + height / 2.0
@@ -172,34 +160,51 @@ module Jekyll
       end
     end
 
+    class Panel
+      HEIGHT = Filters::mm_to_px(128.7)
+      PLUGIN_LABEL_INSET = Filters::mm_to_px(9.0)
+
+      def initialize(width, name, color, background)
+        @width = width
+        @color = color
+        @background = background
+        center_x = width / 2.0
+        @plugin_name = Label.new(center_x, PLUGIN_LABEL_INSET, name, color, PLUGIN_LABEL_FONT_SIZE, :above)
+        @plugin_author = Label.new(center_x, HEIGHT - PLUGIN_LABEL_INSET, "DHE", color, PLUGIN_LABEL_FONT_SIZE, :below)
+      end
+
+      def background_svg
+        %Q[<rect x="0" y="0" width="#{@width}" height="#{HEIGHT}" stroke="#{@color}" fill="#{@background}" stroke-width="1"/>]
+      end
+
+      def to_liquid
+        background_svg + @plugin_name.to_liquid + @plugin_author.to_liquid
+      end
+    end
+
+
     def labeled_round_control(x_mm, y_mm, diameter, label, color, font_size)
       x_px = Filters::mm_to_px(x_mm)
       y_px = Filters::mm_to_px(y_mm)
-      LabeledRoundControl.new(x_px, y_px, diameter, label, color, font_size)
+      RoundControlLabel.new(x_px, y_px, diameter, label, color, font_size)
     end
 
-    def port_box(x_mm, y_mm, border, background, label, label_color)
+    def port_box(x_mm, y_mm, border, background, label, label_color, button = :none)
       x_px = Filters::mm_to_px(x_mm)
       y_px = Filters::mm_to_px(y_mm)
-      PortBox.new(x_px, y_px, border, background, label, label_color)
-    end
-
-    def port_button_box(x_mm, y_mm, direction, border, background, label, label_color)
-      x_px = Filters::mm_to_px(x_mm)
-      y_px = Filters::mm_to_px(y_mm)
-      PortButtonBox.new(x_px, y_px, direction, border, background, label, label_color)
+      PortBox.new(x_px, y_px, border, background, label, label_color, button)
     end
 
     def cv(page, x_mm, y_mm)
-      port_box(x_mm, y_mm, "none", "none", "CV", page["dark_color"])
+      port_box(x_mm, y_mm, "none", "none", "CV", page["dark_color"],)
     end
 
     def in_port_button(page, x_mm, y_mm, label)
-      port_button_box(x_mm, y_mm, :right, page["dark_color"], page["light_color"], label, page["dark_color"])
+      port_box(x_mm, y_mm, page["dark_color"], page["light_color"], label, page["dark_color"], :right)
     end
 
     def out_port_button(page, x_mm, y_mm, label)
-      port_button_box(x_mm, y_mm, :left, page["dark_color"], page["dark_color"], label, page["light_color"])
+      port_box(x_mm, y_mm, page["dark_color"], page["dark_color"], label, page["light_color"], :left)
     end
 
     def in_port(page, x_mm, y_mm, label)
@@ -218,27 +223,7 @@ module Jekyll
       height = right_label ? SWITCH_3_HEIGHT : SWITCH_2_HEIGHT
       x_px = Filters::mm_to_px(x_mm)
       y_px = Filters::mm_to_px(y_mm)
-      LabeledRectangularControl.new(x_px, y_px, SWITCH_WIDTH, height, page['dark_color'], top_label, bottom_label, right_label)
-    end
-
-    class Panel
-      HEIGHT = Filters::mm_to_px(128.7)
-      PLUGIN_LABEL_INSET = Filters::mm_to_px(9.0)
-
-      def initialize(width, name, color, background)
-        @width = width
-        @color = color
-        @background = background
-        center_x = width / 2.0
-        @plugin_name = Label.new(center_x, PLUGIN_LABEL_INSET, name, color, PLUGIN_LABEL_FONT_SIZE, :above)
-        @plugin_author = Label.new(center_x, HEIGHT - PLUGIN_LABEL_INSET, "DHE", color, PLUGIN_LABEL_FONT_SIZE, :below)
-      end
-
-      def to_liquid
-        %Q[<rect x="0" y="0" width="#{@width}" height="#{HEIGHT}" stroke="#{@color}" fill="#{@background}" stroke-width="1"/>] +
-        @plugin_name.to_liquid +
-        @plugin_author.to_liquid
-      end
+      RectangularControlLabels.new(x_px, y_px, SWITCH_WIDTH, height, page['dark_color'], top_label, bottom_label, right_label)
     end
 
     def module_panel(page, width_hp)
