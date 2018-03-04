@@ -115,4 +115,4 @@ CTestTestfile.cmake
 /dist
 /build
 /linux-dist
-/svg/built
+/svg-builder/.jekyll-metadata
