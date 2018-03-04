@@ -1,5 +1,6 @@
 source: svg-builder
 destination: res
+incremental: true
 defaults:
   -
     scope:
