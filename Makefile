@@ -19,7 +19,7 @@ run: dist
 
 MODULE_OBJECTS = $(patsubst %, build/%.o, $(MODULE_SOURCES))
 
-TEST_SOURCES = test/runner/main.cpp $(wildcard test/*.cpp)
+TEST_SOURCES = $(wildcard test/runner/*.cpp test/*.cpp)
 TEST_OBJECTS = $(patsubst %, build/%.o, $(TEST_SOURCES))
 
 $(TEST_OBJECTS): FLAGS+= -I./test

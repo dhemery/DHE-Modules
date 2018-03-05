@@ -1,8 +1,6 @@
 #include <catch/catch.hpp>
-#include "controllers/upstage-controller.h"
+#include <modules/upstage-module.h>
 
-//TEST_CASE("Upstage Controller") {
-//  auto model = DHE::FakeStageModel{};
-//
-//  DHE::UpstageController<DHE::FakeStageModel> stage{&model};
-//}
+TEST_CASE("Upstage Module") {
+  DHE::UpstageModule module{};
+}

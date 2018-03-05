@@ -63,6 +63,7 @@ add_executable(tests
         src/util/track-and-hold-amplifier.h
         test/catch/catch.hpp
         test/runner/main.cpp
+        test/runner/environment.cpp
         test/track-and-hold-amplifier-tests.cpp
         test/stage-tests.cpp
         test/upstage-tests.cpp
