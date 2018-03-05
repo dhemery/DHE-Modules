@@ -35,7 +35,7 @@ StageWidget::StageWidget(rack::Module *module) : ModuleWidget(module, 4, "res/st
   install_knob<StageKnobLarge>(StageModule::LEVEL_KNOB, {center_x, top_row_y + row*row_spacing});
 
   row++;
-  install_knob<StageKnobLarge>(StageModule::SHAPE_KNOB, {center_x, top_row_y + row*row_spacing});
+  install_knob<StageKnobLarge>(StageModule::CURVE_KNOB, {center_x, top_row_y + row*row_spacing});
 
   row++;
   install_knob<StageKnobLarge>(StageModule::DURATION_KNOB, {center_x, top_row_y + row*row_spacing});

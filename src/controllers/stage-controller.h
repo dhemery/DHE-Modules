@@ -66,7 +66,7 @@ private:
   Ramp envelope_ramp;
   DFlipFlop envelope_trigger;
   TrackAndHoldAmplifier stage_input_follower;
-
+/**/
   void defer() {
     envelope_trigger.suspend_firing();
     envelope_ramp.stop();

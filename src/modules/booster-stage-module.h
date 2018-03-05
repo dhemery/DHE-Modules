@@ -26,7 +26,6 @@ struct BoosterStageModule : rack::Module {
   };
 
   enum LightIds {
-    DEFER_BUTTON_LIGHT, TRIG_BUTTON_LIGHT, ACTIVE_BUTTON_LIGHT, EOC_BUTTON_LIGHT,
     NUM_LIGHTS
   };
 

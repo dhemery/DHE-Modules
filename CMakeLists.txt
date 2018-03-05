@@ -71,4 +71,4 @@ add_executable(tests
 target_compile_features(tests PUBLIC cxx_std_11)
 target_compile_options(tests PUBLIC -stdlib=libc++)
 target_include_directories(tests PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/test ${CMAKE_CURRENT_SOURCE_DIR}/src)
-target_link_libraries(tests PUBLIC -stdlib=libc++)
+target_link_libraries(tests PUBLIC rack -stdlib=libc++)
