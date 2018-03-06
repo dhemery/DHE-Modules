@@ -31,6 +31,7 @@ add_library(plugin SHARED
         src/gui/upstage-widget.cpp
         src/modules/booster-stage-module.h
         src/modules/stage-module.h
+        src/modules/stage-processor.h
         src/modules/swave-module.h
         src/modules/upstage-module.h
         src/plugin/dhe-modules.h

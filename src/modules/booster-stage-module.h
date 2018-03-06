@@ -4,19 +4,10 @@
 #include "util/controls.h"
 
 namespace DHE {
-struct BoosterStageModule : StageModule {
-  enum ParamIds {
-    LEVEL_SWITCH = StageModule::PARAM_COUNT, SHAPE_SWITCH, DURATION_SWITCH,
-    DEFER_BUTTON, TRIG_BUTTON, ACTIVE_BUTTON, EOC_BUTTON,
-    PARAM_COUNT
-  };
-
-  enum InputIds {
-    LEVEL_CV = StageModule::INPUT_COUNT, DURATION_CV, CURVE_CV,
-    INPUT_COUNT
-  };
-
-  BoosterStageModule() : StageModule{PARAM_COUNT, INPUT_COUNT, OUTPUT_COUNT} {}
+struct BoosterStageModule : Module, StageProcessor {
+  BoosterStageModule()
+      : Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT},
+        StageProcessor{} {}
 
   float defer_in() const override {
     return std::max(input(DEFER_IN), gate_button(DEFER_BUTTON));
@@ -28,22 +19,34 @@ struct BoosterStageModule : StageModule {
     return Duration::scaled(rotation, range);
   }
 
+  float level_in() const override {
+    const auto &range = Level::range(param(LEVEL_SWITCH));
+    auto rotation = modulated(LEVEL_KNOB, LEVEL_CV);
+    return Level::scaled(rotation, range);
+  }
+
+  float stage_in() const override {
+    return input(STAGE_IN);
+  }
+
+  float trigger_in() const override {
+    return std::max(input(TRIG_IN), gate_button(TRIG_BUTTON));
+  }
+
   bool is_active() const override {
-    return param(ACTIVE_BUTTON) > 0.5f || StageModule::is_active();
+    return param(ACTIVE_BUTTON) > 0.5f || StageProcessor::is_active();
   }
 
   bool is_end_of_cycle() const override {
-    return param(EOC_BUTTON) > 0.5f || StageModule::is_end_of_cycle();
+    return param(EOC_BUTTON) > 0.5f || StageProcessor::is_end_of_cycle();
   }
 
   bool is_s_taper() const {
     return param(SHAPE_SWITCH) > 0.5;
   }
 
-  float level_in() const override {
-    const auto &range = Level::range(param(LEVEL_SWITCH));
-    auto rotation = modulated(LEVEL_KNOB, LEVEL_CV);
-    return Level::scaled(rotation, range);
+  void step() override {
+    process();
   }
 
   float taper(float phase) const override {
@@ -51,8 +54,47 @@ struct BoosterStageModule : StageModule {
     return is_s_taper() ? Taper::s(phase, rotation) : Taper::j(phase, rotation);
   }
 
-  float trigger_in() const override {
-    return std::max(input(TRIG_IN), gate_button(TRIG_BUTTON));
+  void send_active_out(float f) override {
+    outputs[ACTIVE_OUT].value = f;
   }
+
+  void send_eoc_out(float f) override {
+    outputs[EOC_OUT].value = f;
+  }
+
+  void send_stage_out(float f) override {
+    outputs[STAGE_OUT].value = f;
+  }
+
+  enum ParameterIds {
+    ACTIVE_BUTTON,
+    CURVE_KNOB,
+    DEFER_BUTTON,
+    DURATION_KNOB,
+    DURATION_SWITCH,
+    EOC_BUTTON,
+    LEVEL_KNOB,
+    LEVEL_SWITCH,
+    SHAPE_SWITCH,
+    TRIG_BUTTON,
+    PARAMETER_COUNT
+  };
+
+  enum InputIds {
+    CURVE_CV,
+    DEFER_IN,
+    DURATION_CV,
+    LEVEL_CV,
+    STAGE_IN,
+    TRIG_IN,
+    INPUT_COUNT
+  };
+
+  enum OutputIds {
+    ACTIVE_OUT,
+    EOC_OUT,
+    STAGE_OUT,
+    OUTPUT_COUNT
+  };
 };
 }

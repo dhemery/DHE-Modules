@@ -10,7 +10,7 @@ namespace DHE {
  * While tracking, a T&H yields the supplied signal. While holding, it yields
  * the signal value it sampled when it entered holding mode.
  *
- * A newly constructed T&H is holding.
+ * A newly constructed T&H is tracking.
  */
 struct TrackAndHold {
 
@@ -20,8 +20,7 @@ struct TrackAndHold {
    */
   explicit TrackAndHold(std::function<float()> signal) :
       signal{std::move(signal)},
-      held{this->signal()},
-      tracking{false} {}
+      tracking{true} {}
 
   /**
    * Enters holding mode, holding the current value of the supplied signal.

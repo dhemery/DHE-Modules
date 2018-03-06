@@ -25,10 +25,6 @@ struct Module : rack::Module {
   float param(int index) const {
     return params[index].value;
   }
-
-  float sample_time() const {
-    return rack::engineGetSampleTime();
-  }
 };
 
 }

@@ -9,14 +9,10 @@ TEST_CASE("Track and Hold") {
 
   SECTION("newly constructed") {
 
-    SECTION("yields the initially supplied value") {
-      REQUIRE(tracker.value() == initial_value);
-    }
+    SECTION("tracks the supplier") {
+      source += 19;
 
-    SECTION("does not track the supplier") {
-      source += 1;
-
-      REQUIRE(tracker.value() != supplier());
+      REQUIRE(tracker.value() == supplier());
     }
   }
 

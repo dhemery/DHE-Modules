@@ -9,20 +9,6 @@
 namespace DHE {
 
 struct UpstageModule : Module {
-  enum ParamIds {
-    LEVEL_KNOB, TRIG_BUTTON, WAIT_BUTTON,
-    LEVEL_SWITCH,
-    PARAMETER_COUNT
-  };
-  enum InputIds {
-    TRIG_IN, WAIT_IN, LEVEL_CV,
-    INPUT_COUNT
-  };
-  enum OutputIds {
-    TRIG_OUT, STAGE_OUT,
-    OUTPUT_COUNT
-  };
-
   UpstageModule() : Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT} {}
 
   bool is_waiting() const {
@@ -47,6 +33,25 @@ struct UpstageModule : Module {
   float trigger_out() const {
     return is_waiting() ? 0.f : trigger_in();
   }
+
+  enum ParameterIds {
+    LEVEL_KNOB,
+    TRIG_BUTTON,
+    WAIT_BUTTON,
+    LEVEL_SWITCH,
+    PARAMETER_COUNT
+  };
+  enum InputIds {
+    TRIG_IN,
+    WAIT_IN,
+    LEVEL_CV,
+    INPUT_COUNT
+  };
+  enum OutputIds {
+    TRIG_OUT,
+    STAGE_OUT,
+    OUTPUT_COUNT
+  };
 };
 
 }
