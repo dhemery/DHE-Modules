@@ -1,6 +1,6 @@
 #pragma once
 
-#include "interval.h"
+#include "range.h"
 #include "sigmoid.h"
 
 namespace DHE {
@@ -11,52 +11,69 @@ constexpr auto MEDIUM_RANGE_MAX = 10.0f;
 constexpr auto MEDIUM_RANGE_MIN = MEDIUM_RANGE_MAX/RANGE_MAX_TO_MIN_RATIO;
 
 constexpr auto SCALE_STEP = 10.f;
-constexpr auto SHORT_RANGE = Interval{MEDIUM_RANGE_MIN/SCALE_STEP, MEDIUM_RANGE_MAX/SCALE_STEP};
-constexpr auto MEDIUM_RANGE = Interval{MEDIUM_RANGE_MIN, MEDIUM_RANGE_MAX};
-constexpr auto LONG_RANGE = Interval{MEDIUM_RANGE_MIN*SCALE_STEP, MEDIUM_RANGE_MAX*SCALE_STEP};
+constexpr auto SHORT_RANGE = Range{MEDIUM_RANGE_MIN/SCALE_STEP, MEDIUM_RANGE_MAX/SCALE_STEP};
+constexpr auto MEDIUM_RANGE = Range{MEDIUM_RANGE_MIN, MEDIUM_RANGE_MAX};
+constexpr auto LONG_RANGE = Range{MEDIUM_RANGE_MIN*SCALE_STEP, MEDIUM_RANGE_MAX*SCALE_STEP};
 
-inline const Interval range(float switch_value) {
+inline const Range &range(float switch_value) {
   return switch_value < 0.5f ? SHORT_RANGE :
          switch_value < 1.5f ? MEDIUM_RANGE : LONG_RANGE;
 }
 
-inline float scaled(float rotation, const Interval &range) {
-  static constexpr auto KNOB_CURVATURE = 0.8f; // Yields ~1/10 of max at center position
-  auto shaped_rotation = sigmoid(rotation, KNOB_CURVATURE);
-  return range.scale(shaped_rotation);
-}
+inline float scaled(float rotation, const Range &range) {
+  // Shapes the J taper to yield ~0.1 given a rotation of 0.5. So if the
+  // rotation is at dead center, the return value will be ~1/10 of the range's
+  // maximum.
+  constexpr auto KNOB_CURVATURE = 0.8f;
 
+  // Assuming a rotation value in the range [0,1], sigmoid() yields a J taper
+  // in the range [0,1]
+  auto j_tapered_rotation = sigmoid(rotation, KNOB_CURVATURE);
+
+  // Scale the tapered rotation to the desired range.
+  return range.scale(j_tapered_rotation);
+}
 }
 
 namespace Level {
 
-inline const Interval &range(float switch_value) {
-  return switch_value > 0.5f ? UNIPOLAR_CV : BIPOLAR_CV;
+inline const Range &range(float switch_value) {
+  return switch_value > 0.5f ? UNIPOLAR_SIGNAL_RANGE : BIPOLAR_SIGNAL_RANGE;
 }
 
-inline float scaled(float rotation, const Interval &range = UNIPOLAR_CV) {
+inline float scaled(float rotation, const Range &range = UNIPOLAR_SIGNAL_RANGE) {
   return range.scale(rotation);
 }
 }
 
-namespace Shape {
+namespace Taper {
+
 inline float curvature(float rotation) {
-  static constexpr auto curve_knob_curvature = -0.65f;
-  return sigmoid(BIPOLAR_NORMAL.scale(rotation), curve_knob_curvature);
+  // Scale the rotation to [-1,1]. In this range, sigmoid() yields an S taper in
+  // the range [-1,1].
+  auto bipolar_rotation = BIPOLAR_PHASE_RANGE.scale(rotation);
+
+  // Shapes the S taper to gently increase sensitivity in the middle of the
+  // rotation and decrease sensitivity toward the ends.
+  constexpr auto KNOB_CURVATURE = -0.65f;
+
+  // Apply the S taper to the bipolar rotation.
+  return sigmoid(bipolar_rotation, KNOB_CURVATURE);
 }
 
-inline float shape(float phase, float rotation) {
+inline float j(float phase, float rotation) {
   return sigmoid(phase, curvature(rotation));
 }
 
-inline float shape(float phase, float rotation, Interval range) {
-  auto scaled_phase = range.scale(phase);
-  auto shaped_phase = shape(scaled_phase, rotation);
-  return range.normalize(shaped_phase);
+inline float s(float phase, float rotation) {
+  // Scale the phase to [-1,1]. In this range, sigmoid() yields an S taper in
+  // the range [-1,1].
+  auto bipolar_phase = BIPOLAR_PHASE_RANGE.scale(phase);
+  auto s_tapered_bipolar_phase = sigmoid(bipolar_phase, curvature(rotation));
+
+  // Scale the tapered phase back to the range [0,1].
+  return BIPOLAR_PHASE_RANGE.normalize(s_tapered_bipolar_phase);
 }
 
-inline Interval range(float switch_value) {
-  return switch_value > 0.5f ? BIPOLAR_NORMAL : NORMAL;
-}
 }
 }

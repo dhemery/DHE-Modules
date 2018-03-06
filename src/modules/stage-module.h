@@ -5,10 +5,10 @@
 #include "module.h"
 #include "util/controls.h"
 #include "util/d-flip-flop.h"
-#include "util/interval.h"
+#include "util/range.h"
 #include "util/ramp.h"
 #include "util/sigmoid.h"
-#include "util/track-and-hold-amplifier.h"
+#include "util/track-and-hold.h"
 
 namespace DHE {
 
@@ -45,12 +45,8 @@ struct StageModule : public Module {
     envelope_ramp.on_end_of_cycle([this] { end_of_cycle_pulse.start(); });
   }
 
-  virtual float shape(float phase) const {
-    return Shape::shape(phase, param(CURVE_KNOB));
-  }
-
   float active_out() const {
-    return UNIPOLAR_CV.scale(is_active());
+    return UNIPOLAR_SIGNAL_RANGE.scale(is_active());
   }
 
   virtual float defer_in() const {
@@ -62,7 +58,7 @@ struct StageModule : public Module {
   }
 
   float eoc_out() const {
-    return UNIPOLAR_CV.scale(is_end_of_cycle());
+    return UNIPOLAR_SIGNAL_RANGE.scale(is_end_of_cycle());
   }
 
   virtual bool is_active() const {
@@ -79,6 +75,10 @@ struct StageModule : public Module {
 
   float stage_out() const {
     return defer_gate.is_high() ? stage_in.value() : envelope_voltage();
+  }
+
+  virtual float taper(float phase) const {
+    return Taper::j(phase, param(CURVE_KNOB));
   }
 
   virtual float trigger_in() const {
@@ -105,8 +105,8 @@ private:
   }
 
   float envelope_voltage() const {
-    auto range = Interval{stage_in.value(), level_in()};
-    return range.scale(shape(envelope_ramp.phase()));
+    auto range = Range{stage_in.value(), level_in()};
+    return range.scale(taper(envelope_ramp.phase()));
   }
 
   void stop_deferring() {
@@ -123,6 +123,6 @@ private:
   Ramp end_of_cycle_pulse;
   Ramp envelope_ramp;
   DFlipFlop envelope_trigger;
-  TrackAndHoldAmplifier stage_in;
+  TrackAndHold stage_in;
 };
 }

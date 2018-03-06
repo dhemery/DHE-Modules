@@ -1,11 +1,11 @@
 #include "catch/catch.hpp"
-#include "util/track-and-hold-amplifier.h"
+#include "util/track-and-hold.h"
 
-TEST_CASE("Track and Hold Amplifier") {
+TEST_CASE("Track and Hold") {
   constexpr float initial_value{93.f};
   float source{initial_value};
   auto supplier = [&source] { return source; };
-  DHE::TrackAndHoldAmplifier tracker{supplier};
+  DHE::TrackAndHold tracker{supplier};
 
   SECTION("newly constructed") {
 

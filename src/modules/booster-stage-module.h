@@ -18,12 +18,6 @@ struct BoosterStageModule : StageModule {
 
   BoosterStageModule() : StageModule{PARAM_COUNT, INPUT_COUNT, OUTPUT_COUNT} {}
 
-  float shape(float phase) const override {
-    auto rotation = modulated(CURVE_KNOB, CURVE_CV);
-    const auto &range = Shape::range(param(SHAPE_SWITCH));
-    return Shape::shape(phase, rotation, range);
-  }
-
   float defer_in() const override {
     return std::max(input(DEFER_IN), gate_button(DEFER_BUTTON));
   }
@@ -42,10 +36,19 @@ struct BoosterStageModule : StageModule {
     return param(EOC_BUTTON) > 0.5f || StageModule::is_end_of_cycle();
   }
 
+  bool is_s_taper() const {
+    return param(SHAPE_SWITCH) > 0.5;
+  }
+
   float level_in() const override {
     const auto &range = Level::range(param(LEVEL_SWITCH));
     auto rotation = modulated(LEVEL_KNOB, LEVEL_CV);
     return Level::scaled(rotation, range);
+  }
+
+  float taper(float phase) const override {
+    auto rotation = modulated(CURVE_KNOB, CURVE_CV);
+    return is_s_taper() ? Taper::s(phase, rotation) : Taper::j(phase, rotation);
   }
 
   float trigger_in() const override {

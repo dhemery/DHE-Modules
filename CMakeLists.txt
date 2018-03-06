@@ -38,11 +38,11 @@ add_library(plugin SHARED
         src/util/controls.h
         src/util/d-flip-flop.h
         src/util/d-latch.h
-        src/util/interval.h
+        src/util/range.h
         src/util/latch.h
         src/util/ramp.h
         src/util/sigmoid.h
-        src/util/track-and-hold-amplifier.h
+        src/util/track-and-hold.h
         )
 target_link_libraries(plugin
         PUBLIC -stdlib=libc++
@@ -52,11 +52,11 @@ target_link_libraries(plugin
 target_include_directories(plugin PUBLIC src)
 
 add_executable(tests
-        src/util/track-and-hold-amplifier.h
+        src/util/track-and-hold.h
         test/catch/catch.hpp
         test/runner/main.cpp
         test/runner/environment.cpp
-        test/track-and-hold-amplifier-tests.cpp
+        test/track-and-hold-tests.cpp
         test/stage-tests.cpp
         test/upstage-tests.cpp
         )

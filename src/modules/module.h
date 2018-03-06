@@ -2,7 +2,7 @@
 
 #include <engine.hpp>
 
-#include "util/interval.h"
+#include "util/range.h"
 
 namespace DHE {
 
@@ -11,7 +11,7 @@ struct Module : rack::Module {
       : rack::Module(param_count, input_count, output_count) {}
 
   float gate_button(int index) const {
-    return UNIPOLAR_CV.scale(param(index) > 0.5f);
+    return UNIPOLAR_SIGNAL_RANGE.scale(param(index) > 0.5f);
   };
 
   float input(int index) const {

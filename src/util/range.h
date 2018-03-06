@@ -2,11 +2,11 @@
 
 namespace DHE {
 
-struct Interval {
+struct Range {
   const float lower_bound;
   const float upper_bound;
 
-  constexpr Interval(float lower_bound, float upper_bound) noexcept : lower_bound(lower_bound), upper_bound(upper_bound) {}
+  constexpr Range(float lower_bound, float upper_bound) noexcept : lower_bound(lower_bound), upper_bound(upper_bound) {}
 
   static float scale(float proportion, float lower_bound, float upper_bound) {
     return proportion*(upper_bound - lower_bound) + lower_bound;
@@ -31,18 +31,10 @@ struct Interval {
       return upper_bound;
     return f;
   }
-
-  float center() const {
-    return lower_bound + (upper_bound - lower_bound)*0.5f;
-  }
-
-  Interval invert() const {
-    return {upper_bound, lower_bound};
-  }
 };
 
-constexpr auto NORMAL = Interval{0.0f, 1.0f};
-constexpr auto BIPOLAR_NORMAL = Interval{-1.0f, 1.0f};
-constexpr auto UNIPOLAR_CV = Interval{0.0f, 10.0f};
-constexpr auto BIPOLAR_CV = Interval{-5.0f, 5.0f};
+constexpr auto UNIPOLAR_PHASE_RANGE = Range{0.0f, 1.0f};
+constexpr auto BIPOLAR_PHASE_RANGE = Range{-1.0f, 1.0f};
+constexpr auto UNIPOLAR_SIGNAL_RANGE = Range{0.0f, 10.0f};
+constexpr auto BIPOLAR_SIGNAL_RANGE = Range{-5.0f, 5.0f};
 }

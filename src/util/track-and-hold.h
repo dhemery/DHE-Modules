@@ -6,19 +6,19 @@
 namespace DHE {
 
 /**
- * A track-and-hold amplifier (THA) operates in one of two modes: tracking and
- * holding. While tracking, a THA yields the supplied signal. While holding, it
- * yields the signal value it sampled when it entered holding mode.
+ * A track-and-hold (T&H) operates in one of two modes: tracking and holding.
+ * While tracking, a T&H yields the supplied signal. While holding, it yields
+ * the signal value it sampled when it entered holding mode.
  *
- * A newly constructed THA is holding.
+ * A newly constructed T&H is holding.
  */
-struct TrackAndHoldAmplifier {
+struct TrackAndHold {
 
   /**
-   * Creates a track-and-hold amplifier that tracks and holds the supplied signal.
+   * Creates a track-and-hold that tracks and holds the supplied signal.
    * @param signal supplies the signal to track and hold
    */
-  explicit TrackAndHoldAmplifier(std::function<float()> signal) :
+  explicit TrackAndHold(std::function<float()> signal) :
       signal{std::move(signal)},
       held{this->signal()},
       tracking{false} {}
@@ -39,10 +39,10 @@ struct TrackAndHoldAmplifier {
   }
 
   /**
-   * Returns the supplied signal value if the THA is tracking, and the held
+   * Returns the supplied signal value if the T&H is tracking, and the held
    * value if it is holding.
-   * @return the supplied signal value if the THA is tracking,
-   * otherwise the held value.
+   * @return the supplied signal value if the T&H is tracking,
+   * otherwise the held value
    */
   float value() const {
     return tracking ? signal() : held;

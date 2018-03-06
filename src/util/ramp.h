@@ -96,7 +96,7 @@ public:
     if (!is_active())
       return;
 
-    progress = NORMAL.clamp(progress + phase_increment());
+    progress = UNIPOLAR_PHASE_RANGE.clamp(progress + phase_increment());
 
     if (progress >= 1.0f) {
       active.reset();
