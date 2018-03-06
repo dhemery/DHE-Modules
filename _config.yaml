@@ -30,4 +30,4 @@ defaults:
       path: upstage
     values:
       dark_color: rgb(0,77,153)
-      light_color: rgb(230,255,230)
+      light_color: rgb(240,247,255)

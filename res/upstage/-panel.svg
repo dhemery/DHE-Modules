@@ -5,7 +5,7 @@
 
 
 
-<rect x="0" y="0" width="75.0" height="380.01968503784997" stroke="rgb(0,77,153)" fill="rgb(230,255,230)" stroke-width="1"/><text dominant-baseline="baseline" text-anchor="middle" fill="rgb(0,77,153)" x="37.5" y="26.5748031495" style="font-family:Proxima Nova;font-weight:bold;font-size:12.0px">UPSTAGE</text><text dominant-baseline="hanging" text-anchor="middle" fill="rgb(0,77,153)" x="37.5" y="353.44488188835" style="font-family:Proxima Nova;font-weight:bold;font-size:12.0px">DHE</text>
+<rect x="0" y="0" width="75.0" height="380.01968503784997" stroke="rgb(0,77,153)" fill="rgb(240,247,255)" stroke-width="1"/><text dominant-baseline="baseline" text-anchor="middle" fill="rgb(0,77,153)" x="37.5" y="26.5748031495" style="font-family:Proxima Nova;font-weight:bold;font-size:12.0px">UPSTAGE</text><text dominant-baseline="hanging" text-anchor="middle" fill="rgb(0,77,153)" x="37.5" y="353.44488188835" style="font-family:Proxima Nova;font-weight:bold;font-size:12.0px">DHE</text>
 
 <text dominant-baseline="baseline" text-anchor="middle" fill="rgb(0,77,153)" x="37.49999999985" y="51.67322834625" style="font-family:Proxima Nova;font-weight:bold;font-size:9.0px">LEVEL</text>
 
@@ -21,24 +21,24 @@
 
         <rect x="3.863188877937305" y="218.63549868681753" width="31.742125984125003" height="39.361548556245"
           stroke-width="1.033464566925" rx="3.0" ry="3.0"
-          stroke="rgb(0,77,153)" fill="rgb(230,255,230)"/>
+          stroke="rgb(0,77,153)" fill="rgb(240,247,255)"/>
         <text dominant-baseline="baseline" text-anchor="middle" fill="rgb(0,77,153)" x="19.734251869999806" y="226.7716535424" style="font-family:Proxima Nova;font-weight:bold;font-size:7.0px">WAIT</text>
 
 
         <rect x="3.863188877937305" y="262.9268372693175" width="31.742125984125003" height="39.361548556245"
           stroke-width="1.033464566925" rx="3.0" ry="3.0"
-          stroke="rgb(0,77,153)" fill="rgb(230,255,230)"/>
+          stroke="rgb(0,77,153)" fill="rgb(240,247,255)"/>
         <text dominant-baseline="baseline" text-anchor="middle" fill="rgb(0,77,153)" x="19.734251869999806" y="271.0629921249" style="font-family:Proxima Nova;font-weight:bold;font-size:7.0px">TRIG</text>
 
         <rect x="39.394685137637694" y="262.9268372693175" width="31.74212598412501" height="39.361548556245"
           stroke-width="1.033464566925" rx="3.0" ry="3.0"
           stroke="rgb(0,77,153)" fill="rgb(0,77,153)"/>
-        <text dominant-baseline="baseline" text-anchor="middle" fill="rgb(230,255,230)" x="55.2657481297002" y="271.0629921249" style="font-family:Proxima Nova;font-weight:bold;font-size:7.0px">TRIG</text>
+        <text dominant-baseline="baseline" text-anchor="middle" fill="rgb(240,247,255)" x="55.2657481297002" y="271.0629921249" style="font-family:Proxima Nova;font-weight:bold;font-size:7.0px">TRIG</text>
 
 
         <rect x="39.394685137637694" y="307.21817585181753" width="31.74212598412501" height="39.361548556245"
           stroke-width="1.033464566925" rx="3.0" ry="3.0"
           stroke="rgb(0,77,153)" fill="rgb(0,77,153)"/>
-        <text dominant-baseline="baseline" text-anchor="middle" fill="rgb(230,255,230)" x="55.2657481297002" y="315.35433070740004" style="font-family:Proxima Nova;font-weight:bold;font-size:7.0px">OUT</text>
+        <text dominant-baseline="baseline" text-anchor="middle" fill="rgb(240,247,255)" x="55.2657481297002" y="315.35433070740004" style="font-family:Proxima Nova;font-weight:bold;font-size:7.0px">OUT</text>
 
 </svg>

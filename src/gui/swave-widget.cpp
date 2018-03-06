@@ -35,7 +35,7 @@ struct SwaveSwitch2 : rack::SVGSwitch, rack::ToggleSwitch {
   }
 };
 
-SwaveWidget::SwaveWidget(rack::Module *module) : ModuleWidget(module, 3, "res/swave/panel.svg") {
+SwaveWidget::SwaveWidget(rack::Module *module) : ModuleWidget(module, 4, "res/swave/panel.svg") {
   auto widget_right_edge = width();
 
   auto center_x = widget_right_edge/2.f;
@@ -44,10 +44,10 @@ SwaveWidget::SwaveWidget(rack::Module *module) : ModuleWidget(module, 3, "res/sw
   auto row_spacing = 18.5f;
 
   auto row = 0;
-  install_input<SwavePort>(SwaveModule::CURVE_CV, {center_x, top_row_y + row*row_spacing});
+  install_knob<SwaveKnobLarge>(SwaveModule::CURVE_KNOB, {center_x, top_row_y + row*row_spacing});
 
   row++;
-  install_knob<SwaveKnobLarge>(SwaveModule::CURVE_KNOB, {center_x, top_row_y + row*row_spacing});
+  install_input<SwavePort>(SwaveModule::CURVE_CV, {center_x, top_row_y + row*row_spacing});
 
   row++;
   install_switch<SwaveSwitch2>(SwaveModule::SHAPE_SWITCH, {center_x, top_row_y + row*row_spacing}, 1, 1);

@@ -1,14 +1,14 @@
 ---
 layout: panel
-width: 15.24
+width: 20.32
 title: SWAVE
 ---
 {% assign center_x = page.width | divided_by:2.0 %}
 
-{{ page | panel: 3.0 }}
+{{ page | panel: 4.0 }}
 
-{{ page | cv: center_x, 25.0 }}
-{{ page | large_knob: center_x, 43.5, "Curve" }}
+{{ page | large_knob: center_x, 25.0, "Curve" }}
+{{ page | cv: center_x, 43.5 }}
 {{ page | shape_switch: center_x, 62.0 }}
 
 {{ page | in_port: center_x, 97.0, "IN" }}
