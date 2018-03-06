@@ -35,29 +35,32 @@ struct SwaveSwitch2 : rack::SVGSwitch, rack::ToggleSwitch {
   }
 };
 
-SwaveWidget::SwaveWidget(rack::Module *module) : ModuleWidget(module, 4, "res/swave/panel.svg") {
+SwaveWidget::SwaveWidget(rack::Module *module) : ModuleWidget(module, 3, "res/swave/panel.svg") {
   auto widget_right_edge = width();
 
-  auto left_x = 5.3f;
   auto center_x = widget_right_edge/2.f;
-  auto right_x = widget_right_edge - left_x;
 
   auto top_row_y = 25.f;
   auto row_spacing = 18.5f;
 
   auto row = 0;
+  install_input<SwavePort>(SwaveModule::CURVE_CV, {center_x, top_row_y + row*row_spacing});
+
+  row++;
   install_knob<SwaveKnobLarge>(SwaveModule::CURVE_KNOB, {center_x, top_row_y + row*row_spacing});
 
   row++;
-  install_input<SwavePort>(SwaveModule::CURVE_CV, {left_x, top_row_y + row*row_spacing});
-  install_switch<SwaveSwitch2>(SwaveModule::SHAPE_SWITCH, {right_x, top_row_y + row*row_spacing}, 1, 1);
+  install_switch<SwaveSwitch2>(SwaveModule::SHAPE_SWITCH, {center_x, top_row_y + row*row_spacing}, 1, 1);
 
-  top_row_y = 112.f;
+  top_row_y = 82.f;
   row_spacing = 15.f;
 
   row = 0;
 
-  install_input<SwavePort>(SwaveModule::SWAVE_IN, {left_x, top_row_y + row*row_spacing});
-  install_output<SwavePort>(SwaveModule::SWAVE_OUT, {right_x, top_row_y + row*row_spacing});
+  row++;
+  install_input<SwavePort>(SwaveModule::SWAVE_IN, {center_x, top_row_y + row*row_spacing});
+
+  row++;
+  install_output<SwavePort>(SwaveModule::SWAVE_OUT, {center_x, top_row_y + row*row_spacing});
 }
 }

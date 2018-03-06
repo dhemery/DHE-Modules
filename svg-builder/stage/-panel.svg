@@ -1,24 +1,23 @@
 ---
 layout: panel
-width: 20.32
+width: 25.40
 title: STAGE
 ---
-{% assign left_x = 5.3 %}
+{% assign left_x = page.width | divided_by:4.0 | plus:0.33333 %}
 {% assign right_x = page.width | minus:left_x %}
 {% assign center_x = page.width | divided_by:2.0 %}
-{% assign side_padding_ratio = 0.2 %}
 
-{{ page | panel: 4.0 }}
+{{ page | panel: 5.0 }}
 
 {{ page | large_knob: center_x, 25.0, "LEVEL" }}
 {{ page | large_knob: center_x, 43.5, "CURVE" }}
 {{ page | large_knob: center_x, 62.0, "DURATION" }}
 
-{{ page | in_port: left_x, 82, "DEFER", side_padding_ratio }}
-{{ page | out_port: right_x, 82, "ACTIVE", side_padding_ratio }}
+{{ page | in_port: left_x, 82, "DEFER" }}
+{{ page | out_port: right_x, 82, "ACTIVE" }}
 
-{{ page | in_port: left_x, 97, "TRIG", side_padding_ratio }}
-{{ page | out_port: right_x, 97, "EOC", side_padding_ratio }}
+{{ page | in_port: left_x, 97, "TRIG" }}
+{{ page | out_port: right_x, 97, "EOC" }}
 
-{{ page | in_port: left_x, 112.0, "IN", side_padding_ratio }}
-{{ page | out_port: right_x, 112.0, "OUT", side_padding_ratio }}
+{{ page | in_port: left_x, 112.0, "IN" }}
+{{ page | out_port: right_x, 112.0, "OUT" }}

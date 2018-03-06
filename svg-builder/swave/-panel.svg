@@ -1,18 +1,15 @@
 ---
 layout: panel
-width: 20.32
+width: 15.24
 title: SWAVE
 ---
-{% assign left_x = 5.3 %}
-{% assign right_x = page.width | minus:left_x %}
 {% assign center_x = page.width | divided_by:2.0 %}
-{% assign side_padding_ratio = 0.2 %}
 
-{{ page | panel: 4.0 }}
+{{ page | panel: 3.0 }}
 
-{{ page | large_knob: center_x, 25.0, "Curve" }}
-{{ page | cv: left_x, 43.5 }}
-{{ page | shape_switch: right_x, 43.5 }}
+{{ page | cv: center_x, 25.0 }}
+{{ page | large_knob: center_x, 43.5, "Curve" }}
+{{ page | shape_switch: center_x, 62.0 }}
 
-{{ page | in_port: left_x, 112.0, "IN", side_padding_ratio }}
-{{ page | out_port: right_x, 112.0, "OUT", side_padding_ratio }}
+{{ page | in_port: center_x, 97.0, "IN" }}
+{{ page | out_port: center_x, 112.0, "OUT" }}
