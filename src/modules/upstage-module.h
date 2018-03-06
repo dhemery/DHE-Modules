@@ -2,57 +2,51 @@
 
 #include <algorithm>
 
-#include "engine.hpp"
+#include "module.h"
+#include "util/controls.h"
 #include "util/interval.h"
-#include "controllers/upstage-controller.h"
-#include "controllers/level-control.h"
 
 namespace DHE {
 
-struct UpstageModule : rack::Module {
+struct UpstageModule : Module {
   enum ParamIds {
     LEVEL_KNOB, TRIG_BUTTON, WAIT_BUTTON,
     LEVEL_SWITCH,
-    NUM_PARAMS
+    PARAMETER_COUNT
   };
   enum InputIds {
-    TRIG_IN, WAIT_IN, LEVEL_CV_INPUT,
-    NUM_INPUTS
+    TRIG_IN, WAIT_IN, LEVEL_CV,
+    INPUT_COUNT
   };
   enum OutputIds {
     TRIG_OUT, STAGE_OUT,
-    NUM_OUTPUTS
-  };
-  enum LightIds {
-    NUM_LIGHTS
+    OUTPUT_COUNT
   };
 
-  UpstageModule()
-      : rack::Module{NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS},
-        controller{
-            LevelControl{
-                [this] { return params[LEVEL_KNOB].value; },
-                [this] { return inputs[LEVEL_CV_INPUT].value; },
-                [this] { return params[LEVEL_SWITCH].value; }
-            },
-            InputPortControl{
-                [this] { return inputs[WAIT_IN].value; },
-                ButtonControl{[this] { return params[WAIT_BUTTON].value; }}
-            },
-            InputPortControl{
-                [this] { return inputs[TRIG_IN].value; },
-                ButtonControl {[this] { return params[TRIG_BUTTON].value; }}
-            },
-            OutputPortControl{[this](float f) { outputs[TRIG_OUT].value = f; }},
-            [this](float f) { outputs[STAGE_OUT].value = f; }
-        } {}
+  UpstageModule() : Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT} {}
 
-  void step() override {
-    controller.step();
+  float trigger_in() {
+    return std::max(inputs[TRIG_IN].value, gate_button(TRIG_BUTTON));
   }
 
-private:
-  UpstageController controller;
+  float trigger_out() {
+    return is_waiting() ? 0.f : trigger_in();
+  }
+
+  bool is_waiting() {
+    return std::max(inputs[WAIT_IN].value, gate_button(WAIT_BUTTON)) > 0.5f;
+  }
+
+  float stage_out() {
+    const auto &range = Level::range(params[LEVEL_SWITCH].value);
+    auto rotation = modulated(LEVEL_KNOB, LEVEL_CV);
+    return Level::scaled(rotation, range);
+  }
+
+  void step() override {
+    outputs[TRIG_OUT].value = trigger_out();
+    outputs[STAGE_OUT].value = stage_out();
+  }
 };
 
 }

@@ -1,6 +1,5 @@
 #pragma once
 
-#include <plugin/dhe-modules.h>
 #include "module-widget.h"
 
 namespace DHE {

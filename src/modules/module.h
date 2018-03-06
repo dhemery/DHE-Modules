@@ -1,6 +1,7 @@
 #pragma once
 
 #include <engine.hpp>
+
 #include "util/interval.h"
 
 namespace DHE {

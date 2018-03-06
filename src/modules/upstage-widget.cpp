@@ -34,7 +34,6 @@ struct UpstageSwitch2 : rack::SVGSwitch, rack::ToggleSwitch {
   }
 };
 
-
 UpstageWidget::UpstageWidget(rack::Module *module) : ModuleWidget(module, 4, "res/upstage/panel.svg") {
   auto widget_right_edge = width();
 
@@ -49,7 +48,7 @@ UpstageWidget::UpstageWidget(rack::Module *module) : ModuleWidget(module, 4, "re
   install_knob<UpstageKnobLarge>(UpstageModule::LEVEL_KNOB, {center_x, top_row_y + row*row_spacing});
 
   row++;
-  install_input<UpstagePort>(UpstageModule::LEVEL_CV_INPUT, {left_x, top_row_y + row*row_spacing});
+  install_input<UpstagePort>(UpstageModule::LEVEL_CV, {left_x, top_row_y + row*row_spacing});
   install_switch<UpstageSwitch2>(UpstageModule::LEVEL_SWITCH, {right_x, top_row_y + row*row_spacing}, 1, 1);
 
   row++;

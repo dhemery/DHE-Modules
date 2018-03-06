@@ -1,7 +1,6 @@
 #include <asset.hpp>
 #include <componentlibrary.hpp>
 
-#include "plugin/dhe-modules.h"
 #include "booster-stage-module.h"
 #include "booster-stage-widget.h"
 

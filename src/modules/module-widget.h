@@ -3,6 +3,8 @@
 #include <app.hpp>
 #include <util/math.hpp>
 
+#include "plugin/dhe-modules.h"
+
 namespace DHE {
 class ModuleWidget : public rack::ModuleWidget {
 

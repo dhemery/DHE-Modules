@@ -2,13 +2,13 @@
 
 #include <engine.hpp>
 
-#include "util/controls.h"
-#include "util/interval.h"
-#include "util/sigmoid.h"
-#include "util/d-flip-flop.h"
-#include "util/ramp.h"
-#include "util/track-and-hold-amplifier.h"
 #include "module.h"
+#include "util/controls.h"
+#include "util/d-flip-flop.h"
+#include "util/interval.h"
+#include "util/ramp.h"
+#include "util/sigmoid.h"
+#include "util/track-and-hold-amplifier.h"
 
 namespace DHE {
 
@@ -74,7 +74,7 @@ struct StageModule : public Module {
   }
 
   virtual float level_in() const {
-    return Level::scaled(param(LEVEL_KNOB), UNIPOLAR_CV);
+    return Level::scaled(param(LEVEL_KNOB));
   }
 
   float stage_out() const {

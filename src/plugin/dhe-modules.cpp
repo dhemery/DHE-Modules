@@ -1,11 +1,10 @@
 #include "dhe-modules.h"
 
-#include <modules/booster-stage-module.h>
-#include <modules/booster-stage-widget.h>
-#include <modules/swave-module.h>
-#include <modules/swave-widget.h>
-#include <modules/stage-module.h>
-#include <modules/stage-widget.h>
+#include "modules/booster-stage-module.h"
+#include "modules/booster-stage-widget.h"
+#include "modules/stage-widget.h"
+#include "modules/swave-module.h"
+#include "modules/swave-widget.h"
 #include "modules/upstage-module.h"
 #include "modules/upstage-widget.h"
 

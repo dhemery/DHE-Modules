@@ -34,7 +34,7 @@ inline const Interval &range(float switch_value) {
   return switch_value > 0.5f ? UNIPOLAR_CV : BIPOLAR_CV;
 }
 
-inline float scaled(float rotation, const Interval &range) {
+inline float scaled(float rotation, const Interval &range = UNIPOLAR_CV) {
   return range.scale(rotation);
 }
 }

@@ -19,12 +19,6 @@ target_compile_features(rack INTERFACE cxx_std_11)
 target_compile_options(rack INTERFACE -stdlib=libc++)
 
 add_library(plugin SHARED
-        src/controllers/button-control.h
-        src/controllers/input-port-control.h
-        src/controllers/level-control.h
-        src/controllers/modulated-control.h
-        src/controllers/swave-controller.h
-        src/controllers/upstage-controller.h
         src/modules/booster-stage-module.h
         src/modules/booster-stage-widget.cpp
         src/modules/booster-stage-widget.h
@@ -56,7 +50,6 @@ target_link_libraries(plugin
 target_include_directories(plugin PUBLIC src)
 
 add_executable(tests
-        src/controllers/upstage-controller.h
         src/util/track-and-hold-amplifier.h
         test/catch/catch.hpp
         test/runner/main.cpp

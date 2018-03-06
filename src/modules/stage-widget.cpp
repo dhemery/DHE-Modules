@@ -1,5 +1,4 @@
 #include <componentlibrary.hpp>
-#include <plugin/dhe-modules.h>
 
 #include "stage-module.h"
 #include "stage-widget.h"
