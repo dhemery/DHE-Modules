@@ -14,7 +14,5 @@ title: SWAVE
 {{ page | cv: left_x, 43.5 }}
 {{ page | shape_switch: right_x, 43.5 }}
 
-{{ page | small_knob: center_x, 62.0, "-/+" }}
-
 {{ page | in_port: left_x, 112.0, "IN", side_padding_ratio }}
 {{ page | out_port: right_x, 112.0, "OUT", side_padding_ratio }}

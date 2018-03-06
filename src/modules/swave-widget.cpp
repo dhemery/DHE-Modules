@@ -52,9 +52,6 @@ SwaveWidget::SwaveWidget(rack::Module *module) : ModuleWidget(module, 4, "res/sw
   install_input<SwavePort>(SwaveModule::CURVE_CV, {left_x, top_row_y + row*row_spacing});
   install_switch<SwaveSwitch2>(SwaveModule::SHAPE_SWITCH, {right_x, top_row_y + row*row_spacing}, 1, 1);
 
-  row++;
-  install_knob<SwaveKnobSmall>(SwaveModule::TRIM_KNOB, {center_x, top_row_y + row*row_spacing});
-
   top_row_y = 112.f;
   row_spacing = 15.f;
 

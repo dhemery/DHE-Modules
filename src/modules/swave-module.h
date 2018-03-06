@@ -4,54 +4,36 @@
 
 #include <engine.hpp>
 
+#include "module.h"
+#include "util/controls.h"
 #include "util/interval.h"
-#include <controllers/attenuverter.h>
-#include "controllers/swave-controller.h"
-#include "controllers/shape-control.h"
 
 namespace DHE {
 
-struct SwaveModule : rack::Module {
+struct SwaveModule : Module {
   enum ParamIds {
     CURVE_KNOB, SHAPE_SWITCH,
-    TRIM_KNOB,
-    NUM_PARAMS
+    PARAMETER_COUNT
   };
   enum InputIds {
     CURVE_CV, SWAVE_IN,
-    NUM_INPUTS
+    INPUT_COUNT
   };
   enum OutputIds {
     SWAVE_OUT,
-    NUM_OUTPUTS
-  };
-  enum LightIds {
-    NUM_LIGHTS
+    OUTPUT_COUNT
   };
 
-  SwaveModule()
-      : rack::Module{NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS},
-        controller{
-            ShapeControl{
-                [this] { return params[CURVE_KNOB].value; },
-                Attenuverter{
-                  [this] { return inputs[CURVE_CV].value; },
-                  [this] { return params[TRIM_KNOB].value; }
-                },
-                [this] { return params[SHAPE_SWITCH].value; }
-            },
-            [this] { return inputs[SWAVE_IN].value; },
-            [this](
-                float f
-            ) { outputs[SWAVE_OUT].value = f; }
-        } {}
+  SwaveModule() : Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT} {}
 
   void step() override {
-    controller.step();
+    auto rotation = modulated(CURVE_KNOB, CURVE_CV);
+    const auto &shape_phase_range = Shape::range(param(SHAPE_SWITCH));
+    auto audio = inputs[SWAVE_IN].value;
+    auto normalized_audio = BIPOLAR_CV.normalize(audio);
+    auto shaped_normalized_audio = Shape::shape(normalized_audio, rotation, shape_phase_range);
+    outputs[SWAVE_OUT].value = BIPOLAR_CV.scale(shaped_normalized_audio);
   }
-
-private:
-  SwaveController controller;
 };
 
 }
