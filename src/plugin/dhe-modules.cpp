@@ -1,12 +1,12 @@
 #include "dhe-modules.h"
 
+#include "gui/booster-stage-widget.h"
+#include "gui/stage-widget.h"
+#include "gui/swave-widget.h"
+#include "gui/upstage-widget.h"
 #include "modules/booster-stage-module.h"
-#include "modules/booster-stage-widget.h"
-#include "modules/stage-widget.h"
 #include "modules/swave-module.h"
-#include "modules/swave-widget.h"
 #include "modules/upstage-module.h"
-#include "modules/upstage-widget.h"
 
 rack::Plugin *plugin;
 

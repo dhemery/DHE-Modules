@@ -1,7 +1,7 @@
 #include <componentlibrary.hpp>
 
 #include "plugin/dhe-modules.h"
-#include "swave-module.h"
+#include "modules/swave-module.h"
 #include "swave-widget.h"
 
 namespace DHE {

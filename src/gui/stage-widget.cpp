@@ -1,6 +1,6 @@
 #include <componentlibrary.hpp>
 
-#include "stage-module.h"
+#include "modules/stage-module.h"
 #include "stage-widget.h"
 
 namespace DHE {

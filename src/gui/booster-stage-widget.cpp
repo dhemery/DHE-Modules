@@ -1,7 +1,7 @@
 #include <asset.hpp>
 #include <componentlibrary.hpp>
 
-#include "booster-stage-module.h"
+#include "modules/booster-stage-module.h"
 #include "booster-stage-widget.h"
 
 namespace DHE {

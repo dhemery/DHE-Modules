@@ -1,7 +1,7 @@
 #include <asset.hpp>
 #include <componentlibrary.hpp>
 
-#include "upstage-module.h"
+#include "modules/upstage-module.h"
 #include "upstage-widget.h"
 
 namespace DHE {
