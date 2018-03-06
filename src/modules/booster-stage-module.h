@@ -1,7 +1,8 @@
 #pragma once
 
-#include "stage-module.h"
 #include "util/controls.h"
+#include "module.h"
+#include "stage-processor.h"
 
 namespace DHE {
 struct BoosterStageModule : Module, StageProcessor {

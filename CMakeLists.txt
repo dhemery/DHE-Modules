@@ -23,6 +23,8 @@ add_library(plugin SHARED
         src/gui/booster-stage-widget.cpp
         src/gui/module-widget.h
         src/gui/module-widget.cpp
+        src/gui/snob-widget.h
+        src/gui/snob-widget.cpp
         src/gui/stage-widget.h
         src/gui/stage-widget.cpp
         src/gui/swave-widget.h
@@ -30,6 +32,7 @@ add_library(plugin SHARED
         src/gui/upstage-widget.h
         src/gui/upstage-widget.cpp
         src/modules/booster-stage-module.h
+        src/modules/snob-module.h
         src/modules/stage-module.h
         src/modules/stage-processor.h
         src/modules/swave-module.h

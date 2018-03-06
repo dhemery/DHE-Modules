@@ -31,3 +31,9 @@ defaults:
     values:
       dark_color: rgb(0,77,153)
       light_color: rgb(240,247,255)
+  -
+    scope:
+      path: snob
+    values:
+      dark_color: black
+      light_color: white
