@@ -24,7 +24,6 @@ add_library(plugin SHARED
         src/controllers/input-port-control.h
         src/controllers/level-control.h
         src/controllers/modulated-control.h
-        src/controllers/stage-controller.h
         src/controllers/swave-controller.h
         src/controllers/upstage-controller.h
         src/modules/booster-stage-module.h
@@ -49,7 +48,7 @@ add_library(plugin SHARED
         src/util/latch.h
         src/util/ramp.h
         src/util/sigmoid.h
-        )
+        src/util/controls.h)
 target_link_libraries(plugin
         PUBLIC -stdlib=libc++
         PUBLIC rack
@@ -59,7 +58,6 @@ target_include_directories(plugin PUBLIC src)
 
 add_executable(tests
         src/controllers/upstage-controller.h
-        src/controllers/stage-controller.h
         src/util/track-and-hold-amplifier.h
         test/catch/catch.hpp
         test/runner/main.cpp

@@ -69,8 +69,8 @@ BoosterStageWidget::BoosterStageWidget(rack::Module *module) : ModuleWidget(modu
   install_switch<BoosterStageSwitch2>(BoosterStageModule::LEVEL_SWITCH, {right_x, top_row_y + row*row_spacing}, 1, 1);
 
   row++;
-  install_input<BoosterStagePort>(BoosterStageModule::SHAPE_CV, {left_x, top_row_y + row*row_spacing});
-  install_knob<BoosterStageKnobLarge>(BoosterStageModule::SHAPE_KNOB, {center_x, top_row_y + row*row_spacing});
+  install_input<BoosterStagePort>(BoosterStageModule::CURVE_CV, {left_x, top_row_y + row*row_spacing});
+  install_knob<BoosterStageKnobLarge>(BoosterStageModule::CURVE_KNOB, {center_x, top_row_y + row*row_spacing});
   install_switch<BoosterStageSwitch2>(BoosterStageModule::SHAPE_SWITCH, {right_x, top_row_y + row*row_spacing});
 
   row++;

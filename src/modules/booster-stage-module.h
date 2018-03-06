@@ -1,76 +1,69 @@
 #pragma once
 
 #include <engine.hpp>
-#include <controllers/duration-control.h>
-#include "controllers/level-control.h"
-#include "controllers/input-port-control.h"
-#include <controllers/shape-control.h>
-#include "controllers/stage-controller.h"
+#include <util/controls.h>
+#include "stage-module.h"
 
 namespace DHE {
-struct BoosterStageModule : rack::Module {
+struct BoosterStageModule : StageModule {
   enum ParamIds {
-    DURATION_KNOB, LEVEL_KNOB, SHAPE_KNOB,
-    LEVEL_SWITCH, SHAPE_SWITCH, DURATION_SWITCH,
+    LEVEL_SWITCH = StageModule::NUM_PARAMS, SHAPE_SWITCH, DURATION_SWITCH,
     DEFER_BUTTON, TRIG_BUTTON, ACTIVE_BUTTON, EOC_BUTTON,
     NUM_PARAMS
   };
   enum InputIds {
-    STAGE_IN, TRIG_IN, DEFER_IN,
-    LEVEL_CV, DURATION_CV, SHAPE_CV,
+    LEVEL_CV = StageModule::NUM_INPUTS, DURATION_CV, CURVE_CV,
     NUM_INPUTS
   };
-  enum OutputIds {
-    STAGE_OUT, EOC_OUT, ACTIVE_OUT,
-    NUM_OUTPUTS
-  };
 
-  enum LightIds {
-    NUM_LIGHTS
-  };
+  BoosterStageModule() : StageModule{NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS} {}
 
-  BoosterStageModule()
-      : Module{NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS},
-        controller{
-            [] { return rack::engineGetSampleTime(); },
-            LevelControl{
-                [this] { return params[LEVEL_KNOB].value; },
-                [this] { return inputs[LEVEL_CV].value; },
-                [this] { return params[LEVEL_SWITCH].value; }
-            },
-            DurationControl{
-                [this] { return params[DURATION_KNOB].value; },
-                [this] { return inputs[DURATION_CV].value; },
-                [this] { return params[DURATION_SWITCH].value; }
-            },
-            ShapeControl{
-                [this] { return params[SHAPE_KNOB].value; },
-                [this] { return inputs[SHAPE_CV].value; },
-                [this] { return params[SHAPE_SWITCH].value; }
-            },
-            InputPortControl{
-                [this] { return inputs[DEFER_IN].value; },
-                ButtonControl{[this] { return params[DEFER_BUTTON].value; }}
-            },
-            InputPortControl{
-                [this] { return inputs[TRIG_IN].value; },
-                ButtonControl{[this] { return params[TRIG_BUTTON].value; }}
-            },
-            [this] { return inputs[STAGE_IN].value; },
-            OutputPortControl{
-                [this](float f) { outputs[ACTIVE_OUT].value = f; },
-                ButtonControl{[this] { return params[ACTIVE_BUTTON].value; }}
-            },
-            OutputPortControl{
-                [this](float f) { outputs[EOC_OUT].value = f; },
-                ButtonControl{[this] { return params[EOC_BUTTON].value; }}
-            },
-            [this](float f) { outputs[STAGE_OUT].value = f; }
-        } {}
+  float curve_in() const override {
+    return modulated(CURVE_KNOB, CURVE_CV);
+  }
+  float defer_in() const override {
+    return std::max(input(DEFER_IN), gate_button(DEFER_BUTTON));
+  }
 
-  void step() override { controller.step(); }
+  float duration_in() const override {
+    auto rotation = modulated(DURATION_KNOB, DURATION_CV);
+    const auto &range = Duration::range(param(DURATION_SWITCH));
+    return Duration::scaled(rotation, range);
+  }
+
+  bool is_active() const override {
+    return param(ACTIVE_BUTTON) > 0.5f || StageModule::is_active();
+  }
+
+  bool is_end_of_cycle() const override {
+    return param(EOC_BUTTON) > 0.5f || StageModule::is_end_of_cycle();
+  }
+
+  float level_in() const override {
+    const auto &range = Level::range(param(LEVEL_SWITCH));
+    auto rotation = modulated(LEVEL_KNOB, LEVEL_CV);
+    return Level::scaled(rotation, range);
+  }
+
+  float shape(float phase) const override {
+    const auto &range = param(SHAPE_SWITCH) > 0.5f ? BIPOLAR_NORMAL : NORMAL;
+    auto scaled_phase = range.scale(phase);
+    auto shaped_phase = StageModule::shape(scaled_phase);
+    return range.normalize(shaped_phase);
+  }
+
+  float trigger_in() const override {
+    return std::max(input(TRIG_IN), gate_button(TRIG_BUTTON));
+  }
 
 private:
-  StageController controller;
+
+  float gate_button(int index) const {
+    return UNIPOLAR_CV.scale(param(index) > 0.5f);
+  };
+
+  float modulated(int param_index, int mod_index) const {
+    return param(param_index) + input(mod_index)/10.f;
+  }
 };
 }
