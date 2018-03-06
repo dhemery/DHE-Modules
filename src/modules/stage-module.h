@@ -39,7 +39,7 @@ struct StageModule : public Module, StageProcessor {
   }
 
   void step() override {
-    process();
+    StageProcessor::step();
   }
 
   float taper(float phase) const override {

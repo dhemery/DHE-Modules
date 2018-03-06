@@ -28,7 +28,6 @@ struct StageProcessor {
   virtual float level_in() const = 0;
   virtual float stage_in() const = 0;
 
-
   virtual bool is_end_of_cycle() const {
     return end_of_cycle_pulse.is_active();
   }
@@ -44,7 +43,7 @@ struct StageProcessor {
   virtual void send_eoc_out(float f) = 0;
   virtual void send_stage_out(float f) = 0;
 
-  void process() {
+  void step() {
     defer_gate.step();
     envelope_ramp.step();
     envelope_trigger.step();
