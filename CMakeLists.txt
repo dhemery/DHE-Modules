@@ -20,7 +20,6 @@ target_compile_options(rack INTERFACE -stdlib=libc++)
 
 add_library(plugin SHARED
         src/controllers/button-control.h
-        src/controllers/duration-control.h
         src/controllers/input-port-control.h
         src/controllers/level-control.h
         src/controllers/modulated-control.h
