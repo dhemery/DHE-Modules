@@ -8,30 +8,34 @@
 #include "util/d-flip-flop.h"
 #include "util/ramp.h"
 #include "util/track-and-hold-amplifier.h"
+#include "module.h"
 
 namespace DHE {
-struct StageModule : rack::Module {
+
+struct StageModule : public Module {
   enum ParamIds {
     DURATION_KNOB, LEVEL_KNOB, CURVE_KNOB,
-    NUM_PARAMS
+    PARAM_COUNT
   };
+
   enum InputIds {
     STAGE_IN, TRIG_IN, DEFER_IN,
-    NUM_INPUTS
+    INPUT_COUNT
   };
+
   enum OutputIds {
     STAGE_OUT, EOC_OUT, ACTIVE_OUT,
-    NUM_OUTPUTS
+    OUTPUT_COUNT
   };
 
-  StageModule() : StageModule(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS) {}
+  StageModule() : StageModule(PARAM_COUNT, INPUT_COUNT, OUTPUT_COUNT) {}
 
-  StageModule(int numParams, int numInputs, int numOutputs) :
-      rack::Module{numParams, numInputs, numOutputs},
+  StageModule(int param_count, int input_count, int output_count) :
+      Module{param_count, input_count, output_count},
       defer_gate{[this] { return defer_in(); }},
       end_of_cycle_pulse{1e-3, [this] { return sample_time(); }},
       envelope_ramp{[this] { return duration_in(); }, [this] { return sample_time(); }},
-      envelope_trigger{[this] { return trigger_in() ; }},
+      envelope_trigger{[this] { return trigger_in(); }},
       stage_in{[this] { return this->input(STAGE_IN); }} {
     defer_gate.on_rising_edge([this] { begin_deferring(); });
     defer_gate.on_falling_edge([this] { stop_deferring(); });
@@ -45,12 +49,29 @@ struct StageModule : rack::Module {
     return param(CURVE_KNOB);
   }
 
+  virtual float shape(float phase) const {
+    return sigmoid(phase, curvature());
+  }
+
+  float curvature() const {
+    static constexpr auto curve_knob_curvature = -0.65f;
+    return sigmoid(BIPOLAR_NORMAL.scale(curve_in()), curve_knob_curvature);
+  }
+
+  float active_out() const {
+    return UNIPOLAR_CV.scale(is_active());
+  }
+
   virtual float defer_in() const {
     return input(DEFER_IN);
   }
 
   virtual float duration_in() const {
     return Duration::scaled(param(DURATION_KNOB), Duration::MEDIUM_RANGE);
+  }
+
+  float eoc_out() const {
+    return UNIPOLAR_CV.scale(is_end_of_cycle());
   }
 
   virtual bool is_active() const {
@@ -65,47 +86,12 @@ struct StageModule : rack::Module {
     return Level::scaled(param(LEVEL_KNOB), UNIPOLAR_CV);
   }
 
-  virtual float shape(float phase) const {
-    return sigmoid(phase, curvature());
+  float stage_out() const {
+    return defer_gate.is_high() ? stage_in.value() : envelope_voltage();
   }
 
   virtual float trigger_in() const {
     return input(TRIG_IN);
-  }
-
-  float curvature() const {
-    static constexpr auto curve_knob_curvature = -0.65f;
-    return sigmoid(BIPOLAR_NORMAL.scale(curve_in()), curve_knob_curvature);
-  }
-
-  float input(int index) const {
-    return inputs[index].value;
-  }
-
-  float param(int index) const {
-    return params[index].value;
-  }
-
-  float sample_time() const {
-    return rack::engineGetSampleTime();
-  }
-
-  float &output(int index) {
-    return outputs[index].value;
-  }
-
-  void send(int index, float f) { output(index) = f; }
-
-  void send_active_out() {
-    send(ACTIVE_OUT, UNIPOLAR_CV.scale(is_active()));
-  }
-
-  void send_eoc_out() {
-    send(EOC_OUT, UNIPOLAR_CV.scale(is_end_of_cycle()));
-  }
-
-  void send_stage_out() {
-    send(STAGE_OUT, defer_gate.is_high() ? stage_in.value() : envelope_voltage());
   }
 
   void step() override {
@@ -114,9 +100,9 @@ struct StageModule : rack::Module {
     envelope_trigger.step();
     end_of_cycle_pulse.step();
 
-    send_active_out();
-    send_eoc_out();
-    send_stage_out();
+    outputs[ACTIVE_OUT].value = active_out();
+    outputs[EOC_OUT].value = eoc_out();
+    outputs[STAGE_OUT].value = stage_out();
   }
 
 private:

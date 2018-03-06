@@ -7,20 +7,29 @@
 namespace DHE {
 struct BoosterStageModule : StageModule {
   enum ParamIds {
-    LEVEL_SWITCH = StageModule::NUM_PARAMS, SHAPE_SWITCH, DURATION_SWITCH,
+    LEVEL_SWITCH = StageModule::PARAM_COUNT, SHAPE_SWITCH, DURATION_SWITCH,
     DEFER_BUTTON, TRIG_BUTTON, ACTIVE_BUTTON, EOC_BUTTON,
-    NUM_PARAMS
-  };
-  enum InputIds {
-    LEVEL_CV = StageModule::NUM_INPUTS, DURATION_CV, CURVE_CV,
-    NUM_INPUTS
+    PARAM_COUNT
   };
 
-  BoosterStageModule() : StageModule{NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS} {}
+  enum InputIds {
+    LEVEL_CV = StageModule::INPUT_COUNT, DURATION_CV, CURVE_CV,
+    INPUT_COUNT
+  };
+
+  BoosterStageModule() : StageModule{PARAM_COUNT, INPUT_COUNT, OUTPUT_COUNT} {}
 
   float curve_in() const override {
     return modulated(CURVE_KNOB, CURVE_CV);
   }
+
+  float shape(float phase) const override {
+    const auto &range = param(SHAPE_SWITCH) > 0.5f ? BIPOLAR_NORMAL : NORMAL;
+    auto scaled_phase = range.scale(phase);
+    auto shaped_phase = StageModule::shape(scaled_phase);
+    return range.normalize(shaped_phase);
+  }
+
   float defer_in() const override {
     return std::max(input(DEFER_IN), gate_button(DEFER_BUTTON));
   }
@@ -45,25 +54,8 @@ struct BoosterStageModule : StageModule {
     return Level::scaled(rotation, range);
   }
 
-  float shape(float phase) const override {
-    const auto &range = param(SHAPE_SWITCH) > 0.5f ? BIPOLAR_NORMAL : NORMAL;
-    auto scaled_phase = range.scale(phase);
-    auto shaped_phase = StageModule::shape(scaled_phase);
-    return range.normalize(shaped_phase);
-  }
-
   float trigger_in() const override {
     return std::max(input(TRIG_IN), gate_button(TRIG_BUTTON));
-  }
-
-private:
-
-  float gate_button(int index) const {
-    return UNIPOLAR_CV.scale(param(index) > 0.5f);
-  };
-
-  float modulated(int param_index, int mod_index) const {
-    return param(param_index) + input(mod_index)/10.f;
   }
 };
 }
