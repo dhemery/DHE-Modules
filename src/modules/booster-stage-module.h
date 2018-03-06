@@ -19,15 +19,10 @@ struct BoosterStageModule : StageModule {
 
   BoosterStageModule() : StageModule{PARAM_COUNT, INPUT_COUNT, OUTPUT_COUNT} {}
 
-  float curve_in() const override {
-    return modulated(CURVE_KNOB, CURVE_CV);
-  }
-
   float shape(float phase) const override {
-    const auto &range = param(SHAPE_SWITCH) > 0.5f ? BIPOLAR_NORMAL : NORMAL;
-    auto scaled_phase = range.scale(phase);
-    auto shaped_phase = StageModule::shape(scaled_phase);
-    return range.normalize(shaped_phase);
+    auto rotation = modulated(CURVE_KNOB, CURVE_CV);
+    const auto &range = Shape::range(param(SHAPE_SWITCH));
+    return Shape::shape(phase, rotation, range);
   }
 
   float defer_in() const override {

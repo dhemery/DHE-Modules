@@ -38,4 +38,25 @@ inline float scaled(float rotation, const Interval &range) {
   return range.scale(rotation);
 }
 }
+
+namespace Shape {
+inline float curvature(float rotation) {
+  static constexpr auto curve_knob_curvature = -0.65f;
+  return sigmoid(BIPOLAR_NORMAL.scale(rotation), curve_knob_curvature);
+}
+
+inline float shape(float phase, float rotation) {
+  return sigmoid(phase, curvature(rotation));
+}
+
+inline float shape(float phase, float rotation, Interval range) {
+  auto scaled_phase = range.scale(phase);
+  auto shaped_phase = shape(scaled_phase, rotation);
+  return range.normalize(shaped_phase);
+}
+
+inline Interval range(float switch_value) {
+  return switch_value > 0.5f ? BIPOLAR_NORMAL : NORMAL;
+}
+}
 }

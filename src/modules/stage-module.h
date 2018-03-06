@@ -45,17 +45,8 @@ struct StageModule : public Module {
     envelope_ramp.on_end_of_cycle([this] { end_of_cycle_pulse.start(); });
   }
 
-  virtual float curve_in() const {
-    return param(CURVE_KNOB);
-  }
-
   virtual float shape(float phase) const {
-    return sigmoid(phase, curvature());
-  }
-
-  float curvature() const {
-    static constexpr auto curve_knob_curvature = -0.65f;
-    return sigmoid(BIPOLAR_NORMAL.scale(curve_in()), curve_knob_curvature);
+    return Shape::shape(phase, param(CURVE_KNOB));
   }
 
   float active_out() const {
