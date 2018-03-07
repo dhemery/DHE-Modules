@@ -59,6 +59,7 @@ struct HostageModule : Module, StageProcessor {
     DURATION_CV,
     STAGE_IN,
     TRIG_IN,
+    HOLD_IN,
     INPUT_COUNT
   };
   enum OutputIds {

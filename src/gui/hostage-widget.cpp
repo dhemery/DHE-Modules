@@ -39,6 +39,7 @@ HostageWidget::HostageWidget(rack::Module *module) : ModuleWidget(module, 5, "re
   auto row_spacing = 18.5f;
 
   auto row = 0;
+  install_input<HostagePort>(HostageModule::HOLD_IN, {center_x, top_row_y + row*row_spacing});
 
   row++;
   install_input<HostagePort>(HostageModule::DURATION_CV, {left_x, top_row_y + row*row_spacing});

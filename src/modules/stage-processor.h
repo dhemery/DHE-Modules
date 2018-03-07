@@ -18,14 +18,16 @@ struct StageProcessor {
     defer_gate.on_rising_edge([this] { begin_deferring(); });
     defer_gate.on_falling_edge([this] { stop_deferring(); });
 
-    trigger.on_rising_edge([this] { start_envelope(); });
+    trigger.on_rising_edge([this] { triggered(); });
 
     generator.on_end_of_cycle([this] { eoc.start(); });
   }
 
+
   virtual float defer_in() const = 0;
   virtual float duration_in() const = 0;
   virtual float stage_in() const = 0;
+  virtual float trigger_in() const = 0;
 
   virtual float envelope_voltage(float held, float phase) const = 0;
 
@@ -37,7 +39,9 @@ struct StageProcessor {
     return defer_gate.is_high() || generator.is_active();
   }
 
-  virtual float trigger_in() const = 0;
+  virtual void triggered() {
+    start_envelope();
+  }
 
   virtual void send_active_out(float f) = 0;
   virtual void send_eoc_out(float f) = 0;
@@ -54,12 +58,11 @@ struct StageProcessor {
     send_stage_out(stage_out());
   }
 
-private:
   float active_out() const {
     return UNIPOLAR_SIGNAL_RANGE.scale(is_active());
   }
 
-  void begin_deferring() {
+  virtual void begin_deferring() {
     trigger.suspend_firing();
     generator.stop();
     tracker.track();
