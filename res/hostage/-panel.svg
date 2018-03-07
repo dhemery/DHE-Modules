@@ -7,6 +7,8 @@
 
 <rect x="0" y="0" width="75.0" height="380.01968503784997" stroke="#990099" fill="#fff0ff" stroke-width="1"/><text dominant-baseline="baseline" text-anchor="middle" fill="#990099" x="37.5" y="26.5748031495" style="font-family:Proxima Nova;font-weight:bold;font-size:12.0px">HOSTAGE</text><text dominant-baseline="hanging" text-anchor="middle" fill="#990099" x="37.5" y="353.44488188835" style="font-family:Proxima Nova;font-weight:bold;font-size:12.0px">DHE</text>
 
+<text dominant-baseline="baseline" text-anchor="middle" fill="#990099" x="37.49999999985" y="61.491141732037505" style="font-family:Proxima Nova;font-weight:bold;font-size:7.0px">GATE</text><text dominant-baseline="hanging" text-anchor="middle" fill="#990099" x="37.49999999985" y="86.1466535429625" style="font-family:Proxima Nova;font-weight:bold;font-size:7.0px">TRIG</text>
+
 
         <rect x="3.863179133842814" y="104.9543963250675" width="31.742125984125003" height="39.361548556245"
           stroke-width="1.033464566925" rx="3.0" ry="3.0"
@@ -31,7 +33,7 @@
         <rect x="3.863179133842814" y="262.9268372693175" width="31.742125984125003" height="39.361548556245"
           stroke-width="1.033464566925" rx="3.0" ry="3.0"
           stroke="#990099" fill="#fff0ff"/>
-        <text dominant-baseline="baseline" text-anchor="middle" fill="#990099" x="19.734242125905315" y="271.0629921249" style="font-family:Proxima Nova;font-weight:bold;font-size:7.0px">TRIG</text>
+        <text dominant-baseline="baseline" text-anchor="middle" fill="#990099" x="19.734242125905315" y="271.0629921249" style="font-family:Proxima Nova;font-weight:bold;font-size:7.0px">HOLD</text>
 
         <rect x="39.39469488173219" y="262.9268372693175" width="31.742125984124996" height="39.361548556245"
           stroke-width="1.033464566925" rx="3.0" ry="3.0"

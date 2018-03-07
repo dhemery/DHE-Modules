@@ -9,6 +9,8 @@ title: HOSTAGE
 
 {{ page | panel: 5.0 }}
 
+{{ page | switch: center_x, 25.0, "GATE", "TRIG" }}
+
 {{ page | cv: left_x, 43.5 }}
 {{ page | switch: right_x, 43.5, "100", "1", "10" }}
 
@@ -17,7 +19,7 @@ title: HOSTAGE
 {{ page | in_port: left_x, 82, "DEFER" }}
 {{ page | out_port: right_x, 82, "ACTIVE" }}
 
-{{ page | in_port: left_x, 97, "TRIG" }}
+{{ page | in_port: left_x, 97, "HOLD" }}
 {{ page | out_port: right_x, 97, "EOC" }}
 
 {{ page | in_port: left_x, 112.0, "IN" }}

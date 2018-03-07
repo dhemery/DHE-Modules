@@ -20,6 +20,13 @@ struct HostageKnobLarge : rack::RoundKnob {
   }
 };
 
+struct HostageSwitch2 : rack::SVGSwitch, rack::ToggleSwitch {
+  HostageSwitch2() {
+    addFrame(rack::SVG::load(rack::assetPlugin(plugin, "res/hostage/switch-2-low.svg")));
+    addFrame(rack::SVG::load(rack::assetPlugin(plugin, "res/hostage/switch-2-high.svg")));
+  }
+};
+
 struct HostageSwitch3 : rack::SVGSwitch, rack::ToggleSwitch {
   HostageSwitch3() {
     addFrame(rack::SVG::load(rack::assetPlugin(plugin, "res/hostage/switch-3-low.svg")));
@@ -39,7 +46,7 @@ HostageWidget::HostageWidget(rack::Module *module) : ModuleWidget(module, 5, "re
   auto row_spacing = 18.5f;
 
   auto row = 0;
-  install_input<HostagePort>(HostageModule::HOLD_IN, {center_x, top_row_y + row*row_spacing});
+  install_switch<HostageSwitch2>(HostageModule::MODE_SWITCH, {center_x, top_row_y + row*row_spacing});
 
   row++;
   install_input<HostagePort>(HostageModule::DURATION_CV, {left_x, top_row_y + row*row_spacing});
@@ -56,7 +63,7 @@ HostageWidget::HostageWidget(rack::Module *module) : ModuleWidget(module, 5, "re
   install_output<HostagePort>(HostageModule::ACTIVE_OUT, {right_x, top_row_y + row*row_spacing});
 
   row++;
-  install_input<HostagePort>(HostageModule::TRIG_IN, {left_x, top_row_y + row*row_spacing});
+  install_input<HostagePort>(HostageModule::GATE_IN, {left_x, top_row_y + row*row_spacing});
   install_output<HostagePort>(HostageModule::EOC_OUT, {right_x, top_row_y + row*row_spacing});
 
   row++;
