@@ -245,7 +245,6 @@ module Jekyll
     end
 
     def dark(page)
-      c = page['color']
       return rgbhex(hslcolor(page))
     end
 
