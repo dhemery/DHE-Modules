@@ -3,13 +3,9 @@
 #include <engine.hpp>
 
 #include "module.h"
-#include "util/controls.h"
-#include "util/d-flip-flop.h"
-#include "util/range.h"
-#include "util/ramp.h"
-#include "util/sigmoid.h"
-#include "util/track-and-hold.h"
 #include "stage-processor.h"
+#include "util/controls.h"
+#include "util/range.h"
 
 namespace DHE {
 
@@ -26,7 +22,12 @@ struct StageModule : public Module, StageProcessor {
     return Duration::scaled(param(DURATION_KNOB), Duration::MEDIUM_RANGE);
   }
 
-  float level_in() const override {
+  float envelope_voltage(float held, float phase) const override {
+    auto range = Range{held, level_in()};
+    return range.scale(taper(phase));
+  }
+
+  float level_in() const {
     return Level::scaled(param(LEVEL_KNOB));
   }
 
@@ -42,7 +43,7 @@ struct StageModule : public Module, StageProcessor {
     StageProcessor::step();
   }
 
-  float taper(float phase) const override {
+  float taper(float phase) const {
     return Taper::j(phase, param(CURVE_KNOB));
   }
 

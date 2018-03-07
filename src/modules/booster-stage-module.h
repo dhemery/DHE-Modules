@@ -20,7 +20,12 @@ struct BoosterStageModule : Module, StageProcessor {
     return Duration::scaled(rotation, range);
   }
 
-  float level_in() const override {
+  float envelope_voltage(float held, float phase) const override {
+    auto range = Range{held, level_in()};
+    return range.scale(taper(phase));
+  }
+
+  float level_in() const {
     const auto &range = Level::range(param(LEVEL_SWITCH));
     auto rotation = modulated(LEVEL_KNOB, LEVEL_CV);
     return Level::scaled(rotation, range);
@@ -50,7 +55,7 @@ struct BoosterStageModule : Module, StageProcessor {
     StageProcessor::step();
   }
 
-  float taper(float phase) const override {
+  float taper(float phase) const {
     auto rotation = modulated(CURVE_KNOB, CURVE_CV);
     return is_s_taper() ? Taper::s(phase, rotation) : Taper::j(phase, rotation);
   }
