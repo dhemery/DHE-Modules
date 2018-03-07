@@ -63,7 +63,7 @@ HostageWidget::HostageWidget(rack::Module *module) : ModuleWidget(module, 5, "re
   install_output<HostagePort>(HostageModule::ACTIVE_OUT, {right_x, top_row_y + row*row_spacing});
 
   row++;
-  install_input<HostagePort>(HostageModule::HOLD_IN, {left_x, top_row_y + row*row_spacing});
+  install_input<HostagePort>(HostageModule::GATE_IN, {left_x, top_row_y + row*row_spacing});
   install_output<HostagePort>(HostageModule::EOC_OUT, {right_x, top_row_y + row*row_spacing});
 
   row++;

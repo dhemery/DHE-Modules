@@ -35,7 +35,7 @@ struct BoosterStageModule : Module, StageProcessor {
     return input(STAGE_IN);
   }
 
-  float gate_in() const override {
+  float trigger_in() const override {
     return std::max(input(TRIG_IN), gate_button(TRIG_BUTTON));
   }
 

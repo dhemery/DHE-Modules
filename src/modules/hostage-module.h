@@ -25,10 +25,6 @@ struct HostageModule : Module, StageProcessor {
     return held;
   }
 
-  float gate_in() const override {
-    return input(HOLD_IN);
-  }
-
   void send_active_out(float f) override {
     outputs[ACTIVE_OUT].value = f;
   }
@@ -49,6 +45,10 @@ struct HostageModule : Module, StageProcessor {
     return input(STAGE_IN);
   }
 
+  float trigger_in() const override {
+    return input(GATE_IN);
+  }
+
   enum ParameterIds {
     DURATION_KNOB,
     DURATION_SWITCH,
@@ -59,7 +59,7 @@ struct HostageModule : Module, StageProcessor {
   enum InputIds {
     DEFER_IN,
     DURATION_CV,
-    HOLD_IN,
+    GATE_IN,
     STAGE_IN,
     INPUT_COUNT
   };

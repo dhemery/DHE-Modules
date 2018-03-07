@@ -35,7 +35,7 @@ struct StageModule : public Module, StageProcessor {
     return input(STAGE_IN);
   }
 
-  float gate_in() const override {
+  float trigger_in() const override {
     return input(TRIG_IN);
   }
 
