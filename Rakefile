@@ -6,7 +6,7 @@ task :svg do
   sh 'bundle', 'exec', 'jekyll', 'b', '--trace'
 end
 
-module_names = ['booster-stage', 'snob', 'stage', 'swave', 'upstage']
+module_names = ['booster-stage', 'stage', 'swave', 'upstage']
 
 panel_deps = []
 
