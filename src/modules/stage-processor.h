@@ -10,24 +10,25 @@ namespace DHE {
 
 struct StageProcessor {
   StageProcessor() :
-      defer_gate{[this] { return defer_in(); }},
+      active{},
+      defer{[this] { return defer_in(); }},
       eoc{1e-3, [this] { return sample_time(); }},
+      gate{[this] { return gate_in(); }},
       generator{[this] { return duration_in(); }, [this] { return sample_time(); }},
-      trigger{[this] { return trigger_in(); }},
       tracker{[this] { return stage_in(); }} {
-    defer_gate.on_rising_edge([this] { begin_deferring(); });
-    defer_gate.on_falling_edge([this] { stop_deferring(); });
+    defer.on_rising_edge([this] { begin_deferring(); });
+    defer.on_falling_edge([this] { stop_deferring(); });
 
-    trigger.on_rising_edge([this] { triggered(); });
+    gate.on_rising_edge([this] { raised_gate(); });
+    gate.on_falling_edge([this] { lowered_gate(); });
 
-    generator.on_end_of_cycle([this] { eoc.start(); });
+    active.on_falling_edge([this] { eoc.start(); });
   }
-
 
   virtual float defer_in() const = 0;
   virtual float duration_in() const = 0;
   virtual float stage_in() const = 0;
-  virtual float trigger_in() const = 0;
+  virtual float gate_in() const = 0;
 
   virtual float envelope_voltage(float held, float phase) const = 0;
 
@@ -36,11 +37,14 @@ struct StageProcessor {
   }
 
   virtual bool is_active() const {
-    return defer_gate.is_high() || generator.is_active();
+    return defer.is_high() || generator.is_active();
   }
 
-  virtual void triggered() {
+  virtual void raised_gate() {
     start_envelope();
+  }
+
+  virtual void lowered_gate() {
   }
 
   virtual void send_active_out(float f) = 0;
@@ -48,9 +52,14 @@ struct StageProcessor {
   virtual void send_stage_out(float f) = 0;
 
   void step() {
-    defer_gate.step();
+    defer.step();
     generator.step();
-    trigger.step();
+    gate.step();
+    if (is_active()) {
+      active.set();
+    } else {
+      active.reset();
+    }
     eoc.step();
 
     send_active_out(active_out());
@@ -59,11 +68,11 @@ struct StageProcessor {
   }
 
   float active_out() const {
-    return UNIPOLAR_SIGNAL_RANGE.scale(is_active());
+    return UNIPOLAR_SIGNAL_RANGE.scale(active.is_high());
   }
 
   virtual void begin_deferring() {
-    trigger.suspend_firing();
+    gate.suspend_firing();
     generator.stop();
     tracker.track();
   }
@@ -77,7 +86,7 @@ struct StageProcessor {
   }
 
   float stage_out() const {
-    return defer_gate.is_high() ? tracker.value() : envelope_voltage(tracker.value(), generator.phase());
+    return defer.is_high() ? tracker.value() : envelope_voltage(tracker.value(), generator.phase());
   }
 
   void start_envelope() {
@@ -87,13 +96,14 @@ struct StageProcessor {
 
   void stop_deferring() {
     tracker.hold();
-    trigger.resume_firing();
+    gate.resume_firing();
   }
 
-  DFlipFlop defer_gate;
+  DLatch active;
+  DFlipFlop defer;
   Ramp eoc;
+  DFlipFlop gate;
   Ramp generator;
-  DFlipFlop trigger;
   TrackAndHold tracker;
 };
 
