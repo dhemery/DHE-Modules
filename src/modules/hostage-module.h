@@ -29,20 +29,16 @@ struct HostageModule : Module, StageProcessor {
     return input(ENVELOPE_IN);
   }
 
-  float envelope_voltage(float start_voltage, float ignored) const override {
-    return start_voltage;
-  }
-
   void send_active_out(bool is_active) override {
     outputs[ACTIVE_OUT].value = UNIPOLAR_SIGNAL_RANGE.scale(is_active);
   }
 
-  void send_eoc_out(bool is_pulsing) override {
-    outputs[EOC_OUT].value = UNIPOLAR_SIGNAL_RANGE.scale(is_pulsing);
+  void send_envelope_out(float phase_0_voltage, float ignored) override {
+    outputs[ENVELOPE_OUT].value = phase_0_voltage;
   }
 
-  void send_envelope_out(float envelope_out) override {
-    outputs[ENVELOPE_OUT].value = envelope_out;
+  void send_eoc_out(bool is_pulsing) override {
+    outputs[EOC_OUT].value = UNIPOLAR_SIGNAL_RANGE.scale(is_pulsing);
   }
 
   void step() override {

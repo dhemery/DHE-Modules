@@ -30,9 +30,8 @@ struct StageModule : public Module, StageProcessor {
     return input(ENVELOPE_IN);
   }
 
-  float envelope_voltage(float held, float phase) const override {
-    auto range = Range{held, level_in()};
-    return range.scale(taper(phase));
+  float envelope_out(float phase_0_voltage, float phase) const {
+    return scale(taper(phase), phase_0_voltage, level_in());
   }
 
   float level_in() const {
@@ -51,8 +50,8 @@ struct StageModule : public Module, StageProcessor {
     outputs[ACTIVE_OUT].value = UNIPOLAR_SIGNAL_RANGE.scale(is_active);
   }
 
-  void send_envelope_out(float envelope_out) override {
-    outputs[ENVELOPE_OUT].value = envelope_out;
+  void send_envelope_out(float phase_0_voltage, float phase) override {
+    outputs[ENVELOPE_OUT].value = envelope_out(phase_0_voltage, phase);
   }
 
   void send_eoc_out(bool is_pulsing) override {

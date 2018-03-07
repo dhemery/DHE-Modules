@@ -34,9 +34,8 @@ struct BoosterStageModule : Module, StageProcessor {
     return input(ENVELOPE_IN);
   }
 
-  float envelope_voltage(float start_voltage, float phase) const override {
-    auto range = Range{start_voltage, level_in()};
-    return range.scale(taper(phase));
+  float envelope_out(float phase_0_voltage, float phase) const {
+    return scale(taper(phase), phase_0_voltage, level_in());
   }
 
   bool is_s_taper() const {
@@ -44,11 +43,11 @@ struct BoosterStageModule : Module, StageProcessor {
   }
 
   void send_active_out(bool is_active) override {
-  outputs[ACTIVE_OUT].value = UNIPOLAR_SIGNAL_RANGE.scale(is_active || param(ACTIVE_BUTTON) > 0.5f);
+    outputs[ACTIVE_OUT].value = UNIPOLAR_SIGNAL_RANGE.scale(is_active || param(ACTIVE_BUTTON) > 0.5f);
   }
 
-  void send_envelope_out(float envelope_out) override {
-    outputs[ENVELOPE_OUT].value = envelope_out;
+  void send_envelope_out(float phase_0_voltage, float phase) override {
+    outputs[ENVELOPE_OUT].value = envelope_out(phase_0_voltage, phase);
   }
 
   void send_eoc_out(bool is_pulsing) override {

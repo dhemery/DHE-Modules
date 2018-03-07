@@ -14,33 +14,32 @@ struct StageProcessor {
       eoc_pulse{1e-3, [this] { return sample_time(); }},
       envelope{[this] { return duration_in(); }, [this] { return sample_time(); }},
       envelope_gate{[this] { return envelope_gate_in(); }},
-      envelope_start{[this] { return envelope_in(); }} {
-    defer_gate.on_rising_edge([this] { on_defer_rising(); });
-    defer_gate.on_falling_edge([this] { on_defer_falling(); });
+      phase_0_voltage{[this] { return envelope_in(); }} {
+    defer_gate.on_rising_edge([this] { on_defer_gate_rising(); });
+    defer_gate.on_falling_edge([this] { on_defer_gate_falling(); });
 
-    envelope_gate.on_rising_edge([this] { on_gate_rising(); });
-    envelope_gate.on_falling_edge([this] { on_gate_falling(); });
+    envelope_gate.on_rising_edge([this] { on_envelope_gate_rising(); });
+    envelope_gate.on_falling_edge([this] { on_envelope_gate_falling(); });
 
     envelope.on_completion([this] { on_envelope_completion(); });
   }
 
   virtual float defer_gate_in() const = 0;
   virtual float duration_in() const = 0;
-  virtual float envelope_in() const = 0;
   virtual float envelope_gate_in() const = 0;
-  virtual float envelope_voltage(float start_voltage, float phase) const = 0;
+  virtual float envelope_in() const = 0;
   virtual void send_active_out(bool is_active) = 0;
+  virtual void send_envelope_out(float phase_0_voltage, float phase) = 0;
   virtual void send_eoc_out(bool is_pulsing) = 0;
-  virtual void send_envelope_out(float envelope_out) = 0;
 
-  virtual void on_defer_rising() {
+  virtual void on_defer_gate_rising() {
     envelope_gate.suspend_firing();
     envelope.stop();
-    envelope_start.track();
+    phase_0_voltage.track();
   }
 
-  virtual void on_defer_falling() {
-    envelope_start.hold();
+  virtual void on_defer_gate_falling() {
+    phase_0_voltage.hold();
     envelope_gate.resume_firing();
   }
 
@@ -48,9 +47,9 @@ struct StageProcessor {
     eoc_pulse.start();
   }
 
-  virtual void on_gate_falling() {}
+  virtual void on_envelope_gate_falling() {}
 
-  virtual void on_gate_rising() {
+  virtual void on_envelope_gate_rising() {
     start_envelope();
   }
 
@@ -62,7 +61,7 @@ struct StageProcessor {
 
     send_active_out(is_active());
     send_eoc_out(eoc_pulse.is_active());
-    send_envelope_out(stage_out());
+    send_envelope_out(phase_0_voltage.value(), envelope.phase());
   }
 
   bool is_active() const {
@@ -73,12 +72,8 @@ struct StageProcessor {
     return rack::engineGetSampleTime();
   }
 
-  float stage_out() const {
-    return defer_gate.is_high() ? envelope_start.value() : envelope_voltage(envelope_start.value(), envelope.phase());
-  }
-
   void start_envelope() {
-    envelope_start.hold();
+    phase_0_voltage.hold();
     envelope.start();
   }
 
@@ -86,7 +81,7 @@ struct StageProcessor {
   Ramp eoc_pulse;
   Ramp envelope;
   DFlipFlop envelope_gate;
-  TrackAndHold envelope_start;
+  TrackAndHold phase_0_voltage;
 };
 
 }

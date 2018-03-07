@@ -2,18 +2,19 @@
 
 namespace DHE {
 
+inline float scale(float proportion, float lower_bound, float upper_bound) {
+  return proportion*(upper_bound - lower_bound) + lower_bound;
+}
+
 struct Range {
   const float lower_bound;
+
   const float upper_bound;
 
   constexpr Range(float lower_bound, float upper_bound) noexcept : lower_bound(lower_bound), upper_bound(upper_bound) {}
 
-  static float scale(float proportion, float lower_bound, float upper_bound) {
-    return proportion*(upper_bound - lower_bound) + lower_bound;
-  }
-
   float scale(float proportion) const {
-    return scale(proportion, lower_bound, upper_bound);
+    return DHE::scale(proportion, lower_bound, upper_bound);
   }
 
   float scale(bool state) const {
