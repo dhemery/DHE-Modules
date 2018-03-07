@@ -26,8 +26,8 @@
   <rect
      id="rect2"
      stroke-width="1"
-     fill="rgb(255,242,230)"
-     stroke="rgb(255,68,0)"
+     fill="#fff4f0"
+     stroke="#ff4400"
      height="380.01968503784997"
      width="60.0"
      y="0"
@@ -143,8 +143,8 @@
   </g>
   <rect
      id="rect18"
-     fill="rgb(255,242,230)"
-     stroke="rgb(255,68,0)"
+     fill="#fff4f0"
+     stroke="#ff4400"
      ry="3.0"
      rx="3.0"
      stroke-width="1.033464566925"
@@ -167,8 +167,8 @@
   </g>
   <rect
      id="rect22"
-     fill="rgb(255,68,0)"
-     stroke="rgb(255,68,0)"
+     fill="#ff4400"
+     stroke="#ff4400"
      ry="3.0"
      rx="3.0"
      stroke-width="1.033464566925"
@@ -178,19 +178,19 @@
      x="14.128937007817498" />
   <g
      id="text24"
-     style="font-weight:bold;font-size:7px;font-family:'Proxima Nova';text-anchor:middle;fill:#fff2e6"
+     style="font-weight:bold;font-size:7px;font-family:'Proxima Nova';text-anchor:middle;fill:#fff4f0"
      aria-label="OUT">
     <path
        id="path79"
-       style="font-weight:bold;font-size:7px;font-family:'Proxima Nova';text-anchor:middle;fill:#fff2e6"
+       style="font-weight:bold;font-size:7px;font-family:'Proxima Nova';text-anchor:middle;fill:#fff4f0"
        d="m 22.957727,313.02334 c 0,1.407 1.029,2.415 2.436,2.415 1.414,0 2.443,-1.008 2.443,-2.415 0,-1.407 -1.029,-2.415 -2.443,-2.415 -1.407,0 -2.436,1.008 -2.436,2.415 z m 3.857,0 c 0,0.868 -0.56,1.533 -1.421,1.533 -0.861,0 -1.414,-0.665 -1.414,-1.533 0,-0.875 0.553,-1.533 1.414,-1.533 0.861,0 1.421,0.658 1.421,1.533 z" />
     <path
        id="path81"
-       style="font-weight:bold;font-size:7px;font-family:'Proxima Nova';text-anchor:middle;fill:#fff2e6"
+       style="font-weight:bold;font-size:7px;font-family:'Proxima Nova';text-anchor:middle;fill:#fff4f0"
        d="m 28.541102,313.49234 c 0,1.148 0.686,1.946 2.107,1.946 1.421,0 2.107,-0.791 2.107,-1.953 v -2.8 h -1.015 v 2.772 c 0,0.651 -0.371,1.099 -1.092,1.099 -0.721,0 -1.099,-0.448 -1.099,-1.099 v -2.772 h -1.008 z" />
     <path
        id="path83"
-       style="font-weight:bold;font-size:7px;font-family:'Proxima Nova';text-anchor:middle;fill:#fff2e6"
+       style="font-weight:bold;font-size:7px;font-family:'Proxima Nova';text-anchor:middle;fill:#fff4f0"
        d="m 34.746055,315.35434 h 1.001 v -3.794 h 1.358 v -0.875 h -3.724 v 0.875 h 1.365 z" />
   </g>
 </svg>

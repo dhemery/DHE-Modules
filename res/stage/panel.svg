@@ -26,8 +26,8 @@
   <rect
      id="rect2"
      stroke-width="1"
-     fill="rgb(240,255,240)"
-     stroke="rgb(0,153,0)"
+     fill="#f0fff0"
+     stroke="#009900"
      height="380.01968503784997"
      width="75.0"
      y="0"
@@ -163,8 +163,8 @@
   </g>
   <rect
      id="rect14"
-     fill="rgb(240,255,240)"
-     stroke="rgb(0,153,0)"
+     fill="#f0fff0"
+     stroke="#009900"
      ry="3.0"
      rx="3.0"
      stroke-width="1.033464566925"
@@ -199,8 +199,8 @@
   </g>
   <rect
      id="rect18"
-     fill="rgb(0,153,0)"
-     stroke="rgb(0,153,0)"
+     fill="#009900"
+     stroke="#009900"
      ry="3.0"
      rx="3.0"
      stroke-width="1.033464566925"
@@ -239,8 +239,8 @@
   </g>
   <rect
      id="rect22"
-     fill="rgb(240,255,240)"
-     stroke="rgb(0,153,0)"
+     fill="#f0fff0"
+     stroke="#009900"
      ry="3.0"
      rx="3.0"
      stroke-width="1.033464566925"
@@ -271,8 +271,8 @@
   </g>
   <rect
      id="rect26"
-     fill="rgb(0,153,0)"
-     stroke="rgb(0,153,0)"
+     fill="#009900"
+     stroke="#009900"
      ry="3.0"
      rx="3.0"
      stroke-width="1.033464566925"
@@ -299,8 +299,8 @@
   </g>
   <rect
      id="rect30"
-     fill="rgb(240,255,240)"
-     stroke="rgb(0,153,0)"
+     fill="#f0fff0"
+     stroke="#009900"
      ry="3.0"
      rx="3.0"
      stroke-width="1.033464566925"
@@ -323,8 +323,8 @@
   </g>
   <rect
      id="rect34"
-     fill="rgb(0,153,0)"
-     stroke="rgb(0,153,0)"
+     fill="#009900"
+     stroke="#009900"
      ry="3.0"
      rx="3.0"
      stroke-width="1.033464566925"

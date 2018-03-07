@@ -1,3 +1,3 @@
 ---
 ---
-{% include port.svg shadow_color=page.dark_color metal_color=page.light_color %}
+{% include port.svg %}

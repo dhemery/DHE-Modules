@@ -26,8 +26,8 @@
   <rect
      id="rect2"
      stroke-width="1"
-     fill="rgb(255,240,240)"
-     stroke="rgb(153,0,0)"
+     fill="#fff0f0"
+     stroke="#990000"
      height="380.01968503784997"
      width="120.0"
      y="0"
@@ -105,7 +105,7 @@
   <line
      id="line8"
      stroke-width="1.033464566925"
-     stroke="rgb(153,0,0)"
+     stroke="#990000"
      y2="73.8188976375"
      x2="99.01574901535196"
      y1="73.8188976375"
@@ -192,7 +192,7 @@
   <line
      id="line20"
      stroke-width="1.033464566925"
-     stroke="rgb(153,0,0)"
+     stroke="#990000"
      y2="128.44488188925"
      x2="99.01574901535196"
      y1="128.44488188925"
@@ -267,7 +267,7 @@
   <line
      id="line32"
      stroke-width="1.033464566925"
-     stroke="rgb(153,0,0)"
+     stroke="#990000"
      y2="183.070866141"
      x2="99.01574901535196"
      y1="183.070866141"
@@ -374,8 +374,8 @@
   </g>
   <rect
      id="rect46"
-     fill="rgb(255,240,240)"
-     stroke="rgb(153,0,0)"
+     fill="#fff0f0"
+     stroke="#990000"
      ry="3.0"
      rx="3.0"
      stroke-width="1.033464566925"
@@ -410,8 +410,8 @@
   </g>
   <rect
      id="rect50"
-     fill="rgb(153,0,0)"
-     stroke="rgb(153,0,0)"
+     fill="#990000"
+     stroke="#990000"
      ry="3.0"
      rx="3.0"
      stroke-width="1.033464566925"
@@ -450,8 +450,8 @@
   </g>
   <rect
      id="rect54"
-     fill="rgb(255,240,240)"
-     stroke="rgb(153,0,0)"
+     fill="#fff0f0"
+     stroke="#990000"
      ry="3.0"
      rx="3.0"
      stroke-width="1.033464566925"
@@ -482,8 +482,8 @@
   </g>
   <rect
      id="rect58"
-     fill="rgb(153,0,0)"
-     stroke="rgb(153,0,0)"
+     fill="#990000"
+     stroke="#990000"
      ry="3.0"
      rx="3.0"
      stroke-width="1.033464566925"
@@ -510,8 +510,8 @@
   </g>
   <rect
      id="rect62"
-     fill="rgb(255,240,240)"
-     stroke="rgb(153,0,0)"
+     fill="#fff0f0"
+     stroke="#990000"
      ry="3.0"
      rx="3.0"
      stroke-width="1.033464566925"
@@ -534,8 +534,8 @@
   </g>
   <rect
      id="rect66"
-     fill="rgb(153,0,0)"
-     stroke="rgb(153,0,0)"
+     fill="#990000"
+     stroke="#990000"
      ry="3.0"
      rx="3.0"
      stroke-width="1.033464566925"

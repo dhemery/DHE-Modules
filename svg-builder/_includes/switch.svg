@@ -1,7 +1,8 @@
+{% assign dark = page | dark %}
+{% assign light = page | light %}
+
 {% assign switch_width = include.width %}
 {% assign switch_height = include.height %}
-{% assign color = include.color %}
-{% assign background = include.background %}
 {% assign lever_position = include.position %}
 
 {% assign switch_origin_x = 0.0 | minus:switch_width | divided_by:2.0 %}
@@ -31,7 +32,7 @@
 
 <svg width="{{ view_width }}mm" height="{{ view_height }}mm"
   viewBox="{{ view_origin_x }} {{ view_origin_y }} {{ view_width }} {{ view_height }}">
-  <g fill="{{ background }}" stroke="{{ color }}">
+  <g fill="{{ light }}" stroke="{{ dark }}">
 
     <rect x="{{ switch_origin_x }}" y="{{ switch_origin_y }}"
       width="{{ switch_width }}" height="{{ switch_height }}"

@@ -1,6 +1,1 @@
-{% include knob.svg
-  diameter=13.0
-  pointer_width=0.75
-  color=page.dark_color
-  pointer_color=page.light_color
-%}
+{% include knob.svg diameter=13.0 pointer_width=0.75 %}

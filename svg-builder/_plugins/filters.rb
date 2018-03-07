@@ -1,3 +1,5 @@
+require 'color'
+
 module Jekyll
   module Filters
     PX_PER_HP = 15.0
@@ -197,51 +199,67 @@ module Jekyll
     end
 
     def button(page, x_mm, y_mm, label)
-      labeled_round_control(x_mm, y_mm, BUTTON_DIAMETER, label, page['dark_color'], SMALL_LABEL_FONT_SIZE)
+      labeled_round_control(x_mm, y_mm, BUTTON_DIAMETER, label, dark(page), SMALL_LABEL_FONT_SIZE)
     end
 
     def cv(page, x_mm, y_mm)
-      port_box(x_mm, y_mm, "none", "none", "CV", page["dark_color"], :none)
+      port_box(x_mm, y_mm, "none", "none", "CV", dark(page), :none)
     end
 
     def in_port_button(page, x_mm, y_mm, label)
-      port_box(x_mm, y_mm, page["dark_color"], page["light_color"], label, page["dark_color"], :right)
+      port_box(x_mm, y_mm, dark(page), light(page), label, dark(page), :right)
     end
 
     def out_port_button(page, x_mm, y_mm, label)
-      port_box(x_mm, y_mm, page["dark_color"], page["dark_color"], label, page["light_color"], :left)
+      port_box(x_mm, y_mm, dark(page), dark(page), label, light(page), :left)
     end
 
     def in_port(page, x_mm, y_mm, label)
-      port_box(x_mm, y_mm, page["dark_color"], page["light_color"], label, page["dark_color"], :none)
+      port_box(x_mm, y_mm, dark(page), light(page), label, dark(page), :none)
     end
 
     def out_port(page, x_mm, y_mm, label)
-      port_box(x_mm, y_mm, page["dark_color"], page["dark_color"], label, page["light_color"], :none)
+      port_box(x_mm, y_mm, dark(page), dark(page), label, light(page), :none)
     end
 
     def large_knob(page, x_mm, y_mm, label)
-      labeled_round_control(x_mm, y_mm, LARGE_KNOB_DIAMETER, label, page['dark_color'], LARGE_LABEL_FONT_SIZE)
+      labeled_round_control(x_mm, y_mm, LARGE_KNOB_DIAMETER, label, dark(page), LARGE_LABEL_FONT_SIZE)
     end
 
     def small_knob(page, x_mm, y_mm, label)
-      labeled_round_control(x_mm, y_mm, SMALL_KNOB_DIAMETER, label, page['dark_color'], SMALL_LABEL_FONT_SIZE)
+      labeled_round_control(x_mm, y_mm, SMALL_KNOB_DIAMETER, label, dark(page), SMALL_LABEL_FONT_SIZE)
+    end
+
+    def rgbhex(color)
+      "##{color.to_rgb.hex}"
+    end
+
+    def light(page)
+      return rgbhex(Color::HSL.new(*page['light'])) if page.include? 'light'
+      hsl = Color::HSL.new(*page['color'])
+      hsl.l = 0.97
+      rgbhex(hsl)
+    end
+
+    def dark(page)
+      c = page['dark'] || page['color']
+      return rgbhex(Color::HSL.new(*c))
     end
 
     def shape_switch(page, x_mm, y_mm)
-      switch(page, x_mm, y_mm, "S", "J")
+      switch(page, x_mm, y_mm, 'S', 'J')
     end
 
     def switch(page, x_mm, y_mm, top_label, bottom_label, right_label = nil)
       height = right_label ? SWITCH_3_HEIGHT : SWITCH_2_HEIGHT
       x_px = Filters::mm_to_px(x_mm)
       y_px = Filters::mm_to_px(y_mm)
-      RectangularControlLabels.new(x_px, y_px, SWITCH_WIDTH, height, page['dark_color'], top_label, bottom_label, right_label)
+      RectangularControlLabels.new(x_px, y_px, SWITCH_WIDTH, height, dark(page), top_label, bottom_label, right_label)
     end
 
     def panel(page, width_hp)
       width_px = width_hp * PX_PER_HP
-      Panel.new(width_px, page['title'], page['dark_color'], page['light_color'])
+      Panel.new(width_px, page['title'], dark(page), light(page))
     end
 
     def connector(page, x1_mm, y1_mm, x2_mm, y2_mm)
@@ -249,7 +267,7 @@ module Jekyll
       y1 = Filters::mm_to_px(y1_mm)
       x2 = Filters::mm_to_px(x2_mm)
       y2 = Filters::mm_to_px(y2_mm)
-      %Q[<line x1="#{x1}" y1="#{y1}" x2="#{x2}" y2="#{y2}" stroke="#{page['dark_color']}" stroke-width="#{Box::STROKE_WIDTH}" />]
+      %Q[<line x1="#{x1}" y1="#{y1}" x2="#{x2}" y2="#{y2}" stroke="#{dark(page)}" stroke-width="#{Box::STROKE_WIDTH}" />]
     end
   end
 end

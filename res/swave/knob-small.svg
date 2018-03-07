@@ -5,8 +5,10 @@
 
 
 
+
+
 <svg width="9.0mm" height="9.0mm" viewBox="-4.5 -4.5 9.0 9.0">
-  <g stroke="rgb(255,242,230)" fill="rgb(255,68,0)">
+  <g stroke="#fff4f0" fill="#ff4400">
     <circle r="4.5" stroke="none"/>
     <line y2="-3.75" stroke-width="0.75" stroke-linecap="round"/>
   </g>
