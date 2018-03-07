@@ -29,6 +29,25 @@ struct HostageModule : Module, StageProcessor {
     return input(ENVELOPE_IN);
   }
 
+  bool is_gate_mode() const {
+    return param(GATE_MODE_SWITCH) > 0.5f;
+  }
+
+  void on_envelope_gate_rising() override {
+    if(is_gate_mode()) {
+      phase_0_voltage.hold();
+      envelope.stop();
+    } else {
+      envelope.start();
+    }
+  }
+
+  void on_envelope_gate_falling() override {
+    if(is_gate_mode()) {
+      eoc_pulse.start();
+    }
+  }
+
   void send_active_out(bool is_active) override {
     outputs[ACTIVE_OUT].value = UNIPOLAR_SIGNAL_RANGE.scale(is_active);
   }
