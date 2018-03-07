@@ -230,20 +230,23 @@ module Jekyll
       labeled_round_control(x_mm, y_mm, SMALL_KNOB_DIAMETER, label, dark(page), SMALL_LABEL_FONT_SIZE)
     end
 
+    def hslcolor(page)
+      Color::HSL.new(*page['color'])
+    end
+
     def rgbhex(color)
       "##{color.to_rgb.hex}"
     end
 
     def light(page)
-      return rgbhex(Color::HSL.new(*page['light'])) if page.include? 'light'
-      hsl = Color::HSL.new(*page['color'])
+      hsl = hslcolor(page)
       hsl.l = 0.97
       rgbhex(hsl)
     end
 
     def dark(page)
-      c = page['dark'] || page['color']
-      return rgbhex(Color::HSL.new(*c))
+      c = page['color']
+      return rgbhex(hslcolor(page))
     end
 
     def shape_switch(page, x_mm, y_mm)
