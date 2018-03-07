@@ -15,6 +15,12 @@ defaults:
       light_color: rgb(255,240,240)
   -
     scope:
+      path: hostage
+    values:
+      dark_color: black
+      light_color: white
+  -
+    scope:
       path: stage
     values:
       dark_color: rgb(0,153,0)

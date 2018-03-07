@@ -6,7 +6,7 @@ task :svg do
   sh 'bundle', 'exec', 'jekyll', 'b', '--trace'
 end
 
-module_names = ['booster-stage', 'stage', 'swave', 'upstage']
+module_names = ['booster-stage', 'hostage', 'stage', 'swave', 'upstage']
 
 panel_deps = []
 
@@ -26,6 +26,8 @@ module_names.each do |module_name|
   task panels: panel_file
 end
 
-task default: :panels
+task all: [:svg, :panels]
+
+task default: :all
 
 CLEAN.include 'res'
