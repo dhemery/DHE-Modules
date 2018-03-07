@@ -46,7 +46,7 @@ HostageWidget::HostageWidget(rack::Module *module) : ModuleWidget(module, 5, "re
   auto row_spacing = 18.5f;
 
   auto row = 0;
-  install_switch<HostageSwitch2>(HostageModule::MODE_SWITCH, {center_x, top_row_y + row*row_spacing});
+  install_switch<HostageSwitch2>(HostageModule::GATE_MODE_SWITCH, {center_x, top_row_y + row*row_spacing});
 
   row++;
   install_input<HostagePort>(HostageModule::DURATION_CV, {left_x, top_row_y + row*row_spacing});
@@ -63,11 +63,11 @@ HostageWidget::HostageWidget(rack::Module *module) : ModuleWidget(module, 5, "re
   install_output<HostagePort>(HostageModule::ACTIVE_OUT, {right_x, top_row_y + row*row_spacing});
 
   row++;
-  install_input<HostagePort>(HostageModule::GATE_IN, {left_x, top_row_y + row*row_spacing});
+  install_input<HostagePort>(HostageModule::HOLD_GATE_IN, {left_x, top_row_y + row*row_spacing});
   install_output<HostagePort>(HostageModule::EOC_OUT, {right_x, top_row_y + row*row_spacing});
 
   row++;
-  install_input<HostagePort>(HostageModule::STAGE_IN, {left_x, top_row_y + row*row_spacing});
-  install_output<HostagePort>(HostageModule::STAGE_OUT, {right_x, top_row_y + row*row_spacing});
+  install_input<HostagePort>(HostageModule::ENVELOPE_IN, {left_x, top_row_y + row*row_spacing});
+  install_output<HostagePort>(HostageModule::ENVELOPE_OUT, {right_x, top_row_y + row*row_spacing});
 }
 }

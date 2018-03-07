@@ -11,7 +11,7 @@ namespace DHE {
 struct HostageModule : Module, StageProcessor {
   HostageModule() : Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT}, StageProcessor{} {};
 
-  float defer_in() const override {
+  float defer_gate_in() const override {
     return input(DEFER_IN);
   };
 
@@ -21,53 +21,53 @@ struct HostageModule : Module, StageProcessor {
     return Duration::scaled(rotation, range);
   }
 
-  float envelope_voltage(float held, float phase) const override {
-    return held;
+  float envelope_gate_in() const override {
+    return input(HOLD_GATE_IN);
   }
 
-  void send_active_out(float f) override {
-    outputs[ACTIVE_OUT].value = f;
+  float envelope_in() const override {
+    return input(ENVELOPE_IN);
   }
 
-  void send_eoc_out(float f) override {
-    outputs[EOC_OUT].value = f;
+  float envelope_voltage(float start_voltage, float ignored) const override {
+    return start_voltage;
   }
 
-  void send_stage_out(float f) override {
-    outputs[STAGE_OUT].value = f;
+  void send_active_out(bool is_active) override {
+    outputs[ACTIVE_OUT].value = UNIPOLAR_SIGNAL_RANGE.scale(is_active);
+  }
+
+  void send_eoc_out(bool is_pulsing) override {
+    outputs[EOC_OUT].value = UNIPOLAR_SIGNAL_RANGE.scale(is_pulsing);
+  }
+
+  void send_envelope_out(float envelope_out) override {
+    outputs[ENVELOPE_OUT].value = envelope_out;
   }
 
   void step() override {
     StageProcessor::step();
   }
 
-  float stage_in() const override {
-    return input(STAGE_IN);
-  }
-
-  float trigger_in() const override {
-    return input(GATE_IN);
-  }
-
   enum ParameterIds {
     DURATION_KNOB,
     DURATION_SWITCH,
-    MODE_SWITCH,
+    GATE_MODE_SWITCH,
     PARAMETER_COUNT
   };
 
   enum InputIds {
     DEFER_IN,
     DURATION_CV,
-    GATE_IN,
-    STAGE_IN,
+    ENVELOPE_IN,
+    HOLD_GATE_IN,
     INPUT_COUNT
   };
 
   enum OutputIds {
     ACTIVE_OUT,
+    ENVELOPE_OUT,
     EOC_OUT,
-    STAGE_OUT,
     OUTPUT_COUNT
   };
 };

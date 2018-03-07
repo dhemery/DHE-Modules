@@ -14,12 +14,20 @@ struct StageModule : public Module, StageProcessor {
       : Module(PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT),
         StageProcessor{} {}
 
-  float defer_in() const override {
+  float defer_gate_in() const override {
     return input(DEFER_IN);
   }
 
   float duration_in() const override {
     return Duration::scaled(param(DURATION_KNOB), Duration::MEDIUM_RANGE);
+  }
+
+  float envelope_gate_in() const override {
+    return input(TRIGGER_IN);
+  }
+
+  float envelope_in() const override {
+    return input(ENVELOPE_IN);
   }
 
   float envelope_voltage(float held, float phase) const override {
@@ -31,14 +39,6 @@ struct StageModule : public Module, StageProcessor {
     return Level::scaled(param(LEVEL_KNOB));
   }
 
-  float stage_in() const override {
-    return input(STAGE_IN);
-  }
-
-  float trigger_in() const override {
-    return input(TRIG_IN);
-  }
-
   void step() override {
     StageProcessor::step();
   }
@@ -47,16 +47,16 @@ struct StageModule : public Module, StageProcessor {
     return Taper::j(phase, param(CURVE_KNOB));
   }
 
-  void send_active_out(float f) override {
-    outputs[ACTIVE_OUT].value = f;
+  void send_active_out(bool is_active) override {
+    outputs[ACTIVE_OUT].value = UNIPOLAR_SIGNAL_RANGE.scale(is_active);
   }
 
-  void send_eoc_out(float f) override {
-    outputs[EOC_OUT].value = f;
+  void send_envelope_out(float envelope_out) override {
+    outputs[ENVELOPE_OUT].value = envelope_out;
   }
 
-  void send_stage_out(float f) override {
-    outputs[STAGE_OUT].value = f;
+  void send_eoc_out(bool is_pulsing) override {
+    outputs[EOC_OUT].value = UNIPOLAR_SIGNAL_RANGE.scale(is_pulsing);
   }
 
   enum ParameterIIds {
@@ -67,14 +67,14 @@ struct StageModule : public Module, StageProcessor {
   };
 
   enum InputIds {
-    STAGE_IN,
-    TRIG_IN,
+    ENVELOPE_IN,
+    TRIGGER_IN,
     DEFER_IN,
     INPUT_COUNT
   };
 
   enum OutputIds {
-    STAGE_OUT,
+    ENVELOPE_OUT,
     EOC_OUT,
     ACTIVE_OUT,
     OUTPUT_COUNT

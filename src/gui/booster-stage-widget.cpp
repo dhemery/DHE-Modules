@@ -87,13 +87,13 @@ BoosterStageWidget::BoosterStageWidget(rack::Module *module) : ModuleWidget(modu
   install_output<BoosterStagePort>(BoosterStageModule::ACTIVE_OUT, {right_x, top_row_y + row*row_spacing});
 
   row++;
-  install_input<BoosterStagePort>(BoosterStageModule::TRIG_IN, {left_x, top_row_y + row*row_spacing});
-  install_switch<BoosterStageButtonDark>(BoosterStageModule::TRIG_BUTTON, {center_left_x, top_row_y + row*row_spacing});
+  install_input<BoosterStagePort>(BoosterStageModule::TRIGGER_IN, {left_x, top_row_y + row*row_spacing});
+  install_switch<BoosterStageButtonDark>(BoosterStageModule::TRIGGER_BUTTON, {center_left_x, top_row_y + row*row_spacing});
   install_switch<BoosterStageButtonLight>(BoosterStageModule::EOC_BUTTON, {center_right_x, top_row_y + row*row_spacing});
   install_output<BoosterStagePort>(BoosterStageModule::EOC_OUT, {right_x, top_row_y + row*row_spacing});
 
   row++;
-  install_input<BoosterStagePort>(BoosterStageModule::STAGE_IN, {left_x, top_row_y + row*row_spacing});
-  install_output<BoosterStagePort>(BoosterStageModule::STAGE_OUT, {right_x, top_row_y + row*row_spacing});
+  install_input<BoosterStagePort>(BoosterStageModule::ENVELOPE_IN, {left_x, top_row_y + row*row_spacing});
+  install_output<BoosterStagePort>(BoosterStageModule::ENVELOPE_OUT, {right_x, top_row_y + row*row_spacing});
 }
 }

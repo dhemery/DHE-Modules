@@ -66,6 +66,6 @@ UpstageWidget::UpstageWidget(rack::Module *module) : ModuleWidget(module, 5, "re
   install_output<UpstagePort>(UpstageModule::TRIG_OUT, {right_x, top_row_y + row*row_spacing});
 
   row++;
-  install_output<UpstagePort>(UpstageModule::STAGE_OUT, {right_x, top_row_y + row*row_spacing});
+  install_output<UpstagePort>(UpstageModule::ENVELOPE_OUT, {right_x, top_row_y + row*row_spacing});
 }
 }

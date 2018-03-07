@@ -127,7 +127,7 @@ public:
    * Registers an action to be called when the ramp's phase advances to 1.
    * @param action called when the ramp phase advances to 1
    */
-  void on_end_of_cycle(std::function<void()> action) {
+  void on_completion(std::function<void()> action) {
     active.on_falling_edge(std::move(action));
   }
 

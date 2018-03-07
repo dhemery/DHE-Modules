@@ -11,19 +11,19 @@ namespace DHE {
 struct UpstageModule : Module {
   UpstageModule() : Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT} {}
 
-  bool is_waiting() const {
-    return std::max(inputs[WAIT_IN].value, gate_button(WAIT_BUTTON)) > 0.5f;
-  }
-
-  float stage_out() const {
+  float envelope_out() const {
     const auto &range = Level::range(params[LEVEL_SWITCH].value);
     auto rotation = modulated(LEVEL_KNOB, LEVEL_CV);
     return Level::scaled(rotation, range);
   }
 
+  bool is_waiting() const {
+    return std::max(inputs[WAIT_IN].value, gate_button(WAIT_BUTTON)) > 0.5f;
+  }
+
   void step() override {
     outputs[TRIG_OUT].value = trigger_out();
-    outputs[STAGE_OUT].value = stage_out();
+    outputs[ENVELOPE_OUT].value = envelope_out();
   }
 
   float trigger_in() const {
@@ -49,7 +49,7 @@ struct UpstageModule : Module {
   };
   enum OutputIds {
     TRIG_OUT,
-    STAGE_OUT,
+    ENVELOPE_OUT,
     OUTPUT_COUNT
   };
 };

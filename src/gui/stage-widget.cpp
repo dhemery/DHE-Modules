@@ -47,11 +47,11 @@ StageWidget::StageWidget(rack::Module *module) : ModuleWidget(module, 5, "res/st
   install_output<StagePort>(StageModule::ACTIVE_OUT, {right_x, top_row_y + row*row_spacing});
 
   row++;
-  install_input<StagePort>(StageModule::TRIG_IN, {left_x, top_row_y + row*row_spacing});
+  install_input<StagePort>(StageModule::TRIGGER_IN, {left_x, top_row_y + row*row_spacing});
   install_output<StagePort>(StageModule::EOC_OUT, {right_x, top_row_y + row*row_spacing});
 
   row++;
-  install_input<StagePort>(StageModule::STAGE_IN, {left_x, top_row_y + row*row_spacing});
-  install_output<StagePort>(StageModule::STAGE_OUT, {right_x, top_row_y + row*row_spacing});
+  install_input<StagePort>(StageModule::ENVELOPE_IN, {left_x, top_row_y + row*row_spacing});
+  install_output<StagePort>(StageModule::ENVELOPE_OUT, {right_x, top_row_y + row*row_spacing});
 }
 }

@@ -10,7 +10,7 @@ struct BoosterStageModule : Module, StageProcessor {
       : Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT},
         StageProcessor{} {}
 
-  float defer_in() const override {
+  float defer_gate_in() const override {
     return std::max(input(DEFER_IN), gate_button(DEFER_BUTTON));
   }
 
@@ -20,35 +20,39 @@ struct BoosterStageModule : Module, StageProcessor {
     return Duration::scaled(rotation, range);
   }
 
-  float envelope_voltage(float held, float phase) const override {
-    auto range = Range{held, level_in()};
-    return range.scale(taper(phase));
-  }
-
   float level_in() const {
     const auto &range = Level::range(param(LEVEL_SWITCH));
     auto rotation = modulated(LEVEL_KNOB, LEVEL_CV);
     return Level::scaled(rotation, range);
   }
 
-  float stage_in() const override {
-    return input(STAGE_IN);
+  float envelope_gate_in() const override {
+    return std::max(input(TRIGGER_IN), gate_button(TRIGGER_BUTTON));
   }
 
-  float trigger_in() const override {
-    return std::max(input(TRIG_IN), gate_button(TRIG_BUTTON));
+  float envelope_in() const override {
+    return input(ENVELOPE_IN);
   }
 
-  bool is_active() const override {
-    return param(ACTIVE_BUTTON) > 0.5f || StageProcessor::is_active();
-  }
-
-  bool is_end_of_cycle() const override {
-    return param(EOC_BUTTON) > 0.5f || StageProcessor::is_end_of_cycle();
+  float envelope_voltage(float start_voltage, float phase) const override {
+    auto range = Range{start_voltage, level_in()};
+    return range.scale(taper(phase));
   }
 
   bool is_s_taper() const {
     return param(SHAPE_SWITCH) > 0.5;
+  }
+
+  void send_active_out(bool is_active) override {
+  outputs[ACTIVE_OUT].value = UNIPOLAR_SIGNAL_RANGE.scale(is_active || param(ACTIVE_BUTTON) > 0.5f);
+  }
+
+  void send_envelope_out(float envelope_out) override {
+    outputs[ENVELOPE_OUT].value = envelope_out;
+  }
+
+  void send_eoc_out(bool is_pulsing) override {
+    outputs[EOC_OUT].value = UNIPOLAR_SIGNAL_RANGE.scale(is_pulsing || param(EOC_BUTTON) > 0.5f);
   }
 
   void step() override {
@@ -58,18 +62,6 @@ struct BoosterStageModule : Module, StageProcessor {
   float taper(float phase) const {
     auto rotation = modulated(CURVE_KNOB, CURVE_CV);
     return is_s_taper() ? Taper::s(phase, rotation) : Taper::j(phase, rotation);
-  }
-
-  void send_active_out(float f) override {
-    outputs[ACTIVE_OUT].value = f;
-  }
-
-  void send_eoc_out(float f) override {
-    outputs[EOC_OUT].value = f;
-  }
-
-  void send_stage_out(float f) override {
-    outputs[STAGE_OUT].value = f;
   }
 
   enum ParameterIds {
@@ -82,7 +74,7 @@ struct BoosterStageModule : Module, StageProcessor {
     LEVEL_KNOB,
     LEVEL_SWITCH,
     SHAPE_SWITCH,
-    TRIG_BUTTON,
+    TRIGGER_BUTTON,
     PARAMETER_COUNT
   };
 
@@ -91,15 +83,15 @@ struct BoosterStageModule : Module, StageProcessor {
     DEFER_IN,
     DURATION_CV,
     LEVEL_CV,
-    STAGE_IN,
-    TRIG_IN,
+    ENVELOPE_IN,
+    TRIGGER_IN,
     INPUT_COUNT
   };
 
   enum OutputIds {
     ACTIVE_OUT,
     EOC_OUT,
-    STAGE_OUT,
+    ENVELOPE_OUT,
     OUTPUT_COUNT
   };
 };
