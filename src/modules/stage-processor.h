@@ -28,37 +28,48 @@ struct StageProcessor {
   virtual float duration_in() const = 0;
   virtual float envelope_gate_in() const = 0;
   virtual float envelope_in() const = 0;
-  virtual void on_envelope_gate_falling() {}
-  virtual void send_active_out(bool is_active) = 0;
-  virtual void send_envelope_out(float phase_0_voltage, float phase) = 0;
 
-  virtual void send_eoc_out(bool is_pulsing) = 0;
+  virtual void on_defer_gate_rising() {
+    begin_deferring();
+  }
 
   virtual void on_defer_gate_falling() {
-    phase_0_voltage.hold();
-    envelope_gate.resume_firing();
+    stop_deferring();
+  }
+
+  virtual void on_envelope_completion() {
+    eoc_pulse.start();
   }
 
   virtual void on_envelope_gate_rising() {
     start_envelope();
   }
 
+  virtual void on_envelope_gate_falling() {}
+
   bool is_active() const {
     return defer_gate.is_high() || envelope.is_active();
   }
 
-  void on_defer_gate_rising() {
+  virtual void send_active_out(bool is_active) = 0;
+
+  virtual void send_envelope_out(float phase_0_voltage, float phase) = 0;
+
+  virtual void send_eoc_out(bool is_pulsing) = 0;
+
+  void begin_deferring() {
     envelope_gate.suspend_firing();
     envelope.stop();
     phase_0_voltage.track();
   }
 
-  void on_envelope_completion() {
-    eoc_pulse.start();
-  }
-
   float sample_time() const {
     return rack::engineGetSampleTime();
+  }
+
+  void stop_deferring() {
+    phase_0_voltage.hold();
+    envelope_gate.resume_firing();
   }
 
   void step() {

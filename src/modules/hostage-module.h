@@ -9,7 +9,9 @@
 namespace DHE {
 
 struct HostageModule : Module, StageProcessor {
-  HostageModule() : Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT}, StageProcessor{} {};
+  bool is_sustaining{false};
+
+  HostageModule() : Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT}, StageProcessor{} {}
 
   float defer_gate_in() const override {
     return input(DEFER_IN);
@@ -29,27 +31,27 @@ struct HostageModule : Module, StageProcessor {
     return input(ENVELOPE_IN);
   }
 
-  bool is_gate_mode() const {
+  bool is_in_gate_mode() const {
     return param(GATE_MODE_SWITCH) > 0.5f;
   }
 
   void on_envelope_gate_rising() override {
-    if(is_gate_mode()) {
-      phase_0_voltage.hold();
-      envelope.stop();
+    if (is_in_gate_mode()) {
+      begin_sustain();
     } else {
-      envelope.start();
+      StageProcessor::on_envelope_gate_rising();
     }
   }
 
   void on_envelope_gate_falling() override {
-    if(is_gate_mode()) {
-      eoc_pulse.start();
+    if (is_in_gate_mode()) {
+      end_sustain();
     }
+    StageProcessor::on_envelope_gate_falling();
   }
 
   void send_active_out(bool is_active) override {
-    outputs[ACTIVE_OUT].value = UNIPOLAR_SIGNAL_RANGE.scale(is_active);
+    outputs[ACTIVE_OUT].value = UNIPOLAR_SIGNAL_RANGE.scale(is_active || is_sustaining);
   }
 
   void send_envelope_out(float phase_0_voltage, float ignored) override {
@@ -62,6 +64,16 @@ struct HostageModule : Module, StageProcessor {
 
   void step() override {
     StageProcessor::step();
+  }
+
+  void begin_sustain() {
+    envelope.stop();
+    phase_0_voltage.hold();
+  }
+
+  void end_sustain() {
+    eoc_pulse.start();
+    is_sustaining = false;
   }
 
   enum ParameterIds {
