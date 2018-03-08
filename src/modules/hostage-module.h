@@ -3,8 +3,10 @@
 #include <algorithm>
 
 #include "module.h"
-#include "stage-processor.h"
 #include "util/controls.h"
+#include "util/d-flip-flop.h"
+#include "util/ramp.h"
+#include "util/track-and-hold.h"
 
 namespace DHE {
 
@@ -18,8 +20,10 @@ struct HostageModule : Module {
     defer_gate.on_rising_edge([this] { begin_deferring(); });
     defer_gate.on_falling_edge([this] { end_deferring(); });
 
-    envelope_gate.on_rising_edge([this] { on_envelope_gate_rising(); });
-    envelope_gate.on_falling_edge([this] { on_envelope_gate_falling(); });
+    envelope_gate.on_rising_edge([this] { begin_stage(); });
+    envelope_gate.on_falling_edge([this] { end_stage(); });
+
+    envelope.on_completion([this] { eoc_pulse.start(); });
   }
 
   void step() {
@@ -31,6 +35,43 @@ struct HostageModule : Module {
     send_active_out();
     send_eoc_out();
     send_envelope_out();
+  }
+
+  void begin_deferring() {
+    envelope_gate.suspend_firing();
+    envelope.stop();
+    phase_0_voltage.track();
+  }
+
+  void end_deferring() {
+    phase_0_voltage.hold();
+    envelope_gate.resume_firing();
+  }
+
+  void begin_envelope() {
+    phase_0_voltage.hold();
+    envelope.start();
+  }
+
+  void begin_stage() {
+    if (is_in_gate_mode()) {
+      begin_sustain();
+    } else {
+      begin_envelope();
+    }
+  }
+
+  void end_stage() {
+    if (is_sustaining && is_in_gate_mode()) {
+      eoc_pulse.start();
+      is_sustaining = false;
+    }
+  }
+
+  void begin_sustain() {
+    envelope.stop();
+    phase_0_voltage.hold();
+    is_sustaining = true;
   }
 
   float defer_gate_in() const {
@@ -51,22 +92,12 @@ struct HostageModule : Module {
     return input(ENVELOPE_IN);
   }
 
+  bool is_active() const {
+    return defer_gate.is_high() || envelope.is_active() || is_sustaining;
+  }
+
   bool is_in_gate_mode() const {
     return param(GATE_MODE_SWITCH) > 0.5f;
-  }
-
-  void on_envelope_gate_rising() {
-    if (is_in_gate_mode()) {
-      begin_sustain();
-    } else {
-      start_envelope();
-    }
-  }
-
-  void on_envelope_gate_falling() {
-    if (is_in_gate_mode()) {
-      end_sustain();
-    }
   }
 
   void send_active_out() {
@@ -81,39 +112,8 @@ struct HostageModule : Module {
     outputs[EOC_OUT].value = UNIPOLAR_SIGNAL_RANGE.scale(eoc_pulse.is_active());
   }
 
-  void begin_sustain() {
-    envelope.stop();
-    phase_0_voltage.hold();
-    is_sustaining = true;
-  }
-
-  void end_sustain() {
-    is_sustaining = false;
-    eoc_pulse.start();
-  }
-
-  bool is_active() const {
-    return defer_gate.is_high() || envelope.is_active() || is_sustaining;
-  }
-
-  void begin_deferring() {
-    envelope_gate.suspend_firing();
-    envelope.stop();
-    phase_0_voltage.track();
-  }
-
-  void end_deferring() {
-    phase_0_voltage.hold();
-    envelope_gate.resume_firing();
-  }
-
   float sample_time() const {
     return rack::engineGetSampleTime();
-  }
-
-  void start_envelope() {
-    phase_0_voltage.hold();
-    envelope.start();
   }
 
   DFlipFlop defer_gate;
