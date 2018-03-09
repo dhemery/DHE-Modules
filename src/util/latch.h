@@ -70,7 +70,7 @@ private:
   std::vector<std::function<void()>> falling_edge_actions;
   std::vector<std::function<void()>> no_change_actions;
 
-  void fire(std::vector<std::function<void()>> &actions) {
+  void fire(const std::vector<std::function<void()>> &actions) const {
     if (!firing_events)
       return;
     for (const auto &action : actions)

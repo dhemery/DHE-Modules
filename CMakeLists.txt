@@ -46,7 +46,7 @@ add_library(plugin SHARED
         src/util/ramp.h
         src/util/sigmoid.h
         src/util/track-and-hold.h
-        )
+        src/util/mode.h)
 target_link_libraries(plugin
         PUBLIC -stdlib=libc++
         PUBLIC rack

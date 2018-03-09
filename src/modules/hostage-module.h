@@ -1,6 +1,7 @@
 #pragma once
 
 #include <algorithm>
+#include <util/mode.h>
 
 #include "module.h"
 #include "util/controls.h"
@@ -11,105 +12,124 @@
 namespace DHE {
 
 struct HostageModule : Module {
+  Mode deferring_mode{};
+  Mode timed_sustain_mode{};
+  Mode gated_sustain_mode{};
+  Mode *sustain_mode;
+  Mode *mode;
+
   DFlipFlop defer_gate;
   Ramp eoc_pulse;
-  Ramp envelope;
-  DFlipFlop sustain_mode;
-  DFlipFlop *mode{nullptr};
   DFlipFlop mode_switch;
-  TrackAndHold output_voltage;
-  DFlipFlop duration_mode;
+  DFlipFlop sustain_gate;
+  DFlipFlop sustain_trigger;
+  Ramp timer;
 
   HostageModule() : Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT},
                     defer_gate{[this] { return defer_gate_in(); }},
                     eoc_pulse{1e-3, [this] { return sample_time(); }},
-                    envelope{[this] { return duration_in(); }, [this] { return sample_time(); }},
-                    sustain_mode{[this] { return hold_in(); }},
-                    mode_switch{[this] { return gate_mode_in(); }},
-                    output_voltage{[this] { return envelope_in(); }},
-                    duration_mode{[this] { return hold_in(); }} {
-    mode_switch.on_rising_edge([this] { enter_sustain_mode(); });
-    mode_switch.on_falling_edge([this] { enter_duration_mode(); });
+                    mode_switch{[this] { return mode_switch_in(); }},
+                    sustain_gate{[this] { return hold_gate_in(); }},
+                    sustain_trigger{[this] { return hold_gate_in(); }},
+                    timer{[this] { return duration_in(); }, [this] { return sample_time(); }} {
+    deferring_mode.on_entry([this] {
+      send_active(true);
+    });
+    deferring_mode.on_step([this] {
+      send_envelope_out(envelope_in());
+    });
 
-    defer_gate.on_rising_edge([this] { begin_deferring(); });
-    defer_gate.on_falling_edge([this] { end_deferring(); });
+    timed_sustain_mode.on_entry([this] {
+      send_active(false);
+      send_envelope_out(envelope_in());
+    });
+    timed_sustain_mode.on_step([this] {
+      sustain_trigger.step();
+      timer.step();
+    });
+    timed_sustain_mode.on_exit([this] {
+      timer.stop();
+    });
 
-    duration_mode.on_rising_edge([this] { begin_envelope(); });
-    envelope.on_completion([this] { end_cycle(); });
+    sustain_trigger.on_rising_edge([this] {
+      begin_timed_sustain();
+    });
+    timer.on_completion([this] {
+      end_cycle();
+    });
 
-    sustain_mode.on_rising_edge([this] { begin_sustain(); });
-    sustain_mode.on_falling_edge([this] { end_cycle(); });
+    gated_sustain_mode.on_entry([this] {
+      sustain_gate.step();
+      send_active(sustain_gate.is_high());
+    });
+    gated_sustain_mode.on_step([this] {
+      sustain_gate.step();
+    });
 
-    mode = &sustain_mode;
-    mode->resume_firing();
+    sustain_gate.on_rising_edge([this] {
+      begin_gated_sustain();
+    });
+    sustain_gate.on_falling_edge([this] {
+      end_cycle();
+    });
+
+    mode_switch.on_rising_edge([this] {
+      set_sustain_mode(&gated_sustain_mode);
+    });
+    mode_switch.on_falling_edge([this] {
+      set_sustain_mode(&timed_sustain_mode);
+    });
+
+    defer_gate.on_rising_edge([this] {
+      enter_mode(&deferring_mode);
+    });
+    defer_gate.on_falling_edge([this] {
+      enter_mode(sustain_mode);
+    });
+
+    sustain_mode = &gated_sustain_mode;
+    mode = sustain_mode;
+    mode->enter();
+    mode_switch.step();
+  }
+
+  void set_sustain_mode(Mode *incoming_sustain_mode) {
+    sustain_mode = incoming_sustain_mode;
+    if (defer_gate.is_low()) {
+      enter_mode(incoming_sustain_mode);
+    }
+  }
+
+  void enter_mode(Mode *incoming_mode) {
+    mode->exit();
+    mode = incoming_mode;
+    mode->enter();
   }
 
   void step() {
     defer_gate.step();
     mode_switch.step();
     mode->step();
-    envelope.step();
     eoc_pulse.step();
 
     send_eoc_out();
-    send_envelope_out();
   }
 
-  // DEFER mode
   float defer_gate_in() const {
     return input(DEFER_IN);
   };
 
-  void begin_deferring() {
-    mode->suspend_firing();
-    envelope.stop();
-    output_voltage.track();
-    send_active(true);
-  }
-
-  void end_deferring() {
-    output_voltage.hold();
-    choose_mode();
-    mode->resume_firing();
-  }
-
-  void choose_mode() {
-    if (mode_switch.is_high()) enter_sustain_mode();
-    else enter_duration_mode();
-  }
-
-  // Choose GATE/DUR mode for when not DEFERring
-  float gate_mode_in() const {
+  float mode_switch_in() const {
     return param(GATE_MODE_SWITCH);
   }
 
-  void enter_mode(DFlipFlop *new_mode) {
-    mode->suspend_firing();
-    mode = new_mode;
-    mode->resume_firing();
-    envelope.stop();
-  }
-
-  // SUSTAIN mode (active while gate is high)
-  void enter_sustain_mode() {
-    enter_mode(&sustain_mode);
-    send_active(sustain_mode.is_high());
-    if(sustain_mode.is_low()) end_cycle();
-  }
-
-  void begin_sustain() {
+  void begin_gated_sustain() {
     send_active(true);
   }
 
-  // DURATION mode (active while ramp is running)
-  void enter_duration_mode() {
-    send_active(false);
-    enter_mode(&duration_mode);
-  }
-
-  void begin_envelope() {
+  void begin_timed_sustain() {
     send_active(true);
-    envelope.start();
+    timer.start();
   }
 
   void end_cycle() {
@@ -123,8 +143,8 @@ struct HostageModule : Module {
     return Duration::scaled(rotation, range);
   }
 
-  float hold_in() const {
-    return input(HOLD_IN);
+  float hold_gate_in() const {
+    return input(HOLD_GATE_IN);
   }
 
   float envelope_in() const {
@@ -135,8 +155,8 @@ struct HostageModule : Module {
     outputs[ACTIVE_OUT].value = UNIPOLAR_SIGNAL_RANGE.scale(is_active);
   }
 
-  void send_envelope_out() {
-    outputs[ENVELOPE_OUT].value = output_voltage.value();
+  void send_envelope_out(float envelope_out) {
+    outputs[ENVELOPE_OUT].value = envelope_out;
   }
 
   void send_eoc_out() {
@@ -151,7 +171,7 @@ struct HostageModule : Module {
     DEFER_IN,
     DURATION_CV,
     ENVELOPE_IN,
-    HOLD_IN,
+    HOLD_GATE_IN,
     INPUT_COUNT
   };
 
