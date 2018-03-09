@@ -5,6 +5,7 @@
 #include "module.h"
 #include "util/controls.h"
 #include "util/d-flip-flop.h"
+#include "util/mode.h"
 #include "util/ramp.h"
 #include "util/range.h"
 #include "util/track-and-hold.h"
@@ -12,25 +13,71 @@
 namespace DHE {
 
 struct StageModule : public Module {
-  StageModule()
-      : Module(PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT),
-        defer_gate{[this] { return defer_gate_in(); }},
-        eoc_pulse{1e-3, [this] { return sample_time(); }},
-        envelope{[this] { return duration_in(); }, [this] { return sample_time(); }},
-        envelope_gate{[this] { return envelope_gate_in(); }},
-        phase_0_voltage{[this] { return envelope_in(); }} {
-    defer_gate.on_rising_edge([this] { on_defer_gate_rising(); });
-    defer_gate.on_falling_edge([this] { on_defer_gate_falling(); });
+  Mode stage_mode{};
+  Mode deferring_mode{};
+  Mode *mode{&stage_mode};
 
-    envelope_gate.on_rising_edge([this] { on_envelope_gate_rising(); });
+  // TODO: Move this inside stage mode or an envelope class.
+  float phase_0_voltage{0.f};
 
-    envelope.on_completion([this] { on_envelope_completion(); });
+  DFlipFlop defer_gate = DFlipFlop{[this] { return defer_gate_in(); }};
+  Ramp envelope = {[this] { return duration_in(); }, [this] { return sample_time(); }};
+  DFlipFlop envelope_trigger = DFlipFlop{[this] { return envelope_gate_in(); }};
+  Ramp eoc_pulse = {1e-3, [this] { return sample_time(); }};
+
+  StageModule() : Module(PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT) {
+    defer_gate.on_rising_edge([this] {
+      enter_mode(&deferring_mode);
+    });
+    defer_gate.on_falling_edge([this] {
+      enter_mode(&stage_mode);
+    });
+
+    deferring_mode.on_entry([this] {
+      send_active_out(true);
+    });
+    deferring_mode.on_step([this] {
+      send_envelope_out(envelope_in());
+    });
+
+    stage_mode.on_entry([this] {
+      send_active_out(false);
+      phase_0_voltage = envelope_in();
+      envelope_trigger.resume_firing();
+    });
+    stage_mode.on_step([this] {
+      envelope_trigger.step();
+      envelope.step();
+      send_envelope_out(envelope_voltage(envelope.phase())); // TODO: Move to envelope.on_step()
+    });
+    stage_mode.on_exit([this] {
+      envelope_trigger.suspend_firing();
+      envelope.stop();
+    });
+
+    envelope_trigger.on_rising_edge([this] {
+      send_active_out(true); // TODO: Move to envelope.on_start()
+      phase_0_voltage = envelope_in();
+      envelope.start();
+    });
+
+    envelope.on_completion([this] {
+      send_active_out(false); // TODO: Move to envelope.on_completion()
+      send_eoc_out(true); // TODO: Move to eoc.on_start()
+      eoc_pulse.start();
+    });
+
+    eoc_pulse.on_completion([this] {
+      send_eoc_out(false);
+    });
+
+    enter_mode(mode);
   }
 
-  void begin_deferring() {
-    envelope_gate.suspend_firing();
-    envelope.stop();
-    phase_0_voltage.track();
+  void enter_mode(Mode *incoming_mode) {
+    mode->exit();
+    mode = incoming_mode;
+    mode->enter();
   }
 
   float defer_gate_in() const {
@@ -49,32 +96,12 @@ struct StageModule : public Module {
     return input(ENVELOPE_IN);
   }
 
-  float envelope_out(float phase_0_voltage, float phase) const {
+  float envelope_voltage(float phase) const {
     return scale(taper(phase), phase_0_voltage, level_in());
-  }
-
-  bool is_active() const {
-    return defer_gate.is_high() || envelope.is_active();
   }
 
   float level_in() const {
     return Level::scaled(param(LEVEL_KNOB));
-  }
-
-  void on_defer_gate_falling() {
-    stop_deferring();
-  }
-
-  void on_defer_gate_rising() {
-    begin_deferring();
-  }
-
-  void on_envelope_completion() {
-    eoc_pulse.start();
-  }
-
-  void on_envelope_gate_rising() {
-    start_envelope();
   }
 
   float sample_time() const {
@@ -85,44 +112,23 @@ struct StageModule : public Module {
     outputs[ACTIVE_OUT].value = UNIPOLAR_SIGNAL_RANGE.scale(is_active);
   }
 
-  void send_envelope_out(float phase_0_voltage, float phase) {
-    outputs[ENVELOPE_OUT].value = envelope_out(phase_0_voltage, phase);
+  void send_envelope_out(float envelope_out) {
+    outputs[ENVELOPE_OUT].value = envelope_out;
   }
 
   void send_eoc_out(bool is_pulsing) {
     outputs[EOC_OUT].value = UNIPOLAR_SIGNAL_RANGE.scale(is_pulsing);
   }
 
-  void start_envelope() {
-    phase_0_voltage.hold();
-    envelope.start();
-  }
-
   void step() override {
     defer_gate.step();
-    envelope.step();
-    envelope_gate.step();
+    mode->step();
     eoc_pulse.step();
-
-    send_active_out(is_active());
-    send_eoc_out(eoc_pulse.is_active());
-    send_envelope_out(phase_0_voltage.value(), envelope.phase());
-  }
-
-  void stop_deferring() {
-    phase_0_voltage.hold();
-    envelope_gate.resume_firing();
   }
 
   float taper(float phase) const {
     return Taper::j(phase, param(CURVE_KNOB));
   }
-
-  DFlipFlop defer_gate;
-  Ramp eoc_pulse;
-  Ramp envelope;
-  DFlipFlop envelope_gate;
-  TrackAndHold phase_0_voltage;
 
   enum ParameterIIds {
     DURATION_KNOB,
