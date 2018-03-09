@@ -11,25 +11,54 @@
 namespace DHE {
 
 struct HostageModule : Module {
+  DFlipFlop defer_gate;
+  Ramp eoc_pulse;
+  Ramp envelope;
+  DFlipFlop gate_mode;
+  DFlipFlop *mode{nullptr};
+  DFlipFlop mode_switch;
+  TrackAndHold output_voltage;
+  DFlipFlop trig_mode;
+
   HostageModule() : Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT},
                     defer_gate{[this] { return defer_gate_in(); }},
                     eoc_pulse{1e-3, [this] { return sample_time(); }},
                     envelope{[this] { return duration_in(); }, [this] { return sample_time(); }},
-                    envelope_gate{[this] { return envelope_gate_in(); }},
-                    phase_0_voltage{[this] { return envelope_in(); }} {
+                    gate_mode{[this] { return envelope_gate_in(); }},
+                    mode_switch{[this] { return gate_mode_in(); }},
+                    output_voltage{[this] { return envelope_in(); }},
+                    trig_mode{[this] { return envelope_gate_in(); }} {
+    mode_switch.on_rising_edge([this] { enter_gate_mode(); });
+    mode_switch.on_falling_edge([this] { enter_trig_mode(); });
+
     defer_gate.on_rising_edge([this] { begin_deferring(); });
     defer_gate.on_falling_edge([this] { end_deferring(); });
 
-    envelope_gate.on_rising_edge([this] { begin_stage(); });
-    envelope_gate.on_falling_edge([this] { end_stage(); });
-
+    trig_mode.on_rising_edge([this] { begin_envelope(); });
     envelope.on_completion([this] { eoc_pulse.start(); });
+
+    gate_mode.on_rising_edge([this] { begin_sustain(); });
+    gate_mode.on_falling_edge([this] { eoc_pulse.start(); });
+
+    mode = &gate_mode;
+    mode->resume_firing();
+  }
+
+  void enter_mode(DFlipFlop *new_mode) {
+    mode->suspend_firing();
+    mode = new_mode;
+    mode->resume_firing();
+  }
+
+  void enter_gate_mode() {
+    enter_mode(&gate_mode);
   }
 
   void step() {
     defer_gate.step();
+    mode_switch.step();
+    mode->step();
     envelope.step();
-    envelope_gate.step();
     eoc_pulse.step();
 
     send_active_out();
@@ -38,40 +67,28 @@ struct HostageModule : Module {
   }
 
   void begin_deferring() {
-    envelope_gate.suspend_firing();
+    mode->suspend_firing();
     envelope.stop();
-    phase_0_voltage.track();
+    output_voltage.track();
   }
 
   void end_deferring() {
-    phase_0_voltage.hold();
-    envelope_gate.resume_firing();
+    output_voltage.hold();
+    mode->resume_firing();
+  }
+
+  void enter_trig_mode() {
+    enter_mode(&trig_mode);
   }
 
   void begin_envelope() {
-    phase_0_voltage.hold();
+    output_voltage.hold();
     envelope.start();
-  }
-
-  void begin_stage() {
-    if (is_in_gate_mode()) {
-      begin_sustain();
-    } else {
-      begin_envelope();
-    }
-  }
-
-  void end_stage() {
-    if (is_sustaining && is_in_gate_mode()) {
-      eoc_pulse.start();
-      is_sustaining = false;
-    }
   }
 
   void begin_sustain() {
     envelope.stop();
-    phase_0_voltage.hold();
-    is_sustaining = true;
+    output_voltage.hold();
   }
 
   float defer_gate_in() const {
@@ -92,12 +109,12 @@ struct HostageModule : Module {
     return input(ENVELOPE_IN);
   }
 
-  bool is_active() const {
-    return defer_gate.is_high() || envelope.is_active() || is_sustaining;
+  float gate_mode_in() const {
+    return param(GATE_MODE_SWITCH);
   }
 
-  bool is_in_gate_mode() const {
-    return param(GATE_MODE_SWITCH) > 0.5f;
+  bool is_active() const {
+    return defer_gate.is_high() || envelope.is_active() ;
   }
 
   void send_active_out() {
@@ -105,7 +122,7 @@ struct HostageModule : Module {
   }
 
   void send_envelope_out() {
-    outputs[ENVELOPE_OUT].value = phase_0_voltage.value();
+    outputs[ENVELOPE_OUT].value = output_voltage.value();
   }
 
   void send_eoc_out() {
@@ -115,13 +132,6 @@ struct HostageModule : Module {
   float sample_time() const {
     return rack::engineGetSampleTime();
   }
-
-  DFlipFlop defer_gate;
-  Ramp eoc_pulse;
-  Ramp envelope;
-  DFlipFlop envelope_gate;
-  bool is_sustaining{false};
-  TrackAndHold phase_0_voltage;
 
   enum InputIds {
     DEFER_IN,
