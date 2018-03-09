@@ -14,44 +14,35 @@ struct HostageModule : Module {
   DFlipFlop defer_gate;
   Ramp eoc_pulse;
   Ramp envelope;
-  DFlipFlop gate_mode;
+  DFlipFlop sustain_mode;
   DFlipFlop *mode{nullptr};
   DFlipFlop mode_switch;
   TrackAndHold output_voltage;
-  DFlipFlop trig_mode;
+  DFlipFlop duration_mode;
 
   HostageModule() : Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT},
                     defer_gate{[this] { return defer_gate_in(); }},
                     eoc_pulse{1e-3, [this] { return sample_time(); }},
                     envelope{[this] { return duration_in(); }, [this] { return sample_time(); }},
-                    gate_mode{[this] { return envelope_gate_in(); }},
+                    sustain_mode{[this] { return hold_in(); }},
                     mode_switch{[this] { return gate_mode_in(); }},
                     output_voltage{[this] { return envelope_in(); }},
-                    trig_mode{[this] { return envelope_gate_in(); }} {
-    mode_switch.on_rising_edge([this] { enter_gate_mode(); });
-    mode_switch.on_falling_edge([this] { enter_trig_mode(); });
+                    duration_mode{[this] { return hold_in(); }} {
+    mode_switch.on_rising_edge([this] { enter_sustain_mode(); });
+    mode_switch.on_falling_edge([this] { enter_duration_mode(); });
 
     defer_gate.on_rising_edge([this] { begin_deferring(); });
     defer_gate.on_falling_edge([this] { end_deferring(); });
 
-    trig_mode.on_rising_edge([this] { begin_envelope(); });
-    envelope.on_completion([this] { eoc_pulse.start(); });
+    duration_mode.on_rising_edge([this] { begin_envelope(); });
+    envelope.on_completion([this] { end_cycle(); });
 
-    gate_mode.on_rising_edge([this] { begin_sustain(); });
-    gate_mode.on_falling_edge([this] { eoc_pulse.start(); });
+    sustain_mode.on_rising_edge([this] { begin_sustain(); });
+    sustain_mode.on_no_change([this] { send_active(sustain_mode.is_high()); });
+    sustain_mode.on_falling_edge([this] { end_cycle(); });
 
-    mode = &gate_mode;
+    mode = &sustain_mode;
     mode->resume_firing();
-  }
-
-  void enter_mode(DFlipFlop *new_mode) {
-    mode->suspend_firing();
-    mode = new_mode;
-    mode->resume_firing();
-  }
-
-  void enter_gate_mode() {
-    enter_mode(&gate_mode);
   }
 
   void step() {
@@ -61,15 +52,20 @@ struct HostageModule : Module {
     envelope.step();
     eoc_pulse.step();
 
-    send_active_out();
     send_eoc_out();
     send_envelope_out();
   }
+
+  // DEFER mode
+  float defer_gate_in() const {
+    return input(DEFER_IN);
+  };
 
   void begin_deferring() {
     mode->suspend_firing();
     envelope.stop();
     output_voltage.track();
+    send_active(true);
   }
 
   void end_deferring() {
@@ -77,23 +73,39 @@ struct HostageModule : Module {
     mode->resume_firing();
   }
 
-  void enter_trig_mode() {
-    enter_mode(&trig_mode);
+  // Choose GATE/DUR mode for when not DEFERring
+  float gate_mode_in() const {
+    return param(GATE_MODE_SWITCH);
+  }
+
+  void enter_mode(DFlipFlop *new_mode) {
+    mode->suspend_firing();
+    mode = new_mode;
+    mode->resume_firing();
+    envelope.stop();
+  }
+
+  // SUSTAIN mode (active while gate is high)
+  void enter_sustain_mode() {
+    enter_mode(&sustain_mode);
+  }
+
+  void begin_sustain() {}
+
+  // DURATION mode (active while ramp is running)
+  void enter_duration_mode() {
+    enter_mode(&duration_mode);
   }
 
   void begin_envelope() {
-    output_voltage.hold();
+    send_active(true);
     envelope.start();
   }
 
-  void begin_sustain() {
-    envelope.stop();
-    output_voltage.hold();
+  void end_cycle() {
+    send_active(false);
+    eoc_pulse.start();
   }
-
-  float defer_gate_in() const {
-    return input(DEFER_IN);
-  };
 
   float duration_in() const {
     auto rotation = modulated(DURATION_KNOB, DURATION_CV);
@@ -101,24 +113,16 @@ struct HostageModule : Module {
     return Duration::scaled(rotation, range);
   }
 
-  float envelope_gate_in() const {
-    return input(HOLD_GATE_IN);
+  float hold_in() const {
+    return input(HOLD_IN);
   }
 
   float envelope_in() const {
     return input(ENVELOPE_IN);
   }
 
-  float gate_mode_in() const {
-    return param(GATE_MODE_SWITCH);
-  }
-
-  bool is_active() const {
-    return defer_gate.is_high() || envelope.is_active() ;
-  }
-
-  void send_active_out() {
-    outputs[ACTIVE_OUT].value = UNIPOLAR_SIGNAL_RANGE.scale(is_active());
+  void send_active(bool is_active) {
+    outputs[ACTIVE_OUT].value = UNIPOLAR_SIGNAL_RANGE.scale(is_active);
   }
 
   void send_envelope_out() {
@@ -137,7 +141,7 @@ struct HostageModule : Module {
     DEFER_IN,
     DURATION_CV,
     ENVELOPE_IN,
-    HOLD_GATE_IN,
+    HOLD_IN,
     INPUT_COUNT
   };
 
