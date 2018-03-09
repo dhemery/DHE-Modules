@@ -56,17 +56,21 @@ struct StageModule : public Module {
     });
 
     envelope_trigger.on_rising_edge([this] {
-      send_active_out(true); // TODO: Move to envelope.on_start()
       phase_0_voltage = envelope_in();
       envelope.start();
     });
 
+    envelope.on_start([this] {
+      send_active_out(true);
+    });
     envelope.on_completion([this] {
-      send_active_out(false); // TODO: Move to envelope.on_completion()
-      send_eoc_out(true); // TODO: Move to eoc.on_start()
+      send_active_out(false);
       eoc_pulse.start();
     });
 
+    eoc_pulse.on_start([this]{
+      send_eoc_out(true);
+    });
     eoc_pulse.on_completion([this] {
       send_eoc_out(false);
     });

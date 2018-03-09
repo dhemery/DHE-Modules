@@ -123,6 +123,10 @@ public:
    */
   float phase() const { return progress; }
 
+  void on_start(std::function<void()> action) {
+    active.on_rising_edge(std::move(action));
+  }
+
   /**
    * Registers an action to be called when the ramp's phase advances to 1.
    * @param action called when the ramp phase advances to 1
