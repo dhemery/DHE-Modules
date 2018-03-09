@@ -66,10 +66,12 @@ inline float j(float phase, float rotation) {
 }
 
 inline float s(float phase, float rotation) {
-  // Scale the phase to [-1,1]. In this range, sigmoid() yields an S taper in
-  // the range [-1,1].
+  // Scale the phase to [-1,1]. In this range, sigmoid() yields an inverted S
+  // taper in the range [-1,1].
   auto bipolar_phase = BIPOLAR_PHASE_RANGE.scale(phase);
-  auto s_tapered_bipolar_phase = sigmoid(bipolar_phase, curvature(rotation));
+
+  // Invert the curvature so that positive curvature gives an S taper
+  auto s_tapered_bipolar_phase = sigmoid(bipolar_phase, -curvature(rotation));
 
   // Scale the tapered phase back to the range [0,1].
   return BIPOLAR_PHASE_RANGE.normalize(s_tapered_bipolar_phase);
