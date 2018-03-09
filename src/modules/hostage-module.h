@@ -15,62 +15,74 @@ struct HostageModule : Module {
   Mode deferring_mode{};
   Mode timed_sustain_mode{};
   Mode gated_sustain_mode{};
-  Mode *sustain_mode;
-  Mode *mode;
+  Mode *sustain_mode{&timed_sustain_mode};
+  Mode *mode{sustain_mode};
 
-  DFlipFlop defer_gate;
-  Ramp eoc_pulse;
-  DFlipFlop mode_switch;
-  DFlipFlop sustain_gate;
-  DFlipFlop sustain_trigger;
-  Ramp timer;
+  DFlipFlop defer_gate = DFlipFlop{[this] { return defer_gate_in(); }};
+  Ramp eoc_pulse = {1e-3, [this] { return sample_time(); }};
+  DFlipFlop mode_switch = DFlipFlop{[this] { return mode_switch_in(); }};
+  DFlipFlop sustain_gate = DFlipFlop{[this] { return hold_gate_in(); }};
+  DFlipFlop sustain_trigger = DFlipFlop{[this] { return hold_gate_in(); }};
+  Ramp timer = {[this] { return duration_in(); }, [this] { return sample_time(); }};
 
-  HostageModule() : Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT},
-                    defer_gate{[this] { return defer_gate_in(); }},
-                    eoc_pulse{1e-3, [this] { return sample_time(); }},
-                    mode_switch{[this] { return mode_switch_in(); }},
-                    sustain_gate{[this] { return hold_gate_in(); }},
-                    sustain_trigger{[this] { return hold_gate_in(); }},
-                    timer{[this] { return duration_in(); }, [this] { return sample_time(); }} {
+  HostageModule() : Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT} {
     deferring_mode.on_entry([this] {
       send_active(true);
     });
     deferring_mode.on_step([this] {
-      send_envelope_out(envelope_in());
+      send_envelope(envelope_in());
     });
 
     timed_sustain_mode.on_entry([this] {
+      sustain_trigger.resume_firing();
       send_active(false);
-      send_envelope_out(envelope_in());
+      send_envelope(envelope_in());
     });
     timed_sustain_mode.on_step([this] {
       sustain_trigger.step();
       timer.step();
     });
     timed_sustain_mode.on_exit([this] {
+      sustain_trigger.suspend_firing();
       timer.stop();
     });
 
     sustain_trigger.on_rising_edge([this] {
-      begin_timed_sustain();
+      timer.start();
+    });
+
+    timer.on_start([this]{
+      begin_sustaining();
     });
     timer.on_completion([this] {
-      end_cycle();
+      end_sustaining();
     });
 
     gated_sustain_mode.on_entry([this] {
       sustain_gate.step();
-      send_active(sustain_gate.is_high());
+      sustain_gate.resume_firing();
+      if(sustain_gate.is_high()) begin_sustaining();
+      else end_sustaining();
     });
     gated_sustain_mode.on_step([this] {
       sustain_gate.step();
     });
+    gated_sustain_mode.on_exit([this]{
+      sustain_gate.suspend_firing();
+    });
 
     sustain_gate.on_rising_edge([this] {
-      begin_gated_sustain();
+      begin_sustaining();
     });
     sustain_gate.on_falling_edge([this] {
-      end_cycle();
+      end_sustaining();
+    });
+
+    eoc_pulse.on_start([this] {
+      send_eoc(true);
+    });
+    eoc_pulse.on_completion([this]{
+      send_eoc(false);
     });
 
     mode_switch.on_rising_edge([this] {
@@ -87,11 +99,14 @@ struct HostageModule : Module {
       enter_mode(sustain_mode);
     });
 
-    sustain_mode = &gated_sustain_mode;
-    mode = sustain_mode;
-    mode->enter();
-    mode_switch.step();
+    enter_mode(mode);
   }
+
+  void end_sustaining() {
+    send_active(false);
+    eoc_pulse.start();
+  }
+  void begin_sustaining() { send_active(true); }
 
   void set_sustain_mode(Mode *incoming_sustain_mode) {
     sustain_mode = incoming_sustain_mode;
@@ -111,8 +126,6 @@ struct HostageModule : Module {
     mode_switch.step();
     mode->step();
     eoc_pulse.step();
-
-    send_eoc_out();
   }
 
   float defer_gate_in() const {
@@ -121,20 +134,6 @@ struct HostageModule : Module {
 
   float mode_switch_in() const {
     return param(GATE_MODE_SWITCH);
-  }
-
-  void begin_gated_sustain() {
-    send_active(true);
-  }
-
-  void begin_timed_sustain() {
-    send_active(true);
-    timer.start();
-  }
-
-  void end_cycle() {
-    send_active(false);
-    eoc_pulse.start();
   }
 
   float duration_in() const {
@@ -155,12 +154,12 @@ struct HostageModule : Module {
     outputs[ACTIVE_OUT].value = UNIPOLAR_SIGNAL_RANGE.scale(is_active);
   }
 
-  void send_envelope_out(float envelope_out) {
-    outputs[ENVELOPE_OUT].value = envelope_out;
+  void send_envelope(float voltage) {
+    outputs[ENVELOPE_OUT].value = voltage;
   }
 
-  void send_eoc_out() {
-    outputs[EOC_OUT].value = UNIPOLAR_SIGNAL_RANGE.scale(eoc_pulse.is_active());
+  void send_eoc(bool is_pulsing) {
+    outputs[EOC_OUT].value = UNIPOLAR_SIGNAL_RANGE.scale(is_pulsing);
   }
 
   float sample_time() const {

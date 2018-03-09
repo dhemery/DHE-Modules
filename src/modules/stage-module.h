@@ -34,21 +34,21 @@ struct StageModule : public Module {
     });
 
     deferring_mode.on_entry([this] {
-      send_active_out(true);
+      send_active(true);
     });
     deferring_mode.on_step([this] {
-      send_envelope_out(envelope_in());
+      send_envelope(envelope_in());
     });
 
     stage_mode.on_entry([this] {
-      send_active_out(false);
+      send_active(false);
       phase_0_voltage = envelope_in();
       envelope_trigger.resume_firing();
     });
     stage_mode.on_step([this] {
       envelope_trigger.step();
       envelope.step();
-      send_envelope_out(envelope_voltage(envelope.phase())); // TODO: Move to envelope.on_step()
+      send_envelope(envelope_voltage(envelope.phase())); // TODO: Move to envelope.on_step()
     });
     stage_mode.on_exit([this] {
       envelope_trigger.suspend_firing();
@@ -61,18 +61,18 @@ struct StageModule : public Module {
     });
 
     envelope.on_start([this] {
-      send_active_out(true);
+      send_active(true);
     });
     envelope.on_completion([this] {
-      send_active_out(false);
+      send_active(false);
       eoc_pulse.start();
     });
 
     eoc_pulse.on_start([this]{
-      send_eoc_out(true);
+      send_eoc(true);
     });
     eoc_pulse.on_completion([this] {
-      send_eoc_out(false);
+      send_eoc(false);
     });
 
     enter_mode(mode);
@@ -112,15 +112,15 @@ struct StageModule : public Module {
     return rack::engineGetSampleTime();
   }
 
-  void send_active_out(bool is_active) {
+  void send_active(bool is_active) {
     outputs[ACTIVE_OUT].value = UNIPOLAR_SIGNAL_RANGE.scale(is_active);
   }
 
-  void send_envelope_out(float envelope_out) {
-    outputs[ENVELOPE_OUT].value = envelope_out;
+  void send_envelope(float voltage) {
+    outputs[ENVELOPE_OUT].value = voltage;
   }
 
-  void send_eoc_out(bool is_pulsing) {
+  void send_eoc(bool is_pulsing) {
     outputs[EOC_OUT].value = UNIPOLAR_SIGNAL_RANGE.scale(is_pulsing);
   }
 
