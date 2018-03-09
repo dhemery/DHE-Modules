@@ -38,7 +38,6 @@ struct HostageModule : Module {
     envelope.on_completion([this] { end_cycle(); });
 
     sustain_mode.on_rising_edge([this] { begin_sustain(); });
-    sustain_mode.on_no_change([this] { send_active(sustain_mode.is_high()); });
     sustain_mode.on_falling_edge([this] { end_cycle(); });
 
     mode = &sustain_mode;
@@ -70,7 +69,13 @@ struct HostageModule : Module {
 
   void end_deferring() {
     output_voltage.hold();
+    choose_mode();
     mode->resume_firing();
+  }
+
+  void choose_mode() {
+    if (mode_switch.is_high()) enter_sustain_mode();
+    else enter_duration_mode();
   }
 
   // Choose GATE/DUR mode for when not DEFERring
@@ -88,12 +93,17 @@ struct HostageModule : Module {
   // SUSTAIN mode (active while gate is high)
   void enter_sustain_mode() {
     enter_mode(&sustain_mode);
+    send_active(sustain_mode.is_high());
+    if(sustain_mode.is_low()) end_cycle();
   }
 
-  void begin_sustain() {}
+  void begin_sustain() {
+    send_active(true);
+  }
 
   // DURATION mode (active while ramp is running)
   void enter_duration_mode() {
+    send_active(false);
     enter_mode(&duration_mode);
   }
 
