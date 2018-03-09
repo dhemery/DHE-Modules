@@ -8,9 +8,9 @@
 
 namespace DHE {
 struct BoosterStageModule : Module {
-  Mode stage_mode{};
-  Mode deferring_mode{};
-  Mode *mode{&stage_mode};
+  Mode stage_mode = {};
+  Mode deferring_mode = {};
+  Mode *mode = {&stage_mode};
 
   // TODO: Move this inside stage mode or an envelope class.
   float phase_0_voltage{0.f};

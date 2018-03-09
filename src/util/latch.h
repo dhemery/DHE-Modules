@@ -42,23 +42,13 @@ public:
     falling_edge_actions.push_back(std::move(action));
   }
 
-  /**
-   * Registers an action to be called when the latch is set to its current state.
-   * @param action called on when the latch is set to its current state
-   */
-  void on_no_change(std::function<void()> action) {
-    no_change_actions.push_back(std::move(action));
-  }
-
 protected:
   enum class State {
     UNKNOWN, LOW, HIGH
   } state = State::UNKNOWN;
 
   void set_state(State newState) {
-    if (state==newState) {
-      fire(no_change_actions);
-    } else {
+    if (state!=newState) {
       state = newState;
       fire(state==State::HIGH ? rising_edge_actions : falling_edge_actions);
     }
@@ -68,7 +58,6 @@ private:
   bool firing_events = true;
   std::vector<std::function<void()>> rising_edge_actions;
   std::vector<std::function<void()>> falling_edge_actions;
-  std::vector<std::function<void()>> no_change_actions;
 
   void fire(const std::vector<std::function<void()>> &actions) const {
     if (!firing_events)

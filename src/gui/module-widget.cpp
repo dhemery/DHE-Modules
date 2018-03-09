@@ -7,8 +7,6 @@
 
 #include "module-widget.h"
 
-extern rack::Plugin *plugin;
-
 namespace DHE {
 ModuleWidget::ModuleWidget(rack::Module *module, int widget_hp, const char *background)
     : rack::ModuleWidget(module) {

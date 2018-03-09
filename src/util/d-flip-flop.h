@@ -33,7 +33,7 @@ struct DFlipFlop : public Latch {
    * @param signal called on each step to obtain the signal to evaluate
    */
   explicit DFlipFlop(std::function<float()> signal)
-      : DFlipFlop{signal, 0.0f, 1.0f} {}
+      : signal{std::move(signal)} {}
 
   /**
    * Sets the state by comparing the signal to the thresholds.
@@ -52,7 +52,7 @@ struct DFlipFlop : public Latch {
 
 private:
   const std::function<float()> signal;
-  const float low_threshold;
-  const float high_threshold;
+  const float low_threshold = {0.f};
+  const float high_threshold = {1.f};
 };
 }

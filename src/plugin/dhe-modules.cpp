@@ -12,6 +12,11 @@
 #include "modules/upstage-module.h"
 
 rack::Plugin *plugin;
+rack::Model *modelBoosterStage;
+rack::Model *modelHostage;
+rack::Model *modelStage;
+rack::Model *modelSwave;
+rack::Model *modelUpstage;
 
 namespace DHE {
 template<typename TModel, typename TWidget, typename... TTag>
@@ -23,10 +28,16 @@ static rack::Model *createModel(std::string moduleSlug, TTag... tags) {
 void init(rack::Plugin *p) {
   plugin = p;
 
-  p->slug = "DHE-Modules";
+    p->slug = "DHE-Modules";
   p->version = TOSTRING(VERSION);
   p->website = "https://github.com/dhemery/DHE-Modules";
   p->manual = "https://github.com/dhemery/DHE-Modules/wiki";
+
+  modelBoosterStage = DHE::createModel<DHE::BoosterStageModule, DHE::BoosterStageWidget, rack::ModelTag>("Booster Stage", rack::ENVELOPE_GENERATOR_TAG);
+  modelHostage = DHE::createModel<DHE::HostageModule, DHE::HostageWidget, rack::ModelTag>("Hostage", rack::ENVELOPE_GENERATOR_TAG);
+  modelStage = DHE::createModel<DHE::StageModule, DHE::StageWidget, rack::ModelTag>("Stage", rack::ENVELOPE_GENERATOR_TAG);
+  modelSwave = DHE::createModel<DHE::SwaveModule, DHE::SwaveWidget, rack::ModelTag>("Swave", rack::WAVESHAPER_TAG);
+  modelUpstage = DHE::createModel<DHE::UpstageModule, DHE::UpstageWidget, rack::ModelTag>("Upstage", rack::ENVELOPE_GENERATOR_TAG);
 
   p->addModel(modelBoosterStage);
   p->addModel(modelHostage);
@@ -34,10 +45,3 @@ void init(rack::Plugin *p) {
   p->addModel(modelSwave);
   p->addModel(modelUpstage);
 }
-
-rack::Model
-    *modelBoosterStage = DHE::createModel<DHE::BoosterStageModule, DHE::BoosterStageWidget, rack::ModelTag>("Booster Stage", rack::ENVELOPE_GENERATOR_TAG);
-rack::Model *modelHostage = DHE::createModel<DHE::HostageModule, DHE::HostageWidget, rack::ModelTag>("Hostage", rack::ENVELOPE_GENERATOR_TAG);
-rack::Model *modelStage = DHE::createModel<DHE::StageModule, DHE::StageWidget, rack::ModelTag>("Stage", rack::ENVELOPE_GENERATOR_TAG);
-rack::Model *modelSwave = DHE::createModel<DHE::SwaveModule, DHE::SwaveWidget, rack::ModelTag>("Swave", rack::WAVESHAPER_TAG);
-rack::Model *modelUpstage = DHE::createModel<DHE::UpstageModule, DHE::UpstageWidget, rack::ModelTag>("Upstage", rack::ENVELOPE_GENERATOR_TAG);

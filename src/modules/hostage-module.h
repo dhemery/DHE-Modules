@@ -11,11 +11,11 @@
 namespace DHE {
 
 struct HostageModule : Module {
-  Mode deferring_mode{};
-  Mode timed_sustain_mode{};
-  Mode gated_sustain_mode{};
-  Mode *sustain_mode{&timed_sustain_mode};
-  Mode *mode{sustain_mode};
+  Mode deferring_mode = {};
+  Mode timed_sustain_mode = {};
+  Mode gated_sustain_mode = {};
+  Mode *sustain_mode = {&timed_sustain_mode};
+  Mode *mode = {sustain_mode};
 
   DFlipFlop defer_gate = DFlipFlop{[this] { return defer_gate_in(); }};
   Ramp eoc_pulse = {1e-3, [this] { return sample_time(); }};

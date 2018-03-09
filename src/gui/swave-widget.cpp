@@ -13,13 +13,6 @@ struct SwaveKnobLarge : rack::RoundKnob {
   }
 };
 
-struct SwaveKnobSmall : rack::RoundKnob {
-  SwaveKnobSmall() {
-    setSVG(rack::SVG::load(rack::assetPlugin(plugin, "res/swave/knob-small.svg")));
-//    box.size = mm2px(rack::Vec(9.f, 9.f));
-  }
-};
-
 struct SwavePort : rack::SVGPort {
   SwavePort() {
     background->svg = rack::SVG::load(assetPlugin(plugin, "res/swave/port.svg"));

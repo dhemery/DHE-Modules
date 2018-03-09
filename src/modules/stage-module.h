@@ -12,9 +12,9 @@
 namespace DHE {
 
 struct StageModule : public Module {
-  Mode stage_mode{};
-  Mode deferring_mode{};
-  Mode *mode{&stage_mode};
+  Mode stage_mode = {};
+  Mode deferring_mode = {};
+  Mode *mode = {&stage_mode};
 
   // TODO: Move this inside stage mode or an envelope class.
   float phase_0_voltage{0.f};
@@ -67,7 +67,7 @@ struct StageModule : public Module {
       eoc_pulse.start();
     });
 
-    eoc_pulse.on_start([this]{
+    eoc_pulse.on_start([this] {
       send_eoc(true);
     });
     eoc_pulse.on_completion([this] {
