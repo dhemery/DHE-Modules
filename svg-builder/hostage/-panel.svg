@@ -9,7 +9,7 @@ title: HOSTAGE
 
 {{ page | panel: 5.0 }}
 
-{{ page | switch: center_x, 25.0, "GATE", "TRIG" }}
+{{ page | switch: center_x, 25.0, "GATE", "TIMER" }}
 
 {{ page | cv: left_x, 43.5 }}
 {{ page | switch: right_x, 43.5, "100", "1", "10" }}
