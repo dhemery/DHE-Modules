@@ -2,7 +2,6 @@
 
 #include <util/d-flip-flop.h>
 #include <util/ramp.h>
-#include <util/track-and-hold.h>
 #include <util/mode.h>
 #include "util/controls.h"
 #include "module.h"

@@ -8,7 +8,6 @@
 #include "util/mode.h"
 #include "util/ramp.h"
 #include "util/range.h"
-#include "util/track-and-hold.h"
 
 namespace DHE {
 

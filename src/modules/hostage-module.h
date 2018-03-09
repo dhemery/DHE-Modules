@@ -7,7 +7,6 @@
 #include "util/controls.h"
 #include "util/d-flip-flop.h"
 #include "util/ramp.h"
-#include "util/track-and-hold.h"
 
 namespace DHE {
 
