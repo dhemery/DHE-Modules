@@ -1,22 +1,47 @@
 {
-  "version": "",
+  "version": "0.6.0dev",
   "modules": [
     {
       "plugin": "Fundamental",
+      "version": "0.6.0dev",
       "model": "Scope",
       "pos": [
-        480.0,
-        0.0
+        33,
+        1
       ],
       "params": [
-        0.0,
-        -1.7699992656707764,
-        0.0,
-        0.0,
-        -6.3149986267089844,
-        0.0,
-        0.0,
-        0.0
+        {
+          "paramId": 0,
+          "value": 0.0
+        },
+        {
+          "paramId": 1,
+          "value": -1.76999927
+        },
+        {
+          "paramId": 2,
+          "value": 0.0
+        },
+        {
+          "paramId": 3,
+          "value": 0.0
+        },
+        {
+          "paramId": 4,
+          "value": -6.31499863
+        },
+        {
+          "paramId": 5,
+          "value": 0.0
+        },
+        {
+          "paramId": 6,
+          "value": 0.0
+        },
+        {
+          "paramId": 7,
+          "value": 0.0
+        }
       ],
       "data": {
         "lissajous": 0,
@@ -25,136 +50,264 @@
     },
     {
       "plugin": "Fundamental",
+      "version": "0.6.0dev",
       "model": "LFO",
       "pos": [
-        0.0,
-        0.0
+        1,
+        1
       ],
       "params": [
-        1.0,
-        1.0,
-        -2.260000467300415,
-        0.0,
-        0.5,
-        0.0,
-        0.0
+        {
+          "paramId": 0,
+          "value": 1.0
+        },
+        {
+          "paramId": 1,
+          "value": 1.0
+        },
+        {
+          "paramId": 2,
+          "value": -2.26000047
+        },
+        {
+          "paramId": 3,
+          "value": 0.0
+        },
+        {
+          "paramId": 5,
+          "value": 0.5
+        },
+        {
+          "paramId": 4,
+          "value": 0.0
+        },
+        {
+          "paramId": 6,
+          "value": 0.0
+        }
       ]
     },
     {
       "plugin": "DHE-Modules",
+      "version": "0.6.0",
       "model": "Stage",
       "pos": [
-        195.0,
-        0.0
+        12,
+        1
       ],
       "params": [
-        1.0,
-        0.19850006699562073,
-        0.5
+        {
+          "paramId": 1,
+          "value": 1.0
+        },
+        {
+          "paramId": 2,
+          "value": 0.198500067
+        },
+        {
+          "paramId": 0,
+          "value": 0.5
+        }
       ]
     },
     {
       "plugin": "DHE-Modules",
+      "version": "0.6.0",
       "model": "Stage",
       "pos": [
-        255.0,
-        0.0
+        17,
+        1
       ],
       "params": [
-        0.0,
-        0.78649979829788208,
-        0.5
+        {
+          "paramId": 1,
+          "value": 0.0
+        },
+        {
+          "paramId": 2,
+          "value": 0.786499798
+        },
+        {
+          "paramId": 0,
+          "value": 0.5
+        }
       ]
     },
     {
       "plugin": "DHE-Modules",
+      "version": "0.6.0",
       "model": "Stage",
       "pos": [
-        315.0,
-        0.0
+        22,
+        1
       ],
       "params": [
-        1.0,
-        0.80600035190582275,
-        0.5
+        {
+          "paramId": 1,
+          "value": 1.0
+        },
+        {
+          "paramId": 2,
+          "value": 0.806000352
+        },
+        {
+          "paramId": 0,
+          "value": 0.5
+        }
       ]
     },
     {
       "plugin": "DHE-Modules",
+      "version": "0.6.0",
       "model": "Stage",
       "pos": [
-        375.0,
-        0.0
+        27,
+        1
       ],
       "params": [
-        0.0,
-        0.20000004768371582,
-        0.5
+        {
+          "paramId": 1,
+          "value": 0.0
+        },
+        {
+          "paramId": 2,
+          "value": 0.200000048
+        },
+        {
+          "paramId": 0,
+          "value": 0.5
+        }
       ]
     }
   ],
   "wires": [
     {
-      "outputModuleId": 2,
-      "outputId": 0,
-      "inputModuleId": 3,
-      "inputId": 0
-    },
-    {
-      "outputModuleId": 3,
-      "outputId": 0,
-      "inputModuleId": 4,
-      "inputId": 0
-    },
-    {
-      "outputModuleId": 4,
-      "outputId": 0,
-      "inputModuleId": 5,
-      "inputId": 0
-    },
-    {
-      "outputModuleId": 2,
-      "outputId": 1,
-      "inputModuleId": 3,
-      "inputId": 1
-    },
-    {
-      "outputModuleId": 3,
-      "outputId": 1,
-      "inputModuleId": 4,
-      "inputId": 1
-    },
-    {
-      "outputModuleId": 4,
-      "outputId": 1,
-      "inputModuleId": 5,
-      "inputId": 1
-    },
-    {
+      "color": {
+        "r": 0.788235366,
+        "g": 0.717647076,
+        "b": 0.054901965,
+        "a": 1.0
+      },
       "outputModuleId": 2,
       "outputId": 2,
       "inputModuleId": 3,
       "inputId": 2
     },
     {
+      "color": {
+        "r": 0.788235366,
+        "g": 0.0941176564,
+        "b": 0.278431386,
+        "a": 1.0
+      },
       "outputModuleId": 3,
       "outputId": 2,
       "inputModuleId": 4,
       "inputId": 2
     },
     {
+      "color": {
+        "r": 0.0470588282,
+        "g": 0.556862772,
+        "b": 0.0823529437,
+        "a": 1.0
+      },
       "outputModuleId": 4,
       "outputId": 2,
       "inputModuleId": 5,
       "inputId": 2
     },
     {
+      "color": {
+        "r": 0.0352941193,
+        "g": 0.525490224,
+        "b": 0.678431392,
+        "a": 1.0
+      },
+      "outputModuleId": 2,
+      "outputId": 1,
+      "inputModuleId": 3,
+      "inputId": 1
+    },
+    {
+      "color": {
+        "r": 0.788235366,
+        "g": 0.717647076,
+        "b": 0.054901965,
+        "a": 1.0
+      },
+      "outputModuleId": 3,
+      "outputId": 1,
+      "inputModuleId": 4,
+      "inputId": 1
+    },
+    {
+      "color": {
+        "r": 0.788235366,
+        "g": 0.0941176564,
+        "b": 0.278431386,
+        "a": 1.0
+      },
+      "outputModuleId": 4,
+      "outputId": 1,
+      "inputModuleId": 5,
+      "inputId": 1
+    },
+    {
+      "color": {
+        "r": 0.0470588282,
+        "g": 0.556862772,
+        "b": 0.0823529437,
+        "a": 1.0
+      },
+      "outputModuleId": 2,
+      "outputId": 0,
+      "inputModuleId": 3,
+      "inputId": 0
+    },
+    {
+      "color": {
+        "r": 0.0352941193,
+        "g": 0.525490224,
+        "b": 0.678431392,
+        "a": 1.0
+      },
+      "outputModuleId": 3,
+      "outputId": 0,
+      "inputModuleId": 4,
+      "inputId": 0
+    },
+    {
+      "color": {
+        "r": 0.788235366,
+        "g": 0.717647076,
+        "b": 0.054901965,
+        "a": 1.0
+      },
+      "outputModuleId": 4,
+      "outputId": 0,
+      "inputModuleId": 5,
+      "inputId": 0
+    },
+    {
+      "color": {
+        "r": 0.788235366,
+        "g": 0.0941176564,
+        "b": 0.278431386,
+        "a": 1.0
+      },
       "outputModuleId": 5,
-      "outputId": 2,
+      "outputId": 0,
       "inputModuleId": 0,
       "inputId": 0
     },
     {
+      "color": {
+        "r": 0.0470588282,
+        "g": 0.556862772,
+        "b": 0.0823529437,
+        "a": 1.0
+      },
       "outputModuleId": 1,
       "outputId": 3,
       "inputModuleId": 2,
