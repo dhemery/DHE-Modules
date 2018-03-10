@@ -12,7 +12,6 @@ namespace DHE {
 
 struct HostageModule : Module {
 
-  DFlipFlop defer_gate = DFlipFlop{[this] { return defer_gate_in(); }};
   Ramp eoc_pulse = {1e-3, [this] { return sample_time(); }};
   DFlipFlop sustain_gate = DFlipFlop{[this] { return hold_gate_in(); }};
   DFlipFlop sustain_trigger = DFlipFlop{[this] { return hold_gate_in(); }};
@@ -22,7 +21,7 @@ struct HostageModule : Module {
   Mode timed_sustain_mode = {};
   Mode gated_sustain_mode = {};
   SwitchedMode sustain_mode = {[this] { return mode_switch_in(); }, &timed_sustain_mode, &gated_sustain_mode};
-  Mode *mode = {&sustain_mode};
+  SwitchedMode executor = {[this] { return defer_gate_in(); }, &sustain_mode, &defer_mode};
 
   HostageModule() : Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT} {
     defer_mode.on_entry([this] {
@@ -84,14 +83,8 @@ struct HostageModule : Module {
       send_eoc(false);
     });
 
-    defer_gate.on_rising_edge([this] {
-      enter_mode(&defer_mode);
-    });
-    defer_gate.on_falling_edge([this] {
-      enter_mode(&sustain_mode);
-    });
-
-    mode->enter();
+    executor.on_exit([this] { eoc_pulse.step(); });
+    executor.enter();
   }
 
   void end_sustaining() {
@@ -100,16 +93,8 @@ struct HostageModule : Module {
   }
   void begin_sustaining() { send_active(true); }
 
-  void enter_mode(Mode *incoming_mode) {
-    mode->exit();
-    mode = incoming_mode;
-    mode->enter();
-  }
-
   void step() {
-    defer_gate.step();
-    mode->step();
-    eoc_pulse.step();
+    executor.step();
   }
 
   float defer_gate_in() const {
