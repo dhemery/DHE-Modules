@@ -13,29 +13,22 @@ namespace DHE {
 
 struct StageModule : public Module {
   Mode stage_mode = {};
-  Mode deferring_mode = {};
-  Mode *mode = {&stage_mode};
+  Mode defer_mode = {};
 
   // TODO: Move this inside stage mode or an envelope class.
   float phase_0_voltage{0.f};
 
-  DFlipFlop defer_gate = DFlipFlop{[this] { return defer_gate_in(); }};
   Ramp envelope = {[this] { return duration_in(); }, [this] { return sample_time(); }};
   DFlipFlop envelope_trigger = DFlipFlop{[this] { return envelope_gate_in(); }};
   Ramp eoc_pulse = {1e-3, [this] { return sample_time(); }};
 
-  StageModule() : Module(PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT) {
-    defer_gate.on_rising_edge([this] {
-      enter_mode(&deferring_mode);
-    });
-    defer_gate.on_falling_edge([this] {
-      enter_mode(&stage_mode);
-    });
+  SwitchedMode executor = {[this] { return defer_gate_in(); }, &stage_mode, &defer_mode};
 
-    deferring_mode.on_entry([this] {
+  StageModule() : Module(PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT) {
+    defer_mode.on_entry([this] {
       send_active(true);
     });
-    deferring_mode.on_step([this] {
+    defer_mode.on_step([this] {
       send_envelope(envelope_in());
     });
 
@@ -74,13 +67,8 @@ struct StageModule : public Module {
       send_eoc(false);
     });
 
-    enter_mode(mode);
-  }
-
-  void enter_mode(Mode *incoming_mode) {
-    mode->exit();
-    mode = incoming_mode;
-    mode->enter();
+    executor.on_step([this] { eoc_pulse.step(); });
+    executor.enter();
   }
 
   float defer_gate_in() const {
@@ -124,9 +112,7 @@ struct StageModule : public Module {
   }
 
   void step() override {
-    defer_gate.step();
-    mode->step();
-    eoc_pulse.step();
+    executor.step();
   }
 
   float taper(float phase) const {
