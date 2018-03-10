@@ -14,6 +14,8 @@ struct BoosterStageModule : Module {
 
   // TODO: Move this inside stage mode or an envelope class.
   float phase_0_voltage{0.f};
+  bool is_active{false};
+  bool is_eoc{false};
 
   DFlipFlop defer_gate = DFlipFlop{[this] { return defer_gate_in(); }};
   Ramp envelope = {[this] { return duration_in(); }, [this] { return sample_time(); }};
@@ -30,14 +32,14 @@ struct BoosterStageModule : Module {
     });
 
     deferring_mode.on_entry([this] {
-      send_active(true);
+      is_active = true;
     });
     deferring_mode.on_step([this] {
       send_envelope(envelope_in());
     });
 
     stage_mode.on_entry([this] {
-      send_active(false);
+      is_active = false;
       phase_0_voltage = envelope_in();
       envelope_trigger.resume_firing();
     });
@@ -57,18 +59,18 @@ struct BoosterStageModule : Module {
     });
 
     envelope.on_start([this] {
-      send_active(true);
+      is_active = true;
     });
     envelope.on_completion([this] {
-      send_active(false);
+      is_active = false;
       eoc_pulse.start();
     });
 
     eoc_pulse.on_start([this]{
-      send_eoc(true);
+      is_eoc = true;
     });
     eoc_pulse.on_completion([this] {
-      send_eoc(false);
+      is_eoc = false;
     });
 
     enter_mode(mode);  }
@@ -77,6 +79,8 @@ struct BoosterStageModule : Module {
     defer_gate.step();
     mode->step();
     eoc_pulse.step();
+    send_active();
+    send_eoc();
   }
 
   void enter_mode(Mode *incoming_mode) {
@@ -117,7 +121,7 @@ struct BoosterStageModule : Module {
     return Level::scaled(rotation, range);
   }
 
-  void send_active(bool is_active) {
+  void send_active() {
     outputs[ACTIVE_OUT].value = UNIPOLAR_SIGNAL_RANGE.scale(is_active || param(ACTIVE_BUTTON) > 0.5f);
   }
 
@@ -125,8 +129,8 @@ struct BoosterStageModule : Module {
     outputs[ENVELOPE_OUT].value = voltage;
   }
 
-  void send_eoc(bool is_pulsing) {
-    outputs[EOC_OUT].value = UNIPOLAR_SIGNAL_RANGE.scale(is_pulsing || param(EOC_BUTTON) > 0.5f);
+  void send_eoc() {
+    outputs[EOC_OUT].value = UNIPOLAR_SIGNAL_RANGE.scale(is_eoc || param(EOC_BUTTON) > 0.5f);
   }
 
   float sample_time() const {
