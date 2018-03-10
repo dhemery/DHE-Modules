@@ -45,16 +45,24 @@ class SwitchedMode : public Mode {
 
 public:
   SwitchedMode(std::function<float()> switch_signal, Mode *low_mode, Mode *high_mode) :
-      mode_switch(std::move(switch_signal)), current_mode{low_mode}{
-    mode_switch.on_rising_edge([this, high_mode] { enter_mode(high_mode); });
-    mode_switch.on_falling_edge([this, low_mode] { enter_mode(low_mode); });
+      mode_switch{std::move(switch_signal)}, current_mode{low_mode}{
+    mode_switch.on_rising_edge([this, high_mode] {
+      enter_mode(high_mode);
+    });
+    mode_switch.on_falling_edge([this, low_mode] {
+      enter_mode(low_mode);
+    });
 
-    on_entry([this] { current_mode->enter(); });
+    on_entry([this] {
+      current_mode->enter();
+    });
     on_step([this] {
       mode_switch.step();
       current_mode->step();
     });
-    on_exit([this] { current_mode->exit(); });
+    on_exit([this] {
+      current_mode->exit();
+    });
   }
 };
 }
