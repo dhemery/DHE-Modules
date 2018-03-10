@@ -23,7 +23,7 @@ struct BoosterStageModule : Module {
   Ramp eoc_pulse = {1e-3, [this] { return sample_time(); }};
   DFlipFlop envelope_trigger = DFlipFlop{[this] { return envelope_gate_in(); }};
 
-  SwitchedMode executor = {[this] { return defer_gate_in(); }, &stage_mode, &defer_mode};
+  SubmodeSwitch executor = {[this] { return defer_gate_in(); }, &stage_mode, &defer_mode};
 
   BoosterStageModule()
       : Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT} {

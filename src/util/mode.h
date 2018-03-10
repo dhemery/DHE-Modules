@@ -33,35 +33,35 @@ private:
 };
 
 
-class SwitchedMode : public Mode {
-  DFlipFlop mode_switch;
-  Mode *current_mode;
+class SubmodeSwitch : public Mode {
+  DFlipFlop submode_switch;
+  Mode *submode;
 
-  void enter_mode(Mode *incoming_mode) {
-    current_mode->exit();
-    current_mode = incoming_mode;
-    current_mode->enter();
+  void enter_submode(Mode *incoming_submode) {
+    submode->exit();
+    submode = incoming_submode;
+    submode->enter();
   }
 
 public:
-  SwitchedMode(std::function<float()> switch_signal, Mode *low_mode, Mode *high_mode) :
-      mode_switch{std::move(switch_signal)}, current_mode{low_mode}{
-    mode_switch.on_rising_edge([this, high_mode] {
-      enter_mode(high_mode);
+  SubmodeSwitch(std::function<float()> switch_signal, Mode *low_mode, Mode *high_mode) :
+      submode_switch{std::move(switch_signal)}, submode{low_mode}{
+    submode_switch.on_rising_edge([this, high_mode] {
+      enter_submode(high_mode);
     });
-    mode_switch.on_falling_edge([this, low_mode] {
-      enter_mode(low_mode);
+    submode_switch.on_falling_edge([this, low_mode] {
+      enter_submode(low_mode);
     });
 
     on_entry([this] {
-      current_mode->enter();
+      submode->enter();
     });
     on_step([this] {
-      mode_switch.step();
-      current_mode->step();
+      submode_switch.step();
+      submode->step();
     });
     on_exit([this] {
-      current_mode->exit();
+      submode->exit();
     });
   }
 };

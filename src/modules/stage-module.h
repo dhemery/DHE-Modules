@@ -22,7 +22,7 @@ struct StageModule : public Module {
   DFlipFlop envelope_trigger = DFlipFlop{[this] { return envelope_gate_in(); }};
   Ramp eoc_pulse = {1e-3, [this] { return sample_time(); }};
 
-  SwitchedMode executor = {[this] { return defer_gate_in(); }, &stage_mode, &defer_mode};
+  SubmodeSwitch executor = {[this] { return defer_gate_in(); }, &stage_mode, &defer_mode};
 
   StageModule() : Module(PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT) {
     defer_mode.on_entry([this] {

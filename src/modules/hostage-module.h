@@ -20,8 +20,8 @@ struct HostageModule : Module {
   Mode defer_mode = {};
   Mode timed_sustain_mode = {};
   Mode gated_sustain_mode = {};
-  SwitchedMode sustain_mode = {[this] { return mode_switch_in(); }, &timed_sustain_mode, &gated_sustain_mode};
-  SwitchedMode executor = {[this] { return defer_gate_in(); }, &sustain_mode, &defer_mode};
+  SubmodeSwitch sustain_mode = {[this] { return mode_switch_in(); }, &timed_sustain_mode, &gated_sustain_mode};
+  SubmodeSwitch executor = {[this] { return defer_gate_in(); }, &sustain_mode, &defer_mode};
 
   HostageModule() : Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT} {
     defer_mode.on_entry([this] {
@@ -83,7 +83,7 @@ struct HostageModule : Module {
       send_eoc(false);
     });
 
-    executor.on_exit([this] { eoc_pulse.step(); });
+    executor.on_step([this] { eoc_pulse.step(); });
     executor.enter();
   }
 
