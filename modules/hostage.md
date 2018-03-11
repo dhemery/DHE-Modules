@@ -1,6 +1,9 @@
 ---
-title: Hostage Module
+title: The Hostage Module
 ---
-Generates an envelope's sustain stage.
+<img class="panel" src="panel.svg" alt="The Hostage Panel" />
 
-Can also be used to delay a trigger.
+Generates a sustain stage
+controlled by
+either a gate signal
+or a built-in timer.

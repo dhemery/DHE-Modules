@@ -2,27 +2,42 @@
 layout: base
 ---
 
-## Modules
+## The Modules
 
-- [Stage](modules/stage/):
-  Generates a single stage in an envelope.
-- [Booster Stage](modules/booster-stage/):
-  A boosted version of Stage
-  with CV inputs,
-  sigmoid curves,
-  buttons to override inputs and outputs,
-  and more.
-- [Hostage](modules/hostage/):
-    Generates a sustain stage.
-- [Upstage](modules/upstage/):
-  A utility module for building envelopes.
-- [Swave](modules/hostage/)
-  A sigmoid waveshaper.
+**[Stage](modules/stage/)**
+generates a single stage envelope.
+Combine Stage modules
+to generate complex envelopes
+with any number of stages.
 
-## Guides
+**[Booster Stage](modules/booster-stage/)**
+enhances Stage's functionality,
+adding CV inputs,
+sigmoid curves,
+buttons to inject triggers and other control signals,
+and more.
 
-- [Generating Multi-Stage Envelopes](guides/generating-multi-stage-envelopes/)
+**[Hostage](modules/hostage/)**
+generates a sustain stage
+controlled by
+either a gate signal
+or a built-in timer.
 
-## Technical Details
+**[Upstage](modules/upstage/)**
+adds special-purpose envelope controls
+to
+inject triggers,
+suppress retriggers,
+set an envelope's starting voltage,
+and more.
 
-- [The Sigmoid Curve](technical/sigmoid/)
+**[Swave](modules/hostage/)**
+is a waveshaper with a unique sigmoid transfer function.
+
+## See Also
+
+- [Generating Single-Stage Envelopes](guides/single-stage/)
+- [Generating Multi-Stage Envelopes](guides/multi-stage/)
+- [Other Usage Guides](guides/)
+- [Technical Details](technical/) of how the DHE-Modules plugins work
+- [Documentation for Older Versions](versions/)
