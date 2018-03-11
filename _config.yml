@@ -1,0 +1,8 @@
+exclude:
+  - Rakefile
+  - Gemfile
+  - Gemfile.lock
+theme: jekyll-theme-slate
+incremental: true
+permalink: pretty
+show_downloads: true
