@@ -1,10 +1,3 @@
----
-title: Upstage Module
----
-
-A utility module for generating envelopes.
-
-
 <img style="padding-left: 10px" align="right" src="images/v0.6/upstage.png">
 
 **Upstage** offers controls to enhance a chain of Stage modules.

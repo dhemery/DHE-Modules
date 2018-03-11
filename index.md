@@ -1,5 +1,5 @@
 ---
-title: DHE Modules
+layout: base
 ---
 
 ## Modules
@@ -21,7 +21,7 @@ title: DHE Modules
 
 ## Guides
 
-- [Generating Multistage Envelopes](guides/generating-multistage-envelopes/)
+- [Generating Multi-Stage Envelopes](guides/generating-multi-stage-envelopes/)
 
 ## Technical Details
 

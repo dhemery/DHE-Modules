@@ -1,8 +1,9 @@
+title: DHE Modules
+theme: jekyll-theme-slate
+show_downloads: true
+incremental: true
+permalink: pretty
 exclude:
   - Rakefile
   - Gemfile
   - Gemfile.lock
-theme: jekyll-theme-slate
-incremental: true
-permalink: pretty
-show_downloads: true

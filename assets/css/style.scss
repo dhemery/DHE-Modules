@@ -2,3 +2,8 @@
 ---
 
 @import "{{ site.theme }}";
+
+#header_wrap {
+  a { color: #F2F2F2; text-decoration: none; }
+  a:hover { text-decoration: underline; }
+}
