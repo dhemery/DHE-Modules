@@ -28,7 +28,7 @@ static rack::Model *createModel(std::string moduleSlug, TTag... tags) {
 void init(rack::Plugin *p) {
   plugin = p;
 
-    p->slug = "DHE-Modules";
+  p->slug = "DHE-Modules";
   p->version = TOSTRING(VERSION);
   p->website = "https://github.com/dhemery/DHE-Modules";
   p->manual = "https://github.com/dhemery/DHE-Modules/wiki";

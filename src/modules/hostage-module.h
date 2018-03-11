@@ -12,10 +12,10 @@ namespace DHE {
 
 struct HostageModule : Module {
 
-  Ramp eoc_pulse = {1e-3, [this] { return sample_time(); }};
   DFlipFlop sustain_gate = DFlipFlop{[this] { return hold_gate_in(); }};
   DFlipFlop sustain_trigger = DFlipFlop{[this] { return hold_gate_in(); }};
-  Ramp timer = {[this] { return duration_in(); }, [this] { return sample_time(); }};
+  Ramp timer = Ramp{[this] { return sample_time()/duration_in(); }};
+  Ramp eoc_pulse = Ramp{[this] { return sample_time()/1e-3f; }};
 
   Mode defer_mode = {};
   Mode timed_sustain_mode = {};
@@ -32,7 +32,7 @@ struct HostageModule : Module {
     });
 
     timed_sustain_mode.on_entry([this] {
-      sustain_trigger.resume_firing();
+      sustain_trigger.enable();
       send_active(false);
       send_envelope(envelope_in());
     });
@@ -41,15 +41,15 @@ struct HostageModule : Module {
       timer.step();
     });
     timed_sustain_mode.on_exit([this] {
-      sustain_trigger.suspend_firing();
+      sustain_trigger.disable();
       timer.stop();
     });
 
-    sustain_trigger.on_rising_edge([this] {
+    sustain_trigger.on_rise([this] {
       timer.start();
     });
 
-    timer.on_start([this]{
+    timer.on_start([this] {
       begin_sustaining();
     });
     timer.on_completion([this] {
@@ -58,28 +58,28 @@ struct HostageModule : Module {
 
     gated_sustain_mode.on_entry([this] {
       sustain_gate.step();
-      sustain_gate.resume_firing();
-      if(sustain_gate.is_high()) begin_sustaining();
+      sustain_gate.enable();
+      if (sustain_gate.is_high()) begin_sustaining();
       else end_sustaining();
     });
     gated_sustain_mode.on_step([this] {
       sustain_gate.step();
     });
-    gated_sustain_mode.on_exit([this]{
-      sustain_gate.suspend_firing();
+    gated_sustain_mode.on_exit([this] {
+      sustain_gate.disable();
     });
 
-    sustain_gate.on_rising_edge([this] {
+    sustain_gate.on_rise([this] {
       begin_sustaining();
     });
-    sustain_gate.on_falling_edge([this] {
+    sustain_gate.on_fall([this] {
       end_sustaining();
     });
 
     eoc_pulse.on_start([this] {
       send_eoc(true);
     });
-    eoc_pulse.on_completion([this]{
+    eoc_pulse.on_completion([this] {
       send_eoc(false);
     });
 

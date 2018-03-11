@@ -10,36 +10,34 @@ class Latch {
 public:
   bool is_high() const { return state==State::HIGH; }
 
-  bool is_low() const { return state==State::LOW; }
-
   /**
    * Suspends firing events.
    */
-  void suspend_firing() {
-    firing_events = false;
+  void disable() {
+    enabled = false;
   }
 
   /**
    * Resumes firing events.
    */
-  void resume_firing() {
-    firing_events = true;
+  void enable() {
+    enabled = true;
   }
 
   /**
    * Registers an action to be called on each rising edge.
    * @param action called on each rising edge
    */
-  void on_rising_edge(std::function<void()> action) {
-    rising_edge_actions.push_back(std::move(action));
+  void on_rise(std::function<void()> action) {
+    rise_actions.push_back(std::move(action));
   }
 
   /**
    * Registers an action to be called on each falling edge.
    * @param action called on each falling edge
    */
-  void on_falling_edge(std::function<void()> action) {
-    falling_edge_actions.push_back(std::move(action));
+  void on_fall(std::function<void()> action) {
+    fall_actions.push_back(std::move(action));
   }
 
 protected:
@@ -47,20 +45,19 @@ protected:
     UNKNOWN, LOW, HIGH
   } state = State::UNKNOWN;
 
-  void set_state(State newState) {
-    if (state!=newState) {
-      state = newState;
-      fire(state==State::HIGH ? rising_edge_actions : falling_edge_actions);
-    }
+  void set_state(State incoming_state) {
+    if (state==incoming_state) return;
+    state = incoming_state;
+    fire(state==State::HIGH ? rise_actions : fall_actions);
   }
 
 private:
-  bool firing_events = true;
-  std::vector<std::function<void()>> rising_edge_actions;
-  std::vector<std::function<void()>> falling_edge_actions;
+  bool enabled = true;
+  std::vector<std::function<void()>> rise_actions;
+  std::vector<std::function<void()>> fall_actions;
 
   void fire(const std::vector<std::function<void()>> &actions) const {
-    if (!firing_events)
+    if (!enabled)
       return;
     for (const auto &action : actions)
       action();

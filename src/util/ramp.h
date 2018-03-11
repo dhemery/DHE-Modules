@@ -9,15 +9,17 @@
 namespace DHE {
 
 /**
- * A ramp that advances its phase from 0 to 1 in increments.
+ * A ramp that advances its phase from 0 to 1 in increments supplied by a given
+ * supplier.
  *
- * When the phase advances to 1, the ramp fires end-of-cycle and stops advancing.
+ * When the phase advances to 1, the ramp fires 'completion' and stops
+ * advancing.
  */
 class Ramp {
 public:
   /*!
-   * Constructs a ramp that obtains the phase increment for each step by
-   * calling the given supplier.
+   * Constructs a ramp that advances its phase on each step by the amount
+   * supplied by the given supplier.
    *
    * The newly constructed ramp is at phase 0 and inactive.
    *
@@ -29,66 +31,33 @@ public:
     stop();
   }
 
-  /*!
-   * Constructs a ramp that advances its phase in steps of size:
-   *
-   *     ramp duration / step duration
-   *
-   * where the ramp duration and step duration are supplied by the suppliers.
-   *
-   * The newly constructed ramp is at phase 0 and inactive.
-   *
-   * @param ramp_duration_supplier supplies the duration of the ramp
-   * @param step_duration_supplier supplies the duration of each step
-   */
-  Ramp(std::function<float()> ramp_duration_supplier, std::function<float()> step_duration_supplier)
-      : Ramp{[step_duration_supplier, ramp_duration_supplier] { return step_duration_supplier()/ramp_duration_supplier(); }} {
-  }
-
-  /*!
-   * Constructs a ramp that advances its phase in steps of size:
-   *
-   *     ramp duration / step duration
-   *
-   * with the given ramp duration and the step duration supplied by the
-   * supplier.
-   *
-   * The newly constructed ramp is at phase 0 and inactive.
-   *
-   * @param ramp_duration the duration of the ramp
-   * @param step_duration_supplier supplies the duration of each step
-   */
-  Ramp(float ramp_duration, std::function<float()> step_duration_supplier)
-      : Ramp{[ramp_duration, step_duration_supplier] { return step_duration_supplier()/ramp_duration; }} {}
-
   /**
-   * Activates the ramp at phase 0.
-   *
-   * Subsequent calls to step() will advance the phase.
+   * Sets the phase to 0, actives the ramp, and fires 'start'. Subsequent steps
+   * will advance the phase.
    */
   void start() {
     progress = 0.0;
-    active.resume_firing();
+    active.enable();
     active.set();
   }
 
   /*!
-   * Deactivates the ramp at phase 0.
+   * Sets the phase to 0 and deactives the ramp. Subsequent steps will not
+   * advance the phase.
    *
-   * Subsequent calls to step() will not advance the phase.
-   *
-   * Stopping the ramp does not fire an end-of-cycle event.
+   * Stopping the ramp does not fire any events.
    */
   void stop() {
     progress = 0.0;
-    active.suspend_firing();
+    active.disable();
     active.reset();
   }
 
   /**
-   * Advances the phase at the ramp's current rate.
+   * Advances the phase by the amount supplied by the phase increment supplier.
    *
-   * If the phase advances to 1, the ramp fires end-of-cycle and becomes inactive.
+   * If the phase advances to 1, the ramp fires 'completion' and becomes
+   * inactive.
    *
    * If the ramp is inactive, this function has no effect.
    */
@@ -123,16 +92,20 @@ public:
    */
   float phase() const { return progress; }
 
+  /**
+   * Registers an action to be called when the ramp starts.
+   * @param action called when the ramp starts
+   */
   void on_start(std::function<void()> action) {
-    active.on_rising_edge(std::move(action));
+    active.on_rise(std::move(action));
   }
 
   /**
    * Registers an action to be called when the ramp's phase advances to 1.
-   * @param action called when the ramp phase advances to 1
+   * @param action called when the ramp's phase advances to 1
    */
   void on_completion(std::function<void()> action) {
-    active.on_falling_edge(std::move(action));
+    active.on_fall(std::move(action));
   }
 
 private:

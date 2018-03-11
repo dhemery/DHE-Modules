@@ -50,7 +50,7 @@ struct BoosterStageSwitch3 : rack::SVGSwitch, rack::ToggleSwitch {
 };
 
 BoosterStageWidget::BoosterStageWidget(rack::Module *module) : ModuleWidget(module, 8, "res/booster-stage/panel.svg") {
-  auto width = 8.f * 5.08f;
+  auto width = 8.f*5.08f;
 
   auto left_x = width/6.f + 0.3333333f;
   auto center_x = width/2.f;

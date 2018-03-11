@@ -18,12 +18,15 @@ struct StageModule : public Module {
   // TODO: Move this inside stage mode or an envelope class.
   float phase_0_voltage{0.f};
 
-  Ramp envelope = {[this] { return duration_in(); }, [this] { return sample_time(); }};
+  Ramp envelope = Ramp{[this] { return sample_time()/duration_in(); }};
   DFlipFlop envelope_trigger = DFlipFlop{[this] { return envelope_gate_in(); }};
-  Ramp eoc_pulse = {1e-3, [this] { return sample_time(); }};
+  Ramp eoc_pulse = Ramp{[this] { return sample_time()/1e-3f; }};
 
   SubmodeSwitch executor = {[this] { return defer_gate_in(); }, &stage_mode, &defer_mode};
 
+  void onReset() override {
+    Module::onReset();
+  }
   StageModule() : Module(PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT) {
     defer_mode.on_entry([this] {
       send_active(true);
@@ -35,7 +38,7 @@ struct StageModule : public Module {
     stage_mode.on_entry([this] {
       send_active(false);
       phase_0_voltage = envelope_in();
-      envelope_trigger.resume_firing();
+      envelope_trigger.enable();
     });
     stage_mode.on_step([this] {
       envelope_trigger.step();
@@ -43,11 +46,11 @@ struct StageModule : public Module {
       send_envelope(envelope_voltage(envelope.phase())); // TODO: Move to envelope.on_step()
     });
     stage_mode.on_exit([this] {
-      envelope_trigger.suspend_firing();
+      envelope_trigger.disable();
       envelope.stop();
     });
 
-    envelope_trigger.on_rising_edge([this] {
+    envelope_trigger.on_rise([this] {
       phase_0_voltage = envelope_in();
       envelope.start();
     });

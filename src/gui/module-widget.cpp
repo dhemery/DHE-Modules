@@ -45,7 +45,7 @@ void ModuleWidget::install_screws() {
 
   screw_positions.pop_back();
 
-  for(auto p : screw_positions) {
+  for (auto p : screw_positions) {
     install_screw<rack::ScrewSilver>(p);
   }
 }

@@ -6,7 +6,7 @@
 
 namespace DHE {
 struct Mode {
-  void enter() { fire(entry_actions);  }
+  void enter() { fire(entry_actions); }
   void exit() { fire(exit_actions); }
   void step() { fire(step_actions); }
 
@@ -24,14 +24,13 @@ struct Mode {
 
 private:
   void fire(const std::vector<std::function<void()>> &actions) {
-    for(const auto &action : actions) action();
+    for (const auto &action : actions) action();
   }
 
   std::vector<std::function<void()>> entry_actions;
   std::vector<std::function<void()>> exit_actions;
   std::vector<std::function<void()>> step_actions;
 };
-
 
 class SubmodeSwitch : public Mode {
   DFlipFlop submode_switch;
@@ -45,11 +44,11 @@ class SubmodeSwitch : public Mode {
 
 public:
   SubmodeSwitch(std::function<float()> switch_signal, Mode *low_mode, Mode *high_mode) :
-      submode_switch{std::move(switch_signal)}, submode{low_mode}{
-    submode_switch.on_rising_edge([this, high_mode] {
+      submode_switch{std::move(switch_signal)}, submode{low_mode} {
+    submode_switch.on_rise([this, high_mode] {
       enter_submode(high_mode);
     });
-    submode_switch.on_falling_edge([this, low_mode] {
+    submode_switch.on_fall([this, low_mode] {
       enter_submode(low_mode);
     });
 
