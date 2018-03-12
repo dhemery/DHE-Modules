@@ -9,11 +9,11 @@ title: HOSTAGE
 
 {{ page | panel: 5.0 }}
 
-{{ page | switch: center_x, 25.0, "GATE", "TIMER" }}
+{% include panel/switch.svg x=center_x y=25.0 high="GATE" low="TIMER" %}
 
 {% include panel/port/cv.svg x=left_x y=43.5 %}
 
-{{ page | switch: right_x, 43.5, "100", "1", "10" }}
+{% include panel/switch.svg x=right_x y=43.5 high="100" low="1" mid="10" %}
 
 {% include panel/knob/large.svg x=center_x y=62.0 label="DURATION" %}
 

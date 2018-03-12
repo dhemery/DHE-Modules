@@ -11,7 +11,7 @@ title: UPSTAGE
 
 {% include panel/knob/large.svg x=center_x y=25.0 label="LEVEL" %}
 {% include panel/port/cv.svg x=left_x y=43.5 %}
-{{ page | switch: right_x, 43.5, "UNI", "BI" }}
+{% include panel/switch.svg x=right_x y=43.5 high="UNI" low="BI"%}
 
 {{ page | button: left_x, 62.0, "WAIT" }}
 {{ page | button: right_x, 62.0, "TRIG" }}
