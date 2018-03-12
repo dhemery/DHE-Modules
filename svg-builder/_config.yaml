@@ -1,5 +1,4 @@
-source: svg-builder
-destination: res
+destination: ../res
 incremental: true
 defaults:
   -
