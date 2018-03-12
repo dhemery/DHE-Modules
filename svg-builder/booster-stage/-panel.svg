@@ -24,8 +24,8 @@ title: BOOSTER STAGE
 {% include panel/knob/large.svg x=center_x y=62.0 label="DURATION" %}
 {{ page | switch: right_x, 62.0, "100", "1", "10" }}
 
-{{ page | in_port_button: left_x, 82, "DEFER" }}
-{{ page | out_port_button: right_x, 82, "ACTIVE" }}
+{% include panel/port/in-with-button.svg x=left_x y=82.0 label="DEFER" %}
+{% include panel/port/out-with-button.svg x=right_x y=82.0 label="ACTIVE" %}
 
 {{ page | in_port_button: left_x, 97, "TRIG" }}
 {{ page | out_port_button: right_x, 97, "EOC" }}

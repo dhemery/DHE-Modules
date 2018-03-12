@@ -46,10 +46,12 @@
           stroke="#990000" fill="#fff0f0"/>
         <text dominant-baseline="baseline" text-anchor="middle" fill="#990000" x="20.984250984168032" y="226.7716535424" style="font-family:Proxima Nova;font-weight:bold;font-size:7.0px">DEFER</text>
 
+
         <rect x="62.47539468478945" y="218.63549868681753" width="52.41141732262501" height="39.361548556245"
           stroke-width="1.033464566925" rx="3.0" ry="3.0"
           stroke="#990000" fill="#990000"/>
         <text dominant-baseline="baseline" text-anchor="middle" fill="#fff0f0" x="99.01574901535196" y="226.7716535424" style="font-family:Proxima Nova;font-weight:bold;font-size:7.0px">ACTIVE</text>
+
 
 
         <rect x="5.113187992105531" y="262.9268372693175" width="52.411417322625006" height="39.361548556245"
