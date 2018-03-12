@@ -13,8 +13,8 @@ title: UPSTAGE
 {% include panel/port/cv.svg x=left_x y=43.5 %}
 {% include panel/switch.svg x=right_x y=43.5 high="UNI" low="BI"%}
 
-{{ page | button: left_x, 62.0, "WAIT" }}
-{{ page | button: right_x, 62.0, "TRIG" }}
+{% include panel/button.svg x=left_x y=62 label="WAIT" %}
+{% include panel/button.svg x=right_x y=62 label="TRIG" %}
 
 {% include panel/port/in.svg x=left_x y=82.0 label="WAIT" %}
 
