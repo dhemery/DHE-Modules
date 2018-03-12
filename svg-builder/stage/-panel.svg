@@ -9,9 +9,9 @@ title: STAGE
 
 {{ page | panel: 5.0 }}
 
-{{ page | large_knob: center_x, 25.0, "LEVEL" }}
-{{ page | large_knob: center_x, 43.5, "CURVE" }}
-{{ page | large_knob: center_x, 62.0, "DURATION" }}
+{% include panel/knob/large.svg x=center_x y=25.0 label="LEVEL" %}
+{% include panel/knob/large.svg x=center_x y=43.5 label="CURVE" %}
+{% include panel/knob/large.svg x=center_x y=62.0 label="DURATION" %}
 
 
 {% include panel/port/in.svg x=left_x y=82.0 label="DEFER" %}

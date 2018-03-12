@@ -8,8 +8,11 @@
 <rect x="0" y="0" width="75.0" height="380.01968503784997" stroke="#009900" fill="#f0fff0" stroke-width="1"/><text dominant-baseline="baseline" text-anchor="middle" fill="#009900" x="37.5" y="26.5748031495" style="font-family:Proxima Nova;font-weight:bold;font-size:12.0px">STAGE</text><text dominant-baseline="hanging" text-anchor="middle" fill="#009900" x="37.5" y="353.44488188835" style="font-family:Proxima Nova;font-weight:bold;font-size:12.0px">DHE</text>
 
 <text dominant-baseline="baseline" text-anchor="middle" fill="#009900" x="37.49999999985" y="51.67322834625" style="font-family:Proxima Nova;font-weight:bold;font-size:9.0px">LEVEL</text>
+
 <text dominant-baseline="baseline" text-anchor="middle" fill="#009900" x="37.49999999985" y="106.29921259800001" style="font-family:Proxima Nova;font-weight:bold;font-size:9.0px">CURVE</text>
+
 <text dominant-baseline="baseline" text-anchor="middle" fill="#009900" x="37.49999999985" y="160.92519684975002" style="font-family:Proxima Nova;font-weight:bold;font-size:9.0px">DURATION</text>
+
 
 
 

@@ -15,7 +15,7 @@ title: HOSTAGE
 
 {{ page | switch: right_x, 43.5, "100", "1", "10" }}
 
-{{ page | large_knob: center_x, 62.0, "DURATION" }}
+{% include panel/knob/large.svg x=center_x y=62.0 label="DURATION" %}
 
 {% include panel/port/in.svg x=left_x y=82.0 label="DEFER" %}
 {% include panel/port/out.svg x=right_x y=82.0 label="ACTIVE" %}

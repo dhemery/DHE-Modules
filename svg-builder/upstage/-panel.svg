@@ -9,7 +9,7 @@ title: UPSTAGE
 
 {{ page | panel: 5.0 }}
 
-{{ page | large_knob: center_x, 25.0, "LEVEL" }}
+{% include panel/knob/large.svg x=center_x y=25.0 label="LEVEL" %}
 {% include panel/port/cv.svg x=left_x y=43.5 %}
 {{ page | switch: right_x, 43.5, "UNI", "BI" }}
 

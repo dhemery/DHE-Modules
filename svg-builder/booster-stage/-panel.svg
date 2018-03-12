@@ -11,17 +11,17 @@ title: BOOSTER STAGE
 
 {{ page | connector: left_x, 25.0, right_x, 25.0 }}
 {% include panel/port/cv.svg x=left_x y=25.0 %}
-{{ page | large_knob: center_x, 25.0, "LEVEL" }}
+{% include panel/knob/large.svg x=center_x y=25.0 label="LEVEL" %}
 {{ page | switch: right_x, 25.0, "UNI", "BI" }}
 
 {{ page | connector: left_x, 43.5, right_x, 43.5 }}
 {% include panel/port/cv.svg x=left_x y=43.5 %}
-{{ page | large_knob: center_x, 43.5, "CURVE" }}
+{% include panel/knob/large.svg x=center_x y=43.5 label="CURVE" %}
 {{ page | shape_switch: right_x, 43.5 }}
 
 {{ page | connector: left_x, 62.0, right_x, 62.0 }}
 {% include panel/port/cv.svg x=left_x y=62.0 %}
-{{ page | large_knob: center_x, 62.0, "DURATION" }}
+{% include panel/knob/large.svg x=center_x y=62.0 label="DURATION" %}
 {{ page | switch: right_x, 62.0, "100", "1", "10" }}
 
 {{ page | in_port_button: left_x, 82, "DEFER" }}

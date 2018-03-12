@@ -7,7 +7,7 @@ title: SWAVE
 
 {{ page | panel: 4.0 }}
 
-{{ page | large_knob: center_x, 25.0, "Curve" }}
+{% include panel/knob/large.svg x=center_x y=25.0 label="CURVE" %}
 {% include panel/port/cv.svg x=center_x y=43.5 %}
 {{ page | shape_switch: center_x, 62.0 }}
 

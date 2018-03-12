@@ -15,6 +15,7 @@
         <text dominant-baseline="baseline" text-anchor="middle" fill="#990000" x="20.984250984168032" y="58.4645669289" style="font-family:Proxima Nova;font-weight:bold;font-size:7.0px">CV</text>
 
 <text dominant-baseline="baseline" text-anchor="middle" fill="#990000" x="59.99999999976" y="51.67322834625" style="font-family:Proxima Nova;font-weight:bold;font-size:9.0px">LEVEL</text>
+
 <text dominant-baseline="baseline" text-anchor="middle" fill="#990000" x="99.01574901535196" y="61.491141732037505" style="font-family:Proxima Nova;font-weight:bold;font-size:7.0px">UNI</text><text dominant-baseline="hanging" text-anchor="middle" fill="#990000" x="99.01574901535196" y="86.1466535429625" style="font-family:Proxima Nova;font-weight:bold;font-size:7.0px">BI</text>
 
 <line x1="20.984250984168032" y1="128.44488188925" x2="99.01574901535196" y2="128.44488188925" stroke="#990000" stroke-width="1.033464566925" />
@@ -25,6 +26,7 @@
         <text dominant-baseline="baseline" text-anchor="middle" fill="#990000" x="20.984250984168032" y="113.09055118065001" style="font-family:Proxima Nova;font-weight:bold;font-size:7.0px">CV</text>
 
 <text dominant-baseline="baseline" text-anchor="middle" fill="#990000" x="59.99999999976" y="106.29921259800001" style="font-family:Proxima Nova;font-weight:bold;font-size:9.0px">CURVE</text>
+
 <text dominant-baseline="baseline" text-anchor="middle" fill="#990000" x="99.01574901535196" y="116.11712598378752" style="font-family:Proxima Nova;font-weight:bold;font-size:7.0px">S</text><text dominant-baseline="hanging" text-anchor="middle" fill="#990000" x="99.01574901535196" y="140.7726377947125" style="font-family:Proxima Nova;font-weight:bold;font-size:7.0px">J</text>
 
 <line x1="20.984250984168032" y1="183.070866141" x2="99.01574901535196" y2="183.070866141" stroke="#990000" stroke-width="1.033464566925" />
@@ -35,6 +37,7 @@
         <text dominant-baseline="baseline" text-anchor="middle" fill="#990000" x="20.984250984168032" y="167.7165354324" style="font-family:Proxima Nova;font-weight:bold;font-size:7.0px">CV</text>
 
 <text dominant-baseline="baseline" text-anchor="middle" fill="#990000" x="59.99999999976" y="160.92519684975002" style="font-family:Proxima Nova;font-weight:bold;font-size:9.0px">DURATION</text>
+
 <text dominant-baseline="baseline" text-anchor="middle" fill="#990000" x="99.01574901535196" y="166.31397637728753" style="font-family:Proxima Nova;font-weight:bold;font-size:7.0px">100</text><text dominant-baseline="hanging" text-anchor="middle" fill="#990000" x="99.01574901535196" y="199.8277559047125" style="font-family:Proxima Nova;font-weight:bold;font-size:7.0px">1</text><text dominant-baseline="middle" text-anchor="start" fill="#990000" x="105.43799310981446" y="183.070866141" style="font-family:Proxima Nova;font-weight:bold;font-size:7.0px">10</text>
 
 
