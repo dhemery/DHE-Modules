@@ -10,17 +10,17 @@ title: BOOSTER STAGE
 {{ page | panel: 8.0 }}
 
 {{ page | connector: left_x, 25.0, right_x, 25.0 }}
-{{ page | cv: left_x, 25.0 }}
+{% include panel/port/cv.svg x=left_x y=25.0 %}
 {{ page | large_knob: center_x, 25.0, "LEVEL" }}
 {{ page | switch: right_x, 25.0, "UNI", "BI" }}
 
 {{ page | connector: left_x, 43.5, right_x, 43.5 }}
-{{ page | cv: left_x, 43.5 }}
+{% include panel/port/cv.svg x=left_x y=43.5 %}
 {{ page | large_knob: center_x, 43.5, "CURVE" }}
 {{ page | shape_switch: right_x, 43.5 }}
 
 {{ page | connector: left_x, 62.0, right_x, 62.0 }}
-{{ page | cv: left_x, 62.0 }}
+{% include panel/port/cv.svg x=left_x y=62.0 %}
 {{ page | large_knob: center_x, 62.0, "DURATION" }}
 {{ page | switch: right_x, 62.0, "100", "1", "10" }}
 
@@ -30,5 +30,5 @@ title: BOOSTER STAGE
 {{ page | in_port_button: left_x, 97, "TRIG" }}
 {{ page | out_port_button: right_x, 97, "EOC" }}
 
-{{ page | in_port: left_x, 112.0, "IN" }}
-{{ page | out_port: right_x, 112.0, "OUT" }}
+{% include panel/port/in.svg x=left_x y=112.0 label="IN" %}
+{% include panel/port/out.svg x=right_x y=112.0 label="OUT" %}

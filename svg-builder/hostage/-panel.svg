@@ -11,16 +11,17 @@ title: HOSTAGE
 
 {{ page | switch: center_x, 25.0, "GATE", "TIMER" }}
 
-{{ page | cv: left_x, 43.5 }}
+{% include panel/port/cv.svg x=left_x y=43.5 %}
+
 {{ page | switch: right_x, 43.5, "100", "1", "10" }}
 
 {{ page | large_knob: center_x, 62.0, "DURATION" }}
 
-{{ page | in_port: left_x, 82, "DEFER" }}
-{{ page | out_port: right_x, 82, "ACTIVE" }}
+{% include panel/port/in.svg x=left_x y=82.0 label="DEFER" %}
+{% include panel/port/out.svg x=right_x y=82.0 label="ACTIVE" %}
 
-{{ page | in_port: left_x, 97, "HOLD" }}
-{{ page | out_port: right_x, 97, "EOC" }}
+{% include panel/port/in.svg x=left_x y=97.0 label="HOLD" %}
+{% include panel/port/out.svg x=right_x y=97.0 label="EOC" %}
 
-{{ page | in_port: left_x, 112.0, "IN" }}
-{{ page | out_port: right_x, 112.0, "OUT" }}
+{% include panel/port/in.svg x=left_x y=112.0 label="IN" %}
+{% include panel/port/out.svg x=right_x y=112.0 label="OUT" %}

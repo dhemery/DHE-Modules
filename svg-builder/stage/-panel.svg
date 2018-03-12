@@ -13,11 +13,12 @@ title: STAGE
 {{ page | large_knob: center_x, 43.5, "CURVE" }}
 {{ page | large_knob: center_x, 62.0, "DURATION" }}
 
-{{ page | in_port: left_x, 82, "DEFER" }}
-{{ page | out_port: right_x, 82, "ACTIVE" }}
 
-{{ page | in_port: left_x, 97, "TRIG" }}
-{{ page | out_port: right_x, 97, "EOC" }}
+{% include panel/port/in.svg x=left_x y=82.0 label="DEFER" %}
+{% include panel/port/out.svg x=right_x y=82.0 label="ACTIVE" %}
 
-{{ page | in_port: left_x, 112.0, "IN" }}
-{{ page | out_port: right_x, 112.0, "OUT" }}
+{% include panel/port/in.svg x=left_x y=97.0 label="TRIG" %}
+{% include panel/port/out.svg x=right_x y=97.0 label="EOC" %}
+
+{% include panel/port/in.svg x=left_x y=112.0 label="IN" %}
+{% include panel/port/out.svg x=right_x y=112.0 label="OUT" %}

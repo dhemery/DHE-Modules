@@ -8,8 +8,8 @@ title: SWAVE
 {{ page | panel: 4.0 }}
 
 {{ page | large_knob: center_x, 25.0, "Curve" }}
-{{ page | cv: center_x, 43.5 }}
+{% include panel/port/cv.svg x=center_x y=43.5 %}
 {{ page | shape_switch: center_x, 62.0 }}
 
-{{ page | in_port: center_x, 97.0, "IN" }}
-{{ page | out_port: center_x, 112.0, "OUT" }}
+{% include panel/port/in.svg x=center_x y=97.0 label="IN" %}
+{% include panel/port/out.svg x=center_x y=112.0 label="OUT" %}

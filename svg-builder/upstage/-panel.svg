@@ -10,15 +10,15 @@ title: UPSTAGE
 {{ page | panel: 5.0 }}
 
 {{ page | large_knob: center_x, 25.0, "LEVEL" }}
-{{ page | cv: left_x, 43.5 }}
+{% include panel/port/cv.svg x=left_x y=43.5 %}
 {{ page | switch: right_x, 43.5, "UNI", "BI" }}
 
 {{ page | button: left_x, 62.0, "WAIT" }}
 {{ page | button: right_x, 62.0, "TRIG" }}
 
-{{ page | in_port: left_x, 82, "WAIT" }}
+{% include panel/port/in.svg x=left_x y=82.0 label="WAIT" %}
 
-{{ page | in_port: left_x, 97, "TRIG" }}
-{{ page | out_port: right_x, 97, "TRIG" }}
+{% include panel/port/in.svg x=left_x y=97.0 label="TRIG" %}
+{% include panel/port/out.svg x=right_x y=97.0 label="TRIG" %}
 
-{{ page | out_port: right_x, 112.0, "OUT" }}
+{% include panel/port/out.svg x=right_x y=112.0 label="OUT" %}
