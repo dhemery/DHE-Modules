@@ -1,7 +1,7 @@
 ---
 title: The Stage Module
 ---
-<img class="panel" src="{% link /svg/stage.svg %}" alt="The Stage Panel" />
+<img class="panel" src="{{ '/svg/stage.svg' | relative_url }}" alt="The Stage Panel" />
 
 Generates a single-stage envelope.
 Combine Stage modules
