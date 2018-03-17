@@ -1,7 +1,7 @@
 ---
 title: The Booster Stage Module
 ---
-![The Booster Stage Panel]({% link modules/booster-stage/panel.svg %})
+![The Booster Stage Panel](panel.svg)
 
 Enhances [Stage's]({% link modules/stage.md %}) functionality,
 adding CV inputs,

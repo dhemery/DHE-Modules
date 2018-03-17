@@ -1,3 +1,4 @@
+github: [metadata]
 title: DHE Modules
 theme: jekyll-theme-slate
 show_downloads: false
@@ -7,4 +8,4 @@ exclude:
   - Rakefile
   - Gemfile
   - Gemfile.lock
-baseurl: '/DHE-Modules'
+baseurl: /DHE-Modules
