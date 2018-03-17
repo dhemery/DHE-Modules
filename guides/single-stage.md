@@ -22,7 +22,7 @@ These single-stage envelopes are *retriggerable.*
 - Connect a trigger source to Stage's *TRIG* port.
 - Leave the *IN* port disconnected.
 
-![Attack and Hold](images/attack-and-hold.png)
+![Attack and Hold](attack-and-hold.png)
 
 When a trigger arrives,
 Stage starts an envelope stage
@@ -34,7 +34,7 @@ and holds until the next trigger.
 - Connect the trigger source
   to both the *TRIG* port and the *IN* port:
 
-![Decay and Hold](images/decay-and-hold.png)
+![Decay and Hold](decay-and-hold.png)
 
 Think of this as an Attack/Decay/Hold envelope
 with instantaneous attack.
@@ -56,8 +56,8 @@ to start and end the envelope at whatever levels you like.
 
 Here is a rising single-stage envelope:
 
-![Rising Envelope with Upstage](images/upstage-rise.png)
+![Rising Envelope with Upstage](upstage-rise.png)
 
 Here is a falling single-stage envelope:
 
-![Falling Envelope with Upstage](images/upstage-fall.png)
+![Falling Envelope with Upstage](upstage-fall.png)

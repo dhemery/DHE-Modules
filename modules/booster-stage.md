@@ -1,9 +1,9 @@
 ---
 title: The Booster Stage Module
 ---
-![The Booster Stage Panel](panel.svg)
+![The Booster Stage Panel]({% link modules/booster-stage/panel.svg %})
 
-Enhances [Stage's](/modules/stage/) functionality,
+Enhances [Stage's]({% link modules/stage.md %}) functionality,
 adding CV inputs,
 sigmoid curves,
 buttons to inject triggers and other control signals,

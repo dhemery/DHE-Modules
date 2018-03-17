@@ -3,10 +3,10 @@ title: Generating Multi-Stage Envelopes
 ---
 
 You can combine the
-[Stage](../modules/stage/),
-[Booster Stage](../modules/booster-stage/),
-[Hostage](../modules/hostage/),
-and [Upstage](../modules/upstage/)
+[Stage]({% link modules/stage.md %}),
+[Booster Stage]({% link modules/booster-stage.md %}),
+[Hostage]({% link modules/hostage.md %}),
+and [Upstage]({% link modules/upstage.md %})
 modules to generate complex, interesting, multi-stage envelopes.
 
 Here are some of the possibilities:
@@ -36,13 +36,13 @@ To build a basic multi-stage envelope:
   to the destination for the envelope.
 
 The chain looks like this:
-![A basic chain](images/v0.6/basic-chain.png)
+![A basic chain](basic-chain.png)
 
 This configuration begins each envelope at 0 volts,
 and retriggers if a new *TRIG* arrives while the envelope is in progress.
 
 If you want the technical details,
-read about [the cascade of events](../technical/cascade/)
+read about [the cascade of events]({% link technical/cascade.md %})
 
 **Variation:**
 If you wire the output of a basic chain
@@ -51,11 +51,11 @@ each envelope after the first will begin
 at the voltage
 where the previous one left off:
 
-![Continuing Envelope](images/v0.6/continuing.png)
+![Continuing Envelope](continuing.png)
 
 **Note that a basic chain is *retriggerable*:**
 
-![A basic chain is retriggerable](images/retriggerable.png)
+![A basic chain is retriggerable](retriggerable.png)
 
 The green arrow indicates where a new trigger arrives.
 The chain starts a new envelope,
@@ -75,7 +75,7 @@ while it is generating an envelope:
 
 The uninterruptible chain looks like this:
 
-![Uninterruptible Envelope](images/uninterruptible.png)
+![Uninterruptible Envelope](uninterruptible.png)
 
 Here's how it works:
 - While the chain is active,
@@ -101,7 +101,7 @@ To generate a self-retriggering envelope:
 
 The self-retriggering chain looks like this:
 
-![Self-Retriggering Envelope](images/v0.6/self-retriggering.png)
+![Self-Retriggering Envelope](self-retriggering.png})
 
 NOTE: There is no external trigger source for this chain!
 
@@ -149,4 +149,4 @@ each envelope after the first will begin
 at the voltage
 where the previous one left off:
 
-![Continuing Self-Retriggering Envelope](images/v0.6/continuing-self-retriggering.png)
+![Continuing Self-Retriggering Envelope](continuing-self-retriggering.png)
