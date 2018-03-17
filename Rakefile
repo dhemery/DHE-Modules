@@ -2,12 +2,12 @@ require 'rake/clean'
 
 desc 'Build the site'
 task :build do
-  sh 'bundle', 'exec', 'jekyll', 'b', '--trace'
+  sh 'bundle exec jekyll b --trace'
 end
 
 desc 'Serve the site'
 task :serve do
-  sh 'bundle', 'exec', 'jekyll', 's'
+  sh %{bundle exec jekyll s --baseurl ''}
 end
 
 task all: [:build]

@@ -1,7 +1,7 @@
 ---
 title: The Stage Module
 ---
-<img class="panel" src="panel.svg" alt="The Stage Panel" />
+![The Stage Panel](panel.svg)
 
 Generates a single-stage envelope.
 Combine Stage modules

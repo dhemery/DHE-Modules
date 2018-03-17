@@ -1,9 +1,10 @@
 title: DHE Modules
 theme: jekyll-theme-slate
-show_downloads: true
+show_downloads: false
 incremental: true
 permalink: pretty
 exclude:
   - Rakefile
   - Gemfile
   - Gemfile.lock
+baseurl: '/DHE-Modules'
