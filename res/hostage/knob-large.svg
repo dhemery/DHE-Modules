@@ -1,19 +1,9 @@
-<svg version="1.1" xmlns="http://www.w3.org/2000/svg">
-
-
-
-
-
-
-
-
-<svg width="13.0mm" height="13.0mm" viewBox="-6.5 -6.5 13.0 13.0">
-  <g stroke="#fff0ff" fill="#990099">
-    <circle r="6.5" stroke="none"/>
-    <line y2="-5.75" stroke-width="0.75" stroke-linecap="round"/>
+<?xml version="1.0"?>
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="12.7mm" height="12.7mm" viewBox="0 0 12.7 12.7">
+  <g transform="translate(6.35 6.35)">
+    <g transform="translate(0.0 0.0)" stroke="#fff0ff" fill="#990099">
+      <circle r="6.35" stroke="none"/>
+      <line y2="-5.5562499999999995" stroke-width="0.79375" stroke-linecap="round"/>
+    </g>
   </g>
-</svg>
-
-
-
 </svg>

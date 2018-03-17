@@ -26,9 +26,9 @@ build/test/runner/main: $(TEST_OBJECTS)
 test: build/test/runner/main
 	$<
 
-gui:
-	cd svg-builder && rake
-
 run: dist
 	cp -R dist/DHE-Modules $(RACK_DIR)/plugins
 	make -C $(RACK_DIR) run
+
+gui:
+	cd gui && rake clobber all

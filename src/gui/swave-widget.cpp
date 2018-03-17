@@ -9,7 +9,7 @@ namespace DHE {
 struct SwaveKnobLarge : rack::RoundKnob {
   SwaveKnobLarge() {
     setSVG(rack::SVG::load(rack::assetPlugin(plugin, "res/swave/knob-large.svg")));
-    box.size = rack::Vec(39.f, 39.f);
+    shadow->opacity = 0.f;
   }
 };
 

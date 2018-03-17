@@ -16,7 +16,7 @@ struct StagePort : rack::SVGPort {
 struct StageKnobLarge : rack::RoundKnob {
   StageKnobLarge() {
     setSVG(rack::SVG::load(rack::assetPlugin(plugin, "res/stage/knob-large.svg")));
-    box.size = rack::Vec(39.f, 39.f);
+    shadow->opacity = 0.f;
   }
 };
 

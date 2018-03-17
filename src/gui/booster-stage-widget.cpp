@@ -23,6 +23,7 @@ struct BoosterStageButtonLight : rack::SVGSwitch, rack::MomentarySwitch {
 struct BoosterStageKnobLarge : rack::RoundKnob {
   BoosterStageKnobLarge() {
     setSVG(rack::SVG::load(rack::assetPlugin(plugin, "res/booster-stage/knob-large.svg")));
+    shadow->opacity = 0.f;
   }
 };
 

@@ -16,7 +16,7 @@ struct HostagePort : rack::SVGPort {
 struct HostageKnobLarge : rack::RoundKnob {
   HostageKnobLarge() {
     setSVG(rack::SVG::load(rack::assetPlugin(plugin, "res/hostage/knob-large.svg")));
-    box.size = rack::Vec(39.f, 39.f);
+    shadow->opacity = 0.f;
   }
 };
 

@@ -16,6 +16,7 @@ struct UpstageButtonDark : rack::SVGSwitch, rack::MomentarySwitch {
 struct UpstageKnobLarge : rack::RoundKnob {
   UpstageKnobLarge() {
     setSVG(rack::SVG::load(rack::assetPlugin(plugin, "res/upstage/knob-large.svg")));
+    shadow->opacity = 0.f;
   }
 };
 
