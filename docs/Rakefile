@@ -7,7 +7,7 @@ end
 
 desc 'Serve the site'
 task :serve do
-  sh %{bundle exec jekyll s --baseurl=""}
+  sh %{bundle exec jekyll s --baseurl ''}
 end
 
 task all: [:build]
