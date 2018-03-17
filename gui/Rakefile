@@ -4,7 +4,7 @@ require 'pathname'
 
 build_dir = Pathname('_build')
 module_dest_dir = Pathname('../res')
-image_dest_dir = Pathname('../docs/svg')
+image_dest_dir = Pathname('../images')
 
 directory module_dest_dir
 directory image_dest_dir
