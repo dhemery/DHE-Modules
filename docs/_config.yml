@@ -1,8 +1,9 @@
+baseurl: /DHE-Modules
+permalink: pretty
 title: DHE Modules
 theme: jekyll-theme-slate
 show_downloads: true
 incremental: true
-permalink: pretty
 exclude:
   - Rakefile
   - Gemfile
