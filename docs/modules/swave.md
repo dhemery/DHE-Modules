@@ -1,7 +1,7 @@
 ---
 title: The Swave Module
 ---
-<img class="panel" src="/svg/swave.svg" alt="The Swage Panel" />
+<img class="panel" src="{% link /svg/swave.svg %}" alt="The Swage Panel" />
 
 
 
