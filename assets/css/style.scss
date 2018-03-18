@@ -8,8 +8,13 @@
   a:hover { text-decoration: underline; }
 }
 
-img[src='panel.svg'] {
+img.panel {
   padding-left: 10px;
+  padding-bottom: 10px;
   float: right;
-  height: 380px;
+}
+
+span.stage {
+  color: #009900;
+  font-weight: bold;
 }

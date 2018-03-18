@@ -1,7 +1,7 @@
 ---
 title: The Hostage Module
 ---
-![The Hostage Panel](panel.svg)
+<img class="panel" src="panel.svg" alt="The Hostage Panel" />
 
 Generates a sustain stage
 controlled by

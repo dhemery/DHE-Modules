@@ -1,6 +1,6 @@
 ---
 title: The Swave Module
 ---
-![The Swave Panel](panel.svg)
+<img class="panel" src="panel.svg" alt="The Swave Panel" />
 
 A waveshaper with a unique sigmoid transfer function.

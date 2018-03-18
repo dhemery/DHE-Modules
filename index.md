@@ -41,4 +41,3 @@ is a waveshaper with a unique sigmoid transfer function.
 - [Generating Multi-Stage Envelopes](guides/multi-stage/)
 - [Other Usage Guides](guides/)
 - [Technical Details](technical/) of how the modules work
-- [Documentation for Older Versions](versions/)
