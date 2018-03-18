@@ -15,10 +15,20 @@ suppress retriggers,
 set an envelope's starting voltage,
 and more.
 
-See:
-- [Upstage User Interface](#upstage-user-interface)
-- [Generating Single-Stage Envelopes](/guides/single-stage/)
-- [Generating Multi-Stage Envelopes](/guides/multi-stage/)
+Combine
+[Stage]({{ '/modules/stage/' | relative_url }}),
+[Booster Stage]({{ '/modules/booster-stage/' | relative_url }}),
+[Hostage]({{ '/modules/hostage/' | relative_url }}),
+and [Upstage]({{ '/modules/upstage/' | relative_url }})
+modules
+to generate complex envelopes
+with any number of stages.
+
+See also:
+
+- [Generating Single-Stage Envelopes]({{ '/guides/single-stage/' | relatuve_url }})
+- [Generating Multi-Stage Envelopes]({{ '/guides/multi-stage/' | relative_url }})
+- [How Stages Work]({{ '/technical/stages/' | relative_url }})
 
 ## Upstage User Interface
 

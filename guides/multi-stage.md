@@ -2,11 +2,11 @@
 title: Generating Multi-Stage Envelopes
 ---
 
-You can combine the
-[Stage]({% link modules/stage.md %}),
-[Booster Stage]({% link modules/booster-stage.md %}),
-[Hostage]({% link modules/hostage.md %}),
-and [Upstage]({% link modules/upstage.md %})
+Combine
+[Stage]({{ '/modules/stage/' | relative_url }}),
+[Booster Stage]({{ '/modules/booster-stage/' | relative_url }}),
+[Hostage]({{ '/modules/hostage/' | relative_url }}),
+and [Upstage]({{ '/modules/upstage/' | relative_url }})
 modules to generate complex, interesting, multi-stage envelopes.
 
 Here are some of the possibilities:
