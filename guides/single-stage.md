@@ -1,58 +1,65 @@
+---
+title: Generating Single-Stage Envelopes
+---
+
 You can create a simple envelopes
-with one Stage module and (maybe) one Upstage module.
+with one
+[_Stage_]({{ '/modules/stage/' | relative_url }})
+module.
+For additional control and versatility,
+add an
+[_Upstage_]({{ '/modules/upstage' | relative_url }})
+or use a
+[_Booster Stage_]({{ '/modules/booster-stage' | relative_url }})
+instead of a _Stage_.
 
 - [Attack and Hold](#attack-and-hold)
 - [Decay and Hold](#decay-and-hold)
-- [Rise/Fall and Hold](#rise-fall-and-hold)
-
-**NOTES**
-
-When a Stage module completes its envelope stage,
-  it *holds* at the voltage of the *LEVEL* knob
-  until it receives a trigger or its *DEFER* gate rises.
-
-These single-stage envelopes are *retriggerable.*
-  If a trigger arrives
-  while the envelope stage is in progress,
-  Stage begins a new envelope stage
-  *starting at the current voltage on the *IN* port*.
+- [Setting the Starting Voltage](#setting-the-starting-voltage)
+- [Preventing Retriggers](#preventing-retriggers)
 
 ## Attack and Hold
 
-- Connect a trigger source to Stage's *TRIG* port.
-- Leave the *IN* port disconnected.
+- Connect a trigger source to Stage's *TRIG* input.
+- Leave the *IN* input disconnected.
+- Set the _LEVEL_ knob to the desired _hold_ voltage.
 
 ![Attack and Hold](attack-and-hold.png)
 
 When a trigger arrives,
-Stage starts an envelope stage
-that progresses from 0 volts to the *LEVEL* voltage,
-and holds until the next trigger.
+_Stage_ generates an envelope stage
+that progresses from 0 volts to the _LEVEL_ voltage.
+It then continues to emit the _LEVEL_ voltage
+until it receives the next trigger.
 
 ## Decay and Hold
 
-- Connect the trigger source
-  to both the *TRIG* port and the *IN* port:
+- Connect a trigger source
+  to both the *TRIG* input and the *IN* input:
+- Set the _LEVEL_ knob to the desired _hold_ voltage.
+
+This is useful for plucks:
 
 ![Decay and Hold](decay-and-hold.png)
 
 Think of this as an Attack/Decay/Hold envelope
 with instantaneous attack.
 
-This is useful for plucks.
 
-**NOTE:**
-With the trigger source connected to the *IN* port,
+**Note:**
+With the trigger source connected to the *IN* input,
 the envelope stage starts
 at whatever voltage the trigger source
-offers *at the instant it rises to or above 1 volt.*
+offers *at the instant it rises to at least 1V.*
 So you can vary the envelope stage's starting voltage
-by varying the incoming trigger voltage.
+by varying the trigger voltage.
 
-## Rise/Fall and Hold
+## Setting the Starting Voltage
 
-Combine an Upstage module with a Stage module
-to start and end the envelope at whatever levels you like.
+_Stage's_ _LEVEL_ knob sets the ending voltage of the envelope stage.
+To set the starting voltage,
+add an _Upstage_
+or other voltage source.
 
 Here is a rising single-stage envelope:
 
@@ -61,3 +68,13 @@ Here is a rising single-stage envelope:
 Here is a falling single-stage envelope:
 
 ![Falling Envelope with Upstage](upstage-fall.png)
+
+## Preventing Retriggers
+
+All of the single-stage envelopes shown above are *retriggerable:*
+If a trigger arrives
+while an envelope stage is in progress,
+_Stage_ interrupts the in-progress envelope stage
+and begins a new one
+at the voltage of the *IN* signal
+at that instant.

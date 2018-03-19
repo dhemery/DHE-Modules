@@ -19,7 +19,7 @@ See also:
 
 - [Generating Single-Stage Envelopes]({{ '/guides/single-stage/' | relatuve_url }})
 - [Generating Multi-Stage Envelopes]({{ '/guides/multi-stage/' | relative_url }})
-- [How Stages Work]({{ '/technical/stages/' | relative_url }})
+- [How Stages Work Together]({{ '/technical/stages/' | relative_url }})
 
 ## Controls
 
@@ -83,3 +83,21 @@ See also:
 - **OUT:**
     The generated envelope stage signal
     or (when deferring) the _IN_ signal.
+
+## Notes
+
+- While an envelope stage is in progress,
+    all of the knobs are "live."
+    If you adjust a knob,
+    _Stage_ applies the new value
+    to the remainder of the stage.
+
+- After _Stage_ completes an envelope stage,
+    the _LEVEL_ knob remains live
+    until the _DEFER_ gate goes high.
+    If you adjust the _LEVEL_ knob,
+    the _OUT_ signal follows.
+
+- Before _Stage_ becomes active for the first time
+    (by either a trigger or a _DEFER_ gate),
+    it outputs 0V.

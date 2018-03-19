@@ -37,9 +37,9 @@ A waveshaper with a unique sigmoid transfer function.
 
 ## Ports
 
-- _IN:_
+- **IN:**
     The input signal to be shaped
     by the transfer function.
 
-- _OUT:_
+- **OUT:**
     The shaped signal.

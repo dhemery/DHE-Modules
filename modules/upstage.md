@@ -31,7 +31,7 @@ For details, see:
 
 - [Generating Single-Stage Envelopes]({{ '/guides/single-stage/' | relatuve_url }})
 - [Generating Multi-Stage Envelopes]({{ '/guides/multi-stage/' | relative_url }})
-- [How Stages Work]({{ '/technical/stages/' | relative_url }})
+- [How Stages Work Together]({{ '/technical/stages/' | relative_url }})
 
 ## Controls
 

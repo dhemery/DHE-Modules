@@ -18,7 +18,7 @@ See also:
 
 - [Generating Single-Stage Envelopes]({{ '/guides/single-stage/' | relatuve_url }})
 - [Generating Multi-Stage Envelopes]({{ '/guides/multi-stage/' | relative_url }})
-- [How Stages Work]({{ '/technical/stages/' | relative_url }})
+- [How Stages Work Together]({{ '/technical/stages/' | relative_url }})
 
 ## Hold Modes
 
@@ -123,3 +123,18 @@ See also:
 - **OUT:**
     The generated hold stage signal
     or (when deferring) the _IN_ signal.
+
+## Notes
+
+- While a hold stage is in progress,
+    the _DURATION_ knob, switch, and _CV_ input
+    are "live."
+    If the duration value changes,
+    _Hostage_ applies the new value
+    to the remainder of the stage.
+
+- Before _Hostage_ becomes active for the first time
+    (whether by a _HOLD_ trigger, a _HOLD_ gate, or a _DEFER_ gate),
+    it outputs 0V.
+
+- Changing the mode abandons any hold stage in progress.

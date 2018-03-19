@@ -27,7 +27,7 @@ See also:
 
 - [Generating Single-Stage Envelopes]({{ '/guides/single-stage/' | relatuve_url }})
 - [Generating Multi-Stage Envelopes]({{ '/guides/multi-stage/' | relative_url }})
-- [How Stages Work]({{ '/technical/stages/' | relative_url }})
+- [How Stages Work Together]({{ '/technical/stages/' | relative_url }})
 
 ## Controls
 
@@ -55,12 +55,17 @@ See also:
     The duration of the envelope stage.
 
     The duration switch **(1 / 10 / 100)**
-    sets the maximum value (seconds) of the _DURATION_ knob.
-    The minimum value is 1/1000 of the maximum value
-    (1ms, 10ms, or 100ms).
-    At the center position,
-    the duration is 1/10 of the maximum
-    100ms, 1s, or 10s).
+    sets the range of the _DURATION_ knob.
+    The switch labels
+    indicate the maximum duration (seconds)
+    for each range.
+    For each range:
+    - The minimum duration
+        is 1/1000 of the maximum:
+        1ms, 10ms, or 100ms.
+    - Centering the knob gives a duration of
+        1/10 of the maximum:
+        100ms, 1s, or 10s.
 
 - **Buttons:**
     The _DEFER_ and _TRIG_ inputs
@@ -124,3 +129,22 @@ See also:
         as if the knob were rotated 50%
         counterclockwise
         of its actual position.
+
+## Notes
+
+- While an envelope stage is in progress,
+    all of the knobs, switches, and _CV_ inputs
+    are "live."
+    If the parameter value changes,
+    _Booster Stage_ applies the new value
+    to the remainder of the stage.
+
+- After _Booster Stage_ completes an envelope stage,
+    the _LEVEL_ knob, switch, and _CV_ input remain live
+    until the _DEFER_ gate goes high.
+    If the level value changes,
+    the _OUT_ signal follows.
+
+- Before _Booster Stage_ becomes active for the first time
+    (by either a trigger or a _DEFER_ gate),
+    it outputs 0V.
