@@ -32,7 +32,7 @@ See also:
 ## Controls
 
 - **LEVEL:**
-    The voltage level at which the envelope stage ends.
+    The voltage level at which each generated envelope stage ends.
 
     The polarity switch **(UNI / BI)**
     selects the range of the _LEVEL_ knob:
@@ -70,7 +70,7 @@ See also:
     each have an associated "manual override" button.
     While pressed,
     each button injects 10V into the associated signal
-    (unless the signal is already greater than 10V).
+    (unless the signal exceeds 10V).
 
 ## Inputs and Outputs
 
@@ -116,8 +116,13 @@ See also:
 
 - **CV:**
     Control voltage signal that modulates the associated knob.
-    A 0V _CV_ signal yields the value of the knob.
-    The modulation is calibrated
-    so that with the knob in the center position,
-    a -5V _CV_ signal yields the knob's minimum value,
-    and a 5V _CV_ signal yields its maximum value.
+    The modulation is calibrated so that:
+    - A 0V _CV_ signal yields the value of the knob.
+    - A 5V _CV_ signal yields the value
+        as if the knob were rotated 50%
+        clockwise
+        of its actual position.
+    - A -5V _CV_ signal yields the value
+        as if the knob were rotated 50%
+        counterclockwise
+        of its actual position.

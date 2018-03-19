@@ -54,6 +54,18 @@ See also:
     the duration is 1/10 of the maximum
     100ms, 1s, or 10s).
 
+    The _DURATION_ knob is modulated by the **CV** input.
+    The modulation is calibrated so that:
+    - A 0V _CV_ signal yields the value of the knob.
+    - A 5V _CV_ signal yields the value
+        as if the knob were rotated 50%
+        clockwise
+        of its actual position.
+    - A -5V _CV_ signal yields the value
+        as if the knob were rotated 50%
+        counterclockwise
+        of its actual position.
+
     In _GATE_ mode,
     _Hostage_ ignores the _DURATION_ controls.
 
@@ -111,11 +123,3 @@ See also:
 - **OUT:**
     The generated hold stage signal
     or (when deferring) the _IN_ signal.
-
-- **DURATION CV:**
-    Control voltage signal that modulates the _DURATION_ knob.
-    A 0V _CV_ signal yields the value of the knob.
-    The modulation is calibrated
-    so that with the knob in the center position,
-    a -5V _CV_ signal yields the knob's minimum value,
-    and a 5V _CV_ signal yields its maximum value.

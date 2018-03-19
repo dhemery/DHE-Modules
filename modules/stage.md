@@ -24,7 +24,7 @@ See also:
 ## Controls
 
 - **LEVEL:**
-    The voltage level at which the envelope stage ends.
+    The voltage level at which each generated envelope stage ends.
     The range is 0–10V.
 
 - **CURVE:**
