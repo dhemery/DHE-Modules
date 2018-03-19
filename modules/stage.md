@@ -42,7 +42,7 @@ See also:
     with the center position
     giving a duration of 1s.
 
-## Inputs and Outputs
+## Ports
 
 - **DEFER:**
     When the _DEFER_ gate signal is high,

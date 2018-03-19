@@ -69,7 +69,7 @@ See also:
     In _GATE_ mode,
     _Hostage_ ignores the _DURATION_ controls.
 
-## Inputs and Outputs
+## Ports
 
 - **DEFER:**
     When the _DEFER_ gate signal is high,

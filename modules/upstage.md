@@ -69,7 +69,7 @@ For details, see:
     if the _WAIT_ gate signal is high
     or the _WAIT_ button is pressed.
 
-### Inputs and Outputs
+### Ports
 
 - **WAIT:**
     A gate signal that, when high,

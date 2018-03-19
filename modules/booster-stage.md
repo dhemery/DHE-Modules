@@ -48,10 +48,8 @@ See also:
     At extreme positions the curvature is severe.
 
     The shape switch **(S / J)**
-    selects the shape of the envelope stage.
-    _J_ selects a J-shaped curve
-    reminiscent of a "logarithmic" curve.
-    _S_ selects a sigmoid (S-shaped) curve.
+    selects the shape of the envelope stage:
+    Either J-shaped or sigmoid (S-shaped).
 
 - **DURATION:**
     The duration of the envelope stage.
@@ -72,7 +70,7 @@ See also:
     each button injects 10V into the associated signal
     (unless the signal exceeds 10V).
 
-## Inputs and Outputs
+## Ports
 
 - **DEFER:**
     When the _DEFER_ gate signal is high,
