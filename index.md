@@ -10,7 +10,6 @@ Combine Stage modules
 to generate complex envelopes
 with any number of stages.
 
-
 **[Booster Stage](modules/booster-stage/)**
 enhances Stage's functionality,
 adding CV inputs,
@@ -19,7 +18,7 @@ buttons to inject triggers and other control signals,
 and more.
 
 **[Hostage](modules/hostage/)**
-generates a sustain stage
+generates a hold (or sustain) stage
 controlled by
 either a gate signal
 or a built-in timer.
