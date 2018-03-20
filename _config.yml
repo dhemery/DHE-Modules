@@ -1,5 +1,6 @@
 github: [metadata]
 title: DHE Modules
+description: VCV Rack modules from Dale Emery
 theme: jekyll-theme-slate
 show_downloads: false
 incremental: false

@@ -17,7 +17,7 @@ with any number of stages.
 
 See also:
 
-- [Generating Single-Stage Envelopes]({{ '/guides/generating-single-stage-envelopes/' | relatuve_url }})
+- [Generating Single-Stage Envelopes]({{ '/guides/generating-single-stage-envelopes/' | relative_url }})
 - [Generating Multi-Stage Envelopes]({{ '/guides/generating-multi-stage-envelopes/' | relative_url }})
 - [How Stages Work Together]({{ 'technical/how-stages-work-together' | relative_url }})
 
