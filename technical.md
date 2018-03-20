@@ -2,7 +2,7 @@
 title: Technical Details
 ---
 
-- [How Stages Work](stages/)
+- [How Stages Work Together](how-stages-work-together/)
 - [The Sigmoid Curve](sigmoid/)
   that drives the stage modules' envelope stage curves,
   Swave's waveshaping,

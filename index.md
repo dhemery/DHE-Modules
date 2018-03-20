@@ -36,7 +36,6 @@ is a waveshaper with a unique sigmoid transfer function.
 
 ## See Also
 
-- [Generating Single-Stage Envelopes](guides/single-stage/)
-- [Generating Multi-Stage Envelopes](guides/multi-stage/)
-- [Other Usage Guides](guides/)
-- [Technical Details](technical/) of how the modules work
+- [Generating Single-Stage Envelopes]({{ '/guides/generating-single-stage-envelopes/' | relatuve_url }})
+- [Generating Multi-Stage Envelopes]({{ '/guides/generating-multi-stage-envelopes/' | relative_url }})
+- [How Stages Work Together]({{ '/technical/how-stages-work-together/' | relative_url }})

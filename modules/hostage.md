@@ -3,7 +3,9 @@ title: The Hostage Module
 ---
 <img class="panel" src="panel.svg" alt="The Hostage Panel" />
 
-Generates an envelope hold stage (aka sustain stage).
+Generates a hold or sustain envelope stage.
+A hold stage lasts for the duration specified by the controls.
+A sustain stage lasts as long as the _GATE_ is up.
 
 Combine
 [Stage]({{ '/modules/stage/' | relative_url }}),
@@ -16,43 +18,49 @@ with any number of stages.
 
 See also:
 
-- [Generating Single-Stage Envelopes]({{ '/guides/single-stage/' | relatuve_url }})
-- [Generating Multi-Stage Envelopes]({{ '/guides/multi-stage/' | relative_url }})
-- [How Stages Work Together]({{ '/technical/stages/' | relative_url }})
+- [Generating Single-Stage Envelopes]({{ '/guides/generating-single-stage-envelopes/' | relatuve_url }})
+- [Generating Multi-Stage Envelopes]({{ '/guides/generating-multi-stage-envelopes/' | relative_url }})
+- [How Stages Work Together]({{ 'technical/how-stages-work-together' | relative_url }})
 
-## Hold Modes
+## Modes
 
-- In **GATE** mode,
-    _Hostage_ treats the _HOLD_ signal as a sustain gate.
-    When the gate goes high,
+- In **SUSTAIN** mode,
+    the _GATE_ signal acts as a sustain gate.
+    When the gate rises,
     _Hostage_ samples the _IN_ signal,
     then generates a sustain stage
     at the sampled voltage
-    while gate remains high.
+    until the gate falls.
 
-- In **TIMER** mode,
-    _Hostage_ treats the _HOLD_ signal as a trigger.
+- In **HOLD** mode,
+    the _GATE_ signal acts as a trigger.
     When triggered,
     _Hostage_ samples the _IN_ signal,
-    then generates a timed envelope stage
-    at the sampled voltage.
+    then generates a hold stage
+    at the sampled voltage
+    for the specified duration.
 
 ## Controls
 
-- **GATE / TIMER:**
+- **SUSTAIN / HOLD:**
     Selects _Hostage's_ operating mode.
 
 - **DURATION:**
     The duration of the hold stage
-    (when _Hostage_ is in _TIMER_ mode).
+    (when _Hostage_ is in _HOLD_ mode).
 
     The duration switch **(1 / 10 / 100)**
-    sets the maximum value (seconds) of the _DURATION_ knob.
-    The minimum value is 1/1000 of the maximum value
-    (1ms, 10ms, or 100ms).
-    At the center position,
-    the duration is 1/10 of the maximum
-    100ms, 1s, or 10s).
+    sets the range of the _DURATION_ knob.
+    The switch labels
+    indicate the maximum duration (seconds)
+    for each range.
+    For each range:
+    - The minimum duration
+        is 1/1000 of the maximum:
+        1ms, 10ms, or 100ms.
+    - Centering the knob gives a duration of
+        1/10 of the maximum:
+        100ms, 1s, or 10s.
 
     The _DURATION_ knob is modulated by the **CV** input.
     The modulation is calibrated so that:
@@ -72,38 +80,38 @@ See also:
 ## Ports
 
 - **DEFER:**
-    When the _DEFER_ gate signal is high,
+    When the _DEFER_ gate is up,
     _Hostage_ **_defers_** to its _IN_ signal,
     forwarding the _IN_ signal
     directly to the _OUT_ output.
 
     While _Hostage_ is deferring
-    it ignores incoming _HOLD_ signals.
+    it ignores incoming _GATE_ signals.
 
     When it begins deferring,
-     _Hostage_ abandons any hold stage
+     _Hostage_ abandons any envelope stage
     it may have been generating.
 
-- **HOLD:**
-    Triggers or sustains a hold stage,
+- **GATE:**
+    Triggers a hold stage
+    or sustains a sustain stage,
     depending on the current operating mode.
 
     While _Hostage_ is deferring,
-    it ignores incoming _HOLD_ gates and triggers.
+    it ignores the incoming _GATE_ signal.
 
-    In _HOLD_ mode,
-    if the _HOLD_ gate is high
+    In _SUSTAIN_ mode,
+    if the _GATE_ is up
     when _Hostage_ stops deferring,
     it begins a new sustain stage.
-    If the _HOLD_ gate is low
+    If the _GATE_ is down
     when _Hostage_ stops deferring,
     it emits an _EOC_ pulse.
 
 - **IN:**
-    When _Hostage_ generates a hold stage
-    (whether gated or timed),
+    When _Hostage_ generates a hold or sustain stage
     it emits the voltage
-    sampled from the _IN_ signal
+    that it sampled from the _IN_ signal
     at the start of the stage.
 
     While _Hostage_ is _deferring_,
@@ -111,22 +119,21 @@ See also:
 
 - **ACTIVE:**
     A 10V gate signal indicating that _Hostage_
-    is either actively generating a hold stage
+    is either actively generating a stage
     or deferring to its _IN_ signal.
 
 - **EOC:**
-    When _Hostage_ completes a hold stage
-    (whether gated or timed),
+    When _Hostage_ completes a stage
     it emits a 1 millisecond 10V pulse
     at its _EOC_ output.
 
 - **OUT:**
-    The generated hold stage signal
+    The generated stage signal
     or (when deferring) the _IN_ signal.
 
 ## Notes
 
-- While a hold stage is in progress,
+- While a stage is in progress,
     the _DURATION_ knob, switch, and _CV_ input
     are "live."
     If the duration value changes,
@@ -134,7 +141,7 @@ See also:
     to the remainder of the stage.
 
 - Before _Hostage_ becomes active for the first time
-    (whether by a _HOLD_ trigger, a _HOLD_ gate, or a _DEFER_ gate),
+    (whether by a trigger, a gate, or a _DEFER_ signal),
     it outputs 0V.
 
-- Changing the mode abandons any hold stage in progress.
+- Changing the mode abandons any stage in progress.

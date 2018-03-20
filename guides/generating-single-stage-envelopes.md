@@ -24,7 +24,7 @@ instead of a _Stage_.
 - Leave the *IN* input disconnected.
 - Set the _LEVEL_ knob to the desired _hold_ voltage.
 
-![Attack and Hold](attack-and-hold.png)
+![Attack and Hold Envelope](attack-and-hold-envelope.png)
 
 When a trigger arrives,
 _Stage_ generates an envelope stage
@@ -40,7 +40,7 @@ until it receives the next trigger.
 
 This is useful for plucks:
 
-![Decay and Hold](decay-and-hold.png)
+![Decay and Hold Envelope](decay-and-hold-envelope.png)
 
 Think of this as an Attack/Decay/Hold envelope
 with instantaneous attack.
