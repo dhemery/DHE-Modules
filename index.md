@@ -4,26 +4,29 @@ layout: base
 
 ## The Modules
 
-**[Stage](modules/stage/)**
-generates a single stage envelope.
-Combine Stage modules
+![_Upstage_](modules/upstage/panel.svg)
+![_Stage_](modules/stage/panel.svg)
+![_Hostage_](modules/hostage/panel.svg)
+![_Booster Stage_](modules/booster-stage/panel.svg)
+![_Swave_](modules/swave/panel.svg)
+
+**[_Stage_](modules/stage/)**
+generates a single envelope stage.
+Combine _Stages_ and other modules
 to generate complex envelopes
 with any number of stages.
 
-**[Booster Stage](modules/booster-stage/)**
-enhances Stage's functionality,
+**[_Booster Stage_](modules/booster-stage/)**
+enhances _Stage's_ functionality,
 adding CV inputs,
 sigmoid curves,
 buttons to inject triggers and other control signals,
 and more.
 
-**[Hostage](modules/hostage/)**
-generates a hold (or sustain) stage
-controlled by
-either a gate signal
-or a built-in timer.
+**[_Hostage_](modules/hostage/)**
+generates hold and sustain stages.
 
-**[Upstage](modules/upstage/)**
+**[_Upstage_](modules/upstage/)**
 adds special-purpose envelope controls
 to
 inject triggers,
@@ -31,7 +34,7 @@ suppress retriggers,
 set an envelope's starting voltage,
 and more.
 
-**[Swave](modules/swave/)**
+**[_Swave_](modules/swave/)**
 is a waveshaper with a unique sigmoid transfer function.
 
 ## See Also
