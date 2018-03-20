@@ -13,7 +13,7 @@ controls:
 {% assign right_x = width | minus:left_x %}
 {% assign center_x = width | divided_by:2.0 %}
 
-{{ page | switch: center_x, 25, 'low', 'GATE', 'TIMER' }}
+{{ page | switch: center_x, 25, 'low', 'SUSTAIN', 'HOLD' }}
 
 {{ page | cv: left_x, 43.5 }}
 {{ page | duration_switch: right_x, 43.5 }}
@@ -23,7 +23,7 @@ controls:
 {{ page | in_port: left_x, 82.0, 'DEFER' }}
 {{ page | out_port: right_x, 82.0, 'ACTIVE' }}
 
-{{ page | in_port: left_x, 97.0, 'HOLD' }}
+{{ page | in_port: left_x, 97.0, 'GATE' }}
 {{ page | out_port: right_x, 97.0, 'EOC' }}
 
 {{ page | in_port: left_x, 112.0, 'IN' }}
