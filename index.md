@@ -4,10 +4,10 @@ layout: base
 
 ## The Modules
 
-![_Upstage_](modules/upstage/panel.svg)
 ![_Stage_](modules/stage/panel.svg)
-![_Hostage_](modules/hostage/panel.svg)
 ![_Booster Stage_](modules/booster-stage/panel.svg)
+![_Hostage_](modules/hostage/panel.svg)
+![_Upstage_](modules/upstage/panel.svg)
 ![_Swave_](modules/swave/panel.svg)
 
 **[_Stage_](modules/stage/)**

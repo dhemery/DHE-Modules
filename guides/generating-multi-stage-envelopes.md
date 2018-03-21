@@ -11,20 +11,21 @@ modules to generate complex, interesting, multi-stage envelopes.
 
 Here are some of the possibilities:
 
-- [Attack-Release (AR) Envelopes](#attack-release-envelopes)
-- [Add a Hold Stage](#add-a-hold-stage)
-   to generate an Attack-Hold-Release (AHR)
-   or Attack-Decay-Hold-Release (ADHR) envelope.
-- [Add a Sustain Stage](#add-a-sustain-stage)
-    to generate an Attack-Decay-Sustain-Release (ADSR) envelope.
-- [Prevent Retriggers](#prevent-interruption)
-    to allow each envelope to run to completion
-    without interruption from incoming triggers.
-- [Create Loops](#create-loops)
-    to generate envelopes that automatically repeat.
+- [Attack-Release (AR) Envelopes](#ar)
+    using _Stage_ modules
+- [Attack-Hold-Release (AHR) Envelopes](#hold)
+    and Attack-Decay-Hold-Relase (ADHR) envelopes
+    using _Hostage_ to generate a _hold_ stage
+- [Attack-Decay-Sustain-Release (ADSR) Evelopes](#sustain)
+    using _Hostage_ to generate a _sustain_ stage
+- [Non-Interruptible Envelopes](#retriggers)
+    using _Upstage_ to suppress retriggers
+- [Looping Envelopes](#loops)
+    using _Upstage_ or _Booster Stage_
+    to start the loop
 - [Variations](#variations)
 
-## Wiring a Multi-Stage Envelope
+## <span id="wiring">Wiring</span> a Multi-Stage Envelope
 
 The general scheme for wiring these modules
 into multi-stage envelopes is:
@@ -35,7 +36,7 @@ into multi-stage envelopes is:
 
 Suppose you want generate a four-stage envelope using _Stage_ modules:
 
-![Four Disconnected Stage Modules](four-disconnected-stage-modules.png)
+![Four Disconnected Stage Modules](disconnected.png)
 
 To wire the modules:
 
@@ -48,7 +49,7 @@ To wire the modules:
 
 Here is the result:
 
-![Four Connected Stage Modules](four-connected-stage-modules.png)
+![Four Connected Stage Modules](connected.png)
 
 Now all that remains is to
 connect a trigger source to the first module,
@@ -69,11 +70,9 @@ See the examples below for details and exceptions.
 [How Stages Work Together]({{ 'technical/how-stages-work-together' | relative_url }}).
 
 
-## Attack-Release Envelopes
+## <span id="ar">Attack-Release</span> Envelopes
 
-To generate an Attack-Release (AR) envelope:
-
-- [Connect](#wiring-a-multi-stage-envelope):
+- [Connect](#wiring):
     1. A _Stage_ for the attack stage.
     1. A _Stage_ for the release stage.
 - To start the envelope at 0V,
@@ -82,13 +81,11 @@ To generate an Attack-Release (AR) envelope:
     to set the peak attack voltage.
 - Set the release _Stage's_ _LEVEL_ to 0V.
 
-![Attack-Release Envelope](attack-release-envelope.png)
+![Attack-Release Envelope](ar.png)
 
-## Add a Hold Stage
+## <span id="hold">Attack-Hold-Release<span> Envelopes
 
-To generate an Attack-Hold-Release (AHR) envelope:
-
-- [Connect](#wiring-a-multi-stage-envelope):
+- [Connect](#wiring):
     1. A _Stage_ for the attack stage.
     1. A _Hostage_ for the hold stage.
     1. A _Stage_ for the release stage.
@@ -100,21 +97,21 @@ To generate an Attack-Hold-Release (AHR) envelope:
     _This also sets the hold level._
 - Set the release _Stage's_ _LEVEL_ to 0V.
 
-![Attack-Hold-Release Envelope](attack-hold-release-envelope.png)
+![Attack-Hold-Release Envelope](ahr.png)
 
 To generate an Attack-Decay-Hold-Release (ADHR) envelope,
-insert another _Stage_ before the _Hostage:_
+and insert another _Stage_ before the _Hostage:_
 
-![Attack-Decay-Hold-Release Envelope](attack-decay-hold-release-envelope.png)
+![Attack-Decay-Hold-Release Envelope](adhr.png)
 
-## Add a Sustain Stage
+## <span id="sustain">Attack-Decay-Sustain-Release<span> (ADSR) Envelopes
 
-To generate an Attack-Decay-Sustain-Release (ADSR) envelope,
+To generate a sustain stage,
 we need to wire modules a little differently than normal.
 We'll start with the usual wiring scheme,
 then adjust (see the **bold** text below):
 
-- [Connect](#wiring-a-multi-stage-envelope):
+- [Connect](#wiring):
     1. A _Stage_ for the attack stage.
     1. A _Stage_ for the decay stage.
     1. A _Hostage_ for the hold stage.
@@ -133,11 +130,11 @@ then adjust (see the **bold** text below):
     to set the sustain level.
 - Set the release _Stage's_ _LEVEL_ to 0V.
 
-![Attack-Decay-Sustain-Release Envelope](attack-decay-sustain-release-envelope.png)
+![Attack-Decay-Sustain-Release Envelope](adsr.png)
 
-## Prevent Retriggers
+## <span id="retriggers">Non-Interruptible Envelopes</span>
 
-Each multi-stage envelope shown above is *retriggerable:*
+Each multi-stage envelope shown above is _retriggerable._
 If a trigger arrives
 while an envelope stage is in progress,
 the new trigger
@@ -158,7 +155,7 @@ from interrupting in-progress envelopes:
 - Connect _Upstage's_ _WAIT_ input
     to the final _Stage's_ _ACTIVE_ output.
 
-![Prevent Retriggers](prevent-retriggers.png)
+![Non-Interruptible Envelope](non-interruptible.png)
 
 Now,
 whenever an envelope is in progress,
@@ -167,7 +164,73 @@ tells _Upstage_ to suppress incoming triggers.
 When the envelope finishes,
 _Upstage_ resumes forwarding incoming triggers to the first _Stage._
 
-## Create Loops
+## <span id="loops">Looping</span> Envelopes
+
+To generate a looping envelope,
+we need to
+- Manually trigger the first envelope
+- Configure the final stage
+    to retrigger the envelope
+    when it finishes
+
+Two modules offer buttons to manually trigger envelopes:
+_Upstage_ and _Booster Stage._
+
+### <span id="upstage-loops">Using</span> _Upstage_ to Create Self-Looping Envelopes
+
+- [Configure](#wiring) a non-looping envelope in the usual way.
+- Add an _Upstage_ before the first stage.
+- Connect the final stage's _EOC_ output to _Upstage's_ _TRIG_ input.
+- Connect _Upstage's_ _TRIG_ output to the first stage's _TRIG_ input.
+
+![Looping with Upstage](loop-upstage.png)
+
+Now you can use _Upstage's_ buttons
+to start, stop, and retrigger the loop.
+
+- **To start the loop:**
+    Press the _TRIG_ button.
+- **To retrigger the loop:**
+    Press the _TRIG_ button
+    while the envelope is running.
+- **To stop the loop:**
+    Press the _WAIT_ button
+    and hold it
+    until the final stage finishes.
+
+**Weird Fact:**
+You an also stop the loop
+by pressing the _TRIG_ button
+(causing the loop to restart)
+and holding it until the final stage finishes.
+
+### Using _Booster Stage_ to Create Self-Looping Envelopes
+
+- [Configure](#wiring) a non-looping envelope in the usual way,
+    **using a _Booster Stage_ as the first stage.**
+- Connect the final stage's _EOC_ output to _Booster Stage's_ _TRIG_ input.
+
+![Looping with Booster Stage](loop-booster-stage.png)
+
+Now you can use _Booster Stage's_ buttons
+to start, stop, and retrigger the loop.
+
+- **To start the loop:**
+    Press the _TRIG_ button.
+- **To retrigger the loop:**
+    Press the _TRIG_ button
+    while the envelope is running.
+- **To stop the loop:**
+    Press and hold any _Booster Stage_ button
+    until the loop stops.
+
+I leave it as an exercise for the reader
+to discover
+when and at what voltage
+each button stops the envelope.
+
+If you want a gentler, more controlled stop,
+[use _Upstage_ and its _WAIT_ button to manage the loop](#upstage-loops).
 
 ## Variations
 - For additional versatility,
@@ -181,9 +244,12 @@ _Upstage_ resumes forwarding incoming triggers to the first _Stage._
     at the level where the previous one ended,
     connect the the final module's _OUT_ output
     to the first module's _IN_ input.
-- [Make a sick kick](https://www.youtube.com/watch?v=jVLEKn55MGg).
-- Generate audible signals
-    by setting _Stage_ and _Booster Stage_
-    to very short durations.
+- Follow Artur Karlov's lead and
+    [make a sick kick](https://www.youtube.com/watch?v=jVLEKn55MGg).
+- Generate audible waveforms
+    by [configuring a loop](#loops)
+    with very short durations.
+- Generate an envelope with seventeen stages.
+- Configure a stage to trigger two or more "downstream" stages.
 - Vary something.
 - Vary something else.
