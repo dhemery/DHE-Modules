@@ -7,10 +7,10 @@ title: The Stage Module
 Generates a single envelope stage.
 
 Combine
-[Stage]({{ '/modules/stage/' | relative_url }}),
-[Booster Stage]({{ '/modules/booster-stage/' | relative_url }}),
-[Hostage]({{ '/modules/hostage/' | relative_url }}),
-and [Upstage]({{ '/modules/upstage/' | relative_url }})
+[_Stage_]({{ '/modules/stage/' | relative_url }}),
+[_Booster Stage_]({{ '/modules/booster-stage/' | relative_url }}),
+[_Hostage_]({{ '/modules/hostage/' | relative_url }}),
+and [_Upstage_]({{ '/modules/upstage/' | relative_url }})
 modules
 to generate complex envelopes
 with any number of stages.

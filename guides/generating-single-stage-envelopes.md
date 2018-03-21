@@ -71,7 +71,7 @@ Here is a falling single-stage envelope:
 
 ## Preventing Retriggers
 
-All of the single-stage envelopes shown above are *retriggerable:*
+Each single-stage envelope shown above is *retriggerable:*
 If a trigger arrives
 while an envelope stage is in progress,
 _Stage_ interrupts the in-progress envelope stage
