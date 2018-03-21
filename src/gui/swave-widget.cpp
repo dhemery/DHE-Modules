@@ -37,13 +37,13 @@ SwaveWidget::SwaveWidget(rack::Module *module) : ModuleWidget(module, 4, "res/sw
   auto row_spacing = 18.5f;
 
   auto row = 0;
+  install_switch<SwaveSwitch2>(SwaveModule::SHAPE_SWITCH, {center_x, top_row_y + row*row_spacing}, 1, 1);
+
+  row++;
   install_knob<SwaveKnobLarge>(SwaveModule::CURVE_KNOB, {center_x, top_row_y + row*row_spacing});
 
   row++;
   install_input<SwavePort>(SwaveModule::CURVE_CV, {center_x, top_row_y + row*row_spacing});
-
-  row++;
-  install_switch<SwaveSwitch2>(SwaveModule::SHAPE_SWITCH, {center_x, top_row_y + row*row_spacing}, 1, 1);
 
   top_row_y = 82.f;
   row_spacing = 15.f;
