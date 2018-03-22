@@ -41,7 +41,7 @@ This is very useful for plucks:
 
 <img src="dh.png" height="360" alt="Decay and Hold Envelope" />
 
-- Connect a trigger source tothe *TRIG* input.
+- Connect a trigger source to the *TRIG* input.
 - Connect a voltage source to the _IN_ input
     to supply the envelope's starting voltage.
 - Set the _LEVEL_ knob to the desired _hold_ voltage.
