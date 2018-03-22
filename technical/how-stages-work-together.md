@@ -18,22 +18,22 @@ in two ways:
 _Precedence_ and _Sequence._
 
 1. **Precedence:**
-    Whenever an "upstream" module is generating a stage,
-    the "downstream" modules
+    Whenever an module is generating a stage,
+    all successor modules
     must forward that signal
     all the way through the chain
     to the final _OUT_ output.
 
     That is, each module has _precedence_
-    over all downstream modules.
-    When an upstream module wants control,
-    each downstream module must **defer**
+    over all successor modules.
+    When a module wants control,
+    each successor module must **defer**
     to it.
 
 1. **Sequence:**
     As each module completes its stage,
     it must hand off control
-    to its downstream neighbor
+    to its successor
     to start the next stage.
 
 ## Coordinating Precedence
@@ -44,10 +44,10 @@ through their _DEFER_ and _ACTIVE_ ports.
 In a typical configuration,
 each module's _ACTIVE_ output
 is connected
-to its downstream neighbor's _DEFER_ input.
+to its successor's _DEFER_ input.
 And each module's _OUT_ output
 is connected
-to its downstream neighbor's _IN_ input.
+to its successor's _IN_ input.
 
 When a module is generating a stage,
 it holds its _ACTIVE_ gate high
@@ -55,9 +55,9 @@ and sends the generated stage to its _OUT_ output.
 
 When the next module
 receives this high gate signal at its _DEFER_ input,
-it _defers_ to its upstream neighbor.
+it _defers_ to its predecessor.
 It forwards its _IN_ signal
-(the output from the upstream neighbor)
+(the output from the predecessor)
 to its own _OUT_ port.
 
 In this way,
@@ -86,17 +86,17 @@ through their _TRIG_ and _EOC_ ports.
 In a typical configuration,
 each module's _EOC_ output
 is connected
-to its downstream neighbor's _TRIG_ input.
+to its successor's _TRIG_ input.
 
 As each module completes its stage,
 it sends two important coordination signals:
 
 - It lowers its _ACTIVE_ gate
     which relinquishes its control
-    over the downstream modules.
+    over the successor modules.
 - It sends a short pulse on its _EOC_ output,
     which hands off control
-    to the next module.
+    to its successor.
 
 And the next module reacts:
 - Because its _DEFER_ input is now low,
@@ -106,7 +106,7 @@ And the next module reacts:
 - Because it is actively generating a stage,
     it raises its own _ACTIVE_ gate,
     giving _it_ the highest precedence in the chain.
-    And so all of its downstream modules now defer to _it._
+    And so all of the successor modules now defer to _it._
 
 In this way,
 the chain of modules
