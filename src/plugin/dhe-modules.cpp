@@ -30,8 +30,6 @@ void init(rack::Plugin *p) {
 
   p->slug = "DHE-Modules";
   p->version = TOSTRING(VERSION);
-  p->website = "https://github.com/dhemery/DHE-Modules";
-  p->manual = "https://github.com/dhemery/DHE-Modules/wiki";
 
   modelBoosterStage = DHE::createModel<DHE::BoosterStageModule, DHE::BoosterStageWidget, rack::ModelTag>("Booster Stage", rack::ENVELOPE_GENERATOR_TAG);
   modelHostage = DHE::createModel<DHE::HostageModule, DHE::HostageWidget, rack::ModelTag>("Hostage", rack::ENVELOPE_GENERATOR_TAG);
