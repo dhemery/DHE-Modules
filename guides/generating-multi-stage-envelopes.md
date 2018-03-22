@@ -11,23 +11,31 @@ modules to generate complex, interesting, multi-stage envelopes.
 
 Here are some of the possibilities:
 
+- [Wiring a Multi-Stage Envelope](#wiring)
+    describes the usual way
+    to wire modules together.
 - [Attack-Release (AR) Envelopes](#ar)
-    using _Stage_ modules
-- [Attack-Hold-Release (AHR) Envelopes](#hold)
-    and Attack-Decay-Hold-Relase (ADHR) envelopes
-    using _Hostage_ to generate a _hold_ stage
-- [Attack-Decay-Sustain-Release (ADSR) Evelopes](#sustain)
-    using _Hostage_ to generate a _sustain_ stage
+    using _Stage_ modules.
+- [Add a Hold Stage](#hold) using _Hostage._
+- [Attack-Hold-Release (AHR) Envelopes](#ahr).
+- [Attack-Decay-Hold-Relase (ADHR) Envelopes](#adhr).
+- [Add a Sustain Stage](#sustain) using _Hostage._
+- [Attack-Decay-Sustain-Release (ADSR) Evelopes](#adsr).
 - [Non-Interruptible Envelopes](#retriggers)
-    using _Upstage_ to suppress retriggers
+    using _Upstage_ to suppress retriggers.
 - [Looping Envelopes](#loops)
     using _Upstage_ or _Booster Stage_
-    to start the loop
-- [Variations](#variations)
+    to start the loop.
+- [Variations](#variations).
 
 ## <span id="wiring">Wiring</span> a Multi-Stage Envelope
 
-The general scheme for wiring these modules
+The usual way to wire
+[_Stage_]({{ '/modules/stage/' | relative_url }}),
+[_Booster Stage_]({{ '/modules/booster-stage/' | relative_url }}),
+[_Hostage_]({{ '/modules/hostage/' | relative_url }}),
+and [_Upstage_]({{ '/modules/upstage/' | relative_url }})
+modules
 into multi-stage envelopes is:
 
 > Place the modules side-by-side
@@ -52,15 +60,27 @@ Here is the result:
 <img src="connected.png" height="360" alt="Four Connected Stage Modules" />
 
 Now all that remains is to
-connect a trigger source to the first module,
-connect the final module's output
+connect a trigger source to the first stage,
+connect the final stage's output
 to whatever parameter you want your envelope to modulate,
 and adjust the levels, curves, and durations to taste.
 
 **Note:**
-_Upstage's_ and _Hostage's_ ports
-differ slightly from _Stage's._
-Still, their ports are arranged
+Each module's _LEVEL_ knob
+determines the _ending_ level
+of the stage it generates.
+The starting voltage of each stage
+is determined by the signal
+arriving at the module's _IN_ input
+at the instant the module is triggered.
+In this way,
+each stage begins
+where its upstream neighbor ends.
+
+**Note:**
+_Upstage's_ and _Hostage's_ complement of ports
+differs slightly from _Stage's._
+But even their ports are arranged
 so that the usual wiring scheme —
 "connect outputs to neighboring inputs" —
 usually applies.
@@ -69,21 +89,40 @@ See the examples below for details and exceptions.
 **See also:**
 [How Stages Work Together]({{ 'technical/how-stages-work-together' | relative_url }}).
 
-
 ## <span id="ar">Attack-Release</span> Envelopes
 
 - [Connect](#wiring):
     1. A _Stage_ for the attack stage.
     1. A _Stage_ for the release stage.
 - To start the envelope at 0V,
-    leave the attack _Stage's_ _IN_ input disconnected.
-- Adjust the attack _Stage's_ _LEVEL_
-    to set the peak attack voltage.
-- Set the release _Stage's_ _LEVEL_ to 0V.
+    leave the attack stage's _IN_ input disconnected.
+- To set the peak attack voltage,
+    adjust the attack stage's _LEVEL._
+- Set the release stage's _LEVEL_ to 0V.
 
 <img src="ar.png" height="360" alt="Attack-Release Envelope" />
 
-## <span id="hold">Attack-Hold-Release<span> Envelopes
+## <span id="hold">Add</span> a Hold Stage
+
+The _Hostage_ module is designed specifically
+to create hold and sustain stages.
+
+A _hold stage_
+holds the envelope voltage constant
+_for a given duration._
+
+To generate a sustain stage with _Hostage:_
+
+- Wire it into the chain of modules
+    in the position where you want the the hold stage
+- Set its mode to _HOLD._
+
+_Hostage_ holds the voltage
+at the level where the previous stage ended.
+It offers a knob, a range switch, and _CV_ modulation
+to set the duration of the hold stage.
+
+## <span id="ahr">Attack-Hold-Release<span> Envelopes
 
 - [Connect](#wiring):
     1. A _Stage_ for the attack stage.
@@ -99,36 +138,70 @@ See the examples below for details and exceptions.
 
 <img src="ahr.png" height="360" alt="Attack-Hold-Release Envelope" />
 
+## <span id="adhr">Attack-Decay-Hold-Release<span> Envelopes
+
 To generate an Attack-Decay-Hold-Release (ADHR) envelope,
+start with an [Attack-Hold-Release envelope](#ahr)
 and insert another _Stage_ before the _Hostage:_
 
 <img src="adhr.png" height="360" alt="Attack-Decay-Hold-Release Envelope" />
 
-## <span id="sustain">Attack-Decay-Sustain-Release<span> (ADSR) Envelopes
+## <span id="sustain">Add</span> a Sustain Stage
+
+The _Hostage_ module is designed specifically
+to create hold and sustain stages.
+
+A _sustain stage_
+sustains a constant envelope voltage
+_as long as the sustain gate is up._
+
+The wiring for a sustain stage
+differs from the usual scheme.
+Note the **bold text** below.
+
+To generate a sustain stage with _Hostage:_
+
+- Wire it into the chain of modules
+    in the position where you want the the sustain stage.
+- Set its mode to _SUSTAIN._
+- **Connect its _GATE_ input
+    to the same gate source
+    that triggers the envelope.**
+
+_Hostage_ sustains the voltage
+at the level where the previous stage ended
+as long as the gate remains up.
+
+## <span id="adsr">Attack-Decay-Sustain-Release<span> (ADSR) Envelopes
 
 To generate a sustain stage,
-we need to wire modules a little differently than normal.
+we need to wire one module a little differently than normal.
 We'll start with the usual wiring scheme,
 then adjust (see the **bold** text below):
 
 - [Connect](#wiring):
     1. A _Stage_ for the attack stage.
     1. A _Stage_ for the decay stage.
-    1. A _Hostage_ for the hold stage.
+    1. A _Hostage_ for the sustain stage.
     1. A _Stage_ for the release stage.
 - **Connect _Hostage's_ _GATE_ input
     to the same gate source
-    as the decay _Stage's_ _TRIG_ input.**
+    that triggers the first stage.**
     This configures the gate source
     to both _trigger_ and _sustain_ the envelope.
 - Set _Hostage_ to _SUSTAIN_ mode.
 - To start the envelope at 0V,
-    leave the attack _Stage's_ _IN_ input disconnected.
-- Adjust the attack _Stage's_ _LEVEL_
+    leave the attack stage's _IN_ input disconnected.
+- Adjust the attack stage's _LEVEL_
     to set the peak attack voltage.
-- Adjust the decay _Stage's_ _LEVEL_
+- Adjust the decay stage's _LEVEL_
     to set the sustain level.
-- Set the release _Stage's_ _LEVEL_ to 0V.
+- Set the release stage's _LEVEL_ to 0V.
+
+This example uses an _LFO-1_ to trigger and sustain the envelope.
+Note that the envelope uses the LFO's square wave
+both to _trigger the envelope_
+and to _sustain it._
 
 <img src="adsr.png" height="360" alt="Attack-Decay-Sustain-Release Envelope" />
 
@@ -151,18 +224,18 @@ from interrupting in-progress envelopes:
 - Insert an _Upstage_ at the front of the chain.
 - Rewire the trigger source
     so that the trigger signal passes through _Upstage_
-    rather than going directly to the first _Stage._
+    rather than going directly to the first stage.
 - Connect _Upstage's_ _WAIT_ input
-    to the final _Stage's_ _ACTIVE_ output.
+    to the final stage's _ACTIVE_ output.
 
 ![Non-Interruptible Envelope](non-interruptible.png)
 
 Now,
 whenever an envelope is in progress,
-the final _Stage's_ _ACTIVE_ signal
+the final stage's _ACTIVE_ signal
 tells _Upstage_ to suppress incoming triggers.
 When the envelope finishes,
-_Upstage_ resumes forwarding incoming triggers to the first _Stage._
+_Upstage_ resumes forwarding incoming triggers to the first stage.
 
 ## <span id="loops">Looping</span> Envelopes
 
@@ -234,7 +307,7 @@ If you want a gentler, more controlled stop,
 
 ## Variations
 - For additional versatility,
-    replace any _Stage_ with a
+    replace any _Stage_ module with a
     [_Booster Stage_]({{ '/modules/booster-stage/' | relative_url }}).
 - To start each envelope at a level other than 0V,
     connect an
@@ -242,8 +315,8 @@ If you want a gentler, more controlled stop,
     or other voltage source.
 - To start each envelope
     at the level where the previous one ended,
-    connect the the final module's _OUT_ output
-    to the first module's _IN_ input.
+    connect the the final stage's _OUT_ output
+    to the first stage's _IN_ input.
 - Follow Artur Karlov's lead and
     [make a sick kick](https://www.youtube.com/watch?v=jVLEKn55MGg).
 - Generate audible waveforms
