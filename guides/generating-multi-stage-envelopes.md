@@ -36,20 +36,20 @@ into multi-stage envelopes is:
 
 Suppose you want generate a four-stage envelope using _Stage_ modules:
 
-![Four Disconnected Stage Modules](disconnected.png)
+<img src="disconnected.png" height="360" alt="Four Stage Modules" />
 
 To wire the modules:
 
 - Connect each module's _ACTIVE_ output
     to its neighbor's _DEFER_ input.
 - Connect each module's _EOC_ output
-    to its neighbor's _TRIG_ or _GATE_ input.
+    to its neighbor's _TRIG_ input.
 - Connect each module's _OUT_ output
     to its neighbor's _IN_ input.
 
 Here is the result:
 
-![Four Connected Stage Modules](connected.png)
+<img src="connected.png" height="360" alt="Four Connected Stage Modules" />
 
 Now all that remains is to
 connect a trigger source to the first module,
@@ -81,7 +81,7 @@ See the examples below for details and exceptions.
     to set the peak attack voltage.
 - Set the release _Stage's_ _LEVEL_ to 0V.
 
-![Attack-Release Envelope](ar.png)
+<img src="ar.png" height="360" alt="Attack-Release Envelope" />
 
 ## <span id="hold">Attack-Hold-Release<span> Envelopes
 
@@ -97,12 +97,12 @@ See the examples below for details and exceptions.
     _This also sets the hold level._
 - Set the release _Stage's_ _LEVEL_ to 0V.
 
-![Attack-Hold-Release Envelope](ahr.png)
+<img src="ahr.png" height="360" alt="Attack-Hold-Release Envelope" />
 
 To generate an Attack-Decay-Hold-Release (ADHR) envelope,
 and insert another _Stage_ before the _Hostage:_
 
-![Attack-Decay-Hold-Release Envelope](adhr.png)
+<img src="adhr.png" height="360" alt="Attack-Decay-Hold-Release Envelope" />
 
 ## <span id="sustain">Attack-Decay-Sustain-Release<span> (ADSR) Envelopes
 
@@ -130,7 +130,7 @@ then adjust (see the **bold** text below):
     to set the sustain level.
 - Set the release _Stage's_ _LEVEL_ to 0V.
 
-![Attack-Decay-Sustain-Release Envelope](adsr.png)
+<img src="adsr.png" height="360" alt="Attack-Decay-Sustain-Release Envelope" />
 
 ## <span id="retriggers">Non-Interruptible Envelopes</span>
 
