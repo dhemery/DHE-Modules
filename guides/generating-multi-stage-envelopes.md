@@ -228,7 +228,7 @@ from interrupting in-progress envelopes:
 - Connect _Upstage's_ _WAIT_ input
     to the final stage's _ACTIVE_ output.
 
-![Non-Interruptible Envelope](non-interruptible.png)
+<img src="non-interruptible.png" height="360" alt="Non-Interruptible Envelope" />
 
 Now,
 whenever an envelope is in progress,
@@ -256,7 +256,7 @@ _Upstage_ and _Booster Stage._
 - Connect the final stage's _EOC_ output to _Upstage's_ _TRIG_ input.
 - Connect _Upstage's_ _TRIG_ output to the first stage's _TRIG_ input.
 
-![Looping with Upstage](loop-upstage.png)
+<img src="loop-upstage.png" height="360" alt="Looping with Upstage" />
 
 Now you can use _Upstage's_ buttons
 to start, stop, and retrigger the loop.
@@ -283,7 +283,7 @@ and holding it until the final stage finishes.
     **using a _Booster Stage_ as the first stage.**
 - Connect the final stage's _EOC_ output to _Booster Stage's_ _TRIG_ input.
 
-![Looping with Booster Stage](loop-booster-stage.png)
+<img src="loop-booster-stage.png" height="360" alt="Looping with Booster Stage" />
 
 Now you can use _Booster Stage's_ buttons
 to start, stop, and retrigger the loop.

@@ -13,26 +13,26 @@ or use a
 [_Booster Stage_]({{ '/modules/booster-stage' | relative_url }})
 instead of a _Stage_.
 
-- [Attack and Hold](#attack-and-hold)
-- [Decay and Hold](#decay-and-hold)
+- [Attack-and-Hold Envelopes](#ah)
+- [Decay-and-Hold Envelopes](#dh)
 - [Setting the Starting Voltage](#setting-the-starting-voltage)
 - [Preventing Retriggers](#preventing-retriggers)
 
-## Attack and Hold
+## <span id="ah">Attack-and-Hold</span> Envelopes
 
 - Connect a trigger source to Stage's *TRIG* input.
 - Leave the *IN* input disconnected.
 - Set the _LEVEL_ knob to the desired _hold_ voltage.
 
-![Attack and Hold Envelope](attack-and-hold-envelope.png)
+<img src="ah.png" height="360" alt="Attack and Hold Envelope" />
 
-When a trigger arrives,
+When triggered,
 _Stage_ generates an envelope stage
 that progresses from 0 volts to the _LEVEL_ voltage.
 It then continues to emit the _LEVEL_ voltage
 until it receives the next trigger.
 
-## Decay and Hold
+## <span id="dh">Decay-and-Hold</span> Envelopes
 
 - Connect a trigger source
   to both the *TRIG* input and the *IN* input:
@@ -40,17 +40,16 @@ until it receives the next trigger.
 
 This is useful for plucks:
 
-![Decay and Hold Envelope](decay-and-hold-envelope.png)
+<img src="dh.png" height="360" alt="Decay and Hold Envelope" />
 
-Think of this as an Attack/Decay/Hold envelope
+You can think of this as an Attack-Decay-Hold envelope
 with instantaneous attack.
-
 
 **Note:**
 With the trigger source connected to the *IN* input,
 the envelope stage starts
 at whatever voltage the trigger source
-offers *at the instant it rises to at least 1V.*
+offers *at the instant it triggers.*
 So you can vary the envelope stage's starting voltage
 by varying the trigger voltage.
 
