@@ -32,3 +32,20 @@ img.envelope2 {
   max-height: 720px;
   max-width: 100%;
 }
+
+table.curves {
+  td {
+    vertical-align: middle;
+    text-align: center;
+    padding: 0;
+    margin: 0;
+  }
+  svg {
+    width: 12.7mm;
+    height: 12.7mm;
+  }
+
+  img {
+    height: 80px;
+  }
+}
