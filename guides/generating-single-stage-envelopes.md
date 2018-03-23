@@ -29,7 +29,7 @@ and other interesting variations.
 
 ## <span id="ah">Attack-and-Hold</span> Envelopes
 
-<img src="ah.png" height="360" alt="Attack and Hold Envelope" />
+<img class="envelope" src="ah.png" alt="Attack and Hold Envelope" />
 
 - Connect a trigger source to the *TRIG* input.
 - Leave the *IN* input disconnected.
@@ -39,7 +39,7 @@ and other interesting variations.
 
 This is very useful for plucks:
 
-<img src="dh.png" height="360" alt="Decay and Hold Envelope" />
+<img class="envelope" src="dh.png" alt="Decay and Hold Envelope" />
 
 - Connect a trigger source to the *TRIG* input.
 - Connect a voltage source to the _IN_ input

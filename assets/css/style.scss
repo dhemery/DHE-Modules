@@ -8,13 +8,27 @@
   a:hover { text-decoration: underline; }
 }
 
+span.stage {
+  color: #009900;
+  font-weight: bold;
+}
+
 img.panel {
   padding-left: 10px;
   padding-bottom: 10px;
   float: right;
 }
 
-span.stage {
-  color: #009900;
-  font-weight: bold;
+img.envelope {
+  height: auto;
+  width: auto;
+  max-height: 360px;
+  max-width: 100%;
+}
+
+img.envelope2 {
+  height: auto;
+  width: auto;
+  max-height: 720px;
+  max-width: 100%;
 }

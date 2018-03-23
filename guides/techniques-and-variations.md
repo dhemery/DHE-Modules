@@ -32,7 +32,7 @@ into multi-stage envelopes is:
 For example,
 suppose you want generate a four-stage envelope using _Stage_ modules:
 
-<img src="disconnected.png" height="360" alt="Four Stage Modules" />
+<img class="envelope" src="disconnected.png" alt="Four Stage Modules" />
 
 Notice how:
 - The _ACTIVE_ outputs line up with the _DEFER_ inputs.
@@ -50,7 +50,7 @@ That is your clue to wiring the modules together:
 
 Here is the result:
 
-<img src="connected.png" height="360" alt="Four Connected Stage Modules" />
+<img class="envelope" src="connected.png" alt="Four Connected Stage Modules" />
 
 Now all that remains is to
 connect a trigger source to the first stage,
@@ -170,7 +170,7 @@ the envelope is retriggerable.**
 For example,
 here is a retriggerable ADHR envelope:
 
-<img src="retriggerable.png" height="360" alt="Retriggerable Envelope" />
+<img class="envelope" src="retriggerable.png" alt="Retriggerable Envelope" />
 
 The cyan scope trace shows the envelope.
 The magenta trace shows the incoming triggers.
@@ -195,7 +195,7 @@ from interrupting in-progress envelopes:
 For example,
 here is an uninterruptible ADHR envelope:
 
-<img src="uninterruptible.png" height="360" alt="Uninterruptible Envelope" />
+<img class="envelope" src="uninterruptible.png" alt="Uninterruptible Envelope" />
 
 The cyan scope trace shows the envelope.
 The magenta trace shows multiple triggers
@@ -231,7 +231,7 @@ offer ways to control looping envelopes.
 
 Here is a looping ADHR envelope using _Upstage:_
 
-<img src="loop-upstage.png" height="360" alt="Looping with Upstage" />
+<img class="envelope" src="loop-upstage.png" alt="Looping with Upstage" />
 
 You can use _Upstage's_ buttons
 to start, stop, and retrigger the loop.
@@ -260,7 +260,7 @@ and holding it until the final stage finishes.
 
 Here is a looping ADHR envelope using _Booster Stage:_
 
-<img src="loop-booster-stage.png" height="360" alt="Looping with Booster Stage" />
+<img class="envelope" src="loop-booster-stage.png" alt="Looping with Booster Stage" />
 
 You can use _Booster Stage's_ buttons
 to start, stop, and retrigger the loop.
