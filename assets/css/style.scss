@@ -40,6 +40,11 @@ table.curves {
     padding: 0;
     margin: 0;
   }
+  th {
+    vertical-align: middle;
+    text-align: center;
+    padding: .5em;
+  }
   svg {
     width: 12.7mm;
     height: 12.7mm;
