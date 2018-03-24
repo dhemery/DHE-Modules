@@ -39,6 +39,8 @@ is a waveshaper with a unique sigmoid transfer function.
 
 ## See Also
 
-- [Generating Single-Stage Envelopes]({{ '/guides/generating-single-stage-envelopes/' | relative_url }})
-- [Generating Multi-Stage Envelopes]({{ '/guides/generating-multi-stage-envelopes/' | relative_url }})
-- [How Stages Work Together]({{ '/technical/how-stages-work-together/' | relative_url }})
+- [Generating Single-Stage Envelopes]({{ '/guides/generating-single-stage-envelopes/' | relative_url }}).
+- [Generating Multi-Stage Envelopes]({{ '/guides/generating-multi-stage-envelopes/' | relative_url }}).
+- [Additional Guides]({{ '/guides/' | relative_url }}).
+- [Technical Details]({{ '/technical/' | relative_url }})
+    of the modules.
