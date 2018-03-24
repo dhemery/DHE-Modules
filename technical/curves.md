@@ -8,10 +8,10 @@ to produce their output.
 The curves come in two shapes:
 
 - [J curves](#j-curves)
-- [S curves](#j-curves)
+- [S curves](#s-curves)
 
 Each module's _CURVE_ knob
-sets the direction (positive or negative)
+sets the sign (positive or negative)
 and magnitude of the curvature.
 Positive curvature creates a J or S shape.
 Negative curvature inverts the shape.
@@ -22,12 +22,7 @@ so sharp as to be nearly square.
 Each curve (J or S, positive or negative)
 is produced by
 Dino Dini's beautiful
-_normalized tunable sigmoid function._
-To learn about
-this fascinating function,
-its mathematical properties,
-and how and why Dino Dini invented it,
-see [**Normalized Tunable Sigmoid Function**]({{ 'technical/sigmoid/' | relative_url }}).
+[**normalized tunable sigmoid function**]({{ 'technical/sigmoid/' | relative_url }}).
 
 ## J Curves
 [_Stage_]({{ '/modules/stage/' | relative_url }})

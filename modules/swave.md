@@ -5,23 +5,15 @@ title: The Swave Module
 
 A waveshaper with a unique sigmoid transfer function.
 
+See also:
+- [J and S Curves]({{ '/technical/curves/' | relative_url }})
+
 ## Controls
 - **CURVE:**
     The curvature of the transfer function.
-    The center position (no curvature)
-    produces a linear transfer function
-    (no waveshaping).
-    Positive curvature produces
-    an S- or J-shaped transfer function.
-    Negative curvature produces
-    an inverted S- or J-shaped transfer function.
-    At extreme positions the curvature
-    of the transfer function is severe.
-
     The shape switch **(S / J)**
-    selects the general shape
-    of the transfer function:
-    Either J-shaped or sigmoid (S-shaped).
+    selects the shape
+    of the transfer function.
 
     The _CURVE_ knob is modulated by the **CV** input.
     The modulation is calibrated so that:

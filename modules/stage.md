@@ -20,6 +20,7 @@ See also:
 - [Generating Single-Stage Envelopes]({{ '/guides/generating-single-stage-envelopes/' | relative_url }})
 - [Generating Multi-Stage Envelopes]({{ '/guides/generating-multi-stage-envelopes/' | relative_url }})
 - [How Stages Work Together]({{ 'technical/how-stages-work-together' | relative_url }})
+- [J and S Curves]({{ '/technical/curves/' | relative_url }})
 
 ## Controls
 
@@ -29,12 +30,10 @@ See also:
 
 - **CURVE:**
     The curvature of the envelope stage.
-    The center position (no curvature)
-    produces a linear stage.
-    Positive curvature produces a J-shaped curve
-    reminiscent of a "logarithmic" curve.
-    Negative curvature produces an inverted J shape.
-    At extreme positions the curvature is severe.
+    See
+    [J and S Curves]({{ '/technical/curves/' | relative_url }})
+    for details.
+
 
 - **DURATION:**
     The duration of the envelope stage.
