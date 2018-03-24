@@ -29,10 +29,9 @@ See also:
     The range is 0–10V.
 
 - **CURVE:**
-    The curvature of the envelope stage.
-    See
-    [J and S Curves]({{ '/technical/curves/' | relative_url }})
-    for details.
+    The
+    [curvature]({{ '/technical/curves/' | relative_url }})
+    of the envelope stage.
 
 
 - **DURATION:**

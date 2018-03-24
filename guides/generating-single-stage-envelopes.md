@@ -7,8 +7,8 @@ with a single
 [_Stage_]({{ '/modules/stage/' | relative_url }})
 module:
 
-- [Attack-and-Hold Envelopes](#ah).
-- [Decay-and-Hold Envelopes](#dh).
+- [Attack-and-Hold Envelopes](#ah)
+- [Decay-and-Hold Envelopes](#dh)
 
 
 For additional control and versatility,
@@ -17,8 +17,8 @@ use a
 instead of a _Stage_.
 
 **See also:**
-[Techniques and Variations]({{ '/guides/techniques-and-variations/' | relative_url }}),
-which describes
+- [Generating Multi-Stage Envelopes]({{ '/guides/generating-multi-stage-envelopes/' | relative_url }})
+- [Techniques and Variations]({{ '/guides/techniques-and-variations/' | relative_url }}):
 how to wire multi-stage envelopes,
 how to add hold and sustain stages,
 and how to create

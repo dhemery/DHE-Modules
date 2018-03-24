@@ -42,12 +42,12 @@ See also:
     or bipolar control voltage (-5 to 5V).
 
 - **CURVE:**
-    The curvature of the envelope stage.
+    The
+    [curvature]({{ '/technical/curves/' | relative_url }})
+    of the envelope stage.
     The shape switch **(S / J)**
-    selects the shape of the envelope stage.
-    See
-    [J and S Curves]({{ '/technical/curves/' | relative_url }})
-    for details.
+    selects the [shape]({{ '/technical/curves/' | relative_url }})
+    of the envelope stage.
 
 - **DURATION:**
     The duration of the envelope stage.
