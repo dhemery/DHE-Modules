@@ -74,7 +74,7 @@ struct BoosterStageModule : Module {
     executor.enter();
   }
 
-  void step() {
+  void step() override {
     executor.step();
     send_active();
     send_eoc();

@@ -93,7 +93,7 @@ struct HostageModule : Module {
   }
   void begin_sustaining() { send_active(true); }
 
-  void step() {
+  void step() override {
     executor.step();
   }
 
