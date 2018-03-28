@@ -2,6 +2,12 @@ SLUG = DHE-Modules
 VERSION = 0.6.0
 RACK_DIR ?= ../..
 
+RACK_APP = /Applications/Rack.app
+RACK_INSTALLED_PLUGINS_DIR = ~/Documents/Rack/plugins
+RESOURCES_DIR = res
+INSTALL_DIR = $(RACK_INSTALLED_PLUGINS_DIR)/$(SLUG)
+CLOBBERABLES = $(INSTALL_DIR) $(RESOURCES_DIR)
+
 FLAGS += -I./src
 CFLAGS +=
 CXXFLAGS +=
@@ -26,9 +32,15 @@ build/test/runner/main: $(TEST_OBJECTS)
 test: build/test/runner/main
 	$<
 
-run: dist
-	cp -R dist/DHE-Modules $(RACK_DIR)/plugins
-	make -C $(RACK_DIR) run
+install: test dist
+	rsync -r --delete-after dist/DHE-Modules/ $(INSTALL_DIR)
 
+run: install
+	open /Applications/Rack.app
+
+.PHONY: gui
 gui:
 	cd gui && rake clobber all
+
+clobber: clean
+	rm -rf $(CLOBBERABLES)
