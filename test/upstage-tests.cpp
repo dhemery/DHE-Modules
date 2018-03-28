@@ -137,11 +137,47 @@ TEST_CASE("Upstage") {
   }
 
   SECTION("WAIT") {
-// WAIT IN
-// Suppress TRIG IN
-// Suppress TRIG button
-// WAIT button
-// Suppress TRIG IN
-// Suppress TRIG button
+    auto &trig_in = upstage.inputs[upstage.TRIG_IN].value;
+    auto &trig_out = upstage.outputs[upstage.TRIG_OUT].value;
+    auto &trig_button = upstage.params[upstage.TRIG_BUTTON].value;
+    auto &wait_button = upstage.params[upstage.WAIT_BUTTON].value;
+    auto &wait_in = upstage.inputs[upstage.WAIT_IN].value;
+
+    trig_button = BUTTON_OFF;
+    trig_in = 0.f;
+    wait_button = BUTTON_OFF;
+    wait_in = 0.f;
+
+    SECTION("input gate high") {
+      wait_in = 10.f;
+
+      SECTION("suppresses TRIG input") {
+        trig_in = 10.f;
+        upstage.step();
+        REQUIRE(trig_out == 0.f);
+      }
+
+      SECTION("suppresses TRIG button") {
+        trig_button = BUTTON_ON;
+        upstage.step();
+        REQUIRE(trig_out == 0.f);
+      }
+    }
+
+    SECTION("button on") {
+      wait_button = BUTTON_ON;
+
+      SECTION("suppresses TRIG input") {
+        trig_in = 10.f;
+        upstage.step();
+        REQUIRE(trig_out == 0.f);
+      }
+
+      SECTION("suppresses TRIG button") {
+        trig_button = BUTTON_ON;
+        upstage.step();
+        REQUIRE(trig_out == 0.f);
+      }
+    }
   }
 }
