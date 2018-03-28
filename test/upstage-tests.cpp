@@ -20,75 +20,72 @@ TEST_CASE("Upstage") {
 
   SECTION("LEVEL") {
     SECTION("UNI") {
-      auto const selected_range = DHE::UNIPOLAR_SIGNAL_RANGE;
       level_switch = LEVEL_SWITCH_UNI;
 
       SECTION("max rotation yields max unipolar signal") {
         level_knob = 1.f;
         upstage.step();
-        REQUIRE_THAT(out, near(selected_range.upper_bound));
+        REQUIRE_THAT(out, near(DHE::UNIPOLAR_SIGNAL_RANGE.upper_bound));
       }
 
       SECTION("min rotation yields min unipolar signal") {
         level_knob = 0.f;
         upstage.step();
-        REQUIRE_THAT(out, near(selected_range.lower_bound));
+        REQUIRE_THAT(out, near(DHE::UNIPOLAR_SIGNAL_RANGE.lower_bound));
       }
 
       SECTION("center rotation yields central unipolar signal ") {
         level_knob = 0.5f;
         upstage.step();
-        REQUIRE_THAT(out, near(selected_range.scale(level_knob)));
+        REQUIRE_THAT(out, near(DHE::UNIPOLAR_SIGNAL_RANGE.scale(0.5f)));
       }
     }
 
     SECTION("BI") {
-      auto const selected_range = DHE::cv_range;
       level_switch = LEVEL_SWITCH_BI;
 
       SECTION("max rotation yields max bipolar signal") {
         level_knob = 1.f;
         upstage.step();
-        REQUIRE_THAT(out, near(selected_range.upper_bound));
+        REQUIRE_THAT(out, near(DHE::BIPOLAR_SIGNAL_RANGE.upper_bound));
       }
 
       SECTION("min rotation yields min bipolar signal") {
         level_knob = 0.f;
         upstage.step();
-        REQUIRE_THAT(out, near(selected_range.lower_bound));
+        REQUIRE_THAT(out, near(DHE::BIPOLAR_SIGNAL_RANGE.lower_bound));
       }
 
       SECTION("center rotation yields central bipolar signal") {
         level_knob = 0.5f;
         upstage.step();
-        REQUIRE_THAT(out, near(selected_range.scale(0.5f)));
+        REQUIRE_THAT(out, near(DHE::BIPOLAR_SIGNAL_RANGE.scale(0.5f)));
       }
     }
 
     SECTION("CV") {
       auto &level_cv = upstage.inputs[upstage.LEVEL_CV].value;
       level_switch = LEVEL_SWITCH_UNI;
-      auto const selected_range = DHE::UNIPOLAR_SIGNAL_RANGE;
 
-      SECTION("max cv adds half rotation") {
+      SECTION("max cv adds 50% rotation") {
         level_knob = 0.35f;
         level_cv = MAX_CV;
         upstage.step();
-        REQUIRE_THAT(out, near(selected_range.scale(level_knob + 0.5f)));
+        REQUIRE_THAT(out, near(DHE::UNIPOLAR_SIGNAL_RANGE.scale(level_knob + 0.5f)));
       }
 
-      SECTION("min cv subtracts half rotation") {
+      SECTION("min cv subtracts 50% rotation") {
         level_knob = 0.88f;
         level_cv = MIN_CV;
         upstage.step();
-        REQUIRE_THAT(out, near(selected_range.scale(level_knob - 0.5f)));
+        REQUIRE_THAT(out, near(DHE::UNIPOLAR_SIGNAL_RANGE.scale(level_knob - 0.5f)));
       }
 
-      SECTION("is not clamped") {
+      SECTION("modulated value is not clamped") {
         level_knob = 1.f;
         level_cv = MAX_CV;
         upstage.step();
-        REQUIRE_THAT(out, near(selected_range.scale(level_knob + 0.5f)));
+        REQUIRE_THAT(out, near(DHE::UNIPOLAR_SIGNAL_RANGE.scale(level_knob + 0.5f)));
       }
     }
   }

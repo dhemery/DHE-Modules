@@ -29,11 +29,11 @@ struct SwaveModule : Module {
   }
 
   float to_signal(float phase) const {
-    return cv_range.scale(phase);
+    return BIPOLAR_SIGNAL_RANGE.scale(phase);
   }
 
   float to_phase(float signal) const {
-    return cv_range.normalize(signal);
+    return BIPOLAR_SIGNAL_RANGE.normalize(signal);
   }
 
   enum ParameterIds {

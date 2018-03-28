@@ -38,7 +38,7 @@ inline float scaled(float rotation, const Range &range) {
 namespace Level {
 
 inline const Range &range(float switch_value) {
-  return switch_value > 0.5f ? UNIPOLAR_SIGNAL_RANGE : cv_range;
+  return switch_value > 0.5f ? UNIPOLAR_SIGNAL_RANGE : BIPOLAR_SIGNAL_RANGE;
 }
 
 inline float scaled(float rotation, const Range &range = UNIPOLAR_SIGNAL_RANGE) {
