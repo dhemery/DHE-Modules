@@ -27,7 +27,7 @@ struct UpstageModule : Module {
   }
 
   float trigger_in() const {
-    return std::max(inputs[TRIG_IN].value, gate_button(TRIG_BUTTON));
+    return param(TRIG_BUTTON) > 0.5f ? 10.f : input(TRIG_IN);
   }
 
   float trigger_out() const {
