@@ -60,7 +60,8 @@ CMakeCache.txt
 CMakeFiles
 CMakeScripts
 Testing
-Makefile
+# DHE: Track Makefiles
+# Makefile
 cmake_install.cmake
 install_manifest.txt
 compile_commands.json
@@ -111,7 +112,6 @@ CTestTestfile.cmake
 # CodeBlocks file
 *.cbp
 
-!/Makefile
 /dist
 /build
 /linux-dist

@@ -5,3 +5,5 @@ exclude:
   - Gemfile.lock
   - Rakefile
   - Makefile
+  - resources
+  - images
