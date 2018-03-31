@@ -4,10 +4,9 @@ project(DHE_Modules DESCRIPTION "DHE Modules for VCV Rack" VERSION 0.0.0)
 set(CMAKE_OSX_DEPLOYMENT_TARGET 10.7)
 if (DEFINED ENV{RACK_DIR})
     set(RACK_DIR "$ENV{RACK_DIR}")
+else (DEFINED ENV{RACK_DIR})
+    set(RACK_DIR ../Rack-SDK)
 endif (DEFINED ENV{RACK_DIR})
-if (NOT DEFINED RACK_DIR)
-    set(RACK_DIR ../..)
-endif (NOT DEFINED RACK_DIR)
 
 add_library(rack INTERFACE)
 target_include_directories(rack
@@ -46,6 +45,7 @@ add_library(plugin SHARED
         src/util/ramp.h
         src/util/sigmoid.h
         src/util/mode.h)
+target_compile_options(plugin PUBLIC -std=c++11)
 target_link_libraries(plugin
         PUBLIC -stdlib=libc++
         PUBLIC rack
@@ -57,6 +57,7 @@ add_executable(tests
         test/catch/catch.hpp
         test/runner/main.cpp
         test/runner/environment.cpp
+        test/booster-stage-tests.cpp
         test/stage-tests.cpp
         test/upstage-tests.cpp
         )
