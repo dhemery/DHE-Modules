@@ -13,6 +13,10 @@ DISTRIBUTABLES += LICENSE.txt gui/res
 
 include $(RACK_DIR)/plugin.mk
 
+# Above this line: Standard plugin build stuff
+########################################################################
+# Below this line: Targets for Dale to build the gui and test the plugin
+
 TEST_SOURCES = $(wildcard test/runner/*.cpp test/*.cpp)
 TEST_OBJECTS = $(patsubst %, build/%.o, $(TEST_SOURCES))
 TEST_RUNNER = build/test-runner
