@@ -17,7 +17,7 @@ include $(RACK_DIR)/plugin.mk
 ########################################################################
 # Below this line: Targets for Dale to build the gui and test the plugin
 
-TEST_SOURCES = $(wildcard test/runner/*.cpp test/*.cpp)
+TEST_SOURCES = $(shell find test -type f -name '*.cpp')
 TEST_OBJECTS = $(patsubst %, build/%.o, $(TEST_SOURCES))
 TEST_RUNNER = build/test-runner
 

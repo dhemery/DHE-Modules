@@ -1,4 +1,5 @@
-#include <catch/catch.hpp>
+#include <lib/catch.hpp>
+#include <lib/matchers.h>
 #include <modules/upstage-module.h>
 
 static const auto BUTTON_ON = 1;
@@ -7,10 +8,6 @@ static const auto LEVEL_SWITCH_UNI = 1;
 static const auto LEVEL_SWITCH_BI = 0;
 static const auto MAX_CV = 5.f;
 static const auto MIN_CV = -5.f;
-
-static Catch::Matchers::Floating::WithinUlpsMatcher near(float expected) {
-  return Catch::Matchers::WithinULP(expected, 1);
-}
 
 TEST_CASE("Upstage") {
   auto upstage = DHE::UpstageModule{};

@@ -1,5 +1,5 @@
 #include <modules/booster-stage-module.h>
-#include "catch/catch.hpp"
+#include "lib/catch.hpp"
 
 TEST_CASE("Booster Stage Module") {
   DHE::BoosterStageModule module{};

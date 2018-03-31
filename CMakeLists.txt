@@ -44,7 +44,7 @@ add_library(plugin SHARED
         src/util/latch.h
         src/util/ramp.h
         src/util/sigmoid.h
-        src/util/mode.h)
+        src/util/mode.h src/modules/cubic-module.h)
 target_compile_options(plugin PUBLIC -std=c++11)
 target_link_libraries(plugin
         PUBLIC -stdlib=libc++
@@ -54,13 +54,14 @@ target_link_libraries(plugin
 target_include_directories(plugin PUBLIC src)
 
 add_executable(tests
-        test/catch/catch.hpp
-        test/runner/main.cpp
-        test/runner/environment.cpp
+        test/lib/catch.hpp
+        test/lib/runner.cpp
+        test/lib/environment.cpp
         test/booster-stage-tests.cpp
+        test/cubic-tests.cpp
         test/stage-tests.cpp
         test/upstage-tests.cpp
-        )
+        test/lib/matchers.h)
 target_compile_features(tests PUBLIC cxx_std_11)
 target_compile_options(tests PUBLIC -stdlib=libc++)
 target_include_directories(tests PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/test ${CMAKE_CURRENT_SOURCE_DIR}/src)
