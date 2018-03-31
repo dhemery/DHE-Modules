@@ -10,7 +10,7 @@ artifacts:
 
 install:
 - set PATH=C:\msys64\usr\bin;%PATH%
-- pacman -S --noconfirm zip unzip mingw-w64-x86_64-cmake
+- pacman -S --noconfirm zip unzip
 
 build_script:
 - bash -l %APPVEYOR_BUILD_FOLDER%\script\appveyor-build.sh
