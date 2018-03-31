@@ -8,9 +8,6 @@ environment:
 artifacts:
   - path: dist\*.zip
 
-cache:
-  - c:\tmp\Rack
-
 install:
 - set PATH=C:\msys64\usr\bin;%PATH%
 - pacman -S --noconfirm zip unzip mingw-w64-x86_64-cmake

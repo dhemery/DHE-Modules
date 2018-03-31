@@ -4,24 +4,19 @@ set -o nounset
 set -o xtrace
 
 echo "MSYSTEM=${MSYSTEM}"
-export VCV_PLUGIN_NAME=DHE-Modules
-export VCV_PLUGIN_DIR="${APPVEYOR_BUILD_FOLDER}"
-export VCV_RACK_DIR=/c/tmp/Rack
-export VCV_RACK_COMMIT=master
-export VCV_HOME_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+export PLUGIN_NAME=DHE-Modules
+export PLUGIN_DIR="${APPVEYOR_BUILD_FOLDER}"
+export SDK_DIR=/c/tmp/Rack-SDK
+export SDK_VERSION=0.6.0
 
 env | sort
 
-mkdir -p "${VCV_RACK_DIR}" \
-git clone -n https://github.com/VCVRack/Rack.git "${VCV_RACK_DIR}" || true
-cd "${VCV_RACK_DIR}"
-git checkout ${VCV_RACK_COMMIT}
-git pull
-git submodule update --init --recursive
+cd /c/tmp
+curl -o rack-sdk.zip https://vcvrack.com/downloads/Rack-SDK-${SDK_VERSION}.zip
+unzip rack-sdk.zip
 
-make dep > /dev/null
-make
+cd "${PLUGIN_DIR}"
 
-cd "${VCV_PLUGIN_DIR}"
+make clean test dist RACK_DIR="${SDK_DIR}"
 
-make clean test dist RACK_DIR="${VCV_RACK_DIR}"
+
