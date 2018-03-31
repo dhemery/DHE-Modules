@@ -11,19 +11,22 @@ run: racksdk
 	docker run -it $(RACK_SDK_IMAGE)
 
 racksdk: rackenv
-	docker image build \
-		--build-arg RACK_SDK_VERSION=$(RACK_SDK_VERSION) \
-		-t $(RACK_SDK_IMAGE) \
-		sdk/
+	docker image inspect $(RACK_SDK_IMAGE) --format "{{.ID}}" \
+	|| docker image build -t $(RACK_SDK_IMAGE) sdk/ \
+		--build-arg RACK_SDK_VERSION=$(RACK_SDK_VERSION)
 
 rackenv:
-	docker image build -t $(RACK_ENVIRONMENT_IMAGE) $(RACK_ENVIRONMENT_TAG)/
+	docker image inspect $(RACK_ENVIRONMENT_IMAGE) --format "{{.ID}}" \
+	|| docker image build -t $(RACK_ENVIRONMENT_IMAGE) $(RACK_ENVIRONMENT_TAG)/
 
-clobber: clean
-	docker rmi $(RACK_SDK_IMAGE) $(RACK_ENVIRONMENT_IMAGE) || true
+cleansdk:
+	docker image rm $(RACK_SDK_IMAGE)
 
-clean:
+cleanenv:
+	docker image rm $(RACK_ENVIRONMENT_IMAGE)
 
-.PHONY: all build clean clobber
+clean: cleansdk cleanenv
+
+.PHONY: all build clean cleanenv cleansdk 
 
 
