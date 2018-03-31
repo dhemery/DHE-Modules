@@ -6,12 +6,13 @@ set -o xtrace
 echo "MSYSTEM=${MSYSTEM}"
 export PLUGIN_NAME=DHE-Modules
 export PLUGIN_DIR="${APPVEYOR_BUILD_FOLDER}"
-export SDK_DIR=/c/tmp/Rack-SDK
+export SDK_DIR="${temp}/Rack-SDK"
 export SDK_VERSION=0.6.0
 
 env | sort
 
-cd /c/tmp
+mkdir -p ${temp}
+cd ${temp}
 curl -o rack-sdk.zip https://vcvrack.com/downloads/Rack-SDK-${SDK_VERSION}.zip
 unzip rack-sdk.zip
 
