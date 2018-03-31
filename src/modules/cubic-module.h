@@ -26,9 +26,15 @@ struct CubicModule : Module {
     return 5.f * squared * coefficient(param(SQUARED_KNOB));
   }
 
+  float cubed(float x) {
+    auto normalized = x / 5.f;
+    auto squared = normalized * normalized * normalized;
+    return 5.f * squared * coefficient(param(CUBED_KNOB));
+  }
+
   void step() override {
     auto x = input(X);
-    outputs[Y].value = squared(x) + scaled(x) + offset();
+    outputs[Y].value = cubed(x) + squared(x) + scaled(x) + offset();
   }
 
   enum ParameterIds {

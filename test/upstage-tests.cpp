@@ -19,19 +19,19 @@ TEST_CASE("Upstage") {
     SECTION("UNI") {
       level_switch = LEVEL_SWITCH_UNI;
 
-      SECTION("max rotation yields max unipolar signal") {
+      SECTION("100% rotation yields unipolar max") {
         level_knob = 1.f;
         upstage.step();
         REQUIRE_THAT(out, near(DHE::UNIPOLAR_SIGNAL_RANGE.upper_bound));
       }
 
-      SECTION("min rotation yields min unipolar signal") {
+      SECTION("0% rotation yields unipolar min") {
         level_knob = 0.f;
         upstage.step();
         REQUIRE_THAT(out, near(DHE::UNIPOLAR_SIGNAL_RANGE.lower_bound));
       }
 
-      SECTION("center rotation yields central unipolar signal ") {
+      SECTION("50% rotation yields unipolar mid") {
         level_knob = 0.5f;
         upstage.step();
         REQUIRE_THAT(out, near(DHE::UNIPOLAR_SIGNAL_RANGE.scale(0.5f)));
@@ -41,19 +41,19 @@ TEST_CASE("Upstage") {
     SECTION("BI") {
       level_switch = LEVEL_SWITCH_BI;
 
-      SECTION("max rotation yields max bipolar signal") {
+      SECTION("100% rotation yields bipolar max") {
         level_knob = 1.f;
         upstage.step();
         REQUIRE_THAT(out, near(DHE::BIPOLAR_SIGNAL_RANGE.upper_bound));
       }
 
-      SECTION("min rotation yields min bipolar signal") {
+      SECTION("50% rotation yields bipolar min") {
         level_knob = 0.f;
         upstage.step();
         REQUIRE_THAT(out, near(DHE::BIPOLAR_SIGNAL_RANGE.lower_bound));
       }
 
-      SECTION("center rotation yields central bipolar signal") {
+      SECTION("0% rotation yields 0") {
         level_knob = 0.5f;
         upstage.step();
         REQUIRE_THAT(out, near(DHE::BIPOLAR_SIGNAL_RANGE.scale(0.5f)));

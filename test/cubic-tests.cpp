@@ -7,112 +7,163 @@ TEST_CASE("Cubic Module") {
   auto &offset_knob = module.params[module.OFFSET_KNOB].value;
   auto &scale_knob = module.params[module.SCALE_KNOB].value;
   auto &squared_knob = module.params[module.SQUARED_KNOB].value;
+  auto &cubed_knob = module.params[module.CUBED_KNOB].value;
 
   auto &x = module.inputs[module.X].value;
   auto &y = module.outputs[module.Y].value;
 
+  cubed_knob = 0.5f;  // default a = 0, so ax^3 = 0
   squared_knob = 0.5f;  // default b = 0, so bx^2 = 0
   scale_knob = 0.75f;   // default c = 1, so cx^1 = x
   offset_knob = 0.5f;   // default d = 0, so dx_0 = 0
 
   SECTION("offset") {
     x = 1.234f;
-    SECTION("max rotation adds max bipolar signal") {
+    SECTION("100% rotation adds bipolar max") {
       offset_knob = 1.f;
       module.step();
       REQUIRE_THAT(y, near(x + DHE::BIPOLAR_SIGNAL_RANGE.upper_bound));
     }
 
-    SECTION("min rotation adds min bipolar signal") {
-      offset_knob = 0.f;
-      module.step();
-      REQUIRE_THAT(y, near(x + DHE::BIPOLAR_SIGNAL_RANGE.lower_bound));
-    }
-
-    SECTION("central rotation adds 0") {
+    SECTION("50% rotation adds 0") {
       offset_knob = 0.5f;
       module.step();
       REQUIRE_THAT(y, near(x + 0.f));
     }
+
+    SECTION("0% rotation adds bipolar min") {
+      offset_knob = 0.f;
+      module.step();
+      REQUIRE_THAT(y, near(x + DHE::BIPOLAR_SIGNAL_RANGE.lower_bound));
+    }
   }
 
   SECTION("scale") {
-    SECTION("max rotation yields 2x") {
+    SECTION("100% rotation adds 2x") {
       x = 2.181f;
       scale_knob = 1.f;
       module.step();
-      REQUIRE_THAT(y, near(x * 2.f));
+      REQUIRE_THAT(y, near(x*2.f));
     }
 
-    SECTION("three-quarter rotation yields x") {
+    SECTION("75% rotation adds x") {
       x = 3.345;
       scale_knob = 0.75f;
       module.step();
       REQUIRE_THAT(y, near(x));
     }
 
-    SECTION("central rotation yields 0") {
+    SECTION("50% rotation adds 0") {
       x = 2.847;
       scale_knob = 0.5f;
       module.step();
       REQUIRE_THAT(y, near(0.f));
     }
 
-    SECTION("quarter rotation yields -x") {
+    SECTION("25% rotation adds -x") {
       x = 4.394;
       scale_knob = 0.25f;
       module.step();
       REQUIRE_THAT(y, near(-x));
     }
 
-    SECTION("min rotation yields -2x") {
+    SECTION("0% rotation adds -2x") {
       x = 4.394;
       scale_knob = 0.f;
       module.step();
-      REQUIRE_THAT(y, near(x * -2.f));
+      REQUIRE_THAT(y, near(x*-2.f));
     }
   }
 
   SECTION("squared") {
-    scale_knob = 0.5f; // no x^1 term
-
-    SECTION("max rotation yields 2(x^2)") {
-      x = 4.872f;
-      auto bipolar_squared_x = pow(x / 5.f, 2.f) * 5.f;
+    SECTION("100% rotation adds 2x^2") {
+      auto phase = 0.412f;
+      x = phase*DHE::BIPOLAR_SIGNAL_RANGE.upper_bound;
       squared_knob = 1.f;
       module.step();
-      REQUIRE_THAT(y, near(bipolar_squared_x * 2.f));
+      auto x_squared = phase*phase*DHE::BIPOLAR_SIGNAL_RANGE.upper_bound;
+      REQUIRE_THAT(y, near(x + 2.f*x_squared));
     }
 
-    SECTION("three-quarter rotation yields x^2") {
-      x = 3.872f;
-      auto bipolar_squared_x = pow(x / 5.f, 2.f) * 5.f;
+    SECTION("75% rotation adds x^2") {
+      auto phase = 0.573f;
+      x = phase*DHE::BIPOLAR_SIGNAL_RANGE.upper_bound;
       squared_knob = 0.75f;
       module.step();
-      REQUIRE_THAT(y, near(bipolar_squared_x));
+      auto x_squared = phase*phase*DHE::BIPOLAR_SIGNAL_RANGE.upper_bound;
+      REQUIRE_THAT(y, near(x + x_squared));
     }
 
-    SECTION("central rotation yields 0") {
-      x = 3.872f;
+    SECTION("50% rotation adds 0") {
+      auto phase = 0.633f;
+      x = phase*DHE::BIPOLAR_SIGNAL_RANGE.upper_bound;
       squared_knob = 0.5f;
       module.step();
-      REQUIRE_THAT(y, near(0.f));
+      REQUIRE_THAT(y, near(x + 0.f));
     }
 
-    SECTION("one-quarter rotation yields -(x^2)") {
-      x = 1.367f;
-      auto bipolar_squared_x = pow(x / 5.f, 2.f) * 5.f;
+    SECTION("25% rotation adds -x^2") {
+      auto phase = 0.722f;
+      x = phase*DHE::BIPOLAR_SIGNAL_RANGE.upper_bound;
       squared_knob = 0.25f;
       module.step();
-      REQUIRE_THAT(y, near(-bipolar_squared_x));
+      auto x_squared = phase*phase*DHE::BIPOLAR_SIGNAL_RANGE.upper_bound;
+      REQUIRE_THAT(y, near(x - x_squared, 5));
     }
 
-    SECTION("min rotation yields -2(x^2)") {
-      x = 4.872f;
-      auto bipolar_squared_x = pow(x / 5.f, 2.f) * 5.f;
+    SECTION("0% rotation adds -2x^2") {
+      auto phase = 0.140f;
+      x = phase*DHE::BIPOLAR_SIGNAL_RANGE.upper_bound;
       squared_knob = 0.f;
       module.step();
-      REQUIRE_THAT(y, near(bipolar_squared_x * -2.f));
+      auto x_squared = phase*phase*DHE::BIPOLAR_SIGNAL_RANGE.upper_bound;
+      REQUIRE_THAT(y, near(x - 2.f*x_squared));
+    }
+  }
+
+  SECTION("cubed") {
+    SECTION("100% rotation adds 2x^3") {
+      auto phase = 0.583f;
+      x = phase*DHE::BIPOLAR_SIGNAL_RANGE.upper_bound;
+      cubed_knob = 1.f;
+      module.step();
+      auto x_cubed = phase*phase*phase*DHE::BIPOLAR_SIGNAL_RANGE.upper_bound;
+      REQUIRE_THAT(y, near(x + 2.f*x_cubed));
+    }
+
+    SECTION("75% rotation adds x^3") {
+      auto phase = 0.653f;
+      x = phase*DHE::BIPOLAR_SIGNAL_RANGE.upper_bound;
+      cubed_knob = 0.75f;
+      module.step();
+      auto x_cubed = phase*phase*phase*DHE::BIPOLAR_SIGNAL_RANGE.upper_bound;
+      REQUIRE_THAT(y, near(x + x_cubed));
+    }
+
+    SECTION("50% rotation adds 0") {
+      auto phase = 0.345f;
+      x = phase*DHE::BIPOLAR_SIGNAL_RANGE.upper_bound;
+      cubed_knob = 0.5f;
+      module.step();
+      REQUIRE_THAT(y, near(x + 0.f));
+    }
+
+    SECTION("25% rotation adds -x^3") {
+      auto phase = 0.822f;
+      x = phase*DHE::BIPOLAR_SIGNAL_RANGE.upper_bound;
+      cubed_knob = 0.25f;
+      module.step();
+      auto x_cubed = phase*phase*phase*DHE::BIPOLAR_SIGNAL_RANGE.upper_bound;
+      REQUIRE_THAT(y, near(x - x_cubed));
+    }
+
+    SECTION("0% rotation adds -2x^3") {
+      auto phase = 0.102f;
+      x = phase*DHE::BIPOLAR_SIGNAL_RANGE.upper_bound;
+      cubed_knob = 0.f;
+      module.step();
+      auto x_cubed = phase*phase*phase*DHE::BIPOLAR_SIGNAL_RANGE.upper_bound;
+      REQUIRE_THAT(y, near(x - 2.f*x_cubed));
     }
   }
 }
