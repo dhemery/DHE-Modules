@@ -5,7 +5,7 @@ title: BOOSTER STAGE
 color: [0,100,30]
 controls:
   buttons: [dark, light]
-  knobs: []
+  knobs: [large]
   ports: []
   switches: [2, 3]
 ---

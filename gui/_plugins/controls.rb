@@ -95,16 +95,22 @@ class ButtonControl < RoundControl
 end
 
 class KnobControl < RoundControl
-  DIAMETER = 12.7
+  DIAMETERS = {
+    huge: 19.0,
+    large: 12.7,
+    medium: 10.0,
+    small: 8.0,
+  }
 
-  def initialize(x: 0.0, y: 0.0, knob_color:, pointer_color:)
-    super(x: x, y: y, diameter: 12.7)
+  def initialize(x: 0.0, y: 0.0, knob_color:, pointer_color:, size: :large)
+    super(x: x, y: y, diameter: DIAMETERS[size])
+    @size = size
     @knob_color = knob_color
     @pointer_color = pointer_color
   end
 
   def name
-    'knob-large'
+    "knob-#{@size}" 
   end
 
   def svg

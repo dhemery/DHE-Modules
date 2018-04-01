@@ -4,7 +4,7 @@ width: 5
 title: STAGE
 color: [120,100,30]
 controls:
-  knobs: []
+  knobs: [large]
   ports: []
 ---
 {% assign width = page.width | hp_to_mm %}

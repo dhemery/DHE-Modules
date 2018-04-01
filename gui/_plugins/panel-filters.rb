@@ -110,6 +110,15 @@ module PanelFilters
     items.map(&:svg).join("\n")
   end
 
+  def medium_knob(page, x, y, label)
+    dark = dark(page)
+    light = light(page)
+    knob = KnobControl.new(x: x, y: y, knob_color: dark, pointer_color: light, size: :medium)
+    label_text = Text.new(text: label, color: dark, size: LARGE_FONT)
+    items = [Label.new(label_text, PADDING, :above, knob)]
+    items << knob if page['draw_controls']
+    items.map(&:svg).join("\n")
+  end
   def large_knob(page, x, y, label)
     dark = dark(page)
     light = light(page)

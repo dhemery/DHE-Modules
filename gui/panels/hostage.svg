@@ -4,7 +4,7 @@ width: 5
 title: HOSTAGE
 color: [300,100,30]
 controls:
-  knobs: []
+  knobs: [large]
   ports: []
   switches: [2, 3]
 ---

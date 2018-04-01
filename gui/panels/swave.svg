@@ -4,7 +4,7 @@ width: 4
 title: SWAVE
 color: [16,100,50]
 controls:
-  knobs: []
+  knobs: [large]
   ports: []
   switches: [2]
 ---

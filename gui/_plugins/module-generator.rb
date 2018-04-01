@@ -61,8 +61,10 @@ module DHE
       PortControl.new(metal_color: light(page), shadow_color: dark(page))
     end
 
-    def knobs(page, _)
-      KnobControl.new(knob_color: dark(page), pointer_color: light(page))
+    def knobs(page, variants)
+      variants.map do |size|
+        KnobControl.new(knob_color: dark(page), pointer_color: light(page), size: size.to_sym)
+      end
     end
 
     def switches(page, variants)

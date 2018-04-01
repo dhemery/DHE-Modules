@@ -5,7 +5,7 @@ title: UPSTAGE
 color: [210,100,30]
 controls:
   buttons: [dark]
-  knobs: []
+  knobs: [large]
   ports: []
   switches: [2]
 ---

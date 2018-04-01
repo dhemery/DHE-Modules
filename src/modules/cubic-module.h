@@ -42,10 +42,16 @@ struct CubicModule : Module {
     SCALE_KNOB,
     SQUARED_KNOB,
     CUBED_KNOB,
+    INPUT_GAIN_KNOB,
+    OUTPUT_GAIN_KNOB,
     PARAMETER_COUNT
   };
   enum InputIds {
     X,
+    OFFSET_CV,
+    SCALE_CV,
+    SQUARED_CV,
+    CUBED_CV,
     INPUT_COUNT
   };
   enum OutputIds {

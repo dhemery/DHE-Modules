@@ -1,19 +1,34 @@
 ---
 layout: panel
-width: 4
+width: 5
 title: CUBIC
 color: [180,100,30]
 controls:
-  knobs: []
+  knobs: [medium]
   ports: []
 ---
 {% assign width = page.width | hp_to_mm %}
-{% assign center_x = width | divided_by:2.0 %}
+{% assign left_x = width | divided_by:4.0 | plus:0.33333 %}
+{% assign right_x = width | minus:left_x %}
+{% assign delta_y = 16.0 %}
+{% assign y = 25.0 %}
 
-{{ page | large_knob: center_x, 25.0, 'X<tspan baseline-shift="super">3</tspan>' }}
-{{ page | large_knob: center_x, 43.5, 'X<tspan baseline-shift="super">2</tspan>' }}
-{{ page | large_knob: center_x, 62.0, 'X' }}
-{{ page | large_knob: center_x, 80.5, 'C' }}
+{{ page | cv: left_x, y }}
+{{ page | medium_knob: right_x, y, 'X<tspan baseline-shift="super">3</tspan>' }}
 
-{{ page | in_port: center_x, 97.0, 'IN' }}
-{{ page | out_port: center_x, 112.0, 'OUT' }}
+{% assign y = y | plus: delta_y %}
+{{ page | cv: left_x, y }}
+{{ page | medium_knob: right_x, y, 'X<tspan baseline-shift="super">2</tspan>' }}
+
+{% assign y = y | plus: delta_y %}
+{{ page | cv: left_x, y }}
+{{ page | medium_knob: right_x, y, 'X' }}
+
+{% assign y = y | plus: delta_y %}
+{{ page | cv: left_x, y }}
+{{ page | medium_knob: right_x, y, 'C' }}
+
+{{ page | medium_knob: left_x, 97.0, 'IN' }}
+{{ page | medium_knob: right_x, 97.0, 'OUT' }}
+{{ page | in_port: left_x, 112.0, 'IN' }}
+{{ page | out_port: right_x, 112.0, 'OUT' }}
