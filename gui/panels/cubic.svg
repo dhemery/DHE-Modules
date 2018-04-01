@@ -2,7 +2,7 @@
 layout: panel
 width: 4
 title: CUBIC
-color: [16,100,50]
+color: [180,100,30]
 controls:
   knobs: []
   ports: []
