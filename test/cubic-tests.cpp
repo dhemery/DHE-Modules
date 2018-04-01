@@ -9,6 +9,8 @@ TEST_CASE("Cubic Module") {
   auto &squared_knob = module.params[module.SQUARED_KNOB].value;
   auto &cubed_knob = module.params[module.CUBED_KNOB].value;
 
+  auto &input_gain_knob = module.params[module.INPUT_GAIN_KNOB].value;
+
   auto &x = module.inputs[module.X].value;
   auto &y = module.outputs[module.Y].value;
 
@@ -16,6 +18,8 @@ TEST_CASE("Cubic Module") {
   squared_knob = 0.5f;  // default b = 0, so bx^2 = 0
   scale_knob = 0.75f;   // default c = 1, so cx^1 = x
   offset_knob = 0.5f;   // default d = 0, so dx_0 = 0
+
+  input_gain_knob = 1.f;
 
   SECTION("offset") {
     x = 1.234f;
@@ -164,6 +168,44 @@ TEST_CASE("Cubic Module") {
       module.step();
       auto x_cubed = phase*phase*phase*DHE::BIPOLAR_SIGNAL_RANGE.upper_bound;
       REQUIRE_THAT(y, near(x - 2.f*x_cubed));
+    }
+  }
+
+  SECTION("input gain") {
+    // Use y = 2x^2 + 2x to test input gain
+    squared_knob = 1.f;  // 2x^2
+    scale_knob = 1.f;    // 2x
+
+    SECTION("0% rotation f(0)") {
+      auto normalized_x = 1.f;
+      x = normalized_x * 5.f;
+
+      input_gain_knob = 0.f;
+      module.step();
+      REQUIRE_THAT(y, near(0.f));
+    }
+
+    SECTION("100% rotation gives f(x)") {
+      auto normalized_x = 1.f;
+      auto normalized_y = 2.f * normalized_x * normalized_x + 2.f * normalized_x;
+      x = normalized_x * 5.f;
+
+      input_gain_knob = 1.f;
+      module.step();
+      REQUIRE_THAT(y, near(normalized_y * 5.0f));
+    }
+
+    SECTION("50% rotation gives f(x/2)") {
+      auto normalized_x = 1.f;
+      x = normalized_x * 5.f;
+
+      input_gain_knob = 0.5f;
+
+      auto scaled_x = normalized_x * input_gain_knob;
+      auto normalized_y = 2.f * scaled_x * scaled_x + 2.f * scaled_x;
+
+      module.step();
+      REQUIRE_THAT(y, near(normalized_y * 5.0f));
     }
   }
 }

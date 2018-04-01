@@ -33,7 +33,7 @@ struct CubicModule : Module {
   }
 
   void step() override {
-    auto x = input(X);
+    auto x = input(X) * param(INPUT_GAIN_KNOB);
     outputs[Y].value = cubed(x) + squared(x) + scaled(x) + offset();
   }
 
