@@ -40,7 +40,7 @@ CubicWidget::CubicWidget(rack::Module *module) : ModuleWidget(module, 5, "res/cu
 
   row++;
   install_input<CubicPort>(CubicModule::SCALE_CV, {left_x, top_row_y + row*row_spacing});
-  install_knob<CubicKnobMedium>(CubicModule::SCALE_KNOB, {right_x, top_row_y + row*row_spacing});
+  install_knob<CubicKnobMedium>(CubicModule::SCALE_KNOB, {right_x, top_row_y + row*row_spacing}, 0.75f);
 
   row++;
   install_input<CubicPort>(CubicModule::OFFSET_CV, {left_x, top_row_y + row*row_spacing});

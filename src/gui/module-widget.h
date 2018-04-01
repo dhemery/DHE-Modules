@@ -27,8 +27,8 @@ public:
   }
 
   template<class T>
-  void install_knob(int index, rack::Vec center) {
-    install_param<T>(index, center, 0.f, 1.f, 0.5f);
+  void install_knob(int index, rack::Vec center, float initial_rotation = 0.5f) {
+    install_param<T>(index, center, 0.f, 1.f, initial_rotation);
   }
 
   template<class T>
