@@ -1,11 +1,14 @@
+#include <modules/cubic-module.h>
 #include "dhe-modules.h"
 
 #include "gui/booster-stage-widget.h"
+#include "gui/cubic-widget.h"
 #include "gui/hostage-widget.h"
 #include "gui/stage-widget.h"
 #include "gui/swave-widget.h"
 #include "gui/upstage-widget.h"
 #include "modules/booster-stage-module.h"
+#include "modules/cubic-module.h"
 #include "modules/hostage-module.h"
 #include "modules/stage-module.h"
 #include "modules/swave-module.h"
@@ -13,6 +16,7 @@
 
 rack::Plugin *plugin;
 rack::Model *modelBoosterStage;
+rack::Model *modelCubic;
 rack::Model *modelHostage;
 rack::Model *modelStage;
 rack::Model *modelSwave;
@@ -32,12 +36,14 @@ void init(rack::Plugin *p) {
   p->version = TOSTRING(VERSION);
 
   modelBoosterStage = DHE::createModel<DHE::BoosterStageModule, DHE::BoosterStageWidget, rack::ModelTag>("Booster Stage", rack::ENVELOPE_GENERATOR_TAG);
+  modelCubic = DHE::createModel<DHE::CubicModule, DHE::CubicWidget, rack::ModelTag>("Cubic", rack::FUNCTION_GENERATOR_TAG);
   modelHostage = DHE::createModel<DHE::HostageModule, DHE::HostageWidget, rack::ModelTag>("Hostage", rack::ENVELOPE_GENERATOR_TAG);
   modelStage = DHE::createModel<DHE::StageModule, DHE::StageWidget, rack::ModelTag>("Stage", rack::ENVELOPE_GENERATOR_TAG);
   modelSwave = DHE::createModel<DHE::SwaveModule, DHE::SwaveWidget, rack::ModelTag>("Swave", rack::WAVESHAPER_TAG);
   modelUpstage = DHE::createModel<DHE::UpstageModule, DHE::UpstageWidget, rack::ModelTag>("Upstage", rack::ENVELOPE_GENERATOR_TAG);
 
   p->addModel(modelBoosterStage);
+  p->addModel(modelCubic);
   p->addModel(modelHostage);
   p->addModel(modelStage);
   p->addModel(modelSwave);

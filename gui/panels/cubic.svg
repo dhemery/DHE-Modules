@@ -1,0 +1,19 @@
+---
+layout: panel
+width: 4
+title: CUBIC
+color: [16,100,50]
+controls:
+  knobs: []
+  ports: []
+---
+{% assign width = page.width | hp_to_mm %}
+{% assign center_x = width | divided_by:2.0 %}
+
+{{ page | large_knob: center_x, 25.0, 'X<tspan baseline-shift="super">3</tspan>' }}
+{{ page | large_knob: center_x, 43.5, 'X<tspan baseline-shift="super">2</tspan>' }}
+{{ page | large_knob: center_x, 62.0, 'X' }}
+{{ page | large_knob: center_x, 80.5, 'C' }}
+
+{{ page | in_port: center_x, 97.0, 'IN' }}
+{{ page | out_port: center_x, 112.0, 'OUT' }}
