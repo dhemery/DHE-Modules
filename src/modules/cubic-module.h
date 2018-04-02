@@ -9,6 +9,7 @@ struct CubicModule : Module {
 
   void step() override {
     auto input_gain = param(INPUT_GAIN_KNOB);
+    auto output_gain = param(OUTPUT_GAIN_KNOB);
 
     auto x = input_gain*input(X)/5.f;
     auto x2 = x*x;
@@ -19,7 +20,7 @@ struct CubicModule : Module {
     auto c = param(C_KNOB);
     auto d = param(D_KNOB);
 
-    auto y = a*x3 + b*x2 + c*x + d;
+    auto y = output_gain*(a*x3 + b*x2 + c*x + d);
 
     outputs[Y].value = 5.f*y;
   }
