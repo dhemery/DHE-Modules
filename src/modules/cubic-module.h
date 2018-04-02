@@ -3,24 +3,42 @@
 #include "module.h"
 namespace DHE {
 
+
 struct CubicModule : Module {
   CubicModule() : Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT} {
   }
 
-  void step() override {
-    auto input_gain = param(INPUT_GAIN_KNOB);
-    auto output_gain = param(OUTPUT_GAIN_KNOB);
+  static const Range &gain_range() {
+    static constexpr auto gain_range = Range{0.f, 2.f};
+    return gain_range;
+  }
 
-    auto x = input_gain*input(X)/5.f;
+  static const Range &coefficient_range() {
+    static constexpr auto coefficient_range = Range{-2.f, 2.f};
+    return coefficient_range;
+  }
+
+  float gain(int knob) const {
+    return gain_range().scale(param(knob));
+  }
+
+  float coefficient(int knob) const {
+    return coefficient_range().scale(param(knob));
+  }
+
+  float a() const { return coefficient(A_KNOB); }
+  float b() const { return coefficient(B_KNOB); }
+  float c() const { return coefficient(C_KNOB); }
+  float d() const { return coefficient(D_KNOB); }
+  float input_gain() const { return gain(INPUT_GAIN_KNOB); }
+  float output_gain() const { return gain(OUTPUT_GAIN_KNOB); }
+
+  void step() override {
+    auto x = input_gain()*input(X)/5.f;
     auto x2 = x*x;
     auto x3 = x2*x;
 
-    auto a = param(A_KNOB);
-    auto b = param(B_KNOB);
-    auto c = param(C_KNOB);
-    auto d = param(D_KNOB);
-
-    auto y = output_gain*(a*x3 + b*x2 + c*x + d);
+    auto y = output_gain()*(a()*x3 + b()*x2 + c()*x + d());
 
     outputs[Y].value = 5.f*y;
   }
