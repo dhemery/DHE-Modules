@@ -1,5 +1,4 @@
 #include <lib/catch.hpp>
-#include <lib/matchers.h>
 #include <modules/upstage-module.h>
 
 static const auto BUTTON_ON = 1;
@@ -22,19 +21,19 @@ TEST_CASE("Upstage") {
       SECTION("100% rotation yields unipolar max") {
         level_knob = 1.f;
         upstage.step();
-        REQUIRE_THAT(out, near(DHE::UNIPOLAR_SIGNAL_RANGE.upper_bound));
+        REQUIRE(out == Approx(DHE::UNIPOLAR_SIGNAL_RANGE.upper_bound));
       }
 
       SECTION("0% rotation yields unipolar min") {
         level_knob = 0.f;
         upstage.step();
-        REQUIRE_THAT(out, near(DHE::UNIPOLAR_SIGNAL_RANGE.lower_bound));
+        REQUIRE(out == Approx(DHE::UNIPOLAR_SIGNAL_RANGE.lower_bound));
       }
 
       SECTION("50% rotation yields unipolar mid") {
         level_knob = 0.5f;
         upstage.step();
-        REQUIRE_THAT(out, near(DHE::UNIPOLAR_SIGNAL_RANGE.scale(0.5f)));
+        REQUIRE(out == Approx(DHE::UNIPOLAR_SIGNAL_RANGE.scale(0.5f)));
       }
     }
 
@@ -44,19 +43,19 @@ TEST_CASE("Upstage") {
       SECTION("100% rotation yields bipolar max") {
         level_knob = 1.f;
         upstage.step();
-        REQUIRE_THAT(out, near(DHE::BIPOLAR_SIGNAL_RANGE.upper_bound));
+        REQUIRE(out == Approx(DHE::BIPOLAR_SIGNAL_RANGE.upper_bound));
       }
 
       SECTION("50% rotation yields bipolar min") {
         level_knob = 0.f;
         upstage.step();
-        REQUIRE_THAT(out, near(DHE::BIPOLAR_SIGNAL_RANGE.lower_bound));
+        REQUIRE(out == Approx(DHE::BIPOLAR_SIGNAL_RANGE.lower_bound));
       }
 
       SECTION("0% rotation yields 0") {
         level_knob = 0.5f;
         upstage.step();
-        REQUIRE_THAT(out, near(DHE::BIPOLAR_SIGNAL_RANGE.scale(0.5f)));
+        REQUIRE(out == Approx(DHE::BIPOLAR_SIGNAL_RANGE.scale(0.5f)));
       }
     }
 
@@ -68,21 +67,21 @@ TEST_CASE("Upstage") {
         level_knob = 0.35f;
         level_cv = MAX_CV;
         upstage.step();
-        REQUIRE_THAT(out, near(DHE::UNIPOLAR_SIGNAL_RANGE.scale(level_knob + 0.5f)));
+        REQUIRE(out == Approx(DHE::UNIPOLAR_SIGNAL_RANGE.scale(level_knob + 0.5f)));
       }
 
       SECTION("min cv subtracts 50% rotation") {
         level_knob = 0.88f;
         level_cv = MIN_CV;
         upstage.step();
-        REQUIRE_THAT(out, near(DHE::UNIPOLAR_SIGNAL_RANGE.scale(level_knob - 0.5f)));
+        REQUIRE(out == Approx(DHE::UNIPOLAR_SIGNAL_RANGE.scale(level_knob - 0.5f)));
       }
 
       SECTION("modulated value is not clamped") {
         level_knob = 1.f;
         level_cv = MAX_CV;
         upstage.step();
-        REQUIRE_THAT(out, near(DHE::UNIPOLAR_SIGNAL_RANGE.scale(level_knob + 0.5f)));
+        REQUIRE(out == Approx(DHE::UNIPOLAR_SIGNAL_RANGE.scale(level_knob + 0.5f)));
       }
     }
   }

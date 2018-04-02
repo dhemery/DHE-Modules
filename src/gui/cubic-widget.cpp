@@ -22,6 +22,8 @@ struct CubicPort : rack::SVGPort {
 };
 
 CubicWidget::CubicWidget(rack::Module *module) : ModuleWidget(module, 5, "res/cubic/panel.svg") {
+  auto coefficient_knob_range = Range{-2.f, 2.f};
+  auto gain_knob_range = Range{0.f, 2.f};
   auto widget_right_edge = width();
 
   auto left_x = width()/4.f + 0.333333f;
@@ -31,20 +33,20 @@ CubicWidget::CubicWidget(rack::Module *module) : ModuleWidget(module, 5, "res/cu
   auto row_spacing = 16.f;
 
   auto row = 0;
-  install_input<CubicPort>(CubicModule::CUBED_CV, {left_x, top_row_y + row*row_spacing});
-  install_knob<CubicKnobMedium>(CubicModule::CUBED_KNOB, {right_x, top_row_y + row*row_spacing});
+  install_input<CubicPort>(CubicModule::A_CV, {left_x, top_row_y + row*row_spacing});
+  install_knob<CubicKnobMedium>(CubicModule::A_KNOB, {right_x, top_row_y + row*row_spacing}, coefficient_knob_range);
 
   row++;
-  install_input<CubicPort>(CubicModule::SQUARED_CV, {left_x, top_row_y + row*row_spacing});
-  install_knob<CubicKnobMedium>(CubicModule::SQUARED_KNOB, {right_x, top_row_y + row*row_spacing});
+  install_input<CubicPort>(CubicModule::B_CV, {left_x, top_row_y + row*row_spacing});
+  install_knob<CubicKnobMedium>(CubicModule::B_KNOB, {right_x, top_row_y + row*row_spacing}, coefficient_knob_range);
 
   row++;
-  install_input<CubicPort>(CubicModule::SCALE_CV, {left_x, top_row_y + row*row_spacing});
-  install_knob<CubicKnobMedium>(CubicModule::SCALE_KNOB, {right_x, top_row_y + row*row_spacing}, 0.75f);
+  install_input<CubicPort>(CubicModule::C_CV, {left_x, top_row_y + row*row_spacing});
+  install_knob<CubicKnobMedium>(CubicModule::C_KNOB, {right_x, top_row_y + row*row_spacing}, coefficient_knob_range, 1.f);
 
   row++;
-  install_input<CubicPort>(CubicModule::OFFSET_CV, {left_x, top_row_y + row*row_spacing});
-  install_knob<CubicKnobMedium>(CubicModule::OFFSET_KNOB, {right_x, top_row_y + row*row_spacing});
+  install_input<CubicPort>(CubicModule::D_CV, {left_x, top_row_y + row*row_spacing});
+  install_knob<CubicKnobMedium>(CubicModule::D_KNOB, {right_x, top_row_y + row*row_spacing}, coefficient_knob_range);
 
   top_row_y = 82.f;
   row_spacing = 15.f;
@@ -52,8 +54,8 @@ CubicWidget::CubicWidget(rack::Module *module) : ModuleWidget(module, 5, "res/cu
   row = 0;
 
   row++;
-  install_knob<CubicKnobMedium>(CubicModule::INPUT_GAIN_KNOB, {left_x, top_row_y + row*row_spacing});
-  install_knob<CubicKnobMedium>(CubicModule::OUTPUT_GAIN_KNOB, {right_x, top_row_y + row*row_spacing});
+  install_knob<CubicKnobMedium>(CubicModule::INPUT_GAIN_KNOB, {left_x, top_row_y + row*row_spacing}, gain_knob_range, 1.f);
+  install_knob<CubicKnobMedium>(CubicModule::OUTPUT_GAIN_KNOB, {right_x, top_row_y + row*row_spacing}, gain_knob_range, 1.f);
 
   row++;
   install_input<CubicPort>(CubicModule::X, {left_x, top_row_y + row*row_spacing});

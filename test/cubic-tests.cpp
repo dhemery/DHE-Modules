@@ -1,211 +1,116 @@
 #include <lib/catch.hpp>
 #include <modules/cubic-module.h>
-#include <lib/matchers.h>
 
 TEST_CASE("Cubic Module") {
   DHE::CubicModule module{};
-  auto &offset_knob = module.params[module.OFFSET_KNOB].value;
-  auto &scale_knob = module.params[module.SCALE_KNOB].value;
-  auto &squared_knob = module.params[module.SQUARED_KNOB].value;
-  auto &cubed_knob = module.params[module.CUBED_KNOB].value;
+  auto &d = module.params[module.D_KNOB].value;
+  auto &c = module.params[module.C_KNOB].value;
+  auto &b = module.params[module.B_KNOB].value;
+  auto &a = module.params[module.A_KNOB].value;
 
-  auto &input_gain_knob = module.params[module.INPUT_GAIN_KNOB].value;
+  auto &input_gain = module.params[module.INPUT_GAIN_KNOB].value;
 
-  auto &x = module.inputs[module.X].value;
-  auto &y = module.outputs[module.Y].value;
+  auto &x_signal = module.inputs[module.X].value;
+  auto &y_signal = module.outputs[module.Y].value;
 
-  cubed_knob = 0.5f;  // default a = 0, so ax^3 = 0
-  squared_knob = 0.5f;  // default b = 0, so bx^2 = 0
-  scale_knob = 0.75f;   // default c = 1, so cx^1 = x
-  offset_knob = 0.5f;   // default d = 0, so dx_0 = 0
+  a = 0.f;
+  b = 0.f;
+  c = 0.f;
+  d = 0.f;
 
-  input_gain_knob = 1.f;
+  input_gain = 1.f;
 
-  SECTION("offset") {
-    x = 1.234f;
-    SECTION("100% rotation adds bipolar max") {
-      offset_knob = 1.f;
-      module.step();
-      REQUIRE_THAT(y, near(x + DHE::BIPOLAR_SIGNAL_RANGE.upper_bound));
-    }
+  SECTION("ax^3") {
+    auto x = 0.893f;
 
-    SECTION("50% rotation adds 0") {
-      offset_knob = 0.5f;
-      module.step();
-      REQUIRE_THAT(y, near(x + 0.f));
-    }
+    a = 1.392f;
+    x_signal = x*5.f;
+    module.step();
 
-    SECTION("0% rotation adds bipolar min") {
-      offset_knob = 0.f;
-      module.step();
-      REQUIRE_THAT(y, near(x + DHE::BIPOLAR_SIGNAL_RANGE.lower_bound));
-    }
+    auto y = a*x*x*x;
+    REQUIRE(y_signal == Approx(y*5.f));
   }
 
-  SECTION("scale") {
-    SECTION("100% rotation adds 2x") {
-      x = 2.181f;
-      scale_knob = 1.f;
-      module.step();
-      REQUIRE_THAT(y, near(x*2.f));
-    }
+  SECTION("bx^2") {
+    auto x = 0.893f;
 
-    SECTION("75% rotation adds x") {
-      x = 3.345;
-      scale_knob = 0.75f;
-      module.step();
-      REQUIRE_THAT(y, near(x));
-    }
+    b = 1.392f;
+    x_signal = x*5.f;
+    module.step();
 
-    SECTION("50% rotation adds 0") {
-      x = 2.847;
-      scale_knob = 0.5f;
-      module.step();
-      REQUIRE_THAT(y, near(0.f));
-    }
-
-    SECTION("25% rotation adds -x") {
-      x = 4.394;
-      scale_knob = 0.25f;
-      module.step();
-      REQUIRE_THAT(y, near(-x));
-    }
-
-    SECTION("0% rotation adds -2x") {
-      x = 4.394;
-      scale_knob = 0.f;
-      module.step();
-      REQUIRE_THAT(y, near(x*-2.f));
-    }
+    auto y = b*x*x;
+    REQUIRE(y_signal == Approx(y*5.f));
   }
 
-  SECTION("squared") {
-    SECTION("100% rotation adds 2x^2") {
-      auto phase = 0.412f;
-      x = phase*DHE::BIPOLAR_SIGNAL_RANGE.upper_bound;
-      squared_knob = 1.f;
-      module.step();
-      auto x_squared = phase*phase*DHE::BIPOLAR_SIGNAL_RANGE.upper_bound;
-      REQUIRE_THAT(y, near(x + 2.f*x_squared));
-    }
+  SECTION("cx^1") {
+    auto x = 0.893f;
 
-    SECTION("75% rotation adds x^2") {
-      auto phase = 0.573f;
-      x = phase*DHE::BIPOLAR_SIGNAL_RANGE.upper_bound;
-      squared_knob = 0.75f;
-      module.step();
-      auto x_squared = phase*phase*DHE::BIPOLAR_SIGNAL_RANGE.upper_bound;
-      REQUIRE_THAT(y, near(x + x_squared));
-    }
+    c = 1.392f;
+    x_signal = x*5.f;
+    module.step();
 
-    SECTION("50% rotation adds 0") {
-      auto phase = 0.633f;
-      x = phase*DHE::BIPOLAR_SIGNAL_RANGE.upper_bound;
-      squared_knob = 0.5f;
-      module.step();
-      REQUIRE_THAT(y, near(x + 0.f));
-    }
-
-    SECTION("25% rotation adds -x^2") {
-      auto phase = 0.722f;
-      x = phase*DHE::BIPOLAR_SIGNAL_RANGE.upper_bound;
-      squared_knob = 0.25f;
-      module.step();
-      auto x_squared = phase*phase*DHE::BIPOLAR_SIGNAL_RANGE.upper_bound;
-      REQUIRE_THAT(y, near(x - x_squared, 5));
-    }
-
-    SECTION("0% rotation adds -2x^2") {
-      auto phase = 0.140f;
-      x = phase*DHE::BIPOLAR_SIGNAL_RANGE.upper_bound;
-      squared_knob = 0.f;
-      module.step();
-      auto x_squared = phase*phase*DHE::BIPOLAR_SIGNAL_RANGE.upper_bound;
-      REQUIRE_THAT(y, near(x - 2.f*x_squared));
-    }
+    auto y = c*x;
+    REQUIRE(y_signal == Approx(y*5.f));
   }
 
-  SECTION("cubed") {
-    SECTION("100% rotation adds 2x^3") {
-      auto phase = 0.583f;
-      x = phase*DHE::BIPOLAR_SIGNAL_RANGE.upper_bound;
-      cubed_knob = 1.f;
+  SECTION("dx^0") {
+    x_signal = 1.234f;
+    c = 1.f;
+
+    SECTION("d=1 adds 5v") {
+      d = 1.f;
       module.step();
-      auto x_cubed = phase*phase*phase*DHE::BIPOLAR_SIGNAL_RANGE.upper_bound;
-      REQUIRE_THAT(y, near(x + 2.f*x_cubed));
+      REQUIRE(y_signal == Approx(x_signal + 5.f));
     }
 
-    SECTION("75% rotation adds x^3") {
-      auto phase = 0.653f;
-      x = phase*DHE::BIPOLAR_SIGNAL_RANGE.upper_bound;
-      cubed_knob = 0.75f;
+    SECTION("d=0 adds 0") {
+      d = 0.f;
       module.step();
-      auto x_cubed = phase*phase*phase*DHE::BIPOLAR_SIGNAL_RANGE.upper_bound;
-      REQUIRE_THAT(y, near(x + x_cubed));
+      REQUIRE(y_signal == Approx(x_signal + 0.f));
     }
 
-    SECTION("50% rotation adds 0") {
-      auto phase = 0.345f;
-      x = phase*DHE::BIPOLAR_SIGNAL_RANGE.upper_bound;
-      cubed_knob = 0.5f;
+    SECTION("d=-1 subtracts 5v") {
+      d = -1.f;
       module.step();
-      REQUIRE_THAT(y, near(x + 0.f));
-    }
 
-    SECTION("25% rotation adds -x^3") {
-      auto phase = 0.822f;
-      x = phase*DHE::BIPOLAR_SIGNAL_RANGE.upper_bound;
-      cubed_knob = 0.25f;
-      module.step();
-      auto x_cubed = phase*phase*phase*DHE::BIPOLAR_SIGNAL_RANGE.upper_bound;
-      REQUIRE_THAT(y, near(x - x_cubed));
-    }
-
-    SECTION("0% rotation adds -2x^3") {
-      auto phase = 0.102f;
-      x = phase*DHE::BIPOLAR_SIGNAL_RANGE.upper_bound;
-      cubed_knob = 0.f;
-      module.step();
-      auto x_cubed = phase*phase*phase*DHE::BIPOLAR_SIGNAL_RANGE.upper_bound;
-      REQUIRE_THAT(y, near(x - 2.f*x_cubed));
+      REQUIRE(y_signal == Approx(x_signal - 5.f));
     }
   }
 
   SECTION("input gain") {
-    // Use y = 2x^2 + 2x to test input gain
-    squared_knob = 1.f;  // 2x^2
-    scale_knob = 1.f;    // 2x
+    a = 1.340;
+    b = 0.482f;
+    c = -1.929f;
+    d = -0.283f;
+    auto x = 0.849f;
 
-    SECTION("0% rotation f(0)") {
-      auto normalized_x = 1.f;
-      x = normalized_x * 5.f;
-
-      input_gain_knob = 0.f;
+    SECTION("0 gives f(0)") {
+      input_gain = 0.f;
+      x_signal = x*5.f;
       module.step();
-      REQUIRE_THAT(y, near(0.f));
+
+      auto y = d;
+      REQUIRE(y_signal == Approx(y*5.f));
     }
 
-    SECTION("100% rotation gives f(x)") {
-      auto normalized_x = 1.f;
-      auto normalized_y = 2.f * normalized_x * normalized_x + 2.f * normalized_x;
-      x = normalized_x * 5.f;
-
-      input_gain_knob = 1.f;
+    SECTION("1 gives f(x)") {
+      input_gain = 1.f;
+      x_signal = x*5.f;
       module.step();
-      REQUIRE_THAT(y, near(normalized_y * 5.0f));
+
+      auto y = a*x*x*x + b*x*x + c*x + d;
+      REQUIRE(y_signal == Approx(y*5.f));
     }
 
-    SECTION("50% rotation gives f(x/2)") {
-      auto normalized_x = 1.f;
-      x = normalized_x * 5.f;
+    SECTION("2 gives f(2x)") {
+      auto _2x = 2.f*x;
 
-      input_gain_knob = 0.5f;
-
-      auto scaled_x = normalized_x * input_gain_knob;
-      auto normalized_y = 2.f * scaled_x * scaled_x + 2.f * scaled_x;
-
+      input_gain = 2.f;
+      x_signal = x*5.f;
       module.step();
-      REQUIRE_THAT(y, near(normalized_y * 5.0f));
+
+      auto y = a*_2x*_2x*_2x + b*_2x*_2x + c*_2x + d;
+      REQUIRE(y_signal == Approx(y*5.f));
     }
   }
 }

@@ -7,51 +7,38 @@ struct CubicModule : Module {
   CubicModule() : Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT} {
   }
 
-  float coefficient(float rotation) {
-    static Range coefficient_knob_range = Range{-2.0f, 2.0f};
-    return coefficient_knob_range.scale(rotation);
-  }
-
-  float offset() {
-    return BIPOLAR_SIGNAL_RANGE.scale(param(OFFSET_KNOB));
-  }
-
-  float scaled(float x) {
-    return x * coefficient(param(SCALE_KNOB));
-  }
-
-  float squared(float x) {
-    auto normalized = x / 5.f;
-    auto squared = normalized * normalized;
-    return 5.f * squared * coefficient(param(SQUARED_KNOB));
-  }
-
-  float cubed(float x) {
-    auto normalized = x / 5.f;
-    auto squared = normalized * normalized * normalized;
-    return 5.f * squared * coefficient(param(CUBED_KNOB));
-  }
-
   void step() override {
-    auto x = input(X) * param(INPUT_GAIN_KNOB);
-    outputs[Y].value = cubed(x) + squared(x) + scaled(x) + offset();
+    auto input_gain = param(INPUT_GAIN_KNOB);
+
+    auto x = input_gain*input(X)/5.f;
+    auto x2 = x*x;
+    auto x3 = x2*x;
+
+    auto a = param(A_KNOB);
+    auto b = param(B_KNOB);
+    auto c = param(C_KNOB);
+    auto d = param(D_KNOB);
+
+    auto y = a*x3 + b*x2 + c*x + d;
+
+    outputs[Y].value = 5.f*y;
   }
 
   enum ParameterIds {
-    OFFSET_KNOB,
-    SCALE_KNOB,
-    SQUARED_KNOB,
-    CUBED_KNOB,
+    A_KNOB,
+    B_KNOB,
+    C_KNOB,
+    D_KNOB,
     INPUT_GAIN_KNOB,
     OUTPUT_GAIN_KNOB,
     PARAMETER_COUNT
   };
   enum InputIds {
     X,
-    OFFSET_CV,
-    SCALE_CV,
-    SQUARED_CV,
-    CUBED_CV,
+    A_CV,
+    B_CV,
+    C_CV,
+    D_CV,
     INPUT_COUNT
   };
   enum OutputIds {

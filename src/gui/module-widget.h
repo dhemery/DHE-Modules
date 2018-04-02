@@ -2,6 +2,7 @@
 
 #include <app.hpp>
 #include <util/math.hpp>
+#include <util/range.h>
 
 #include "plugin/dhe-modules.h"
 
@@ -24,6 +25,11 @@ public:
     auto input = rack::Port::create<T>({0, 0}, rack::Port::INPUT, module, index);
     moveTo(input->box, rack::mm2px(center));
     addInput(input);
+  }
+
+  template<class T>
+  void install_knob(int index, rack::Vec center, Range range, float initial_value = 0.f) {
+    install_param<T>(index, center, range.lower_bound, range.upper_bound, initial_value);
   }
 
   template<class T>
