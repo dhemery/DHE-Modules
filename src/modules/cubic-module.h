@@ -40,6 +40,8 @@ struct CubicModule : Module {
     B_CV,
     C_CV,
     D_CV,
+    INPUT_GAIN_CV,
+    OUTPUT_GAIN_CV,
     INPUT_COUNT
   };
   enum OutputIds {

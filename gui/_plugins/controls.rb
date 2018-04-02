@@ -99,7 +99,7 @@ class KnobControl < RoundControl
     huge: 19.0,
     large: 12.7,
     medium: 10.0,
-    small: 8.0,
+    small: 8.4,
   }
 
   def initialize(x: 0.0, y: 0.0, knob_color:, pointer_color:, size: :large)
