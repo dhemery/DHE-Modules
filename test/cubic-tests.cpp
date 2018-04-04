@@ -99,7 +99,7 @@ TEST_CASE("Cubic Module") {
     }
   }
 
-  SECTION("bx^3") {
+  SECTION("bx^2") {
     auto x = -0.5f; // Arbitrary-ish
 
     SECTION("0% rotation -> -2x^2") {
@@ -154,14 +154,57 @@ TEST_CASE("Cubic Module") {
   }
 
   SECTION("cx^1") {
-    auto x = 0.893f;
+    auto x = -0.5f; // Arbitrary-ish
 
-    x1_coefficient = 1.392f;
-    input_signal = x*5.f;
-    cubic.step();
+    SECTION("0% rotation -> -2x") {
+      x1_knob = 0.f;
+      auto y = -2.f*x;
 
-    auto y = x1_coefficient()*x;
-    REQUIRE(output_signal==Approx(y*5.f));
+      input_signal = 5.f*x;
+      cubic.step();
+
+      REQUIRE(output_signal==5.f*y);
+    }
+
+    SECTION("25% rotation -> -1x") {
+      x1_knob = 0.25f;
+      auto y = -1.f*x;
+
+      input_signal = 5.f*x;
+      cubic.step();
+
+      REQUIRE(output_signal==5.f*y);
+    }
+
+    SECTION("50% rotation -> 0x") {
+      x1_knob = 0.5f;
+      auto y = 0.f*x;
+
+      input_signal = 5.f*x;
+      cubic.step();
+
+      REQUIRE(output_signal==5.f*y);
+    }
+
+    SECTION("75% rotation -> 1x") {
+      x1_knob = 0.75f;
+      auto y = 1.f*x;
+
+      input_signal = 5.f*x;
+      cubic.step();
+
+      REQUIRE(output_signal==5.f*y);
+    }
+
+    SECTION("100% rotation -> 2x") {
+      x1_knob = 1.f;
+      auto y = 2.f*x;
+
+      input_signal = 5.f*x;
+      cubic.step();
+
+      REQUIRE(output_signal==5.f*y);
+    }
   }
 
   SECTION("dx^0") {
