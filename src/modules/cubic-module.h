@@ -18,20 +18,20 @@ struct CubicModule : Module {
     return coefficient_range;
   }
 
-  float gain(int knob) const {
-    return gain_range().scale(param(knob));
+  float gain(int knob, int cv) const {
+    return gain_range().scale(modulated(knob, cv));
   }
 
-  float coefficient(int knob) const {
-    return coefficient_range().scale(param(knob));
+  float coefficient(int knob, int cv) const {
+    return coefficient_range().scale(modulated(knob, cv));
   }
 
-  float a() const { return coefficient(X3_KNOB); }
-  float b() const { return coefficient(X2_KNOB); }
-  float c() const { return coefficient(X1_KNOB); }
-  float d() const { return coefficient(X0_KNOB); }
-  float input_gain() const { return gain(INPUT_GAIN_KNOB); }
-  float output_gain() const { return gain(OUTPUT_GAIN_KNOB); }
+  float a() const { return coefficient(X3_KNOB, A_CV); }
+  float b() const { return coefficient(X2_KNOB, A_CV); }
+  float c() const { return coefficient(X1_KNOB, A_CV); }
+  float d() const { return coefficient(X0_KNOB, A_CV); }
+  float input_gain() const { return gain(INPUT_GAIN_KNOB, INPUT_GAIN_CV); }
+  float output_gain() const { return gain(OUTPUT_GAIN_KNOB, OUTPUT_GAIN_CV); }
 
   void step() override {
     auto x = input_gain()*input(IN)/5.f;

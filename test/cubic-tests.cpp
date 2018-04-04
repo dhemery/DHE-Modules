@@ -9,8 +9,10 @@ TEST_CASE("Cubic Module") {
   auto &x0_knob = cubic.params[cubic.X0_KNOB].value;
   auto &input_gain_knob = cubic.params[cubic.INPUT_GAIN_KNOB].value;
   auto &output_gain_knob = cubic.params[cubic.OUTPUT_GAIN_KNOB].value;
+
   auto &input_signal = cubic.inputs[cubic.IN].value;
   auto &output_signal = cubic.outputs[cubic.OUT].value;
+  auto &input_gain_cv = cubic.inputs[cubic.INPUT_GAIN_CV].value;
 
   x3_knob = 0.5f; // 0x^3
   x2_knob = 0.5f; // 0x^2
@@ -280,6 +282,44 @@ TEST_CASE("Cubic Module") {
       cubic.step();
 
       REQUIRE(output_signal==5.f*y);
+    }
+
+    SECTION("CV") {
+      SECTION("-5V subtracts 1 from input gain") {
+        input_gain_knob = 0.75f; // input gain = 1.5
+        input_gain_cv = -5.f;
+        auto modulated_input_gain = 0.5f;
+        auto x = input_signal*modulated_input_gain/5.f;
+        auto y = a*x*x*x + b*x*x + c*x + d;
+
+        cubic.step();
+
+        REQUIRE(output_signal==5.f*y);
+      }
+
+      SECTION("0V leaves input gain unaffected") {
+        input_gain_knob = 0.5f; // input gain = 1
+        input_gain_cv = 0.f;
+        auto modulated_input_gain = 1.f;
+        auto x = input_signal*modulated_input_gain/5.f;
+        auto y = a*x*x*x + b*x*x + c*x + d;
+
+        cubic.step();
+
+        REQUIRE(output_signal==5.f*y);
+      }
+
+      SECTION("5V adds 1 to gain") {
+        input_gain_knob = 0.25f; // input gain = .5
+        input_gain_cv = 5.f;
+        auto modulated_input_gain = 1.5f;
+        auto x = input_signal*modulated_input_gain/5.f;
+        auto y = a*x*x*x + b*x*x + c*x + d;
+
+        cubic.step();
+
+        REQUIRE(output_signal==5.f*y);
+      }
     }
   }
 
