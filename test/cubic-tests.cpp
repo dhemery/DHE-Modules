@@ -13,10 +13,10 @@ TEST_CASE("Cubic Module") {
   auto &input_signal = cubic.inputs[cubic.IN].value;
   auto &output_signal = cubic.outputs[cubic.OUT].value;
 
-  auto &x3_cv = cubic.inputs[cubic.A_CV].value;
-  auto &x2_cv = cubic.inputs[cubic.B_CV].value;
-  auto &x1_cv = cubic.inputs[cubic.C_CV].value;
-  auto &x0_cv = cubic.inputs[cubic.D_CV].value;
+  auto &x3_cv = cubic.inputs[cubic.X3_CV].value;
+  auto &x2_cv = cubic.inputs[cubic.X2_CV].value;
+  auto &x1_cv = cubic.inputs[cubic.X1_CV].value;
+  auto &x0_cv = cubic.inputs[cubic.X0_CV].value;
   auto &input_gain_cv = cubic.inputs[cubic.INPUT_GAIN_CV].value;
   auto &output_gain_cv = cubic.inputs[cubic.OUTPUT_GAIN_CV].value;
 

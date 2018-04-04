@@ -26,10 +26,10 @@ struct CubicModule : Module {
     return coefficient_range().scale(modulated(knob, cv));
   }
 
-  float a() const { return coefficient(X3_KNOB, A_CV); }
-  float b() const { return coefficient(X2_KNOB, B_CV); }
-  float c() const { return coefficient(X1_KNOB, C_CV); }
-  float d() const { return coefficient(X0_KNOB, D_CV); }
+  float a() const { return coefficient(X3_KNOB, X3_CV); }
+  float b() const { return coefficient(X2_KNOB, X2_CV); }
+  float c() const { return coefficient(X1_KNOB, X1_CV); }
+  float d() const { return coefficient(X0_KNOB, X0_CV); }
   float input_gain() const { return gain(INPUT_GAIN_KNOB, INPUT_GAIN_CV); }
   float output_gain() const { return gain(OUTPUT_GAIN_KNOB, OUTPUT_GAIN_CV); }
 
@@ -54,10 +54,10 @@ struct CubicModule : Module {
   };
   enum InputIds {
     IN,
-    A_CV,
-    B_CV,
-    C_CV,
-    D_CV,
+    X3_CV,
+    X2_CV,
+    X1_CV,
+    X0_CV,
     INPUT_GAIN_CV,
     OUTPUT_GAIN_CV,
     INPUT_COUNT

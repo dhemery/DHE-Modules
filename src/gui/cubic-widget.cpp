@@ -33,19 +33,19 @@ CubicWidget::CubicWidget(rack::Module *module) : ModuleWidget(module, 5, "res/cu
   auto row_spacing = 15.f;
 
   auto row = 0;
-  install_input<CubicPort>(CubicModule::A_CV, {left_x, top_row_y + row*row_spacing});
+  install_input<CubicPort>(CubicModule::X3_CV, {left_x, top_row_y + row*row_spacing});
   install_knob<CubicKnobsmall>(CubicModule::X3_KNOB, {right_x, top_row_y + row*row_spacing});
 
   row++;
-  install_input<CubicPort>(CubicModule::B_CV, {left_x, top_row_y + row*row_spacing});
+  install_input<CubicPort>(CubicModule::X2_CV, {left_x, top_row_y + row*row_spacing});
   install_knob<CubicKnobsmall>(CubicModule::X2_KNOB, {right_x, top_row_y + row*row_spacing});
 
   row++;
-  install_input<CubicPort>(CubicModule::C_CV, {left_x, top_row_y + row*row_spacing});
+  install_input<CubicPort>(CubicModule::X1_CV, {left_x, top_row_y + row*row_spacing});
   install_knob<CubicKnobsmall>(CubicModule::X1_KNOB, {right_x, top_row_y + row*row_spacing}, c_knob_rotation);
 
   row++;
-  install_input<CubicPort>(CubicModule::D_CV, {left_x, top_row_y + row*row_spacing});
+  install_input<CubicPort>(CubicModule::X0_CV, {left_x, top_row_y + row*row_spacing});
   install_knob<CubicKnobsmall>(CubicModule::X0_KNOB, {right_x, top_row_y + row*row_spacing});
 
   top_row_y = 82.f;
