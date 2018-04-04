@@ -378,6 +378,44 @@ TEST_CASE("Cubic Module") {
 
       REQUIRE(output_signal==5.f*y);
     }
+
+    SECTION("CV") {
+      SECTION("-5V subtracts 2 from coefficient") {
+        x0_knob = 0.75f; // coefficient = 1
+        x0_cv = -5.f;
+        auto x0_coefficient = -1.f;
+        auto y = x0_coefficient;
+
+        input_signal = 5.f*x;
+        cubic.step();
+
+        REQUIRE(output_signal==5.f*y);
+      }
+
+      SECTION("0V leaves coefficient unchanged") {
+        x0_knob = 0.75f; // coefficient = 1
+        x0_cv = 0.f;
+        auto x0_coefficient = 1.f;
+        auto y = x0_coefficient;
+
+        input_signal = 5.f*x;
+        cubic.step();
+
+        REQUIRE(output_signal==5.f*y);
+      }
+
+      SECTION("5V adds 2 to coefficient") {
+        x0_knob = 0.25f; // coefficient = -1
+        x0_cv = 5.f;
+        auto x0_coefficient = 1.f;
+        auto y = x0_coefficient;
+
+        input_signal = 5.f*x;
+        cubic.step();
+
+        REQUIRE(output_signal==5.f*y);
+      }
+    }
   }
 
   SECTION("input gain") {
