@@ -1,23 +1,6 @@
 #include <lib/catch.hpp>
 #include <modules/cubic-module.h>
 
-struct Scaled {
-  Scaled(float &normalized, const DHE::Range &range) :
-      normalized{normalized},
-      range{range} {}
-
-  float operator()() const {
-    return range.scale(normalized);
-  }
-
-  void operator=(const float coefficient) {
-    normalized = range.normalize(coefficient);
-  }
-
-  float &normalized;
-  const DHE::Range &range;
-};
-
 TEST_CASE("Cubic Module") {
   DHE::CubicModule cubic{};
   auto &x3_knob = cubic.params[cubic.X3_KNOB].value;
@@ -28,13 +11,6 @@ TEST_CASE("Cubic Module") {
   auto &output_gain_knob = cubic.params[cubic.OUTPUT_GAIN_KNOB].value;
   auto &input_signal = cubic.inputs[cubic.IN].value;
   auto &output_signal = cubic.outputs[cubic.OUT].value;
-
-  auto x3_coefficient = Scaled{x3_knob, DHE::CubicModule::coefficient_range()};
-  auto x2_coefficient = Scaled{x2_knob, DHE::CubicModule::coefficient_range()};
-  auto x1_coefficient = Scaled{x1_knob, DHE::CubicModule::coefficient_range()};
-  auto x0_coefficient = Scaled{x0_knob, DHE::CubicModule::coefficient_range()};
-
-  auto output_gain = Scaled{output_gain_knob, DHE::CubicModule::gain_range()};
 
   x3_knob = 0.5f; // 0x^3
   x2_knob = 0.5f; // 0x^2
@@ -260,7 +236,7 @@ TEST_CASE("Cubic Module") {
   }
 
   SECTION("input gain") {
-    auto x = -0.5f; // Arbitrary-ish
+    input_signal = -2.5f; // Arbitrary-ish
     // Arbitrary f(x): y = -2x^3 - x^2 + x + 2
     auto a = -2.f;
     auto b = -1.f;
@@ -276,34 +252,31 @@ TEST_CASE("Cubic Module") {
     SECTION("0% rotation -> f(0x)") {
       input_gain_knob = 0.f;
       auto input_gain = 0.f;
-      auto xg = x*input_gain;
-      auto y = a*xg*xg*xg + b*xg*xg + c*xg + d;
+      auto x = input_signal*input_gain/5.f;
+      auto y = a*x*x*x + b*x*x + c*x + d;
 
-      input_signal = x*5.f;
       cubic.step();
 
       REQUIRE(output_signal==5.f*y);
     }
 
     SECTION("50% rotation -> f(1x)") {
-      input_gain_knob = 0.f;
-      auto input_gain = 0.f;
-      auto xg = x*input_gain;
-      auto y = a*xg*xg*xg + b*xg*xg + c*xg + d;
+      input_gain_knob = 0.5f;
+      auto input_gain = 1.f;
+      auto x = input_signal*input_gain/5.f;
+      auto y = a*x*x*x + b*x*x + c*x + d;
 
-      input_signal = x*5.f;
       cubic.step();
 
       REQUIRE(output_signal==5.f*y);
     }
 
     SECTION("100% rotation -> f(2x)") {
-      input_gain_knob = 0.f;
-      auto input_gain = 0.f;
-      auto xg = x*input_gain;
-      auto y = a*xg*xg*xg + b*xg*xg + c*xg + d;
+      input_gain_knob = 1.f;
+      auto input_gain = 2.f;
+      auto x = input_signal*input_gain/5.f;
+      auto y = a*x*x*x + b*x*x + c*x + d;
 
-      input_signal = x*5.f;
       cubic.step();
 
       REQUIRE(output_signal==5.f*y);
@@ -311,37 +284,50 @@ TEST_CASE("Cubic Module") {
   }
 
   SECTION("output gain") {
-    x3_coefficient = 1.340;
-    x2_coefficient = 0.482f;
-    x1_coefficient = -1.929f;
-    x0_coefficient = -0.283f;
-    auto x = 0.849f;
+    auto x = -2.5f; // Arbitrary-ish
+    // Arbitrary f(x): y = 2x^3 + x^2 - x - 2
+    auto a = 2.f;
+    auto b = 1.f;
+    auto c = -1.f;
+    auto d = -2.f;
+    // Dial in f(x)
+    x3_knob = 1.f;    // 2x^3
+    x2_knob = 0.75f;  // x^2
+    x1_knob = 0.25f;  // -x
+    x0_knob = 0.f;    // -2
 
-    SECTION("0 gives 0f(x) == 0") {
-      output_gain = 0.f;
+
+    SECTION("0% rotation -> 0f(x)") {
+      output_gain_knob = 0.f;
+      auto output_gain = 0.f;
+      auto y = a*x*x*x + b*x*x + c*x + d;
+
       input_signal = x*5.f;
       cubic.step();
 
-      auto y = output_gain()*(x3_coefficient()*x*x*x + x2_coefficient()*x*x + x1_coefficient()*x + x0_coefficient());
-      REQUIRE(output_signal==Approx(y*5.f));
+      REQUIRE(output_signal==5.f*output_gain*y);
     }
 
-    SECTION("1 gives f(x)") {
-      output_gain = 1.f;
+    SECTION("50% rotation -> 1f(x)") {
+      output_gain_knob = 0.5f;
+      auto output_gain = 1.f;
+      auto y = a*x*x*x + b*x*x + c*x + d;
+
       input_signal = x*5.f;
       cubic.step();
 
-      auto y = output_gain()*(x3_coefficient()*x*x*x + x2_coefficient()*x*x + x1_coefficient()*x + x0_coefficient());
-      REQUIRE(output_signal==Approx(y*5.f));
+      REQUIRE(output_signal==5.f*output_gain*y);
     }
 
-    SECTION("2 gives 2f(x)") {
-      output_gain = 2.f;
+    SECTION("100% rotation -> 2f(x)") {
+      output_gain_knob = 1.f;
+      auto output_gain = 2.f;
+      auto y = a*x*x*x + b*x*x + c*x + d;
+
       input_signal = x*5.f;
       cubic.step();
 
-      auto y = output_gain()*(x3_coefficient()*x*x*x + x2_coefficient()*x*x + x1_coefficient()*x + x0_coefficient());
-      REQUIRE(output_signal==Approx(y*5.f));
+      REQUIRE(output_signal==5.f*output_gain*y);
     }
   }
 }
