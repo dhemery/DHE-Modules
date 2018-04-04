@@ -13,6 +13,7 @@ TEST_CASE("Cubic Module") {
   auto &input_signal = cubic.inputs[cubic.IN].value;
   auto &output_signal = cubic.outputs[cubic.OUT].value;
   auto &input_gain_cv = cubic.inputs[cubic.INPUT_GAIN_CV].value;
+  auto &output_gain_cv = cubic.inputs[cubic.OUTPUT_GAIN_CV].value;
 
   x3_knob = 0.5f; // 0x^3
   x2_knob = 0.5f; // 0x^2
@@ -20,6 +21,9 @@ TEST_CASE("Cubic Module") {
   x0_knob = 0.5f; // 0x^0
   input_gain_knob = 0.5f; // input gain = 1
   output_gain_knob = 0.5f; // output gain = 1
+
+  input_gain_cv = 0.f;  // no modulation
+  output_gain_cv = 0.f; // no modulation
 
   SECTION("ax^3") {
     auto x = -0.5f; // Arbitrary-ish
@@ -309,7 +313,7 @@ TEST_CASE("Cubic Module") {
         REQUIRE(output_signal==5.f*y);
       }
 
-      SECTION("5V adds 1 to gain") {
+      SECTION("5V adds 1 to input gain") {
         input_gain_knob = 0.25f; // input gain = .5
         input_gain_cv = 5.f;
         auto modulated_input_gain = 1.5f;
@@ -368,6 +372,44 @@ TEST_CASE("Cubic Module") {
       cubic.step();
 
       REQUIRE(output_signal==5.f*output_gain*y);
+    }
+
+    SECTION("CV") {
+      SECTION("-5V subtracts 1 from output gain") {
+        output_gain_knob = 0.75f; // output gain = 1.5
+        output_gain_cv = -5.f;
+        auto modulated_output_gain = 0.5f;
+        auto y = a*x*x*x + b*x*x + c*x + d;
+
+        input_signal = x*5.f;
+        cubic.step();
+
+        REQUIRE(output_signal==5.f*modulated_output_gain*y);
+      }
+
+      SECTION("0V leaves output gain unaffected") {
+        output_gain_knob = 0.5f; // output gain = 1
+        output_gain_cv = 0.f;
+        auto modulated_output_gain = 1.f;
+        auto y = a*x*x*x + b*x*x + c*x + d;
+
+        input_signal = x*5.f;
+        cubic.step();
+
+        REQUIRE(output_signal==5.f*modulated_output_gain*y);
+      }
+
+      SECTION("5V adds 1 to output gain") {
+        output_gain_knob = 0.25f; // output gain = .5
+        output_gain_cv = 5.f;
+        auto modulated_output_gain = 1.5f;
+        auto y = a*x*x*x + b*x*x + c*x + d;
+
+        input_signal = x*5.f;
+        cubic.step();
+
+        REQUIRE(output_signal==5.f*modulated_output_gain*y);
+      }
     }
   }
 }
