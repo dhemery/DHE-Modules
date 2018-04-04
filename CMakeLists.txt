@@ -56,7 +56,6 @@ target_include_directories(plugin PUBLIC src)
 add_executable(tests
         test/lib/catch.hpp
         test/lib/environment.cpp
-        test/lib/matchers.h
         test/lib/runner.cpp
         test/booster-stage-tests.cpp
         test/cubic-tests.cpp

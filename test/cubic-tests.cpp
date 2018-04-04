@@ -19,167 +19,215 @@ struct Scaled {
 };
 
 TEST_CASE("Cubic Module") {
-  DHE::CubicModule module{};
-  auto a = Scaled{module.params[module.A_KNOB].value, DHE::CubicModule::coefficient_range()};
-  auto b = Scaled{module.params[module.B_KNOB].value, DHE::CubicModule::coefficient_range()};
-  auto c = Scaled{module.params[module.C_KNOB].value, DHE::CubicModule::coefficient_range()};
-  auto d = Scaled{module.params[module.D_KNOB].value, DHE::CubicModule::coefficient_range()};
+  DHE::CubicModule cubic{};
+  auto &x3_knob = cubic.params[cubic.X3_KNOB].value;
+  auto &x2_knob = cubic.params[cubic.X2_KNOB].value;
+  auto &x1_knob = cubic.params[cubic.X1_KNOB].value;
+  auto &x0_knob = cubic.params[cubic.X0_KNOB].value;
+  auto &input_gain_knob = cubic.params[cubic.INPUT_GAIN_KNOB].value;
+  auto &output_gain_knob = cubic.params[cubic.OUTPUT_GAIN_KNOB].value;
+  auto &input_signal = cubic.inputs[cubic.IN].value;
+  auto &output_signal = cubic.outputs[cubic.OUT].value;
 
-  auto input_gain = Scaled{module.params[module.INPUT_GAIN_KNOB].value, DHE::CubicModule::gain_range()};
-  auto output_gain = Scaled{module.params[module.OUTPUT_GAIN_KNOB].value, DHE::CubicModule::gain_range()};
+  auto x3_coefficient = Scaled{x3_knob, DHE::CubicModule::coefficient_range()};
+  auto x2_coefficient = Scaled{x2_knob, DHE::CubicModule::coefficient_range()};
+  auto x1_coefficient = Scaled{x1_knob, DHE::CubicModule::coefficient_range()};
+  auto x0_coefficient = Scaled{x0_knob, DHE::CubicModule::coefficient_range()};
 
-  auto &x_signal = module.inputs[module.X].value;
-  auto &y_signal = module.outputs[module.Y].value;
+  auto input_gain = Scaled{input_gain_knob, DHE::CubicModule::gain_range()};
+  auto output_gain = Scaled{output_gain_knob, DHE::CubicModule::gain_range()};
 
-  a = 0.f;
-  b = 0.f;
-  c = 0.f;
-  d = 0.f;
+  x3_coefficient = 0.f;
+  x2_coefficient = 0.f;
+  x1_coefficient = 0.f;
+  x0_coefficient = 0.f;
 
   input_gain = 1.f;
   output_gain = 1.f;
 
   SECTION("ax^3") {
-    auto x = 0.893f;
+    auto x = -0.5f; // Arbitrary-ish
 
-    a = 1.392f;
+    SECTION("0% rotation -> -2x^3") {
+      x3_knob = 0.f;
+      auto y = -2.f*x*x*x;
 
-    x_signal = x*5.f;
-    module.step();
+      input_signal = 5.f*x;
+      cubic.step();
 
-    auto y = a()*x*x*x;
-    REQUIRE(y_signal==Approx(y*5.f));
+      REQUIRE(output_signal==5.f*y);
+    }
+
+    SECTION("25% rotation -> -1x^3") {
+      x3_knob = 0.25f;
+      auto y = -1.f*x*x*x;
+
+      input_signal = 5.f*x;
+      cubic.step();
+
+      REQUIRE(output_signal==5.f*y);
+    }
+
+    SECTION("50% rotation -> 0x^3") {
+      x3_knob = 0.5f;
+      auto y = 0.f*x*x*x;
+
+      input_signal = 5.f*x;
+      cubic.step();
+
+      REQUIRE(output_signal==5.f*y);
+    }
+
+    SECTION("75% rotation -> 1x^3") {
+      x3_knob = 0.75f;
+      auto y = 1.f*x*x*x;
+
+      input_signal = 5.f*x;
+      cubic.step();
+
+      REQUIRE(output_signal==5.f*y);
+    }
+
+    SECTION("100% rotation -> 2x^3") {
+      x3_knob = 1.f;
+      auto y = 2.f*x*x*x;
+
+      input_signal = 5.f*x;
+      cubic.step();
+
+      REQUIRE(output_signal==5.f*y);
+    }
   }
 
   SECTION("bx^2") {
     auto x = 0.893f;
 
-    b = 1.392f;
-    x_signal = x*5.f;
-    module.step();
+    x2_coefficient = 1.392f;
+    input_signal = x*5.f;
+    cubic.step();
 
-    auto y = b()*x*x;
-    REQUIRE(y_signal==Approx(y*5.f));
+    auto y = x2_coefficient()*x*x;
+    REQUIRE(output_signal==Approx(y*5.f));
   }
 
   SECTION("cx^1") {
     auto x = 0.893f;
 
-    c = 1.392f;
-    x_signal = x*5.f;
-    module.step();
+    x1_coefficient = 1.392f;
+    input_signal = x*5.f;
+    cubic.step();
 
-    auto y = c()*x;
-    REQUIRE(y_signal==Approx(y*5.f));
+    auto y = x1_coefficient()*x;
+    REQUIRE(output_signal==Approx(y*5.f));
   }
 
   SECTION("dx^0") {
-    x_signal = 1.234f;
-    c = 1.f;
+    input_signal = 1.234f;
+    x1_coefficient = 1.f;
 
     SECTION("d=2 adds 10v") {
-      d = 2.f;
-      module.step();
-      REQUIRE(y_signal==Approx(x_signal + 10.f));
+      x0_coefficient = 2.f;
+      cubic.step();
+      REQUIRE(output_signal==Approx(input_signal + 10.f));
     }
 
     SECTION("d=1 adds 5v") {
-      d = 1.f;
-      module.step();
-      REQUIRE(y_signal==Approx(x_signal + 5.f));
+      x0_coefficient = 1.f;
+      cubic.step();
+      REQUIRE(output_signal==Approx(input_signal + 5.f));
     }
 
     SECTION("d=0 adds 0v") {
-      d = 0.f;
-      module.step();
-      REQUIRE(y_signal==Approx(x_signal + 0.f));
+      x0_coefficient = 0.f;
+      cubic.step();
+      REQUIRE(output_signal==Approx(input_signal + 0.f));
     }
 
     SECTION("d=-1 subtracts 5v") {
-      d = -1.f;
-      module.step();
+      x0_coefficient = -1.f;
+      cubic.step();
 
-      REQUIRE(y_signal==Approx(x_signal - 5.f));
+      REQUIRE(output_signal==Approx(input_signal - 5.f));
     }
 
     SECTION("d=-2 subtracts 10v") {
-      d = -2.f;
-      module.step();
-      REQUIRE(y_signal==Approx(x_signal - 10.f));
+      x0_coefficient = -2.f;
+      cubic.step();
+      REQUIRE(output_signal==Approx(input_signal - 10.f));
     }
 
   }
 
   SECTION("input gain") {
-    a = 1.340f;
-    b = 0.482f;
-    c = -1.929f;
-    d = -0.283f;
+    x3_coefficient = 1.340f;
+    x2_coefficient = 0.482f;
+    x1_coefficient = -1.929f;
+    x0_coefficient = -0.283f;
     auto x = 0.849f;
 
     SECTION("0 gives f(0)") {
       input_gain = 0.f;
-      x_signal = x*5.f;
-      module.step();
+      input_signal = x*5.f;
+      cubic.step();
 
       auto xg = x*input_gain();
-      auto y = a()*xg*xg*xg + b()*xg*xg + c()*xg + d();
-      REQUIRE(y_signal==Approx(y*5.f));
+      auto y = x3_coefficient()*xg*xg*xg + x2_coefficient()*xg*xg + x1_coefficient()*xg + x0_coefficient();
+      REQUIRE(output_signal==Approx(y*5.f));
     }
 
     SECTION("1 gives f(x)") {
       input_gain = 1.f;
-      x_signal = x*5.f;
-      module.step();
+      input_signal = x*5.f;
+      cubic.step();
 
       auto xg = x*input_gain();
-      auto y = a()*xg*xg*xg + b()*xg*xg + c()*xg + d();
-      REQUIRE(y_signal==Approx(y*5.f));
+      auto y = x3_coefficient()*xg*xg*xg + x2_coefficient()*xg*xg + x1_coefficient()*xg + x0_coefficient();
+      REQUIRE(output_signal==Approx(y*5.f));
     }
 
     SECTION("2 gives f(2x)") {
       input_gain = 2.f;
-      x_signal = x*5.f;
-      module.step();
+      input_signal = x*5.f;
+      cubic.step();
 
       auto xg = x*input_gain();
-      auto y = a()*xg*xg*xg + b()*xg*xg + c()*xg + d();
-      REQUIRE(y_signal==Approx(y*5.f));
+      auto y = x3_coefficient()*xg*xg*xg + x2_coefficient()*xg*xg + x1_coefficient()*xg + x0_coefficient();
+      REQUIRE(output_signal==Approx(y*5.f));
     }
   }
 
   SECTION("output gain") {
-    a = 1.340;
-    b = 0.482f;
-    c = -1.929f;
-    d = -0.283f;
+    x3_coefficient = 1.340;
+    x2_coefficient = 0.482f;
+    x1_coefficient = -1.929f;
+    x0_coefficient = -0.283f;
     auto x = 0.849f;
 
     SECTION("0 gives 0f(x) == 0") {
       output_gain = 0.f;
-      x_signal = x*5.f;
-      module.step();
+      input_signal = x*5.f;
+      cubic.step();
 
-      auto y = output_gain()*(a()*x*x*x + b()*x*x + c()*x + d());
-      REQUIRE(y_signal==Approx(y*5.f));
+      auto y = output_gain()*(x3_coefficient()*x*x*x + x2_coefficient()*x*x + x1_coefficient()*x + x0_coefficient());
+      REQUIRE(output_signal==Approx(y*5.f));
     }
 
     SECTION("1 gives f(x)") {
       output_gain = 1.f;
-      x_signal = x*5.f;
-      module.step();
+      input_signal = x*5.f;
+      cubic.step();
 
-      auto y = output_gain()*(a()*x*x*x + b()*x*x + c()*x + d());
-      REQUIRE(y_signal==Approx(y*5.f));
+      auto y = output_gain()*(x3_coefficient()*x*x*x + x2_coefficient()*x*x + x1_coefficient()*x + x0_coefficient());
+      REQUIRE(output_signal==Approx(y*5.f));
     }
 
     SECTION("2 gives 2f(x)") {
       output_gain = 2.f;
-      x_signal = x*5.f;
-      module.step();
+      input_signal = x*5.f;
+      cubic.step();
 
-      auto y = output_gain()*(a()*x*x*x + b()*x*x + c()*x + d());
-      REQUIRE(y_signal==Approx(y*5.f));
+      auto y = output_gain()*(x3_coefficient()*x*x*x + x2_coefficient()*x*x + x1_coefficient()*x + x0_coefficient());
+      REQUIRE(output_signal==Approx(y*5.f));
     }
   }
 }
