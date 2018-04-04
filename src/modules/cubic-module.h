@@ -27,9 +27,9 @@ struct CubicModule : Module {
   }
 
   float a() const { return coefficient(X3_KNOB, A_CV); }
-  float b() const { return coefficient(X2_KNOB, A_CV); }
-  float c() const { return coefficient(X1_KNOB, A_CV); }
-  float d() const { return coefficient(X0_KNOB, A_CV); }
+  float b() const { return coefficient(X2_KNOB, B_CV); }
+  float c() const { return coefficient(X1_KNOB, C_CV); }
+  float d() const { return coefficient(X0_KNOB, D_CV); }
   float input_gain() const { return gain(INPUT_GAIN_KNOB, INPUT_GAIN_CV); }
   float output_gain() const { return gain(OUTPUT_GAIN_KNOB, OUTPUT_GAIN_CV); }
 
