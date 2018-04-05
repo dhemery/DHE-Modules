@@ -22,8 +22,6 @@ struct CubicPort : rack::SVGPort {
 };
 
 CubicWidget::CubicWidget(rack::Module *module) : ModuleWidget(module, 5, "res/cubic/panel.svg") {
-  auto c_knob_rotation = DHE::CubicModule::coefficient_range().normalize(1.f);
-  auto gain_knob_rotation = DHE::CubicModule::gain_range().normalize((1.f));
   auto widget_right_edge = width();
 
   auto left_x = width()/4.f + 0.333333f;
@@ -42,7 +40,7 @@ CubicWidget::CubicWidget(rack::Module *module) : ModuleWidget(module, 5, "res/cu
 
   row++;
   install_input<CubicPort>(CubicModule::X1_CV, {left_x, top_row_y + row*row_spacing});
-  install_knob<CubicKnobsmall>(CubicModule::X1_KNOB, {right_x, top_row_y + row*row_spacing}, c_knob_rotation);
+  install_knob<CubicKnobsmall>(CubicModule::X1_KNOB, {right_x, top_row_y + row*row_spacing});
 
   row++;
   install_input<CubicPort>(CubicModule::X0_CV, {left_x, top_row_y + row*row_spacing});
@@ -50,8 +48,8 @@ CubicWidget::CubicWidget(rack::Module *module) : ModuleWidget(module, 5, "res/cu
 
   top_row_y = 82.f;
   row = 0;
-  install_knob<CubicKnobsmall>(CubicModule::INPUT_GAIN_KNOB, {left_x, top_row_y + row*row_spacing}, gain_knob_rotation);
-  install_knob<CubicKnobsmall>(CubicModule::OUTPUT_GAIN_KNOB, {right_x, top_row_y + row*row_spacing}, gain_knob_rotation);
+  install_knob<CubicKnobsmall>(CubicModule::INPUT_GAIN_KNOB, {left_x, top_row_y + row*row_spacing});
+  install_knob<CubicKnobsmall>(CubicModule::OUTPUT_GAIN_KNOB, {right_x, top_row_y + row*row_spacing});
 
   row++;
   install_input<CubicPort>(CubicModule::INPUT_GAIN_CV, {left_x, top_row_y + row*row_spacing});
