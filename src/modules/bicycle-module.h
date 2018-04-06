@@ -43,13 +43,14 @@ struct BicycleModule : Module {
     auto roller_radius = length(ROLL_RADIUS_KNOB, ROLL_RADIUS_CV, ROLL_CV_ATTENUVERTER);
     auto pole_length = length(POLE_LENGTH_KNOB, POLE_LENGTH_CV, POLE_CV_ATTENUVERTER);
 
-    auto roll_radius = std::abs(base_radius - roller_radius);
+    auto direction = param(ROLL_POSITION_SWITCH) > 0.5f ? 1.f : -1.f;
+    auto roll_radius = std::abs(base_radius + direction*roller_radius);
     auto pole_angle_multiplier = roll_radius/roller_radius;
 
     roll_angle = increment_angle(roll_angle);
     pole_angle = increment_angle(pole_angle, pole_angle_multiplier);
 
-    auto x = roll_radius*std::cos(roll_angle) + pole_length*std::cos(pole_angle);
+    auto x = roll_radius*std::cos(roll_angle) - direction*pole_length*std::cos(pole_angle);
     auto y = roll_radius*std::sin(roll_angle) - pole_length*std::sin(pole_angle);
 
     auto roulette_radius = roll_radius + pole_length;
@@ -61,7 +62,6 @@ struct BicycleModule : Module {
     outputs[X_OUT].value = x_gain*(x*scale + x_offset);
     outputs[Y_OUT].value = y_gain*(y*scale + y_offset);
   }
-
   enum ParameterIds {
     BASE_RADIUS_KNOB,
     BASE_CV_ATTENUVERTER,
