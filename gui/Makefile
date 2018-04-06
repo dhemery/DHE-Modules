@@ -30,7 +30,7 @@ info:
 	@echo "Ports: $(PORTS)"
 
 $(IMAGE_BUILD_FILES) $(PANEL_BUILD_FILES) $(PORT_BUILD_FILES): $(SOURCES) $(JEKYLL_FILES)
-	bundle exec jekyll build
+	jekyll build --trace
 
 $(IMAGE_DIR)/%.svg: $(IMAGE_BUILD_DIR)/%.svg
 	mkdir -p $(dir $@)

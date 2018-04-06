@@ -22,6 +22,12 @@ struct Module : rack::Module {
     return param(param_index) + input(mod_index)/10.f;
   }
 
+  float modulated(int param_index, int mod_index, int attenuverter_index) const {
+    auto modulation_gain = BIPOLAR_PHASE_RANGE.scale(param(attenuverter_index));
+    auto modulation = modulation_gain*input(mod_index)/10.f;
+    return param(param_index) + modulation;
+  }
+
   float param(int index) const {
     return params[index].value;
   }

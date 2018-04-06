@@ -110,11 +110,21 @@ module PanelFilters
     items.map(&:svg).join("\n")
   end
 
+  def tiny_knob(page, x, y, label, label_size = SMALL_FONT)
+    dark = dark(page)
+    light = light(page)
+    knob = KnobControl.new(x: x, y: y, knob_color: dark, pointer_color: light, size: :tiny)
+    label_text = Text.new(text: label, color: dark, size: label_size)
+    items = [Label.new(label_text, PADDING, :above, knob)]
+    items << knob if page['draw_controls']
+    items.map(&:svg).join("\n")
+  end
+
   def small_knob(page, x, y, label)
     dark = dark(page)
     light = light(page)
     knob = KnobControl.new(x: x, y: y, knob_color: dark, pointer_color: light, size: :small)
-    label_text = Text.new(text: label, color: dark, size: LARGE_FONT)
+    label_text = Text.new(text: label, color: dark, size: SMALL_FONT)
     items = [Label.new(label_text, PADDING, :above, knob)]
     items << knob if page['draw_controls']
     items.map(&:svg).join("\n")
@@ -138,6 +148,10 @@ module PanelFilters
     items = [Label.new(label_text, PADDING, :above, knob)]
     items << knob if page['draw_controls']
     items.map(&:svg).join("\n")
+  end
+
+  def attenuverter(page, x, y)
+    tiny_knob(page, x, y, '<tspan font-size="larger">-&#160;&#160;+</tspan>', LARGE_FONT)
   end
 
   def cv(page, x, y)
@@ -205,8 +219,8 @@ module PanelFilters
     switch(page, x, y, :mid, '100', '1', '10')
   end
 
-  def polarity_switch(page, x, y)
-    switch(page, x, y, :high, 'UNI', 'BI',)
+  def polarity_switch(page, x, y, position = :high)
+    switch(page, x, y, position, 'UNI', 'BI',)
   end
 
   def shape_switch(page, x, y)
