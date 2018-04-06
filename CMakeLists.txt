@@ -22,8 +22,8 @@ add_library(plugin SHARED
         src/gui/booster-stage-widget.cpp
         src/gui/cubic-widget.h
         src/gui/cubic-widget.cpp
-        src/gui/cycloid-widget.h
-        src/gui/cycloid-widget.cpp
+        src/gui/bicycle-widget.h
+        src/gui/bicycle-widget.cpp
         src/gui/hostage-widget.h
         src/gui/hostage-widget.cpp
         src/gui/module-widget.h
@@ -36,7 +36,7 @@ add_library(plugin SHARED
         src/gui/upstage-widget.cpp
         src/modules/booster-stage-module.h
         src/modules/cubic-module.h
-        src/modules/cycloid-module.h
+        src/modules/bicycle-module.h
         src/modules/hostage-module.h
         src/modules/stage-module.h
         src/modules/swave-module.h
