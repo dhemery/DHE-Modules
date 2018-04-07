@@ -24,24 +24,23 @@ struct BicycleModule : Module {
     return gain_range().scale(modulated(knob, cv));
   }
 
-  float speed() {
-    auto modulated_speed = modulated(SPEED_KNOB, SPEED_CV, SPEED_CV_ATTENUVERTER);
-    auto inverted_speed = 1.f - modulated_speed;
-    auto clamped_speed = DHE::UNIPOLAR_PHASE_RANGE.clamp(inverted_speed);
-    return Duration::scaled(clamped_speed, Duration::MEDIUM_RANGE);
+  float period() {
+    auto speed_rotation = modulated(HASTE_KNOB, HASTE_CV, HASTE_CV_ATTENUVERTER);
+    auto period_rotation = DHE::UNIPOLAR_PHASE_RANGE.clamp(1.f - speed_rotation);
+    return Duration::scaled(period_rotation, Duration::MEDIUM_RANGE);
   }
 
   float increment_angle(float angle, float multiplier = 1.f) {
     static auto two_pi = 2.f*std::acos(-1.f);
-    angle += multiplier*two_pi*rack::engineGetSampleTime()/speed();
+    angle += multiplier*two_pi*rack::engineGetSampleTime()/period();
     if (angle > two_pi) angle -= two_pi;
     return angle;
   }
 
   void step() override {
-    auto base_radius = length(BASE_RADIUS_KNOB, BASE_RADIUS_CV, BASE_CV_ATTENUVERTER);
-    auto roller_radius = length(ROLL_RADIUS_KNOB, ROLL_RADIUS_CV, ROLL_CV_ATTENUVERTER);
-    auto pole_length = length(POLE_LENGTH_KNOB, POLE_LENGTH_CV, POLE_CV_ATTENUVERTER);
+    auto base_radius = length(ROCK_KNOB, ROCK_CV, ROCK_CV_ATTENUVERTER);
+    auto roller_radius = length(ROLL_KNOB, ROLL_CV, ROLL_CV_ATTENUVERTER);
+    auto pole_length = length(CURL_KNOB, CURL_CV, CURL_CV_ATTENUVERTER);
 
     auto direction = param(ROLL_POSITION_SWITCH) > 0.5f ? 1.f : -1.f;
     auto roll_radius = std::abs(base_radius + direction*roller_radius);
@@ -54,24 +53,24 @@ struct BicycleModule : Module {
     auto y = roll_radius*std::sin(roll_angle) - pole_length*std::sin(pole_angle);
 
     auto roulette_radius = roll_radius + pole_length;
-    auto scale = 5.f/roulette_radius;
+    auto roulette_scale = 5.f/roulette_radius;
     auto x_gain = gain(X_GAIN_KNOB, X_GAIN_CV);
     auto y_gain = gain(Y_GAIN_KNOB, Y_GAIN_CV);
     auto x_offset = param(X_RANGE_SWITCH) > 0.5f ? 5.f : 0.f;
     auto y_offset = param(Y_RANGE_SWITCH) > 0.5f ? 5.f : 0.f;
-    outputs[X_OUT].value = x_gain*(x*scale + x_offset);
-    outputs[Y_OUT].value = y_gain*(y*scale + y_offset);
+    outputs[X_OUT].value = x_gain*(x*roulette_scale + x_offset);
+    outputs[Y_OUT].value = y_gain*(y*roulette_scale + y_offset);
   }
   enum ParameterIds {
-    BASE_RADIUS_KNOB,
-    BASE_CV_ATTENUVERTER,
-    ROLL_RADIUS_KNOB,
+    ROCK_KNOB,
+    ROCK_CV_ATTENUVERTER,
+    ROLL_KNOB,
     ROLL_CV_ATTENUVERTER,
     ROLL_POSITION_SWITCH,
-    POLE_LENGTH_KNOB,
-    POLE_CV_ATTENUVERTER,
-    SPEED_KNOB,
-    SPEED_CV_ATTENUVERTER,
+    CURL_KNOB,
+    CURL_CV_ATTENUVERTER,
+    HASTE_KNOB,
+    HASTE_CV_ATTENUVERTER,
     X_GAIN_KNOB,
     Y_GAIN_KNOB,
     X_RANGE_SWITCH,
@@ -79,10 +78,10 @@ struct BicycleModule : Module {
     PARAMETER_COUNT
   };
   enum InputIds {
-    BASE_RADIUS_CV,
-    ROLL_RADIUS_CV,
-    POLE_LENGTH_CV,
-    SPEED_CV,
+    ROCK_CV,
+    ROLL_CV,
+    CURL_CV,
+    HASTE_CV,
     X_GAIN_CV,
     Y_GAIN_CV,
     INPUT_COUNT
