@@ -16,7 +16,7 @@ struct XynchrotronModule : Module {
   }
 
   float length(int knob, int cv, int av) {
-    static auto length_range = Range{1e-3f, 1.f};
+    static auto length_range = Range{1e-2f, 1.f};
     return length_range.clamp(modulated(knob, cv, av));
   }
 
@@ -42,14 +42,15 @@ struct XynchrotronModule : Module {
     auto roller_radius = length(ROLL_KNOB, ROLL_CV, ROLL_CV_ATTENUVERTER);
     auto pole_length = length(CURL_KNOB, CURL_CV, CURL_CV_ATTENUVERTER);
 
-    auto direction = param(ROLL_POSITION_SWITCH) > 0.5f ? 1.f : -1.f;
-    auto roll_radius = std::abs(base_radius + direction*roller_radius);
-    auto pole_angle_multiplier = roll_radius/roller_radius;
+    auto position = param(ROLL_POSITION_SWITCH) > 0.5f ? 1.f : -1.f;
+    auto roll_radius = std::abs(base_radius + position*roller_radius);
 
-    roll_angle = increment_angle(roll_angle);
+    auto direction = param(DIRECTION_SWITCH) > 0.5f ? 1.f : -1.f;
+    roll_angle = increment_angle(roll_angle, direction);
+    auto pole_angle_multiplier = direction*roll_radius/roller_radius;
     pole_angle = increment_angle(pole_angle, pole_angle_multiplier);
 
-    auto x = roll_radius*std::cos(roll_angle) - direction*pole_length*std::cos(pole_angle);
+    auto x = roll_radius*std::cos(roll_angle) - position*pole_length*std::cos(pole_angle);
     auto y = roll_radius*std::sin(roll_angle) - pole_length*std::sin(pole_angle);
 
     auto roulette_radius = roll_radius + pole_length;
@@ -65,6 +66,7 @@ struct XynchrotronModule : Module {
     ROCK_KNOB,
     ROCK_CV_ATTENUVERTER,
     ROLL_KNOB,
+    DIRECTION_SWITCH,
     ROLL_CV_ATTENUVERTER,
     ROLL_POSITION_SWITCH,
     CURL_KNOB,

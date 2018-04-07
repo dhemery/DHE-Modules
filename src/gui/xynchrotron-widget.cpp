@@ -8,7 +8,7 @@ namespace DHE {
 
 struct XynchrotronKnobTiny : rack::RoundKnob {
   XynchrotronKnobTiny() {
-    setSVG(rack::SVG::load(rack::assetPlugin(plugin, "res/xyclotron/knob-tiny.svg")));
+    setSVG(rack::SVG::load(rack::assetPlugin(plugin, "res/xynchrotron/knob-tiny.svg")));
     shadow->opacity = 0.f;
   }
 };
@@ -57,6 +57,7 @@ XynchrotronWidget::XynchrotronWidget(rack::Module *module) : ModuleWidget(module
   install_input<XynchrotronPort>(XynchrotronModule::ROCK_CV, {left_x, top_row_y + row*row_spacing});
   install_knob<XynchrotronKnobTiny>(XynchrotronModule::ROCK_CV_ATTENUVERTER, {left_center_x, top_row_y + row*row_spacing});
   install_knob<XynchrotronKnobLarge>(XynchrotronModule::ROCK_KNOB, {right_center_x, top_row_y + row*row_spacing});
+  install_switch<XynchrotronSwitch2>(XynchrotronModule::DIRECTION_SWITCH, {right_x, top_row_y + row*row_spacing}, 1, 1);
 
   row++;
   install_input<XynchrotronPort>(XynchrotronModule::ROLL_CV, {left_x, top_row_y + row*row_spacing});
