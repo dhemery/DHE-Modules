@@ -3,14 +3,14 @@
 
 #include "gui/booster-stage-widget.h"
 #include "gui/cubic-widget.h"
-#include "gui/xyclotron-widget.h"
+#include "gui/xynchrotron-widget.h"
 #include "gui/hostage-widget.h"
 #include "gui/stage-widget.h"
 #include "gui/swave-widget.h"
 #include "gui/upstage-widget.h"
 #include "modules/booster-stage-module.h"
 #include "modules/cubic-module.h"
-#include "modules/xyclotron-module.h"
+#include "modules/xynchrotron-module.h"
 #include "modules/hostage-module.h"
 #include "modules/stage-module.h"
 #include "modules/swave-module.h"
@@ -23,7 +23,7 @@ rack::Model *modelHostage;
 rack::Model *modelStage;
 rack::Model *modelSwave;
 rack::Model *modelUpstage;
-rack::Model *modelXyclotron;
+rack::Model *modelXynchrotron;
 
 namespace DHE {
 template<typename TModel, typename TWidget, typename... TTag>
@@ -44,7 +44,7 @@ void init(rack::Plugin *p) {
   modelStage = DHE::createModel<DHE::StageModule, DHE::StageWidget, rack::ModelTag>("Stage", rack::ENVELOPE_GENERATOR_TAG);
   modelSwave = DHE::createModel<DHE::SwaveModule, DHE::SwaveWidget, rack::ModelTag>("Swave", rack::WAVESHAPER_TAG);
   modelUpstage = DHE::createModel<DHE::UpstageModule, DHE::UpstageWidget, rack::ModelTag>("Upstage", rack::ENVELOPE_GENERATOR_TAG);
-  modelXyclotron = DHE::createModel<DHE::BicycleModule, DHE::XyclotronWidget, rack::ModelTag>("Xyclotron", rack::FUNCTION_GENERATOR_TAG);
+  modelXynchrotron = DHE::createModel<DHE::XynchrotronModule, DHE::XynchrotronWidget, rack::ModelTag>("Xynchrotron", rack::FUNCTION_GENERATOR_TAG);
 
   p->addModel(modelBoosterStage);
   p->addModel(modelCubic);
@@ -52,5 +52,5 @@ void init(rack::Plugin *p) {
   p->addModel(modelStage);
   p->addModel(modelSwave);
   p->addModel(modelUpstage);
-  p->addModel(modelXyclotron);
+  p->addModel(modelXynchrotron);
 }

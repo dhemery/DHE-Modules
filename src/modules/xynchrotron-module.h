@@ -4,10 +4,10 @@
 #include "module.h"
 namespace DHE {
 
-struct BicycleModule : Module {
+struct XynchrotronModule : Module {
   float roll_angle = 0.f;
   float pole_angle = 0.f;
-  BicycleModule() : Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT} {
+  XynchrotronModule() : Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT} {
   }
 
   static const Range &gain_range() {
@@ -25,7 +25,7 @@ struct BicycleModule : Module {
   }
 
   float period() {
-    auto speed_rotation = modulated(HASTE_KNOB, HASTE_CV, HASTE_CV_ATTENUVERTER);
+    auto speed_rotation = modulated(ZING_KNOB, ZING_CV, ZING_CV_ATTENUVERTER);
     auto period_rotation = DHE::UNIPOLAR_PHASE_RANGE.clamp(1.f - speed_rotation);
     return Duration::scaled(period_rotation, Duration::MEDIUM_RANGE);
   }
@@ -69,8 +69,8 @@ struct BicycleModule : Module {
     ROLL_POSITION_SWITCH,
     CURL_KNOB,
     CURL_CV_ATTENUVERTER,
-    HASTE_KNOB,
-    HASTE_CV_ATTENUVERTER,
+    ZING_KNOB,
+    ZING_CV_ATTENUVERTER,
     X_GAIN_KNOB,
     Y_GAIN_KNOB,
     X_RANGE_SWITCH,
@@ -81,7 +81,7 @@ struct BicycleModule : Module {
     ROCK_CV,
     ROLL_CV,
     CURL_CV,
-    HASTE_CV,
+    ZING_CV,
     X_GAIN_CV,
     Y_GAIN_CV,
     INPUT_COUNT

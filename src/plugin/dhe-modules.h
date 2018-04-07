@@ -9,4 +9,4 @@ extern rack::Model *modelHostage;
 extern rack::Model *modelStage;
 extern rack::Model *modelSwave;
 extern rack::Model *modelUpstage;
-extern rack::Model *modelXyclotron;
+extern rack::Model *modelXynchrotron;

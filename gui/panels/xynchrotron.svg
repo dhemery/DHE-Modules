@@ -1,7 +1,7 @@
 ---
 layout: panel
 width: 11
-title: XYCLOTRON
+title: XYNCHROTRON
 color: [270,100,30]
 invert: true
 controls:
@@ -39,7 +39,7 @@ controls:
 {{ page | connector: left_x, y, right_center_x, y }}
 {{ page | cv: left_x, y }}
 {{ page | attenuverter: left_center_x, y }}
-{{ page | large_knob: right_center_x, y, 'HASTE' }}
+{{ page | large_knob: right_center_x, y, 'ZING' }}
 
 {% assign y = 82.0 %}
 {% assign delta_y = 15.0 %}
