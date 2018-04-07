@@ -1,0 +1,59 @@
+---
+layout: panel
+width: 11
+title: XYCLOTRON
+color: [270,100,30]
+invert: true
+controls:
+  knobs: [tiny, small, large]
+  ports: []
+  switches: [2]
+---
+{% assign width = page.width | hp_to_mm %}
+{% assign left_x = width | divided_by:7.0 %}
+{% assign right_x = width | minus:left_x %}
+{% assign left_center_x = right_x | minus:left_x | divided_by:3.0 | plus:left_x %}
+{% assign right_center_x = width | minus:left_center_x %}
+{% assign delta_y = 18.5 %}
+{% assign y = 22.0 %}
+
+{{ page | connector: left_x, y, right_center_x, y }}
+{{ page | cv: left_x, y }}
+{{ page | attenuverter: left_center_x, y }}
+{{ page | large_knob: right_center_x, y, 'RADIUS 1' }}
+
+{% assign y = y | plus: delta_y %}
+{{ page | connector: left_x, y, right_center_x, y }}
+{{ page | cv: left_x, y }}
+{{ page | attenuverter: left_center_x, y }}
+{{ page | large_knob: right_center_x, y, 'SPEED 1' }}
+
+{% assign y = y | plus: delta_y %}
+{{ page | connector: left_x, y, right_center_x, y }}
+{{ page | cv: left_x, y }}
+{{ page | attenuverter: left_center_x, y }}
+{{ page | large_knob: right_center_x, y, 'RADIUS 2' }}
+
+{% assign y = y | plus: delta_y %}
+{{ page | connector: left_x, y, right_center_x, y }}
+{{ page | cv: left_x, y }}
+{{ page | attenuverter: left_center_x, y }}
+{{ page | large_knob: right_center_x, y, 'SPEED 2' }}
+
+{% assign y = 82.0 %}
+{% assign delta_y = 15.0 %}
+
+{% assign y = y | plus: delta_y %}
+{{ page | connector: left_x, y, right_x, y }}
+{{ page | cv: left_x, y }}
+{{ page | small_knob: left_center_x, y, 'GAIN' }}
+{{ page | polarity_switch: right_center_x, y, 'low' }}
+{{ page | out_port: right_x, y, 'X OUT' }}
+
+{% assign y = y | plus: delta_y %}
+{{ page | connector: left_x, y, right_x, y }}
+{{ page | cv: left_x, y }}
+{{ page | small_knob: left_center_x, y, 'GAIN' }}
+{{ page | polarity_switch: right_center_x, y, 'low' }}
+{{ page | out_port: right_x, y, 'Y OUT' }}
+
