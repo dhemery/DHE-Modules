@@ -1,59 +1,67 @@
 #pragma once
 
 #include <util/controls.h>
+#include <util/wheel.h>
 #include "module.h"
 namespace DHE {
 
 struct XynchrotronModule : Module {
-  float roll_angle = 0.f;
-  float pole_angle = 0.f;
-  XynchrotronModule() : Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT} {
-  }
+  Wheel primary_wheel;
+  Wheel secondary_wheel;
+  float primary_wheel_radius{0.f};
+  float secondary_wheel_radius{0.f};
+  float gear_ratio{0.f};
+
+  XynchrotronModule()
+      : Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT},
+        primary_wheel{
+            [this] { return primary_wheel_radius; },
+            [this] { return speed(); }
+        },
+        secondary_wheel{
+            [this] { return secondary_wheel_radius; },
+            [this] { return gear_ratio*speed(); }
+        } {}
 
   static const Range &gain_range() {
     static constexpr auto gain_range = Range{0.f, 2.f};
     return gain_range;
   }
 
-  float length(int knob, int cv, int av) {
+  float positive_length(int knob, int cv, int av) const {
     static auto length_range = Range{1e-2f, 1.f};
     return length_range.clamp(modulated(knob, cv, av));
   }
 
-  float gain(int knob, int cv) {
+  float nonnegative_length(int knob, int cv, int av) const {
+    return UNIPOLAR_PHASE_RANGE.clamp(modulated(knob, cv, av));
+  }
+
+  float gain(int knob, int cv) const {
     return gain_range().scale(modulated(knob, cv));
   }
 
-  float period() {
-    auto speed_rotation = modulated(ZING_KNOB, ZING_CV, ZING_CV_ATTENUVERTER);
-    auto period_rotation = DHE::UNIPOLAR_PHASE_RANGE.clamp(1.f - speed_rotation);
-    return Duration::scaled(period_rotation, Duration::MEDIUM_RANGE);
-  }
-
-  float increment_angle(float angle, float multiplier = 1.f) {
-    static auto two_pi = 2.f*std::acos(-1.f);
-    angle += multiplier*two_pi*rack::engineGetSampleTime()/period();
-    if (angle > two_pi) angle -= two_pi;
-    return angle;
+  float speed() const {
+    auto rotation = modulated(ZING_KNOB, ZING_CV, ZING_CV_ATTENUVERTER);
+    auto bipolar = BIPOLAR_PHASE_RANGE.scale(rotation);
+    auto tapered = sigmoid(bipolar, 0.8f);
+    return -10.f*tapered*rack::engineGetSampleTime();
   }
 
   void step() override {
-    auto base_radius = length(ROCK_KNOB, ROCK_CV, ROCK_CV_ATTENUVERTER);
-    auto roller_radius = length(ROLL_KNOB, ROLL_CV, ROLL_CV_ATTENUVERTER);
-    auto pole_length = length(CURL_KNOB, CURL_CV, CURL_CV_ATTENUVERTER);
+    secondary_wheel_radius = nonnegative_length(CURL_KNOB, CURL_CV, CURL_CV_ATTENUVERTER);
+    auto base_radius = nonnegative_length(ROCK_KNOB, ROCK_CV, ROCK_CV_ATTENUVERTER);
+    auto roller_radius = positive_length(ROLL_KNOB, ROLL_CV, ROLL_CV_ATTENUVERTER);
+    primary_wheel_radius = base_radius + roller_radius;
+    gear_ratio = primary_wheel_radius/roller_radius;
 
-    auto position = param(ROLL_POSITION_SWITCH) > 0.5f ? 1.f : -1.f;
-    auto roll_radius = std::abs(base_radius + position*roller_radius);
+    primary_wheel.step();
+    secondary_wheel.step();
 
-    auto direction = param(DIRECTION_SWITCH) > 0.5f ? 1.f : -1.f;
-    roll_angle = increment_angle(roll_angle, direction);
-    auto pole_angle_multiplier = direction*roll_radius/roller_radius;
-    pole_angle = increment_angle(pole_angle, pole_angle_multiplier);
+    auto x = primary_wheel.x() + secondary_wheel.x();
+    auto y = primary_wheel.y() - secondary_wheel.y();
 
-    auto x = roll_radius*std::cos(roll_angle) - position*pole_length*std::cos(pole_angle);
-    auto y = roll_radius*std::sin(roll_angle) - pole_length*std::sin(pole_angle);
-
-    auto roulette_radius = roll_radius + pole_length;
+    auto roulette_radius = primary_wheel.radius() + secondary_wheel.radius();
     auto roulette_scale = 5.f/roulette_radius;
     auto x_gain = gain(X_GAIN_KNOB, X_GAIN_CV);
     auto y_gain = gain(Y_GAIN_KNOB, Y_GAIN_CV);
@@ -66,9 +74,7 @@ struct XynchrotronModule : Module {
     ROCK_KNOB,
     ROCK_CV_ATTENUVERTER,
     ROLL_KNOB,
-    DIRECTION_SWITCH,
     ROLL_CV_ATTENUVERTER,
-    ROLL_POSITION_SWITCH,
     CURL_KNOB,
     CURL_CV_ATTENUVERTER,
     ZING_KNOB,

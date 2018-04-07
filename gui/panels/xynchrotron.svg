@@ -21,14 +21,12 @@ controls:
 {{ page | cv: left_x, y }}
 {{ page | attenuverter: left_center_x, y }}
 {{ page | large_knob: right_center_x, y, 'ROCK' }}
-{{ page | switch: right_x, y, 'high', 'TO', 'FRO' }}
 
 {% assign y = y | plus: delta_y %}
-{{ page | connector: left_x, y, right_x, y }}
+{{ page | connector: left_x, y, right_center_x, y }}
 {{ page | cv: left_x, y }}
 {{ page | attenuverter: left_center_x, y }}
 {{ page | large_knob: right_center_x, y, 'ROLL' }}
-{{ page | switch: right_x, y, 'low', 'OUTSIDE', 'INSIDE' }}
 
 {% assign y = y | plus: delta_y %}
 {{ page | connector: left_x, y, right_center_x, y }}

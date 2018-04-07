@@ -57,13 +57,11 @@ XynchrotronWidget::XynchrotronWidget(rack::Module *module) : ModuleWidget(module
   install_input<XynchrotronPort>(XynchrotronModule::ROCK_CV, {left_x, top_row_y + row*row_spacing});
   install_knob<XynchrotronKnobTiny>(XynchrotronModule::ROCK_CV_ATTENUVERTER, {left_center_x, top_row_y + row*row_spacing});
   install_knob<XynchrotronKnobLarge>(XynchrotronModule::ROCK_KNOB, {right_center_x, top_row_y + row*row_spacing});
-  install_switch<XynchrotronSwitch2>(XynchrotronModule::DIRECTION_SWITCH, {right_x, top_row_y + row*row_spacing}, 1, 1);
 
   row++;
   install_input<XynchrotronPort>(XynchrotronModule::ROLL_CV, {left_x, top_row_y + row*row_spacing});
   install_knob<XynchrotronKnobTiny>(XynchrotronModule::ROLL_CV_ATTENUVERTER, {left_center_x, top_row_y + row*row_spacing});
   install_knob<XynchrotronKnobLarge>(XynchrotronModule::ROLL_KNOB, {right_center_x, top_row_y + row*row_spacing});
-  install_switch<XynchrotronSwitch2>(XynchrotronModule::ROLL_POSITION_SWITCH, {right_x, top_row_y + row*row_spacing}, 1, 0);
 
   row++;
   install_input<XynchrotronPort>(XynchrotronModule::CURL_CV, {left_x, top_row_y + row*row_spacing});
