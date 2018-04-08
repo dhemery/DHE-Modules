@@ -14,12 +14,12 @@ struct XyclotronModule : Module {
   XyclotronModule()
       : Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT},
         primary_wheel{
-            [this] { return length(R1_KNOB, R1_CV, R1_CV_ATTENUVERTER); },
-            [this] { return speed(S1_KNOB, S1_CV, S1_CV_ATTENUVERTER); }
+            [this] { return length(PRIMARY_WHEEL_RADIUS_KNOB, PRIMARY_WHEEL_RADIUS_CV, PRIMARY_WHEEL_RADIUS_CV_ATTENUVERTER); },
+            [this] { return speed(PRIMARY_WHEEL_SPEED_KNOB, PRIMARY_WHEEL_SPEED_CV, PRIMARY_WHEEL_SPEED_CV_ATTENUVERTER); }
         },
         secondary_wheel{
-            [this] { return length(R2_KNOB, R2_CV, R2_CV_ATTENUVERTER); },
-            [this] { return speed(S2_KNOB, S2_CV, S2_CV_ATTENUVERTER); }
+            [this] { return length(SECONDARY_WHEEL_RADIUS_KNOB, SECONDARY_WHEEL_RADIUS_CV, SECONDARY_WHEEL_RADIUS_CV_ATTENUVERTER); },
+            [this] { return speed(SECONDARY_WHEEL_SPEED_KNOB, SECONDARY_WHEEL_SPEED_CV, SECONDARY_WHEEL_SPEED_CV_ATTENUVERTER); }
         } {}
 
   static const Range &gain_range() {
@@ -61,14 +61,14 @@ struct XyclotronModule : Module {
   }
 
   enum ParameterIds {
-    R1_KNOB,
-    R1_CV_ATTENUVERTER,
-    S1_KNOB,
-    S1_CV_ATTENUVERTER,
-    R2_KNOB,
-    R2_CV_ATTENUVERTER,
-    S2_KNOB,
-    S2_CV_ATTENUVERTER,
+    PRIMARY_WHEEL_RADIUS_KNOB,
+    PRIMARY_WHEEL_RADIUS_CV_ATTENUVERTER,
+    PRIMARY_WHEEL_SPEED_KNOB,
+    PRIMARY_WHEEL_SPEED_CV_ATTENUVERTER,
+    SECONDARY_WHEEL_RADIUS_KNOB,
+    SECONDARY_WHEEL_RADIUS_CV_ATTENUVERTER,
+    SECONDARY_WHEEL_SPEED_KNOB,
+    SECONDARY_WHEEL_SPEED_CV_ATTENUVERTER,
     X_GAIN_KNOB,
     Y_GAIN_KNOB,
     X_RANGE_SWITCH,
@@ -76,10 +76,10 @@ struct XyclotronModule : Module {
     PARAMETER_COUNT
   };
   enum InputIds {
-    R1_CV,
-    S1_CV,
-    R2_CV,
-    S2_CV,
+    PRIMARY_WHEEL_RADIUS_CV,
+    PRIMARY_WHEEL_SPEED_CV,
+    SECONDARY_WHEEL_RADIUS_CV,
+    SECONDARY_WHEEL_SPEED_CV,
     X_GAIN_CV,
     Y_GAIN_CV,
     INPUT_COUNT

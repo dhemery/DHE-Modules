@@ -52,14 +52,15 @@ struct XynchrotronModule : Module {
     secondary_wheel_radius = nonnegative_length(CURL_KNOB, CURL_CV, CURL_CV_ATTENUVERTER);
     auto base_radius = nonnegative_length(ROCK_KNOB, ROCK_CV, ROCK_CV_ATTENUVERTER);
     auto roller_radius = positive_length(ROLL_KNOB, ROLL_CV, ROLL_CV_ATTENUVERTER);
-    primary_wheel_radius = base_radius + roller_radius;
+    auto direction = param(ROLL_TYPE_SWITCH) > 0.5f ? 1.f : -1.f;
+    primary_wheel_radius = std::abs(base_radius + direction*roller_radius);
     gear_ratio = primary_wheel_radius/roller_radius;
 
     primary_wheel.step();
     secondary_wheel.step();
 
-    auto x = primary_wheel.x() + secondary_wheel.x();
-    auto y = primary_wheel.y() - secondary_wheel.y();
+    auto x = primary_wheel.x() + direction*secondary_wheel.x();
+    auto y = primary_wheel.y() + secondary_wheel.y();
 
     auto roulette_radius = primary_wheel.radius() + secondary_wheel.radius();
     auto roulette_scale = 5.f/roulette_radius;
@@ -75,6 +76,7 @@ struct XynchrotronModule : Module {
     ROCK_CV_ATTENUVERTER,
     ROLL_KNOB,
     ROLL_CV_ATTENUVERTER,
+    ROLL_TYPE_SWITCH,
     CURL_KNOB,
     CURL_CV_ATTENUVERTER,
     ZING_KNOB,

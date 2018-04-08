@@ -54,24 +54,24 @@ XyclotronWidget::XyclotronWidget(rack::Module *module) : ModuleWidget(module, 11
   auto row_spacing = 18.5f;
 
   auto row = 0;
-  install_input<XyclotronPort>(XyclotronModule::R1_CV, {left_x, top_row_y + row*row_spacing});
-  install_knob<XyclotronKnobTiny>(XyclotronModule::R1_CV_ATTENUVERTER, {left_center_x, top_row_y + row*row_spacing});
-  install_knob<XyclotronKnobLarge>(XyclotronModule::R1_KNOB, {right_center_x, top_row_y + row*row_spacing});
+  install_input<XyclotronPort>(XyclotronModule::PRIMARY_WHEEL_RADIUS_CV, {left_x, top_row_y + row*row_spacing});
+  install_knob<XyclotronKnobTiny>(XyclotronModule::PRIMARY_WHEEL_RADIUS_CV_ATTENUVERTER, {left_center_x, top_row_y + row*row_spacing});
+  install_knob<XyclotronKnobLarge>(XyclotronModule::PRIMARY_WHEEL_RADIUS_KNOB, {right_center_x, top_row_y + row*row_spacing});
 
   row++;
-  install_input<XyclotronPort>(XyclotronModule::S1_CV, {left_x, top_row_y + row*row_spacing});
-  install_knob<XyclotronKnobTiny>(XyclotronModule::S1_CV_ATTENUVERTER, {left_center_x, top_row_y + row*row_spacing});
-  install_knob<XyclotronKnobLarge>(XyclotronModule::S1_KNOB, {right_center_x, top_row_y + row*row_spacing});
+  install_input<XyclotronPort>(XyclotronModule::PRIMARY_WHEEL_SPEED_CV, {left_x, top_row_y + row*row_spacing});
+  install_knob<XyclotronKnobTiny>(XyclotronModule::PRIMARY_WHEEL_SPEED_CV_ATTENUVERTER, {left_center_x, top_row_y + row*row_spacing});
+  install_knob<XyclotronKnobLarge>(XyclotronModule::PRIMARY_WHEEL_SPEED_KNOB, {right_center_x, top_row_y + row*row_spacing});
 
   row++;
-  install_input<XyclotronPort>(XyclotronModule::R2_CV, {left_x, top_row_y + row*row_spacing});
-  install_knob<XyclotronKnobTiny>(XyclotronModule::R2_CV_ATTENUVERTER, {left_center_x, top_row_y + row*row_spacing});
-  install_knob<XyclotronKnobLarge>(XyclotronModule::R2_KNOB, {right_center_x, top_row_y + row*row_spacing});
+  install_input<XyclotronPort>(XyclotronModule::SECONDARY_WHEEL_RADIUS_CV, {left_x, top_row_y + row*row_spacing});
+  install_knob<XyclotronKnobTiny>(XyclotronModule::SECONDARY_WHEEL_RADIUS_CV_ATTENUVERTER, {left_center_x, top_row_y + row*row_spacing});
+  install_knob<XyclotronKnobLarge>(XyclotronModule::SECONDARY_WHEEL_RADIUS_KNOB, {right_center_x, top_row_y + row*row_spacing});
 
   row++;
-  install_input<XyclotronPort>(XyclotronModule::S2_CV, {left_x, top_row_y + row*row_spacing});
-  install_knob<XyclotronKnobTiny>(XyclotronModule::S2_CV_ATTENUVERTER, {left_center_x, top_row_y + row*row_spacing});
-  install_knob<XyclotronKnobLarge>(XyclotronModule::S2_KNOB, {right_center_x, top_row_y + row*row_spacing});
+  install_input<XyclotronPort>(XyclotronModule::SECONDARY_WHEEL_SPEED_CV, {left_x, top_row_y + row*row_spacing});
+  install_knob<XyclotronKnobTiny>(XyclotronModule::SECONDARY_WHEEL_SPEED_CV_ATTENUVERTER, {left_center_x, top_row_y + row*row_spacing});
+  install_knob<XyclotronKnobLarge>(XyclotronModule::SECONDARY_WHEEL_SPEED_KNOB, {right_center_x, top_row_y + row*row_spacing});
 
   top_row_y = 82.f;
   row_spacing = 15.f;
