@@ -31,10 +31,6 @@ test: $(TEST_RUNNER)
 
 RACK_APP = /Applications/Rack.app
 RACK_PLUGINS_DIR = ~/Documents/Rack/plugins
-MODULE_INSTALL_DIR = $(RACK_PLUGINS_DIR)/$(SLUG)
-
-install: dist
-	rsync -r --delete-after dist/DHE-Modules/ $(MODULE_INSTALL_DIR)
 
 run: install
 	open $(RACK_APP)
