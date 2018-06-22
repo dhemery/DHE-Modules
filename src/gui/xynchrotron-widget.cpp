@@ -34,6 +34,14 @@ struct XynchrotronSwitch2 : rack::SVGSwitch, rack::ToggleSwitch {
   }
 };
 
+struct XynchrotronSwitch3 : rack::SVGSwitch, rack::ToggleSwitch {
+  XynchrotronSwitch3() {
+    addFrame(rack::SVG::load(rack::assetPlugin(plugin, "res/xynchrotron/switch-3-low.svg")));
+    addFrame(rack::SVG::load(rack::assetPlugin(plugin, "res/xynchrotron/switch-3-mid.svg")));
+    addFrame(rack::SVG::load(rack::assetPlugin(plugin, "res/xynchrotron/switch-3-high.svg")));
+  }
+};
+
 struct XynchrotronPort : rack::SVGPort {
   XynchrotronPort() {
     background->svg = rack::SVG::load(assetPlugin(plugin, "res/xynchrotron/port.svg"));
@@ -54,20 +62,21 @@ XynchrotronWidget::XynchrotronWidget(rack::Module *module) : ModuleWidget(module
   auto row_spacing = 18.5f;
 
   auto row = 0;
-  install_input<XynchrotronPort>(XynchrotronModule::GEAR_RATIO_CV, {left_x, top_row_y + row*row_spacing});
-  install_knob<XynchrotronKnobTiny>(XynchrotronModule::GEAR_RATIO_CV_ATTENUVERTER, {left_center_x, top_row_y + row*row_spacing});
-  install_knob<XynchrotronKnobLarge>(XynchrotronModule::GEAR_RATIO_KNOB, {right_center_x, top_row_y + row*row_spacing});
+  row++;
+  install_input<XynchrotronPort>(XynchrotronModule::CURL_CV, {left_x, top_row_y + row*row_spacing});
+  install_knob<XynchrotronKnobTiny>(XynchrotronModule::CURL_CV_ATTENUVERTER, {left_center_x, top_row_y + row*row_spacing});
+  install_knob<XynchrotronKnobLarge>(XynchrotronModule::CURL_KNOB, {right_center_x, top_row_y + row*row_spacing});
+  install_switch<XynchrotronSwitch3>(XynchrotronModule::CURL_RANGE_SWITCH, {right_x, top_row_y + row*row_spacing}, 2, 0);
 
   row++;
-  install_input<XynchrotronPort>(XynchrotronModule::SPINNER_RATIO_CV, {left_x, top_row_y + row*row_spacing});
-  install_knob<XynchrotronKnobTiny>(XynchrotronModule::SPINNER_RATIO_CV_ATTENUVERTER, {left_center_x, top_row_y + row*row_spacing});
-  install_knob<XynchrotronKnobLarge>(XynchrotronModule::SPINNER_RATIO_KNOB, {right_center_x, top_row_y + row*row_spacing});
+  install_input<XynchrotronPort>(XynchrotronModule::WOBBLE_CV, {left_x, top_row_y + row*row_spacing});
+  install_knob<XynchrotronKnobTiny>(XynchrotronModule::WOBBLE_CV_ATTENUVERTER, {left_center_x, top_row_y + row*row_spacing});
+  install_knob<XynchrotronKnobLarge>(XynchrotronModule::WOBBLE_KNOB, {right_center_x, top_row_y + row*row_spacing});
 
   row++;
-  row++;
-  install_input<XynchrotronPort>(XynchrotronModule::SPEED_CV, {left_x, top_row_y + row*row_spacing});
-  install_knob<XynchrotronKnobTiny>(XynchrotronModule::SPEED_CV_ATTENUVERTER, {left_center_x, top_row_y + row*row_spacing});
-  install_knob<XynchrotronKnobLarge>(XynchrotronModule::SPEED_KNOB, {right_center_x, top_row_y + row*row_spacing});
+  install_input<XynchrotronPort>(XynchrotronModule::ZING_CV, {left_x, top_row_y + row*row_spacing});
+  install_knob<XynchrotronKnobTiny>(XynchrotronModule::ZING_CV_ATTENUVERTER, {left_center_x, top_row_y + row*row_spacing});
+  install_knob<XynchrotronKnobLarge>(XynchrotronModule::ZING_KNOB, {right_center_x, top_row_y + row*row_spacing});
 
   top_row_y = 82.f;
   row_spacing = 15.f;

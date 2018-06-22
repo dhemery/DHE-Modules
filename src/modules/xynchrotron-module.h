@@ -15,21 +15,28 @@ struct XynchrotronModule : Module {
       : Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT},
         rotor{
             [this] { return rotor_length; },
-            [this] { return gear_ratio()*spinner_speed(); }
+            [this] { return curl()*zing(); }
         },
         spinner{
             [this] { return spinner_length; },
-            [this] { return spinner_speed(); }
+            [this] { return zing(); }
         } {}
 
-  float gear_ratio() const {
-    static constexpr auto gear_ratio_range = Range{-4.f, 6.f};
-    return gear_ratio_range.scale(modulated(GEAR_RATIO_KNOB, GEAR_RATIO_CV, GEAR_RATIO_CV_ATTENUVERTER));
+  float curl() const {
+    static constexpr auto curl_range = Range{-6.f, 4.f};
+    return -curl_range.scale(modulated(CURL_KNOB, CURL_CV, CURL_CV_ATTENUVERTER));
   }
 
-  float spinner_ratio() const {
+  float wobble() const {
     static constexpr auto stick_ratio_range = Range{0.f, 1.f};
-    return stick_ratio_range.clamp(modulated(SPINNER_RATIO_KNOB, SPINNER_RATIO_CV, SPINNER_RATIO_CV_ATTENUVERTER));
+    return stick_ratio_range.clamp(modulated(WOBBLE_KNOB, WOBBLE_CV, WOBBLE_CV_ATTENUVERTER));
+  }
+
+  float zing() const {
+    auto rotation = modulated(ZING_KNOB, ZING_CV, ZING_CV_ATTENUVERTER);
+    auto bipolar = BIPOLAR_PHASE_RANGE.scale(rotation);
+    auto tapered = sigmoid(bipolar, 0.8f);
+    return -10.f*tapered*rack::engineGetSampleTime();
   }
 
   float gain(int knob, int cv) const {
@@ -41,15 +48,8 @@ struct XynchrotronModule : Module {
     return gain_range;
   }
 
-  float spinner_speed() const {
-    auto rotation = modulated(SPEED_KNOB, SPEED_CV, SPEED_CV_ATTENUVERTER);
-    auto bipolar = BIPOLAR_PHASE_RANGE.scale(rotation);
-    auto tapered = sigmoid(bipolar, 0.8f);
-    return -10.f*tapered*rack::engineGetSampleTime();
-  }
-
   void step() override {
-    spinner_length = 5.f*spinner_ratio();
+    spinner_length = 5.f*wobble();
     rotor_length = 5.f - spinner_length;
 
     rotor.step();
@@ -66,12 +66,13 @@ struct XynchrotronModule : Module {
     outputs[Y_OUT].value = y_gain*(y + y_offset);
   }
   enum ParameterIds {
-    GEAR_RATIO_KNOB,
-    GEAR_RATIO_CV_ATTENUVERTER,
-    SPINNER_RATIO_KNOB,
-    SPINNER_RATIO_CV_ATTENUVERTER,
-    SPEED_KNOB,
-    SPEED_CV_ATTENUVERTER,
+    CURL_KNOB,
+    CURL_CV_ATTENUVERTER,
+    CURL_RANGE_SWITCH,
+    WOBBLE_KNOB,
+    WOBBLE_CV_ATTENUVERTER,
+    ZING_KNOB,
+    ZING_CV_ATTENUVERTER,
     X_GAIN_KNOB,
     Y_GAIN_KNOB,
     X_RANGE_SWITCH,
@@ -79,9 +80,9 @@ struct XynchrotronModule : Module {
     PARAMETER_COUNT
   };
   enum InputIds {
-    GEAR_RATIO_CV,
-    SPINNER_RATIO_CV,
-    SPEED_CV,
+    CURL_CV,
+    WOBBLE_CV,
+    ZING_CV,
     X_GAIN_CV,
     Y_GAIN_CV,
     INPUT_COUNT
