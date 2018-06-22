@@ -6,81 +6,72 @@
 namespace DHE {
 
 struct XynchrotronModule : Module {
-  Wheel primary_wheel;
-  Wheel secondary_wheel;
-  float primary_wheel_radius{0.f};
-  float secondary_wheel_radius{0.f};
-  float gear_ratio{0.f};
+  Wheel rotor;
+  Wheel spinner;
+  float spinner_length{0.f};
+  float rotor_length{0.f};
 
   XynchrotronModule()
       : Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT},
-        primary_wheel{
-            [this] { return primary_wheel_radius; },
-            [this] { return speed(); }
+        rotor{
+            [this] { return rotor_length; },
+            [this] { return gear_ratio()*spinner_speed(); }
         },
-        secondary_wheel{
-            [this] { return secondary_wheel_radius; },
-            [this] { return gear_ratio*speed(); }
+        spinner{
+            [this] { return spinner_length; },
+            [this] { return spinner_speed(); }
         } {}
 
-  static const Range &gain_range() {
-    static constexpr auto gain_range = Range{0.f, 2.f};
-    return gain_range;
+  float gear_ratio() const {
+    static constexpr auto gear_ratio_range = Range{-4.f, 6.f};
+    return gear_ratio_range.scale(modulated(GEAR_RATIO_KNOB, GEAR_RATIO_CV, GEAR_RATIO_CV_ATTENUVERTER));
   }
 
-  float positive_length(int knob, int cv, int av) const {
-    static auto length_range = Range{1e-2f, 1.f};
-    return length_range.clamp(modulated(knob, cv, av));
-  }
-
-  float nonnegative_length(int knob, int cv, int av) const {
-    return UNIPOLAR_PHASE_RANGE.clamp(modulated(knob, cv, av));
+  float spinner_ratio() const {
+    static constexpr auto stick_ratio_range = Range{0.f, 1.f};
+    return stick_ratio_range.clamp(modulated(SPINNER_RATIO_KNOB, SPINNER_RATIO_CV, SPINNER_RATIO_CV_ATTENUVERTER));
   }
 
   float gain(int knob, int cv) const {
     return gain_range().scale(modulated(knob, cv));
   }
 
-  float speed() const {
-    auto rotation = modulated(ZING_KNOB, ZING_CV, ZING_CV_ATTENUVERTER);
+  static const Range &gain_range() {
+    static constexpr auto gain_range = Range{0.f, 2.f};
+    return gain_range;
+  }
+
+  float spinner_speed() const {
+    auto rotation = modulated(SPEED_KNOB, SPEED_CV, SPEED_CV_ATTENUVERTER);
     auto bipolar = BIPOLAR_PHASE_RANGE.scale(rotation);
     auto tapered = sigmoid(bipolar, 0.8f);
     return -10.f*tapered*rack::engineGetSampleTime();
   }
 
   void step() override {
-    secondary_wheel_radius = nonnegative_length(CURL_KNOB, CURL_CV, CURL_CV_ATTENUVERTER);
-    auto base_radius = nonnegative_length(ROCK_KNOB, ROCK_CV, ROCK_CV_ATTENUVERTER);
-    auto roller_radius = positive_length(ROLL_KNOB, ROLL_CV, ROLL_CV_ATTENUVERTER);
-    auto direction = param(ROLL_TYPE_SWITCH) > 0.5f ? 1.f : -1.f;
-    primary_wheel_radius = std::abs(base_radius + direction*roller_radius);
-    gear_ratio = primary_wheel_radius/roller_radius;
+    spinner_length = 5.f*spinner_ratio();
+    rotor_length = 5.f - spinner_length;
 
-    primary_wheel.step();
-    secondary_wheel.step();
+    rotor.step();
+    spinner.step();
 
-    auto x = primary_wheel.x() + direction*secondary_wheel.x();
-    auto y = primary_wheel.y() + secondary_wheel.y();
+    auto x = rotor.x() + spinner.x();
+    auto y = rotor.y() + spinner.y();
 
-    auto roulette_radius = primary_wheel.radius() + secondary_wheel.radius();
-    auto roulette_scale = 5.f/roulette_radius;
     auto x_gain = gain(X_GAIN_KNOB, X_GAIN_CV);
     auto y_gain = gain(Y_GAIN_KNOB, Y_GAIN_CV);
     auto x_offset = param(X_RANGE_SWITCH) > 0.5f ? 5.f : 0.f;
     auto y_offset = param(Y_RANGE_SWITCH) > 0.5f ? 5.f : 0.f;
-    outputs[X_OUT].value = x_gain*(x*roulette_scale + x_offset);
-    outputs[Y_OUT].value = y_gain*(y*roulette_scale + y_offset);
+    outputs[X_OUT].value = x_gain*(x + x_offset);
+    outputs[Y_OUT].value = y_gain*(y + y_offset);
   }
   enum ParameterIds {
-    ROCK_KNOB,
-    ROCK_CV_ATTENUVERTER,
-    ROLL_KNOB,
-    ROLL_CV_ATTENUVERTER,
-    ROLL_TYPE_SWITCH,
-    CURL_KNOB,
-    CURL_CV_ATTENUVERTER,
-    ZING_KNOB,
-    ZING_CV_ATTENUVERTER,
+    GEAR_RATIO_KNOB,
+    GEAR_RATIO_CV_ATTENUVERTER,
+    SPINNER_RATIO_KNOB,
+    SPINNER_RATIO_CV_ATTENUVERTER,
+    SPEED_KNOB,
+    SPEED_CV_ATTENUVERTER,
     X_GAIN_KNOB,
     Y_GAIN_KNOB,
     X_RANGE_SWITCH,
@@ -88,10 +79,9 @@ struct XynchrotronModule : Module {
     PARAMETER_COUNT
   };
   enum InputIds {
-    ROCK_CV,
-    ROLL_CV,
-    CURL_CV,
-    ZING_CV,
+    GEAR_RATIO_CV,
+    SPINNER_RATIO_CV,
+    SPEED_CV,
     X_GAIN_CV,
     Y_GAIN_CV,
     INPUT_COUNT

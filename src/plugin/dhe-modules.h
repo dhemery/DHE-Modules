@@ -10,3 +10,4 @@ extern rack::Model *modelStage;
 extern rack::Model *modelSwave;
 extern rack::Model *modelUpstage;
 extern rack::Model *modelXynchrotron;
+extern rack::Model *modelXyclrotron;
