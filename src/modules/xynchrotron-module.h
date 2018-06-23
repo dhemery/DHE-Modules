@@ -32,8 +32,8 @@ struct XynchrotronModule : Module {
   }
 
   float wobble() const {
-    static constexpr auto stick_ratio_range = Range{0.f, 1.f};
-    return stick_ratio_range.clamp(modulated(WOBBLE_KNOB, WOBBLE_CV, WOBBLE_CV_ATTENUVERTER));
+    static constexpr auto wobble_range = Range{0.f, 1.f};
+    return 1.f-wobble_range.clamp(modulated(WOBBLE_KNOB, WOBBLE_CV, WOBBLE_CV_ATTENUVERTER));
   }
 
   float zing() const {
