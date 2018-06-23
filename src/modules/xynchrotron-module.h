@@ -23,17 +23,19 @@ struct XynchrotronModule : Module {
         } {}
 
   float curl() const {
-    static constexpr auto curl_out_range = Range{0.f, -6.f};
-    static constexpr auto curl_in_range = Range{0.f, 4.f};
-    static constexpr auto curl_all_range = Range{6.f, -4.f};
+    static constexpr auto node_max = 10.f;
+    static constexpr auto curl_out_range = Range{0.f, node_max};
+    static constexpr auto curl_in_range = Range{0.f, -node_max};
+    static constexpr auto curl_all_range = Range{-node_max, node_max};
     auto curl_range_switch = param(CURL_RANGE_SWITCH);
-    auto curl_range = curl_range_switch < 0.7f ? curl_in_range : curl_range_switch > 1.3f ? curl_out_range : curl_all_range;
-    return curl_range.scale(modulated(CURL_KNOB, CURL_CV, CURL_CV_ATTENUVERTER));
+    auto curl_range =
+        curl_range_switch < 0.7f ? curl_in_range : curl_range_switch > 1.3f ? curl_out_range : curl_all_range;
+    return 1.f - curl_range.scale(modulated(CURL_KNOB, CURL_CV, CURL_CV_ATTENUVERTER));
   }
 
   float wobble() const {
     static constexpr auto wobble_range = Range{0.f, 1.f};
-    return 1.f-wobble_range.clamp(modulated(WOBBLE_KNOB, WOBBLE_CV, WOBBLE_CV_ATTENUVERTER));
+    return 1.f - wobble_range.clamp(modulated(WOBBLE_KNOB, WOBBLE_CV, WOBBLE_CV_ATTENUVERTER));
   }
 
   float zing() const {
