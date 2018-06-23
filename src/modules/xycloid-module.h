@@ -5,41 +5,42 @@
 #include "module.h"
 namespace DHE {
 
-struct XynchrotronModule : Module {
+struct XycloidModule : Module {
   Wheel rotor;
   Wheel spinner;
   float spinner_length{0.f};
   float rotor_length{0.f};
 
-  XynchrotronModule()
+  XycloidModule()
       : Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT},
         rotor{
             [this] { return rotor_length; },
-            [this] { return curl()*zing(); }
+            [this] { return gear_ratio()*speed(); }
         },
         spinner{
             [this] { return spinner_length; },
-            [this] { return zing(); }
+            [this] { return speed(); }
         } {}
 
-  float curl() const {
-    static constexpr auto node_max = 10.f;
-    static constexpr auto curl_out_range = Range{0.f, node_max};
-    static constexpr auto curl_in_range = Range{0.f, -node_max};
-    static constexpr auto curl_all_range = Range{-node_max, node_max};
-    auto curl_range_switch = param(CURL_RANGE_SWITCH);
-    auto curl_range =
-        curl_range_switch < 0.7f ? curl_in_range : curl_range_switch > 1.3f ? curl_out_range : curl_all_range;
-    return 1.f - curl_range.scale(modulated(CURL_KNOB, CURL_CV, CURL_CV_ATTENUVERTER));
+  float gear_ratio() const {
+    static constexpr auto cusp_max = 16.f;
+    static constexpr auto outward_cusps = Range{0.f, cusp_max};
+    static constexpr auto inward_cusps = Range{0.f, -cusp_max};
+    static constexpr auto inward_and_outward_cusps = Range{-cusp_max, cusp_max};
+    static constexpr Range cusp_ranges[] = {inward_cusps, inward_and_outward_cusps, outward_cusps};
+    auto cusp_type = static_cast<int>(param(CUSP_TYPE_SWITCH));
+    auto cusp_range = cusp_ranges[cusp_type];
+    float modulated_cusps = modulated(CUSP_KNOB, CUSP_CV, CUSP_CV_ATTENUVERTER);
+    return 1.f - cusp_range.scale(modulated_cusps);
   }
 
-  float wobble() const {
+  float depth() const {
     static constexpr auto wobble_range = Range{0.f, 1.f};
-    return 1.f - wobble_range.clamp(modulated(WOBBLE_KNOB, WOBBLE_CV, WOBBLE_CV_ATTENUVERTER));
+    return 1.f - wobble_range.clamp(modulated(DEPTH_KNOB, DEPTH_CV, DEPTH_CV_ATTENUVERTER));
   }
 
-  float zing() const {
-    auto rotation = modulated(ZING_KNOB, ZING_CV, ZING_CV_ATTENUVERTER);
+  float speed() const {
+    auto rotation = modulated(SPEED_KNOB, SPEED_CV, SPEED_CV_ATTENUVERTER);
     auto bipolar = BIPOLAR_PHASE_RANGE.scale(rotation);
     auto tapered = sigmoid(bipolar, 0.8f);
     return -10.f*tapered*rack::engineGetSampleTime();
@@ -55,7 +56,7 @@ struct XynchrotronModule : Module {
   }
 
   void step() override {
-    spinner_length = 5.f*wobble();
+    spinner_length = 5.f*depth();
     rotor_length = 5.f - spinner_length;
 
     rotor.step();
@@ -72,13 +73,13 @@ struct XynchrotronModule : Module {
     outputs[Y_OUT].value = y_gain*(y + y_offset);
   }
   enum ParameterIds {
-    CURL_KNOB,
-    CURL_CV_ATTENUVERTER,
-    CURL_RANGE_SWITCH,
-    WOBBLE_KNOB,
-    WOBBLE_CV_ATTENUVERTER,
-    ZING_KNOB,
-    ZING_CV_ATTENUVERTER,
+    CUSP_KNOB,
+    CUSP_CV_ATTENUVERTER,
+    CUSP_TYPE_SWITCH,
+    DEPTH_KNOB,
+    DEPTH_CV_ATTENUVERTER,
+    SPEED_KNOB,
+    SPEED_CV_ATTENUVERTER,
     X_GAIN_KNOB,
     Y_GAIN_KNOB,
     X_RANGE_SWITCH,
@@ -86,9 +87,9 @@ struct XynchrotronModule : Module {
     PARAMETER_COUNT
   };
   enum InputIds {
-    CURL_CV,
-    WOBBLE_CV,
-    ZING_CV,
+    CUSP_CV,
+    DEPTH_CV,
+    SPEED_CV,
     X_GAIN_CV,
     Y_GAIN_CV,
     INPUT_COUNT

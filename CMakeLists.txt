@@ -22,8 +22,6 @@ add_library(plugin SHARED
         src/gui/booster-stage-widget.cpp
         src/gui/cubic-widget.h
         src/gui/cubic-widget.cpp
-        src/gui/xynchrotron-widget.h
-        src/gui/xynchrotron-widget.cpp
         src/gui/hostage-widget.h
         src/gui/hostage-widget.cpp
         src/gui/module-widget.h
@@ -34,13 +32,15 @@ add_library(plugin SHARED
         src/gui/swave-widget.cpp
         src/gui/upstage-widget.h
         src/gui/upstage-widget.cpp
+        src/gui/xycloid-widget.h
+        src/gui/xycloid-widget.cpp
         src/modules/booster-stage-module.h
         src/modules/cubic-module.h
-        src/modules/xynchrotron-module.h
         src/modules/hostage-module.h
         src/modules/stage-module.h
         src/modules/swave-module.h
         src/modules/upstage-module.h
+        src/modules/xycloid-module.h
         src/plugin/dhe-modules.h
         src/plugin/dhe-modules.cpp
         src/util/controls.h

@@ -1,13 +1,13 @@
 ---
 layout: panel
 width: 11
-title: XYCLOTRON
+title: XYCLOID
 color: [270,100,30]
 invert: true
 controls:
   knobs: [tiny, small, large]
   ports: []
-  switches: [2]
+  switches: [2, 3]
 ---
 {% assign width = page.width | hp_to_mm %}
 {% assign left_x = width | divided_by:7.0 %}
@@ -17,28 +17,24 @@ controls:
 {% assign delta_y = 18.5 %}
 {% assign y = 22.0 %}
 
-{{ page | connector: left_x, y, right_center_x, y }}
+{% assign y = y | plus: delta_y %}
+{{ page | connector: left_x, y, right_x, y }}
 {{ page | cv: left_x, y }}
 {{ page | attenuverter: left_center_x, y }}
-{{ page | large_knob: right_center_x, y, 'RADIUS 1' }}
+{{ page | large_knob: right_center_x, y, 'CUSPS' }}
+{{ page | switch: right_x, y, 'mid', 'OUT', 'IN', '' }}
 
 {% assign y = y | plus: delta_y %}
 {{ page | connector: left_x, y, right_center_x, y }}
 {{ page | cv: left_x, y }}
 {{ page | attenuverter: left_center_x, y }}
-{{ page | large_knob: right_center_x, y, 'SPEED 1' }}
+{{ page | large_knob: right_center_x, y, 'DEPTH' }}
 
 {% assign y = y | plus: delta_y %}
 {{ page | connector: left_x, y, right_center_x, y }}
 {{ page | cv: left_x, y }}
 {{ page | attenuverter: left_center_x, y }}
-{{ page | large_knob: right_center_x, y, 'RADIUS 2' }}
-
-{% assign y = y | plus: delta_y %}
-{{ page | connector: left_x, y, right_center_x, y }}
-{{ page | cv: left_x, y }}
-{{ page | attenuverter: left_center_x, y }}
-{{ page | large_knob: right_center_x, y, 'SPEED 2' }}
+{{ page | large_knob: right_center_x, y, 'SPEED' }}
 
 {% assign y = 82.0 %}
 {% assign delta_y = 15.0 %}
