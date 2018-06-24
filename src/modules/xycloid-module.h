@@ -8,22 +8,11 @@ namespace DHE {
 struct XycloidModule : Module {
   Wheel rotor;
   Wheel spinner;
-  float spinner_length{0.f};
-  float rotor_length{0.f};
 
-  XycloidModule()
-      : Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT},
-        rotor{
-            [this] { return rotor_length; },
-            [this] { return gear_ratio()*speed(); }
-        },
-        spinner{
-            [this] { return spinner_length; },
-            [this] { return speed(); }
-        } {}
+  XycloidModule() : Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT} {}
 
   float gear_ratio() const {
-    static constexpr auto cusp_max = 16.f;
+    static constexpr auto cusp_max = 5.f;
     static constexpr auto outward_cusps = Range{0.f, cusp_max};
     static constexpr auto inward_cusps = Range{0.f, -cusp_max};
     static constexpr auto inward_and_outward_cusps = Range{-cusp_max, cusp_max};
@@ -39,8 +28,8 @@ struct XycloidModule : Module {
     return 1.f - wobble_range.clamp(modulated(DEPTH_KNOB, DEPTH_CV, DEPTH_CV_ATTENUVERTER));
   }
 
-  float speed() const {
-    auto rotation = modulated(SPEED_KNOB, SPEED_CV, SPEED_CV_ATTENUVERTER);
+  float speed(int knob, int cv, int attenuator) const {
+    auto rotation = modulated(knob, cv, attenuator);
     auto bipolar = BIPOLAR_PHASE_RANGE.scale(rotation);
     auto tapered = sigmoid(bipolar, 0.8f);
     return -10.f*tapered*rack::engineGetSampleTime();
@@ -56,22 +45,25 @@ struct XycloidModule : Module {
   }
 
   void step() override {
-    spinner_length = 5.f*depth();
-    rotor_length = 5.f - spinner_length;
+    auto spinner_speed = speed(SPEED_KNOB, SPEED_CV, SPEED_CV_ATTENUVERTER);
+    spinner.advance(spinner_speed);
 
-    rotor.step();
-    spinner.step();
+    float rotor_speed = gear_ratio()*spinner_speed;
+    rotor.advance(rotor_speed);
 
-    auto x = rotor.x() + spinner.x();
-    auto y = rotor.y() + spinner.y();
+    auto spinner_length = 5.f*depth();
+    auto rotor_length = 5.f - spinner_length;
+    auto x = rotor.x(rotor_length) + spinner.x(spinner_length);
+    auto y = rotor.y(rotor_length) + spinner.y(spinner_length);
 
     auto x_gain = gain(X_GAIN_KNOB, X_GAIN_CV);
     auto y_gain = gain(Y_GAIN_KNOB, Y_GAIN_CV);
-    auto x_offset = param(X_RANGE_SWITCH) > 0.5f ? 5.f : 0.f;
-    auto y_offset = param(Y_RANGE_SWITCH) > 0.5f ? 5.f : 0.f;
+    auto x_offset = param(X_RANGE_SWITCH)*5.f;
+    auto y_offset = param(Y_RANGE_SWITCH)*5.f;
     outputs[X_OUT].value = x_gain*(x + x_offset);
     outputs[Y_OUT].value = y_gain*(y + y_offset);
   }
+
   enum ParameterIds {
     CUSP_KNOB,
     CUSP_CV_ATTENUVERTER,
