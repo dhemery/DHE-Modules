@@ -101,50 +101,50 @@ module PanelFilters
   end
 
   def button(page, x, y, label)
-    dark = dark(page)
-    light = light(page)
-    button = ButtonControl.new(x: x, y: y, style: :dark, state: :off, dark: dark, light: light)
-    label_text = Text.new(text: label, color: dark, size: SMALL_FONT)
+    page_background = background(page)
+    page_foreground = foreground(page)
+    button = ButtonControl.new(x: x, y: y, style: :dark, state: :off, normal_on: page_background, normal_off: page_foreground)
+    label_text = Text.new(text: label, color: page_foreground, size: SMALL_FONT)
     items = [Label.new(label_text, PADDING, :above, button)]
     items << button if page['draw_controls']
     items.map(&:svg).join("\n")
   end
 
   def tiny_knob(page, x, y, label, label_size = SMALL_FONT)
-    dark = dark(page)
-    light = light(page)
-    knob = KnobControl.new(x: x, y: y, knob_color: dark, pointer_color: light, size: :tiny)
-    label_text = Text.new(text: label, color: dark, size: label_size)
+    knob_color = foreground(page)
+    pointer_color = background(page)
+    knob = KnobControl.new(x: x, y: y, knob_color: knob_color, pointer_color: pointer_color, size: :tiny)
+    label_text = Text.new(text: label, color: knob_color, size: label_size)
     items = [Label.new(label_text, PADDING, :above, knob)]
     items << knob if page['draw_controls']
     items.map(&:svg).join("\n")
   end
 
   def small_knob(page, x, y, label)
-    dark = dark(page)
-    light = light(page)
-    knob = KnobControl.new(x: x, y: y, knob_color: dark, pointer_color: light, size: :small)
-    label_text = Text.new(text: label, color: dark, size: SMALL_FONT)
+    knob_color = foreground(page)
+    pointer_color = background(page)
+    knob = KnobControl.new(x: x, y: y, knob_color: knob_color, pointer_color: pointer_color, size: :small)
+    label_text = Text.new(text: label, color: knob_color, size: SMALL_FONT)
     items = [Label.new(label_text, PADDING, :above, knob)]
     items << knob if page['draw_controls']
     items.map(&:svg).join("\n")
   end
 
   def medium_knob(page, x, y, label)
-    dark = dark(page)
-    light = light(page)
-    knob = KnobControl.new(x: x, y: y, knob_color: dark, pointer_color: light, size: :medium)
-    label_text = Text.new(text: label, color: dark, size: LARGE_FONT)
+    knob_color = foreground(page)
+    pointer_color = background(page)
+    knob = KnobControl.new(x: x, y: y, knob_color: knob_color, pointer_color: pointer_color, size: :medium)
+    label_text = Text.new(text: label, color: knob_color, size: LARGE_FONT)
     items = [Label.new(label_text, PADDING, :above, knob)]
     items << knob if page['draw_controls']
     items.map(&:svg).join("\n")
   end
 
   def large_knob(page, x, y, label)
-    dark = dark(page)
-    light = light(page)
-    knob = KnobControl.new(x: x, y: y, knob_color: dark, pointer_color: light)
-    label_text = Text.new(text: label, color: dark, size: LARGE_FONT)
+    knob_color = foreground(page)
+    pointer_color = background(page)
+    knob = KnobControl.new(x: x, y: y, knob_color: knob_color, pointer_color: pointer_color)
+    label_text = Text.new(text: label, color: knob_color, size: LARGE_FONT)
     items = [Label.new(label_text, PADDING, :above, knob)]
     items << knob if page['draw_controls']
     items.map(&:svg).join("\n")
@@ -155,11 +155,11 @@ module PanelFilters
   end
 
   def cv(page, x, y)
-    dark = dark(page)
-    light = light(page)
+    metal_color = background(page)
+    shadow_color = foreground(page)
     draw = page['draw_controls']
-    port = PortControl.new(x: x, y: y, metal_color: light, shadow_color: dark)
-    label_text = Text.new(text: 'CV', color: dark, size: SMALL_FONT)
+    port = PortControl.new(x: x, y: y, metal_color: metal_color, shadow_color: shadow_color)
+    label_text = Text.new(text: 'CV', color: shadow_color, size: SMALL_FONT)
     items = [Label.new(label_text, PADDING, :above, port)]
     items << port if draw
     items.map(&:svg).join("\n")
@@ -169,7 +169,7 @@ module PanelFilters
     port = PortControl.new(x: port_x, y: port_y, metal_color: metal_color, shadow_color: shadow_color)
     label_text = Text.new(text: label, color: label_color, size: SMALL_FONT)
     label = Label.new(label_text, PADDING, :above, port)
-    button = ButtonControl.new(style: button_style, state: :off, dark: shadow_color, light: metal_color)
+    button = ButtonControl.new(style: button_style, state: :off, normal_on: shadow_color, normal_off: metal_color)
     button.align(PADDING, button_position, port)
     box = Box.around(content: [port, label, button], border_color: foreground_color, background_color: background_color)
     items = [box, label]
@@ -178,17 +178,17 @@ module PanelFilters
   end
 
   def in_port_button(page, x, y, label)
-    dark = dark(page)
-    light = light(page)
+    foreground = foreground(page)
+    background = background(page)
     draw = page['draw_controls']
-    port_button(port_x: x, port_y: y, label: label, button_position: :right_of, foreground_color: dark, background_color: light, label_color: dark, metal_color: light, shadow_color: dark, button_style: :dark, draw: draw)
+    port_button(port_x: x, port_y: y, label: label, button_position: :right_of, foreground_color: foreground, background_color: background, label_color: foreground, metal_color: background, shadow_color: foreground, button_style: :normal, draw: draw)
   end
 
   def out_port_button(page, x, y, label)
-    dark = dark(page)
-    light = light(page)
+    foreground = background(page)
+    background = foreground(page)
     draw = page['draw_controls']
-    port_button(port_x: x, port_y: y, label: label, button_position: :left_of, foreground_color: dark, background_color: dark, label_color: light, metal_color: light, shadow_color: dark, button_style: :light, draw: draw)
+    port_button(port_x: x, port_y: y, label: label, button_position: :left_of, foreground_color: foreground, background_color: background, label_color: foreground, metal_color: background, shadow_color: foreground, button_style: :reverse, draw: draw)
   end
 
   def port(x:, y:, foreground_color:, background_color:, label:, label_color:, metal_color:, shadow_color:, draw:)
@@ -202,17 +202,17 @@ module PanelFilters
   end
 
   def in_port(page, x, y, label)
-    dark = dark(page)
-    light = light(page)
+    background = background(page)
+    foreground = foreground(page)
     draw = page ['draw_controls']
-    port(x: x, y: y, foreground_color: dark, background_color: light, label: label, label_color: dark, metal_color: light, shadow_color: dark, draw: draw)
+    port(x: x, y: y, foreground_color: background, background_color: foreground, label: label, label_color: background, metal_color: foreground, shadow_color: background, draw: draw)
   end
 
   def out_port(page, x, y, label)
-    dark = dark(page)
-    light = light(page)
+    foreground = background(page)
+    background = foreground(page)
     draw = page ['draw_controls']
-    port(x: x, y: y, foreground_color: dark, background_color: dark, label: label, label_color: light, metal_color: light, shadow_color: dark, draw: draw)
+    port(x: x, y: y, foreground_color: background, background_color: background, label: label, label_color: foreground, metal_color: foreground, shadow_color: background, draw: draw)
   end
 
   def duration_switch(page, x, y)
@@ -228,18 +228,18 @@ module PanelFilters
   end
 
   def switch(page, x, y, position, high, low, mid = nil)
-    dark = dark(page)
-    light = light(page)
+    foreground = background(page)
+    background = foreground(page)
     draw = page['draw_controls']
-    switch = SwitchControl.new(x: x, y: y, positions: mid ? 3 : 2, dark: dark, light: light, state: position.to_sym)
-    high_text = Text.new(text: high, size: SMALL_FONT, color: dark)
-    low_text = Text.new(text: low, size: SMALL_FONT, color: dark)
+    switch = SwitchControl.new(x: x, y: y, positions: mid ? 3 : 2, background: background, foreground: foreground, state: position.to_sym)
+    high_text = Text.new(text: high, size: SMALL_FONT, color: background)
+    low_text = Text.new(text: low, size: SMALL_FONT, color: background)
     items = [
         Label.new(high_text, PADDING + STROKE_INSET, :above, switch),
         Label.new(low_text, PADDING + STROKE_INSET, :below, switch),
     ]
     if mid
-      mid_text = Text.new(text: mid, size: SMALL_FONT, color: dark)
+      mid_text = Text.new(text: mid, size: SMALL_FONT, color: background)
       items << Label.new(mid_text, PADDING / 2.0 + STROKE_INSET, :right_of, switch)
     end
     items << switch if draw
@@ -247,19 +247,19 @@ module PanelFilters
   end
 
   def panel(page)
-    dark = dark(page)
-    light = light(page)
+    foreground = foreground(page)
+    background = background(page)
     panel = Bounded.new(top: 0.0, right: width(page), bottom: PANEL_HEIGHT, left: 0.0)
-    name_label_text = Text.new(text: page['title'], color: dark, size: PLUGIN_FONT)
+    name_label_text = Text.new(text: page['title'], color: foreground, size: PLUGIN_FONT)
     name_label = Label.new(name_label_text, -PLUGIN_LABEL_INSET, :above, panel)
-    author_label_text = Text.new(text: 'DHE', color: dark, size: PLUGIN_FONT)
+    author_label_text = Text.new(text: 'DHE', color: foreground, size: PLUGIN_FONT)
     author_label = Label.new(author_label_text, -PLUGIN_LABEL_INSET, :below, panel)
-    box = %Q[<rect x="#{panel.left}" y="#{panel.top}" width="#{panel.width}" height="#{panel.height}" stroke="#{dark}" fill="#{light}" stroke-width="1"/>]
+    box = %Q[<rect x="#{panel.left}" y="#{panel.top}" width="#{panel.width}" height="#{panel.height}" stroke="#{foreground}" fill="#{background}" stroke-width="1"/>]
     box + [name_label, author_label].map(&:svg).join("\n")
   end
 
   def connector(page, x1, y1, x2, y2)
-    %Q[<line x1="#{x1}" y1="#{y1}" x2="#{x2}" y2="#{y2}" stroke="#{dark(page)}" stroke-width="#{STROKE_WIDTH}" />]
+    %Q[<line x1="#{x1}" y1="#{y1}" x2="#{x2}" y2="#{y2}" stroke="#{foreground(page)}" stroke-width="#{STROKE_WIDTH}" />]
   end
 
   def width(page)

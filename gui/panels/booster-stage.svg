@@ -2,9 +2,10 @@
 layout: panel
 width: 8
 title: BOOSTER STAGE
-color: [0,100,30]
+foreground-color: [0,100,30]
+background-color: [0,100,97]
 controls:
-  buttons: [dark, light]
+  buttons: [normal, reverse]
   knobs: [large]
   ports: []
   switches: [2, 3]

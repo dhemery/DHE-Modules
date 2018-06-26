@@ -6,17 +6,17 @@
 
 namespace DHE {
 
-struct BoosterStageButtonDark : rack::SVGSwitch, rack::MomentarySwitch {
-  BoosterStageButtonDark() {
-    addFrame(rack::SVG::load(rack::assetPlugin(plugin, "res/booster-stage/button-dark-off.svg")));
-    addFrame(rack::SVG::load(rack::assetPlugin(plugin, "res/booster-stage/button-dark-on.svg")));
+struct BoosterStageButtonReverse : rack::SVGSwitch, rack::MomentarySwitch {
+  BoosterStageButtonReverse() {
+    addFrame(rack::SVG::load(rack::assetPlugin(plugin, "res/booster-stage/button-reverse-off.svg")));
+    addFrame(rack::SVG::load(rack::assetPlugin(plugin, "res/booster-stage/button-reverse-on.svg")));
   }
 };
 
-struct BoosterStageButtonLight : rack::SVGSwitch, rack::MomentarySwitch {
-  BoosterStageButtonLight() {
-    addFrame(rack::SVG::load(rack::assetPlugin(plugin, "res/booster-stage/button-light-off.svg")));
-    addFrame(rack::SVG::load(rack::assetPlugin(plugin, "res/booster-stage/button-light-on.svg")));
+struct BoosterStageButtonNormal : rack::SVGSwitch, rack::MomentarySwitch {
+  BoosterStageButtonNormal() {
+    addFrame(rack::SVG::load(rack::assetPlugin(plugin, "res/booster-stage/button-normal-off.svg")));
+    addFrame(rack::SVG::load(rack::assetPlugin(plugin, "res/booster-stage/button-normal-on.svg")));
   }
 };
 
@@ -83,14 +83,14 @@ BoosterStageWidget::BoosterStageWidget(rack::Module *module) : ModuleWidget(modu
 
   row = 0;
   install_input<BoosterStagePort>(BoosterStageModule::DEFER_IN, {left_x, top_row_y + row*row_spacing});
-  install_switch<BoosterStageButtonDark>(BoosterStageModule::DEFER_BUTTON, {center_left_x, top_row_y + row*row_spacing});
-  install_switch<BoosterStageButtonLight>(BoosterStageModule::ACTIVE_BUTTON, {center_right_x, top_row_y + row*row_spacing});
+  install_switch<BoosterStageButtonNormal>(BoosterStageModule::DEFER_BUTTON, {center_left_x, top_row_y + row*row_spacing});
+  install_switch<BoosterStageButtonReverse>(BoosterStageModule::ACTIVE_BUTTON, {center_right_x, top_row_y + row*row_spacing});
   install_output<BoosterStagePort>(BoosterStageModule::ACTIVE_OUT, {right_x, top_row_y + row*row_spacing});
 
   row++;
   install_input<BoosterStagePort>(BoosterStageModule::TRIGGER_IN, {left_x, top_row_y + row*row_spacing});
-  install_switch<BoosterStageButtonDark>(BoosterStageModule::TRIGGER_BUTTON, {center_left_x, top_row_y + row*row_spacing});
-  install_switch<BoosterStageButtonLight>(BoosterStageModule::EOC_BUTTON, {center_right_x, top_row_y + row*row_spacing});
+  install_switch<BoosterStageButtonNormal>(BoosterStageModule::TRIGGER_BUTTON, {center_left_x, top_row_y + row*row_spacing});
+  install_switch<BoosterStageButtonReverse>(BoosterStageModule::EOC_BUTTON, {center_right_x, top_row_y + row*row_spacing});
   install_output<BoosterStagePort>(BoosterStageModule::EOC_OUT, {right_x, top_row_y + row*row_spacing});
 
   row++;

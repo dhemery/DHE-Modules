@@ -43,8 +43,8 @@ module DHE
       page = PageWithoutAFile.new(module_page.site, __dir__, module_page.url.pathmap("%{^#{SOURCE_DIR},images}d"), module_page.name)
       page.data.merge!(module_page.data)
       page.data['draw_controls'] = true
-      page.data['dark'] = dark(page)
-      page.data['light'] = light(page)
+      page.data['foreground'] = foreground(page)
+      page.data['background'] = background(page)
       page.content = module_page.content
       page
     end
@@ -52,18 +52,18 @@ module DHE
     def buttons(page, variants)
       variants.flat_map do |style|
         [:off, :on].map do |state|
-          ButtonControl.new(style: style, state: state, dark: dark(page), light: light(page))
+          ButtonControl.new(style: style, state: state, normal_on: background(page), normal_off: foreground(page))
         end
       end
     end
 
     def ports(page, _)
-      PortControl.new(metal_color: light(page), shadow_color: dark(page))
+      PortControl.new(metal_color: background(page), shadow_color: foreground(page))
     end
 
     def knobs(page, variants)
       variants.map do |size|
-        KnobControl.new(knob_color: dark(page), pointer_color: light(page), size: size.to_sym)
+        KnobControl.new(knob_color: foreground(page), pointer_color: background(page), size: size.to_sym)
       end
     end
 
@@ -72,7 +72,7 @@ module DHE
         states = [:high, :low]
         states << :mid if positions == 3
         states.map do |state|
-          SwitchControl.new(positions: positions, state: state, dark: dark(page), light: light(page))
+          SwitchControl.new(positions: positions, state: state, foreground: foreground(page), background: background(page))
         end
       end
     end

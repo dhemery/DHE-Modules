@@ -56,15 +56,15 @@ end
 class ButtonControl < RoundControl
   DIAMETER = 6.0
 
-  def initialize(x: 0.0, y: 0.0, style:, state:, dark:, light:)
+  def initialize(x: 0.0, y: 0.0, style:, state:, normal_on:, normal_off:)
     super(x: x, y: y, diameter: DIAMETER)
     @style = style.to_sym
     @state = state.to_sym
-    @button_color = @style == :dark ? dark : light
-    if @style == :dark
-      @state_color = @state == :on ? light : dark
+    @button_color = @style == :normal ? normal_off : normal_on
+    if @style == :normal
+      @state_color = @state == :on ? normal_on: normal_off
     else
-      @state_color = @state == :on ? dark : light
+      @state_color = @state == :on ? normal_off : normal_on
     end
   end
 
@@ -159,12 +159,12 @@ end
 class SwitchControl < Control
   WIDTH = 3.0
 
-  def initialize(x: 0.0, y: 0.0, positions:, state:, dark:, light:)
+  def initialize(x: 0.0, y: 0.0, positions:, state:, foreground:, background:)
     super(x: x, y: y, width: WIDTH, height: positions * WIDTH)
     @positions = positions
     @state = state
-    @dark = dark
-    @light = light
+    @foreground = foreground
+    @background = background
     @position =
         case @state
           when :high
@@ -209,7 +209,7 @@ class SwitchControl < Control
                 .map {|y| %Q[<line x1="#{knurl_left}" x2="#{knurl_right}" y1="#{y}" y2="#{y}" stroke-width="#{knurl_stroke_width}" stroke-linecap="round"/>]}
                 .join("\n")
     %Q[
-      <g transform="translate(#{center.x} #{center.y})" fill="#{@light}" stroke="#{@dark}">
+      <g transform="translate(#{center.x} #{center.y})" fill="#{@background}" stroke="#{@foreground}">
         <rect x="#{box_left}" y="#{box_top}" width="#{box_width}" height="#{box_height}"
               rx="#{corner_radius}" ry="#{corner_radius}"
               stroke-width="#{box_stroke_width}"/>

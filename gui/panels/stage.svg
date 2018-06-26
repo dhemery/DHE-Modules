@@ -2,7 +2,8 @@
 layout: panel
 width: 5
 title: STAGE
-color: [120,100,30]
+foreground-color: [120,100,30]
+background-color: [120,100,97]
 controls:
   knobs: [large]
   ports: []

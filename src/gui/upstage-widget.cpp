@@ -6,10 +6,10 @@
 
 namespace DHE {
 
-struct UpstageButtonDark : rack::SVGSwitch, rack::MomentarySwitch {
-  UpstageButtonDark() {
-    addFrame(rack::SVG::load(rack::assetPlugin(plugin, "res/upstage/button-dark-off.svg")));
-    addFrame(rack::SVG::load(rack::assetPlugin(plugin, "res/upstage/button-dark-on.svg")));
+struct UpstageButtonNormal : rack::SVGSwitch, rack::MomentarySwitch {
+  UpstageButtonNormal() {
+    addFrame(rack::SVG::load(rack::assetPlugin(plugin, "res/upstage/button-normal-off.svg")));
+    addFrame(rack::SVG::load(rack::assetPlugin(plugin, "res/upstage/button-normal-on.svg")));
   }
 };
 
@@ -53,8 +53,8 @@ UpstageWidget::UpstageWidget(rack::Module *module) : ModuleWidget(module, 5, "re
   install_switch<UpstageSwitch2>(UpstageModule::LEVEL_SWITCH, {right_x, top_row_y + row*row_spacing}, 1, 1);
 
   row++;
-  install_switch<UpstageButtonDark>(UpstageModule::WAIT_BUTTON, {left_x, top_row_y + row*row_spacing});
-  install_switch<UpstageButtonDark>(UpstageModule::TRIG_BUTTON, {right_x, top_row_y + row*row_spacing});
+  install_switch<UpstageButtonNormal>(UpstageModule::WAIT_BUTTON, {left_x, top_row_y + row*row_spacing});
+  install_switch<UpstageButtonNormal>(UpstageModule::TRIG_BUTTON, {right_x, top_row_y + row*row_spacing});
 
   top_row_y = 82.f;
   row_spacing = 15.f;

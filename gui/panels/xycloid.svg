@@ -2,8 +2,8 @@
 layout: panel
 width: 11
 title: XYCLOID
-color: [270,100,30]
-invert: true
+foreground-color: [270,100,87]
+background-color: [270,66,50]
 controls:
   knobs: [tiny, small, large]
   ports: []

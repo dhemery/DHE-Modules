@@ -1,21 +1,15 @@
 module DHE
   module PageColor
-    def hslcolor(page)
-      Color::HSL.new(*page['color'])
-    end
-
     def rgbhex(color)
       "##{color.to_rgb.hex}"
     end
 
-    def light(page)
-      hsl = hslcolor(page)
-      hsl.l = 0.97
-      rgbhex(hsl)
+    def background(page)
+      rgbhex(Color::HSL.new(*page['background-color']))
     end
 
-    def dark(page)
-      rgbhex(hslcolor(page))
+    def foreground(page)
+      rgbhex(Color::HSL.new(*page['foreground-color']))
     end
   end
 end

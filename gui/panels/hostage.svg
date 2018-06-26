@@ -2,7 +2,8 @@
 layout: panel
 width: 5
 title: HOSTAGE
-color: [300,100,30]
+foreground-color: [300,100,30]
+background-color: [300,100,97]
 controls:
   knobs: [large]
   ports: []

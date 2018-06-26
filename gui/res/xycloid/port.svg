@@ -4,10 +4,10 @@
 width="8.4mm" height="8.4mm" viewBox="0 0 8.4 8.4">
   <g transform="translate(4.2 4.2)">
     
-    <g transform="translate(0.0 0.0)" stroke="#4c0099" fill="#f7f0ff" stroke-width="0.21000000000000002">
+    <g transform="translate(0.0 0.0)" stroke="#debdff" fill="#7f2bd4" stroke-width="0.21000000000000002">
       <circle r="4.095"/>
       <circle r="2.925"/>
-      <circle r="1.755" fill="#4c0099"/>
+      <circle r="1.755" fill="#debdff"/>
     </g>
     
   </g>

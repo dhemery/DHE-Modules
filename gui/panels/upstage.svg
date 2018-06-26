@@ -2,9 +2,10 @@
 layout: panel
 width: 5
 title: UPSTAGE
-color: [210,100,30]
+foreground-color: [210,100,30]
+background-color: [210,100,97]
 controls:
-  buttons: [dark]
+  buttons: [normal]
   knobs: [large]
   ports: []
   switches: [2]
