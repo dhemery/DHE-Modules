@@ -2,8 +2,8 @@
 layout: panel
 width: 5
 title: CUBIC
-foreground-color: [180,100,97]
-background-color: [180,100,30]
+foreground-color: [180,100,30]
+background-color: [180,100,97]
 controls:
   knobs: [small]
   ports: []

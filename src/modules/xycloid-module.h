@@ -12,14 +12,14 @@ struct XycloidModule : Module {
   XycloidModule() : Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT} {}
 
   float gear_ratio() const {
-    static constexpr auto cusp_max = 5.f;
+    static constexpr auto cusp_max = 16.f;
     static constexpr auto outward_cusps = Range{0.f, cusp_max};
     static constexpr auto inward_cusps = Range{0.f, -cusp_max};
     static constexpr auto inward_and_outward_cusps = Range{-cusp_max, cusp_max};
     static constexpr Range cusp_ranges[] = {inward_cusps, inward_and_outward_cusps, outward_cusps};
     auto cusp_type = static_cast<int>(param(CUSP_TYPE_SWITCH));
     auto cusp_range = cusp_ranges[cusp_type];
-    float modulated_cusps = modulated(CUSP_KNOB, CUSP_CV, CUSP_CV_ATTENUVERTER);
+    float modulated_cusps = modulated(GEAR_RATIO_KNOB, GEAR_RATIO_CV, GEAR_RATIO_CV_ATTENUVERTER);
     return 1.f - cusp_range.scale(modulated_cusps);
   }
 
@@ -65,8 +65,8 @@ struct XycloidModule : Module {
   }
 
   enum ParameterIds {
-    CUSP_KNOB,
-    CUSP_CV_ATTENUVERTER,
+    GEAR_RATIO_KNOB,
+    GEAR_RATIO_CV_ATTENUVERTER,
     CUSP_TYPE_SWITCH,
     DEPTH_KNOB,
     DEPTH_CV_ATTENUVERTER,
@@ -79,7 +79,7 @@ struct XycloidModule : Module {
     PARAMETER_COUNT
   };
   enum InputIds {
-    CUSP_CV,
+    GEAR_RATIO_CV,
     DEPTH_CV,
     SPEED_CV,
     X_GAIN_CV,

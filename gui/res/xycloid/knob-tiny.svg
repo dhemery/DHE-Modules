@@ -4,7 +4,7 @@
 width="7.0mm" height="7.0mm" viewBox="0 0 7.0 7.0">
   <g transform="translate(3.5 3.5)">
     
-      <g transform="translate(0.0 0.0)" stroke="#7f2bd4" fill="#debdff">
+      <g transform="translate(0.0 0.0)" stroke="#f7f2fc" fill="#7f00ff">
         <circle r="3.5" stroke="none"/>
         <line y2="-3.0625" stroke-width="0.4375" stroke-linecap="round"/>
       </g>

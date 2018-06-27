@@ -63,15 +63,15 @@ XycloidWidget::XycloidWidget(rack::Module *module) : ModuleWidget(module, 11, "r
 
   auto row = 0;
   row++;
-  install_input<XycloidPort>(XycloidModule::CUSP_CV, {left_x, top_row_y + row*row_spacing});
-  install_knob<XycloidKnobTiny>(XycloidModule::CUSP_CV_ATTENUVERTER, {left_center_x, top_row_y + row*row_spacing});
-  install_knob<XycloidKnobLarge>(XycloidModule::CUSP_KNOB, {right_center_x, top_row_y + row*row_spacing});
-  install_switch<XycloidSwitch3>(XycloidModule::CUSP_TYPE_SWITCH, {right_x, top_row_y + row*row_spacing}, 2, 2);
+  install_input<XycloidPort>(XycloidModule::GEAR_RATIO_CV, {left_x, top_row_y + row*row_spacing});
+  install_knob<XycloidKnobTiny>(XycloidModule::GEAR_RATIO_CV_ATTENUVERTER, {left_center_x, top_row_y + row*row_spacing});
+  install_knob<XycloidKnobLarge>(XycloidModule::GEAR_RATIO_KNOB, {right_center_x, top_row_y + row*row_spacing});
 
   row++;
   install_input<XycloidPort>(XycloidModule::DEPTH_CV, {left_x, top_row_y + row*row_spacing});
   install_knob<XycloidKnobTiny>(XycloidModule::DEPTH_CV_ATTENUVERTER, {left_center_x, top_row_y + row*row_spacing});
   install_knob<XycloidKnobLarge>(XycloidModule::DEPTH_KNOB, {right_center_x, top_row_y + row*row_spacing});
+  install_switch<XycloidSwitch3>(XycloidModule::CUSP_TYPE_SWITCH, {right_x, top_row_y + row*row_spacing}, 2, 2);
 
   row++;
   install_input<XycloidPort>(XycloidModule::SPEED_CV, {left_x, top_row_y + row*row_spacing});

@@ -2,8 +2,8 @@
 layout: panel
 width: 4
 title: SWAVE
-foreground-color: [16,100,97]
-background-color: [16,100,50]
+foreground-color: [16,100,50]
+background-color: [16,100,97]
 controls:
   knobs: [large]
   ports: []

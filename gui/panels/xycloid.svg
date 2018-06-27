@@ -2,8 +2,8 @@
 layout: panel
 width: 11
 title: XYCLOID
-foreground-color: [270,100,87]
-background-color: [270,66,50]
+foreground-color: [270,100,50]
+background-color: [270,66,97]
 controls:
   knobs: [tiny, small, large]
   ports: []
@@ -18,17 +18,17 @@ controls:
 {% assign y = 22.0 %}
 
 {% assign y = y | plus: delta_y %}
-{{ page | connector: left_x, y, right_x, y }}
-{{ page | cv: left_x, y }}
-{{ page | attenuverter: left_center_x, y }}
-{{ page | large_knob: right_center_x, y, 'CUSPS' }}
-{{ page | switch: right_x, y, 'mid', 'OUT', 'IN', '' }}
-
-{% assign y = y | plus: delta_y %}
 {{ page | connector: left_x, y, right_center_x, y }}
 {{ page | cv: left_x, y }}
 {{ page | attenuverter: left_center_x, y }}
+{{ page | large_knob: right_center_x, y, 'RATIO' }}
+
+{% assign y = y | plus: delta_y %}
+{{ page | connector: left_x, y, right_x, y }}
+{{ page | cv: left_x, y }}
+{{ page | attenuverter: left_center_x, y }}
 {{ page | large_knob: right_center_x, y, 'DEPTH' }}
+{{ page | switch: right_x, y, 'mid', 'OUT', 'IN', '' }}
 
 {% assign y = y | plus: delta_y %}
 {{ page | connector: left_x, y, right_center_x, y }}
