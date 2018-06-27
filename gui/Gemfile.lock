@@ -60,7 +60,7 @@ PLATFORMS
 
 DEPENDENCIES
   color (~> 1.8)
-  jekyll (~> 3.7)
+  jekyll (~> 3.8)
   rake (~> 12.3)
 
 BUNDLED WITH
