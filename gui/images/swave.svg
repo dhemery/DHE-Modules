@@ -90,7 +90,7 @@
          d="m 9.5977629,30.547615 c 0.113792,0.111422 0.2655147,0.154094 0.4243491,0.154094 0.324782,0 0.557107,-0.173059 0.557107,-0.547624 v -1.062059 h -0.336635 v 1.057317 c 0,0.154094 -0.0972,0.253662 -0.2465491,0.253662 -0.1090507,0 -0.1896533,-0.05453 -0.2512907,-0.113792 z" />
     </g>
     <g
-       style="fill:#ff4400;stroke:#fff4f0"
+       style="fill:#fff4f0;stroke:#ff4400"
        id="g24"
        transform="translate(10.16,25)">
       <path
@@ -189,22 +189,22 @@
     <path
        id="rect44"
        d="M 5.7849998,89.044556 H 14.535 c 0.554,0 1,0.446 1,1 V 101.375 c 0,0.554 -0.446,1 -1,1 H 5.7849998 c -0.554,0 -1,-0.446 -1,-1 V 90.044556 c 0,-0.554 0.446,-1 1,-1 z"
-       style="fill:#ff4400;stroke:#fff4f0;stroke-width:0.34999999" />
+       style="fill:#fff4f0;stroke:#ff4400;stroke-width:0.34999999" />
     <g
        id="text46"
-       style="font-weight:bold;font-size:2.37066674px;font-family:'Proxima Nova';text-anchor:middle;fill:#fff4f0"
+       style="font-weight:bold;font-size:2.37066674px;font-family:'Proxima Nova';text-anchor:middle;fill:#ff4400"
        aria-label="IN">
       <path
          id="path131"
-         style="font-weight:bold;font-size:2.37066674px;font-family:'Proxima Nova';text-anchor:middle;fill:#fff4f0"
+         style="font-weight:bold;font-size:2.37066674px;font-family:'Proxima Nova';text-anchor:middle;fill:#ff4400"
          d="M 9.1288154,91.800003 H 9.4654501 V 90.218768 H 9.1288154 Z" />
       <path
          id="path133"
-         style="font-weight:bold;font-size:2.37066674px;font-family:'Proxima Nova';text-anchor:middle;fill:#fff4f0"
+         style="font-weight:bold;font-size:2.37066674px;font-family:'Proxima Nova';text-anchor:middle;fill:#ff4400"
          d="m 10.867551,91.800003 h 0.324782 v -1.581235 h -0.336635 v 0.99331 l -0.732536,-0.99331 H 9.7770446 v 1.581235 h 0.3366344 v -1.03124 z" />
     </g>
     <g
-       style="fill:#ff4400;stroke:#fff4f0;stroke-width:0.20999999"
+       style="fill:#fff4f0;stroke:#ff4400;stroke-width:0.20999999"
        id="g54"
        transform="translate(10.16,97)">
       <path
@@ -218,7 +218,7 @@
       <path
          id="circle52"
          d="M 1.755,0 A 1.755,1.755 0 0 1 0,1.755 1.755,1.755 0 0 1 -1.755,0 1.755,1.755 0 0 1 0,-1.755 1.755,1.755 0 0 1 1.755,0 Z"
-         style="fill:#fff4f0" />
+         style="fill:#ff4400" />
     </g>
     <path
        id="rect56"

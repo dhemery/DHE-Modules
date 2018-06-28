@@ -234,18 +234,18 @@
     <path
        id="rect40"
        d="M 2.3083301,104.04456 H 11.05833 c 0.554,0 1,0.446 1,1 v 11.33045 c 0,0.554 -0.446,1 -1,1 H 2.3083301 c -0.554,0 -1,-0.446 -1,-1 v -11.33045 c 0,-0.554 0.446,-1 1,-1 z"
-       style="fill:#009999;stroke:#f0ffff;stroke-width:0.34999999" />
+       style="fill:#f0ffff;stroke:#009999;stroke-width:0.34999999" />
     <g
        id="text42"
-       style="font-weight:bold;font-size:2.37066674px;font-family:'Proxima Nova';text-anchor:middle;fill:#f0ffff"
+       style="font-weight:bold;font-size:2.37066674px;font-family:'Proxima Nova';text-anchor:middle;fill:#009999"
        aria-label="IN">
       <path
          id="path140"
-         style="font-weight:bold;font-size:2.37066674px;font-family:'Proxima Nova';text-anchor:middle;fill:#f0ffff"
+         style="font-weight:bold;font-size:2.37066674px;font-family:'Proxima Nova';text-anchor:middle;fill:#009999"
          d="m 5.6521456,106.8 h 0.3366347 v -1.58123 H 5.6521456 Z" />
       <path
          id="path142"
-         style="font-weight:bold;font-size:2.37066674px;font-family:'Proxima Nova';text-anchor:middle;fill:#f0ffff"
+         style="font-weight:bold;font-size:2.37066674px;font-family:'Proxima Nova';text-anchor:middle;fill:#009999"
          d="m 7.3908815,106.8 h 0.3247813 v -1.58123 H 7.3790281 v 0.99331 l -0.732536,-0.99331 H 6.3003748 V 106.8 h 0.3366346 v -1.03124 z" />
     </g>
     <path
