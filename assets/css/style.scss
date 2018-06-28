@@ -8,6 +8,11 @@
   a:hover { text-decoration: underline; }
 }
 
+sup {
+  font-size: smaller;
+  vertical-align: super;
+}
+
 span.stage {
   color: #009900;
   font-weight: bold;
