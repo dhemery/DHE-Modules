@@ -1,13 +1,30 @@
 #pragma once
 
 #include <util/controls.h>
-#include <util/wheel.h>
 #include "module.h"
 namespace DHE {
 
+struct Pole {
+  const float two_pi = 2.f*std::acos(-1.f);
+  float phase{0.f};
+
+  void advance(float increment) {
+    phase += increment;
+    phase -= std::trunc(phase); // Reduce phase to (-1, 1) to avoid eventual overflow
+  }
+
+  float x(float radius) const {
+    return radius*std::cos(two_pi*phase);
+  }
+
+  float y(float radius) const {
+    return radius*std::sin(two_pi*phase);
+  }
+};
+
 struct XycloidModule : Module {
-  Wheel rotor;
-  Wheel spinner;
+  Pole inner_pole;
+  Pole outer_pole;
 
   XycloidModule() : Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT} {}
 
@@ -20,12 +37,12 @@ struct XycloidModule : Module {
     auto cusp_type = static_cast<int>(param(CUSP_TYPE_SWITCH));
     auto cusp_range = cusp_ranges[cusp_type];
     float modulated_cusps = modulated(GEAR_RATIO_KNOB, GEAR_RATIO_CV, GEAR_RATIO_CV_ATTENUVERTER);
-    return 1.f - cusp_range.scale(modulated_cusps);
+    return cusp_range.scale(modulated_cusps) - 1.f;
   }
 
   float depth() const {
-    static constexpr auto wobble_range = Range{0.f, 1.f};
-    return 1.f - wobble_range.clamp(modulated(DEPTH_KNOB, DEPTH_CV, DEPTH_CV_ATTENUVERTER));
+    static constexpr auto depth_range = Range{0.f, 1.f};
+    return 1.f - depth_range.clamp(modulated(DEPTH_KNOB, DEPTH_CV, DEPTH_CV_ATTENUVERTER));
   }
 
   float speed(int knob, int cv, int attenuator) const {
@@ -45,16 +62,15 @@ struct XycloidModule : Module {
   }
 
   void step() override {
-    auto spinner_speed = speed(SPEED_KNOB, SPEED_CV, SPEED_CV_ATTENUVERTER);
-    spinner.advance(spinner_speed);
+    auto outer_pole_speed = speed(SPEED_KNOB, SPEED_CV, SPEED_CV_ATTENUVERTER);
+    auto inner_pole_speed = gear_ratio()*outer_pole_speed;
+    outer_pole.advance(outer_pole_speed);
+    inner_pole.advance(inner_pole_speed);
 
-    float rotor_speed = gear_ratio()*spinner_speed;
-    rotor.advance(rotor_speed);
-
-    auto spinner_length = 5.f*depth();
-    auto rotor_length = 5.f - spinner_length;
-    auto x = rotor.x(rotor_length) + spinner.x(spinner_length);
-    auto y = rotor.y(rotor_length) + spinner.y(spinner_length);
+    auto outer_pole_radius = 5.f*depth();
+    auto inner_pole_radius = 5.f - outer_pole_radius;
+    auto x = inner_pole.x(inner_pole_radius) + outer_pole.x(outer_pole_radius);
+    auto y = inner_pole.y(inner_pole_radius) + outer_pole.y(outer_pole_radius);
 
     auto x_gain = gain(X_GAIN_KNOB, X_GAIN_CV);
     auto y_gain = gain(Y_GAIN_KNOB, Y_GAIN_CV);

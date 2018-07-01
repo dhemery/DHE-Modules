@@ -50,8 +50,7 @@ add_library(plugin SHARED
         src/util/latch.h
         src/util/ramp.h
         src/util/sigmoid.h
-        src/util/mode.h
-        src/util/wheel.h)
+        src/util/mode.h)
 target_compile_options(plugin PUBLIC -std=c++11)
 target_link_libraries(plugin
         PUBLIC -stdlib=libc++
