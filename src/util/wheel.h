@@ -9,11 +9,7 @@ struct Wheel {
 
   void advance(float increment) {
     phase += increment;
-    if (phase > 1.f) {
-      phase -= 1.f;
-    } else if (phase < 0.f) {
-      phase += 1.f;
-    }
+    phase -= std::trunc(phase); // Reduce phase to (-1, 1) to avoid eventual overflow
   }
 
   float x(float radius) const {
