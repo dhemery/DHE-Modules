@@ -3,36 +3,40 @@ title: The Xycloid Module
 ---
 <img class="panel" src="panel.svg" alt="The Xycloid Panel" />
 
-Generates cyclically related pairs of sinusoidal signals.
+Generates pairs of cyclically related modulation signals.
 
 Uh… what?
 
 Yeah, don't worry about all that.
 
-_Xycloid_ [makes fun shapes](#my-inspiration).
+_Xycloid_ [makes fun shapes](#examples).
+Check the [usage guide](#using-xycloid).
 
-Just play with the knobs.
+Or better yet, just **play with the knobs.**
 
 ## Controls
 - **RATIO:**
     Determines the number of "cusps" or "nodes" in the shape.
-
-    The "curl direction" switch **(IN / OUT)**
-    determines whether the cusps curl
-    toward the inside or the outside of the shape.
-    With the switch at the top or bottom position,
-    the *RATIO* knob ranges from 0 to 16 cusps.
-    With the switch in the center,
-    the *RATIO* knob ranges from 16 inward cusps
-    (fully counterclockwise)
-    to 16 outward cusps
-    (fully clockwise).
 
 - **DEPTH:**
     How far the shape extends from its outer edge.
 
     Note that with the knob at either extreme,
     the shape is a circle.
+
+- **IN / OUT:**
+    This "curl direction" switch
+    determines whether the cusps curl
+    toward the inside or the outside of the shape.
+
+    It also determines the range of the _RATIO_ knob.
+    With the switch set to _IN_ or _OUT_,
+    the *RATIO* knob ranges from 0 to 16 cusps.
+    With the switch in the center,
+    the *RATIO* knob ranges from 16 inward cusps
+    (fully counterclockwise)
+    to 16 outward cusps
+    (fully clockwise).
 
 - **SPEED:**
     The speed at which the shape is drawn.
@@ -52,9 +56,8 @@ Just play with the knobs.
     Either 0 to 10V (UNI)
     or -5 to 5V (BI).
 
-    The **GAIN** knob applies gain (from -2 to 2)
+    The **GAIN** knob applies gain (from 0 to 2)
     to the signal.
-    The amount of gain is modulated by a _CV_ signal.
 
     The range is selected before gain is applied.
 
@@ -77,6 +80,42 @@ Just play with the knobs.
         of the the _CV_ signal's effect
         on the modulated knob.
 
+## Using Xycloid
+
+1. Choose one or two Rack modules that you want to modulate.
+1. Choose two parameters that have CV modulation.
+1. Connect Xycloid's _X_ output to one parameter's CV input
+    and the _Y_ output to the other's.
+1. (Optional)
+   To view the shape that Xycloid produces,
+   connect its _X_ and _Y_ outputs to a Scope's _X_ and _Y_ inputs.
+   Set the scope to _XxY_ mode.
+   (_X/Y_ mode can also be interesting.)
+1. **Play with the knobs.**
+1. For extra chaos,
+    modulate Xycloid's controls.
+
+**The Audible Instruments Macro Oscillator**
+is a fantastic choice for your initial exploration of what Xycloid can do.
+Attach Xycloid's _X_ and _y_ outputs
+to the Macro Oscillator's _TIMBRE_ and _COLOR_ inputs.
+Modulating _V/OCT_ and _FM_ is also fun.
+
+Then **play with the knobs.**
+
+**More stuff to try:**
+
+- Modulate two closely related parameters.
+- Modulate two parameters that have nothing to do with each other.
+- Modulate the same parameter on different modules.
+    For example,
+    modulate the _PWM_ input on two Fundamental VCO-1s.
+    Or the _FM_ inputs.
+
+## Examples
+
+TODO: Images here.
+
 ## My Inspiration
 
 Okay, so remember when you were a kid,
@@ -95,7 +134,7 @@ and
 
 But, seriously, don't worry about that.
 
-Just play with the knobs.
+Just **play with the knobs.**
 
 ## The Name
 
@@ -120,4 +159,4 @@ No, you would not.
 
 But don't worry about that.
 
-Just play with the knobs.
+Just **play with the knobs.**
