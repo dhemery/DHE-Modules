@@ -12,10 +12,10 @@ and
 
 ### Envelope Generators
 
-[![_Stage_](modules/stage/panel.svg)](/modules/stage/)
-[![_Booster Stage_](modules/booster-stage/panel.svg)](/modules/booster-stage/)
-[![_Hostage_](modules/hostage/panel.svg)](/modules/hostage/)
-[![_Upstage_](modules/upstage/panel.svg)](/modules/upstage/)
+[![_Stage_](modules/stage/panel.svg)](modules/stage/)
+[![_Booster Stage_](modules/booster-stage/panel.svg)](modules/booster-stage/)
+[![_Hostage_](modules/hostage/panel.svg)](modules/hostage/)
+[![_Upstage_](modules/upstage/panel.svg)](modules/upstage/)
 
 **[_Stage_](modules/stage/)**
 generates a single envelope stage.
@@ -43,15 +43,15 @@ and more.
 
 ### Function Generators
 
-[![_Xycloid_](modules/xycloid/panel.svg)](/modules/xycloid/)
+[![_Xycloid_](modules/xycloid/panel.svg)](modules/xycloid/)
 
 **[_Xycloid_](modules/xycloid/)**
 generates a pair of cyclically related modulation signals.
 
 ### Waveshapers
 
-[![_Cubic_](modules/cubic/panel.svg)](/modules/cubic/)
-[![_Swave_](modules/swave/panel.svg)](/modules/swave/)
+[![_Cubic_](modules/cubic/panel.svg)](modules/cubic/)
+[![_Swave_](modules/swave/panel.svg)](modules/swave/)
 
 **[_Cubic_](modules/cubic/)**
 transforms its input signal by offsetting, scaling, squaring, and cubing it.
