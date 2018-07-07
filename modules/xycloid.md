@@ -96,7 +96,7 @@ Or better yet, just **play with the knobs.**
     modulate Xycloid's controls.
 
 **The Audible Instruments Macro Oscillator**
-is a fantastic choice for your initial exploration of what Xycloid can do.
+is a fantastic choice for exploring what Xycloid can do.
 Attach Xycloid's _X_ and _y_ outputs
 to the Macro Oscillator's _TIMBRE_ and _COLOR_ inputs.
 Modulating _V/OCT_ and _FM_ is also fun.
