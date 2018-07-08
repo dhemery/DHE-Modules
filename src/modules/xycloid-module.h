@@ -37,7 +37,7 @@ struct XycloidModule : Module {
     auto cusp_type = static_cast<int>(param(CUSP_TYPE_SWITCH));
     auto cusp_range = cusp_ranges[cusp_type];
     float modulated_cusps = modulated(GEAR_RATIO_KNOB, GEAR_RATIO_CV, GEAR_RATIO_CV_ATTENUVERTER);
-    return cusp_range.scale(modulated_cusps) - 1.f;
+    return 1.f - cusp_range.scale(modulated_cusps);
   }
 
   float depth() const {

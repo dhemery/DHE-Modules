@@ -39,12 +39,12 @@ void init(rack::Plugin *p) {
   p->version = TOSTRING(VERSION);
 
   modelBoosterStage = DHE::createModel<DHE::BoosterStageModule, DHE::BoosterStageWidget, rack::ModelTag>("Booster Stage", rack::ENVELOPE_GENERATOR_TAG);
-  modelCubic = DHE::createModel<DHE::CubicModule, DHE::CubicWidget, rack::ModelTag>("Cubic", rack::FUNCTION_GENERATOR_TAG);
+  modelCubic = DHE::createModel<DHE::CubicModule, DHE::CubicWidget, rack::ModelTag>("Cubic", rack::WAVESHAPER_TAG);
   modelHostage = DHE::createModel<DHE::HostageModule, DHE::HostageWidget, rack::ModelTag>("Hostage", rack::ENVELOPE_GENERATOR_TAG);
   modelStage = DHE::createModel<DHE::StageModule, DHE::StageWidget, rack::ModelTag>("Stage", rack::ENVELOPE_GENERATOR_TAG);
   modelSwave = DHE::createModel<DHE::SwaveModule, DHE::SwaveWidget, rack::ModelTag>("Swave", rack::WAVESHAPER_TAG);
   modelUpstage = DHE::createModel<DHE::UpstageModule, DHE::UpstageWidget, rack::ModelTag>("Upstage", rack::ENVELOPE_GENERATOR_TAG);
-  modelXycloid = DHE::createModel<DHE::XycloidModule, DHE::XycloidWidget, rack::ModelTag>("Xycloid", rack::FUNCTION_GENERATOR_TAG);
+  modelXycloid = DHE::createModel<DHE::XycloidModule, DHE::XycloidWidget, rack::ModelTag>("Xycloid", rack::FUNCTION_GENERATOR_TAG, rack::LFO_TAG);
 
   p->addModel(modelBoosterStage);
   p->addModel(modelCubic);
