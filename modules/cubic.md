@@ -88,19 +88,20 @@ See the [usage guide](#using-cubic) for details.
 ## Using Cubic
 
 - Cubic excels at transforming a simple modulation signal,
-    such as a sawtooth or triangle LFO signal,
+    such as a sawtooth or triangle wave,
     into something more interesting.
-- With all other controls set to 0,
-    _x<sup>0</sup>_
-    generates a constant voltage
-    with a range of -10 to 10V.
-- With all other controls set to 0,
-    _x<sup>1</sup>_
-    acts as an attenuverter
-    with a gain range of -2 to 2.
-- Applied to an audio signal,
-    _x<sup>3</sup>_
-   generates mellow harmonics.
+- To generate a constant voltage,
+    adjust _x<sup>0</sup>_
+    and leave all other controls at 0.
+    The range is -10V to 10V
+    (which you can amplify
+    using the _OUT_ gain).
+- To use Cubic as an attenuverter,
+    adjust _x<sup>1</sup>_
+    and leave all other controls at 0.
+    The range is -2 to 2
+    (which you can further amplify
+    using the _OUT_ gain).
 - By default,
     all of Cubic's controls are set to 0.
     While this makes the default patch essentially useless,

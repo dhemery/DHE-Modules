@@ -48,11 +48,11 @@ Or better yet, just **play with the knobs.**
     in counterintuitive ways.
 
 ## Ports
-- **X OUT and Y OUT:**
+- **X OUT** and **Y OUT:**
     The output signals.
 
     The polarity switch **(UNI / BI)**
-    selects the range of the signal:
+    selects the nominal range of the signal:
     Either 0 to 10V (UNI)
     or -5 to 5V (BI).
 
