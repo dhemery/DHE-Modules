@@ -28,8 +28,6 @@ can generate
 a **very large DC bias.**
 See the [usage guide](#using-cubic) for details.
 
-**NOTE:**
-
 ## Controls
 - **IN:**
     The gain to apply to the **IN** signal
@@ -48,12 +46,6 @@ See the [usage guide](#using-cubic) for details.
     the *b* coefficient for the *bx<sup>2</sup>* term of the equation.
     The range is -2 to 2.
 
-    **WARNING:**
-    The _x<sup>2</sup>_ knob
-    can generate
-    a **very large DC bias.**
-    See the [usage guide](#using-cubic) for details.
-
 - **x<sup>1</sup>:**
     The amount of *x* to add to *y*
     —
@@ -67,12 +59,6 @@ See the [usage guide](#using-cubic) for details.
     the *d* coefficient for the *dx<sup>0</sup>* term of the equation.
     This acts as a DC offset
     with a range of -10 to 10V.
-
-    **WARNING:**
-    The _x<sup>0</sup>_ knob
-    can generate
-    a **very large DC bias.**
-    See the [usage guide](#using-cubic) for details.
 
 - **OUT:**
     The gain to apply to *y*

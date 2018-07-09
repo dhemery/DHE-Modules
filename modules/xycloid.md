@@ -16,7 +16,7 @@ Or better yet, just **play with the knobs.**
 
 ## Controls
 - **RATIO:**
-    Determines the number of "cusps" or "nodes" in the shape.
+    Determines the number of "lobes" or "cusps" or "nodes" in the shape.
 
 - **DEPTH:**
     How far the shape extends from its outer edge.
@@ -26,16 +26,16 @@ Or better yet, just **play with the knobs.**
 
 - **IN / OUT:**
     This "curl direction" switch
-    determines whether the cusps curl
+    determines whether the lobes curl
     toward the inside or the outside of the shape.
 
     It also determines the range of the _RATIO_ knob.
     With the switch set to _IN_ or _OUT_,
-    the *RATIO* knob ranges from 0 to 16 cusps.
+    the *RATIO* knob ranges from 0 to 16 lobes.
     With the switch in the center,
-    the *RATIO* knob ranges from 16 inward cusps
+    the *RATIO* knob ranges from 16 inward lobes
     (fully counterclockwise)
-    to 16 outward cusps
+    to 16 outward lobes
     (fully clockwise).
 
 - **SPEED:**
@@ -94,10 +94,13 @@ Or better yet, just **play with the knobs.**
 1. **Play with the knobs.**
 1. For extra chaos,
     modulate Xycloid's controls.
+1. For extra, extra chaos,
+    use Xycloid's outputs
+    to modulate its own controls.
 
 **The Audible Instruments Macro Oscillator**
 is a fantastic choice for exploring what Xycloid can do.
-Attach Xycloid's _X_ and _y_ outputs
+Attach Xycloid's _X_ and _Y_ outputs
 to the Macro Oscillator's _TIMBRE_ and _COLOR_ inputs.
 Modulating _V/OCT_ and _FM_ is also fun.
 
@@ -114,7 +117,73 @@ Then **play with the knobs.**
 
 ## Examples
 
-TODO: Images here.
+### The Default Settings
+
+The default settings
+draw a shape
+with eight lobes that touch in the center:
+
+<img class="xycloid" src="r12-d12-out.png" height="auto" max-width="100px" alt="Xycloid Default Settings" />
+
+### Adjusting the Ratio
+
+With the switch _IN_ or _OUT_,
+the center position on the ratio knob draws eight lobes:
+
+<img class="xycloid" src="r12-d12-out.png" height="auto" max-width="100px" alt="Xycloid Default Settings" />
+
+A lower ratio draws fewer lobes:
+
+<img class="xycloid" src="r10-d10-out.png" height="auto" max-width="100px" alt="Xycloid Default Settings" />
+
+A higher ratio draws more lobes:
+
+<img class="xycloid" src="r05-d10-out.png" height="auto" max-width="100px" alt="Xycloid Default Settings" />
+
+### Adjusting the Depth
+
+With a lower depth,
+the lobes never stray far
+from the outer edge of the shape:
+
+<img class="xycloid" src="r12-d08-out.png" height="auto" max-width="100px" alt="Xycloid Default Settings" />
+
+As depth increases,
+the lobes dip closer to the center of the shape:
+
+<img class="xycloid" src="r12-d10-out.png" height="auto" max-width="100px" alt="Xycloid Default Settings" />
+
+As the depth approaches the center position,
+the lobes approach the center of the shape:
+
+<img class="xycloid" src="r12-d11-out.png" height="auto" max-width="100px" alt="Xycloid Default Settings" />
+
+With the depth in the center position,
+each lobe touches the center of the shape:
+
+<img class="xycloid" src="r12-d12-out.png" height="auto" max-width="100px" alt="Xycloid Default Settings" />
+
+As depth increases,
+each lobe loops around the center of the shape:
+
+<img class="xycloid" src="r12-d02-out.png" height="auto" max-width="100px" alt="Xycloid Default Settings" />
+
+### Adjusting the Lobe Direction (the IN / OUT Switch)
+
+
+With the switch _OUT_,
+the lobes curl outward:
+
+<img class="xycloid" src="r12-d10-out.png" height="auto" max-width="100px" alt="Xycloid Default Settings" />
+
+With the switch _IN_,
+the lobes curl inward:
+
+<img class="xycloid" src="r12-d10-in.png" height="auto" max-width="100px" alt="Xycloid Default Settings" />
+
+With the switch in the center,
+the _RATIO_ knob determines
+which way the lobes curl.
 
 ## My Inspiration
 
@@ -149,7 +218,9 @@ Sort of.
 But more preciesely,
 _Xycloid_ draws [centered trochoids](https://en.wikipedia.org/wiki/Centered_trochoid).
 
-So why did I call the module _Xycloid?_
+So if the module draws centered trochoids,
+why, oh, why
+did I call _Xycloid?_
 
 Because would you load a module called _Centered Trochoid?_
 
