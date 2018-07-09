@@ -46,7 +46,9 @@ and more.
 [![_Xycloid_](modules/xycloid/panel.svg)](modules/xycloid/)
 
 **[_Xycloid_](modules/xycloid/)**
-generates a pair of cyclically related modulation signals.
+generates X and Y modulation signals
+that interact and repeat
+in cycles upon cycles.
 
 ### Waveshapers
 

@@ -3,13 +3,10 @@ title: The Xycloid Module
 ---
 <img class="panel" src="panel.svg" alt="The Xycloid Panel" />
 
-Generates pairs of cyclically related modulation signals.
+Generates X and Y modulation signals
+that interact and repeat
+in [cycles upon cycles](#examples).
 
-Uh… what?
-
-Yeah, don't worry about all that.
-
-_Xycloid_ [makes fun shapes](#examples).
 Check the [usage guide](#using-xycloid).
 
 Or better yet, just **play with the knobs.**
