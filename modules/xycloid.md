@@ -130,7 +130,7 @@ with eight lobes that touch in the center:
 With the switch _IN_ or _OUT_,
 the center position on the ratio knob draws eight lobes:
 
-<img class="xycloid" src="r12-d12-out.png" height="auto" max-width="100px" alt="Xycloid Default Settings" />
+<img class="xycloid" src="r12-d10-out.png" height="auto" max-width="100px" alt="Xycloid Default Settings" />
 
 A lower ratio draws fewer lobes:
 
@@ -168,7 +168,7 @@ each lobe loops around the center of the shape:
 
 <img class="xycloid" src="r12-d02-out.png" height="auto" max-width="100px" alt="Xycloid Default Settings" />
 
-### Adjusting the Lobe Direction (the IN / OUT Switch)
+### Adjusting the Curl Direction (the IN / OUT Switch)
 
 
 With the switch _OUT_,
