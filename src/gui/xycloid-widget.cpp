@@ -66,6 +66,7 @@ XycloidWidget::XycloidWidget(rack::Module *module) : ModuleWidget(module, 11, "r
   install_input<XycloidPort>(XycloidModule::GEAR_RATIO_CV, {left_x, top_row_y + row*row_spacing});
   install_knob<XycloidKnobTiny>(XycloidModule::GEAR_RATIO_CV_ATTENUVERTER, {left_center_x, top_row_y + row*row_spacing});
   install_knob<XycloidKnobLarge>(XycloidModule::GEAR_RATIO_KNOB, {right_center_x, top_row_y + row*row_spacing});
+  install_switch<XycloidSwitch2>(XycloidModule::RATIO_TYPE_SWITCH, {right_x, top_row_y + row*row_spacing}, 1, 1);
 
   row++;
   install_input<XycloidPort>(XycloidModule::DEPTH_CV, {left_x, top_row_y + row*row_spacing});

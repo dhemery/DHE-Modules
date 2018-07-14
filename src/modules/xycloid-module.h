@@ -36,8 +36,11 @@ struct XycloidModule : Module {
     static constexpr Range cusp_ranges[] = {inward_cusps, inward_and_outward_cusps, outward_cusps};
     auto cusp_type = static_cast<int>(param(CUSP_TYPE_SWITCH));
     auto cusp_range = cusp_ranges[cusp_type];
-    float modulated_cusps = modulated(GEAR_RATIO_KNOB, GEAR_RATIO_CV, GEAR_RATIO_CV_ATTENUVERTER);
-    return 1.f - cusp_range.scale(modulated_cusps);
+    auto modulated_cusps = modulated(GEAR_RATIO_KNOB, GEAR_RATIO_CV, GEAR_RATIO_CV_ATTENUVERTER);
+    auto ratio_type = static_cast<int>(param(RATIO_TYPE_SWITCH));
+    auto ratio = 1.f - cusp_range.scale(modulated_cusps);
+    if (ratio_type == 0) ratio = std::round(ratio);
+    return ratio;
   }
 
   float depth() const {
@@ -92,6 +95,7 @@ struct XycloidModule : Module {
     Y_GAIN_KNOB,
     X_RANGE_SWITCH,
     Y_RANGE_SWITCH,
+    RATIO_TYPE_SWITCH,
     PARAMETER_COUNT
   };
   enum InputIds {
