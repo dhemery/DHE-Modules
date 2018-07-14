@@ -1,4 +1,4 @@
-RESOURCE_DIR = res
+RESOURCE_DIR = ../res
 IMAGE_DIR = images
 
 JEKYLL_FILES := _config.yaml Gemfile.lock

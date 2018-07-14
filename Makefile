@@ -1,5 +1,5 @@
 SLUG = DHE-Modules
-VERSION = 0.6.1
+VERSION = 0.6.2
 RACK_DIR ?= ../..
 
 FLAGS += -I./src
@@ -9,7 +9,7 @@ LDFLAGS +=
 
 SOURCES = $(wildcard src/*/*.cpp)
 
-DISTRIBUTABLES += LICENSE.txt gui/res
+DISTRIBUTABLES += LICENSE.txt res
 
 include $(RACK_DIR)/plugin.mk
 
