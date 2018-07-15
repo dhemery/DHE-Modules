@@ -5,6 +5,7 @@ title: XYCLOID
 foreground-color: [270,100,50]
 background-color: [270,66,97]
 controls:
+  buttons: [normal]
   knobs: [tiny, small, large]
   ports: []
   switches: [2, 3]
@@ -17,7 +18,6 @@ controls:
 {% assign delta_y = 18.5 %}
 {% assign y = 22.0 %}
 
-{% assign y = y | plus: delta_y %}
 {{ page | connector: left_x, y, right_x, y }}
 {{ page | cv: left_x, y }}
 {{ page | attenuverter: left_center_x, y }}
@@ -36,6 +36,13 @@ controls:
 {{ page | cv: left_x, y }}
 {{ page | attenuverter: left_center_x, y }}
 {{ page | large_knob: right_center_x, y, 'SPEED' }}
+
+{% assign y = y | plus: delta_y %}
+{{ page | connector: left_x, y, right_x, y }}
+{{ page | cv: left_x, y }}
+{{ page | attenuverter: left_center_x, y }}
+{{ page | large_knob: right_center_x, y, 'PHASE' }}
+{{ page | button: right_x, y, 'RESET' }}
 
 {% assign y = 82.0 %}
 {% assign delta_y = 15.0 %}

@@ -52,18 +52,18 @@ module DHE
     def buttons(page, variants)
       variants.flat_map do |style|
         [:off, :on].map do |state|
-          ButtonControl.new(style: style, state: state, normal_on: background(page), normal_off: foreground(page))
+          ButtonControl.new(style: style.to_sym, state: state, foreground: foreground(page), background: background(page))
         end
       end
     end
 
     def ports(page, _)
-      PortControl.new(metal_color: background(page), shadow_color: foreground(page))
+      PortControl.new(foreground: foreground(page), background: background(page))
     end
 
     def knobs(page, variants)
       variants.map do |size|
-        KnobControl.new(knob_color: foreground(page), pointer_color: background(page), size: size.to_sym)
+        KnobControl.new(size: size.to_sym, foreground: foreground(page), background: background(page))
       end
     end
 

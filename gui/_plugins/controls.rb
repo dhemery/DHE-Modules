@@ -54,22 +54,16 @@ class RoundControl < Control
 end
 
 class ButtonControl < RoundControl
+  attr_reader :name
   DIAMETER = 6.0
 
-  def initialize(x: 0.0, y: 0.0, style:, state:, normal_on:, normal_off:)
+  def initialize(x: 0.0, y: 0.0, style: :normal, state: :off, foreground:, background:)
     super(x: x, y: y, diameter: DIAMETER)
-    @style = style.to_sym
-    @state = state.to_sym
-    @button_color = @style == :normal ? normal_off : normal_on
-    if @style == :normal
-      @state_color = @state == :on ? normal_on: normal_off
-    else
-      @state_color = @state == :on ? normal_off : normal_on
-    end
-  end
+    @name = "button-#{style}-#{state}"
+    foreground, background = background, foreground if style == :reverse
 
-  def name
-    "button-#{@style}-#{@state}"
+    @stroke = foreground
+    @fill = state == :on ? background : foreground
   end
 
   def align(padding, alignment, other)
@@ -89,12 +83,14 @@ class ButtonControl < RoundControl
     circle_diameter = diameter - stroke_width
     circle_radius = circle_diameter / 2.0
     %Q[
-      <circle cx="#{center.x}" cy="#{center.y}" r="#{circle_radius}" stroke-width="#{stroke_width}" fill="#{@state_color}" stroke="#{@button_color}"/>
+      <circle cx="#{center.x}" cy="#{center.y}" r="#{circle_radius}" stroke-width="#{stroke_width}" fill="#{@fill}" stroke="#{@stroke}"/>
     ]
   end
 end
 
 class KnobControl < RoundControl
+  attr_reader :name
+
   DIAMETERS = {
     huge: 19.0,
     large: 12.7,
@@ -103,15 +99,11 @@ class KnobControl < RoundControl
     tiny: 7.0,
   }
 
-  def initialize(x: 0.0, y: 0.0, knob_color:, pointer_color:, size: :large)
+  def initialize(x: 0.0, y: 0.0, size: :large, foreground:, background:)
     super(x: x, y: y, diameter: DIAMETERS[size])
-    @size = size
-    @knob_color = knob_color
-    @pointer_color = pointer_color
-  end
-
-  def name
-    "knob-#{@size}" 
+    @name = "knob-#{@size}"
+    @knob_color = foreground
+    @pointer_color = background
   end
 
   def svg
@@ -129,10 +121,10 @@ end
 class PortControl < RoundControl
   DIAMETER = 8.4
 
-  def initialize(x: 0.0, y: 0.0, metal_color:, shadow_color:)
+  def initialize(x: 0.0, y: 0.0, foreground:, background:)
     super(x: x, y: y, diameter: 8.4)
-    @metal_color = metal_color
-    @shadow_color = shadow_color
+    @foreground = foreground
+    @background = background
   end
 
   def name
@@ -147,20 +139,24 @@ class PortControl < RoundControl
     ring_radius = sleeve_radius - step
     tip_radius = ring_radius - step
     %Q[
-    <g transform="translate(#{center.x} #{center.y})" stroke="#{@shadow_color}" fill="#{@metal_color}" stroke-width="#{stroke_width}">
+    <g transform="translate(#{center.x} #{center.y})" stroke="#{@foreground}" fill="#{@background}" stroke-width="#{stroke_width}">
       <circle r="#{sleeve_radius}"/>
       <circle r="#{ring_radius }"/>
-      <circle r="#{tip_radius}" fill="#{@shadow_color}"/>
+      <circle r="#{tip_radius}" fill="#{@foreground}"/>
     </g>
     ]
   end
 end
 
 class SwitchControl < Control
+  attr_reader :name
+
   WIDTH = 3.0
 
   def initialize(x: 0.0, y: 0.0, positions:, state:, foreground:, background:)
     super(x: x, y: y, width: WIDTH, height: positions * WIDTH)
+    @name = "switch-#{@positions}-#{@state}"
+
     @positions = positions
     @state = state
     @foreground = foreground
@@ -174,10 +170,6 @@ class SwitchControl < Control
           else
             0.0
         end
-  end
-
-  def name
-    "switch-#{@positions}-#{@state}"
   end
 
   def svg

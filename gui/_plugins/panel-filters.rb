@@ -55,18 +55,18 @@ module PanelFilters
       @text = text
       @alignment = alignment
       case alignment
-        when :above
-          @x = control.center.x
-          @y = control.top - padding
-        when :below
-          @x = control.center.x
-          @y = control.bottom + padding
-        when :right_of
-          @x = control.right + padding
-          @y = control.center.y
-        else
-          @x = control.center.x
-          @y = control.center.y
+      when :above
+        @x = control.center.x
+        @y = control.top - padding
+      when :below
+        @x = control.center.x
+        @y = control.bottom + padding
+      when :right_of
+        @x = control.right + padding
+        @y = control.center.y
+      else
+        @x = control.center.x
+        @y = control.center.y
       end
       super(top: @y - @text.ascent, right: @x, bottom: @y + @text.descent, left: @x)
     end
@@ -80,139 +80,129 @@ module PanelFilters
     CORNER_RADIUS = 1.0
     BUFFER = PADDING + STROKE_INSET
 
-    def initialize(content_bounds:, border_color:, background_color:)
+    def initialize(content_bounds:, style:, foreground:, background:)
       super(top: content_bounds.top - BUFFER, right: content_bounds.right + BUFFER, bottom: content_bounds.bottom + BUFFER, left: content_bounds.left - BUFFER)
-      @border_color = border_color
-      @background_color = background_color
+      foreground, background = background, foreground if style == :reverse
+      @stroke = foreground
+      @fill = background
     end
 
     def svg
       %Q[
       <rect x="#{left}" y="#{top}" width="#{width}" height="#{height}"
         stroke-width="#{STROKE_WIDTH}" rx="#{CORNER_RADIUS}" ry="#{CORNER_RADIUS}"
-        stroke="#{@border_color}" fill="#{@background_color}"/>
+        stroke="#{@stroke}" fill="#{@fill}"/>
       ]
     end
 
-    def self.around(content:, border_color:, background_color:)
+    def self.around(content:, style:, foreground:, background:)
       content_bounds = Bounded.new(top: content.map(&:top).min, right: content.map(&:right).max, bottom: content.map(&:bottom).max, left: content.map(&:left).min)
-      Box.new(content_bounds: content_bounds, border_color: border_color, background_color: background_color)
+      Box.new(content_bounds: content_bounds, style: style, foreground: foreground, background: background)
     end
   end
 
+  def port(x:, y:, style: :normal, label:, foreground:, background:, draw:)
+    text_color = style == :normal ? foreground : background
+    port = PortControl.new(x: x, y: y, foreground: foreground, background: background)
+    label_text = Text.new(text: label, color: text_color, size: SMALL_FONT)
+    label = Label.new(label_text, PADDING, :above, port)
+    box = Box.around(content: [port, label], style: style, foreground: foreground, background: background)
+    items = [box, label]
+    items << port if draw
+    items.map(&:svg).join("\n")
+  end
+
+  def port_button(port_x:, port_y:, style: :normal, button_position:, label:, foreground:, background:, draw:)
+    text_color = style == :normal ? foreground : background
+    port = PortControl.new(x: port_x, y: port_y, foreground: foreground, background: background)
+    label_text = Text.new(text: label, color: text_color, size: SMALL_FONT)
+    label = Label.new(label_text, PADDING, :above, port)
+    button = ButtonControl.new(style: style, foreground: foreground, background: background)
+    button.align(PADDING, button_position, port)
+    box = Box.around(content: [port, label, button], style: style, foreground: foreground, background: background)
+    items = [box, label]
+    items += [port, button] if draw
+    items.map(&:svg).join("\n")
+  end
+
+  def knob(page:, x:, y:, size:, label:, label_size:)
+    foreground = foreground(page)
+    background = background(page)
+    knob = KnobControl.new(x: x, y: y, size: size, foreground: foreground, background: background)
+    label_text = Text.new(text: label, color: foreground, size: label_size)
+    items = [Label.new(label_text, PADDING, :above, knob)]
+    items << knob if page['draw_controls']
+    items.map(&:svg).join("\n")
+  end
+
   def button(page, x, y, label)
-    page_background = background(page)
-    page_foreground = foreground(page)
-    button = ButtonControl.new(x: x, y: y, style: :dark, state: :off, normal_on: page_background, normal_off: page_foreground)
-    label_text = Text.new(text: label, color: page_foreground, size: SMALL_FONT)
+    background = background(page)
+    foreground = foreground(page)
+    button = ButtonControl.new(x: x, y: y, foreground: foreground, background: background)
+    label_text = Text.new(text: label, color: foreground, size: SMALL_FONT)
     items = [Label.new(label_text, PADDING, :above, button)]
     items << button if page['draw_controls']
     items.map(&:svg).join("\n")
   end
 
   def tiny_knob(page, x, y, label, label_size = SMALL_FONT)
-    knob_color = foreground(page)
-    pointer_color = background(page)
-    knob = KnobControl.new(x: x, y: y, knob_color: knob_color, pointer_color: pointer_color, size: :tiny)
-    label_text = Text.new(text: label, color: knob_color, size: label_size)
-    items = [Label.new(label_text, PADDING, :above, knob)]
-    items << knob if page['draw_controls']
-    items.map(&:svg).join("\n")
+    knob(page: page, x: x, y: y, size: :tiny, label: label, label_size: label_size)
   end
 
   def small_knob(page, x, y, label)
-    knob_color = foreground(page)
-    pointer_color = background(page)
-    knob = KnobControl.new(x: x, y: y, knob_color: knob_color, pointer_color: pointer_color, size: :small)
-    label_text = Text.new(text: label, color: knob_color, size: SMALL_FONT)
-    items = [Label.new(label_text, PADDING, :above, knob)]
-    items << knob if page['draw_controls']
-    items.map(&:svg).join("\n")
+    knob(page: page, x: x, y: y, size: :small, label: label, label_size: SMALL_FONT)
   end
 
   def medium_knob(page, x, y, label)
-    knob_color = foreground(page)
-    pointer_color = background(page)
-    knob = KnobControl.new(x: x, y: y, knob_color: knob_color, pointer_color: pointer_color, size: :medium)
-    label_text = Text.new(text: label, color: knob_color, size: LARGE_FONT)
-    items = [Label.new(label_text, PADDING, :above, knob)]
-    items << knob if page['draw_controls']
-    items.map(&:svg).join("\n")
+    knob(page: page, x: x, y: y, size: :medium, label: label, label_size: LARGE_FONT)
   end
 
   def large_knob(page, x, y, label)
-    knob_color = foreground(page)
-    pointer_color = background(page)
-    knob = KnobControl.new(x: x, y: y, knob_color: knob_color, pointer_color: pointer_color)
-    label_text = Text.new(text: label, color: knob_color, size: LARGE_FONT)
-    items = [Label.new(label_text, PADDING, :above, knob)]
-    items << knob if page['draw_controls']
-    items.map(&:svg).join("\n")
+    knob(page: page, x: x, y: y, size: :large, label: label, label_size: LARGE_FONT)
   end
 
   def attenuverter(page, x, y)
-    tiny_knob(page, x, y, '<tspan font-size="larger">-&#160;&#160;+</tspan>', LARGE_FONT)
+    knob(page: page, x: x, y: y, size: :tiny, label: '<tspan font-size="larger">-&#160;&#160;+</tspan>', label_size: LARGE_FONT)
   end
 
   def cv(page, x, y)
-    metal_color = background(page)
-    shadow_color = foreground(page)
+    foreground = foreground(page)
+    background = background(page)
     draw = page['draw_controls']
-    port = PortControl.new(x: x, y: y, metal_color: metal_color, shadow_color: shadow_color)
-    label_text = Text.new(text: 'CV', color: shadow_color, size: SMALL_FONT)
+    port = PortControl.new(x: x, y: y, foreground: foreground, background: background)
+    label_text = Text.new(text: 'CV', color: foreground, size: SMALL_FONT)
     items = [Label.new(label_text, PADDING, :above, port)]
     items << port if draw
     items.map(&:svg).join("\n")
   end
 
-  def port_button(port_x:, port_y:, label:, button_position:, foreground_color:, background_color:, label_color:, metal_color:, shadow_color:, button_style:, draw:)
-    port = PortControl.new(x: port_x, y: port_y, metal_color: metal_color, shadow_color: shadow_color)
-    label_text = Text.new(text: label, color: label_color, size: SMALL_FONT)
-    label = Label.new(label_text, PADDING, :above, port)
-    button = ButtonControl.new(style: button_style, state: :off, normal_on: background_color, normal_off: foreground_color)
-    button.align(PADDING, button_position, port)
-    box = Box.around(content: [port, label, button], border_color: foreground_color, background_color: background_color)
-    items = [box, label]
-    items += [port, button] if draw
-    items.map(&:svg).join("\n")
-  end
 
   def in_port_button(page, x, y, label)
     foreground = foreground(page)
     background = background(page)
     draw = page['draw_controls']
-    port_button(port_x: x, port_y: y, label: label, button_position: :right_of, foreground_color: foreground, background_color: background, label_color: foreground, metal_color: background, shadow_color: foreground, button_style: :normal, draw: draw)
+    port_button(port_x: x, port_y: y, button_position: :right_of, label: label, foreground: foreground, background: background, draw: draw)
   end
 
   def out_port_button(page, x, y, label)
-    foreground = background(page)
-    background = foreground(page)
+    foreground = foreground(page)
+    background = background(page)
     draw = page['draw_controls']
-    port_button(port_x: x, port_y: y, label: label, button_position: :left_of, foreground_color: foreground, background_color: background, label_color: foreground, metal_color: background, shadow_color: foreground, button_style: :reverse, draw: draw)
-  end
-
-  def port(x:, y:, foreground_color:, background_color:, label:, label_color:, metal_color:, shadow_color:, draw:)
-    port = PortControl.new(x: x, y: y, metal_color: metal_color, shadow_color: shadow_color)
-    label_text = Text.new(text: label, color: label_color, size: SMALL_FONT)
-    label = Label.new(label_text, PADDING, :above, port)
-    box = Box.around(content: [port, label], border_color: foreground_color, background_color: background_color)
-    items = [box, label]
-    items << port if draw
-    items.map(&:svg).join("\n")
+    port_button(port_x: x, port_y: y, button_position: :left_of, style: :reverse, label: label, foreground: foreground, background: background, draw: draw)
   end
 
   def in_port(page, x, y, label)
-    background = background(page)
     foreground = foreground(page)
+    background = background(page)
     draw = page ['draw_controls']
-    port(x: x, y: y, foreground_color: foreground, background_color: background, label: label, label_color: foreground, metal_color: background, shadow_color: foreground, draw: draw)
+    port(x: x, y: y, label: label, foreground: foreground, background: background, draw: draw)
   end
 
   def out_port(page, x, y, label)
-    foreground = background(page)
-    background = foreground(page)
+    foreground = foreground(page)
+    background = background(page)
     draw = page ['draw_controls']
-    port(x: x, y: y, foreground_color: background, background_color: background, label: label, label_color: foreground, metal_color: foreground, shadow_color: background, draw: draw)
+    port(x: x, y: y, style: :reverse, label: label, foreground: foreground, background: background, draw: draw)
   end
 
   def duration_switch(page, x, y)
@@ -228,18 +218,18 @@ module PanelFilters
   end
 
   def switch(page, x, y, position, high, low, mid = nil)
-    foreground = background(page)
-    background = foreground(page)
+    foreground = foreground(page)
+    background = background(page)
     draw = page['draw_controls']
-    switch = SwitchControl.new(x: x, y: y, positions: mid ? 3 : 2, background: foreground, foreground: background, state: position.to_sym)
-    high_text = Text.new(text: high, size: SMALL_FONT, color: background)
-    low_text = Text.new(text: low, size: SMALL_FONT, color: background)
+    switch = SwitchControl.new(x: x, y: y, positions: mid ? 3 : 2, state: position.to_sym, foreground: foreground, background: background)
+    high_text = Text.new(text: high, size: SMALL_FONT, color: foreground)
+    low_text = Text.new(text: low, size: SMALL_FONT, color: foreground)
     items = [
         Label.new(high_text, PADDING + STROKE_INSET, :above, switch),
         Label.new(low_text, PADDING + STROKE_INSET, :below, switch),
     ]
     if mid
-      mid_text = Text.new(text: mid, size: SMALL_FONT, color: background)
+      mid_text = Text.new(text: mid, size: SMALL_FONT, color: foreground)
       items << Label.new(mid_text, PADDING / 2.0 + STROKE_INSET, :right_of, switch)
     end
     items << switch if draw

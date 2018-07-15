@@ -230,7 +230,7 @@
     <path
        id="circle46"
        d="m 9.1833301,62 a 2.5,2.5 0 0 1 -2.5,2.5 2.5,2.5 0 0 1 -2.5,-2.5 2.5,2.5 0 0 1 2.5,-2.5 2.5,2.5 0 0 1 2.5,2.5 z"
-       style="fill:#f0f7ff;stroke:#f0f7ff;stroke-width:1" />
+       style="fill:#004c99;stroke:#004c99;stroke-width:1" />
     <g
        id="text48"
        style="font-weight:bold;font-size:2.37066674px;font-family:'Proxima Nova';text-anchor:middle;fill:#004c99"
@@ -255,7 +255,7 @@
     <path
        id="circle50"
        d="m 21.216669,62 a 2.5,2.5 0 0 1 -2.5,2.5 2.5,2.5 0 0 1 -2.5,-2.5 2.5,2.5 0 0 1 2.5,-2.5 2.5,2.5 0 0 1 2.5,2.5 z"
-       style="fill:#f0f7ff;stroke:#f0f7ff;stroke-width:1" />
+       style="fill:#004c99;stroke:#004c99;stroke-width:1" />
     <path
        id="rect52"
        d="M 2.3083301,74.044556 H 11.05833 c 0.554,0 1,0.446 1,1 V 86.375 c 0,0.554 -0.446,1 -1,1 H 2.3083301 c -0.554,0 -1,-0.446 -1,-1 V 75.044556 c 0,-0.554 0.446,-1 1,-1 z"
@@ -343,7 +343,7 @@
     <path
        id="rect76"
        d="m 14.34167,89.044556 h 8.75 c 0.554,0 1,0.446 1,1 V 101.375 c 0,0.554 -0.446,1 -1,1 h -8.75 c -0.554,0 -1,-0.446 -1,-1 V 90.044556 c 0,-0.554 0.446,-1 1,-1 z"
-       style="fill:#004c99;stroke:#004c99;stroke-width:0.34999999" />
+       style="fill:#004c99;stroke:#f0f7ff;stroke-width:0.34999999" />
     <g
        id="text78"
        style="font-weight:bold;font-size:2.37066674px;font-family:'Proxima Nova';text-anchor:middle;fill:#f0f7ff"
@@ -385,7 +385,7 @@
     <path
        id="rect88"
        d="m 14.34167,104.04456 h 8.75 c 0.554,0 1,0.446 1,1 v 11.33045 c 0,0.554 -0.446,1 -1,1 h -8.75 c -0.554,0 -1,-0.446 -1,-1 v -11.33045 c 0,-0.554 0.446,-1 1,-1 z"
-       style="fill:#004c99;stroke:#004c99;stroke-width:0.34999999" />
+       style="fill:#004c99;stroke:#f0f7ff;stroke-width:0.34999999" />
     <g
        id="text90"
        style="font-weight:bold;font-size:2.37066674px;font-family:'Proxima Nova';text-anchor:middle;fill:#f0f7ff"

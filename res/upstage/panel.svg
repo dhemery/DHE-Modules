@@ -242,7 +242,7 @@
     <path
        id="rect28"
        d="m 14.34167,89.044556 h 8.75 c 0.554,0 1,0.446 1,1 V 101.375 c 0,0.554 -0.446,1 -1,1 h -8.75 c -0.554,0 -1,-0.446 -1,-1 V 90.044556 c 0,-0.554 0.446,-1 1,-1 z"
-       style="fill:#004c99;stroke:#004c99;stroke-width:0.34999999" />
+       style="fill:#004c99;stroke:#f0f7ff;stroke-width:0.34999999" />
     <g
        id="text30"
        style="font-weight:bold;font-size:2.37066674px;font-family:'Proxima Nova';text-anchor:middle;fill:#f0f7ff"
@@ -267,7 +267,7 @@
     <path
        id="rect32"
        d="m 14.34167,104.04456 h 8.75 c 0.554,0 1,0.446 1,1 v 11.33045 c 0,0.554 -0.446,1 -1,1 h -8.75 c -0.554,0 -1,-0.446 -1,-1 v -11.33045 c 0,-0.554 0.446,-1 1,-1 z"
-       style="fill:#004c99;stroke:#004c99;stroke-width:0.34999999" />
+       style="fill:#004c99;stroke:#f0f7ff;stroke-width:0.34999999" />
     <g
        id="text34"
        style="font-weight:bold;font-size:2.37066674px;font-family:'Proxima Nova';text-anchor:middle;fill:#f0f7ff"
