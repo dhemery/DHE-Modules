@@ -13,12 +13,12 @@ struct Pole {
     phase -= std::trunc(phase); // Reduce phase to (-1, 1) to avoid eventual overflow
   }
 
-  float x(float radius) const {
-    return radius*std::cos(two_pi*phase);
+  float x(float radius, float offset = 0.f) const {
+    return radius*std::cos(two_pi*(phase+offset));
   }
 
-  float y(float radius) const {
-    return radius*std::sin(two_pi*phase);
+  float y(float radius, float offset = 0.f) const {
+    return radius*std::sin(two_pi*(phase+offset));
   }
 };
 
@@ -65,15 +65,18 @@ struct XycloidModule : Module {
   }
 
   void step() override {
+    auto ratio = gear_ratio();
     auto outer_pole_speed = speed(SPEED_KNOB, SPEED_CV, SPEED_CV_ATTENUVERTER);
-    auto inner_pole_speed = gear_ratio()*outer_pole_speed;
+    auto inner_pole_speed = ratio*outer_pole_speed;
     outer_pole.advance(outer_pole_speed);
     inner_pole.advance(inner_pole_speed);
 
+    auto phase_offset = param(PHASE_KNOB)-0.5f;
+    if (ratio < -0.f) phase_offset*=-1.f;
     auto outer_pole_radius = 5.f*depth();
     auto inner_pole_radius = 5.f - outer_pole_radius;
-    auto x = inner_pole.x(inner_pole_radius) + outer_pole.x(outer_pole_radius);
-    auto y = inner_pole.y(inner_pole_radius) + outer_pole.y(outer_pole_radius);
+    auto x = inner_pole.x(inner_pole_radius, phase_offset) + outer_pole.x(outer_pole_radius);
+    auto y = inner_pole.y(inner_pole_radius, phase_offset) + outer_pole.y(outer_pole_radius);
 
     auto x_gain = gain(X_GAIN_KNOB, X_GAIN_CV);
     auto y_gain = gain(Y_GAIN_KNOB, Y_GAIN_CV);
@@ -97,8 +100,6 @@ struct XycloidModule : Module {
     Y_RANGE_SWITCH,
     RATIO_TYPE_SWITCH,
     PHASE_KNOB,
-    PHASE_CV_ATTENUVERTER,
-    PHASE_RESET_BUTTON,
     PARAMETER_COUNT
   };
   enum InputIds {
@@ -107,7 +108,6 @@ struct XycloidModule : Module {
     SPEED_CV,
     X_GAIN_CV,
     Y_GAIN_CV,
-    PHASE_CV,
     INPUT_COUNT
   };
   enum OutputIds {

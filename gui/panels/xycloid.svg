@@ -15,14 +15,14 @@ controls:
 {% assign right_x = width | minus:left_x %}
 {% assign left_center_x = right_x | minus:left_x | divided_by:3.0 | plus:left_x %}
 {% assign right_center_x = width | minus:left_center_x %}
-{% assign delta_y = 18.5 %}
-{% assign y = 22.0 %}
+{% assign delta_y = 22.0 %}
+{% assign y = 30.0 %}
 
 {{ page | connector: left_x, y, right_x, y }}
 {{ page | cv: left_x, y }}
 {{ page | attenuverter: left_center_x, y }}
 {{ page | large_knob: right_center_x, y, 'RATIO' }}
-{{ page | switch: right_x, y, 'high', 'SLIDE', 'STEP' }}
+{{ page | switch: right_x, y, 'high', 'FREE', 'LOCK' }}
 
 {% assign y = y | plus: delta_y %}
 {{ page | connector: left_x, y, right_x, y }}
@@ -36,13 +36,7 @@ controls:
 {{ page | cv: left_x, y }}
 {{ page | attenuverter: left_center_x, y }}
 {{ page | large_knob: right_center_x, y, 'SPEED' }}
-
-{% assign y = y | plus: delta_y %}
-{{ page | connector: left_x, y, right_x, y }}
-{{ page | cv: left_x, y }}
-{{ page | attenuverter: left_center_x, y }}
-{{ page | large_knob: right_center_x, y, 'PHASE' }}
-{{ page | button: right_x, y, 'RESET' }}
+{{ page | small_knob: right_x, y, 'PHASE' }}
 
 {% assign y = 82.0 %}
 {% assign delta_y = 15.0 %}

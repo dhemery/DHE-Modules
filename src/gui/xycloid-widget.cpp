@@ -65,8 +65,8 @@ XycloidWidget::XycloidWidget(rack::Module *module) : ModuleWidget(module, 11, "r
   auto left_center_x = (right_x - left_x)/3.f + left_x;
   auto right_center_x = width - left_center_x;
 
-  auto top_row_y = 22.f;
-  auto row_spacing = 18.5f;
+  auto top_row_y = 30.f;
+  auto row_spacing = 22.f;
 
   auto row = 0;
 
@@ -85,12 +85,7 @@ XycloidWidget::XycloidWidget(rack::Module *module) : ModuleWidget(module, 11, "r
   install_input<XycloidPort>(XycloidModule::SPEED_CV, {left_x, top_row_y + row*row_spacing});
   install_knob<XycloidKnobTiny>(XycloidModule::SPEED_CV_ATTENUVERTER, {left_center_x, top_row_y + row*row_spacing});
   install_knob<XycloidKnobLarge>(XycloidModule::SPEED_KNOB, {right_center_x, top_row_y + row*row_spacing}, 0.65f);
-
-  row++;
-  install_input<XycloidPort>(XycloidModule::PHASE_CV, {left_x, top_row_y + row*row_spacing});
-  install_knob<XycloidKnobTiny>(XycloidModule::PHASE_CV_ATTENUVERTER, {left_center_x, top_row_y + row*row_spacing});
-  install_knob<XycloidKnobLarge>(XycloidModule::PHASE_KNOB, {right_center_x, top_row_y + row*row_spacing});
-  install_switch<XycloidButtonNormal>(XycloidModule::PHASE_RESET_BUTTON, {right_x, top_row_y + row*row_spacing});
+  install_knob<XycloidKnobSmall>(XycloidModule::PHASE_KNOB, {right_x, top_row_y + row*row_spacing});
 
   top_row_y = 82.f;
   row_spacing = 15.f;
