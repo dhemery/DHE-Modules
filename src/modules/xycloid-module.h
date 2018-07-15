@@ -96,6 +96,9 @@ struct XycloidModule : Module {
     X_RANGE_SWITCH,
     Y_RANGE_SWITCH,
     RATIO_TYPE_SWITCH,
+    PHASE_KNOB,
+    PHASE_CV_ATTENUVERTER,
+    PHASE_RESET_BUTTON,
     PARAMETER_COUNT
   };
   enum InputIds {
@@ -104,6 +107,7 @@ struct XycloidModule : Module {
     SPEED_CV,
     X_GAIN_CV,
     Y_GAIN_CV,
+    PHASE_CV,
     INPUT_COUNT
   };
   enum OutputIds {

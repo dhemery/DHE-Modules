@@ -6,6 +6,13 @@
 
 namespace DHE {
 
+struct XycloidButtonNormal : rack::SVGSwitch, rack::MomentarySwitch {
+  XycloidButtonNormal() {
+    addFrame(rack::SVG::load(rack::assetPlugin(plugin, "res/xycloid/button-normal-off.svg")));
+    addFrame(rack::SVG::load(rack::assetPlugin(plugin, "res/xycloid/button-normal-on.svg")));
+  }
+};
+
 struct XycloidKnobTiny : rack::RoundKnob {
   XycloidKnobTiny() {
     setSVG(rack::SVG::load(rack::assetPlugin(plugin, "res/xycloid/knob-tiny.svg")));
@@ -62,7 +69,7 @@ XycloidWidget::XycloidWidget(rack::Module *module) : ModuleWidget(module, 11, "r
   auto row_spacing = 18.5f;
 
   auto row = 0;
-  row++;
+
   install_input<XycloidPort>(XycloidModule::GEAR_RATIO_CV, {left_x, top_row_y + row*row_spacing});
   install_knob<XycloidKnobTiny>(XycloidModule::GEAR_RATIO_CV_ATTENUVERTER, {left_center_x, top_row_y + row*row_spacing});
   install_knob<XycloidKnobLarge>(XycloidModule::GEAR_RATIO_KNOB, {right_center_x, top_row_y + row*row_spacing});
@@ -78,6 +85,12 @@ XycloidWidget::XycloidWidget(rack::Module *module) : ModuleWidget(module, 11, "r
   install_input<XycloidPort>(XycloidModule::SPEED_CV, {left_x, top_row_y + row*row_spacing});
   install_knob<XycloidKnobTiny>(XycloidModule::SPEED_CV_ATTENUVERTER, {left_center_x, top_row_y + row*row_spacing});
   install_knob<XycloidKnobLarge>(XycloidModule::SPEED_KNOB, {right_center_x, top_row_y + row*row_spacing}, 0.65f);
+
+  row++;
+  install_input<XycloidPort>(XycloidModule::PHASE_CV, {left_x, top_row_y + row*row_spacing});
+  install_knob<XycloidKnobTiny>(XycloidModule::PHASE_CV_ATTENUVERTER, {left_center_x, top_row_y + row*row_spacing});
+  install_knob<XycloidKnobLarge>(XycloidModule::PHASE_KNOB, {right_center_x, top_row_y + row*row_spacing});
+  install_switch<XycloidButtonNormal>(XycloidModule::PHASE_RESET_BUTTON, {right_x, top_row_y + row*row_spacing});
 
   top_row_y = 82.f;
   row_spacing = 15.f;

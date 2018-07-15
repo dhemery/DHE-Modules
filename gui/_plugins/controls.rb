@@ -101,7 +101,7 @@ class KnobControl < RoundControl
 
   def initialize(x: 0.0, y: 0.0, size: :large, foreground:, background:)
     super(x: x, y: y, diameter: DIAMETERS[size])
-    @name = "knob-#{@size}"
+    @name = "knob-#{size}"
     @knob_color = foreground
     @pointer_color = background
   end
@@ -155,7 +155,7 @@ class SwitchControl < Control
 
   def initialize(x: 0.0, y: 0.0, positions:, state:, foreground:, background:)
     super(x: x, y: y, width: WIDTH, height: positions * WIDTH)
-    @name = "switch-#{@positions}-#{@state}"
+    @name = "switch-#{positions}-#{state}"
 
     @positions = positions
     @state = state
