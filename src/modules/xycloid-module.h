@@ -7,18 +7,20 @@ namespace DHE {
 struct Pole {
   const float two_pi = 2.f*std::acos(-1.f);
   float phase{0.f};
+  float offset{0.f};
 
-  void advance(float increment) {
+  void advance(float increment, float offset = 0.f) {
+    this->offset = offset;
     phase += increment;
     phase -= std::trunc(phase); // Reduce phase to (-1, 1) to avoid eventual overflow
   }
 
-  float x(float radius, float offset = 0.f) const {
-    return radius*std::cos(two_pi*(phase+offset));
+  float x() const {
+    return std::cos(two_pi*(phase+offset));
   }
 
-  float y(float radius, float offset = 0.f) const {
-    return radius*std::sin(two_pi*(phase+offset));
+  float y() const {
+    return std::sin(two_pi*(phase+offset));
   }
 };
 
@@ -66,24 +68,25 @@ struct XycloidModule : Module {
 
   void step() override {
     auto ratio = gear_ratio();
+    auto phase_offset = param(PHASE_KNOB)-0.5f;
+    if (ratio < 0.f) phase_offset*=-1.f;
+
     auto outer_pole_speed = speed(SPEED_KNOB, SPEED_CV, SPEED_CV_ATTENUVERTER);
     auto inner_pole_speed = ratio*outer_pole_speed;
     outer_pole.advance(outer_pole_speed);
-    inner_pole.advance(inner_pole_speed);
+    inner_pole.advance(inner_pole_speed, phase_offset);
 
-    auto phase_offset = param(PHASE_KNOB)-0.5f;
-    if (ratio < -0.f) phase_offset*=-1.f;
-    auto outer_pole_radius = 5.f*depth();
-    auto inner_pole_radius = 5.f - outer_pole_radius;
-    auto x = inner_pole.x(inner_pole_radius, phase_offset) + outer_pole.x(outer_pole_radius);
-    auto y = inner_pole.y(inner_pole_radius, phase_offset) + outer_pole.y(outer_pole_radius);
+    auto outer_pole_radius = depth();
+    auto inner_pole_radius = 1.f - outer_pole_radius;
+    auto x = inner_pole_radius*inner_pole.x() + outer_pole_radius*outer_pole.x();
+    auto y = inner_pole_radius*inner_pole.y() + outer_pole_radius*outer_pole.y();
 
     auto x_gain = gain(X_GAIN_KNOB, X_GAIN_CV);
     auto y_gain = gain(Y_GAIN_KNOB, Y_GAIN_CV);
     auto x_offset = param(X_RANGE_SWITCH)*5.f;
     auto y_offset = param(Y_RANGE_SWITCH)*5.f;
-    outputs[X_OUT].value = x_gain*(x + x_offset);
-    outputs[Y_OUT].value = y_gain*(y + y_offset);
+    outputs[X_OUT].value = 5.f*x_gain*(x + x_offset);
+    outputs[Y_OUT].value = 5.f*y_gain*(y + y_offset);
   }
 
   enum ParameterIds {
