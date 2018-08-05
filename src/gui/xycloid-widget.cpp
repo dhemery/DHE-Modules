@@ -71,21 +71,21 @@ XycloidWidget::XycloidWidget(rack::Module *module) : ModuleWidget(module, 11, "r
   auto row = 0;
 
   install_input<XycloidPort>(XycloidModule::GEAR_RATIO_CV, {left_x, top_row_y + row*row_spacing});
-  install_knob<XycloidKnobTiny>(XycloidModule::GEAR_RATIO_CV_ATTENUVERTER, {left_center_x, top_row_y + row*row_spacing});
-  install_knob<XycloidKnobLarge>(XycloidModule::GEAR_RATIO_KNOB, {right_center_x, top_row_y + row*row_spacing});
-  install_switch<XycloidSwitch2>(XycloidModule::RATIO_TYPE_SWITCH, {right_x, top_row_y + row*row_spacing}, 1, 1);
+  install_knob<XycloidKnobTiny>(XycloidModule::WOBBLE_RATIO_CV_ATTENUVERTER, {left_center_x, top_row_y + row*row_spacing});
+  install_knob<XycloidKnobLarge>(XycloidModule::WOBBLE_RATIO_KNOB, {right_center_x, top_row_y + row*row_spacing});
+  install_switch<XycloidSwitch2>(XycloidModule::QUANTIZE_WOBBLE_RATIO_SWITCH, {right_x, top_row_y + row*row_spacing}, 1, 1);
 
   row++;
   install_input<XycloidPort>(XycloidModule::DEPTH_CV, {left_x, top_row_y + row*row_spacing});
-  install_knob<XycloidKnobTiny>(XycloidModule::DEPTH_CV_ATTENUVERTER, {left_center_x, top_row_y + row*row_spacing});
-  install_knob<XycloidKnobLarge>(XycloidModule::DEPTH_KNOB, {right_center_x, top_row_y + row*row_spacing});
-  install_switch<XycloidSwitch3>(XycloidModule::CUSP_TYPE_SWITCH, {right_x, top_row_y + row*row_spacing}, 2, 2);
+  install_knob<XycloidKnobTiny>(XycloidModule::WOBBLE_DEPTH_CV_ATTENUVERTER, {left_center_x, top_row_y + row*row_spacing});
+  install_knob<XycloidKnobLarge>(XycloidModule::WOBBLE_DEPTH_KNOB, {right_center_x, top_row_y + row*row_spacing});
+  install_switch<XycloidSwitch3>(XycloidModule::WOBBLE_TYPE_SWITCH, {right_x, top_row_y + row*row_spacing}, 2, 2);
 
   row++;
   install_input<XycloidPort>(XycloidModule::SPEED_CV, {left_x, top_row_y + row*row_spacing});
-  install_knob<XycloidKnobTiny>(XycloidModule::SPEED_CV_ATTENUVERTER, {left_center_x, top_row_y + row*row_spacing});
-  install_knob<XycloidKnobLarge>(XycloidModule::SPEED_KNOB, {right_center_x, top_row_y + row*row_spacing}, 0.65f);
-  install_knob<XycloidKnobSmall>(XycloidModule::PHASE_KNOB, {right_x, top_row_y + row*row_spacing});
+  install_knob<XycloidKnobTiny>(XycloidModule::THROB_SPEED_CV_ATTENUVERTER, {left_center_x, top_row_y + row*row_spacing});
+  install_knob<XycloidKnobLarge>(XycloidModule::THROB_SPEED_KNOB, {right_center_x, top_row_y + row*row_spacing}, 0.65f);
+  install_knob<XycloidKnobSmall>(XycloidModule::WOBBLE_PHASE_KNOB, {right_x, top_row_y + row*row_spacing});
 
   top_row_y = 82.f;
   row_spacing = 15.f;

@@ -25,32 +25,32 @@ struct Pole {
 };
 
 struct XycloidModule : Module {
-  Pole inner_pole;
-  Pole outer_pole;
+  Pole wobbler;
+  Pole throbber;
 
   XycloidModule() : Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT} {}
 
-  float gear_ratio() const {
-    static constexpr auto cusp_max = 16.f;
-    static constexpr auto outward_cusps = Range{0.f, cusp_max};
-    static constexpr auto inward_cusps = Range{0.f, -cusp_max};
-    static constexpr auto inward_and_outward_cusps = Range{-cusp_max, cusp_max};
-    static constexpr Range cusp_ranges[] = {inward_cusps, inward_and_outward_cusps, outward_cusps};
-    auto cusp_type = static_cast<int>(param(CUSP_TYPE_SWITCH));
-    auto cusp_range = cusp_ranges[cusp_type];
-    auto modulated_cusps = modulated(GEAR_RATIO_KNOB, GEAR_RATIO_CV, GEAR_RATIO_CV_ATTENUVERTER);
-    auto ratio_type = static_cast<int>(param(RATIO_TYPE_SWITCH));
-    auto ratio = 1.f - cusp_range.scale(modulated_cusps);
-    if (ratio_type == 0) ratio = std::round(ratio);
-    return ratio;
+  float wobble_ratio() const {
+    static constexpr auto wobble_max = 16.f;
+    static constexpr auto wobble_inward = Range{0.f, wobble_max};
+    static constexpr auto wobble_outward = Range{0.f, -wobble_max};
+    static constexpr auto bidirectional = Range{-wobble_max, wobble_max};
+    static constexpr Range wobble_ratio_ranges[] = {wobble_inward, bidirectional, wobble_outward};
+    auto wobble_type = static_cast<int>(param(WOBBLE_TYPE_SWITCH));
+    auto quantize_wobble_ratio = param(QUANTIZE_WOBBLE_RATIO_SWITCH) < 1.f;
+    auto wobble_range = wobble_ratio_ranges[wobble_type];
+    auto wobble_ratio_rotation = modulated(WOBBLE_RATIO_KNOB, GEAR_RATIO_CV, WOBBLE_RATIO_CV_ATTENUVERTER);
+    auto wobble_ratio = wobble_range.scale(wobble_ratio_rotation);
+    if (quantize_wobble_ratio) wobble_ratio = std::round(wobble_ratio);
+    return wobble_ratio;
   }
 
-  float depth() const {
-    static constexpr auto depth_range = Range{0.f, 1.f};
-    return 1.f - depth_range.clamp(modulated(DEPTH_KNOB, DEPTH_CV, DEPTH_CV_ATTENUVERTER));
+  float wobble_depth() const {
+    static constexpr auto wobble_depth_range = Range{0.f, 1.f};
+    return wobble_depth_range.clamp(modulated(WOBBLE_DEPTH_KNOB, DEPTH_CV, WOBBLE_DEPTH_CV_ATTENUVERTER));
   }
 
-  float speed(int knob, int cv, int attenuator) const {
+  float throb_speed(int knob, int cv, int attenuator) const {
     auto rotation = modulated(knob, cv, attenuator);
     auto bipolar = BIPOLAR_PHASE_RANGE.scale(rotation);
     auto tapered = sigmoid(bipolar, 0.8f);
@@ -67,19 +67,19 @@ struct XycloidModule : Module {
   }
 
   void step() override {
-    auto ratio = gear_ratio();
-    auto phase_offset = param(PHASE_KNOB)-0.5f;
-    if (ratio < 0.f) phase_offset*=-1.f;
+    auto wobble_ratio = this->wobble_ratio();
+    auto wobble_phase_offset = param(WOBBLE_PHASE_KNOB)-0.5f;
+    if (wobble_ratio < 0.f) wobble_phase_offset*=-1.f;
 
-    auto outer_pole_speed = speed(SPEED_KNOB, SPEED_CV, SPEED_CV_ATTENUVERTER);
-    auto inner_pole_speed = ratio*outer_pole_speed;
-    outer_pole.advance(outer_pole_speed);
-    inner_pole.advance(inner_pole_speed, phase_offset);
+    auto throb_speed = this->throb_speed(THROB_SPEED_KNOB, SPEED_CV, THROB_SPEED_CV_ATTENUVERTER);
+    auto wobble_speed = wobble_ratio*throb_speed;
+    auto wobble_depth = this->wobble_depth();
+    auto throb_depth = 1.f - wobble_depth;
 
-    auto outer_pole_radius = depth();
-    auto inner_pole_radius = 1.f - outer_pole_radius;
-    auto x = inner_pole_radius*inner_pole.x() + outer_pole_radius*outer_pole.x();
-    auto y = inner_pole_radius*inner_pole.y() + outer_pole_radius*outer_pole.y();
+    throbber.advance(throb_speed);
+    wobbler.advance(wobble_speed, wobble_phase_offset);
+    auto x = throb_depth*throbber.x() + wobble_depth*wobbler.x();
+    auto y = throb_depth*throbber.y() + wobble_depth*wobbler.y();
 
     auto x_gain = gain(X_GAIN_KNOB, X_GAIN_CV);
     auto y_gain = gain(Y_GAIN_KNOB, Y_GAIN_CV);
@@ -90,19 +90,19 @@ struct XycloidModule : Module {
   }
 
   enum ParameterIds {
-    GEAR_RATIO_KNOB,
-    GEAR_RATIO_CV_ATTENUVERTER,
-    CUSP_TYPE_SWITCH,
-    DEPTH_KNOB,
-    DEPTH_CV_ATTENUVERTER,
-    SPEED_KNOB,
-    SPEED_CV_ATTENUVERTER,
+    WOBBLE_RATIO_KNOB,
+    WOBBLE_RATIO_CV_ATTENUVERTER,
+    WOBBLE_TYPE_SWITCH,
+    WOBBLE_DEPTH_KNOB,
+    WOBBLE_DEPTH_CV_ATTENUVERTER,
+    THROB_SPEED_KNOB,
+    THROB_SPEED_CV_ATTENUVERTER,
     X_GAIN_KNOB,
     Y_GAIN_KNOB,
     X_RANGE_SWITCH,
     Y_RANGE_SWITCH,
-    RATIO_TYPE_SWITCH,
-    PHASE_KNOB,
+    QUANTIZE_WOBBLE_RATIO_SWITCH,
+    WOBBLE_PHASE_KNOB,
     PARAMETER_COUNT
   };
   enum InputIds {
