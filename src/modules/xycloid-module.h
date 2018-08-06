@@ -32,9 +32,9 @@ struct XycloidModule : Module {
 
   float wobble_ratio() const {
     static constexpr auto wobble_max = 16.f;
-    static constexpr auto wobble_inward = Range{0.f, wobble_max};
-    static constexpr auto wobble_outward = Range{0.f, -wobble_max};
-    static constexpr auto bidirectional = Range{-wobble_max, wobble_max};
+    static constexpr auto wobble_inward = Range{1.f, wobble_max};
+    static constexpr auto wobble_outward = Range{1.f, -wobble_max};
+    static constexpr auto bidirectional = Range{wobble_max, -wobble_max};
     static constexpr Range wobble_ratio_ranges[] = {wobble_inward, bidirectional, wobble_outward};
     auto wobble_type = static_cast<int>(param(WOBBLE_TYPE_SWITCH));
     auto quantize_wobble_ratio = param(QUANTIZE_WOBBLE_RATIO_SWITCH) < 1.f;
