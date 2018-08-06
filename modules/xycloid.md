@@ -3,9 +3,7 @@ title: The Xycloid Module
 ---
 <img class="panel" src="panel.svg" alt="The Xycloid Panel" />
 
-Generates X and Y modulation signals
-that interact and repeat
-in [cycles upon cycles](#examples).
+Generates a [cyclically related pair](#examples) of compound LFO signals.
 
 Check the [usage guide](#using-xycloid).
 

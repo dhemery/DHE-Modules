@@ -5,10 +5,10 @@ layout: base
 ## The Modules
 
 The DHE-Modules suite includes
-[envelope generators](envelope-generators),
-[function generators](function-generators),
+[envelope generators](#envelope-generators),
+[low frequency oscillators](#low-frequency-oscillators),
 and
-[waveshapers](waveshapers).
+[waveshapers](#waveshapers).
 
 ### Envelope Generators
 
@@ -41,14 +41,12 @@ suppress retriggers,
 set an envelope's starting voltage,
 and more.
 
-### Function Generators
+### Low Frequency Oscillators
 
 [![_Xycloid_](modules/xycloid/panel.svg)](modules/xycloid/)
 
 **[_Xycloid_](modules/xycloid/)**
-generates X and Y modulation signals
-that interact and repeat
-in cycles upon cycles.
+generates a cyclically related pair of compound LFO signals.
 
 ### Waveshapers
 
