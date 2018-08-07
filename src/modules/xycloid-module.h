@@ -83,8 +83,8 @@ struct XycloidModule : Module {
 
     auto x_gain = gain(X_GAIN_KNOB, X_GAIN_CV);
     auto y_gain = gain(Y_GAIN_KNOB, Y_GAIN_CV);
-    auto x_offset = param(X_RANGE_SWITCH)*5.f;
-    auto y_offset = param(Y_RANGE_SWITCH)*5.f;
+    auto x_offset = param(X_RANGE_SWITCH);
+    auto y_offset = param(Y_RANGE_SWITCH);
     outputs[X_OUT].value = 5.f*x_gain*(x + x_offset);
     outputs[Y_OUT].value = 5.f*y_gain*(y + y_offset);
   }
