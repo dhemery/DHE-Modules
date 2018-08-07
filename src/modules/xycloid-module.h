@@ -30,19 +30,30 @@ struct XycloidModule : Module {
 
   XycloidModule() : Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT} {}
 
-  float wobble_ratio() const {
+  int wobble_type() const {
+    return static_cast<int>(param(WOBBLE_TYPE_SWITCH));
+  }
+
+  bool quantize_wobble_ratio() const {
+    return !param(QUANTIZE_WOBBLE_RATIO_SWITCH);
+  }
+
+  float wobble_ratio_rotation() const {
+    return modulated(WOBBLE_RATIO_KNOB, GEAR_RATIO_CV, WOBBLE_RATIO_CV_ATTENUVERTER);
+  }
+
+  Range wobble_range() const {
     static constexpr auto wobble_max = 16.f;
     static constexpr auto wobble_inward = Range{1.f, wobble_max};
     static constexpr auto wobble_outward = Range{1.f, -wobble_max};
     static constexpr auto bidirectional = Range{wobble_max, -wobble_max};
     static constexpr Range wobble_ratio_ranges[] = {wobble_inward, bidirectional, wobble_outward};
-    auto wobble_type = static_cast<int>(param(WOBBLE_TYPE_SWITCH));
-    auto quantize_wobble_ratio = param(QUANTIZE_WOBBLE_RATIO_SWITCH) < 1.f;
-    auto wobble_range = wobble_ratio_ranges[wobble_type];
-    auto wobble_ratio_rotation = modulated(WOBBLE_RATIO_KNOB, GEAR_RATIO_CV, WOBBLE_RATIO_CV_ATTENUVERTER);
-    auto wobble_ratio = wobble_range.scale(wobble_ratio_rotation);
-    if (quantize_wobble_ratio) wobble_ratio = std::round(wobble_ratio);
-    return wobble_ratio;
+    return wobble_ratio_ranges[wobble_type()];
+  }
+
+  float wobble_ratio() const {
+    auto wobble_ratio = wobble_range().scale(wobble_ratio_rotation());
+    return quantize_wobble_ratio() ? std::round(wobble_ratio) : wobble_ratio;
   }
 
   float wobble_depth() const {
