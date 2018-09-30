@@ -43,11 +43,16 @@ struct XycloidModule : Module {
   }
 
   Range wobble_range() const {
-    static constexpr auto wobble_max = 16.f;
-    static constexpr auto wobble_inward = Range{1.f, wobble_max};
-    static constexpr auto wobble_outward = Range{1.f, -wobble_max};
-    static constexpr auto bidirectional = Range{wobble_max, -wobble_max};
-    static constexpr Range wobble_ratio_ranges[] = {wobble_inward, bidirectional, wobble_outward};
+    static constexpr auto inward_wobble_max = 16.f;
+    static constexpr auto outward_wobble_max = -inward_wobble_max;
+    static constexpr auto inward_wobble_range = Range{0.f, inward_wobble_max};
+    static constexpr auto outward_wobble_range = Range{0.f, outward_wobble_max};
+    static constexpr auto bidirectional_wobble_range = Range{inward_wobble_max, outward_wobble_max};
+    static constexpr Range wobble_ratio_ranges[] = {
+                                inward_wobble_range,
+                                bidirectional_wobble_range,
+                                outward_wobble_range
+                            };
     return wobble_ratio_ranges[wobble_type()];
   }
 
