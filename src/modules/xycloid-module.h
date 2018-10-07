@@ -25,6 +25,8 @@ struct Pole {
 };
 
 struct XycloidModule : Module {
+  const float legacy_wobble_ratio_offset = 1.f;
+  float wobble_ratio_offset = 0.f;
   Pole wobbler;
   Pole throbber;
 
@@ -57,7 +59,7 @@ struct XycloidModule : Module {
   }
 
   float wobble_ratio() const {
-    auto wobble_ratio = wobble_range().scale(wobble_ratio_rotation());
+    auto wobble_ratio = wobble_range().scale(wobble_ratio_rotation()) + wobble_ratio_offset;
     return quantize_wobble_ratio() ? std::round(wobble_ratio) : wobble_ratio;
   }
 
@@ -134,6 +136,19 @@ struct XycloidModule : Module {
     Y_OUT,
     OUTPUT_COUNT
   };
-};
 
+  json_t *toJson() override {
+      json_t *configuration = json_object();
+      json_object_set_new(configuration, "wobble_ratio_offset", json_real(wobble_ratio_offset));
+      return configuration;
+  }
+
+  void fromJson(json_t *configuration) override {
+      wobble_ratio_offset = legacy_wobble_ratio_offset;
+      json_t *wobble_ratio_offset_json = json_object_get(configuration, "wobble_ratio_offset");
+      if (wobble_ratio_offset_json) {
+          wobble_ratio_offset = json_real_value(wobble_ratio_offset_json);
+      }
+  }
+};
 }

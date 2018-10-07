@@ -12,6 +12,17 @@ class ModuleWidget : public rack::ModuleWidget {
 public:
   ModuleWidget(rack::Module *module, int widget_hp, const char *background);
 
+  void fromJson(json_t *patch) override {
+    // If there's no data, we're loading from a legacy patch. Add empty data to
+    // the incoming patch so that ModuleWidget::fromJson will call
+    // Module::fromJson, which will configure the module with appropriate legacy
+    // behavior.
+    if (!json_object_get(patch, "data")) {
+      json_object_set_new(patch, "data", json_object());
+    }
+    rack::ModuleWidget::fromJson(patch);
+  }
+
   float height() const {
     return box.size.y*MM_PER_IN/SVG_DPI;
   }

@@ -104,4 +104,5 @@ XycloidWidget::XycloidWidget(rack::Module *module) : ModuleWidget(module, 11, "r
   install_switch<XycloidSwitch2>(XycloidModule::Y_RANGE_SWITCH, {right_center_x, top_row_y + row*row_spacing}, 1, 0);
   install_output<XycloidPort>(XycloidModule::Y_OUT, {right_x, top_row_y + row*row_spacing});
 }
+
 }
