@@ -55,3 +55,4 @@ StageWidget::StageWidget(rack::Module *module) : ModuleWidget(module, 5, "res/st
   install_output<StagePort>(StageModule::ENVELOPE_OUT, {right_x, top_row_y + row*row_spacing});
 }
 }
+rack::Model *modelStage = rack::Model::create<DHE::StageModule, DHE::StageWidget>("DHE-Modules", "Stage", "Stage", rack::ENVELOPE_GENERATOR_TAG);
