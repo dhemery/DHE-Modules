@@ -1,17 +1,16 @@
-#pragma once
-
 #include <algorithm>
-#include <util/mode.h>
+#include <componentlibrary.hpp>
 
-#include "module.h"
+#include "gui/module-widget.h"
+#include "modules/module.h"
 #include "util/controls.h"
 #include "util/d-flip-flop.h"
+#include "util/mode.h"
 #include "util/ramp.h"
 
 namespace DHE {
 
-struct HostageModule : Module {
-
+struct Hostage : Module {
   DFlipFlop sustain_gate = DFlipFlop{[this] { return hold_gate_in(); }};
   DFlipFlop sustain_trigger = DFlipFlop{[this] { return hold_gate_in(); }};
   Ramp timer = Ramp{[this] { return sample_time()/duration_in(); }};
@@ -23,7 +22,7 @@ struct HostageModule : Module {
   SubmodeSwitch sustain_mode = {[this] { return mode_switch_in(); }, &timed_sustain_mode, &gated_sustain_mode};
   SubmodeSwitch executor = {[this] { return defer_gate_in(); }, &sustain_mode, &defer_mode};
 
-  HostageModule() : Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT} {
+  Hostage() : Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT} {
     defer_mode.on_entry([this] {
       send_active(true);
     });
@@ -158,4 +157,72 @@ struct HostageModule : Module {
   };
 };
 
+struct HostagePort : rack::SVGPort {
+  HostagePort() {
+    background->svg = rack::SVG::load(rack::assetPlugin(plugin, "res/hostage/port.svg"));
+    background->wrap();
+    box.size = background->box.size;
+  }
+};
+
+struct HostageKnobLarge : rack::RoundKnob {
+  HostageKnobLarge() {
+    setSVG(rack::SVG::load(rack::assetPlugin(plugin, "res/hostage/knob-large.svg")));
+    shadow->opacity = 0.f;
+  }
+};
+
+struct HostageSwitch2 : rack::SVGSwitch, rack::ToggleSwitch {
+  HostageSwitch2() {
+    addFrame(rack::SVG::load(rack::assetPlugin(plugin, "res/hostage/switch-2-low.svg")));
+    addFrame(rack::SVG::load(rack::assetPlugin(plugin, "res/hostage/switch-2-high.svg")));
+  }
+};
+
+struct HostageSwitch3 : rack::SVGSwitch, rack::ToggleSwitch {
+  HostageSwitch3() {
+    addFrame(rack::SVG::load(rack::assetPlugin(plugin, "res/hostage/switch-3-low.svg")));
+    addFrame(rack::SVG::load(rack::assetPlugin(plugin, "res/hostage/switch-3-mid.svg")));
+    addFrame(rack::SVG::load(rack::assetPlugin(plugin, "res/hostage/switch-3-high.svg")));
+  }
+};
+
+struct HostageWidget : public ModuleWidget {
+  HostageWidget(rack::Module *module) : ModuleWidget(module, 5, "res/hostage/panel.svg") {
+    auto widget_right_edge = width();
+
+    auto left_x = width()/4.f + 0.333333f;
+    auto center_x = widget_right_edge/2.f;
+    auto right_x = widget_right_edge - left_x;
+
+    auto top_row_y = 25.f;
+    auto row_spacing = 18.5f;
+
+    auto row = 0;
+    install_switch<HostageSwitch2>(Hostage::GATE_MODE_SWITCH, {center_x, top_row_y + row*row_spacing});
+
+    row++;
+    install_input<HostagePort>(Hostage::DURATION_CV, {left_x, top_row_y + row*row_spacing});
+    install_switch<HostageSwitch3>(Hostage::DURATION_SWITCH, {right_x, top_row_y + row*row_spacing}, 2, 1);
+
+    row++;
+    install_knob<HostageKnobLarge>(Hostage::DURATION_KNOB, {center_x, top_row_y + row*row_spacing});
+
+    top_row_y = 82.f;
+    row_spacing = 15.f;
+
+    row = 0;
+    install_input<HostagePort>(Hostage::DEFER_IN, {left_x, top_row_y + row*row_spacing});
+    install_output<HostagePort>(Hostage::ACTIVE_OUT, {right_x, top_row_y + row*row_spacing});
+
+    row++;
+    install_input<HostagePort>(Hostage::HOLD_GATE_IN, {left_x, top_row_y + row*row_spacing});
+    install_output<HostagePort>(Hostage::EOC_OUT, {right_x, top_row_y + row*row_spacing});
+
+    row++;
+    install_input<HostagePort>(Hostage::ENVELOPE_IN, {left_x, top_row_y + row*row_spacing});
+    install_output<HostagePort>(Hostage::ENVELOPE_OUT, {right_x, top_row_y + row*row_spacing});
+  }
+};
 }
+rack::Model *modelHostage = rack::Model::create<DHE::Hostage, DHE::HostageWidget>("DHE-Modules", "Hostage", "Hostage", rack::ENVELOPE_GENERATOR_TAG);
