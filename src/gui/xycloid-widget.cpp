@@ -4,8 +4,8 @@
 #include "modules/xycloid-module.h"
 #include "xycloid-widget.h"
 
-namespace DHE {
 
+namespace DHE {
 struct XycloidButtonNormal : rack::SVGSwitch, rack::MomentarySwitch {
   XycloidButtonNormal() {
     addFrame(rack::SVG::load(rack::assetPlugin(plugin, "res/xycloid/button-normal-off.svg")));
@@ -132,3 +132,4 @@ void XycloidWidget::appendContextMenu(rack::Menu *menu) {
     menu->addChild(new XycloidWobbleRangeModeItem(xycloid));
 }
 }
+rack::Model *modelXycloid = rack::Model::create<DHE::XycloidModule, DHE::XycloidWidget>("DHE-Modules", "Xycloid", "Xycloid", rack::FUNCTION_GENERATOR_TAG, rack::LFO_TAG);

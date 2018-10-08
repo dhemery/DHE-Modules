@@ -23,7 +23,6 @@ rack::Model *modelHostage;
 rack::Model *modelStage;
 rack::Model *modelSwave;
 rack::Model *modelUpstage;
-rack::Model *modelXycloid;
 
 namespace DHE {
 template<typename TModel, typename TWidget, typename... TTag>
@@ -44,7 +43,6 @@ void init(rack::Plugin *p) {
   modelStage = DHE::createModel<DHE::StageModule, DHE::StageWidget, rack::ModelTag>("Stage", rack::ENVELOPE_GENERATOR_TAG);
   modelSwave = DHE::createModel<DHE::SwaveModule, DHE::SwaveWidget, rack::ModelTag>("Swave", rack::WAVESHAPER_TAG);
   modelUpstage = DHE::createModel<DHE::UpstageModule, DHE::UpstageWidget, rack::ModelTag>("Upstage", rack::ENVELOPE_GENERATOR_TAG);
-  modelXycloid = DHE::createModel<DHE::XycloidModule, DHE::XycloidWidget, rack::ModelTag>("Xycloid", rack::FUNCTION_GENERATOR_TAG, rack::LFO_TAG);
 
   p->addModel(modelBoosterStage);
   p->addModel(modelCubic);
