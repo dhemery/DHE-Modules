@@ -105,4 +105,30 @@ XycloidWidget::XycloidWidget(rack::Module *module) : ModuleWidget(module, 11, "r
   install_output<XycloidPort>(XycloidModule::Y_OUT, {right_x, top_row_y + row*row_spacing});
 }
 
+struct XycloidWobbleRangeModeItem : rack::MenuItem {
+    XycloidModule *xycloid;
+
+    XycloidWobbleRangeModeItem(XycloidModule *xycloid)
+        : MenuItem{},
+        xycloid{xycloid} {
+        this->text = "Musical Ratios";
+        this->rightText = "";
+    }
+
+	void onAction(rack::EventAction &e) override {
+        xycloid->toggle_musical_wobble_ratios();
+	}
+
+	void step() override {
+		rightText = xycloid->is_musical_wobble_ratios() ? "✔" : "";
+		rack::MenuItem::step();
+	}
+};
+
+void XycloidWidget::appendContextMenu(rack::Menu *menu) {
+    XycloidModule *xycloid = dynamic_cast<XycloidModule*>(module);
+    menu->addChild(rack::construct<rack::MenuLabel>());
+    menu->addChild(rack::construct<rack::MenuLabel>(&rack::MenuLabel::text, "Options"));
+    menu->addChild(new XycloidWobbleRangeModeItem(xycloid));
+}
 }

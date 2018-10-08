@@ -12,7 +12,7 @@ class ModuleWidget : public rack::ModuleWidget {
 public:
   ModuleWidget(rack::Module *module, int widget_hp, const char *background);
 
-  void fromJson(json_t *patch) override {
+  virtual void fromJson(json_t *patch) override {
     // If there's no data, we're loading from a legacy patch. Add empty data to
     // the incoming patch so that ModuleWidget::fromJson will call
     // Module::fromJson, which will configure the module with appropriate legacy

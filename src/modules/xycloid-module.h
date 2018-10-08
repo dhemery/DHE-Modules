@@ -25,7 +25,6 @@ struct Pole {
 };
 
 struct XycloidModule : Module {
-  const float legacy_wobble_ratio_offset = 1.f;
   float wobble_ratio_offset = 0.f;
   Pole wobbler;
   Pole throbber;
@@ -139,16 +138,25 @@ struct XycloidModule : Module {
 
   json_t *toJson() override {
       json_t *configuration = json_object();
-      json_object_set_new(configuration, "wobble_ratio_offset", json_real(wobble_ratio_offset));
+      json_object_set_new(configuration, "musical_wobble_ratios", json_boolean(is_musical_wobble_ratios()));
       return configuration;
   }
 
   void fromJson(json_t *configuration) override {
-      wobble_ratio_offset = legacy_wobble_ratio_offset;
-      json_t *wobble_ratio_offset_json = json_object_get(configuration, "wobble_ratio_offset");
-      if (wobble_ratio_offset_json) {
-          wobble_ratio_offset = json_real_value(wobble_ratio_offset_json);
-      }
+      json_t *musical_wobble_ratios = json_object_get(configuration, "musical_wobble_ratios");
+      set_wobble_ratios(json_is_true(musical_wobble_ratios));
+  }
+
+  void set_wobble_ratios(bool is_musical) {
+      wobble_ratio_offset = is_musical ? 0.f : 1.f;
+  }
+
+  void toggle_musical_wobble_ratios() {
+      set_wobble_ratios(!is_musical_wobble_ratios());
+  }
+
+  bool is_musical_wobble_ratios() {
+      return wobble_ratio_offset == 0.f;
   }
 };
 }
