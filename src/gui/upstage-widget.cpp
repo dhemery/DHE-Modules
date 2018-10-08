@@ -70,3 +70,4 @@ UpstageWidget::UpstageWidget(rack::Module *module) : ModuleWidget(module, 5, "re
   install_output<UpstagePort>(UpstageModule::ENVELOPE_OUT, {right_x, top_row_y + row*row_spacing});
 }
 }
+rack::Model *modelUpstage = rack::Model::create<DHE::UpstageModule, DHE::UpstageWidget>("DHE-Modules", "Upstage", "Upstage", rack::ENVELOPE_GENERATOR_TAG);
