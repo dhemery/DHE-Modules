@@ -60,3 +60,4 @@ CubicWidget::CubicWidget(rack::Module *module) : ModuleWidget(module, 5, "res/cu
   install_output<CubicPort>(CubicModule::OUT, {right_x, top_row_y + row*row_spacing});
 }
 }
+rack::Model *modelCubic = rack::Model::create<DHE::CubicModule, DHE::CubicWidget>("DHE-Modules", "Cubic", "Cubic", rack::FUNCTION_GENERATOR_TAG);
