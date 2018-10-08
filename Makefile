@@ -7,7 +7,7 @@ CFLAGS +=
 CXXFLAGS +=
 LDFLAGS +=
 
-SOURCES = $(wildcard src/*/*.cpp)
+SOURCES = $(wildcard src/**/*.cpp)  $(wildcard src/*.cpp)
 
 DISTRIBUTABLES += LICENSE.txt res
 
@@ -46,4 +46,3 @@ gui:
 .PHONY: clobber
 clobber: clean uninstall
 	$(MAKE) -C gui clobber
-
