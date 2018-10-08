@@ -57,3 +57,4 @@ SwaveWidget::SwaveWidget(rack::Module *module) : ModuleWidget(module, 4, "res/sw
   install_output<SwavePort>(SwaveModule::SWAVE_OUT, {center_x, top_row_y + row*row_spacing});
 }
 }
+rack::Model *modelSwave = rack::Model::create<DHE::SwaveModule, DHE::SwaveWidget>("DHE-Modules", "Swave", "Swave", rack::WAVESHAPER_TAG);
