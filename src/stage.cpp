@@ -1,8 +1,9 @@
-#pragma once
-
+#include <componentlibrary.hpp>
 #include <engine.hpp>
 
-#include "module.h"
+#include "gui/module-widget.h"
+#include "modules/module.h"
+#include "plugin/dhe-modules.h"
 #include "util/controls.h"
 #include "util/d-flip-flop.h"
 #include "util/mode.h"
@@ -10,8 +11,7 @@
 #include "util/range.h"
 
 namespace DHE {
-
-struct StageModule : public Module {
+struct Stage : public Module {
   Mode stage_mode = {};
   Mode defer_mode = {};
 
@@ -27,7 +27,7 @@ struct StageModule : public Module {
   void onReset() override {
     Module::onReset();
   }
-  StageModule() : Module(PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT) {
+  Stage() : Module(PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT) {
     defer_mode.on_entry([this] {
       send_active(true);
     });
@@ -143,4 +143,57 @@ struct StageModule : public Module {
     OUTPUT_COUNT
   };
 };
+
+struct StagePort : rack::SVGPort {
+  StagePort() {
+    background->svg = rack::SVG::load(rack::assetPlugin(plugin, "res/stage/port.svg"));
+    background->wrap();
+    box.size = background->box.size;
+  }
+};
+
+struct StageKnobLarge : rack::RoundKnob {
+  StageKnobLarge() {
+    setSVG(rack::SVG::load(rack::assetPlugin(plugin, "res/stage/knob-large.svg")));
+    shadow->opacity = 0.f;
+  }
+};
+
+struct StageWidget : public ModuleWidget {
+  StageWidget(rack::Module *module) : ModuleWidget(module, 5, "res/stage/panel.svg") {
+    auto widget_right_edge = width();
+
+    auto left_x = width()/4.f + 0.333333f;
+    auto center_x = widget_right_edge/2.f;
+    auto right_x = widget_right_edge - left_x;
+
+    auto top_row_y = 25.f;
+    auto row_spacing = 18.5f;
+
+    auto row = 0;
+    install_knob<StageKnobLarge>(Stage::LEVEL_KNOB, {center_x, top_row_y + row*row_spacing});
+
+    row++;
+    install_knob<StageKnobLarge>(Stage::CURVE_KNOB, {center_x, top_row_y + row*row_spacing});
+
+    row++;
+    install_knob<StageKnobLarge>(Stage::DURATION_KNOB, {center_x, top_row_y + row*row_spacing});
+
+    top_row_y = 82.f;
+    row_spacing = 15.f;
+
+    row = 0;
+    install_input<StagePort>(Stage::DEFER_IN, {left_x, top_row_y + row*row_spacing});
+    install_output<StagePort>(Stage::ACTIVE_OUT, {right_x, top_row_y + row*row_spacing});
+
+    row++;
+    install_input<StagePort>(Stage::TRIGGER_IN, {left_x, top_row_y + row*row_spacing});
+    install_output<StagePort>(Stage::EOC_OUT, {right_x, top_row_y + row*row_spacing});
+
+    row++;
+    install_input<StagePort>(Stage::ENVELOPE_IN, {left_x, top_row_y + row*row_spacing});
+    install_output<StagePort>(Stage::ENVELOPE_OUT, {right_x, top_row_y + row*row_spacing});
+  }
+};
 }
+rack::Model *modelStage = rack::Model::create<DHE::Stage, DHE::StageWidget>("DHE-Modules", "Stage", "Stage", rack::ENVELOPE_GENERATOR_TAG);
