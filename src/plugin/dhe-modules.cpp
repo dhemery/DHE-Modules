@@ -1,13 +1,9 @@
-#include <modules/cubic-module.h>
 #include "dhe-modules.h"
 
-#include "gui/booster-stage-widget.h"
 #include "gui/cubic-widget.h"
-#include "modules/booster-stage-module.h"
 #include "modules/cubic-module.h"
 
 rack::Plugin *plugin;
-rack::Model *modelBoosterStage;
 rack::Model *modelCubic;
 
 namespace DHE {
@@ -23,9 +19,8 @@ void init(rack::Plugin *p) {
   p->slug = "DHE-Modules";
   p->version = TOSTRING(VERSION);
 
-  modelBoosterStage = DHE::createModel<DHE::BoosterStageModule, DHE::BoosterStageWidget, rack::ModelTag>("Booster Stage", rack::ENVELOPE_GENERATOR_TAG);
   modelCubic = DHE::createModel<DHE::CubicModule, DHE::CubicWidget, rack::ModelTag>("Cubic", rack::WAVESHAPER_TAG);
-  
+
   p->addModel(modelBoosterStage);
   p->addModel(modelCubic);
   p->addModel(modelHostage);

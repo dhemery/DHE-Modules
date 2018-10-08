@@ -98,3 +98,4 @@ BoosterStageWidget::BoosterStageWidget(rack::Module *module) : ModuleWidget(modu
   install_output<BoosterStagePort>(BoosterStageModule::ENVELOPE_OUT, {right_x, top_row_y + row*row_spacing});
 }
 }
+rack::Model *modelBoosterStage = rack::Model::create<DHE::BoosterStageModule, DHE::BoosterStageWidget>("DHE-Modules", "BoosterStage", "BoosterStage", rack::ENVELOPE_GENERATOR_TAG);
