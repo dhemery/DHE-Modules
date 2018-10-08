@@ -3,12 +3,12 @@
 #include <asset.hpp>
 #include <componentlibrary.hpp>
 
-#include "dhe-modules.h"
-#include "module.h"
-#include "module-widget.h"
+#include "dhe-modules.hpp"
+#include "module.hpp"
+#include "module-widget.hpp"
 
-#include "util/controls.h"
-#include "util/range.h"
+#include "util/controls.hpp"
+#include "util/range.hpp"
 
 namespace DHE {
 

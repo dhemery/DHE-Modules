@@ -1,4 +1,4 @@
-#include "dhe-modules.h"
+#include "dhe-modules.hpp"
 
 rack::Plugin *plugin;
 

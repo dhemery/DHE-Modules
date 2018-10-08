@@ -5,7 +5,7 @@
 #include <componentlibrary.hpp>
 #include <engine.hpp>
 
-#include "module-widget.h"
+#include "module-widget.hpp"
 
 namespace DHE {
 ModuleWidget::ModuleWidget(rack::Module *module, int widget_hp, const char *background)

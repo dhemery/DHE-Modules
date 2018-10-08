@@ -3,14 +3,14 @@
 #include <asset.hpp>
 #include <componentlibrary.hpp>
 
-#include "dhe-modules.h"
-#include "module.h"
-#include "module-widget.h"
+#include "dhe-modules.hpp"
+#include "module.hpp"
+#include "module-widget.hpp"
 
-#include "util/controls.h"
-#include "util/d-flip-flop.h"
-#include "util/ramp.h"
-#include "util/mode.h"
+#include "util/controls.hpp"
+#include "util/d-flip-flop.hpp"
+#include "util/mode.hpp"
+#include "util/ramp.hpp"
 
 namespace DHE {
 

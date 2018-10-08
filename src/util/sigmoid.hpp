@@ -3,7 +3,7 @@
 #include <cmath>
 #include <functional>
 
-#include "range.h"
+#include "range.hpp"
 
 namespace DHE {
 

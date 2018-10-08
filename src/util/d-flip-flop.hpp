@@ -5,7 +5,7 @@
 #include <utility>
 #include <vector>
 
-#include "latch.h"
+#include "latch.hpp"
 
 namespace DHE {
 

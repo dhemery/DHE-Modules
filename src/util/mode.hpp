@@ -2,7 +2,7 @@
 
 #include <functional>
 #include <vector>
-#include "util/d-flip-flop.h"
+#include "util/d-flip-flop.hpp"
 
 namespace DHE {
 struct Mode {

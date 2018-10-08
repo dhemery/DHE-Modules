@@ -1,7 +1,7 @@
 #pragma once
 
-#include "range.h"
-#include "sigmoid.h"
+#include "range.hpp"
+#include "sigmoid.hpp"
 
 namespace DHE {
 
