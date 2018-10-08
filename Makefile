@@ -7,7 +7,7 @@ CFLAGS +=
 CXXFLAGS +=
 LDFLAGS +=
 
-SOURCES = $(wildcard src/**/*.cpp)  $(wildcard src/*.cpp)
+SOURCES = $(wildcard src/*.cpp)
 
 DISTRIBUTABLES += LICENSE.txt res
 
@@ -15,19 +15,7 @@ include $(RACK_DIR)/plugin.mk
 
 # Above this line: Standard plugin build stuff
 ########################################################################
-# Below this line: Targets for Dale to build the gui and test the plugin
-
-TEST_SOURCES = $(shell find test -type f -name '*.cpp')
-TEST_OBJECTS = $(patsubst %, build/%.o, $(TEST_SOURCES))
-TEST_RUNNER = build/test-runner
-
-$(TEST_OBJECTS): FLAGS+= -I./test
-
-$(TEST_RUNNER): $(TEST_OBJECTS)
-	$(CXX) -o $@ $^
-
-test: $(TEST_RUNNER)
-	$<
+# Below this line: Targets for Dale to build the gui and run Rack
 
 RACK_APP = /Applications/Rack.app
 RACK_PLUGINS_DIR = ~/Documents/Rack/plugins
