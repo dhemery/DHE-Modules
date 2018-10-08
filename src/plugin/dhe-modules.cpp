@@ -1,8 +1,4 @@
-#include <modules/cubic-module.h>
 #include "dhe-modules.h"
-
-#include "gui/cubic-widget.h"
-#include "modules/cubic-module.h"
 
 rack::Plugin *plugin;
 

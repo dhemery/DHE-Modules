@@ -1,6 +1,6 @@
 #pragma once
 
-#include <plugin.hpp>
+#include <rack.hpp>
 
 extern rack::Plugin *plugin;
 extern rack::Model *modelBoosterStage;
