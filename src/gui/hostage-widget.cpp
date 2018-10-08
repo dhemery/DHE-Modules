@@ -71,3 +71,4 @@ HostageWidget::HostageWidget(rack::Module *module) : ModuleWidget(module, 5, "re
   install_output<HostagePort>(HostageModule::ENVELOPE_OUT, {right_x, top_row_y + row*row_spacing});
 }
 }
+rack::Model *modelHostage = rack::Model::create<DHE::HostageModule, DHE::HostageWidget>("DHE-Modules", "Hostage", "Hostage", rack::ENVELOPE_GENERATOR_TAG);
