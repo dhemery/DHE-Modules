@@ -1,10 +1,12 @@
 #include <algorithm>
+
 #include <componentlibrary.hpp>
 #include <engine.hpp>
 
-#include "gui/module-widget.h"
-#include "modules/module.h"
-#include "plugin/dhe-modules.h"
+#include "dhe-modules.h"
+#include "module.h"
+#include "module-widget.h"
+
 #include "util/controls.h"
 #include "util/range.h"
 

@@ -1,9 +1,12 @@
-#include <asset.hpp>
-#include <componentlibrary.hpp>
 #include <utility>
 
-#include "gui/module-widget.h"
-#include "modules/module.h"
+#include <asset.hpp>
+#include <componentlibrary.hpp>
+
+#include "dhe-modules.h"
+#include "module.h"
+#include "module-widget.h"
+
 #include "util/controls.h"
 #include "util/d-flip-flop.h"
 #include "util/ramp.h"

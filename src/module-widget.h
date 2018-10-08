@@ -1,10 +1,11 @@
 #pragma once
 
 #include <app.hpp>
-#include <util/math.hpp>
-#include <util/range.h>
 
-#include "plugin/dhe-modules.h"
+#include "dhe-modules.h"
+
+#include "util/math.hpp"
+#include "util/range.h"
 
 namespace DHE {
 class ModuleWidget : public rack::ModuleWidget {

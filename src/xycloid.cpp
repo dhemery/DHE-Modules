@@ -1,8 +1,9 @@
 #include <componentlibrary.hpp>
 
-#include "gui/module-widget.h"
-#include "modules/module.h"
-#include "plugin/dhe-modules.h"
+#include "dhe-modules.h"
+#include "module.h"
+#include "module-widget.h"
+
 #include "util/controls.h"
 
 namespace DHE {

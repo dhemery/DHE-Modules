@@ -1,8 +1,11 @@
 #include <algorithm>
+
 #include <componentlibrary.hpp>
 
-#include "gui/module-widget.h"
-#include "modules/module.h"
+#include "dhe-modules.h"
+#include "module.h"
+#include "module-widget.h"
+
 #include "util/controls.h"
 #include "util/d-flip-flop.h"
 #include "util/mode.h"

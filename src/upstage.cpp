@@ -1,9 +1,12 @@
 #include <algorithm>
+
 #include <asset.hpp>
 #include <componentlibrary.hpp>
 
-#include "gui/module-widget.h"
-#include "modules/module.h"
+#include "dhe-modules.h"
+#include "module.h"
+#include "module-widget.h"
+
 #include "util/controls.h"
 #include "util/range.h"
 
