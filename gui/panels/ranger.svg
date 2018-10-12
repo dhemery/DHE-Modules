@@ -5,6 +5,7 @@ title: RANGER
 foreground-color: [60,100,15]
 background-color: [60,100,97]
 controls:
+  buttons: [normal]
   knobs: [tiny, large]
   ports: []
   switches: [2]
