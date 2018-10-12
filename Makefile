@@ -2,7 +2,7 @@ SLUG = DHE-Modules
 VERSION = 0.6.2
 RACK_DIR ?= ../..
 
-FLAGS += -I./src
+FLAGS += -I./include
 CFLAGS +=
 CXXFLAGS +=
 LDFLAGS +=
