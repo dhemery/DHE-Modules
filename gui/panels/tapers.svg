@@ -1,0 +1,44 @@
+---
+layout: panel
+width: 9
+title: TAPERS
+foreground-color: [30,100,30]
+background-color: [30,100,97]
+controls:
+  buttons: [normal]
+  knobs: [tiny, medium, large]
+  ports: []
+  switches: [2]
+---
+{% assign width = page.width | hp_to_mm %}
+{% assign left_x = width | divided_by:5.0 | plus:0.333333 %}
+{% assign right_x = width | minus:left_x %}
+{% assign center_x = width | divided_by:2.0 %}
+
+{% assign y = 26.0 %}
+{% assign delta_y = 15.0 %}
+{% assign spacing = delta_y | divided_by:2.0 | plus:2.0%}
+
+{{ page | cv: left_x, y }}
+{{ page | attenuverter: center_x, y }}
+{{ page | large_knob: right_x, y, 'LEVEL' }}
+{% assign y = y | plus:delta_y %}
+{{ page | shape_switch: left_x, y }}
+{{ page | tiny_knob: center_x, y, 'CURVE' }}
+{{ page | polarity_switch: right_x, y }}
+{% assign y = y | plus:delta_y %}
+{{ page | out_port: right_x, y, 'OUT' }}
+
+{% assign y = y | plus:spacing %}
+{{ page | connector: 0.0, y, width, y }}
+{% assign y = y | plus:spacing | plus:4.0 %}
+
+{{ page | cv: left_x, y }}
+{{ page | attenuverter: center_x, y }}
+{{ page | large_knob: right_x, y, 'LEVEL' }}
+{% assign y = y | plus:delta_y %}
+{{ page | shape_switch: left_x, y }}
+{{ page | tiny_knob: center_x, y, 'CURVE' }}
+{{ page | polarity_switch: right_x, y }}
+{% assign y = y | plus:delta_y %}
+{{ page | out_port: right_x, y, 'OUT' }}

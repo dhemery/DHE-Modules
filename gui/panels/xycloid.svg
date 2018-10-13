@@ -54,4 +54,3 @@ controls:
 {{ page | small_knob: left_center_x, y, 'GAIN' }}
 {{ page | polarity_switch: right_center_x, y, 'low' }}
 {{ page | out_port: right_x, y, 'Y OUT' }}
-

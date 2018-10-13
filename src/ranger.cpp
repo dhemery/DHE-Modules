@@ -15,42 +15,40 @@ namespace DHE {
 struct Ranger : Module {
   Ranger() : Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT} {}
 
-  float module_value(int knob_param, int cv_input, int av_param,
-                     int range_param, int clamp_param) {
-    auto range = Level::range(param(range_param));
-    return module_value(knob_param, cv_input, av_param, range, clamp_param);
+  float ranged_value(int knob_param, int cv_param, int av_param,
+                     const Range &range) {
+    auto rotation = modulated(knob_param, cv_param, av_param);
+    return range.scale(rotation);
   }
 
-  float module_value(int knob_param, int cv_input, int av_param,
-                     const Range &range, int clamp_param) {
-    auto rotation = modulated(knob_param, cv_input, av_param);
-    auto scaled = range.scale(rotation);
-    auto is_clamped = param(clamp_param) > 0.5f;
-    return is_clamped ? range.clamp(scaled) : scaled;
+  float limit_value(int knob_param, int cv_input, int av_param,
+                    int range_param) {
+    auto range = Level::range(param(range_param));
+    return ranged_value(knob_param, cv_input, av_param, range);
   }
 
   void step() override {
-    auto max = module_value(MAX_KNOB, MAX_CV, MAX_ATTENUVERTER_KNOB,
-                            MAX_RANGE_SWITCH, MAX_CLAMP_BUTTON);
-    auto min = module_value(MIN_KNOB, MIN_CV, MIN_ATTENUVERTER_KNOB,
-                            MIN_RANGE_SWITCH, MIN_CLAMP_BUTTON);
-    auto range = Range{min,max};
-    outputs[OUT].value = module_value(
-        LEVEL_KNOB, LEVEL_CV, LEVEL_ATTENUVERTER_KNOB, range, LEVEL_CLAMP_BUTTON);
+    auto max =
+        limit_value(MAX_KNOB, MAX_CV, MAX_ATTENUVERTER_KNOB, MAX_RANGE_SWITCH);
+    auto min =
+        limit_value(MIN_KNOB, MIN_CV, MIN_ATTENUVERTER_KNOB, MIN_RANGE_SWITCH);
+    auto range = Range{min, max};
+
+    auto out =
+        ranged_value(LEVEL_KNOB, LEVEL_CV, LEVEL_ATTENUVERTER_KNOB, range);
+
+    outputs[OUT].value = out;
   }
 
   enum ParameterIds {
-    MAX_ATTENUVERTER_KNOB,
-    LEVEL_ATTENUVERTER_KNOB,
-    MIN_ATTENUVERTER_KNOB,
-    MAX_KNOB,
-    LEVEL_KNOB,
     MIN_KNOB,
-    MAX_CLAMP_BUTTON,
-    LEVEL_CLAMP_BUTTON,
-    MIN_CLAMP_BUTTON,
-    MAX_RANGE_SWITCH,
+    LEVEL_KNOB,
+    MAX_KNOB,
+    MIN_ATTENUVERTER_KNOB,
+    LEVEL_ATTENUVERTER_KNOB,
+    MAX_ATTENUVERTER_KNOB,
     MIN_RANGE_SWITCH,
+    MAX_RANGE_SWITCH,
     PARAMETER_COUNT
   };
   enum InputIds { MAX_CV, LEVEL_CV, MIN_CV, INPUT_COUNT };
@@ -66,10 +64,10 @@ struct RangerButtonNormal : rack::SVGSwitch, rack::ToggleSwitch {
   }
 };
 
-struct RangerKnobLarge : rack::RoundKnob {
-  RangerKnobLarge() {
+struct RangerKnobMedium : rack::RoundKnob {
+  RangerKnobMedium() {
     setSVG(rack::SVG::load(
-        rack::assetPlugin(plugin, "res/ranger/knob-large.svg")));
+        rack::assetPlugin(plugin, "res/ranger/knob-medium.svg")));
     shadow->opacity = 0.f;
   }
 };
@@ -102,47 +100,40 @@ struct RangerSwitch2 : rack::SVGSwitch, rack::ToggleSwitch {
 
 struct RangerWidget : public ModuleWidget {
   RangerWidget(rack::Module *module)
-      : ModuleWidget(module, 8, "res/ranger/panel.svg") {
+      : ModuleWidget(module, 6, "res/ranger/panel.svg") {
     auto widget_right_edge = width();
 
-    auto left_x = width() / 6.f + 0.333333333f;
-    auto center_x = widget_right_edge / 2.f;
+    auto left_x = width() / 3.5f + 0.333333333f;
     auto right_x = widget_right_edge - left_x;
 
-    auto y = 24.f;
+    auto y = 22.f;
     auto delta_y = 16.f;
     auto panel_buffer = 4.f;
 
-    install_knob<RangerKnobTiny>(Ranger::MAX_ATTENUVERTER_KNOB, {left_x, y});
-    install_switch<RangerButtonNormal>(Ranger::MAX_CLAMP_BUTTON, {right_x, y});
-    install_knob<RangerKnobLarge>(Ranger::MAX_KNOB,
-                                  {center_x, y + delta_y / 2.f});
-    y += delta_y;
     install_input<RangerPort>(Ranger::MAX_CV, {left_x, y});
-    install_switch<RangerSwitch2>(Ranger::MAX_RANGE_SWITCH, {right_x, y}, 1, 1);
+    install_knob<RangerKnobTiny>(Ranger::MAX_ATTENUVERTER_KNOB, {right_x, y});
+    y += delta_y;
+    install_knob<RangerKnobMedium>(Ranger::MAX_KNOB, {left_x, y});
+    install_switch<RangerSwitch2>(Ranger::MAX_RANGE_SWITCH, {right_x, y}, 1, 0);
 
     y += delta_y + panel_buffer;
 
-    install_knob<RangerKnobTiny>(Ranger::LEVEL_ATTENUVERTER_KNOB, {left_x, y});
-    install_switch<RangerButtonNormal>(Ranger::LEVEL_CLAMP_BUTTON,
-                                       {right_x, y});
-    install_knob<RangerKnobLarge>(Ranger::LEVEL_KNOB,
-                                  {center_x, y + delta_y / 2.f});
-    y += delta_y;
     install_input<RangerPort>(Ranger::LEVEL_CV, {left_x, y});
+    install_knob<RangerKnobTiny>(Ranger::LEVEL_ATTENUVERTER_KNOB, {right_x, y});
+    y += delta_y;
+    install_knob<RangerKnobMedium>(Ranger::LEVEL_KNOB, {left_x, y});
     install_output<RangerPort>(Ranger::OUT, {right_x, y});
 
     y += delta_y + panel_buffer;
 
-    install_knob<RangerKnobTiny>(Ranger::MIN_ATTENUVERTER_KNOB, {left_x, y});
-    install_switch<RangerButtonNormal>(Ranger::MIN_CLAMP_BUTTON, {right_x, y});
-    install_knob<RangerKnobLarge>(Ranger::MIN_KNOB,
-                                  {center_x, y + delta_y / 2.f});
-    y += delta_y;
     install_input<RangerPort>(Ranger::MIN_CV, {left_x, y});
-    install_switch<RangerSwitch2>(Ranger::MIN_RANGE_SWITCH, {right_x, y}, 1, 1);
+    install_knob<RangerKnobTiny>(Ranger::MIN_ATTENUVERTER_KNOB, {right_x, y});
+    y += delta_y;
+    install_knob<RangerKnobMedium>(Ranger::MIN_KNOB, {left_x, y});
+    install_switch<RangerSwitch2>(Ranger::MIN_RANGE_SWITCH, {right_x, y}, 1, 0);
   }
 };
 } // namespace DHE
+
 rack::Model *modelRanger = rack::Model::create<DHE::Ranger, DHE::RangerWidget>(
     "DHE-Modules", "Ranger", "Ranger", rack::UTILITY_TAG);

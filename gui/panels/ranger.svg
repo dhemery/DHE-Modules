@@ -1,53 +1,45 @@
 ---
 layout: panel
-width: 8
+width: 6
 title: RANGER
 foreground-color: [60,100,15]
 background-color: [60,100,97]
 controls:
   buttons: [normal]
-  knobs: [tiny, large]
+  knobs: [tiny, medium]
   ports: []
   switches: [2]
 ---
 {% assign width = page.width | hp_to_mm %}
-{% assign left_x = width | divided_by:6.0 | plus:0.333333 %}
+{% assign left_x = width | divided_by:3.5 | plus:0.333333 %}
 {% assign right_x = width | minus:left_x %}
-{% assign center_x = width | divided_by:2.0 %}
 
-{% assign y = 24.0 %}
-{% assign delta_y = 8 %}
+{% assign y = 22.0 %}
+{% assign delta_y = 16.0 %}
+{% assign spacing = delta_y | divided_by:2.0 | plus:2.0 %}
 
-{{ page | attenuverter: left_x, y }}
-{{ page | button: right_x, y, 'CLAMP' }}
-{% assign y = y | plus:delta_y %}
-{{ page | large_knob: center_x, y, 'MAX' }}
-{% assign y = y | plus:delta_y %}
 {{ page | cv: left_x, y }}
+{{ page | attenuverter: right_x, y }}
+{% assign y = y | plus:delta_y %}
 {{ page | polarity_switch: right_x, y }}
+{{ page | medium_knob: left_x, y, 'MAX' }}
 
-{% assign y = y | plus:delta_y %}
+{% assign y = y | plus:spacing %}
 {{ page | connector: 0.0, y, width, y }}
-{% assign y = y | plus:delta_y %}
-{% assign y = y | plus:4.0 %}
+{% assign y = y | plus:spacing %}
 
-{{ page | attenuverter: left_x, y }}
-{{ page | button: right_x, y, 'CLAMP' }}
-{% assign y = y | plus:delta_y %}
-{{ page | large_knob: center_x, y, 'LEVEL' }}
-{% assign y = y | plus:delta_y %}
 {{ page | cv: left_x, y }}
-{{ page | out_port: right_x, y, "OUT" }}
-
+{{ page | attenuverter: right_x, y }}
 {% assign y = y | plus:delta_y %}
+{{ page | medium_knob: left_x, y, 'LEVEL' }}
+{{ page | out_port: right_x, y, 'OUT' }}
+
+{% assign y = y | plus:spacing %}
 {{ page | connector: 0.0, y, width, y }}
-{% assign y = y | plus:delta_y %}
-{% assign y = y | plus:4.0 %}
+{% assign y = y | plus:spacing %}
 
-{{ page | attenuverter: left_x, y }}
-{{ page | button: right_x, y, 'CLAMP' }}
-{% assign y = y | plus:delta_y %}
-{{ page | large_knob: center_x, y, 'MIN' }}
-{% assign y = y | plus:delta_y %}
 {{ page | cv: left_x, y }}
+{{ page | attenuverter: right_x, y }}
+{% assign y = y | plus:delta_y %}
 {{ page | polarity_switch: right_x, y }}
+{{ page | medium_knob: left_x, y, 'MIN' }}
