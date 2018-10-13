@@ -15,33 +15,39 @@ namespace DHE {
 struct Tapers : Module {
   Tapers() : Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT} {}
 
-  void step_knob(int index) {
-    auto range = Level::range(param(RANGE_SWITCH_1 + index));
-    auto rotation = modulated(LEVEL_KNOB_1 + index, CV_1 + index,
-                              ATTENUVERTER_KNOB_1 + index);
-    outputs[OUT_1 + index].value = range.scale(rotation);
+  bool is_s_taper(int shape_switch) const {
+    return param(shape_switch) > 0.5;
   }
 
   void step() override {
-    step_knob(0);
-    step_knob(1);
+      auto phase1 = modulated(LEVEL_1_KNOB, LEVEL_1_CV_IN, LEVEL_1_AV_KNOB);
+      auto tapered1 = taper(phase1, TAPER_1_KNOB, TAPER_1_CV_IN, TAPER_1_AV_KNOB, SHAPE_1_SWITCH);
+      auto range1 = Level::range(param(RANGE_1_SWITCH));
+      outputs[OUT_1].value = range1.scale(tapered1);
+
+      auto phase2 = modulated(LEVEL_2_KNOB, LEVEL_2_CV_IN, LEVEL_2_AV_KNOB);
+      auto tapered2 = taper(phase2, TAPER_2_KNOB, TAPER_2_CV_IN, TAPER_2_AV_KNOB, SHAPE_2_SWITCH);
+      auto range2 = Level::range(param(RANGE_2_SWITCH));
+      outputs[OUT_2].value = range2.scale(tapered2);
+  }
+
+  float taper(float phase, int knob, int cv, int av, int shape) const {
+    auto curvature = modulated(knob, cv, av);
+    return is_s_taper(shape) ? Taper::s(phase, curvature) : Taper::j(phase, curvature);
   }
 
   enum ParameterIds {
-    LEVEL_KNOB_1,
-    LEVEL_KNOB_2,
-    ATTENUVERTER_KNOB_1,
-    ATTENUVERTER_KNOB_2,
-    SHAPE_SWITCH_1,
-    SHAPE_SWITCH_2,
-    CURVE_KNOB_1,
-    CURVE_KNOB_2,
-    RANGE_SWITCH_1,
-    RANGE_SWITCH_2,
+    LEVEL_1_KNOB, LEVEL_1_AV_KNOB, RANGE_1_SWITCH,
+    TAPER_1_KNOB, TAPER_1_AV_KNOB, SHAPE_1_SWITCH,
+    LEVEL_2_KNOB, LEVEL_2_AV_KNOB, RANGE_2_SWITCH,
+    TAPER_2_KNOB, TAPER_2_AV_KNOB, SHAPE_2_SWITCH,
     PARAMETER_COUNT
   };
-  enum InputIds { CV_1, CV_2, CV_3, INPUT_COUNT };
-  enum OutputIds { OUT_1, OUT_2, OUT_3, OUTPUT_COUNT };
+  enum InputIds {
+      LEVEL_1_CV_IN, TAPER_1_CV_IN,
+      LEVEL_2_CV_IN, TAPER_2_CV_IN,
+      INPUT_COUNT };
+  enum OutputIds { OUT_1, OUT_2, OUTPUT_COUNT };
 };
 
 struct TapersButtonNormal : rack::SVGSwitch, rack::ToggleSwitch {
@@ -57,6 +63,14 @@ struct TapersKnobLarge : rack::RoundKnob {
   TapersKnobLarge() {
     setSVG(
         rack::SVG::load(rack::assetPlugin(plugin, "res/tapers/knob-large.svg")));
+    shadow->opacity = 0.f;
+  }
+};
+
+struct TapersKnobMedium : rack::RoundKnob {
+  TapersKnobMedium() {
+    setSVG(
+        rack::SVG::load(rack::assetPlugin(plugin, "res/tapers/knob-medium.svg")));
     shadow->opacity = 0.f;
   }
 };
@@ -89,10 +103,10 @@ struct TapersSwitch2 : rack::SVGSwitch, rack::ToggleSwitch {
 
 struct TapersWidget : public ModuleWidget {
   TapersWidget(rack::Module *module)
-      : ModuleWidget(module, 8, "res/tapers/panel.svg") {
+      : ModuleWidget(module, 9, "res/tapers/panel.svg") {
     auto widget_right_edge = width();
 
-    auto left_x = width() / 6.f + 0.333333333f;
+    auto left_x = width() / 5.f + 0.333333333f;
     auto center_x = widget_right_edge / 2.f;
     auto right_x = widget_right_edge - left_x;
 
@@ -100,21 +114,32 @@ struct TapersWidget : public ModuleWidget {
     auto delta_y = 16.f;
     auto panel_buffer = 4.f;
 
-    install_knob<TapersKnobTiny>(Tapers::ATTENUVERTER_KNOB_1, {left_x, y});
-    install_knob<TapersKnobLarge>(Tapers::LEVEL_KNOB_1, {center_x, y});
+    install_input<TapersPort>(Tapers::LEVEL_1_CV_IN, {left_x, y});
+    install_knob<TapersKnobTiny>(Tapers::LEVEL_1_AV_KNOB, {center_x, y});
+    install_knob<TapersKnobMedium>(Tapers::LEVEL_1_KNOB, {right_x, y});
     y += delta_y;
-    install_input<TapersPort>(Tapers::CV_1, {left_x, y});
-    install_output<TapersPort>(Tapers::OUT_1, {center_x, y});
-    install_switch<TapersSwitch2>(Tapers::RANGE_SWITCH_1, {right_x, y}, 1, 1);
+    install_input<TapersPort>(Tapers::TAPER_1_CV_IN, {left_x, y});
+    install_knob<TapersKnobTiny>(Tapers::TAPER_1_AV_KNOB, {center_x, y});
+    install_knob<TapersKnobMedium>(Tapers::TAPER_1_KNOB, {right_x, y});
+    y += delta_y;
+    install_switch<TapersSwitch2>(Tapers::SHAPE_1_SWITCH, {left_x, y}, 1, 0);
+    install_switch<TapersSwitch2>(Tapers::RANGE_1_SWITCH, {center_x, y}, 1, 0);
+    install_output<TapersPort>(Tapers::OUT_1, {right_x, y});
 
     y += delta_y + panel_buffer;
 
-    install_knob<TapersKnobTiny>(Tapers::ATTENUVERTER_KNOB_2, {left_x, y});
-    install_knob<TapersKnobLarge>(Tapers::LEVEL_KNOB_2, {center_x, y});
+    install_input<TapersPort>(Tapers::LEVEL_2_CV_IN, {left_x, y});
+    install_knob<TapersKnobTiny>(Tapers::LEVEL_2_AV_KNOB, {center_x, y});
+    install_knob<TapersKnobMedium>(Tapers::LEVEL_2_KNOB, {right_x, y});
     y += delta_y;
-    install_input<TapersPort>(Tapers::CV_2, {left_x, y});
-    install_output<TapersPort>(Tapers::OUT_2, {center_x, y});
-    install_switch<TapersSwitch2>(Tapers::RANGE_SWITCH_2, {right_x, y}, 1, 1);
+    install_input<TapersPort>(Tapers::TAPER_2_CV_IN, {left_x, y});
+    install_knob<TapersKnobTiny>(Tapers::TAPER_2_AV_KNOB, {center_x, y});
+    install_knob<TapersKnobMedium>(Tapers::TAPER_2_KNOB, {right_x, y});
+    y += delta_y;
+    install_switch<TapersSwitch2>(Tapers::SHAPE_2_SWITCH, {left_x, y}, 1, 0);
+    install_switch<TapersSwitch2>(Tapers::RANGE_2_SWITCH, {center_x, y}, 1, 0);
+    install_output<TapersPort>(Tapers::OUT_2, {right_x, y});
+
   }
 };
 } // namespace DHE
