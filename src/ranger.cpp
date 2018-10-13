@@ -29,29 +29,29 @@ struct Ranger : Module {
 
   void step() override {
     auto max =
-        limit_value(MAX_KNOB, MAX_CV, MAX_ATTENUVERTER_KNOB, MAX_RANGE_SWITCH);
+        limit_value(LIMIT_1_KNOB, LIMIT_1_CV_IN, LIMIT_1_AV_KNOB, LIMIT_1_RANGE_SWITCH);
     auto min =
-        limit_value(MIN_KNOB, MIN_CV, MIN_ATTENUVERTER_KNOB, MIN_RANGE_SWITCH);
+        limit_value(LIMIT_2_KNOB, LIMIT_2_CV_IN, LIMIT_2_AV_KNOB, LIMIT_2_RANGE_SWITCH);
     auto range = Range{min, max};
 
     auto out =
-        ranged_value(LEVEL_KNOB, LEVEL_CV, LEVEL_ATTENUVERTER_KNOB, range);
+        ranged_value(LEVEL_KNOB, LEVEL_CV_IN, LEVEL_AV_KNOB, range);
 
     outputs[OUT].value = out;
   }
 
   enum ParameterIds {
-    MIN_KNOB,
-    LEVEL_KNOB,
-    MAX_KNOB,
-    MIN_ATTENUVERTER_KNOB,
-    LEVEL_ATTENUVERTER_KNOB,
-    MAX_ATTENUVERTER_KNOB,
-    MIN_RANGE_SWITCH,
-    MAX_RANGE_SWITCH,
-    PARAMETER_COUNT
+      LEVEL_KNOB,
+      LEVEL_AV_KNOB,
+      LIMIT_1_KNOB,
+      LIMIT_1_AV_KNOB,
+      LIMIT_1_RANGE_SWITCH,
+      LIMIT_2_KNOB,
+      LIMIT_2_AV_KNOB,
+      LIMIT_2_RANGE_SWITCH,
+      PARAMETER_COUNT
   };
-  enum InputIds { MAX_CV, LEVEL_CV, MIN_CV, INPUT_COUNT };
+  enum InputIds { LEVEL_CV_IN, LIMIT_1_CV_IN, LIMIT_2_CV_IN, INPUT_COUNT };
   enum OutputIds { OUT, OUTPUT_COUNT };
 };
 
@@ -106,31 +106,31 @@ struct RangerWidget : public ModuleWidget {
     auto left_x = width() / 3.5f + 0.333333333f;
     auto right_x = widget_right_edge - left_x;
 
-    auto y = 22.f;
+    auto y = 24.f;
     auto delta_y = 16.f;
     auto panel_buffer = 4.f;
 
-    install_input<RangerPort>(Ranger::MAX_CV, {left_x, y});
-    install_knob<RangerKnobTiny>(Ranger::MAX_ATTENUVERTER_KNOB, {right_x, y});
-    y += delta_y;
-    install_knob<RangerKnobMedium>(Ranger::MAX_KNOB, {left_x, y});
-    install_switch<RangerSwitch2>(Ranger::MAX_RANGE_SWITCH, {right_x, y}, 1, 0);
-
-    y += delta_y + panel_buffer;
-
-    install_input<RangerPort>(Ranger::LEVEL_CV, {left_x, y});
-    install_knob<RangerKnobTiny>(Ranger::LEVEL_ATTENUVERTER_KNOB, {right_x, y});
-    y += delta_y;
     install_knob<RangerKnobMedium>(Ranger::LEVEL_KNOB, {left_x, y});
     install_output<RangerPort>(Ranger::OUT, {right_x, y});
+    y += delta_y;
+    install_input<RangerPort>(Ranger::LEVEL_CV_IN, {left_x, y});
+    install_knob<RangerKnobTiny>(Ranger::LEVEL_AV_KNOB, {right_x, y});
 
     y += delta_y + panel_buffer;
 
-    install_input<RangerPort>(Ranger::MIN_CV, {left_x, y});
-    install_knob<RangerKnobTiny>(Ranger::MIN_ATTENUVERTER_KNOB, {right_x, y});
+    install_knob<RangerKnobMedium>(Ranger::LIMIT_1_KNOB, {left_x, y});
+    install_switch<RangerSwitch2>(Ranger::LIMIT_1_RANGE_SWITCH, {right_x, y}, 1, 0);
     y += delta_y;
-    install_knob<RangerKnobMedium>(Ranger::MIN_KNOB, {left_x, y});
-    install_switch<RangerSwitch2>(Ranger::MIN_RANGE_SWITCH, {right_x, y}, 1, 0);
+    install_input<RangerPort>(Ranger::LIMIT_1_CV_IN, {left_x, y});
+    install_knob<RangerKnobTiny>(Ranger::LIMIT_1_AV_KNOB, {right_x, y});
+
+    y += delta_y + panel_buffer;
+
+    install_knob<RangerKnobMedium>(Ranger::LIMIT_2_KNOB, {left_x, y});
+    install_switch<RangerSwitch2>(Ranger::LIMIT_2_RANGE_SWITCH, {right_x, y}, 1, 0);
+    y += delta_y;
+    install_input<RangerPort>(Ranger::LIMIT_2_CV_IN, {left_x, y});
+    install_knob<RangerKnobTiny>(Ranger::LIMIT_2_AV_KNOB, {right_x, y});
   }
 };
 } // namespace DHE
