@@ -283,7 +283,8 @@ struct XycloidWidget : public ModuleWidget {
     install_switch<XycloidSwitch2>(Xycloid::Y_RANGE_SWITCH, {right_center_x, top_row_y + row*row_spacing}, 1, 0);
     install_output<XycloidPort>(Xycloid::Y_OUT, {right_x, top_row_y + row*row_spacing});
   }
-  void appendContextMenu(rack::Menu *menu) {
+
+  void appendContextMenu(rack::Menu *menu) override {
       Xycloid *xycloid = dynamic_cast<Xycloid*>(module);
       menu->addChild(rack::construct<rack::MenuLabel>());
       menu->addChild(rack::construct<rack::MenuLabel>(&rack::MenuLabel::text, "Options"));
