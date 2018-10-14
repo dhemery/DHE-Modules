@@ -136,4 +136,4 @@ struct RangerWidget : public ModuleWidget {
 } // namespace DHE
 
 rack::Model *modelRanger = rack::Model::create<DHE::Ranger, DHE::RangerWidget>(
-    "DHE-Modules", "Ranger", "Ranger", rack::UTILITY_TAG);
+    "DHE-Modules", "Ranger", "Ranger", rack::UTILITY_TAG, rack::WAVESHAPER_TAG);

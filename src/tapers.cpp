@@ -144,4 +144,4 @@ struct TapersWidget : public ModuleWidget {
 };
 } // namespace DHE
 rack::Model *modelTapers = rack::Model::create<DHE::Tapers, DHE::TapersWidget>(
-    "DHE-Modules", "Tapers", "Tapers", rack::UTILITY_TAG);
+    "DHE-Modules", "Tapers", "Tapers", rack::UTILITY_TAG, rack::WAVESHAPER_TAG);
