@@ -7,8 +7,7 @@ layout: base
 The DHE-Modules suite includes
 [envelope generators](#envelope-generators),
 [low frequency oscillators](#low-frequency-oscillators),
-and
-[waveshapers](#waveshapers).
+[utilities, and waveshapers](#utilities-and-waveshapers).
 
 ### Envelope Generators
 
@@ -48,16 +47,26 @@ and more.
 **[_Xycloid_](modules/xycloid/)**
 generates a cyclically related pair of compound LFO signals.
 
-### Waveshapers
+### Utilities and Waveshapers
 
 [![_Cubic_](modules/cubic/panel.svg)](modules/cubic/)
+[![_Ranger_](modules/ranger/panel.svg)](modules/ranger/)
 [![_Swave_](modules/swave/panel.svg)](modules/swave/)
+[![_Tapers_](modules/tapers/panel.svg)](modules/tapers/)
 
 **[_Cubic_](modules/cubic/)**
 transforms its input signal by offsetting, scaling, squaring, and cubing it.
 
+**[_Ranger_](modules/ranger/)**
+(coming soon)
+is a knob with independently adjustable upper and lower limits.
+
 **[_Swave_](modules/swave/)**
 is a waveshaper with a unique sigmoid transfer function.
+
+**[_Tapers_](modules/tapers/)**
+(coming soon)
+is a pair of knobs with adjustable tapers.
 
 ## See Also
 

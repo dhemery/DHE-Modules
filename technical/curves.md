@@ -3,9 +3,9 @@ title: J and S Curves
 ---
 
 Several of the DHE Modules
-apply a curve function
+apply a curved transfer function
 to produce their output.
-The curves come in two shapes:
+The transfer function come in two shapes:
 
 - [J curves](#j-curves)
 - [S curves](#s-curves)
@@ -19,7 +19,7 @@ Extreme curvature (positive or negative)
 creates a curve
 so sharp as to be nearly square.
 
-Each curve (J or S, positive or negative)
+Each transfer function (J or S, positive or negative)
 is produced by
 Dino Dini's beautiful
 [**normalized tunable sigmoid function**]({{ 'technical/sigmoid/' | relative_url }}).
@@ -33,6 +33,10 @@ can generate J-shaped envelope stages.
 [_Swave_]({{ '/modules/swave/' | relative_url }})
 can apply a J-shaped transfer function
 to shape its input.
+
+[_Tapers_]({{ '/modules/tapers/' | relative_url }})
+can apply a J-shaped transfer function
+to the position of its _LEVEL_ knob.
 
 ### Positive J Curves
 
@@ -163,6 +167,11 @@ can generate S-shaped envelope stages.
 [_Swave_]({{ '/modules/swave/' | relative_url }})
 can apply an S-shaped transfer function
 to shape its input.
+
+[_Tapers_]({{ '/modules/tapers/' | relative_url }})
+can apply an S-shaped transfer function
+to the position of its _LEVEL_ knob.
+
 
 ### Positive S Curves
 
