@@ -45,7 +45,9 @@ and more.
 [![_Xycloid_](modules/xycloid/panel.svg)](modules/xycloid/)
 
 **[_Xycloid_](modules/xycloid/)**
-generates a cyclically related pair of compound LFO signals.
+produces a complex, pulsing
+_throb_ and _wobble_ LFO effect
+with accents that either repeat or vary.
 
 ### Utilities and Waveshapers
 

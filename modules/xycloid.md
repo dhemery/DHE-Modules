@@ -3,58 +3,99 @@ title: The Xycloid Module
 ---
 <img class="panel" src="panel.svg" alt="The Xycloid Panel" />
 
-Generates a [cyclically related pair](#examples) of compound LFO signals.
+Produces a complex, pulsing
+throb and wobble LFO effect
+with accents that either repeat or vary.
 
-Check the [usage guide](#using-xycloid).
-
-Or better yet, just **play with the knobs.**
+See:
+- **[Throb, Wobble, and Accent](https://www.youtube.com/watch?v=Kc0WctuFNvY):**
+    My Xycloid tutorial on YouTube.
+- **[The v0.6.1 manual](v0.6.1/):**
+    More fun and less helpful than the current manual.
 
 ## Controls
 - **RATIO:**
-    Determines the number of "lobes" or "cusps" or "nodes" in the shape.
+    The number of wobble cycles
+    per throb cycle.
+
+    **Note:**
+    With the _IN / OUT_ switch
+    in the center position,
+    the _RATIO_ knob
+    determines both the *rate* and *direction*
+    in which the wobble angle advances.
+    Clockwise rotation
+    advances the wobble angle
+    in the same direction
+    as the throb angle.
+    Counterclockwise rotation
+    advances the wobble angle
+    in the opposite direction.
+
+- **FREE / LOCK:**
+    Determines whether to round the _RATIO_ value
+    to the nearest integer.
+
+    _LOCK_ rounds the _RATIO_ value
+    to the nearest integer,
+    causing _Xycloid's_ pattern of accents
+    to repeat on every throb cycle.
+
+    _FREE_ allows non-integer _RATIO_ values,
+    which lets the accents
+    vary from one throb cycle to the next.
 
 - **DEPTH:**
-    How far the shape extends from its outer edge.
-
-    Note that with the knob at either extreme,
-    the shape is a circle.
+    The dominance of the wobble cycle in the output signals.
 
 - **IN / OUT:**
-    This "curl direction" switch
-    determines whether the lobes curl
-    toward the inside or the outside of the shape.
+    Determines the direction in which
+    the wobble angle advances
+    compared to the throb angle.
 
-    It also determines the range of the _RATIO_ knob.
-    With the switch set to _IN_ or _OUT_,
-    the *RATIO* knob ranges from 0 to 16 lobes.
-    With the switch in the center,
-    the *RATIO* knob ranges from 16 inward lobes
-    (fully counterclockwise)
-    to 16 outward lobes
-    (fully clockwise).
+    _IN_ advances the wobble angle
+    in the same direction
+    as the throb angle.
+    This produces "inward" nodes
+    when the _X_ and _Y_ signals
+    are plotted on an X/Y graph.
+
+    _OUT_ advances the wobble angle
+    in the opposite direction
+    from the throb angle.
+    This produces "outward" nodes
+    when the _X_ and _Y_ signals
+    are plotted on an X/Y graph.
+
+    With this switch in the center position
+    the _RATIO_ knob
+    determines the direction
+    in which the wobble angle advances.
 
 - **SPEED:**
-    The speed at which the shape is drawn.
-    Turn the knob counterclockwise to reverse the shape's direction.
+    The throb frequency.
 
-    Note that the **RATIO** knob
-    (and to some extent the **DEPTH** knob)
-    can also affect the speed
-    in counterintuitive ways.
+- **PHASE:**
+    Offsets the phase of the wobble angle.
+
+    This has the effect
+    of shifting the accents
+    produced when the wobble and throb cycles
+    peak.
 
 ## Ports
 - **X OUT** and **Y OUT:**
     The output signals.
 
     The polarity switch **(UNI / BI)**
-    selects the nominal range of the signal:
-    Either 0 to 10V (UNI)
+    selects the voltage range of the associated output signal.
+    0 to 10V (UNI)
     or -5 to 5V (BI).
 
     The **GAIN** knob applies gain (from 0 to 2)
     to the signal.
 
-    The range is selected before gain is applied.
+    _Xycloid_ selects the range before applying the gain.
 
 - **CV:**
     Control voltage signal that modulates the associated knob.
@@ -75,6 +116,18 @@ Or better yet, just **play with the knobs.**
         of the the _CV_ signal's effect
         on the modulated knob.
 
+## Menu Options
+
+- **Musical Ratios:**
+    Determines the range of the _RATIO_ knob.
+
+    When checked
+    the maximum wobble-to-throb ratio is 16.
+
+    When unchecked
+    the maximum wobble-to-throb ratio is either 15 or 17,
+    depending on the position of the _IN / OUT_ switch.
+
 ## Using Xycloid
 
 1. Choose one or two Rack modules that you want to modulate.
@@ -84,7 +137,7 @@ Or better yet, just **play with the knobs.**
 1. (Optional)
    To view the shape that Xycloid produces,
    connect its _X_ and _Y_ outputs to a Scope's _X_ and _Y_ inputs.
-   Set the scope to _XxY_ mode.
+   Set the scope to _X x Y_ mode.
    (_X/Y_ mode can also be interesting.)
 1. **Play with the knobs.**
 1. For extra chaos,
@@ -110,119 +163,12 @@ Then **play with the knobs.**
     modulate the _PWM_ input on two Fundamental VCO-1s.
     Or the _FM_ inputs.
 
-## Examples
+## Plotting Xycloid
 
-### The Default Settings
-
-The default settings
-draw a shape
-with eight lobes that touch in the center:
-
-<img class="xycloid" src="r12-d12-out.png" height="auto" max-width="100px" alt="Xycloid Default Settings" />
-
-### Adjusting the Ratio
-
-With the switch _IN_ or _OUT_,
-the center position on the ratio knob draws eight lobes:
-
-<img class="xycloid" src="r12-d10-out.png" height="auto" max-width="100px" alt="Xycloid Default Settings" />
-
-A lower ratio draws fewer lobes:
-
-<img class="xycloid" src="r10-d10-out.png" height="auto" max-width="100px" alt="Xycloid Default Settings" />
-
-A higher ratio draws more lobes:
-
-<img class="xycloid" src="r05-d10-out.png" height="auto" max-width="100px" alt="Xycloid Default Settings" />
-
-### Adjusting the Depth
-
-With a lower depth,
-the lobes never stray far
-from the outer edge of the shape:
-
-<img class="xycloid" src="r12-d08-out.png" height="auto" max-width="100px" alt="Xycloid Default Settings" />
-
-As depth increases,
-the lobes dip closer to the center of the shape:
-
-<img class="xycloid" src="r12-d10-out.png" height="auto" max-width="100px" alt="Xycloid Default Settings" />
-
-As the depth approaches the center position,
-the lobes approach the center of the shape:
-
-<img class="xycloid" src="r12-d11-out.png" height="auto" max-width="100px" alt="Xycloid Default Settings" />
-
-With the depth in the center position,
-each lobe touches the center of the shape:
-
-<img class="xycloid" src="r12-d12-out.png" height="auto" max-width="100px" alt="Xycloid Default Settings" />
-
-As depth increases,
-each lobe loops around the center of the shape:
-
-<img class="xycloid" src="r12-d02-out.png" height="auto" max-width="100px" alt="Xycloid Default Settings" />
-
-### Adjusting the Curl Direction (the IN / OUT Switch)
-
-
-With the switch _OUT_,
-the lobes curl outward:
-
-<img class="xycloid" src="r12-d10-out.png" height="auto" max-width="100px" alt="Xycloid Default Settings" />
-
-With the switch _IN_,
-the lobes curl inward:
-
-<img class="xycloid" src="r12-d10-in.png" height="auto" max-width="100px" alt="Xycloid Default Settings" />
-
-With the switch in the center,
-the _RATIO_ knob determines
-which way the lobes curl.
-
-## My Inspiration
-
-Okay, so remember when you were a kid,
-and [you had a toy](https://en.wikipedia.org/wiki/Spirograph)
-where you stuck a pen in a hole in a little plastic gear
-and you rolled the gear around inside a plastic ring
-to draw fun shapes?
-
-That's what _Xycloid_ does.
-
-If you want to know the math,
-look up
-[epitrochoid](https://en.wikipedia.org/wiki/Epitrochoid)
-and
-[hypotrochoid](https://en.wikipedia.org/wiki/Hypotrochoid).
-
-But, seriously, don't worry about that.
-
-Just **play with the knobs.**
-
-## The Name
-
-There is a kind of shape called a _cycloid._
-Technically,
-_Xycloid_ doesn't draw those.
-Well,
-technically,
-it does.
-Sort of.
-
-But more preciesely,
-_Xycloid_ draws [centered trochoids](https://en.wikipedia.org/wiki/Centered_trochoid).
-
-So if the module draws centered trochoids,
-why, oh, why
-did I call _Xycloid?_
-
-Because would you load a module called _Centered Trochoid?_
-
-No.
-
-No, you would not.
-
-But don't worry about that.
-
-Just **play with the knobs.**
+When plotted on a two-dimensional graph,
+the _X_ and _Y_ signals
+produce a [visually pleasing shape](#examples),
+which can be either a
+_[hypotrochoid](https://en.wikipedia.org/wiki/Hypotrochoid)_
+or an
+_[epitrochoid](https://en.wikipedia.org/wiki/Epitrochoid)._
