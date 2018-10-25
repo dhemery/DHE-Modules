@@ -145,13 +145,6 @@ struct Stage : public Module {
   };
 };
 
-struct StageKnobLarge : rack::RoundKnob {
-  StageKnobLarge() {
-    setSVG(rack::SVG::load(rack::assetPlugin(plugin, "res/stage/knob-large.svg")));
-    shadow->opacity = 0.f;
-  }
-};
-
 struct StageWidget : public ModuleWidget {
   StageWidget(rack::Module *module) : ModuleWidget(module, 5, "stage") {
     auto widget_right_edge = width();
@@ -164,13 +157,13 @@ struct StageWidget : public ModuleWidget {
     auto row_spacing = 18.5f;
 
     auto row = 0;
-    install_knob<StageKnobLarge>(Stage::LEVEL_KNOB, {center_x, top_row_y + row*row_spacing});
+    install_knob("large", Stage::LEVEL_KNOB, {center_x, top_row_y + row*row_spacing});
 
     row++;
-    install_knob<StageKnobLarge>(Stage::CURVE_KNOB, {center_x, top_row_y + row*row_spacing});
+    install_knob("large", Stage::CURVE_KNOB, {center_x, top_row_y + row*row_spacing});
 
     row++;
-    install_knob<StageKnobLarge>(Stage::DURATION_KNOB, {center_x, top_row_y + row*row_spacing});
+    install_knob("large", Stage::DURATION_KNOB, {center_x, top_row_y + row*row_spacing});
 
     top_row_y = 82.f;
     row_spacing = 15.f;

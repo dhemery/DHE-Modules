@@ -23,6 +23,18 @@ struct Port : rack::SVGPort {
   }
 };
 
+struct Knob : rack::RoundKnob {
+  static Knob *create(rack::Module *module, std::string module_name, std::string size, int index, rack::Vec center, float initial) {
+    auto knob = rack::ParamWidget::create<Knob>({0, 0}, module, index, 0.f, 1.f, initial);
+    auto image_file = std::string("res/") + module_name + "/knob-" + size + ".svg";
+    knob->setSVG(rack::SVG::load(rack::assetPlugin(plugin, image_file)));
+    knob->shadow->opacity = 0.f;
+    moveTo(knob->box, rack::mm2px(center));
+    return knob;
+  }
+};
+
+
 class ModuleWidget : public rack::ModuleWidget {
   std::string module_name;
 
@@ -53,9 +65,9 @@ public:
     addInput(input);
   }
 
-  template<class T>
-  void install_knob(int index, rack::Vec center, float initial_rotation = 0.5f) {
-    install_param<T>(index, center, 0.f, 1.f, initial_rotation);
+  void install_knob(std::string size, int index, rack::Vec center, float initial_rotation = 0.5f) {
+    auto knob = Knob::create(module, module_name, size, index, center, initial_rotation);
+    addParam(knob);
   }
 
   void install_output(int index, rack::Vec center) {

@@ -160,13 +160,6 @@ struct Hostage : Module {
   };
 };
 
-struct HostageKnobLarge : rack::RoundKnob {
-  HostageKnobLarge() {
-    setSVG(rack::SVG::load(rack::assetPlugin(plugin, "res/hostage/knob-large.svg")));
-    shadow->opacity = 0.f;
-  }
-};
-
 struct HostageSwitch2 : rack::SVGSwitch, rack::ToggleSwitch {
   HostageSwitch2() {
     addFrame(rack::SVG::load(rack::assetPlugin(plugin, "res/hostage/switch-2-low.svg")));
@@ -201,7 +194,7 @@ struct HostageWidget : public ModuleWidget {
     install_switch<HostageSwitch3>(Hostage::DURATION_SWITCH, {right_x, top_row_y + row*row_spacing}, 2, 1);
 
     row++;
-    install_knob<HostageKnobLarge>(Hostage::DURATION_KNOB, {center_x, top_row_y + row*row_spacing});
+    install_knob("large", Hostage::DURATION_KNOB, {center_x, top_row_y + row*row_spacing});
 
     top_row_y = 82.f;
     row_spacing = 15.f;

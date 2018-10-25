@@ -64,22 +64,6 @@ struct RangerButtonNormal : rack::SVGSwitch, rack::ToggleSwitch {
   }
 };
 
-struct RangerKnobMedium : rack::RoundKnob {
-  RangerKnobMedium() {
-    setSVG(rack::SVG::load(
-        rack::assetPlugin(plugin, "res/ranger/knob-medium.svg")));
-    shadow->opacity = 0.f;
-  }
-};
-
-struct RangerKnobTiny : rack::RoundKnob {
-  RangerKnobTiny() {
-    setSVG(
-        rack::SVG::load(rack::assetPlugin(plugin, "res/ranger/knob-tiny.svg")));
-    shadow->opacity = 0.f;
-  }
-};
-
 struct RangerSwitch2 : rack::SVGSwitch, rack::ToggleSwitch {
   RangerSwitch2() {
     addFrame(rack::SVG::load(
@@ -101,27 +85,27 @@ struct RangerWidget : public ModuleWidget {
     auto delta_y = 16.f;
     auto panel_buffer = 4.f;
 
-    install_knob<RangerKnobMedium>(Ranger::LEVEL_KNOB, {left_x, y});
+    install_knob("medium", Ranger::LEVEL_KNOB, {left_x, y});
     install_output(Ranger::OUT, {right_x, y});
     y += delta_y;
     install_input(Ranger::LEVEL_CV_IN, {left_x, y});
-    install_knob<RangerKnobTiny>(Ranger::LEVEL_AV_KNOB, {right_x, y});
+    install_knob("tiny", Ranger::LEVEL_AV_KNOB, {right_x, y});
 
     y += delta_y + panel_buffer;
 
-    install_knob<RangerKnobMedium>(Ranger::LIMIT_1_KNOB, {left_x, y});
+    install_knob("medium", Ranger::LIMIT_1_KNOB, {left_x, y});
     install_switch<RangerSwitch2>(Ranger::LIMIT_1_RANGE_SWITCH, {right_x, y}, 1, 0);
     y += delta_y;
     install_input(Ranger::LIMIT_1_CV_IN, {left_x, y});
-    install_knob<RangerKnobTiny>(Ranger::LIMIT_1_AV_KNOB, {right_x, y});
+    install_knob("tiny", Ranger::LIMIT_1_AV_KNOB, {right_x, y});
 
     y += delta_y + panel_buffer;
 
-    install_knob<RangerKnobMedium>(Ranger::LIMIT_2_KNOB, {left_x, y});
+    install_knob("medium", Ranger::LIMIT_2_KNOB, {left_x, y});
     install_switch<RangerSwitch2>(Ranger::LIMIT_2_RANGE_SWITCH, {right_x, y}, 1, 0);
     y += delta_y;
     install_input(Ranger::LIMIT_2_CV_IN, {left_x, y});
-    install_knob<RangerKnobTiny>(Ranger::LIMIT_2_AV_KNOB, {right_x, y});
+    install_knob("tiny", Ranger::LIMIT_2_AV_KNOB, {right_x, y});
   }
 };
 } // namespace DHE

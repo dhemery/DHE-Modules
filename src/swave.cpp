@@ -54,13 +54,6 @@ struct Swave : Module {
   };
 };
 
-struct SwaveKnobLarge : rack::RoundKnob {
-  SwaveKnobLarge() {
-    setSVG(rack::SVG::load(rack::assetPlugin(plugin, "res/swave/knob-large.svg")));
-    shadow->opacity = 0.f;
-  }
-};
-
 struct SwaveSwitch2 : rack::SVGSwitch, rack::ToggleSwitch {
   SwaveSwitch2() {
     addFrame(rack::SVG::load(rack::assetPlugin(plugin, "res/swave/switch-2-low.svg")));
@@ -81,7 +74,7 @@ struct SwaveWidget : public ModuleWidget {
     install_switch<SwaveSwitch2>(Swave::SHAPE_SWITCH, {center_x, top_row_y + row*row_spacing}, 1, 1);
 
     row++;
-    install_knob<SwaveKnobLarge>(Swave::CURVE_KNOB, {center_x, top_row_y + row*row_spacing});
+    install_knob("large", Swave::CURVE_KNOB, {center_x, top_row_y + row*row_spacing});
 
     row++;
     install_input(Swave::CURVE_CV, {center_x, top_row_y + row*row_spacing});

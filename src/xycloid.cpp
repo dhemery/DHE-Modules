@@ -171,27 +171,6 @@ struct XycloidButtonNormal : rack::SVGSwitch, rack::MomentarySwitch {
   }
 };
 
-struct XycloidKnobTiny : rack::RoundKnob {
-  XycloidKnobTiny() {
-    setSVG(rack::SVG::load(rack::assetPlugin(plugin, "res/xycloid/knob-tiny.svg")));
-    shadow->opacity = 0.f;
-  }
-};
-
-struct XycloidKnobSmall : rack::RoundKnob {
-  XycloidKnobSmall() {
-    setSVG(rack::SVG::load(rack::assetPlugin(plugin, "res/xycloid/knob-small.svg")));
-    shadow->opacity = 0.f;
-  }
-};
-
-struct XycloidKnobLarge : rack::RoundKnob {
-  XycloidKnobLarge() {
-    setSVG(rack::SVG::load(rack::assetPlugin(plugin, "res/xycloid/knob-large.svg")));
-    shadow->opacity = 0.f;
-  }
-};
-
 struct XycloidSwitch2 : rack::SVGSwitch, rack::ToggleSwitch {
   XycloidSwitch2() {
     addFrame(rack::SVG::load(rack::assetPlugin(plugin, "res/xycloid/switch-2-low.svg")));
@@ -242,21 +221,21 @@ struct XycloidWidget : public ModuleWidget {
     auto row = 0;
 
     install_input(Xycloid::GEAR_RATIO_CV, {left_x, top_row_y + row*row_spacing});
-    install_knob<XycloidKnobTiny>(Xycloid::WOBBLE_RATIO_CV_ATTENUVERTER, {left_center_x, top_row_y + row*row_spacing});
-    install_knob<XycloidKnobLarge>(Xycloid::WOBBLE_RATIO_KNOB, {right_center_x, top_row_y + row*row_spacing});
+    install_knob("tiny", Xycloid::WOBBLE_RATIO_CV_ATTENUVERTER, {left_center_x, top_row_y + row*row_spacing});
+    install_knob("large", Xycloid::WOBBLE_RATIO_KNOB, {right_center_x, top_row_y + row*row_spacing});
     install_switch<XycloidSwitch2>(Xycloid::QUANTIZE_WOBBLE_RATIO_SWITCH, {right_x, top_row_y + row*row_spacing}, 1, 1);
 
     row++;
     install_input(Xycloid::DEPTH_CV, {left_x, top_row_y + row*row_spacing});
-    install_knob<XycloidKnobTiny>(Xycloid::WOBBLE_DEPTH_CV_ATTENUVERTER, {left_center_x, top_row_y + row*row_spacing});
-    install_knob<XycloidKnobLarge>(Xycloid::WOBBLE_DEPTH_KNOB, {right_center_x, top_row_y + row*row_spacing});
+    install_knob("tiny", Xycloid::WOBBLE_DEPTH_CV_ATTENUVERTER, {left_center_x, top_row_y + row*row_spacing});
+    install_knob("large", Xycloid::WOBBLE_DEPTH_KNOB, {right_center_x, top_row_y + row*row_spacing});
     install_switch<XycloidSwitch3>(Xycloid::WOBBLE_TYPE_SWITCH, {right_x, top_row_y + row*row_spacing}, 2, 2);
 
     row++;
     install_input(Xycloid::SPEED_CV, {left_x, top_row_y + row*row_spacing});
-    install_knob<XycloidKnobTiny>(Xycloid::THROB_SPEED_CV_ATTENUVERTER, {left_center_x, top_row_y + row*row_spacing});
-    install_knob<XycloidKnobLarge>(Xycloid::THROB_SPEED_KNOB, {right_center_x, top_row_y + row*row_spacing}, 0.65f);
-    install_knob<XycloidKnobSmall>(Xycloid::WOBBLE_PHASE_KNOB, {right_x, top_row_y + row*row_spacing});
+    install_knob("tiny", Xycloid::THROB_SPEED_CV_ATTENUVERTER, {left_center_x, top_row_y + row*row_spacing});
+    install_knob("large", Xycloid::THROB_SPEED_KNOB, {right_center_x, top_row_y + row*row_spacing}, 0.65f);
+    install_knob("small", Xycloid::WOBBLE_PHASE_KNOB, {right_x, top_row_y + row*row_spacing});
 
     top_row_y = 82.f;
     row_spacing = 15.f;
@@ -265,13 +244,13 @@ struct XycloidWidget : public ModuleWidget {
     auto default_gain = Xycloid::gain_range().normalize(1.f);
     row++;
     install_input(Xycloid::X_GAIN_CV, {left_x, top_row_y + row*row_spacing});
-    install_knob<XycloidKnobSmall>(Xycloid::X_GAIN_KNOB, {left_center_x, top_row_y + row*row_spacing}, default_gain);
+    install_knob("small", Xycloid::X_GAIN_KNOB, {left_center_x, top_row_y + row*row_spacing}, default_gain);
     install_switch<XycloidSwitch2>(Xycloid::X_RANGE_SWITCH, {right_center_x, top_row_y + row*row_spacing}, 1, 0);
     install_output(Xycloid::X_OUT, {right_x, top_row_y + row*row_spacing});
 
     row++;
     install_input(Xycloid::Y_GAIN_CV, {left_x, top_row_y + row*row_spacing});
-    install_knob<XycloidKnobSmall>(Xycloid::Y_GAIN_KNOB, {left_center_x, top_row_y + row*row_spacing}, default_gain);
+    install_knob("small", Xycloid::Y_GAIN_KNOB, {left_center_x, top_row_y + row*row_spacing}, default_gain);
     install_switch<XycloidSwitch2>(Xycloid::Y_RANGE_SWITCH, {right_center_x, top_row_y + row*row_spacing}, 1, 0);
     install_output(Xycloid::Y_OUT, {right_x, top_row_y + row*row_spacing});
   }

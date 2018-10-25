@@ -65,13 +65,6 @@ struct UpstageButtonNormal : rack::SVGSwitch, rack::MomentarySwitch {
   }
 };
 
-struct UpstageKnobLarge : rack::RoundKnob {
-  UpstageKnobLarge() {
-    setSVG(rack::SVG::load(rack::assetPlugin(plugin, "res/upstage/knob-large.svg")));
-    shadow->opacity = 0.f;
-  }
-};
-
 struct UpstageSwitch2 : rack::SVGSwitch, rack::ToggleSwitch {
   UpstageSwitch2() {
     addFrame(rack::SVG::load(rack::assetPlugin(plugin, "res/upstage/switch-2-low.svg")));
@@ -91,7 +84,7 @@ struct UpstageWidget : public ModuleWidget {
     auto row_spacing = 18.5f;
 
     auto row = 0;
-    install_knob<UpstageKnobLarge>(Upstage::LEVEL_KNOB, {center_x, top_row_y + row*row_spacing});
+    install_knob("large", Upstage::LEVEL_KNOB, {center_x, top_row_y + row*row_spacing});
 
     row++;
     install_input(Upstage::LEVEL_CV, {left_x, top_row_y + row*row_spacing});

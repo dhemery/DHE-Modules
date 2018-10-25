@@ -183,13 +183,6 @@ struct BoosterStageButtonNormal : rack::SVGSwitch, rack::MomentarySwitch {
   }
 };
 
-struct BoosterStageKnobLarge : rack::RoundKnob {
-  BoosterStageKnobLarge() {
-    setSVG(rack::SVG::load(rack::assetPlugin(plugin, "res/booster-stage/knob-large.svg")));
-    shadow->opacity = 0.f;
-  }
-};
-
 struct BoosterStageSwitch2 : rack::SVGSwitch, rack::ToggleSwitch {
   BoosterStageSwitch2() {
     addFrame(rack::SVG::load(rack::assetPlugin(plugin, "res/booster-stage/switch-2-low.svg")));
@@ -221,17 +214,17 @@ struct BoosterStageWidget : public ModuleWidget {
 
     auto row = 0;
     install_input(BoosterStage::LEVEL_CV, {left_x, top_row_y + row*row_spacing});
-    install_knob<BoosterStageKnobLarge>(BoosterStage::LEVEL_KNOB, {center_x, top_row_y + row*row_spacing});
+    install_knob("large", BoosterStage::LEVEL_KNOB, {center_x, top_row_y + row*row_spacing});
     install_switch<BoosterStageSwitch2>(BoosterStage::LEVEL_SWITCH, {right_x, top_row_y + row*row_spacing}, 1, 1);
 
     row++;
     install_input(BoosterStage::CURVE_CV, {left_x, top_row_y + row*row_spacing});
-    install_knob<BoosterStageKnobLarge>(BoosterStage::CURVE_KNOB, {center_x, top_row_y + row*row_spacing});
+    install_knob("large", BoosterStage::CURVE_KNOB, {center_x, top_row_y + row*row_spacing});
     install_switch<BoosterStageSwitch2>(BoosterStage::SHAPE_SWITCH, {right_x, top_row_y + row*row_spacing});
 
     row++;
     install_input(BoosterStage::DURATION_CV, {left_x, top_row_y + row*row_spacing});
-    install_knob<BoosterStageKnobLarge>(BoosterStage::DURATION_KNOB, {center_x, top_row_y + row*row_spacing});
+    install_knob("large", BoosterStage::DURATION_KNOB, {center_x, top_row_y + row*row_spacing});
     install_switch<BoosterStageSwitch3>(BoosterStage::DURATION_SWITCH, {right_x, top_row_y + row*row_spacing}, 2, 1);
 
     top_row_y = 82.f;

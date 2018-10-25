@@ -70,13 +70,6 @@ struct Cubic : Module {
   };
 };
 
-struct CubicKnobsmall : rack::RoundKnob {
-  CubicKnobsmall() {
-    setSVG(rack::SVG::load(rack::assetPlugin(plugin, "res/cubic/knob-small.svg")));
-    shadow->opacity = 0.f;
-  }
-};
-
 struct CubicWidget : public ModuleWidget {
   CubicWidget(rack::Module *module) : ModuleWidget(module, 5, "cubic") {
     auto widget_right_edge = width();
@@ -89,24 +82,24 @@ struct CubicWidget : public ModuleWidget {
 
     auto row = 0;
     install_input(Cubic::X3_CV, {left_x, top_row_y + row*row_spacing});
-    install_knob<CubicKnobsmall>(Cubic::X3_KNOB, {right_x, top_row_y + row*row_spacing});
+    install_knob("small", Cubic::X3_KNOB, {right_x, top_row_y + row*row_spacing});
 
     row++;
     install_input(Cubic::X2_CV, {left_x, top_row_y + row*row_spacing});
-    install_knob<CubicKnobsmall>(Cubic::X2_KNOB, {right_x, top_row_y + row*row_spacing});
+    install_knob("small", Cubic::X2_KNOB, {right_x, top_row_y + row*row_spacing});
 
     row++;
     install_input(Cubic::X1_CV, {left_x, top_row_y + row*row_spacing});
-    install_knob<CubicKnobsmall>(Cubic::X1_KNOB, {right_x, top_row_y + row*row_spacing});
+    install_knob("small", Cubic::X1_KNOB, {right_x, top_row_y + row*row_spacing});
 
     row++;
     install_input(Cubic::X0_CV, {left_x, top_row_y + row*row_spacing});
-    install_knob<CubicKnobsmall>(Cubic::X0_KNOB, {right_x, top_row_y + row*row_spacing});
+    install_knob("small", Cubic::X0_KNOB, {right_x, top_row_y + row*row_spacing});
 
     top_row_y = 82.f;
     row = 0;
-    install_knob<CubicKnobsmall>(Cubic::INPUT_GAIN_KNOB, {left_x, top_row_y + row*row_spacing});
-    install_knob<CubicKnobsmall>(Cubic::OUTPUT_GAIN_KNOB, {right_x, top_row_y + row*row_spacing});
+    install_knob("small", Cubic::INPUT_GAIN_KNOB, {left_x, top_row_y + row*row_spacing});
+    install_knob("small", Cubic::OUTPUT_GAIN_KNOB, {right_x, top_row_y + row*row_spacing});
 
     row++;
     install_input(Cubic::INPUT_GAIN_CV, {left_x, top_row_y + row*row_spacing});
