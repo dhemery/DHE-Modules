@@ -8,11 +8,16 @@
 #include "module-widget.hpp"
 
 namespace DHE {
-ModuleWidget::ModuleWidget(rack::Module *module, int widget_hp, const char *background)
-    : rack::ModuleWidget(module) {
+void moveTo(rack::Rect &box, rack::Vec center) {
+  box.pos = center.minus(box.size.mult(0.5f));
+}
+
+ModuleWidget::ModuleWidget(rack::Module *module, int widget_hp, std::string module_name)
+    : rack::ModuleWidget(module), module_name{module_name} {
   box.size = rack::Vec{(float) widget_hp*rack::RACK_GRID_WIDTH, rack::RACK_GRID_HEIGHT};
 
   auto *panel = new rack::SVGPanel();
+  auto background = std::string("res/") + module_name + "/panel.svg";
   panel->box.size = box.size;
   panel->setBackground(rack::SVG::load(rack::assetPlugin(plugin, background)));
   addChild(panel);
@@ -48,9 +53,5 @@ void ModuleWidget::install_screws() {
   for (auto p : screw_positions) {
     install_screw<rack::ScrewSilver>(p);
   }
-}
-
-void ModuleWidget::moveTo(rack::Rect &box, rack::Vec center) {
-  box.pos = center.minus(box.size.mult(0.5f));
 }
 }

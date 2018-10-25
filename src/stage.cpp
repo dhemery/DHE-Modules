@@ -145,14 +145,6 @@ struct Stage : public Module {
   };
 };
 
-struct StagePort : rack::SVGPort {
-  StagePort() {
-    background->svg = rack::SVG::load(rack::assetPlugin(plugin, "res/stage/port.svg"));
-    background->wrap();
-    box.size = background->box.size;
-  }
-};
-
 struct StageKnobLarge : rack::RoundKnob {
   StageKnobLarge() {
     setSVG(rack::SVG::load(rack::assetPlugin(plugin, "res/stage/knob-large.svg")));
@@ -161,7 +153,7 @@ struct StageKnobLarge : rack::RoundKnob {
 };
 
 struct StageWidget : public ModuleWidget {
-  StageWidget(rack::Module *module) : ModuleWidget(module, 5, "res/stage/panel.svg") {
+  StageWidget(rack::Module *module) : ModuleWidget(module, 5, "stage") {
     auto widget_right_edge = width();
 
     auto left_x = width()/4.f + 0.333333f;
@@ -184,16 +176,16 @@ struct StageWidget : public ModuleWidget {
     row_spacing = 15.f;
 
     row = 0;
-    install_input<StagePort>(Stage::DEFER_IN, {left_x, top_row_y + row*row_spacing});
-    install_output<StagePort>(Stage::ACTIVE_OUT, {right_x, top_row_y + row*row_spacing});
+    install_input(Stage::DEFER_IN, {left_x, top_row_y + row*row_spacing});
+    install_output(Stage::ACTIVE_OUT, {right_x, top_row_y + row*row_spacing});
 
     row++;
-    install_input<StagePort>(Stage::TRIGGER_IN, {left_x, top_row_y + row*row_spacing});
-    install_output<StagePort>(Stage::EOC_OUT, {right_x, top_row_y + row*row_spacing});
+    install_input(Stage::TRIGGER_IN, {left_x, top_row_y + row*row_spacing});
+    install_output(Stage::EOC_OUT, {right_x, top_row_y + row*row_spacing});
 
     row++;
-    install_input<StagePort>(Stage::ENVELOPE_IN, {left_x, top_row_y + row*row_spacing});
-    install_output<StagePort>(Stage::ENVELOPE_OUT, {right_x, top_row_y + row*row_spacing});
+    install_input(Stage::ENVELOPE_IN, {left_x, top_row_y + row*row_spacing});
+    install_output(Stage::ENVELOPE_OUT, {right_x, top_row_y + row*row_spacing});
   }
 };
 }

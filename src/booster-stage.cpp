@@ -190,14 +190,6 @@ struct BoosterStageKnobLarge : rack::RoundKnob {
   }
 };
 
-struct BoosterStagePort : rack::SVGPort {
-  BoosterStagePort() {
-    background->svg = rack::SVG::load(assetPlugin(plugin, "res/booster-stage/port.svg"));
-    background->wrap();
-    box.size = background->box.size;
-  }
-};
-
 struct BoosterStageSwitch2 : rack::SVGSwitch, rack::ToggleSwitch {
   BoosterStageSwitch2() {
     addFrame(rack::SVG::load(rack::assetPlugin(plugin, "res/booster-stage/switch-2-low.svg")));
@@ -214,7 +206,7 @@ struct BoosterStageSwitch3 : rack::SVGSwitch, rack::ToggleSwitch {
 };
 
 struct BoosterStageWidget : public ModuleWidget {
-  BoosterStageWidget(rack::Module *module) : ModuleWidget(module, 8, "res/booster-stage/panel.svg") {
+  BoosterStageWidget(rack::Module *module) : ModuleWidget(module, 8, "booster-stage") {
     auto width = 8.f*5.08f;
 
     auto left_x = width/6.f + 0.3333333f;
@@ -228,17 +220,17 @@ struct BoosterStageWidget : public ModuleWidget {
     auto row_spacing = 18.5f;
 
     auto row = 0;
-    install_input<BoosterStagePort>(BoosterStage::LEVEL_CV, {left_x, top_row_y + row*row_spacing});
+    install_input(BoosterStage::LEVEL_CV, {left_x, top_row_y + row*row_spacing});
     install_knob<BoosterStageKnobLarge>(BoosterStage::LEVEL_KNOB, {center_x, top_row_y + row*row_spacing});
     install_switch<BoosterStageSwitch2>(BoosterStage::LEVEL_SWITCH, {right_x, top_row_y + row*row_spacing}, 1, 1);
 
     row++;
-    install_input<BoosterStagePort>(BoosterStage::CURVE_CV, {left_x, top_row_y + row*row_spacing});
+    install_input(BoosterStage::CURVE_CV, {left_x, top_row_y + row*row_spacing});
     install_knob<BoosterStageKnobLarge>(BoosterStage::CURVE_KNOB, {center_x, top_row_y + row*row_spacing});
     install_switch<BoosterStageSwitch2>(BoosterStage::SHAPE_SWITCH, {right_x, top_row_y + row*row_spacing});
 
     row++;
-    install_input<BoosterStagePort>(BoosterStage::DURATION_CV, {left_x, top_row_y + row*row_spacing});
+    install_input(BoosterStage::DURATION_CV, {left_x, top_row_y + row*row_spacing});
     install_knob<BoosterStageKnobLarge>(BoosterStage::DURATION_KNOB, {center_x, top_row_y + row*row_spacing});
     install_switch<BoosterStageSwitch3>(BoosterStage::DURATION_SWITCH, {right_x, top_row_y + row*row_spacing}, 2, 1);
 
@@ -246,20 +238,20 @@ struct BoosterStageWidget : public ModuleWidget {
     row_spacing = 15.f;
 
     row = 0;
-    install_input<BoosterStagePort>(BoosterStage::DEFER_IN, {left_x, top_row_y + row*row_spacing});
+    install_input(BoosterStage::DEFER_IN, {left_x, top_row_y + row*row_spacing});
     install_switch<BoosterStageButtonNormal>(BoosterStage::DEFER_BUTTON, {center_left_x, top_row_y + row*row_spacing});
     install_switch<BoosterStageButtonReverse>(BoosterStage::ACTIVE_BUTTON, {center_right_x, top_row_y + row*row_spacing});
-    install_output<BoosterStagePort>(BoosterStage::ACTIVE_OUT, {right_x, top_row_y + row*row_spacing});
+    install_output(BoosterStage::ACTIVE_OUT, {right_x, top_row_y + row*row_spacing});
 
     row++;
-    install_input<BoosterStagePort>(BoosterStage::TRIGGER_IN, {left_x, top_row_y + row*row_spacing});
+    install_input(BoosterStage::TRIGGER_IN, {left_x, top_row_y + row*row_spacing});
     install_switch<BoosterStageButtonNormal>(BoosterStage::TRIGGER_BUTTON, {center_left_x, top_row_y + row*row_spacing});
     install_switch<BoosterStageButtonReverse>(BoosterStage::EOC_BUTTON, {center_right_x, top_row_y + row*row_spacing});
-    install_output<BoosterStagePort>(BoosterStage::EOC_OUT, {right_x, top_row_y + row*row_spacing});
+    install_output(BoosterStage::EOC_OUT, {right_x, top_row_y + row*row_spacing});
 
     row++;
-    install_input<BoosterStagePort>(BoosterStage::ENVELOPE_IN, {left_x, top_row_y + row*row_spacing});
-    install_output<BoosterStagePort>(BoosterStage::ENVELOPE_OUT, {right_x, top_row_y + row*row_spacing});
+    install_input(BoosterStage::ENVELOPE_IN, {left_x, top_row_y + row*row_spacing});
+    install_output(BoosterStage::ENVELOPE_OUT, {right_x, top_row_y + row*row_spacing});
   }
 };
 }

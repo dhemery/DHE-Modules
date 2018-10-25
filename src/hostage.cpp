@@ -160,14 +160,6 @@ struct Hostage : Module {
   };
 };
 
-struct HostagePort : rack::SVGPort {
-  HostagePort() {
-    background->svg = rack::SVG::load(rack::assetPlugin(plugin, "res/hostage/port.svg"));
-    background->wrap();
-    box.size = background->box.size;
-  }
-};
-
 struct HostageKnobLarge : rack::RoundKnob {
   HostageKnobLarge() {
     setSVG(rack::SVG::load(rack::assetPlugin(plugin, "res/hostage/knob-large.svg")));
@@ -191,7 +183,7 @@ struct HostageSwitch3 : rack::SVGSwitch, rack::ToggleSwitch {
 };
 
 struct HostageWidget : public ModuleWidget {
-  HostageWidget(rack::Module *module) : ModuleWidget(module, 5, "res/hostage/panel.svg") {
+  HostageWidget(rack::Module *module) : ModuleWidget(module, 5, "hostage") {
     auto widget_right_edge = width();
 
     auto left_x = width()/4.f + 0.333333f;
@@ -205,7 +197,7 @@ struct HostageWidget : public ModuleWidget {
     install_switch<HostageSwitch2>(Hostage::GATE_MODE_SWITCH, {center_x, top_row_y + row*row_spacing});
 
     row++;
-    install_input<HostagePort>(Hostage::DURATION_CV, {left_x, top_row_y + row*row_spacing});
+    install_input(Hostage::DURATION_CV, {left_x, top_row_y + row*row_spacing});
     install_switch<HostageSwitch3>(Hostage::DURATION_SWITCH, {right_x, top_row_y + row*row_spacing}, 2, 1);
 
     row++;
@@ -215,16 +207,16 @@ struct HostageWidget : public ModuleWidget {
     row_spacing = 15.f;
 
     row = 0;
-    install_input<HostagePort>(Hostage::DEFER_IN, {left_x, top_row_y + row*row_spacing});
-    install_output<HostagePort>(Hostage::ACTIVE_OUT, {right_x, top_row_y + row*row_spacing});
+    install_input(Hostage::DEFER_IN, {left_x, top_row_y + row*row_spacing});
+    install_output(Hostage::ACTIVE_OUT, {right_x, top_row_y + row*row_spacing});
 
     row++;
-    install_input<HostagePort>(Hostage::HOLD_GATE_IN, {left_x, top_row_y + row*row_spacing});
-    install_output<HostagePort>(Hostage::EOC_OUT, {right_x, top_row_y + row*row_spacing});
+    install_input(Hostage::HOLD_GATE_IN, {left_x, top_row_y + row*row_spacing});
+    install_output(Hostage::EOC_OUT, {right_x, top_row_y + row*row_spacing});
 
     row++;
-    install_input<HostagePort>(Hostage::ENVELOPE_IN, {left_x, top_row_y + row*row_spacing});
-    install_output<HostagePort>(Hostage::ENVELOPE_OUT, {right_x, top_row_y + row*row_spacing});
+    install_input(Hostage::ENVELOPE_IN, {left_x, top_row_y + row*row_spacing});
+    install_output(Hostage::ENVELOPE_OUT, {right_x, top_row_y + row*row_spacing});
   }
 };
 }

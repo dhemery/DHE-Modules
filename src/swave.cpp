@@ -61,14 +61,6 @@ struct SwaveKnobLarge : rack::RoundKnob {
   }
 };
 
-struct SwavePort : rack::SVGPort {
-  SwavePort() {
-    background->svg = rack::SVG::load(assetPlugin(plugin, "res/swave/port.svg"));
-    background->wrap();
-    box.size = background->box.size;
-  }
-};
-
 struct SwaveSwitch2 : rack::SVGSwitch, rack::ToggleSwitch {
   SwaveSwitch2() {
     addFrame(rack::SVG::load(rack::assetPlugin(plugin, "res/swave/switch-2-low.svg")));
@@ -77,7 +69,7 @@ struct SwaveSwitch2 : rack::SVGSwitch, rack::ToggleSwitch {
 };
 
 struct SwaveWidget : public ModuleWidget {
-  SwaveWidget(rack::Module *module) : ModuleWidget(module, 4, "res/swave/panel.svg") {
+  SwaveWidget(rack::Module *module) : ModuleWidget(module, 4, "swave") {
     auto widget_right_edge = width();
 
     auto center_x = widget_right_edge/2.f;
@@ -92,7 +84,7 @@ struct SwaveWidget : public ModuleWidget {
     install_knob<SwaveKnobLarge>(Swave::CURVE_KNOB, {center_x, top_row_y + row*row_spacing});
 
     row++;
-    install_input<SwavePort>(Swave::CURVE_CV, {center_x, top_row_y + row*row_spacing});
+    install_input(Swave::CURVE_CV, {center_x, top_row_y + row*row_spacing});
 
     top_row_y = 82.f;
     row_spacing = 15.f;
@@ -100,10 +92,10 @@ struct SwaveWidget : public ModuleWidget {
     row = 0;
 
     row++;
-    install_input<SwavePort>(Swave::SWAVE_IN, {center_x, top_row_y + row*row_spacing});
+    install_input(Swave::SWAVE_IN, {center_x, top_row_y + row*row_spacing});
 
     row++;
-    install_output<SwavePort>(Swave::SWAVE_OUT, {center_x, top_row_y + row*row_spacing});
+    install_output(Swave::SWAVE_OUT, {center_x, top_row_y + row*row_spacing});
   }
 };
 }

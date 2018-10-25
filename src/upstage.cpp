@@ -72,14 +72,6 @@ struct UpstageKnobLarge : rack::RoundKnob {
   }
 };
 
-struct UpstagePort : rack::SVGPort {
-  UpstagePort() {
-    background->svg = rack::SVG::load(assetPlugin(plugin, "res/upstage/port.svg"));
-    background->wrap();
-    box.size = background->box.size;
-  }
-};
-
 struct UpstageSwitch2 : rack::SVGSwitch, rack::ToggleSwitch {
   UpstageSwitch2() {
     addFrame(rack::SVG::load(rack::assetPlugin(plugin, "res/upstage/switch-2-low.svg")));
@@ -88,7 +80,7 @@ struct UpstageSwitch2 : rack::SVGSwitch, rack::ToggleSwitch {
 };
 
 struct UpstageWidget : public ModuleWidget {
-  UpstageWidget(rack::Module *module) : ModuleWidget(module, 5, "res/upstage/panel.svg") {
+  UpstageWidget(rack::Module *module) : ModuleWidget(module, 5, "upstage") {
     auto widget_right_edge = width();
 
     auto left_x = width()/4.f + 0.333333333f;
@@ -102,7 +94,7 @@ struct UpstageWidget : public ModuleWidget {
     install_knob<UpstageKnobLarge>(Upstage::LEVEL_KNOB, {center_x, top_row_y + row*row_spacing});
 
     row++;
-    install_input<UpstagePort>(Upstage::LEVEL_CV, {left_x, top_row_y + row*row_spacing});
+    install_input(Upstage::LEVEL_CV, {left_x, top_row_y + row*row_spacing});
     install_switch<UpstageSwitch2>(Upstage::LEVEL_SWITCH, {right_x, top_row_y + row*row_spacing}, 1, 1);
 
     row++;
@@ -113,14 +105,14 @@ struct UpstageWidget : public ModuleWidget {
     row_spacing = 15.f;
 
     row = 0;
-    install_input<UpstagePort>(Upstage::WAIT_IN, {left_x, top_row_y + row*row_spacing});
+    install_input(Upstage::WAIT_IN, {left_x, top_row_y + row*row_spacing});
 
     row++;
-    install_input<UpstagePort>(Upstage::TRIG_IN, {left_x, top_row_y + row*row_spacing});
-    install_output<UpstagePort>(Upstage::TRIG_OUT, {right_x, top_row_y + row*row_spacing});
+    install_input(Upstage::TRIG_IN, {left_x, top_row_y + row*row_spacing});
+    install_output(Upstage::TRIG_OUT, {right_x, top_row_y + row*row_spacing});
 
     row++;
-    install_output<UpstagePort>(Upstage::ENVELOPE_OUT, {right_x, top_row_y + row*row_spacing});
+    install_output(Upstage::ENVELOPE_OUT, {right_x, top_row_y + row*row_spacing});
   }
 };
 }

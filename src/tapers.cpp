@@ -83,15 +83,6 @@ struct TapersKnobTiny : rack::RoundKnob {
   }
 };
 
-struct TapersPort : rack::SVGPort {
-  TapersPort() {
-    background->svg =
-        rack::SVG::load(assetPlugin(plugin, "res/tapers/port.svg"));
-    background->wrap();
-    box.size = background->box.size;
-  }
-};
-
 struct TapersSwitch2 : rack::SVGSwitch, rack::ToggleSwitch {
   TapersSwitch2() {
     addFrame(rack::SVG::load(
@@ -103,7 +94,7 @@ struct TapersSwitch2 : rack::SVGSwitch, rack::ToggleSwitch {
 
 struct TapersWidget : public ModuleWidget {
   TapersWidget(rack::Module *module)
-      : ModuleWidget(module, 9, "res/tapers/panel.svg") {
+      : ModuleWidget(module, 9, "tapers") {
     auto widget_right_edge = width();
 
     auto left_x = width() / 5.f + 0.333333333f;
@@ -114,31 +105,31 @@ struct TapersWidget : public ModuleWidget {
     auto delta_y = 16.f;
     auto panel_buffer = 4.f;
 
-    install_input<TapersPort>(Tapers::LEVEL_1_CV_IN, {left_x, y});
+    install_input(Tapers::LEVEL_1_CV_IN, {left_x, y});
     install_knob<TapersKnobTiny>(Tapers::LEVEL_1_AV_KNOB, {center_x, y});
     install_knob<TapersKnobMedium>(Tapers::LEVEL_1_KNOB, {right_x, y});
     y += delta_y;
-    install_input<TapersPort>(Tapers::TAPER_1_CV_IN, {left_x, y});
+    install_input(Tapers::TAPER_1_CV_IN, {left_x, y});
     install_knob<TapersKnobTiny>(Tapers::TAPER_1_AV_KNOB, {center_x, y});
     install_knob<TapersKnobMedium>(Tapers::TAPER_1_KNOB, {right_x, y});
     y += delta_y;
     install_switch<TapersSwitch2>(Tapers::SHAPE_1_SWITCH, {left_x, y}, 1, 0);
     install_switch<TapersSwitch2>(Tapers::RANGE_1_SWITCH, {center_x, y}, 1, 0);
-    install_output<TapersPort>(Tapers::OUT_1, {right_x, y});
+    install_output(Tapers::OUT_1, {right_x, y});
 
     y += delta_y + panel_buffer;
 
-    install_input<TapersPort>(Tapers::LEVEL_2_CV_IN, {left_x, y});
+    install_input(Tapers::LEVEL_2_CV_IN, {left_x, y});
     install_knob<TapersKnobTiny>(Tapers::LEVEL_2_AV_KNOB, {center_x, y});
     install_knob<TapersKnobMedium>(Tapers::LEVEL_2_KNOB, {right_x, y});
     y += delta_y;
-    install_input<TapersPort>(Tapers::TAPER_2_CV_IN, {left_x, y});
+    install_input(Tapers::TAPER_2_CV_IN, {left_x, y});
     install_knob<TapersKnobTiny>(Tapers::TAPER_2_AV_KNOB, {center_x, y});
     install_knob<TapersKnobMedium>(Tapers::TAPER_2_KNOB, {right_x, y});
     y += delta_y;
     install_switch<TapersSwitch2>(Tapers::SHAPE_2_SWITCH, {left_x, y}, 1, 0);
     install_switch<TapersSwitch2>(Tapers::RANGE_2_SWITCH, {center_x, y}, 1, 0);
-    install_output<TapersPort>(Tapers::OUT_2, {right_x, y});
+    install_output(Tapers::OUT_2, {right_x, y});
 
   }
 };

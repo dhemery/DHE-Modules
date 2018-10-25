@@ -77,16 +77,8 @@ struct CubicKnobsmall : rack::RoundKnob {
   }
 };
 
-struct CubicPort : rack::SVGPort {
-  CubicPort() {
-    background->svg = rack::SVG::load(assetPlugin(plugin, "res/cubic/port.svg"));
-    background->wrap();
-    box.size = background->box.size;
-  }
-};
-
 struct CubicWidget : public ModuleWidget {
-  CubicWidget(rack::Module *module) : ModuleWidget(module, 5, "res/cubic/panel.svg") {
+  CubicWidget(rack::Module *module) : ModuleWidget(module, 5, "cubic") {
     auto widget_right_edge = width();
 
     auto left_x = width()/4.f + 0.333333f;
@@ -96,19 +88,19 @@ struct CubicWidget : public ModuleWidget {
     auto row_spacing = 15.f;
 
     auto row = 0;
-    install_input<CubicPort>(Cubic::X3_CV, {left_x, top_row_y + row*row_spacing});
+    install_input(Cubic::X3_CV, {left_x, top_row_y + row*row_spacing});
     install_knob<CubicKnobsmall>(Cubic::X3_KNOB, {right_x, top_row_y + row*row_spacing});
 
     row++;
-    install_input<CubicPort>(Cubic::X2_CV, {left_x, top_row_y + row*row_spacing});
+    install_input(Cubic::X2_CV, {left_x, top_row_y + row*row_spacing});
     install_knob<CubicKnobsmall>(Cubic::X2_KNOB, {right_x, top_row_y + row*row_spacing});
 
     row++;
-    install_input<CubicPort>(Cubic::X1_CV, {left_x, top_row_y + row*row_spacing});
+    install_input(Cubic::X1_CV, {left_x, top_row_y + row*row_spacing});
     install_knob<CubicKnobsmall>(Cubic::X1_KNOB, {right_x, top_row_y + row*row_spacing});
 
     row++;
-    install_input<CubicPort>(Cubic::X0_CV, {left_x, top_row_y + row*row_spacing});
+    install_input(Cubic::X0_CV, {left_x, top_row_y + row*row_spacing});
     install_knob<CubicKnobsmall>(Cubic::X0_KNOB, {right_x, top_row_y + row*row_spacing});
 
     top_row_y = 82.f;
@@ -117,12 +109,12 @@ struct CubicWidget : public ModuleWidget {
     install_knob<CubicKnobsmall>(Cubic::OUTPUT_GAIN_KNOB, {right_x, top_row_y + row*row_spacing});
 
     row++;
-    install_input<CubicPort>(Cubic::INPUT_GAIN_CV, {left_x, top_row_y + row*row_spacing});
-    install_input<CubicPort>(Cubic::OUTPUT_GAIN_CV, {right_x, top_row_y + row*row_spacing});
+    install_input(Cubic::INPUT_GAIN_CV, {left_x, top_row_y + row*row_spacing});
+    install_input(Cubic::OUTPUT_GAIN_CV, {right_x, top_row_y + row*row_spacing});
 
     row++;
-    install_input<CubicPort>(Cubic::IN, {left_x, top_row_y + row*row_spacing});
-    install_output<CubicPort>(Cubic::OUT, {right_x, top_row_y + row*row_spacing});
+    install_input(Cubic::IN, {left_x, top_row_y + row*row_spacing});
+    install_output(Cubic::OUT, {right_x, top_row_y + row*row_spacing});
   }
 };
 }

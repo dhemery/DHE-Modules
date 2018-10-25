@@ -80,15 +80,6 @@ struct RangerKnobTiny : rack::RoundKnob {
   }
 };
 
-struct RangerPort : rack::SVGPort {
-  RangerPort() {
-    background->svg =
-        rack::SVG::load(assetPlugin(plugin, "res/ranger/port.svg"));
-    background->wrap();
-    box.size = background->box.size;
-  }
-};
-
 struct RangerSwitch2 : rack::SVGSwitch, rack::ToggleSwitch {
   RangerSwitch2() {
     addFrame(rack::SVG::load(
@@ -100,7 +91,7 @@ struct RangerSwitch2 : rack::SVGSwitch, rack::ToggleSwitch {
 
 struct RangerWidget : public ModuleWidget {
   RangerWidget(rack::Module *module)
-      : ModuleWidget(module, 6, "res/ranger/panel.svg") {
+      : ModuleWidget(module, 6, "ranger") {
     auto widget_right_edge = width();
 
     auto left_x = width() / 3.5f + 0.333333333f;
@@ -111,9 +102,9 @@ struct RangerWidget : public ModuleWidget {
     auto panel_buffer = 4.f;
 
     install_knob<RangerKnobMedium>(Ranger::LEVEL_KNOB, {left_x, y});
-    install_output<RangerPort>(Ranger::OUT, {right_x, y});
+    install_output(Ranger::OUT, {right_x, y});
     y += delta_y;
-    install_input<RangerPort>(Ranger::LEVEL_CV_IN, {left_x, y});
+    install_input(Ranger::LEVEL_CV_IN, {left_x, y});
     install_knob<RangerKnobTiny>(Ranger::LEVEL_AV_KNOB, {right_x, y});
 
     y += delta_y + panel_buffer;
@@ -121,7 +112,7 @@ struct RangerWidget : public ModuleWidget {
     install_knob<RangerKnobMedium>(Ranger::LIMIT_1_KNOB, {left_x, y});
     install_switch<RangerSwitch2>(Ranger::LIMIT_1_RANGE_SWITCH, {right_x, y}, 1, 0);
     y += delta_y;
-    install_input<RangerPort>(Ranger::LIMIT_1_CV_IN, {left_x, y});
+    install_input(Ranger::LIMIT_1_CV_IN, {left_x, y});
     install_knob<RangerKnobTiny>(Ranger::LIMIT_1_AV_KNOB, {right_x, y});
 
     y += delta_y + panel_buffer;
@@ -129,7 +120,7 @@ struct RangerWidget : public ModuleWidget {
     install_knob<RangerKnobMedium>(Ranger::LIMIT_2_KNOB, {left_x, y});
     install_switch<RangerSwitch2>(Ranger::LIMIT_2_RANGE_SWITCH, {right_x, y}, 1, 0);
     y += delta_y;
-    install_input<RangerPort>(Ranger::LIMIT_2_CV_IN, {left_x, y});
+    install_input(Ranger::LIMIT_2_CV_IN, {left_x, y});
     install_knob<RangerKnobTiny>(Ranger::LIMIT_2_AV_KNOB, {right_x, y});
   }
 };

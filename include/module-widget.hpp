@@ -1,5 +1,6 @@
 #pragma once
 
+#include <string>
 #include <app.hpp>
 #include <util/math.hpp>
 
@@ -8,10 +9,25 @@
 #include "util/range.hpp"
 
 namespace DHE {
+void moveTo(rack::Rect &box, rack::Vec center);
+
+struct Port : rack::SVGPort {
+  static Port *create(rack::Module *module, std::string module_name, rack::Port::PortType type, int index, rack::Vec center) {
+    auto image_file = std::string("res/") + module_name + "/port.svg";
+    auto input = rack::Port::create<Port>({0, 0}, type, module, index);
+    input->background->svg = rack::SVG::load(assetPlugin(plugin, image_file));
+    input->background->wrap();
+    input->box.size = input->background->box.size;
+    moveTo(input->box, rack::mm2px(center));
+    return input;
+  }
+};
+
 class ModuleWidget : public rack::ModuleWidget {
+  std::string module_name;
 
 public:
-  ModuleWidget(rack::Module *module, int widget_hp, const char *background);
+  ModuleWidget(rack::Module *module, int widget_hp, std::string module_name);
 
   virtual void fromJson(json_t *patch) override {
     // If there's no data, we're loading from a legacy patch. Add empty data to
@@ -32,10 +48,8 @@ public:
     return box.size.x*MM_PER_IN/SVG_DPI;
   }
 
-  template<class T>
   void install_input(int index, rack::Vec center) {
-    auto input = rack::Port::create<T>({0, 0}, rack::Port::INPUT, module, index);
-    moveTo(input->box, rack::mm2px(center));
+    auto input = Port::create(module, module_name, rack::Port::INPUT, index, center);
     addInput(input);
   }
 
@@ -44,10 +58,8 @@ public:
     install_param<T>(index, center, 0.f, 1.f, initial_rotation);
   }
 
-  template<class T>
   void install_output(int index, rack::Vec center) {
-    auto output = rack::Port::create<T>({0, 0}, rack::Port::OUTPUT, module, index);
-    moveTo(output->box, rack::mm2px(center));
+    auto output = Port::create(module, module_name, rack::Port::OUTPUT, index, center);
     addOutput(output);
   }
 
@@ -69,8 +81,6 @@ public:
   void install_switch(int index, rack::Vec center, int max_position = 1, int initial_position = 0) {
     install_param<T>(index, center, 0.f, (float) max_position, (float) initial_position);
   }
-
-  static void moveTo(rack::Rect &box, rack::Vec center);
 
   void install_screws();
 };
