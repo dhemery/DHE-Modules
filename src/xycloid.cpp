@@ -184,12 +184,12 @@ struct XycloidMusicalRatiosMenuItem : rack::MenuItem {
 
 struct XycloidWidget : public ModuleWidget {
   XycloidWidget(rack::Module *module) : ModuleWidget(module, 11, "xycloid") {
-    auto width = 11.f*5.08f;
+    auto widget_right_edge = width();
 
-    auto left_x = width/7.f;
-    auto right_x = width - left_x;
+    auto left_x = widget_right_edge/7.f;
+    auto right_x = widget_right_edge - left_x;
     auto left_center_x = (right_x - left_x)/3.f + left_x;
-    auto right_center_x = width - left_center_x;
+    auto right_center_x = widget_right_edge - left_center_x;
 
     auto top_row_y = 30.f;
     auto row_spacing = 22.f;

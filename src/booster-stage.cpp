@@ -168,11 +168,11 @@ struct BoosterStage : Module {
 
 struct BoosterStageWidget : public ModuleWidget {
   BoosterStageWidget(rack::Module *module) : ModuleWidget(module, 8, "booster-stage") {
-    auto width = 8.f*5.08f;
+    auto widget_right_edge = width();
 
-    auto left_x = width/6.f + 0.3333333f;
-    auto center_x = width/2.f;
-    auto right_x = width - left_x;
+    auto left_x = widget_right_edge/6.f + 0.3333333f;
+    auto center_x = widget_right_edge/2.f;
+    auto right_x = widget_right_edge - left_x;
     auto button_port_distance = 7.891f;
     auto center_left_x = left_x + button_port_distance;
     auto center_right_x = right_x - button_port_distance;
@@ -216,4 +216,4 @@ struct BoosterStageWidget : public ModuleWidget {
   }
 };
 }
-rack::Model *modelBoosterStage = rack::Model::create<DHE::BoosterStage, DHE::BoosterStageWidget>("DHE-Modules", "BoosterStage", "BoosterStage", rack::ENVELOPE_GENERATOR_TAG);
+rack::Model *modelBoosterStage = rack::Model::create<DHE::BoosterStage, DHE::BoosterStageWidget>("DHE-Modules", "BoosterStage", "Booster Stage", rack::ENVELOPE_GENERATOR_TAG);
