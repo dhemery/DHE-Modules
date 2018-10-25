@@ -54,13 +54,6 @@ struct Swave : Module {
   };
 };
 
-struct SwaveSwitch2 : rack::SVGSwitch, rack::ToggleSwitch {
-  SwaveSwitch2() {
-    addFrame(rack::SVG::load(rack::assetPlugin(plugin, "res/swave/switch-2-low.svg")));
-    addFrame(rack::SVG::load(rack::assetPlugin(plugin, "res/swave/switch-2-high.svg")));
-  }
-};
-
 struct SwaveWidget : public ModuleWidget {
   SwaveWidget(rack::Module *module) : ModuleWidget(module, 4, "swave") {
     auto widget_right_edge = width();
@@ -71,7 +64,7 @@ struct SwaveWidget : public ModuleWidget {
     auto row_spacing = 18.5f;
 
     auto row = 0;
-    install_switch<SwaveSwitch2>(Swave::SHAPE_SWITCH, {center_x, top_row_y + row*row_spacing}, 1, 1);
+    install_switch(Swave::SHAPE_SWITCH, {center_x, top_row_y + row*row_spacing}, 1, 1);
 
     row++;
     install_knob("large", Swave::CURVE_KNOB, {center_x, top_row_y + row*row_spacing});

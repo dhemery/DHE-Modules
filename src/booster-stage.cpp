@@ -169,21 +169,6 @@ struct BoosterStage : Module {
   };
 };
 
-struct BoosterStageSwitch2 : rack::SVGSwitch, rack::MomentarySwitch {
-  BoosterStageSwitch2() {
-    addFrame(rack::SVG::load(rack::assetPlugin(plugin, "res/booster-stage/switch-2-low.svg")));
-    addFrame(rack::SVG::load(rack::assetPlugin(plugin, "res/booster-stage/switch-2-high.svg")));
-  }
-};
-
-struct BoosterStageSwitch3 : rack::SVGSwitch, rack::ToggleSwitch {
-  BoosterStageSwitch3() {
-    addFrame(rack::SVG::load(rack::assetPlugin(plugin, "res/booster-stage/switch-3-low.svg")));
-    addFrame(rack::SVG::load(rack::assetPlugin(plugin, "res/booster-stage/switch-3-mid.svg")));
-    addFrame(rack::SVG::load(rack::assetPlugin(plugin, "res/booster-stage/switch-3-high.svg")));
-  }
-};
-
 struct BoosterStageWidget : public ModuleWidget {
   BoosterStageWidget(rack::Module *module) : ModuleWidget(module, 8, "booster-stage") {
     auto width = 8.f*5.08f;
@@ -201,17 +186,17 @@ struct BoosterStageWidget : public ModuleWidget {
     auto row = 0;
     install_input(BoosterStage::LEVEL_CV, {left_x, top_row_y + row*row_spacing});
     install_knob("large", BoosterStage::LEVEL_KNOB, {center_x, top_row_y + row*row_spacing});
-    install_switch<BoosterStageSwitch2>(BoosterStage::LEVEL_SWITCH, {right_x, top_row_y + row*row_spacing}, 1, 1);
+    install_switch(BoosterStage::LEVEL_SWITCH, {right_x, top_row_y + row*row_spacing}, 1, 1);
 
     row++;
     install_input(BoosterStage::CURVE_CV, {left_x, top_row_y + row*row_spacing});
     install_knob("large", BoosterStage::CURVE_KNOB, {center_x, top_row_y + row*row_spacing});
-    install_switch<BoosterStageSwitch2>(BoosterStage::SHAPE_SWITCH, {right_x, top_row_y + row*row_spacing});
+    install_switch(BoosterStage::SHAPE_SWITCH, {right_x, top_row_y + row*row_spacing});
 
     row++;
     install_input(BoosterStage::DURATION_CV, {left_x, top_row_y + row*row_spacing});
     install_knob("large", BoosterStage::DURATION_KNOB, {center_x, top_row_y + row*row_spacing});
-    install_switch<BoosterStageSwitch3>(BoosterStage::DURATION_SWITCH, {right_x, top_row_y + row*row_spacing}, 2, 1);
+    install_switch(BoosterStage::DURATION_SWITCH, {right_x, top_row_y + row*row_spacing}, 2, 1);
 
     top_row_y = 82.f;
     row_spacing = 15.f;

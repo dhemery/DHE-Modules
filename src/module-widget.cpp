@@ -44,6 +44,24 @@ Button *Button::create(rack::Module *module, std::string module_name, std::strin
   return button;
 }
 
+Switch *Switch::create(rack::Module *module, std::string module_name, int index, rack::Vec center, int max_position, int initial_position) {
+  auto widget = Component::create<Switch>({0,0}, module);
+  auto type = std::to_string(max_position + 1);
+  auto low_image_file = std::string("res/") + module_name + "/switch-" + type + "-low.svg";
+  widget->addFrame(rack::SVG::load(rack::assetPlugin(plugin, low_image_file)));
+  if(max_position == 2) {
+    auto mid_image_file = std::string("res/") + module_name + "/switch-" + type + "-mid.svg";
+    widget->addFrame(rack::SVG::load(rack::assetPlugin(plugin, mid_image_file)));
+  }
+  auto high_image_file = std::string("res/") + module_name + "/switch-" + type + "-high.svg";
+  widget->addFrame(rack::SVG::load(rack::assetPlugin(plugin, high_image_file)));
+  widget->paramId = index;
+  widget->setLimits(0.f, max_position);
+  widget->setDefaultValue(initial_position);
+  moveTo(widget->box, rack::mm2px(center));
+  return widget;
+}
+
 ModuleWidget::ModuleWidget(rack::Module *module, int widget_hp, std::string module_name)
     : rack::ModuleWidget(module), module_name{module_name} {
   box.size = rack::Vec{(float) widget_hp*rack::RACK_GRID_WIDTH, rack::RACK_GRID_HEIGHT};

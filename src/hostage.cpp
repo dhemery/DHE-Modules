@@ -160,21 +160,6 @@ struct Hostage : Module {
   };
 };
 
-struct HostageSwitch2 : rack::SVGSwitch, rack::ToggleSwitch {
-  HostageSwitch2() {
-    addFrame(rack::SVG::load(rack::assetPlugin(plugin, "res/hostage/switch-2-low.svg")));
-    addFrame(rack::SVG::load(rack::assetPlugin(plugin, "res/hostage/switch-2-high.svg")));
-  }
-};
-
-struct HostageSwitch3 : rack::SVGSwitch, rack::ToggleSwitch {
-  HostageSwitch3() {
-    addFrame(rack::SVG::load(rack::assetPlugin(plugin, "res/hostage/switch-3-low.svg")));
-    addFrame(rack::SVG::load(rack::assetPlugin(plugin, "res/hostage/switch-3-mid.svg")));
-    addFrame(rack::SVG::load(rack::assetPlugin(plugin, "res/hostage/switch-3-high.svg")));
-  }
-};
-
 struct HostageWidget : public ModuleWidget {
   HostageWidget(rack::Module *module) : ModuleWidget(module, 5, "hostage") {
     auto widget_right_edge = width();
@@ -187,11 +172,11 @@ struct HostageWidget : public ModuleWidget {
     auto row_spacing = 18.5f;
 
     auto row = 0;
-    install_switch<HostageSwitch2>(Hostage::GATE_MODE_SWITCH, {center_x, top_row_y + row*row_spacing});
+    install_switch(Hostage::GATE_MODE_SWITCH, {center_x, top_row_y + row*row_spacing});
 
     row++;
     install_input(Hostage::DURATION_CV, {left_x, top_row_y + row*row_spacing});
-    install_switch<HostageSwitch3>(Hostage::DURATION_SWITCH, {right_x, top_row_y + row*row_spacing}, 2, 1);
+    install_switch(Hostage::DURATION_SWITCH, {right_x, top_row_y + row*row_spacing}, 2, 1);
 
     row++;
     install_knob("large", Hostage::DURATION_KNOB, {center_x, top_row_y + row*row_spacing});

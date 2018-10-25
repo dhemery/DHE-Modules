@@ -58,13 +58,6 @@ struct Upstage : Module {
   };
 };
 
-struct UpstageSwitch2 : rack::SVGSwitch, rack::ToggleSwitch {
-  UpstageSwitch2() {
-    addFrame(rack::SVG::load(rack::assetPlugin(plugin, "res/upstage/switch-2-low.svg")));
-    addFrame(rack::SVG::load(rack::assetPlugin(plugin, "res/upstage/switch-2-high.svg")));
-  }
-};
-
 struct UpstageWidget : public ModuleWidget {
   UpstageWidget(rack::Module *module) : ModuleWidget(module, 5, "upstage") {
     auto widget_right_edge = width();
@@ -81,7 +74,7 @@ struct UpstageWidget : public ModuleWidget {
 
     row++;
     install_input(Upstage::LEVEL_CV, {left_x, top_row_y + row*row_spacing});
-    install_switch<UpstageSwitch2>(Upstage::LEVEL_SWITCH, {right_x, top_row_y + row*row_spacing}, 1, 1);
+    install_switch(Upstage::LEVEL_SWITCH, {right_x, top_row_y + row*row_spacing}, 1, 1);
 
     row++;
     install_button("normal", Upstage::WAIT_BUTTON, {left_x, top_row_y + row*row_spacing});

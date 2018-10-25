@@ -50,15 +50,6 @@ struct Tapers : Module {
   enum OutputIds { OUT_1, OUT_2, OUTPUT_COUNT };
 };
 
-struct TapersSwitch2 : rack::SVGSwitch, rack::ToggleSwitch {
-  TapersSwitch2() {
-    addFrame(rack::SVG::load(
-        rack::assetPlugin(plugin, "res/tapers/switch-2-low.svg")));
-    addFrame(rack::SVG::load(
-        rack::assetPlugin(plugin, "res/tapers/switch-2-high.svg")));
-  }
-};
-
 struct TapersWidget : public ModuleWidget {
   TapersWidget(rack::Module *module)
       : ModuleWidget(module, 9, "tapers") {
@@ -80,8 +71,8 @@ struct TapersWidget : public ModuleWidget {
     install_knob("tiny", Tapers::TAPER_1_AV_KNOB, {center_x, y});
     install_knob("medium", Tapers::TAPER_1_KNOB, {right_x, y});
     y += delta_y;
-    install_switch<TapersSwitch2>(Tapers::SHAPE_1_SWITCH, {left_x, y}, 1, 0);
-    install_switch<TapersSwitch2>(Tapers::RANGE_1_SWITCH, {center_x, y}, 1, 0);
+    install_switch(Tapers::SHAPE_1_SWITCH, {left_x, y});
+    install_switch(Tapers::RANGE_1_SWITCH, {center_x, y});
     install_output(Tapers::OUT_1, {right_x, y});
 
     y += delta_y + panel_buffer;
@@ -94,8 +85,8 @@ struct TapersWidget : public ModuleWidget {
     install_knob("tiny", Tapers::TAPER_2_AV_KNOB, {center_x, y});
     install_knob("medium", Tapers::TAPER_2_KNOB, {right_x, y});
     y += delta_y;
-    install_switch<TapersSwitch2>(Tapers::SHAPE_2_SWITCH, {left_x, y}, 1, 0);
-    install_switch<TapersSwitch2>(Tapers::RANGE_2_SWITCH, {center_x, y}, 1, 0);
+    install_switch(Tapers::SHAPE_2_SWITCH, {left_x, y});
+    install_switch(Tapers::RANGE_2_SWITCH, {center_x, y});
     install_output(Tapers::OUT_2, {right_x, y});
 
   }

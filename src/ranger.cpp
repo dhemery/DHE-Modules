@@ -55,18 +55,8 @@ struct Ranger : Module {
   enum OutputIds { OUT, OUTPUT_COUNT };
 };
 
-struct RangerSwitch2 : rack::SVGSwitch, rack::ToggleSwitch {
-  RangerSwitch2() {
-    addFrame(rack::SVG::load(
-        rack::assetPlugin(plugin, "res/ranger/switch-2-low.svg")));
-    addFrame(rack::SVG::load(
-        rack::assetPlugin(plugin, "res/ranger/switch-2-high.svg")));
-  }
-};
-
 struct RangerWidget : public ModuleWidget {
-  RangerWidget(rack::Module *module)
-      : ModuleWidget(module, 6, "ranger") {
+  RangerWidget(rack::Module *module) : ModuleWidget(module, 6, "ranger") {
     auto widget_right_edge = width();
 
     auto left_x = width() / 3.5f + 0.333333333f;
@@ -85,7 +75,7 @@ struct RangerWidget : public ModuleWidget {
     y += delta_y + panel_buffer;
 
     install_knob("medium", Ranger::LIMIT_1_KNOB, {left_x, y});
-    install_switch<RangerSwitch2>(Ranger::LIMIT_1_RANGE_SWITCH, {right_x, y}, 1, 0);
+    install_switch(Ranger::LIMIT_1_RANGE_SWITCH, {right_x, y});
     y += delta_y;
     install_input(Ranger::LIMIT_1_CV_IN, {left_x, y});
     install_knob("tiny", Ranger::LIMIT_1_AV_KNOB, {right_x, y});
@@ -93,7 +83,7 @@ struct RangerWidget : public ModuleWidget {
     y += delta_y + panel_buffer;
 
     install_knob("medium", Ranger::LIMIT_2_KNOB, {left_x, y});
-    install_switch<RangerSwitch2>(Ranger::LIMIT_2_RANGE_SWITCH, {right_x, y}, 1, 0);
+    install_switch(Ranger::LIMIT_2_RANGE_SWITCH, {right_x, y});
     y += delta_y;
     install_input(Ranger::LIMIT_2_CV_IN, {left_x, y});
     install_knob("tiny", Ranger::LIMIT_2_AV_KNOB, {right_x, y});

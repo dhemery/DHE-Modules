@@ -164,21 +164,6 @@ struct Xycloid : Module {
     }
   };
 
-struct XycloidSwitch2 : rack::SVGSwitch, rack::ToggleSwitch {
-  XycloidSwitch2() {
-    addFrame(rack::SVG::load(rack::assetPlugin(plugin, "res/xycloid/switch-2-low.svg")));
-    addFrame(rack::SVG::load(rack::assetPlugin(plugin, "res/xycloid/switch-2-high.svg")));
-  }
-};
-
-struct XycloidSwitch3 : rack::SVGSwitch, rack::ToggleSwitch {
-  XycloidSwitch3() {
-    addFrame(rack::SVG::load(rack::assetPlugin(plugin, "res/xycloid/switch-3-low.svg")));
-    addFrame(rack::SVG::load(rack::assetPlugin(plugin, "res/xycloid/switch-3-mid.svg")));
-    addFrame(rack::SVG::load(rack::assetPlugin(plugin, "res/xycloid/switch-3-high.svg")));
-  }
-};
-
 struct XycloidMusicalRatiosMenuItem : rack::MenuItem {
     Xycloid *xycloid;
 
@@ -216,13 +201,13 @@ struct XycloidWidget : public ModuleWidget {
     install_input(Xycloid::GEAR_RATIO_CV, {left_x, top_row_y + row*row_spacing});
     install_knob("tiny", Xycloid::WOBBLE_RATIO_CV_ATTENUVERTER, {left_center_x, top_row_y + row*row_spacing});
     install_knob("large", Xycloid::WOBBLE_RATIO_KNOB, {right_center_x, top_row_y + row*row_spacing});
-    install_switch<XycloidSwitch2>(Xycloid::QUANTIZE_WOBBLE_RATIO_SWITCH, {right_x, top_row_y + row*row_spacing}, 1, 1);
+    install_switch(Xycloid::QUANTIZE_WOBBLE_RATIO_SWITCH, {right_x, top_row_y + row*row_spacing}, 1, 1);
 
     row++;
     install_input(Xycloid::DEPTH_CV, {left_x, top_row_y + row*row_spacing});
     install_knob("tiny", Xycloid::WOBBLE_DEPTH_CV_ATTENUVERTER, {left_center_x, top_row_y + row*row_spacing});
     install_knob("large", Xycloid::WOBBLE_DEPTH_KNOB, {right_center_x, top_row_y + row*row_spacing});
-    install_switch<XycloidSwitch3>(Xycloid::WOBBLE_TYPE_SWITCH, {right_x, top_row_y + row*row_spacing}, 2, 2);
+    install_switch(Xycloid::WOBBLE_TYPE_SWITCH, {right_x, top_row_y + row*row_spacing}, 2, 2);
 
     row++;
     install_input(Xycloid::SPEED_CV, {left_x, top_row_y + row*row_spacing});
@@ -238,13 +223,13 @@ struct XycloidWidget : public ModuleWidget {
     row++;
     install_input(Xycloid::X_GAIN_CV, {left_x, top_row_y + row*row_spacing});
     install_knob("small", Xycloid::X_GAIN_KNOB, {left_center_x, top_row_y + row*row_spacing}, default_gain);
-    install_switch<XycloidSwitch2>(Xycloid::X_RANGE_SWITCH, {right_center_x, top_row_y + row*row_spacing}, 1, 0);
+    install_switch(Xycloid::X_RANGE_SWITCH, {right_center_x, top_row_y + row*row_spacing});
     install_output(Xycloid::X_OUT, {right_x, top_row_y + row*row_spacing});
 
     row++;
     install_input(Xycloid::Y_GAIN_CV, {left_x, top_row_y + row*row_spacing});
     install_knob("small", Xycloid::Y_GAIN_KNOB, {left_center_x, top_row_y + row*row_spacing}, default_gain);
-    install_switch<XycloidSwitch2>(Xycloid::Y_RANGE_SWITCH, {right_center_x, top_row_y + row*row_spacing}, 1, 0);
+    install_switch(Xycloid::Y_RANGE_SWITCH, {right_center_x, top_row_y + row*row_spacing});
     install_output(Xycloid::Y_OUT, {right_x, top_row_y + row*row_spacing});
   }
 
