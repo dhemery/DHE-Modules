@@ -55,15 +55,6 @@ struct Ranger : Module {
   enum OutputIds { OUT, OUTPUT_COUNT };
 };
 
-struct RangerButtonNormal : rack::SVGSwitch, rack::ToggleSwitch {
-  RangerButtonNormal() {
-    addFrame(rack::SVG::load(
-        rack::assetPlugin(plugin, "res/ranger/button-normal-off.svg")));
-    addFrame(rack::SVG::load(
-        rack::assetPlugin(plugin, "res/ranger/button-normal-on.svg")));
-  }
-};
-
 struct RangerSwitch2 : rack::SVGSwitch, rack::ToggleSwitch {
   RangerSwitch2() {
     addFrame(rack::SVG::load(

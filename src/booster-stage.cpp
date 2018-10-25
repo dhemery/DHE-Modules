@@ -169,21 +169,7 @@ struct BoosterStage : Module {
   };
 };
 
-struct BoosterStageButtonReverse : rack::SVGSwitch, rack::MomentarySwitch {
-  BoosterStageButtonReverse() {
-    addFrame(rack::SVG::load(rack::assetPlugin(plugin, "res/booster-stage/button-reverse-off.svg")));
-    addFrame(rack::SVG::load(rack::assetPlugin(plugin, "res/booster-stage/button-reverse-on.svg")));
-  }
-};
-
-struct BoosterStageButtonNormal : rack::SVGSwitch, rack::MomentarySwitch {
-  BoosterStageButtonNormal() {
-    addFrame(rack::SVG::load(rack::assetPlugin(plugin, "res/booster-stage/button-normal-off.svg")));
-    addFrame(rack::SVG::load(rack::assetPlugin(plugin, "res/booster-stage/button-normal-on.svg")));
-  }
-};
-
-struct BoosterStageSwitch2 : rack::SVGSwitch, rack::ToggleSwitch {
+struct BoosterStageSwitch2 : rack::SVGSwitch, rack::MomentarySwitch {
   BoosterStageSwitch2() {
     addFrame(rack::SVG::load(rack::assetPlugin(plugin, "res/booster-stage/switch-2-low.svg")));
     addFrame(rack::SVG::load(rack::assetPlugin(plugin, "res/booster-stage/switch-2-high.svg")));
@@ -232,14 +218,14 @@ struct BoosterStageWidget : public ModuleWidget {
 
     row = 0;
     install_input(BoosterStage::DEFER_IN, {left_x, top_row_y + row*row_spacing});
-    install_switch<BoosterStageButtonNormal>(BoosterStage::DEFER_BUTTON, {center_left_x, top_row_y + row*row_spacing});
-    install_switch<BoosterStageButtonReverse>(BoosterStage::ACTIVE_BUTTON, {center_right_x, top_row_y + row*row_spacing});
+    install_button("normal", BoosterStage::DEFER_BUTTON, {center_left_x, top_row_y + row*row_spacing});
+    install_button("reverse", BoosterStage::ACTIVE_BUTTON, {center_right_x, top_row_y + row*row_spacing});
     install_output(BoosterStage::ACTIVE_OUT, {right_x, top_row_y + row*row_spacing});
 
     row++;
     install_input(BoosterStage::TRIGGER_IN, {left_x, top_row_y + row*row_spacing});
-    install_switch<BoosterStageButtonNormal>(BoosterStage::TRIGGER_BUTTON, {center_left_x, top_row_y + row*row_spacing});
-    install_switch<BoosterStageButtonReverse>(BoosterStage::EOC_BUTTON, {center_right_x, top_row_y + row*row_spacing});
+    install_button("normal", BoosterStage::TRIGGER_BUTTON, {center_left_x, top_row_y + row*row_spacing});
+    install_button("reverse", BoosterStage::EOC_BUTTON, {center_right_x, top_row_y + row*row_spacing});
     install_output(BoosterStage::EOC_OUT, {right_x, top_row_y + row*row_spacing});
 
     row++;

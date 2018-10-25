@@ -164,13 +164,6 @@ struct Xycloid : Module {
     }
   };
 
-struct XycloidButtonNormal : rack::SVGSwitch, rack::MomentarySwitch {
-  XycloidButtonNormal() {
-    addFrame(rack::SVG::load(rack::assetPlugin(plugin, "res/xycloid/button-normal-off.svg")));
-    addFrame(rack::SVG::load(rack::assetPlugin(plugin, "res/xycloid/button-normal-on.svg")));
-  }
-};
-
 struct XycloidSwitch2 : rack::SVGSwitch, rack::ToggleSwitch {
   XycloidSwitch2() {
     addFrame(rack::SVG::load(rack::assetPlugin(plugin, "res/xycloid/switch-2-low.svg")));

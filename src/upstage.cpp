@@ -58,13 +58,6 @@ struct Upstage : Module {
   };
 };
 
-struct UpstageButtonNormal : rack::SVGSwitch, rack::MomentarySwitch {
-  UpstageButtonNormal() {
-    addFrame(rack::SVG::load(rack::assetPlugin(plugin, "res/upstage/button-normal-off.svg")));
-    addFrame(rack::SVG::load(rack::assetPlugin(plugin, "res/upstage/button-normal-on.svg")));
-  }
-};
-
 struct UpstageSwitch2 : rack::SVGSwitch, rack::ToggleSwitch {
   UpstageSwitch2() {
     addFrame(rack::SVG::load(rack::assetPlugin(plugin, "res/upstage/switch-2-low.svg")));
@@ -91,8 +84,8 @@ struct UpstageWidget : public ModuleWidget {
     install_switch<UpstageSwitch2>(Upstage::LEVEL_SWITCH, {right_x, top_row_y + row*row_spacing}, 1, 1);
 
     row++;
-    install_switch<UpstageButtonNormal>(Upstage::WAIT_BUTTON, {left_x, top_row_y + row*row_spacing});
-    install_switch<UpstageButtonNormal>(Upstage::TRIG_BUTTON, {right_x, top_row_y + row*row_spacing});
+    install_button("normal", Upstage::WAIT_BUTTON, {left_x, top_row_y + row*row_spacing});
+    install_button("normal", Upstage::TRIG_BUTTON, {right_x, top_row_y + row*row_spacing});
 
     top_row_y = 82.f;
     row_spacing = 15.f;

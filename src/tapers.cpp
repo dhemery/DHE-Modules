@@ -50,15 +50,6 @@ struct Tapers : Module {
   enum OutputIds { OUT_1, OUT_2, OUTPUT_COUNT };
 };
 
-struct TapersButtonNormal : rack::SVGSwitch, rack::ToggleSwitch {
-  TapersButtonNormal() {
-    addFrame(rack::SVG::load(
-        rack::assetPlugin(plugin, "res/tapers/button-normal-off.svg")));
-    addFrame(rack::SVG::load(
-        rack::assetPlugin(plugin, "res/tapers/button-normal-on.svg")));
-  }
-};
-
 struct TapersSwitch2 : rack::SVGSwitch, rack::ToggleSwitch {
   TapersSwitch2() {
     addFrame(rack::SVG::load(

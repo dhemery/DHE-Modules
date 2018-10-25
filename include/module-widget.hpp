@@ -34,6 +34,20 @@ struct Knob : rack::RoundKnob {
   }
 };
 
+struct Button : rack::SVGSwitch, rack::MomentarySwitch {
+  static Button *create(rack::Module *module, std::string module_name, std::string type, int index, rack::Vec center) {
+    auto button = Component::create<Button>({0,0}, module);
+    auto off_image_file = std::string("res/") + module_name + "/button-" + type + "-off.svg";
+    auto on_image_file = std::string("res/") + module_name + "/button-" + type + "-on.svg";
+    button->addFrame(rack::SVG::load(rack::assetPlugin(plugin, off_image_file)));
+    button->addFrame(rack::SVG::load(rack::assetPlugin(plugin, on_image_file)));
+		button->paramId = index;
+		button->setLimits(0.f, 1.f);
+		button->setDefaultValue(0.f);
+    moveTo(button->box, rack::mm2px(center));
+    return button;
+  }
+};
 
 class ModuleWidget : public rack::ModuleWidget {
   std::string module_name;
@@ -73,6 +87,11 @@ public:
   void install_output(int index, rack::Vec center) {
     auto output = Port::create(module, module_name, rack::Port::OUTPUT, index, center);
     addOutput(output);
+  }
+
+  void install_button(std::string type, int index, rack::Vec center) {
+    auto button = Button::create(module, module_name, type, index, center);
+    addParam(button);
   }
 
   template<class T>
