@@ -1,10 +1,6 @@
 #include <algorithm>
 #include <random>
 
-#include <app.hpp>
-#include <componentlibrary.hpp>
-#include <engine.hpp>
-
 #include "module-widget.hpp"
 
 namespace DHE {

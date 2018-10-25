@@ -1,8 +1,5 @@
 #include <algorithm>
 
-#include <componentlibrary.hpp>
-#include <engine.hpp>
-
 #include "dhe-modules.hpp"
 #include "module.hpp"
 #include "module-widget.hpp"

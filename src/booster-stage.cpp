@@ -1,8 +1,5 @@
 #include <utility>
 
-#include <asset.hpp>
-#include <componentlibrary.hpp>
-
 #include "dhe-modules.hpp"
 #include "module.hpp"
 #include "module-widget.hpp"
