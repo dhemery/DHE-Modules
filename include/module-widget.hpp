@@ -12,41 +12,15 @@ namespace DHE {
 void moveTo(rack::Rect &box, rack::Vec center);
 
 struct Port : rack::SVGPort {
-  static Port *create(rack::Module *module, std::string module_name, rack::Port::PortType type, int index, rack::Vec center) {
-    auto image_file = std::string("res/") + module_name + "/port.svg";
-    auto input = rack::Port::create<Port>({0, 0}, type, module, index);
-    input->background->svg = rack::SVG::load(assetPlugin(plugin, image_file));
-    input->background->wrap();
-    input->box.size = input->background->box.size;
-    moveTo(input->box, rack::mm2px(center));
-    return input;
-  }
+  static Port *create(rack::Module *module, std::string module_name, rack::Port::PortType type, int index, rack::Vec center);
 };
 
 struct Knob : rack::RoundKnob {
-  static Knob *create(rack::Module *module, std::string module_name, std::string size, int index, rack::Vec center, float initial) {
-    auto knob = rack::ParamWidget::create<Knob>({0, 0}, module, index, 0.f, 1.f, initial);
-    auto image_file = std::string("res/") + module_name + "/knob-" + size + ".svg";
-    knob->setSVG(rack::SVG::load(rack::assetPlugin(plugin, image_file)));
-    knob->shadow->opacity = 0.f;
-    moveTo(knob->box, rack::mm2px(center));
-    return knob;
-  }
+  static Knob *create(rack::Module *module, std::string module_name, std::string size, int index, rack::Vec center, float initial);
 };
 
 struct Button : rack::SVGSwitch, rack::MomentarySwitch {
-  static Button *create(rack::Module *module, std::string module_name, std::string type, int index, rack::Vec center) {
-    auto button = Component::create<Button>({0,0}, module);
-    auto off_image_file = std::string("res/") + module_name + "/button-" + type + "-off.svg";
-    auto on_image_file = std::string("res/") + module_name + "/button-" + type + "-on.svg";
-    button->addFrame(rack::SVG::load(rack::assetPlugin(plugin, off_image_file)));
-    button->addFrame(rack::SVG::load(rack::assetPlugin(plugin, on_image_file)));
-		button->paramId = index;
-		button->setLimits(0.f, 1.f);
-		button->setDefaultValue(0.f);
-    moveTo(button->box, rack::mm2px(center));
-    return button;
-  }
+  static Button *create(rack::Module *module, std::string module_name, std::string type, int index, rack::Vec center);
 };
 
 class ModuleWidget : public rack::ModuleWidget {
