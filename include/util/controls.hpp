@@ -8,16 +8,18 @@ namespace DHE {
 namespace Duration {
 constexpr auto RANGE_MAX_TO_MIN_RATIO = 1000.f;
 constexpr auto MEDIUM_RANGE_MAX = 10.0f;
-constexpr auto MEDIUM_RANGE_MIN = MEDIUM_RANGE_MAX/RANGE_MAX_TO_MIN_RATIO;
+constexpr auto MEDIUM_RANGE_MIN = MEDIUM_RANGE_MAX / RANGE_MAX_TO_MIN_RATIO;
 
 constexpr auto SCALE_STEP = 10.f;
-constexpr auto SHORT_RANGE = Range{MEDIUM_RANGE_MIN/SCALE_STEP, MEDIUM_RANGE_MAX/SCALE_STEP};
+constexpr auto SHORT_RANGE =
+    Range{MEDIUM_RANGE_MIN / SCALE_STEP, MEDIUM_RANGE_MAX / SCALE_STEP};
 constexpr auto MEDIUM_RANGE = Range{MEDIUM_RANGE_MIN, MEDIUM_RANGE_MAX};
-constexpr auto LONG_RANGE = Range{MEDIUM_RANGE_MIN*SCALE_STEP, MEDIUM_RANGE_MAX*SCALE_STEP};
+constexpr auto LONG_RANGE =
+    Range{MEDIUM_RANGE_MIN * SCALE_STEP, MEDIUM_RANGE_MAX *SCALE_STEP};
 
 inline const Range &range(float switch_value) {
-  return switch_value < 0.5f ? SHORT_RANGE :
-         switch_value < 1.5f ? MEDIUM_RANGE : LONG_RANGE;
+  return switch_value < 0.5f ? SHORT_RANGE
+                             : switch_value < 1.5f ? MEDIUM_RANGE : LONG_RANGE;
 }
 
 inline float scaled(float rotation, const Range &range) {
@@ -33,7 +35,7 @@ inline float scaled(float rotation, const Range &range) {
   // Scale the tapered rotation to the desired range.
   return range.scale(j_tapered_rotation);
 }
-}
+} // namespace Duration
 
 namespace Level {
 
@@ -41,10 +43,11 @@ inline const Range &range(float switch_value) {
   return switch_value > 0.5f ? UNIPOLAR_SIGNAL_RANGE : BIPOLAR_SIGNAL_RANGE;
 }
 
-inline float scaled(float rotation, const Range &range = UNIPOLAR_SIGNAL_RANGE) {
+inline float scaled(float rotation,
+                    const Range &range = UNIPOLAR_SIGNAL_RANGE) {
   return range.scale(rotation);
 }
-}
+} // namespace Level
 
 namespace Taper {
 
@@ -75,5 +78,5 @@ inline float s(float phase, float rotation) {
   return BIPOLAR_PHASE_RANGE.normalize(s_tapered_bipolar_phase);
 }
 
-}
-}
+} // namespace Taper
+} // namespace DHE

@@ -1,0 +1,3 @@
+-I./include
+-I../Rack-SDK/include
+-I../Rack-SDK/dep/include

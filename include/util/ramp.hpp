@@ -113,4 +113,4 @@ private:
   DLatch active{};
   const std::function<float()> phase_increment;
 };
-}
+} // namespace DHE

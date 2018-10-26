@@ -18,12 +18,14 @@ struct DFlipFlop : public Latch {
    * Creates a flip-flop that compares the signal to the given thresholds.
    *
    * @param signal supplies the signal to evaluate
-   * @param low_threshold signal value at or below which the flip-flop state is LOW
-   * @param high_threshold signal value at or above which the flip-flop state is HIGH
+   * @param low_threshold signal value at or below which the flip-flop state is
+   * LOW
+   * @param high_threshold signal value at or above which the flip-flop state is
+   * HIGH
    */
-  DFlipFlop(std::function<float()> signal, float low_threshold, float high_threshold)
-      : signal{std::move(signal)},
-        low_threshold{low_threshold},
+  DFlipFlop(std::function<float()> signal, float low_threshold,
+            float high_threshold)
+      : signal{std::move(signal)}, low_threshold{low_threshold},
         high_threshold{high_threshold} {}
 
   /**
@@ -52,4 +54,4 @@ private:
   const float low_threshold = {0.1f};
   const float high_threshold = {0.9f};
 };
-}
+} // namespace DHE

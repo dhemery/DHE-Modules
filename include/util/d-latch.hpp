@@ -21,4 +21,4 @@ struct DLatch : Latch {
    */
   void reset() { set_state(State::LOW); }
 };
-}
+} // namespace DHE

@@ -15,6 +15,7 @@ inline float sigmoid(float x, float curvature) {
   curvature = curvature_range.clamp(curvature);
   x = BIPOLAR_PHASE_RANGE.clamp(x);
 
-  return (x - x*curvature)/(curvature - std::abs(x)*2.0f*curvature + 1.0f);
+  return (x - x * curvature) /
+         (curvature - std::abs(x) * 2.0f * curvature + 1.0f);
 }
-}
+} // namespace DHE

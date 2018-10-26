@@ -1,8 +1,8 @@
 #pragma once
 
+#include "util/d-flip-flop.hpp"
 #include <functional>
 #include <vector>
-#include "util/d-flip-flop.hpp"
 
 namespace DHE {
 struct Mode {
@@ -24,7 +24,8 @@ struct Mode {
 
 private:
   void fire(const std::vector<std::function<void()>> &actions) {
-    for (const auto &action : actions) action();
+    for (const auto &action : actions)
+      action();
   }
 
   std::vector<std::function<void()>> entry_actions;
@@ -43,25 +44,18 @@ class SubmodeSwitch : public Mode {
   }
 
 public:
-  SubmodeSwitch(std::function<float()> switch_signal, Mode *low_mode, Mode *high_mode) :
-      submode_switch{std::move(switch_signal)}, submode{low_mode} {
-    submode_switch.on_rise([this, high_mode] {
-      enter_submode(high_mode);
-    });
-    submode_switch.on_fall([this, low_mode] {
-      enter_submode(low_mode);
-    });
+  SubmodeSwitch(std::function<float()> switch_signal, Mode *low_mode,
+                Mode *high_mode)
+      : submode_switch{std::move(switch_signal)}, submode{low_mode} {
+    submode_switch.on_rise([this, high_mode] { enter_submode(high_mode); });
+    submode_switch.on_fall([this, low_mode] { enter_submode(low_mode); });
 
-    on_entry([this] {
-      submode->enter();
-    });
+    on_entry([this] { submode->enter(); });
     on_step([this] {
       submode_switch.step();
       submode->step();
     });
-    on_exit([this] {
-      submode->exit();
-    });
+    on_exit([this] { submode->exit(); });
   }
 };
-}
+} // namespace DHE

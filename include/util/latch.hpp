@@ -8,21 +8,17 @@ namespace DHE {
 class Latch {
 
 public:
-  bool is_high() const { return state==State::HIGH; }
+  bool is_high() const { return state == State::HIGH; }
 
   /**
    * Suspends firing events.
    */
-  void disable() {
-    enabled = false;
-  }
+  void disable() { enabled = false; }
 
   /**
    * Resumes firing events.
    */
-  void enable() {
-    enabled = true;
-  }
+  void enable() { enabled = true; }
 
   /**
    * Registers an action to be called on each rising edge.
@@ -41,14 +37,13 @@ public:
   }
 
 protected:
-  enum class State {
-    UNKNOWN, LOW, HIGH
-  } state = State::UNKNOWN;
+  enum class State { UNKNOWN, LOW, HIGH } state = State::UNKNOWN;
 
   void set_state(State incoming_state) {
-    if (state==incoming_state) return;
+    if (state == incoming_state)
+      return;
     state = incoming_state;
-    fire(state==State::HIGH ? rise_actions : fall_actions);
+    fire(state == State::HIGH ? rise_actions : fall_actions);
   }
 
 private:
@@ -63,4 +58,4 @@ private:
       action();
   }
 };
-}
+} // namespace DHE

@@ -25,28 +25,27 @@ struct Ranger : Module {
   }
 
   void step() override {
-    auto max =
-        limit_value(LIMIT_1_KNOB, LIMIT_1_CV_IN, LIMIT_1_AV_KNOB, LIMIT_1_RANGE_SWITCH);
-    auto min =
-        limit_value(LIMIT_2_KNOB, LIMIT_2_CV_IN, LIMIT_2_AV_KNOB, LIMIT_2_RANGE_SWITCH);
+    auto max = limit_value(LIMIT_1_KNOB, LIMIT_1_CV_IN, LIMIT_1_AV_KNOB,
+                           LIMIT_1_RANGE_SWITCH);
+    auto min = limit_value(LIMIT_2_KNOB, LIMIT_2_CV_IN, LIMIT_2_AV_KNOB,
+                           LIMIT_2_RANGE_SWITCH);
     auto range = Range{min, max};
 
-    auto out =
-        ranged_value(LEVEL_KNOB, LEVEL_CV_IN, LEVEL_AV_KNOB, range);
+    auto out = ranged_value(LEVEL_KNOB, LEVEL_CV_IN, LEVEL_AV_KNOB, range);
 
     outputs[OUT].value = out;
   }
 
   enum ParameterIds {
-      LEVEL_KNOB,
-      LEVEL_AV_KNOB,
-      LIMIT_1_KNOB,
-      LIMIT_1_AV_KNOB,
-      LIMIT_1_RANGE_SWITCH,
-      LIMIT_2_KNOB,
-      LIMIT_2_AV_KNOB,
-      LIMIT_2_RANGE_SWITCH,
-      PARAMETER_COUNT
+    LEVEL_KNOB,
+    LEVEL_AV_KNOB,
+    LIMIT_1_KNOB,
+    LIMIT_1_AV_KNOB,
+    LIMIT_1_RANGE_SWITCH,
+    LIMIT_2_KNOB,
+    LIMIT_2_AV_KNOB,
+    LIMIT_2_RANGE_SWITCH,
+    PARAMETER_COUNT
   };
   enum InputIds { LEVEL_CV_IN, LIMIT_1_CV_IN, LIMIT_2_CV_IN, INPUT_COUNT };
   enum OutputIds { OUT, OUTPUT_COUNT };
