@@ -5,10 +5,33 @@ title: The Tapers Module (coming soon)
 
 A pair of knobs with adjustable tapers.
 
+A
+_[taper](https://en.wikipedia.org/wiki/Potentiometer#Resistance–position_relationship:_"taper")_
+is a
+_[transfer function](https://en.wikipedia.org/wiki/Transfer_function)_
+that defines the relationship
+between the position of the knob
+and the device's output value.
+
+_Tapers_ can produce
+[linear, J-shaped, or S-shaped]({{ '/technical/curves/' | relative_url }})
+tapers,
+as well as inverted J and S tapers.
+
+**NOTE:**
+    The [sigmoid function]({{ '/technical/sigmoid/' | relative_url }})
+    that generates the tapers
+    cannot accept _LEVEL_ and _TAPER_ values
+    outside the range of the knobs.
+    If a _CV_ signal would modulate a value
+    beyond the associated knob's range,
+    _Tapers_ clamps the modulated value
+    to the knob's range.
+
 ## Controls
 - **LEVEL:**
-    The input
-    to the transfer function
+    Selects a position
+    along the transfer function
     defined by the _TAPER_ panel.
 
 - **TAPER:**
@@ -27,16 +50,16 @@ A pair of knobs with adjustable tapers.
     selects the general [shape]({{ '/technical/curves/' | relative_url }})
     of the transfer function.
 
+- **UNI / BI:**
+    The voltage range of the output signal.
+    0 to 10V (UNI)
+    or -5 to 5V (BI).
+
 ## Ports
 - **OUT:**
     The output voltage,
     determined by applying the transfer function
     to the position of the _LEVEL_ knob.
-
-    The polarity switch **(UNI / BI)**
-    selects the range of the output voltage:
-    Either 0 to 10V (UNI)
-    or -5 to 5V (BI).
 
 - **CV:**
     Control voltage signal that modulates the associated knob.

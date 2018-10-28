@@ -7,24 +7,24 @@ A knob with independently adjustable upper and lower limits.
 
 ## Controls
 - **LEVEL:**
-    Selects a value between the limits
+    A value in the range
     set by the _LIMIT_ panels.
 
 - **LIMIT:**
     One end of the _LEVEL_ knob's range.
+    The middle panel sets the knob's upper limit.
+    The lower panel sets the lower limit.
 
-    The middle panel sets the _LEVEL_ knob's upper limit.
-    The lower panel sets the _LEVEL_ knob's lower limit.
-
-- **UNI / BI**
-    (polarity switch):
-    Selects the range of the associated _LIMIT_ knob:
-    Either 0 to 10V (UNI)
+- **UNI / BI:**
+    The voltage range of the associated _LIMIT_ knob.
+    0 to 10V (UNI)
     or -5 to 5V (BI).
 
 ## Ports
 - **OUT:**
-    The output voltage.
+    The output voltage,
+    selected by the _LEVEL_ knob
+    within the range specified by the _LIMIT_ knobs.
 
 - **CV:**
     Control voltage signal that modulates the associated knob.

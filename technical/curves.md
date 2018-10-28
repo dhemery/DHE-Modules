@@ -5,13 +5,30 @@ title: J and S Curves
 Several of the DHE Modules
 apply a curved transfer function
 to produce their output.
-The transfer function come in two shapes:
+The transfer function comes in two shapes:
 
 - [J curves](#j-curves)
 - [S curves](#s-curves)
 
-Each module's _CURVE_ knob
-sets the sign (positive or negative)
+[_Stage_]({{ '/modules/stage/' | relative_url }})
+and
+[_Booster Stage_]({{ '/modules/booster-stage/' | relative_url }})
+can generate J-shaped envelope stages.
+In addition,
+_Booster Stage_
+can generate S-shaped stages.
+
+[_Swave_]({{ '/modules/swave/' | relative_url }})
+can apply a J- or S-shaped transfer function
+to shape its input.
+
+[_Tapers_]({{ '/modules/tapers/' | relative_url }})
+can apply a J- or S-shaped taper
+to the position of its _LEVEL_ knob.
+
+Each module has a knob
+that determines
+the sign (positive or negative)
 and magnitude of the curvature.
 Positive curvature creates a J or S shape.
 Negative curvature inverts the shape.
@@ -25,18 +42,6 @@ Dino Dini's beautiful
 [**normalized tunable sigmoid function**]({{ 'technical/sigmoid/' | relative_url }}).
 
 ## J Curves
-[_Stage_]({{ '/modules/stage/' | relative_url }})
-and
-[_Booster Stage_]({{ '/modules/booster-stage/' | relative_url }})
-can generate J-shaped envelope stages.
-
-[_Swave_]({{ '/modules/swave/' | relative_url }})
-can apply a J-shaped transfer function
-to shape its input.
-
-[_Tapers_]({{ '/modules/tapers/' | relative_url }})
-can apply a J-shaped transfer function
-to the position of its _LEVEL_ knob.
 
 ### Positive J Curves
 
@@ -160,18 +165,6 @@ _pushes the steep part of the curve to the left._
     Or try it yourself.
 
 ## S Curves
-
-[_Booster Stage_]({{ '/modules/booster-stage/' | relative_url }})
-can generate S-shaped envelope stages.
-
-[_Swave_]({{ '/modules/swave/' | relative_url }})
-can apply an S-shaped transfer function
-to shape its input.
-
-[_Tapers_]({{ '/modules/tapers/' | relative_url }})
-can apply an S-shaped transfer function
-to the position of its _LEVEL_ knob.
-
 
 ### Positive S Curves
 
