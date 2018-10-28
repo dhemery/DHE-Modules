@@ -161,12 +161,6 @@ struct Xycloid : Module {
 struct XycloidMusicalRatiosMenuItem : rack::MenuItem {
   Xycloid *xycloid;
 
-  XycloidMusicalRatiosMenuItem(Xycloid *xycloid)
-      : MenuItem{}, xycloid{xycloid} {
-    this->text = "Musical Ratios";
-    this->rightText = "";
-  }
-
   void onAction(rack::EventAction &e) override {
     xycloid->toggle_musical_wobble_ratios();
   }
@@ -242,10 +236,14 @@ struct XycloidWidget : public ModuleWidget {
 
   void appendContextMenu(rack::Menu *menu) override {
     Xycloid *xycloid = dynamic_cast<Xycloid *>(module);
+    assert(xycloid);
+
     menu->addChild(rack::construct<rack::MenuLabel>());
     menu->addChild(
         rack::construct<rack::MenuLabel>(&rack::MenuLabel::text, "Options"));
-    menu->addChild(new XycloidMusicalRatiosMenuItem(xycloid));
+    menu->addChild(rack::construct<XycloidMusicalRatiosMenuItem>(
+        &rack::MenuItem::text, "Musical Ratios",
+        &XycloidMusicalRatiosMenuItem::xycloid, xycloid));
   }
 };
 
