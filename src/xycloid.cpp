@@ -158,19 +158,6 @@ struct Xycloid : Module {
   bool is_musical_wobble_ratios() { return wobble_ratio_offset == 0.f; }
 };
 
-struct XycloidMusicalRatiosMenuItem : rack::MenuItem {
-  Xycloid *xycloid;
-
-  void onAction(rack::EventAction &e) override {
-    xycloid->toggle_musical_wobble_ratios();
-  }
-
-  void step() override {
-    rightText = xycloid->is_musical_wobble_ratios() ? "✔" : "";
-    rack::MenuItem::step();
-  }
-};
-
 struct XycloidWidget : public ModuleWidget {
   XycloidWidget(rack::Module *module) : ModuleWidget(module, 11, "xycloid") {
     auto widget_right_edge = width();
@@ -241,9 +228,10 @@ struct XycloidWidget : public ModuleWidget {
     menu->addChild(rack::construct<rack::MenuLabel>());
     menu->addChild(
         rack::construct<rack::MenuLabel>(&rack::MenuLabel::text, "Options"));
-    menu->addChild(rack::construct<XycloidMusicalRatiosMenuItem>(
-        &rack::MenuItem::text, "Musical Ratios",
-        &XycloidMusicalRatiosMenuItem::xycloid, xycloid));
+    menu->addChild(new BooleanMenuItem(
+        "Musical Ratios",
+        [xycloid]() { xycloid->toggle_musical_wobble_ratios(); },
+        [xycloid]() -> bool { return xycloid->is_musical_wobble_ratios(); }));
   }
 };
 

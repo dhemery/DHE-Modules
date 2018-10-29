@@ -11,6 +11,16 @@
 namespace DHE {
 void moveTo(rack::Rect &box, rack::Vec center);
 
+struct BooleanMenuItem : rack::MenuItem {
+  BooleanMenuItem(std::string name, std::function<void()> toggle,
+                  std::function<bool()> is_on);
+  void onAction(rack::EventAction &e) override;
+  void step() override;
+
+  std::function<void()> toggle;
+  std::function<bool()> is_on;
+};
+
 struct Port : rack::SVGPort {
   static Port *create(rack::Module *module, std::string module_name,
                       rack::Port::PortType type, int index, rack::Vec center);

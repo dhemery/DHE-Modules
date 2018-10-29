@@ -8,6 +8,19 @@ void moveTo(rack::Rect &box, rack::Vec center) {
   box.pos = center.minus(box.size.mult(0.5f));
 }
 
+BooleanMenuItem::BooleanMenuItem(std::string name, std::function<void()> toggle,
+                                 std::function<bool()> is_on)
+    : toggle{toggle}, is_on{is_on} {
+  text = name;
+}
+
+void BooleanMenuItem::onAction(rack::EventAction &e) { toggle(); }
+
+void BooleanMenuItem::step() {
+  rightText = is_on() ? "✔" : "";
+  rack::MenuItem::step();
+}
+
 Port *Port::create(rack::Module *module, std::string module_name,
                    rack::Port::PortType type, int index, rack::Vec center) {
   auto image_file = std::string("res/") + module_name + "/port.svg";
