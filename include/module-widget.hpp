@@ -12,12 +12,12 @@ namespace DHE {
 void moveTo(rack::Rect &box, rack::Vec center);
 
 struct BooleanMenuItem : rack::MenuItem {
-  BooleanMenuItem(std::string name, std::function<void()> toggle,
+  BooleanMenuItem(std::string name, std::function<void(bool)> set,
                   std::function<bool()> is_on);
   void onAction(rack::EventAction &e) override;
   void step() override;
 
-  std::function<void()> toggle;
+  std::function<void(bool)> set;
   std::function<bool()> is_on;
 };
 

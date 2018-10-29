@@ -144,15 +144,11 @@ struct Xycloid : Module {
   void fromJson(json_t *configuration) override {
     json_t *musical_wobble_ratios =
         json_object_get(configuration, "musical_wobble_ratios");
-    set_wobble_ratios(json_is_true(musical_wobble_ratios));
+    set_musical_wobble_ratios(json_is_true(musical_wobble_ratios));
   }
 
-  void set_wobble_ratios(bool is_musical) {
+  void set_musical_wobble_ratios(bool is_musical) {
     wobble_ratio_offset = is_musical ? 0.f : 1.f;
-  }
-
-  void toggle_musical_wobble_ratios() {
-    set_wobble_ratios(!is_musical_wobble_ratios());
   }
 
   bool is_musical_wobble_ratios() { return wobble_ratio_offset == 0.f; }
@@ -230,7 +226,9 @@ struct XycloidWidget : public ModuleWidget {
         rack::construct<rack::MenuLabel>(&rack::MenuLabel::text, "Options"));
     menu->addChild(new BooleanMenuItem(
         "Musical Ratios",
-        [xycloid]() { xycloid->toggle_musical_wobble_ratios(); },
+        [xycloid](bool setting) {
+          xycloid->set_musical_wobble_ratios(setting);
+        },
         [xycloid]() -> bool { return xycloid->is_musical_wobble_ratios(); }));
   }
 };
