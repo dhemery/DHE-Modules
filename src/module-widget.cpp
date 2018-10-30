@@ -8,16 +8,16 @@ void moveTo(rack::Rect &box, rack::Vec center) {
   box.pos = center.minus(box.size.mult(0.5f));
 }
 
-BooleanMenuItem::BooleanMenuItem(std::string name,
+BooleanOption::BooleanOption(std::string name,
                                  std::function<void(bool)> set,
                                  std::function<bool()> is_on)
     : set{set}, is_on{is_on} {
   text = name;
 }
 
-void BooleanMenuItem::onAction(rack::EventAction &e) { set(!is_on()); }
+void BooleanOption::onAction(rack::EventAction &e) { set(!is_on()); }
 
-void BooleanMenuItem::step() {
+void BooleanOption::step() {
   rightText = is_on() ? "✔" : "";
   rack::MenuItem::step();
 }

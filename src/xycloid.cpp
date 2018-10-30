@@ -224,7 +224,7 @@ struct XycloidWidget : public ModuleWidget {
     menu->addChild(rack::construct<rack::MenuLabel>());
     menu->addChild(
         rack::construct<rack::MenuLabel>(&rack::MenuLabel::text, "Options"));
-    menu->addChild(new BooleanMenuItem(
+    menu->addChild(new BooleanOption(
         "Musical Ratios",
         [xycloid](bool setting) {
           xycloid->set_musical_wobble_ratios(setting);
