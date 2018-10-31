@@ -1,4 +1,4 @@
-FROM ubuntu
+FROM ubuntu:xenial
 RUN apt-get update \
   && apt-get install -y --no-install-recommends software-properties-common \
   && add-apt-repository -y ppa:ubuntu-toolchain-r/test \
