@@ -1,5 +1,5 @@
 SLUG = DHE-Modules
-VERSION = 0.6.2
+VERSION = 0.6.3
 RACK_DIR ?= ../..
 
 FLAGS += -I./include
