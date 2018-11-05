@@ -45,7 +45,7 @@ and more.
 [![_Xycloid_](modules/xycloid/panel.svg)](modules/xycloid/)
 
 **[_Xycloid_](modules/xycloid/)**
-produces a complex, pulsing
+produces a complex, pulsing,
 _throb_ and _wobble_ LFO effect
 with accents that either repeat or vary.
 

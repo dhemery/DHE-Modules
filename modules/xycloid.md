@@ -3,7 +3,7 @@ title: The Xycloid Module
 ---
 <img class="panel" src="panel.svg" alt="The Xycloid Panel" />
 
-Produces a complex, pulsing
+Produces a complex, pulsing,
 throb and wobble LFO effect
 with accents that either repeat or vary.
 
@@ -130,38 +130,28 @@ See:
 
 ## Using Xycloid
 
-1. Choose one or two Rack modules that you want to modulate.
-1. Choose two parameters that have CV modulation.
-1. Connect Xycloid's _X_ output to one parameter's CV input
-    and the _Y_ output to the other's.
-1. (Optional)
-   To view the shape that Xycloid produces,
-   connect its _X_ and _Y_ outputs to a Scope's _X_ and _Y_ inputs.
-   Set the scope to _X x Y_ mode.
-   (_X/Y_ mode can also be interesting.)
-1. **Play with the knobs.**
-1. For extra chaos,
-    modulate Xycloid's controls.
-1. For extra, extra chaos,
-    use Xycloid's outputs
-    to modulate its own controls.
+- Adjust the _SPEED_ knob to control the frequency of the throb cycle, and
+  therefore the frequency of the overall pattern.
+- Adjust the _RATIO_ knob to control the number of wobble cycles within each
+  throb cycle.
+- Adjust the _DEPTH_ knob to control whether the throb cycle, the wobble cycle,
+  or neither cycle dominates the overall pattern
+- Adjust the _PHASE_ knob to shift the position of the wobbles within the throb
+  cycle, which determines where the accents fall within each throb.
+- _FIXED_ mode produces a whole number of wobbles for each throb.  As a result,
+  the pattern of accents repeats exactly from one throb cycle to the next.
+- _FREE_ mode allows the pattern of wobbles to drift over time.  This can
+  create yet another, longer cycle in the pattern of accents.
+- For extra chaos, modulate Xycloid's controls.
+- For extra, extra chaos, use Xycloid's outputs to modulate its own controls.
 
-**The Audible Instruments Macro Oscillator**
-is a fantastic choice for exploring what Xycloid can do.
-Attach Xycloid's _X_ and _Y_ outputs
-to the Macro Oscillator's _TIMBRE_ and _COLOR_ inputs.
-Modulating _V/OCT_ and _FM_ is also fun.
-
-Then **play with the knobs.**
-
-**More stuff to try:**
+Xycloid's _X_ and _Y_ outputs are always **similar, but never identical** to
+each other.  You can use relationship to create interesting interactions
+between parameters:
 
 - Modulate two closely related parameters.
 - Modulate two parameters that have nothing to do with each other.
 - Modulate the same parameter on different modules.
-    For example,
-    modulate the _PWM_ input on two Fundamental VCO-1s.
-    Or the _FM_ inputs.
 
 ## Plotting Xycloid
 
@@ -172,3 +162,8 @@ which can be either a
 _[hypotrochoid](https://en.wikipedia.org/wiki/Hypotrochoid)_
 or an
 _[epitrochoid](https://en.wikipedia.org/wiki/Epitrochoid)._
+
+To view the shape that Xycloid produces, connect its _X_ and _Y_ outputs to a
+Scope's _X_ and _Y_ inputs.  Set the scope to _X x Y_ mode.  Note that the
+scope's _X/Y_ mode can also be interesting.
+
