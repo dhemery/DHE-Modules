@@ -3,7 +3,7 @@ title: The Ranger Module (coming soon)
 ---
 <img class="panel" src="panel.svg" alt="The Ranger Panel" />
 
-A knob with independently adjustable upper and lower limits.
+A knob with an adjustable, modulatable range.
 
 ## Controls
 - **LEVEL:**
@@ -11,9 +11,9 @@ A knob with independently adjustable upper and lower limits.
     set by the _LIMIT_ panels.
 
 - **LIMIT:**
-    One end of the _LEVEL_ knob's range.
-    The middle panel sets the knob's upper limit.
-    The lower panel sets the lower limit.
+    One end of the _LEVEL_ knob's range.  The middle panel sets the the value
+    of the _LEVEL_ knob's fully clockwise position.  The lower panel sets the
+    the value of the _LEVEL_ knob's fully counterclockwise position.
 
 - **UNI / BI:**
     The voltage range of the associated _LIMIT_ knob.
