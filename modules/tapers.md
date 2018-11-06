@@ -19,11 +19,9 @@ tapers,
 as well as inverted J and S tapers.
 
 **WARNING:**
-The [sigmoid function]({{ '/technical/sigmoid/' | relative_url }}) that
-generates the tapers is nicely defined within the normal range of the _LEVEL_
-knob.  If you modulate the _LEVEL_ beyond its normal range, Tapers will
-sometimes generate outputs far beyond its normal range.  This is especially
-true as the _CURVE_ knob approaches either extreme.
+Modulating a _LEVEL_ knob beyond its normal range can generate outputs far
+outside the knob's normal range.  This is especially true as the _CURVE_ knob
+approaches either extreme.
 
 ## Controls
 - **LEVEL:**
