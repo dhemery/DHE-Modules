@@ -62,18 +62,6 @@ See also:
         1/10 of the maximum:
         100ms, 1s, or 10s.
 
-    The _DURATION_ knob is modulated by the **CV** input.
-    The modulation is calibrated so that:
-    - A 0V _CV_ signal yields the value of the knob.
-    - A 5V _CV_ signal yields the value
-        as if the knob were rotated 50%
-        clockwise
-        of its actual position.
-    - A -5V _CV_ signal yields the value
-        as if the knob were rotated 50%
-        counterclockwise
-        of its actual position.
-
     In _GATE_ mode,
     _Hostage_ ignores the _DURATION_ controls.
 
@@ -130,6 +118,10 @@ See also:
 - **OUT:**
     The generated stage signal
     or (when deferring) the _IN_ signal.
+
+- **CV:**
+    A [control voltage]({{ '/technical/modulation/' | relative_url }})
+    signal to modulate the duration.
 
 ## Notes
 

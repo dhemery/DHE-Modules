@@ -18,15 +18,12 @@ _Tapers_ can produce
 tapers,
 as well as inverted J and S tapers.
 
-**NOTE:**
-    The [sigmoid function]({{ '/technical/sigmoid/' | relative_url }})
-    that generates the tapers
-    cannot accept _LEVEL_ and _TAPER_ values
-    outside the range of the knobs.
-    If a _CV_ signal would modulate a value
-    beyond the associated knob's range,
-    _Tapers_ clamps the modulated value
-    to the knob's range.
+**WARNING:**
+The [sigmoid function]({{ '/technical/sigmoid/' | relative_url }}) that
+generates the tapers is nicely defined within the normal range of the _LEVEL_
+knob.  If you modulate the _LEVEL_ beyond its normal range, Tapers will
+sometimes generate outputs far beyond its normal range.  This is especially
+true as the _CURVE_ knob approaches either extreme.
 
 ## Controls
 - **LEVEL:**
@@ -34,7 +31,7 @@ as well as inverted J and S tapers.
     along the transfer function
     defined by the _TAPER_ panel.
 
-- **TAPER:**
+- **CURVE:**
     The curvature
     of the transfer function
     applied to the _LEVEL_ knob.
@@ -62,23 +59,8 @@ as well as inverted J and S tapers.
     to the position of the _LEVEL_ knob.
 
 - **CV:**
-    Control voltage signal that modulates the associated knob.
-    The modulation is calibrated so that:
-    - A 0V _CV_ signal yields the value of the knob.
-    - A 5V _CV_ signal yields the value
-        as if the knob were rotated 50%
-        clockwise
-        of its actual position.
-    - A -5V _CV_ signal yields the value
-        as if the knob were rotated 50%
-        counterclockwise
-        of its actual position.
-
-    Each _CV_ port
-        is accompanied by a small *attenuverter* (**- +**) knob,
-        which adjusts the strength and direction
-        of the the _CV_ signal's effect
-        on the modulated knob.
+    A [control voltage]({{ '/technical/modulation/' | relative_url }}) signal
+    to modulate the associated parameter. Each CV input has an attenuverter.
 
 ## Using Tapers
 

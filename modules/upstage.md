@@ -43,19 +43,6 @@ For details, see:
     Either unipolar control voltage (0 to 10V)
     or bipolar control voltage (-5 to 5V).
 
-    The _LEVEL_ knob is modulated by the **CV** input.
-    The modulation is calibrated so that:
-    - A 0V _CV_ signal yields the value
-        of the knob's current position.
-    - A 5V _CV_ signal yields the value
-        as if the knob were rotated 50%
-        clockwise
-        of its actual position.
-    - A -5V _CV_ signal yields the value
-        as if the knob were rotated 50%
-        counterclockwise
-        of its actual position.
-
 - **WAIT button:**
     Suppresses triggers
     from both the _TRIG_ input and the _TRIG_ button.
@@ -97,3 +84,7 @@ For details, see:
 
 - **OUT:**
     Sends the voltage set by the (_CV_-modulated) _LEVEL_ knob.
+
+- **CV:**
+    A [control voltage]({{ '/technical/modulation/' | relative_url }}) signal
+    to modulate the _LEVEL_ parameter.

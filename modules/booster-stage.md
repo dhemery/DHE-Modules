@@ -116,17 +116,8 @@ See also:
     or (when deferring) the _IN_ signal.
 
 - **CV:**
-    Control voltage signal that modulates the associated knob.
-    The modulation is calibrated so that:
-    - A 0V _CV_ signal yields the value of the knob.
-    - A 5V _CV_ signal yields the value
-        as if the knob were rotated 50%
-        clockwise
-        of its actual position.
-    - A -5V _CV_ signal yields the value
-        as if the knob were rotated 50%
-        counterclockwise
-        of its actual position.
+    A [control voltage]({{ '/technical/modulation/' | relative_url }})
+    signal to modulate the associated parameter.
 
 ## Notes
 

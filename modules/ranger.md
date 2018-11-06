@@ -7,7 +7,7 @@ A knob with an adjustable, modulatable range.
 
 ## Controls
 - **LEVEL:**
-    A value in the range
+    Interpolates between the values
     set by the _LIMIT_ panels.
 
 - **LIMIT:**
@@ -27,23 +27,8 @@ A knob with an adjustable, modulatable range.
     within the range specified by the _LIMIT_ knobs.
 
 - **CV:**
-    Control voltage signal that modulates the associated knob.
-    The modulation is calibrated so that:
-    - A 0V _CV_ signal yields the value of the knob.
-    - A 5V _CV_ signal yields the value
-        as if the knob were rotated 50%
-        clockwise
-        of its actual position.
-    - A -5V _CV_ signal yields the value
-        as if the knob were rotated 50%
-        counterclockwise
-        of its actual position.
-
-    Each _CV_ port
-        is accompanied by a small *attenuverter* (**- +**) knob,
-        which adjusts the strength and direction
-        of the the _CV_ signal's effect
-        on the modulated knob.
+    A [control voltage]({{ '/technical/modulation/' | relative_url }}) signal
+    to modulate the associated parameter. Each CV input has an attenuverter.
 
 ## Using Ranger
 
