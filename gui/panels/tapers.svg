@@ -20,15 +20,15 @@ controls:
 {% assign panel_buffer = 4.0 %}
 {% assign separator_offset = 10.0 %}
 
+{{ page | connector: left_x, y, right_x, y  }}
 {{ page | cv: left_x, y }}
 {{ page | attenuverter: center_x, y }}
 {{ page | medium_knob: right_x, y, 'LEVEL' }}
-{{ page | connector: left_x, y, right_x, y  }}
 {% assign y = y | plus:delta_y %}
+{{ page | connector: left_x, y, right_x, y  }}
 {{ page | cv: left_x, y }}
 {{ page | attenuverter: center_x, y }}
-{{ page | medium_knob: right_x, y, 'TAPER' }}
-{{ page | connector: left_x, y, right_x, y  }}
+{{ page | medium_knob: right_x, y, 'CURVE' }}
 {% assign y = y | plus:delta_y %}
 {{ page | shape_switch: left_x, y }}
 {{ page | polarity_switch: center_x, y }}
@@ -38,15 +38,15 @@ controls:
 {{ page | connector: 0.0, y, width, y  }}
 {% assign y = y | plus:delta_y | plus:panel_buffer | minus:separator_offset %}
 
+{{ page | connector: left_x, y, right_x, y  }}
 {{ page | cv: left_x, y }}
 {{ page | attenuverter: center_x, y }}
 {{ page | medium_knob: right_x, y, 'LEVEL' }}
-{{ page | connector: left_x, y, right_x, y  }}
 {% assign y = y | plus:delta_y %}
+{{ page | connector: left_x, y, right_x, y  }}
 {{ page | cv: left_x, y }}
 {{ page | attenuverter: center_x, y }}
-{{ page | medium_knob: right_x, y, 'TAPER' }}
-{{ page | connector: left_x, y, right_x, y  }}
+{{ page | medium_knob: right_x, y, 'CURVE' }}
 {% assign y = y | plus:delta_y %}
 {{ page | shape_switch: left_x, y }}
 {{ page | polarity_switch: center_x, y }}
