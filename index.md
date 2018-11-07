@@ -60,14 +60,12 @@ with accents that either repeat or vary.
 transforms its input signal by offsetting, scaling, squaring, and cubing it.
 
 **[_Ranger_](modules/ranger/)**
-(coming soon)
 is a knob with an adjustable, modulatable range.
 
 **[_Swave_](modules/swave/)**
 is a waveshaper with a unique sigmoid transfer function.
 
 **[_Tapers_](modules/tapers/)**
-(coming soon)
 is a pair of knobs with adjustable tapers.
 
 ## See Also

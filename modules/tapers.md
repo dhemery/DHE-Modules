@@ -1,5 +1,5 @@
 ---
-title: The Tapers Module (coming soon)
+title: The Tapers Module
 ---
 <img class="panel" src="panel.svg" alt="The Tapers Panel" />
 

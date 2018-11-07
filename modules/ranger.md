@@ -1,5 +1,5 @@
 ---
-title: The Ranger Module (coming soon)
+title: The Ranger Module
 ---
 <img class="panel" src="panel.svg" alt="The Ranger Panel" />
 
