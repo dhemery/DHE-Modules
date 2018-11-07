@@ -13,7 +13,7 @@ void moveTo(rack::Rect &box, rack::Vec center);
 
 struct BooleanOption : rack::MenuItem {
   BooleanOption(std::string name, std::function<void(bool)> set,
-                  std::function<bool()> is_on);
+                std::function<bool()> is_on);
   void onAction(rack::EventAction &e) override;
   void step() override;
 

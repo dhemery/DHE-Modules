@@ -10,28 +10,32 @@
 namespace DHE {
 
 struct Tapers : Module {
+  std::function<float()> level1_knob = knob(
+      params[LEVEL_1_KNOB], inputs[LEVEL_1_CV_IN], params[LEVEL_1_AV_KNOB]);
+  std::function<float()> taper1_knob = knob(
+      params[TAPER_1_KNOB], inputs[TAPER_1_CV_IN], params[TAPER_1_AV_KNOB]);
+  std::function<float()> level2_knob = knob(
+      params[LEVEL_2_KNOB], inputs[LEVEL_2_CV_IN], params[LEVEL_2_AV_KNOB]);
+  std::function<float()> taper2_knob = knob(
+      params[TAPER_2_KNOB], inputs[TAPER_2_CV_IN], params[TAPER_2_AV_KNOB]);
+
   Tapers() : Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT} {}
 
   bool is_s_taper(int shape_switch) const { return param(shape_switch) > 0.5; }
 
   void step() override {
-    auto phase1 = modulated(LEVEL_1_KNOB, LEVEL_1_CV_IN, LEVEL_1_AV_KNOB);
-    auto tapered1 = taper(phase1, TAPER_1_KNOB, TAPER_1_CV_IN, TAPER_1_AV_KNOB,
-                          SHAPE_1_SWITCH);
+    auto tapered1 = taper(level1_knob(), taper1_knob(), SHAPE_1_SWITCH);
     auto range1 = Level::range(param(RANGE_1_SWITCH));
     outputs[OUT_1].value = range1.scale(tapered1);
 
-    auto phase2 = modulated(LEVEL_2_KNOB, LEVEL_2_CV_IN, LEVEL_2_AV_KNOB);
-    auto tapered2 = taper(phase2, TAPER_2_KNOB, TAPER_2_CV_IN, TAPER_2_AV_KNOB,
-                          SHAPE_2_SWITCH);
+    auto tapered2 = taper(level2_knob(), taper1_knob(), SHAPE_2_SWITCH);
     auto range2 = Level::range(param(RANGE_2_SWITCH));
     outputs[OUT_2].value = range2.scale(tapered2);
   }
 
-  float taper(float phase, int knob, int cv, int av, int shape) const {
-    auto curvature = modulated(knob, cv, av);
-    return is_s_taper(shape) ? Taper::s(phase, curvature)
-                             : Taper::j(phase, curvature);
+  float taper(float level, float curvature, int shape) const {
+    return is_s_taper(shape) ? Taper::s(level, curvature)
+                             : Taper::j(level, curvature);
   }
 
   enum ParameterIds {

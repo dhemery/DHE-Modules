@@ -14,8 +14,7 @@ struct Upstage : Module {
 
   float envelope_out() const {
     const auto &range = Level::range(params[LEVEL_SWITCH].value);
-    auto rotation = modulated(LEVEL_KNOB, LEVEL_CV);
-    return Level::scaled(rotation, range);
+    return Level::scaled(level_knob(), range);
   }
 
   bool is_waiting() const {
@@ -42,6 +41,8 @@ struct Upstage : Module {
   };
   enum InputIds { TRIG_IN, WAIT_IN, LEVEL_CV, INPUT_COUNT };
   enum OutputIds { TRIG_OUT, ENVELOPE_OUT, OUTPUT_COUNT };
+  std::function<float()> level_knob =
+      knob(params[LEVEL_KNOB], inputs[LEVEL_CV]);
 };
 
 struct UpstageWidget : public ModuleWidget {

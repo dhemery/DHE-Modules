@@ -8,9 +8,8 @@ void moveTo(rack::Rect &box, rack::Vec center) {
   box.pos = center.minus(box.size.mult(0.5f));
 }
 
-BooleanOption::BooleanOption(std::string name,
-                                 std::function<void(bool)> set,
-                                 std::function<bool()> is_on)
+BooleanOption::BooleanOption(std::string name, std::function<void(bool)> set,
+                             std::function<bool()> is_on)
     : set{set}, is_on{is_on} {
   text = name;
 }

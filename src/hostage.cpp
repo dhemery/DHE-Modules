@@ -82,9 +82,8 @@ struct Hostage : Module {
   float mode_switch_in() const { return param(GATE_MODE_SWITCH); }
 
   float duration_in() const {
-    auto rotation = modulated(DURATION_KNOB, DURATION_CV);
     const auto &range = Duration::range(param(DURATION_SWITCH));
-    return Duration::scaled(rotation, range);
+    return Duration::scaled(duration_knob(), range);
   }
 
   float hold_gate_in() const { return input(HOLD_GATE_IN); }
@@ -102,6 +101,9 @@ struct Hostage : Module {
   }
 
   float sample_time() const { return rack::engineGetSampleTime(); }
+
+  std::function<float()> duration_knob =
+      knob(params[DURATION_KNOB], inputs[DURATION_CV]);
 
   enum InputIds {
     DEFER_IN,

@@ -12,13 +12,18 @@
 namespace DHE {
 
 struct BoosterStage : Module {
-  Mode stage_mode = {};
-  Mode defer_mode = {};
+  Mode stage_mode{};
+  Mode defer_mode{};
 
-  // TODO: Move this inside stage mode or an envelope class.
   float phase_0_voltage{0.f};
   bool is_active{false};
   bool is_eoc{false};
+
+  std::function<float()> duration_knob = knob(params[DURATION_KNOB]);
+  std::function<float()> level_knob =
+      knob(params[LEVEL_KNOB], inputs[LEVEL_CV]);
+  std::function<float()> curve_knob =
+      knob(params[CURVE_KNOB], inputs[CURVE_CV]);
 
   Ramp envelope = Ramp{[this] { return sample_time() / duration_in(); }};
   Ramp eoc_pulse = Ramp{[this] { return sample_time() / 1e-3f; }};
@@ -40,8 +45,7 @@ struct BoosterStage : Module {
     stage_mode.on_step([this] {
       envelope_trigger.step();
       envelope.step();
-      send_envelope(envelope_voltage(
-          envelope.phase())); // TODO: Move to envelope.on_step()
+      send_envelope(envelope_voltage(envelope.phase()));
     });
     stage_mode.on_exit([this] {
       envelope_trigger.disable();
@@ -77,9 +81,8 @@ struct BoosterStage : Module {
   }
 
   float duration_in() const {
-    auto rotation = modulated(DURATION_KNOB, DURATION_CV);
     const auto &range = Duration::range(param(DURATION_SWITCH));
-    return Duration::scaled(rotation, range);
+    return Duration::scaled(duration_knob(), range);
   }
 
   float envelope_gate_in() const {
@@ -96,8 +99,7 @@ struct BoosterStage : Module {
 
   float level_in() const {
     const auto &range = Level::range(param(LEVEL_SWITCH));
-    auto rotation = modulated(LEVEL_KNOB, LEVEL_CV);
-    return Level::scaled(rotation, range);
+    return Level::scaled(level_knob(), range);
   }
 
   void send_active() {
@@ -115,8 +117,9 @@ struct BoosterStage : Module {
   float sample_time() const { return rack::engineGetSampleTime(); }
 
   float taper(float phase) const {
-    auto rotation = modulated(CURVE_KNOB, CURVE_CV);
-    return is_s_taper() ? Taper::s(phase, rotation) : Taper::j(phase, rotation);
+    auto curvature = curve_knob();
+    return is_s_taper() ? Taper::s(phase, curvature)
+                        : Taper::j(phase, curvature);
   }
 
   enum ParameterIds {

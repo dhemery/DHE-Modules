@@ -21,7 +21,7 @@ struct Swave : Module {
   float swave_in() const { return input(SWAVE_IN); }
 
   float taper(float phase) const {
-    auto rotation = modulated(CURVE_KNOB, CURVE_CV);
+    auto rotation = curve_knob();
     return is_s_taper() ? Taper::s(phase, rotation) : Taper::j(phase, rotation);
   }
 
@@ -36,6 +36,8 @@ struct Swave : Module {
   enum ParameterIds { CURVE_KNOB, SHAPE_SWITCH, PARAMETER_COUNT };
   enum InputIds { CURVE_CV, SWAVE_IN, INPUT_COUNT };
   enum OutputIds { SWAVE_OUT, OUTPUT_COUNT };
+  std::function<float()> curve_knob =
+      knob(params[CURVE_KNOB], inputs[CURVE_CV]);
 };
 
 struct SwaveWidget : public ModuleWidget {

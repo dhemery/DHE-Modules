@@ -17,20 +17,12 @@ struct Cubic : Module {
     return coefficient_range;
   }
 
-  float gain(int knob, int cv) const {
-    return gain_range().scale(modulated(knob, cv));
-  }
-
-  float coefficient(int knob, int cv) const {
-    return coefficient_range().scale(modulated(knob, cv));
-  }
-
-  float a() const { return coefficient(X3_KNOB, X3_CV); }
-  float b() const { return coefficient(X2_KNOB, X2_CV); }
-  float c() const { return coefficient(X1_KNOB, X1_CV); }
-  float d() const { return coefficient(X0_KNOB, X0_CV); }
-  float input_gain() const { return gain(INPUT_GAIN_KNOB, INPUT_GAIN_CV); }
-  float output_gain() const { return gain(OUTPUT_GAIN_KNOB, OUTPUT_GAIN_CV); }
+  float a() const { return coefficient_range().scale(x3_knob()); }
+  float b() const { return coefficient_range().scale(x2_knob()); }
+  float c() const { return coefficient_range().scale(x1_knob()); }
+  float d() const { return coefficient_range().scale(x0_knob()); }
+  float input_gain() const { return gain_range().scale(input_gain_knob()); }
+  float output_gain() const { return gain_range().scale(output_gain_knob()); }
 
   void step() override {
     auto x = input_gain() * input(IN) / 5.f;
@@ -62,6 +54,14 @@ struct Cubic : Module {
     INPUT_COUNT
   };
   enum OutputIds { OUT, OUTPUT_COUNT };
+  std::function<float()> x0_knob = knob(params[X0_KNOB], inputs[X0_CV]);
+  std::function<float()> x1_knob = knob(params[X1_KNOB], inputs[X1_CV]);
+  std::function<float()> x2_knob = knob(params[X2_KNOB], inputs[X2_CV]);
+  std::function<float()> x3_knob = knob(params[X3_KNOB], inputs[X3_CV]);
+  std::function<float()> input_gain_knob =
+      knob(params[INPUT_GAIN_KNOB], inputs[INPUT_GAIN_CV]);
+  std::function<float()> output_gain_knob =
+      knob(params[OUTPUT_GAIN_KNOB], inputs[OUTPUT_GAIN_CV]);
 };
 
 struct CubicWidget : public ModuleWidget {
