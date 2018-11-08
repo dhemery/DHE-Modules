@@ -2,15 +2,43 @@
 #include "module-widget.hpp"
 #include "module.hpp"
 
-#include "util/controls.hpp"
-
 namespace DHE {
 
 struct Tweaks : Module {
-
   Tweaks() : Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT} {}
 
-  void step() override {}
+  float gain(float input, int knob) const {
+    static constexpr auto gain_range = Range{0.f, 2.f};
+    return input * gain_range.scale(param(knob));
+  }
+
+  float av(float input, int knob) const {
+    static constexpr auto av_range = Range{-1.f,1.f};
+    return input * av_range.scale(param(knob));
+  }
+
+  float offset(float input, int knob) const {
+    static constexpr auto offset_range = Range{-5.f,5.f};
+    return input + offset_range.scale(param(knob));
+  }
+
+  const std::function<float(float,int)>& function_for_mode(int sw) {
+    static auto functions = std::vector<std::function<float(float,int)>>{
+      [this](float input, int knob) -> float { return offset(input, knob); },
+      [this](float input, int knob) -> float { return av(input, knob); },
+      [this](float input, int knob) -> float { return gain(input, knob); },
+    };
+    auto mode = static_cast<int>(param(sw));
+    return functions[mode];
+  }
+
+  void step() override {
+    for(auto i = 0 ; i < 5 ; i++) {
+      auto in = input(IN_1+i);
+      auto function = function_for_mode(MODE_1+i);
+      outputs[OUT_1+i].value = function(in, KNOB_1+i);
+    }
+  }
 
   enum ParameterIds {
     KNOB_1,
@@ -41,15 +69,17 @@ struct TweaksWidget : public ModuleWidget {
     auto top_row_y = 27.f;
     auto row_spacing = 20.f;
 
-    for (int row = 0; row < 5; row++) {
-      install_input(Tweaks::IN_1 + row, {left_x, top_row_y + row * row_spacing});
+    for (auto row = 0; row < 5; row++) {
+      install_input(Tweaks::IN_1 + row,
+                    {left_x, top_row_y + row * row_spacing});
       install_knob(
           "large", Tweaks::KNOB_1 + row,
           {left_center_x + 1.25f, top_row_y - 1.25f + row * row_spacing});
       install_switch(Tweaks::MODE_1 + row,
                      {right_center_x, top_row_y - 1.25f + row * row_spacing}, 2,
                      2);
-      install_output(Tweaks::OUT_1 + row, {right_x, top_row_y + row * row_spacing});
+      install_output(Tweaks::OUT_1 + row,
+                     {right_x, top_row_y + row * row_spacing});
     }
   }
 };
