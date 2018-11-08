@@ -13,30 +13,42 @@ struct Tweaks : Module {
   }
 
   float av(float input, int knob) const {
-    static constexpr auto av_range = Range{-1.f,1.f};
+    static constexpr auto av_range = Range{-1.f, 1.f};
     return input * av_range.scale(param(knob));
   }
 
   float offset(float input, int knob) const {
-    static constexpr auto offset_range = Range{-5.f,5.f};
+    static constexpr auto offset_range = Range{-5.f, 5.f};
     return input + offset_range.scale(param(knob));
   }
 
-  const std::function<float(float,int)>& function_for_mode(int sw) {
-    static auto functions = std::vector<std::function<float(float,int)>>{
-      [this](float input, int knob) -> float { return offset(input, knob); },
-      [this](float input, int knob) -> float { return av(input, knob); },
-      [this](float input, int knob) -> float { return gain(input, knob); },
+  const std::function<float(float, int)> &function_for_mode(int sw) {
+    static auto functions = std::vector<std::function<float(float, int)>>{
+        [this](float input, int knob) -> float { return offset(input, knob); },
+        [this](float input, int knob) -> float { return av(input, knob); },
+        [this](float input, int knob) -> float { return gain(input, knob); },
     };
     auto mode = static_cast<int>(param(sw));
     return functions[mode];
   }
 
+  float channel_input(int channel) {
+    if (channel == 0 || inputs[IN_1 + channel].active) {
+      return input(IN_1 + channel);
+    } else {
+      return outputs[OUT_1 + channel - 1].value;
+    }
+  }
+
+  float channel_value(int channel) {
+    auto in = channel_input(channel);
+    auto function = function_for_mode(MODE_1 + channel);
+    return function(in, KNOB_1 + channel);
+  }
+
   void step() override {
-    for(auto i = 0 ; i < 5 ; i++) {
-      auto in = input(IN_1+i);
-      auto function = function_for_mode(MODE_1+i);
-      outputs[OUT_1+i].value = function(in, KNOB_1+i);
+    for (auto chanel = 0; chanel < 5; chanel++) {
+      outputs[OUT_1 + chanel].value = channel_value(chanel);
     }
   }
 
