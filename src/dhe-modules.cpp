@@ -15,6 +15,7 @@ void init(rack::Plugin *p) {
   p->addModel(modelStage);
   p->addModel(modelSwave);
   p->addModel(modelTapers);
+  p->addModel(modelTweaks);
   p->addModel(modelUpstage);
   p->addModel(modelXycloid);
 }

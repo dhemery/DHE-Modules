@@ -10,5 +10,6 @@ extern rack::Model *modelRanger;
 extern rack::Model *modelStage;
 extern rack::Model *modelSwave;
 extern rack::Model *modelTapers;
+extern rack::Model *modelTweaks;
 extern rack::Model *modelUpstage;
 extern rack::Model *modelXycloid;
