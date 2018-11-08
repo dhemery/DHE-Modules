@@ -1,7 +1,7 @@
 ---
 layout: panel
 width: 11
-title: DHEFUNCT
+title: TWEAKS
 foreground-color: [270,100,50]
 background-color: [270,66,97]
 controls:
@@ -17,8 +17,14 @@ controls:
 {% assign delta_y = 20.0 %}
 {% assign y = 27.0 %}
 
+{% for i in (1..5) %}
 {{ page | in_port: left_x, y, 'IN' }}
-{{ page | large_knob: left_center_x, y, '' }}
-{{ page | switch: right_center_x, y, 'mid', 'GAIN', 'OFF', 'AV' }}
+{% assign knob_x = left_center_x | plus:1.25 %}
+{% assign knob_y = y | minus:1.25 %}
+{{ page | large_knob: knob_x, knob_y, '' }}
+{% assign switch_x = right_center_x | plus:0.0 %}
+{% assign switch_y = y | minus:1.25 %}
+{{ page | switch: switch_x, switch_y, 'high', 'GAIN', 'OFFSET', 'AV' }}
 {{ page | out_port: right_x, y, 'OUT' }}
 {% assign y = y | plus: delta_y %}
+{% endfor %}
