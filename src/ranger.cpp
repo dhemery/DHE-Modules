@@ -10,16 +10,13 @@ namespace DHE {
 
 struct Ranger : Module {
   std::vector<const Range> ranges{UNIPOLAR_SIGNAL_RANGE, BIPOLAR_PHASE_RANGE};
-  std::function<float()> level =
-      knob(params[LEVEL_KNOB], inputs[LEVEL_CV_IN], params[LEVEL_AV_KNOB]);
-  std::function<float()> limit1 = knob(
-      params[LIMIT_1_KNOB], inputs[LIMIT_1_CV_IN], params[LIMIT_1_AV_KNOB]);
-  std::function<float()> limit2 = knob(
-      params[LIMIT_2_KNOB], inputs[LIMIT_2_CV_IN], params[LIMIT_2_AV_KNOB]);
-  std::function<const Range &()> range1 =
-      range_switch(params[LIMIT_1_RANGE_SWITCH]);
-  std::function<const Range &()> range2 =
-      range_switch(params[LIMIT_2_RANGE_SWITCH]);
+  std::function<float()> level = knob(LEVEL_KNOB, LEVEL_CV_IN, LEVEL_AV_KNOB);
+  std::function<float()> limit1 =
+      knob(LIMIT_1_KNOB, LIMIT_1_CV_IN, LIMIT_1_AV_KNOB);
+  std::function<float()> limit2 =
+      knob(LIMIT_2_KNOB, LIMIT_2_CV_IN, LIMIT_2_AV_KNOB);
+  std::function<const Range &()> range1 = range_switch(LIMIT_1_RANGE_SWITCH);
+  std::function<const Range &()> range2 = range_switch(LIMIT_2_RANGE_SWITCH);
 
   Ranger() : Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT} {}
 

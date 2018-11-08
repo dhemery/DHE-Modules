@@ -19,11 +19,9 @@ struct BoosterStage : Module {
   bool is_active{false};
   bool is_eoc{false};
 
-  std::function<float()> duration_knob = knob(params[DURATION_KNOB]);
-  std::function<float()> level_knob =
-      knob(params[LEVEL_KNOB], inputs[LEVEL_CV]);
-  std::function<float()> curve_knob =
-      knob(params[CURVE_KNOB], inputs[CURVE_CV]);
+  std::function<float()> duration_knob = knob(DURATION_KNOB);
+  std::function<float()> level_knob = knob(LEVEL_KNOB, LEVEL_CV);
+  std::function<float()> curve_knob = knob(CURVE_KNOB, CURVE_CV);
 
   Ramp envelope = Ramp{[this] { return sample_time() / duration_in(); }};
   Ramp eoc_pulse = Ramp{[this] { return sample_time() / 1e-3f; }};

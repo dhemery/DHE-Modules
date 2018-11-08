@@ -36,8 +36,7 @@ struct Swave : Module {
   enum ParameterIds { CURVE_KNOB, SHAPE_SWITCH, PARAMETER_COUNT };
   enum InputIds { CURVE_CV, SWAVE_IN, INPUT_COUNT };
   enum OutputIds { SWAVE_OUT, OUTPUT_COUNT };
-  std::function<float()> curve_knob =
-      knob(params[CURVE_KNOB], inputs[CURVE_CV]);
+  std::function<float()> curve_knob = knob(CURVE_KNOB, CURVE_CV);
 };
 
 struct SwaveWidget : public ModuleWidget {

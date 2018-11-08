@@ -102,8 +102,7 @@ struct Hostage : Module {
 
   float sample_time() const { return rack::engineGetSampleTime(); }
 
-  std::function<float()> duration_knob =
-      knob(params[DURATION_KNOB], inputs[DURATION_CV]);
+  std::function<float()> duration_knob = knob(DURATION_KNOB, DURATION_CV);
 
   enum InputIds {
     DEFER_IN,

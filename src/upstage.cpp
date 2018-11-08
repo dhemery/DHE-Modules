@@ -41,8 +41,7 @@ struct Upstage : Module {
   };
   enum InputIds { TRIG_IN, WAIT_IN, LEVEL_CV, INPUT_COUNT };
   enum OutputIds { TRIG_OUT, ENVELOPE_OUT, OUTPUT_COUNT };
-  std::function<float()> level_knob =
-      knob(params[LEVEL_KNOB], inputs[LEVEL_CV]);
+  std::function<float()> level_knob = knob(LEVEL_KNOB, LEVEL_CV);
 };
 
 struct UpstageWidget : public ModuleWidget {

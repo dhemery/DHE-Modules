@@ -10,14 +10,14 @@
 namespace DHE {
 
 struct Tapers : Module {
-  std::function<float()> level1_knob = knob(
-      params[LEVEL_1_KNOB], inputs[LEVEL_1_CV_IN], params[LEVEL_1_AV_KNOB]);
-  std::function<float()> taper1_knob = knob(
-      params[TAPER_1_KNOB], inputs[TAPER_1_CV_IN], params[TAPER_1_AV_KNOB]);
-  std::function<float()> level2_knob = knob(
-      params[LEVEL_2_KNOB], inputs[LEVEL_2_CV_IN], params[LEVEL_2_AV_KNOB]);
-  std::function<float()> taper2_knob = knob(
-      params[TAPER_2_KNOB], inputs[TAPER_2_CV_IN], params[TAPER_2_AV_KNOB]);
+  std::function<float()> level1_knob =
+      knob(LEVEL_1_KNOB, LEVEL_1_CV_IN, LEVEL_1_AV_KNOB);
+  std::function<float()> taper1_knob =
+      knob(TAPER_1_KNOB, TAPER_1_CV_IN, TAPER_1_AV_KNOB);
+  std::function<float()> level2_knob =
+      knob(LEVEL_2_KNOB, LEVEL_2_CV_IN, LEVEL_2_AV_KNOB);
+  std::function<float()> taper2_knob =
+      knob(TAPER_2_KNOB, TAPER_2_CV_IN, TAPER_2_AV_KNOB);
 
   Tapers() : Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT} {}
 

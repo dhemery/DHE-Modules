@@ -123,17 +123,13 @@ struct Xycloid : Module {
   };
   enum OutputIds { X_OUT, Y_OUT, OUTPUT_COUNT };
   std::function<float()> wobble_ratio_knob =
-      knob(params[WOBBLE_RATIO_KNOB], inputs[WOBBLE_RATIO_CV],
-           params[WOBBLE_RATIO_AV]);
+      knob(WOBBLE_RATIO_KNOB, WOBBLE_RATIO_CV, WOBBLE_RATIO_AV);
   std::function<float()> wobble_depth_knob =
-      knob(params[WOBBLE_DEPTH_KNOB], inputs[WOBBLE_DEPTH_CV],
-           params[WOBBLE_DEPTH_AV]);
-  std::function<float()> throb_speed_knob = knob(
-      params[THROB_SPEED_KNOB], inputs[THROB_SPEED_CV], params[THROB_SPEED_AV]);
-  std::function<float()> x_gain_knob =
-      knob(params[X_GAIN_KNOB], inputs[X_GAIN_CV]);
-  std::function<float()> y_gain_knob =
-      knob(params[Y_GAIN_KNOB], inputs[Y_GAIN_CV]);
+      knob(WOBBLE_DEPTH_KNOB, WOBBLE_DEPTH_CV, WOBBLE_DEPTH_AV);
+  std::function<float()> throb_speed_knob =
+      knob(THROB_SPEED_KNOB, THROB_SPEED_CV, THROB_SPEED_AV);
+  std::function<float()> x_gain_knob = knob(X_GAIN_KNOB, X_GAIN_CV);
+  std::function<float()> y_gain_knob = knob(Y_GAIN_KNOB, Y_GAIN_CV);
 
   json_t *toJson() override {
     json_t *configuration = json_object();

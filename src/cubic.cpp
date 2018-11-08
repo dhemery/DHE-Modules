@@ -54,14 +54,13 @@ struct Cubic : Module {
     INPUT_COUNT
   };
   enum OutputIds { OUT, OUTPUT_COUNT };
-  std::function<float()> x0_knob = knob(params[X0_KNOB], inputs[X0_CV]);
-  std::function<float()> x1_knob = knob(params[X1_KNOB], inputs[X1_CV]);
-  std::function<float()> x2_knob = knob(params[X2_KNOB], inputs[X2_CV]);
-  std::function<float()> x3_knob = knob(params[X3_KNOB], inputs[X3_CV]);
-  std::function<float()> input_gain_knob =
-      knob(params[INPUT_GAIN_KNOB], inputs[INPUT_GAIN_CV]);
+  std::function<float()> x0_knob = knob(X0_KNOB, X0_CV);
+  std::function<float()> x1_knob = knob(X1_KNOB, X1_CV);
+  std::function<float()> x2_knob = knob(X2_KNOB, X2_CV);
+  std::function<float()> x3_knob = knob(X3_KNOB, X3_CV);
+  std::function<float()> input_gain_knob = knob(INPUT_GAIN_KNOB, INPUT_GAIN_CV);
   std::function<float()> output_gain_knob =
-      knob(params[OUTPUT_GAIN_KNOB], inputs[OUTPUT_GAIN_CV]);
+      knob(OUTPUT_GAIN_KNOB, OUTPUT_GAIN_CV);
 };
 
 struct CubicWidget : public ModuleWidget {
