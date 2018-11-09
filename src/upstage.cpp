@@ -10,11 +10,11 @@
 namespace DHE {
 
 struct Upstage : Module {
+  std::function<const Range&()> level_range = range_switch(LEVEL_SWITCH);
   Upstage() : Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT} {}
 
   float envelope_out() const {
-    const auto &range = Level::range(params[LEVEL_SWITCH].value);
-    return Level::scaled(level_knob(), range);
+    return level_range().scale(level_knob());
   }
 
   bool is_waiting() const {

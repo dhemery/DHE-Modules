@@ -12,6 +12,7 @@
 
 namespace DHE {
 struct Stage : public Module {
+  std::function<float()> level_knob = knob(LEVEL_KNOB);
   Mode stage_mode = {};
   Mode defer_mode = {};
 
@@ -26,6 +27,7 @@ struct Stage : public Module {
                             &defer_mode};
 
   void onReset() override { Module::onReset(); }
+
   Stage() : Module(PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT) {
     defer_mode.on_entry([this] { send_active(true); });
     defer_mode.on_step([this] { send_envelope(envelope_in()); });
@@ -78,7 +80,10 @@ struct Stage : public Module {
     return scale(taper(phase), phase_0_voltage, level_in());
   }
 
-  float level_in() const { return Level::scaled(param(LEVEL_KNOB)); }
+  float level_in() const {
+    static constexpr auto level_range = Range{0.f, 10.f};
+    return level_range.scale(level_knob());
+   }
 
   float sample_time() const { return rack::engineGetSampleTime(); }
 

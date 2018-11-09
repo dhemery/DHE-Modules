@@ -37,23 +37,10 @@ inline float scaled(float rotation, const Range &range) {
 }
 } // namespace Duration
 
-namespace Level {
-
-inline const Range &range(float switch_value) {
-  return switch_value > 0.5f ? UNIPOLAR_SIGNAL_RANGE : BIPOLAR_SIGNAL_RANGE;
-}
-
-inline float scaled(float rotation,
-                    const Range &range = UNIPOLAR_SIGNAL_RANGE) {
-  return range.scale(rotation);
-}
-} // namespace Level
-
 namespace Taper {
-
 inline float curvature(float rotation) {
-  // Scale the rotation to [-1,1] to use the entire range of the sigmoid curve.
-  auto bipolar_rotation = BIPOLAR_PHASE_RANGE.scale(rotation);
+  // Scale the rotation to use the entire range of the sigmoid curve.
+  auto bipolar_rotation = SIGMOID_RANGE.scale(rotation);
 
   // This knob curvature gives an S taper that gently increases sensitivity in
   // the middle of the rotation and decreases sensitivity toward the ends.
@@ -68,14 +55,14 @@ inline float j(float phase, float rotation) {
 }
 
 inline float s(float phase, float rotation) {
-  // Scale the phase to [-1,1] to use the entire range of the sigmoid curve.
-  auto bipolar_phase = BIPOLAR_PHASE_RANGE.scale(phase);
+  // Scale the phase to use the entire range of the sigmoid curve.
+  auto bipolar_phase = SIGMOID_RANGE.scale(phase);
 
   // Invert the curvature so that rotation greater than 0.5 gives an S taper.
   auto s_tapered_bipolar_phase = sigmoid(bipolar_phase, -curvature(rotation));
 
   // Scale the tapered phase back to the range [0,1].
-  return BIPOLAR_PHASE_RANGE.normalize(s_tapered_bipolar_phase);
+  return SIGMOID_RANGE.normalize(s_tapered_bipolar_phase);
 }
 
 } // namespace Taper

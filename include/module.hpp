@@ -22,7 +22,7 @@ struct Module : rack::Module {
 
   std::function<float()> knob(int rotation, int cv, int av) const;
 
-  std::function<const Range &()> range_switch(int switch_param) const;
+  std::function<const Range &()> range_switch(int index) const;
 };
 
 } // namespace DHE

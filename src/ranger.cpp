@@ -9,8 +9,7 @@
 namespace DHE {
 
 struct Ranger : Module {
-  std::vector<const Range> ranges{UNIPOLAR_SIGNAL_RANGE, BIPOLAR_PHASE_RANGE};
-  std::function<float()> level = knob(LEVEL_KNOB, LEVEL_CV_IN, LEVEL_AV_KNOB);
+std::function<float()> level = knob(LEVEL_KNOB, LEVEL_CV_IN, LEVEL_AV_KNOB);
   std::function<float()> limit1 =
       knob(LIMIT_1_KNOB, LIMIT_1_CV_IN, LIMIT_1_AV_KNOB);
   std::function<float()> limit2 =
