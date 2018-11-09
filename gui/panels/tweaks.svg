@@ -2,8 +2,8 @@
 layout: panel
 width: 11
 title: TWEAKS
-foreground-color: [270,100,50]
-background-color: [270,66,97]
+foreground-color: [220,100,40]
+background-color: [40,50,96]
 controls:
   knobs: [large]
   ports: []
