@@ -4,8 +4,8 @@
 
 namespace DHE {
 
-struct Tweaks : Module {
-  Tweaks() : Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT} {}
+struct Juster : Module {
+  Juster() : Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT} {}
 
   float gain(float input, int knob) const {
     static constexpr auto gain_range = Range{0.f, 2.f};
@@ -69,8 +69,8 @@ struct Tweaks : Module {
   enum OutputIds { OUT_1, OUT_2, OUT_3, OUT_4, OUT_5, OUTPUT_COUNT };
 };
 
-struct TweaksWidget : public ModuleWidget {
-  TweaksWidget(rack::Module *module) : ModuleWidget(module, 11, "tweaks") {
+struct JusterWidget : public ModuleWidget {
+  JusterWidget(rack::Module *module) : ModuleWidget(module, 11, "juster") {
     auto widget_right_edge = width();
 
     auto left_x = widget_right_edge / 7.f;
@@ -82,20 +82,20 @@ struct TweaksWidget : public ModuleWidget {
     auto row_spacing = 20.f;
 
     for (auto row = 0; row < 5; row++) {
-      install_input(Tweaks::IN_1 + row,
+      install_input(Juster::IN_1 + row,
                     {left_x, top_row_y + row * row_spacing});
       install_knob(
-          "large", Tweaks::KNOB_1 + row,
+          "large", Juster::KNOB_1 + row,
           {left_center_x + 1.25f, top_row_y - 1.25f + row * row_spacing});
-      install_switch(Tweaks::MODE_1 + row,
+      install_switch(Juster::MODE_1 + row,
                      {right_center_x, top_row_y - 1.25f + row * row_spacing}, 2,
                      2);
-      install_output(Tweaks::OUT_1 + row,
+      install_output(Juster::OUT_1 + row,
                      {right_x, top_row_y + row * row_spacing});
     }
   }
 };
 
 } // namespace DHE
-rack::Model *modelTweaks = rack::Model::create<DHE::Tweaks, DHE::TweaksWidget>(
-    "DHE-Modules", "Tweaks", "Tweaks", rack::UTILITY_TAG);
+rack::Model *modelJuster = rack::Model::create<DHE::Juster, DHE::JusterWidget>(
+    "DHE-Modules", "Juster", "Juster", rack::UTILITY_TAG);

@@ -7,7 +7,21 @@ CFLAGS +=
 CXXFLAGS +=
 LDFLAGS +=
 
-SOURCES = $(wildcard src/*.cpp)
+SOURCES = \
+	src/booster-stage.cpp \
+	src/cubic.cpp \
+	src/dhe-modules.cpp \
+	src/hostage.cpp \
+	src/juster.cpp \
+	src/module.cpp \
+	src/module-widget.cpp \
+	src/ranger.cpp \
+	src/stage.cpp \
+	src/swave.cpp \
+	src/tapers.cpp \
+	src/upstage.cpp \
+	src/xycloid.cpp \
+	$(EMPTY)
 
 DISTRIBUTABLES += LICENSE.txt res
 
