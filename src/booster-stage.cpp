@@ -101,15 +101,15 @@ struct BoosterStage : Module {
   }
 
   void send_active() {
-    outputs[ACTIVE_OUT].value =
-        UNIPOLAR_SIGNAL_RANGE.scale(is_active || param(ACTIVE_BUTTON) > 0.5f);
+    auto active = is_active || param(ACTIVE_BUTTON) > 0.5f;
+    outputs[ACTIVE_OUT].value = active ? 10.f : 0.f;
   }
 
   void send_envelope(float voltage) { outputs[ENVELOPE_OUT].value = voltage; }
 
   void send_eoc() {
-    outputs[EOC_OUT].value =
-        UNIPOLAR_SIGNAL_RANGE.scale(is_eoc || param(EOC_BUTTON) > 0.5f);
+    auto eoc = is_eoc || param(EOC_BUTTON) > 0.5f;
+    outputs[EOC_OUT].value = eoc ? 10.f : 0.f;
   }
 
   float sample_time() const { return rack::engineGetSampleTime(); }

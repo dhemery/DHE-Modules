@@ -30,13 +30,4 @@ std::function<float()> Module::knob(int rotation, int cv, int av) const {
   };
 }
 
-std::function<const Range &()> Module::range_switch(int switch_index) const {
-  static constexpr auto unipolar = Range{0.f, 10.f};
-  static constexpr auto bipolar = Range{-5.f, 5.f};
-
-  return [this, switch_index]() -> const Range & {
-    return param(switch_index) > 0.5f ? unipolar : bipolar;
-  };
-}
-
 } // namespace DHE

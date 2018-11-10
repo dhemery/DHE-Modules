@@ -91,13 +91,13 @@ struct Hostage : Module {
   float envelope_in() const { return input(ENVELOPE_IN); }
 
   void send_active(bool is_active) {
-    outputs[ACTIVE_OUT].value = UNIPOLAR_SIGNAL_RANGE.scale(is_active);
+    outputs[ACTIVE_OUT].value = is_active ? 10.f : 0.f;
   }
 
   void send_envelope(float voltage) { outputs[ENVELOPE_OUT].value = voltage; }
 
   void send_eoc(bool is_pulsing) {
-    outputs[EOC_OUT].value = UNIPOLAR_SIGNAL_RANGE.scale(is_pulsing);
+    outputs[EOC_OUT].value = is_pulsing ? 10.f : 0.f;
   }
 
   float sample_time() const { return rack::engineGetSampleTime(); }

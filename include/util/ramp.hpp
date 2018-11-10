@@ -62,10 +62,11 @@ public:
    * If the ramp is inactive, this function has no effect.
    */
   void step() {
+    constexpr auto phase_range = Range{0.f, 1.f};
     if (!is_active())
       return;
 
-    progress = UNIPOLAR_PHASE_RANGE.clamp(progress + phase_increment());
+    progress = phase_range.clamp(progress + phase_increment());
 
     if (progress >= 1.0f) {
       active.reset();

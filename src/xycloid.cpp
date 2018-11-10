@@ -14,8 +14,7 @@ struct Pole {
   void advance(float increment, float offset = 0.f) {
     this->offset = offset;
     phase += increment;
-    phase -=
-        std::trunc(phase); // Reduce phase to (-1, 1) to avoid eventual overflow
+    phase -= std::trunc(phase);
   }
 
   float x() const { return std::cos(two_pi * (phase + offset)); }
@@ -24,6 +23,26 @@ struct Pole {
 };
 
 struct Xycloid : Module {
+  static constexpr auto inward_wobble_max = 16.f;
+  static constexpr auto outward_wobble_max = -inward_wobble_max;
+  static constexpr auto inward_wobble_range = Range{0.f, inward_wobble_max};
+  static constexpr auto outward_wobble_range = Range{0.f, outward_wobble_max};
+  static constexpr auto bidirectional_wobble_range =
+      Range{inward_wobble_max, outward_wobble_max};
+  static constexpr auto throb_speed_knob_range = Range{-1.f, 1.f};
+  static constexpr auto wobble_depth_range = Range{0.f, 1.f};
+  static constexpr auto gain_range = Range{0.f, 2.f};
+
+  std::vector<Range> wobble_ratio_ranges{inward_wobble_range, bidirectional_wobble_range, outward_wobble_range};
+  std::function<float()> wobble_ratio_knob =
+      knob(WOBBLE_RATIO_KNOB, WOBBLE_RATIO_CV, WOBBLE_RATIO_AV);
+  std::function<float()> wobble_depth_knob =
+      knob(WOBBLE_DEPTH_KNOB, WOBBLE_DEPTH_CV, WOBBLE_DEPTH_AV);
+  std::function<float()> throb_speed_knob =
+      knob(THROB_SPEED_KNOB, THROB_SPEED_CV, THROB_SPEED_AV);
+  std::function<float()> x_gain_knob = knob(X_GAIN_KNOB, X_GAIN_CV);
+  std::function<float()> y_gain_knob = knob(Y_GAIN_KNOB, Y_GAIN_CV);
+
   float wobble_ratio_offset = 0.f;
   Pole wobbler;
   Pole throbber;
@@ -38,17 +57,7 @@ struct Xycloid : Module {
     return !param(QUANTIZE_WOBBLE_RATIO_SWITCH);
   }
 
-  Range wobble_range() const {
-    static constexpr auto inward_wobble_max = 16.f;
-    static constexpr auto outward_wobble_max = -inward_wobble_max;
-    static constexpr auto inward_wobble_range = Range{0.f, inward_wobble_max};
-    static constexpr auto outward_wobble_range = Range{0.f, outward_wobble_max};
-    static constexpr auto bidirectional_wobble_range =
-        Range{inward_wobble_max, outward_wobble_max};
-    static constexpr Range wobble_ratio_ranges[] = {
-        inward_wobble_range, bidirectional_wobble_range, outward_wobble_range};
-    return wobble_ratio_ranges[wobble_type()];
-  }
+  Range wobble_range() const { return wobble_ratio_ranges[wobble_type()]; }
 
   float wobble_ratio() const {
     auto wobble_ratio =
@@ -57,19 +66,13 @@ struct Xycloid : Module {
   }
 
   float wobble_depth() const {
-    static constexpr auto wobble_depth_range = Range{0.f, 1.f};
     return wobble_depth_range.clamp(wobble_depth_knob());
   }
 
   float throb_speed(int knob, int cv, int attenuator) const {
-    auto bipolar = BIPOLAR_PHASE_RANGE.scale(throb_speed_knob());
-    auto tapered = sigmoid(bipolar, 0.8f);
+    auto scaled = throb_speed_knob_range.scale(throb_speed_knob());
+    auto tapered = sigmoid(scaled, 0.8f);
     return -10.f * tapered * rack::engineGetSampleTime();
-  }
-
-  static const Range &gain_range() {
-    static constexpr auto gain_range = Range{0.f, 2.f};
-    return gain_range;
   }
 
   void step() override {
@@ -89,8 +92,8 @@ struct Xycloid : Module {
     auto x = throb_depth * throbber.x() + wobble_depth * wobbler.x();
     auto y = throb_depth * throbber.y() + wobble_depth * wobbler.y();
 
-    auto x_gain = gain_range().scale(x_gain_knob());
-    auto y_gain = gain_range().scale(y_gain_knob());
+    auto x_gain = gain_range.scale(x_gain_knob());
+    auto y_gain = gain_range.scale(y_gain_knob());
     auto x_offset = param(X_RANGE_SWITCH);
     auto y_offset = param(Y_RANGE_SWITCH);
     outputs[X_OUT].value = 5.f * x_gain * (x + x_offset);
@@ -122,14 +125,6 @@ struct Xycloid : Module {
     INPUT_COUNT
   };
   enum OutputIds { X_OUT, Y_OUT, OUTPUT_COUNT };
-  std::function<float()> wobble_ratio_knob =
-      knob(WOBBLE_RATIO_KNOB, WOBBLE_RATIO_CV, WOBBLE_RATIO_AV);
-  std::function<float()> wobble_depth_knob =
-      knob(WOBBLE_DEPTH_KNOB, WOBBLE_DEPTH_CV, WOBBLE_DEPTH_AV);
-  std::function<float()> throb_speed_knob =
-      knob(THROB_SPEED_KNOB, THROB_SPEED_CV, THROB_SPEED_AV);
-  std::function<float()> x_gain_knob = knob(X_GAIN_KNOB, X_GAIN_CV);
-  std::function<float()> y_gain_knob = knob(Y_GAIN_KNOB, Y_GAIN_CV);
 
   json_t *toJson() override {
     json_t *configuration = json_object();
@@ -149,6 +144,7 @@ struct Xycloid : Module {
   }
 
   bool is_musical_wobble_ratios() { return wobble_ratio_offset == 0.f; }
+
 };
 
 struct XycloidWidget : public ModuleWidget {
@@ -198,7 +194,7 @@ struct XycloidWidget : public ModuleWidget {
     row_spacing = 15.f;
     row = 0;
 
-    auto default_gain = Xycloid::gain_range().normalize(1.f);
+    auto default_gain = Xycloid::gain_range.normalize(1.f);
     row++;
     install_input(Xycloid::X_GAIN_CV, {left_x, top_row_y + row * row_spacing});
     install_knob("small", Xycloid::X_GAIN_KNOB,

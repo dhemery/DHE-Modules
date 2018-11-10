@@ -10,6 +10,9 @@
 namespace DHE {
 
 struct Swave : Module {
+  static constexpr auto signal_range = Range{-5.f, 5.f};
+  const std::function<float()> curve_knob = knob(CURVE_KNOB, CURVE_CV);
+
   Swave() : Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT} {}
 
   bool is_s_taper() const { return param(SHAPE_SWITCH) > 0.5f; }
@@ -26,17 +29,16 @@ struct Swave : Module {
   }
 
   float to_signal(float phase) const {
-    return BIPOLAR_SIGNAL_RANGE.scale(phase);
+    return signal_range.scale(phase);
   }
 
   float to_phase(float signal) const {
-    return BIPOLAR_SIGNAL_RANGE.normalize(signal);
+    return signal_range.normalize(signal);
   }
 
   enum ParameterIds { CURVE_KNOB, SHAPE_SWITCH, PARAMETER_COUNT };
   enum InputIds { CURVE_CV, SWAVE_IN, INPUT_COUNT };
   enum OutputIds { SWAVE_OUT, OUTPUT_COUNT };
-  std::function<float()> curve_knob = knob(CURVE_KNOB, CURVE_CV);
 };
 
 struct SwaveWidget : public ModuleWidget {

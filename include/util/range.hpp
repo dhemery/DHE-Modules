@@ -32,9 +32,4 @@ struct Range {
     return f;
   }
 };
-
-constexpr auto UNIPOLAR_PHASE_RANGE = Range{0.0f, 1.0f};
-constexpr auto BIPOLAR_PHASE_RANGE = Range{-1.0f, 1.0f};
-constexpr auto UNIPOLAR_SIGNAL_RANGE = Range{0.0f, 10.0f};
-constexpr auto BIPOLAR_SIGNAL_RANGE = Range{-5.0f, 5.0f};
 } // namespace DHE
