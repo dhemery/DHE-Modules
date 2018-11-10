@@ -10,12 +10,10 @@
 namespace DHE {
 
 struct Upstage : Module {
-  std::function<const Range&()> level_range = range_switch(LEVEL_SWITCH);
+  std::function<const Range &()> level_range = range_switch(LEVEL_SWITCH);
   Upstage() : Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT} {}
 
-  float envelope_out() const {
-    return level_range().scale(level_knob());
-  }
+  float envelope_out() const { return level_range().scale(level_knob()); }
 
   bool is_waiting() const {
     return std::max(inputs[WAIT_IN].value, gate_button(WAIT_BUTTON)) > 0.5f;

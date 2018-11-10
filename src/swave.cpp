@@ -28,13 +28,9 @@ struct Swave : Module {
     return is_s_taper() ? Taper::s(phase, rotation) : Taper::j(phase, rotation);
   }
 
-  float to_signal(float phase) const {
-    return signal_range.scale(phase);
-  }
+  float to_signal(float phase) const { return signal_range.scale(phase); }
 
-  float to_phase(float signal) const {
-    return signal_range.normalize(signal);
-  }
+  float to_phase(float signal) const { return signal_range.normalize(signal); }
 
   enum ParameterIds { CURVE_KNOB, SHAPE_SWITCH, PARAMETER_COUNT };
   enum InputIds { CURVE_CV, SWAVE_IN, INPUT_COUNT };

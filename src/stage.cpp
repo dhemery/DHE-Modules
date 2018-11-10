@@ -83,7 +83,7 @@ struct Stage : public Module {
   float level_in() const {
     static constexpr auto level_range = Range{0.f, 10.f};
     return level_range.scale(level_knob());
-   }
+  }
 
   float sample_time() const { return rack::engineGetSampleTime(); }
 

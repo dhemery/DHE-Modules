@@ -33,7 +33,8 @@ struct Xycloid : Module {
   static constexpr auto wobble_depth_range = Range{0.f, 1.f};
   static constexpr auto gain_range = Range{0.f, 2.f};
 
-  std::vector<Range> wobble_ratio_ranges{inward_wobble_range, bidirectional_wobble_range, outward_wobble_range};
+  std::vector<Range> wobble_ratio_ranges{
+      inward_wobble_range, bidirectional_wobble_range, outward_wobble_range};
   std::function<float()> wobble_ratio_knob =
       knob(WOBBLE_RATIO_KNOB, WOBBLE_RATIO_CV, WOBBLE_RATIO_AV);
   std::function<float()> wobble_depth_knob =
@@ -144,7 +145,6 @@ struct Xycloid : Module {
   }
 
   bool is_musical_wobble_ratios() { return wobble_ratio_offset == 0.f; }
-
 };
 
 struct XycloidWidget : public ModuleWidget {

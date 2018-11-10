@@ -6,22 +6,23 @@
 
 namespace DHE {
 
-float Module::gate_button(int button) const {
+auto Module::gate_button(int button) const -> float {
   return param(button) > 0.5f ? 10.f : 0.f;
 };
 
-std::function<float()> Module::knob(int rotation) const {
+auto Module::knob(int rotation) const -> std::function<float()> {
   return [this, rotation] { return param(rotation); };
 }
 
-std::function<float()> Module::knob(int rotation, int cv) const {
+auto Module::knob(int rotation, int cv) const -> std::function<float()> {
   return [this, rotation, cv]() -> float {
     return param(rotation) + input(cv) / 10.f;
   };
 }
 
-std::function<float()> Module::knob(int rotation, int cv, int av) const {
-  static constexpr auto av_range = Range{-1.f,1.f};
+auto Module::knob(int rotation, int cv, int av) const
+    -> std::function<float()> {
+  static constexpr auto av_range = Range{-1.f, 1.f};
 
   return [this, rotation, cv, av]() -> float {
     auto modulation_gain = av_range.scale(param(av));

@@ -22,7 +22,7 @@ struct BoosterStage : Module {
   std::function<float()> duration_knob = knob(DURATION_KNOB);
   std::function<float()> level_knob = knob(LEVEL_KNOB, LEVEL_CV);
   std::function<float()> curve_knob = knob(CURVE_KNOB, CURVE_CV);
-  std::function<const Range&()> level_range = range_switch(LEVEL_SWITCH);
+  std::function<const Range &()> level_range = range_switch(LEVEL_SWITCH);
 
   Ramp envelope = Ramp{[this] { return sample_time() / duration_in(); }};
   Ramp eoc_pulse = Ramp{[this] { return sample_time() / 1e-3f; }};
@@ -96,9 +96,7 @@ struct BoosterStage : Module {
 
   bool is_s_taper() const { return param(SHAPE_SWITCH) > 0.5; }
 
-  float level_in() const {
-    return level_range().scale(level_knob());
-  }
+  float level_in() const { return level_range().scale(level_knob()); }
 
   void send_active() {
     auto active = is_active || param(ACTIVE_BUTTON) > 0.5f;
