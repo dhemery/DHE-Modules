@@ -22,9 +22,10 @@ struct Module : rack::Module {
 
   auto knob(int rotation, int cv, int av) const -> std::function<float()>;
 
-  template <typename C>
-  auto choice(int switch_param, std::vector<C> choices) const
-      -> std::function<C const &()> {
+  template<typename C>
+  auto choice(int switch_param, C choice1, C choice2) const
+  -> std::function<C const &()> {
+    auto choices = std::vector<C>{choice1, choice2};
     return [this, switch_param, choices]() -> C const & {
       auto index = static_cast<int>(param(switch_param));
       return choices[index];
@@ -32,8 +33,9 @@ struct Module : rack::Module {
   }
 
   auto range_switch(int switch_param) const -> std::function<Range const &()> {
-    static auto ranges = std::vector<Range>{{-5.f, 5.f}, {0.f, 10.f}};
-    return choice(switch_param, ranges);
+    auto const unipolar = Range{0.f, 10.f};
+    auto const bipolar = Range{-5.f, 5.f};
+    return choice(switch_param, bipolar, unipolar);
   }
 };
 
