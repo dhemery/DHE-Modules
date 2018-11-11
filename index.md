@@ -52,12 +52,16 @@ with accents that either repeat or vary.
 ### Utilities and Waveshapers
 
 [![_Cubic_](modules/cubic/panel.svg)](modules/cubic/)
+[![_Juster_](modules/juster/panel.svg)](modules/juster/)
 [![_Ranger_](modules/ranger/panel.svg)](modules/ranger/)
 [![_Swave_](modules/swave/panel.svg)](modules/swave/)
 [![_Tapers_](modules/tapers/panel.svg)](modules/tapers/)
 
 **[_Cubic_](modules/cubic/)**
 transforms its input signal by offsetting, scaling, squaring, and cubing it.
+
+**[_Juster_](modules/Juster/)** (coming soon)
+is a signal chain that applies a series of selectable functions.
 
 **[_Ranger_](modules/ranger/)**
 is a knob with an adjustable, modulatable range.
