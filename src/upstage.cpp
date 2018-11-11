@@ -4,7 +4,7 @@
 #include "module-widget.hpp"
 #include "module.hpp"
 
-#include "util/controls.hpp"
+#include "util/duration.hpp"
 #include "util/range.hpp"
 
 namespace DHE {

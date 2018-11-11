@@ -4,8 +4,8 @@
 #include "module-widget.hpp"
 #include "module.hpp"
 
-#include "util/controls.hpp"
 #include "util/range.hpp"
+#include "util/taper.hpp"
 
 namespace DHE {
 

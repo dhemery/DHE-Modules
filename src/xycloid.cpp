@@ -2,7 +2,7 @@
 #include "module-widget.hpp"
 #include "module.hpp"
 
-#include "util/controls.hpp"
+#include "util/sigmoid.hpp"
 
 namespace DHE {
 

@@ -4,10 +4,11 @@
 #include "module-widget.hpp"
 #include "module.hpp"
 
-#include "util/controls.hpp"
+#include "util/duration.hpp"
 #include "util/d-flip-flop.hpp"
 #include "util/mode.hpp"
 #include "util/ramp.hpp"
+#include "util/taper.hpp"
 
 namespace DHE {
 
