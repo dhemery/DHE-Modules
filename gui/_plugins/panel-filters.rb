@@ -82,9 +82,8 @@ module PanelFilters
 
     def initialize(content_bounds:, style:, foreground:, background:)
       super(top: content_bounds.top - BUFFER, right: content_bounds.right + BUFFER, bottom: content_bounds.bottom + BUFFER, left: content_bounds.left - BUFFER)
-      foreground, background = background, foreground if style == :reverse
       @stroke = foreground
-      @fill = background
+      @fill = style == :reverse ? foreground : background
     end
 
     def svg

@@ -220,7 +220,7 @@
     <path
        id="rect48"
        d="m 43.522144,19.044556 h 8.75 c 0.554,0 1,0.446 1,1 V 31.375 c 0,0.554 -0.446,1 -1,1 h -8.75 c -0.554,0 -1,-0.446 -1,-1 V 20.044556 c 0,-0.554 0.446,-1 1,-1 z"
-       style="fill:#0044cc;stroke:#faf7f0;stroke-width:0.34999999" />
+       style="fill:#0044cc;stroke:#0044cc;stroke-width:0.34999999" />
     <g
        id="text50"
        style="font-weight:bold;font-size:2.37066674px;font-family:'Proxima Nova';text-anchor:middle;fill:#faf7f0"
@@ -400,7 +400,7 @@
     <path
        id="rect100"
        d="m 43.522144,39.044556 h 8.75 c 0.554,0 1,0.446 1,1 V 51.375 c 0,0.554 -0.446,1 -1,1 h -8.75 c -0.554,0 -1,-0.446 -1,-1 V 40.044556 c 0,-0.554 0.446,-1 1,-1 z"
-       style="fill:#0044cc;stroke:#faf7f0;stroke-width:0.34999999" />
+       style="fill:#0044cc;stroke:#0044cc;stroke-width:0.34999999" />
     <g
        id="text102"
        style="font-weight:bold;font-size:2.37066674px;font-family:'Proxima Nova';text-anchor:middle;fill:#faf7f0"
@@ -580,7 +580,7 @@
     <path
        id="rect152"
        d="m 43.522144,59.044556 h 8.75 c 0.554,0 1,0.446 1,1 V 71.375 c 0,0.554 -0.446,1 -1,1 h -8.75 c -0.554,0 -1,-0.446 -1,-1 V 60.044556 c 0,-0.554 0.446,-1 1,-1 z"
-       style="fill:#0044cc;stroke:#faf7f0;stroke-width:0.34999999" />
+       style="fill:#0044cc;stroke:#0044cc;stroke-width:0.34999999" />
     <g
        id="text154"
        style="font-weight:bold;font-size:2.37066674px;font-family:'Proxima Nova';text-anchor:middle;fill:#faf7f0"
@@ -760,7 +760,7 @@
     <path
        id="rect204"
        d="m 43.522144,79.044556 h 8.75 c 0.554,0 1,0.446 1,1 V 91.375 c 0,0.554 -0.446,1 -1,1 h -8.75 c -0.554,0 -1,-0.446 -1,-1 V 80.044556 c 0,-0.554 0.446,-1 1,-1 z"
-       style="fill:#0044cc;stroke:#faf7f0;stroke-width:0.34999999" />
+       style="fill:#0044cc;stroke:#0044cc;stroke-width:0.34999999" />
     <g
        id="text206"
        style="font-weight:bold;font-size:2.37066674px;font-family:'Proxima Nova';text-anchor:middle;fill:#faf7f0"
@@ -940,7 +940,7 @@
     <path
        id="rect256"
        d="m 43.522144,99.044556 h 8.75 c 0.554,0 1,0.446 1,1.000004 V 111.375 c 0,0.554 -0.446,1 -1,1 h -8.75 c -0.554,0 -1,-0.446 -1,-1 v -11.33044 c 0,-0.554004 0.446,-1.000004 1,-1.000004 z"
-       style="fill:#0044cc;stroke:#faf7f0;stroke-width:0.34999999" />
+       style="fill:#0044cc;stroke:#0044cc;stroke-width:0.34999999" />
     <g
        id="text258"
        style="font-weight:bold;font-size:2.37066674px;font-family:'Proxima Nova';text-anchor:middle;fill:#faf7f0"
