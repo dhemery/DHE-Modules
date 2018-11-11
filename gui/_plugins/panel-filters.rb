@@ -48,7 +48,7 @@ module PanelFilters
     ALIGNMENT_ATTRIBUTES = {
         above: ALIGNMENT_ATTRIBUTES_TEMPLATE % %w{baseline middle},
         below: ALIGNMENT_ATTRIBUTES_TEMPLATE % %w{hanging middle},
-        right: ALIGNMENT_ATTRIBUTES_TEMPLATE % %w{middle start},
+        right_of: ALIGNMENT_ATTRIBUTES_TEMPLATE % %w{middle start},
     }
 
     def initialize(text, padding, alignment, control)
