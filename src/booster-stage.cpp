@@ -4,8 +4,8 @@
 #include "module-widget.hpp"
 #include "module.hpp"
 
-#include "util/duration.hpp"
 #include "util/d-flip-flop.hpp"
+#include "util/duration.hpp"
 #include "util/mode.hpp"
 #include "util/ramp.hpp"
 #include "util/taper.hpp"
@@ -20,17 +20,17 @@ struct BoosterStage : Module {
   bool is_active{false};
   bool is_eoc{false};
 
-  std::function<float()> duration_knob = knob(DURATION_KNOB);
-  std::function<float()> level_knob = knob(LEVEL_KNOB, LEVEL_CV);
-  std::function<float()> curve_knob = knob(CURVE_KNOB, CURVE_CV);
-  std::function<const Range &()> level_range = range_switch(LEVEL_SWITCH);
+  const std::function<float()> duration_knob = knob(DURATION_KNOB);
+  const std::function<float()> level_knob = knob(LEVEL_KNOB, LEVEL_CV);
+  const std::function<float()> curve_knob = knob(CURVE_KNOB, CURVE_CV);
+  const std::function<const Range &()> level_range = range_switch(LEVEL_SWITCH);
 
-  Ramp envelope = Ramp{[this] { return sample_time() / duration_in(); }};
-  Ramp eoc_pulse = Ramp{[this] { return sample_time() / 1e-3f; }};
-  DFlipFlop envelope_trigger = DFlipFlop{[this] { return envelope_gate_in(); }};
+  Ramp envelope{[this] { return sample_time() / duration_in(); }};
+  Ramp eoc_pulse{[this] { return sample_time() / 1e-3f; }};
+  DFlipFlop envelope_trigger{[this] { return envelope_gate_in(); }};
 
-  SubmodeSwitch executor = {[this] { return defer_gate_in(); }, &stage_mode,
-                            &defer_mode};
+  SubmodeSwitch executor{[this] { return defer_gate_in(); }, &stage_mode,
+                         &defer_mode};
 
   BoosterStage() : Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT} {
 

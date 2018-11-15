@@ -22,9 +22,9 @@ struct Module : rack::Module {
 
   auto knob(int rotation, int cv, int av) const -> std::function<float()>;
 
-  template<typename C>
+  template <typename C>
   auto choice(int switch_param, C choice1, C choice2) const
-  -> std::function<C const &()> {
+      -> std::function<C const &()> {
     auto choices = std::vector<C>{choice1, choice2};
     return [this, switch_param, choices]() -> C const & {
       auto index = static_cast<int>(param(switch_param));
