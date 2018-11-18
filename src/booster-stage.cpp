@@ -13,6 +13,11 @@
 namespace DHE {
 
 struct BoosterStage : Module {
+  const std::function<float()> duration_knob = knob(DURATION_KNOB);
+  const std::function<float()> level_knob = knob(LEVEL_KNOB, LEVEL_CV);
+  const std::function<float()> curve_knob = knob(CURVE_KNOB, CURVE_CV);
+  const std::function<const Range &()> level_range = range_switch(LEVEL_SWITCH);
+
   Mode stage_mode{};
   Mode defer_mode{};
 
@@ -20,13 +25,8 @@ struct BoosterStage : Module {
   bool is_active{false};
   bool is_eoc{false};
 
-  const std::function<float()> duration_knob = knob(DURATION_KNOB);
-  const std::function<float()> level_knob = knob(LEVEL_KNOB, LEVEL_CV);
-  const std::function<float()> curve_knob = knob(CURVE_KNOB, CURVE_CV);
-  const std::function<const Range &()> level_range = range_switch(LEVEL_SWITCH);
-
-  Ramp envelope{[this] { return sample_time() / duration_in(); }};
-  Ramp eoc_pulse{[this] { return sample_time() / 1e-3f; }};
+  Ramp envelope{[this] { return sample_time()/duration_in(); }};
+  Ramp eoc_pulse{[this] { return sample_time()/1e-3f; }};
   DFlipFlop envelope_trigger{[this] { return envelope_gate_in(); }};
 
   SubmodeSwitch executor{[this] { return defer_gate_in(); }, &stage_mode,
@@ -147,12 +147,12 @@ struct BoosterStage : Module {
 };
 
 struct BoosterStageWidget : public ModuleWidget {
-  BoosterStageWidget(rack::Module *module)
+  explicit BoosterStageWidget(rack::Module *module)
       : ModuleWidget(module, 8, "booster-stage") {
     auto widget_right_edge = width();
 
-    auto left_x = widget_right_edge / 6.f + 0.3333333f;
-    auto center_x = widget_right_edge / 2.f;
+    auto left_x = widget_right_edge/6.f + 0.3333333f;
+    auto center_x = widget_right_edge/2.f;
     auto right_x = widget_right_edge - left_x;
     auto button_port_distance = 7.891f;
     auto center_left_x = left_x + button_port_distance;
@@ -163,56 +163,56 @@ struct BoosterStageWidget : public ModuleWidget {
 
     auto row = 0;
     install_input(BoosterStage::LEVEL_CV,
-                  {left_x, top_row_y + row * row_spacing});
+                  {left_x, top_row_y + row*row_spacing});
     install_knob("large", BoosterStage::LEVEL_KNOB,
-                 {center_x, top_row_y + row * row_spacing});
+                 {center_x, top_row_y + row*row_spacing});
     install_switch(BoosterStage::LEVEL_SWITCH,
-                   {right_x, top_row_y + row * row_spacing}, 1, 1);
+                   {right_x, top_row_y + row*row_spacing}, 1, 1);
 
     row++;
     install_input(BoosterStage::CURVE_CV,
-                  {left_x, top_row_y + row * row_spacing});
+                  {left_x, top_row_y + row*row_spacing});
     install_knob("large", BoosterStage::CURVE_KNOB,
-                 {center_x, top_row_y + row * row_spacing});
+                 {center_x, top_row_y + row*row_spacing});
     install_switch(BoosterStage::SHAPE_SWITCH,
-                   {right_x, top_row_y + row * row_spacing});
+                   {right_x, top_row_y + row*row_spacing});
 
     row++;
     install_input(BoosterStage::DURATION_CV,
-                  {left_x, top_row_y + row * row_spacing});
+                  {left_x, top_row_y + row*row_spacing});
     install_knob("large", BoosterStage::DURATION_KNOB,
-                 {center_x, top_row_y + row * row_spacing});
+                 {center_x, top_row_y + row*row_spacing});
     install_switch(BoosterStage::DURATION_SWITCH,
-                   {right_x, top_row_y + row * row_spacing}, 2, 1);
+                   {right_x, top_row_y + row*row_spacing}, 2, 1);
 
     top_row_y = 82.f;
     row_spacing = 15.f;
 
     row = 0;
     install_input(BoosterStage::DEFER_IN,
-                  {left_x, top_row_y + row * row_spacing});
+                  {left_x, top_row_y + row*row_spacing});
     install_button("normal", BoosterStage::DEFER_BUTTON,
-                   {center_left_x, top_row_y + row * row_spacing});
+                   {center_left_x, top_row_y + row*row_spacing});
     install_button("reverse", BoosterStage::ACTIVE_BUTTON,
-                   {center_right_x, top_row_y + row * row_spacing});
+                   {center_right_x, top_row_y + row*row_spacing});
     install_output(BoosterStage::ACTIVE_OUT,
-                   {right_x, top_row_y + row * row_spacing});
+                   {right_x, top_row_y + row*row_spacing});
 
     row++;
     install_input(BoosterStage::TRIGGER_IN,
-                  {left_x, top_row_y + row * row_spacing});
+                  {left_x, top_row_y + row*row_spacing});
     install_button("normal", BoosterStage::TRIGGER_BUTTON,
-                   {center_left_x, top_row_y + row * row_spacing});
+                   {center_left_x, top_row_y + row*row_spacing});
     install_button("reverse", BoosterStage::EOC_BUTTON,
-                   {center_right_x, top_row_y + row * row_spacing});
+                   {center_right_x, top_row_y + row*row_spacing});
     install_output(BoosterStage::EOC_OUT,
-                   {right_x, top_row_y + row * row_spacing});
+                   {right_x, top_row_y + row*row_spacing});
 
     row++;
     install_input(BoosterStage::ENVELOPE_IN,
-                  {left_x, top_row_y + row * row_spacing});
+                  {left_x, top_row_y + row*row_spacing});
     install_output(BoosterStage::ENVELOPE_OUT,
-                   {right_x, top_row_y + row * row_spacing});
+                   {right_x, top_row_y + row*row_spacing});
   }
 };
 } // namespace DHE
