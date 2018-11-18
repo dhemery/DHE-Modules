@@ -9,13 +9,13 @@
 namespace DHE {
 
 struct Ranger : Module {
-  std::function<float()> level = knob(LEVEL_KNOB, LEVEL_CV_IN, LEVEL_AV_KNOB);
-  std::function<float()> limit1 =
+  const std::function<float()> level = knob(LEVEL_KNOB, LEVEL_CV_IN, LEVEL_AV_KNOB);
+  const std::function<float()> limit1 =
       knob(LIMIT_1_KNOB, LIMIT_1_CV_IN, LIMIT_1_AV_KNOB);
-  std::function<float()> limit2 =
+  const std::function<float()> limit2 =
       knob(LIMIT_2_KNOB, LIMIT_2_CV_IN, LIMIT_2_AV_KNOB);
-  std::function<const Range &()> range1 = range_switch(LIMIT_1_RANGE_SWITCH);
-  std::function<const Range &()> range2 = range_switch(LIMIT_2_RANGE_SWITCH);
+  const std::function<const Range &()> range1 = range_switch(LIMIT_1_RANGE_SWITCH);
+  const std::function<const Range &()> range2 = range_switch(LIMIT_2_RANGE_SWITCH);
 
   Ranger() : Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT} {}
 
@@ -45,7 +45,7 @@ struct Ranger : Module {
 };
 
 struct RangerWidget : public ModuleWidget {
-  RangerWidget(rack::Module *module) : ModuleWidget(module, 6, "ranger") {
+  explicit RangerWidget(rack::Module *module) : ModuleWidget(module, 6, "ranger") {
     auto widget_right_edge = width();
 
     auto left_x = width() / 3.5f + 0.333333333f;

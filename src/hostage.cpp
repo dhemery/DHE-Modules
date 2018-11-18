@@ -12,6 +12,8 @@
 namespace DHE {
 
 struct Hostage : Module {
+  const std::function<float()> duration_knob = knob(DURATION_KNOB, DURATION_CV);
+
   DFlipFlop sustain_gate = DFlipFlop{[this] { return hold_gate_in(); }};
   DFlipFlop sustain_trigger = DFlipFlop{[this] { return hold_gate_in(); }};
   Ramp timer = Ramp{[this] { return sample_time() / duration_in(); }};
@@ -102,8 +104,6 @@ struct Hostage : Module {
 
   float sample_time() const { return rack::engineGetSampleTime(); }
 
-  std::function<float()> duration_knob = knob(DURATION_KNOB, DURATION_CV);
-
   enum InputIds {
     DEFER_IN,
     DURATION_CV,
@@ -123,7 +123,7 @@ struct Hostage : Module {
 };
 
 struct HostageWidget : public ModuleWidget {
-  HostageWidget(rack::Module *module) : ModuleWidget(module, 5, "hostage") {
+  explicit HostageWidget(rack::Module *module) : ModuleWidget(module, 5, "hostage") {
     auto widget_right_edge = width();
 
     auto left_x = width() / 4.f + 0.333333f;

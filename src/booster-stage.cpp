@@ -17,6 +17,10 @@ struct BoosterStage : Module {
   const std::function<float()> level_knob = knob(LEVEL_KNOB, LEVEL_CV);
   const std::function<float()> curve_knob = knob(CURVE_KNOB, CURVE_CV);
   const std::function<const Range &()> level_range = range_switch(LEVEL_SWITCH);
+  const std::function<bool()> defer_button = button(DEFER_BUTTON);
+  const std::function<bool()> defer_in = trigger(DEFER_IN);
+  const std::function<bool()> trigger_button = button(TRIGGER_BUTTON);
+  const std::function<bool()> trigger_in = trigger(TRIGGER_IN);
 
   Mode stage_mode{};
   Mode defer_mode{};
@@ -76,8 +80,9 @@ struct BoosterStage : Module {
     send_eoc();
   }
 
+
   float defer_gate_in() const {
-    return std::max(input(DEFER_IN), gate_button(DEFER_BUTTON));
+    return defer_button() || defer_in() ? 10.f : 0.f;
   }
 
   float duration_in() const {
@@ -86,7 +91,7 @@ struct BoosterStage : Module {
   }
 
   float envelope_gate_in() const {
-    return std::max(input(TRIGGER_IN), gate_button(TRIGGER_BUTTON));
+    return trigger_button() || trigger_in() ? 10.f : 0.f;
   }
 
   float envelope_in() const { return input(ENVELOPE_IN); }

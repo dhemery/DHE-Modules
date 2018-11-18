@@ -3,6 +3,7 @@
 #include <engine.hpp>
 
 #include "util/range.hpp"
+#include "util/controls.hpp"
 
 namespace DHE {
 
@@ -10,13 +11,21 @@ struct Module : rack::Module {
   Module(int param_count, int input_count, int output_count)
       : rack::Module(param_count, input_count, output_count) {}
 
-  auto gate_button(int index) const -> float;
+  auto button(int param) const -> std::function<bool()> {
+    return Controls::bool_value_of(params[param]);
+  };
+
+  auto trigger(int input) const -> std::function<bool()> {
+    return Controls::bool_value_of(inputs[input]);
+  };
 
   auto input(int index) const -> float { return inputs[index].value; }
 
   auto param(int index) const -> float { return params[index].value; }
 
-  auto knob(int rotation) const -> std::function<float()>;
+  auto knob(int param) const -> std::function<float()> {
+    return Controls::float_value_of(params[param]);
+  };
 
   auto knob(int rotation, int cv) const -> std::function<float()>;
 

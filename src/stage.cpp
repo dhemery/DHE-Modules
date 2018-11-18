@@ -13,7 +13,8 @@
 
 namespace DHE {
 struct Stage : public Module {
-  std::function<float()> level_knob = knob(LEVEL_KNOB);
+  const std::function<float()> level_knob = knob(LEVEL_KNOB);
+
   Mode stage_mode = {};
   Mode defer_mode = {};
 
@@ -110,7 +111,7 @@ struct Stage : public Module {
 };
 
 struct StageWidget : public ModuleWidget {
-  StageWidget(rack::Module *module) : ModuleWidget(module, 5, "stage") {
+  explicit StageWidget(rack::Module *module) : ModuleWidget(module, 5, "stage") {
     auto widget_right_edge = width();
 
     auto left_x = width() / 4.f + 0.333333f;

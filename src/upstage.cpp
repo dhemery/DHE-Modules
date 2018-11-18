@@ -10,13 +10,17 @@
 namespace DHE {
 
 struct Upstage : Module {
-  std::function<const Range &()> level_range = range_switch(LEVEL_SWITCH);
+  const std::function<float()> level_knob = knob(LEVEL_KNOB, LEVEL_CV);
+  const std::function<const Range &()> level_range = range_switch(LEVEL_SWITCH);
+  const std::function<bool()> wait_in = trigger(WAIT_IN);
+  const std::function<bool()> wait_button = button(WAIT_BUTTON);
+
   Upstage() : Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT} {}
 
   float envelope_out() const { return level_range().scale(level_knob()); }
 
   bool is_waiting() const {
-    return std::max(inputs[WAIT_IN].value, gate_button(WAIT_BUTTON)) > 0.5f;
+    return wait_button() || wait_in();
   }
 
   void step() override {
@@ -39,11 +43,10 @@ struct Upstage : Module {
   };
   enum InputIds { TRIG_IN, WAIT_IN, LEVEL_CV, INPUT_COUNT };
   enum OutputIds { TRIG_OUT, ENVELOPE_OUT, OUTPUT_COUNT };
-  std::function<float()> level_knob = knob(LEVEL_KNOB, LEVEL_CV);
 };
 
 struct UpstageWidget : public ModuleWidget {
-  UpstageWidget(rack::Module *module) : ModuleWidget(module, 5, "upstage") {
+  explicit UpstageWidget(rack::Module *module) : ModuleWidget(module, 5, "upstage") {
     auto widget_right_edge = width();
 
     auto left_x = width() / 4.f + 0.333333333f;

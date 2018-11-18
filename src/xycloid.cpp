@@ -33,16 +33,16 @@ struct Xycloid : Module {
   static constexpr auto wobble_depth_range = Range{0.f, 1.f};
   static constexpr auto gain_range = Range{0.f, 2.f};
 
-  std::vector<Range> wobble_ratio_ranges{
+  const std::vector<Range> wobble_ratio_ranges{
       inward_wobble_range, bidirectional_wobble_range, outward_wobble_range};
-  std::function<float()> wobble_ratio_knob =
+  const std::function<float()> wobble_ratio_knob =
       knob(WOBBLE_RATIO_KNOB, WOBBLE_RATIO_CV, WOBBLE_RATIO_AV);
-  std::function<float()> wobble_depth_knob =
+  const std::function<float()> wobble_depth_knob =
       knob(WOBBLE_DEPTH_KNOB, WOBBLE_DEPTH_CV, WOBBLE_DEPTH_AV);
-  std::function<float()> throb_speed_knob =
+  const std::function<float()> throb_speed_knob =
       knob(THROB_SPEED_KNOB, THROB_SPEED_CV, THROB_SPEED_AV);
-  std::function<float()> x_gain_knob = knob(X_GAIN_KNOB, X_GAIN_CV);
-  std::function<float()> y_gain_knob = knob(Y_GAIN_KNOB, Y_GAIN_CV);
+  const std::function<float()> x_gain_knob = knob(X_GAIN_KNOB, X_GAIN_CV);
+  const std::function<float()> y_gain_knob = knob(Y_GAIN_KNOB, Y_GAIN_CV);
 
   float wobble_ratio_offset = 0.f;
   Pole wobbler;
@@ -148,7 +148,7 @@ struct Xycloid : Module {
 };
 
 struct XycloidWidget : public ModuleWidget {
-  XycloidWidget(rack::Module *module) : ModuleWidget(module, 11, "xycloid") {
+  explicit XycloidWidget(rack::Module *module) : ModuleWidget(module, 11, "xycloid") {
     auto widget_right_edge = width();
 
     auto left_x = widget_right_edge / 7.f;

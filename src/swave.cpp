@@ -38,7 +38,7 @@ struct Swave : Module {
 };
 
 struct SwaveWidget : public ModuleWidget {
-  SwaveWidget(rack::Module *module) : ModuleWidget(module, 4, "swave") {
+  explicit SwaveWidget(rack::Module *module) : ModuleWidget(module, 4, "swave") {
     auto widget_right_edge = width();
 
     auto center_x = widget_right_edge / 2.f;

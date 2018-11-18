@@ -70,7 +70,7 @@ struct Juster : Module {
 };
 
 struct JusterWidget : public ModuleWidget {
-  JusterWidget(rack::Module *module) : ModuleWidget(module, 11, "juster") {
+  explicit JusterWidget(rack::Module *module) : ModuleWidget(module, 11, "juster") {
     auto widget_right_edge = width();
 
     auto left_x = widget_right_edge / 7.f;

@@ -10,16 +10,16 @@
 namespace DHE {
 
 struct Tapers : Module {
-  std::function<float()> level1_knob =
+  const std::function<float()> level1_knob =
       knob(LEVEL_1_KNOB, LEVEL_1_CV_IN, LEVEL_1_AV_KNOB);
-  std::function<float()> taper1_knob =
+  const std::function<float()> taper1_knob =
       knob(TAPER_1_KNOB, TAPER_1_CV_IN, TAPER_1_AV_KNOB);
-  std::function<const Range &()> range1 = range_switch(RANGE_1_SWITCH);
-  std::function<float()> level2_knob =
+  const std::function<const Range &()> range1 = range_switch(RANGE_1_SWITCH);
+  const std::function<float()> level2_knob =
       knob(LEVEL_2_KNOB, LEVEL_2_CV_IN, LEVEL_2_AV_KNOB);
-  std::function<float()> taper2_knob =
+  const std::function<float()> taper2_knob =
       knob(TAPER_2_KNOB, TAPER_2_CV_IN, TAPER_2_AV_KNOB);
-  std::function<const Range &()> range2 = range_switch(RANGE_2_SWITCH);
+  const std::function<const Range &()> range2 = range_switch(RANGE_2_SWITCH);
 
   Tapers() : Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT} {}
 
@@ -64,7 +64,7 @@ struct Tapers : Module {
 };
 
 struct TapersWidget : public ModuleWidget {
-  TapersWidget(rack::Module *module) : ModuleWidget(module, 9, "tapers") {
+  explicit TapersWidget(rack::Module *module) : ModuleWidget(module, 9, "tapers") {
     auto widget_right_edge = width();
 
     auto left_x = width() / 5.f + 0.333333333f;
