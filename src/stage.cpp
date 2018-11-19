@@ -16,6 +16,7 @@ struct Stage : public Module {
   const std::function<float()> level_knob = knob(LEVEL_KNOB);
   const std::function<float()> duration_knob = knob(DURATION_KNOB);
   const std::function<float()> duration = Duration::of(duration_knob);
+  const std::function<float()> curve_knob = knob(CURVE_KNOB);
 
   Mode stage_mode = {};
   Mode defer_mode = {};
@@ -99,7 +100,7 @@ struct Stage : public Module {
 
   void step() override { executor.step(); }
 
-  float taper(float phase) const { return Taper::j(phase, param(CURVE_KNOB)); }
+  float taper(float phase) const { return Taper::j(phase, curve_knob()); }
 
   enum ParameterIIds { DURATION_KNOB, LEVEL_KNOB, CURVE_KNOB, PARAMETER_COUNT };
 

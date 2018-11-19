@@ -9,13 +9,11 @@
 namespace DHE {
 
 struct Ranger : Module {
-  const std::function<float()> level = knob(LEVEL_KNOB, LEVEL_CV_IN, LEVEL_AV_KNOB);
-  const std::function<float()> limit1 =
-      knob(LIMIT_1_KNOB, LIMIT_1_CV_IN, LIMIT_1_AV_KNOB);
-  const std::function<float()> limit2 =
-      knob(LIMIT_2_KNOB, LIMIT_2_CV_IN, LIMIT_2_AV_KNOB);
-  const std::function<const Range &()> range1 = range_switch(LIMIT_1_RANGE_SWITCH);
-  const std::function<const Range &()> range2 = range_switch(LIMIT_2_RANGE_SWITCH);
+  const std::function<float()> level = knob(LEVEL_KNOB, LEVEL_CV, LEVEL_AV);
+  const std::function<float()> limit1 = knob(LIMIT_1_KNOB, LIMIT_1_CV, LIMIT_1_AV);
+  const std::function<float()> limit2 = knob(LIMIT_2_KNOB, LIMIT_2_CV, LIMIT_2_AV);
+  const std::function<Range const &()> range1 = signal_range(LIMIT_1_RANGE);
+  const std::function<Range const &()> range2 = signal_range(LIMIT_2_RANGE);
 
   Ranger() : Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT} {}
 
@@ -31,16 +29,16 @@ struct Ranger : Module {
 
   enum ParameterIds {
     LEVEL_KNOB,
-    LEVEL_AV_KNOB,
+    LEVEL_AV,
     LIMIT_1_KNOB,
-    LIMIT_1_AV_KNOB,
-    LIMIT_1_RANGE_SWITCH,
+    LIMIT_1_AV,
+    LIMIT_1_RANGE,
     LIMIT_2_KNOB,
-    LIMIT_2_AV_KNOB,
-    LIMIT_2_RANGE_SWITCH,
+    LIMIT_2_AV,
+    LIMIT_2_RANGE,
     PARAMETER_COUNT
   };
-  enum InputIds { LEVEL_CV_IN, LIMIT_1_CV_IN, LIMIT_2_CV_IN, INPUT_COUNT };
+  enum InputIds { LEVEL_CV, LIMIT_1_CV, LIMIT_2_CV, INPUT_COUNT };
   enum OutputIds { OUT, OUTPUT_COUNT };
 };
 
@@ -48,7 +46,7 @@ struct RangerWidget : public ModuleWidget {
   explicit RangerWidget(rack::Module *module) : ModuleWidget(module, 6, "ranger") {
     auto widget_right_edge = width();
 
-    auto left_x = width() / 3.5f + 0.333333333f;
+    auto left_x = width()/3.5f + 0.333333333f;
     auto right_x = widget_right_edge - left_x;
 
     auto y = 24.f;
@@ -58,24 +56,24 @@ struct RangerWidget : public ModuleWidget {
     install_knob("medium", Ranger::LEVEL_KNOB, {left_x, y});
     install_output(Ranger::OUT, {right_x, y});
     y += delta_y;
-    install_input(Ranger::LEVEL_CV_IN, {left_x, y});
-    install_knob("tiny", Ranger::LEVEL_AV_KNOB, {right_x, y});
+    install_input(Ranger::LEVEL_CV, {left_x, y});
+    install_knob("tiny", Ranger::LEVEL_AV, {right_x, y});
 
     y += delta_y + panel_buffer;
 
     install_knob("medium", Ranger::LIMIT_1_KNOB, {left_x, y});
-    install_switch(Ranger::LIMIT_1_RANGE_SWITCH, {right_x, y});
+    install_switch(Ranger::LIMIT_1_RANGE, {right_x, y});
     y += delta_y;
-    install_input(Ranger::LIMIT_1_CV_IN, {left_x, y});
-    install_knob("tiny", Ranger::LIMIT_1_AV_KNOB, {right_x, y});
+    install_input(Ranger::LIMIT_1_CV, {left_x, y});
+    install_knob("tiny", Ranger::LIMIT_1_AV, {right_x, y});
 
     y += delta_y + panel_buffer;
 
     install_knob("medium", Ranger::LIMIT_2_KNOB, {left_x, y});
-    install_switch(Ranger::LIMIT_2_RANGE_SWITCH, {right_x, y});
+    install_switch(Ranger::LIMIT_2_RANGE, {right_x, y});
     y += delta_y;
-    install_input(Ranger::LIMIT_2_CV_IN, {left_x, y});
-    install_knob("tiny", Ranger::LIMIT_2_AV_KNOB, {right_x, y});
+    install_input(Ranger::LIMIT_2_CV, {left_x, y});
+    install_knob("tiny", Ranger::LIMIT_2_AV, {right_x, y});
   }
 };
 } // namespace DHE

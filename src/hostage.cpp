@@ -12,6 +12,11 @@
 namespace DHE {
 
 struct Hostage : Module {
+  // TODO: Delete
+  float param(int index) const {
+    return params[index].value;
+  }
+
   const std::function<float()> duration_knob = knob(DURATION_KNOB);
   const std::function<int()> duration_selector = selector(DURATION_SWITCH);
   const std::function<float()> duration = Duration::of(duration_knob, duration_selector);

@@ -11,7 +11,9 @@ namespace DHE {
 
 struct Upstage : Module {
   const std::function<float()> level_knob = knob(LEVEL_KNOB, LEVEL_CV);
-  const std::function<const Range &()> level_range = range_switch(LEVEL_SWITCH);
+  const std::function<bool()> trigger_button = button(TRIG_BUTTON);
+  const std::function<bool()> trigger_signal = trigger(TRIG_BUTTON);
+  const std::function<const Range &()> level_range = signal_range(LEVEL_SWITCH);
   const std::function<bool()> wait_in = trigger(WAIT_IN);
   const std::function<bool()> wait_button = button(WAIT_BUTTON);
 
@@ -29,7 +31,7 @@ struct Upstage : Module {
   }
 
   float trigger_in() const {
-    return param(TRIG_BUTTON) > 0.5f ? 10.f : input(TRIG_IN);
+    return trigger_button() || trigger_signal() ? 10.f : 0.f;
   }
 
   float trigger_out() const { return is_waiting() ? 0.f : trigger_in(); }

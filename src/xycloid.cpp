@@ -7,7 +7,7 @@
 namespace DHE {
 
 struct Pole {
-  const float two_pi = 2.f * std::acos(-1.f);
+  const float two_pi = 2.f*std::acos(-1.f);
   float phase{0.f};
   float offset{0.f};
 
@@ -17,32 +17,26 @@ struct Pole {
     phase -= std::trunc(phase);
   }
 
-  float x() const { return std::cos(two_pi * (phase + offset)); }
+  float x() const { return std::cos(two_pi*(phase + offset)); }
 
-  float y() const { return std::sin(two_pi * (phase + offset)); }
+  float y() const { return std::sin(two_pi*(phase + offset)); }
 };
 
 struct Xycloid : Module {
-  static constexpr auto inward_wobble_max = 16.f;
-  static constexpr auto outward_wobble_max = -inward_wobble_max;
-  static constexpr auto inward_wobble_range = Range{0.f, inward_wobble_max};
-  static constexpr auto outward_wobble_range = Range{0.f, outward_wobble_max};
-  static constexpr auto bidirectional_wobble_range =
-      Range{inward_wobble_max, outward_wobble_max};
   static constexpr auto throb_speed_knob_range = Range{-1.f, 1.f};
   static constexpr auto wobble_depth_range = Range{0.f, 1.f};
   static constexpr auto gain_range = Range{0.f, 2.f};
 
-  const std::vector<Range> wobble_ratio_ranges{
-      inward_wobble_range, bidirectional_wobble_range, outward_wobble_range};
-  const std::function<float()> wobble_ratio_knob =
-      knob(WOBBLE_RATIO_KNOB, WOBBLE_RATIO_CV, WOBBLE_RATIO_AV);
-  const std::function<float()> wobble_depth_knob =
-      knob(WOBBLE_DEPTH_KNOB, WOBBLE_DEPTH_CV, WOBBLE_DEPTH_AV);
-  const std::function<float()> throb_speed_knob =
-      knob(THROB_SPEED_KNOB, THROB_SPEED_CV, THROB_SPEED_AV);
-  const std::function<float()> x_gain_knob = knob(X_GAIN_KNOB, X_GAIN_CV);
-  const std::function<float()> y_gain_knob = knob(Y_GAIN_KNOB, Y_GAIN_CV);
+  const std::function<float()> x_offset = knob(X_RANGE);
+  const std::function<float()> y_offset = knob(Y_RANGE);
+  const std::function<float()> wobble_phase_knob = knob(WOBBLE_PHASE);
+  const std::function<float()> wobble_ratio_knob = knob(WOBBLE_RATIO, WOBBLE_RATIO_CV, WOBBLE_RATIO_AV);
+  const std::function<float()> wobble_depth_knob = knob(WOBBLE_DEPTH, WOBBLE_DEPTH_CV, WOBBLE_DEPTH_AV);
+  const std::function<bool()> is_wobble_ratio_free = button(WOBBLE_RATIO_TYPE);
+  const std::function<int()> wobble_type = selector(WOBBLE_TYPE);
+  const std::function<float()> throb_speed_knob = knob(THROB_SPEED, THROB_SPEED_CV, THROB_SPEED_AV);
+  const std::function<float()> x_gain_knob = knob(X_GAIN, X_GAIN_CV);
+  const std::function<float()> y_gain_knob = knob(Y_GAIN, Y_GAIN_CV);
 
   float wobble_ratio_offset = 0.f;
   Pole wobbler;
@@ -50,71 +44,67 @@ struct Xycloid : Module {
 
   Xycloid() : Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT} {}
 
-  int wobble_type() const {
-    return static_cast<int>(param(WOBBLE_TYPE_SWITCH));
-  }
+  Range wobble_range() const {
+    static constexpr auto wobble_max = 16.f;
+    static constexpr auto inward_wobble_range = Range{0.f, wobble_max};
+    static constexpr auto outward_wobble_range = Range{0.f, -wobble_max};
+    static constexpr auto bidirectional_wobble_range = Range{wobble_max, -wobble_max};
+    const std::vector<Range> wobble_ratio_ranges{inward_wobble_range, bidirectional_wobble_range, outward_wobble_range};
 
-  bool quantize_wobble_ratio() const {
-    return !param(QUANTIZE_WOBBLE_RATIO_SWITCH);
+    return wobble_ratio_ranges[wobble_type()];
   }
-
-  Range wobble_range() const { return wobble_ratio_ranges[wobble_type()]; }
 
   float wobble_ratio() const {
-    auto wobble_ratio =
-        wobble_range().scale(wobble_ratio_knob()) + wobble_ratio_offset;
-    return quantize_wobble_ratio() ? std::round(wobble_ratio) : wobble_ratio;
+    auto wobble_ratio = wobble_range().scale(wobble_ratio_knob()) + wobble_ratio_offset;
+    return is_wobble_ratio_free() ? wobble_ratio : std::round(wobble_ratio);
   }
 
   float wobble_depth() const {
     return wobble_depth_range.clamp(wobble_depth_knob());
   }
 
-  float throb_speed(int knob, int cv, int attenuator) const {
+  float throb_speed() const {
     auto scaled = throb_speed_knob_range.scale(throb_speed_knob());
     auto tapered = sigmoid(scaled, 0.8f);
-    return -10.f * tapered * rack::engineGetSampleTime();
+    return -10.f*tapered*rack::engineGetSampleTime();
   }
 
   void step() override {
     auto wobble_ratio = this->wobble_ratio();
-    auto wobble_phase_offset = param(WOBBLE_PHASE_KNOB) - 0.5f;
+    auto wobble_phase_offset = wobble_phase_knob() - 0.5f;
     if (wobble_ratio < 0.f)
       wobble_phase_offset *= -1.f;
 
-    auto throb_speed =
-        this->throb_speed(THROB_SPEED_KNOB, THROB_SPEED_CV, THROB_SPEED_AV);
-    auto wobble_speed = wobble_ratio * throb_speed;
+    auto throb_speed = this->throb_speed();
+    auto wobble_speed = wobble_ratio*throb_speed;
     auto wobble_depth = this->wobble_depth();
     auto throb_depth = 1.f - wobble_depth;
 
     throbber.advance(throb_speed);
     wobbler.advance(wobble_speed, wobble_phase_offset);
-    auto x = throb_depth * throbber.x() + wobble_depth * wobbler.x();
-    auto y = throb_depth * throbber.y() + wobble_depth * wobbler.y();
+    auto x = throb_depth*throbber.x() + wobble_depth*wobbler.x();
+    auto y = throb_depth*throbber.y() + wobble_depth*wobbler.y();
 
     auto x_gain = gain_range.scale(x_gain_knob());
     auto y_gain = gain_range.scale(y_gain_knob());
-    auto x_offset = param(X_RANGE_SWITCH);
-    auto y_offset = param(Y_RANGE_SWITCH);
-    outputs[X_OUT].value = 5.f * x_gain * (x + x_offset);
-    outputs[Y_OUT].value = 5.f * y_gain * (y + y_offset);
+    outputs[X_OUT].value = 5.f*x_gain*(x + x_offset());
+    outputs[Y_OUT].value = 5.f*y_gain*(y + y_offset());
   }
 
   enum ParameterIds {
-    WOBBLE_RATIO_KNOB,
+    WOBBLE_RATIO,
     WOBBLE_RATIO_AV,
-    WOBBLE_TYPE_SWITCH,
-    WOBBLE_DEPTH_KNOB,
+    WOBBLE_TYPE,
+    WOBBLE_DEPTH,
     WOBBLE_DEPTH_AV,
-    THROB_SPEED_KNOB,
+    THROB_SPEED,
     THROB_SPEED_AV,
-    X_GAIN_KNOB,
-    Y_GAIN_KNOB,
-    X_RANGE_SWITCH,
-    Y_RANGE_SWITCH,
-    QUANTIZE_WOBBLE_RATIO_SWITCH,
-    WOBBLE_PHASE_KNOB,
+    X_GAIN,
+    Y_GAIN,
+    X_RANGE,
+    Y_RANGE,
+    WOBBLE_RATIO_TYPE,
+    WOBBLE_PHASE,
     PARAMETER_COUNT
   };
   enum InputIds {
@@ -144,16 +134,16 @@ struct Xycloid : Module {
     wobble_ratio_offset = is_musical ? 0.f : 1.f;
   }
 
-  bool is_musical_wobble_ratios() { return wobble_ratio_offset == 0.f; }
+  bool is_musical_wobble_ratios() { return wobble_ratio_offset==0.f; }
 };
 
 struct XycloidWidget : public ModuleWidget {
   explicit XycloidWidget(rack::Module *module) : ModuleWidget(module, 11, "xycloid") {
     auto widget_right_edge = width();
 
-    auto left_x = widget_right_edge / 7.f;
+    auto left_x = widget_right_edge/7.f;
     auto right_x = widget_right_edge - left_x;
-    auto left_center_x = (right_x - left_x) / 3.f + left_x;
+    auto left_center_x = (right_x - left_x)/3.f + left_x;
     auto right_center_x = widget_right_edge - left_center_x;
 
     auto top_row_y = 30.f;
@@ -162,33 +152,33 @@ struct XycloidWidget : public ModuleWidget {
     auto row = 0;
 
     install_input(Xycloid::WOBBLE_RATIO_CV,
-                  {left_x, top_row_y + row * row_spacing});
+                  {left_x, top_row_y + row*row_spacing});
     install_knob("tiny", Xycloid::WOBBLE_RATIO_AV,
-                 {left_center_x, top_row_y + row * row_spacing});
-    install_knob("large", Xycloid::WOBBLE_RATIO_KNOB,
-                 {right_center_x, top_row_y + row * row_spacing});
-    install_switch(Xycloid::QUANTIZE_WOBBLE_RATIO_SWITCH,
-                   {right_x, top_row_y + row * row_spacing}, 1, 1);
+                 {left_center_x, top_row_y + row*row_spacing});
+    install_knob("large", Xycloid::WOBBLE_RATIO,
+                 {right_center_x, top_row_y + row*row_spacing});
+    install_switch(Xycloid::WOBBLE_RATIO_TYPE,
+                   {right_x, top_row_y + row*row_spacing}, 1, 1);
 
     row++;
     install_input(Xycloid::WOBBLE_DEPTH_CV,
-                  {left_x, top_row_y + row * row_spacing});
+                  {left_x, top_row_y + row*row_spacing});
     install_knob("tiny", Xycloid::WOBBLE_DEPTH_AV,
-                 {left_center_x, top_row_y + row * row_spacing});
-    install_knob("large", Xycloid::WOBBLE_DEPTH_KNOB,
-                 {right_center_x, top_row_y + row * row_spacing});
-    install_switch(Xycloid::WOBBLE_TYPE_SWITCH,
-                   {right_x, top_row_y + row * row_spacing}, 2, 2);
+                 {left_center_x, top_row_y + row*row_spacing});
+    install_knob("large", Xycloid::WOBBLE_DEPTH,
+                 {right_center_x, top_row_y + row*row_spacing});
+    install_switch(Xycloid::WOBBLE_TYPE,
+                   {right_x, top_row_y + row*row_spacing}, 2, 2);
 
     row++;
     install_input(Xycloid::THROB_SPEED_CV,
-                  {left_x, top_row_y + row * row_spacing});
+                  {left_x, top_row_y + row*row_spacing});
     install_knob("tiny", Xycloid::THROB_SPEED_AV,
-                 {left_center_x, top_row_y + row * row_spacing});
-    install_knob("large", Xycloid::THROB_SPEED_KNOB,
-                 {right_center_x, top_row_y + row * row_spacing}, 0.65f);
-    install_knob("small", Xycloid::WOBBLE_PHASE_KNOB,
-                 {right_x, top_row_y + row * row_spacing});
+                 {left_center_x, top_row_y + row*row_spacing});
+    install_knob("large", Xycloid::THROB_SPEED,
+                 {right_center_x, top_row_y + row*row_spacing}, 0.65f);
+    install_knob("small", Xycloid::WOBBLE_PHASE,
+                 {right_x, top_row_y + row*row_spacing});
 
     top_row_y = 82.f;
     row_spacing = 15.f;
@@ -196,20 +186,20 @@ struct XycloidWidget : public ModuleWidget {
 
     auto default_gain = Xycloid::gain_range.normalize(1.f);
     row++;
-    install_input(Xycloid::X_GAIN_CV, {left_x, top_row_y + row * row_spacing});
-    install_knob("small", Xycloid::X_GAIN_KNOB,
-                 {left_center_x, top_row_y + row * row_spacing}, default_gain);
-    install_switch(Xycloid::X_RANGE_SWITCH,
-                   {right_center_x, top_row_y + row * row_spacing});
-    install_output(Xycloid::X_OUT, {right_x, top_row_y + row * row_spacing});
+    install_input(Xycloid::X_GAIN_CV, {left_x, top_row_y + row*row_spacing});
+    install_knob("small", Xycloid::X_GAIN,
+                 {left_center_x, top_row_y + row*row_spacing}, default_gain);
+    install_switch(Xycloid::X_RANGE,
+                   {right_center_x, top_row_y + row*row_spacing});
+    install_output(Xycloid::X_OUT, {right_x, top_row_y + row*row_spacing});
 
     row++;
-    install_input(Xycloid::Y_GAIN_CV, {left_x, top_row_y + row * row_spacing});
-    install_knob("small", Xycloid::Y_GAIN_KNOB,
-                 {left_center_x, top_row_y + row * row_spacing}, default_gain);
-    install_switch(Xycloid::Y_RANGE_SWITCH,
-                   {right_center_x, top_row_y + row * row_spacing});
-    install_output(Xycloid::Y_OUT, {right_x, top_row_y + row * row_spacing});
+    install_input(Xycloid::Y_GAIN_CV, {left_x, top_row_y + row*row_spacing});
+    install_knob("small", Xycloid::Y_GAIN,
+                 {left_center_x, top_row_y + row*row_spacing}, default_gain);
+    install_switch(Xycloid::Y_RANGE,
+                   {right_center_x, top_row_y + row*row_spacing});
+    install_output(Xycloid::Y_OUT, {right_x, top_row_y + row*row_spacing});
   }
 
   void appendContextMenu(rack::Menu *menu) override {

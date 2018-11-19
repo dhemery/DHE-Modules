@@ -13,8 +13,7 @@ struct Cubic : Module {
   const std::function<float()> x2_knob = knob(X2_KNOB, X2_CV);
   const std::function<float()> x3_knob = knob(X3_KNOB, X3_CV);
   const std::function<float()> input_gain_knob = knob(INPUT_GAIN_KNOB, INPUT_GAIN_CV);
-  const std::function<float()> output_gain_knob =
-      knob(OUTPUT_GAIN_KNOB, OUTPUT_GAIN_CV);
+  const std::function<float()> output_gain_knob = knob(OUTPUT_GAIN_KNOB, OUTPUT_GAIN_CV);
 
   Cubic() : Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT} {}
 

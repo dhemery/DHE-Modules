@@ -12,10 +12,9 @@ namespace DHE {
 struct Swave : Module {
   static constexpr auto signal_range = Range{-5.f, 5.f};
   const std::function<float()> curve_knob = knob(CURVE_KNOB, CURVE_CV);
+  const std::function<bool()> is_s_taper = button(SHAPE_SWITCH);
 
   Swave() : Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT} {}
-
-  bool is_s_taper() const { return param(SHAPE_SWITCH) > 0.5f; }
 
   void step() override {
     outputs[SWAVE_OUT].value = to_signal(taper(to_phase(swave_in())));

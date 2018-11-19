@@ -14,9 +14,12 @@ namespace DHE {
 
 struct BoosterStage : Module {
   const std::function<float()> level_knob = knob(LEVEL_KNOB, LEVEL_CV);
-  const std::function<Range const &()> level_range = range_switch(LEVEL_SWITCH);
+
+  const std::function<Range const &()> level_range = signal_range(LEVEL_SWITCH);
 
   const std::function<float()> curve_knob = knob(CURVE_KNOB, CURVE_CV);
+
+  const std::function<bool()> is_s_taper = selector(SHAPE_SWITCH);
 
   const std::function<float()> duration_knob = knob(DURATION_KNOB);
   const std::function<int()> duration_selector = selector(DURATION_SWITCH);
@@ -27,6 +30,9 @@ struct BoosterStage : Module {
 
   const std::function<bool()> trigger_button = button(TRIGGER_BUTTON);
   const std::function<bool()> trigger_in = trigger(TRIGGER_IN);
+
+  const std::function<bool()> active_button = button(ACTIVE_BUTTON);
+  const std::function<bool()> eoc_button = button(EOC_BUTTON);
 
   Mode stage_mode{};
   Mode defer_mode{};
@@ -101,19 +107,17 @@ struct BoosterStage : Module {
     return scale(taper(phase), phase_0_voltage, level_in());
   }
 
-  bool is_s_taper() const { return param(SHAPE_SWITCH) > 0.5; }
-
   float level_in() const { return level_range().scale(level_knob()); }
 
   void send_active() {
-    auto active = is_active || param(ACTIVE_BUTTON) > 0.5f;
+    auto active = is_active || active_button();
     outputs[ACTIVE_OUT].value = active ? 10.f : 0.f;
   }
 
   void send_envelope(float voltage) { outputs[ENVELOPE_OUT].value = voltage; }
 
   void send_eoc() {
-    auto eoc = is_eoc || param(EOC_BUTTON) > 0.5f;
+    auto eoc = is_eoc || eoc_button();
     outputs[EOC_OUT].value = eoc ? 10.f : 0.f;
   }
 

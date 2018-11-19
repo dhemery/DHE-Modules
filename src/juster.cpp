@@ -1,10 +1,15 @@
 #include "dhe-modules.hpp"
 #include "module-widget.hpp"
 #include "module.hpp"
+#include "util/range.hpp"
 
 namespace DHE {
 
 struct Juster : Module {
+  float param(int index) const {
+    return params[index].value;
+  }
+
   Juster() : Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT} {}
 
   float gain(float input, int knob) const {
