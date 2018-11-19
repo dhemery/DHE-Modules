@@ -25,7 +25,7 @@ auto float_value_of(Source const &source) -> std::function<float()> {
 template<typename Source>
 auto bool_value_of(Source const &source) -> std::function<bool()> {
   return [&source]() -> float {
-    return source.value > 0.5f;
+    return source.value > 0.1f;
   };
 }
 
