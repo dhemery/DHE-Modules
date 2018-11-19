@@ -12,11 +12,13 @@
 namespace DHE {
 
 struct Hostage : Module {
-  const std::function<float()> duration_knob = knob(DURATION_KNOB, DURATION_CV);
+  const std::function<float()> duration_knob = knob(DURATION_KNOB);
+  const std::function<int()> duration_selector = selector(DURATION_SWITCH);
+  const std::function<float()> duration = Duration::of(duration_knob, duration_selector);
 
   DFlipFlop sustain_gate = DFlipFlop{[this] { return hold_gate_in(); }};
   DFlipFlop sustain_trigger = DFlipFlop{[this] { return hold_gate_in(); }};
-  Ramp timer = Ramp{[this] { return sample_time() / duration_in(); }};
+  Ramp timer = Ramp{[this] { return sample_time() / duration(); }};
   Ramp eoc_pulse = Ramp{[this] { return sample_time() / 1e-3f; }};
 
   Mode defer_mode = {};
@@ -82,11 +84,6 @@ struct Hostage : Module {
   float defer_gate_in() const { return input(DEFER_IN); };
 
   float mode_switch_in() const { return param(GATE_MODE_SWITCH); }
-
-  float duration_in() const {
-    const auto &range = Duration::range(param(DURATION_SWITCH));
-    return Duration::scaled(duration_knob(), range);
-  }
 
   float hold_gate_in() const { return input(HOLD_GATE_IN); }
 

@@ -13,12 +13,18 @@
 namespace DHE {
 
 struct BoosterStage : Module {
-  const std::function<float()> duration_knob = knob(DURATION_KNOB);
   const std::function<float()> level_knob = knob(LEVEL_KNOB, LEVEL_CV);
+  const std::function<Range const &()> level_range = range_switch(LEVEL_SWITCH);
+
   const std::function<float()> curve_knob = knob(CURVE_KNOB, CURVE_CV);
-  const std::function<const Range &()> level_range = range_switch(LEVEL_SWITCH);
+
+  const std::function<float()> duration_knob = knob(DURATION_KNOB);
+  const std::function<int()> duration_selector = selector(DURATION_SWITCH);
+  const std::function<float()> duration = Duration::of(duration_knob, duration_selector);
+
   const std::function<bool()> defer_button = button(DEFER_BUTTON);
   const std::function<bool()> defer_in = trigger(DEFER_IN);
+
   const std::function<bool()> trigger_button = button(TRIGGER_BUTTON);
   const std::function<bool()> trigger_in = trigger(TRIGGER_IN);
 
@@ -29,7 +35,7 @@ struct BoosterStage : Module {
   bool is_active{false};
   bool is_eoc{false};
 
-  Ramp envelope{[this] { return sample_time()/duration_in(); }};
+  Ramp envelope{[this] { return sample_time()/duration(); }};
   Ramp eoc_pulse{[this] { return sample_time()/1e-3f; }};
   DFlipFlop envelope_trigger{[this] { return envelope_gate_in(); }};
 
@@ -83,11 +89,6 @@ struct BoosterStage : Module {
 
   float defer_gate_in() const {
     return defer_button() || defer_in() ? 10.f : 0.f;
-  }
-
-  float duration_in() const {
-    const auto &range = Duration::range(param(DURATION_SWITCH));
-    return Duration::scaled(duration_knob(), range);
   }
 
   float envelope_gate_in() const {

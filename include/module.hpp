@@ -15,6 +15,10 @@ struct Module : rack::Module {
     return Controls::bool_value_of(params[param]);
   };
 
+  auto selector(int param) const -> std::function<int()> {
+    return Controls::int_value_of(params[param]);
+  }
+
   auto trigger(int input) const -> std::function<bool()> {
     return Controls::bool_value_of(inputs[input]);
   };

@@ -14,6 +14,8 @@
 namespace DHE {
 struct Stage : public Module {
   const std::function<float()> level_knob = knob(LEVEL_KNOB);
+  const std::function<float()> duration_knob = knob(DURATION_KNOB);
+  const std::function<float()> duration = Duration::of(duration_knob);
 
   Mode stage_mode = {};
   Mode defer_mode = {};
@@ -21,7 +23,7 @@ struct Stage : public Module {
   // TODO: Move this inside stage mode or an envelope class.
   float phase_0_voltage{0.f};
 
-  Ramp envelope = Ramp{[this] { return sample_time() / duration_in(); }};
+  Ramp envelope = Ramp{[this] { return sample_time() / duration(); }};
   DFlipFlop envelope_trigger = DFlipFlop{[this] { return envelope_gate_in(); }};
   Ramp eoc_pulse = Ramp{[this] { return sample_time() / 1e-3f; }};
 
@@ -69,10 +71,6 @@ struct Stage : public Module {
   }
 
   float defer_gate_in() const { return input(DEFER_IN); }
-
-  float duration_in() const {
-    return Duration::scaled(param(DURATION_KNOB), Duration::MEDIUM_RANGE);
-  }
 
   float envelope_gate_in() const { return input(TRIGGER_IN); }
 
