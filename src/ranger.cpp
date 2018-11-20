@@ -12,8 +12,8 @@ struct Ranger : Module {
   std::function<float()> const level{knob(LEVEL_KNOB, LEVEL_CV, LEVEL_AV)};
   std::function<float()> const limit1{knob(LIMIT_1_KNOB, LIMIT_1_CV, LIMIT_1_AV)};
   std::function<float()> const limit2{knob(LIMIT_2_KNOB, LIMIT_2_CV, LIMIT_2_AV)};
-  std::function<Range const &()> const range1{signal_range(LIMIT_1_RANGE)};
-  std::function<Range const &()> const range2{signal_range(LIMIT_2_RANGE)};
+  std::function<Range const &()> const range1{signal_range(int_param(LIMIT_1_RANGE))};
+  std::function<Range const &()> const range2{signal_range(int_param(LIMIT_2_RANGE))};
 
   Ranger() : Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT} {}
 

@@ -81,20 +81,20 @@ struct Module : rack::Module {
     };
   }
 
-  template<typename C>
-  auto choice(int switch_param, C choice1, C choice2) const
-  -> std::function<C const &()> {
-    auto choices = std::vector<C>{choice1, choice2};
-    auto selected = int_param(switch_param);
-    return [selected, choices]() -> C const & {
-      return choices[selected()];
+  template<typename Selector, typename Choice>
+  auto choice(Selector selector, Choice choice0, Choice choice1) const
+  -> std::function<Choice const &()> {
+    auto choices = std::vector<Choice>{choice0, choice1};
+    return [selector, choices]() -> Choice const & {
+      return choices[selector()];
     };
   }
 
-  auto signal_range(int switch_param) const -> std::function<Range const &()> {
+  template<typename Selector>
+  auto signal_range(Selector selector) const -> std::function<Range const &()> {
     auto const unipolar = Range{0.f, 10.f};
     auto const bipolar = Range{-5.f, 5.f};
-    return choice(switch_param, bipolar, unipolar);
+    return choice(selector, bipolar, unipolar);
   }
 };
 

@@ -14,7 +14,7 @@ namespace DHE {
 
 struct BoosterStage : Module {
   std::function<float()> const level_knob{knob(LEVEL_KNOB, LEVEL_CV)};
-  std::function<Range const &()> const level_range{signal_range(LEVEL_SWITCH)};
+  std::function<Range const &()> const level_range{signal_range(int_param(LEVEL_SWITCH))};
 
   std::function<float()> const curve_knob{knob(CURVE_KNOB, CURVE_CV)};
   std::function<bool()> const is_s_taper{bool_param(SHAPE_SWITCH)};

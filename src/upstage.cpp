@@ -13,7 +13,7 @@ struct Upstage : Module {
   std::function<float()> const level_knob = knob(LEVEL_KNOB, LEVEL_CV);
   std::function<bool()> const trigger_button = bool_param(TRIG_BUTTON);
   std::function<bool()> const trigger_signal = bool_param(TRIG_BUTTON);
-  std::function<Range const &()> const level_range = signal_range(LEVEL_SWITCH);
+  std::function<Range const &()> const level_range = signal_range(int_param(LEVEL_SWITCH));
   std::function<bool()> const wait_in = bool_in(WAIT_IN);
   std::function<bool()> const wait_button = bool_param(WAIT_BUTTON);
 
