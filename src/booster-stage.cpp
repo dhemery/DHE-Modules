@@ -13,26 +13,26 @@
 namespace DHE {
 
 struct BoosterStage : Module {
-  const std::function<float()> level_knob = knob(LEVEL_KNOB, LEVEL_CV);
+  std::function<float()> const level_knob{knob(LEVEL_KNOB, LEVEL_CV)};
+  std::function<Range const &()> const level_range{signal_range(LEVEL_SWITCH)};
 
-  const std::function<Range const &()> level_range = signal_range(LEVEL_SWITCH);
+  std::function<float()> const curve_knob{knob(CURVE_KNOB, CURVE_CV)};
+  std::function<bool()> const is_s_taper{bool_param(SHAPE_SWITCH)};
 
-  const std::function<float()> curve_knob = knob(CURVE_KNOB, CURVE_CV);
+  std::function<float()> const duration_knob{knob(DURATION_KNOB)};
+  std::function<int()> const duration_selector{int_param(DURATION_SWITCH)};
+  std::function<float()> const duration{Duration::of(duration_knob, duration_selector)};
 
-  const std::function<bool()> is_s_taper = selector(SHAPE_SWITCH);
+  std::function<bool()> const defer_button{bool_param(DEFER_BUTTON)};
+  std::function<bool()> const defer_in{bool_in(DEFER_IN)};
 
-  const std::function<float()> duration_knob = knob(DURATION_KNOB);
-  const std::function<int()> duration_selector = selector(DURATION_SWITCH);
-  const std::function<float()> duration = Duration::of(duration_knob, duration_selector);
+  std::function<bool()> const trigger_button{bool_param(TRIGGER_BUTTON)};
+  std::function<bool()> const trigger_in{bool_in(TRIGGER_IN)};
 
-  const std::function<bool()> defer_button = button(DEFER_BUTTON);
-  const std::function<bool()> defer_in = trigger(DEFER_IN);
+  std::function<bool()> const active_button = bool_param(ACTIVE_BUTTON);
+  std::function<bool()> const eoc_button = bool_param(EOC_BUTTON);
 
-  const std::function<bool()> trigger_button = button(TRIGGER_BUTTON);
-  const std::function<bool()> trigger_in = trigger(TRIGGER_IN);
-
-  const std::function<bool()> active_button = button(ACTIVE_BUTTON);
-  const std::function<bool()> eoc_button = button(EOC_BUTTON);
+  std::function<float()> const envelope_in = float_param(ENVELOPE_IN);
 
   Mode stage_mode{};
   Mode defer_mode{};
@@ -92,22 +92,19 @@ struct BoosterStage : Module {
     send_eoc();
   }
 
-
-  float defer_gate_in() const {
+  auto defer_gate_in() const -> float {
     return defer_button() || defer_in() ? 10.f : 0.f;
   }
 
-  float envelope_gate_in() const {
+  auto envelope_gate_in() const -> float {
     return trigger_button() || trigger_in() ? 10.f : 0.f;
   }
 
-  float envelope_in() const { return input(ENVELOPE_IN); }
-
-  float envelope_voltage(float phase) const {
+  auto envelope_voltage(float phase) const -> float {
     return scale(taper(phase), phase_0_voltage, level_in());
   }
 
-  float level_in() const { return level_range().scale(level_knob()); }
+  auto level_in() const -> float { return level_range().scale(level_knob()); }
 
   void send_active() {
     auto active = is_active || active_button();
@@ -121,9 +118,9 @@ struct BoosterStage : Module {
     outputs[EOC_OUT].value = eoc ? 10.f : 0.f;
   }
 
-  float sample_time() const { return rack::engineGetSampleTime(); }
+  auto sample_time() const -> float { return rack::engineGetSampleTime(); }
 
-  float taper(float phase) const {
+  auto taper(float phase) const -> float {
     auto curvature = curve_knob();
     return is_s_taper() ? Taper::s(phase, curvature)
                         : Taper::j(phase, curvature);

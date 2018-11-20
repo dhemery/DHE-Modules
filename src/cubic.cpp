@@ -8,24 +8,25 @@ struct Cubic : Module {
   static constexpr Range GAIN_RANGE{0.f, 2.f};
   static constexpr Range COEFFICIENT_RANGE{-2.f, 2.f};
 
-  const std::function<float()> x0_knob = knob(X0_KNOB, X0_CV);
-  const std::function<float()> x1_knob = knob(X1_KNOB, X1_CV);
-  const std::function<float()> x2_knob = knob(X2_KNOB, X2_CV);
-  const std::function<float()> x3_knob = knob(X3_KNOB, X3_CV);
-  const std::function<float()> input_gain_knob = knob(INPUT_GAIN_KNOB, INPUT_GAIN_CV);
-  const std::function<float()> output_gain_knob = knob(OUTPUT_GAIN_KNOB, OUTPUT_GAIN_CV);
+  std::function<float()> const in{float_in(IN)};
+  std::function<float()> const x0_knob{knob(X0_KNOB, X0_CV)};
+  std::function<float()> const x1_knob{knob(X1_KNOB, X1_CV)};
+  std::function<float()> const x2_knob{knob(X2_KNOB, X2_CV)};
+  std::function<float()> const x3_knob{knob(X3_KNOB, X3_CV)};
+  std::function<float()> const input_gain_knob{knob(INPUT_GAIN_KNOB, INPUT_GAIN_CV)};
+  std::function<float()> const output_gain_knob{knob(OUTPUT_GAIN_KNOB, OUTPUT_GAIN_CV)};
 
   Cubic() : Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT} {}
 
-  float a() const { return COEFFICIENT_RANGE.scale(x3_knob()); }
-  float b() const { return COEFFICIENT_RANGE.scale(x2_knob()); }
-  float c() const { return COEFFICIENT_RANGE.scale(x1_knob()); }
-  float d() const { return COEFFICIENT_RANGE.scale(x0_knob()); }
-  float input_gain() const { return GAIN_RANGE.scale(input_gain_knob()); }
-  float output_gain() const { return GAIN_RANGE.scale(output_gain_knob()); }
+  auto a() const -> float { return COEFFICIENT_RANGE.scale(x3_knob()); }
+  auto b() const -> float { return COEFFICIENT_RANGE.scale(x2_knob()); }
+  auto c() const -> float { return COEFFICIENT_RANGE.scale(x1_knob()); }
+  auto d() const -> float { return COEFFICIENT_RANGE.scale(x0_knob()); }
+  auto input_gain() const -> float { return GAIN_RANGE.scale(input_gain_knob()); }
+  auto output_gain() const -> float { return GAIN_RANGE.scale(output_gain_knob()); }
 
   void step() override {
-    auto x = input_gain()*input(IN)/5.f;
+    auto x = input_gain()*in()/5.f;
     auto x2 = x*x;
     auto x3 = x2*x;
 

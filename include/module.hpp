@@ -2,7 +2,6 @@
 
 #include <engine.hpp>
 
-#include "util/controls.hpp"
 #include "util/range.hpp"
 
 namespace DHE {
@@ -11,8 +10,50 @@ struct Module : rack::Module {
   Module(int param_count, int input_count, int output_count)
       : rack::Module(param_count, input_count, output_count) {}
 
+  auto float_param(int param) const -> std::function<float()> {
+    auto const &source = params[param];
+    return [&source]() -> float {
+      return source.value;
+    };
+  }
+
+  auto int_param(int param) const -> std::function<int()> {
+    auto const &source = params[param];\
+    return [&source]() -> int {
+      return static_cast<int>(source.value);
+    };
+  }
+
+  auto bool_param(int param) const -> std::function<bool()> {
+    auto const &source = params[param];
+    return [&source]() -> bool {
+      return source.value > 0.1f;
+    };
+  }
+
+  auto float_in(int input) const -> std::function<float()> {
+    auto const &source = inputs[input];
+    return [&source]() -> float {
+      return source.value;
+    };
+  }
+
+  auto int_in(int input) const -> std::function<int()> {
+    auto const &source = inputs[input];
+    return [&source]() -> int {
+      return static_cast<int>(source.value);
+    };
+  }
+
+  auto bool_in(int input) const -> std::function<bool()> {
+    auto const &source = inputs[input];
+    return [&source]() -> bool {
+      return source.value > 0.1f;
+    };
+  }
+
   auto knob(int param) const -> std::function<float()> {
-    return Controls::float_value_of(params[param]);
+    return float_param(param);
   };
 
   auto knob(int knob, int cv) const -> std::function<float()> {
@@ -40,29 +81,11 @@ struct Module : rack::Module {
     };
   }
 
-  auto button(int param) const -> std::function<bool()> {
-    return Controls::bool_value_of(params[param]);
-  };
-
-  auto selector(int param) const -> std::function<int()> {
-    return Controls::int_value_of(params[param]);
-  }
-
-  auto signal(int input) const -> std::function<float()> {
-    return Controls::float_value_of(inputs[input]);
-  };
-
-  auto trigger(int input) const -> std::function<bool()> {
-    return Controls::bool_value_of(inputs[input]);
-  };
-
-  auto input(int index) const -> float { return inputs[index].value; }
-
   template<typename C>
   auto choice(int switch_param, C choice1, C choice2) const
   -> std::function<C const &()> {
     auto choices = std::vector<C>{choice1, choice2};
-    auto selected = selector(switch_param);
+    auto selected = int_param(switch_param);
     return [selected, choices]() -> C const & {
       return choices[selected()];
     };

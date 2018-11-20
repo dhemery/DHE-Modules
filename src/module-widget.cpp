@@ -69,7 +69,7 @@ Switch *Switch::create(rack::Module *module, std::string module_name, int index,
   auto low_image_file =
       std::string("res/") + module_name + "/switch-" + type + "-low.svg";
   widget->addFrame(rack::SVG::load(rack::assetPlugin(plugin, low_image_file)));
-  if (max_position == 2) {
+  if (max_position==2) {
     auto mid_image_file =
         std::string("res/") + module_name + "/switch-" + type + "-mid.svg";
     widget->addFrame(
@@ -88,7 +88,7 @@ Switch *Switch::create(rack::Module *module, std::string module_name, int index,
 ModuleWidget::ModuleWidget(rack::Module *module, int widget_hp,
                            std::string module_name)
     : rack::ModuleWidget(module), module_name{module_name} {
-  box.size = rack::Vec{(float)widget_hp * rack::RACK_GRID_WIDTH,
+  box.size = rack::Vec{(float) widget_hp*rack::RACK_GRID_WIDTH,
                        rack::RACK_GRID_HEIGHT};
 
   auto *panel = new rack::SVGPanel();
@@ -102,14 +102,14 @@ ModuleWidget::ModuleWidget(rack::Module *module, int widget_hp,
 
 void ModuleWidget::install_screws() {
 
-  auto screw_diameter = rack::RACK_GRID_WIDTH * MM_PER_IN / SVG_DPI;
-  auto screw_radius = screw_diameter / 2.f;
+  auto screw_diameter = rack::RACK_GRID_WIDTH*MM_PER_IN/SVG_DPI;
+  auto screw_radius = screw_diameter/2.f;
 
   auto top = screw_radius;
   auto bottom = height() - top;
 
-  auto max_screw_inset = screw_diameter * 1.5f;
-  auto left = std::min(width() / 4.f, max_screw_inset);
+  auto max_screw_inset = screw_diameter*1.5f;
+  auto left = std::min(width()/4.f, max_screw_inset);
   auto right = width() - left;
 
   auto screw_positions = std::vector<rack::Vec>{

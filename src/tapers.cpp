@@ -10,14 +10,14 @@
 namespace DHE {
 
 struct Tapers : Module {
-  const std::function<float()> level1 = knob(LEVEL_1, LEVEL_1_CV, LEVEL_1_AV);
-  const std::function<float()> curvature1 = knob(CURVE_1, TAPER_1_CV, TAPER_1_AV);
-  const std::function<bool()> is_s1 = button(SHAPE_1);
-  const std::function<const Range &()> range1 = signal_range(RANGE_1);
-  const std::function<float()> level2 = knob(LEVEL_2, LEVEL_2_CV, LEVEL_2_AV);
-  const std::function<bool()> is_s2 = button(SHAPE_2);
-  const std::function<float()> curvature2 = knob(TAPER_2, TAPER_2_CV, TAPER_2_AV);
-  const std::function<const Range &()> range2 = signal_range(RANGE_2);
+  std::function<float()> const level1{knob(LEVEL_1, LEVEL_1_CV, LEVEL_1_AV)};
+  std::function<float()> const curvature1{knob(CURVE_1, TAPER_1_CV, TAPER_1_AV)};
+  std::function<bool()> const is_s1{bool_param(SHAPE_1)};
+  std::function<const Range &()> const range1{signal_range(RANGE_1)};
+  std::function<float()> const level2{knob(LEVEL_2, LEVEL_2_CV, LEVEL_2_AV)};
+  std::function<bool()> const is_s2{bool_param(SHAPE_2)};
+  std::function<float()> const curvature2{knob(TAPER_2, TAPER_2_CV, TAPER_2_AV)};
+  std::function<const Range &()> const range2{signal_range(RANGE_2)};
 
   Tapers() : Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT} {}
 
@@ -29,7 +29,7 @@ struct Tapers : Module {
     outputs[OUT_2].value = range2().scale(tapered2);
   }
 
-  float taper(float level, float curvature, bool is_s) const {
+  auto taper(float level, float curvature, bool is_s) const -> float {
     return is_s ? Taper::s(level, curvature) : Taper::j(level, curvature);
   }
 

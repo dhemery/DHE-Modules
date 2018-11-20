@@ -6,46 +6,42 @@
 namespace DHE {
 
 struct Juster : Module {
-  float param(int index) const {
-    return params[index].value;
-  }
-
   Juster() : Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT} {}
 
-  float gain(float input, int knob) const {
+  auto gain(float input, int knob) const -> float {
     static constexpr auto gain_range = Range{0.f, 2.f};
-    return input * gain_range.scale(param(knob));
+    return input*gain_range.scale(params[knob].value);
   }
 
-  float av(float input, int knob) const {
+  auto av(float input, int knob) const -> float {
     static constexpr auto av_range = Range{-1.f, 1.f};
-    return input * av_range.scale(param(knob));
+    return input*av_range.scale(params[knob].value);
   }
 
-  float offset(float input, int knob) const {
+  auto offset(float input, int knob) const -> float {
     static constexpr auto offset_range = Range{-5.f, 5.f};
-    return input + offset_range.scale(param(knob));
+    return input + offset_range.scale(params[knob].value);
   }
 
-  const std::function<float(float, int)> &function_for_mode(int sw) {
+  auto function_for_mode(int sw) const -> std::function<float(float, int)> const & {
     static auto functions = std::vector<std::function<float(float, int)>>{
         [this](float input, int knob) -> float { return offset(input, knob); },
         [this](float input, int knob) -> float { return av(input, knob); },
         [this](float input, int knob) -> float { return gain(input, knob); },
     };
-    auto mode = static_cast<int>(param(sw));
+    auto mode = static_cast<int>(params[sw].value);
     return functions[mode];
   }
 
-  float channel_input(int channel) {
-    if (channel == 0 || inputs[IN_1 + channel].active) {
-      return input(IN_1 + channel);
+  auto channel_input(int channel) const -> float {
+    if (channel==0 || inputs[IN_1 + channel].active) {
+      return inputs[IN_1 + channel].value;
     } else {
       return outputs[OUT_1 + channel - 1].value;
     }
   }
 
-  float channel_value(int channel) {
+  auto channel_value(int channel) const -> float {
     auto in = channel_input(channel);
     auto function = function_for_mode(MODE_1 + channel);
     return function(in, KNOB_1 + channel);
@@ -78,9 +74,9 @@ struct JusterWidget : public ModuleWidget {
   explicit JusterWidget(rack::Module *module) : ModuleWidget(module, 11, "juster") {
     auto widget_right_edge = width();
 
-    auto left_x = widget_right_edge / 7.f;
+    auto left_x = widget_right_edge/7.f;
     auto right_x = widget_right_edge - left_x;
-    auto left_center_x = (right_x - left_x) / 3.f + left_x;
+    auto left_center_x = (right_x - left_x)/3.f + left_x;
     auto right_center_x = widget_right_edge - left_center_x;
 
     auto top_row_y = 27.f;
@@ -88,15 +84,15 @@ struct JusterWidget : public ModuleWidget {
 
     for (auto row = 0; row < 5; row++) {
       install_input(Juster::IN_1 + row,
-                    {left_x, top_row_y + row * row_spacing});
+                    {left_x, top_row_y + row*row_spacing});
       install_knob(
           "large", Juster::KNOB_1 + row,
-          {left_center_x + 1.25f, top_row_y - 1.25f + row * row_spacing});
+          {left_center_x + 1.25f, top_row_y - 1.25f + row*row_spacing});
       install_switch(Juster::MODE_1 + row,
-                     {right_center_x, top_row_y - 1.25f + row * row_spacing}, 2,
+                     {right_center_x, top_row_y - 1.25f + row*row_spacing}, 2,
                      2);
       install_output(Juster::OUT_1 + row,
-                     {right_x, top_row_y + row * row_spacing});
+                     {right_x, top_row_y + row*row_spacing});
     }
   }
 };

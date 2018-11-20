@@ -10,18 +10,18 @@
 namespace DHE {
 
 struct Upstage : Module {
-  const std::function<float()> level_knob = knob(LEVEL_KNOB, LEVEL_CV);
-  const std::function<bool()> trigger_button = button(TRIG_BUTTON);
-  const std::function<bool()> trigger_signal = trigger(TRIG_BUTTON);
-  const std::function<const Range &()> level_range = signal_range(LEVEL_SWITCH);
-  const std::function<bool()> wait_in = trigger(WAIT_IN);
-  const std::function<bool()> wait_button = button(WAIT_BUTTON);
+  std::function<float()> const level_knob = knob(LEVEL_KNOB, LEVEL_CV);
+  std::function<bool()> const trigger_button = bool_param(TRIG_BUTTON);
+  std::function<bool()> const trigger_signal = bool_param(TRIG_BUTTON);
+  std::function<Range const &()> const level_range = signal_range(LEVEL_SWITCH);
+  std::function<bool()> const wait_in = bool_in(WAIT_IN);
+  std::function<bool()> const wait_button = bool_param(WAIT_BUTTON);
 
   Upstage() : Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT} {}
 
-  float envelope_out() const { return level_range().scale(level_knob()); }
+  auto envelope_out() const -> float { return level_range().scale(level_knob()); }
 
-  bool is_waiting() const {
+  auto is_waiting() const -> bool {
     return wait_button() || wait_in();
   }
 
@@ -30,11 +30,11 @@ struct Upstage : Module {
     outputs[ENVELOPE_OUT].value = envelope_out();
   }
 
-  float trigger_in() const {
+  auto trigger_in() const -> float {
     return trigger_button() || trigger_signal() ? 10.f : 0.f;
   }
 
-  float trigger_out() const { return is_waiting() ? 0.f : trigger_in(); }
+  auto trigger_out() const -> float { return is_waiting() ? 0.f : trigger_in(); }
 
   enum ParameterIds {
     LEVEL_KNOB,
@@ -51,8 +51,8 @@ struct UpstageWidget : public ModuleWidget {
   explicit UpstageWidget(rack::Module *module) : ModuleWidget(module, 5, "upstage") {
     auto widget_right_edge = width();
 
-    auto left_x = width() / 4.f + 0.333333333f;
-    auto center_x = widget_right_edge / 2.f;
+    auto left_x = width()/4.f + 0.333333333f;
+    auto center_x = widget_right_edge/2.f;
     auto right_x = widget_right_edge - left_x;
 
     auto top_row_y = 25.f;
@@ -60,32 +60,32 @@ struct UpstageWidget : public ModuleWidget {
 
     auto row = 0;
     install_knob("large", Upstage::LEVEL_KNOB,
-                 {center_x, top_row_y + row * row_spacing});
+                 {center_x, top_row_y + row*row_spacing});
 
     row++;
-    install_input(Upstage::LEVEL_CV, {left_x, top_row_y + row * row_spacing});
+    install_input(Upstage::LEVEL_CV, {left_x, top_row_y + row*row_spacing});
     install_switch(Upstage::LEVEL_SWITCH,
-                   {right_x, top_row_y + row * row_spacing}, 1, 1);
+                   {right_x, top_row_y + row*row_spacing}, 1, 1);
 
     row++;
     install_button("normal", Upstage::WAIT_BUTTON,
-                   {left_x, top_row_y + row * row_spacing});
+                   {left_x, top_row_y + row*row_spacing});
     install_button("normal", Upstage::TRIG_BUTTON,
-                   {right_x, top_row_y + row * row_spacing});
+                   {right_x, top_row_y + row*row_spacing});
 
     top_row_y = 82.f;
     row_spacing = 15.f;
 
     row = 0;
-    install_input(Upstage::WAIT_IN, {left_x, top_row_y + row * row_spacing});
+    install_input(Upstage::WAIT_IN, {left_x, top_row_y + row*row_spacing});
 
     row++;
-    install_input(Upstage::TRIG_IN, {left_x, top_row_y + row * row_spacing});
-    install_output(Upstage::TRIG_OUT, {right_x, top_row_y + row * row_spacing});
+    install_input(Upstage::TRIG_IN, {left_x, top_row_y + row*row_spacing});
+    install_output(Upstage::TRIG_OUT, {right_x, top_row_y + row*row_spacing});
 
     row++;
     install_output(Upstage::ENVELOPE_OUT,
-                   {right_x, top_row_y + row * row_spacing});
+                   {right_x, top_row_y + row*row_spacing});
   }
 };
 } // namespace DHE

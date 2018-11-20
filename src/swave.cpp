@@ -11,8 +11,9 @@ namespace DHE {
 
 struct Swave : Module {
   static constexpr auto signal_range = Range{-5.f, 5.f};
-  const std::function<float()> curve_knob = knob(CURVE_KNOB, CURVE_CV);
-  const std::function<bool()> is_s_taper = button(SHAPE_SWITCH);
+  std::function<float()> const curve_knob{knob(CURVE_KNOB, CURVE_CV)};
+  std::function<bool()> const is_s_taper{bool_param(SHAPE_SWITCH)};
+  std::function<float()> const swave_in{float_in(SWAVE_IN)};
 
   Swave() : Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT} {}
 
@@ -20,16 +21,14 @@ struct Swave : Module {
     outputs[SWAVE_OUT].value = to_signal(taper(to_phase(swave_in())));
   }
 
-  float swave_in() const { return input(SWAVE_IN); }
-
-  float taper(float phase) const {
+  auto taper(float phase) const -> float {
     auto rotation = curve_knob();
     return is_s_taper() ? Taper::s(phase, rotation) : Taper::j(phase, rotation);
   }
 
-  float to_signal(float phase) const { return signal_range.scale(phase); }
+  auto to_signal(float phase) const -> float { return signal_range.scale(phase); }
 
-  float to_phase(float signal) const { return signal_range.normalize(signal); }
+  auto to_phase(float signal) const -> float { return signal_range.normalize(signal); }
 
   enum ParameterIds { CURVE_KNOB, SHAPE_SWITCH, PARAMETER_COUNT };
   enum InputIds { CURVE_CV, SWAVE_IN, INPUT_COUNT };
@@ -40,21 +39,21 @@ struct SwaveWidget : public ModuleWidget {
   explicit SwaveWidget(rack::Module *module) : ModuleWidget(module, 4, "swave") {
     auto widget_right_edge = width();
 
-    auto center_x = widget_right_edge / 2.f;
+    auto center_x = widget_right_edge/2.f;
 
     auto top_row_y = 25.f;
     auto row_spacing = 18.5f;
 
     auto row = 0;
     install_switch(Swave::SHAPE_SWITCH,
-                   {center_x, top_row_y + row * row_spacing}, 1, 1);
+                   {center_x, top_row_y + row*row_spacing}, 1, 1);
 
     row++;
     install_knob("large", Swave::CURVE_KNOB,
-                 {center_x, top_row_y + row * row_spacing});
+                 {center_x, top_row_y + row*row_spacing});
 
     row++;
-    install_input(Swave::CURVE_CV, {center_x, top_row_y + row * row_spacing});
+    install_input(Swave::CURVE_CV, {center_x, top_row_y + row*row_spacing});
 
     top_row_y = 82.f;
     row_spacing = 15.f;
@@ -62,10 +61,10 @@ struct SwaveWidget : public ModuleWidget {
     row = 0;
 
     row++;
-    install_input(Swave::SWAVE_IN, {center_x, top_row_y + row * row_spacing});
+    install_input(Swave::SWAVE_IN, {center_x, top_row_y + row*row_spacing});
 
     row++;
-    install_output(Swave::SWAVE_OUT, {center_x, top_row_y + row * row_spacing});
+    install_output(Swave::SWAVE_OUT, {center_x, top_row_y + row*row_spacing});
   }
 };
 } // namespace DHE

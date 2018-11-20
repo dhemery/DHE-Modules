@@ -13,10 +13,13 @@
 
 namespace DHE {
 struct Stage : public Module {
-  const std::function<float()> level_knob = knob(LEVEL_KNOB);
-  const std::function<float()> duration_knob = knob(DURATION_KNOB);
-  const std::function<float()> duration = Duration::of(duration_knob);
-  const std::function<float()> curve_knob = knob(CURVE_KNOB);
+  std::function<float()> const level_knob{knob(LEVEL_KNOB)};
+  std::function<float()> const duration_knob{knob(DURATION_KNOB)};
+  std::function<float()> const duration{Duration::of(duration_knob)};
+  std::function<float()> const curve_knob{knob(CURVE_KNOB)};
+  std::function<float()> const defer_gate_in{float_in(DEFER_IN)};
+  std::function<bool()> const envelope_gate_in{bool_in(TRIGGER_IN)};
+  std::function<float()> const envelope_in{float_in(ENVELOPE_IN)};
 
   Mode stage_mode = {};
   Mode defer_mode = {};
@@ -24,14 +27,11 @@ struct Stage : public Module {
   // TODO: Move this inside stage mode or an envelope class.
   float phase_0_voltage{0.f};
 
-  Ramp envelope = Ramp{[this] { return sample_time() / duration(); }};
-  DFlipFlop envelope_trigger = DFlipFlop{[this] { return envelope_gate_in(); }};
-  Ramp eoc_pulse = Ramp{[this] { return sample_time() / 1e-3f; }};
+  Ramp envelope = Ramp{[this] { return sample_time()/duration(); }};
+  DFlipFlop envelope_trigger = DFlipFlop{envelope_gate_in};
+  Ramp eoc_pulse = Ramp{[this] { return sample_time()/1e-3f; }};
 
-  SubmodeSwitch executor = {[this] { return defer_gate_in(); }, &stage_mode,
-                            &defer_mode};
-
-  void onReset() override { Module::onReset(); }
+  SubmodeSwitch executor = {defer_gate_in, &stage_mode, &defer_mode};
 
   Stage() : Module(PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT) {
     defer_mode.on_entry([this] { send_active(true); });
@@ -71,22 +71,16 @@ struct Stage : public Module {
     executor.enter();
   }
 
-  float defer_gate_in() const { return input(DEFER_IN); }
-
-  float envelope_gate_in() const { return input(TRIGGER_IN); }
-
-  float envelope_in() const { return input(ENVELOPE_IN); }
-
-  float envelope_voltage(float phase) const {
+  auto envelope_voltage(float phase) const -> float {
     return scale(taper(phase), phase_0_voltage, level_in());
   }
 
-  float level_in() const {
+  auto level_in() const -> float {
     static constexpr auto level_range = Range{0.f, 10.f};
     return level_range.scale(level_knob());
   }
 
-  float sample_time() const { return rack::engineGetSampleTime(); }
+  auto sample_time() const -> float { return rack::engineGetSampleTime(); }
 
   void send_active(bool is_active) {
     outputs[ACTIVE_OUT].value = is_active ? 10.f : 0.f;
@@ -100,7 +94,7 @@ struct Stage : public Module {
 
   void step() override { executor.step(); }
 
-  float taper(float phase) const { return Taper::j(phase, curve_knob()); }
+  auto taper(float phase) const -> float { return Taper::j(phase, curve_knob()); }
 
   enum ParameterIIds { DURATION_KNOB, LEVEL_KNOB, CURVE_KNOB, PARAMETER_COUNT };
 
@@ -113,8 +107,8 @@ struct StageWidget : public ModuleWidget {
   explicit StageWidget(rack::Module *module) : ModuleWidget(module, 5, "stage") {
     auto widget_right_edge = width();
 
-    auto left_x = width() / 4.f + 0.333333f;
-    auto center_x = widget_right_edge / 2.f;
+    auto left_x = width()/4.f + 0.333333f;
+    auto center_x = widget_right_edge/2.f;
     auto right_x = widget_right_edge - left_x;
 
     auto top_row_y = 25.f;
@@ -122,31 +116,31 @@ struct StageWidget : public ModuleWidget {
 
     auto row = 0;
     install_knob("large", Stage::LEVEL_KNOB,
-                 {center_x, top_row_y + row * row_spacing});
+                 {center_x, top_row_y + row*row_spacing});
 
     row++;
     install_knob("large", Stage::CURVE_KNOB,
-                 {center_x, top_row_y + row * row_spacing});
+                 {center_x, top_row_y + row*row_spacing});
 
     row++;
     install_knob("large", Stage::DURATION_KNOB,
-                 {center_x, top_row_y + row * row_spacing});
+                 {center_x, top_row_y + row*row_spacing});
 
     top_row_y = 82.f;
     row_spacing = 15.f;
 
     row = 0;
-    install_input(Stage::DEFER_IN, {left_x, top_row_y + row * row_spacing});
-    install_output(Stage::ACTIVE_OUT, {right_x, top_row_y + row * row_spacing});
+    install_input(Stage::DEFER_IN, {left_x, top_row_y + row*row_spacing});
+    install_output(Stage::ACTIVE_OUT, {right_x, top_row_y + row*row_spacing});
 
     row++;
-    install_input(Stage::TRIGGER_IN, {left_x, top_row_y + row * row_spacing});
-    install_output(Stage::EOC_OUT, {right_x, top_row_y + row * row_spacing});
+    install_input(Stage::TRIGGER_IN, {left_x, top_row_y + row*row_spacing});
+    install_output(Stage::EOC_OUT, {right_x, top_row_y + row*row_spacing});
 
     row++;
-    install_input(Stage::ENVELOPE_IN, {left_x, top_row_y + row * row_spacing});
+    install_input(Stage::ENVELOPE_IN, {left_x, top_row_y + row*row_spacing});
     install_output(Stage::ENVELOPE_OUT,
-                   {right_x, top_row_y + row * row_spacing});
+                   {right_x, top_row_y + row*row_spacing});
   }
 };
 } // namespace DHE
