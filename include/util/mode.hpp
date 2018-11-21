@@ -10,16 +10,16 @@ struct Mode {
   void exit() { fire(exit_actions); }
   void step() { fire(step_actions); }
 
-  void on_entry(std::function<void()> action) {
-    entry_actions.push_back(std::move(action));
+  template <typename Action> void on_entry(Action &&action) {
+    entry_actions.emplace_back(std::forward<Action>(action));
   }
 
-  void on_exit(std::function<void()> action) {
-    exit_actions.push_back(std::move(action));
+  template <typename Action> void on_exit(Action &&action) {
+    exit_actions.emplace_back(std::forward<Action>(action));
   }
 
-  void on_step(std::function<void()> action) {
-    step_actions.push_back(std::move(action));
+  template <typename Action> void on_step(Action &&action) {
+    step_actions.emplace_back(std::forward<Action>(action));
   }
 
 private:
@@ -34,7 +34,7 @@ private:
 };
 
 class SubmodeSwitch : public Mode {
-  DFlipFlop submode_switch;
+  DFlipFlop selector;
   Mode *submode;
 
   void enter_submode(Mode *incoming_submode) {
@@ -44,15 +44,15 @@ class SubmodeSwitch : public Mode {
   }
 
 public:
-  SubmodeSwitch(std::function<float()> switch_signal, Mode *low_mode,
-                Mode *high_mode)
-      : submode_switch{std::move(switch_signal)}, submode{low_mode} {
-    submode_switch.on_rise([this, high_mode] { enter_submode(high_mode); });
-    submode_switch.on_fall([this, low_mode] { enter_submode(low_mode); });
+  template <typename Selector>
+  SubmodeSwitch(Selector selector, Mode *low_mode, Mode *high_mode)
+      : selector{std::move(selector)}, submode{low_mode} {
+    this->selector.on_rise([this, high_mode] { enter_submode(high_mode); });
+    this->selector.on_fall([this, low_mode] { enter_submode(low_mode); });
 
     on_entry([this] { submode->enter(); });
     on_step([this] {
-      submode_switch.step();
+      this->selector.step();
       submode->step();
     });
     on_exit([this] { submode->exit(); });

@@ -8,7 +8,6 @@ inline float scale(float proportion, float lower_bound, float upper_bound) {
 
 struct Range {
   const float lower_bound;
-
   const float upper_bound;
 
   constexpr Range(float lower_bound, float upper_bound) noexcept

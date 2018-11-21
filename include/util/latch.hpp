@@ -25,18 +25,16 @@ public:
    * Registers an action to be called on each rising edge.
    * @param action called on each rising edge
    */
-  template<typename Action>
-  void on_rise(Action&& action) {
-    rise_actions.emplace_back(action);
+  template <typename Action> void on_rise(Action &&action) {
+    rise_actions.emplace_back(std::forward<Action>(action));
   }
 
   /**
    * Registers an action to be called on each falling edge.
    * @param action called on each falling edge
    */
-  template<typename Action>
-  void on_fall(Action&& action) {
-    fall_actions.emplace_back(action);
+  template <typename Action> void on_fall(Action &&action) {
+    fall_actions.emplace_back(std::forward<Action>(action));
   }
 
 protected:

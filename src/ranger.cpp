@@ -10,10 +10,14 @@ namespace DHE {
 
 struct Ranger : Module {
   std::function<float()> const level{knob(LEVEL_KNOB, LEVEL_CV, LEVEL_AV)};
-  std::function<float()> const limit1{knob(LIMIT_1_KNOB, LIMIT_1_CV, LIMIT_1_AV)};
-  std::function<float()> const limit2{knob(LIMIT_2_KNOB, LIMIT_2_CV, LIMIT_2_AV)};
-  std::function<Range const &()> const range1{signal_range(int_param(LIMIT_1_RANGE))};
-  std::function<Range const &()> const range2{signal_range(int_param(LIMIT_2_RANGE))};
+  std::function<float()> const limit1{
+      knob(LIMIT_1_KNOB, LIMIT_1_CV, LIMIT_1_AV)};
+  std::function<float()> const limit2{
+      knob(LIMIT_2_KNOB, LIMIT_2_CV, LIMIT_2_AV)};
+  std::function<Range const &()> const range1{
+      signal_range(int_param(LIMIT_1_RANGE))};
+  std::function<Range const &()> const range2{
+      signal_range(int_param(LIMIT_2_RANGE))};
 
   Ranger() : Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT} {}
 
@@ -43,10 +47,11 @@ struct Ranger : Module {
 };
 
 struct RangerWidget : public ModuleWidget {
-  explicit RangerWidget(rack::Module *module) : ModuleWidget(module, 6, "ranger") {
+  explicit RangerWidget(rack::Module *module)
+      : ModuleWidget(module, 6, "ranger") {
     auto widget_right_edge = width();
 
-    auto left_x = width()/3.5f + 0.333333333f;
+    auto left_x = width() / 3.5f + 0.333333333f;
     auto right_x = widget_right_edge - left_x;
 
     auto y = 24.f;

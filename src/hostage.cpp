@@ -7,29 +7,31 @@
 #include "util/d-flip-flop.hpp"
 #include "util/duration.hpp"
 #include "util/mode.hpp"
-#include "util/ramp.hpp"
+#include "util/phase-accumulator.hpp"
 
 namespace DHE {
 
 struct Hostage : Module {
   std::function<float()> const duration_knob{knob(DURATION_KNOB)};
   std::function<int()> const duration_selector{int_param(DURATION_SWITCH)};
-  std::function<float()> const duration{Duration::of(duration_knob, duration_selector)};
+  std::function<float()> const duration{
+      Duration::of(duration_knob, duration_selector)};
   std::function<float()> const defer_gate_in{float_in(DEFER_IN)};
   std::function<float()> const hold_gate_in{float_in(HOLD_GATE_IN)};
   std::function<float()> const envelope_in{float_in(ENVELOPE_IN)};
   std::function<float()> const mode_switch_in{float_param(GATE_MODE_SWITCH)};
 
-  DFlipFlop sustain_gate = DFlipFlop{hold_gate_in};
-  DFlipFlop sustain_trigger = DFlipFlop{hold_gate_in};
-  Ramp timer = Ramp{[this] { return sample_time()/duration(); }};
-  Ramp eoc_pulse = Ramp{[this] { return sample_time()/1e-3f; }};
+  DFlipFlop sustain_gate{hold_gate_in};
+  DFlipFlop sustain_trigger{hold_gate_in};
+  PhaseAccumulator timer{[this] { return sample_time() / duration(); }};
+  PhaseAccumulator eoc_pulse{[this] { return sample_time() / 1e-3f; }};
 
-  Mode defer_mode = {};
-  Mode timed_sustain_mode = {};
-  Mode gated_sustain_mode = {};
-  SubmodeSwitch sustain_mode = {mode_switch_in, &timed_sustain_mode, &gated_sustain_mode};
-  SubmodeSwitch executor = {defer_gate_in, &sustain_mode, &defer_mode};
+  Mode defer_mode{};
+  Mode timed_sustain_mode{};
+  Mode gated_sustain_mode{};
+  SubmodeSwitch sustain_mode{mode_switch_in, &timed_sustain_mode,
+                             &gated_sustain_mode};
+  SubmodeSwitch executor{defer_gate_in, &sustain_mode, &defer_mode};
 
   Hostage() : Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT} {
     defer_mode.on_entry([this] { send_active(true); });
@@ -114,11 +116,12 @@ struct Hostage : Module {
 };
 
 struct HostageWidget : public ModuleWidget {
-  explicit HostageWidget(rack::Module *module) : ModuleWidget(module, 5, "hostage") {
+  explicit HostageWidget(rack::Module *module)
+      : ModuleWidget(module, 5, "hostage") {
     auto widget_right_edge = width();
 
-    auto left_x = width()/4.f + 0.333333f;
-    auto center_x = widget_right_edge/2.f;
+    auto left_x = width() / 4.f + 0.333333f;
+    auto center_x = widget_right_edge / 2.f;
     auto right_x = widget_right_edge - left_x;
 
     auto top_row_y = 25.f;
@@ -126,36 +129,36 @@ struct HostageWidget : public ModuleWidget {
 
     auto row = 0;
     install_switch(Hostage::GATE_MODE_SWITCH,
-                   {center_x, top_row_y + row*row_spacing});
+                   {center_x, top_row_y + row * row_spacing});
 
     row++;
     install_input(Hostage::DURATION_CV,
-                  {left_x, top_row_y + row*row_spacing});
+                  {left_x, top_row_y + row * row_spacing});
     install_switch(Hostage::DURATION_SWITCH,
-                   {right_x, top_row_y + row*row_spacing}, 2, 1);
+                   {right_x, top_row_y + row * row_spacing}, 2, 1);
 
     row++;
     install_knob("large", Hostage::DURATION_KNOB,
-                 {center_x, top_row_y + row*row_spacing});
+                 {center_x, top_row_y + row * row_spacing});
 
     top_row_y = 82.f;
     row_spacing = 15.f;
 
     row = 0;
-    install_input(Hostage::DEFER_IN, {left_x, top_row_y + row*row_spacing});
+    install_input(Hostage::DEFER_IN, {left_x, top_row_y + row * row_spacing});
     install_output(Hostage::ACTIVE_OUT,
-                   {right_x, top_row_y + row*row_spacing});
+                   {right_x, top_row_y + row * row_spacing});
 
     row++;
     install_input(Hostage::HOLD_GATE_IN,
-                  {left_x, top_row_y + row*row_spacing});
-    install_output(Hostage::EOC_OUT, {right_x, top_row_y + row*row_spacing});
+                  {left_x, top_row_y + row * row_spacing});
+    install_output(Hostage::EOC_OUT, {right_x, top_row_y + row * row_spacing});
 
     row++;
     install_input(Hostage::ENVELOPE_IN,
-                  {left_x, top_row_y + row*row_spacing});
+                  {left_x, top_row_y + row * row_spacing});
     install_output(Hostage::ENVELOPE_OUT,
-                   {right_x, top_row_y + row*row_spacing});
+                   {right_x, top_row_y + row * row_spacing});
   }
 };
 } // namespace DHE

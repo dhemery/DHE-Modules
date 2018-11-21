@@ -12,8 +12,12 @@ namespace DHE {
 void moveTo(rack::Rect &box, rack::Vec center);
 
 struct BooleanOption : rack::MenuItem {
-  BooleanOption(std::string name, std::function<void(bool)> set,
-                std::function<bool()> is_on);
+  template<typename Setter, typename Getter>
+  BooleanOption(std::string name, Setter setter,
+                               Getter getter)
+      : set{std::move(setter)}, is_on{std::move(getter)} {
+    text = std::move(name);
+  }
   void onAction(rack::EventAction &e) override;
   void step() override;
 

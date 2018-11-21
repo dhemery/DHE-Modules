@@ -10,12 +10,12 @@ struct Juster : Module {
 
   auto gain(float input, int knob) const -> float {
     static constexpr auto gain_range = Range{0.f, 2.f};
-    return input*gain_range.scale(params[knob].value);
+    return input * gain_range.scale(params[knob].value);
   }
 
   auto av(float input, int knob) const -> float {
     static constexpr auto av_range = Range{-1.f, 1.f};
-    return input*av_range.scale(params[knob].value);
+    return input * av_range.scale(params[knob].value);
   }
 
   auto offset(float input, int knob) const -> float {
@@ -23,7 +23,8 @@ struct Juster : Module {
     return input + offset_range.scale(params[knob].value);
   }
 
-  auto function_for_mode(int sw) const -> std::function<float(float, int)> const & {
+  auto function_for_mode(int sw) const
+      -> std::function<float(float, int)> const & {
     static auto functions = std::vector<std::function<float(float, int)>>{
         [this](float input, int knob) -> float { return offset(input, knob); },
         [this](float input, int knob) -> float { return av(input, knob); },
@@ -34,7 +35,7 @@ struct Juster : Module {
   }
 
   auto channel_input(int channel) const -> float {
-    if (channel==0 || inputs[IN_1 + channel].active) {
+    if (channel == 0 || inputs[IN_1 + channel].active) {
       return inputs[IN_1 + channel].value;
     } else {
       return outputs[OUT_1 + channel - 1].value;
@@ -71,12 +72,13 @@ struct Juster : Module {
 };
 
 struct JusterWidget : public ModuleWidget {
-  explicit JusterWidget(rack::Module *module) : ModuleWidget(module, 11, "juster") {
+  explicit JusterWidget(rack::Module *module)
+      : ModuleWidget(module, 11, "juster") {
     auto widget_right_edge = width();
 
-    auto left_x = widget_right_edge/7.f;
+    auto left_x = widget_right_edge / 7.f;
     auto right_x = widget_right_edge - left_x;
-    auto left_center_x = (right_x - left_x)/3.f + left_x;
+    auto left_center_x = (right_x - left_x) / 3.f + left_x;
     auto right_center_x = widget_right_edge - left_center_x;
 
     auto top_row_y = 27.f;
@@ -84,15 +86,15 @@ struct JusterWidget : public ModuleWidget {
 
     for (auto row = 0; row < 5; row++) {
       install_input(Juster::IN_1 + row,
-                    {left_x, top_row_y + row*row_spacing});
+                    {left_x, top_row_y + row * row_spacing});
       install_knob(
           "large", Juster::KNOB_1 + row,
-          {left_center_x + 1.25f, top_row_y - 1.25f + row*row_spacing});
+          {left_center_x + 1.25f, top_row_y - 1.25f + row * row_spacing});
       install_switch(Juster::MODE_1 + row,
-                     {right_center_x, top_row_y - 1.25f + row*row_spacing}, 2,
+                     {right_center_x, top_row_y - 1.25f + row * row_spacing}, 2,
                      2);
       install_output(Juster::OUT_1 + row,
-                     {right_x, top_row_y + row*row_spacing});
+                     {right_x, top_row_y + row * row_spacing});
     }
   }
 };
