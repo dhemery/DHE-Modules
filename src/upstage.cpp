@@ -12,10 +12,10 @@ namespace DHE {
 struct Upstage : Module {
   std::function<float()> const level_knob = knob(LEVEL_KNOB, LEVEL_CV);
   std::function<bool()> const trigger_button = bool_param(TRIG_BUTTON);
-  std::function<bool()> const trigger_signal = bool_param(TRIG_BUTTON);
+  std::function<bool()> const trigger_in = bool_in(TRIG_IN);
   std::function<Range const &()> const level_range = signal_range(int_param(LEVEL_SWITCH));
-  std::function<bool()> const wait_in = bool_in(WAIT_IN);
   std::function<bool()> const wait_button = bool_param(WAIT_BUTTON);
+  std::function<bool()> const wait_in = bool_in(WAIT_IN);
 
   Upstage() : Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT} {}
 
@@ -30,11 +30,13 @@ struct Upstage : Module {
     outputs[ENVELOPE_OUT].value = envelope_out();
   }
 
-  auto trigger_in() const -> float {
-    return trigger_button() || trigger_signal() ? 10.f : 0.f;
+  auto is_triggered() const -> bool {
+    return trigger_button() || trigger_in();
   }
 
-  auto trigger_out() const -> float { return is_waiting() ? 0.f : trigger_in(); }
+  auto trigger_out() const -> float {
+    return is_triggered() && !is_waiting() ? 10.f : 0.f;
+  }
 
   enum ParameterIds {
     LEVEL_KNOB,

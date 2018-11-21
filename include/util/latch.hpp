@@ -1,6 +1,7 @@
 #pragma once
 
 #include <functional>
+#include <utility>
 #include <vector>
 
 namespace DHE {
@@ -8,7 +9,7 @@ namespace DHE {
 class Latch {
 
 public:
-  bool is_high() const { return state == State::HIGH; }
+  auto is_high() const -> bool { return state == State::HIGH; }
 
   /**
    * Suspends firing events.
@@ -24,16 +25,18 @@ public:
    * Registers an action to be called on each rising edge.
    * @param action called on each rising edge
    */
-  void on_rise(std::function<void()> action) {
-    rise_actions.push_back(std::move(action));
+  template<typename Action>
+  void on_rise(Action&& action) {
+    rise_actions.emplace_back(action);
   }
 
   /**
    * Registers an action to be called on each falling edge.
    * @param action called on each falling edge
    */
-  void on_fall(std::function<void()> action) {
-    fall_actions.push_back(std::move(action));
+  template<typename Action>
+  void on_fall(Action&& action) {
+    fall_actions.emplace_back(action);
   }
 
 protected:
