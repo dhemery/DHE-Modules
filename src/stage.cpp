@@ -17,12 +17,9 @@ struct Stage : public Module {
   std::function<float()> const duration_knob{knob(DURATION_KNOB)};
   std::function<float()> const duration{Duration::of(duration_knob)};
   std::function<float()> const curve_knob{knob(CURVE_KNOB)};
-  std::function<float()> const defer_gate_in{float_in(DEFER_IN)};
+  std::function<bool()> const defer_gate_in{bool_in(DEFER_IN)};
   std::function<bool()> const envelope_gate_in{bool_in(TRIGGER_IN)};
   std::function<float()> const envelope_in{float_in(ENVELOPE_IN)};
-
-  Mode stage_mode{};
-  Mode defer_mode{};
 
   // TODO: Move this inside stage mode or an envelope class.
   float phase_0_voltage{0.f};
@@ -31,7 +28,10 @@ struct Stage : public Module {
   DFlipFlop envelope_trigger{envelope_gate_in};
   PhaseAccumulator eoc_pulse{[this] { return sample_time() / 1e-3f; }};
 
-  SubmodeSwitch executor{defer_gate_in, &stage_mode, &defer_mode};
+  Mode stage_mode{};
+  Mode defer_mode{};
+  std::vector<Mode *> const modes{&stage_mode, &defer_mode};
+  CompoundMode executor{defer_gate_in, modes};
 
   Stage() : Module(PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT) {
     defer_mode.on_entry([this] { send_active(true); });
@@ -45,8 +45,7 @@ struct Stage : public Module {
     stage_mode.on_step([this] {
       envelope_trigger.step();
       envelope.step();
-      send_envelope(envelope_voltage(
-          envelope.phase())); // TODO: Move to envelope.on_step()
+      send_envelope(envelope_voltage(envelope.phase()));
     });
     stage_mode.on_exit([this] {
       envelope_trigger.disable();

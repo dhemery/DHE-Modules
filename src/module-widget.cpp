@@ -8,10 +8,10 @@ void moveTo(rack::Rect &box, rack::Vec center) {
   box.pos = center.minus(box.size.mult(0.5f));
 }
 
-void BooleanOption::onAction(rack::EventAction &e) { set_(!is_on_()); }
+void BooleanOption::onAction(rack::EventAction &e) { set(!is_on()); }
 
 void BooleanOption::step() {
-  rightText = is_on_() ? "✔" : "";
+  rightText = is_on() ? "✔" : "";
   rack::MenuItem::step();
 }
 

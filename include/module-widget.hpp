@@ -19,14 +19,14 @@ struct BooleanOption : rack::MenuItem {
   template <typename Setter, typename Getter>
   BooleanOption(std::string const &name, Setter const &setter,
                 Getter const &getter)
-      : set_{setter}, is_on_{getter} {
+      : set{setter}, is_on{getter} {
     text = name;
   }
   void onAction(rack::EventAction &e) override;
   void step() override;
 
-  std::function<void(bool)> const set_;
-  std::function<bool()> const is_on_;
+  std::function<void(bool)> const set;
+  std::function<bool()> const is_on;
 };
 
 struct ButtonWidget : rack::SVGSwitch, rack::MomentarySwitch {};

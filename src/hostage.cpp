@@ -16,8 +16,8 @@ struct Hostage : Module {
   std::function<int()> const duration_selector{int_param(DURATION_SWITCH)};
   std::function<float()> const duration{
       Duration::of(duration_knob, duration_selector)};
-  std::function<float()> const defer_gate_in{float_in(DEFER_IN)};
-  std::function<float()> const hold_gate_in{float_in(HOLD_GATE_IN)};
+  std::function<bool()> const defer_gate_in{bool_in(DEFER_IN)};
+  std::function<bool()> const hold_gate_in{bool_in(HOLD_GATE_IN)};
   std::function<float()> const envelope_in{float_in(ENVELOPE_IN)};
   std::function<float()> const mode_switch_in{float_param(GATE_MODE_SWITCH)};
 
@@ -29,9 +29,11 @@ struct Hostage : Module {
   Mode defer_mode{};
   Mode timed_sustain_mode{};
   Mode gated_sustain_mode{};
-  SubmodeSwitch sustain_mode{mode_switch_in, &timed_sustain_mode,
-                             &gated_sustain_mode};
-  SubmodeSwitch executor{defer_gate_in, &sustain_mode, &defer_mode};
+  std::vector<Mode *> const sustain_modes{&timed_sustain_mode, &gated_sustain_mode};
+  CompoundMode sustain_mode{mode_switch_in, sustain_modes};
+
+  std::vector<Mode *> main_modes{&sustain_mode, &defer_mode};
+  CompoundMode executor{defer_gate_in, main_modes};
 
   Hostage() : Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT} {
     defer_mode.on_entry([this] { send_active(true); });

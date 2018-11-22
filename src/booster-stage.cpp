@@ -34,10 +34,7 @@ struct BoosterStage : Module {
   std::function<bool()> const active_button = bool_param(ACTIVE_BUTTON);
   std::function<bool()> const eoc_button = bool_param(EOC_BUTTON);
 
-  std::function<float()> const envelope_in = float_param(ENVELOPE_IN);
-
-  Mode stage_mode{};
-  Mode defer_mode{};
+  std::function<float()> const envelope_in = float_in(ENVELOPE_IN);
 
   float phase_0_voltage{0.f};
   bool is_active{false};
@@ -47,11 +44,12 @@ struct BoosterStage : Module {
   PhaseAccumulator eoc_pulse{[this] { return sample_time() / 1e-3f; }};
   DFlipFlop envelope_trigger{[this] { return envelope_gate_in(); }};
 
-  SubmodeSwitch executor{[this] { return defer_gate_in(); }, &stage_mode,
-                         &defer_mode};
+  Mode stage_mode{};
+  Mode defer_mode{};
+  std::vector<Mode *> main_modes{&stage_mode, &defer_mode};
+  CompoundMode executor{[this] { return defer_gate_in(); }, main_modes};
 
   BoosterStage() : Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT} {
-
     defer_mode.on_entry([this] { is_active = true; });
     defer_mode.on_step([this] { send_envelope(envelope_in()); });
 
