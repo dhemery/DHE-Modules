@@ -1,3 +1,7 @@
+#include <utility>
+
+#include <utility>
+
 #pragma once
 
 #include <app.hpp>
@@ -25,35 +29,19 @@ struct BooleanOption : rack::MenuItem {
   std::function<bool()> const is_on_;
 };
 
-struct Port : rack::SVGPort {
-  static Port *create(rack::Module *module, std::string module_name,
-                      rack::Port::PortType type, int index, rack::Vec center);
-};
-
-struct Knob : rack::RoundKnob {
-  static Knob *create(rack::Module *module, std::string module_name,
-                      std::string size, int index, rack::Vec center,
-                      float initial);
-};
-
-struct Button : rack::SVGSwitch, rack::MomentarySwitch {
-  static Button *create(rack::Module *module, std::string module_name,
-                        std::string type, int index, rack::Vec center);
-};
-
-struct Switch : rack::SVGSwitch, rack::ToggleSwitch {
-  static Switch *create(rack::Module *module, std::string module_name,
-                        int index, rack::Vec center, int high_position,
-                        int initial_position = 0);
-};
+struct ButtonWidget : rack::SVGSwitch, rack::MomentarySwitch {};
+struct KnobWidget : rack::RoundKnob {};
+struct PortWidget : rack::SVGPort {};
+struct SwitchWidget : rack::SVGSwitch, rack::ToggleSwitch {};
 
 class ModuleWidget : public rack::ModuleWidget {
-  std::string module_name;
+  std::string const module_name_;
 
 public:
-  ModuleWidget(rack::Module *module, int widget_hp, std::string module_name);
+  ModuleWidget(rack::Module *module, int widget_hp,
+               std::string const &module_name);
 
-  virtual void fromJson(json_t *patch) override {
+  void fromJson(json_t *patch) override {
     // If there's no data, we're loading from a legacy patch. Add empty data to
     // the incoming patch so that ModuleWidget::fromJson will call
     // Module::fromJson, which will configure the module with appropriate legacy
@@ -64,48 +52,50 @@ public:
     rack::ModuleWidget::fromJson(patch);
   }
 
-  float height() const { return box.size.y * MM_PER_IN / SVG_DPI; }
+protected:
+  auto height() const -> float { return box.size.y * MM_PER_IN / SVG_DPI; }
 
-  float width() const { return box.size.x * MM_PER_IN / SVG_DPI; }
+  auto width() const -> float { return box.size.x * MM_PER_IN / SVG_DPI; }
 
   void install_button(std::string type, int index, rack::Vec center) {
-    auto button = Button::create(module, module_name, type, index, center);
-    addParam(button);
+    addParam(create_button(std::move(type), index, center));
   }
 
   void install_input(int index, rack::Vec center) {
-    auto input =
-        Port::create(module, module_name, rack::Port::INPUT, index, center);
-    addInput(input);
+    addInput(create_port(rack::Port::INPUT, index, center));
   }
 
   void install_knob(std::string size, int index, rack::Vec center,
                     float initial_rotation = 0.5f) {
-    auto knob = Knob::create(module, module_name, size, index, center,
-                             initial_rotation);
-    addParam(knob);
+    addParam(create_knob(std::move(size), index, center, initial_rotation));
   }
 
   void install_output(int index, rack::Vec center) {
-    auto output =
-        Port::create(module, module_name, rack::Port::OUTPUT, index, center);
-    addOutput(output);
+    addOutput(create_port(rack::Port::OUTPUT, index, center));
   }
 
   void install_switch(int index, rack::Vec center, int max_position = 1,
                       int initial_position = 0) {
-    auto sw = Switch::create(module, module_name, index, center, max_position,
-                             initial_position);
-    addParam(sw);
+    addParam(create_switch(index, center, max_position, initial_position));
   }
 
-  template <class T> void install_screw(rack::Vec center) {
-    auto widget = rack::Widget::create<T>({0, 0});
+  void install_screws();
+
+private:
+  template <typename T> void install_screw(rack::Vec center) {
+    auto widget{rack::Widget::create<T>({0, 0})};
     moveTo(widget->box, rack::mm2px(center));
     addChild(widget);
   }
 
-  void install_screws();
+  auto create_button(std::string type, int index, rack::Vec center)
+      -> ButtonWidget *;
+  auto create_knob(std::string size, int index, rack::Vec center, float initial)
+      -> KnobWidget *;
+  auto create_port(rack::Port::PortType type, int index, rack::Vec center)
+      -> PortWidget *;
+  auto create_switch(int index, rack::Vec center, int high_position,
+                     int initial_position = 0) -> SwitchWidget *;
 };
 
 } // namespace DHE
