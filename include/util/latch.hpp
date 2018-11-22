@@ -14,27 +14,27 @@ public:
   /**
    * Suspends firing events.
    */
-  void disable() { enabled = false; }
+  void disable() { enabled_ = false; }
 
   /**
    * Resumes firing events.
    */
-  void enable() { enabled = true; }
+  void enable() { enabled_ = true; }
 
   /**
    * Registers an action to be called on each rising edge.
    * @param action called on each rising edge
    */
-  template <typename Action> void on_rise(Action &&action) {
-    rise_actions.emplace_back(std::forward<Action>(action));
+  template <typename Action> void on_rise(Action const &action) {
+    rise_actions_.push_back(action);
   }
 
   /**
    * Registers an action to be called on each falling edge.
    * @param action called on each falling edge
    */
-  template <typename Action> void on_fall(Action &&action) {
-    fall_actions.emplace_back(std::forward<Action>(action));
+  template <typename Action> void on_fall(Action const &action) {
+    fall_actions_.push_back(action);
   }
 
 protected:
@@ -44,18 +44,18 @@ protected:
     if (state == incoming_state)
       return;
     state = incoming_state;
-    fire(state == State::HIGH ? rise_actions : fall_actions);
+    fire(state == State::HIGH ? rise_actions_ : fall_actions_);
   }
 
 private:
-  bool enabled = true;
-  std::vector<std::function<void()>> rise_actions;
-  std::vector<std::function<void()>> fall_actions;
+  bool enabled_{true};
+  std::vector<std::function<void()>> rise_actions_;
+  std::vector<std::function<void()>> fall_actions_;
 
-  void fire(const std::vector<std::function<void()>> &actions) const {
-    if (!enabled)
+  void fire(std::vector<std::function<void()>> const &actions) const {
+    if (!enabled_)
       return;
-    for (const auto &action : actions)
+    for (auto const &action : actions)
       action();
   }
 };

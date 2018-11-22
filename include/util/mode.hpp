@@ -6,56 +6,56 @@
 
 namespace DHE {
 struct Mode {
-  void enter() { fire(entry_actions); }
-  void exit() { fire(exit_actions); }
-  void step() { fire(step_actions); }
+  void enter() { fire(entry_actions_); }
+  void exit() { fire(exit_actions_); }
+  void step() { fire(step_actions_); }
 
-  template <typename Action> void on_entry(Action &&action) {
-    entry_actions.emplace_back(std::forward<Action>(action));
+  template <typename Action> void on_entry(Action const &action) {
+    entry_actions_.push_back(action);
   }
 
-  template <typename Action> void on_exit(Action &&action) {
-    exit_actions.emplace_back(std::forward<Action>(action));
+  template <typename Action> void on_exit(Action const &action) {
+    exit_actions_.push_back(action);
   }
 
-  template <typename Action> void on_step(Action &&action) {
-    step_actions.emplace_back(std::forward<Action>(action));
+  template <typename Action> void on_step(Action const &action) {
+    step_actions_.push_back(action);
   }
 
 private:
-  void fire(const std::vector<std::function<void()>> &actions) {
-    for (const auto &action : actions)
+  void fire(std::vector<std::function<void()>> const &actions) {
+    for (auto const &action : actions)
       action();
   }
 
-  std::vector<std::function<void()>> entry_actions;
-  std::vector<std::function<void()>> exit_actions;
-  std::vector<std::function<void()>> step_actions;
+  std::vector<std::function<void()>> entry_actions_;
+  std::vector<std::function<void()>> exit_actions_;
+  std::vector<std::function<void()>> step_actions_;
 };
 
 class SubmodeSwitch : public Mode {
-  DFlipFlop selector;
-  Mode *submode;
+  DFlipFlop selector_;
+  Mode *submode_;
 
   void enter_submode(Mode *incoming_submode) {
-    submode->exit();
-    submode = incoming_submode;
-    submode->enter();
+    submode_->exit();
+    submode_ = incoming_submode;
+    submode_->enter();
   }
 
 public:
   template <typename Selector>
-  SubmodeSwitch(Selector selector, Mode *low_mode, Mode *high_mode)
-      : selector{std::move(selector)}, submode{low_mode} {
-    this->selector.on_rise([this, high_mode] { enter_submode(high_mode); });
-    this->selector.on_fall([this, low_mode] { enter_submode(low_mode); });
+  SubmodeSwitch(Selector const &selector, Mode *low_mode, Mode *high_mode)
+      : selector_{selector}, submode_{low_mode} {
+    selector_.on_rise([this, high_mode] { enter_submode(high_mode); });
+    selector_.on_fall([this, low_mode] { enter_submode(low_mode); });
 
-    on_entry([this] { submode->enter(); });
+    on_entry([this] { submode_->enter(); });
     on_step([this] {
-      this->selector.step();
-      submode->step();
+      selector_.step();
+      submode_->step();
     });
-    on_exit([this] { submode->exit(); });
+    on_exit([this] { submode_->exit(); });
   }
 };
 } // namespace DHE

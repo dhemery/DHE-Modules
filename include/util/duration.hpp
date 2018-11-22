@@ -8,9 +8,9 @@
 namespace DHE {
 
 namespace Duration {
-constexpr auto SHORT_RANGE = Range{0.001f, 1.f};
-constexpr auto MEDIUM_RANGE = Range{0.01f, 10.f};
-constexpr auto LONG_RANGE = Range{0.1f, 100.f};
+auto constexpr short_range{Range{0.001f, 1.f}};
+auto constexpr medium_range{Range{0.01f, 10.f}};
+auto constexpr long_range{Range{0.1f, 100.f}};
 
 /**
  * Creates a function that applies the given proportion and selector suppliers
@@ -38,19 +38,19 @@ constexpr auto LONG_RANGE = Range{0.1f, 100.f};
 template <typename Proportion, typename Selector>
 auto of(Proportion const &proportion, Selector const &selector)
     -> std::function<float()> {
-  static auto const RANGES =
-      std::vector<Range const>{SHORT_RANGE, MEDIUM_RANGE, LONG_RANGE};
+  static auto const ranges =
+      std::vector<Range const>{short_range, medium_range, long_range};
 
   // Shapes the J taper to map an input of 0.5 to an output of ~0.1. Thus a
   // proportion of 0.5 will yield a duration of ~1/10 of the range's maximum.
-  constexpr auto KNOB_CURVATURE = 0.8f;
+  auto constexpr knob_curvature = 0.8f;
 
   return [&proportion, &selector]() -> float {
     // Apply the J taper to the proportion.
-    auto j_tapered_proportion = sigmoid(proportion(), KNOB_CURVATURE);
+    auto j_tapered_proportion = sigmoid(proportion(), knob_curvature);
 
     // Scale the tapered proportion to the desired range.
-    return RANGES[selector()].scale(j_tapered_proportion);
+    return ranges[selector()].scale(j_tapered_proportion);
   };
 }
 
@@ -73,9 +73,9 @@ auto of(Proportion const &proportion, Selector const &selector)
  */
 template <typename Proportion>
 auto of(Proportion const &proportion) -> std::function<float()> {
-  static const auto SELECT_MEDIUM_RANGE = []() -> int { return 1; };
+  static auto const select_medium_range = []() -> int { return 1; };
 
-  return of(proportion, SELECT_MEDIUM_RANGE);
+  return of(proportion, select_medium_range);
 }
 
 } // namespace Duration

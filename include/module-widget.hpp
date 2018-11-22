@@ -12,17 +12,17 @@ namespace DHE {
 void moveTo(rack::Rect &box, rack::Vec center);
 
 struct BooleanOption : rack::MenuItem {
-  template<typename Setter, typename Getter>
-  BooleanOption(std::string name, Setter setter,
-                               Getter getter)
-      : set{std::move(setter)}, is_on{std::move(getter)} {
-    text = std::move(name);
+  template <typename Setter, typename Getter>
+  BooleanOption(std::string const &name, Setter const &setter,
+                Getter const &getter)
+      : set_{setter}, is_on_{getter} {
+    text = name;
   }
   void onAction(rack::EventAction &e) override;
   void step() override;
 
-  std::function<void(bool)> set;
-  std::function<bool()> is_on;
+  std::function<void(bool)> const set_;
+  std::function<bool()> const is_on_;
 };
 
 struct Port : rack::SVGPort {

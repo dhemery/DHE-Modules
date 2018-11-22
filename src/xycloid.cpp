@@ -7,24 +7,24 @@
 namespace DHE {
 
 struct Pole {
-  const float two_pi{2.f * std::acos(-1.f)};
-  float phase{0.f};
-  float offset{0.f};
+  float const two_pi_{2.f * std::acos(-1.f)};
+  float phase_{0.f};
+  float offset_{0.f};
 
   void advance(float increment, float offset = 0.f) {
-    this->offset = offset;
-    phase += increment;
-    phase -= std::trunc(phase);
+    offset_ = offset;
+    phase_ += increment;
+    phase_ -= std::trunc(phase_);
   }
 
-  auto x() const -> float { return std::cos(two_pi * (phase + offset)); }
-  auto y() const -> float { return std::sin(two_pi * (phase + offset)); }
+  auto x() const -> float { return std::cos(two_pi_ * (phase_ + offset_)); }
+  auto y() const -> float { return std::sin(two_pi_ * (phase_ + offset_)); }
 };
 
 struct Xycloid : Module {
-  static constexpr auto throb_speed_knob_range = Range{-1.f, 1.f};
-  static constexpr auto wobble_depth_range = Range{0.f, 1.f};
-  static constexpr auto gain_range = Range{0.f, 2.f};
+  static auto constexpr throb_speed_knob_range = Range{-1.f, 1.f};
+  static auto constexpr wobble_depth_range = Range{0.f, 1.f};
+  static auto constexpr gain_range = Range{0.f, 2.f};
 
   std::function<float()> const x_offset{knob(X_RANGE)};
   std::function<float()> const y_offset{knob(Y_RANGE)};
@@ -48,10 +48,10 @@ struct Xycloid : Module {
   Xycloid() : Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT} {}
 
   auto wobble_range() const -> Range const & {
-    static constexpr auto wobble_max = 16.f;
-    static constexpr auto inward_wobble_range = Range{0.f, wobble_max};
-    static constexpr auto outward_wobble_range = Range{0.f, -wobble_max};
-    static constexpr auto bidirectional_wobble_range =
+    static auto constexpr wobble_max = 16.f;
+    static auto constexpr inward_wobble_range = Range{0.f, wobble_max};
+    static auto constexpr outward_wobble_range = Range{0.f, -wobble_max};
+    static auto constexpr bidirectional_wobble_range =
         Range{wobble_max, -wobble_max};
     static const std::vector<Range> wobble_ratio_ranges{
         inward_wobble_range, bidirectional_wobble_range, outward_wobble_range};

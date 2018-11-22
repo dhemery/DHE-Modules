@@ -9,17 +9,17 @@ struct Juster : Module {
   Juster() : Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT} {}
 
   auto gain(float input, int knob) const -> float {
-    static constexpr auto gain_range = Range{0.f, 2.f};
+    static auto constexpr gain_range{Range{0.f, 2.f}};
     return input * gain_range.scale(params[knob].value);
   }
 
   auto av(float input, int knob) const -> float {
-    static constexpr auto av_range = Range{-1.f, 1.f};
+    static auto constexpr av_range{Range{-1.f, 1.f}};
     return input * av_range.scale(params[knob].value);
   }
 
   auto offset(float input, int knob) const -> float {
-    static constexpr auto offset_range = Range{-5.f, 5.f};
+    static auto constexpr offset_range{Range{-5.f, 5.f}};
     return input + offset_range.scale(params[knob].value);
   }
 

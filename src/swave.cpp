@@ -10,7 +10,7 @@
 namespace DHE {
 
 struct Swave : Module {
-  static constexpr auto signal_range = Range{-5.f, 5.f};
+  static auto constexpr signal_range{Range{-5.f, 5.f}};
   std::function<float()> const curve_knob{knob(CURVE_KNOB, CURVE_CV)};
   std::function<bool()> const is_s_taper{bool_param(SHAPE_SWITCH)};
   std::function<float()> const swave_in{float_in(SWAVE_IN)};

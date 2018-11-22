@@ -76,7 +76,7 @@ struct Stage : public Module {
   }
 
   auto level_in() const -> float {
-    static constexpr auto level_range = Range{0.f, 10.f};
+    static auto constexpr level_range{Range{0.f, 10.f}};
     return level_range.scale(level_knob());
   }
 
