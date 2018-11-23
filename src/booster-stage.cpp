@@ -1,4 +1,5 @@
 #include <utility>
+#include <util/signal.hpp>
 
 #include "dhe-modules.hpp"
 #include "module-widget.hpp"
@@ -8,49 +9,49 @@
 #include "util/duration.hpp"
 #include "util/mode.hpp"
 #include "util/phase-accumulator.hpp"
-#include "util/taper.hpp"
+#include "util/sigmoid.hpp"
 
 namespace DHE {
 
 struct BoosterStage : Module {
-  std::function<float()> const level_knob{knob(LEVEL_KNOB, LEVEL_CV)};
-  std::function<Range const &()> const level_range{
-      signal_range(int_param(LEVEL_SWITCH))};
+  enum ParameterIds {
+    ACTIVE_BUTTON,
+    CURVE_KNOB,
+    DEFER_BUTTON,
+    DURATION_KNOB,
+    DURATION_SWITCH,
+    EOC_BUTTON,
+    LEVEL_KNOB,
+    LEVEL_SWITCH,
+    SHAPE_SWITCH,
+    TRIGGER_BUTTON,
+    PARAMETER_COUNT
+  };
 
-  std::function<float()> const curve_knob{knob(CURVE_KNOB, CURVE_CV)};
-  std::function<bool()> const is_s_taper{bool_param(SHAPE_SWITCH)};
+  enum InputIds {
+    CURVE_CV,
+    DEFER_IN,
+    DURATION_CV,
+    LEVEL_CV,
+    ENVELOPE_IN,
+    TRIGGER_IN,
+    INPUT_COUNT
+  };
 
-  std::function<bool()> const defer_button{bool_param(DEFER_BUTTON)};
-  std::function<bool()> const defer_in{bool_in(DEFER_IN)};
-
-  std::function<bool()> const trigger_button{bool_param(TRIGGER_BUTTON)};
-  std::function<bool()> const trigger_in{bool_in(TRIGGER_IN)};
-
-  std::function<bool()> const active_button = bool_param(ACTIVE_BUTTON);
-  std::function<bool()> const eoc_button = bool_param(EOC_BUTTON);
-
-  std::function<float()> const envelope_in = float_in(ENVELOPE_IN);
+  enum OutputIds { ACTIVE_OUT, EOC_OUT, ENVELOPE_OUT, OUTPUT_COUNT };
 
   float phase_0_voltage{0.f};
   bool is_active{false};
   bool is_eoc{false};
 
-  auto duration() const -> float {
-    static auto const ranges{std::vector<Range>{Duration::short_range, Duration::medium_range, Duration::long_range}};
-    auto rotation{modulated(DURATION_KNOB, DURATION_CV)};
-    auto selection{static_cast<int>(params[DURATION_SWITCH].value)};
-    auto range{ranges[selection]};
-    return range.scale(rotation);
-  }
-
-  PhaseAccumulator envelope{[this] { return sample_time() / duration(); }};
-  PhaseAccumulator eoc_pulse{[this] { return sample_time() / 1e-3f; }};
-  DFlipFlop envelope_trigger{[this] { return envelope_gate_in(); }};
+  PhaseAccumulator envelope{[this] { return sample_time()/duration_in(); }};
+  PhaseAccumulator eoc_pulse{[this] { return sample_time()/1e-3f; }};
+  DFlipFlop envelope_trigger{[this] { return trigger_in(); }};
 
   Mode stage_mode{};
   Mode defer_mode{};
-  std::vector<Mode *> main_modes{&stage_mode, &defer_mode};
-  CompoundMode executor{[this] { return defer_gate_in(); }, main_modes};
+
+  CompoundMode executor{[this] { return defer_in(); }, {&stage_mode, &defer_mode}};
 
   BoosterStage() : Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT} {
     defer_mode.on_entry([this] { is_active = true; });
@@ -95,63 +96,67 @@ struct BoosterStage : Module {
     send_eoc();
   }
 
-  auto defer_gate_in() const -> float { return defer_button() || defer_in(); }
-
-  auto envelope_gate_in() const -> bool {
-    return trigger_button() || trigger_in();
+  auto active_in() const -> bool {
+    return params[ACTIVE_BUTTON].value > 0.1f;
   }
 
-  auto envelope_voltage(float phase) const -> float {
-    return scale(taper(phase), phase_0_voltage, level_in());
+  auto defer_in() const -> bool {
+    auto const defer_button{params[DEFER_BUTTON].value > 0.1f};
+    auto const defer_input{inputs[DEFER_IN].value > 0.1f};
+    return defer_button || defer_input;
   }
 
-  auto level_in() const -> float { return level_range().scale(level_knob()); }
+  auto duration_in() const -> float {
+    static auto const ranges{std::vector<Range>{Duration::short_range, Duration::medium_range, Duration::long_range}};
+    auto rotation{modulated(DURATION_KNOB, DURATION_CV)};
+    auto selection{static_cast<int>(params[DURATION_SWITCH].value)};
+    auto range{ranges[selection]};
+    return Duration::of(rotation, range);
+  }
+
+  auto envelope_in() const -> float {
+    return inputs[ENVELOPE_IN].value;
+  }
+
+  auto eoc_in() const -> bool {
+    return params[EOC_BUTTON].value > 0.1f;
+  }
+  auto level_in() const -> float {
+    auto const amount = modulated(LEVEL_KNOB, LEVEL_CV);
+    auto const &range = params[LEVEL_SWITCH].value > 0.5f ? Signal::unipolar_range : Signal::bipolar_range;
+    return range.scale(amount);
+  }
+
+  auto trigger_in() const -> bool {
+    auto const trigger_button{params[TRIGGER_BUTTON].value > 0.1};
+    auto const trigger_input{inputs[TRIGGER_IN].value > 0.1};
+    return trigger_button || trigger_input;
+  }
 
   void send_active() {
-    auto active = is_active || active_button();
+    auto const active{is_active || active_in()};
     outputs[ACTIVE_OUT].value = active ? 10.f : 0.f;
   }
 
   void send_envelope(float voltage) { outputs[ENVELOPE_OUT].value = voltage; }
 
   void send_eoc() {
-    auto eoc = is_eoc || eoc_button();
+    auto const eoc{is_eoc || eoc_in()};
     outputs[EOC_OUT].value = eoc ? 10.f : 0.f;
+  }
+
+  auto envelope_voltage(float phase) const -> float {
+    return scale(taper(phase), phase_0_voltage, level_in());
   }
 
   auto sample_time() const -> float { return rack::engineGetSampleTime(); }
 
   auto taper(float phase) const -> float {
-    auto curvature = curve_knob();
-    return is_s_taper() ? Taper::s(phase, curvature)
-                        : Taper::j(phase, curvature);
+    auto const curve_in{modulated(CURVE_KNOB, CURVE_CV)};
+    auto const curvature{DHE::curvature(curve_in)};
+    auto const is_s_taper = params[SHAPE_SWITCH].value > 0.5f;
+    return is_s_taper ? s_taper(phase, curvature) : j_taper(phase, curvature);
   }
-
-  enum ParameterIds {
-    ACTIVE_BUTTON,
-    CURVE_KNOB,
-    DEFER_BUTTON,
-    DURATION_KNOB,
-    DURATION_SWITCH,
-    EOC_BUTTON,
-    LEVEL_KNOB,
-    LEVEL_SWITCH,
-    SHAPE_SWITCH,
-    TRIGGER_BUTTON,
-    PARAMETER_COUNT
-  };
-
-  enum InputIds {
-    CURVE_CV,
-    DEFER_IN,
-    DURATION_CV,
-    LEVEL_CV,
-    ENVELOPE_IN,
-    TRIGGER_IN,
-    INPUT_COUNT
-  };
-
-  enum OutputIds { ACTIVE_OUT, EOC_OUT, ENVELOPE_OUT, OUTPUT_COUNT };
 };
 
 struct BoosterStageWidget : public ModuleWidget {
@@ -159,8 +164,8 @@ struct BoosterStageWidget : public ModuleWidget {
       : ModuleWidget(module, 8, "booster-stage") {
     auto widget_right_edge = width();
 
-    auto left_x = widget_right_edge / 6.f + 0.3333333f;
-    auto center_x = widget_right_edge / 2.f;
+    auto left_x = widget_right_edge/6.f + 0.3333333f;
+    auto center_x = widget_right_edge/2.f;
     auto right_x = widget_right_edge - left_x;
     auto button_port_distance = 7.891f;
     auto center_left_x = left_x + button_port_distance;
@@ -171,56 +176,56 @@ struct BoosterStageWidget : public ModuleWidget {
 
     auto row = 0;
     install_input(BoosterStage::LEVEL_CV,
-                  {left_x, top_row_y + row * row_spacing});
+                  {left_x, top_row_y + row*row_spacing});
     install_knob("large", BoosterStage::LEVEL_KNOB,
-                 {center_x, top_row_y + row * row_spacing});
+                 {center_x, top_row_y + row*row_spacing});
     install_switch(BoosterStage::LEVEL_SWITCH,
-                   {right_x, top_row_y + row * row_spacing}, 1, 1);
+                   {right_x, top_row_y + row*row_spacing}, 1, 1);
 
     row++;
     install_input(BoosterStage::CURVE_CV,
-                  {left_x, top_row_y + row * row_spacing});
+                  {left_x, top_row_y + row*row_spacing});
     install_knob("large", BoosterStage::CURVE_KNOB,
-                 {center_x, top_row_y + row * row_spacing});
+                 {center_x, top_row_y + row*row_spacing});
     install_switch(BoosterStage::SHAPE_SWITCH,
-                   {right_x, top_row_y + row * row_spacing});
+                   {right_x, top_row_y + row*row_spacing});
 
     row++;
     install_input(BoosterStage::DURATION_CV,
-                  {left_x, top_row_y + row * row_spacing});
+                  {left_x, top_row_y + row*row_spacing});
     install_knob("large", BoosterStage::DURATION_KNOB,
-                 {center_x, top_row_y + row * row_spacing});
+                 {center_x, top_row_y + row*row_spacing});
     install_switch(BoosterStage::DURATION_SWITCH,
-                   {right_x, top_row_y + row * row_spacing}, 2, 1);
+                   {right_x, top_row_y + row*row_spacing}, 2, 1);
 
     top_row_y = 82.f;
     row_spacing = 15.f;
 
     row = 0;
     install_input(BoosterStage::DEFER_IN,
-                  {left_x, top_row_y + row * row_spacing});
+                  {left_x, top_row_y + row*row_spacing});
     install_button("normal", BoosterStage::DEFER_BUTTON,
-                   {center_left_x, top_row_y + row * row_spacing});
+                   {center_left_x, top_row_y + row*row_spacing});
     install_button("reverse", BoosterStage::ACTIVE_BUTTON,
-                   {center_right_x, top_row_y + row * row_spacing});
+                   {center_right_x, top_row_y + row*row_spacing});
     install_output(BoosterStage::ACTIVE_OUT,
-                   {right_x, top_row_y + row * row_spacing});
+                   {right_x, top_row_y + row*row_spacing});
 
     row++;
     install_input(BoosterStage::TRIGGER_IN,
-                  {left_x, top_row_y + row * row_spacing});
+                  {left_x, top_row_y + row*row_spacing});
     install_button("normal", BoosterStage::TRIGGER_BUTTON,
-                   {center_left_x, top_row_y + row * row_spacing});
+                   {center_left_x, top_row_y + row*row_spacing});
     install_button("reverse", BoosterStage::EOC_BUTTON,
-                   {center_right_x, top_row_y + row * row_spacing});
+                   {center_right_x, top_row_y + row*row_spacing});
     install_output(BoosterStage::EOC_OUT,
-                   {right_x, top_row_y + row * row_spacing});
+                   {right_x, top_row_y + row*row_spacing});
 
     row++;
     install_input(BoosterStage::ENVELOPE_IN,
-                  {left_x, top_row_y + row * row_spacing});
+                  {left_x, top_row_y + row*row_spacing});
     install_output(BoosterStage::ENVELOPE_OUT,
-                   {right_x, top_row_y + row * row_spacing});
+                   {right_x, top_row_y + row*row_spacing});
   }
 };
 } // namespace DHE

@@ -9,8 +9,8 @@
 #include "util/mode.hpp"
 #include "util/phase-accumulator.hpp"
 #include "util/range.hpp"
+#include "util/sigmoid.hpp"
 #include "util/signal.hpp"
-#include "util/taper.hpp"
 
 namespace DHE {
 
@@ -33,18 +33,18 @@ struct Stage : public Module {
   CompoundMode executor{[this]() -> bool { return defer_in(); }, modes};
 
   Stage() : Module(PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT) {
-    deferring_mode.on_entry([this] { active_out(true); });
-    deferring_mode.on_step([this] { envelope_out(envelope_in()); });
+    deferring_mode.on_entry([this] { send_active(true); });
+    deferring_mode.on_step([this] { send_envelope(envelope_in()); });
 
     generating_mode.on_entry([this] {
-      active_out(false);
+      send_active(false);
       phase_0_voltage = envelope_in();
       envelope_trigger.enable();
     });
     generating_mode.on_step([this] {
       envelope_trigger.step();
       generator.step();
-      envelope_out(envelope_voltage(generator.phase()));
+      send_envelope(envelope_voltage(generator.phase()));
     });
     generating_mode.on_exit([this] {
       envelope_trigger.disable();
@@ -56,14 +56,14 @@ struct Stage : public Module {
       generator.start();
     });
 
-    generator.on_start([this] { active_out(true); });
+    generator.on_start([this] { send_active(true); });
     generator.on_completion([this] {
-      active_out(false);
+      send_active(false);
       eoc_pulse.start();
     });
 
-    eoc_pulse.on_start([this] { eoc_out(true); });
-    eoc_pulse.on_completion([this] { eoc_out(false); });
+    eoc_pulse.on_start([this] { send_eoc(true); });
+    eoc_pulse.on_completion([this] { send_eoc(false); });
 
     executor.on_step([this] { eoc_pulse.step(); });
     executor.enter();
@@ -78,11 +78,8 @@ struct Stage : public Module {
   void step() override { executor.step(); }
 
   auto taper(float phase) const -> float {
-    return Taper::j(phase, curve_in());
-  }
-
-  void active_out(bool is_active) {
-    outputs[ACTIVE_OUT].value = is_active ? 10.f : 0.f;
+    float curviness = curve_in();
+    return j_taper(phase, curvature(curviness));
   }
 
   auto curve_in() const -> float {
@@ -98,21 +95,25 @@ struct Stage : public Module {
     return Duration::of(rotation);
   }
 
-  void eoc_out(bool eoc) {
-    outputs[EOC_OUT].value = eoc ? 10.f : 0.f;
-  }
-
   auto envelope_in() const -> float {
     return inputs[ENVELOPE_IN].value;
-  }
-
-  void envelope_out(float envelope) {
-    outputs[ENVELOPE_OUT].value = envelope;
   }
 
   auto level_in() const -> float {
     auto rotation{params[LEVEL_KNOB].value};
     return Signal::unipolar_range.scale(rotation);
+  }
+
+  void send_active(bool is_active) {
+    outputs[ACTIVE_OUT].value = is_active ? 10.f : 0.f;
+  }
+
+  void send_envelope(float envelope) {
+    outputs[ENVELOPE_OUT].value = envelope;
+  }
+
+  void send_eoc(bool eoc) {
+    outputs[EOC_OUT].value = eoc ? 10.f : 0.f;
   }
 
   auto trigger_in() const -> bool {

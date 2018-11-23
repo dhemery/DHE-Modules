@@ -5,7 +5,7 @@
 #include "module.hpp"
 
 #include "util/range.hpp"
-#include "util/taper.hpp"
+#include "util/sigmoid.hpp"
 
 namespace DHE {
 
@@ -32,7 +32,7 @@ struct Tapers : Module {
   }
 
   auto taper(float level, float curvature, bool is_s) const -> float {
-    return is_s ? Taper::s(level, curvature) : Taper::j(level, curvature);
+      return is_s ? s_taper(level, DHE::curvature(curvature)) : j_taper(level, DHE::curvature(curvature));
   }
 
   enum ParameterIds {

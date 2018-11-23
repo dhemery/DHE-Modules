@@ -67,7 +67,7 @@ struct Module : rack::Module {
   static auto modulated(rack::Param const &knob, rack::Input const &cv) -> float {
     auto const rotation = knob.value;
     auto const cv_offset = cv.value * 0.1f;
-    return cv_offset + rotation;
+    return rotation + cv_offset;
   }
 
   auto modulated(int knob, int cv) const -> float {

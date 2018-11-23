@@ -5,7 +5,7 @@
 #include "module.hpp"
 
 #include "util/range.hpp"
-#include "util/taper.hpp"
+#include "util/sigmoid.hpp"
 
 namespace DHE {
 
@@ -23,7 +23,7 @@ struct Swave : Module {
 
   auto taper(float phase) const -> float {
     auto rotation = curve_knob();
-    return is_s_taper() ? Taper::s(phase, rotation) : Taper::j(phase, rotation);
+    return is_s_taper() ? s_taper(phase, curvature(rotation)) : j_taper(phase, curvature(rotation));
   }
 
   auto to_signal(float phase) const -> float {
