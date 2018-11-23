@@ -12,34 +12,37 @@
 namespace DHE {
 
 struct Hostage : Module {
-  auto duration() const -> float {
-    static auto const ranges{std::vector<Range>{
-        Duration::short_range, Duration::medium_range, Duration::long_range}};
-    auto rotation{modulated(DURATION_KNOB, DURATION_CV)};
-    auto selection{static_cast<int>(params[DURATION_SWITCH].value)};
-    auto range{ranges[selection]};
-    return range.scale(rotation);
-  }
+  enum InputIds {
+    DEFER_IN,
+    DURATION_CV,
+    ENVELOPE_IN,
+    HOLD_GATE_IN,
+    INPUT_COUNT
+  };
 
-  std::function<bool()> const defer_gate_in{bool_in(DEFER_IN)};
-  std::function<bool()> const hold_gate_in{bool_in(HOLD_GATE_IN)};
-  std::function<float()> const envelope_in{float_in(ENVELOPE_IN)};
-  std::function<float()> const mode_switch_in{float_param(GATE_MODE_SWITCH)};
+  enum OutputIds { ACTIVE_OUT, ENVELOPE_OUT, EOC_OUT, OUTPUT_COUNT };
 
-  DFlipFlop sustain_gate{hold_gate_in};
-  DFlipFlop sustain_trigger{hold_gate_in};
-  PhaseAccumulator timer{[this] { return sample_time() / duration(); }};
+  enum ParameterIds {
+    DURATION_KNOB,
+    DURATION_SWITCH,
+    MODE_SWITCH,
+    PARAMETER_COUNT
+  };
+
+  DFlipFlop sustain_gate{[this]() -> bool { return hold_in(); }};
+  DFlipFlop sustain_trigger{[this]() -> bool { return hold_in(); }};
+
+  PhaseAccumulator timer{[this] { return sample_time() / duration_in(); }};
   PhaseAccumulator eoc_pulse{[this] { return sample_time() / 1e-3f; }};
 
-  Mode defer_mode{};
   Mode timed_sustain_mode{};
   Mode gated_sustain_mode{};
-  std::vector<Mode *> const sustain_modes{&timed_sustain_mode,
-                                          &gated_sustain_mode};
-  CompoundMode sustain_mode{mode_switch_in, sustain_modes};
+  CompoundMode sustain_mode{[this]() -> int { return mode_switch_in(); },
+                            {&timed_sustain_mode, &gated_sustain_mode}};
 
-  std::vector<Mode *> main_modes{&sustain_mode, &defer_mode};
-  CompoundMode executor{defer_gate_in, main_modes};
+  Mode defer_mode{};
+  CompoundMode executor{[this]() -> bool { return defer_in(); },
+                        {&sustain_mode, &defer_mode}};
 
   Hostage() : Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT} {
     defer_mode.on_entry([this] { send_active(true); });
@@ -85,13 +88,37 @@ struct Hostage : Module {
     executor.enter();
   }
 
+  void begin_sustaining() { send_active(true); }
+
+  auto defer_in() const -> bool { return inputs[DEFER_IN].value > 0.1f; }
+
+  auto duration_in() const -> float {
+    static auto const ranges{std::vector<Range>{
+        Duration::short_range, Duration::medium_range, Duration::long_range}};
+    auto rotation{modulated(DURATION_KNOB, DURATION_CV)};
+    auto selection{static_cast<int>(params[DURATION_SWITCH].value)};
+    auto range{ranges[selection]};
+    return Duration::of(rotation, range);
+  }
+
   void end_sustaining() {
     send_active(false);
     eoc_pulse.start();
   }
-  void begin_sustaining() { send_active(true); }
 
-  void step() override { executor.step(); }
+  auto envelope_in() const -> float {
+    return inputs[ENVELOPE_IN].value;
+  }
+
+  auto hold_in() const -> bool {
+    return inputs[HOLD_GATE_IN].value > 0.1f;
+  }
+
+  auto mode_switch_in() const -> int {
+    return static_cast<int>(params[MODE_SWITCH].value);
+  }
+
+  auto sample_time() const -> float { return rack::engineGetSampleTime(); }
 
   void send_active(bool is_active) {
     outputs[ACTIVE_OUT].value = is_active ? 10.f : 0.f;
@@ -103,24 +130,7 @@ struct Hostage : Module {
     outputs[EOC_OUT].value = is_pulsing ? 10.f : 0.f;
   }
 
-  auto sample_time() const -> float { return rack::engineGetSampleTime(); }
-
-  enum InputIds {
-    DEFER_IN,
-    DURATION_CV,
-    ENVELOPE_IN,
-    HOLD_GATE_IN,
-    INPUT_COUNT
-  };
-
-  enum OutputIds { ACTIVE_OUT, ENVELOPE_OUT, EOC_OUT, OUTPUT_COUNT };
-
-  enum ParameterIds {
-    DURATION_KNOB,
-    DURATION_SWITCH,
-    GATE_MODE_SWITCH,
-    PARAMETER_COUNT
-  };
+  void step() override { executor.step(); }
 };
 
 struct HostageWidget : public ModuleWidget {
@@ -136,7 +146,7 @@ struct HostageWidget : public ModuleWidget {
     auto row_spacing = 18.5f;
 
     auto row = 0;
-    install_switch(Hostage::GATE_MODE_SWITCH,
+    install_switch(Hostage::MODE_SWITCH,
                    {center_x, top_row_y + row * row_spacing});
 
     row++;

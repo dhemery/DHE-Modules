@@ -59,7 +59,7 @@ struct Cubic : Module {
     auto const x2{x * x};
     auto const x3{x2 * x};
     auto const y{a() * x3 + b() * x2 + c() * x + d()};
-    send(output_gain()*y);
+    send(output_gain() * y);
   }
 
   auto in() const -> float { return inputs[IN].value * 0.2f; }
