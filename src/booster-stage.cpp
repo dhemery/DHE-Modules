@@ -91,13 +91,12 @@ struct BoosterStage : Module {
     executor.enter();
   }
 
-  void step() override {
-    executor.step();
-    send_active();
-    send_eoc();
-  }
-
   auto active_in() const -> bool { return params[ACTIVE_BUTTON].value > 0.1f; }
+
+  auto curve_in() const -> float {
+    auto const amount{modulated(CURVE_KNOB, CURVE_CV)};
+    return Sigmoid::curvature(amount);
+  }
 
   auto defer_in() const -> bool {
     auto const defer_button{params[DEFER_BUTTON].value > 0.1f};
@@ -116,7 +115,14 @@ struct BoosterStage : Module {
 
   auto envelope_in() const -> float { return inputs[ENVELOPE_IN].value; }
 
+  auto envelope_voltage(float phase) const -> float {
+    return scale(taper(phase), phase_0_voltage, level_in());
+  }
+
   auto eoc_in() const -> bool { return params[EOC_BUTTON].value > 0.1f; }
+
+  bool is_s_taper() const { return params[SHAPE_SWITCH].value > 0.1f; }
+
   auto level_in() const -> float {
     auto const amount = modulated(LEVEL_KNOB, LEVEL_CV);
     auto const &range = params[LEVEL_SWITCH].value > 0.5f
@@ -125,11 +131,7 @@ struct BoosterStage : Module {
     return range.scale(amount);
   }
 
-  auto trigger_in() const -> bool {
-    auto const trigger_button{params[TRIGGER_BUTTON].value > 0.1};
-    auto const trigger_input{inputs[TRIGGER_IN].value > 0.1};
-    return trigger_button || trigger_input;
-  }
+  auto sample_time() const -> float { return rack::engineGetSampleTime(); }
 
   void send_active() {
     auto const active{is_active || active_in()};
@@ -143,18 +145,22 @@ struct BoosterStage : Module {
     outputs[EOC_OUT].value = eoc ? 10.f : 0.f;
   }
 
-  auto envelope_voltage(float phase) const -> float {
-    return scale(taper(phase), phase_0_voltage, level_in());
+  void step() override {
+    executor.step();
+    send_active();
+    send_eoc();
   }
-
-  auto sample_time() const -> float { return rack::engineGetSampleTime(); }
 
   auto taper(float phase) const -> float {
-    auto const curve_in{modulated(CURVE_KNOB, CURVE_CV)};
-    auto const curvature{DHE::curvature(curve_in)};
-    auto const is_s_taper = params[SHAPE_SWITCH].value > 0.5f;
-    return is_s_taper ? s_taper(phase, curvature) : j_taper(phase, curvature);
+    return is_s_taper() ? Sigmoid::s_taper(phase, curve_in()) : Sigmoid::j_taper(phase, curve_in());
   }
+
+  auto trigger_in() const -> bool {
+    auto const trigger_button{params[TRIGGER_BUTTON].value > 0.1};
+    auto const trigger_input{inputs[TRIGGER_IN].value > 0.1};
+    return trigger_button || trigger_input;
+  }
+
 };
 
 struct BoosterStageWidget : public ModuleWidget {

@@ -14,7 +14,7 @@ auto constexpr long_range{Range{0.1f, 100.f}};
 
 /**
  * Selects a duration by applying a J taper to the proportion
- * and mapping the result onto the range [0.01, 10.0] seconds.
+ * and mapping the result onto the given range.
  * <p>
  * The proportion selects a value as follows:
  * <ul>
@@ -25,18 +25,18 @@ auto constexpr long_range{Range{0.1f, 100.f}};
  *
  * @param proportion selects the duration
  * @param range the range from which to select the duration
- * @return a function that yields the selected duration
+ * @return the selected duration
  */
 inline auto of(float proportion, Range range = medium_range) -> float {
   // Shapes the J taper to map an input of 0.5 to an output of ~0.1. Thus a
   // proportion of 0.5 will yield a duration of ~1/10 of the range's maximum.
-  static auto constexpr knob_curvature{0.8f};
+  static auto constexpr curvature{0.8f};
 
-  // Apply the J taper to the proportion.
-  auto j_tapered_proportion{sigmoid(proportion, knob_curvature)};
+  // Taper the proportion.
+  auto const tapered{Sigmoid::j_taper(proportion, curvature)};
 
   // Scale the tapered proportion to the desired range.
-  return range.scale(j_tapered_proportion);
+  return range.scale(tapered);
 }
 } // namespace Duration
 } // namespace DHE

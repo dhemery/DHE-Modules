@@ -73,30 +73,26 @@ struct Stage : public Module {
     return scale(taper(phase), phase_0_voltage, level_in());
   }
 
-  auto sample_time() const -> float { return rack::engineGetSampleTime(); }
-
-  void step() override { executor.step(); }
-
-  auto taper(float phase) const -> float {
-    float curviness = curve_in();
-    return j_taper(phase, curvature(curviness));
+  auto curve_in() const -> float {
+    auto const rotation{params[CURVE_KNOB].value};
+    return Sigmoid::curvature(rotation);
   }
-
-  auto curve_in() const -> float { return params[CURVE_KNOB].value; }
 
   auto defer_in() const -> bool { return inputs[DEFER_IN].value > 0.1; }
 
   auto duration_in() const -> float {
-    auto rotation{params[DURATION_KNOB].value};
+    auto const rotation{params[DURATION_KNOB].value};
     return Duration::of(rotation);
   }
 
   auto envelope_in() const -> float { return inputs[ENVELOPE_IN].value; }
 
   auto level_in() const -> float {
-    auto rotation{params[LEVEL_KNOB].value};
+    auto const rotation{params[LEVEL_KNOB].value};
     return Signal::unipolar_range.scale(rotation);
   }
+
+  auto sample_time() const -> float { return rack::engineGetSampleTime(); }
 
   void send_active(bool is_active) {
     outputs[ACTIVE_OUT].value = is_active ? 10.f : 0.f;
@@ -105,6 +101,12 @@ struct Stage : public Module {
   void send_envelope(float envelope) { outputs[ENVELOPE_OUT].value = envelope; }
 
   void send_eoc(bool eoc) { outputs[EOC_OUT].value = eoc ? 10.f : 0.f; }
+
+  void step() override { executor.step(); }
+
+  auto taper(float phase) const -> float {
+    return Sigmoid::j_taper(phase, curve_in());
+  }
 
   auto trigger_in() const -> bool { return inputs[TRIGGER_IN].value > 0.1; }
 };

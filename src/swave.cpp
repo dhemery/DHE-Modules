@@ -23,8 +23,8 @@ struct Swave : Module {
 
   auto taper(float phase) const -> float {
     auto rotation = curve_knob();
-    return is_s_taper() ? s_taper(phase, curvature(rotation))
-                        : j_taper(phase, curvature(rotation));
+    return is_s_taper() ? Sigmoid::s_taper(phase, Sigmoid::curvature(rotation))
+                        : Sigmoid::j_taper(phase, Sigmoid::curvature(rotation));
   }
 
   auto to_signal(float phase) const -> float {

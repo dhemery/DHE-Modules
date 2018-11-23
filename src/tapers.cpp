@@ -32,8 +32,8 @@ struct Tapers : Module {
   }
 
   auto taper(float level, float curvature, bool is_s) const -> float {
-    return is_s ? s_taper(level, DHE::curvature(curvature))
-                : j_taper(level, DHE::curvature(curvature));
+    return is_s ? Sigmoid::s_taper(level, Sigmoid::curvature(curvature))
+                : Sigmoid::j_taper(level, Sigmoid::curvature(curvature));
   }
 
   enum ParameterIds {
