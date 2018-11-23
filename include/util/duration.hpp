@@ -13,15 +13,16 @@ auto constexpr medium_range{Range{0.01f, 10.f}};
 auto constexpr long_range{Range{0.1f, 100.f}};
 
 /**
- * Selects a duration by applying a J taper to the proportion
- * and mapping the result onto the given range.
+ * Selects a duration by applying a J taper to the proportion and mapping the
+ * result onto the given range.
  * <p>
- * The proportion selects a value as follows:
+ * The proportion selects a value from the range
+ * as follows:
  * <ul>
- * <li>0.0 selects the lower bound of the range.</li>
- * <li>0.5 selects a value approximately 1/10 the upper bound of the
- * range.</li>
- * <li>1.0 selects the upper bound of the range.</li>
+ * <li>0.0 selects the lower bound.</li>
+ * <li>0.5 selects a value approximately 1/10 the upper bound.</li>
+ * <li>1.0 selects the upper bound.</li>
+ *</ul>
  *
  * @param proportion selects the duration
  * @param range the range from which to select the duration

@@ -20,7 +20,7 @@ auto constexpr proportion_range{Range{0.f, 1.f}};
  * Before the function is applied:
  * <ul>
  * <li>The input is clamped to the range [-1.0, 1.0].</li>
- * <li>The curvature is clamped to the range [1-e4, 1.0-1-e4].</li>
+ * <li>The curvature is clamped to the range [0.0001, 0.9999].</li>
  * </ul>
  * @param input the input to the inverse sigmoid function
  * @param curvature the intensity and direction of the curvature
@@ -34,8 +34,8 @@ inline auto inverse(float input, float curvature) -> float {
   curvature = curvature_range.clamp(curvature);
   input = sigmoid_range.clamp(input);
 
-  return (input - input*curvature)/
-      (curvature - std::abs(input)*2.0f*curvature + 1.0f);
+  return (input - input * curvature) /
+         (curvature - std::abs(input) * 2.0f * curvature + 1.0f);
 }
 
 /**
@@ -49,7 +49,7 @@ inline auto inverse(float input, float curvature) -> float {
  * Before the function is applied:
  * <ul>
  * <li>The input is clamped to the range [-1.0, 1.0].</li>
- * <li>The curvature is clamped to the range [1-e4, 1.0-1-e4].</li>
+ * <li>The curvature is clamped to the range [0.0001, 0.9999].</li>
  * </ul>
  * @param input the input to the sigmoid function
  * @param curvature the intensity and direction of the curvature
@@ -70,7 +70,7 @@ inline auto curve(float input, float curvature) -> float {
  * Before the function is applied:
  * <ul>
  * <li>The input is clamped to the range [0.0, 1.0].</li>
- * <li>The curvature is clamped to the range [1-e4, 1.0-1-e4].</li>
+ * <li>The curvature is clamped to the range [0.0001, 0.9999].</li>
  * </ul>
  * @param input the input to the taper function
  * @param curvature the intensity and direction of the taper
@@ -91,7 +91,7 @@ inline auto j_taper(float input, float curvature) -> float {
  * Before the function is applied:
  * <ul>
  * <li>The input is clamped to the range [0.0, 1.0].</li>
- * <li>The curvature is clamped to the range [1-e4, 1.0-1-e4].</li>
+ * <li>The curvature is clamped to the range [0.0001, 0.9999].</li>
  * </ul>
  * @param input the input to the taper function
  * @param curvature the intensity and direction of the taper
@@ -124,5 +124,5 @@ inline auto curvature(float input) -> float {
   auto const scaled{sigmoid_range.scale(input)};
   return curve(scaled, gentle_s);
 }
-}
+} // namespace Sigmoid
 } // namespace DHE

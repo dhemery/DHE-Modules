@@ -39,43 +39,44 @@ public:
   }
 };
 
-class JusterChannel {
-  rack::Input const &input;
-  rack::Output &output;
-  rack::Param const &mode;
-  JusterAdder const offset;
-  JusterMultiplier const av;
-  JusterMultiplier const gain;
-
-public:
-  JusterChannel(rack::Input const &input, rack::Output &output,
-                rack::Param const &mode, rack::Param const &knob)
-      : input{input}, output{output}, mode{mode}, offset{knob,
-                                                         Signal::bipolar_range},
-        av{knob, {-1.f, 1.f}}, gain{knob, {0.f, 2.f}} {}
-
-  auto adjust(float upstream) const -> float {
-    auto const selection = static_cast<int>(mode.value);
-    auto const in = input.active ? input.value : upstream;
-
-    switch (selection) {
-    case 0:
-      output.value = offset.apply(in);
-      break;
-    case 1:
-      output.value = av.apply(in);
-      break;
-    case 2:
-      output.value = gain.apply(in);
-      break;
-    default:
-      break;
-    }
-    return output.value;
-  }
-};
 
 struct Juster : Module {
+  class JusterChannel {
+    rack::Input const &input;
+    rack::Output &output;
+    rack::Param const &mode;
+    JusterAdder const offset;
+    JusterMultiplier const av;
+    JusterMultiplier const gain;
+
+  public:
+    JusterChannel(rack::Input const &input, rack::Output &output,
+                  rack::Param const &mode, rack::Param const &knob)
+        : input{input}, output{output}, mode{mode}, offset{knob,
+                                                           Signal::bipolar_range},
+          av{knob, {-1.f, 1.f}}, gain{knob, {0.f, 2.f}} {}
+
+    auto adjust(float upstream) const -> float {
+      auto const selection = static_cast<int>(mode.value);
+      auto const in = input.active ? input.value : upstream;
+
+      switch (selection) {
+      case 0:
+        output.value = offset.apply(in);
+        break;
+      case 1:
+        output.value = av.apply(in);
+        break;
+      case 2:
+        output.value = gain.apply(in);
+        break;
+      default:
+        break;
+      }
+      return output.value;
+    }
+  };
+
   enum ParameterIds {
     KNOB_1,
     KNOB_2,
@@ -108,6 +109,7 @@ struct Juster : Module {
     }
   }
 };
+
 
 struct JusterWidget : public ModuleWidget {
   explicit JusterWidget(rack::Module *module)

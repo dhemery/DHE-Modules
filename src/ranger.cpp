@@ -1,4 +1,5 @@
 #include <algorithm>
+#include <util/signal.hpp>
 
 #include "dhe-modules.hpp"
 #include "module-widget.hpp"
@@ -8,29 +9,38 @@
 
 namespace DHE {
 
-struct Ranger : Module {
-  std::function<float()> const level{knob(LEVEL_KNOB, LEVEL_CV, LEVEL_AV)};
-  std::function<float()> const limit1{
-      knob(LIMIT_1_KNOB, LIMIT_1_CV, LIMIT_1_AV)};
-  std::function<float()> const limit2{
-      knob(LIMIT_2_KNOB, LIMIT_2_CV, LIMIT_2_AV)};
-  std::function<Range const &()> const range1{
-      signal_range(int_param(LIMIT_1_RANGE))};
-  std::function<Range const &()> const range2{
-      signal_range(int_param(LIMIT_2_RANGE))};
+struct RangerLevel {
+  rack::Param const &knob;
+  rack::Input const &cv;
+  rack::Param const &av;
 
-  Ranger() : Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT} {}
+  RangerLevel(rack::Param const &knob, rack::Input const &cv, rack::Param const &av)
+      : knob{knob}, cv{cv}, av{av} {}
 
-  void step() override {
-    auto cw_limit = range1().scale(limit1());
-    auto ccw_limit = range2().scale(limit2());
-
-    auto range = Range{ccw_limit, cw_limit};
-    auto out = range.scale(level());
-
-    outputs[OUT].value = out;
+  auto operator()(float limit1, float limit2) const -> float {
+    auto const range{Range{limit1, limit2}};
+    auto const input{Module::modulated(knob, cv, av)};
+    return range.scale(input);
   }
+};
 
+struct RangerLimit {
+  rack::Param const &knob;
+  rack::Input const &cv;
+  rack::Param const &av;
+  rack::Param const &range_selector;
+
+  RangerLimit(rack::Param const &knob, rack::Input const &cv, rack::Param const &av, rack::Param const &range_selector)
+      : knob{knob}, cv{cv}, av{av}, range_selector{range_selector} {}
+
+  auto operator()() const -> float {
+    auto const range{range_selector.value > 0.1 ? Signal::unipolar_range : Signal::bipolar_range};
+    auto const input{Module::modulated(knob, cv, av)};
+    return range.scale(input);
+  }
+};
+
+struct Ranger : Module {
   enum ParameterIds {
     LEVEL_KNOB,
     LEVEL_AV,
@@ -44,6 +54,16 @@ struct Ranger : Module {
   };
   enum InputIds { LEVEL_CV, LIMIT_1_CV, LIMIT_2_CV, INPUT_COUNT };
   enum OutputIds { OUT, OUTPUT_COUNT };
+
+  RangerLevel level{params[LEVEL_KNOB], inputs[LEVEL_CV], params[LEVEL_AV]};
+  RangerLimit upper{params[LIMIT_1_KNOB], inputs[LIMIT_1_CV], params[LIMIT_1_AV], params[LIMIT_1_RANGE]};
+  RangerLimit lower{params[LIMIT_2_KNOB], inputs[LIMIT_2_CV], params[LIMIT_2_AV], params[LIMIT_2_RANGE]};
+
+  Ranger() : Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT} {}
+
+  void step() override {
+    outputs[OUT].value = level(lower(), upper());
+  }
 };
 
 struct RangerWidget : public ModuleWidget {
@@ -51,7 +71,7 @@ struct RangerWidget : public ModuleWidget {
       : ModuleWidget(module, 6, "ranger") {
     auto widget_right_edge = width();
 
-    auto left_x = width() / 3.5f + 0.333333333f;
+    auto left_x = width()/3.5f + 0.333333333f;
     auto right_x = widget_right_edge - left_x;
 
     auto y = 24.f;
@@ -83,5 +103,7 @@ struct RangerWidget : public ModuleWidget {
 };
 } // namespace DHE
 
-rack::Model *modelRanger = rack::Model::create<DHE::Ranger, DHE::RangerWidget>(
+rack::Model
+    *
+    modelRanger = rack::Model::create<DHE::Ranger, DHE::RangerWidget>(
     "DHE-Modules", "Ranger", "Ranger", rack::UTILITY_TAG, rack::WAVESHAPER_TAG);

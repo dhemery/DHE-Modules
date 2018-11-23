@@ -152,7 +152,8 @@ struct BoosterStage : Module {
   }
 
   auto taper(float phase) const -> float {
-    return is_s_taper() ? Sigmoid::s_taper(phase, curve_in()) : Sigmoid::j_taper(phase, curve_in());
+    return is_s_taper() ? Sigmoid::s_taper(phase, curve_in())
+                        : Sigmoid::j_taper(phase, curve_in());
   }
 
   auto trigger_in() const -> bool {
@@ -160,7 +161,6 @@ struct BoosterStage : Module {
     auto const trigger_input{inputs[TRIGGER_IN].value > 0.1};
     return trigger_button || trigger_input;
   }
-
 };
 
 struct BoosterStageWidget : public ModuleWidget {
