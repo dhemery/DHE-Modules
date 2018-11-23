@@ -12,10 +12,14 @@
 namespace DHE {
 
 struct Hostage : Module {
-  std::function<float()> const duration_knob{knob(DURATION_KNOB)};
-  std::function<int()> const duration_selector{int_param(DURATION_SWITCH)};
-  std::function<float()> const duration{
-      Duration::of(duration_knob, duration_selector)};
+  auto duration() const -> float {
+    static auto const ranges{std::vector<Range>{Duration::short_range, Duration::medium_range, Duration::long_range}};
+    auto rotation{modulated(DURATION_KNOB, DURATION_CV)};
+    auto selection{static_cast<int>(params[DURATION_SWITCH].value)};
+    auto range{ranges[selection]};
+    return range.scale(rotation);
+  }
+
   std::function<bool()> const defer_gate_in{bool_in(DEFER_IN)};
   std::function<bool()> const hold_gate_in{bool_in(HOLD_GATE_IN)};
   std::function<float()> const envelope_in{float_in(ENVELOPE_IN)};

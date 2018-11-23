@@ -30,11 +30,6 @@ struct Module : rack::Module {
     return [&source]() -> float { return source.value; };
   }
 
-  auto int_in(int input) const -> std::function<int()> {
-    auto const &source{inputs[input]};
-    return [&source]() -> int { return static_cast<int>(source.value); };
-  }
-
   auto bool_in(int input) const -> std::function<bool()> {
     auto const &source{inputs[input]};
     return [&source]() -> bool { return source.value > 0.1f; };
@@ -68,6 +63,21 @@ struct Module : rack::Module {
       return cv_multiplier * cv_offset + rotation;
     };
   }
+
+  auto modulated(int knob, int cv) const -> float {
+    auto const rotation = params[knob].value;
+    auto const cv_offset = inputs[knob].value * 0.1f;
+    return cv_offset + rotation;
+  }
+
+  auto modulated(int knob, int cv, int av) const -> float {
+    static auto constexpr av_range{Range{-1.f, 1.f}};
+    auto const rotation = params[knob].value;
+    auto const cv_offset = inputs[knob].value * 0.1f;
+    auto const cv_multiplier = av_range.scale(params[av].value);
+    return cv_multiplier * cv_offset + rotation;
+  }
+
 
   template <typename Selector, typename Choice>
   auto choice(Selector selector, Choice choice0, Choice choice1) const

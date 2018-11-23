@@ -9,62 +9,61 @@
 #include "util/mode.hpp"
 #include "util/phase-accumulator.hpp"
 #include "util/range.hpp"
+#include "util/signal.hpp"
 #include "util/taper.hpp"
 
 namespace DHE {
-struct Stage : public Module {
-  std::function<float()> const level_knob{knob(LEVEL_KNOB)};
-  std::function<float()> const duration_knob{knob(DURATION_KNOB)};
-  std::function<float()> const duration{Duration::of(duration_knob)};
-  std::function<float()> const curve_knob{knob(CURVE_KNOB)};
-  std::function<bool()> const defer_gate_in{bool_in(DEFER_IN)};
-  std::function<bool()> const envelope_gate_in{bool_in(TRIGGER_IN)};
-  std::function<float()> const envelope_in{float_in(ENVELOPE_IN)};
 
-  // TODO: Move this inside stage mode or an envelope class.
+struct Stage : public Module {
+  enum ParameterIIds { DURATION_KNOB, LEVEL_KNOB, CURVE_KNOB, PARAMETER_COUNT };
+
+  enum InputIds { ENVELOPE_IN, TRIGGER_IN, DEFER_IN, INPUT_COUNT };
+
+  enum OutputIds { ENVELOPE_OUT, EOC_OUT, ACTIVE_OUT, OUTPUT_COUNT };
+
   float phase_0_voltage{0.f};
 
-  PhaseAccumulator envelope{[this] { return sample_time() / duration(); }};
-  DFlipFlop envelope_trigger{envelope_gate_in};
+  PhaseAccumulator generator{[this] { return sample_time() / duration_in(); }};
+  DFlipFlop envelope_trigger{[this]() -> bool { return trigger_in(); }};
   PhaseAccumulator eoc_pulse{[this] { return sample_time() / 1e-3f; }};
 
-  Mode stage_mode{};
-  Mode defer_mode{};
-  std::vector<Mode *> const modes{&stage_mode, &defer_mode};
-  CompoundMode executor{defer_gate_in, modes};
+  Mode generating_mode{};
+  Mode deferring_mode{};
+  std::vector<Mode *> const modes{&generating_mode, &deferring_mode};
+  CompoundMode executor{[this]() -> bool { return defer_in(); }, modes};
 
   Stage() : Module(PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT) {
-    defer_mode.on_entry([this] { send_active(true); });
-    defer_mode.on_step([this] { send_envelope(envelope_in()); });
+    deferring_mode.on_entry([this] { active_out(true); });
+    deferring_mode.on_step([this] { envelope_out(envelope_in()); });
 
-    stage_mode.on_entry([this] {
-      send_active(false);
+    generating_mode.on_entry([this] {
+      active_out(false);
       phase_0_voltage = envelope_in();
       envelope_trigger.enable();
     });
-    stage_mode.on_step([this] {
+    generating_mode.on_step([this] {
       envelope_trigger.step();
-      envelope.step();
-      send_envelope(envelope_voltage(envelope.phase()));
+      generator.step();
+      envelope_out(envelope_voltage(generator.phase()));
     });
-    stage_mode.on_exit([this] {
+    generating_mode.on_exit([this] {
       envelope_trigger.disable();
-      envelope.stop();
+      generator.stop();
     });
 
     envelope_trigger.on_rise([this] {
       phase_0_voltage = envelope_in();
-      envelope.start();
+      generator.start();
     });
 
-    envelope.on_start([this] { send_active(true); });
-    envelope.on_completion([this] {
-      send_active(false);
+    generator.on_start([this] { active_out(true); });
+    generator.on_completion([this] {
+      active_out(false);
       eoc_pulse.start();
     });
 
-    eoc_pulse.on_start([this] { send_eoc(true); });
-    eoc_pulse.on_completion([this] { send_eoc(false); });
+    eoc_pulse.on_start([this] { eoc_out(true); });
+    eoc_pulse.on_completion([this] { eoc_out(false); });
 
     executor.on_step([this] { eoc_pulse.step(); });
     executor.enter();
@@ -74,34 +73,51 @@ struct Stage : public Module {
     return scale(taper(phase), phase_0_voltage, level_in());
   }
 
-  auto level_in() const -> float {
-    static auto constexpr level_range{Range{0.f, 10.f}};
-    return level_range.scale(level_knob());
-  }
-
   auto sample_time() const -> float { return rack::engineGetSampleTime(); }
-
-  void send_active(bool is_active) {
-    outputs[ACTIVE_OUT].value = is_active ? 10.f : 0.f;
-  }
-
-  void send_envelope(float voltage) { outputs[ENVELOPE_OUT].value = voltage; }
-
-  void send_eoc(bool is_pulsing) {
-    outputs[EOC_OUT].value = is_pulsing ? 10.f : 0.f;
-  }
 
   void step() override { executor.step(); }
 
   auto taper(float phase) const -> float {
-    return Taper::j(phase, curve_knob());
+    return Taper::j(phase, curve_in());
   }
 
-  enum ParameterIIds { DURATION_KNOB, LEVEL_KNOB, CURVE_KNOB, PARAMETER_COUNT };
+  void active_out(bool is_active) {
+    outputs[ACTIVE_OUT].value = is_active ? 10.f : 0.f;
+  }
 
-  enum InputIds { ENVELOPE_IN, TRIGGER_IN, DEFER_IN, INPUT_COUNT };
+  auto curve_in() const -> float {
+    return params[CURVE_KNOB].value;
+  }
 
-  enum OutputIds { ENVELOPE_OUT, EOC_OUT, ACTIVE_OUT, OUTPUT_COUNT };
+  auto defer_in() const -> bool {
+    return inputs[DEFER_IN].value > 0.1;
+  }
+
+  auto duration_in() const -> float {
+    auto rotation{params[DURATION_KNOB].value};
+    return Duration::of(rotation);
+  }
+
+  void eoc_out(bool eoc) {
+    outputs[EOC_OUT].value = eoc ? 10.f : 0.f;
+  }
+
+  auto envelope_in() const -> float {
+    return inputs[ENVELOPE_IN].value;
+  }
+
+  void envelope_out(float envelope) {
+    outputs[ENVELOPE_OUT].value = envelope;
+  }
+
+  auto level_in() const -> float {
+    auto rotation{params[LEVEL_KNOB].value};
+    return Signal::unipolar_range.scale(rotation);
+  }
+
+  auto trigger_in() const -> bool {
+    return inputs[TRIGGER_IN].value > 0.1;
+  }
 };
 
 struct StageWidget : public ModuleWidget {

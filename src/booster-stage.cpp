@@ -20,11 +20,6 @@ struct BoosterStage : Module {
   std::function<float()> const curve_knob{knob(CURVE_KNOB, CURVE_CV)};
   std::function<bool()> const is_s_taper{bool_param(SHAPE_SWITCH)};
 
-  std::function<float()> const duration_knob{knob(DURATION_KNOB)};
-  std::function<int()> const duration_selector{int_param(DURATION_SWITCH)};
-  std::function<float()> const duration{
-      Duration::of(duration_knob, duration_selector)};
-
   std::function<bool()> const defer_button{bool_param(DEFER_BUTTON)};
   std::function<bool()> const defer_in{bool_in(DEFER_IN)};
 
@@ -39,6 +34,14 @@ struct BoosterStage : Module {
   float phase_0_voltage{0.f};
   bool is_active{false};
   bool is_eoc{false};
+
+  auto duration() const -> float {
+    static auto const ranges{std::vector<Range>{Duration::short_range, Duration::medium_range, Duration::long_range}};
+    auto rotation{modulated(DURATION_KNOB, DURATION_CV)};
+    auto selection{static_cast<int>(params[DURATION_SWITCH].value)};
+    auto range{ranges[selection]};
+    return range.scale(rotation);
+  }
 
   PhaseAccumulator envelope{[this] { return sample_time() / duration(); }};
   PhaseAccumulator eoc_pulse{[this] { return sample_time() / 1e-3f; }};
