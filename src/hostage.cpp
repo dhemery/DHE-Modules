@@ -106,13 +106,9 @@ struct Hostage : Module {
     eoc_pulse.start();
   }
 
-  auto envelope_in() const -> float {
-    return inputs[ENVELOPE_IN].value;
-  }
+  auto envelope_in() const -> float { return inputs[ENVELOPE_IN].value; }
 
-  auto hold_in() const -> bool {
-    return inputs[HOLD_GATE_IN].value > 0.1f;
-  }
+  auto hold_in() const -> bool { return inputs[HOLD_GATE_IN].value > 0.1f; }
 
   auto mode_switch_in() const -> int {
     return static_cast<int>(params[MODE_SWITCH].value);
