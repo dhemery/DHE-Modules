@@ -4,63 +4,69 @@
 
 namespace DHE {
 
+struct ScaledKnob {
+  rack::Param const &knob;
+  rack::Input const &cv;
+  Range const range;
+
+  ScaledKnob(rack::Param const& knob, rack::Input const& cv, Range range) : knob{knob}, cv{cv}, range{range} {}
+
+  auto operator()() const -> float {
+    return range.scale(Module::modulated(knob, cv));
+  }
+};
+
 struct Cubic : Module {
-  static constexpr Range GAIN_RANGE{0.f, 2.f};
-  static constexpr Range COEFFICIENT_RANGE{-2.f, 2.f};
-
-  std::function<float()> const in{float_in(IN)};
-  std::function<float()> const x0_knob{knob(X0_KNOB, X0_CV)};
-  std::function<float()> const x1_knob{knob(X1_KNOB, X1_CV)};
-  std::function<float()> const x2_knob{knob(X2_KNOB, X2_CV)};
-  std::function<float()> const x3_knob{knob(X3_KNOB, X3_CV)};
-  std::function<float()> const input_gain_knob{
-      knob(INPUT_GAIN_KNOB, INPUT_GAIN_CV)};
-  std::function<float()> const output_gain_knob{
-      knob(OUTPUT_GAIN_KNOB, OUTPUT_GAIN_CV)};
-
-  Cubic() : Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT} {}
-
-  auto a() const -> float { return COEFFICIENT_RANGE.scale(x3_knob()); }
-  auto b() const -> float { return COEFFICIENT_RANGE.scale(x2_knob()); }
-  auto c() const -> float { return COEFFICIENT_RANGE.scale(x1_knob()); }
-  auto d() const -> float { return COEFFICIENT_RANGE.scale(x0_knob()); }
-  auto input_gain() const -> float {
-    return GAIN_RANGE.scale(input_gain_knob());
-  }
-  auto output_gain() const -> float {
-    return GAIN_RANGE.scale(output_gain_knob());
-  }
-
-  void step() override {
-    auto x = input_gain() * in() / 5.f;
-    auto x2 = x * x;
-    auto x3 = x2 * x;
-
-    auto y = output_gain() * (a() * x3 + b() * x2 + c() * x + d());
-
-    outputs[OUT].value = 5.f * y;
-  }
-
   enum ParameterIds {
-    X3_KNOB,
-    X2_KNOB,
-    X1_KNOB,
-    X0_KNOB,
+    A_KNOB,
+    B_KNOB,
+    C_KNOB,
+    D_KNOB,
     INPUT_GAIN_KNOB,
     OUTPUT_GAIN_KNOB,
     PARAMETER_COUNT
   };
   enum InputIds {
     IN,
-    X3_CV,
-    X2_CV,
-    X1_CV,
-    X0_CV,
+    A_CV,
+    B_CV,
+    C_CV,
+    D_CV,
     INPUT_GAIN_CV,
     OUTPUT_GAIN_CV,
     INPUT_COUNT
   };
   enum OutputIds { OUT, OUTPUT_COUNT };
+
+  static Range constexpr coefficient_range{-2.0f, 2.0f};
+  static Range constexpr gain_range{0.f, 2.0f};
+
+  ScaledKnob const a{params[A_KNOB], inputs[A_CV], coefficient_range};
+  ScaledKnob const b{params[B_KNOB], inputs[B_CV], coefficient_range};
+  ScaledKnob const c{params[C_KNOB], inputs[C_CV], coefficient_range};
+  ScaledKnob const d{params[D_KNOB], inputs[D_CV], coefficient_range};
+
+  ScaledKnob const input_gain{params[INPUT_GAIN_KNOB], inputs[INPUT_GAIN_CV], gain_range};
+  ScaledKnob const output_gain{params[OUTPUT_GAIN_KNOB], inputs[OUTPUT_GAIN_CV], gain_range};
+
+  Cubic() : Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT} {}
+
+  void step() override {
+    auto const x{input_gain() * in()};
+    auto const x2{x * x};
+    auto const x3{x2 * x};
+    auto const y{a() * x3 + b() * x2 + c() * x + d()};
+    out(output_gain() * y);
+  }
+
+  auto in() const -> float {
+    return inputs[IN].value * 0.2f;
+  }
+
+  void out(float y) {
+    outputs[OUT].value = 5.f * y;
+  }
+
 };
 
 struct CubicWidget : public ModuleWidget {
@@ -75,23 +81,23 @@ struct CubicWidget : public ModuleWidget {
     auto row_spacing = 15.f;
 
     auto row = 0;
-    install_input(Cubic::X3_CV, {left_x, top_row_y + row * row_spacing});
-    install_knob("small", Cubic::X3_KNOB,
+    install_input(Cubic::A_CV, {left_x, top_row_y + row * row_spacing});
+    install_knob("small", Cubic::A_KNOB,
                  {right_x, top_row_y + row * row_spacing});
 
     row++;
-    install_input(Cubic::X2_CV, {left_x, top_row_y + row * row_spacing});
-    install_knob("small", Cubic::X2_KNOB,
+    install_input(Cubic::B_CV, {left_x, top_row_y + row * row_spacing});
+    install_knob("small", Cubic::B_KNOB,
                  {right_x, top_row_y + row * row_spacing});
 
     row++;
-    install_input(Cubic::X1_CV, {left_x, top_row_y + row * row_spacing});
-    install_knob("small", Cubic::X1_KNOB,
+    install_input(Cubic::C_CV, {left_x, top_row_y + row * row_spacing});
+    install_knob("small", Cubic::C_KNOB,
                  {right_x, top_row_y + row * row_spacing});
 
     row++;
-    install_input(Cubic::X0_CV, {left_x, top_row_y + row * row_spacing});
-    install_knob("small", Cubic::X0_KNOB,
+    install_input(Cubic::D_CV, {left_x, top_row_y + row * row_spacing});
+    install_knob("small", Cubic::D_KNOB,
                  {right_x, top_row_y + row * row_spacing});
 
     top_row_y = 82.f;
