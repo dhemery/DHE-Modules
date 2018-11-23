@@ -13,7 +13,8 @@ namespace DHE {
 
 struct Hostage : Module {
   auto duration() const -> float {
-    static auto const ranges{std::vector<Range>{Duration::short_range, Duration::medium_range, Duration::long_range}};
+    static auto const ranges{std::vector<Range>{
+        Duration::short_range, Duration::medium_range, Duration::long_range}};
     auto rotation{modulated(DURATION_KNOB, DURATION_CV)};
     auto selection{static_cast<int>(params[DURATION_SWITCH].value)};
     auto range{ranges[selection]};
@@ -33,7 +34,8 @@ struct Hostage : Module {
   Mode defer_mode{};
   Mode timed_sustain_mode{};
   Mode gated_sustain_mode{};
-  std::vector<Mode *> const sustain_modes{&timed_sustain_mode, &gated_sustain_mode};
+  std::vector<Mode *> const sustain_modes{&timed_sustain_mode,
+                                          &gated_sustain_mode};
   CompoundMode sustain_mode{mode_switch_in, sustain_modes};
 
   std::vector<Mode *> main_modes{&sustain_mode, &defer_mode};

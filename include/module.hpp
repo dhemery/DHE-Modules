@@ -64,7 +64,8 @@ struct Module : rack::Module {
     };
   }
 
-  static auto modulated(rack::Param const &knob, rack::Input const &cv) -> float {
+  static auto modulated(rack::Param const &knob, rack::Input const &cv)
+      -> float {
     auto const rotation = knob.value;
     auto const cv_offset = cv.value * 0.1f;
     return rotation + cv_offset;
@@ -81,7 +82,6 @@ struct Module : rack::Module {
     auto const cv_multiplier = av_range.scale(params[av].value);
     return cv_multiplier * cv_offset + rotation;
   }
-
 
   template <typename Selector, typename Choice>
   auto choice(Selector selector, Choice choice0, Choice choice1) const

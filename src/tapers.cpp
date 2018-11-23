@@ -32,7 +32,8 @@ struct Tapers : Module {
   }
 
   auto taper(float level, float curvature, bool is_s) const -> float {
-      return is_s ? s_taper(level, DHE::curvature(curvature)) : j_taper(level, DHE::curvature(curvature));
+    return is_s ? s_taper(level, DHE::curvature(curvature))
+                : j_taper(level, DHE::curvature(curvature));
   }
 
   enum ParameterIds {

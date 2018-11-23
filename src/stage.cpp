@@ -82,22 +82,16 @@ struct Stage : public Module {
     return j_taper(phase, curvature(curviness));
   }
 
-  auto curve_in() const -> float {
-    return params[CURVE_KNOB].value;
-  }
+  auto curve_in() const -> float { return params[CURVE_KNOB].value; }
 
-  auto defer_in() const -> bool {
-    return inputs[DEFER_IN].value > 0.1;
-  }
+  auto defer_in() const -> bool { return inputs[DEFER_IN].value > 0.1; }
 
   auto duration_in() const -> float {
     auto rotation{params[DURATION_KNOB].value};
     return Duration::of(rotation);
   }
 
-  auto envelope_in() const -> float {
-    return inputs[ENVELOPE_IN].value;
-  }
+  auto envelope_in() const -> float { return inputs[ENVELOPE_IN].value; }
 
   auto level_in() const -> float {
     auto rotation{params[LEVEL_KNOB].value};
@@ -108,17 +102,11 @@ struct Stage : public Module {
     outputs[ACTIVE_OUT].value = is_active ? 10.f : 0.f;
   }
 
-  void send_envelope(float envelope) {
-    outputs[ENVELOPE_OUT].value = envelope;
-  }
+  void send_envelope(float envelope) { outputs[ENVELOPE_OUT].value = envelope; }
 
-  void send_eoc(bool eoc) {
-    outputs[EOC_OUT].value = eoc ? 10.f : 0.f;
-  }
+  void send_eoc(bool eoc) { outputs[EOC_OUT].value = eoc ? 10.f : 0.f; }
 
-  auto trigger_in() const -> bool {
-    return inputs[TRIGGER_IN].value > 0.1;
-  }
+  auto trigger_in() const -> bool { return inputs[TRIGGER_IN].value > 0.1; }
 };
 
 struct StageWidget : public ModuleWidget {

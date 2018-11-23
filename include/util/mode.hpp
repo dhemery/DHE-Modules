@@ -22,15 +22,15 @@ public:
   void exit() { fire(exit_actions); }
   virtual void step() { fire(step_actions); }
 
-  template<typename Action> void on_entry(Action const &action) {
+  template <typename Action> void on_entry(Action const &action) {
     entry_actions.push_back(action);
   }
 
-  template<typename Action> void on_exit(Action const &action) {
+  template <typename Action> void on_exit(Action const &action) {
     exit_actions.push_back(action);
   }
 
-  template<typename Action> void on_step(Action const &action) {
+  template <typename Action> void on_step(Action const &action) {
     step_actions.push_back(action);
   }
 };
@@ -41,14 +41,13 @@ class Modal {
   int current = -1;
 
 public:
-  template<typename Selector>
+  template <typename Selector>
   Modal(Selector const &selector, std::vector<Mode *> modes)
-      : select{selector},
-        modes{std::move(modes)} {}
+      : select{selector}, modes{std::move(modes)} {}
 
   virtual void step() {
     auto const selected{select()};
-    if (selected!=current) {
+    if (selected != current) {
       if (current >= 0) {
         modes[current]->exit();
       }
@@ -61,13 +60,14 @@ public:
 
 class CompoundMode : public Mode, Modal {
 public:
-  template<typename Selector>
-  CompoundMode(Selector const &submode_selector, std::vector<Mode *> const &submodes)
+  template <typename Selector>
+  CompoundMode(Selector const &submode_selector,
+               std::vector<Mode *> const &submodes)
       : Modal{submode_selector, submodes} {}
 
-      void step() override {
-        Modal::step();
-        Mode::step();
-      }
+  void step() override {
+    Modal::step();
+    Mode::step();
+  }
 };
 } // namespace DHE

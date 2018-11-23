@@ -9,7 +9,8 @@ struct ScaledKnob {
   rack::Input const &cv;
   Range const range;
 
-  ScaledKnob(rack::Param const& knob, rack::Input const& cv, Range range) : knob{knob}, cv{cv}, range{range} {}
+  ScaledKnob(rack::Param const &knob, rack::Input const &cv, Range range)
+      : knob{knob}, cv{cv}, range{range} {}
 
   auto operator()() const -> float {
     return range.scale(Module::modulated(knob, cv));
@@ -46,8 +47,10 @@ struct Cubic : Module {
   ScaledKnob const c{params[C_KNOB], inputs[C_CV], coefficient_range};
   ScaledKnob const d{params[D_KNOB], inputs[D_CV], coefficient_range};
 
-  ScaledKnob const input_gain{params[INPUT_GAIN_KNOB], inputs[INPUT_GAIN_CV], gain_range};
-  ScaledKnob const output_gain{params[OUTPUT_GAIN_KNOB], inputs[OUTPUT_GAIN_CV], gain_range};
+  ScaledKnob const input_gain{params[INPUT_GAIN_KNOB], inputs[INPUT_GAIN_CV],
+                              gain_range};
+  ScaledKnob const output_gain{params[OUTPUT_GAIN_KNOB], inputs[OUTPUT_GAIN_CV],
+                               gain_range};
 
   Cubic() : Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT} {}
 
@@ -56,17 +59,12 @@ struct Cubic : Module {
     auto const x2{x * x};
     auto const x3{x2 * x};
     auto const y{a() * x3 + b() * x2 + c() * x + d()};
-    out(output_gain() * y);
+    send(output_gain()*y);
   }
 
-  auto in() const -> float {
-    return inputs[IN].value * 0.2f;
-  }
+  auto in() const -> float { return inputs[IN].value * 0.2f; }
 
-  void out(float y) {
-    outputs[OUT].value = 5.f * y;
-  }
-
+  void send(float y) { outputs[OUT].value = 5.f * y; }
 };
 
 struct CubicWidget : public ModuleWidget {

@@ -39,7 +39,8 @@ inline float s_taper(float proportion, float curvature) {
   // Scale the proportion to use the entire range of the sigmoid curve [-1,1].
   auto const scaled{sigmoid_range.scale(proportion)};
 
-  // Invert the curvature so that a proportion greater than 0.5 gives an S shape.
+  // Invert the curvature so that a proportion greater than 0.5 gives an S
+  // shape.
   auto const tapered{sigmoid(scaled, -curvature)};
 
   // Scale the tapered proportion back to the range [0,1].
