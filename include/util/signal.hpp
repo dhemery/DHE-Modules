@@ -1,4 +1,5 @@
 #pragma once
+
 #include "util/range.hpp"
 
 namespace DHE {

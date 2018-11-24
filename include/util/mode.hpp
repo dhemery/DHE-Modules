@@ -1,10 +1,9 @@
-#include <utility>
-
 #pragma once
 
-#include "util/d-flip-flop.hpp"
 #include <functional>
 #include <vector>
+
+#include "d-flip-flop.hpp"
 
 namespace DHE {
 class Mode {

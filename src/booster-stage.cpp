@@ -1,5 +1,3 @@
-#include <util/signal.hpp>
-#include <utility>
 
 #include "dhe-modules.hpp"
 #include "module-widget.hpp"
@@ -10,6 +8,7 @@
 #include "util/mode.hpp"
 #include "util/phase-accumulator.hpp"
 #include "util/sigmoid.hpp"
+#include "util/signal.hpp"
 
 namespace DHE {
 

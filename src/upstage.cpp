@@ -1,5 +1,3 @@
-#include <algorithm>
-
 #include "dhe-modules.hpp"
 #include "module-widget.hpp"
 #include "module.hpp"
