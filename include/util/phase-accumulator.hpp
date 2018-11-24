@@ -40,7 +40,7 @@ public:
   }
 
   /*!
-   * Sets the phase to 0 and deactives the accumulator. Subsequent steps will
+   * Sets the phase to 0 and deactivates the accumulator. Subsequent steps will
    * not advance the phase.
    *
    * Stopping the accumulator does not fire any events.

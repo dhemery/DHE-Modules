@@ -10,42 +10,48 @@
 namespace DHE {
 
 struct Upstage : Module {
-  std::function<float()> const level_knob = knob(LEVEL_KNOB, LEVEL_CV);
-  std::function<bool()> const trigger_button = bool_param(TRIG_BUTTON);
-  std::function<bool()> const trigger_in = bool_in(TRIG_IN);
-  std::function<Range const &()> const level_range =
-      signal_range(int_param(LEVEL_SWITCH));
-  std::function<bool()> const wait_button = bool_param(WAIT_BUTTON);
-  std::function<bool()> const wait_in = bool_in(WAIT_IN);
-
-  Upstage() : Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT} {}
-
-  auto envelope_out() const -> float {
-    return level_range().scale(level_knob());
-  }
-
-  auto is_waiting() const -> bool { return wait_button() || wait_in(); }
-
-  void step() override {
-    outputs[TRIG_OUT].value = trigger_out();
-    outputs[ENVELOPE_OUT].value = envelope_out();
-  }
-
-  auto is_triggered() const -> bool { return trigger_button() || trigger_in(); }
-
-  auto trigger_out() const -> float {
-    return is_triggered() && !is_waiting() ? 10.f : 0.f;
-  }
-
   enum ParameterIds {
     LEVEL_KNOB,
-    TRIG_BUTTON,
+    TRIGGER_BUTTON,
     WAIT_BUTTON,
     LEVEL_SWITCH,
     PARAMETER_COUNT
   };
-  enum InputIds { TRIG_IN, WAIT_IN, LEVEL_CV, INPUT_COUNT };
-  enum OutputIds { TRIG_OUT, ENVELOPE_OUT, OUTPUT_COUNT };
+  enum InputIds { TRIGGER_IN, WAIT_IN, LEVEL_CV, INPUT_COUNT };
+  enum OutputIds { TRIGGER_OUT, MAIN_OUT, OUTPUT_COUNT };
+
+  Upstage() : Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT} {}
+
+  auto envelope_voltage() const -> float {
+    auto const is_uni{params[LEVEL_SWITCH].value > 0.1f};
+    auto const &range{is_uni ? Signal::unipolar_range : Signal::bipolar_range};
+    return range.scale(level_in());
+  }
+
+  auto level_in() const -> float { return modulated(LEVEL_KNOB, LEVEL_CV); }
+
+  void send_main_out(float voltage) { outputs[MAIN_OUT].value = voltage; }
+  void send_trigger_out(bool is_triggered) {
+    outputs[TRIGGER_OUT].value = is_triggered ? 10.f : 0.f;
+  }
+
+  void step() override {
+    auto const is_triggered{trigger_in() && !wait_in()};
+    send_trigger_out(is_triggered);
+    send_main_out(envelope_voltage());
+  }
+
+  auto trigger_in() const -> bool {
+    auto const trigger_button{params[TRIGGER_BUTTON].value > 0.1f};
+    auto const trigger_input{inputs[TRIGGER_IN].value > 0.1f};
+    return trigger_button || trigger_input;
+  }
+
+  auto wait_in() const -> bool {
+    auto const wait_button{params[WAIT_BUTTON].value > 0.1f};
+    auto const wait_input{inputs[WAIT_IN].value > 0.1f};
+    return wait_button || wait_input;
+  }
 };
 
 struct UpstageWidget : public ModuleWidget {
@@ -72,7 +78,7 @@ struct UpstageWidget : public ModuleWidget {
     row++;
     install_button("normal", Upstage::WAIT_BUTTON,
                    {left_x, top_row_y + row * row_spacing});
-    install_button("normal", Upstage::TRIG_BUTTON,
+    install_button("normal", Upstage::TRIGGER_BUTTON,
                    {right_x, top_row_y + row * row_spacing});
 
     top_row_y = 82.f;
@@ -82,12 +88,12 @@ struct UpstageWidget : public ModuleWidget {
     install_input(Upstage::WAIT_IN, {left_x, top_row_y + row * row_spacing});
 
     row++;
-    install_input(Upstage::TRIG_IN, {left_x, top_row_y + row * row_spacing});
-    install_output(Upstage::TRIG_OUT, {right_x, top_row_y + row * row_spacing});
+    install_input(Upstage::TRIGGER_IN, {left_x, top_row_y + row * row_spacing});
+    install_output(Upstage::TRIGGER_OUT,
+                   {right_x, top_row_y + row * row_spacing});
 
     row++;
-    install_output(Upstage::ENVELOPE_OUT,
-                   {right_x, top_row_y + row * row_spacing});
+    install_output(Upstage::MAIN_OUT, {right_x, top_row_y + row * row_spacing});
   }
 };
 } // namespace DHE
