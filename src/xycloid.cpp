@@ -92,7 +92,7 @@ struct Xycloid : Module {
   auto throb_speed() const -> float {
     auto constexpr speed_taper_curvature = 0.8f;
     auto scaled = throb_speed_knob_range.scale(throb_speed_in());
-    auto tapered = Sigmoid::curve(scaled, speed_taper_curvature);
+    auto tapered = Sigmoid::inverse(scaled, speed_taper_curvature);
     return -10.f * tapered * rack::engineGetSampleTime();
   }
 
