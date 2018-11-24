@@ -12,15 +12,9 @@
 namespace DHE {
 
 struct Hostage : Module {
-  enum InputIds {
-    DEFER_IN,
-    DURATION_CV,
-    ENVELOPE_IN,
-    HOLD_GATE_IN,
-    INPUT_COUNT
-  };
+  enum InputIds { DEFER_IN, DURATION_CV, MAIN_IN, HOLD_GATE_IN, INPUT_COUNT };
 
-  enum OutputIds { ACTIVE_OUT, ENVELOPE_OUT, EOC_OUT, OUTPUT_COUNT };
+  enum OutputIds { ACTIVE_OUT, MAIN_OUT, EOC_OUT, OUTPUT_COUNT };
 
   enum ParameterIds {
     DURATION_KNOB,
@@ -46,12 +40,12 @@ struct Hostage : Module {
 
   Hostage() : Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT} {
     defer_mode.on_entry([this] { send_active(true); });
-    defer_mode.on_step([this] { send_envelope(envelope_in()); });
+    defer_mode.on_step([this] { send_main_out(main_in()); });
 
     timed_sustain_mode.on_entry([this] {
       sustain_trigger.enable();
       send_active(false);
-      send_envelope(envelope_in());
+      send_main_out(main_in());
     });
     timed_sustain_mode.on_step([this] {
       sustain_trigger.step();
@@ -106,9 +100,9 @@ struct Hostage : Module {
     eoc_pulse.start();
   }
 
-  auto envelope_in() const -> float { return inputs[ENVELOPE_IN].value; }
-
   auto hold_in() const -> bool { return inputs[HOLD_GATE_IN].value > 0.1f; }
+
+  auto main_in() const -> float { return inputs[MAIN_IN].value; }
 
   auto mode_switch_in() const -> int {
     return static_cast<int>(params[MODE_SWITCH].value);
@@ -120,11 +114,11 @@ struct Hostage : Module {
     outputs[ACTIVE_OUT].value = is_active ? 10.f : 0.f;
   }
 
-  void send_envelope(float voltage) { outputs[ENVELOPE_OUT].value = voltage; }
-
   void send_eoc(bool is_pulsing) {
     outputs[EOC_OUT].value = is_pulsing ? 10.f : 0.f;
   }
+
+  void send_main_out(float voltage) { outputs[MAIN_OUT].value = voltage; }
 
   void step() override { executor.step(); }
 };
@@ -169,10 +163,8 @@ struct HostageWidget : public ModuleWidget {
     install_output(Hostage::EOC_OUT, {right_x, top_row_y + row * row_spacing});
 
     row++;
-    install_input(Hostage::ENVELOPE_IN,
-                  {left_x, top_row_y + row * row_spacing});
-    install_output(Hostage::ENVELOPE_OUT,
-                   {right_x, top_row_y + row * row_spacing});
+    install_input(Hostage::MAIN_IN, {left_x, top_row_y + row * row_spacing});
+    install_output(Hostage::MAIN_OUT, {right_x, top_row_y + row * row_spacing});
   }
 };
 } // namespace DHE

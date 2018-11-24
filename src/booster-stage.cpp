@@ -33,12 +33,12 @@ struct BoosterStage : Module {
     DEFER_IN,
     DURATION_CV,
     LEVEL_CV,
-    ENVELOPE_IN,
+    MAIN_IN,
     TRIGGER_IN,
     INPUT_COUNT
   };
 
-  enum OutputIds { ACTIVE_OUT, EOC_OUT, ENVELOPE_OUT, OUTPUT_COUNT };
+  enum OutputIds { ACTIVE_OUT, EOC_OUT, MAIN_OUT, OUTPUT_COUNT };
 
   float phase_0_voltage{0.f};
   bool is_active{false};
@@ -56,17 +56,17 @@ struct BoosterStage : Module {
 
   BoosterStage() : Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT} {
     defer_mode.on_entry([this] { is_active = true; });
-    defer_mode.on_step([this] { send_envelope(envelope_in()); });
+    defer_mode.on_step([this] { send_main_out(main_in()); });
 
     stage_mode.on_entry([this] {
       is_active = false;
-      phase_0_voltage = envelope_in();
+      phase_0_voltage = main_in();
       envelope_trigger.enable();
     });
     stage_mode.on_step([this] {
       envelope_trigger.step();
       envelope.step();
-      send_envelope(envelope_voltage(envelope.phase()));
+      send_main_out(envelope_voltage(envelope.phase()));
     });
     stage_mode.on_exit([this] {
       envelope_trigger.disable();
@@ -74,7 +74,7 @@ struct BoosterStage : Module {
     });
 
     envelope_trigger.on_rise([this] {
-      phase_0_voltage = envelope_in();
+      phase_0_voltage = main_in();
       envelope.start();
     });
 
@@ -113,8 +113,6 @@ struct BoosterStage : Module {
     return Duration::of(rotation, range);
   }
 
-  auto envelope_in() const -> float { return inputs[ENVELOPE_IN].value; }
-
   auto envelope_voltage(float phase) const -> float {
     return scale(taper(phase), phase_0_voltage, level_in());
   }
@@ -131,6 +129,8 @@ struct BoosterStage : Module {
     return range.scale(amount);
   }
 
+  auto main_in() const -> float { return inputs[MAIN_IN].value; }
+
   auto sample_time() const -> float { return rack::engineGetSampleTime(); }
 
   void send_active() {
@@ -138,7 +138,7 @@ struct BoosterStage : Module {
     outputs[ACTIVE_OUT].value = active ? 10.f : 0.f;
   }
 
-  void send_envelope(float voltage) { outputs[ENVELOPE_OUT].value = voltage; }
+  void send_main_out(float voltage) { outputs[MAIN_OUT].value = voltage; }
 
   void send_eoc() {
     auto const eoc{is_eoc || eoc_in()};
@@ -226,9 +226,9 @@ struct BoosterStageWidget : public ModuleWidget {
                    {right_x, top_row_y + row * row_spacing});
 
     row++;
-    install_input(BoosterStage::ENVELOPE_IN,
+    install_input(BoosterStage::MAIN_IN,
                   {left_x, top_row_y + row * row_spacing});
-    install_output(BoosterStage::ENVELOPE_OUT,
+    install_output(BoosterStage::MAIN_OUT,
                    {right_x, top_row_y + row * row_spacing});
   }
 };

@@ -10,34 +10,37 @@
 namespace DHE {
 
 struct Swave : Module {
-  static auto constexpr signal_range{Range{-5.f, 5.f}};
-  std::function<float()> const curve_knob{knob(CURVE_KNOB, CURVE_CV)};
-  std::function<bool()> const is_s_taper{bool_param(SHAPE_SWITCH)};
-  std::function<float()> const swave_in{float_in(SWAVE_IN)};
+  enum ParameterIds { CURVE_KNOB, SHAPE_SWITCH, PARAMETER_COUNT };
+  enum InputIds { CURVE_CV, MAIN_IN, INPUT_COUNT };
+  enum OutputIds { MAIN_OUT, OUTPUT_COUNT };
 
   Swave() : Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT} {}
 
+  auto curve_in() const -> float {
+    auto const amount{modulated(CURVE_KNOB, CURVE_CV)};
+    return Sigmoid::curvature(amount);
+  }
+
+  auto is_s_curve() const -> bool { return params[SHAPE_SWITCH].value > 0.1f; }
+
+  auto main_in() const -> float { return inputs[MAIN_IN].value; }
+
+  void send_main_out(float voltage) { outputs[MAIN_OUT].value = voltage; }
+
+  auto shape(float phase) const -> float {
+    auto const rotation{curve_in()};
+    auto const curvature{Sigmoid::curvature(rotation)};
+    return is_s_curve() ? Sigmoid::s_taper(phase, curvature)
+                        : Sigmoid::j_taper(phase, curvature);
+  }
+
   void step() override {
-    outputs[SWAVE_OUT].value = to_signal(taper(to_phase(swave_in())));
+    auto const input(main_in());
+    auto const phase{Signal::bipolar_range.normalize(input)};
+    auto const shaped{shape(phase)};
+    auto const out_voltage{Signal::bipolar_range.scale(shaped)};
+    send_main_out(out_voltage);
   }
-
-  auto taper(float phase) const -> float {
-    auto rotation = curve_knob();
-    return is_s_taper() ? Sigmoid::s_taper(phase, Sigmoid::curvature(rotation))
-                        : Sigmoid::j_taper(phase, Sigmoid::curvature(rotation));
-  }
-
-  auto to_signal(float phase) const -> float {
-    return signal_range.scale(phase);
-  }
-
-  auto to_phase(float signal) const -> float {
-    return signal_range.normalize(signal);
-  }
-
-  enum ParameterIds { CURVE_KNOB, SHAPE_SWITCH, PARAMETER_COUNT };
-  enum InputIds { CURVE_CV, SWAVE_IN, INPUT_COUNT };
-  enum OutputIds { SWAVE_OUT, OUTPUT_COUNT };
 };
 
 struct SwaveWidget : public ModuleWidget {
@@ -67,10 +70,10 @@ struct SwaveWidget : public ModuleWidget {
     row = 0;
 
     row++;
-    install_input(Swave::SWAVE_IN, {center_x, top_row_y + row * row_spacing});
+    install_input(Swave::MAIN_IN, {center_x, top_row_y + row * row_spacing});
 
     row++;
-    install_output(Swave::SWAVE_OUT, {center_x, top_row_y + row * row_spacing});
+    install_output(Swave::MAIN_OUT, {center_x, top_row_y + row * row_spacing});
   }
 };
 } // namespace DHE

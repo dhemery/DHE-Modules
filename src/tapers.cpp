@@ -9,31 +9,73 @@
 
 namespace DHE {
 
+struct TapersLevel {
+  rack::Param const &knob;
+  rack::Input const &cv;
+  rack::Param const &av;
+
+  TapersLevel(rack::Param const &knob, rack::Input const &cv,
+              rack::Param const &av)
+      : knob{knob}, cv{cv}, av{av} {}
+
+  auto operator()() const -> float { return Module::modulated(knob, cv, av); }
+};
+
+struct TapersCurve {
+  rack::Param const &knob;
+  rack::Input const &cv;
+  rack::Param const &av;
+  rack::Param const &shape_selector;
+
+  TapersCurve(rack::Param const &knob, rack::Input const &cv,
+              rack::Param const &av, rack::Param const &shape_selector)
+      : knob{knob}, cv{cv}, av{av}, shape_selector{shape_selector} {}
+
+  auto operator()(float input) const -> float {
+    auto const is_s{shape_selector.value > 0.1};
+    auto const rotation{Module::modulated(knob, cv, av)};
+    auto const curvature{Sigmoid::curvature(rotation)};
+    return is_s ? Sigmoid::s_taper(input, curvature)
+                : Sigmoid::j_taper(input, curvature);
+  }
+};
+
+struct TapersPanel {
+  TapersLevel const &level;
+  TapersCurve const &curve;
+  rack::Param const &range_selector;
+  rack::Output &output;
+
+  TapersPanel(TapersLevel const &level, TapersCurve const &curve,
+              rack::Param const &range_selector, rack::Output &output)
+      : level{level}, curve{curve},
+        range_selector{range_selector}, output{output} {}
+
+  void step() {
+    auto const is_uni{range_selector.value > 0.1};
+    auto const &range{is_uni ? Signal::unipolar_range : Signal::bipolar_range};
+    output.value = range.scale(curve(level()));
+  }
+};
+
 struct Tapers : Module {
-  std::function<float()> const level1{knob(LEVEL_1, LEVEL_1_CV, LEVEL_1_AV)};
-  std::function<float()> const curvature1{
-      knob(CURVE_1, TAPER_1_CV, TAPER_1_AV)};
-  std::function<bool()> const is_s1{bool_param(SHAPE_1)};
-  std::function<const Range &()> const range1{signal_range(int_param(RANGE_1))};
-  std::function<float()> const level2{knob(LEVEL_2, LEVEL_2_CV, LEVEL_2_AV)};
-  std::function<bool()> const is_s2{bool_param(SHAPE_2)};
-  std::function<float()> const curvature2{
-      knob(TAPER_2, TAPER_2_CV, TAPER_2_AV)};
-  std::function<const Range &()> const range2{signal_range(int_param(RANGE_2))};
+  TapersLevel const level1{params[LEVEL_1], inputs[LEVEL_1_CV],
+                           params[LEVEL_1_AV]};
+  TapersCurve const curve1{params[CURVE_1], inputs[CURVE_1_CV],
+                           params[CURVE_1_AV], params[SHAPE_1]};
+  TapersPanel panel1{level1, curve1, params[RANGE_1], outputs[OUT_1]};
+
+  TapersLevel const level2{params[LEVEL_2], inputs[LEVEL_2_CV],
+                           params[LEVEL_2_AV]};
+  TapersCurve const curve2{params[CURVE_2], inputs[CURVE_2_CV],
+                           params[CURVE_2_AV], params[SHAPE_2]};
+  TapersPanel panel2{level2, curve2, params[RANGE_2], outputs[OUT_2]};
 
   Tapers() : Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT} {}
 
   void step() override {
-    auto tapered1 = taper(level1(), curvature1(), is_s1());
-    outputs[OUT_1].value = range1().scale(tapered1);
-
-    auto tapered2 = taper(level2(), curvature2(), is_s2());
-    outputs[OUT_2].value = range2().scale(tapered2);
-  }
-
-  auto taper(float level, float curvature, bool is_s) const -> float {
-    return is_s ? Sigmoid::s_taper(level, Sigmoid::curvature(curvature))
-                : Sigmoid::j_taper(level, Sigmoid::curvature(curvature));
+    panel1.step();
+    panel2.step();
   }
 
   enum ParameterIds {
@@ -41,17 +83,17 @@ struct Tapers : Module {
     LEVEL_1_AV,
     RANGE_1,
     CURVE_1,
-    TAPER_1_AV,
+    CURVE_1_AV,
     SHAPE_1,
     LEVEL_2,
     LEVEL_2_AV,
     RANGE_2,
-    TAPER_2,
-    TAPER_2_AV,
+    CURVE_2,
+    CURVE_2_AV,
     SHAPE_2,
     PARAMETER_COUNT
   };
-  enum InputIds { LEVEL_1_CV, TAPER_1_CV, LEVEL_2_CV, TAPER_2_CV, INPUT_COUNT };
+  enum InputIds { LEVEL_1_CV, CURVE_1_CV, LEVEL_2_CV, CURVE_2_CV, INPUT_COUNT };
   enum OutputIds { OUT_1, OUT_2, OUTPUT_COUNT };
 };
 
@@ -72,8 +114,8 @@ struct TapersWidget : public ModuleWidget {
     install_knob("tiny", Tapers::LEVEL_1_AV, {center_x, y});
     install_knob("medium", Tapers::LEVEL_1, {right_x, y});
     y += delta_y;
-    install_input(Tapers::TAPER_1_CV, {left_x, y});
-    install_knob("tiny", Tapers::TAPER_1_AV, {center_x, y});
+    install_input(Tapers::CURVE_1_CV, {left_x, y});
+    install_knob("tiny", Tapers::CURVE_1_AV, {center_x, y});
     install_knob("medium", Tapers::CURVE_1, {right_x, y});
     y += delta_y;
     install_switch(Tapers::SHAPE_1, {left_x, y});
@@ -86,9 +128,9 @@ struct TapersWidget : public ModuleWidget {
     install_knob("tiny", Tapers::LEVEL_2_AV, {center_x, y});
     install_knob("medium", Tapers::LEVEL_2, {right_x, y});
     y += delta_y;
-    install_input(Tapers::TAPER_2_CV, {left_x, y});
-    install_knob("tiny", Tapers::TAPER_2_AV, {center_x, y});
-    install_knob("medium", Tapers::TAPER_2, {right_x, y});
+    install_input(Tapers::CURVE_2_CV, {left_x, y});
+    install_knob("tiny", Tapers::CURVE_2_AV, {center_x, y});
+    install_knob("medium", Tapers::CURVE_2, {right_x, y});
     y += delta_y;
     install_switch(Tapers::SHAPE_2, {left_x, y});
     install_switch(Tapers::RANGE_2, {center_x, y});

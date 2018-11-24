@@ -28,7 +28,7 @@ struct Cubic : Module {
     PARAMETER_COUNT
   };
   enum InputIds {
-    IN,
+    MAIN_IN,
     A_CV,
     B_CV,
     C_CV,
@@ -37,7 +37,7 @@ struct Cubic : Module {
     OUTPUT_GAIN_CV,
     INPUT_COUNT
   };
-  enum OutputIds { OUT, OUTPUT_COUNT };
+  enum OutputIds { MAIN_OUT, OUTPUT_COUNT };
 
   static Range constexpr coefficient_range{-2.0f, 2.0f};
   static Range constexpr gain_range{0.f, 2.0f};
@@ -55,16 +55,17 @@ struct Cubic : Module {
   Cubic() : Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT} {}
 
   void step() override {
-    auto const x{input_gain() * in()};
+    auto const x{input_gain() * main_in() * 0.2f};
     auto const x2{x * x};
     auto const x3{x2 * x};
     auto const y{a() * x3 + b() * x2 + c() * x + d()};
-    send(output_gain() * y);
+    auto const output_voltage{output_gain() * y * 5.f};
+    send_main_out(output_voltage);
   }
 
-  auto in() const -> float { return inputs[IN].value * 0.2f; }
+  auto main_in() const -> float { return inputs[MAIN_IN].value; }
 
-  void send(float y) { outputs[OUT].value = 5.f * y; }
+  void send_main_out(float voltage) { outputs[MAIN_OUT].value = voltage; }
 };
 
 struct CubicWidget : public ModuleWidget {
@@ -112,8 +113,8 @@ struct CubicWidget : public ModuleWidget {
                   {right_x, top_row_y + row * row_spacing});
 
     row++;
-    install_input(Cubic::IN, {left_x, top_row_y + row * row_spacing});
-    install_output(Cubic::OUT, {right_x, top_row_y + row * row_spacing});
+    install_input(Cubic::MAIN_IN, {left_x, top_row_y + row * row_spacing});
+    install_output(Cubic::MAIN_OUT, {right_x, top_row_y + row * row_spacing});
   }
 };
 } // namespace DHE

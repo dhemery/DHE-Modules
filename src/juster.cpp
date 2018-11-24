@@ -39,7 +39,6 @@ public:
   }
 };
 
-
 struct Juster : Module {
   class JusterChannel {
     rack::Input const &input;
@@ -52,9 +51,9 @@ struct Juster : Module {
   public:
     JusterChannel(rack::Input const &input, rack::Output &output,
                   rack::Param const &mode, rack::Param const &knob)
-        : input{input}, output{output}, mode{mode}, offset{knob,
-                                                           Signal::bipolar_range},
-          av{knob, {-1.f, 1.f}}, gain{knob, {0.f, 2.f}} {}
+        : input{input}, output{output}, mode{mode},
+          offset{knob, Signal::bipolar_range}, av{knob, {-1.f, 1.f}},
+          gain{knob, {0.f, 2.f}} {}
 
     auto adjust(float upstream) const -> float {
       auto const selection = static_cast<int>(mode.value);
@@ -109,7 +108,6 @@ struct Juster : Module {
     }
   }
 };
-
 
 struct JusterWidget : public ModuleWidget {
   explicit JusterWidget(rack::Module *module)

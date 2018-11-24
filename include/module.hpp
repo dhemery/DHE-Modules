@@ -3,6 +3,7 @@
 #include <engine.hpp>
 
 #include "util/range.hpp"
+#include "util/signal.hpp"
 
 namespace DHE {
 
@@ -71,7 +72,8 @@ struct Module : rack::Module {
     return rotation + cv_offset;
   }
 
-  static auto modulated(rack::Param const &knob, rack::Input const &cv, rack::Param const &av) -> float {
+  static auto modulated(rack::Param const &knob, rack::Input const &cv,
+                        rack::Param const &av) -> float {
     static auto constexpr av_range{Range{-1.f, 1.f}};
     auto const rotation = knob.value;
     auto const cv_offset = cv.value * 0.1f;
@@ -97,9 +99,7 @@ struct Module : rack::Module {
 
   template <typename Selector>
   auto signal_range(Selector selector) const -> std::function<Range const &()> {
-    auto constexpr unipolar{Range{0.f, 10.f}};
-    auto constexpr bipolar{Range{-5.f, 5.f}};
-    return choice(selector, bipolar, unipolar);
+    return choice(selector, Signal::bipolar_range, Signal::bipolar_range);
   }
 };
 

@@ -17,9 +17,9 @@ namespace DHE {
 struct Stage : public Module {
   enum ParameterIIds { DURATION_KNOB, LEVEL_KNOB, CURVE_KNOB, PARAMETER_COUNT };
 
-  enum InputIds { ENVELOPE_IN, TRIGGER_IN, DEFER_IN, INPUT_COUNT };
+  enum InputIds { MAIN_IN, TRIGGER_IN, DEFER_IN, INPUT_COUNT };
 
-  enum OutputIds { ENVELOPE_OUT, EOC_OUT, ACTIVE_OUT, OUTPUT_COUNT };
+  enum OutputIds { MAIN_OUT, EOC_OUT, ACTIVE_OUT, OUTPUT_COUNT };
 
   float phase_0_voltage{0.f};
 
@@ -29,22 +29,22 @@ struct Stage : public Module {
 
   Mode generating_mode{};
   Mode deferring_mode{};
-  std::vector<Mode *> const modes{&generating_mode, &deferring_mode};
-  CompoundMode executor{[this]() -> bool { return defer_in(); }, modes};
+  CompoundMode executor{[this]() -> bool { return defer_in(); },
+                        {&generating_mode, &deferring_mode}};
 
   Stage() : Module(PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT) {
     deferring_mode.on_entry([this] { send_active(true); });
-    deferring_mode.on_step([this] { send_envelope(envelope_in()); });
+    deferring_mode.on_step([this] { send_main_out(main_in()); });
 
     generating_mode.on_entry([this] {
       send_active(false);
-      phase_0_voltage = envelope_in();
+      phase_0_voltage = main_in();
       envelope_trigger.enable();
     });
     generating_mode.on_step([this] {
       envelope_trigger.step();
       generator.step();
-      send_envelope(envelope_voltage(generator.phase()));
+      send_main_out(envelope_voltage(generator.phase()));
     });
     generating_mode.on_exit([this] {
       envelope_trigger.disable();
@@ -52,7 +52,7 @@ struct Stage : public Module {
     });
 
     envelope_trigger.on_rise([this] {
-      phase_0_voltage = envelope_in();
+      phase_0_voltage = main_in();
       generator.start();
     });
 
@@ -69,10 +69,6 @@ struct Stage : public Module {
     executor.enter();
   }
 
-  auto envelope_voltage(float phase) const -> float {
-    return scale(taper(phase), phase_0_voltage, level_in());
-  }
-
   auto curve_in() const -> float {
     auto const rotation{params[CURVE_KNOB].value};
     return Sigmoid::curvature(rotation);
@@ -85,22 +81,30 @@ struct Stage : public Module {
     return Duration::of(rotation);
   }
 
-  auto envelope_in() const -> float { return inputs[ENVELOPE_IN].value; }
+  auto envelope_voltage(float phase) const -> float {
+    return scale(taper(phase), phase_0_voltage, level_in());
+  }
 
   auto level_in() const -> float {
     auto const rotation{params[LEVEL_KNOB].value};
     return Signal::unipolar_range.scale(rotation);
   }
 
+  auto main_in() const -> float { return inputs[MAIN_IN].value; }
+
   auto sample_time() const -> float { return rack::engineGetSampleTime(); }
 
   void send_active(bool is_active) {
-    outputs[ACTIVE_OUT].value = is_active ? 10.f : 0.f;
+    auto const active_out_voltage{is_active ? 10.f : 0.f};
+    outputs[ACTIVE_OUT].value = active_out_voltage;
   }
 
-  void send_envelope(float envelope) { outputs[ENVELOPE_OUT].value = envelope; }
+  void send_eoc(bool is_eoc) {
+    auto const eoc_out_voltage{is_eoc ? 10.f : 0.f};
+    outputs[EOC_OUT].value = eoc_out_voltage;
+  }
 
-  void send_eoc(bool eoc) { outputs[EOC_OUT].value = eoc ? 10.f : 0.f; }
+  void send_main_out(float voltage) { outputs[MAIN_OUT].value = voltage; }
 
   void step() override { executor.step(); }
 
@@ -147,9 +151,8 @@ struct StageWidget : public ModuleWidget {
     install_output(Stage::EOC_OUT, {right_x, top_row_y + row * row_spacing});
 
     row++;
-    install_input(Stage::ENVELOPE_IN, {left_x, top_row_y + row * row_spacing});
-    install_output(Stage::ENVELOPE_OUT,
-                   {right_x, top_row_y + row * row_spacing});
+    install_input(Stage::MAIN_IN, {left_x, top_row_y + row * row_spacing});
+    install_output(Stage::MAIN_OUT, {right_x, top_row_y + row * row_spacing});
   }
 };
 } // namespace DHE
