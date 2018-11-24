@@ -4,6 +4,7 @@
 
 #include "util/range.hpp"
 #include "util/sigmoid.hpp"
+#include "util/signal.hpp"
 
 namespace DHE {
 

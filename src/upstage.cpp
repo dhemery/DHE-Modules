@@ -4,6 +4,7 @@
 
 #include "util/duration.hpp"
 #include "util/range.hpp"
+#include "util/signal.hpp"
 
 namespace DHE {
 
