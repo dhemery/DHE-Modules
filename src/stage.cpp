@@ -3,10 +3,10 @@
 
 #include "dhe-modules.h"
 #include "module-widget.h"
-#include "module.h"
 
 #include "util/d-flip-flop.h"
 #include "util/duration.h"
+#include "util/knob.h"
 #include "util/mode.h"
 #include "util/phase-accumulator.h"
 #include "util/range.h"
@@ -15,7 +15,7 @@
 
 namespace DHE {
 
-struct Stage : public Module {
+struct Stage : public rack::Module {
   enum ParameterIIds { DURATION_KNOB, LEVEL_KNOB, CURVE_KNOB, PARAMETER_COUNT };
 
   enum InputIds { MAIN_IN, TRIGGER_IN, DEFER_IN, INPUT_COUNT };

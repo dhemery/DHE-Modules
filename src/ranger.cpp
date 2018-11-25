@@ -2,7 +2,6 @@
 
 #include "dhe-modules.h"
 #include "module-widget.h"
-#include "module.h"
 
 #include "util/knob.h"
 #include "util/range.h"
@@ -34,7 +33,7 @@ struct RangerLimit {
   }
 };
 
-struct Ranger : Module {
+struct Ranger : rack::Module {
   enum ParameterIds {
     LEVEL_KNOB,
     LEVEL_AV,

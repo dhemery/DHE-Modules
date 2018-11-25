@@ -1,15 +1,14 @@
 #include "dhe-modules.h"
 #include "module-widget.h"
-#include "module.h"
-#include <util/knob.h>
 
+#include "util/knob.h"
 #include "util/range.h"
 #include "util/sigmoid.h"
 #include "util/signal.h"
 
 namespace DHE {
 
-struct Swave : Module {
+struct Swave : rack::Module {
   enum ParameterIds { CURVE_KNOB, SHAPE_SWITCH, PARAMETER_COUNT };
   enum InputIds { CURVE_CV, MAIN_IN, INPUT_COUNT };
   enum OutputIds { MAIN_OUT, OUTPUT_COUNT };

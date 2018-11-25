@@ -2,8 +2,8 @@
 
 #include "dhe-modules.h"
 #include "module-widget.h"
-#include "module.h"
-#include <util/knob.h>
+
+#include "util/knob.h"
 
 namespace DHE {
 
@@ -17,7 +17,7 @@ struct ScaledKnob {
   auto operator()() const -> float { return range.scale(knob()); }
 };
 
-struct Cubic : Module {
+struct Cubic : rack::Module {
   enum ParameterIds {
     A_KNOB,
     B_KNOB,

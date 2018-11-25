@@ -2,7 +2,6 @@
 
 #include "dhe-modules.h"
 #include "module-widget.h"
-#include "module.h"
 
 #include "util/knob.h"
 #include "util/sigmoid.h"
@@ -25,7 +24,7 @@ struct XycloidRotor {
   auto y() const -> float { return std::sin(two_pi * (phase + offset)); }
 };
 
-struct Xycloid : Module {
+struct Xycloid : rack::Module {
   enum ParameterIds {
     WOBBLE_RATIO,
     WOBBLE_RATIO_AV,

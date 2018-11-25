@@ -1,7 +1,7 @@
 #include "dhe-modules.h"
 #include "module-widget.h"
-#include "module.h"
 
+#include "util/knob.h"
 #include "util/range.h"
 #include "util/signal.h"
 
@@ -40,7 +40,7 @@ public:
   }
 };
 
-struct Juster : Module {
+struct Juster : rack::Module {
   class JusterChannel {
     const rack::Input &input;
     rack::Output &output;

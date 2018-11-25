@@ -1,16 +1,15 @@
 #include "dhe-modules.h"
 #include "module-widget.h"
-#include "module.h"
-#include <util/knob.h>
 
 #include "util/d-flip-flop.h"
 #include "util/duration.h"
+#include "util/knob.h"
 #include "util/mode.h"
 #include "util/phase-accumulator.h"
 
 namespace DHE {
 
-struct Hostage : Module {
+struct Hostage : rack::Module {
   enum InputIds { DEFER_IN, DURATION_CV, MAIN_IN, HOLD_GATE_IN, INPUT_COUNT };
 
   enum OutputIds { ACTIVE_OUT, MAIN_OUT, EOC_OUT, OUTPUT_COUNT };

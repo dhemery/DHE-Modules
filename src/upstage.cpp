@@ -1,6 +1,5 @@
 #include "dhe-modules.h"
 #include "module-widget.h"
-#include "module.h"
 
 #include "util/duration.h"
 #include "util/knob.h"
@@ -9,7 +8,7 @@
 
 namespace DHE {
 
-struct Upstage : Module {
+struct Upstage : rack::Module {
   enum ParameterIds {
     LEVEL_KNOB,
     TRIGGER_BUTTON,

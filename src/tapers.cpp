@@ -2,9 +2,8 @@
 
 #include "dhe-modules.h"
 #include "module-widget.h"
-#include "module.h"
-#include <util/knob.h>
 
+#include "util/knob.h"
 #include "util/range.h"
 #include "util/sigmoid.h"
 #include "util/signal.h"
@@ -44,7 +43,7 @@ struct TapersPanel {
   }
 };
 
-struct Tapers : Module {
+struct Tapers : rack::Module {
   const Knob level1 = Knob::modulated(this, LEVEL_1, LEVEL_1_CV, LEVEL_1_AV);
   const TapersCurve curve1{
       Knob::modulated(this, CURVE_1, CURVE_1_CV, CURVE_1_AV), params[SHAPE_1]};
