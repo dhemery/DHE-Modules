@@ -1,4 +1,5 @@
 #include <engine.hpp>
+#include <util/knob.h>
 
 #include "dhe-modules.h"
 #include "module-widget.h"
@@ -20,6 +21,10 @@ struct Stage : public Module {
   enum InputIds { MAIN_IN, TRIGGER_IN, DEFER_IN, INPUT_COUNT };
 
   enum OutputIds { MAIN_OUT, EOC_OUT, ACTIVE_OUT, OUTPUT_COUNT };
+
+  const Knob curve_knob = Knob::plain(this, CURVE_KNOB);
+  const Knob duration_knob = Knob::plain(this, DURATION_KNOB);
+  const Knob level_knob = Knob::plain(this, LEVEL_KNOB);
 
   float phase_0_voltage{0.f};
 
@@ -69,25 +74,18 @@ struct Stage : public Module {
     executor.enter();
   }
 
-  auto curve_in() const -> float {
-    auto rotation = params[CURVE_KNOB].value;
-    return Sigmoid::curvature(rotation);
-  }
+  auto curve_in() const -> float { return Sigmoid::curvature(curve_knob()); }
 
   auto defer_in() const -> bool { return inputs[DEFER_IN].value > 0.1; }
 
-  auto duration_in() const -> float {
-    auto rotation = params[DURATION_KNOB].value;
-    return Duration::of(rotation);
-  }
+  auto duration_in() const -> float { return Duration::of(duration_knob()); }
 
   auto envelope_voltage(float phase) const -> float {
     return scale(taper(phase), phase_0_voltage, level_in());
   }
 
   auto level_in() const -> float {
-    auto rotation = params[LEVEL_KNOB].value;
-    return Signal::unipolar_range.scale(rotation);
+    return Signal::unipolar_range.scale(level_knob());
   }
 
   auto main_in() const -> float { return inputs[MAIN_IN].value; }
