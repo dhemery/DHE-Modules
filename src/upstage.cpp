@@ -1,6 +1,7 @@
 #include "dhe-modules.h"
 #include "module-widget.h"
 #include "module.h"
+#include <util/knob.h>
 
 #include "util/duration.h"
 #include "util/modulation.h"
@@ -20,16 +21,14 @@ struct Upstage : Module {
   enum InputIds { TRIGGER_IN, WAIT_IN, LEVEL_CV, INPUT_COUNT };
   enum OutputIds { TRIGGER_OUT, MAIN_OUT, OUTPUT_COUNT };
 
+  const Knob level_knob = Knob::modulated(this, LEVEL_KNOB, LEVEL_CV);
+
   Upstage() : Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT} {}
 
   auto envelope_voltage() const -> float {
     auto is_uni = params[LEVEL_SWITCH].value > 0.1f;
     auto &range = is_uni ? Signal::unipolar_range : Signal::bipolar_range;
-    return range.scale(level_in());
-  }
-
-  auto level_in() const -> float {
-    return Modulation::of(this, LEVEL_KNOB, LEVEL_CV);
+    return range.scale(level_knob());
   }
 
   void send_main_out(float voltage) { outputs[MAIN_OUT].value = voltage; }
