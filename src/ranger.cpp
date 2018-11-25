@@ -17,7 +17,7 @@ struct RangerLevel {
       : knob{knob}, cv{cv}, av{av} {}
 
   auto operator()(float limit1, float limit2) const -> float {
-    auto input = Module::modulated(knob, cv, av);
+    auto input = Modulation::of(knob, cv, av);
     return scale(input, limit1, limit2);
   }
 };
@@ -35,7 +35,7 @@ struct RangerLimit {
   auto operator()() const -> float {
     auto range = range_selector.value > 0.1 ? Signal::unipolar_range
                                             : Signal::bipolar_range;
-    auto input = Module::modulated(knob, cv, av);
+    auto input = Modulation::of(knob, cv, av);
     return range.scale(input);
   }
 };

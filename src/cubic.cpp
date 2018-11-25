@@ -13,7 +13,7 @@ struct ScaledKnob {
       : knob{knob}, cv{cv}, range{range} {}
 
   auto operator()() const -> float {
-    return range.scale(Module::modulated(knob, cv));
+    return range.scale(Modulation::of(knob, cv));
   }
 };
 

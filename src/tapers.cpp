@@ -17,7 +17,7 @@ struct TapersLevel {
               const rack::Param &av)
       : knob{knob}, cv{cv}, av{av} {}
 
-  auto operator()() const -> float { return Module::modulated(knob, cv, av); }
+  auto operator()() const -> float { return Modulation::of(knob, cv, av); }
 };
 
 struct TapersCurve {
@@ -32,7 +32,7 @@ struct TapersCurve {
 
   auto operator()(float input) const -> float {
     auto is_s = shape_selector.value > 0.1;
-    auto rotation = Module::modulated(knob, cv, av);
+    auto rotation = Modulation::of(knob, cv, av);
     auto curvature = Sigmoid::curvature(rotation);
     return is_s ? Sigmoid::s_taper(input, curvature)
                 : Sigmoid::j_taper(input, curvature);
@@ -64,9 +64,9 @@ struct Tapers : Module {
                            params[CURVE_1_AV], params[SHAPE_1]};
   TapersPanel panel1{level1, curve1, params[RANGE_1], outputs[OUT_1]};
 
-  TapersLevel const level2{params[LEVEL_2], inputs[LEVEL_2_CV],
+  const TapersLevel level2{params[LEVEL_2], inputs[LEVEL_2_CV],
                            params[LEVEL_2_AV]};
-  TapersCurve const curve2{params[CURVE_2], inputs[CURVE_2_CV],
+  const TapersCurve curve2{params[CURVE_2], inputs[CURVE_2_CV],
                            params[CURVE_2_AV], params[SHAPE_2]};
   TapersPanel panel2{level2, curve2, params[RANGE_2], outputs[OUT_2]};
 
