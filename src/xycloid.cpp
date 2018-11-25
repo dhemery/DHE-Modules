@@ -254,7 +254,7 @@ struct XycloidWidget : public ModuleWidget {
         [xycloid](bool setting) {
           xycloid->set_musical_wobble_ratios(setting);
         },
-        [xycloid]() -> bool { return xycloid->is_musical_wobble_ratios(); }));
+        [xycloid] { return xycloid->is_musical_wobble_ratios(); }));
   }
 };
 

@@ -21,19 +21,19 @@ struct Hostage : Module {
     PARAMETER_COUNT
   };
 
-  DFlipFlop sustain_gate{[this]() -> bool { return hold_in(); }};
-  DFlipFlop sustain_trigger{[this]() -> bool { return hold_in(); }};
+  DFlipFlop sustain_gate{[this] { return hold_in(); }};
+  DFlipFlop sustain_trigger{[this] { return hold_in(); }};
 
   PhaseAccumulator timer{[this] { return sample_time() / duration_in(); }};
   PhaseAccumulator eoc_pulse{[this] { return sample_time() / 1e-3f; }};
 
   Mode timed_sustain_mode{};
   Mode gated_sustain_mode{};
-  CompoundMode sustain_mode{[this]() -> int { return mode_switch_in(); },
+  CompoundMode sustain_mode{[this] { return mode_switch_in(); },
                             {&timed_sustain_mode, &gated_sustain_mode}};
 
   Mode defer_mode{};
-  CompoundMode executor{[this]() -> bool { return defer_in(); },
+  CompoundMode executor{[this] { return defer_in(); },
                         {&sustain_mode, &defer_mode}};
 
   Hostage() : Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT} {

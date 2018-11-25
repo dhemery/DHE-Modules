@@ -24,12 +24,12 @@ struct Stage : public Module {
   float phase_0_voltage{0.f};
 
   PhaseAccumulator generator{[this] { return sample_time() / duration_in(); }};
-  DFlipFlop envelope_trigger{[this]() -> bool { return trigger_in(); }};
+  DFlipFlop envelope_trigger{[this] { return trigger_in(); }};
   PhaseAccumulator eoc_pulse{[this] { return sample_time() / 1e-3f; }};
 
   Mode generating_mode{};
   Mode deferring_mode{};
-  CompoundMode executor{[this]() -> bool { return defer_in(); },
+  CompoundMode executor{[this] { return defer_in(); },
                         {&generating_mode, &deferring_mode}};
 
   Stage() : Module(PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT) {
