@@ -85,11 +85,11 @@ struct Hostage : Module {
   auto defer_in() const -> bool { return inputs[DEFER_IN].value > 0.1f; }
 
   auto duration_in() const -> float {
-    static auto const ranges{std::vector<Range>{
-        Duration::short_range, Duration::medium_range, Duration::long_range}};
-    auto rotation{modulated(DURATION_KNOB, DURATION_CV)};
-    auto selection{static_cast<int>(params[DURATION_SWITCH].value)};
-    auto range{ranges[selection]};
+    static const auto ranges = std::vector<Range>{
+        Duration::short_range, Duration::medium_range, Duration::long_range};
+    auto rotation = modulated(DURATION_KNOB, DURATION_CV);
+    auto selection = static_cast<int>(params[DURATION_SWITCH].value);
+    auto range = ranges[selection];
     return Duration::of(rotation, range);
   }
 

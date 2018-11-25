@@ -13,16 +13,16 @@ void moveTo(rack::Rect &box, rack::Vec center);
 
 struct BooleanOption : rack::MenuItem {
   template <typename Setter, typename Getter>
-  BooleanOption(std::string const &name, Setter const &setter,
-                Getter const &getter)
+  BooleanOption(const std::string &name, const Setter &setter,
+                const Getter &getter)
       : set{setter}, is_on{getter} {
     text = name;
   }
   void onAction(rack::EventAction &e) override;
   void step() override;
 
-  std::function<void(bool)> const set;
-  std::function<bool()> const is_on;
+  const std::function<void(bool)> set;
+  const std::function<bool()> is_on;
 };
 
 struct ButtonWidget : rack::SVGSwitch, rack::MomentarySwitch {};
@@ -35,7 +35,7 @@ class ModuleWidget : public rack::ModuleWidget {
 
 public:
   ModuleWidget(rack::Module *module, int widget_hp,
-               std::string const &module_name);
+               const std::string &module_name);
 
   void fromJson(json_t *patch) override {
     // If there's no data, we're loading from a legacy patch. Add empty data to
@@ -79,7 +79,7 @@ protected:
 
 private:
   template <typename T> void install_screw(rack::Vec center) {
-    auto widget{rack::Widget::create<T>({0, 0})};
+    auto widget = rack::Widget::create<T>({0, 0});
     moveTo(widget->box, rack::mm2px(center));
     addChild(widget);
   }

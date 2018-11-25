@@ -22,8 +22,8 @@ struct Upstage : Module {
   Upstage() : Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT} {}
 
   auto envelope_voltage() const -> float {
-    auto const is_uni{params[LEVEL_SWITCH].value > 0.1f};
-    auto const &range{is_uni ? Signal::unipolar_range : Signal::bipolar_range};
+    auto is_uni = params[LEVEL_SWITCH].value > 0.1f;
+    auto &range = is_uni ? Signal::unipolar_range : Signal::bipolar_range;
     return range.scale(level_in());
   }
 
@@ -35,20 +35,20 @@ struct Upstage : Module {
   }
 
   void step() override {
-    auto const is_triggered{trigger_in() && !wait_in()};
+    auto is_triggered = trigger_in() && !wait_in();
     send_trigger_out(is_triggered);
     send_main_out(envelope_voltage());
   }
 
   auto trigger_in() const -> bool {
-    auto const trigger_button{params[TRIGGER_BUTTON].value > 0.1f};
-    auto const trigger_input{inputs[TRIGGER_IN].value > 0.1f};
+    auto trigger_button = params[TRIGGER_BUTTON].value > 0.1f;
+    auto trigger_input = inputs[TRIGGER_IN].value > 0.1f;
     return trigger_button || trigger_input;
   }
 
   auto wait_in() const -> bool {
-    auto const wait_button{params[WAIT_BUTTON].value > 0.1f};
-    auto const wait_input{inputs[WAIT_IN].value > 0.1f};
+    auto wait_button = params[WAIT_BUTTON].value > 0.1f;
+    auto wait_input = inputs[WAIT_IN].value > 0.1f;
     return wait_button || wait_input;
   }
 };

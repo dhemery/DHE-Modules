@@ -16,7 +16,7 @@ struct Swave : Module {
   Swave() : Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT} {}
 
   auto curve_in() const -> float {
-    auto const amount{modulated(CURVE_KNOB, CURVE_CV)};
+    auto amount = modulated(CURVE_KNOB, CURVE_CV);
     return Sigmoid::curvature(amount);
   }
 
@@ -27,17 +27,17 @@ struct Swave : Module {
   void send_main_out(float voltage) { outputs[MAIN_OUT].value = voltage; }
 
   auto shape(float phase) const -> float {
-    auto const rotation{curve_in()};
-    auto const curvature{Sigmoid::curvature(rotation)};
+    auto rotation = curve_in();
+    auto curvature = Sigmoid::curvature(rotation);
     return is_s_curve() ? Sigmoid::s_taper(phase, curvature)
                         : Sigmoid::j_taper(phase, curvature);
   }
 
   void step() override {
-    auto const input(main_in());
-    auto const phase{Signal::bipolar_range.normalize(input)};
-    auto const shaped{shape(phase)};
-    auto const out_voltage{Signal::bipolar_range.scale(shaped)};
+    auto input(main_in());
+    auto phase = Signal::bipolar_range.normalize(input);
+    auto shaped = shape(phase);
+    auto out_voltage = Signal::bipolar_range.scale(shaped);
     send_main_out(out_voltage);
   }
 };

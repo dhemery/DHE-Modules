@@ -51,9 +51,9 @@ struct Xycloid : Module {
   };
   enum OutputIds { X_OUT, Y_OUT, OUTPUT_COUNT };
 
-  static auto constexpr throb_speed_knob_range = Range{-1.f, 1.f};
-  static auto constexpr wobble_depth_range = Range{0.f, 1.f};
-  static auto constexpr gain_range = Range{0.f, 2.f};
+  static constexpr auto throb_speed_knob_range = Range{-1.f, 1.f};
+  static constexpr auto wobble_depth_range = Range{0.f, 1.f};
+  static constexpr auto gain_range = Range{0.f, 2.f};
 
   float wobble_ratio_offset{0.f};
   XycloidRotor wobbler{};
@@ -90,7 +90,7 @@ struct Xycloid : Module {
   }
 
   auto throb_speed() const -> float {
-    auto constexpr speed_taper_curvature = 0.8f;
+    constexpr auto speed_taper_curvature = 0.8f;
     auto scaled = throb_speed_knob_range.scale(throb_speed_in());
     auto tapered = Sigmoid::inverse(scaled, speed_taper_curvature);
     return -10.f * tapered * rack::engineGetSampleTime();
@@ -105,15 +105,15 @@ struct Xycloid : Module {
   }
 
   auto wobble_phase_in() const -> float {
-    auto const rotation{params[WOBBLE_PHASE].value};
+    auto rotation = params[WOBBLE_PHASE].value;
     return rotation - 0.5f;
   }
 
-  auto wobble_range() const -> Range const & {
-    static auto constexpr wobble_max = 16.f;
-    static auto constexpr inward_wobble_range = Range{0.f, wobble_max};
-    static auto constexpr outward_wobble_range = Range{0.f, -wobble_max};
-    static auto constexpr bidirectional_wobble_range =
+  auto wobble_range() const -> const Range & {
+    static constexpr auto wobble_max = 16.f;
+    static constexpr auto inward_wobble_range = Range{0.f, wobble_max};
+    static constexpr auto outward_wobble_range = Range{0.f, -wobble_max};
+    static constexpr auto bidirectional_wobble_range =
         Range{wobble_max, -wobble_max};
     static const std::vector<Range> wobble_ratio_ranges{
         inward_wobble_range, bidirectional_wobble_range, outward_wobble_range};
@@ -132,27 +132,27 @@ struct Xycloid : Module {
   }
 
   auto wobble_type() const -> int {
-    auto const param{params[WOBBLE_TYPE].value};
+    auto param = params[WOBBLE_TYPE].value;
     return static_cast<int>(param);
   }
 
   auto x_gain_in() const -> float {
-    auto const rotation{modulated(X_GAIN, X_GAIN_CV)};
+    auto rotation = modulated(X_GAIN, X_GAIN_CV);
     return gain_range.scale(rotation);
   }
 
   auto x_offset() const -> float {
-    auto const is_uni{params[X_RANGE].value > 0.1f};
+    auto is_uni = params[X_RANGE].value > 0.1f;
     return is_uni ? 1.f : 0.f;
   }
 
   auto y_gain_in() const -> float {
-    auto const rotation{modulated(Y_GAIN, Y_GAIN_CV)};
+    auto rotation = modulated(Y_GAIN, Y_GAIN_CV);
     return gain_range.scale(rotation);
   }
 
   auto y_offset() const -> float {
-    auto const is_uni{params[Y_RANGE].value > 0.1f};
+    auto is_uni = params[Y_RANGE].value > 0.1f;
     return is_uni ? 1.f : 0.f;
   }
 

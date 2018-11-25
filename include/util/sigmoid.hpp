@@ -6,8 +6,8 @@
 
 namespace DHE {
 namespace Sigmoid {
-auto constexpr sigmoid_range{Range{-1.f, 1.f}};
-auto constexpr proportion_range{Range{0.f, 1.f}};
+constexpr auto sigmoid_range = Range{-1.f, 1.f};
+constexpr auto proportion_range = Range{0.f, 1.f};
 
 /**
  * Applies an inverse sigmoid function to the input.
@@ -27,9 +27,9 @@ auto constexpr proportion_range{Range{0.f, 1.f}};
  * @return the sigmoid function result
  */
 inline auto inverse(float input, float curvature) -> float {
-  static auto constexpr precision{1e-4f};
-  static auto constexpr max_curvature{1.0f - precision};
-  static auto constexpr curvature_range{Range{-max_curvature, max_curvature}};
+  static constexpr auto precision = 1e-4f;
+  static constexpr auto max_curvature = 1.0f - precision;
+  static constexpr auto curvature_range = Range{-max_curvature, max_curvature};
 
   curvature = curvature_range.clamp(curvature);
   input = sigmoid_range.clamp(input);
@@ -98,8 +98,8 @@ inline auto j_taper(float input, float curvature) -> float {
  * @return the taper function result
  */
 inline auto s_taper(float input, float curvature) -> float {
-  auto const scaled{sigmoid_range.scale(input)};
-  auto const tapered{curve(scaled, curvature)};
+  const auto scaled = sigmoid_range.scale(input);
+  const auto tapered = curve(scaled, curvature);
   return sigmoid_range.normalize(tapered);
 }
 
@@ -119,9 +119,8 @@ inline auto s_taper(float input, float curvature) -> float {
 inline auto curvature(float input) -> float {
   // This curvature creates a gentle S curve, increasing sensitivity in the
   // middle of the input range and decreasing sensitivity toward the extremes.
-  static auto constexpr gentle_s{0.65f};
-
-  auto const scaled{sigmoid_range.scale(input)};
+  static constexpr auto gentle_s = 0.65f;
+  auto scaled = sigmoid_range.scale(input);
   return curve(scaled, gentle_s);
 }
 } // namespace Sigmoid

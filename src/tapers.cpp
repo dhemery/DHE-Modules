@@ -9,58 +9,58 @@
 namespace DHE {
 
 struct TapersLevel {
-  rack::Param const &knob;
-  rack::Input const &cv;
-  rack::Param const &av;
+  const rack::Param &knob;
+  const rack::Input &cv;
+  const rack::Param &av;
 
-  TapersLevel(rack::Param const &knob, rack::Input const &cv,
-              rack::Param const &av)
+  TapersLevel(const rack::Param &knob, const rack::Input &cv,
+              const rack::Param &av)
       : knob{knob}, cv{cv}, av{av} {}
 
   auto operator()() const -> float { return Module::modulated(knob, cv, av); }
 };
 
 struct TapersCurve {
-  rack::Param const &knob;
-  rack::Input const &cv;
-  rack::Param const &av;
-  rack::Param const &shape_selector;
+  const rack::Param &knob;
+  const rack::Input &cv;
+  const rack::Param &av;
+  const rack::Param &shape_selector;
 
-  TapersCurve(rack::Param const &knob, rack::Input const &cv,
-              rack::Param const &av, rack::Param const &shape_selector)
+  TapersCurve(const rack::Param &knob, const rack::Input &cv,
+              const rack::Param &av, const rack::Param &shape_selector)
       : knob{knob}, cv{cv}, av{av}, shape_selector{shape_selector} {}
 
   auto operator()(float input) const -> float {
-    auto const is_s{shape_selector.value > 0.1};
-    auto const rotation{Module::modulated(knob, cv, av)};
-    auto const curvature{Sigmoid::curvature(rotation)};
+    auto is_s = shape_selector.value > 0.1;
+    auto rotation = Module::modulated(knob, cv, av);
+    auto curvature = Sigmoid::curvature(rotation);
     return is_s ? Sigmoid::s_taper(input, curvature)
                 : Sigmoid::j_taper(input, curvature);
   }
 };
 
 struct TapersPanel {
-  TapersLevel const &level;
-  TapersCurve const &curve;
-  rack::Param const &range_selector;
+  const TapersLevel &level;
+  const TapersCurve &curve;
+  const rack::Param &range_selector;
   rack::Output &output;
 
-  TapersPanel(TapersLevel const &level, TapersCurve const &curve,
-              rack::Param const &range_selector, rack::Output &output)
+  TapersPanel(const TapersLevel &level, const TapersCurve &curve,
+              const rack::Param &range_selector, rack::Output &output)
       : level{level}, curve{curve},
         range_selector{range_selector}, output{output} {}
 
   void step() {
-    auto const is_uni{range_selector.value > 0.1};
-    auto const &range{is_uni ? Signal::unipolar_range : Signal::bipolar_range};
+    auto is_uni = range_selector.value > 0.1;
+    auto &range = is_uni ? Signal::unipolar_range : Signal::bipolar_range;
     output.value = range.scale(curve(level()));
   }
 };
 
 struct Tapers : Module {
-  TapersLevel const level1{params[LEVEL_1], inputs[LEVEL_1_CV],
+  const TapersLevel level1{params[LEVEL_1], inputs[LEVEL_1_CV],
                            params[LEVEL_1_AV]};
-  TapersCurve const curve1{params[CURVE_1], inputs[CURVE_1_CV],
+  const TapersCurve curve1{params[CURVE_1], inputs[CURVE_1_CV],
                            params[CURVE_1_AV], params[SHAPE_1]};
   TapersPanel panel1{level1, curve1, params[RANGE_1], outputs[OUT_1]};
 

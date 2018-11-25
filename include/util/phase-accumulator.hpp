@@ -24,8 +24,8 @@ public:
    * @param delta_supplier supplies the amount to advance the phase on each step
    */
   template <typename Supplier>
-  explicit PhaseAccumulator(Supplier const &delta_supplier)
-      : delta_{delta_supplier} {
+  explicit PhaseAccumulator(const Supplier &delta_supplier)
+      : delta{delta_supplier} {
     stop();
   }
 
@@ -34,9 +34,9 @@ public:
    * steps will advance the phase.
    */
   void start() {
-    phase_ = 0.0;
-    active_.enable();
-    active_.set();
+    accumulated = 0.0;
+    active.enable();
+    active.set();
   }
 
   /*!
@@ -46,9 +46,9 @@ public:
    * Stopping the accumulator does not fire any events.
    */
   void stop() {
-    phase_ = 0.0;
-    active_.disable();
-    active_.reset();
+    accumulated = 0.0;
+    active.disable();
+    active.reset();
   }
 
   /**
@@ -60,14 +60,14 @@ public:
    * If the accumulator is inactive, this function has no effect.
    */
   void step() {
-    auto constexpr phase_range{Range{0.f, 1.f}};
+    constexpr auto phase_range = Range{0.f, 1.f};
     if (!is_active())
       return;
 
-    phase_ = phase_range.clamp(phase_ + delta_());
+    accumulated = phase_range.clamp(accumulated + delta());
 
-    if (phase_ >= 1.0f) {
-      active_.reset();
+    if (accumulated >= 1.0f) {
+      active.reset();
     };
   }
 
@@ -76,7 +76,7 @@ public:
    *
    * @return whether the accumulator is active
    */
-  bool is_active() const { return active_.is_high(); }
+  auto is_active() const -> bool { return active.is_high(); }
 
   /**
    * Returns the accumulator's phase.
@@ -90,14 +90,14 @@ public:
    *
    * @return the accumulator's phase
    */
-  float phase() const { return phase_; }
+  auto phase() const -> float { return accumulated; }
 
   /**
    * Registers an action to be called when the accumulator starts.
    * @param action called when the accumulator starts
    */
-  template <typename Action> void on_start(Action const &action) {
-    active_.on_rise(action);
+  template <typename Action> void on_start(const Action &action) {
+    active.on_rise(action);
   }
 
   /**
@@ -105,13 +105,13 @@ public:
    * to 1.
    * @param action called when the accumulator's phase advances to 1
    */
-  template <typename Action> void on_completion(Action const &action) {
-    active_.on_fall(action);
+  template <typename Action> void on_completion(const Action &action) {
+    active.on_fall(action);
   }
 
 private:
-  float phase_{0.0f};
-  DLatch active_{};
-  std::function<float()> const delta_;
+  float accumulated = 0.0f;
+  DLatch active{};
+  const std::function<float()> delta;
 };
 } // namespace DHE

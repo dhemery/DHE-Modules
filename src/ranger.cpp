@@ -8,34 +8,34 @@
 namespace DHE {
 
 struct RangerLevel {
-  rack::Param const &knob;
-  rack::Input const &cv;
-  rack::Param const &av;
+  const rack::Param &knob;
+  const rack::Input &cv;
+  const rack::Param &av;
 
-  RangerLevel(rack::Param const &knob, rack::Input const &cv,
-              rack::Param const &av)
+  RangerLevel(const rack::Param &knob, const rack::Input &cv,
+              const rack::Param &av)
       : knob{knob}, cv{cv}, av{av} {}
 
   auto operator()(float limit1, float limit2) const -> float {
-    auto const input{Module::modulated(knob, cv, av)};
+    auto input = Module::modulated(knob, cv, av);
     return scale(input, limit1, limit2);
   }
 };
 
 struct RangerLimit {
-  rack::Param const &knob;
-  rack::Input const &cv;
-  rack::Param const &av;
-  rack::Param const &range_selector;
+  const rack::Param &knob;
+  const rack::Input &cv;
+  const rack::Param &av;
+  const rack::Param &range_selector;
 
-  RangerLimit(rack::Param const &knob, rack::Input const &cv,
-              rack::Param const &av, rack::Param const &range_selector)
+  RangerLimit(const rack::Param &knob, const rack::Input &cv,
+              const rack::Param &av, const rack::Param &range_selector)
       : knob{knob}, cv{cv}, av{av}, range_selector{range_selector} {}
 
   auto operator()() const -> float {
-    auto const range{range_selector.value > 0.1 ? Signal::unipolar_range
-                                                : Signal::bipolar_range};
-    auto const input{Module::modulated(knob, cv, av)};
+    auto range = range_selector.value > 0.1 ? Signal::unipolar_range
+                                            : Signal::bipolar_range;
+    auto input = Module::modulated(knob, cv, av);
     return range.scale(input);
   }
 };

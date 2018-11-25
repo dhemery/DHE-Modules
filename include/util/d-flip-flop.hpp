@@ -11,7 +11,8 @@ namespace DHE {
  * A flip-flop is a latch that determines its state based on an incoming boolean
  * signal.
  */
-struct DFlipFlop : public Latch {
+class DFlipFlop : public Latch {
+public:
   /**
    * Creates a flip-flop that determines its state based on the given boolean
    * signal.
@@ -19,7 +20,7 @@ struct DFlipFlop : public Latch {
    * @param signal supplies the boolean signal to evaluate
    */
   template <typename Signal>
-  explicit DFlipFlop(Signal const &signal) : signal{signal} {}
+  explicit DFlipFlop(const Signal &signal) : signal{signal} {}
 
   /**
    * Sets the state by comparing its current state to the signal.
@@ -34,6 +35,6 @@ struct DFlipFlop : public Latch {
   }
 
 private:
-  std::function<bool()> const signal;
+  const std::function<bool()> signal;
 };
 } // namespace DHE

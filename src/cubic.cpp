@@ -5,11 +5,11 @@
 namespace DHE {
 
 struct ScaledKnob {
-  rack::Param const &knob;
-  rack::Input const &cv;
-  Range const range;
+  const rack::Param &knob;
+  const rack::Input &cv;
+  const Range range;
 
-  ScaledKnob(rack::Param const &knob, rack::Input const &cv, Range range)
+  ScaledKnob(const rack::Param &knob, const rack::Input &cv, const Range &range)
       : knob{knob}, cv{cv}, range{range} {}
 
   auto operator()() const -> float {
@@ -55,11 +55,11 @@ struct Cubic : Module {
   Cubic() : Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT} {}
 
   void step() override {
-    auto const x{input_gain() * main_in() * 0.2f};
-    auto const x2{x * x};
-    auto const x3{x2 * x};
-    auto const y{a() * x3 + b() * x2 + c() * x + d()};
-    auto const output_voltage{output_gain() * y * 5.f};
+    auto x = input_gain() * main_in() * 0.2f;
+    auto x2 = x * x;
+    auto x3 = x2 * x;
+    auto y = a() * x3 + b() * x2 + c() * x + d();
+    auto output_voltage = output_gain() * y * 5.f;
     send_main_out(output_voltage);
   }
 

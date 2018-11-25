@@ -93,22 +93,22 @@ struct BoosterStage : Module {
   auto active_in() const -> bool { return params[ACTIVE_BUTTON].value > 0.1f; }
 
   auto curve_in() const -> float {
-    auto const amount{modulated(CURVE_KNOB, CURVE_CV)};
+    auto amount = modulated(CURVE_KNOB, CURVE_CV);
     return Sigmoid::curvature(amount);
   }
 
   auto defer_in() const -> bool {
-    auto const defer_button{params[DEFER_BUTTON].value > 0.1f};
-    auto const defer_input{inputs[DEFER_IN].value > 0.1f};
+    auto defer_button = params[DEFER_BUTTON].value > 0.1f;
+    auto defer_input = inputs[DEFER_IN].value > 0.1f;
     return defer_button || defer_input;
   }
 
   auto duration_in() const -> float {
-    static auto const ranges{std::vector<Range>{
-        Duration::short_range, Duration::medium_range, Duration::long_range}};
-    auto rotation{modulated(DURATION_KNOB, DURATION_CV)};
-    auto selection{static_cast<int>(params[DURATION_SWITCH].value)};
-    auto range{ranges[selection]};
+    static const auto ranges = std::vector<Range>{
+        Duration::short_range, Duration::medium_range, Duration::long_range};
+    auto rotation = modulated(DURATION_KNOB, DURATION_CV);
+    auto selection = static_cast<int>(params[DURATION_SWITCH].value);
+    auto range = ranges[selection];
     return Duration::of(rotation, range);
   }
 
@@ -121,10 +121,9 @@ struct BoosterStage : Module {
   bool is_s_taper() const { return params[SHAPE_SWITCH].value > 0.1f; }
 
   auto level_in() const -> float {
-    auto const amount = modulated(LEVEL_KNOB, LEVEL_CV);
-    auto const &range = params[LEVEL_SWITCH].value > 0.5f
-                            ? Signal::unipolar_range
-                            : Signal::bipolar_range;
+    auto amount = modulated(LEVEL_KNOB, LEVEL_CV);
+    auto &range = params[LEVEL_SWITCH].value > 0.5f ? Signal::unipolar_range
+                                                    : Signal::bipolar_range;
     return range.scale(amount);
   }
 
@@ -133,14 +132,14 @@ struct BoosterStage : Module {
   auto sample_time() const -> float { return rack::engineGetSampleTime(); }
 
   void send_active() {
-    auto const active{is_active || active_in()};
+    auto active = is_active || active_in();
     outputs[ACTIVE_OUT].value = active ? 10.f : 0.f;
   }
 
   void send_main_out(float voltage) { outputs[MAIN_OUT].value = voltage; }
 
   void send_eoc() {
-    auto const eoc{is_eoc || eoc_in()};
+    auto eoc = is_eoc || eoc_in();
     outputs[EOC_OUT].value = eoc ? 10.f : 0.f;
   }
 
@@ -156,8 +155,8 @@ struct BoosterStage : Module {
   }
 
   auto trigger_in() const -> bool {
-    auto const trigger_button{params[TRIGGER_BUTTON].value > 0.1};
-    auto const trigger_input{inputs[TRIGGER_IN].value > 0.1};
+    auto trigger_button = params[TRIGGER_BUTTON].value > 0.1;
+    auto trigger_input = inputs[TRIGGER_IN].value > 0.1;
     return trigger_button || trigger_input;
   }
 };

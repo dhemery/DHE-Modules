@@ -8,11 +8,11 @@
 namespace DHE {
 
 class JusterFunction {
-  rack::Param const &knob;
+  const rack::Param &knob;
   Range const range;
 
 public:
-  JusterFunction(rack::Param const &knob, Range range)
+  JusterFunction(const rack::Param &knob, Range range)
       : knob{knob}, range{range} {}
 
   auto adjustment() const -> float { return range.scale(knob.value); }
@@ -22,7 +22,7 @@ public:
 
 class JusterMultiplier : JusterFunction {
 public:
-  JusterMultiplier(rack::Param const &knob, Range range)
+  JusterMultiplier(const rack::Param &knob, const Range &range)
       : JusterFunction{knob, range} {}
 
   auto apply(float input) const -> float override {
@@ -32,7 +32,7 @@ public:
 
 class JusterAdder : JusterFunction {
 public:
-  JusterAdder(rack::Param const &knob, Range range)
+  JusterAdder(const rack::Param &knob, const Range &range)
       : JusterFunction{knob, range} {}
 
   auto apply(float input) const -> float override {
@@ -42,23 +42,23 @@ public:
 
 struct Juster : Module {
   class JusterChannel {
-    rack::Input const &input;
+    const rack::Input &input;
     rack::Output &output;
-    rack::Param const &mode;
-    JusterAdder const offset;
-    JusterMultiplier const av;
-    JusterMultiplier const gain;
+    const rack::Param &mode;
+    const JusterAdder offset;
+    const JusterMultiplier av;
+    const JusterMultiplier gain;
 
   public:
-    JusterChannel(rack::Input const &input, rack::Output &output,
-                  rack::Param const &mode, rack::Param const &knob)
+    JusterChannel(const rack::Input &input, rack::Output &output,
+                  const rack::Param &mode, const rack::Param &knob)
         : input{input}, output{output}, mode{mode},
           offset{knob, Signal::bipolar_range}, av{knob, {-1.f, 1.f}},
           gain{knob, {0.f, 2.f}} {}
 
     auto adjust(float upstream) const -> float {
-      auto const selection = static_cast<int>(mode.value);
-      auto const in = input.active ? input.value : upstream;
+      auto selection = static_cast<int>(mode.value);
+      auto in = input.active ? input.value : upstream;
 
       switch (selection) {
       case 0:
@@ -93,7 +93,7 @@ struct Juster : Module {
   enum InputIds { IN_1, IN_2, IN_3, IN_4, IN_5, INPUT_COUNT };
   enum OutputIds { OUT_1, OUT_2, OUT_3, OUT_4, OUT_5, OUTPUT_COUNT };
 
-  std::vector<JusterChannel const> const channels{
+  const std::vector<const JusterChannel> channels{
       {inputs[IN_1], outputs[OUT_1], params[MODE_1], params[KNOB_1]},
       {inputs[IN_2], outputs[OUT_2], params[MODE_2], params[KNOB_2]},
       {inputs[IN_3], outputs[OUT_3], params[MODE_3], params[KNOB_3]},
@@ -103,7 +103,7 @@ struct Juster : Module {
   Juster() : Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT} {}
 
   void step() override {
-    auto upstream{0.f};
+    auto upstream = 0.f;
     for (const auto &channel : channels) {
       upstream = channel.adjust(upstream);
     }

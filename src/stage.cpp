@@ -70,14 +70,14 @@ struct Stage : public Module {
   }
 
   auto curve_in() const -> float {
-    auto const rotation{params[CURVE_KNOB].value};
+    auto rotation = params[CURVE_KNOB].value;
     return Sigmoid::curvature(rotation);
   }
 
   auto defer_in() const -> bool { return inputs[DEFER_IN].value > 0.1; }
 
   auto duration_in() const -> float {
-    auto const rotation{params[DURATION_KNOB].value};
+    auto rotation = params[DURATION_KNOB].value;
     return Duration::of(rotation);
   }
 
@@ -86,7 +86,7 @@ struct Stage : public Module {
   }
 
   auto level_in() const -> float {
-    auto const rotation{params[LEVEL_KNOB].value};
+    auto rotation = params[LEVEL_KNOB].value;
     return Signal::unipolar_range.scale(rotation);
   }
 
@@ -95,12 +95,12 @@ struct Stage : public Module {
   auto sample_time() const -> float { return rack::engineGetSampleTime(); }
 
   void send_active(bool is_active) {
-    auto const active_out_voltage{is_active ? 10.f : 0.f};
+    auto active_out_voltage = is_active ? 10.f : 0.f;
     outputs[ACTIVE_OUT].value = active_out_voltage;
   }
 
   void send_eoc(bool is_eoc) {
-    auto const eoc_out_voltage{is_eoc ? 10.f : 0.f};
+    auto eoc_out_voltage = is_eoc ? 10.f : 0.f;
     outputs[EOC_OUT].value = eoc_out_voltage;
   }
 

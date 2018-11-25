@@ -24,7 +24,7 @@ public:
    * Registers an action to be called on each rising edge.
    * @param action called on each rising edge
    */
-  template <typename Action> void on_rise(Action const &action) {
+  template <typename Action> void on_rise(const Action &action) {
     rise_actions_.push_back(action);
   }
 
@@ -32,7 +32,7 @@ public:
    * Registers an action to be called on each falling edge.
    * @param action called on each falling edge
    */
-  template <typename Action> void on_fall(Action const &action) {
+  template <typename Action> void on_fall(const Action &action) {
     fall_actions_.push_back(action);
   }
 
@@ -51,10 +51,10 @@ private:
   std::vector<std::function<void()>> rise_actions_;
   std::vector<std::function<void()>> fall_actions_;
 
-  void fire(std::vector<std::function<void()>> const &actions) const {
+  void fire(const std::vector<std::function<void()>> &actions) const {
     if (!enabled_)
       return;
-    for (auto const &action : actions)
+    for (const auto &action : actions)
       action();
   }
 };
