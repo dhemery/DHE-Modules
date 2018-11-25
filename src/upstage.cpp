@@ -1,10 +1,9 @@
 #include "dhe-modules.h"
 #include "module-widget.h"
 #include "module.h"
-#include <util/knob.h>
 
 #include "util/duration.h"
-#include "util/modulation.h"
+#include "util/knob.h"
 #include "util/range.h"
 #include "util/signal.h"
 

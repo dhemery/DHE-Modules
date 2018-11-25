@@ -1,74 +1,58 @@
+#include <utility>
+
 #include "dhe-modules.h"
 #include "module-widget.h"
 #include "module.h"
+#include <util/knob.h>
 
-#include "util/modulation.h"
 #include "util/range.h"
 #include "util/sigmoid.h"
 #include "util/signal.h"
 
 namespace DHE {
 
-struct TapersLevel {
-  const rack::Param &knob;
-  const rack::Input &cv;
-  const rack::Param &av;
-
-  TapersLevel(const rack::Param &knob, const rack::Input &cv,
-              const rack::Param &av)
-      : knob{knob}, cv{cv}, av{av} {}
-
-  auto operator()() const -> float { return Modulation::of(knob, cv, av); }
-};
-
 struct TapersCurve {
-  const rack::Param &knob;
-  const rack::Input &cv;
-  const rack::Param &av;
+  const Knob knob;
   const rack::Param &shape_selector;
 
-  TapersCurve(const rack::Param &knob, const rack::Input &cv,
-              const rack::Param &av, const rack::Param &shape_selector)
-      : knob{knob}, cv{cv}, av{av}, shape_selector{shape_selector} {}
+  TapersCurve(const Knob &knob, const rack::Param &shape_selector)
+      : knob{knob}, shape_selector{shape_selector} {}
 
   auto operator()(float input) const -> float {
     auto is_s = shape_selector.value > 0.1;
-    auto rotation = Modulation::of(knob, cv, av);
-    auto curvature = Sigmoid::curvature(rotation);
+    auto curvature = Sigmoid::curvature(knob());
     return is_s ? Sigmoid::s_taper(input, curvature)
                 : Sigmoid::j_taper(input, curvature);
   }
 };
 
 struct TapersPanel {
-  const TapersLevel &level;
+  const Knob level_knob;
   const TapersCurve &curve;
   const rack::Param &range_selector;
   rack::Output &output;
 
-  TapersPanel(const TapersLevel &level, const TapersCurve &curve,
+  TapersPanel(Knob level_knob, const TapersCurve &curve,
               const rack::Param &range_selector, rack::Output &output)
-      : level{level}, curve{curve},
+      : level_knob{std::move(level_knob)}, curve{curve},
         range_selector{range_selector}, output{output} {}
 
   void step() {
     auto is_uni = range_selector.value > 0.1;
     auto &range = is_uni ? Signal::unipolar_range : Signal::bipolar_range;
-    output.value = range.scale(curve(level()));
+    output.value = range.scale(curve(level_knob()));
   }
 };
 
 struct Tapers : Module {
-  const TapersLevel level1{params[LEVEL_1], inputs[LEVEL_1_CV],
-                           params[LEVEL_1_AV]};
-  const TapersCurve curve1{params[CURVE_1], inputs[CURVE_1_CV],
-                           params[CURVE_1_AV], params[SHAPE_1]};
+  const Knob level1 = Knob::modulated(this, LEVEL_1, LEVEL_1_CV, LEVEL_1_AV);
+  const TapersCurve curve1{
+      Knob::modulated(this, CURVE_1, CURVE_1_CV, CURVE_1_AV), params[SHAPE_1]};
   TapersPanel panel1{level1, curve1, params[RANGE_1], outputs[OUT_1]};
 
-  const TapersLevel level2{params[LEVEL_2], inputs[LEVEL_2_CV],
-                           params[LEVEL_2_AV]};
-  const TapersCurve curve2{params[CURVE_2], inputs[CURVE_2_CV],
-                           params[CURVE_2_AV], params[SHAPE_2]};
+  const Knob level2 = Knob::modulated(this, LEVEL_2, LEVEL_2_CV, LEVEL_2_AV);
+  const TapersCurve curve2{
+      Knob::modulated(this, CURVE_2, CURVE_2_CV, CURVE_2_AV), params[SHAPE_2]};
   TapersPanel panel2{level2, curve2, params[RANGE_2], outputs[OUT_2]};
 
   Tapers() : Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT} {}
