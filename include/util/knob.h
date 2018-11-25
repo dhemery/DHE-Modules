@@ -30,10 +30,13 @@ public:
     }};
   }
 
-  static auto modulated(float rotation, float cv = 0.f, float av = 1.f) -> float {
+  static auto modulated(float knob, float cv = 0.f, float av = 1.f) -> float {
+    static constexpr auto av_range = Range{-1.f, 1.f};
+    static constexpr auto cv_to_offset = 0.1f;
+
     auto offset = cv*cv_to_offset;
     auto multipler = av_range.scale(av);
-    return rotation + multipler*offset;
+    return knob + multipler*offset;
   }
 
   auto operator()() const -> float {
@@ -43,8 +46,6 @@ public:
 private:
   explicit Knob(std::function<float()> supplier) : supplier{std::move(supplier)} {}
 
-  static constexpr auto av_range = Range{-1.f, 1.f};
-  static constexpr auto cv_to_offset = 0.1f;
   const std::function<float()> supplier;
 };
 }

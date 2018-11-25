@@ -1,8 +1,8 @@
 #include "dhe-modules.h"
 #include "module-widget.h"
 #include "module.h"
+#include <util/knob.h>
 
-#include "util/modulation.h"
 #include "util/range.h"
 #include "util/sigmoid.h"
 #include "util/signal.h"
@@ -14,12 +14,11 @@ struct Swave : Module {
   enum InputIds { CURVE_CV, MAIN_IN, INPUT_COUNT };
   enum OutputIds { MAIN_OUT, OUTPUT_COUNT };
 
+  const Knob curve_knob = Knob::modulated(this, CURVE_KNOB, CURVE_CV);
+
   Swave() : Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT} {}
 
-  auto curve_in() const -> float {
-    auto amount = Modulation::of(this, CURVE_KNOB, CURVE_CV);
-    return Sigmoid::curvature(amount);
-  }
+  auto curve_in() const -> float { return Sigmoid::curvature(curve_knob()); }
 
   auto is_s_curve() const -> bool { return params[SHAPE_SWITCH].value > 0.1f; }
 
@@ -28,8 +27,7 @@ struct Swave : Module {
   void send_main_out(float voltage) { outputs[MAIN_OUT].value = voltage; }
 
   auto shape(float phase) const -> float {
-    auto rotation = curve_in();
-    auto curvature = Sigmoid::curvature(rotation);
+    auto curvature = curve_in();
     return is_s_curve() ? Sigmoid::s_taper(phase, curvature)
                         : Sigmoid::j_taper(phase, curvature);
   }
