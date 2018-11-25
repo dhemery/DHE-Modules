@@ -3,7 +3,7 @@
 #include <functional>
 #include <vector>
 
-#include "d-flip-flop.hpp"
+#include "d-flip-flop.h"
 
 namespace DHE {
 class Mode {

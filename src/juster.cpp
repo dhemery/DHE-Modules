@@ -1,9 +1,9 @@
-#include "dhe-modules.hpp"
-#include "module-widget.hpp"
-#include "module.hpp"
+#include "dhe-modules.h"
+#include "module-widget.h"
+#include "module.h"
 
-#include "util/range.hpp"
-#include "util/signal.hpp"
+#include "util/range.h"
+#include "util/signal.h"
 
 namespace DHE {
 

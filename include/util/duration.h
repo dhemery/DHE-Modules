@@ -3,8 +3,8 @@
 #include <functional>
 #include <vector>
 
-#include "range.hpp"
-#include "sigmoid.hpp"
+#include "range.h"
+#include "sigmoid.h"
 
 namespace DHE {
 

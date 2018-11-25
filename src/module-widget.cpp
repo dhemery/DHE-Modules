@@ -1,7 +1,7 @@
 #include <algorithm>
 #include <random>
 
-#include "module-widget.hpp"
+#include "module-widget.h"
 
 namespace DHE {
 void moveTo(rack::Rect &box, rack::Vec center) {

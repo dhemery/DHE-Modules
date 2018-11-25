@@ -1,14 +1,14 @@
 
-#include "dhe-modules.hpp"
-#include "module-widget.hpp"
-#include "module.hpp"
+#include "dhe-modules.h"
+#include "module-widget.h"
+#include "module.h"
 
-#include "util/d-flip-flop.hpp"
-#include "util/duration.hpp"
-#include "util/mode.hpp"
-#include "util/phase-accumulator.hpp"
-#include "util/sigmoid.hpp"
-#include "util/signal.hpp"
+#include "util/d-flip-flop.h"
+#include "util/duration.h"
+#include "util/mode.h"
+#include "util/phase-accumulator.h"
+#include "util/sigmoid.h"
+#include "util/signal.h"
 
 namespace DHE {
 

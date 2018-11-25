@@ -2,8 +2,8 @@
 
 #include <functional>
 
-#include "d-latch.hpp"
-#include "sigmoid.hpp"
+#include "d-latch.h"
+#include "sigmoid.h"
 
 namespace DHE {
 

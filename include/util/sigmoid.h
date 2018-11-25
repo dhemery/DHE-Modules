@@ -2,7 +2,7 @@
 
 #include <cmath>
 
-#include "range.hpp"
+#include "range.h"
 
 namespace DHE {
 namespace Sigmoid {

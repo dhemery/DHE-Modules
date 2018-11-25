@@ -3,7 +3,7 @@
 #include <functional>
 #include <vector>
 
-#include "latch.hpp"
+#include "latch.h"
 
 namespace DHE {
 

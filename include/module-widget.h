@@ -4,9 +4,9 @@
 #include <string>
 #include <util/math.hpp>
 
-#include "dhe-modules.hpp"
+#include "dhe-modules.h"
 
-#include "util/range.hpp"
+#include "util/range.h"
 
 namespace DHE {
 void moveTo(rack::Rect &box, rack::Vec center);
