@@ -5,6 +5,7 @@
 #include "util/d-flip-flop.h"
 #include "util/duration.h"
 #include "util/mode.h"
+#include "util/modulation.h"
 #include "util/phase-accumulator.h"
 
 namespace DHE {
@@ -87,7 +88,7 @@ struct Hostage : Module {
   auto duration_in() const -> float {
     static const auto ranges = std::vector<Range>{
         Duration::short_range, Duration::medium_range, Duration::long_range};
-    auto rotation = modulated(DURATION_KNOB, DURATION_CV);
+    auto rotation = Modulation::of(this, DURATION_KNOB, DURATION_CV);
     auto selection = static_cast<int>(params[DURATION_SWITCH].value);
     auto range = ranges[selection];
     return Duration::of(rotation, range);

@@ -2,6 +2,7 @@
 #include "module-widget.h"
 #include "module.h"
 
+#include "util/modulation.h"
 #include "util/range.h"
 #include "util/signal.h"
 

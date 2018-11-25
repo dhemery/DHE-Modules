@@ -40,5 +40,6 @@ inline auto of(float proportion, const Range &range = medium_range) -> float {
   // Scale the tapered proportion to the desired range.
   return range.scale(tapered);
 }
+
 } // namespace Duration
 } // namespace DHE

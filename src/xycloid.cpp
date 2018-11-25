@@ -4,6 +4,7 @@
 #include "module-widget.h"
 #include "module.h"
 
+#include "util/modulation.h"
 #include "util/sigmoid.h"
 #include "util/signal.h"
 
@@ -86,7 +87,7 @@ struct Xycloid : Module {
   }
 
   auto throb_speed_in() const -> float {
-    return modulated(THROB_SPEED, THROB_SPEED_CV, THROB_SPEED_AV);
+    return Modulation::of(this, THROB_SPEED, THROB_SPEED_CV, THROB_SPEED_AV);
   }
 
   auto throb_speed() const -> float {
@@ -101,7 +102,7 @@ struct Xycloid : Module {
   }
 
   auto wobble_depth_in() const -> float {
-    return modulated(WOBBLE_DEPTH, WOBBLE_DEPTH_CV, WOBBLE_DEPTH_AV);
+    return Modulation::of(this, WOBBLE_DEPTH, WOBBLE_DEPTH_CV, WOBBLE_DEPTH_AV);
   }
 
   auto wobble_phase_in() const -> float {
@@ -128,7 +129,7 @@ struct Xycloid : Module {
   }
 
   auto wobble_ratio_in() const -> float {
-    return modulated(WOBBLE_RATIO, WOBBLE_RATIO_CV, WOBBLE_RATIO_AV);
+    return Modulation::of(this, WOBBLE_RATIO, WOBBLE_RATIO_CV, WOBBLE_RATIO_AV);
   }
 
   auto wobble_type() const -> int {
@@ -137,7 +138,7 @@ struct Xycloid : Module {
   }
 
   auto x_gain_in() const -> float {
-    auto rotation = modulated(X_GAIN, X_GAIN_CV);
+    auto rotation = Modulation::of(this, X_GAIN, X_GAIN_CV);
     return gain_range.scale(rotation);
   }
 
@@ -147,7 +148,7 @@ struct Xycloid : Module {
   }
 
   auto y_gain_in() const -> float {
-    auto rotation = modulated(Y_GAIN, Y_GAIN_CV);
+    auto rotation = Modulation::of(this, Y_GAIN, Y_GAIN_CV);
     return gain_range.scale(rotation);
   }
 

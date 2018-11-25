@@ -6,6 +6,7 @@
 #include "util/d-flip-flop.h"
 #include "util/duration.h"
 #include "util/mode.h"
+#include "util/modulation.h"
 #include "util/phase-accumulator.h"
 #include "util/sigmoid.h"
 #include "util/signal.h"
@@ -93,7 +94,7 @@ struct BoosterStage : Module {
   auto active_in() const -> bool { return params[ACTIVE_BUTTON].value > 0.1f; }
 
   auto curve_in() const -> float {
-    auto amount = modulated(CURVE_KNOB, CURVE_CV);
+    auto amount = Modulation::of(this, CURVE_KNOB, CURVE_CV);
     return Sigmoid::curvature(amount);
   }
 
@@ -106,7 +107,7 @@ struct BoosterStage : Module {
   auto duration_in() const -> float {
     static const auto ranges = std::vector<Range>{
         Duration::short_range, Duration::medium_range, Duration::long_range};
-    auto rotation = modulated(DURATION_KNOB, DURATION_CV);
+    auto rotation = Modulation::of(this, DURATION_KNOB, DURATION_CV);
     auto selection = static_cast<int>(params[DURATION_SWITCH].value);
     auto range = ranges[selection];
     return Duration::of(rotation, range);
@@ -121,7 +122,7 @@ struct BoosterStage : Module {
   bool is_s_taper() const { return params[SHAPE_SWITCH].value > 0.1f; }
 
   auto level_in() const -> float {
-    auto amount = modulated(LEVEL_KNOB, LEVEL_CV);
+    auto amount = Modulation::of(this, LEVEL_KNOB, LEVEL_CV);
     auto &range = params[LEVEL_SWITCH].value > 0.5f ? Signal::unipolar_range
                                                     : Signal::bipolar_range;
     return range.scale(amount);

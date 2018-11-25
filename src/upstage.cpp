@@ -3,6 +3,7 @@
 #include "module.h"
 
 #include "util/duration.h"
+#include "util/modulation.h"
 #include "util/range.h"
 #include "util/signal.h"
 
@@ -27,7 +28,9 @@ struct Upstage : Module {
     return range.scale(level_in());
   }
 
-  auto level_in() const -> float { return modulated(LEVEL_KNOB, LEVEL_CV); }
+  auto level_in() const -> float {
+    return Modulation::of(this, LEVEL_KNOB, LEVEL_CV);
+  }
 
   void send_main_out(float voltage) { outputs[MAIN_OUT].value = voltage; }
   void send_trigger_out(bool is_triggered) {

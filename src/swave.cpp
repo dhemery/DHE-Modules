@@ -2,6 +2,7 @@
 #include "module-widget.h"
 #include "module.h"
 
+#include "util/modulation.h"
 #include "util/range.h"
 #include "util/sigmoid.h"
 #include "util/signal.h"
@@ -16,7 +17,7 @@ struct Swave : Module {
   Swave() : Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT} {}
 
   auto curve_in() const -> float {
-    auto amount = modulated(CURVE_KNOB, CURVE_CV);
+    auto amount = Modulation::of(this, CURVE_KNOB, CURVE_CV);
     return Sigmoid::curvature(amount);
   }
 

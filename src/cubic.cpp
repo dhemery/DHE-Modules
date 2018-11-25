@@ -2,6 +2,8 @@
 #include "module-widget.h"
 #include "module.h"
 
+#include "util/modulation.h"
+
 namespace DHE {
 
 struct ScaledKnob {
