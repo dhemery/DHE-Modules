@@ -1,12 +1,11 @@
 #include <engine.hpp>
-#include <util/knob.h>
 
 #include "dhe-modules.h"
 #include "module-widget.h"
 
+#include "controls/knob.h"
 #include "util/d-flip-flop.h"
 #include "util/duration.h"
-#include "util/knob.h"
 #include "util/mode.h"
 #include "util/phase-accumulator.h"
 #include "util/range.h"

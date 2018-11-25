@@ -17,14 +17,14 @@ include $(RACK_DIR)/plugin.mk
 ########################################################################
 # Below this line: Targets for Dale to build the gui and run Rack
 
-RACK_APP = /Applications/Rack.app
+RACK_APP = /Applications/Rack.app/Contents/MacOS/Rack
 
 RACK_PLUGINS_DIR = $(RACK_USER_DIR)/plugins
 MODULE_INSTALL_DIR = $(RACK_PLUGINS_DIR)/$(SLUG)
 MODULE_INSTALL_ZIP = $(RACK_PLUGINS_DIR)/$(SLUG)-$(VERSION)-$(ARCH).zip
 
 run: install
-	open $(RACK_APP)
+	/Applications/Rack.app/Contents/MacOS/Rack -d
 
 uninstall:
 	rm -rf $(MODULE_INSTALL_DIR) $(MODULE_INSTALL_ZIP)

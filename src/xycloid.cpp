@@ -3,7 +3,7 @@
 #include "dhe-modules.h"
 #include "module-widget.h"
 
-#include "util/knob.h"
+#include "controls/knob.h"
 #include "util/sigmoid.h"
 #include "util/signal.h"
 
