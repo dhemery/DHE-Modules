@@ -1,4 +1,5 @@
 
+#include <util/knob.h>
 #include "dhe-modules.h"
 #include "module-widget.h"
 #include "module.h"
@@ -6,7 +7,6 @@
 #include "util/d-flip-flop.h"
 #include "util/duration.h"
 #include "util/mode.h"
-#include "util/modulation.h"
 #include "util/phase-accumulator.h"
 #include "util/sigmoid.h"
 #include "util/signal.h"
@@ -39,6 +39,10 @@ struct BoosterStage : Module {
   };
 
   enum OutputIds { ACTIVE_OUT, EOC_OUT, MAIN_OUT, OUTPUT_COUNT };
+
+  const Knob curve_knob = Knob::modulated(this, CURVE_KNOB, CURVE_CV);
+  const Knob duration_knob = Knob::modulated(this, DURATION_KNOB, DURATION_CV);
+  const Knob level_knob = Knob::modulated(this, LEVEL_KNOB, LEVEL_CV);
 
   float phase_0_voltage{0.f};
   bool is_active{false};
@@ -94,8 +98,7 @@ struct BoosterStage : Module {
   auto active_in() const -> bool { return params[ACTIVE_BUTTON].value > 0.1f; }
 
   auto curve_in() const -> float {
-    auto amount = Modulation::of(this, CURVE_KNOB, CURVE_CV);
-    return Sigmoid::curvature(amount);
+    return Sigmoid::curvature(curve_knob());
   }
 
   auto defer_in() const -> bool {
@@ -107,10 +110,9 @@ struct BoosterStage : Module {
   auto duration_in() const -> float {
     static const auto ranges = std::vector<Range>{
         Duration::short_range, Duration::medium_range, Duration::long_range};
-    auto rotation = Modulation::of(this, DURATION_KNOB, DURATION_CV);
     auto selection = static_cast<int>(params[DURATION_SWITCH].value);
     auto range = ranges[selection];
-    return Duration::of(rotation, range);
+    return Duration::of(duration_knob(), range);
   }
 
   auto envelope_voltage(float phase) const -> float {
@@ -122,10 +124,9 @@ struct BoosterStage : Module {
   bool is_s_taper() const { return params[SHAPE_SWITCH].value > 0.1f; }
 
   auto level_in() const -> float {
-    auto amount = Modulation::of(this, LEVEL_KNOB, LEVEL_CV);
     auto &range = params[LEVEL_SWITCH].value > 0.5f ? Signal::unipolar_range
                                                     : Signal::bipolar_range;
-    return range.scale(amount);
+    return range.scale(level_knob());
   }
 
   auto main_in() const -> float { return inputs[MAIN_IN].value; }
