@@ -1,43 +1,36 @@
+#include <utility>
+
 #include "dhe-modules.h"
 #include "module-widget.h"
 #include "module.h"
 
-#include "util/modulation.h"
+#include "util/knob.h"
 #include "util/range.h"
 #include "util/signal.h"
 
 namespace DHE {
 
 struct RangerLevel {
-  const rack::Param &knob;
-  const rack::Input &cv;
-  const rack::Param &av;
+  const Knob knob;
 
-  RangerLevel(const rack::Param &knob, const rack::Input &cv,
-              const rack::Param &av)
-      : knob{knob}, cv{cv}, av{av} {}
+  explicit RangerLevel(Knob knob) : knob{std::move(knob)} {}
 
   auto operator()(float limit1, float limit2) const -> float {
-    auto input = Modulation::of(knob, cv, av);
-    return scale(input, limit1, limit2);
+    return scale(knob(), limit1, limit2);
   }
 };
 
 struct RangerLimit {
-  const rack::Param &knob;
-  const rack::Input &cv;
-  const rack::Param &av;
+  const Knob knob;
   const rack::Param &range_selector;
 
-  RangerLimit(const rack::Param &knob, const rack::Input &cv,
-              const rack::Param &av, const rack::Param &range_selector)
-      : knob{knob}, cv{cv}, av{av}, range_selector{range_selector} {}
+  RangerLimit(Knob knob, const rack::Param &range_selector)
+      : knob{std::move(knob)}, range_selector{range_selector} {}
 
   auto operator()() const -> float {
     auto range = range_selector.value > 0.1 ? Signal::unipolar_range
                                             : Signal::bipolar_range;
-    auto input = Modulation::of(knob, cv, av);
-    return range.scale(input);
+    return range.scale(knob());
   }
 };
 
@@ -56,11 +49,11 @@ struct Ranger : Module {
   enum InputIds { LEVEL_CV, LIMIT_1_CV, LIMIT_2_CV, INPUT_COUNT };
   enum OutputIds { MAIN_OUT, OUTPUT_COUNT };
 
-  RangerLevel level{params[LEVEL_KNOB], inputs[LEVEL_CV], params[LEVEL_AV]};
-  RangerLimit upper{params[LIMIT_1_KNOB], inputs[LIMIT_1_CV],
-                    params[LIMIT_1_AV], params[LIMIT_1_RANGE]};
-  RangerLimit lower{params[LIMIT_2_KNOB], inputs[LIMIT_2_CV],
-                    params[LIMIT_2_AV], params[LIMIT_2_RANGE]};
+  RangerLevel level{Knob::modulated(this, LEVEL_KNOB, LEVEL_CV, LEVEL_AV)};
+  RangerLimit upper{Knob::modulated(this, LIMIT_1_KNOB, LIMIT_1_CV, LIMIT_1_AV),
+                    params[LIMIT_1_RANGE]};
+  RangerLimit lower{Knob::modulated(this, LIMIT_2_KNOB, LIMIT_2_CV, LIMIT_2_AV),
+                    params[LIMIT_2_RANGE]};
 
   Ranger() : Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT} {}
 
