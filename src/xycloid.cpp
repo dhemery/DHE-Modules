@@ -4,7 +4,7 @@
 #include "module-widget.h"
 #include "module.h"
 
-#include "util/modulation.h"
+#include "util/knob.h"
 #include "util/sigmoid.h"
 #include "util/signal.h"
 
@@ -56,6 +56,12 @@ struct Xycloid : Module {
   static constexpr auto wobble_depth_range = Range{0.f, 1.f};
   static constexpr auto gain_range = Range{0.f, 2.f};
 
+  const Knob throb_speed_knob = Knob::modulated(this, THROB_SPEED, THROB_SPEED_CV, THROB_SPEED_AV);
+  const Knob wobble_depth_knob = Knob::modulated(this, WOBBLE_DEPTH, WOBBLE_DEPTH_CV, WOBBLE_DEPTH_AV);
+  const Knob wobble_ratio_knob = Knob::modulated(this, WOBBLE_RATIO, WOBBLE_RATIO_CV, WOBBLE_RATIO_AV);
+  const Knob x_gain_knob = Knob::modulated(this, X_GAIN, X_GAIN_CV);
+  const Knob y_gain_knob = Knob::modulated(this, Y_GAIN, Y_GAIN_CV);
+
   float wobble_ratio_offset{0.f};
   XycloidRotor wobbler{};
   XycloidRotor throbber{};
@@ -86,23 +92,15 @@ struct Xycloid : Module {
     outputs[Y_OUT].value = 5.f * y_gain_in() * (y + y_offset());
   }
 
-  auto throb_speed_in() const -> float {
-    return Modulation::of(this, THROB_SPEED, THROB_SPEED_CV, THROB_SPEED_AV);
-  }
-
   auto throb_speed() const -> float {
     constexpr auto speed_taper_curvature = 0.8f;
-    auto scaled = throb_speed_knob_range.scale(throb_speed_in());
+    auto scaled = throb_speed_knob_range.scale(throb_speed_knob());
     auto tapered = Sigmoid::inverse(scaled, speed_taper_curvature);
     return -10.f * tapered * rack::engineGetSampleTime();
   }
 
   auto wobble_depth() const -> float {
-    return wobble_depth_range.clamp(wobble_depth_in());
-  }
-
-  auto wobble_depth_in() const -> float {
-    return Modulation::of(this, WOBBLE_DEPTH, WOBBLE_DEPTH_CV, WOBBLE_DEPTH_AV);
+    return wobble_depth_range.clamp(wobble_depth_knob());
   }
 
   auto wobble_phase_in() const -> float {
@@ -124,13 +122,10 @@ struct Xycloid : Module {
 
   auto wobble_ratio() const -> float {
     auto wobble_ratio =
-        wobble_range().scale(wobble_ratio_in()) + wobble_ratio_offset;
+        wobble_range().scale(wobble_ratio_knob()) + wobble_ratio_offset;
     return is_wobble_ratio_free() ? wobble_ratio : std::round(wobble_ratio);
   }
 
-  auto wobble_ratio_in() const -> float {
-    return Modulation::of(this, WOBBLE_RATIO, WOBBLE_RATIO_CV, WOBBLE_RATIO_AV);
-  }
 
   auto wobble_type() const -> int {
     auto param = params[WOBBLE_TYPE].value;
@@ -138,8 +133,7 @@ struct Xycloid : Module {
   }
 
   auto x_gain_in() const -> float {
-    auto rotation = Modulation::of(this, X_GAIN, X_GAIN_CV);
-    return gain_range.scale(rotation);
+    return gain_range.scale(x_gain_knob());
   }
 
   auto x_offset() const -> float {
@@ -148,8 +142,7 @@ struct Xycloid : Module {
   }
 
   auto y_gain_in() const -> float {
-    auto rotation = Modulation::of(this, Y_GAIN, Y_GAIN_CV);
-    return gain_range.scale(rotation);
+    return gain_range.scale(y_gain_knob());
   }
 
   auto y_offset() const -> float {
