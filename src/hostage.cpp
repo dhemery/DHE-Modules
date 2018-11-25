@@ -1,11 +1,11 @@
 #include "dhe-modules.h"
 #include "module-widget.h"
 #include "module.h"
+#include <util/knob.h>
 
 #include "util/d-flip-flop.h"
 #include "util/duration.h"
 #include "util/mode.h"
-#include "util/modulation.h"
 #include "util/phase-accumulator.h"
 
 namespace DHE {
@@ -21,6 +21,8 @@ struct Hostage : Module {
     MODE_SWITCH,
     PARAMETER_COUNT
   };
+
+  const Knob duration_knob = Knob::modulated(this, DURATION_KNOB, DURATION_CV);
 
   DFlipFlop sustain_gate{[this] { return hold_in(); }};
   DFlipFlop sustain_trigger{[this] { return hold_in(); }};
@@ -88,10 +90,9 @@ struct Hostage : Module {
   auto duration_in() const -> float {
     static const auto ranges = std::vector<Range>{
         Duration::short_range, Duration::medium_range, Duration::long_range};
-    auto rotation = Modulation::of(this, DURATION_KNOB, DURATION_CV);
     auto selection = static_cast<int>(params[DURATION_SWITCH].value);
     auto range = ranges[selection];
-    return Duration::of(rotation, range);
+    return Duration::of(duration_knob(), range);
   }
 
   void end_sustaining() {
