@@ -1,8 +1,8 @@
 
-#include <util/knob.h>
 #include "dhe-modules.h"
 #include "module-widget.h"
 #include "module.h"
+#include <util/knob.h>
 
 #include "util/d-flip-flop.h"
 #include "util/duration.h"
@@ -97,9 +97,7 @@ struct BoosterStage : Module {
 
   auto active_in() const -> bool { return params[ACTIVE_BUTTON].value > 0.1f; }
 
-  auto curve_in() const -> float {
-    return Sigmoid::curvature(curve_knob());
-  }
+  auto curve_in() const -> float { return Sigmoid::curvature(curve_knob()); }
 
   auto defer_in() const -> bool {
     auto defer_button = params[DEFER_BUTTON].value > 0.1f;

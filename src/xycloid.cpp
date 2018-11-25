@@ -56,9 +56,12 @@ struct Xycloid : Module {
   static constexpr auto wobble_depth_range = Range{0.f, 1.f};
   static constexpr auto gain_range = Range{0.f, 2.f};
 
-  const Knob throb_speed_knob = Knob::modulated(this, THROB_SPEED, THROB_SPEED_CV, THROB_SPEED_AV);
-  const Knob wobble_depth_knob = Knob::modulated(this, WOBBLE_DEPTH, WOBBLE_DEPTH_CV, WOBBLE_DEPTH_AV);
-  const Knob wobble_ratio_knob = Knob::modulated(this, WOBBLE_RATIO, WOBBLE_RATIO_CV, WOBBLE_RATIO_AV);
+  const Knob throb_speed_knob =
+      Knob::modulated(this, THROB_SPEED, THROB_SPEED_CV, THROB_SPEED_AV);
+  const Knob wobble_depth_knob =
+      Knob::modulated(this, WOBBLE_DEPTH, WOBBLE_DEPTH_CV, WOBBLE_DEPTH_AV);
+  const Knob wobble_ratio_knob =
+      Knob::modulated(this, WOBBLE_RATIO, WOBBLE_RATIO_CV, WOBBLE_RATIO_AV);
   const Knob x_gain_knob = Knob::modulated(this, X_GAIN, X_GAIN_CV);
   const Knob y_gain_knob = Knob::modulated(this, Y_GAIN, Y_GAIN_CV);
 
@@ -126,24 +129,19 @@ struct Xycloid : Module {
     return is_wobble_ratio_free() ? wobble_ratio : std::round(wobble_ratio);
   }
 
-
   auto wobble_type() const -> int {
     auto param = params[WOBBLE_TYPE].value;
     return static_cast<int>(param);
   }
 
-  auto x_gain_in() const -> float {
-    return gain_range.scale(x_gain_knob());
-  }
+  auto x_gain_in() const -> float { return gain_range.scale(x_gain_knob()); }
 
   auto x_offset() const -> float {
     auto is_uni = params[X_RANGE].value > 0.1f;
     return is_uni ? 1.f : 0.f;
   }
 
-  auto y_gain_in() const -> float {
-    return gain_range.scale(y_gain_knob());
-  }
+  auto y_gain_in() const -> float { return gain_range.scale(y_gain_knob()); }
 
   auto y_offset() const -> float {
     auto is_uni = params[Y_RANGE].value > 0.1f;

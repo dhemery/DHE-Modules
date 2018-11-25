@@ -1,22 +1,20 @@
+#include <utility>
+
 #include "dhe-modules.h"
 #include "module-widget.h"
 #include "module.h"
-
-#include "util/modulation.h"
+#include <util/knob.h>
 
 namespace DHE {
 
 struct ScaledKnob {
-  const rack::Param &knob;
-  const rack::Input &cv;
+  const Knob knob;
   const Range range;
 
-  ScaledKnob(const rack::Param &knob, const rack::Input &cv, const Range &range)
-      : knob{knob}, cv{cv}, range{range} {}
+  ScaledKnob(const rack::Module *module, int knob, int cv, const Range &range)
+      : knob{Knob::modulated(module, knob, cv)}, range{range} {}
 
-  auto operator()() const -> float {
-    return range.scale(Modulation::of(knob, cv));
-  }
+  auto operator()() const -> float { return range.scale(knob()); }
 };
 
 struct Cubic : Module {
@@ -44,14 +42,13 @@ struct Cubic : Module {
   static Range constexpr coefficient_range{-2.0f, 2.0f};
   static Range constexpr gain_range{0.f, 2.0f};
 
-  ScaledKnob const a{params[A_KNOB], inputs[A_CV], coefficient_range};
-  ScaledKnob const b{params[B_KNOB], inputs[B_CV], coefficient_range};
-  ScaledKnob const c{params[C_KNOB], inputs[C_CV], coefficient_range};
-  ScaledKnob const d{params[D_KNOB], inputs[D_CV], coefficient_range};
+  ScaledKnob const a{this, A_KNOB, A_CV, coefficient_range};
+  ScaledKnob const b{this, B_KNOB, B_CV, coefficient_range};
+  ScaledKnob const c{this, C_KNOB, C_CV, coefficient_range};
+  ScaledKnob const d{this, D_KNOB, D_CV, coefficient_range};
 
-  ScaledKnob const input_gain{params[INPUT_GAIN_KNOB], inputs[INPUT_GAIN_CV],
-                              gain_range};
-  ScaledKnob const output_gain{params[OUTPUT_GAIN_KNOB], inputs[OUTPUT_GAIN_CV],
+  ScaledKnob const input_gain{this, INPUT_GAIN_KNOB, INPUT_GAIN_CV, gain_range};
+  ScaledKnob const output_gain{this, OUTPUT_GAIN_KNOB, OUTPUT_GAIN_CV,
                                gain_range};
 
   Cubic() : Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT} {}
