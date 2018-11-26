@@ -43,7 +43,7 @@
 # DHE-Modules
 ###############################################
 
-/dist
 /build
-/linux-dist
+/dist
+/.dev
 /.idea

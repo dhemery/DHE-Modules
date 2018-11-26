@@ -17,23 +17,30 @@ include $(RACK_DIR)/plugin.mk
 ########################################################################
 # Below this line: Targets for Dale to build the gui and run Rack
 
-RACK_APP = /Applications/Rack.app
+DEV_INSTALL_DIR = .dev
+DEV_PLUGIN_DIR = $(DEV_INSTALL_DIR)/plugins
 
-RACK_PLUGINS_DIR = $(RACK_USER_DIR)/plugins
-MODULE_INSTALL_DIR = $(RACK_PLUGINS_DIR)/$(SLUG)
-MODULE_INSTALL_ZIP = $(RACK_PLUGINS_DIR)/$(SLUG)-$(VERSION)-$(ARCH).zip
+$(DEV_INSTALL_DIR) $(DEV_PLUGIN_DIR):
+	mkdir -p $@
 
-run: install
-	open $(RACK_APP)
+$(DEV_PLUGIN_DIR)/Fundamental: $(DEV_PLUGIN_DIR)
+	cp -r $(RACK_USER_DIR)/plugins/Fundamental $(DEV_PLUGIN_DIR)
 
-uninstall:
-	rm -rf $(MODULE_INSTALL_DIR) $(MODULE_INSTALL_ZIP)
+dev: dist $(DEV_PLUGIN_DIR) $(DEV_PLUGIN_DIR)/Fundamental
+	cp dist/$(SLUG)-$(VERSION)-$(ARCH).zip $(DEV_PLUGIN_DIR)
 
-.PHONY: gui
+run: dev
+	/Applications/Rack.app/Contents/MacOS/Rack -d -g /Applications/Rack.app/Contents/Resources -l $(realpath $(DEV_INSTALL_DIR))
+
 gui:
 	$(MAKE) -C gui clobber all
 
-
-.PHONY: clobber
-clobber: clean uninstall
+clobber: fresh
 	$(MAKE) -C gui clobber
+
+fresh: clean uninstall
+
+uninstall:
+	rm -rf $(DEV_INSTALL_DIR)
+
+.PHONY: clean clobber fresh gui uninstall
