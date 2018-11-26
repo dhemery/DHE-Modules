@@ -7,7 +7,7 @@ CFLAGS +=
 CXXFLAGS +=
 LDFLAGS +=
 
-SOURCES = $(wildcard src/*.cpp)
+SOURCES = $(wildcard src/*.cpp src/controls/*.cpp)
 
 DISTRIBUTABLES += LICENSE.txt res
 
