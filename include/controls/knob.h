@@ -10,6 +10,9 @@ namespace DHE {
 
 class Knob {
 public:
+  template <typename Supplier>
+  explicit Knob(const Supplier &supplier) : supplier{supplier} {}
+
   static auto plain(const rack::Module *module, int knob) -> Knob {
     const auto *knob_param = &module->params[knob];
     return Knob{[knob_param] { return knob_param->value; }};
@@ -33,21 +36,19 @@ public:
     }};
   }
 
-  static auto modulate(float knob, float cv = 0.f, float av = 1.f) -> float {
+  static auto modulate(float rotation, float cv = 0.f, float av = 1.f)
+      -> float {
     static constexpr auto av_range = Range{-1.f, 1.f};
     static constexpr auto cv_to_offset = 0.1f;
 
     auto offset = cv * cv_to_offset;
     auto multipler = av_range.scale(av);
-    return knob + multipler * offset;
+    return rotation + multipler * offset;
   }
 
   auto operator()() const -> float { return supplier(); }
 
 private:
-  template <typename Supplier>
-  explicit Knob(const Supplier &supplier) : supplier{supplier} {}
-
   const std::function<float()> supplier;
 };
 } // namespace DHE

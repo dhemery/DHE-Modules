@@ -29,8 +29,11 @@ $(DEV_PLUGIN_DIR)/Fundamental: $(DEV_PLUGIN_DIR)
 dev: dist $(DEV_PLUGIN_DIR) $(DEV_PLUGIN_DIR)/Fundamental
 	cp dist/$(SLUG)-$(VERSION)-$(ARCH).zip $(DEV_PLUGIN_DIR)
 
-run: dev
+debug: dev
 	/Applications/Rack.app/Contents/MacOS/Rack -d -g /Applications/Rack.app/Contents/Resources -l $(realpath $(DEV_INSTALL_DIR))
+
+run: dev
+	/Applications/Rack.app/Contents/MacOS/Rack -g /Applications/Rack.app/Contents/Resources -l $(realpath $(DEV_INSTALL_DIR))
 
 tidy:
 	find . -name *.h -o -name *.cpp | xargs clang-format -i

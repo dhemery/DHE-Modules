@@ -42,18 +42,17 @@ struct BoosterStage : rack::Module {
 
   const Knob curve_knob = Knob::with_cv(this, CURVE_KNOB, CURVE_CV);
 
-  const Knob duration_knob = Knob::with_cv(this, DURATION_KNOB, DURATION_CV);
-  const Switch<Range> duration_range =
-      Duration::range_switch(this, DURATION_SWITCH);
+  const Knob duration =
+      Duration::ranged_knob(this, DURATION_KNOB, DURATION_CV, DURATION_SWITCH);
 
   const Knob level_knob = Knob::with_cv(this, LEVEL_KNOB, LEVEL_CV);
   const Switch<Range> level_range = Signal::range_switch(this, LEVEL_SWITCH);
 
-  float phase_0_voltage{0.f};
-  bool is_active{false};
-  bool is_eoc{false};
+  float phase_0_voltage = 0.f;
+  bool is_active = false;
+  bool is_eoc = false;
 
-  PhaseAccumulator envelope{[this] { return sample_time() / duration_in(); }};
+  PhaseAccumulator envelope{[this] { return sample_time() / duration(); }};
   PhaseAccumulator eoc_pulse{[this] { return sample_time() / 1e-3f; }};
   DFlipFlop envelope_trigger{[this] { return trigger_in(); }};
 
@@ -108,10 +107,6 @@ struct BoosterStage : rack::Module {
     auto defer_button = params[DEFER_BUTTON].value > 0.1f;
     auto defer_input = inputs[DEFER_IN].value > 0.1f;
     return defer_button || defer_input;
-  }
-
-  auto duration_in() const -> float {
-    return Duration::of(duration_knob(), duration_range());
   }
 
   auto envelope_voltage(float phase) const -> float {

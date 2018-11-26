@@ -21,14 +21,13 @@ struct Hostage : rack::Module {
     PARAMETER_COUNT
   };
 
-  const Knob duration_knob = Knob::with_cv(this, DURATION_KNOB, DURATION_CV);
-  const Switch<Range> duration_range =
-      Duration::range_switch(this, DURATION_SWITCH);
+  const Knob duration =
+      Duration::ranged_knob(this, DURATION_KNOB, DURATION_CV, DURATION_SWITCH);
 
   DFlipFlop sustain_gate{[this] { return hold_in(); }};
   DFlipFlop sustain_trigger{[this] { return hold_in(); }};
 
-  PhaseAccumulator timer{[this] { return sample_time() / duration_in(); }};
+  PhaseAccumulator timer{[this] { return sample_time() / duration(); }};
   PhaseAccumulator eoc_pulse{[this] { return sample_time() / 1e-3f; }};
 
   Mode timed_sustain_mode{};
@@ -87,10 +86,6 @@ struct Hostage : rack::Module {
   void begin_sustaining() { send_active(true); }
 
   auto defer_in() const -> bool { return inputs[DEFER_IN].value > 0.1f; }
-
-  auto duration_in() const -> float {
-    return Duration::of(duration_knob(), duration_range());
-  }
 
   void end_sustaining() {
     send_active(false);

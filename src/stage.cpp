@@ -24,13 +24,13 @@ struct Stage : public rack::Module {
 
   const Knob curve_knob = Knob::plain(this, CURVE_KNOB);
 
-  const Knob duration_knob = Knob::plain(this, DURATION_KNOB);
+  const Knob duration = Duration::knob(this, DURATION_KNOB);
 
   const Knob level_knob = Knob::plain(this, LEVEL_KNOB);
 
   float phase_0_voltage{0.f};
 
-  PhaseAccumulator generator{[this] { return sample_time() / duration_in(); }};
+  PhaseAccumulator generator{[this] { return sample_time() / duration(); }};
   DFlipFlop envelope_trigger{[this] { return trigger_in(); }};
   PhaseAccumulator eoc_pulse{[this] { return sample_time() / 1e-3f; }};
 
@@ -79,8 +79,6 @@ struct Stage : public rack::Module {
   auto curve_in() const -> float { return Sigmoid::curvature(curve_knob()); }
 
   auto defer_in() const -> bool { return inputs[DEFER_IN].value > 0.1; }
-
-  auto duration_in() const -> float { return Duration::of(duration_knob()); }
 
   auto envelope_voltage(float phase) const -> float {
     return scale(taper(phase), phase_0_voltage, level_in());
