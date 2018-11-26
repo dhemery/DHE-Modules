@@ -12,7 +12,7 @@ struct ScaledKnob {
   const Range range;
 
   ScaledKnob(const rack::Module *module, int knob, int cv, const Range &range)
-      : knob{Knob::modulated(module, knob, cv)}, range{range} {}
+      : knob{Knob::with_cv(module, knob, cv)}, range{range} {}
 
   auto operator()() const -> float { return range.scale(knob()); }
 };

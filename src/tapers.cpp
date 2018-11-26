@@ -41,15 +41,15 @@ struct TapersPanel {
 };
 
 struct Tapers : rack::Module {
-  const Knob level1 = Knob::modulated(this, LEVEL_1, LEVEL_1_CV, LEVEL_1_AV);
-  const TapersCurve curve1{
-      Knob::modulated(this, CURVE_1, CURVE_1_CV, CURVE_1_AV), params[SHAPE_1]};
+  const Knob level1 = Knob::with_av(this, LEVEL_1, LEVEL_1_CV, LEVEL_1_AV);
+  const TapersCurve curve1{Knob::with_av(this, CURVE_1, CURVE_1_CV, CURVE_1_AV),
+                           params[SHAPE_1]};
   TapersPanel panel1{level1, curve1, Signal::range_switch(this, RANGE_1),
                      outputs[OUT_1]};
 
-  const Knob level2 = Knob::modulated(this, LEVEL_2, LEVEL_2_CV, LEVEL_2_AV);
-  const TapersCurve curve2{
-      Knob::modulated(this, CURVE_2, CURVE_2_CV, CURVE_2_AV), params[SHAPE_2]};
+  const Knob level2 = Knob::with_av(this, LEVEL_2, LEVEL_2_CV, LEVEL_2_AV);
+  const TapersCurve curve2{Knob::with_av(this, CURVE_2, CURVE_2_CV, CURVE_2_AV),
+                           params[SHAPE_2]};
   TapersPanel panel2{level2, curve2, Signal::range_switch(this, RANGE_2),
                      outputs[OUT_2]};
 

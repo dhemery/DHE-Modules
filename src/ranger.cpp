@@ -47,10 +47,10 @@ struct Ranger : rack::Module {
   enum InputIds { LEVEL_CV, LIMIT_1_CV, LIMIT_2_CV, INPUT_COUNT };
   enum OutputIds { MAIN_OUT, OUTPUT_COUNT };
 
-  RangerLevel level{Knob::modulated(this, LEVEL_KNOB, LEVEL_CV, LEVEL_AV)};
-  RangerLimit upper{Knob::modulated(this, LIMIT_1_KNOB, LIMIT_1_CV, LIMIT_1_AV),
+  RangerLevel level{Knob::with_av(this, LEVEL_KNOB, LEVEL_CV, LEVEL_AV)};
+  RangerLimit upper{Knob::with_av(this, LIMIT_1_KNOB, LIMIT_1_CV, LIMIT_1_AV),
                     Signal::range_switch(this, LIMIT_1_RANGE)};
-  RangerLimit lower{Knob::modulated(this, LIMIT_2_KNOB, LIMIT_2_CV, LIMIT_2_AV),
+  RangerLimit lower{Knob::with_av(this, LIMIT_2_KNOB, LIMIT_2_CV, LIMIT_2_AV),
                     Signal::range_switch(this, LIMIT_2_RANGE)};
 
   Ranger() : Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT} {}

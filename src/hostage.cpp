@@ -21,7 +21,7 @@ struct Hostage : rack::Module {
     PARAMETER_COUNT
   };
 
-  const Knob duration_knob = Knob::modulated(this, DURATION_KNOB, DURATION_CV);
+  const Knob duration_knob = Knob::with_cv(this, DURATION_KNOB, DURATION_CV);
   const Switch<Range> duration_range =
       Duration::range_switch(this, DURATION_SWITCH);
 

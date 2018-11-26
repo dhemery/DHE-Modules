@@ -40,13 +40,13 @@ struct BoosterStage : rack::Module {
 
   enum OutputIds { ACTIVE_OUT, EOC_OUT, MAIN_OUT, OUTPUT_COUNT };
 
-  const Knob curve_knob = Knob::modulated(this, CURVE_KNOB, CURVE_CV);
+  const Knob curve_knob = Knob::with_cv(this, CURVE_KNOB, CURVE_CV);
 
-  const Knob duration_knob = Knob::modulated(this, DURATION_KNOB, DURATION_CV);
+  const Knob duration_knob = Knob::with_cv(this, DURATION_KNOB, DURATION_CV);
   const Switch<Range> duration_range =
       Duration::range_switch(this, DURATION_SWITCH);
 
-  const Knob level_knob = Knob::modulated(this, LEVEL_KNOB, LEVEL_CV);
+  const Knob level_knob = Knob::with_cv(this, LEVEL_KNOB, LEVEL_CV);
   const Switch<Range> level_range = Signal::range_switch(this, LEVEL_SWITCH);
 
   float phase_0_voltage{0.f};

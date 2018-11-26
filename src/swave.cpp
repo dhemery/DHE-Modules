@@ -13,7 +13,7 @@ struct Swave : rack::Module {
   enum InputIds { CURVE_CV, MAIN_IN, INPUT_COUNT };
   enum OutputIds { MAIN_OUT, OUTPUT_COUNT };
 
-  const Knob curve_knob = Knob::modulated(this, CURVE_KNOB, CURVE_CV);
+  const Knob curve_knob = Knob::with_cv(this, CURVE_KNOB, CURVE_CV);
 
   Swave() : Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT} {}
 
