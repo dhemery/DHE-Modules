@@ -3,7 +3,6 @@
 
 #include "controls/knob.h"
 #include "controls/signal.h"
-#include "util/duration.h"
 #include "util/range.h"
 
 namespace DHE {

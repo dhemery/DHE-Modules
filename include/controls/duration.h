@@ -1,10 +1,8 @@
 #pragma once
 
-#include <functional>
-#include <vector>
-
-#include "range.h"
-#include "sigmoid.h"
+#include "switch.h"
+#include "util/range.h"
+#include "util/sigmoid.h"
 
 namespace DHE {
 
@@ -39,6 +37,12 @@ inline auto of(float proportion, const Range &range = medium_range) -> float {
 
   // Scale the tapered proportion to the desired range.
   return range.scale(tapered);
+}
+
+inline auto range_switch(const rack::Module *module, int index)
+    -> Switch<Range> {
+  return Switch<Range>::three(module, index, short_range, medium_range,
+                              long_range);
 }
 
 } // namespace Duration

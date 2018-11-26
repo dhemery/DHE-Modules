@@ -3,11 +3,11 @@
 #include "dhe-modules.h"
 #include "module-widget.h"
 
+#include "controls/duration.h"
 #include "controls/knob.h"
 #include "controls/signal.h"
 #include "controls/switch.h"
 #include "util/d-flip-flop.h"
-#include "util/duration.h"
 #include "util/mode.h"
 #include "util/phase-accumulator.h"
 #include "util/range.h"
@@ -23,7 +23,9 @@ struct Stage : public rack::Module {
   enum OutputIds { MAIN_OUT, EOC_OUT, ACTIVE_OUT, OUTPUT_COUNT };
 
   const Knob curve_knob = Knob::plain(this, CURVE_KNOB);
+
   const Knob duration_knob = Knob::plain(this, DURATION_KNOB);
+
   const Knob level_knob = Knob::plain(this, LEVEL_KNOB);
 
   float phase_0_voltage{0.f};
