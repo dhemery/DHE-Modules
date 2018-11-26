@@ -43,7 +43,7 @@ struct BoosterStage : rack::Module {
   const Knob curve_knob = Knob::modulated(this, CURVE_KNOB, CURVE_CV);
   const Knob duration_knob = Knob::modulated(this, DURATION_KNOB, DURATION_CV);
   const Knob level_knob = Knob::modulated(this, LEVEL_KNOB, LEVEL_CV);
-  const Switch<Range> level_range = Switch<Range>::two(this, LEVEL_SWITCH, Signal::bipolar_range, Signal::unipolar_range);
+  const Switch<Range> level_range = Signal::range_switch(this, LEVEL_SWITCH);
 
   float phase_0_voltage{0.f};
   bool is_active{false};
@@ -122,9 +122,7 @@ struct BoosterStage : rack::Module {
 
   bool is_s_taper() const { return params[SHAPE_SWITCH].value > 0.1f; }
 
-  auto level_in() const -> float {
-    return level_range().scale(level_knob());
-  }
+  auto level_in() const -> float { return level_range().scale(level_knob()); }
 
   auto main_in() const -> float { return inputs[MAIN_IN].value; }
 

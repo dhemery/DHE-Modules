@@ -1,7 +1,7 @@
 #include <utility>
 
-#include <utility>
 #include <controls/switch.h>
+#include <utility>
 
 #include "dhe-modules.h"
 #include "module-widget.h"
@@ -29,9 +29,7 @@ struct RangerLimit {
   RangerLimit(Knob knob, Switch<Range> selector)
       : knob{std::move(knob)}, range{std::move(selector)} {}
 
-  auto operator()() const -> float {
-    return range().scale(knob());
-  }
+  auto operator()() const -> float { return range().scale(knob()); }
 };
 
 struct Ranger : rack::Module {
@@ -51,9 +49,9 @@ struct Ranger : rack::Module {
 
   RangerLevel level{Knob::modulated(this, LEVEL_KNOB, LEVEL_CV, LEVEL_AV)};
   RangerLimit upper{Knob::modulated(this, LIMIT_1_KNOB, LIMIT_1_CV, LIMIT_1_AV),
-                    Switch<Range>::two(this, LIMIT_1_RANGE, Signal::bipolar_range, Signal::unipolar_range)};
+                    Signal::range_switch(this, LIMIT_1_RANGE)};
   RangerLimit lower{Knob::modulated(this, LIMIT_2_KNOB, LIMIT_2_CV, LIMIT_2_AV),
-                    Switch<Range>::two(this, LIMIT_2_RANGE, Signal::bipolar_range, Signal::unipolar_range)};
+                    Signal::range_switch(this, LIMIT_2_RANGE)};
 
   Ranger() : Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT} {}
 

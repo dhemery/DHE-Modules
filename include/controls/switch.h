@@ -9,7 +9,7 @@ namespace DHE {
 template<typename T>
 class Switch {
 public:
-  static auto two(rack::Module *module, int index, T low, T high) -> Switch<T> {
+  static auto two(const rack::Module *module, int index, T low, T high) -> Switch<T> {
     const auto *param = &module->params[index];
     return Switch<T>{[param, low, high] {
       return param->value > 0.1f ? high : low;
