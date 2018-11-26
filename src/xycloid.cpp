@@ -61,8 +61,12 @@ struct Xycloid : rack::Module {
       Knob::modulated(this, WOBBLE_DEPTH, WOBBLE_DEPTH_CV, WOBBLE_DEPTH_AV);
   const Knob wobble_ratio_knob =
       Knob::modulated(this, WOBBLE_RATIO, WOBBLE_RATIO_CV, WOBBLE_RATIO_AV);
+
   const Knob x_gain_knob = Knob::modulated(this, X_GAIN, X_GAIN_CV);
+  const Switch<float> x_offset = Switch<float>::two(this, X_RANGE, 0.f, 1.f);
+
   const Knob y_gain_knob = Knob::modulated(this, Y_GAIN, Y_GAIN_CV);
+  const Switch<float> y_offset = Switch<float>::two(this, Y_RANGE, 0.f, 1.f);
 
   float wobble_ratio_offset{0.f};
   XycloidRotor wobbler{};
@@ -135,17 +139,7 @@ struct Xycloid : rack::Module {
 
   auto x_gain_in() const -> float { return gain_range.scale(x_gain_knob()); }
 
-  auto x_offset() const -> float {
-    auto is_uni = params[X_RANGE].value > 0.1f;
-    return is_uni ? 1.f : 0.f;
-  }
-
   auto y_gain_in() const -> float { return gain_range.scale(y_gain_knob()); }
-
-  auto y_offset() const -> float {
-    auto is_uni = params[Y_RANGE].value > 0.1f;
-    return is_uni ? 1.f : 0.f;
-  }
 
   json_t *toJson() override {
     json_t *configuration = json_object();
