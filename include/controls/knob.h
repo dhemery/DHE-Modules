@@ -1,3 +1,5 @@
+#include <utility>
+
 #pragma once
 
 #include <utility>
@@ -9,34 +11,43 @@
 namespace DHE {
 
 class Knob {
+  const rack::Module *module;
+  const rack::Param *knob_param;
+  const std::function<float(float)> mapped{&identity};
+
 public:
-  template <typename Supplier>
-  explicit Knob(const Supplier &supplier) : supplier{supplier} {}
+  Knob(const rack::Module *module, int knob_index)
+      : module{module}, knob_param{&module->params[knob_index]} {}
 
-  static auto plain(const rack::Module *module, int knob_index) -> Knob {
-    const auto *knob_param = &module->params[knob_index];
-    return Knob{[knob_param] { return knob_param->value; }};
+  auto operator()() const -> float { return mapped(knob_param->value); }
+
+  auto modulate_by(int cv_index) -> Knob {
+    return map(modulated_by(module, cv_index));
   }
 
-  static auto with_cv(const rack::Module *module, int knob_index, int cv_index)
-      -> Knob {
-    const auto *knob_param = &module->params[knob_index];
-    const auto modulate = modulated_by(module, cv_index);
-    return Knob{[knob_param, modulate] { return modulate(knob_param->value); }};
+  auto modulate_by(int cv_index, int av_index) -> Knob {
+    return map(modulated_by(module, cv_index, av_index));
   }
 
-  static auto with_av(const rack::Module *module, int knob_index, int cv_index,
-                      int av_index) -> Knob {
-    const auto *knob_param = &module->params[knob_index];
-    const auto modulate = modulated_by(module, cv_index, av_index);
-    return Knob{[knob_param, modulate] { return modulate(knob_param->value); }};
+  template <typename Mapper> auto map(Mapper mapper) -> Knob {
+    return Knob{*this, mapper};
   }
 
-  auto operator()() const -> float { return supplier(); }
+  const Knob scale_to(const Range range) {
+    const auto to_range = [range](float in) -> float {
+      return range.scale(in);
+    };
+    return map(to_range);
+  }
+
+  template <typename Scaler> const Knob scale_to(Scaler scaler) {
+    const auto to_selected_range = [scaler](float in) -> float {
+      return scaler().scale(in);
+    };
+    return map(to_selected_range);
+  }
 
 private:
-  const std::function<float()> supplier;
-
   static auto modulate(float rotation, float cv = 0.f, float av = 1.f)
       -> float {
     static constexpr auto av_range = Range{-1.f, 1.f};
@@ -63,5 +74,14 @@ private:
       return modulate(rotation, cv_input->value, av_param->value);
     };
   }
+
+  static auto identity(float in) -> float { return in; }
+
+  template <typename Mapper>
+  Knob(const Knob source, Mapper mapper)
+      : module{source.module}, knob_param{source.knob_param},
+        mapped{[source, mapper](float in) -> float {
+          return mapper(source.mapped(in));
+        }} {};
 };
 } // namespace DHE

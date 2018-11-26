@@ -28,30 +28,24 @@ constexpr auto long_range = Range{0.1f, 100.f};
  * @param range the range from which to select the duration
  * @return the selected duration
  */
-inline auto duration(float proportion, const Range &range = medium_range)
-    -> float {
-  // Shapes the J taper to map an input of 0.5 to an output of ~0.1. Thus a
-  // proportion of 0.5 will yield a duration of ~1/10 of the range's maximum.
-  static constexpr auto curvature = 0.8f;
-
-  // Taper the proportion.
-  auto tapered = Sigmoid::j_taper(proportion, curvature);
-
-  // Scale the tapered proportion to the desired range.
-  return range.scale(tapered);
+static auto to_duration_taper(float rotation) -> float {
+  return Sigmoid::j_taper(rotation, 0.8f);
 }
 
 inline auto knob(const rack::Module *module, int knob_index) -> Knob {
-  const auto knob = Knob::plain(module, knob_index);
-  return Knob{[knob] { return duration(knob()); }};
+  return Knob{module, knob_index}
+      .map(&to_duration_taper)
+      .scale_to(medium_range);
 }
 
 inline auto ranged_knob(const rack::Module *module, int knob_index,
-                        int cv_index, int switch_index) -> Knob {
-  const auto knob = Knob::with_cv(module, knob_index, cv_index);
-  const auto range = Switch<Range>::three(module, switch_index, short_range,
-                                          medium_range, long_range);
-  return Knob{[knob, range] { return duration(knob(), range()); }};
+                        int cv_index, int range_switch_index) -> Knob {
+  const auto selected_range = Switch<Range>::three(
+      module, range_switch_index, short_range, medium_range, long_range);
+  return Knob{module, knob_index}
+      .modulate_by(cv_index)
+      .map(&to_duration_taper)
+      .scale_to(selected_range);
 }
 
 } // namespace Duration

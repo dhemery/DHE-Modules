@@ -7,16 +7,6 @@
 
 namespace DHE {
 
-struct ScaledKnob {
-  const Knob knob;
-  const Range range;
-
-  ScaledKnob(const rack::Module *module, int knob, int cv, const Range &range)
-      : knob{Knob::with_cv(module, knob, cv)}, range{range} {}
-
-  auto operator()() const -> float { return range.scale(knob()); }
-};
-
 struct Cubic : rack::Module {
   enum ParameterIds {
     A_KNOB,
@@ -42,14 +32,21 @@ struct Cubic : rack::Module {
   static Range constexpr coefficient_range{-2.0f, 2.0f};
   static Range constexpr gain_range{0.f, 2.0f};
 
-  ScaledKnob const a{this, A_KNOB, A_CV, coefficient_range};
-  ScaledKnob const b{this, B_KNOB, B_CV, coefficient_range};
-  ScaledKnob const c{this, C_KNOB, C_CV, coefficient_range};
-  ScaledKnob const d{this, D_KNOB, D_CV, coefficient_range};
+  const Knob a =
+      Knob{this, A_KNOB}.modulate_by(A_CV).scale_to(coefficient_range);
+  const Knob b =
+      Knob{this, B_KNOB}.modulate_by(B_CV).scale_to(coefficient_range);
+  const Knob c =
+      Knob{this, C_KNOB}.modulate_by(C_CV).scale_to(coefficient_range);
+  const Knob d =
+      Knob{this, D_KNOB}.modulate_by(D_CV).scale_to(coefficient_range);
 
-  ScaledKnob const input_gain{this, INPUT_GAIN_KNOB, INPUT_GAIN_CV, gain_range};
-  ScaledKnob const output_gain{this, OUTPUT_GAIN_KNOB, OUTPUT_GAIN_CV,
-                               gain_range};
+  const Knob input_gain = Knob{this, INPUT_GAIN_KNOB}
+                              .modulate_by(INPUT_GAIN_CV)
+                              .scale_to(gain_range);
+  const Knob output_gain = Knob{this, OUTPUT_GAIN_KNOB}
+                               .modulate_by(OUTPUT_GAIN_CV)
+                               .scale_to(gain_range);
 
   Cubic() : Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT} {}
 

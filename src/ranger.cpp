@@ -12,26 +12,6 @@
 
 namespace DHE {
 
-struct RangerLevel {
-  const Knob knob;
-
-  explicit RangerLevel(Knob knob) : knob{std::move(knob)} {}
-
-  auto operator()(float limit1, float limit2) const -> float {
-    return scale(knob(), limit1, limit2);
-  }
-};
-
-struct RangerLimit {
-  const Knob knob;
-  const Switch<Range> range;
-
-  RangerLimit(Knob knob, Switch<Range> selector)
-      : knob{std::move(knob)}, range{std::move(selector)} {}
-
-  auto operator()() const -> float { return range().scale(knob()); }
-};
-
 struct Ranger : rack::Module {
   enum ParameterIds {
     LEVEL_KNOB,
@@ -47,17 +27,22 @@ struct Ranger : rack::Module {
   enum InputIds { LEVEL_CV, LIMIT_1_CV, LIMIT_2_CV, INPUT_COUNT };
   enum OutputIds { MAIN_OUT, OUTPUT_COUNT };
 
-  RangerLevel level{Knob::with_av(this, LEVEL_KNOB, LEVEL_CV, LEVEL_AV)};
-  RangerLimit upper{Knob::with_av(this, LIMIT_1_KNOB, LIMIT_1_CV, LIMIT_1_AV),
-                    Signal::range_switch(this, LIMIT_1_RANGE)};
-  RangerLimit lower{Knob::with_av(this, LIMIT_2_KNOB, LIMIT_2_CV, LIMIT_2_AV),
-                    Signal::range_switch(this, LIMIT_2_RANGE)};
+  Knob upper = Knob{this, LIMIT_1_KNOB}
+                   .modulate_by(LIMIT_1_CV, LIMIT_1_AV)
+                   .scale_to(Signal::range_switch(this, LIMIT_1_RANGE));
+  Knob lower = Knob{this, LIMIT_2_KNOB}
+                   .modulate_by(LIMIT_2_CV, LIMIT_2_AV)
+                   .scale_to(Signal::range_switch(this, LIMIT_2_RANGE));
+  Knob level =
+      Knob{this, LEVEL_KNOB}.modulate_by(LEVEL_CV, LEVEL_AV).scale_to([this] {
+        return Range{lower(), upper()};
+      });
 
   Ranger() : Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT} {}
 
   void send_main_out(float voltage) { outputs[MAIN_OUT].value = voltage; }
 
-  void step() override { send_main_out(level(lower(), upper())); }
+  void step() override { send_main_out(level()); }
 };
 
 struct RangerWidget : public ModuleWidget {
