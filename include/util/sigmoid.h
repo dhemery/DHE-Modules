@@ -1,13 +1,9 @@
 #pragma once
 
-#include <cmath>
-
 #include "range.h"
 
 namespace DHE {
 namespace Sigmoid {
-constexpr auto sigmoid_range = Range{-1.f, 1.f};
-constexpr auto proportion_range = Range{0.f, 1.f};
 
 /**
  * Applies an inverse sigmoid function to the input.
@@ -26,17 +22,7 @@ constexpr auto proportion_range = Range{0.f, 1.f};
  * @param curvature the intensity and direction of the curvature
  * @return the sigmoid function result
  */
-inline auto inverse(float input, float curvature) -> float {
-  static constexpr auto precision = 1e-4f;
-  static constexpr auto max_curvature = 1.0f - precision;
-  static constexpr auto curvature_range = Range{-max_curvature, max_curvature};
-
-  curvature = curvature_range.clamp(curvature);
-  input = sigmoid_range.clamp(input);
-
-  return (input - input * curvature) /
-         (curvature - std::abs(input) * 2.0f * curvature + 1.0f);
-}
+auto inverse(float input, float curvature) -> float;
 
 /**
  * Applies a sigmoid function to the input.
@@ -76,9 +62,7 @@ inline auto curve(float input, float curvature) -> float {
  * @param curvature the intensity and direction of the taper
  * @return the taper function result
  */
-inline auto j_taper(float input, float curvature) -> float {
-  return inverse(proportion_range.clamp(input), curvature);
-}
+auto j_taper(float input, float curvature) -> float;
 
 /**
  * Applies an S-shaped transfer function to the input.
@@ -97,11 +81,7 @@ inline auto j_taper(float input, float curvature) -> float {
  * @param curvature the intensity and direction of the taper
  * @return the taper function result
  */
-inline auto s_taper(float input, float curvature) -> float {
-  const auto scaled = sigmoid_range.scale(input);
-  const auto tapered = curve(scaled, curvature);
-  return sigmoid_range.normalize(tapered);
-}
+auto s_taper(float input, float curvature) -> float;
 
 /**
  * Applies a gentle S-shaped transfer function to map an input in the range
@@ -116,12 +96,6 @@ inline auto s_taper(float input, float curvature) -> float {
  * @param input the value to map to a curvature
  * @return the curvature
  */
-inline auto curvature(float input) -> float {
-  // This curvature creates a gentle S curve, increasing sensitivity in the
-  // middle of the input range and decreasing sensitivity toward the extremes.
-  static constexpr auto gentle_s = 0.65f;
-  auto scaled = sigmoid_range.scale(input);
-  return curve(scaled, gentle_s);
-}
+auto curvature(float input) -> float;
 } // namespace Sigmoid
 } // namespace DHE
