@@ -16,7 +16,7 @@ class Knob {
 public:
   Knob(const rack::Module *module, int knob_index);
 
-  auto operator()() const -> float;
+  auto operator()() const -> float { return supplier(); }
 
   auto modulate_by(int cv_index) const -> Knob;
 
@@ -29,11 +29,9 @@ public:
   auto scale_to(const std::function<Range()> &range_supplier) const -> Knob;
 
 private:
-  Knob(const rack::Module *module, const rack::Param *knob_param,
-       const std::function<float(float)> &mapper);
+  Knob(const rack::Module *module, const std::function<float()> &supplier);
 
   const rack::Module *module;
-  const rack::Param *knob_param;
-  const std::function<float(float)> mapper;
+  const std::function<float()> supplier;
 };
 } // namespace DHE
