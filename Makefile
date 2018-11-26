@@ -32,6 +32,9 @@ dev: dist $(DEV_PLUGIN_DIR) $(DEV_PLUGIN_DIR)/Fundamental
 run: dev
 	/Applications/Rack.app/Contents/MacOS/Rack -d -g /Applications/Rack.app/Contents/Resources -l $(realpath $(DEV_INSTALL_DIR))
 
+tidy:
+	find . -name *.h -o -name *.cpp | xargs clang-format -i
+
 gui:
 	$(MAKE) -C gui clobber all
 
@@ -43,4 +46,4 @@ fresh: clean uninstall
 uninstall:
 	rm -rf $(DEV_INSTALL_DIR)
 
-.PHONY: clean clobber fresh gui uninstall
+.PHONY: clean clobber fresh gui tidy uninstall

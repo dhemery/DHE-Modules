@@ -23,7 +23,8 @@ public:
     }};
   }
 
-  static auto modulated(const rack::Module *module, int knob, int cv, int av) -> Knob {
+  static auto modulated(const rack::Module *module, int knob, int cv, int av)
+      -> Knob {
     const auto *knob_param = &module->params[knob];
     const auto *cv_input = &module->inputs[cv];
     const auto *av_param = &module->params[av];
@@ -36,19 +37,17 @@ public:
     static constexpr auto av_range = Range{-1.f, 1.f};
     static constexpr auto cv_to_offset = 0.1f;
 
-    auto offset = cv*cv_to_offset;
+    auto offset = cv * cv_to_offset;
     auto multipler = av_range.scale(av);
-    return knob + multipler*offset;
+    return knob + multipler * offset;
   }
 
-  auto operator()() const -> float {
-    return supplier();
-  }
+  auto operator()() const -> float { return supplier(); }
 
 private:
-  template<typename Supplier>
+  template <typename Supplier>
   explicit Knob(const Supplier &supplier) : supplier{supplier} {}
 
   const std::function<float()> supplier;
 };
-}
+} // namespace DHE
