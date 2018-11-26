@@ -4,6 +4,7 @@
 #include "module-widget.h"
 
 #include "controls/knob.h"
+#include "controls/switch.h"
 #include "util/range.h"
 #include "util/sigmoid.h"
 #include "util/signal.h"
@@ -28,31 +29,29 @@ struct TapersCurve {
 struct TapersPanel {
   const Knob level_knob;
   const TapersCurve &curve;
-  const rack::Param &range_selector;
+  const Switch<Range> range;
   rack::Output &output;
 
   TapersPanel(Knob level_knob, const TapersCurve &curve,
-              const rack::Param &range_selector, rack::Output &output)
+              Switch<Range> range_switch, rack::Output &output)
       : level_knob{std::move(level_knob)}, curve{curve},
-        range_selector{range_selector}, output{output} {}
+        range{std::move(range_switch)}, output{output} {}
 
-  void step() {
-    auto is_uni = range_selector.value > 0.1;
-    auto &range = is_uni ? Signal::unipolar_range : Signal::bipolar_range;
-    output.value = range.scale(curve(level_knob()));
-  }
+  void step() { output.value = range().scale(curve(level_knob())); }
 };
 
 struct Tapers : rack::Module {
   const Knob level1 = Knob::modulated(this, LEVEL_1, LEVEL_1_CV, LEVEL_1_AV);
   const TapersCurve curve1{
       Knob::modulated(this, CURVE_1, CURVE_1_CV, CURVE_1_AV), params[SHAPE_1]};
-  TapersPanel panel1{level1, curve1, params[RANGE_1], outputs[OUT_1]};
+  TapersPanel panel1{level1, curve1, Signal::range_switch(this, RANGE_1),
+                     outputs[OUT_1]};
 
   const Knob level2 = Knob::modulated(this, LEVEL_2, LEVEL_2_CV, LEVEL_2_AV);
   const TapersCurve curve2{
       Knob::modulated(this, CURVE_2, CURVE_2_CV, CURVE_2_AV), params[SHAPE_2]};
-  TapersPanel panel2{level2, curve2, params[RANGE_2], outputs[OUT_2]};
+  TapersPanel panel2{level2, curve2, Signal::range_switch(this, RANGE_2),
+                     outputs[OUT_2]};
 
   Tapers() : Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT} {}
 
