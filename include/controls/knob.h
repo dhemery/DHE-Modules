@@ -46,7 +46,8 @@ public:
   }
 
 private:
-  explicit Knob(std::function<float()> supplier) : supplier{std::move(supplier)} {}
+  template<typename Supplier>
+  explicit Knob(const Supplier &supplier) : supplier{supplier} {}
 
   const std::function<float()> supplier;
 };

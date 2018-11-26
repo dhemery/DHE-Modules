@@ -1,5 +1,8 @@
 #include <utility>
 
+#include <utility>
+#include <controls/switch.h>
+
 #include "dhe-modules.h"
 #include "module-widget.h"
 
@@ -21,15 +24,13 @@ struct RangerLevel {
 
 struct RangerLimit {
   const Knob knob;
-  const rack::Param &range_selector;
+  const Switch<Range> range;
 
-  RangerLimit(Knob knob, const rack::Param &range_selector)
-      : knob{std::move(knob)}, range_selector{range_selector} {}
+  RangerLimit(Knob knob, Switch<Range> selector)
+      : knob{std::move(knob)}, range{std::move(selector)} {}
 
   auto operator()() const -> float {
-    auto range = range_selector.value > 0.1 ? Signal::unipolar_range
-                                            : Signal::bipolar_range;
-    return range.scale(knob());
+    return range().scale(knob());
   }
 };
 
@@ -50,9 +51,9 @@ struct Ranger : rack::Module {
 
   RangerLevel level{Knob::modulated(this, LEVEL_KNOB, LEVEL_CV, LEVEL_AV)};
   RangerLimit upper{Knob::modulated(this, LIMIT_1_KNOB, LIMIT_1_CV, LIMIT_1_AV),
-                    params[LIMIT_1_RANGE]};
+                    Switch<Range>::two(this, LIMIT_1_RANGE, Signal::bipolar_range, Signal::unipolar_range)};
   RangerLimit lower{Knob::modulated(this, LIMIT_2_KNOB, LIMIT_2_CV, LIMIT_2_AV),
-                    params[LIMIT_2_RANGE]};
+                    Switch<Range>::two(this, LIMIT_2_RANGE, Signal::bipolar_range, Signal::unipolar_range)};
 
   Ranger() : Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT} {}
 
