@@ -15,51 +15,43 @@ namespace DHE {
 
 struct TapersCurve {
   const Knob knob;
-  const rack::Param &shape_selector;
+  const rack::Param *shape_selector;
 
-  TapersCurve(Knob knob, const rack::Param &shape_selector)
+  TapersCurve(Knob knob, const rack::Param *shape_selector)
       : knob{std::move(knob)}, shape_selector{shape_selector} {}
 
   auto operator()(float input) const -> float {
-    auto is_s = shape_selector.value > 0.1;
+    auto is_s = shape_selector->value > 0.1;
     auto curvature = Sigmoid::curvature(knob());
     return is_s ? Sigmoid::s_taper(input, curvature)
                 : Sigmoid::j_taper(input, curvature);
   }
 };
 
-struct TapersPanel {
-  const Knob level_knob;
-  const TapersCurve &curve;
-  const Switch<Range> range;
-  rack::Output &output;
-
-  TapersPanel(Knob level_knob, const TapersCurve &curve,
-              Switch<Range> range_switch, rack::Output &output)
-      : level_knob{std::move(level_knob)}, curve{curve},
-        range{std::move(range_switch)}, output{output} {}
-
-  void step() { output.value = range().scale(curve(level_knob())); }
-};
-
 struct Tapers : rack::Module {
-  const Knob level1 = Knob{this, LEVEL_1}.modulate_by(LEVEL_1_CV, LEVEL_1_AV);
   const TapersCurve curve1{
-      Knob{this, CURVE_1}.modulate_by(CURVE_1_CV, CURVE_1_AV), params[SHAPE_1]};
-  TapersPanel panel1{level1, curve1, Signal::range_switch(this, RANGE_1),
-                     outputs[OUT_1]};
+      Knob{this, CURVE_1}.modulate_by(CURVE_1_CV, CURVE_1_AV),
+      &params[SHAPE_1]};
+  const Switch<Range> range1 = Signal::range_switch(this, RANGE_1);
+  const Knob level1 = Knob{this, LEVEL_1}
+                          .modulate_by(LEVEL_1_CV, LEVEL_1_AV)
+                          .map(curve1)
+                          .scale_to(range1);
 
-  const Knob level2 = Knob{this, LEVEL_2}.modulate_by(LEVEL_2_CV, LEVEL_2_AV);
   const TapersCurve curve2{
-      Knob{this, CURVE_2}.modulate_by(CURVE_2_CV, CURVE_2_AV), params[SHAPE_2]};
-  TapersPanel panel2{level2, curve2, Signal::range_switch(this, RANGE_2),
-                     outputs[OUT_2]};
+      Knob{this, CURVE_2}.modulate_by(CURVE_2_CV, CURVE_2_AV),
+      &params[SHAPE_2]};
+  const Switch<Range> range2 = Signal::range_switch(this, RANGE_2);
+  const Knob level2 = Knob{this, LEVEL_2}
+                          .modulate_by(LEVEL_2_CV, LEVEL_2_AV)
+                          .map(curve2)
+                          .scale_to(range2);
 
   Tapers() : Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT} {}
 
   void step() override {
-    panel1.step();
-    panel2.step();
+    outputs[OUT_1].value = level1();
+    outputs[OUT_2].value = level2();
   }
 
   enum ParameterIds {
