@@ -4,13 +4,14 @@
 #include "module-widget.h"
 
 #include "controls/knob.h"
+#include "controls/signal.h"
+#include "controls/switch.h"
 #include "util/d-flip-flop.h"
 #include "util/duration.h"
 #include "util/mode.h"
 #include "util/phase-accumulator.h"
 #include "util/range.h"
 #include "util/sigmoid.h"
-#include "util/signal.h"
 
 namespace DHE {
 

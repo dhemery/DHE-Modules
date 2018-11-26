@@ -2,9 +2,9 @@
 #include "module-widget.h"
 
 #include "controls/knob.h"
+#include "controls/signal.h"
 #include "util/duration.h"
 #include "util/range.h"
-#include "util/signal.h"
 
 namespace DHE {
 
