@@ -20,13 +20,12 @@ struct Upstage : rack::Module {
   enum OutputIds { TRIGGER_OUT, MAIN_OUT, OUTPUT_COUNT };
 
   const Knob level_knob = Knob::modulated(this, LEVEL_KNOB, LEVEL_CV);
+  const Switch<Range> level_range = Signal::range_switch(this, LEVEL_SWITCH);
 
   Upstage() : Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT} {}
 
   auto envelope_voltage() const -> float {
-    auto is_uni = params[LEVEL_SWITCH].value > 0.1f;
-    auto &range = is_uni ? Signal::unipolar_range : Signal::bipolar_range;
-    return range.scale(level_knob());
+    return level_range().scale(level_knob());
   }
 
   void send_main_out(float voltage) { outputs[MAIN_OUT].value = voltage; }
