@@ -7,9 +7,8 @@
 #include "util/range.h"
 
 namespace DHE {
-
-auto default_cv() -> const rack::Input *;
-auto default_av() -> const rack::Param *;
+static constexpr auto constant_zero = 0.f;
+static constexpr auto constant_one = 1.f;
 
 inline auto cv_offset(float cv) -> float {
   static constexpr auto cv_to_offset = 0.1f;
@@ -32,41 +31,40 @@ inline auto modulated(float rotation, float cv) -> float {
 class Knob {
 public:
   Knob(const rack::Module *module, int knob_index)
-      : Knob{&module->params[knob_index]} {}
-  Knob(const rack::Module *module, int knob_index, int cv_index)
-      : Knob{&module->params[knob_index], &module->inputs[cv_index]} {}
-  Knob(const rack::Module *module, int knob_index, int cv_index, int av_index)
-      : Knob{&module->params[knob_index], &module->inputs[cv_index],
-             &module->params[av_index]} {}
-
-  virtual auto operator()() const -> float {
-    return modulated(knob->value, cv->value, av->value);
+      : Knob{&module->params[knob_index].value, &constant_zero, &constant_one} {
   }
+  Knob(const rack::Module *module, int knob_index, int cv_index)
+      : Knob{&module->params[knob_index].value, &module->inputs[cv_index].value,
+             &constant_one} {}
+  Knob(const rack::Module *module, int knob_index, int cv_index, int av_index)
+      : Knob{&module->params[knob_index].value, &module->inputs[cv_index].value,
+             &module->params[av_index].value} {}
+
+  inline auto operator()() const -> float { return modulated(*knob, *cv, *av); }
 
 private:
-  explicit Knob(const rack::Param *knob, const rack::Input *cv = default_cv(),
-                const rack::Param *av = default_av())
+  explicit Knob(const float *knob, const float *cv, const float *av)
       : knob{knob}, cv{cv}, av{av} {}
 
-  const rack::Param *knob;
-  const rack::Input *cv;
-  const rack::Param *av;
+  const float *knob;
+  const float *cv;
+  const float *av;
 };
 
 class ScaledKnob {
 public:
   ScaledKnob(const rack::Module *module, int knob_index, int cv_index,
              Range range)
-      : knob{&module->params[knob_index]}, cv{&module->inputs[cv_index]},
-        range{range} {}
+      : knob{&module->params[knob_index].value},
+        cv{&module->inputs[cv_index].value}, range{range} {}
 
   inline auto operator()() const -> float {
-    return range.scale(modulated(knob->value, cv->value));
+    return range.scale(modulated(*knob, *cv));
   }
 
 private:
-  const rack::Param *knob;
-  const rack::Input *cv;
+  const float *knob;
+  const float *cv;
   const Range range;
 };
 } // namespace DHE

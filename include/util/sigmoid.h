@@ -6,6 +6,9 @@
 namespace DHE {
 namespace Sigmoid {
 
+static constexpr auto sigmoid_range = Range{-1.f, 1.f};
+static constexpr auto proportion_range = Range{0.f, 1.f};
+
 /**
  * Applies an inverse sigmoid function to the input.
  * <p>
@@ -23,7 +26,17 @@ namespace Sigmoid {
  * @param curvature the intensity and direction of the curvature
  * @return the sigmoid function result
  */
-auto inverse(float input, float curvature) -> float;
+inline auto inverse(float input, float curvature) -> float {
+  static constexpr auto precision = 1e-4f;
+  static constexpr auto max_curvature = 1.0f - precision;
+  static constexpr auto curvature_range = Range{-max_curvature, max_curvature};
+
+  curvature = curvature_range.clamp(curvature);
+  input = sigmoid_range.clamp(input);
+
+  return (input - input * curvature) /
+      (curvature - std::abs(input) * 2.0f * curvature + 1.0f);
+}
 
 /**
  * Applies a sigmoid function to the input.
@@ -59,7 +72,13 @@ inline auto curve(float input, float curvature) -> float {
  * @param input the value to map to a curvature
  * @return the curvature
  */
-auto curvature(float input) -> float;
+inline auto curvature(float input) -> float {
+  // This curvature creates a gentle S curve, increasing sensitivity in the
+  // middle of the input range and decreasing sensitivity toward the extremes.
+  static constexpr auto gentle_s = 0.65f;
+  auto scaled = sigmoid_range.scale(input);
+  return curve(scaled, gentle_s);
+}
 
 /**
  * Applies a J-shaped transfer function to the input.
@@ -78,7 +97,9 @@ auto curvature(float input) -> float;
  * @param curvature the intensity and direction of the taper
  * @return the taper function result
  */
-auto j_taper(float input, float curvature) -> float;
+inline auto j_taper(float input, float curvature) -> float {
+  return inverse(proportion_range.clamp(input), curvature);
+}
 
 /**
  * Applies an S-shaped transfer function to the input.
@@ -97,9 +118,16 @@ auto j_taper(float input, float curvature) -> float;
  * @param curvature the intensity and direction of the taper
  * @return the taper function result
  */
-auto s_taper(float input, float curvature) -> float;
+inline auto s_taper(float input, float curvature) -> float {
+  const auto scaled = sigmoid_range.scale(input);
+  const auto tapered = curve(scaled, curvature);
+  return sigmoid_range.normalize(tapered);
+}
 
-auto shape(float input, float curvature, bool is_s) -> float;
+inline auto shape(float input, float curve, bool is_s) -> float {
+  auto k = curvature(curve);
+  return is_s ? s_taper(input, k) : j_taper(input, k);
+}
 
 class Shaper {
   Knob curve_knob;
@@ -108,7 +136,7 @@ class Shaper {
 public:
   Shaper(Knob curve_knob, Button is_s) : curve_knob{curve_knob}, is_s{is_s} {}
 
-  auto operator()(float input) const -> float {
+  inline auto operator()(float input) const -> float {
     return shape(input, curve_knob(), is_s());
   }
 };

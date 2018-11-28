@@ -9,25 +9,23 @@ namespace DHE {
 class Button {
 public:
   Button(const rack::Module *module, int index)
-      : switch_param{&module->params[index]} {}
+      : position{&module->params[index].value} {}
 
-  auto operator()() const -> bool { return switch_param->value > 0.5f; }
+  inline auto operator()() const -> bool { return *position > 0.5f; }
 
 private:
-  const rack::Param *switch_param;
+  const float *position;
 };
 
 template <typename T> class Switch2 {
 public:
   Switch2(const rack::Module *module, int index, T low, T high)
-      : switch_param{&module->params[index]}, low{low}, high{high} {}
+      : position{&module->params[index].value}, low{low}, high{high} {}
 
-  auto operator()() const -> T {
-    return switch_param->value > 0.5f ? high : low;
-  }
+  inline auto operator()() const -> T { return *position > 0.5f ? high : low; }
 
 private:
-  const rack::Param *switch_param;
+  const float *position;
   T low;
   T high;
 };
