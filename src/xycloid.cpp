@@ -55,18 +55,18 @@ struct Xycloid : rack::Module {
   static constexpr auto wobble_depth_range = Range{0.f, 1.f};
   static constexpr auto gain_range = Range{0.f, 2.f};
 
-  const Knob throb_speed_knob =
-      Knob{this, THROB_SPEED, THROB_SPEED_CV, THROB_SPEED_AV};
-  const Knob wobble_depth_knob =
-      Knob{this, WOBBLE_DEPTH, WOBBLE_DEPTH_CV, WOBBLE_DEPTH_AV};
-  const Knob wobble_ratio_knob =
-      Knob{this, WOBBLE_RATIO, WOBBLE_RATIO_CV, WOBBLE_RATIO_AV};
+  const Knob throb_speed_knob{this, THROB_SPEED, THROB_SPEED_CV,
+                              THROB_SPEED_AV};
+  const Knob wobble_depth_knob{this, WOBBLE_DEPTH, WOBBLE_DEPTH_CV,
+                               WOBBLE_DEPTH_AV};
+  const Knob wobble_ratio_knob{this, WOBBLE_RATIO, WOBBLE_RATIO_CV,
+                               WOBBLE_RATIO_AV};
 
   const Knob x_gain_knob = Knob{this, X_GAIN, X_GAIN_CV};
-  const Switch<float> x_offset = Switch<float>::two(this, X_RANGE, 0.f, 1.f);
+  const Switch2<float> x_offset{this, X_RANGE, 0.f, 1.f};
 
   const Knob y_gain_knob = Knob{this, Y_GAIN, Y_GAIN_CV};
-  const Switch<float> y_offset = Switch<float>::two(this, Y_RANGE, 0.f, 1.f);
+  const Switch2<float> y_offset{this, Y_RANGE, 0.f, 1.f};
 
   float wobble_ratio_offset{0.f};
   XycloidRotor wobbler{};

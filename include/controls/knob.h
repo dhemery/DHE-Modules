@@ -31,8 +31,7 @@ public:
   }
 
 private:
-  Knob(const rack::Param *knob,
-       const rack::Input *cv = default_cv(),
+  Knob(const rack::Param *knob, const rack::Input *cv = default_cv(),
        const rack::Param *av = default_av())
       : knob{knob}, cv{cv}, av{av} {}
 
