@@ -13,38 +13,23 @@
 
 namespace DHE {
 
-struct TapersCurve {
-  const Knob knob;
-  const rack::Param *shape_selector;
-
-  TapersCurve(Knob knob, const rack::Param *shape_selector)
-      : knob{std::move(knob)}, shape_selector{shape_selector} {}
-
-  auto operator()(float input) const -> float {
-    auto is_s = shape_selector->value > 0.1;
-    auto curvature = Sigmoid::curvature(knob());
-    return is_s ? Sigmoid::s_taper(input, curvature)
-                : Sigmoid::j_taper(input, curvature);
-  }
-};
-
 struct Tapers : rack::Module {
-  const TapersCurve curve1{
-      Knob{this, CURVE_1}.modulate_by(CURVE_1_CV, CURVE_1_AV),
-      &params[SHAPE_1]};
+  const Knob curvature1 = Knob{this, CURVE_1}.modulate_by(CURVE_1_CV, CURVE_1_AV);
+  const Switch<bool> is_s1 = Switch<bool>::two(this, SHAPE_1, false, true);
   const Switch<Range> range1 = Signal::range_switch(this, RANGE_1);
+  const Sigmoid::Shaper shaper1{curvature1, is_s1};
   const Knob level1 = Knob{this, LEVEL_1}
                           .modulate_by(LEVEL_1_CV, LEVEL_1_AV)
-                          .map(curve1)
+                          .map(shaper1)
                           .scale_to(range1);
 
-  const TapersCurve curve2{
-      Knob{this, CURVE_2}.modulate_by(CURVE_2_CV, CURVE_2_AV),
-      &params[SHAPE_2]};
+  const Knob curvature2 = Knob{this, CURVE_2}.modulate_by(CURVE_2_CV, CURVE_2_AV);
+  const Switch<bool> is_s2 = Switch<bool>::two(this, SHAPE_2, false, true);
   const Switch<Range> range2 = Signal::range_switch(this, RANGE_2);
+  const Sigmoid::Shaper shaper2{curvature2, is_s2};
   const Knob level2 = Knob{this, LEVEL_2}
                           .modulate_by(LEVEL_2_CV, LEVEL_2_AV)
-                          .map(curve2)
+                          .map(shaper2)
                           .scale_to(range2);
 
   Tapers() : Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT} {}

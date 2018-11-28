@@ -46,6 +46,22 @@ inline auto curve(float input, float curvature) -> float {
 }
 
 /**
+ * Applies a gentle S-shaped transfer function to map an input in the range
+ * [0.0, 1.0] to an output in the range [-1.0, 1.0]. The transfer function makes
+ * the output more sensitive to changes in inputs near 0.5 and less sensitive to
+ * changes near 0.0 and 1.0.
+ * <p>
+ * This function is intended to translate DHE-Modules CURVE knob rotation to a
+ * curvature value suitable to pass to the curve(), inverse(), j_taper(), and
+ * s_taper() functions.
+ *
+ * @param input the value to map to a curvature
+ * @return the curvature
+ */
+auto curvature(float input) -> float;
+
+
+/**
  * Applies a J-shaped transfer function to the input.
  * <p>
  * The curvature determines the shape and intensity of the taper.
@@ -83,19 +99,19 @@ auto j_taper(float input, float curvature) -> float;
  */
 auto s_taper(float input, float curvature) -> float;
 
-/**
- * Applies a gentle S-shaped transfer function to map an input in the range
- * [0.0, 1.0] to an output in the range [-1.0, 1.0]. The transfer function makes
- * the output more sensitive to changes in inputs near 0.5 and less sensitive to
- * changes near 0.0 and 1.0.
- * <p>
- * This function is intended to translate DHE-Modules CURVE knob rotation to a
- * curvature value suitable to pass to the curve(), inverse(), j_taper(), and
- * s_taper() functions.
- *
- * @param input the value to map to a curvature
- * @return the curvature
- */
-auto curvature(float input) -> float;
+auto shape(float input, float curvature, bool is_s) -> float;
+
+class Shaper {
+  Knob curve_knob;
+  Switch<bool> is_s;
+
+public:
+  Shaper(Knob curve_knob, Switch<bool> is_s) : curve_knob{std::move(curve_knob)}, is_s{std::move(is_s)} {}
+
+  auto operator()(float input) const -> float {
+    return shape(input, curve_knob(), is_s());
+  }
+};
+
 } // namespace Sigmoid
 } // namespace DHE

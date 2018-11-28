@@ -26,9 +26,7 @@ struct Swave : rack::Module {
   void send_main_out(float voltage) { outputs[MAIN_OUT].value = voltage; }
 
   auto shape(float phase) const -> float {
-    auto curvature = curve_in();
-    return is_s_curve() ? Sigmoid::s_taper(phase, curvature)
-                        : Sigmoid::j_taper(phase, curvature);
+    return Sigmoid::shape(phase, curve_in(), is_s_curve());
   }
 
   void step() override {

@@ -39,14 +39,15 @@ struct BoosterStage : rack::Module {
   };
 
   enum OutputIds { ACTIVE_OUT, EOC_OUT, MAIN_OUT, OUTPUT_COUNT };
-
-  const Knob curve_knob = Knob{this, CURVE_KNOB}.modulate_by(CURVE_CV);
-
   const Knob duration =
       Duration::ranged_knob(this, DURATION_KNOB, DURATION_CV, DURATION_SWITCH);
 
-  const Knob level_knob = Knob{this, LEVEL_KNOB}.modulate_by(LEVEL_CV);
   const Switch<Range> level_range = Signal::range_switch(this, LEVEL_SWITCH);
+  const Knob level = Knob{this, LEVEL_KNOB}.modulate_by(LEVEL_CV).scale_to(level_range);
+
+  const Knob curve_knob = Knob{this, CURVE_KNOB}.modulate_by(CURVE_CV);
+  const Switch<bool> is_s = Switch<bool>::two(this, SHAPE_SWITCH, false, true);
+  const Sigmoid::Shaper shaper{curve_knob, is_s};
 
   float phase_0_voltage = 0.f;
   bool is_active = false;
@@ -101,8 +102,6 @@ struct BoosterStage : rack::Module {
 
   auto active_in() const -> bool { return params[ACTIVE_BUTTON].value > 0.1f; }
 
-  auto curve_in() const -> float { return Sigmoid::curvature(curve_knob()); }
-
   auto defer_in() const -> bool {
     auto defer_button = params[DEFER_BUTTON].value > 0.1f;
     auto defer_input = inputs[DEFER_IN].value > 0.1f;
@@ -110,14 +109,10 @@ struct BoosterStage : rack::Module {
   }
 
   auto envelope_voltage(float phase) const -> float {
-    return scale(taper(phase), phase_0_voltage, level_in());
+    return scale(shaper(phase), phase_0_voltage, level());
   }
 
   auto eoc_in() const -> bool { return params[EOC_BUTTON].value > 0.1f; }
-
-  bool is_s_taper() const { return params[SHAPE_SWITCH].value > 0.1f; }
-
-  auto level_in() const -> float { return level_range().scale(level_knob()); }
 
   auto main_in() const -> float { return inputs[MAIN_IN].value; }
 
@@ -139,11 +134,6 @@ struct BoosterStage : rack::Module {
     executor.step();
     send_active();
     send_eoc();
-  }
-
-  auto taper(float phase) const -> float {
-    return is_s_taper() ? Sigmoid::s_taper(phase, curve_in())
-                        : Sigmoid::j_taper(phase, curve_in());
   }
 
   auto trigger_in() const -> bool {

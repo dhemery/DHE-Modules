@@ -1,4 +1,10 @@
+#include <utility>
+
+#include <utility>
+
 #include <cmath>
+#include <controls/switch.h>
+#include <controls/knob.h>
 
 #include "util/range.h"
 #include "util/sigmoid.h"
@@ -18,6 +24,11 @@ auto inverse(float input, float curvature) -> float {
 
   return (input - input * curvature) /
          (curvature - std::abs(input) * 2.0f * curvature + 1.0f);
+}
+
+auto shape(float input, float curve, bool is_s) -> float {
+  auto k = curvature(curve);
+  return is_s ? s_taper(input, k) : j_taper(input, k);
 }
 
 auto j_taper(float input, float curvature) -> float {
