@@ -25,7 +25,7 @@ public:
   Knob(const rack::Module *module, int knob_index, int cv_index, int av_index)
       : Knob{module, &module->params[knob_index], &module->inputs[cv_index], &module->params[av_index]} {}
 
-  auto operator()() const -> float {
+  virtual auto operator()() const -> float {
     static constexpr auto av_range = Range{-1.f, 1.f};
     static constexpr auto cv_to_offset = 0.1f;
     auto rotation = knob->value;

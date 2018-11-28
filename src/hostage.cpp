@@ -1,7 +1,7 @@
 #include "dhe-modules.h"
 #include "module-widget.h"
 
-#include "controls/duration.h"
+#include "controls/duration-knob.h"
 #include "controls/knob.h"
 #include "util/d-flip-flop.h"
 #include "util/mode.h"
@@ -21,8 +21,7 @@ struct Hostage : rack::Module {
     PARAMETER_COUNT
   };
 
-  const Knob duration =
-      Duration::ranged_knob(this, DURATION_KNOB, DURATION_CV, DURATION_SWITCH);
+  const DurationKnob duration{this, DURATION_KNOB, DURATION_CV, DURATION_SWITCH};
 
   DFlipFlop sustain_gate{[this] { return hold_in(); }};
   DFlipFlop sustain_trigger{[this] { return hold_in(); }};

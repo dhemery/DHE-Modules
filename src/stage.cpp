@@ -3,7 +3,7 @@
 #include "dhe-modules.h"
 #include "module-widget.h"
 
-#include "controls/duration.h"
+#include "controls/duration-knob.h"
 #include "controls/knob.h"
 #include "controls/signal.h"
 #include "controls/switch.h"
@@ -24,7 +24,7 @@ struct Stage : public rack::Module {
 
   const Knob curve_knob = Knob{this, CURVE_KNOB};
 
-  const Knob duration = Duration::knob(this, DURATION_KNOB);
+  const DurationKnob duration{this, DURATION_KNOB};
   const Knob level = Knob{this, LEVEL_KNOB}.scale_to(Signal::unipolar_range);
 
   float phase_0_voltage{0.f};

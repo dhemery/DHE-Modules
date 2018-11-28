@@ -2,7 +2,7 @@
 #include "dhe-modules.h"
 #include "module-widget.h"
 
-#include "controls/duration.h"
+#include "controls/duration-knob.h"
 #include "controls/signal.h"
 #include "util/d-flip-flop.h"
 #include "util/mode.h"
@@ -36,12 +36,10 @@ struct BoosterStage : rack::Module {
   };
 
   enum OutputIds { ACTIVE_OUT, EOC_OUT, MAIN_OUT, OUTPUT_COUNT };
-  const Knob duration =
-      Duration::ranged_knob(this, DURATION_KNOB, DURATION_CV, DURATION_SWITCH);
+  const DurationKnob duration{this, DURATION_KNOB, DURATION_CV, DURATION_SWITCH};
 
   const Switch<Range> level_range = Signal::range_switch(this, LEVEL_SWITCH);
-  const Knob level = Knob{this, LEVEL_KNOB, LEVEL_CV}
-  .scale_to(level_range);
+  const Knob level = Knob{this, LEVEL_KNOB, LEVEL_CV}.scale_to(level_range);
 
   const Knob curve_knob{this, CURVE_KNOB, CURVE_CV};
   const Switch<bool> is_s = Switch<bool>::two(this, SHAPE_SWITCH, false, true);

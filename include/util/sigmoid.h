@@ -1,5 +1,6 @@
 #pragma once
 
+#include "controls/switch.h"
 #include "range.h"
 
 namespace DHE {
