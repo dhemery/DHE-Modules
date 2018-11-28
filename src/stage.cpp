@@ -25,7 +25,7 @@ struct Stage : public rack::Module {
   const Knob curve_knob = Knob{this, CURVE_KNOB};
 
   const DurationKnob duration{this, DURATION_KNOB};
-  const Knob level = Knob{this, LEVEL_KNOB}.scale_to(Signal::unipolar_range);
+  const Knob level_knob{this, LEVEL_KNOB};
 
   float phase_0_voltage{0.f};
 
@@ -80,7 +80,8 @@ struct Stage : public rack::Module {
   auto defer_in() const -> bool { return inputs[DEFER_IN].value > 0.1; }
 
   auto envelope_voltage(float phase) const -> float {
-    return scale(taper(phase), phase_0_voltage, level());
+    auto target = Signal::unipolar_range.scale(level_knob());
+    return scale(taper(phase), phase_0_voltage, target);
   }
 
   auto main_in() const -> float { return inputs[MAIN_IN].value; }

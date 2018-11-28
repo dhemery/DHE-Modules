@@ -1,42 +1,32 @@
 #include <utility>
 
-#include <utility>
-
 #include "dhe-modules.h"
 #include "module-widget.h"
 
 #include "controls/knob.h"
 #include "controls/signal.h"
-#include "controls/switch.h"
-#include "util/range.h"
 #include "util/sigmoid.h"
 
 namespace DHE {
 
 struct Tapers : rack::Module {
-  const Knob curvature1 =
-      Knob{this, CURVE_1, CURVE_1_CV, CURVE_1_AV};
+  const Knob curvature1{this, CURVE_1, CURVE_1_CV, CURVE_1_AV};
   const Switch<bool> is_s1 = Switch<bool>::two(this, SHAPE_1, false, true);
   const Switch<Range> range1 = Signal::range_switch(this, RANGE_1);
   const Sigmoid::Shaper shaper1{curvature1, is_s1};
-  const Knob level1 = Knob{this, LEVEL_1, LEVEL_1_CV, LEVEL_1_AV}
-                          .map(shaper1)
-                          .scale_to(range1);
+  const Knob level1{this, LEVEL_1, LEVEL_1_CV, LEVEL_1_AV};
 
-  const Knob curvature2 =
-      Knob{this, CURVE_2, CURVE_2_CV, CURVE_2_AV};
+  const Knob curvature2{this, CURVE_2, CURVE_2_CV, CURVE_2_AV};
   const Switch<bool> is_s2 = Switch<bool>::two(this, SHAPE_2, false, true);
   const Switch<Range> range2 = Signal::range_switch(this, RANGE_2);
   const Sigmoid::Shaper shaper2{curvature2, is_s2};
-  const Knob level2 = Knob{this, LEVEL_2, LEVEL_2_CV, LEVEL_2_AV}
-                          .map(shaper2)
-                          .scale_to(range2);
+  const Knob level2{this, LEVEL_2, LEVEL_2_CV, LEVEL_2_AV};
 
   Tapers() : Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT} {}
 
   void step() override {
-    outputs[OUT_1].value = level1();
-    outputs[OUT_2].value = level2();
+    outputs[OUT_1].value = range1().scale(shaper1(level1()));
+    outputs[OUT_2].value = range2().scale(shaper2(level2()));
   }
 
   enum ParameterIds {

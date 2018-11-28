@@ -36,10 +36,11 @@ struct BoosterStage : rack::Module {
   };
 
   enum OutputIds { ACTIVE_OUT, EOC_OUT, MAIN_OUT, OUTPUT_COUNT };
-  const DurationKnob duration{this, DURATION_KNOB, DURATION_CV, DURATION_SWITCH};
+  const DurationKnob duration{this, DURATION_KNOB, DURATION_CV,
+                              DURATION_SWITCH};
 
   const Switch<Range> level_range = Signal::range_switch(this, LEVEL_SWITCH);
-  const Knob level = Knob{this, LEVEL_KNOB, LEVEL_CV}.scale_to(level_range);
+  const Knob level_knob = Knob{this, LEVEL_KNOB, LEVEL_CV};
 
   const Knob curve_knob{this, CURVE_KNOB, CURVE_CV};
   const Switch<bool> is_s = Switch<bool>::two(this, SHAPE_SWITCH, false, true);
@@ -49,8 +50,8 @@ struct BoosterStage : rack::Module {
   bool is_active = false;
   bool is_eoc = false;
 
-  PhaseAccumulator envelope{[this] { return sample_time()/duration(); }};
-  PhaseAccumulator eoc_pulse{[this] { return sample_time()/1e-3f; }};
+  PhaseAccumulator envelope{[this] { return sample_time() / duration(); }};
+  PhaseAccumulator eoc_pulse{[this] { return sample_time() / 1e-3f; }};
   DFlipFlop envelope_trigger{[this] { return trigger_in(); }};
 
   Mode stage_mode{};
@@ -105,7 +106,8 @@ struct BoosterStage : rack::Module {
   }
 
   auto envelope_voltage(float phase) const -> float {
-    return scale(shaper(phase), phase_0_voltage, level());
+    auto level = level_range().scale(level_knob());
+    return scale(shaper(phase), phase_0_voltage, level);
   }
 
   auto eoc_in() const -> bool { return params[EOC_BUTTON].value > 0.1f; }
@@ -144,8 +146,8 @@ struct BoosterStageWidget : public ModuleWidget {
       : ModuleWidget(module, 8, "booster-stage") {
     auto widget_right_edge = width();
 
-    auto left_x = widget_right_edge/6.f + 0.3333333f;
-    auto center_x = widget_right_edge/2.f;
+    auto left_x = widget_right_edge / 6.f + 0.3333333f;
+    auto center_x = widget_right_edge / 2.f;
     auto right_x = widget_right_edge - left_x;
     auto button_port_distance = 7.891f;
     auto center_left_x = left_x + button_port_distance;
@@ -156,56 +158,56 @@ struct BoosterStageWidget : public ModuleWidget {
 
     auto row = 0;
     install_input(BoosterStage::LEVEL_CV,
-                  {left_x, top_row_y + row*row_spacing});
+                  {left_x, top_row_y + row * row_spacing});
     install_knob("large", BoosterStage::LEVEL_KNOB,
-                 {center_x, top_row_y + row*row_spacing});
+                 {center_x, top_row_y + row * row_spacing});
     install_switch(BoosterStage::LEVEL_SWITCH,
-                   {right_x, top_row_y + row*row_spacing}, 1, 1);
+                   {right_x, top_row_y + row * row_spacing}, 1, 1);
 
     row++;
     install_input(BoosterStage::CURVE_CV,
-                  {left_x, top_row_y + row*row_spacing});
+                  {left_x, top_row_y + row * row_spacing});
     install_knob("large", BoosterStage::CURVE_KNOB,
-                 {center_x, top_row_y + row*row_spacing});
+                 {center_x, top_row_y + row * row_spacing});
     install_switch(BoosterStage::SHAPE_SWITCH,
-                   {right_x, top_row_y + row*row_spacing});
+                   {right_x, top_row_y + row * row_spacing});
 
     row++;
     install_input(BoosterStage::DURATION_CV,
-                  {left_x, top_row_y + row*row_spacing});
+                  {left_x, top_row_y + row * row_spacing});
     install_knob("large", BoosterStage::DURATION_KNOB,
-                 {center_x, top_row_y + row*row_spacing});
+                 {center_x, top_row_y + row * row_spacing});
     install_switch(BoosterStage::DURATION_SWITCH,
-                   {right_x, top_row_y + row*row_spacing}, 2, 1);
+                   {right_x, top_row_y + row * row_spacing}, 2, 1);
 
     top_row_y = 82.f;
     row_spacing = 15.f;
 
     row = 0;
     install_input(BoosterStage::DEFER_IN,
-                  {left_x, top_row_y + row*row_spacing});
+                  {left_x, top_row_y + row * row_spacing});
     install_button("normal", BoosterStage::DEFER_BUTTON,
-                   {center_left_x, top_row_y + row*row_spacing});
+                   {center_left_x, top_row_y + row * row_spacing});
     install_button("reverse", BoosterStage::ACTIVE_BUTTON,
-                   {center_right_x, top_row_y + row*row_spacing});
+                   {center_right_x, top_row_y + row * row_spacing});
     install_output(BoosterStage::ACTIVE_OUT,
-                   {right_x, top_row_y + row*row_spacing});
+                   {right_x, top_row_y + row * row_spacing});
 
     row++;
     install_input(BoosterStage::TRIGGER_IN,
-                  {left_x, top_row_y + row*row_spacing});
+                  {left_x, top_row_y + row * row_spacing});
     install_button("normal", BoosterStage::TRIGGER_BUTTON,
-                   {center_left_x, top_row_y + row*row_spacing});
+                   {center_left_x, top_row_y + row * row_spacing});
     install_button("reverse", BoosterStage::EOC_BUTTON,
-                   {center_right_x, top_row_y + row*row_spacing});
+                   {center_right_x, top_row_y + row * row_spacing});
     install_output(BoosterStage::EOC_OUT,
-                   {right_x, top_row_y + row*row_spacing});
+                   {right_x, top_row_y + row * row_spacing});
 
     row++;
     install_input(BoosterStage::MAIN_IN,
-                  {left_x, top_row_y + row*row_spacing});
+                  {left_x, top_row_y + row * row_spacing});
     install_output(BoosterStage::MAIN_OUT,
-                   {right_x, top_row_y + row*row_spacing});
+                   {right_x, top_row_y + row * row_spacing});
   }
 };
 } // namespace DHE

@@ -1,14 +1,12 @@
 #include <utility>
 
-#include <utility>
-
 #include "dhe-modules.h"
 #include "module-widget.h"
 
 #include "controls/knob.h"
 #include "controls/signal.h"
+#include "controls/switch.h"
 #include "util/range.h"
-#include <controls/switch.h>
 
 namespace DHE {
 
@@ -27,20 +25,21 @@ struct Ranger : rack::Module {
   enum InputIds { LEVEL_CV, LIMIT_1_CV, LIMIT_2_CV, INPUT_COUNT };
   enum OutputIds { MAIN_OUT, OUTPUT_COUNT };
 
-  Knob upper = Knob{this, LIMIT_1_KNOB,LIMIT_1_CV, LIMIT_1_AV}
-                   .scale_to(Signal::range_switch(this, LIMIT_1_RANGE));
-  Knob lower = Knob{this, LIMIT_2_KNOB, LIMIT_2_CV, LIMIT_2_AV}
-                   .scale_to(Signal::range_switch(this, LIMIT_2_RANGE));
-  Knob level =
-      Knob{this, LEVEL_KNOB, LEVEL_CV, LEVEL_AV}.scale_to([this] {
-        return Range{lower(), upper()};
-      });
+  const Knob upper_knob{this, LIMIT_1_KNOB, LIMIT_1_CV, LIMIT_1_AV};
+  const Switch<Range> upper_range = Signal::range_switch(this, LIMIT_1_RANGE);
+  const Knob lower_knob{this, LIMIT_2_KNOB, LIMIT_2_CV, LIMIT_2_AV};
+  const Switch<Range> lower_range = Signal::range_switch(this, LIMIT_2_RANGE);
+  const Knob level_knob{this, LEVEL_KNOB, LEVEL_CV, LEVEL_AV};
 
   Ranger() : Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT} {}
 
   void send_main_out(float voltage) { outputs[MAIN_OUT].value = voltage; }
 
-  void step() override { send_main_out(level()); }
+  void step() override {
+    auto upper_level = upper_range().scale(upper_knob());
+    auto lower_level = lower_range().scale(lower_knob());
+    send_main_out(scale(level_knob(), lower_level, upper_level));
+  }
 };
 
 struct RangerWidget : public ModuleWidget {
