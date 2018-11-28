@@ -3,8 +3,8 @@
 #include <utility>
 
 #include <cmath>
-#include <controls/switch.h>
 #include <controls/knob.h>
+#include <controls/switch.h>
 
 #include "util/range.h"
 #include "util/sigmoid.h"

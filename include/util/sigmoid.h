@@ -60,7 +60,6 @@ inline auto curve(float input, float curvature) -> float {
  */
 auto curvature(float input) -> float;
 
-
 /**
  * Applies a J-shaped transfer function to the input.
  * <p>
@@ -106,7 +105,8 @@ class Shaper {
   Switch<bool> is_s;
 
 public:
-  Shaper(Knob curve_knob, Switch<bool> is_s) : curve_knob{std::move(curve_knob)}, is_s{std::move(is_s)} {}
+  Shaper(Knob curve_knob, Switch<bool> is_s)
+      : curve_knob{std::move(curve_knob)}, is_s{std::move(is_s)} {}
 
   auto operator()(float input) const -> float {
     return shape(input, curve_knob(), is_s());

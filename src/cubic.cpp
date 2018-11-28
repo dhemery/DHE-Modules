@@ -33,19 +33,17 @@ struct Cubic : rack::Module {
   static Range constexpr gain_range{0.f, 2.0f};
 
   const Knob a =
-      Knob{this, A_KNOB}.modulate_by(A_CV).scale_to(coefficient_range);
+      Knob{this, A_KNOB, A_CV}.scale_to(coefficient_range);
   const Knob b =
-      Knob{this, B_KNOB}.modulate_by(B_CV).scale_to(coefficient_range);
+      Knob{this, B_KNOB, B_CV}.scale_to(coefficient_range);
   const Knob c =
-      Knob{this, C_KNOB}.modulate_by(C_CV).scale_to(coefficient_range);
+      Knob{this, C_KNOB, C_CV}.scale_to(coefficient_range);
   const Knob d =
-      Knob{this, D_KNOB}.modulate_by(D_CV).scale_to(coefficient_range);
+      Knob{this, D_KNOB, D_CV}.scale_to(coefficient_range);
 
-  const Knob input_gain = Knob{this, INPUT_GAIN_KNOB}
-                              .modulate_by(INPUT_GAIN_CV)
+  const Knob input_gain = Knob{this, INPUT_GAIN_KNOB, INPUT_GAIN_CV}
                               .scale_to(gain_range);
-  const Knob output_gain = Knob{this, OUTPUT_GAIN_KNOB}
-                               .modulate_by(OUTPUT_GAIN_CV)
+  const Knob output_gain = Knob{this, OUTPUT_GAIN_KNOB, OUTPUT_GAIN_CV}
                                .scale_to(gain_range);
 
   Cubic() : Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT} {}

@@ -14,21 +14,21 @@
 namespace DHE {
 
 struct Tapers : rack::Module {
-  const Knob curvature1 = Knob{this, CURVE_1}.modulate_by(CURVE_1_CV, CURVE_1_AV);
+  const Knob curvature1 =
+      Knob{this, CURVE_1, CURVE_1_CV, CURVE_1_AV};
   const Switch<bool> is_s1 = Switch<bool>::two(this, SHAPE_1, false, true);
   const Switch<Range> range1 = Signal::range_switch(this, RANGE_1);
   const Sigmoid::Shaper shaper1{curvature1, is_s1};
-  const Knob level1 = Knob{this, LEVEL_1}
-                          .modulate_by(LEVEL_1_CV, LEVEL_1_AV)
+  const Knob level1 = Knob{this, LEVEL_1, LEVEL_1_CV, LEVEL_1_AV}
                           .map(shaper1)
                           .scale_to(range1);
 
-  const Knob curvature2 = Knob{this, CURVE_2}.modulate_by(CURVE_2_CV, CURVE_2_AV);
+  const Knob curvature2 =
+      Knob{this, CURVE_2, CURVE_2_CV, CURVE_2_AV};
   const Switch<bool> is_s2 = Switch<bool>::two(this, SHAPE_2, false, true);
   const Switch<Range> range2 = Signal::range_switch(this, RANGE_2);
   const Sigmoid::Shaper shaper2{curvature2, is_s2};
-  const Knob level2 = Knob{this, LEVEL_2}
-                          .modulate_by(LEVEL_2_CV, LEVEL_2_AV)
+  const Knob level2 = Knob{this, LEVEL_2, LEVEL_2_CV, LEVEL_2_AV}
                           .map(shaper2)
                           .scale_to(range2);
 

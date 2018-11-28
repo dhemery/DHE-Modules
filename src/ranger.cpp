@@ -27,14 +27,12 @@ struct Ranger : rack::Module {
   enum InputIds { LEVEL_CV, LIMIT_1_CV, LIMIT_2_CV, INPUT_COUNT };
   enum OutputIds { MAIN_OUT, OUTPUT_COUNT };
 
-  Knob upper = Knob{this, LIMIT_1_KNOB}
-                   .modulate_by(LIMIT_1_CV, LIMIT_1_AV)
+  Knob upper = Knob{this, LIMIT_1_KNOB,LIMIT_1_CV, LIMIT_1_AV}
                    .scale_to(Signal::range_switch(this, LIMIT_1_RANGE));
-  Knob lower = Knob{this, LIMIT_2_KNOB}
-                   .modulate_by(LIMIT_2_CV, LIMIT_2_AV)
+  Knob lower = Knob{this, LIMIT_2_KNOB, LIMIT_2_CV, LIMIT_2_AV}
                    .scale_to(Signal::range_switch(this, LIMIT_2_RANGE));
   Knob level =
-      Knob{this, LEVEL_KNOB}.modulate_by(LEVEL_CV, LEVEL_AV).scale_to([this] {
+      Knob{this, LEVEL_KNOB, LEVEL_CV, LEVEL_AV}.scale_to([this] {
         return Range{lower(), upper()};
       });
 

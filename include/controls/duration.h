@@ -42,8 +42,7 @@ inline auto ranged_knob(const rack::Module *module, int knob_index,
                         int cv_index, int range_switch_index) -> Knob {
   const auto selected_range = Switch<Range>::three(
       module, range_switch_index, short_range, medium_range, long_range);
-  return Knob{module, knob_index}
-      .modulate_by(cv_index)
+  return Knob{module, knob_index, cv_index}
       .map(&to_duration_taper)
       .scale_to(selected_range);
 }
