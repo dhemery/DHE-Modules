@@ -39,11 +39,12 @@ struct BoosterStage : rack::Module {
   const DurationKnob duration{this, DURATION_KNOB, DURATION_CV,
                               DURATION_SWITCH};
 
-  const Switch2<Range> level_range = Signal::range_switch(this, LEVEL_SWITCH);
+  const Switch2<const Range &> level_range =
+      Signal::range_switch(this, LEVEL_SWITCH);
   const Knob level_knob = Knob{this, LEVEL_KNOB, LEVEL_CV};
 
   const Knob curve_knob{this, CURVE_KNOB, CURVE_CV};
-  const Switch2<bool> is_s{this, SHAPE_SWITCH, false, true};
+  const Button is_s{this, SHAPE_SWITCH};
   const Sigmoid::Shaper shaper{curve_knob, is_s};
 
   float phase_0_voltage = 0.f;

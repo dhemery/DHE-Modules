@@ -19,7 +19,8 @@ struct Upstage : rack::Module {
   enum OutputIds { TRIGGER_OUT, MAIN_OUT, OUTPUT_COUNT };
 
   const Knob level_knob = Knob{this, LEVEL_KNOB, LEVEL_CV};
-  const Switch2<Range> level_range = Signal::range_switch(this, LEVEL_SWITCH);
+  const Switch2<const Range &> level_range =
+      Signal::range_switch(this, LEVEL_SWITCH);
 
   Upstage() : Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT} {}
 

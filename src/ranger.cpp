@@ -26,9 +26,11 @@ struct Ranger : rack::Module {
   enum OutputIds { MAIN_OUT, OUTPUT_COUNT };
 
   const Knob upper_knob{this, LIMIT_1_KNOB, LIMIT_1_CV, LIMIT_1_AV};
-  const Switch2<Range> upper_range = Signal::range_switch(this, LIMIT_1_RANGE);
+  const Switch2<const Range &> upper_range =
+      Signal::range_switch(this, LIMIT_1_RANGE);
   const Knob lower_knob{this, LIMIT_2_KNOB, LIMIT_2_CV, LIMIT_2_AV};
-  const Switch2<Range> lower_range = Signal::range_switch(this, LIMIT_2_RANGE);
+  const Switch2<const Range &> lower_range =
+      Signal::range_switch(this, LIMIT_2_RANGE);
   const Knob level_knob{this, LEVEL_KNOB, LEVEL_CV, LEVEL_AV};
 
   Ranger() : Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT} {}

@@ -6,23 +6,27 @@
 
 namespace DHE {
 
-class DurationKnob : Knob {
+class DurationKnob {
 public:
   DurationKnob(const rack::Module *module, int knob_index)
-      : Knob{module, knob_index} {}
-
+      : DurationKnob{&module->params[knob_index], default_cv(),
+                     default_range_switch()} {}
   DurationKnob(const rack::Module *module, int knob_index, int cv_index,
                int range_switch_index)
-      : Knob{module, knob_index, cv_index},
-        range_switch{&module->params[range_switch_index]} {}
+      : DurationKnob{&module->params[knob_index], &module->inputs[cv_index],
+                     &module->params[range_switch_index]} {}
 
-  auto operator()() const -> float override {
-    auto rotation = DHE::Knob::operator()();
+  auto operator()() const -> float {
+    auto rotation = modulated(knob->value, cv->value);
     auto tapered = Sigmoid::j_taper(rotation, 0.8f);
     return range().scale(tapered);
   }
 
 private:
+  DurationKnob(const rack::Param *knob, const rack::Input *cv,
+               const rack::Param *range_switch)
+      : knob{knob}, cv{cv}, range_switch{range_switch} {}
+
   static auto default_range_switch() -> const rack::Param * {
     static auto range_switch = rack::Param{};
     range_switch.value = 1.f;
@@ -42,6 +46,9 @@ private:
     return medium_range;
   }
 
+  const rack::Param *knob;
+  const rack::Input *cv;
   const rack::Param *range_switch{default_range_switch()};
 };
+
 } // namespace DHE

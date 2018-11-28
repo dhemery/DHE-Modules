@@ -11,6 +11,24 @@ namespace DHE {
 auto default_cv() -> const rack::Input *;
 auto default_av() -> const rack::Param *;
 
+inline auto cv_offset(float cv) -> float {
+  static constexpr auto cv_to_offset = 0.1f;
+  return cv * cv_to_offset;
+}
+
+inline auto av_multiplier(float av) -> float {
+  static constexpr auto av_range = Range{-1.f, 1.f};
+  return av_range.scale(av);
+}
+
+inline auto modulated(float rotation, float cv, float av) -> float {
+  return rotation + av_multiplier(av) * cv_offset(cv);
+}
+
+inline auto modulated(float rotation, float cv) -> float {
+  return rotation + cv_offset(cv);
+}
+
 class Knob {
 public:
   Knob(const rack::Module *module, int knob_index)
@@ -22,17 +40,12 @@ public:
              &module->params[av_index]} {}
 
   virtual auto operator()() const -> float {
-    static constexpr auto av_range = Range{-1.f, 1.f};
-    static constexpr auto cv_to_offset = 0.1f;
-    auto rotation = knob->value;
-    auto offset = cv->value * cv_to_offset;
-    auto multiplier = av_range.scale(av);
-    return rotation + multiplier * offset;
+    return modulated(knob->value, cv->value, av->value);
   }
 
 private:
-  Knob(const rack::Param *knob, const rack::Input *cv = default_cv(),
-       const rack::Param *av = default_av())
+  explicit Knob(const rack::Param *knob, const rack::Input *cv = default_cv(),
+                const rack::Param *av = default_av())
       : knob{knob}, cv{cv}, av{av} {}
 
   const rack::Param *knob;
@@ -47,10 +60,8 @@ public:
       : knob{&module->params[knob_index]}, cv{&module->inputs[cv_index]},
         range{range} {}
 
-  auto operator()() const -> float {
-    auto rotation = knob->value;
-    auto offset = cv->value * 0.1f;
-    return range.scale(rotation + offset);
+  inline auto operator()() const -> float {
+    return range.scale(modulated(knob->value, cv->value));
   }
 
 private:

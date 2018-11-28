@@ -6,6 +6,17 @@
 
 namespace DHE {
 
+class Button {
+public:
+  Button(const rack::Module *module, int index)
+      : switch_param{&module->params[index]} {}
+
+  auto operator()() const -> bool { return switch_param->value > 0.5f; }
+
+private:
+  const rack::Param *switch_param;
+};
+
 template <typename T> class Switch2 {
 public:
   Switch2(const rack::Module *module, int index, T low, T high)

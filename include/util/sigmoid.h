@@ -103,11 +103,10 @@ auto shape(float input, float curvature, bool is_s) -> float;
 
 class Shaper {
   Knob curve_knob;
-  Switch2<bool> is_s;
+  Button is_s;
 
 public:
-  Shaper(Knob curve_knob, Switch2<bool> is_s)
-      : curve_knob{std::move(curve_knob)}, is_s{is_s} {}
+  Shaper(Knob curve_knob, Button is_s) : curve_knob{curve_knob}, is_s{is_s} {}
 
   auto operator()(float input) const -> float {
     return shape(input, curve_knob(), is_s());
