@@ -35,7 +35,7 @@ inline auto inverse(float input, float curvature) -> float {
   input = sigmoid_range.clamp(input);
 
   return (input - input * curvature) /
-      (curvature - std::abs(input) * 2.0f * curvature + 1.0f);
+         (curvature - std::abs(input) * 2.0f * curvature + 1.0f);
 }
 
 /**
