@@ -1,3 +1,4 @@
+#include <util/signal.h>
 #include <utility>
 
 #include "dhe-modules.h"
@@ -8,8 +9,6 @@
 namespace DHE {
 
 struct Cubic : rack::Module {
-  static Range constexpr coefficient_range{-2.0f, 2.0f};
-
   enum ParameterIds {
     A_KNOB,
     B_KNOB,
@@ -31,25 +30,28 @@ struct Cubic : rack::Module {
   };
   enum OutputIds { MAIN_OUT, OUTPUT_COUNT };
 
-  static Range constexpr gain_range{0.f, 2.0f};
-
-  const ScaledKnob a{this, A_KNOB, A_CV, coefficient_range};
-  const ScaledKnob b{this, B_KNOB, B_CV, coefficient_range};
-  const ScaledKnob c{this, C_KNOB, C_CV, coefficient_range};
-  const ScaledKnob d{this, D_KNOB, D_CV, coefficient_range};
-
-  const ScaledKnob input_gain{this, INPUT_GAIN_KNOB, INPUT_GAIN_CV, gain_range};
-  const ScaledKnob output_gain{this, OUTPUT_GAIN_KNOB, OUTPUT_GAIN_CV,
-                               gain_range};
-
   Cubic() : Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT} {}
 
+  auto coefficient(int knob_param, int cv_param) const -> float {
+    static auto constexpr coefficient_range = Range{-2.0f, 2.0f};
+    return coefficient_range.scale(modulated(this, knob_param, cv_param));
+  }
+
   void step() override {
-    auto x = input_gain() * main_in() * 0.2f;
+    auto a = coefficient(A_KNOB, A_CV);
+    auto b = coefficient(B_KNOB, B_CV);
+    auto c = coefficient(C_KNOB, C_CV);
+    auto d = coefficient(D_KNOB, D_CV);
+    auto input_gain =
+        Signal::gain(modulated(this, INPUT_GAIN_KNOB, INPUT_GAIN_CV));
+    auto output_gain =
+        Signal::gain(modulated(this, OUTPUT_GAIN_KNOB, OUTPUT_GAIN_CV));
+
+    auto x = input_gain * main_in() * 0.2f;
     auto x2 = x * x;
     auto x3 = x2 * x;
-    auto y = a() * x3 + b() * x2 + c() * x + d();
-    auto output_voltage = output_gain() * y * 5.f;
+    auto y = a * x3 + b * x2 + c * x + d;
+    auto output_voltage = output_gain * y * 5.f;
     send_main_out(output_voltage);
   }
 

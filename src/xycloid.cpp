@@ -4,8 +4,8 @@
 #include "module-widget.h"
 
 #include "controls/knob.h"
-#include "controls/signal.h"
 #include "util/sigmoid.h"
+#include "util/signal.h"
 
 namespace DHE {
 
@@ -53,20 +53,6 @@ struct Xycloid : rack::Module {
 
   static constexpr auto throb_speed_knob_range = Range{-1.f, 1.f};
   static constexpr auto wobble_depth_range = Range{0.f, 1.f};
-  static constexpr auto gain_range = Range{0.f, 2.f};
-
-  const Knob throb_speed_knob{this, THROB_SPEED, THROB_SPEED_CV,
-                              THROB_SPEED_AV};
-  const Knob wobble_depth_knob{this, WOBBLE_DEPTH, WOBBLE_DEPTH_CV,
-                               WOBBLE_DEPTH_AV};
-  const Knob wobble_ratio_knob{this, WOBBLE_RATIO, WOBBLE_RATIO_CV,
-                               WOBBLE_RATIO_AV};
-
-  const Knob x_gain_knob = Knob{this, X_GAIN, X_GAIN_CV};
-  const Switch2<float> x_offset{this, X_RANGE, 0.f, 1.f};
-
-  const Knob y_gain_knob = Knob{this, Y_GAIN, Y_GAIN_CV};
-  const Switch2<float> y_offset{this, Y_RANGE, 0.f, 1.f};
 
   float wobble_ratio_offset{0.f};
   XycloidRotor wobbler{};
@@ -98,15 +84,28 @@ struct Xycloid : rack::Module {
     outputs[Y_OUT].value = 5.f * y_gain_in() * (y + y_offset());
   }
 
+  inline auto offset(int param) const -> float {
+    auto is_uni = params[param].value > 0.5f;
+    return is_uni ? 1.f : 0.f;
+  }
+
+  auto x_offset() const -> float { return offset(X_RANGE); }
+
+  auto y_offset() const -> float { return offset(Y_RANGE); }
+
   auto throb_speed() const -> float {
     constexpr auto speed_taper_curvature = 0.8f;
-    auto scaled = throb_speed_knob_range.scale(throb_speed_knob());
+    auto rotation =
+        modulated(this, THROB_SPEED, THROB_SPEED_CV, THROB_SPEED_AV);
+    auto scaled = throb_speed_knob_range.scale(rotation);
     auto tapered = Sigmoid::inverse(scaled, speed_taper_curvature);
     return -10.f * tapered * rack::engineGetSampleTime();
   }
 
   auto wobble_depth() const -> float {
-    return wobble_depth_range.clamp(wobble_depth_knob());
+    auto rotation =
+        modulated(this, WOBBLE_DEPTH, WOBBLE_DEPTH_CV, WOBBLE_DEPTH_CV);
+    return wobble_depth_range.clamp(rotation);
   }
 
   auto wobble_phase_in() const -> float {
@@ -127,8 +126,9 @@ struct Xycloid : rack::Module {
   }
 
   auto wobble_ratio() const -> float {
-    auto wobble_ratio =
-        wobble_range().scale(wobble_ratio_knob()) + wobble_ratio_offset;
+    auto rotation =
+        modulated(this, WOBBLE_RATIO, WOBBLE_RATIO_CV, WOBBLE_RATIO_AV);
+    auto wobble_ratio = wobble_range().scale(rotation) + wobble_ratio_offset;
     return is_wobble_ratio_free() ? wobble_ratio : std::round(wobble_ratio);
   }
 
@@ -137,9 +137,13 @@ struct Xycloid : rack::Module {
     return static_cast<int>(param);
   }
 
-  auto x_gain_in() const -> float { return gain_range.scale(x_gain_knob()); }
+  auto x_gain_in() const -> float {
+    return Signal::gain(modulated(this, X_GAIN, X_GAIN_CV));
+  }
 
-  auto y_gain_in() const -> float { return gain_range.scale(y_gain_knob()); }
+  auto y_gain_in() const -> float {
+    return Signal::gain(modulated(this, Y_GAIN, Y_GAIN_CV));
+  }
 
   json_t *toJson() override {
     json_t *configuration = json_object();
@@ -209,7 +213,7 @@ struct XycloidWidget : public ModuleWidget {
     row_spacing = 15.f;
     row = 0;
 
-    auto default_gain = Xycloid::gain_range.normalize(1.f);
+    auto default_gain = Signal::gain_range.normalize(1.f);
     row++;
     install_input(Xycloid::X_GAIN_CV, {left_x, top_row_y + row * row_spacing});
     install_knob("small", Xycloid::X_GAIN,

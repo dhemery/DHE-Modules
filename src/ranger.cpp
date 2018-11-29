@@ -4,9 +4,8 @@
 #include "module-widget.h"
 
 #include "controls/knob.h"
-#include "controls/signal.h"
-#include "controls/switch.h"
 #include "util/range.h"
+#include "util/signal.h"
 
 namespace DHE {
 
@@ -25,22 +24,22 @@ struct Ranger : rack::Module {
   enum InputIds { LEVEL_CV, LIMIT_1_CV, LIMIT_2_CV, INPUT_COUNT };
   enum OutputIds { MAIN_OUT, OUTPUT_COUNT };
 
-  const Knob upper_knob{this, LIMIT_1_KNOB, LIMIT_1_CV, LIMIT_1_AV};
-  const Switch2<const Range &> upper_range =
-      Signal::range_switch(this, LIMIT_1_RANGE);
-  const Knob lower_knob{this, LIMIT_2_KNOB, LIMIT_2_CV, LIMIT_2_AV};
-  const Switch2<const Range &> lower_range =
-      Signal::range_switch(this, LIMIT_2_RANGE);
-  const Knob level_knob{this, LEVEL_KNOB, LEVEL_CV, LEVEL_AV};
-
   Ranger() : Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT} {}
 
   void send_main_out(float voltage) { outputs[MAIN_OUT].value = voltage; }
 
+  auto limit(int knob_param, int cv_input, int av_param, int range_param) const
+      -> float {
+    auto is_uni = params[range_param].value > 0.5f;
+    auto range = Signal::range(is_uni);
+    return range.scale(modulated(this, knob_param, cv_input, av_param));
+  }
+
   void step() override {
-    auto upper_level = upper_range().scale(upper_knob());
-    auto lower_level = lower_range().scale(lower_knob());
-    send_main_out(scale(level_knob(), lower_level, upper_level));
+    auto limit1 = limit(LIMIT_1_KNOB, LIMIT_1_CV, LIMIT_1_AV, LIMIT_1_RANGE);
+    auto limit2 = limit(LIMIT_2_KNOB, LIMIT_2_CV, LIMIT_2_AV, LIMIT_2_RANGE);
+    auto level = modulated(this, LEVEL_KNOB, LEVEL_CV, LEVEL_AV);
+    send_main_out(scale(level, limit2, limit1));
   }
 };
 

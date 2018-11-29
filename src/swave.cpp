@@ -2,9 +2,9 @@
 #include "module-widget.h"
 
 #include "controls/knob.h"
-#include "controls/signal.h"
 #include "util/range.h"
 #include "util/sigmoid.h"
+#include "util/signal.h"
 
 namespace DHE {
 
@@ -13,28 +13,25 @@ struct Swave : rack::Module {
   enum InputIds { CURVE_CV, MAIN_IN, INPUT_COUNT };
   enum OutputIds { MAIN_OUT, OUTPUT_COUNT };
 
-  const Knob curve_knob = Knob{this, CURVE_KNOB, CURVE_CV};
-
   Swave() : Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT} {}
 
-  auto curve_in() const -> float { return Sigmoid::curvature(curve_knob()); }
-
-  auto is_s_curve() const -> bool { return params[SHAPE_SWITCH].value > 0.1f; }
-
-  auto main_in() const -> float { return inputs[MAIN_IN].value; }
-
-  void send_main_out(float voltage) { outputs[MAIN_OUT].value = voltage; }
-
-  auto shape(float phase) const -> float {
-    return Sigmoid::shape(phase, curve_in(), is_s_curve());
+  auto curve() const -> float {
+    auto rotation = params[CURVE_KNOB].value;
+    auto cv = inputs[CURVE_CV].value;
+    return modulated(rotation, cv);
   }
 
+  void send_signal(float voltage) { outputs[MAIN_OUT].value = voltage; }
+
+  auto shape() const -> float { return params[SHAPE_SWITCH].value; }
+
+  auto signal_in() const -> float { return inputs[MAIN_IN].value; }
+
   void step() override {
-    auto input(main_in());
-    auto phase = Signal::bipolar_range.normalize(input);
-    auto shaped = shape(phase);
+    auto phase = Signal::bipolar_range.normalize(signal_in());
+    auto shaped = Sigmoid::taper(phase, curve(), shape());
     auto out_voltage = Signal::bipolar_range.scale(shaped);
-    send_main_out(out_voltage);
+    send_signal(out_voltage);
   }
 };
 

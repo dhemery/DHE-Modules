@@ -1,9 +1,9 @@
 #include "dhe-modules.h"
 #include "module-widget.h"
+#include <controls/knob.h>
 
-#include "controls/knob.h"
-#include "controls/signal.h"
 #include "util/range.h"
+#include "util/signal.h"
 
 namespace DHE {
 
@@ -12,31 +12,33 @@ struct Upstage : rack::Module {
     LEVEL_KNOB,
     TRIGGER_BUTTON,
     WAIT_BUTTON,
-    LEVEL_SWITCH,
+    LEVEL_RANGE_SWITCH,
     PARAMETER_COUNT
   };
   enum InputIds { TRIGGER_IN, WAIT_IN, LEVEL_CV, INPUT_COUNT };
   enum OutputIds { TRIGGER_OUT, MAIN_OUT, OUTPUT_COUNT };
 
-  const Knob level_knob = Knob{this, LEVEL_KNOB, LEVEL_CV};
-  const Switch2<const Range &> level_range =
-      Signal::range_switch(this, LEVEL_SWITCH);
-
   Upstage() : Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT} {}
 
-  auto envelope_voltage() const -> float {
-    return level_range().scale(level_knob());
+  auto envelope_voltage() const -> float { return range().scale(level()); }
+
+  auto level() const -> float { return modulated(this, LEVEL_KNOB, LEVEL_CV); }
+
+  auto range() const -> const Range & {
+    auto is_uni = params[LEVEL_RANGE_SWITCH].value > 0.5f;
+    return Signal::range(is_uni);
   }
 
-  void send_main_out(float voltage) { outputs[MAIN_OUT].value = voltage; }
-  void send_trigger_out(bool is_triggered) {
+  void send_envelope(float voltage) { outputs[MAIN_OUT].value = voltage; }
+
+  void send_trigger(bool is_triggered) {
     outputs[TRIGGER_OUT].value = is_triggered ? 10.f : 0.f;
   }
 
   void step() override {
     auto is_triggered = trigger_in() && !wait_in();
-    send_trigger_out(is_triggered);
-    send_main_out(envelope_voltage());
+    send_trigger(is_triggered);
+    send_envelope(envelope_voltage());
   }
 
   auto trigger_in() const -> bool {
@@ -70,7 +72,7 @@ struct UpstageWidget : public ModuleWidget {
 
     row++;
     install_input(Upstage::LEVEL_CV, {left_x, top_row_y + row * row_spacing});
-    install_switch(Upstage::LEVEL_SWITCH,
+    install_switch(Upstage::LEVEL_RANGE_SWITCH,
                    {right_x, top_row_y + row * row_spacing}, 1, 1);
 
     row++;

@@ -1,9 +1,9 @@
 #include "dhe-modules.h"
 #include "module-widget.h"
 
-#include "controls/duration-knob.h"
 #include "controls/knob.h"
 #include "util/d-flip-flop.h"
+#include "util/duration.h"
 #include "util/mode.h"
 #include "util/phase-accumulator.h"
 
@@ -20,9 +20,6 @@ struct Hostage : rack::Module {
     MODE_SWITCH,
     PARAMETER_COUNT
   };
-
-  const DurationKnob duration{this, DURATION_KNOB, DURATION_CV,
-                              DURATION_SWITCH};
 
   DFlipFlop sustain_gate{[this] { return hold_in(); }};
   DFlipFlop sustain_trigger{[this] { return hold_in(); }};
@@ -41,12 +38,12 @@ struct Hostage : rack::Module {
 
   Hostage() : Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT} {
     defer_mode.on_entry([this] { send_active(true); });
-    defer_mode.on_step([this] { send_main_out(main_in()); });
+    defer_mode.on_step([this] { send_envelope(envelope_in()); });
 
     timed_sustain_mode.on_entry([this] {
       sustain_trigger.enable();
       send_active(false);
-      send_main_out(main_in());
+      send_envelope(envelope_in());
     });
     timed_sustain_mode.on_step([this] {
       sustain_trigger.step();
@@ -87,14 +84,20 @@ struct Hostage : rack::Module {
 
   auto defer_in() const -> bool { return inputs[DEFER_IN].value > 0.1f; }
 
+  auto duration() const -> float {
+    auto rotation = modulated(this, DURATION_KNOB, DURATION_CV);
+    auto range_selection = static_cast<int>(params[DURATION_SWITCH].value);
+    return DHE::duration(rotation, range_selection);
+  }
+
   void end_sustaining() {
     send_active(false);
     eoc_pulse.start();
   }
 
-  auto hold_in() const -> bool { return inputs[HOLD_GATE_IN].value > 0.1f; }
+  auto envelope_in() const -> float { return inputs[MAIN_IN].value; }
 
-  auto main_in() const -> float { return inputs[MAIN_IN].value; }
+  auto hold_in() const -> bool { return inputs[HOLD_GATE_IN].value > 0.1f; }
 
   auto mode_switch_in() const -> int {
     return static_cast<int>(params[MODE_SWITCH].value);
@@ -110,7 +113,7 @@ struct Hostage : rack::Module {
     outputs[EOC_OUT].value = is_pulsing ? 10.f : 0.f;
   }
 
-  void send_main_out(float voltage) { outputs[MAIN_OUT].value = voltage; }
+  void send_envelope(float voltage) { outputs[MAIN_OUT].value = voltage; }
 
   void step() override { executor.step(); }
 };

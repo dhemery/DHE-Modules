@@ -3,15 +3,14 @@
 #include "dhe-modules.h"
 #include "module-widget.h"
 
-#include "controls/duration-knob.h"
 #include "controls/knob.h"
-#include "controls/signal.h"
-#include "controls/switch.h"
 #include "util/d-flip-flop.h"
+#include "util/duration.h"
 #include "util/mode.h"
 #include "util/phase-accumulator.h"
 #include "util/range.h"
 #include "util/sigmoid.h"
+#include "util/signal.h"
 
 namespace DHE {
 
@@ -21,11 +20,6 @@ struct Stage : public rack::Module {
   enum InputIds { MAIN_IN, TRIGGER_IN, DEFER_IN, INPUT_COUNT };
 
   enum OutputIds { MAIN_OUT, EOC_OUT, ACTIVE_OUT, OUTPUT_COUNT };
-
-  const Knob curve_knob = Knob{this, CURVE_KNOB};
-
-  const DurationKnob duration{this, DURATION_KNOB};
-  const Knob level_knob{this, LEVEL_KNOB};
 
   float phase_0_voltage{0.f};
 
@@ -40,17 +34,17 @@ struct Stage : public rack::Module {
 
   Stage() : Module(PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT) {
     deferring_mode.on_entry([this] { send_active(true); });
-    deferring_mode.on_step([this] { send_main_out(main_in()); });
+    deferring_mode.on_step([this] { send_envelope(envelope_in()); });
 
     generating_mode.on_entry([this] {
       send_active(false);
-      phase_0_voltage = main_in();
+      phase_0_voltage = envelope_in();
       envelope_trigger.enable();
     });
     generating_mode.on_step([this] {
       envelope_trigger.step();
       generator.step();
-      send_main_out(envelope_voltage(generator.phase()));
+      send_envelope(envelope_voltage(generator.phase()));
     });
     generating_mode.on_exit([this] {
       envelope_trigger.disable();
@@ -58,7 +52,7 @@ struct Stage : public rack::Module {
     });
 
     envelope_trigger.on_rise([this] {
-      phase_0_voltage = main_in();
+      phase_0_voltage = envelope_in();
       generator.start();
     });
 
@@ -75,16 +69,28 @@ struct Stage : public rack::Module {
     executor.enter();
   }
 
-  auto curve_in() const -> float { return Sigmoid::curvature(curve_knob()); }
+  auto curvature() const -> float {
+    auto rotation = params[CURVE_KNOB].value;
+    return Sigmoid::curvature(rotation);
+  }
 
   auto defer_in() const -> bool { return inputs[DEFER_IN].value > 0.1; }
 
-  auto envelope_voltage(float phase) const -> float {
-    auto target = Signal::unipolar_range.scale(level_knob());
-    return scale(taper(phase), phase_0_voltage, target);
+  auto duration() const -> float {
+    auto rotation = params[DURATION_KNOB].value;
+    return DHE::duration(rotation);
   }
 
-  auto main_in() const -> float { return inputs[MAIN_IN].value; }
+  auto level() const -> float {
+    auto rotation = params[LEVEL_KNOB].value;
+    return Signal::unipolar_range.scale(rotation);
+  }
+
+  auto envelope_voltage(float phase) const -> float {
+    return scale(taper(phase), phase_0_voltage, level());
+  }
+
+  auto envelope_in() const -> float { return inputs[MAIN_IN].value; }
 
   auto sample_time() const -> float { return rack::engineGetSampleTime(); }
 
@@ -98,12 +104,12 @@ struct Stage : public rack::Module {
     outputs[EOC_OUT].value = eoc_out_voltage;
   }
 
-  void send_main_out(float voltage) { outputs[MAIN_OUT].value = voltage; }
+  void send_envelope(float voltage) { outputs[MAIN_OUT].value = voltage; }
 
   void step() override { executor.step(); }
 
   auto taper(float phase) const -> float {
-    return Sigmoid::j_taper(phase, curve_in());
+    return Sigmoid::j_taper(phase, curvature());
   }
 
   auto trigger_in() const -> bool { return inputs[TRIGGER_IN].value > 0.1; }

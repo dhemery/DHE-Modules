@@ -4,44 +4,47 @@
 #include "module-widget.h"
 
 #include "controls/knob.h"
-#include "controls/signal.h"
 #include "util/sigmoid.h"
+#include "util/signal.h"
 
 namespace DHE {
 
 struct Tapers : rack::Module {
-  const Knob curvature1{this, CURVE_1, CURVE_1_CV, CURVE_1_AV};
-  const Button is_s1{this, SHAPE_1};
-  const Switch2<const Range &> range1 = Signal::range_switch(this, RANGE_1);
-  const Sigmoid::Shaper shaper1{curvature1, is_s1};
-  const Knob level1{this, LEVEL_1, LEVEL_1_CV, LEVEL_1_AV};
-
-  const Knob curvature2{this, CURVE_2, CURVE_2_CV, CURVE_2_AV};
-  const Button is_s2{this, SHAPE_2};
-  const Switch2<const Range &> range2 = Signal::range_switch(this, RANGE_2);
-  const Sigmoid::Shaper shaper2{curvature2, is_s2};
-  const Knob level2{this, LEVEL_2, LEVEL_2_CV, LEVEL_2_AV};
-
   Tapers() : Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT} {}
 
   void step() override {
-    outputs[OUT_1].value = range1().scale(shaper1(level1()));
-    outputs[OUT_2].value = range2().scale(shaper2(level2()));
+    auto level = modulated(this, LEVEL_1_KNOB, LEVEL_1_CV, LEVEL_1_AV);
+    auto curvature = Sigmoid::curvature(
+        modulated(this, CURVE_1_KNOB, CURVE_1_CV, CURVE_1_AV));
+    auto is_s = params[SHAPE_1_SWITCH].value > 0.5f;
+    auto tapered = Sigmoid::taper(level, curvature, is_s);
+    auto is_uni = params[RANGE_1_SWITCH].value > 0.5f;
+    auto scaled = Signal::range(is_uni).scale(tapered);
+    outputs[OUT_1].value = scaled;
+
+    level = modulated(this, LEVEL_2_KNOB, LEVEL_2_CV, LEVEL_2_AV);
+    curvature = Sigmoid::curvature(
+        modulated(this, CURVE_2_KNOB, CURVE_2_CV, CURVE_2_AV));
+    is_s = params[SHAPE_2_SWITCH].value > 0.5f;
+    tapered = Sigmoid::taper(level, curvature, is_s);
+    is_uni = params[RANGE_2_SWITCH].value > 0.5f;
+    scaled = Signal::range(is_uni).scale(tapered);
+    outputs[OUT_2].value = scaled;
   }
 
   enum ParameterIds {
-    LEVEL_1,
+    LEVEL_1_KNOB,
     LEVEL_1_AV,
-    RANGE_1,
-    CURVE_1,
+    RANGE_1_SWITCH,
+    CURVE_1_KNOB,
     CURVE_1_AV,
-    SHAPE_1,
-    LEVEL_2,
+    SHAPE_1_SWITCH,
+    LEVEL_2_KNOB,
     LEVEL_2_AV,
-    RANGE_2,
-    CURVE_2,
+    RANGE_2_SWITCH,
+    CURVE_2_KNOB,
     CURVE_2_AV,
-    SHAPE_2,
+    SHAPE_2_SWITCH,
     PARAMETER_COUNT
   };
   enum InputIds { LEVEL_1_CV, CURVE_1_CV, LEVEL_2_CV, CURVE_2_CV, INPUT_COUNT };
@@ -63,28 +66,28 @@ struct TapersWidget : public ModuleWidget {
 
     install_input(Tapers::LEVEL_1_CV, {left_x, y});
     install_knob("tiny", Tapers::LEVEL_1_AV, {center_x, y});
-    install_knob("medium", Tapers::LEVEL_1, {right_x, y});
+    install_knob("medium", Tapers::LEVEL_1_KNOB, {right_x, y});
     y += delta_y;
     install_input(Tapers::CURVE_1_CV, {left_x, y});
     install_knob("tiny", Tapers::CURVE_1_AV, {center_x, y});
-    install_knob("medium", Tapers::CURVE_1, {right_x, y});
+    install_knob("medium", Tapers::CURVE_1_KNOB, {right_x, y});
     y += delta_y;
-    install_switch(Tapers::SHAPE_1, {left_x, y});
-    install_switch(Tapers::RANGE_1, {center_x, y});
+    install_switch(Tapers::SHAPE_1_SWITCH, {left_x, y});
+    install_switch(Tapers::RANGE_1_SWITCH, {center_x, y});
     install_output(Tapers::OUT_1, {right_x, y});
 
     y += delta_y + panel_buffer;
 
     install_input(Tapers::LEVEL_2_CV, {left_x, y});
     install_knob("tiny", Tapers::LEVEL_2_AV, {center_x, y});
-    install_knob("medium", Tapers::LEVEL_2, {right_x, y});
+    install_knob("medium", Tapers::LEVEL_2_KNOB, {right_x, y});
     y += delta_y;
     install_input(Tapers::CURVE_2_CV, {left_x, y});
     install_knob("tiny", Tapers::CURVE_2_AV, {center_x, y});
-    install_knob("medium", Tapers::CURVE_2, {right_x, y});
+    install_knob("medium", Tapers::CURVE_2_KNOB, {right_x, y});
     y += delta_y;
-    install_switch(Tapers::SHAPE_2, {left_x, y});
-    install_switch(Tapers::RANGE_2, {center_x, y});
+    install_switch(Tapers::SHAPE_2_SWITCH, {left_x, y});
+    install_switch(Tapers::RANGE_2_SWITCH, {center_x, y});
     install_output(Tapers::OUT_2, {right_x, y});
   }
 };

@@ -1,6 +1,5 @@
 #pragma once
 
-#include "controls/switch.h"
 #include "range.h"
 
 namespace DHE {
@@ -124,22 +123,8 @@ inline auto s_taper(float input, float curvature) -> float {
   return sigmoid_range.normalize(tapered);
 }
 
-inline auto shape(float input, float curve, bool is_s) -> float {
-  auto k = curvature(curve);
-  return is_s ? s_taper(input, k) : j_taper(input, k);
+inline auto taper(float input, float curvature, bool is_s) -> float {
+  return is_s ? s_taper(input, curvature) : j_taper(input, curvature);
 }
-
-class Shaper {
-  Knob curve_knob;
-  Button is_s;
-
-public:
-  Shaper(Knob curve_knob, Button is_s) : curve_knob{curve_knob}, is_s{is_s} {}
-
-  inline auto operator()(float input) const -> float {
-    return shape(input, curve_knob(), is_s());
-  }
-};
-
 } // namespace Sigmoid
 } // namespace DHE

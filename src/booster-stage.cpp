@@ -1,12 +1,13 @@
 
 #include "dhe-modules.h"
 #include "module-widget.h"
+#include <controls/knob.h>
 
-#include "controls/duration-knob.h"
-#include "controls/signal.h"
 #include "util/d-flip-flop.h"
+#include "util/duration.h"
 #include "util/mode.h"
 #include "util/phase-accumulator.h"
+#include "util/signal.h"
 
 namespace DHE {
 
@@ -36,21 +37,6 @@ struct BoosterStage : rack::Module {
   };
 
   enum OutputIds { ACTIVE_OUT, EOC_OUT, MAIN_OUT, OUTPUT_COUNT };
-  const DurationKnob duration{this, DURATION_KNOB, DURATION_CV,
-                              DURATION_SWITCH};
-
-  const Switch2<const Range &> level_range =
-      Signal::range_switch(this, LEVEL_SWITCH);
-  const Knob level_knob = Knob{this, LEVEL_KNOB, LEVEL_CV};
-
-  const Knob curve_knob{this, CURVE_KNOB, CURVE_CV};
-  const Button is_s{this, SHAPE_SWITCH};
-  const Sigmoid::Shaper taper{curve_knob, is_s};
-
-  const Button defer_button{this, DEFER_BUTTON};
-  const Button eoc_button{this, EOC_BUTTON};
-  const Button active_button{this, ACTIVE_BUTTON};
-  const Button trigger_button{this, TRIGGER_BUTTON};
 
   float phase_0_voltage = 0.f;
   bool is_active = false;
@@ -69,17 +55,17 @@ struct BoosterStage : rack::Module {
 
   BoosterStage() : Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT} {
     defer_mode.on_entry([this] { is_active = true; });
-    defer_mode.on_step([this] { send_main_out(main_in()); });
+    defer_mode.on_step([this] { send_envelope(envelope_in()); });
 
     stage_mode.on_entry([this] {
       is_active = false;
-      phase_0_voltage = main_in();
+      phase_0_voltage = envelope_in();
       envelope_trigger.enable();
     });
     stage_mode.on_step([this] {
       envelope_trigger.step();
       envelope.step();
-      send_main_out(envelope_voltage(envelope.phase()));
+      send_envelope(envelope_voltage(envelope.phase()));
     });
     stage_mode.on_exit([this] {
       envelope_trigger.disable();
@@ -87,7 +73,7 @@ struct BoosterStage : rack::Module {
     });
 
     envelope_trigger.on_rise([this] {
-      phase_0_voltage = main_in();
+      phase_0_voltage = envelope_in();
       envelope.start();
     });
 
@@ -106,30 +92,53 @@ struct BoosterStage : rack::Module {
 
   auto defer_in() const -> bool {
     auto defer_input = inputs[DEFER_IN].value > 0.1f;
-    return defer_button() || defer_input;
+    auto defer_button = params[DEFER_BUTTON].value > 0.1f;
+    return defer_button || defer_input;
+  }
+
+  auto curvature() const -> float {
+    auto rotation = params[CURVE_KNOB].value;
+    auto cv = inputs[CURVE_CV].value;
+    return Sigmoid::curvature(modulated(rotation, cv));
+  }
+
+  auto duration() const -> float {
+    auto rotation = modulated(this, DURATION_KNOB, DURATION_CV);
+    auto selection = params[DURATION_SWITCH].value;
+    return DHE::duration(rotation, selection);
   }
 
   auto envelope_voltage(float phase) const -> float {
-    auto level = level_range().scale(level_knob());
-    auto tapered = taper(phase);
-    return scale(tapered, phase_0_voltage, level);
+    auto tapered = Sigmoid::taper(phase, curvature(), is_s_shape());
+    return scale(tapered, phase_0_voltage, level());
   }
 
-  auto main_in() const -> float { return inputs[MAIN_IN].value; }
+  auto envelope_in() const -> float { return inputs[MAIN_IN].value; }
+
+  auto is_s_shape() const -> bool { return params[SHAPE_SWITCH].value > 0.5f; }
+
+  auto level() const -> float {
+    auto is_uni = params[LEVEL_SWITCH].value > 0.5f;
+    auto range = Signal::range(is_uni);
+    auto level = modulated(this, LEVEL_KNOB, LEVEL_CV);
+    return range.scale(level);
+  }
 
   auto sample_time() const -> float { return rack::engineGetSampleTime(); }
 
   void send_active() {
-    auto active = is_active || active_button();
+    auto active_button = params[ACTIVE_BUTTON].value > 0.1f;
+    auto active = is_active || active_button;
     outputs[ACTIVE_OUT].value = active ? 10.f : 0.f;
   }
 
-  void send_main_out(float voltage) { outputs[MAIN_OUT].value = voltage; }
-
   void send_eoc() {
-    auto eoc = is_eoc || eoc_button();
+    auto eoc_button = params[EOC_BUTTON].value > 0.1f;
+    auto eoc = is_eoc || eoc_button;
     outputs[EOC_OUT].value = eoc ? 10.f : 0.f;
   }
+
+  void send_envelope(float voltage) { outputs[MAIN_OUT].value = voltage; }
 
   void step() override {
     executor.step();
@@ -138,8 +147,9 @@ struct BoosterStage : rack::Module {
   }
 
   auto trigger_in() const -> bool {
+    auto trigger_button = params[TRIGGER_BUTTON].value > 0.1;
     auto trigger_input = inputs[TRIGGER_IN].value > 0.1;
-    return trigger_button() || trigger_input;
+    return trigger_button || trigger_input;
   }
 };
 
