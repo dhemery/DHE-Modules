@@ -1,9 +1,9 @@
 #pragma once
 
 #include "util/range.h"
-#include <engine.hpp>
 
 namespace DHE {
+namespace Knob {
 inline auto cv_offset(float cv) -> float {
   static constexpr auto cv_to_offset = 0.1f;
   return cv * cv_to_offset;
@@ -21,19 +21,5 @@ inline auto modulated(float rotation, float cv, float av) -> float {
 inline auto modulated(float rotation, float cv) -> float {
   return rotation + cv_offset(cv);
 }
-
-inline auto modulated(const rack::Module *module, int knob_param, int cv_input,
-                      int av_param) -> float {
-  auto knob = module->params[knob_param].value;
-  auto cv = module->inputs[cv_input].value;
-  auto av = module->params[av_param].value;
-  return modulated(knob, cv, av);
-}
-
-inline auto modulated(const rack::Module *module, int knob_param, int cv_input)
-    -> float {
-  auto knob = module->params[knob_param].value;
-  auto cv = module->inputs[cv_input].value;
-  return modulated(knob, cv);
-}
+} // namespace Knob
 } // namespace DHE

@@ -1,46 +1,61 @@
-#include <utility>
-
 #include "dhe-modules.h"
 #include "module-widget.h"
 
-#include "controls/knob.h"
+#include "util/knob.h"
 #include "util/range.h"
 #include "util/signal.h"
 
 namespace DHE {
 
-struct Ranger : rack::Module {
+class Ranger : public rack::Module {
+public:
+  Ranger() : Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT} {}
+
+  void step() override { send_main_out(scale(level(), limit2(), limit1())); }
+
   enum ParameterIds {
     LEVEL_KNOB,
     LEVEL_AV,
     LIMIT_1_KNOB,
     LIMIT_1_AV,
-    LIMIT_1_RANGE,
+    LIMIT_1_RANGE_SWITCH,
     LIMIT_2_KNOB,
     LIMIT_2_AV,
-    LIMIT_2_RANGE,
+    LIMIT_2_RANGE_SWITCH,
     PARAMETER_COUNT
   };
   enum InputIds { LEVEL_CV, LIMIT_1_CV, LIMIT_2_CV, INPUT_COUNT };
   enum OutputIds { MAIN_OUT, OUTPUT_COUNT };
 
-  Ranger() : Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT} {}
+private:
+  auto level() const -> float {
+    return modulated(LEVEL_KNOB, LEVEL_CV, LEVEL_AV);
+  }
+
+  auto limit(ParameterIds knob_param, InputIds cv_input, ParameterIds av_param,
+             int range_switch_param) const -> float {
+    auto is_uni = params[range_switch_param].value > 0.5f;
+    auto range = Signal::range(is_uni);
+    return range.scale(modulated(knob_param, cv_input, av_param));
+  }
+
+  auto limit1() const -> float {
+    return limit(LIMIT_1_KNOB, LIMIT_1_CV, LIMIT_1_AV, LIMIT_1_RANGE_SWITCH);
+  }
+
+  auto limit2() const -> float {
+    return limit(LIMIT_2_KNOB, LIMIT_2_CV, LIMIT_2_AV, LIMIT_2_RANGE_SWITCH);
+  }
+
+  auto modulated(ParameterIds knob_param, InputIds cv_input,
+                 ParameterIds av_parm) const -> float {
+    auto rotation = params[knob_param].value;
+    auto cv = inputs[cv_input].value;
+    auto av = params[av_parm].value;
+    return Knob::modulated(rotation, cv, av);
+  }
 
   void send_main_out(float voltage) { outputs[MAIN_OUT].value = voltage; }
-
-  auto limit(int knob_param, int cv_input, int av_param, int range_param) const
-      -> float {
-    auto is_uni = params[range_param].value > 0.5f;
-    auto range = Signal::range(is_uni);
-    return range.scale(modulated(this, knob_param, cv_input, av_param));
-  }
-
-  void step() override {
-    auto limit1 = limit(LIMIT_1_KNOB, LIMIT_1_CV, LIMIT_1_AV, LIMIT_1_RANGE);
-    auto limit2 = limit(LIMIT_2_KNOB, LIMIT_2_CV, LIMIT_2_AV, LIMIT_2_RANGE);
-    auto level = modulated(this, LEVEL_KNOB, LEVEL_CV, LEVEL_AV);
-    send_main_out(scale(level, limit2, limit1));
-  }
 };
 
 struct RangerWidget : public ModuleWidget {
@@ -64,7 +79,7 @@ struct RangerWidget : public ModuleWidget {
     y += delta_y + panel_buffer;
 
     install_knob("medium", Ranger::LIMIT_1_KNOB, {left_x, y});
-    install_switch(Ranger::LIMIT_1_RANGE, {right_x, y});
+    install_switch(Ranger::LIMIT_1_RANGE_SWITCH, {right_x, y});
     y += delta_y;
     install_input(Ranger::LIMIT_1_CV, {left_x, y});
     install_knob("tiny", Ranger::LIMIT_1_AV, {right_x, y});
@@ -72,7 +87,7 @@ struct RangerWidget : public ModuleWidget {
     y += delta_y + panel_buffer;
 
     install_knob("medium", Ranger::LIMIT_2_KNOB, {left_x, y});
-    install_switch(Ranger::LIMIT_2_RANGE, {right_x, y});
+    install_switch(Ranger::LIMIT_2_RANGE_SWITCH, {right_x, y});
     y += delta_y;
     install_input(Ranger::LIMIT_2_CV, {left_x, y});
     install_knob("tiny", Ranger::LIMIT_2_AV, {right_x, y});

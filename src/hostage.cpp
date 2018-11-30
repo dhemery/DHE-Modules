@@ -1,41 +1,16 @@
 #include "dhe-modules.h"
 #include "module-widget.h"
 
-#include "controls/knob.h"
 #include "util/d-flip-flop.h"
 #include "util/duration.h"
+#include "util/knob.h"
 #include "util/mode.h"
 #include "util/phase-accumulator.h"
 
 namespace DHE {
 
-struct Hostage : rack::Module {
-  enum InputIds { DEFER_IN, DURATION_CV, MAIN_IN, HOLD_GATE_IN, INPUT_COUNT };
-
-  enum OutputIds { ACTIVE_OUT, MAIN_OUT, EOC_OUT, OUTPUT_COUNT };
-
-  enum ParameterIds {
-    DURATION_KNOB,
-    DURATION_SWITCH,
-    MODE_SWITCH,
-    PARAMETER_COUNT
-  };
-
-  DFlipFlop sustain_gate{[this] { return hold_in(); }};
-  DFlipFlop sustain_trigger{[this] { return hold_in(); }};
-
-  PhaseAccumulator timer{[this] { return sample_time() / duration(); }};
-  PhaseAccumulator eoc_pulse{[this] { return sample_time() / 1e-3f; }};
-
-  Mode timed_sustain_mode{};
-  Mode gated_sustain_mode{};
-  CompoundMode sustain_mode{[this] { return mode_switch_in(); },
-                            {&timed_sustain_mode, &gated_sustain_mode}};
-
-  Mode defer_mode{};
-  CompoundMode executor{[this] { return defer_in(); },
-                        {&sustain_mode, &defer_mode}};
-
+class Hostage : public rack::Module {
+public:
   Hostage() : Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT} {
     defer_mode.on_entry([this] { send_active(true); });
     defer_mode.on_step([this] { send_envelope(envelope_in()); });
@@ -80,12 +55,26 @@ struct Hostage : rack::Module {
     executor.enter();
   }
 
+  void step() override { executor.step(); }
+
+  enum InputIds { DEFER_IN, DURATION_CV, MAIN_IN, HOLD_GATE_IN, INPUT_COUNT };
+
+  enum OutputIds { ACTIVE_OUT, MAIN_OUT, EOC_OUT, OUTPUT_COUNT };
+
+  enum ParameterIds {
+    DURATION_KNOB,
+    DURATION_SWITCH,
+    MODE_SWITCH,
+    PARAMETER_COUNT
+  };
+
+private:
   void begin_sustaining() { send_active(true); }
 
   auto defer_in() const -> bool { return inputs[DEFER_IN].value > 0.1f; }
 
   auto duration() const -> float {
-    auto rotation = modulated(this, DURATION_KNOB, DURATION_CV);
+    auto rotation = modulated(DURATION_KNOB, DURATION_CV);
     auto range_selection = static_cast<int>(params[DURATION_SWITCH].value);
     return DHE::duration(rotation, range_selection);
   }
@@ -98,6 +87,12 @@ struct Hostage : rack::Module {
   auto envelope_in() const -> float { return inputs[MAIN_IN].value; }
 
   auto hold_in() const -> bool { return inputs[HOLD_GATE_IN].value > 0.1f; }
+
+  auto modulated(ParameterIds knob_param, InputIds cv_input) const -> float {
+    auto rotation = params[knob_param].value;
+    auto cv = inputs[cv_input].value;
+    return Knob::modulated(rotation, cv);
+  }
 
   auto mode_switch_in() const -> int {
     return static_cast<int>(params[MODE_SWITCH].value);
@@ -115,7 +110,21 @@ struct Hostage : rack::Module {
 
   void send_envelope(float voltage) { outputs[MAIN_OUT].value = voltage; }
 
-  void step() override { executor.step(); }
+  DFlipFlop sustain_gate{[this] { return hold_in(); }};
+
+  DFlipFlop sustain_trigger{[this] { return hold_in(); }};
+  PhaseAccumulator timer{[this] { return sample_time() / duration(); }};
+
+  PhaseAccumulator eoc_pulse{[this] { return sample_time() / 1e-3f; }};
+  Mode timed_sustain_mode{};
+  Mode gated_sustain_mode{};
+
+  CompoundMode sustain_mode{[this] { return mode_switch_in(); },
+                            {&timed_sustain_mode, &gated_sustain_mode}};
+  Mode defer_mode{};
+
+  CompoundMode executor{[this] { return defer_in(); },
+                        {&sustain_mode, &defer_mode}};
 };
 
 struct HostageWidget : public ModuleWidget {

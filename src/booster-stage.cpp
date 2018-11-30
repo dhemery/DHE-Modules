@@ -1,58 +1,17 @@
-
 #include "dhe-modules.h"
 #include "module-widget.h"
-#include <controls/knob.h>
 
 #include "util/d-flip-flop.h"
 #include "util/duration.h"
+#include "util/knob.h"
 #include "util/mode.h"
 #include "util/phase-accumulator.h"
 #include "util/signal.h"
 
 namespace DHE {
 
-struct BoosterStage : rack::Module {
-  enum ParameterIds {
-    ACTIVE_BUTTON,
-    CURVE_KNOB,
-    DEFER_BUTTON,
-    DURATION_KNOB,
-    DURATION_SWITCH,
-    EOC_BUTTON,
-    LEVEL_KNOB,
-    LEVEL_SWITCH,
-    SHAPE_SWITCH,
-    TRIGGER_BUTTON,
-    PARAMETER_COUNT
-  };
-
-  enum InputIds {
-    CURVE_CV,
-    DEFER_IN,
-    DURATION_CV,
-    LEVEL_CV,
-    MAIN_IN,
-    TRIGGER_IN,
-    INPUT_COUNT
-  };
-
-  enum OutputIds { ACTIVE_OUT, EOC_OUT, MAIN_OUT, OUTPUT_COUNT };
-
-  float phase_0_voltage = 0.f;
-  bool is_active = false;
-
-  bool is_eoc = false;
-  PhaseAccumulator envelope{[this] { return sample_time() / duration(); }};
-  PhaseAccumulator eoc_pulse{[this] { return sample_time() / 1e-3f; }};
-
-  DFlipFlop envelope_trigger{[this] { return trigger_in(); }};
-  Mode stage_mode{};
-
-  Mode defer_mode{};
-
-  CompoundMode executor{[this] { return defer_in(); },
-                        {&stage_mode, &defer_mode}};
-
+class BoosterStage : public rack::Module {
+public:
   BoosterStage() : Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT} {
     defer_mode.on_entry([this] { is_active = true; });
     defer_mode.on_step([this] { send_envelope(envelope_in()); });
@@ -90,38 +49,75 @@ struct BoosterStage : rack::Module {
     executor.enter();
   }
 
+  void step() override {
+    executor.step();
+    send_active();
+    send_eoc();
+  }
+
+  enum ParameterIds {
+    ACTIVE_BUTTON,
+    CURVE_KNOB,
+    DEFER_BUTTON,
+    DURATION_KNOB,
+    DURATION_SWITCH,
+    EOC_BUTTON,
+    LEVEL_KNOB,
+    LEVEL_SWITCH,
+    SHAPE_SWITCH,
+    TRIGGER_BUTTON,
+    PARAMETER_COUNT
+  };
+
+  enum InputIds {
+    CURVE_CV,
+    DEFER_IN,
+    DURATION_CV,
+    LEVEL_CV,
+    MAIN_IN,
+    TRIGGER_IN,
+    INPUT_COUNT
+  };
+
+  enum OutputIds { ACTIVE_OUT, EOC_OUT, MAIN_OUT, OUTPUT_COUNT };
+
+private:
+  auto curvature() const -> float {
+    return Sigmoid::curvature(modulated(CURVE_KNOB, CURVE_CV));
+  }
+
   auto defer_in() const -> bool {
     auto defer_input = inputs[DEFER_IN].value > 0.1f;
     auto defer_button = params[DEFER_BUTTON].value > 0.1f;
     return defer_button || defer_input;
   }
 
-  auto curvature() const -> float {
-    auto rotation = params[CURVE_KNOB].value;
-    auto cv = inputs[CURVE_CV].value;
-    return Sigmoid::curvature(modulated(rotation, cv));
-  }
-
   auto duration() const -> float {
-    auto rotation = modulated(this, DURATION_KNOB, DURATION_CV);
+    auto rotation = modulated(DURATION_KNOB, DURATION_CV);
     auto selection = params[DURATION_SWITCH].value;
     return DHE::duration(rotation, selection);
   }
+
+  auto envelope_in() const -> float { return inputs[MAIN_IN].value; }
 
   auto envelope_voltage(float phase) const -> float {
     auto tapered = Sigmoid::taper(phase, curvature(), is_s_shape());
     return scale(tapered, phase_0_voltage, level());
   }
 
-  auto envelope_in() const -> float { return inputs[MAIN_IN].value; }
-
   auto is_s_shape() const -> bool { return params[SHAPE_SWITCH].value > 0.5f; }
 
   auto level() const -> float {
     auto is_uni = params[LEVEL_SWITCH].value > 0.5f;
     auto range = Signal::range(is_uni);
-    auto level = modulated(this, LEVEL_KNOB, LEVEL_CV);
+    auto level = modulated(LEVEL_KNOB, LEVEL_CV);
     return range.scale(level);
+  }
+
+  auto modulated(ParameterIds knob_param, InputIds cv_input) const -> float {
+    auto rotation = params[knob_param].value;
+    auto cv = inputs[cv_input].value;
+    return Knob::modulated(rotation, cv);
   }
 
   auto sample_time() const -> float { return rack::engineGetSampleTime(); }
@@ -140,17 +136,27 @@ struct BoosterStage : rack::Module {
 
   void send_envelope(float voltage) { outputs[MAIN_OUT].value = voltage; }
 
-  void step() override {
-    executor.step();
-    send_active();
-    send_eoc();
-  }
-
   auto trigger_in() const -> bool {
     auto trigger_button = params[TRIGGER_BUTTON].value > 0.1;
     auto trigger_input = inputs[TRIGGER_IN].value > 0.1;
     return trigger_button || trigger_input;
   }
+
+  float phase_0_voltage = 0.f;
+  bool is_active = false;
+  bool is_eoc = false;
+
+  PhaseAccumulator envelope{[this] { return sample_time() / duration(); }};
+  PhaseAccumulator eoc_pulse{[this] { return sample_time() / 1e-3f; }};
+
+  DFlipFlop envelope_trigger{[this] { return trigger_in(); }};
+
+  Mode stage_mode{};
+
+  Mode defer_mode{};
+
+  CompoundMode executor{[this] { return defer_in(); },
+                        {&stage_mode, &defer_mode}};
 };
 
 struct BoosterStageWidget : public ModuleWidget {

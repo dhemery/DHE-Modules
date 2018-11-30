@@ -3,17 +3,14 @@
 #include "dhe-modules.h"
 #include "module-widget.h"
 
-#include "controls/knob.h"
+#include "util/knob.h"
 #include "util/sigmoid.h"
 #include "util/signal.h"
 
 namespace DHE {
 
-struct XycloidRotor {
-  float const two_pi{2.f * std::acos(-1.f)};
-  float phase{0.f};
-  float offset{0.f};
-
+class XycloidRotor {
+public:
   void advance(float delta, float offset = 0.f) {
     this->offset = offset;
     phase += delta;
@@ -22,9 +19,45 @@ struct XycloidRotor {
 
   auto x() const -> float { return std::cos(two_pi * (phase + offset)); }
   auto y() const -> float { return std::sin(two_pi * (phase + offset)); }
+
+private:
+  float const two_pi{2.f * std::acos(-1.f)};
+  float phase{0.f};
+  float offset{0.f};
 };
 
-struct Xycloid : rack::Module {
+class Xycloid : public rack::Module {
+public:
+  Xycloid() : Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT} {}
+
+  void set_musical_wobble_ratios(bool is_musical) {
+    wobble_ratio_offset = is_musical ? 0.f : 1.f;
+  }
+
+  auto is_musical_wobble_ratios() const -> bool {
+    return wobble_ratio_offset == 0.f;
+  }
+
+  void step() override {
+    auto wobble_ratio = this->wobble_ratio();
+    auto wobble_phase_offset = wobble_phase_in();
+    if (wobble_ratio < 0.f)
+      wobble_phase_offset *= -1.f;
+
+    auto throb_speed = this->throb_speed();
+    auto wobble_speed = wobble_ratio * throb_speed;
+    auto wobble_depth = this->wobble_depth();
+    auto throb_depth = 1.f - wobble_depth;
+
+    throbber.advance(throb_speed);
+    wobbler.advance(wobble_speed, wobble_phase_offset);
+    auto x = throb_depth * throbber.x() + wobble_depth * wobbler.x();
+    auto y = throb_depth * throbber.y() + wobble_depth * wobbler.y();
+
+    outputs[X_OUT].value = 5.f * x_gain_in() * (x + x_offset());
+    outputs[Y_OUT].value = 5.f * y_gain_in() * (y + y_offset());
+  }
+
   enum ParameterIds {
     WOBBLE_RATIO,
     WOBBLE_RATIO_AV,
@@ -51,60 +84,41 @@ struct Xycloid : rack::Module {
   };
   enum OutputIds { X_OUT, Y_OUT, OUTPUT_COUNT };
 
-  static constexpr auto throb_speed_knob_range = Range{-1.f, 1.f};
-  static constexpr auto wobble_depth_range = Range{0.f, 1.f};
-
-  float wobble_ratio_offset{0.f};
-  XycloidRotor wobbler{};
-  XycloidRotor throbber{};
-
-  Xycloid() : Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT} {}
-
+private:
   auto is_wobble_ratio_free() const -> bool {
     return params[WOBBLE_RATIO_TYPE].value > 0.1f;
   }
 
-  void step() override {
-    auto wobble_ratio = this->wobble_ratio();
-    auto wobble_phase_offset = wobble_phase_in();
-    if (wobble_ratio < 0.f)
-      wobble_phase_offset *= -1.f;
-
-    auto throb_speed = this->throb_speed();
-    auto wobble_speed = wobble_ratio * throb_speed;
-    auto wobble_depth = this->wobble_depth();
-    auto throb_depth = 1.f - wobble_depth;
-
-    throbber.advance(throb_speed);
-    wobbler.advance(wobble_speed, wobble_phase_offset);
-    auto x = throb_depth * throbber.x() + wobble_depth * wobbler.x();
-    auto y = throb_depth * throbber.y() + wobble_depth * wobbler.y();
-
-    outputs[X_OUT].value = 5.f * x_gain_in() * (x + x_offset());
-    outputs[Y_OUT].value = 5.f * y_gain_in() * (y + y_offset());
+  auto modulated(const ParameterIds &knob_param, const InputIds &cv_input) const
+      -> float {
+    auto rotation = params[knob_param].value;
+    auto cv = inputs[cv_input].value;
+    return Knob::modulated(rotation, cv);
   }
 
-  inline auto offset(int param) const -> float {
+  auto modulated(const ParameterIds &knob_param, const InputIds &cv_input,
+                 const ParameterIds &av_param) const -> float {
+    auto rotation = params[knob_param].value;
+    auto cv = inputs[cv_input].value;
+    auto av = params[av_param].value;
+    return Knob::modulated(rotation, cv, av);
+  }
+
+  auto offset(int param) const -> float {
     auto is_uni = params[param].value > 0.5f;
     return is_uni ? 1.f : 0.f;
   }
 
-  auto x_offset() const -> float { return offset(X_RANGE); }
-
-  auto y_offset() const -> float { return offset(Y_RANGE); }
-
   auto throb_speed() const -> float {
     constexpr auto speed_taper_curvature = 0.8f;
-    auto rotation =
-        modulated(this, THROB_SPEED, THROB_SPEED_CV, THROB_SPEED_AV);
+    auto rotation = modulated(THROB_SPEED, THROB_SPEED_CV, THROB_SPEED_AV);
     auto scaled = throb_speed_knob_range.scale(rotation);
     auto tapered = Sigmoid::inverse(scaled, speed_taper_curvature);
     return -10.f * tapered * rack::engineGetSampleTime();
   }
 
   auto wobble_depth() const -> float {
-    auto rotation =
-        modulated(this, WOBBLE_DEPTH, WOBBLE_DEPTH_CV, WOBBLE_DEPTH_CV);
+    auto rotation = modulated(WOBBLE_DEPTH, WOBBLE_DEPTH_CV, WOBBLE_DEPTH_AV);
     return wobble_depth_range.clamp(rotation);
   }
 
@@ -126,9 +140,10 @@ struct Xycloid : rack::Module {
   }
 
   auto wobble_ratio() const -> float {
-    auto rotation =
-        modulated(this, WOBBLE_RATIO, WOBBLE_RATIO_CV, WOBBLE_RATIO_AV);
-    auto wobble_ratio = wobble_range().scale(rotation) + wobble_ratio_offset;
+    auto wobble_ammount =
+        modulated(WOBBLE_RATIO, WOBBLE_RATIO_CV, WOBBLE_RATIO_AV);
+    auto wobble_ratio =
+        wobble_range().scale(wobble_ammount) + wobble_ratio_offset;
     return is_wobble_ratio_free() ? wobble_ratio : std::round(wobble_ratio);
   }
 
@@ -136,14 +151,17 @@ struct Xycloid : rack::Module {
     auto param = params[WOBBLE_TYPE].value;
     return static_cast<int>(param);
   }
+  auto x_offset() const -> float { return offset(X_RANGE); }
 
   auto x_gain_in() const -> float {
-    return Signal::gain(modulated(this, X_GAIN, X_GAIN_CV));
+    return Signal::gain(modulated(X_GAIN, X_GAIN_CV));
   }
 
   auto y_gain_in() const -> float {
-    return Signal::gain(modulated(this, Y_GAIN, Y_GAIN_CV));
+    return Signal::gain(modulated(Y_GAIN, Y_GAIN_CV));
   }
+
+  auto y_offset() const -> float { return offset(Y_RANGE); }
 
   json_t *toJson() override {
     json_t *configuration = json_object();
@@ -158,11 +176,13 @@ struct Xycloid : rack::Module {
     set_musical_wobble_ratios(json_is_true(musical_wobble_ratios));
   }
 
-  void set_musical_wobble_ratios(bool is_musical) {
-    wobble_ratio_offset = is_musical ? 0.f : 1.f;
-  }
+  static constexpr auto throb_speed_knob_range = Range{-1.f, 1.f};
+  static constexpr auto wobble_depth_range = Range{0.f, 1.f};
 
-  bool is_musical_wobble_ratios() { return wobble_ratio_offset == 0.f; }
+  float wobble_ratio_offset{0.f};
+  XycloidRotor wobbler{};
+
+  XycloidRotor throbber{};
 };
 
 struct XycloidWidget : public ModuleWidget {

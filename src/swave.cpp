@@ -1,31 +1,16 @@
 #include "dhe-modules.h"
 #include "module-widget.h"
 
-#include "controls/knob.h"
+#include "util/knob.h"
 #include "util/range.h"
 #include "util/sigmoid.h"
 #include "util/signal.h"
 
 namespace DHE {
 
-struct Swave : rack::Module {
-  enum ParameterIds { CURVE_KNOB, SHAPE_SWITCH, PARAMETER_COUNT };
-  enum InputIds { CURVE_CV, MAIN_IN, INPUT_COUNT };
-  enum OutputIds { MAIN_OUT, OUTPUT_COUNT };
-
+class Swave : public rack::Module {
+public:
   Swave() : Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT} {}
-
-  auto curve() const -> float {
-    auto rotation = params[CURVE_KNOB].value;
-    auto cv = inputs[CURVE_CV].value;
-    return modulated(rotation, cv);
-  }
-
-  void send_signal(float voltage) { outputs[MAIN_OUT].value = voltage; }
-
-  auto shape() const -> float { return params[SHAPE_SWITCH].value; }
-
-  auto signal_in() const -> float { return inputs[MAIN_IN].value; }
 
   void step() override {
     auto phase = Signal::bipolar_range.normalize(signal_in());
@@ -33,6 +18,23 @@ struct Swave : rack::Module {
     auto out_voltage = Signal::bipolar_range.scale(shaped);
     send_signal(out_voltage);
   }
+
+  enum ParameterIds { CURVE_KNOB, SHAPE_SWITCH, PARAMETER_COUNT };
+  enum InputIds { CURVE_CV, MAIN_IN, INPUT_COUNT };
+  enum OutputIds { MAIN_OUT, OUTPUT_COUNT };
+
+private:
+  auto curve() const -> float {
+    auto rotation = params[CURVE_KNOB].value;
+    auto cv = inputs[CURVE_CV].value;
+    return Knob::modulated(rotation, cv);
+  }
+
+  void send_signal(float voltage) { outputs[MAIN_OUT].value = voltage; }
+
+  auto shape() const -> float { return params[SHAPE_SWITCH].value; }
+
+  auto signal_in() const -> float { return inputs[MAIN_IN].value; }
 };
 
 struct SwaveWidget : public ModuleWidget {

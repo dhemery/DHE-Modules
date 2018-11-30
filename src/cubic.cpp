@@ -1,14 +1,30 @@
-#include <util/signal.h>
-#include <utility>
-
 #include "dhe-modules.h"
 #include "module-widget.h"
 
-#include "controls/knob.h"
+#include "util/knob.h"
+#include "util/signal.h"
 
 namespace DHE {
 
-struct Cubic : rack::Module {
+class Cubic : public rack::Module {
+public:
+  Cubic() : Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT} {}
+
+  void step() override {
+    auto a = coefficient(A_KNOB, A_CV);
+    auto b = coefficient(B_KNOB, B_CV);
+    auto c = coefficient(C_KNOB, C_CV);
+    auto d = coefficient(D_KNOB, D_CV);
+    auto input_gain = gain(INPUT_GAIN_KNOB, INPUT_GAIN_CV);
+    auto output_gain = gain(OUTPUT_GAIN_KNOB, OUTPUT_GAIN_CV);
+
+    auto x = input_gain * main_in() * 0.2f;
+    auto x2 = x * x;
+    auto x3 = x2 * x;
+    auto y = a * x3 + b * x2 + c * x + d;
+    auto output_voltage = output_gain * y * 5.f;
+    send_main_out(output_voltage);
+  }
   enum ParameterIds {
     A_KNOB,
     B_KNOB,
@@ -18,6 +34,7 @@ struct Cubic : rack::Module {
     OUTPUT_GAIN_KNOB,
     PARAMETER_COUNT
   };
+
   enum InputIds {
     MAIN_IN,
     A_CV,
@@ -28,34 +45,27 @@ struct Cubic : rack::Module {
     OUTPUT_GAIN_CV,
     INPUT_COUNT
   };
+
   enum OutputIds { MAIN_OUT, OUTPUT_COUNT };
 
-  Cubic() : Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT} {}
-
-  auto coefficient(int knob_param, int cv_param) const -> float {
+private:
+  auto coefficient(ParameterIds knob_param, InputIds cv_param) const -> float {
     static auto constexpr coefficient_range = Range{-2.0f, 2.0f};
-    return coefficient_range.scale(modulated(this, knob_param, cv_param));
+    return coefficient_range.scale(modulated(knob_param, cv_param));
   }
 
-  void step() override {
-    auto a = coefficient(A_KNOB, A_CV);
-    auto b = coefficient(B_KNOB, B_CV);
-    auto c = coefficient(C_KNOB, C_CV);
-    auto d = coefficient(D_KNOB, D_CV);
-    auto input_gain =
-        Signal::gain(modulated(this, INPUT_GAIN_KNOB, INPUT_GAIN_CV));
-    auto output_gain =
-        Signal::gain(modulated(this, OUTPUT_GAIN_KNOB, OUTPUT_GAIN_CV));
-
-    auto x = input_gain * main_in() * 0.2f;
-    auto x2 = x * x;
-    auto x3 = x2 * x;
-    auto y = a * x3 + b * x2 + c * x + d;
-    auto output_voltage = output_gain * y * 5.f;
-    send_main_out(output_voltage);
+  auto gain(const ParameterIds knob_param, const InputIds cv_input) const
+      -> float {
+    return Signal::gain(modulated(knob_param, cv_input));
   }
 
   auto main_in() const -> float { return inputs[MAIN_IN].value; }
+
+  auto modulated(ParameterIds knob_param, InputIds cv_input) const -> float {
+    auto rotation = params[knob_param].value;
+    auto cv = inputs[cv_input].value;
+    return Knob::modulated(rotation, cv);
+  }
 
   void send_main_out(float voltage) { outputs[MAIN_OUT].value = voltage; }
 };

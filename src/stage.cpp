@@ -3,7 +3,6 @@
 #include "dhe-modules.h"
 #include "module-widget.h"
 
-#include "controls/knob.h"
 #include "util/d-flip-flop.h"
 #include "util/duration.h"
 #include "util/mode.h"
@@ -14,24 +13,8 @@
 
 namespace DHE {
 
-struct Stage : public rack::Module {
-  enum ParameterIIds { DURATION_KNOB, LEVEL_KNOB, CURVE_KNOB, PARAMETER_COUNT };
-
-  enum InputIds { MAIN_IN, TRIGGER_IN, DEFER_IN, INPUT_COUNT };
-
-  enum OutputIds { MAIN_OUT, EOC_OUT, ACTIVE_OUT, OUTPUT_COUNT };
-
-  float phase_0_voltage{0.f};
-
-  PhaseAccumulator generator{[this] { return sample_time() / duration(); }};
-  DFlipFlop envelope_trigger{[this] { return trigger_in(); }};
-  PhaseAccumulator eoc_pulse{[this] { return sample_time() / 1e-3f; }};
-
-  Mode generating_mode{};
-  Mode deferring_mode{};
-  CompoundMode executor{[this] { return defer_in(); },
-                        {&generating_mode, &deferring_mode}};
-
+class Stage : public rack::Module {
+public:
   Stage() : Module(PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT) {
     deferring_mode.on_entry([this] { send_active(true); });
     deferring_mode.on_step([this] { send_envelope(envelope_in()); });
@@ -69,6 +52,15 @@ struct Stage : public rack::Module {
     executor.enter();
   }
 
+  void step() override { executor.step(); }
+
+  enum ParameterIIds { DURATION_KNOB, LEVEL_KNOB, CURVE_KNOB, PARAMETER_COUNT };
+
+  enum InputIds { MAIN_IN, TRIGGER_IN, DEFER_IN, INPUT_COUNT };
+
+  enum OutputIds { MAIN_OUT, EOC_OUT, ACTIVE_OUT, OUTPUT_COUNT };
+
+private:
   auto curvature() const -> float {
     auto rotation = params[CURVE_KNOB].value;
     return Sigmoid::curvature(rotation);
@@ -99,20 +91,29 @@ struct Stage : public rack::Module {
     outputs[ACTIVE_OUT].value = active_out_voltage;
   }
 
+  void send_envelope(float voltage) { outputs[MAIN_OUT].value = voltage; }
+
   void send_eoc(bool is_eoc) {
     auto eoc_out_voltage = is_eoc ? 10.f : 0.f;
     outputs[EOC_OUT].value = eoc_out_voltage;
   }
-
-  void send_envelope(float voltage) { outputs[MAIN_OUT].value = voltage; }
-
-  void step() override { executor.step(); }
 
   auto taper(float phase) const -> float {
     return Sigmoid::j_taper(phase, curvature());
   }
 
   auto trigger_in() const -> bool { return inputs[TRIGGER_IN].value > 0.1; }
+
+  float phase_0_voltage{0.f};
+  PhaseAccumulator generator{[this] { return sample_time() / duration(); }};
+  DFlipFlop envelope_trigger{[this] { return trigger_in(); }};
+
+  PhaseAccumulator eoc_pulse{[this] { return sample_time() / 1e-3f; }};
+  Mode generating_mode{};
+  Mode deferring_mode{};
+
+  CompoundMode executor{[this] { return defer_in(); },
+                        {&generating_mode, &deferring_mode}};
 };
 
 struct StageWidget : public ModuleWidget {

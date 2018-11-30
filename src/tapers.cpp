@@ -1,35 +1,20 @@
-#include <utility>
-
 #include "dhe-modules.h"
 #include "module-widget.h"
 
-#include "controls/knob.h"
+#include "util/knob.h"
 #include "util/sigmoid.h"
 #include "util/signal.h"
 
 namespace DHE {
 
-struct Tapers : rack::Module {
+class Tapers : public rack::Module {
+public:
   Tapers() : Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT} {}
 
   void step() override {
-    auto level = modulated(this, LEVEL_1_KNOB, LEVEL_1_CV, LEVEL_1_AV);
-    auto curvature = Sigmoid::curvature(
-        modulated(this, CURVE_1_KNOB, CURVE_1_CV, CURVE_1_AV));
-    auto is_s = params[SHAPE_1_SWITCH].value > 0.5f;
-    auto tapered = Sigmoid::taper(level, curvature, is_s);
-    auto is_uni = params[RANGE_1_SWITCH].value > 0.5f;
-    auto scaled = Signal::range(is_uni).scale(tapered);
-    outputs[OUT_1].value = scaled;
+    outputs[OUT_1].value = taper(level1(), is_uni_1(), curvature1(), is_s_1());
 
-    level = modulated(this, LEVEL_2_KNOB, LEVEL_2_CV, LEVEL_2_AV);
-    curvature = Sigmoid::curvature(
-        modulated(this, CURVE_2_KNOB, CURVE_2_CV, CURVE_2_AV));
-    is_s = params[SHAPE_2_SWITCH].value > 0.5f;
-    tapered = Sigmoid::taper(level, curvature, is_s);
-    is_uni = params[RANGE_2_SWITCH].value > 0.5f;
-    scaled = Signal::range(is_uni).scale(tapered);
-    outputs[OUT_2].value = scaled;
+    outputs[OUT_2].value = taper(level2(), is_uni_2(), curvature2(), is_s_2());
   }
 
   enum ParameterIds {
@@ -49,6 +34,47 @@ struct Tapers : rack::Module {
   };
   enum InputIds { LEVEL_1_CV, CURVE_1_CV, LEVEL_2_CV, CURVE_2_CV, INPUT_COUNT };
   enum OutputIds { OUT_1, OUT_2, OUTPUT_COUNT };
+
+private:
+  auto curvature(ParameterIds knob, InputIds cv, ParameterIds av) const
+      -> float {
+    auto curvature = modulated(knob, cv, av);
+    return Sigmoid::curvature(curvature);
+  }
+
+  auto curvature1() const -> float {
+    return curvature(CURVE_1_KNOB, CURVE_1_CV, CURVE_1_AV);
+  }
+
+  auto curvature2() const -> float {
+    return curvature(CURVE_2_KNOB, CURVE_2_CV, CURVE_2_AV);
+  }
+
+  auto is_uni_1() const -> bool { return params[RANGE_1_SWITCH].value > 0.5f; }
+  auto is_uni_2() const -> bool { return params[RANGE_2_SWITCH].value > 0.5f; }
+  auto is_s_1() const -> bool { return params[SHAPE_1_SWITCH].value > 0.5f; }
+  auto is_s_2() const -> bool { return params[SHAPE_2_SWITCH].value > 0.5f; }
+
+  auto level1() const -> float {
+    return modulated(LEVEL_1_KNOB, LEVEL_1_CV, LEVEL_1_AV);
+  }
+
+  auto level2() const -> float {
+    return modulated(LEVEL_2_KNOB, LEVEL_2_CV, LEVEL_2_AV);
+  }
+
+  auto modulated(ParameterIds knob_param, InputIds cv_input,
+                 ParameterIds av_param) const -> float {
+    auto rotation = params[knob_param].value;
+    auto cv = inputs[cv_input].value;
+    auto av = params[av_param].value;
+    return Knob::modulated(rotation, cv, av);
+  }
+
+  auto taper(float level, bool is_uni, float curve, bool is_s) const -> float {
+    auto tapered = Sigmoid::taper(level, curve, is_s);
+    return Signal::range(is_uni).scale(tapered);
+  }
 };
 
 struct TapersWidget : public ModuleWidget {
