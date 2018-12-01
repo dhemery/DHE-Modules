@@ -23,7 +23,7 @@ public:
     eoc_generator.step();
   }
 
-  auto defer_in() const -> bool { return inputs[DEFER_IN].value > 0.1; }
+  auto defer_gate_in() const -> bool { return inputs[DEFER_IN].value > 0.1; }
 
   auto duration() const -> float {
     auto rotation = params[DURATION_KNOB].value;
@@ -50,13 +50,15 @@ public:
     send_out(scale(taper(phase), held_voltage, level()));
   }
 
-  void start_deferring() { enter(&deferring_mode); }
+  auto stage_trigger_in() const -> bool {
+    return inputs[TRIGGER_IN].value > 0.1;
+  }
 
-  void stop_deferring() { enter(&following_mode); }
+  void start_deferring() { enter(&deferring_mode); }
 
   void start_generating() { enter(&generating_mode); }
 
-  auto trigger_in() const -> bool { return inputs[TRIGGER_IN].value > 0.1; }
+  void stop_deferring() { enter(&following_mode); }
 
   enum ParameterIIds { DURATION_KNOB, LEVEL_KNOB, CURVE_KNOB, PARAMETER_COUNT };
 
@@ -89,15 +91,15 @@ private:
     return Sigmoid::j_taper(phase, curvature());
   }
 
-  StageTrigger<Stage> envelope_trigger{this};
-  EocGenerator<Stage> eoc_generator{this};
   DeferGate<Stage> defer_gate{this};
+  StageTrigger<Stage> stage_trigger{this};
+
+  EocGenerator<Stage> eoc_generator{this};
   StageGenerator<Stage> stage_generator{this};
 
   DeferringMode<Stage> deferring_mode{this};
-  FollowingMode<Stage> following_mode{this, &envelope_trigger};
-  GeneratingMode<Stage> generating_mode{this, &stage_generator,
-                                        &envelope_trigger};
+  FollowingMode<Stage> following_mode{this, &stage_trigger};
+  GeneratingMode<Stage> generating_mode{this, &stage_generator, &stage_trigger};
   Mode *mode;
 
   float held_voltage = 0.f;

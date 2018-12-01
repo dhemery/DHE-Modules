@@ -15,12 +15,12 @@ public:
   }
 
   void step() override {
-    mode_gate.step();
+    defer_gate.step();
     mode->step();
     eoc_generator.step();
   }
 
-  auto defer_in() const -> bool {
+  auto defer_gate_in() const -> bool {
     auto defer_button = params[DEFER_BUTTON].value > 0.5f;
     auto defer_input = inputs[DEFER_IN].value > 0.1f;
     return defer_button || defer_input;
@@ -32,24 +32,12 @@ public:
     return DHE::duration(rotation, selection);
   }
 
-  void enter(Mode *incoming) {
-    mode->exit();
-    mode = incoming;
-    mode->enter();
-  }
-
-  void hold_input() { held_voltage = envelope_in(); }
-
-  void start_deferring() { enter(&deferring_mode); }
-
-  void start_generating() { enter(&generating_mode); }
-
-  void stop_deferring() { enter(&following_mode); }
-
   void finished_generating() {
     eoc_generator.start();
     enter(&following_mode);
   }
+
+  void hold_input() { held_voltage = envelope_in(); }
 
   void send_active(bool active) {
     outputs[ACTIVE_OUT].value = active || active_button() ? 10.f : 0.f;
@@ -59,14 +47,20 @@ public:
     outputs[EOC_OUT].value = eoc || eoc_button() ? 10.f : 0.f;
   }
 
+  void send_input() { send_out(envelope_in()); }
+
   void send_stage() {
     auto phase = stage_generator.phase();
     send_out(scale(taper(phase), held_voltage, level()));
   }
 
-  void send_input() { send_out(envelope_in()); }
+  void start_deferring() { enter(&deferring_mode); }
 
-  auto trigger_in() const -> bool {
+  void start_generating() { enter(&generating_mode); }
+
+  void stop_deferring() { enter(&following_mode); }
+
+  auto stage_trigger_in() const -> bool {
     auto trigger_button = params[TRIGGER_BUTTON].value > 0.5;
     auto trigger_input = inputs[TRIGGER_IN].value > 0.1;
     return trigger_button || trigger_input;
@@ -102,14 +96,19 @@ private:
   auto active_button() const -> bool {
     return params[ACTIVE_BUTTON].value > 0.5;
   }
-
   auto curvature() const -> float {
     return Sigmoid::curvature(modulated(CURVE_KNOB, CURVE_CV));
   }
 
+  void enter(Mode *incoming) {
+    mode->exit();
+    mode = incoming;
+    mode->enter();
+  }
+
   auto envelope_in() const -> float { return inputs[ENVELOPE_IN].value; }
 
-  bool eoc_button() const { return params[EOC_BUTTON].value > 0.5f; }
+  auto eoc_button() const -> bool { return params[EOC_BUTTON].value > 0.5f; }
 
   auto is_s_shape() const -> bool { return params[SHAPE_SWITCH].value > 0.5f; }
 
@@ -132,15 +131,16 @@ private:
     return Sigmoid::taper(phase, curvature(), is_s_shape());
   }
 
-  StageTrigger<BoosterStage> envelope_trigger{this};
-  EocGenerator<BoosterStage> eoc_generator{this};
-  DeferGate<BoosterStage> mode_gate{this};
+  DeferGate<BoosterStage> defer_gate{this};
+  StageTrigger<BoosterStage> stage_trigger{this};
+
   StageGenerator<BoosterStage> stage_generator{this};
+  EocGenerator<BoosterStage> eoc_generator{this};
 
   DeferringMode<BoosterStage> deferring_mode{this};
-  FollowingMode<BoosterStage> following_mode{this, &envelope_trigger};
+  FollowingMode<BoosterStage> following_mode{this, &stage_trigger};
   GeneratingMode<BoosterStage> generating_mode{this, &stage_generator,
-                                               &envelope_trigger};
+                                               &stage_trigger};
   Mode *mode{&following_mode};
   float held_voltage = 0.f;
 };

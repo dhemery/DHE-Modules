@@ -14,9 +14,7 @@ public:
 protected:
   virtual auto state_in() const -> bool = 0;
   virtual void on_rise() = 0;
-  virtual void on_state_change(bool state) {
-    on_rise();
-  }
+  virtual void on_state_change(bool state) { on_rise(); }
 
 private:
   bool state = false;

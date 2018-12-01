@@ -1,6 +1,6 @@
-#include <util/stage-components.h>
 #include "dhe-modules.h"
 #include "module-widget.h"
+#include <util/stage-components.h>
 
 #include "util/duration.h"
 #include "util/knob.h"
@@ -20,7 +20,7 @@ public:
     eoc_generator.step();
   }
 
-  auto defer_in() const -> bool { return inputs[DEFER_IN].value > 0.1f; }
+  auto defer_gate_in() const -> bool { return inputs[DEFER_IN].value > 0.1f; }
 
   auto duration() const -> float {
     auto rotation = modulated(DURATION_KNOB, DURATION_CV);
@@ -33,53 +33,35 @@ public:
     enter(&following_mode);
   }
 
-  auto gate_in() const -> bool { return inputs[HOLD_GATE_IN].value > 0.1f; }
-
-  void hold_input() {
-    held_voltage = envelope_in();
-  }
+  void hold_input() { held_voltage = envelope_in(); }
 
   void send_active(bool active) {
     outputs[ACTIVE_OUT].value = active ? 10.f : 0.f;
   }
 
-  void send_eoc(bool eoc) {
-    outputs[EOC_OUT].value = eoc ? 10.f : 0.f;
-  }
+  void send_eoc(bool eoc) { outputs[EOC_OUT].value = eoc ? 10.f : 0.f; }
 
-  void send_held() {
-    send_out(held_voltage);
-  }
+  void send_held() { send_out(held_voltage); }
 
-  void send_input() {
-    send_out(envelope_in());
-  }
+  void send_input() { send_out(envelope_in()); }
 
-  void send_stage() {
-    send_held();
-  }
+  void send_stage() { send_held(); }
 
-  void start_deferring() {
-    enter(&deferring_mode);
-  }
+  auto stage_trigger_in() const -> bool { return sustain_gate_in(); }
 
-  void stop_deferring() {
-    enter(&following_mode);
-  }
+  void start_deferring() { enter(&deferring_mode); }
 
-  void start_generating() {
-    enter(&generating_mode);
-  }
+  void start_generating() { enter(&generating_mode); }
 
-  void start_sustaining() {
-    enter(&sustaining_mode);
-  }
+  void start_sustaining() { enter(&sustaining_mode); }
 
-  void stop_sustaining() {
-    enter(&following_mode);
-  }
+  void stop_deferring() { enter(&following_mode); }
 
-  auto trigger_in() const -> bool { return gate_in(); }
+  void stop_sustaining() { enter(&following_mode); }
+
+  auto sustain_gate_in() const -> bool {
+    return inputs[HOLD_GATE_IN].value > 0.1f;
+  }
 
   enum InputIds { DEFER_IN, DURATION_CV, MAIN_IN, HOLD_GATE_IN, INPUT_COUNT };
 
@@ -93,7 +75,17 @@ public:
   };
 
 private:
+  void enter(Mode *incoming) {
+    mode->exit();
+    mode = incoming;
+    mode->enter();
+  }
+
   auto envelope_in() const -> float { return inputs[MAIN_IN].value; }
+
+  auto mode_switch_in() const -> int {
+    return static_cast<int>(params[MODE_SWITCH].value);
+  }
 
   auto modulated(ParameterIds knob_param, InputIds cv_input) const -> float {
     auto rotation = params[knob_param].value;
@@ -101,27 +93,21 @@ private:
     return Knob::modulated(rotation, cv);
   }
 
-  auto mode_switch_in() const -> int {
-    return static_cast<int>(params[MODE_SWITCH].value);
-  }
-
   void send_out(float voltage) { outputs[MAIN_OUT].value = voltage; }
 
-  void enter(Mode *incoming) {
-    mode->exit();
-    mode = incoming;
-    mode->enter();
-  }
-
   DeferGate<Hostage> defer_gate{this};
-  StageTrigger<Hostage> stage_trigger{this};
-  StageGenerator<Hostage> stage_generator{this};
   SustainGate<Hostage> sustain_gate{this};
+  StageTrigger<Hostage> stage_trigger{this};
+
+  StageGenerator<Hostage> stage_generator{this};
   EocGenerator<Hostage> eoc_generator{this};
+
   DeferringMode<Hostage> deferring_mode{this};
   FollowingMode<Hostage> following_mode{this, &stage_trigger};
-  GeneratingMode<Hostage> generating_mode{this, &stage_generator, &stage_trigger};
+  GeneratingMode<Hostage> generating_mode{this, &stage_generator,
+                                          &stage_trigger};
   SustainingMode<Hostage> sustaining_mode{this, &sustain_gate};
+
   Mode *mode{&following_mode};
   float held_voltage{0.f};
 };

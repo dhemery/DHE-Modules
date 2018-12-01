@@ -9,7 +9,7 @@ public:
   explicit DeferGate(M *module) : module{module} {}
 
 protected:
-  auto state_in() const -> bool override { return module->defer_in(); }
+  auto state_in() const -> bool override { return module->defer_gate_in(); }
 
   void on_rise() override { module->start_deferring(); }
 
@@ -24,7 +24,7 @@ public:
   explicit SustainGate(M *module) : module{module} {}
 
 protected:
-  auto state_in() const -> bool override { return module->defer_in(); }
+  auto state_in() const -> bool override { return module->sustain_gate_in(); }
 
   void on_rise() override { module->start_sustaining(); }
 
@@ -39,7 +39,7 @@ public:
   explicit StageTrigger(M *module) : module{module} {}
 
 protected:
-  auto state_in() const -> bool override { return module->trigger_in(); }
+  auto state_in() const -> bool override { return module->stage_trigger_in(); }
 
   void on_rise() override { module->start_generating(); }
 
@@ -53,9 +53,7 @@ public:
 
   auto duration() const -> float override { return module->duration(); }
 
-  void on_completion() const override {
-    module->finished_generating();
-  }
+  void on_completion() const override { module->finished_generating(); }
 
 private:
   M *module;
@@ -104,8 +102,8 @@ template <typename M> class GeneratingMode : public Mode {
 public:
   explicit GeneratingMode(M *module, PhaseGenerator *stage_generator,
                           Trigger *stage_trigger)
-      : module{module}, stage_trigger{stage_trigger},
-        stage_generator{stage_generator} {}
+      : module{module}, stage_trigger{stage_trigger}, stage_generator{
+                                                          stage_generator} {}
 
   void enter() override {
     module->send_active(true);
@@ -129,8 +127,7 @@ private:
   PhaseGenerator *stage_generator;
 };
 
-template <typename M>
-class SustainingMode : public Mode {
+template <typename M> class SustainingMode : public Mode {
 public:
   explicit SustainingMode(M *module, Gate *sustain_gate)
       : module{module}, sustain_gate{sustain_gate} {}
