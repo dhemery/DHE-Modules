@@ -7,75 +7,42 @@
 
 namespace DHE {
 
-class JusterFunction {
-public:
-  JusterFunction(const rack::Param &knob, Range range)
-      : knob{knob}, range{range} {}
-
-  auto adjustment() const -> float { return range.scale(knob.value); }
-
-  virtual auto apply(float input) const -> float = 0;
-
-private:
-  const rack::Param &knob;
-  const Range range;
-};
-
-class JusterMultiplier : JusterFunction {
-public:
-  JusterMultiplier(const rack::Param &knob, const Range &range)
-      : JusterFunction{knob, range} {}
-
-  auto apply(float input) const -> float override {
-    return input * adjustment();
-  }
-};
-
-class JusterAdder : JusterFunction {
-public:
-  JusterAdder(const rack::Param &knob, const Range &range)
-      : JusterFunction{knob, range} {}
-
-  auto apply(float input) const -> float override {
-    return input + adjustment();
-  }
-};
-
 class JusterChannel {
 public:
-  JusterChannel(const rack::Input &input, rack::Output &output,
-                const rack::Param &mode, const rack::Param &knob)
-      : input{input}, output{output}, mode{mode}, offset{knob,
-                                                         Signal::bipolar_range},
-        av{knob, {-1.f, 1.f}}, gain{knob, {0.f, 2.f}} {}
+  JusterChannel(rack::Module *module, int input, int function_switch_param,
+                int amount_knob_param, int output)
+      : input_port{module->inputs[input]},
+        function_selector{module->params[function_switch_param].value},
+        amount{module->params[amount_knob_param].value},
+        output{module->outputs[output].value} {}
 
-  auto adjust(float upstream) const -> float {
-    auto selection = static_cast<int>(mode.value);
-    auto in = input.active ? input.value : upstream;
-
-    switch (selection) {
-    case 0:
-      output.value = offset.apply(in);
+  auto adjust(float upstream) -> float {
+    auto input = input_port.active ? input_port.value : upstream;
+    auto function_selection = static_cast<int>(function_selector);
+    switch (function_selection) {
+    case OFFSET:
+      output = input + Signal::bipolar_range.scale(amount);
       break;
-    case 1:
-      output.value = av.apply(in);
+    case AV:
+      output = input * Knob::av_multiplier(amount);
       break;
-    case 2:
-      output.value = gain.apply(in);
+    case GAIN:
+      output = input * Knob::gain_multiplier(amount);
       break;
     default:
+      output = -9.f;
       break;
     }
-    return output.value;
+    return output;
   }
 
 private:
-  const rack::Input &input;
-  rack::Output &output;
-  const rack::Param &mode;
-  const JusterAdder offset;
-  const JusterMultiplier av;
-  const JusterMultiplier gain;
+  enum ChannelFunction { OFFSET, AV, GAIN };
+
+  const rack::Input &input_port;
+  const float &function_selector;
+  const float &amount;
+  float &output;
 };
 
 class Juster : public rack::Module {
@@ -84,7 +51,7 @@ public:
 
   void step() override {
     auto upstream = 0.f;
-    for (const auto &channel : channels) {
+    for (auto &channel : channels) {
       upstream = channel.adjust(upstream);
     }
   }
@@ -108,12 +75,11 @@ public:
   enum OutputIds { OUT_1, OUT_2, OUT_3, OUT_4, OUT_5, OUTPUT_COUNT };
 
 private:
-  const std::vector<const JusterChannel> channels{
-      {inputs[IN_1], outputs[OUT_1], params[MODE_1], params[KNOB_1]},
-      {inputs[IN_2], outputs[OUT_2], params[MODE_2], params[KNOB_2]},
-      {inputs[IN_3], outputs[OUT_3], params[MODE_3], params[KNOB_3]},
-      {inputs[IN_4], outputs[OUT_4], params[MODE_4], params[KNOB_4]},
-      {inputs[IN_5], outputs[OUT_5], params[MODE_5], params[KNOB_5]}};
+  std::vector<JusterChannel> channels{
+      {this, IN_1, MODE_1, KNOB_1, OUT_1}, {this, IN_2, MODE_2, KNOB_2, OUT_2},
+      {this, IN_3, MODE_3, KNOB_3, OUT_3}, {this, IN_4, MODE_4, KNOB_4, OUT_4},
+      {this, IN_5, MODE_5, KNOB_5, OUT_5},
+  };
 };
 
 struct JusterWidget : public ModuleWidget {

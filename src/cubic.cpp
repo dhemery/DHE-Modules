@@ -56,7 +56,7 @@ private:
 
   auto gain(const ParameterIds knob_param, const InputIds cv_input) const
       -> float {
-    return Signal::gain(modulated(knob_param, cv_input));
+    return Knob::gain_multiplier(modulated(knob_param, cv_input));
   }
 
   auto main_in() const -> float { return inputs[MAIN_IN].value; }

@@ -154,11 +154,11 @@ private:
   auto x_offset() const -> float { return offset(X_RANGE); }
 
   auto x_gain_in() const -> float {
-    return Signal::gain(modulated(X_GAIN, X_GAIN_CV));
+    return Knob::gain_multiplier(modulated(X_GAIN, X_GAIN_CV));
   }
 
   auto y_gain_in() const -> float {
-    return Signal::gain(modulated(Y_GAIN, Y_GAIN_CV));
+    return Knob::gain_multiplier(modulated(Y_GAIN, Y_GAIN_CV));
   }
 
   auto y_offset() const -> float { return offset(Y_RANGE); }
@@ -233,7 +233,7 @@ struct XycloidWidget : public ModuleWidget {
     row_spacing = 15.f;
     row = 0;
 
-    auto default_gain = Signal::gain_range.normalize(1.f);
+    auto default_gain = Knob::gain_range.normalize(1.f);
     row++;
     install_input(Xycloid::X_GAIN_CV, {left_x, top_row_y + row * row_spacing});
     install_knob("small", Xycloid::X_GAIN,
