@@ -3,56 +3,243 @@
 #include "dhe-modules.h"
 #include "module-widget.h"
 
-#include "util/d-flip-flop.h"
 #include "util/duration.h"
-#include "util/mode.h"
-#include "util/phase-accumulator.h"
-#include "util/range.h"
-#include "util/sigmoid.h"
 #include "util/signal.h"
 
 namespace DHE {
 
-class Stage : public rack::Module {
+class Trigger {
 public:
-  Stage() : Module(PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT) {
-    deferring_mode.on_entry([this] { send_active(true); });
-    deferring_mode.on_step([this] { send_envelope(envelope_in()); });
+  void step() {
+    auto old_state = state;
+    state = trigger_in();
+    if (state == old_state)
+      return;
+    if (state) {
+      on_rise();
+    }
+  }
+  void set() { state = true; }
+  void reset() { state = false; }
 
-    generating_mode.on_entry([this] {
-      send_active(false);
-      phase_0_voltage = envelope_in();
-      envelope_trigger.enable();
-    });
-    generating_mode.on_step([this] {
-      envelope_trigger.step();
-      generator.step();
-      send_envelope(envelope_voltage(generator.phase()));
-    });
-    generating_mode.on_exit([this] {
-      envelope_trigger.disable();
-      generator.stop();
-    });
+protected:
+  virtual auto trigger_in() const -> bool = 0;
+  virtual void on_rise() = 0;
 
-    envelope_trigger.on_rise([this] {
-      phase_0_voltage = envelope_in();
-      generator.start();
-    });
+private:
+  bool state = false;
+};
 
-    generator.on_start([this] { send_active(true); });
-    generator.on_completion([this] {
-      send_active(false);
-      eoc_pulse.start();
-    });
+class Gate {
+public:
+  void step() {
+    auto old_state = state;
+    state = gate_in();
+    if (state == old_state)
+      return;
+    if (state) {
+      on_rise();
+    } else {
+      on_fall();
+    }
+  }
+  void set() { state = true; }
+  void reset() { state = false; }
 
-    eoc_pulse.on_start([this] { send_eoc(true); });
-    eoc_pulse.on_completion([this] { send_eoc(false); });
+protected:
+  virtual auto gate_in() const -> bool = 0;
+  virtual void on_rise() = 0;
+  virtual void on_fall() = 0;
 
-    executor.on_step([this] { eoc_pulse.step(); });
-    executor.enter();
+private:
+  bool state = false;
+};
+
+class PhaseGenerator {
+public:
+  void start() {
+    accumulated = 0.f;
+    on_start();
   }
 
-  void step() override { executor.step(); }
+  void step() {
+    accumulated += rack::engineGetSampleTime();
+    if (accumulated >= 1.0f) {
+      accumulated = 1.f;
+    };
+    if (accumulated >= 1.0f) {
+      on_complete();
+    };
+  }
+
+  auto phase() const -> float { return this->accumulated; }
+
+protected:
+  virtual void on_start(){};
+  virtual void on_complete(){};
+
+private:
+  float accumulated = 0.f;
+};
+
+class Mode {
+public:
+  virtual void enter(){};
+  virtual void step(){};
+  virtual void exit(){};
+};
+
+template <typename M> class StageGenerator : public PhaseGenerator {
+public:
+  explicit StageGenerator(M *module) : module{module} {}
+
+  void on_start() override { module->send_active(true); }
+
+  void on_complete() override { module->on_stage_complete(); }
+
+private:
+  M *module;
+};
+
+template <typename M> class EocGenerator : public PhaseGenerator {
+public:
+  explicit EocGenerator(M *module) : module{module} {}
+
+  void on_start() override { module->send_eoc(true); }
+  void on_complete() override { module->send_eoc(false); }
+
+private:
+  M *module;
+};
+
+template <typename M> class DeferringMode : public Mode {
+public:
+  explicit DeferringMode(M *module) : module{module} {}
+  void enter() override { module->send_active(true); }
+  void step() override { module->send_input(); }
+
+private:
+  M *module;
+};
+
+template <typename M> class FollowingMode : public Mode {
+public:
+  explicit FollowingMode(M *module, Trigger *envelope_trigger)
+      : module{module}, envelope_trigger{envelope_trigger} {}
+  void enter() override { module->send_active(false); }
+  void step() override {
+    envelope_trigger->step();
+    module->send_envelope();
+  }
+
+private:
+  M *module;
+  Trigger *envelope_trigger;
+};
+
+template <typename M> class GeneratingMode : public Mode {
+public:
+  explicit GeneratingMode(M *module, PhaseGenerator *stage_generator,
+                          Trigger *envelope_trigger)
+      : module{module}, envelope_trigger{envelope_trigger},
+        stage_generator{stage_generator} {}
+
+  void enter() override { start(); }
+
+  void step() override {
+    stage_generator->step();
+    module->send_envelope();
+    envelope_trigger->step();
+  }
+
+  void start() {
+    module->hold_input();
+    stage_generator->start();
+  }
+
+private:
+  M *module;
+  Trigger *envelope_trigger;
+  PhaseGenerator *stage_generator;
+};
+
+template <typename M> class DeferGate : public Gate {
+public:
+  explicit DeferGate(M *module) : module{module} {}
+
+protected:
+  auto gate_in() const -> bool override { return module->defer_in(); }
+
+  void on_rise() override { module->on_defer_rise(); }
+
+  void on_fall() override { module->on_defer_fall(); }
+
+private:
+  M *module;
+};
+
+template <typename M> class EnvelopeTrigger : public Trigger {
+public:
+  explicit EnvelopeTrigger(M *module) : module{module} {}
+
+protected:
+  auto trigger_in() const -> bool override { return module->trigger_in(); }
+
+  void on_rise() override { module->on_trigger_rise(); }
+
+private:
+  M *module;
+};
+
+class Stage : public rack::Module {
+public:
+  Stage()
+      : Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT},
+        mode{&following_mode} {
+    mode->enter();
+  }
+
+  void step() override {
+    mode_gate.step();
+    mode->step();
+    eoc_generator.step();
+  }
+
+  auto defer_in() const -> bool { return inputs[DEFER_IN].value > 0.1; }
+
+  void enter(Mode *incoming) {
+    mode->exit();
+    mode = incoming;
+    mode->enter();
+  }
+
+  void hold_input() { held_voltage = envelope_in(); }
+
+  void on_stage_complete() {
+    eoc_generator.start();
+    enter(&following_mode);
+  }
+
+  void on_defer_fall() { enter(&following_mode); }
+
+  void on_defer_rise() { enter(&deferring_mode); }
+
+  void on_trigger_rise() { enter(&generating_mode); }
+
+  void send_active(bool active) {
+    outputs[ACTIVE_OUT].value = active ? 10.f : 0.f;
+  }
+
+  void send_envelope() {
+    auto phase = stage_generator.phase();
+    send_out(scale(taper(phase), held_voltage, level()));
+  }
+
+  void send_input() { send_out(envelope_in()); }
+
+  void send_eoc(bool eoc) { outputs[EOC_OUT].value = eoc ? 10.f : 0.f; }
+
+  auto trigger_in() const -> bool { return inputs[TRIGGER_IN].value > 0.1; }
 
   enum ParameterIIds { DURATION_KNOB, LEVEL_KNOB, CURVE_KNOB, PARAMETER_COUNT };
 
@@ -66,54 +253,36 @@ private:
     return Sigmoid::curvature(rotation);
   }
 
-  auto defer_in() const -> bool { return inputs[DEFER_IN].value > 0.1; }
-
   auto duration() const -> float {
     auto rotation = params[DURATION_KNOB].value;
     return DHE::duration(rotation);
   }
+
+  auto envelope_in() const -> float { return inputs[MAIN_IN].value; }
 
   auto level() const -> float {
     auto rotation = params[LEVEL_KNOB].value;
     return Signal::unipolar_range.scale(rotation);
   }
 
-  auto envelope_voltage(float phase) const -> float {
-    return scale(taper(phase), phase_0_voltage, level());
-  }
-
-  auto envelope_in() const -> float { return inputs[MAIN_IN].value; }
-
-  auto sample_time() const -> float { return rack::engineGetSampleTime(); }
-
-  void send_active(bool is_active) {
-    auto active_out_voltage = is_active ? 10.f : 0.f;
-    outputs[ACTIVE_OUT].value = active_out_voltage;
-  }
-
-  void send_envelope(float voltage) { outputs[MAIN_OUT].value = voltage; }
-
-  void send_eoc(bool is_eoc) {
-    auto eoc_out_voltage = is_eoc ? 10.f : 0.f;
-    outputs[EOC_OUT].value = eoc_out_voltage;
-  }
+  void send_out(float voltage) { outputs[MAIN_OUT].value = voltage; }
 
   auto taper(float phase) const -> float {
     return Sigmoid::j_taper(phase, curvature());
   }
 
-  auto trigger_in() const -> bool { return inputs[TRIGGER_IN].value > 0.1; }
+  EnvelopeTrigger<Stage> envelope_trigger{this};
+  EocGenerator<Stage> eoc_generator{this};
+  DeferGate<Stage> mode_gate{this};
+  StageGenerator<Stage> stage_generator{this};
 
-  float phase_0_voltage{0.f};
-  PhaseAccumulator generator{[this] { return sample_time() / duration(); }};
-  DFlipFlop envelope_trigger{[this] { return trigger_in(); }};
+  DeferringMode<Stage> deferring_mode{this};
+  FollowingMode<Stage> following_mode{this, &envelope_trigger};
+  GeneratingMode<Stage> generating_mode{this, &stage_generator,
+                                        &envelope_trigger};
+  Mode *mode;
 
-  PhaseAccumulator eoc_pulse{[this] { return sample_time() / 1e-3f; }};
-  Mode generating_mode{};
-  Mode deferring_mode{};
-
-  CompoundMode executor{[this] { return defer_in(); },
-                        {&generating_mode, &deferring_mode}};
+  float held_voltage = 0.f;
 };
 
 struct StageWidget : public ModuleWidget {
