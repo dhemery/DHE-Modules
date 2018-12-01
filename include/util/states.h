@@ -6,47 +6,34 @@ class Trigger {
 public:
   void step() {
     auto old_state = state;
-    state = trigger_in();
-    if (state == old_state)
-      return;
-    if (state) {
-      on_rise();
-    }
+    state = state_in();
+    if (state != old_state)
+      on_state_change(state);
   }
-  void set() { state = true; }
-  void reset() { state = false; }
 
 protected:
-  virtual auto trigger_in() const -> bool = 0;
+  virtual auto state_in() const -> bool = 0;
   virtual void on_rise() = 0;
+  virtual void on_state_change(bool state) {
+    on_rise();
+  }
 
 private:
   bool state = false;
 };
 
-class Gate {
+class Gate : public Trigger {
 public:
-  void step() {
-    auto old_state = state;
-    state = gate_in();
-    if (state == old_state)
-      return;
+  void on_state_change(bool state) override {
     if (state) {
       on_rise();
     } else {
       on_fall();
     }
   }
-  void set() { state = true; }
-  void reset() { state = false; }
 
 protected:
-  virtual auto gate_in() const -> bool = 0;
-  virtual void on_rise() = 0;
   virtual void on_fall() = 0;
-
-private:
-  bool state = false;
 };
 
 class Mode {

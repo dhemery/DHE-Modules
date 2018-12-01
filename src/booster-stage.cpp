@@ -40,16 +40,16 @@ public:
 
   void hold_input() { held_voltage = envelope_in(); }
 
-  void on_defer_fall() { enter(&following_mode); }
+  void start_deferring() { enter(&deferring_mode); }
 
-  void on_defer_rise() { enter(&deferring_mode); }
+  void start_generating() { enter(&generating_mode); }
 
-  void on_stage_complete() {
+  void stop_deferring() { enter(&following_mode); }
+
+  void finished_generating() {
     eoc_generator.start();
     enter(&following_mode);
   }
-
-  void on_trigger_rise() { enter(&generating_mode); }
 
   void send_active(bool active) {
     outputs[ACTIVE_OUT].value = active || active_button() ? 10.f : 0.f;
@@ -59,7 +59,7 @@ public:
     outputs[EOC_OUT].value = eoc || eoc_button() ? 10.f : 0.f;
   }
 
-  void send_generated() {
+  void send_stage() {
     auto phase = stage_generator.phase();
     send_out(scale(taper(phase), held_voltage, level()));
   }
@@ -132,7 +132,7 @@ private:
     return Sigmoid::taper(phase, curvature(), is_s_shape());
   }
 
-  EnvelopeTrigger<BoosterStage> envelope_trigger{this};
+  StageTrigger<BoosterStage> envelope_trigger{this};
   EocGenerator<BoosterStage> eoc_generator{this};
   DeferGate<BoosterStage> mode_gate{this};
   StageGenerator<BoosterStage> stage_generator{this};

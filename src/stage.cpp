@@ -18,7 +18,7 @@ public:
   }
 
   void step() override {
-    mode_gate.step();
+    defer_gate.step();
     mode->step();
     eoc_generator.step();
   }
@@ -30,24 +30,12 @@ public:
     return DHE::duration(rotation);
   }
 
-  void enter(Mode *incoming) {
-    mode->exit();
-    mode = incoming;
-    mode->enter();
-  }
-
-  void hold_input() { held_voltage = envelope_in(); }
-
-  void on_defer_fall() { enter(&following_mode); }
-
-  void on_defer_rise() { enter(&deferring_mode); }
-
-  void on_stage_complete() {
+  void finished_generating() {
     eoc_generator.start();
     enter(&following_mode);
   }
 
-  void on_trigger_rise() { enter(&generating_mode); }
+  void hold_input() { held_voltage = envelope_in(); }
 
   void send_active(bool active) {
     outputs[ACTIVE_OUT].value = active ? 10.f : 0.f;
@@ -55,12 +43,18 @@ public:
 
   void send_eoc(bool eoc) { outputs[EOC_OUT].value = eoc ? 10.f : 0.f; }
 
-  void send_generated() {
+  void send_input() { send_out(envelope_in()); }
+
+  void send_stage() {
     auto phase = stage_generator.phase();
     send_out(scale(taper(phase), held_voltage, level()));
   }
 
-  void send_input() { send_out(envelope_in()); }
+  void start_deferring() { enter(&deferring_mode); }
+
+  void stop_deferring() { enter(&following_mode); }
+
+  void start_generating() { enter(&generating_mode); }
 
   auto trigger_in() const -> bool { return inputs[TRIGGER_IN].value > 0.1; }
 
@@ -76,6 +70,12 @@ private:
     return Sigmoid::curvature(rotation);
   }
 
+  void enter(Mode *incoming) {
+    mode->exit();
+    mode = incoming;
+    mode->enter();
+  }
+
   auto envelope_in() const -> float { return inputs[ENVELOPE_IN].value; }
 
   auto level() const -> float {
@@ -89,9 +89,9 @@ private:
     return Sigmoid::j_taper(phase, curvature());
   }
 
-  EnvelopeTrigger<Stage> envelope_trigger{this};
+  StageTrigger<Stage> envelope_trigger{this};
   EocGenerator<Stage> eoc_generator{this};
-  DeferGate<Stage> mode_gate{this};
+  DeferGate<Stage> defer_gate{this};
   StageGenerator<Stage> stage_generator{this};
 
   DeferringMode<Stage> deferring_mode{this};

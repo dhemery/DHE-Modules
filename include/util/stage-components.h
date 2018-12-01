@@ -4,15 +4,58 @@
 #include "states.h"
 
 namespace DHE {
+template <typename M> class DeferGate : public Gate {
+public:
+  explicit DeferGate(M *module) : module{module} {}
+
+protected:
+  auto state_in() const -> bool override { return module->defer_in(); }
+
+  void on_rise() override { module->start_deferring(); }
+
+  void on_fall() override { module->stop_deferring(); }
+
+private:
+  M *module;
+};
+
+template <typename M> class SustainGate : public Gate {
+public:
+  explicit SustainGate(M *module) : module{module} {}
+
+protected:
+  auto state_in() const -> bool override { return module->defer_in(); }
+
+  void on_rise() override { module->start_sustaining(); }
+
+  void on_fall() override { module->stop_sustaining(); }
+
+private:
+  M *module;
+};
+
+template <typename M> class StageTrigger : public Trigger {
+public:
+  explicit StageTrigger(M *module) : module{module} {}
+
+protected:
+  auto state_in() const -> bool override { return module->trigger_in(); }
+
+  void on_rise() override { module->start_generating(); }
+
+private:
+  M *module;
+};
+
 template <typename M> class StageGenerator : public PhaseGenerator {
 public:
   explicit StageGenerator(M *module) : module{module} {}
 
-  void on_start() override { module->send_active(true); }
-
   auto duration() const -> float override { return module->duration(); }
 
-  void on_complete() override { module->on_stage_complete(); }
+  void on_completion() const override {
+    module->finished_generating();
+  }
 
 private:
   M *module;
@@ -22,11 +65,11 @@ template <typename M> class EocGenerator : public PhaseGenerator {
 public:
   explicit EocGenerator(M *module) : module{module} {}
 
-  void on_start() override { module->send_eoc(true); }
+  void on_start() const override { module->send_eoc(true); }
 
   auto duration() const -> float override { return 1e-3; }
 
-  void on_complete() override { module->send_eoc(false); }
+  void on_completion() const override { module->send_eoc(false); }
 
 private:
   M *module;
@@ -44,32 +87,35 @@ private:
 
 template <typename M> class FollowingMode : public Mode {
 public:
-  explicit FollowingMode(M *module, Trigger *envelope_trigger)
-      : module{module}, envelope_trigger{envelope_trigger} {}
+  explicit FollowingMode(M *module, Trigger *stage_trigger)
+      : module{module}, stage_trigger{stage_trigger} {}
   void enter() override { module->send_active(false); }
   void step() override {
-    envelope_trigger->step();
-    module->send_generated();
+    module->send_stage();
+    stage_trigger->step();
   }
 
 private:
   M *module;
-  Trigger *envelope_trigger;
+  Trigger *stage_trigger;
 };
 
 template <typename M> class GeneratingMode : public Mode {
 public:
   explicit GeneratingMode(M *module, PhaseGenerator *stage_generator,
-                          Trigger *envelope_trigger)
-      : module{module}, envelope_trigger{envelope_trigger},
+                          Trigger *stage_trigger)
+      : module{module}, stage_trigger{stage_trigger},
         stage_generator{stage_generator} {}
 
-  void enter() override { start(); }
+  void enter() override {
+    module->send_active(true);
+    start();
+  }
 
   void step() override {
     stage_generator->step();
-    module->send_generated();
-    envelope_trigger->step();
+    module->send_stage();
+    stage_trigger->step();
   }
 
   void start() {
@@ -79,35 +125,28 @@ public:
 
 private:
   M *module;
-  Trigger *envelope_trigger;
+  Trigger *stage_trigger;
   PhaseGenerator *stage_generator;
 };
 
-template <typename M> class DeferGate : public Gate {
+template <typename M>
+class SustainingMode : public Mode {
 public:
-  explicit DeferGate(M *module) : module{module} {}
+  explicit SustainingMode(M *module, Gate *sustain_gate)
+      : module{module}, sustain_gate{sustain_gate} {}
 
-protected:
-  auto gate_in() const -> bool override { return module->defer_in(); }
+  void enter() override {
+    module->send_active(true);
+    module->hold_input();
+  }
 
-  void on_rise() override { module->on_defer_rise(); }
-
-  void on_fall() override { module->on_defer_fall(); }
+  void step() override {
+    module->send_held();
+    sustain_gate->step();
+  }
 
 private:
   M *module;
-};
-
-template <typename M> class EnvelopeTrigger : public Trigger {
-public:
-  explicit EnvelopeTrigger(M *module) : module{module} {}
-
-protected:
-  auto trigger_in() const -> bool override { return module->trigger_in(); }
-
-  void on_rise() override { module->on_trigger_rise(); }
-
-private:
-  M *module;
+  Gate *sustain_gate;
 };
 } // namespace DHE

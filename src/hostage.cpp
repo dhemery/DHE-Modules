@@ -1,10 +1,9 @@
+#include <util/stage-components.h>
 #include "dhe-modules.h"
 #include "module-widget.h"
 
-#include "util/d-flip-flop.h"
 #include "util/duration.h"
 #include "util/knob.h"
-#include "util/mode.h"
 #include "util/phase-accumulator.h"
 
 namespace DHE {
@@ -12,50 +11,75 @@ namespace DHE {
 class Hostage : public rack::Module {
 public:
   Hostage() : Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT} {
-    defer_mode.on_entry([this] { send_active(true); });
-    defer_mode.on_step([this] { send_envelope(envelope_in()); });
-
-    timed_sustain_mode.on_entry([this] {
-      sustain_trigger.enable();
-      send_active(false);
-      send_envelope(envelope_in());
-    });
-    timed_sustain_mode.on_step([this] {
-      sustain_trigger.step();
-      timer.step();
-    });
-    timed_sustain_mode.on_exit([this] {
-      sustain_trigger.disable();
-      timer.stop();
-    });
-
-    sustain_trigger.on_rise([this] { timer.start(); });
-
-    timer.on_start([this] { begin_sustaining(); });
-    timer.on_completion([this] { end_sustaining(); });
-
-    gated_sustain_mode.on_entry([this] {
-      sustain_gate.step();
-      sustain_gate.enable();
-      if (sustain_gate.is_high())
-        begin_sustaining();
-      else
-        end_sustaining();
-    });
-    gated_sustain_mode.on_step([this] { sustain_gate.step(); });
-    gated_sustain_mode.on_exit([this] { sustain_gate.disable(); });
-
-    sustain_gate.on_rise([this] { begin_sustaining(); });
-    sustain_gate.on_fall([this] { end_sustaining(); });
-
-    eoc_pulse.on_start([this] { send_eoc(true); });
-    eoc_pulse.on_completion([this] { send_eoc(false); });
-
-    executor.on_step([this] { eoc_pulse.step(); });
-    executor.enter();
+    mode->enter();
   }
 
-  void step() override { executor.step(); }
+  void step() override {
+    defer_gate.step();
+    mode->step();
+    eoc_generator.step();
+  }
+
+  auto defer_in() const -> bool { return inputs[DEFER_IN].value > 0.1f; }
+
+  auto duration() const -> float {
+    auto rotation = modulated(DURATION_KNOB, DURATION_CV);
+    auto range_selection = static_cast<int>(params[DURATION_SWITCH].value);
+    return DHE::duration(rotation, range_selection);
+  }
+
+  void finished_generating() {
+    eoc_generator.start();
+    enter(&following_mode);
+  }
+
+  auto gate_in() const -> bool { return inputs[HOLD_GATE_IN].value > 0.1f; }
+
+  void hold_input() {
+    held_voltage = envelope_in();
+  }
+
+  void send_active(bool active) {
+    outputs[ACTIVE_OUT].value = active ? 10.f : 0.f;
+  }
+
+  void send_eoc(bool eoc) {
+    outputs[EOC_OUT].value = eoc ? 10.f : 0.f;
+  }
+
+  void send_held() {
+    send_out(held_voltage);
+  }
+
+  void send_input() {
+    send_out(envelope_in());
+  }
+
+  void send_stage() {
+    send_held();
+  }
+
+  void start_deferring() {
+    enter(&deferring_mode);
+  }
+
+  void stop_deferring() {
+    enter(&following_mode);
+  }
+
+  void start_generating() {
+    enter(&generating_mode);
+  }
+
+  void start_sustaining() {
+    enter(&sustaining_mode);
+  }
+
+  void stop_sustaining() {
+    enter(&following_mode);
+  }
+
+  auto trigger_in() const -> bool { return gate_in(); }
 
   enum InputIds { DEFER_IN, DURATION_CV, MAIN_IN, HOLD_GATE_IN, INPUT_COUNT };
 
@@ -69,24 +93,7 @@ public:
   };
 
 private:
-  void begin_sustaining() { send_active(true); }
-
-  auto defer_in() const -> bool { return inputs[DEFER_IN].value > 0.1f; }
-
-  auto duration() const -> float {
-    auto rotation = modulated(DURATION_KNOB, DURATION_CV);
-    auto range_selection = static_cast<int>(params[DURATION_SWITCH].value);
-    return DHE::duration(rotation, range_selection);
-  }
-
-  void end_sustaining() {
-    send_active(false);
-    eoc_pulse.start();
-  }
-
   auto envelope_in() const -> float { return inputs[MAIN_IN].value; }
-
-  auto hold_in() const -> bool { return inputs[HOLD_GATE_IN].value > 0.1f; }
 
   auto modulated(ParameterIds knob_param, InputIds cv_input) const -> float {
     auto rotation = params[knob_param].value;
@@ -98,33 +105,25 @@ private:
     return static_cast<int>(params[MODE_SWITCH].value);
   }
 
-  auto sample_time() const -> float { return rack::engineGetSampleTime(); }
+  void send_out(float voltage) { outputs[MAIN_OUT].value = voltage; }
 
-  void send_active(bool is_active) {
-    outputs[ACTIVE_OUT].value = is_active ? 10.f : 0.f;
+  void enter(Mode *incoming) {
+    mode->exit();
+    mode = incoming;
+    mode->enter();
   }
 
-  void send_eoc(bool is_pulsing) {
-    outputs[EOC_OUT].value = is_pulsing ? 10.f : 0.f;
-  }
-
-  void send_envelope(float voltage) { outputs[MAIN_OUT].value = voltage; }
-
-  DFlipFlop sustain_gate{[this] { return hold_in(); }};
-
-  DFlipFlop sustain_trigger{[this] { return hold_in(); }};
-  PhaseAccumulator timer{[this] { return sample_time() / duration(); }};
-
-  PhaseAccumulator eoc_pulse{[this] { return sample_time() / 1e-3f; }};
-  Mode timed_sustain_mode{};
-  Mode gated_sustain_mode{};
-
-  CompoundMode sustain_mode{[this] { return mode_switch_in(); },
-                            {&timed_sustain_mode, &gated_sustain_mode}};
-  Mode defer_mode{};
-
-  CompoundMode executor{[this] { return defer_in(); },
-                        {&sustain_mode, &defer_mode}};
+  DeferGate<Hostage> defer_gate{this};
+  StageTrigger<Hostage> stage_trigger{this};
+  StageGenerator<Hostage> stage_generator{this};
+  SustainGate<Hostage> sustain_gate{this};
+  EocGenerator<Hostage> eoc_generator{this};
+  DeferringMode<Hostage> deferring_mode{this};
+  FollowingMode<Hostage> following_mode{this, &stage_trigger};
+  GeneratingMode<Hostage> generating_mode{this, &stage_generator, &stage_trigger};
+  SustainingMode<Hostage> sustaining_mode{this, &sustain_gate};
+  Mode *mode{&following_mode};
+  float held_voltage{0.f};
 };
 
 struct HostageWidget : public ModuleWidget {
