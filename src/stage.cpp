@@ -5,191 +5,9 @@
 
 #include "util/duration.h"
 #include "util/signal.h"
+#include "util/stage-components.h"
 
 namespace DHE {
-
-class Trigger {
-public:
-  void step() {
-    auto old_state = state;
-    state = trigger_in();
-    if (state == old_state)
-      return;
-    if (state) {
-      on_rise();
-    }
-  }
-  void set() { state = true; }
-  void reset() { state = false; }
-
-protected:
-  virtual auto trigger_in() const -> bool = 0;
-  virtual void on_rise() = 0;
-
-private:
-  bool state = false;
-};
-
-class Gate {
-public:
-  void step() {
-    auto old_state = state;
-    state = gate_in();
-    if (state == old_state)
-      return;
-    if (state) {
-      on_rise();
-    } else {
-      on_fall();
-    }
-  }
-  void set() { state = true; }
-  void reset() { state = false; }
-
-protected:
-  virtual auto gate_in() const -> bool = 0;
-  virtual void on_rise() = 0;
-  virtual void on_fall() = 0;
-
-private:
-  bool state = false;
-};
-
-class PhaseGenerator {
-public:
-  void start() {
-    accumulated = 0.f;
-    on_start();
-  }
-
-  void step() {
-    accumulated += rack::engineGetSampleTime();
-    if (accumulated >= 1.0f) {
-      accumulated = 1.f;
-    };
-    if (accumulated >= 1.0f) {
-      on_complete();
-    };
-  }
-
-  auto phase() const -> float { return this->accumulated; }
-
-protected:
-  virtual void on_start(){};
-  virtual void on_complete(){};
-
-private:
-  float accumulated = 0.f;
-};
-
-class Mode {
-public:
-  virtual void enter(){};
-  virtual void step(){};
-  virtual void exit(){};
-};
-
-template <typename M> class StageGenerator : public PhaseGenerator {
-public:
-  explicit StageGenerator(M *module) : module{module} {}
-
-  void on_start() override { module->send_active(true); }
-
-  void on_complete() override { module->on_stage_complete(); }
-
-private:
-  M *module;
-};
-
-template <typename M> class EocGenerator : public PhaseGenerator {
-public:
-  explicit EocGenerator(M *module) : module{module} {}
-
-  void on_start() override { module->send_eoc(true); }
-  void on_complete() override { module->send_eoc(false); }
-
-private:
-  M *module;
-};
-
-template <typename M> class DeferringMode : public Mode {
-public:
-  explicit DeferringMode(M *module) : module{module} {}
-  void enter() override { module->send_active(true); }
-  void step() override { module->send_input(); }
-
-private:
-  M *module;
-};
-
-template <typename M> class FollowingMode : public Mode {
-public:
-  explicit FollowingMode(M *module, Trigger *envelope_trigger)
-      : module{module}, envelope_trigger{envelope_trigger} {}
-  void enter() override { module->send_active(false); }
-  void step() override {
-    envelope_trigger->step();
-    module->send_envelope();
-  }
-
-private:
-  M *module;
-  Trigger *envelope_trigger;
-};
-
-template <typename M> class GeneratingMode : public Mode {
-public:
-  explicit GeneratingMode(M *module, PhaseGenerator *stage_generator,
-                          Trigger *envelope_trigger)
-      : module{module}, envelope_trigger{envelope_trigger},
-        stage_generator{stage_generator} {}
-
-  void enter() override { start(); }
-
-  void step() override {
-    stage_generator->step();
-    module->send_envelope();
-    envelope_trigger->step();
-  }
-
-  void start() {
-    module->hold_input();
-    stage_generator->start();
-  }
-
-private:
-  M *module;
-  Trigger *envelope_trigger;
-  PhaseGenerator *stage_generator;
-};
-
-template <typename M> class DeferGate : public Gate {
-public:
-  explicit DeferGate(M *module) : module{module} {}
-
-protected:
-  auto gate_in() const -> bool override { return module->defer_in(); }
-
-  void on_rise() override { module->on_defer_rise(); }
-
-  void on_fall() override { module->on_defer_fall(); }
-
-private:
-  M *module;
-};
-
-template <typename M> class EnvelopeTrigger : public Trigger {
-public:
-  explicit EnvelopeTrigger(M *module) : module{module} {}
-
-protected:
-  auto trigger_in() const -> bool override { return module->trigger_in(); }
-
-  void on_rise() override { module->on_trigger_rise(); }
-
-private:
-  M *module;
-};
 
 class Stage : public rack::Module {
 public:
@@ -207,6 +25,11 @@ public:
 
   auto defer_in() const -> bool { return inputs[DEFER_IN].value > 0.1; }
 
+  auto duration() const -> float {
+    auto rotation = params[DURATION_KNOB].value;
+    return DHE::duration(rotation);
+  }
+
   void enter(Mode *incoming) {
     mode->exit();
     mode = incoming;
@@ -215,14 +38,14 @@ public:
 
   void hold_input() { held_voltage = envelope_in(); }
 
+  void on_defer_fall() { enter(&following_mode); }
+
+  void on_defer_rise() { enter(&deferring_mode); }
+
   void on_stage_complete() {
     eoc_generator.start();
     enter(&following_mode);
   }
-
-  void on_defer_fall() { enter(&following_mode); }
-
-  void on_defer_rise() { enter(&deferring_mode); }
 
   void on_trigger_rise() { enter(&generating_mode); }
 
@@ -230,20 +53,20 @@ public:
     outputs[ACTIVE_OUT].value = active ? 10.f : 0.f;
   }
 
-  void send_envelope() {
+  void send_eoc(bool eoc) { outputs[EOC_OUT].value = eoc ? 10.f : 0.f; }
+
+  void send_generated() {
     auto phase = stage_generator.phase();
     send_out(scale(taper(phase), held_voltage, level()));
   }
 
   void send_input() { send_out(envelope_in()); }
 
-  void send_eoc(bool eoc) { outputs[EOC_OUT].value = eoc ? 10.f : 0.f; }
-
   auto trigger_in() const -> bool { return inputs[TRIGGER_IN].value > 0.1; }
 
   enum ParameterIIds { DURATION_KNOB, LEVEL_KNOB, CURVE_KNOB, PARAMETER_COUNT };
 
-  enum InputIds { MAIN_IN, TRIGGER_IN, DEFER_IN, INPUT_COUNT };
+  enum InputIds { ENVELOPE_IN, TRIGGER_IN, DEFER_IN, INPUT_COUNT };
 
   enum OutputIds { MAIN_OUT, EOC_OUT, ACTIVE_OUT, OUTPUT_COUNT };
 
@@ -253,12 +76,7 @@ private:
     return Sigmoid::curvature(rotation);
   }
 
-  auto duration() const -> float {
-    auto rotation = params[DURATION_KNOB].value;
-    return DHE::duration(rotation);
-  }
-
-  auto envelope_in() const -> float { return inputs[MAIN_IN].value; }
+  auto envelope_in() const -> float { return inputs[ENVELOPE_IN].value; }
 
   auto level() const -> float {
     auto rotation = params[LEVEL_KNOB].value;
@@ -321,7 +139,7 @@ struct StageWidget : public ModuleWidget {
     install_output(Stage::EOC_OUT, {right_x, top_row_y + row * row_spacing});
 
     row++;
-    install_input(Stage::MAIN_IN, {left_x, top_row_y + row * row_spacing});
+    install_input(Stage::ENVELOPE_IN, {left_x, top_row_y + row * row_spacing});
     install_output(Stage::MAIN_OUT, {right_x, top_row_y + row * row_spacing});
   }
 };

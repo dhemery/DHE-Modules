@@ -1,58 +1,75 @@
 #include "dhe-modules.h"
 #include "module-widget.h"
 
-#include "util/d-flip-flop.h"
 #include "util/duration.h"
 #include "util/knob.h"
-#include "util/mode.h"
-#include "util/phase-accumulator.h"
 #include "util/signal.h"
+#include <util/stage-components.h>
 
 namespace DHE {
 
 class BoosterStage : public rack::Module {
 public:
   BoosterStage() : Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT} {
-    defer_mode.on_entry([this] { is_active = true; });
-    defer_mode.on_step([this] { send_envelope(envelope_in()); });
-
-    stage_mode.on_entry([this] {
-      is_active = false;
-      phase_0_voltage = envelope_in();
-      envelope_trigger.enable();
-    });
-    stage_mode.on_step([this] {
-      envelope_trigger.step();
-      envelope.step();
-      send_envelope(envelope_voltage(envelope.phase()));
-    });
-    stage_mode.on_exit([this] {
-      envelope_trigger.disable();
-      envelope.stop();
-    });
-
-    envelope_trigger.on_rise([this] {
-      phase_0_voltage = envelope_in();
-      envelope.start();
-    });
-
-    envelope.on_start([this] { is_active = true; });
-    envelope.on_completion([this] {
-      is_active = false;
-      eoc_pulse.start();
-    });
-
-    eoc_pulse.on_start([this] { is_eoc = true; });
-    eoc_pulse.on_completion([this] { is_eoc = false; });
-
-    executor.on_step([this] { eoc_pulse.step(); });
-    executor.enter();
+    mode->enter();
   }
 
   void step() override {
-    executor.step();
-    send_active();
-    send_eoc();
+    mode_gate.step();
+    mode->step();
+    eoc_generator.step();
+  }
+
+  auto defer_in() const -> bool {
+    auto defer_button = params[DEFER_BUTTON].value > 0.5f;
+    auto defer_input = inputs[DEFER_IN].value > 0.1f;
+    return defer_button || defer_input;
+  }
+
+  auto duration() const -> float {
+    auto rotation = modulated(DURATION_KNOB, DURATION_CV);
+    auto selection = static_cast<int>(params[DURATION_RANGE_SWITCH].value);
+    return DHE::duration(rotation, selection);
+  }
+
+  void enter(Mode *incoming) {
+    mode->exit();
+    mode = incoming;
+    mode->enter();
+  }
+
+  void hold_input() { held_voltage = envelope_in(); }
+
+  void on_defer_fall() { enter(&following_mode); }
+
+  void on_defer_rise() { enter(&deferring_mode); }
+
+  void on_stage_complete() {
+    eoc_generator.start();
+    enter(&following_mode);
+  }
+
+  void on_trigger_rise() { enter(&generating_mode); }
+
+  void send_active(bool active) {
+    outputs[ACTIVE_OUT].value = active || active_button() ? 10.f : 0.f;
+  }
+
+  void send_eoc(bool eoc) {
+    outputs[EOC_OUT].value = eoc || eoc_button() ? 10.f : 0.f;
+  }
+
+  void send_generated() {
+    auto phase = stage_generator.phase();
+    send_out(scale(taper(phase), held_voltage, level()));
+  }
+
+  void send_input() { send_out(envelope_in()); }
+
+  auto trigger_in() const -> bool {
+    auto trigger_button = params[TRIGGER_BUTTON].value > 0.5;
+    auto trigger_input = inputs[TRIGGER_IN].value > 0.1;
+    return trigger_button || trigger_input;
   }
 
   enum ParameterIds {
@@ -60,10 +77,10 @@ public:
     CURVE_KNOB,
     DEFER_BUTTON,
     DURATION_KNOB,
-    DURATION_SWITCH,
+    DURATION_RANGE_SWITCH,
     EOC_BUTTON,
     LEVEL_KNOB,
-    LEVEL_SWITCH,
+    LEVEL_RANGE_SWITCH,
     SHAPE_SWITCH,
     TRIGGER_BUTTON,
     PARAMETER_COUNT
@@ -74,7 +91,7 @@ public:
     DEFER_IN,
     DURATION_CV,
     LEVEL_CV,
-    MAIN_IN,
+    ENVELOPE_IN,
     TRIGGER_IN,
     INPUT_COUNT
   };
@@ -82,33 +99,22 @@ public:
   enum OutputIds { ACTIVE_OUT, EOC_OUT, MAIN_OUT, OUTPUT_COUNT };
 
 private:
+  auto active_button() const -> bool {
+    return params[ACTIVE_BUTTON].value > 0.5;
+  }
+
   auto curvature() const -> float {
     return Sigmoid::curvature(modulated(CURVE_KNOB, CURVE_CV));
   }
 
-  auto defer_in() const -> bool {
-    auto defer_input = inputs[DEFER_IN].value > 0.1f;
-    auto defer_button = params[DEFER_BUTTON].value > 0.1f;
-    return defer_button || defer_input;
-  }
+  auto envelope_in() const -> float { return inputs[ENVELOPE_IN].value; }
 
-  auto duration() const -> float {
-    auto rotation = modulated(DURATION_KNOB, DURATION_CV);
-    auto selection = params[DURATION_SWITCH].value;
-    return DHE::duration(rotation, selection);
-  }
-
-  auto envelope_in() const -> float { return inputs[MAIN_IN].value; }
-
-  auto envelope_voltage(float phase) const -> float {
-    auto tapered = Sigmoid::taper(phase, curvature(), is_s_shape());
-    return scale(tapered, phase_0_voltage, level());
-  }
+  bool eoc_button() const { return params[EOC_BUTTON].value > 0.5f; }
 
   auto is_s_shape() const -> bool { return params[SHAPE_SWITCH].value > 0.5f; }
 
   auto level() const -> float {
-    auto is_uni = params[LEVEL_SWITCH].value > 0.5f;
+    auto is_uni = params[LEVEL_RANGE_SWITCH].value > 0.5f;
     auto range = Signal::range(is_uni);
     auto level = modulated(LEVEL_KNOB, LEVEL_CV);
     return range.scale(level);
@@ -120,43 +126,23 @@ private:
     return Knob::modulated(rotation, cv);
   }
 
-  auto sample_time() const -> float { return rack::engineGetSampleTime(); }
+  void send_out(float voltage) { outputs[MAIN_OUT].value = voltage; }
 
-  void send_active() {
-    auto active_button = params[ACTIVE_BUTTON].value > 0.1f;
-    auto active = is_active || active_button;
-    outputs[ACTIVE_OUT].value = active ? 10.f : 0.f;
+  auto taper(float phase) const -> float {
+    return Sigmoid::taper(phase, curvature(), is_s_shape());
   }
 
-  void send_eoc() {
-    auto eoc_button = params[EOC_BUTTON].value > 0.1f;
-    auto eoc = is_eoc || eoc_button;
-    outputs[EOC_OUT].value = eoc ? 10.f : 0.f;
-  }
+  EnvelopeTrigger<BoosterStage> envelope_trigger{this};
+  EocGenerator<BoosterStage> eoc_generator{this};
+  DeferGate<BoosterStage> mode_gate{this};
+  StageGenerator<BoosterStage> stage_generator{this};
 
-  void send_envelope(float voltage) { outputs[MAIN_OUT].value = voltage; }
-
-  auto trigger_in() const -> bool {
-    auto trigger_button = params[TRIGGER_BUTTON].value > 0.1;
-    auto trigger_input = inputs[TRIGGER_IN].value > 0.1;
-    return trigger_button || trigger_input;
-  }
-
-  float phase_0_voltage = 0.f;
-  bool is_active = false;
-  bool is_eoc = false;
-
-  PhaseAccumulator envelope{[this] { return sample_time() / duration(); }};
-  PhaseAccumulator eoc_pulse{[this] { return sample_time() / 1e-3f; }};
-
-  DFlipFlop envelope_trigger{[this] { return trigger_in(); }};
-
-  Mode stage_mode{};
-
-  Mode defer_mode{};
-
-  CompoundMode executor{[this] { return defer_in(); },
-                        {&stage_mode, &defer_mode}};
+  DeferringMode<BoosterStage> deferring_mode{this};
+  FollowingMode<BoosterStage> following_mode{this, &envelope_trigger};
+  GeneratingMode<BoosterStage> generating_mode{this, &stage_generator,
+                                               &envelope_trigger};
+  Mode *mode{&following_mode};
+  float held_voltage = 0.f;
 };
 
 struct BoosterStageWidget : public ModuleWidget {
@@ -179,7 +165,7 @@ struct BoosterStageWidget : public ModuleWidget {
                   {left_x, top_row_y + row * row_spacing});
     install_knob("large", BoosterStage::LEVEL_KNOB,
                  {center_x, top_row_y + row * row_spacing});
-    install_switch(BoosterStage::LEVEL_SWITCH,
+    install_switch(BoosterStage::LEVEL_RANGE_SWITCH,
                    {right_x, top_row_y + row * row_spacing}, 1, 1);
 
     row++;
@@ -195,7 +181,7 @@ struct BoosterStageWidget : public ModuleWidget {
                   {left_x, top_row_y + row * row_spacing});
     install_knob("large", BoosterStage::DURATION_KNOB,
                  {center_x, top_row_y + row * row_spacing});
-    install_switch(BoosterStage::DURATION_SWITCH,
+    install_switch(BoosterStage::DURATION_RANGE_SWITCH,
                    {right_x, top_row_y + row * row_spacing}, 2, 1);
 
     top_row_y = 82.f;
@@ -222,7 +208,7 @@ struct BoosterStageWidget : public ModuleWidget {
                    {right_x, top_row_y + row * row_spacing});
 
     row++;
-    install_input(BoosterStage::MAIN_IN,
+    install_input(BoosterStage::ENVELOPE_IN,
                   {left_x, top_row_y + row * row_spacing});
     install_output(BoosterStage::MAIN_OUT,
                    {right_x, top_row_y + row * row_spacing});
