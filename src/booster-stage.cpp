@@ -32,12 +32,18 @@ public:
     return DHE::duration(rotation, selection);
   }
 
-  void finished_generating() {
+  void hold_input() { held_voltage = envelope_in(); }
+
+  void on_defer_gate_rise() { enter(&deferring_mode); }
+
+  void on_defer_gate_fall() { enter(&following_mode); }
+
+  void on_stage_generator_finish() {
     eoc_generator.start();
     enter(&following_mode);
   }
 
-  void hold_input() { held_voltage = envelope_in(); }
+  void on_stage_trigger_rise() { enter(&generating_mode); }
 
   void send_active(bool active) {
     outputs[ACTIVE_OUT].value = active || active_button() ? 10.f : 0.f;
@@ -53,12 +59,6 @@ public:
     auto phase = stage_generator.phase();
     send_out(scale(taper(phase), held_voltage, level()));
   }
-
-  void start_deferring() { enter(&deferring_mode); }
-
-  void start_generating() { enter(&generating_mode); }
-
-  void stop_deferring() { enter(&following_mode); }
 
   auto stage_trigger_in() const -> bool {
     auto trigger_button = params[TRIGGER_BUTTON].value > 0.5;

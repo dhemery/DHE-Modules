@@ -30,12 +30,18 @@ public:
     return DHE::duration(rotation);
   }
 
-  void finished_generating() {
+  void hold_input() { held_voltage = envelope_in(); }
+
+  void on_defer_gate_rise() { enter(&deferring_mode); }
+
+  void on_defer_gate_fall() { enter(&following_mode); }
+
+  void on_stage_trigger_rise() { enter(&generating_mode); }
+
+  void on_stage_generator_finish() {
     eoc_generator.start();
     enter(&following_mode);
   }
-
-  void hold_input() { held_voltage = envelope_in(); }
 
   void send_active(bool active) {
     outputs[ACTIVE_OUT].value = active ? 10.f : 0.f;
@@ -54,12 +60,6 @@ public:
     return inputs[TRIGGER_IN].value > 0.1;
   }
 
-  void start_deferring() { enter(&deferring_mode); }
-
-  void start_generating() { enter(&generating_mode); }
-
-  void stop_deferring() { enter(&following_mode); }
-
   enum ParameterIIds { DURATION_KNOB, LEVEL_KNOB, CURVE_KNOB, PARAMETER_COUNT };
 
   enum InputIds { ENVELOPE_IN, TRIGGER_IN, DEFER_IN, INPUT_COUNT };
@@ -72,13 +72,13 @@ private:
     return Sigmoid::curvature(rotation);
   }
 
+  auto envelope_in() const -> float { return inputs[ENVELOPE_IN].value; }
+
   void enter(Mode *incoming) {
     mode->exit();
     mode = incoming;
     mode->enter();
   }
-
-  auto envelope_in() const -> float { return inputs[ENVELOPE_IN].value; }
 
   auto level() const -> float {
     auto rotation = params[LEVEL_KNOB].value;

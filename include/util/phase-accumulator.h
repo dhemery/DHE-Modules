@@ -3,7 +3,7 @@
 #include <engine.hpp>
 
 namespace DHE {
-class PhaseGenerator {
+class PhaseAccumulator {
 public:
   void start() {
     accumulated = 0.f;
@@ -16,7 +16,7 @@ public:
       accumulated = 1.f;
     };
     if (accumulated >= 1.0f) {
-      on_completion();
+      on_finish();
     };
   }
 
@@ -25,7 +25,7 @@ public:
 protected:
   virtual void on_start() const {};
   virtual auto duration() const -> float = 0;
-  virtual void on_completion() const {};
+  virtual void on_finish() const {};
 
 private:
   float accumulated = 0.f;
