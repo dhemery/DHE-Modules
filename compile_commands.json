@@ -366,9 +366,9 @@
    "-mmacosx-version-min=10.7",
    "-c",
    "-o",
-   "build/src/juster.cpp.o",
-   "src/juster.cpp"
+   "build/src/tweaks.cpp.o",
+   "src/tweaks.cpp"
   ],
-  "file": "src/juster.cpp"
+  "file": "src/tweaks.cpp"
  }
 ]
