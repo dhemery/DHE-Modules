@@ -111,41 +111,41 @@
     </g>
     <g
        id="text12"
+       style="font-weight:bold;font-size:3.0480001px;font-family:'Proxima Nova';text-anchor:middle;fill:#0044cc" />
+    <g
+       id="text14"
        style="font-weight:bold;font-size:2.37066674px;font-family:'Proxima Nova';text-anchor:middle;fill:#0044cc"
        aria-label="GAIN">
       <path
-         id="path71"
+         id="path72"
          style="font-weight:bold;font-size:2.37066674px;font-family:'Proxima Nova';text-anchor:middle;fill:#0044cc"
-         d="m 4.8576545,35.035569 c 0,0.49784 0.3793067,0.82025 0.8415867,0.82025 0.2868507,0 0.5120641,-0.118533 0.6732694,-0.298704 v -0.60689 h -0.753872 v 0.293962 h 0.4172373 v 0.189654 c -0.064008,0.05927 -0.1967653,0.120904 -0.3366347,0.120904 -0.2868506,0 -0.4954693,-0.220472 -0.4954693,-0.519176 0,-0.298704 0.2086187,-0.519176 0.4954693,-0.519176 0.1683174,0 0.3034454,0.09483 0.3745654,0.206248 L 6.3535453,34.570918 C 6.2350119,34.383635 6.0287639,34.217689 5.6992412,34.217689 c -0.46228,0 -0.8415867,0.317669 -0.8415867,0.81788 z" />
+         d="m 4.8576545,52.035569 c 0,0.49784 0.3793067,0.82025 0.8415867,0.82025 0.2868507,0 0.5120641,-0.118533 0.6732694,-0.298704 v -0.60689 h -0.753872 v 0.293962 h 0.4172373 v 0.189654 c -0.064008,0.05927 -0.1967653,0.120904 -0.3366347,0.120904 -0.2868506,0 -0.4954693,-0.220472 -0.4954693,-0.519176 0,-0.298704 0.2086187,-0.519176 0.4954693,-0.519176 0.1683174,0 0.3034454,0.09483 0.3745654,0.206248 L 6.3535453,51.570918 C 6.2350119,51.383635 6.0287639,51.217689 5.6992412,51.217689 c -0.46228,0 -0.8415867,0.317669 -0.8415867,0.81788 z" />
       <path
-         id="path73"
+         id="path74"
          style="font-weight:bold;font-size:2.37066674px;font-family:'Proxima Nova';text-anchor:middle;fill:#0044cc"
-         d="m 7.7140486,35.825001 h 0.384048 L 7.4888353,34.243766 H 7.0668566 l -0.611632,1.581235 h 0.384048 l 0.099568,-0.267886 h 0.6780107 z m -0.4362027,-1.2446 0.2465494,0.680381 H 7.0312966 Z" />
+         d="m 7.7140486,52.825001 h 0.384048 L 7.4888353,51.243766 H 7.0668566 l -0.611632,1.581235 h 0.384048 l 0.099568,-0.267886 h 0.6780107 z m -0.4362027,-1.2446 0.2465494,0.680381 H 7.0312966 Z" />
       <path
-         id="path75"
+         id="path76"
          style="font-weight:bold;font-size:2.37066674px;font-family:'Proxima Nova';text-anchor:middle;fill:#0044cc"
-         d="M 8.2441147,35.825001 H 8.5807494 V 34.243766 H 8.2441147 Z" />
+         d="M 8.2441147,52.825001 H 8.5807494 V 51.243766 H 8.2441147 Z" />
       <path
-         id="path77"
+         id="path78"
          style="font-weight:bold;font-size:2.37066674px;font-family:'Proxima Nova';text-anchor:middle;fill:#0044cc"
-         d="M 9.9828508,35.825001 H 10.307632 V 34.243766 H 9.9709975 v 0.993309 L 9.2384614,34.243766 H 8.8923441 v 1.581235 h 0.3366347 v -1.03124 z" />
-    </g>
-    <g
-       id="text14"
-       style="font-weight:bold;font-size:2.37066674px;font-family:'Proxima Nova';dominant-baseline:hanging;text-anchor:middle;fill:#0044cc"
-       aria-label="AV">
-      <path
-         id="path80"
-         style="font-weight:bold;font-size:2.37066674px;font-family:'Proxima Nova';dominant-baseline:hanging;text-anchor:middle;fill:#0044cc"
-         d="m 7.3019601,45.673261 h 0.384048 L 7.0767468,44.092026 H 6.6547681 l -0.611632,1.581235 h 0.384048 l 0.099568,-0.267886 h 0.6780107 z m -0.4362027,-1.2446 0.2465494,0.680381 H 6.6192081 Z" />
-      <path
-         id="path82"
-         style="font-weight:bold;font-size:2.37066674px;font-family:'Proxima Nova';dominant-baseline:hanging;text-anchor:middle;fill:#0044cc"
-         d="M 8.164216,45.673261 H 8.5861947 L 9.1954561,44.092026 H 8.8114081 L 8.3752054,45.308178 7.936632,44.092026 H 7.552584 Z" />
+         d="M 9.9828508,52.825001 H 10.307632 V 51.243766 H 9.9709975 v 0.993309 L 9.2384614,51.243766 H 8.8923441 v 1.581235 h 0.3366347 v -1.03124 z" />
     </g>
     <g
        id="text16"
-       style="font-weight:bold;font-size:3.0480001px;font-family:'Proxima Nova';text-anchor:middle;fill:#0044cc" />
+       style="font-weight:bold;font-size:2.37066674px;font-family:'Proxima Nova';dominant-baseline:hanging;text-anchor:middle;fill:#0044cc"
+       aria-label="AV">
+      <path
+         id="path81"
+         style="font-weight:bold;font-size:2.37066674px;font-family:'Proxima Nova';dominant-baseline:hanging;text-anchor:middle;fill:#0044cc"
+         d="m 7.3019601,62.673261 h 0.384048 L 7.0767468,61.092026 H 6.6547681 l -0.611632,1.581235 h 0.384048 l 0.099568,-0.267886 h 0.6780107 z m -0.4362027,-1.2446 0.2465494,0.680381 H 6.6192081 Z" />
+      <path
+         id="path83"
+         style="font-weight:bold;font-size:2.37066674px;font-family:'Proxima Nova';dominant-baseline:hanging;text-anchor:middle;fill:#0044cc"
+         d="M 8.164216,62.673261 H 8.5861947 L 9.1954561,61.092026 H 8.8114081 L 8.3752054,62.308178 7.936632,61.092026 H 7.552584 Z" />
+    </g>
     <path
        id="rect18"
        d="M 3.2449999,84.294556 H 11.995 c 0.554,0 1,0.446 1,1 V 96.625 c 0,0.554 -0.446,1 -1,1 H 3.2449999 c -0.554,0 -1,-0.446 -1,-1 V 85.294556 c 0,-0.554 0.446,-1 1,-1 z"

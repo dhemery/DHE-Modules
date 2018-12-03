@@ -116,7 +116,6 @@ struct TweakWidget : public ModuleWidget {
 
     auto top = 23.f;
     auto bottom = 108.f;
-    auto center_y = (bottom - top) / 2.f + top;
 
     auto row_count = 6;
     auto row_spacing = (bottom - top) / (row_count -1);
@@ -126,9 +125,9 @@ struct TweakWidget : public ModuleWidget {
     auto y = top;
     install_switch(Tweak::OPERATOR_SWITCH, {center_x, y}, 1, 1);
     y+= row_spacing;
-    install_switch(Tweak::RANGE_SWITCH, {center_x, y}, 1, 1);
+    install_knob("large", Tweak::KNOB, {center_x, y});
     y+= row_spacing;
-    install_knob("large", Tweak::KNOB, {center_x, center_y});
+    install_switch(Tweak::RANGE_SWITCH, {center_x, y}, 1, 1);
     y+= row_spacing;
     y+= row_spacing;
     install_input(Tweak::IN, {center_x, y+port_offset});

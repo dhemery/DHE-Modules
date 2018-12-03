@@ -15,7 +15,6 @@ controls:
 
 {% assign top = 23.0 %}
 {% assign bottom = 108.0 %}
-{% assign center_y = bottom | minus: top | divided_by: 2.0 | plus: top %}
 
 {% assign row_count = 6 %}
 {% assign last_row = row_count | minus:1 %}
@@ -26,9 +25,9 @@ controls:
 
 {{ page | switch: center_x, y, 'high', 'MULT', 'ADD' }}
 {% assign y = y | plus:delta_y %}
-{{ page | switch: center_x, y, 'high', 'GAIN', 'AV' }}
+{{ page | large_knob: center_x, y, '' }}
 {% assign y = y | plus:delta_y %}
-{{ page | large_knob: center_x, center_y, '' }}
+{{ page | switch: center_x, y, 'high', 'GAIN', 'AV' }}
 {% assign y = y | plus:delta_y %}
 {% assign y = y | plus:delta_y | plus:port_offset %}
 {{ page | in_port: center_x, y, 'IN' }}
