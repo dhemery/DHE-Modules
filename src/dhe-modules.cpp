@@ -10,13 +10,13 @@ void init(rack::Plugin *p) {
 
   p->addModel(modelBoosterStage);
   p->addModel(modelCubic);
+  p->addModel(modelFunc);
+  p->addModel(modelFunc6);
   p->addModel(modelHostage);
   p->addModel(modelRanger);
   p->addModel(modelStage);
   p->addModel(modelSwave);
   p->addModel(modelTapers);
-  p->addModel(modelTweak);
-  p->addModel(modelTweaks);
   p->addModel(modelUpstage);
   p->addModel(modelXycloid);
 }

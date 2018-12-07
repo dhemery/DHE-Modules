@@ -6,9 +6,9 @@
 
 namespace DHE {
 
-class TweakChannel {
+class FuncChannel {
 public:
-  TweakChannel(rack::Module *module,
+  FuncChannel(rack::Module *module,
                int input,
                int function_switch_param,
                int range_switch_param,
@@ -42,9 +42,9 @@ private:
   float &output;
 };
 
-class Tweak : public rack::Module {
+class Func : public rack::Module {
 public:
-  Tweak() : Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT} {}
+  Func() : Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT} {}
 
   void step() override { channel.adjust(0.f); }
 
@@ -55,12 +55,12 @@ public:
   enum OutputIds { OUT, OUTPUT_COUNT };
 
 private:
-  TweakChannel channel{this, IN, OPERATOR_SWITCH, RANGE_SWITCH, KNOB, OUT};
+  FuncChannel channel{this, IN, OPERATOR_SWITCH, RANGE_SWITCH, KNOB, OUT};
 };
 
-class Tweaks : public rack::Module {
+class Func6 : public rack::Module {
 public:
-  Tweaks() : Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT} {}
+  Func6() : Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT} {}
 
   void step() override {
     auto upstream = 0.f;
@@ -96,7 +96,7 @@ public:
   enum OutputIds { OUT_1, OUT_2, OUT_3, OUT_4, OUT_5, OUT_6, OUTPUT_COUNT };
 
 private:
-  std::vector<TweakChannel> channels{
+  std::vector<FuncChannel> channels{
       {this, IN_1, OPERATOR_SWITCH_1, RANGE_SWITCH_1, KNOB_1, OUT_1},
       {this, IN_2, OPERATOR_SWITCH_2, RANGE_SWITCH_2, KNOB_2, OUT_2},
       {this, IN_3, OPERATOR_SWITCH_3, RANGE_SWITCH_3, KNOB_3, OUT_3},
@@ -106,9 +106,9 @@ private:
   };
 };
 
-struct TweakWidget : public ModuleWidget {
-  explicit TweakWidget(rack::Module *module)
-      : ModuleWidget(module, 3, "tweak") {
+struct FuncWidget : public ModuleWidget {
+  explicit FuncWidget(rack::Module *module)
+      : ModuleWidget(module, 3, "func") {
     auto widget_right_edge = width();
 
     auto center_x = widget_right_edge/2.f;
@@ -122,22 +122,22 @@ struct TweakWidget : public ModuleWidget {
     auto port_offset = 1.25f;
 
     auto y = top;
-    install_input(Tweak::IN, {center_x, y + port_offset});
+    install_input(Func::IN, {center_x, y + port_offset});
     y += row_spacing;
-    install_switch(Tweak::OPERATOR_SWITCH, {center_x, y}, 1, 1);
+    install_switch(Func::OPERATOR_SWITCH, {center_x, y}, 1, 1);
     y += row_spacing;
-    install_knob("large", Tweak::KNOB, {center_x, y});
+    install_knob("large", Func::KNOB, {center_x, y});
     y += row_spacing;
-    install_toggle("range", Tweak::RANGE_SWITCH, {center_x, y}, 3, 0);
+    install_toggle("range", Func::RANGE_SWITCH, {center_x, y}, 3, 0);
     y += row_spacing;
     y += row_spacing;
-    install_output(Tweak::OUT, {center_x, y + port_offset});
+    install_output(Func::OUT, {center_x, y + port_offset});
   }
 };
 
-struct TweaksWidget : public ModuleWidget {
-  explicit TweaksWidget(rack::Module *module)
-      : ModuleWidget(module, 12, "tweaks") {
+struct FuncsWidget : public ModuleWidget {
+  explicit FuncsWidget(rack::Module *module)
+      : ModuleWidget(module, 12, "func6") {
     auto widget_right_edge = width();
 
     auto center_x = widget_right_edge/2.f;
@@ -157,17 +157,17 @@ struct TweaksWidget : public ModuleWidget {
     for (auto row = 0; row < row_count; row++) {
       auto y = top + row*row_spacing;
 
-      install_input(Tweaks::IN_1 + row, {left_x, y + port_offset});
-      install_switch(Tweaks::OPERATOR_SWITCH_1 + row, {left_center_x, y}, 1, 1);
-      install_knob("large", Tweaks::KNOB_1 + row, {center_x, y});
-      install_toggle("range", Tweaks::RANGE_SWITCH_1 + row, {right_center_x, y}, 3, 0);
-      install_output(Tweaks::OUT_1 + row, {right_x, y + port_offset});
+      install_input(Func6::IN_1 + row, {left_x, y + port_offset});
+      install_switch(Func6::OPERATOR_SWITCH_1 + row, {left_center_x, y}, 1, 1);
+      install_knob("large", Func6::KNOB_1 + row, {center_x, y});
+      install_toggle("range", Func6::RANGE_SWITCH_1 + row, {right_center_x, y}, 3, 0);
+      install_output(Func6::OUT_1 + row, {right_x, y + port_offset});
     }
   }
 };
 
 } // namespace DHE
-rack::Model *modelTweak = rack::Model::create<DHE::Tweak, DHE::TweakWidget>(
-    "DHE-Modules", "Tweak", "Tweak", rack::UTILITY_TAG);
-rack::Model *modelTweaks = rack::Model::create<DHE::Tweaks, DHE::TweaksWidget>(
-    "DHE-Modules", "Tweaks", "Tweaks", rack::UTILITY_TAG);
+rack::Model *modelFunc = rack::Model::create<DHE::Func, DHE::FuncWidget>(
+    "DHE-Modules", "Func", "Func", rack::UTILITY_TAG);
+rack::Model *modelFunc6 = rack::Model::create<DHE::Func6, DHE::FuncsWidget>(
+    "DHE-Modules", "Func 6", "Func 6", rack::UTILITY_TAG);

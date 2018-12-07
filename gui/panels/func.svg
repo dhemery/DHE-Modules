@@ -1,7 +1,7 @@
 ---
 layout: panel
 width: 3
-title: TWEAK
+title: FUNC
 foreground-color: [220,100,40]
 background-color: [40,50,96]
 controls:
