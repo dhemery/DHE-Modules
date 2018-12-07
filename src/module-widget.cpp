@@ -101,7 +101,7 @@ auto ModuleWidget::create_switch(int index, rack::Vec center, int max_position,
 auto ModuleWidget::create_toggle(std::string type, int index, rack::Vec center, int max_position,
                                  int initial_position) -> SwitchWidget * {
   auto switch_widget = rack::Component::create<SwitchWidget>({0, 0}, module);
-  for(int i = 0 ; i < max_position ; i++) {
+  for(int i = 0 ; i <= max_position ; i++) {
   auto image_file =
       std::string("res/") + module_name_ + "/toggle-" + type + "-" + std::to_string(i) + ".svg";
     switch_widget->addFrame(
