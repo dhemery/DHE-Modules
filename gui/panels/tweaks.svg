@@ -5,6 +5,7 @@ title: TWEAKS
 foreground-color: [220,100,40]
 background-color: [40,50,96]
 controls:
+  buttons: [normal]
   knobs: [large]
   ports: []
   switches: [2]
@@ -32,7 +33,7 @@ controls:
 {{ page | in_port: left_x, port_y, 'IN' }}
 {{ page | switch: left_center_x, y, 'high', 'MULT', 'ADD' }}
 {{ page | large_knob: center_x, y, '' }}
-{{ page | switch: right_center_x, y, 'high', 'GAIN', 'AV' }}
+{{ page | toggle_button: right_center_x, y, '1', '-1' }}
 {{ page | out_port: right_x, port_y, 'OUT' }}
 {% assign y = y | plus:delta_y %}
 {% endfor %}

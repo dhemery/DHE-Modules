@@ -144,6 +144,20 @@ module PanelFilters
     items.map(&:svg).join("\n")
   end
 
+  def toggle_button(page, x, y, top, bottom)
+    background = background(page)
+    foreground = foreground(page)
+    button = ButtonControl.new(x: x, y: y, foreground: foreground, background: background)
+    top_text = Text.new(text: top, color: foreground, size: SMALL_FONT)
+    bottom_text = Text.new(text: bottom, color: foreground, size: SMALL_FONT)
+    items = [
+      Label.new(top_text, PADDING, :above, button),
+      button,
+      Label.new(bottom_text, PADDING, :below, button),
+    ]
+    items.map(&:svg).join("\n") if page['draw_controls']
+  end
+
   def tiny_knob(page, x, y, label, label_size = SMALL_FONT)
     knob(page: page, x: x, y: y, size: :tiny, label: label, label_size: label_size)
   end

@@ -75,6 +75,11 @@ protected:
     addParam(create_switch(index, center, max_position, initial_position));
   }
 
+  void install_toggle(std::string type, int index, rack::Vec center, int max_position = 1,
+                      int initial_position = 0) {
+    addParam(create_toggle(type, index, center, max_position, initial_position));
+  }
+
   void install_screws();
 
 private:
@@ -91,6 +96,8 @@ private:
   auto create_port(rack::Port::PortType type, int index, rack::Vec center)
       -> PortWidget *;
   auto create_switch(int index, rack::Vec center, int high_position,
+                     int initial_position = 0) -> SwitchWidget *;
+  auto create_toggle(std::string type, int index, rack::Vec center, int high_position,
                      int initial_position = 0) -> SwitchWidget *;
 };
 

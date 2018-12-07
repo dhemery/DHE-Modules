@@ -98,6 +98,22 @@ auto ModuleWidget::create_switch(int index, rack::Vec center, int max_position,
   return switch_widget;
 }
 
+auto ModuleWidget::create_toggle(std::string type, int index, rack::Vec center, int max_position,
+                                 int initial_position) -> SwitchWidget * {
+  auto switch_widget = rack::Component::create<SwitchWidget>({0, 0}, module);
+  for(int i = 0 ; i < max_position ; i++) {
+  auto image_file =
+      std::string("res/") + module_name_ + "/toggle-" + type + "-" + std::to_string(i) + ".svg";
+    switch_widget->addFrame(
+        rack::SVG::load(rack::assetPlugin(plugin, image_file)));
+  }
+  switch_widget->paramId = index;
+  switch_widget->setLimits(0.f, max_position);
+  switch_widget->setDefaultValue(initial_position);
+  moveTo(switch_widget->box, rack::mm2px(center));
+  return switch_widget;
+}
+
 void ModuleWidget::install_screws() {
   auto screw_diameter = rack::RACK_GRID_WIDTH * MM_PER_IN / SVG_DPI;
   auto screw_radius = screw_diameter / 2.f;

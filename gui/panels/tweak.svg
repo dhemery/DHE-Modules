@@ -5,6 +5,7 @@ title: TWEAK
 foreground-color: [220,100,40]
 background-color: [40,50,96]
 controls:
+  buttons: [normal]
   knobs: [large]
   ports: []
   switches: [2]
@@ -12,24 +13,27 @@ controls:
 
 {% assign width = page.width | hp_to_mm %}
 {% assign center_x = width | divided_by:2.0 %}
-
 {% assign top = 23.0 %}
 {% assign bottom = 108.0 %}
-
 {% assign row_count = 6 %}
 {% assign last_row = row_count | minus:1 %}
 {% assign delta_y = bottom | minus:top | divided_by:last_row %}
-
-{% assign y = top %}
 {% assign port_offset = 1.25 %}
 
+{% assign y = top %}
+{% assign port_y = y | plus:port_offset %}
+{{ page | in_port: center_x, port_y, 'IN' }}
+
+{% assign y = y | plus:delta_y %}
 {{ page | switch: center_x, y, 'high', 'MULT', 'ADD' }}
+
 {% assign y = y | plus:delta_y %}
 {{ page | large_knob: center_x, y, '' }}
+
 {% assign y = y | plus:delta_y %}
-{{ page | switch: center_x, y, 'high', 'GAIN', 'AV' }}
+{{ page | toggle_button: center_x, y, '1', '-1' }}
+
 {% assign y = y | plus:delta_y %}
-{% assign y = y | plus:delta_y | plus:port_offset %}
-{{ page | in_port: center_x, y, 'IN' }}
 {% assign y = y | plus:delta_y %}
-{{ page | out_port: center_x, y, 'OUT' }}
+{% assign port_y = y | plus:port_offset %}
+{{ page | out_port: center_x, port_y, 'OUT' }}
