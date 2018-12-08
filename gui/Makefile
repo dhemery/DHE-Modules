@@ -42,6 +42,7 @@ $(RESOURCE_DIR)/%/panel.svg: $(PANEL_BUILD_DIR)/%.svg
 
 $(RESOURCE_DIR)/%/port.svg: $(CONTROL_BUILD_DIR)/%/port.svg
 	rsync -a $(dir $<) $(dir $@)
+	scripts/translate-controls.sh $(dir $<) $(dir $@)
 
 clean:
 	rm -rf $(BUILD_DIR)

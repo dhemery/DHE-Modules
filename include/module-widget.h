@@ -82,6 +82,9 @@ protected:
 
   void install_screws();
 
+  auto create_toggle(std::string type, int index, rack::Vec center, int high_position,
+                     int initial_position = 0) -> SwitchWidget *;
+
 private:
   template <typename T> void install_screw(rack::Vec center) {
     auto widget = rack::Widget::create<T>({0, 0});
@@ -96,8 +99,6 @@ private:
   auto create_port(rack::Port::PortType type, int index, rack::Vec center)
       -> PortWidget *;
   auto create_switch(int index, rack::Vec center, int high_position,
-                     int initial_position = 0) -> SwitchWidget *;
-  auto create_toggle(std::string type, int index, rack::Vec center, int high_position,
                      int initial_position = 0) -> SwitchWidget *;
 };
 

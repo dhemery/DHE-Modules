@@ -128,7 +128,11 @@ struct FuncWidget : public ModuleWidget {
     y += row_spacing;
     install_knob("large", Func::KNOB, {center_x, y});
     y += row_spacing;
-    install_toggle("add", Func::RANGE_SWITCH, {center_x, y}, 3, 0);
+    auto add_range_switch = create_toggle("add", Func::RANGE_SWITCH, {center_x, y}, 3, 0);
+    auto mult_range_switch = create_toggle("mult", Func::RANGE_SWITCH, {center_x, y}, 3, 0);
+    addParam(add_range_switch);
+    addParam(mult_range_switch);
+    mult_range_switch->visible=false;
     y += row_spacing;
     y += row_spacing;
     install_output(Func::OUT, {center_x, y + port_offset});
@@ -160,7 +164,12 @@ struct FuncsWidget : public ModuleWidget {
       install_input(Func6::IN_1 + row, {left_x, y + port_offset});
       install_switch(Func6::OPERATOR_SWITCH_1 + row, {left_center_x, y}, 1, 1);
       install_knob("large", Func6::KNOB_1 + row, {center_x, y});
-      install_toggle("mult", Func6::RANGE_SWITCH_1 + row, {right_center_x, y}, 3, 0);
+      auto mult_range_switch = create_toggle("mult", Func6::RANGE_SWITCH_1 + row, {right_center_x, y}, 3, 0);
+      auto add_range_switch = create_toggle("add", Func6::RANGE_SWITCH_1 + row, {right_center_x, y}, 3, 0);
+      addParam(mult_range_switch);
+      addParam(add_range_switch);
+      add_range_switch->visible=false;
+
       install_output(Func6::OUT_1 + row, {right_x, y + port_offset});
     }
   }

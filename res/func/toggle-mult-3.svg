@@ -1,10 +1,56 @@
-
-
-<svg version="1.1" xmlns="http://www.w3.org/2000/svg"
-width="6.0mm" height="12.370666666666667mm" viewBox="0 0 6.0 12.370666666666667">
-  <g transform="translate(3.0 6.185333333333333)">
-    <text dominant-baseline="baseline" text-anchor="middle" fill="#0044cc" x="0.0" y="-4.0" style="font-family:Proxima Nova;font-weight:bold;font-size:2.3706666666666667px">2</text>
-      <circle cx="0.0" cy="0.0" r="2.5" stroke-width="1.0" fill="#0044cc" stroke="#0044cc"/>
-    <text dominant-baseline="hanging" text-anchor="middle" fill="#0044cc" x="0.0" y="4.0" style="font-family:Proxima Nova;font-weight:bold;font-size:2.3706666666666667px">-2</text>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   id="svg10"
+   viewBox="0 0 6.0 12.370666666666667"
+   height="12.370666666666667mm"
+   width="6.0mm"
+   version="1.1">
+  <metadata
+     id="metadata16">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs14" />
+  <g
+     id="g8"
+     transform="translate(3,6.1853333)">
+    <g
+       id="text2"
+       style="font-weight:bold;font-size:2.37066674px;font-family:'Proxima Nova';text-anchor:middle;fill:#0044cc"
+       aria-label="2">
+      <path
+         id="path18"
+         style="font-weight:bold;font-size:2.37066674px;font-family:'Proxima Nova';text-anchor:middle;fill:#0044cc"
+         d="m -0.59931566,-4 h 1.1900747 v -0.2963333 h -0.64482135 c 0.41012534,-0.2987041 0.63296802,-0.5334001 0.63296802,-0.8036561 0,-0.3152986 -0.26788535,-0.504952 -0.60452002,-0.504952 -0.22047201,0 -0.45516802,0.080603 -0.60926136,0.2584027 l 0.19202401,0.2228427 c 0.10668,-0.1114214 0.24417867,-0.1825414 0.42434935,-0.1825414 0.13038667,0 0.25603201,0.068749 0.25603201,0.206248 0,0.1943947 -0.18965334,0.3579707 -0.83684536,0.8344747 z" />
+    </g>
+    <path
+       id="circle4"
+       d="M 2.5,0 A 2.5,2.5 0 0 1 0,2.5 2.5,2.5 0 0 1 -2.5,0 2.5,2.5 0 0 1 0,-2.5 2.5,2.5 0 0 1 2.5,0 Z"
+       style="fill:#0044cc;stroke:#0044cc;stroke-width:1" />
+    <g
+       id="text6"
+       style="font-weight:bold;font-size:2.37066674px;font-family:'Proxima Nova';dominant-baseline:hanging;text-anchor:middle;fill:#0044cc"
+       aria-label="-2">
+      <path
+         id="path22"
+         style="font-weight:bold;font-size:2.37066674px;font-family:'Proxima Nova';dominant-baseline:hanging;text-anchor:middle;fill:#0044cc"
+         d="m -0.99614305,5.052576 h 0.56896002 V 4.796544 h -0.56896002 z" />
+      <path
+         id="path24"
+         style="font-weight:bold;font-size:2.37066674px;font-family:'Proxima Nova';dominant-baseline:hanging;text-anchor:middle;fill:#0044cc"
+         d="m -0.24278962,5.4982613 h 1.1900747 V 5.201928 H 0.30246373 c 0.41012534,-0.298704 0.63296802,-0.5334 0.63296802,-0.803656 0,-0.3152987 -0.26788534,-0.5049521 -0.60452002,-0.5049521 -0.22047201,0 -0.45516802,0.080603 -0.60926136,0.2584027 l 0.19202401,0.2228427 C 0.02035438,4.263144 0.15785306,4.192024 0.33802373,4.192024 c 0.13038667,0 0.25603201,0.068749 0.25603201,0.206248 0,0.1943946 -0.18965334,0.3579706 -0.83684536,0.8344747 z" />
+    </g>
   </g>
 </svg>
