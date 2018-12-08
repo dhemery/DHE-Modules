@@ -11,11 +11,13 @@ public:
   FuncChannel(rack::Module *module,
                int input,
                int function_switch_param,
-               int range_switch_param,
+               int addition_range_switch_param,
+               int multiplcation_range_switch_param,
                int amount_knob_param,
                int output) : input_port{module->inputs[input]},
                              function_selector{module->params[function_switch_param].value},
-                             range_selector{module->params[range_switch_param].value},
+                             addition_range_selector{module->params[addition_range_switch_param].value},
+                             multiplication_range_selector{module->params[addition_range_switch_param].value},
                              amount{module->params[amount_knob_param].value},
                              output{module->outputs[output].value} {}
 
@@ -23,12 +25,13 @@ public:
     static const std::vector<Range> multiplication_ranges{{0.f,1.f}, {-1.f,1.f}, {0.f,2.f}, {-2.f,2.f}};
     static const std::vector<Range> addition_ranges{{0.f,5.f}, {-5.f,5.f}, {0.f,10.f}, {-10.f,10.f}};
     auto input = input_port.active ? input_port.value : upstream;
-    auto range_selection = static_cast<int>(range_selector);
     if (function_selector > 0.5f) {
-      auto range = multiplication_ranges[range_selection];
+      auto selection = static_cast<int>(multiplication_range_selector);
+      auto range = multiplication_ranges[selection];
       output = input*range.scale(amount);
     } else {
-      auto range = addition_ranges[range_selection];
+      auto selection = static_cast<int>(addition_range_selector);
+      auto range = addition_ranges[selection];
       output = input + range.scale(amount);
     }
     return output;
@@ -37,7 +40,8 @@ public:
 private:
   const rack::Input &input_port;
   const float &function_selector;
-  const float &range_selector;
+  const float &addition_range_selector;
+  const float &multiplication_range_selector;
   const float &amount;
   float &output;
 };
@@ -48,14 +52,14 @@ public:
 
   void step() override { channel.adjust(0.f); }
 
-  enum ParameterIds { KNOB, OPERATOR_SWITCH, RANGE_SWITCH, PARAMETER_COUNT };
+  enum ParameterIds { KNOB, OPERATOR_SWITCH, ADD_RANGE_SWITCH, MULT_RANGE_SWITCH, PARAMETER_COUNT };
 
   enum InputIds { IN, INPUT_COUNT };
 
   enum OutputIds { OUT, OUTPUT_COUNT };
 
 private:
-  FuncChannel channel{this, IN, OPERATOR_SWITCH, RANGE_SWITCH, KNOB, OUT};
+  FuncChannel channel{this, IN, OPERATOR_SWITCH, ADD_RANGE_SWITCH, MULT_RANGE_SWITCH, KNOB, OUT};
 };
 
 class Func6 : public rack::Module {
@@ -82,12 +86,18 @@ public:
     OPERATOR_SWITCH_4,
     OPERATOR_SWITCH_5,
     OPERATOR_SWITCH_6,
-    RANGE_SWITCH_1,
-    RANGE_SWITCH_2,
-    RANGE_SWITCH_3,
-    RANGE_SWITCH_4,
-    RANGE_SWITCH_5,
-    RANGE_SWITCH_6,
+    ADDITION_RANGE_SWITCH_1,
+    ADDITION_RANGE_SWITCH_2,
+    ADDITION_RANGE_SWITCH_3,
+    ADDITION_RANGE_SWITCH_4,
+    ADDITION_RANGE_SWITCH_5,
+    ADDITION_RANGE_SWITCH_6,
+    MULTIPLICATION_RANGE_SWITCH_1,
+    MULTIPLICATION_RANGE_SWITCH_2,
+    MULTIPLICATION_RANGE_SWITCH_3,
+    MULTIPLICATION_RANGE_SWITCH_4,
+    MULTIPLICATION_RANGE_SWITCH_5,
+    MULTIPLICATION_RANGE_SWITCH_6,
     PARAMETER_COUNT
   };
 
@@ -97,12 +107,12 @@ public:
 
 private:
   std::vector<FuncChannel> channels{
-      {this, IN_1, OPERATOR_SWITCH_1, RANGE_SWITCH_1, KNOB_1, OUT_1},
-      {this, IN_2, OPERATOR_SWITCH_2, RANGE_SWITCH_2, KNOB_2, OUT_2},
-      {this, IN_3, OPERATOR_SWITCH_3, RANGE_SWITCH_3, KNOB_3, OUT_3},
-      {this, IN_4, OPERATOR_SWITCH_4, RANGE_SWITCH_4, KNOB_4, OUT_4},
-      {this, IN_5, OPERATOR_SWITCH_5, RANGE_SWITCH_5, KNOB_5, OUT_5},
-      {this, IN_6, OPERATOR_SWITCH_6, RANGE_SWITCH_6, KNOB_6, OUT_6}
+      {this, IN_1, OPERATOR_SWITCH_1, ADDITION_RANGE_SWITCH_1, MULTIPLICATION_RANGE_SWITCH_1, KNOB_1, OUT_1},
+      {this, IN_2, OPERATOR_SWITCH_2, ADDITION_RANGE_SWITCH_2, MULTIPLICATION_RANGE_SWITCH_2, KNOB_2, OUT_2},
+      {this, IN_3, OPERATOR_SWITCH_3, ADDITION_RANGE_SWITCH_3, MULTIPLICATION_RANGE_SWITCH_3, KNOB_3, OUT_3},
+      {this, IN_4, OPERATOR_SWITCH_4, ADDITION_RANGE_SWITCH_4, MULTIPLICATION_RANGE_SWITCH_4, KNOB_4, OUT_4},
+      {this, IN_5, OPERATOR_SWITCH_5, ADDITION_RANGE_SWITCH_5, MULTIPLICATION_RANGE_SWITCH_5, KNOB_5, OUT_5},
+      {this, IN_6, OPERATOR_SWITCH_6, ADDITION_RANGE_SWITCH_6, MULTIPLICATION_RANGE_SWITCH_6, KNOB_6, OUT_6}
   };
 };
 
@@ -128,8 +138,8 @@ struct FuncWidget : public ModuleWidget {
     y += row_spacing;
     install_knob("large", Func::KNOB, {center_x, y});
     y += row_spacing;
-    auto add_range_switch = create_toggle("add", Func::RANGE_SWITCH, {center_x, y}, 3, 0);
-    auto mult_range_switch = create_toggle("mult", Func::RANGE_SWITCH, {center_x, y}, 3, 0);
+    auto add_range_switch = create_toggle("add", Func::ADD_RANGE_SWITCH, {center_x, y}, 3, 0);
+    auto mult_range_switch = create_toggle("mult", Func::MULT_RANGE_SWITCH, {center_x, y}, 3, 0);
     addParam(add_range_switch);
     addParam(mult_range_switch);
     mult_range_switch->visible=false;
@@ -164,11 +174,11 @@ struct FuncsWidget : public ModuleWidget {
       install_input(Func6::IN_1 + row, {left_x, y + port_offset});
       install_switch(Func6::OPERATOR_SWITCH_1 + row, {left_center_x, y}, 1, 1);
       install_knob("large", Func6::KNOB_1 + row, {center_x, y});
-      auto mult_range_switch = create_toggle("mult", Func6::RANGE_SWITCH_1 + row, {right_center_x, y}, 3, 0);
-      auto add_range_switch = create_toggle("add", Func6::RANGE_SWITCH_1 + row, {right_center_x, y}, 3, 0);
-      addParam(mult_range_switch);
-      addParam(add_range_switch);
-      add_range_switch->visible=false;
+      auto multiplication_range_switch = create_toggle("mult", Func6::MULTIPLICATION_RANGE_SWITCH_1 + row, {right_center_x, y}, 3, 0);
+      auto addition_range_switch = create_toggle("add", Func6::ADDITION_RANGE_SWITCH_1 + row, {right_center_x, y}, 3, 0);
+      addParam(multiplication_range_switch);
+      addParam(addition_range_switch);
+      addition_range_switch->visible=false;
 
       install_output(Func6::OUT_1 + row, {right_x, y + port_offset});
     }
