@@ -18,7 +18,7 @@ void BooleanOption::step() {
 ModuleWidget::ModuleWidget(rack::Module *module, int widget_hp,
                            const std::string &module_name)
     : rack::ModuleWidget(module), module_name_{module_name} {
-  box.size = rack::Vec{(float)widget_hp * rack::RACK_GRID_WIDTH,
+  box.size = rack::Vec{(float) widget_hp*rack::RACK_GRID_WIDTH,
                        rack::RACK_GRID_HEIGHT};
 
   auto panel = new rack::SVGPanel();
@@ -31,7 +31,7 @@ ModuleWidget::ModuleWidget(rack::Module *module, int widget_hp,
 }
 
 auto ModuleWidget::create_button(std::string type, int index, rack::Vec center)
-    -> ButtonWidget * {
+-> ButtonWidget * {
   auto button_widget = rack::Component::create<ButtonWidget>({0, 0}, module);
   auto off_image_file =
       std::string("res/") + module_name_ + "/button-" + type + "-off.svg";
@@ -81,7 +81,7 @@ auto ModuleWidget::create_switch(int index, rack::Vec center, int max_position,
       std::string("res/") + module_name_ + "/switch-" + type + "-low.svg";
   switch_widget->addFrame(
       rack::SVG::load(rack::assetPlugin(plugin, low_image_file)));
-  if (max_position == 2) {
+  if (max_position==2) {
     auto mid_image_file =
         std::string("res/") + module_name_ + "/switch-" + type + "-mid.svg";
     switch_widget->addFrame(
@@ -101,11 +101,9 @@ auto ModuleWidget::create_switch(int index, rack::Vec center, int max_position,
 auto ModuleWidget::create_toggle(std::string type, int index, rack::Vec center, int max_position,
                                  int initial_position) -> SwitchWidget * {
   auto switch_widget = rack::Component::create<SwitchWidget>({0, 0}, module);
-  for(int i = 0 ; i <= max_position ; i++) {
-  auto image_file =
-      std::string("res/") + module_name_ + "/toggle-" + type + "-" + std::to_string(i) + ".svg";
-    switch_widget->addFrame(
-        rack::SVG::load(rack::assetPlugin(plugin, image_file)));
+  for (int i = 0; i <= max_position; i++) {
+    auto image_file = std::string("res/") + module_name_ + "/toggle-" + type + "-" + std::to_string(i) + ".svg";
+    switch_widget->addFrame(rack::SVG::load(rack::assetPlugin(plugin, image_file)));
   }
   switch_widget->paramId = index;
   switch_widget->setLimits(0.f, max_position);
@@ -115,14 +113,14 @@ auto ModuleWidget::create_toggle(std::string type, int index, rack::Vec center, 
 }
 
 void ModuleWidget::install_screws() {
-  auto screw_diameter = rack::RACK_GRID_WIDTH * MM_PER_IN / SVG_DPI;
-  auto screw_radius = screw_diameter / 2.f;
+  auto screw_diameter = rack::RACK_GRID_WIDTH*MM_PER_IN/SVG_DPI;
+  auto screw_radius = screw_diameter/2.f;
 
   auto top = screw_radius;
   auto bottom = height() - top;
 
-  auto max_screw_inset = screw_diameter * 1.5f;
-  auto left = std::min(width() / 4.f, max_screw_inset);
+  auto max_screw_inset = screw_diameter*1.5f;
+  auto left = std::min(width()/4.f, max_screw_inset);
   auto right = width() - left;
 
   auto screw_positions = std::vector<rack::Vec>{

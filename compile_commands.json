@@ -366,9 +366,9 @@
    "-mmacosx-version-min=10.7",
    "-c",
    "-o",
-   "build/src/tweaks.cpp.o",
-   "src/tweaks.cpp"
+   "build/src/func.cpp.o",
+   "src/func.cpp"
   ],
-  "file": "src/tweaks.cpp"
+  "file": "src/func.cpp"
  }
 ]

@@ -196,7 +196,7 @@ class ToggleButtonControl < Bounded
   end
 
   def svg
-    [@upper.svg, @button.svg, @lower.svg].join '\n'
+    [@upper.svg, @button.svg, @lower.svg].join
   end
 end
 

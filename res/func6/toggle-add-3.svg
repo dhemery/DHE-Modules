@@ -3,8 +3,8 @@
 <svg version="1.1" xmlns="http://www.w3.org/2000/svg"
 width="6.0mm" height="12.370666666666667mm" viewBox="0 0 6.0 12.370666666666667">
   <g transform="translate(3.0 6.185333333333333)">
-    <text dominant-baseline="baseline" text-anchor="middle" fill="#0044cc" x="0.0" y="-4.0" style="font-family:Proxima Nova;font-weight:bold;font-size:2.3706666666666667px">10</text>\n
+    <text dominant-baseline="baseline" text-anchor="middle" fill="#0044cc" x="0.0" y="-4.0" style="font-family:Proxima Nova;font-weight:bold;font-size:2.3706666666666667px">10</text>
       <circle cx="0.0" cy="0.0" r="2.5" stroke-width="1.0" fill="#0044cc" stroke="#0044cc"/>
-    \n<text dominant-baseline="hanging" text-anchor="middle" fill="#0044cc" x="0.0" y="4.0" style="font-family:Proxima Nova;font-weight:bold;font-size:2.3706666666666667px">-10</text>
+    <text dominant-baseline="hanging" text-anchor="middle" fill="#0044cc" x="0.0" y="4.0" style="font-family:Proxima Nova;font-weight:bold;font-size:2.3706666666666667px">-10</text>
   </g>
 </svg>

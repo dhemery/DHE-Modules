@@ -3,7 +3,7 @@
 #include <app.hpp>
 #include <string>
 #include <util/math.hpp>
-
+#include <utility>
 #include "dhe-modules.h"
 
 #include "util/range.h"
@@ -77,7 +77,7 @@ protected:
 
   void install_toggle(std::string type, int index, rack::Vec center, int max_position = 1,
                       int initial_position = 0) {
-    addParam(create_toggle(type, index, center, max_position, initial_position));
+    addParam(create_toggle(std::move(type), index, center, max_position, initial_position));
   }
 
   void install_screws();
