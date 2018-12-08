@@ -31,7 +31,6 @@ struct PortWidget : rack::SVGPort {};
 struct SwitchWidget : rack::SVGSwitch, rack::ToggleSwitch {};
 
 class ModuleWidget : public rack::ModuleWidget {
-  std::string const module_name_;
 
 public:
   ModuleWidget(rack::Module *module, int widget_hp,
@@ -85,6 +84,7 @@ protected:
   auto create_toggle(std::string type, int index, rack::Vec center, int high_position,
                      int initial_position = 0) -> SwitchWidget *;
 
+  std::string const module_name;
 private:
   template <typename T> void install_screw(rack::Vec center) {
     auto widget = rack::Widget::create<T>({0, 0});
