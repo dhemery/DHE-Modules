@@ -76,5 +76,20 @@ module DHE
         end
       end
     end
+
+    def toggle_buttons(page, variants)
+      variants.flat_map do |variant|
+        variant.each_pair.flat_map do |name, frames|
+          frames.each_with_index.map do |labels, position|
+            button = ButtonControl.new(style: :normal, state: :off, foreground: foreground(page), background: background(page))
+            upper_text = Text.new(text: labels.last, size: SMALL_FONT, color: foreground(page))
+            upper_label = Label.new(upper_text, PADDING, :above, button)
+            lower_text = Text.new(text: labels.first, size: SMALL_FONT, color: foreground(page))
+            lower_label = Label.new(lower_text, PADDING, :below, button)
+            ToggleButtonControl.new(name: name, position: position, button: button, lower: lower_label, upper: upper_label)
+          end
+        end
+      end
+    end
   end
 end

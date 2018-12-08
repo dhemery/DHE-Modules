@@ -1,3 +1,41 @@
+MM_PER_INCH = 25.4
+PX_PER_INCH = 75.0
+PX_PER_MM = PX_PER_INCH / MM_PER_INCH
+MM_PER_HP = 5.08
+
+STROKE_WIDTH = 0.35
+STROKE_INSET = STROKE_WIDTH / 2.0
+PADDING = 1.0
+
+PLUGIN_LABEL_INSET = 9.0
+PANEL_HEIGHT = 128.5
+
+PLUGIN_FONT = 12.0 / PX_PER_MM
+LARGE_FONT = 9.0 / PX_PER_MM
+SMALL_FONT = 7.0 / PX_PER_MM
+
+class Text
+  ASCENT_RATIO = 2.0 / 3.0 # For Proxima Nova font
+
+  def initialize(text:, size:, color:)
+    @text = text
+    @size = size
+    @color = color
+  end
+
+  def ascent
+    @size * ASCENT_RATIO
+  end
+
+  def descent
+    @size - ascent
+  end
+
+  def svg(x:, y:, attributes:)
+    %Q[<text #{attributes} fill="#{@color}" x="#{x}" y="#{y}" style="font-family:Proxima Nova;font-weight:bold;font-size:#{@size}px">#{@text}</text>]
+  end
+end
+
 class Bounded
   attr_reader :top, :right, :bottom, :left
 
@@ -31,6 +69,64 @@ class Bounded
     delta_x = x - center.x
     delta_y = y - center.y
     translate(delta_x: delta_x, delta_y: delta_y)
+  end
+end
+
+class Label < Bounded
+  ALIGNMENT_ATTRIBUTES_TEMPLATE = %[dominant-baseline="%s" text-anchor="%s"]
+  ALIGNMENT_ATTRIBUTES = {
+      above: ALIGNMENT_ATTRIBUTES_TEMPLATE % %w{baseline middle},
+      below: ALIGNMENT_ATTRIBUTES_TEMPLATE % %w{hanging middle},
+      right_of: ALIGNMENT_ATTRIBUTES_TEMPLATE % %w{middle start},
+  }
+
+  def initialize(text, padding, alignment, control)
+    @text = text
+    @alignment = alignment
+    case alignment
+    when :above
+      @x = control.center.x
+      @y = control.top - padding
+    when :below
+      @x = control.center.x
+      @y = control.bottom + padding
+    when :right_of
+      @x = control.right + padding
+      @y = control.center.y
+    else
+      @x = control.center.x
+      @y = control.center.y
+    end
+    super(top: @y - @text.ascent, right: @x, bottom: @y + @text.descent, left: @x)
+  end
+
+  def svg
+    @text.svg(x: @x, y: @y, attributes: ALIGNMENT_ATTRIBUTES[@alignment])
+  end
+end
+
+
+class Box < Bounded
+  CORNER_RADIUS = 1.0
+  BUFFER = PADDING + STROKE_INSET
+
+  def initialize(content_bounds:, style:, foreground:, background:)
+    super(top: content_bounds.top - BUFFER, right: content_bounds.right + BUFFER, bottom: content_bounds.bottom + BUFFER, left: content_bounds.left - BUFFER)
+    @stroke = foreground
+    @fill = style == :reverse ? foreground : background
+  end
+
+  def svg
+    %Q[
+      <rect x="#{left}" y="#{top}" width="#{width}" height="#{height}"
+        stroke-width="#{STROKE_WIDTH}" rx="#{CORNER_RADIUS}" ry="#{CORNER_RADIUS}"
+        stroke="#{@stroke}" fill="#{@fill}"/>
+      ]
+  end
+
+  def self.around(content:, style:, foreground:, background:)
+    content_bounds = Bounded.new(top: content.map(&:top).min, right: content.map(&:right).max, bottom: content.map(&:bottom).max, left: content.map(&:left).min)
+    Box.new(content_bounds: content_bounds, style: style, foreground: foreground, background: background)
   end
 end
 
@@ -68,12 +164,12 @@ class ButtonControl < RoundControl
 
   def align(padding, alignment, other)
     new_x = case alignment
-              when :right_of
-                other.right + padding + radius
-              when :left_of
-                other.left - padding - radius
-              else
-                center.x
+            when :right_of
+              other.right + padding + radius
+            when :left_of
+              other.left - padding - radius
+            else
+              center.x
             end
     move_center_to(x: new_x, y: other.center.y)
   end
@@ -88,15 +184,31 @@ class ButtonControl < RoundControl
   end
 end
 
+class ToggleButtonControl < Bounded
+  attr_reader :name
+
+  def initialize(name:, position:, button:, lower:, upper:)
+    super(top: upper.top - PADDING, right: button.right, bottom: lower.bottom + PADDING, left: button.left)
+    @upper = upper
+    @button = button
+    @lower = lower
+    @name = "toggle-#{name}-#{position}"
+  end
+
+  def svg
+    [@upper.svg, @button.svg, @lower.svg].join '\n'
+  end
+end
+
 class KnobControl < RoundControl
   attr_reader :name
 
   DIAMETERS = {
-    huge: 19.0,
-    large: 12.7,
-    medium: 10.0,
-    small: 8.4,
-    tiny: 7.0,
+      huge: 19.0,
+      large: 12.7,
+      medium: 10.0,
+      small: 8.4,
+      tiny: 7.0,
   }
 
   def initialize(x: 0.0, y: 0.0, size: :large, foreground:, background:)
@@ -163,12 +275,12 @@ class SwitchControl < Control
     @background = background
     @position =
         case @state
-          when :high
-            1.0
-          when :low
-            -1.0
-          else
-            0.0
+        when :high
+          1.0
+        when :low
+          -1.0
+        else
+          0.0
         end
   end
 
