@@ -120,15 +120,15 @@ struct StageWidget : public ModuleWidget<StageWidget, Stage> {
     auto row_spacing = 18.5f;
 
     auto row = 0;
-    install_knob("large", Stage::LEVEL_KNOB,
+    install_large_knob(Stage::LEVEL_KNOB,
                  {center_x, top_row_y + row * row_spacing});
 
     row++;
-    install_knob("large", Stage::CURVE_KNOB,
+    install_large_knob(Stage::CURVE_KNOB,
                  {center_x, top_row_y + row * row_spacing});
 
     row++;
-    install_knob("large", Stage::DURATION_KNOB,
+    install_large_knob(Stage::DURATION_KNOB,
                  {center_x, top_row_y + row * row_spacing});
 
     top_row_y = 82.f;

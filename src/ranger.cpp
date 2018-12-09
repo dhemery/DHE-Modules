@@ -72,27 +72,27 @@ struct RangerWidget : public ModuleWidget<RangerWidget, Ranger> {
     auto delta_y = 16.f;
     auto panel_buffer = 4.f;
 
-    install_knob("medium", Ranger::LEVEL_KNOB, {left_x, y});
+    install_medium_knob(Ranger::LEVEL_KNOB, {left_x, y});
     install_output(Ranger::MAIN_OUT, {right_x, y});
     y += delta_y;
     install_input(Ranger::LEVEL_CV, {left_x, y});
-    install_knob("tiny", Ranger::LEVEL_AV, {right_x, y});
+    install_tiny_knob(Ranger::LEVEL_AV, {right_x, y});
 
     y += delta_y + panel_buffer;
 
-    install_knob("medium", Ranger::LIMIT_1_KNOB, {left_x, y});
+    install_medium_knob(Ranger::LIMIT_1_KNOB, {left_x, y});
     install_switch(Ranger::LIMIT_1_RANGE_SWITCH, {right_x, y});
     y += delta_y;
     install_input(Ranger::LIMIT_1_CV, {left_x, y});
-    install_knob("tiny", Ranger::LIMIT_1_AV, {right_x, y});
+    install_tiny_knob(Ranger::LIMIT_1_AV, {right_x, y});
 
     y += delta_y + panel_buffer;
 
-    install_knob("medium", Ranger::LIMIT_2_KNOB, {left_x, y});
+    install_medium_knob(Ranger::LIMIT_2_KNOB, {left_x, y});
     install_switch(Ranger::LIMIT_2_RANGE_SWITCH, {right_x, y});
     y += delta_y;
     install_input(Ranger::LIMIT_2_CV, {left_x, y});
-    install_knob("tiny", Ranger::LIMIT_2_AV, {right_x, y});
+    install_tiny_knob(Ranger::LIMIT_2_AV, {right_x, y});
   }
 };
 } // namespace DHE

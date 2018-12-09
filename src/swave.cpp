@@ -54,7 +54,7 @@ struct SwaveWidget : public ModuleWidget<SwaveWidget, Swave> {
                    {center_x, top_row_y + row * row_spacing}, 1, 1);
 
     row++;
-    install_knob("large", Swave::CURVE_KNOB,
+    install_large_knob(Swave::CURVE_KNOB,
                  {center_x, top_row_y + row * row_spacing});
 
     row++;

@@ -164,21 +164,21 @@ struct BoosterStageWidget : public ModuleWidget<BoosterStageWidget, BoosterStage
 
     auto row = 0;
     install_input(BoosterStage::LEVEL_CV, {left_x, top_row_y + row * row_spacing});
-    install_knob("large", BoosterStage::LEVEL_KNOB,
+    install_large_knob(BoosterStage::LEVEL_KNOB,
                  {center_x, top_row_y + row * row_spacing});
     addParam(ThumbSwitch2<BoosterStageWidget>::create(module, BoosterStage::LEVEL_RANGE_SWITCH,
                    {right_x, top_row_y + row * row_spacing}, 1));
 
     row++;
     install_input(BoosterStage::CURVE_CV, {left_x, top_row_y + row * row_spacing});
-    install_knob("large", BoosterStage::CURVE_KNOB,
+    install_large_knob(BoosterStage::CURVE_KNOB,
                  {center_x, top_row_y + row * row_spacing});
     addParam(ThumbSwitch2<BoosterStageWidget>::create(module, BoosterStage::SHAPE_SWITCH,
                    {right_x, top_row_y + row * row_spacing}));
 
     row++;
     install_input(BoosterStage::DURATION_CV, {left_x, top_row_y + row * row_spacing});
-    install_knob("large", BoosterStage::DURATION_KNOB,
+    install_large_knob(BoosterStage::DURATION_KNOB,
                  {center_x, top_row_y + row * row_spacing});
     addParam(ThumbSwitch3<BoosterStageWidget>::create(module, BoosterStage::DURATION_RANGE_SWITCH,
                    {right_x, top_row_y + row * row_spacing}, 1));

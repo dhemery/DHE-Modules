@@ -204,9 +204,9 @@ struct XycloidWidget : public ModuleWidget<XycloidWidget, Xycloid> {
 
     install_input(Xycloid::WOBBLE_RATIO_CV,
                   {left_x, top_row_y + row * row_spacing});
-    install_knob("tiny", Xycloid::WOBBLE_RATIO_AV,
+    install_tiny_knob(Xycloid::WOBBLE_RATIO_AV,
                  {left_center_x, top_row_y + row * row_spacing});
-    install_knob("large", Xycloid::WOBBLE_RATIO,
+    install_large_knob(Xycloid::WOBBLE_RATIO,
                  {right_center_x, top_row_y + row * row_spacing});
     install_switch(Xycloid::WOBBLE_RATIO_TYPE,
                    {right_x, top_row_y + row * row_spacing}, 1, 1);
@@ -214,9 +214,9 @@ struct XycloidWidget : public ModuleWidget<XycloidWidget, Xycloid> {
     row++;
     install_input(Xycloid::WOBBLE_DEPTH_CV,
                   {left_x, top_row_y + row * row_spacing});
-    install_knob("tiny", Xycloid::WOBBLE_DEPTH_AV,
+    install_tiny_knob(Xycloid::WOBBLE_DEPTH_AV,
                  {left_center_x, top_row_y + row * row_spacing});
-    install_knob("large", Xycloid::WOBBLE_DEPTH,
+    install_large_knob(Xycloid::WOBBLE_DEPTH,
                  {right_center_x, top_row_y + row * row_spacing});
     install_switch(Xycloid::WOBBLE_TYPE,
                    {right_x, top_row_y + row * row_spacing}, 2, 2);
@@ -224,11 +224,11 @@ struct XycloidWidget : public ModuleWidget<XycloidWidget, Xycloid> {
     row++;
     install_input(Xycloid::THROB_SPEED_CV,
                   {left_x, top_row_y + row * row_spacing});
-    install_knob("tiny", Xycloid::THROB_SPEED_AV,
+    install_tiny_knob(Xycloid::THROB_SPEED_AV,
                  {left_center_x, top_row_y + row * row_spacing});
-    install_knob("large", Xycloid::THROB_SPEED,
+    install_large_knob(Xycloid::THROB_SPEED,
                  {right_center_x, top_row_y + row * row_spacing}, 0.65f);
-    install_knob("small", Xycloid::WOBBLE_PHASE,
+    install_small_knob(Xycloid::WOBBLE_PHASE,
                  {right_x, top_row_y + row * row_spacing});
 
     top_row_y = 82.f;
@@ -238,7 +238,7 @@ struct XycloidWidget : public ModuleWidget<XycloidWidget, Xycloid> {
     auto default_gain = Knob::gain_range.normalize(1.f);
     row++;
     install_input(Xycloid::X_GAIN_CV, {left_x, top_row_y + row * row_spacing});
-    install_knob("small", Xycloid::X_GAIN,
+    install_small_knob(Xycloid::X_GAIN,
                  {left_center_x, top_row_y + row * row_spacing}, default_gain);
     install_switch(Xycloid::X_RANGE,
                    {right_center_x, top_row_y + row * row_spacing});
@@ -246,7 +246,7 @@ struct XycloidWidget : public ModuleWidget<XycloidWidget, Xycloid> {
 
     row++;
     install_input(Xycloid::Y_GAIN_CV, {left_x, top_row_y + row * row_spacing});
-    install_knob("small", Xycloid::Y_GAIN,
+    install_small_knob(Xycloid::Y_GAIN,
                  {left_center_x, top_row_y + row * row_spacing}, default_gain);
     install_switch(Xycloid::Y_RANGE,
                    {right_center_x, top_row_y + row * row_spacing});

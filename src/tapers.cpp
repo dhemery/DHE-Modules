@@ -93,12 +93,12 @@ struct TapersWidget : public ModuleWidget<TapersWidget, Tapers> {
     auto panel_buffer = 4.f;
 
     install_input(Tapers::LEVEL_1_CV, {left_x, y});
-    install_knob("tiny", Tapers::LEVEL_1_AV, {center_x, y});
-    install_knob("medium", Tapers::LEVEL_1_KNOB, {right_x, y});
+    install_tiny_knob(Tapers::LEVEL_1_AV, {center_x, y});
+    install_medium_knob(Tapers::LEVEL_1_KNOB, {right_x, y});
     y += delta_y;
     install_input(Tapers::CURVE_1_CV, {left_x, y});
-    install_knob("tiny", Tapers::CURVE_1_AV, {center_x, y});
-    install_knob("medium", Tapers::CURVE_1_KNOB, {right_x, y});
+    install_tiny_knob(Tapers::CURVE_1_AV, {center_x, y});
+    install_medium_knob(Tapers::CURVE_1_KNOB, {right_x, y});
     y += delta_y;
     install_switch(Tapers::SHAPE_1_SWITCH, {left_x, y});
     install_switch(Tapers::RANGE_1_SWITCH, {center_x, y});
@@ -107,12 +107,12 @@ struct TapersWidget : public ModuleWidget<TapersWidget, Tapers> {
     y += delta_y + panel_buffer;
 
     install_input(Tapers::LEVEL_2_CV, {left_x, y});
-    install_knob("tiny", Tapers::LEVEL_2_AV, {center_x, y});
-    install_knob("medium", Tapers::LEVEL_2_KNOB, {right_x, y});
+    install_tiny_knob(Tapers::LEVEL_2_AV, {center_x, y});
+    install_medium_knob(Tapers::LEVEL_2_KNOB, {right_x, y});
     y += delta_y;
     install_input(Tapers::CURVE_2_CV, {left_x, y});
-    install_knob("tiny", Tapers::CURVE_2_AV, {center_x, y});
-    install_knob("medium", Tapers::CURVE_2_KNOB, {right_x, y});
+    install_tiny_knob(Tapers::CURVE_2_AV, {center_x, y});
+    install_medium_knob(Tapers::CURVE_2_KNOB, {right_x, y});
     y += delta_y;
     install_switch(Tapers::SHAPE_2_SWITCH, {left_x, y});
     install_switch(Tapers::RANGE_2_SWITCH, {center_x, y});

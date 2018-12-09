@@ -185,7 +185,7 @@ struct HostageWidget : public ModuleWidget<HostageWidget, Hostage> {
                    {right_x, top_row_y + row * row_spacing}, 2, 1);
 
     row++;
-    install_knob("large", Hostage::DURATION_KNOB,
+    install_large_knob(Hostage::DURATION_KNOB,
                  {center_x, top_row_y + row * row_spacing});
 
     top_row_y = 82.f;

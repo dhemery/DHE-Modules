@@ -95,6 +95,36 @@ private:
   }
 };
 
+template<typename TDisplay>
+class Potentiometer : public rack::RoundKnob {
+public:
+  static auto create_tiny(rack::Module *module, int index, rack::Vec center, float initial) -> Potentiometer * {
+    return create(module, "knob-tiny", index, center, initial);
+  }
+
+  static auto create_small(rack::Module *module, int index, rack::Vec center, float initial) -> Potentiometer * {
+    return create(module, "knob-small", index, center, initial);
+  }
+
+  static auto create_medium(rack::Module *module, int index, rack::Vec center, float initial) -> Potentiometer * {
+    return create(module, "knob-medium", index, center, initial);
+  }
+
+  static auto create_large(rack::Module *module, int index, rack::Vec center, float initial) -> Potentiometer * {
+    return create(module, "knob-large", index, center, initial);
+  }
+
+private:
+  static auto create(rack::Module *module, std::string file, int index, rack::Vec center, float initial) -> Potentiometer * {
+    auto potentiometer = rack::ParamWidget::create<Potentiometer<TDisplay>>(
+        {0, 0}, module, index, 0.f, 1.f, initial);
+    potentiometer->setSVG(TDisplay::svg(file));
+    potentiometer->shadow->opacity = 0.f;
+    moveTo(potentiometer->box, rack::mm2px(center));
+    return potentiometer;
+  }
+};
+
 template<typename TDisplay, typename TModule>
 class ModuleWidget : public rack::ModuleWidget {
 
@@ -146,9 +176,24 @@ protected:
     addInput(Jack<TDisplay>::create_input(module, index, center));
   }
 
-  void install_knob(const std::string &size, int index, rack::Vec center,
-                    float initial_rotation = 0.5f) {
-    addParam(create_knob(size, index, center, initial_rotation));
+  void install_tiny_knob(int index, rack::Vec center,
+                           float initial_rotation = 0.5f) {
+    addParam(Potentiometer<TDisplay>::create_tiny(module, index, center, initial_rotation));
+  }
+
+  void install_small_knob(int index, rack::Vec center,
+                           float initial_rotation = 0.5f) {
+    addParam(Potentiometer<TDisplay>::create_small(module, index, center, initial_rotation));
+  }
+
+  void install_medium_knob(int index, rack::Vec center,
+                           float initial_rotation = 0.5f) {
+    addParam(Potentiometer<TDisplay>::create_medium(module, index, center, initial_rotation));
+  }
+
+  void install_large_knob(int index, rack::Vec center,
+                           float initial_rotation = 0.5f) {
+    addParam(Potentiometer<TDisplay>::create_large(module, index, center, initial_rotation));
   }
 
   void install_output(int index, rack::Vec center) {
@@ -222,16 +267,6 @@ private:
     button_widget->setDefaultValue(0.f);
     moveTo(button_widget->box, rack::mm2px(center));
     return button_widget;
-  }
-  auto create_knob(const std::string &size, int index, rack::Vec center, float initial)
-  -> KnobWidget * {
-    auto knob_widget = rack::ParamWidget::create<KnobWidget>(
-        {0, 0}, module, index, 0.f, 1.f, initial);
-    auto image_file = resource_prefix() + "/knob-" + size + ".svg";
-    knob_widget->setSVG(rack::SVG::load(rack::assetPlugin(plugin, image_file)));
-    knob_widget->shadow->opacity = 0.f;
-    moveTo(knob_widget->box, rack::mm2px(center));
-    return knob_widget;
   }
 
   auto create_switch(int index, rack::Vec center, int max_position,

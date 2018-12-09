@@ -161,7 +161,7 @@ struct FuncWidget : public ModuleWidget<FuncWidget, Func> {
     auto out_port_center = Position{x, top + row_spacing*5 + port_offset};
 
     install_input(Func::IN, in_port_center);
-    install_knob("large", Func::KNOB, knob_center);
+    install_large_knob(Func::KNOB, knob_center);
     install_output(Func::OUT, out_port_center);
 
     auto multiplication_range_switch = create_toggle("mult", Func::MULTIPLICATION_RANGE_SWITCH, range_switch_center, 3, 2);
@@ -207,7 +207,7 @@ struct Func6Widget : public ModuleWidget<Func6Widget, Func6> {
       auto out_port_center = Position{out_port_x, port_y};
 
       install_input(Func6::IN + row, in_port_center);
-      install_knob("large", Func6::KNOB + row, knob_center);
+      install_large_knob(Func6::KNOB + row, knob_center);
       install_output(Func6::OUT + row, out_port_center);
 
       auto multiplication_range_switch = create_toggle("mult", Func6::MULTIPLICATION_RANGE_SWITCH + row, range_switch_center, 3, 2);

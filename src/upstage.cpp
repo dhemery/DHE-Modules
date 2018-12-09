@@ -79,7 +79,7 @@ struct UpstageWidget : public ModuleWidget<UpstageWidget, Upstage> {
     auto row_spacing = 18.5f;
 
     auto row = 0;
-    install_knob("large", Upstage::LEVEL_KNOB,
+    install_large_knob(Upstage::LEVEL_KNOB,
                  {center_x, top_row_y + row * row_spacing});
 
     row++;

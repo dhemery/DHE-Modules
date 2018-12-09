@@ -85,29 +85,29 @@ struct CubicWidget : public ModuleWidget<CubicWidget, Cubic> {
 
     auto row = 0;
     install_input(Cubic::A_CV, {left_x, top_row_y + row * row_spacing});
-    install_knob("small", Cubic::A_KNOB,
+    install_small_knob(Cubic::A_KNOB,
                  {right_x, top_row_y + row * row_spacing});
 
     row++;
     install_input(Cubic::B_CV, {left_x, top_row_y + row * row_spacing});
-    install_knob("small", Cubic::B_KNOB,
+    install_small_knob(Cubic::B_KNOB,
                  {right_x, top_row_y + row * row_spacing});
 
     row++;
     install_input(Cubic::C_CV, {left_x, top_row_y + row * row_spacing});
-    install_knob("small", Cubic::C_KNOB,
+    install_small_knob(Cubic::C_KNOB,
                  {right_x, top_row_y + row * row_spacing});
 
     row++;
     install_input(Cubic::D_CV, {left_x, top_row_y + row * row_spacing});
-    install_knob("small", Cubic::D_KNOB,
+    install_small_knob(Cubic::D_KNOB,
                  {right_x, top_row_y + row * row_spacing});
 
     top_row_y = 82.f;
     row = 0;
-    install_knob("small", Cubic::INPUT_GAIN_KNOB,
+    install_small_knob(Cubic::INPUT_GAIN_KNOB,
                  {left_x, top_row_y + row * row_spacing});
-    install_knob("small", Cubic::OUTPUT_GAIN_KNOB,
+    install_small_knob(Cubic::OUTPUT_GAIN_KNOB,
                  {right_x, top_row_y + row * row_spacing});
 
     row++;
