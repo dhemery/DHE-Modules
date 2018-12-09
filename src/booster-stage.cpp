@@ -180,14 +180,14 @@ struct BoosterStageWidget : public ModuleWidget<BoosterStageWidget, BoosterStage
     dy = 15.f;
 
     install(column_1, y, input_jack(BoosterStage::DEFER_IN));
-    install_button("normal", BoosterStage::DEFER_BUTTON, {column_2, y});
-    install_button("reverse", BoosterStage::ACTIVE_BUTTON, {column_4, y});
+    install(column_2, y, button(BoosterStage::DEFER_BUTTON));
+    install(column_4, y, reverse_button(BoosterStage::ACTIVE_BUTTON));
     install(column_5, y, output_jack(BoosterStage::ACTIVE_OUT));
 
     y += dy;
     install(column_1, y, input_jack(BoosterStage::TRIGGER_IN));
-    install_button("normal", BoosterStage::TRIGGER_BUTTON, {column_2, y});
-    install_button("reverse", BoosterStage::EOC_BUTTON, {column_4, y});
+    install(column_2, y, button(BoosterStage::TRIGGER_BUTTON));
+    install(column_4, y, reverse_button(BoosterStage::EOC_BUTTON));
     install(column_5, y, output_jack(BoosterStage::EOC_OUT));
 
     y += dy;

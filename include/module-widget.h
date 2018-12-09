@@ -37,8 +37,31 @@ struct BooleanOption : rack::MenuItem {
   const std::function<bool()> is_on;
 };
 
-struct ButtonWidget : rack::SVGSwitch, rack::MomentarySwitch {};
-struct SwitchWidget : rack::SVGSwitch, rack::ToggleSwitch {};
+template<typename TDisplay>
+class NormalButton : public rack::SVGSwitch, public rack::MomentarySwitch {
+public:
+  NormalButton() {
+    addFrame(TDisplay::svg("button-normal-off"));
+    addFrame(TDisplay::svg("button-normal-on"));
+  }
+
+  static auto create(rack::Module *module, int index) -> NormalButton * {
+    return rack::ParamWidget::create<NormalButton<TDisplay>>({0, 0}, module, index, 0, 1, 0);
+  }
+};
+
+template<typename TDisplay>
+class ReverseButton : public rack::SVGSwitch, public rack::MomentarySwitch {
+public:
+  ReverseButton() {
+    addFrame(TDisplay::svg("button-reverse-off"));
+    addFrame(TDisplay::svg("button-reverse-on"));
+  }
+
+  static auto create(rack::Module *module, int index) -> ReverseButton * {
+    return rack::ParamWidget::create<ReverseButton<TDisplay>>({0, 0}, module, index, 0, 1, 0);
+  }
+};
 
 template<typename TDisplay>
 class ThumbSwitch2 : public rack::SVGSwitch, public rack::ToggleSwitch {
@@ -141,11 +164,6 @@ public:
     install_screws();
   }
 
-  static auto resource_prefix() -> std::string {
-    static const auto prefix = std::string("res/") + TDisplay::resource_name + "/";
-    return prefix;
-  }
-
   void fromJson(json_t *patch) override {
     // If there's no data, we're loading from a legacy patch. Add empty data to
     // the incoming patch so that ModuleWidget::fromJson will call
@@ -167,23 +185,24 @@ protected:
 
   auto width() const -> float { return box.size.x*MM_PER_IN/SVG_DPI; }
 
-  void install(float x, float y, InputJack<TDisplay> *jack) {
-    moveTo(x, y, jack);
-    addInput(jack);
-  }
-
   void install(float x, float y, rack::ParamWidget *widget) {
     moveTo(x, y, widget);
     addParam(widget);
   }
 
+  void install(float x, float y, rack::Widget *widget) {
+    moveTo(x, y, widget);
+    addChild(widget);
+  }
+
+  void install(float x, float y, InputJack<TDisplay> *jack) {
+    moveTo(x, y, jack);
+    addInput(jack);
+  }
+
   void install(float x, float y, OutputJack<TDisplay> *jack) {
     moveTo(x, y, jack);
     addOutput(jack);
-  }
-
-  void install_button(const std::string &type, int index, rack::Vec center) {
-    addParam(create_button(type, index, center));
   }
 
   auto input_jack(int index) const -> InputJack<TDisplay> * {
@@ -192,14 +211,6 @@ protected:
 
   auto output_jack(int index) const -> OutputJack<TDisplay> * {
     return OutputJack<TDisplay>::create(module, index);
-  }
-
-  auto thumb_switch_2(int index, int initial = 0) const -> ThumbSwitch2<TDisplay> * {
-    return ThumbSwitch2<TDisplay>::create(module, index, initial);
-  }
-
-  auto thumb_switch_3(int index, int initial = 0) const -> ThumbSwitch3<TDisplay> * {
-    return ThumbSwitch3<TDisplay>::create(module, index, initial);
   }
 
   auto tiny_knob(int index, float initial_rotation = 0.5f) const -> Potentiometer <TDisplay> * {
@@ -216,6 +227,22 @@ protected:
 
   auto large_knob(int index, float initial_rotation = 0.5f) const -> Potentiometer <TDisplay> * {
     return Potentiometer<TDisplay>::create_large(module, index, initial_rotation);
+  }
+
+  auto button(int index) const -> NormalButton<TDisplay> * {
+    return NormalButton<TDisplay>::create(module, index);
+  }
+
+  auto reverse_button(int index) const -> ReverseButton<TDisplay> * {
+    return ReverseButton<TDisplay>::create(module, index);
+  }
+
+  auto thumb_switch_2(int index, int initial = 0) const -> ThumbSwitch2<TDisplay> * {
+    return ThumbSwitch2<TDisplay>::create(module, index, initial);
+  }
+
+  auto thumb_switch_3(int index, int initial = 0) const -> ThumbSwitch3<TDisplay> * {
+    return ThumbSwitch3<TDisplay>::create(module, index, initial);
   }
 
   void install_screws() {
@@ -235,73 +262,20 @@ protected:
     std::shuffle(screw_positions.begin(), screw_positions.end(),
                  std::mt19937(std::random_device()()));
 
-    install_screw<rack::ScrewBlack>(screw_positions.back());
+    auto p_special = screw_positions.back();
+    install(p_special.x, p_special.y, rack::Widget::create<rack::ScrewBlack>());
 
     screw_positions.pop_back();
 
     for (auto p : screw_positions) {
-      install_screw<rack::ScrewSilver>(p);
+      install(p.x, p.y, rack::Widget::create<rack::ScrewSilver>());
     }
-  }
-
-  auto create_toggle(const std::string &type, int index, rack::Vec center, int max_position,
-                     int initial_position = 0) -> SwitchWidget * {
-    auto switch_widget = rack::Component::create<SwitchWidget>({0, 0}, module);
-    for (int i = 0; i <= max_position; i++) {
-      auto image_file = resource_prefix() + "/toggle-" + type + "-" + std::to_string(i) + ".svg";
-      switch_widget->addFrame(rack::SVG::load(rack::assetPlugin(plugin, image_file)));
-    }
-    switch_widget->paramId = index;
-    switch_widget->setLimits(0.f, max_position);
-    switch_widget->setDefaultValue(initial_position);
-    moveTo(switch_widget->box, rack::mm2px(center));
-    return switch_widget;
-
   }
 
 private:
-  template<typename T> void install_screw(rack::Vec center) {
-    auto widget = rack::Widget::create<T>({0, 0});
-    moveTo(widget->box, rack::mm2px(center));
-    addChild(widget);
-  }
-
-  auto create_button(const std::string &type, int index, rack::Vec center)
-  -> ButtonWidget * {
-    auto button_widget = rack::Component::create<ButtonWidget>({0, 0}, module);
-    auto off_image_file = resource_prefix() + "/button-" + type + "-off.svg";
-    auto on_image_file = resource_prefix() + "/button-" + type + "-on.svg";
-    button_widget->addFrame(
-        rack::SVG::load(rack::assetPlugin(plugin, off_image_file)));
-    button_widget->addFrame(
-        rack::SVG::load(rack::assetPlugin(plugin, on_image_file)));
-    button_widget->paramId = index;
-    button_widget->setLimits(0.f, 1.f);
-    button_widget->setDefaultValue(0.f);
-    moveTo(button_widget->box, rack::mm2px(center));
-    return button_widget;
-  }
-
-  auto create_switch(int index, rack::Vec center, int max_position,
-                     int initial_position = 0) -> SwitchWidget * {
-    auto switch_widget = rack::Component::create<SwitchWidget>({0, 0}, module);
-    auto type = std::to_string(max_position + 1);
-    auto low_image_file = resource_prefix() + "/switch-" + type + "-low.svg";
-    switch_widget->addFrame(
-        rack::SVG::load(rack::assetPlugin(plugin, low_image_file)));
-    if (max_position==2) {
-      auto mid_image_file = resource_prefix() + "/switch-" + type + "-mid.svg";
-      switch_widget->addFrame(
-          rack::SVG::load(rack::assetPlugin(plugin, mid_image_file)));
-    }
-    auto high_image_file = resource_prefix() + "/switch-" + type + "-high.svg";
-    switch_widget->addFrame(
-        rack::SVG::load(rack::assetPlugin(plugin, high_image_file)));
-    switch_widget->paramId = index;
-    switch_widget->setLimits(0.f, max_position);
-    switch_widget->setDefaultValue(initial_position);
-    moveTo(switch_widget->box, rack::mm2px(center));
-    return switch_widget;
+  static auto resource_prefix() -> std::string {
+    static const auto prefix = std::string("res/") + TDisplay::resource_name + "/";
+    return prefix;
   }
 };
 
