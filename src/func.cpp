@@ -96,12 +96,11 @@ private:
 };
 
 template<typename TDisplay>
-class OperatorSwitchWidget : public rack::SVGSwitch, public rack::ToggleSwitch {
+class OperatorSwitch : public rack::SVGSwitch, public rack::ToggleSwitch {
 public:
-  OperatorSwitchWidget() {
-    auto file_name_prefix = TDisplay::resource_prefix() + "/switch-2-";
-    addFrame(rack::SVG::load(rack::assetPlugin(plugin, file_name_prefix + "low.svg")));
-    addFrame(rack::SVG::load(rack::assetPlugin(plugin, file_name_prefix + "high.svg")));
+  OperatorSwitch() {
+    addFrame(TDisplay::svg("switch-2-low"));
+    addFrame(TDisplay::svg("switch-2-high"));
   }
 
   void onChange(rack::EventChange &e) override {
@@ -126,8 +125,8 @@ public:
     set_range_switch_visibility();
   }
 
-  static auto create(rack::Module *module, const std::string &name, int index, rack::Vec center, SwitchWidget *addition_range_switch, SwitchWidget *multiplication_range_switch) -> OperatorSwitchWidget<TDisplay> * {
-    auto switch_widget = rack::ParamWidget::create<OperatorSwitchWidget<TDisplay>>({0, 0}, module, index, 0.f, 1.f, 0.f);
+  static auto create(rack::Module *module, const std::string &name, int index, rack::Vec center, SwitchWidget *addition_range_switch, SwitchWidget *multiplication_range_switch) -> OperatorSwitch<TDisplay> * {
+    auto switch_widget = rack::ParamWidget::create<OperatorSwitch<TDisplay>>({0, 0}, module, index, 0.f, 1.f, 0.f);
     moveTo(switch_widget->box, rack::mm2px(center));
     switch_widget->set_range_switches(addition_range_switch, multiplication_range_switch);
     return switch_widget;
@@ -171,7 +170,7 @@ struct FuncWidget : public ModuleWidget<FuncWidget, Func> {
     auto addition_range_switch = create_toggle("add", Func::ADDITION_RANGE_SWITCH, range_switch_center, 3, 1);
     addParam(addition_range_switch);
 
-    auto operator_switch = OperatorSwitchWidget<FuncWidget>::create(module, resource_name, Func::OPERATOR_SWITCH, operator_switch_center, addition_range_switch, multiplication_range_switch);
+    auto operator_switch = OperatorSwitch<FuncWidget>::create(module, resource_name, Func::OPERATOR_SWITCH, operator_switch_center, addition_range_switch, multiplication_range_switch);
     addParam(operator_switch);
   }
 };
@@ -217,7 +216,7 @@ struct Func6Widget : public ModuleWidget<Func6Widget, Func6> {
       auto addition_range_switch = create_toggle("add", Func6::ADDITION_RANGE_SWITCH + row, range_switch_center, 3, 1);
       addParam(addition_range_switch);
 
-      auto operator_switch = OperatorSwitchWidget<Func6Widget>::create(module, resource_name, Func6::OPERATOR_SWITCH + row, operator_switch_center, addition_range_switch, multiplication_range_switch);
+      auto operator_switch = OperatorSwitch<Func6Widget>::create(module, resource_name, Func6::OPERATOR_SWITCH + row, operator_switch_center, addition_range_switch, multiplication_range_switch);
       addParam(operator_switch);
     }
   }

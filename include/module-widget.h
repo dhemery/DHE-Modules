@@ -43,9 +43,8 @@ template<typename TDisplay>
 class ThumbSwitch2 : public rack::SVGSwitch, public rack::ToggleSwitch {
 public:
   ThumbSwitch2() {
-    auto file_name_prefix = TDisplay::resource_prefix() + "/switch-2-";
-    addFrame(rack::SVG::load(rack::assetPlugin(plugin, file_name_prefix + "low.svg")));
-    addFrame(rack::SVG::load(rack::assetPlugin(plugin, file_name_prefix + "high.svg")));
+    addFrame(TDisplay::svg("switch-2-low"));
+    addFrame(TDisplay::svg("switch-2-low"));
   }
 
   static auto create(rack::Module *module, int index, rack::Vec center, int initial_position = 0) -> ThumbSwitch2 * {
@@ -60,10 +59,9 @@ template<typename TDisplay>
 class ThumbSwitch3 : public rack::SVGSwitch, public rack::ToggleSwitch {
 public:
   ThumbSwitch3() {
-    auto file_name_prefix = TDisplay::resource_prefix() + "/switch-3-";
-    addFrame(rack::SVG::load(rack::assetPlugin(plugin, file_name_prefix + "low.svg")));
-    addFrame(rack::SVG::load(rack::assetPlugin(plugin, file_name_prefix + "mid.svg")));
-    addFrame(rack::SVG::load(rack::assetPlugin(plugin, file_name_prefix + "high.svg")));
+    addFrame(TDisplay::svg("switch-3-low"));
+    addFrame(TDisplay::svg("switch-3-mid"));
+    addFrame(TDisplay::svg("switch-3-high"));
   }
 
   static auto create(rack::Module *module, int index, rack::Vec center, int initial_position = 0) -> ThumbSwitch3 * {
@@ -83,16 +81,15 @@ public:
                          rack::RACK_GRID_HEIGHT};
 
     auto panel = new rack::SVGPanel();
-    auto background = resource_prefix() + "/panel.svg";
     panel->box.size = box.size;
-    panel->setBackground(rack::SVG::load(rack::assetPlugin(plugin, background)));
+    panel->setBackground(TDisplay::svg("panel"));
     addChild(panel);
 
     install_screws();
   }
 
   static auto resource_prefix() -> std::string {
-    static const auto prefix = std::string("res/") + TDisplay::resource_name;
+    static const auto prefix = std::string("res/") + TDisplay::resource_name + "/";
     return prefix;
   }
 
@@ -106,6 +103,12 @@ public:
     }
     rack::ModuleWidget::fromJson(patch);
   }
+
+  static auto svg(const std::string &filename) -> std::shared_ptr<rack::SVG> {
+    static const auto asset_dir = rack::assetPlugin(plugin, resource_prefix());
+    return rack::SVG::load(asset_dir + filename + ".svg");
+  }
+
 protected:
   auto height() const -> float { return box.size.y*MM_PER_IN/SVG_DPI; }
 
