@@ -17,11 +17,11 @@ public:
     phase -= std::trunc(phase);
   }
 
-  auto x() const -> float { return std::cos(two_pi * (phase + offset)); }
-  auto y() const -> float { return std::sin(two_pi * (phase + offset)); }
+  auto x() const -> float { return std::cos(two_pi*(phase + offset)); }
+  auto y() const -> float { return std::sin(two_pi*(phase + offset)); }
 
 private:
-  float const two_pi{2.f * std::acos(-1.f)};
+  float const two_pi{2.f*std::acos(-1.f)};
   float phase{0.f};
   float offset{0.f};
 };
@@ -35,7 +35,7 @@ public:
   }
 
   auto is_musical_wobble_ratios() const -> bool {
-    return wobble_ratio_offset == 0.f;
+    return wobble_ratio_offset==0.f;
   }
 
   void step() override {
@@ -45,17 +45,17 @@ public:
       wobble_phase_offset *= -1.f;
 
     auto throb_speed = this->throb_speed();
-    auto wobble_speed = wobble_ratio * throb_speed;
+    auto wobble_speed = wobble_ratio*throb_speed;
     auto wobble_depth = this->wobble_depth();
     auto throb_depth = 1.f - wobble_depth;
 
     throbber.advance(throb_speed);
     wobbler.advance(wobble_speed, wobble_phase_offset);
-    auto x = throb_depth * throbber.x() + wobble_depth * wobbler.x();
-    auto y = throb_depth * throbber.y() + wobble_depth * wobbler.y();
+    auto x = throb_depth*throbber.x() + wobble_depth*wobbler.x();
+    auto y = throb_depth*throbber.y() + wobble_depth*wobbler.y();
 
-    outputs[X_OUT].value = 5.f * x_gain_in() * (x + x_offset());
-    outputs[Y_OUT].value = 5.f * y_gain_in() * (y + y_offset());
+    outputs[X_OUT].value = 5.f*x_gain_in()*(x + x_offset());
+    outputs[Y_OUT].value = 5.f*y_gain_in()*(y + y_offset());
   }
 
   enum ParameterIds {
@@ -90,7 +90,7 @@ private:
   }
 
   auto modulated(const ParameterIds &knob_param, const InputIds &cv_input) const
-      -> float {
+  -> float {
     auto rotation = params[knob_param].value;
     auto cv = inputs[cv_input].value;
     return Knob::modulated(rotation, cv);
@@ -114,7 +114,7 @@ private:
     auto rotation = modulated(THROB_SPEED, THROB_SPEED_CV, THROB_SPEED_AV);
     auto scaled = throb_speed_knob_range.scale(rotation);
     auto tapered = Sigmoid::inverse(scaled, speed_taper_curvature);
-    return -10.f * tapered * rack::engineGetSampleTime();
+    return -10.f*tapered*rack::engineGetSampleTime();
   }
 
   auto wobble_depth() const -> float {
@@ -192,65 +192,47 @@ struct XycloidWidget : public ModuleWidget<XycloidWidget, Xycloid> {
       : ModuleWidget(module, 11) {
     auto widget_right_edge = width();
 
-    auto left_x = widget_right_edge / 7.f;
+    auto left_x = widget_right_edge/7.f;
     auto right_x = widget_right_edge - left_x;
-    auto left_center_x = (right_x - left_x) / 3.f + left_x;
+    auto left_center_x = (right_x - left_x)/3.f + left_x;
     auto right_center_x = widget_right_edge - left_center_x;
 
-    auto top_row_y = 30.f;
-    auto row_spacing = 22.f;
+    auto y = 30.f;
+    auto dy = 22.f;
 
-    auto row = 0;
+    install(left_x, y, input_jack(Xycloid::WOBBLE_RATIO_CV));
+    install(left_center_x, y, tiny_knob(Xycloid::WOBBLE_RATIO_AV));
+    install(right_center_x, y, large_knob(Xycloid::WOBBLE_RATIO));
+    install(right_x, y, thumb_switch_2(Xycloid::WOBBLE_RATIO_TYPE, 1));
 
-    install_input(Xycloid::WOBBLE_RATIO_CV,
-                  {left_x, top_row_y + row * row_spacing});
-    install_tiny_knob(Xycloid::WOBBLE_RATIO_AV,
-                 {left_center_x, top_row_y + row * row_spacing});
-    install_large_knob(Xycloid::WOBBLE_RATIO,
-                 {right_center_x, top_row_y + row * row_spacing});
-    install_switch(Xycloid::WOBBLE_RATIO_TYPE,
-                   {right_x, top_row_y + row * row_spacing}, 1, 1);
+    y += dy;
+    install(left_x, y, input_jack(Xycloid::WOBBLE_DEPTH_CV));
+    install(left_center_x, y, tiny_knob(Xycloid::WOBBLE_DEPTH_AV));
+    install(right_center_x, y, large_knob(Xycloid::WOBBLE_DEPTH));
+    install(right_x, y, thumb_switch_3(Xycloid::WOBBLE_TYPE, 2));
 
-    row++;
-    install_input(Xycloid::WOBBLE_DEPTH_CV,
-                  {left_x, top_row_y + row * row_spacing});
-    install_tiny_knob(Xycloid::WOBBLE_DEPTH_AV,
-                 {left_center_x, top_row_y + row * row_spacing});
-    install_large_knob(Xycloid::WOBBLE_DEPTH,
-                 {right_center_x, top_row_y + row * row_spacing});
-    install_switch(Xycloid::WOBBLE_TYPE,
-                   {right_x, top_row_y + row * row_spacing}, 2, 2);
+    y += dy;
+    install(left_x, y, input_jack(Xycloid::THROB_SPEED_CV));
+    install(left_center_x, y, tiny_knob(Xycloid::THROB_SPEED_AV));
+    install(right_center_x, y, large_knob(Xycloid::THROB_SPEED, 0.65f));
+    install(right_x, y, small_knob(Xycloid::WOBBLE_PHASE));
 
-    row++;
-    install_input(Xycloid::THROB_SPEED_CV,
-                  {left_x, top_row_y + row * row_spacing});
-    install_tiny_knob(Xycloid::THROB_SPEED_AV,
-                 {left_center_x, top_row_y + row * row_spacing});
-    install_large_knob(Xycloid::THROB_SPEED,
-                 {right_center_x, top_row_y + row * row_spacing}, 0.65f);
-    install_small_knob(Xycloid::WOBBLE_PHASE,
-                 {right_x, top_row_y + row * row_spacing});
-
-    top_row_y = 82.f;
-    row_spacing = 15.f;
-    row = 0;
+    y = 82.f;
+    dy = 15.f;
 
     auto default_gain = Knob::gain_range.normalize(1.f);
-    row++;
-    install_input(Xycloid::X_GAIN_CV, {left_x, top_row_y + row * row_spacing});
-    install_small_knob(Xycloid::X_GAIN,
-                 {left_center_x, top_row_y + row * row_spacing}, default_gain);
-    install_switch(Xycloid::X_RANGE,
-                   {right_center_x, top_row_y + row * row_spacing});
-    install_output(Xycloid::X_OUT, {right_x, top_row_y + row * row_spacing});
 
-    row++;
-    install_input(Xycloid::Y_GAIN_CV, {left_x, top_row_y + row * row_spacing});
-    install_small_knob(Xycloid::Y_GAIN,
-                 {left_center_x, top_row_y + row * row_spacing}, default_gain);
-    install_switch(Xycloid::Y_RANGE,
-                   {right_center_x, top_row_y + row * row_spacing});
-    install_output(Xycloid::Y_OUT, {right_x, top_row_y + row * row_spacing});
+    y += dy;
+    install(left_x, y, input_jack(Xycloid::X_GAIN_CV));
+    install(left_center_x, y, small_knob(Xycloid::X_GAIN, default_gain));
+    install(right_center_x, y, thumb_switch_2(Xycloid::X_RANGE));
+    install(right_x, y, output_jack(Xycloid::X_OUT));
+
+    y += dy;
+    install(left_x, y, input_jack(Xycloid::Y_GAIN_CV));
+    install(left_center_x, y, small_knob(Xycloid::Y_GAIN, default_gain));
+    install(right_center_x, y, thumb_switch_2(Xycloid::Y_RANGE));
+    install(right_x, y, output_jack(Xycloid::Y_OUT));
   }
 
   void appendContextMenu(rack::Menu *menu) override {

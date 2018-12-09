@@ -44,32 +44,27 @@ struct SwaveWidget : public ModuleWidget<SwaveWidget, Swave> {
       : ModuleWidget(module, 4) {
     auto widget_right_edge = width();
 
-    auto center_x = widget_right_edge / 2.f;
+    auto x = widget_right_edge / 2.f;
 
-    auto top_row_y = 25.f;
-    auto row_spacing = 18.5f;
+    auto y = 25.f;
+    auto dy = 18.5f;
 
-    auto row = 0;
-    install_switch(Swave::SHAPE_SWITCH,
-                   {center_x, top_row_y + row * row_spacing}, 1, 1);
+    install(x, y, thumb_switch_2(Swave::SHAPE_SWITCH, 1));
 
-    row++;
-    install_large_knob(Swave::CURVE_KNOB,
-                 {center_x, top_row_y + row * row_spacing});
+    y += dy;
+    install(x, y, large_knob(Swave::CURVE_KNOB));
 
-    row++;
-    install_input(Swave::CURVE_CV, {center_x, top_row_y + row * row_spacing});
+    y += dy;
+    install(x, y, input_jack(Swave::CURVE_CV));
 
-    top_row_y = 82.f;
-    row_spacing = 15.f;
+    y = 82.f;
+    dy = 15.f;
 
-    row = 0;
+    y += dy;
+    install(x, y, input_jack(Swave::MAIN_IN));
 
-    row++;
-    install_input(Swave::MAIN_IN, {center_x, top_row_y + row * row_spacing});
-
-    row++;
-    install_output(Swave::MAIN_OUT, {center_x, top_row_y + row * row_spacing});
+    y += dy;
+    install(x, y, output_jack(Swave::MAIN_OUT));
   }
 };
 } // namespace DHE

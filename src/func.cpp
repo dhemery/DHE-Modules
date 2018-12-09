@@ -153,16 +153,16 @@ struct FuncWidget : public ModuleWidget<FuncWidget, Func> {
     auto row_spacing = (bottom - top)/(row_count - 1);
     auto port_offset = 1.25f;
 
-    using Position = rack::Vec;
-    auto in_port_center = Position{x, top+port_offset};
-    auto operator_switch_center = Position{x, top + row_spacing*1};
-    auto knob_center = Position{x, top + row_spacing*2};
-    auto range_switch_center = Position{x, top + row_spacing*3};
-    auto out_port_center = Position{x, top + row_spacing*5 + port_offset};
+    auto in_port_y = top+port_offset;
+    auto knob_y = top + row_spacing*2;
+    auto out_port_y = top + row_spacing*5 + port_offset;
 
-    install_input(Func::IN, in_port_center);
-    install_large_knob(Func::KNOB, knob_center);
-    install_output(Func::OUT, out_port_center);
+    auto operator_switch_center = rack::Vec{x, top + row_spacing*1};
+    auto range_switch_center = rack::Vec{x, top + row_spacing*3};
+
+    install(x, in_port_y, input_jack(Func::IN));
+    install(x, knob_y, large_knob(Func::KNOB));
+    install(x, out_port_y, output_jack(Func::OUT));
 
     auto multiplication_range_switch = create_toggle("mult", Func::MULTIPLICATION_RANGE_SWITCH, range_switch_center, 3, 2);
     addParam(multiplication_range_switch);
@@ -194,21 +194,16 @@ struct Func6Widget : public ModuleWidget<Func6Widget, Func6> {
     auto row_spacing = (bottom - top)/(row_count - 1);
     auto port_offset = 1.25f;
 
-    using Position = rack::Vec;
-
     for (auto row = 0; row < row_count; row++) {
       auto y = top + row*row_spacing;
       auto port_y = y + port_offset;
 
-      auto in_port_center = Position{in_port_x, port_y};
-      auto operator_switch_center = Position{operator_switch_x, y};
-      auto knob_center = Position{knob_x, y};
-      auto range_switch_center = Position{range_switch_x, y};
-      auto out_port_center = Position{out_port_x, port_y};
+      auto operator_switch_center = rack::Vec{operator_switch_x, y};
+      auto range_switch_center = rack::Vec{range_switch_x, y};
 
-      install_input(Func6::IN + row, in_port_center);
-      install_large_knob(Func6::KNOB + row, knob_center);
-      install_output(Func6::OUT + row, out_port_center);
+      install(in_port_x, port_y, input_jack(Func6::IN + row));
+      install(knob_x, y, large_knob(Func6::KNOB + row));
+      install(out_port_x, port_y, output_jack(Func6::OUT + row));
 
       auto multiplication_range_switch = create_toggle("mult", Func6::MULTIPLICATION_RANGE_SWITCH + row, range_switch_center, 3, 2);
       addParam(multiplication_range_switch);

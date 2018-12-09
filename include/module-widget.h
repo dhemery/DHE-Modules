@@ -15,6 +15,9 @@ inline void moveTo(rack::Rect &box, rack::Vec center) {
   box.pos = center.minus(box.size.mult(0.5f));
 }
 
+inline void moveTo(float x, float y, rack::Widget *widget) {
+  moveTo(widget->box, rack::mm2px({x, y}));
+}
 
 struct BooleanOption : rack::MenuItem {
   template<typename Setter, typename Getter>
@@ -35,7 +38,6 @@ struct BooleanOption : rack::MenuItem {
 };
 
 struct ButtonWidget : rack::SVGSwitch, rack::MomentarySwitch {};
-struct KnobWidget : rack::RoundKnob {};
 struct SwitchWidget : rack::SVGSwitch, rack::ToggleSwitch {};
 
 template<typename TDisplay>
@@ -46,10 +48,8 @@ public:
     addFrame(TDisplay::svg("switch-2-low"));
   }
 
-  static auto create(rack::Module *module, int index, rack::Vec center, int initial_position = 0) -> ThumbSwitch2 * {
-    auto switch_widget = rack::ParamWidget::create<ThumbSwitch2<TDisplay>>({0, 0}, module, index, 0, 1, initial_position);
-    moveTo(switch_widget->box, rack::mm2px(center));
-    return switch_widget;
+  static auto create(rack::Module *module, int index, int initial_position = 0) -> ThumbSwitch2 * {
+    return rack::ParamWidget::create<ThumbSwitch2<TDisplay>>({0, 0}, module, index, 0, 1, initial_position);
   }
 
 };
@@ -63,10 +63,8 @@ public:
     addFrame(TDisplay::svg("switch-3-high"));
   }
 
-  static auto create(rack::Module *module, int index, rack::Vec center, int initial_position = 0) -> ThumbSwitch3 * {
-    auto switch_widget = rack::ParamWidget::create<ThumbSwitch3<TDisplay>>({0, 0}, module, index, 0, 2, initial_position);
-    moveTo(switch_widget->box, rack::mm2px(center));
-    return switch_widget;
+  static auto create(rack::Module *module, int index, int initial_position = 0) -> ThumbSwitch3 * {
+    return rack::ParamWidget::create<ThumbSwitch3<TDisplay>>({0, 0}, module, index, 0, 2, initial_position);
   }
 };
 
@@ -78,49 +76,50 @@ public:
     background->wrap();
     box.size = background->box.size;
   }
+};
 
-  static auto create_input(rack::Module *module, int index, rack::Vec center) -> Jack * {
-    return create(module, index, rack::Port::PortType::INPUT, center);
+template<typename TDisplay>
+class InputJack : public Jack<TDisplay> {
+public:
+  static auto create(rack::Module *module, int index) -> InputJack * {
+    return rack::Port::create<InputJack<TDisplay>>({0, 0}, rack::Port::PortType::INPUT, module, index);
+  }
+};
+
+template<typename TDisplay>
+class OutputJack : public Jack<TDisplay> {
+public:
+  static auto create(rack::Module *module, int index) -> OutputJack * {
+    return rack::Port::create<OutputJack<TDisplay>>({0, 0}, rack::Port::PortType::OUTPUT, module, index);
   }
 
-  static auto create_output(rack::Module *module, int index, rack::Vec center) -> Jack * {
-    return create(module, index, rack::Port::PortType::OUTPUT, center);
-  }
-
-private:
-  static auto create(rack::Module *module, int index, rack::Port::PortType type, rack::Vec center) -> Jack * {
-    auto port_widget = rack::Port::create<Jack<TDisplay>>({0, 0}, type, module, index);
-    moveTo(port_widget->box, rack::mm2px(center));
-    return port_widget;
-  }
 };
 
 template<typename TDisplay>
 class Potentiometer : public rack::RoundKnob {
 public:
-  static auto create_tiny(rack::Module *module, int index, rack::Vec center, float initial) -> Potentiometer * {
-    return create(module, "knob-tiny", index, center, initial);
+  static auto create_tiny(rack::Module *module, int index, float initial) -> Potentiometer * {
+    return create(module, "knob-tiny", index, initial);
   }
 
-  static auto create_small(rack::Module *module, int index, rack::Vec center, float initial) -> Potentiometer * {
-    return create(module, "knob-small", index, center, initial);
+  static auto create_small(rack::Module *module, int index, float initial) -> Potentiometer * {
+    return create(module, "knob-small", index, initial);
   }
 
-  static auto create_medium(rack::Module *module, int index, rack::Vec center, float initial) -> Potentiometer * {
-    return create(module, "knob-medium", index, center, initial);
+  static auto create_medium(rack::Module *module, int index, float initial) -> Potentiometer * {
+    return create(module, "knob-medium", index, initial);
   }
 
-  static auto create_large(rack::Module *module, int index, rack::Vec center, float initial) -> Potentiometer * {
-    return create(module, "knob-large", index, center, initial);
+  static auto create_large(rack::Module *module, int index, float initial) -> Potentiometer * {
+    return create(module, "knob-large", index, initial);
   }
 
 private:
-  static auto create(rack::Module *module, std::string file, int index, rack::Vec center, float initial) -> Potentiometer * {
+  static auto create(rack::Module *module, std::string file, int index, float initial) -> Potentiometer * {
     auto potentiometer = rack::ParamWidget::create<Potentiometer<TDisplay>>(
         {0, 0}, module, index, 0.f, 1.f, initial);
     potentiometer->setSVG(TDisplay::svg(file));
     potentiometer->shadow->opacity = 0.f;
-    moveTo(potentiometer->box, rack::mm2px(center));
     return potentiometer;
   }
 };
@@ -168,41 +167,55 @@ protected:
 
   auto width() const -> float { return box.size.x*MM_PER_IN/SVG_DPI; }
 
+  void install(float x, float y, InputJack<TDisplay> *jack) {
+    moveTo(x, y, jack);
+    addInput(jack);
+  }
+
+  void install(float x, float y, rack::ParamWidget *widget) {
+    moveTo(x, y, widget);
+    addParam(widget);
+  }
+
+  void install(float x, float y, OutputJack<TDisplay> *jack) {
+    moveTo(x, y, jack);
+    addOutput(jack);
+  }
+
   void install_button(const std::string &type, int index, rack::Vec center) {
     addParam(create_button(type, index, center));
   }
 
-  void install_input(int index, rack::Vec center) {
-    addInput(Jack<TDisplay>::create_input(module, index, center));
+  auto input_jack(int index) const -> InputJack<TDisplay> * {
+    return InputJack<TDisplay>::create(module, index);
   }
 
-  void install_tiny_knob(int index, rack::Vec center,
-                           float initial_rotation = 0.5f) {
-    addParam(Potentiometer<TDisplay>::create_tiny(module, index, center, initial_rotation));
+  auto output_jack(int index) const -> OutputJack<TDisplay> * {
+    return OutputJack<TDisplay>::create(module, index);
   }
 
-  void install_small_knob(int index, rack::Vec center,
-                           float initial_rotation = 0.5f) {
-    addParam(Potentiometer<TDisplay>::create_small(module, index, center, initial_rotation));
+  auto thumb_switch_2(int index, int initial = 0) const -> ThumbSwitch2<TDisplay> * {
+    return ThumbSwitch2<TDisplay>::create(module, index, initial);
   }
 
-  void install_medium_knob(int index, rack::Vec center,
-                           float initial_rotation = 0.5f) {
-    addParam(Potentiometer<TDisplay>::create_medium(module, index, center, initial_rotation));
+  auto thumb_switch_3(int index, int initial = 0) const -> ThumbSwitch3<TDisplay> * {
+    return ThumbSwitch3<TDisplay>::create(module, index, initial);
   }
 
-  void install_large_knob(int index, rack::Vec center,
-                           float initial_rotation = 0.5f) {
-    addParam(Potentiometer<TDisplay>::create_large(module, index, center, initial_rotation));
+  auto tiny_knob(int index, float initial_rotation = 0.5f) const -> Potentiometer <TDisplay> * {
+    return Potentiometer<TDisplay>::create_tiny(module, index, initial_rotation);
   }
 
-  void install_output(int index, rack::Vec center) {
-    addOutput(Jack<TDisplay>::create_output(module, index, center));
+  auto small_knob(int index, float initial_rotation = 0.5f) const -> Potentiometer <TDisplay> * {
+    return Potentiometer<TDisplay>::create_small(module, index, initial_rotation);
   }
 
-  void install_switch(int index, rack::Vec center, int max_position = 1,
-                      int initial_position = 0) {
-    addParam(create_switch(index, center, max_position, initial_position));
+  auto medium_knob(int index, float initial_rotation = 0.5f) const -> Potentiometer <TDisplay> * {
+    return Potentiometer<TDisplay>::create_medium(module, index, initial_rotation);
+  }
+
+  auto large_knob(int index, float initial_rotation = 0.5f) const -> Potentiometer <TDisplay> * {
+    return Potentiometer<TDisplay>::create_large(module, index, initial_rotation);
   }
 
   void install_screws() {

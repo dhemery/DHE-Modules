@@ -159,53 +159,42 @@ struct BoosterStageWidget : public ModuleWidget<BoosterStageWidget, BoosterStage
     auto center_left_x = left_x + button_port_distance;
     auto center_right_x = right_x - button_port_distance;
 
-    auto top_row_y = 25.f;
-    auto row_spacing = 18.5f;
+    auto y = 25.f;
+    auto dy = 18.5f;
 
-    auto row = 0;
-    install_input(BoosterStage::LEVEL_CV, {left_x, top_row_y + row * row_spacing});
-    install_large_knob(BoosterStage::LEVEL_KNOB,
-                 {center_x, top_row_y + row * row_spacing});
-    addParam(ThumbSwitch2<BoosterStageWidget>::create(module, BoosterStage::LEVEL_RANGE_SWITCH,
-                   {right_x, top_row_y + row * row_spacing}, 1));
+    install(left_x, y, input_jack(BoosterStage::LEVEL_CV));
+    install(center_x, y, large_knob(BoosterStage::LEVEL_KNOB));
+    install(right_x, y, thumb_switch_2(BoosterStage::LEVEL_RANGE_SWITCH, 1));
 
-    row++;
-    install_input(BoosterStage::CURVE_CV, {left_x, top_row_y + row * row_spacing});
-    install_large_knob(BoosterStage::CURVE_KNOB,
-                 {center_x, top_row_y + row * row_spacing});
-    addParam(ThumbSwitch2<BoosterStageWidget>::create(module, BoosterStage::SHAPE_SWITCH,
-                   {right_x, top_row_y + row * row_spacing}));
+    y += dy;
+    install(left_x, y, input_jack(BoosterStage::CURVE_CV));
+    install(center_x, y, large_knob(BoosterStage::CURVE_KNOB));
+    install(right_x, y, thumb_switch_2(BoosterStage::SHAPE_SWITCH));
 
-    row++;
-    install_input(BoosterStage::DURATION_CV, {left_x, top_row_y + row * row_spacing});
-    install_large_knob(BoosterStage::DURATION_KNOB,
-                 {center_x, top_row_y + row * row_spacing});
-    addParam(ThumbSwitch3<BoosterStageWidget>::create(module, BoosterStage::DURATION_RANGE_SWITCH,
-                   {right_x, top_row_y + row * row_spacing}, 1));
+    y += dy;
+    install(left_x, y, input_jack(BoosterStage::DURATION_CV));
+    install(center_x, y, large_knob(BoosterStage::DURATION_KNOB));
+    install(right_x, y, thumb_switch_3(BoosterStage::DURATION_RANGE_SWITCH, 1));
 
-    top_row_y = 82.f;
-    row_spacing = 15.f;
+    y = 82.f;
+    dy = 15.f;
 
-    row = 0;
-    install_input(BoosterStage::DEFER_IN, {left_x, top_row_y + row * row_spacing});
-    install_button("normal", BoosterStage::DEFER_BUTTON,
-                   {center_left_x, top_row_y + row * row_spacing});
-    install_button("reverse", BoosterStage::ACTIVE_BUTTON,
-                   {center_right_x, top_row_y + row * row_spacing});
-    install_output(BoosterStage::ACTIVE_OUT, {right_x, top_row_y + row * row_spacing});
+    install(left_x, y, input_jack(BoosterStage::DEFER_IN));
+    install_button("normal", BoosterStage::DEFER_BUTTON, {center_left_x, y});
+    install_button("reverse", BoosterStage::ACTIVE_BUTTON, {center_right_x, y});
+    install(right_x, y, output_jack(BoosterStage::ACTIVE_OUT));
 
-    row++;
-    install_input(BoosterStage::TRIGGER_IN, {left_x, top_row_y + row * row_spacing});
-    install_button("normal", BoosterStage::TRIGGER_BUTTON,
-                   {center_left_x, top_row_y + row * row_spacing});
-    install_button("reverse", BoosterStage::EOC_BUTTON,
-                   {center_right_x, top_row_y + row * row_spacing});
-    install_output(BoosterStage::EOC_OUT, {right_x, top_row_y + row * row_spacing});
+    y += dy;
+    install(left_x, y, input_jack(BoosterStage::TRIGGER_IN));
+    install_button("normal", BoosterStage::TRIGGER_BUTTON, {center_left_x, y});
+    install_button("reverse", BoosterStage::EOC_BUTTON, {center_right_x, y});
+    install(right_x, y, output_jack(BoosterStage::EOC_OUT));
 
-    row++;
-    install_input(BoosterStage::ENVELOPE_IN, {left_x, top_row_y + row * row_spacing});
-    install_output(BoosterStage::MAIN_OUT, {right_x, top_row_y + row * row_spacing});
+    y += dy;
+    install(left_x, y, input_jack(BoosterStage::ENVELOPE_IN));
+    install(right_x, y, output_jack(BoosterStage::MAIN_OUT));
   }
+
 };
 } // namespace DHE
 rack::Model *modelBoosterStage =

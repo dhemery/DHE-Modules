@@ -171,39 +171,31 @@ struct HostageWidget : public ModuleWidget<HostageWidget, Hostage> {
     auto center_x = widget_right_edge / 2.f;
     auto right_x = widget_right_edge - left_x;
 
-    auto top_row_y = 25.f;
-    auto row_spacing = 18.5f;
+    auto y = 25.f;
+    auto dy = 18.5f;
 
-    auto row = 0;
-    install_switch(Hostage::SUSTAIN_MODE_SWITCH,
-                   {center_x, top_row_y + row * row_spacing});
+    install(center_x, y, thumb_switch_2(Hostage::SUSTAIN_MODE_SWITCH));
 
-    row++;
-    install_input(Hostage::DURATION_CV,
-                  {left_x, top_row_y + row * row_spacing});
-    install_switch(Hostage::DURATION_RANGE_SWITCH,
-                   {right_x, top_row_y + row * row_spacing}, 2, 1);
+    y += dy;
+    install(left_x, y, input_jack(Hostage::DURATION_CV));
+    install(right_x, y, thumb_switch_3(Hostage::DURATION_RANGE_SWITCH, 1));
 
-    row++;
-    install_large_knob(Hostage::DURATION_KNOB,
-                 {center_x, top_row_y + row * row_spacing});
+    y += dy;
+    install(center_x, y, large_knob(Hostage::DURATION_KNOB));
 
-    top_row_y = 82.f;
-    row_spacing = 15.f;
+    y = 82.f;
+    dy = 15.f;
 
-    row = 0;
-    install_input(Hostage::DEFER_IN, {left_x, top_row_y + row * row_spacing});
-    install_output(Hostage::ACTIVE_OUT,
-                   {right_x, top_row_y + row * row_spacing});
+    install(left_x, y, input_jack(Hostage::DEFER_IN));
+    install(right_x, y, output_jack(Hostage::ACTIVE_OUT));
 
-    row++;
-    install_input(Hostage::SUSTAIN_GATE_IN,
-                  {left_x, top_row_y + row * row_spacing});
-    install_output(Hostage::EOC_OUT, {right_x, top_row_y + row * row_spacing});
+    y += dy;
+    install(left_x, y, input_jack(Hostage::SUSTAIN_GATE_IN));
+    install(right_x, y, output_jack(Hostage::EOC_OUT));
 
-    row++;
-    install_input(Hostage::MAIN_IN, {left_x, top_row_y + row * row_spacing});
-    install_output(Hostage::MAIN_OUT, {right_x, top_row_y + row * row_spacing});
+    y += dy;
+    install(left_x, y, input_jack(Hostage::MAIN_IN));
+    install(right_x, y, output_jack(Hostage::MAIN_OUT));
   }
 };
 } // namespace DHE

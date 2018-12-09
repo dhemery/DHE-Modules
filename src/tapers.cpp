@@ -89,34 +89,35 @@ struct TapersWidget : public ModuleWidget<TapersWidget, Tapers> {
     auto right_x = widget_right_edge - left_x;
 
     auto y = 24.f;
-    auto delta_y = 16.f;
+    auto dy = 16.f;
     auto panel_buffer = 4.f;
 
-    install_input(Tapers::LEVEL_1_CV, {left_x, y});
-    install_tiny_knob(Tapers::LEVEL_1_AV, {center_x, y});
-    install_medium_knob(Tapers::LEVEL_1_KNOB, {right_x, y});
-    y += delta_y;
-    install_input(Tapers::CURVE_1_CV, {left_x, y});
-    install_tiny_knob(Tapers::CURVE_1_AV, {center_x, y});
-    install_medium_knob(Tapers::CURVE_1_KNOB, {right_x, y});
-    y += delta_y;
-    install_switch(Tapers::SHAPE_1_SWITCH, {left_x, y});
-    install_switch(Tapers::RANGE_1_SWITCH, {center_x, y});
-    install_output(Tapers::OUT_1, {right_x, y});
+    install(left_x, y, input_jack(Tapers::LEVEL_1_CV));
+    install(center_x, y, tiny_knob(Tapers::LEVEL_1_AV));
+    install(center_x, y, medium_knob(Tapers::LEVEL_1_KNOB));
+    y += dy;
+    install(left_x, y, input_jack(Tapers::CURVE_1_CV));
+    install(center_x, y, tiny_knob(Tapers::CURVE_1_AV));
+    install(center_x, y, medium_knob(Tapers::CURVE_1_KNOB));
+    y += dy;
+    install(left_x, y, thumb_switch_2(Tapers::SHAPE_1_SWITCH));
+    install(center_x, y, thumb_switch_2(Tapers::RANGE_1_SWITCH));
+    install(right_x, y, output_jack(Tapers::OUT_1));
 
-    y += delta_y + panel_buffer;
+    y += dy + panel_buffer;
 
-    install_input(Tapers::LEVEL_2_CV, {left_x, y});
-    install_tiny_knob(Tapers::LEVEL_2_AV, {center_x, y});
-    install_medium_knob(Tapers::LEVEL_2_KNOB, {right_x, y});
-    y += delta_y;
-    install_input(Tapers::CURVE_2_CV, {left_x, y});
-    install_tiny_knob(Tapers::CURVE_2_AV, {center_x, y});
-    install_medium_knob(Tapers::CURVE_2_KNOB, {right_x, y});
-    y += delta_y;
-    install_switch(Tapers::SHAPE_2_SWITCH, {left_x, y});
-    install_switch(Tapers::RANGE_2_SWITCH, {center_x, y});
-    install_output(Tapers::OUT_2, {right_x, y});
+    install(left_x, y, input_jack(Tapers::LEVEL_2_CV));
+    install(center_x, y, tiny_knob(Tapers::LEVEL_2_AV));
+    install(center_x, y, medium_knob(Tapers::LEVEL_2_KNOB));
+    y += dy;
+    install(left_x, y, input_jack(Tapers::CURVE_2_CV));
+    install(center_x, y, tiny_knob(Tapers::CURVE_2_AV));
+    install(center_x, y, medium_knob(Tapers::CURVE_2_KNOB));
+    y += dy;
+    install(left_x, y, thumb_switch_2(Tapers::SHAPE_2_SWITCH));
+    install(center_x, y, thumb_switch_2(Tapers::RANGE_2_SWITCH));
+    install(right_x, y, output_jack(Tapers::OUT_2));
+
   }
 };
 } // namespace DHE

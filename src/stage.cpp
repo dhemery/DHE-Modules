@@ -116,35 +116,30 @@ struct StageWidget : public ModuleWidget<StageWidget, Stage> {
     auto center_x = widget_right_edge / 2.f;
     auto right_x = widget_right_edge - left_x;
 
-    auto top_row_y = 25.f;
-    auto row_spacing = 18.5f;
+    auto y = 25.f;
+    auto dy = 18.5f;
 
-    auto row = 0;
-    install_large_knob(Stage::LEVEL_KNOB,
-                 {center_x, top_row_y + row * row_spacing});
+    install(center_x, y, large_knob(Stage::LEVEL_KNOB));
 
-    row++;
-    install_large_knob(Stage::CURVE_KNOB,
-                 {center_x, top_row_y + row * row_spacing});
+    y += dy;
+    install(center_x, y, large_knob(Stage::CURVE_KNOB));
 
-    row++;
-    install_large_knob(Stage::DURATION_KNOB,
-                 {center_x, top_row_y + row * row_spacing});
+    y += dy;
+    install(center_x, y, large_knob(Stage::DURATION_KNOB));
 
-    top_row_y = 82.f;
-    row_spacing = 15.f;
+    y = 82.f;
+    dy = 15.f;
 
-    row = 0;
-    install_input(Stage::DEFER_IN, {left_x, top_row_y + row * row_spacing});
-    install_output(Stage::ACTIVE_OUT, {right_x, top_row_y + row * row_spacing});
+    install(left_x, y, input_jack(Stage::DEFER_IN));
+    install(right_x, y, output_jack(Stage::ACTIVE_OUT));
 
-    row++;
-    install_input(Stage::TRIGGER_IN, {left_x, top_row_y + row * row_spacing});
-    install_output(Stage::EOC_OUT, {right_x, top_row_y + row * row_spacing});
+    y += dy;
+    install(left_x, y, input_jack(Stage::TRIGGER_IN));
+    install(right_x, y, output_jack(Stage::EOC_OUT));
 
-    row++;
-    install_input(Stage::ENVELOPE_IN, {left_x, top_row_y + row * row_spacing});
-    install_output(Stage::MAIN_OUT, {right_x, top_row_y + row * row_spacing});
+    y += dy;
+    install(left_x, y, input_jack(Stage::ENVELOPE_IN));
+    install(right_x, y, output_jack(Stage::MAIN_OUT));
   }
 };
 } // namespace DHE

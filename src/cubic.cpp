@@ -80,45 +80,32 @@ struct CubicWidget : public ModuleWidget<CubicWidget, Cubic> {
     auto left_x = width() / 4.f + 0.333333f;
     auto right_x = widget_right_edge - left_x;
 
-    auto top_row_y = 20.f;
-    auto row_spacing = 15.f;
+    auto y = 20.f;
+    auto dy = 15.f;
 
-    auto row = 0;
-    install_input(Cubic::A_CV, {left_x, top_row_y + row * row_spacing});
-    install_small_knob(Cubic::A_KNOB,
-                 {right_x, top_row_y + row * row_spacing});
+    install(left_x, y, input_jack(Cubic::A_CV));
+    install(right_x, y, small_knob(Cubic::A_KNOB));
 
-    row++;
-    install_input(Cubic::B_CV, {left_x, top_row_y + row * row_spacing});
-    install_small_knob(Cubic::B_KNOB,
-                 {right_x, top_row_y + row * row_spacing});
+    y += dy;
+    install(left_x, y, input_jack(Cubic::B_CV));
+    install(right_x, y, small_knob(Cubic::B_KNOB));
 
-    row++;
-    install_input(Cubic::C_CV, {left_x, top_row_y + row * row_spacing});
-    install_small_knob(Cubic::C_KNOB,
-                 {right_x, top_row_y + row * row_spacing});
+    y += dy;
+    install(left_x, y, input_jack(Cubic::C_CV));
+    install(right_x, y, small_knob(Cubic::C_KNOB));
 
-    row++;
-    install_input(Cubic::D_CV, {left_x, top_row_y + row * row_spacing});
-    install_small_knob(Cubic::D_KNOB,
-                 {right_x, top_row_y + row * row_spacing});
+    y += dy;
+    install(left_x, y, input_jack(Cubic::D_CV));
+    install(right_x, y, small_knob(Cubic::D_KNOB));
 
-    top_row_y = 82.f;
-    row = 0;
-    install_small_knob(Cubic::INPUT_GAIN_KNOB,
-                 {left_x, top_row_y + row * row_spacing});
-    install_small_knob(Cubic::OUTPUT_GAIN_KNOB,
-                 {right_x, top_row_y + row * row_spacing});
+    y = 82.f;
+    install(left_x, y, small_knob(Cubic::INPUT_GAIN_KNOB));
+    install(right_x, y, small_knob(Cubic::OUTPUT_GAIN_KNOB));
 
-    row++;
-    install_input(Cubic::INPUT_GAIN_CV,
-                  {left_x, top_row_y + row * row_spacing});
-    install_input(Cubic::OUTPUT_GAIN_CV,
-                  {right_x, top_row_y + row * row_spacing});
+    y += dy;
+    install(left_x, y, input_jack(Cubic::MAIN_IN));
+    install(right_x, y, output_jack(Cubic::MAIN_OUT));
 
-    row++;
-    install_input(Cubic::MAIN_IN, {left_x, top_row_y + row * row_spacing});
-    install_output(Cubic::MAIN_OUT, {right_x, top_row_y + row * row_spacing});
   }
 };
 } // namespace DHE
