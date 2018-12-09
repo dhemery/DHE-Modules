@@ -39,6 +39,23 @@ struct KnobWidget : rack::RoundKnob {};
 struct PortWidget : rack::SVGPort {};
 struct SwitchWidget : rack::SVGSwitch, rack::ToggleSwitch {};
 
+template<typename TDisplay>
+class ThumbSwitch2 : public rack::SVGSwitch, public rack::ToggleSwitch {
+public:
+  ThumbSwitch2() {
+    auto file_name_prefix = TDisplay::resource_prefix() + "/switch-2-";
+    addFrame(rack::SVG::load(rack::assetPlugin(plugin, file_name_prefix + "low.svg")));
+    addFrame(rack::SVG::load(rack::assetPlugin(plugin, file_name_prefix + "high.svg")));
+  }
+
+  static auto create(rack::Module *module, int index, rack::Vec center, int initial_position = 0) -> ThumbSwitch2 * {
+    auto switch_widget = rack::ParamWidget::create<ThumbSwitch2<TDisplay>>({0, 0}, module, index, 0, 1, initial_position);
+    moveTo(switch_widget->box, rack::mm2px(center));
+    return switch_widget;
+  }
+
+};
+
 template<typename TDisplay, typename TModule>
 class ModuleWidget : public rack::ModuleWidget {
 

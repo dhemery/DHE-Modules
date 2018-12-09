@@ -167,16 +167,16 @@ struct BoosterStageWidget : public ModuleWidget<BoosterStageWidget, BoosterStage
                   {left_x, top_row_y + row * row_spacing});
     install_knob("large", BoosterStage::LEVEL_KNOB,
                  {center_x, top_row_y + row * row_spacing});
-    install_switch(BoosterStage::LEVEL_RANGE_SWITCH,
-                   {right_x, top_row_y + row * row_spacing}, 1, 1);
+    addParam(ThumbSwitch2<BoosterStageWidget>::create(module, BoosterStage::LEVEL_RANGE_SWITCH,
+                   {right_x, top_row_y + row * row_spacing}, 1));
 
     row++;
     install_input(BoosterStage::CURVE_CV,
                   {left_x, top_row_y + row * row_spacing});
     install_knob("large", BoosterStage::CURVE_KNOB,
                  {center_x, top_row_y + row * row_spacing});
-    install_switch(BoosterStage::SHAPE_SWITCH,
-                   {right_x, top_row_y + row * row_spacing});
+    addParam(ThumbSwitch2<BoosterStageWidget>::create(module, BoosterStage::SHAPE_SWITCH,
+                   {right_x, top_row_y + row * row_spacing}));
 
     row++;
     install_input(BoosterStage::DURATION_CV,
