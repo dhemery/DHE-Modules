@@ -183,8 +183,8 @@ struct BoosterStageWidget : public ModuleWidget<BoosterStageWidget, BoosterStage
                   {left_x, top_row_y + row * row_spacing});
     install_knob("large", BoosterStage::DURATION_KNOB,
                  {center_x, top_row_y + row * row_spacing});
-    install_switch(BoosterStage::DURATION_RANGE_SWITCH,
-                   {right_x, top_row_y + row * row_spacing}, 2, 1);
+    addParam(ThumbSwitch3<BoosterStageWidget>::create(module, BoosterStage::DURATION_RANGE_SWITCH,
+                   {right_x, top_row_y + row * row_spacing}, 1));
 
     top_row_y = 82.f;
     row_spacing = 15.f;

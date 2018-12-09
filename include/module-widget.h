@@ -56,6 +56,23 @@ public:
 
 };
 
+template<typename TDisplay>
+class ThumbSwitch3 : public rack::SVGSwitch, public rack::ToggleSwitch {
+public:
+  ThumbSwitch3() {
+    auto file_name_prefix = TDisplay::resource_prefix() + "/switch-3-";
+    addFrame(rack::SVG::load(rack::assetPlugin(plugin, file_name_prefix + "low.svg")));
+    addFrame(rack::SVG::load(rack::assetPlugin(plugin, file_name_prefix + "mid.svg")));
+    addFrame(rack::SVG::load(rack::assetPlugin(plugin, file_name_prefix + "high.svg")));
+  }
+
+  static auto create(rack::Module *module, int index, rack::Vec center, int initial_position = 0) -> ThumbSwitch3 * {
+    auto switch_widget = rack::ParamWidget::create<ThumbSwitch3<TDisplay>>({0, 0}, module, index, 0, 2, initial_position);
+    moveTo(switch_widget->box, rack::mm2px(center));
+    return switch_widget;
+  }
+};
+
 template<typename TDisplay, typename TModule>
 class ModuleWidget : public rack::ModuleWidget {
 
