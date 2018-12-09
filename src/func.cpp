@@ -141,6 +141,8 @@ struct FuncWidget : public ModuleWidget {
   static constexpr auto name = "func";
   explicit FuncWidget(rack::Module *module)
       : ModuleWidget(module, 3, name) {
+
+
     auto widget_right_edge = width();
 
     auto x = widget_right_edge/2.f;
@@ -151,23 +153,24 @@ struct FuncWidget : public ModuleWidget {
     auto row_spacing = (bottom - top)/(row_count - 1);
     auto port_offset = 1.25f;
 
-    auto in_port_y = top;
-    auto operator_switch_y = top + row_spacing*1;
-    auto knob_y = top + row_spacing*2;
-    auto range_switch_y = top + row_spacing*3;
-    auto out_port_y = top + row_spacing*(row_count - 1) + port_offset;
+    using Position = rack::Vec;
+    auto in_port_center = Position{x, top+port_offset};
+    auto operator_switch_center = Position{x, top + row_spacing*1};
+    auto knob_center = Position{x, top + row_spacing*2};
+    auto range_switch_center = Position{x, top + row_spacing*3};
+    auto out_port_center = Position{x, top + row_spacing*5 + port_offset};
 
-    install_input(Func::IN, {x, in_port_y + port_offset});
-    install_knob("large", Func::KNOB, {x, knob_y});
-    install_output(Func::OUT, {x, out_port_y});
+    install_input(Func::IN, in_port_center);
+    install_knob("large", Func::KNOB, knob_center);
+    install_output(Func::OUT, out_port_center);
 
-    auto multiplication_range_switch = create_toggle("mult", Func::MULTIPLICATION_RANGE_SWITCH, {x, range_switch_y}, 3, 2);
+    auto multiplication_range_switch = create_toggle("mult", Func::MULTIPLICATION_RANGE_SWITCH, range_switch_center, 3, 2);
     addParam(multiplication_range_switch);
 
-    auto addition_range_switch = create_toggle("add", Func::ADDITION_RANGE_SWITCH, {x, range_switch_y}, 3, 1);
+    auto addition_range_switch = create_toggle("add", Func::ADDITION_RANGE_SWITCH, range_switch_center, 3, 1);
     addParam(addition_range_switch);
 
-    auto operator_switch = OperatorSwitchWidget<FuncWidget>::create(module, module_name, Func::OPERATOR_SWITCH, {x, operator_switch_y}, addition_range_switch, multiplication_range_switch);
+    auto operator_switch = OperatorSwitchWidget<FuncWidget>::create(module, module_name, Func::OPERATOR_SWITCH, operator_switch_center, addition_range_switch, multiplication_range_switch);
     addParam(operator_switch);
   }
 };
@@ -190,20 +193,28 @@ struct FuncsWidget : public ModuleWidget {
     auto row_spacing = (bottom - top)/(row_count - 1);
     auto port_offset = 1.25f;
 
+    using Position = rack::Vec;
+
     for (auto row = 0; row < row_count; row++) {
       auto y = top + row*row_spacing;
 
-      install_input(Func6::IN + row, {in_port_x, y + port_offset});
-      install_knob("large", Func6::KNOB + row, {knob_x, y});
-      install_output(Func6::OUT + row, {out_port_x, y + port_offset});
+      auto in_port_center = Position{in_port_x, top+port_offset};
+      auto operator_switch_center = Position{operator_switch_x, y};
+      auto knob_center = Position{knob_x, y};
+      auto range_switch_center = Position{range_switch_x, y};
+      auto out_port_center = Position{out_port_x, y};
 
-      auto multiplication_range_switch = create_toggle("mult", Func6::MULTIPLICATION_RANGE_SWITCH + row, {range_switch_x, y}, 3, 2);
+      install_input(Func6::IN + row, in_port_center);
+      install_knob("large", Func6::KNOB + row, knob_center);
+      install_output(Func6::OUT + row, out_port_center);
+
+      auto multiplication_range_switch = create_toggle("mult", Func6::MULTIPLICATION_RANGE_SWITCH + row, range_switch_center, 3, 2);
       addParam(multiplication_range_switch);
 
-      auto addition_range_switch = create_toggle("add", Func6::ADDITION_RANGE_SWITCH + row, {range_switch_x, y}, 3, 1);
+      auto addition_range_switch = create_toggle("add", Func6::ADDITION_RANGE_SWITCH + row, range_switch_center, 3, 1);
       addParam(addition_range_switch);
 
-      auto operator_switch = OperatorSwitchWidget<FuncsWidget>::create(module, module_name, Func6::OPERATOR_SWITCH + row, {operator_switch_x, y}, addition_range_switch, multiplication_range_switch);
+      auto operator_switch = OperatorSwitchWidget<FuncsWidget>::create(module, module_name, Func6::OPERATOR_SWITCH + row, operator_switch_center, addition_range_switch, multiplication_range_switch);
       addParam(operator_switch);
     }
   }
