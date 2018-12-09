@@ -163,24 +163,21 @@ struct BoosterStageWidget : public ModuleWidget<BoosterStageWidget, BoosterStage
     auto row_spacing = 18.5f;
 
     auto row = 0;
-    install_input(BoosterStage::LEVEL_CV,
-                  {left_x, top_row_y + row * row_spacing});
+    install_input(BoosterStage::LEVEL_CV, {left_x, top_row_y + row * row_spacing});
     install_knob("large", BoosterStage::LEVEL_KNOB,
                  {center_x, top_row_y + row * row_spacing});
     addParam(ThumbSwitch2<BoosterStageWidget>::create(module, BoosterStage::LEVEL_RANGE_SWITCH,
                    {right_x, top_row_y + row * row_spacing}, 1));
 
     row++;
-    install_input(BoosterStage::CURVE_CV,
-                  {left_x, top_row_y + row * row_spacing});
+    install_input(BoosterStage::CURVE_CV, {left_x, top_row_y + row * row_spacing});
     install_knob("large", BoosterStage::CURVE_KNOB,
                  {center_x, top_row_y + row * row_spacing});
     addParam(ThumbSwitch2<BoosterStageWidget>::create(module, BoosterStage::SHAPE_SWITCH,
                    {right_x, top_row_y + row * row_spacing}));
 
     row++;
-    install_input(BoosterStage::DURATION_CV,
-                  {left_x, top_row_y + row * row_spacing});
+    install_input(BoosterStage::DURATION_CV, {left_x, top_row_y + row * row_spacing});
     install_knob("large", BoosterStage::DURATION_KNOB,
                  {center_x, top_row_y + row * row_spacing});
     addParam(ThumbSwitch3<BoosterStageWidget>::create(module, BoosterStage::DURATION_RANGE_SWITCH,
@@ -190,30 +187,24 @@ struct BoosterStageWidget : public ModuleWidget<BoosterStageWidget, BoosterStage
     row_spacing = 15.f;
 
     row = 0;
-    install_input(BoosterStage::DEFER_IN,
-                  {left_x, top_row_y + row * row_spacing});
+    install_input(BoosterStage::DEFER_IN, {left_x, top_row_y + row * row_spacing});
     install_button("normal", BoosterStage::DEFER_BUTTON,
                    {center_left_x, top_row_y + row * row_spacing});
     install_button("reverse", BoosterStage::ACTIVE_BUTTON,
                    {center_right_x, top_row_y + row * row_spacing});
-    install_output(BoosterStage::ACTIVE_OUT,
-                   {right_x, top_row_y + row * row_spacing});
+    install_output(BoosterStage::ACTIVE_OUT, {right_x, top_row_y + row * row_spacing});
 
     row++;
-    install_input(BoosterStage::TRIGGER_IN,
-                  {left_x, top_row_y + row * row_spacing});
+    install_input(BoosterStage::TRIGGER_IN, {left_x, top_row_y + row * row_spacing});
     install_button("normal", BoosterStage::TRIGGER_BUTTON,
                    {center_left_x, top_row_y + row * row_spacing});
     install_button("reverse", BoosterStage::EOC_BUTTON,
                    {center_right_x, top_row_y + row * row_spacing});
-    install_output(BoosterStage::EOC_OUT,
-                   {right_x, top_row_y + row * row_spacing});
+    install_output(BoosterStage::EOC_OUT, {right_x, top_row_y + row * row_spacing});
 
     row++;
-    install_input(BoosterStage::ENVELOPE_IN,
-                  {left_x, top_row_y + row * row_spacing});
-    install_output(BoosterStage::MAIN_OUT,
-                   {right_x, top_row_y + row * row_spacing});
+    install_input(BoosterStage::ENVELOPE_IN, {left_x, top_row_y + row * row_spacing});
+    install_output(BoosterStage::MAIN_OUT, {right_x, top_row_y + row * row_spacing});
   }
 };
 } // namespace DHE

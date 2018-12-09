@@ -36,7 +36,6 @@ struct BooleanOption : rack::MenuItem {
 
 struct ButtonWidget : rack::SVGSwitch, rack::MomentarySwitch {};
 struct KnobWidget : rack::RoundKnob {};
-struct PortWidget : rack::SVGPort {};
 struct SwitchWidget : rack::SVGSwitch, rack::ToggleSwitch {};
 
 template<typename TDisplay>
@@ -68,6 +67,31 @@ public:
     auto switch_widget = rack::ParamWidget::create<ThumbSwitch3<TDisplay>>({0, 0}, module, index, 0, 2, initial_position);
     moveTo(switch_widget->box, rack::mm2px(center));
     return switch_widget;
+  }
+};
+
+template<typename TDisplay>
+class Jack : public rack::SVGPort {
+public:
+  Jack() {
+    background->svg = TDisplay::svg("port");
+    background->wrap();
+    box.size = background->box.size;
+  }
+
+  static auto create_input(rack::Module *module, int index, rack::Vec center) -> Jack * {
+    return create(module, index, rack::Port::PortType::INPUT, center);
+  }
+
+  static auto create_output(rack::Module *module, int index, rack::Vec center) -> Jack * {
+    return create(module, index, rack::Port::PortType::OUTPUT, center);
+  }
+
+private:
+  static auto create(rack::Module *module, int index, rack::Port::PortType type, rack::Vec center) -> Jack * {
+    auto port_widget = rack::Port::create<Jack<TDisplay>>({0, 0}, type, module, index);
+    moveTo(port_widget->box, rack::mm2px(center));
+    return port_widget;
   }
 };
 
@@ -119,7 +143,7 @@ protected:
   }
 
   void install_input(int index, rack::Vec center) {
-    addInput(create_port(rack::Port::INPUT, index, center));
+    addInput(Jack<TDisplay>::create_input(module, index, center));
   }
 
   void install_knob(const std::string &size, int index, rack::Vec center,
@@ -128,7 +152,7 @@ protected:
   }
 
   void install_output(int index, rack::Vec center) {
-    addOutput(create_port(rack::Port::OUTPUT, index, center));
+    addOutput(Jack<TDisplay>::create_output(module, index, center));
   }
 
   void install_switch(int index, rack::Vec center, int max_position = 1,
@@ -208,19 +232,6 @@ private:
     knob_widget->shadow->opacity = 0.f;
     moveTo(knob_widget->box, rack::mm2px(center));
     return knob_widget;
-  }
-
-  auto create_port(rack::Port::PortType type, int index, rack::Vec center)
-  -> PortWidget * {
-    auto image_file = resource_prefix() + "/port.svg";
-    auto port_widget =
-        rack::Port::create<PortWidget>({0, 0}, type, module, index);
-    port_widget->background->svg =
-        rack::SVG::load(assetPlugin(plugin, image_file));
-    port_widget->background->wrap();
-    port_widget->box.size = port_widget->background->box.size;
-    moveTo(port_widget->box, rack::mm2px(center));
-    return port_widget;
   }
 
   auto create_switch(int index, rack::Vec center, int max_position,
