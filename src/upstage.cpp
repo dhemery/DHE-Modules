@@ -71,34 +71,34 @@ struct UpstageWidget : public ModuleWidget<UpstageWidget, Upstage> {
       : ModuleWidget(module, 5) {
     auto widget_right_edge = width();
 
-    auto left_x = width() / 4.f + 0.333333333f;
-    auto center_x = widget_right_edge / 2.f;
-    auto right_x = widget_right_edge - left_x;
+    auto column_1 = width() / 4.f + 0.333333333f;
+    auto column_2 = widget_right_edge / 2.f;
+    auto column_3 = widget_right_edge - column_1;
 
     auto y = 25.f;
     auto dy = 18.5f;
 
-    install(center_x, y, large_knob(Upstage::LEVEL_KNOB));
+    install(column_2, y, large_knob(Upstage::LEVEL_KNOB));
 
     y += dy;
-    install(left_x, y, input_jack(Upstage::LEVEL_CV));
-    install(right_x, y, thumb_switch_2(Upstage::LEVEL_RANGE_SWITCH, 1));
+    install(column_1, y, input_jack(Upstage::LEVEL_CV));
+    install(column_3, y, thumb_switch_2(Upstage::LEVEL_RANGE_SWITCH, 1));
 
     y += dy;
-    install_button("normal", Upstage::WAIT_BUTTON, {left_x, y});
-    install_button("normal", Upstage::TRIGGER_BUTTON, {right_x, y});
+    install_button("normal", Upstage::WAIT_BUTTON, {column_1, y});
+    install_button("normal", Upstage::TRIGGER_BUTTON, {column_3, y});
 
     y = 82.f;
     dy = 15.f;
 
-    install(left_x, y, input_jack(Upstage::WAIT_IN));
+    install(column_1, y, input_jack(Upstage::WAIT_IN));
 
     y += dy;
-    install(left_x, y, input_jack(Upstage::TRIGGER_IN));
-    install(right_x, y, output_jack(Upstage::TRIGGER_OUT));
+    install(column_1, y, input_jack(Upstage::TRIGGER_IN));
+    install(column_3, y, output_jack(Upstage::TRIGGER_OUT));
 
     y += dy;
-    install(right_x, y, output_jack(Upstage::MAIN_OUT));
+    install(column_3, y, output_jack(Upstage::MAIN_OUT));
   }
 };
 } // namespace DHE

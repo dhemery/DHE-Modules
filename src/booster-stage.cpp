@@ -152,47 +152,47 @@ struct BoosterStageWidget : public ModuleWidget<BoosterStageWidget, BoosterStage
       : ModuleWidget(module, 8) {
     auto widget_right_edge = width();
 
-    auto left_x = widget_right_edge / 6.f + 0.3333333f;
-    auto center_x = widget_right_edge / 2.f;
-    auto right_x = widget_right_edge - left_x;
+    auto column_1 = widget_right_edge / 6.f + 0.3333333f;
+    auto column_3 = widget_right_edge / 2.f;
+    auto column_5 = widget_right_edge - column_1;
     auto button_port_distance = 7.891f;
-    auto center_left_x = left_x + button_port_distance;
-    auto center_right_x = right_x - button_port_distance;
+    auto column_2 = column_1 + button_port_distance;
+    auto column_4 = column_5 - button_port_distance;
 
     auto y = 25.f;
     auto dy = 18.5f;
 
-    install(left_x, y, input_jack(BoosterStage::LEVEL_CV));
-    install(center_x, y, large_knob(BoosterStage::LEVEL_KNOB));
-    install(right_x, y, thumb_switch_2(BoosterStage::LEVEL_RANGE_SWITCH, 1));
+    install(column_1, y, input_jack(BoosterStage::LEVEL_CV));
+    install(column_3, y, large_knob(BoosterStage::LEVEL_KNOB));
+    install(column_5, y, thumb_switch_2(BoosterStage::LEVEL_RANGE_SWITCH, 1));
 
     y += dy;
-    install(left_x, y, input_jack(BoosterStage::CURVE_CV));
-    install(center_x, y, large_knob(BoosterStage::CURVE_KNOB));
-    install(right_x, y, thumb_switch_2(BoosterStage::SHAPE_SWITCH));
+    install(column_1, y, input_jack(BoosterStage::CURVE_CV));
+    install(column_3, y, large_knob(BoosterStage::CURVE_KNOB));
+    install(column_5, y, thumb_switch_2(BoosterStage::SHAPE_SWITCH));
 
     y += dy;
-    install(left_x, y, input_jack(BoosterStage::DURATION_CV));
-    install(center_x, y, large_knob(BoosterStage::DURATION_KNOB));
-    install(right_x, y, thumb_switch_3(BoosterStage::DURATION_RANGE_SWITCH, 1));
+    install(column_1, y, input_jack(BoosterStage::DURATION_CV));
+    install(column_3, y, large_knob(BoosterStage::DURATION_KNOB));
+    install(column_5, y, thumb_switch_3(BoosterStage::DURATION_RANGE_SWITCH, 1));
 
     y = 82.f;
     dy = 15.f;
 
-    install(left_x, y, input_jack(BoosterStage::DEFER_IN));
-    install_button("normal", BoosterStage::DEFER_BUTTON, {center_left_x, y});
-    install_button("reverse", BoosterStage::ACTIVE_BUTTON, {center_right_x, y});
-    install(right_x, y, output_jack(BoosterStage::ACTIVE_OUT));
+    install(column_1, y, input_jack(BoosterStage::DEFER_IN));
+    install_button("normal", BoosterStage::DEFER_BUTTON, {column_2, y});
+    install_button("reverse", BoosterStage::ACTIVE_BUTTON, {column_4, y});
+    install(column_5, y, output_jack(BoosterStage::ACTIVE_OUT));
 
     y += dy;
-    install(left_x, y, input_jack(BoosterStage::TRIGGER_IN));
-    install_button("normal", BoosterStage::TRIGGER_BUTTON, {center_left_x, y});
-    install_button("reverse", BoosterStage::EOC_BUTTON, {center_right_x, y});
-    install(right_x, y, output_jack(BoosterStage::EOC_OUT));
+    install(column_1, y, input_jack(BoosterStage::TRIGGER_IN));
+    install_button("normal", BoosterStage::TRIGGER_BUTTON, {column_2, y});
+    install_button("reverse", BoosterStage::EOC_BUTTON, {column_4, y});
+    install(column_5, y, output_jack(BoosterStage::EOC_OUT));
 
     y += dy;
-    install(left_x, y, input_jack(BoosterStage::ENVELOPE_IN));
-    install(right_x, y, output_jack(BoosterStage::MAIN_OUT));
+    install(column_1, y, input_jack(BoosterStage::ENVELOPE_IN));
+    install(column_5, y, output_jack(BoosterStage::MAIN_OUT));
   }
 
 };

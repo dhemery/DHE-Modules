@@ -77,34 +77,34 @@ struct CubicWidget : public ModuleWidget<CubicWidget, Cubic> {
       : ModuleWidget(module, 5) {
     auto widget_right_edge = width();
 
-    auto left_x = width() / 4.f + 0.333333f;
-    auto right_x = widget_right_edge - left_x;
+    auto column_1 = width() / 4.f + 0.333333f;
+    auto column_2 = widget_right_edge - column_1;
 
     auto y = 20.f;
     auto dy = 15.f;
 
-    install(left_x, y, input_jack(Cubic::A_CV));
-    install(right_x, y, small_knob(Cubic::A_KNOB));
+    install(column_1, y, input_jack(Cubic::A_CV));
+    install(column_2, y, small_knob(Cubic::A_KNOB));
 
     y += dy;
-    install(left_x, y, input_jack(Cubic::B_CV));
-    install(right_x, y, small_knob(Cubic::B_KNOB));
+    install(column_1, y, input_jack(Cubic::B_CV));
+    install(column_2, y, small_knob(Cubic::B_KNOB));
 
     y += dy;
-    install(left_x, y, input_jack(Cubic::C_CV));
-    install(right_x, y, small_knob(Cubic::C_KNOB));
+    install(column_1, y, input_jack(Cubic::C_CV));
+    install(column_2, y, small_knob(Cubic::C_KNOB));
 
     y += dy;
-    install(left_x, y, input_jack(Cubic::D_CV));
-    install(right_x, y, small_knob(Cubic::D_KNOB));
+    install(column_1, y, input_jack(Cubic::D_CV));
+    install(column_2, y, small_knob(Cubic::D_KNOB));
 
     y = 82.f;
-    install(left_x, y, small_knob(Cubic::INPUT_GAIN_KNOB));
-    install(right_x, y, small_knob(Cubic::OUTPUT_GAIN_KNOB));
+    install(column_1, y, small_knob(Cubic::INPUT_GAIN_KNOB));
+    install(column_2, y, small_knob(Cubic::OUTPUT_GAIN_KNOB));
 
     y += dy;
-    install(left_x, y, input_jack(Cubic::MAIN_IN));
-    install(right_x, y, output_jack(Cubic::MAIN_OUT));
+    install(column_1, y, input_jack(Cubic::MAIN_IN));
+    install(column_2, y, output_jack(Cubic::MAIN_OUT));
 
   }
 };
