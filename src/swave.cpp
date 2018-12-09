@@ -37,9 +37,11 @@ private:
   auto signal_in() const -> float { return inputs[MAIN_IN].value; }
 };
 
-struct SwaveWidget : public ModuleWidget {
-  explicit SwaveWidget(rack::Module *module)
-      : ModuleWidget(module, 4, "swave") {
+struct SwaveWidget : public ModuleWidget<SwaveWidget, Swave> {
+  static constexpr auto resource_name = "swave";
+
+  explicit SwaveWidget(Swave *module)
+      : ModuleWidget(module, 4) {
     auto widget_right_edge = width();
 
     auto center_x = widget_right_edge / 2.f;

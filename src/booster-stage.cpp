@@ -4,7 +4,7 @@
 #include "util/duration.h"
 #include "util/knob.h"
 #include "util/signal.h"
-#include <util/stage-components.h>
+#include "util/stage-components.h"
 
 namespace DHE {
 
@@ -145,9 +145,11 @@ private:
   float held_voltage = 0.f;
 };
 
-struct BoosterStageWidget : public ModuleWidget {
-  explicit BoosterStageWidget(rack::Module *module)
-      : ModuleWidget(module, 8, "booster-stage") {
+struct BoosterStageWidget : public ModuleWidget<BoosterStageWidget, BoosterStage> {
+  static constexpr auto resource_name = "booster-stage";
+
+  explicit BoosterStageWidget(BoosterStage *module)
+      : ModuleWidget(module, 8) {
     auto widget_right_edge = width();
 
     auto left_x = widget_right_edge / 6.f + 0.3333333f;

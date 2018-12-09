@@ -161,9 +161,10 @@ private:
   StageType stage_type{HOLD};
 };
 
-struct HostageWidget : public ModuleWidget {
-  explicit HostageWidget(rack::Module *module)
-      : ModuleWidget(module, 5, "hostage") {
+struct HostageWidget : public ModuleWidget<HostageWidget, Hostage> {
+  static constexpr auto resource_name = "hostage";
+  explicit HostageWidget(Hostage *module)
+      : ModuleWidget(module, 5) {
     auto widget_right_edge = width();
 
     auto left_x = width() / 4.f + 0.333333f;

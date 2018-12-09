@@ -185,9 +185,11 @@ private:
   XycloidRotor throbber{};
 };
 
-struct XycloidWidget : public ModuleWidget {
-  explicit XycloidWidget(rack::Module *module)
-      : ModuleWidget(module, 11, "xycloid") {
+struct XycloidWidget : public ModuleWidget<XycloidWidget, Xycloid> {
+  static constexpr auto resource_name = "xycloid";
+
+  explicit XycloidWidget(Xycloid *module)
+      : ModuleWidget(module, 11) {
     auto widget_right_edge = width();
 
     auto left_x = widget_right_edge / 7.f;

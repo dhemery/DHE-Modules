@@ -105,9 +105,11 @@ private:
   float held_voltage = 0.f;
 };
 
-struct StageWidget : public ModuleWidget {
-  explicit StageWidget(rack::Module *module)
-      : ModuleWidget(module, 5, "stage") {
+struct StageWidget : public ModuleWidget<StageWidget, Stage> {
+  static constexpr auto resource_name = "stage";
+
+  explicit StageWidget(Stage *module)
+      : ModuleWidget(module, 5) {
     auto widget_right_edge = width();
 
     auto left_x = width() / 4.f + 0.333333f;

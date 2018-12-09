@@ -77,9 +77,11 @@ private:
   }
 };
 
-struct TapersWidget : public ModuleWidget {
-  explicit TapersWidget(rack::Module *module)
-      : ModuleWidget(module, 9, "tapers") {
+struct TapersWidget : public ModuleWidget<TapersWidget, Tapers> {
+  static constexpr auto resource_name = "tapers";
+
+  explicit TapersWidget(Tapers *module)
+      : ModuleWidget(module, 9) {
     auto widget_right_edge = width();
 
     auto left_x = width() / 5.f + 0.333333333f;

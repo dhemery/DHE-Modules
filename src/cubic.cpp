@@ -70,9 +70,11 @@ private:
   void send_main_out(float voltage) { outputs[MAIN_OUT].value = voltage; }
 };
 
-struct CubicWidget : public ModuleWidget {
-  explicit CubicWidget(rack::Module *module)
-      : ModuleWidget(module, 5, "cubic") {
+struct CubicWidget : public ModuleWidget<CubicWidget, Cubic> {
+  static constexpr auto resource_name = "cubic";
+
+  explicit CubicWidget(Cubic *module)
+      : ModuleWidget(module, 5) {
     auto widget_right_edge = width();
 
     auto left_x = width() / 4.f + 0.333333f;

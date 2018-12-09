@@ -64,9 +64,11 @@ private:
   }
 };
 
-struct UpstageWidget : public ModuleWidget {
-  explicit UpstageWidget(rack::Module *module)
-      : ModuleWidget(module, 5, "upstage") {
+struct UpstageWidget : public ModuleWidget<UpstageWidget, Upstage> {
+  static constexpr auto resource_name = "upstage";
+
+  explicit UpstageWidget(Upstage *module)
+      : ModuleWidget(module, 5) {
     auto widget_right_edge = width();
 
     auto left_x = width() / 4.f + 0.333333333f;

@@ -58,9 +58,11 @@ private:
   void send_main_out(float voltage) { outputs[MAIN_OUT].value = voltage; }
 };
 
-struct RangerWidget : public ModuleWidget {
-  explicit RangerWidget(rack::Module *module)
-      : ModuleWidget(module, 6, "ranger") {
+struct RangerWidget : public ModuleWidget<RangerWidget, Ranger> {
+  static constexpr auto resource_name = "ranger";
+
+  explicit RangerWidget(Ranger *module)
+      : ModuleWidget(module, 6) {
     auto widget_right_edge = width();
 
     auto left_x = width() / 3.5f + 0.333333333f;
