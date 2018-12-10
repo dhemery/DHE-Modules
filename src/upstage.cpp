@@ -64,6 +64,11 @@ private:
   }
 };
 
+class UpstageKnob : public LargeKnob {
+public:
+  UpstageKnob() : LargeKnob("upstage") {}
+};
+
 struct UpstageWidget : public ModuleWidget<UpstageWidget, Upstage> {
   static constexpr auto resource_name = "upstage";
 
@@ -78,7 +83,7 @@ struct UpstageWidget : public ModuleWidget<UpstageWidget, Upstage> {
     auto y = 25.f;
     auto dy = 18.5f;
 
-    install(column_2, y, large_knob(Upstage::LEVEL_KNOB));
+    install(column_2, y, knob<UpstageKnob>(Upstage::LEVEL_KNOB));
 
     y += dy;
     install(column_1, y, input_jack(Upstage::LEVEL_CV));

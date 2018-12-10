@@ -161,6 +161,11 @@ private:
   StageType stage_type{HOLD};
 };
 
+class HostageKnob : public LargeKnob {
+public:
+  HostageKnob() : LargeKnob("hostage") {}
+};
+
 struct HostageWidget : public ModuleWidget<HostageWidget, Hostage> {
   static constexpr auto resource_name = "hostage";
   explicit HostageWidget(Hostage *module)
@@ -181,7 +186,7 @@ struct HostageWidget : public ModuleWidget<HostageWidget, Hostage> {
     install(column_3, y, thumb_switch_3(Hostage::DURATION_RANGE_SWITCH, 1));
 
     y += dy;
-    install(column_2, y, large_knob(Hostage::DURATION_KNOB));
+    install(column_2, y, knob<HostageKnob>(Hostage::DURATION_KNOB));
 
     y = 82.f;
     dy = 15.f;

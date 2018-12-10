@@ -37,6 +37,51 @@ struct BooleanOption : rack::MenuItem {
   const std::function<bool()> is_on;
 };
 
+class SVGLoader {
+public:
+  explicit SVGLoader(const std::string &module_dir) : resource_dir{resource_dir_for(module_dir)} {}
+
+  auto load_svg(const std::string &filename) -> std::shared_ptr<rack::SVG> {
+    return rack::SVG::load(resource_dir + filename + ".svg");
+  }
+
+private:
+  static auto resource_dir_for(const std::string &module_dir) -> std::string {
+    static const auto plugin_resource_root = rack::assetPlugin(plugin, "res/");
+    return plugin_resource_root + module_dir + "/";
+  }
+  const std::string resource_dir;
+};
+
+class Potentiometer : public rack::RoundKnob, SVGLoader {
+public:
+  Potentiometer(const std::string &module_dir, const std::string &size) : SVGLoader{module_dir} {
+    static const auto prefix = std::string{"knob-"};
+    setSVG(load_svg(prefix + size));
+    shadow->opacity = 0.f;
+  }
+};
+
+class LargeKnob : public Potentiometer {
+public:
+  explicit LargeKnob(const std::string &module_dir) : Potentiometer(module_dir, "large") {}
+};
+
+class MediumKnob : public Potentiometer {
+public:
+  explicit MediumKnob(const std::string &module_dir) : Potentiometer(module_dir, "medium") {}
+};
+
+class SmallKnob : public Potentiometer {
+public:
+  explicit SmallKnob(const std::string &module_dir) : Potentiometer(module_dir, "small") {}
+};
+
+class TinyKnob : public Potentiometer {
+public:
+  explicit TinyKnob(const std::string &module_dir) : Potentiometer(module_dir, "tiny") {}
+};
+
 template<typename TDisplay>
 class NormalButton : public rack::SVGSwitch, public rack::MomentarySwitch {
 public:
@@ -118,35 +163,6 @@ public:
 
 };
 
-template<typename TDisplay>
-class Potentiometer : public rack::RoundKnob {
-public:
-  static auto create_tiny(rack::Module *module, int index, float initial) -> Potentiometer * {
-    return create(module, "knob-tiny", index, initial);
-  }
-
-  static auto create_small(rack::Module *module, int index, float initial) -> Potentiometer * {
-    return create(module, "knob-small", index, initial);
-  }
-
-  static auto create_medium(rack::Module *module, int index, float initial) -> Potentiometer * {
-    return create(module, "knob-medium", index, initial);
-  }
-
-  static auto create_large(rack::Module *module, int index, float initial) -> Potentiometer * {
-    return create(module, "knob-large", index, initial);
-  }
-
-private:
-  static auto create(rack::Module *module, std::string file, int index, float initial) -> Potentiometer * {
-    auto potentiometer = rack::ParamWidget::create<Potentiometer<TDisplay>>(
-        {0, 0}, module, index, 0.f, 1.f, initial);
-    potentiometer->setSVG(TDisplay::svg(file));
-    potentiometer->shadow->opacity = 0.f;
-    return potentiometer;
-  }
-};
-
 template<typename TDisplay, typename TModule>
 class ModuleWidget : public rack::ModuleWidget {
 
@@ -213,20 +229,9 @@ protected:
     return OutputJack<TDisplay>::create(module, index);
   }
 
-  auto tiny_knob(int index, float initial_rotation = 0.5f) const -> Potentiometer <TDisplay> * {
-    return Potentiometer<TDisplay>::create_tiny(module, index, initial_rotation);
-  }
-
-  auto small_knob(int index, float initial_rotation = 0.5f) const -> Potentiometer <TDisplay> * {
-    return Potentiometer<TDisplay>::create_small(module, index, initial_rotation);
-  }
-
-  auto medium_knob(int index, float initial_rotation = 0.5f) const -> Potentiometer <TDisplay> * {
-    return Potentiometer<TDisplay>::create_medium(module, index, initial_rotation);
-  }
-
-  auto large_knob(int index, float initial_rotation = 0.5f) const -> Potentiometer <TDisplay> * {
-    return Potentiometer<TDisplay>::create_large(module, index, initial_rotation);
+  template<typename TKnob>
+  auto knob(int index, float initial = 0.5f) const -> Potentiometer * {
+    return rack::ParamWidget::create<TKnob>({0,0}, module, index, 0, 1, initial);
   }
 
   auto button(int index) const -> NormalButton<TDisplay> * {

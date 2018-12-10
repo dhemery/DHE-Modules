@@ -37,6 +37,11 @@ private:
   auto signal_in() const -> float { return inputs[MAIN_IN].value; }
 };
 
+class SwaveKnob : public LargeKnob {
+public:
+  SwaveKnob() : LargeKnob("swave") {}
+};
+
 struct SwaveWidget : public ModuleWidget<SwaveWidget, Swave> {
   static constexpr auto resource_name = "swave";
 
@@ -52,7 +57,7 @@ struct SwaveWidget : public ModuleWidget<SwaveWidget, Swave> {
     install(x, y, thumb_switch_2(Swave::SHAPE_SWITCH, 1));
 
     y += dy;
-    install(x, y, large_knob(Swave::CURVE_KNOB));
+    install(x, y, knob<SwaveKnob>(Swave::CURVE_KNOB));
 
     y += dy;
     install(x, y, input_jack(Swave::CURVE_CV));

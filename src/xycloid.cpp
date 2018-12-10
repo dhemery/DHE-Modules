@@ -185,6 +185,21 @@ private:
   XycloidRotor throbber{};
 };
 
+class XycloidLargeKnob : public LargeKnob {
+public:
+  XycloidLargeKnob() : LargeKnob("xycloid") {}
+};
+
+class XycloidSmallKnob : public SmallKnob {
+public:
+  XycloidSmallKnob() : SmallKnob("xycloid") {}
+};
+
+class XycloidTinyKnob : public TinyKnob {
+public:
+  XycloidTinyKnob() : TinyKnob("xycloid") {}
+};
+
 struct XycloidWidget : public ModuleWidget<XycloidWidget, Xycloid> {
   static constexpr auto resource_name = "xycloid";
 
@@ -201,21 +216,21 @@ struct XycloidWidget : public ModuleWidget<XycloidWidget, Xycloid> {
     auto dy = 22.f;
 
     install(column_1, y, input_jack(Xycloid::WOBBLE_RATIO_CV));
-    install(column_2, y, tiny_knob(Xycloid::WOBBLE_RATIO_AV));
-    install(column_3, y, large_knob(Xycloid::WOBBLE_RATIO));
+    install(column_2, y, knob<XycloidTinyKnob>(Xycloid::WOBBLE_RATIO_AV));
+    install(column_3, y, knob<XycloidLargeKnob>(Xycloid::WOBBLE_RATIO));
     install(column_4, y, thumb_switch_2(Xycloid::WOBBLE_RATIO_TYPE, 1));
 
     y += dy;
     install(column_1, y, input_jack(Xycloid::WOBBLE_DEPTH_CV));
-    install(column_2, y, tiny_knob(Xycloid::WOBBLE_DEPTH_AV));
-    install(column_3, y, large_knob(Xycloid::WOBBLE_DEPTH));
+    install(column_2, y, knob<XycloidTinyKnob>(Xycloid::WOBBLE_DEPTH_AV));
+    install(column_3, y, knob<XycloidLargeKnob>(Xycloid::WOBBLE_DEPTH));
     install(column_4, y, thumb_switch_3(Xycloid::WOBBLE_TYPE, 2));
 
     y += dy;
     install(column_1, y, input_jack(Xycloid::THROB_SPEED_CV));
-    install(column_2, y, tiny_knob(Xycloid::THROB_SPEED_AV));
-    install(column_3, y, large_knob(Xycloid::THROB_SPEED, 0.65f));
-    install(column_4, y, small_knob(Xycloid::WOBBLE_PHASE));
+    install(column_2, y, knob<XycloidTinyKnob>(Xycloid::THROB_SPEED_AV));
+    install(column_3, y, knob<XycloidLargeKnob>(Xycloid::THROB_SPEED, 0.65f));
+    install(column_4, y, knob<XycloidSmallKnob>(Xycloid::WOBBLE_PHASE));
 
     y = 82.f;
     dy = 15.f;
@@ -224,13 +239,13 @@ struct XycloidWidget : public ModuleWidget<XycloidWidget, Xycloid> {
 
     y += dy;
     install(column_1, y, input_jack(Xycloid::X_GAIN_CV));
-    install(column_2, y, small_knob(Xycloid::X_GAIN, default_gain));
+    install(column_2, y, knob<XycloidSmallKnob>(Xycloid::X_GAIN, default_gain));
     install(column_3, y, thumb_switch_2(Xycloid::X_RANGE));
     install(column_4, y, output_jack(Xycloid::X_OUT));
 
     y += dy;
     install(column_1, y, input_jack(Xycloid::Y_GAIN_CV));
-    install(column_2, y, small_knob(Xycloid::Y_GAIN, default_gain));
+    install(column_2, y, knob<XycloidSmallKnob>(Xycloid::Y_GAIN, default_gain));
     install(column_3, y, thumb_switch_2(Xycloid::Y_RANGE));
     install(column_4, y, output_jack(Xycloid::Y_OUT));
   }

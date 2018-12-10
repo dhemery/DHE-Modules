@@ -70,6 +70,11 @@ private:
   void send_main_out(float voltage) { outputs[MAIN_OUT].value = voltage; }
 };
 
+class CubicKnob : public SmallKnob {
+public:
+  CubicKnob() : SmallKnob("cubic") {}
+};
+
 struct CubicWidget : public ModuleWidget<CubicWidget, Cubic> {
   static constexpr auto resource_name = "cubic";
 
@@ -84,23 +89,23 @@ struct CubicWidget : public ModuleWidget<CubicWidget, Cubic> {
     auto dy = 15.f;
 
     install(column_1, y, input_jack(Cubic::A_CV));
-    install(column_2, y, small_knob(Cubic::A_KNOB));
+    install(column_2, y, knob<CubicKnob>(Cubic::A_KNOB));
 
     y += dy;
     install(column_1, y, input_jack(Cubic::B_CV));
-    install(column_2, y, small_knob(Cubic::B_KNOB));
+    install(column_2, y, knob<CubicKnob>(Cubic::B_KNOB));
 
     y += dy;
     install(column_1, y, input_jack(Cubic::C_CV));
-    install(column_2, y, small_knob(Cubic::C_KNOB));
+    install(column_2, y, knob<CubicKnob>(Cubic::C_KNOB));
 
     y += dy;
     install(column_1, y, input_jack(Cubic::D_CV));
-    install(column_2, y, small_knob(Cubic::D_KNOB));
+    install(column_2, y, knob<CubicKnob>(Cubic::D_KNOB));
 
     y = 82.f;
-    install(column_1, y, small_knob(Cubic::INPUT_GAIN_KNOB));
-    install(column_2, y, small_knob(Cubic::OUTPUT_GAIN_KNOB));
+    install(column_1, y, knob<CubicKnob>(Cubic::INPUT_GAIN_KNOB));
+    install(column_2, y, knob<CubicKnob>(Cubic::OUTPUT_GAIN_KNOB));
 
     y += dy;
     install(column_1, y, input_jack(Cubic::MAIN_IN));
