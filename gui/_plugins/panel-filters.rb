@@ -49,16 +49,14 @@ module PanelFilters
     items.map(&:svg).join("\n")
   end
 
-  def toggle_button(page, x, y, top, bottom)
+  def toggle_button(page, x, y, label)
     background = background(page)
     foreground = foreground(page)
     button = ButtonControl.new(x: x, y: y, foreground: foreground, background: background)
-    top_text = Text.new(text: top, color: foreground, size: SMALL_FONT)
-    bottom_text = Text.new(text: bottom, color: foreground, size: SMALL_FONT)
+    text = Text.new(text: label, color: foreground, size: SMALL_FONT)
     items = [
-      Label.new(top_text, PADDING, :above, button),
+      Label.new(text, PADDING, :above, button),
       button,
-      Label.new(bottom_text, PADDING, :below, button),
     ]
     items.map(&:svg).join("\n") if page['draw_controls']
   end
@@ -124,32 +122,46 @@ module PanelFilters
   end
 
   def duration_switch(page, x, y)
-    switch(page, x, y, :mid, '100', '1', '10')
+    thumb3(page, x, y, 1, 10, 100, 2)
   end
 
-  def polarity_switch(page, x, y, position = :high)
-    switch(page, x, y, position, 'UNI', 'BI',)
+  def polarity_switch(page, x, y, selected = 2)
+    thumb2(page, x, y, 'BI', 'UNI', selected)
   end
 
   def shape_switch(page, x, y)
-    switch(page, x, y, :low, 'S', 'J',)
+    thumb2(page, x, y,  'J', 'S', 1)
   end
 
-  def switch(page, x, y, position, high, low, mid = nil)
+  def thumb2(page, x, y, low, high, selected)
     foreground = foreground(page)
     background = background(page)
     draw = page['draw_controls']
-    switch = SwitchControl.new(x: x, y: y, positions: mid ? 3 : 2, state: position.to_sym, foreground: foreground, background: background)
+    switch = SwitchControl.new(x: x, y: y, size: 2, selection: selected, foreground: foreground, background: background)
     high_text = Text.new(text: high, size: SMALL_FONT, color: foreground)
     low_text = Text.new(text: low, size: SMALL_FONT, color: foreground)
     items = [
         Label.new(high_text, PADDING + STROKE_INSET, :above, switch),
         Label.new(low_text, PADDING + STROKE_INSET, :below, switch),
     ]
-    if mid
-      mid_text = Text.new(text: mid, size: SMALL_FONT, color: foreground)
-      items << Label.new(mid_text, PADDING / 2.0 + STROKE_INSET, :right_of, switch)
-    end
+    items << switch if draw
+    items.map(&:svg).join("\n")
+  end
+
+  def thumb3(page, x, y, low, mid, high, selected)
+    foreground = foreground(page)
+    background = background(page)
+    draw = page['draw_controls']
+    switch = SwitchControl.new(x: x, y: y, size: 3, selection: selected, foreground: foreground, background: background)
+    high_text = Text.new(text: high, size: SMALL_FONT, color: foreground)
+    mid_text = Text.new(text: mid, size: SMALL_FONT, color: foreground)
+    low_text = Text.new(text: low, size: SMALL_FONT, color: foreground)
+    items = [
+        Label.new(high_text, PADDING + STROKE_INSET, :above, switch),
+        Label.new(mid_text, PADDING / 2.0 + STROKE_INSET, :right_of, switch),
+        Label.new(low_text, PADDING + STROKE_INSET, :below, switch)
+    ]
+
     items << switch if draw
     items.map(&:svg).join("\n")
   end

@@ -8,20 +8,9 @@ controls:
   knobs: [large]
   ports: []
   switches: [2]
-  toggle_buttons: [
-    mult: [
-      [0, 1],
-      [-1, 1],
-      [0, 2],
-      [-2, 2]
-    ],
-    add: [
-      [0, 5],
-      [-5, 5],
-      [0, 10],
-      [-10, 10],
-    ]
-  ]
+  toggle_buttons:
+    mult: ['0–1', '±1', '0–2', '±2']
+    add: ['0–5', '±5', '0–10', '±10']
 ---
 
 {% assign width = page.width | hp_to_mm %}
@@ -44,9 +33,9 @@ controls:
 {% assign port_y = y | plus:port_offset %}
 {{ page | connector: left_x, y, right_x, y }}
 {{ page | in_port: left_x, port_y, 'IN' }}
-{{ page | switch: left_center_x, y, 'high', 'MULT', 'ADD' }}
+{{ page | thumb2: left_center_x, y, 'ADD', 'MULT', 1 }}
 {{ page | large_knob: center_x, y, '' }}
-{{ page | toggle_button: right_center_x, y, '1', '-1' }}
+{{ page | toggle_button: right_center_x, y, '±5' }}
 {{ page | out_port: right_x, port_y, 'OUT' }}
 {% assign y = y | plus:delta_y %}
 {% endfor %}

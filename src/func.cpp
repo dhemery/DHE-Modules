@@ -99,10 +99,10 @@ template<typename TDisplay>
 class MultiplicationRangeSwitch : public rack::SVGSwitch, public rack::ToggleSwitch {
 public:
   MultiplicationRangeSwitch() {
-    addFrame(TDisplay::svg("toggle-mult-0"));
-    addFrame(TDisplay::svg("toggle-mult-1"));
-    addFrame(TDisplay::svg("toggle-mult-2"));
-    addFrame(TDisplay::svg("toggle-mult-3"));
+    addFrame(TDisplay::svg("button-mult-1"));
+    addFrame(TDisplay::svg("button-mult-2"));
+    addFrame(TDisplay::svg("button-mult-3"));
+    addFrame(TDisplay::svg("button-mult-4"));
   }
 
   static auto create(rack::Module *module, int index) -> MultiplicationRangeSwitch * {
@@ -114,10 +114,10 @@ template<typename TDisplay>
 class AdditionRangeSwitch : public rack::SVGSwitch, public rack::ToggleSwitch {
 public:
   AdditionRangeSwitch() {
-    addFrame(TDisplay::svg("toggle-add-0"));
-    addFrame(TDisplay::svg("toggle-add-1"));
-    addFrame(TDisplay::svg("toggle-add-2"));
-    addFrame(TDisplay::svg("toggle-add-3"));
+    addFrame(TDisplay::svg("button-add-1"));
+    addFrame(TDisplay::svg("button-add-2"));
+    addFrame(TDisplay::svg("button-add-3"));
+    addFrame(TDisplay::svg("button-add-4"));
   }
 
   static auto create(rack::Module *module, int index) -> AdditionRangeSwitch * {
@@ -129,8 +129,8 @@ template<typename TDisplay>
 class OperatorSwitch : public rack::SVGSwitch, public rack::ToggleSwitch {
 public:
   OperatorSwitch() {
-    addFrame(TDisplay::svg("switch-2-low"));
-    addFrame(TDisplay::svg("switch-2-high"));
+    addFrame(TDisplay::svg("thumb-2-1"));
+    addFrame(TDisplay::svg("thumb-2-2"));
   }
 
   void onChange(rack::EventChange &e) override {
@@ -156,7 +156,7 @@ public:
   }
 
   static auto create(rack::Module *module, int index, AdditionRangeSwitch<TDisplay> *addition_range_switch, MultiplicationRangeSwitch<TDisplay> *multiplication_range_switch) -> OperatorSwitch<TDisplay> * {
-    auto switch_widget = rack::ParamWidget::create<OperatorSwitch<TDisplay>>({0, 0}, module, index, 0, 1, 1);
+    auto switch_widget = rack::ParamWidget::create<OperatorSwitch<TDisplay>>({0, 0}, module, index, 0, 1, 0);
     switch_widget->set_range_switches(addition_range_switch, multiplication_range_switch);
     return switch_widget;
   }

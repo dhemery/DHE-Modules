@@ -365,20 +365,20 @@
     </g>
     <g
        id="text88"
+       style="font-weight:bold;font-size:2.37066674px;font-family:'Proxima Nova';dominant-baseline:middle;text-anchor:start;fill:#7f00ff" />
+    <g
+       id="text90"
        style="font-weight:bold;font-size:2.37066674px;font-family:'Proxima Nova';dominant-baseline:hanging;text-anchor:middle;fill:#7f00ff"
        aria-label="IN">
       <path
-         id="path366"
+         id="path367"
          style="font-weight:bold;font-size:2.37066674px;font-family:'Proxima Nova';dominant-baseline:hanging;text-anchor:middle;fill:#7f00ff"
          d="m 46.86596,59.173261 h 0.336635 V 57.592026 H 46.86596 Z" />
       <path
-         id="path368"
+         id="path369"
          style="font-weight:bold;font-size:2.37066674px;font-family:'Proxima Nova';dominant-baseline:hanging;text-anchor:middle;fill:#7f00ff"
          d="m 48.604696,59.173261 h 0.324781 v -1.581235 h -0.336635 v 0.993309 l -0.732536,-0.993309 h -0.346117 v 1.581235 h 0.336635 v -1.03124 z" />
     </g>
-    <g
-       id="text90"
-       style="font-weight:bold;font-size:2.37066674px;font-family:'Proxima Nova';dominant-baseline:middle;text-anchor:start;fill:#7f00ff" />
     <g
        style="fill:#f7f2fc;stroke:#7f00ff"
        id="g104"
@@ -389,23 +389,23 @@
          style="stroke-width:0.375" />
       <path
          id="line94"
-         d="m -0.875,-1 h 1.75"
+         d="m -0.875,-3.75 h 1.75"
          style="stroke-width:0.25;stroke-linecap:round" />
       <path
          id="line96"
-         d="m -0.875,-0.5 h 1.75"
+         d="m -0.875,-3.25 h 1.75"
          style="stroke-width:0.25;stroke-linecap:round" />
       <path
          id="line98"
-         d="m -0.875,0 h 1.75"
+         d="m -0.875,-2.75 h 1.75"
          style="stroke-width:0.25;stroke-linecap:round" />
       <path
          id="line100"
-         d="m -0.875,0.5 h 1.75"
+         d="m -0.875,-2.25 h 1.75"
          style="stroke-width:0.25;stroke-linecap:round" />
       <path
          id="line102"
-         d="m -0.875,1 h 1.75"
+         d="m -0.875,-1.75 h 1.75"
          style="stroke-width:0.25;stroke-linecap:round" />
     </g>
     <path

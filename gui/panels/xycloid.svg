@@ -22,14 +22,14 @@ controls:
 {{ page | cv: left_x, y }}
 {{ page | attenuverter: left_center_x, y }}
 {{ page | large_knob: right_center_x, y, 'RATIO' }}
-{{ page | switch: right_x, y, 'high', 'FREE', 'LOCK' }}
+{{ page | thumb2: right_x, y, 'LOCK', 'FREE', 2 }}
 
 {% assign y = y | plus: delta_y %}
 {{ page | connector: left_x, y, right_x, y }}
 {{ page | cv: left_x, y }}
 {{ page | attenuverter: left_center_x, y }}
 {{ page | large_knob: right_center_x, y, 'DEPTH' }}
-{{ page | switch: right_x, y, 'mid', 'OUT', 'IN', '' }}
+{{ page | thumb3: right_x, y, 'IN', '', 'OUT', 3 }}
 
 {% assign y = y | plus: delta_y %}
 {{ page | connector: left_x, y, right_center_x, y }}
@@ -45,12 +45,12 @@ controls:
 {{ page | connector: left_x, y, right_x, y }}
 {{ page | cv: left_x, y }}
 {{ page | small_knob: left_center_x, y, 'GAIN' }}
-{{ page | polarity_switch: right_center_x, y, 'low' }}
+{{ page | polarity_switch: right_center_x, y, 1 }}
 {{ page | out_port: right_x, y, 'X OUT' }}
 
 {% assign y = y | plus: delta_y %}
 {{ page | connector: left_x, y, right_x, y }}
 {{ page | cv: left_x, y }}
 {{ page | small_knob: left_center_x, y, 'GAIN' }}
-{{ page | polarity_switch: right_center_x, y, 'low' }}
+{{ page | polarity_switch: right_center_x, y, 1 }}
 {{ page | out_port: right_x, y, 'Y OUT' }}

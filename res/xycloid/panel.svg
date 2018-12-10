@@ -250,20 +250,20 @@
     </g>
     <g
        id="text34"
+       style="font-weight:bold;font-size:2.37066674px;font-family:'Proxima Nova';dominant-baseline:middle;text-anchor:start;fill:#7f00ff" />
+    <g
+       id="text36"
        style="font-weight:bold;font-size:2.37066674px;font-family:'Proxima Nova';dominant-baseline:hanging;text-anchor:middle;fill:#7f00ff"
        aria-label="IN">
       <path
-         id="path180"
+         id="path181"
          style="font-weight:bold;font-size:2.37066674px;font-family:'Proxima Nova';dominant-baseline:hanging;text-anchor:middle;fill:#7f00ff"
          d="m 46.86596,59.173261 h 0.336635 V 57.592026 H 46.86596 Z" />
       <path
-         id="path182"
+         id="path183"
          style="font-weight:bold;font-size:2.37066674px;font-family:'Proxima Nova';dominant-baseline:hanging;text-anchor:middle;fill:#7f00ff"
          d="m 48.604696,59.173261 h 0.324781 v -1.581235 h -0.336635 v 0.993309 l -0.732536,-0.993309 h -0.346117 v 1.581235 h 0.336635 v -1.03124 z" />
     </g>
-    <g
-       id="text36"
-       style="font-weight:bold;font-size:2.37066674px;font-family:'Proxima Nova';dominant-baseline:middle;text-anchor:start;fill:#7f00ff" />
     <path
        id="line38"
        d="M 7.9828572,74 H 34.592381"

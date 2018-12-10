@@ -51,7 +51,7 @@ module DHE
 
     def buttons(page, variants)
       variants.flat_map do |style|
-        [:off, :on].map do |state|
+        [0, 1].map do |state|
           ButtonControl.new(style: style.to_sym, state: state, foreground: foreground(page), background: background(page))
         end
       end
@@ -68,26 +68,20 @@ module DHE
     end
 
     def switches(page, variants)
-      variants.flat_map do |positions|
-        states = [:high, :low]
-        states << :mid if positions == 3
-        states.map do |state|
-          SwitchControl.new(positions: positions, state: state, foreground: foreground(page), background: background(page))
+      variants.flat_map do |size|
+        (1..size).map do |selected|
+          SwitchControl.new(size: size, selection: selected, foreground: foreground(page), background: background(page))
         end
       end
     end
 
     def toggle_buttons(page, variants)
-      variants.flat_map do |variant|
-        variant.each_pair.flat_map do |name, frames|
-          frames.each_with_index.map do |labels, position|
-            button = ButtonControl.new(style: :normal, state: :off, foreground: foreground(page), background: background(page))
-            upper_text = Text.new(text: labels.last, size: SMALL_FONT, color: foreground(page))
-            upper_label = Label.new(upper_text, PADDING, :above, button)
-            lower_text = Text.new(text: labels.first, size: SMALL_FONT, color: foreground(page))
-            lower_label = Label.new(lower_text, PADDING, :below, button)
-            ToggleButtonControl.new(name: name, position: position, button: button, lower: lower_label, upper: upper_label)
-          end
+      variants.each_pair.flat_map do |name, labels|
+        labels.each_with_index.flat_map do |item, index|
+          button = ButtonControl.new(style: :normal, state: 1, foreground: foreground(page), background: background(page))
+          text = Text.new(text: item, size: SMALL_FONT, color: foreground(page))
+          label = Label.new(text, PADDING, :above, button)
+          ToggleButtonControl.new(name: name, position: index + 1, button: button, label: label)
         end
       end
     end

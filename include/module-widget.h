@@ -86,8 +86,8 @@ template<typename TDisplay>
 class NormalButton : public rack::SVGSwitch, public rack::MomentarySwitch {
 public:
   NormalButton() {
-    addFrame(TDisplay::svg("button-normal-off"));
-    addFrame(TDisplay::svg("button-normal-on"));
+    addFrame(TDisplay::svg("button-normal-1"));
+    addFrame(TDisplay::svg("button-normal-2"));
   }
 
   static auto create(rack::Module *module, int index) -> NormalButton * {
@@ -99,8 +99,8 @@ template<typename TDisplay>
 class ReverseButton : public rack::SVGSwitch, public rack::MomentarySwitch {
 public:
   ReverseButton() {
-    addFrame(TDisplay::svg("button-reverse-off"));
-    addFrame(TDisplay::svg("button-reverse-on"));
+    addFrame(TDisplay::svg("button-reverse-1"));
+    addFrame(TDisplay::svg("button-reverse-2"));
   }
 
   static auto create(rack::Module *module, int index) -> ReverseButton * {
@@ -112,8 +112,8 @@ template<typename TDisplay>
 class ThumbSwitch2 : public rack::SVGSwitch, public rack::ToggleSwitch {
 public:
   ThumbSwitch2() {
-    addFrame(TDisplay::svg("switch-2-low"));
-    addFrame(TDisplay::svg("switch-2-low"));
+    addFrame(TDisplay::svg("thumb-2-1"));
+    addFrame(TDisplay::svg("thumb-2-2"));
   }
 
   static auto create(rack::Module *module, int index, int initial_position = 0) -> ThumbSwitch2 * {
@@ -126,9 +126,9 @@ template<typename TDisplay>
 class ThumbSwitch3 : public rack::SVGSwitch, public rack::ToggleSwitch {
 public:
   ThumbSwitch3() {
-    addFrame(TDisplay::svg("switch-3-low"));
-    addFrame(TDisplay::svg("switch-3-mid"));
-    addFrame(TDisplay::svg("switch-3-high"));
+    addFrame(TDisplay::svg("thumb-3-1"));
+    addFrame(TDisplay::svg("thumb-3-2"));
+    addFrame(TDisplay::svg("thumb-3-3"));
   }
 
   static auto create(rack::Module *module, int index, int initial_position = 0) -> ThumbSwitch3 * {

@@ -153,7 +153,7 @@ class ButtonControl < RoundControl
   attr_reader :name
   DIAMETER = 6.0
 
-  def initialize(x: 0.0, y: 0.0, style: :normal, state: :off, foreground:, background:)
+  def initialize(x: 0.0, y: 0.0, style: :normal, state: 0, foreground:, background:)
     super(x: x, y: y, diameter: DIAMETER)
     @name = "button-#{style}-#{state}"
     foreground, background = background, foreground if style == :reverse
@@ -187,16 +187,15 @@ end
 class ToggleButtonControl < Bounded
   attr_reader :name
 
-  def initialize(name:, position:, button:, lower:, upper:)
-    super(top: upper.top - PADDING, right: button.right, bottom: lower.bottom + PADDING, left: button.left)
-    @upper = upper
+  def initialize(name:, position:, button:, label:)
+    super(top: button.top - 3.0 - SMALL_FONT, right: button.right, bottom: button.bottom, left: button.left)
+    @label = label
     @button = button
-    @lower = lower
-    @name = "toggle-#{name}-#{position}"
+    @name = "button-#{name}-#{position}"
   end
 
   def svg
-    [@upper.svg, @button.svg, @lower.svg].join
+    [@button.svg, @label.svg].join
   end
 end
 
@@ -265,19 +264,18 @@ class SwitchControl < Control
 
   WIDTH = 3.0
 
-  def initialize(x: 0.0, y: 0.0, positions:, state:, foreground:, background:)
-    super(x: x, y: y, width: WIDTH, height: positions * WIDTH)
-    @name = "switch-#{positions}-#{state}"
+  def initialize(x: 0.0, y: 0.0, size:, selection:, foreground:, background:)
+    super(x: x, y: y, width: WIDTH, height: (size) * WIDTH)
+    @name = "thumb-#{size}-#{selection}"
 
-    @positions = positions
-    @state = state
+    @size = size
     @foreground = foreground
     @background = background
     @position =
-        case @state
-        when :high
+        case selection
+        when size
           1.0
-        when :low
+        when 1
           -1.0
         else
           0.0
