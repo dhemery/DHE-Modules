@@ -8,7 +8,6 @@
 #include <util/math.hpp>
 
 #include "dhe-modules.h"
-#include "display/controls.h"
 
 namespace DHE {
 inline void moveTo(rack::Rect &box, rack::Vec center) {
@@ -35,32 +34,6 @@ struct BooleanOption : rack::MenuItem {
 
   const std::function<void(bool)> set;
   const std::function<bool()> is_on;
-};
-
-template<typename TDisplay>
-class NormalButton : public rack::SVGSwitch, public rack::MomentarySwitch {
-public:
-  NormalButton() {
-    addFrame(TDisplay::svg("button-normal-1"));
-    addFrame(TDisplay::svg("button-normal-2"));
-  }
-
-  static auto create(rack::Module *module, int index) -> NormalButton * {
-    return rack::ParamWidget::create<NormalButton<TDisplay>>({0, 0}, module, index, 0, 1, 0);
-  }
-};
-
-template<typename TDisplay>
-class ReverseButton : public rack::SVGSwitch, public rack::MomentarySwitch {
-public:
-  ReverseButton() {
-    addFrame(TDisplay::svg("button-reverse-1"));
-    addFrame(TDisplay::svg("button-reverse-2"));
-  }
-
-  static auto create(rack::Module *module, int index) -> ReverseButton * {
-    return rack::ParamWidget::create<ReverseButton<TDisplay>>({0, 0}, module, index, 0, 1, 0);
-  }
 };
 
 template<typename TDisplay>
@@ -185,16 +158,13 @@ protected:
   }
 
   template<typename TKnob>
-  auto knob(int index, float initial = 0.5f) const -> Potentiometer * {
+  auto knob(int index, float initial = 0.5f) const -> TKnob * {
     return rack::ParamWidget::create<TKnob>({0,0}, module, index, 0, 1, initial);
   }
 
-  auto button(int index) const -> NormalButton<TDisplay> * {
-    return NormalButton<TDisplay>::create(module, index);
-  }
-
-  auto reverse_button(int index) const -> ReverseButton<TDisplay> * {
-    return ReverseButton<TDisplay>::create(module, index);
+  template<typename TButton>
+  auto button(int index) const -> TButton * {
+    return rack::ParamWidget::create<TButton>({0,0}, module, index, 0, 1, 0);
   }
 
   auto thumb_switch_2(int index, int initial = 0) const -> ThumbSwitch2<TDisplay> * {

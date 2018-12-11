@@ -44,3 +44,16 @@ class TinyKnob : public Potentiometer {
 public:
   explicit TinyKnob(const std::string &module_dir) : Potentiometer(module_dir, "tiny") {}
 };
+
+
+class Button : public rack::SVGSwitch, public rack::MomentarySwitch, public SVGLoader {
+public:
+  Button(const std::string &module_dir, const std::string &type) : SVGLoader{module_dir} {
+    static const auto base = std::string{"button-"};
+    const auto prefix = base + type + "-";
+    addFrame(load_svg(prefix + "1"));
+    addFrame(load_svg(prefix + "2"));
+  }
+
+  explicit Button(const std::string &module_dir) : Button(module_dir, "normal") {}
+};

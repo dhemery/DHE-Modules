@@ -1,10 +1,11 @@
 #include "dhe-modules.h"
 #include "module-widget.h"
-#include <util/stage-components.h>
 
+#include "display/controls.h"
 #include "util/duration.h"
 #include "util/knob.h"
 #include "util/phase-accumulator.h"
+#include <util/stage-components.h>
 
 namespace DHE {
 

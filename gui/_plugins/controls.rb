@@ -153,13 +153,13 @@ class ButtonControl < RoundControl
   attr_reader :name
   DIAMETER = 6.0
 
-  def initialize(x: 0.0, y: 0.0, style: :normal, state: 0, foreground:, background:)
+  def initialize(x: 0.0, y: 0.0, style: :normal, state: 1, foreground:, background:)
     super(x: x, y: y, diameter: DIAMETER)
     @name = "button-#{style}-#{state}"
     foreground, background = background, foreground if style == :reverse
 
     @stroke = foreground
-    @fill = state == :on ? background : foreground
+    @fill = state == 2 ? background : foreground
   end
 
   def align(padding, alignment, other)

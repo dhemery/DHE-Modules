@@ -1,6 +1,7 @@
 #include "dhe-modules.h"
 #include "module-widget.h"
 
+#include "display/controls.h"
 #include "util/knob.h"
 #include "util/sigmoid.h"
 #include "util/signal.h"

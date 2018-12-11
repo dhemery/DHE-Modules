@@ -1,6 +1,7 @@
 #include "dhe-modules.h"
 #include "module-widget.h"
 
+#include "display/controls.h"
 #include "util/knob.h"
 #include "util/range.h"
 #include "util/signal.h"
@@ -69,6 +70,11 @@ public:
   UpstageKnob() : LargeKnob("upstage") {}
 };
 
+class UpstageButton : public Button {
+public:
+  UpstageButton() : Button{"upstage"} {}
+};
+
 struct UpstageWidget : public ModuleWidget<UpstageWidget, Upstage> {
   static constexpr auto resource_name = "upstage";
 
@@ -90,8 +96,8 @@ struct UpstageWidget : public ModuleWidget<UpstageWidget, Upstage> {
     install(column_3, y, thumb_switch_2(Upstage::LEVEL_RANGE_SWITCH, 1));
 
     y += dy;
-    install(column_1, y, button(Upstage::WAIT_BUTTON));
-    install(column_3, y, button(Upstage::TRIGGER_BUTTON));
+    install(column_1, y, button<UpstageButton>(Upstage::WAIT_BUTTON));
+    install(column_3, y, button<UpstageButton>(Upstage::TRIGGER_BUTTON));
 
     y = 82.f;
     dy = 15.f;

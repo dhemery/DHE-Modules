@@ -2,6 +2,7 @@
 #include "dhe-modules.h"
 #include "module-widget.h"
 
+#include "display/controls.h"
 #include "util/duration.h"
 #include "util/knob.h"
 #include "util/signal.h"
@@ -97,6 +98,7 @@ private:
   auto active_button() const -> bool {
     return params[ACTIVE_BUTTON].value > 0.5;
   }
+
   auto curvature() const -> float {
     return Sigmoid::curvature(modulated(CURVE_KNOB, CURVE_CV));
   }
@@ -151,6 +153,16 @@ public:
   BoosterStageKnob() : LargeKnob("booster-stage") {}
 };
 
+class BoosterStageButton : public Button {
+public:
+  BoosterStageButton() : Button{"booster-stage"} {}
+};
+
+class BoosterStageReverseButton : public Button {
+public:
+  BoosterStageReverseButton() : Button{"booster-stage", "reverse"} {}
+};
+
 struct BoosterStageWidget : public ModuleWidget<BoosterStageWidget, BoosterStage> {
   static constexpr auto resource_name = "booster-stage";
 
@@ -186,14 +198,14 @@ struct BoosterStageWidget : public ModuleWidget<BoosterStageWidget, BoosterStage
     dy = 15.f;
 
     install(column_1, y, input_jack(BoosterStage::DEFER_IN));
-    install(column_2, y, button(BoosterStage::DEFER_BUTTON));
-    install(column_4, y, reverse_button(BoosterStage::ACTIVE_BUTTON));
+    install(column_2, y, button<BoosterStageButton>(BoosterStage::DEFER_BUTTON));
+    install(column_4, y, button<BoosterStageReverseButton>(BoosterStage::ACTIVE_BUTTON));
     install(column_5, y, output_jack(BoosterStage::ACTIVE_OUT));
 
     y += dy;
     install(column_1, y, input_jack(BoosterStage::TRIGGER_IN));
-    install(column_2, y, button(BoosterStage::TRIGGER_BUTTON));
-    install(column_4, y, reverse_button(BoosterStage::EOC_BUTTON));
+    install(column_2, y, button<BoosterStageButton>(BoosterStage::TRIGGER_BUTTON));
+    install(column_4, y, button<BoosterStageReverseButton>(BoosterStage::EOC_BUTTON));
     install(column_5, y, output_jack(BoosterStage::EOC_OUT));
 
     y += dy;

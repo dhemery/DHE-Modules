@@ -51,7 +51,7 @@ module DHE
 
     def buttons(page, variants)
       variants.flat_map do |style|
-        [0, 1].map do |state|
+        [1, 2].map do |state|
           ButtonControl.new(style: style.to_sym, state: state, foreground: foreground(page), background: background(page))
         end
       end

@@ -3,6 +3,7 @@
 #include "dhe-modules.h"
 #include "module-widget.h"
 
+#include "display/controls.h"
 #include "util/duration.h"
 #include "util/signal.h"
 #include "util/stage-components.h"
