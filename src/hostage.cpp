@@ -167,11 +167,6 @@ public:
   HostageKnob() : LargeKnob("hostage") {}
 };
 
-template <int size> class HostageThumbSwitch : public ThumbSwitch<size> {
-public:
-  HostageThumbSwitch() : ThumbSwitch<size>{"hostage"} {}
-};
-
 struct HostageWidget : public ModuleWidget<HostageWidget, Hostage> {
   static constexpr auto resource_name = "hostage";
   explicit HostageWidget(Hostage *module) : ModuleWidget(module, 5) {
@@ -185,13 +180,12 @@ struct HostageWidget : public ModuleWidget<HostageWidget, Hostage> {
     auto dy = 18.5f;
 
     install(column_2, y,
-            thumb_switch<HostageThumbSwitch<2>>(Hostage::SUSTAIN_MODE_SWITCH));
+            thumb_switch<ThumbSwitch2>(Hostage::SUSTAIN_MODE_SWITCH));
 
     y += dy;
     install(column_1, y, input<Jack>(Hostage::DURATION_CV));
-    install(
-        column_3, y,
-        thumb_switch<HostageThumbSwitch<3>>(Hostage::DURATION_RANGE_SWITCH, 1));
+    install(column_3, y,
+            thumb_switch<ThumbSwitch3>(Hostage::DURATION_RANGE_SWITCH, 1));
 
     y += dy;
     install(column_2, y, knob<HostageKnob>(Hostage::DURATION_KNOB));

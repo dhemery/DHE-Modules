@@ -121,10 +121,10 @@ protected:
     return rack::ParamWidget::create<TButton>({0, 0}, module, index, 0, 1, 0);
   }
 
-  template <typename TSwitch>
-  auto thumb_switch(int index, int initial = 0) const -> TSwitch * {
-    return rack::ParamWidget::create<TSwitch>({0, 0}, module, index, 0,
-                                              TSwitch::size - 1, initial);
+  template <template <typename> class TSwitch>
+  auto thumb_switch(int index, int initial = 0) const -> TSwitch<TDisplay> * {
+    return rack::ParamWidget::create<TSwitch<TDisplay>>(
+        {0, 0}, module, index, 0, TSwitch<TDisplay>::size - 1, initial);
   }
 
   void install_screws() {

@@ -43,11 +43,6 @@ public:
   SwaveKnob() : LargeKnob("swave") {}
 };
 
-class SwaveShapeSwitch : public ThumbSwitch<2> {
-public:
-  SwaveShapeSwitch() : ThumbSwitch<2>("swave") {}
-};
-
 struct SwaveWidget : public ModuleWidget<SwaveWidget, Swave> {
   static constexpr auto resource_name = "swave";
 
@@ -59,7 +54,7 @@ struct SwaveWidget : public ModuleWidget<SwaveWidget, Swave> {
     auto y = 25.f;
     auto dy = 18.5f;
 
-    install(x, y, thumb_switch<SwaveShapeSwitch>(Swave::SHAPE_SWITCH, 1));
+    install(x, y, thumb_switch<ThumbSwitch2>(Swave::SHAPE_SWITCH, 1));
 
     y += dy;
     install(x, y, knob<SwaveKnob>(Swave::CURVE_KNOB));

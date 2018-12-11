@@ -201,11 +201,6 @@ public:
   XycloidTinyKnob() : TinyKnob("xycloid") {}
 };
 
-template <int size> class XycloidSwitch : public ThumbSwitch<size> {
-public:
-  XycloidSwitch() : ThumbSwitch<size>{"xycloid"} {}
-};
-
 struct XycloidWidget : public ModuleWidget<XycloidWidget, Xycloid> {
   static constexpr auto resource_name = "xycloid";
 
@@ -224,14 +219,13 @@ struct XycloidWidget : public ModuleWidget<XycloidWidget, Xycloid> {
     install(column_2, y, knob<XycloidTinyKnob>(Xycloid::WOBBLE_RATIO_AV));
     install(column_3, y, knob<XycloidLargeKnob>(Xycloid::WOBBLE_RATIO));
     install(column_4, y,
-            thumb_switch<XycloidSwitch<2>>(Xycloid::WOBBLE_RATIO_TYPE, 1));
+            thumb_switch<ThumbSwitch2>(Xycloid::WOBBLE_RATIO_TYPE, 1));
 
     y += dy;
     install(column_1, y, input<Jack>(Xycloid::WOBBLE_DEPTH_CV));
     install(column_2, y, knob<XycloidTinyKnob>(Xycloid::WOBBLE_DEPTH_AV));
     install(column_3, y, knob<XycloidLargeKnob>(Xycloid::WOBBLE_DEPTH));
-    install(column_4, y,
-            thumb_switch<XycloidSwitch<3>>(Xycloid::WOBBLE_TYPE, 2));
+    install(column_4, y, thumb_switch<ThumbSwitch3>(Xycloid::WOBBLE_TYPE, 2));
 
     y += dy;
     install(column_1, y, input<Jack>(Xycloid::THROB_SPEED_CV));
@@ -247,13 +241,13 @@ struct XycloidWidget : public ModuleWidget<XycloidWidget, Xycloid> {
     y += dy;
     install(column_1, y, input<Jack>(Xycloid::X_GAIN_CV));
     install(column_2, y, knob<XycloidSmallKnob>(Xycloid::X_GAIN, default_gain));
-    install(column_3, y, thumb_switch<XycloidSwitch<2>>(Xycloid::X_RANGE));
+    install(column_3, y, thumb_switch<ThumbSwitch2>(Xycloid::X_RANGE));
     install(column_4, y, output<Jack>(Xycloid::X_OUT));
 
     y += dy;
     install(column_1, y, input<Jack>(Xycloid::Y_GAIN_CV));
     install(column_2, y, knob<XycloidSmallKnob>(Xycloid::Y_GAIN, default_gain));
-    install(column_3, y, thumb_switch<XycloidSwitch<2>>(Xycloid::Y_RANGE));
+    install(column_3, y, thumb_switch<ThumbSwitch2>(Xycloid::Y_RANGE));
     install(column_4, y, output<Jack>(Xycloid::Y_OUT));
   }
 

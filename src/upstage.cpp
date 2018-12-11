@@ -75,11 +75,6 @@ public:
   UpstageButton() : Button{"upstage"} {}
 };
 
-class UpstageLevelRangeSwitch : public ThumbSwitch<2> {
-public:
-  UpstageLevelRangeSwitch() : ThumbSwitch<2>{"upstage"} {}
-};
-
 struct UpstageWidget : public ModuleWidget<UpstageWidget, Upstage> {
   static constexpr auto resource_name = "upstage";
 
@@ -97,9 +92,8 @@ struct UpstageWidget : public ModuleWidget<UpstageWidget, Upstage> {
 
     y += dy;
     install(column_1, y, input<Jack>(Upstage::LEVEL_CV));
-    install(
-        column_3, y,
-        thumb_switch<UpstageLevelRangeSwitch>(Upstage::LEVEL_RANGE_SWITCH, 1));
+    install(column_3, y,
+            thumb_switch<ThumbSwitch2>(Upstage::LEVEL_RANGE_SWITCH, 1));
 
     y += dy;
     install(column_1, y, button<UpstageButton>(Upstage::WAIT_BUTTON));

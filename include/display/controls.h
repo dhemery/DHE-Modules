@@ -69,20 +69,29 @@ public:
       : Button(module_dir, "normal") {}
 };
 
-template <int N>
-class ThumbSwitch : public rack::SVGSwitch,
-                    public rack::ToggleSwitch,
-                    public Control {
+template <typename TDisplay, int n>
+class ThumbSwitch : public rack::SVGSwitch, public rack::ToggleSwitch {
 public:
-  static constexpr auto size = N;
-
-  ThumbSwitch(const std::string &module_dir) : Control{module_dir} {
+  static constexpr auto size = n;
+  ThumbSwitch() {
     static const auto base = std::string{"thumb-"};
     const auto prefix = base + std::to_string(size) + "-";
     for (int position = 1; position <= size; position++) {
-      addFrame(load_svg(prefix + std::to_string(position)));
+      addFrame(TDisplay::svg(prefix + std::to_string(position)));
     }
   }
+};
+
+template <typename TDisplay>
+class ThumbSwitch2 : public ThumbSwitch<TDisplay, 2> {
+public:
+  ThumbSwitch2() {}
+};
+
+template <typename TDisplay>
+class ThumbSwitch3 : public ThumbSwitch<TDisplay, 3> {
+public:
+  ThumbSwitch3() {}
 };
 
 template <typename TDisplay, int type> class Jack : public rack::SVGPort {
