@@ -69,9 +69,9 @@ public:
   RangerTinyKnob() : TinyKnob("ranger") {}
 };
 
-class RangerLevelRangeSwitch : public ThumbSwitch2 {
+class RangerLevelRangeSwitch : public ThumbSwitch<2> {
 public:
-  RangerLevelRangeSwitch() : ThumbSwitch2("ranger") {}
+  RangerLevelRangeSwitch() : ThumbSwitch<2>("ranger") {}
 };
 
 template <int type> class RangerJack : public Jack<type> {

@@ -75,9 +75,9 @@ public:
   UpstageButton() : Button{"upstage"} {}
 };
 
-class UpstageLevelRangeSwitch : public ThumbSwitch2 {
+class UpstageLevelRangeSwitch : public ThumbSwitch<2> {
 public:
-  UpstageLevelRangeSwitch() : ThumbSwitch2{"upstage"} {}
+  UpstageLevelRangeSwitch() : ThumbSwitch<2>{"upstage"} {}
 };
 
 template <int type> class UpstageJack : public Jack<type> {

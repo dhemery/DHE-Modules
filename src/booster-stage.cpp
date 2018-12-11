@@ -163,14 +163,9 @@ public:
   BoosterStageReverseButton() : Button{"booster-stage", "reverse"} {}
 };
 
-class BoosterStageThumbSwitch2 : public ThumbSwitch2 {
+template <int size> class BoosterStageThumbSwitch : public ThumbSwitch<size> {
 public:
-  BoosterStageThumbSwitch2() : ThumbSwitch2{"booster-stage"} {}
-};
-
-class BoosterStageThumbSwitch3 : public ThumbSwitch3 {
-public:
-  BoosterStageThumbSwitch3() : ThumbSwitch3{"booster-stage"} {}
+  BoosterStageThumbSwitch() : ThumbSwitch<size>{"booster-stage"} {}
 };
 
 template <int type> class BoosterStageJack : public Jack<type> {
@@ -198,20 +193,21 @@ struct BoosterStageWidget
     install(column_1, y, input<BoosterStageJack>(BoosterStage::LEVEL_CV));
     install(column_3, y, knob<BoosterStageKnob>(BoosterStage::LEVEL_KNOB));
     install(column_5, y,
-            thumb_switch<BoosterStageThumbSwitch2>(
+            thumb_switch<BoosterStageThumbSwitch<2>>(
                 BoosterStage::LEVEL_RANGE_SWITCH, 1));
 
     y += dy;
     install(column_1, y, input<BoosterStageJack>(BoosterStage::CURVE_CV));
     install(column_3, y, knob<BoosterStageKnob>(BoosterStage::CURVE_KNOB));
-    install(column_5, y,
-            thumb_switch<BoosterStageThumbSwitch2>(BoosterStage::SHAPE_SWITCH));
+    install(
+        column_5, y,
+        thumb_switch<BoosterStageThumbSwitch<2>>(BoosterStage::SHAPE_SWITCH));
 
     y += dy;
     install(column_1, y, input<BoosterStageJack>(BoosterStage::DURATION_CV));
     install(column_3, y, knob<BoosterStageKnob>(BoosterStage::DURATION_KNOB));
     install(column_5, y,
-            thumb_switch<BoosterStageThumbSwitch3>(
+            thumb_switch<BoosterStageThumbSwitch<3>>(
                 BoosterStage::DURATION_RANGE_SWITCH, 1));
 
     y = 82.f;

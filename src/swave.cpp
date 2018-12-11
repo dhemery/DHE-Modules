@@ -43,9 +43,9 @@ public:
   SwaveKnob() : LargeKnob("swave") {}
 };
 
-class SwaveShapeSwitch : public ThumbSwitch2 {
+class SwaveShapeSwitch : public ThumbSwitch<2> {
 public:
-  SwaveShapeSwitch() : ThumbSwitch2("swave") {}
+  SwaveShapeSwitch() : ThumbSwitch<2>("swave") {}
 };
 
 template <int type> class SwaveJack : public Jack<type> {

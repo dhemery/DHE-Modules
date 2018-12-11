@@ -69,33 +69,20 @@ public:
       : Button(module_dir, "normal") {}
 };
 
+template <int N>
 class ThumbSwitch : public rack::SVGSwitch,
                     public rack::ToggleSwitch,
                     public Control {
 public:
-  ThumbSwitch(const std::string &module_dir, int size) : Control{module_dir} {
+  static constexpr auto size = N;
+
+  ThumbSwitch(const std::string &module_dir) : Control{module_dir} {
     static const auto base = std::string{"thumb-"};
     const auto prefix = base + std::to_string(size) + "-";
     for (int position = 1; position <= size; position++) {
       addFrame(load_svg(prefix + std::to_string(position)));
     }
   }
-};
-
-class ThumbSwitch2 : public ThumbSwitch {
-public:
-  explicit ThumbSwitch2(const std::string &module_dir)
-      : ThumbSwitch{module_dir, size} {}
-
-  static constexpr auto size = 2;
-};
-
-class ThumbSwitch3 : public ThumbSwitch {
-public:
-  explicit ThumbSwitch3(const std::string &module_dir)
-      : ThumbSwitch{module_dir, size} {}
-
-  static constexpr auto size = 3;
 };
 
 template <int type> class Jack : public rack::SVGPort, public Control {

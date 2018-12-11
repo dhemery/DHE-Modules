@@ -48,7 +48,7 @@ public:
 
     auto panel = new rack::SVGPanel();
     panel->box.size = box.size;
-    panel->setBackground(TDisplay::svg("panel"));
+    panel->setBackground(svg("panel"));
     addChild(panel);
 
     install_screws();
