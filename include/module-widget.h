@@ -85,25 +85,29 @@ protected:
     addParam(widget);
   }
 
-  void install(float x, float y, Jack<rack::Port::PortType::INPUT> *port) {
+  void install(float x, float y,
+               Jack<TDisplay, rack::Port::PortType::INPUT> *port) {
     moveTo(x, y, port);
     addInput(port);
   }
 
-  void install(float x, float y, Jack<rack::Port::PortType::OUTPUT> *port) {
+  void install(float x, float y,
+               Jack<TDisplay, rack::Port::PortType::OUTPUT> *port) {
     moveTo(x, y, port);
     addOutput(port);
   }
 
-  template <template <int> class TJack>
-  auto input(int index) const -> TJack<rack::Port::PortType::INPUT> * {
-    return rack::Port::create<TJack<rack::Port::PortType::INPUT>>(
+  template <template <typename, int> class TJack>
+  auto input(int index) const
+      -> TJack<TDisplay, rack::Port::PortType::INPUT> * {
+    return rack::Port::create<TJack<TDisplay, rack::Port::PortType::INPUT>>(
         {0, 0}, rack::Port::PortType::INPUT, module, index);
   }
 
-  template <template <int> class TJack>
-  auto output(int index) const -> TJack<rack::Port::PortType::OUTPUT> * {
-    return rack::Port::create<TJack<rack::Port::PortType::OUTPUT>>(
+  template <template <typename, int> class TJack>
+  auto output(int index) const
+      -> TJack<TDisplay, rack::Port::PortType::OUTPUT> * {
+    return rack::Port::create<TJack<TDisplay, rack::Port::PortType::OUTPUT>>(
         {0, 0}, rack::Port::PortType::OUTPUT, module, index);
   }
 

@@ -74,11 +74,6 @@ public:
   RangerLevelRangeSwitch() : ThumbSwitch<2>("ranger") {}
 };
 
-template <int type> class RangerJack : public Jack<type> {
-public:
-  RangerJack() : Jack<type>("ranger") {}
-};
-
 struct RangerWidget : public ModuleWidget<RangerWidget, Ranger> {
   static constexpr auto resource_name = "ranger";
 
@@ -93,9 +88,9 @@ struct RangerWidget : public ModuleWidget<RangerWidget, Ranger> {
     auto panel_buffer = 4.f;
 
     install(column_1, y, knob<RangerMediumKnob>(Ranger::LEVEL_KNOB));
-    install(column_2, y, output<RangerJack>(Ranger::MAIN_OUT));
+    install(column_2, y, output<Jack>(Ranger::MAIN_OUT));
     y += dy;
-    install(column_1, y, input<RangerJack>(Ranger::LEVEL_CV));
+    install(column_1, y, input<Jack>(Ranger::LEVEL_CV));
     install(column_2, y, knob<RangerTinyKnob>(Ranger::LEVEL_AV));
 
     y += dy + panel_buffer;
@@ -105,7 +100,7 @@ struct RangerWidget : public ModuleWidget<RangerWidget, Ranger> {
         thumb_switch<RangerLevelRangeSwitch>(Ranger::LIMIT_1_RANGE_SWITCH, 1));
 
     y += dy;
-    install(column_1, y, input<RangerJack>(Ranger::LIMIT_1_CV));
+    install(column_1, y, input<Jack>(Ranger::LIMIT_1_CV));
     install(column_2, y, knob<RangerTinyKnob>(Ranger::LIMIT_1_AV));
 
     y += dy + panel_buffer;
@@ -115,7 +110,7 @@ struct RangerWidget : public ModuleWidget<RangerWidget, Ranger> {
         thumb_switch<RangerLevelRangeSwitch>(Ranger::LIMIT_2_RANGE_SWITCH, 1));
 
     y += dy;
-    install(column_1, y, input<RangerJack>(Ranger::LIMIT_2_CV));
+    install(column_1, y, input<Jack>(Ranger::LIMIT_2_CV));
     install(column_2, y, knob<RangerTinyKnob>(Ranger::LIMIT_2_AV));
   }
 };

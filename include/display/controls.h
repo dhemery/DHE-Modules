@@ -85,10 +85,10 @@ public:
   }
 };
 
-template <int type> class Jack : public rack::SVGPort, public Control {
+template <typename TDisplay, int type> class Jack : public rack::SVGPort {
 public:
-  Jack(const std::string &module_dir) : Control{module_dir} {
-    background->svg = load_svg("port");
+  Jack() {
+    background->svg = TDisplay::svg("port");
     background->wrap();
     box.size = background->box.size;
   }

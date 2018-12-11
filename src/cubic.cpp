@@ -76,11 +76,6 @@ public:
   CubicKnob() : SmallKnob("cubic") {}
 };
 
-template <int type> class CubicJack : public Jack<type> {
-public:
-  CubicJack() : Jack<type>("cubic") {}
-};
-
 struct CubicWidget : public ModuleWidget<CubicWidget, Cubic> {
   static constexpr auto resource_name = "cubic";
 
@@ -93,19 +88,19 @@ struct CubicWidget : public ModuleWidget<CubicWidget, Cubic> {
     auto y = 20.f;
     auto dy = 15.f;
 
-    install(column_1, y, input<CubicJack>(Cubic::A_CV));
+    install(column_1, y, input<Jack>(Cubic::A_CV));
     install(column_2, y, knob<CubicKnob>(Cubic::A_KNOB));
 
     y += dy;
-    install(column_1, y, input<CubicJack>(Cubic::B_CV));
+    install(column_1, y, input<Jack>(Cubic::B_CV));
     install(column_2, y, knob<CubicKnob>(Cubic::B_KNOB));
 
     y += dy;
-    install(column_1, y, input<CubicJack>(Cubic::C_CV));
+    install(column_1, y, input<Jack>(Cubic::C_CV));
     install(column_2, y, knob<CubicKnob>(Cubic::C_KNOB));
 
     y += dy;
-    install(column_1, y, input<CubicJack>(Cubic::D_CV));
+    install(column_1, y, input<Jack>(Cubic::D_CV));
     install(column_2, y, knob<CubicKnob>(Cubic::D_KNOB));
 
     y = 82.f;
@@ -113,8 +108,8 @@ struct CubicWidget : public ModuleWidget<CubicWidget, Cubic> {
     install(column_2, y, knob<CubicKnob>(Cubic::OUTPUT_GAIN_KNOB));
 
     y += dy;
-    install(column_1, y, input<CubicJack>(Cubic::MAIN_IN));
-    install(column_2, y, output<CubicJack>(Cubic::MAIN_OUT));
+    install(column_1, y, input<Jack>(Cubic::MAIN_IN));
+    install(column_2, y, output<Jack>(Cubic::MAIN_OUT));
   }
 };
 } // namespace DHE
