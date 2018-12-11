@@ -43,11 +43,15 @@ public:
   SwaveKnob() : LargeKnob("swave") {}
 };
 
+class SwaveShapeSwitch : public ThumbSwitch2 {
+public:
+  SwaveShapeSwitch() : ThumbSwitch2("ranger") {}
+};
+
 struct SwaveWidget : public ModuleWidget<SwaveWidget, Swave> {
   static constexpr auto resource_name = "swave";
 
-  explicit SwaveWidget(Swave *module)
-      : ModuleWidget(module, 4) {
+  explicit SwaveWidget(Swave *module) : ModuleWidget(module, 4) {
     auto widget_right_edge = width();
 
     auto x = widget_right_edge / 2.f;
@@ -55,7 +59,7 @@ struct SwaveWidget : public ModuleWidget<SwaveWidget, Swave> {
     auto y = 25.f;
     auto dy = 18.5f;
 
-    install(x, y, thumb_switch_2(Swave::SHAPE_SWITCH, 1));
+    install(x, y, thumb_switch<SwaveShapeSwitch>(Swave::SHAPE_SWITCH, 1));
 
     y += dy;
     install(x, y, knob<SwaveKnob>(Swave::CURVE_KNOB));

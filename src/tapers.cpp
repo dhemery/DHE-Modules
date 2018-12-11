@@ -88,11 +88,15 @@ public:
   TapersAVKnob() : TinyKnob("tapers") {}
 };
 
+class TapersSwitch2 : public ThumbSwitch2 {
+public:
+  TapersSwitch2() : ThumbSwitch2("ranger") {}
+};
+
 struct TapersWidget : public ModuleWidget<TapersWidget, Tapers> {
   static constexpr auto resource_name = "tapers";
 
-  explicit TapersWidget(Tapers *module)
-      : ModuleWidget(module, 9) {
+  explicit TapersWidget(Tapers *module) : ModuleWidget(module, 9) {
     auto widget_right_edge = width();
 
     auto column_1 = width() / 5.f + 0.333333333f;
@@ -111,8 +115,9 @@ struct TapersWidget : public ModuleWidget<TapersWidget, Tapers> {
     install(column_2, y, knob<TapersAVKnob>(Tapers::CURVE_1_AV));
     install(column_3, y, knob<TapersMediumKnob>(Tapers::CURVE_1_KNOB));
     y += dy;
-    install(column_1, y, thumb_switch_2(Tapers::SHAPE_1_SWITCH));
-    install(column_2, y, thumb_switch_2(Tapers::RANGE_1_SWITCH, 1));
+    install(column_1, y, thumb_switch<TapersSwitch2>(Tapers::SHAPE_1_SWITCH));
+    install(column_2, y,
+            thumb_switch<TapersSwitch2>(Tapers::RANGE_1_SWITCH, 1));
     install(column_3, y, output_jack(Tapers::OUT_1));
 
     y += dy + panel_buffer;
@@ -125,10 +130,10 @@ struct TapersWidget : public ModuleWidget<TapersWidget, Tapers> {
     install(column_2, y, knob<TapersAVKnob>(Tapers::CURVE_2_AV));
     install(column_3, y, knob<TapersMediumKnob>(Tapers::CURVE_2_KNOB));
     y += dy;
-    install(column_1, y, thumb_switch_2(Tapers::SHAPE_2_SWITCH));
-    install(column_2, y, thumb_switch_2(Tapers::RANGE_2_SWITCH, 1));
+    install(column_1, y, thumb_switch<TapersSwitch2>(Tapers::SHAPE_2_SWITCH));
+    install(column_2, y,
+            thumb_switch<TapersSwitch2>(Tapers::RANGE_2_SWITCH, 1));
     install(column_3, y, output_jack(Tapers::OUT_2));
-
   }
 };
 } // namespace DHE

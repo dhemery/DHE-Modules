@@ -1,6 +1,6 @@
-#include <utility>
 #include "dhe-modules.h"
 #include "module-widget.h"
+#include <utility>
 
 #include "display/controls.h"
 #include "util/duration.h"
@@ -163,15 +163,25 @@ public:
   BoosterStageReverseButton() : Button{"booster-stage", "reverse"} {}
 };
 
-struct BoosterStageWidget : public ModuleWidget<BoosterStageWidget, BoosterStage> {
+class BoosterStageThumbSwitch2 : public ThumbSwitch2 {
+public:
+  BoosterStageThumbSwitch2() : ThumbSwitch2{"booster-stage"} {}
+};
+
+class BoosterStageThumbSwitch3 : public ThumbSwitch3 {
+public:
+  BoosterStageThumbSwitch3() : ThumbSwitch3{"booster-stage"} {}
+};
+
+struct BoosterStageWidget
+    : public ModuleWidget<BoosterStageWidget, BoosterStage> {
   static constexpr auto resource_name = "booster-stage";
 
-  explicit BoosterStageWidget(BoosterStage *module)
-      : ModuleWidget(module, 8) {
+  explicit BoosterStageWidget(BoosterStage *module) : ModuleWidget(module, 8) {
     auto widget_right_edge = width();
 
-    auto column_1 = widget_right_edge/6.f + 0.3333333f;
-    auto column_3 = widget_right_edge/2.f;
+    auto column_1 = widget_right_edge / 6.f + 0.3333333f;
+    auto column_3 = widget_right_edge / 2.f;
     auto column_5 = widget_right_edge - column_1;
     auto button_port_distance = 7.891f;
     auto column_2 = column_1 + button_port_distance;
@@ -182,37 +192,45 @@ struct BoosterStageWidget : public ModuleWidget<BoosterStageWidget, BoosterStage
 
     install(column_1, y, input_jack(BoosterStage::LEVEL_CV));
     install(column_3, y, knob<BoosterStageKnob>(BoosterStage::LEVEL_KNOB));
-    install(column_5, y, thumb_switch_2(BoosterStage::LEVEL_RANGE_SWITCH, 1));
+    install(column_5, y,
+            thumb_switch<BoosterStageThumbSwitch2>(
+                BoosterStage::LEVEL_RANGE_SWITCH, 1));
 
     y += dy;
     install(column_1, y, input_jack(BoosterStage::CURVE_CV));
     install(column_3, y, knob<BoosterStageKnob>(BoosterStage::CURVE_KNOB));
-    install(column_5, y, thumb_switch_2(BoosterStage::SHAPE_SWITCH));
+    install(column_5, y,
+            thumb_switch<BoosterStageThumbSwitch2>(BoosterStage::SHAPE_SWITCH));
 
     y += dy;
     install(column_1, y, input_jack(BoosterStage::DURATION_CV));
     install(column_3, y, knob<BoosterStageKnob>(BoosterStage::DURATION_KNOB));
-    install(column_5, y, thumb_switch_3(BoosterStage::DURATION_RANGE_SWITCH, 1));
+    install(column_5, y,
+            thumb_switch<BoosterStageThumbSwitch3>(
+                BoosterStage::DURATION_RANGE_SWITCH, 1));
 
     y = 82.f;
     dy = 15.f;
 
     install(column_1, y, input_jack(BoosterStage::DEFER_IN));
-    install(column_2, y, button<BoosterStageButton>(BoosterStage::DEFER_BUTTON));
-    install(column_4, y, button<BoosterStageReverseButton>(BoosterStage::ACTIVE_BUTTON));
+    install(column_2, y,
+            button<BoosterStageButton>(BoosterStage::DEFER_BUTTON));
+    install(column_4, y,
+            button<BoosterStageReverseButton>(BoosterStage::ACTIVE_BUTTON));
     install(column_5, y, output_jack(BoosterStage::ACTIVE_OUT));
 
     y += dy;
     install(column_1, y, input_jack(BoosterStage::TRIGGER_IN));
-    install(column_2, y, button<BoosterStageButton>(BoosterStage::TRIGGER_BUTTON));
-    install(column_4, y, button<BoosterStageReverseButton>(BoosterStage::EOC_BUTTON));
+    install(column_2, y,
+            button<BoosterStageButton>(BoosterStage::TRIGGER_BUTTON));
+    install(column_4, y,
+            button<BoosterStageReverseButton>(BoosterStage::EOC_BUTTON));
     install(column_5, y, output_jack(BoosterStage::EOC_OUT));
 
     y += dy;
     install(column_1, y, input_jack(BoosterStage::ENVELOPE_IN));
     install(column_5, y, output_jack(BoosterStage::MAIN_OUT));
   }
-
 };
 } // namespace DHE
 rack::Model *modelBoosterStage =

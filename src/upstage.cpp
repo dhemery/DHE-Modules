@@ -75,11 +75,15 @@ public:
   UpstageButton() : Button{"upstage"} {}
 };
 
+class UpstageLevelRangeSwitch : public ThumbSwitch2 {
+public:
+  UpstageLevelRangeSwitch() : ThumbSwitch2{"upstage"} {}
+};
+
 struct UpstageWidget : public ModuleWidget<UpstageWidget, Upstage> {
   static constexpr auto resource_name = "upstage";
 
-  explicit UpstageWidget(Upstage *module)
-      : ModuleWidget(module, 5) {
+  explicit UpstageWidget(Upstage *module) : ModuleWidget(module, 5) {
     auto widget_right_edge = width();
 
     auto column_1 = width() / 4.f + 0.333333333f;
@@ -93,7 +97,9 @@ struct UpstageWidget : public ModuleWidget<UpstageWidget, Upstage> {
 
     y += dy;
     install(column_1, y, input_jack(Upstage::LEVEL_CV));
-    install(column_3, y, thumb_switch_2(Upstage::LEVEL_RANGE_SWITCH, 1));
+    install(
+        column_3, y,
+        thumb_switch<UpstageLevelRangeSwitch>(Upstage::LEVEL_RANGE_SWITCH, 1));
 
     y += dy;
     install(column_1, y, button<UpstageButton>(Upstage::WAIT_BUTTON));

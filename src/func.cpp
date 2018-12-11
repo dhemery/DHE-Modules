@@ -9,27 +9,29 @@ namespace DHE {
 
 class FuncChannel {
 public:
-  FuncChannel(rack::Module *module,
-              int input,
-              int operator_switch_param,
+  FuncChannel(rack::Module *module, int input, int operator_switch_param,
               int addition_range_switch_param,
-              int multiplication_range_switch_param,
-              int amount_knob_param,
-              int output) : input_port{module->inputs[input]},
-                            operator_selector{module->params[operator_switch_param].value},
-                            addition_range_selector{module->params[addition_range_switch_param].value},
-                            multiplication_range_selector{module->params[multiplication_range_switch_param].value},
-                            amount{module->params[amount_knob_param].value},
-                            output{module->outputs[output].value} {}
+              int multiplication_range_switch_param, int amount_knob_param,
+              int output)
+      : input_port{module->inputs[input]},
+        operator_selector{module->params[operator_switch_param].value},
+        addition_range_selector{
+            module->params[addition_range_switch_param].value},
+        multiplication_range_selector{
+            module->params[multiplication_range_switch_param].value},
+        amount{module->params[amount_knob_param].value},
+        output{module->outputs[output].value} {}
 
   auto adjust(float upstream) -> float {
-    static const std::vector<Range> multiplication_ranges{{0.f, 1.f}, {-1.f, 1.f}, {0.f, 2.f}, {-2.f, 2.f}};
-    static const std::vector<Range> addition_ranges{{0.f, 5.f}, {-5.f, 5.f}, {0.f, 10.f}, {-10.f, 10.f}};
+    static const std::vector<Range> multiplication_ranges{
+        {0.f, 1.f}, {-1.f, 1.f}, {0.f, 2.f}, {-2.f, 2.f}};
+    static const std::vector<Range> addition_ranges{
+        {0.f, 5.f}, {-5.f, 5.f}, {0.f, 10.f}, {-10.f, 10.f}};
     auto input = input_port.active ? input_port.value : upstream;
     if (operator_selector > 0.5f) {
       auto selection = static_cast<int>(multiplication_range_selector);
       auto range = multiplication_ranges[selection];
-      output = input*range.scale(amount);
+      output = input * range.scale(amount);
     } else {
       auto selection = static_cast<int>(addition_range_selector);
       auto range = addition_ranges[selection];
@@ -53,14 +55,26 @@ public:
 
   void step() override { channel.adjust(0.f); }
 
-  enum ParameterIds { KNOB, OPERATOR_SWITCH, ADDITION_RANGE_SWITCH, MULTIPLICATION_RANGE_SWITCH, PARAMETER_COUNT };
+  enum ParameterIds {
+    KNOB,
+    OPERATOR_SWITCH,
+    ADDITION_RANGE_SWITCH,
+    MULTIPLICATION_RANGE_SWITCH,
+    PARAMETER_COUNT
+  };
 
   enum InputIds { IN, INPUT_COUNT };
 
   enum OutputIds { OUT, OUTPUT_COUNT };
 
 private:
-  FuncChannel channel{this, IN, OPERATOR_SWITCH, ADDITION_RANGE_SWITCH, MULTIPLICATION_RANGE_SWITCH, KNOB, OUT};
+  FuncChannel channel{this,
+                      IN,
+                      OPERATOR_SWITCH,
+                      ADDITION_RANGE_SWITCH,
+                      MULTIPLICATION_RANGE_SWITCH,
+                      KNOB,
+                      OUT};
 };
 
 class Func6 : public rack::Module {
@@ -69,7 +83,9 @@ class Func6 : public rack::Module {
 public:
   Func6() : Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT} {
     for (int i = 0; i < channel_count; i++) {
-      channels.emplace_back(this, IN + i, OPERATOR_SWITCH + i, ADDITION_RANGE_SWITCH + i, MULTIPLICATION_RANGE_SWITCH + i, KNOB + i, OUT + i);
+      channels.emplace_back(this, IN + i, OPERATOR_SWITCH + i,
+                            ADDITION_RANGE_SWITCH + i,
+                            MULTIPLICATION_RANGE_SWITCH + i, KNOB + i, OUT + i);
     }
   }
 
@@ -96,8 +112,9 @@ private:
   std::vector<FuncChannel> channels{};
 };
 
-template<typename TDisplay>
-class MultiplicationRangeSwitch : public rack::SVGSwitch, public rack::ToggleSwitch {
+template <typename TDisplay>
+class MultiplicationRangeSwitch : public rack::SVGSwitch,
+                                  public rack::ToggleSwitch {
 public:
   MultiplicationRangeSwitch() {
     addFrame(TDisplay::svg("button-mult-1"));
@@ -106,12 +123,14 @@ public:
     addFrame(TDisplay::svg("button-mult-4"));
   }
 
-  static auto create(rack::Module *module, int index) -> MultiplicationRangeSwitch * {
-    return rack::ParamWidget::create<MultiplicationRangeSwitch<TDisplay>>({0,0}, module, index, 0, 3, 2);
+  static auto create(rack::Module *module, int index)
+      -> MultiplicationRangeSwitch * {
+    return rack::ParamWidget::create<MultiplicationRangeSwitch<TDisplay>>(
+        {0, 0}, module, index, 0, 3, 2);
   }
 };
 
-template<typename TDisplay>
+template <typename TDisplay>
 class AdditionRangeSwitch : public rack::SVGSwitch, public rack::ToggleSwitch {
 public:
   AdditionRangeSwitch() {
@@ -122,11 +141,12 @@ public:
   }
 
   static auto create(rack::Module *module, int index) -> AdditionRangeSwitch * {
-    return rack::ParamWidget::create<AdditionRangeSwitch<TDisplay>>({0,0}, module, index, 0, 3, 1);
+    return rack::ParamWidget::create<AdditionRangeSwitch<TDisplay>>(
+        {0, 0}, module, index, 0, 3, 1);
   }
 };
 
-template<typename TDisplay>
+template <typename TDisplay>
 class OperatorSwitch : public rack::SVGSwitch, public rack::ToggleSwitch {
 public:
   OperatorSwitch() {
@@ -140,8 +160,9 @@ public:
   }
 
   void set_range_switch_visibility() {
-    if(multiplication_range_switch == nullptr) return;
-    if(value > 0.5) {
+    if (multiplication_range_switch == nullptr)
+      return;
+    if (value > 0.5) {
       multiplication_range_switch->visible = true;
       addition_range_switch->visible = false;
     } else {
@@ -150,15 +171,23 @@ public:
     }
   }
 
-  void set_range_switches(AdditionRangeSwitch<TDisplay> *addition_range_switch, MultiplicationRangeSwitch<TDisplay> *multiplication_range_switch) {
+  void set_range_switches(
+      AdditionRangeSwitch<TDisplay> *addition_range_switch,
+      MultiplicationRangeSwitch<TDisplay> *multiplication_range_switch) {
     this->addition_range_switch = addition_range_switch;
     this->multiplication_range_switch = multiplication_range_switch;
     set_range_switch_visibility();
   }
 
-  static auto create(rack::Module *module, int index, AdditionRangeSwitch<TDisplay> *addition_range_switch, MultiplicationRangeSwitch<TDisplay> *multiplication_range_switch) -> OperatorSwitch<TDisplay> * {
-    auto switch_widget = rack::ParamWidget::create<OperatorSwitch<TDisplay>>({0, 0}, module, index, 0, 1, 0);
-    switch_widget->set_range_switches(addition_range_switch, multiplication_range_switch);
+  static auto
+  create(rack::Module *module, int index,
+         AdditionRangeSwitch<TDisplay> *addition_range_switch,
+         MultiplicationRangeSwitch<TDisplay> *multiplication_range_switch)
+      -> OperatorSwitch<TDisplay> * {
+    auto switch_widget = rack::ParamWidget::create<OperatorSwitch<TDisplay>>(
+        {0, 0}, module, index, 0, 1, 0);
+    switch_widget->set_range_switches(addition_range_switch,
+                                      multiplication_range_switch);
     return switch_widget;
   }
 
@@ -175,37 +204,40 @@ public:
 struct FuncWidget : public ModuleWidget<FuncWidget, Func> {
   static constexpr auto resource_name = "func";
 
-  explicit FuncWidget(Func *module)
-      : ModuleWidget(module, 3) {
-
+  explicit FuncWidget(Func *module) : ModuleWidget(module, 3) {
 
     auto widget_right_edge = width();
 
-    auto x = widget_right_edge/2.f;
+    auto x = widget_right_edge / 2.f;
 
     auto top = 23.f;
     auto bottom = 108.f;
     auto row_count = 6;
-    auto row_spacing = (bottom - top)/(row_count - 1);
+    auto row_spacing = (bottom - top) / (row_count - 1);
     auto port_offset = 1.25f;
 
-    auto row_1 = top+port_offset;
+    auto row_1 = top + port_offset;
     auto row_2 = top + row_spacing;
-    auto row_3 = top + row_spacing*2;
-    auto row_4 = top + row_spacing*3;
-    auto row_6 = top + row_spacing*5 + port_offset;
+    auto row_3 = top + row_spacing * 2;
+    auto row_4 = top + row_spacing * 3;
+    auto row_6 = top + row_spacing * 5 + port_offset;
 
     install(x, row_1, input_jack(Func::IN));
     install(x, row_3, knob<FuncKnob>(Func::KNOB));
     install(x, row_6, output_jack(Func::OUT));
 
-    auto multiplication_range_switch = MultiplicationRangeSwitch<FuncWidget>::create(module, Func::MULTIPLICATION_RANGE_SWITCH);
+    auto multiplication_range_switch =
+        MultiplicationRangeSwitch<FuncWidget>::create(
+            module, Func::MULTIPLICATION_RANGE_SWITCH);
     install(x, row_4, multiplication_range_switch);
 
-    auto addition_range_switch = AdditionRangeSwitch<FuncWidget>::create(module, Func::ADDITION_RANGE_SWITCH);
+    auto addition_range_switch = AdditionRangeSwitch<FuncWidget>::create(
+        module, Func::ADDITION_RANGE_SWITCH);
     install(x, row_4, addition_range_switch);
 
-    auto operator_switch = OperatorSwitch<FuncWidget>::create(module, Func::OPERATOR_SWITCH, addition_range_switch, multiplication_range_switch);
+    auto operator_switch = OperatorSwitch<FuncWidget>::create(
+        module, Func::OPERATOR_SWITCH, addition_range_switch,
+        multiplication_range_switch);
     install(x, row_2, operator_switch);
   }
 };
@@ -218,37 +250,41 @@ public:
 struct Func6Widget : public ModuleWidget<Func6Widget, Func6> {
   static constexpr auto resource_name = "func6";
 
-  explicit Func6Widget(Func6 *module)
-      : ModuleWidget(module, 12) {
+  explicit Func6Widget(Func6 *module) : ModuleWidget(module, 12) {
     auto widget_right_edge = width();
 
-    auto column_3 = widget_right_edge/2.f;
-    auto column_1 = widget_right_edge/7.f;
+    auto column_3 = widget_right_edge / 2.f;
+    auto column_1 = widget_right_edge / 7.f;
     auto column_5 = widget_right_edge - column_1;
-    auto column_2 = (column_3 - column_1)/2.f + column_1;
+    auto column_2 = (column_3 - column_1) / 2.f + column_1;
     auto column_4 = widget_right_edge - column_2;
 
     auto top = 23.f;
     auto bottom = 108.f;
     auto row_count = 6;
-    auto row_spacing = (bottom - top)/(row_count - 1);
+    auto row_spacing = (bottom - top) / (row_count - 1);
     auto port_offset = 1.25f;
 
     for (auto row = 0; row < row_count; row++) {
-      auto y = top + row*row_spacing;
+      auto y = top + row * row_spacing;
       auto port_y = y + port_offset;
 
       install(column_1, port_y, input_jack(Func6::IN + row));
       install(column_3, y, knob<Func6Knob>(Func6::KNOB + row));
       install(column_5, port_y, output_jack(Func6::OUT + row));
 
-      auto multiplication_range_switch = MultiplicationRangeSwitch<Func6Widget>::create(module, Func6::MULTIPLICATION_RANGE_SWITCH+row);
+      auto multiplication_range_switch =
+          MultiplicationRangeSwitch<Func6Widget>::create(
+              module, Func6::MULTIPLICATION_RANGE_SWITCH + row);
       install(column_4, y, multiplication_range_switch);
 
-      auto addition_range_switch = AdditionRangeSwitch<Func6Widget>::create(module, Func6::ADDITION_RANGE_SWITCH +row);
+      auto addition_range_switch = AdditionRangeSwitch<Func6Widget>::create(
+          module, Func6::ADDITION_RANGE_SWITCH + row);
       install(column_4, y, addition_range_switch);
 
-      auto operator_switch = OperatorSwitch<Func6Widget>::create(module, Func6::OPERATOR_SWITCH + row, addition_range_switch, multiplication_range_switch);
+      auto operator_switch = OperatorSwitch<Func6Widget>::create(
+          module, Func6::OPERATOR_SWITCH + row, addition_range_switch,
+          multiplication_range_switch);
       install(column_2, y, operator_switch);
     }
   }

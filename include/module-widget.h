@@ -19,7 +19,7 @@ inline void moveTo(float x, float y, rack::Widget *widget) {
 }
 
 struct BooleanOption : rack::MenuItem {
-  template<typename Setter, typename Getter>
+  template <typename Setter, typename Getter>
   BooleanOption(const std::string &name, const Setter &setter,
                 const Getter &getter)
       : set{setter}, is_on{getter} {
@@ -36,36 +36,7 @@ struct BooleanOption : rack::MenuItem {
   const std::function<bool()> is_on;
 };
 
-template<typename TDisplay>
-class ThumbSwitch2 : public rack::SVGSwitch, public rack::ToggleSwitch {
-public:
-  ThumbSwitch2() {
-    addFrame(TDisplay::svg("thumb-2-1"));
-    addFrame(TDisplay::svg("thumb-2-2"));
-  }
-
-  static auto create(rack::Module *module, int index, int initial_position = 0) -> ThumbSwitch2 * {
-    return rack::ParamWidget::create<ThumbSwitch2<TDisplay>>({0, 0}, module, index, 0, 1, initial_position);
-  }
-
-};
-
-template<typename TDisplay>
-class ThumbSwitch3 : public rack::SVGSwitch, public rack::ToggleSwitch {
-public:
-  ThumbSwitch3() {
-    addFrame(TDisplay::svg("thumb-3-1"));
-    addFrame(TDisplay::svg("thumb-3-2"));
-    addFrame(TDisplay::svg("thumb-3-3"));
-  }
-
-  static auto create(rack::Module *module, int index, int initial_position = 0) -> ThumbSwitch3 * {
-    return rack::ParamWidget::create<ThumbSwitch3<TDisplay>>({0, 0}, module, index, 0, 2, initial_position);
-  }
-};
-
-template<typename TDisplay>
-class Jack : public rack::SVGPort {
+template <typename TDisplay> class Jack : public rack::SVGPort {
 public:
   Jack() {
     background->svg = TDisplay::svg("port");
@@ -74,30 +45,28 @@ public:
   }
 };
 
-template<typename TDisplay>
-class InputJack : public Jack<TDisplay> {
+template <typename TDisplay> class InputJack : public Jack<TDisplay> {
 public:
   static auto create(rack::Module *module, int index) -> InputJack * {
-    return rack::Port::create<InputJack<TDisplay>>({0, 0}, rack::Port::PortType::INPUT, module, index);
+    return rack::Port::create<InputJack<TDisplay>>(
+        {0, 0}, rack::Port::PortType::INPUT, module, index);
   }
 };
 
-template<typename TDisplay>
-class OutputJack : public Jack<TDisplay> {
+template <typename TDisplay> class OutputJack : public Jack<TDisplay> {
 public:
   static auto create(rack::Module *module, int index) -> OutputJack * {
-    return rack::Port::create<OutputJack<TDisplay>>({0, 0}, rack::Port::PortType::OUTPUT, module, index);
+    return rack::Port::create<OutputJack<TDisplay>>(
+        {0, 0}, rack::Port::PortType::OUTPUT, module, index);
   }
-
 };
 
-template<typename TDisplay, typename TModule>
+template <typename TDisplay, typename TModule>
 class ModuleWidget : public rack::ModuleWidget {
 
 public:
-  ModuleWidget(TModule *module, int widget_hp)
-      : rack::ModuleWidget(module) {
-    box.size = rack::Vec{(float) widget_hp*rack::RACK_GRID_WIDTH,
+  ModuleWidget(TModule *module, int widget_hp) : rack::ModuleWidget(module) {
+    box.size = rack::Vec{(float)widget_hp * rack::RACK_GRID_WIDTH,
                          rack::RACK_GRID_HEIGHT};
 
     auto panel = new rack::SVGPanel();
@@ -125,9 +94,9 @@ public:
   }
 
 protected:
-  auto height() const -> float { return box.size.y*MM_PER_IN/SVG_DPI; }
+  auto height() const -> float { return box.size.y * MM_PER_IN / SVG_DPI; }
 
-  auto width() const -> float { return box.size.x*MM_PER_IN/SVG_DPI; }
+  auto width() const -> float { return box.size.x * MM_PER_IN / SVG_DPI; }
 
   void install(float x, float y, rack::ParamWidget *widget) {
     moveTo(x, y, widget);
@@ -157,33 +126,31 @@ protected:
     return OutputJack<TDisplay>::create(module, index);
   }
 
-  template<typename TKnob>
+  template <typename TKnob>
   auto knob(int index, float initial = 0.5f) const -> TKnob * {
-    return rack::ParamWidget::create<TKnob>({0,0}, module, index, 0, 1, initial);
+    return rack::ParamWidget::create<TKnob>({0, 0}, module, index, 0, 1,
+                                            initial);
   }
 
-  template<typename TButton>
-  auto button(int index) const -> TButton * {
-    return rack::ParamWidget::create<TButton>({0,0}, module, index, 0, 1, 0);
+  template <typename TButton> auto button(int index) const -> TButton * {
+    return rack::ParamWidget::create<TButton>({0, 0}, module, index, 0, 1, 0);
   }
 
-  auto thumb_switch_2(int index, int initial = 0) const -> ThumbSwitch2<TDisplay> * {
-    return ThumbSwitch2<TDisplay>::create(module, index, initial);
-  }
-
-  auto thumb_switch_3(int index, int initial = 0) const -> ThumbSwitch3<TDisplay> * {
-    return ThumbSwitch3<TDisplay>::create(module, index, initial);
+  template <typename TSwitch>
+  auto thumb_switch(int index, int initial = 0) const -> TSwitch * {
+    return rack::ParamWidget::create<TSwitch>({0, 0}, module, index, 0,
+                                              TSwitch::size - 1, initial);
   }
 
   void install_screws() {
-    auto screw_diameter = rack::RACK_GRID_WIDTH*MM_PER_IN/SVG_DPI;
-    auto screw_radius = screw_diameter/2.f;
+    auto screw_diameter = rack::RACK_GRID_WIDTH * MM_PER_IN / SVG_DPI;
+    auto screw_radius = screw_diameter / 2.f;
 
     auto top = screw_radius;
     auto bottom = height() - top;
 
-    auto max_screw_inset = screw_diameter*1.5f;
-    auto left = std::min(width()/4.f, max_screw_inset);
+    auto max_screw_inset = screw_diameter * 1.5f;
+    auto left = std::min(width() / 4.f, max_screw_inset);
     auto right = width() - left;
 
     auto screw_positions = std::vector<rack::Vec>{
@@ -204,7 +171,8 @@ protected:
 
 private:
   static auto resource_prefix() -> std::string {
-    static const auto prefix = std::string("res/") + TDisplay::resource_name + "/";
+    static const auto prefix =
+        std::string("res/") + TDisplay::resource_name + "/";
     return prefix;
   }
 };

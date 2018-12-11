@@ -79,8 +79,7 @@ public:
 struct CubicWidget : public ModuleWidget<CubicWidget, Cubic> {
   static constexpr auto resource_name = "cubic";
 
-  explicit CubicWidget(Cubic *module)
-      : ModuleWidget(module, 5) {
+  explicit CubicWidget(Cubic *module) : ModuleWidget(module, 5) {
     auto widget_right_edge = width();
 
     auto column_1 = width() / 4.f + 0.333333f;
@@ -111,7 +110,6 @@ struct CubicWidget : public ModuleWidget<CubicWidget, Cubic> {
     y += dy;
     install(column_1, y, input_jack(Cubic::MAIN_IN));
     install(column_2, y, output_jack(Cubic::MAIN_OUT));
-
   }
 };
 } // namespace DHE

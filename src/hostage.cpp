@@ -167,10 +167,19 @@ public:
   HostageKnob() : LargeKnob("hostage") {}
 };
 
+class HostageThumbSwitch2 : public ThumbSwitch2 {
+public:
+  HostageThumbSwitch2() : ThumbSwitch2{"hostage"} {}
+};
+
+class HostageThumbSwitch3 : public ThumbSwitch3 {
+public:
+  HostageThumbSwitch3() : ThumbSwitch3{"hostage"} {}
+};
+
 struct HostageWidget : public ModuleWidget<HostageWidget, Hostage> {
   static constexpr auto resource_name = "hostage";
-  explicit HostageWidget(Hostage *module)
-      : ModuleWidget(module, 5) {
+  explicit HostageWidget(Hostage *module) : ModuleWidget(module, 5) {
     auto widget_right_edge = width();
 
     auto column_1 = width() / 4.f + 0.333333f;
@@ -180,11 +189,14 @@ struct HostageWidget : public ModuleWidget<HostageWidget, Hostage> {
     auto y = 25.f;
     auto dy = 18.5f;
 
-    install(column_2, y, thumb_switch_2(Hostage::SUSTAIN_MODE_SWITCH));
+    install(column_2, y,
+            thumb_switch<HostageThumbSwitch2>(Hostage::SUSTAIN_MODE_SWITCH));
 
     y += dy;
     install(column_1, y, input_jack(Hostage::DURATION_CV));
-    install(column_3, y, thumb_switch_3(Hostage::DURATION_RANGE_SWITCH, 1));
+    install(
+        column_3, y,
+        thumb_switch<HostageThumbSwitch3>(Hostage::DURATION_RANGE_SWITCH, 1));
 
     y += dy;
     install(column_2, y, knob<HostageKnob>(Hostage::DURATION_KNOB));

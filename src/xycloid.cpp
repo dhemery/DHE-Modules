@@ -18,11 +18,11 @@ public:
     phase -= std::trunc(phase);
   }
 
-  auto x() const -> float { return std::cos(two_pi*(phase + offset)); }
-  auto y() const -> float { return std::sin(two_pi*(phase + offset)); }
+  auto x() const -> float { return std::cos(two_pi * (phase + offset)); }
+  auto y() const -> float { return std::sin(two_pi * (phase + offset)); }
 
 private:
-  float const two_pi{2.f*std::acos(-1.f)};
+  float const two_pi{2.f * std::acos(-1.f)};
   float phase{0.f};
   float offset{0.f};
 };
@@ -36,7 +36,7 @@ public:
   }
 
   auto is_musical_wobble_ratios() const -> bool {
-    return wobble_ratio_offset==0.f;
+    return wobble_ratio_offset == 0.f;
   }
 
   void step() override {
@@ -46,17 +46,17 @@ public:
       wobble_phase_offset *= -1.f;
 
     auto throb_speed = this->throb_speed();
-    auto wobble_speed = wobble_ratio*throb_speed;
+    auto wobble_speed = wobble_ratio * throb_speed;
     auto wobble_depth = this->wobble_depth();
     auto throb_depth = 1.f - wobble_depth;
 
     throbber.advance(throb_speed);
     wobbler.advance(wobble_speed, wobble_phase_offset);
-    auto x = throb_depth*throbber.x() + wobble_depth*wobbler.x();
-    auto y = throb_depth*throbber.y() + wobble_depth*wobbler.y();
+    auto x = throb_depth * throbber.x() + wobble_depth * wobbler.x();
+    auto y = throb_depth * throbber.y() + wobble_depth * wobbler.y();
 
-    outputs[X_OUT].value = 5.f*x_gain_in()*(x + x_offset());
-    outputs[Y_OUT].value = 5.f*y_gain_in()*(y + y_offset());
+    outputs[X_OUT].value = 5.f * x_gain_in() * (x + x_offset());
+    outputs[Y_OUT].value = 5.f * y_gain_in() * (y + y_offset());
   }
 
   enum ParameterIds {
@@ -91,7 +91,7 @@ private:
   }
 
   auto modulated(const ParameterIds &knob_param, const InputIds &cv_input) const
-  -> float {
+      -> float {
     auto rotation = params[knob_param].value;
     auto cv = inputs[cv_input].value;
     return Knob::modulated(rotation, cv);
@@ -115,7 +115,7 @@ private:
     auto rotation = modulated(THROB_SPEED, THROB_SPEED_CV, THROB_SPEED_AV);
     auto scaled = throb_speed_knob_range.scale(rotation);
     auto tapered = Sigmoid::inverse(scaled, speed_taper_curvature);
-    return -10.f*tapered*rack::engineGetSampleTime();
+    return -10.f * tapered * rack::engineGetSampleTime();
   }
 
   auto wobble_depth() const -> float {
@@ -201,16 +201,25 @@ public:
   XycloidTinyKnob() : TinyKnob("xycloid") {}
 };
 
+class XycloidSwitch2 : public ThumbSwitch2 {
+public:
+  XycloidSwitch2() : ThumbSwitch2{"xycloid"} {}
+};
+
+class XycloidSwitch3 : public ThumbSwitch3 {
+public:
+  XycloidSwitch3() : ThumbSwitch3{"xycloid"} {}
+};
+
 struct XycloidWidget : public ModuleWidget<XycloidWidget, Xycloid> {
   static constexpr auto resource_name = "xycloid";
 
-  explicit XycloidWidget(Xycloid *module)
-      : ModuleWidget(module, 11) {
+  explicit XycloidWidget(Xycloid *module) : ModuleWidget(module, 11) {
     auto widget_right_edge = width();
 
-    auto column_1 = widget_right_edge/7.f;
+    auto column_1 = widget_right_edge / 7.f;
     auto column_4 = widget_right_edge - column_1;
-    auto column_2 = (column_4 - column_1)/3.f + column_1;
+    auto column_2 = (column_4 - column_1) / 3.f + column_1;
     auto column_3 = widget_right_edge - column_2;
 
     auto y = 30.f;
@@ -219,13 +228,14 @@ struct XycloidWidget : public ModuleWidget<XycloidWidget, Xycloid> {
     install(column_1, y, input_jack(Xycloid::WOBBLE_RATIO_CV));
     install(column_2, y, knob<XycloidTinyKnob>(Xycloid::WOBBLE_RATIO_AV));
     install(column_3, y, knob<XycloidLargeKnob>(Xycloid::WOBBLE_RATIO));
-    install(column_4, y, thumb_switch_2(Xycloid::WOBBLE_RATIO_TYPE, 1));
+    install(column_4, y,
+            thumb_switch<XycloidSwitch2>(Xycloid::WOBBLE_RATIO_TYPE, 1));
 
     y += dy;
     install(column_1, y, input_jack(Xycloid::WOBBLE_DEPTH_CV));
     install(column_2, y, knob<XycloidTinyKnob>(Xycloid::WOBBLE_DEPTH_AV));
     install(column_3, y, knob<XycloidLargeKnob>(Xycloid::WOBBLE_DEPTH));
-    install(column_4, y, thumb_switch_3(Xycloid::WOBBLE_TYPE, 2));
+    install(column_4, y, thumb_switch<XycloidSwitch3>(Xycloid::WOBBLE_TYPE, 2));
 
     y += dy;
     install(column_1, y, input_jack(Xycloid::THROB_SPEED_CV));
@@ -241,13 +251,13 @@ struct XycloidWidget : public ModuleWidget<XycloidWidget, Xycloid> {
     y += dy;
     install(column_1, y, input_jack(Xycloid::X_GAIN_CV));
     install(column_2, y, knob<XycloidSmallKnob>(Xycloid::X_GAIN, default_gain));
-    install(column_3, y, thumb_switch_2(Xycloid::X_RANGE));
+    install(column_3, y, thumb_switch<XycloidSwitch2>(Xycloid::X_RANGE));
     install(column_4, y, output_jack(Xycloid::X_OUT));
 
     y += dy;
     install(column_1, y, input_jack(Xycloid::Y_GAIN_CV));
     install(column_2, y, knob<XycloidSmallKnob>(Xycloid::Y_GAIN, default_gain));
-    install(column_3, y, thumb_switch_2(Xycloid::Y_RANGE));
+    install(column_3, y, thumb_switch<XycloidSwitch2>(Xycloid::Y_RANGE));
     install(column_4, y, output_jack(Xycloid::Y_OUT));
   }
 

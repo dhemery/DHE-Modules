@@ -114,8 +114,7 @@ public:
 struct StageWidget : public ModuleWidget<StageWidget, Stage> {
   static constexpr auto resource_name = "stage";
 
-  explicit StageWidget(Stage *module)
-      : ModuleWidget(module, 5) {
+  explicit StageWidget(Stage *module) : ModuleWidget(module, 5) {
     auto widget_right_edge = width();
 
     auto column_1 = width() / 4.f + 0.333333f;
