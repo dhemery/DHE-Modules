@@ -97,4 +97,13 @@ public:
 
   static constexpr auto size = 3;
 };
+
+template <int type> class Jack : public rack::SVGPort, public Control {
+public:
+  Jack(const std::string &module_dir) : Control{module_dir} {
+    background->svg = load_svg("port");
+    background->wrap();
+    box.size = background->box.size;
+  }
+};
 } // namespace DHE

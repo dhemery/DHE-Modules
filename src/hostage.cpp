@@ -177,6 +177,11 @@ public:
   HostageThumbSwitch3() : ThumbSwitch3{"hostage"} {}
 };
 
+template <int type> class HostageJack : public Jack<type> {
+public:
+  HostageJack() : Jack<type>("hostage") {}
+};
+
 struct HostageWidget : public ModuleWidget<HostageWidget, Hostage> {
   static constexpr auto resource_name = "hostage";
   explicit HostageWidget(Hostage *module) : ModuleWidget(module, 5) {
@@ -193,7 +198,7 @@ struct HostageWidget : public ModuleWidget<HostageWidget, Hostage> {
             thumb_switch<HostageThumbSwitch2>(Hostage::SUSTAIN_MODE_SWITCH));
 
     y += dy;
-    install(column_1, y, input_jack(Hostage::DURATION_CV));
+    install(column_1, y, input<HostageJack>(Hostage::DURATION_CV));
     install(
         column_3, y,
         thumb_switch<HostageThumbSwitch3>(Hostage::DURATION_RANGE_SWITCH, 1));
@@ -204,16 +209,16 @@ struct HostageWidget : public ModuleWidget<HostageWidget, Hostage> {
     y = 82.f;
     dy = 15.f;
 
-    install(column_1, y, input_jack(Hostage::DEFER_IN));
-    install(column_3, y, output_jack(Hostage::ACTIVE_OUT));
+    install(column_1, y, input<HostageJack>(Hostage::DEFER_IN));
+    install(column_3, y, output<HostageJack>(Hostage::ACTIVE_OUT));
 
     y += dy;
-    install(column_1, y, input_jack(Hostage::SUSTAIN_GATE_IN));
-    install(column_3, y, output_jack(Hostage::EOC_OUT));
+    install(column_1, y, input<HostageJack>(Hostage::SUSTAIN_GATE_IN));
+    install(column_3, y, output<HostageJack>(Hostage::EOC_OUT));
 
     y += dy;
-    install(column_1, y, input_jack(Hostage::MAIN_IN));
-    install(column_3, y, output_jack(Hostage::MAIN_OUT));
+    install(column_1, y, input<HostageJack>(Hostage::MAIN_IN));
+    install(column_3, y, output<HostageJack>(Hostage::MAIN_OUT));
   }
 };
 } // namespace DHE

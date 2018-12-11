@@ -80,6 +80,11 @@ public:
   UpstageLevelRangeSwitch() : ThumbSwitch2{"upstage"} {}
 };
 
+template <int type> class UpstageJack : public Jack<type> {
+public:
+  UpstageJack() : Jack<type>("upstage") {}
+};
+
 struct UpstageWidget : public ModuleWidget<UpstageWidget, Upstage> {
   static constexpr auto resource_name = "upstage";
 
@@ -96,7 +101,7 @@ struct UpstageWidget : public ModuleWidget<UpstageWidget, Upstage> {
     install(column_2, y, knob<UpstageKnob>(Upstage::LEVEL_KNOB));
 
     y += dy;
-    install(column_1, y, input_jack(Upstage::LEVEL_CV));
+    install(column_1, y, input<UpstageJack>(Upstage::LEVEL_CV));
     install(
         column_3, y,
         thumb_switch<UpstageLevelRangeSwitch>(Upstage::LEVEL_RANGE_SWITCH, 1));
@@ -108,14 +113,14 @@ struct UpstageWidget : public ModuleWidget<UpstageWidget, Upstage> {
     y = 82.f;
     dy = 15.f;
 
-    install(column_1, y, input_jack(Upstage::WAIT_IN));
+    install(column_1, y, input<UpstageJack>(Upstage::WAIT_IN));
 
     y += dy;
-    install(column_1, y, input_jack(Upstage::TRIGGER_IN));
-    install(column_3, y, output_jack(Upstage::TRIGGER_OUT));
+    install(column_1, y, input<UpstageJack>(Upstage::TRIGGER_IN));
+    install(column_3, y, output<UpstageJack>(Upstage::TRIGGER_OUT));
 
     y += dy;
-    install(column_3, y, output_jack(Upstage::MAIN_OUT));
+    install(column_3, y, output<UpstageJack>(Upstage::MAIN_OUT));
   }
 };
 } // namespace DHE

@@ -45,7 +45,12 @@ public:
 
 class SwaveShapeSwitch : public ThumbSwitch2 {
 public:
-  SwaveShapeSwitch() : ThumbSwitch2("ranger") {}
+  SwaveShapeSwitch() : ThumbSwitch2("swave") {}
+};
+
+template <int type> class SwaveJack : public Jack<type> {
+public:
+  SwaveJack() : Jack<type>("swave") {}
 };
 
 struct SwaveWidget : public ModuleWidget<SwaveWidget, Swave> {
@@ -65,16 +70,16 @@ struct SwaveWidget : public ModuleWidget<SwaveWidget, Swave> {
     install(x, y, knob<SwaveKnob>(Swave::CURVE_KNOB));
 
     y += dy;
-    install(x, y, input_jack(Swave::CURVE_CV));
+    install(x, y, input<SwaveJack>(Swave::CURVE_CV));
 
     y = 82.f;
     dy = 15.f;
 
     y += dy;
-    install(x, y, input_jack(Swave::MAIN_IN));
+    install(x, y, input<SwaveJack>(Swave::MAIN_IN));
 
     y += dy;
-    install(x, y, output_jack(Swave::MAIN_OUT));
+    install(x, y, output<SwaveJack>(Swave::MAIN_OUT));
   }
 };
 } // namespace DHE

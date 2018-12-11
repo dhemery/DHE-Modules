@@ -173,6 +173,11 @@ public:
   BoosterStageThumbSwitch3() : ThumbSwitch3{"booster-stage"} {}
 };
 
+template <int type> class BoosterStageJack : public Jack<type> {
+public:
+  BoosterStageJack() : Jack<type>{"booster-stage"} {}
+};
+
 struct BoosterStageWidget
     : public ModuleWidget<BoosterStageWidget, BoosterStage> {
   static constexpr auto resource_name = "booster-stage";
@@ -190,20 +195,20 @@ struct BoosterStageWidget
     auto y = 25.f;
     auto dy = 18.5f;
 
-    install(column_1, y, input_jack(BoosterStage::LEVEL_CV));
+    install(column_1, y, input<BoosterStageJack>(BoosterStage::LEVEL_CV));
     install(column_3, y, knob<BoosterStageKnob>(BoosterStage::LEVEL_KNOB));
     install(column_5, y,
             thumb_switch<BoosterStageThumbSwitch2>(
                 BoosterStage::LEVEL_RANGE_SWITCH, 1));
 
     y += dy;
-    install(column_1, y, input_jack(BoosterStage::CURVE_CV));
+    install(column_1, y, input<BoosterStageJack>(BoosterStage::CURVE_CV));
     install(column_3, y, knob<BoosterStageKnob>(BoosterStage::CURVE_KNOB));
     install(column_5, y,
             thumb_switch<BoosterStageThumbSwitch2>(BoosterStage::SHAPE_SWITCH));
 
     y += dy;
-    install(column_1, y, input_jack(BoosterStage::DURATION_CV));
+    install(column_1, y, input<BoosterStageJack>(BoosterStage::DURATION_CV));
     install(column_3, y, knob<BoosterStageKnob>(BoosterStage::DURATION_KNOB));
     install(column_5, y,
             thumb_switch<BoosterStageThumbSwitch3>(
@@ -212,24 +217,24 @@ struct BoosterStageWidget
     y = 82.f;
     dy = 15.f;
 
-    install(column_1, y, input_jack(BoosterStage::DEFER_IN));
+    install(column_1, y, input<BoosterStageJack>(BoosterStage::DEFER_IN));
     install(column_2, y,
             button<BoosterStageButton>(BoosterStage::DEFER_BUTTON));
     install(column_4, y,
             button<BoosterStageReverseButton>(BoosterStage::ACTIVE_BUTTON));
-    install(column_5, y, output_jack(BoosterStage::ACTIVE_OUT));
+    install(column_5, y, output<BoosterStageJack>(BoosterStage::ACTIVE_OUT));
 
     y += dy;
-    install(column_1, y, input_jack(BoosterStage::TRIGGER_IN));
+    install(column_1, y, input<BoosterStageJack>(BoosterStage::TRIGGER_IN));
     install(column_2, y,
             button<BoosterStageButton>(BoosterStage::TRIGGER_BUTTON));
     install(column_4, y,
             button<BoosterStageReverseButton>(BoosterStage::EOC_BUTTON));
-    install(column_5, y, output_jack(BoosterStage::EOC_OUT));
+    install(column_5, y, output<BoosterStageJack>(BoosterStage::EOC_OUT));
 
     y += dy;
-    install(column_1, y, input_jack(BoosterStage::ENVELOPE_IN));
-    install(column_5, y, output_jack(BoosterStage::MAIN_OUT));
+    install(column_1, y, input<BoosterStageJack>(BoosterStage::ENVELOPE_IN));
+    install(column_5, y, output<BoosterStageJack>(BoosterStage::MAIN_OUT));
   }
 };
 } // namespace DHE

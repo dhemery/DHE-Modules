@@ -111,6 +111,11 @@ public:
   StageKnob() : LargeKnob("stage") {}
 };
 
+template <int type> class StageJack : public Jack<type> {
+public:
+  StageJack() : Jack<type>("stage") {}
+};
+
 struct StageWidget : public ModuleWidget<StageWidget, Stage> {
   static constexpr auto resource_name = "stage";
 
@@ -135,16 +140,16 @@ struct StageWidget : public ModuleWidget<StageWidget, Stage> {
     y = 82.f;
     dy = 15.f;
 
-    install(column_1, y, input_jack(Stage::DEFER_IN));
-    install(column_3, y, output_jack(Stage::ACTIVE_OUT));
+    install(column_1, y, input<StageJack>(Stage::DEFER_IN));
+    install(column_3, y, output<StageJack>(Stage::ACTIVE_OUT));
 
     y += dy;
-    install(column_1, y, input_jack(Stage::TRIGGER_IN));
-    install(column_3, y, output_jack(Stage::EOC_OUT));
+    install(column_1, y, input<StageJack>(Stage::TRIGGER_IN));
+    install(column_3, y, output<StageJack>(Stage::EOC_OUT));
 
     y += dy;
-    install(column_1, y, input_jack(Stage::ENVELOPE_IN));
-    install(column_3, y, output_jack(Stage::MAIN_OUT));
+    install(column_1, y, input<StageJack>(Stage::ENVELOPE_IN));
+    install(column_3, y, output<StageJack>(Stage::MAIN_OUT));
   }
 };
 } // namespace DHE

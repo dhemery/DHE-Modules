@@ -211,6 +211,11 @@ public:
   XycloidSwitch3() : ThumbSwitch3{"xycloid"} {}
 };
 
+template <int type> class XycloidJack : public Jack<type> {
+public:
+  XycloidJack() : Jack<type>("xycloid") {}
+};
+
 struct XycloidWidget : public ModuleWidget<XycloidWidget, Xycloid> {
   static constexpr auto resource_name = "xycloid";
 
@@ -225,20 +230,20 @@ struct XycloidWidget : public ModuleWidget<XycloidWidget, Xycloid> {
     auto y = 30.f;
     auto dy = 22.f;
 
-    install(column_1, y, input_jack(Xycloid::WOBBLE_RATIO_CV));
+    install(column_1, y, input<XycloidJack>(Xycloid::WOBBLE_RATIO_CV));
     install(column_2, y, knob<XycloidTinyKnob>(Xycloid::WOBBLE_RATIO_AV));
     install(column_3, y, knob<XycloidLargeKnob>(Xycloid::WOBBLE_RATIO));
     install(column_4, y,
             thumb_switch<XycloidSwitch2>(Xycloid::WOBBLE_RATIO_TYPE, 1));
 
     y += dy;
-    install(column_1, y, input_jack(Xycloid::WOBBLE_DEPTH_CV));
+    install(column_1, y, input<XycloidJack>(Xycloid::WOBBLE_DEPTH_CV));
     install(column_2, y, knob<XycloidTinyKnob>(Xycloid::WOBBLE_DEPTH_AV));
     install(column_3, y, knob<XycloidLargeKnob>(Xycloid::WOBBLE_DEPTH));
     install(column_4, y, thumb_switch<XycloidSwitch3>(Xycloid::WOBBLE_TYPE, 2));
 
     y += dy;
-    install(column_1, y, input_jack(Xycloid::THROB_SPEED_CV));
+    install(column_1, y, input<XycloidJack>(Xycloid::THROB_SPEED_CV));
     install(column_2, y, knob<XycloidTinyKnob>(Xycloid::THROB_SPEED_AV));
     install(column_3, y, knob<XycloidLargeKnob>(Xycloid::THROB_SPEED, 0.65f));
     install(column_4, y, knob<XycloidSmallKnob>(Xycloid::WOBBLE_PHASE));
@@ -249,16 +254,16 @@ struct XycloidWidget : public ModuleWidget<XycloidWidget, Xycloid> {
     auto default_gain = Rotation::gain_range.normalize(1.f);
 
     y += dy;
-    install(column_1, y, input_jack(Xycloid::X_GAIN_CV));
+    install(column_1, y, input<XycloidJack>(Xycloid::X_GAIN_CV));
     install(column_2, y, knob<XycloidSmallKnob>(Xycloid::X_GAIN, default_gain));
     install(column_3, y, thumb_switch<XycloidSwitch2>(Xycloid::X_RANGE));
-    install(column_4, y, output_jack(Xycloid::X_OUT));
+    install(column_4, y, output<XycloidJack>(Xycloid::X_OUT));
 
     y += dy;
-    install(column_1, y, input_jack(Xycloid::Y_GAIN_CV));
+    install(column_1, y, input<XycloidJack>(Xycloid::Y_GAIN_CV));
     install(column_2, y, knob<XycloidSmallKnob>(Xycloid::Y_GAIN, default_gain));
     install(column_3, y, thumb_switch<XycloidSwitch2>(Xycloid::Y_RANGE));
-    install(column_4, y, output_jack(Xycloid::Y_OUT));
+    install(column_4, y, output<XycloidJack>(Xycloid::Y_OUT));
   }
 
   void appendContextMenu(rack::Menu *menu) override {

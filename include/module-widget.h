@@ -9,6 +9,8 @@
 
 #include "dhe-modules.h"
 
+#include "display/controls.h"
+
 namespace DHE {
 inline void moveTo(rack::Rect &box, rack::Vec center) {
   box.pos = center.minus(box.size.mult(0.5f));
@@ -34,31 +36,6 @@ struct BooleanOption : rack::MenuItem {
 
   const std::function<void(bool)> set;
   const std::function<bool()> is_on;
-};
-
-template <typename TDisplay> class Jack : public rack::SVGPort {
-public:
-  Jack() {
-    background->svg = TDisplay::svg("port");
-    background->wrap();
-    box.size = background->box.size;
-  }
-};
-
-template <typename TDisplay> class InputJack : public Jack<TDisplay> {
-public:
-  static auto create(rack::Module *module, int index) -> InputJack * {
-    return rack::Port::create<InputJack<TDisplay>>(
-        {0, 0}, rack::Port::PortType::INPUT, module, index);
-  }
-};
-
-template <typename TDisplay> class OutputJack : public Jack<TDisplay> {
-public:
-  static auto create(rack::Module *module, int index) -> OutputJack * {
-    return rack::Port::create<OutputJack<TDisplay>>(
-        {0, 0}, rack::Port::PortType::OUTPUT, module, index);
-  }
 };
 
 template <typename TDisplay, typename TModule>
@@ -98,32 +75,36 @@ protected:
 
   auto width() const -> float { return box.size.x * MM_PER_IN / SVG_DPI; }
 
-  void install(float x, float y, rack::ParamWidget *widget) {
-    moveTo(x, y, widget);
-    addParam(widget);
-  }
-
   void install(float x, float y, rack::Widget *widget) {
     moveTo(x, y, widget);
     addChild(widget);
   }
 
-  void install(float x, float y, InputJack<TDisplay> *jack) {
-    moveTo(x, y, jack);
-    addInput(jack);
+  void install(float x, float y, rack::ParamWidget *widget) {
+    moveTo(x, y, widget);
+    addParam(widget);
   }
 
-  void install(float x, float y, OutputJack<TDisplay> *jack) {
-    moveTo(x, y, jack);
-    addOutput(jack);
+  void install(float x, float y, Jack<rack::Port::PortType::INPUT> *port) {
+    moveTo(x, y, port);
+    addInput(port);
   }
 
-  auto input_jack(int index) const -> InputJack<TDisplay> * {
-    return InputJack<TDisplay>::create(module, index);
+  void install(float x, float y, Jack<rack::Port::PortType::OUTPUT> *port) {
+    moveTo(x, y, port);
+    addOutput(port);
   }
 
-  auto output_jack(int index) const -> OutputJack<TDisplay> * {
-    return OutputJack<TDisplay>::create(module, index);
+  template <template <int> class TJack>
+  auto input(int index) const -> TJack<rack::Port::PortType::INPUT> * {
+    return rack::Port::create<TJack<rack::Port::PortType::INPUT>>(
+        {0, 0}, rack::Port::PortType::INPUT, module, index);
+  }
+
+  template <template <int> class TJack>
+  auto output(int index) const -> TJack<rack::Port::PortType::OUTPUT> * {
+    return rack::Port::create<TJack<rack::Port::PortType::OUTPUT>>(
+        {0, 0}, rack::Port::PortType::OUTPUT, module, index);
   }
 
   template <typename TKnob>
@@ -176,5 +157,4 @@ private:
     return prefix;
   }
 };
-
 } // namespace DHE

@@ -201,6 +201,11 @@ public:
   FuncKnob() : LargeKnob("func") {}
 };
 
+template <int type> class FuncJack : public Jack<type> {
+public:
+  FuncJack() : Jack<type>("func") {}
+};
+
 struct FuncWidget : public ModuleWidget<FuncWidget, Func> {
   static constexpr auto resource_name = "func";
 
@@ -222,9 +227,9 @@ struct FuncWidget : public ModuleWidget<FuncWidget, Func> {
     auto row_4 = top + row_spacing * 3;
     auto row_6 = top + row_spacing * 5 + port_offset;
 
-    install(x, row_1, input_jack(Func::IN));
+    install(x, row_1, input<FuncJack>(Func::IN));
     install(x, row_3, knob<FuncKnob>(Func::KNOB));
-    install(x, row_6, output_jack(Func::OUT));
+    install(x, row_6, output<FuncJack>(Func::OUT));
 
     auto multiplication_range_switch =
         MultiplicationRangeSwitch<FuncWidget>::create(
@@ -245,6 +250,11 @@ struct FuncWidget : public ModuleWidget<FuncWidget, Func> {
 class Func6Knob : public LargeKnob {
 public:
   Func6Knob() : LargeKnob("func6") {}
+};
+
+template <int type> class Func6Jack : public Jack<type> {
+public:
+  Func6Jack() : Jack<type>("func6") {}
 };
 
 struct Func6Widget : public ModuleWidget<Func6Widget, Func6> {
@@ -269,9 +279,9 @@ struct Func6Widget : public ModuleWidget<Func6Widget, Func6> {
       auto y = top + row * row_spacing;
       auto port_y = y + port_offset;
 
-      install(column_1, port_y, input_jack(Func6::IN + row));
+      install(column_1, port_y, input<Func6Jack>(Func6::IN + row));
       install(column_3, y, knob<Func6Knob>(Func6::KNOB + row));
-      install(column_5, port_y, output_jack(Func6::OUT + row));
+      install(column_5, port_y, output<Func6Jack>(Func6::OUT + row));
 
       auto multiplication_range_switch =
           MultiplicationRangeSwitch<Func6Widget>::create(
