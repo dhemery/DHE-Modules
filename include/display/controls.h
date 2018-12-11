@@ -20,9 +20,9 @@ private:
   const std::string resource_dir;
 };
 
-class Potentiometer : public rack::RoundKnob, public Control {
+class Knob : public rack::RoundKnob, public Control {
 public:
-  Potentiometer(const std::string &module_dir, const std::string &size)
+  Knob(const std::string &module_dir, const std::string &size)
       : Control{module_dir} {
     static const auto prefix = std::string{"knob-"};
     setSVG(load_svg(prefix + size));
@@ -30,28 +30,27 @@ public:
   }
 };
 
-class LargeKnob : public Potentiometer {
+class LargeKnob : public Knob {
 public:
   explicit LargeKnob(const std::string &module_dir)
-      : Potentiometer(module_dir, "large") {}
+      : Knob(module_dir, "large") {}
 };
 
-class MediumKnob : public Potentiometer {
+class MediumKnob : public Knob {
 public:
   explicit MediumKnob(const std::string &module_dir)
-      : Potentiometer(module_dir, "medium") {}
+      : Knob(module_dir, "medium") {}
 };
 
-class SmallKnob : public Potentiometer {
+class SmallKnob : public Knob {
 public:
   explicit SmallKnob(const std::string &module_dir)
-      : Potentiometer(module_dir, "small") {}
+      : Knob(module_dir, "small") {}
 };
 
-class TinyKnob : public Potentiometer {
+class TinyKnob : public Knob {
 public:
-  explicit TinyKnob(const std::string &module_dir)
-      : Potentiometer(module_dir, "tiny") {}
+  explicit TinyKnob(const std::string &module_dir) : Knob(module_dir, "tiny") {}
 };
 
 class Button : public rack::SVGSwitch,

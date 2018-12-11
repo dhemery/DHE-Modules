@@ -3,7 +3,7 @@
 #include "util/range.h"
 
 namespace DHE {
-namespace Knob {
+namespace Rotation {
 constexpr auto gain_range = Range{0.f, 2.f};
 constexpr auto av_range = Range{-1.f, 1.f};
 
@@ -29,5 +29,5 @@ inline auto modulated(float knob_rotation, float cv_bipolar_voltage,
 inline auto modulated(float knob_rotation, float cv_bipolar_voltage) -> float {
   return knob_rotation + cv_offset(cv_bipolar_voltage);
 }
-} // namespace Knob
+} // namespace Rotation
 } // namespace DHE

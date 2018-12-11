@@ -2,7 +2,7 @@
 #include "module-widget.h"
 
 #include "display/controls.h"
-#include "util/knob.h"
+#include "util/rotation.h"
 #include "util/signal.h"
 
 namespace DHE {
@@ -57,7 +57,7 @@ private:
 
   auto gain(const ParameterIds knob_param, const InputIds cv_input) const
       -> float {
-    return Knob::gain_multiplier(modulated(knob_param, cv_input));
+    return Rotation::gain_multiplier(modulated(knob_param, cv_input));
   }
 
   auto main_in() const -> float { return inputs[MAIN_IN].value; }
@@ -65,7 +65,7 @@ private:
   auto modulated(ParameterIds knob_param, InputIds cv_input) const -> float {
     auto rotation = params[knob_param].value;
     auto cv = inputs[cv_input].value;
-    return Knob::modulated(rotation, cv);
+    return Rotation::modulated(rotation, cv);
   }
 
   void send_main_out(float voltage) { outputs[MAIN_OUT].value = voltage; }

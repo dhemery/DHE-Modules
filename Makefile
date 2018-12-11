@@ -35,7 +35,7 @@ debug: dev
 run: dev
 	/Applications/Rack.app/Contents/MacOS/Rack -g /Applications/Rack.app/Contents/Resources -l $(realpath $(DEV_INSTALL_DIR))
 
-tidy:
+pretty:
 	find . -name *.h -o -name *.cpp | xargs clang-format -i
 
 gui:
@@ -49,4 +49,4 @@ fresh: clean uninstall
 uninstall:
 	rm -rf $(DEV_INSTALL_DIR)
 
-.PHONY: clean clobber fresh gui tidy uninstall
+.PHONY: clean clobber fresh gui pretty uninstall

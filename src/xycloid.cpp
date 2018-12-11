@@ -4,7 +4,7 @@
 #include "module-widget.h"
 
 #include "display/controls.h"
-#include "util/knob.h"
+#include "util/rotation.h"
 #include "util/sigmoid.h"
 #include "util/signal.h"
 
@@ -94,7 +94,7 @@ private:
       -> float {
     auto rotation = params[knob_param].value;
     auto cv = inputs[cv_input].value;
-    return Knob::modulated(rotation, cv);
+    return Rotation::modulated(rotation, cv);
   }
 
   auto modulated(const ParameterIds &knob_param, const InputIds &cv_input,
@@ -102,7 +102,7 @@ private:
     auto rotation = params[knob_param].value;
     auto cv = inputs[cv_input].value;
     auto av = params[av_param].value;
-    return Knob::modulated(rotation, cv, av);
+    return Rotation::modulated(rotation, cv, av);
   }
 
   auto offset(int param) const -> float {
@@ -155,11 +155,11 @@ private:
   auto x_offset() const -> float { return offset(X_RANGE); }
 
   auto x_gain_in() const -> float {
-    return Knob::gain_multiplier(modulated(X_GAIN, X_GAIN_CV));
+    return Rotation::gain_multiplier(modulated(X_GAIN, X_GAIN_CV));
   }
 
   auto y_gain_in() const -> float {
-    return Knob::gain_multiplier(modulated(Y_GAIN, Y_GAIN_CV));
+    return Rotation::gain_multiplier(modulated(Y_GAIN, Y_GAIN_CV));
   }
 
   auto y_offset() const -> float { return offset(Y_RANGE); }
@@ -246,7 +246,7 @@ struct XycloidWidget : public ModuleWidget<XycloidWidget, Xycloid> {
     y = 82.f;
     dy = 15.f;
 
-    auto default_gain = Knob::gain_range.normalize(1.f);
+    auto default_gain = Rotation::gain_range.normalize(1.f);
 
     y += dy;
     install(column_1, y, input_jack(Xycloid::X_GAIN_CV));

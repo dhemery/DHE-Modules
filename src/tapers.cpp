@@ -2,7 +2,7 @@
 #include "module-widget.h"
 
 #include "display/controls.h"
-#include "util/knob.h"
+#include "util/rotation.h"
 #include "util/sigmoid.h"
 #include "util/signal.h"
 
@@ -69,7 +69,7 @@ private:
     auto rotation = params[knob_param].value;
     auto cv = inputs[cv_input].value;
     auto av = params[av_param].value;
-    return Knob::modulated(rotation, cv, av);
+    return Rotation::modulated(rotation, cv, av);
   }
 
   auto taper(float level, bool is_uni, float curve, bool is_s) const -> float {

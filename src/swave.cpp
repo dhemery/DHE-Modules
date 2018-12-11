@@ -2,8 +2,8 @@
 #include "module-widget.h"
 
 #include "display/controls.h"
-#include "util/knob.h"
 #include "util/range.h"
+#include "util/rotation.h"
 #include "util/sigmoid.h"
 #include "util/signal.h"
 
@@ -28,7 +28,7 @@ private:
   auto curve() const -> float {
     auto rotation = params[CURVE_KNOB].value;
     auto cv = inputs[CURVE_CV].value;
-    return Knob::modulated(rotation, cv);
+    return Rotation::modulated(rotation, cv);
   }
 
   void send_signal(float voltage) { outputs[MAIN_OUT].value = voltage; }

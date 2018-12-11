@@ -2,8 +2,8 @@
 #include "module-widget.h"
 
 #include "display/controls.h"
-#include "util/knob.h"
 #include "util/range.h"
+#include "util/rotation.h"
 #include "util/signal.h"
 
 namespace DHE {
@@ -38,7 +38,7 @@ private:
   auto modulated(ParameterIds knob_param, InputIds cv_input) const -> float {
     auto rotation = params[knob_param].value;
     auto cv = inputs[cv_input].value;
-    return Knob::modulated(rotation, cv);
+    return Rotation::modulated(rotation, cv);
   }
 
   auto range() const -> const Range & {
