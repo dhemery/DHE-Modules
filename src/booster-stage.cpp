@@ -189,13 +189,13 @@ struct BoosterStageWidget
     dy = 15.f;
 
     install(column_1, y, input(BoosterStage::DEFER_IN));
-    install(column_2, y, button<Button>(BoosterStage::DEFER_BUTTON));
+    install(column_2, y, button(BoosterStage::DEFER_BUTTON));
     install(column_4, y, button<ReverseButton>(BoosterStage::ACTIVE_BUTTON));
     install(column_5, y, output(BoosterStage::ACTIVE_OUT));
 
     y += dy;
     install(column_1, y, input(BoosterStage::TRIGGER_IN));
-    install(column_2, y, button<Button>(BoosterStage::TRIGGER_BUTTON));
+    install(column_2, y, button(BoosterStage::TRIGGER_BUTTON));
     install(column_4, y, button<ReverseButton>(BoosterStage::EOC_BUTTON));
     install(column_5, y, output(BoosterStage::EOC_OUT));
 

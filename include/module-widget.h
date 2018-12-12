@@ -113,7 +113,7 @@ protected:
     return rack::ParamWidget::create<K>({0, 0}, module, index, 0, 1, initial);
   }
 
-  template <template <typename> class B>
+  template <template <typename> class B = Button>
   auto button(int index) const -> B<D> * {
     return rack::ParamWidget::create<B<D>>({0, 0}, module, index, 0, 1, 0);
   }

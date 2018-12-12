@@ -90,8 +90,8 @@ struct UpstageWidget : public ModuleWidget<UpstageWidget, Upstage> {
     install(column_3, y, thumb_switch<2>(Upstage::LEVEL_RANGE_SWITCH, 1));
 
     y += dy;
-    install(column_1, y, button<Button>(Upstage::WAIT_BUTTON));
-    install(column_3, y, button<Button>(Upstage::TRIGGER_BUTTON));
+    install(column_1, y, button(Upstage::WAIT_BUTTON));
+    install(column_3, y, button(Upstage::TRIGGER_BUTTON));
 
     y = 82.f;
     dy = 15.f;
