@@ -1,5 +1,8 @@
 #pragma once
 
+#include <app.hpp>
+#include <componentlibrary.hpp>
+
 namespace DHE {
 template <typename T> class Knob : public rack::RoundKnob {
 public:

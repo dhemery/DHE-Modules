@@ -116,12 +116,18 @@ template <typename TDisplay>
 class MultiplicationRangeSwitch : public Counter<TDisplay, 4> {
 public:
   MultiplicationRangeSwitch() : Counter<TDisplay, 4>{"mult"} {}
+
+  void enable() { this->visible = true; }
+
+  void disable() { this->visible = false; }
 };
 
 template <typename TDisplay>
 class AdditionRangeSwitch : public Counter<TDisplay, 4> {
 public:
   AdditionRangeSwitch() : Counter<TDisplay, 4>{"add"} {}
+  void enable() { this->visible = true; }
+  void disable() { this->visible = false; }
 };
 
 template <typename TDisplay>
@@ -138,24 +144,25 @@ public:
     }
 
     if (this->value > 0.5) {
-      multiplication_range_switch->visible = true;
-      addition_range_switch->visible = false;
+      multiplication_range_switch->enable();
+      addition_range_switch->disable();
     } else {
-      multiplication_range_switch->visible = false;
-      addition_range_switch->visible = true;
+      multiplication_range_switch->disable();
+      addition_range_switch->enable();
     }
   }
 
-  void set_range_switches(rack::Widget *addition_range_switch,
-                          rack::Widget *multiplication_range_switch) {
+  void set_range_switches(
+      AdditionRangeSwitch<TDisplay> *addition_range_switch,
+      MultiplicationRangeSwitch<TDisplay> *multiplication_range_switch) {
     this->addition_range_switch = addition_range_switch;
     this->multiplication_range_switch = multiplication_range_switch;
     set_range_switch_visibility();
   }
 
 private:
-  rack::Widget *addition_range_switch = nullptr;
-  rack::Widget *multiplication_range_switch = nullptr;
+  AdditionRangeSwitch<TDisplay> *addition_range_switch = nullptr;
+  MultiplicationRangeSwitch<TDisplay> *multiplication_range_switch = nullptr;
 };
 
 struct FuncWidget : public ModuleWidget<FuncWidget, Func> {
@@ -191,7 +198,7 @@ struct FuncWidget : public ModuleWidget<FuncWidget, Func> {
         counter<AdditionRangeSwitch>(Func::ADDITION_RANGE_SWITCH, 1);
     install(x, row_4, addition_range_switch);
 
-    auto operator_switch = counter<OperatorSwitch>(Func::ADDITION_RANGE_SWITCH);
+    auto operator_switch = counter<OperatorSwitch>(Func::OPERATOR_SWITCH);
     operator_switch->set_range_switches(addition_range_switch,
                                         multiplication_range_switch);
 
