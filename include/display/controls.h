@@ -3,7 +3,7 @@
 namespace DHE {
 template <typename T> class Knob : public rack::RoundKnob {
 public:
-  Knob(const std::string &size) {
+  explicit Knob(const std::string &size) {
     static const auto prefix = std::string{"knob-"};
     setSVG(T::svg(prefix + size));
     shadow->opacity = 0.f;
@@ -12,22 +12,22 @@ public:
 
 template <typename T> class LargeKnob : public Knob<T> {
 public:
-  explicit LargeKnob() : Knob<T>("large") {}
+  LargeKnob() : Knob<T>("large") {}
 };
 
 template <typename T> class MediumKnob : public Knob<T> {
 public:
-  explicit MediumKnob() : Knob<T>("medium") {}
+  MediumKnob() : Knob<T>("medium") {}
 };
 
 template <typename T> class SmallKnob : public Knob<T> {
 public:
-  explicit SmallKnob() : Knob<T>("small") {}
+  SmallKnob() : Knob<T>("small") {}
 };
 
 template <typename T> class TinyKnob : public Knob<T> {
 public:
-  explicit TinyKnob() : Knob<T>("tiny") {}
+  TinyKnob() : Knob<T>("tiny") {}
 };
 
 template <typename T>
@@ -44,6 +44,20 @@ public:
 template <typename T> class ReverseButton : public Button<T> {
 public:
   ReverseButton() : Button<T>{"reverse"} {}
+};
+
+template <typename T, int N>
+class Counter : public rack::SVGSwitch, public rack::ToggleSwitch {
+public:
+  Counter(const std::string &name) {
+    static const auto base = std::string{"button-"};
+    const auto prefix = base + name + "-";
+    for (int position = 1; position <= size; position++) {
+      addFrame(T::svg(prefix + std::to_string(position)));
+    }
+  }
+
+  static constexpr auto size = N;
 };
 
 template <typename T, int N>

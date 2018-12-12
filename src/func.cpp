@@ -113,56 +113,31 @@ private:
 };
 
 template <typename TDisplay>
-class MultiplicationRangeSwitch : public rack::SVGSwitch,
-                                  public rack::ToggleSwitch {
+class MultiplicationRangeSwitch : public Counter<TDisplay, 4> {
 public:
-  MultiplicationRangeSwitch() {
-    addFrame(TDisplay::svg("button-mult-1"));
-    addFrame(TDisplay::svg("button-mult-2"));
-    addFrame(TDisplay::svg("button-mult-3"));
-    addFrame(TDisplay::svg("button-mult-4"));
-  }
-
-  static auto create(rack::Module *module, int index)
-      -> MultiplicationRangeSwitch * {
-    return rack::ParamWidget::create<MultiplicationRangeSwitch<TDisplay>>(
-        {0, 0}, module, index, 0, 3, 2);
-  }
+  MultiplicationRangeSwitch() : Counter<TDisplay, 4>{"mult"} {}
 };
 
 template <typename TDisplay>
-class AdditionRangeSwitch : public rack::SVGSwitch, public rack::ToggleSwitch {
+class AdditionRangeSwitch : public Counter<TDisplay, 4> {
 public:
-  AdditionRangeSwitch() {
-    addFrame(TDisplay::svg("button-add-1"));
-    addFrame(TDisplay::svg("button-add-2"));
-    addFrame(TDisplay::svg("button-add-3"));
-    addFrame(TDisplay::svg("button-add-4"));
-  }
-
-  static auto create(rack::Module *module, int index) -> AdditionRangeSwitch * {
-    return rack::ParamWidget::create<AdditionRangeSwitch<TDisplay>>(
-        {0, 0}, module, index, 0, 3, 1);
-  }
+  AdditionRangeSwitch() : Counter<TDisplay, 4>{"add"} {}
 };
 
 template <typename TDisplay>
-class OperatorSwitch : public rack::SVGSwitch, public rack::ToggleSwitch {
+class OperatorSwitch : public ThumbSwitch<TDisplay, 2> {
 public:
-  OperatorSwitch() {
-    addFrame(TDisplay::svg("thumb-2-1"));
-    addFrame(TDisplay::svg("thumb-2-2"));
-  }
-
   void onChange(rack::EventChange &e) override {
     rack::SVGSwitch::onChange(e);
     set_range_switch_visibility();
   }
 
   void set_range_switch_visibility() {
-    if (multiplication_range_switch == nullptr)
+    if (multiplication_range_switch == nullptr) {
       return;
-    if (value > 0.5) {
+    }
+
+    if (this->value > 0.5) {
       multiplication_range_switch->visible = true;
       addition_range_switch->visible = false;
     } else {
@@ -171,29 +146,16 @@ public:
     }
   }
 
-  void set_range_switches(
-      AdditionRangeSwitch<TDisplay> *addition_range_switch,
-      MultiplicationRangeSwitch<TDisplay> *multiplication_range_switch) {
+  void set_range_switches(rack::Widget *addition_range_switch,
+                          rack::Widget *multiplication_range_switch) {
     this->addition_range_switch = addition_range_switch;
     this->multiplication_range_switch = multiplication_range_switch;
     set_range_switch_visibility();
   }
 
-  static auto
-  create(rack::Module *module, int index,
-         AdditionRangeSwitch<TDisplay> *addition_range_switch,
-         MultiplicationRangeSwitch<TDisplay> *multiplication_range_switch)
-      -> OperatorSwitch<TDisplay> * {
-    auto switch_widget = rack::ParamWidget::create<OperatorSwitch<TDisplay>>(
-        {0, 0}, module, index, 0, 1, 0);
-    switch_widget->set_range_switches(addition_range_switch,
-                                      multiplication_range_switch);
-    return switch_widget;
-  }
-
 private:
-  AdditionRangeSwitch<TDisplay> *addition_range_switch = nullptr;
-  MultiplicationRangeSwitch<TDisplay> *multiplication_range_switch = nullptr;
+  rack::Widget *addition_range_switch = nullptr;
+  rack::Widget *multiplication_range_switch = nullptr;
 };
 
 struct FuncWidget : public ModuleWidget<FuncWidget, Func> {
@@ -221,18 +183,18 @@ struct FuncWidget : public ModuleWidget<FuncWidget, Func> {
     install(x, row_3, knob<LargeKnob>(Func::KNOB));
     install(x, row_6, output(Func::OUT));
 
-    auto multiplication_range_switch =
-        MultiplicationRangeSwitch<FuncWidget>::create(
-            module, Func::MULTIPLICATION_RANGE_SWITCH);
+    auto multiplication_range_switch = counter<MultiplicationRangeSwitch>(
+        Func::MULTIPLICATION_RANGE_SWITCH, 2);
     install(x, row_4, multiplication_range_switch);
 
-    auto addition_range_switch = AdditionRangeSwitch<FuncWidget>::create(
-        module, Func::ADDITION_RANGE_SWITCH);
+    auto addition_range_switch =
+        counter<AdditionRangeSwitch>(Func::ADDITION_RANGE_SWITCH, 1);
     install(x, row_4, addition_range_switch);
 
-    auto operator_switch = OperatorSwitch<FuncWidget>::create(
-        module, Func::OPERATOR_SWITCH, addition_range_switch,
-        multiplication_range_switch);
+    auto operator_switch = counter<OperatorSwitch>(Func::ADDITION_RANGE_SWITCH);
+    operator_switch->set_range_switches(addition_range_switch,
+                                        multiplication_range_switch);
+
     install(x, row_2, operator_switch);
   }
 };
@@ -263,18 +225,18 @@ struct Func6Widget : public ModuleWidget<Func6Widget, Func6> {
       install(column_3, y, knob<LargeKnob>(Func6::KNOB + row));
       install(column_5, port_y, output(Func6::OUT + row));
 
-      auto multiplication_range_switch =
-          MultiplicationRangeSwitch<Func6Widget>::create(
-              module, Func6::MULTIPLICATION_RANGE_SWITCH + row);
+      auto multiplication_range_switch = counter<MultiplicationRangeSwitch>(
+          Func6::MULTIPLICATION_RANGE_SWITCH + row, 2);
       install(column_4, y, multiplication_range_switch);
 
-      auto addition_range_switch = AdditionRangeSwitch<Func6Widget>::create(
-          module, Func6::ADDITION_RANGE_SWITCH + row);
+      auto addition_range_switch =
+          counter<AdditionRangeSwitch>(Func6::ADDITION_RANGE_SWITCH + row, 1);
       install(column_4, y, addition_range_switch);
 
-      auto operator_switch = OperatorSwitch<Func6Widget>::create(
-          module, Func6::OPERATOR_SWITCH + row, addition_range_switch,
-          multiplication_range_switch);
+      auto operator_switch =
+          counter<OperatorSwitch>(Func6::OPERATOR_SWITCH + row);
+      operator_switch->set_range_switches(addition_range_switch,
+                                          multiplication_range_switch);
       install(column_2, y, operator_switch);
     }
   }

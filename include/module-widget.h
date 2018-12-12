@@ -119,6 +119,12 @@ protected:
     return rack::ParamWidget::create<B<D>>({0, 0}, module, index, 0, 1, 0);
   }
 
+  template <template <typename> class C>
+  auto counter(int index, int initial = 0) const -> C<D> * {
+    return rack::ParamWidget::create<C<D>>({0, 0}, module, index, 0,
+                                           C<D>::size - 1, initial);
+  }
+
   template <int N>
   auto thumb_switch(int index, int initial = 0) const -> ThumbSwitch<D, N> * {
     return rack::ParamWidget::create<ThumbSwitch<D, N>>({0, 0}, module, index,
