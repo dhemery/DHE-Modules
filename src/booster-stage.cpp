@@ -172,20 +172,18 @@ struct BoosterStageWidget
 
     install(column_1, y, input(BoosterStage::LEVEL_CV));
     install(column_3, y, knob<BoosterStageKnob>(BoosterStage::LEVEL_KNOB));
-    install(column_5, y,
-            thumb_switch<ThumbSwitch2>(BoosterStage::LEVEL_RANGE_SWITCH, 1));
+    install(column_5, y, thumb_switch<2>(BoosterStage::LEVEL_RANGE_SWITCH, 1));
 
     y += dy;
     install(column_1, y, input(BoosterStage::CURVE_CV));
     install(column_3, y, knob<BoosterStageKnob>(BoosterStage::CURVE_KNOB));
-    install(column_5, y,
-            thumb_switch<ThumbSwitch2>(BoosterStage::SHAPE_SWITCH));
+    install(column_5, y, thumb_switch<2>(BoosterStage::SHAPE_SWITCH));
 
     y += dy;
     install(column_1, y, input(BoosterStage::DURATION_CV));
     install(column_3, y, knob<BoosterStageKnob>(BoosterStage::DURATION_KNOB));
     install(column_5, y,
-            thumb_switch<ThumbSwitch3>(BoosterStage::DURATION_RANGE_SWITCH, 1));
+            thumb_switch<3>(BoosterStage::DURATION_RANGE_SWITCH, 1));
 
     y = 82.f;
     dy = 15.f;

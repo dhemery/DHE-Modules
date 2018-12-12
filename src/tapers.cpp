@@ -110,8 +110,8 @@ struct TapersWidget : public ModuleWidget<TapersWidget, Tapers> {
     install(column_2, y, knob<TapersAVKnob>(Tapers::CURVE_1_AV));
     install(column_3, y, knob<TapersMediumKnob>(Tapers::CURVE_1_KNOB));
     y += dy;
-    install(column_1, y, thumb_switch<ThumbSwitch2>(Tapers::SHAPE_1_SWITCH));
-    install(column_2, y, thumb_switch<ThumbSwitch2>(Tapers::RANGE_1_SWITCH, 1));
+    install(column_1, y, thumb_switch<2>(Tapers::SHAPE_1_SWITCH));
+    install(column_2, y, thumb_switch<2>(Tapers::RANGE_1_SWITCH, 1));
     install(column_3, y, output(Tapers::OUT_1));
 
     y += dy + panel_buffer;
@@ -124,8 +124,8 @@ struct TapersWidget : public ModuleWidget<TapersWidget, Tapers> {
     install(column_2, y, knob<TapersAVKnob>(Tapers::CURVE_2_AV));
     install(column_3, y, knob<TapersMediumKnob>(Tapers::CURVE_2_KNOB));
     y += dy;
-    install(column_1, y, thumb_switch<ThumbSwitch2>(Tapers::SHAPE_2_SWITCH));
-    install(column_2, y, thumb_switch<ThumbSwitch2>(Tapers::RANGE_2_SWITCH, 1));
+    install(column_1, y, thumb_switch<2>(Tapers::SHAPE_2_SWITCH));
+    install(column_2, y, thumb_switch<2>(Tapers::RANGE_2_SWITCH, 1));
     install(column_3, y, output(Tapers::OUT_2));
   }
 };

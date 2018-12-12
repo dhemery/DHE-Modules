@@ -90,8 +90,7 @@ struct RangerWidget : public ModuleWidget<RangerWidget, Ranger> {
 
     y += dy + panel_buffer;
     install(column_1, y, knob<RangerMediumKnob>(Ranger::LIMIT_1_KNOB));
-    install(column_2, y,
-            thumb_switch<ThumbSwitch2>(Ranger::LIMIT_1_RANGE_SWITCH, 1));
+    install(column_2, y, thumb_switch<2>(Ranger::LIMIT_1_RANGE_SWITCH, 1));
 
     y += dy;
     install(column_1, y, input(Ranger::LIMIT_1_CV));
@@ -99,8 +98,7 @@ struct RangerWidget : public ModuleWidget<RangerWidget, Ranger> {
 
     y += dy + panel_buffer;
     install(column_1, y, knob<RangerMediumKnob>(Ranger::LIMIT_2_KNOB));
-    install(column_2, y,
-            thumb_switch<ThumbSwitch2>(Ranger::LIMIT_2_RANGE_SWITCH, 1));
+    install(column_2, y, thumb_switch<2>(Ranger::LIMIT_2_RANGE_SWITCH, 1));
 
     y += dy;
     install(column_1, y, input(Ranger::LIMIT_2_CV));

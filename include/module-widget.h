@@ -47,6 +47,10 @@ public:
   }
 };
 
+template <typename D> using InputJack = Jack<D, rack::Port::PortType::INPUT>;
+
+template <typename D> using OutputJack = Jack<D, rack::Port::PortType::OUTPUT>;
+
 template <typename D, typename M>
 class ModuleWidget : public rack::ModuleWidget {
 
@@ -84,19 +88,19 @@ protected:
 
   auto width() const -> float { return box.size.x * MM_PER_IN / SVG_DPI; }
 
-  void install(float x, float y, Jack<D, rack::Port::PortType::INPUT> *port) {
-    moveTo(x, y, port);
-    addInput(port);
+  void install(float x, float y, InputJack<D> *jack) {
+    moveTo(x, y, jack);
+    addInput(jack);
   }
 
-  void install(float x, float y, Jack<D, rack::Port::PortType::OUTPUT> *port) {
-    moveTo(x, y, port);
-    addOutput(port);
+  void install(float x, float y, OutputJack<D> *jack) {
+    moveTo(x, y, jack);
+    addOutput(jack);
   }
 
-  void install(float x, float y, rack::ParamWidget *widget) {
-    moveTo(x, y, widget);
-    addParam(widget);
+  void install(float x, float y, rack::ParamWidget *param) {
+    moveTo(x, y, param);
+    addParam(param);
   }
 
   void install(float x, float y, rack::Widget *widget) {
@@ -114,19 +118,19 @@ protected:
     return rack::ParamWidget::create<B<D>>({0, 0}, module, index, 0, 1, 0);
   }
 
-  template <template <typename> class S>
-  auto thumb_switch(int index, int initial = 0) const -> S<D> * {
-    return rack::ParamWidget::create<S<D>>({0, 0}, module, index, 0,
-                                           S<D>::size - 1, initial);
+  template <int N>
+  auto thumb_switch(int index, int initial = 0) const -> ThumbSwitch<D, N> * {
+    return rack::ParamWidget::create<ThumbSwitch<D, N>>({0, 0}, module, index,
+                                                        0, N - 1, initial);
   }
 
-  auto input(int index) const -> Jack<D, rack::Port::PortType::INPUT> * {
-    return rack::Port::create<Jack<D, rack::Port::PortType::INPUT>>(
-        {0, 0}, rack::Port::PortType::INPUT, module, index);
+  auto input(int index) const -> InputJack<D> * {
+    return rack::Port::create<InputJack<D>>({0, 0}, rack::Port::PortType::INPUT,
+                                            module, index);
   }
 
-  auto output(int index) const -> Jack<D, rack::Port::PortType::OUTPUT> * {
-    return rack::Port::create<Jack<D, rack::Port::PortType::OUTPUT>>(
+  auto output(int index) const -> OutputJack<D> * {
+    return rack::Port::create<OutputJack<D>>(
         {0, 0}, rack::Port::PortType::OUTPUT, module, index);
   }
 

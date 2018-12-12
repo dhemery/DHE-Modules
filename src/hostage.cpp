@@ -179,13 +179,11 @@ struct HostageWidget : public ModuleWidget<HostageWidget, Hostage> {
     auto y = 25.f;
     auto dy = 18.5f;
 
-    install(column_2, y,
-            thumb_switch<ThumbSwitch2>(Hostage::SUSTAIN_MODE_SWITCH));
+    install(column_2, y, thumb_switch<2>(Hostage::SUSTAIN_MODE_SWITCH));
 
     y += dy;
     install(column_1, y, input(Hostage::DURATION_CV));
-    install(column_3, y,
-            thumb_switch<ThumbSwitch3>(Hostage::DURATION_RANGE_SWITCH, 1));
+    install(column_3, y, thumb_switch<3>(Hostage::DURATION_RANGE_SWITCH, 1));
 
     y += dy;
     install(column_2, y, knob<HostageKnob>(Hostage::DURATION_KNOB));
