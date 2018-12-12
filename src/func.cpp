@@ -113,9 +113,9 @@ private:
 };
 
 template <typename TDisplay>
-class MultiplicationRangeSwitch : public Counter<TDisplay, 4> {
+class MultiplicationRangeSwitch : public Switch<TDisplay, 4> {
 public:
-  MultiplicationRangeSwitch() : Counter<TDisplay, 4>{"mult"} {}
+  MultiplicationRangeSwitch() : Switch<TDisplay, 4>{"button-mult"} {}
 
   void enable() { this->visible = true; }
 
@@ -123,9 +123,9 @@ public:
 };
 
 template <typename TDisplay>
-class AdditionRangeSwitch : public Counter<TDisplay, 4> {
+class AdditionRangeSwitch : public Switch<TDisplay, 4> {
 public:
-  AdditionRangeSwitch() : Counter<TDisplay, 4>{"add"} {}
+  AdditionRangeSwitch() : Switch<TDisplay, 4>{"button-add"} {}
   void enable() { this->visible = true; }
   void disable() { this->visible = false; }
 };

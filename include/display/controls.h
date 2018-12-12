@@ -50,30 +50,25 @@ public:
 };
 
 template <typename T, int N>
-class Counter : public rack::SVGSwitch, public rack::ToggleSwitch {
+class Switch : public rack::SVGSwitch, public rack::ToggleSwitch {
 public:
-  Counter(const std::string &name) {
-    static const auto base = std::string{"button-"};
-    const auto prefix = base + name + "-";
+  explicit Switch(const std::string& name) {
+    auto base = name + "-" ;
     for (int position = 1; position <= size; position++) {
-      addFrame(T::svg(prefix + std::to_string(position)));
+      addFrame(T::svg(base + std::to_string(position)));
     }
+  }
+
+  auto position() const -> int {
+    return static_cast<int>(this->value);
   }
 
   static constexpr auto size = N;
 };
 
 template <typename T, int N>
-class ThumbSwitch : public rack::SVGSwitch, public rack::ToggleSwitch {
+class ThumbSwitch : public Switch<T,N> {
 public:
-  ThumbSwitch() {
-    static const auto base = std::string{"thumb-"};
-    const auto prefix = base + std::to_string(size) + "-";
-    for (int position = 1; position <= size; position++) {
-      addFrame(T::svg(prefix + std::to_string(position)));
-    }
-  }
-
-  static constexpr auto size = N;
+  explicit ThumbSwitch(const std::string& name = "thumb-" + std::to_string(N)) : Switch<T,N>{name} {}
 };
 } // namespace DHE
