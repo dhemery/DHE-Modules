@@ -153,16 +153,6 @@ public:
   BoosterStageKnob() : LargeKnob("booster-stage") {}
 };
 
-class BoosterStageButton : public Button {
-public:
-  BoosterStageButton() : Button{"booster-stage"} {}
-};
-
-class BoosterStageReverseButton : public Button {
-public:
-  BoosterStageReverseButton() : Button{"booster-stage", "reverse"} {}
-};
-
 struct BoosterStageWidget
     : public ModuleWidget<BoosterStageWidget, BoosterStage> {
   static constexpr auto resource_name = "booster-stage";
@@ -201,18 +191,14 @@ struct BoosterStageWidget
     dy = 15.f;
 
     install(column_1, y, input(BoosterStage::DEFER_IN));
-    install(column_2, y,
-            button<BoosterStageButton>(BoosterStage::DEFER_BUTTON));
-    install(column_4, y,
-            button<BoosterStageReverseButton>(BoosterStage::ACTIVE_BUTTON));
+    install(column_2, y, button<Button>(BoosterStage::DEFER_BUTTON));
+    install(column_4, y, button<ReverseButton>(BoosterStage::ACTIVE_BUTTON));
     install(column_5, y, output(BoosterStage::ACTIVE_OUT));
 
     y += dy;
     install(column_1, y, input(BoosterStage::TRIGGER_IN));
-    install(column_2, y,
-            button<BoosterStageButton>(BoosterStage::TRIGGER_BUTTON));
-    install(column_4, y,
-            button<BoosterStageReverseButton>(BoosterStage::EOC_BUTTON));
+    install(column_2, y, button<Button>(BoosterStage::TRIGGER_BUTTON));
+    install(column_4, y, button<ReverseButton>(BoosterStage::EOC_BUTTON));
     install(column_5, y, output(BoosterStage::EOC_OUT));
 
     y += dy;

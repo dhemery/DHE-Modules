@@ -70,11 +70,6 @@ public:
   UpstageKnob() : LargeKnob("upstage") {}
 };
 
-class UpstageButton : public Button {
-public:
-  UpstageButton() : Button{"upstage"} {}
-};
-
 struct UpstageWidget : public ModuleWidget<UpstageWidget, Upstage> {
   static constexpr auto resource_name = "upstage";
 
@@ -96,8 +91,8 @@ struct UpstageWidget : public ModuleWidget<UpstageWidget, Upstage> {
             thumb_switch<ThumbSwitch2>(Upstage::LEVEL_RANGE_SWITCH, 1));
 
     y += dy;
-    install(column_1, y, button<UpstageButton>(Upstage::WAIT_BUTTON));
-    install(column_3, y, button<UpstageButton>(Upstage::TRIGGER_BUTTON));
+    install(column_1, y, button<Button>(Upstage::WAIT_BUTTON));
+    install(column_3, y, button<Button>(Upstage::TRIGGER_BUTTON));
 
     y = 82.f;
     dy = 15.f;

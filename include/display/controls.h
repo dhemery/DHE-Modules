@@ -53,20 +53,20 @@ public:
   explicit TinyKnob(const std::string &module_dir) : Knob(module_dir, "tiny") {}
 };
 
-class Button : public rack::SVGSwitch,
-               public rack::MomentarySwitch,
-               public Control {
+template <typename T>
+class Button : public rack::SVGSwitch, public rack::MomentarySwitch {
 public:
-  Button(const std::string &module_dir, const std::string &type)
-      : Control{module_dir} {
+  explicit Button(const std::string &type = "normal") {
     static const auto base = std::string{"button-"};
     const auto prefix = base + type + "-";
-    addFrame(load_svg(prefix + "1"));
-    addFrame(load_svg(prefix + "2"));
+    addFrame(T::svg(prefix + "1"));
+    addFrame(T::svg(prefix + "2"));
   }
+};
 
-  explicit Button(const std::string &module_dir)
-      : Button(module_dir, "normal") {}
+template <typename D> class ReverseButton : public Button<D> {
+public:
+  ReverseButton() : Button<D>{"reverse"} {}
 };
 
 template <typename T, int N>
