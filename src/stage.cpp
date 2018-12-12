@@ -135,16 +135,16 @@ struct StageWidget : public ModuleWidget<StageWidget, Stage> {
     y = 82.f;
     dy = 15.f;
 
-    install(column_1, y, input<Jack>(Stage::DEFER_IN));
-    install(column_3, y, output<Jack>(Stage::ACTIVE_OUT));
+    install(column_1, y, input(Stage::DEFER_IN));
+    install(column_3, y, output(Stage::ACTIVE_OUT));
 
     y += dy;
-    install(column_1, y, input<Jack>(Stage::TRIGGER_IN));
-    install(column_3, y, output<Jack>(Stage::EOC_OUT));
+    install(column_1, y, input(Stage::TRIGGER_IN));
+    install(column_3, y, output(Stage::EOC_OUT));
 
     y += dy;
-    install(column_1, y, input<Jack>(Stage::ENVELOPE_IN));
-    install(column_3, y, output<Jack>(Stage::MAIN_OUT));
+    install(column_1, y, input(Stage::ENVELOPE_IN));
+    install(column_3, y, output(Stage::MAIN_OUT));
   }
 };
 } // namespace DHE

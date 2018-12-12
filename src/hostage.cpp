@@ -183,7 +183,7 @@ struct HostageWidget : public ModuleWidget<HostageWidget, Hostage> {
             thumb_switch<ThumbSwitch2>(Hostage::SUSTAIN_MODE_SWITCH));
 
     y += dy;
-    install(column_1, y, input<Jack>(Hostage::DURATION_CV));
+    install(column_1, y, input(Hostage::DURATION_CV));
     install(column_3, y,
             thumb_switch<ThumbSwitch3>(Hostage::DURATION_RANGE_SWITCH, 1));
 
@@ -193,16 +193,16 @@ struct HostageWidget : public ModuleWidget<HostageWidget, Hostage> {
     y = 82.f;
     dy = 15.f;
 
-    install(column_1, y, input<Jack>(Hostage::DEFER_IN));
-    install(column_3, y, output<Jack>(Hostage::ACTIVE_OUT));
+    install(column_1, y, input(Hostage::DEFER_IN));
+    install(column_3, y, output(Hostage::ACTIVE_OUT));
 
     y += dy;
-    install(column_1, y, input<Jack>(Hostage::SUSTAIN_GATE_IN));
-    install(column_3, y, output<Jack>(Hostage::EOC_OUT));
+    install(column_1, y, input(Hostage::SUSTAIN_GATE_IN));
+    install(column_3, y, output(Hostage::EOC_OUT));
 
     y += dy;
-    install(column_1, y, input<Jack>(Hostage::MAIN_IN));
-    install(column_3, y, output<Jack>(Hostage::MAIN_OUT));
+    install(column_1, y, input(Hostage::MAIN_IN));
+    install(column_3, y, output(Hostage::MAIN_OUT));
   }
 };
 } // namespace DHE

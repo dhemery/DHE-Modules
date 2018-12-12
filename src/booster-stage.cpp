@@ -180,19 +180,19 @@ struct BoosterStageWidget
     auto y = 25.f;
     auto dy = 18.5f;
 
-    install(column_1, y, input<Jack>(BoosterStage::LEVEL_CV));
+    install(column_1, y, input(BoosterStage::LEVEL_CV));
     install(column_3, y, knob<BoosterStageKnob>(BoosterStage::LEVEL_KNOB));
     install(column_5, y,
             thumb_switch<ThumbSwitch2>(BoosterStage::LEVEL_RANGE_SWITCH, 1));
 
     y += dy;
-    install(column_1, y, input<Jack>(BoosterStage::CURVE_CV));
+    install(column_1, y, input(BoosterStage::CURVE_CV));
     install(column_3, y, knob<BoosterStageKnob>(BoosterStage::CURVE_KNOB));
     install(column_5, y,
             thumb_switch<ThumbSwitch2>(BoosterStage::SHAPE_SWITCH));
 
     y += dy;
-    install(column_1, y, input<Jack>(BoosterStage::DURATION_CV));
+    install(column_1, y, input(BoosterStage::DURATION_CV));
     install(column_3, y, knob<BoosterStageKnob>(BoosterStage::DURATION_KNOB));
     install(column_5, y,
             thumb_switch<ThumbSwitch3>(BoosterStage::DURATION_RANGE_SWITCH, 1));
@@ -200,24 +200,24 @@ struct BoosterStageWidget
     y = 82.f;
     dy = 15.f;
 
-    install(column_1, y, input<Jack>(BoosterStage::DEFER_IN));
+    install(column_1, y, input(BoosterStage::DEFER_IN));
     install(column_2, y,
             button<BoosterStageButton>(BoosterStage::DEFER_BUTTON));
     install(column_4, y,
             button<BoosterStageReverseButton>(BoosterStage::ACTIVE_BUTTON));
-    install(column_5, y, output<Jack>(BoosterStage::ACTIVE_OUT));
+    install(column_5, y, output(BoosterStage::ACTIVE_OUT));
 
     y += dy;
-    install(column_1, y, input<Jack>(BoosterStage::TRIGGER_IN));
+    install(column_1, y, input(BoosterStage::TRIGGER_IN));
     install(column_2, y,
             button<BoosterStageButton>(BoosterStage::TRIGGER_BUTTON));
     install(column_4, y,
             button<BoosterStageReverseButton>(BoosterStage::EOC_BUTTON));
-    install(column_5, y, output<Jack>(BoosterStage::EOC_OUT));
+    install(column_5, y, output(BoosterStage::EOC_OUT));
 
     y += dy;
-    install(column_1, y, input<Jack>(BoosterStage::ENVELOPE_IN));
-    install(column_5, y, output<Jack>(BoosterStage::MAIN_OUT));
+    install(column_1, y, input(BoosterStage::ENVELOPE_IN));
+    install(column_5, y, output(BoosterStage::MAIN_OUT));
   }
 };
 } // namespace DHE

@@ -69,37 +69,21 @@ public:
       : Button(module_dir, "normal") {}
 };
 
-template <typename TDisplay, int n>
+template <typename T, int N>
 class ThumbSwitch : public rack::SVGSwitch, public rack::ToggleSwitch {
 public:
-  static constexpr auto size = n;
   ThumbSwitch() {
     static const auto base = std::string{"thumb-"};
     const auto prefix = base + std::to_string(size) + "-";
     for (int position = 1; position <= size; position++) {
-      addFrame(TDisplay::svg(prefix + std::to_string(position)));
+      addFrame(T::svg(prefix + std::to_string(position)));
     }
   }
+
+  static constexpr auto size = N;
 };
 
-template <typename TDisplay>
-class ThumbSwitch2 : public ThumbSwitch<TDisplay, 2> {
-public:
-  ThumbSwitch2() {}
-};
+template <typename T> using ThumbSwitch2 = ThumbSwitch<T, 2>;
 
-template <typename TDisplay>
-class ThumbSwitch3 : public ThumbSwitch<TDisplay, 3> {
-public:
-  ThumbSwitch3() {}
-};
-
-template <typename TDisplay, int type> class Jack : public rack::SVGPort {
-public:
-  Jack() {
-    background->svg = TDisplay::svg("port");
-    background->wrap();
-    box.size = background->box.size;
-  }
-};
+template <typename T> using ThumbSwitch3 = ThumbSwitch<T, 3>;
 } // namespace DHE

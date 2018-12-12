@@ -102,31 +102,31 @@ struct TapersWidget : public ModuleWidget<TapersWidget, Tapers> {
     auto dy = 16.f;
     auto panel_buffer = 4.f;
 
-    install(column_1, y, input<Jack>(Tapers::LEVEL_1_CV));
+    install(column_1, y, input(Tapers::LEVEL_1_CV));
     install(column_2, y, knob<TapersAVKnob>(Tapers::LEVEL_1_AV));
     install(column_3, y, knob<TapersMediumKnob>(Tapers::LEVEL_1_KNOB));
     y += dy;
-    install(column_1, y, input<Jack>(Tapers::CURVE_1_CV));
+    install(column_1, y, input(Tapers::CURVE_1_CV));
     install(column_2, y, knob<TapersAVKnob>(Tapers::CURVE_1_AV));
     install(column_3, y, knob<TapersMediumKnob>(Tapers::CURVE_1_KNOB));
     y += dy;
     install(column_1, y, thumb_switch<ThumbSwitch2>(Tapers::SHAPE_1_SWITCH));
     install(column_2, y, thumb_switch<ThumbSwitch2>(Tapers::RANGE_1_SWITCH, 1));
-    install(column_3, y, output<Jack>(Tapers::OUT_1));
+    install(column_3, y, output(Tapers::OUT_1));
 
     y += dy + panel_buffer;
 
-    install(column_1, y, input<Jack>(Tapers::LEVEL_2_CV));
+    install(column_1, y, input(Tapers::LEVEL_2_CV));
     install(column_2, y, knob<TapersAVKnob>(Tapers::LEVEL_2_AV));
     install(column_3, y, knob<TapersMediumKnob>(Tapers::LEVEL_2_KNOB));
     y += dy;
-    install(column_1, y, input<Jack>(Tapers::CURVE_2_CV));
+    install(column_1, y, input(Tapers::CURVE_2_CV));
     install(column_2, y, knob<TapersAVKnob>(Tapers::CURVE_2_AV));
     install(column_3, y, knob<TapersMediumKnob>(Tapers::CURVE_2_KNOB));
     y += dy;
     install(column_1, y, thumb_switch<ThumbSwitch2>(Tapers::SHAPE_2_SWITCH));
     install(column_2, y, thumb_switch<ThumbSwitch2>(Tapers::RANGE_2_SWITCH, 1));
-    install(column_3, y, output<Jack>(Tapers::OUT_2));
+    install(column_3, y, output(Tapers::OUT_2));
   }
 };
 } // namespace DHE

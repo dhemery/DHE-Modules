@@ -222,9 +222,9 @@ struct FuncWidget : public ModuleWidget<FuncWidget, Func> {
     auto row_4 = top + row_spacing * 3;
     auto row_6 = top + row_spacing * 5 + port_offset;
 
-    install(x, row_1, input<Jack>(Func::IN));
+    install(x, row_1, input(Func::IN));
     install(x, row_3, knob<FuncKnob>(Func::KNOB));
-    install(x, row_6, output<Jack>(Func::OUT));
+    install(x, row_6, output(Func::OUT));
 
     auto multiplication_range_switch =
         MultiplicationRangeSwitch<FuncWidget>::create(
@@ -269,9 +269,9 @@ struct Func6Widget : public ModuleWidget<Func6Widget, Func6> {
       auto y = top + row * row_spacing;
       auto port_y = y + port_offset;
 
-      install(column_1, port_y, input<Jack>(Func6::IN + row));
+      install(column_1, port_y, input(Func6::IN + row));
       install(column_3, y, knob<Func6Knob>(Func6::KNOB + row));
-      install(column_5, port_y, output<Jack>(Func6::OUT + row));
+      install(column_5, port_y, output(Func6::OUT + row));
 
       auto multiplication_range_switch =
           MultiplicationRangeSwitch<Func6Widget>::create(

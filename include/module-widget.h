@@ -38,11 +38,20 @@ struct BooleanOption : rack::MenuItem {
   const std::function<bool()> is_on;
 };
 
-template <typename TDisplay, typename TModule>
+template <typename D, int P> class Jack : public rack::SVGPort {
+public:
+  Jack() {
+    background->svg = D::svg("port");
+    background->wrap();
+    box.size = background->box.size;
+  }
+};
+
+template <typename D, typename M>
 class ModuleWidget : public rack::ModuleWidget {
 
 public:
-  ModuleWidget(TModule *module, int widget_hp) : rack::ModuleWidget(module) {
+  ModuleWidget(M *module, int widget_hp) : rack::ModuleWidget(module) {
     box.size = rack::Vec{(float)widget_hp * rack::RACK_GRID_WIDTH,
                          rack::RACK_GRID_HEIGHT};
 
@@ -75,9 +84,14 @@ protected:
 
   auto width() const -> float { return box.size.x * MM_PER_IN / SVG_DPI; }
 
-  void install(float x, float y, rack::Widget *widget) {
-    moveTo(x, y, widget);
-    addChild(widget);
+  void install(float x, float y, Jack<D, rack::Port::PortType::INPUT> *port) {
+    moveTo(x, y, port);
+    addInput(port);
+  }
+
+  void install(float x, float y, Jack<D, rack::Port::PortType::OUTPUT> *port) {
+    moveTo(x, y, port);
+    addOutput(port);
   }
 
   void install(float x, float y, rack::ParamWidget *widget) {
@@ -85,46 +99,34 @@ protected:
     addParam(widget);
   }
 
-  void install(float x, float y,
-               Jack<TDisplay, rack::Port::PortType::INPUT> *port) {
-    moveTo(x, y, port);
-    addInput(port);
+  void install(float x, float y, rack::Widget *widget) {
+    moveTo(x, y, widget);
+    addChild(widget);
   }
 
-  void install(float x, float y,
-               Jack<TDisplay, rack::Port::PortType::OUTPUT> *port) {
-    moveTo(x, y, port);
-    addOutput(port);
+  template <typename K>
+  auto knob(int index, float initial = 0.5f) const -> K * {
+    return rack::ParamWidget::create<K>({0, 0}, module, index, 0, 1, initial);
   }
 
-  template <template <typename, int> class TJack>
-  auto input(int index) const
-      -> TJack<TDisplay, rack::Port::PortType::INPUT> * {
-    return rack::Port::create<TJack<TDisplay, rack::Port::PortType::INPUT>>(
+  template <typename B> auto button(int index) const -> B * {
+    return rack::ParamWidget::create<B>({0, 0}, module, index, 0, 1, 0);
+  }
+
+  template <template <typename> class S>
+  auto thumb_switch(int index, int initial = 0) const -> S<D> * {
+    return rack::ParamWidget::create<S<D>>({0, 0}, module, index, 0,
+                                           S<D>::size - 1, initial);
+  }
+
+  auto input(int index) const -> Jack<D, rack::Port::PortType::INPUT> * {
+    return rack::Port::create<Jack<D, rack::Port::PortType::INPUT>>(
         {0, 0}, rack::Port::PortType::INPUT, module, index);
   }
 
-  template <template <typename, int> class TJack>
-  auto output(int index) const
-      -> TJack<TDisplay, rack::Port::PortType::OUTPUT> * {
-    return rack::Port::create<TJack<TDisplay, rack::Port::PortType::OUTPUT>>(
+  auto output(int index) const -> Jack<D, rack::Port::PortType::OUTPUT> * {
+    return rack::Port::create<Jack<D, rack::Port::PortType::OUTPUT>>(
         {0, 0}, rack::Port::PortType::OUTPUT, module, index);
-  }
-
-  template <typename TKnob>
-  auto knob(int index, float initial = 0.5f) const -> TKnob * {
-    return rack::ParamWidget::create<TKnob>({0, 0}, module, index, 0, 1,
-                                            initial);
-  }
-
-  template <typename TButton> auto button(int index) const -> TButton * {
-    return rack::ParamWidget::create<TButton>({0, 0}, module, index, 0, 1, 0);
-  }
-
-  template <template <typename> class TSwitch>
-  auto thumb_switch(int index, int initial = 0) const -> TSwitch<TDisplay> * {
-    return rack::ParamWidget::create<TSwitch<TDisplay>>(
-        {0, 0}, module, index, 0, TSwitch<TDisplay>::size - 1, initial);
   }
 
   void install_screws() {
@@ -156,8 +158,7 @@ protected:
 
 private:
   static auto resource_prefix() -> std::string {
-    static const auto prefix =
-        std::string("res/") + TDisplay::resource_name + "/";
+    static const auto prefix = std::string("res/") + D::resource_name + "/";
     return prefix;
   }
 };

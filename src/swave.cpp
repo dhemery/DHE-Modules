@@ -60,16 +60,16 @@ struct SwaveWidget : public ModuleWidget<SwaveWidget, Swave> {
     install(x, y, knob<SwaveKnob>(Swave::CURVE_KNOB));
 
     y += dy;
-    install(x, y, input<Jack>(Swave::CURVE_CV));
+    install(x, y, input(Swave::CURVE_CV));
 
     y = 82.f;
     dy = 15.f;
 
     y += dy;
-    install(x, y, input<Jack>(Swave::MAIN_IN));
+    install(x, y, input(Swave::MAIN_IN));
 
     y += dy;
-    install(x, y, output<Jack>(Swave::MAIN_OUT));
+    install(x, y, output(Swave::MAIN_OUT));
   }
 };
 } // namespace DHE
