@@ -196,11 +196,6 @@ private:
   MultiplicationRangeSwitch<TDisplay> *multiplication_range_switch = nullptr;
 };
 
-class FuncKnob : public LargeKnob {
-public:
-  FuncKnob() : LargeKnob("func") {}
-};
-
 struct FuncWidget : public ModuleWidget<FuncWidget, Func> {
   static constexpr auto resource_name = "func";
 
@@ -223,7 +218,7 @@ struct FuncWidget : public ModuleWidget<FuncWidget, Func> {
     auto row_6 = top + row_spacing * 5 + port_offset;
 
     install(x, row_1, input(Func::IN));
-    install(x, row_3, knob<FuncKnob>(Func::KNOB));
+    install(x, row_3, knob<LargeKnob>(Func::KNOB));
     install(x, row_6, output(Func::OUT));
 
     auto multiplication_range_switch =
@@ -240,11 +235,6 @@ struct FuncWidget : public ModuleWidget<FuncWidget, Func> {
         multiplication_range_switch);
     install(x, row_2, operator_switch);
   }
-};
-
-class Func6Knob : public LargeKnob {
-public:
-  Func6Knob() : LargeKnob("func6") {}
 };
 
 struct Func6Widget : public ModuleWidget<Func6Widget, Func6> {
@@ -270,7 +260,7 @@ struct Func6Widget : public ModuleWidget<Func6Widget, Func6> {
       auto port_y = y + port_offset;
 
       install(column_1, port_y, input(Func6::IN + row));
-      install(column_3, y, knob<Func6Knob>(Func6::KNOB + row));
+      install(column_3, y, knob<LargeKnob>(Func6::KNOB + row));
       install(column_5, port_y, output(Func6::OUT + row));
 
       auto multiplication_range_switch =

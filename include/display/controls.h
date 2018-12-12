@@ -1,56 +1,33 @@
 #pragma once
 
 namespace DHE {
-class Control {
+template <typename T> class Knob : public rack::RoundKnob {
 public:
-  explicit Control(const std::string &module_dir)
-      : resource_dir{resource_dir_for(module_dir)} {}
-
-protected:
-  auto load_svg(const std::string &filename) -> std::shared_ptr<rack::SVG> {
-    return rack::SVG::load(resource_dir + filename + ".svg");
-  }
-
-private:
-  static auto resource_dir_for(const std::string &module_dir) -> std::string {
-    static const auto plugin_resource_root = rack::assetPlugin(plugin, "res/");
-    return plugin_resource_root + module_dir + "/";
-  }
-
-  const std::string resource_dir;
-};
-
-class Knob : public rack::RoundKnob, public Control {
-public:
-  Knob(const std::string &module_dir, const std::string &size)
-      : Control{module_dir} {
+  Knob(const std::string &size) {
     static const auto prefix = std::string{"knob-"};
-    setSVG(load_svg(prefix + size));
+    setSVG(T::svg(prefix + size));
     shadow->opacity = 0.f;
   }
 };
 
-class LargeKnob : public Knob {
+template <typename T> class LargeKnob : public Knob<T> {
 public:
-  explicit LargeKnob(const std::string &module_dir)
-      : Knob(module_dir, "large") {}
+  explicit LargeKnob() : Knob<T>("large") {}
 };
 
-class MediumKnob : public Knob {
+template <typename T> class MediumKnob : public Knob<T> {
 public:
-  explicit MediumKnob(const std::string &module_dir)
-      : Knob(module_dir, "medium") {}
+  explicit MediumKnob() : Knob<T>("medium") {}
 };
 
-class SmallKnob : public Knob {
+template <typename T> class SmallKnob : public Knob<T> {
 public:
-  explicit SmallKnob(const std::string &module_dir)
-      : Knob(module_dir, "small") {}
+  explicit SmallKnob() : Knob<T>("small") {}
 };
 
-class TinyKnob : public Knob {
+template <typename T> class TinyKnob : public Knob<T> {
 public:
-  explicit TinyKnob(const std::string &module_dir) : Knob(module_dir, "tiny") {}
+  explicit TinyKnob() : Knob<T>("tiny") {}
 };
 
 template <typename T>
@@ -64,9 +41,9 @@ public:
   }
 };
 
-template <typename D> class ReverseButton : public Button<D> {
+template <typename T> class ReverseButton : public Button<T> {
 public:
-  ReverseButton() : Button<D>{"reverse"} {}
+  ReverseButton() : Button<T>{"reverse"} {}
 };
 
 template <typename T, int N>
@@ -82,8 +59,4 @@ public:
 
   static constexpr auto size = N;
 };
-
-template <typename T> using ThumbSwitch2 = ThumbSwitch<T, 2>;
-
-template <typename T> using ThumbSwitch3 = ThumbSwitch<T, 3>;
 } // namespace DHE

@@ -108,9 +108,10 @@ protected:
     addChild(widget);
   }
 
-  template <typename K>
-  auto knob(int index, float initial = 0.5f) const -> K * {
-    return rack::ParamWidget::create<K>({0, 0}, module, index, 0, 1, initial);
+  template <template <typename> class K>
+  auto knob(int index, float initial = 0.5f) const -> K<D> * {
+    return rack::ParamWidget::create<K<D>>({0, 0}, module, index, 0, 1,
+                                           initial);
   }
 
   template <template <typename> class B = Button>

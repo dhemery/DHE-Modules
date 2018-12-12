@@ -59,16 +59,6 @@ private:
   void send_main_out(float voltage) { outputs[MAIN_OUT].value = voltage; }
 };
 
-class RangerMediumKnob : public MediumKnob {
-public:
-  RangerMediumKnob() : MediumKnob("ranger") {}
-};
-
-class RangerTinyKnob : public TinyKnob {
-public:
-  RangerTinyKnob() : TinyKnob("ranger") {}
-};
-
 struct RangerWidget : public ModuleWidget<RangerWidget, Ranger> {
   static constexpr auto resource_name = "ranger";
 
@@ -82,27 +72,27 @@ struct RangerWidget : public ModuleWidget<RangerWidget, Ranger> {
     auto dy = 16.f;
     auto panel_buffer = 4.f;
 
-    install(column_1, y, knob<RangerMediumKnob>(Ranger::LEVEL_KNOB));
+    install(column_1, y, knob<MediumKnob>(Ranger::LEVEL_KNOB));
     install(column_2, y, output(Ranger::MAIN_OUT));
     y += dy;
     install(column_1, y, input(Ranger::LEVEL_CV));
-    install(column_2, y, knob<RangerTinyKnob>(Ranger::LEVEL_AV));
+    install(column_2, y, knob<TinyKnob>(Ranger::LEVEL_AV));
 
     y += dy + panel_buffer;
-    install(column_1, y, knob<RangerMediumKnob>(Ranger::LIMIT_1_KNOB));
+    install(column_1, y, knob<MediumKnob>(Ranger::LIMIT_1_KNOB));
     install(column_2, y, thumb_switch<2>(Ranger::LIMIT_1_RANGE_SWITCH, 1));
 
     y += dy;
     install(column_1, y, input(Ranger::LIMIT_1_CV));
-    install(column_2, y, knob<RangerTinyKnob>(Ranger::LIMIT_1_AV));
+    install(column_2, y, knob<TinyKnob>(Ranger::LIMIT_1_AV));
 
     y += dy + panel_buffer;
-    install(column_1, y, knob<RangerMediumKnob>(Ranger::LIMIT_2_KNOB));
+    install(column_1, y, knob<MediumKnob>(Ranger::LIMIT_2_KNOB));
     install(column_2, y, thumb_switch<2>(Ranger::LIMIT_2_RANGE_SWITCH, 1));
 
     y += dy;
     install(column_1, y, input(Ranger::LIMIT_2_CV));
-    install(column_2, y, knob<RangerTinyKnob>(Ranger::LIMIT_2_AV));
+    install(column_2, y, knob<TinyKnob>(Ranger::LIMIT_2_AV));
   }
 };
 } // namespace DHE

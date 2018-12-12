@@ -106,11 +106,6 @@ private:
   float held_voltage = 0.f;
 };
 
-class StageKnob : public LargeKnob {
-public:
-  StageKnob() : LargeKnob("stage") {}
-};
-
 struct StageWidget : public ModuleWidget<StageWidget, Stage> {
   static constexpr auto resource_name = "stage";
 
@@ -124,13 +119,13 @@ struct StageWidget : public ModuleWidget<StageWidget, Stage> {
     auto y = 25.f;
     auto dy = 18.5f;
 
-    install(column_2, y, knob<StageKnob>(Stage::LEVEL_KNOB));
+    install(column_2, y, knob<LargeKnob>(Stage::LEVEL_KNOB));
 
     y += dy;
-    install(column_2, y, knob<StageKnob>(Stage::CURVE_KNOB));
+    install(column_2, y, knob<LargeKnob>(Stage::CURVE_KNOB));
 
     y += dy;
-    install(column_2, y, knob<StageKnob>(Stage::DURATION_KNOB));
+    install(column_2, y, knob<LargeKnob>(Stage::DURATION_KNOB));
 
     y = 82.f;
     dy = 15.f;

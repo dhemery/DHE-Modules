@@ -78,16 +78,6 @@ private:
   }
 };
 
-class TapersMediumKnob : public MediumKnob {
-public:
-  TapersMediumKnob() : MediumKnob("tapers") {}
-};
-
-class TapersAVKnob : public TinyKnob {
-public:
-  TapersAVKnob() : TinyKnob("tapers") {}
-};
-
 struct TapersWidget : public ModuleWidget<TapersWidget, Tapers> {
   static constexpr auto resource_name = "tapers";
 
@@ -103,12 +93,12 @@ struct TapersWidget : public ModuleWidget<TapersWidget, Tapers> {
     auto panel_buffer = 4.f;
 
     install(column_1, y, input(Tapers::LEVEL_1_CV));
-    install(column_2, y, knob<TapersAVKnob>(Tapers::LEVEL_1_AV));
-    install(column_3, y, knob<TapersMediumKnob>(Tapers::LEVEL_1_KNOB));
+    install(column_2, y, knob<TinyKnob>(Tapers::LEVEL_1_AV));
+    install(column_3, y, knob<MediumKnob>(Tapers::LEVEL_1_KNOB));
     y += dy;
     install(column_1, y, input(Tapers::CURVE_1_CV));
-    install(column_2, y, knob<TapersAVKnob>(Tapers::CURVE_1_AV));
-    install(column_3, y, knob<TapersMediumKnob>(Tapers::CURVE_1_KNOB));
+    install(column_2, y, knob<TinyKnob>(Tapers::CURVE_1_AV));
+    install(column_3, y, knob<MediumKnob>(Tapers::CURVE_1_KNOB));
     y += dy;
     install(column_1, y, thumb_switch<2>(Tapers::SHAPE_1_SWITCH));
     install(column_2, y, thumb_switch<2>(Tapers::RANGE_1_SWITCH, 1));
@@ -117,12 +107,12 @@ struct TapersWidget : public ModuleWidget<TapersWidget, Tapers> {
     y += dy + panel_buffer;
 
     install(column_1, y, input(Tapers::LEVEL_2_CV));
-    install(column_2, y, knob<TapersAVKnob>(Tapers::LEVEL_2_AV));
-    install(column_3, y, knob<TapersMediumKnob>(Tapers::LEVEL_2_KNOB));
+    install(column_2, y, knob<TinyKnob>(Tapers::LEVEL_2_AV));
+    install(column_3, y, knob<MediumKnob>(Tapers::LEVEL_2_KNOB));
     y += dy;
     install(column_1, y, input(Tapers::CURVE_2_CV));
-    install(column_2, y, knob<TapersAVKnob>(Tapers::CURVE_2_AV));
-    install(column_3, y, knob<TapersMediumKnob>(Tapers::CURVE_2_KNOB));
+    install(column_2, y, knob<TinyKnob>(Tapers::CURVE_2_AV));
+    install(column_3, y, knob<MediumKnob>(Tapers::CURVE_2_KNOB));
     y += dy;
     install(column_1, y, thumb_switch<2>(Tapers::SHAPE_2_SWITCH));
     install(column_2, y, thumb_switch<2>(Tapers::RANGE_2_SWITCH, 1));

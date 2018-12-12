@@ -148,11 +148,6 @@ private:
   float held_voltage = 0.f;
 };
 
-class BoosterStageKnob : public LargeKnob {
-public:
-  BoosterStageKnob() : LargeKnob("booster-stage") {}
-};
-
 struct BoosterStageWidget
     : public ModuleWidget<BoosterStageWidget, BoosterStage> {
   static constexpr auto resource_name = "booster-stage";
@@ -171,17 +166,17 @@ struct BoosterStageWidget
     auto dy = 18.5f;
 
     install(column_1, y, input(BoosterStage::LEVEL_CV));
-    install(column_3, y, knob<BoosterStageKnob>(BoosterStage::LEVEL_KNOB));
+    install(column_3, y, knob<LargeKnob>(BoosterStage::LEVEL_KNOB));
     install(column_5, y, thumb_switch<2>(BoosterStage::LEVEL_RANGE_SWITCH, 1));
 
     y += dy;
     install(column_1, y, input(BoosterStage::CURVE_CV));
-    install(column_3, y, knob<BoosterStageKnob>(BoosterStage::CURVE_KNOB));
+    install(column_3, y, knob<LargeKnob>(BoosterStage::CURVE_KNOB));
     install(column_5, y, thumb_switch<2>(BoosterStage::SHAPE_SWITCH));
 
     y += dy;
     install(column_1, y, input(BoosterStage::DURATION_CV));
-    install(column_3, y, knob<BoosterStageKnob>(BoosterStage::DURATION_KNOB));
+    install(column_3, y, knob<LargeKnob>(BoosterStage::DURATION_KNOB));
     install(column_5, y,
             thumb_switch<3>(BoosterStage::DURATION_RANGE_SWITCH, 1));
 
