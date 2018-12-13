@@ -185,10 +185,10 @@ private:
   XycloidRotor throbber{};
 };
 
-struct XycloidWidget : public Panel<XycloidWidget, Xycloid> {
+struct XycloidPanel : public Panel<XycloidPanel, Xycloid> {
   static constexpr auto resource_name = "xycloid";
 
-  explicit XycloidWidget(Xycloid *module) : Panel(module, 11) {
+  explicit XycloidPanel(Xycloid *module) : Panel{module, 11} {
     auto widget_right_edge = width();
 
     auto column_1 = widget_right_edge / 7.f;
@@ -224,13 +224,13 @@ struct XycloidWidget : public Panel<XycloidWidget, Xycloid> {
     y += dy;
     install(column_1, y, input(Xycloid::X_GAIN_CV));
     install(column_2, y, knob<SmallKnob>(Xycloid::X_GAIN, default_gain));
-    install(column_3, y, toggle<2>(Xycloid::X_RANGE));
+    install(column_3, y, toggle<2>(Xycloid::X_RANGE, 0));
     install(column_4, y, output(Xycloid::X_OUT));
 
     y += dy;
     install(column_1, y, input(Xycloid::Y_GAIN_CV));
     install(column_2, y, knob<SmallKnob>(Xycloid::Y_GAIN, default_gain));
-    install(column_3, y, toggle<2>(Xycloid::Y_RANGE));
+    install(column_3, y, toggle<2>(Xycloid::Y_RANGE, 0));
     install(column_4, y, output(Xycloid::Y_OUT));
   }
 
@@ -252,6 +252,6 @@ struct XycloidWidget : public Panel<XycloidWidget, Xycloid> {
 
 } // namespace DHE
 rack::Model *modelXycloid =
-    rack::Model::create<DHE::Xycloid, DHE::XycloidWidget>(
+    rack::Model::create<DHE::Xycloid, DHE::XycloidPanel>(
         "DHE-Modules", "Xycloid", "Xycloid", rack::FUNCTION_GENERATOR_TAG,
         rack::LFO_TAG);

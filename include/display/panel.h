@@ -45,16 +45,14 @@ public:
   }
 };
 
-template <typename P>
-class InputJack : public Jack<P> {};
+template <typename P> class InputJack : public Jack<P> {};
 
-template <typename P>
-class OutputJack : public Jack<P> {};
+template <typename P> class OutputJack : public Jack<P> {};
 
 template <typename P, typename M> class Panel : public rack::ModuleWidget {
 
 public:
-  Panel(M *module, int widget_hp) : rack::ModuleWidget(module) {
+  Panel(M *module, int widget_hp) : rack::ModuleWidget{module} {
     box.size = rack::Vec{(float)widget_hp * rack::RACK_GRID_WIDTH,
                          rack::RACK_GRID_HEIGHT};
 
@@ -109,25 +107,21 @@ protected:
 
   template <template <typename> class K>
   auto knob(int index, float initial = 0.5f) const -> K<P> * {
-    return rack::ParamWidget::create<K<P>>({0, 0}, module, index, 0, 1,
-                                           initial);
+    return param<K<P>>(index, 1, initial);
   }
 
   template <template <typename> class B = Button>
   auto button(int index) const -> B<P> * {
-    return rack::ParamWidget::create<B<P>>({0, 0}, module, index, 0, 1, 0);
+    return param<B<P>>(index, 1, 0);
   }
 
   template <template <typename> class C>
-  auto counter(int index, int initial = 0) const -> C<P> * {
-    return rack::ParamWidget::create<C<P>>({0, 0}, module, index, 0,
-                                           C<P>::size - 1, initial);
+  auto toggle(int index, int initial) const -> C<P> * {
+    return param<C<P>>(index, C<P>::size - 1, initial);
   }
 
-  template <int N>
-  auto toggle(int index, int initial = 0) const -> Toggle<P, N> * {
-    return rack::ParamWidget::create<Toggle<P, N>>({0, 0}, module, index, 0,
-                                                   N - 1, initial);
+  template <int N> auto toggle(int index, int initial) const -> Toggle<P, N> * {
+    return param<Toggle<P, N>>(index, N - 1, initial);
   }
 
   auto input(int index) const -> InputJack<P> * {
@@ -138,6 +132,12 @@ protected:
   auto output(int index) const -> OutputJack<P> * {
     return rack::Port::create<OutputJack<P>>(
         {0, 0}, rack::Port::PortType::OUTPUT, module, index);
+  }
+
+private:
+  template <typename T>
+  auto param(int index, float max, float initial) const -> T * {
+    return rack::ParamWidget::create<T>({0, 0}, module, index, 0, max, initial);
   }
 
   void install_screws() {
@@ -167,7 +167,6 @@ protected:
     }
   }
 
-private:
   static auto resource_prefix() -> std::string {
     static const auto prefix = std::string("res/") + P::resource_name + "/";
     return prefix;

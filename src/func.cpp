@@ -161,10 +161,10 @@ private:
   MultiplicationRangeSwitch<P> *multiplication_range_switch = nullptr;
 };
 
-struct FuncWidget : public Panel<FuncWidget, Func> {
+struct FuncPanel : public Panel<FuncPanel, Func> {
   static constexpr auto resource_name = "func";
 
-  explicit FuncWidget(Func *module) : Panel(module, 3) {
+  explicit FuncPanel(Func *module) : Panel{module, 3} {
 
     auto widget_right_edge = width();
 
@@ -186,15 +186,15 @@ struct FuncWidget : public Panel<FuncWidget, Func> {
     install(x, row_3, knob<LargeKnob>(Func::KNOB));
     install(x, row_6, output(Func::OUT));
 
-    auto multiplication_range_switch = counter<MultiplicationRangeSwitch>(
-        Func::MULTIPLICATION_RANGE_SWITCH, 2);
+    auto multiplication_range_switch =
+        toggle<MultiplicationRangeSwitch>(Func::MULTIPLICATION_RANGE_SWITCH, 2);
     install(x, row_4, multiplication_range_switch);
 
     auto addition_range_switch =
-        counter<AdditionRangeSwitch>(Func::ADDITION_RANGE_SWITCH, 1);
+        toggle<AdditionRangeSwitch>(Func::ADDITION_RANGE_SWITCH, 1);
     install(x, row_4, addition_range_switch);
 
-    auto operator_switch = counter<OperatorSwitch>(Func::OPERATOR_SWITCH);
+    auto operator_switch = toggle<OperatorSwitch>(Func::OPERATOR_SWITCH, 0);
     operator_switch->set_range_switches(addition_range_switch,
                                         multiplication_range_switch);
 
@@ -202,10 +202,10 @@ struct FuncWidget : public Panel<FuncWidget, Func> {
   }
 };
 
-struct Func6Widget : public Panel<Func6Widget, Func6> {
+struct Func6Panel : public Panel<Func6Panel, Func6> {
   static constexpr auto resource_name = "func6";
 
-  explicit Func6Widget(Func6 *module) : Panel(module, 12) {
+  explicit Func6Panel(Func6 *module) : Panel{module, 12} {
     auto widget_right_edge = width();
 
     auto column_3 = widget_right_edge / 2.f;
@@ -228,16 +228,16 @@ struct Func6Widget : public Panel<Func6Widget, Func6> {
       install(column_3, y, knob<LargeKnob>(Func6::KNOB + row));
       install(column_5, port_y, output(Func6::OUT + row));
 
-      auto multiplication_range_switch = counter<MultiplicationRangeSwitch>(
+      auto multiplication_range_switch = toggle<MultiplicationRangeSwitch>(
           Func6::MULTIPLICATION_RANGE_SWITCH + row, 2);
       install(column_4, y, multiplication_range_switch);
 
       auto addition_range_switch =
-          counter<AdditionRangeSwitch>(Func6::ADDITION_RANGE_SWITCH + row, 1);
+          toggle<AdditionRangeSwitch>(Func6::ADDITION_RANGE_SWITCH + row, 1);
       install(column_4, y, addition_range_switch);
 
       auto operator_switch =
-          counter<OperatorSwitch>(Func6::OPERATOR_SWITCH + row);
+          toggle<OperatorSwitch>(Func6::OPERATOR_SWITCH + row, 0);
       operator_switch->set_range_switches(addition_range_switch,
                                           multiplication_range_switch);
       install(column_2, y, operator_switch);
@@ -246,7 +246,7 @@ struct Func6Widget : public Panel<Func6Widget, Func6> {
 };
 
 } // namespace DHE
-rack::Model *modelFunc = rack::Model::create<DHE::Func, DHE::FuncWidget>(
+rack::Model *modelFunc = rack::Model::create<DHE::Func, DHE::FuncPanel>(
     "DHE-Modules", "Func", "Func", rack::UTILITY_TAG);
-rack::Model *modelFunc6 = rack::Model::create<DHE::Func6, DHE::Func6Widget>(
+rack::Model *modelFunc6 = rack::Model::create<DHE::Func6, DHE::Func6Panel>(
     "DHE-Modules", "Func6", "Func 6", rack::UTILITY_TAG);

@@ -161,9 +161,9 @@ private:
   StageType stage_type{HOLD};
 };
 
-struct HostageWidget : public Panel<HostageWidget, Hostage> {
+struct HostagePanel : public Panel<HostagePanel, Hostage> {
   static constexpr auto resource_name = "hostage";
-  explicit HostageWidget(Hostage *module) : Panel(module, 5) {
+  explicit HostagePanel(Hostage *module) : Panel{module, 5} {
     auto widget_right_edge = width();
 
     auto column_1 = width() / 4.f + 0.333333f;
@@ -173,7 +173,7 @@ struct HostageWidget : public Panel<HostageWidget, Hostage> {
     auto y = 25.f;
     auto dy = 18.5f;
 
-    install(column_2, y, toggle<2>(Hostage::SUSTAIN_MODE_SWITCH));
+    install(column_2, y, toggle<2>(Hostage::SUSTAIN_MODE_SWITCH, 0));
 
     y += dy;
     install(column_1, y, input(Hostage::DURATION_CV));
@@ -199,5 +199,5 @@ struct HostageWidget : public Panel<HostageWidget, Hostage> {
 };
 } // namespace DHE
 rack::Model *modelHostage =
-    rack::Model::create<DHE::Hostage, DHE::HostageWidget>(
+    rack::Model::create<DHE::Hostage, DHE::HostagePanel>(
         "DHE-Modules", "Hostage", "Hostage", rack::ENVELOPE_GENERATOR_TAG);

@@ -64,10 +64,10 @@ private:
   }
 };
 
-struct UpstageWidget : public Panel<UpstageWidget, Upstage> {
+struct UpstagePanel : public Panel<UpstagePanel, Upstage> {
   static constexpr auto resource_name = "upstage";
 
-  explicit UpstageWidget(Upstage *module) : Panel(module, 5) {
+  explicit UpstagePanel(Upstage *module) : Panel{module, 5} {
     auto widget_right_edge = width();
 
     auto column_1 = width() / 4.f + 0.333333333f;
@@ -102,5 +102,5 @@ struct UpstageWidget : public Panel<UpstageWidget, Upstage> {
 };
 } // namespace DHE
 rack::Model *modelUpstage =
-    rack::Model::create<DHE::Upstage, DHE::UpstageWidget>(
+    rack::Model::create<DHE::Upstage, DHE::UpstagePanel>(
         "DHE-Modules", "Upstage", "Upstage", rack::ENVELOPE_GENERATOR_TAG);

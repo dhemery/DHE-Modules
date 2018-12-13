@@ -77,10 +77,10 @@ private:
   }
 };
 
-struct TapersWidget : public Panel<TapersWidget, Tapers> {
+struct TapersPanel : public Panel<TapersPanel, Tapers> {
   static constexpr auto resource_name = "tapers";
 
-  explicit TapersWidget(Tapers *module) : Panel(module, 9) {
+  explicit TapersPanel(Tapers *module) : Panel{module, 9} {
     auto widget_right_edge = width();
 
     auto column_1 = width() / 5.f + 0.333333333f;
@@ -99,7 +99,7 @@ struct TapersWidget : public Panel<TapersWidget, Tapers> {
     install(column_2, y, knob<TinyKnob>(Tapers::CURVE_1_AV));
     install(column_3, y, knob<MediumKnob>(Tapers::CURVE_1_KNOB));
     y += dy;
-    install(column_1, y, toggle<2>(Tapers::SHAPE_1_SWITCH));
+    install(column_1, y, toggle<2>(Tapers::SHAPE_1_SWITCH, 0));
     install(column_2, y, toggle<2>(Tapers::RANGE_1_SWITCH, 1));
     install(column_3, y, output(Tapers::OUT_1));
 
@@ -113,11 +113,11 @@ struct TapersWidget : public Panel<TapersWidget, Tapers> {
     install(column_2, y, knob<TinyKnob>(Tapers::CURVE_2_AV));
     install(column_3, y, knob<MediumKnob>(Tapers::CURVE_2_KNOB));
     y += dy;
-    install(column_1, y, toggle<2>(Tapers::SHAPE_2_SWITCH));
+    install(column_1, y, toggle<2>(Tapers::SHAPE_2_SWITCH, 0));
     install(column_2, y, toggle<2>(Tapers::RANGE_2_SWITCH, 1));
     install(column_3, y, output(Tapers::OUT_2));
   }
 };
 } // namespace DHE
-rack::Model *modelTapers = rack::Model::create<DHE::Tapers, DHE::TapersWidget>(
+rack::Model *modelTapers = rack::Model::create<DHE::Tapers, DHE::TapersPanel>(
     "DHE-Modules", "Tapers", "Tapers", rack::UTILITY_TAG, rack::WAVESHAPER_TAG);

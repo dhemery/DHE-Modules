@@ -58,10 +58,10 @@ private:
   void send_main_out(float voltage) { outputs[MAIN_OUT].value = voltage; }
 };
 
-struct RangerWidget : public Panel<RangerWidget, Ranger> {
+struct RangerPanel : public Panel<RangerPanel, Ranger> {
   static constexpr auto resource_name = "ranger";
 
-  explicit RangerWidget(Ranger *module) : Panel(module, 6) {
+  explicit RangerPanel(Ranger *module) : Panel{module, 6} {
     auto widget_right_edge = width();
 
     auto column_1 = width() / 3.5f + 0.333333333f;
@@ -73,6 +73,7 @@ struct RangerWidget : public Panel<RangerWidget, Ranger> {
 
     install(column_1, y, knob<MediumKnob>(Ranger::LEVEL_KNOB));
     install(column_2, y, output(Ranger::MAIN_OUT));
+
     y += dy;
     install(column_1, y, input(Ranger::LEVEL_CV));
     install(column_2, y, knob<TinyKnob>(Ranger::LEVEL_AV));
@@ -96,5 +97,5 @@ struct RangerWidget : public Panel<RangerWidget, Ranger> {
 };
 } // namespace DHE
 
-rack::Model *modelRanger = rack::Model::create<DHE::Ranger, DHE::RangerWidget>(
+rack::Model *modelRanger = rack::Model::create<DHE::Ranger, DHE::RangerPanel>(
     "DHE-Modules", "Ranger", "Ranger", rack::UTILITY_TAG, rack::WAVESHAPER_TAG);

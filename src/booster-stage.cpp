@@ -148,10 +148,10 @@ private:
   float held_voltage = 0.f;
 };
 
-struct BoosterStageWidget : public Panel<BoosterStageWidget, BoosterStage> {
+struct BoosterStagePanel : public Panel<BoosterStagePanel, BoosterStage> {
   static constexpr auto resource_name = "booster-stage";
 
-  explicit BoosterStageWidget(BoosterStage *module) : Panel(module, 8) {
+  explicit BoosterStagePanel(BoosterStage *module) : Panel{module, 8} {
     auto widget_right_edge = width();
 
     auto column_1 = widget_right_edge / 6.f + 0.3333333f;
@@ -171,7 +171,7 @@ struct BoosterStageWidget : public Panel<BoosterStageWidget, BoosterStage> {
     y += dy;
     install(column_1, y, input(BoosterStage::CURVE_CV));
     install(column_3, y, knob<LargeKnob>(BoosterStage::CURVE_KNOB));
-    install(column_5, y, toggle<2>(BoosterStage::SHAPE_SWITCH));
+    install(column_5, y, toggle<2>(BoosterStage::SHAPE_SWITCH, 0));
 
     y += dy;
     install(column_1, y, input(BoosterStage::DURATION_CV));
@@ -199,6 +199,6 @@ struct BoosterStageWidget : public Panel<BoosterStageWidget, BoosterStage> {
 };
 } // namespace DHE
 rack::Model *modelBoosterStage =
-    rack::Model::create<DHE::BoosterStage, DHE::BoosterStageWidget>(
+    rack::Model::create<DHE::BoosterStage, DHE::BoosterStagePanel>(
         "DHE-Modules", "BoosterStage", "Booster Stage",
         rack::ENVELOPE_GENERATOR_TAG);
