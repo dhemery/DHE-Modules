@@ -1,7 +1,6 @@
 #include "dhe-modules.h"
-#include "module-widget.h"
-
 #include "display/controls.h"
+#include "display/panel.h"
 #include "util/rotation.h"
 #include "util/signal.h"
 
@@ -112,26 +111,23 @@ private:
   std::vector<FuncChannel> channels{};
 };
 
-template <typename TDisplay>
-class MultiplicationRangeSwitch : public Switch<TDisplay, 4> {
+template <typename P> class MultiplicationRangeSwitch : public Toggle<P, 4> {
 public:
-  MultiplicationRangeSwitch() : Switch<TDisplay, 4>{"button-mult"} {}
+  MultiplicationRangeSwitch() : Toggle<P, 4>{"button-mult"} {}
 
   void enable() { this->visible = true; }
 
   void disable() { this->visible = false; }
 };
 
-template <typename TDisplay>
-class AdditionRangeSwitch : public Switch<TDisplay, 4> {
+template <typename P> class AdditionRangeSwitch : public Toggle<P, 4> {
 public:
-  AdditionRangeSwitch() : Switch<TDisplay, 4>{"button-add"} {}
+  AdditionRangeSwitch() : Toggle<P, 4>{"button-add"} {}
   void enable() { this->visible = true; }
   void disable() { this->visible = false; }
 };
 
-template <typename TDisplay>
-class OperatorSwitch : public ThumbSwitch<TDisplay, 2> {
+template <typename P> class OperatorSwitch : public Toggle<P, 2> {
 public:
   void onChange(rack::EventChange &e) override {
     rack::SVGSwitch::onChange(e);
@@ -153,22 +149,22 @@ public:
   }
 
   void set_range_switches(
-      AdditionRangeSwitch<TDisplay> *addition_range_switch,
-      MultiplicationRangeSwitch<TDisplay> *multiplication_range_switch) {
+      AdditionRangeSwitch<P> *addition_range_switch,
+      MultiplicationRangeSwitch<P> *multiplication_range_switch) {
     this->addition_range_switch = addition_range_switch;
     this->multiplication_range_switch = multiplication_range_switch;
     set_range_switch_visibility();
   }
 
 private:
-  AdditionRangeSwitch<TDisplay> *addition_range_switch = nullptr;
-  MultiplicationRangeSwitch<TDisplay> *multiplication_range_switch = nullptr;
+  AdditionRangeSwitch<P> *addition_range_switch = nullptr;
+  MultiplicationRangeSwitch<P> *multiplication_range_switch = nullptr;
 };
 
-struct FuncWidget : public ModuleWidget<FuncWidget, Func> {
+struct FuncWidget : public Panel<FuncWidget, Func> {
   static constexpr auto resource_name = "func";
 
-  explicit FuncWidget(Func *module) : ModuleWidget(module, 3) {
+  explicit FuncWidget(Func *module) : Panel(module, 3) {
 
     auto widget_right_edge = width();
 
@@ -206,10 +202,10 @@ struct FuncWidget : public ModuleWidget<FuncWidget, Func> {
   }
 };
 
-struct Func6Widget : public ModuleWidget<Func6Widget, Func6> {
+struct Func6Widget : public Panel<Func6Widget, Func6> {
   static constexpr auto resource_name = "func6";
 
-  explicit Func6Widget(Func6 *module) : ModuleWidget(module, 12) {
+  explicit Func6Widget(Func6 *module) : Panel(module, 12) {
     auto widget_right_edge = width();
 
     auto column_3 = widget_right_edge / 2.f;

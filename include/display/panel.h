@@ -9,8 +9,6 @@
 
 #include "dhe-modules.h"
 
-#include "display/controls.h"
-
 namespace DHE {
 inline void moveTo(rack::Rect &box, rack::Vec center) {
   box.pos = center.minus(box.size.mult(0.5f));
@@ -38,24 +36,23 @@ struct BooleanOption : rack::MenuItem {
   const std::function<bool()> is_on;
 };
 
-template <typename D, int P> class Jack : public rack::SVGPort {
+template <typename P, int T> class Jack : public rack::SVGPort {
 public:
   Jack() {
-    background->svg = D::svg("port");
+    background->svg = P::svg("port");
     background->wrap();
     box.size = background->box.size;
   }
 };
 
-template <typename D> using InputJack = Jack<D, rack::Port::PortType::INPUT>;
+template <typename P> using InputJack = Jack<P, rack::Port::PortType::INPUT>;
 
-template <typename D> using OutputJack = Jack<D, rack::Port::PortType::OUTPUT>;
+template <typename P> using OutputJack = Jack<P, rack::Port::PortType::OUTPUT>;
 
-template <typename D, typename M>
-class ModuleWidget : public rack::ModuleWidget {
+template <typename P, typename M> class Panel : public rack::ModuleWidget {
 
 public:
-  ModuleWidget(M *module, int widget_hp) : rack::ModuleWidget(module) {
+  Panel(M *module, int widget_hp) : rack::ModuleWidget(module) {
     box.size = rack::Vec{(float)widget_hp * rack::RACK_GRID_WIDTH,
                          rack::RACK_GRID_HEIGHT};
 
@@ -88,12 +85,12 @@ protected:
 
   auto width() const -> float { return box.size.x * MM_PER_IN / SVG_DPI; }
 
-  void install(float x, float y, InputJack<D> *jack) {
+  void install(float x, float y, InputJack<P> *jack) {
     moveTo(x, y, jack);
     addInput(jack);
   }
 
-  void install(float x, float y, OutputJack<D> *jack) {
+  void install(float x, float y, OutputJack<P> *jack) {
     moveTo(x, y, jack);
     addOutput(jack);
   }
@@ -109,35 +106,35 @@ protected:
   }
 
   template <template <typename> class K>
-  auto knob(int index, float initial = 0.5f) const -> K<D> * {
-    return rack::ParamWidget::create<K<D>>({0, 0}, module, index, 0, 1,
+  auto knob(int index, float initial = 0.5f) const -> K<P> * {
+    return rack::ParamWidget::create<K<P>>({0, 0}, module, index, 0, 1,
                                            initial);
   }
 
   template <template <typename> class B = Button>
-  auto button(int index) const -> B<D> * {
-    return rack::ParamWidget::create<B<D>>({0, 0}, module, index, 0, 1, 0);
+  auto button(int index) const -> B<P> * {
+    return rack::ParamWidget::create<B<P>>({0, 0}, module, index, 0, 1, 0);
   }
 
   template <template <typename> class C>
-  auto counter(int index, int initial = 0) const -> C<D> * {
-    return rack::ParamWidget::create<C<D>>({0, 0}, module, index, 0,
-                                           C<D>::size - 1, initial);
+  auto counter(int index, int initial = 0) const -> C<P> * {
+    return rack::ParamWidget::create<C<P>>({0, 0}, module, index, 0,
+                                           C<P>::size - 1, initial);
   }
 
   template <int N>
-  auto thumb_switch(int index, int initial = 0) const -> ThumbSwitch<D, N> * {
-    return rack::ParamWidget::create<ThumbSwitch<D, N>>({0, 0}, module, index,
-                                                        0, N - 1, initial);
+  auto toggle(int index, int initial = 0) const -> Toggle<P, N> * {
+    return rack::ParamWidget::create<Toggle<P, N>>({0, 0}, module, index, 0,
+                                                   N - 1, initial);
   }
 
-  auto input(int index) const -> InputJack<D> * {
-    return rack::Port::create<InputJack<D>>({0, 0}, rack::Port::PortType::INPUT,
+  auto input(int index) const -> InputJack<P> * {
+    return rack::Port::create<InputJack<P>>({0, 0}, rack::Port::PortType::INPUT,
                                             module, index);
   }
 
-  auto output(int index) const -> OutputJack<D> * {
-    return rack::Port::create<OutputJack<D>>(
+  auto output(int index) const -> OutputJack<P> * {
+    return rack::Port::create<OutputJack<P>>(
         {0, 0}, rack::Port::PortType::OUTPUT, module, index);
   }
 
@@ -170,7 +167,7 @@ protected:
 
 private:
   static auto resource_prefix() -> std::string {
-    static const auto prefix = std::string("res/") + D::resource_name + "/";
+    static const auto prefix = std::string("res/") + P::resource_name + "/";
     return prefix;
   }
 };

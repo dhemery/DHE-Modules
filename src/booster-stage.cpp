@@ -1,8 +1,8 @@
-#include "dhe-modules.h"
-#include "module-widget.h"
 #include <utility>
 
+#include "dhe-modules.h"
 #include "display/controls.h"
+#include "display/panel.h"
 #include "util/duration.h"
 #include "util/rotation.h"
 #include "util/signal.h"
@@ -148,11 +148,10 @@ private:
   float held_voltage = 0.f;
 };
 
-struct BoosterStageWidget
-    : public ModuleWidget<BoosterStageWidget, BoosterStage> {
+struct BoosterStageWidget : public Panel<BoosterStageWidget, BoosterStage> {
   static constexpr auto resource_name = "booster-stage";
 
-  explicit BoosterStageWidget(BoosterStage *module) : ModuleWidget(module, 8) {
+  explicit BoosterStageWidget(BoosterStage *module) : Panel(module, 8) {
     auto widget_right_edge = width();
 
     auto column_1 = widget_right_edge / 6.f + 0.3333333f;
@@ -167,18 +166,17 @@ struct BoosterStageWidget
 
     install(column_1, y, input(BoosterStage::LEVEL_CV));
     install(column_3, y, knob<LargeKnob>(BoosterStage::LEVEL_KNOB));
-    install(column_5, y, thumb_switch<2>(BoosterStage::LEVEL_RANGE_SWITCH, 1));
+    install(column_5, y, toggle<2>(BoosterStage::LEVEL_RANGE_SWITCH, 1));
 
     y += dy;
     install(column_1, y, input(BoosterStage::CURVE_CV));
     install(column_3, y, knob<LargeKnob>(BoosterStage::CURVE_KNOB));
-    install(column_5, y, thumb_switch<2>(BoosterStage::SHAPE_SWITCH));
+    install(column_5, y, toggle<2>(BoosterStage::SHAPE_SWITCH));
 
     y += dy;
     install(column_1, y, input(BoosterStage::DURATION_CV));
     install(column_3, y, knob<LargeKnob>(BoosterStage::DURATION_KNOB));
-    install(column_5, y,
-            thumb_switch<3>(BoosterStage::DURATION_RANGE_SWITCH, 1));
+    install(column_5, y, toggle<3>(BoosterStage::DURATION_RANGE_SWITCH, 1));
 
     y = 82.f;
     dy = 15.f;

@@ -1,7 +1,6 @@
 #include "dhe-modules.h"
-#include "module-widget.h"
-
 #include "display/controls.h"
+#include "display/panel.h"
 #include "util/range.h"
 #include "util/rotation.h"
 #include "util/signal.h"
@@ -59,10 +58,10 @@ private:
   void send_main_out(float voltage) { outputs[MAIN_OUT].value = voltage; }
 };
 
-struct RangerWidget : public ModuleWidget<RangerWidget, Ranger> {
+struct RangerWidget : public Panel<RangerWidget, Ranger> {
   static constexpr auto resource_name = "ranger";
 
-  explicit RangerWidget(Ranger *module) : ModuleWidget(module, 6) {
+  explicit RangerWidget(Ranger *module) : Panel(module, 6) {
     auto widget_right_edge = width();
 
     auto column_1 = width() / 3.5f + 0.333333333f;
@@ -80,7 +79,7 @@ struct RangerWidget : public ModuleWidget<RangerWidget, Ranger> {
 
     y += dy + panel_buffer;
     install(column_1, y, knob<MediumKnob>(Ranger::LIMIT_1_KNOB));
-    install(column_2, y, thumb_switch<2>(Ranger::LIMIT_1_RANGE_SWITCH, 1));
+    install(column_2, y, toggle<2>(Ranger::LIMIT_1_RANGE_SWITCH, 1));
 
     y += dy;
     install(column_1, y, input(Ranger::LIMIT_1_CV));
@@ -88,7 +87,7 @@ struct RangerWidget : public ModuleWidget<RangerWidget, Ranger> {
 
     y += dy + panel_buffer;
     install(column_1, y, knob<MediumKnob>(Ranger::LIMIT_2_KNOB));
-    install(column_2, y, thumb_switch<2>(Ranger::LIMIT_2_RANGE_SWITCH, 1));
+    install(column_2, y, toggle<2>(Ranger::LIMIT_2_RANGE_SWITCH, 1));
 
     y += dy;
     install(column_1, y, input(Ranger::LIMIT_2_CV));

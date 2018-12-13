@@ -1,7 +1,6 @@
 #include "dhe-modules.h"
-#include "module-widget.h"
-
 #include "display/controls.h"
+#include "display/panel.h"
 #include "util/range.h"
 #include "util/rotation.h"
 #include "util/signal.h"
@@ -65,10 +64,10 @@ private:
   }
 };
 
-struct UpstageWidget : public ModuleWidget<UpstageWidget, Upstage> {
+struct UpstageWidget : public Panel<UpstageWidget, Upstage> {
   static constexpr auto resource_name = "upstage";
 
-  explicit UpstageWidget(Upstage *module) : ModuleWidget(module, 5) {
+  explicit UpstageWidget(Upstage *module) : Panel(module, 5) {
     auto widget_right_edge = width();
 
     auto column_1 = width() / 4.f + 0.333333333f;
@@ -82,7 +81,7 @@ struct UpstageWidget : public ModuleWidget<UpstageWidget, Upstage> {
 
     y += dy;
     install(column_1, y, input(Upstage::LEVEL_CV));
-    install(column_3, y, thumb_switch<2>(Upstage::LEVEL_RANGE_SWITCH, 1));
+    install(column_3, y, toggle<2>(Upstage::LEVEL_RANGE_SWITCH, 1));
 
     y += dy;
     install(column_1, y, button(Upstage::WAIT_BUTTON));

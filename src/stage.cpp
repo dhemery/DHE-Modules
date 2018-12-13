@@ -1,9 +1,8 @@
 #include <engine.hpp>
 
 #include "dhe-modules.h"
-#include "module-widget.h"
-
 #include "display/controls.h"
+#include "display/panel.h"
 #include "util/duration.h"
 #include "util/signal.h"
 #include "util/stage-components.h"
@@ -106,10 +105,10 @@ private:
   float held_voltage = 0.f;
 };
 
-struct StageWidget : public ModuleWidget<StageWidget, Stage> {
+struct StageWidget : public Panel<StageWidget, Stage> {
   static constexpr auto resource_name = "stage";
 
-  explicit StageWidget(Stage *module) : ModuleWidget(module, 5) {
+  explicit StageWidget(Stage *module) : Panel(module, 5) {
     auto widget_right_edge = width();
 
     auto column_1 = width() / 4.f + 0.333333f;

@@ -1,7 +1,6 @@
 #include "dhe-modules.h"
-#include "module-widget.h"
-
 #include "display/controls.h"
+#include "display/panel.h"
 #include "util/rotation.h"
 #include "util/signal.h"
 
@@ -71,10 +70,10 @@ private:
   void send_main_out(float voltage) { outputs[MAIN_OUT].value = voltage; }
 };
 
-struct CubicWidget : public ModuleWidget<CubicWidget, Cubic> {
+struct CubicWidget : public Panel<CubicWidget, Cubic> {
   static constexpr auto resource_name = "cubic";
 
-  explicit CubicWidget(Cubic *module) : ModuleWidget(module, 5) {
+  explicit CubicWidget(Cubic *module) : Panel(module, 5) {
     auto widget_right_edge = width();
 
     auto column_1 = width() / 4.f + 0.333333f;

@@ -1,7 +1,6 @@
 #include "dhe-modules.h"
-#include "module-widget.h"
-
 #include "display/controls.h"
+#include "display/panel.h"
 #include "util/rotation.h"
 #include "util/sigmoid.h"
 #include "util/signal.h"
@@ -78,10 +77,10 @@ private:
   }
 };
 
-struct TapersWidget : public ModuleWidget<TapersWidget, Tapers> {
+struct TapersWidget : public Panel<TapersWidget, Tapers> {
   static constexpr auto resource_name = "tapers";
 
-  explicit TapersWidget(Tapers *module) : ModuleWidget(module, 9) {
+  explicit TapersWidget(Tapers *module) : Panel(module, 9) {
     auto widget_right_edge = width();
 
     auto column_1 = width() / 5.f + 0.333333333f;
@@ -100,8 +99,8 @@ struct TapersWidget : public ModuleWidget<TapersWidget, Tapers> {
     install(column_2, y, knob<TinyKnob>(Tapers::CURVE_1_AV));
     install(column_3, y, knob<MediumKnob>(Tapers::CURVE_1_KNOB));
     y += dy;
-    install(column_1, y, thumb_switch<2>(Tapers::SHAPE_1_SWITCH));
-    install(column_2, y, thumb_switch<2>(Tapers::RANGE_1_SWITCH, 1));
+    install(column_1, y, toggle<2>(Tapers::SHAPE_1_SWITCH));
+    install(column_2, y, toggle<2>(Tapers::RANGE_1_SWITCH, 1));
     install(column_3, y, output(Tapers::OUT_1));
 
     y += dy + panel_buffer;
@@ -114,8 +113,8 @@ struct TapersWidget : public ModuleWidget<TapersWidget, Tapers> {
     install(column_2, y, knob<TinyKnob>(Tapers::CURVE_2_AV));
     install(column_3, y, knob<MediumKnob>(Tapers::CURVE_2_KNOB));
     y += dy;
-    install(column_1, y, thumb_switch<2>(Tapers::SHAPE_2_SWITCH));
-    install(column_2, y, thumb_switch<2>(Tapers::RANGE_2_SWITCH, 1));
+    install(column_1, y, toggle<2>(Tapers::SHAPE_2_SWITCH));
+    install(column_2, y, toggle<2>(Tapers::RANGE_2_SWITCH, 1));
     install(column_3, y, output(Tapers::OUT_2));
   }
 };

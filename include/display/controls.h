@@ -4,71 +4,61 @@
 #include <componentlibrary.hpp>
 
 namespace DHE {
-template <typename T> class Knob : public rack::RoundKnob {
+template <typename P> class Knob : public rack::RoundKnob {
 public:
   explicit Knob(const std::string &size) {
     static const auto prefix = std::string{"knob-"};
-    setSVG(T::svg(prefix + size));
+    setSVG(P::svg(prefix + size));
     shadow->opacity = 0.f;
   }
 };
 
-template <typename T> class LargeKnob : public Knob<T> {
+template <typename P> class LargeKnob : public Knob<P> {
 public:
-  LargeKnob() : Knob<T>("large") {}
+  LargeKnob() : Knob<P>("large") {}
 };
 
-template <typename T> class MediumKnob : public Knob<T> {
+template <typename P> class MediumKnob : public Knob<P> {
 public:
-  MediumKnob() : Knob<T>("medium") {}
+  MediumKnob() : Knob<P>("medium") {}
 };
 
-template <typename T> class SmallKnob : public Knob<T> {
+template <typename P> class SmallKnob : public Knob<P> {
 public:
-  SmallKnob() : Knob<T>("small") {}
+  SmallKnob() : Knob<P>("small") {}
 };
 
-template <typename T> class TinyKnob : public Knob<T> {
+template <typename P> class TinyKnob : public Knob<P> {
 public:
-  TinyKnob() : Knob<T>("tiny") {}
+  TinyKnob() : Knob<P>("tiny") {}
 };
 
-template <typename T>
+template <typename P>
 class Button : public rack::SVGSwitch, public rack::MomentarySwitch {
 public:
-  explicit Button(const std::string &type = "normal") {
-    static const auto base = std::string{"button-"};
-    const auto prefix = base + type + "-";
-    addFrame(T::svg(prefix + "1"));
-    addFrame(T::svg(prefix + "2"));
+  explicit Button(const std::string &name = "button") {
+    addFrame(P::svg(name + "-1"));
+    addFrame(P::svg(name + "-2"));
   }
 };
 
-template <typename T> class ReverseButton : public Button<T> {
+template <typename P> class ReverseButton : public Button<P> {
 public:
-  ReverseButton() : Button<T>{"reverse"} {}
+  ReverseButton() : Button<P>{"button-reverse"} {}
 };
 
-template <typename T, int N>
-class Switch : public rack::SVGSwitch, public rack::ToggleSwitch {
+template <typename P, int N>
+class Toggle : public rack::SVGSwitch, public rack::ToggleSwitch {
 public:
-  explicit Switch(const std::string& name) {
-    auto base = name + "-" ;
+  explicit Toggle(const std::string &name = "thumb-" + std::to_string(N)) {
+    auto base = name + "-";
     for (int position = 1; position <= size; position++) {
-      addFrame(T::svg(base + std::to_string(position)));
+      addFrame(P::svg(base + std::to_string(position)));
     }
   }
 
-  auto position() const -> int {
-    return static_cast<int>(this->value);
-  }
+  auto position() const -> int { return static_cast<int>(this->value); }
 
   static constexpr auto size = N;
-};
-
-template <typename T, int N>
-class ThumbSwitch : public Switch<T,N> {
-public:
-  explicit ThumbSwitch(const std::string& name = "thumb-" + std::to_string(N)) : Switch<T,N>{name} {}
 };
 } // namespace DHE

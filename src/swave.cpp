@@ -1,7 +1,6 @@
 #include "dhe-modules.h"
-#include "module-widget.h"
-
 #include "display/controls.h"
+#include "display/panel.h"
 #include "util/range.h"
 #include "util/rotation.h"
 #include "util/sigmoid.h"
@@ -38,10 +37,10 @@ private:
   auto signal_in() const -> float { return inputs[MAIN_IN].value; }
 };
 
-struct SwaveWidget : public ModuleWidget<SwaveWidget, Swave> {
+struct SwaveWidget : public Panel<SwaveWidget, Swave> {
   static constexpr auto resource_name = "swave";
 
-  explicit SwaveWidget(Swave *module) : ModuleWidget(module, 4) {
+  explicit SwaveWidget(Swave *module) : Panel(module, 4) {
     auto widget_right_edge = width();
 
     auto x = widget_right_edge / 2.f;
@@ -49,7 +48,7 @@ struct SwaveWidget : public ModuleWidget<SwaveWidget, Swave> {
     auto y = 25.f;
     auto dy = 18.5f;
 
-    install(x, y, thumb_switch<2>(Swave::SHAPE_SWITCH, 1));
+    install(x, y, toggle<2>(Swave::SHAPE_SWITCH, 1));
 
     y += dy;
     install(x, y, knob<LargeKnob>(Swave::CURVE_KNOB));

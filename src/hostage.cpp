@@ -1,11 +1,10 @@
 #include "dhe-modules.h"
-#include "module-widget.h"
-
 #include "display/controls.h"
+#include "display/panel.h"
 #include "util/duration.h"
 #include "util/phase-accumulator.h"
 #include "util/rotation.h"
-#include <util/stage-components.h>
+#include "util/stage-components.h"
 
 namespace DHE {
 
@@ -162,9 +161,9 @@ private:
   StageType stage_type{HOLD};
 };
 
-struct HostageWidget : public ModuleWidget<HostageWidget, Hostage> {
+struct HostageWidget : public Panel<HostageWidget, Hostage> {
   static constexpr auto resource_name = "hostage";
-  explicit HostageWidget(Hostage *module) : ModuleWidget(module, 5) {
+  explicit HostageWidget(Hostage *module) : Panel(module, 5) {
     auto widget_right_edge = width();
 
     auto column_1 = width() / 4.f + 0.333333f;
@@ -174,11 +173,11 @@ struct HostageWidget : public ModuleWidget<HostageWidget, Hostage> {
     auto y = 25.f;
     auto dy = 18.5f;
 
-    install(column_2, y, thumb_switch<2>(Hostage::SUSTAIN_MODE_SWITCH));
+    install(column_2, y, toggle<2>(Hostage::SUSTAIN_MODE_SWITCH));
 
     y += dy;
     install(column_1, y, input(Hostage::DURATION_CV));
-    install(column_3, y, thumb_switch<3>(Hostage::DURATION_RANGE_SWITCH, 1));
+    install(column_3, y, toggle<3>(Hostage::DURATION_RANGE_SWITCH, 1));
 
     y += dy;
     install(column_2, y, knob<LargeKnob>(Hostage::DURATION_KNOB));
