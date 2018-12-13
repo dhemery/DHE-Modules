@@ -36,7 +36,7 @@ struct BooleanOption : rack::MenuItem {
   const std::function<bool()> is_on;
 };
 
-template <typename P, int T> class Jack : public rack::SVGPort {
+template <typename P> class Jack : public rack::SVGPort {
 public:
   Jack() {
     background->svg = P::svg("port");
@@ -45,9 +45,11 @@ public:
   }
 };
 
-template <typename P> using InputJack = Jack<P, rack::Port::PortType::INPUT>;
+template <typename P>
+class InputJack : public Jack<P> {};
 
-template <typename P> using OutputJack = Jack<P, rack::Port::PortType::OUTPUT>;
+template <typename P>
+class OutputJack : public Jack<P> {};
 
 template <typename P, typename M> class Panel : public rack::ModuleWidget {
 
