@@ -3,6 +3,8 @@
 #include <app.hpp>
 #include <componentlibrary.hpp>
 
+#include "util/range.h"
+
 namespace DHE {
 template <typename P> class Knob : public rack::RoundKnob {
 public:
@@ -61,4 +63,21 @@ public:
 
   static constexpr auto size = N;
 };
+
+template <typename P, typename M>
+class LevelRangeSelector : public Toggle<P, 2> {
+public:
+  void onChange(rack::EventChange &e) override {
+    Toggle<P, 2>::onChange(e);
+    dynamic_cast<M *>(this->module)->set_level_range(this->selection());
+  }
+
+private:
+  auto selection() const -> const Range & { return ranges[this->position()]; }
+
+  static constexpr auto unipolar_range = Range{0.f, 10.f};
+  static constexpr auto bipolar_range = Range{-5.f, 5.f};
+  const std::vector<const Range> ranges{bipolar_range, unipolar_range};
+};
+
 } // namespace DHE

@@ -149,25 +149,8 @@ private:
   Range const *level_range = &Signal::bipolar_range;
 };
 
-template <typename P> class LevelRangeSelector : public Toggle<P, 2> {
-public:
-  auto selection() const -> const Range & { return ranges[this->position()]; }
-
-private:
-  static constexpr auto unipolar_range = Range{0.f, 10.f};
-  static constexpr auto bipolar_range = Range{-5.f, 5.f};
-  const std::vector<Range> ranges{bipolar_range, unipolar_range};
-};
-
 template <typename P>
-class BoosterStageLevelRangeSelector : public LevelRangeSelector<P> {
-public:
-  void onChange(rack::EventChange &e) override {
-    LevelRangeSelector<P>::onChange(e);
-    auto booster_stage = dynamic_cast<BoosterStage *>(this->module);
-    booster_stage->set_level_range(this->selection());
-  }
-};
+using BoosterStageLevelRangeSelector = LevelRangeSelector<P, BoosterStage>;
 
 class BoosterStagePanel : public Panel<BoosterStagePanel> {
 public:
