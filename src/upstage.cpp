@@ -17,6 +17,8 @@ public:
     send_envelope(envelope_voltage());
   }
 
+  void set_level_range(const Range &range) { level_range = &range; }
+
   enum ParameterIds {
     LEVEL_KNOB,
     TRIGGER_BUTTON,
@@ -30,7 +32,7 @@ public:
   enum OutputIds { TRIGGER_OUT, MAIN_OUT, OUTPUT_COUNT };
 
 private:
-  auto envelope_voltage() const -> float { return range().scale(level()); }
+  auto envelope_voltage() const -> float { return level_range->scale(level()); }
 
   auto level() const -> float { return modulated(LEVEL_KNOB, LEVEL_CV); }
 
@@ -38,11 +40,6 @@ private:
     auto rotation = params[knob_param].value;
     auto cv = inputs[cv_input].value;
     return Rotation::modulated(rotation, cv);
-  }
-
-  auto range() const -> const Range & {
-    auto is_uni = params[LEVEL_RANGE_SWITCH].value > 0.5f;
-    return Signal::range(is_uni);
   }
 
   void send_envelope(float voltage) { outputs[MAIN_OUT].value = voltage; }
@@ -62,7 +59,12 @@ private:
     auto wait_input = inputs[WAIT_IN].value > 0.1f;
     return wait_button || wait_input;
   }
+
+  Range const *level_range = &Signal::bipolar_range;
 };
+
+template <typename P>
+using UpstageLevelRangeSelector = LevelRangeSelector<P, Upstage>;
 
 class UpstagePanel : public Panel<UpstagePanel> {
 public:
@@ -80,7 +82,8 @@ public:
 
     y += dy;
     install(column_1, y, input(Upstage::LEVEL_CV));
-    install(column_3, y, toggle<2>(Upstage::LEVEL_RANGE_SWITCH, 1));
+    install(column_3, y,
+            toggle<UpstageLevelRangeSelector>(Upstage::LEVEL_RANGE_SWITCH, 1));
 
     y += dy;
     install(column_1, y, button(Upstage::WAIT_BUTTON));
