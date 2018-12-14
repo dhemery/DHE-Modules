@@ -68,6 +68,8 @@ public:
     return trigger_button || trigger_input;
   }
 
+  void set_level_range(const Range &range) { level_range = &range; }
+
   enum ParameterIds {
     ACTIVE_BUTTON,
     CURVE_KNOB,
@@ -116,10 +118,8 @@ private:
   auto is_s_shape() const -> bool { return params[SHAPE_SWITCH].value > 0.5f; }
 
   auto level() const -> float {
-    auto is_uni = params[LEVEL_RANGE_SWITCH].value > 0.5f;
-    auto range = Signal::range(is_uni);
     auto level = modulated(LEVEL_KNOB, LEVEL_CV);
-    return range.scale(level);
+    return level_range->scale(level);
   }
 
   auto modulated(ParameterIds knob_param, InputIds cv_input) const -> float {
@@ -146,6 +146,27 @@ private:
                                                &stage_trigger};
   Mode *mode{&following_mode};
   float held_voltage = 0.f;
+  Range const *level_range = &Signal::bipolar_range;
+};
+
+template <typename P> class LevelRangeSelector : public Toggle<P, 2> {
+public:
+  auto selection() const -> const Range & { return ranges[this->position()]; }
+
+private:
+  static constexpr auto unipolar_range = Range{0.f, 10.f};
+  static constexpr auto bipolar_range = Range{-5.f, 5.f};
+  const std::vector<Range> ranges{bipolar_range, unipolar_range};
+};
+
+template <typename P>
+class BoosterStageLevelRangeSelector : public LevelRangeSelector<P> {
+public:
+  void onChange(rack::EventChange &e) override {
+    LevelRangeSelector<P>::onChange(e);
+    auto booster_stage = dynamic_cast<BoosterStage *>(this->module);
+    booster_stage->set_level_range(this->selection());
+  }
 };
 
 class BoosterStagePanel : public Panel<BoosterStagePanel> {
@@ -165,7 +186,9 @@ public:
 
     install(column_1, y, input(BoosterStage::LEVEL_CV));
     install(column_3, y, knob<LargeKnob>(BoosterStage::LEVEL_KNOB));
-    install(column_5, y, toggle<2>(BoosterStage::LEVEL_RANGE_SWITCH, 1));
+    install(column_5, y,
+            toggle<BoosterStageLevelRangeSelector>(
+                BoosterStage::LEVEL_RANGE_SWITCH, 1));
 
     y += dy;
     install(column_1, y, input(BoosterStage::CURVE_CV));
