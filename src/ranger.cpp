@@ -58,10 +58,9 @@ private:
   void send_main_out(float voltage) { outputs[MAIN_OUT].value = voltage; }
 };
 
-struct RangerPanel : public Panel<RangerPanel, Ranger> {
-  static constexpr auto resource_name = "ranger";
-
-  explicit RangerPanel(Ranger *module) : Panel{module, 6} {
+class RangerPanel : public Panel<RangerPanel> {
+public:
+  explicit RangerPanel(Ranger *module) : Panel{module, hp} {
     auto widget_right_edge = width();
 
     auto column_1 = width() / 3.5f + 0.333333333f;
@@ -94,6 +93,11 @@ struct RangerPanel : public Panel<RangerPanel, Ranger> {
     install(column_1, y, input(Ranger::LIMIT_2_CV));
     install(column_2, y, knob<TinyKnob>(Ranger::LIMIT_2_AV));
   }
+
+  static constexpr auto resource_name = "ranger";
+
+private:
+  static constexpr auto hp = 6;
 };
 } // namespace DHE
 

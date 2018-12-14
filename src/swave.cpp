@@ -37,10 +37,9 @@ private:
   auto signal_in() const -> float { return inputs[MAIN_IN].value; }
 };
 
-struct SwavePanel : public Panel<SwavePanel, Swave> {
-  static constexpr auto resource_name = "swave";
-
-  explicit SwavePanel(Swave *module) : Panel{module, 4} {
+class SwavePanel : public Panel<SwavePanel> {
+public:
+  explicit SwavePanel(Swave *module) : Panel{module, hp} {
     auto widget_right_edge = width();
 
     auto x = widget_right_edge / 2.f;
@@ -65,6 +64,11 @@ struct SwavePanel : public Panel<SwavePanel, Swave> {
     y += dy;
     install(x, y, output(Swave::MAIN_OUT));
   }
+
+  static constexpr auto resource_name = "swave";
+
+public:
+  static constexpr auto hp = 4;
 };
 } // namespace DHE
 rack::Model *modelSwave = rack::Model::create<DHE::Swave, DHE::SwavePanel>(

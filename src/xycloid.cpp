@@ -185,10 +185,9 @@ private:
   XycloidRotor throbber{};
 };
 
-struct XycloidPanel : public Panel<XycloidPanel, Xycloid> {
-  static constexpr auto resource_name = "xycloid";
-
-  explicit XycloidPanel(Xycloid *module) : Panel{module, 11} {
+class XycloidPanel : public Panel<XycloidPanel> {
+public:
+  explicit XycloidPanel(Xycloid *module) : Panel{module, hp} {
     auto widget_right_edge = width();
 
     auto column_1 = widget_right_edge / 7.f;
@@ -248,6 +247,11 @@ struct XycloidPanel : public Panel<XycloidPanel, Xycloid> {
         },
         [xycloid] { return xycloid->is_musical_wobble_ratios(); }));
   }
+
+  static constexpr auto resource_name = "xycloid";
+
+private:
+  static constexpr auto hp = 11;
 };
 
 } // namespace DHE

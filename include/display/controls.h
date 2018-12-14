@@ -36,7 +36,7 @@ public:
 template <typename P>
 class Button : public rack::SVGSwitch, public rack::MomentarySwitch {
 public:
-  explicit Button(const std::string &name = "button") {
+  explicit Button(const std::string &name = "button-normal") {
     addFrame(P::svg(name + "-1"));
     addFrame(P::svg(name + "-2"));
   }

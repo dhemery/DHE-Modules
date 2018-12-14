@@ -77,10 +77,9 @@ private:
   }
 };
 
-struct TapersPanel : public Panel<TapersPanel, Tapers> {
-  static constexpr auto resource_name = "tapers";
-
-  explicit TapersPanel(Tapers *module) : Panel{module, 9} {
+class TapersPanel : public Panel<TapersPanel> {
+public:
+  explicit TapersPanel(Tapers *module) : Panel{module, hp} {
     auto widget_right_edge = width();
 
     auto column_1 = width() / 5.f + 0.333333333f;
@@ -117,6 +116,11 @@ struct TapersPanel : public Panel<TapersPanel, Tapers> {
     install(column_2, y, toggle<2>(Tapers::RANGE_2_SWITCH, 1));
     install(column_3, y, output(Tapers::OUT_2));
   }
+
+  static constexpr auto resource_name = "tapers";
+
+public:
+  static constexpr auto hp = 9;
 };
 } // namespace DHE
 rack::Model *modelTapers = rack::Model::create<DHE::Tapers, DHE::TapersPanel>(

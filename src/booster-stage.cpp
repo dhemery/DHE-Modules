@@ -148,10 +148,9 @@ private:
   float held_voltage = 0.f;
 };
 
-struct BoosterStagePanel : public Panel<BoosterStagePanel, BoosterStage> {
-  static constexpr auto resource_name = "booster-stage";
-
-  explicit BoosterStagePanel(BoosterStage *module) : Panel{module, 8} {
+class BoosterStagePanel : public Panel<BoosterStagePanel> {
+public:
+  explicit BoosterStagePanel(BoosterStage *module) : Panel{module, hp} {
     auto widget_right_edge = width();
 
     auto column_1 = widget_right_edge / 6.f + 0.3333333f;
@@ -196,6 +195,11 @@ struct BoosterStagePanel : public Panel<BoosterStagePanel, BoosterStage> {
     install(column_1, y, input(BoosterStage::ENVELOPE_IN));
     install(column_5, y, output(BoosterStage::MAIN_OUT));
   }
+
+  static constexpr auto resource_name = "booster-stage";
+
+private:
+  static constexpr auto hp = 8;
 };
 } // namespace DHE
 rack::Model *modelBoosterStage =

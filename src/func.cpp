@@ -161,10 +161,9 @@ private:
   MultiplicationRangeSwitch<P> *multiplication_range_switch = nullptr;
 };
 
-struct FuncPanel : public Panel<FuncPanel, Func> {
-  static constexpr auto resource_name = "func";
-
-  explicit FuncPanel(Func *module) : Panel{module, 3} {
+class FuncPanel : public Panel<FuncPanel> {
+public:
+  explicit FuncPanel(Func *module) : Panel{module, hp} {
 
     auto widget_right_edge = width();
 
@@ -200,12 +199,16 @@ struct FuncPanel : public Panel<FuncPanel, Func> {
 
     install(x, row_2, operator_switch);
   }
+
+  static constexpr auto resource_name = "func";
+
+private:
+  static constexpr auto hp = 3;
 };
 
-struct Func6Panel : public Panel<Func6Panel, Func6> {
-  static constexpr auto resource_name = "func6";
-
-  explicit Func6Panel(Func6 *module) : Panel{module, 12} {
+class Func6Panel : public Panel<Func6Panel> {
+public:
+  explicit Func6Panel(Func6 *module) : Panel{module, hp} {
     auto widget_right_edge = width();
 
     auto column_3 = widget_right_edge / 2.f;
@@ -243,6 +246,11 @@ struct Func6Panel : public Panel<Func6Panel, Func6> {
       install(column_2, y, operator_switch);
     }
   }
+
+  static constexpr auto resource_name = "func6";
+
+private:
+  static constexpr auto hp = 12;
 };
 
 } // namespace DHE

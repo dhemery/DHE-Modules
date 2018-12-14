@@ -105,10 +105,9 @@ private:
   float held_voltage = 0.f;
 };
 
-struct StagePanel : public Panel<StagePanel, Stage> {
-  static constexpr auto resource_name = "stage";
-
-  explicit StagePanel(Stage *module) : Panel{module, 5} {
+class StagePanel : public Panel<StagePanel> {
+public:
+  explicit StagePanel(Stage *module) : Panel{module, hp} {
     auto widget_right_edge = width();
 
     auto column_1 = width() / 4.f + 0.333333f;
@@ -140,6 +139,11 @@ struct StagePanel : public Panel<StagePanel, Stage> {
     install(column_1, y, input(Stage::ENVELOPE_IN));
     install(column_3, y, output(Stage::MAIN_OUT));
   }
+
+  static constexpr auto resource_name = "stage";
+
+private:
+  static constexpr auto hp = 5;
 };
 } // namespace DHE
 rack::Model *modelStage = rack::Model::create<DHE::Stage, DHE::StagePanel>(

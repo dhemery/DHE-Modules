@@ -49,12 +49,11 @@ template <typename P> class InputJack : public Jack<P> {};
 
 template <typename P> class OutputJack : public Jack<P> {};
 
-template <typename P, typename M> class Panel : public rack::ModuleWidget {
-
+template <typename P> class Panel : public rack::ModuleWidget {
 public:
-  Panel(M *module, int widget_hp) : rack::ModuleWidget{module} {
-    box.size = rack::Vec{(float)widget_hp * rack::RACK_GRID_WIDTH,
-                         rack::RACK_GRID_HEIGHT};
+  Panel(rack::Module *module, int widget_hp) : rack::ModuleWidget{module} {
+    box.size =
+        rack::Vec{widget_hp * rack::RACK_GRID_WIDTH, rack::RACK_GRID_HEIGHT};
 
     auto panel = new rack::SVGPanel();
     panel->box.size = box.size;

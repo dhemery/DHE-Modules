@@ -161,9 +161,9 @@ private:
   StageType stage_type{HOLD};
 };
 
-struct HostagePanel : public Panel<HostagePanel, Hostage> {
-  static constexpr auto resource_name = "hostage";
-  explicit HostagePanel(Hostage *module) : Panel{module, 5} {
+class HostagePanel : public Panel<HostagePanel> {
+public:
+  explicit HostagePanel(Hostage *module) : Panel{module, hp} {
     auto widget_right_edge = width();
 
     auto column_1 = width() / 4.f + 0.333333f;
@@ -196,6 +196,11 @@ struct HostagePanel : public Panel<HostagePanel, Hostage> {
     install(column_1, y, input(Hostage::MAIN_IN));
     install(column_3, y, output(Hostage::MAIN_OUT));
   }
+
+  static constexpr auto resource_name = "hostage";
+
+private:
+  static constexpr auto hp = 5;
 };
 } // namespace DHE
 rack::Model *modelHostage =

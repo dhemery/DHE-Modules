@@ -70,10 +70,9 @@ private:
   void send_main_out(float voltage) { outputs[MAIN_OUT].value = voltage; }
 };
 
-struct CubicPanel : public Panel<CubicPanel, Cubic> {
-  static constexpr auto resource_name = "cubic";
-
-  explicit CubicPanel(Cubic *module) : Panel{module, 5} {
+class CubicPanel : public Panel<CubicPanel> {
+public:
+  explicit CubicPanel(Cubic *module) : Panel{module, hp} {
     auto widget_right_edge = width();
 
     auto column_1 = width() / 4.f + 0.333333f;
@@ -102,9 +101,18 @@ struct CubicPanel : public Panel<CubicPanel, Cubic> {
     install(column_2, y, knob<SmallKnob>(Cubic::OUTPUT_GAIN_KNOB));
 
     y += dy;
+    install(column_1, y, input(Cubic::INPUT_GAIN_CV));
+    install(column_2, y, input(Cubic::OUTPUT_GAIN_CV));
+
+    y += dy;
     install(column_1, y, input(Cubic::MAIN_IN));
     install(column_2, y, output(Cubic::MAIN_OUT));
   }
+
+  static constexpr auto resource_name = "cubic";
+
+private:
+  static constexpr auto hp = 5;
 };
 } // namespace DHE
 rack::Model *modelCubic = rack::Model::create<DHE::Cubic, DHE::CubicPanel>(
