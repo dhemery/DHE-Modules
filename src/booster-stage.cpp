@@ -146,7 +146,7 @@ private:
                                                &stage_trigger};
   Mode *mode{&following_mode};
   float held_voltage = 0.f;
-  Range const *duration_range = &Durations::medium_range;
+  Range const *duration_range = &Duration::medium_range;
   Range const *level_range = &Signal::bipolar_range;
 };
 
@@ -155,7 +155,7 @@ using BoosterStageLevelRangeSelector = LevelRangeSelector<P, BoosterStage>;
 
 template <typename P>
 using BoosterStageDurationRangeSelector =
-    DurationRangeSelector<P, BoosterStage>;
+    Duration::RangeSelector<P, BoosterStage>;
 
 class BoosterStagePanel : public Panel<BoosterStagePanel> {
 public:

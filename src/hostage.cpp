@@ -159,11 +159,11 @@ private:
   Mode *mode{&following_mode};
   float held_voltage{0.f};
   StageType stage_type{HOLD};
-  Range const *duration_range = &Durations::medium_range;
+  Range const *duration_range = &Duration::medium_range;
 };
 
 template <typename P>
-using HostageDurationRangeSelector = DurationRangeSelector<P, Hostage>;
+using HostageDurationRangeSelector = Duration::RangeSelector<P, Hostage>;
 
 class HostagePanel : public Panel<HostagePanel> {
 public:
