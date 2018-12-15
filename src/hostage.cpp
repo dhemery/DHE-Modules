@@ -25,9 +25,7 @@ public:
 
   auto duration() const -> float {
     auto rotation = modulated(DURATION_KNOB, DURATION_CV);
-    auto range_selection =
-        static_cast<int>(params[DURATION_RANGE_SWITCH].value);
-    return DHE::duration(rotation, range_selection);
+    return DHE::duration(rotation, *duration_range);
   }
 
   void hold_input() { held_voltage = envelope_in(); }
@@ -68,6 +66,8 @@ public:
   void send_input() { send_out(envelope_in()); }
 
   void send_stage() { send_held(); }
+
+  void set_duration_range(const Range &range) { duration_range = &range; }
 
   auto sustain_gate_in() const -> bool {
     return inputs[SUSTAIN_GATE_IN].value > 0.1f;
@@ -159,7 +159,11 @@ private:
   Mode *mode{&following_mode};
   float held_voltage{0.f};
   StageType stage_type{HOLD};
+  Range const *duration_range = &Durations::medium_range;
 };
+
+template <typename P>
+using HostageDurationRangeSelector = DurationRangeSelector<P, Hostage>;
 
 class HostagePanel : public Panel<HostagePanel> {
 public:
@@ -177,7 +181,9 @@ public:
 
     y += dy;
     install(column_1, y, input(Hostage::DURATION_CV));
-    install(column_3, y, toggle<3>(Hostage::DURATION_RANGE_SWITCH, 1));
+    install(column_3, y,
+            toggle<HostageDurationRangeSelector>(Hostage::DURATION_RANGE_SWITCH,
+                                                 1));
 
     y += dy;
     install(column_2, y, knob<LargeKnob>(Hostage::DURATION_KNOB));

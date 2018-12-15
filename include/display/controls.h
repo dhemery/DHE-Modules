@@ -80,4 +80,22 @@ private:
   const std::vector<const Range> ranges{bipolar_range, unipolar_range};
 };
 
+template <typename P, typename M>
+class DurationRangeSelector : public Toggle<P, 3> {
+public:
+  void onChange(rack::EventChange &e) override {
+    Toggle<P, 3>::onChange(e);
+    dynamic_cast<M *>(this->module)->set_duration_range(this->selection());
+  }
+
+private:
+  auto selection() const -> const Range & { return ranges[this->position()]; }
+
+  static constexpr auto short_range = Range{0.001f, 1.f};
+  static constexpr auto medium_range = Range{0.01f, 10.f};
+  static constexpr auto long_range = Range{0.1f, 100.f};
+
+  const std::vector<const Range> ranges{short_range, medium_range, long_range};
+};
+
 } // namespace DHE

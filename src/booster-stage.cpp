@@ -30,8 +30,7 @@ public:
 
   auto duration() const -> float {
     auto rotation = modulated(DURATION_KNOB, DURATION_CV);
-    auto selection = static_cast<int>(params[DURATION_RANGE_SWITCH].value);
-    return DHE::duration(rotation, selection);
+    return DHE::duration(rotation, *duration_range);
   }
 
   void hold_input() { held_voltage = envelope_in(); }
@@ -62,13 +61,14 @@ public:
     send_out(scale(taper(phase), held_voltage, level()));
   }
 
+  void set_duration_range(const Range &range) { duration_range = &range; }
+  void set_level_range(const Range &range) { level_range = &range; }
+
   auto stage_trigger_in() const -> bool {
     auto trigger_button = params[TRIGGER_BUTTON].value > 0.5;
     auto trigger_input = inputs[TRIGGER_IN].value > 0.1;
     return trigger_button || trigger_input;
   }
-
-  void set_level_range(const Range &range) { level_range = &range; }
 
   enum ParameterIds {
     ACTIVE_BUTTON,
@@ -146,11 +146,16 @@ private:
                                                &stage_trigger};
   Mode *mode{&following_mode};
   float held_voltage = 0.f;
+  Range const *duration_range = &Durations::medium_range;
   Range const *level_range = &Signal::bipolar_range;
 };
 
 template <typename P>
 using BoosterStageLevelRangeSelector = LevelRangeSelector<P, BoosterStage>;
+
+template <typename P>
+using BoosterStageDurationRangeSelector =
+    DurationRangeSelector<P, BoosterStage>;
 
 class BoosterStagePanel : public Panel<BoosterStagePanel> {
 public:
@@ -181,7 +186,9 @@ public:
     y += dy;
     install(column_1, y, input(BoosterStage::DURATION_CV));
     install(column_3, y, knob<LargeKnob>(BoosterStage::DURATION_KNOB));
-    install(column_5, y, toggle<3>(BoosterStage::DURATION_RANGE_SWITCH, 1));
+    install(column_5, y,
+            toggle<BoosterStageDurationRangeSelector>(
+                BoosterStage::DURATION_RANGE_SWITCH, 1));
 
     y = 82.f;
     dy = 15.f;
