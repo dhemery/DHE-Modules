@@ -67,7 +67,7 @@ public:
 
   void send_stage() { send_held(); }
 
-  void set_duration_range(const Range &range) { duration_range = &range; }
+  void set_duration_range(Range const *range) { duration_range = range; }
 
   auto sustain_gate_in() const -> bool {
     return inputs[SUSTAIN_GATE_IN].value > 0.1f;
@@ -162,12 +162,12 @@ private:
   Range const *duration_range = &Duration::medium_range;
 };
 
-template <typename P>
-using HostageDurationRangeSelector = Duration::RangeSelector<P, Hostage>;
-
 class HostagePanel : public Panel<HostagePanel> {
 public:
-  explicit HostagePanel(Hostage *module) : Panel{module, hp} {
+  explicit HostagePanel(Hostage *module)
+      : Panel{module, hp}, update_duration_range{[module](Range const *range) {
+          module->set_duration_range(range);
+        }} {
     auto widget_right_edge = width();
 
     auto column_1 = width() / 4.f + 0.333333f;
@@ -181,9 +181,9 @@ public:
 
     y += dy;
     install(column_1, y, input(Hostage::DURATION_CV));
-    install(column_3, y,
-            toggle<HostageDurationRangeSelector>(Hostage::DURATION_RANGE_SWITCH,
-                                                 1));
+    install(
+        column_3, y,
+        toggle<3>(Hostage::DURATION_RANGE_SWITCH, 1, update_duration_range));
 
     y += dy;
     install(column_2, y, knob<LargeKnob>(Hostage::DURATION_KNOB));
@@ -206,6 +206,7 @@ public:
   static constexpr auto resource_name = "hostage";
 
 private:
+  const Duration::RangeSelector update_duration_range;
   static constexpr auto hp = 5;
 };
 } // namespace DHE

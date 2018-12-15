@@ -1,17 +1,28 @@
 #pragma once
 
+#include <utility>
+
 #include <app.hpp>
 #include <componentlibrary.hpp>
 
-#include "util/range.h"
-
 namespace DHE {
-template <typename P> class Knob : public rack::RoundKnob {
+class Control {
+public:
+  static constexpr auto noop = [](float) {};
+  std::function<void(float)> notify{noop};
+};
+
+template <typename P> class Knob : public Control, public rack::RoundKnob {
 public:
   explicit Knob(const std::string &size) {
     static const auto prefix = std::string{"knob-"};
     setSVG(P::svg(prefix + size));
     shadow->opacity = 0.f;
+  }
+
+  void onChange(rack::EventChange &e) override {
+    rack::RoundKnob::onChange(e);
+    notify(this->value);
   }
 };
 
@@ -36,11 +47,18 @@ public:
 };
 
 template <typename P>
-class Button : public rack::SVGSwitch, public rack::MomentarySwitch {
+class Button : public Control,
+               public rack::SVGSwitch,
+               public rack::MomentarySwitch {
 public:
   explicit Button(const std::string &name = "button-normal") {
     addFrame(P::svg(name + "-1"));
     addFrame(P::svg(name + "-2"));
+  }
+
+  void onChange(rack::EventChange &e) override {
+    rack::SVGSwitch::onChange(e);
+    notify(this->value);
   }
 };
 
@@ -50,7 +68,9 @@ public:
 };
 
 template <typename P, int N>
-class Toggle : public rack::SVGSwitch, public rack::ToggleSwitch {
+class Toggle : public Control,
+               public rack::SVGSwitch,
+               public rack::ToggleSwitch {
 public:
   explicit Toggle(const std::string &name = "thumb-" + std::to_string(N)) {
     auto base = name + "-";
@@ -59,24 +79,11 @@ public:
     }
   }
 
-  auto position() const -> int { return static_cast<int>(this->value); }
-
-  static constexpr auto size = N;
-};
-
-template <typename P, typename M>
-class LevelRangeSelector : public Toggle<P, 2> {
-public:
   void onChange(rack::EventChange &e) override {
-    Toggle<P, 2>::onChange(e);
-    dynamic_cast<M *>(this->module)->set_level_range(this->selection());
+    rack::SVGSwitch::onChange(e);
+    notify(this->value);
   }
 
-private:
-  auto selection() const -> const Range & { return ranges[this->position()]; }
-
-  static constexpr auto unipolar_range = Range{0.f, 10.f};
-  static constexpr auto bipolar_range = Range{-5.f, 5.f};
-  const std::vector<const Range> ranges{bipolar_range, unipolar_range};
+  static constexpr auto size = N;
 };
 } // namespace DHE

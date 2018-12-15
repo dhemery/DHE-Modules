@@ -105,22 +105,31 @@ protected:
   }
 
   template <template <typename> class K>
-  auto knob(int index, float initial = 0.5f) const -> K<P> * {
-    return param<K<P>>(index, 1, initial);
+  auto knob(int index, float initial = 0.5f,
+            const std::function<void(float)> &on_change = Control::noop) const
+      -> K<P> * {
+    return param<K<P>>(index, 1, initial, on_change);
   }
 
   template <template <typename> class B = Button>
-  auto button(int index) const -> B<P> * {
-    return param<B<P>>(index, 1, 0);
+  auto button(int index,
+              const std::function<void(float)> &on_change = Control::noop) const
+      -> B<P> * {
+    return param<B<P>>(index, 1, 0, on_change);
   }
 
   template <template <typename> class C>
-  auto toggle(int index, int initial) const -> C<P> * {
-    return param<C<P>>(index, C<P>::size - 1, initial);
+  auto toggle(int index, int initial,
+              const std::function<void(float)> &on_change = Control::noop) const
+      -> C<P> * {
+    return param<C<P>>(index, C<P>::size - 1, initial, on_change);
   }
 
-  template <int N> auto toggle(int index, int initial) const -> Toggle<P, N> * {
-    return param<Toggle<P, N>>(index, N - 1, initial);
+  template <int N>
+  auto toggle(int index, int initial,
+              const std::function<void(float)> &on_change = Control::noop) const
+      -> Toggle<P, N> * {
+    return param<Toggle<P, N>>(index, N - 1, initial, on_change);
   }
 
   auto input(int index) const -> InputJack<P> * {
@@ -135,8 +144,12 @@ protected:
 
 private:
   template <typename T>
-  auto param(int index, float max, float initial) const -> T * {
-    return rack::ParamWidget::create<T>({0, 0}, module, index, 0, max, initial);
+  auto param(int index, float max, float initial,
+             const std::function<void(float)> &on_change) const -> T * {
+    auto widget =
+        rack::ParamWidget::create<T>({0, 0}, module, index, 0, max, initial);
+    widget->notify = on_change;
+    return widget;
   }
 
   void install_screws() {
