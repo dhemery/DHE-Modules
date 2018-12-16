@@ -23,7 +23,9 @@ public:
     eoc_generator.step();
   }
 
-  auto defer_gate_in() const -> bool { return inputs[DEFER_IN].value > 0.1; }
+  auto defer_gate_in() const -> bool {
+    return inputs[DEFER_GATE_IN].value > 0.1;
+  }
 
   auto duration() const -> float {
     auto rotation = params[DURATION_KNOB].value;
@@ -57,12 +59,12 @@ public:
   }
 
   auto stage_trigger_in() const -> bool {
-    return inputs[TRIGGER_IN].value > 0.1;
+    return inputs[STAGE_TRIGGER_IN].value > 0.1;
   }
 
   enum ParameterIIds { DURATION_KNOB, LEVEL_KNOB, CURVE_KNOB, PARAMETER_COUNT };
 
-  enum InputIds { ENVELOPE_IN, TRIGGER_IN, DEFER_IN, INPUT_COUNT };
+  enum InputIds { ENVELOPE_IN, STAGE_TRIGGER_IN, DEFER_GATE_IN, INPUT_COUNT };
 
   enum OutputIds { MAIN_OUT, EOC_OUT, ACTIVE_OUT, OUTPUT_COUNT };
 
@@ -128,11 +130,11 @@ public:
     y = 82.f;
     dy = 15.f;
 
-    install(column_1, y, input(Stage::DEFER_IN));
+    install(column_1, y, input(Stage::DEFER_GATE_IN));
     install(column_3, y, output(Stage::ACTIVE_OUT));
 
     y += dy;
-    install(column_1, y, input(Stage::TRIGGER_IN));
+    install(column_1, y, input(Stage::STAGE_TRIGGER_IN));
     install(column_3, y, output(Stage::EOC_OUT));
 
     y += dy;

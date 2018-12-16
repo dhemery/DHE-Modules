@@ -24,7 +24,7 @@ public:
 
   auto defer_gate_in() const -> bool {
     auto defer_button = params[DEFER_BUTTON].value > 0.5f;
-    auto defer_input = inputs[DEFER_IN].value > 0.1f;
+    auto defer_input = inputs[DEFER_GATE_IN].value > 0.1f;
     return defer_button || defer_input;
   }
 
@@ -68,7 +68,7 @@ public:
 
   auto stage_trigger_in() const -> bool {
     auto trigger_button = params[TRIGGER_BUTTON].value > 0.5;
-    auto trigger_input = inputs[TRIGGER_IN].value > 0.1;
+    auto trigger_input = inputs[STAGE_TRIGGER_IN].value > 0.1;
     return trigger_button || trigger_input;
   }
 
@@ -88,11 +88,11 @@ public:
 
   enum InputIds {
     CURVE_CV,
-    DEFER_IN,
+    DEFER_GATE_IN,
     DURATION_CV,
     LEVEL_CV,
     ENVELOPE_IN,
-    TRIGGER_IN,
+    STAGE_TRIGGER_IN,
     INPUT_COUNT
   };
 
@@ -188,13 +188,13 @@ public:
     y = 82.f;
     dy = 15.f;
 
-    install(column_1, y, input(BoosterStage::DEFER_IN));
+    install(column_1, y, input(BoosterStage::DEFER_GATE_IN));
     install(column_2, y, button(BoosterStage::DEFER_BUTTON));
     install(column_4, y, button<ReverseButton>(BoosterStage::ACTIVE_BUTTON));
     install(column_5, y, output(BoosterStage::ACTIVE_OUT));
 
     y += dy;
-    install(column_1, y, input(BoosterStage::TRIGGER_IN));
+    install(column_1, y, input(BoosterStage::STAGE_TRIGGER_IN));
     install(column_2, y, button(BoosterStage::TRIGGER_BUTTON));
     install(column_4, y, button<ReverseButton>(BoosterStage::EOC_BUTTON));
     install(column_5, y, output(BoosterStage::EOC_OUT));

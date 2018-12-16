@@ -21,7 +21,9 @@ public:
     eoc_generator.step();
   }
 
-  auto defer_gate_in() const -> bool { return inputs[DEFER_IN].value > 0.1f; }
+  auto defer_gate_in() const -> bool {
+    return inputs[DEFER_GATE_IN].value > 0.1f;
+  }
 
   auto duration() const -> float {
     auto rotation = modulated(DURATION_KNOB, DURATION_CV);
@@ -70,17 +72,17 @@ public:
   void set_duration_range(Range const *range) { duration_range = range; }
 
   auto sustain_gate_in() const -> bool {
-    return inputs[SUSTAIN_GATE_IN].value > 0.1f;
+    return inputs[STAGE_GATE_IN].value > 0.1f;
   }
 
   const Selector<Range const *> duration_range_selector{
       Duration::ranges, [this](Range const *range) { duration_range = range; }};
 
   enum InputIds {
-    DEFER_IN,
+    DEFER_GATE_IN,
     DURATION_CV,
     MAIN_IN,
-    SUSTAIN_GATE_IN,
+    STAGE_GATE_IN,
     INPUT_COUNT
   };
 
@@ -89,7 +91,7 @@ public:
   enum ParameterIds {
     DURATION_KNOB,
     DURATION_RANGE_SWITCH,
-    SUSTAIN_MODE_SWITCH,
+    HOSTAGE_MODE_SWITCH,
     PARAMETER_COUNT
   };
 
@@ -144,7 +146,7 @@ private:
   void send_out(float voltage) { outputs[MAIN_OUT].value = voltage; }
 
   auto stage_type_in() const -> bool {
-    return params[SUSTAIN_MODE_SWITCH].value > 0.5f;
+    return params[HOSTAGE_MODE_SWITCH].value > 0.5f;
   }
 
   DeferGate<Hostage> defer_gate{this};
@@ -177,7 +179,7 @@ public:
     auto y = 25.f;
     auto dy = 18.5f;
 
-    install(column_2, y, toggle<2>(Hostage::SUSTAIN_MODE_SWITCH, 0));
+    install(column_2, y, toggle<2>(Hostage::HOSTAGE_MODE_SWITCH, 0));
 
     y += dy;
     install(column_1, y, input(Hostage::DURATION_CV));
@@ -191,11 +193,11 @@ public:
     y = 82.f;
     dy = 15.f;
 
-    install(column_1, y, input(Hostage::DEFER_IN));
+    install(column_1, y, input(Hostage::DEFER_GATE_IN));
     install(column_3, y, output(Hostage::ACTIVE_OUT));
 
     y += dy;
-    install(column_1, y, input(Hostage::SUSTAIN_GATE_IN));
+    install(column_1, y, input(Hostage::STAGE_GATE_IN));
     install(column_3, y, output(Hostage::EOC_OUT));
 
     y += dy;

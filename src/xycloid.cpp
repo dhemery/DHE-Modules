@@ -59,19 +59,19 @@ public:
   }
 
   enum ParameterIds {
-    WOBBLE_RATIO,
+    WOBBLE_RATIO_KNOB,
     WOBBLE_RATIO_AV,
-    WOBBLE_TYPE,
-    WOBBLE_DEPTH,
+    WOBBLE_TYPE_KNOB,
+    WOBBLE_DEPTH_KNOB,
     WOBBLE_DEPTH_AV,
-    THROB_SPEED,
+    THROB_SPEED_KNOB,
     THROB_SPEED_AV,
-    X_GAIN,
-    Y_GAIN,
-    X_RANGE,
-    Y_RANGE,
-    WOBBLE_RATIO_TYPE,
-    WOBBLE_PHASE,
+    X_GAIN_KNOB,
+    Y_GAIN_KNOB,
+    X_RANGE_SWITCH,
+    Y_RANGE_SWITCH,
+    WOBBLE_RATIO_FREEDOM_SWITCH,
+    WOBBLE_PHASE_KNOB,
     PARAMETER_COUNT
   };
   enum InputIds {
@@ -86,7 +86,7 @@ public:
 
 private:
   auto is_wobble_ratio_free() const -> bool {
-    return params[WOBBLE_RATIO_TYPE].value > 0.1f;
+    return params[WOBBLE_RATIO_FREEDOM_SWITCH].value > 0.1f;
   }
 
   auto modulated(const ParameterIds &knob_param, const InputIds &cv_input) const
@@ -111,19 +111,20 @@ private:
 
   auto throb_speed() const -> float {
     constexpr auto speed_taper_curvature = 0.8f;
-    auto rotation = modulated(THROB_SPEED, THROB_SPEED_CV, THROB_SPEED_AV);
+    auto rotation = modulated(THROB_SPEED_KNOB, THROB_SPEED_CV, THROB_SPEED_AV);
     auto scaled = throb_speed_knob_range.scale(rotation);
     auto tapered = Sigmoid::inverse(scaled, speed_taper_curvature);
     return -10.f * tapered * rack::engineGetSampleTime();
   }
 
   auto wobble_depth() const -> float {
-    auto rotation = modulated(WOBBLE_DEPTH, WOBBLE_DEPTH_CV, WOBBLE_DEPTH_AV);
+    auto rotation =
+        modulated(WOBBLE_DEPTH_KNOB, WOBBLE_DEPTH_CV, WOBBLE_DEPTH_AV);
     return wobble_depth_range.clamp(rotation);
   }
 
   auto wobble_phase_in() const -> float {
-    auto rotation = params[WOBBLE_PHASE].value;
+    auto rotation = params[WOBBLE_PHASE_KNOB].value;
     return rotation - 0.5f;
   }
 
@@ -141,27 +142,27 @@ private:
 
   auto wobble_ratio() const -> float {
     auto wobble_ammount =
-        modulated(WOBBLE_RATIO, WOBBLE_RATIO_CV, WOBBLE_RATIO_AV);
+        modulated(WOBBLE_RATIO_KNOB, WOBBLE_RATIO_CV, WOBBLE_RATIO_AV);
     auto wobble_ratio =
         wobble_range().scale(wobble_ammount) + wobble_ratio_offset;
     return is_wobble_ratio_free() ? wobble_ratio : std::round(wobble_ratio);
   }
 
   auto wobble_type() const -> int {
-    auto param = params[WOBBLE_TYPE].value;
+    auto param = params[WOBBLE_TYPE_KNOB].value;
     return static_cast<int>(param);
   }
-  auto x_offset() const -> float { return offset(X_RANGE); }
+  auto x_offset() const -> float { return offset(X_RANGE_SWITCH); }
 
   auto x_gain_in() const -> float {
-    return Rotation::gain_multiplier(modulated(X_GAIN, X_GAIN_CV));
+    return Rotation::gain_multiplier(modulated(X_GAIN_KNOB, X_GAIN_CV));
   }
 
   auto y_gain_in() const -> float {
-    return Rotation::gain_multiplier(modulated(Y_GAIN, Y_GAIN_CV));
+    return Rotation::gain_multiplier(modulated(Y_GAIN_KNOB, Y_GAIN_CV));
   }
 
-  auto y_offset() const -> float { return offset(Y_RANGE); }
+  auto y_offset() const -> float { return offset(Y_RANGE_SWITCH); }
 
   json_t *toJson() override {
     json_t *configuration = json_object();
@@ -200,20 +201,20 @@ public:
 
     install(column_1, y, input(Xycloid::WOBBLE_RATIO_CV));
     install(column_2, y, knob<TinyKnob>(Xycloid::WOBBLE_RATIO_AV));
-    install(column_3, y, knob<LargeKnob>(Xycloid::WOBBLE_RATIO));
-    install(column_4, y, toggle<2>(Xycloid::WOBBLE_RATIO_TYPE, 1));
+    install(column_3, y, knob<LargeKnob>(Xycloid::WOBBLE_RATIO_KNOB));
+    install(column_4, y, toggle<2>(Xycloid::WOBBLE_RATIO_FREEDOM_SWITCH, 1));
 
     y += dy;
     install(column_1, y, input(Xycloid::WOBBLE_DEPTH_CV));
     install(column_2, y, knob<TinyKnob>(Xycloid::WOBBLE_DEPTH_AV));
-    install(column_3, y, knob<LargeKnob>(Xycloid::WOBBLE_DEPTH));
-    install(column_4, y, toggle<3>(Xycloid::WOBBLE_TYPE, 2));
+    install(column_3, y, knob<LargeKnob>(Xycloid::WOBBLE_DEPTH_KNOB));
+    install(column_4, y, toggle<3>(Xycloid::WOBBLE_TYPE_KNOB, 2));
 
     y += dy;
     install(column_1, y, input(Xycloid::THROB_SPEED_CV));
     install(column_2, y, knob<TinyKnob>(Xycloid::THROB_SPEED_AV));
-    install(column_3, y, knob<LargeKnob>(Xycloid::THROB_SPEED, 0.65f));
-    install(column_4, y, knob<SmallKnob>(Xycloid::WOBBLE_PHASE));
+    install(column_3, y, knob<LargeKnob>(Xycloid::THROB_SPEED_KNOB, 0.65f));
+    install(column_4, y, knob<SmallKnob>(Xycloid::WOBBLE_PHASE_KNOB));
 
     y = 82.f;
     dy = 15.f;
@@ -222,14 +223,14 @@ public:
 
     y += dy;
     install(column_1, y, input(Xycloid::X_GAIN_CV));
-    install(column_2, y, knob<SmallKnob>(Xycloid::X_GAIN, default_gain));
-    install(column_3, y, toggle<2>(Xycloid::X_RANGE, 0));
+    install(column_2, y, knob<SmallKnob>(Xycloid::X_GAIN_KNOB, default_gain));
+    install(column_3, y, toggle<2>(Xycloid::X_RANGE_SWITCH, 0));
     install(column_4, y, output(Xycloid::X_OUT));
 
     y += dy;
     install(column_1, y, input(Xycloid::Y_GAIN_CV));
-    install(column_2, y, knob<SmallKnob>(Xycloid::Y_GAIN, default_gain));
-    install(column_3, y, toggle<2>(Xycloid::Y_RANGE, 0));
+    install(column_2, y, knob<SmallKnob>(Xycloid::Y_GAIN_KNOB, default_gain));
+    install(column_3, y, toggle<2>(Xycloid::Y_RANGE_SWITCH, 0));
     install(column_4, y, output(Xycloid::Y_OUT));
   }
 
