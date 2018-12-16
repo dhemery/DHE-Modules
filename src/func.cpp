@@ -145,18 +145,23 @@ public:
     auto row_6 = top + row_spacing * 5 + port_offset;
 
     auto channel = &func->channel;
+    auto operator_switch_index = Func::OPERATOR_SWITCH;
+    auto addition_range_switch_index = Func::ADDITION_RANGE_SWITCH;
+    auto multiplication_range_switch_index = Func::MULTIPLICATION_RANGE_SWITCH;
+
     auto addition_range_selector = [channel](int selection) {
       channel->set_addition_range(selection);
     };
+
     auto multiplication_range_selector = [channel](int selection) {
       channel->set_multiplication_range(selection);
     };
 
     auto multiplication_range_switch = toggle<MultiplicationRangeSwitch>(
-        Func::MULTIPLICATION_RANGE_SWITCH, 2, multiplication_range_selector);
+        multiplication_range_switch_index, 2, multiplication_range_selector);
 
     auto addition_range_switch = toggle<AdditionRangeSwitch>(
-        Func::ADDITION_RANGE_SWITCH, 1, addition_range_selector);
+        addition_range_switch_index, 1, addition_range_selector);
 
     auto select_operator = [channel, addition_range_switch,
                             multiplication_range_switch](int position) {
@@ -166,7 +171,7 @@ public:
       addition_range_switch->visible = !is_multiplication;
     };
 
-    auto operator_switch = toggle<2>(Func::OPERATOR_SWITCH, 0, select_operator);
+    auto operator_switch = toggle<2>(operator_switch_index, 0, select_operator);
 
     install(x, row_1, input(Func::IN));
     install(x, row_2, operator_switch);
@@ -204,19 +209,22 @@ public:
       auto port_y = y + port_offset;
 
       auto channel = &func6->channels[row];
-      auto addition_range_selector = [channel](int selection) {
-        channel->set_addition_range(selection);
-      };
+      auto operator_switch_index = Func6::OPERATOR_SWITCH + row;
+      auto addition_range_switch_index = Func6::ADDITION_RANGE_SWITCH + row;
+      auto multiplication_range_switch_index =
+          Func6::MULTIPLICATION_RANGE_SWITCH + row;
+
       auto multiplication_range_selector = [channel](int selection) {
         channel->set_multiplication_range(selection);
       };
-
       auto multiplication_range_switch = toggle<MultiplicationRangeSwitch>(
-          Func6::MULTIPLICATION_RANGE_SWITCH + row, 2,
-          multiplication_range_selector);
+          multiplication_range_switch_index, 2, multiplication_range_selector);
 
+      auto addition_range_selector = [channel](int selection) {
+        channel->set_addition_range(selection);
+      };
       auto addition_range_switch = toggle<AdditionRangeSwitch>(
-          Func6::ADDITION_RANGE_SWITCH + row, 1, addition_range_selector);
+          addition_range_switch_index, 1, addition_range_selector);
 
       auto select_operator = [channel, addition_range_switch,
                               multiplication_range_switch](int position) {
@@ -227,7 +235,7 @@ public:
       };
 
       auto operator_switch =
-          toggle<2>(Func6::OPERATOR_SWITCH + row, 0, select_operator);
+          toggle<2>(operator_switch_index, 0, select_operator);
 
       install(column_1, port_y, input(Func6::IN + row));
       install(column_2, y, operator_switch);
