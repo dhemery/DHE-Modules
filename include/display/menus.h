@@ -24,4 +24,4 @@ struct BooleanOption : rack::MenuItem {
   const std::function<void(bool)> set;
   const std::function<bool()> is_on;
 };
-}
+} // namespace DHE

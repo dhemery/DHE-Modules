@@ -131,6 +131,7 @@ private:
     auto widget =
         rack::ParamWidget::create<T>({0, 0}, module, index, 0, max, initial);
     widget->notify = on_change;
+    widget->notify(widget->value);
     return widget;
   }
 

@@ -167,7 +167,6 @@ public:
     };
 
     auto operator_switch = toggle<2>(Func::OPERATOR_SWITCH, 0, select_operator);
-    select_operator(0);
 
     install(x, row_1, input(Func::IN));
     install(x, row_2, operator_switch);
@@ -229,7 +228,6 @@ public:
 
       auto operator_switch =
           toggle<2>(Func6::OPERATOR_SWITCH + row, 0, select_operator);
-      select_operator(0);
 
       install(column_1, port_y, input(Func6::IN + row));
       install(column_2, y, operator_switch);
