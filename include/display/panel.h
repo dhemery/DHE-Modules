@@ -106,29 +106,33 @@ protected:
   }
 
   template <template <typename> class K>
-  auto knob(int index, float initial = 0.5f,
-            const std::function<void(float)> &on_change = Control::noop) const
+  auto
+  knob(int index, float initial = 0.5f,
+       const std::function<void(float)> &on_change = Control<float>::noop) const
       -> K<P> * {
     return param<K<P>>(index, 1, initial, on_change);
   }
 
   template <template <typename> class B = Button>
-  auto button(int index,
-              const std::function<void(float)> &on_change = Control::noop) const
+  auto
+  button(int index,
+         const std::function<void(bool)> &on_change = Control<bool>::noop) const
       -> B<P> * {
     return param<B<P>>(index, 1, 0, on_change);
   }
 
   template <template <typename> class C>
-  auto toggle(int index, int initial,
-              const std::function<void(float)> &on_change = Control::noop) const
+  auto
+  toggle(int index, int initial,
+         const std::function<void(int)> &on_change = Control<int>::noop) const
       -> C<P> * {
     return param<C<P>>(index, C<P>::size - 1, initial, on_change);
   }
 
   template <int N>
-  auto toggle(int index, int initial,
-              const std::function<void(float)> &on_change = Control::noop) const
+  auto
+  toggle(int index, int initial,
+         const std::function<void(int)> &on_change = Control<int>::noop) const
       -> Toggle<P, N> * {
     return param<Toggle<P, N>>(index, N - 1, initial, on_change);
   }

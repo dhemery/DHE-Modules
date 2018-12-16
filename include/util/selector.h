@@ -11,13 +11,11 @@ public:
       : choices{std::move(choices)}, notify{std::move(on_selection)} {}
 
   /**
-   * Select the choice indicated by the input and send notification of the
-   * selection.
+   * Send notice that the choice at the given position has been selected.
    */
-  void operator()(float input) { notify(selection(input)); }
+  void operator()(int position) { notify(choices[position]); }
 
 private:
-  auto selection(float input) -> T { return choices[static_cast<int>(input)]; }
   const std::vector<T> choices;
   const std::function<void(T)> notify;
 };

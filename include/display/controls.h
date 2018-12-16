@@ -6,13 +6,14 @@
 #include <componentlibrary.hpp>
 
 namespace DHE {
-class Control {
+template <typename T> class Control {
 public:
-  static constexpr auto noop = [](float) {};
-  std::function<void(float)> notify{noop};
+  static constexpr auto noop = [](T) {};
+  std::function<void(T)> notify{noop};
 };
 
-template <typename P> class Knob : public Control, public rack::RoundKnob {
+template <typename P>
+class Knob : public Control<float>, public rack::RoundKnob {
 public:
   explicit Knob(const std::string &size) {
     static const auto prefix = std::string{"knob-"};
@@ -47,7 +48,7 @@ public:
 };
 
 template <typename P>
-class Button : public Control,
+class Button : public Control<bool>,
                public rack::SVGSwitch,
                public rack::MomentarySwitch {
 public:
@@ -58,7 +59,7 @@ public:
 
   void onChange(rack::EventChange &e) override {
     rack::SVGSwitch::onChange(e);
-    notify(this->value);
+    notify(this->value > 0.5f);
   }
 };
 
@@ -68,7 +69,7 @@ public:
 };
 
 template <typename P, int N>
-class Toggle : public Control,
+class Toggle : public Control<int>,
                public rack::SVGSwitch,
                public rack::ToggleSwitch {
 public:
@@ -81,7 +82,7 @@ public:
 
   void onChange(rack::EventChange &e) override {
     rack::SVGSwitch::onChange(e);
-    notify(this->value);
+    notify(static_cast<int>(this->value));
   }
 
   static constexpr auto size = N;
