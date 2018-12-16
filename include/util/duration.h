@@ -12,13 +12,8 @@ static constexpr auto short_range = Range{0.001f, 1.f};
 static constexpr auto medium_range = Range{0.01f, 10.f};
 static constexpr auto long_range = Range{0.1f, 100.f};
 
-class RangeSelector : public Selector<Range const *> {
-public:
-  RangeSelector(const std::function<void(Range const *)> &on_selection)
-      : Selector<Range const *>{std::vector<Range const *>{
-                                    &short_range, &medium_range, &long_range},
-                                on_selection} {}
-};
+static const auto ranges =
+    std::vector<Range const *>{&short_range, &medium_range, &long_range};
 } // namespace Duration
 
 inline auto duration(float rotation, const Range &range) -> float {

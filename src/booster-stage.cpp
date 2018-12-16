@@ -61,8 +61,10 @@ public:
     send_out(scale(taper(phase), held_voltage, level()));
   }
 
-  void set_duration_range(Range const *range) { duration_range = range; }
-  void set_level_range(Range const *range) { level_range = range; }
+  const Selector<Range const *> duration_range_selector{
+      Duration::ranges, [this](Range const *range) { duration_range = range; }};
+  const Selector<Range const *> level_range_selector{
+      Signal::ranges, [this](Range const *range) { level_range = range; }};
 
   auto stage_trigger_in() const -> bool {
     auto trigger_button = params[TRIGGER_BUTTON].value > 0.5;
@@ -152,12 +154,7 @@ private:
 
 class BoosterStagePanel : public Panel<BoosterStagePanel> {
 public:
-  explicit BoosterStagePanel(BoosterStage *module)
-      : Panel{module, hp}, update_duration_range{[module](Range const *range) {
-          module->set_duration_range(range);
-        }},
-        update_level_range{
-            [module](Range const *range) { module->set_level_range(range); }} {
+  explicit BoosterStagePanel(BoosterStage *module) : Panel{module, hp} {
     auto widget_right_edge = width();
 
     auto column_1 = widget_right_edge / 6.f + 0.3333333f;
@@ -173,7 +170,8 @@ public:
     install(column_1, y, input(BoosterStage::LEVEL_CV));
     install(column_3, y, knob<LargeKnob>(BoosterStage::LEVEL_KNOB));
     install(column_5, y,
-            toggle<2>(BoosterStage::LEVEL_RANGE_SWITCH, 1, update_level_range));
+            toggle<2>(BoosterStage::LEVEL_RANGE_SWITCH, 1,
+                      module->level_range_selector));
 
     y += dy;
     install(column_1, y, input(BoosterStage::CURVE_CV));
@@ -185,7 +183,7 @@ public:
     install(column_3, y, knob<LargeKnob>(BoosterStage::DURATION_KNOB));
     install(column_5, y,
             toggle<3>(BoosterStage::DURATION_RANGE_SWITCH, 1,
-                      update_duration_range));
+                      module->duration_range_selector));
 
     y = 82.f;
     dy = 15.f;
@@ -209,8 +207,6 @@ public:
   static constexpr auto resource_name = "booster-stage";
 
 private:
-  Duration::RangeSelector update_duration_range;
-  Signal::RangeSelector update_level_range;
   static constexpr auto hp = 8;
 };
 } // namespace DHE

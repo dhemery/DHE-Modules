@@ -17,7 +17,8 @@ public:
     send_envelope(envelope_voltage());
   }
 
-  void set_level_range(const Range *range) { level_range = range; }
+  const Selector<Range const *> level_range_selector{
+      Signal::ranges, [this](Range const *range) { level_range = range; }};
 
   enum ParameterIds {
     LEVEL_KNOB,
@@ -65,10 +66,7 @@ private:
 
 class UpstagePanel : public Panel<UpstagePanel> {
 public:
-  explicit UpstagePanel(Upstage *module)
-      : Panel{module, hp}, update_level_range{[module](Range const *range) {
-          module->set_level_range(range);
-        }} {
+  explicit UpstagePanel(Upstage *module) : Panel{module, hp} {
     auto widget_right_edge = width();
 
     auto column_1 = width() / 4.f + 0.333333333f;
@@ -83,7 +81,8 @@ public:
     y += dy;
     install(column_1, y, input(Upstage::LEVEL_CV));
     install(column_3, y,
-            toggle<2>(Upstage::LEVEL_RANGE_SWITCH, 1, update_level_range));
+            toggle<2>(Upstage::LEVEL_RANGE_SWITCH, 1,
+                      module->level_range_selector));
 
     y += dy;
     install(column_1, y, button(Upstage::WAIT_BUTTON));
@@ -105,7 +104,6 @@ public:
   static constexpr auto resource_name = "upstage";
 
 private:
-  Signal::RangeSelector update_level_range;
   static constexpr auto hp = 5;
 };
 } // namespace DHE
