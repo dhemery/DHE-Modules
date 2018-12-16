@@ -5,6 +5,9 @@
 #include <app.hpp>
 #include <componentlibrary.hpp>
 
+#include "display/controls.h"
+#include "display/menus.h"
+
 namespace DHE {
 template <typename T> class Control {
 public:
