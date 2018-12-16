@@ -1,3 +1,5 @@
+#include <vector>
+
 #include "dhe-modules.h"
 #include "display/controls.h"
 #include "display/panel.h"
@@ -5,34 +7,35 @@
 #include "util/signal.h"
 
 namespace DHE {
+static constexpr auto attenuation_range = Range{0.f, 1.f};
+static constexpr auto invertible_attenuation_range = Range{-1.f, 1.f};
+static constexpr auto gain_range = Range{0.f, 2.f};
+static constexpr auto invertible_gain_range = Range{-2.f, 2.f};
+
+static const auto multiplication_ranges = std::vector<Range const *>{
+    &attenuation_range, &invertible_attenuation_range, &gain_range,
+    &invertible_gain_range};
+
+static constexpr auto half_bipolar_range = Range{0.f, 5.f};
+static constexpr auto invertible_unipolar_range = Range{-10.f, 10.f};
+static const auto addition_ranges = std::vector<Range const *>{
+    &half_bipolar_range, &Signal::bipolar_range, &Signal::unipolar_range,
+    &invertible_unipolar_range};
 
 class FuncChannel {
 public:
-  FuncChannel(rack::Module *module, int input, int addition_range_switch_param,
-              int multiplication_range_switch_param, int amount_knob_param,
+  FuncChannel(rack::Module *module, int input, int amount_knob_param,
               int output)
       : input_port{module->inputs[input]},
-        addition_range_selector{
-            module->params[addition_range_switch_param].value},
-        multiplication_range_selector{
-            module->params[multiplication_range_switch_param].value},
         amount{module->params[amount_knob_param].value},
         output{module->outputs[output].value} {}
 
   auto adjust(float upstream) -> float {
-    static const std::vector<Range> multiplication_ranges{
-        {0.f, 1.f}, {-1.f, 1.f}, {0.f, 2.f}, {-2.f, 2.f}};
-    static const std::vector<Range> addition_ranges{
-        {0.f, 5.f}, {-5.f, 5.f}, {0.f, 10.f}, {-10.f, 10.f}};
     auto input = input_port.active ? input_port.value : upstream;
     if (is_multiplication) {
-      auto selection = static_cast<int>(multiplication_range_selector);
-      auto range = multiplication_ranges[selection];
-      output = input * range.scale(amount);
+      output = input * multiplication_range->scale(amount);
     } else {
-      auto selection = static_cast<int>(addition_range_selector);
-      auto range = addition_ranges[selection];
-      output = input + range.scale(amount);
+      output = input + addition_range->scale(amount);
     }
     return output;
   }
@@ -41,11 +44,19 @@ public:
     this->is_multiplication = is_multiplication;
   }
 
+  void set_addition_range(int selection) {
+    addition_range = addition_ranges[selection];
+  }
+
+  void set_multiplication_range(int selection) {
+    multiplication_range = multiplication_ranges[selection];
+  }
+
 private:
   const rack::Input &input_port;
   bool is_multiplication = false;
-  const float &addition_range_selector;
-  const float &multiplication_range_selector;
+  Range const *addition_range{&Signal::bipolar_range};
+  Range const *multiplication_range{&gain_range};
   const float &amount;
   float &output;
 };
@@ -68,8 +79,7 @@ public:
 
   enum OutputIds { OUT, OUTPUT_COUNT };
 
-  FuncChannel channel{
-      this, IN, ADDITION_RANGE_SWITCH, MULTIPLICATION_RANGE_SWITCH, KNOB, OUT};
+  FuncChannel channel{this, IN, KNOB, OUT};
 };
 
 class Func6 : public rack::Module {
@@ -78,8 +88,7 @@ class Func6 : public rack::Module {
 public:
   Func6() : Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT} {
     for (int i = 0; i < channel_count; i++) {
-      channels.emplace_back(this, IN + i, ADDITION_RANGE_SWITCH + i,
-                            MULTIPLICATION_RANGE_SWITCH + i, KNOB + i, OUT + i);
+      channels.emplace_back(this, IN + i, KNOB + i, OUT + i);
     }
   }
 
@@ -135,13 +144,20 @@ public:
     auto row_4 = top + row_spacing * 3;
     auto row_6 = top + row_spacing * 5 + port_offset;
 
-    auto multiplication_range_switch =
-        toggle<MultiplicationRangeSwitch>(Func::MULTIPLICATION_RANGE_SWITCH, 2);
-
-    auto addition_range_switch =
-        toggle<AdditionRangeSwitch>(Func::ADDITION_RANGE_SWITCH, 1);
-
     auto channel = &func->channel;
+    auto addition_range_selector = [channel](int selection) {
+      channel->set_addition_range(selection);
+    };
+    auto multiplication_range_selector = [channel](int selection) {
+      channel->set_multiplication_range(selection);
+    };
+
+    auto multiplication_range_switch = toggle<MultiplicationRangeSwitch>(
+        Func::MULTIPLICATION_RANGE_SWITCH, 2, multiplication_range_selector);
+
+    auto addition_range_switch = toggle<AdditionRangeSwitch>(
+        Func::ADDITION_RANGE_SWITCH, 1, addition_range_selector);
+
     auto select_operator = [channel, addition_range_switch,
                             multiplication_range_switch](int position) {
       auto is_multiplication = position == 1;
@@ -188,13 +204,21 @@ public:
       auto y = top + row * row_spacing;
       auto port_y = y + port_offset;
 
-      auto multiplication_range_switch = toggle<MultiplicationRangeSwitch>(
-          Func6::MULTIPLICATION_RANGE_SWITCH + row, 2);
-
-      auto addition_range_switch =
-          toggle<AdditionRangeSwitch>(Func6::ADDITION_RANGE_SWITCH + row, 1);
-
       auto channel = &func6->channels[row];
+      auto addition_range_selector = [channel](int selection) {
+        channel->set_addition_range(selection);
+      };
+      auto multiplication_range_selector = [channel](int selection) {
+        channel->set_multiplication_range(selection);
+      };
+
+      auto multiplication_range_switch = toggle<MultiplicationRangeSwitch>(
+          Func6::MULTIPLICATION_RANGE_SWITCH + row, 2,
+          multiplication_range_selector);
+
+      auto addition_range_switch = toggle<AdditionRangeSwitch>(
+          Func6::ADDITION_RANGE_SWITCH + row, 1, addition_range_selector);
+
       auto select_operator = [channel, addition_range_switch,
                               multiplication_range_switch](int position) {
         auto is_multiplication = position == 1;

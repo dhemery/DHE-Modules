@@ -8,8 +8,7 @@
 namespace DHE {
 template <typename T> class Control {
 public:
-  static constexpr auto noop = [](T) {};
-  std::function<void(T)> notify{noop};
+  std::function<void(T)> notify{[](T) {}};
 };
 
 template <typename P>
