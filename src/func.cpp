@@ -200,7 +200,7 @@ public:
     install(x, row_2, operator_switch);
   }
 
-  static constexpr auto resource_name = "func";
+  static constexpr auto module_svg_dir = "func";
 
 private:
   static constexpr auto hp = 3;
@@ -247,7 +247,7 @@ public:
     }
   }
 
-  static constexpr auto resource_name = "func6";
+  static constexpr auto module_svg_dir = "func6";
 
 private:
   static constexpr auto hp = 12;

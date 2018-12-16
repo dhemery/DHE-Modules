@@ -248,7 +248,7 @@ public:
         [xycloid] { return xycloid->is_musical_wobble_ratios(); }));
   }
 
-  static constexpr auto resource_name = "xycloid";
+  static constexpr auto module_svg_dir = "xycloid";
 
 private:
   static constexpr auto hp = 11;

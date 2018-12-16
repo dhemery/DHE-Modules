@@ -65,7 +65,7 @@ public:
     install(x, y, output(Swave::MAIN_OUT));
   }
 
-  static constexpr auto resource_name = "swave";
+  static constexpr auto module_svg_dir = "swave";
 
 public:
   static constexpr auto hp = 4;

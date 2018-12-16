@@ -75,8 +75,9 @@ public:
   }
 
   static auto svg(const std::string &filename) -> std::shared_ptr<rack::SVG> {
-    static const auto asset_dir = rack::assetPlugin(plugin, resource_prefix());
-    return rack::SVG::load(asset_dir + filename + ".svg");
+    static const auto module_asset_dir = rack::assetPlugin(
+        plugin, std::string("res/") + P::module_svg_dir + "/");
+    return rack::SVG::load(module_asset_dir + filename + ".svg");
   }
 
 protected:
@@ -177,11 +178,6 @@ private:
     for (auto p : screw_positions) {
       install(p.x, p.y, rack::Widget::create<rack::ScrewSilver>());
     }
-  }
-
-  static auto resource_prefix() -> std::string {
-    static const auto prefix = std::string("res/") + P::resource_name + "/";
-    return prefix;
   }
 };
 } // namespace DHE

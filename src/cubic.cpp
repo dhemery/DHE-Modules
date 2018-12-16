@@ -109,7 +109,7 @@ public:
     install(column_2, y, output(Cubic::MAIN_OUT));
   }
 
-  static constexpr auto resource_name = "cubic";
+  static constexpr auto module_svg_dir = "cubic";
 
 private:
   static constexpr auto hp = 5;

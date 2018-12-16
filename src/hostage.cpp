@@ -203,7 +203,7 @@ public:
     install(column_3, y, output(Hostage::MAIN_OUT));
   }
 
-  static constexpr auto resource_name = "hostage";
+  static constexpr auto module_svg_dir = "hostage";
 
 private:
   static constexpr auto hp = 5;
