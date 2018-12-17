@@ -1,3 +1,4 @@
+#include <array>
 #include <math.h>
 
 #include "dhe-modules.h"
@@ -61,7 +62,7 @@ public:
   enum ParameterIds {
     WOBBLE_RATIO_KNOB,
     WOBBLE_RATIO_AV,
-    WOBBLE_TYPE_KNOB,
+    WOBBLE_RANGE_SWITCH,
     WOBBLE_DEPTH_KNOB,
     WOBBLE_DEPTH_AV,
     THROB_SPEED_KNOB,
@@ -128,30 +129,32 @@ private:
     return rotation - 0.5f;
   }
 
-  auto wobble_range() const -> const Range & {
-    static constexpr auto wobble_max = 16.f;
-    static constexpr auto inward_wobble_range = Range{0.f, wobble_max};
-    static constexpr auto outward_wobble_range = Range{0.f, -wobble_max};
-    static constexpr auto bidirectional_wobble_range =
-        Range{wobble_max, -wobble_max};
-    static const std::vector<Range> wobble_ratio_ranges{
-        inward_wobble_range, bidirectional_wobble_range, outward_wobble_range};
+  auto wobble_ratio_range() const -> const Range & {
+    static constexpr auto wobble_ratio_max = 16.f;
+    static constexpr auto inward_wobble_ratio_range =
+        Range{0.f, wobble_ratio_max};
+    static constexpr auto outward_wobble_ratio_range =
+        Range{0.f, -wobble_ratio_max};
+    static constexpr auto bidirectional_wobble_ratio_range =
+        Range{wobble_ratio_max, -wobble_ratio_max};
+    static constexpr std::array<Range, 3> wobble_ratio_ranges{
+        inward_wobble_ratio_range, bidirectional_wobble_ratio_range,
+        outward_wobble_ratio_range};
 
-    return wobble_ratio_ranges[wobble_type()];
+    const auto param = params[WOBBLE_RANGE_SWITCH].value;
+    const auto selection = static_cast<int>(param);
+
+    return wobble_ratio_ranges[selection];
   }
 
   auto wobble_ratio() const -> float {
-    auto wobble_ammount =
+    auto wobble_ratio_amount =
         modulated(WOBBLE_RATIO_KNOB, WOBBLE_RATIO_CV, WOBBLE_RATIO_AV);
     auto wobble_ratio =
-        wobble_range().scale(wobble_ammount) + wobble_ratio_offset;
+        wobble_ratio_range().scale(wobble_ratio_amount) + wobble_ratio_offset;
     return is_wobble_ratio_free() ? wobble_ratio : std::round(wobble_ratio);
   }
 
-  auto wobble_type() const -> int {
-    auto param = params[WOBBLE_TYPE_KNOB].value;
-    return static_cast<int>(param);
-  }
   auto x_offset() const -> float { return offset(X_RANGE_SWITCH); }
 
   auto x_gain_in() const -> float {
@@ -208,7 +211,7 @@ public:
     install(column_1, y, input(Xycloid::WOBBLE_DEPTH_CV));
     install(column_2, y, knob<TinyKnob>(Xycloid::WOBBLE_DEPTH_AV));
     install(column_3, y, knob<LargeKnob>(Xycloid::WOBBLE_DEPTH_KNOB));
-    install(column_4, y, toggle<3>(Xycloid::WOBBLE_TYPE_KNOB, 2));
+    install(column_4, y, toggle<3>(Xycloid::WOBBLE_RANGE_SWITCH, 2));
 
     y += dy;
     install(column_1, y, input(Xycloid::THROB_SPEED_CV));
