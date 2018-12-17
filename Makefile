@@ -36,7 +36,7 @@ run: dev
 	/Applications/Rack.app/Contents/MacOS/Rack -g /Applications/Rack.app/Contents/Resources -l $(realpath $(DEV_INSTALL_DIR))
 
 tidy:
-	find . -name *.h -o -name *.cpp | xargs clang-format -i
+	find src include -name *.h -o -name *.cpp | xargs clang-format -i
 
 gui:
 	$(MAKE) -C gui clobber all
