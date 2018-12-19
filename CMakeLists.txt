@@ -35,6 +35,23 @@ target_sources(plugin
 set_target_properties(plugin
         PROPERTIES
         PREFIX "")
+target_compile_options(plugin
+        PRIVATE
+        -std=c++11
+        -stdlib=libc++
+        -I./include
+        -fPIC
+        -MMD
+        -MP
+        -g
+        -O3
+        -march=nocona
+        -ffast-math
+        -fno-finite-math-only
+        -Wall
+        -Wextra
+        -Wno-unused-parameter
+        -mmacosx-version-min=10.7)
 target_compile_definitions(plugin
         PRIVATE
         VERSION=0.6.4
@@ -54,7 +71,8 @@ target_include_directories(rack
 target_compile_features(rack INTERFACE
         cxx_std_11)
 
-set(CMAKE_INSTALL_PREFIX /Users/Dale/programming/DHE-Modules/.cdev/plugins/DHE-Modules)
-install(TARGETS plugin LIBRARY DESTINATION .)
-install(DIRECTORY res DESTINATION .)
-install(FILES LICENSE.txt DESTINATION .)
+set(CMAKE_INSTALL_PREFIX /Users/Dale/programming/DHE-Modules/.cdev/plugins)
+install(TARGETS plugin LIBRARY DESTINATION DHE-Modules)
+install(DIRECTORY res DESTINATION DHE-Modules)
+install(FILES LICENSE.txt DESTINATION DHE-Modules)
+install(DIRECTORY /Users/Dale/Documents/Rack/plugins/Fundamental DESTINATION .)
