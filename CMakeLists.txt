@@ -34,44 +34,47 @@ target_sources(plugin
         src/xycloid.cpp)
 set_target_properties(plugin
         PROPERTIES
-        PREFIX "")
+        CXX_STANDARD 11
+        CXX_STANDARD_REQUIRED YES
+        CXX_EXTENSIONS NO
+        PREFIX ""
+        )
 target_compile_options(plugin
         PRIVATE
-        -std=c++11
         -stdlib=libc++
-        -I./include
-        -fPIC
+        -march=nocona
         -MMD
         -MP
-        -g
         -O3
-        -march=nocona
         -ffast-math
         -fno-finite-math-only
+        -mmacosx-version-min=10.7
         -Wall
         -Wextra
         -Wno-unused-parameter
-        -mmacosx-version-min=10.7)
+        )
 target_compile_definitions(plugin
         PRIVATE
-        VERSION=0.6.4
+        ARCH_MAC
         SLUG=DHE-Modules
-        ARCH_MAC)
+        VERSION=0.6.4
+        )
 target_include_directories(plugin PRIVATE include)
-target_link_libraries(plugin PRIVATE rack)
+target_link_libraries(plugin PRIVATE racksdk)
 target_link_options(plugin
         PRIVATE
-        "LINKER:-undefined,dynamic_lookup")
+        "LINKER:-undefined,dynamic_lookup"
+        )
 
-add_library(rack INTERFACE)
-target_include_directories(rack
+add_library(racksdk INTERFACE)
+target_include_directories(racksdk
         INTERFACE
         ../Rack-SDK/include
         ../Rack-SDK/dep/include)
-target_compile_features(rack INTERFACE
+target_compile_features(racksdk INTERFACE
         cxx_std_11)
 
-set(CMAKE_INSTALL_PREFIX /Users/Dale/programming/DHE-Modules/.cdev/plugins)
+set(CMAKE_INSTALL_PREFIX /plugins)
 install(TARGETS plugin LIBRARY DESTINATION DHE-Modules)
 install(DIRECTORY res DESTINATION DHE-Modules)
 install(FILES LICENSE.txt DESTINATION DHE-Modules)
