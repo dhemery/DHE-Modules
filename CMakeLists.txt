@@ -4,6 +4,7 @@ project(DHE_Modules)
 set(CMAKE_VERBOSE_MAKEFILE ON)
 
 add_library(plugin SHARED)
+
 target_sources(plugin
         PRIVATE
         include/display/controls.h
@@ -52,3 +53,8 @@ target_include_directories(rack
         ../Rack-SDK/dep/include)
 target_compile_features(rack INTERFACE
         cxx_std_11)
+
+set(CMAKE_INSTALL_PREFIX /Users/Dale/programming/DHE-Modules/.cdev/plugins/DHE-Modules)
+install(TARGETS plugin LIBRARY DESTINATION .)
+install(DIRECTORY res DESTINATION .)
+install(FILES LICENSE.txt DESTINATION .)

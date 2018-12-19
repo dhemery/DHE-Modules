@@ -45,6 +45,7 @@
 
 /build
 /dist
+/.cdev
 /.dev
 /.idea
 /cmake-build-debug
