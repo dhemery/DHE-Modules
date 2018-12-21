@@ -1,0 +1,6 @@
+*.d
+*.dylib
+/.cdev
+/.dev
+/.idea
+/cmake-build-debug

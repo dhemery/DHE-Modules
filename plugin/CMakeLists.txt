@@ -69,13 +69,13 @@ target_link_options(plugin
 add_library(racksdk INTERFACE)
 target_include_directories(racksdk
         INTERFACE
-        ../Rack-SDK/include
-        ../Rack-SDK/dep/include)
+        ../../Rack-SDK/include
+        ../../Rack-SDK/dep/include)
 target_compile_features(racksdk INTERFACE
         cxx_std_11)
 
 set(CMAKE_INSTALL_PREFIX /plugins)
 install(TARGETS plugin LIBRARY DESTINATION DHE-Modules)
-install(DIRECTORY res DESTINATION DHE-Modules)
-install(FILES LICENSE.txt DESTINATION DHE-Modules)
+install(DIRECTORY ../svg DESTINATION DHE-Modules)
+install(FILES ../LICENSE.txt DESTINATION DHE-Modules)
 install(DIRECTORY /Users/Dale/Documents/Rack/plugins/Fundamental DESTINATION .)

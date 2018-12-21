@@ -2,14 +2,14 @@ SLUG = DHE-Modules
 VERSION = 0.6.4
 RACK_DIR ?= ../..
 
-FLAGS += -I./include
+FLAGS += -I./plugin/include
 CFLAGS +=
 CXXFLAGS +=
 LDFLAGS +=
 
-SOURCES = $(wildcard src/*.cpp)
+SOURCES = $(wildcard plugin/src/*.cpp)
 
-DISTRIBUTABLES += LICENSE.txt res
+DISTRIBUTABLES += LICENSE.txt svg
 
 include $(RACK_DIR)/plugin.mk
 
