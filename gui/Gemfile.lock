@@ -1,0 +1,15 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    color (1.8)
+    rake (12.3.2)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  color (~> 1.8)
+  rake (~> 12.3)
+
+BUNDLED WITH
+   1.17.1
