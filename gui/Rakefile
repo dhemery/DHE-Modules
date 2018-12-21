@@ -1,0 +1,11 @@
+require 'rake/clean'
+
+task default: [:svg]
+
+task svg: [] do
+end
+
+desc 'Clobber all files, then build all SVG files.'
+task fresh: [:clobber, :default]
+
+CLEAN.include $build_dir

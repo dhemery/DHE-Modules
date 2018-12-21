@@ -1,0 +1,81 @@
+{
+  "name": "STAGE",
+  "width": 5,
+  "colors": {
+    "foreground": [
+      120,
+      100,
+      30
+    ],
+    "background": [
+      120,
+      100,
+      97
+    ]
+  },
+  "controls": [
+    {
+      "control": "knob",
+      "type": "large",
+      "label": "level",
+      "x": 2,
+      "y": 2
+    },
+    {
+      "control": "knob",
+      "type": "large",
+      "label": "curve",
+      "x": 2,
+      "y": 2
+    },
+    {
+      "control": "knob",
+      "type": "large",
+      "label": "duration",
+      "x": 2,
+      "y": 3
+    },
+    {
+      "control": "port",
+      "type": "in",
+      "label": "defer",
+      "x": 1,
+      "y": 4
+    },
+    {
+      "control": "port",
+      "type": "out",
+      "label": "active",
+      "x": 3,
+      "y": 4
+    },
+    {
+      "control": "port",
+      "type": "in",
+      "label": "trig",
+      "x": 1,
+      "y": 5
+    },
+    {
+      "control": "port",
+      "type": "out",
+      "label": "eoc",
+      "x": 3,
+      "y": 5
+    },
+    {
+      "control": "port",
+      "type": "in",
+      "label": "in",
+      "x": 1,
+      "y": 5
+    },
+    {
+      "control": "port",
+      "type": "out",
+      "label": "out",
+      "x": 3,
+      "y": 5
+    }
+  ]
+}
