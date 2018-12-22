@@ -1,9 +1,11 @@
 cmake_minimum_required(VERSION 3.13)
-project(DHE_Modules)
+project(DHE-Modules
+        VERSION 0.6.4
+        LANGUAGES CXX)
 
 set(CMAKE_VERBOSE_MAKEFILE ON)
 
-add_library(plugin SHARED)
+add_library(plugin)
 
 target_sources(plugin
         PRIVATE
@@ -74,8 +76,8 @@ target_include_directories(racksdk
 target_compile_features(racksdk INTERFACE
         cxx_std_11)
 
-set(CMAKE_INSTALL_PREFIX /plugins)
-install(TARGETS plugin LIBRARY DESTINATION DHE-Modules)
-install(DIRECTORY ../svg DESTINATION DHE-Modules)
-install(FILES ../LICENSE.txt DESTINATION DHE-Modules)
-install(DIRECTORY /Users/Dale/Documents/Rack/plugins/Fundamental DESTINATION .)
+set(CMAKE_INSTALL_PREFIX ${CMAKE_CURRENT_BINARY_DIR}/rack)
+install(TARGETS plugin LIBRARY DESTINATION plugins/DHE-Modules)
+install(DIRECTORY ../svg DESTINATION plugins/DHE-Modules)
+install(FILES ../LICENSE.txt DESTINATION plugins/DHE-Modules)
+install(DIRECTORY /Users/Dale/Documents/Rack/plugins/Fundamental DESTINATION plugins)
