@@ -2,6 +2,7 @@ GEM
   remote: https://rubygems.org/
   specs:
     color (1.8)
+    oj (3.7.4)
     rake (12.3.2)
 
 PLATFORMS
@@ -9,7 +10,8 @@ PLATFORMS
 
 DEPENDENCIES
   color (~> 1.8)
+  oj (~> 3.7)
   rake (~> 12.3)
 
 BUNDLED WITH
-   1.17.1
+   1.17.2
