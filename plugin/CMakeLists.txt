@@ -77,7 +77,10 @@ target_compile_features(racksdk INTERFACE
         cxx_std_11)
 
 set(CMAKE_INSTALL_PREFIX ${CMAKE_CURRENT_BINARY_DIR}/rack)
-install(TARGETS plugin LIBRARY DESTINATION plugins/DHE-Modules)
-install(DIRECTORY ../svg DESTINATION plugins/DHE-Modules)
-install(FILES ../LICENSE.txt DESTINATION plugins/DHE-Modules)
-install(DIRECTORY /Users/Dale/Documents/Rack/plugins/Fundamental DESTINATION plugins)
+set(PLUGINS_INSTALL_DIR plugins)
+set(PLUGIN_INSTALL_DIR plugins/${PROJECT_NAME})
+
+install(TARGETS plugin LIBRARY DESTINATION ${PLUGIN_INSTALL_DIR})
+install(DIRECTORY ../svg DESTINATION ${PLUGIN_INSTALL_DIR})
+install(FILES ../LICENSE.txt DESTINATION ${PLUGIN_INSTALL_DIR})
+install(DIRECTORY /Users/Dale/Documents/Rack/plugins/Fundamental DESTINATION ${PLUGINS_INSTALL_DIR})
