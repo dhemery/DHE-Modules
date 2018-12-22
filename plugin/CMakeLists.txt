@@ -3,8 +3,6 @@ project(DHE-Modules
         VERSION 0.6.4
         LANGUAGES CXX)
 
-set(CMAKE_VERBOSE_MAKEFILE ON)
-
 add_library(plugin)
 
 target_sources(plugin

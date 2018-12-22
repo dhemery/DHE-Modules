@@ -2,7 +2,23 @@ require 'rake/clean'
 
 task default: [:svg]
 
-task svg: [] do
+json = IO.readlines('modules/stage.json')
+loaded = oj.load(json)
+puts loaded
+
+# SVG files for the individual controls
+task controls: [] do
+end
+
+# SVG files for the panels (sans controls)
+task panels: [] do
+end
+
+# SVG files for the manual (panels + controls)
+task images: [] do
+end
+
+task svg: [:controls, :panels, :images] do
 end
 
 desc 'Clobber all files, then build all SVG files.'
