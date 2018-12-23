@@ -15,65 +15,65 @@
   },
   "controls": [
     {
-      "name": "level",
+      "label": "level",
       "type": "knob",
-      "size": "large",
+      "style": "large",
       "x": 2,
       "y": 1
     },
     {
-      "name": "curve",
+      "label": "curve",
       "type": "knob",
-      "size": "large",
+      "style": "large",
       "x": 2,
       "y": 2
     },
     {
-      "name": "duration",
+      "label": "duration",
       "type": "knob",
-      "size": "large",
+      "style": "large",
       "x": 2,
       "y": 3
     },
     {
-      "name": "defer",
+      "label": "defer",
       "type": "port",
-      "direction": "in",
+      "style": "input",
       "x": 1,
       "y": 4
     },
     {
-      "name": "active",
+      "label": "active",
       "type": "port",
-      "direction": "out",
+      "style": "output",
       "x": 3,
       "y": 4
     },
     {
-      "name": "trig",
+      "label": "trig",
       "type": "port",
-      "direction": "in",
+      "style": "input",
       "x": 1,
       "y": 5
     },
     {
-      "name": "eoc",
+      "label": "eoc",
       "type": "port",
-      "direction": "out",
+      "style": "output",
       "x": 3,
       "y": 5
     },
     {
-      "name": "in",
+      "label": "in",
       "type": "port",
-      "direction": "in",
+      "style": "input",
       "x": 1,
       "y": 6
     },
     {
-      "name": "out",
+      "label": "out",
       "type": "port",
-      "direction": "out",
+      "style": "output",
       "x": 3,
       "y": 6
     }

@@ -1,6 +1,6 @@
 {
   "name": "BOOSTER STAGE",
-  "width": 9,
+  "width": 8,
   "colors": {
     "foreground": [
       120,
@@ -15,93 +15,112 @@
   },
   "controls": [
     {
-      "name": "level_cv_in",
+      "name": "level",
       "type": "port",
-      "direction": "in",
+      "style": "cv",
       "x": 1,
       "y": 1
     },
     {
-      "name": "level",
+      "label": "level",
       "type": "knob",
-      "size": "large",
+      "style": "large",
       "x": 2,
       "y": 1
     },
     {
-      "name": "level_range",
+      "name": "level range",
       "type": "toggle",
       "labels": ["BI", "UNI"],
       "x": 3,
       "y": 1
     },
     {
-      "name": "curve_cv",
+      "name": "curve",
       "type": "port",
-      "direction": "in",
+      "style": "cv",
       "x": 1,
       "y": 2
     },
     {
       "name": "curve",
       "type": "knob",
-      "size": "large",
-      "x": 2,
-      "y": 1
-    },
-    {
-      "name": "curve_shape",
-      "type": "toggle",
-      "labels": ["J", "S"],
+      "style": "large",
       "x": 2,
       "y": 2
     },
     {
-      "name": "duration",
+      "name": "curve shape",
+      "type": "toggle",
+      "labels": ["J", "S"],
+      "x": 3,
+      "y": 2
+    },
+    {
+      "label": "duration",
+      "type": "port",
+      "style": "cv",
+      "x": 1,
+      "y": 3
+    },
+    {
+      "label": "duration",
       "type": "knob",
       "style": "large",
       "x": 2,
       "y": 3
     },
     {
-      "name": "defer",
+      "name": "duration range",
+      "type": "toggle",
+      "labels": ["1", "10", "100"],
+      "position": 2,
+      "x": 3,
+      "y": 3
+    },
+    {
+      "label": "defer",
       "type": "port",
-      "style": "in",
+      "style": "input",
+      "special": "button",
       "x": 1,
       "y": 4
     },
     {
-      "name": "active",
+      "label": "active",
       "type": "port",
-      "style": "out",
+      "style": "input",
+      "special": "button",
       "x": 3,
       "y": 4
     },
     {
-      "name": "trig",
+      "label": "trig",
       "type": "port",
-      "style": "in",
+      "style": "input",
+      "special": "button",
       "x": 1,
       "y": 5
     },
     {
-      "name": "eoc",
+      "label": "eoc",
       "type": "port",
-      "style": "out",
+      "style": "output",
+      "special": "button",
       "x": 3,
       "y": 5
     },
     {
-      "name": "in",
+      "label": "in",
       "type": "port",
-      "style": "in",
+      "style": "input",
       "x": 1,
       "y": 6
     },
     {
-      "name": "out",
+      "label": "out",
       "type": "port",
-      "style": "out",
+      "style": "output",
       "x": 3,
       "y": 6
     }

@@ -1,0 +1,75 @@
+{
+  "name": "FUNC",
+  "width": 3,
+  "colors": {
+    "foreground": [
+      220,
+      100,
+      40
+    ],
+    "background": [
+      40,
+      50,
+      96
+    ]
+  },
+  "controls": [
+    {
+      "label": "in",
+      "type": "port",
+      "style": "input",
+      "x": 1,
+      "y": 1
+    },
+    {
+      "name": "mult/add",
+      "type": "toggle",
+      "labels": [
+        "add",
+        "mult"
+      ],
+      "x": 1,
+      "y": 2
+    },
+    {
+      "name": "amount",
+      "type": "knob",
+      "x": 1,
+      "y": 3
+    },
+    {
+      "name": "add range",
+      "type": "counter",
+      "labels": [
+        "0–5",
+        "±5",
+        "0–10",
+        "±10"
+      ],
+      "position": 2,
+      "x": 1,
+      "y": 4
+    },
+    {
+      "name": "mult range",
+      "type": "counter",
+      "labels": [
+        "0–1",
+        "±1",
+        "0–2",
+        "±2"
+      ],
+      "special": "invisible",
+      "position": 3,
+      "x": 1,
+      "y": 4
+    },
+    {
+      "label": "out",
+      "type": "port",
+      "style": "output",
+      "x": 1,
+      "y": 6
+    }
+  ]
+}

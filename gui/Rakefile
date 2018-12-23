@@ -1,13 +1,19 @@
 require 'rake/clean'
+require 'pathname'
 require 'oj'
-require_relative 'lib/module'
+require_relative 'lib/panel'
 
-modules_dir = Pathname('modules')
-modules_files = modules_dir.glob('*.json')
+$build_dir = Pathname('_build')
 
-modules_files
-    .map { |f| DHE::Module.from_file f}
-    .each { |m| puts "#{m.to_s}"}
+$modules_dir = Pathname('panels')
+$modules_files = $modules_dir.glob('*.json')
+
+puts $modules_files
+    .map { |f| DHE::Panel.new(json_file: f)}
+    .map { |m| "#{m.to_s}\n"}
+    .join("\n")
+
+directory $build_dir
 
 task default: [:svg] do
 end
