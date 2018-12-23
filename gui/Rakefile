@@ -1,10 +1,16 @@
 require 'rake/clean'
+require 'oj'
+require_relative 'lib/module'
 
-task default: [:svg]
+modules_dir = Pathname('modules')
+modules_files = modules_dir.glob('*.json')
 
-json = IO.readlines('modules/stage.json')
-loaded = oj.load(json)
-puts loaded
+modules_files
+    .map { |f| DHE::Module.from_file f}
+    .each { |m| puts "#{m.to_s}"}
+
+task default: [:svg] do
+end
 
 # SVG files for the individual controls
 task controls: [] do

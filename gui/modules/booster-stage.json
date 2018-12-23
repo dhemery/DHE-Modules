@@ -1,6 +1,6 @@
 {
-  "name": "STAGE",
-  "width": 5,
+  "name": "BOOSTER STAGE",
+  "width": 9,
   "colors": {
     "foreground": [
       120,
@@ -15,6 +15,13 @@
   },
   "controls": [
     {
+      "name": "level_cv_in",
+      "type": "port",
+      "direction": "in",
+      "x": 1,
+      "y": 1
+    },
+    {
       "name": "level",
       "type": "knob",
       "size": "large",
@@ -22,58 +29,79 @@
       "y": 1
     },
     {
+      "name": "level_range",
+      "type": "toggle",
+      "labels": ["BI", "UNI"],
+      "x": 3,
+      "y": 1
+    },
+    {
+      "name": "curve_cv",
+      "type": "port",
+      "direction": "in",
+      "x": 1,
+      "y": 2
+    },
+    {
       "name": "curve",
       "type": "knob",
       "size": "large",
+      "x": 2,
+      "y": 1
+    },
+    {
+      "name": "curve_shape",
+      "type": "toggle",
+      "labels": ["J", "S"],
       "x": 2,
       "y": 2
     },
     {
       "name": "duration",
       "type": "knob",
-      "size": "large",
+      "style": "large",
       "x": 2,
       "y": 3
     },
     {
       "name": "defer",
       "type": "port",
-      "direction": "in",
+      "style": "in",
       "x": 1,
       "y": 4
     },
     {
       "name": "active",
       "type": "port",
-      "direction": "out",
+      "style": "out",
       "x": 3,
       "y": 4
     },
     {
       "name": "trig",
       "type": "port",
-      "direction": "in",
+      "style": "in",
       "x": 1,
       "y": 5
     },
     {
       "name": "eoc",
       "type": "port",
-      "direction": "out",
+      "style": "out",
       "x": 3,
       "y": 5
     },
     {
       "name": "in",
       "type": "port",
-      "direction": "in",
+      "style": "in",
       "x": 1,
       "y": 6
     },
     {
       "name": "out",
       "type": "port",
-      "direction": "out",
+      "style": "out",
       "x": 3,
       "y": 6
     }
