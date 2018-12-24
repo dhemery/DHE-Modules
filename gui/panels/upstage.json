@@ -1,0 +1,95 @@
+{
+  "name": "UPSTAGE",
+  "hp": 5,
+  "colors": {
+    "foreground": [
+      210,
+      100,
+      30
+    ],
+    "background": [
+      210,
+      100,
+      97
+    ]
+  },
+  "rows": [
+    25,
+    43.5,
+    62,
+    82,
+    97,
+    112
+  ],
+  "columns": [
+    6.6833,
+    12.7,
+    18.7167
+  ],
+  "controls": [
+    {
+      "label": "level",
+      "type": "knob",
+      "style": "large",
+      "column": 2,
+      "row": 1
+    },
+    {
+      "name": "level",
+      "type": "port",
+      "style": "cv",
+      "column": 1,
+      "row": 2
+    },
+    {
+      "name": "level range",
+      "type": "toggle",
+      "labels": [
+        "BI",
+        "UNI"
+      ],
+      "column": 3,
+      "row": 2
+    },
+    {
+      "type": "button",
+      "label": "wait",
+      "column": 1,
+      "row": 3
+    },
+    {
+      "type": "button",
+      "label": "trig",
+      "column": 3,
+      "row": 3
+    },
+    {
+      "label": "wait",
+      "type": "port",
+      "style": "input",
+      "column": 1,
+      "row": 4
+    },
+    {
+      "label": "trig",
+      "type": "port",
+      "style": "input",
+      "column": 1,
+      "row": 5
+    },
+    {
+      "label": "trig",
+      "type": "port",
+      "style": "output",
+      "column": 3,
+      "row": 5
+    },
+    {
+      "label": "out",
+      "type": "port",
+      "style": "output",
+      "column": 3,
+      "row": 6
+    }
+  ]
+}

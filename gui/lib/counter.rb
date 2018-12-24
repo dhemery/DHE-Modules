@@ -9,8 +9,11 @@ module DHE
       @special = spec[:special]
     end
 
-    def to_s
-      "#{super} counter #{@labels} (#{@labels[@position]}) #{@special}"
+    def draw_on_image(panel:, svg:)
     end
+
+    def draw_on_panel(panel:, svg:)
+    end
+
   end
 end

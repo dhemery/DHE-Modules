@@ -7,12 +7,18 @@ module DHE
       @row = spec[:row]
       @column = spec[:column]
     end
+  end
 
-    def to_s
-      "[#{@column},#{@row}]#{' ' + @name if @name}"
+  class RoundControl < Control
+    attr_reader :diameter
+
+    def initialize(spec:, diameter:)
+      super(spec: spec)
+      @diameter = diameter
     end
 
-    def draw_on_image(panel:, svg:)
+    def radius
+      diameter / 2
     end
   end
 end

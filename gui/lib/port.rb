@@ -11,14 +11,13 @@ module DHE
       @special = spec[:special]
     end
 
-    def to_s
-      "#{super} #{@style} port #{@special}"
-    end
-
     def draw_on_image(panel:, svg:)
       x = panel.x(column)
       y = panel.y(row)
       draw_inner_svg(panel: panel, x: x, y: y, svg: svg)
+    end
+
+    def draw_on_panel(panel:, svg:)
     end
 
     def draw_inner_svg(panel:, x:, y:, svg:)

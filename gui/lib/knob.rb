@@ -1,7 +1,7 @@
 require_relative 'control'
 
 module DHE
-  class Knob < Control
+  class Knob < RoundControl
     DIAMETERS = {
         huge: 19.0,
         large: 12.7,
@@ -10,23 +10,19 @@ module DHE
         tiny: 7.0,
     }
 
-    attr_reader :radius
-
     def initialize(spec:, foreground:, background:)
-      super(spec: spec)
       @label = spec[:label]
       @style = spec[:style] || :large
-      @radius = DIAMETERS[@style.to_sym] / 2
-    end
-
-    def to_s
-      "#{super} #{@style} knob (#{@label})"
+      super(spec: spec, diameter: DIAMETERS[@style.to_sym])
     end
 
     def draw_on_image(panel:, svg:)
       x = panel.x(column)
       y = panel.y(row)
       draw_inner_svg(panel: panel, x: x, y: y, svg: svg)
+    end
+
+    def draw_on_panel(panel:, svg:)
     end
 
     def draw_inner_svg(panel:, x:, y:, svg:)

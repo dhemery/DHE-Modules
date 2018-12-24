@@ -3,45 +3,52 @@ require 'pathname'
 require 'oj'
 require_relative 'lib/panel'
 
-$svg_dir = Pathname('_svg')
-$image_dir = Pathname('_images')
-
 $modules_dir = Pathname('panels')
 $modules_files = $modules_dir.glob('*.json')
-
 $modules = $modules_files
                .map {|f| DHE::Panel.new(json_file: f)}
+
+$svg_dir = Pathname('_svg')
+$image_dir = Pathname('_images')
 
 directory $image_dir
 directory $svg_dir
 
-# SVG files for the individual controls
-task controls: [] do
+task default: [:all] do
 end
 
-# SVG files for the panels (sans controls)
-task panels: [$svg_dir] do
+task all: [:controls, :panels, :images] do
 end
 
-# SVG files for the manual (panels + controls)
+# SVG files for the manual images (panels with controls)
 task images: [$image_dir] do
   $modules
-      .map(&:image_svg_file)
+      .map{ |m| m.image_svg_file(dir: $image_dir)}
       .each do |svg_file|
-    path = $image_dir / svg_file.path
+    path = svg_file.path
     path.parent.mkpath
     content = svg_file.content
     path.open("w") {|f| f.write content}
   end
 end
 
-task svg: [:controls, :panels, :images] do
+# SVG files for the module panels (sans controls)
+task panels: [$svg_dir] do
+  $modules
+      .map{ |m| m.panel_svg_file(dir: $svg_dir)}
+      .each do |svg_file|
+    path = svg_file.path
+    path.parent.mkpath
+    content = svg_file.content
+    path.open("w") {|f| f.write content}
+  end
 end
 
-task default: [:svg] do
+# SVG files for the individual controls
+task controls: [] do
 end
 
-desc 'Clobber all files, then build all SVG files.'
+desc 'Clobber all files, then build all SVG files'
 task fresh: [:clobber, :default]
 
 CLEAN.include $image_dir, $svg_dir
