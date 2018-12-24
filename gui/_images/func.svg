@@ -8,6 +8,10 @@
       <circle r="2.925"/>
       <circle r="1.755" fill="#0044cc"/>
     </g>
+    <g transform="translate(7.62 57)" stroke="#faf7f0" fill="#0044cc">
+      <circle r="6.35" stroke="none"/>
+      <line y2="-5.5562499999999995" stroke-width="0.79375" stroke-linecap="round"/>
+    </g>
     <g transform="translate(7.62 108)" stroke="#0044cc" fill="#faf7f0" stroke-width="0.21000000000000002">
       <circle r="4.095"/>
       <circle r="2.925"/>

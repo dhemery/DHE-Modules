@@ -8,15 +8,27 @@
       <circle r="2.925"/>
       <circle r="1.755" fill="#990000"/>
     </g>
+    <g transform="translate(20.32 25)" stroke="#fff0f0" fill="#990000">
+      <circle r="6.35" stroke="none"/>
+      <line y2="-5.5562499999999995" stroke-width="0.79375" stroke-linecap="round"/>
+    </g>
     <g transform="translate(7.1067 43.5)" stroke="#990000" fill="#fff0f0" stroke-width="0.21000000000000002">
       <circle r="4.095"/>
       <circle r="2.925"/>
       <circle r="1.755" fill="#990000"/>
     </g>
+    <g transform="translate(20.32 43.5)" stroke="#fff0f0" fill="#990000">
+      <circle r="6.35" stroke="none"/>
+      <line y2="-5.5562499999999995" stroke-width="0.79375" stroke-linecap="round"/>
+    </g>
     <g transform="translate(7.1067 62)" stroke="#990000" fill="#fff0f0" stroke-width="0.21000000000000002">
       <circle r="4.095"/>
       <circle r="2.925"/>
       <circle r="1.755" fill="#990000"/>
+    </g>
+    <g transform="translate(20.32 62)" stroke="#fff0f0" fill="#990000">
+      <circle r="6.35" stroke="none"/>
+      <line y2="-5.5562499999999995" stroke-width="0.79375" stroke-linecap="round"/>
     </g>
     <g transform="translate(7.1067 82)" stroke="#990000" fill="#fff0f0" stroke-width="0.21000000000000002">
       <circle r="4.095"/>
