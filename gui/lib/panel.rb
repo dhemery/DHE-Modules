@@ -20,7 +20,6 @@ module DHE
 
     def initialize(json_file:)
       spec = Oj.load_file(json_file.to_s, JSON_PARSING_OPTIONS)
-      puts spec[:name]
       @name = spec[:name]
       @base_file_name = Pathname(@name.downcase.sub(' ', '-'))
       @width = spec[:hp] * MM_PER_HP
@@ -28,8 +27,7 @@ module DHE
       @columns = spec[:columns]
       @foreground = "##{Color::HSL.new(*spec[:colors][:foreground]).to_rgb.hex}"
       @background = "##{Color::HSL.new(*spec[:colors][:background]).to_rgb.hex}"
-      @controls = spec[:controls]
-                      .map {|spec| Panel::control_from(spec: spec, foreground: foreground, background: background)}
+      @controls = spec[:controls].map {|spec| Panel::control_from(spec: spec)}
     end
 
     def x(column)
@@ -47,15 +45,15 @@ module DHE
 
     def image_svg_file(dir:)
       path = dir / @base_file_name.sub_ext('.svg')
-      svg_file(path: path) do |panel, svg, control|
-        control.draw_on_image(panel: panel, svg: svg)
+      svg_file(path: path) do |svg, control|
+        control.draw_image_svg(svg: svg, x: x(control.column), y: y(control.row), foreground: foreground, background: background)
       end
     end
 
     def panel_svg_file(dir:)
       path = dir / @base_file_name / 'panel.svg'
-      svg_file(path: path) do |panel, svg, control|
-        control.draw_on_panel(panel: panel, svg: svg)
+      svg_file(path: path) do |svg, control|
+        control.draw_background_svg(svg: svg, x: x(control.column), y: y(control.row), foreground: foreground, background: background)
       end
     end
 
@@ -74,7 +72,7 @@ module DHE
                  style: Font::PANEL.text_style)
           panel = self
           @controls.each do |control|
-            yield(panel, g, control)
+            yield(g, control)
           end
         end
       end
@@ -84,18 +82,18 @@ module DHE
     def control_svg_files(dir:)
     end
 
-    def self.control_from(spec:, foreground:, background:)
+    def self.control_from(spec:)
       case spec[:type]
       when 'knob'
-        Knob.new(spec: spec, foreground: foreground, background: background)
+        Knob.new(spec: spec)
       when 'button'
-        Button.new(spec: spec, foreground: foreground, background: background)
+        Button.new(spec: spec)
       when 'port'
-        Port.new(spec: spec, foreground: foreground, background: background)
+        Port.new(spec: spec)
       when 'toggle'
-        Toggle.new(spec: spec, foreground: foreground, background: background)
+        Toggle.new(spec: spec)
       when 'counter'
-        Counter.new(spec: spec, foreground: foreground, background: background)
+        Counter.new(spec: spec)
       else
         "Unknown control type #{type}"
       end

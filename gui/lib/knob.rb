@@ -10,24 +10,15 @@ module DHE
         tiny: 7.0,
     }
 
-    def initialize(spec:, foreground:, background:)
+    def initialize(spec:)
       @label = spec[:label]
       @style = spec[:style] || :large
       super(spec: spec, diameter: DIAMETERS[@style.to_sym])
     end
 
-    def draw_on_image(panel:, svg:)
-      x = panel.x(column)
-      y = panel.y(row)
-      draw_inner_svg(panel: panel, x: x, y: y, svg: svg)
-    end
-
-    def draw_on_panel(panel:, svg:)
-    end
-
-    def draw_inner_svg(panel:, x:, y:, svg:)
-      knob_color = panel.foreground
-      pointer_color = panel.background
+    def draw_foreground_svg(svg:, x:, y:, foreground:, background:)
+      knob_color = foreground
+      pointer_color = background
       pointer_width = radius / 8.0
       pointer_length = radius - pointer_width
       svg.g(transform: "translate(#{x} #{y})", stroke: pointer_color, fill: knob_color) do |g|

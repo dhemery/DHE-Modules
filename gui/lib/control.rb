@@ -1,11 +1,21 @@
 module DHE
   class Control
-    attr_reader :name, :row, :column
+    attr_reader :name, :row, :column, :width, :height
 
-    def initialize(spec:)
+    def initialize(spec:, width:, height:)
       @name = spec[:name]
       @row = spec[:row]
       @column = spec[:column]
+      @width = width
+      @height = height
+    end
+
+    def draw_image_svg(svg:, x:, y:, foreground:, background:)
+      draw_background_svg(svg: svg, x: x, y: y, foreground: foreground, background: background)
+      draw_foreground_svg(svg: svg, x: x, y: y, foreground: foreground, background: background)
+    end
+
+    def draw_background_svg(svg:, x:, y:, foreground:, background:)
     end
   end
 
@@ -13,8 +23,8 @@ module DHE
     attr_reader :diameter
 
     def initialize(spec:, diameter:)
-      super(spec: spec)
       @diameter = diameter
+      super(spec: spec, width: @diameter, height: @diameter)
     end
 
     def radius
