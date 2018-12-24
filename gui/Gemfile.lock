@@ -1,6 +1,7 @@
 GEM
   remote: https://rubygems.org/
   specs:
+    builder (3.2.3)
     color (1.8)
     oj (3.7.4)
     rake (12.3.2)
@@ -9,6 +10,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  builder (~> 3.2)
   color (~> 1.8)
   oj (~> 3.7)
   rake (~> 12.3)

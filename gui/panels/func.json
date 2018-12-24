@@ -1,6 +1,6 @@
 {
   "name": "FUNC",
-  "width": 3,
+  "hp": 3,
   "colors": {
     "foreground": [
       220,

@@ -1,17 +1,9 @@
 {
   "name": "BOOSTER STAGE",
-  "width": 8,
+  "hp": 8,
   "colors": {
-    "foreground": [
-      120,
-      100,
-      30
-    ],
-    "background": [
-      120,
-      100,
-      97
-    ]
+    "foreground": [0,100,30],
+    "background": [0,100,97]
   },
   "controls": [
     {

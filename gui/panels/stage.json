@@ -1,6 +1,6 @@
 {
   "name": "STAGE",
-  "width": 5,
+  "hp": 5,
   "colors": {
     "foreground": [
       120,

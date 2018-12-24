@@ -8,22 +8,25 @@ $build_dir = Pathname('_build')
 $modules_dir = Pathname('panels')
 $modules_files = $modules_dir.glob('*.json')
 
-puts $modules_files
-    .map { |f| DHE::Panel.new(json_file: f)}
-    .map { |m| "#{m.to_s}\n"}
-    .join("\n")
+$modules = $modules_files
+               .map {|f| DHE::Panel.new(json_file: f)}
 
 directory $build_dir
-
-task default: [:svg] do
-end
 
 # SVG files for the individual controls
 task controls: [] do
 end
 
 # SVG files for the panels (sans controls)
-task panels: [] do
+task panels: [$build_dir] do
+  svg_files = $modules.map(&:panel_svg_file)
+
+  svg_files.each do |svg_file|
+    path = $build_dir / svg_file.path
+    path.parent.mkpath
+    content = svg_file.content
+    path.open("w") { |f| f.write content }
+  end
 end
 
 # SVG files for the manual (panels + controls)
@@ -32,6 +35,10 @@ end
 
 task svg: [:controls, :panels, :images] do
 end
+
+task default: [:svg] do
+end
+
 
 desc 'Clobber all files, then build all SVG files.'
 task fresh: [:clobber, :default]

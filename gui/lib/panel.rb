@@ -1,28 +1,29 @@
+require 'builder'
 require 'color'
 require 'oj'
-require_relative 'button.rb'
+
 require_relative 'counter.rb'
-require_relative 'knob.rb'
-require_relative 'port.rb'
-require_relative 'toggle.rb'
+require_relative 'button'
+require_relative 'knob'
+require_relative 'port'
+require_relative 'toggle'
+
+require_relative 'dimensions'
+require_relative 'svg-file'
 
 module DHE
   JSON_PARSING_OPTIONS = {symbol_keys: true}
 
   class Panel
-    MM_PER_INCH = 25.4
-    PX_PER_INCH = 75.0
-    PX_PER_MM = PX_PER_INCH / MM_PER_INCH
-    MM_PER_HP = 5.08
-
     attr_reader :name, :foreground, :background
 
     def initialize(json_file:)
       spec = Oj.load_file(json_file.to_s, JSON_PARSING_OPTIONS)
       @name = spec[:name]
-      @width = spec[:width] * MM_PER_HP
-      @foreground = Color::HSL.new(*spec[:colors][:foreground])
-      @background = Color::HSL.new(*spec[:colors][:background])
+      @dirname = Pathname(@name.downcase.sub(' ', '-'))
+      @width = spec[:hp] * MM_PER_HP
+      @foreground = "##{Color::HSL.new(*spec[:colors][:foreground]).to_rgb.hex}"
+      @background = "##{Color::HSL.new(*spec[:colors][:background]).to_rgb.hex}"
       @controls = spec[:controls]
                       .map {|spec| Panel::control_from(spec: spec, foreground: foreground, background: background)}
     end
@@ -30,6 +31,34 @@ module DHE
     def to_s
       control_strings = @controls.map(&:to_s).join("\n")
       "#{@name} #{@width} #{@foreground.inspect} #{@background.inspect}\n#{control_strings}"
+    end
+
+    def panel_svg_file
+      path = @dirname / 'panel.svg'
+      xml = Builder::XmlMarkup.new(indent: 2)
+      content = xml.svg(version: "1.1", xmlns: "http://www.w3.org/2000/svg",
+                        width: @width * PX_PER_MM,
+                        height: PANEL_HEIGHT * PX_PER_MM) do |svg|
+        svg.g(transform: "scale(#{PX_PER_MM})") do |g|
+          g.rect(x: 0, y: 0, width: @width, height: PANEL_HEIGHT, stroke: @foreground, fill: @background, 'stroke-width' => 1)
+          g.text(@name.upcase, x: @width / 2, y: PANEL_LABEL_INSET,
+                 'dominant-baseline' => 'hanging', 'text-anchor' => 'middle', fill: @foreground,
+                 style: "font-family:Proxima Nova;font-weight:bold;font-size:4.064px")
+          @controls.each do |control|
+            control.panel_svg(panel: self, svg: g)
+          end
+          g.text('DHE', x: @width / 2, y: PANEL_HEIGHT - PANEL_LABEL_INSET,
+                 'dominant-baseline' => 'hanging', 'text-anchor' => 'middle', fill: @foreground,
+                 style: "font-family:Proxima Nova;font-weight:bold;font-size:4.064px")
+        end
+      end
+      SvgFile.new(path: path, content: content)
+    end
+
+    def image_svg
+    end
+
+    def control_svgs
     end
 
     def self.control_from(spec:, foreground:, background:)

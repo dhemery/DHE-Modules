@@ -11,5 +11,8 @@ module DHE
     def to_s
       "[#{@x},#{@y}]#{' ' + @name if @name}"
     end
+
+    def panel_svg(panel:, svg:)
+    end
   end
 end
