@@ -1,18 +1,18 @@
 module DHE
   class Control
-    attr_reader :x, :y
+    attr_reader :name, :row, :column
 
     def initialize(spec:)
-      @x = spec[:x]
-      @y = spec[:y]
       @name = spec[:name]
+      @row = spec[:row]
+      @column = spec[:column]
     end
 
     def to_s
-      "[#{@x},#{@y}]#{' ' + @name if @name}"
+      "[#{@column},#{@row}]#{' ' + @name if @name}"
     end
 
-    def panel_svg(panel:, svg:)
+    def draw_on_image(panel:, svg:)
     end
   end
 end

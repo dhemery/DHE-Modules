@@ -1,0 +1,17 @@
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="45.0" height="379.42913385826773">
+  <g transform="scale(2.952755905511811)">
+    <rect x="0" y="0" width="15.24" height="128.5" stroke="#0044cc" fill="#faf7f0" stroke-width="1"/>
+    <text x="7.62" y="9.0" dominant-baseline="baseline" text-anchor="middle" fill="#0044cc" style="font-family:Proxima Nova;font-weight:bold;font-size:4.064px">FUNC</text>
+    <text x="7.62" y="119.5" dominant-baseline="hanging" text-anchor="middle" fill="#0044cc" style="font-family:Proxima Nova;font-weight:bold;font-size:4.064px">DHE</text>
+    <g transform="translate(7.62 23)" stroke="#0044cc" fill="#faf7f0" stroke-width="0.21000000000000002">
+      <circle r="4.095"/>
+      <circle r="2.925"/>
+      <circle r="1.755" fill="#0044cc"/>
+    </g>
+    <g transform="translate(7.62 108)" stroke="#0044cc" fill="#faf7f0" stroke-width="0.21000000000000002">
+      <circle r="4.095"/>
+      <circle r="2.925"/>
+      <circle r="1.755" fill="#0044cc"/>
+    </g>
+  </g>
+</svg>
