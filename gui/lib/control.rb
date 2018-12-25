@@ -1,64 +1,117 @@
 require_relative 'dimensions'
+require_relative 'shape'
 
 module DHE
-  class Bounded
-    attr_reader :width, :height
-
-    def initialize(width:, height: width)
-      @width = width
-      @height = height
-    end
-
-    def left(x:)
-      x - width / 2
-    end
-
-    def right(x:)
-      x + width / 2
-    end
-
-    def top(y:)
-      y - height / 2
-    end
-
-    def bottom(y:)
-      y + height / 2
-    end
-
-    def draw_bounding_box_svg(svg:, x:, y:, color:)
-      svg.line(x1: left(x: x), x2: right(x: x), y1: top(y: y), y2: top(y: y), 'stroke-width' => STROKE_WIDTH, stroke: color)
-      svg.line(x1: right(x: x), x2: right(x: x), y1: bottom(y: y), y2: top(y: y), 'stroke-width' => STROKE_WIDTH, stroke: color)
-      svg.line(x1: left(x: x), x2: right(x: x), y1: bottom(y: y), y2: bottom(y: y), 'stroke-width' => STROKE_WIDTH, stroke: color)
-      svg.line(x1: left(x: x), x2: left(x: x), y1: bottom(y: y), y2: top(y: y), 'stroke-width' => STROKE_WIDTH, stroke: color)
-    end
-  end
-
-  class Control < Bounded
+  class Control
     attr_reader :name, :row, :column
 
-    def initialize(name:, row:, column:, width:, height:)
-      super(width: width, height: height)
+    def initialize(name:, row:, column:)
       @name = name
       @row = row
       @column = column
     end
 
-    def draw_image_svg(svg:, x:, y:, foreground:, background:)
-      draw_background_svg(svg: svg, x: x, y: y, foreground: foreground, background: background)
-      draw_foreground_svg(svg: svg, x: x, y: y, foreground: foreground, background: background)
+    def draw_image_svg(svg:, x:, y:)
+      draw_panel_svg(svg: svg, x: x, y: y)
+      draw_hardware_svg(svg: svg, x: x, y: y)
     end
   end
 
-  class RoundControl < Control
-    attr_reader :diameter
+  class ButtonControl < Control
+    DIAMETER = 6.0
 
-    def initialize(name:, row:, column:, diameter:)
-      super(name: name, row: row, column: column, width: diameter, height: diameter)
-      @diameter = diameter
+    def initialize(panel:, control:)
+      super(name: control[:name], row: control[:row], column: control[:column])
+      text = control[:label]
+      @style = control[:style]
+      @label = Text.new(text: text, size: :small, alignment: :above, color: panel.foreground)
+      @button = Button.new(foreground: panel.foreground, background: panel.background)
     end
 
-    def radius
-      diameter / 2
+    def draw_panel_svg(svg:, x:, y:)
+      @label.draw_svg(svg: svg, x: x, y: @button.top(y: y))
+    end
+
+    def draw_hardware_svg(svg:, x:, y:)
+      @button.draw_svg(svg: svg, x: x, y: y)
+    end
+  end
+
+  class CounterControl < Control
+    def initialize(panel:, control:)
+      super(name: control[:name], row: control[:row], column: control[:column])
+      @labels = control[:labels].map {|label| Text.new(text: label, color: panel.foreground, size: :small, alignment: :above)}
+      @selection = control.fetch(:selection, 1)
+      special = control[:special] || []
+      @invisible = special.include? 'invisible'
+      @button = Button.new(foreground: panel.foreground, background: panel.background)
+    end
+
+    def draw_panel_svg(svg:, x:, y:)
+      @labels[@selection - 1].draw_svg(svg: svg, x: x, y: @button.top(y: y)) unless @invisible
+    end
+
+    def draw_hardware_svg(svg:, x:, y:)
+      @button.draw_svg(svg: svg, x: x, y: y)
+    end
+  end
+
+  class KnobControl < Control
+    def initialize(panel:, control:)
+      @style = control[:style] || :large
+      super(name: control[:name], row: control[:row], column: control[:column])
+      text = control[:label]
+      @label = Text.new(text: text, size: :large, color: panel.foreground, alignment: :above)
+      @knob = Knob.new(size: @style.to_sym, knob_color: panel.foreground, pointer_color: panel.background)
+    end
+
+    def draw_panel_svg(svg:, x:, y:)
+      @label.draw_svg(svg: svg, x: x, y: @knob.top(y: y))
+    end
+
+    def draw_hardware_svg(svg:, x:, y:)
+      @knob.draw_svg(svg: svg, x: x, y: y)
+    end
+  end
+
+  class PortControl < Control
+    def initialize(panel:, control:)
+      super(name: control[:name], row: control[:row], column: control[:column])
+      text = control[:label] || control[:style]
+      @label = Text.new(text: text, size: :small, color: panel.foreground, alignment: :above)
+      @port = Port.new(foreground: panel.foreground, background: panel.background)
+    end
+
+    def draw_panel_svg(x:, y:, svg:)
+      @label.draw_svg(svg: svg, x: x, y: @port.top(y: y))
+    end
+
+    def draw_hardware_svg(svg:, x:, y:)
+      @port.draw_svg(svg: svg, x: x, y: y)
+    end
+  end
+
+  class ToggleControl < Control
+    def initialize(panel:, control:)
+      labels = control[:labels]
+      foreground = panel.foreground
+      background = panel.background
+      super(name: control[:name], row: control[:row], column: control[:column])
+      @labels = Array(Text.new(text: labels.first, size: :small, color: foreground, alignment: :below))
+      @labels << Text.new(text: labels[1], size: :small, color: foreground, alignment: :right_of) if (labels.size == 3)
+      @labels << Text.new(text: labels.last, size: :small, color: foreground, alignment: :above)
+      @selection = control.fetch(:selection, 1)
+      @toggle = ToggleShape.new(size: labels.size, foreground: foreground, background: background)
+    end
+
+    def draw_panel_svg(svg:, x:, y:)
+      @labels.first.draw_svg(svg: svg, x: x, y: @toggle.bottom(y: y))
+      @labels[1].draw_svg(svg: svg, x: @toggle.right(x: x), y: y) if (@labels.size == 3)
+      @labels.last.draw_svg(svg: svg, x: x, y: @toggle.top(y: y))
+    end
+
+    def draw_hardware_svg(svg:, x:, y:)
+      @toggle.draw_svg(svg: svg, x: x, y: y, selection: @selection)
     end
   end
 end
