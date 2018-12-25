@@ -36,11 +36,11 @@ module DHE
   class Control < Bounded
     attr_reader :name, :row, :column
 
-    def initialize(spec:, width:, height:)
+    def initialize(name:, row:, column:, width:, height:)
       super(width: width, height: height)
-      @name = spec[:name]
-      @row = spec[:row]
-      @column = spec[:column]
+      @name = name
+      @row = row
+      @column = column
     end
 
     def draw_image_svg(svg:, x:, y:, foreground:, background:)
@@ -52,9 +52,9 @@ module DHE
   class RoundControl < Control
     attr_reader :diameter
 
-    def initialize(spec:, diameter:)
+    def initialize(name:, row:, column:, diameter:)
+      super(name: name, row: row, column: column, width: diameter, height: diameter)
       @diameter = diameter
-      super(spec: spec, width: @diameter, height: @diameter)
     end
 
     def radius

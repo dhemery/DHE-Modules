@@ -11,10 +11,10 @@ module DHE
     }
 
     def initialize(spec:)
+      @style = spec[:style] || :large
+      super(name: spec[:name], row: spec[:row], column: spec[:column], diameter: DIAMETERS[@style.to_sym])
       text = spec[:label]
       @label = Text.new(text: text, size: :large, alignment: :above)
-      @style = spec[:style] || :large
-      super(spec: spec, diameter: DIAMETERS[@style.to_sym])
     end
 
     def draw_foreground_svg(svg:, x:, y:, foreground:, background:)

@@ -5,7 +5,7 @@ module DHE
     DIAMETER = 6.0
 
     def initialize(spec:)
-      super(spec: spec, diameter: DIAMETER)
+      super(name: spec[:name], row: spec[:row], column: spec[:column], diameter: DIAMETER)
       text = spec[:label]
       @style = spec[:style]
       @label = Text.new(text: text, size: :small, alignment: :above)

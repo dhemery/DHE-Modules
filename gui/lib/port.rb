@@ -5,10 +5,11 @@ module DHE
     DIAMETER = 8.4
 
     def initialize(spec:)
-      super(spec: spec, diameter: DIAMETER)
+      super(name: spec[:name], row: spec[:row], column: spec[:column], diameter: DIAMETER)
       text = spec[:label] || spec[:style]
       @label = Text.new(text: text, size: :small, alignment: :above)
-      @special = spec[:special]
+      special = spec[:special] || []
+      @button  = special.include? 'button'
     end
 
     def draw_foreground_svg(svg:, x:, y:, foreground:, background:)

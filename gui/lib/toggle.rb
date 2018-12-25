@@ -6,7 +6,7 @@ module DHE
 
     def initialize(spec:)
       labels = spec[:labels]
-      super(spec: spec, width: WIDTH, height: WIDTH * labels.size)
+      super(name: spec[:name], row: spec[:row], column: spec[:column], width: WIDTH, height: WIDTH * labels.size)
       @labels = Array(Text.new(text: labels.first, size: :small, alignment: :below))
       @labels << Text.new(text: labels[1], size: :small, alignment: :right_of) if (labels.size == 3)
       @labels << Text.new(text: labels.last, size: :small, alignment: :above)

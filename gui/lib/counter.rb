@@ -5,10 +5,11 @@ module DHE
     DIAMETER = 6.0
 
     def initialize(spec:)
-      super(spec: spec, diameter: DIAMETER)
-      @labels = spec[:labels].map{ |label| Text.new(text: @label, size: :small, alignment: :above) }
+      super(name: spec[:name], row: spec[:row], column: spec[:column], diameter: DIAMETER)
+      @labels = spec[:labels].map{ |label| Text.new(text: label, size: :small, alignment: :above) }
       @position = (spec[:position] || 1) - 1
-      @special = spec[:special]
+      special = spec[:special] || []
+      @invisible = special.include? 'invisible'
     end
 
     def draw_foreground_svg(svg:, x:, y:, foreground:, background:)
@@ -21,7 +22,7 @@ module DHE
     end
 
     def draw_background_svg(x:, y:, svg:, foreground:, background:)
-      @labels[@position].draw_svg(svg: svg, x: x, y: top(y: y), color: foreground)
+      @labels[@position].draw_svg(svg: svg, x: x, y: top(y: y), color: foreground) unless @invisible
     end
   end
 end
