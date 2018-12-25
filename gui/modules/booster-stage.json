@@ -113,7 +113,7 @@
     {
       "label": "active",
       "type": "port",
-      "style": "in",
+      "style": "out",
       "button": true,
       "column": 3,
       "row": 4

@@ -2,29 +2,42 @@ module DHE
   class Shape
     attr_reader :width, :height
 
-    def initialize(width:, height: width)
-      @width = width
-      @height = height
+    def initialize(top:, right:, bottom:, left:)
+      @top = top
+      @right = right
+      @bottom = bottom
+      @left = left
+      @width = right - left
+      @height = bottom - top
     end
 
-    def left(x:)
-      x - width / 2
+    def self.centered(width:, height: width)
+      {
+          left: -width / 2,
+          right: width / 2,
+          top: -height / 2,
+          bottom: height / 2,
+      }
     end
 
-    def right(x:)
-      x + width / 2
+    def top(y)
+      y + @top
     end
 
-    def top(y:)
-      y - height / 2
+    def right(x)
+      x + @right
     end
 
-    def bottom(y:)
-      y + height / 2
+    def bottom(y)
+      y + @bottom
+    end
+
+    def left(x)
+      x + @left
     end
 
     def draw_bounding_box(svg:, x:, y:, color:)
-      Shape::draw_box(svg: svg, top: top(y: y), right: right(x: x), bottom: bottom(y: y), left: left(x: x), color: color)
+      Shape::draw_box(svg: svg, top: top(y), right: right(x), bottom: bottom(y), left: left(x), color: color)
     end
 
     def self.draw_box(svg:, top:, right:, bottom:, left:, color:)
@@ -35,11 +48,28 @@ module DHE
     end
   end
 
+  class Box < Shape
+    CORNER_RADIUS = 1.0
+    BUFFER = PADDING + STROKE_INSET
+
+    def initialize(top:, right:, bottom:, left:, foreground:, background:)
+      super(top: top, right: right, bottom: bottom, left: left)
+      @foreground = foreground
+      @background = background
+    end
+
+    def draw_svg(svg:, x:, y:)
+      svg.rect(x: @left + x, y: @top + y, width: @width, height: @height,
+               'stroke-width' => STROKE_WIDTH, rx: CORNER_RADIUS, ry: CORNER_RADIUS,
+               stroke: @foreground, fill: @background)
+    end
+  end
+
   class RoundShape < Shape
     attr_reader :diameter
 
     def initialize(diameter:)
-      super(width: diameter, height: diameter)
+      super(Shape::centered(width: diameter, height: diameter))
       @diameter = diameter
     end
 
@@ -113,28 +143,36 @@ module DHE
         small: 7.0 / PX_PER_MM
     }
 
-    def initialize(text:, size:, color:, alignment:, padding: PADDING)
+    def initialize(text:, size:, color:, alignment:)
       @text = text&.upcase || ''
       @size = SIZES[size.to_sym]
-      super(height: @size, width: @text.length * @size * 0.6)
       @color = color
       @alignment = alignment
       @baseline = BASELINES[@alignment]
       @anchor = ANCHORS[@alignment]
-      @padding = padding
+      height = @size * ASCENT_RATIO
+      width = @text.length * @size * 0.6 # Approximate
+      left = case alignment
+              when :right_of
+                0
+              else
+                -width / 2
+              end
+      top = case alignment
+            when :above
+              -height
+            when :right_of
+              -height / 2
+            else
+              0
+            end
+      bottom = top + height
+      right = left + width
+      super(top: top, right: right, bottom: bottom, left: left)
     end
 
     def draw_svg(svg:, x:, y:)
-      # draw_bounding_box_svg(svg: svg, x: x, y: y, color: color)
-
-      case @alignment
-      when :above
-        y -= @padding
-      when :below
-        y += @padding
-      when :right_of
-        x += @padding / 2
-      end
+      # draw_bounding_box(svg: svg, x: x, y: y, color: @color)
 
       svg.text(@text, x: x, y: y,
                'dominant-baseline' => @baseline, 'text-anchor' => @anchor, fill: @color,
@@ -170,7 +208,7 @@ module DHE
     WIDTH = 3.0
 
     def initialize(size:, foreground:, background:)
-      super(width: WIDTH, height: size * WIDTH)
+      super(Shape::centered(width: WIDTH, height: size * WIDTH))
       @size = size
       @foreground = foreground
       @background = background

@@ -34,7 +34,7 @@ module DHE
     end
 
     def draw_faceplate(svg:, x:, y:)
-      @label.draw_svg(svg: svg, x: x, y: @button.top(y: y))
+      @label.draw_svg(svg: svg, x: x, y: @button.top(y - PADDING))
     end
 
     def draw_hardware(svg:, x:, y:)
@@ -58,7 +58,7 @@ module DHE
     end
 
     def draw_hardware(svg:, x:, y:)
-      @labels[@selection - 1].draw_svg(svg: svg, x: x, y: @button.top(y: y)) unless @invisible
+      @labels[@selection - 1].draw_svg(svg: svg, x: x, y: @button.top(y - PADDING)) unless @invisible
       @button.draw_svg(svg: svg, x: x, y: y)
     end
   end
@@ -75,7 +75,7 @@ module DHE
     end
 
     def draw_faceplate(svg:, x:, y:)
-      @label.draw_svg(svg: svg, x: x, y: @knob.top(y: y))
+      @label.draw_svg(svg: svg, x: x, y: @knob.top(y - PADDING))
     end
 
     def draw_hardware(svg:, x:, y:)
@@ -88,13 +88,25 @@ module DHE
       super(options)
       foreground = panel.foreground
       background = panel.background
-      label_text = options[:label] || options[:style]
-      @label = Label.new(text: label_text, size: :small, color: foreground, alignment: :above)
+      style = options[:style]
+      label_text = options[:label] || style
+      is_input = style == 'in'
+      is_output = style == 'out'
+      is_boxed = is_input || is_output
+      label_color = is_output ? background : foreground
+      box_background = is_output ? foreground : background
+      @label = Label.new(text: label_text, size: :small, color: label_color, alignment: :above)
       @port = Port.new(foreground: foreground, background: background)
+      box_left = @port.left(0) - PADDING
+      box_right = @port.right(0) + PADDING
+      box_top = @label.top(@port.top(0)) - PADDING - PADDING
+      box_bottom = @port.bottom(0) + PADDING
+      @box = Box.new(top: box_top, right: box_right, bottom: box_bottom, left: box_left, foreground: foreground, background: box_background) if is_boxed
     end
 
     def draw_faceplate(x:, y:, svg:)
-      @label.draw_svg(svg: svg, x: x, y: @port.top(y: y))
+      @box.draw_svg(svg: svg, x: x, y: y) if @box
+      @label.draw_svg(svg: svg, x: x, y: @port.top(y - PADDING))
     end
 
     def draw_hardware(svg:, x:, y:)
@@ -120,9 +132,9 @@ module DHE
     end
 
     def draw_faceplate(svg:, x:, y:)
-      @labels.first.draw_svg(svg: svg, x: x, y: @toggle.bottom(y: y))
-      @labels[1].draw_svg(svg: svg, x: @toggle.right(x: x), y: y) if (@labels.size == 3)
-      @labels.last.draw_svg(svg: svg, x: x, y: @toggle.top(y: y))
+      @labels.first.draw_svg(svg: svg, x: x, y: @toggle.bottom(y + PADDING))
+      @labels[1].draw_svg(svg: svg, x: @toggle.right(x + PADDING / 2), y: y) if (@labels.size == 3)
+      @labels.last.draw_svg(svg: svg, x: x, y: @toggle.top(y - PADDING))
     end
 
     def draw_hardware(svg:, x:, y:)
