@@ -5,10 +5,10 @@ module DHE
   class Control
     attr_reader :name, :row, :column
 
-    def initialize(name:, row:, column:)
-      @name = name
-      @row = row
-      @column = column
+    def initialize(options)
+      @name = options[:name]
+      @row = options[:row]
+      @column = options[:column]
     end
 
     def draw_image_svg(svg:, x:, y:)
@@ -20,12 +20,13 @@ module DHE
   class ButtonControl < Control
     DIAMETER = 6.0
 
-    def initialize(panel:, control:)
-      super(name: control[:name], row: control[:row], column: control[:column])
-      text = control[:label]
-      @style = control[:style]
-      @label = Text.new(text: text, size: :small, alignment: :above, color: panel.foreground)
-      @button = Button.new(foreground: panel.foreground, background: panel.background)
+    def initialize(panel, options)
+      super(options)
+      foreground = panel.foreground
+      background = panel.background
+      label_text = options[:label]
+      @label = Label.new(text: label_text, size: :small, alignment: :above, color: foreground)
+      @button = Button.new(foreground: foreground, background: background)
     end
 
     def draw_panel_svg(svg:, x:, y:)
@@ -38,13 +39,15 @@ module DHE
   end
 
   class CounterControl < Control
-    def initialize(panel:, control:)
-      super(name: control[:name], row: control[:row], column: control[:column])
-      @labels = control[:labels].map {|label| Text.new(text: label, color: panel.foreground, size: :small, alignment: :above)}
-      @selection = control.fetch(:selection, 1)
-      special = control[:special] || []
-      @invisible = special.include? 'invisible'
-      @button = Button.new(foreground: panel.foreground, background: panel.background)
+    def initialize(panel, options)
+      super(options)
+      foreground = panel.foreground
+      background = panel.background
+      label_texts = options[:labels]
+      @invisible = options.fetch(:invisible, false)
+      @selection = options.fetch(:selection, 1)
+      @labels = label_texts.map {|text| Label.new(text: text, color: foreground, size: :small, alignment: :above)}
+      @button = Button.new(foreground: foreground, background: background)
     end
 
     def draw_panel_svg(svg:, x:, y:)
@@ -57,12 +60,14 @@ module DHE
   end
 
   class KnobControl < Control
-    def initialize(panel:, control:)
-      @style = control[:style] || :large
-      super(name: control[:name], row: control[:row], column: control[:column])
-      text = control[:label]
-      @label = Text.new(text: text, size: :large, color: panel.foreground, alignment: :above)
-      @knob = Knob.new(size: @style.to_sym, knob_color: panel.foreground, pointer_color: panel.background)
+    def initialize(panel, options)
+      super(options)
+      foreground = panel.foreground
+      background = panel.background
+      label_text = options[:label]
+      @style = options.fetch(:style, :large)
+      @label = Label.new(text: label_text, size: :large, color: foreground, alignment: :above)
+      @knob = Knob.new(size: @style.to_sym, knob_color: foreground, pointer_color: background)
     end
 
     def draw_panel_svg(svg:, x:, y:)
@@ -75,11 +80,13 @@ module DHE
   end
 
   class PortControl < Control
-    def initialize(panel:, control:)
-      super(name: control[:name], row: control[:row], column: control[:column])
-      text = control[:label] || control[:style]
-      @label = Text.new(text: text, size: :small, color: panel.foreground, alignment: :above)
-      @port = Port.new(foreground: panel.foreground, background: panel.background)
+    def initialize(panel, options)
+      super(options)
+      foreground = panel.foreground
+      background = panel.background
+      label_text = options[:label] || options[:style]
+      @label = Label.new(text: label_text, size: :small, color: foreground, alignment: :above)
+      @port = Port.new(foreground: foreground, background: background)
     end
 
     def draw_panel_svg(x:, y:, svg:)
@@ -92,16 +99,16 @@ module DHE
   end
 
   class ToggleControl < Control
-    def initialize(panel:, control:)
-      labels = control[:labels]
+    def initialize(panel, options)
+      super(options)
       foreground = panel.foreground
       background = panel.background
-      super(name: control[:name], row: control[:row], column: control[:column])
-      @labels = Array(Text.new(text: labels.first, size: :small, color: foreground, alignment: :below))
-      @labels << Text.new(text: labels[1], size: :small, color: foreground, alignment: :right_of) if (labels.size == 3)
-      @labels << Text.new(text: labels.last, size: :small, color: foreground, alignment: :above)
-      @selection = control.fetch(:selection, 1)
-      @toggle = ToggleShape.new(size: labels.size, foreground: foreground, background: background)
+      label_texts = options[:labels]
+      @selection = options.fetch(:selection, 1)
+      @labels = Array(Label.new(text: label_texts.first, size: :small, color: foreground, alignment: :below))
+      @labels << Label.new(text: label_texts[1], size: :small, color: foreground, alignment: :right_of) if (label_texts.size == 3)
+      @labels << Label.new(text: label_texts.last, size: :small, color: foreground, alignment: :above)
+      @toggle = Toggle.new(size: label_texts.size, foreground: foreground, background: background)
     end
 
     def draw_panel_svg(svg:, x:, y:)

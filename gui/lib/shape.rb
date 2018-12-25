@@ -90,31 +90,7 @@ module DHE
     end
   end
 
-  class Port < RoundShape
-    DIAMETER = 8.4
-
-    def initialize(foreground:, background:)
-      super(diameter: DIAMETER)
-      @foreground = foreground
-      @background = background
-    end
-
-    def draw_svg(svg:, x:, y:)
-      stroke_width = DIAMETER * 0.025
-      sleeve_diameter = DIAMETER - stroke_width
-      step = sleeve_diameter / 7.0
-      sleeve_radius = sleeve_diameter / 2.0
-      ring_radius = sleeve_radius - step
-      tip_radius = ring_radius - step
-      svg.g(transform: "translate(#{x} #{y})", stroke: @foreground, fill: @background, 'stroke-width' => stroke_width) do |g|
-        g.circle(r: sleeve_radius)
-        g.circle(r: ring_radius)
-        g.circle(r: tip_radius, fill: @foreground)
-      end
-    end
-  end
-
-  class Text < Shape
+  class Label < Shape
     BASELINES = {
         above: 'alphabetic',
         below: 'hanging',
@@ -162,17 +138,50 @@ module DHE
     end
   end
 
-  class ToggleShape < Shape
+  class Port < RoundShape
+    DIAMETER = 8.4
+
+    def initialize(foreground:, background:)
+      super(diameter: DIAMETER)
+      @foreground = foreground
+      @background = background
+    end
+
+    def draw_svg(svg:, x:, y:)
+      stroke_width = DIAMETER * 0.025
+      sleeve_diameter = DIAMETER - stroke_width
+      step = sleeve_diameter / 7.0
+      sleeve_radius = sleeve_diameter / 2.0
+      ring_radius = sleeve_radius - step
+      tip_radius = ring_radius - step
+      svg.g(transform: "translate(#{x} #{y})", stroke: @foreground, fill: @background, 'stroke-width' => stroke_width) do |g|
+        g.circle(r: sleeve_radius)
+        g.circle(r: ring_radius)
+        g.circle(r: tip_radius, fill: @foreground)
+      end
+    end
+  end
+
+  class Toggle < Shape
     WIDTH = 3.0
 
     def initialize(size:, foreground:, background:)
       super(width: WIDTH, height: size * WIDTH)
+      @size = size
       @foreground = foreground
       @background = background
     end
 
     def draw_svg(svg:, x:, y:, selection:)
-      position = selection - 2
+      position =
+          case selection
+          when @size
+            1.0
+          when 1
+            -1.0
+          else
+            0.0
+          end
       box_stroke_width = width / 8.0
       interior_inset = box_stroke_width / 2.0
 

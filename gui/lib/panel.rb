@@ -22,7 +22,7 @@ module DHE
       @columns = spec[:columns]
       @foreground = "##{Color::HSL.new(*spec[:colors][:foreground]).to_rgb.hex}"
       @background = "##{Color::HSL.new(*spec[:colors][:background]).to_rgb.hex}"
-      @controls = spec[:controls].map {|spec| control_from(control: spec)}
+      @controls = spec[:controls].map {|spec| control_from(options: spec)}
     end
 
     def x(column)
@@ -59,9 +59,9 @@ module DHE
                         height: PANEL_HEIGHT * PX_PER_MM) do |svg|
         svg.g(transform: "scale(#{PX_PER_MM})") do |g|
           g.rect(x: 0, y: 0, width: @width, height: PANEL_HEIGHT, stroke: @foreground, fill: @background, 'stroke-width' => 1)
-          Text.new(text: @name.upcase, size: :panel, color: @foreground, alignment: :above)
+          Label.new(text: @name.upcase, size: :panel, color: @foreground, alignment: :above)
               .draw_svg(svg: g, x: @width / 2, y: PANEL_LABEL_INSET)
-          Text.new(text: 'DHE', size: :panel, color: @foreground, alignment: :below)
+          Label.new(text: 'DHE', size: :panel, color: @foreground, alignment: :below)
               .draw_svg(svg: g, x: @width / 2, y: PANEL_HEIGHT - PANEL_LABEL_INSET)
           @controls.each do |control|
             yield(g, control)
@@ -74,18 +74,18 @@ module DHE
     def control_svg_files(dir:)
     end
 
-    def control_from(control:)
-      case control[:type]
+    def control_from(options:)
+      case options[:type]
       when 'knob'
-        KnobControl.new(panel: self, control: control)
+        KnobControl.new(self, options)
       when 'button'
-        ButtonControl.new(panel: self, control: control)
+        ButtonControl.new(self, options)
       when 'port'
-        PortControl.new(panel: self, control: control)
+        PortControl.new(self, options)
       when 'toggle'
-        ToggleControl.new(panel: self, control: control)
+        ToggleControl.new(self, options)
       when 'counter'
-        CounterControl.new(panel: self, control: control)
+        CounterControl.new(self, options)
       else
         "Unknown control type #{type}"
       end

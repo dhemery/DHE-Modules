@@ -48,6 +48,7 @@
         "BI",
         "UNI"
       ],
+      "selection": 2,
       "column": 3,
       "row": 1
     },
@@ -105,7 +106,7 @@
       "label": "defer",
       "type": "port",
       "style": "in",
-      "special": "button",
+      "button": true,
       "column": 1,
       "row": 4
     },
@@ -113,7 +114,7 @@
       "label": "active",
       "type": "port",
       "style": "in",
-      "special": "button",
+      "button": true,
       "column": 3,
       "row": 4
     },
@@ -121,7 +122,7 @@
       "label": "trig",
       "type": "port",
       "style": "in",
-      "special": "button",
+      "button": true,
       "column": 1,
       "row": 5
     },
@@ -129,19 +130,17 @@
       "label": "eoc",
       "type": "port",
       "style": "out",
-      "special": "button",
+      "button": true,
       "column": 3,
       "row": 5
     },
     {
-      "label": "in",
       "type": "port",
       "style": "in",
       "column": 1,
       "row": 6
     },
     {
-      "label": "out",
       "type": "port",
       "style": "out",
       "column": 3,
