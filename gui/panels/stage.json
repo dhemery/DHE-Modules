@@ -51,42 +51,40 @@
     {
       "label": "defer",
       "type": "port",
-      "style": "input",
+      "style": "in",
       "column": 1,
       "row": 4
     },
     {
       "label": "active",
       "type": "port",
-      "style": "output",
+      "style": "out",
       "column": 3,
       "row": 4
     },
     {
       "label": "trig",
       "type": "port",
-      "style": "input",
+      "style": "in",
       "column": 1,
       "row": 5
     },
     {
       "label": "eoc",
       "type": "port",
-      "style": "output",
+      "style": "out",
       "column": 3,
       "row": 5
     },
     {
-      "label": "in",
       "type": "port",
-      "style": "input",
+      "style": "in",
       "column": 1,
       "row": 6
     },
     {
-      "label": "out",
       "type": "port",
-      "style": "output",
+      "style": "out",
       "column": 3,
       "row": 6
     }

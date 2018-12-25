@@ -9,8 +9,8 @@ require_relative 'port'
 require_relative 'toggle'
 
 require_relative 'dimensions'
-require_relative 'font'
 require_relative 'svg-file'
+require_relative 'text'
 
 module DHE
   JSON_PARSING_OPTIONS = {symbol_keys: true}
@@ -64,13 +64,10 @@ module DHE
                         height: PANEL_HEIGHT * PX_PER_MM) do |svg|
         svg.g(transform: "scale(#{PX_PER_MM})") do |g|
           g.rect(x: 0, y: 0, width: @width, height: PANEL_HEIGHT, stroke: @foreground, fill: @background, 'stroke-width' => 1)
-          g.text(@name.upcase, x: @width / 2, y: PANEL_LABEL_INSET,
-                 'dominant-baseline' => 'alphabetic', 'text-anchor' => 'middle', fill: @foreground,
-                 style: Font::PANEL.text_style)
-          g.text('DHE', x: @width / 2, y: PANEL_HEIGHT - PANEL_LABEL_INSET,
-                 'dominant-baseline' => 'hanging', 'text-anchor' => 'middle', fill: @foreground,
-                 style: Font::PANEL.text_style)
-          panel = self
+          Text.new(text: @name.upcase, size: :panel, alignment: :above)
+              .draw_svg(svg: g, x: @width / 2, y: PANEL_LABEL_INSET, color: @foreground)
+          Text.new(text: 'DHE', size: :panel, alignment: :below)
+              .draw_svg(svg: g, x: @width / 2, y: PANEL_HEIGHT - PANEL_LABEL_INSET, color: @foreground)
           @controls.each do |control|
             yield(g, control)
           end

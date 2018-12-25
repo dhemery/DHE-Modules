@@ -11,7 +11,8 @@ module DHE
     }
 
     def initialize(spec:)
-      @label = spec[:label]
+      text = spec[:label]
+      @label = Text.new(text: text, size: :large, alignment: :above)
       @style = spec[:style] || :large
       super(spec: spec, diameter: DIAMETERS[@style.to_sym])
     end
@@ -25,6 +26,10 @@ module DHE
         g.circle(r: radius, stroke: 'none')
         g.line(y2: -pointer_length, 'stroke-width' => pointer_width, 'stroke-linecap' => 'round')
       end
+    end
+
+    def draw_background_svg(x:, y:, svg:, foreground:, background:)
+      @label.draw_svg(svg: svg, x: x, y: top(y: y), color: foreground)
     end
   end
 end

@@ -6,8 +6,8 @@ module DHE
 
     def initialize(spec:)
       super(spec: spec, diameter: DIAMETER)
-      @label = spec[:label]
-      @style = spec[:style]
+      text = spec[:label] || spec[:style]
+      @label = Text.new(text: text, size: :small, alignment: :above)
       @special = spec[:special]
     end
 
@@ -23,6 +23,10 @@ module DHE
         g.circle(r: ring_radius)
         g.circle(r: tip_radius, fill: foreground)
       end
+    end
+
+    def draw_background_svg(x:, y:, svg:, foreground:, background:)
+      @label.draw_svg(svg: svg, x: x, y: top(y: y), color: foreground)
     end
   end
 end

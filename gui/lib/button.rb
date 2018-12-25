@@ -6,8 +6,9 @@ module DHE
 
     def initialize(spec:)
       super(spec: spec, diameter: DIAMETER)
-      @label = spec[:label]
+      text = spec[:label]
       @style = spec[:style]
+      @label = Text.new(text: text, size: :small, alignment: :above)
     end
 
     def draw_foreground_svg(x:, y:, svg:, foreground:, background:)
@@ -17,6 +18,10 @@ module DHE
       circle_diameter = DIAMETER - stroke_width
       circle_radius = circle_diameter / 2.0
       svg.circle(cx: x, cy: y, r: circle_radius, 'stroke-width' => stroke_width, fill: center_color, stroke: ring_color)
+    end
+
+    def draw_background_svg(x:, y:, svg:, foreground:, background:)
+      @label.draw_svg(svg: svg, x: x, y: top(y: y), color: foreground)
     end
   end
 end

@@ -26,9 +26,8 @@
   ],
   "controls": [
     {
-      "label": "in",
       "type": "port",
-      "style": "input",
+      "style": "in",
       "column": 1,
       "row": 1
     },
@@ -76,9 +75,8 @@
       "row": 4
     },
     {
-      "label": "out",
       "type": "port",
-      "style": "output",
+      "style": "out",
       "column": 1,
       "row": 6
     }

@@ -5,9 +5,12 @@ module DHE
     WIDTH = 3.0
 
     def initialize(spec:)
-      @labels = spec[:labels]
+      labels = spec[:labels]
+      super(spec: spec, width: WIDTH, height: WIDTH * labels.size)
+      @labels = Array(Text.new(text: labels.first, size: :small, alignment: :below))
+      @labels << Text.new(text: labels[1], size: :small, alignment: :right_of) if (labels.size == 3)
+      @labels << Text.new(text: labels.last, size: :small, alignment: :above)
       @position = (spec[:position] || 1) - 1
-      super(spec: spec, width: WIDTH, height: WIDTH * @labels.size)
     end
 
     def draw_foreground_svg(svg:, x:, y:, foreground:, background:)
@@ -45,6 +48,12 @@ module DHE
                  'stroke-width' => knurl_stroke_width, 'stroke-linecap' => 'round')
         end
       end
+    end
+
+    def draw_background_svg(x:, y:, svg:, foreground:, background:)
+      @labels.first.draw_svg(svg: svg, x: x, y: bottom(y: y), color: foreground)
+      @labels[1].draw_svg(svg: svg, x: right(x: x), y: y, color: foreground) if (@labels.size == 3)
+      @labels.last.draw_svg(svg: svg, x: x, y: top(y: y), color: foreground)
     end
   end
 end

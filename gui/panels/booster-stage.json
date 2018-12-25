@@ -59,7 +59,7 @@
       "row": 2
     },
     {
-      "name": "curve",
+      "label": "curve",
       "type": "knob",
       "style": "large",
       "column": 2,
@@ -76,7 +76,7 @@
       "row": 2
     },
     {
-      "label": "duration",
+      "name": "duration",
       "type": "port",
       "style": "cv",
       "column": 1,
@@ -104,7 +104,7 @@
     {
       "label": "defer",
       "type": "port",
-      "style": "input",
+      "style": "in",
       "special": "button",
       "column": 1,
       "row": 4
@@ -112,7 +112,7 @@
     {
       "label": "active",
       "type": "port",
-      "style": "input",
+      "style": "in",
       "special": "button",
       "column": 3,
       "row": 4
@@ -120,7 +120,7 @@
     {
       "label": "trig",
       "type": "port",
-      "style": "input",
+      "style": "in",
       "special": "button",
       "column": 1,
       "row": 5
@@ -128,7 +128,7 @@
     {
       "label": "eoc",
       "type": "port",
-      "style": "output",
+      "style": "out",
       "special": "button",
       "column": 3,
       "row": 5
@@ -136,14 +136,14 @@
     {
       "label": "in",
       "type": "port",
-      "style": "input",
+      "style": "in",
       "column": 1,
       "row": 6
     },
     {
       "label": "out",
       "type": "port",
-      "style": "output",
+      "style": "out",
       "column": 3,
       "row": 6
     }
