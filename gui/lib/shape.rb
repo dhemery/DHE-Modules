@@ -23,11 +23,15 @@ module DHE
       y + height / 2
     end
 
-    def draw_bounding_box_svg(svg:, x:, y:, color:)
-      svg.line(x1: left(x: x), x2: right(x: x), y1: top(y: y), y2: top(y: y), 'stroke-width' => STROKE_WIDTH, stroke: color)
-      svg.line(x1: right(x: x), x2: right(x: x), y1: bottom(y: y), y2: top(y: y), 'stroke-width' => STROKE_WIDTH, stroke: color)
-      svg.line(x1: left(x: x), x2: right(x: x), y1: bottom(y: y), y2: bottom(y: y), 'stroke-width' => STROKE_WIDTH, stroke: color)
-      svg.line(x1: left(x: x), x2: left(x: x), y1: bottom(y: y), y2: top(y: y), 'stroke-width' => STROKE_WIDTH, stroke: color)
+    def draw_bounding_box(svg:, x:, y:, color:)
+      Shape::draw_box(svg: svg, top: top(y: y), right: right(x: x), bottom: bottom(y: y), left: left(x: x), color: color)
+    end
+
+    def self.draw_box(svg:, top:, right:, bottom:, left:, color:)
+      svg.line(x1: left, x2: right, y1: top, y2: top, 'stroke-width' => STROKE_WIDTH, stroke: color)
+      svg.line(x1: right, x2: right, y1: bottom, y2: top, 'stroke-width' => STROKE_WIDTH, stroke: color)
+      svg.line(x1: left, x2: right, y1: bottom, y2: bottom, 'stroke-width' => STROKE_WIDTH, stroke: color)
+      svg.line(x1: left, x2: left, y1: bottom, y2: top, 'stroke-width' => STROKE_WIDTH, stroke: color)
     end
   end
 

@@ -11,9 +11,13 @@ module DHE
       @column = options[:column]
     end
 
-    def draw_image_svg(svg:, x:, y:)
-      draw_panel_svg(svg: svg, x: x, y: y)
-      draw_hardware_svg(svg: svg, x: x, y: y)
+    def draw_manual(svg:, x:, y:)
+      draw_faceplate(svg: svg, x: x, y: y)
+      draw_hardware(svg: svg, x: x, y: y)
+    end
+
+    def to_svg
+      Builder::XmlMarkup.new(indent: 2)
     end
   end
 
@@ -29,11 +33,11 @@ module DHE
       @button = Button.new(foreground: foreground, background: background)
     end
 
-    def draw_panel_svg(svg:, x:, y:)
+    def draw_faceplate(svg:, x:, y:)
       @label.draw_svg(svg: svg, x: x, y: @button.top(y: y))
     end
 
-    def draw_hardware_svg(svg:, x:, y:)
+    def draw_hardware(svg:, x:, y:)
       @button.draw_svg(svg: svg, x: x, y: y)
     end
   end
@@ -50,11 +54,11 @@ module DHE
       @button = Button.new(foreground: foreground, background: background)
     end
 
-    def draw_panel_svg(svg:, x:, y:)
-      @labels[@selection - 1].draw_svg(svg: svg, x: x, y: @button.top(y: y)) unless @invisible
+    def draw_faceplate(svg:, x:, y:)
     end
 
-    def draw_hardware_svg(svg:, x:, y:)
+    def draw_hardware(svg:, x:, y:)
+      @labels[@selection - 1].draw_svg(svg: svg, x: x, y: @button.top(y: y)) unless @invisible
       @button.draw_svg(svg: svg, x: x, y: y)
     end
   end
@@ -70,11 +74,11 @@ module DHE
       @knob = Knob.new(size: @style.to_sym, knob_color: foreground, pointer_color: background)
     end
 
-    def draw_panel_svg(svg:, x:, y:)
+    def draw_faceplate(svg:, x:, y:)
       @label.draw_svg(svg: svg, x: x, y: @knob.top(y: y))
     end
 
-    def draw_hardware_svg(svg:, x:, y:)
+    def draw_hardware(svg:, x:, y:)
       @knob.draw_svg(svg: svg, x: x, y: y)
     end
   end
@@ -89,12 +93,16 @@ module DHE
       @port = Port.new(foreground: foreground, background: background)
     end
 
-    def draw_panel_svg(x:, y:, svg:)
+    def draw_faceplate(x:, y:, svg:)
       @label.draw_svg(svg: svg, x: x, y: @port.top(y: y))
     end
 
-    def draw_hardware_svg(svg:, x:, y:)
+    def draw_hardware(svg:, x:, y:)
       @port.draw_svg(svg: svg, x: x, y: y)
+    end
+
+    def svg_file(module_path:)
+      SvgFile.new(path: module_path / path, content: to_svg)
     end
   end
 
@@ -111,13 +119,13 @@ module DHE
       @toggle = Toggle.new(size: label_texts.size, foreground: foreground, background: background)
     end
 
-    def draw_panel_svg(svg:, x:, y:)
+    def draw_faceplate(svg:, x:, y:)
       @labels.first.draw_svg(svg: svg, x: x, y: @toggle.bottom(y: y))
       @labels[1].draw_svg(svg: svg, x: @toggle.right(x: x), y: y) if (@labels.size == 3)
       @labels.last.draw_svg(svg: svg, x: x, y: @toggle.top(y: y))
     end
 
-    def draw_hardware_svg(svg:, x:, y:)
+    def draw_hardware(svg:, x:, y:)
       @toggle.draw_svg(svg: svg, x: x, y: y, selection: @selection)
     end
   end
