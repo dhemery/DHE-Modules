@@ -8,6 +8,7 @@ module DHE
       super(module_: module_, diameter: DIAMETER)
       @foreground = module_.foreground
       @background = module_.background
+      @path = module_.slug / 'port'
     end
 
     def draw_svg(svg:, x:, y:)
@@ -25,14 +26,13 @@ module DHE
     end
 
     def svg_file
-      path = module_.slug / "port"
       content = Builder::XmlMarkup.new(indent: 2)
                     .svg(version: "1.1", xmlns: "http://www.w3.org/2000/svg",
                          width: width,
                          height: height) do |svg|
         draw_svg(svg: svg, x: width / 2, y: height / 2)
       end
-      SvgFile.new(path: path, content: content)
+      SvgFile.new(path: @path, content: content)
     end
   end
 end

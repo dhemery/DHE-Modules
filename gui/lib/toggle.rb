@@ -11,11 +11,12 @@ module DHE
       @size = size
       @foreground = module_.foreground
       @background = module_.background
+      @slug = "toggle-#{@size}"
     end
 
-    def draw_svg(svg:, x:, y:, selection:)
-      position =
-          case selection
+    def draw_svg(svg:, x:, y:, position:)
+      thumb_position =
+          case position
           when @size
             1.0
           when 1
@@ -45,7 +46,7 @@ module DHE
       lever_height = knurl_spacing * 4.0 + knurl_stroke_width
       lever_inset = knurl_stroke_width
       lever_distance = (interior_height - lever_height) / 2.0 - lever_inset
-      lever_offset = lever_distance * -position
+      lever_offset = lever_distance * -thumb_position
 
       svg.g(transform: "translate(#{x} #{y})", fill: @background, stroke: @foreground) do |g|
         g.rect(x: box_left, y: box_top, width: box_width, height: box_height,
@@ -57,15 +58,18 @@ module DHE
       end
     end
 
-    def svg_file(selection:)
-      path = @module_.slug / "toggle-#{@size}-#{selection}"
+    def path(position)
+      module_.slug / "#{@slug}-#{position}"
+    end
+
+    def svg_file(position:)
       content = Builder::XmlMarkup.new(indent: 2)
                     .svg(version: "1.1", xmlns: "http://www.w3.org/2000/svg",
                          width: width,
                          height: height) do |svg|
-        draw_svg(svg: svg, x: width / 2, y: height / 2, selection: selection)
+        draw_svg(svg: svg, x: width / 2, y: height / 2, position: position)
       end
-      SvgFile.new(path: path, content: content)
+      SvgFile.new(path: path(position), content: content)
     end
   end
 end

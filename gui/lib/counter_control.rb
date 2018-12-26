@@ -3,6 +3,7 @@ module DHE
     def initialize(module_, options)
       super(module_, options)
       label_texts = options[:labels]
+      @slug = "counter-#{@name}"
       @invisible = options.fetch(:invisible, false)
       @selection = options.fetch(:selection, 1)
       @labels = label_texts.map {|text| Label.new(module_: module_, text: text, size: :small)}
@@ -15,6 +16,10 @@ module DHE
     def draw_hardware(svg:, x:, y:)
       @labels[@selection - 1].draw_svg(svg: svg, x: x, y: @button.top(y - PADDING)) unless @invisible
       @button.draw_svg(svg: svg, x: x, y: y)
+    end
+
+    def path(position)
+      module_.slug / "#{@slug}-#{position}"
     end
 
     def control_file(label:, position:)
@@ -34,7 +39,7 @@ module DHE
     end
 
     def control_files
-      @labels.each_with_index.map {|label, i| control_file(label: label, position: i + 1)}
+      @labels.each_with_index.map {|label, index| control_file(label: label, position: index + 1)}
     end
   end
 end

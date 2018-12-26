@@ -6,10 +6,11 @@ module DHE
 
     def initialize(module_:, style: :normal)
       super(module_: module_, diameter: DIAMETER)
-      @style = style
+      @slug = 'button'
+      @slug += '-reversed' if style == :reversed
       @ring_color = module_.foreground
       @center_color = module_.background
-      @ring_color, @center_color = @center_color, @ring_color if @style == :reversed
+      @ring_color, @center_color = @center_color, @ring_color if style == :reversed
     end
 
     def draw_svg(svg:, x:, y:, state: :off)
@@ -20,16 +21,19 @@ module DHE
       svg.circle(cx: x, cy: y, r: circle_radius, 'stroke-width' => stroke_width, fill: center_color, stroke: @ring_color)
     end
 
+    def path(position)
+      module_.slug / "#{@slug}-#{position}"
+    end
+
     def svg_file(state:)
       position = state == :off ? 1 : 2
-      path = module_.slug / "button-#{@style}-#{position}"
       content = Builder::XmlMarkup.new(indent: 2)
                     .svg(version: "1.1", xmlns: "http://www.w3.org/2000/svg",
                          width: width,
                          height: height) do |svg|
         draw_svg(svg: svg, x: width / 2, y: height / 2, state: state)
       end
-      SvgFile.new(path: path, content: content)
+      SvgFile.new(path: path(position), content: content)
     end
   end
 end

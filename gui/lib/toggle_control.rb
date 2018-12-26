@@ -22,11 +22,11 @@ module DHE
     end
 
     def draw_hardware(svg:, x:, y:)
-      @toggle.draw_svg(svg: svg, x: x, y: y, selection: @selection)
+      @toggle.draw_svg(svg: svg, x: x, y: y, position: @selection)
     end
 
     def control_files
-      (1..@toggle.size).map {|selection| @toggle.svg_file(selection: selection)}
+      (1..@toggle.size).map {|position| @toggle.svg_file(position: position)}
     end
   end
 end
