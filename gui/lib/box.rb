@@ -12,9 +12,7 @@ module DHE
     end
 
     def draw_svg(svg:, x:, y:)
-      svg.rect(x: @left + x, y: @top + y, width: @width, height: @height,
-               'stroke-width' => STROKE_WIDTH, rx: CORNER_RADIUS, ry: CORNER_RADIUS,
-               stroke: @stroke, fill: @fill)
+      svg.rect(x: @left + x, y: @top + y, width: @width, height: @height, 'stroke-width' => STROKE_WIDTH, rx: CORNER_RADIUS, ry: CORNER_RADIUS, stroke: @stroke, fill: @fill)
     end
   end
 end

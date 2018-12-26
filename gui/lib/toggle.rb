@@ -14,16 +14,22 @@ module DHE
       @slug = "toggle-#{@size}"
     end
 
-    def draw_svg(svg:, x:, y:, position:)
-      thumb_position =
-          case position
-          when @size
-            1.0
-          when 1
-            -1.0
-          else
-            0.0
-          end
+    def svg_file(position:)
+      path = module_.slug / "#{@slug}-#{position}"
+      SvgFile.new(path: path, width: width, height: height) do |svg|
+        draw_svg(svg: svg, position: position)
+      end
+    end
+
+    def draw_svg(svg:, x: width / 2, y: height / 2, position:)
+      thumb_position = case position
+                         when @size
+                           1.0
+                         when 1
+                           -1.0
+                         else
+                           0.0
+                       end
       box_stroke_width = width / 8.0
       interior_inset = box_stroke_width / 2.0
 
@@ -49,27 +55,11 @@ module DHE
       lever_offset = lever_distance * -thumb_position
 
       svg.g(transform: "translate(#{x} #{y})", fill: @background, stroke: @foreground) do |g|
-        g.rect(x: box_left, y: box_top, width: box_width, height: box_height,
-               rx: corner_radius, ry: corner_radius, 'stroke-width' => box_stroke_width)
-        (-2..2).map {|index| knurl_spacing * index + lever_offset}.each do |knurl_y|
-          g.line(x1: knurl_left, x2: knurl_right, y1: knurl_y, y2: knurl_y,
-                 'stroke-width' => knurl_stroke_width, 'stroke-linecap' => 'round')
+        g.rect(x: box_left, y: box_top, width: box_width, height: box_height, rx: corner_radius, ry: corner_radius, 'stroke-width' => box_stroke_width)
+        (-2..2).map { |index| knurl_spacing * index + lever_offset }.each do |knurl_y|
+          g.line(x1: knurl_left, x2: knurl_right, y1: knurl_y, y2: knurl_y, 'stroke-width' => knurl_stroke_width, 'stroke-linecap' => 'round')
         end
       end
-    end
-
-    def path(position)
-      module_.slug / "#{@slug}-#{position}"
-    end
-
-    def svg_file(position:)
-      content = Builder::XmlMarkup.new(indent: 2)
-                    .svg(version: "1.1", xmlns: "http://www.w3.org/2000/svg",
-                         width: width,
-                         height: height) do |svg|
-        draw_svg(svg: svg, x: width / 2, y: height / 2, position: position)
-      end
-      SvgFile.new(path: path(position), content: content)
     end
   end
 end

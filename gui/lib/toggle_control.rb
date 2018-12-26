@@ -26,7 +26,7 @@ module DHE
     end
 
     def control_files
-      (1..@toggle.size).map {|position| @toggle.svg_file(position: position)}
+      (1..@toggle.size).map { |position| @toggle.svg_file(position: position) }
     end
   end
 end

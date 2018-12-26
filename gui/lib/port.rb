@@ -11,7 +11,13 @@ module DHE
       @path = module_.slug / 'port'
     end
 
-    def draw_svg(svg:, x:, y:)
+    def svg_file
+      SvgFile.new(path: @path, width: width, height: height) do |svg|
+        draw_svg(svg: svg)
+      end
+    end
+
+    def draw_svg(svg:, x: width / 2, y: height / 2)
       stroke_width = DIAMETER * 0.025
       sleeve_diameter = DIAMETER - stroke_width
       step = sleeve_diameter / 7.0
@@ -25,14 +31,5 @@ module DHE
       end
     end
 
-    def svg_file
-      content = Builder::XmlMarkup.new(indent: 2)
-                    .svg(version: "1.1", xmlns: "http://www.w3.org/2000/svg",
-                         width: width,
-                         height: height) do |svg|
-        draw_svg(svg: svg, x: width / 2, y: height / 2)
-      end
-      SvgFile.new(path: @path, content: content)
-    end
   end
 end

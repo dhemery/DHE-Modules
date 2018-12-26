@@ -13,12 +13,7 @@ module DHE
     end
 
     def self.centered(width:, height: width)
-      {
-          left: -width / 2,
-          right: width / 2,
-          top: -height / 2,
-          bottom: height / 2,
-      }
+      { left: -width / 2, right: width / 2, top: -height / 2, bottom: height / 2, }
     end
 
     def top(y)

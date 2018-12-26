@@ -6,11 +6,11 @@ module DHE
       @slug = "counter-#{@name}"
       @invisible = options.fetch(:invisible, false)
       @selection = options.fetch(:selection, 1)
-      @labels = label_texts.map {|text| Label.new(module_: module_, text: text, size: :small)}
+      @labels = label_texts.map { |text| Label.new(module_: module_, text: text, size: :small) }
       @button = Button.new(module_: module_)
     end
 
-    def draw_faceplate(svg:, x:, y:)
+    def draw_faceplate(svg:, x:, y:) # Counters are not drawn on the faceplate
     end
 
     def draw_hardware(svg:, x:, y:)
@@ -28,18 +28,14 @@ module DHE
       height = @button.height + (PADDING + label.height) * 2
       x = width / 2
       y = height / 2
-      content = Builder::XmlMarkup.new(indent: 2)
-                    .svg(version: "1.1", xmlns: "http://www.w3.org/2000/svg",
-                         width: width,
-                         height: height) do |svg|
+      SvgFile.new(path: path, width: width, height: height, has_text: true) do |svg|
         @button.draw_svg(svg: svg, x: x, y: y)
         label.draw_svg(svg: svg, x: x, y: @button.top(y - PADDING))
       end
-      SvgFile.new(path: path, content: content, has_text: true)
     end
 
     def control_files
-      @labels.each_with_index.map {|label, index| control_file(label: label, position: index + 1)}
+      @labels.each_with_index.map { |label, index| control_file(label: label, position: index + 1) }
     end
   end
 end

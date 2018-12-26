@@ -23,7 +23,7 @@ module DHE
     end
 
     def control_files
-      [:on, :off].map {|state| @button.svg_file(state: state)}
+      [:on, :off].map { |state| @button.svg_file(state: state) }
     end
   end
 end

@@ -47,7 +47,7 @@ module DHE
 
     def control_files
       files = [@port.svg_file]
-      files += [:on, :off].map {|state| @button.svg_file(state: state)} if @button
+      files += [:on, :off].map { |state| @button.svg_file(state: state) } if @button
       files
     end
   end

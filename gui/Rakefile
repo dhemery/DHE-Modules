@@ -9,9 +9,9 @@ $modules = $module_json_files
                .map {|f| DHE::Module.new(json_file: f)}
 
 $svg_dir = Pathname('_svg')
-$manual_image_dir = Pathname('_manual')
+$manual_dir = Pathname('_manual')
 
-directory $manual_image_dir
+directory $manual_dir
 directory $svg_dir
 
 task default: [:all] do
@@ -20,17 +20,17 @@ end
 task all: [:controls, :modules, :images] do
 end
 
-# SVG files for the manual (panels with controls)
-task images: [$manual_image_dir] do
+# SVG files for the manual (faceplates plus hardware)
+task images: [$manual_dir] do
   $modules
-      .map(&:manual_image_file)
-      .each {|f| f.write($manual_image_dir)}
+      .map{ |m| m.svg_file(draw_hardware: true)}
+      .each {|f| f.write($manual_dir)}
 end
 
-# SVG files for module faceplates (sans controls)
+# SVG files for module faceplates (sans hardware)
 task modules: [$svg_dir] do
   $modules
-      .map(&:faceplate_file)
+      .map{ |m| m.svg_file(draw_hardware: false)}
       .each {|f| f.write($svg_dir)}
 end
 
@@ -44,4 +44,4 @@ end
 desc 'Clobber all files, then build all SVG files'
 task fresh: [:clobber, :default]
 
-CLEAN.include $manual_image_dir, $svg_dir
+CLEAN.include $manual_dir, $svg_dir
