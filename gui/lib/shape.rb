@@ -83,9 +83,10 @@ module DHE
 
     def initialize(foreground:, background:, style: :normal)
       super(diameter: DIAMETER)
+      @style = style
       @ring_color = foreground
       @on_center_color = background
-      @ring_color, @on_center_color = @on_center_color, @ring_color if style == :reversed
+      @ring_color, @on_center_color = @on_center_color, @ring_color if @style == :reversed
     end
 
     def draw_svg(svg:, x:, y:, state: :off)
@@ -94,6 +95,18 @@ module DHE
       circle_diameter = DIAMETER - stroke_width
       circle_radius = circle_diameter / 2.0
       svg.circle(cx: x, cy: y, r: circle_radius, 'stroke-width' => stroke_width, fill: center_color, stroke: @ring_color)
+    end
+
+    def svg_file(module_path:, state:)
+      index = state == :off ? 1 : 2
+      path = module_path / "button-#{@style}-#{index}"
+      content = Builder::XmlMarkup.new(indent: 2)
+                    .svg(version: "1.1", xmlns: "http://www.w3.org/2000/svg",
+                         width: width,
+                         height: height) do |svg|
+        draw_svg(svg: svg, x: width / 2, y: height / 2, state: state)
+      end
+      SvgFile.new(path: path, content: content)
     end
   end
 
@@ -108,6 +121,7 @@ module DHE
 
     def initialize(size:, knob_color:, pointer_color:)
       super(diameter: DIAMETERS[size])
+      @size = size
       @knob_color = knob_color
       @pointer_color = pointer_color
 
@@ -120,6 +134,17 @@ module DHE
         g.circle(r: radius, stroke: 'none')
         g.line(y2: -pointer_length, 'stroke-width' => pointer_width, 'stroke-linecap' => 'round')
       end
+    end
+
+    def svg_file(module_path:)
+      path = module_path / "knob-#{@size}"
+      content = Builder::XmlMarkup.new(indent: 2)
+                    .svg(version: "1.1", xmlns: "http://www.w3.org/2000/svg",
+                         width: width,
+                         height: height) do |svg|
+        draw_svg(svg: svg, x: width / 2, y: height / 2)
+      end
+      SvgFile.new(path: path, content: content)
     end
   end
 
@@ -201,10 +226,23 @@ module DHE
         g.circle(r: tip_radius, fill: @foreground)
       end
     end
+
+    def svg_file(module_path:)
+      path = module_path / "port"
+      content = Builder::XmlMarkup.new(indent: 2)
+                    .svg(version: "1.1", xmlns: "http://www.w3.org/2000/svg",
+                         width: width,
+                         height: height) do |svg|
+        draw_svg(svg: svg, x: width / 2, y: height / 2)
+      end
+      SvgFile.new(path: path, content: content)
+    end
   end
 
   class Toggle < Shape
     WIDTH = 3.0
+
+    attr_reader :size
 
     def initialize(size:, foreground:, background:)
       super(Shape::centered(width: WIDTH, height: size * WIDTH))
@@ -255,6 +293,17 @@ module DHE
                  'stroke-width' => knurl_stroke_width, 'stroke-linecap' => 'round')
         end
       end
+    end
+
+    def svg_file(module_path:, selection:)
+      path = module_path / "thumb-#{@size}-#{selection}"
+      content = Builder::XmlMarkup.new(indent: 2)
+                    .svg(version: "1.1", xmlns: "http://www.w3.org/2000/svg",
+                         width: width,
+                         height: height) do |svg|
+        draw_svg(svg: svg, x: width / 2, y: height / 2, selection: selection)
+      end
+      SvgFile.new(path: path, content: content)
     end
   end
 end

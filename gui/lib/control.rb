@@ -15,10 +15,6 @@ module DHE
       draw_faceplate(svg: svg, x: x, y: y)
       draw_hardware(svg: svg, x: x, y: y)
     end
-
-    def to_svg
-      Builder::XmlMarkup.new(indent: 2)
-    end
   end
 
   class ButtonControl < Control
@@ -39,6 +35,10 @@ module DHE
 
     def draw_hardware(svg:, x:, y:)
       @button.draw_svg(svg: svg, x: x, y: y)
+    end
+
+    def control_files(module_path:)
+      [:on, :off].map {|state| @button.svg_file(module_path: module_path, state: state)}
     end
   end
 
@@ -61,6 +61,11 @@ module DHE
       @labels[@selection - 1].draw_svg(svg: svg, x: x, y: @button.top(y - PADDING)) unless @invisible
       @button.draw_svg(svg: svg, x: x, y: y)
     end
+
+    def control_files(module_path:)
+      # TODO: SVG for each toggle position
+      [@button.svg_file(module_path: module_path, state: :off)]
+    end
   end
 
   class KnobControl < Control
@@ -80,6 +85,10 @@ module DHE
 
     def draw_hardware(svg:, x:, y:)
       @knob.draw_svg(svg: svg, x: x, y: y)
+    end
+
+    def control_files(module_path:)
+      [@knob.svg_file(module_path: module_path)]
     end
   end
 
@@ -126,8 +135,10 @@ module DHE
       @button.draw_svg(svg: svg, x: x + @button_offset, y: y) if @button
     end
 
-    def svg_file(module_path:)
-      SvgFile.new(path: module_path / path, content: to_svg)
+    def control_files(module_path:)
+      files = [@port.svg_file(module_path: module_path)]
+      files += [:on, :off].map {|state| @button.svg_file(module_path: module_path, state: state)} if @button
+      files
     end
   end
 
@@ -152,6 +163,10 @@ module DHE
 
     def draw_hardware(svg:, x:, y:)
       @toggle.draw_svg(svg: svg, x: x, y: y, selection: @selection)
+    end
+
+    def control_files(module_path:)
+      (1..@toggle.size).map {|selection| @toggle.svg_file(module_path: module_path, selection: selection)}
     end
   end
 end

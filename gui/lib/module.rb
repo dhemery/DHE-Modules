@@ -15,7 +15,7 @@ module DHE
     def initialize(json_file:)
       spec = Oj.load_file(json_file.to_s, JSON_PARSING_OPTIONS)
       @name = spec[:name].upcase
-      @module_path_name = Pathname(@name.downcase.sub(' ', '-'))
+      @module_path = Pathname(@name.downcase.sub(' ', '-'))
       @width = spec[:hp] * MM_PER_HP
       @rows = spec[:rows]
       @columns = spec[:columns]
@@ -39,7 +39,7 @@ module DHE
     end
 
     def faceplate_file
-      SvgFile.new(path: (@module_path_name / 'faceplate'), content: faceplate_svg, has_text: true)
+      SvgFile.new(path: (@module_path / 'faceplate'), content: faceplate_svg, has_text: true)
     end
 
     def manual_svg
@@ -49,7 +49,7 @@ module DHE
     end
 
     def manual_image_file
-      SvgFile.new(path: @module_path_name, content: manual_svg, has_text: true)
+      SvgFile.new(path: @module_path, content: manual_svg, has_text: true)
     end
 
     def to_svg
@@ -71,7 +71,7 @@ module DHE
     end
 
     def control_files
-      @controls.map {|control| control.svg_file(@name)}
+      @controls.flat_map {|control| control.control_files(module_path: @module_path)}
     end
 
     def control_from(options:)

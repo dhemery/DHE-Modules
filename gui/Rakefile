@@ -35,7 +35,10 @@ task modules: [$svg_dir] do
 end
 
 # SVG files for the individual controls
-task controls: [] do
+task controls: [$svg_dir] do
+  $modules
+      .flat_map(&:control_files)
+      .each {|f| f.write($svg_dir)}
 end
 
 desc 'Clobber all files, then build all SVG files'
