@@ -2,9 +2,13 @@ require 'builder'
 require 'color'
 require 'oj'
 
-require_relative 'control'
 require_relative 'dimensions'
-require_relative 'svg-file'
+require_relative 'button_control'
+require_relative 'counter_control'
+require_relative 'knob_control'
+require_relative 'port_control'
+require_relative 'toggle_control'
+require_relative 'svg_file'
 
 module DHE
   JSON_PARSING_OPTIONS = {symbol_keys: true}
@@ -76,16 +80,16 @@ module DHE
 
     def control_from(options:)
       case options[:type]
-      when 'knob'
-        KnobControl.new(self, options)
       when 'button'
         ButtonControl.new(self, options)
+      when 'counter'
+        CounterControl.new(self, options)
+      when 'knob'
+        KnobControl.new(self, options)
       when 'port'
         PortControl.new(self, options)
       when 'toggle'
         ToggleControl.new(self, options)
-      when 'counter'
-        CounterControl.new(self, options)
       else
         "Unknown control type #{type}"
       end
