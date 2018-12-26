@@ -7,10 +7,12 @@ module DHE
   class KnobControl < Control
     def initialize(module_, options)
       super(module_, options)
-      label_text = options[:label]
-      @style = options.fetch(:style, :large)
+      style = options[:style]
+      @size = to_size(style)
+      label_text = options[:label] || default_label(style)
+
       @label = Label.new(module_: module_, text: label_text, size: :large)
-      @knob = Knob.new(module_: module_, size: @style.to_sym)
+      @knob = Knob.new(module_: module_, size: @size.to_sym)
     end
 
     def draw_faceplate(svg:, x:, y:)
@@ -23,6 +25,28 @@ module DHE
 
     def control_files
       [@knob.svg_file]
+    end
+
+    private
+
+    def to_size(style)
+      case style
+        when 'av'
+          :tiny
+        when nil
+          :large
+        else
+          style.to_sym
+      end
+    end
+
+    def default_label(style)
+      case style
+        when 'av'
+          '- +'
+        else
+          ''
+      end
     end
   end
 end

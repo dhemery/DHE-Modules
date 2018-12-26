@@ -7,8 +7,9 @@ module DHE
   class ToggleControl < Control
     def initialize(module_, options)
       super(module_, options)
-      label_texts = options[:labels]
-      @selection = options.fetch(:selection, 1)
+      style = options[:style]
+      label_texts = options[:labels] || labels_for(style)
+      @selection = options[:selection] || selection_for(style)
       @labels = Array(Label.new(module_: module_, text: label_texts.first, size: :small, alignment: :below))
       @labels << Label.new(module_: module_, text: label_texts[1], size: :small, alignment: :right_of) if (label_texts.size == 3)
       @labels << Label.new(module_: module_, text: label_texts.last, size: :small)
@@ -27,6 +28,30 @@ module DHE
 
     def control_files
       (1..@toggle.size).map { |position| @toggle.svg_file(position: position) }
+    end
+
+    private
+
+    def labels_for(style)
+      case style
+        when 'level'
+          %w(bi uni)
+        when 'shape'
+          %w(j s)
+        when 'duration'
+          %w(1 10 100)
+        else
+          []
+      end
+    end
+
+    def selection_for(style)
+      case style
+        when 'duration'
+          2
+        else
+          1
+      end
     end
   end
 end

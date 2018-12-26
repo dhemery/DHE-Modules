@@ -26,29 +26,28 @@
   ],
   "controls": [
     {
-      "type": "port",
       "style": "in",
+      "type": "port",
       "column": 1,
       "row": 1
     },
     {
-      "name": "mult/add",
-      "type": "toggle",
       "labels": [
         "add",
         "mult"
       ],
+      "type": "toggle",
       "column": 1,
       "row": 2
     },
     {
-      "name": "amount",
+      "comment": "amount",
       "type": "knob",
       "column": 1,
       "row": 3
     },
     {
-      "name": "add",
+      "comment": "add",
       "type": "counter",
       "labels": [
         "0–5",
@@ -61,7 +60,7 @@
       "row": 4
     },
     {
-      "name": "mult",
+      "comment": "mult",
       "type": "counter",
       "labels": [
         "0–1",

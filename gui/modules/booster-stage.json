@@ -37,17 +37,12 @@
     {
       "label": "level",
       "type": "knob",
-      "style": "large",
       "column": 2,
       "row": 1
     },
     {
-      "name": "level range",
+      "style": "level",
       "type": "toggle",
-      "labels": [
-        "BI",
-        "UNI"
-      ],
       "selection": 2,
       "column": 3,
       "row": 1
@@ -62,17 +57,12 @@
     {
       "label": "curve",
       "type": "knob",
-      "style": "large",
       "column": 2,
       "row": 2
     },
     {
-      "name": "curve shape",
+      "style": "shape",
       "type": "toggle",
-      "labels": [
-        "J",
-        "S"
-      ],
       "column": 3,
       "row": 2
     },
@@ -86,19 +76,12 @@
     {
       "label": "duration",
       "type": "knob",
-      "style": "large",
       "column": 2,
       "row": 3
     },
     {
-      "name": "duration range",
+      "style": "duration",
       "type": "toggle",
-      "labels": [
-        "1",
-        "10",
-        "100"
-      ],
-      "selection": 2,
       "column": 3,
       "row": 3
     },

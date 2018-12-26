@@ -30,64 +30,59 @@
     {
       "label": "level",
       "type": "knob",
-      "style": "large",
       "column": 2,
       "row": 1
     },
     {
-      "name": "level",
-      "type": "port",
+      "comment": "level",
       "style": "cv",
+      "type": "port",
       "column": 1,
       "row": 2
     },
     {
-      "name": "level range",
+      "style": "level",
       "type": "toggle",
-      "labels": [
-        "BI",
-        "UNI"
-      ],
       "selection": 2,
       "column": 3,
       "row": 2
     },
     {
-      "type": "button",
       "label": "wait",
+      "type": "button",
       "column": 1,
       "row": 3
     },
     {
-      "type": "button",
       "label": "trig",
+      "type": "button",
       "column": 3,
       "row": 3
     },
     {
       "label": "wait",
-      "type": "port",
       "style": "in",
+      "type": "port",
       "column": 1,
       "row": 4
     },
     {
       "label": "trig",
-      "type": "port",
       "style": "in",
+      "type": "port",
       "column": 1,
       "row": 5
     },
     {
       "label": "trig",
-      "type": "port",
       "style": "out",
+      "type": "port",
       "column": 3,
       "row": 5
     },
     {
-      "type": "port",
       "style": "out",
+      "type": "port",
       "column": 3,
       "row": 6
     }

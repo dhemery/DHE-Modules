@@ -42,9 +42,12 @@ module DHE
     def svg_file(draw_hardware:)
       SvgFile.new(path: slug, width: @width_px, height: @height_px, has_text: true) do |svg|
         svg.g(transform: "scale(#{PX_PER_MM})") do |g|
-          g.rect(x: 0, y: 0, width: @width, height: PANEL_HEIGHT, stroke: @foreground, fill: @background, 'stroke-width' => 1)
-          Label.new(module_: self, text: @name.upcase, size: :panel).draw_svg(svg: g, x: @width / 2, y: PANEL_LABEL_INSET)
-          Label.new(module_: self, text: 'DHE', size: :panel, alignment: :below).draw_svg(svg: g, x: @width / 2, y: PANEL_HEIGHT - PANEL_LABEL_INSET)
+          g.rect(x: 0, y: 0, width: @width, height: PANEL_HEIGHT,
+                 stroke: @foreground, fill: @background, 'stroke-width' => 1)
+          Label.new(module_: self, text: @name.upcase, size: :panel)
+              .draw_svg(svg: g, x: @width / 2, y: PANEL_LABEL_INSET)
+          Label.new(module_: self, text: 'DHE', size: :panel, alignment: :below)
+              .draw_svg(svg: g, x: @width / 2, y: PANEL_HEIGHT - PANEL_LABEL_INSET)
           @controls.each do |control|
             x = x(control.column)
             y = y(control.row)

@@ -5,7 +5,7 @@ module DHE
     DIAMETERS = { huge: 19.0, large: 12.7, medium: 10.0, small: 8.4, tiny: 7.0, }
 
     def initialize(module_:, size:)
-      super(module_: module_, diameter: DIAMETERS[size])
+      super(module_: module_, diameter: DIAMETERS[size.to_sym])
       @knob_color = module_.foreground
       @pointer_color = module_.background
       @path = module_.slug / "knob-#{size}"

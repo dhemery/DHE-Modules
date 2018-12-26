@@ -28,13 +28,11 @@
   ],
   "controls": [
     {
-      "name": "generator mode",
-      "type": "toggle",
       "labels": [
         "hold",
         "sustain"
       ],
-      "style": 2,
+      "type": "toggle",
       "row": 1,
       "column": 2
     },
@@ -45,21 +43,14 @@
       "column": 1
     },
     {
-      "name": "duration range",
+      "style": "duration",
       "type": "toggle",
-      "labels": [
-        "1",
-        "10",
-        "100"
-      ],
-      "selection": 2,
       "row": 2,
       "column": 3
     },
     {
       "label": "duration",
       "type": "knob",
-      "style": "large",
       "row": 3,
       "column": 2
     },

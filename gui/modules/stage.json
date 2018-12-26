@@ -30,21 +30,18 @@
     {
       "label": "level",
       "type": "knob",
-      "style": "large",
       "column": 2,
       "row": 1
     },
     {
       "label": "curve",
       "type": "knob",
-      "style": "large",
       "column": 2,
       "row": 2
     },
     {
       "label": "duration",
       "type": "knob",
-      "style": "large",
       "column": 2,
       "row": 3
     },
@@ -77,14 +74,14 @@
       "row": 5
     },
     {
-      "type": "port",
       "style": "in",
+      "type": "port",
       "column": 1,
       "row": 6
     },
     {
-      "type": "port",
       "style": "out",
+      "type": "port",
       "column": 3,
       "row": 6
     }
