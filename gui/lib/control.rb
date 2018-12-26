@@ -5,7 +5,8 @@ module DHE
   class Control
     attr_reader :name, :row, :column
 
-    def initialize(options)
+    def initialize(module_, options)
+      @module = module_
       @name = options[:name]
       @row = options[:row]
       @column = options[:column]
@@ -20,13 +21,11 @@ module DHE
   class ButtonControl < Control
     DIAMETER = 6.0
 
-    def initialize(panel, options)
-      super(options)
-      foreground = panel.foreground
-      background = panel.background
+    def initialize(module_, options)
+      super(module_, options)
       label_text = options[:label]
-      @label = Label.new(text: label_text, size: :small, alignment: :above, color: foreground)
-      @button = Button.new(foreground: foreground, background: background)
+      @label = Label.new(module_: module_, text: label_text, size: :small)
+      @button = Button.new(module_: module_)
     end
 
     def draw_faceplate(svg:, x:, y:)
@@ -37,21 +36,19 @@ module DHE
       @button.draw_svg(svg: svg, x: x, y: y)
     end
 
-    def control_files(module_path:)
-      [:on, :off].map {|state| @button.svg_file(module_path: module_path, state: state)}
+    def control_files
+      [:on, :off].map {|state| @button.svg_file(state: state)}
     end
   end
 
   class CounterControl < Control
-    def initialize(panel, options)
-      super(options)
-      foreground = panel.foreground
-      background = panel.background
+    def initialize(module_, options)
+      super(module_, options)
       label_texts = options[:labels]
       @invisible = options.fetch(:invisible, false)
       @selection = options.fetch(:selection, 1)
-      @labels = label_texts.map {|text| Label.new(text: text, color: foreground, size: :small, alignment: :above)}
-      @button = Button.new(foreground: foreground, background: background)
+      @labels = label_texts.map {|text| Label.new(module_: module_, text: text, size: :small)}
+      @button = Button.new(module_: module_)
     end
 
     def draw_faceplate(svg:, x:, y:)
@@ -62,8 +59,8 @@ module DHE
       @button.draw_svg(svg: svg, x: x, y: y)
     end
 
-    def control_file(module_path:, label:, position:)
-      path = module_path / "counter-#{@name}-#{position}"
+    def control_file(label:, position:)
+      path = @module.slug / "counter-#{@name}-#{position}"
       width = @button.width
       height = @button.height + (PADDING + label.height) * 2
       x = width / 2
@@ -78,20 +75,18 @@ module DHE
       SvgFile.new(path: path, content: content)
     end
 
-    def control_files(module_path:)
-      @labels.each_with_index.map {|label, i| control_file(module_path: module_path, label: label, position: i + 1)}
+    def control_files
+      @labels.each_with_index.map {|label, i| control_file(label: label, position: i + 1)}
     end
   end
 
   class KnobControl < Control
-    def initialize(panel, options)
-      super(options)
-      foreground = panel.foreground
-      background = panel.background
+    def initialize(module_, options)
+      super(module_, options)
       label_text = options[:label]
       @style = options.fetch(:style, :large)
-      @label = Label.new(text: label_text, size: :large, color: foreground, alignment: :above)
-      @knob = Knob.new(size: @style.to_sym, knob_color: foreground, pointer_color: background)
+      @label = Label.new(module_: module_, text: label_text, size: :large)
+      @knob = Knob.new(module_: module_, size: @style.to_sym)
     end
 
     def draw_faceplate(svg:, x:, y:)
@@ -102,32 +97,29 @@ module DHE
       @knob.draw_svg(svg: svg, x: x, y: y)
     end
 
-    def control_files(module_path:)
-      [@knob.svg_file(module_path: module_path)]
+    def control_files
+      [@knob.svg_file]
     end
   end
 
   class PortControl < Control
-    def initialize(panel, options)
-      super(options)
-      foreground = panel.foreground
-      background = panel.background
+    def initialize(module_, options)
+      super(module_, options)
       style = options[:style]
       label_text = options[:label] || style
       is_input = style == 'in'
       is_output = style == 'out'
       is_boxed = is_input || is_output
-      label_color = is_output ? background : foreground
-      @label = Label.new(text: label_text, size: :small, color: label_color, alignment: :above)
-      @port = Port.new(foreground: foreground, background: background)
+      drawing_style = is_output ? :reversed : :normal
+      @label = Label.new(module_: module_, text: label_text, size: :small, style: drawing_style)
+      @port = Port.new(module_: module_)
       box_top = @label.top(@port.top(0))
       box_bottom = @port.bottom(0)
       box_left = @port.left(0)
       box_right = @port.right(0)
       button_position = options.fetch(:button, :none).to_sym
       if button_position != :none
-        button_style = is_input ? :normal : :reversed
-        @button = Button.new(foreground: foreground, background: background, style: button_style)
+        @button = Button.new(module_: module_, style: drawing_style)
         if button_position == :right
           @button_offset = @port.right(0) + PADDING + @button.radius
           box_right = @button.right(@button_offset)
@@ -136,8 +128,7 @@ module DHE
           box_left = @button.left(@button_offset)
         end
       end
-      box_background = is_output ? foreground : background
-      @box = Box.new(top: box_top, right: box_right, bottom: box_bottom, left: box_left, foreground: foreground, background: box_background) if is_boxed
+      @box = Box.new(module_: module_, top: box_top, right: box_right, bottom: box_bottom, left: box_left, style: drawing_style) if is_boxed
     end
 
     def draw_faceplate(x:, y:, svg:)
@@ -150,24 +141,22 @@ module DHE
       @button.draw_svg(svg: svg, x: x + @button_offset, y: y) if @button
     end
 
-    def control_files(module_path:)
-      files = [@port.svg_file(module_path: module_path)]
-      files += [:on, :off].map {|state| @button.svg_file(module_path: module_path, state: state)} if @button
+    def control_files
+      files = [@port.svg_file ]
+      files += [:on, :off].map {|state| @button.svg_file(state: state)} if @button
       files
     end
   end
 
   class ToggleControl < Control
-    def initialize(panel, options)
-      super(options)
-      foreground = panel.foreground
-      background = panel.background
+    def initialize(module_, options)
+      super(module_, options)
       label_texts = options[:labels]
       @selection = options.fetch(:selection, 1)
-      @labels = Array(Label.new(text: label_texts.first, size: :small, color: foreground, alignment: :below))
-      @labels << Label.new(text: label_texts[1], size: :small, color: foreground, alignment: :right_of) if (label_texts.size == 3)
-      @labels << Label.new(text: label_texts.last, size: :small, color: foreground, alignment: :above)
-      @toggle = Toggle.new(size: label_texts.size, foreground: foreground, background: background)
+      @labels = Array(Label.new(module_: module_, text: label_texts.first, size: :small, alignment: :below))
+      @labels << Label.new(module_: module_, text: label_texts[1], size: :small, alignment: :right_of) if (label_texts.size == 3)
+      @labels << Label.new(module_: module_, text: label_texts.last, size: :small)
+      @toggle = Toggle.new(module_: module_, size: label_texts.size)
     end
 
     def draw_faceplate(svg:, x:, y:)
@@ -180,8 +169,8 @@ module DHE
       @toggle.draw_svg(svg: svg, x: x, y: y, selection: @selection)
     end
 
-    def control_files(module_path:)
-      (1..@toggle.size).map {|selection| @toggle.svg_file(module_path: module_path, selection: selection)}
+    def control_files
+      (1..@toggle.size).map {|selection| @toggle.svg_file(selection: selection)}
     end
   end
 end

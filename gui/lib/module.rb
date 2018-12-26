@@ -10,12 +10,12 @@ module DHE
   JSON_PARSING_OPTIONS = {symbol_keys: true}
 
   class Module
-    attr_reader :name, :foreground, :background
+    attr_reader :name, :slug, :foreground, :background
 
     def initialize(json_file:)
       spec = Oj.load_file(json_file.to_s, JSON_PARSING_OPTIONS)
       @name = spec[:name].upcase
-      @module_path = Pathname(@name.downcase.sub(' ', '-'))
+      @slug = Pathname(@name.downcase.sub(' ', '-'))
       @width = spec[:hp] * MM_PER_HP
       @rows = spec[:rows]
       @columns = spec[:columns]
@@ -39,7 +39,7 @@ module DHE
     end
 
     def faceplate_file
-      SvgFile.new(path: (@module_path / 'faceplate'), content: faceplate_svg, has_text: true)
+      SvgFile.new(path: slug / 'faceplate', content: faceplate_svg, has_text: true)
     end
 
     def manual_svg
@@ -49,7 +49,7 @@ module DHE
     end
 
     def manual_image_file
-      SvgFile.new(path: @module_path, content: manual_svg, has_text: true)
+      SvgFile.new(path: slug, content: manual_svg, has_text: true)
     end
 
     def to_svg
@@ -59,9 +59,9 @@ module DHE
                height: PANEL_HEIGHT * PX_PER_MM) do |svg|
         svg.g(transform: "scale(#{PX_PER_MM})") do |g|
           g.rect(x: 0, y: 0, width: @width, height: PANEL_HEIGHT, stroke: @foreground, fill: @background, 'stroke-width' => 1)
-          Label.new(text: @name.upcase, size: :panel, color: @foreground, alignment: :above)
+          Label.new(module_: self, text: @name.upcase, size: :panel)
               .draw_svg(svg: g, x: @width / 2, y: PANEL_LABEL_INSET)
-          Label.new(text: 'DHE', size: :panel, color: @foreground, alignment: :below)
+          Label.new(module_: self, text: 'DHE', size: :panel, alignment: :below)
               .draw_svg(svg: g, x: @width / 2, y: PANEL_HEIGHT - PANEL_LABEL_INSET)
           @controls.each do |control|
             yield(g, control)
@@ -71,7 +71,7 @@ module DHE
     end
 
     def control_files
-      @controls.flat_map {|control| control.control_files(module_path: @module_path)}
+      @controls.flat_map(&:control_files)
     end
 
     def control_from(options:)

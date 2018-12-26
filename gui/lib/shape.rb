@@ -1,8 +1,9 @@
 module DHE
   class Shape
-    attr_reader :width, :height
+    attr_reader :module_, :width, :height
 
-    def initialize(top:, right:, bottom:, left:)
+    def initialize(module_:, top:, right:, bottom:, left:)
+      @module_ = module_
       @top = top
       @right = right
       @bottom = bottom
@@ -52,24 +53,24 @@ module DHE
     CORNER_RADIUS = 1.0
     BUFFER = PADDING + STROKE_INSET
 
-    def initialize(top:, right:, bottom:, left:, foreground:, background:)
-      super(top: top - BUFFER, right: right + BUFFER, bottom: bottom + BUFFER, left: left - BUFFER)
-      @foreground = foreground
-      @background = background
+    def initialize(module_:, top:, right:, bottom:, left:, style: :normal)
+      super(module_: module_, top: top - BUFFER, right: right + BUFFER, bottom: bottom + BUFFER, left: left - BUFFER)
+      @stroke = module_.foreground
+      @fill = style == :normal ? module_.background : @stroke
     end
 
     def draw_svg(svg:, x:, y:)
       svg.rect(x: @left + x, y: @top + y, width: @width, height: @height,
                'stroke-width' => STROKE_WIDTH, rx: CORNER_RADIUS, ry: CORNER_RADIUS,
-               stroke: @foreground, fill: @background)
+               stroke: @stroke, fill: @fill)
     end
   end
 
   class RoundShape < Shape
     attr_reader :diameter
 
-    def initialize(diameter:)
-      super(Shape::centered(width: diameter, height: diameter))
+    def initialize(module_:, diameter:)
+      super(module_: module_, **Shape::centered(width: diameter, height: diameter))
       @diameter = diameter
     end
 
@@ -81,25 +82,25 @@ module DHE
   class Button < RoundShape
     DIAMETER = 6.0
 
-    def initialize(foreground:, background:, style: :normal)
-      super(diameter: DIAMETER)
+    def initialize(module_:, style: :normal)
+      super(module_: module_, diameter: DIAMETER)
       @style = style
-      @ring_color = foreground
-      @on_center_color = background
-      @ring_color, @on_center_color = @on_center_color, @ring_color if @style == :reversed
+      @ring_color = module_.foreground
+      @center_color = module_.background
+      @ring_color, @center_color = @center_color, @ring_color if @style == :reversed
     end
 
     def draw_svg(svg:, x:, y:, state: :off)
-      center_color = state == :on ? @on_center_color : @ring_color
+      center_color = state == :on ? @center_color : @ring_color
       stroke_width = DIAMETER / 6.0
       circle_diameter = DIAMETER - stroke_width
       circle_radius = circle_diameter / 2.0
       svg.circle(cx: x, cy: y, r: circle_radius, 'stroke-width' => stroke_width, fill: center_color, stroke: @ring_color)
     end
 
-    def svg_file(module_path:, state:)
-      index = state == :off ? 1 : 2
-      path = module_path / "button-#{@style}-#{index}"
+    def svg_file(state:)
+      position = state == :off ? 1 : 2
+      path = module_.slug / "button-#{@style}-#{position}"
       content = Builder::XmlMarkup.new(indent: 2)
                     .svg(version: "1.1", xmlns: "http://www.w3.org/2000/svg",
                          width: width,
@@ -119,11 +120,11 @@ module DHE
         tiny: 7.0,
     }
 
-    def initialize(size:, knob_color:, pointer_color:)
-      super(diameter: DIAMETERS[size])
+    def initialize(module_:, size:)
+      super(module_: module_, diameter: DIAMETERS[size])
       @size = size
-      @knob_color = knob_color
-      @pointer_color = pointer_color
+      @knob_color = module_.foreground
+      @pointer_color =  module_.background
 
     end
 
@@ -136,8 +137,8 @@ module DHE
       end
     end
 
-    def svg_file(module_path:)
-      path = module_path / "knob-#{@size}"
+    def svg_file
+      path = module_.slug / "knob-#{@size}"
       content = Builder::XmlMarkup.new(indent: 2)
                     .svg(version: "1.1", xmlns: "http://www.w3.org/2000/svg",
                          width: width,
@@ -169,10 +170,10 @@ module DHE
 
     attr_reader :text
 
-    def initialize(text:, size:, color:, alignment:)
+    def initialize(module_:, text:, size:, style: :normal, alignment: :above)
       @text = text&.upcase || ''
       @size = SIZES[size.to_sym]
-      @color = color
+      @color = style == :normal ? module_.foreground : module_.background
       @alignment = alignment
       @baseline = BASELINES[@alignment]
       @anchor = ANCHORS[@alignment]
@@ -194,7 +195,7 @@ module DHE
             end
       bottom = top + height
       right = left + width
-      super(top: top, right: right, bottom: bottom, left: left)
+      super(module_: module_, top: top, right: right, bottom: bottom, left: left)
     end
 
     def draw_svg(svg:, x:, y:)
@@ -209,10 +210,10 @@ module DHE
   class Port < RoundShape
     DIAMETER = 8.4
 
-    def initialize(foreground:, background:)
-      super(diameter: DIAMETER)
-      @foreground = foreground
-      @background = background
+    def initialize(module_:)
+      super(module_: module_, diameter: DIAMETER)
+      @foreground = module_.foreground
+      @background = module_.background
     end
 
     def draw_svg(svg:, x:, y:)
@@ -229,8 +230,8 @@ module DHE
       end
     end
 
-    def svg_file(module_path:)
-      path = module_path / "port"
+    def svg_file
+      path = module_.slug / "port"
       content = Builder::XmlMarkup.new(indent: 2)
                     .svg(version: "1.1", xmlns: "http://www.w3.org/2000/svg",
                          width: width,
@@ -246,11 +247,11 @@ module DHE
 
     attr_reader :size
 
-    def initialize(size:, foreground:, background:)
-      super(Shape::centered(width: WIDTH, height: size * WIDTH))
+    def initialize(module_:, size:)
+      super(module_: module_, **Shape::centered(width: WIDTH, height: size * WIDTH))
       @size = size
-      @foreground = foreground
-      @background = background
+      @foreground = module_.foreground
+      @background = module_.background
     end
 
     def draw_svg(svg:, x:, y:, selection:)
@@ -297,8 +298,8 @@ module DHE
       end
     end
 
-    def svg_file(module_path:, selection:)
-      path = module_path / "toggle-#{@size}-#{selection}"
+    def svg_file(selection:)
+      path = @module_.slug / "toggle-#{@size}-#{selection}"
       content = Builder::XmlMarkup.new(indent: 2)
                     .svg(version: "1.1", xmlns: "http://www.w3.org/2000/svg",
                          width: width,
