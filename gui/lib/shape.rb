@@ -53,7 +53,7 @@ module DHE
     BUFFER = PADDING + STROKE_INSET
 
     def initialize(top:, right:, bottom:, left:, foreground:, background:)
-      super(top: top, right: right, bottom: bottom, left: left)
+      super(top: top - BUFFER, right: right + BUFFER, bottom: bottom + BUFFER, left: left - BUFFER)
       @foreground = foreground
       @background = background
     end
@@ -81,20 +81,19 @@ module DHE
   class Button < RoundShape
     DIAMETER = 6.0
 
-    def initialize(foreground:, background:)
+    def initialize(foreground:, background:, style: :normal)
       super(diameter: DIAMETER)
-      @foreground = foreground
-      @background = background
+      @ring_color = foreground
+      @on_center_color = background
+      @ring_color, @on_center_color = @on_center_color, @ring_color if style == :reversed
     end
 
-    def draw_svg(svg:, x:, y:, state: :off, style: :normal)
-      ring_color = @foreground
-      center_color = state == :on ? @background : @foreground
-      ring_color, center_color = center_color, ring_color if style == :reversed
+    def draw_svg(svg:, x:, y:, state: :off)
+      center_color = state == :on ? @on_center_color : @ring_color
       stroke_width = DIAMETER / 6.0
       circle_diameter = DIAMETER - stroke_width
       circle_radius = circle_diameter / 2.0
-      svg.circle(cx: x, cy: y, r: circle_radius, 'stroke-width' => stroke_width, fill: center_color, stroke: ring_color)
+      svg.circle(cx: x, cy: y, r: circle_radius, 'stroke-width' => stroke_width, fill: center_color, stroke: @ring_color)
     end
   end
 
@@ -153,18 +152,18 @@ module DHE
       height = @size * ASCENT_RATIO
       width = @text.length * @size * 0.6 # Approximate
       left = case alignment
-              when :right_of
-                0
-              else
-                -width / 2
-              end
+             when :right_of
+               PADDING / 2
+             else
+               -width / 2
+             end
       top = case alignment
             when :above
-              -height
+              -(height + PADDING)
             when :right_of
               -height / 2
             else
-              0
+              PADDING
             end
       bottom = top + height
       right = left + width

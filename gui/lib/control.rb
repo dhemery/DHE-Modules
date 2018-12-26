@@ -92,15 +92,27 @@ module DHE
       label_text = options[:label] || style
       is_input = style == 'in'
       is_output = style == 'out'
-      is_boxed = is_input || is_output
       label_color = is_output ? background : foreground
-      box_background = is_output ? foreground : background
       @label = Label.new(text: label_text, size: :small, color: label_color, alignment: :above)
       @port = Port.new(foreground: foreground, background: background)
-      box_left = @port.left(0) - PADDING
-      box_right = @port.right(0) + PADDING
-      box_top = @label.top(@port.top(0)) - PADDING - PADDING
-      box_bottom = @port.bottom(0) + PADDING
+      has_button = options[:button]
+      button_style = is_input ? :normal : :reversed
+      box_left = @port.left(0)
+      box_right = @port.right(0)
+      box_top = @label.top(@port.top(0))
+      box_bottom = @port.bottom(0)
+      @button_offset = PADDING + Button::DIAMETER / 2 + @port.width / 2
+      if has_button
+        if is_input
+          box_right = @port.right(0) + PADDING + Button::DIAMETER
+        else
+          box_left = @port.left(0) - PADDING - Button::DIAMETER
+          @button_offset *= -1
+        end
+        @button = Button.new(foreground: foreground, background: background, style: button_style)
+      end
+      is_boxed = is_input || is_output
+      box_background = is_output ? foreground : background
       @box = Box.new(top: box_top, right: box_right, bottom: box_bottom, left: box_left, foreground: foreground, background: box_background) if is_boxed
     end
 
@@ -111,6 +123,7 @@ module DHE
 
     def draw_hardware(svg:, x:, y:)
       @port.draw_svg(svg: svg, x: x, y: y)
+      @button.draw_svg(svg: svg, x: x + @button_offset, y: y) if @button
     end
 
     def svg_file(module_path:)
