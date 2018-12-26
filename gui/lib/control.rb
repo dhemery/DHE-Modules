@@ -92,26 +92,26 @@ module DHE
       label_text = options[:label] || style
       is_input = style == 'in'
       is_output = style == 'out'
+      is_boxed = is_input || is_output
       label_color = is_output ? background : foreground
       @label = Label.new(text: label_text, size: :small, color: label_color, alignment: :above)
       @port = Port.new(foreground: foreground, background: background)
-      has_button = options[:button]
-      button_style = is_input ? :normal : :reversed
-      box_left = @port.left(0)
-      box_right = @port.right(0)
       box_top = @label.top(@port.top(0))
       box_bottom = @port.bottom(0)
-      @button_offset = PADDING + Button::DIAMETER / 2 + @port.width / 2
-      if has_button
-        if is_input
-          box_right = @port.right(0) + PADDING + Button::DIAMETER
-        else
-          box_left = @port.left(0) - PADDING - Button::DIAMETER
-          @button_offset *= -1
-        end
+      box_left = @port.left(0)
+      box_right = @port.right(0)
+      button_position = options.fetch(:button, :none).to_sym
+      if button_position != :none
+        button_style = is_input ? :normal : :reversed
         @button = Button.new(foreground: foreground, background: background, style: button_style)
+        if button_position == :right
+          @button_offset = @port.right(0) + PADDING + @button.radius
+          box_right = @button.right(@button_offset)
+        else
+          @button_offset = @port.left(0) - PADDING - @button.radius
+          box_left = @button.left(@button_offset)
+        end
       end
-      is_boxed = is_input || is_output
       box_background = is_output ? foreground : background
       @box = Box.new(top: box_top, right: box_right, bottom: box_bottom, left: box_left, foreground: foreground, background: box_background) if is_boxed
     end
