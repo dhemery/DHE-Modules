@@ -167,6 +167,8 @@ module DHE
         small: 7.0 / PX_PER_MM
     }
 
+    attr_reader :text
+
     def initialize(text:, size:, color:, alignment:)
       @text = text&.upcase || ''
       @size = SIZES[size.to_sym]
@@ -296,7 +298,7 @@ module DHE
     end
 
     def svg_file(module_path:, selection:)
-      path = module_path / "thumb-#{@size}-#{selection}"
+      path = module_path / "toggle-#{@size}-#{selection}"
       content = Builder::XmlMarkup.new(indent: 2)
                     .svg(version: "1.1", xmlns: "http://www.w3.org/2000/svg",
                          width: width,

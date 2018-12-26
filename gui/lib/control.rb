@@ -62,9 +62,24 @@ module DHE
       @button.draw_svg(svg: svg, x: x, y: y)
     end
 
+    def control_file(module_path:, label:, position:)
+      path = module_path / "counter-#{@name}-#{position}"
+      width = @button.width
+      height = @button.height + (PADDING + label.height) * 2
+      x = width / 2
+      y = height / 2
+      content = Builder::XmlMarkup.new(indent: 2)
+                    .svg(version: "1.1", xmlns: "http://www.w3.org/2000/svg",
+                         width: width,
+                         height: height) do |svg|
+        @button.draw_svg(svg: svg, x: x, y: y)
+        label.draw_svg(svg: svg, x: x, y: @button.top(y - PADDING))
+      end
+      SvgFile.new(path: path, content: content)
+    end
+
     def control_files(module_path:)
-      # TODO: SVG for each toggle position
-      [@button.svg_file(module_path: module_path, state: :off)]
+      @labels.each_with_index.map {|label, i| control_file(module_path: module_path, label: label, position: i + 1)}
     end
   end
 

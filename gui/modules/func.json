@@ -48,7 +48,7 @@
       "row": 3
     },
     {
-      "name": "add range",
+      "name": "add",
       "type": "counter",
       "labels": [
         "0–5",
@@ -61,7 +61,7 @@
       "row": 4
     },
     {
-      "name": "mult range",
+      "name": "mult",
       "type": "counter",
       "labels": [
         "0–1",
