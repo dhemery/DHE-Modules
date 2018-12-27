@@ -1,17 +1,9 @@
 {
-  "name": "UPSTAGE",
+  "name": "upstage",
   "hp": 5,
   "colors": {
-    "foreground": [
-      210,
-      100,
-      30
-    ],
-    "background": [
-      210,
-      100,
-      97
-    ]
+    "foreground": [210, 100, 30],
+    "background": [210, 100, 97]
   },
   "rows": [
     25,

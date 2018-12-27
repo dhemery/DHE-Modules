@@ -1,0 +1,131 @@
+{
+  "name": "ranger",
+  "hp": 6,
+  "colors": {
+    "foreground": [60, 100, 15],
+    "background": [60, 100, 97]
+  },
+  "rows": [
+    24,
+    40,
+    48,
+    60,
+    76,
+    84,
+    96,
+    110
+  ],
+  "columns": [
+    0,
+    9.04190476190476,
+    21.4380952380952,
+    30.48
+  ],
+  "controls": [
+    {
+      "style": "medium",
+      "label": "level",
+      "type": "knob",
+      "row": 1,
+      "column": 2
+    },
+    {
+      "style": "out",
+      "type": "port",
+      "row": 1,
+      "column": 3
+    },
+    {
+      "comment": "level",
+      "style": "cv",
+      "type": "port",
+      "row": 2,
+      "column": 2
+    },
+    {
+      "comment": "level",
+      "style": "av",
+      "type": "knob",
+      "row": 2,
+      "column": 3
+    },
+    {
+      "style": "medium",
+      "label": "limit",
+      "type": "knob",
+      "row": 4,
+      "column": 2
+    },
+    {
+      "comment": "limit 1",
+      "style": "level",
+      "type": "toggle",
+      "row": 4,
+      "column": 3
+    },
+    {
+      "comment": "limit 1",
+      "style": "cv",
+      "type": "port",
+      "row": 5,
+      "column": 2
+    },
+    {
+      "comment": "limit 1",
+      "style": "av",
+      "type": "knob",
+      "row": 5,
+      "column": 3
+    },
+    {
+      "style": "medium",
+      "label": "limit",
+      "type": "knob",
+      "row": 7,
+      "column": 2
+    },
+    {
+      "comment": "limit 2",
+      "style": "level",
+      "type": "toggle",
+      "row": 7,
+      "column": 3
+    },
+    {
+      "comment": "limit 2",
+      "style": "cv",
+      "type": "port",
+      "row": 8,
+      "column": 2
+    },
+    {
+      "comment": "limit 2",
+      "style": "av",
+      "type": "knob",
+      "row": 8,
+      "column": 3
+    }
+  ],
+  "lines": [
+    {
+      "start": {
+        "row": 3,
+        "column": 1
+      },
+      "end": {
+        "row": 3,
+        "column": 4
+      }
+    },
+    {
+      "start": {
+        "row": 6,
+        "column": 1
+      },
+      "end": {
+        "row": 6,
+        "column": 4
+      }
+    }
+  ]
+}

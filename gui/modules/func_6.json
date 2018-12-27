@@ -1,17 +1,9 @@
 {
-  "name": "FUNC 6",
+  "name": "func 6",
   "hp": 12,
   "colors": {
-    "foreground": [
-      220,
-      100,
-      40
-    ],
-    "background": [
-      40,
-      50,
-      96
-    ]
+    "foreground": [220, 100, 40],
+    "background": [40, 50, 97]
   },
   "rows": [
     23,

@@ -1,17 +1,9 @@
 {
-  "name": "STAGE",
+  "name": "stage",
   "hp": 5,
   "colors": {
-    "foreground": [
-      120,
-      100,
-      30
-    ],
-    "background": [
-      120,
-      100,
-      97
-    ]
+    "foreground": [120, 100, 30],
+    "background": [120, 100, 97]
   },
   "rows": [
     25,

@@ -2,16 +2,8 @@
   "name": "tapers",
   "hp": 9,
   "colors": {
-    "foreground": [
-      30,
-      100,
-      30
-    ],
-    "background": [
-      30,
-      100,
-      97
-    ]
+    "foreground": [30, 100, 30],
+    "background": [30, 100, 97]
   },
   "rows": [
     24,

@@ -1,17 +1,9 @@
 {
-  "name": "FUNC",
+  "name": "func",
   "hp": 3,
   "colors": {
-    "foreground": [
-      220,
-      100,
-      40
-    ],
-    "background": [
-      40,
-      50,
-      96
-    ]
+    "foreground": [220, 100, 40],
+    "background": [40, 50, 97]
   },
   "rows": [
     23,
@@ -21,9 +13,7 @@
     -1,
     108
   ],
-  "columns": [
-    7.62
-  ],
+  "columns": [7.62],
   "controls": [
     {
       "style": "in",

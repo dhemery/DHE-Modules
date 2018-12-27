@@ -2,16 +2,8 @@
   "name": "cubic",
   "hp": 5,
   "colors": {
-    "foreground": [
-      180,
-      100,
-      30
-    ],
-    "background": [
-      180,
-      100,
-      97
-    ]
+    "foreground": [180, 100, 30],
+    "background": [180, 100, 97]
   },
   "rows": [
     20,

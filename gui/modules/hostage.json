@@ -1,17 +1,9 @@
 {
-  "name": "HOSTAGE",
+  "name": "hostage",
   "hp": 5,
   "colors": {
-    "foreground": [
-      300,
-      100,
-      30
-    ],
-    "background": [
-      300,
-      100,
-      97
-    ]
+    "foreground": [300, 100, 30],
+    "background": [300, 100, 97]
   },
   "rows": [
     25,
