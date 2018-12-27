@@ -31,12 +31,12 @@ module DHE
       @controls = spec[:controls].map { |spec| control_from(options: spec) }
     end
 
-    def x(column)
-      @columns[column - 1]
+    def x(control:)
+      @columns[control.column - 1] + control.x_offset
     end
 
-    def y(row)
-      @rows[row - 1]
+    def y(control:)
+      @rows[control.row - 1] + control.y_offset
     end
 
     def svg_file(draw_hardware:)
@@ -49,8 +49,8 @@ module DHE
           Label.new(module_: self, text: 'DHE', size: :panel, alignment: :below)
               .draw_svg(svg: g, x: @width / 2, y: PANEL_HEIGHT - PANEL_LABEL_INSET)
           @controls.each do |control|
-            x = x(control.column)
-            y = y(control.row)
+            x = x(control: control)
+            y = y(control: control)
             control.draw_faceplate(svg: g, x: x, y: y)
             control.draw_hardware(svg: g, x: x, y: y) if draw_hardware
           end

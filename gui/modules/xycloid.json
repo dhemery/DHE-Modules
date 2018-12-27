@@ -14,11 +14,11 @@
     ]
   },
   "rows": [
-    30,
-    52,
-    74,
-    97,
-    112
+    25,
+    47,
+    69,
+    93,
+    108
   ],
   "columns": [
     7.98285714286,
@@ -140,6 +140,7 @@
       "label": "x out",
       "style": "out",
       "type": "port",
+      "y_offset": 1.25,
       "row": 4,
       "column": 4
     },
@@ -168,6 +169,7 @@
       "label": "y out",
       "style": "out",
       "type": "port",
+      "y_offset": 1.25,
       "row": 5,
       "column": 4
     }
