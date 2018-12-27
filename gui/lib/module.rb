@@ -2,13 +2,14 @@ require 'builder'
 require 'color'
 require 'oj'
 
-require_relative 'dimensions'
 require_relative 'button_control'
 require_relative 'counter_control'
+require_relative 'dimensions'
 require_relative 'knob_control'
+require_relative 'line'
 require_relative 'port_control'
-require_relative 'toggle_control'
 require_relative 'svg_file'
+require_relative 'toggle_control'
 
 module DHE
   JSON_PARSING_OPTIONS = { symbol_keys: true }
@@ -17,18 +18,19 @@ module DHE
     attr_reader :name, :slug, :foreground, :background
 
     def initialize(json_file:)
-      spec = Oj.load_file(json_file.to_s, JSON_PARSING_OPTIONS)
-      @name = spec[:name].upcase
+      options = Oj.load_file(json_file.to_s, JSON_PARSING_OPTIONS)
+      @name = options[:name].upcase
       @slug = Pathname(@name.downcase.sub(' ', '-'))
-      @width = spec[:hp] * MM_PER_HP
+      @width = options[:hp] * MM_PER_HP
       @width_px = @width * PX_PER_MM
       @height_px = PANEL_HEIGHT * PX_PER_MM
 
-      @rows = spec[:rows]
-      @columns = spec[:columns]
-      @foreground = "##{Color::HSL.new(*spec[:colors][:foreground]).to_rgb.hex}"
-      @background = "##{Color::HSL.new(*spec[:colors][:background]).to_rgb.hex}"
-      @controls = spec[:controls].map { |spec| control_from(options: spec) }
+      @rows = options[:rows]
+      @columns = options[:columns]
+      @foreground = "##{Color::HSL.new(*options[:colors][:foreground]).to_rgb.hex}"
+      @background = "##{Color::HSL.new(*options[:colors][:background]).to_rgb.hex}"
+      @controls = options[:controls].map { |control_options| control_from(options: control_options) }
+      @lines = options[:lines]&.map { |line_options| Line.new(module_: self, options: line_options) }
     end
 
     def x(control:)
@@ -48,6 +50,13 @@ module DHE
               .draw_svg(svg: g, x: @width / 2, y: PANEL_LABEL_INSET)
           Label.new(module_: self, text: 'DHE', size: :panel, alignment: :below)
               .draw_svg(svg: g, x: @width / 2, y: PANEL_HEIGHT - PANEL_LABEL_INSET)
+          @lines&.each do |line|
+            x1 = x(control: line.start)
+            y1 = y(control: line.start)
+            x2 = x(control: line.end)
+            y2 = y(control: line.end)
+            line.draw_svg(svg: svg, x1: x1, y1: y1, x2: x2, y2: y2)
+          end
           @controls.each do |control|
             x = x(control: control)
             y = y(control: control)
@@ -63,7 +72,8 @@ module DHE
     end
 
     def control_from(options:)
-      case options[:type]
+      type = options[:type]
+      case type
         when 'button'
           ButtonControl.new(self, options)
         when 'counter'

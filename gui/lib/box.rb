@@ -1,3 +1,4 @@
+require_relative 'dimensions'
 require_relative 'shape'
 
 module DHE
