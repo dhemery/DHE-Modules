@@ -1,0 +1,131 @@
+{
+  "name": "cubic",
+  "hp": 5,
+  "colors": {
+    "foreground": [
+      180,
+      100,
+      30
+    ],
+    "background": [
+      180,
+      100,
+      97
+    ]
+  },
+  "rows": [
+    20,
+    35,
+    50,
+    65,
+    82,
+    97,
+    112
+  ],
+  "columns": [
+    6.68333333333333,
+    18.7166666666667
+  ],
+  "controls": [
+    {
+      "comment": "x^3",
+      "style": "cv",
+      "type": "port",
+      "row": 1,
+      "column": 1
+    },
+    {
+      "label": "x^3",
+      "style": "small",
+      "type": "knob",
+      "row": 1,
+      "column": 2
+    },
+    {
+      "comment": "x^2",
+      "style": "cv",
+      "type": "port",
+      "row": 2,
+      "column": 1
+    },
+    {
+      "label": "x^2",
+      "style": "small",
+      "type": "knob",
+      "row": 2,
+      "column": 2
+    },
+    {
+      "comment": "x^1",
+      "style": "cv",
+      "type": "port",
+      "row": 3,
+      "column": 1
+    },
+    {
+      "label": "x^1",
+      "style": "small",
+      "type": "knob",
+      "row": 3,
+      "column": 2
+    },
+    {
+      "comment": "x^0",
+      "style": "cv",
+      "type": "port",
+      "row": 4,
+      "column": 1
+    },
+    {
+      "label": "x^0",
+      "style": "small",
+      "type": "knob",
+      "row": 4,
+      "column": 2
+    },
+    {
+      "style": "small",
+      "label": "in",
+      "comment": "gain",
+      "type": "knob",
+      "row": 5,
+      "column": 1
+    },
+    {
+      "style": "small",
+      "label": "out",
+      "comment": "gain",
+      "type": "knob",
+      "row": 5,
+      "column": 2
+    },
+    {
+      "comment": "in",
+      "style": "cv",
+      "type": "port",
+      "y_offset": -1,
+      "row": 6,
+      "column": 1
+    },
+    {
+      "comment": "out",
+      "style": "cv",
+      "type": "port",
+      "y_offset": -1,
+      "row": 6,
+      "column": 2
+    },
+    {
+      "style": "in",
+      "type": "port",
+      "row": 7,
+      "column": 1
+    },
+    {
+      "style": "out",
+      "type": "port",
+      "row": 7,
+      "column": 2
+    }
+  ]
+}
