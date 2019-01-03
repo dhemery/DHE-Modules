@@ -4,11 +4,15 @@ module DHE
   class Port < RoundShape
     DIAMETER = 8.4
 
-    def initialize(module_:)
-      super(module_: module_, diameter: DIAMETER)
-      @foreground = module_.foreground
-      @background = module_.background
-      @path = module_.slug / 'port'
+    attr_reader :x, :y
+
+    def initialize(faceplate:, x:, y:)
+      super(faceplate: faceplate, x: x, y: y, diameter: DIAMETER)
+      @foreground = faceplate.foreground
+      @background = faceplate.background
+      @path = faceplate.slug / 'port'
+      @x = x
+      @y = y
     end
 
     def svg_file
@@ -17,7 +21,7 @@ module DHE
       end
     end
 
-    def draw_svg(svg:, x: width / 2, y: height / 2)
+    def draw(svg:, x: @x, y: @y)
       stroke_width = DIAMETER * 0.025
       sleeve_diameter = DIAMETER - stroke_width
       step = sleeve_diameter / 7.0

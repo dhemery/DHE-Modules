@@ -1,7 +1,7 @@
 require_relative 'control'
-require_relative 'dimensions'
-require_relative 'label'
-require_relative 'toggle'
+require_relative '../shapes/dimensions'
+require_relative '../shapes/label'
+require_relative '../shapes/toggle'
 
 module DHE
   class ToggleControl < Control

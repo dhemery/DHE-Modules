@@ -1,35 +1,23 @@
+require_relative 'dimensions'
+
 module DHE
   class Shape
-    attr_reader :module_, :width, :height
+    attr_reader :faceplate, :width, :height, :top, :right, :bottom, :left, :x, :y
 
-    def initialize(module_:, top:, right:, bottom:, left:)
-      @module_ = module_
+    def initialize(faceplate:, top:, right:, bottom:, left:)
+      @faceplate = faceplate
       @top = top
       @right = right
       @bottom = bottom
       @left = left
       @width = right - left
       @height = bottom - top
+      @x = (@right + @left) / 2.0
+      @y = (@bottom + @top) / 2.0
     end
 
-    def self.centered(width:, height: width)
-      { left: -width / 2, right: width / 2, top: -height / 2, bottom: height / 2, }
-    end
-
-    def top(y)
-      y + @top
-    end
-
-    def right(x)
-      x + @right
-    end
-
-    def bottom(y)
-      y + @bottom
-    end
-
-    def left(x)
-      x + @left
+    def self.centered(x:, y:, width:, height: width)
+      { left: x - width / 2, right: x + width / 2, top: y - height / 2, bottom: y + height / 2, }
     end
 
     def draw_bounding_box(svg:, x:, y:, color:)
@@ -44,14 +32,11 @@ module DHE
     end
   end
 
-  require_relative 'box.rb'
-
-
   class RoundShape < Shape
     attr_reader :diameter
 
-    def initialize(module_:, diameter:)
-      super(module_: module_, **Shape::centered(width: diameter, height: diameter))
+    def initialize(faceplate:, x:, y:, diameter:)
+      super(faceplate: faceplate, **Shape::centered(x: x, y: y, width: diameter, height: diameter))
       @diameter = diameter
     end
 

@@ -6,12 +6,13 @@ module DHE
 
     attr_reader :size
 
-    def initialize(module_:, size:)
-      super(module_: module_, **Shape::centered(width: WIDTH, height: size * WIDTH))
+    def initialize(faceplate:, size:, x:, y:, position:)
+      super(faceplate: faceplate, **Shape::centered(x: x, y: y, width: WIDTH, height: WIDTH * size))
       @size = size
-      @foreground = module_.foreground
-      @background = module_.background
+      @foreground = faceplate.foreground
+      @background = faceplate.background
       @slug = "toggle-#{@size}"
+      @position = position
     end
 
     def svg_file(position:)
@@ -21,7 +22,7 @@ module DHE
       end
     end
 
-    def draw_svg(svg:, x: width / 2, y: height / 2, position:)
+    def draw(svg:, x: @x, y: @y, position: @position)
       thumb_position = case position
                          when @size
                            1.0

@@ -1,16 +1,14 @@
-require_relative 'button'
 require_relative 'control'
-require_relative 'dimensions'
-require_relative 'label'
+require_relative '../shapes/dimensions'
+require_relative '../shapes/button'
+require_relative '../shapes/label'
 
 module DHE
   class ButtonControl < Control
     DIAMETER = 6.0
 
-    def initialize(module_, options)
-      super(module_, options)
-      label_text = options[:label]
-      @label = Label.new(module_: module_, text: label_text, size: :small)
+    def initialize(owner:, x:, y:)
+      super
       @button = Button.new(module_: module_)
     end
 

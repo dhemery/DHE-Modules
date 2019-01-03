@@ -1,12 +1,9 @@
 require 'rake/clean'
 require 'pathname'
 require 'oj'
-require_relative 'lib/module'
+require_relative 'lib/modules/modules'
 
-$modules_dir = Pathname('modules')
-$module_json_files = $modules_dir.glob('*.json')
-$modules = $module_json_files
-               .map {|f| DHE::Module.new(json_file: f)}
+$modules = DHE::Modules::all
 
 $svg_dir = Pathname('_svg')
 $manual_dir = Pathname('_manual')
@@ -23,14 +20,14 @@ end
 # SVG files for the manual (faceplates plus hardware)
 task images: [$manual_dir] do
   $modules
-      .map{ |m| m.svg_file(draw_hardware: true)}
+      .map(&:manual_image_file)
       .each {|f| f.write($manual_dir)}
 end
 
 # SVG files for module faceplates (sans hardware)
 task modules: [$svg_dir] do
   $modules
-      .map{ |m| m.svg_file(draw_hardware: false)}
+      .map(&:faceplate_file)
       .each {|f| f.write($svg_dir)}
 end
 

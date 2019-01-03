@@ -1,0 +1,53 @@
+---
+layout: panel
+width: 9
+title: TAPERS
+foreground-color: [30,100,30]
+background-color: [30,100,97]
+controls:
+  buttons: [normal]
+  knobs: [tiny, medium]
+  ports: []
+  switches: [2]
+---
+{% assign width = page.width | hp_to_mm %}
+{% assign left_x = width | divided_by:5.0 | plus:0.333333 %}
+{% assign right_x = width | minus:left_x %}
+{% assign center_x = width | divided_by:2.0 %}
+
+{% assign y = 24.0 %}
+{% assign delta_y = 16.0 %}
+{% assign panel_buffer = 4.0 %}
+{% assign separator_offset = 10.0 %}
+
+{{ page | connector: left_x, y, right_x, y  }}
+{{ page | cv: left_x, y }}
+{{ page | attenuverter: center_x, y }}
+{{ page | medium_knob: right_x, y, 'LEVEL' }}
+{% assign y = y | plus:delta_y %}
+{{ page | connector: left_x, y, right_x, y  }}
+{{ page | cv: left_x, y }}
+{{ page | attenuverter: center_x, y }}
+{{ page | medium_knob: right_x, y, 'CURVE' }}
+{% assign y = y | plus:delta_y %}
+{{ page | shape_switch: left_x, y }}
+{{ page | polarity_switch: center_x, y }}
+{{ page | out_port: right_x, y, 'OUT' }}
+
+{% assign y = y | plus:separator_offset %}
+{{ page | connector: 0.0, y, width, y  }}
+{% assign y = y | plus:delta_y | plus:panel_buffer | minus:separator_offset %}
+
+{{ page | connector: left_x, y, right_x, y  }}
+{{ page | cv: left_x, y }}
+{{ page | attenuverter: center_x, y }}
+{{ page | medium_knob: right_x, y, 'LEVEL' }}
+{% assign y = y | plus:delta_y %}
+{{ page | connector: left_x, y, right_x, y  }}
+{{ page | cv: left_x, y }}
+{{ page | attenuverter: center_x, y }}
+{{ page | medium_knob: right_x, y, 'CURVE' }}
+{% assign y = y | plus:delta_y %}
+{{ page | shape_switch: left_x, y }}
+{{ page | polarity_switch: center_x, y }}
+{{ page | out_port: right_x, y, 'OUT' }}

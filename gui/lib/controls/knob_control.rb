@@ -1,7 +1,7 @@
 require_relative 'control'
-require_relative 'dimensions'
-require_relative 'knob'
-require_relative 'label'
+require_relative '../shapes/dimensions'
+require_relative '../shapes/knob'
+require_relative '../shapes/label'
 
 module DHE
   class KnobControl < Control

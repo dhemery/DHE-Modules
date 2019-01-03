@@ -4,12 +4,12 @@ module DHE
   class Button < RoundShape
     DIAMETER = 6.0
 
-    def initialize(module_:, style: :normal)
-      super(module_: module_, diameter: DIAMETER)
+    def initialize(faceplate:, x:, y:, style: :normal)
+      super(faceplate: faceplate, x: x, y: y, diameter: DIAMETER)
       @slug = 'button'
       @slug += '-reversed' if style == :reversed
-      @ring_color = module_.foreground
-      @center_color = module_.background
+      @ring_color = faceplate.foreground
+      @center_color = faceplate.background
       @ring_color, @center_color = @center_color, @ring_color if style == :reversed
     end
 
@@ -21,7 +21,7 @@ module DHE
       end
     end
 
-    def draw_svg(svg:, x: width / 2, y: height / 2, state: :off)
+    def draw(svg:, x: @x, y: @y, state: :off)
       center_color = state == :on ? @center_color : @ring_color
       stroke_width = DIAMETER / 6.0
       circle_diameter = DIAMETER - stroke_width

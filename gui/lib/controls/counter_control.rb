@@ -1,3 +1,5 @@
+require_relative 'control'
+
 module DHE
   class CounterControl < Control
     def initialize(module_, options)

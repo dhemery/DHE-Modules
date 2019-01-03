@@ -1,9 +1,9 @@
-require_relative 'box'
-require_relative 'button'
 require_relative 'control'
-require_relative 'dimensions'
-require_relative 'label'
-require_relative 'port'
+require_relative '../shapes/box'
+require_relative '../shapes/button'
+require_relative '../shapes/dimensions'
+require_relative '../shapes/label'
+require_relative '../shapes/port'
 
 module DHE
   class PortControl < Control
