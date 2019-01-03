@@ -38,7 +38,7 @@
       "row": 3
     },
     {
-      "comment": "add",
+      "name": "add",
       "type": "counter",
       "labels": [
         "0–5",
@@ -51,7 +51,7 @@
       "row": 4
     },
     {
-      "comment": "mult",
+      "name": "mult",
       "type": "counter",
       "labels": [
         "0–1",

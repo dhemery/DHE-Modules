@@ -23,7 +23,7 @@ module DHE
     end
 
     def control_file(label:, position:)
-      path = @module.slug / "counter-#{@name}-#{position}"
+      path = @module.slug / "#{@slug}-#{position}"
       width = @button.width
       height = @button.height + (PADDING + label.height) * 2
       x = width / 2
