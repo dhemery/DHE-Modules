@@ -2,6 +2,7 @@ require 'builder'
 require 'color'
 require 'oj'
 
+require_relative '../shapes/counter'
 require_relative '../shapes/dimensions'
 require_relative '../shapes/knob'
 require_relative '../shapes/label'
@@ -121,6 +122,12 @@ module DHE
 
     def duration_switch(x:, y:)
       toggle(x: x, y: y, labels: %w(1 10 100), position: 2)
+    end
+
+    def counter(x:, y:, name:, labels:, position: 1, enabled: true)
+      counter = Counter.new(faceplate: self, x: x, y: y, name: name, labels: labels, position: position, enabled:
+          enabled)
+      @controls << counter
     end
 
     private
