@@ -91,9 +91,11 @@ module DHE
     end
 
     def large_knob(x:, y:, label:)
-      knob = Knob.new(faceplate: self, size: :large, x: x, y: y)
-      @controls << knob
-      @faceplate_items << Label.new(faceplate: self, text: label, size: :large, x: x, y: knob.top - PADDING)
+      knob(x: x, y: y, size: :large, label: label)
+    end
+
+    def small_knob(x:, y:, label:)
+      knob(x: x, y: y, size: :small, label: label)
     end
 
     def toggle(x:, y:, labels:, position: 1)
@@ -119,6 +121,14 @@ module DHE
 
     def duration_switch(x:, y:)
       toggle(x: x, y: y, labels: %w(1 10 100), position: 2)
+    end
+
+    private
+
+    def knob(x:, y:, label:, size:)
+      knob = Knob.new(faceplate: self, size: size, x: x, y: y)
+      @controls << knob
+      @faceplate_items << Label.new(faceplate: self, text: label, size: size, x: x, y: knob.top - PADDING)
     end
   end
 end
