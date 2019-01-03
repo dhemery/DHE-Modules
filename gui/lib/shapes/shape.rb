@@ -4,7 +4,7 @@ module DHE
   class Shape
     attr_reader :faceplate, :width, :height, :top, :right, :bottom, :left, :x, :y
 
-    def initialize(faceplate:, top:, right:, bottom:, left:)
+    def initialize(faceplate:, top:, right:, bottom:, left:, x: (right + left) / 2.0, y: (bottom + top) / 2.0)
       @faceplate = faceplate
       @top = top
       @right = right
@@ -12,8 +12,8 @@ module DHE
       @left = left
       @width = right - left
       @height = bottom - top
-      @x = (@right + @left) / 2.0
-      @y = (@bottom + @top) / 2.0
+      @x = x
+      @y = y
     end
 
     def self.centered(x:, y:, width:, height: width)

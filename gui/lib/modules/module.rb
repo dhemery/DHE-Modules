@@ -69,14 +69,14 @@ module DHE
 
     def cv_port(x:, y:)
       port = Port.new(faceplate: self, x: x, y: y)
-      label = Label.new(faceplate: self, text: 'cv', size: :small, x: x, y: port.top)
+      label = Label.new(faceplate: self, text: 'cv', size: :small, x: x, y: port.top - PADDING)
       @faceplate_items << label
       @controls << port
     end
 
     def input_port(x:, y:, label: 'in')
       port = Port.new(faceplate: self, x: x, y: y)
-      label = Label.new(faceplate: self, text: label, size: :small, x: x, y: port.top)
+      label = Label.new(faceplate: self, text: label, size: :small, x: x, y: port.top - PADDING)
       @faceplate_items << Box.new(faceplate: self, top: label.top, right: port.right, bottom: port.bottom, left: port.left)
       @faceplate_items << label
       @controls << port
@@ -84,7 +84,7 @@ module DHE
 
     def output_port(x:, y:, label: 'out')
       port = Port.new(faceplate: self, x: x, y: y)
-      label = Label.new(faceplate: self, text: label, size: :small, x: x, y: port.top, style: :reversed)
+      label = Label.new(faceplate: self, text: label, size: :small, x: x, y: port.top - PADDING, style: :reversed)
       @faceplate_items << Box.new(faceplate: self, style: :reversed, top: label.top, right: port.right, bottom: port.bottom, left: port.left)
       @faceplate_items << label
       @controls << port
@@ -93,18 +93,20 @@ module DHE
     def large_knob(x:, y:, label:)
       knob = Knob.new(faceplate: self, size: :large, x: x, y: y)
       @controls << knob
-      @faceplate_items << Label.new(faceplate: self, text: label, size: :large, x: x, y: knob.top)
+      @faceplate_items << Label.new(faceplate: self, text: label, size: :large, x: x, y: knob.top - PADDING)
     end
 
     def toggle(x:, y:, labels:, position: 1)
       toggle = Toggle.new(faceplate: self, x: x, y: y, size: labels.size, position: position)
       @controls << toggle
-      @faceplate_items << Label.new(faceplate: self, text: labels.first, size: :small, x: x, y: toggle.bottom,
+      @faceplate_items << Label.new(faceplate: self, text: labels.first, size: :small, x: x, y: toggle.bottom + PADDING,
                                     alignment: :below)
-      @faceplate_items << Label.new(faceplate: self, text: labels[1], size: :small, x: toggle.right, y: y,
+      @faceplate_items << Label.new(faceplate: self, text: labels[1], size: :small, x: toggle.right + PADDING / 2.0,
+                                    y: y,
                                     alignment: :right_of) if labels.size == 3
-      @faceplate_items << Label.new(faceplate: self, text: labels.last, size: :small, x: x, y: toggle.top, alignment:
-          :above)
+      @faceplate_items << Label.new(faceplate: self, text: labels.last, size: :small, x: x, y: toggle.top - PADDING,
+                                    alignment:
+                                        :above)
     end
 
     def polarity_switch(x:, y:)

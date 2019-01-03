@@ -24,21 +24,21 @@ module DHE
       width = @text.length * @size * 0.6 # Approximate
       left = case alignment
                when :right_of
-                 x + PADDING / 2
-               else
+                 x
+               else # above or below
                  x - width / 2
              end
       top = case alignment
               when :above
-                y - (height + PADDING)
+                y - height
               when :right_of
                 y - height / 2
-              else
-                y + PADDING
+              else # below
+                y
             end
       bottom = top + height
       right = left + width
-      super(faceplate: faceplate, top: top, right: right, bottom: bottom, left: left)
+      super(faceplate: faceplate, x: x, y: y, top: top, right: right, bottom: bottom, left: left)
     end
 
     def draw(svg:, x: @x, y: @y)
