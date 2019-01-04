@@ -1,6 +1,7 @@
 require 'builder'
 require 'color'
 
+require_relative '../shapes/button'
 require_relative '../shapes/counter'
 require_relative '../shapes/dimensions'
 require_relative '../shapes/knob'
@@ -74,7 +75,7 @@ module DHE
       @controls << button
     end
 
-    def connector(x1:, y1:, x2:, y2:)
+    def connector(x1:, y1:, x2: x1, y2: y1)
       @faceplate_items << Line.new(faceplate: self, x1: x1, y1: y1, x2: x2, y2: y2)
     end
 

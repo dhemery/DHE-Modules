@@ -8,6 +8,7 @@ require_relative 'stage'
 require_relative 'swave'
 require_relative 'tapers'
 require_relative 'upstage'
+require_relative 'xycloid'
 
 module DHE
   class Modules
@@ -23,6 +24,7 @@ module DHE
           Swave.new,
           Tapers.new,
           Upstage.new,
+          Xycloid.new,
       ]
     end
   end
