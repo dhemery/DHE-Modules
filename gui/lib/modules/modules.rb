@@ -4,6 +4,7 @@ require_relative 'func'
 require_relative 'func_6'
 require_relative 'hostage'
 require_relative 'ranger'
+require_relative 'stage'
 
 module DHE
   class Modules
@@ -15,6 +16,7 @@ module DHE
           Func6.new,
           Hostage.new,
           Ranger.new,
+          Stage.new,
       ]
     end
   end

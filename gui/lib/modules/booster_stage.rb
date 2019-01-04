@@ -4,7 +4,6 @@ require_relative '../shapes/button'
 
 module DHE
   class BoosterStage < DHE::Module
-
     def initialize
       super(name: 'booster stage', hp: 8, foreground: [0, 100, 30], background: [0, 100, 97])
       left = @width / 6.0 + 1.0 / 3.0
