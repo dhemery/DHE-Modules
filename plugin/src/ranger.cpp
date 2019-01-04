@@ -102,4 +102,4 @@ private:
 } // namespace DHE
 
 rack::Model *modelRanger = rack::Model::create<DHE::Ranger, DHE::RangerPanel>(
-    "DHE-Modules", "Ranger", "Ranger", rack::UTILITY_TAG, rack::WAVESHAPER_TAG);
+    "DHE-Modules", "Ranger", "Ranger", rack::UTILITY_TAG);

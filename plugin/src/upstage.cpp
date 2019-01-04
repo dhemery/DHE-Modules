@@ -110,3 +110,4 @@ private:
 rack::Model *modelUpstage =
     rack::Model::create<DHE::Upstage, DHE::UpstagePanel>(
         "DHE-Modules", "Upstage", "Upstage", rack::ENVELOPE_GENERATOR_TAG);
+    // rack::createModel<DHE::Upstage, DHE::UpstagePanel>("Upstage");
