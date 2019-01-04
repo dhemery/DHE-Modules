@@ -3,7 +3,7 @@ GEM
   specs:
     builder (3.2.3)
     color (1.8)
-    oj (3.7.4)
+    oj (3.7.6)
     rake (12.3.2)
 
 PLATFORMS
@@ -16,4 +16,4 @@ DEPENDENCIES
   rake (~> 12.3)
 
 BUNDLED WITH
-   1.17.2
+   2.0.1
