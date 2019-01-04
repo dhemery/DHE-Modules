@@ -16,7 +16,7 @@ module DHE
 
       y += delta_y
       cv_port(x: left, y: y)
-      duration_switch(x: right, y: y)
+      duration_toggle(x: right, y: y)
 
       y += delta_y
       large_knob(x: center, y: y, label: 'duration')

@@ -1,6 +1,5 @@
 require 'rake/clean'
 require 'pathname'
-require 'oj'
 require_relative 'lib/modules/modules'
 
 $modules = DHE::Modules::all

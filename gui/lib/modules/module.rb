@@ -1,6 +1,5 @@
 require 'builder'
 require 'color'
-require 'oj'
 
 require_relative '../shapes/counter'
 require_relative '../shapes/dimensions'
@@ -120,15 +119,15 @@ module DHE
                                         :above)
     end
 
-    def polarity_switch(x:, y:)
+    def polarity_toggle(x:, y:)
       toggle(x: x, y: y, labels: %w(bi uni))
     end
 
-    def shape_switch(x:, y:)
+    def shape_toggle(x:, y:)
       toggle(x: x, y: y, labels: %w(j s))
     end
 
-    def duration_switch(x:, y:)
+    def duration_toggle(x:, y:)
       toggle(x: x, y: y, labels: %w(1 10 100), position: 2)
     end
 

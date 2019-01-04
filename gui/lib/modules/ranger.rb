@@ -23,7 +23,7 @@ module DHE
         y += panel_buffer
         connector(x1: 0.0, y1: y - separator_offset, x2: @width, y2: y - separator_offset)
         medium_knob(x: left, y: y, label: 'limit')
-        polarity_switch(x: right, y: y)
+        polarity_toggle(x: right, y: y)
 
         y += delta_y
         cv_port(x: left, y: y)

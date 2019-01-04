@@ -6,6 +6,7 @@ require_relative 'hostage'
 require_relative 'ranger'
 require_relative 'stage'
 require_relative 'swave'
+require_relative 'tapers'
 
 module DHE
   class Modules
@@ -19,6 +20,7 @@ module DHE
           Ranger.new,
           Stage.new,
           Swave.new,
+          Tapers.new,
       ]
     end
   end

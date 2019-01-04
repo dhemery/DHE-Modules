@@ -16,21 +16,21 @@ module DHE
       connector(x1: left, y1: y, x2: right, y2: y)
       cv_port(x: left, y: y)
       large_knob(x: center, y: y, label: 'level')
-      polarity_switch(x: right, y: y)
+      polarity_toggle(x: right, y: y)
 
       y += delta_y
 
       connector(x1: left, y1: y, x2: right, y2: y)
       cv_port(x: left, y: y)
       large_knob(x: center, y: y, label: 'curve')
-      shape_switch(x: right, y: y)
+      shape_toggle(x: right, y: y)
 
       y += delta_y
 
       connector(x1: left, y1: y, x2: right, y2: y)
       cv_port(x: left, y: y)
       large_knob(x: center, y: y, label: 'duration')
-      duration_switch(x: right, y: y)
+      duration_toggle(x: right, y: y)
 
       y = 82.0
       delta_y = 15.0
