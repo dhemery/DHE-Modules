@@ -1,8 +1,7 @@
 require_relative 'module'
 
 module DHE
-  class Tapers < DHE
-    ::Module
+  class Tapers < DHE::Module
 
     def initialize
       super(name: 'tapers', hp: 9, foreground: [30, 100, 30], background: [30, 100, 97])

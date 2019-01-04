@@ -7,6 +7,7 @@ require_relative 'ranger'
 require_relative 'stage'
 require_relative 'swave'
 require_relative 'tapers'
+require_relative 'upstage'
 
 module DHE
   class Modules
@@ -21,6 +22,7 @@ module DHE
           Stage.new,
           Swave.new,
           Tapers.new,
+          Upstage.new,
       ]
     end
   end

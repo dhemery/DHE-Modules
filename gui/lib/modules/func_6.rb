@@ -25,7 +25,7 @@ module DHE
         y = top + row * delta_y
         connector(x1: left, y1: y, x2: right, y2: y)
         input_port(x: left, y: y + port_offset)
-        toggle(x: left_center, y: y, labels: %w(add mult))
+        toggle(x: left_center, y: y, labels: %w(add mult), position: 1)
         large_knob(x: center, y: y, label: ' ')
         counter(x: right_center, y: y, name: 'add', labels: %w(0–5 ±5 0–10 ±10), position: 2)
         counter(x: right_center, y: y, name: 'mult', labels: %w(0–1 ±1 0–2 ±2), position: 2, enabled: false)

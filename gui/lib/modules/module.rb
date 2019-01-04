@@ -63,8 +63,25 @@ module DHE
       []
     end
 
+    def attenuverter(x:, y:)
+      knob(x: x, y: y, size: :tiny, label: '- +', label_size: :small)
+    end
+
+    def button(x:, y:, label:)
+      button = Button.new(faceplate: self, x: x, y: y)
+      label = Label.new(faceplate: self, text: label, size: :small, x: x, y: button.top - PADDING)
+      @faceplate_items << label
+      @controls << button
+    end
+
     def connector(x1:, y1:, x2:, y2:)
       @faceplate_items << Line.new(faceplate: self, x1: x1, y1: y1, x2: x2, y2: y2)
+    end
+
+    def counter(x:, y:, name:, labels:, position: 1, enabled: true)
+      counter = Counter.new(faceplate: self, x: x, y: y, name: name, labels: labels, position: position, enabled:
+          enabled)
+      @controls << counter
     end
 
     def cv_port(x:, y:)
@@ -72,6 +89,10 @@ module DHE
       label = Label.new(faceplate: self, text: 'cv', size: :small, x: x, y: port.top - PADDING)
       @faceplate_items << label
       @controls << port
+    end
+
+    def duration_toggle(x:, y:)
+      toggle(x: x, y: y, labels: %w(1 10 100), position: 2)
     end
 
     def input_port(x:, y:, label: 'in')
@@ -82,6 +103,20 @@ module DHE
       @controls << port
     end
 
+    def knob(x:, y:, label:, size:, label_size:)
+      knob = Knob.new(faceplate: self, size: size, x: x, y: y)
+      @controls << knob
+      @faceplate_items << Label.new(faceplate: self, text: label, size: label_size, x: x, y: knob.top - PADDING)
+    end
+
+    def large_knob(x:, y:, label:)
+      knob(x: x, y: y, size: :large, label: label, label_size: :large)
+    end
+
+    def medium_knob(x:, y:, label:)
+      knob(x: x, y: y, size: :medium, label: label, label_size: :small)
+    end
+
     def output_port(x:, y:, label: 'out')
       port = Port.new(faceplate: self, x: x, y: y)
       label = Label.new(faceplate: self, text: label, size: :small, x: x, y: port.top - PADDING, style: :reversed)
@@ -90,23 +125,19 @@ module DHE
       @controls << port
     end
 
-    def large_knob(x:, y:, label:)
-      knob(x: x, y: y, size: :large, label: label)
+    def polarity_toggle(x:, y:, position: 1)
+      toggle(x: x, y: y, labels: %w(bi uni), position: position)
     end
 
-    def medium_knob(x:, y:, label:)
-      knob(x: x, y: y, size: :medium, label: label, label_size: :small)
+    def shape_toggle(x:, y:)
+      toggle(x: x, y: y, labels: %w(j s), position: 1)
     end
 
     def small_knob(x:, y:, label:)
       knob(x: x, y: y, size: :small, label: label, label_size: :small)
     end
 
-    def attenuverter(x:, y:)
-      knob(x: x, y: y, size: :tiny, label: '- +', label_size: :small)
-    end
-
-    def toggle(x:, y:, labels:, position: 1)
+    def toggle(x:, y:, labels:, position:)
       toggle = Toggle.new(faceplate: self, x: x, y: y, size: labels.size, position: position)
       @controls << toggle
       @faceplate_items << Label.new(faceplate: self, text: labels.first, size: :small, x: x, y: toggle.bottom + PADDING,
@@ -117,32 +148,6 @@ module DHE
       @faceplate_items << Label.new(faceplate: self, text: labels.last, size: :small, x: x, y: toggle.top - PADDING,
                                     alignment:
                                         :above)
-    end
-
-    def polarity_toggle(x:, y:)
-      toggle(x: x, y: y, labels: %w(bi uni))
-    end
-
-    def shape_toggle(x:, y:)
-      toggle(x: x, y: y, labels: %w(j s))
-    end
-
-    def duration_toggle(x:, y:)
-      toggle(x: x, y: y, labels: %w(1 10 100), position: 2)
-    end
-
-    def counter(x:, y:, name:, labels:, position: 1, enabled: true)
-      counter = Counter.new(faceplate: self, x: x, y: y, name: name, labels: labels, position: position, enabled:
-          enabled)
-      @controls << counter
-    end
-
-    private
-
-    def knob(x:, y:, label:, size:, label_size: :large)
-      knob = Knob.new(faceplate: self, size: size, x: x, y: y)
-      @controls << knob
-      @faceplate_items << Label.new(faceplate: self, text: label, size: label_size, x: x, y: knob.top - PADDING)
     end
   end
 end
