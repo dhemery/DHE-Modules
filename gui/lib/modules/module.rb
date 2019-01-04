@@ -95,8 +95,16 @@ module DHE
       knob(x: x, y: y, size: :large, label: label)
     end
 
+    def medium_knob(x:, y:, label:)
+      knob(x: x, y: y, size: :medium, label: label, label_size: :small)
+    end
+
     def small_knob(x:, y:, label:)
-      knob(x: x, y: y, size: :small, label: label)
+      knob(x: x, y: y, size: :small, label: label, label_size: :small)
+    end
+
+    def attenuverter(x:, y:)
+      knob(x: x, y: y, size: :tiny, label: '- +', label_size: :small)
     end
 
     def toggle(x:, y:, labels:, position: 1)
@@ -132,10 +140,10 @@ module DHE
 
     private
 
-    def knob(x:, y:, label:, size:)
+    def knob(x:, y:, label:, size:, label_size: :large)
       knob = Knob.new(faceplate: self, size: size, x: x, y: y)
       @controls << knob
-      @faceplate_items << Label.new(faceplate: self, text: label, size: size, x: x, y: knob.top - PADDING)
+      @faceplate_items << Label.new(faceplate: self, text: label, size: label_size, x: x, y: knob.top - PADDING)
     end
   end
 end
