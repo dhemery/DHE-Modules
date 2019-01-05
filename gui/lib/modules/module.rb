@@ -1,14 +1,14 @@
 require 'builder'
 require 'color'
 
-require_relative '../shapes/button'
-require_relative '../shapes/counter'
-require_relative '../shapes/dimensions'
-require_relative '../shapes/knob'
-require_relative '../shapes/label'
-require_relative '../shapes/line'
-require_relative '../shapes/port'
-require_relative '../shapes/toggle'
+require_relative '../controls/button'
+require_relative '../controls/counter'
+require_relative '../controls/dimensions'
+require_relative '../controls/knob'
+require_relative '../controls/label'
+require_relative '../controls/line'
+require_relative '../controls/port'
+require_relative '../controls/toggle'
 require_relative '../svg_file'
 
 module DHE
@@ -61,7 +61,7 @@ module DHE
     end
 
     def control_files
-      []
+      @controls.flat_map(&:svg_files)
     end
 
     def attenuverter(x:, y:)

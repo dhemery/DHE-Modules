@@ -1,4 +1,4 @@
-require_relative 'shape'
+require_relative 'control'
 
 module DHE
   class Port < RoundShape
@@ -15,9 +15,13 @@ module DHE
       @y = y
     end
 
+    def svg_files
+      [svg_file]
+    end
+
     def svg_file
       SvgFile.new(path: @path, width: width, height: height) do |svg|
-        draw_svg(svg: svg)
+        draw(svg: svg, x: @width / 2.0, y: @height / 2.0)
       end
     end
 

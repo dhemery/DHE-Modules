@@ -1,6 +1,9 @@
 require_relative 'module'
-require_relative '../shapes/box'
-require_relative '../shapes/button'
+require_relative '../controls/box'
+require_relative '../controls/button'
+require_relative '../controls/dimensions'
+require_relative '../controls/label'
+require_relative '../controls/port'
 
 module DHE
   class BoosterStage < DHE::Module

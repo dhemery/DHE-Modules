@@ -1,4 +1,4 @@
-require_relative 'shape'
+require_relative 'control'
 
 module DHE
   class Button < RoundShape
@@ -13,11 +13,15 @@ module DHE
       @ring_color, @center_color = @center_color, @ring_color if style == :reversed
     end
 
+    def svg_files
+      [:on, :off].map {|state| svg_file(state: state)}
+    end
+
     def svg_file(state:)
       position = state == :off ? 1 : 2
-      path = module_.slug / "#{@slug}-#{position}"
+      path = faceplate.slug / "#{@slug}-#{position}"
       SvgFile.new(path: path, width: width, height: height) do |svg|
-        draw_svg(svg: svg, state: state)
+        draw(svg: svg, state: state, x: @width / 2.0, y: @height / 2.0)
       end
     end
 

@@ -1,13 +1,15 @@
 require_relative 'dimensions'
-require_relative 'shape'
+require_relative 'control'
 
 module DHE
-  class Counter < Shape
+  class Counter < Control
     def initialize(faceplate:, x:, y:, name:, labels:, enabled:, position:)
+      @name = name
       @slug = "counter-#{@name}"
       @button = Button.new(faceplate: faceplate, x: x, y: y)
-      @labels = labels.map { |label| Label.new(faceplate: faceplate, x: x, y: @button.top - PADDING, text: label, size:
-          :small) }
+      @label_offset = @button.radius + PADDING
+      @labels = labels.map {|label| Label.new(faceplate: faceplate, x: x, y: y - @label_offset, text: label, size:
+          :small)}
       super(faceplate: faceplate, x: x, y: y, top: @labels[0].top, right: @button.right, bottom: @button.bottom, left:
           @button.left)
       @enabled = enabled
@@ -16,7 +18,7 @@ module DHE
 
     def draw(svg:, x: @x, y: @y)
       return unless @enabled
-      @labels[@selection - 1].draw(svg: svg, x: x, y: @button.top - PADDING)
+      @labels[@selection - 1].draw(svg: svg, x: x, y: y - @label_offset)
       @button.draw(svg: svg, x: x, y: y)
     end
 
@@ -24,18 +26,20 @@ module DHE
       faceplate.slug / "#{@slug}-#{position}"
     end
 
-    def control_file(label:, position:)
+    def svg_file(label:, position:)
       path = path(position)
       width = @button.width
-      height = @button.bottom - @labels[0].top
+      height = (@button.y - @labels[0].top) * 2.0
+      x = width / 2.0
+      y = height / 2.0
       SvgFile.new(path: path, width: width, height: height, has_text: true) do |svg|
-        @button.draw(svg: svg, x: 0.0, y: 0.0)
-        label.draw(svg: svg, x: 0.0, y: -(@button.top - PADDING))
+        @button.draw(svg: svg, x: x, y: y)
+        label.draw(svg: svg, x: x, y: y - @label_offset)
       end
     end
 
-    def control_files
-      @labels.each_with_index.map { |label, index| control_file(label: label, position: index + 1) }
+    def svg_files
+      @labels.each_with_index.map {|label, index| svg_file(label: label, position: index + 1)}
     end
   end
 end

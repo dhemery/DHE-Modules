@@ -27,8 +27,8 @@ module DHE
         input_port(x: left, y: y + port_offset)
         toggle(x: left_center, y: y, labels: %w(ADD MULT), position: 1)
         large_knob(x: center, y: y, label: ' ')
-        counter(x: right_center, y: y, name: 'ADD', labels: %w(0–5 ±5 0–10 ±10), position: 2)
-        counter(x: right_center, y: y, name: 'MULT', labels: %w(0–1 ±1 0–2 ±2), position: 2, enabled: false)
+        counter(x: right_center, y: y, name: 'add', labels: %w(0–5 ±5 0–10 ±10), position: 2)
+        counter(x: right_center, y: y, name: 'mult', labels: %w(0–1 ±1 0–2 ±2), position: 2, enabled: false)
         output_port(x: right, y: y + port_offset)
       end
     end
