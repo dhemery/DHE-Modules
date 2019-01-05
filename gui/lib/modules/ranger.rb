@@ -33,4 +33,4 @@ module DHE
   end
 end
 
-
+MODULE_TO_FILENAME[DHE::Ranger.new] = __FILE__

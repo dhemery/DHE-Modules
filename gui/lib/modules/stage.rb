@@ -40,3 +40,5 @@ module DHE
     end
   end
 end
+
+MODULE_TO_FILENAME[DHE::Stage.new] = __FILE__

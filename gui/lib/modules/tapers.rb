@@ -40,3 +40,5 @@ module DHE
     end
   end
 end
+
+MODULE_TO_FILENAME[DHE::Tapers.new] = __FILE__

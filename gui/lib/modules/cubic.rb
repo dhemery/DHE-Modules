@@ -42,3 +42,4 @@ module DHE
   end
 end
 
+MODULE_TO_FILENAME[DHE::Cubic.new] = __FILE__

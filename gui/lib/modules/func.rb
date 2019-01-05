@@ -32,3 +32,5 @@ module DHE
     end
   end
 end
+
+MODULE_TO_FILENAME[DHE::Func.new] = __FILE__

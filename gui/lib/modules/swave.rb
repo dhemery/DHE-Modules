@@ -15,3 +15,4 @@ module DHE
   end
 end
 
+MODULE_TO_FILENAME[DHE::Swave.new] = __FILE__

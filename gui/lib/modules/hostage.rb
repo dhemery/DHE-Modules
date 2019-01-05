@@ -37,3 +37,5 @@ module DHE
     end
   end
 end
+
+MODULE_TO_FILENAME[DHE::Hostage.new] = __FILE__

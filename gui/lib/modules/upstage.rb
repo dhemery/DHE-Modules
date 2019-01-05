@@ -36,3 +36,5 @@ module DHE
     end
   end
 end
+
+MODULE_TO_FILENAME[DHE::Upstage.new] = __FILE__

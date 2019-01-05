@@ -13,7 +13,7 @@ module DHE
   JSON_PARSING_OPTIONS = { symbol_keys: true }
 
   class Module
-    attr_reader :name, :slug, :foreground, :background
+    attr_reader :name, :slug, :foreground, :background, :controls
 
     def initialize(name:, hp:, foreground:, background:)
       @name = name
@@ -43,7 +43,7 @@ module DHE
       end
     end
 
-    def manual_image_file
+    def image_file
       SvgFile.new(path: slug, width: @width_px, height: @height_px, has_text: true) do |svg|
         svg.g(transform: "scale(#{PX_PER_MM})") do |g|
           g.rect(x: 0, y: 0, width: @width, height: PANEL_HEIGHT,

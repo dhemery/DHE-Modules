@@ -2,7 +2,7 @@ require_relative '../control'
 
 module DHE
   class Knob < RoundControl
-    DIAMETERS = { huge: 19.0, large: 12.7, medium: 10.0, small: 8.4, tiny: 7.0, }
+    DIAMETERS = {huge: 19.0, large: 12.7, medium: 10.0, small: 8.4, tiny: 7.0, }
 
     def initialize(faceplate:, size:, x:, y:)
       super(faceplate: faceplate, x: x, y: y, diameter: DIAMETERS[size.to_sym])
@@ -23,9 +23,11 @@ module DHE
     end
 
     def svg_files
-      svg_file(path: @path) do |svg|
-        draw_control(svg: svg)
-      end
+      [
+          svg_file(path: @path) do |svg|
+            draw_control(svg: svg)
+          end
+      ]
     end
   end
 end

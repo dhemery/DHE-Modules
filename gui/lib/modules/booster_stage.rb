@@ -77,3 +77,5 @@ module DHE
     end
   end
 end
+
+MODULE_TO_FILENAME[DHE::BoosterStage.new] = __FILE__

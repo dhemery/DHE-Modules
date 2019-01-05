@@ -30,9 +30,11 @@ module DHE
     end
 
     def svg_files
-      svg_file(path: @path) do |svg|
-        draw_control(svg: svg)
-      end
+      [
+          svg_file(path: @path) do |svg|
+            draw_control(svg: svg)
+          end
+      ]
     end
   end
 end
