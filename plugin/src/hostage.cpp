@@ -205,7 +205,7 @@ public:
     install(column_3, y, output(Hostage::MAIN_OUT));
   }
 
-  static constexpr auto module_svg_dir = "hostage";
+  static constexpr auto module_slug = "hostage";
 
 private:
   static constexpr auto hp = 5;

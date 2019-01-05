@@ -142,7 +142,7 @@ public:
     install(column_3, y, output(Stage::MAIN_OUT));
   }
 
-  static constexpr auto module_svg_dir = "stage";
+  static constexpr auto module_slug = "stage";
 
 private:
   static constexpr auto hp = 5;

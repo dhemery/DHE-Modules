@@ -221,6 +221,7 @@ public:
 
     y = 82.f;
     dy = 15.f;
+    const auto output_port_offset = 1.25;
 
     auto default_gain = Rotation::gain_range.normalize(1.f);
 
@@ -228,13 +229,13 @@ public:
     install(column_1, y, input(Xycloid::X_GAIN_CV));
     install(column_2, y, knob<SmallKnob>(Xycloid::X_GAIN_KNOB, default_gain));
     install(column_3, y, toggle<2>(Xycloid::X_RANGE_SWITCH, 0));
-    install(column_4, y, output(Xycloid::X_OUT));
+    install(column_4, y + output_port_offset, output(Xycloid::X_OUT));
 
     y += dy;
     install(column_1, y, input(Xycloid::Y_GAIN_CV));
     install(column_2, y, knob<SmallKnob>(Xycloid::Y_GAIN_KNOB, default_gain));
     install(column_3, y, toggle<2>(Xycloid::Y_RANGE_SWITCH, 0));
-    install(column_4, y, output(Xycloid::Y_OUT));
+    install(column_4, y + output_port_offset, output(Xycloid::Y_OUT));
   }
 
   void appendContextMenu(rack::Menu *menu) override {
@@ -252,7 +253,7 @@ public:
         [xycloid] { return xycloid->is_musical_wobble_ratios(); }));
   }
 
-  static constexpr auto module_svg_dir = "xycloid";
+  static constexpr auto module_slug = "xycloid";
 
 private:
   static constexpr auto hp = 11;

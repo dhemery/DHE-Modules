@@ -204,7 +204,7 @@ public:
     install(column_5, y, output(BoosterStage::MAIN_OUT));
   }
 
-  static constexpr auto module_svg_dir = "booster-stage";
+  static constexpr auto module_slug = "booster-stage";
 
 private:
   static constexpr auto hp = 8;

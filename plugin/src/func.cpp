@@ -116,12 +116,12 @@ public:
 
 template <typename P> class MultiplicationRangeSwitch : public Toggle<P, 4> {
 public:
-  MultiplicationRangeSwitch() : Toggle<P, 4>{"button-mult"} {}
+  MultiplicationRangeSwitch() : Toggle<P, 4>{"counter-mult"} {}
 };
 
 template <typename P> class AdditionRangeSwitch : public Toggle<P, 4> {
 public:
-  AdditionRangeSwitch() : Toggle<P, 4>{"button-add"} {}
+  AdditionRangeSwitch() : Toggle<P, 4>{"counter-add"} {}
 };
 
 class FuncPanel : public Panel<FuncPanel> {
@@ -181,7 +181,7 @@ public:
     install(x, row_6, output(Func::OUT));
   }
 
-  static constexpr auto module_svg_dir = "func";
+  static constexpr auto module_slug = "func";
 
 private:
   static constexpr auto hp = 3;
@@ -246,7 +246,7 @@ public:
     }
   }
 
-  static constexpr auto module_svg_dir = "func6";
+  static constexpr auto module_slug = "func-6";
 
 private:
   static constexpr auto hp = 12;

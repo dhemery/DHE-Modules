@@ -1,0 +1,56 @@
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="120.0" height="379.42913385826773">
+  <g transform="scale(2.952755905511811)">
+    <rect x="0" y="0" width="40.64" height="128.5" stroke="#990000" fill="#fff0f0" stroke-width="1"/>
+    <text x="20.32" y="9.0" dominant-baseline="alphabetic" text-anchor="middle" fill="#990000" style="font-family:Proxima Nova;font-weight:bold;font-size:4.064px">
+BOOSTER STAGE    </text>
+    <text x="20.32" y="119.5" dominant-baseline="hanging" text-anchor="middle" fill="#990000" style="font-family:Proxima Nova;font-weight:bold;font-size:4.064px">
+DHE    </text>
+    <line x1="7.1066666666666665" y1="25.0" x2="33.53333333333333" y2="25.0" stroke-width="0.35" stroke="#990000"/>
+    <text x="7.1066666666666665" y="19.8" dominant-baseline="alphabetic" text-anchor="middle" fill="#990000" style="font-family:Proxima Nova;font-weight:bold;font-size:2.3706666666666667px">
+CV    </text>
+    <text x="20.32" y="17.65" dominant-baseline="alphabetic" text-anchor="middle" fill="#990000" style="font-family:Proxima Nova;font-weight:bold;font-size:3.048px">
+LEVEL    </text>
+    <text x="33.53333333333333" y="29.0" dominant-baseline="hanging" text-anchor="middle" fill="#990000" style="font-family:Proxima Nova;font-weight:bold;font-size:2.3706666666666667px">
+BI    </text>
+    <text x="33.53333333333333" y="21.0" dominant-baseline="alphabetic" text-anchor="middle" fill="#990000" style="font-family:Proxima Nova;font-weight:bold;font-size:2.3706666666666667px">
+UNI    </text>
+    <line x1="7.1066666666666665" y1="43.5" x2="33.53333333333333" y2="43.5" stroke-width="0.35" stroke="#990000"/>
+    <text x="7.1066666666666665" y="38.3" dominant-baseline="alphabetic" text-anchor="middle" fill="#990000" style="font-family:Proxima Nova;font-weight:bold;font-size:2.3706666666666667px">
+CV    </text>
+    <text x="20.32" y="36.15" dominant-baseline="alphabetic" text-anchor="middle" fill="#990000" style="font-family:Proxima Nova;font-weight:bold;font-size:3.048px">
+CURVE    </text>
+    <text x="33.53333333333333" y="47.5" dominant-baseline="hanging" text-anchor="middle" fill="#990000" style="font-family:Proxima Nova;font-weight:bold;font-size:2.3706666666666667px">
+J    </text>
+    <text x="33.53333333333333" y="39.5" dominant-baseline="alphabetic" text-anchor="middle" fill="#990000" style="font-family:Proxima Nova;font-weight:bold;font-size:2.3706666666666667px">
+S    </text>
+    <line x1="7.1066666666666665" y1="62.0" x2="33.53333333333333" y2="62.0" stroke-width="0.35" stroke="#990000"/>
+    <text x="7.1066666666666665" y="56.8" dominant-baseline="alphabetic" text-anchor="middle" fill="#990000" style="font-family:Proxima Nova;font-weight:bold;font-size:2.3706666666666667px">
+CV    </text>
+    <text x="20.32" y="54.65" dominant-baseline="alphabetic" text-anchor="middle" fill="#990000" style="font-family:Proxima Nova;font-weight:bold;font-size:3.048px">
+DURATION    </text>
+    <text x="33.53333333333333" y="67.5" dominant-baseline="hanging" text-anchor="middle" fill="#990000" style="font-family:Proxima Nova;font-weight:bold;font-size:2.3706666666666667px">
+1    </text>
+    <text x="35.53333333333333" y="62.0" dominant-baseline="middle" text-anchor="start" fill="#990000" style="font-family:Proxima Nova;font-weight:bold;font-size:2.3706666666666667px">
+10    </text>
+    <text x="33.53333333333333" y="56.5" dominant-baseline="alphabetic" text-anchor="middle" fill="#990000" style="font-family:Proxima Nova;font-weight:bold;font-size:2.3706666666666667px">
+100    </text>
+    <rect x="1.7316666666666656" y="74.04455555555558" width="17.75" height="13.330444444444439" stroke-width="0.35" rx="1.0" ry="1.0" stroke="#990000" fill="#fff0f0"/>
+    <text x="7.1066666666666665" y="76.8" dominant-baseline="alphabetic" text-anchor="middle" fill="#990000" style="font-family:Proxima Nova;font-weight:bold;font-size:2.3706666666666667px">
+DEFER    </text>
+    <rect x="21.15833333333333" y="74.04455555555558" width="17.75" height="13.330444444444439" stroke-width="0.35" rx="1.0" ry="1.0" stroke="#990000" fill="#990000"/>
+    <text x="33.53333333333333" y="76.8" dominant-baseline="alphabetic" text-anchor="middle" fill="#fff0f0" style="font-family:Proxima Nova;font-weight:bold;font-size:2.3706666666666667px">
+ACTIVE    </text>
+    <rect x="1.7316666666666656" y="89.04455555555558" width="17.75" height="13.330444444444439" stroke-width="0.35" rx="1.0" ry="1.0" stroke="#990000" fill="#fff0f0"/>
+    <text x="7.1066666666666665" y="91.8" dominant-baseline="alphabetic" text-anchor="middle" fill="#990000" style="font-family:Proxima Nova;font-weight:bold;font-size:2.3706666666666667px">
+TRIG    </text>
+    <rect x="21.15833333333333" y="89.04455555555558" width="17.75" height="13.330444444444439" stroke-width="0.35" rx="1.0" ry="1.0" stroke="#990000" fill="#990000"/>
+    <text x="33.53333333333333" y="91.8" dominant-baseline="alphabetic" text-anchor="middle" fill="#fff0f0" style="font-family:Proxima Nova;font-weight:bold;font-size:2.3706666666666667px">
+EOC    </text>
+    <rect x="1.7316666666666656" y="104.04455555555558" width="10.750000000000002" height="13.330444444444439" stroke-width="0.35" rx="1.0" ry="1.0" stroke="#990000" fill="#fff0f0"/>
+    <text x="7.1066666666666665" y="106.8" dominant-baseline="alphabetic" text-anchor="middle" fill="#990000" style="font-family:Proxima Nova;font-weight:bold;font-size:2.3706666666666667px">
+IN    </text>
+    <rect x="28.15833333333333" y="104.04455555555558" width="10.75" height="13.330444444444439" stroke-width="0.35" rx="1.0" ry="1.0" stroke="#990000" fill="#990000"/>
+    <text x="33.53333333333333" y="106.8" dominant-baseline="alphabetic" text-anchor="middle" fill="#fff0f0" style="font-family:Proxima Nova;font-weight:bold;font-size:2.3706666666666667px">
+OUT    </text>
+  </g>
+</svg>

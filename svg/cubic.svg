@@ -1,0 +1,39 @@
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="75.0" height="379.42913385826773">
+  <g transform="scale(2.952755905511811)">
+    <rect x="0" y="0" width="25.4" height="128.5" stroke="#009999" fill="#f0ffff" stroke-width="1"/>
+    <text x="12.7" y="9.0" dominant-baseline="alphabetic" text-anchor="middle" fill="#009999" style="font-family:Proxima Nova;font-weight:bold;font-size:4.064px">
+CUBIC    </text>
+    <text x="12.7" y="119.5" dominant-baseline="hanging" text-anchor="middle" fill="#009999" style="font-family:Proxima Nova;font-weight:bold;font-size:4.064px">
+DHE    </text>
+    <text x="6.683333333333333" y="14.8" dominant-baseline="alphabetic" text-anchor="middle" fill="#009999" style="font-family:Proxima Nova;font-weight:bold;font-size:2.3706666666666667px">
+CV    </text>
+    <text x="18.716666666666665" y="14.8" dominant-baseline="alphabetic" text-anchor="middle" fill="#009999" style="font-family:Proxima Nova;font-weight:bold;font-size:2.3706666666666667px">
+X<tspan baseline-shift="super">3</tspan>    </text>
+    <text x="6.683333333333333" y="29.8" dominant-baseline="alphabetic" text-anchor="middle" fill="#009999" style="font-family:Proxima Nova;font-weight:bold;font-size:2.3706666666666667px">
+CV    </text>
+    <text x="18.716666666666665" y="29.8" dominant-baseline="alphabetic" text-anchor="middle" fill="#009999" style="font-family:Proxima Nova;font-weight:bold;font-size:2.3706666666666667px">
+X<tspan baseline-shift="super">2</tspan>    </text>
+    <text x="6.683333333333333" y="44.8" dominant-baseline="alphabetic" text-anchor="middle" fill="#009999" style="font-family:Proxima Nova;font-weight:bold;font-size:2.3706666666666667px">
+CV    </text>
+    <text x="18.716666666666665" y="44.8" dominant-baseline="alphabetic" text-anchor="middle" fill="#009999" style="font-family:Proxima Nova;font-weight:bold;font-size:2.3706666666666667px">
+X<tspan baseline-shift="super">1</tspan>    </text>
+    <text x="6.683333333333333" y="59.8" dominant-baseline="alphabetic" text-anchor="middle" fill="#009999" style="font-family:Proxima Nova;font-weight:bold;font-size:2.3706666666666667px">
+CV    </text>
+    <text x="18.716666666666665" y="59.8" dominant-baseline="alphabetic" text-anchor="middle" fill="#009999" style="font-family:Proxima Nova;font-weight:bold;font-size:2.3706666666666667px">
+X<tspan baseline-shift="super">0</tspan>    </text>
+    <text x="6.683333333333333" y="76.8" dominant-baseline="alphabetic" text-anchor="middle" fill="#009999" style="font-family:Proxima Nova;font-weight:bold;font-size:2.3706666666666667px">
+IN    </text>
+    <text x="18.716666666666665" y="76.8" dominant-baseline="alphabetic" text-anchor="middle" fill="#009999" style="font-family:Proxima Nova;font-weight:bold;font-size:2.3706666666666667px">
+OUT    </text>
+    <text x="6.683333333333333" y="91.8" dominant-baseline="alphabetic" text-anchor="middle" fill="#009999" style="font-family:Proxima Nova;font-weight:bold;font-size:2.3706666666666667px">
+CV    </text>
+    <text x="18.716666666666665" y="91.8" dominant-baseline="alphabetic" text-anchor="middle" fill="#009999" style="font-family:Proxima Nova;font-weight:bold;font-size:2.3706666666666667px">
+CV    </text>
+    <rect x="1.3083333333333318" y="104.04455555555558" width="10.750000000000002" height="13.330444444444439" stroke-width="0.35" rx="1.0" ry="1.0" stroke="#009999" fill="#f0ffff"/>
+    <text x="6.683333333333333" y="106.8" dominant-baseline="alphabetic" text-anchor="middle" fill="#009999" style="font-family:Proxima Nova;font-weight:bold;font-size:2.3706666666666667px">
+IN    </text>
+    <rect x="13.341666666666665" y="104.04455555555558" width="10.75" height="13.330444444444439" stroke-width="0.35" rx="1.0" ry="1.0" stroke="#009999" fill="#009999"/>
+    <text x="18.716666666666665" y="106.8" dominant-baseline="alphabetic" text-anchor="middle" fill="#f0ffff" style="font-family:Proxima Nova;font-weight:bold;font-size:2.3706666666666667px">
+OUT    </text>
+  </g>
+</svg>

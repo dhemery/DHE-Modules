@@ -1,0 +1,40 @@
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="90.0" height="379.42913385826773">
+  <g transform="scale(2.952755905511811)">
+    <rect x="0" y="0" width="30.48" height="128.5" stroke="#4d4d00" fill="#fffff0" stroke-width="1"/>
+    <text x="15.24" y="9.0" dominant-baseline="alphabetic" text-anchor="middle" fill="#4d4d00" style="font-family:Proxima Nova;font-weight:bold;font-size:4.064px">
+RANGER    </text>
+    <text x="15.24" y="119.5" dominant-baseline="hanging" text-anchor="middle" fill="#4d4d00" style="font-family:Proxima Nova;font-weight:bold;font-size:4.064px">
+DHE    </text>
+    <text x="9.041904761904762" y="18.0" dominant-baseline="alphabetic" text-anchor="middle" fill="#4d4d00" style="font-family:Proxima Nova;font-weight:bold;font-size:2.3706666666666667px">
+LEVEL    </text>
+    <rect x="16.063095238095237" y="16.044555555555554" width="10.75" height="13.330444444444446" stroke-width="0.35" rx="1.0" ry="1.0" stroke="#4d4d00" fill="#4d4d00"/>
+    <text x="21.438095238095237" y="18.8" dominant-baseline="alphabetic" text-anchor="middle" fill="#fffff0" style="font-family:Proxima Nova;font-weight:bold;font-size:2.3706666666666667px">
+OUT    </text>
+    <text x="9.041904761904762" y="34.8" dominant-baseline="alphabetic" text-anchor="middle" fill="#4d4d00" style="font-family:Proxima Nova;font-weight:bold;font-size:2.3706666666666667px">
+CV    </text>
+    <text x="21.438095238095237" y="35.5" dominant-baseline="alphabetic" text-anchor="middle" fill="#4d4d00" style="font-family:Proxima Nova;font-weight:bold;font-size:3.048px">
+<tspan font-size="larger">-&#160;&#160;+</tspan>    </text>
+    <line x1="0" y1="48.0" x2="30.48" y2="48.0" stroke-width="0.35" stroke="#4d4d00"/>
+    <text x="9.041904761904762" y="54.0" dominant-baseline="alphabetic" text-anchor="middle" fill="#4d4d00" style="font-family:Proxima Nova;font-weight:bold;font-size:2.3706666666666667px">
+LIMIT    </text>
+    <text x="21.438095238095237" y="64.0" dominant-baseline="hanging" text-anchor="middle" fill="#4d4d00" style="font-family:Proxima Nova;font-weight:bold;font-size:2.3706666666666667px">
+BI    </text>
+    <text x="21.438095238095237" y="56.0" dominant-baseline="alphabetic" text-anchor="middle" fill="#4d4d00" style="font-family:Proxima Nova;font-weight:bold;font-size:2.3706666666666667px">
+UNI    </text>
+    <text x="9.041904761904762" y="70.8" dominant-baseline="alphabetic" text-anchor="middle" fill="#4d4d00" style="font-family:Proxima Nova;font-weight:bold;font-size:2.3706666666666667px">
+CV    </text>
+    <text x="21.438095238095237" y="71.5" dominant-baseline="alphabetic" text-anchor="middle" fill="#4d4d00" style="font-family:Proxima Nova;font-weight:bold;font-size:3.048px">
+<tspan font-size="larger">-&#160;&#160;+</tspan>    </text>
+    <line x1="0" y1="84.0" x2="30.48" y2="84.0" stroke-width="0.35" stroke="#4d4d00"/>
+    <text x="9.041904761904762" y="90.0" dominant-baseline="alphabetic" text-anchor="middle" fill="#4d4d00" style="font-family:Proxima Nova;font-weight:bold;font-size:2.3706666666666667px">
+LIMIT    </text>
+    <text x="21.438095238095237" y="100.0" dominant-baseline="hanging" text-anchor="middle" fill="#4d4d00" style="font-family:Proxima Nova;font-weight:bold;font-size:2.3706666666666667px">
+BI    </text>
+    <text x="21.438095238095237" y="92.0" dominant-baseline="alphabetic" text-anchor="middle" fill="#4d4d00" style="font-family:Proxima Nova;font-weight:bold;font-size:2.3706666666666667px">
+UNI    </text>
+    <text x="9.041904761904762" y="106.8" dominant-baseline="alphabetic" text-anchor="middle" fill="#4d4d00" style="font-family:Proxima Nova;font-weight:bold;font-size:2.3706666666666667px">
+CV    </text>
+    <text x="21.438095238095237" y="107.5" dominant-baseline="alphabetic" text-anchor="middle" fill="#4d4d00" style="font-family:Proxima Nova;font-weight:bold;font-size:3.048px">
+<tspan font-size="larger">-&#160;&#160;+</tspan>    </text>
+  </g>
+</svg>

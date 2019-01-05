@@ -1,0 +1,60 @@
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="135.0" height="379.42913385826773">
+  <g transform="scale(2.952755905511811)">
+    <rect x="0" y="0" width="45.72" height="128.5" stroke="#994d00" fill="#fff7f0" stroke-width="1"/>
+    <text x="22.86" y="9.0" dominant-baseline="alphabetic" text-anchor="middle" fill="#994d00" style="font-family:Proxima Nova;font-weight:bold;font-size:4.064px">
+TAPERS    </text>
+    <text x="22.86" y="119.5" dominant-baseline="hanging" text-anchor="middle" fill="#994d00" style="font-family:Proxima Nova;font-weight:bold;font-size:4.064px">
+DHE    </text>
+    <line x1="9.477333333333334" y1="24.0" x2="36.242666666666665" y2="24.0" stroke-width="0.35" stroke="#994d00"/>
+    <text x="9.477333333333334" y="18.8" dominant-baseline="alphabetic" text-anchor="middle" fill="#994d00" style="font-family:Proxima Nova;font-weight:bold;font-size:2.3706666666666667px">
+CV    </text>
+    <text x="22.86" y="19.5" dominant-baseline="alphabetic" text-anchor="middle" fill="#994d00" style="font-family:Proxima Nova;font-weight:bold;font-size:3.048px">
+<tspan font-size="larger">-&#160;&#160;+</tspan>    </text>
+    <text x="36.242666666666665" y="18.0" dominant-baseline="alphabetic" text-anchor="middle" fill="#994d00" style="font-family:Proxima Nova;font-weight:bold;font-size:2.3706666666666667px">
+LEVEL    </text>
+    <line x1="9.477333333333334" y1="40.0" x2="36.242666666666665" y2="40.0" stroke-width="0.35" stroke="#994d00"/>
+    <text x="9.477333333333334" y="34.8" dominant-baseline="alphabetic" text-anchor="middle" fill="#994d00" style="font-family:Proxima Nova;font-weight:bold;font-size:2.3706666666666667px">
+CV    </text>
+    <text x="22.86" y="35.5" dominant-baseline="alphabetic" text-anchor="middle" fill="#994d00" style="font-family:Proxima Nova;font-weight:bold;font-size:3.048px">
+<tspan font-size="larger">-&#160;&#160;+</tspan>    </text>
+    <text x="36.242666666666665" y="34.0" dominant-baseline="alphabetic" text-anchor="middle" fill="#994d00" style="font-family:Proxima Nova;font-weight:bold;font-size:2.3706666666666667px">
+CURVE    </text>
+    <text x="9.477333333333334" y="60.0" dominant-baseline="hanging" text-anchor="middle" fill="#994d00" style="font-family:Proxima Nova;font-weight:bold;font-size:2.3706666666666667px">
+J    </text>
+    <text x="9.477333333333334" y="52.0" dominant-baseline="alphabetic" text-anchor="middle" fill="#994d00" style="font-family:Proxima Nova;font-weight:bold;font-size:2.3706666666666667px">
+S    </text>
+    <text x="22.86" y="60.0" dominant-baseline="hanging" text-anchor="middle" fill="#994d00" style="font-family:Proxima Nova;font-weight:bold;font-size:2.3706666666666667px">
+BI    </text>
+    <text x="22.86" y="52.0" dominant-baseline="alphabetic" text-anchor="middle" fill="#994d00" style="font-family:Proxima Nova;font-weight:bold;font-size:2.3706666666666667px">
+UNI    </text>
+    <rect x="30.867666666666665" y="48.04455555555555" width="10.750000000000004" height="13.330444444444446" stroke-width="0.35" rx="1.0" ry="1.0" stroke="#994d00" fill="#994d00"/>
+    <text x="36.242666666666665" y="50.8" dominant-baseline="alphabetic" text-anchor="middle" fill="#fff7f0" style="font-family:Proxima Nova;font-weight:bold;font-size:2.3706666666666667px">
+OUT    </text>
+    <line x1="0" y1="66.0" x2="45.72" y2="66.0" stroke-width="0.35" stroke="#994d00"/>
+    <line x1="9.477333333333334" y1="76.0" x2="36.242666666666665" y2="76.0" stroke-width="0.35" stroke="#994d00"/>
+    <text x="9.477333333333334" y="70.8" dominant-baseline="alphabetic" text-anchor="middle" fill="#994d00" style="font-family:Proxima Nova;font-weight:bold;font-size:2.3706666666666667px">
+CV    </text>
+    <text x="22.86" y="71.5" dominant-baseline="alphabetic" text-anchor="middle" fill="#994d00" style="font-family:Proxima Nova;font-weight:bold;font-size:3.048px">
+<tspan font-size="larger">-&#160;&#160;+</tspan>    </text>
+    <text x="36.242666666666665" y="70.0" dominant-baseline="alphabetic" text-anchor="middle" fill="#994d00" style="font-family:Proxima Nova;font-weight:bold;font-size:2.3706666666666667px">
+LEVEL    </text>
+    <line x1="9.477333333333334" y1="92.0" x2="36.242666666666665" y2="92.0" stroke-width="0.35" stroke="#994d00"/>
+    <text x="9.477333333333334" y="86.8" dominant-baseline="alphabetic" text-anchor="middle" fill="#994d00" style="font-family:Proxima Nova;font-weight:bold;font-size:2.3706666666666667px">
+CV    </text>
+    <text x="22.86" y="87.5" dominant-baseline="alphabetic" text-anchor="middle" fill="#994d00" style="font-family:Proxima Nova;font-weight:bold;font-size:3.048px">
+<tspan font-size="larger">-&#160;&#160;+</tspan>    </text>
+    <text x="36.242666666666665" y="86.0" dominant-baseline="alphabetic" text-anchor="middle" fill="#994d00" style="font-family:Proxima Nova;font-weight:bold;font-size:2.3706666666666667px">
+CURVE    </text>
+    <text x="9.477333333333334" y="112.0" dominant-baseline="hanging" text-anchor="middle" fill="#994d00" style="font-family:Proxima Nova;font-weight:bold;font-size:2.3706666666666667px">
+J    </text>
+    <text x="9.477333333333334" y="104.0" dominant-baseline="alphabetic" text-anchor="middle" fill="#994d00" style="font-family:Proxima Nova;font-weight:bold;font-size:2.3706666666666667px">
+S    </text>
+    <text x="22.86" y="112.0" dominant-baseline="hanging" text-anchor="middle" fill="#994d00" style="font-family:Proxima Nova;font-weight:bold;font-size:2.3706666666666667px">
+BI    </text>
+    <text x="22.86" y="104.0" dominant-baseline="alphabetic" text-anchor="middle" fill="#994d00" style="font-family:Proxima Nova;font-weight:bold;font-size:2.3706666666666667px">
+UNI    </text>
+    <rect x="30.867666666666665" y="100.04455555555558" width="10.750000000000004" height="13.330444444444439" stroke-width="0.35" rx="1.0" ry="1.0" stroke="#994d00" fill="#994d00"/>
+    <text x="36.242666666666665" y="102.8" dominant-baseline="alphabetic" text-anchor="middle" fill="#fff7f0" style="font-family:Proxima Nova;font-weight:bold;font-size:2.3706666666666667px">
+OUT    </text>
+  </g>
+</svg>

@@ -117,7 +117,7 @@ public:
     install(column_3, y, output(Tapers::OUT_2));
   }
 
-  static constexpr auto module_svg_dir = "tapers";
+  static constexpr auto module_slug = "tapers";
 
 public:
   static constexpr auto hp = 9;

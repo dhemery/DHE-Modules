@@ -62,7 +62,7 @@ module DHE
 
     def svg_file(position:)
       path = faceplate.slug / "#{@slug}-#{position}"
-      SvgFile.new(path: path, width: width, height: height) do |svg|
+      SvgFile.new(path: path, width: "#{width}mm", height: "#{height}mm", viewBox: "0 0 #{width} #{height}") do |svg|
         draw(svg: svg, position: position, x: @width / 2.0, y: @height / 2.0)
       end
     end

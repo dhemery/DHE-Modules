@@ -31,6 +31,11 @@ template <typename P> class InputJack : public Jack<P> {};
 
 template <typename P> class OutputJack : public Jack<P> {};
 
+static auto plugin_asset_dir() -> std::string {
+  static const auto dir = rack::assetPlugin(plugin, std::string("svg/"));
+  return dir;
+}
+
 template <typename P> class Panel : public rack::ModuleWidget {
 public:
   Panel(rack::Module *module, int widget_hp) : rack::ModuleWidget{module} {
@@ -39,7 +44,7 @@ public:
 
     auto panel = new rack::SVGPanel();
     panel->box.size = box.size;
-    panel->setBackground(svg("panel"));
+    panel->setBackground(panel_svg());
     addChild(panel);
 
     install_screws();
@@ -57,9 +62,12 @@ public:
   }
 
   static auto svg(const std::string &filename) -> std::shared_ptr<rack::SVG> {
-    static const auto module_asset_dir = rack::assetPlugin(
-        plugin, std::string("svg/") + P::module_svg_dir + "/");
+    static const auto module_asset_dir = plugin_asset_dir() + P::module_slug + "/";
     return rack::SVG::load(module_asset_dir + filename + ".svg");
+  }
+
+  static auto panel_svg() -> std::shared_ptr<rack::SVG> {
+    return rack::SVG::load(plugin_asset_dir() + P::module_slug + ".svg");
   }
 
 protected:

@@ -1,0 +1,19 @@
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="60.0" height="379.42913385826773">
+  <g transform="scale(2.952755905511811)">
+    <rect x="0" y="0" width="20.32" height="128.5" stroke="#ff4400" fill="#fff4f0" stroke-width="1"/>
+    <text x="10.16" y="9.0" dominant-baseline="alphabetic" text-anchor="middle" fill="#ff4400" style="font-family:Proxima Nova;font-weight:bold;font-size:4.064px">
+SWAVE    </text>
+    <text x="10.16" y="119.5" dominant-baseline="hanging" text-anchor="middle" fill="#ff4400" style="font-family:Proxima Nova;font-weight:bold;font-size:4.064px">
+DHE    </text>
+    <text x="10.16" y="36.15" dominant-baseline="alphabetic" text-anchor="middle" fill="#ff4400" style="font-family:Proxima Nova;font-weight:bold;font-size:3.048px">
+CURVE    </text>
+    <text x="10.16" y="56.8" dominant-baseline="alphabetic" text-anchor="middle" fill="#ff4400" style="font-family:Proxima Nova;font-weight:bold;font-size:2.3706666666666667px">
+CV    </text>
+    <rect x="4.785" y="89.04455555555558" width="10.75" height="13.330444444444439" stroke-width="0.35" rx="1.0" ry="1.0" stroke="#ff4400" fill="#fff4f0"/>
+    <text x="10.16" y="91.8" dominant-baseline="alphabetic" text-anchor="middle" fill="#ff4400" style="font-family:Proxima Nova;font-weight:bold;font-size:2.3706666666666667px">
+IN    </text>
+    <rect x="4.785" y="104.04455555555558" width="10.75" height="13.330444444444439" stroke-width="0.35" rx="1.0" ry="1.0" stroke="#ff4400" fill="#ff4400"/>
+    <text x="10.16" y="106.8" dominant-baseline="alphabetic" text-anchor="middle" fill="#fff4f0" style="font-family:Proxima Nova;font-weight:bold;font-size:2.3706666666666667px">
+OUT    </text>
+  </g>
+</svg>

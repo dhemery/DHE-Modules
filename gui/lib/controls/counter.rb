@@ -32,7 +32,7 @@ module DHE
       height = (@button.y - @labels[0].top) * 2.0
       x = width / 2.0
       y = height / 2.0
-      SvgFile.new(path: path, width: width, height: height, has_text: true) do |svg|
+      SvgFile.new(path: path, width: "#{width}mm", height: "#{height}mm", has_text: true, viewBox: "0 0 #{width} #{height}") do |svg|
         @button.draw(svg: svg, x: x, y: y)
         label.draw(svg: svg, x: x, y: y - @label_offset)
       end

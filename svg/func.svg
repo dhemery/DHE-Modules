@@ -1,0 +1,21 @@
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="45.0" height="379.42913385826773">
+  <g transform="scale(2.952755905511811)">
+    <rect x="0" y="0" width="15.24" height="128.5" stroke="#0044cc" fill="#faf7f0" stroke-width="1"/>
+    <text x="7.62" y="9.0" dominant-baseline="alphabetic" text-anchor="middle" fill="#0044cc" style="font-family:Proxima Nova;font-weight:bold;font-size:4.064px">
+FUNC    </text>
+    <text x="7.62" y="119.5" dominant-baseline="hanging" text-anchor="middle" fill="#0044cc" style="font-family:Proxima Nova;font-weight:bold;font-size:4.064px">
+DHE    </text>
+    <rect x="2.245000000000001" y="16.294555555555554" width="10.75" height="13.330444444444446" stroke-width="0.35" rx="1.0" ry="1.0" stroke="#0044cc" fill="#faf7f0"/>
+    <text x="7.62" y="19.05" dominant-baseline="alphabetic" text-anchor="middle" fill="#0044cc" style="font-family:Proxima Nova;font-weight:bold;font-size:2.3706666666666667px">
+IN    </text>
+    <text x="7.62" y="44.0" dominant-baseline="hanging" text-anchor="middle" fill="#0044cc" style="font-family:Proxima Nova;font-weight:bold;font-size:2.3706666666666667px">
+ADD    </text>
+    <text x="7.62" y="36.0" dominant-baseline="alphabetic" text-anchor="middle" fill="#0044cc" style="font-family:Proxima Nova;font-weight:bold;font-size:2.3706666666666667px">
+MULT    </text>
+    <text x="7.62" y="49.65" dominant-baseline="alphabetic" text-anchor="middle" fill="#0044cc" style="font-family:Proxima Nova;font-weight:bold;font-size:3.048px">
+     </text>
+    <rect x="2.245000000000001" y="101.29455555555558" width="10.75" height="13.330444444444439" stroke-width="0.35" rx="1.0" ry="1.0" stroke="#0044cc" fill="#0044cc"/>
+    <text x="7.62" y="104.05" dominant-baseline="alphabetic" text-anchor="middle" fill="#faf7f0" style="font-family:Proxima Nova;font-weight:bold;font-size:2.3706666666666667px">
+OUT    </text>
+  </g>
+</svg>

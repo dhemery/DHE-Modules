@@ -94,7 +94,7 @@ public:
     install(column_2, y, knob<TinyKnob>(Ranger::LIMIT_2_AV));
   }
 
-  static constexpr auto module_svg_dir = "ranger";
+  static constexpr auto module_slug = "ranger";
 
 private:
   static constexpr auto hp = 6;

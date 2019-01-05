@@ -101,7 +101,7 @@ public:
     install(column_3, y, output(Upstage::MAIN_OUT));
   }
 
-  static constexpr auto module_svg_dir = "upstage";
+  static constexpr auto module_slug = "upstage";
 
 private:
   static constexpr auto hp = 5;
