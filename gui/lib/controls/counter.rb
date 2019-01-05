@@ -1,5 +1,5 @@
-require_relative 'dimensions'
-require_relative 'control'
+require_relative '../control'
+require_relative '../dimensions'
 
 module DHE
   class Counter < Control
@@ -22,12 +22,12 @@ module DHE
       @button.draw(svg: svg, x: x, y: y)
     end
 
-    def path(position)
-      faceplate.slug / "#{@slug}-#{position}"
+    def svg_files
+      @labels.each_with_index.map {|label, index| svg_file(label: label, position: index + 1)}
     end
 
     def svg_file(label:, position:)
-      path = path(position)
+      path = faceplate.slug / "#{@slug}-#{position}"
       width = @button.width
       height = (@button.y - @labels[0].top) * 2.0
       x = width / 2.0
@@ -36,10 +36,6 @@ module DHE
         @button.draw(svg: svg, x: x, y: y)
         label.draw(svg: svg, x: x, y: y - @label_offset)
       end
-    end
-
-    def svg_files
-      @labels.each_with_index.map {|label, index| svg_file(label: label, position: index + 1)}
     end
   end
 end

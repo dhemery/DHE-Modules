@@ -1,14 +1,14 @@
-require_relative 'module'
+require_relative '../module'
 
 module DHE
   class Cubic < DHE::Module
     def initialize
-      super(name: 'CUBIC', hp: 5, foreground: [180,100,30], background: [180,100,97])
+      super(name: 'CUBIC', hp: 5, foreground: [180, 100, 30], background: [180, 100, 97])
       left = @width / 4.0 + 1.0 / 3.0
       right = @width - left
       delta_y = 15.0
 
-      y =  20.0
+      y = 20.0
 
       cv_port(x: left, y: y)
       small_knob(x: right, y: y, label: 'X<tspan baseline-shift="super">3</tspan>')

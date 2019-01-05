@@ -1,15 +1,11 @@
-require_relative 'control'
+require_relative '../control'
 
 module DHE
   class Label < Control
-    BASELINES = {above: 'alphabetic', below: 'hanging', right_of: 'middle'
-    }
-    ANCHORS = {above: 'middle', below: 'middle', right_of: 'start'
-    }
+    BASELINES = {above: 'alphabetic', below: 'hanging', right_of: 'middle'}
+    ANCHORS = {above: 'middle', below: 'middle', right_of: 'start'}
     ASCENT_RATIO = 2.0 / 3.0 # Approximately correct for Proxima Nova font
-
-    SIZES = {title: 12.0 / PX_PER_MM, large: 9.0 / PX_PER_MM, small: 7.0 / PX_PER_MM
-    }
+    SIZES = {title: 12.0 / PX_PER_MM, large: 9.0 / PX_PER_MM, small: 7.0 / PX_PER_MM}
 
     def initialize(faceplate:, text:, size:, x:, y:, style: :normal, alignment: :above, transform: :upper)
       @x = x

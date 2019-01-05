@@ -1,4 +1,4 @@
-require_relative 'control'
+require_relative '../control'
 
 module DHE
   class Toggle < Control
@@ -13,17 +13,6 @@ module DHE
       @background = faceplate.background
       @slug = "toggle-#{@size}"
       @position = position
-    end
-
-    def svg_files
-      (1..size).map {|position| svg_file(position: position)}
-    end
-
-    def svg_file(position:)
-      path = faceplate.slug / "#{@slug}-#{position}"
-      SvgFile.new(path: path, width: width, height: height) do |svg|
-        draw(svg: svg, position: position, x: @width / 2.0, y: @height / 2.0)
-      end
     end
 
     def draw(svg:, x: @x, y: @y, position: @position)
@@ -64,6 +53,17 @@ module DHE
         (-2..2).map {|index| knurl_spacing * index + lever_offset}.each do |knurl_y|
           g.line(x1: knurl_left, x2: knurl_right, y1: knurl_y, y2: knurl_y, 'stroke-width' => knurl_stroke_width, 'stroke-linecap' => 'round')
         end
+      end
+    end
+
+    def svg_files
+      (1..size).map {|position| svg_file(position: position)}
+    end
+
+    def svg_file(position:)
+      path = faceplate.slug / "#{@slug}-#{position}"
+      SvgFile.new(path: path, width: width, height: height) do |svg|
+        draw(svg: svg, position: position, x: @width / 2.0, y: @height / 2.0)
       end
     end
   end

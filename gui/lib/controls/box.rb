@@ -1,5 +1,5 @@
-require_relative 'dimensions'
-require_relative 'control'
+require_relative '../dimensions'
+require_relative '../control'
 
 module DHE
   class Box < Control

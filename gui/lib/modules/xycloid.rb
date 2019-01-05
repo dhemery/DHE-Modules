@@ -1,9 +1,9 @@
-require_relative 'module'
+require_relative '../module'
 
 module DHE
   class Xycloid < DHE::Module
     def initialize
-      super(name: 'XYCLOID', hp: 11, foreground: [270,100,50], background: [270,66,97])
+      super(name: 'XYCLOID', hp: 11, foreground: [270, 100, 50], background: [270, 66, 97])
 
       left = @width / 7.0
       right = @width - left
@@ -14,7 +14,7 @@ module DHE
       delta_y = 22.0
       port_offset = 1.25
 
-      connector(x1: left, x2: right, y1: y)
+      connector(left: left, right: right, y: y)
       cv_port(x: left, y: y)
       attenuverter(x: left_center, y: y)
       large_knob(x: right_center, y: y, label: 'RATIO')
@@ -22,7 +22,7 @@ module DHE
 
       y += delta_y
 
-      connector(x1: left, x2: right, y1: y)
+      connector(left: left, right: right, y: y)
       cv_port(x: left, y: y)
       attenuverter(x: left_center, y: y)
       large_knob(x: right_center, y: y, label: 'DEPTH')
@@ -30,7 +30,7 @@ module DHE
 
       y += delta_y
 
-      connector(x1: left, x2: right, y1: y)
+      connector(left: left, right: right_center, y: y)
       cv_port(x: left, y: y)
       attenuverter(x: left_center, y: y)
       large_knob(x: right_center, y: y, label: 'SPEED')
@@ -39,7 +39,7 @@ module DHE
       y = 97.0
       delta_y = 15.0
 
-      connector(x1: left, x2: right, y1: y)
+      connector(left: left, right: right, y: y)
       cv_port(x: left, y: y)
       small_knob(x: left_center, y: y, label: 'GAIN')
       polarity_toggle(x: right_center, y: y)
@@ -47,7 +47,7 @@ module DHE
 
       y += delta_y
 
-      connector(x1: left, x2: right, y1: y)
+      connector(left: left, right: right, y: y)
       cv_port(x: left, y: y)
       small_knob(x: left_center, y: y, label: 'GAIN')
       polarity_toggle(x: right_center, y: y)

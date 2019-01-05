@@ -1,18 +1,16 @@
-require 'builder'
 require 'color'
 
-require_relative '../controls/button'
-require_relative '../controls/counter'
-require_relative '../controls/dimensions'
-require_relative '../controls/knob'
-require_relative '../controls/label'
-require_relative '../controls/line'
-require_relative '../controls/port'
-require_relative '../controls/toggle'
-require_relative '../svg_file'
+require_relative 'controls/button'
+require_relative 'controls/counter'
+require_relative 'controls/knob'
+require_relative 'controls/label'
+require_relative 'controls/line'
+require_relative 'controls/port'
+require_relative 'controls/toggle'
+require_relative 'svg_file'
 
 module DHE
-  JSON_PARSING_OPTIONS = { symbol_keys: true }
+  JSON_PARSING_OPTIONS = {symbol_keys: true}
 
   class Module
     attr_reader :name, :slug, :foreground, :background
@@ -65,7 +63,6 @@ module DHE
     end
 
     def attenuverter(x:, y:)
-      Builder::XmlMarkup.new
       knob(x: x, y: y, size: :tiny, label: '<tspan font-size="larger">-&#160;&#160;+</tspan>', label_size: :large)
     end
 
@@ -76,8 +73,8 @@ module DHE
       @controls << button
     end
 
-    def connector(x1:, y1:, x2: x1, y2: y1)
-      @faceplate_items << Line.new(faceplate: self, x1: x1, y1: y1, x2: x2, y2: y2)
+    def connector(left:, right:, y:)
+      @faceplate_items << Line.new(faceplate: self, x1: left, y1: y, x2: right, y2: y)
     end
 
     def counter(x:, y:, name:, labels:, position: 1, enabled: true)
@@ -129,6 +126,10 @@ module DHE
 
     def polarity_toggle(x:, y:, position: 1)
       toggle(x: x, y: y, labels: %w(BI UNI), position: position)
+    end
+
+    def separator(y:)
+      @faceplate_items << Line.new(faceplate: self, x1: 0, y1: y, x2: @width, y2: y)
     end
 
     def shape_toggle(x:, y:)

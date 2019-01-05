@@ -1,4 +1,4 @@
-require_relative 'module'
+require_relative '../module'
 
 module DHE
   class Ranger < DHE::Module
@@ -21,7 +21,7 @@ module DHE
 
       2.times do
         y += panel_buffer
-        connector(x1: 0.0, y1: y - separator_offset, x2: @width, y2: y - separator_offset)
+        separator(y: y - separator_offset)
         medium_knob(x: left, y: y, label: 'LIMIT')
         polarity_toggle(x: right, y: y)
 

@@ -1,9 +1,9 @@
-require_relative 'module'
+require_relative '../module'
 
 module DHE
   class Swave < DHE::Module
     def initialize
-      super(name: 'SWAVE', hp: 4, foreground: [16,100,50], background: [16,100,97])
+      super(name: 'SWAVE', hp: 4, foreground: [16, 100, 50], background: [16, 100, 97])
 
       center = @width / 2.0
 

@@ -1,8 +1,8 @@
-require_relative 'module'
+require_relative '../module'
 module DHE
   class Func < DHE::Module
     def initialize
-      super(name: 'FUNC', hp: 3, foreground: [220,100,40], background: [40,50,96])
+      super(name: 'FUNC', hp: 3, foreground: [220, 100, 40], background: [40, 50, 96])
 
       center = @width / 2.0
 

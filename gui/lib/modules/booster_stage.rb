@@ -1,9 +1,9 @@
-require_relative 'module'
+require_relative '../module'
 require_relative '../controls/box'
 require_relative '../controls/button'
-require_relative '../controls/dimensions'
 require_relative '../controls/label'
 require_relative '../controls/port'
+require_relative '../dimensions'
 
 module DHE
   class BoosterStage < DHE::Module
@@ -16,21 +16,21 @@ module DHE
       y = 25.0
       delta_y = 18.5
 
-      connector(x1: left, y1: y, x2: right, y2: y)
+      connector(left: left, right: right, y: y)
       cv_port(x: left, y: y)
       large_knob(x: center, y: y, label: 'LEVEL')
       polarity_toggle(x: right, y: y)
 
       y += delta_y
 
-      connector(x1: left, y1: y, x2: right, y2: y)
+      connector(left: left, right: right, y: y)
       cv_port(x: left, y: y)
       large_knob(x: center, y: y, label: 'CURVE')
       shape_toggle(x: right, y: y)
 
       y += delta_y
 
-      connector(x1: left, y1: y, x2: right, y2: y)
+      connector(left: left, right: right, y: y)
       cv_port(x: left, y: y)
       large_knob(x: center, y: y, label: 'DURATION')
       duration_toggle(x: right, y: y)
@@ -58,7 +58,7 @@ module DHE
       button_x = port.right + PADDING + Button::DIAMETER / 2.0
       button = Button.new(faceplate: self, x: button_x, y: y)
       @faceplate_items << Box.new(faceplate: self, top: label.top, right: button.right, bottom: port.bottom, left: port
-                                                                                                                   .left)
+                                                                                                                       .left)
       @faceplate_items << label
       @controls << port
       @controls << button

@@ -1,7 +1,7 @@
-require_relative 'control'
+require_relative '../control'
 
 module DHE
-  class Port < RoundShape
+  class Port < RoundControl
     DIAMETER = 8.4
 
     attr_reader :x, :y
@@ -13,16 +13,6 @@ module DHE
       @path = faceplate.slug / 'port'
       @x = x
       @y = y
-    end
-
-    def svg_files
-      [svg_file]
-    end
-
-    def svg_file
-      SvgFile.new(path: @path, width: width, height: height) do |svg|
-        draw(svg: svg, x: @width / 2.0, y: @height / 2.0)
-      end
     end
 
     def draw(svg:, x: @x, y: @y)
@@ -39,5 +29,10 @@ module DHE
       end
     end
 
+    def svg_files
+      SvgFile.new(path: @path, width: width, height: height) do |svg|
+        draw(svg: svg, x: @width / 2.0, y: @height / 2.0)
+      end
+    end
   end
 end

@@ -1,4 +1,4 @@
-require_relative 'module'
+require_relative '../module'
 
 module DHE
   class Tapers < DHE::Module
@@ -15,14 +15,14 @@ module DHE
       separator_offset = 10.0
 
       2.times do |i|
-        connector(x1: left, y1: y, x2: right, y2: y)
+        connector(left: left, right: right, y: y)
         cv_port(x: left, y: y)
         attenuverter(x: center, y: y)
         medium_knob(x: right, y: y, label: 'LEVEL')
 
         y += delta_y
 
-        connector(x1: left, y1: y, x2: right, y2: y)
+        connector(left: left, right: right, y: y)
         cv_port(x: left, y: y)
         attenuverter(x: center, y: y)
         medium_knob(x: right, y: y, label: 'CURVE')
@@ -33,7 +33,7 @@ module DHE
         polarity_toggle(x: center, y: y)
         output_port(x: right, y: y)
 
-        connector(x1: 0, y1: y + separator_offset, x2: @width, y2: y + separator_offset) if i == 0
+        separator(y: y + separator_offset) if i == 0
 
         y += delta_y + panel_buffer
       end

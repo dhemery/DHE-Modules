@@ -1,4 +1,4 @@
-require_relative 'dimensions'
+require_relative 'control'
 
 module DHE
   class Control
@@ -19,20 +19,9 @@ module DHE
     def self.centered(x:, y:, width:, height: width)
       {left: x - width / 2, right: x + width / 2, top: y - height / 2, bottom: y + height / 2, }
     end
-
-    def draw_bounding_box(svg:, x:, y:, color:)
-      Control::draw_box(svg: svg, top: top(y), right: right(x), bottom: bottom(y), left: left(x), color: color)
-    end
-
-    def self.draw_box(svg:, top:, right:, bottom:, left:, color:)
-      svg.line(x1: left, x2: right, y1: top, y2: top, 'stroke-width' => STROKE_WIDTH, stroke: color)
-      svg.line(x1: right, x2: right, y1: bottom, y2: top, 'stroke-width' => STROKE_WIDTH, stroke: color)
-      svg.line(x1: left, x2: right, y1: bottom, y2: bottom, 'stroke-width' => STROKE_WIDTH, stroke: color)
-      svg.line(x1: left, x2: left, y1: bottom, y2: top, 'stroke-width' => STROKE_WIDTH, stroke: color)
-    end
   end
 
-  class RoundShape < Control
+  class RoundControl < Control
     attr_reader :diameter
 
     def initialize(faceplate:, x:, y:, diameter:)

@@ -1,8 +1,31 @@
 require 'rake/clean'
 require 'pathname'
-require_relative 'lib/modules/modules'
 
-$modules = DHE::Modules::all
+require_relative 'lib/modules/booster_stage'
+require_relative 'lib/modules/cubic'
+require_relative 'lib/modules/func'
+require_relative 'lib/modules/func_6'
+require_relative 'lib/modules/hostage'
+require_relative 'lib/modules/ranger'
+require_relative 'lib/modules/stage'
+require_relative 'lib/modules/swave'
+require_relative 'lib/modules/tapers'
+require_relative 'lib/modules/upstage'
+require_relative 'lib/modules/xycloid'
+
+$modules = [
+    DHE::BoosterStage.new,
+    DHE::Cubic.new,
+    DHE::Func.new,
+    DHE::Func6.new,
+    DHE::Hostage.new,
+    DHE::Ranger.new,
+    DHE::Stage.new,
+    DHE::Swave.new,
+    DHE::Tapers.new,
+    DHE::Upstage.new,
+    DHE::Xycloid.new,
+]
 
 $svg_dir = Pathname('_svg')
 $manual_dir = Pathname('_manual')

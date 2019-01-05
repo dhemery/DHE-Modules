@@ -1,9 +1,9 @@
-require_relative 'module'
+require_relative '../module'
 
 module DHE
   class Upstage < DHE::Module
     def initialize
-      super(name: 'UPSTAGE', hp: 5, foreground: [210,100,30], background: [210,100,97])
+      super(name: 'UPSTAGE', hp: 5, foreground: [210, 100, 30], background: [210, 100, 97])
 
       left = @width / 4.0 + 1.0 / 3.0
       right = @width - left

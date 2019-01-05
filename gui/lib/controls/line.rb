@@ -1,5 +1,5 @@
 require 'ostruct'
-require_relative 'control'
+require_relative '../control'
 
 module DHE
   class Line

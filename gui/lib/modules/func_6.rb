@@ -1,4 +1,4 @@
-require_relative 'module'
+require_relative '../module'
 module DHE
   class Func6 < DHE::Module
     def initialize
@@ -23,7 +23,7 @@ module DHE
 
       (0..last_row).each do |row|
         y = top + row * delta_y
-        connector(x1: left, y1: y, x2: right, y2: y)
+        connector(left: left, right: right, y: y)
         input_port(x: left, y: y + port_offset)
         toggle(x: left_center, y: y, labels: %w(ADD MULT), position: 1)
         large_knob(x: center, y: y, label: ' ')
