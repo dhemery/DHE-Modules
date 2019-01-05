@@ -18,7 +18,7 @@ module DHE
       cv_port(x: left, y: y)
       attenuverter(x: left_center, y: y)
       large_knob(x: right_center, y: y, label: 'RATIO')
-      toggle(x: right, y: y, labels: %w(LOCK FREE), position: 2)
+      toggle(x: right, y: y, labels: %w(LOCK FREE), selection: 2)
 
       y += delta_y
 
@@ -26,7 +26,7 @@ module DHE
       cv_port(x: left, y: y)
       attenuverter(x: left_center, y: y)
       large_knob(x: right_center, y: y, label: 'DEPTH')
-      toggle(x: right, y: y, labels: ['IN', ' ', 'OUT'], position: 2)
+      toggle(x: right, y: y, labels: ['IN', ' ', 'OUT'], selection: 2)
 
       y += delta_y
 

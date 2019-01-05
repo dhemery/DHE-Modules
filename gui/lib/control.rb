@@ -1,4 +1,4 @@
-require_relative 'control'
+require_relative 'svg_file'
 
 module DHE
   class Control
@@ -18,6 +18,22 @@ module DHE
 
     def self.centered(x:, y:, width:, height: width)
       {left: x - width / 2, right: x + width / 2, top: y - height / 2, bottom: y + height / 2, }
+    end
+
+    def draw_control(svg:, **options)
+      draw(svg: svg, x: width / 2.0, y: height / 2.0, **options)
+    end
+
+    def draw_faceplate(svg:)
+      draw(svg: svg, x: @x, y: @y)
+    end
+
+    def svg_file(path:, has_text: false)
+      SvgFile.new(path: path,
+                  width: "#{width}mm", height: "#{height}mm", viewBox: "0 0 #{width} #{height}",
+                  has_text: has_text) do |svg|
+        yield svg
+      end
     end
   end
 

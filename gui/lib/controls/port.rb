@@ -15,7 +15,7 @@ module DHE
       @y = y
     end
 
-    def draw(svg:, x: @x, y: @y)
+    def draw(svg:, x:, y:)
       stroke_width = DIAMETER * 0.025
       sleeve_diameter = DIAMETER - stroke_width
       step = sleeve_diameter / 7.0
@@ -30,8 +30,8 @@ module DHE
     end
 
     def svg_files
-      SvgFile.new(path: @path, width: "#{width}mm", height: "#{height}mm", viewBox: "0 0 #{width} #{height}") do |svg|
-        draw(svg: svg, x: @width / 2.0, y: @height / 2.0)
+      svg_file(path: @path) do |svg|
+        draw_control(svg: svg)
       end
     end
   end

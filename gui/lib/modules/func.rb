@@ -18,14 +18,14 @@ module DHE
       input_port(x: center, y: y + port_offset)
 
       y += delta_y
-      toggle(x: center, y: y, labels: %w(ADD MULT), position: 1)
+      toggle(x: center, y: y, labels: %w(ADD MULT), selection: 1)
 
       y += delta_y
       large_knob(x: center, y: y, label: ' ')
 
       y += delta_y
-      counter(x: center, y: y, name: 'add', labels: %w(0–5 ±5 0–10 ±10), position: 2)
-      counter(x: center, y: y, name: 'mult', labels: %w(0–1 ±1 0–2 ±2), position: 2, enabled: false)
+      counter(x: center, y: y, name: 'add', labels: %w(0–5 ±5 0–10 ±10), selection: 2)
+      counter(x: center, y: y, name: 'mult', labels: %w(0–1 ±1 0–2 ±2), selection: 2, enabled: false)
 
       y += 2.0 * delta_y
       output_port(x: center, y: y + port_offset)

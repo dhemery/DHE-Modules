@@ -12,7 +12,7 @@ module DHE
       y = 25.0
       delta_y = 18.5
 
-      toggle(x: center, y: y, labels: %w(HOLD SUSTAIN), position: 1)
+      toggle(x: center, y: y, labels: %w(HOLD SUSTAIN), selection: 1)
 
       y += delta_y
       cv_port(x: left, y: y)

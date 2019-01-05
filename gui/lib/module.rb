@@ -10,7 +10,7 @@ require_relative 'controls/toggle'
 require_relative 'svg_file'
 
 module DHE
-  JSON_PARSING_OPTIONS = {symbol_keys: true}
+  JSON_PARSING_OPTIONS = { symbol_keys: true }
 
   class Module
     attr_reader :name, :slug, :foreground, :background
@@ -37,7 +37,7 @@ module DHE
           g.rect(x: 0, y: 0, width: @width, height: PANEL_HEIGHT,
                  stroke: @foreground, fill: @background, 'stroke-width' => 1)
           @faceplate_items.each do |item|
-            item.draw(svg: g)
+            item.draw_faceplate(svg: g)
           end
         end
       end
@@ -49,10 +49,10 @@ module DHE
           g.rect(x: 0, y: 0, width: @width, height: PANEL_HEIGHT,
                  stroke: @foreground, fill: @background, 'stroke-width' => 1)
           @faceplate_items.each do |item|
-            item.draw(svg: g)
+            item.draw_faceplate(svg: g)
           end
           @controls.each do |control|
-            control.draw(svg: g)
+            control.draw_faceplate(svg: g)
           end
         end
       end
@@ -77,9 +77,9 @@ module DHE
       @faceplate_items << Line.new(faceplate: self, x1: left, y1: y, x2: right, y2: y)
     end
 
-    def counter(x:, y:, name:, labels:, position: 1, enabled: true)
-      counter = Counter.new(faceplate: self, x: x, y: y, name: name, labels: labels, position: position, enabled:
-          enabled)
+    def counter(x:, y:, name:, labels:, selection: 1, enabled: true)
+      counter = Counter.new(faceplate: self, x: x, y: y, name: name, labels: labels,
+                            selection: selection, enabled: enabled)
       @controls << counter
     end
 
@@ -91,7 +91,7 @@ module DHE
     end
 
     def duration_toggle(x:, y:)
-      toggle(x: x, y: y, labels: %w(1 10 100), position: 2)
+      toggle(x: x, y: y, labels: %w(1 10 100), selection: 2)
     end
 
     def input_port(x:, y:, label: 'IN')
@@ -124,8 +124,8 @@ module DHE
       @controls << port
     end
 
-    def polarity_toggle(x:, y:, position: 1)
-      toggle(x: x, y: y, labels: %w(BI UNI), position: position)
+    def polarity_toggle(x:, y:, selection: 1)
+      toggle(x: x, y: y, labels: %w(BI UNI), selection: selection)
     end
 
     def separator(y:)
@@ -133,24 +133,25 @@ module DHE
     end
 
     def shape_toggle(x:, y:)
-      toggle(x: x, y: y, labels: %w(J S), position: 1)
+      toggle(x: x, y: y, labels: %w(J S), selection: 1)
     end
 
     def small_knob(x:, y:, label:)
       knob(x: x, y: y, size: :small, label: label, label_size: :small)
     end
 
-    def toggle(x:, y:, labels:, position:)
-      toggle = Toggle.new(faceplate: self, x: x, y: y, size: labels.size, position: position)
+    def toggle(x:, y:, labels:, selection:)
+      toggle = Toggle.new(faceplate: self, x: x, y: y, size: labels.size, selection: selection)
       @controls << toggle
-      @faceplate_items << Label.new(faceplate: self, text: labels.first, size: :small, x: x, y: toggle.bottom + PADDING,
+      @faceplate_items << Label.new(faceplate: self, text: labels.first, size: :small,
+                                    x: x, y: toggle.bottom + PADDING,
                                     alignment: :below)
-      @faceplate_items << Label.new(faceplate: self, text: labels[1], size: :small, x: toggle.right + PADDING / 2.0,
-                                    y: y,
+      @faceplate_items << Label.new(faceplate: self, text: labels[1], size: :small,
+                                    x: toggle.right + PADDING / 2.0, y: y,
                                     alignment: :right_of) if labels.size == 3
-      @faceplate_items << Label.new(faceplate: self, text: labels.last, size: :small, x: x, y: toggle.top - PADDING,
-                                    alignment:
-                                        :above)
+      @faceplate_items << Label.new(faceplate: self, text: labels.last, size: :small,
+                                    x: x, y: toggle.top - PADDING,
+                                    alignment: :above)
     end
   end
 end

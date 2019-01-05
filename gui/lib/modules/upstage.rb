@@ -16,7 +16,7 @@ module DHE
 
       y += delta_y
       cv_port(x: left, y: y)
-      polarity_toggle(x: right, y: y, position: 2)
+      polarity_toggle(x: right, y: y, selection: 2)
 
       y += delta_y
       button(x: left, y: y, label: 'WAIT')

@@ -13,7 +13,7 @@ module DHE
       @ring_color, @center_color = @center_color, @ring_color if style == :reversed
     end
 
-    def draw(svg:, x: @x, y: @y, state: :off)
+    def draw(svg:, x:, y:, state: :off)
       center_color = state == :on ? @center_color : @ring_color
       stroke_width = DIAMETER / 6.0
       circle_diameter = DIAMETER - stroke_width
@@ -22,14 +22,12 @@ module DHE
     end
 
     def svg_files
-      [:on, :off].map {|state| svg_file(state: state)}
-    end
-
-    def svg_file(state:)
-      position = state == :off ? 1 : 2
-      path = faceplate.slug / "#{@slug}-#{position}"
-      SvgFile.new(path: path, width: "#{width}mm", height: "#{height}mm", viewBox: "0 0 #{width} #{height}") do |svg|
-        draw(svg: svg, state: state, x: @width / 2.0, y: @height / 2.0)
+      [:on, :off].map do |state|
+        position = state == :off ? 1 : 2
+        path = faceplate.slug / "#{@slug}-#{position}"
+        svg_file(path: path) do |svg|
+          draw_control(svg: svg, state: state)
+        end
       end
     end
   end

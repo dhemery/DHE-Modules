@@ -2,7 +2,7 @@ require_relative '../control'
 
 module DHE
   class Knob < RoundControl
-    DIAMETERS = {huge: 19.0, large: 12.7, medium: 10.0, small: 8.4, tiny: 7.0, }
+    DIAMETERS = { huge: 19.0, large: 12.7, medium: 10.0, small: 8.4, tiny: 7.0, }
 
     def initialize(faceplate:, size:, x:, y:)
       super(faceplate: faceplate, x: x, y: y, diameter: DIAMETERS[size.to_sym])
@@ -13,7 +13,7 @@ module DHE
       @y = y
     end
 
-    def draw(svg:, x: @x, y: @y)
+    def draw(svg:, x:, y:)
       pointer_width = radius / 8.0
       pointer_length = radius - pointer_width
       svg.g(transform: "translate(#{x} #{y})", stroke: @pointer_color, fill: @knob_color) do |g|
@@ -23,8 +23,8 @@ module DHE
     end
 
     def svg_files
-      SvgFile.new(path: @path, width: "#{width}mm", height: "#{height}mm", viewBox: "0 0 #{width} #{height}") do |svg|
-        draw(svg: svg, x: @width / 2.0, y: @height / 2.0)
+      svg_file(path: @path) do |svg|
+        draw_control(svg: svg)
       end
     end
   end

@@ -6,23 +6,23 @@ module DHE
 
     attr_reader :size
 
-    def initialize(faceplate:, size:, x:, y:, position:)
+    def initialize(faceplate:, size:, x:, y:, selection:)
       super(faceplate: faceplate, **Control::centered(x: x, y: y, width: WIDTH, height: WIDTH * size))
       @size = size
       @foreground = faceplate.foreground
       @background = faceplate.background
       @slug = "toggle-#{@size}"
-      @position = position
+      @selection = selection
     end
 
-    def draw(svg:, x: @x, y: @y, position: @position)
-      thumb_position = case position
-                       when @size
-                         1.0
-                       when 1
-                         -1.0
-                       else
-                         0.0
+    def draw(svg:, x:, y:, selection: @selection)
+      thumb_position = case selection
+                         when @size
+                           1.0
+                         when 1
+                           -1.0
+                         else
+                           0.0
                        end
       box_stroke_width = width / 8.0
       interior_inset = box_stroke_width / 2.0
@@ -50,20 +50,18 @@ module DHE
 
       svg.g(transform: "translate(#{x} #{y})", fill: @background, stroke: @foreground) do |g|
         g.rect(x: box_left, y: box_top, width: box_width, height: box_height, rx: corner_radius, ry: corner_radius, 'stroke-width' => box_stroke_width)
-        (-2..2).map {|index| knurl_spacing * index + lever_offset}.each do |knurl_y|
+        (-2..2).map { |index| knurl_spacing * index + lever_offset }.each do |knurl_y|
           g.line(x1: knurl_left, x2: knurl_right, y1: knurl_y, y2: knurl_y, 'stroke-width' => knurl_stroke_width, 'stroke-linecap' => 'round')
         end
       end
     end
 
     def svg_files
-      (1..size).map {|position| svg_file(position: position)}
-    end
-
-    def svg_file(position:)
-      path = faceplate.slug / "#{@slug}-#{position}"
-      SvgFile.new(path: path, width: "#{width}mm", height: "#{height}mm", viewBox: "0 0 #{width} #{height}") do |svg|
-        draw(svg: svg, position: position, x: @width / 2.0, y: @height / 2.0)
+      (1..size).map do |selection|
+        path = faceplate.slug / "#{@slug}-#{selection}"
+        svg_file(path: path) do |svg|
+          draw_control(svg: svg, selection: selection)
+        end
       end
     end
   end

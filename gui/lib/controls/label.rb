@@ -37,7 +37,7 @@ module DHE
       super(faceplate: faceplate, x: x, y: y, top: top, right: right, bottom: bottom, left: left)
     end
 
-    def draw(svg:, x: @x, y: @y)
+    def draw(svg:, x:, y:)
       svg.text(x: x, y: y, 'dominant-baseline' => @baseline, 'text-anchor' => @anchor, fill: @color, style: "font-family:Proxima Nova;font-weight:bold;font-size:#{@size}px") do |text|
         text << @text
       end
