@@ -2,9 +2,8 @@ require_relative 'module'
 
 module DHE
   class Tapers < DHE::Module
-
     def initialize
-      super(name: 'tapers', hp: 9, foreground: [30, 100, 30], background: [30, 100, 97])
+      super(name: 'TAPERS', hp: 9, foreground: [30, 100, 30], background: [30, 100, 97])
 
       left = @width / 5.0 + 1.0 / 3.0
       right = @width - left
@@ -19,14 +18,14 @@ module DHE
         connector(x1: left, y1: y, x2: right, y2: y)
         cv_port(x: left, y: y)
         attenuverter(x: center, y: y)
-        medium_knob(x: right, y: y, label: 'level')
+        medium_knob(x: right, y: y, label: 'LEVEL')
 
         y += delta_y
 
         connector(x1: left, y1: y, x2: right, y2: y)
         cv_port(x: left, y: y)
         attenuverter(x: center, y: y)
-        medium_knob(x: right, y: y, label: 'curve')
+        medium_knob(x: right, y: y, label: 'CURVE')
 
         y += delta_y
 

@@ -18,7 +18,7 @@ module DHE
     attr_reader :name, :slug, :foreground, :background
 
     def initialize(name:, hp:, foreground:, background:)
-      @name = name.upcase
+      @name = name
       @slug = Pathname(@name.downcase.sub(' ', '-'))
       @width = hp * MM_PER_HP
       @width_px = @width * PX_PER_MM
@@ -65,7 +65,8 @@ module DHE
     end
 
     def attenuverter(x:, y:)
-      knob(x: x, y: y, size: :tiny, label: '- +', label_size: :small)
+      Builder::XmlMarkup.new
+      knob(x: x, y: y, size: :tiny, label: '<tspan font-size="larger">-&#160;&#160;+</tspan>', label_size: :large)
     end
 
     def button(x:, y:, label:)
@@ -87,7 +88,7 @@ module DHE
 
     def cv_port(x:, y:)
       port = Port.new(faceplate: self, x: x, y: y)
-      label = Label.new(faceplate: self, text: 'cv', size: :small, x: x, y: port.top - PADDING)
+      label = Label.new(faceplate: self, text: 'CV', size: :small, x: x, y: port.top - PADDING)
       @faceplate_items << label
       @controls << port
     end
@@ -96,7 +97,7 @@ module DHE
       toggle(x: x, y: y, labels: %w(1 10 100), position: 2)
     end
 
-    def input_port(x:, y:, label: 'in')
+    def input_port(x:, y:, label: 'IN')
       port = Port.new(faceplate: self, x: x, y: y)
       label = Label.new(faceplate: self, text: label, size: :small, x: x, y: port.top - PADDING)
       @faceplate_items << Box.new(faceplate: self, top: label.top, right: port.right, bottom: port.bottom, left: port.left)
@@ -118,7 +119,7 @@ module DHE
       knob(x: x, y: y, size: :medium, label: label, label_size: :small)
     end
 
-    def output_port(x:, y:, label: 'out')
+    def output_port(x:, y:, label: 'OUT')
       port = Port.new(faceplate: self, x: x, y: y)
       label = Label.new(faceplate: self, text: label, size: :small, x: x, y: port.top - PADDING, style: :reversed)
       @faceplate_items << Box.new(faceplate: self, style: :reversed, top: label.top, right: port.right, bottom: port.bottom, left: port.left)
@@ -127,11 +128,11 @@ module DHE
     end
 
     def polarity_toggle(x:, y:, position: 1)
-      toggle(x: x, y: y, labels: %w(bi uni), position: position)
+      toggle(x: x, y: y, labels: %w(BI UNI), position: position)
     end
 
     def shape_toggle(x:, y:)
-      toggle(x: x, y: y, labels: %w(j s), position: 1)
+      toggle(x: x, y: y, labels: %w(J S), position: 1)
     end
 
     def small_knob(x:, y:, label:)

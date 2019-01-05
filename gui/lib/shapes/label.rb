@@ -11,10 +11,10 @@ module DHE
     SIZES = { title: 12.0 / PX_PER_MM, large: 9.0 / PX_PER_MM, small: 7.0 / PX_PER_MM
     }
 
-    def initialize(faceplate:, text:, size:, x:, y:, style: :normal, alignment: :above)
+    def initialize(faceplate:, text:, size:, x:, y:, style: :normal, alignment: :above, transform: :upper)
       @x = x
       @y = y
-      @text = text&.upcase || ''
+      @text = text
       @size = SIZES[size.to_sym]
       @color = style == :normal ? faceplate.foreground : faceplate.background
       @alignment = alignment
@@ -42,7 +42,9 @@ module DHE
     end
 
     def draw(svg:, x: @x, y: @y)
-      svg.text(@text, x: x, y: y, 'dominant-baseline' => @baseline, 'text-anchor' => @anchor, fill: @color, style: "font-family:Proxima Nova;font-weight:bold;font-size:#{@size}px")
+      svg.text(x: x, y: y, 'dominant-baseline' => @baseline, 'text-anchor' => @anchor, fill: @color, style: "font-family:Proxima Nova;font-weight:bold;font-size:#{@size}px") do |text|
+        text << @text
+      end
     end
   end
 end
