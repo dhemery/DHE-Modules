@@ -60,10 +60,10 @@ generates a pair of complex, evolving, pulsing LFO signals.
 **[_Cubic_](modules/cubic/)**
 offsets, scales, squares, and cubes its input signal.
 
-**[_Func_](modules/func/)** (coming soon)
+**[_Func_](modules/func/)**
 is a knob with a selectable range to offset or scale its input signal.
 
-**[_Func 6_](modules/func-6/)** (coming soon)
+**[_Func 6_](modules/func-6/)**
 is a chain of knobs with selectable ranges to offset and scale input signals.
 
 **[_Ranger_](modules/ranger/)**
