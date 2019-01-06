@@ -78,7 +78,9 @@ private:
 template <typename M> class DeferringMode : public Mode {
 public:
   explicit DeferringMode(M *module) : module{module} {}
+
   void enter() override { module->set_active(true); }
+
   void step() override { module->send_input(); }
 
 private:
@@ -89,7 +91,9 @@ template <typename M> class FollowingMode : public Mode {
 public:
   explicit FollowingMode(M *module, Trigger *stage_trigger)
       : module{module}, stage_trigger{stage_trigger} {}
+
   void enter() override { module->set_active(false); }
+
   void step() override {
     module->send_stage();
     stage_trigger->step();
@@ -132,7 +136,10 @@ public:
   explicit SustainingMode(M *module, Gate *sustain_gate)
       : module{module}, sustain_gate{sustain_gate} {}
 
-  void enter() override { module->set_active(true); }
+  void enter() override {
+    module->hold_input();
+    module->set_active(true);
+  }
 
   void step() override {
     module->send_held();
