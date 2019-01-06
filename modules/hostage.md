@@ -1,7 +1,7 @@
 ---
 title: The Hostage Module
 ---
-<img class="panel" src="panel.svg" alt="The Hostage Panel" />
+<img class="faceplate" src="hostage.svg" alt="The Hostage Faceplate" />
 
 Generates a hold or sustain envelope stage.
 A hold stage lasts for the duration specified by the controls.

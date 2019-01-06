@@ -1,7 +1,7 @@
 ---
 title: The Booster Stage Module
 ---
-<img class="panel" src="panel.svg" alt="The Booster Stage Panel" />
+<img class="faceplate" src="booster-stage.svg" alt="The Booster Stage Faceplate" />
 
 Generates a single envelope stage.
 

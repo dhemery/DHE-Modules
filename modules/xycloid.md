@@ -1,11 +1,9 @@
 ---
 title: The Xycloid Module
 ---
-<img class="panel" src="panel.svg" alt="The Xycloid Panel" />
+<img class="faceplate" src="xycloid.svg" alt="The Xycloid Faceplate" />
 
-Produces a complex, pulsing,
-throb and wobble LFO effect
-with accents that either repeat or vary.
+Generates a pair of complex, evolving, pulsing LFO signals.
 
 See:
 - **[Throb, Wobble, and Accent](https://www.youtube.com/watch?v=Kc0WctuFNvY):**
@@ -151,4 +149,3 @@ _[epitrochoid](https://en.wikipedia.org/wiki/Epitrochoid)._
 To view the shape that Xycloid produces, connect its _X_ and _Y_ outputs to a
 Scope's _X_ and _Y_ inputs.  Set the scope to _X x Y_ mode.  Note that the
 scope's _X/Y_ mode can also be interesting.
-

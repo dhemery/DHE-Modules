@@ -2,7 +2,7 @@
 title: The Stage Module
 ---
 
-<img class="panel" src="panel.svg" alt="The Stage Panel" />
+<img class="faceplate" src="stage.svg" alt="The Stage Faceplate" />
 
 Generates a single envelope stage.
 

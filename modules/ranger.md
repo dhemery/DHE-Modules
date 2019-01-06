@@ -1,9 +1,9 @@
 ---
 title: The Ranger Module
 ---
-<img class="panel" src="panel.svg" alt="The Ranger Panel" />
+<img class="faceplate" src="ranger.svg" alt="The Ranger Faceplate" />
 
-A knob with an adjustable, modulatable range.
+A modulatable knob with an adjustable, modulatable range.
 
 ## Controls
 - **LEVEL:**

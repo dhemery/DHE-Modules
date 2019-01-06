@@ -1,7 +1,7 @@
 ---
 title: The Swave Module
 ---
-<img class="panel" src="panel.svg" alt="The Swave Panel" />
+<img class="faceplate" src="swave.svg" alt="The Swave Faceplate" />
 
 A waveshaper with a unique sigmoid transfer function.
 
@@ -11,6 +11,9 @@ is in the range [-5V,5V],
 the standard range
 for audio and bipolar CV signals
 in VCV Rack.
+
+**Note:**
+_Swave_ does not apply anti-aliasing.
 
 See also:
 - [J and S Curves]({{ '/technical/curves/' | relative_url }})
@@ -39,4 +42,3 @@ See also:
 - **CV:**
     A [control voltage]({{ '/technical/modulation/' | relative_url }}) signal
     to modulate the _CURVE_ parameter.
-

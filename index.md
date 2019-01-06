@@ -7,14 +7,16 @@ layout: base
 The DHE-Modules suite includes
 [envelope generators](#envelope-generators),
 [low frequency oscillators](#low-frequency-oscillators),
-[utilities, and waveshapers](#utilities-and-waveshapers).
+[utilities](#utilities).
+and
+[waveshapers](#waveshapers).
 
 ### Envelope Generators
 
-[![_Stage_](modules/stage/panel.svg)](modules/stage/)
-[![_Booster Stage_](modules/booster-stage/panel.svg)](modules/booster-stage/)
-[![_Hostage_](modules/hostage/panel.svg)](modules/hostage/)
-[![_Upstage_](modules/upstage/panel.svg)](modules/upstage/)
+[![_Stage_](modules/stage/stage.svg)](modules/stage/)
+[![_Booster Stage_](modules/booster-stage/booster-stage.svg)](modules/booster-stage/)
+[![_Hostage_](modules/hostage/hostage.svg)](modules/hostage/)
+[![_Upstage_](modules/upstage/upstage.svg)](modules/upstage/)
 
 **[_Stage_](modules/stage/)**
 generates a single envelope stage.
@@ -30,7 +32,7 @@ buttons to inject triggers and other control signals,
 and more.
 
 **[_Hostage_](modules/hostage/)**
-generates hold and sustain stages.
+generates a hold or sustain envelope stage.
 
 **[_Upstage_](modules/upstage/)**
 adds special-purpose envelope controls
@@ -42,35 +44,40 @@ and more.
 
 ### Low Frequency Oscillators
 
-[![_Xycloid_](modules/xycloid/panel.svg)](modules/xycloid/)
+[![_Xycloid_](modules/xycloid/xycloid.svg)](modules/xycloid/)
 
 **[_Xycloid_](modules/xycloid/)**
-produces a complex, pulsing,
-_throb_ and _wobble_ LFO effect
-with accents that either repeat or vary.
+generates a pair of complex, evolving, pulsing LFO signals.
 
-### Utilities and Waveshapers
+### Utilities
 
-[![_Cubic_](modules/cubic/panel.svg)](modules/cubic/)
-[![_Juster_](modules/juster/panel.svg)](modules/juster/)
-[![_Ranger_](modules/ranger/panel.svg)](modules/ranger/)
-[![_Swave_](modules/swave/panel.svg)](modules/swave/)
-[![_Tapers_](modules/tapers/panel.svg)](modules/tapers/)
+[![_Cubic_](modules/cubic/cubic.svg)](modules/cubic/)
+[![_Func_](modules/func/func.svg)](modules/func/)
+[![_Func 6_](modules/func-6/func-6.svg)](modules/func-6/)
+[![_Ranger_](modules/ranger/ranger.svg)](modules/ranger/)
+[![_Tapers_](modules/tapers/tapers.svg)](modules/tapers/)
 
 **[_Cubic_](modules/cubic/)**
-transforms its input signal by offsetting, scaling, squaring, and cubing it.
+offsets, scales, squares, and cubes its input signal.
 
-**[_Juster_](modules/Juster/)** (coming soon)
-is a signal chain that applies a series of selectable functions.
+**[_Func_](modules/func/)** (coming soon)
+is a knob with a selectable range to offset or scale its input signal.
+
+**[_Func 6_](modules/func-6/)** (coming soon)
+is a chain of knobs with selectable ranges to offset and scale input signals.
 
 **[_Ranger_](modules/ranger/)**
-is a knob with an adjustable, modulatable range.
+is a modulatable knob with an adjustable, modulatable range.
+
+**[_Tapers_](modules/tapers/)**
+is a pair of modulatable knobs with adjustable, modulatable tapers.
+
+### Waveshapers
+
+[![_Swave_](modules/swave/swave.svg)](modules/swave/)
 
 **[_Swave_](modules/swave/)**
 is a waveshaper with a unique sigmoid transfer function.
-
-**[_Tapers_](modules/tapers/)**
-is a pair of knobs with adjustable tapers.
 
 ## See Also
 
