@@ -1,9 +1,0 @@
-destination: _build
-incremental: false
-exclude:
-  - Gemfile
-  - Gemfile.lock
-  - Rakefile
-  - Makefile
-  - resources
-  - images
