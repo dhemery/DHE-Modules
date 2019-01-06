@@ -80,7 +80,6 @@ public:
   explicit DeferringMode(M *module) : module{module} {}
   void enter() override { module->set_active(true); }
   void step() override { module->send_input(); }
-  void exit() override { module->hold_input(); }
 
 private:
   M *module;
@@ -109,6 +108,7 @@ public:
                                                           stage_generator} {}
 
   void enter() override {
+    module->hold_input();
     module->set_active(true);
     start();
   }
