@@ -57,19 +57,19 @@ public:
     }
   }
 
-  void send_active(bool active) {
-    outputs[ACTIVE_OUT].value = active ? 10.f : 0.f;
-  }
-
-  void send_eoc(bool eoc) { outputs[EOC_OUT].value = eoc ? 10.f : 0.f; }
-
   void send_held() { send_out(held_voltage); }
 
   void send_input() { send_out(envelope_in()); }
 
   void send_stage() { send_held(); }
 
+  void set_active(bool active) {
+    outputs[ACTIVE_OUT].value = active ? 10.f : 0.f;
+  }
+
   void set_duration_range(Range const *range) { duration_range = range; }
+
+  void set_eoc(bool eoc) { outputs[EOC_OUT].value = eoc ? 10.f : 0.f; }
 
   auto sustain_gate_in() const -> bool {
     return inputs[STAGE_GATE_IN].value > 0.1f;

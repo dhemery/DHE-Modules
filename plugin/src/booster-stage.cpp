@@ -46,19 +46,31 @@ public:
 
   void on_stage_trigger_rise() { enter(&generating_mode); }
 
-  void send_active(bool active) {
-    outputs[ACTIVE_OUT].value = active || active_button() ? 10.f : 0.f;
-  }
-
-  void send_eoc(bool eoc) {
-    outputs[EOC_OUT].value = eoc || eoc_button() ? 10.f : 0.f;
-  }
-
   void send_input() { send_out(envelope_in()); }
 
   void send_stage() {
     auto phase = stage_generator.phase();
     send_out(scale(taper(phase), held_voltage, level()));
+  }
+
+  void set_active(bool active) {
+    is_active = active;
+    send_active();
+  }
+
+  void set_active_button(bool active) {
+    active_button_is_pressed = active;
+    send_active();
+  }
+
+  void set_eoc(bool eoc) {
+    is_eoc = eoc;
+    send_eoc();
+  }
+
+  void set_eoc_button(bool eoc) {
+    eoc_button_is_pressed = eoc;
+    send_eoc();
   }
 
   const Selector<Range const *> duration_range_selector{
@@ -99,10 +111,6 @@ public:
   enum OutputIds { ACTIVE_OUT, EOC_OUT, MAIN_OUT, OUTPUT_COUNT };
 
 private:
-  auto active_button() const -> bool {
-    return params[ACTIVE_BUTTON].value > 0.5;
-  }
-
   auto curvature() const -> float {
     return Sigmoid::curvature(modulated(CURVE_KNOB, CURVE_CV));
   }
@@ -115,8 +123,6 @@ private:
 
   auto envelope_in() const -> float { return inputs[ENVELOPE_IN].value; }
 
-  auto eoc_button() const -> bool { return params[EOC_BUTTON].value > 0.5f; }
-
   auto is_s_shape() const -> bool { return params[SHAPE_SWITCH].value > 0.5f; }
 
   auto level() const -> float {
@@ -128,6 +134,15 @@ private:
     auto rotation = params[knob_param].value;
     auto cv = inputs[cv_input].value;
     return Rotation::modulated(rotation, cv);
+  }
+
+  void send_active() {
+    outputs[ACTIVE_OUT].value =
+        is_active || active_button_is_pressed ? 10.f : 0.f;
+  }
+
+  void send_eoc() {
+    outputs[EOC_OUT].value = is_eoc || eoc_button_is_pressed ? 10.f : 0.f;
   }
 
   void send_out(float voltage) { outputs[MAIN_OUT].value = voltage; }
@@ -150,6 +165,10 @@ private:
   float held_voltage = 0.f;
   Range const *duration_range{&Duration::medium_range};
   Range const *level_range{&Signal::bipolar_range};
+  bool is_active = false;
+  bool active_button_is_pressed = false;
+  bool is_eoc = false;
+  bool eoc_button_is_pressed = false;
 };
 
 class BoosterStagePanel : public Panel<BoosterStagePanel> {
@@ -190,13 +209,19 @@ public:
 
     install(column_1, y, input(BoosterStage::DEFER_GATE_IN));
     install(column_2, y, button(BoosterStage::DEFER_BUTTON));
-    install(column_4, y, button<ReverseButton>(BoosterStage::ACTIVE_BUTTON));
+    install(column_4, y,
+            button<ReverseButton>(
+                BoosterStage::ACTIVE_BUTTON,
+                [module](bool active) { module->set_active_button(active); }));
     install(column_5, y, output(BoosterStage::ACTIVE_OUT));
 
     y += dy;
     install(column_1, y, input(BoosterStage::STAGE_TRIGGER_IN));
     install(column_2, y, button(BoosterStage::TRIGGER_BUTTON));
-    install(column_4, y, button<ReverseButton>(BoosterStage::EOC_BUTTON));
+    install(column_4, y,
+            button<ReverseButton>(BoosterStage::EOC_BUTTON, [module](bool eoc) {
+              module->set_eoc_button(eoc);
+            }));
     install(column_5, y, output(BoosterStage::EOC_OUT));
 
     y += dy;

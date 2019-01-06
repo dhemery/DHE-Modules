@@ -62,7 +62,8 @@ public:
   }
 
   static auto svg(const std::string &filename) -> std::shared_ptr<rack::SVG> {
-    static const auto module_asset_dir = plugin_asset_dir() + P::module_slug + "/";
+    static const auto module_asset_dir =
+        plugin_asset_dir() + P::module_slug + "/";
     return rack::SVG::load(module_asset_dir + filename + ".svg");
   }
 

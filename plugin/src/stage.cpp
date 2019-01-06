@@ -45,18 +45,18 @@ public:
     enter(&following_mode);
   }
 
-  void send_active(bool active) {
-    outputs[ACTIVE_OUT].value = active ? 10.f : 0.f;
-  }
-
-  void send_eoc(bool eoc) { outputs[EOC_OUT].value = eoc ? 10.f : 0.f; }
-
   void send_input() { send_out(envelope_in()); }
 
   void send_stage() {
     auto phase = stage_generator.phase();
     send_out(scale(taper(phase), held_voltage, level()));
   }
+
+  void set_active(bool active) {
+    outputs[ACTIVE_OUT].value = active ? 10.f : 0.f;
+  }
+
+  void set_eoc(bool eoc) { outputs[EOC_OUT].value = eoc ? 10.f : 0.f; }
 
   auto stage_trigger_in() const -> bool {
     return inputs[STAGE_TRIGGER_IN].value > 0.1;

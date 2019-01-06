@@ -65,11 +65,11 @@ template <typename M> class EocGenerator : public PhaseAccumulator {
 public:
   explicit EocGenerator(M *module) : module{module} {}
 
-  void on_start() const override { module->send_eoc(true); }
+  void on_start() const override { module->set_eoc(true); }
 
   auto duration() const -> float override { return 1e-3; }
 
-  void on_finish() const override { module->send_eoc(false); }
+  void on_finish() const override { module->set_eoc(false); }
 
 private:
   M *module;
@@ -78,7 +78,7 @@ private:
 template <typename M> class DeferringMode : public Mode {
 public:
   explicit DeferringMode(M *module) : module{module} {}
-  void enter() override { module->send_active(true); }
+  void enter() override { module->set_active(true); }
   void step() override { module->send_input(); }
   void exit() override { module->hold_input(); }
 
@@ -90,7 +90,7 @@ template <typename M> class FollowingMode : public Mode {
 public:
   explicit FollowingMode(M *module, Trigger *stage_trigger)
       : module{module}, stage_trigger{stage_trigger} {}
-  void enter() override { module->send_active(false); }
+  void enter() override { module->set_active(false); }
   void step() override {
     module->send_stage();
     stage_trigger->step();
@@ -109,7 +109,7 @@ public:
                                                           stage_generator} {}
 
   void enter() override {
-    module->send_active(true);
+    module->set_active(true);
     start();
   }
 
@@ -132,7 +132,7 @@ public:
   explicit SustainingMode(M *module, Gate *sustain_gate)
       : module{module}, sustain_gate{sustain_gate} {}
 
-  void enter() override { module->send_active(true); }
+  void enter() override { module->set_active(true); }
 
   void step() override {
     module->send_held();
