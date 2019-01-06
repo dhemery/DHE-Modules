@@ -39,12 +39,12 @@ tidy:
 	find plugin/src plugin/include -name *.h -o -name *.cpp | xargs clang-format -i
 
 gui:
-	$(MAKE) -C gui clobber all
+	cd gui && rake install
 
-clobber: fresh
-	$(MAKE) -C gui clobber
+clobber: clean uninstall
+	cd gui && rake clobber
 
-fresh: clean uninstall
+fresh: clean all
 
 uninstall:
 	rm -rf $(DEV_INSTALL_DIR)
