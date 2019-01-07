@@ -1,9 +1,9 @@
 require_relative '../module'
 
 module DHE
-  class Bloomer < DHE::Module
+  class Blossom < DHE::Module
     def initialize
-      super(name: 'BLOOMER', hp: 11, foreground: [270, 100, 50], background: [270, 66, 97])
+      super(name: 'BLOSSOM', hp: 11, foreground: [270, 100, 50], background: [270, 66, 97])
       left = @width / 7.0
       right = @width - left
       center = @width / 2.0
@@ -84,4 +84,4 @@ module DHE
   end
 end
 
-MODULE_TO_FILENAME[DHE::Bloomer.new] = __FILE__
+MODULE_TO_FILENAME[DHE::Blossom.new] = __FILE__

@@ -10,7 +10,7 @@
 
 namespace DHE {
 
-class BloomerRotor {
+class BlossomRotor {
 public:
   void advance(float delta, float offset = 0.f) {
     this->offset = offset;
@@ -27,9 +27,9 @@ private:
   float offset{0.f};
 };
 
-class Bloomer : public rack::Module {
+class Blossom : public rack::Module {
 public:
-  Bloomer() : Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT} {}
+  Blossom() : Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT} {}
 
   void step() override {
     auto spin_rate = spin();
@@ -136,13 +136,13 @@ private:
 
   static constexpr auto speed_curvature = 0.8f;
 
-  BloomerRotor spinner{};
-  BloomerRotor bouncer{};
+  BlossomRotor spinner{};
+  BlossomRotor bouncer{};
 };
 
-class BloomerPanel : public Panel<BloomerPanel> {
+class BlossomPanel : public Panel<BlossomPanel> {
 public:
-  explicit BloomerPanel(Bloomer *module) : Panel{module, hp} {
+  explicit BlossomPanel(Blossom *module) : Panel{module, hp} {
     auto widget_right_edge = width();
 
     auto column_1 = widget_right_edge/7.f;
@@ -153,24 +153,24 @@ public:
     auto y = 25.f;
     auto dy = 18.5f;
 
-    install(column_1, y, input(Bloomer::SPIN_CV));
-    install(column_2, y, knob<TinyKnob>(Bloomer::SPIN_AV));
-    install(column_3, y, knob<LargeKnob>(Bloomer::SPIN_KNOB, 0.65f));
+    install(column_1, y, input(Blossom::SPIN_CV));
+    install(column_2, y, knob<TinyKnob>(Blossom::SPIN_AV));
+    install(column_3, y, knob<LargeKnob>(Blossom::SPIN_KNOB, 0.65f));
 
     y += dy;
-    install(column_1, y, input(Bloomer::BOUNCE_CV));
-    install(column_2, y, knob<TinyKnob>(Bloomer::BOUNCE_AV));
-    install(column_3, y, knob<LargeKnob>(Bloomer::BOUNCE_KNOB));
+    install(column_1, y, input(Blossom::BOUNCE_CV));
+    install(column_2, y, knob<TinyKnob>(Blossom::BOUNCE_AV));
+    install(column_3, y, knob<LargeKnob>(Blossom::BOUNCE_KNOB));
 
     y += dy;
-    install(column_1, y, input(Bloomer::DEPTH_CV));
-    install(column_2, y, knob<TinyKnob>(Bloomer::DEPTH_AV));
-    install(column_3, y, knob<LargeKnob>(Bloomer::DEPTH_KNOB));
+    install(column_1, y, input(Blossom::DEPTH_CV));
+    install(column_2, y, knob<TinyKnob>(Blossom::DEPTH_AV));
+    install(column_3, y, knob<LargeKnob>(Blossom::DEPTH_KNOB));
 
     y += dy;
-    install(column_1, y, input(Bloomer::PHASE_CV));
-    install(column_2, y, knob<TinyKnob>(Bloomer::PHASE_AV));
-    install(column_3, y, knob<LargeKnob>(Bloomer::PHASE_KNOB));
+    install(column_1, y, input(Blossom::PHASE_CV));
+    install(column_2, y, knob<TinyKnob>(Blossom::PHASE_AV));
+    install(column_3, y, knob<LargeKnob>(Blossom::PHASE_KNOB));
 
     y = 97.f;
     dy = 15.f;
@@ -178,25 +178,25 @@ public:
 
     auto default_gain = Rotation::gain_range.normalize(1.f);
 
-    install(column_1, y, input(Bloomer::X_GAIN_CV));
-    install(column_2, y, knob<SmallKnob>(Bloomer::X_GAIN_KNOB, default_gain));
-    install(column_3, y, toggle<2>(Bloomer::X_RANGE_SWITCH, 0));
-    install(column_4, y + output_port_offset, output(Bloomer::X_OUT));
+    install(column_1, y, input(Blossom::X_GAIN_CV));
+    install(column_2, y, knob<SmallKnob>(Blossom::X_GAIN_KNOB, default_gain));
+    install(column_3, y, toggle<2>(Blossom::X_RANGE_SWITCH, 0));
+    install(column_4, y + output_port_offset, output(Blossom::X_OUT));
 
     y += dy;
-    install(column_1, y, input(Bloomer::Y_GAIN_CV));
-    install(column_2, y, knob<SmallKnob>(Bloomer::Y_GAIN_KNOB, default_gain));
-    install(column_3, y, toggle<2>(Bloomer::Y_RANGE_SWITCH, 0));
-    install(column_4, y + output_port_offset, output(Bloomer::Y_OUT));
+    install(column_1, y, input(Blossom::Y_GAIN_CV));
+    install(column_2, y, knob<SmallKnob>(Blossom::Y_GAIN_KNOB, default_gain));
+    install(column_3, y, toggle<2>(Blossom::Y_RANGE_SWITCH, 0));
+    install(column_4, y + output_port_offset, output(Blossom::Y_OUT));
   }
 
-  static constexpr auto module_slug = "bloomer";
+  static constexpr auto module_slug = "blossom";
 
 private:
   static constexpr auto hp = 11;
 };
 
 } // namespace DHE
-rack::Model *modelBloomer =
-    rack::Model::create<DHE::Bloomer, DHE::BloomerPanel>(
-        "DHE-Modules", "Bloomer", "Bloomer", rack::LFO_TAG);
+rack::Model *modelBlossom =
+    rack::Model::create<DHE::Blossom, DHE::BlossomPanel>(
+        "DHE-Modules", "Blossom", "Blossom", rack::LFO_TAG);

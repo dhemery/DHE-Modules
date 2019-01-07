@@ -8,7 +8,7 @@ void init(rack::Plugin *p) {
   p->slug = "DHE-Modules";
   p->version = TOSTRING(VERSION);
 
-  p->addModel(modelBloomer);
+  p->addModel(modelBlossom);
   p->addModel(modelBoosterStage);
   p->addModel(modelCubic);
   p->addModel(modelFunc);
