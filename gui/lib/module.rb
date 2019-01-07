@@ -1,5 +1,6 @@
 require 'color'
 
+require_relative 'controls/box'
 require_relative 'controls/button'
 require_relative 'controls/counter'
 require_relative 'controls/knob'

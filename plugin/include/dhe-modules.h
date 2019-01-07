@@ -3,6 +3,7 @@
 #include <rack.hpp>
 
 extern rack::Plugin *plugin;
+extern rack::Model *modelBloomer;
 extern rack::Model *modelBoosterStage;
 extern rack::Model *modelCubic;
 extern rack::Model *modelFunc;

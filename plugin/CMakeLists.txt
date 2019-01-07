@@ -22,6 +22,7 @@ target_sources(plugin
         include/util/trigger.h
         include/dhe-modules.h
         src/booster-stage.cpp
+        src/bloomer.cpp
         src/cubic.cpp
         src/dhe-modules.cpp
         src/func.cpp
