@@ -221,7 +221,7 @@ public:
 
     y = 82.f;
     dy = 15.f;
-    const auto output_port_offset = 1.25;
+    const auto output_port_offset = 1.25f;
 
     auto default_gain = Rotation::gain_range.normalize(1.f);
 

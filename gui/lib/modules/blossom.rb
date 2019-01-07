@@ -21,10 +21,11 @@ module DHE
 
       y += delta_y
 
-      connector(left: left, right: right_center, y: y)
+      connector(left: left, right: right, y: y)
       cv_port(x: left, y: y)
       attenuverter(x: left_center, y: y)
       large_knob(x: right_center, y: y, label: 'BOUNCE')
+      toggle(x: right, y: y, labels: %w(LOCK FREE), selection: 2)
 
       y += delta_y
 

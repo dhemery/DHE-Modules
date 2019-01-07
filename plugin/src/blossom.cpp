@@ -33,7 +33,7 @@ public:
 
   void step() override {
     auto spin_rate = spin();
-    auto bounce_ratio = bounce();
+    auto bounce_ratio = is_bounce_free() ? bounce() : std::round(bounce());
     auto bounce_depth = depth();
 
     spinner.advance(spin_rate, 0.f);
@@ -54,6 +54,7 @@ public:
     SPIN_AV,
     BOUNCE_KNOB,
     BOUNCE_AV,
+    BOUNCE_LOCK_SWITCH,
     DEPTH_KNOB,
     DEPTH_AV,
     PHASE_KNOB,
@@ -116,6 +117,10 @@ private:
     return depth_range.clamp(rotation);
   }
 
+  auto is_bounce_free() const -> bool {
+    return params[BOUNCE_LOCK_SWITCH].value > 0.1f;
+  }
+
   auto phase() const -> float {
     static constexpr auto phase_range = Range{0.f, 1.f};
     auto rotation = modulated(PHASE_KNOB, PHASE_CV, PHASE_AV);
@@ -161,6 +166,7 @@ public:
     install(column_1, y, input(Blossom::BOUNCE_CV));
     install(column_2, y, knob<TinyKnob>(Blossom::BOUNCE_AV));
     install(column_3, y, knob<LargeKnob>(Blossom::BOUNCE_KNOB));
+    install(column_4, y, toggle<2>(Blossom::BOUNCE_LOCK_SWITCH, 1));
 
     y += dy;
     install(column_1, y, input(Blossom::DEPTH_CV));
