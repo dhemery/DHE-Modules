@@ -1,31 +1,14 @@
 #include <array>
-#include <math.h>
 
 #include "dhe-modules.h"
 #include "display/controls.h"
 #include "display/panel.h"
 #include "util/rotation.h"
+#include "util/rotor.h"
 #include "util/sigmoid.h"
 #include "util/signal.h"
 
 namespace DHE {
-
-class BlossomRotor {
-public:
-  void advance(float delta, float offset = 0.f) {
-    this->offset = offset;
-    phase += delta;
-    phase -= std::trunc(phase);
-  }
-
-  auto angle() const -> float { return two_pi*(phase + offset); }
-  auto radius() const -> float { return std::sin(angle()); }
-
-private:
-  float const two_pi{2.f*std::acos(-1.f)};
-  float phase{0.f};
-  float offset{0.f};
-};
 
 class Blossom : public rack::Module {
 public:
@@ -141,8 +124,8 @@ private:
 
   static constexpr auto speed_curvature = 0.8f;
 
-  BlossomRotor spinner{};
-  BlossomRotor bouncer{};
+  Rotor spinner{};
+  Rotor bouncer{};
 };
 
 class BlossomPanel : public Panel<BlossomPanel> {

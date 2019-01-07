@@ -15,6 +15,7 @@ target_sources(plugin
         include/util/phase-accumulator.h
         include/util/range.h
         include/util/rotation.h
+        include/util/rotor.h
         include/util/selector.h
         include/util/sigmoid.h
         include/util/signal.h

@@ -1,31 +1,14 @@
 #include <array>
-#include <math.h>
 
 #include "dhe-modules.h"
 #include "display/controls.h"
 #include "display/panel.h"
 #include "util/rotation.h"
+#include "util/rotor.h"
 #include "util/sigmoid.h"
 #include "util/signal.h"
 
 namespace DHE {
-
-class XycloidRotor {
-public:
-  void advance(float delta, float offset = 0.f) {
-    this->offset = offset;
-    phase += delta;
-    phase -= std::trunc(phase);
-  }
-
-  auto x() const -> float { return std::cos(two_pi * (phase + offset)); }
-  auto y() const -> float { return std::sin(two_pi * (phase + offset)); }
-
-private:
-  float const two_pi{2.f * std::acos(-1.f)};
-  float phase{0.f};
-  float offset{0.f};
-};
 
 class Xycloid : public rack::Module {
 public:
@@ -184,9 +167,8 @@ private:
   static constexpr auto wobble_depth_range = Range{0.f, 1.f};
 
   float wobble_ratio_offset{0.f};
-  XycloidRotor wobbler{};
-
-  XycloidRotor throbber{};
+  Rotor wobbler{};
+  Rotor throbber{};
 };
 
 class XycloidPanel : public Panel<XycloidPanel> {
