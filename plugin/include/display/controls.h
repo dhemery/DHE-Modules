@@ -67,7 +67,7 @@ public:
 
 template <typename P> class ReverseButton : public Button<P> {
 public:
-  ReverseButton() : Button<P>{"button-reversed"} {}
+  ReverseButton() : Button<P>("button-reversed") {}
 };
 
 template <typename P, int N>

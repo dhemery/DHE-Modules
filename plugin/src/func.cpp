@@ -116,12 +116,12 @@ public:
 
 template <typename P> class MultiplicationRangeSwitch : public Toggle<P, 4> {
 public:
-  MultiplicationRangeSwitch() : Toggle<P, 4>{"counter-mult"} {}
+  MultiplicationRangeSwitch() : Toggle<P, 4>("counter-mult") {}
 };
 
 template <typename P> class AdditionRangeSwitch : public Toggle<P, 4> {
 public:
-  AdditionRangeSwitch() : Toggle<P, 4>{"counter-add"} {}
+  AdditionRangeSwitch() : Toggle<P, 4>("counter-add") {}
 };
 
 class FuncPanel : public Panel<FuncPanel> {
