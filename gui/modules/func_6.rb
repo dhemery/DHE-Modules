@@ -3,11 +3,11 @@ hp 12
 foreground [220, 100, 40]
 background [40, 50, 96]
 
-center = @width / 2.0
-left = @width / 7.0
-right = @width - left
+center = width / 2.0
+left = width / 7.0
+right = width - left
 left_center = (left + center) / 2.0
-right_center = @width - left_center
+right_center = width - left_center
 
 row_count = 6
 last_row = row_count - 1

@@ -3,8 +3,8 @@ hp 5
 foreground [180, 100, 30]
 background [180, 100, 97]
 
-left = @width / 4.0 + 1.0 / 3.0
-right = @width - left
+left = width / 4.0 + 1.0 / 3.0
+right = width - left
 delta_y = 15.0
 
 y = 20.0

@@ -14,6 +14,8 @@ require_relative 'controls/toggle'
 class ModuleFactory
   BOX_BUFFER = PADDING + STROKE_INSET
 
+  attr_reader :width
+
   def initialize
     @controls = []
     @faceplate = []

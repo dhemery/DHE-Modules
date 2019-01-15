@@ -3,9 +3,9 @@ hp 8
 foreground [0, 100, 30]
 background [0, 100, 97]
 
-left = @width / 6.0 + 1.0 / 3.0
-right = @width - left
-center = @width / 2.0
+left = width / 6.0 + 1.0 / 3.0
+right = width - left
+center = width / 2.0
 
 y = 25.0
 delta_y = 18.5

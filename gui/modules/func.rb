@@ -3,7 +3,7 @@ hp 3
 foreground [220, 100, 40]
 background [40, 50, 96]
 
-center = @width / 2.0
+center = width / 2.0
 
 top = 23.0
 bottom = 108.0

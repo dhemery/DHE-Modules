@@ -3,10 +3,10 @@ hp 11
 foreground [270, 100, 50]
 background [270, 66, 97]
 
-left = @width / 7.0
-right = @width - left
+left = width / 7.0
+right = width - left
 left_center = (right - left) / 3.0 + left
-right_center = @width - left_center
+right_center = width - left_center
 
 y = 25.0
 delta_y = 18.5
