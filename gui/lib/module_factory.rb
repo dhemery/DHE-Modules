@@ -22,9 +22,8 @@ class ModuleFactory
   end
 
   def build
-    DheModule.new(name: @name, width: @width, foreground: @foreground, background: @background, controls:
-        @controls,
-                  faceplate: @faceplate)
+    DheModule.new(name: @name, controls: @controls, faceplate: @faceplate,
+                  width: @width, foreground: @foreground, background: @background)
   end
 
   def name(name)
@@ -43,8 +42,12 @@ class ModuleFactory
     @background = "##{Color::HSL.new(*color).to_rgb.hex}"
   end
 
-  def attenuverter(x:, y:)
-    knob(x: x, y: y, size: :tiny, label: '<tspan font-size="larger">-&#160;&#160;+</tspan>', label_size: :large)
+  def separator(y:)
+    @faceplate << make_line(left: 0, right: @width, y: y)
+  end
+
+  def connector(left:, right:, y:)
+    @faceplate << make_line(left: left, right: right, y: y,)
   end
 
   def button(x:, y:, label: '', style: :normal)
@@ -55,49 +58,12 @@ class ModuleFactory
     @controls << button
   end
 
-  def connector(left:, right:, y:)
-    @faceplate << make_line(left: left, right: right, y: y, )
-  end
-
-  def separator(y:)
-    @faceplate << make_line(left: 0, right: @width, y: y)
-  end
-
-  def counter(x:, y:, name:, labels:, selection: 1, enabled: true)
-    @controls << make_counter(x: x, y: y, name: name, labels: labels, selection: selection, enabled: enabled)
-  end
-
-  def cv_port(x:, y:)
-    port = make_port(x: x, y: y)
-    label = make_label(control: port, text: 'CV', size: :small)
-    @faceplate << label
-    @controls << port
-  end
-
-  def duration_toggle(x:, y:)
-    toggle(x: x, y: y, labels: %w(1 10 100), selection: 2)
-  end
-
   def input_port(x:, y:, label: 'IN')
     port = make_port(x: x, y: y)
     label = make_label(control: port, text: label, size: :small)
     @faceplate << make_box(around: [label, port])
     @faceplate << label
     @controls << port
-  end
-
-  def knob(x:, y:, label:, size:, label_size:)
-    knob = make_knob(x: x, y: y, size: size)
-    @controls << knob
-    @faceplate << make_label(control: knob, text: label, size: label_size)
-  end
-
-  def large_knob(x:, y:, label:)
-    knob(x: x, y: y, size: :large, label: label, label_size: :large)
-  end
-
-  def medium_knob(x:, y:, label:)
-    knob(x: x, y: y, size: :medium, label: label, label_size: :small)
   end
 
   def output_port(x:, y:, label: 'OUT')
@@ -108,16 +74,33 @@ class ModuleFactory
     @controls << port
   end
 
-  def polarity_toggle(x:, y:, selection: 1)
-    toggle(x: x, y: y, labels: %w(BI UNI), selection: selection)
+  def cv_port(x:, y:)
+    port = make_port(x: x, y: y)
+    label = make_label(control: port, text: 'CV', size: :small)
+    @faceplate << label
+    @controls << port
   end
 
-  def shape_toggle(x:, y:)
-    toggle(x: x, y: y, labels: %w(J S), selection: 1)
+  def knob(x:, y:, size:, label:, label_size:)
+    knob = make_knob(x: x, y: y, size: size)
+    @controls << knob
+    @faceplate << make_label(control: knob, text: label, size: label_size)
   end
 
   def small_knob(x:, y:, label:)
     knob(x: x, y: y, size: :small, label: label, label_size: :small)
+  end
+
+  def medium_knob(x:, y:, label:)
+    knob(x: x, y: y, size: :medium, label: label, label_size: :small)
+  end
+
+  def large_knob(x:, y:, label:)
+    knob(x: x, y: y, size: :large, label: label, label_size: :large)
+  end
+
+  def attenuverter(x:, y:)
+    knob(x: x, y: y, size: :tiny, label: '<tspan font-size="larger">-&#160;&#160;+</tspan>', label_size: :large)
   end
 
   def toggle(x:, y:, labels:, selection:)
@@ -130,6 +113,22 @@ class ModuleFactory
                              text: labels[1], size: :small) if labels.size == 3
     @faceplate << make_label(control: toggle, alignment: :above,
                              text: labels.last, size: :small)
+  end
+
+  def polarity_toggle(x:, y:, selection: 1)
+    toggle(x: x, y: y, labels: %w(BI UNI), selection: selection)
+  end
+
+  def duration_toggle(x:, y:)
+    toggle(x: x, y: y, labels: %w(1 10 100), selection: 2)
+  end
+
+  def shape_toggle(x:, y:)
+    toggle(x: x, y: y, labels: %w(J S), selection: 1)
+  end
+
+  def counter(x:, y:, name:, labels:, selection: 1, enabled: true)
+    @controls << make_counter(x: x, y: y, name: name, labels: labels, selection: selection, enabled: enabled)
   end
 
   def input_button_port(x:, y:, label:)
