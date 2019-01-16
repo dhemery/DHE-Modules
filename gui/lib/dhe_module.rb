@@ -16,11 +16,11 @@ class DheModule
 
   attr_reader :name, :slug, :width, :foreground, :background, :controls
 
-  def initialize(name:, hp:, foreground:, background:, controls:, faceplate:)
+  def initialize(name:, width:, foreground:, background:, controls:, faceplate:)
     @name = name
     @slug = Pathname(@name.downcase.sub(' ', '-'))
-    @width = hp * MM_PER_HP
-    @width_px = @width * PX_PER_MM
+    @width = width
+    @width_px = width * PX_PER_MM
 
     @foreground = foreground
     @background = background

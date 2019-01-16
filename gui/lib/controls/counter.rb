@@ -5,7 +5,7 @@ class Counter < Control
   def initialize(x:, y:, name:, labels:, foreground:, background:, enabled:, selection:)
     @name = name
     @slug = "counter-#{@name}"
-    @button = Button.new(x: x, y: y, pressed_color: background, ring_color: foreground)
+    @button = Button.new(x: x, y: y, pressed_color: background, ring_color: foreground, style: :normal)
     @label_offset = @button.radius + PADDING
     @labels = labels.map do |label|
       Label.new(x: x, y: y - @label_offset,

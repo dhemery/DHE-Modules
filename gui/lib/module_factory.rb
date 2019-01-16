@@ -12,7 +12,7 @@ require_relative 'controls/port'
 require_relative 'controls/toggle'
 
 class ModuleFactory
-  BOX_BUFFER = PADDING + STROKE_INSET
+  MM_PER_HP = 5.08
 
   attr_reader :width
 
@@ -22,7 +22,8 @@ class ModuleFactory
   end
 
   def build
-    DheModule.new(name: @name, hp: @hp, foreground: @foreground, background: @background, controls: @controls,
+    DheModule.new(name: @name, width: @width, foreground: @foreground, background: @background, controls:
+        @controls,
                   faceplate: @faceplate)
   end
 
@@ -31,9 +32,7 @@ class ModuleFactory
   end
 
   def hp(hp)
-    @hp = hp
     @width = hp * MM_PER_HP
-    @width_px = @width * PX_PER_MM
   end
 
   def foreground(color)
@@ -48,15 +47,20 @@ class ModuleFactory
     knob(x: x, y: y, size: :tiny, label: '<tspan font-size="larger">-&#160;&#160;+</tspan>', label_size: :large)
   end
 
-  def button(x:, y:, label: '', style: :foreground)
+  def button(x:, y:, label: '', style: :normal)
     button = make_button(x: x, y: y, style: style)
-    label = make_label(text: label, size: :small, x: x, y: button.top - PADDING, style: style)
+    label = make_label(control: button, text: label, size: :small, style: style)
+
     @faceplate << label
     @controls << button
   end
 
   def connector(left:, right:, y:)
-    @faceplate << make_line(x1: left, y1: y, x2: right)
+    @faceplate << make_line(left: left, right: right, y: y, )
+  end
+
+  def separator(y:)
+    @faceplate << make_line(left: 0, right: @width, y: y)
   end
 
   def counter(x:, y:, name:, labels:, selection: 1, enabled: true)
@@ -65,7 +69,7 @@ class ModuleFactory
 
   def cv_port(x:, y:)
     port = make_port(x: x, y: y)
-    label = make_label(text: 'CV', size: :small, x: x, y: port.top - PADDING)
+    label = make_label(control: port, text: 'CV', size: :small)
     @faceplate << label
     @controls << port
   end
@@ -76,8 +80,8 @@ class ModuleFactory
 
   def input_port(x:, y:, label: 'IN')
     port = make_port(x: x, y: y)
-    label = make_label(text: label, size: :small, x: x, y: port.top - PADDING)
-    @faceplate << make_box(top: label.top, right: port.right, bottom: port.bottom, left: port.left)
+    label = make_label(control: port, text: label, size: :small)
+    @faceplate << make_box(around: [label, port])
     @faceplate << label
     @controls << port
   end
@@ -85,7 +89,7 @@ class ModuleFactory
   def knob(x:, y:, label:, size:, label_size:)
     knob = make_knob(x: x, y: y, size: size)
     @controls << knob
-    @faceplate << make_label(text: label, size: label_size, x: x, y: knob.top - PADDING)
+    @faceplate << make_label(control: knob, text: label, size: label_size)
   end
 
   def large_knob(x:, y:, label:)
@@ -98,18 +102,14 @@ class ModuleFactory
 
   def output_port(x:, y:, label: 'OUT')
     port = make_port(x: x, y: y)
-    label = make_label(text: label, size: :small, style: :background, x: x, y: port.top - PADDING)
-    @faceplate << make_box(top: label.top, right: port.right, bottom: port.bottom, left: port.left, style: :solid)
+    label = make_label(control: port, text: label, size: :small, style: :reversed)
+    @faceplate << make_box(around: [label, port], style: :solid)
     @faceplate << label
     @controls << port
   end
 
   def polarity_toggle(x:, y:, selection: 1)
     toggle(x: x, y: y, labels: %w(BI UNI), selection: selection)
-  end
-
-  def separator(y:)
-    @faceplate << make_line(x1: 0, y1: y, x2: @width)
   end
 
   def shape_toggle(x:, y:)
@@ -124,23 +124,20 @@ class ModuleFactory
     toggle = make_toggle(x: x, y: y,
                          size: labels.size, selection: selection)
     @controls << toggle
-    @faceplate << make_label(text: labels.first, size: :small,
-                             x: x, y: toggle.bottom + PADDING,
-                             alignment: :below)
-    @faceplate << make_label(text: labels[1], size: :small,
-                             x: toggle.right + PADDING / 2.0, y: y,
-                             alignment: :right_of) if labels.size == 3
-    @faceplate << make_label(text: labels.last, size: :small,
-                             x: x, y: toggle.top - PADDING,
-                             alignment: :above)
+    @faceplate << make_label(control: toggle, alignment: :below,
+                             text: labels.first, size: :small)
+    @faceplate << make_label(control: toggle, alignment: :right_of,
+                             text: labels[1], size: :small) if labels.size == 3
+    @faceplate << make_label(control: toggle, alignment: :above,
+                             text: labels.last, size: :small)
   end
 
   def input_button_port(x:, y:, label:)
     port = make_port(x: x, y: y)
-    label = make_label(text: label, size: :small, x: x, y: port.top - PADDING)
+    label = make_label(control: port, text: label, size: :small)
     button_x = port.right + PADDING + Button::DIAMETER / 2.0
     button = make_button(x: button_x, y: y)
-    @faceplate << make_box(top: label.top, right: button.right, bottom: port.bottom, left: port.left)
+    @faceplate << make_box(around: [button, label, port])
     @faceplate << label
     @controls << port
     @controls << button
@@ -148,27 +145,32 @@ class ModuleFactory
 
   def output_button_port(x:, y:, label:)
     port = make_port(x: x, y: y)
-    label = make_label(text: label, size: :small, x: x, y: port.top - PADDING, style: :background)
+    label = make_label(control: port, text: label, size: :small, style: :reversed)
     button_x = port.left - PADDING - Button::DIAMETER / 2.0
-    button = make_button(x: button_x, y: y, style: :background)
-    @faceplate << make_box(top: label.top, right: port.right, bottom: port.bottom, left: button.left, style: :solid)
+    button = make_button(x: button_x, y: y, style: :reversed)
+    @faceplate << make_box(around: [button, label, port], style: :solid)
     @faceplate << label
     @controls << port
     @controls << button
   end
 
-  def make_box(top:, right:, bottom:, left:, style: :outline)
+  def make_box(around:, style: :outline)
+    stroke_inset = STROKE_WIDTH / 2.0
+    box_buffer = PADDING + stroke_inset
+    top = around.map(&:top).min - box_buffer
+    right = around.map(&:right).max + box_buffer
+    bottom = around.map(&:bottom).max + box_buffer
+    left = around.map(&:left).min - box_buffer
     stroke = @foreground
     fill = style == :solid ? @foreground : @background
-    Box.new(top: top - BOX_BUFFER, right: right + PADDING, bottom: bottom + PADDING, left: left - PADDING,
+    Box.new(top: top, right: right, bottom: bottom, left: left,
             stroke: stroke, fill: fill)
   end
 
-  def make_button(x:, y:, style: :foreground)
-    ring_color = @foreground
-    pressed_color = @background
-    ring_color, pressed_color = pressed_color, ring_color if style == :background
-    Button.new(x: x, y: y, ring_color: ring_color, pressed_color: pressed_color)
+  def make_button(x:, y:, style: :normal)
+    ring_color = style == :normal ? @foreground : @background
+    pressed_color = style == :normal ? @background : @foreground
+    Button.new(x: x, y: y, ring_color: ring_color, pressed_color: pressed_color, style: style)
   end
 
   def make_counter(x:, y:, name:, labels:, selection:, enabled:)
@@ -180,13 +182,26 @@ class ModuleFactory
     Knob.new(x: x, y: y, knob_color: @foreground, pointer_color: @background, size: size,)
   end
 
-  def make_label(x:, y:, text:, size:, alignment: :above, style: :foreground)
-    color = style == :background ? @background : @foreground
+  def make_label(control:, text:, size:, alignment: :above, style: :normal)
+    color = style == :normal ? @foreground : @background
+    case alignment
+      when :above
+        x = control.x
+        y = control.top - PADDING
+      when :right_of
+        x = control.right + PADDING / 2
+        y = control.y
+      when :below
+        x = control.x
+        y = control.bottom + PADDING
+      else
+        raise "unknown alignment #{alignment} for label #{text}"
+    end
     Label.new(x: x, y: y, text: text, color: color, size: size, alignment: alignment)
   end
 
-  def make_line(x1:, x2: x1, y1:, y2: y1)
-    Line.new(x1: x1, x2: x2, y1: y1, y2: y2, color: @foreground)
+  def make_line(left:, right:, y:)
+    Line.new(x1: left, x2: right, y1: y, y2: y, color: @foreground)
   end
 
   def make_port(x:, y:)

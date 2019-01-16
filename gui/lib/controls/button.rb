@@ -3,7 +3,7 @@ require_relative '../control'
 class Button < RoundControl
   DIAMETER = 6.0
 
-  def initialize(x:, y:, ring_color:, pressed_color:, style: :normal)
+  def initialize(x:, y:, ring_color:, pressed_color:, style:)
     super(x: x, y: y, diameter: DIAMETER)
     @slug = 'button'
     @slug += '-reversed' if style == :reversed
