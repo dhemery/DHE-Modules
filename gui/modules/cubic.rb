@@ -7,22 +7,13 @@ left = width / 4.0 + 1.0 / 3.0
 right = width - left
 delta_y = 15.0
 
-y = 20.0
+top = 20.0
 
-cv_port(x: left, y: y)
-small_knob(x: right, y: y, label: 'X<tspan baseline-shift="super">3</tspan>')
-
-y += delta_y
-cv_port(x: left, y: y)
-small_knob(x: right, y: y, label: 'X<tspan baseline-shift="super">2</tspan>')
-
-y += delta_y
-cv_port(x: left, y: y)
-small_knob(x: right, y: y, label: 'X<tspan baseline-shift="super">1</tspan>')
-
-y += delta_y
-cv_port(x: left, y: y)
-small_knob(x: right, y: y, label: 'X<tspan baseline-shift="super">0</tspan>')
+(0..3).each do |row|
+  y = top + delta_y * row
+  cv_port(x: left, y: y)
+  small_knob(x: right, y: y, label: "X<tspan baseline-shift=\"super\">#{3 - row}</tspan>")
+end
 
 y = 82.0
 
