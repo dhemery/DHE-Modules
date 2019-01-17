@@ -1,7 +1,7 @@
 require_relative 'svg_file'
 
 class Control
-  attr_reader :width, :height, :top, :right, :bottom, :left, :x, :y
+  attr_reader :width, :height, :top, :right, :bottom, :left, :x, :y, :slug
 
   def initialize(top:, right:, bottom:, left:, x: (right + left) / 2.0, y: (bottom + top) / 2.0)
     @top = top

@@ -7,6 +7,7 @@ class Port < RoundControl
 
   def initialize(x:, y:, foreground:, background:)
     super(x: x, y: y, diameter: DIAMETER)
+    @slug = 'port'
     @foreground = foreground
     @background = background
     @x = x
@@ -29,7 +30,7 @@ class Port < RoundControl
 
   def svg_files(dir)
     [
-        svg_file(path: dir / 'port') do |svg|
+        svg_file(path: dir / @slug) do |svg|
           draw_control(svg: svg)
         end
     ]

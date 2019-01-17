@@ -16,7 +16,7 @@ class Label < Control
     @baseline = BASELINES[@alignment]
     @anchor = ANCHORS[@alignment]
     height = @size * ASCENT_RATIO
-    width = @text.length * @size * 0.6 # Approximate
+    width = @text.length * @size * 0.5 # Approximate
     left = case alignment
              when :right_of
                x
