@@ -1,3 +1,9 @@
+class Float
+  def to_s
+    '%.3f' % self
+  end
+end
+
 require 'rake/clean'
 require 'pathname'
 require_relative 'lib/module_factory'
