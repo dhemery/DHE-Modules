@@ -31,7 +31,13 @@ class DheModule
         Label.new(x: @width / 2, y: HEIGHT - PANEL_LABEL_INSET,
                   text: 'DHE', size: :title, color: @foreground, alignment: :below)
     ] + faceplate
+    @faceplate_items.each do |item|
+      item.owner = self
+    end
     @controls = controls
+    @controls.each do |control|
+      control.owner = self
+    end
   end
 
   def faceplate_file

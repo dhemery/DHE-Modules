@@ -1,7 +1,7 @@
 require 'ostruct'
-require_relative '../control'
+require_relative '../shape'
 
-class Line
+class Line < Shape
   attr_reader :start, :end
 
   def initialize(color:, x1:, y1:, x2:, y2:)
