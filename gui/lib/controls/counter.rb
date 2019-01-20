@@ -17,25 +17,29 @@ class Counter < Control
     super(x: x, y: y,
           top: @labels[0].top, right: @button.right, bottom: bottom, left: @button.left)
     @enabled = enabled
-    @selection = selection
+    @states = @labels.each_with_index.map do |label, index|
+      {
+          slug: "#{@slug}-#{index + 1}",
+          label: label
+      }
+    end
+    @default_state = @states[selection - 1]
   end
 
-  def draw(svg:, x:, y:, selection: @selection)
-    @labels[selection - 1].draw(svg: svg, x: x, y: y - @label_offset)
-    @button.draw(svg: svg, x: x, y: y, **@button.states[0])
+  def draw(svg:, x:, y:, **state)
+    state[:label].draw(svg: svg, x: x, y: y - @label_offset)
+    @button.draw(svg: svg, x: x, y: y, **@button.default_state)
   end
 
   def draw_faceplate(svg:)
-    return unless @enabled
-    draw(svg: svg, x: @x, y: @y)
+    draw(svg: svg, x: @x, y: @y, **@default_state) if @enabled
   end
 
   def svg_files(dir)
-    (0...@labels.size).map do |index|
-      selection = index + 1
-      path = dir / "#{@slug}-#{selection}"
-      svg_file(path: path, has_text: true) do |svg|
-        draw_control(svg: svg, selection: selection)
+    @states.map do |state|
+      path = dir / state[:slug]
+      svg_file(path: path) do |svg|
+        draw_control(svg: svg, **state)
       end
     end
   end
