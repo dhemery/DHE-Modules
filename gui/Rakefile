@@ -57,6 +57,7 @@ modules.each do |mod|
 end
 
 controls = modules.map(&:controls).flatten
+states = controls.map(&:states).flatten
 
 controls.each do |control|
   task control => [control.owner]

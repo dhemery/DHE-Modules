@@ -2,7 +2,7 @@ require_relative 'shape'
 require_relative 'svg_file'
 
 class Control < Shape
-  attr_reader :slug
+  attr_reader :slug, :states
 
   def initialize(top:, right:, bottom:, left:, x: (right + left) / 2.0, y: (bottom + top) / 2.0)
     super(top: top, right: right, bottom: bottom, left: left, x: x, y: y)

@@ -1,6 +1,7 @@
-require_relative '../control'
+require_relative '../dimensions'
+require_relative '../shape'
 
-class Label < Control
+class Label < Shape
   BASELINES = { above: 'alphabetic', below: 'hanging', right_of: 'middle' }
   ANCHORS = { above: 'middle', below: 'middle', right_of: 'start' }
   ASCENT_RATIO = 2.0 / 3.0 # Approximately correct for Proxima Nova font

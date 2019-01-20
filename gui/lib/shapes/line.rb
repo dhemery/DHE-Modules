@@ -1,4 +1,4 @@
-require 'ostruct'
+require_relative '../dimensions'
 require_relative '../shape'
 
 class Line < Shape

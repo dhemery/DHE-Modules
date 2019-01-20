@@ -2,14 +2,14 @@ require 'color'
 
 require_relative 'dhe_module'
 require_relative 'dimensions'
-require_relative 'controls/box'
 require_relative 'controls/button'
 require_relative 'controls/counter'
 require_relative 'controls/knob'
-require_relative 'controls/label'
-require_relative 'controls/line'
 require_relative 'controls/port'
 require_relative 'controls/toggle'
+require_relative 'shapes/box'
+require_relative 'shapes/label'
+require_relative 'shapes/line'
 
 class ModuleFactory
   MM_PER_HP = 5.08

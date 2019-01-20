@@ -1,5 +1,7 @@
 require_relative '../control'
 require_relative '../dimensions'
+require_relative '../shapes/label'
+require_relative 'button'
 
 class Counter < Control
   def initialize(x:, y:, name:, labels:, foreground:, background:, enabled:, selection:)
@@ -20,7 +22,7 @@ class Counter < Control
 
   def draw(svg:, x:, y:, selection: @selection)
     @labels[selection - 1].draw(svg: svg, x: x, y: y - @label_offset)
-    @button.draw(svg: svg, x: x, y: y)
+    @button.draw(svg: svg, x: x, y: y, **@button.states[0])
   end
 
   def draw_faceplate(svg:)

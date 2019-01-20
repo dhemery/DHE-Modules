@@ -1,5 +1,5 @@
 require_relative '../dimensions'
-require_relative '../control'
+require_relative '../shape'
 
 class Box < Shape
   CORNER_RADIUS = 1.0
