@@ -16,13 +16,15 @@ class ModuleFactory
 
   attr_reader :width
 
-  def initialize
+  def initialize(source_file)
+    @source_file = source_file
     @controls = []
     @faceplate = []
   end
 
   def build
-    DheModule.new(name: @name, controls: @controls, faceplate: @faceplate,
+    instance_eval(File.read(@source_file), @source_file)
+    DheModule.new(source_file: @source_file, name: @name, controls: @controls, faceplate: @faceplate,
                   width: @width, foreground: @foreground, background: @background)
   end
 

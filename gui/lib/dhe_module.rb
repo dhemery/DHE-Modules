@@ -14,9 +14,10 @@ class DheModule
   HEIGHT_PX = HEIGHT * PX_PER_MM
   PANEL_LABEL_INSET = 9.0
 
-  attr_reader :name, :slug, :width, :foreground, :background, :controls
+  attr_reader :source_file, :name, :slug, :width, :foreground, :background, :controls
 
-  def initialize(name:, width:, foreground:, background:, controls:, faceplate:)
+  def initialize(source_file:, name:, width:, foreground:, background:, controls:, faceplate:)
+    @source_file = source_file
     @name = name
     @slug = Pathname(@name.downcase.sub(' ', '-'))
     @width = width

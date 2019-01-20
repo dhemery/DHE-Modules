@@ -8,6 +8,9 @@ require 'rake/clean'
 require 'pathname'
 require_relative 'lib/module_factory'
 
+modules_dir = Pathname('modules')
+modules = FileList.new(modules_dir / '*.rb').map { |file| ModuleFactory.new(file).build }
+
 svg_build_dir = Pathname('_svg')
 directory svg_build_dir
 
@@ -20,24 +23,8 @@ def inkscape(from:, to:)
   sh '/Applications/Inkscape.app/Contents/Resources/script', '--export-text-to-path', "--export-plain-svg=#{to}", from
 end
 
-def load_module(file)
-  factory = ModuleFactory.new
-  factory.instance_eval(File.read(file), file)
-  factory.build
-end
-
-modules_dir = Pathname('modules')
-module_files = FileList.new(modules_dir / '*.rb')
-
-module_files.each do |module_file|
-  file module_file
-end
-
-module_to_file = Hash[module_files.map { |file| [load_module(file), file] }]
-modules = module_to_file.keys
-
 modules.each do |mod|
-  task mod => [module_to_file[mod]]
+  task mod => [mod.source_file]
 end
 
 faceplate_file_to_module = Hash[modules.map { |m| [m.faceplate_file, m] }]
@@ -46,12 +33,11 @@ faceplate_build_files = []
 faceplate_install_files = []
 
 faceplate_files.each do |faceplate_file|
-  m = faceplate_file_to_module[faceplate_file]
-  module_source_file = module_to_file[m]
+  mod = faceplate_file_to_module[faceplate_file]
   faceplate_build_file = svg_build_dir / faceplate_file.path
   faceplate_build_files << faceplate_build_file
 
-  file faceplate_build_file => [svg_build_dir, module_source_file] do
+  file faceplate_build_file => [svg_build_dir, mod] do
     faceplate_file.write(svg_build_dir)
   end
 
@@ -74,12 +60,11 @@ image_build_files = []
 image_install_files = []
 
 image_files.each do |image_file|
-  m = image_file_to_module[image_file]
-  module_source_file = module_to_file[m]
+  mod = image_file_to_module[image_file]
   image_build_file = image_build_dir / image_file.path
   image_build_files << image_build_file
 
-  file image_build_file => [image_build_dir, module_source_file] do
+  file image_build_file => [image_build_dir, mod] do
     image_file.write(image_build_dir)
   end
 
