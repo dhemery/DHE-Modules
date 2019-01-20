@@ -11,19 +11,21 @@ class Control < Shape
         slug: slug,
     }
     @states = [@default_state]
+    @draws_on_faceplate = true
+    @has_text = false
   end
 
   def svg_files(dir)
     @states.map do |state|
       path = dir / state[:slug]
-      svg_file(path: path) do |svg|
+      svg_file(path: path, has_text: @has_text) do |svg|
         draw_control(svg: svg, **state)
       end
     end
   end
 
   def draw_faceplate(svg:)
-    draw(svg: svg, x: @x, y: @y, **@default_state)
+    draw(svg: svg, x: @x, y: @y, **@default_state) if @draws_on_faceplate
   end
 
   def draw_control(svg:, **options)

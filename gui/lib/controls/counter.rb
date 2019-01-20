@@ -14,7 +14,7 @@ class Counter < Control
     bottom = y + (@button.y - @labels[0].top)
     super(slug: "counter-#{name}", x: x, y: y,
           top: @labels[0].top, right: @button.right, bottom: bottom, left: @button.left)
-    @enabled = enabled
+    @draws_on_faceplate = enabled
     @states = @labels.each_with_index.map do |label, index|
       {
           slug: "#{slug}-#{index + 1}",
@@ -22,14 +22,11 @@ class Counter < Control
       }
     end
     @default_state = @states[selection - 1]
+    @has_text = true
   end
 
   def draw(svg:, x:, y:, **state)
     state[:label].draw(svg: svg, x: x, y: y - @label_offset)
     @button.draw(svg: svg, x: x, y: y, **@button.default_state)
-  end
-
-  def draw_faceplate(svg:)
-    draw(svg: svg, x: @x, y: @y, **@default_state) if @enabled
   end
 end
