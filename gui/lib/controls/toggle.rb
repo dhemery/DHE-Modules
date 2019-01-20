@@ -6,17 +6,22 @@ class Toggle < Control
   attr_reader :size
 
   def initialize(x:, y:, foreground:, background:, size:, selection:)
-    super(**Control::centered(x: x, y: y, width: WIDTH, height: WIDTH * size))
-    @size = size
+    super(slug: "toggle-#{size}", **Control::centered(x: x, y: y, width: WIDTH, height: WIDTH * size))
     @foreground = foreground
     @background = background
-    @slug = "toggle-#{@size}"
     @selection = selection
+    @states = (1..size).map do |position|
+      {
+          slug: "#{@slug}-#{position}",
+          position: position,
+      }
+    end
+    @default_state = @states[selection - 1]
   end
 
-  def draw(svg:, x:, y:, selection: @selection)
-    thumb_position = case selection
-                       when @size
+  def draw(svg:, x:, y:, **state)
+    position = case state[:position]
+                       when states.length
                          1.0
                        when 1
                          -1.0
@@ -45,21 +50,12 @@ class Toggle < Control
     lever_height = knurl_spacing * 4.0 + knurl_stroke_width
     lever_inset = knurl_stroke_width
     lever_distance = (interior_height - lever_height) / 2.0 - lever_inset
-    lever_offset = lever_distance * -thumb_position
+    lever_offset = lever_distance * -position
 
     svg.g(transform: "translate(#{x} #{y})", fill: @background, stroke: @foreground) do |g|
       g.rect(x: box_left, y: box_top, width: box_width, height: box_height, rx: corner_radius, ry: corner_radius, 'stroke-width' => box_stroke_width)
       (-2..2).map { |index| knurl_spacing * index + lever_offset }.each do |knurl_y|
         g.line(x1: knurl_left, x2: knurl_right, y1: knurl_y, y2: knurl_y, 'stroke-width' => knurl_stroke_width, 'stroke-linecap' => 'round')
-      end
-    end
-  end
-
-  def svg_files(dir)
-    (1..size).map do |selection|
-      path = dir / "#{@slug}-#{selection}"
-      svg_file(path: path) do |svg|
-        draw_control(svg: svg, selection: selection)
       end
     end
   end

@@ -4,8 +4,26 @@ require_relative 'svg_file'
 class Control < Shape
   attr_reader :slug, :states, :default_state
 
-  def initialize(top:, right:, bottom:, left:, x: (right + left) / 2.0, y: (bottom + top) / 2.0)
+  def initialize(slug:, top:, right:, bottom:, left:, x: (right + left) / 2.0, y: (bottom + top) / 2.0)
     super(top: top, right: right, bottom: bottom, left: left, x: x, y: y)
+    @slug = slug
+    @default_state = {
+        slug: slug,
+    }
+    @states = [@default_state]
+  end
+
+  def svg_files(dir)
+    @states.map do |state|
+      path = dir / state[:slug]
+      svg_file(path: path) do |svg|
+        draw_control(svg: svg, **state)
+      end
+    end
+  end
+
+  def draw_faceplate(svg:)
+    draw(svg: svg, x: @x, y: @y, **@default_state)
   end
 
   def draw_control(svg:, **options)
@@ -24,8 +42,8 @@ end
 class RoundControl < Control
   attr_reader :diameter
 
-  def initialize(x:, y:, diameter:)
-    super(**Control::centered(x: x, y: y, width: diameter, height: diameter))
+  def initialize(slug:, x:, y:, diameter:)
+    super(slug: slug, **Control::centered(x: x, y: y, width: diameter, height: diameter))
     @diameter = diameter
   end
 

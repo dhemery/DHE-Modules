@@ -5,8 +5,6 @@ require_relative 'button'
 
 class Counter < Control
   def initialize(x:, y:, name:, labels:, foreground:, background:, enabled:, selection:)
-    @name = name
-    @slug = "counter-#{@name}"
     @button = Button.new(x: x, y: y, pressed_color: background, ring_color: foreground, style: :normal)
     @label_offset = @button.radius + PADDING
     @labels = labels.map do |label|
@@ -14,12 +12,12 @@ class Counter < Control
                 color: foreground, text: label, size: :small)
     end
     bottom = y + (@button.y - @labels[0].top)
-    super(x: x, y: y,
+    super(slug: "counter-#{name}", x: x, y: y,
           top: @labels[0].top, right: @button.right, bottom: bottom, left: @button.left)
     @enabled = enabled
     @states = @labels.each_with_index.map do |label, index|
       {
-          slug: "#{@slug}-#{index + 1}",
+          slug: "#{slug}-#{index + 1}",
           label: label
       }
     end
@@ -33,14 +31,5 @@ class Counter < Control
 
   def draw_faceplate(svg:)
     draw(svg: svg, x: @x, y: @y, **@default_state) if @enabled
-  end
-
-  def svg_files(dir)
-    @states.map do |state|
-      path = dir / state[:slug]
-      svg_file(path: path) do |svg|
-        draw_control(svg: svg, **state)
-      end
-    end
   end
 end
