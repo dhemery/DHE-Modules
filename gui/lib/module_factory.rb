@@ -3,9 +3,9 @@ require 'color'
 require_relative 'dhe_module'
 require_relative 'dimensions'
 require_relative 'controls/button'
-require_relative 'controls/counter'
 require_relative 'controls/knob'
 require_relative 'controls/port'
+require_relative 'controls/stepper'
 require_relative 'controls/toggle'
 require_relative 'shapes/box'
 require_relative 'shapes/label'
@@ -129,8 +129,8 @@ class ModuleFactory
     toggle(x: x, y: y, labels: %w(J S), selection: 1)
   end
 
-  def counter(x:, y:, name:, labels:, selection: 1, enabled: true)
-    @controls << make_counter(x: x, y: y, name: name, labels: labels, selection: selection, enabled: enabled)
+  def stepper(x:, y:, name:, labels:, selection: 1, enabled: true)
+    @controls << make_stepper(x: x, y: y, name: name, labels: labels, selection: selection, enabled: enabled)
   end
 
   def input_button_port(x:, y:, label:)
@@ -174,8 +174,8 @@ class ModuleFactory
     Button.new(x: x, y: y, ring_color: ring_color, pressed_color: pressed_color, style: style)
   end
 
-  def make_counter(x:, y:, name:, labels:, selection:, enabled:)
-    Counter.new(x: x, y: y, foreground: @foreground, background: @background,
+  def make_stepper(x:, y:, name:, labels:, selection:, enabled:)
+    Stepper.new(x: x, y: y, foreground: @foreground, background: @background,
                 name: name, labels: labels, selection: selection, enabled: enabled)
   end
 

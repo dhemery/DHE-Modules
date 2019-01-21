@@ -1,33 +1,28 @@
 require_relative '../control'
 
-class Toggle < Control
-  WIDTH = 3.0
+class ToggleState
+  attr_reader :slug, :control
 
-  attr_reader :size
-
-  def initialize(x:, y:, foreground:, background:, size:, selection:)
-    super(slug: "toggle-#{size}", **Control::centered(x: x, y: y, width: WIDTH, height: WIDTH * size))
+  def initialize(control:, slug:, foreground:, background:, size:, position:)
+    @control = control
+    @slug = slug
     @foreground = foreground
     @background = background
-    @selection = selection
-    @states = (1..size).map do |position|
-      {
-          slug: "#{@slug}-#{position}",
-          position: position,
-      }
-    end
-    @default_state = @states[selection - 1]
+    @size = size
+    @position = position
   end
 
-  def draw(svg:, x:, y:, **state)
-    position = case state[:position]
-                       when states.length
-                         1.0
-                       when 1
-                         -1.0
-                       else
-                         0.0
-                     end
+  def draw(svg:, x:, y:)
+    width = control.width
+    height = control.height
+    position = case @position
+                 when @size
+                   1.0
+                 when 1
+                   -1.0
+                 else
+                   0.0
+               end
     box_stroke_width = width / 8.0
     interior_inset = box_stroke_width / 2.0
 
@@ -58,5 +53,27 @@ class Toggle < Control
         g.line(x1: knurl_left, x2: knurl_right, y1: knurl_y, y2: knurl_y, 'stroke-width' => knurl_stroke_width, 'stroke-linecap' => 'round')
       end
     end
+  end
+end
+
+class Toggle < Control
+  WIDTH = 3.0
+
+  attr_reader :size
+
+  def initialize(x:, y:, foreground:, background:, size:, selection:)
+    super(**Control::centered(x: x, y: y, width: WIDTH, height: WIDTH * size))
+    @selection = selection
+    @states = (1..size).map do |position|
+      ToggleState.new(
+          control: self,
+          slug: "toggle-#{size}-#{position}",
+          foreground: foreground,
+          background: background,
+          size: size,
+          position: position,
+      )
+    end
+    @default_state = @states[selection - 1]
   end
 end

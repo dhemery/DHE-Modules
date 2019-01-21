@@ -1,17 +1,18 @@
 require_relative '../control'
 
-class Port < RoundControl
-  DIAMETER = 8.4
+class PortState
+  attr_reader :slug, :control
 
-  def initialize(x:, y:, foreground:, background:)
-    super(slug: 'port', x: x, y: y, diameter: DIAMETER)
+  def initialize(control:, slug:, foreground:, background:)
+    @control = control
+    @slug = slug
     @foreground = foreground
     @background = background
   end
 
-  def draw(svg:, x:, y:, **ignored)
-    stroke_width = DIAMETER * 0.025
-    sleeve_diameter = DIAMETER - stroke_width
+  def draw(svg:, x:, y:)
+    stroke_width = control.diameter * 0.025
+    sleeve_diameter = control.diameter - stroke_width
     step = sleeve_diameter / 7.0
     sleeve_radius = sleeve_diameter / 2.0
     ring_radius = sleeve_radius - step
@@ -22,4 +23,15 @@ class Port < RoundControl
       g.circle(r: tip_radius, fill: @foreground)
     end
   end
+end
+
+class Port < RoundControl
+  DIAMETER = 8.4
+
+  def initialize(x:, y:, foreground:, background:)
+    super(x: x, y: y, diameter: DIAMETER)
+    @default_state = PortState.new(control: self, slug: 'port', foreground: foreground, background: background)
+    @states = [@default_state]
+  end
+
 end

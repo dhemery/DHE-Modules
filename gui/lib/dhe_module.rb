@@ -1,9 +1,9 @@
 require 'color'
 
 require_relative 'controls/button'
-require_relative 'controls/counter'
 require_relative 'controls/knob'
 require_relative 'controls/port'
+require_relative 'controls/stepper'
 require_relative 'controls/toggle'
 require_relative 'shapes/label'
 require_relative 'svg_file'
