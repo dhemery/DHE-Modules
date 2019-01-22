@@ -1,4 +1,5 @@
 require 'color'
+require 'pathname'
 
 require_relative 'dimensions'
 require_relative 'shapes/box'
@@ -17,24 +18,28 @@ class ModuleFactory
   MODULE_LABEL_INSET = 9.0
   PADDING = 1.0
 
-  attr_reader :width
+  attr_reader :source_file, :width, :slug, :faceplate_shape, :image_shape, :control_shapes
 
   def initialize(source_file)
-    @source_file = source_file
+    @source_file = Pathname(source_file)
+    @slug = Pathname(source_file.to_s.pathmap('%n'))
     @faceplate_shapes = []
     @image_shapes = []
     @control_shapes = []
   end
 
   def build
-    instance_eval(File.read(@source_file), @source_file)
+    instance_eval(@source_file.read, @source_file.to_s)
     faceplate = Faceplate.new(top: 0, right: @width, bottom: MODULE_HEIGHT, left: 0, stroke: @foreground, fill: @background)
     module_label = Label.new(text: @name, size: :title, color: @foreground)
                        .translate(width / 2, MODULE_LABEL_INSET)
     author_label = Label.new(text: 'DHE', size: :title, color: @foreground, alignment: :below)
                        .translate(width / 2, MODULE_HEIGHT - MODULE_LABEL_INSET)
     @faceplate_shapes.prepend(module_label, author_label, faceplate)
+    @faceplate_shape = CompositeShape.new(shapes: @faceplate_shapes)
     @image_shapes.prepend(module_label, author_label, faceplate)
+    @image_shape = CompositeShape.new(shapes: @faceplate_shapes + @image_shapes)
+    self
   end
 
   def name(name)
@@ -155,8 +160,6 @@ class ModuleFactory
     end
     @control_shapes += levers
 
-    puts "selection #{selection} from levers.size #{levers.size}"
-
     image_housing = housing.translate(x, y)
     image_lever = levers[selection - 1].translate(x, y)
     @image_shapes.append(image_housing, image_lever)
@@ -189,7 +192,7 @@ class ModuleFactory
   def stepper(x:, y:, name:, labels:, selection: 1, hidden: false)
     stepper_button = Button.new(stroke: @foreground, fill: @foreground)
     stepper_labels = labels.map do |label|
-      Label.new(text: label, size: :medium, color: @foreground, alignment: :above)
+      Label.new(text: label, size: :small, color: @foreground, alignment: :above)
           .translate(stepper_button.x, stepper_button.top - PADDING)
     end
     steppers = stepper_labels.map do |label|
@@ -207,7 +210,7 @@ class ModuleFactory
     @control_shapes.append(port, pressed_button, released_button)
 
     image_port = port.translate(x, y)
-    image_button = released_button.translate(port.x + port.radius + PADDING + button.radius, port.y)
+    image_button = released_button.translate(port.x + port.radius + PADDING + released_button.radius, port.y)
     @image_shapes.append(image_port, image_button)
 
     faceplate_label = Label.new(text: label, color: @foreground, size: :small)
@@ -225,7 +228,7 @@ class ModuleFactory
     @control_shapes.append(port, pressed_button, released_button)
 
     image_port = port.translate(x, y)
-    image_button = released_button.translate(port.x - port.radius - PADDING - button.radius, port.y)
+    image_button = released_button.translate(port.x - port.radius - PADDING - released_button.radius, port.y)
     @image_shapes.append(image_port, image_button)
 
     faceplate_label = Label.new(text: label, color: @background, size: :small)

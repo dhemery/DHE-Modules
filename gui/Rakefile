@@ -7,6 +7,7 @@ end
 require 'rake/clean'
 require 'pathname'
 require_relative 'lib/module_factory'
+require_relative 'lib/svg_file'
 
 def inkscape(from:, to:)
   from = from.expand_path.to_s
@@ -26,94 +27,95 @@ directory image_build_dir
 directory image_install_dir
 
 modules = FileList.new(modules_dir / '*.rb').map { |file| ModuleFactory.new(file).build }
+pp modules
 
 modules.each do |mod|
   task mod => mod.source_file
-  module_path = mod.slug.sub_ext('.svg')
+  module_svg_path = mod.slug.sub_ext('.svg')
 
-  faceplate_build_file = svg_build_dir / module_path
+  faceplate_build_file = svg_build_dir / module_svg_path
   file faceplate_build_file => [svg_build_dir, mod] do
-    mod.faceplate_file.write(svg_build_dir)
+    SvgFile.new(path: faceplate_build_file, content: mod.faceplate_shape).write
   end
   task build: faceplate_build_file
 
-  faceplate_install_file = svg_install_dir / module_path
+  faceplate_install_file = svg_install_dir / module_svg_path
   file faceplate_install_file => [svg_install_dir, faceplate_build_file] do
     inkscape(from: faceplate_build_file, to: faceplate_install_file)
   end
   task install: faceplate_install_file
 
-  image_build_file = image_build_dir / module_path
+  image_build_file = image_build_dir / module_svg_path
   file image_build_file => [image_build_dir, mod] do
-    mod.image_file.write(image_build_dir)
+    SvgFile.new(path: faceplate_install_file, content: mod.image_shape).write
   end
   task build: image_build_file
 
-  image_install_file = image_install_dir / module_path
+  image_install_file = image_install_dir / module_svg_path
   file image_install_file => [image_install_dir, image_build_file] do
     inkscape(from: image_build_file, to: image_install_file)
   end
   task install: image_install_file
 end
 
-controls = modules.map(&:controls).flatten
-states = controls.map(&:states).flatten
-
-controls.each do |control|
-  task control => [control.owner]
-end
-
-control_svg_to_control = Hash[
-    controls.flat_map do |control|
-      module_slug = control.owner.slug
-      control.svg_files(module_slug).map { |file| [file, control] }
-    end
-]
-control_svgs = control_svg_to_control.keys
-
-control_svgs.each do |svg|
-  task svg => [control_svg_to_control[svg]]
-end
-
-control_build_path_to_svg = Hash[control_svgs.map { |svg| [svg_build_dir / svg.path, svg] }]
-control_build_paths = control_build_path_to_svg.keys
-
-control_build_paths.each do |control_build_path|
-  dir = control_build_path.parent
-  directory dir
-  svg = control_build_path_to_svg[control_build_path]
-  file control_build_path => [dir, svg] do
-    svg.write(svg_build_dir)
-  end
-end
-
-install_path_mapper = "%{^#{svg_build_dir},#{svg_install_dir}}p"
-control_install_path_to_build_path = Hash[
-    control_build_paths.map do |build_path|
-      [Pathname(build_path.to_s.pathmap(install_path_mapper)), build_path]
-    end
-]
-control_install_paths = control_install_path_to_build_path.keys
-
-control_install_paths.each do |install_path|
-  dir = Pathname(install_path).parent
-  directory dir
-  build_path = control_install_path_to_build_path[install_path]
-  svg = control_build_path_to_svg[build_path]
-  file install_path => [dir, build_path] do
-    if svg.has_text
-      inkscape(from: build_path, to: install_path)
-    else
-      cp build_path, install_path
-    end
-  end
-end
+# controls = modules.map(&:control_files).flatten
+# states = controls.map(&:states).flatten
+#
+# controls.each do |control|
+#   task control => [control.owner]
+# end
+#
+# control_svg_to_control = Hash[
+#     controls.flat_map do |control|
+#       module_slug = control.owner.slug
+#       control.svg_files(module_slug).map { |file| [file, control] }
+#     end
+# ]
+# control_svgs = control_svg_to_control.keys
+#
+# control_svgs.each do |svg|
+#   task svg => [control_svg_to_control[svg]]
+# end
+#
+# control_build_path_to_svg = Hash[control_svgs.map { |svg| [svg_build_dir / svg.path, svg] }]
+# control_build_paths = control_build_path_to_svg.keys
+#
+# control_build_paths.each do |control_build_path|
+#   dir = control_build_path.parent
+#   directory dir
+#   svg = control_build_path_to_svg[control_build_path]
+#   file control_build_path => [dir, svg] do
+#     svg.write(svg_build_dir)
+#   end
+# end
+#
+# install_path_mapper = "%{^#{svg_build_dir},#{svg_install_dir}}p"
+# control_install_path_to_build_path = Hash[
+#     control_build_paths.map do |build_path|
+#       [Pathname(build_path.to_s.pathmap(install_path_mapper)), build_path]
+#     end
+# ]
+# control_install_paths = control_install_path_to_build_path.keys
+#
+# control_install_paths.each do |install_path|
+#   dir = Pathname(install_path).parent
+#   directory dir
+#   build_path = control_install_path_to_build_path[install_path]
+#   svg = control_build_path_to_svg[build_path]
+#   file install_path => [dir, build_path] do
+#     if svg.has_text
+#       inkscape(from: build_path, to: install_path)
+#     else
+#       cp build_path, install_path
+#     end
+#   end
+# end
 
 desc 'Build SVG files'
-task build: control_build_paths
+task :build
 
 desc 'Install SVG files'
-task install: control_install_paths
+task :install
 
 desc 'Remove and rebuild SVG files'
 task fresh: [:clean, :default]

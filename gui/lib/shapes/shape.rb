@@ -39,6 +39,14 @@ class Translated < SimpleDelegator
 end
 
 class Shape
+  def x
+    0.0
+  end
+
+  def y
+    0.0
+  end
+
   def translate(dx, dy)
     Translated.new(dx: dx, dy: dy, shape: self)
   end
@@ -58,11 +66,7 @@ class BoundedShape < Shape
 end
 
 class CenteredShape < BoundedShape
-  attr_reader :x, :y
-
   def initialize(width:, height:)
-    @x = 0.0
-    @y = 0.0
     right = width / 2.0
     bottom = height / 2.0
     super(right: right, bottom: bottom, left: -right, top: -bottom)
@@ -85,6 +89,7 @@ end
 
 class CompositeShape < BoundedShape
   def initialize(shapes:)
+    shapes.each { |shape| p shape }
     super(top: shapes.map(&:top).min,
           right: shapes.map(&:right).max,
           bottom: shapes.map(&:bottom).max,

@@ -23,9 +23,7 @@ class SvgFile
     @has_text ||= @content.has_text?
   end
 
-  def write(dir)
-    file_path = dir / path
-    file_path.parent.mkpath
-    file_path.open('w') {|file| file.write to_svg}
+  def write
+    @path.open('w') { |file| file.write(to_svg) }
   end
 end

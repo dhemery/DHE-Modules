@@ -25,6 +25,6 @@ port_offset = 1.25
   toggle(x: left_center, y: y, labels: %w(ADD MULT), selection: 1)
   large_knob(x: center, y: y, label: ' ')
   stepper(x: right_center, y: y, name: 'add', labels: %w(0–5 ±5 0–10 ±10), selection: 2)
-  stepper(x: right_center, y: y, name: 'mult', labels: %w(0–1 ±1 0–2 ±2), selection: 2, enabled: false)
+  stepper(x: right_center, y: y, name: 'mult', labels: %w(0–1 ±1 0–2 ±2), selection: 2, hidden: true)
   output_port(x: right, y: y + port_offset)
 end
