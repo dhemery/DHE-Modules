@@ -1,18 +1,12 @@
+require_relative 'shape'
 require_relative '../dimensions'
-require_relative '../shape'
 
-class Line < Shape
-  attr_reader :start, :end
-
-  def initialize(color:, x1:, y1:, x2:, y2:)
-    @stroke = color
-    @x1 = x1
-    @y1 = y1
-    @x2 = x2
-    @y2 = y2
+class Line < BoundedShape
+  def initialize(left:, right:, y:, color:)
+    super(top: y, right: right, bottom: y, left: left)
   end
 
-  def draw_faceplate(svg:)
-    svg.line(x1: @x1, y1: @y1, x2: @x2, y2: @y2, 'stroke-width' => STROKE_WIDTH, stroke: @stroke)
+  def draw(canvas)
+    canvas.line(x1: left, y1: top, x2: right, y2: top, 'stroke-width' => STROKE_WIDTH, stroke: @stroke)
   end
 end

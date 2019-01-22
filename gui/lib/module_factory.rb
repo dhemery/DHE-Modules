@@ -1,31 +1,40 @@
 require 'color'
 
-require_relative 'dhe_module'
 require_relative 'dimensions'
-require_relative 'controls/button'
-require_relative 'controls/knob'
-require_relative 'controls/port'
-require_relative 'controls/stepper'
-require_relative 'controls/toggle'
 require_relative 'shapes/box'
+require_relative 'shapes/button'
+require_relative 'shapes/faceplate'
+require_relative 'shapes/knob'
 require_relative 'shapes/label'
 require_relative 'shapes/line'
+require_relative 'shapes/port'
+require_relative 'shapes/toggle'
 
 class ModuleFactory
   MM_PER_HP = 5.08
+  MODULE_HEIGHT = 128.5
+  MODULE_HEIGHT_PX = MODULE_HEIGHT * PX_PER_MM
+  MODULE_LABEL_INSET = 9.0
+  PADDING = 1.0
 
   attr_reader :width
 
   def initialize(source_file)
     @source_file = source_file
-    @controls = []
-    @faceplate = []
+    @faceplate_shapes = []
+    @image_shapes = []
+    @control_shapes = []
   end
 
   def build
     instance_eval(File.read(@source_file), @source_file)
-    DheModule.new(source_file: @source_file, name: @name, controls: @controls, faceplate: @faceplate,
-                  width: @width, foreground: @foreground, background: @background)
+    faceplate = Faceplate.new(top: 0, right: @width, bottom: MODULE_HEIGHT, left: 0, stroke: @foreground, fill: @background)
+    module_label = Label.new(text: @name, size: :title, color: @foreground)
+                       .translate(width / 2, MODULE_LABEL_INSET)
+    author_label = Label.new(text: 'DHE', size: :title, color: @foreground, alignment: :below)
+                       .translate(width / 2, MODULE_HEIGHT - MODULE_LABEL_INSET)
+    @faceplate_shapes.prepend(module_label, author_label, faceplate)
+    @image_shapes.prepend(module_label, author_label, faceplate)
   end
 
   def name(name)
@@ -45,48 +54,80 @@ class ModuleFactory
   end
 
   def separator(y:)
-    @faceplate << make_line(left: 0, right: @width, y: y)
+    @faceplate_shapes << Line.new(color: @foreground, left: 0, right: @width, y: y)
   end
 
   def connector(left:, right:, y:)
-    @faceplate << make_line(left: left, right: right, y: y,)
+    @faceplate_shapes << Line.new(color: @foreground, left: left, right: right, y: y)
   end
 
-  def button(x:, y:, label: '', style: :normal)
-    button = make_button(x: x, y: y, style: style)
-    label = make_label(control: button, text: label, size: :small, style: style)
+  def button(x:, y:, label: nil, style: :normal)
+    stroke = style == :normal ? @foreground : @background
+    fill = style == :normal ? @background : @foreground
 
-    @faceplate << label
-    @controls << button
+    pressed = Button.new(stroke: stroke, fill: fill, style: style)
+    released = Button.new(stroke: stroke, fill: stroke, style: style)
+    @control_shapes.append(pressed, released)
+
+    image_button = released.translate(x, y)
+    @image_shapes << image_button
+
+    faceplate_label = Label.new(text: label, color: stroke, size: :small, alignment: :above)
+                          .translate(image_button.x, image_button.top - PADDING)
+    @faceplate_shapes << faceplate_label
   end
 
   def input_port(x:, y:, label: 'IN')
-    port = make_port(x: x, y: y)
-    label = make_label(control: port, text: label, size: :small)
-    @faceplate << make_box(around: [label, port])
-    @faceplate << label
-    @controls << port
+    port = Port.new(foreground: @foreground, background: @background)
+    @control_shapes << port
+
+    image_port = port.translate(x, y)
+    @image_shapes << image_port
+
+    faceplate_label = Label.new(text: label, color: @foreground, size: :small)
+                          .translate(image_port.x, image_port.top - PADDING)
+    faceplate_box = Box.new(top: faceplate_label.top, right: image_port.right, bottom: image_port.bottom, left: image_port.left,
+                            stroke: @foreground, fill: @background)
+    @faceplate_shapes.append(faceplate_box, faceplate_label)
   end
 
   def output_port(x:, y:, label: 'OUT')
-    port = make_port(x: x, y: y)
-    label = make_label(control: port, text: label, size: :small, style: :reversed)
-    @faceplate << make_box(around: [label, port], style: :solid)
-    @faceplate << label
-    @controls << port
+    port = Port.new(foreground: @foreground, background: @background)
+    @control_shapes << port
+
+    image_port = port.translate(x, y)
+    @image_shapes << image_port
+
+    faceplate_label = Label.new(text: label, color: @background, size: :small)
+                          .translate(image_port.x, image_port.top - PADDING)
+    faceplate_box = Box.new(top: faceplate_label.top, right: image_port.right, bottom: image_port.bottom, left: image_port.left,
+                            stroke: @foreground, fill: @foreground)
+    @faceplate_shapes.append(faceplate_box, faceplate_label)
+    @faceplate_shapes << faceplate_label
   end
 
   def cv_port(x:, y:)
-    port = make_port(x: x, y: y)
-    label = make_label(control: port, text: 'CV', size: :small)
-    @faceplate << label
-    @controls << port
+    port = Port.new(foreground: @foreground, background: @background)
+    @control_shapes << port
+
+    image_port = port.translate(x, y)
+    @image_shapes << image_port
+
+    faceplate_label = Label.new(text: 'cv', color: @foreground, size: :small)
+                          .translate(image_port.x, image_port.top - PADDING)
+    @faceplate_shapes << faceplate_label
   end
 
   def knob(x:, y:, size:, label:, label_size:)
-    knob = make_knob(x: x, y: y, size: size)
-    @controls << knob
-    @faceplate << make_label(control: knob, text: label, size: label_size)
+    knob = Knob.new(knob_color: @foreground, pointer_color: @background, size: size)
+    @control_shapes << knob
+
+    image_knob = knob.translate(x, y)
+    @image_shapes << image_knob
+
+    faceplate_label = Label.new(text: label, color: @foreground, size: label_size)
+                          .translate(image_knob.x, image_knob.top - PADDING)
+    @faceplate_shapes << faceplate_label
   end
 
   def small_knob(x:, y:, label:)
@@ -106,15 +147,31 @@ class ModuleFactory
   end
 
   def toggle(x:, y:, labels:, selection:)
-    toggle = make_toggle(x: x, y: y,
-                         size: labels.size, selection: selection)
-    @controls << toggle
-    @faceplate << make_label(control: toggle, alignment: :below,
-                             text: labels.first, size: :small)
-    @faceplate << make_label(control: toggle, alignment: :right_of,
-                             text: labels[1], size: :small) if labels.size == 3
-    @faceplate << make_label(control: toggle, alignment: :above,
-                             text: labels.last, size: :small)
+    housing = ToggleHousing.new(foreground: @foreground, background: @background, size: labels.size)
+    @control_shapes.append(housing)
+
+    levers = (1..labels.size).map do |position|
+      ToggleLever.new(foreground: @foreground, background: @background, size: labels.size, position: position)
+    end
+    @control_shapes += levers
+
+    puts "selection #{selection} from levers.size #{levers.size}"
+
+    image_housing = housing.translate(x, y)
+    image_lever = levers[selection - 1].translate(x, y)
+    @image_shapes.append(image_housing, image_lever)
+
+    low_label = Label.new(text: labels.first, color: @foreground, size: :small, alignment: :below)
+                    .translate(image_housing.x, image_housing.bottom + PADDING)
+    high_label = Label.new(text: labels.last, color: @foreground, size: :small, alignment: :above)
+                     .translate(image_housing.x, image_housing.top - PADDING)
+    @faceplate_shapes.append(low_label, high_label)
+
+    if labels.size == 3
+      mid_label = Label.new(text: labels.last, color: @foreground, size: :small, alignment: :right_of)
+                      .translate(image_housing.right + PADDING, image_housing.y)
+      @faceplate_shapes << mid_label
+    end
   end
 
   def polarity_toggle(x:, y:, selection: 1)
@@ -129,89 +186,53 @@ class ModuleFactory
     toggle(x: x, y: y, labels: %w(J S), selection: 1)
   end
 
-  def stepper(x:, y:, name:, labels:, selection: 1, enabled: true)
-    @controls << make_stepper(x: x, y: y, name: name, labels: labels, selection: selection, enabled: enabled)
+  def stepper(x:, y:, name:, labels:, selection: 1, hidden: false)
+    stepper_button = Button.new(stroke: @foreground, fill: @foreground)
+    stepper_labels = labels.map do |label|
+      Label.new(text: label, size: :medium, color: @foreground, alignment: :above)
+          .translate(stepper_button.x, stepper_button.top - PADDING)
+    end
+    steppers = stepper_labels.map do |label|
+      CompositeShape.new(shapes: [stepper_button, label])
+    end
+    @control_shapes += steppers
+
+    @image_shapes << steppers[selection - 1].translate(x, y) unless hidden
   end
 
   def input_button_port(x:, y:, label:)
-    port = make_port(x: x, y: y)
-    label = make_label(control: port, text: label, size: :small)
-    button_x = port.right + PADDING + Button::DIAMETER / 2.0
-    button = make_button(x: button_x, y: y)
-    @faceplate << make_box(around: [button, label, port])
-    @faceplate << label
-    @controls << port
-    @controls << button
+    port = Port.new(foreground: @foreground, background: @background)
+    pressed_button = Button.new(stroke: @foreground, fill: @background)
+    released_button = Button.new(stroke: @foreground, fill: @foreground)
+    @control_shapes.append(port, pressed_button, released_button)
+
+    image_port = port.translate(x, y)
+    image_button = released_button.translate(port.x + port.radius + PADDING + button.radius, port.y)
+    @image_shapes.append(image_port, image_button)
+
+    faceplate_label = Label.new(text: label, color: @foreground, size: :small)
+                          .translate(image_port.x, image_port.top - PADDING)
+    faceplate_box = Box.new(top: faceplate_label.top, right: image_button.right,
+                            bottom: image_port.bottom, left: image_port.left,
+                            stroke: @foreground, fill: @background)
+    @faceplate_shapes.append(faceplate_box, faceplate_label)
   end
 
   def output_button_port(x:, y:, label:)
-    port = make_port(x: x, y: y)
-    label = make_label(control: port, text: label, size: :small, style: :reversed)
-    button_x = port.left - PADDING - Button::DIAMETER / 2.0
-    button = make_button(x: button_x, y: y, style: :reversed)
-    @faceplate << make_box(around: [button, label, port], style: :solid)
-    @faceplate << label
-    @controls << port
-    @controls << button
-  end
+    port = Port.new(foreground: @foreground, background: @background)
+    pressed_button = Button.new(stroke: @background, fill: @foreground)
+    released_button = Button.new(stroke: @background, fill: @background)
+    @control_shapes.append(port, pressed_button, released_button)
 
-  def make_box(around:, style: :outline)
-    stroke_inset = STROKE_WIDTH / 2.0
-    box_buffer = PADDING + stroke_inset
-    top = around.map(&:top).min - box_buffer
-    right = around.map(&:right).max + box_buffer
-    bottom = around.map(&:bottom).max + box_buffer
-    left = around.map(&:left).min - box_buffer
-    stroke = @foreground
-    fill = style == :solid ? @foreground : @background
-    Box.new(top: top, right: right, bottom: bottom, left: left,
-            stroke: stroke, fill: fill)
-  end
+    image_port = port.translate(x, y)
+    image_button = released_button.translate(port.x - port.radius - PADDING - button.radius, port.y)
+    @image_shapes.append(image_port, image_button)
 
-  def make_button(x:, y:, style: :normal)
-    ring_color = style == :normal ? @foreground : @background
-    pressed_color = style == :normal ? @background : @foreground
-    Button.new(x: x, y: y, ring_color: ring_color, pressed_color: pressed_color, style: style)
-  end
-
-  def make_stepper(x:, y:, name:, labels:, selection:, enabled:)
-    Stepper.new(x: x, y: y, foreground: @foreground, background: @background,
-                name: name, labels: labels, selection: selection, enabled: enabled)
-  end
-
-  def make_knob(x:, y:, size:)
-    Knob.new(x: x, y: y, knob_color: @foreground, pointer_color: @background, size: size,)
-  end
-
-  def make_label(control:, text:, size:, alignment: :above, style: :normal)
-    color = style == :normal ? @foreground : @background
-    case alignment
-      when :above
-        x = control.x
-        y = control.top - PADDING
-      when :right_of
-        x = control.right + PADDING / 2
-        y = control.y
-      when :below
-        x = control.x
-        y = control.bottom + PADDING
-      else
-        raise "unknown alignment #{alignment} for label #{text}"
-    end
-    Label.new(x: x, y: y, text: text, color: color, size: size, alignment: alignment)
-  end
-
-  def make_line(left:, right:, y:)
-    Line.new(x1: left, x2: right, y1: y, y2: y, color: @foreground)
-  end
-
-  def make_port(x:, y:)
-    Port.new(x: x, y: y, foreground: @foreground, background: @background)
-  end
-
-  def make_toggle(x:, y:, size:, selection:)
-    Toggle.new(x: x, y: y,
-               foreground: @foreground, background: @background,
-               size: size, selection: selection)
+    faceplate_label = Label.new(text: label, color: @background, size: :small)
+                          .translate(image_port.x, image_port.top - PADDING)
+    faceplate_box = Box.new(top: faceplate_label.top, right: image_button.right,
+                            bottom: image_port.bottom, left: image_port.left,
+                            stroke: @foreground, fill: @foreground)
+    @faceplate_shapes.append(faceplate_box, faceplate_label)
   end
 end

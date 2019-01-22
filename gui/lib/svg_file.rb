@@ -1,17 +1,31 @@
 require 'builder'
 
 class SvgFile
-  attr_reader :has_text, :path, :content
+  SVG_ATTRIBUTES = {
+      version: "1.1",
+      xmlns: "http://www.w3.org/2000/svg"
+  }
+  attr_reader :path
 
-  def initialize(path:, width:, height:, has_text: false, **options)
+  def initialize(path:, content:)
     @path = path.sub_ext('.svg')
-    @has_text = has_text
-    @content = Builder::XmlMarkup.new(indent: 2).svg(version: "1.1", xmlns: "http://www.w3.org/2000/svg", width: width, height: height, **options) { |svg| yield(svg) }
+    @content = content
+  end
+
+  def to_svg
+    @svg ||= Builder::XmlMarkup.new(indent: 2)
+                 .svg(width: @content.width, height: @content.height, **SVG_ATTRIBUTES) do |svg|
+      @content.draw(svg)
+    end
+  end
+
+  def has_text?
+    @has_text ||= @content.has_text?
   end
 
   def write(dir)
     file_path = dir / path
     file_path.parent.mkpath
-    file_path.open('w') { |file| file.write @content }
+    file_path.open('w') {|file| file.write to_svg}
   end
 end

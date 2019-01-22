@@ -1,15 +1,14 @@
+require_relative 'shape'
 require_relative '../dimensions'
-require_relative '../shape'
 
-class Label < Shape
+class Label < BoundedShape
+  STYLE_FOR_SIZE = 'font-family:Proxima Nova;font-weight:bold;font-size:%spx'
   BASELINES = { above: 'alphabetic', below: 'hanging', right_of: 'middle' }
   ANCHORS = { above: 'middle', below: 'middle', right_of: 'start' }
   ASCENT_RATIO = 2.0 / 3.0 # Approximately correct for Proxima Nova font
   SIZES = { title: 12.0 / PX_PER_MM, large: 9.0 / PX_PER_MM, small: 7.0 / PX_PER_MM }
 
-  def initialize(x:, y:, text:, size:, color:, alignment: :above, transform: :upper)
-    @x = x
-    @y = y
+  def initialize(text:, size:, color:, alignment: :above)
     @text = text
     @size = SIZES[size.to_sym]
     @color = color
@@ -20,25 +19,25 @@ class Label < Shape
     width = @text.length * @size * 0.5 # Approximate
     left = case alignment
              when :right_of
-               x
+               0.0
              else # above or below
-               x - width / 2
+               -width / 2.0
            end
     top = case alignment
             when :above
-              y - height
+              -height
             when :right_of
-              y - height / 2
+              -height / 2.0
             else # below
-              y
+              0.0
           end
     bottom = top + height
     right = left + width
-    super(x: x, y: y, top: top, right: right, bottom: bottom, left: left)
+    super(top: top, right: right, bottom: bottom, left: left)
   end
 
-  def draw(svg:, x:, y:)
-    svg.text(x: x, y: y, 'dominant-baseline' => @baseline, 'text-anchor' => @anchor, fill: @color, style: "font-family:Proxima Nova;font-weight:bold;font-size:#{@size}px") do |text|
+  def draw(canvas)
+    canvas.text('dominant-baseline' => @baseline, 'text-anchor' => @anchor, fill: @color, style: STYLE_FOR_SIZE % @size) do |text|
       text << @text
     end
   end

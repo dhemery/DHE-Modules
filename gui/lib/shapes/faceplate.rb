@@ -1,7 +1,7 @@
 require_relative '../dimensions'
 require_relative 'shape'
 
-class Box < BoundedShape
+class Faceplate < BoundedShape
   CORNER_RADIUS = 1.0
 
   def initialize(top:, right:, bottom:, left:, stroke:, fill:)
@@ -11,8 +11,7 @@ class Box < BoundedShape
   end
 
   def draw(canvas)
-    canvas.rect(x: left, y: top, width: width, height: height,
-                rx: CORNER_RADIUS, ry: CORNER_RADIUS,
-                stroke: @stroke, fill: @fill, 'stroke-width' => STROKE_WIDTH)
+    canvas.rect(x: 0, y: 0, width: @width, height: @height,
+           stroke: @foreground, fill: @background, 'stroke-width' => 1)
   end
 end
