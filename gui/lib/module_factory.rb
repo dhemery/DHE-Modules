@@ -35,12 +35,13 @@ class ModuleFactory
                        .translate(width / 2, MODULE_LABEL_INSET)
     author_label = Label.new(text: 'DHE', size: :title, color: @foreground, alignment: :below)
                        .translate(width / 2, MODULE_HEIGHT - MODULE_LABEL_INSET)
-    @faceplate_shapes.prepend(module_label, author_label, faceplate)
-    @faceplate_shape = CompositeShape.new(shapes: @faceplate_shapes)
-    @image_shapes.prepend(module_label, author_label, faceplate)
-    @image_shape = CompositeShape.new(shapes: @faceplate_shapes + @image_shapes)
+    @faceplate_shapes.prepend(faceplate, module_label, author_label)
+    @faceplate_shape ||= CompositeShape.new(shapes: @faceplate_shapes)
+    @image_shapes.prepend(@faceplate_shape)
+    @image_shape ||= CompositeShape.new(shapes: @image_shapes)
     self
   end
+
 
   def name(name)
     @name = name
@@ -152,11 +153,11 @@ class ModuleFactory
   end
 
   def toggle(x:, y:, labels:, selection:)
-    housing = ToggleHousing.new(foreground: @foreground, background: @background, size: labels.size)
+    housing = Toggle::Housing.new(foreground: @foreground, background: @background, size: labels.size)
     @control_shapes.append(housing)
 
     levers = (1..labels.size).map do |position|
-      ToggleLever.new(foreground: @foreground, background: @background, size: labels.size, position: position)
+      Toggle::Lever.new(foreground: @foreground, background: @background, size: labels.size, position: position)
     end
     @control_shapes += levers
 
@@ -171,7 +172,7 @@ class ModuleFactory
     @faceplate_shapes.append(low_label, high_label)
 
     if labels.size == 3
-      mid_label = Label.new(text: labels.last, color: @foreground, size: :small, alignment: :right_of)
+      mid_label = Label.new(text: labels[1], color: @foreground, size: :small, alignment: :right_of)
                       .translate(image_housing.right + PADDING, image_housing.y)
       @faceplate_shapes << mid_label
     end

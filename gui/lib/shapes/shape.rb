@@ -36,6 +36,12 @@ class Translated < SimpleDelegator
   def height
     @shape.height
   end
+
+  def draw(canvas)
+    canvas.g(transform: "translate(#{@dx},#{@dy})") do |g|
+      @shape.draw(g)
+    end
+  end
 end
 
 class Shape
@@ -89,7 +95,6 @@ end
 
 class CompositeShape < BoundedShape
   def initialize(shapes:)
-    shapes.each { |shape| p shape }
     super(top: shapes.map(&:top).min,
           right: shapes.map(&:right).max,
           bottom: shapes.map(&:bottom).max,

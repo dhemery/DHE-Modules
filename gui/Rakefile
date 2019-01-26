@@ -27,7 +27,6 @@ directory image_build_dir
 directory image_install_dir
 
 modules = FileList.new(modules_dir / '*.rb').map { |file| ModuleFactory.new(file).build }
-pp modules
 
 modules.each do |mod|
   task mod => mod.source_file
@@ -39,23 +38,23 @@ modules.each do |mod|
   end
   task build: faceplate_build_file
 
-  faceplate_install_file = svg_install_dir / module_svg_path
-  file faceplate_install_file => [svg_install_dir, faceplate_build_file] do
-    inkscape(from: faceplate_build_file, to: faceplate_install_file)
-  end
-  task install: faceplate_install_file
+  # faceplate_install_file = svg_install_dir / module_svg_path
+  # file faceplate_install_file => [svg_install_dir, faceplate_build_file] do
+  #   inkscape(from: faceplate_build_file, to: faceplate_install_file)
+  # end
+  # task install: faceplate_install_file
 
   image_build_file = image_build_dir / module_svg_path
   file image_build_file => [image_build_dir, mod] do
-    SvgFile.new(path: faceplate_install_file, content: mod.image_shape).write
+    SvgFile.new(path: image_build_file, content: mod.image_shape).write
   end
   task build: image_build_file
 
-  image_install_file = image_install_dir / module_svg_path
-  file image_install_file => [image_install_dir, image_build_file] do
-    inkscape(from: image_build_file, to: image_install_file)
-  end
-  task install: image_install_file
+  # image_install_file = image_install_dir / module_svg_path
+  # file image_install_file => [image_install_dir, image_build_file] do
+  #   inkscape(from: image_build_file, to: image_install_file)
+  # end
+  # task install: image_install_file
 end
 
 # controls = modules.map(&:control_files).flatten

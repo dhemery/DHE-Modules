@@ -12,6 +12,6 @@ class Faceplate < BoundedShape
 
   def draw(canvas)
     canvas.rect(x: 0, y: 0, width: @width, height: @height,
-           stroke: @foreground, fill: @background, 'stroke-width' => 1)
+           stroke: @stroke, fill: @fill, 'stroke-width' => 1)
   end
 end
