@@ -14,7 +14,6 @@ require_relative 'shapes/toggle'
 class ModuleFactory
   MM_PER_HP = 5.08
   MODULE_HEIGHT = 128.5
-  MODULE_HEIGHT_PX = MODULE_HEIGHT * PX_PER_MM
   MODULE_LABEL_INSET = 9.0
   PADDING = 1.0
 
@@ -36,9 +35,9 @@ class ModuleFactory
     author_label = Label.new(text: 'DHE', size: :title, color: @foreground, alignment: :below)
                        .translate(width / 2, MODULE_HEIGHT - MODULE_LABEL_INSET)
     @faceplate_shapes.prepend(faceplate, module_label, author_label)
-    @faceplate_shape ||= CompositeShape.new(shapes: @faceplate_shapes)
+    @faceplate_shape = CompositeShape.new(shapes: @faceplate_shapes)
     @image_shapes.prepend(@faceplate_shape)
-    @image_shape ||= CompositeShape.new(shapes: @image_shapes)
+    @image_shape = CompositeShape.new(shapes: @image_shapes)
     self
   end
 

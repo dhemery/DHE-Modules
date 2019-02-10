@@ -16,7 +16,7 @@ class Label < BoundedShape
     @baseline = BASELINES[@alignment]
     @anchor = ANCHORS[@alignment]
     height = @size * ASCENT_RATIO
-    width = @text.length * @size * 0.5 # Approximate
+    width = 0.1 # Ignore the actual width of the label
     left = case alignment
              when :right_of
                0.0

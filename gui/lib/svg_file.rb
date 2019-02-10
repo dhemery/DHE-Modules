@@ -14,8 +14,10 @@ class SvgFile
 
   def to_svg
     @svg ||= Builder::XmlMarkup.new(indent: 2)
-                 .svg(width: @content.width, height: @content.height, **SVG_ATTRIBUTES) do |svg|
-      @content.draw(svg)
+                 .svg(width: @content.width * PX_PER_MM, height: @content.height * PX_PER_MM, **SVG_ATTRIBUTES) do |svg|
+      svg.g(transform: "scale(#{PX_PER_MM})") do |g|
+        @content.draw(g)
+      end
     end
   end
 
@@ -24,6 +26,6 @@ class SvgFile
   end
 
   def write
-    @path.open('w') { |file| file.write(to_svg) }
+    @path.open('w') {|file| file.write(to_svg)}
   end
 end
