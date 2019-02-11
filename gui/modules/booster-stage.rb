@@ -44,4 +44,3 @@ y += delta_y
 
 input_port x: left, y: y
 output_port x: right, y: y
-
