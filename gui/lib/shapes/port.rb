@@ -22,4 +22,8 @@ class Port < RoundShape
       g.circle(r: tip_radius, fill: @foreground)
     end
   end
+
+  def slug
+    'port'
+  end
 end

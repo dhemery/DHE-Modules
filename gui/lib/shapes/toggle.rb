@@ -15,11 +15,14 @@ class Toggle < CenteredShape
       3 => [WIDTH - KNURL_THICKNESS, 0.0, -WIDTH + KNURL_THICKNESS]
   }
 
+  attr_reader :slug
+
   def initialize(foreground:, background:, size:, position:)
     super(width: WIDTH, height: size * WIDTH)
     @foreground = foreground
     @background = background
     @knurl_offset = KNURL_OFFSETS[size][position - 1]
+    @slug = "toggle-#{size}-#{position}"
   end
 
   def draw(svg)

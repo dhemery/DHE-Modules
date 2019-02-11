@@ -9,13 +9,13 @@ require_relative 'shapes/knob'
 require_relative 'shapes/label'
 require_relative 'shapes/line'
 require_relative 'shapes/port'
+require_relative 'shapes/stepper'
 require_relative 'shapes/toggle'
 
 class ModuleFactory
   MM_PER_HP = 5.08
   MODULE_HEIGHT = 128.5
   MODULE_LABEL_INSET = 9.0
-  PADDING = 1.0
 
   attr_reader :source_file, :width, :slug, :faceplate_shape, :image_shape, :control_shapes
 
@@ -67,17 +67,15 @@ class ModuleFactory
   end
 
   def button(x:, y:, label: nil, style: :normal)
-    stroke = style == :normal ? @foreground : @background
-    fill = style == :normal ? @background : @foreground
-
-    pressed = Button.new(stroke: stroke, fill: fill, style: style)
-    released = Button.new(stroke: stroke, fill: stroke, style: style)
+    pressed = Button.new(foreground: @foreground, background: @background, style: style, state: :pressed)
+    released = Button.new(foreground: @foreground, background: @background, style: style, state: :released)
     @control_shapes.append(pressed, released)
 
     image_button = released.translate(x, y)
     @image_shapes << image_button
 
-    faceplate_label = Label.new(text: label, color: stroke, size: :small, alignment: :above)
+    label_color = style == :normal ? @background : @foreground
+    faceplate_label = Label.new(text: label, color: label_color, size: :small, alignment: :above)
                           .translate(image_button.x, image_button.top - PADDING)
     @faceplate_shapes << faceplate_label
   end
@@ -188,13 +186,8 @@ class ModuleFactory
   end
 
   def stepper(x:, y:, name:, labels:, selection: 1, hidden: false)
-    stepper_button = Button.new(stroke: @foreground, fill: @foreground)
-    stepper_labels = labels.map do |label|
-      Label.new(text: label, size: :small, color: @foreground, alignment: :above)
-          .translate(stepper_button.x, stepper_button.top - PADDING)
-    end
-    steppers = stepper_labels.map do |label|
-      CompositeShape.new(shapes: [stepper_button, label])
+    steppers = labels.each_with_index.map do |label, index|
+      Stepper.new(color: @foreground, name: name, text: label, position: index + 1)
     end
     @control_shapes += steppers
 
@@ -203,8 +196,8 @@ class ModuleFactory
 
   def input_button_port(x:, y:, label:)
     port = Port.new(foreground: @foreground, background: @background)
-    pressed_button = Button.new(stroke: @foreground, fill: @background)
-    released_button = Button.new(stroke: @foreground, fill: @foreground)
+    pressed_button = Button.new(foreground: @foreground, background: @background, state: :pressed)
+    released_button = Button.new(foreground: @foreground, background: @background, state: :released)
     @control_shapes.append(port, pressed_button, released_button)
 
     image_port = port.translate(x, y)
@@ -221,8 +214,8 @@ class ModuleFactory
 
   def output_button_port(x:, y:, label:)
     port = Port.new(foreground: @foreground, background: @background)
-    pressed_button = Button.new(stroke: @background, fill: @foreground)
-    released_button = Button.new(stroke: @background, fill: @background)
+    pressed_button = Button.new(foreground: @foreground, background: @background, state: :pressed, style: :reversed)
+    released_button = Button.new(foreground: @foreground, background: @background, state: :released, style: :reversed)
     @control_shapes.append(port, pressed_button, released_button)
 
     image_port = port.translate(x, y)

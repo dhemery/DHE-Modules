@@ -1,4 +1,5 @@
 require 'builder'
+require 'pathname'
 
 class SvgFile
   SVG_ATTRIBUTES = {
@@ -8,7 +9,7 @@ class SvgFile
   attr_reader :path
 
   def initialize(path:, content:)
-    @path = path.sub_ext('.svg')
+    @path = Pathname(path).sub_ext('.svg')
     @content = content
   end
 

@@ -3,10 +3,14 @@ require_relative 'shape'
 class Button < RoundShape
   DIAMETER = 6.0
 
-  def initialize(stroke:, fill:, style: :normal)
+  attr_reader :slug
+
+  def initialize(foreground:, background:, style: :normal, state:)
     super(DIAMETER)
-    @stroke = stroke
-    @fill = fill
+    foreground, background = background, foreground unless style == :normal
+    @stroke = foreground
+    @fill = state == :pressed ? background : foreground
+    @slug = "button-#{style}-#{state == :pressed ? '2' : '1'}"
   end
 
   def draw(canvas)
