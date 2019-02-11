@@ -154,27 +154,23 @@ class ModuleFactory
   end
 
   def toggle(x:, y:, labels:, selection:)
-    housing = Toggle::Housing.new(foreground: @foreground, background: @background, size: labels.size)
-    @control_shapes.append(housing)
-
-    levers = (1..labels.size).map do |position|
-      Toggle::Lever.new(foreground: @foreground, background: @background, size: labels.size, position: position)
+    toggles = (1..labels.size).map do |position|
+      Toggle::new(foreground: @foreground, background: @background, size: labels.size, position: position)
     end
-    @control_shapes += levers
+    @control_shapes += toggles
 
-    image_housing = housing.translate(x, y)
-    image_lever = levers[selection - 1].translate(x, y)
-    @image_shapes.append(image_housing, image_lever)
+    image_toggle = toggles[selection - 1].translate(x, y)
+    @image_shapes.append(image_toggle)
 
     low_label = Label.new(text: labels.first, color: @foreground, size: :small, alignment: :below)
-                    .translate(image_housing.x, image_housing.bottom + PADDING)
+                    .translate(image_toggle.x, image_toggle.bottom + PADDING)
     high_label = Label.new(text: labels.last, color: @foreground, size: :small, alignment: :above)
-                     .translate(image_housing.x, image_housing.top - PADDING)
+                     .translate(image_toggle.x, image_toggle.top - PADDING)
     @faceplate_shapes.append(low_label, high_label)
 
     if labels.size == 3
       mid_label = Label.new(text: labels[1], color: @foreground, size: :small, alignment: :right_of)
-                      .translate(image_housing.right + PADDING, image_housing.y)
+                      .translate(image_toggle.right + PADDING, image_toggle.y)
       @faceplate_shapes << mid_label
     end
   end
