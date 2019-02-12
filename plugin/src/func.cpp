@@ -114,14 +114,14 @@ public:
   std::vector<FuncChannel> channels{};
 };
 
-template <typename P> class MultiplicationRangeSwitch : public Toggle<P, 4> {
+template <typename P> class MultiplicationRangeStepper : public Toggle<P, 4> {
 public:
-  MultiplicationRangeSwitch() : Toggle<P, 4>("counter-mult") {}
+  MultiplicationRangeStepper() : Toggle<P, 4>("stepper-mult") {}
 };
 
-template <typename P> class AdditionRangeSwitch : public Toggle<P, 4> {
+template <typename P> class AdditionRangeStepper : public Toggle<P, 4> {
 public:
-  AdditionRangeSwitch() : Toggle<P, 4>("counter-add") {}
+  AdditionRangeStepper() : Toggle<P, 4>("stepper-add") {}
 };
 
 class FuncPanel : public Panel<FuncPanel> {
@@ -157,10 +157,10 @@ public:
       channel->set_multiplication_range(selection);
     };
 
-    auto multiplication_range_switch = toggle<MultiplicationRangeSwitch>(
+    auto multiplication_range_switch = toggle<MultiplicationRangeStepper>(
         multiplication_range_switch_index, 2, multiplication_range_selector);
 
-    auto addition_range_switch = toggle<AdditionRangeSwitch>(
+    auto addition_range_switch = toggle<AdditionRangeStepper>(
         addition_range_switch_index, 1, addition_range_selector);
 
     auto select_operator = [channel, addition_range_switch,
@@ -217,13 +217,13 @@ public:
       auto multiplication_range_selector = [channel](int selection) {
         channel->set_multiplication_range(selection);
       };
-      auto multiplication_range_switch = toggle<MultiplicationRangeSwitch>(
+      auto multiplication_range_switch = toggle<MultiplicationRangeStepper>(
           multiplication_range_switch_index, 2, multiplication_range_selector);
 
       auto addition_range_selector = [channel](int selection) {
         channel->set_addition_range(selection);
       };
-      auto addition_range_switch = toggle<AdditionRangeSwitch>(
+      auto addition_range_switch = toggle<AdditionRangeStepper>(
           addition_range_switch_index, 1, addition_range_selector);
 
       auto select_operator = [channel, addition_range_switch,

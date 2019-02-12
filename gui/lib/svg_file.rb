@@ -4,17 +4,13 @@ require 'pathname'
 class SvgFile
   attr_reader :path
 
-  def initialize(path:, has_text:)
-    @path = Pathname(path).sub_ext('.svg')
-    @has_text = has_text
+  def initialize(path:, content:)
+    @path = Pathname(path)
+    @content = content
   end
 
   def to_svg
     @svg ||= draw(Builder::XmlMarkup.new(indent: 2))
-  end
-
-  def has_text?
-    @has_text
   end
 
   def write
@@ -24,8 +20,7 @@ end
 
 class ModuleSvgFile < SvgFile
   def initialize(path:, content:)
-    super(path: path, has_text: true)
-    @content = content
+    super(path: path, content: content)
   end
 
   def draw(canvas)
@@ -40,8 +35,7 @@ end
 
 class ControlSvgFile < SvgFile
   def initialize(path:, content:)
-    super(path: path, has_text: content.has_text?)
-    @content = content
+    super(path: path, content: content)
   end
 
   def draw(canvas)

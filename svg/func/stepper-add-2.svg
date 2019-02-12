@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   id="svg10"
+   viewBox="0 0 6.000 8.580"
+   height="8.580mm"
+   width="6.000mm"
+   version="1.1">
+  <metadata
+     id="metadata16">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs14" />
+  <g
+     id="g8"
+     transform="translate(3,5.58)">
+    <g
+       id="g4"
+       transform="translate(0,-4)">
+      <g
+         id="text2"
+         style="font-weight:bold;font-size:2.37100005px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#0044cc"
+         aria-label="±5">
+        <path
+           id="path18"
+           style="font-weight:bold;font-size:2.37100005px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#0044cc"
+           d="m -0.61566351,-0.77294602 h 0.42440901 v -0.184938 H -0.61566351 V -1.424971 h -0.206277 v 0.46708698 H -1.2487205 v 0.184938 h 0.42677999 v 0.48368401 h 0.206277 z M -1.2487205,0 h 1.057466 v -0.184938 h -1.057466 z" />
+        <path
+           id="path20"
+           style="font-weight:bold;font-size:2.37100005px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#0044cc"
+           d="m -0.00653877,-0.208648 c 0.13514701,0.147002 0.33431101,0.2371 0.60934702,0.2371 0.38173101,0 0.63305705,-0.211019 0.63305705,-0.54770101 0,-0.32008501 -0.23947104,-0.51213599 -0.50739405,-0.51213599 -0.144631,0 -0.27266501,0.056904 -0.34853701,0.13277598 V -1.285082 H 1.1291703 V -1.581457 H 0.04325224 v 0.90809299 l 0.234729,0.061646 c 0.09484,-0.090098 0.20153501,-0.12803401 0.33194001,-0.12803401 0.180196,0 0.28452,0.09484 0.28452,0.23472901 0,0.128034 -0.106695,0.234729 -0.294004,0.234729 -0.16597001,0 -0.31297201,-0.061646 -0.41966701,-0.173083 z" />
+      </g>
+    </g>
+    <path
+       id="circle6"
+       d="M 2.5,0 A 2.5,2.5 0 0 1 0,2.5 2.5,2.5 0 0 1 -2.5,0 2.5,2.5 0 0 1 0,-2.5 2.5,2.5 0 0 1 2.5,0 Z"
+       style="fill:#0044cc;stroke:#0044cc;stroke-width:1" />
+  </g>
+</svg>

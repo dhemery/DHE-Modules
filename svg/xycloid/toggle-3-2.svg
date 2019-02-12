@@ -1,10 +1,12 @@
-<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="3.0mm" height="9.0mm" viewBox="0 0 3.0 9.0">
-  <g transform="translate(1.5 4.5)" fill="#f7f2fc" stroke="#7f00ff">
-    <rect x="-1.3125" y="-4.3125" width="2.625" height="8.625" rx="0.1875" ry="0.1875" stroke-width="0.375"/>
-    <line x1="-0.875" x2="0.875" y1="-1.0" y2="-1.0" stroke-width="0.25" stroke-linecap="round"/>
-    <line x1="-0.875" x2="0.875" y1="-0.5" y2="-0.5" stroke-width="0.25" stroke-linecap="round"/>
-    <line x1="-0.875" x2="0.875" y1="0.0" y2="0.0" stroke-width="0.25" stroke-linecap="round"/>
-    <line x1="-0.875" x2="0.875" y1="0.5" y2="0.5" stroke-width="0.25" stroke-linecap="round"/>
-    <line x1="-0.875" x2="0.875" y1="1.0" y2="1.0" stroke-width="0.25" stroke-linecap="round"/>
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="3.000mm" height="9.000mm" viewBox="0 0 3.000 9.000">
+  <g transform="translate(1.500 4.500)">
+    <rect x="-1.312" y="-4.312" width="2.625" height="8.625" rx="0.188" ry="0.188" stroke-width="0.375" fill="#f7f2fc" stroke="#7f00ff"/>
+    <g transform="translate(0.000 0.000)">
+      <line x1="-0.812" x2="0.812" y1="-1.000" y2="-1.000" stroke-width="0.250" stroke-linecap="round" fill="#f7f2fc" stroke="#7f00ff"/>
+      <line x1="-0.812" x2="0.812" y1="-0.500" y2="-0.500" stroke-width="0.250" stroke-linecap="round" fill="#f7f2fc" stroke="#7f00ff"/>
+      <line x1="-0.812" x2="0.812" y1="0.000" y2="0.000" stroke-width="0.250" stroke-linecap="round" fill="#f7f2fc" stroke="#7f00ff"/>
+      <line x1="-0.812" x2="0.812" y1="0.500" y2="0.500" stroke-width="0.250" stroke-linecap="round" fill="#f7f2fc" stroke="#7f00ff"/>
+      <line x1="-0.812" x2="0.812" y1="1.000" y2="1.000" stroke-width="0.250" stroke-linecap="round" fill="#f7f2fc" stroke="#7f00ff"/>
+    </g>
   </g>
 </svg>

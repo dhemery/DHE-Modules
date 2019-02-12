@@ -1,7 +1,9 @@
-<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="8.4mm" height="8.399999999999999mm" viewBox="0 0 8.4 8.399999999999999">
-  <g transform="translate(4.2 4.199999999999999)" stroke="#7f00ff" fill="#f7f2fc" stroke-width="0.21000000000000002">
-    <circle r="4.095"/>
-    <circle r="2.925"/>
-    <circle r="1.755" fill="#7f00ff"/>
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="8.400mm" height="8.400mm" viewBox="0 0 8.400 8.400">
+  <g transform="translate(4.200 4.200)">
+    <g stroke="#7f00ff" fill="#f7f2fc" stroke-width="0.210">
+      <circle r="4.095"/>
+      <circle r="2.925"/>
+      <circle r="1.755" fill="#7f00ff"/>
+    </g>
   </g>
 </svg>
