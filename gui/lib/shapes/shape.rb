@@ -56,6 +56,10 @@ class Shape
   def translate(dx, dy)
     Translated.new(dx: dx, dy: dy, shape: self)
   end
+
+  def has_text?
+    false
+  end
 end
 
 class BoundedShape < Shape

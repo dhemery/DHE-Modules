@@ -41,4 +41,8 @@ class Label < BoundedShape
       text << @text
     end
   end
+
+  def has_text?
+    true
+  end
 end

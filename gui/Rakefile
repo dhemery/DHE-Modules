@@ -34,7 +34,7 @@ modules.each do |mod|
 
   faceplate_build_file = svg_build_dir / module_svg_path
   file faceplate_build_file => [svg_build_dir, mod] do
-    SvgFile.new(path: faceplate_build_file, content: mod.faceplate_shape).write
+    ModuleSvgFile.new(path: faceplate_build_file, content: mod.faceplate_shape).write
   end
   task build: faceplate_build_file
 
@@ -46,7 +46,7 @@ modules.each do |mod|
 
   image_build_file = image_build_dir / module_svg_path
   file image_build_file => [image_build_dir, mod] do
-    SvgFile.new(path: image_build_file, content: mod.image_shape).write
+    ModuleSvgFile.new(path: image_build_file, content: mod.image_shape).write
   end
   task build: image_build_file
 
@@ -71,7 +71,7 @@ controls_by_file_path.each do |path, control|
   control_build_file = svg_build_dir / path
   directory control_build_file.parent
   file control_build_file => [control_build_file.parent, control] do
-    SvgFile.new(path: control_build_file, content: control).write
+    ControlSvgFile.new(path: control_build_file, content: control).write
   end
   task build: control_build_file
 end

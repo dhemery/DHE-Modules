@@ -17,4 +17,8 @@ class Stepper < BoundedShape
     @label.draw(canvas)
     @button.draw(canvas)
   end
+
+  def has_text?
+    true
+  end
 end
