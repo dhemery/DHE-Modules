@@ -12,7 +12,7 @@ class Button < RoundShape
     @fill = state == :pressed ? background : foreground
     style_slug = style == :reversed ? '-reversed' : ''
     state_slug = state == :pressed ? '-2' : '-1'
-    @slug = "button#{style_slug}#{state_slug}"
+    @slug = Pathname("button#{style_slug}#{state_slug}")
   end
 
   def draw(canvas)

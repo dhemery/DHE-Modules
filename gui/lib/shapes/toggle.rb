@@ -22,7 +22,7 @@ class Toggle < CenteredShape
     @foreground = foreground
     @background = background
     @knurl_offset = KNURL_OFFSETS[size][position - 1]
-    @slug = "toggle-#{size}-#{position}"
+    @slug = Pathname("toggle-#{size}-#{position}")
   end
 
   def draw(svg)

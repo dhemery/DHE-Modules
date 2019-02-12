@@ -3,10 +3,13 @@ require_relative 'shape'
 class Port < RoundShape
   DIAMETER = 8.4
 
+  attr_reader :slug
+
   def initialize(foreground:, background:)
     super(DIAMETER)
     @foreground = foreground
     @background = background
+    @slug = Pathname('port')
   end
 
   def draw(canvas)
@@ -21,9 +24,5 @@ class Port < RoundShape
       g.circle(r: ring_radius)
       g.circle(r: tip_radius, fill: @foreground)
     end
-  end
-
-  def slug
-    'port'
   end
 end

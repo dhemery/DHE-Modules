@@ -9,7 +9,7 @@ class Stepper < BoundedShape
     @button = Button.new(foreground: color, background: color, state: :released)
     @label = Label.new(color: color, alignment: :above, size: :small, text: text)
                  .translate(0.0, @button.top - PADDING)
-    @slug = "stepper-#{name}-#{position}"
+    @slug = Pathname("stepper-#{name}-#{position}")
     super(top: @label.top, right: @button.right, bottom: @button.bottom, left: @button.left)
   end
 

@@ -29,11 +29,13 @@ directory image_install_dir
 modules = FileList.new(modules_dir / '*.rb').map {|file| ModuleFactory.new(file).build}
 
 modules.each do |mod|
-  task mod => mod.source_file
+  module_source_file = mod.source_file
+  file module_source_file
+
   module_svg_path = mod.slug.sub_ext('.svg')
 
   faceplate_build_file = svg_build_dir / module_svg_path
-  file faceplate_build_file => [svg_build_dir, mod] do
+  file faceplate_build_file => [svg_build_dir, module_source_file] do
     ModuleSvgFile.new(path: faceplate_build_file, content: mod.faceplate_shape).write
   end
   task build: faceplate_build_file
@@ -45,7 +47,7 @@ modules.each do |mod|
   task install: faceplate_install_file
 
   image_build_file = image_build_dir / module_svg_path
-  file image_build_file => [image_build_dir, mod] do
+  file image_build_file => [image_build_dir, module_source_file] do
     ModuleSvgFile.new(path: image_build_file, content: mod.image_shape).write
   end
   task build: image_build_file
@@ -57,30 +59,34 @@ modules.each do |mod|
   task install: image_install_file
 end
 
-controls_by_file_path = {}
+controls_by_control_svg_path = {}
 
 modules.each do |mod|
-  mod.control_shapes.map do |control|
-    path = Pathname(mod.slug) / control.slug
-    controls_by_file_path[path.sub_ext('.svg')] = control
-    task control => mod
+  mod.control_shapes.map do |shape|
+    control_svg_path = mod.slug / shape.slug.sub_ext('.svg')
+    controls_by_control_svg_path[control_svg_path] = {content: shape, source_file: mod.source_file}
   end
 end
 
-controls_by_file_path.each do |path, control|
-  control_build_file = svg_build_dir / path
+controls_by_control_svg_path.each do |control_svg_path, control|
+  control_source_file = control[:source_file]
+  control_content = control[:content]
+
+  control_build_file = svg_build_dir / control_svg_path
   control_build_dir = control_build_file.parent
+
   directory control_build_dir
-  file control_build_file => [control_build_dir, control] do
-    ControlSvgFile.new(path: control_build_file, content: control).write
+  file control_build_file => [control_build_dir, control_source_file] do
+    ControlSvgFile.new(path: control_build_file, content: control_content).write
   end
   task build: control_build_file
 
-  control_install_file = svg_install_dir / path
+  control_install_file = svg_install_dir / control_svg_path
   control_install_dir = control_install_file.parent
+
   directory control_install_dir
   file control_install_file => [control_install_dir, control_build_file] do
-    if control.has_text?
+    if control_content.has_text?
       inkscape(from: control_build_file, to: control_install_file)
     else
       cp(control_build_file, control_install_file)

@@ -9,7 +9,7 @@ class Knob < RoundShape
     super(DIAMETERS[size])
     @knob_color = knob_color
     @pointer_color = pointer_color
-    @slug = "knob-#{size}"
+    @slug = Pathname("knob-#{size}")
   end
 
   def draw(canvas)
