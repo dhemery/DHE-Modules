@@ -90,7 +90,7 @@
     <path
        id="line12"
        d="M 7.9829998,30 H 47.896999"
-       style="stroke-width:0.34999999" />
+       style="stroke:#7f00ff;stroke-width:0.34999999" />
     <g
        id="g16"
        transform="translate(7.983,24.8)">
@@ -207,7 +207,7 @@
     <path
        id="line36"
        d="M 7.9829998,52 H 47.896999"
-       style="stroke-width:0.34999999" />
+       style="stroke:#7f00ff;stroke-width:0.34999999" />
     <g
        id="g40"
        transform="translate(7.983,46.8)">
@@ -319,7 +319,7 @@
     <path
        id="line64"
        d="M 7.9829998,74 H 34.591999"
-       style="stroke-width:0.34999999" />
+       style="stroke:#7f00ff;stroke-width:0.34999999" />
     <g
        id="g68"
        transform="translate(7.983,68.8)">
@@ -415,7 +415,7 @@
     <path
        id="line84"
        d="M 7.9829998,97 H 47.896999"
-       style="stroke-width:0.34999999" />
+       style="stroke:#7f00ff;stroke-width:0.34999999" />
     <g
        id="g88"
        transform="translate(7.983,91.8)">
@@ -553,7 +553,7 @@
     <path
        id="line112"
        d="M 7.9829998,112 H 47.896999"
-       style="stroke-width:0.34999999" />
+       style="stroke:#7f00ff;stroke-width:0.34999999" />
     <g
        id="g116"
        transform="translate(7.983,106.8)">

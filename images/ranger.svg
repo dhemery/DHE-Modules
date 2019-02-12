@@ -195,7 +195,7 @@
     <path
        id="line36"
        d="M 0,48 H 30.48"
-       style="stroke-width:0.34999999" />
+       style="stroke:#4d4d00;stroke-width:0.34999999" />
     <g
        id="g40"
        transform="translate(9.042,54)">
@@ -300,7 +300,7 @@
     <path
        id="line60"
        d="M 0,84 H 30.48"
-       style="stroke-width:0.34999999" />
+       style="stroke:#4d4d00;stroke-width:0.34999999" />
     <g
        id="g64"
        transform="translate(9.042,90)">

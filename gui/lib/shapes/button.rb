@@ -10,7 +10,9 @@ class Button < RoundShape
     foreground, background = background, foreground unless style == :normal
     @stroke = foreground
     @fill = state == :pressed ? background : foreground
-    @slug = "button-#{style}-#{state == :pressed ? '2' : '1'}"
+    style_slug = style == :reversed ? '-reversed' : ''
+    state_slug = state == :pressed ? '-2' : '-1'
+    @slug = "button#{style_slug}#{state_slug}"
   end
 
   def draw(canvas)
