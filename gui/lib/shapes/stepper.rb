@@ -10,7 +10,7 @@ class Stepper < BoundedShape
     @label = Label.new(color: color, alignment: :above, size: :small, text: text)
                  .translate(0.0, @button.top - PADDING)
     @slug = Pathname("stepper-#{name}-#{position}")
-    super(top: @label.top, right: @button.right, bottom: @button.bottom, left: @button.left)
+    super(top: @label.top, right: @button.right, bottom: -@label.top, left: @button.left)
   end
 
   def draw(canvas)

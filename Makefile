@@ -26,7 +26,10 @@ $(DEV_INSTALL_DIR) $(DEV_PLUGIN_DIR):
 $(DEV_PLUGIN_DIR)/Fundamental: $(DEV_PLUGIN_DIR)
 	cp -r $(RACK_USER_DIR)/plugins/Fundamental $(DEV_PLUGIN_DIR)
 
-dev: dist $(DEV_PLUGIN_DIR) $(DEV_PLUGIN_DIR)/Fundamental
+$(DEV_PLUGIN_DIR)/AudibleInstruments: $(DEV_PLUGIN_DIR)
+	cp -r $(RACK_USER_DIR)/plugins/AudibleInstruments $(DEV_PLUGIN_DIR)
+
+dev: dist $(DEV_PLUGIN_DIR) $(DEV_PLUGIN_DIR)/Fundamental $(DEV_PLUGIN_DIR)/AudibleInstruments
 	cp dist/$(SLUG)-$(VERSION)-$(ARCH).zip $(DEV_PLUGIN_DIR)
 
 debug: dev

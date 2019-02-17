@@ -86,3 +86,4 @@ install(TARGETS plugin
 install(DIRECTORY ../svg DESTINATION ${PLUGIN_INSTALL_DIR})
 install(FILES ../LICENSE.txt DESTINATION ${PLUGIN_INSTALL_DIR})
 install(DIRECTORY /Users/Dale/Documents/Rack/plugins/Fundamental DESTINATION ${PLUGINS_INSTALL_DIR})
+install(DIRECTORY /Users/Dale/Documents/Rack/plugins/AudibleInstruments DESTINATION ${PLUGINS_INSTALL_DIR})
