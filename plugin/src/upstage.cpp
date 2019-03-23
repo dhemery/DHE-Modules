@@ -1,4 +1,5 @@
-#include "dhe-modules.h"
+#include "engine.hpp"
+
 #include "display/controls.h"
 #include "display/panel.h"
 #include "util/range.h"

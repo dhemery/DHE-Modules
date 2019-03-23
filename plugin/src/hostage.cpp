@@ -1,10 +1,16 @@
-#include "dhe-modules.h"
+#include "engine.hpp"
+
 #include "display/controls.h"
 #include "display/panel.h"
+#include "stage/components/defer-gate.h"
+#include "stage/components/stage-gate.h"
+#include "stage/components/eoc-generator.h"
+#include "stage/components/stage-generator.h"
+#include "stage/modes/deferring-mode.h"
+#include "stage/modes/following-mode.h"
+#include "stage/modes/generating-mode.h"
 #include "util/duration.h"
-#include "components/phase-accumulator.h"
 #include "util/rotation.h"
-#include "util/stage-components.h"
 
 namespace DHE {
 

@@ -1,7 +1,8 @@
 #include <array>
 #include <math.h>
 
-#include "dhe-modules.h"
+#include "engine.hpp"
+
 #include "display/controls.h"
 #include "display/panel.h"
 #include "util/rotation.h"
@@ -221,7 +222,7 @@ public:
 
     y = 82.f;
     dy = 15.f;
-    const auto output_port_offset = 1.25;
+    const auto output_port_offset = 1.25f;
 
     auto default_gain = Rotation::gain_range.normalize(1.f);
 

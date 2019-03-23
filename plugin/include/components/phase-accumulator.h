@@ -1,14 +1,27 @@
 #pragma once
 
 namespace DHE {
+
+/**
+ * Advances a "phase" value from 0 to 1 over time.
+ */
 class PhaseAccumulator {
 public:
   PhaseAccumulator() {}
+
+  /**
+   * Sets the phase to 0 and generates an on_start event.
+   */
   void start() {
     accumulated = 0.f;
     on_start();
   }
 
+  /**
+   * Advances the phase according to the current duration and sample time.
+   * If the phase advances to or beyond 1, this accumulator generates an
+   * on_finish event.
+   */
   void step() {
     accumulated += sampleTime() / duration();
     if (accumulated >= 1.0f) {
@@ -19,6 +32,9 @@ public:
     };
   }
 
+  /**
+   * Returns the currently accumulated phase.
+   */
   auto phase() const -> float { return this->accumulated; }
 
 protected:

@@ -18,7 +18,7 @@ target_sources(components
         include/util/selector.h
         include/util/sigmoid.h
         include/util/signal.h
-        include/util/stage-components.h
+        include/stage/modes/sustaining-mode.h
         )
 target_include_directories(components
         INTERFACE

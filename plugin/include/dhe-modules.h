@@ -1,6 +1,9 @@
 #pragma once
 
-#include <rack.hpp>
+namespace rack {
+struct Plugin;
+struct Model;
+}
 
 extern rack::Plugin *plugin;
 extern rack::Model *modelBoosterStage;

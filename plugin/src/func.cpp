@@ -1,6 +1,6 @@
 #include <vector>
+#include "engine.hpp"
 
-#include "dhe-modules.h"
 #include "display/controls.h"
 #include "display/panel.h"
 #include "util/rotation.h"

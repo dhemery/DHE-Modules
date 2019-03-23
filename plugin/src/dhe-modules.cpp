@@ -1,3 +1,6 @@
+#include "util/common.hpp"
+#include "plugin.hpp"
+
 #include "dhe-modules.h"
 
 rack::Plugin *plugin;
