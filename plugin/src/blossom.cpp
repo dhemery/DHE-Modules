@@ -28,8 +28,8 @@ public:
     auto x = radius * std::cos(angle);
     auto y = radius * std::sin(angle);
 
-    outputs[X_OUT].value = 5.f*x_gain_in()*(x + x_offset());
-    outputs[Y_OUT].value = 5.f*y_gain_in()*(y + y_offset());
+    outputs[X_OUT].value = 5.f * x_gain_in() * (x + x_offset());
+    outputs[Y_OUT].value = 5.f * y_gain_in() * (y + y_offset());
   }
 
   enum ParameterIds {
@@ -61,7 +61,7 @@ public:
 
 private:
   auto modulated(const ParameterIds &knob_param, const InputIds &cv_input) const
-  -> float {
+      -> float {
     auto rotation = params[knob_param].value;
     auto cv = inputs[cv_input].value;
     return Rotation::modulated(rotation, cv);
@@ -91,7 +91,7 @@ private:
     auto rotation = modulated(SPIN_KNOB, SPIN_CV, SPIN_AV);
     auto scaled = spin_range.scale(rotation);
     auto tapered = Sigmoid::inverse(scaled, speed_curvature);
-    return -10.f*tapered*rack::engineGetSampleTime();
+    return -10.f * tapered * rack::engineGetSampleTime();
   }
 
   auto depth() const -> float {
@@ -133,9 +133,9 @@ public:
   explicit BlossomPanel(Blossom *module) : Panel{module, hp} {
     auto widget_right_edge = width();
 
-    auto column_1 = widget_right_edge/7.f;
+    auto column_1 = widget_right_edge / 7.f;
     auto column_4 = widget_right_edge - column_1;
-    auto column_2 = (column_4 - column_1)/3.f + column_1;
+    auto column_2 = (column_4 - column_1) / 3.f + column_1;
     auto column_3 = widget_right_edge - column_2;
 
     auto y = 25.f;

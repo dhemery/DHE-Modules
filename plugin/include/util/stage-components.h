@@ -91,7 +91,6 @@ template <typename M> class FollowingMode : public Mode {
 public:
   explicit FollowingMode(M *module, Trigger *stage_trigger)
       : module{module}, stage_trigger{stage_trigger} {}
-
   void enter() override { module->set_active(false); }
 
   void step() override {
