@@ -1,9 +1,9 @@
 
-#include <bandit/bandit.h>
+#include <gmock/gmock.h>
+#include <gtest/gtest.h>
 #include "util/stage-components.h"
 
-using namespace snowhouse;
-using namespace bandit;
+namespace {
 
 struct MockModule {
   bool on_defer_gate_rise_called;
@@ -23,21 +23,15 @@ struct MockModule {
   }
 };
 
-go_bandit([]() { // NOLINT(cert-err58-cpp)
-  describe("DeferGate", [&]() {
-    auto module = MockModule{};
-    module.the_defer_gate_in = 0.f;
-    auto defer_gate = DHE::DeferGate<MockModule>{&module};
+TEST(DeferGateTest, WhenDeferGateRises_CallsOnDeferGateRise) {
+  auto module = MockModule{};
+  auto defer_gate = DHE::DeferGate<MockModule>{&module};
 
-    defer_gate.step();
-    
-    describe("when defer_gate_in transitions above threshold", [&](){
-      module.the_defer_gate_in = 0.5f;
+  defer_gate.step();
 
-      it("calls on_defer_gate_rise", [&]() {
-        defer_gate.step();
-        AssertThat(module.on_defer_gate_rise_called, IsTrue());
-      });
-    });
-  });
-});
+  module.the_defer_gate_in = 0.5f;
+
+  defer_gate.step();
+  EXPECT_TRUE(module.on_defer_gate_rise_called);
+}
+}

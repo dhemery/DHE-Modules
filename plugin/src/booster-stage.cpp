@@ -46,6 +46,10 @@ public:
 
   void on_stage_trigger_rise() { enter(&generating_mode); }
 
+  auto sampleTime() const -> float {
+    return rack::engineGetSampleTime();
+  }
+
   void send_input() { send_out(envelope_in()); }
 
   void send_stage() {

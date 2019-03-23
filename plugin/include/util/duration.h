@@ -2,7 +2,6 @@
 
 #include <vector>
 
-#include "display/controls.h"
 #include "range.h"
 #include "selector.h"
 #include "sigmoid.h"

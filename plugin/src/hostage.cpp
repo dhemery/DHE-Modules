@@ -57,6 +57,10 @@ public:
     }
   }
 
+  auto sampleTime() const -> float {
+    return rack::engineGetSampleTime();
+  }
+
   void send_held() { send_out(held_voltage); }
 
   void send_input() { send_out(envelope_in()); }

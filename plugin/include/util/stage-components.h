@@ -55,6 +55,8 @@ public:
 
   auto duration() const -> float override { return module->duration(); }
 
+  auto sampleTime() const -> float override { return module->sampleTime(); }
+
   void on_finish() const override { module->on_stage_generator_finish(); }
 
 private:
@@ -68,6 +70,8 @@ public:
   void on_start() const override { module->set_eoc(true); }
 
   auto duration() const -> float override { return 1e-3; }
+
+  auto sampleTime() const -> float override { return module->sampleTime(); }
 
   void on_finish() const override { module->set_eoc(false); }
 

@@ -1,4 +1,0 @@
-[submodule "plugin/tests/bandit"]
-	path = plugin/tests/bandit
-	url = https://github.com/banditcpp/bandit
-	branch = headers-only
