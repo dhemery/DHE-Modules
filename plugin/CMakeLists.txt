@@ -120,7 +120,6 @@ set_target_properties(run-tests
 target_link_libraries(run-tests
         PRIVATE
         components
-        gtest_main
         gmock_main
         )
 target_include_directories(run-tests

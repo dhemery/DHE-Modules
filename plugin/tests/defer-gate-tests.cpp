@@ -1,37 +1,43 @@
 
 #include <gmock/gmock.h>
-#include <gtest/gtest.h>
 #include "util/stage-components.h"
 
 namespace {
 
+using ::testing::Expectation;
+using ::testing::Return;
+
 struct MockModule {
-  bool on_defer_gate_rise_called;
-  bool on_defer_gate_fall_called;
-  float the_defer_gate_in;
-
-  auto on_defer_gate_rise() -> void {
-    on_defer_gate_rise_called = true;
-  }
-
-  auto on_defer_gate_fall() -> void {
-    on_defer_gate_fall_called = true;
-  }
-
-  auto defer_gate_in() -> float {
-    return the_defer_gate_in;
-  }
+  MOCK_CONST_METHOD0(defer_gate_in, float());
+  MOCK_METHOD0(on_defer_gate_fall, void());
+  MOCK_METHOD0(on_defer_gate_rise, void());
 };
 
-TEST(DeferGateTest, WhenDeferGateRises_CallsOnDeferGateRise) {
-  auto module = MockModule{};
+TEST(DeferGateTest, WhenDeferSignalRises_CallsOnDeferGateRise) {
+  MockModule module;
   auto defer_gate = DHE::DeferGate<MockModule>{&module};
 
-  defer_gate.step();
+  Expectation gate_rises = EXPECT_CALL(module, defer_gate_in())
+      .WillOnce(Return(0.5f));
 
-  module.the_defer_gate_in = 0.5f;
+  EXPECT_CALL(module, on_defer_gate_rise())
+      .After(gate_rises);
 
   defer_gate.step();
-  EXPECT_TRUE(module.on_defer_gate_rise_called);
+}
+
+TEST(DeferGateTest, WhenDeferSignalFalls_CallsOnDeferGateFall) {
+  MockModule module;
+  auto defer_gate = DHE::DeferGate<MockModule>{&module};
+
+  Expectation gate_falls = EXPECT_CALL(module, defer_gate_in())
+      .WillOnce(Return(0.5f)) // rise
+      .WillOnce(Return(0.f)); // fall
+
+  EXPECT_CALL(module, on_defer_gate_fall())
+      .After(gate_falls);
+
+  defer_gate.step();
+  defer_gate.step();
 }
 }
