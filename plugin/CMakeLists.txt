@@ -1,12 +1,12 @@
 cmake_minimum_required(VERSION 3.13)
 project(DHE-Modules
-        VERSION 0.6.4
+        VERSION 0.6.5
         LANGUAGES CXX)
 
 add_library(plugin)
 
 target_sources(plugin
-        PRIVATE
+        PUBLIC
         include/display/controls.h
         include/display/panel.h
         include/util/duration.h
@@ -21,6 +21,7 @@ target_sources(plugin
         include/util/stage-components.h
         include/util/trigger.h
         include/dhe-modules.h
+        PRIVATE
         src/booster-stage.cpp
         src/cubic.cpp
         src/dhe-modules.cpp
@@ -31,7 +32,8 @@ target_sources(plugin
         src/swave.cpp
         src/tapers.cpp
         src/upstage.cpp
-        src/xycloid.cpp)
+        src/xycloid.cpp
+        )
 set_target_properties(plugin
         PROPERTIES
         CXX_STANDARD 11
@@ -40,7 +42,7 @@ set_target_properties(plugin
         PREFIX ""
         )
 target_compile_options(plugin
-        PRIVATE
+        PUBLIC
         -stdlib=libc++
         -march=nocona
         -MMD
@@ -59,8 +61,14 @@ target_compile_definitions(plugin
         SLUG=DHE-Modules
         VERSION=0.6.4
         )
-target_include_directories(plugin PRIVATE include)
-target_link_libraries(plugin PRIVATE racksdk)
+target_include_directories(plugin
+        PUBLIC
+        include
+        )
+target_link_libraries(plugin
+        PUBLIC
+        racksdk
+        )
 target_link_options(plugin
         PRIVATE
         "LINKER:-undefined,dynamic_lookup"
@@ -70,9 +78,11 @@ add_library(racksdk INTERFACE)
 target_include_directories(racksdk
         INTERFACE
         ../../Rack-SDK/include
-        ../../Rack-SDK/dep/include)
+        ../../Rack-SDK/dep/include
+        )
 target_compile_features(racksdk INTERFACE
-        cxx_std_11)
+        cxx_std_11
+        )
 
 set(CMAKE_INSTALL_PREFIX ${CMAKE_CURRENT_BINARY_DIR}/rack)
 set(PLUGINS_INSTALL_DIR plugins)
@@ -84,3 +94,18 @@ install(TARGETS plugin
 install(DIRECTORY ../svg DESTINATION ${PLUGIN_INSTALL_DIR})
 install(FILES ../LICENSE.txt DESTINATION ${PLUGIN_INSTALL_DIR})
 install(DIRECTORY /Users/Dale/Documents/Rack/plugins/Fundamental DESTINATION ${PLUGINS_INSTALL_DIR})
+
+add_executable(run-tests)
+target_link_libraries(run-tests
+        PRIVATE
+        plugin
+        )
+target_include_directories(run-tests
+        PRIVATE
+        tests
+        )
+target_sources(run-tests
+        PRIVATE
+        tests/run-tests.cpp
+        tests/defer-gate-tests.cpp
+        )
