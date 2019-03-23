@@ -5,6 +5,7 @@
 namespace {
 
 using ::testing::Expectation;
+using ::testing::NiceMock;
 using ::testing::Return;
 
 struct MockModule {
@@ -27,7 +28,7 @@ TEST(DeferGateTest, WhenDeferSignalRises_CallsOnDeferGateRise) {
 }
 
 TEST(DeferGateTest, WhenDeferSignalFalls_CallsOnDeferGateFall) {
-  MockModule module;
+  NiceMock<MockModule> module;
   auto defer_gate = DHE::DeferGate<MockModule>{&module};
 
   Expectation gate_falls = EXPECT_CALL(module, defer_gate_in())

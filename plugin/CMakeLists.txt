@@ -6,19 +6,19 @@ project(DHE-Modules
 add_library(components INTERFACE)
 target_sources(components
         INTERFACE
+        include/components/gate.h
+        include/components/phase-accumulator.h
+        include/components/trigger.h
         include/display/controls.h
         include/display/panel.h
         include/util/duration.h
-        include/util/gate.h
         include/util/mode.h
-        include/util/phase-accumulator.h
         include/util/range.h
         include/util/rotation.h
         include/util/selector.h
         include/util/sigmoid.h
         include/util/signal.h
         include/util/stage-components.h
-        include/util/trigger.h
         )
 target_include_directories(components
         INTERFACE

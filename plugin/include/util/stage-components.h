@@ -1,9 +1,9 @@
 #pragma once
 
-#include "gate.h"
 #include "mode.h"
-#include "phase-accumulator.h"
-#include "trigger.h"
+#include "components/gate.h"
+#include "components/phase-accumulator.h"
+#include "components/trigger.h"
 
 namespace DHE {
 template <typename M> class DeferGate : public Gate {

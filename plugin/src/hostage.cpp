@@ -2,7 +2,7 @@
 #include "display/controls.h"
 #include "display/panel.h"
 #include "util/duration.h"
-#include "util/phase-accumulator.h"
+#include "components/phase-accumulator.h"
 #include "util/rotation.h"
 #include "util/stage-components.h"
 
