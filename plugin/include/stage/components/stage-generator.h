@@ -11,11 +11,15 @@ template <typename M> class StageGenerator : public PhaseAccumulator {
 public:
   explicit StageGenerator(M *module) : module{module} {}
 
+  void on_start() const override { module->on_generate_start(); }
+
   auto duration() const -> float override { return module->duration(); }
 
   auto sampleTime() const -> float override { return module->sampleTime(); }
 
-  void on_finish() const override { module->on_stage_generator_finish(); }
+  void on_step(float phase) const override { module->send_phase(phase); }
+
+  void on_finish() const override { module->on_generate_end(); }
 
 private:
   M *module;

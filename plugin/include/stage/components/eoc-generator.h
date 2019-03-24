@@ -11,13 +11,13 @@ template <typename M> class EocGenerator : public PhaseAccumulator {
 public:
   explicit EocGenerator(M *module) : module{module} {}
 
-  void on_start() const override { module->set_eoc(true); }
+  void on_start() const override { module->on_eoc_start(); }
 
   auto duration() const -> float override { return 1e-3; }
 
   auto sampleTime() const -> float override { return module->sampleTime(); }
 
-  void on_finish() const override { module->set_eoc(false); }
+  void on_finish() const override { module->on_eoc_end(); }
 
 private:
   M *module;

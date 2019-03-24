@@ -27,6 +27,7 @@ public:
     if (accumulated >= 1.0f) {
       accumulated = 1.f;
     };
+    on_step(accumulated);
     if (accumulated >= 1.0f) {
       on_finish();
     };
@@ -38,9 +39,10 @@ public:
   auto phase() const -> float { return this->accumulated; }
 
 protected:
-  virtual void on_start() const {};
   virtual auto sampleTime() const -> float = 0;
   virtual auto duration() const -> float = 0;
+  virtual void on_start() const {};
+  virtual void on_step(float phase) const {};
   virtual void on_finish() const {};
 
 private:

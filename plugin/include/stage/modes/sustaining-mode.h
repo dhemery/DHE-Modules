@@ -5,28 +5,21 @@
 
 namespace DHE {
 
-/**
- * A stage module in sustaining mode emits its sustain voltage at its output
- * port. The sustain voltage is the voltage that the module saw at its input
- * port at the moment when it entered sustaining mode.
- */
-template <typename M> class SustainingMode : public Mode {
+template <typename M> class SustainMode : public Mode {
 public:
-  explicit SustainingMode(M *module, Gate *sustain_gate)
-      : module{module}, sustain_gate{sustain_gate} {}
+  explicit SustainMode(M *module)
+      : module{module} {}
 
   void enter() override {
-    module->hold_input();
     module->set_active(true);
+    module->hold_input();
   }
 
   void step() override {
-    module->send_held();
-    sustain_gate->step();
+    module->do_sustain();
   }
 
 private:
   M *module;
-  Gate *sustain_gate;
 };
 } // namespace DHE

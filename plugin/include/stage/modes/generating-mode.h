@@ -6,35 +6,22 @@
 
 namespace DHE {
 
-/**
- * A stage module in generating mode advances its phase, converts the phase into
- * a voltage, and emits the resulting voltage at its output port.
- */
-template<typename M> class GeneratingMode : public Mode {
+template <typename M> class GeneratingMode : public Mode {
 public:
-  explicit GeneratingMode(M *module, PhaseAccumulator *stage_generator,
-                          Trigger *stage_trigger)
-      : module{module}, stage_trigger{stage_trigger}, stage_generator{
-      stage_generator} {}
+  explicit GeneratingMode(M *module)
+      : module{module} {}
 
   void enter() override {
-    module->hold_input();
     module->set_active(true);
-    start();
+    module->hold_input();
   }
 
   void step() override {
-    stage_generator->step();
-    module->send_stage();
-    stage_trigger->step();
+    module->do_generate();
   }
-
-  void start() { stage_generator->start(); }
 
 private:
   M *module;
-  Trigger *stage_trigger;
-  PhaseAccumulator *stage_generator;
 };
 
 } // namespace DHE

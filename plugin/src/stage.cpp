@@ -4,12 +4,11 @@
 #include "display/panel.h"
 #include "stage/components/defer-gate.h"
 #include "stage/components/eoc-generator.h"
+#include "stage/components/stage-gate.h"
 #include "stage/components/stage-generator.h"
-#include "stage/components/stage-trigger.h"
 #include "stage/modes/deferring-mode.h"
 #include "stage/modes/following-mode.h"
 #include "stage/modes/generating-mode.h"
-#include "stage/modes/sustaining-mode.h"
 #include "util/duration.h"
 #include "util/signal.h"
 
@@ -29,51 +28,44 @@ public:
     eoc_generator.step();
   }
 
-  auto defer_gate_in() const -> bool {
-    return inputs[DEFER_GATE_IN].value > 0.1;
-  }
-
   auto duration() const -> float {
     auto rotation = params[DURATION_KNOB].value;
     return DHE::duration(rotation);
   }
-
-  void hold_input() { held_voltage = envelope_in(); }
-
-  void on_defer_gate_rise() { enter(&deferring_mode); }
-
-  void on_defer_gate_fall() { enter(&following_mode); }
-
-  void on_stage_trigger_rise() { enter(&generating_mode); }
-
-  void on_stage_generator_finish() {
-    eoc_generator.start();
-    enter(&following_mode);
-  }
-
   auto sampleTime() const -> float {
     return rack::engineGetSampleTime();
   }
 
-  void send_input() { send_out(envelope_in()); }
+  auto defer_gate_in() const -> bool { return inputs[DEFER_GATE_IN].value > 0.1; }
+  void on_defer_gate_rise() { enter(&deferring_mode); }
+  void do_defer() { send_input(); }
+  void on_defer_gate_fall() { enter(&following_mode); }
 
-  void send_level() {
-    send_out(level());
+  void do_follow() { send_level(); }
+
+  auto stage_gate_in() const -> bool { return inputs[STAGE_TRIGGER_IN].value > 0.1; }
+  void on_stage_gate_rise() { enter(&generating_mode); }
+  void on_stage_gate_fall() {}
+
+  void on_generate_start() {}
+  void do_generate() { stage_generator.step(); }
+  void on_generate_end() {
+    eoc_generator.start();
+    enter(&following_mode);
   }
 
-  void send_stage() {
-    auto phase = stage_generator.phase();
+  void on_eoc_start() { set_eoc(true); }
+  void on_eoc_end() { set_eoc(false); }
+
+  void hold_input() { held_voltage = envelope_in(); }
+  void send_input() { send_out(envelope_in()); }
+  void send_level() { send_out(level()); }
+  void send_phase(float phase) {
     send_out(scale(taper(phase), held_voltage, level()));
   }
 
   void set_active(bool active) {
     outputs[ACTIVE_OUT].value = active ? 10.f : 0.f;
-  }
-
-  void set_eoc(bool eoc) { outputs[EOC_OUT].value = eoc ? 10.f : 0.f; }
-
-  auto stage_trigger_in() const -> bool {
-    return inputs[STAGE_TRIGGER_IN].value > 0.1;
   }
 
   enum ParameterIIds { DURATION_KNOB, LEVEL_KNOB, CURVE_KNOB, PARAMETER_COUNT };
@@ -101,6 +93,8 @@ private:
     return Signal::unipolar_range.scale(rotation);
   }
 
+  void set_eoc(bool eoc) { outputs[EOC_OUT].value = eoc ? 10.f : 0.f; }
+
   void send_out(float voltage) { outputs[MAIN_OUT].value = voltage; }
 
   auto taper(float phase) const -> float {
@@ -108,14 +102,14 @@ private:
   }
 
   DeferGate<Stage> defer_gate{this};
-  StageTrigger<Stage> stage_trigger{this};
+  StageGate<Stage> stage_gate{this};
 
-  EocGenerator<Stage> eoc_generator{this};
   StageGenerator<Stage> stage_generator{this};
+  EocGenerator<Stage> eoc_generator{this};
 
   DeferringMode<Stage> deferring_mode{this};
-  FollowingMode<Stage> following_mode{this, &stage_trigger};
-  GeneratingMode<Stage> generating_mode{this, &stage_generator, &stage_trigger};
+  FollowingMode<Stage> following_mode{this};
+  GeneratingMode<Stage> generating_mode{this};
   Mode *mode;
 
   float held_voltage = 0.f;

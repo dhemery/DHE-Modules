@@ -27,35 +27,33 @@ public:
     eoc_generator.step();
   }
 
-  auto defer_gate_in() const -> bool {
-    return inputs[DEFER_GATE_IN].value > 0.1f;
-  }
-
   auto duration() const -> float {
     auto rotation = modulated(DURATION_KNOB, DURATION_CV);
     return DHE::duration(rotation, *duration_range);
   }
 
-  void hold_input() { held_voltage = envelope_in(); }
-
+  auto sampleTime() const -> float {
+    return rack::engineGetSampleTime();
+  }
+  auto defer_gate_in() const -> bool {
+    return inputs[DEFER_GATE_IN].value > 0.1f;
+  }
   void on_defer_gate_rise() { enter(&deferring_mode); }
-
+  void do_defer() { send_input(); }
   void on_defer_gate_fall() {
-    if (stage_type == SUSTAIN && sustain_gate_in()) {
+    if (stage_type == SUSTAIN && stage_gate_in()) {
       enter(&generating_mode);
     } else {
       stop_generating();
     }
   }
 
-  void on_stage_gate_rise() { enter(&generating_mode); }
+  void do_follow() { send_held(); }
 
-  void on_stage_generator_finish() {
-    if (stage_type == HOLD) {
-      stop_generating();
-    }
+  auto stage_gate_in() const -> bool {
+    return inputs[STAGE_GATE_IN].value > 0.1f;
   }
-
+  void on_stage_gate_rise() { enter(&generating_mode); }
   void on_stage_gate_fall() {
     if (stage_type == SUSTAIN) {
       eoc_generator.start();
@@ -63,19 +61,20 @@ public:
     }
   }
 
-  auto sampleTime() const -> float {
-    return rack::engineGetSampleTime();
+  void on_stage_start() {}
+  void do_generate() { send_held(); }
+  void on_stage_end() {
+    if (stage_type == HOLD) {
+      stop_generating();
+    }
   }
 
+  void on_eoc_start() { set_eoc(true); }
+  void on_eoc_end() { set_eoc(false); }
+
+  void hold_input() { held_voltage = envelope_in(); }
   void send_held() { send_out(held_voltage); }
-
   void send_input() { send_out(envelope_in()); }
-
-  void send_level() {
-    send_input();
-  }
-
-  void send_stage() { send_held(); }
 
   void set_active(bool active) {
     outputs[ACTIVE_OUT].value = active ? 10.f : 0.f;
@@ -84,10 +83,6 @@ public:
   void set_duration_range(Range const *range) { duration_range = range; }
 
   void set_eoc(bool eoc) { outputs[EOC_OUT].value = eoc ? 10.f : 0.f; }
-
-  auto sustain_gate_in() const -> bool {
-    return inputs[STAGE_GATE_IN].value > 0.1f;
-  }
 
   const Selector<Range const *> duration_range_selector{
       Duration::ranges, [this](Range const *range) { duration_range = range; }};
@@ -129,8 +124,8 @@ private:
       return;
     }
 
-    // If the sustain gate is up, continue sustaining.
-    if (sustain_gate_in()) {
+    // If the stage gate is up, continue sustaining.
+    if (stage_gate_in()) {
       return;
     }
 
@@ -166,12 +161,11 @@ private:
   DeferGate<Hostage> defer_gate{this};
   StageGate<Hostage> stage_gate{this};
 
-  StageGenerator<Hostage> stage_generator{this};
   EocGenerator<Hostage> eoc_generator{this};
 
   DeferringMode<Hostage> deferring_mode{this};
-  FollowingMode<Hostage> following_mode{this, &stage_gate};
-  GeneratingMode<Hostage> generating_mode{this, &stage_generator, &stage_gate};
+  FollowingMode<Hostage> following_mode{this};
+  GeneratingMode<Hostage> generating_mode{this};
 
   enum StageType { HOLD, SUSTAIN };
 

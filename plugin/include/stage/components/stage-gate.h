@@ -11,7 +11,7 @@ public:
   explicit StageGate(M *module) : module{module} {}
 
 protected:
-  auto state_in() const -> bool override { return module->sustain_gate_in(); }
+  auto state_in() const -> bool override { return module->stage_gate_in(); }
 
   void on_rise() override { module->on_stage_gate_rise(); }
 
