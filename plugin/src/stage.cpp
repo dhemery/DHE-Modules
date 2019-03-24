@@ -1,45 +1,69 @@
 #include <engine.hpp>
+#include <stage/modes/resting-mode.h>
+#include <stage/modes/deferring-mode.h>
+#include <stage/modes/generating-mode.h>
 
 #include "display/controls.h"
 #include "display/panel.h"
-#include "stage/stage-module.h"
+#include "stage/stage-state-machine.h"
 #include "util/duration.h"
 #include "util/signal.h"
 
 namespace DHE {
 
-class Stage : public StageModule {
+class Stage : public rack::Module {
 public:
-  Stage() : StageModule{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT}{}
+  Stage() : rack::Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT} {}
 
-  auto duration() const -> float override {
+  auto sample_time() const -> float {
+    return rack::engineGetSampleTime();
+  };
+
+  auto duration() const -> float {
     auto rotation = params[DURATION_KNOB].value;
     return DHE::duration(rotation);
   }
 
-  auto defer_gate_in() const -> bool override { return inputs[DEFER_GATE_IN].value > 0.1; }
+  auto defer_gate_in() const -> bool { return inputs[DEFER_GATE_IN].value > 0.1; }
+  auto stage_gate_in() const -> bool { return inputs[STAGE_TRIGGER_IN].value > 0.1; }
 
-  auto stage_gate_in() const -> bool override { return inputs[STAGE_TRIGGER_IN].value > 0.1; }
+  void start_deferring() {}
+  void do_defer() {}
+  void stop_deferring() {}
+
+  void start_generating() {}
+  void do_generate() {}
+  void stop_generating() {}
+
+  void do_rest() {}
 
 
-  void send_phase(float phase) override {
-    send_out(scale(taper(phase), held_voltage(), level()));
+  void on_eoc_start() {
+    set_eoc(true);
   }
 
-  void set_active(bool active) override {
+  void on_eoc_end() {
+    set_eoc(false);
+  }
+
+  void send_phase(float phase) {
+    send_out(scale(taper(phase), held_voltage, level()));
+  }
+
+  void set_active(bool active) {
     outputs[ACTIVE_OUT].value = active ? 10.f : 0.f;
   }
 
-  auto envelope_in() const -> float override { return inputs[ENVELOPE_IN].value; }
+  auto envelope_in() const -> float { return inputs[ENVELOPE_IN].value; }
 
-  auto level() const -> float override {
+  auto level() const -> float {
     auto rotation = params[LEVEL_KNOB].value;
     return Signal::unipolar_range.scale(rotation);
   }
 
-  void set_eoc(bool eoc) override { outputs[EOC_OUT].value = eoc ? 10.f : 0.f; }
+  void set_eoc(bool eoc) { outputs[EOC_OUT].value = eoc ? 10.f : 0.f; }
 
-  void send_out(float voltage) override { outputs[MAIN_OUT].value = voltage; }
+  void send_out(float voltage) { outputs[MAIN_OUT].value = voltage; }
 
   enum ParameterIIds { DURATION_KNOB, LEVEL_KNOB, CURVE_KNOB, PARAMETER_COUNT };
 
@@ -56,6 +80,12 @@ private:
   auto taper(float phase) const -> float {
     return Sigmoid::j_taper(phase, curvature());
   }
+
+  DeferringMode<Stage> deferring_mode{this};
+  GeneratingMode<Stage> generating_mode{this};
+  RestingMode<Stage> resting_mode{this};
+  StageStateMachine<Stage> state_machine{this, &resting_mode};
+  float held_voltage{0.f};
 };
 
 class StagePanel : public Panel<StagePanel> {

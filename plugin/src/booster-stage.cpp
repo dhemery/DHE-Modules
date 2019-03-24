@@ -1,48 +1,65 @@
 #include <utility>
+#include <stage/modes/deferring-mode.h>
+#include <stage/modes/generating-mode.h>
+#include <stage/modes/resting-mode.h>
 
 #include "engine.hpp"
 
 #include "display/controls.h"
 #include "display/panel.h"
-#include "stage/stage-module.h"
+#include "stage/stage-state-machine.h"
 #include "util/duration.h"
 #include "util/rotation.h"
 #include "util/signal.h"
 
 namespace DHE {
 
-class BoosterStage : public StageModule {
+class BoosterStage : public rack::Module {
 public:
-  BoosterStage() : StageModule{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT} {}
+  BoosterStage() : rack::Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT} {}
 
-  auto envelope_in() const -> float override { return inputs[ENVELOPE_IN].value; }
+  auto envelope_in() const -> float { return inputs[ENVELOPE_IN].value; }
 
-  auto level() const -> float override {
+  auto level() const -> float {
     auto level = modulated(LEVEL_KNOB, LEVEL_CV);
     return level_range->scale(level);
   }
 
-  auto duration() const -> float override {
+  auto duration() const -> float {
     auto rotation = modulated(DURATION_KNOB, DURATION_CV);
     return DHE::duration(rotation, *duration_range);
   }
 
-  auto defer_gate_in() const -> bool override {
+  auto sample_time() const -> float {
+    return rack::engineGetSampleTime();
+  };
+
+  auto defer_gate_in() const -> bool {
     auto defer_button = params[DEFER_BUTTON].value > 0.5f;
     auto defer_input = inputs[DEFER_GATE_IN].value > 0.1f;
     return defer_button || defer_input;
   }
-  auto stage_gate_in() const -> bool override {
+  void start_deferring() {}
+  void do_defer() {}
+  void stop_deferring() {}
+
+  void start_generating() {}
+  void do_generate() {}
+  void stop_generating() {}
+
+  void do_rest() {}
+
+  auto stage_gate_in() const -> bool {
     auto trigger_button = params[TRIGGER_BUTTON].value > 0.5;
     auto trigger_input = inputs[STAGE_TRIGGER_IN].value > 0.1;
     return trigger_button || trigger_input;
   }
 
-  void send_phase(float phase) override {
-    send_out(scale(taper(phase), held_voltage(), level()));
+  void send_phase(float phase) {
+    send_out(scale(taper(phase), held_voltage, level()));
   }
 
-  void set_active(bool active) override {
+  void set_active(bool active) {
     is_active = active;
     send_active();
   }
@@ -52,7 +69,7 @@ public:
     send_active();
   }
 
-  void set_eoc(bool eoc) override {
+  void set_eoc(bool eoc) {
     is_eoc = eoc;
     send_eoc();
   }
@@ -115,18 +132,24 @@ private:
     outputs[EOC_OUT].value = is_eoc || eoc_button_is_pressed ? 10.f : 0.f;
   }
 
-  void send_out(float voltage) override { outputs[MAIN_OUT].value = voltage; }
+  void send_out(float voltage) { outputs[MAIN_OUT].value = voltage; }
 
   auto taper(float phase) const -> float {
     return Sigmoid::taper(phase, curvature(), is_s_shape());
   }
 
+  DeferringMode<BoosterStage> deferring_mode{this};
+  GeneratingMode<BoosterStage> generating_mode{this};
+  RestingMode<BoosterStage> resting_mode{this};
+  StageStateMachine<BoosterStage> state_machine{this, &resting_mode};
+  float held_voltage{0.f};
+
   Range const *duration_range{&Duration::medium_range};
   Range const *level_range{&Signal::bipolar_range};
-  bool is_active = false;
-  bool active_button_is_pressed = false;
-  bool is_eoc = false;
-  bool eoc_button_is_pressed = false;
+  bool is_active{false};
+  bool active_button_is_pressed{false};
+  bool is_eoc{false};
+  bool eoc_button_is_pressed{false};
 };
 
 class BoosterStagePanel : public Panel<BoosterStagePanel> {

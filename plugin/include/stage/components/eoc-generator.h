@@ -4,22 +4,24 @@
 namespace DHE {
 
 /**
- * Generates an end-of-cycle pulse and informs the module when the pulse rises
+ * Generates an end-of-cycle pulse and informs the sink when the pulse rises
  * and falls.
  */
-template <typename M> class EocGenerator : public PhaseAccumulator {
+template <typename TSource, typename TSink>
+class EocGenerator : public PhaseAccumulator {
 public:
-  explicit EocGenerator(M *module) : module{module} {}
+  explicit EocGenerator(TSource *source, TSink *sink) : source{source}, sink{sink} {}
 
-  void on_start() const override { module->on_eoc_start(); }
+  void on_start() const override { sink->on_end_of_cycle_rise(); }
 
   auto duration() const -> float override { return 1e-3; }
 
-  auto sampleTime() const -> float override { return module->sampleTime(); }
+  auto sampleTime() const -> float override { return source->sample_time(); }
 
-  void on_finish() const override { module->on_eoc_end(); }
+  void on_finish() const override { sink->on_end_of_cycle_fall(); }
 
 private:
-  M *module;
+  TSource const * const source;
+  TSink * const sink;
 };
 }

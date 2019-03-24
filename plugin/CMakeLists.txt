@@ -11,9 +11,9 @@ target_sources(components
         include/components/trigger.h
         include/display/controls.h
         include/display/panel.h
-        include/stage/stage-module.h
+        include/stage/stage-state-machine.h
         include/stage/modes/deferring-mode.h
-        include/stage/modes/following-mode.h
+        include/stage/modes/resting-mode.h
         include/stage/modes/generating-mode.h
         include/stage/modes/sustaining-mode.h
         include/util/duration.h

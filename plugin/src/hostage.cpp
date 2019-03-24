@@ -1,59 +1,62 @@
+#include <stage/modes/generating-mode.h>
+#include <stage/modes/resting-mode.h>
+#include <stage/modes/deferring-mode.h>
+#include <stage/modes/sustaining-mode.h>
 #include "engine.hpp"
 
 #include "display/controls.h"
 #include "display/panel.h"
-#include "stage/stage-module.h"
+#include "stage/stage-state-machine.h"
 #include "util/duration.h"
 #include "util/rotation.h"
 
 namespace DHE {
 
-class Hostage : public StageModule {
+class Hostage : public rack::Module {
 public:
-  Hostage() : StageModule{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT} {}
+  Hostage() : rack::Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT} {}
 
-  auto duration() const -> float override {
+  auto defer_gate_in() const -> bool { return inputs[DEFER_GATE_IN].value > 0.1f; }
+  void start_deferring() {}
+  void do_defer() {}
+  void stop_deferring() {}
+
+  void start_generating() {}
+  void do_generate() {}
+  void stop_generating() {}
+
+  void do_rest() {}
+
+  void do_sustain() {}
+  void stop_sustaining() {}
+
+  auto duration() const -> float {
     auto rotation = modulated(DURATION_KNOB, DURATION_CV);
     return DHE::duration(rotation, *duration_range);
   }
 
-  auto level() const -> float override { return held_voltage(); }
+  auto sample_time() const -> float {
+    return rack::engineGetSampleTime();
+  };
 
-  void send_phase(float ignored)  override { send_out(held_voltage()); }
+  auto level() const -> float { return held_voltage; }
 
-  auto defer_gate_in() const -> bool override { return inputs[DEFER_GATE_IN].value > 0.1f; }
+  void send_phase(float ignored)  { send_out(held_voltage); }
 
-  auto stage_gate_in() const -> bool override { return inputs[STAGE_GATE_IN].value > 0.1f; }
 
-  void set_active(bool active) override {
+  auto stage_gate_in() const -> bool { return inputs[STAGE_GATE_IN].value > 0.1f; }
+
+  void set_active(bool active) {
     outputs[ACTIVE_OUT].value = active ? 10.f : 0.f;
   }
 
-  void set_eoc(bool eoc) override { outputs[EOC_OUT].value = eoc ? 10.f : 0.f; }
+  void set_eoc(bool eoc) { outputs[EOC_OUT].value = eoc ? 10.f : 0.f; }
 
-  auto envelope_in() const -> float override { return inputs[MAIN_IN].value; }
+  auto envelope_in() const -> float { return inputs[MAIN_IN].value; }
 
-  void send_out(float voltage) override { outputs[MAIN_OUT].value = voltage; }
+  void send_out(float voltage) { outputs[MAIN_OUT].value = voltage; }
 
   void set_duration_range(Range const *range) { duration_range = range; }
-
-  void on_defer_gate_fall() override {
-    if(stage_gate_in()) {
-      begin_generating();
-    } else {
-      on_generate_end();
-    }
-  }
-
-  void on_generate_start() override {
-    is_generating = true;
-    StageModule::on_generate_start();
-  }
-
-  void on_generate_end() override {
-    is_generating = false;
-    StageModule::on_generate_end();
-  }
 
   const Selector<Range const *> duration_range_selector{
       Duration::ranges, [this](Range const *range) { duration_range = range; }};
@@ -76,34 +79,6 @@ public:
   };
 
 private:
-  void choose_stage_type() {
-    auto old_stage_type = stage_type;
-    stage_type = stage_type_in() ? SUSTAIN : HOLD;
-
-    // If no change, there's nothing more to do.
-    if (stage_type == old_stage_type) {
-      return;
-    }
-
-    // If no stage in progress, there's nothing more to do.
-    if (!is_generating) {
-      return;
-    }
-
-    // If we're holding, continue holding.
-    if (stage_type == HOLD) {
-      return;
-    }
-
-    // If the stage gate is up, continue sustaining.
-    if (stage_gate_in()) {
-      return;
-    }
-
-    // The sustain gate is down, so there's no sustain to continue.
-    on_generate_end();
-  }
-
   auto modulated(ParameterIds knob_param, InputIds cv_input) const -> float {
     auto rotation = params[knob_param].value;
     auto cv = inputs[cv_input].value;
@@ -116,9 +91,16 @@ private:
 
   enum StageType { HOLD, SUSTAIN };
 
+  DeferringMode<Hostage> deferring_mode{this};
+  GeneratingMode<Hostage> generating_mode{this};
+  RestingMode<Hostage> resting_mode{this};
+  SustainingMode<Hostage> sustaining_mode{this};
+
+  StageStateMachine<Hostage> state_machine{this, &resting_mode};
+
   StageType stage_type{HOLD};
-  Range const *duration_range = &Duration::medium_range;
-  bool is_generating = false;
+  Range const *duration_range{&Duration::medium_range};
+  float held_voltage{0};
 };
 
 class HostagePanel : public Panel<HostagePanel> {

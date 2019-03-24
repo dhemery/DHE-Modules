@@ -4,20 +4,22 @@
 namespace DHE {
 
 /**
- * Informs the module when its stage gate signal rises and falls.
+ * Informs the sink when the source's stage gate signal rises and falls.
  */
-template <typename M> class StageGate : public Gate {
+template <typename TSource, typename TSink>
+class StageGate : public Gate {
 public:
-  explicit StageGate(M *module) : module{module} {}
+  explicit StageGate(TSource *source, TSink *sink) : source{source}, sink{sink} {}
 
 protected:
-  auto state_in() const -> bool override { return module->stage_gate_in(); }
+  auto state_in() const -> bool override { return source->stage_gate_in(); }
 
-  void on_rise() override { module->on_stage_gate_rise(); }
+  void on_rise() override { sink->on_stage_gate_rise(); }
 
-  void on_fall() override { module->on_stage_gate_fall(); }
+  void on_fall() override { sink->on_stage_gate_fall(); }
 
 private:
-  M *module;
+  TSource const * const source;
+  TSink * const sink;
 };
 }
