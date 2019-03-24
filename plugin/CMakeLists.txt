@@ -11,6 +11,11 @@ target_sources(components
         include/components/trigger.h
         include/display/controls.h
         include/display/panel.h
+        include/stage/stage-module.h
+        include/stage/modes/deferring-mode.h
+        include/stage/modes/following-mode.h
+        include/stage/modes/generating-mode.h
+        include/stage/modes/sustaining-mode.h
         include/util/duration.h
         include/util/mode.h
         include/util/range.h
@@ -18,7 +23,6 @@ target_sources(components
         include/util/selector.h
         include/util/sigmoid.h
         include/util/signal.h
-        include/stage/modes/sustaining-mode.h
         )
 target_include_directories(components
         INTERFACE

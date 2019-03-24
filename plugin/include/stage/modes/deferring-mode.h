@@ -1,23 +1,20 @@
 #pragma once
 
-#include "util/mode.h"
+#include "stage-mode.h"
 
 namespace DHE {
 
-template<typename M> class DeferringMode : public Mode {
+template<typename M>
+class DeferringMode : public StageMode<M> {
 public:
   explicit DeferringMode(M *module) : module{module} {}
 
-  void enter() override {
-    module->set_active(true);
-  }
+  void step() override { module->do_defer(); }
 
-  void step() override {
-    module->do_defer();
-  }
+  void on_defer_gate_fall() override { module->begin_following(); }
 
 private:
-  M *module;
+  M * const module;
 };
 
 } // namespace DHE

@@ -2,87 +2,58 @@
 
 #include "display/controls.h"
 #include "display/panel.h"
-#include "stage/components/defer-gate.h"
-#include "stage/components/stage-gate.h"
-#include "stage/components/eoc-generator.h"
-#include "stage/components/stage-generator.h"
-#include "stage/modes/deferring-mode.h"
-#include "stage/modes/following-mode.h"
-#include "stage/modes/generating-mode.h"
+#include "stage/stage-module.h"
 #include "util/duration.h"
 #include "util/rotation.h"
 
 namespace DHE {
 
-class Hostage : public rack::Module {
+class Hostage : public StageModule {
 public:
-  Hostage() : Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT} {
-    mode->enter();
-  }
+  Hostage() : StageModule{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT} {}
 
-  void step() override {
-    choose_stage_type();
-    defer_gate.step();
-    mode->step();
-    eoc_generator.step();
-  }
-
-  auto duration() const -> float {
+  auto duration() const -> float override {
     auto rotation = modulated(DURATION_KNOB, DURATION_CV);
     return DHE::duration(rotation, *duration_range);
   }
 
-  auto sampleTime() const -> float {
-    return rack::engineGetSampleTime();
-  }
-  auto defer_gate_in() const -> bool {
-    return inputs[DEFER_GATE_IN].value > 0.1f;
-  }
-  void on_defer_gate_rise() { enter(&deferring_mode); }
-  void do_defer() { send_input(); }
-  void on_defer_gate_fall() {
-    if (stage_type == SUSTAIN && stage_gate_in()) {
-      enter(&generating_mode);
-    } else {
-      stop_generating();
-    }
-  }
+  auto level() const -> float override { return held_voltage(); }
 
-  void do_follow() { send_held(); }
+  void send_phase(float ignored)  override { send_out(held_voltage()); }
 
-  auto stage_gate_in() const -> bool {
-    return inputs[STAGE_GATE_IN].value > 0.1f;
-  }
-  void on_stage_gate_rise() { enter(&generating_mode); }
-  void on_stage_gate_fall() {
-    if (stage_type == SUSTAIN) {
-      eoc_generator.start();
-      enter(&following_mode);
-    }
-  }
+  auto defer_gate_in() const -> bool override { return inputs[DEFER_GATE_IN].value > 0.1f; }
 
-  void on_stage_start() {}
-  void do_generate() { send_held(); }
-  void on_stage_end() {
-    if (stage_type == HOLD) {
-      stop_generating();
-    }
-  }
+  auto stage_gate_in() const -> bool override { return inputs[STAGE_GATE_IN].value > 0.1f; }
 
-  void on_eoc_start() { set_eoc(true); }
-  void on_eoc_end() { set_eoc(false); }
-
-  void hold_input() { held_voltage = envelope_in(); }
-  void send_held() { send_out(held_voltage); }
-  void send_input() { send_out(envelope_in()); }
-
-  void set_active(bool active) {
+  void set_active(bool active) override {
     outputs[ACTIVE_OUT].value = active ? 10.f : 0.f;
   }
 
+  void set_eoc(bool eoc) override { outputs[EOC_OUT].value = eoc ? 10.f : 0.f; }
+
+  auto envelope_in() const -> float override { return inputs[MAIN_IN].value; }
+
+  void send_out(float voltage) override { outputs[MAIN_OUT].value = voltage; }
+
   void set_duration_range(Range const *range) { duration_range = range; }
 
-  void set_eoc(bool eoc) { outputs[EOC_OUT].value = eoc ? 10.f : 0.f; }
+  void on_defer_gate_fall() override {
+    if(stage_gate_in()) {
+      begin_generating();
+    } else {
+      on_generate_end();
+    }
+  }
+
+  void on_generate_start() override {
+    is_generating = true;
+    StageModule::on_generate_start();
+  }
+
+  void on_generate_end() override {
+    is_generating = false;
+    StageModule::on_generate_end();
+  }
 
   const Selector<Range const *> duration_range_selector{
       Duration::ranges, [this](Range const *range) { duration_range = range; }};
@@ -115,11 +86,11 @@ private:
     }
 
     // If no stage in progress, there's nothing more to do.
-    if (mode != &generating_mode) {
+    if (!is_generating) {
       return;
     }
 
-    // If we're now holding, continue holding.
+    // If we're holding, continue holding.
     if (stage_type == HOLD) {
       return;
     }
@@ -130,20 +101,7 @@ private:
     }
 
     // The sustain gate is down, so there's no sustain to continue.
-    stop_generating();
-  }
-
-  void enter(Mode *incoming) {
-    mode->exit();
-    mode = incoming;
-    mode->enter();
-  }
-
-  auto envelope_in() const -> float { return inputs[MAIN_IN].value; }
-
-  void stop_generating() {
-    eoc_generator.start();
-    enter(&following_mode);
+    on_generate_end();
   }
 
   auto modulated(ParameterIds knob_param, InputIds cv_input) const -> float {
@@ -152,27 +110,15 @@ private:
     return Rotation::modulated(rotation, cv);
   }
 
-  void send_out(float voltage) { outputs[MAIN_OUT].value = voltage; }
-
   auto stage_type_in() const -> bool {
     return params[HOSTAGE_MODE_SWITCH].value > 0.5f;
   }
 
-  DeferGate<Hostage> defer_gate{this};
-  StageGate<Hostage> stage_gate{this};
-
-  EocGenerator<Hostage> eoc_generator{this};
-
-  DeferringMode<Hostage> deferring_mode{this};
-  FollowingMode<Hostage> following_mode{this};
-  GeneratingMode<Hostage> generating_mode{this};
-
   enum StageType { HOLD, SUSTAIN };
 
-  Mode *mode{&following_mode};
-  float held_voltage{0.f};
   StageType stage_type{HOLD};
   Range const *duration_range = &Duration::medium_range;
+  bool is_generating = false;
 };
 
 class HostagePanel : public Panel<HostagePanel> {

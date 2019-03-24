@@ -4,87 +4,45 @@
 
 #include "display/controls.h"
 #include "display/panel.h"
-#include "stage/components/defer-gate.h"
-#include "stage/components/eoc-generator.h"
-#include "stage/components/stage-gate.h"
-#include "stage/components/stage-generator.h"
-#include "stage/modes/deferring-mode.h"
-#include "stage/modes/following-mode.h"
-#include "stage/modes/generating-mode.h"
+#include "stage/stage-module.h"
 #include "util/duration.h"
 #include "util/rotation.h"
 #include "util/signal.h"
 
 namespace DHE {
 
-class BoosterStage : public rack::Module {
+class BoosterStage : public StageModule {
 public:
-  BoosterStage() : Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT} {
-    mode->enter();
+  BoosterStage() : StageModule{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT} {}
+
+  auto envelope_in() const -> float override { return inputs[ENVELOPE_IN].value; }
+
+  auto level() const -> float override {
+    auto level = modulated(LEVEL_KNOB, LEVEL_CV);
+    return level_range->scale(level);
   }
 
-  void step() override {
-    defer_gate.step();
-    if(mode != &deferring_mode) stage_gate.step();
-    mode->step();
-  }
-
-  auto duration() const -> float {
+  auto duration() const -> float override {
     auto rotation = modulated(DURATION_KNOB, DURATION_CV);
     return DHE::duration(rotation, *duration_range);
   }
-  auto sampleTime() const -> float {
-    return rack::engineGetSampleTime();
-  }
 
-  auto defer_gate_in() const -> bool {
+  auto defer_gate_in() const -> bool override {
     auto defer_button = params[DEFER_BUTTON].value > 0.5f;
     auto defer_input = inputs[DEFER_GATE_IN].value > 0.1f;
     return defer_button || defer_input;
   }
-  void on_defer_gate_rise() {
-    enter(&deferring_mode);
-  }
-  void do_defer() {
-    send_input();
-  }
-  void on_defer_gate_fall() {
-    enter(&following_mode);
-    stage_gate.step();
-  }
-
-  void do_follow() {
-    send_level();
-  }
-
-  auto stage_gate_in() const -> bool {
+  auto stage_gate_in() const -> bool override {
     auto trigger_button = params[TRIGGER_BUTTON].value > 0.5;
     auto trigger_input = inputs[STAGE_TRIGGER_IN].value > 0.1;
     return trigger_button || trigger_input;
   }
-  void on_stage_gate_rise() { enter(&generating_mode); }
-  void on_stage_gate_fall() { }
 
-  void on_generate_start() {}
-  void do_generate() {
-    stage_generator.step();
-  }
-  void on_generate_end() {
-    eoc_generator.start();
-    enter(&following_mode);
+  void send_phase(float phase) override {
+    send_out(scale(taper(phase), held_voltage(), level()));
   }
 
-  void on_eoc_start() { set_eoc(true);}
-  void on_eoc_end() { set_eoc(false);}
-
-  void hold_input() { held_voltage = envelope_in(); }
-  void send_input() { send_out(envelope_in()); }
-  void send_level() { send_out(level()); }
-  void send_phase(float phase) {
-    send_out(scale(taper(phase), held_voltage, level()));
-  }
-
-  void set_active(bool active) {
+  void set_active(bool active) override {
     is_active = active;
     send_active();
   }
@@ -94,7 +52,7 @@ public:
     send_active();
   }
 
-  void set_eoc(bool eoc) {
+  void set_eoc(bool eoc) override {
     is_eoc = eoc;
     send_eoc();
   }
@@ -140,20 +98,7 @@ private:
     return Sigmoid::curvature(modulated(CURVE_KNOB, CURVE_CV));
   }
 
-  void enter(Mode *incoming) {
-    mode->exit();
-    mode = incoming;
-    mode->enter();
-  }
-
-  auto envelope_in() const -> float { return inputs[ENVELOPE_IN].value; }
-
   auto is_s_shape() const -> bool { return params[SHAPE_SWITCH].value > 0.5f; }
-
-  auto level() const -> float {
-    auto level = modulated(LEVEL_KNOB, LEVEL_CV);
-    return level_range->scale(level);
-  }
 
   auto modulated(ParameterIds knob_param, InputIds cv_input) const -> float {
     auto rotation = params[knob_param].value;
@@ -170,24 +115,12 @@ private:
     outputs[EOC_OUT].value = is_eoc || eoc_button_is_pressed ? 10.f : 0.f;
   }
 
-  void send_out(float voltage) { outputs[MAIN_OUT].value = voltage; }
+  void send_out(float voltage) override { outputs[MAIN_OUT].value = voltage; }
 
   auto taper(float phase) const -> float {
     return Sigmoid::taper(phase, curvature(), is_s_shape());
   }
 
-  DeferGate<BoosterStage> defer_gate{this};
-  StageGate<BoosterStage> stage_gate{this};
-
-  EocGenerator<BoosterStage> eoc_generator{this};
-  StageGenerator<BoosterStage> stage_generator{this};
-
-  DeferringMode<BoosterStage> deferring_mode{this};
-  FollowingMode<BoosterStage> following_mode{this};
-  GeneratingMode<BoosterStage> generating_mode{this};
-
-  Mode *mode{&following_mode};
-  float held_voltage = 0.f;
   Range const *duration_range{&Duration::medium_range};
   Range const *level_range{&Signal::bipolar_range};
   bool is_active = false;
