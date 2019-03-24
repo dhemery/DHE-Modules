@@ -4,6 +4,8 @@
 
 namespace {
 
+using ::testing::AnyNumber;
+using ::testing::AtMost;
 using ::testing::Expectation;
 using ::testing::NiceMock;
 using ::testing::Return;
@@ -14,31 +16,73 @@ struct MockModule {
   MOCK_METHOD0(on_defer_gate_rise, void());
 };
 
-TEST(DeferGateTest, WhenDeferSignalRises_CallsOnDeferGateRise) {
+struct DeferGateTest : public ::testing::Test {
   MockModule module;
-  auto defer_gate = DHE::DeferGate<MockModule>{&module};
+  DHE::DeferGate<MockModule> defer_gate{&module};
 
-  Expectation gate_rises = EXPECT_CALL(module, defer_gate_in())
-      .WillOnce(Return(0.5f));
+  void given_defer_signal(bool state) {
+    EXPECT_CALL(module, defer_gate_in())
+        .WillOnce(Return(state));
+  }
 
-  EXPECT_CALL(module, on_defer_gate_rise())
-      .After(gate_rises);
+  void given_gate_is_high() {
+    EXPECT_CALL(module, defer_gate_in())
+        .WillOnce(Return(true));
+    EXPECT_CALL(module, on_defer_gate_rise())
+        .Times(AnyNumber());
+    defer_gate.step();
+    EXPECT_CALL(module, on_defer_gate_rise())
+        .Times(0);
+  }
+
+  void given_gate_is_low() {
+    EXPECT_CALL(module, defer_gate_in())
+        .WillOnce(Return(false));
+    EXPECT_CALL(module, on_defer_gate_fall())
+        .Times(AnyNumber());
+    defer_gate.step();
+    EXPECT_CALL(module, on_defer_gate_fall())
+        .Times(0);
+  }
+};
+
+TEST_F(DeferGateTest, step_callsOnDeferGateRise_ifDeferSignalIsTrue_whenGateIsLow) {
+  given_gate_is_low();
+  given_defer_signal(true);
+
+  EXPECT_CALL(module, on_defer_gate_rise());
 
   defer_gate.step();
 }
 
-TEST(DeferGateTest, WhenDeferSignalFalls_CallsOnDeferGateFall) {
-  NiceMock<MockModule> module;
-  auto defer_gate = DHE::DeferGate<MockModule>{&module};
+TEST_F(DeferGateTest, step_callsOnDeferGateFall_ifDeferSignalIsFalse_whenGateIsHigh) {
+  given_gate_is_high();
+  given_defer_signal(false);
 
-  Expectation gate_falls = EXPECT_CALL(module, defer_gate_in())
-      .WillOnce(Return(0.5f)) // rise
-      .WillOnce(Return(0.f)); // fall
+  EXPECT_CALL(module, on_defer_gate_fall());
 
-  EXPECT_CALL(module, on_defer_gate_fall())
-      .After(gate_falls);
-
-  defer_gate.step();
   defer_gate.step();
 }
+
+TEST_F(DeferGateTest, step_generatesNoEvents_ifDeferSignalIsTrue_whenGateIsHigh) {
+  given_gate_is_high();
+  given_defer_signal(true);
+
+  EXPECT_CALL(module, on_defer_gate_fall()).Times(0);
+  EXPECT_CALL(module, on_defer_gate_rise()).Times(0);
+
+  defer_gate.step();
+}
+
+
+TEST_F(DeferGateTest, step_generatesNoEvents_ifDeferSignalIsFalse_whenGateIsLow) {
+  given_gate_is_low();
+  given_defer_signal(false);
+
+  EXPECT_CALL(module, on_defer_gate_fall()).Times(0);
+  EXPECT_CALL(module, on_defer_gate_rise()).Times(0);
+
+  defer_gate.step();
+}
+
 }

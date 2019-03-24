@@ -45,7 +45,9 @@ public:
 
   void on_defer_gate_rise() { enter(&deferring_mode); }
 
-  void on_defer_gate_fall() { enter(&following_mode); }
+  void on_defer_gate_fall() {
+    enter(&following_mode);
+  }
 
   void on_stage_generator_finish() {
     eoc_generator.start();
@@ -59,6 +61,10 @@ public:
   }
 
   void send_input() { send_out(envelope_in()); }
+
+  void send_level() {
+    send_out(level());
+  }
 
   void send_stage() {
     auto phase = stage_generator.phase();

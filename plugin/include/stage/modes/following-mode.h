@@ -16,7 +16,7 @@ public:
   void enter() override { module->set_active(false); }
 
   void step() override {
-    module->send_stage();
+    module->send_level();
     stage_trigger->step();
   }
 

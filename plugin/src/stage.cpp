@@ -57,6 +57,10 @@ public:
 
   void send_input() { send_out(envelope_in()); }
 
+  void send_level() {
+    send_out(level());
+  }
+
   void send_stage() {
     auto phase = stage_generator.phase();
     send_out(scale(taper(phase), held_voltage, level()));

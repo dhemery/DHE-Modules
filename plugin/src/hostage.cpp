@@ -71,6 +71,10 @@ public:
 
   void send_input() { send_out(envelope_in()); }
 
+  void send_level() {
+    send_input();
+  }
+
   void send_stage() { send_held(); }
 
   void set_active(bool active) {
