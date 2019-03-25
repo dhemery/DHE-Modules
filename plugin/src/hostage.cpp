@@ -19,7 +19,10 @@ public:
     state_machine.start(&resting_mode);
   }
 
-  void step() override { state_machine.step(); }
+  void step() override {
+    state_machine.step();
+    eoc_generator.step();
+  }
 
   void start_deferring() {
     set_active(true);
@@ -50,18 +53,20 @@ public:
     send_out(held_voltage);
   }
   void finish_sustaining() {
-    state_machine.generate_end_of_cycle();
+    eoc_generator.start();
     start_resting();
   }
 
   void start_holding() {
     set_active(true);
     held_voltage = envelope_in();
+    stage_generator.start();
     state_machine.enter(&holding_mode);
   }
+  void do_generate() { stage_generator.step(); }
   void generate(float ignored) { do_sustain(); }
   void finish_generating() {
-    state_machine.generate_end_of_cycle();
+    eoc_generator.start();
     start_resting();
   }
   void on_end_of_cycle_rise() { set_eoc(true); }
@@ -131,11 +136,13 @@ private:
   void set_eoc(bool eoc) { outputs[EOC_OUT].value = eoc ? 10.f : 0.f; }
 
   StageStateMachine<Hostage> state_machine{this};
-
   DeferringMode<Hostage> deferring_mode{this};
   GeneratingMode<Hostage> holding_mode{this};
   RestingMode<Hostage> resting_mode{this};
   SustainingMode<Hostage> sustaining_mode{this};
+
+  EocGenerator<Hostage> eoc_generator{this};
+  StageGenerator<Hostage> stage_generator{this};
 
   Range const *duration_range{&Duration::medium_range};
   float held_voltage{0};

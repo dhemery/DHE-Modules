@@ -27,11 +27,6 @@ public:
     defer_gate.step();
     stage_gate.step();
     mode->step();
-    eoc_generator.step();
-  }
-
-  void generate_end_of_cycle() {
-    eoc_generator.start();
   }
 
   void on_defer_gate_rise() { mode->on_defer_gate_rise(); }
@@ -44,7 +39,6 @@ private:
   M * const module;
   StageMode *mode;
 
-  EocGenerator<M> eoc_generator{module};
   DeferGate<M, StageStateMachine<M>> defer_gate{module, this};
   StageGate<M, StageStateMachine<M>> stage_gate{module, this};
 };

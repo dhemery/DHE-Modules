@@ -33,13 +33,17 @@ public:
   void start_generating() {
     set_active(true);
     held_voltage = envelope_in();
+    stage_generator.start();
     state_machine.enter(&generating_mode);
+  }
+  void do_generate() {
+    stage_generator.step();
   }
   void generate(float phase) {
     send_out(scale(taper(phase), held_voltage, level()));
   }
   void finish_generating() {
-    state_machine.generate_end_of_cycle();
+    eoc_generator.start();
     start_resting();
   }
   void on_end_of_cycle_rise() { set_eoc(true); }
@@ -97,6 +101,9 @@ private:
   GeneratingMode<Stage> generating_mode{this};
   RestingMode<Stage> resting_mode{this};
   StageStateMachine<Stage> state_machine{this};
+
+  EocGenerator<Stage> eoc_generator{this};
+  StageGenerator<Stage> stage_generator{this};
 
   float held_voltage{0.f};
 };

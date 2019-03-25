@@ -36,14 +36,16 @@ public:
   void start_generating() {
     set_active(true);
     held_voltage = envelope_in();
+    stage_generator.start();
     state_machine.enter(&generating_mode);
   }
+  void do_generate() { stage_generator.step(); }
   void generate(float phase) {
     send_out(scale(taper(phase), held_voltage, level()));
   }
   void finish_generating() {
     set_active(false);
-    state_machine.generate_end_of_cycle();
+    eoc_generator.start();
     state_machine.enter(&resting_mode);
   }
   void on_end_of_cycle_rise() { set_eoc(true); }
@@ -162,6 +164,9 @@ private:
   GeneratingMode<BoosterStage> generating_mode{this};
   RestingMode<BoosterStage> resting_mode{this};
   StageStateMachine<BoosterStage> state_machine{this};
+
+  EocGenerator<BoosterStage> eoc_generator{this};
+  StageGenerator<BoosterStage> stage_generator{this};
 
   float held_voltage{0.f};
 
