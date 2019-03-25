@@ -12,7 +12,6 @@ public:
   void step() override { module->do_defer(); }
 
   void on_defer_gate_fall() override { module->stop_deferring(); }
-
 private:
   M* const module;
 };

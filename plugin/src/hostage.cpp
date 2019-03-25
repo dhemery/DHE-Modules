@@ -49,6 +49,10 @@ public:
   void do_sustain() {
     send_out(held_voltage);
   }
+  void finish_sustaining() {
+    state_machine.generate_end_of_cycle();
+    start_resting();
+  }
 
   void start_holding() {
     set_active(true);
@@ -57,7 +61,7 @@ public:
   }
   void generate(float ignored) { do_sustain(); }
   void finish_generating() {
-    state_machine.on_generator_completed();
+    state_machine.generate_end_of_cycle();
     start_resting();
   }
   void on_end_of_cycle_rise() { set_eoc(true); }
@@ -129,8 +133,7 @@ private:
   StageStateMachine<Hostage> state_machine{this};
 
   DeferringMode<Hostage> deferring_mode{this};
-  StageGenerator<Hostage, StageStateMachine<Hostage>> hold_generator{this, &state_machine};
-  GeneratingMode<Hostage> holding_mode{this, &hold_generator};
+  GeneratingMode<Hostage> holding_mode{this};
   RestingMode<Hostage> resting_mode{this};
   SustainingMode<Hostage> sustaining_mode{this};
 

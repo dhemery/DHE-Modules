@@ -30,14 +30,14 @@ public:
     eoc_generator.step();
   }
 
+  void generate_end_of_cycle() {
+    eoc_generator.start();
+  }
+
   void on_defer_gate_rise() { mode->on_defer_gate_rise(); }
   void on_defer_gate_fall() { mode->on_defer_gate_fall(); }
   void on_stage_gate_rise() { mode->on_stage_gate_rise(); }
   void on_stage_gate_fall() { mode->on_stage_gate_fall(); }
-  void on_generator_completed() {
-    mode->on_generator_completed();
-    eoc_generator.start();
-  }
 
 private:
 

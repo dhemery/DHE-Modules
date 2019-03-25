@@ -39,6 +39,7 @@ public:
     send_out(scale(taper(phase), held_voltage, level()));
   }
   void finish_generating() {
+    state_machine.generate_end_of_cycle();
     start_resting();
   }
   void on_end_of_cycle_rise() { set_eoc(true); }
@@ -91,13 +92,11 @@ private:
     return Sigmoid::j_taper(phase, curvature());
   }
 
-  StageStateMachine<Stage> state_machine{this};
-
-  StageGenerator<Stage, StageStateMachine<Stage>> stage_generator{this, &state_machine};
 
   DeferringMode<Stage> deferring_mode{this};
-  GeneratingMode<Stage> generating_mode{this, &stage_generator};
+  GeneratingMode<Stage> generating_mode{this};
   RestingMode<Stage> resting_mode{this};
+  StageStateMachine<Stage> state_machine{this};
 
   float held_voltage{0.f};
 };

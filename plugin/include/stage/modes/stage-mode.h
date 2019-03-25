@@ -11,6 +11,5 @@ public:
   virtual void on_defer_gate_fall() {};
   virtual void on_stage_gate_rise() {};
   virtual void on_stage_gate_fall() {};
-  virtual void on_generator_completed() {};
 };
 }

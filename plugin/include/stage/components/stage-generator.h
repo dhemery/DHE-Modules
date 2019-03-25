@@ -8,12 +8,11 @@ namespace DHE {
  * Advances its phase over the duration specified by the module, and informs the
  * module when the phase advances, and the state machine when the phase ends.
  */
-template<typename M, typename S>
+template<typename M>
 class StageGenerator : public PhaseAccumulator {
 public:
-  explicit StageGenerator(M *module, S *states)
-      : module{module},
-        states{states} {}
+  explicit StageGenerator(M *module)
+      : module{module} {}
 
   auto duration() const -> float override { return module->duration(); }
 
@@ -21,10 +20,9 @@ public:
 
   void on_advance(float phase) const override { module->generate(phase); }
 
-  void on_finish() const override { states->on_generator_completed(); }
+  void on_finish() const override { module->finish_generating(); }
 
 private:
   M *const module;
-  S *const states;
 };
 }
