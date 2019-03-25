@@ -7,6 +7,7 @@
 #include "display/controls.h"
 #include "display/panel.h"
 #include "stage/stage-state-machine.h"
+#include "stage/components/stage-generator.h"
 #include "util/duration.h"
 #include "util/rotation.h"
 
@@ -14,21 +15,24 @@ namespace DHE {
 
 class Hostage : public rack::Module {
 public:
-  Hostage() : rack::Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT} {}
+  Hostage() : rack::Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT} {
+    state_machine.start(&resting_mode);
+  }
 
-  auto defer_gate_in() const -> bool { return inputs[DEFER_GATE_IN].value > 0.1f; }
   void start_deferring() {}
   void do_defer() {}
   void stop_deferring() {}
 
   void start_generating() {}
-  void do_generate() {}
-  void stop_generating() {}
+  void generate(float ignored) { send_out(held_voltage); }
+  void finish_generating() {}
+  void on_end_of_cycle_rise() { set_eoc(true); }
+  void on_end_of_cycle_fall() { set_eoc(false); }
 
   void do_rest() {}
 
   void do_sustain() {}
-  void stop_sustaining() {}
+  void finish_sustaining() {}
 
   auto duration() const -> float {
     auto rotation = modulated(DURATION_KNOB, DURATION_CV);
@@ -39,24 +43,8 @@ public:
     return rack::engineGetSampleTime();
   };
 
-  auto level() const -> float { return held_voltage; }
-
-  void send_phase(float ignored)  { send_out(held_voltage); }
-
-
+  auto defer_gate_in() const -> bool { return inputs[DEFER_GATE_IN].value > 0.1f; }
   auto stage_gate_in() const -> bool { return inputs[STAGE_GATE_IN].value > 0.1f; }
-
-  void set_active(bool active) {
-    outputs[ACTIVE_OUT].value = active ? 10.f : 0.f;
-  }
-
-  void set_eoc(bool eoc) { outputs[EOC_OUT].value = eoc ? 10.f : 0.f; }
-
-  auto envelope_in() const -> float { return inputs[MAIN_IN].value; }
-
-  void send_out(float voltage) { outputs[MAIN_OUT].value = voltage; }
-
-  void set_duration_range(Range const *range) { duration_range = range; }
 
   const Selector<Range const *> duration_range_selector{
       Duration::ranges, [this](Range const *range) { duration_range = range; }};
@@ -79,24 +67,37 @@ public:
   };
 
 private:
+  auto envelope_in() const -> float { return inputs[MAIN_IN].value; }
+
+  auto level() const -> float { return held_voltage; }
+
   auto modulated(ParameterIds knob_param, InputIds cv_input) const -> float {
     auto rotation = params[knob_param].value;
     auto cv = inputs[cv_input].value;
     return Rotation::modulated(rotation, cv);
   }
 
+  void send_out(float voltage) { outputs[MAIN_OUT].value = voltage; }
+
   auto stage_type_in() const -> bool {
     return params[HOSTAGE_MODE_SWITCH].value > 0.5f;
   }
 
+  void set_active(bool active) {
+    outputs[ACTIVE_OUT].value = active ? 10.f : 0.f;
+  }
+
+  void set_eoc(bool eoc) { outputs[EOC_OUT].value = eoc ? 10.f : 0.f; }
+
   enum StageType { HOLD, SUSTAIN };
 
+  StageStateMachine<Hostage> state_machine{this};
+
   DeferringMode<Hostage> deferring_mode{this};
-  GeneratingMode<Hostage> generating_mode{this};
+  StageGenerator<Hostage, StageStateMachine<Hostage>> stage_generator{this, &state_machine};
+  GeneratingMode<Hostage> generating_mode{this, &stage_generator};
   RestingMode<Hostage> resting_mode{this};
   SustainingMode<Hostage> sustaining_mode{this};
-
-  StageStateMachine<Hostage> state_machine{this, &resting_mode};
 
   StageType stage_type{HOLD};
   Range const *duration_range{&Duration::medium_range};
@@ -108,8 +109,8 @@ public:
   explicit HostagePanel(Hostage *module) : Panel{module, hp} {
     auto widget_right_edge = width();
 
-    auto column_1 = width() / 4.f + 0.333333f;
-    auto column_2 = widget_right_edge / 2.f;
+    auto column_1 = width()/4.f + 0.333333f;
+    auto column_2 = widget_right_edge/2.f;
     auto column_3 = widget_right_edge - column_1;
 
     auto y = 25.f;

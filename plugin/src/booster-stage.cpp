@@ -8,6 +8,7 @@
 #include "display/controls.h"
 #include "display/panel.h"
 #include "stage/stage-state-machine.h"
+#include "stage/components/stage-generator.h"
 #include "util/duration.h"
 #include "util/rotation.h"
 #include "util/signal.h"
@@ -16,14 +17,39 @@ namespace DHE {
 
 class BoosterStage : public rack::Module {
 public:
-  BoosterStage() : rack::Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT} {}
-
-  auto envelope_in() const -> float { return inputs[ENVELOPE_IN].value; }
-
-  auto level() const -> float {
-    auto level = modulated(LEVEL_KNOB, LEVEL_CV);
-    return level_range->scale(level);
+  BoosterStage() : rack::Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT} {
+    state_machine.start(&resting_mode);
   }
+
+  void step() override { state_machine.step(); }
+
+  void start_deferring() {
+    set_active(true);
+    state_machine.enter(&deferring_mode);
+  }
+  void do_defer() { send_out(envelope_in()); }
+  void stop_deferring() {
+    set_active(false);
+    state_machine.enter(&resting_mode);
+  }
+
+  void start_generating() {
+    set_active(true);
+    held_voltage = envelope_in();
+    stage_generator.start();
+    state_machine.enter(&generating_mode);
+  }
+  void generate(float phase) {
+    send_out(scale(taper(phase), held_voltage, level()));
+  }
+  void finish_generating() {
+    set_active(false);
+    state_machine.enter(&resting_mode);
+  }
+  void on_end_of_cycle_rise() { set_eoc(true); }
+  void on_end_of_cycle_fall() { set_eoc(false); }
+
+  void do_rest() { send_out(level()); }
 
   auto duration() const -> float {
     auto rotation = modulated(DURATION_KNOB, DURATION_CV);
@@ -39,15 +65,6 @@ public:
     auto defer_input = inputs[DEFER_GATE_IN].value > 0.1f;
     return defer_button || defer_input;
   }
-  void start_deferring() {}
-  void do_defer() {}
-  void stop_deferring() {}
-
-  void start_generating() {}
-  void do_generate() {}
-  void stop_generating() {}
-
-  void do_rest() {}
 
   auto stage_gate_in() const -> bool {
     auto trigger_button = params[TRIGGER_BUTTON].value > 0.5;
@@ -55,23 +72,9 @@ public:
     return trigger_button || trigger_input;
   }
 
-  void send_phase(float phase) {
-    send_out(scale(taper(phase), held_voltage, level()));
-  }
-
-  void set_active(bool active) {
-    is_active = active;
-    send_active();
-  }
-
   void set_active_button(bool active) {
     active_button_is_pressed = active;
     send_active();
-  }
-
-  void set_eoc(bool eoc) {
-    is_eoc = eoc;
-    send_eoc();
   }
 
   void set_eoc_button(bool eoc) {
@@ -111,11 +114,18 @@ public:
   enum OutputIds { ACTIVE_OUT, EOC_OUT, MAIN_OUT, OUTPUT_COUNT };
 
 private:
+  auto envelope_in() const -> float { return inputs[ENVELOPE_IN].value; }
+
   auto curvature() const -> float {
     return Sigmoid::curvature(modulated(CURVE_KNOB, CURVE_CV));
   }
 
   auto is_s_shape() const -> bool { return params[SHAPE_SWITCH].value > 0.5f; }
+
+  auto level() const -> float {
+    auto level = modulated(LEVEL_KNOB, LEVEL_CV);
+    return level_range->scale(level);
+  }
 
   auto modulated(ParameterIds knob_param, InputIds cv_input) const -> float {
     auto rotation = params[knob_param].value;
@@ -134,14 +144,28 @@ private:
 
   void send_out(float voltage) { outputs[MAIN_OUT].value = voltage; }
 
+  void set_active(bool active) {
+    is_active = active;
+    send_active();
+  }
+
+  void set_eoc(bool eoc) {
+    is_eoc = eoc;
+    send_eoc();
+  }
+
   auto taper(float phase) const -> float {
     return Sigmoid::taper(phase, curvature(), is_s_shape());
   }
 
+  StageStateMachine<BoosterStage> state_machine{this};
+
+  StageGenerator<BoosterStage, StageStateMachine<BoosterStage>> stage_generator{this, &state_machine};
+
   DeferringMode<BoosterStage> deferring_mode{this};
-  GeneratingMode<BoosterStage> generating_mode{this};
+  GeneratingMode<BoosterStage> generating_mode{this, &stage_generator};
   RestingMode<BoosterStage> resting_mode{this};
-  StageStateMachine<BoosterStage> state_machine{this, &resting_mode};
+
   float held_voltage{0.f};
 
   Range const *duration_range{&Duration::medium_range};

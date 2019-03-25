@@ -1,27 +1,28 @@
 #pragma once
+#include <stage/stage-state-machine.h>
 #include "components/phase-accumulator.h"
 
 namespace DHE {
 
 /**
- * Generates an end-of-cycle pulse and informs the sink when the pulse rises
+ * Generates an end-of-cycle pulse and informs the module when the pulse rises
  * and falls.
  */
-template <typename TSource, typename TSink>
+template<typename M>
 class EocGenerator : public PhaseAccumulator {
 public:
-  explicit EocGenerator(TSource *source, TSink *sink) : source{source}, sink{sink} {}
+  explicit EocGenerator(M *module)
+      : module{module} {}
 
-  void on_start() const override { sink->on_end_of_cycle_rise(); }
+  void on_start() const override { module->on_end_of_cycle_rise(); }
 
   auto duration() const -> float override { return 1e-3; }
 
-  auto sampleTime() const -> float override { return source->sample_time(); }
+  auto sample_time() const -> float override { return module->sample_time(); }
 
-  void on_finish() const override { sink->on_end_of_cycle_fall(); }
+  void on_finish() const override { module->on_end_of_cycle_fall(); }
 
 private:
-  TSource const * const source;
-  TSink * const sink;
+  M *const module;
 };
 }

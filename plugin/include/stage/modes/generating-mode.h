@@ -1,21 +1,23 @@
 #pragma once
 
+#include <components/phase-accumulator.h>
 #include "stage-mode.h"
 
 namespace DHE {
 
 template <typename M> class GeneratingMode : public StageMode {
 public:
-  explicit GeneratingMode(M *module) : module{module} {}
+  explicit GeneratingMode(M *module, PhaseAccumulator *generator) : module{module}, generator{generator} {}
 
-  void step() override { module->do_generate(); }
+  void step() override { generator->step(); }
 
   void on_defer_gate_rise() override { module->start_deferring(); };
-  void on_stage_gate_rise() override { module->start_generating(); }
-  void on_end_of_cycle_rise() override { module->stop_generating(); }
+  void on_stage_gate_rise() override { generator->start(); }
+  void on_generator_completed() override { module->finish_generating(); }
 
 private:
   M* const module;
+  PhaseAccumulator *const generator;
 };
 
 } // namespace DHE

@@ -4,22 +4,24 @@
 namespace DHE {
 
 /**
- * Informs the sink when the source's defer gate signal rises or falls.
+ * Informs the state machine when the module's defer gate signal rises or falls.
  */
-template <typename TSource, typename TSink>
+template<typename M, typename S>
 class DeferGate : public Gate {
 public:
-  explicit DeferGate(TSource *source, TSink *sink) : source{source}, sink{sink} {}
+  explicit DeferGate(M *module, S *states)
+      : module{module},
+        states{states} {}
 
 protected:
-  auto state_in() const -> bool override { return source->defer_gate_in(); }
+  auto state_in() const -> bool override { return module->defer_gate_in(); }
 
-  void on_rise() override { sink->on_defer_gate_rise(); }
+  void on_rise() override { states->on_defer_gate_rise(); }
 
-  void on_fall() override { sink->on_defer_gate_fall(); }
+  void on_fall() override { states->on_defer_gate_fall(); }
 
 private:
-  TSource const * const source;
-  TSink * const sink;
+  M const *const module;
+  S *const states;
 };
 }

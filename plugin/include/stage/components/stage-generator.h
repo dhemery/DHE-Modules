@@ -1,29 +1,30 @@
 #pragma once
 #include "components/phase-accumulator.h"
+#include "stage/stage-state-machine.h"
 
 namespace DHE {
 
 /**
- * Advances its phase over the duration specified by the source, and informs the sink
- * when the phase starts, advances, or ends.
+ * Advances its phase over the duration specified by the module, and informs the
+ * module when the phase advances, and the state machine when the phase ends.
  */
-template <typename TSource, typename TSink>
+template<typename M, typename S>
 class StageGenerator : public PhaseAccumulator {
 public:
-  explicit StageGenerator(TSource *source, TSink *sink) : source{source}, sink{sink} {}
+  explicit StageGenerator(M *module, S *states)
+      : module{module},
+        states{states} {}
 
-  void on_start() const override { sink->on_generate_start(); }
+  auto duration() const -> float override { return module->duration(); }
 
-  auto duration() const -> float override { return source->duration(); }
+  auto sample_time() const -> float override { return module->sample_time(); }
 
-  auto sampleTime() const -> float override { return source->sample_time(); }
+  void on_advance(float phase) const override { module->generate(phase); }
 
-  void on_step(float phase) const override { sink->send_phase(phase); }
-
-  void on_finish() const override { sink->on_generate_end(); }
+  void on_finish() const override { states->on_generator_completed(); }
 
 private:
-  TSource const * const source;
-  TSink * const sink;
+  M *const module;
+  S *const states;
 };
 }
