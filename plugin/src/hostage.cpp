@@ -19,20 +19,57 @@ public:
     state_machine.start(&resting_mode);
   }
 
-  void start_deferring() {}
-  void do_defer() {}
-  void stop_deferring() {}
+  void step() override { state_machine.step(); }
 
-  void start_generating() {}
-  void generate(float ignored) { send_out(held_voltage); }
-  void finish_generating() {}
+  void start_deferring() {
+    set_active(true);
+    state_machine.enter(&deferring_mode);
+  }
+  void do_defer() { send_out(envelope_in()); }
+  void stop_deferring() {
+    if(stage_gate_in()) {
+      start_generating();
+    } else {
+      finish_generating();
+    }
+  }
+
+  void start_generating() {
+    if(is_sustain_mode()) {
+      start_sustaining();
+    } else {
+      start_holding();
+    }
+  }
+  void start_sustaining() {
+    set_active(true);
+    held_voltage = envelope_in();
+    state_machine.enter(&sustaining_mode);
+  }
+  void do_sustain() {
+    send_out(held_voltage);
+  }
+
+  void start_holding() {
+    set_active(true);
+    held_voltage = envelope_in();
+    state_machine.enter(&holding_mode);
+  }
+  void generate(float ignored) { do_sustain(); }
+  void finish_generating() {
+    state_machine.on_generator_completed();
+    start_resting();
+  }
   void on_end_of_cycle_rise() { set_eoc(true); }
   void on_end_of_cycle_fall() { set_eoc(false); }
 
-  void do_rest() {}
-
-  void do_sustain() {}
-  void finish_sustaining() {}
+  void start_resting() {
+    set_active(false);
+    state_machine.enter(&resting_mode);
+  }
+  void do_rest() {
+    send_out(held_voltage);
+  }
 
   auto duration() const -> float {
     auto rotation = modulated(DURATION_KNOB, DURATION_CV);
@@ -79,7 +116,7 @@ private:
 
   void send_out(float voltage) { outputs[MAIN_OUT].value = voltage; }
 
-  auto stage_type_in() const -> bool {
+  auto is_sustain_mode() const -> bool {
     return params[HOSTAGE_MODE_SWITCH].value > 0.5f;
   }
 
@@ -89,17 +126,14 @@ private:
 
   void set_eoc(bool eoc) { outputs[EOC_OUT].value = eoc ? 10.f : 0.f; }
 
-  enum StageType { HOLD, SUSTAIN };
-
   StageStateMachine<Hostage> state_machine{this};
 
   DeferringMode<Hostage> deferring_mode{this};
-  StageGenerator<Hostage, StageStateMachine<Hostage>> stage_generator{this, &state_machine};
-  GeneratingMode<Hostage> generating_mode{this, &stage_generator};
+  StageGenerator<Hostage, StageStateMachine<Hostage>> hold_generator{this, &state_machine};
+  GeneratingMode<Hostage> holding_mode{this, &hold_generator};
   RestingMode<Hostage> resting_mode{this};
   SustainingMode<Hostage> sustaining_mode{this};
 
-  StageType stage_type{HOLD};
   Range const *duration_range{&Duration::medium_range};
   float held_voltage{0};
 };

@@ -33,20 +33,21 @@ public:
   void start_generating() {
     set_active(true);
     held_voltage = envelope_in();
-    stage_generator.start();
     state_machine.enter(&generating_mode);
   }
   void generate(float phase) {
     send_out(scale(taper(phase), held_voltage, level()));
   }
   void finish_generating() {
-    set_active(false);
-    state_machine.enter(&resting_mode);
+    start_resting();
   }
-
   void on_end_of_cycle_rise() { set_eoc(true); }
   void on_end_of_cycle_fall() { set_eoc(false); }
 
+  void start_resting() {
+    set_active(false);
+    state_machine.enter(&resting_mode);
+  }
   void do_rest() { send_out(level()); }
 
   auto defer_gate_in() const -> bool { return inputs[DEFER_GATE_IN].value > 0.1; }

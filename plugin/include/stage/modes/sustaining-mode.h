@@ -11,7 +11,7 @@ public:
   void step() override { module->do_sustain(); }
 
   void on_defer_gate_rise() override { module->start_deferring(); };
-  void on_stage_gate_fall() override { module->finish_sustaining(); };
+  void on_stage_gate_fall() override { module->finish_generating(); };
 
 private:
   M* const module;

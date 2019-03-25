@@ -36,7 +36,6 @@ public:
   void start_generating() {
     set_active(true);
     held_voltage = envelope_in();
-    stage_generator.start();
     state_machine.enter(&generating_mode);
   }
   void generate(float phase) {
