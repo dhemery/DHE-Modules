@@ -1,6 +1,6 @@
 
 #include <gmock/gmock.h>
-#include "stage/components/defer-gate.h"
+#include "envelopes/components/defer-gate.h"
 
 namespace {
 

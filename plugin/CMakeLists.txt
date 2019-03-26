@@ -11,11 +11,11 @@ target_sources(components
         include/components/trigger.h
         include/display/controls.h
         include/display/panel.h
-        include/stage/stage-state-machine.h
-        include/stage/modes/deferring-mode.h
-        include/stage/modes/resting-mode.h
-        include/stage/modes/generating-mode.h
-        include/stage/modes/sustaining-mode.h
+        include/envelopes/states/stage.h
+        include/envelopes/stage/deferring.h
+        include/envelopes/stage/resting.h
+        include/envelopes/stage/generating.h
+        include/envelopes/hostage/sustaining.h
         include/util/duration.h
         include/util/mode.h
         include/util/range.h

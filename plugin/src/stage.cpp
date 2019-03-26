@@ -1,12 +1,10 @@
 #include <engine.hpp>
-#include <stage/components/stage-generator.h>
-#include <stage/modes/resting-mode.h>
-#include <stage/modes/deferring-mode.h>
-#include <stage/modes/generating-mode.h>
+#include <envelopes/components/eoc-generator.h>
+#include <envelopes/states/stage.h>
+#include <envelopes/components/stage-generator.h>
 
 #include "display/controls.h"
 #include "display/panel.h"
-#include "stage/stage-state-machine.h"
 #include "util/duration.h"
 #include "util/signal.h"
 
@@ -15,44 +13,31 @@ namespace DHE {
 class Stage : public rack::Module {
 public:
   Stage() : rack::Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT} {
-    state_machine.start(&resting_mode);
+    state_machine.start();
   }
 
-  void step() override { state_machine.step(); }
-
-  void start_deferring() {
-    set_active(true);
-    state_machine.enter(&deferring_mode);
+  void step() override {
+    state_machine.step();
+    eoc_generator.step();
   }
+
+  void start_deferring() { set_active(true); }
   void do_defer() { send_out(envelope_in()); }
-  void stop_deferring() {
-    set_active(false);
-    state_machine.enter(&resting_mode);
-  }
 
   void start_generating() {
     set_active(true);
     held_voltage = envelope_in();
     stage_generator.start();
-    state_machine.enter(&generating_mode);
   }
-  void do_generate() {
-    stage_generator.step();
-  }
+  void do_generate() { stage_generator.step(); }
   void generate(float phase) {
     send_out(scale(taper(phase), held_voltage, level()));
   }
-  void finish_generating() {
-    eoc_generator.start();
-    start_resting();
-  }
+  void finish_generating() { eoc_generator.start(); }
   void on_end_of_cycle_rise() { set_eoc(true); }
   void on_end_of_cycle_fall() { set_eoc(false); }
 
-  void start_resting() {
-    set_active(false);
-    state_machine.enter(&resting_mode);
-  }
+  void start_resting() { set_active(false); }
   void do_rest() { send_out(level()); }
 
   auto defer_gate_in() const -> bool { return inputs[DEFER_GATE_IN].value > 0.1; }
@@ -96,12 +81,7 @@ private:
     return Sigmoid::j_taper(phase, curvature());
   }
 
-
-  DeferringMode<Stage> deferring_mode{this};
-  GeneratingMode<Stage> generating_mode{this};
-  RestingMode<Stage> resting_mode{this};
-  StageStateMachine<Stage> state_machine{this};
-
+  stage::StateMachine<Stage> state_machine{this};
   EocGenerator<Stage> eoc_generator{this};
   StageGenerator<Stage> stage_generator{this};
 

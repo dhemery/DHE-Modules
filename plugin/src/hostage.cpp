@@ -1,13 +1,10 @@
-#include <stage/modes/generating-mode.h>
-#include <stage/modes/resting-mode.h>
-#include <stage/modes/deferring-mode.h>
-#include <stage/modes/sustaining-mode.h>
+#include <envelopes/components/eoc-generator.h>
+#include "envelopes/states/hostage.h"
+#include "envelopes/components/stage-generator.h"
 #include "engine.hpp"
 
 #include "display/controls.h"
 #include "display/panel.h"
-#include "stage/stage-state-machine.h"
-#include "stage/components/stage-generator.h"
 #include "util/duration.h"
 #include "util/rotation.h"
 
@@ -16,7 +13,7 @@ namespace DHE {
 class Hostage : public rack::Module {
 public:
   Hostage() : rack::Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT} {
-    state_machine.start(&resting_mode);
+    state_machine.start();
   }
 
   void step() override {
@@ -24,65 +21,38 @@ public:
     eoc_generator.step();
   }
 
-  void start_deferring() {
-    set_active(true);
-    state_machine.enter(&deferring_mode);
-  }
-  void do_defer() { send_out(envelope_in()); }
-  void stop_deferring() {
-    if(stage_gate_in()) {
-      start_generating();
-    } else {
-      finish_generating();
-    }
-  }
-
-  void start_generating() {
-    if(is_sustain_mode()) {
-      start_sustaining();
-    } else {
-      start_holding();
-    }
-  }
   void start_sustaining() {
     set_active(true);
     held_voltage = envelope_in();
-    state_machine.enter(&sustaining_mode);
   }
-  void do_sustain() {
-    send_out(held_voltage);
-  }
-  void finish_sustaining() {
-    eoc_generator.start();
-    start_resting();
-  }
+  void do_sustain() { send_out(held_voltage); }
+  void stop_sustaining() { eoc_generator.start(); }
 
   void start_holding() {
     set_active(true);
     held_voltage = envelope_in();
-    stage_generator.start();
-    state_machine.enter(&holding_mode);
+    hold_generator.start();
   }
-  void do_generate() { stage_generator.step(); }
+  void do_hold() { hold_generator.step(); }
   void generate(float ignored) { do_sustain(); }
   void finish_generating() {
     eoc_generator.start();
-    start_resting();
+    state_machine.start_resting();
   }
+
   void on_end_of_cycle_rise() { set_eoc(true); }
   void on_end_of_cycle_fall() { set_eoc(false); }
 
-  void start_resting() {
-    set_active(false);
-    state_machine.enter(&resting_mode);
-  }
-  void do_rest() {
-    send_out(held_voltage);
-  }
+  void start_resting() { set_active(false); }
+  void do_rest() { send_out(held_voltage); }
 
   auto duration() const -> float {
     auto rotation = modulated(DURATION_KNOB, DURATION_CV);
     return DHE::duration(rotation, *duration_range);
+  }
+
+  auto is_sustain_mode() const -> bool {
+    return params[HOSTAGE_MODE_SWITCH].value > 0.5f;
   }
 
   auto sample_time() const -> float {
@@ -125,24 +95,15 @@ private:
 
   void send_out(float voltage) { outputs[MAIN_OUT].value = voltage; }
 
-  auto is_sustain_mode() const -> bool {
-    return params[HOSTAGE_MODE_SWITCH].value > 0.5f;
-  }
-
   void set_active(bool active) {
     outputs[ACTIVE_OUT].value = active ? 10.f : 0.f;
   }
 
   void set_eoc(bool eoc) { outputs[EOC_OUT].value = eoc ? 10.f : 0.f; }
 
-  StageStateMachine<Hostage> state_machine{this};
-  DeferringMode<Hostage> deferring_mode{this};
-  GeneratingMode<Hostage> holding_mode{this};
-  RestingMode<Hostage> resting_mode{this};
-  SustainingMode<Hostage> sustaining_mode{this};
-
+  hostage::StateMachine<Hostage> state_machine{this};
   EocGenerator<Hostage> eoc_generator{this};
-  StageGenerator<Hostage> stage_generator{this};
+  StageGenerator<Hostage> hold_generator{this};
 
   Range const *duration_range{&Duration::medium_range};
   float held_voltage{0};

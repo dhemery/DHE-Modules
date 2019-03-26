@@ -1,5 +1,4 @@
 #pragma once
-#include <stage/stage-state-machine.h>
 #include "components/phase-accumulator.h"
 
 namespace DHE {
