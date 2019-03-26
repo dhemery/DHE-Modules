@@ -36,15 +36,15 @@ public:
   void do_hold() { hold_generator.step(); }
   void generate(float ignored) { do_sustain(); }
   void finish_generating() {
+    set_active(false);
     eoc_generator.start();
-    state_machine.start_resting();
   }
 
   void on_end_of_cycle_rise() { set_eoc(true); }
   void on_end_of_cycle_fall() { set_eoc(false); }
 
   void start_resting() { set_active(false); }
-  void do_rest() { send_out(held_voltage); }
+  void do_rest() { send_out(envelope_in()); }
 
   auto duration() const -> float {
     auto rotation = modulated(DURATION_KNOB, DURATION_CV);
@@ -114,8 +114,8 @@ public:
   explicit HostagePanel(Hostage *module) : Panel{module, hp} {
     auto widget_right_edge = width();
 
-    auto column_1 = width()/4.f + 0.333333f;
-    auto column_2 = widget_right_edge/2.f;
+    auto column_1 = width() / 4.f + 0.333333f;
+    auto column_2 = widget_right_edge / 2.f;
     auto column_3 = widget_right_edge - column_1;
 
     auto y = 25.f;

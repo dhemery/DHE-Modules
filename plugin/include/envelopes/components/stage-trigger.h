@@ -1,4 +1,5 @@
 #pragma once
+#include <functional>
 #include "components/trigger.h"
 
 namespace DHE {
@@ -6,20 +7,17 @@ namespace DHE {
 /**
  * Informs the state machine when the module's stage gate signal rises.
  */
-template<typename M, typename S>
+template <typename M>
 class StageTrigger : public Trigger {
 public:
-  explicit StageTrigger(M *module, S *states)
-      : module{module},
-        states{states} {}
+  explicit StageTrigger(M *module, std::function<void()> on_rise)
+      : Trigger{on_rise},
+        module{module} {}
 
 protected:
   auto state_in() const -> bool override { return module->stage_gate_in(); }
 
-  void on_rise() override { states->on_stage_gate_rise(); }
-
 private:
   M const *const module;
-  S *const states;
 };
 }

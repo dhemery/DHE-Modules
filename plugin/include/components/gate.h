@@ -1,3 +1,7 @@
+#include <utility>
+
+#include <utility>
+
 #pragma once
 
 #include "trigger.h"
@@ -5,15 +9,15 @@
 namespace DHE {
 
 /**
- * Tracks a boolean value and generates an event whenever the value changes.
+ * Tracks a boolean value and generates an event whenever the value rises or falls.
  */
-class Gate : public Trigger {
-protected:
-  /**
-   * The event generated whenever the tracked value changes from false to true.
-   */
-  virtual void on_fall() = 0;
+class Gate : public EdgeDetector {
+public:
+  Gate(std::function<void()> on_rise, std::function<void()> on_fall) :
+      on_rise{std::move(on_rise)},
+      on_fall{std::move(on_fall)} {}
 
+protected:
   void on_state_change(bool state) override {
     if (state) {
       on_rise();
@@ -21,5 +25,8 @@ protected:
       on_fall();
     }
   }
+private:
+  const std::function<void()> on_rise;
+  const std::function<void()> on_fall;
 };
 } // namespace DHE
