@@ -1,8 +1,6 @@
-#include <utility>
-
-#include <utility>
-
 #pragma once
+
+#include <utility>
 
 #include "trigger.h"
 

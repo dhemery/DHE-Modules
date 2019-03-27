@@ -1,7 +1,7 @@
 #include <engine.hpp>
-#include <envelopes/components/eoc-generator.h>
-#include <envelopes/states/stage.h>
-#include <envelopes/components/stage-generator.h>
+#include <stages/components/pulse-generator.h>
+#include <stages/components/stage-generator.h>
+#include <stages/stage.h>
 
 #include "display/controls.h"
 #include "display/panel.h"
@@ -18,27 +18,21 @@ public:
 
   void step() override {
     state_machine.step();
-    eoc_generator.step();
   }
 
-  void start_deferring() { set_active(true); }
-  void do_defer() { send_out(envelope_in()); }
+  void forward() { send_out(envelope_in()); }
 
-  void start_generating() {
-    set_active(true);
-    held_voltage = envelope_in();
-    stage_generator.start();
-  }
-  void do_generate() { stage_generator.step(); }
   void generate(float phase) {
-    send_out(scale(taper(phase), held_voltage, level()));
+    send_out(scale(taper(phase), start_voltage, level()));
   }
-  void finish_generating() { eoc_generator.start(); }
-  void on_end_of_cycle_rise() { set_eoc(true); }
-  void on_end_of_cycle_fall() { set_eoc(false); }
+  void hold_input() {
+    start_voltage = envelope_in();
+  }
 
-  void start_resting() { set_active(false); }
-  void do_rest() { send_out(level()); }
+
+  void set_active(bool active) { outputs[ACTIVE_OUT].value = active ? 10.f : 0.f; }
+
+  void set_eoc(bool eoc) { outputs[EOC_OUT].value = eoc ? 10.f : 0.f; }
 
   auto defer_gate_in() const -> bool { return inputs[DEFER_GATE_IN].value > 0.1; }
   auto stage_gate_in() const -> bool { return inputs[STAGE_TRIGGER_IN].value > 0.1; }
@@ -73,19 +67,12 @@ private:
 
   void send_out(float voltage) { outputs[MAIN_OUT].value = voltage; }
 
-  void set_active(bool active) { outputs[ACTIVE_OUT].value = active ? 10.f : 0.f; }
-
-  void set_eoc(bool eoc) { outputs[EOC_OUT].value = eoc ? 10.f : 0.f; }
-
   auto taper(float phase) const -> float {
     return Sigmoid::j_taper(phase, curvature());
   }
 
   stage::StateMachine<Stage> state_machine{this};
-  EocGenerator<Stage> eoc_generator{this};
-  StageGenerator<Stage> stage_generator{this};
-
-  float held_voltage{0.f};
+  float start_voltage{0.f};
 };
 
 class StagePanel : public Panel<StagePanel> {

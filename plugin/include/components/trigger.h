@@ -1,7 +1,7 @@
-#include <utility>
 
 #pragma once
-
+#include <functional>
+#include <utility>
 #include "edge-detector.h"
 
 namespace DHE {

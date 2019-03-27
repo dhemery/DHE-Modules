@@ -1,6 +1,4 @@
-#include <envelopes/components/eoc-generator.h>
-#include "envelopes/states/hostage.h"
-#include "envelopes/components/stage-generator.h"
+#include "stages/hostage.h"
 #include "engine.hpp"
 
 #include "display/controls.h"
@@ -18,42 +16,26 @@ public:
 
   void step() override {
     state_machine.step();
-    eoc_generator.step();
   }
-
-  void start_sustaining() {
-    set_active(true);
-    held_voltage = envelope_in();
-  }
-  void do_sustain() { send_out(held_voltage); }
-  void stop_sustaining() { eoc_generator.start(); }
-
-  void start_holding() {
-    set_active(true);
-    held_voltage = envelope_in();
-    hold_generator.start();
-  }
-  void do_hold() { hold_generator.step(); }
-  void generate(float ignored) { do_sustain(); }
-  void finish_generating() {
-    set_active(false);
-    eoc_generator.start();
-  }
-
-  void on_end_of_cycle_rise() { set_eoc(true); }
-  void on_end_of_cycle_fall() { set_eoc(false); }
-
-  void start_resting() { set_active(false); }
-  void do_rest() { send_out(envelope_in()); }
 
   auto duration() const -> float {
     auto rotation = modulated(DURATION_KNOB, DURATION_CV);
     return DHE::duration(rotation, *duration_range);
   }
 
+  void forward() {
+    send_out(envelope_in());
+  }
+
   auto is_sustain_mode() const -> bool {
     return params[HOSTAGE_MODE_SWITCH].value > 0.5f;
   }
+
+  void set_active(bool active) {
+    outputs[ACTIVE_OUT].value = active ? 10.f : 0.f;
+  }
+
+  void set_eoc(bool eoc) { outputs[EOC_OUT].value = eoc ? 10.f : 0.f; }
 
   auto sample_time() const -> float {
     return rack::engineGetSampleTime();
@@ -85,8 +67,6 @@ public:
 private:
   auto envelope_in() const -> float { return inputs[MAIN_IN].value; }
 
-  auto level() const -> float { return held_voltage; }
-
   auto modulated(ParameterIds knob_param, InputIds cv_input) const -> float {
     auto rotation = params[knob_param].value;
     auto cv = inputs[cv_input].value;
@@ -95,18 +75,9 @@ private:
 
   void send_out(float voltage) { outputs[MAIN_OUT].value = voltage; }
 
-  void set_active(bool active) {
-    outputs[ACTIVE_OUT].value = active ? 10.f : 0.f;
-  }
-
-  void set_eoc(bool eoc) { outputs[EOC_OUT].value = eoc ? 10.f : 0.f; }
-
   hostage::StateMachine<Hostage> state_machine{this};
-  EocGenerator<Hostage> eoc_generator{this};
-  StageGenerator<Hostage> hold_generator{this};
 
   Range const *duration_range{&Duration::medium_range};
-  float held_voltage{0};
 };
 
 class HostagePanel : public Panel<HostagePanel> {

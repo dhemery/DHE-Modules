@@ -4,9 +4,7 @@
 
 #include "display/controls.h"
 #include "display/panel.h"
-#include <envelopes/components/eoc-generator.h>
-#include <envelopes/components/stage-generator.h>
-#include "envelopes/states/stage.h"
+#include "stages/stage.h"
 #include "util/duration.h"
 #include "util/rotation.h"
 #include "util/signal.h"
@@ -21,30 +19,19 @@ public:
 
   void step() override {
     state_machine.step();
-    eoc_generator.step();
   }
 
-  void start_deferring() { set_active(true); }
-  void do_defer() { send_out(envelope_in()); }
-
-  void start_generating() {
-    set_active(true);
-    held_voltage = envelope_in();
-    stage_generator.start();
+  void forward() {
+    send_out(envelope_in());
   }
-  void do_generate() { stage_generator.step(); }
+
   void generate(float phase) {
-    send_out(scale(taper(phase), held_voltage, level()));
+    send_out(scale(taper(phase), start_voltage, level()));
   }
-  void finish_generating() {
-    set_active(false);
-    eoc_generator.start();
-  }
-  void on_end_of_cycle_rise() { set_eoc(true); }
-  void on_end_of_cycle_fall() { set_eoc(false); }
 
-  void start_resting() { set_active(false); }
-  void do_rest() { send_out(level()); }
+  void hold_input() {
+    start_voltage = envelope_in();
+  }
 
   auto duration() const -> float {
     auto rotation = modulated(DURATION_KNOB, DURATION_CV);
@@ -67,9 +54,19 @@ public:
     return trigger_button || trigger_input;
   }
 
+  void set_active(bool active) {
+    is_active = active;
+    send_active();
+  }
+
   void set_active_button(bool active) {
     active_button_is_pressed = active;
     send_active();
+  }
+
+  void set_eoc(bool eoc) {
+    is_eoc = eoc;
+    send_eoc();
   }
 
   void set_eoc_button(bool eoc) {
@@ -139,26 +136,11 @@ private:
 
   void send_out(float voltage) { outputs[MAIN_OUT].value = voltage; }
 
-  void set_active(bool active) {
-    is_active = active;
-    send_active();
-  }
-
-  void set_eoc(bool eoc) {
-    is_eoc = eoc;
-    send_eoc();
-  }
-
   auto taper(float phase) const -> float {
     return Sigmoid::taper(phase, curvature(), is_s_shape());
   }
 
   stage::StateMachine<BoosterStage> state_machine{this};
-
-  EocGenerator<BoosterStage> eoc_generator{this};
-  StageGenerator<BoosterStage> stage_generator{this};
-
-  float held_voltage{0.f};
 
   Range const *duration_range{&Duration::medium_range};
   Range const *level_range{&Signal::bipolar_range};
@@ -166,6 +148,7 @@ private:
   bool active_button_is_pressed{false};
   bool is_eoc{false};
   bool eoc_button_is_pressed{false};
+  float start_voltage{0.f};
 };
 
 class BoosterStagePanel : public Panel<BoosterStagePanel> {

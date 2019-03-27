@@ -6,18 +6,23 @@ project(DHE-Modules
 add_library(components INTERFACE)
 target_sources(components
         INTERFACE
+        include/components/edge-detector.h
         include/components/gate.h
+        include/components/mode.h
         include/components/phase-accumulator.h
         include/components/trigger.h
         include/display/controls.h
+        include/display/menus.h
         include/display/panel.h
-        include/envelopes/states/stage.h
-        include/envelopes/stage/deferring.h
-        include/envelopes/stage/resting.h
-        include/envelopes/stage/generating.h
-        include/envelopes/hostage/sustaining.h
+        include/stages/components/defer-gate.h
+        include/stages/components/hold-generator.h
+        include/stages/components/pulse-generator.h
+        include/stages/components/stage-gate.h
+        include/stages/components/stage-generator.h
+        include/stages/components/stage-trigger.h
+        include/stages/hostage.h
+        include/stages/stage.h
         include/util/duration.h
-        include/util/mode.h
         include/util/range.h
         include/util/rotation.h
         include/util/selector.h
