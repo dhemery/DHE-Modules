@@ -35,7 +35,7 @@ private:
     if (module->stage_gate_in()) {
       start_generating();
     } else {
-      enter_idling();
+      finish_stage();
     }
   }
 
