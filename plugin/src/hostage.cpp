@@ -27,6 +27,10 @@ public:
     send_out(envelope_in());
   }
 
+  auto defer_gate_is_active() const -> bool {
+    return inputs[DEFER_GATE_IN].active;
+  }
+
   auto is_sustain_mode() const -> bool {
     return params[HOSTAGE_MODE_SWITCH].value > 0.5f;
   }
@@ -75,7 +79,7 @@ private:
 
   void send_out(float voltage) { outputs[MAIN_OUT].value = voltage; }
 
-  hostage::StateMachine<Hostage> state_machine{this};
+  HostageStateMachine<Hostage> state_machine{this};
 
   Range const *duration_range{&Duration::medium_range};
 };

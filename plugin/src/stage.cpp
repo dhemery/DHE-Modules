@@ -25,10 +25,13 @@ public:
   void generate(float phase) {
     send_out(scale(taper(phase), start_voltage, level()));
   }
-  void hold_input() {
+  void prepare_to_generate() {
     start_voltage = envelope_in();
   }
 
+  auto defer_gate_is_active() const -> bool {
+    return inputs[DEFER_GATE_IN].active;
+  }
 
   void set_active(bool active) { outputs[ACTIVE_OUT].value = active ? 10.f : 0.f; }
 
@@ -71,7 +74,7 @@ private:
     return Sigmoid::j_taper(phase, curvature());
   }
 
-  stage::StateMachine<Stage> state_machine{this};
+  StageStateMachine<Stage> state_machine{this};
   float start_voltage{0.f};
 };
 

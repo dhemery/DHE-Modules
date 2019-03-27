@@ -29,8 +29,12 @@ public:
     send_out(scale(taper(phase), start_voltage, level()));
   }
 
-  void hold_input() {
+  void prepare_to_generate() {
     start_voltage = envelope_in();
+  }
+
+  auto defer_gate_is_active() const -> bool {
+    return inputs[DEFER_GATE_IN].active;
   }
 
   auto duration() const -> float {
@@ -140,7 +144,7 @@ private:
     return Sigmoid::taper(phase, curvature(), is_s_shape());
   }
 
-  stage::StateMachine<BoosterStage> state_machine{this};
+  StageStateMachine<BoosterStage> state_machine{this};
 
   Range const *duration_range{&Duration::medium_range};
   Range const *level_range{&Signal::bipolar_range};

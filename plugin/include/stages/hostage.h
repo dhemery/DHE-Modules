@@ -1,145 +1,90 @@
 #pragma once
 
-#include "components/mode.h"
-#include "components/hold-generator.h"
-#include "components/pulse-generator.h"
-#include "components/stage-gate.h"
+#include <components/mode.h>
+#include <components/phase-accumulator.h>
+#include <stages/components/defer-gate.h>
+#include <stages/components/pulse-generator.h>
+#include <stages/components/stage-generator.h>
+#include <stages/components/stage-gate.h>
+#include <stages/components/states.h>
 
 namespace DHE {
-namespace hostage {
-
 template <typename M>
-class State : public DHE::Mode {
+class HostageStateMachine {
 public:
-  explicit State(M *module,
-                 std::function<void()> on_stage_gate_rise = []() {},
-                 std::function<void()> on_stage_gate_fall = []() {})
-      : on_stage_gate_rise{std::move(on_stage_gate_rise)},
-        on_stage_gate_fall{std::move(on_stage_gate_fall)},
-        module{module} {}
-
-  const std::function<void()> on_stage_gate_rise;
-  const std::function<void()> on_stage_gate_fall;
-
-protected:
-  void become_active() const { module->set_active(true); }
-  void become_inactive() const { module->set_active(false); }
-  void forward() const { module->forward(); }
-
-private:
-  M *const module;
-};
-
-template <typename M>
-class Forwarding : public State<M> {
-public:
-  explicit Forwarding(M *module, std::function<void()> on_stage_gate_rise)
-      : State<M>{module, on_stage_gate_rise} {}
-
-  void enter() override {
-    this->become_inactive();
-  }
-
-  void step() override {
-    this->forward();
-  }
-};
-
-template <typename M>
-class Holding : public State<M> {
-public:
-  explicit Holding(M *module, PhaseAccumulator *generator, std::function<void()> on_stage_gate_rise)
-      : State<M>{module, on_stage_gate_rise},
-        generator{generator} {}
-
-  void enter() override {
-    this->become_active();
-    this->forward();
-    generator->start();
-  }
-  void step() override {
-    generator->step();
-  }
-  PhaseAccumulator *generator;
-};
-
-template <typename M>
-class Idling : public State<M> {
-public:
-  explicit Idling(M *module, std::function<void()> on_stage_gate_rise)
-      : State<M>{module, on_stage_gate_rise} {}
-
-  void enter() override {
-    this->become_inactive();
-  }
-};
-
-template <typename M> class Sustaining : public State<M> {
-public:
-  explicit Sustaining(M *module, std::function<void()> on_stage_gate_fall)
-      : State<M>{module, []() {}, on_stage_gate_fall} {}
-
-  void enter() override {
-    this->become_active();
-    this->forward();
-  }
-};
-
-template <typename M>
-class StateMachine {
-public:
-  explicit StateMachine(M *module) : module{module} {}
+  explicit HostageStateMachine(M *module) : module{module} {}
 
   void start() { state->enter(); }
 
   void step() {
+    defer_gate.step();
     stage_gate.step();
     state->step();
     eoc_generator.step();
   }
 
-  void start_generating() {
-    if (module->is_sustain_mode()) {
-      enter(&sustaining);
-    } else {
-      enter(&holding);
-    }
-  }
-
 private:
-  void enter(State<M> *incoming) {
+  void enter(StageState<M> *incoming) {
     state->exit();
     state = incoming;
     state->enter();
-    eoc_generator.step();
   }
 
-  void on_eoc_rise() {
-    module->set_eoc(true);
+  void enter_deferring() { enter(&deferring); };
+  void stop_deferring() {
+    if (module->stage_gate_in()) {
+      start_generating();
+    } else {
+      enter_idling();
+    }
   }
 
-  void on_eoc_fall() {
-    module->set_eoc(false);
+  void start_generating() {
+    if (module->is_sustain_mode()) {
+      enter_sustaining();
+    } else {
+      enter_holding();
+    }
   }
-
-  void on_stage_gate_rise() {
-    state->on_stage_gate_rise();
-  }
-
-  void on_stage_gate_fall() {
-    state->on_stage_gate_fall();
-  }
-
-  M *const module;
-  State<M> *state{&idling};
 
   void enter_holding() { enter(&holding); };
   void enter_idling() { enter(&idling); };
+  void enter_sustaining() { enter(&sustaining); };
 
   void finish_stage() {
     eoc_generator.start();
     enter_idling();
   };
+
+  void on_defer_gate_rise() { enter_deferring(); }
+  void on_defer_gate_fall() { stop_deferring(); }
+
+  void on_stage_gate_rise() {
+    // If DEFER is active, suppress GATE rises.
+    // We will check GATE when DEFER falls.
+    if(!module->defer_gate_is_active()) {
+      state->on_stage_gate_rise();
+    }
+  }
+  void on_stage_gate_fall() { state->on_stage_gate_fall(); }
+
+  void on_eoc_rise() { module->set_eoc(true); }
+  void on_eoc_fall() { module->set_eoc(false); }
+
+  M *const module;
+  StageState<M> *state{&forwarding};
+
+  StageGate<M> stage_gate{module,
+                          [this]() { on_stage_gate_rise(); },
+                          [this]() { on_stage_gate_fall(); }
+  };
+
+  DeferGate<M> defer_gate{module,
+                          [this]() { on_defer_gate_rise(); },
+                          [this]() { on_defer_gate_fall(); }
+  };
+
+  HoldGenerator<M> hold_generator{module, [this]() { finish_stage(); }};
 
   PulseGenerator<M> eoc_generator{
       module,
@@ -147,17 +92,10 @@ private:
       [this]() { on_eoc_fall(); },
   };
 
-  HoldGenerator<M> hold_generator{module, [this]() { finish_stage(); }};
-
-  StageGate<M> stage_gate{module,
-                          [this]() { on_stage_gate_rise(); },
-                          [this]() { on_stage_gate_fall(); }
-  };
-
+  Deferring<M> deferring{module};
   Forwarding<M> forwarding{module, [this]() { start_generating(); }};
   Holding<M> holding{module, &hold_generator, [this]() { enter_holding(); }};
   Idling<M> idling{module, [this]() { start_generating(); }};
   Sustaining<M> sustaining{module, [this]() { finish_stage(); }};
 };
-}
 }
