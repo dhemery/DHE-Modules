@@ -14,18 +14,14 @@ public:
     state_machine.start();
   }
 
-  void step() override {
-    state_machine.step();
-  }
+  void step() override { state_machine.step(); }
 
   auto duration() const -> float {
     auto rotation = modulated(DURATION_KNOB, DURATION_CV);
     return DHE::duration(rotation, *duration_range);
   }
 
-  void forward() {
-    send_out(envelope_in());
-  }
+  void forward() { send_out(envelope_in()); }
 
   auto defer_gate_is_active() const -> bool {
     return inputs[DEFER_GATE_IN].active;
@@ -41,12 +37,14 @@ public:
 
   void set_eoc(bool eoc) { outputs[EOC_OUT].value = eoc ? 10.f : 0.f; }
 
-  auto sample_time() const -> float {
-    return rack::engineGetSampleTime();
-  };
+  auto sample_time() const -> float { return rack::engineGetSampleTime(); };
 
-  auto defer_gate_in() const -> bool { return inputs[DEFER_GATE_IN].value > 0.1f; }
-  auto stage_gate_in() const -> bool { return inputs[STAGE_GATE_IN].value > 0.1f; }
+  auto defer_gate_in() const -> bool {
+    return inputs[DEFER_GATE_IN].value > 0.1f;
+  }
+  auto stage_gate_in() const -> bool {
+    return inputs[STAGE_GATE_IN].value > 0.1f;
+  }
 
   const Selector<Range const *> duration_range_selector{
       Duration::ranges, [this](Range const *range) { duration_range = range; }};

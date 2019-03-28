@@ -4,13 +4,12 @@
 #include <components/phase-accumulator.h>
 #include <stages/components/defer-gate.h>
 #include <stages/components/pulse-generator.h>
-#include <stages/components/stage-generator.h>
 #include <stages/components/stage-gate.h>
+#include <stages/components/stage-generator.h>
 #include <stages/components/states.h>
 
 namespace DHE {
-template <typename M>
-class StageStateMachine {
+template <typename M> class StageStateMachine {
 public:
   explicit StageStateMachine(M *module) : module{module} {}
 
@@ -32,7 +31,7 @@ private:
 
   void enter_deferring() { enter(&deferring); };
   void stop_deferring() {
-    if(module->stage_gate_in()) {
+    if (module->stage_gate_in()) {
       start_generating();
     } else {
       finish_stage();
@@ -54,7 +53,7 @@ private:
   void on_stage_gate_rise() {
     // If DEFER is active, suppress GATE rises.
     // We will check GATE when DEFER falls.
-    if(!module->defer_gate_is_active()) {
+    if (!module->defer_gate_is_active()) {
       state->on_stage_gate_rise();
     }
   }
@@ -66,15 +65,11 @@ private:
   M *const module;
   StageState<M> *state{&forwarding};
 
-  DeferGate<M> defer_gate{module,
-                          [this]() { on_defer_gate_rise(); },
-                          [this]() { on_defer_gate_fall(); }
-  };
+  DeferGate<M> defer_gate{module, [this]() { on_defer_gate_rise(); },
+                          [this]() { on_defer_gate_fall(); }};
 
-  StageGate<M> stage_gate{module,
-                          [this]() { on_stage_gate_rise(); },
-                          [this]() { on_stage_gate_fall(); }
-  };
+  StageGate<M> stage_gate{module, [this]() { on_stage_gate_rise(); },
+                          [this]() { on_stage_gate_fall(); }};
 
   StageGenerator<M> stage_generator{module, [this]() { finish_stage(); }};
 
@@ -86,7 +81,8 @@ private:
 
   Deferring<M> deferring{module};
   Forwarding<M> forwarding{module, [this]() { start_generating(); }};
-  Generating<M> generating{module, &stage_generator, [this]() { start_generating(); }};
+  Generating<M> generating{module, &stage_generator,
+                           [this]() { start_generating(); }};
   Idling<M> idling{module, [this]() { start_generating(); }};
 };
-}
+} // namespace DHE

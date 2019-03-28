@@ -7,14 +7,13 @@
 namespace DHE {
 
 /**
- * Advances its phase over the duration specified by the module, and generates an event phase ends.
+ * Advances its phase over the duration specified by the module, and generates
+ * an event phase ends.
  */
-template <typename M>
-class HoldGenerator : public PhaseAccumulator {
+template <typename M> class HoldGenerator : public PhaseAccumulator {
 public:
   explicit HoldGenerator(M *module, std::function<void()> on_hold_complete)
-      : module{module},
-        on_hold_complete{std::move(on_hold_complete)} {}
+      : module{module}, on_hold_complete{std::move(on_hold_complete)} {}
 
   auto duration() const -> float override { return module->duration(); }
 
@@ -26,4 +25,4 @@ private:
   M *const module;
   const std::function<void()> on_hold_complete;
 };
-}
+} // namespace DHE

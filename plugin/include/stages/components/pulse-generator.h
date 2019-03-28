@@ -9,17 +9,14 @@
 namespace DHE {
 
 /**
- * Generates a pulse of the given length and generates events when the pulse rises
- * and falls.
+ * Generates a pulse of the given length and generates events when the pulse
+ * rises and falls.
  */
-template <typename M>
-class PulseGenerator : public PhaseAccumulator {
+template <typename M> class PulseGenerator : public PhaseAccumulator {
 public:
-  explicit PulseGenerator(M *module,
-                        std::function<void()> on_eoc_rise,
-                        std::function<void()> on_eoc_fall)
-      : module{module},
-        on_eoc_rise{std::move(on_eoc_rise)},
+  explicit PulseGenerator(M *module, std::function<void()> on_eoc_rise,
+                          std::function<void()> on_eoc_fall)
+      : module{module}, on_eoc_rise{std::move(on_eoc_rise)},
         on_eoc_fall{std::move(on_eoc_fall)} {}
 
   void on_start() const override { on_eoc_rise(); }
@@ -35,4 +32,4 @@ private:
   const std::function<void()> on_eoc_rise;
   const std::function<void()> on_eoc_fall;
 };
-}
+} // namespace DHE

@@ -32,9 +32,7 @@ public:
     };
   }
 
-  void stop() {
-    phase = 1.f;
-  }
+  void stop() { phase = 1.f; }
 
 protected:
   virtual auto sample_time() const -> float = 0;

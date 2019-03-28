@@ -3,7 +3,7 @@
 namespace rack {
 struct Plugin;
 struct Model;
-}
+} // namespace rack
 
 extern rack::Plugin *plugin;
 extern rack::Model *modelBoosterStage;

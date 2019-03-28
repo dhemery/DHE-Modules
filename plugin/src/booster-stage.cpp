@@ -17,21 +17,15 @@ public:
     state_machine.start();
   }
 
-  void step() override {
-    state_machine.step();
-  }
+  void step() override { state_machine.step(); }
 
-  void forward() {
-    send_out(envelope_in());
-  }
+  void forward() { send_out(envelope_in()); }
 
   void generate(float phase) {
     send_out(scale(taper(phase), start_voltage, level()));
   }
 
-  void prepare_to_generate() {
-    start_voltage = envelope_in();
-  }
+  void prepare_to_generate() { start_voltage = envelope_in(); }
 
   auto defer_gate_is_active() const -> bool {
     return inputs[DEFER_GATE_IN].active;
@@ -42,9 +36,7 @@ public:
     return DHE::duration(rotation, *duration_range);
   }
 
-  auto sample_time() const -> float {
-    return rack::engineGetSampleTime();
-  };
+  auto sample_time() const -> float { return rack::engineGetSampleTime(); };
 
   auto defer_gate_in() const -> bool {
     auto defer_button = params[DEFER_BUTTON].value > 0.5f;

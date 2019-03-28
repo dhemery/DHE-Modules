@@ -1,5 +1,5 @@
-#include <gmock/gmock.h>
 #include "stages/components/defer-gate.h"
+#include <gmock/gmock.h>
 
 namespace {
 
@@ -21,35 +21,30 @@ struct DeferGateTest : public ::testing::Test {
   Module source;
   Runnable on_rise;
   Runnable on_fall;
-  DHE::DeferGate<Module> defer_gate{&source, [this]() {on_rise.run();}, [this]() {on_fall.run();}  };
+  DHE::DeferGate<Module> defer_gate{&source, [this]() { on_rise.run(); },
+                                    [this]() { on_fall.run(); }};
 
   void given_defer_signal(bool state) {
-    EXPECT_CALL(source, defer_gate_in())
-        .WillOnce(Return(state));
+    EXPECT_CALL(source, defer_gate_in()).WillOnce(Return(state));
   }
 
   void given_gate_is_high() {
-    EXPECT_CALL(source, defer_gate_in())
-        .WillOnce(Return(true));
-    EXPECT_CALL(on_rise, run())
-        .Times(AnyNumber());
+    EXPECT_CALL(source, defer_gate_in()).WillOnce(Return(true));
+    EXPECT_CALL(on_rise, run()).Times(AnyNumber());
     defer_gate.step();
-    EXPECT_CALL(on_rise, run())
-        .Times(0);
+    EXPECT_CALL(on_rise, run()).Times(0);
   }
 
   void given_gate_is_low() {
-    EXPECT_CALL(source, defer_gate_in())
-        .WillOnce(Return(false));
-    EXPECT_CALL(on_fall, run())
-        .Times(AnyNumber());
+    EXPECT_CALL(source, defer_gate_in()).WillOnce(Return(false));
+    EXPECT_CALL(on_fall, run()).Times(AnyNumber());
     defer_gate.step();
-    EXPECT_CALL(on_fall, run())
-        .Times(0);
+    EXPECT_CALL(on_fall, run()).Times(0);
   }
 };
 
-TEST_F(DeferGateTest, step_callsOnDeferGateRise_ifDeferSignalIsTrue_whenGateIsLow) {
+TEST_F(DeferGateTest,
+       step_callsOnDeferGateRise_ifDeferSignalIsTrue_whenGateIsLow) {
   given_gate_is_low();
   given_defer_signal(true);
 
@@ -58,7 +53,8 @@ TEST_F(DeferGateTest, step_callsOnDeferGateRise_ifDeferSignalIsTrue_whenGateIsLo
   defer_gate.step();
 }
 
-TEST_F(DeferGateTest, step_callsOnDeferGateFall_ifDeferSignalIsFalse_whenGateIsHigh) {
+TEST_F(DeferGateTest,
+       step_callsOnDeferGateFall_ifDeferSignalIsFalse_whenGateIsHigh) {
   given_gate_is_high();
   given_defer_signal(false);
 
@@ -67,7 +63,8 @@ TEST_F(DeferGateTest, step_callsOnDeferGateFall_ifDeferSignalIsFalse_whenGateIsH
   defer_gate.step();
 }
 
-TEST_F(DeferGateTest, step_generatesNoEvents_ifDeferSignalIsTrue_whenGateIsHigh) {
+TEST_F(DeferGateTest,
+       step_generatesNoEvents_ifDeferSignalIsTrue_whenGateIsHigh) {
   given_gate_is_high();
   given_defer_signal(true);
 
@@ -77,8 +74,8 @@ TEST_F(DeferGateTest, step_generatesNoEvents_ifDeferSignalIsTrue_whenGateIsHigh)
   defer_gate.step();
 }
 
-
-TEST_F(DeferGateTest, step_generatesNoEvents_ifDeferSignalIsFalse_whenGateIsLow) {
+TEST_F(DeferGateTest,
+       step_generatesNoEvents_ifDeferSignalIsFalse_whenGateIsLow) {
   given_gate_is_low();
   given_defer_signal(false);
 
@@ -88,4 +85,4 @@ TEST_F(DeferGateTest, step_generatesNoEvents_ifDeferSignalIsFalse_whenGateIsLow)
   defer_gate.step();
 }
 
-}
+} // namespace

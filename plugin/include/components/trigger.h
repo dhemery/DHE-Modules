@@ -1,13 +1,14 @@
 
 #pragma once
+#include "edge-detector.h"
 #include <functional>
 #include <utility>
-#include "edge-detector.h"
 
 namespace DHE {
 
 /**
- * Tracks a boolean value and generates one or more events whenever the value rises.
+ * Tracks a boolean value and generates one or more events whenever the value
+ * rises.
  */
 class Trigger : public EdgeDetector {
 public:

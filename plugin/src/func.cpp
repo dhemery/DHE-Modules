@@ -1,5 +1,5 @@
-#include <vector>
 #include "engine.hpp"
+#include <vector>
 
 #include "display/controls.h"
 #include "display/panel.h"

@@ -16,33 +16,33 @@ public:
     state_machine.start();
   }
 
-  void step() override {
-    state_machine.step();
-  }
+  void step() override { state_machine.step(); }
 
   void forward() { send_out(envelope_in()); }
 
   void generate(float phase) {
     send_out(scale(taper(phase), start_voltage, level()));
   }
-  void prepare_to_generate() {
-    start_voltage = envelope_in();
-  }
+  void prepare_to_generate() { start_voltage = envelope_in(); }
 
   auto defer_gate_is_active() const -> bool {
     return inputs[DEFER_GATE_IN].active;
   }
 
-  void set_active(bool active) { outputs[ACTIVE_OUT].value = active ? 10.f : 0.f; }
+  void set_active(bool active) {
+    outputs[ACTIVE_OUT].value = active ? 10.f : 0.f;
+  }
 
   void set_eoc(bool eoc) { outputs[EOC_OUT].value = eoc ? 10.f : 0.f; }
 
-  auto defer_gate_in() const -> bool { return inputs[DEFER_GATE_IN].value > 0.1; }
-  auto stage_gate_in() const -> bool { return inputs[STAGE_TRIGGER_IN].value > 0.1; }
+  auto defer_gate_in() const -> bool {
+    return inputs[DEFER_GATE_IN].value > 0.1;
+  }
+  auto stage_gate_in() const -> bool {
+    return inputs[STAGE_TRIGGER_IN].value > 0.1;
+  }
 
-  auto sample_time() const -> float {
-    return rack::engineGetSampleTime();
-  };
+  auto sample_time() const -> float { return rack::engineGetSampleTime(); };
 
   auto duration() const -> float {
     auto rotation = params[DURATION_KNOB].value;
@@ -83,8 +83,8 @@ public:
   explicit StagePanel(Stage *module) : Panel{module, hp} {
     auto widget_right_edge = width();
 
-    auto column_1 = width()/4.f + 0.333333f;
-    auto column_2 = widget_right_edge/2.f;
+    auto column_1 = width() / 4.f + 0.333333f;
+    auto column_2 = widget_right_edge / 2.f;
     auto column_3 = widget_right_edge - column_1;
 
     auto y = 25.f;

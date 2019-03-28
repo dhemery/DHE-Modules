@@ -1,5 +1,5 @@
-#include "util/common.hpp"
 #include "plugin.hpp"
+#include "util/common.hpp"
 
 #include "dhe-modules.h"
 

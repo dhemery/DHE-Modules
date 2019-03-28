@@ -4,13 +4,12 @@
 #include <components/phase-accumulator.h>
 #include <stages/components/defer-gate.h>
 #include <stages/components/pulse-generator.h>
-#include <stages/components/stage-generator.h>
 #include <stages/components/stage-gate.h>
+#include <stages/components/stage-generator.h>
 #include <stages/components/states.h>
 
 namespace DHE {
-template <typename M>
-class HostageStateMachine {
+template <typename M> class HostageStateMachine {
 public:
   explicit HostageStateMachine(M *module) : module{module} {}
 
@@ -62,7 +61,7 @@ private:
   void on_stage_gate_rise() {
     // If DEFER is active, suppress GATE rises.
     // We will check GATE when DEFER falls.
-    if(!module->defer_gate_is_active()) {
+    if (!module->defer_gate_is_active()) {
       state->on_stage_gate_rise();
     }
   }
@@ -74,15 +73,11 @@ private:
   M *const module;
   StageState<M> *state{&forwarding};
 
-  StageGate<M> stage_gate{module,
-                          [this]() { on_stage_gate_rise(); },
-                          [this]() { on_stage_gate_fall(); }
-  };
+  StageGate<M> stage_gate{module, [this]() { on_stage_gate_rise(); },
+                          [this]() { on_stage_gate_fall(); }};
 
-  DeferGate<M> defer_gate{module,
-                          [this]() { on_defer_gate_rise(); },
-                          [this]() { on_defer_gate_fall(); }
-  };
+  DeferGate<M> defer_gate{module, [this]() { on_defer_gate_rise(); },
+                          [this]() { on_defer_gate_fall(); }};
 
   HoldGenerator<M> hold_generator{module, [this]() { finish_stage(); }};
 
@@ -98,4 +93,4 @@ private:
   Idling<M> idling{module, [this]() { start_generating(); }};
   Sustaining<M> sustaining{module, [this]() { finish_stage(); }};
 };
-}
+} // namespace DHE
