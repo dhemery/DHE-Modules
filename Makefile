@@ -2,12 +2,12 @@ SLUG = DHE-Modules
 VERSION = 0.6.4
 RACK_DIR ?= ../..
 
-FLAGS += -I./plugin/include
+FLAGS += -I./include
 CFLAGS +=
 CXXFLAGS +=
 LDFLAGS +=
 
-SOURCES = $(wildcard plugin/src/*.cpp)
+SOURCES = $(wildcard src/*.cpp)
 
 DISTRIBUTABLES += LICENSE.txt svg
 
@@ -36,7 +36,7 @@ run: dev
 	/Applications/Rack.app/Contents/MacOS/Rack -g /Applications/Rack.app/Contents/Resources -l $(realpath $(DEV_INSTALL_DIR))
 
 tidy:
-	find plugin/src plugin/include -name *.h -o -name *.cpp | xargs clang-format -i
+	find src include -name *.h -o -name *.cpp | xargs clang-format -i -style=file
 
 gui:
 	cd gui && rake install

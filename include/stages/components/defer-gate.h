@@ -10,8 +10,8 @@ namespace DHE {
  */
 template <typename M> class DeferGate : public Gate {
 public:
-  explicit DeferGate(M *module, const std::function<void()>& on_rise,
-                     const std::function<void()>& on_fall)
+  explicit DeferGate(M *module, const std::function<void()> &on_rise,
+                     const std::function<void()> &on_fall)
       : Gate{on_rise, on_fall}, module{module} {}
 
 protected:
