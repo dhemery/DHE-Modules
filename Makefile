@@ -1,5 +1,5 @@
 SLUG = DHE-Modules
-VERSION = 0.6.4
+VERSION = 0.6.5
 RACK_DIR ?= ../..
 
 FLAGS += -I./include
@@ -16,6 +16,19 @@ include $(RACK_DIR)/plugin.mk
 # Above this line: Standard plugin build stuff
 ########################################################################
 # Below this line: Targets for Dale to build the gui and run Rack
+
+TEST_SOURCES =  $(wildcard test/*.cpp)
+TEST_OBJECTS := $(patsubst %, build/%.o, $(TEST_SOURCES)) $(TEST_OBJECTS)
+
+$(TEST_OBJECTS): FLAGS += -Igoogletest/googletest/include/ -Igoogletest/googlemock/include/
+
+TEST_RUNNER = build/dhe-module-tests
+
+$(TEST_RUNNER): $(TEST_OBJECTS)
+	$(CXX) -o $@ $^ -stdlib=libc++ -Lgoogletest/lib -lgmock_main -lgtest -lgmock
+
+test: $(TEST_RUNNER)
+	$<
 
 DEV_INSTALL_DIR = .dev
 DEV_PLUGIN_DIR = $(DEV_INSTALL_DIR)/plugins
@@ -50,3 +63,4 @@ uninstall:
 	rm -rf $(DEV_INSTALL_DIR)
 
 .PHONY: clean clobber fresh gui tidy uninstall
+
