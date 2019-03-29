@@ -30,7 +30,7 @@ $(TEST_RUNNER): $(TEST_OBJECTS)
 
 test-runner: $(TEST_RUNNER)
 
-test: test-runner
+test: $(TEST_RUNNER)
 	$<
 
 DEV_INSTALL_DIR = .dev
@@ -54,7 +54,7 @@ run: dev
 tidy:
 	find src include -name *.h -o -name *.cpp | xargs clang-format -i -style=file
 
-COMPILE_DB_JSONS := $(patsubst %, %.json, $(TEST_OBJECTS) $(OBJECTS))
+COMPILE_DB_JSONS := $(patsubst %, %.json, $(OBJECTS) $(TEST_OBJECTS) )
 
 $(COMPILE_DB_JSONS): $(OBJECTS) $(TEST_OBJECTS)
 
