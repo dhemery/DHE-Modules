@@ -2,7 +2,7 @@ SLUG = DHE-Modules
 VERSION = 0.6.5
 RACK_DIR ?= ../..
 
-FLAGS += -I./include
+FLAGS += -I./include -MJ $@.json
 CFLAGS +=
 CXXFLAGS +=
 LDFLAGS +=
@@ -18,16 +18,19 @@ include $(RACK_DIR)/plugin.mk
 # Below this line: Targets for Dale to build the gui and run Rack
 
 TEST_SOURCES =  $(wildcard test/*.cpp)
-TEST_OBJECTS := $(patsubst %, build/%.o, $(TEST_SOURCES)) $(TEST_OBJECTS)
+TEST_OBJECTS := $(patsubst %, build/%.o, $(TEST_SOURCES))
+TESTFLAGS += -Igoogletest/googletest/include/ -Igoogletest/googlemock/include/
 
-$(TEST_OBJECTS): FLAGS += -Igoogletest/googletest/include/ -Igoogletest/googlemock/include/
+$(TEST_OBJECTS): FLAGS += $(TESTFLAGS)
 
 TEST_RUNNER = build/dhe-module-tests
 
 $(TEST_RUNNER): $(TEST_OBJECTS)
 	$(CXX) -o $@ $^ -stdlib=libc++ -Lgoogletest/lib -lgmock_main -lgtest -lgmock
 
-test: $(TEST_RUNNER)
+test-runner: $(TEST_RUNNER)
+
+test: test-runner
 	$<
 
 DEV_INSTALL_DIR = .dev
@@ -50,6 +53,15 @@ run: dev
 
 tidy:
 	find src include -name *.h -o -name *.cpp | xargs clang-format -i -style=file
+
+COMPILE_DB_JSONS := $(patsubst %, %.json, $(TEST_OBJECTS) $(OBJECTS))
+
+$(COMPILE_DB_JSONS): $(OBJECTS) $(TEST_OBJECTS)
+
+compile_commands.json: $(COMPILE_DB_JSONS)
+	sed -e '1s/^/[/' -e '$$s/,$$/]/' $^ | json_pp > $@
+
+compiledb: compile_commands.json
 
 gui:
 	cd gui && rake install
