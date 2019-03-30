@@ -13,11 +13,18 @@ DISTRIBUTABLES += LICENSE.txt svg
 
 include $(RACK_DIR)/plugin.mk
 
-MAC_SDK_FLAGS += -MJ $@.json
-
-# Above this line: Standard plugin build stuff
+# Above this line: Standard plugin build configuration
 ########################################################################
-# Below this line: Targets for Dale to build the gui and run Rack
+# Below this line: Special configuration and targets for Dale
+
+
+
+
+########################################################################
+#
+# Build and run the tests
+#
+########################################################################
 
 TEST_SOURCES =  $(wildcard test/*.cpp)
 TEST_OBJECTS := $(patsubst %, build/%.o, $(TEST_SOURCES))
@@ -30,10 +37,42 @@ TEST_RUNNER = build/dhe-module-tests
 $(TEST_RUNNER): $(TEST_OBJECTS)
 	$(CXX) -o $@ $^ -stdlib=libc++ -Lgoogletest/lib -lgmock_main -lgtest -lgmock
 
-test-runner: $(TEST_RUNNER)
+test: all
 
 test: $(TEST_RUNNER)
 	$<
+
+
+
+
+########################################################################
+#
+# Build the compilation database that configures CLion
+#
+########################################################################
+
+# Tell clang to emit a compilation database entry for each source file
+# when building the project target
+project: FLAGS += -MJ $@.json
+
+COMPILATION_DATABASE_JSONS := $(patsubst %, %.json, $(OBJECTS) $(TEST_OBJECTS) )
+
+$(COMPILATION_DATABASE_JSONS): $(OBJECTS) $(TEST_OBJECTS)
+
+# Aggregate the compilation database entries
+compile_commands.json: $(COMPILATION_DATABASE_JSONS)
+	sed -e '1s/^/[/' -e '$$s/,$$/]/' $^ | json_pp > $@
+
+project: clean compile_commands.json
+
+
+
+
+########################################################################
+#
+# Install and run in a local directory
+#
+########################################################################
 
 DEV_INSTALL_DIR = .dev
 DEV_PLUGIN_DIR = $(DEV_INSTALL_DIR)/plugins
@@ -53,25 +92,35 @@ debug: dev
 run: dev
 	/Applications/Rack.app/Contents/MacOS/Rack -g /Applications/Rack.app/Contents/Resources -l $(realpath $(DEV_INSTALL_DIR))
 
-tidy:
-	find src include -name *.h -o -name *.cpp | xargs clang-format -i -style=file
 
-COMPILE_DB_JSONS := $(patsubst %, %.json, $(OBJECTS) $(TEST_OBJECTS) )
 
-$(COMPILE_DB_JSONS): $(OBJECTS) $(TEST_OBJECTS)
 
-compile_commands.json: $(COMPILE_DB_JSONS)
-	sed -e '1s/^/[/' -e '$$s/,$$/]/' $^ | json_pp > $@
-
-compiledb: compile_commands.json
+########################################################################
+#
+# Build the SVG files for the GUI
+#
+########################################################################
 
 gui:
 	cd gui && rake install
 
+
+
+
+########################################################################
+#
+# Utilities
+#
+########################################################################
+
+# Apply .clang-format to all source files
+tidy:
+	find src include -name *.h -o -name *.cpp | xargs clang-format -i -style=file
+
 clobber: clean uninstall
 	cd gui && rake clobber
 
-fresh: clean all
+fresh: clean test
 
 uninstall:
 	rm -rf $(DEV_INSTALL_DIR)
