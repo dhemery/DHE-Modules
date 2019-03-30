@@ -1,10 +1,11 @@
 #include <array>
 
-#include "dhe-modules.h"
+#include "engine.hpp"
+
+#include "components/rotor.h"
 #include "display/controls.h"
 #include "display/panel.h"
 #include "util/rotation.h"
-#include "util/rotor.h"
 #include "util/sigmoid.h"
 #include "util/signal.h"
 

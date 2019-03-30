@@ -116,20 +116,12 @@ public:
 
 template <typename P> class MultiplicationRangeStepper : public Toggle<P, 4> {
 public:
-<<<<<<< HEAD:plugin/src/func.cpp
   MultiplicationRangeStepper() : Toggle<P, 4>("stepper-mult") {}
-=======
-  MultiplicationRangeSwitch() : Toggle<P, 4>("counter-mult") {}
->>>>>>> master:src/func.cpp
 };
 
 template <typename P> class AdditionRangeStepper : public Toggle<P, 4> {
 public:
-<<<<<<< HEAD:plugin/src/func.cpp
   AdditionRangeStepper() : Toggle<P, 4>("stepper-add") {}
-=======
-  AdditionRangeSwitch() : Toggle<P, 4>("counter-add") {}
->>>>>>> master:src/func.cpp
 };
 
 class FuncPanel : public Panel<FuncPanel> {
