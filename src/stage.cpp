@@ -1,12 +1,10 @@
 #include <engine.hpp>
-#include <stages/components/pulse-generator.h>
-#include <stages/components/stage-generator.h>
-#include <stages/stage.h>
 
 #include "display/controls.h"
 #include "display/panel.h"
 #include "util/duration.h"
 #include "util/signal.h"
+#include <stages/stage-state-machine.h>
 
 namespace DHE {
 

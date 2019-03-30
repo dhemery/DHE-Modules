@@ -5,12 +5,13 @@
 namespace DHE {
 
 /**
- * Calls functions when the stage gate signal rises and falls.
+ * Calls on_rise() when the module's stage gate signal rises, and on_fall() when
+ * it falls.
  */
 template <typename M> class StageGate : public Gate {
 public:
-  explicit StageGate(M *module, std::function<void()> on_rise,
-                     std::function<void()> on_fall)
+  explicit StageGate(M *module, const std::function<void()>& on_rise,
+                     const std::function<void()>& on_fall)
       : Gate{on_rise, on_fall}, module{module} {}
 
 protected:

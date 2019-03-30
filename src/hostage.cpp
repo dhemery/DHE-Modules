@@ -1,8 +1,8 @@
-#include "stages/hostage.h"
 #include "engine.hpp"
 
 #include "display/controls.h"
 #include "display/panel.h"
+#include "stages/hostage-state-machine.h"
 #include "util/duration.h"
 #include "util/rotation.h"
 

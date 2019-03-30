@@ -1,17 +1,16 @@
 #pragma once
 
 #include <components/mode.h>
-#include <components/phase-accumulator.h>
 #include <stages/components/defer-gate.h>
-#include <stages/components/pulse-generator.h>
+#include <stages/components/end-of-cycle-pulse-generator.h>
 #include <stages/components/stage-gate.h>
 
 namespace DHE {
 template <typename M> class StageState : public DHE::Mode {
 public:
-  explicit StageState(
-      M *module, std::function<void()> on_stage_gate_rise = []() {},
-      std::function<void()> on_stage_gate_fall = []() {})
+  explicit StageState(M *module,
+                      std::function<void()> on_stage_gate_rise = []() {},
+                      std::function<void()> on_stage_gate_fall = []() {})
       : on_stage_gate_rise{std::move(on_stage_gate_rise)},
         on_stage_gate_fall{std::move(on_stage_gate_fall)}, module{module} {}
 
@@ -28,6 +27,10 @@ private:
   M *const module;
 };
 
+/**
+ * A deferring stage module is active, and steps by forwarding its input signal
+ * to its output port.
+ */
 template <typename M> class Deferring : public StageState<M> {
 public:
   explicit Deferring(M *module) : StageState<M>{module, []() {}} {}
@@ -36,9 +39,14 @@ public:
   void step() override { this->forward(); }
 };
 
+/**
+ * A forwarding stage module is active, and steps by forwarding its input signal
+ * to its output port.
+ */
 template <typename M> class Forwarding : public StageState<M> {
 public:
-  explicit Forwarding(M *module, const std::function<void()>& on_stage_gate_rise)
+  explicit Forwarding(M *module,
+                      const std::function<void()> &on_stage_gate_rise)
       : StageState<M>{module, on_stage_gate_rise} {}
 
   void enter() override { this->become_inactive(); }
@@ -46,9 +54,12 @@ public:
   void step() override { this->forward(); }
 };
 
+/**
+ * An idling stage module is inactive and takes no action on each step.
+ */
 template <typename M> class Idling : public StageState<M> {
 public:
-  explicit Idling(M *module, const std::function<void()>& on_stage_gate_rise)
+  explicit Idling(M *module, const std::function<void()> &on_stage_gate_rise)
       : StageState<M>{module, on_stage_gate_rise} {}
 
   void enter() override { this->become_inactive(); }
@@ -113,7 +124,7 @@ private:
   DeferGate<M> defer_gate{module, [this]() { on_defer_gate_rise(); },
                           [this]() { on_defer_gate_fall(); }};
 
-  PulseGenerator<M> eoc_generator{
+  EndOfCyclePulseGenerator<M> eoc_generator{
       module,
       [this]() { on_eoc_rise(); },
       [this]() { on_eoc_fall(); },

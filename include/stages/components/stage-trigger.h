@@ -1,12 +1,13 @@
 #pragma once
-#include "components/trigger.h"
 #include <functional>
+#include "components/trigger.h"
 
 namespace DHE {
 
 /**
- * Informs the state machine when the module's stage gate signal rises.
+ * Calls on_rise() when the module's stage gate signal rises.
  */
+
 template <typename M> class StageTrigger : public Trigger {
 public:
   explicit StageTrigger(M *module, std::function<void()> on_rise)

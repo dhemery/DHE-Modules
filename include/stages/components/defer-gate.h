@@ -1,12 +1,13 @@
 
 #pragma once
-#include "components/gate.h"
 #include <functional>
+#include "components/gate.h"
 
 namespace DHE {
 
 /**
- * Informs the state machine when the module's defer gate signal rises or falls.
+ * Calls on_rise() when the module's defer gate signal rises, and on_fall() when
+ * it falls.
  */
 template <typename M> class DeferGate : public Gate {
 public:

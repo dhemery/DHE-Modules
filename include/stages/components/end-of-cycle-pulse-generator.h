@@ -9,12 +9,12 @@
 namespace DHE {
 
 /**
- * Generates a pulse of the given length and generates events when the pulse
- * rises and falls.
+ * Generates a 1ms end-of-cycle pulse. The pulse generator calls on_eoc_rise()
+ * when the pulse starts and on_eoc_fall() when the pulse ends.
  */
-template <typename M> class PulseGenerator : public PhaseAccumulator {
+template <typename M> class EndOfCyclePulseGenerator : public PhaseAccumulator {
 public:
-  explicit PulseGenerator(M *module, std::function<void()> on_eoc_rise,
+  explicit EndOfCyclePulseGenerator(M *module, std::function<void()> on_eoc_rise,
                           std::function<void()> on_eoc_fall)
       : module{module}, on_eoc_rise{std::move(on_eoc_rise)},
         on_eoc_fall{std::move(on_eoc_fall)} {}
