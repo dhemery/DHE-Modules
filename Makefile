@@ -1,21 +1,39 @@
 SLUG = DHE-Modules
-VERSION = 0.6.4
+VERSION = 0.6.5
 RACK_DIR ?= ../..
 
-FLAGS += -I./plugin/include
+FLAGS += -I./include
 CFLAGS +=
 CXXFLAGS +=
 LDFLAGS +=
 
-SOURCES = $(wildcard plugin/src/*.cpp)
+SOURCES = $(wildcard src/*.cpp)
 
 DISTRIBUTABLES += LICENSE.txt svg
 
 include $(RACK_DIR)/plugin.mk
 
+MAC_SDK_FLAGS += -MJ $@.json
+
 # Above this line: Standard plugin build stuff
 ########################################################################
 # Below this line: Targets for Dale to build the gui and run Rack
+
+TEST_SOURCES =  $(wildcard test/*.cpp)
+TEST_OBJECTS := $(patsubst %, build/%.o, $(TEST_SOURCES))
+TESTFLAGS += -Igoogletest/googletest/include/ -Igoogletest/googlemock/include/
+
+$(TEST_OBJECTS): FLAGS += $(TESTFLAGS)
+
+TEST_RUNNER = build/dhe-module-tests
+
+$(TEST_RUNNER): $(TEST_OBJECTS)
+	$(CXX) -o $@ $^ -stdlib=libc++ -Lgoogletest/lib -lgmock_main -lgtest -lgmock
+
+test-runner: $(TEST_RUNNER)
+
+test: $(TEST_RUNNER)
+	$<
 
 DEV_INSTALL_DIR = .dev
 DEV_PLUGIN_DIR = $(DEV_INSTALL_DIR)/plugins
@@ -39,7 +57,16 @@ run: dev
 	/Applications/Rack.app/Contents/MacOS/Rack -g /Applications/Rack.app/Contents/Resources -l $(realpath $(DEV_INSTALL_DIR))
 
 tidy:
-	find plugin/src plugin/include -name *.h -o -name *.cpp | xargs clang-format -i
+	find src include -name *.h -o -name *.cpp | xargs clang-format -i -style=file
+
+COMPILE_DB_JSONS := $(patsubst %, %.json, $(OBJECTS) $(TEST_OBJECTS) )
+
+$(COMPILE_DB_JSONS): $(OBJECTS) $(TEST_OBJECTS)
+
+compile_commands.json: $(COMPILE_DB_JSONS)
+	sed -e '1s/^/[/' -e '$$s/,$$/]/' $^ | json_pp > $@
+
+compiledb: compile_commands.json
 
 gui:
 	cd gui && rake install
@@ -53,3 +80,4 @@ uninstall:
 	rm -rf $(DEV_INSTALL_DIR)
 
 .PHONY: clean clobber fresh gui tidy uninstall
+
