@@ -2,7 +2,7 @@ SLUG = DHE-Modules
 VERSION = 0.6.5
 RACK_DIR ?= ../..
 
-FLAGS += -I./include -MJ $@.json
+FLAGS += -I./include
 CFLAGS +=
 CXXFLAGS +=
 LDFLAGS +=
@@ -12,6 +12,8 @@ SOURCES = $(wildcard src/*.cpp)
 DISTRIBUTABLES += LICENSE.txt svg
 
 include $(RACK_DIR)/plugin.mk
+
+MAC_SDK_FLAGS += -MJ $@.json
 
 # Above this line: Standard plugin build stuff
 ########################################################################
