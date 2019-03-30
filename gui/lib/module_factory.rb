@@ -74,7 +74,7 @@ class ModuleFactory
     image_button = released.translate(x, y)
     @image_shapes << image_button
 
-    label_color = style == :normal ? @background : @foreground
+    label_color = style == :normal ? @foreground : @background
     faceplate_label = Label.new(text: label, color: label_color, size: :small, alignment: :above)
                           .translate(image_button.x, image_button.top - PADDING)
     @faceplate_shapes << faceplate_label
