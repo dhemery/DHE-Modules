@@ -28,8 +28,12 @@ include $(RACK_DIR)/plugin.mk
 
 TEST_SOURCES =  $(wildcard test/*.cpp)
 TEST_OBJECTS := $(patsubst %, build/%.o, $(TEST_SOURCES))
+
 TESTFLAGS += -Igoogletest/googletest/include/ -Igoogletest/googlemock/include/
 TESTLDFLAGS += -Lgoogletest/lib -lgmock_main -lgtest -lgmock
+ifdef ARCH_LIN
+	TESTLDFLAGS += -lpthread
+endif
 
 $(TEST_OBJECTS): FLAGS += $(TESTFLAGS)
 
