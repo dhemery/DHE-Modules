@@ -61,9 +61,10 @@ $(COMPILATION_DATABASE_JSONS): $(OBJECTS) $(TEST_OBJECTS)
 
 # Aggregate the compilation database entries
 compile_commands.json: $(COMPILATION_DATABASE_JSONS)
-	sed -e '1s/^/[/' -e '$$s/,$$/]/' $^ | scripts/clean-compile-db.rb > $@
+	sed -e '1s/^/[/' -e '$$s/,$$/]/' $^ | json_pp > $@
 
-project: clean compile_commands.json
+# Run as 'make -B project' to force compile all sources
+project: compile_commands.json
 
 
 
