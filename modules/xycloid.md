@@ -3,7 +3,14 @@ title: The Xycloid Module
 ---
 <img class="faceplate" src="xycloid.svg" alt="The Xycloid Faceplate" />
 
-Generates a pair of complex, evolving, pulsing LFO signals.
+Xycloid
+traces a fixed point
+on the edge a circle
+rolling along the inside or outside
+of another circle.
+
+The resulting two-dimensional shape
+generates a pair of complex, evolving, pulsing LFO signals.
 
 See:
 - **[Throb, Wobble, and Accent](https://www.youtube.com/watch?v=Kc0WctuFNvY):**
@@ -139,8 +146,8 @@ between parameters:
 ## Plotting Xycloid
 
 When plotted on a two-dimensional graph,
-the _X_ and _Y_ signals
-produce a [visually pleasing shape](#examples),
+Xycloid's _X_ and _Y_ signals
+produce a visually pleasing shape,
 which can be either a
 _[hypotrochoid](https://en.wikipedia.org/wiki/Hypotrochoid)_
 or an

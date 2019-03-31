@@ -44,10 +44,22 @@ and more.
 
 ### Low Frequency Oscillators
 
+[![_Blossom_](modules/blossom/blossom.svg)](modules/blossom/)
 [![_Xycloid_](modules/xycloid/xycloid.svg)](modules/xycloid/)
 
+**[_Blossom_](modules/blossom/)**
+traces a point
+around the edge of a circle
+as the radius of the circle varies.
+
 **[_Xycloid_](modules/xycloid/)**
-generates a pair of complex, evolving, pulsing LFO signals.
+traces a fixed point
+on the edge a circle
+rolling along the inside or outside
+of another circle.
+
+Each draws a pleasing, two-dimensional shape,
+generating a pair of complex, evolving, pulsing LFO signals.
 
 ### Utilities
 
@@ -81,6 +93,7 @@ is a waveshaper with a unique sigmoid transfer function.
 
 ## See Also
 
+- [Release Notes]({{ '/release-notes/' | relative_url }})
 - [Generating Single-Stage Envelopes]({{ '/guides/generating-single-stage-envelopes/' | relative_url }})
 - [Generating Multi-Stage Envelopes]({{ '/guides/generating-multi-stage-envelopes/' | relative_url }})
 - [More Usage Ideas]({{ '/guides/' | relative_url }})
