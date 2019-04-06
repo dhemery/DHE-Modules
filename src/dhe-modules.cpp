@@ -1,9 +1,10 @@
 #include "plugin.hpp"
 
+#include "modules/Blossom.h"
+#include "panels/BlossomPanel.h"
 #include "modules/Cubic.h"
 #include "panels/CubicPanel.h"
 
-extern rack::Model *modelBlossom;
 extern rack::Model *modelBoosterStage;
 extern rack::Model *modelFunc;
 extern rack::Model *modelFunc6;
@@ -29,7 +30,8 @@ void init(rack::Plugin *p) {
   plugin->slug = "DHE-Modules";
   plugin->version = TOSTRING(VERSION);
 
-  plugin->addModel(modelBlossom);
+  registerModel<DHE::Blossom, DHE::BlossomPanel>("Blossom", rack::LFO_TAG);
+
   plugin->addModel(modelBoosterStage);
 
   registerModel<DHE::Cubic, DHE::CubicPanel>("Cubic", rack::FUNCTION_GENERATOR_TAG);

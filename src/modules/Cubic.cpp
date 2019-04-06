@@ -4,6 +4,8 @@
 
 namespace DHE {
 
+Cubic::Cubic() : rack::Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT} {}
+
 void Cubic::step() {
   auto a = coefficient(A_KNOB, A_CV);
   auto b = coefficient(B_KNOB, B_CV);

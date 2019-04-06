@@ -6,7 +6,7 @@ namespace DHE {
 
 class Cubic : public rack::Module {
 public:
-  Cubic() : Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT} {}
+  Cubic();
 
   void step() override;
 
