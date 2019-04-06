@@ -7,7 +7,7 @@ CFLAGS +=
 CXXFLAGS +=
 LDFLAGS +=
 
-SOURCES = $(wildcard src/*.cpp)
+SOURCES = $(wildcard src/*.cpp src/modules/*.cpp src/panels/*.cpp)
 
 DISTRIBUTABLES += LICENSE.txt svg
 

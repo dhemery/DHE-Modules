@@ -4,10 +4,13 @@
 #include <string>
 #include <utility>
 
+#include <asset.hpp>
 #include <app.hpp>
 #include <util/math.hpp>
 
-#include "dhe-modules.h"
+#include <display/controls.h>
+
+extern rack::Plugin *plugin;
 
 namespace DHE {
 inline void moveTo(rack::Rect &box, rack::Vec center) {
@@ -31,7 +34,7 @@ template <typename P> class InputJack : public Jack<P> {};
 
 template <typename P> class OutputJack : public Jack<P> {};
 
-static auto plugin_asset_dir() -> std::string {
+static inline auto plugin_asset_dir() -> std::string {
   static const auto dir = rack::assetPlugin(plugin, std::string("svg/"));
   return dir;
 }
