@@ -1,4 +1,6 @@
-#include "display/panel.h"
+#pragma once
+
+#include <display/panel.h>
 #include <modules/Blossom.h>
 
 namespace DHE {

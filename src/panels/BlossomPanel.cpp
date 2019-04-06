@@ -1,9 +1,4 @@
-#include <array>
-
 #include <panels/BlossomPanel.h>
-#include "display/controls.h"
-#include "display/panel.h"
-#include <modules/Blossom.h>
 #include <util/rotation.h>
 
 namespace DHE {

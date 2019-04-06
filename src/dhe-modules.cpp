@@ -6,10 +6,11 @@
 #include "panels/BoosterStagePanel.h"
 #include "modules/Cubic.h"
 #include "panels/CubicPanel.h"
+#include "modules/Hostage.h"
+#include "panels/HostagePanel.h"
 
 extern rack::Model *modelFunc;
 extern rack::Model *modelFunc6;
-extern rack::Model *modelHostage;
 extern rack::Model *modelRanger;
 extern rack::Model *modelStage;
 extern rack::Model *modelSwave;
@@ -34,10 +35,10 @@ void init(rack::Plugin *p) {
   registerModel<DHE::Blossom, DHE::BlossomPanel>("Blossom", rack::LFO_TAG);
   registerModel<DHE::BoosterStage, DHE::BoosterStagePanel>("Booster Stage", rack::ENVELOPE_GENERATOR_TAG);
   registerModel<DHE::Cubic, DHE::CubicPanel>("Cubic", rack::FUNCTION_GENERATOR_TAG);
+  registerModel<DHE::Hostage, DHE::HostagePanel>("Hostage", rack::ENVELOPE_GENERATOR_TAG);
 
   plugin->addModel(modelFunc);
   plugin->addModel(modelFunc6);
-  plugin->addModel(modelHostage);
   plugin->addModel(modelRanger);
   plugin->addModel(modelStage);
   plugin->addModel(modelSwave);

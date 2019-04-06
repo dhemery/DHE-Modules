@@ -40,4 +40,4 @@ private:
   auto modulated(ParameterIds knob_param, InputIds cv_input) const -> float;
   void send_main_out(float voltage);
 };
-}
+} // namespace DHE

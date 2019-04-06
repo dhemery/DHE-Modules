@@ -1,7 +1,7 @@
 #pragma once
 
-#include <engine.hpp>
 #include <components/rotor.h>
+#include <engine.hpp>
 
 namespace DHE {
 
@@ -38,21 +38,22 @@ public:
   enum OutputIds { X_OUT, Y_OUT, OUTPUT_COUNT };
 
 private:
+  auto bounce() const -> float;
+  auto depth() const -> float;
+  auto is_bounce_free() const -> bool;
   auto modulated(ParameterIds knob_param, InputIds cv_input) const -> float;
   auto modulated(ParameterIds knob_param, InputIds cv_input,
                  ParameterIds av_param) const -> float;
   auto offset(int param) const -> float;
-  auto bounce() const -> float;
-  auto spin() const -> float;
-  auto depth() const -> float;
-  auto is_bounce_free() const -> bool;
   auto phase() const -> float;
-  auto x_offset() const -> float;
+  auto spin() const -> float;
   auto x_gain_in() const -> float;
+  auto x_offset() const -> float;
   auto y_gain_in() const -> float;
   auto y_offset() const -> float;
+
   static constexpr auto speed_curvature = 0.8f;
   Rotor spinner{};
   Rotor bouncer{};
 };
-}
+} // namespace DHE

@@ -1,10 +1,8 @@
-#include "display/controls.h"
-#include "modules/Cubic.h"
 #include "panels/CubicPanel.h"
 
 namespace DHE {
 
-CubicPanel::CubicPanel(rack::Module *cubic) : Panel{cubic, hp} {
+CubicPanel::CubicPanel(Cubic *module) : Panel{module, hp} {
   auto widget_right_edge = width();
 
   auto column_1 = width() / 4.f + 0.333333f;

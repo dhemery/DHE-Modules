@@ -15,31 +15,19 @@ class BoosterStage : public rack::Module {
 public:
   BoosterStage();
 
-  void step() override;
-
-  void forward();
-
-  void generate(float phase);
-
-  void prepare_to_generate();
-
-  auto defer_gate_is_active() const -> bool;
-
-  auto duration() const -> float;
-
-  auto sample_time() const -> float;;
-
   auto defer_gate_in() const -> bool;
-
-  auto stage_gate_in() const -> bool;
-
-  void set_active(bool active);
-
+  auto defer_gate_is_active() const -> bool;
+  auto duration() const -> float;
+  void forward();
+  void generate(float phase);
+  void prepare_to_generate();
+  auto sample_time() const -> float;
   void set_active_button(bool active);
-
+  void set_active(bool active);
   void set_eoc(bool eoc);
-
   void set_eoc_button(bool eoc);
+  auto stage_gate_in() const -> bool;
+  void step() override;
 
   const Selector<Range const *> duration_range_selector{
       Duration::ranges, [this](Range const *range) { duration_range = range; }};
@@ -74,25 +62,16 @@ public:
 
 private:
   auto envelope_in() const -> float;
-
   auto curvature() const -> float;
-
   auto is_s_shape() const -> bool;
-
   auto level() const -> float;
-
   auto modulated(ParameterIds knob_param, InputIds cv_input) const -> float;
-
   void send_active();
-
   void send_eoc();
-
   void send_out(float voltage);
-
   auto taper(float phase) const -> float;
 
   StageStateMachine<BoosterStage> state_machine{this};
-
   Range const *duration_range{&Duration::medium_range};
   Range const *level_range{&Signal::bipolar_range};
   bool is_active{false};

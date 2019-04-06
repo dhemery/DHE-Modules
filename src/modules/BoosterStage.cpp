@@ -1,12 +1,7 @@
-#include <utility>
-
-#include "engine.hpp"
-
+#include <modules/BoosterStage.h>
 #include "util/duration.h"
 #include "util/rotation.h"
 #include "util/signal.h"
-#include <modules/BoosterStage.h>
-#include <stages/stage-state-machine.h>
 
 namespace DHE {
 
