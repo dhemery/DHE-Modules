@@ -2,30 +2,18 @@
 
 #include "plugin.hpp"
 
-#include "modules/Blossom.h"
 #include "panels/BlossomPanel.h"
-#include "modules/BoosterStage.h"
 #include "panels/BoosterStagePanel.h"
-#include "modules/Cubic.h"
 #include "panels/CubicPanel.h"
-#include "modules/Func.h"
 #include "panels/FuncPanel.h"
-#include "modules/Func6.h"
 #include "panels/Func6Panel.h"
-#include "modules/Hostage.h"
 #include "panels/HostagePanel.h"
-#include "modules/Ranger.h"
 #include "panels/RangerPanel.h"
-#include "modules/Stage.h"
 #include "panels/StagePanel.h"
-#include "modules/Swave.h"
 #include "panels/SwavePanel.h"
-#include "modules/Tapers.h"
 #include "panels/TapersPanel.h"
-#include "modules/Upstage.h"
 #include "panels/UpstagePanel.h"
-
-extern rack::Model *modelXycloid;
+#include "panels/XycloidPanel.h"
 
 rack::Plugin *plugin;
 
@@ -55,6 +43,5 @@ void init(rack::Plugin *p) {
   registerModel<DHE::Swave, DHE::SwavePanel>("Swave", rack::WAVESHAPER_TAG);
   registerModel<DHE::Tapers, DHE::TapersPanel>("Tapers", rack::UTILITY_TAG);
   registerModel<DHE::Upstage, DHE::UpstagePanel>("Upstage", rack::ENVELOPE_GENERATOR_TAG);
-
-  plugin->addModel(modelXycloid);
+  registerModel<DHE::Xycloid, DHE::XycloidPanel>("Xycloid", rack::LFO_TAG);
 }
