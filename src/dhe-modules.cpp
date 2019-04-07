@@ -24,9 +24,14 @@ extern rack::Model *modelXycloid;
 rack::Plugin *plugin;
 
 template<typename TModule, typename TPanel, typename... TTag>
-void registerModel(const std::string& name, TTag... tags) {
-  rack::Model *model = rack::Model::create<TModule, TPanel, TTag...>("DHE-Modules", name, name, tags...);
+void registerModelWithSlug(const std::string& slug, const std::string& name, TTag... tags) {
+  rack::Model *model = rack::Model::create<TModule, TPanel, TTag...>("DHE-Modules", slug, name, tags...);
   plugin->addModel(model);
+}
+
+template<typename TModule, typename TPanel, typename... TTag>
+void registerModel(const std::string& name, TTag... tags) {
+  registerModelWithSlug<TModule, TPanel, TTag...>(name, name, tags...);
 }
 
 void init(rack::Plugin *p) {
@@ -36,12 +41,12 @@ void init(rack::Plugin *p) {
   plugin->version = TOSTRING(VERSION);
 
   registerModel<DHE::Blossom, DHE::BlossomPanel>("Blossom", rack::LFO_TAG);
-  registerModel<DHE::BoosterStage, DHE::BoosterStagePanel>("Booster Stage", rack::ENVELOPE_GENERATOR_TAG);
+  registerModelWithSlug<DHE::BoosterStage, DHE::BoosterStagePanel>("BoosterStage", "Booster Stage", rack::ENVELOPE_GENERATOR_TAG);
   registerModel<DHE::Cubic, DHE::CubicPanel>("Cubic", rack::FUNCTION_GENERATOR_TAG);
   registerModel<DHE::Hostage, DHE::HostagePanel>("Hostage", rack::ENVELOPE_GENERATOR_TAG);
   registerModel<DHE::Stage, DHE::StagePanel>("Stage", rack::ENVELOPE_GENERATOR_TAG);
   registerModel<DHE::Func, DHE::FuncPanel>("Func", rack::UTILITY_TAG);
-  registerModel<DHE::Func6, DHE::Func6Panel>("Func 6", rack::UTILITY_TAG);
+  registerModelWithSlug<DHE::Func6, DHE::Func6Panel>("Func6", "Func 6", rack::UTILITY_TAG);
 
   plugin->addModel(modelRanger);
   plugin->addModel(modelSwave);
