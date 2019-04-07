@@ -6,7 +6,7 @@ namespace DHE {
 
 template <typename M> class HoldGenerator : public PhaseAccumulator {
 public:
-  explicit HoldGenerator(M *module, std::function<void()> on_hold_complete)
+  HoldGenerator(M *module, std::function<void()> on_hold_complete)
       : module{module}, on_hold_complete{std::move(on_hold_complete)} {}
 
   auto duration() const -> float override { return module->duration(); }
@@ -22,23 +22,24 @@ private:
 
 template <typename M> class Holding : public StageState<M> {
 public:
-  explicit Holding(M *module, PhaseAccumulator *generator,
-                   const std::function<void()> &on_stage_gate_rise)
-      : StageState<M>{module, on_stage_gate_rise}, generator{generator} {}
+  Holding(M *module, const std::function<void()> &on_stage_gate_rise,
+          const std::function<void()> &on_stage_complete)
+      : StageState<M>{module, on_stage_gate_rise}, generator{
+                                                       module,
+                                                       on_stage_complete} {}
 
   void enter() override {
     this->become_active();
     this->forward();
-    generator->start();
+    generator.start();
   }
-  void step() override { generator->step(); }
-  PhaseAccumulator *generator;
+  void step() override { generator.step(); }
+  HoldGenerator<M> generator;
 };
 
 template <typename M> class Sustaining : public StageState<M> {
 public:
-  explicit Sustaining(M *module,
-                      const std::function<void()> &on_stage_gate_fall)
+  Sustaining(M *module, const std::function<void()> &on_stage_gate_fall)
       : StageState<M>{module, []() {}, on_stage_gate_fall} {}
 
   void enter() override {
@@ -61,11 +62,8 @@ protected:
   }
 
 private:
-  HoldGenerator<M> hold_generator{this->module,
-                                  [this]() { this->finish_stage(); }};
-
-  Holding<M> holding{this->module, &hold_generator,
-                     [this]() { this->enter(&holding); }};
+  Holding<M> holding{this->module, [this]() { this->enter(&holding); },
+                     [this]() { this->finish_stage(); }};
   Sustaining<M> sustaining{this->module, [this]() { this->finish_stage(); }};
 };
 } // namespace DHE
