@@ -20,8 +20,9 @@
 #include "panels/StagePanel.h"
 #include "modules/Swave.h"
 #include "panels/SwavePanel.h"
+#include "modules/Tapers.h"
+#include "panels/TapersPanel.h"
 
-extern rack::Model *modelTapers;
 extern rack::Model *modelUpstage;
 extern rack::Model *modelXycloid;
 
@@ -51,8 +52,8 @@ void init(rack::Plugin *p) {
   registerModel<DHE::Stage, DHE::StagePanel>("Stage", rack::ENVELOPE_GENERATOR_TAG);
   registerModel<DHE::Ranger, DHE::RangerPanel>("Ranger", rack::UTILITY_TAG);
   registerModel<DHE::Swave, DHE::SwavePanel>("Swave", rack::WAVESHAPER_TAG);
+  registerModel<DHE::Tapers, DHE::TapersPanel>("Tapers", rack::UTILITY_TAG);
 
-  plugin->addModel(modelTapers);
   plugin->addModel(modelUpstage);
   plugin->addModel(modelXycloid);
 }
