@@ -1,10 +1,10 @@
 #include <modules/Cubic.h>
 #include <util/range.h>
-#include <util/rotation.h>
+#include <util/gain.h>
 
 namespace DHE {
 
-Cubic::Cubic() : rack::Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT} {}
+Cubic::Cubic() : Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT} {}
 
 void Cubic::step() {
   auto a = coefficient(A_KNOB, A_CV);
@@ -30,17 +30,10 @@ auto Cubic::coefficient(Cubic::ParameterIds knob_param,
 
 auto Cubic::gain(const Cubic::ParameterIds knob_param,
                  const Cubic::InputIds cv_input) const -> float {
-  return Rotation::gain_multiplier(modulated(knob_param, cv_input));
+  return Gain::multiplier(modulated(knob_param, cv_input));
 }
 
 auto Cubic::main_in() const -> float { return inputs[MAIN_IN].value; }
-
-auto Cubic::modulated(Cubic::ParameterIds knob_param,
-                      Cubic::InputIds cv_input) const -> float {
-  auto rotation = params[knob_param].value;
-  auto cv = inputs[cv_input].value;
-  return Rotation::modulated(rotation, cv);
-}
 
 void Cubic::send_main_out(float voltage) { outputs[MAIN_OUT].value = voltage; }
 } // namespace DHE

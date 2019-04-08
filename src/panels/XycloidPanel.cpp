@@ -1,6 +1,6 @@
 #include <panels/XycloidPanel.h>
 
-#include <util/rotation.h>
+#include <util/gain.h>
 
 namespace DHE {
 
@@ -36,7 +36,7 @@ XycloidPanel::XycloidPanel(Xycloid *module) : Panel{module, hp} {
   dy = 15.f;
   const auto output_port_offset = 1.25f;
 
-  auto default_gain = Rotation::gain_range.normalize(1.f);
+  auto default_gain = Gain::range.normalize(1.f);
 
   y += dy;
   install(column_1, y, input(Xycloid::X_GAIN_CV));

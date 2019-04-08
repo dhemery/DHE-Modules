@@ -1,10 +1,11 @@
 #pragma once
 
+#include "Module.h"
 #include "engine.hpp"
 
 namespace DHE {
 
-class Swave : public rack::Module {
+class Swave : public Module {
 public:
   Swave();
   void step() override;
@@ -16,7 +17,6 @@ public:
 private:
   auto curve() const -> float;
   auto is_s() const -> bool;
-  auto modulated(int rotation_index, int cv_index) const -> float;
   void send_signal(float voltage);
   auto signal_in() const -> float;
 };

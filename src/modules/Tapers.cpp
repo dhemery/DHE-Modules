@@ -1,6 +1,5 @@
 #include <modules/Tapers.h>
 
-#include <util/rotation.h>
 #include <util/sigmoid.h>
 #include <util/signal.h>
 
@@ -13,8 +12,7 @@ void Tapers::step() {
   outputs[OUT_2].value = taper(level2(), is_uni_2(), curvature2(), is_s_2());
 }
 
-auto Tapers::curvature(Tapers::ParameterIds knob, Tapers::InputIds cv,
-                       Tapers::ParameterIds av) const -> float {
+auto Tapers::curvature(int knob, int cv, int av) const -> float {
   auto curvature = modulated(knob, cv, av);
   return Sigmoid::curvature(curvature);
 }
@@ -49,15 +47,6 @@ auto Tapers::level1() const -> float {
 
 auto Tapers::level2() const -> float {
   return modulated(LEVEL_2_KNOB, LEVEL_2_CV, LEVEL_2_AV);
-}
-
-auto Tapers::modulated(Tapers::ParameterIds knob_param,
-                       Tapers::InputIds cv_input,
-                       Tapers::ParameterIds av_param) const -> float {
-  auto rotation = params[knob_param].value;
-  auto cv = inputs[cv_input].value;
-  auto av = params[av_param].value;
-  return Rotation::modulated(rotation, cv, av);
 }
 
 auto Tapers::taper(float level, bool is_uni, float curve, bool is_s) const

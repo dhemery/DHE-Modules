@@ -1,10 +1,9 @@
 #include <modules/Hostage.h>
 
 #include "util/duration.h"
-#include "util/rotation.h"
 
 namespace DHE {
-Hostage::Hostage() : rack::Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT} {
+Hostage::Hostage() : Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT} {
   state_machine.start();
 }
 
@@ -44,13 +43,6 @@ auto Hostage::stage_gate_in() const -> bool {
 }
 
 auto Hostage::envelope_in() const -> float { return inputs[MAIN_IN].value; }
-
-auto Hostage::modulated(Hostage::ParameterIds knob_param,
-                        Hostage::InputIds cv_input) const -> float {
-  auto rotation = params[knob_param].value;
-  auto cv = inputs[cv_input].value;
-  return Rotation::modulated(rotation, cv);
-}
 
 void Hostage::send_out(float voltage) {
   outputs[MAIN_OUT].value = voltage;

@@ -1,17 +1,16 @@
 #pragma once
 
-#include "engine.hpp"
+#include "modules/Module.h"
 
 #include "display/controls.h"
 #include "display/panel.h"
 #include "util/duration.h"
-#include "util/rotation.h"
 #include "util/signal.h"
 #include <stages/stage-state-machine.h>
 
 namespace DHE {
 
-class BoosterStage : public rack::Module {
+class BoosterStage : public Module {
 public:
   BoosterStage();
 
@@ -65,7 +64,6 @@ private:
   auto curvature() const -> float;
   auto is_s_shape() const -> bool;
   auto level() const -> float;
-  auto modulated(ParameterIds knob_param, InputIds cv_input) const -> float;
   void send_active();
   void send_eoc();
   void send_out(float voltage);

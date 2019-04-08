@@ -1,7 +1,8 @@
 #pragma once
 
+#include <vector>
+
 #include "range.h"
-#include "selector.h"
 
 namespace DHE {
 namespace Signal {

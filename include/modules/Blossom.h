@@ -1,11 +1,11 @@
 #pragma once
 
+#include "modules/Module.h"
 #include <components/rotor.h>
-#include <engine.hpp>
 
 namespace DHE {
 
-class Blossom : public rack::Module {
+class Blossom : public Module {
 public:
   Blossom();
   void step() override;
@@ -41,9 +41,6 @@ private:
   auto bounce() const -> float;
   auto depth() const -> float;
   auto is_bounce_free() const -> bool;
-  auto modulated(ParameterIds knob_param, InputIds cv_input) const -> float;
-  auto modulated(ParameterIds knob_param, InputIds cv_input,
-                 ParameterIds av_param) const -> float;
   auto offset(int param) const -> float;
   auto phase() const -> float;
   auto spin() const -> float;

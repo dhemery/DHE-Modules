@@ -1,5 +1,5 @@
 #include <panels/BlossomPanel.h>
-#include <util/rotation.h>
+#include <util/gain.h>
 
 namespace DHE {
 BlossomPanel::BlossomPanel(Blossom *module) : Panel{module, hp} {
@@ -37,7 +37,7 @@ BlossomPanel::BlossomPanel(Blossom *module) : Panel{module, hp} {
   dy = 15.f;
   const auto output_port_offset = 1.25f;
 
-  auto default_gain = Rotation::gain_range.normalize(1.f);
+  auto default_gain = Gain::range.normalize(1.f);
 
   install(column_1, y, input(Blossom::X_GAIN_CV));
   install(column_2, y, knob<SmallKnob>(Blossom::X_GAIN_KNOB, default_gain));

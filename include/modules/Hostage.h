@@ -1,14 +1,14 @@
 #pragma once
 
-#include "engine.hpp"
+#include "modules/Module.h"
 
 #include "stages/hostage-state-machine.h"
 #include "util/duration.h"
-#include "util/rotation.h"
+
 
 namespace DHE {
 
-class Hostage : public rack::Module {
+class Hostage : public Module {
 public:
   Hostage();
   void step() override;
@@ -44,7 +44,6 @@ public:
 
 private:
   auto envelope_in() const -> float;
-  auto modulated(ParameterIds knob_param, InputIds cv_input) const -> float;
   void send_out(float voltage);
 
   HostageStateMachine<Hostage> state_machine{this};

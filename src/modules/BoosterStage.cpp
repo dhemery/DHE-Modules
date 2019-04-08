@@ -1,12 +1,12 @@
-#include <modules/BoosterStage.h>
 #include "util/duration.h"
-#include "util/rotation.h"
+#include "util/gain.h"
 #include "util/signal.h"
+#include <modules/BoosterStage.h>
 
 namespace DHE {
 
 BoosterStage::BoosterStage()
-    : rack::Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT} {
+    : Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT} {
   state_machine.start();
 }
 
@@ -80,13 +80,6 @@ auto BoosterStage::is_s_shape() const -> bool {
 auto BoosterStage::level() const -> float {
   auto level = modulated(LEVEL_KNOB, LEVEL_CV);
   return level_range->scale(level);
-}
-
-auto BoosterStage::modulated(BoosterStage::ParameterIds knob_param,
-                             BoosterStage::InputIds cv_input) const -> float {
-  auto rotation = params[knob_param].value;
-  auto cv = inputs[cv_input].value;
-  return Rotation::modulated(rotation, cv);
 }
 
 void BoosterStage::send_active() {

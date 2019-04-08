@@ -1,10 +1,10 @@
 #pragma once
 
-#include "engine.hpp"
+#include "modules/Module.h"
 
 namespace DHE {
 
-class Tapers : public rack::Module {
+class Tapers : public Module {
 public:
   Tapers();
 
@@ -29,8 +29,7 @@ public:
   enum OutputIds { OUT_1, OUT_2, OUTPUT_COUNT };
 
 private:
-  auto curvature(ParameterIds knob, InputIds cv, ParameterIds av) const
-      -> float;
+  auto curvature(int knob, int cv, int av) const -> float;
   auto curvature1() const -> float;
   auto curvature2() const -> float;
   auto is_uni_1() const -> bool;
@@ -39,8 +38,6 @@ private:
   auto is_s_2() const -> bool;
   auto level1() const -> float;
   auto level2() const -> float;
-  auto modulated(ParameterIds knob_param, InputIds cv_input,
-                 ParameterIds av_param) const -> float;
   auto taper(float level, bool is_uni, float curve, bool is_s) const -> float;
 };
 

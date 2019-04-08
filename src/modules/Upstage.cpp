@@ -1,7 +1,5 @@
 #include <modules/Upstage.h>
 
-#include "util/rotation.h"
-
 namespace DHE {
 
 Upstage::Upstage() : Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT} {}
@@ -17,13 +15,6 @@ auto Upstage::envelope_voltage() const -> float {
 }
 
 auto Upstage::level() const -> float { return modulated(LEVEL_KNOB, LEVEL_CV); }
-
-auto Upstage::modulated(Upstage::ParameterIds knob_param,
-                        Upstage::InputIds cv_input) const -> float {
-  auto rotation = params[knob_param].value;
-  auto cv = inputs[cv_input].value;
-  return Rotation::modulated(rotation, cv);
-}
 
 void Upstage::send_envelope(float voltage) {
   outputs[MAIN_OUT].value = voltage;

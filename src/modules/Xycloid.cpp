@@ -2,7 +2,7 @@
 
 #include <array>
 
-#include "util/rotation.h"
+#include "util/gain.h"
 #include "util/sigmoid.h"
 #include "util/signal.h"
 
@@ -40,22 +40,6 @@ void Xycloid::step() {
 
 auto Xycloid::is_wobble_ratio_free() const -> bool {
   return params[WOBBLE_RATIO_FREEDOM_SWITCH].value > 0.1f;
-}
-
-auto Xycloid::modulated(const Xycloid::ParameterIds &knob_param,
-                        const Xycloid::InputIds &cv_input) const -> float {
-  auto rotation = params[knob_param].value;
-  auto cv = inputs[cv_input].value;
-  return Rotation::modulated(rotation, cv);
-}
-
-auto Xycloid::modulated(const Xycloid::ParameterIds &knob_param,
-                        const Xycloid::InputIds &cv_input,
-                        const Xycloid::ParameterIds &av_param) const -> float {
-  auto rotation = params[knob_param].value;
-  auto cv = inputs[cv_input].value;
-  auto av = params[av_param].value;
-  return Rotation::modulated(rotation, cv, av);
 }
 
 auto Xycloid::offset(int param) const -> float {
@@ -111,11 +95,11 @@ auto Xycloid::wobble_ratio() const -> float {
 auto Xycloid::x_offset() const -> float { return offset(X_RANGE_SWITCH); }
 
 auto Xycloid::x_gain_in() const -> float {
-  return Rotation::gain_multiplier(modulated(X_GAIN_KNOB, X_GAIN_CV));
+  return Gain::multiplier(modulated(X_GAIN_KNOB, X_GAIN_CV));
 }
 
 auto Xycloid::y_gain_in() const -> float {
-  return Rotation::gain_multiplier(modulated(Y_GAIN_KNOB, Y_GAIN_CV));
+  return Gain::multiplier(modulated(Y_GAIN_KNOB, Y_GAIN_CV));
 }
 
 auto Xycloid::y_offset() const -> float { return offset(Y_RANGE_SWITCH); }

@@ -1,10 +1,10 @@
 #pragma once
 
-#include "engine.hpp"
+#include "modules/Module.h"
 
 namespace DHE {
 
-class Ranger : public rack::Module {
+class Ranger : public Module {
 public:
   Ranger();
 
@@ -26,12 +26,10 @@ public:
 
 private:
   auto level() const -> float;
-  auto limit(ParameterIds knob_param, InputIds cv_input, ParameterIds av_param,
+  auto limit(int knob_param, int cv_input, int av_param,
              int range_switch_param) const -> float;
   auto limit1() const -> float;
   auto limit2() const -> float;
-  auto modulated(ParameterIds knob_param, InputIds cv_input,
-                 ParameterIds av_parm) const -> float;
   void send_main_out(float voltage);
 };
 

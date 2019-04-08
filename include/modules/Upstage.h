@@ -1,13 +1,14 @@
 #pragma once
 
-#include "engine.hpp"
+#include "modules/Module.h"
 
 #include "util/range.h"
 #include "util/signal.h"
+#include "util/selector.h"
 
 namespace DHE {
 
-class Upstage : public rack::Module {
+class Upstage : public Module {
 public:
   Upstage();
 
@@ -30,7 +31,6 @@ public:
 private:
   auto envelope_voltage() const -> float;
   auto level() const -> float;
-  auto modulated(ParameterIds knob_param, InputIds cv_input) const -> float;
   void send_envelope(float voltage);
   void send_trigger(bool is_triggered);
   auto trigger_in() const -> bool;

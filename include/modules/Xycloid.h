@@ -1,13 +1,13 @@
 #pragma once
 
-#include "engine.hpp"
+#include "modules/Module.h"
 
 #include "components/rotor.h"
 #include "util/range.h"
 
 namespace DHE {
 
-class Xycloid : public rack::Module {
+class Xycloid : public Module {
 public:
   Xycloid();
 
@@ -43,10 +43,6 @@ public:
 
 private:
   auto is_wobble_ratio_free() const -> bool;
-  auto modulated(const ParameterIds &knob_param, const InputIds &cv_input) const
-      -> float;
-  auto modulated(const ParameterIds &knob_param, const InputIds &cv_input,
-                 const ParameterIds &av_param) const -> float;
   auto offset(int param) const -> float;
   auto throb_speed() const -> float;
   auto wobble_depth() const -> float;

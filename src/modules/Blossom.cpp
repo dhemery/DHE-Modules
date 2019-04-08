@@ -1,11 +1,11 @@
 #include "modules/Blossom.h"
-#include "util/rotation.h"
+#include "util/gain.h"
 #include "util/sigmoid.h"
 #include "util/signal.h"
 
 namespace DHE {
 
-Blossom::Blossom() : rack::Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT} {}
+Blossom::Blossom() : Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT} {}
 
 void Blossom::step() {
   auto spin_rate = spin();
@@ -23,22 +23,6 @@ void Blossom::step() {
 
   outputs[X_OUT].value = 5.f * x_gain_in() * (x + x_offset());
   outputs[Y_OUT].value = 5.f * y_gain_in() * (y + y_offset());
-}
-
-auto Blossom::modulated(Blossom::ParameterIds knob_param,
-                        Blossom::InputIds cv_input) const -> float {
-  auto rotation = params[knob_param].value;
-  auto cv = inputs[cv_input].value;
-  return Rotation::modulated(rotation, cv);
-}
-
-auto Blossom::modulated(Blossom::ParameterIds knob_param,
-                        Blossom::InputIds cv_input,
-                        Blossom::ParameterIds av_param) const -> float {
-  auto rotation = params[knob_param].value;
-  auto cv = inputs[cv_input].value;
-  auto av = params[av_param].value;
-  return Rotation::modulated(rotation, cv, av);
 }
 
 auto Blossom::offset(int param) const -> float {
@@ -79,11 +63,11 @@ auto Blossom::phase() const -> float {
 auto Blossom::x_offset() const -> float { return offset(X_RANGE_SWITCH); }
 
 auto Blossom::x_gain_in() const -> float {
-  return Rotation::gain_multiplier(modulated(X_GAIN_KNOB, X_GAIN_CV));
+  return Gain::multiplier(modulated(X_GAIN_KNOB, X_GAIN_CV));
 }
 
 auto Blossom::y_gain_in() const -> float {
-  return Rotation::gain_multiplier(modulated(Y_GAIN_KNOB, Y_GAIN_CV));
+  return Gain::multiplier(modulated(Y_GAIN_KNOB, Y_GAIN_CV));
 }
 
 auto Blossom::y_offset() const -> float { return offset(Y_RANGE_SWITCH); }

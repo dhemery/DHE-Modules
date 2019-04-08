@@ -1,10 +1,10 @@
 #pragma once
 
-#include <engine.hpp>
+#include "modules/Module.h"
 
 namespace DHE {
 
-class Cubic : public rack::Module {
+class Cubic : public Module {
 public:
   Cubic();
 
@@ -37,7 +37,6 @@ private:
   auto coefficient(ParameterIds knob_param, InputIds cv_param) const -> float;
   auto gain(ParameterIds knob_param, InputIds cv_input) const -> float;
   auto main_in() const -> float;
-  auto modulated(ParameterIds knob_param, InputIds cv_input) const -> float;
   void send_main_out(float voltage);
 };
 } // namespace DHE
