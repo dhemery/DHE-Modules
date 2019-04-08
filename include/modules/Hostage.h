@@ -2,9 +2,8 @@
 
 #include "modules/Module.h"
 
-#include "stages/hostage-state-machine.h"
+#include "envelopes/hostage-state-machine.h"
 #include "util/duration.h"
-
 
 namespace DHE {
 
@@ -17,7 +16,8 @@ public:
   auto duration() const -> float;
   void forward();
   auto is_sustain_mode() const -> bool;
-  auto sample_time() const -> float;;
+  auto sample_time() const -> float;
+  ;
   void set_active(bool active);
   void set_eoc(bool eoc);
   auto stage_gate_in() const -> bool;

@@ -44,7 +44,5 @@ auto Hostage::stage_gate_in() const -> bool {
 
 auto Hostage::envelope_in() const -> float { return inputs[MAIN_IN].value; }
 
-void Hostage::send_out(float voltage) {
-  outputs[MAIN_OUT].value = voltage;
-}
+void Hostage::send_out(float voltage) { outputs[MAIN_OUT].value = voltage; }
 } // namespace DHE

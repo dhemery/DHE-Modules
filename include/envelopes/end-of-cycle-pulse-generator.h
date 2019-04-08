@@ -14,8 +14,9 @@ namespace DHE {
  */
 template <typename M> class EndOfCyclePulseGenerator : public PhaseAccumulator {
 public:
-  explicit EndOfCyclePulseGenerator(M *module, std::function<void()> on_eoc_rise,
-                          std::function<void()> on_eoc_fall)
+  explicit EndOfCyclePulseGenerator(M *module,
+                                    std::function<void()> on_eoc_rise,
+                                    std::function<void()> on_eoc_fall)
       : module{module}, on_eoc_rise{std::move(on_eoc_rise)},
         on_eoc_fall{std::move(on_eoc_fall)} {}
 

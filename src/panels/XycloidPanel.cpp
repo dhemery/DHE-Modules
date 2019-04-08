@@ -60,9 +60,7 @@ void XycloidPanel::appendContextMenu(rack::Menu *menu) {
       rack::construct<rack::MenuLabel>(&rack::MenuLabel::text, "Options"));
   menu->addChild(new BooleanOption(
       "Musical Ratios",
-      [xycloid](bool setting) {
-        xycloid->set_musical_wobble_ratios(setting);
-      },
+      [xycloid](bool setting) { xycloid->set_musical_wobble_ratios(setting); },
       [xycloid] { return xycloid->is_musical_wobble_ratios(); }));
 }
 

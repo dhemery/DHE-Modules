@@ -1,9 +1,9 @@
 #pragma once
 
-#include <components/mode.h>
-#include <stages/components/defer-gate.h>
-#include <stages/components/end-of-cycle-pulse-generator.h>
-#include <stages/components/stage-gate.h>
+#include "components/mode.h"
+#include "defer-gate.h"
+#include "end-of-cycle-pulse-generator.h"
+#include "stage-gate.h"
 
 namespace DHE {
 template <typename M> class StageState : public DHE::Mode {

@@ -1,6 +1,6 @@
 #pragma once
 
-#include <stages/components/state-machine.h>
+#include "envelopes/state-machine.h"
 
 namespace DHE {
 template <typename M> class StageGenerator : public PhaseAccumulator {

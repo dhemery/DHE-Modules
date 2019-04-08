@@ -10,8 +10,8 @@ namespace DHE {
  */
 template <typename M> class StageGate : public Gate {
 public:
-  explicit StageGate(M *module, const std::function<void()>& on_rise,
-                     const std::function<void()>& on_fall)
+  explicit StageGate(M *module, const std::function<void()> &on_rise,
+                     const std::function<void()> &on_fall)
       : Gate{on_rise, on_fall}, module{module} {}
 
 protected:

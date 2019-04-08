@@ -1,6 +1,6 @@
-#include <modules/Stage.h>
 #include "util/duration.h"
 #include "util/signal.h"
+#include <modules/Stage.h>
 
 namespace DHE {
 Stage::Stage() : rack::Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT} {
@@ -59,4 +59,4 @@ void Stage::step() { state_machine.step(); }
 auto Stage::taper(float phase) const -> float {
   return Sigmoid::j_taper(phase, curvature());
 }
-}
+} // namespace DHE

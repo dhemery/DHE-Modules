@@ -4,9 +4,9 @@
 
 #include "display/controls.h"
 #include "display/panel.h"
+#include "envelopes/stage-state-machine.h"
 #include "util/duration.h"
 #include "util/signal.h"
-#include <stages/stage-state-machine.h>
 
 namespace DHE {
 

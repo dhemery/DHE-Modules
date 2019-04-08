@@ -1,7 +1,7 @@
 
 #pragma once
-#include <functional>
 #include "components/gate.h"
+#include <functional>
 
 namespace DHE {
 

@@ -1,4 +1,4 @@
-#include "stages/components/defer-gate.h"
+#include "stages/defer-gate.h"
 #include <gmock/gmock.h>
 
 namespace {

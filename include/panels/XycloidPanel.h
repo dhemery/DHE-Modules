@@ -5,7 +5,6 @@
 
 namespace DHE {
 
-
 class XycloidPanel : public Panel<XycloidPanel> {
 public:
   explicit XycloidPanel(Xycloid *module);

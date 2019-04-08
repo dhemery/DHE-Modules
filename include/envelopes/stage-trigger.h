@@ -1,6 +1,6 @@
 #pragma once
-#include <functional>
 #include "components/trigger.h"
+#include <functional>
 
 namespace DHE {
 

@@ -1,6 +1,6 @@
 #include <modules/Cubic.h>
-#include <util/range.h>
 #include <util/gain.h>
+#include <util/range.h>
 
 namespace DHE {
 

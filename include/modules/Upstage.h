@@ -3,8 +3,8 @@
 #include "modules/Module.h"
 
 #include "util/range.h"
-#include "util/signal.h"
 #include "util/selector.h"
+#include "util/signal.h"
 
 namespace DHE {
 
@@ -28,6 +28,7 @@ public:
 
   const Selector<Range const *> level_range_selector{
       Signal::ranges, [this](Range const *range) { level_range = range; }};
+
 private:
   auto envelope_voltage() const -> float;
   auto level() const -> float;

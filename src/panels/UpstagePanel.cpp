@@ -16,9 +16,9 @@ UpstagePanel::UpstagePanel(Upstage *module) : Panel{module, hp} {
 
   y += dy;
   install(column_1, y, input(Upstage::LEVEL_CV));
-  install(column_3, y,
-          toggle<2>(Upstage::LEVEL_RANGE_SWITCH, 1,
-                    module->level_range_selector));
+  install(
+      column_3, y,
+      toggle<2>(Upstage::LEVEL_RANGE_SWITCH, 1, module->level_range_selector));
 
   y += dy;
   install(column_1, y, button(Upstage::WAIT_BUTTON));

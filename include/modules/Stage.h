@@ -1,8 +1,7 @@
 #pragma once
 
-#include <engine.hpp>
-
-#include <stages/stage-state-machine.h>
+#include "engine.hpp"
+#include "envelopes/stage-state-machine.h"
 
 namespace DHE {
 
@@ -16,7 +15,8 @@ public:
   void forward();
   void generate(float phase);
   void prepare_to_generate();
-  auto sample_time() const -> float;;
+  auto sample_time() const -> float;
+  ;
   void set_active(bool active);
   void set_eoc(bool eoc);
   auto stage_gate_in() const -> bool;
@@ -38,4 +38,4 @@ private:
   StageStateMachine<Stage> state_machine{this};
   float start_voltage{0.f};
 };
-}
+} // namespace DHE

@@ -1,7 +1,7 @@
 #pragma once
 
-#include <cmath>
 #include "range.h"
+#include <cmath>
 
 namespace DHE {
 namespace Sigmoid {

@@ -23,7 +23,6 @@ public:
   void set_multiplication_range(int selection);
 
 private:
-
   const rack::Input &input_port;
   bool is_multiplication = false;
   Range const *addition_range{&Signal::bipolar_range};
