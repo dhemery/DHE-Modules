@@ -15,8 +15,9 @@ public:
 
 private:
   auto curve() const -> float;
+  auto is_s() const -> bool;
+  auto modulated(int rotation_index, int cv_index) const -> float;
   void send_signal(float voltage);
-  auto shape() const -> float;
   auto signal_in() const -> float;
 };
 
