@@ -38,4 +38,4 @@ CubicPanel::CubicPanel(Cubic *module) : Panel{module, hp} {
   install(column_1, y, input(Cubic::MAIN_IN));
   install(column_2, y, output(Cubic::MAIN_OUT));
 }
-}
+} // namespace DHE

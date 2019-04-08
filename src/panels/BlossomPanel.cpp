@@ -50,4 +50,4 @@ BlossomPanel::BlossomPanel(Blossom *module) : Panel{module, hp} {
   install(column_3, y, toggle<2>(Blossom::Y_RANGE_SWITCH, 0));
   install(column_4, y + output_port_offset, output(Blossom::Y_OUT));
 }
-}
+} // namespace DHE

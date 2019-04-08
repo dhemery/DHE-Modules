@@ -30,4 +30,4 @@ auto Module::modulated(int knob_param, int cv_input, int av_param) const
   auto av = params[av_param].value;
   return rotation + av_multiplier(av) * cv_offset(cv);
 }
-}
+} // namespace DHE

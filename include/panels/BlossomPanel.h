@@ -11,4 +11,4 @@ public:
   static constexpr auto module_slug = "blossom";
   static constexpr auto hp = 11;
 };
-}
+} // namespace DHE

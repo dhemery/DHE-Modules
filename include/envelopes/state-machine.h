@@ -8,9 +8,9 @@
 namespace DHE {
 template <typename M> class StageState : public DHE::Mode {
 public:
-  explicit StageState(M *module,
-                      std::function<void()> on_stage_gate_rise = []() {},
-                      std::function<void()> on_stage_gate_fall = []() {})
+  explicit StageState(
+      M *module, std::function<void()> on_stage_gate_rise = []() {},
+      std::function<void()> on_stage_gate_fall = []() {})
       : on_stage_gate_rise{std::move(on_stage_gate_rise)},
         on_stage_gate_fall{std::move(on_stage_gate_fall)}, module{module} {}
 

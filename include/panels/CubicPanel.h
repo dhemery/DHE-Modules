@@ -11,4 +11,4 @@ public:
   static constexpr auto module_slug = "cubic";
   static constexpr auto hp = 5;
 };
-}
+} // namespace DHE
