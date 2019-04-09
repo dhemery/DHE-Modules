@@ -1,12 +1,12 @@
 #pragma once
 
 #include <engine.hpp>
+#include <util/gain.h>
 #include <util/signal.h>
 
 namespace DHE {
 
 static constexpr auto attenuation_range = Range{0.f, 1.f};
-static constexpr auto gain_range = Range{0.f, 2.f};
 static constexpr auto invertible_attenuation_range = Range{-1.f, 1.f};
 static constexpr auto invertible_gain_range = Range{-2.f, 2.f};
 
@@ -26,7 +26,7 @@ private:
   const rack::Input &input_port;
   bool is_multiplication = false;
   Range const *addition_range{&Signal::bipolar_range};
-  Range const *multiplication_range{&gain_range};
+  Range const *multiplication_range{&Gain::range};
   const float &amount;
   float &output;
 };

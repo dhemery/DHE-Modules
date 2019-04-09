@@ -4,6 +4,7 @@
 
 #include "envelopes/hostage-state-machine.h"
 #include "util/duration.h"
+#include "util/selector.h"
 
 namespace DHE {
 
@@ -22,8 +23,9 @@ public:
   void set_eoc(bool eoc);
   auto stage_gate_in() const -> bool;
 
-  const Selector<Range const *> duration_range_selector{
-      Duration::ranges, [this](Range const *range) { duration_range = range; }};
+  const Selector<Range const *, 3> duration_range_selector{
+      Duration::ranges(),
+      [this](Range const *range) { duration_range = range; }};
 
   enum InputIds {
     DEFER_GATE_IN,

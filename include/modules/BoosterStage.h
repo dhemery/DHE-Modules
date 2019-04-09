@@ -6,6 +6,7 @@
 #include "display/panel.h"
 #include "envelopes/stage-state-machine.h"
 #include "util/duration.h"
+#include "util/selector.h"
 #include "util/signal.h"
 
 namespace DHE {
@@ -28,10 +29,10 @@ public:
   auto stage_gate_in() const -> bool;
   void step() override;
 
-  const Selector<Range const *> duration_range_selector{
-      Duration::ranges, [this](Range const *range) { duration_range = range; }};
-  const Selector<Range const *> level_range_selector{
-      Signal::ranges, [this](Range const *range) { level_range = range; }};
+  const Selector<Range const *, 3> duration_range_selector{
+      Duration::ranges(), [this](Range const *range) { duration_range = range; }};
+  const Selector<Range const *, 2> level_range_selector{
+      Signal::ranges(), [this](Range const *range) { level_range = range; }};
 
   enum ParameterIds {
     ACTIVE_BUTTON,

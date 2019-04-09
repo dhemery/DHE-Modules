@@ -2,7 +2,7 @@
 
 namespace DHE {
 
-inline auto scale(float proportion, float lower_bound, float upper_bound)
+static inline auto scale(float proportion, float lower_bound, float upper_bound)
     -> float {
   return proportion * (upper_bound - lower_bound) + lower_bound;
 }

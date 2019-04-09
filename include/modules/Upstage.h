@@ -26,8 +26,8 @@ public:
 
   enum OutputIds { TRIGGER_OUT, MAIN_OUT, OUTPUT_COUNT };
 
-  const Selector<Range const *> level_range_selector{
-      Signal::ranges, [this](Range const *range) { level_range = range; }};
+  const Selector<Range const *, 2> level_range_selector{
+      Signal::ranges(), [this](Range const *range) { level_range = range; }};
 
 private:
   auto envelope_voltage() const -> float;
@@ -37,7 +37,7 @@ private:
   auto trigger_in() const -> bool;
   auto wait_in() const -> bool;
 
-  Range const *level_range = &Signal::bipolar_range;
+  Range const *level_range{&Signal::bipolar_range};
 };
 
 } // namespace DHE
