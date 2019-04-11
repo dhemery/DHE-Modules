@@ -5,9 +5,18 @@
 #include <modules/Stage.h>
 
 namespace DHE {
-Stage::Stage(const std::function<float()>& sample_time)
+Stage::Stage(const std::function<float()> &sample_time)
     : rack::Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT},
-      state_machine{this, sample_time} {
+      state_machine{[this]() -> bool { return defer_gate_is_active(); },
+                    [this]() -> bool { return defer_gate_in(); },
+                    [this]() -> bool { return stage_gate_in(); },
+                    [this]() -> float { return duration(); },
+                    sample_time,
+                    [this](bool active) { set_active(active); },
+                    [this](bool eoc) { set_eoc(eoc); },
+                    [this]() { prepare_to_generate(); },
+                    [this](float phase) { generate(phase); },
+                    [this]() { forward(); }} {
   state_machine.start();
 }
 

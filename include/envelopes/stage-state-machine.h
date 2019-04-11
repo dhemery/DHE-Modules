@@ -1,56 +1,77 @@
+#include <utility>
+
+#include <utility>
+
+#include <utility>
+
+#include <utility>
+
 #pragma once
 
 #include "envelopes/state-machine.h"
 
 namespace DHE {
-template <typename M> class StageGenerator : public PhaseAccumulator {
+class StageGenerator : public PhaseAccumulator {
 public:
-  StageGenerator(M *module, const std::function<float()> &sample_time,
-                 std::function<void()> on_stage_complete)
-      : PhaseAccumulator{sample_time}, module{module},
-        on_stage_complete{std::move(on_stage_complete)} {}
-
-  auto duration() const -> float override { return module->duration(); }
-
-  void on_advance(float phase) const override { module->generate(phase); }
-
-  void on_finish() const override { on_stage_complete(); }
-
-private:
-  M *const module;
-  const std::function<void()> on_stage_complete;
+  StageGenerator(const std::function<float()> &duration,
+                 const std::function<float()> &sample_time,
+                 const std::function<void(float)> &generate,
+                 const std::function<void()> &on_stage_complete)
+      : PhaseAccumulator{duration, sample_time, []() {}, generate,
+                         on_stage_complete} {}
 };
 
-template <typename M> class Generating : public StageState<M> {
+class Generating : public StageState {
 public:
-  Generating(M *module, const std::function<float()> &sample_time,
+  Generating(const std::function<float()> &duration,
+             const std::function<float()> &sample_time,
+             std::function<void(bool)> set_active,
+             std::function<void()> prepare_to_generate,
+             const std::function<void(float)> &generate,
              const std::function<void()> &on_stage_gate_rise,
              const std::function<void()> &on_stage_complete)
-      : StageState<M>{module, on_stage_gate_rise}, generator{
-                                                       module, sample_time,
-                                                       on_stage_complete} {}
+      : StageState{on_stage_gate_rise}, set_active{std::move(set_active)},
+        prepare_to_generate{std::move(prepare_to_generate)},
+        generator{duration, sample_time, generate, on_stage_complete} {}
 
   void enter() override {
-    this->become_active();
-    this->prepare_to_generate();
+    set_active(true);
+    prepare_to_generate();
     generator.start();
   }
   void step() override { generator.step(); }
 
-  StageGenerator<M> generator;
+  const std::function<void(bool)> set_active;
+  const std::function<void()> prepare_to_generate;
+  StageGenerator generator;
 };
 
-template <typename M> class StageStateMachine : public StateMachine<M> {
+class StageStateMachine : public StateMachine {
 public:
-  StageStateMachine(M *module, std::function<float()> const &sample_time)
-      : StateMachine<M>{module, sample_time},
-        generating{module, sample_time, [this]() { start_generating(); },
+  StageStateMachine(const std::function<bool()> &defer_is_active,
+                    const std::function<bool()> &defer_is_up,
+                    const std::function<bool()> &stage_is_up,
+                    const std::function<float()> &duration,
+                    std::function<float()> const &sample_time,
+                    const std::function<void(bool)> &set_active,
+                    const std::function<void(bool)> &set_eoc,
+                    const std::function<void()> &prepare_to_generate,
+                    const std::function<void(float)> &generate,
+                    const std::function<void()> &forward)
+      : StateMachine{sample_time, defer_is_active, defer_is_up, stage_is_up,
+                     set_active,  set_eoc,         forward},
+        generating{duration,
+                   sample_time,
+                   set_active,
+                   prepare_to_generate,
+                   generate,
+                   [this]() { start_generating(); },
                    [this]() { this->finish_stage(); }} {}
 
 protected:
   void start_generating() override { this->enter(&generating); };
 
 private:
-  Generating<M> generating;
+  Generating generating;
 };
 } // namespace DHE

@@ -1,5 +1,8 @@
 #pragma once
 
+#include <functional>
+#include <utility>
+
 namespace DHE {
 
 /**
@@ -7,31 +10,29 @@ namespace DHE {
  */
 class EdgeDetector {
 public:
+  EdgeDetector(std::function<bool()> state_in, std::function<void()> on_rise,
+               std::function<void()> on_fall)
+      : state_in{std::move(state_in)}, on_rise{std::move(on_rise)},
+        on_fall{std::move(on_fall)} {}
+
   /**
    * Retrieves the current state of the tracked value and generates an event
    * if the state changes.
    */
   void step() {
-    auto old_state = state;
-    state = state_in();
-    if (state != old_state) {
-      on_state_change(state);
-    }
+    if (state_in() == state)
+      return;
+    state = !state;
+    if (state)
+      on_rise();
+    else
+      on_fall();
   }
-
-protected:
-  /**
-   * Retrieves the current state of the tracked value.
-   */
-  virtual auto state_in() const -> bool = 0;
-
-  /**
-   * The event generated whenever the tracked value changes.
-   * @param state the new value of the tracked value
-   */
-  virtual void on_state_change(bool state) = 0;
 
 private:
   bool state = false;
+  const std::function<bool()> state_in;
+  const std::function<void()> on_rise;
+  const std::function<void()> on_fall;
 };
 } // namespace DHE

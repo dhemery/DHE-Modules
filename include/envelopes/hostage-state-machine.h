@@ -1,65 +1,89 @@
 #pragma once
 
+#include <utility>
+
 #include "envelopes/state-machine.h"
 
 namespace DHE {
 
-template <typename M> class HoldGenerator : public PhaseAccumulator {
+class HoldGenerator : public PhaseAccumulator {
 public:
-  HoldGenerator(M *module, const std::function<float()> &sample_time,
-                std::function<void()> on_hold_complete)
-      : PhaseAccumulator{sample_time}, module{module},
-        on_hold_complete{std::move(on_hold_complete)} {}
-
-  auto duration() const -> float override { return module->duration(); }
-
-  void on_finish() const override { on_hold_complete(); }
-
-private:
-  M *const module;
-  const std::function<void()> on_hold_complete;
+  HoldGenerator(std::function<float()> duration,
+                const std::function<float()> &sample_time,
+                const std::function<void()> &on_hold_complete)
+      : PhaseAccumulator{std::move(duration), sample_time, []() {},
+                         [](float phase) {}, on_hold_complete} {}
 };
 
-template <typename M> class Holding : public StageState<M> {
+class Holding : public StageState {
 public:
-  Holding(M *module, const std::function<float()>& sample_time,
+  Holding(std::function<float()> duration,
+          const std::function<float()> &sample_time,
+          std::function<void(bool)> set_active, std::function<void()> forward,
           const std::function<void()> &on_stage_gate_rise,
           const std::function<void()> &on_stage_complete)
-      : StageState<M>{module, on_stage_gate_rise}, generator{
-                                                       module, sample_time,
-                                                       on_stage_complete} {}
+      : StageState{on_stage_gate_rise}, set_active{std::move(set_active)},
+        forward{std::move(forward)}, generator{std::move(duration), sample_time,
+                                               on_stage_complete} {}
 
   void enter() override {
-    this->become_active();
-    this->forward();
+    set_active(true);
+    forward();
     generator.start();
   }
   void step() override { generator.step(); }
-  HoldGenerator<M> generator;
+
+  const std::function<void(bool)> set_active;
+  const std::function<void()> forward;
+  HoldGenerator generator;
 };
 
-template <typename M> class Sustaining : public StageState<M> {
+class Sustaining : public StageState {
 public:
-  Sustaining(M *module, const std::function<void()> &on_stage_gate_fall)
-      : StageState<M>{module, []() {}, on_stage_gate_fall} {}
+  Sustaining(std::function<void(bool)> set_active,
+             std::function<void()> forward,
+             const std::function<void()> &on_stage_gate_fall)
+      : StageState{[]() {}, on_stage_gate_fall},
+        set_active{std::move(set_active)}, forward{std::move(forward)} {}
 
   void enter() override {
-    this->become_active();
-    this->forward();
+    set_active(true);
+    forward();
   }
+
+private:
+  const std::function<void(bool)> set_active;
+  const std::function<void()> forward;
 };
 
-template <typename M> class HostageStateMachine : public StateMachine<M> {
+class HostageStateMachine : public StateMachine {
 public:
-  explicit HostageStateMachine(M *module,
-                               const std::function<float()> &sample_time)
-      : StateMachine<M>{module, sample_time},
-        holding{module, sample_time, [this]() { this->enter(&holding); },
-                [this]() { this->finish_stage(); }} {}
+  HostageStateMachine(const std::function<float()> &duration,
+                      const std::function<float()> &sample_time,
+                      const std::function<void(bool)> &set_active,
+                      const std::function<void(bool)> &set_eoc,
+                      const std::function<bool()> &defer_is_active,
+                      const std::function<bool()> &defer_is_up,
+                      const std::function<bool()> &stage_is_up,
+                      std::function<bool()> is_sustain_mode,
+                      const std::function<void()> &forward)
+      : StateMachine{sample_time, defer_is_active, defer_is_up, stage_is_up,
+                     set_active,  set_eoc,         forward},
+        is_sustain_mode{std::move(is_sustain_mode)}, holding{duration,
+                                                             sample_time,
+                                                             set_active,
+                                                             forward,
+                                                             [this]() {
+                                                               enter(&holding);
+                                                             },
+                                                             [this]() {
+                                                               finish_stage();
+                                                             }},
+        sustaining{set_active, forward, [this]() { finish_stage(); }} {}
 
 protected:
   void start_generating() override {
-    if (this->module->is_sustain_mode()) {
+    if (is_sustain_mode()) {
       this->enter(&sustaining);
     } else {
       this->enter(&holding);
@@ -67,7 +91,8 @@ protected:
   }
 
 private:
-  Holding<M> holding;
-  Sustaining<M> sustaining{this->module, [this]() { this->finish_stage(); }};
+  const std::function<bool()> is_sustain_mode;
+  Holding holding;
+  Sustaining sustaining;
 }; // namespace DHE
 } // namespace DHE

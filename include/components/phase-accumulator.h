@@ -1,5 +1,13 @@
 #include <utility>
 
+#include <utility>
+
+#include <utility>
+
+#include <utility>
+
+#include <utility>
+
 #pragma once
 #include <algorithm>
 
@@ -10,8 +18,14 @@ namespace DHE {
  */
 class PhaseAccumulator {
 public:
-  explicit PhaseAccumulator(std::function<float()> sample_time)
-      : sample_time{std::move(sample_time)} {}
+  explicit PhaseAccumulator(std::function<float()> duration,
+                            std::function<float()> sample_time,
+                            std::function<void()> on_start,
+                            std::function<void(float)> on_advance,
+                            std::function<void()> on_finish)
+      : duration{std::move(duration)},
+        sample_time{std::move(sample_time)}, on_start{std::move(on_start)},
+        on_advance{std::move(on_advance)}, on_finish{std::move(on_finish)} {}
   /**
    * Sets the phase to 0 and generates an on_start event.
    */
@@ -39,13 +53,12 @@ public:
   void stop() { phase = 1.f; }
 
 protected:
-  virtual auto duration() const -> float = 0;
-  virtual void on_start() const {};
-  virtual void on_advance(float phase) const {};
-  virtual void on_finish() const {};
-
 private:
   float phase{0.f};
+  const std::function<float()> duration;
   const std::function<float()> sample_time;
+  const std::function<void()> on_start;
+  const std::function<void(float)> on_advance;
+  const std::function<void()> on_finish;
 };
 } // namespace DHE

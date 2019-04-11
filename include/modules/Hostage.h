@@ -47,7 +47,7 @@ private:
   auto envelope_in() const -> float;
   void send_out(float voltage);
 
-  HostageStateMachine<Hostage> state_machine;
+  HostageStateMachine state_machine;
   Range const *duration_range{&Duration::medium_range};
 };
 } // namespace DHE

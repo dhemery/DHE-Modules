@@ -70,7 +70,7 @@ private:
   void send_out(float voltage);
   auto taper(float phase) const -> float;
 
-  StageStateMachine<BoosterStage> state_machine;
+  StageStateMachine state_machine;
   Range const *duration_range{&Duration::medium_range};
   Range const *level_range{&Signal::bipolar_range};
   bool is_active{false};

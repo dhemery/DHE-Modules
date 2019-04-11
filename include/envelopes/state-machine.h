@@ -1,77 +1,104 @@
 #include <utility>
 
+#include <utility>
+
 #pragma once
 
+#include <utility>
+
+#include "components/edge-detector.h"
 #include "components/mode.h"
-#include "defer-gate.h"
 #include "end-of-cycle-pulse-generator.h"
-#include "stage-gate.h"
 
 namespace DHE {
-template <typename M> class StageState : public DHE::Mode {
+class StageState : public DHE::Mode {
 public:
-  explicit StageState(M *module,
-                      std::function<void()> on_stage_gate_rise = []() {},
+  explicit StageState(std::function<void()> on_stage_gate_rise = []() {},
                       std::function<void()> on_stage_gate_fall = []() {})
       : on_stage_gate_rise{std::move(on_stage_gate_rise)},
-        on_stage_gate_fall{std::move(on_stage_gate_fall)}, module{module} {}
+        on_stage_gate_fall{std::move(on_stage_gate_fall)} {}
 
   const std::function<void()> on_stage_gate_rise;
   const std::function<void()> on_stage_gate_fall;
+};
 
-protected:
-  void become_active() const { module->set_active(true); }
-  void become_inactive() const { module->set_active(false); }
-  void forward() const { module->forward(); }
-  void prepare_to_generate() const { module->prepare_to_generate(); }
+/**
+ * A deferring stage module is active, and steps by forwarding its input
+ * signal to its output port.
+ */
+class Deferring : public StageState {
+public:
+  explicit Deferring(std::function<void(bool)> set_active,
+                     std::function<void()> forward)
+      : StageState{}, set_active{std::move(set_active)}, forward{std::move(
+                                                             forward)} {}
+
+  void enter() override { set_active(true); }
+  void step() override { forward(); }
 
 private:
-  M *const module;
+  const std::function<void(bool)> set_active;
+  const std::function<void()> forward;
 };
 
 /**
- * A deferring stage module is active, and steps by forwarding its input signal
- * to its output port.
+ * A forwarding stage module is active, and steps by forwarding its input
+ * signal to its output port.
  */
-template <typename M> class Deferring : public StageState<M> {
+class Forwarding : public StageState {
 public:
-  explicit Deferring(M *module) : StageState<M>{module, []() {}} {}
+  explicit Forwarding(const std::function<void()> &on_stage_gate_rise,
+                      std::function<void(bool)> set_active,
+                      std::function<void()> forward)
+      : StageState{on_stage_gate_rise},
+        set_active{std::move(set_active)}, forward{std::move(forward)} {}
 
-  void enter() override { this->become_active(); }
-  void step() override { this->forward(); }
-};
+  void enter() override { set_active(true); }
 
-/**
- * A forwarding stage module is active, and steps by forwarding its input signal
- * to its output port.
- */
-template <typename M> class Forwarding : public StageState<M> {
-public:
-  explicit Forwarding(M *module,
-                      const std::function<void()> &on_stage_gate_rise)
-      : StageState<M>{module, on_stage_gate_rise} {}
+  void step() override { forward(); }
 
-  void enter() override { this->become_inactive(); }
-
-  void step() override { this->forward(); }
+private:
+  const std::function<void(bool)> set_active;
+  const std::function<void()> forward;
 };
 
 /**
  * An idling stage module is inactive and takes no action on each step.
  */
-template <typename M> class Idling : public StageState<M> {
+class Idling : public StageState {
 public:
-  explicit Idling(M *module, const std::function<void()> &on_stage_gate_rise)
-      : StageState<M>{module, on_stage_gate_rise} {}
+  explicit Idling(const std::function<void()> &on_stage_gate_rise,
+                  std::function<void(bool)> set_active)
+      : StageState{on_stage_gate_rise}, set_active{std::move(set_active)} {}
 
-  void enter() override { this->become_inactive(); }
+  void enter() override { set_active(false); }
+
+private:
+  std::function<void(bool)> set_active;
 };
 
-template <typename M> class StateMachine {
+class StateMachine {
 public:
-  explicit StateMachine(M *module, const std::function<float()>& sample_time)
-      : module{module}, eoc_generator{sample_time, [this]() { on_eoc_rise(); },
-                                      [this]() { on_eoc_fall(); }} {}
+  explicit StateMachine(const std::function<float()> &sample_time,
+                        std::function<bool()> defer_gate_is_active,
+                        std::function<bool()> defer_gate_is_up,
+                        const std::function<bool()>& stage_gate_is_up,
+                        const std::function<void(bool)> &set_active,
+                        const std::function<void(bool)> &set_eoc,
+                        const std::function<void()> &forward)
+      : defer_gate_is_active{std::move(defer_gate_is_active)},
+        stage_gate_is_up{stage_gate_is_up},
+        eoc_generator{sample_time, [set_eoc]() { set_eoc(true); },
+                      [set_eoc]() { set_eoc(false); }},
+        stage_gate{stage_gate_is_up, [this]() { on_stage_gate_rise(); },
+                   [this]() { on_stage_gate_fall(); }},
+        defer_gate{std::move(defer_gate_is_up), [this]() { enter(&deferring); },
+                   [this]() { stop_deferring(); }},
+        deferring{set_active, forward}, forwarding{[this]() {
+                                                     start_generating();
+                                                   },
+                                                   set_active, forward},
+        idling{[this]() { start_generating(); }, set_active} {}
 
   void start() { state->enter(); }
 
@@ -85,7 +112,7 @@ public:
 protected:
   virtual void start_generating() = 0;
 
-  void enter(StageState<M> *incoming) {
+  void enter(StageState *incoming) {
     state->exit();
     state = incoming;
     state->enter();
@@ -96,43 +123,38 @@ protected:
     enter(&idling);
   };
 
-  M *const module;
-
 private:
-  void on_defer_gate_rise() { enter(&deferring); }
-  void on_defer_gate_fall() { stop_deferring(); }
   void on_stage_gate_rise() {
-    // If DEFER is active, suppress GATE rises.
+    // If DEFER is active, ignore GATE rises.
     // We will check GATE when DEFER falls.
-    if (!module->defer_gate_is_active()) {
-      state->on_stage_gate_rise();
-    }
+    if (defer_gate_is_active())
+      return;
+    state->on_stage_gate_rise();
   }
+
   void on_stage_gate_fall() { state->on_stage_gate_fall(); }
-  void on_eoc_rise() { module->set_eoc(true); }
-  void on_eoc_fall() { module->set_eoc(false); }
 
   void stop_deferring() {
-    if (module->stage_gate_in()) {
+    if (stage_gate_is_up()) {
       start_generating();
     } else {
       finish_stage();
     }
   }
 
-  EndOfCyclePulseGenerator<M> eoc_generator;
+  const std::function<bool()> defer_gate_is_active;
+  const std::function<bool()> stage_gate_is_up;
 
-  StageState<M> *state{&forwarding};
+  EndOfCyclePulseGenerator eoc_generator;
 
-  StageGate<M> stage_gate{module, [this]() { on_stage_gate_rise(); },
-                          [this]() { on_stage_gate_fall(); }};
+  StageState *state{&forwarding};
 
-  DeferGate<M> defer_gate{module, [this]() { on_defer_gate_rise(); },
-                          [this]() { on_defer_gate_fall(); }};
+  EdgeDetector stage_gate;
 
+  EdgeDetector defer_gate;
 
-  Deferring<M> deferring{module};
-  Forwarding<M> forwarding{module, [this]() { start_generating(); }};
-  Idling<M> idling{module, [this]() { start_generating(); }};
-};
+  Deferring deferring;
+  Forwarding forwarding;
+  Idling idling;
+}; // namespace DHE
 } // namespace DHE

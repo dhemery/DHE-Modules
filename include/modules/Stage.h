@@ -34,7 +34,7 @@ private:
   void send_out(float voltage);
   auto taper(float phase) const -> float;
 
-  StageStateMachine<Stage> state_machine;
+  StageStateMachine state_machine;
   float start_voltage{0.f};
 };
 } // namespace DHE
