@@ -8,7 +8,7 @@ namespace DHE {
 class Stage : public rack::Module {
 public:
   Stage() : Stage{[]() -> float { return rack::engineGetSampleTime();}} {}
-  Stage(std::function<float()> sample_time);
+  explicit Stage(const std::function<float()>& sample_time);
 
   auto defer_gate_in() const -> bool;
   auto defer_gate_is_active() const -> bool;
@@ -34,8 +34,7 @@ private:
   void send_out(float voltage);
   auto taper(float phase) const -> float;
 
-  const std::function<float()> sample_time;
-  StageStateMachine<Stage> state_machine{this, sample_time};
+  StageStateMachine<Stage> state_machine;
   float start_voltage{0.f};
 };
 } // namespace DHE

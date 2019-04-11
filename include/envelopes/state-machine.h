@@ -69,8 +69,9 @@ public:
 
 template <typename M> class StateMachine {
 public:
-  explicit StateMachine(M *module, std::function<float()> sample_time)
-      : module{module}, sample_time{std::move(sample_time)} {}
+  explicit StateMachine(M *module, const std::function<float()>& sample_time)
+      : module{module}, eoc_generator{sample_time, [this]() { on_eoc_rise(); },
+                                      [this]() { on_eoc_fall(); }} {}
 
   void start() { state->enter(); }
 
@@ -119,7 +120,7 @@ private:
     }
   }
 
-  const std::function<float()> sample_time;
+  EndOfCyclePulseGenerator<M> eoc_generator;
 
   StageState<M> *state{&forwarding};
 
@@ -129,11 +130,6 @@ private:
   DeferGate<M> defer_gate{module, [this]() { on_defer_gate_rise(); },
                           [this]() { on_defer_gate_fall(); }};
 
-  EndOfCyclePulseGenerator<M> eoc_generator{
-      sample_time,
-      [this]() { on_eoc_rise(); },
-      [this]() { on_eoc_fall(); },
-  };
 
   Deferring<M> deferring{module};
   Forwarding<M> forwarding{module, [this]() { start_generating(); }};

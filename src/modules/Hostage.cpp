@@ -5,9 +5,9 @@
 #include "util/duration.h"
 
 namespace DHE {
-Hostage::Hostage(std::function<float()> sample_time)
+Hostage::Hostage(const std::function<float()>& sample_time)
     : Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT},
-    sample_time{std::move(sample_time)} {
+      state_machine{this, sample_time} {
   state_machine.start();
 }
 

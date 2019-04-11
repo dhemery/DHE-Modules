@@ -5,9 +5,9 @@
 #include <modules/Stage.h>
 
 namespace DHE {
-Stage::Stage(std::function<float()> sample_time)
+Stage::Stage(const std::function<float()>& sample_time)
     : rack::Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT},
-      sample_time{std::move(sample_time)} {
+      state_machine{this, sample_time} {
   state_machine.start();
 }
 

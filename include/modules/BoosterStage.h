@@ -14,7 +14,7 @@ namespace DHE {
 class BoosterStage : public Module {
 public:
   BoosterStage() : BoosterStage{[]() -> float { return rack::engineGetSampleTime(); }} {}
-  explicit BoosterStage(std::function<float()> sample_time);
+  explicit BoosterStage(const std::function<float()>& sample_time);
 
   auto defer_gate_in() const -> bool;
   auto defer_gate_is_active() const -> bool;
@@ -70,8 +70,7 @@ private:
   void send_out(float voltage);
   auto taper(float phase) const -> float;
 
-  const std::function<float()> sample_time;
-  StageStateMachine<BoosterStage> state_machine{this, sample_time};
+  StageStateMachine<BoosterStage> state_machine;
   Range const *duration_range{&Duration::medium_range};
   Range const *level_range{&Signal::bipolar_range};
   bool is_active{false};

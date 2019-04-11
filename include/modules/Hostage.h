@@ -11,7 +11,7 @@ namespace DHE {
 class Hostage : public Module {
 public:
   Hostage() : Hostage{[]() -> float { return rack::engineGetSampleTime(); }} {}
-  explicit Hostage(std::function<float()> sample_time);
+  explicit Hostage(const std::function<float()>& sample_time);
   void step() override;
   auto defer_gate_in() const -> bool;
   auto defer_gate_is_active() const -> bool;
@@ -47,8 +47,7 @@ private:
   auto envelope_in() const -> float;
   void send_out(float voltage);
 
-  const std::function<float()> sample_time;
-  HostageStateMachine<Hostage> state_machine{this, sample_time};
+  HostageStateMachine<Hostage> state_machine;
   Range const *duration_range{&Duration::medium_range};
 };
 } // namespace DHE

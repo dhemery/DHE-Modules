@@ -7,9 +7,9 @@
 
 namespace DHE {
 
-BoosterStage::BoosterStage(std::function<float()> sample_time)
+BoosterStage::BoosterStage(const std::function<float()>& sample_time)
     : Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT},
-    sample_time{std::move(sample_time)} {
+      state_machine{this, sample_time} {
   state_machine.start();
 }
 

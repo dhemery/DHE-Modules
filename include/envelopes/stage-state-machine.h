@@ -43,15 +43,14 @@ public:
 template <typename M> class StageStateMachine : public StateMachine<M> {
 public:
   StageStateMachine(M *module, std::function<float()> const &sample_time)
-      : StateMachine<M>{module, sample_time}, sample_time{sample_time} {}
+      : StateMachine<M>{module, sample_time},
+        generating{module, sample_time, [this]() { start_generating(); },
+                   [this]() { this->finish_stage(); }} {}
 
 protected:
   void start_generating() override { this->enter(&generating); };
 
 private:
-  const std::function<float()> sample_time;
-  Generating<M> generating{this->module, sample_time,
-                           [this]() { start_generating(); },
-                           [this]() { this->finish_stage(); }};
+  Generating<M> generating;
 };
 } // namespace DHE

@@ -22,7 +22,7 @@ private:
 
 template <typename M> class Holding : public StageState<M> {
 public:
-  Holding(M *module, std::function<float()> sample_time,
+  Holding(M *module, const std::function<float()>& sample_time,
           const std::function<void()> &on_stage_gate_rise,
           const std::function<void()> &on_stage_complete)
       : StageState<M>{module, on_stage_gate_rise}, generator{
@@ -53,7 +53,9 @@ template <typename M> class HostageStateMachine : public StateMachine<M> {
 public:
   explicit HostageStateMachine(M *module,
                                const std::function<float()> &sample_time)
-      : StateMachine<M>{module, sample_time}, sample_time{sample_time} {}
+      : StateMachine<M>{module, sample_time},
+        holding{module, sample_time, [this]() { this->enter(&holding); },
+                [this]() { this->finish_stage(); }} {}
 
 protected:
   void start_generating() override {
@@ -65,10 +67,7 @@ protected:
   }
 
 private:
-  const std::function<float()> sample_time;
-  Holding<M> holding{this->module, sample_time,
-                     [this]() { this->enter(&holding); },
-                     [this]() { this->finish_stage(); }};
+  Holding<M> holding;
   Sustaining<M> sustaining{this->module, [this]() { this->finish_stage(); }};
-};
+}; // namespace DHE
 } // namespace DHE
