@@ -1,3 +1,5 @@
+#include <utility>
+
 #include "util/duration.h"
 #include "util/gain.h"
 #include "util/signal.h"
@@ -5,8 +7,9 @@
 
 namespace DHE {
 
-BoosterStage::BoosterStage()
-    : Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT} {
+BoosterStage::BoosterStage(std::function<float()> sample_time)
+    : Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT},
+    sample_time{std::move(sample_time)} {
   state_machine.start();
 }
 
@@ -38,10 +41,6 @@ auto BoosterStage::defer_gate_is_active() const -> bool {
 auto BoosterStage::duration() const -> float {
   auto rotation = modulated(DURATION_KNOB, DURATION_CV);
   return DHE::duration(rotation, *duration_range);
-}
-
-auto BoosterStage::sample_time() const -> float {
-  return rack::engineGetSampleTime();
 }
 
 auto BoosterStage::defer_gate_in() const -> bool {

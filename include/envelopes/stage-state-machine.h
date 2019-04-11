@@ -5,12 +5,12 @@
 namespace DHE {
 template <typename M> class StageGenerator : public PhaseAccumulator {
 public:
-  StageGenerator(M *module, std::function<void()> on_stage_complete)
-      : module{module}, on_stage_complete{std::move(on_stage_complete)} {}
+  StageGenerator(M *module, const std::function<float()> &sample_time,
+                 std::function<void()> on_stage_complete)
+      : PhaseAccumulator{sample_time}, module{module},
+        on_stage_complete{std::move(on_stage_complete)} {}
 
   auto duration() const -> float override { return module->duration(); }
-
-  auto sample_time() const -> float override { return module->sample_time(); }
 
   void on_advance(float phase) const override { module->generate(phase); }
 
@@ -23,10 +23,11 @@ private:
 
 template <typename M> class Generating : public StageState<M> {
 public:
-  Generating(M *module, const std::function<void()> &on_stage_gate_rise,
+  Generating(M *module, const std::function<float()> &sample_time,
+             const std::function<void()> &on_stage_gate_rise,
              const std::function<void()> &on_stage_complete)
       : StageState<M>{module, on_stage_gate_rise}, generator{
-                                                       module,
+                                                       module, sample_time,
                                                        on_stage_complete} {}
 
   void enter() override {
@@ -41,13 +42,16 @@ public:
 
 template <typename M> class StageStateMachine : public StateMachine<M> {
 public:
-  explicit StageStateMachine(M *module) : StateMachine<M>{module} {}
+  StageStateMachine(M *module, std::function<float()> const &sample_time)
+      : StateMachine<M>{module, sample_time}, sample_time{sample_time} {}
 
 protected:
   void start_generating() override { this->enter(&generating); };
 
 private:
-  Generating<M> generating{this->module, [this]() { start_generating(); },
+  const std::function<float()> sample_time;
+  Generating<M> generating{this->module, sample_time,
+                           [this]() { start_generating(); },
                            [this]() { this->finish_stage(); }};
 };
 } // namespace DHE

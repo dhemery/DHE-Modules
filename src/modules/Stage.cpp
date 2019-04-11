@@ -1,9 +1,13 @@
+#include <utility>
+
 #include "util/duration.h"
 #include "util/signal.h"
 #include <modules/Stage.h>
 
 namespace DHE {
-Stage::Stage() : rack::Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT} {
+Stage::Stage(std::function<float()> sample_time)
+    : rack::Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT},
+      sample_time{std::move(sample_time)} {
   state_machine.start();
 }
 
@@ -39,8 +43,6 @@ auto Stage::level() const -> float {
 }
 
 void Stage::prepare_to_generate() { start_voltage = envelope_in(); }
-
-auto Stage::sample_time() const -> float { return rack::engineGetSampleTime(); }
 
 void Stage::send_out(float voltage) { outputs[MAIN_OUT].value = voltage; }
 

@@ -1,9 +1,13 @@
+#include <utility>
+
 #include <modules/Hostage.h>
 
 #include "util/duration.h"
 
 namespace DHE {
-Hostage::Hostage() : Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT} {
+Hostage::Hostage(std::function<float()> sample_time)
+    : Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT},
+    sample_time{std::move(sample_time)} {
   state_machine.start();
 }
 
@@ -29,10 +33,6 @@ void Hostage::set_active(bool active) {
 }
 
 void Hostage::set_eoc(bool eoc) { outputs[EOC_OUT].value = eoc ? 10.f : 0.f; }
-
-auto Hostage::sample_time() const -> float {
-  return rack::engineGetSampleTime();
-}
 
 auto Hostage::defer_gate_in() const -> bool {
   return inputs[DEFER_GATE_IN].value > 0.1f;

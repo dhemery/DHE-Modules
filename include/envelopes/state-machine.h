@@ -1,3 +1,5 @@
+#include <utility>
+
 #pragma once
 
 #include "components/mode.h"
@@ -8,9 +10,9 @@
 namespace DHE {
 template <typename M> class StageState : public DHE::Mode {
 public:
-  explicit StageState(
-      M *module, std::function<void()> on_stage_gate_rise = []() {},
-      std::function<void()> on_stage_gate_fall = []() {})
+  explicit StageState(M *module,
+                      std::function<void()> on_stage_gate_rise = []() {},
+                      std::function<void()> on_stage_gate_fall = []() {})
       : on_stage_gate_rise{std::move(on_stage_gate_rise)},
         on_stage_gate_fall{std::move(on_stage_gate_fall)}, module{module} {}
 
@@ -67,7 +69,8 @@ public:
 
 template <typename M> class StateMachine {
 public:
-  explicit StateMachine(M *module) : module{module} {}
+  explicit StateMachine(M *module, std::function<float()> sample_time)
+      : module{module}, sample_time{std::move(sample_time)} {}
 
   void start() { state->enter(); }
 
@@ -116,6 +119,8 @@ private:
     }
   }
 
+  const std::function<float()> sample_time;
+
   StageState<M> *state{&forwarding};
 
   StageGate<M> stage_gate{module, [this]() { on_stage_gate_rise(); },
@@ -125,7 +130,7 @@ private:
                           [this]() { on_defer_gate_fall(); }};
 
   EndOfCyclePulseGenerator<M> eoc_generator{
-      module,
+      sample_time,
       [this]() { on_eoc_rise(); },
       [this]() { on_eoc_fall(); },
   };

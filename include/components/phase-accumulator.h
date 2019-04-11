@@ -1,3 +1,5 @@
+#include <utility>
+
 #pragma once
 #include <algorithm>
 
@@ -8,6 +10,8 @@ namespace DHE {
  */
 class PhaseAccumulator {
 public:
+  explicit PhaseAccumulator(std::function<float()> sample_time)
+      : sample_time{std::move(sample_time)} {}
   /**
    * Sets the phase to 0 and generates an on_start event.
    */
@@ -35,7 +39,6 @@ public:
   void stop() { phase = 1.f; }
 
 protected:
-  virtual auto sample_time() const -> float = 0;
   virtual auto duration() const -> float = 0;
   virtual void on_start() const {};
   virtual void on_advance(float phase) const {};
@@ -43,5 +46,6 @@ protected:
 
 private:
   float phase{0.f};
+  const std::function<float()> sample_time;
 };
 } // namespace DHE

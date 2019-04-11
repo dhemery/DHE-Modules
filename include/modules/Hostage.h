@@ -10,15 +10,14 @@ namespace DHE {
 
 class Hostage : public Module {
 public:
-  Hostage();
+  Hostage() : Hostage{[]() -> float { return rack::engineGetSampleTime(); }} {}
+  explicit Hostage(std::function<float()> sample_time);
   void step() override;
   auto defer_gate_in() const -> bool;
   auto defer_gate_is_active() const -> bool;
   auto duration() const -> float;
   void forward();
   auto is_sustain_mode() const -> bool;
-  auto sample_time() const -> float;
-  ;
   void set_active(bool active);
   void set_eoc(bool eoc);
   auto stage_gate_in() const -> bool;
@@ -48,7 +47,8 @@ private:
   auto envelope_in() const -> float;
   void send_out(float voltage);
 
-  HostageStateMachine<Hostage> state_machine{this};
+  const std::function<float()> sample_time;
+  HostageStateMachine<Hostage> state_machine{this, sample_time};
   Range const *duration_range{&Duration::medium_range};
 };
 } // namespace DHE
