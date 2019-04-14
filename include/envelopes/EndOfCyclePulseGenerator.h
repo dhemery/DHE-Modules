@@ -1,6 +1,5 @@
-#include <utility>
-
 #pragma once
+
 #include <functional>
 #include <utility>
 
@@ -14,10 +13,11 @@ namespace DHE {
  */
 class EndOfCyclePulseGenerator : public PhaseAccumulator {
 public:
-  EndOfCyclePulseGenerator(const std::function<float()> &sample_time,
-                                    const std::function<void()>& on_eoc_rise,
-                                    const std::function<void()>& on_eoc_fall)
-      : PhaseAccumulator{[]() { return 1e-3; }, sample_time, on_eoc_rise,
-                         [](float) {}, on_eoc_fall} {}
+  EndOfCyclePulseGenerator(std::function<float()> sample_time,
+                           std::function<void()> on_eoc_rise,
+                           std::function<void()> on_eoc_fall)
+      : PhaseAccumulator{[]() { return 1e-3; }, std::move(sample_time),
+                         std::move(on_eoc_rise), [](float) {},
+                         std::move(on_eoc_fall)} {}
 };
 } // namespace DHE

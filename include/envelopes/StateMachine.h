@@ -1,9 +1,9 @@
 #pragma once
 
+#include <functional>
 #include <utility>
 
 #include "components/edge-detector.h"
-#include "components/mode.h"
 
 #include "Deferring.h"
 #include "EndOfCyclePulseGenerator.h"
@@ -15,25 +15,25 @@ namespace DHE {
 
 class StateMachine {
 public:
-  explicit StateMachine(const std::function<float()> &sample_time,
+  explicit StateMachine(std::function<float()> sample_time,
                         std::function<bool()> defer_gate_is_active,
                         std::function<bool()> defer_gate_is_up,
-                        const std::function<bool()>& stage_gate_is_up,
-                        const std::function<void(bool)> &set_active,
-                        const std::function<void(bool)> &set_eoc,
-                        const std::function<void()> &forward)
+                        std::function<bool()> const &stage_gate_is_up,
+                        std::function<void(bool)> const &set_active,
+                        std::function<void(bool)> const &set_eoc,
+                        std::function<void()> const &forward)
       : defer_gate_is_active{std::move(defer_gate_is_active)},
         stage_gate_is_up{stage_gate_is_up},
-        eoc_generator{sample_time, [set_eoc]() { set_eoc(true); },
+        eoc_generator{std::move(sample_time), [set_eoc]() { set_eoc(true); },
                       [set_eoc]() { set_eoc(false); }},
         stage_gate{stage_gate_is_up, [this]() { on_stage_gate_rise(); },
                    [this]() { on_stage_gate_fall(); }},
         defer_gate{std::move(defer_gate_is_up), [this]() { enter(&deferring); },
                    [this]() { stop_deferring(); }},
-        deferring{set_active, forward}, forwarding{[this]() {
+        deferring{forward, set_active}, forwarding{[this]() {
                                                      start_generating();
                                                    },
-                                                   set_active, forward},
+                                                   forward, set_active},
         idling{[this]() { start_generating(); }, set_active} {}
 
   void start() { state->enter(); }

@@ -1,37 +1,45 @@
+#include <utility>
+
+#include <utility>
+
+#include <utility>
+
 #pragma once
 
 #include <functional>
 #include <utility>
 
-#include "StageGenerator.h"
 #include "StateMachine.h"
-
 #include "Generating.h"
 
 namespace DHE {
 
 class StageStateMachine : public StateMachine {
 public:
-  StageStateMachine(const std::function<bool()> &defer_gate_connected,
-                    const std::function<bool()> &defer_gate,
-                    const std::function<bool()> &stage_trigger,
-                    const std::function<float()> &duration,
+  StageStateMachine(std::function<bool()> defer_gate_connected,
+                    std::function<bool()> defer_gate,
+                    std::function<bool()> const &stage_trigger,
+                    std::function<float()> duration,
                     std::function<float()> const &sample_time,
-                    const std::function<void()> &forward,
-                    const std::function<void()> &prepare,
-                    const std::function<void(float)> &generate,
-                    const std::function<void(bool)> &set_active,
-                    const std::function<void(bool)> &set_eoc)
-      : StateMachine{sample_time,   defer_gate_connected, defer_gate,
-                     stage_trigger, set_active,           set_eoc,
+                    std::function<void()> const &forward,
+                    std::function<void()> prepare,
+                    std::function<void(float)> generate,
+                    std::function<void(bool)> const &set_active,
+                    std::function<void(bool)> const &set_eoc)
+      : StateMachine{sample_time,
+                     std::move(defer_gate_connected),
+                     std::move(defer_gate),
+                     stage_trigger,
+                     set_active,
+                     set_eoc,
                      forward},
-        generating{duration,
+        generating{[this]() { start_generating(); },
+                   [this]() { this->finish_stage(); },
+                   std::move(duration),
                    sample_time,
-                   set_active,
-                   prepare,
-                   generate,
-                   [this]() { start_generating(); },
-                   [this]() { this->finish_stage(); }} {}
+                   std::move(prepare),
+                   std::move(generate),
+                   set_active} {}
 
 protected:
   void start_generating() override { this->enter(&generating); };

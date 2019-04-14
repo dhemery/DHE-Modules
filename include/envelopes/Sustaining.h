@@ -9,9 +9,9 @@ namespace DHE {
 
 class Sustaining : public StageState {
 public:
-  Sustaining(std::function<void(bool)> set_active,
+  Sustaining(const std::function<void()> &on_stage_gate_fall,
              std::function<void()> forward,
-             const std::function<void()> &on_stage_gate_fall)
+             std::function<void(bool)> set_active)
       : StageState{[]() {}, on_stage_gate_fall},
         set_active{std::move(set_active)}, forward{std::move(forward)} {}
 

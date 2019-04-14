@@ -3,7 +3,6 @@
 #include <functional>
 #include <utility>
 
-#include "StageState.h"
 #include "StateMachine.h"
 
 #include "Holding.h"
@@ -13,29 +12,30 @@ namespace DHE {
 
 class HostageStateMachine : public StateMachine {
 public:
-  HostageStateMachine(const std::function<bool()> &defer_gate_connected,
-                      const std::function<bool()> &defer_gate,
-                      const std::function<bool()> &stage_gate,
+  HostageStateMachine(std::function<bool()> defer_gate_connected,
+                      std::function<bool()> defer_gate,
+                      std::function<bool()> const &stage_gate,
                       std::function<bool()> is_sustain_mode,
                       std::function<float()> duration,
-                      const std::function<float()> &sample_time,
-                      const std::function<void()> &forward,
-                      const std::function<void(bool)> &set_active,
-                      const std::function<void(bool)> &set_eoc)
-      : StateMachine{sample_time, defer_gate_connected, defer_gate,
-                     stage_gate,  set_active,           set_eoc,
+                      std::function<float()> const &sample_time,
+                      std::function<void()> const &forward,
+                      std::function<void(bool)> const &set_active,
+                      std::function<void(bool)> const &set_eoc)
+      : StateMachine{sample_time,
+                     std::move(defer_gate_connected),
+                     std::move(defer_gate),
+                     stage_gate,
+                     set_active,
+                     set_eoc,
                      forward},
-        is_sustain_mode{std::move(is_sustain_mode)}, holding{duration,
-                                                             sample_time,
-                                                             set_active,
-                                                             forward,
-                                                             [this]() {
-                                                               enter(&holding);
-                                                             },
-                                                             [this]() {
-                                                               finish_stage();
-                                                             }},
-        sustaining{set_active, forward, [this]() { finish_stage(); }} {}
+        is_sustain_mode{std::move(is_sustain_mode)},
+        holding{[this]() { enter(&holding); },
+                [this]() { finish_stage(); },
+                std::move(duration),
+                sample_time,
+                forward,
+                set_active},
+        sustaining{[this]() { finish_stage(); }, forward, set_active} {}
 
 protected:
   void start_generating() override {
