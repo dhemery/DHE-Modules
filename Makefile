@@ -9,6 +9,7 @@ LDFLAGS +=
 
 SOURCES = $(wildcard \
 			src/*.cpp \
+			src/envelopes/*.cpp \
 			src/modules/*.cpp \
 			src/panels/*.cpp \
 			src/util/*.cpp \
