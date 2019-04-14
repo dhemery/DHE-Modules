@@ -12,11 +12,11 @@ Stage::Stage(const std::function<float()> &sample_time)
                     [this]() -> bool { return stage_gate_in(); },
                     [this]() -> float { return duration(); },
                     sample_time,
-                    [this](bool active) { set_active(active); },
-                    [this](bool eoc) { set_eoc(eoc); },
+                    [this]() { forward(); },
                     [this]() { prepare_to_generate(); },
                     [this](float phase) { generate(phase); },
-                    [this]() { forward(); }} {
+                    [this](bool active) { set_active(active); },
+                    [this](bool eoc) { set_eoc(eoc); }} {
   state_machine.start();
 }
 

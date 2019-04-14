@@ -7,15 +7,15 @@
 namespace DHE {
 Hostage::Hostage(const std::function<float()> &sample_time)
     : Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT},
-      state_machine{[this]() -> float { return duration(); },
-                    sample_time,
-                    [this](bool active) { set_active(active); },
-                    [this](bool eoc) { set_eoc(eoc); },
-                    [this]() -> bool { return defer_gate_is_active(); },
+      state_machine{[this]() -> bool { return defer_gate_is_active(); },
                     [this]() -> bool { return defer_gate_in(); },
                     [this]() -> bool { return stage_gate_in(); },
                     [this]() -> bool { return is_sustain_mode(); },
-                    [this]() { forward(); }} {
+                    [this]() -> float { return duration(); },
+                    sample_time,
+                    [this]() { forward(); },
+                    [this](bool active) { set_active(active); },
+                    [this](bool eoc) { set_eoc(eoc); }} {
   state_machine.start();
 }
 

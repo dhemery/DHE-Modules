@@ -11,7 +11,8 @@ class Holding : public StageState {
 public:
   Holding(std::function<float()> duration,
           const std::function<float()> &sample_time,
-          std::function<void(bool)> set_active, std::function<void()> forward,
+          std::function<void(bool)> set_active,
+          std::function<void()> forward,
           const std::function<void()> &on_stage_gate_rise,
           const std::function<void()> &on_stage_complete)
       : StageState{on_stage_gate_rise}, set_active{std::move(set_active)},

@@ -12,12 +12,13 @@ BoosterStage::BoosterStage(const std::function<float()> &sample_time)
       state_machine{[this]() -> bool { return defer_gate_is_active(); },
                     [this]() -> bool { return defer_gate_in(); },
                     [this]() -> bool { return stage_gate_in(); },
-                    [this]() -> float { return duration(); }, sample_time,
-                    [this](bool active) { set_active(active); },
-                    [this](bool eoc) { set_eoc(eoc); },
+                    [this]() -> float { return duration(); },
+                    sample_time,
+                    [this]() { forward(); },
                     [this]() { prepare_to_generate(); },
                     [this](float phase) { generate(phase); },
-                    [this]() { forward(); }} {
+                    [this](bool active) { set_active(active); },
+                    [this](bool eoc) { set_eoc(eoc); }} {
   state_machine.start();
 }
 
