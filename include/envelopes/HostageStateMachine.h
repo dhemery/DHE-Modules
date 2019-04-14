@@ -1,60 +1,15 @@
 #pragma once
 
+#include <functional>
 #include <utility>
 
-#include "envelopes/state-machine.h"
+#include "StageState.h"
+#include "StateMachine.h"
+
+#include "Holding.h"
+#include "Sustaining.h"
 
 namespace DHE {
-
-class HoldGenerator : public PhaseAccumulator {
-public:
-  HoldGenerator(std::function<float()> duration,
-                const std::function<float()> &sample_time,
-                const std::function<void()> &on_hold_complete)
-      : PhaseAccumulator{std::move(duration), sample_time, []() {},
-                         [](float phase) {}, on_hold_complete} {}
-};
-
-class Holding : public StageState {
-public:
-  Holding(std::function<float()> duration,
-          const std::function<float()> &sample_time,
-          std::function<void(bool)> set_active, std::function<void()> forward,
-          const std::function<void()> &on_stage_gate_rise,
-          const std::function<void()> &on_stage_complete)
-      : StageState{on_stage_gate_rise}, set_active{std::move(set_active)},
-        forward{std::move(forward)}, generator{std::move(duration), sample_time,
-                                               on_stage_complete} {}
-
-  void enter() override {
-    set_active(true);
-    forward();
-    generator.start();
-  }
-  void step() override { generator.step(); }
-
-  const std::function<void(bool)> set_active;
-  const std::function<void()> forward;
-  HoldGenerator generator;
-};
-
-class Sustaining : public StageState {
-public:
-  Sustaining(std::function<void(bool)> set_active,
-             std::function<void()> forward,
-             const std::function<void()> &on_stage_gate_fall)
-      : StageState{[]() {}, on_stage_gate_fall},
-        set_active{std::move(set_active)}, forward{std::move(forward)} {}
-
-  void enter() override {
-    set_active(true);
-    forward();
-  }
-
-private:
-  const std::function<void(bool)> set_active;
-  const std::function<void()> forward;
-};
 
 class HostageStateMachine : public StateMachine {
 public:

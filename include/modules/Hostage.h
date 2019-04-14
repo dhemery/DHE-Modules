@@ -2,7 +2,7 @@
 
 #include "modules/Module.h"
 
-#include "envelopes/hostage-state-machine.h"
+#include "envelopes/HostageStateMachine.h"
 #include "util/duration.h"
 #include "util/selector.h"
 

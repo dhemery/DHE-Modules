@@ -14,7 +14,7 @@ namespace DHE {
  */
 class EndOfCyclePulseGenerator : public PhaseAccumulator {
 public:
-  explicit EndOfCyclePulseGenerator(const std::function<float()> &sample_time,
+  EndOfCyclePulseGenerator(const std::function<float()> &sample_time,
                                     const std::function<void()>& on_eoc_rise,
                                     const std::function<void()>& on_eoc_fall)
       : PhaseAccumulator{[]() { return 1e-3; }, sample_time, on_eoc_rise,

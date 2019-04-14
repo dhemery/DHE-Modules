@@ -1,7 +1,7 @@
 #pragma once
 
 #include "engine.hpp"
-#include "envelopes/stage-state-machine.h"
+#include "envelopes/StageStateMachine.h"
 
 namespace DHE {
 

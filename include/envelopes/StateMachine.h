@@ -1,81 +1,17 @@
-#include <utility>
-
-#include <utility>
-
 #pragma once
 
 #include <utility>
 
 #include "components/edge-detector.h"
 #include "components/mode.h"
-#include "end-of-cycle-pulse-generator.h"
+
+#include "Deferring.h"
+#include "EndOfCyclePulseGenerator.h"
+#include "Forwarding.h"
+#include "Idling.h"
+#include "StageState.h"
 
 namespace DHE {
-class StageState : public DHE::Mode {
-public:
-  explicit StageState(std::function<void()> on_stage_gate_rise = []() {},
-                      std::function<void()> on_stage_gate_fall = []() {})
-      : on_stage_gate_rise{std::move(on_stage_gate_rise)},
-        on_stage_gate_fall{std::move(on_stage_gate_fall)} {}
-
-  const std::function<void()> on_stage_gate_rise;
-  const std::function<void()> on_stage_gate_fall;
-};
-
-/**
- * A deferring stage module is active, and steps by forwarding its input
- * signal to its output port.
- */
-class Deferring : public StageState {
-public:
-  explicit Deferring(std::function<void(bool)> set_active,
-                     std::function<void()> forward)
-      : StageState{}, set_active{std::move(set_active)}, forward{std::move(
-                                                             forward)} {}
-
-  void enter() override { set_active(true); }
-  void step() override { forward(); }
-
-private:
-  const std::function<void(bool)> set_active;
-  const std::function<void()> forward;
-};
-
-/**
- * A forwarding stage module is active, and steps by forwarding its input
- * signal to its output port.
- */
-class Forwarding : public StageState {
-public:
-  explicit Forwarding(const std::function<void()> &on_stage_gate_rise,
-                      std::function<void(bool)> set_active,
-                      std::function<void()> forward)
-      : StageState{on_stage_gate_rise},
-        set_active{std::move(set_active)}, forward{std::move(forward)} {}
-
-  void enter() override { set_active(true); }
-
-  void step() override { forward(); }
-
-private:
-  const std::function<void(bool)> set_active;
-  const std::function<void()> forward;
-};
-
-/**
- * An idling stage module is inactive and takes no action on each step.
- */
-class Idling : public StageState {
-public:
-  explicit Idling(const std::function<void()> &on_stage_gate_rise,
-                  std::function<void(bool)> set_active)
-      : StageState{on_stage_gate_rise}, set_active{std::move(set_active)} {}
-
-  void enter() override { set_active(false); }
-
-private:
-  std::function<void(bool)> set_active;
-};
 
 class StateMachine {
 public:

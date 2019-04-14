@@ -4,7 +4,7 @@
 
 #include "display/controls.h"
 #include "display/panel.h"
-#include "envelopes/stage-state-machine.h"
+#include "envelopes/StageStateMachine.h"
 #include "util/duration.h"
 #include "util/selector.h"
 #include "util/signal.h"
