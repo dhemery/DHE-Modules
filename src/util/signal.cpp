@@ -1,6 +1,6 @@
-#include <array>
-#include "util/range.h"
 #include "util/signal.h"
+#include "util/range.h"
+#include <array>
 
 namespace DHE {
 namespace Signal {

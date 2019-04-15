@@ -11,17 +11,18 @@ namespace DHE {
 
 class Sustaining : public StageState {
 public:
-  Sustaining(const std::function<void()> &on_stage_gate_fall,
+  Sustaining(const std::function<void()> &finish_sustaining,
              std::function<void()> forward,
              std::function<void(bool)> set_active)
-      : StageState{[]() {}, // Ignore stage gate rise
-                   on_stage_gate_fall, // As instructed
-                   [this]() { start_sustaining(); }, // Start sustaining on entry
-                   [] () {} // Do nothing on each step
-                   },
+      : StageState{
+            []() {},               // Ignore stage gate rise
+            finish_sustaining,     // Finish sustaining on stage gate fall
+            [this]() { start(); }, // Start sustaining on entry
+            []() {}                // Do nothing on each step
+        },
         set_active{std::move(set_active)}, forward{std::move(forward)} {}
 
-  void start_sustaining() {
+  void start() {
     set_active(true);
     forward();
   }

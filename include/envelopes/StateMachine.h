@@ -29,7 +29,7 @@ public:
 protected:
   virtual void start_generating() = 0;
   void enter(StageState *incoming);
-  void finish_stage();;
+  void finish_stage();
 
 private:
   void on_stage_gate_rise();

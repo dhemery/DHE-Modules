@@ -13,8 +13,9 @@ namespace DHE {
 
 class BoosterStage : public Module {
 public:
-  BoosterStage() : BoosterStage{[]() -> float { return rack::engineGetSampleTime(); }} {}
-  explicit BoosterStage(const std::function<float()>& sample_time);
+  BoosterStage()
+      : BoosterStage{[]() -> float { return rack::engineGetSampleTime(); }} {}
+  explicit BoosterStage(const std::function<float()> &sample_time);
 
   auto defer_gate_in() const -> bool;
   auto defer_gate_is_active() const -> bool;
@@ -30,7 +31,8 @@ public:
   void step() override;
 
   const Selector<Range const *, 3> duration_range_selector{
-      Duration::ranges(), [this](Range const *range) { duration_range = range; }};
+      Duration::ranges(),
+      [this](Range const *range) { duration_range = range; }};
   const Selector<Range const *, 2> level_range_selector{
       Signal::ranges(), [this](Range const *range) { level_range = range; }};
 

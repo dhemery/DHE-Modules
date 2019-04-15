@@ -7,8 +7,8 @@ namespace DHE {
 
 class Stage : public rack::Module {
 public:
-  Stage() : Stage{[]() -> float { return rack::engineGetSampleTime();}} {}
-  explicit Stage(const std::function<float()>& sample_time);
+  Stage() : Stage{[]() -> float { return rack::engineGetSampleTime(); }} {}
+  explicit Stage(const std::function<float()> &sample_time);
 
   auto defer_gate_in() const -> bool;
   auto defer_gate_is_active() const -> bool;

@@ -8,7 +8,7 @@ static const auto multiplication_ranges = std::array<Range const *, 4>{
     &attenuation_range, &invertible_attenuation_range, &Gain::range,
     &invertible_gain_range};
 
-static const auto addition_ranges = std::array<Range const *,4>{
+static const auto addition_ranges = std::array<Range const *, 4>{
     &half_bipolar_range, &Signal::bipolar_range, &Signal::unipolar_range,
     &invertible_unipolar_range};
 

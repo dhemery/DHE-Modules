@@ -7,19 +7,15 @@
 
 namespace DHE {
 
-/**
- * A forwarding stage is active and steps by forwarding its input signal to its
- * output port.
- */
 class Forwarding : public StageState {
 public:
-  Forwarding(std::function<void()> on_stage_gate_rise,
+  Forwarding(std::function<void()> start_generating,
              std::function<void()> const &forward,
              std::function<void(bool)> const &set_active)
       : StageState{
-            std::move(on_stage_gate_rise),        // As instructed
-            []() {},                              // Ignore stage gate fall
-            [set_active]() { set_active(true); }, // Activate on entry
+            std::move(start_generating), // Start generating on stage gate rise
+            []() {},                     // Ignore stage gate fall
+            [set_active]() { set_active(true); }, // Become active on entry
             forward                               // Forward on each step
         } {}
 };

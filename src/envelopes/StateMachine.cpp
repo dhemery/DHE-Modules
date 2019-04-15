@@ -10,9 +10,10 @@ StateMachine::StateMachine(std::function<float()> sample_time,
                            std::function<void(bool)> const &set_eoc,
                            std::function<void()> const &forward)
     : defer_gate_is_active{std::move(defer_gate_is_active)},
-      stage_gate_is_up{stage_gate_is_up},
-      eoc_generator{std::move(sample_time), [set_eoc]() { set_eoc(true); },
-                    [set_eoc]() { set_eoc(false); }},
+      stage_gate_is_up{stage_gate_is_up}, eoc_generator{
+                                              std::move(sample_time),
+                                              [set_eoc]() { set_eoc(true); },
+                                              [set_eoc]() { set_eoc(false); }},
       stage_gate{stage_gate_is_up, [this]() { on_stage_gate_rise(); },
                  [this]() { on_stage_gate_fall(); }},
       defer_gate{std::move(defer_gate_is_up), [this]() { enter(&deferring); },
@@ -25,7 +26,7 @@ StateMachine::StateMachine(std::function<float()> sample_time,
 
 void StateMachine::enter(StageState *incoming) {
   state = incoming;
-  state->on_entry();
+  state->enter();
 }
 
 void StateMachine::finish_stage() {
@@ -43,12 +44,12 @@ void StateMachine::on_stage_gate_rise() {
   state->on_stage_gate_rise();
 }
 
-void StateMachine::start() { state->on_entry(); }
+void StateMachine::start() { state->enter(); }
 
 void StateMachine::step() {
   defer_gate.step();
   stage_gate.step();
-  state->on_step();
+  state->step();
   eoc_generator.step();
 }
 
