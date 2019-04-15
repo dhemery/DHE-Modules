@@ -25,6 +25,7 @@ public:
                      std::move(defer_gate_is_active),
                      std::move(defer_gate_is_up),
                      stage_gate_is_up,
+                     [this]() { start_generating(); },
                      set_active,
                      set_eoc,
                      forward},
@@ -34,7 +35,7 @@ public:
         sustaining{[this]() { finish_stage(); }, forward, set_active} {}
 
 protected:
-  void start_generating() override {
+  void start_generating() {
     if (is_sustain_mode()) {
       this->enter(&sustaining);
     } else {

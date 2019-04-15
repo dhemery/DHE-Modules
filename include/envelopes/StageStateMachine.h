@@ -30,6 +30,7 @@ public:
                      std::move(defer_gate_is_active),
                      std::move(defer_gate_is_up),
                      stage_trigger_is_up,
+                     [this]() { enter(&generating); },
                      set_active,
                      set_eoc,
                      forward},
@@ -39,9 +40,6 @@ public:
                    std::move(prepare),
                    std::move(generate),
                    set_active} {}
-
-protected:
-  void start_generating() override { this->enter(&generating); };
 
 private:
   Generating generating;
