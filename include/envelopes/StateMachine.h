@@ -40,11 +40,11 @@ private:
   const std::function<bool()> stage_gate_is_up;
 
   EndOfCyclePulseGenerator eoc_generator;
-  StageState *state{&forwarding};
   EdgeDetector stage_gate;
   EdgeDetector defer_gate;
   Deferring deferring;
   Forwarding forwarding;
   Idling idling;
+  StageState *state{&forwarding};
 };
 } // namespace DHE

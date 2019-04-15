@@ -13,13 +13,12 @@ namespace DHE {
 class Idling : public StageState {
 public:
   explicit Idling(std::function<void()> on_stage_gate_rise,
-                  std::function<void(bool)> set_active)
-      : StageState{std::move(on_stage_gate_rise)}, set_active{
-                                                       std::move(set_active)} {}
-
-  void enter() override { set_active(false); }
-
-private:
-  const std::function<void(bool)> set_active;
+                  std::function<void(bool)> const &set_active)
+      : StageState{
+            std::move(on_stage_gate_rise), // As instructed on stage gate rise
+            []() {},                       // Ignore stage gate fall
+            [set_active]() { set_active(false); }, // Deactivate on entry
+            []() {}                                // Do nothing on each step
+        } {}
 };
 } // namespace DHE

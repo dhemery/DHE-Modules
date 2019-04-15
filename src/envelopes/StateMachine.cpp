@@ -24,9 +24,8 @@ StateMachine::StateMachine(std::function<float()> sample_time,
       idling{[this]() { start_generating(); }, set_active} {}
 
 void StateMachine::enter(StageState *incoming) {
-  state->exit();
   state = incoming;
-  state->enter();
+  state->on_entry();
 }
 
 void StateMachine::finish_stage() {
@@ -44,12 +43,12 @@ void StateMachine::on_stage_gate_rise() {
   state->on_stage_gate_rise();
 }
 
-void StateMachine::start() { state->enter(); }
+void StateMachine::start() { state->on_entry(); }
 
 void StateMachine::step() {
   defer_gate.step();
   stage_gate.step();
-  state->step();
+  state->on_step();
   eoc_generator.step();
 }
 

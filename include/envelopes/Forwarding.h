@@ -14,17 +14,13 @@ namespace DHE {
 class Forwarding : public StageState {
 public:
   Forwarding(std::function<void()> on_stage_gate_rise,
-             std::function<void()> forward,
-             std::function<void(bool)> set_active)
-      : StageState{std::move(on_stage_gate_rise)},
-        set_active{std::move(set_active)}, forward{std::move(forward)} {}
-
-  void enter() override { set_active(true); }
-
-  void step() override { forward(); }
-
-private:
-  const std::function<void(bool)> set_active;
-  const std::function<void()> forward;
+             std::function<void()> const &forward,
+             std::function<void(bool)> const &set_active)
+      : StageState{
+            std::move(on_stage_gate_rise),        // As instructed
+            []() {},                              // Ignore stage gate fall
+            [set_active]() { set_active(true); }, // Activate on entry
+            forward                               // Forward on each step
+        } {}
 };
 } // namespace DHE

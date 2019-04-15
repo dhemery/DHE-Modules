@@ -1,3 +1,5 @@
+#include <utility>
+
 #pragma once
 
 #include <functional>
@@ -12,10 +14,14 @@ public:
   Sustaining(const std::function<void()> &on_stage_gate_fall,
              std::function<void()> forward,
              std::function<void(bool)> set_active)
-      : StageState{[]() {}, on_stage_gate_fall},
+      : StageState{[]() {}, // Ignore stage gate rise
+                   on_stage_gate_fall, // As instructed
+                   [this]() { start_sustaining(); }, // Start sustaining on entry
+                   [] () {} // Do nothing on each step
+                   },
         set_active{std::move(set_active)}, forward{std::move(forward)} {}
 
-  void enter() override {
+  void start_sustaining() {
     set_active(true);
     forward();
   }

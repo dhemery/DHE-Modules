@@ -14,15 +14,13 @@ namespace DHE {
  */
 class Deferring : public StageState {
 public:
-  explicit Deferring(std::function<void()> forward,
-                     std::function<void(bool)> set_active)
-      : set_active{std::move(set_active)}, forward{std::move(forward)} {}
-
-  void enter() override { set_active(true); }
-  void step() override { forward(); }
-
-private:
-  const std::function<void(bool)> set_active;
-  const std::function<void()> forward;
+  explicit Deferring(std::function<void()> const &forward,
+                     std::function<void(bool)> const &set_active)
+      : StageState{
+            []() {},                              // Ignore stage gate rise
+            []() {},                              // Ignore stage gate fall
+            [set_active]() { set_active(true); }, // Activate on entry
+            forward                               // Forward on each step
+        } {}
 };
 } // namespace DHE
