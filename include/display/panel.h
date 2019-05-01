@@ -23,7 +23,8 @@ extern rack::plugin::Plugin *plugin;
 
 namespace DHE {
 template <typename P> class Jack : public rack::app::SvgPort {
-  Jack() { setBackground(P::svg("port")); }
+public:
+  Jack() { setSvg(P::svg("port")); }
 };
 
 template <typename P> class InputJack : public Jack<P> {};
@@ -80,63 +81,35 @@ protected:
     return box.size.x * rack::app::MM_PER_IN / rack::app::SVG_DPI;
   }
 
-  void install(float x, float y, InputJack<P> *jack) { addInput(jack); }
-
-  void install(float x, float y, OutputJack<P> *jack) { addOutput(jack); }
-
-  void install(float x, float y, rack::app::ParamWidget *param) {
-    addParam(param);
-  }
-
-  void install(float x, float y, rack::widget::Widget *widget) {
-    addChild(widget);
-  }
-
   template <template <typename> class K>
-  auto knob(int index, float initial = 0.5f,
-            const std::function<void(float)> &on_change = [](float) {}) const
-      -> K<P> * {
-    return param<K<P>>(index, 1, initial, on_change);
+  auto knob(float x, float y, int index) const -> K<P> * {
+    return rack::createParamCentered<K<P>>({x, y}, module, index);
   }
 
   template <template <typename> class B = Button>
-  auto button(int index, const std::function<void(bool)> &on_change = [](bool) {
-  }) const -> B<P> * {
-    return param<B<P>>(index, 1, 0, on_change);
+  auto button(float x, float y, int index) const -> B<P> * {
+    return rack::createParamCentered<B<P>>({x, y}, module, index);
   }
 
   template <template <typename> class C>
-  auto toggle(int index, int initial,
-              const std::function<void(int)> &on_change = [](int) {}) const
-      -> C<P> * {
-    return param<C<P>>(index, C<P>::size - 1, initial, on_change);
+  auto toggle(float x, float y, int index) const -> C<P> * {
+    return rack::createParamCentered<C<P>>({x, y}, module, index);
   }
 
   template <int N>
-  auto toggle(int index, int initial,
-              const std::function<void(int)> &on_change = [](int) {}) const
-      -> Toggle<P, N> * {
-    return param<Toggle<P, N>>(index, N - 1, initial, on_change);
+  auto toggle(float x, float y, int index) const -> Toggle<P, N> * {
+    return rack::createParamCentered<Toggle<P, N>>({x, y}, module, index);
   }
 
-  auto input(int index) const -> InputJack<P> * {
-    return rack::createInput({0, 0}, module, index);
+  auto input(float x, float y, int index) const -> InputJack<P> * {
+    return rack::createInput<InputJack<P>>({x, y}, module, index);
   }
 
-  auto output(int index) const -> OutputJack<P> * {
-    return rack::createOutput({0, 0}, module, index);
+  auto output(float x, float y, int index) const -> OutputJack<P> * {
+    return rack::createOutput<OutputJack<P>>({x, y}, module, index);
   }
 
 private:
-  template <typename T>
-  auto param(int index, float max, float initial,
-             const std::function<void(float)> &on_change) const -> T * {
-    auto widget = rack::createParam<T>({0, 0}, module, index, 0, max, initial);
-    widget->notify = on_change;
-    widget->notify(widget->value);
-    return widget;
-  }
-
   void install_screws() {
     auto screw_diameter =
         rack::app::RACK_GRID_WIDTH * rack::app::MM_PER_IN / rack::app::SVG_DPI;
@@ -156,13 +129,14 @@ private:
                  std::mt19937(std::random_device()()));
 
     auto p_special = screw_positions.back();
-    install(p_special.x, p_special.y,
-            rack::createWidgetCentered<rack::componentlibrary::ScrewBlack>(p_special));
+    addChild(rack::createWidgetCentered<rack::componentlibrary::ScrewBlack>(
+        p_special));
 
     screw_positions.pop_back();
 
     for (auto p : screw_positions) {
-      install(rack::createWidgetCentered<rack::componentlibrary::ScrewSilver>(p));
+      addChild(
+          rack::createWidgetCentered<rack::componentlibrary::ScrewSilver>(p));
     }
   }
 };

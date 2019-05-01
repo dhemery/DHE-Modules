@@ -10,21 +10,13 @@ namespace DHE {
 
 Xycloid::Xycloid() : Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT} {}
 
-void Xycloid::set_musical_wobble_ratios(bool is_musical) {
-  wobble_ratio_offset = is_musical ? 0.f : 1.f;
-}
-
-auto Xycloid::is_musical_wobble_ratios() const -> bool {
-  return wobble_ratio_offset == 0.f;
-}
-
-void Xycloid::step() {
+void Xycloid::process(const ProcessArgs &args) {
   auto wobble_ratio = this->wobble_ratio();
   auto wobble_phase_offset = wobble_phase_in();
   if (wobble_ratio < 0.f)
     wobble_phase_offset *= -1.f;
 
-  auto throb_speed = this->throb_speed();
+  auto throb_speed = this->throb_speed(args.sampleTime);
   auto wobble_speed = wobble_ratio * throb_speed;
   auto wobble_depth = this->wobble_depth();
   auto throb_depth = 1.f - wobble_depth;
@@ -47,12 +39,12 @@ auto Xycloid::offset(int param) const -> float {
   return is_uni ? 1.f : 0.f;
 }
 
-auto Xycloid::throb_speed() const -> float {
+auto Xycloid::throb_speed(float sampleTime) const -> float {
   constexpr auto speed_taper_curvature = 0.8f;
   auto rotation = modulated(THROB_SPEED_KNOB, THROB_SPEED_CV, THROB_SPEED_AV);
   auto scaled = throb_speed_knob_range.scale(rotation);
   auto tapered = Sigmoid::inverse(scaled, speed_taper_curvature);
-  return -10.f * tapered * rack::engineGetSampleTime();
+  return -10.f * tapered * sampleTime;
 }
 
 auto Xycloid::wobble_depth() const -> float {
@@ -103,18 +95,5 @@ auto Xycloid::y_gain_in() const -> float {
 }
 
 auto Xycloid::y_offset() const -> float { return offset(Y_RANGE_SWITCH); }
-
-json_t *Xycloid::toJson() {
-  json_t *configuration = json_object();
-  json_object_set_new(configuration, "musical_wobble_ratios",
-                      json_boolean(is_musical_wobble_ratios()));
-  return configuration;
-}
-
-void Xycloid::fromJson(json_t *configuration) {
-  json_t *musical_wobble_ratios =
-      json_object_get(configuration, "musical_wobble_ratios");
-  set_musical_wobble_ratios(json_is_true(musical_wobble_ratios));
-}
 
 } // namespace DHE

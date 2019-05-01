@@ -15,47 +15,37 @@ BoosterStagePanel::BoosterStagePanel(BoosterStage *module) : Panel{module, hp} {
   auto y = 25.f;
   auto dy = 18.5f;
 
-  install(column_1, y, input(BoosterStage::LEVEL_CV));
-  install(column_3, y, knob<LargeKnob>(BoosterStage::LEVEL_KNOB));
-  install(column_5, y,
-          toggle<2>(BoosterStage::LEVEL_RANGE_SWITCH, 1,
-                    module->level_range_selector));
+  input(column_1, y, BoosterStage::LEVEL_CV);
+  knob<LargeKnob>(column_3, y, BoosterStage::LEVEL_KNOB);
+  toggle<2>(column_5, y, BoosterStage::LEVEL_RANGE_SWITCH);
 
   y += dy;
-  install(column_1, y, input(BoosterStage::CURVE_CV));
-  install(column_3, y, knob<LargeKnob>(BoosterStage::CURVE_KNOB));
-  install(column_5, y, toggle<2>(BoosterStage::SHAPE_SWITCH, 0));
+  input(column_1, y, BoosterStage::CURVE_CV);
+  knob<LargeKnob>(column_3, y, BoosterStage::CURVE_KNOB);
+  toggle<2>(column_5, y, BoosterStage::SHAPE_SWITCH);
 
   y += dy;
-  install(column_1, y, input(BoosterStage::DURATION_CV));
-  install(column_3, y, knob<LargeKnob>(BoosterStage::DURATION_KNOB));
-  install(column_5, y,
-          toggle<3>(BoosterStage::DURATION_RANGE_SWITCH, 1,
-                    module->duration_range_selector));
+  input(column_1, y, BoosterStage::DURATION_CV);
+  knob<LargeKnob>(column_3, y, BoosterStage::DURATION_KNOB);
+  toggle<3>(column_5, y, BoosterStage::DURATION_RANGE_SWITCH);
 
   y = 82.f;
   dy = 15.f;
 
-  install(column_1, y, input(BoosterStage::DEFER_GATE_IN));
-  install(column_2, y, button(BoosterStage::DEFER_BUTTON));
-  install(
-      column_4, y,
-      button<ReverseButton>(BoosterStage::ACTIVE_BUTTON, [module](bool active) {
-        module->set_active_button(active);
-      }));
-  install(column_5, y, output(BoosterStage::ACTIVE_OUT));
+  input(column_1, y, BoosterStage::DEFER_GATE_IN);
+  button(column_2, y, BoosterStage::DEFER_BUTTON);
+
+  button<ReverseButton>(column_4, y, BoosterStage::ACTIVE_BUTTON);
+  output(column_5, y, BoosterStage::ACTIVE_OUT);
 
   y += dy;
-  install(column_1, y, input(BoosterStage::STAGE_TRIGGER_IN));
-  install(column_2, y, button(BoosterStage::TRIGGER_BUTTON));
-  install(column_4, y,
-          button<ReverseButton>(BoosterStage::EOC_BUTTON, [module](bool eoc) {
-            module->set_eoc_button(eoc);
-          }));
-  install(column_5, y, output(BoosterStage::EOC_OUT));
+  input(column_1, y, BoosterStage::STAGE_TRIGGER_IN);
+  button(column_2, y, BoosterStage::TRIGGER_BUTTON);
+  button<ReverseButton>(column_4, y, BoosterStage::EOC_BUTTON);
+  output(column_5, y, BoosterStage::EOC_OUT);
 
   y += dy;
-  install(column_1, y, input(BoosterStage::ENVELOPE_IN));
-  install(column_5, y, output(BoosterStage::MAIN_OUT));
+  input(column_1, y, BoosterStage::ENVELOPE_IN);
+  output(column_5, y, BoosterStage::MAIN_OUT);
 }
 } // namespace DHE

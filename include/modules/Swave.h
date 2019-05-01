@@ -2,13 +2,12 @@
 
 #include "Module.h"
 
-
 namespace DHE {
 
 class Swave : public Module {
 public:
   Swave();
-  void step() override;
+  void process(const ProcessArgs &args) override;
 
   enum ParameterIds { CURVE_KNOB, SHAPE_SWITCH, PARAMETER_COUNT };
   enum InputIds { CURVE_CV, MAIN_IN, INPUT_COUNT };

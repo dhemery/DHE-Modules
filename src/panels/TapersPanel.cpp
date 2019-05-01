@@ -13,30 +13,30 @@ TapersPanel::TapersPanel(Tapers *module) : Panel{module, hp} {
   auto dy = 16.f;
   auto panel_buffer = 4.f;
 
-  install(column_1, y, input(Tapers::LEVEL_1_CV));
-  install(column_2, y, knob<TinyKnob>(Tapers::LEVEL_1_AV));
-  install(column_3, y, knob<MediumKnob>(Tapers::LEVEL_1_KNOB));
+  input(column_1, y, Tapers::LEVEL_1_CV);
+  knob<TinyKnob>(column_2, y, Tapers::LEVEL_1_AV);
+  knob<MediumKnob>(column_3, y, Tapers::LEVEL_1_KNOB);
   y += dy;
-  install(column_1, y, input(Tapers::CURVE_1_CV));
-  install(column_2, y, knob<TinyKnob>(Tapers::CURVE_1_AV));
-  install(column_3, y, knob<MediumKnob>(Tapers::CURVE_1_KNOB));
+  input(column_1, y, Tapers::CURVE_1_CV);
+  knob<TinyKnob>(column_2, y, Tapers::CURVE_1_AV);
+  knob<MediumKnob>(column_3, y, Tapers::CURVE_1_KNOB);
   y += dy;
-  install(column_1, y, toggle<2>(Tapers::SHAPE_1_SWITCH, 0));
-  install(column_2, y, toggle<2>(Tapers::RANGE_1_SWITCH, 1));
-  install(column_3, y, output(Tapers::OUT_1));
+  toggle<2>(column_1, y, Tapers::SHAPE_1_SWITCH);
+  toggle<2>(column_2, y, Tapers::RANGE_1_SWITCH);
+  output(column_3, y, Tapers::OUT_1);
 
   y += dy + panel_buffer;
 
-  install(column_1, y, input(Tapers::LEVEL_2_CV));
-  install(column_2, y, knob<TinyKnob>(Tapers::LEVEL_2_AV));
-  install(column_3, y, knob<MediumKnob>(Tapers::LEVEL_2_KNOB));
+  input(column_1, y, Tapers::LEVEL_2_CV);
+  knob<TinyKnob>(column_2, y, Tapers::LEVEL_2_AV);
+  knob<MediumKnob>(column_3, y, Tapers::LEVEL_2_KNOB);
   y += dy;
-  install(column_1, y, input(Tapers::CURVE_2_CV));
-  install(column_2, y, knob<TinyKnob>(Tapers::CURVE_2_AV));
-  install(column_3, y, knob<MediumKnob>(Tapers::CURVE_2_KNOB));
+  input(column_1, y, Tapers::CURVE_2_CV);
+  knob<TinyKnob>(column_2, y, Tapers::CURVE_2_AV);
+  knob<MediumKnob>(column_3, y, Tapers::CURVE_2_KNOB);
   y += dy;
-  install(column_1, y, toggle<2>(Tapers::SHAPE_2_SWITCH, 0));
-  install(column_2, y, toggle<2>(Tapers::RANGE_2_SWITCH, 1));
-  install(column_3, y, output(Tapers::OUT_2));
+  toggle<2>(column_1, y, Tapers::SHAPE_2_SWITCH);
+  toggle<2>(column_2, y, Tapers::RANGE_2_SWITCH);
+  output(column_3, y, Tapers::OUT_2);
 }
 } // namespace DHE

@@ -4,7 +4,7 @@ namespace DHE {
 
 Upstage::Upstage() : Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT} {}
 
-void Upstage::step() {
+void Upstage::process(const ProcessArgs &args) {
   auto is_triggered = trigger_in() && !wait_in();
   send_trigger(is_triggered);
   send_envelope(envelope_voltage());

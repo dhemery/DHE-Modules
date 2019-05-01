@@ -12,7 +12,7 @@ static const auto addition_ranges = std::array<Range const *, 4>{
     &half_bipolar_range, &Signal::bipolar_range, &Signal::unipolar_range,
     &invertible_unipolar_range};
 
-FuncChannel::FuncChannel(rack::Module *module, int input, int amount_knob_param,
+FuncChannel::FuncChannel(rack::engine::Module *module, int input, int amount_knob_param,
                          int output)
     : input_port{module->inputs[input]},
       amount{module->params[amount_knob_param].value},

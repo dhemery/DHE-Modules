@@ -11,26 +11,26 @@ StagePanel::StagePanel(Stage *module) : Panel{module, hp} {
   auto y = 25.f;
   auto dy = 18.5f;
 
-  install(column_2, y, knob<LargeKnob>(Stage::LEVEL_KNOB));
+  knob<LargeKnob>(column_2, y, Stage::LEVEL_KNOB);
 
   y += dy;
-  install(column_2, y, knob<LargeKnob>(Stage::CURVE_KNOB));
+  knob<LargeKnob>(column_2, y, Stage::CURVE_KNOB);
 
   y += dy;
-  install(column_2, y, knob<LargeKnob>(Stage::DURATION_KNOB));
+  knob<LargeKnob>(column_2, y, Stage::DURATION_KNOB);
 
   y = 82.f;
   dy = 15.f;
 
-  install(column_1, y, input(Stage::DEFER_GATE_IN));
-  install(column_3, y, output(Stage::ACTIVE_OUT));
+  input(column_1, y, Stage::DEFER_GATE_IN);
+  output(column_3, y, Stage::ACTIVE_OUT);
 
   y += dy;
-  install(column_1, y, input(Stage::STAGE_TRIGGER_IN));
-  install(column_3, y, output(Stage::EOC_OUT));
+  input(column_1, y, Stage::STAGE_TRIGGER_IN);
+  output(column_3, y, Stage::EOC_OUT);
 
   y += dy;
-  install(column_1, y, input(Stage::ENVELOPE_IN));
-  install(column_3, y, output(Stage::MAIN_OUT));
+  input(column_1, y, Stage::ENVELOPE_IN);
+  output(column_3, y, Stage::MAIN_OUT);
 }
 } // namespace DHE

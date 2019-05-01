@@ -14,17 +14,16 @@ namespace DHE {
 
 class StateMachine {
 public:
-  StateMachine(std::function<float()> sample_time,
-               std::function<bool()> defer_gate_is_active,
+  StateMachine(std::function<bool()> defer_gate_is_active,
                std::function<bool()> defer_gate_is_up,
                std::function<bool()> const &stage_gate_is_up,
                std::function<void()> const &start_generating,
                std::function<void(bool)> const &set_active,
                std::function<void(bool)> const &set_eoc,
-               std::function<void()> const &forward);
+               std::function<void(float)> const &forward);
 
   void start();
-  void step();
+  void step(float sampleTime);
 
 protected:
   void enter(StageState *incoming);

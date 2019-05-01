@@ -12,7 +12,7 @@ class Upstage : public Module {
 public:
   Upstage();
 
-  void step() override;
+  void process(const ProcessArgs &args) override;
 
   enum ParameterIds {
     LEVEL_KNOB,

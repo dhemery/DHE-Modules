@@ -18,7 +18,7 @@ void Swave::send_signal(float voltage) { outputs[MAIN_OUT].value = voltage; }
 
 auto Swave::signal_in() const -> float { return inputs[MAIN_IN].value; }
 
-void Swave::step() {
+void Swave::process(const ProcessArgs &args) {
   auto phase = Signal::bipolar_range.normalize(signal_in());
   auto shaped = Sigmoid::taper(phase, curve(), is_s());
   auto out_voltage = Signal::bipolar_range.scale(shaped);

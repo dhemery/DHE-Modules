@@ -8,7 +8,7 @@ class Tapers : public Module {
 public:
   Tapers();
 
-  void step() override;
+  void process(const ProcessArgs &args) override;
 
   enum ParameterIds {
     LEVEL_1_KNOB,

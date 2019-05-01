@@ -10,9 +10,9 @@ namespace DHE {
 
 class Hostage : public Module {
 public:
-  Hostage() : Hostage{[]() -> float { return rack::engineGetSampleTime(); }} {}
-  explicit Hostage(const std::function<float()> &sample_time);
-  void step() override;
+  Hostage();
+  void process(const ProcessArgs &args) override;
+
   auto defer_gate_in() const -> bool;
   auto defer_gate_is_active() const -> bool;
   auto duration() const -> float;

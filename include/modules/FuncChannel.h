@@ -1,5 +1,7 @@
 #pragma once
 
+#include "engine/Module.hpp"
+
 #include "util/gain.h"
 #include "util/signal.h"
 
@@ -14,7 +16,7 @@ static constexpr auto invertible_unipolar_range = Range{-10.f, 10.f};
 
 class FuncChannel {
 public:
-  FuncChannel(rack::Module *module, int input, int amount_knob_param,
+  FuncChannel(rack::engine::Module *module, int input, int amount_knob_param,
               int output);
   auto adjust(float upstream) -> float;
   void set_operator(bool is_multiplication);
@@ -22,7 +24,7 @@ public:
   void set_multiplication_range(int selection);
 
 private:
-  const rack::Input &input_port;
+  const rack::engine::Input &input_port;
   bool is_multiplication = false;
   Range const *addition_range{&Signal::bipolar_range};
   Range const *multiplication_range{&Gain::range};

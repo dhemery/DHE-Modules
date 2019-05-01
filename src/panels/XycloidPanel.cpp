@@ -15,53 +15,38 @@ XycloidPanel::XycloidPanel(Xycloid *module) : Panel{module, hp} {
   auto y = 30.f;
   auto dy = 22.f;
 
-  install(column_1, y, input(Xycloid::WOBBLE_RATIO_CV));
-  install(column_2, y, knob<TinyKnob>(Xycloid::WOBBLE_RATIO_AV));
-  install(column_3, y, knob<LargeKnob>(Xycloid::WOBBLE_RATIO_KNOB));
-  install(column_4, y, toggle<2>(Xycloid::WOBBLE_RATIO_FREEDOM_SWITCH, 1));
+  input(column_1, y, Xycloid::WOBBLE_RATIO_CV);
+  knob<TinyKnob>(column_2, y, Xycloid::WOBBLE_RATIO_AV);
+  knob<LargeKnob>(column_3, y, Xycloid::WOBBLE_RATIO_KNOB);
+  toggle<2>(column_4, y, Xycloid::WOBBLE_RATIO_FREEDOM_SWITCH);
 
   y += dy;
-  install(column_1, y, input(Xycloid::WOBBLE_DEPTH_CV));
-  install(column_2, y, knob<TinyKnob>(Xycloid::WOBBLE_DEPTH_AV));
-  install(column_3, y, knob<LargeKnob>(Xycloid::WOBBLE_DEPTH_KNOB));
-  install(column_4, y, toggle<3>(Xycloid::WOBBLE_RANGE_SWITCH, 2));
+  input(column_1, y, Xycloid::WOBBLE_DEPTH_CV);
+  knob<TinyKnob>(column_2, y, Xycloid::WOBBLE_DEPTH_AV);
+  knob<LargeKnob>(column_3, y, Xycloid::WOBBLE_DEPTH_KNOB);
+  toggle<3>(column_4, y, Xycloid::WOBBLE_RANGE_SWITCH);
 
   y += dy;
-  install(column_1, y, input(Xycloid::THROB_SPEED_CV));
-  install(column_2, y, knob<TinyKnob>(Xycloid::THROB_SPEED_AV));
-  install(column_3, y, knob<LargeKnob>(Xycloid::THROB_SPEED_KNOB, 0.65f));
-  install(column_4, y, knob<SmallKnob>(Xycloid::WOBBLE_PHASE_KNOB));
+  input(column_1, y, Xycloid::THROB_SPEED_CV);
+  knob<TinyKnob>(column_2, y, Xycloid::THROB_SPEED_AV);
+  knob<LargeKnob>(column_3, y, Xycloid::THROB_SPEED_KNOB);
+  knob<SmallKnob>(column_4, y, Xycloid::WOBBLE_PHASE_KNOB);
 
   y = 82.f;
   dy = 15.f;
   const auto output_port_offset = 1.25f;
 
-  auto default_gain = Gain::range.normalize(1.f);
+  y += dy;
+  input(column_1, y, Xycloid::X_GAIN_CV);
+  knob<SmallKnob>(column_2, y, Xycloid::X_GAIN_KNOB);
+  toggle<2>(column_3, y, Xycloid::X_RANGE_SWITCH);
+  output(column_4, y + output_port_offset, Xycloid::X_OUT);
 
   y += dy;
-  install(column_1, y, input(Xycloid::X_GAIN_CV));
-  install(column_2, y, knob<SmallKnob>(Xycloid::X_GAIN_KNOB, default_gain));
-  install(column_3, y, toggle<2>(Xycloid::X_RANGE_SWITCH, 0));
-  install(column_4, y + output_port_offset, output(Xycloid::X_OUT));
-
-  y += dy;
-  install(column_1, y, input(Xycloid::Y_GAIN_CV));
-  install(column_2, y, knob<SmallKnob>(Xycloid::Y_GAIN_KNOB, default_gain));
-  install(column_3, y, toggle<2>(Xycloid::Y_RANGE_SWITCH, 0));
-  install(column_4, y + output_port_offset, output(Xycloid::Y_OUT));
-}
-
-void XycloidPanel::appendContextMenu(rack::Menu *menu) {
-  auto xycloid = dynamic_cast<Xycloid *>(module);
-  assert(xycloid);
-
-  menu->addChild(rack::construct<rack::MenuLabel>());
-  menu->addChild(
-      rack::construct<rack::MenuLabel>(&rack::MenuLabel::text, "Options"));
-  menu->addChild(new BooleanOption(
-      "Musical Ratios",
-      [xycloid](bool setting) { xycloid->set_musical_wobble_ratios(setting); },
-      [xycloid] { return xycloid->is_musical_wobble_ratios(); }));
+  input(column_1, y, Xycloid::Y_GAIN_CV);
+  knob<SmallKnob>(column_2, y, Xycloid::Y_GAIN_KNOB);
+  toggle<2>(column_3, y, Xycloid::Y_RANGE_SWITCH);
+  output(column_4, y + output_port_offset, Xycloid::Y_OUT);
 }
 
 } // namespace DHE

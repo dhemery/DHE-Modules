@@ -8,14 +8,13 @@
 
 namespace DHE {
 
-BoosterStage::BoosterStage(const std::function<float()> &sample_time)
+BoosterStage::BoosterStage()
     : Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT},
       state_machine{[this]() -> bool { return defer_gate_is_active(); },
                     [this]() -> bool { return defer_gate_in(); },
                     [this]() -> bool { return stage_gate_in(); },
                     [this]() -> float { return duration(); },
-                    sample_time,
-                    [this]() { forward(); },
+                    [this](float) { forward(); },
                     [this]() { prepare_to_generate(); },
                     [this](float phase) { generate(phase); },
                     [this](bool active) { set_active(active); },
@@ -23,7 +22,7 @@ BoosterStage::BoosterStage(const std::function<float()> &sample_time)
   state_machine.start();
 }
 
-void BoosterStage::step() { state_machine.step(); }
+void BoosterStage::process(const ProcessArgs &args) { state_machine.step(args.sampleTime); }
 
 void BoosterStage::forward() { send_out(envelope_in()); }
 

@@ -6,7 +6,7 @@ Func6::Func6() : Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT} {
     channels.emplace_back(this, IN + i, KNOB + i, OUT + i);
   }
 }
-void Func6::step() {
+void Func6::process(const ProcessArgs &args) {
   auto upstream = 0.f;
   for (auto &channel : channels) {
     upstream = channel.adjust(upstream);

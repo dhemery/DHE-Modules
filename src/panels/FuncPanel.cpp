@@ -20,41 +20,30 @@ FuncPanel::FuncPanel(Func *module) : Panel{module, hp} {
   auto row_4 = top + row_spacing * 3;
   auto row_6 = top + row_spacing * 5 + port_offset;
 
-  auto channel = &module->channel;
-  auto operator_switch_index = Func::OPERATOR_SWITCH;
-  auto addition_range_switch_index = Func::ADDITION_RANGE_SWITCH;
-  auto multiplication_range_switch_index = Func::MULTIPLICATION_RANGE_SWITCH;
+  //  auto channel = &module->channel;
+  //  auto addition_range_selector = [channel](int selection) {
+  //    channel->set_addition_range(selection);
+  //  };
+  //
+  //  auto multiplication_range_selector = [channel](int selection) {
+  //    channel->set_multiplication_range(selection);
+  //  };
+  //
+  //  auto select_operator = [channel, addition_range_switch,
+  //                          multiplication_range_switch](int position) {
+  //    auto is_multiplication = position == 1;
+  //    channel->set_operator(is_multiplication);
+  //    multiplication_range_switch->visible = is_multiplication;
+  //    addition_range_switch->visible = !is_multiplication;
+  //  };
 
-  auto addition_range_selector = [channel](int selection) {
-    channel->set_addition_range(selection);
-  };
-
-  auto multiplication_range_selector = [channel](int selection) {
-    channel->set_multiplication_range(selection);
-  };
-
-  auto multiplication_range_switch = toggle<MultiplicationRangeStepper>(
-      multiplication_range_switch_index, 2, multiplication_range_selector);
-
-  auto addition_range_switch = toggle<AdditionRangeStepper>(
-      addition_range_switch_index, 1, addition_range_selector);
-
-  auto select_operator = [channel, addition_range_switch,
-                          multiplication_range_switch](int position) {
-    auto is_multiplication = position == 1;
-    channel->set_operator(is_multiplication);
-    multiplication_range_switch->visible = is_multiplication;
-    addition_range_switch->visible = !is_multiplication;
-  };
-
-  auto operator_switch = toggle<2>(operator_switch_index, 0, select_operator);
-
-  install(x, row_1, input(Func::IN));
-  install(x, row_2, operator_switch);
-  install(x, row_4, addition_range_switch);
-  install(x, row_4, multiplication_range_switch);
-  install(x, row_3, knob<LargeKnob>(Func::KNOB));
-  install(x, row_6, output(Func::OUT));
+  input(x, row_1, Func::IN);
+  toggle<2>(x, row_2, Func::OPERATOR_SWITCH);
+  toggle<AdditionRangeStepper>(x, row_4, Func::ADDITION_RANGE_SWITCH);
+  toggle<MultiplicationRangeStepper>(x, row_4,
+                                     Func::MULTIPLICATION_RANGE_SWITCH);
+  knob<LargeKnob>(x, row_3, Func::KNOB);
+  output(x, row_6, Func::OUT);
 }
 
 } // namespace DHE

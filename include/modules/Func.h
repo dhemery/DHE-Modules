@@ -8,7 +8,7 @@ namespace DHE {
 class Func : public Module {
 public:
   Func();
-  void step() override;
+  void process(const ProcessArgs &args) override;
 
   enum ParameterIds {
     KNOB,

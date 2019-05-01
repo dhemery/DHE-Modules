@@ -6,14 +6,13 @@
 #include "util/signal.h"
 
 namespace DHE {
-Stage::Stage(const std::function<float()> &sample_time)
-    : rack::Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT},
+Stage::Stage()
+    : Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT},
       state_machine{[this]() -> bool { return defer_gate_is_active(); },
                     [this]() -> bool { return defer_gate_in(); },
                     [this]() -> bool { return stage_gate_in(); },
                     [this]() -> float { return duration(); },
-                    sample_time,
-                    [this]() { forward(); },
+                    [this](float) { forward(); },
                     [this]() { prepare_to_generate(); },
                     [this](float phase) { generate(phase); },
                     [this](bool active) { set_active(active); },
@@ -66,7 +65,7 @@ auto Stage::stage_gate_in() const -> bool {
   return inputs[STAGE_TRIGGER_IN].value > 0.1;
 }
 
-void Stage::step() { state_machine.step(); }
+void Stage::process(const ProcessArgs &args) { state_machine.step(args.sampleTime); }
 
 auto Stage::taper(float phase) const -> float {
   return Sigmoid::j_taper(phase, curvature());

@@ -11,7 +11,7 @@ class Func6 : public Module {
 public:
   Func6();
 
-  void step() override;
+  void process(const ProcessArgs &args) override;
 
   enum ParameterIds {
     KNOB,

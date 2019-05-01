@@ -9,7 +9,7 @@ namespace DHE {
 class Forwarding : public StageState {
 public:
   Forwarding(std::function<void()> start_generating,
-             std::function<void()> const &forward,
+             std::function<void(float)> const &forward,
              std::function<void(bool)> const &set_active)
       : StageState{
             std::move(start_generating), // Start generating on stage gate rise

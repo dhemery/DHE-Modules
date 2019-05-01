@@ -11,31 +11,31 @@ CubicPanel::CubicPanel(Cubic *module) : Panel{module, hp} {
   auto y = 20.f;
   auto dy = 15.f;
 
-  install(column_1, y, input(Cubic::A_CV));
-  install(column_2, y, knob<SmallKnob>(Cubic::A_KNOB));
+  input(column_1, y, Cubic::A_CV);
+  knob<SmallKnob>(column_2, y, Cubic::A_KNOB);
 
   y += dy;
-  install(column_1, y, input(Cubic::B_CV));
-  install(column_2, y, knob<SmallKnob>(Cubic::B_KNOB));
+  input(column_1, y, Cubic::B_CV);
+  knob<SmallKnob>(column_2, y, Cubic::B_KNOB);
 
   y += dy;
-  install(column_1, y, input(Cubic::C_CV));
-  install(column_2, y, knob<SmallKnob>(Cubic::C_KNOB));
+  input(column_1, y, Cubic::C_CV);
+  knob<SmallKnob>(column_2, y, Cubic::C_KNOB);
 
   y += dy;
-  install(column_1, y, input(Cubic::D_CV));
-  install(column_2, y, knob<SmallKnob>(Cubic::D_KNOB));
+  input(column_1, y, Cubic::D_CV);
+  knob<SmallKnob>(column_2, y, Cubic::D_KNOB);
 
   y = 82.f;
-  install(column_1, y, knob<SmallKnob>(Cubic::INPUT_GAIN_KNOB));
-  install(column_2, y, knob<SmallKnob>(Cubic::OUTPUT_GAIN_KNOB));
+  knob<SmallKnob>(column_1, y, Cubic::INPUT_GAIN_KNOB);
+  knob<SmallKnob>(column_2, y, Cubic::OUTPUT_GAIN_KNOB);
 
   y += dy;
-  install(column_1, y, input(Cubic::INPUT_GAIN_CV));
-  install(column_2, y, input(Cubic::OUTPUT_GAIN_CV));
+  input(column_1, y, Cubic::INPUT_GAIN_CV);
+  input(column_2, y, Cubic::OUTPUT_GAIN_CV);
 
   y += dy;
-  install(column_1, y, input(Cubic::MAIN_IN));
-  install(column_2, y, output(Cubic::MAIN_OUT));
+  input(column_1, y, Cubic::MAIN_IN);
+  output(column_2, y, Cubic::MAIN_OUT);
 }
 } // namespace DHE

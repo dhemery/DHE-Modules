@@ -7,8 +7,8 @@ namespace DHE {
 
 Blossom::Blossom() : Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT} {}
 
-void Blossom::step() {
-  auto spin_rate = spin();
+void Blossom::process(const ProcessArgs &args) {
+  auto spin_rate = spin(args.sampleTime);
   auto bounce_ratio = is_bounce_free() ? bounce() : std::round(bounce());
   auto bounce_depth = depth();
 
@@ -36,12 +36,12 @@ auto Blossom::bounce() const -> float {
   return bounce_range.scale(rotation);
 }
 
-auto Blossom::spin() const -> float {
+auto Blossom::spin(float sample_time) const -> float {
   static constexpr auto spin_range = Range{-1.f, 1.f};
   auto rotation = modulated(SPIN_KNOB, SPIN_CV, SPIN_AV);
   auto scaled = spin_range.scale(rotation);
   auto tapered = Sigmoid::inverse(scaled, speed_curvature);
-  return -10.f * tapered * rack::engineGetSampleTime();
+  return -10.f * tapered * sample_time;
 }
 
 auto Blossom::depth() const -> float {

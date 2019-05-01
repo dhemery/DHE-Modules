@@ -8,8 +8,8 @@ namespace DHE {
 
 class Stage : public Module {
 public:
-  Stage() : Stage{[]() -> float { return rack::engineGetSampleTime(); }} {}
-  explicit Stage(const std::function<float()> &sample_time);
+  Stage();
+  void process(const ProcessArgs &args) override;
 
   auto defer_gate_in() const -> bool;
   auto defer_gate_is_active() const -> bool;
@@ -20,7 +20,6 @@ public:
   void set_active(bool active);
   void set_eoc(bool eoc);
   auto stage_gate_in() const -> bool;
-  void step() override;
 
   enum ParameterIIds { DURATION_KNOB, LEVEL_KNOB, CURVE_KNOB, PARAMETER_COUNT };
 

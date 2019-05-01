@@ -8,7 +8,7 @@ namespace DHE {
 
 class Deferring : public StageState {
 public:
-  explicit Deferring(std::function<void()> const &forward,
+  explicit Deferring(std::function<void(float)> const &forward,
                      std::function<void(bool)> const &set_active)
       : StageState{
             []() {},                              // Ignore stage gate rise

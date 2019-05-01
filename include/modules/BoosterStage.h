@@ -13,9 +13,8 @@ namespace DHE {
 
 class BoosterStage : public Module {
 public:
-  BoosterStage()
-      : BoosterStage{[]() -> float { return rack::engineGetSampleTime(); }} {}
-  explicit BoosterStage(const std::function<float()> &sample_time);
+  BoosterStage();
+  void process(const ProcessArgs &args) override;
 
   auto defer_gate_in() const -> bool;
   auto defer_gate_is_active() const -> bool;
@@ -28,7 +27,6 @@ public:
   void set_eoc(bool eoc);
   void set_eoc_button(bool eoc);
   auto stage_gate_in() const -> bool;
-  void step() override;
 
   const Selector<Range const *, 3> duration_range_selector{
       Duration::ranges(),

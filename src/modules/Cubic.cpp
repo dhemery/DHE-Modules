@@ -6,7 +6,7 @@ namespace DHE {
 
 Cubic::Cubic() : Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT} {}
 
-void Cubic::step() {
+void Cubic::process(const ProcessArgs &args) {
   auto a = coefficient(A_KNOB, A_CV);
   auto b = coefficient(B_KNOB, B_CV);
   auto c = coefficient(C_KNOB, C_CV);

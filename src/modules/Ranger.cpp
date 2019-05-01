@@ -26,6 +26,6 @@ auto Ranger::limit2() const -> float {
 
 void Ranger::send_main_out(float voltage) { outputs[MAIN_OUT].value = voltage; }
 
-void Ranger::step() { send_main_out(scale(level(), limit2(), limit1())); }
+void Ranger::process(const ProcessArgs &args) { send_main_out(scale(level(), limit2(), limit1())); }
 
 } // namespace DHE

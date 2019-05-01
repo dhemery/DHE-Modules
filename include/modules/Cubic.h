@@ -8,7 +8,7 @@ class Cubic : public Module {
 public:
   Cubic();
 
-  void step() override;
+  void process(const ProcessArgs &args) override;
 
   enum ParameterIds {
     A_KNOB,

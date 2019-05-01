@@ -12,29 +12,27 @@ HostagePanel::HostagePanel(Hostage *module) : Panel{module, hp} {
   auto y = 25.f;
   auto dy = 18.5f;
 
-  install(column_2, y, toggle<2>(Hostage::HOSTAGE_MODE_SWITCH, 0));
+  toggle<2>(column_2, y, Hostage::HOSTAGE_MODE_SWITCH);
 
   y += dy;
-  install(column_1, y, input(Hostage::DURATION_CV));
-  install(column_3, y,
-          toggle<3>(Hostage::DURATION_RANGE_SWITCH, 1,
-                    module->duration_range_selector));
+  input(column_1, y, Hostage::DURATION_CV);
+  toggle<3>(column_3, y, Hostage::DURATION_RANGE_SWITCH);
 
   y += dy;
-  install(column_2, y, knob<LargeKnob>(Hostage::DURATION_KNOB));
+  knob<LargeKnob>(column_2, y, Hostage::DURATION_KNOB);
 
   y = 82.f;
   dy = 15.f;
 
-  install(column_1, y, input(Hostage::DEFER_GATE_IN));
-  install(column_3, y, output(Hostage::ACTIVE_OUT));
+  input(column_1, y, Hostage::DEFER_GATE_IN);
+  output(column_3, y, Hostage::ACTIVE_OUT);
 
   y += dy;
-  install(column_1, y, input(Hostage::STAGE_GATE_IN));
-  install(column_3, y, output(Hostage::EOC_OUT));
+  input(column_1, y, Hostage::STAGE_GATE_IN);
+  output(column_3, y, Hostage::EOC_OUT);
 
   y += dy;
-  install(column_1, y, input(Hostage::MAIN_IN));
-  install(column_3, y, output(Hostage::MAIN_OUT));
+  input(column_1, y, Hostage::MAIN_IN);
+  output(column_3, y, Hostage::MAIN_OUT);
 }
 } // namespace DHE
