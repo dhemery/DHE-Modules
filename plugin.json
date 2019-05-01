@@ -108,14 +108,14 @@
         ]
       }
     },
-    "Xycloid"
-    :
     {
-      "name": "Xycloid",
-      "description": "Generates a pair of complex, evolving, pulsing LFO signals",
-      "tags": [
-        "LFO"
-      ]
+      "Xycloid": {
+        "name": "Xycloid",
+        "description": "Generates a pair of complex, evolving, pulsing LFO signals",
+        "tags": [
+          "LFO"
+        ]
+      }
     }
   ]
 }
