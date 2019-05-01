@@ -1,6 +1,6 @@
-#include <modules/Xycloid.h>
-
 #include <array>
+
+#include "modules/Xycloid.h"
 
 #include "util/gain.h"
 #include "util/sigmoid.h"

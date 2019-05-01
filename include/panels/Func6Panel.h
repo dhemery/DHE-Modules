@@ -1,8 +1,7 @@
 #pragma once
 
-#include <display/panel.h>
-#include <modules/Func6.h>
-#include <panels/FuncSteppers.h>
+#include "display/panel.h"
+#include "modules/Func6.h"
 
 namespace DHE {
 

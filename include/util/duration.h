@@ -1,8 +1,8 @@
 #pragma once
+#include <array>
 
 #include "range.h"
 #include "sigmoid.h"
-#include <array>
 
 namespace DHE {
 

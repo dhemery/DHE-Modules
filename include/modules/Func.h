@@ -1,10 +1,11 @@
 #pragma once
 
-#include <engine.hpp>
-#include <modules/FuncChannel.h>
+#include "Module.h"
+
+#include "modules/FuncChannel.h"
 
 namespace DHE {
-class Func : public rack::Module {
+class Func : public Module {
 public:
   Func();
   void step() override;

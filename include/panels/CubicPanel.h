@@ -1,7 +1,7 @@
 #pragma once
 
-#include <display/panel.h>
-#include <modules/Cubic.h>
+#include "display/panel.h"
+#include "modules/Cubic.h"
 
 namespace DHE {
 

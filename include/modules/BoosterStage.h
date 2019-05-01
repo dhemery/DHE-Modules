@@ -1,6 +1,6 @@
 #pragma once
 
-#include "modules/Module.h"
+#include "Module.h"
 
 #include "display/controls.h"
 #include "display/panel.h"

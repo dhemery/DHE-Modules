@@ -1,6 +1,7 @@
+#include <array>
+
 #include "util/duration.h"
 #include "util/range.h"
-#include <array>
 
 namespace DHE {
 namespace Duration {

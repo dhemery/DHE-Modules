@@ -1,9 +1,10 @@
 #include <utility>
 
+#include "modules/BoosterStage.h"
+
 #include "util/duration.h"
 #include "util/gain.h"
 #include "util/signal.h"
-#include <modules/BoosterStage.h>
 
 namespace DHE {
 

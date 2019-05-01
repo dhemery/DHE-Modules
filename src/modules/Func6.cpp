@@ -1,4 +1,4 @@
-#include <modules/Func6.h>
+#include "modules/Func6.h"
 
 namespace DHE {
 Func6::Func6() : Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT} {

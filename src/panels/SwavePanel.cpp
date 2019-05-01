@@ -1,4 +1,4 @@
-#include <panels/SwavePanel.h>
+#include "panels/SwavePanel.h"
 
 namespace DHE {
 

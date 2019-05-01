@@ -1,11 +1,12 @@
 #pragma once
 
-#include "engine.hpp"
+#include "Module.h"
+
 #include "envelopes/StageStateMachine.h"
 
 namespace DHE {
 
-class Stage : public rack::Module {
+class Stage : public Module {
 public:
   Stage() : Stage{[]() -> float { return rack::engineGetSampleTime(); }} {}
   explicit Stage(const std::function<float()> &sample_time);

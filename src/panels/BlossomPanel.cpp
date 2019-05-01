@@ -1,5 +1,6 @@
-#include <panels/BlossomPanel.h>
-#include <util/gain.h>
+#include "panels/BlossomPanel.h"
+
+#include "util/gain.h"
 
 namespace DHE {
 BlossomPanel::BlossomPanel(Blossom *module) : Panel{module, hp} {

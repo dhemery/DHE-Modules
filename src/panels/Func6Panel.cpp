@@ -1,4 +1,4 @@
-#include <panels/Func6Panel.h>
+#include "panels/Func6Panel.h"
 
 namespace DHE {
 Func6Panel::Func6Panel(Func6 *func6) : Panel{func6, hp} {

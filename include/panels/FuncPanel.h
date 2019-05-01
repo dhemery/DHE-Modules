@@ -1,7 +1,7 @@
 #pragma once
 
-#include <display/panel.h>
-#include <modules/Func.h>
+#include "display/panel.h"
+#include "modules/Func.h"
 
 namespace DHE {
 class FuncPanel : public Panel<FuncPanel> {

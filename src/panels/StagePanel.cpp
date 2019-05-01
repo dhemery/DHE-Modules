@@ -1,4 +1,4 @@
-#include <panels/StagePanel.h>
+#include "panels/StagePanel.h"
 
 namespace DHE {
 StagePanel::StagePanel(Stage *module) : Panel{module, hp} {

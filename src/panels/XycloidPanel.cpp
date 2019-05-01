@@ -1,6 +1,6 @@
-#include <panels/XycloidPanel.h>
+#include "panels/XycloidPanel.h"
 
-#include <util/gain.h>
+#include "util/gain.h"
 
 namespace DHE {
 

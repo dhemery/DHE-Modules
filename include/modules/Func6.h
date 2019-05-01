@@ -1,10 +1,11 @@
 #pragma once
 
-#include <engine.hpp>
-#include <modules/FuncChannel.h>
+#include "Module.h"
+
+#include "modules/FuncChannel.h"
 
 namespace DHE {
-class Func6 : public rack::Module {
+class Func6 : public Module {
   static constexpr auto channel_count = 6;
 
 public:

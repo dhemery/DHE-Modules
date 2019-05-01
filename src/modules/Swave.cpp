@@ -1,6 +1,5 @@
-#include <modules/Swave.h>
+#include "modules/Swave.h"
 
-#include "modules/Module.h"
 #include "util/range.h"
 #include "util/sigmoid.h"
 #include "util/signal.h"

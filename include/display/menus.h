@@ -1,9 +1,7 @@
 #pragma once
-
 #include <functional>
 
-#include <events.hpp>
-#include <ui.hpp>
+#include "event.hpp"
 
 namespace DHE {
 

@@ -1,4 +1,4 @@
-#include <panels/RangerPanel.h>
+#include "panels/RangerPanel.h"
 
 namespace DHE {
 

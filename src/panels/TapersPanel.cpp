@@ -1,4 +1,4 @@
-#include <panels/TapersPanel.h>
+#include "panels/TapersPanel.h"
 
 namespace DHE {
 

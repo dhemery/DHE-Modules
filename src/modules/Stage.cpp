@@ -1,8 +1,9 @@
 #include <utility>
 
+#include "modules/Stage.h"
+
 #include "util/duration.h"
 #include "util/signal.h"
-#include <modules/Stage.h>
 
 namespace DHE {
 Stage::Stage(const std::function<float()> &sample_time)

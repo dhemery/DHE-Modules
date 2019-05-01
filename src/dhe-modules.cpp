@@ -1,7 +1,5 @@
 #include <algorithm>
 
-#include "plugin.hpp"
-
 #include "panels/BlossomPanel.h"
 #include "panels/BoosterStagePanel.h"
 #include "panels/CubicPanel.h"

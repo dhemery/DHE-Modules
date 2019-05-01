@@ -1,7 +1,7 @@
 #pragma once
 
-#include <display/panel.h>
-#include <modules/Ranger.h>
+#include "display/panel.h"
+#include "modules/Ranger.h"
 
 namespace DHE {
 

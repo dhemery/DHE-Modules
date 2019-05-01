@@ -1,6 +1,6 @@
 #pragma once
 
-#include "engine.hpp"
+#include "engine/module.hpp"
 
 namespace DHE {
 class Module : public rack::Module {

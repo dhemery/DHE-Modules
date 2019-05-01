@@ -1,4 +1,4 @@
-#include <panels/HostagePanel.h>
+#include "panels/HostagePanel.h"
 
 namespace DHE {
 

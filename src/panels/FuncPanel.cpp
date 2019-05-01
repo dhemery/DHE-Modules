@@ -1,5 +1,5 @@
-#include <panels/FuncPanel.h>
-#include <panels/FuncSteppers.h>
+#include "panels/FuncPanel.h"
+#include "panels/FuncSteppers.h"
 
 namespace DHE {
 

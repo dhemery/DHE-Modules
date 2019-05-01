@@ -1,11 +1,9 @@
 #pragma once
-
 #include <functional>
 #include <utility>
 
-#include "StateMachine.h"
-
 #include "Holding.h"
+#include "StateMachine.h"
 #include "Sustaining.h"
 
 namespace DHE {

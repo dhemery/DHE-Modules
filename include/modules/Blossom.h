@@ -1,7 +1,8 @@
 #pragma once
 
-#include "modules/Module.h"
-#include <components/rotor.h>
+#include "Module.h"
+
+#include "components/rotor.h"
 
 namespace DHE {
 

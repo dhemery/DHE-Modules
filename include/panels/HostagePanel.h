@@ -1,7 +1,7 @@
 #pragma once
 
-#include <display/panel.h>
-#include <modules/Hostage.h>
+#include "display/panel.h"
+#include "modules/Hostage.h"
 
 namespace DHE {
 

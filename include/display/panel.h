@@ -4,11 +4,9 @@
 #include <string>
 #include <utility>
 
-#include <app.hpp>
-#include <asset.hpp>
-#include <util/math.hpp>
+#include "event.hpp"
 
-#include <display/controls.h>
+#include "display/controls.h"
 
 extern rack::Plugin *plugin;
 

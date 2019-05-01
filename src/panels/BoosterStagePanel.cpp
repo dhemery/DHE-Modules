@@ -1,6 +1,4 @@
-#include "engine.hpp"
-
-#include <panels/BoosterStagePanel.h>
+#include "panels/BoosterStagePanel.h"
 
 namespace DHE {
 
