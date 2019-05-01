@@ -1,9 +1,9 @@
 #pragma once
 
-#include "engine/module.hpp"
+#include "engine/Module.hpp"
 
 namespace DHE {
-class Module : public rack::Module {
+class Module : public rack::engine::Module {
 public:
   Module(int param_count, int input_count, int output_count);
 

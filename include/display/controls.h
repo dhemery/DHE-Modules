@@ -1,26 +1,31 @@
 #pragma once
 #include <utility>
 
+#include "app/SvgButton.hpp"
+#include "app/SvgSwitch.hpp"
+#include "componentlibrary.hpp"
+
 #include "display/controls.h"
 #include "display/menus.h"
 
 namespace DHE {
+
 template <typename T> class Control {
 public:
   std::function<void(T)> notify{[](T) {}};
 };
 
 template <typename P>
-class Knob : public Control<float>, public rack::RoundKnob {
+class Knob : public Control<float>, public rack::componentlibrary::RoundKnob {
 public:
   explicit Knob(const std::string &size) {
     static const auto prefix = std::string{"knob-"};
-    setSVG(P::svg(prefix + size));
+    setSvg(P::svg(prefix + size));
     shadow->opacity = 0.f;
   }
 
-  void onChange(rack::EventChange &e) override {
-    rack::RoundKnob::onChange(e);
+  void onChange(const rack::event::Change &e) override {
+    rack::componentlibrary::RoundKnob::onChange(e);
     notify(this->value);
   }
 };
@@ -47,19 +52,18 @@ public:
 
 template <typename P>
 class Button : public Control<bool>,
-               public rack::SVGSwitch,
-               public rack::MomentarySwitch {
+               public rack::app::SvgButton {
 public:
   explicit Button(const std::string &name = "button") {
     addFrame(P::svg(name + "-1"));
     addFrame(P::svg(name + "-2"));
   }
 
-  void onChange(rack::EventChange &e) override {
-    rack::SVGSwitch::onChange(e);
+  void onChange(const rack::event::Change &e) override {
+    rack::app::SvgButton::onChange(e);
     notify(this->value > 0.5f);
   }
-};
+}; // namespace DHE
 
 template <typename P> class ReverseButton : public Button<P> {
 public:
@@ -68,8 +72,7 @@ public:
 
 template <typename P, int N>
 class Toggle : public Control<int>,
-               public rack::SVGSwitch,
-               public rack::ToggleSwitch {
+               public rack::app::SvgSwitch {
 public:
   explicit Toggle(const std::string &name = "toggle-" + std::to_string(N)) {
     auto base = name + "-";
@@ -78,8 +81,8 @@ public:
     }
   }
 
-  void onChange(rack::EventChange &e) override {
-    rack::SVGSwitch::onChange(e);
+  void onChange(const rack::event::Change &e) override {
+    rack::app::SvgSwitch::onChange(e);
     notify(static_cast<int>(this->value));
   }
 

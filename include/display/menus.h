@@ -1,22 +1,24 @@
 #pragma once
 #include <functional>
 
+#include "ui/MenuItem.hpp"
 #include "event.hpp"
 
 namespace DHE {
 
-struct BooleanOption : rack::MenuItem {
+struct BooleanOption : rack::ui::MenuItem {
   template <typename Setter, typename Getter>
   BooleanOption(const std::string &name, const Setter &setter,
                 const Getter &getter)
       : set{setter}, is_on{getter} {
     text = name;
   }
-  void onAction(rack::EventAction &e) override { set(!is_on()); }
+
+  void onAction(const rack::event::Action &e) override { set(!is_on()); }
 
   void step() override {
     rightText = is_on() ? "✔" : "";
-    rack::MenuItem::step();
+      rack::ui::MenuItem::step();
   }
 
   const std::function<void(bool)> set;
