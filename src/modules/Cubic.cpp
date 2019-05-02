@@ -4,7 +4,9 @@
 
 namespace DHE {
 
-Cubic::Cubic() : Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT} {}
+Cubic::Cubic() {
+    config(PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT);
+}
 
 void Cubic::process(const ProcessArgs &args) {
   auto a = coefficient(A_KNOB, A_CV);

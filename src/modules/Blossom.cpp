@@ -5,7 +5,9 @@
 
 namespace DHE {
 
-Blossom::Blossom() : Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT} {}
+Blossom::Blossom() {
+    config(PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT);
+}
 
 void Blossom::process(const ProcessArgs &args) {
   auto spin_rate = spin(args.sampleTime);

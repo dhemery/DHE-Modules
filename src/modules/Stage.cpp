@@ -7,8 +7,7 @@
 
 namespace DHE {
 Stage::Stage()
-    : Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT},
-      state_machine{[this]() -> bool { return defer_gate_is_active(); },
+    : state_machine{[this]() -> bool { return defer_gate_is_active(); },
                     [this]() -> bool { return defer_gate_in(); },
                     [this]() -> bool { return stage_gate_in(); },
                     [this]() -> float { return duration(); },
@@ -17,6 +16,7 @@ Stage::Stage()
                     [this](float phase) { generate(phase); },
                     [this](bool active) { set_active(active); },
                     [this](bool eoc) { set_eoc(eoc); }} {
+  config(PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT);
   state_machine.start();
 }
 
@@ -65,7 +65,9 @@ auto Stage::stage_gate_in() const -> bool {
   return inputs[STAGE_TRIGGER_IN].value > 0.1;
 }
 
-void Stage::process(const ProcessArgs &args) { state_machine.step(args.sampleTime); }
+void Stage::process(const ProcessArgs &args) {
+  state_machine.step(args.sampleTime);
+}
 
 auto Stage::taper(float phase) const -> float {
   return Sigmoid::j_taper(phase, curvature());

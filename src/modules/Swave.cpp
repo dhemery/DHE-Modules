@@ -6,7 +6,7 @@
 
 namespace DHE {
 
-Swave::Swave() : Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT} {}
+Swave::Swave() { config(PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT); }
 
 auto Swave::curve() const -> float {
   return Sigmoid::curvature(modulated(CURVE_KNOB, CURVE_CV));

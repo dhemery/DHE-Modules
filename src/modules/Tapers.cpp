@@ -5,7 +5,7 @@
 
 namespace DHE {
 
-Tapers::Tapers() : Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT} {}
+Tapers::Tapers() { config(PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT); }
 
 void Tapers::process(const ProcessArgs &args) {
   outputs[OUT_1].value = taper(level1(), is_uni_1(), curvature1(), is_s_1());

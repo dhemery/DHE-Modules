@@ -6,8 +6,7 @@
 
 namespace DHE {
 Hostage::Hostage()
-    : Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT},
-      state_machine{[this]() -> bool { return defer_gate_is_active(); },
+    : state_machine{[this]() -> bool { return defer_gate_is_active(); },
                     [this]() -> bool { return defer_gate_in(); },
                     [this]() -> bool { return stage_gate_in(); },
                     [this]() -> bool { return is_sustain_mode(); },
@@ -15,10 +14,13 @@ Hostage::Hostage()
                     [this](float) { forward(); },
                     [this](bool active) { set_active(active); },
                     [this](bool eoc) { set_eoc(eoc); }} {
+  config(PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT);
   state_machine.start();
 }
 
-void Hostage::process(const ProcessArgs &args) { state_machine.step(args.sampleTime); }
+void Hostage::process(const ProcessArgs &args) {
+  state_machine.step(args.sampleTime);
+}
 
 auto Hostage::duration() const -> float {
   auto rotation = modulated(DURATION_KNOB, DURATION_CV);

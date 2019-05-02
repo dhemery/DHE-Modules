@@ -14,10 +14,6 @@ auto av_multiplier(float av_amount) -> float {
   return av_range.scale(av_amount);
 }
 
-Module::Module(int param_count, int input_count, int output_count) {
-  config(param_count, input_count, output_count);
-}
-
 auto Module::modulated(int knob_param, int cv_input) const -> float {
   auto rotation = params[knob_param].value;
   auto cv = inputs[cv_input].value;

@@ -9,8 +9,7 @@
 namespace DHE {
 
 BoosterStage::BoosterStage()
-    : Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT},
-      state_machine{[this]() -> bool { return defer_gate_is_active(); },
+    : state_machine{[this]() -> bool { return defer_gate_is_active(); },
                     [this]() -> bool { return defer_gate_in(); },
                     [this]() -> bool { return stage_gate_in(); },
                     [this]() -> float { return duration(); },
@@ -19,10 +18,13 @@ BoosterStage::BoosterStage()
                     [this](float phase) { generate(phase); },
                     [this](bool active) { set_active(active); },
                     [this](bool eoc) { set_eoc(eoc); }} {
+  config(PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT);
   state_machine.start();
 }
 
-void BoosterStage::process(const ProcessArgs &args) { state_machine.step(args.sampleTime); }
+void BoosterStage::process(const ProcessArgs &args) {
+  state_machine.step(args.sampleTime);
+}
 
 void BoosterStage::forward() { send_out(envelope_in()); }
 

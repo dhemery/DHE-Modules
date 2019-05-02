@@ -8,7 +8,7 @@
 
 namespace DHE {
 
-Xycloid::Xycloid() : Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT} {}
+Xycloid::Xycloid() { config(PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT); }
 
 void Xycloid::process(const ProcessArgs &args) {
   auto wobble_ratio = this->wobble_ratio();

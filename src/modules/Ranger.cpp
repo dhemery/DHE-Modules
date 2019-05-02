@@ -3,7 +3,7 @@
 
 namespace DHE {
 
-Ranger::Ranger() : Module{PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT} {}
+Ranger::Ranger() { config(PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT); }
 
 auto Ranger::level() const -> float {
   return modulated(LEVEL_KNOB, LEVEL_CV, LEVEL_AV);
@@ -26,6 +26,8 @@ auto Ranger::limit2() const -> float {
 
 void Ranger::send_main_out(float voltage) { outputs[MAIN_OUT].value = voltage; }
 
-void Ranger::process(const ProcessArgs &args) { send_main_out(scale(level(), limit2(), limit1())); }
+void Ranger::process(const ProcessArgs &args) {
+  send_main_out(scale(level(), limit2(), limit1()));
+}
 
 } // namespace DHE
