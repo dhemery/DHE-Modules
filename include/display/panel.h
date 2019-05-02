@@ -19,7 +19,7 @@
 
 #include "display/controls.h"
 
-extern rack::plugin::Plugin *plugin;
+extern rack::plugin::Plugin *pluginInstance;
 
 namespace DHE {
 template <typename P> class Jack : public rack::app::SvgPort {
@@ -32,7 +32,7 @@ template <typename P> class InputJack : public Jack<P> {};
 template <typename P> class OutputJack : public Jack<P> {};
 
 static inline auto plugin_asset_dir() -> std::string {
-  static const auto dir = rack::asset::plugin(plugin, std::string("svg/"));
+  static const auto dir = rack::asset::plugin(pluginInstance, std::string("svg/"));
   return dir;
 }
 

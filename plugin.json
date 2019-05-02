@@ -1,16 +1,19 @@
 {
+  "slug": "DHE-Modules",
   "name": "DHE Modules",
   "version": "1.0.0",
-  "slug": "DHE-Modules",
   "sourceUrl": "https://github.com/dhemery/DHE-Modules/",
   "license": "MIT",
   "author": "Dale Emery",
   "authorEmail": "dale@dhemery.com",
-  "authorUrl": "https://dhemery.github.io/DHE-Modules/",
+  "authorUrl": "https://dhemery.com",
   "donateUrl": "https://paypal.me/DaleHEmery/",
+  "pluginUrl": "https://dhemery.github.io/DHE-Modules/",
+  "manualUrl": "https://dhemery.github.io/DHE-Modules/",
+
   "modules": [
     {
-      "Booster-Stage": {
+      "Blossom": {
         "name": "Blossom",
         "description": "Generates a pair of complex, evolving, pulsing LFO signals",
         "tags": [
@@ -19,7 +22,7 @@
       }
     },
     {
-      "Booster-Stage": {
+      "BoosterStage": {
         "name": "Booster Stage",
         "description": "Generates a single envelope stage",
         "tags": [

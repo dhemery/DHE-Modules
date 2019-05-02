@@ -99,14 +99,16 @@ $(DEV_PLUGIN_DIR)/AudibleInstruments: $(DEV_PLUGIN_DIR)
 dev: dist $(DEV_PLUGIN_DIR) $(DEV_PLUGIN_DIR)/Fundamental $(DEV_PLUGIN_DIR)/AudibleInstruments
 	cp dist/$(SLUG)-$(VERSION)-$(ARCH).zip $(DEV_PLUGIN_DIR)
 
-debug: dev
-	/Applications/Rack.app/Contents/MacOS/Rack -d -g /Applications/Rack.app/Contents/Resources -l $(realpath $(DEV_INSTALL_DIR))
 
-run: dev
-	/Applications/Rack.app/Contents/MacOS/Rack -g /Applications/Rack.app/Contents/Resources -l $(realpath $(DEV_INSTALL_DIR))
+# Temporary until I can install Rack v1.
+run:
+	cd ../.. && make plugins run
 
-
-
+#debug: dev
+#	/Applications/Rack.app/Contents/MacOS/Rack -d -g /Applications/Rack.app/Contents/Resources -l $(realpath $(DEV_INSTALL_DIR))
+#
+#run: dev
+#	/Applications/Rack.app/Contents/MacOS/Rack -g /Applications/Rack.app/Contents/Resources -l $(realpath $(DEV_INSTALL_DIR))
 
 ########################################################################
 #
