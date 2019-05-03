@@ -8,5 +8,11 @@ public:
   auto modulated(int knob_param, int cv_input) const -> float;
 
   auto modulated(int knob_param, int cv_input, int av_param) const -> float;
+
+protected:
+  void configKnob(int index, const std::string& name);
+  void configAv(int index, const std::string& target);
+  void configGain(int index, const std::string& target);
+  void configSignalRange(int index, const std::string& target);
 };
 } // namespace DHE

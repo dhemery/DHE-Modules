@@ -7,6 +7,26 @@ namespace DHE {
 
 Blossom::Blossom() {
     config(PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT);
+
+    configParam(SPIN_KNOB, -1.f, 1.f, 0.3f, "Spin");
+    configAv(SPIN_AV, "Spin");
+
+    configKnob(BOUNCE_KNOB, "Bounce");
+    configAv(BOUNCE_AV,"Bounce");
+
+    configKnob(DEPTH_KNOB, "Depth");
+    configAv(DEPTH_AV, "Depth");
+
+    configAv(PHASE_AV, "Phase");
+    configKnob(PHASE_KNOB, "Phase");
+
+    configGain(X_GAIN_KNOB, "X");
+    configGain(Y_GAIN_KNOB, "Y");
+
+    configSignalRange(X_RANGE_SWITCH, "X");
+    configSignalRange(Y_RANGE_SWITCH, "Y");
+
+    configParam(BOUNCE_LOCK_SWITCH, 0.0, 1.0, 1.0, "Bounce Lock");
 }
 
 void Blossom::process(const ProcessArgs &args) {
