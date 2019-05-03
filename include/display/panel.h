@@ -117,6 +117,10 @@ protected:
   }
 
 private:
+  template <typename T> void screw(rack::math::Vec pos) {
+    addChild(rack::createWidgetCentered<T>(rack::app::mm2px(pos)));
+  }
+
   void install_screws() {
     auto screw_diameter =
         rack::app::RACK_GRID_WIDTH * rack::app::MM_PER_IN / rack::app::SVG_DPI;
@@ -130,20 +134,19 @@ private:
     auto right = width() - left;
 
     auto screw_positions =
-        std::vector<rack::math::Vec>{mmvec(left, top), mmvec(left, bottom),
-                                     mmvec(right, top), mmvec(right, bottom)};
+        std::vector<rack::math::Vec>{{left, top}, {left, bottom},
+                                     {right, top}, {right, bottom}};
 
     std::shuffle(screw_positions.begin(), screw_positions.end(),
                  std::mt19937(std::random_device()()));
 
     auto p_special = screw_positions.back();
-    addChild(rack::createWidgetCentered<rack::componentlibrary::ScrewBlack>(
-        p_special));
+    screw<rack::componentlibrary::ScrewBlack>(p_special);
 
     screw_positions.pop_back();
 
     for (auto p : screw_positions) {
-      addChild(rack::createWidgetCentered<rack::componentlibrary::ScrewSilver>(p));
+      screw<rack::componentlibrary::ScrewSilver>(p);
     }
   }
 };
