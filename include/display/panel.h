@@ -31,8 +31,13 @@ template <typename P> class InputJack : public Jack<P> {};
 
 template <typename P> class OutputJack : public Jack<P> {};
 
+static inline auto mmvec(float x, float y) -> rack::math::Vec {
+  return rack::app::mm2px(rack::math::Vec{x, y});
+}
+
 static inline auto plugin_asset_dir() -> std::string {
-  static const auto dir = rack::asset::plugin(pluginInstance, std::string("svg/"));
+  static const auto dir =
+      rack::asset::plugin(pluginInstance, std::string("svg/"));
   return dir;
 }
 
@@ -82,31 +87,33 @@ protected:
   }
 
   template <template <typename> class K>
-  auto knob(float x, float y, int index) const -> K<P> * {
-    return rack::createParamCentered<K<P>>({x, y}, module, index);
+  void knob(float x, float y, int index) {
+    addParam(rack::createParamCentered<K<P>>(mmvec(x, y), module, index));
   }
 
   template <template <typename> class B = Button>
-  auto button(float x, float y, int index) const -> B<P> * {
-    return rack::createParamCentered<B<P>>({x, y}, module, index);
+  void button(float x, float y, int index) {
+    addParam(rack::createParamCentered<B<P>>(mmvec(x, y), module, index));
   }
 
   template <template <typename> class C>
-  auto toggle(float x, float y, int index) const -> C<P> * {
-    return rack::createParamCentered<C<P>>({x, y}, module, index);
+  void toggle(float x, float y, int index) {
+    addParam(rack::createParamCentered<C<P>>(mmvec(x, y), module, index));
   }
 
-  template <int N>
-  auto toggle(float x, float y, int index) const -> Toggle<P, N> * {
-    return rack::createParamCentered<Toggle<P, N>>({x, y}, module, index);
+  template <int N> void toggle(float x, float y, int index) {
+    addParam(
+        rack::createParamCentered<Toggle<P, N>>(mmvec(x, y), module, index));
   }
 
-  auto input(float x, float y, int index) const -> InputJack<P> * {
-    return rack::createInput<InputJack<P>>({x, y}, module, index);
+  void input(float x, float y, int index) {
+    addInput(
+        rack::createInputCentered<InputJack<P>>(mmvec(x, y), module, index));
   }
 
-  auto output(float x, float y, int index) const -> OutputJack<P> * {
-    return rack::createOutput<OutputJack<P>>({x, y}, module, index);
+  void output(float x, float y, int index) {
+    addOutput(
+        rack::createOutputCentered<OutputJack<P>>(mmvec(x, y), module, index));
   }
 
 private:
@@ -122,8 +129,9 @@ private:
     auto left = std::min(width() / 4.f, max_screw_inset);
     auto right = width() - left;
 
-    auto screw_positions = std::vector<rack::math::Vec>{
-        {left, top}, {left, bottom}, {right, top}, {right, bottom}};
+    auto screw_positions =
+        std::vector<rack::math::Vec>{mmvec(left, top), mmvec(left, bottom),
+                                     mmvec(right, top), mmvec(right, bottom)};
 
     std::shuffle(screw_positions.begin(), screw_positions.end(),
                  std::mt19937(std::random_device()()));
@@ -135,8 +143,7 @@ private:
     screw_positions.pop_back();
 
     for (auto p : screw_positions) {
-      addChild(
-          rack::createWidgetCentered<rack::componentlibrary::ScrewSilver>(p));
+      addChild(rack::createWidgetCentered<rack::componentlibrary::ScrewSilver>(p));
     }
   }
 };
