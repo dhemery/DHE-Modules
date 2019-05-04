@@ -19,14 +19,14 @@ BoosterStage::BoosterStage()
                     [this](bool active) { set_active(active); },
                     [this](bool eoc) { set_eoc(eoc); }} {
   config(PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT);
+  duration.config(&params[DURATION_KNOB], &params[DURATION_RANGE_SWITCH], &inputs[DURATION_CV]);
 
+  configParam(DURATION_KNOB, 0.f, 1.f, 0.5f, "Duration");
+  configParam(DURATION_RANGE_SWITCH, 0.f, 2.f, 1.f, "Max Duration", "", 1.f, 10.f, 1.f);
   configParam(LEVEL_KNOB, 0.f, 1.f, 0.5f, "Level", "%", 0.f, 100.f, 0.f);
   configParam(CURVE_KNOB, 0.f, 1.f, 0.5f, "Curvature", "%", 0.f, 100.f, 0.f);
-  configParam(DURATION_KNOB, 0.f, 1.f, 0.5f, "Duration");
 
-  configParam(DURATION_RANGE_SWITCH, 0.f, 2.f, 1.f, "Max Duration", "", 1.f,
-              10.f, 1.f);
-  configSignalRange(LEVEL_RANGE_SWITCH, "Level", 1.f);
+  configSignalRange(LEVEL_RANGE_SWITCH, "Level", true);
   configParam(SHAPE_SWITCH, 0.f, 1.f, 0.f, "Curve Shape");
 
   configParam(ACTIVE_BUTTON, 0.f, 1.f, 0.f, "Active");
@@ -39,7 +39,6 @@ BoosterStage::BoosterStage()
 
 void BoosterStage::process(const ProcessArgs &args) {
   set_level_range();
-  set_duration_range();
   set_shape();
 
   state_machine.step(args.sampleTime);
@@ -66,11 +65,6 @@ void BoosterStage::prepare_to_generate() { start_voltage = envelope_in(); }
 
 auto BoosterStage::defer_gate_is_active() const -> bool {
   return inputs[DEFER_GATE_IN].active;
-}
-
-auto BoosterStage::duration() const -> float {
-  auto rotation = modulated(DURATION_KNOB, DURATION_CV);
-  return DHE::duration(rotation, *duration_range);
 }
 
 auto BoosterStage::defer_gate_in() const -> bool {
@@ -127,12 +121,6 @@ auto BoosterStage::taper(float phase) const -> float {
 void BoosterStage::set_level_range() {
   const auto choice = static_cast<int>(params[LEVEL_RANGE_SWITCH].getValue());
   level_range = Signal::ranges()[choice];
-}
-
-void BoosterStage::set_duration_range() {
-  const auto choice =
-      static_cast<int>(params[DURATION_RANGE_SWITCH].getValue());
-  duration_range = Duration::ranges()[choice];
 }
 
 void BoosterStage::set_shape() {

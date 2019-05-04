@@ -2,6 +2,7 @@
 
 #include "Module.h"
 
+#include "components/RangedDuration.h"
 #include "display/controls.h"
 #include "display/panel.h"
 #include "envelopes/StageStateMachine.h"
@@ -18,7 +19,6 @@ public:
 
   auto defer_gate_in() const -> bool;
   auto defer_gate_is_active() const -> bool;
-  auto duration() const -> float;
   void forward();
   void generate(float phase);
   void prepare_to_generate();
@@ -27,12 +27,6 @@ public:
   void set_eoc(bool eoc);
   void set_eoc_button(bool eoc);
   auto stage_gate_in() const -> bool;
-
-  const Selector<Range const *, 3> duration_range_selector{
-      Duration::ranges(),
-      [this](Range const *range) { duration_range = range; }};
-  const Selector<Range const *, 2> level_range_selector{
-      Signal::ranges(), [this](Range const *range) { level_range = range; }};
 
   enum ParameterIds {
     ACTIVE_BUTTON,
@@ -71,15 +65,14 @@ private:
 
   StageStateMachine state_machine;
   Sigmoid::Shape const *curve_shape{&Sigmoid::j_shape};
-  Range const *duration_range{&Duration::medium_range};
   Range const *level_range{&Signal::bipolar_range};
   bool is_active{false};
   bool active_button_is_pressed{false};
   bool is_eoc{false};
   bool eoc_button_is_pressed{false};
   float start_voltage{0.f};
-void set_level_range();
-void set_duration_range();
-void set_shape();
+  void set_level_range();
+  void set_shape();
+  RangedDuration duration;
 };
 } // namespace DHE

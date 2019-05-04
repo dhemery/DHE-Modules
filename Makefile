@@ -7,6 +7,7 @@ LDFLAGS +=
 
 SOURCES = $(wildcard \
 			src/*.cpp \
+			src/components/*.cpp \
 			src/envelopes/*.cpp \
 			src/modules/*.cpp \
 			src/panels/*.cpp \
@@ -30,11 +31,12 @@ include $(RACK_DIR)/plugin.mk
 #
 ########################################################################
 
-TEST_SOURCES =  $(wildcard test/*.cpp)
+TEST_SOURCES =  $(wildcard test/*.cpp src/util/*.cpp)
 TEST_OBJECTS := $(patsubst %, build/%.o, $(TEST_SOURCES))
 
 TESTFLAGS += -Igoogletest/googletest/include/ -Igoogletest/googlemock/include/
 TESTLDFLAGS += -Lgoogletest/lib -lgmock_main -lgtest -lgmock
+
 ifdef ARCH_LIN
 	TESTLDFLAGS += -lpthread
 endif
