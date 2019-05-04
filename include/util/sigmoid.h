@@ -1,4 +1,5 @@
 #pragma once
+#include <array>
 #include <cmath>
 
 #include "range.h"
@@ -127,5 +128,30 @@ static inline auto s_taper(float input, float curvature) -> float {
 static inline auto taper(float input, float curvature, bool is_s) -> float {
   return is_s ? s_taper(input, curvature) : j_taper(input, curvature);
 }
+
+class Shape {
+public:
+  virtual auto taper(float input, float curvature) const -> float = 0;
+};
+
+class JShape : public Shape {
+  auto taper(float input, float curvature) const -> float override {
+    return inverse(proportion_range.clamp(input), curvature);
+  }
+};
+
+class SShape : public Shape {
+  auto taper(float input, float curvature) const -> float override {
+    const auto scaled = sigmoid_range.scale(input);
+    const auto tapered = curve(scaled, curvature);
+    return sigmoid_range.normalize(tapered);
+  }
+};
+
+static constexpr auto j_shape = JShape{};
+static constexpr auto s_shape = SShape{};
+
+auto shapes() -> std::array<Shape const *, 2> const &;
+
 } // namespace Sigmoid
 } // namespace DHE

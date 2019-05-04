@@ -63,7 +63,6 @@ public:
 private:
   auto envelope_in() const -> float;
   auto curvature() const -> float;
-  auto is_s_shape() const -> bool;
   auto level() const -> float;
   void send_active();
   void send_eoc();
@@ -71,6 +70,7 @@ private:
   auto taper(float phase) const -> float;
 
   StageStateMachine state_machine;
+  Sigmoid::Shape const *curve_shape{&Sigmoid::j_shape};
   Range const *duration_range{&Duration::medium_range};
   Range const *level_range{&Signal::bipolar_range};
   bool is_active{false};
@@ -78,5 +78,8 @@ private:
   bool is_eoc{false};
   bool eoc_button_is_pressed{false};
   float start_voltage{0.f};
+void set_level_range();
+void set_duration_range();
+void set_shape();
 };
 } // namespace DHE
