@@ -32,12 +32,12 @@ void Module::configKnob(int index, const std::string& name) {
     configParam(index, 0.f, 1.f, 0.5f, name);
 }
 
-void Module::configAv(int index, const std::string& target) {
-    configParam(index, 0.f, 1.f, 0.5f, target + " AV", "", 0.f, 2.f, -1.f);
+void Module::configCvGain(int index, const std::string &target) {
+    configParam(index, 0.f, 1.f, 0.5f, target + " CV Gain", "%", 0.f, 200.f, -100.f);
 }
 
 void Module::configGain(int index, const std::string& target) {
-    configParam(index, 0.f, 1.f, 0.5f, target + " Gain", "", 0.f, 2.f);
+    configParam(index, 0.f, 1.f, 0.5f, target + " Gain", "%", 0.f, 200.f);
 }
 
 void Module::configSignalRange(int index, const std::string& target) {

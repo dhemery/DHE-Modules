@@ -9,19 +9,19 @@ Blossom::Blossom() {
     config(PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT);
 
     configParam(SPIN_KNOB, 0.f, 1.f, 0.65f, "Spin", "", 0.f, 2.f, -1.f);
-    configAv(SPIN_AV, "Spin");
+    configCvGain(SPIN_AV, "Spin");
 
     configKnob(BOUNCE_KNOB, "Bounce");
-    configAv(BOUNCE_AV,"Bounce");
+    configCvGain(BOUNCE_AV, "Bounce");
 
     configParam(DEPTH_KNOB, 0.f, 1.f, 0.5f, "Depth", "%", 0.f, 100.f);
-    configAv(DEPTH_AV, "Depth");
+    configCvGain(DEPTH_AV, "Depth");
 
     configParam(PHASE_KNOB, 0.f, 1.f, 0.5f, "Phase", "°", 0.f, 360.f, -180.f);
-    configAv(PHASE_AV, "Phase");
+    configCvGain(PHASE_AV, "Phase");
 
-    configGain(X_GAIN_KNOB, "X");
-    configGain(Y_GAIN_KNOB, "Y");
+    configGain(X_GAIN_KNOB, "X OUT");
+    configGain(Y_GAIN_KNOB, "Y OUT");
 
     configSignalRange(X_RANGE_SWITCH, "X");
     configSignalRange(Y_RANGE_SWITCH, "Y");

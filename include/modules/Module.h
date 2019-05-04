@@ -11,7 +11,7 @@ public:
 
 protected:
   void configKnob(int index, const std::string& name);
-  void configAv(int index, const std::string& target);
+  void configCvGain(int index, const std::string &target);
   void configGain(int index, const std::string& target);
   void configSignalRange(int index, const std::string& target);
 };
