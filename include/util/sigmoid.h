@@ -135,12 +135,14 @@ public:
 };
 
 class JShape : public Shape {
+public:
   auto taper(float input, float curvature) const -> float override {
     return inverse(proportion_range.clamp(input), curvature);
   }
 };
 
 class SShape : public Shape {
+public:
   auto taper(float input, float curvature) const -> float override {
     const auto scaled = sigmoid_range.scale(input);
     const auto tapered = curve(scaled, curvature);

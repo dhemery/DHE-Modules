@@ -16,8 +16,8 @@ auto RangedDuration::operator()() -> float {
   auto const range_index = static_cast<int>(switch_param->getValue());
   auto const *range = Duration::ranges()[range_index];
   auto const rotation = knob_param->getValue();
-  auto const duration = range->scale(rotation);
-  return duration;
+  auto tapered = Sigmoid::j_shape.taper(rotation, 0.802f);
+  return range->scale(tapered);
 }
 
 } // namespace DHE
