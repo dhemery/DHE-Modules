@@ -31,7 +31,11 @@ include $(RACK_DIR)/plugin.mk
 #
 ########################################################################
 
-TEST_SOURCES =  $(wildcard test/*.cpp src/util/*.cpp)
+TEST_SOURCES =  $(wildcard \
+					src/components/*.cpp \
+					src/util/*.cpp \
+					test/*.cpp \
+					)
 TEST_OBJECTS := $(patsubst %, build/%.o, $(TEST_SOURCES))
 
 TESTFLAGS += -Igoogletest/googletest/include/ -Igoogletest/googlemock/include/
@@ -43,7 +47,7 @@ endif
 
 $(TEST_OBJECTS): FLAGS += $(TESTFLAGS)
 
-TEST_RUNNER = build/dhe-module-tests
+TEST_RUNNER = build/test-runner
 
 $(TEST_RUNNER): $(TEST_OBJECTS)
 	$(CXX) -o $@ $^ $(TESTLDFLAGS)

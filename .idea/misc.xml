@@ -14,7 +14,7 @@
     </option>
   </component>
   <component name="CompDBWorkspace" PROJECT_DIR="$PROJECT_DIR$" />
-  <component name="JavaScriptSettings">
-    <option name="languageLevel" value="ES6" />
+  <component name="NodePackageJsonFileManager">
+    <packageJsonPaths />
   </component>
 </project>

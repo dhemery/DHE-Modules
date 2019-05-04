@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="CLionExternalBuildManager">
-    <target id="6c8a7f85-c6ec-4573-a4a2-066d83fca681" name="All" projectName="DHE-Modules">
-      <configuration id="4683ef08-6ca7-47e9-98da-68b8e84a4ca4" name="All">
+    <target id="58d20671-45a4-4cb7-90c1-5a65a14041e2" name="Test Runner" projectName="DHE-Modules">
+      <configuration id="a39b2d7f-6495-4cde-9b8f-6281330060a1" name="Test Runner">
         <build type="TOOL">
-          <tool actionId="Tool_External Tools_make all" />
+          <tool actionId="Tool_External Tools_make test-runner" />
         </build>
         <clean type="TOOL">
           <tool actionId="Tool_External Tools_make clean" />
         </clean>
       </configuration>
     </target>
-    <target id="483c16ff-ea7e-453f-af89-b215ed0ec131" name="Tests" projectName="DHE-Modules">
-      <configuration id="9b177c5a-4d14-486e-a693-8a17d5132f08" name="Tests">
+    <target id="de8c3294-7a26-4c9b-9426-cc89c98971a1" name="Plugin" projectName="DHE-Modules">
+      <configuration id="c1842cc9-630f-4fb4-ae56-953d38495488" name="Plugin">
         <build type="TOOL">
-          <tool actionId="Tool_External Tools_make test-runner" />
+          <tool actionId="Tool_External Tools_make run" />
         </build>
         <clean type="TOOL">
           <tool actionId="Tool_External Tools_make clean" />
