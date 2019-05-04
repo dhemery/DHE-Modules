@@ -7,9 +7,11 @@ namespace DHE {
 
 class RangedDuration {
 public:
+  void config(rack::engine::Param *knob_param);
   void config(rack::engine::Param *knob_param,
               rack::engine::Param *switch_param,
               rack::engine::Input *cv_input);
+
   auto operator()() -> float;
 
 private:

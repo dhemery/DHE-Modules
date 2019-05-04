@@ -5,6 +5,16 @@
 
 namespace DHE {
 
+static constexpr float medium_duration_switch_position{1.f};
+static rack::engine::Input default_cv_input{};
+static rack::engine::Param default_switch_param{};
+
+void RangedDuration::config(rack::engine::Param *knob_param) {
+  default_switch_param.setValue(medium_duration_switch_position);
+
+  config(knob_param, &default_switch_param, &default_cv_input);
+}
+
 void RangedDuration::config(rack::engine::Param *knob_param,
                             rack::engine::Param *switch_param,
                             rack::engine::Input *cv_input) {

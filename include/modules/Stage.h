@@ -2,6 +2,7 @@
 
 #include "Module.h"
 
+#include "components/RangedDuration.h"
 #include "envelopes/StageStateMachine.h"
 
 namespace DHE {
@@ -13,7 +14,6 @@ public:
 
   auto defer_gate_in() const -> bool;
   auto defer_gate_is_active() const -> bool;
-  auto duration() const -> float;
   void forward();
   void generate(float phase);
   void prepare_to_generate();
@@ -34,6 +34,7 @@ private:
   void send_out(float voltage);
   auto taper(float phase) const -> float;
 
+  RangedDuration duration;
   StageStateMachine state_machine;
   float start_voltage{0.f};
 };
