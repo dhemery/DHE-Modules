@@ -8,7 +8,27 @@
 
 namespace DHE {
 
-Xycloid::Xycloid() { config(PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT); }
+Xycloid::Xycloid() {
+  config(PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT);
+
+  configParam(THROB_SPEED_KNOB, 0.f, 1.f, 0.65f, "Throb speed", "", 0.f, 2.f, -1.f);
+  configCvGain(THROB_SPEED_AV, "Throb speed");
+
+  configKnob(WOBBLE_RATIO_KNOB, "Wobble ratio");
+  configCvGain(WOBBLE_RATIO_AV, "Wobble ratio");
+  configParam(WOBBLE_RANGE_SWITCH, 0.f, 2.f, 2.f, "Wobble direction");
+
+  configKnob(WOBBLE_DEPTH_KNOB, "Wobble depth");
+  configCvGain(WOBBLE_DEPTH_AV, "Wobble depth");
+
+  configParam(WOBBLE_RATIO_FREEDOM_SWITCH, 0.f, 1.f, 1.f, "Wobble freedom");
+  configParam(WOBBLE_PHASE_KNOB, 0.f, 1.f, 0.5f, "Wobble phase offset", "°", 0.f, 360.f, -180.f);
+
+  configGain(X_GAIN_KNOB, "X");
+  configSignalRange(X_RANGE_SWITCH, "X", false);
+  configGain(Y_GAIN_KNOB, "Y");
+  configSignalRange(Y_RANGE_SWITCH, "Y", false);
+}
 
 void Xycloid::process(const ProcessArgs &args) {
   auto wobble_ratio = this->wobble_ratio();

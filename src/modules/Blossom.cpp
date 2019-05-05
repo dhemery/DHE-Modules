@@ -17,8 +17,8 @@ Blossom::Blossom() {
   configParam(DEPTH_KNOB, 0.f, 1.f, 0.5f, "Depth", "%", 0.f, 100.f);
   configCvGain(DEPTH_AV, "Depth");
 
-  configParam(PHASE_KNOB, 0.f, 1.f, 0.5f, "Phase", "°", 0.f, 360.f, -180.f);
-  configCvGain(PHASE_AV, "Phase");
+  configParam(PHASE_KNOB, 0.f, 1.f, 0.5f, "Bounce phase offset", "°", 0.f, 360.f, -180.f);
+  configCvGain(PHASE_AV, "Bounce phase offset");
 
   configGain(X_GAIN_KNOB, "X output");
   configGain(Y_GAIN_KNOB, "Y output");
