@@ -34,9 +34,9 @@ public:
   enum OutputIds { MAIN_OUT, OUTPUT_COUNT };
 
 private:
-  auto coefficient(ParameterIds knob_param, InputIds cv_param)  -> float;
-  auto gain(ParameterIds knob_param, InputIds cv_input)  -> float;
-  auto main_in()  -> float;
+  auto coefficient(ParameterIds knob_param, InputIds cv_param) -> float;
+  auto gain(ParameterIds knob_param, InputIds cv_input) -> float;
+  auto main_in() -> float;
   void send_main_out(float voltage);
 };
 } // namespace DHE

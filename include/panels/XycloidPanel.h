@@ -1,7 +1,7 @@
 #pragma once
 
-#include "panel.h"
 #include "modules/Xycloid.h"
+#include "panel.h"
 
 namespace DHE {
 

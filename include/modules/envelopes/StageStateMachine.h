@@ -25,11 +25,8 @@ public:
                      set_active,
                      set_eoc,
                      forward},
-        generating{[this]() { this->finish_stage(); },
-                   std::move(duration),
-                   std::move(prepare),
-                   std::move(generate),
-                   set_active} {}
+        generating{[this]() { this->finish_stage(); }, std::move(duration),
+                   std::move(prepare), std::move(generate), set_active} {}
 
 private:
   Generating generating;

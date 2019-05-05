@@ -1,7 +1,7 @@
 #include <array>
 
-#include "util/signal.h"
 #include "util/range.h"
+#include "util/signal.h"
 
 namespace DHE {
 namespace Signal {

@@ -18,7 +18,6 @@ Stage::Stage()
                     [this](bool eoc) { set_eoc(eoc); }} {
   config(PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT);
 
-
   configParam(DURATION_KNOB, 0.f, 1.f, 0.5f, "Duration");
   configParam(LEVEL_KNOB, 0.f, 1.f, 0.5f, "Level", " V", 0.f, 10.f, 0.f);
   configParam(CURVE_KNOB, 0.f, 1.f, 0.5f, "Curvature", "%", 0.f, 200.f, -100.f);
@@ -52,13 +51,17 @@ void Stage::generate(float phase) {
 
 void Stage::prepare_to_generate() { start_voltage = envelope_in(); }
 
-void Stage::send_out(float voltage) { outputs[MAIN_OUT].value = voltage; }
+void Stage::send_out(float voltage) { outputs[MAIN_OUT].setVoltage(voltage); }
 
 void Stage::set_active(bool active) {
-  outputs[ACTIVE_OUT].value = active ? 10.f : 0.f;
+  const auto voltage = active ? 10.f : 0.f;
+  outputs[ACTIVE_OUT].setVoltage(voltage);
 }
 
-void Stage::set_eoc(bool eoc) { outputs[EOC_OUT].value = eoc ? 10.f : 0.f; }
+void Stage::set_eoc(bool eoc) {
+  const auto voltage = eoc ? 10.f : 0.f;
+  outputs[EOC_OUT].setVoltage(voltage);
+}
 
 auto Stage::stage_gate_in() const -> bool {
   return inputs[STAGE_TRIGGER_IN].value > 0.1;

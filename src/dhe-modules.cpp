@@ -20,19 +20,19 @@
 rack::plugin::Plugin *pluginInstance;
 
 void init(rack::plugin::Plugin *p) {
-    pluginInstance = p;
+  pluginInstance = p;
 
-
-    p->addModel(rack::createModel<DHE::Blossom, DHE::BlossomPanel>("Blossom"));
-    p->addModel(rack::createModel<DHE::BoosterStage, DHE::BoosterStagePanel>("BoosterStage"));
-    p->addModel(rack::createModel<DHE::Cubic, DHE::CubicPanel>("Cubic"));
-    p->addModel(rack::createModel<DHE::Func, DHE::FuncPanel>("Func"));
-    p->addModel(rack::createModel<DHE::Func6, DHE::Func6Panel>("Func 6"));
-    p->addModel(rack::createModel<DHE::Hostage, DHE::HostagePanel>("Hostage"));
-    p->addModel(rack::createModel<DHE::Stage, DHE::StagePanel>("Stage"));
-    p->addModel(rack::createModel<DHE::Ranger, DHE::RangerPanel>("Ranger"));
-    p->addModel(rack::createModel<DHE::Swave, DHE::SwavePanel>("Swave"));
-    p->addModel(rack::createModel<DHE::Tapers, DHE::TapersPanel>("Tapers"));
-    p->addModel(rack::createModel<DHE::Upstage, DHE::UpstagePanel>("Upstage"));
-    p->addModel(rack::createModel<DHE::Xycloid, DHE::XycloidPanel>("Xycloid"));
+  p->addModel(rack::createModel<DHE::Blossom, DHE::BlossomPanel>("Blossom"));
+  p->addModel(rack::createModel<DHE::BoosterStage, DHE::BoosterStagePanel>(
+      "BoosterStage"));
+  p->addModel(rack::createModel<DHE::Cubic, DHE::CubicPanel>("Cubic"));
+  p->addModel(rack::createModel<DHE::Func, DHE::FuncPanel>("Func"));
+  p->addModel(rack::createModel<DHE::Func6, DHE::Func6Panel>("Func 6"));
+  p->addModel(rack::createModel<DHE::Hostage, DHE::HostagePanel>("Hostage"));
+  p->addModel(rack::createModel<DHE::Stage, DHE::StagePanel>("Stage"));
+  p->addModel(rack::createModel<DHE::Ranger, DHE::RangerPanel>("Ranger"));
+  p->addModel(rack::createModel<DHE::Swave, DHE::SwavePanel>("Swave"));
+  p->addModel(rack::createModel<DHE::Tapers, DHE::TapersPanel>("Tapers"));
+  p->addModel(rack::createModel<DHE::Upstage, DHE::UpstagePanel>("Upstage"));
+  p->addModel(rack::createModel<DHE::Xycloid, DHE::XycloidPanel>("Xycloid"));
 }

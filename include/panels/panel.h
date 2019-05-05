@@ -133,9 +133,8 @@ private:
     auto left = std::min(width() / 4.f, max_screw_inset);
     auto right = width() - left;
 
-    auto screw_positions =
-        std::vector<rack::math::Vec>{{left, top}, {left, bottom},
-                                     {right, top}, {right, bottom}};
+    auto screw_positions = std::vector<rack::math::Vec>{
+        {left, top}, {left, bottom}, {right, top}, {right, bottom}};
 
     std::shuffle(screw_positions.begin(), screw_positions.end(),
                  std::mt19937(std::random_device()()));

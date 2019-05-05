@@ -8,10 +8,9 @@ Func::Func() {
   configKnob(KNOB, "Operand");
   configParam(OPERATOR_SWITCH, 0.f, 1.f, 0.f, "Operation");
   configParam(ADDITION_RANGE_SWITCH, 0.f, 3.f, 0.f, "Addition operand range");
-  configParam(MULTIPLICATION_RANGE_SWITCH, 0.f, 3.f, 0.f, "Multiplication operand range");
+  configParam(MULTIPLICATION_RANGE_SWITCH, 0.f, 3.f, 0.f,
+              "Multiplication operand range");
 }
 
-void Func::process(const ProcessArgs &args) {
-  channel->adjust(0.f);
-}
+void Func::process(const ProcessArgs &args) { channel->adjust(0.f); }
 } // namespace DHE

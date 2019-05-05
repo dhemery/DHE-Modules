@@ -28,20 +28,22 @@ Tapers::Tapers() {
 }
 
 void Tapers::process(const ProcessArgs &args) {
-  outputs[OUT_1].value = taper(level1(), is_uni_1(), curvature1(), is_s_1());
-  outputs[OUT_2].value = taper(level2(), is_uni_2(), curvature2(), is_s_2());
+  outputs[OUT_1].setVoltage(
+      taper(level1(), is_uni_1(), curvature1(), is_s_1()));
+  outputs[OUT_2].setVoltage(
+      taper(level2(), is_uni_2(), curvature2(), is_s_2()));
 }
 
-auto Tapers::curvature(int knob, int cv, int av)  -> float {
+auto Tapers::curvature(int knob, int cv, int av) -> float {
   auto curvature = modulated(knob, cv, av);
   return Sigmoid::curvature(curvature);
 }
 
-auto Tapers::curvature1()  -> float {
+auto Tapers::curvature1() -> float {
   return curvature(CURVE_1_KNOB, CURVE_1_CV, CURVE_1_AV);
 }
 
-auto Tapers::curvature2()  -> float {
+auto Tapers::curvature2() -> float {
   return curvature(CURVE_2_KNOB, CURVE_2_CV, CURVE_2_AV);
 }
 

@@ -10,9 +10,8 @@ const Range Duration::short_range{0.001f, 1.f};
 const Range Duration::medium_range{0.01f, 10.f};
 const Range Duration::long_range{0.1f, 100.f};
 
-const std::array<Range const *, 3> Duration::ranges{
-    &short_range, &medium_range, &long_range
-};
+const std::array<Range const *, 3> Duration::ranges{&short_range, &medium_range,
+                                                    &long_range};
 
 static constexpr float medium_duration_switch_position{1.f};
 

@@ -12,10 +12,9 @@ static const auto addition_ranges = std::array<Range const *, 4>{
     &half_bipolar_range, &Signal::bipolar_range, &Signal::unipolar_range,
     &invertible_unipolar_range};
 
-FuncChannel::FuncChannel(rack::engine::Module *module, int inputIndex, int operandIndex,
-                         int outputIndex)
-    : input{module->inputs[inputIndex]},
-      operand{module->params[operandIndex]},
+FuncChannel::FuncChannel(rack::engine::Module *module, int inputIndex,
+                         int operandIndex, int outputIndex)
+    : input{module->inputs[inputIndex]}, operand{module->params[operandIndex]},
       output{module->outputs[outputIndex]} {}
 
 auto FuncChannel::adjust(float upstream) -> float {

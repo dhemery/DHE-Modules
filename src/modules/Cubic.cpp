@@ -51,5 +51,7 @@ auto Cubic::gain(const Cubic::ParameterIds knob_param,
 
 auto Cubic::main_in() -> float { return inputs[MAIN_IN].value; }
 
-void Cubic::send_main_out(float voltage) { outputs[MAIN_OUT].value = voltage; }
+void Cubic::send_main_out(float voltage) {
+  outputs[MAIN_OUT].setVoltage(voltage);
+}
 } // namespace DHE

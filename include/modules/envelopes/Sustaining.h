@@ -15,7 +15,7 @@ public:
             []() {},               // Ignore stage gate rise
             finish_sustaining,     // Finish sustaining on stage gate fall
             [this]() { start(); }, // Start sustaining on entry
-            [](float) {}                // Do nothing on each step
+            [](float) {}           // Do nothing on each step
         },
         set_active{std::move(set_active)}, forward{std::move(forward)} {}
 

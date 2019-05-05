@@ -19,7 +19,9 @@ auto Swave::curve() -> float {
 
 auto Swave::is_s() const -> bool { return params[SHAPE_SWITCH].value > 0.5f; }
 
-void Swave::send_signal(float voltage) { outputs[MAIN_OUT].value = voltage; }
+void Swave::send_signal(float voltage) {
+  outputs[MAIN_OUT].setVoltage(voltage);
+}
 
 auto Swave::signal_in() const -> float { return inputs[MAIN_IN].value; }
 

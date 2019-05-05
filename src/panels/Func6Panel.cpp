@@ -26,7 +26,7 @@ Func6Panel::Func6Panel(Func6 *func6) : Panel{func6, hp} {
     auto multiplication_range_switch_index =
         Func6::MULTIPLICATION_RANGE_SWITCH + row;
 
-//    auto channel = &func6->channels[row];
+    //    auto channel = &func6->channels[row];
     //    auto select_operator = [channel, addition_range_switch,
     //                            multiplication_range_switch](int position) {
     //      auto is_multiplication = position == 1;

@@ -32,8 +32,10 @@ BoosterStage::BoosterStage()
   configParam(EOC_BUTTON, 0.f, 1.f, 0.f, "EOC");
   configParam(TRIGGER_BUTTON, 0.f, 1.f, 0.f, "TRIGGER");
 
-  duration.config(&params[DURATION_KNOB], &params[DURATION_RANGE_SWITCH], &inputs[DURATION_CV]);
-  level.config(&params[LEVEL_KNOB], &params[LEVEL_RANGE_SWITCH], &inputs[LEVEL_CV]);
+  duration.config(&params[DURATION_KNOB], &params[DURATION_RANGE_SWITCH],
+                  &inputs[DURATION_CV]);
+  level.config(&params[LEVEL_KNOB], &params[LEVEL_RANGE_SWITCH],
+               &inputs[LEVEL_CV]);
 
   state_machine.start();
 }
@@ -92,21 +94,22 @@ auto BoosterStage::envelope_in() const -> float {
   return inputs[ENVELOPE_IN].value;
 }
 
-auto BoosterStage::curvature()  -> float {
+auto BoosterStage::curvature() -> float {
   return Sigmoid::curvature(modulated(CURVE_KNOB, CURVE_CV));
 }
 
 void BoosterStage::send_active() {
-  outputs[ACTIVE_OUT].value =
-      is_active || active_button_is_pressed ? 10.f : 0.f;
+  auto const voltage = is_active || active_button_is_pressed ? 10.f : 0.f;
+  outputs[ACTIVE_OUT].setVoltage(voltage);
 }
 
 void BoosterStage::send_eoc() {
-  outputs[EOC_OUT].value = is_eoc || eoc_button_is_pressed ? 10.f : 0.f;
+  const auto voltage = is_eoc || eoc_button_is_pressed ? 10.f : 0.f;
+  outputs[EOC_OUT].setVoltage(voltage);
 }
 
 void BoosterStage::send_out(float voltage) {
-  outputs[MAIN_OUT].value = voltage;
+  outputs[MAIN_OUT].setVoltage(voltage);
 }
 
 auto BoosterStage::taper(float phase) -> float {

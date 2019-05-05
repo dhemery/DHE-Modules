@@ -21,11 +21,12 @@ void Upstage::process(const ProcessArgs &args) {
 }
 
 void Upstage::send_envelope(float voltage) {
-  outputs[MAIN_OUT].value = voltage;
+  outputs[MAIN_OUT].setVoltage(voltage);
 }
 
 void Upstage::send_trigger(bool is_triggered) {
-  outputs[TRIGGER_OUT].value = is_triggered ? 10.f : 0.f;
+  const auto voltage = is_triggered ? 10.f : 0.f;
+  outputs[TRIGGER_OUT].setVoltage(voltage);
 }
 
 auto Upstage::trigger_in() const -> bool {

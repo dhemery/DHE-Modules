@@ -1,8 +1,8 @@
 #pragma once
 #include <functional>
 
-#include "ui/MenuItem.hpp"
 #include "event.hpp"
+#include "ui/MenuItem.hpp"
 
 namespace DHE {
 
@@ -18,7 +18,7 @@ struct BooleanOption : rack::ui::MenuItem {
 
   void step() override {
     rightText = is_on() ? "✔" : "";
-      rack::ui::MenuItem::step();
+    rack::ui::MenuItem::step();
   }
 
   const std::function<void(bool)> set;

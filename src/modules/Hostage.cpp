@@ -19,7 +19,8 @@ Hostage::Hostage()
 
   configParam(HOSTAGE_MODE_SWITCH, 0.f, 1.f, 0.f, "Mode");
 
-  duration.config(&params[DURATION_KNOB], &params[DURATION_RANGE_SWITCH], &inputs[DURATION_CV]);
+  duration.config(&params[DURATION_KNOB], &params[DURATION_RANGE_SWITCH],
+                  &inputs[DURATION_CV]);
   state_machine.start();
 }
 
@@ -38,10 +39,14 @@ auto Hostage::is_sustain_mode() const -> bool {
 }
 
 void Hostage::set_active(bool active) {
-  outputs[ACTIVE_OUT].value = active ? 10.f : 0.f;
+  const auto voltage = active ? 10.f : 0.f;
+  outputs[ACTIVE_OUT].setVoltage(voltage);
 }
 
-void Hostage::set_eoc(bool eoc) { outputs[EOC_OUT].value = eoc ? 10.f : 0.f; }
+void Hostage::set_eoc(bool eoc) {
+  const auto voltage = eoc ? 10.f : 0.f;
+  outputs[EOC_OUT].setVoltage(voltage);
+}
 
 auto Hostage::defer_gate_in() const -> bool {
   return inputs[DEFER_GATE_IN].value > 0.1f;
@@ -53,5 +58,5 @@ auto Hostage::stage_gate_in() const -> bool {
 
 auto Hostage::envelope_in() const -> float { return inputs[MAIN_IN].value; }
 
-void Hostage::send_out(float voltage) { outputs[MAIN_OUT].value = voltage; }
+void Hostage::send_out(float voltage) { outputs[MAIN_OUT].setVoltage(voltage); }
 } // namespace DHE

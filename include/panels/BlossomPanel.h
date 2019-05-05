@@ -1,7 +1,7 @@
 #pragma once
 
-#include "panel.h"
 #include "modules/Blossom.h"
+#include "panel.h"
 
 namespace DHE {
 

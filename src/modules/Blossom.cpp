@@ -17,7 +17,8 @@ Blossom::Blossom() {
   configParam(DEPTH_KNOB, 0.f, 1.f, 0.5f, "Depth", "%", 0.f, 100.f);
   configCvGain(DEPTH_AV, "Depth");
 
-  configParam(PHASE_KNOB, 0.f, 1.f, 0.5f, "Bounce phase offset", "°", 0.f, 360.f, -180.f);
+  configParam(PHASE_KNOB, 0.f, 1.f, 0.5f, "Bounce phase offset", "°", 0.f,
+              360.f, -180.f);
   configCvGain(PHASE_AV, "Bounce phase offset");
 
   configGain(X_GAIN_KNOB, "X output");
@@ -43,8 +44,8 @@ void Blossom::process(const ProcessArgs &args) {
   auto x = radius * std::cos(angle);
   auto y = radius * std::sin(angle);
 
-  outputs[X_OUT].value = 5.f * x_gain_in() * (x + x_offset());
-  outputs[Y_OUT].value = 5.f * y_gain_in() * (y + y_offset());
+  outputs[X_OUT].setVoltage(5.f * x_gain_in() * (x + x_offset()));
+  outputs[Y_OUT].setVoltage(5.f * y_gain_in() * (y + y_offset()));
 }
 
 auto Blossom::offset(int param) const -> float {

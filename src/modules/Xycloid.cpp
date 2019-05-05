@@ -11,7 +11,8 @@ namespace DHE {
 Xycloid::Xycloid() {
   config(PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT);
 
-  configParam(THROB_SPEED_KNOB, 0.f, 1.f, 0.65f, "Throb speed", "", 0.f, 2.f, -1.f);
+  configParam(THROB_SPEED_KNOB, 0.f, 1.f, 0.65f, "Throb speed", "", 0.f, 2.f,
+              -1.f);
   configCvGain(THROB_SPEED_AV, "Throb speed");
 
   configKnob(WOBBLE_RATIO_KNOB, "Wobble ratio");
@@ -22,7 +23,8 @@ Xycloid::Xycloid() {
   configCvGain(WOBBLE_DEPTH_AV, "Wobble depth");
 
   configParam(WOBBLE_RATIO_FREEDOM_SWITCH, 0.f, 1.f, 1.f, "Wobble freedom");
-  configParam(WOBBLE_PHASE_KNOB, 0.f, 1.f, 0.5f, "Wobble phase offset", "°", 0.f, 360.f, -180.f);
+  configParam(WOBBLE_PHASE_KNOB, 0.f, 1.f, 0.5f, "Wobble phase offset", "°",
+              0.f, 360.f, -180.f);
 
   configGain(X_GAIN_KNOB, "X");
   configSignalRange(X_RANGE_SWITCH, "X", false);
@@ -46,8 +48,8 @@ void Xycloid::process(const ProcessArgs &args) {
   auto x = throb_depth * throbber.x() + wobble_depth * wobbler.x();
   auto y = throb_depth * throbber.y() + wobble_depth * wobbler.y();
 
-  outputs[X_OUT].value = 5.f * x_gain_in() * (x + x_offset());
-  outputs[Y_OUT].value = 5.f * y_gain_in() * (y + y_offset());
+  outputs[X_OUT].setVoltage(5.f * x_gain_in() * (x + x_offset()));
+  outputs[Y_OUT].setVoltage(5.f * y_gain_in() * (y + y_offset()));
 }
 
 auto Xycloid::is_wobble_ratio_free() const -> bool {
