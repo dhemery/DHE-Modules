@@ -3,7 +3,6 @@
 #include "Module.h"
 
 #include "util/range.h"
-#include "util/selector.h"
 #include "util/signal.h"
 
 namespace DHE {
@@ -25,9 +24,6 @@ public:
   enum InputIds { TRIGGER_IN, WAIT_IN, LEVEL_CV, INPUT_COUNT };
 
   enum OutputIds { TRIGGER_OUT, MAIN_OUT, OUTPUT_COUNT };
-
-  const Selector<Range const *, 2> level_range_selector{
-      Signal::ranges(), [this](Range const *range) { level_range = range; }};
 
 private:
   auto envelope_voltage() const -> float;

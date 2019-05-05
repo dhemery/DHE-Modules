@@ -9,7 +9,7 @@ using ::testing::Expectation;
 using ::testing::NiceMock;
 using ::testing::Return;
 
-struct RangedDurationTest : public ::testing::Test {
+struct DurationTest : public ::testing::Test {
 
   static constexpr float tolerance = 1.f / 1000.f;
   static constexpr float short_range_switch_position = 0.f;
@@ -22,13 +22,13 @@ struct RangedDurationTest : public ::testing::Test {
 
   DHE::Duration duration{};
 
-  RangedDurationTest() {
+  DurationTest() {
     cv_input.setVoltage(0.f);
     duration.config(&knob_param, &switch_param, &cv_input);
   }
 };
 
-TEST_F(RangedDurationTest, shortRange_minimumDuration_isShortRangeLowerBound) {
+TEST_F(DurationTest, shortRange_minimumDuration_isShortRangeLowerBound) {
   switch_param.setValue(short_range_switch_position);
   knob_param.setValue(0.f);
 
@@ -36,7 +36,7 @@ TEST_F(RangedDurationTest, shortRange_minimumDuration_isShortRangeLowerBound) {
   ASSERT_NEAR(duration(), expected, expected * tolerance);
 }
 
-TEST_F(RangedDurationTest, shortRange_middleDuration_isOneTenthOfShortRangeUpperBound) {
+TEST_F(DurationTest, shortRange_middleDuration_isOneTenthOfShortRangeUpperBound) {
   switch_param.setValue(short_range_switch_position);
   knob_param.setValue(0.5f);
 
@@ -44,7 +44,7 @@ TEST_F(RangedDurationTest, shortRange_middleDuration_isOneTenthOfShortRangeUpper
   ASSERT_NEAR(duration(), expected, expected * tolerance);
 }
 
-TEST_F(RangedDurationTest, shortRange_maximumDuration_isShortRangeUpperBound) {
+TEST_F(DurationTest, shortRange_maximumDuration_isShortRangeUpperBound) {
   switch_param.setValue(short_range_switch_position);
   knob_param.setValue(1.f);
 
@@ -52,7 +52,7 @@ TEST_F(RangedDurationTest, shortRange_maximumDuration_isShortRangeUpperBound) {
   ASSERT_NEAR(duration(), expected, expected * tolerance);
 }
 
-TEST_F(RangedDurationTest, mediumRange_minimumDuration_isMediumRangeLowerBound) {
+TEST_F(DurationTest, mediumRange_minimumDuration_isMediumRangeLowerBound) {
   switch_param.setValue(medium_range_switch_position);
   knob_param.setValue(0.f);
 
@@ -60,7 +60,7 @@ TEST_F(RangedDurationTest, mediumRange_minimumDuration_isMediumRangeLowerBound) 
   ASSERT_NEAR(duration(), expected, expected * tolerance);
 }
 
-TEST_F(RangedDurationTest, mediumRange_middleDuration_isOneTenthOfMediumRangeUpperBound) {
+TEST_F(DurationTest, mediumRange_middleDuration_isOneTenthOfMediumRangeUpperBound) {
   switch_param.setValue(medium_range_switch_position);
   knob_param.setValue(0.5f);
 
@@ -68,7 +68,7 @@ TEST_F(RangedDurationTest, mediumRange_middleDuration_isOneTenthOfMediumRangeUpp
   ASSERT_NEAR(duration(), expected, expected * tolerance);
 }
 
-TEST_F(RangedDurationTest, mediumRange_maximumDuration_isMediumRangeUpperBound) {
+TEST_F(DurationTest, mediumRange_maximumDuration_isMediumRangeUpperBound) {
   switch_param.setValue(medium_range_switch_position);
   knob_param.setValue(1.f);
 
@@ -76,7 +76,7 @@ TEST_F(RangedDurationTest, mediumRange_maximumDuration_isMediumRangeUpperBound) 
   ASSERT_NEAR(duration(), expected, expected * tolerance);
 }
 
-TEST_F(RangedDurationTest, longRange_minimumDuration_isLongRangeLowerBound) {
+TEST_F(DurationTest, longRange_minimumDuration_isLongRangeLowerBound) {
   switch_param.setValue(long_range_switch_position);
   knob_param.setValue(0.f);
 
@@ -84,7 +84,7 @@ TEST_F(RangedDurationTest, longRange_minimumDuration_isLongRangeLowerBound) {
   ASSERT_NEAR(duration(), expected, expected * tolerance);
 }
 
-TEST_F(RangedDurationTest, longRange_middleDuration_isOneTenthOfLongRangeUpperBound) {
+TEST_F(DurationTest, longRange_middleDuration_isOneTenthOfLongRangeUpperBound) {
   switch_param.setValue(long_range_switch_position);
   knob_param.setValue(0.5f);
 
@@ -92,7 +92,7 @@ TEST_F(RangedDurationTest, longRange_middleDuration_isOneTenthOfLongRangeUpperBo
   ASSERT_NEAR(duration(), expected, expected * tolerance);
 }
 
-TEST_F(RangedDurationTest, longRange_maximumDuration_isLongRangeUpperBound) {
+TEST_F(DurationTest, longRange_maximumDuration_isLongRangeUpperBound) {
   switch_param.setValue(long_range_switch_position);
   knob_param.setValue(1.f);
 

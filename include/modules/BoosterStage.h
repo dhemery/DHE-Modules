@@ -4,7 +4,6 @@
 
 #include "controls/Duration.h"
 #include "envelopes/StageStateMachine.h"
-#include "util/selector.h"
 #include "util/sigmoid.h"
 #include "util/signal.h"
 

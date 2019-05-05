@@ -4,7 +4,6 @@
 
 #include "controls/Duration.h"
 #include "envelopes/HostageStateMachine.h"
-#include "util/selector.h"
 
 namespace DHE {
 
