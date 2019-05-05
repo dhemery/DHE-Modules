@@ -4,9 +4,7 @@
 
 namespace DHE {
 
-Cubic::Cubic() {
-    config(PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT);
-}
+Cubic::Cubic() { config(PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT); }
 
 void Cubic::process(const ProcessArgs &args) {
   auto a = coefficient(A_KNOB, A_CV);
@@ -25,17 +23,17 @@ void Cubic::process(const ProcessArgs &args) {
 }
 
 auto Cubic::coefficient(Cubic::ParameterIds knob_param,
-                        Cubic::InputIds cv_param) const -> float {
+                        Cubic::InputIds cv_param) -> float {
   static auto constexpr coefficient_range = Range{-2.0f, 2.0f};
   return coefficient_range.scale(modulated(knob_param, cv_param));
 }
 
 auto Cubic::gain(const Cubic::ParameterIds knob_param,
-                 const Cubic::InputIds cv_input) const -> float {
+                 const Cubic::InputIds cv_input) -> float {
   return Gain::multiplier(modulated(knob_param, cv_input));
 }
 
-auto Cubic::main_in() const -> float { return inputs[MAIN_IN].value; }
+auto Cubic::main_in() -> float { return inputs[MAIN_IN].value; }
 
 void Cubic::send_main_out(float voltage) { outputs[MAIN_OUT].value = voltage; }
 } // namespace DHE

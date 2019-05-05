@@ -60,6 +60,69 @@ static inline auto curve(float input, float curvature) -> float {
   return inverse(input, -curvature);
 }
 
+class Shape {
+public:
+  virtual auto taper(float input, float curvature) const -> float = 0;
+};
+
+/**
+ * Applies a J-shaped transfer function to the input.
+ * <p>
+ * The curvature determines the shape and intensity of the taper.
+ * A positive curvature applies a J-taper.
+ * A curvature of 0 applies a linear taper.
+ * A negative curvature applies an inverted J-taper.
+ * <p>
+ * Before the function is applied:
+ * <ul>
+ * <li>The input is clamped to the range [0.0, 1.0].</li>
+ * <li>The curvature is clamped to the range [0.0001, 0.9999].</li>
+ * </ul>
+ */
+class JShape : public Shape {
+public:
+  /**
+   * Applies a J-shaped transfer function to the input.
+   * @param input the input value
+   * @param curvature the intensity of the taper
+   */
+  auto taper(float input, float curvature) const -> float override {
+    return inverse(proportion_range.clamp(input), curvature);
+  }
+};
+static constexpr auto j_shape = JShape{};
+
+/**
+ * Applies an S-shaped transfer function to the input.
+ * <p>
+ * The curvature determines the shape and intensity of the taper.
+ * A positive curvature applies an S-taper.
+ * A curvature of 0 applies a linear taper.
+ * A negative curvature applies an inverted S-taper.
+ * <p>
+ * Before the function is applied:
+ * <ul>
+ * <li>The input is clamped to the range [0.0, 1.0].</li>
+ * <li>The curvature is clamped to the range [0.0001, 0.9999].</li>
+ * </ul>
+ */
+class SShape : public Shape {
+public:
+  /**
+   * Applies an S-shaped transfer function to the input.
+   * @param input the input value
+   * @param curvature the intensity of the taper
+   */
+  auto taper(float input, float curvature) const -> float override {
+    const auto scaled = sigmoid_range.scale(input);
+    const auto tapered = curve(scaled, curvature);
+    return sigmoid_range.normalize(tapered);
+  }
+};
+static constexpr auto s_shape = SShape{};
+
+auto shapes() -> std::array<Shape const *, 2> const &;
+
 /**
  * Applies a gentle S-shaped transfer function to map an input in the range
  * [0.0, 1.0] to an output in the range [-1.0, 1.0]. The transfer function makes
@@ -81,44 +144,10 @@ static inline auto curvature(float input) -> float {
   return curve(scaled, gentle_s);
 }
 
-/**
- * Applies a J-shaped transfer function to the input.
- * <p>
- * The curvature determines the shape and intensity of the taper.
- * A positive curvature applies a J-taper.
- * A curvature of 0 applies a linear taper.
- * A negative curvature applies an inverted J-taper.
- * <p>
- * Before the function is applied:
- * <ul>
- * <li>The input is clamped to the range [0.0, 1.0].</li>
- * <li>The curvature is clamped to the range [0.0001, 0.9999].</li>
- * </ul>
- * @param input the input to the taper function
- * @param curvature the intensity and direction of the taper
- * @return the taper function result
- */
 static inline auto j_taper(float input, float curvature) -> float {
   return inverse(proportion_range.clamp(input), curvature);
 }
 
-/**
- * Applies an S-shaped transfer function to the input.
- * <p>
- * The curvature determines the shape and intensity of the taper.
- * A positive curvature applies an S-taper.
- * A curvature of 0 applies a linear taper.
- * A negative curvature applies an inverted S-taper.
- * <p>
- * Before the function is applied:
- * <ul>
- * <li>The input is clamped to the range [0.0, 1.0].</li>
- * <li>The curvature is clamped to the range [0.0001, 0.9999].</li>
- * </ul>
- * @param input the input to the taper function
- * @param curvature the intensity and direction of the taper
- * @return the taper function result
- */
 static inline auto s_taper(float input, float curvature) -> float {
   const auto scaled = sigmoid_range.scale(input);
   const auto tapered = curve(scaled, curvature);
@@ -128,32 +157,6 @@ static inline auto s_taper(float input, float curvature) -> float {
 static inline auto taper(float input, float curvature, bool is_s) -> float {
   return is_s ? s_taper(input, curvature) : j_taper(input, curvature);
 }
-
-class Shape {
-public:
-  virtual auto taper(float input, float curvature) const -> float = 0;
-};
-
-class JShape : public Shape {
-public:
-  auto taper(float input, float curvature) const -> float override {
-    return inverse(proportion_range.clamp(input), curvature);
-  }
-};
-
-class SShape : public Shape {
-public:
-  auto taper(float input, float curvature) const -> float override {
-    const auto scaled = sigmoid_range.scale(input);
-    const auto tapered = curve(scaled, curvature);
-    return sigmoid_range.normalize(tapered);
-  }
-};
-
-static constexpr auto j_shape = JShape{};
-static constexpr auto s_shape = SShape{};
-
-auto shapes() -> std::array<Shape const *, 2> const &;
 
 } // namespace Sigmoid
 } // namespace DHE

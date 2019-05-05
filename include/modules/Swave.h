@@ -14,7 +14,7 @@ public:
   enum OutputIds { MAIN_OUT, OUTPUT_COUNT };
 
 private:
-  auto curve() const -> float;
+  auto curve() -> float;
   auto is_s() const -> bool;
   void send_signal(float voltage);
   auto signal_in() const -> float;

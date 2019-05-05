@@ -92,7 +92,7 @@ auto BoosterStage::envelope_in() const -> float {
   return inputs[ENVELOPE_IN].value;
 }
 
-auto BoosterStage::curvature() const -> float {
+auto BoosterStage::curvature()  -> float {
   return Sigmoid::curvature(modulated(CURVE_KNOB, CURVE_CV));
 }
 
@@ -109,7 +109,7 @@ void BoosterStage::send_out(float voltage) {
   outputs[MAIN_OUT].value = voltage;
 }
 
-auto BoosterStage::taper(float phase) const -> float {
+auto BoosterStage::taper(float phase) -> float {
   return curve_shape->taper(phase, curvature());
 }
 

@@ -39,15 +39,15 @@ public:
   enum OutputIds { X_OUT, Y_OUT, OUTPUT_COUNT };
 
 private:
-  auto bounce() const -> float;
-  auto depth() const -> float;
+  auto bounce() -> float;
+  auto depth() -> float;
   auto is_bounce_free() const -> bool;
   auto offset(int param) const -> float;
-  auto phase() const -> float;
-  auto spin(float sample_time) const -> float;
-  auto x_gain_in() const -> float;
+  auto phase() -> float;
+  auto spin(float sample_time) -> float;
+  auto x_gain_in() -> float;
   auto x_offset() const -> float;
-  auto y_gain_in() const -> float;
+  auto y_gain_in() -> float;
   auto y_offset() const -> float;
 
   static constexpr auto speed_curvature = 0.8f;

@@ -42,14 +42,14 @@ public:
 private:
   auto is_wobble_ratio_free() const -> bool;
   auto offset(int param) const -> float;
-  auto throb_speed(float sampleTime) const -> float;
-  auto wobble_depth() const -> float;
+  auto throb_speed(float sampleTime) -> float;
+  auto wobble_depth() -> float;
   auto wobble_phase_in() const -> float;
   auto wobble_ratio_range() const -> const Range &;
-  auto wobble_ratio() const -> float;
+  auto wobble_ratio() -> float;
   auto x_offset() const -> float;
-  auto x_gain_in() const -> float;
-  auto y_gain_in() const -> float;
+  auto x_gain_in() -> float;
+  auto y_gain_in() -> float;
   auto y_offset() const -> float;
 
   static constexpr auto throb_speed_knob_range = Range{-1.f, 1.f};

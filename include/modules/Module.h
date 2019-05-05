@@ -5,9 +5,8 @@
 namespace DHE {
 class Module : public rack::engine::Module {
 public:
-  auto modulated(int knob_param, int cv_input) const -> float;
-
-  auto modulated(int knob_param, int cv_input, int av_param) const -> float;
+  auto modulated(int knob_param, int cv_input) -> float;
+  auto modulated(int knob_param, int cv_input, int av_param) -> float;
 
 protected:
   void configKnob(int index, const std::string& name);

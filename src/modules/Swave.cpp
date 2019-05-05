@@ -8,7 +8,7 @@ namespace DHE {
 
 Swave::Swave() { config(PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT); }
 
-auto Swave::curve() const -> float {
+auto Swave::curve() -> float {
   return Sigmoid::curvature(modulated(CURVE_KNOB, CURVE_CV));
 }
 

@@ -14,17 +14,16 @@ auto av_multiplier(float av_amount) -> float {
   return av_range.scale(av_amount);
 }
 
-auto Module::modulated(int knob_param, int cv_input) const -> float {
-  auto rotation = params[knob_param].value;
-  auto cv = inputs[cv_input].value;
+auto Module::modulated(int knob_param, int cv_input) -> float {
+  auto rotation = params[knob_param].getValue();
+  auto cv = inputs[cv_input].getVoltage();
   return rotation + cv_offset(cv);
 }
 
-auto Module::modulated(int knob_param, int cv_input, int av_param) const
-    -> float {
-  auto rotation = params[knob_param].value;
-  auto cv = inputs[cv_input].value;
-  auto av = params[av_param].value;
+auto Module::modulated(int knob_param, int cv_input, int av_param) -> float {
+  auto rotation = params[knob_param].getValue();
+  auto cv = inputs[cv_input].getVoltage();
+  auto av = params[av_param].getValue();
   return rotation + av_multiplier(av) * cv_offset(cv);
 }
 

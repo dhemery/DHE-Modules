@@ -39,7 +39,7 @@ auto Xycloid::offset(int param) const -> float {
   return is_uni ? 1.f : 0.f;
 }
 
-auto Xycloid::throb_speed(float sampleTime) const -> float {
+auto Xycloid::throb_speed(float sampleTime) -> float {
   constexpr auto speed_taper_curvature = 0.8f;
   auto rotation = modulated(THROB_SPEED_KNOB, THROB_SPEED_CV, THROB_SPEED_AV);
   auto scaled = throb_speed_knob_range.scale(rotation);
@@ -47,7 +47,7 @@ auto Xycloid::throb_speed(float sampleTime) const -> float {
   return -10.f * tapered * sampleTime;
 }
 
-auto Xycloid::wobble_depth() const -> float {
+auto Xycloid::wobble_depth() -> float {
   auto rotation =
       modulated(WOBBLE_DEPTH_KNOB, WOBBLE_DEPTH_CV, WOBBLE_DEPTH_AV);
   return wobble_depth_range.clamp(rotation);
@@ -76,7 +76,7 @@ auto Xycloid::wobble_ratio_range() const -> const Range & {
   return wobble_ratio_ranges[selection];
 }
 
-auto Xycloid::wobble_ratio() const -> float {
+auto Xycloid::wobble_ratio() -> float {
   auto wobble_ratio_amount =
       modulated(WOBBLE_RATIO_KNOB, WOBBLE_RATIO_CV, WOBBLE_RATIO_AV);
   auto wobble_ratio =
@@ -86,11 +86,11 @@ auto Xycloid::wobble_ratio() const -> float {
 
 auto Xycloid::x_offset() const -> float { return offset(X_RANGE_SWITCH); }
 
-auto Xycloid::x_gain_in() const -> float {
+auto Xycloid::x_gain_in() -> float {
   return Gain::multiplier(modulated(X_GAIN_KNOB, X_GAIN_CV));
 }
 
-auto Xycloid::y_gain_in() const -> float {
+auto Xycloid::y_gain_in() -> float {
   return Gain::multiplier(modulated(Y_GAIN_KNOB, Y_GAIN_CV));
 }
 

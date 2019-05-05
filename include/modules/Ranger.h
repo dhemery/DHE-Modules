@@ -25,11 +25,11 @@ public:
   enum OutputIds { MAIN_OUT, OUTPUT_COUNT };
 
 private:
-  auto level() const -> float;
-  auto limit(int knob_param, int cv_input, int av_param,
-             int range_switch_param) const -> float;
-  auto limit1() const -> float;
-  auto limit2() const -> float;
+  auto level() -> float;
+  auto limit(int knob_param, int cv_input, int av_param, int range_switch_param)
+      -> float;
+  auto limit1() -> float;
+  auto limit2() -> float;
   void send_main_out(float voltage);
 };
 

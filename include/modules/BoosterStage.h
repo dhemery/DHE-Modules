@@ -2,8 +2,8 @@
 
 #include "Module.h"
 
-#include "controls/Level.h"
 #include "controls/Duration.h"
+#include "controls/Level.h"
 #include "envelopes/StageStateMachine.h"
 #include "util/sigmoid.h"
 
@@ -53,11 +53,11 @@ public:
 
 private:
   auto envelope_in() const -> float;
-  auto curvature() const -> float;
+  auto curvature() -> float;
   void send_active();
   void send_eoc();
   void send_out(float voltage);
-  auto taper(float phase) const -> float;
+  auto taper(float phase) -> float;
 
   StageStateMachine state_machine;
   Sigmoid::Shape const *curve_shape{&Sigmoid::j_shape};
