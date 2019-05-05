@@ -1,10 +1,26 @@
+#include <string>
+
 #include "modules/Cubic.h"
 #include "util/gain.h"
 #include "util/range.h"
 
 namespace DHE {
 
-Cubic::Cubic() { config(PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT); }
+void configCoefficient(rack::engine::Module *module, int param,
+                       std::string const &name) {
+  module->configParam(param, 0.f, 1.f, 0.5f, name + " coefficient", "", 0.f,
+                      4.f, -2.f);
+}
+
+Cubic::Cubic() {
+  config(PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT);
+  configCoefficient(this, A_KNOB, "x^3");
+  configCoefficient(this, B_KNOB, "x^2");
+  configCoefficient(this, C_KNOB, "x^1");
+  configCoefficient(this, D_KNOB, "x^0");
+  configGain(INPUT_GAIN_KNOB, "Input");
+  configGain(OUTPUT_GAIN_KNOB, "Output");
+}
 
 void Cubic::process(const ProcessArgs &args) {
   auto a = coefficient(A_KNOB, A_CV);
