@@ -2,20 +2,21 @@
 
 #include <array>
 
-#include "engine/Param.hpp"
-#include "engine/Port.hpp"
-
+#include "modules/controls/Common.h"
 #include "util/range.h"
 
 namespace DHE {
 
 class Duration {
-public:
-  void config(rack::engine::Param *knob_param);
-  void config(rack::engine::Param *knob_param,
-              rack::engine::Param *switch_param, rack::engine::Input *cv_input);
+  static ConstantParam defaultRangeSwitch;
 
-  auto operator()() -> float;
+public:
+  explicit Duration(rack::engine::Param &knob,
+                    rack::engine::Param &rangeSwitch = defaultRangeSwitch,
+                    rack::engine::Input &cvInput = defaultCvInput)
+      : knob{knob}, rangeSwitch{rangeSwitch}, cvInput{cvInput} {}
+
+  auto seconds() -> float;
 
   static const Range short_range;
   static const Range medium_range;
@@ -23,9 +24,9 @@ public:
   static const std::array<Range const *, 3> ranges;
 
 private:
-  rack::engine::Param *knob_param;
-  rack::engine::Param *switch_param;
-  rack::engine::Input *cv_input;
+  rack::engine::Param &knob;
+  rack::engine::Param &rangeSwitch;
+  rack::engine::Input &cvInput;
 };
 
 } // namespace DHE

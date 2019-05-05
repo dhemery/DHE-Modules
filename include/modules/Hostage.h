@@ -1,5 +1,7 @@
 #pragma once
 
+#include <memory>
+
 #include "Module.h"
 
 #include "controls/Duration.h"
@@ -41,7 +43,7 @@ private:
   auto envelope_in() -> float;
   void send_out(float voltage);
 
-  Duration duration;
+  std::unique_ptr<Duration> duration;
   HostageStateMachine state_machine;
 };
 } // namespace DHE

@@ -11,7 +11,7 @@ BoosterStage::BoosterStage()
     : state_machine{[this]() -> bool { return defer_gate_is_active(); },
                     [this]() -> bool { return defer_gate_in(); },
                     [this]() -> bool { return stage_gate_in(); },
-                    [this]() -> float { return duration(); },
+                    [this]() -> float { return duration->seconds(); },
                     [this](float) { forward(); },
                     [this]() { prepare_to_generate(); },
                     [this](float phase) { generate(phase); },
@@ -32,10 +32,11 @@ BoosterStage::BoosterStage()
   configParam(EOC_BUTTON, 0.f, 1.f, 0.f, "EOC");
   configParam(TRIGGER_BUTTON, 0.f, 1.f, 0.f, "TRIGGER");
 
-  duration.config(&params[DURATION_KNOB], &params[DURATION_RANGE_SWITCH],
-                  &inputs[DURATION_CV]);
-  level.config(&params[LEVEL_KNOB], &params[LEVEL_RANGE_SWITCH],
-               &inputs[LEVEL_CV]);
+  duration = std::unique_ptr<Duration>(
+      new Duration(params[DURATION_KNOB], params[DURATION_RANGE_SWITCH],
+                   inputs[DURATION_CV]));
+  level = std::unique_ptr<Level>(new Level(
+      params[LEVEL_KNOB], params[LEVEL_RANGE_SWITCH], inputs[LEVEL_CV]));
 
   state_machine.start();
 }
@@ -49,7 +50,7 @@ void BoosterStage::process(const ProcessArgs &args) {
 void BoosterStage::forward() { send_out(envelope_in()); }
 
 void BoosterStage::generate(float phase) {
-  send_out(scale(taper(phase), start_voltage, level()));
+  send_out(scale(taper(phase), start_voltage, level->voltage()));
 }
 
 void BoosterStage::set_active(bool active) {

@@ -11,13 +11,14 @@ Upstage::Upstage() {
   configParam(TRIGGER_BUTTON, 0.f, 1.f, 0.f, "Trigger");
   configParam(WAIT_BUTTON, 0.f, 1.f, 0.f, "Wait");
 
-  level.config(&params[LEVEL_KNOB], &params[LEVEL_RANGE_SWITCH]);
+  level = std::unique_ptr<Level>(
+      new Level(params[LEVEL_KNOB], params[LEVEL_RANGE_SWITCH]));
 }
 
 void Upstage::process(const ProcessArgs &args) {
   auto is_triggered = trigger_in() && !wait_in();
   send_trigger(is_triggered);
-  send_envelope(level());
+  send_envelope(level->voltage());
 }
 
 void Upstage::send_envelope(float voltage) {

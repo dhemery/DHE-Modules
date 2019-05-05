@@ -67,7 +67,7 @@ private:
   bool eoc_button_is_pressed{false};
   float start_voltage{0.f};
   void set_shape();
-  Duration duration;
-  Level level;
+  std::unique_ptr<Duration> duration;
+  std::unique_ptr<Level> level;
 };
 } // namespace DHE

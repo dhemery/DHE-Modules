@@ -8,7 +8,7 @@ Hostage::Hostage()
                     [this]() -> bool { return defer_gate_in(); },
                     [this]() -> bool { return stage_gate_in(); },
                     [this]() -> bool { return is_sustain_mode(); },
-                    [this]() -> float { return duration(); },
+                    [this]() -> float { return duration->seconds(); },
                     [this](float) { forward(); },
                     [this](bool active) { set_active(active); },
                     [this](bool eoc) { set_eoc(eoc); }} {
@@ -19,8 +19,9 @@ Hostage::Hostage()
 
   configParam(HOSTAGE_MODE_SWITCH, 0.f, 1.f, 0.f, "Mode");
 
-  duration.config(&params[DURATION_KNOB], &params[DURATION_RANGE_SWITCH],
-                  &inputs[DURATION_CV]);
+  duration = std::unique_ptr<Duration>(
+      new Duration(params[DURATION_KNOB], params[DURATION_RANGE_SWITCH],
+                   inputs[DURATION_CV]));
   state_machine.start();
 }
 

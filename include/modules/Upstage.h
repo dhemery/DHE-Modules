@@ -1,5 +1,7 @@
 #pragma once
 
+#include <memory>
+
 #include "Module.h"
 
 #include "modules/controls/Level.h"
@@ -33,7 +35,7 @@ private:
   auto trigger_in() -> bool;
   auto wait_in() -> bool;
 
-  Level level;
+  std::unique_ptr<Level> level;
 };
 
 } // namespace DHE

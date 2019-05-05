@@ -10,7 +10,7 @@ Stage::Stage()
     : state_machine{[this]() -> bool { return defer_gate_is_active(); },
                     [this]() -> bool { return defer_gate_in(); },
                     [this]() -> bool { return stage_gate_in(); },
-                    [this]() -> float { return duration(); },
+                    [this]() -> float { return duration->seconds(); },
                     [this](float) { forward(); },
                     [this]() { prepare_to_generate(); },
                     [this](float phase) { generate(phase); },
@@ -22,8 +22,8 @@ Stage::Stage()
   configParam(LEVEL_KNOB, 0.f, 1.f, 0.5f, "Level", " V", 0.f, 10.f, 0.f);
   configParam(CURVE_KNOB, 0.f, 1.f, 0.5f, "Curvature", "%", 0.f, 200.f, -100.f);
 
-  duration.config(&params[DURATION_KNOB]);
-  level.config(&params[LEVEL_KNOB]);
+  duration = std::unique_ptr<Duration>(new Duration(params[DURATION_KNOB]));
+  level = std::unique_ptr<Level>(new Level(params[LEVEL_KNOB]));
 
   state_machine.start();
 }
@@ -46,7 +46,7 @@ auto Stage::envelope_in() -> float { return inputs[ENVELOPE_IN].getVoltage(); }
 void Stage::forward() { send_out(envelope_in()); }
 
 void Stage::generate(float phase) {
-  send_out(scale(taper(phase), start_voltage, level()));
+  send_out(scale(taper(phase), start_voltage, level->voltage()));
 }
 
 void Stage::prepare_to_generate() { start_voltage = envelope_in(); }

@@ -1,5 +1,7 @@
 #pragma once
 
+#include <memory>
+
 #include "Module.h"
 
 #include "controls/Duration.h"
@@ -34,8 +36,8 @@ private:
   void send_out(float voltage);
   auto taper(float phase) -> float;
 
-  Duration duration;
-  Level level;
+  std::unique_ptr<Duration> duration;
+  std::unique_ptr<Level> level;
   StageStateMachine state_machine;
   float start_voltage{0.f};
 };
