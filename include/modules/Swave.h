@@ -15,9 +15,9 @@ public:
 
 private:
   auto curve() -> float;
-  auto is_s() const -> bool;
+  auto is_s() -> bool;
   void send_signal(float voltage);
-  auto signal_in() const -> float;
+  auto signal_in() -> float;
 };
 
 } // namespace DHE

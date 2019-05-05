@@ -14,7 +14,7 @@ using ::testing::Return;
 
 struct LevelTest : public ::testing::Test {
 
-  static constexpr float tolerance = 1.f / 1000.f;
+  static constexpr float tolerance = 0.000001f;
   static constexpr float bipolar_range_switch_position = 0.f;
   static constexpr float unipolar_range_switch_position = 1.f;
 

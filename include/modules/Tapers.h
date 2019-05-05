@@ -32,10 +32,10 @@ private:
   auto curvature(int knob, int cv, int av) -> float;
   auto curvature1() -> float;
   auto curvature2() -> float;
-  auto is_uni_1() const -> bool;
-  auto is_uni_2() const -> bool;
-  auto is_s_1() const -> bool;
-  auto is_s_2() const -> bool;
+  auto is_uni_1() -> bool;
+  auto is_uni_2() -> bool;
+  auto is_s_1() -> bool;
+  auto is_s_2() -> bool;
   auto level1() -> float;
   auto level2() -> float;
   auto taper(float level, bool is_uni, float curve, bool is_s) const -> float;

@@ -52,12 +52,12 @@ void Xycloid::process(const ProcessArgs &args) {
   outputs[Y_OUT].setVoltage(5.f * y_gain_in() * (y + y_offset()));
 }
 
-auto Xycloid::is_wobble_ratio_free() const -> bool {
-  return params[WOBBLE_RATIO_FREEDOM_SWITCH].value > 0.1f;
+auto Xycloid::is_wobble_ratio_free() -> bool {
+  return params[WOBBLE_RATIO_FREEDOM_SWITCH].getValue() > 0.1f;
 }
 
-auto Xycloid::offset(int param) const -> float {
-  auto is_uni = params[param].value > 0.5f;
+auto Xycloid::offset(int param) -> float {
+  auto is_uni = params[param].getValue() > 0.5f;
   return is_uni ? 1.f : 0.f;
 }
 
@@ -75,12 +75,12 @@ auto Xycloid::wobble_depth() -> float {
   return wobble_depth_range.clamp(rotation);
 }
 
-auto Xycloid::wobble_phase_in() const -> float {
-  auto rotation = params[WOBBLE_PHASE_KNOB].value;
+auto Xycloid::wobble_phase_in() -> float {
+  auto rotation = params[WOBBLE_PHASE_KNOB].getValue();
   return rotation - 0.5f;
 }
 
-auto Xycloid::wobble_ratio_range() const -> const Range & {
+auto Xycloid::wobble_ratio_range() -> const Range & {
   static constexpr auto wobble_ratio_max = 16.f;
   static constexpr auto inward_wobble_ratio_range =
       Range{0.f, wobble_ratio_max};
@@ -92,7 +92,7 @@ auto Xycloid::wobble_ratio_range() const -> const Range & {
       inward_wobble_ratio_range, bidirectional_wobble_ratio_range,
       outward_wobble_ratio_range};
 
-  const auto param = params[WOBBLE_RANGE_SWITCH].value;
+  const auto param = params[WOBBLE_RANGE_SWITCH].getValue();
   const auto selection = static_cast<int>(param);
 
   return wobble_ratio_ranges[selection];
@@ -106,16 +106,16 @@ auto Xycloid::wobble_ratio() -> float {
   return is_wobble_ratio_free() ? wobble_ratio : std::round(wobble_ratio);
 }
 
-auto Xycloid::x_offset() const -> float { return offset(X_RANGE_SWITCH); }
-
 auto Xycloid::x_gain_in() -> float {
   return Gain::multiplier(modulated(X_GAIN_KNOB, X_GAIN_CV));
 }
+
+auto Xycloid::x_offset() -> float { return offset(X_RANGE_SWITCH); }
 
 auto Xycloid::y_gain_in() -> float {
   return Gain::multiplier(modulated(Y_GAIN_KNOB, Y_GAIN_CV));
 }
 
-auto Xycloid::y_offset() const -> float { return offset(Y_RANGE_SWITCH); }
+auto Xycloid::y_offset() -> float { return offset(Y_RANGE_SWITCH); }
 
 } // namespace DHE

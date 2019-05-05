@@ -13,14 +13,14 @@ public:
   Stage();
   void process(const ProcessArgs &args) override;
 
-  auto defer_gate_in() const -> bool;
+  auto defer_gate_in() -> bool;
   auto defer_gate_is_active() const -> bool;
   void forward();
   void generate(float phase);
   void prepare_to_generate();
   void set_active(bool active);
   void set_eoc(bool eoc);
-  auto stage_gate_in() const -> bool;
+  auto stage_gate_in() -> bool;
 
   enum ParameterIIds { DURATION_KNOB, LEVEL_KNOB, CURVE_KNOB, PARAMETER_COUNT };
 
@@ -29,10 +29,10 @@ public:
   enum OutputIds { MAIN_OUT, EOC_OUT, ACTIVE_OUT, OUTPUT_COUNT };
 
 private:
-  auto curvature() const -> float;
-  auto envelope_in() const -> float;
+  auto curvature() -> float;
+  auto envelope_in() -> float;
   void send_out(float voltage);
-  auto taper(float phase) const -> float;
+  auto taper(float phase) -> float;
 
   Duration duration;
   Level level;

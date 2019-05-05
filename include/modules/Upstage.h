@@ -27,11 +27,11 @@ public:
   enum OutputIds { TRIGGER_OUT, MAIN_OUT, OUTPUT_COUNT };
 
 private:
-  auto envelope_voltage() const -> float;
+  auto envelope_voltage() -> float;
   void send_envelope(float voltage);
   void send_trigger(bool is_triggered);
-  auto trigger_in() const -> bool;
-  auto wait_in() const -> bool;
+  auto trigger_in() -> bool;
+  auto wait_in() -> bool;
 
   Level level;
 };

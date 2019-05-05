@@ -14,7 +14,7 @@ public:
   BoosterStage();
   void process(const ProcessArgs &args) override;
 
-  auto defer_gate_in() const -> bool;
+  auto defer_gate_in() -> bool;
   auto defer_gate_is_active() const -> bool;
   void forward();
   void generate(float phase);
@@ -23,7 +23,7 @@ public:
   void set_active(bool active);
   void set_eoc(bool eoc);
   void set_eoc_button(bool eoc);
-  auto stage_gate_in() const -> bool;
+  auto stage_gate_in() -> bool;
 
   enum ParameterIds {
     ACTIVE_BUTTON,
@@ -52,7 +52,7 @@ public:
   enum OutputIds { ACTIVE_OUT, EOC_OUT, MAIN_OUT, OUTPUT_COUNT };
 
 private:
-  auto envelope_in() const -> float;
+  auto envelope_in() -> float;
   auto curvature() -> float;
   void send_active();
   void send_eoc();

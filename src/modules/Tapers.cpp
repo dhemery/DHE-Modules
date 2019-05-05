@@ -47,20 +47,20 @@ auto Tapers::curvature2() -> float {
   return curvature(CURVE_2_KNOB, CURVE_2_CV, CURVE_2_AV);
 }
 
-auto Tapers::is_uni_1() const -> bool {
-  return params[RANGE_1_SWITCH].value > 0.5f;
+auto Tapers::is_uni_1() -> bool {
+  return params[RANGE_1_SWITCH].getValue() > 0.5f;
 }
 
-auto Tapers::is_uni_2() const -> bool {
-  return params[RANGE_2_SWITCH].value > 0.5f;
+auto Tapers::is_uni_2() -> bool {
+  return params[RANGE_2_SWITCH].getValue() > 0.5f;
 }
 
-auto Tapers::is_s_1() const -> bool {
-  return params[SHAPE_1_SWITCH].value > 0.5f;
+auto Tapers::is_s_1() -> bool {
+  return params[SHAPE_1_SWITCH].getValue() > 0.5f;
 }
 
-auto Tapers::is_s_2() const -> bool {
-  return params[SHAPE_2_SWITCH].value > 0.5f;
+auto Tapers::is_s_2() -> bool {
+  return params[SHAPE_2_SWITCH].getValue() > 0.5f;
 }
 
 auto Tapers::level1() -> float {

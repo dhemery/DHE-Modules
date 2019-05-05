@@ -28,20 +28,20 @@ Stage::Stage()
   state_machine.start();
 }
 
-auto Stage::defer_gate_in() const -> bool {
-  return inputs[DEFER_GATE_IN].value > 0.1;
+auto Stage::defer_gate_in() -> bool {
+  return inputs[DEFER_GATE_IN].getVoltage() > 0.1;
 }
 
 auto Stage::defer_gate_is_active() const -> bool {
   return inputs[DEFER_GATE_IN].active;
 }
 
-auto Stage::curvature() const -> float {
-  auto rotation = params[CURVE_KNOB].value;
+auto Stage::curvature() -> float {
+  auto rotation = params[CURVE_KNOB].getValue();
   return Sigmoid::curvature(rotation);
 }
 
-auto Stage::envelope_in() const -> float { return inputs[ENVELOPE_IN].value; }
+auto Stage::envelope_in() -> float { return inputs[ENVELOPE_IN].getVoltage(); }
 
 void Stage::forward() { send_out(envelope_in()); }
 
@@ -63,15 +63,15 @@ void Stage::set_eoc(bool eoc) {
   outputs[EOC_OUT].setVoltage(voltage);
 }
 
-auto Stage::stage_gate_in() const -> bool {
-  return inputs[STAGE_TRIGGER_IN].value > 0.1;
+auto Stage::stage_gate_in() -> bool {
+  return inputs[STAGE_TRIGGER_IN].getVoltage() > 0.1;
 }
 
 void Stage::process(const ProcessArgs &args) {
   state_machine.step(args.sampleTime);
 }
 
-auto Stage::taper(float phase) const -> float {
+auto Stage::taper(float phase) -> float {
   return Sigmoid::j_taper(phase, curvature());
 }
 } // namespace DHE

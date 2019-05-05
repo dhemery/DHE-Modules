@@ -48,8 +48,8 @@ void Blossom::process(const ProcessArgs &args) {
   outputs[Y_OUT].setVoltage(5.f * y_gain_in() * (y + y_offset()));
 }
 
-auto Blossom::offset(int param) const -> float {
-  auto is_uni = params[param].value > 0.5f;
+auto Blossom::offset(int param) -> float {
+  auto is_uni = params[param].getValue() > 0.5f;
   return is_uni ? 1.f : 0.f;
 }
 
@@ -73,8 +73,8 @@ auto Blossom::depth() -> float {
   return depth_range.clamp(rotation);
 }
 
-auto Blossom::is_bounce_free() const -> bool {
-  return params[BOUNCE_LOCK_SWITCH].value > 0.1f;
+auto Blossom::is_bounce_free() -> bool {
+  return params[BOUNCE_LOCK_SWITCH].getValue() > 0.1f;
 }
 
 auto Blossom::phase() -> float {
@@ -83,7 +83,7 @@ auto Blossom::phase() -> float {
   return phase_range.clamp(rotation);
 }
 
-auto Blossom::x_offset() const -> float { return offset(X_RANGE_SWITCH); }
+auto Blossom::x_offset() -> float { return offset(X_RANGE_SWITCH); }
 
 auto Blossom::x_gain_in() -> float {
   return Gain::multiplier(modulated(X_GAIN_KNOB, X_GAIN_CV));
@@ -93,6 +93,6 @@ auto Blossom::y_gain_in() -> float {
   return Gain::multiplier(modulated(Y_GAIN_KNOB, Y_GAIN_CV));
 }
 
-auto Blossom::y_offset() const -> float { return offset(Y_RANGE_SWITCH); }
+auto Blossom::y_offset() -> float { return offset(Y_RANGE_SWITCH); }
 
 } // namespace DHE

@@ -41,14 +41,14 @@ public:
 private:
   auto bounce() -> float;
   auto depth() -> float;
-  auto is_bounce_free() const -> bool;
-  auto offset(int param) const -> float;
+  auto is_bounce_free() -> bool;
+  auto offset(int param) -> float;
   auto phase() -> float;
   auto spin(float sample_time) -> float;
   auto x_gain_in() -> float;
-  auto x_offset() const -> float;
+  auto x_offset() -> float;
   auto y_gain_in() -> float;
-  auto y_offset() const -> float;
+  auto y_offset() -> float;
 
   static constexpr auto speed_curvature = 0.8f;
   Rotor spinner{};

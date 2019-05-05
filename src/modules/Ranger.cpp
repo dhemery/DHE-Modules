@@ -24,7 +24,7 @@ auto Ranger::level() -> float {
 
 auto Ranger::limit(int knob_param, int cv_input, int av_param,
                    int range_switch_param) -> float {
-  auto is_uni = params[range_switch_param].value > 0.5f;
+  auto is_uni = params[range_switch_param].getValue() > 0.5f;
   auto range = Signal::range(is_uni);
   return range.scale(modulated(knob_param, cv_input, av_param));
 }

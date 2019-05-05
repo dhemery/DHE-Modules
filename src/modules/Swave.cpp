@@ -17,13 +17,13 @@ auto Swave::curve() -> float {
   return Sigmoid::curvature(modulated(CURVE_KNOB, CURVE_CV));
 }
 
-auto Swave::is_s() const -> bool { return params[SHAPE_SWITCH].value > 0.5f; }
+auto Swave::is_s() -> bool { return params[SHAPE_SWITCH].getValue() > 0.5f; }
 
 void Swave::send_signal(float voltage) {
   outputs[MAIN_OUT].setVoltage(voltage);
 }
 
-auto Swave::signal_in() const -> float { return inputs[MAIN_IN].value; }
+auto Swave::signal_in() -> float { return inputs[MAIN_IN].getVoltage(); }
 
 void Swave::process(const ProcessArgs &args) {
   auto phase = Signal::bipolar_range.normalize(signal_in());

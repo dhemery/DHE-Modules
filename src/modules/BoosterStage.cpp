@@ -57,9 +57,9 @@ void BoosterStage::set_active(bool active) {
   send_active();
 }
 
-auto BoosterStage::stage_gate_in() const -> bool {
-  auto trigger_button = params[TRIGGER_BUTTON].value > 0.5;
-  auto trigger_input = inputs[STAGE_TRIGGER_IN].value > 0.1;
+auto BoosterStage::stage_gate_in() -> bool {
+  auto trigger_button = params[TRIGGER_BUTTON].getValue() > 0.5;
+  auto trigger_input = inputs[STAGE_TRIGGER_IN].getVoltage() > 0.1;
   return trigger_button || trigger_input;
 }
 
@@ -69,9 +69,9 @@ auto BoosterStage::defer_gate_is_active() const -> bool {
   return inputs[DEFER_GATE_IN].active;
 }
 
-auto BoosterStage::defer_gate_in() const -> bool {
-  auto defer_button = params[DEFER_BUTTON].value > 0.5f;
-  auto defer_input = inputs[DEFER_GATE_IN].value > 0.1f;
+auto BoosterStage::defer_gate_in() -> bool {
+  auto defer_button = params[DEFER_BUTTON].getValue() > 0.5f;
+  auto defer_input = inputs[DEFER_GATE_IN].getVoltage() > 0.1f;
   return defer_button || defer_input;
 }
 
@@ -90,8 +90,8 @@ void BoosterStage::set_eoc_button(bool eoc) {
   send_eoc();
 }
 
-auto BoosterStage::envelope_in() const -> float {
-  return inputs[ENVELOPE_IN].value;
+auto BoosterStage::envelope_in() -> float {
+  return inputs[ENVELOPE_IN].getVoltage();
 }
 
 auto BoosterStage::curvature() -> float {

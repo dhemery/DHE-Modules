@@ -29,15 +29,15 @@ void Upstage::send_trigger(bool is_triggered) {
   outputs[TRIGGER_OUT].setVoltage(voltage);
 }
 
-auto Upstage::trigger_in() const -> bool {
-  auto trigger_button = params[TRIGGER_BUTTON].value > 0.1f;
-  auto trigger_input = inputs[TRIGGER_IN].value > 0.1f;
+auto Upstage::trigger_in() -> bool {
+  auto trigger_button = params[TRIGGER_BUTTON].getValue() > 0.1f;
+  auto trigger_input = inputs[TRIGGER_IN].getVoltage() > 0.1f;
   return trigger_button || trigger_input;
 }
 
-auto Upstage::wait_in() const -> bool {
-  auto wait_button = params[WAIT_BUTTON].value > 0.1f;
-  auto wait_input = inputs[WAIT_IN].value > 0.1f;
+auto Upstage::wait_in() -> bool {
+  auto wait_button = params[WAIT_BUTTON].getValue() > 0.1f;
+  auto wait_input = inputs[WAIT_IN].getVoltage() > 0.1f;
   return wait_button || wait_input;
 }
 

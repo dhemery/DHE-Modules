@@ -49,7 +49,7 @@ auto Cubic::gain(const Cubic::ParameterIds knob_param,
   return Gain::multiplier(modulated(knob_param, cv_input));
 }
 
-auto Cubic::main_in() -> float { return inputs[MAIN_IN].value; }
+auto Cubic::main_in() -> float { return inputs[MAIN_IN].getVoltage(); }
 
 void Cubic::send_main_out(float voltage) {
   outputs[MAIN_OUT].setVoltage(voltage);

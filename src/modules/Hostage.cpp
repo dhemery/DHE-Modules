@@ -34,8 +34,8 @@ auto Hostage::defer_gate_is_active() const -> bool {
   return inputs[DEFER_GATE_IN].active;
 }
 
-auto Hostage::is_sustain_mode() const -> bool {
-  return params[HOSTAGE_MODE_SWITCH].value > 0.5f;
+auto Hostage::is_sustain_mode() -> bool {
+  return params[HOSTAGE_MODE_SWITCH].getValue() > 0.5f;
 }
 
 void Hostage::set_active(bool active) {
@@ -48,15 +48,15 @@ void Hostage::set_eoc(bool eoc) {
   outputs[EOC_OUT].setVoltage(voltage);
 }
 
-auto Hostage::defer_gate_in() const -> bool {
-  return inputs[DEFER_GATE_IN].value > 0.1f;
+auto Hostage::defer_gate_in() -> bool {
+  return inputs[DEFER_GATE_IN].getVoltage() > 0.1f;
 }
 
-auto Hostage::stage_gate_in() const -> bool {
-  return inputs[STAGE_GATE_IN].value > 0.1f;
+auto Hostage::stage_gate_in() -> bool {
+  return inputs[STAGE_GATE_IN].getVoltage() > 0.1f;
 }
 
-auto Hostage::envelope_in() const -> float { return inputs[MAIN_IN].value; }
+auto Hostage::envelope_in() -> float { return inputs[MAIN_IN].getVoltage(); }
 
 void Hostage::send_out(float voltage) { outputs[MAIN_OUT].setVoltage(voltage); }
 } // namespace DHE

@@ -12,13 +12,13 @@ public:
   Hostage();
   void process(const ProcessArgs &args) override;
 
-  auto defer_gate_in() const -> bool;
+  auto defer_gate_in() -> bool;
   auto defer_gate_is_active() const -> bool;
   void forward();
-  auto is_sustain_mode() const -> bool;
+  auto is_sustain_mode() -> bool;
   void set_active(bool active);
   void set_eoc(bool eoc);
-  auto stage_gate_in() const -> bool;
+  auto stage_gate_in() -> bool;
 
   enum InputIds {
     DEFER_GATE_IN,
@@ -38,7 +38,7 @@ public:
   };
 
 private:
-  auto envelope_in() const -> float;
+  auto envelope_in() -> float;
   void send_out(float voltage);
 
   Duration duration;
