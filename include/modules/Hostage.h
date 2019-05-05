@@ -1,5 +1,6 @@
 #pragma once
 
+#include <components/RangedDuration.h>
 #include "Module.h"
 
 #include "envelopes/HostageStateMachine.h"
@@ -15,16 +16,11 @@ public:
 
   auto defer_gate_in() const -> bool;
   auto defer_gate_is_active() const -> bool;
-  auto duration() const -> float;
   void forward();
   auto is_sustain_mode() const -> bool;
   void set_active(bool active);
   void set_eoc(bool eoc);
   auto stage_gate_in() const -> bool;
-
-  const Selector<Range const *, 3> duration_range_selector{
-      Duration::ranges(),
-      [this](Range const *range) { duration_range = range; }};
 
   enum InputIds {
     DEFER_GATE_IN,
@@ -47,7 +43,7 @@ private:
   auto envelope_in() const -> float;
   void send_out(float voltage);
 
+  RangedDuration duration;
   HostageStateMachine state_machine;
-  Range const *duration_range{&Duration::medium_range};
 };
 } // namespace DHE

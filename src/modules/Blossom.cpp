@@ -20,13 +20,13 @@ Blossom::Blossom() {
     configParam(PHASE_KNOB, 0.f, 1.f, 0.5f, "Phase", "°", 0.f, 360.f, -180.f);
     configCvGain(PHASE_AV, "Phase");
 
-    configGain(X_GAIN_KNOB, "X OUT");
-    configGain(Y_GAIN_KNOB, "Y OUT");
+    configGain(X_GAIN_KNOB, "X output");
+    configGain(Y_GAIN_KNOB, "Y output");
 
     configSignalRange(X_RANGE_SWITCH, "X");
     configSignalRange(Y_RANGE_SWITCH, "Y");
 
-    configParam(BOUNCE_LOCK_SWITCH, 0.0, 1.0, 1.0, "Bounce Lock");
+    configParam(BOUNCE_LOCK_SWITCH, 0.0, 1.0, 1.0, "Bounce lock");
 }
 
 void Blossom::process(const ProcessArgs &args) {

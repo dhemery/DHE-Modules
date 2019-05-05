@@ -15,16 +15,18 @@ Hostage::Hostage()
                     [this](bool active) { set_active(active); },
                     [this](bool eoc) { set_eoc(eoc); }} {
   config(PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT);
+
+  configParam(DURATION_KNOB, 0.f, 1.f, 0.5f, "Duration");
+  configParam(DURATION_RANGE_SWITCH, 0.f, 2.f, 1.f, "Max Duration");
+
+  configParam(HOSTAGE_MODE_SWITCH, 0.f, 1.f, 0.f, "Mode");
+
+  duration.config(&params[DURATION_KNOB], &params[DURATION_RANGE_SWITCH], &inputs[DURATION_CV]);
   state_machine.start();
 }
 
 void Hostage::process(const ProcessArgs &args) {
   state_machine.step(args.sampleTime);
-}
-
-auto Hostage::duration() const -> float {
-  auto rotation = modulated(DURATION_KNOB, DURATION_CV);
-  return DHE::duration(rotation, *duration_range);
 }
 
 void Hostage::forward() { send_out(envelope_in()); }

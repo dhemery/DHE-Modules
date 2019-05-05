@@ -22,7 +22,7 @@ BoosterStage::BoosterStage()
   duration.config(&params[DURATION_KNOB], &params[DURATION_RANGE_SWITCH], &inputs[DURATION_CV]);
 
   configParam(DURATION_KNOB, 0.f, 1.f, 0.5f, "Duration");
-  configParam(DURATION_RANGE_SWITCH, 0.f, 2.f, 1.f, "Max Duration", "", 1.f, 10.f, 1.f);
+  configParam(DURATION_RANGE_SWITCH, 0.f, 2.f, 1.f, "Max Duration");
   configParam(LEVEL_KNOB, 0.f, 1.f, 0.5f, "Level", "%", 0.f, 100.f, 0.f);
   configParam(CURVE_KNOB, 0.f, 1.f, 0.5f, "Curvature", "%", 0.f, 100.f, 0.f);
 
