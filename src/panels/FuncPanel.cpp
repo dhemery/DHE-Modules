@@ -20,23 +20,6 @@ FuncPanel::FuncPanel(Func *module) : Panel{module, hp} {
   auto row_4 = top + row_spacing * 3;
   auto row_6 = top + row_spacing * 5 + port_offset;
 
-  //  auto channel = &module->channel;
-  //  auto addition_range_selector = [channel](int selection) {
-  //    channel->set_addition_range(selection);
-  //  };
-  //
-  //  auto multiplication_range_selector = [channel](int selection) {
-  //    channel->set_multiplication_range(selection);
-  //  };
-  //
-  //  auto select_operator = [channel, addition_range_switch,
-  //                          multiplication_range_switch](int position) {
-  //    auto is_multiplication = position == 1;
-  //    channel->set_operator(is_multiplication);
-  //    multiplication_range_switch->visible = is_multiplication;
-  //    addition_range_switch->visible = !is_multiplication;
-  //  };
-
   input(x, row_1, Func::IN);
   toggle<2>(x, row_2, Func::OPERATOR_SWITCH);
   toggle<AdditionRangeStepper>(x, row_4, Func::ADDITION_RANGE_SWITCH);

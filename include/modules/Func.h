@@ -1,5 +1,7 @@
 #pragma once
 
+#include <memory>
+
 #include "Module.h"
 
 #include "func/FuncChannel.h"
@@ -22,6 +24,6 @@ public:
 
   enum OutputIds { OUT, OUTPUT_COUNT };
 
-  FuncChannel channel{this, IN, KNOB, OUT};
+  std::unique_ptr<FuncChannel> channel;
 };
 } // namespace DHE

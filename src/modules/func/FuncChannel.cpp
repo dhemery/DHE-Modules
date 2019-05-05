@@ -12,31 +12,19 @@ static const auto addition_ranges = std::array<Range const *, 4>{
     &half_bipolar_range, &Signal::bipolar_range, &Signal::unipolar_range,
     &invertible_unipolar_range};
 
-FuncChannel::FuncChannel(rack::engine::Module *module, int input, int amount_knob_param,
-                         int output)
-    : input_port{module->inputs[input]},
-      amount{module->params[amount_knob_param].value},
-      output{module->outputs[output].value} {}
+FuncChannel::FuncChannel(rack::engine::Module *module, int inputIndex, int operandIndex,
+                         int outputIndex)
+    : input{module->inputs[inputIndex]},
+      operand{module->params[operandIndex]},
+      output{module->outputs[outputIndex]} {}
 
 auto FuncChannel::adjust(float upstream) -> float {
-  auto input = input_port.active ? input_port.value : upstream;
+  auto inputVoltage = input.getNormalVoltage(upstream);
+  auto operandValue = operand.getValue();
   if (is_multiplication) {
-    output = input * multiplication_range->scale(amount);
+    return inputVoltage * multiplication_range->scale(operandValue);
   } else {
-    output = input + addition_range->scale(amount);
+    return inputVoltage + addition_range->scale(operandValue);
   }
-  return output;
-}
-
-void FuncChannel::set_operator(bool is_multiplication) {
-  this->is_multiplication = is_multiplication;
-}
-
-void FuncChannel::set_addition_range(int selection) {
-  addition_range = addition_ranges[selection];
-}
-
-void FuncChannel::set_multiplication_range(int selection) {
-  multiplication_range = multiplication_ranges[selection];
 }
 } // namespace DHE
