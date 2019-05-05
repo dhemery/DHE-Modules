@@ -2,6 +2,7 @@
 
 #include "Module.h"
 
+#include "modules/controls/Level.h"
 #include "util/range.h"
 #include "util/signal.h"
 
@@ -27,13 +28,12 @@ public:
 
 private:
   auto envelope_voltage() const -> float;
-  auto level() const -> float;
   void send_envelope(float voltage);
   void send_trigger(bool is_triggered);
   auto trigger_in() const -> bool;
   auto wait_in() const -> bool;
 
-  Range const *level_range{&Signal::bipolar_range};
+  Level level;
 };
 
 } // namespace DHE

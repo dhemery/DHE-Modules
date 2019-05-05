@@ -3,6 +3,7 @@
 #include "Module.h"
 
 #include "controls/Duration.h"
+#include "controls/Level.h"
 #include "envelopes/StageStateMachine.h"
 
 namespace DHE {
@@ -30,11 +31,11 @@ public:
 private:
   auto curvature() const -> float;
   auto envelope_in() const -> float;
-  auto level() const -> float;
   void send_out(float voltage);
   auto taper(float phase) const -> float;
 
   Duration duration;
+  Level level;
   StageStateMachine state_machine;
   float start_voltage{0.f};
 };

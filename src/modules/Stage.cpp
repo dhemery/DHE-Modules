@@ -18,11 +18,13 @@ Stage::Stage()
                     [this](bool eoc) { set_eoc(eoc); }} {
   config(PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT);
 
-  duration.config(&params[DURATION_KNOB]);
 
   configParam(DURATION_KNOB, 0.f, 1.f, 0.5f, "Duration");
   configParam(LEVEL_KNOB, 0.f, 1.f, 0.5f, "Level", " V", 0.f, 10.f, 0.f);
   configParam(CURVE_KNOB, 0.f, 1.f, 0.5f, "Curvature", "%", 0.f, 200.f, -100.f);
+
+  duration.config(&params[DURATION_KNOB]);
+  level.config(&params[LEVEL_KNOB]);
 
   state_machine.start();
 }
@@ -46,11 +48,6 @@ void Stage::forward() { send_out(envelope_in()); }
 
 void Stage::generate(float phase) {
   send_out(scale(taper(phase), start_voltage, level()));
-}
-
-auto Stage::level() const -> float {
-  auto rotation = params[LEVEL_KNOB].value;
-  return Signal::unipolar_range.scale(rotation);
 }
 
 void Stage::prepare_to_generate() { start_voltage = envelope_in(); }

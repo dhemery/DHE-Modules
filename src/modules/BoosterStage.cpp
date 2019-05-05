@@ -18,7 +18,6 @@ BoosterStage::BoosterStage()
                     [this](bool active) { set_active(active); },
                     [this](bool eoc) { set_eoc(eoc); }} {
   config(PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT);
-  duration.config(&params[DURATION_KNOB], &params[DURATION_RANGE_SWITCH], &inputs[DURATION_CV]);
 
   configParam(DURATION_KNOB, 0.f, 1.f, 0.5f, "Duration");
   configParam(DURATION_RANGE_SWITCH, 0.f, 2.f, 1.f, "Max Duration");
@@ -33,11 +32,13 @@ BoosterStage::BoosterStage()
   configParam(EOC_BUTTON, 0.f, 1.f, 0.f, "EOC");
   configParam(TRIGGER_BUTTON, 0.f, 1.f, 0.f, "TRIGGER");
 
+  duration.config(&params[DURATION_KNOB], &params[DURATION_RANGE_SWITCH], &inputs[DURATION_CV]);
+  level.config(&params[LEVEL_KNOB], &params[LEVEL_RANGE_SWITCH], &inputs[LEVEL_CV]);
+
   state_machine.start();
 }
 
 void BoosterStage::process(const ProcessArgs &args) {
-  set_level_range();
   set_shape();
 
   state_machine.step(args.sampleTime);
@@ -95,11 +96,6 @@ auto BoosterStage::curvature() const -> float {
   return Sigmoid::curvature(modulated(CURVE_KNOB, CURVE_CV));
 }
 
-auto BoosterStage::level() const -> float {
-  auto level = modulated(LEVEL_KNOB, LEVEL_CV);
-  return level_range->scale(level);
-}
-
 void BoosterStage::send_active() {
   outputs[ACTIVE_OUT].value =
       is_active || active_button_is_pressed ? 10.f : 0.f;
@@ -115,11 +111,6 @@ void BoosterStage::send_out(float voltage) {
 
 auto BoosterStage::taper(float phase) const -> float {
   return curve_shape->taper(phase, curvature());
-}
-
-void BoosterStage::set_level_range() {
-  const auto choice = static_cast<int>(params[LEVEL_RANGE_SWITCH].getValue());
-  level_range = Signal::ranges()[choice];
 }
 
 void BoosterStage::set_shape() {
