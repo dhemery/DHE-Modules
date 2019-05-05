@@ -2,7 +2,6 @@
 
 #include "modules/BoosterStage.h"
 
-#include "util/duration.h"
 #include "util/gain.h"
 #include "util/signal.h"
 

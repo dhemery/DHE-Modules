@@ -4,20 +4,20 @@
 #include <string>
 #include <utility>
 
-#include "app.hpp"
-#include "event.hpp"
-#include "helpers.hpp"
-#include "math.hpp"
+#include "../../../../include/app.hpp"
+#include "../../../../include/event.hpp"
+#include "../../../../include/helpers.hpp"
+#include "../../../../include/math.hpp"
 
-#include "app/ModuleWidget.hpp"
-#include "app/ParamWidget.hpp"
-#include "app/PortWidget.hpp"
-#include "app/SvgPanel.hpp"
-#include "app/SvgPort.hpp"
-#include "app/common.hpp"
-#include "widget/Widget.hpp"
+#include "../../../../include/app/ModuleWidget.hpp"
+#include "../../../../include/app/ParamWidget.hpp"
+#include "../../../../include/app/PortWidget.hpp"
+#include "../../../../include/app/SvgPanel.hpp"
+#include "../../../../include/app/SvgPort.hpp"
+#include "../../../../include/app/common.hpp"
+#include "../../../../include/widget/Widget.hpp"
 
-#include "display/controls.h"
+#include "controls.h"
 
 extern rack::plugin::Plugin *pluginInstance;
 

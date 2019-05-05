@@ -3,7 +3,7 @@
 #include <utility>
 
 #include "StageState.h"
-#include "components/phase-accumulator.h"
+#include "modules/components/phase-accumulator.h"
 
 namespace DHE {
 

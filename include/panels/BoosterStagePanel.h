@@ -1,6 +1,6 @@
 #pragma once
 
-#include "display/panel.h"
+#include "panel.h"
 #include "modules/BoosterStage.h"
 
 namespace DHE {

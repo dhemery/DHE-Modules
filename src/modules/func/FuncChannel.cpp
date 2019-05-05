@@ -1,6 +1,6 @@
 #include <array>
 
-#include "modules/FuncChannel.h"
+#include "modules/func/FuncChannel.h"
 
 namespace DHE {
 

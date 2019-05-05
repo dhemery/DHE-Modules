@@ -2,12 +2,10 @@
 
 #include "Module.h"
 
-#include "components/RangedDuration.h"
-#include "display/controls.h"
-#include "display/panel.h"
+#include "controls/Duration.h"
 #include "envelopes/StageStateMachine.h"
-#include "util/duration.h"
 #include "util/selector.h"
+#include "util/sigmoid.h"
 #include "util/signal.h"
 
 namespace DHE {
@@ -73,6 +71,6 @@ private:
   float start_voltage{0.f};
   void set_level_range();
   void set_shape();
-  RangedDuration duration;
+  Duration duration;
 };
 } // namespace DHE

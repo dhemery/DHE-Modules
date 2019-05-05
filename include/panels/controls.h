@@ -1,11 +1,11 @@
 #pragma once
 #include <utility>
 
-#include "app/SvgSwitch.hpp"
-#include "componentlibrary.hpp"
+#include "../../../../include/app/SvgSwitch.hpp"
+#include "../../../../include/componentlibrary.hpp"
 
-#include "display/controls.h"
-#include "display/menus.h"
+#include "controls.h"
+#include "menus.h"
 
 namespace DHE {
 

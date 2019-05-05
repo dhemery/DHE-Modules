@@ -2,7 +2,7 @@
 
 #include "Module.h"
 
-#include "components/RangedDuration.h"
+#include "controls/Duration.h"
 #include "envelopes/StageStateMachine.h"
 
 namespace DHE {
@@ -34,7 +34,7 @@ private:
   void send_out(float voltage);
   auto taper(float phase) const -> float;
 
-  RangedDuration duration;
+  Duration duration;
   StageStateMachine state_machine;
   float start_voltage{0.f};
 };

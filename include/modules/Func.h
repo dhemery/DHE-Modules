@@ -2,7 +2,7 @@
 
 #include "Module.h"
 
-#include "modules/FuncChannel.h"
+#include "func/FuncChannel.h"
 
 namespace DHE {
 class Func : public Module {

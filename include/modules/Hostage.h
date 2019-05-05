@@ -1,10 +1,9 @@
 #pragma once
 
-#include <components/RangedDuration.h>
 #include "Module.h"
 
+#include "controls/Duration.h"
 #include "envelopes/HostageStateMachine.h"
-#include "util/duration.h"
 #include "util/selector.h"
 
 namespace DHE {
@@ -43,7 +42,7 @@ private:
   auto envelope_in() const -> float;
   void send_out(float voltage);
 
-  RangedDuration duration;
+  Duration duration;
   HostageStateMachine state_machine;
 };
 } // namespace DHE

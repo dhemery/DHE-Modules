@@ -2,7 +2,7 @@
 #include <functional>
 #include <utility>
 
-#include "components/phase-accumulator.h"
+#include "modules/components/phase-accumulator.h"
 
 namespace DHE {
 

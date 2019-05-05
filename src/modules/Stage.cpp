@@ -2,7 +2,7 @@
 
 #include "modules/Stage.h"
 
-#include "util/duration.h"
+#include "util/sigmoid.h"
 #include "util/signal.h"
 
 namespace DHE {

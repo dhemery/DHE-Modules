@@ -7,9 +7,9 @@ LDFLAGS +=
 
 SOURCES = $(wildcard \
 			src/*.cpp \
-			src/components/*.cpp \
-			src/envelopes/*.cpp \
 			src/modules/*.cpp \
+			src/modules/*/*.cpp \
+			src/panels/*/*.cpp \
 			src/panels/*.cpp \
 			src/util/*.cpp \
 			)
@@ -32,7 +32,8 @@ include $(RACK_DIR)/plugin.mk
 ########################################################################
 
 TEST_SOURCES =  $(wildcard \
-					src/components/*.cpp \
+					src/modules/components/*.cpp \
+					src/modules/controls/*.cpp \
 					src/util/*.cpp \
 					test/*.cpp \
 					)

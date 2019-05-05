@@ -1,5 +1,4 @@
-#include "components/RangedDuration.h"
-#include "util/duration.h"
+#include "modules/controls/Duration.h"
 #include "gmock/gmock.h"
 
 namespace {
@@ -21,7 +20,7 @@ struct RangedDurationTest : public ::testing::Test {
   rack::engine::Param switch_param{};
   rack::engine::Input cv_input{};
 
-  DHE::RangedDuration duration{};
+  DHE::Duration duration{};
 
   RangedDurationTest() {
     cv_input.setVoltage(0.f);

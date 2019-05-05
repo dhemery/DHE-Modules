@@ -2,8 +2,6 @@
 
 #include "modules/Hostage.h"
 
-#include "util/duration.h"
-
 namespace DHE {
 Hostage::Hostage()
     : state_machine{[this]() -> bool { return defer_gate_is_active(); },
