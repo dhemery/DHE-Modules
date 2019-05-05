@@ -14,7 +14,7 @@
     <target id="de8c3294-7a26-4c9b-9426-cc89c98971a1" name="Plugin" projectName="DHE-Modules">
       <configuration id="c1842cc9-630f-4fb4-ae56-953d38495488" name="Plugin">
         <build type="TOOL">
-          <tool actionId="Tool_External Tools_make run" />
+          <tool actionId="Tool_External Tools_make dist" />
         </build>
         <clean type="TOOL">
           <tool actionId="Tool_External Tools_make clean" />

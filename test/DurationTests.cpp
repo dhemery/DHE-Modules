@@ -1,3 +1,4 @@
+#include <util/sigmoid.h>
 #include "modules/controls/Duration.h"
 #include "gmock/gmock.h"
 
@@ -11,7 +12,8 @@ using ::testing::Return;
 
 struct DurationTest : public ::testing::Test {
 
-  static constexpr float tolerance = 1.f / 1000.f;
+  // tolerance = 6 decimal places
+  static constexpr float tolerance = 0.000001f;
   static constexpr float short_range_switch_position = 0.f;
   static constexpr float medium_range_switch_position = 1.f;
   static constexpr float long_range_switch_position = 2.f;
@@ -99,5 +101,4 @@ TEST_F(DurationTest, longRange_maximumDuration_isLongRangeUpperBound) {
   const auto expected = DHE::Duration::long_range.upper_bound;
   ASSERT_NEAR(duration(), expected, expected * tolerance);
 }
-
 } // namespace
