@@ -75,34 +75,43 @@ protected:
     return box.size.x * rack::app::MM_PER_IN / rack::app::SVG_DPI;
   }
 
+  template <typename T> auto param(float x, float y, int index) -> T * {
+    auto const &pos = mmvec(x, y);
+    auto *widget = rack::createParamCentered<T>(pos, module, index);
+    addParam(widget);
+    return widget;
+  }
+
   template <template <typename> class K>
-  void knob(float x, float y, int index) {
-    addParam(rack::createParamCentered<K<P>>(mmvec(x, y), module, index));
+  auto knob(float x, float y, int index) -> K<P> * {
+    return param<K<P>>(x, y, index);
   }
 
   template <template <typename> class B = Button>
-  void button(float x, float y, int index) {
-    addParam(rack::createParamCentered<B<P>>(mmvec(x, y), module, index));
+  auto button(float x, float y, int index) -> B<P> * {
+    return param<B<P>>(x, y, index);
   }
 
   template <template <typename> class C>
-  void toggle(float x, float y, int index) {
-    addParam(rack::createParamCentered<C<P>>(mmvec(x, y), module, index));
+  auto toggle(float x, float y, int index) -> C<P> * {
+    return param<C<P>>(x, y, index);
   }
 
-  template <int N> void toggle(float x, float y, int index) {
-    addParam(
-        rack::createParamCentered<Toggle<P, N>>(mmvec(x, y), module, index));
+  template <int N> auto toggle(float x, float y, int index) -> Toggle<P, N> * {
+    return param<Toggle<P, N>>(x, y, index);
   }
 
   void input(float x, float y, int index) {
-    addInput(
-        rack::createInputCentered<InputJack<P>>(mmvec(x, y), module, index));
+    auto const &pos = mmvec(x, y);
+    auto *input = rack::createInputCentered<InputJack<P>>(pos, module, index);
+    addInput(input);
   }
 
   void output(float x, float y, int index) {
-    addOutput(
-        rack::createOutputCentered<OutputJack<P>>(mmvec(x, y), module, index));
+    auto const &pos = mmvec(x, y);
+    auto *output =
+        rack::createOutputCentered<OutputJack<P>>(pos, module, index);
+    addOutput(output);
   }
 
 private:
