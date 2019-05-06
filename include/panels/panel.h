@@ -55,17 +55,6 @@ public:
     install_screws();
   }
 
-  void fromJson(json_t *patch) override {
-    // If there's no data, we're loading from a legacy patch. Add empty data to
-    // the incoming patch so that ModuleWidget::fromJson will call
-    // Module::fromJson, which will configure the module with appropriate legacy
-    // behavior.
-    if (!json_object_get(patch, "data")) {
-      json_object_set_new(patch, "data", json_object());
-    }
-    rack::app::ModuleWidget::fromJson(patch);
-  }
-
   static auto svg(const std::string &filename) -> std::shared_ptr<rack::Svg> {
     static const auto module_asset_dir =
         plugin_asset_dir() + P::module_slug + "/";

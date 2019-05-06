@@ -3,7 +3,7 @@
 #include "util/gain.h"
 
 namespace DHE {
-BlossomPanel::BlossomPanel(Blossom *module) : Panel{module, hp} {
+BlossomPanel::BlossomPanel(Blossom *blossom) : Panel{blossom, hp} {
   auto widget_right_edge = width();
 
   auto column_1 = widget_right_edge / 7.f;

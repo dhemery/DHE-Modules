@@ -7,7 +7,7 @@ namespace DHE {
 
 class BlossomPanel : public Panel<BlossomPanel> {
 public:
-  explicit BlossomPanel(Blossom *module);
+  explicit BlossomPanel(Blossom *blossom);
   static constexpr auto module_slug = "blossom";
   static constexpr auto hp = 11;
 };
