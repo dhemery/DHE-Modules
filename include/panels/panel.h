@@ -78,6 +78,7 @@ protected:
   template <typename T> auto param(float x, float y, int index) -> T * {
     auto const &pos = mmvec(x, y);
     auto *widget = rack::createParamCentered<T>(pos, module, index);
+    widget->shadow->opacity = 0.f;
     addParam(widget);
     return widget;
   }
@@ -104,6 +105,7 @@ protected:
   void input(float x, float y, int index) {
     auto const &pos = mmvec(x, y);
     auto *input = rack::createInputCentered<InputJack<P>>(pos, module, index);
+    input->shadow->opacity = 0.f;
     addInput(input);
   }
 
@@ -111,6 +113,7 @@ protected:
     auto const &pos = mmvec(x, y);
     auto *output =
         rack::createOutputCentered<OutputJack<P>>(pos, module, index);
+    output->shadow->opacity = 0.f;
     addOutput(output);
   }
 

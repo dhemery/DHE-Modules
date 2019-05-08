@@ -14,7 +14,6 @@ public:
   explicit Knob(const std::string &size) {
     static const auto prefix = std::string{"knob-"};
     setSvg(P::svg(prefix + size));
-    shadow->opacity = 0.f;
   }
 };
 
