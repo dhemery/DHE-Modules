@@ -17,6 +17,8 @@ Func6Panel::Func6Panel(Func6 *func6) : Panel{func6, hp} {
   auto row_spacing = (bottom - top) / (row_count - 1);
   auto port_offset = 1.25f;
 
+  std::vector<std::function<void(FuncOperator)>> operatorSelectionCallbacks;
+
   for (auto row = 0; row < row_count; row++) {
     auto y = top + row * row_spacing;
     auto port_y = y + port_offset;
@@ -26,23 +28,27 @@ Func6Panel::Func6Panel(Func6 *func6) : Panel{func6, hp} {
     auto multiplication_range_switch_index =
         Func6::MULTIPLICATION_RANGE_SWITCH + row;
 
-    //    auto channel = &func6->channels[row];
-    //    auto select_operator = [channel, addition_range_switch,
-    //                            multiplication_range_switch](int position) {
-    //      auto is_multiplication = position == 1;
-    //      channel->set_operator(is_multiplication);
-    //      multiplication_range_switch->visible = is_multiplication;
-    //      addition_range_switch->visible = !is_multiplication;
-    //    };
-    //
-
     input(column_1, port_y, Func6::IN + row);
     toggle<2>(column_2, y, operator_switch_index);
     knob<LargeKnob>(column_3, y, Func6::KNOB + row);
-    toggle<MultiplicationRangeStepper>(column_4, y,
-                                       multiplication_range_switch_index);
-    toggle<AdditionRangeStepper>(column_4, y, addition_range_switch_index);
+
+    auto additionRangeStepper =
+        toggle<AdditionRangeStepper>(column_4, y, addition_range_switch_index);
+    auto multiplicationRangeStepper = toggle<MultiplicationRangeStepper>(
+        column_4, y, multiplication_range_switch_index);
+    multiplicationRangeStepper->visible = false;
+
     output(column_5, port_y, Func6::OUT + row);
+
+    operatorSelectionCallbacks.emplace_back(
+        [additionRangeStepper, multiplicationRangeStepper](FuncOperator op) {
+          additionRangeStepper->visible = op == FuncOperator::ADD;
+          multiplicationRangeStepper->visible = op == FuncOperator::MULTIPLY;
+        });
+  }
+
+  if (func6 != nullptr) {
+    func6->initialize(operatorSelectionCallbacks);
   }
 }
 

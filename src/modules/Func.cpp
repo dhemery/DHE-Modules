@@ -6,15 +6,12 @@ Func::Func() {
 
   configKnob(KNOB, "Operand");
   configParam(OPERATOR_SWITCH, 0.f, 1.f, 0.f, "Operation");
-  configParam(ADDITION_RANGE_SWITCH, 0.f, 3.f, 0.f, "Addition operand range");
-  configParam(MULTIPLICATION_RANGE_SWITCH, 0.f, 3.f, 0.f,
+  configParam(ADDITION_RANGE_SWITCH, 0.f, 3.f, 1.f, "Addition operand range");
+  configParam(MULTIPLICATION_RANGE_SWITCH, 0.f, 3.f, 2.f,
               "Multiplication operand range");
 }
 
-void Func::process(const ProcessArgs &args) {
-  auto const voltage = channel->apply(0.f);
-  outputs[OUT].setVoltage(voltage);
-}
+void Func::process(const ProcessArgs &args) { channel->apply(0.f); }
 
 void Func::initialize(
     const std::function<void(FuncOperator)> &onOperatorChange) {
