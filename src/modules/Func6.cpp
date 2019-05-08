@@ -17,13 +17,13 @@ Func6::Func6() {
     configParam(MULTIPLICATION_RANGE_SWITCH + i, 0.f, 3.f, 0.f,
                 "Multiplication operand " + channelNumber + " range");
 
-    channels.emplace_back(this, IN + i, KNOB + i, OUT + i);
+    //    channels.emplace_back(this, IN + i, KNOB + i, OUT + i);
   }
 }
 void Func6::process(const ProcessArgs &args) {
   auto upstream = 0.f;
   for (auto &channel : channels) {
-    upstream = channel.adjust(upstream);
+    upstream = channel.apply(upstream);
   }
 }
 } // namespace DHE

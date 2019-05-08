@@ -1,3 +1,5 @@
+#include <utility>
+
 #pragma once
 
 #include <memory>
@@ -10,6 +12,9 @@ namespace DHE {
 class Func : public Module {
 public:
   Func();
+
+  void initialize(const std::function<void(FuncOperator)> &onOperatorChange);
+
   void process(const ProcessArgs &args) override;
 
   enum ParameterIds {

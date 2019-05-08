@@ -3,7 +3,7 @@
 
 namespace DHE {
 
-FuncPanel::FuncPanel(Func *module) : Panel{module, hp} {
+FuncPanel::FuncPanel(Func *func) : Panel{func, hp} {
   auto widget_right_edge = width();
 
   auto x = widget_right_edge / 2.f;
@@ -22,11 +22,27 @@ FuncPanel::FuncPanel(Func *module) : Panel{module, hp} {
 
   input(x, row_1, Func::IN);
   toggle<2>(x, row_2, Func::OPERATOR_SWITCH);
-  toggle<AdditionRangeStepper>(x, row_4, Func::ADDITION_RANGE_SWITCH);
-  toggle<MultiplicationRangeStepper>(x, row_4,
-                                     Func::MULTIPLICATION_RANGE_SWITCH);
+
+  auto additionRangeStepper =
+      toggle<AdditionRangeStepper>(x, row_4, Func::ADDITION_RANGE_SWITCH);
+  auto multiplicationRangeStepper = toggle<MultiplicationRangeStepper>(
+      x, row_4, Func::MULTIPLICATION_RANGE_SWITCH);
+  multiplicationRangeStepper->visible = false;
+
   knob<LargeKnob>(x, row_3, Func::KNOB);
   output(x, row_6, Func::OUT);
+
+  if (func == nullptr) {
+    return;
+  }
+
+  auto selectOperator = [additionRangeStepper,
+                         multiplicationRangeStepper](FuncOperator op) {
+    additionRangeStepper->visible = op == FuncOperator::ADD;
+    multiplicationRangeStepper->visible = op == FuncOperator::MULTIPLY;
+  };
+
+  func->initialize(selectOperator);
 }
 
 } // namespace DHE
