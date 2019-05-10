@@ -24,20 +24,20 @@ static const auto additionRanges = std::array<Range const *, 4>{
 FuncChannel::FuncChannel(rack::engine::Module *module, int inputIndex,
                          int operandIndex, int outputIndex,
                          int operatorSwitchIndex, int additionRangeSwitchIndex,
-                         int multiplicationRangeSwitchIndex,
-                         std::function<void(FuncOperator)> onOperatorChange)
+                         int multiplicationRangeSwitchIndex)
     : input{module->inputs[inputIndex]}, operand{module->params[operandIndex]},
       output{module->outputs[outputIndex]},
       operatorSwitch{module->params[operatorSwitchIndex]},
       additionRangeSwitch{module->params[additionRangeSwitchIndex]},
-      multiplicationRangeSwitch{module->params[multiplicationRangeSwitchIndex]},
-      onOperatorChange{std::move(onOperatorChange)} {}
+      multiplicationRangeSwitch{
+          module->params[multiplicationRangeSwitchIndex]} {}
 
 auto FuncChannel::apply(float upstream) -> float {
   auto const in = input.getNormalVoltage(upstream);
   auto const rotation = operand.getValue();
-  setOperator();
-  auto const voltage = op == ADD ? add(in, rotation) : multiply(in, rotation);
+  auto const isMultiplication = operatorSwitch.getValue() > 0.5f;
+  auto const voltage =
+      isMultiplication ? multiply(in, rotation) : add(in, rotation);
   output.setVoltage(voltage);
   return voltage;
 }
@@ -52,14 +52,5 @@ auto FuncChannel::multiply(float in, float rotation) const -> float {
   auto rangeSelection = static_cast<int>(multiplicationRangeSwitch.getValue());
   auto range = multiplicationRanges[rangeSelection];
   return in * range->scale(rotation);
-}
-
-void FuncChannel::setOperator() {
-  auto selectedOp = operatorSwitch.getValue() > 0.5f ? MULTIPLY : ADD;
-  if (selectedOp == op) {
-    return;
-  }
-  op = selectedOp;
-  onOperatorChange(op);
 }
 } // namespace DHE

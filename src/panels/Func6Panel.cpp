@@ -23,32 +23,26 @@ Func6Panel::Func6Panel(Func6 *func6) : Panel{func6, hp} {
     auto y = top + row * row_spacing;
     auto port_y = y + port_offset;
 
-    auto operator_switch_index = Func6::OPERATOR_SWITCH + row;
-    auto addition_range_switch_index = Func6::ADDITION_RANGE_SWITCH + row;
-    auto multiplication_range_switch_index =
-        Func6::MULTIPLICATION_RANGE_SWITCH + row;
-
     input(column_1, port_y, Func6::IN + row);
-    toggle<2>(column_2, y, operator_switch_index);
     knob<LargeKnob>(column_3, y, Func6::KNOB + row);
-
-    auto additionRangeStepper =
-        toggle<AdditionRangeStepper>(column_4, y, addition_range_switch_index);
-    auto multiplicationRangeStepper = toggle<MultiplicationRangeStepper>(
-        column_4, y, multiplication_range_switch_index);
-    multiplicationRangeStepper->visible = false;
-
     output(column_5, port_y, Func6::OUT + row);
 
-    operatorSelectionCallbacks.emplace_back(
-        [additionRangeStepper, multiplicationRangeStepper](FuncOperator op) {
-          additionRangeStepper->visible = op == FuncOperator::ADD;
-          multiplicationRangeStepper->visible = op == FuncOperator::MULTIPLY;
-        });
-  }
+    auto additionRangeStepper = toggle<AdditionRangeStepper>(
+        column_4, y, Func6::ADDITION_RANGE_SWITCH + row);
+    auto multiplicationRangeStepper = toggle<MultiplicationRangeStepper>(
+        column_4, y, Func6::MULTIPLICATION_RANGE_SWITCH + row);
+    multiplicationRangeStepper->visible = false;
 
-  if (func6 != nullptr) {
-    func6->initialize(operatorSelectionCallbacks);
+    auto updateRangeStepperVisibility =
+        [additionRangeStepper, multiplicationRangeStepper](bool isMultiply) {
+          additionRangeStepper->visible = !isMultiply;
+          multiplicationRangeStepper->visible = isMultiply;
+        };
+
+    auto operatorSwitch =
+        toggle<OperatorSwitch>(column_2, y, Func6::OPERATOR_SWITCH + row);
+
+    operatorSwitch->onOperatorChange(updateRangeStepperVisibility);
   }
 }
 

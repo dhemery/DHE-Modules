@@ -12,8 +12,6 @@ public:
   Func6();
 
   void process(const ProcessArgs &args) override;
-  void
-  initialize(std::vector<std::function<void(FuncOperator)>> &onOperatorChange);
 
   enum ParameterIds {
     KNOB,

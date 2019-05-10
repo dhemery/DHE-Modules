@@ -13,8 +13,7 @@ class FuncChannel {
 public:
   FuncChannel(rack::engine::Module *module, int inputIndex, int operandIndex,
               int outputIndex, int operatorSwitchIndex,
-              int additionRangeSwitchIndex, int multiplicationRangeSwitchIndex,
-              std::function<void(FuncOperator)> onOperatorChange);
+              int additionRangeSwitchIndex, int multiplicationRangeSwitchIndex);
 
   auto apply(float upstream) -> float;
 
@@ -26,12 +25,7 @@ private:
   rack::engine::Param &additionRangeSwitch;
   rack::engine::Param &multiplicationRangeSwitch;
 
-  FuncOperator op = ADD;
-
   auto add(float in, float rotation) const -> float;
   auto multiply(float in, float rotation) const -> float;
-  void setOperator();
-
-  std::function<void(FuncOperator)> onOperatorChange;
 };
 } // namespace DHE

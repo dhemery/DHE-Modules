@@ -21,7 +21,6 @@ FuncPanel::FuncPanel(Func *func) : Panel{func, hp} {
   auto row_6 = top + row_spacing * 5 + port_offset;
 
   input(x, row_1, Func::IN);
-  toggle<2>(x, row_2, Func::OPERATOR_SWITCH);
   knob<LargeKnob>(x, row_3, Func::KNOB);
   output(x, row_6, Func::OUT);
 
@@ -31,15 +30,13 @@ FuncPanel::FuncPanel(Func *func) : Panel{func, hp} {
       x, row_4, Func::MULTIPLICATION_RANGE_SWITCH);
   multiplicationRangeStepper->visible = false;
 
-  if (func != nullptr) {
-    auto selectOperator = [additionRangeStepper,
-                           multiplicationRangeStepper](FuncOperator op) {
-      additionRangeStepper->visible = op == FuncOperator::ADD;
-      multiplicationRangeStepper->visible = op == FuncOperator::MULTIPLY;
-    };
-
-    func->initialize(selectOperator);
-  }
+  auto operatorSwitch = toggle<OperatorSwitch>(x, row_2, Func::OPERATOR_SWITCH);
+  auto updateRangeStepperVisibility =
+      [additionRangeStepper, multiplicationRangeStepper](bool isMultiply) {
+        additionRangeStepper->visible = !isMultiply;
+        multiplicationRangeStepper->visible = isMultiply;
+      };
+  operatorSwitch->onOperatorChange(updateRangeStepperVisibility);
 }
 
 } // namespace DHE
