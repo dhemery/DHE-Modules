@@ -13,8 +13,6 @@ class Func : public Module {
 public:
   Func();
 
-  void initialize(const std::function<void(FuncOperator)> &onOperatorChange);
-
   void process(const ProcessArgs &args) override;
 
   enum ParameterIds {

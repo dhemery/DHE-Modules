@@ -17,8 +17,6 @@ Func6Panel::Func6Panel(Func6 *func6) : Panel{func6, hp} {
   auto row_spacing = (bottom - top) / (row_count - 1);
   auto port_offset = 1.25f;
 
-  std::vector<std::function<void(FuncOperator)>> operatorSelectionCallbacks;
-
   for (auto row = 0; row < row_count; row++) {
     auto y = top + row * row_spacing;
     auto port_y = y + port_offset;

@@ -13,11 +13,11 @@ static constexpr auto invertible_gain_range = Range{-2.f, 2.f};
 static constexpr auto half_bipolar_range = Range{0.f, 5.f};
 static constexpr auto invertible_unipolar_range = Range{-10.f, 10.f};
 
-static const auto multiplicationRanges = std::array<Range const *, 4>{
+auto const FuncChannel::multiplicationRanges = std::array<Range const *, 4>{
     &attenuation_range, &invertible_attenuation_range, &Gain::range,
     &invertible_gain_range};
 
-static const auto additionRanges = std::array<Range const *, 4>{
+auto const FuncChannel::additionRanges = std::array<Range const *, 4>{
     &half_bipolar_range, &Signal::bipolar_range, &Signal::unipolar_range,
     &invertible_unipolar_range};
 

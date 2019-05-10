@@ -7,8 +7,6 @@
 
 namespace DHE {
 
-enum FuncOperator { ADD, MULTIPLY };
-
 class FuncChannel {
 public:
   FuncChannel(rack::engine::Module *module, int inputIndex, int operandIndex,
@@ -16,6 +14,9 @@ public:
               int additionRangeSwitchIndex, int multiplicationRangeSwitchIndex);
 
   auto apply(float upstream) -> float;
+
+  static const std::array<Range const *, 4> additionRanges;
+  static const std::array<Range const *, 4> multiplicationRanges;
 
 private:
   rack::engine::Input &input;
