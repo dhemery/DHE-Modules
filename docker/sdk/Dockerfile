@@ -1,6 +1,10 @@
 FROM rack:env
-ARG RACK_SDK_VERSION
-RUN curl -o rack-sdk.zip https://vcvrack.com/downloads/Rack-SDK-${RACK_SDK_VERSION}.zip \
-    && unzip rack-sdk.zip
-VOLUME /dist
+ARG RACK_BRANCH
+RUN \
+    cmake --version \
+    && git clone -v --single-branch -b ${RACK_BRANCH} https://github.com/VCVRack/Rack.git \
+    && cd Rack \
+    && git submodule update --init --recursive \
+    && make dep \
+    && make
 CMD bash

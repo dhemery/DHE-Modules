@@ -1,4 +1,5 @@
-RACK_SDK_VERSION ?= 0.6.2
+RACK_SDK_VERSION=1-pre
+RACK_BRANCH=v1
 RACK_REPOSITORY := rack
 RACK_ENVIRONMENT_TAG := env
 RACK_ENVIRONMENT_IMAGE := $(RACK_REPOSITORY):$(RACK_ENVIRONMENT_TAG)
@@ -14,7 +15,7 @@ run: racksdk distdir
 racksdk: rackenv
 	docker image inspect $(RACK_SDK_IMAGE) --format "{{.ID}}" \
 	|| docker image build -t $(RACK_SDK_IMAGE) sdk/ \
-		--build-arg RACK_SDK_VERSION=$(RACK_SDK_VERSION)
+		--build-arg RACK_BRANCH=$(RACK_BRANCH)
 
 rackenv:
 	docker image inspect $(RACK_ENVIRONMENT_IMAGE) --format "{{.ID}}" \

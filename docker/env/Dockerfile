@@ -3,6 +3,7 @@ RUN apt-get update \
   && apt-get install -y --no-install-recommends software-properties-common \
   && add-apt-repository -y ppa:ubuntu-toolchain-r/test \
   && apt-get update \
+  && apt-cache madison cmake \
   && apt-get install -y --no-install-recommends \
   autoconf \
   automake \
@@ -10,6 +11,7 @@ RUN apt-get update \
   curl \
   g++ \
   git \
+  jq \
   libasound2-dev \
   libgl1-mesa-dev \
   libglu1-mesa-dev \
@@ -28,3 +30,4 @@ RUN apt-get update \
   && add-apt-repository -yr ppa:ubuntu-toolchain-r/test \
   && apt-get autoremove --purge \
   && apt-get clean
+CMD bash
