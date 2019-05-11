@@ -1,5 +1,7 @@
 #pragma once
 
+#include <array>
+
 #include "engine/Module.hpp"
 
 #include "util/gain.h"

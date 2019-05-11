@@ -5,6 +5,5 @@ RUN \
     && git clone -v --single-branch -b ${RACK_BRANCH} https://github.com/VCVRack/Rack.git \
     && cd Rack \
     && git submodule update --init --recursive \
-    && make dep \
-    && make
+    && make dep
 CMD bash

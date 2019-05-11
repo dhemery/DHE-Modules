@@ -1,5 +1,7 @@
 #pragma once
 
+#include <memory>
+
 #include "Module.h"
 
 #include "controls/Duration.h"
