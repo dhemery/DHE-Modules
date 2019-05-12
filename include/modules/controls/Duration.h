@@ -2,19 +2,18 @@
 
 #include <array>
 
-#include "modules/controls/Common.h"
+#include "modules/controls/ModulatedKnob.h"
 #include "util/range.h"
 
 namespace DHE {
 
-class Duration {
+class Duration : public ModulatedKnob {
   static ConstantParam defaultRangeSwitch;
 
 public:
-  explicit Duration(rack::engine::Param &knob,
-                    rack::engine::Param &rangeSwitch = defaultRangeSwitch,
-                    rack::engine::Input &cvInput = defaultCvInput)
-      : knob{knob}, rangeSwitch{rangeSwitch}, cvInput{cvInput} {}
+  explicit Duration(Param &knob, Param &rangeSwitch = defaultRangeSwitch,
+                    Input &cvInput = defaultCvInput)
+      : ModulatedKnob{knob, cvInput}, rangeSwitch{rangeSwitch} {}
 
   auto seconds() -> float;
 
@@ -24,9 +23,7 @@ public:
   static const std::array<Range const *, 3> ranges;
 
 private:
-  rack::engine::Param &knob;
-  rack::engine::Param &rangeSwitch;
-  rack::engine::Input &cvInput;
+  Param &rangeSwitch;
 };
 
 } // namespace DHE
