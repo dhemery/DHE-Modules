@@ -2,20 +2,19 @@
 
 #include <array>
 
-#include "Common.h"
+#include "ModulatedKnob.h"
 
 #include "util/range.h"
 
 namespace DHE {
 
-class Level {
+class Level : public ModulatedKnob {
   static ConstantParam defaultRangeSwitch;
 
 public:
   explicit Level(rack::engine::Param &knob,
                  rack::engine::Param &rangeSwitch = defaultRangeSwitch,
-                 rack::engine::Input &cvInput = defaultCvInput)
-      : knob{knob}, rangeSwitch{rangeSwitch}, cvInput{cvInput} {}
+                 rack::engine::Input &cvInput = defaultCvInput);
 
   auto voltage() -> float;
 
@@ -24,9 +23,7 @@ public:
   static const std::array<Range const *, 2> ranges;
 
 private:
-  rack::engine::Param &knob;
   rack::engine::Param &rangeSwitch;
-  rack::engine::Input &cvInput;
 };
 
 } // namespace DHE

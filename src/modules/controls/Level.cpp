@@ -13,11 +13,13 @@ const std::array<Range const *, 2> Level::ranges{&bipolar_range,
 
 ConstantParam Level::defaultRangeSwitch{1.f};
 
+Level::Level(rack::engine::Param &knob, Param &rangeSwitch, Input &cvInput)
+    : ModulatedKnob{knob, cvInput}, rangeSwitch{rangeSwitch} {}
+
 auto Level::voltage() -> float {
   auto const rangeChoice = static_cast<int>(rangeSwitch.getValue());
   auto const *range = ranges[rangeChoice];
-  auto const rotation = knob.getValue();
-  return range->scale(rotation);
+  return range->scale(rotation());
 }
 
 } // namespace DHE
