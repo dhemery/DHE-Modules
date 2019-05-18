@@ -5,6 +5,11 @@
 
 namespace DHE {
 
+auto taper(LevelControl *level, float curve, bool is_s) -> float {
+  auto tapered = Sigmoid::taper(level->rotation(), curve, is_s);
+  return level->range()->scale(tapered);
+}
+
 Tapers::Tapers() {
   config(PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT);
 
@@ -25,13 +30,18 @@ Tapers::Tapers() {
               100.f, 0.f);
   configCvGain(CURVE_2_AV, "Taper 2 level");
   configParam(SHAPE_2_SWITCH, 0.f, 1.f, 0.f, "Taper 2 shape");
+
+  level1 = std::unique_ptr<LevelControl>(
+      new LevelControl(params[LEVEL_1_KNOB], params[RANGE_1_SWITCH],
+                       inputs[LEVEL_1_CV], params[LEVEL_1_AV]));
+  level2 = std::unique_ptr<LevelControl>(
+      new LevelControl(params[LEVEL_2_KNOB], params[RANGE_2_SWITCH],
+                       inputs[LEVEL_2_CV], params[LEVEL_2_AV]));
 }
 
 void Tapers::process(const ProcessArgs &args) {
-  outputs[OUT_1].setVoltage(
-      taper(level1(), is_uni_1(), curvature1(), is_s_1()));
-  outputs[OUT_2].setVoltage(
-      taper(level2(), is_uni_2(), curvature2(), is_s_2()));
+  outputs[OUT_1].setVoltage(taper(level1.get(), curvature1(), is_s_1()));
+  outputs[OUT_2].setVoltage(taper(level2.get(), curvature2(), is_s_2()));
 }
 
 auto Tapers::curvature(int knob, int cv, int av) -> float {
@@ -47,34 +57,12 @@ auto Tapers::curvature2() -> float {
   return curvature(CURVE_2_KNOB, CURVE_2_CV, CURVE_2_AV);
 }
 
-auto Tapers::is_uni_1() -> bool {
-  return params[RANGE_1_SWITCH].getValue() > 0.5f;
-}
-
-auto Tapers::is_uni_2() -> bool {
-  return params[RANGE_2_SWITCH].getValue() > 0.5f;
-}
-
 auto Tapers::is_s_1() -> bool {
   return params[SHAPE_1_SWITCH].getValue() > 0.5f;
 }
 
 auto Tapers::is_s_2() -> bool {
   return params[SHAPE_2_SWITCH].getValue() > 0.5f;
-}
-
-auto Tapers::level1() -> float {
-  return modulated(LEVEL_1_KNOB, LEVEL_1_CV, LEVEL_1_AV);
-}
-
-auto Tapers::level2() -> float {
-  return modulated(LEVEL_2_KNOB, LEVEL_2_CV, LEVEL_2_AV);
-}
-
-auto Tapers::taper(float level, bool is_uni, float curve, bool is_s) const
-    -> float {
-  auto tapered = Sigmoid::taper(level, curve, is_s);
-  return Signal::range(is_uni).scale(tapered);
 }
 
 } // namespace DHE

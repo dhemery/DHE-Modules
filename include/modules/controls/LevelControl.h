@@ -18,6 +18,7 @@ public:
       : ModulatedKnob{knob, cvInput, avParam}, rangeSwitch{rangeSwitch} {};
 
   auto voltage() -> float;
+  auto range() -> Range const *;
 
   static const Range unipolar_range;
   static const Range bipolar_range;

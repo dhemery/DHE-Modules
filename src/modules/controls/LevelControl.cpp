@@ -13,10 +13,11 @@ const std::array<Range const *, 2> LevelControl::ranges{&bipolar_range,
 
 ConstantParam LevelControl::defaultRangeSwitch{1.f};
 
-auto LevelControl::voltage() -> float {
+auto LevelControl::voltage() -> float { return range()->scale(rotation()); }
+
+auto LevelControl::range() -> Range const * {
   auto const rangeChoice = static_cast<int>(rangeSwitch.getValue());
-  auto const *range = ranges[rangeChoice];
-  return range->scale(rotation());
+  return ranges[rangeChoice];
 }
 
 } // namespace DHE
