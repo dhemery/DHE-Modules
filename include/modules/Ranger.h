@@ -4,6 +4,7 @@
 
 #include "Module.h"
 #include "modules/controls/LevelControl.h"
+#include "modules/controls/ModulatedKnob.h"
 
 namespace DHE {
 
@@ -28,10 +29,9 @@ public:
   enum OutputIds { MAIN_OUT, OUTPUT_COUNT };
 
 private:
-  auto level() -> float;
-  std::unique_ptr<LevelControl> limit1;
-  std::unique_ptr<LevelControl> limit2;
-  void send_main_out(float voltage);
+  std::unique_ptr<LevelControl> zeroRotationLevel;
+  std::unique_ptr<LevelControl> fullRotationLevel;
+  std::unique_ptr<ModulatedKnob> level;
 };
 
 } // namespace DHE
