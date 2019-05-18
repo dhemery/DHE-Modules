@@ -5,18 +5,18 @@
 #include <utility>
 
 #include <app.hpp>
-#include <app/common.hpp>
 #include <app/ModuleWidget.hpp>
 #include <app/ParamWidget.hpp>
 #include <app/PortWidget.hpp>
 #include <app/SvgPanel.hpp>
 #include <app/SvgPort.hpp>
+#include <app/common.hpp>
 #include <event.hpp>
 #include <helpers.hpp>
 #include <math.hpp>
 #include <widget/Widget.hpp>
 
-#include "controls.h"
+#include "Controls.h"
 
 extern rack::plugin::Plugin *pluginInstance;
 

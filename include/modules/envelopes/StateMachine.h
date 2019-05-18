@@ -2,7 +2,7 @@
 #include <functional>
 #include <utility>
 
-#include "modules/components/edge-detector.h"
+#include "modules/components/EdgeDetector.h"
 
 #include "Deferring.h"
 #include "EndOfCyclePulseGenerator.h"

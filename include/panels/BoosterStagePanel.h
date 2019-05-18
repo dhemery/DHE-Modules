@@ -1,7 +1,7 @@
 #pragma once
 
+#include "Panel.h"
 #include "modules/BoosterStage.h"
-#include "panel.h"
 
 namespace DHE {
 

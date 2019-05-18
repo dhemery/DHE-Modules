@@ -1,7 +1,7 @@
 #pragma once
 
+#include "Panel.h"
 #include "modules/Upstage.h"
-#include "panel.h"
 
 namespace DHE {
 

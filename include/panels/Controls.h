@@ -4,8 +4,7 @@
 #include <app/SvgSwitch.hpp>
 #include <componentlibrary.hpp>
 
-#include "controls.h"
-#include "menus.h"
+#include "Controls.h"
 
 namespace DHE {
 

@@ -91,22 +91,35 @@ project: compile_commands.json
 #
 ########################################################################
 
-DEV_INSTALL_DIR = .dev
-DEV_PLUGIN_DIR = $(DEV_INSTALL_DIR)/plugins
+PLUGIN_ZIP_NAME = $(SLUG)-$(VERSION)-$(ARCH).zip
+DIST_PLUGIN_ZIP = dist/$(PLUGIN_ZIP_NAME)
+DEV_DIR = .dev
+DEV_PLUGIN_DIR = $(DEV_DIR)/plugins
+DEV_PLUGIN_ZIP = $(DEV_PLUGIN_DIR)/$(PLUGIN_ZIP_NAME)
+
 RACK_EXECUTABLE = $(RACK_APP_DIR)/Rack.app/Contents/MacOS/Rack
 RACK_SYSTEM_DIR = $(RACK_APP_DIR)/Rack.app/Contents/Resources
 
-$(DEV_INSTALL_DIR) $(DEV_PLUGIN_DIR):
+$(DEV_DIR) $(DEV_PLUGIN_DIR):
 	mkdir -p $@
 
-dev: dist $(DEV_PLUGIN_DIR)
-	cp dist/$(SLUG)-$(VERSION)-$(ARCH).zip $(DEV_PLUGIN_DIR)
+$(DEV_PLUGIN_ZIP): dist $(DEV_PLUGIN_DIR)
+	cp $(DIST_PLUGIN_ZIP) $(DEV_PLUGIN_DIR)
 
-debug: dev
-	$(RACK_EXECUTABLE) -d -s $(RACK_SYSTEM_DIR) -u $(realpath $(DEV_INSTALL_DIR))
+unplug:
+	rm -rf $(DEV_PLUGIN_DIR)
+
+undev:
+	rm -rf $(DEV_DIR)
+
+dev: $(DEV_PLUGIN_ZIP)
 
 run: dev
-	$(RACK_EXECUTABLE) -s $(RACK_SYSTEM_DIR) -u $(realpath $(DEV_INSTALL_DIR))
+	$(RACK_EXECUTABLE) $(RACK_FLAGS) -s $(RACK_SYSTEM_DIR) -u $(realpath $(DEV_DIR))
+
+debug: RACK_FLAGS += -d
+
+debug: run
 
 
 
@@ -133,13 +146,10 @@ gui:
 tidy:
 	find src include -name *.h -o -name *.cpp | xargs clang-format -i -style=file
 
-clobber: clean uninstall
+clobber: clean
 	cd gui && rake clobber
 
-fresh: clean test
-
-uninstall:
-	rm -rf $(DEV_INSTALL_DIR)
+fresh: clean undev test
 
 .PHONY: clean clobber fresh gui tidy uninstall
 

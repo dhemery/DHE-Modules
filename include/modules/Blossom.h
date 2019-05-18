@@ -2,7 +2,7 @@
 
 #include "Module.h"
 
-#include "components/rotor.h"
+#include "modules/components/Rotor.h"
 
 namespace DHE {
 

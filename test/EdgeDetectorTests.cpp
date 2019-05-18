@@ -1,4 +1,4 @@
-#include "modules/components/edge-detector.h"
+#include "modules/components/EdgeDetector.h"
 #include "gmock/gmock.h"
 
 namespace {
