@@ -93,29 +93,23 @@ project: compile_commands.json
 
 DEV_INSTALL_DIR = .dev
 DEV_PLUGIN_DIR = $(DEV_INSTALL_DIR)/plugins
+RACK_EXECUTABLE = $(RACK_APP_DIR)/Rack.app/Contents/MacOS/Rack
+RACK_SYSTEM_DIR = $(RACK_APP_DIR)/Rack.app/Contents/Resources
 
 $(DEV_INSTALL_DIR) $(DEV_PLUGIN_DIR):
 	mkdir -p $@
 
-$(DEV_PLUGIN_DIR)/Fundamental: $(DEV_PLUGIN_DIR)
-	cp -r $(RACK_USER_DIR)/plugins/Fundamental $(DEV_PLUGIN_DIR)
-
-$(DEV_PLUGIN_DIR)/AudibleInstruments: $(DEV_PLUGIN_DIR)
-	cp -r $(RACK_USER_DIR)/plugins/AudibleInstruments $(DEV_PLUGIN_DIR)
-
-dev: dist $(DEV_PLUGIN_DIR) $(DEV_PLUGIN_DIR)/Fundamental $(DEV_PLUGIN_DIR)/AudibleInstruments
+dev: dist $(DEV_PLUGIN_DIR)
 	cp dist/$(SLUG)-$(VERSION)-$(ARCH).zip $(DEV_PLUGIN_DIR)
 
+debug: dev
+	$(RACK_EXECUTABLE) -d -s $(RACK_SYSTEM_DIR) -u $(realpath $(DEV_INSTALL_DIR))
 
-# Temporary until I can install Rack v1.
-run:
-	cd ../.. && make plugins run
+run: dev
+	$(RACK_EXECUTABLE) -s $(RACK_SYSTEM_DIR) -u $(realpath $(DEV_INSTALL_DIR))
 
-#debug: dev
-#	/Applications/Rack.app/Contents/MacOS/Rack -d -g /Applications/Rack.app/Contents/Resources -l $(realpath $(DEV_INSTALL_DIR))
-#
-#run: dev
-#	/Applications/Rack.app/Contents/MacOS/Rack -g /Applications/Rack.app/Contents/Resources -l $(realpath $(DEV_INSTALL_DIR))
+
+
 
 ########################################################################
 #

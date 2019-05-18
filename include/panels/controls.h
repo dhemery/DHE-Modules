@@ -1,8 +1,8 @@
 #pragma once
 #include <utility>
 
-#include "../../../../include/app/SvgSwitch.hpp"
-#include "../../../../include/componentlibrary.hpp"
+#include <app/SvgSwitch.hpp>
+#include <componentlibrary.hpp>
 
 #include "controls.h"
 #include "menus.h"

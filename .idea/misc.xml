@@ -1,5 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="CidrRootsConfiguration">
+    <sourceRoots>
+      <file path="$PROJECT_DIR$/include" />
+      <file path="$PROJECT_DIR$/src" />
+      <file path="$PROJECT_DIR$/test" />
+    </sourceRoots>
+    <libraryRoots>
+      <file path="$PROJECT_DIR$/googletest/googlemock/include/gmock" />
+      <file path="$PROJECT_DIR$/googletest/googletest/include/gtest" />
+    </libraryRoots>
+    <excludeRoots>
+      <file path="$PROJECT_DIR$/.dev" />
+      <file path="$PROJECT_DIR$/build" />
+      <file path="$PROJECT_DIR$/docker" />
+      <file path="$PROJECT_DIR$/gui" />
+      <file path="$PROJECT_DIR$/images" />
+      <file path="$PROJECT_DIR$/svg" />
+    </excludeRoots>
+  </component>
   <component name="CompDBSettings">
     <option name="linkedExternalProjectsSettings">
       <CompDBProjectSettings>
