@@ -12,7 +12,7 @@ Upstage::Upstage() {
   configParam(WAIT_BUTTON, 0.f, 1.f, 0.f, "Wait");
 
   level = std::unique_ptr<Level>(
-      new Level(params[LEVEL_KNOB], params[LEVEL_RANGE_SWITCH]));
+      new Level(params[LEVEL_KNOB], params[LEVEL_RANGE_SWITCH], inputs[LEVEL_CV]));
 }
 
 void Upstage::process(const ProcessArgs &args) {
