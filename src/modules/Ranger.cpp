@@ -16,25 +16,17 @@ Ranger::Ranger() {
   configKnob(LIMIT_2_KNOB, "Limit 2");
   configCvGain(LIMIT_2_AV, "Limit 2");
   configSignalRange(LIMIT_2_RANGE_SWITCH, "Limit 2", false);
+
+  limit1 = std::unique_ptr<LevelControl>(
+      new LevelControl(params[LIMIT_1_KNOB], params[LIMIT_1_RANGE_SWITCH],
+                       inputs[LIMIT_1_CV], params[LIMIT_1_AV]));
+  limit2 = std::unique_ptr<LevelControl>(
+      new LevelControl(params[LIMIT_2_KNOB], params[LIMIT_2_RANGE_SWITCH],
+                       inputs[LIMIT_2_CV], params[LIMIT_1_AV]));
 }
 
 auto Ranger::level() -> float {
   return modulated(LEVEL_KNOB, LEVEL_CV, LEVEL_AV);
-}
-
-auto Ranger::limit(int knob_param, int cv_input, int av_param,
-                   int range_switch_param) -> float {
-  auto is_uni = params[range_switch_param].getValue() > 0.5f;
-  auto range = Signal::range(is_uni);
-  return range.scale(modulated(knob_param, cv_input, av_param));
-}
-
-auto Ranger::limit1() -> float {
-  return limit(LIMIT_1_KNOB, LIMIT_1_CV, LIMIT_1_AV, LIMIT_1_RANGE_SWITCH);
-}
-
-auto Ranger::limit2() -> float {
-  return limit(LIMIT_2_KNOB, LIMIT_2_CV, LIMIT_2_AV, LIMIT_2_RANGE_SWITCH);
 }
 
 void Ranger::send_main_out(float voltage) {
@@ -42,7 +34,7 @@ void Ranger::send_main_out(float voltage) {
 }
 
 void Ranger::process(const ProcessArgs &args) {
-  send_main_out(scale(level(), limit2(), limit1()));
+  send_main_out(scale(level(), limit1->voltage(), limit2->voltage()));
 }
 
 } // namespace DHE

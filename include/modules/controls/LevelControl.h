@@ -12,9 +12,10 @@ class LevelControl : public ModulatedKnob {
   static ConstantParam defaultRangeSwitch;
 
 public:
-  explicit LevelControl(rack::engine::Param &knob,
-                        rack::engine::Param &rangeSwitch = defaultRangeSwitch,
-                        rack::engine::Input &cvInput = defaultCvInput);
+  explicit LevelControl(Param &knob, Param &rangeSwitch = defaultRangeSwitch,
+                        Input &cvInput = defaultCvInput,
+                        Param &avParam = defaultAvParam)
+      : ModulatedKnob{knob, cvInput, avParam}, rangeSwitch{rangeSwitch} {};
 
   auto voltage() -> float;
 

@@ -1,6 +1,9 @@
 #pragma once
 
+#include <memory>
+
 #include "Module.h"
+#include "modules/controls/LevelControl.h"
 
 namespace DHE {
 
@@ -26,10 +29,8 @@ public:
 
 private:
   auto level() -> float;
-  auto limit(int knob_param, int cv_input, int av_param, int range_switch_param)
-      -> float;
-  auto limit1() -> float;
-  auto limit2() -> float;
+  std::unique_ptr<LevelControl> limit1;
+  std::unique_ptr<LevelControl> limit2;
   void send_main_out(float voltage);
 };
 

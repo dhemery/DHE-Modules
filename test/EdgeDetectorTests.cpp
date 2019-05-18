@@ -1,5 +1,6 @@
 #include "modules/components/EdgeDetector.h"
-#include "gmock/gmock.h"
+
+#include <gmock/gmock.h>
 
 namespace {
 

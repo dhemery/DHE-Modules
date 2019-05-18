@@ -1,14 +1,8 @@
-#include <util/sigmoid.h>
 #include "modules/controls/DurationControl.h"
-#include "gmock/gmock.h"
+
+#include <gtest/gtest.h>
 
 namespace {
-
-using ::testing::AnyNumber;
-using ::testing::AtMost;
-using ::testing::Expectation;
-using ::testing::NiceMock;
-using ::testing::Return;
 
 struct DurationTest : public ::testing::Test {
 

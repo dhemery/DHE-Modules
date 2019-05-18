@@ -12,8 +12,9 @@ class DurationControl : public ModulatedKnob {
 
 public:
   explicit DurationControl(Param &knob, Param &rangeSwitch = defaultRangeSwitch,
-                           Input &cvInput = defaultCvInput)
-      : ModulatedKnob{knob, cvInput}, rangeSwitch{rangeSwitch} {}
+                           Input &cvInput = defaultCvInput,
+                           Param &avParam = defaultAvParam)
+      : ModulatedKnob{knob, cvInput, avParam}, rangeSwitch{rangeSwitch} {}
 
   auto seconds() -> float;
 

@@ -1,16 +1,10 @@
 
 #include "modules/controls/LevelControl.h"
 
-#include "gmock/gmock.h"
 #include <cmath>
+#include <gtest/gtest.h>
 
 namespace {
-
-using ::testing::AnyNumber;
-using ::testing::AtMost;
-using ::testing::Expectation;
-using ::testing::NiceMock;
-using ::testing::Return;
 
 struct LevelTest : public ::testing::Test {
 

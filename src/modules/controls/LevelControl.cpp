@@ -13,10 +13,6 @@ const std::array<Range const *, 2> LevelControl::ranges{&bipolar_range,
 
 ConstantParam LevelControl::defaultRangeSwitch{1.f};
 
-LevelControl::LevelControl(rack::engine::Param &knob, Param &rangeSwitch,
-                           Input &cvInput)
-    : ModulatedKnob{knob, cvInput}, rangeSwitch{rangeSwitch} {}
-
 auto LevelControl::voltage() -> float {
   auto const rangeChoice = static_cast<int>(rangeSwitch.getValue());
   auto const *range = ranges[rangeChoice];

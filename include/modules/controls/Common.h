@@ -1,7 +1,7 @@
 #pragma once
 
-#include "engine/Param.hpp"
-#include "engine/Port.hpp"
+#include <engine/Param.hpp>
+#include <engine/Port.hpp>
 
 namespace DHE {
 
@@ -20,5 +20,6 @@ public:
 };
 
 extern ConstantInput defaultCvInput;
+extern ConstantParam defaultAvParam;
 
 } // namespace DHE

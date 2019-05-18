@@ -6,12 +6,15 @@ namespace DHE {
 
 class ModulatedKnob {
 public:
-  ModulatedKnob(Param &knob, Input &cvInput);
+  ModulatedKnob(Param &knob, Input &cvInput, Param &avParam)
+      : knob{knob}, cvInput{cvInput}, avParam{avParam} {}
+
   auto rotation() -> float;
 
 private:
   Param &knob;
   Input &cvInput;
+  Param &avParam;
 };
 
 } // namespace DHE
