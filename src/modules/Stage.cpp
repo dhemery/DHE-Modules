@@ -22,8 +22,9 @@ Stage::Stage()
   configParam(LEVEL_KNOB, 0.f, 1.f, 0.5f, "Level", " V", 0.f, 10.f, 0.f);
   configParam(CURVE_KNOB, 0.f, 1.f, 0.5f, "Curvature", "%", 0.f, 200.f, -100.f);
 
-  duration = std::unique_ptr<Duration>(new Duration(params[DURATION_KNOB]));
-  level = std::unique_ptr<Level>(new Level(params[LEVEL_KNOB]));
+  duration = std::unique_ptr<DurationControl>(
+      new DurationControl(params[DURATION_KNOB]));
+  level = std::unique_ptr<LevelControl>(new LevelControl(params[LEVEL_KNOB]));
 
   state_machine.start();
 }

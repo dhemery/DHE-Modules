@@ -4,9 +4,9 @@
 
 #include "Module.h"
 
-#include "controls/Duration.h"
-#include "controls/Level.h"
 #include "envelopes/StageStateMachine.h"
+#include "modules/controls/DurationControl.h"
+#include "modules/controls/LevelControl.h"
 
 namespace DHE {
 
@@ -36,8 +36,8 @@ private:
   void send_out(float voltage);
   auto taper(float phase) -> float;
 
-  std::unique_ptr<Duration> duration;
-  std::unique_ptr<Level> level;
+  std::unique_ptr<DurationControl> duration;
+  std::unique_ptr<LevelControl> level;
   StageStateMachine state_machine;
   float start_voltage{0.f};
 };

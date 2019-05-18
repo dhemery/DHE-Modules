@@ -7,12 +7,12 @@
 
 namespace DHE {
 
-class Duration : public ModulatedKnob {
+class DurationControl : public ModulatedKnob {
   static ConstantParam defaultRangeSwitch;
 
 public:
-  explicit Duration(Param &knob, Param &rangeSwitch = defaultRangeSwitch,
-                    Input &cvInput = defaultCvInput)
+  explicit DurationControl(Param &knob, Param &rangeSwitch = defaultRangeSwitch,
+                           Input &cvInput = defaultCvInput)
       : ModulatedKnob{knob, cvInput}, rangeSwitch{rangeSwitch} {}
 
   auto seconds() -> float;

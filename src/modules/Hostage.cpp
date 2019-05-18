@@ -19,9 +19,9 @@ Hostage::Hostage()
 
   configParam(HOSTAGE_MODE_SWITCH, 0.f, 1.f, 0.f, "Mode");
 
-  duration = std::unique_ptr<Duration>(
-      new Duration(params[DURATION_KNOB], params[DURATION_RANGE_SWITCH],
-                   inputs[DURATION_CV]));
+  duration = std::unique_ptr<DurationControl>(
+      new DurationControl(params[DURATION_KNOB], params[DURATION_RANGE_SWITCH],
+                          inputs[DURATION_CV]));
   state_machine.start();
 }
 

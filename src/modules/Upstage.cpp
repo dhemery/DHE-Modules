@@ -11,7 +11,7 @@ Upstage::Upstage() {
   configParam(TRIGGER_BUTTON, 0.f, 1.f, 0.f, "Trigger");
   configParam(WAIT_BUTTON, 0.f, 1.f, 0.f, "Wait");
 
-  level = std::unique_ptr<Level>(new Level(
+  level = std::unique_ptr<LevelControl>(new LevelControl(
       params[LEVEL_KNOB], params[LEVEL_RANGE_SWITCH], inputs[LEVEL_CV]));
 }
 

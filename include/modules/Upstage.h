@@ -4,7 +4,7 @@
 
 #include "Module.h"
 
-#include "modules/controls/Level.h"
+#include "modules/controls/LevelControl.h"
 #include "util/range.h"
 #include "util/signal.h"
 
@@ -35,7 +35,7 @@ private:
   auto trigger_in() -> bool;
   auto wait_in() -> bool;
 
-  std::unique_ptr<Level> level;
+  std::unique_ptr<LevelControl> level;
 };
 
 } // namespace DHE

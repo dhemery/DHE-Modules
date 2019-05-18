@@ -1,21 +1,21 @@
 #include <array>
 
-#include "modules/controls/Duration.h"
+#include "modules/controls/DurationControl.h"
 #include "util/sigmoid.h"
 
 namespace DHE {
 
 // Note that each range is of the form [n, 1000n].
-const Range Duration::short_range{0.001f, 1.f};
-const Range Duration::medium_range{0.01f, 10.f};
-const Range Duration::long_range{0.1f, 100.f};
+const Range DurationControl::short_range{0.001f, 1.f};
+const Range DurationControl::medium_range{0.01f, 10.f};
+const Range DurationControl::long_range{0.1f, 100.f};
 
-ConstantParam Duration::defaultRangeSwitch{1.f};
+ConstantParam DurationControl::defaultRangeSwitch{1.f};
 
-const std::array<Range const *, 3> Duration::ranges{&short_range, &medium_range,
-                                                    &long_range};
+const std::array<Range const *, 3> DurationControl::ranges{
+    &short_range, &medium_range, &long_range};
 
-auto Duration::seconds() -> float {
+auto DurationControl::seconds() -> float {
   /**
    * Each duration range is of the form [n, 1000n]. Given ranges of that form,
    * this curvature tapers the rotation so a knob positioned dead center yields

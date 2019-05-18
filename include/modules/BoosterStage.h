@@ -4,9 +4,9 @@
 
 #include "Module.h"
 
-#include "controls/Duration.h"
-#include "controls/Level.h"
 #include "envelopes/StageStateMachine.h"
+#include "modules/controls/DurationControl.h"
+#include "modules/controls/LevelControl.h"
 #include "util/sigmoid.h"
 
 namespace DHE {
@@ -69,7 +69,7 @@ private:
   bool eoc_button_is_pressed{false};
   float start_voltage{0.f};
   void set_shape();
-  std::unique_ptr<Duration> duration;
-  std::unique_ptr<Level> level;
+  std::unique_ptr<DurationControl> duration;
+  std::unique_ptr<LevelControl> level;
 };
 } // namespace DHE

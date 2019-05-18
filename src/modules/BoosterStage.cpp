@@ -32,10 +32,10 @@ BoosterStage::BoosterStage()
   configParam(EOC_BUTTON, 0.f, 1.f, 0.f, "EOC");
   configParam(TRIGGER_BUTTON, 0.f, 1.f, 0.f, "TRIGGER");
 
-  duration = std::unique_ptr<Duration>(
-      new Duration(params[DURATION_KNOB], params[DURATION_RANGE_SWITCH],
-                   inputs[DURATION_CV]));
-  level = std::unique_ptr<Level>(new Level(
+  duration = std::unique_ptr<DurationControl>(
+      new DurationControl(params[DURATION_KNOB], params[DURATION_RANGE_SWITCH],
+                          inputs[DURATION_CV]));
+  level = std::unique_ptr<LevelControl>(new LevelControl(
       params[LEVEL_KNOB], params[LEVEL_RANGE_SWITCH], inputs[LEVEL_CV]));
 
   state_machine.start();

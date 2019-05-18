@@ -8,13 +8,13 @@
 
 namespace DHE {
 
-class Level : public ModulatedKnob {
+class LevelControl : public ModulatedKnob {
   static ConstantParam defaultRangeSwitch;
 
 public:
-  explicit Level(rack::engine::Param &knob,
-                 rack::engine::Param &rangeSwitch = defaultRangeSwitch,
-                 rack::engine::Input &cvInput = defaultCvInput);
+  explicit LevelControl(rack::engine::Param &knob,
+                        rack::engine::Param &rangeSwitch = defaultRangeSwitch,
+                        rack::engine::Input &cvInput = defaultCvInput);
 
   auto voltage() -> float;
 
