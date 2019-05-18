@@ -16,16 +16,14 @@ public:
   BoosterStage();
   void process(const ProcessArgs &args) override;
 
-  auto defer_gate_in() -> bool;
-  auto defer_gate_is_active() const -> bool;
+  auto deferGateIn() -> bool;
+  auto deferGateIsActive() const -> bool;
   void forward();
   void generate(float phase);
-  void prepare_to_generate();
-  void set_active_button(bool active);
-  void set_active(bool active);
-  void set_eoc(bool eoc);
-  void set_eoc_button(bool eoc);
-  auto stage_gate_in() -> bool;
+  void prepareToGenerate();
+  void setActive(bool active);
+  void setEoc(bool eoc);
+  auto stageGateIn() -> bool;
 
   enum ParameterIds {
     ACTIVE_BUTTON,
@@ -54,21 +52,19 @@ public:
   enum OutputIds { ACTIVE_OUT, EOC_OUT, MAIN_OUT, OUTPUT_COUNT };
 
 private:
-  auto envelope_in() -> float;
   auto curvature() -> float;
-  void send_active();
-  void send_eoc();
-  void send_out(float voltage);
+  auto envelopeIn() -> float;
+  void sendActive();
+  void sendEoc();
+  void sendOut(float voltage);
   auto taper(float phase) -> float;
 
-  StageStateMachine state_machine;
-  Sigmoid::Shape const *curve_shape{&Sigmoid::j_shape};
-  bool is_active{false};
-  bool active_button_is_pressed{false};
-  bool is_eoc{false};
-  bool eoc_button_is_pressed{false};
-  float start_voltage{0.f};
-  void set_shape();
+  StageStateMachine stateMachine;
+  Sigmoid::Shape const *curveShape{&Sigmoid::j_shape};
+  bool isActive{false};
+  bool isEoc{false};
+  float startVoltage{0.f};
+  void setShape();
   std::unique_ptr<DurationControl> duration;
   std::unique_ptr<LevelControl> level;
 };

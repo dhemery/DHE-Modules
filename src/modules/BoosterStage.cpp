@@ -8,15 +8,15 @@
 namespace DHE {
 
 BoosterStage::BoosterStage()
-    : state_machine{[this]() -> bool { return defer_gate_is_active(); },
-                    [this]() -> bool { return defer_gate_in(); },
-                    [this]() -> bool { return stage_gate_in(); },
-                    [this]() -> float { return duration->seconds(); },
-                    [this](float) { forward(); },
-                    [this]() { prepare_to_generate(); },
-                    [this](float phase) { generate(phase); },
-                    [this](bool active) { set_active(active); },
-                    [this](bool eoc) { set_eoc(eoc); }} {
+    : stateMachine{[this]() -> bool { return deferGateIsActive(); },
+                   [this]() -> bool { return deferGateIn(); },
+                   [this]() -> bool { return stageGateIn(); },
+                   [this]() -> float { return duration->seconds(); },
+                   [this](float) { forward(); },
+                   [this]() { prepareToGenerate(); },
+                   [this](float phase) { generate(phase); },
+                   [this](bool active) { setActive(active); },
+                   [this](bool eoc) { setEoc(eoc); }} {
   config(PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT);
 
   configParam(DURATION_KNOB, 0.f, 1.f, 0.5f, "Duration");
@@ -38,60 +38,47 @@ BoosterStage::BoosterStage()
   level = std::unique_ptr<LevelControl>(new LevelControl(
       params[LEVEL_KNOB], params[LEVEL_RANGE_SWITCH], inputs[LEVEL_CV]));
 
-  state_machine.start();
+  stateMachine.start();
 }
 
 void BoosterStage::process(const ProcessArgs &args) {
-  set_shape();
+  setShape();
 
-  state_machine.step(args.sampleTime);
+  stateMachine.step(args.sampleTime);
+
+  sendActive();
+  sendEoc();
 }
 
-void BoosterStage::forward() { send_out(envelope_in()); }
+void BoosterStage::forward() { sendOut(envelopeIn()); }
 
 void BoosterStage::generate(float phase) {
-  send_out(scale(taper(phase), start_voltage, level->voltage()));
+  sendOut(scale(taper(phase), startVoltage, level->voltage()));
 }
 
-void BoosterStage::set_active(bool active) {
-  is_active = active;
-  send_active();
+void BoosterStage::setActive(bool active) { isActive = active; }
+
+auto BoosterStage::stageGateIn() -> bool {
+  auto const triggerButton = params[TRIGGER_BUTTON].getValue() > 0.5;
+  auto const triggerInput = inputs[STAGE_TRIGGER_IN].getVoltage() > 0.1;
+  return triggerButton || triggerInput;
 }
 
-auto BoosterStage::stage_gate_in() -> bool {
-  auto trigger_button = params[TRIGGER_BUTTON].getValue() > 0.5;
-  auto trigger_input = inputs[STAGE_TRIGGER_IN].getVoltage() > 0.1;
-  return trigger_button || trigger_input;
-}
+void BoosterStage::prepareToGenerate() { startVoltage = envelopeIn(); }
 
-void BoosterStage::prepare_to_generate() { start_voltage = envelope_in(); }
-
-auto BoosterStage::defer_gate_is_active() const -> bool {
+auto BoosterStage::deferGateIsActive() const -> bool {
   return inputs[DEFER_GATE_IN].active;
 }
 
-auto BoosterStage::defer_gate_in() -> bool {
-  auto defer_button = params[DEFER_BUTTON].getValue() > 0.5f;
-  auto defer_input = inputs[DEFER_GATE_IN].getVoltage() > 0.1f;
-  return defer_button || defer_input;
+auto BoosterStage::deferGateIn() -> bool {
+  auto const deferButton = params[DEFER_BUTTON].getValue() > 0.5f;
+  auto const deferInput = inputs[DEFER_GATE_IN].getVoltage() > 0.1f;
+  return deferButton || deferInput;
 }
 
-void BoosterStage::set_active_button(bool active) {
-  active_button_is_pressed = active;
-  send_active();
-}
+void BoosterStage::setEoc(bool eoc) { isEoc = eoc; }
 
-void BoosterStage::set_eoc(bool eoc) {
-  is_eoc = eoc;
-  send_eoc();
-}
-
-void BoosterStage::set_eoc_button(bool eoc) {
-  eoc_button_is_pressed = eoc;
-  send_eoc();
-}
-
-auto BoosterStage::envelope_in() -> float {
+auto BoosterStage::envelopeIn() -> float {
   return inputs[ENVELOPE_IN].getVoltage();
 }
 
@@ -99,27 +86,29 @@ auto BoosterStage::curvature() -> float {
   return Sigmoid::curvature(modulated(CURVE_KNOB, CURVE_CV));
 }
 
-void BoosterStage::send_active() {
-  auto const voltage = is_active || active_button_is_pressed ? 10.f : 0.f;
+void BoosterStage::sendActive() {
+  auto const activeButton = params[ACTIVE_BUTTON].getValue() > 0.5f;
+  auto const voltage = isActive || activeButton ? 10.f : 0.f;
   outputs[ACTIVE_OUT].setVoltage(voltage);
 }
 
-void BoosterStage::send_eoc() {
-  const auto voltage = is_eoc || eoc_button_is_pressed ? 10.f : 0.f;
+void BoosterStage::sendEoc() {
+  auto const eocButton = params[EOC_BUTTON].getValue() > 0.5f;
+  auto const voltage = isEoc || eocButton ? 10.f : 0.f;
   outputs[EOC_OUT].setVoltage(voltage);
 }
 
-void BoosterStage::send_out(float voltage) {
+void BoosterStage::sendOut(float voltage) {
   outputs[MAIN_OUT].setVoltage(voltage);
 }
 
 auto BoosterStage::taper(float phase) -> float {
-  return curve_shape->taper(phase, curvature());
+  return curveShape->taper(phase, curvature());
 }
 
-void BoosterStage::set_shape() {
+void BoosterStage::setShape() {
   const auto choice = static_cast<int>(params[SHAPE_SWITCH].getValue());
-  curve_shape = Sigmoid::shapes()[choice];
+  curveShape = Sigmoid::shapes()[choice];
 }
 
 } // namespace DHE
