@@ -1,6 +1,6 @@
 #include "modules/controls/Common.h"
 
 namespace DHE {
-ConstantInput defaultCvInput{0.f};
-ConstantParam defaultAvParam{1.f};
+ConstantInput constant0VoltageInput{0.f};
+ConstantParam constantFullyRotatedKnobParam{1.f};
 } // namespace DHE

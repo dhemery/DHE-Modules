@@ -8,12 +8,13 @@
 namespace DHE {
 
 class DurationControl : public ModulatedKnob {
-  static ConstantParam defaultRangeSwitch;
+  static ConstantParam constantMediumDurationRangeSwitch;
 
 public:
-  explicit DurationControl(Param &knob, Param &rangeSwitch = defaultRangeSwitch,
-                           Input &cvInput = defaultCvInput,
-                           Param &avParam = defaultAvParam)
+  explicit DurationControl(
+      Param &knob, Param &rangeSwitch = constantMediumDurationRangeSwitch,
+      Input &cvInput = constant0VoltageInput,
+      Param &avParam = constantFullyRotatedKnobParam)
       : ModulatedKnob{knob, cvInput, avParam}, rangeSwitch{rangeSwitch} {}
 
   auto seconds() -> float;

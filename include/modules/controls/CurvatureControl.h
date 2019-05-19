@@ -14,8 +14,8 @@ class CurvatureControl : public ModulatedKnob {
 public:
   explicit CurvatureControl(Param &knob,
                             Param &shapeSwitch = constantJShapeSwitch,
-                            Input &cvInput = defaultCvInput,
-                            Param &avParam = defaultAvParam)
+                            Input &cvInput = constant0VoltageInput,
+                            Param &avParam = constantFullyRotatedKnobParam)
       : ModulatedKnob{knob, cvInput, avParam}, shapeSwitch{shapeSwitch} {};
 
   auto taper(float phase) -> float;

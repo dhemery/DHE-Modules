@@ -35,15 +35,17 @@ BoosterStage::BoosterStage()
   duration = std::unique_ptr<DurationControl>(
       new DurationControl(params[DURATION_KNOB], params[DURATION_RANGE_SWITCH],
                           inputs[DURATION_CV]));
+
   level = std::unique_ptr<LevelControl>(new LevelControl(
       params[LEVEL_KNOB], params[LEVEL_RANGE_SWITCH], inputs[LEVEL_CV]));
+
+  shape = std::unique_ptr<CurvatureControl>(new CurvatureControl(
+      params[CURVE_KNOB], params[SHAPE_SWITCH], inputs[CURVE_CV]));
 
   stateMachine.start();
 }
 
 void BoosterStage::process(const ProcessArgs &args) {
-  setShape();
-
   stateMachine.step(args.sampleTime);
 
   sendActive();
@@ -53,7 +55,8 @@ void BoosterStage::process(const ProcessArgs &args) {
 void BoosterStage::forward() { sendOut(envelopeIn()); }
 
 void BoosterStage::generate(float phase) {
-  sendOut(scale(taper(phase), startVoltage, level->voltage()));
+  auto const taperedPhase = shape->taper(phase);
+  sendOut(scale(taperedPhase, startVoltage, level->voltage()));
 }
 
 void BoosterStage::setActive(bool active) { isActive = active; }
@@ -82,10 +85,6 @@ auto BoosterStage::envelopeIn() -> float {
   return inputs[ENVELOPE_IN].getVoltage();
 }
 
-auto BoosterStage::curvature() -> float {
-  return Sigmoid::curvature(modulated(CURVE_KNOB, CURVE_CV));
-}
-
 void BoosterStage::sendActive() {
   auto const activeButton = params[ACTIVE_BUTTON].getValue() > 0.5f;
   auto const voltage = isActive || activeButton ? 10.f : 0.f;
@@ -101,14 +100,4 @@ void BoosterStage::sendEoc() {
 void BoosterStage::sendOut(float voltage) {
   outputs[MAIN_OUT].setVoltage(voltage);
 }
-
-auto BoosterStage::taper(float phase) -> float {
-  return curveShape->taper(phase, curvature());
-}
-
-void BoosterStage::setShape() {
-  const auto choice = static_cast<int>(params[SHAPE_SWITCH].getValue());
-  curveShape = Sigmoid::shapes()[choice];
-}
-
 } // namespace DHE

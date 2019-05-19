@@ -5,6 +5,7 @@
 #include "Module.h"
 
 #include "envelopes/StageStateMachine.h"
+#include "modules/controls/CurvatureControl.h"
 #include "modules/controls/DurationControl.h"
 #include "modules/controls/LevelControl.h"
 #include "util/sigmoid.h"
@@ -52,20 +53,17 @@ public:
   enum OutputIds { ACTIVE_OUT, EOC_OUT, MAIN_OUT, OUTPUT_COUNT };
 
 private:
-  auto curvature() -> float;
   auto envelopeIn() -> float;
   void sendActive();
   void sendEoc();
   void sendOut(float voltage);
-  auto taper(float phase) -> float;
 
   StageStateMachine stateMachine;
-  Sigmoid::Shape const *curveShape{&Sigmoid::j_shape};
   bool isActive{false};
   bool isEoc{false};
   float startVoltage{0.f};
-  void setShape();
   std::unique_ptr<DurationControl> duration;
   std::unique_ptr<LevelControl> level;
+  std::unique_ptr<CurvatureControl> shape;
 };
 } // namespace DHE

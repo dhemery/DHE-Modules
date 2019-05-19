@@ -19,7 +19,7 @@ public:
   explicit ConstantParam(float value) noexcept { setValue(value); }
 };
 
-extern ConstantInput defaultCvInput;
-extern ConstantParam defaultAvParam;
+extern ConstantInput constant0VoltageInput;
+extern ConstantParam constantFullyRotatedKnobParam;
 
 } // namespace DHE

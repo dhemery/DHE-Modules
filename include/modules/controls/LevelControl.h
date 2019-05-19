@@ -9,12 +9,13 @@
 namespace DHE {
 
 class LevelControl : public ModulatedKnob {
-  static ConstantParam defaultRangeSwitch;
+  static ConstantParam constantUnipolarLevelRangeSwitch;
 
 public:
-  explicit LevelControl(Param &knob, Param &rangeSwitch = defaultRangeSwitch,
-                        Input &cvInput = defaultCvInput,
-                        Param &avParam = defaultAvParam)
+  explicit LevelControl(Param &knob,
+                        Param &rangeSwitch = constantUnipolarLevelRangeSwitch,
+                        Input &cvInput = constant0VoltageInput,
+                        Param &avParam = constantFullyRotatedKnobParam)
       : ModulatedKnob{knob, cvInput, avParam}, rangeSwitch{rangeSwitch} {};
 
   auto voltage() -> float;

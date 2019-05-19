@@ -11,7 +11,7 @@ const Range LevelControl::bipolar_range{-5.f, 5.f};
 const std::array<Range const *, 2> LevelControl::ranges{&bipolar_range,
                                                         &unipolar_range};
 
-ConstantParam LevelControl::defaultRangeSwitch{1.f};
+ConstantParam LevelControl::constantUnipolarLevelRangeSwitch{1.f};
 
 auto LevelControl::voltage() -> float { return range()->scale(rotation()); }
 
