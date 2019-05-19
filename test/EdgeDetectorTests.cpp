@@ -2,7 +2,7 @@
 
 #include <gmock/gmock.h>
 
-namespace {
+namespace DHE {
 
 using ::testing::AnyNumber;
 using ::testing::AtMost;
@@ -22,7 +22,7 @@ struct EdgeDetectorTest : public ::testing::Test {
   Signal signal;
   Runnable on_rise;
   Runnable on_fall;
-  DHE::EdgeDetector edge_detector{[this]() -> bool { return signal.get(); },
+  EdgeDetector edge_detector{[this]() -> bool { return signal.get(); },
                                   [this]() { on_rise.run(); },
                                   [this]() { on_fall.run(); }};
 

@@ -8,7 +8,7 @@ namespace Signal {
 
 auto ranges() -> std::array<Range const *, 2> const & {
   static auto const ranges =
-      std::array<DHE::Range const *, 2>{&bipolar_range, &unipolar_range};
+      std::array<Range const *, 2>{&bipolar_range, &unipolar_range};
   return ranges;
 }
 
