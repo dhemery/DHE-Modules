@@ -24,7 +24,11 @@ Stage::Stage()
 
   duration = std::unique_ptr<DurationControl>(
       new DurationControl(params[DURATION_KNOB]));
+
   level = std::unique_ptr<LevelControl>(new LevelControl(params[LEVEL_KNOB]));
+
+  shape = std::unique_ptr<CurvatureControl>(
+      new CurvatureControl(params[CURVE_KNOB]));
 
   state_machine.start();
 }
@@ -37,17 +41,13 @@ auto Stage::defer_gate_is_active() const -> bool {
   return inputs[DEFER_GATE_IN].active;
 }
 
-auto Stage::curvature() -> float {
-  auto rotation = params[CURVE_KNOB].getValue();
-  return Sigmoid::curvature(rotation);
-}
-
 auto Stage::envelope_in() -> float { return inputs[ENVELOPE_IN].getVoltage(); }
 
 void Stage::forward() { send_out(envelope_in()); }
 
 void Stage::generate(float phase) {
-  send_out(scale(taper(phase), start_voltage, level->voltage()));
+  auto const taperedPhase = shape->taper(phase);
+  send_out(scale(taperedPhase, start_voltage, level->voltage()));
 }
 
 void Stage::prepare_to_generate() { start_voltage = envelope_in(); }
@@ -70,9 +70,5 @@ auto Stage::stage_gate_in() -> bool {
 
 void Stage::process(const ProcessArgs &args) {
   state_machine.step(args.sampleTime);
-}
-
-auto Stage::taper(float phase) -> float {
-  return Sigmoid::j_taper(phase, curvature());
 }
 } // namespace DHE

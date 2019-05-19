@@ -5,6 +5,7 @@
 #include "Module.h"
 
 #include "envelopes/StageStateMachine.h"
+#include "modules/controls/CurvatureControl.h"
 #include "modules/controls/DurationControl.h"
 #include "modules/controls/LevelControl.h"
 
@@ -31,13 +32,12 @@ public:
   enum OutputIds { MAIN_OUT, EOC_OUT, ACTIVE_OUT, OUTPUT_COUNT };
 
 private:
-  auto curvature() -> float;
   auto envelope_in() -> float;
   void send_out(float voltage);
-  auto taper(float phase) -> float;
 
   std::unique_ptr<DurationControl> duration;
   std::unique_ptr<LevelControl> level;
+  std::unique_ptr<CurvatureControl> shape;
   StageStateMachine state_machine;
   float start_voltage{0.f};
 };
