@@ -5,8 +5,8 @@
 
 namespace DHE {
 
-auto taper(LevelControl *level, float curve, bool is_s) -> float {
-  auto tapered = Sigmoid::taper(level->rotation(), curve, is_s);
+auto taper(LevelControl *level, CurvatureControl *curvature) -> float {
+  auto tapered = curvature->taper(level->rotation());
   return level->range()->scale(tapered);
 }
 
@@ -34,35 +34,19 @@ Tapers::Tapers() {
   level1 = std::unique_ptr<LevelControl>(
       new LevelControl(params[LEVEL_1_KNOB], params[RANGE_1_SWITCH],
                        inputs[LEVEL_1_CV], params[LEVEL_1_AV]));
+  curvature1 = std::unique_ptr<CurvatureControl>(
+      new CurvatureControl(params[CURVE_1_KNOB], params[SHAPE_1_SWITCH],
+                           inputs[CURVE_1_CV], params[CURVE_1_AV]));
   level2 = std::unique_ptr<LevelControl>(
       new LevelControl(params[LEVEL_2_KNOB], params[RANGE_2_SWITCH],
                        inputs[LEVEL_2_CV], params[LEVEL_2_AV]));
+  curvature2 = std::unique_ptr<CurvatureControl>(
+      new CurvatureControl(params[CURVE_2_KNOB], params[SHAPE_2_SWITCH],
+                           inputs[CURVE_2_CV], params[CURVE_2_AV]));
 }
 
 void Tapers::process(const ProcessArgs &args) {
-  outputs[OUT_1].setVoltage(taper(level1.get(), curvature1(), is_s_1()));
-  outputs[OUT_2].setVoltage(taper(level2.get(), curvature2(), is_s_2()));
+  outputs[OUT_1].setVoltage(taper(level1.get(), curvature1.get()));
+  outputs[OUT_2].setVoltage(taper(level2.get(), curvature2.get()));
 }
-
-auto Tapers::curvature(int knob, int cv, int av) -> float {
-  auto curvature = modulated(knob, cv, av);
-  return Sigmoid::curvature(curvature);
-}
-
-auto Tapers::curvature1() -> float {
-  return curvature(CURVE_1_KNOB, CURVE_1_CV, CURVE_1_AV);
-}
-
-auto Tapers::curvature2() -> float {
-  return curvature(CURVE_2_KNOB, CURVE_2_CV, CURVE_2_AV);
-}
-
-auto Tapers::is_s_1() -> bool {
-  return params[SHAPE_1_SWITCH].getValue() > 0.5f;
-}
-
-auto Tapers::is_s_2() -> bool {
-  return params[SHAPE_2_SWITCH].getValue() > 0.5f;
-}
-
 } // namespace DHE

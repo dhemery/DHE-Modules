@@ -3,6 +3,7 @@
 #include <memory>
 
 #include "Module.h"
+#include "modules/controls/CurvatureControl.h"
 #include "modules/controls/LevelControl.h"
 
 namespace DHE {
@@ -32,13 +33,10 @@ public:
   enum OutputIds { OUT_1, OUT_2, OUTPUT_COUNT };
 
 private:
-  auto curvature(int knob, int cv, int av) -> float;
-  auto curvature1() -> float;
-  auto curvature2() -> float;
-  auto is_s_1() -> bool;
-  auto is_s_2() -> bool;
   std::unique_ptr<LevelControl> level1;
+  std::unique_ptr<CurvatureControl> curvature1;
   std::unique_ptr<LevelControl> level2;
+  std::unique_ptr<CurvatureControl> curvature2;
 };
 
 } // namespace DHE
