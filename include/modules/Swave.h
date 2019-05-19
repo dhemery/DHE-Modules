@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Module.h"
+#include "modules/controls/CurvatureControl.h"
 
 namespace DHE {
 
@@ -14,10 +15,9 @@ public:
   enum OutputIds { MAIN_OUT, OUTPUT_COUNT };
 
 private:
-  auto curve() -> float;
-  auto is_s() -> bool;
-  void send_signal(float voltage);
-  auto signal_in() -> float;
+  void sendSignal(float voltage);
+  auto signalIn() -> float;
+  std::unique_ptr<CurvatureControl> shape;
 };
 
 } // namespace DHE

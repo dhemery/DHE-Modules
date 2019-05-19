@@ -11,25 +11,20 @@ Swave::Swave() {
 
   configParam(SHAPE_SWITCH, 0.f, 1.f, 0.f, "Curve Shape");
   configParam(CURVE_KNOB, 0.f, 1.f, 0.5f, "Curvature", "%", 0.f, 100.f, 0.f);
+
+  shape = std::unique_ptr<CurvatureControl>(new CurvatureControl(
+      params[CURVE_KNOB], params[SHAPE_SWITCH], inputs[CURVE_CV]));
 }
-
-auto Swave::curve() -> float {
-  return Sigmoid::curvature(modulated(CURVE_KNOB, CURVE_CV));
-}
-
-auto Swave::is_s() -> bool { return params[SHAPE_SWITCH].getValue() > 0.5f; }
-
-void Swave::send_signal(float voltage) {
-  outputs[MAIN_OUT].setVoltage(voltage);
-}
-
-auto Swave::signal_in() -> float { return inputs[MAIN_IN].getVoltage(); }
 
 void Swave::process(const ProcessArgs &args) {
-  auto phase = Signal::bipolar_range.normalize(signal_in());
-  auto shaped = Sigmoid::taper(phase, curve(), is_s());
-  auto out_voltage = Signal::bipolar_range.scale(shaped);
-  send_signal(out_voltage);
+  auto const normalized = Signal::bipolar_range.normalize(signalIn());
+  auto const shaped = shape->taper(normalized);
+  auto const outputVoltage = Signal::bipolar_range.scale(shaped);
+  sendSignal(outputVoltage);
 }
+
+void Swave::sendSignal(float voltage) { outputs[MAIN_OUT].setVoltage(voltage); }
+
+auto Swave::signalIn() -> float { return inputs[MAIN_IN].getVoltage(); }
 
 } // namespace DHE
