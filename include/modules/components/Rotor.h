@@ -1,6 +1,7 @@
 #pragma once
 #include <cmath>
 
+// TODO: Make this class immutable?
 namespace DHE {
 class Rotor {
 public:
