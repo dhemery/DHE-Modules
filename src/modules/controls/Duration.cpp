@@ -52,7 +52,8 @@ void Duration::config(rack::engine::Module *module, int knobParamId) {
                                                    "Duration", "s");
   auto durationKnob = dynamic_cast<Duration::KnobParamQuantity *>(
       module->paramQuantities[knobParamId]);
-  durationKnob->rangeSwitch = &Duration::Control::constantMediumDurationRangeSwitch;
+  durationKnob->rangeSwitch =
+      &Duration::Control::constantMediumDurationRangeSwitch;
 }
 
 auto Duration::Control::seconds() -> float {

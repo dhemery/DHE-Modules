@@ -27,6 +27,7 @@ public:
   auto seconds() -> float;
 
   static ConstantParam constantMediumDurationRangeSwitch;
+
 private:
   Param &rangeSwitch;
 };
@@ -43,7 +44,7 @@ public:
 
   auto range() -> Range const *;
 
-  Param *rangeSwitch;
+  Param *rangeSwitch{nullptr};
 };
 
 void config(rack::engine::Module *module, int knobParamId,
