@@ -18,9 +18,10 @@ Stage::Stage()
                     [this](bool eoc) { set_eoc(eoc); }} {
   config(PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT);
 
-  configParam(DURATION_KNOB, 0.f, 1.f, 0.5f, "Duration");
   configParam(LEVEL_KNOB, 0.f, 1.f, 0.5f, "Level", " V", 0.f, 10.f, 0.f);
   configParam(CURVE_KNOB, 0.f, 1.f, 0.5f, "Curvature", "%", 0.f, 200.f, -100.f);
+
+  Duration::config(this, DURATION_KNOB);
 
   duration = std::unique_ptr<Duration::Control>(
       new Duration::Control(params[DURATION_KNOB]));

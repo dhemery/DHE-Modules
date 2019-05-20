@@ -17,7 +17,6 @@ auto range(float switchPosition) -> Range const *;
 auto range(Param &rangeSwitchParam) -> Range const *;
 
 class Control : public ModulatedKnob {
-  static ConstantParam constantMediumDurationRangeSwitch;
 
 public:
   explicit Control(Param &knob,
@@ -27,6 +26,7 @@ public:
 
   auto seconds() -> float;
 
+  static ConstantParam constantMediumDurationRangeSwitch;
 private:
   Param &rangeSwitch;
 };
@@ -37,18 +37,18 @@ public:
 };
 
 class KnobParamQuantity : public rack::engine::ParamQuantity {
-
 public:
   float getDisplayValue() override;
   void setDisplayValue(float displayValue) override;
 
   auto range() -> Range const *;
 
-  int rangeSwitchId{0};
+  Param *rangeSwitch;
 };
 
 void config(rack::engine::Module *module, int knobParamId,
             int rangeSwitchParamId);
+void config(rack::engine::Module *module, int knobParamId);
 } // namespace Duration
 
 } // namespace DHE

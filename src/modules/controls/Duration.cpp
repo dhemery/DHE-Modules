@@ -42,10 +42,18 @@ void Duration::config(rack::engine::Module *module, int knobParamId,
                                                    "Duration", "s");
   auto durationKnob = dynamic_cast<Duration::KnobParamQuantity *>(
       module->paramQuantities[knobParamId]);
-  durationKnob->rangeSwitchId = rangeSwitchParamId;
+  durationKnob->rangeSwitch = &module->params[rangeSwitchParamId];
 }
 
 ConstantParam Duration::Control::constantMediumDurationRangeSwitch{1.f};
+
+void Duration::config(rack::engine::Module *module, int knobParamId) {
+  module->configParam<Duration::KnobParamQuantity>(knobParamId, 0.f, 1.f, 0.5f,
+                                                   "Duration", "s");
+  auto durationKnob = dynamic_cast<Duration::KnobParamQuantity *>(
+      module->paramQuantities[knobParamId]);
+  durationKnob->rangeSwitch = &Duration::Control::constantMediumDurationRangeSwitch;
+}
 
 auto Duration::Control::seconds() -> float {
   auto const tapered = Sigmoid::j_shape.taper(rotation(), knobTaperCurvature);
@@ -78,6 +86,6 @@ void Duration::KnobParamQuantity::setDisplayValue(float displayValue) {
 }
 
 auto Duration::KnobParamQuantity::range() -> Range const * {
-  return Duration::range(module->params[rangeSwitchId]);
+  return Duration::range(rangeSwitch->getValue());
 }
 } // namespace DHE

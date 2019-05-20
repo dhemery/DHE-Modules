@@ -14,8 +14,7 @@ Hostage::Hostage()
                     [this](bool eoc) { set_eoc(eoc); }} {
   config(PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT);
 
-  configParam(DURATION_KNOB, 0.f, 1.f, 0.5f, "Duration");
-  configParam(DURATION_RANGE_SWITCH, 0.f, 2.f, 1.f, "Max Duration");
+  Duration::config(this, DURATION_KNOB, DURATION_RANGE_SWITCH);
 
   configParam(HOSTAGE_MODE_SWITCH, 0.f, 1.f, 0.f, "Mode");
 
