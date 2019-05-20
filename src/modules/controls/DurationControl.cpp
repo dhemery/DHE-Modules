@@ -6,14 +6,14 @@
 namespace DHE {
 
 // Note that each range is of the form [n, 1000n].
-const Range DurationControl::short_range{0.001f, 1.f};
-const Range DurationControl::medium_range{0.01f, 10.f};
-const Range DurationControl::long_range{0.1f, 100.f};
+const Range DurationControl::shortRange{0.001f, 1.f};
+const Range DurationControl::mediumRange{0.01f, 10.f};
+const Range DurationControl::longRange{0.1f, 100.f};
 
 ConstantParam DurationControl::constantMediumDurationRangeSwitch{1.f};
 
 const std::array<Range const *, 3> DurationControl::ranges{
-    &short_range, &medium_range, &long_range};
+    &shortRange, &mediumRange, &longRange};
 
 auto DurationControl::seconds() -> float {
   /**

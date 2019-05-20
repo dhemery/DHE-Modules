@@ -7,6 +7,8 @@
 
 namespace DHE {
 
+using ParamQuantity = rack::engine::ParamQuantity;
+
 BoosterStage::BoosterStage()
     : stateMachine{[this]() -> bool { return deferGateIsActive(); },
                    [this]() -> bool { return deferGateIn(); },
@@ -19,8 +21,13 @@ BoosterStage::BoosterStage()
                    [this](bool eoc) { setEoc(eoc); }} {
   config(PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT);
 
-  configParam(DURATION_KNOB, 0.f, 1.f, 0.5f, "Duration");
-  configParam(DURATION_RANGE_SWITCH, 0.f, 2.f, 1.f, "Max Duration");
+  configParam<DurationRangeSwitch>(DURATION_RANGE_SWITCH, 0.f, 2.f, 1.f,
+                                   "Duration Range");
+  configParam<DurationKnob>(DURATION_KNOB, 0.f, 1.f, 0.5f, "Duration", "s");
+  auto durationKnob =
+      dynamic_cast<DurationKnob *>(paramQuantities[DURATION_KNOB]);
+  durationKnob->rangeSwitchId = DURATION_RANGE_SWITCH;
+
   configParam(LEVEL_KNOB, 0.f, 1.f, 0.5f, "Level", "%", 0.f, 100.f, 0.f);
   configParam(CURVE_KNOB, 0.f, 1.f, 0.5f, "Curvature", "%", 0.f, 100.f, 0.f);
 
