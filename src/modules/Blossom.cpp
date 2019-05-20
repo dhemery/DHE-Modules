@@ -24,8 +24,8 @@ Blossom::Blossom() {
   configGain(X_GAIN_KNOB, "X output");
   configGain(Y_GAIN_KNOB, "Y output");
 
-  configSignalRange(X_RANGE_SWITCH, "X");
-  configSignalRange(Y_RANGE_SWITCH, "Y");
+  configSignalRange(X_RANGE_SWITCH, "X", false);
+  configSignalRange(Y_RANGE_SWITCH, "Y", false);
 
   configParam(BOUNCE_LOCK_SWITCH, 0.0, 1.0, 1.0, "Bounce lock");
 }

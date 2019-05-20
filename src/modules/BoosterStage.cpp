@@ -24,7 +24,7 @@ BoosterStage::BoosterStage()
   configParam(LEVEL_KNOB, 0.f, 1.f, 0.5f, "Level", "%", 0.f, 100.f, 0.f);
   configParam(CURVE_KNOB, 0.f, 1.f, 0.5f, "Curvature", "%", 0.f, 100.f, 0.f);
 
-  configSignalRange(LEVEL_RANGE_SWITCH, "Level", true);
+  configSignalRange(LEVEL_RANGE_SWITCH, "Level");
   configParam(SHAPE_SWITCH, 0.f, 1.f, 0.f, "Curve Shape");
 
   configParam(ACTIVE_BUTTON, 0.f, 1.f, 0.f, "Active");

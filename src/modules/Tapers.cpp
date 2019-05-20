@@ -15,7 +15,7 @@ Tapers::Tapers() {
 
   configParam(LEVEL_1_KNOB, 0.f, 1.f, 0.5f, "Taper 1 level", "%", 0.f, 100.f,
               0.f);
-  configSignalRange(RANGE_1_SWITCH, "Taper 1 level", false);
+  configSignalRange(RANGE_1_SWITCH, "Taper 1 level");
   configCvGain(LEVEL_1_AV, "Taper 1 level");
   configParam(CURVE_1_KNOB, 0.f, 1.f, 0.5f, "Taper 1 curvature", "%", 0.f,
               100.f, 0.f);
@@ -24,7 +24,7 @@ Tapers::Tapers() {
 
   configParam(LEVEL_2_KNOB, 0.f, 1.f, 0.5f, "Taper 2 level", "%", 0.f, 100.f,
               0.f);
-  configSignalRange(RANGE_2_SWITCH, "Taper 2 level", false);
+  configSignalRange(RANGE_2_SWITCH, "Taper 2 level");
   configCvGain(LEVEL_2_AV, "Taper 2 level");
   configParam(CURVE_2_KNOB, 0.f, 1.f, 0.5f, "Taper 2 curvature", "%", 0.f,
               100.f, 0.f);
