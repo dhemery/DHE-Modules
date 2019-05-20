@@ -6,7 +6,7 @@
 
 #include "envelopes/StageStateMachine.h"
 #include "modules/controls/CurvatureControl.h"
-#include "modules/controls/DurationControl.h"
+#include "modules/controls/Duration.h"
 #include "modules/controls/LevelControl.h"
 #include "util/sigmoid.h"
 
@@ -62,7 +62,7 @@ private:
   bool isActive{false};
   bool isEoc{false};
   float startVoltage{0.f};
-  std::unique_ptr<DurationControl> duration;
+  std::unique_ptr<Duration::Control> duration;
   std::unique_ptr<LevelControl> level;
   std::unique_ptr<CurvatureControl> shape;
 };

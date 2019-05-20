@@ -21,12 +21,7 @@ BoosterStage::BoosterStage()
                    [this](bool eoc) { setEoc(eoc); }} {
   config(PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT);
 
-  configParam<DurationRangeSwitch>(DURATION_RANGE_SWITCH, 0.f, 2.f, 1.f,
-                                   "Duration Range");
-  configParam<DurationKnob>(DURATION_KNOB, 0.f, 1.f, 0.5f, "Duration", "s");
-  auto durationKnob =
-      dynamic_cast<DurationKnob *>(paramQuantities[DURATION_KNOB]);
-  durationKnob->rangeSwitchId = DURATION_RANGE_SWITCH;
+  Duration::config(this, DURATION_KNOB, DURATION_RANGE_SWITCH);
 
   configParam(LEVEL_KNOB, 0.f, 1.f, 0.5f, "Level", "%", 0.f, 100.f, 0.f);
   configParam(CURVE_KNOB, 0.f, 1.f, 0.5f, "Curvature", "%", 0.f, 100.f, 0.f);
@@ -39,9 +34,9 @@ BoosterStage::BoosterStage()
   configParam(EOC_BUTTON, 0.f, 1.f, 0.f, "EOC");
   configParam(TRIGGER_BUTTON, 0.f, 1.f, 0.f, "TRIGGER");
 
-  duration = std::unique_ptr<DurationControl>(
-      new DurationControl(params[DURATION_KNOB], params[DURATION_RANGE_SWITCH],
-                          inputs[DURATION_CV]));
+  duration = std::unique_ptr<Duration::Control>(new Duration::Control(
+      params[DURATION_KNOB], params[DURATION_RANGE_SWITCH],
+      inputs[DURATION_CV]));
 
   level = std::unique_ptr<LevelControl>(new LevelControl(
       params[LEVEL_KNOB], params[LEVEL_RANGE_SWITCH], inputs[LEVEL_CV]));

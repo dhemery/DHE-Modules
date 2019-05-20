@@ -5,7 +5,7 @@
 #include "Module.h"
 
 #include "envelopes/HostageStateMachine.h"
-#include "modules/controls/DurationControl.h"
+#include "modules/controls/Duration.h"
 
 namespace DHE {
 
@@ -43,7 +43,7 @@ private:
   auto envelope_in() -> float;
   void send_out(float voltage);
 
-  std::unique_ptr<DurationControl> duration;
+  std::unique_ptr<Duration::Control> duration;
   HostageStateMachine state_machine;
 };
 } // namespace DHE
