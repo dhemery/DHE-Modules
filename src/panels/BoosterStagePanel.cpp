@@ -2,6 +2,16 @@
 
 namespace DHE {
 
+template <typename P> class DurationRangeSwitch : public Toggle<P, 3> {
+public:
+  void onChange(const rack::event::Change &e) override {
+    setRange(this->paramQuantity->getValue());
+    Toggle<P, 3>::onChange(e);
+  }
+
+  std::function<void(float switchPosition)> setRange;
+};
+
 BoosterStagePanel::BoosterStagePanel(BoosterStage *module) : Panel{module, hp} {
   auto widget_right_edge = width();
 
@@ -27,7 +37,11 @@ BoosterStagePanel::BoosterStagePanel(BoosterStage *module) : Panel{module, hp} {
   y += dy;
   input(column_1, y, BoosterStage::DURATION_CV);
   knob<LargeKnob>(column_3, y, BoosterStage::DURATION_KNOB);
-  toggle<3>(column_5, y, BoosterStage::DURATION_RANGE_SWITCH);
+  auto durationRangeSwitch = toggle<DurationRangeSwitch>(
+      column_5, y, BoosterStage::DURATION_RANGE_SWITCH);
+  durationRangeSwitch->setRange = [module](float switchPosition) {
+    module->setDurationRange(switchPosition);
+  };
 
   y = 82.f;
   dy = 15.f;

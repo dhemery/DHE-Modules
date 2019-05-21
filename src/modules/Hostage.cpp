@@ -1,6 +1,9 @@
 #include <utility>
 
 #include "modules/Hostage.h"
+#include "modules/config/DurationConfig.h"
+#include "modules/controls/ModulatedKnob.h"
+#include "modules/controls/RackControls.h"
 
 namespace DHE {
 Hostage::Hostage()
@@ -14,13 +17,22 @@ Hostage::Hostage()
                     [this](bool eoc) { set_eoc(eoc); }} {
   config(PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT);
 
-  Duration::config(this, DURATION_KNOB, DURATION_RANGE_SWITCH);
+  auto durationKnob = ModulatedKnob{params[DURATION_KNOB], inputs[DURATION_CV],
+                                    constantFullyRotatedKnobParam};
+
+  auto getDurationRange = [this]() -> Range const * { return durationRange; };
+  Duration::config(this, DURATION_KNOB, DURATION_RANGE_SWITCH,
+                   getDurationRange);
+
+  auto getDurationRotation = [durationKnob]() -> float {
+    return durationKnob.rotation();
+  };
+  auto durationControl =
+      new Duration::Control(getDurationRotation, getDurationRange);
+  duration = std::unique_ptr<Duration::Control>(durationControl);
 
   configParam(HOSTAGE_MODE_SWITCH, 0.f, 1.f, 0.f, "Mode");
 
-  duration = std::unique_ptr<Duration::Control>(new Duration::Control(
-      params[DURATION_KNOB], params[DURATION_RANGE_SWITCH],
-      inputs[DURATION_CV]));
   state_machine.start();
 }
 

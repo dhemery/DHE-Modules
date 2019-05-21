@@ -1,6 +1,7 @@
 #include <utility>
 
 #include "modules/BoosterStage.h"
+#include "modules/config/DurationConfig.h"
 
 #include "util/gain.h"
 #include "util/signal.h"
@@ -21,7 +22,18 @@ BoosterStage::BoosterStage()
                    [this](bool eoc) { setEoc(eoc); }} {
   config(PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT);
 
-  Duration::config(this, DURATION_KNOB, DURATION_RANGE_SWITCH);
+  auto getDurationRange = [this]() -> Range const * { return durationRange; };
+  Duration::config(this, DURATION_KNOB, DURATION_RANGE_SWITCH,
+                   getDurationRange);
+
+  auto durationKnob = ModulatedKnob{params[DURATION_KNOB], inputs[DURATION_CV],
+                                    constantFullyRotatedKnobParam};
+  auto durationKnobRotation = [durationKnob]() -> float {
+    return durationKnob.rotation();
+  };
+  auto durationControl =
+      new Duration::Control(durationKnobRotation, getDurationRange);
+  duration = std::unique_ptr<Duration::Control>(durationControl);
 
   configParam(LEVEL_KNOB, 0.f, 1.f, 0.5f, "Level", "%", 0.f, 100.f, 0.f);
   configParam(CURVE_KNOB, 0.f, 1.f, 0.5f, "Curvature", "%", 0.f, 100.f, 0.f);
@@ -33,10 +45,6 @@ BoosterStage::BoosterStage()
   configParam(DEFER_BUTTON, 0.f, 1.f, 0.f, "Defer");
   configParam(EOC_BUTTON, 0.f, 1.f, 0.f, "EOC");
   configParam(TRIGGER_BUTTON, 0.f, 1.f, 0.f, "TRIGGER");
-
-  duration = std::unique_ptr<Duration::Control>(new Duration::Control(
-      params[DURATION_KNOB], params[DURATION_RANGE_SWITCH],
-      inputs[DURATION_CV]));
 
   level = std::unique_ptr<LevelControl>(new LevelControl(
       params[LEVEL_KNOB], params[LEVEL_RANGE_SWITCH], inputs[LEVEL_CV]));

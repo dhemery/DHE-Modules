@@ -6,7 +6,7 @@
 
 #include "envelopes/StageStateMachine.h"
 #include "modules/controls/CurvatureControl.h"
-#include "modules/controls/Duration.h"
+#include "modules/controls/DurationControl.h"
 #include "modules/controls/LevelControl.h"
 #include "util/sigmoid.h"
 
@@ -26,6 +26,9 @@ public:
   void setEoc(bool eoc);
   auto stageGateIn() -> bool;
 
+  void setDurationRange(float switchPosition) {
+    durationRange = Duration::range(switchPosition);
+  }
   enum ParameterIds {
     ACTIVE_BUTTON,
     CURVE_KNOB,
@@ -62,6 +65,7 @@ private:
   bool isActive{false};
   bool isEoc{false};
   float startVoltage{0.f};
+  Range const *durationRange;
   std::unique_ptr<Duration::Control> duration;
   std::unique_ptr<LevelControl> level;
   std::unique_ptr<CurvatureControl> shape;

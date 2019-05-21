@@ -4,8 +4,9 @@
 
 #include "Module.h"
 
+#include "components/Duration.h"
 #include "envelopes/HostageStateMachine.h"
-#include "modules/controls/Duration.h"
+#include "modules/controls/DurationControl.h"
 
 namespace DHE {
 
@@ -44,6 +45,7 @@ private:
   void send_out(float voltage);
 
   std::unique_ptr<Duration::Control> duration;
+  Range const *durationRange{&Duration::mediumRange};
   HostageStateMachine state_machine;
 };
 } // namespace DHE

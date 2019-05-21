@@ -3,7 +3,7 @@
 
 namespace DHE {
 
-auto ModulatedKnob::rotation() -> float {
+auto ModulatedKnob::rotation() const -> float {
   auto constexpr attenuationRange = Range{-0.1f, 0.1f};
 
   auto const knobRotation = knob.getValue();

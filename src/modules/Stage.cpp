@@ -1,7 +1,8 @@
 #include <utility>
 
 #include "modules/Stage.h"
-
+#include "modules/components/Duration.h"
+#include "modules/config/DurationConfig.h"
 #include "util/sigmoid.h"
 #include "util/signal.h"
 
@@ -21,10 +22,20 @@ Stage::Stage()
   configParam(LEVEL_KNOB, 0.f, 1.f, 0.5f, "Level", " V", 0.f, 10.f, 0.f);
   configParam(CURVE_KNOB, 0.f, 1.f, 0.5f, "Curvature", "%", 0.f, 200.f, -100.f);
 
-  Duration::config(this, DURATION_KNOB);
+  auto getDurationRange = []() -> Range const * {
+    return &Duration::mediumRange;
+  };
+  Duration::config(this, DURATION_KNOB, getDurationRange);
 
-  duration = std::unique_ptr<Duration::Control>(
-      new Duration::Control(params[DURATION_KNOB]));
+  auto durationKnob =
+      ModulatedKnob{params[DURATION_KNOB], constant0VoltageInput,
+                    constantFullyRotatedKnobParam};
+  auto durationKnobRotation = [durationKnob]() -> float {
+    return durationKnob.rotation();
+  };
+  auto durationControl =
+      new Duration::Control(durationKnobRotation, getDurationRange);
+  duration = std::unique_ptr<Duration::Control>(durationControl);
 
   level = std::unique_ptr<LevelControl>(new LevelControl(params[LEVEL_KNOB]));
 

@@ -6,7 +6,7 @@
 
 #include "envelopes/StageStateMachine.h"
 #include "modules/controls/CurvatureControl.h"
-#include "modules/controls/Duration.h"
+#include "modules/controls/DurationControl.h"
 #include "modules/controls/LevelControl.h"
 
 namespace DHE {

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "modules/controls/Common.h"
+#include "modules/controls/RackControls.h"
 
 namespace DHE {
 
@@ -9,7 +9,7 @@ public:
   ModulatedKnob(Param &knob, Input &cvInput, Param &avParam)
       : knob{knob}, cvInput{cvInput}, avParam{avParam} {}
 
-  auto rotation() -> float;
+  auto rotation() const -> float;
 
 private:
   Param &knob;

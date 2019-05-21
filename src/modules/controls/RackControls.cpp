@@ -1,4 +1,4 @@
-#include "modules/controls/Common.h"
+#include "modules/controls/RackControls.h"
 
 namespace DHE {
 ConstantInput constant0VoltageInput{0.f};

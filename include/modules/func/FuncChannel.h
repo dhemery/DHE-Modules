@@ -4,7 +4,7 @@
 
 #include <engine/Module.hpp>
 
-#include "modules/controls/Common.h"
+#include "modules/controls/RackControls.h"
 #include "util/gain.h"
 #include "util/signal.h"
 

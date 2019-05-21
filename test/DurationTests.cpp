@@ -1,97 +1,95 @@
-#include "modules/controls/Duration.h"
+#include "../include/modules/controls/DurationControl.h"
 
 #include <gtest/gtest.h>
 
 namespace DHE {
 
 struct DurationTest : public ::testing::Test {
-
   // tolerance = 6 decimal places
   static constexpr float tolerance = 0.000001f;
-  static constexpr float short_range_switch_position = 0.f;
-  static constexpr float medium_range_switch_position = 1.f;
-  static constexpr float long_range_switch_position = 2.f;
 
-  Param knob_param{};
-  Param switch_param{};
-  Input cv_input{};
+  Range const *range;
+  float rotation;
 
-  Duration::Control duration{knob_param, switch_param, cv_input};
+  std::function<float()> getRotation{[this]() -> float { return rotation; }};
 
-  DurationTest() {
-    cv_input.setVoltage(0.f);
-  }
+  std::function<Range const *()> getRange{
+      [this]() -> Range const * { return range; }};
+
+  Duration::Control duration{getRotation, getRange};
 };
 
 TEST_F(DurationTest, shortRange_minimumDuration_isShortRangeLowerBound) {
-  switch_param.setValue(short_range_switch_position);
-  knob_param.setValue(0.f);
+  range = &Duration::shortRange;
+  rotation = 0.f;
 
   const auto expected = Duration::shortRange.lower_bound;
   ASSERT_NEAR(duration.seconds(), expected, expected * tolerance);
 }
 
-TEST_F(DurationTest, shortRange_middleDuration_isOneTenthOfShortRangeUpperBound) {
-  switch_param.setValue(short_range_switch_position);
-  knob_param.setValue(0.5f);
+TEST_F(DurationTest,
+       shortRange_middleDuration_isOneTenthOfShortRangeUpperBound) {
+  range = &Duration::shortRange;
+  rotation = 0.5f;
 
   const auto expected = Duration::shortRange.upper_bound / 10.f;
   ASSERT_NEAR(duration.seconds(), expected, expected * tolerance);
 }
 
 TEST_F(DurationTest, shortRange_maximumDuration_isShortRangeUpperBound) {
-  switch_param.setValue(short_range_switch_position);
-  knob_param.setValue(1.f);
+  range = &Duration::shortRange;
+  rotation = 1.f;
 
   const auto expected = Duration::shortRange.upper_bound;
   ASSERT_NEAR(duration.seconds(), expected, expected * tolerance);
 }
 
 TEST_F(DurationTest, mediumRange_minimumDuration_isMediumRangeLowerBound) {
-  switch_param.setValue(medium_range_switch_position);
-  knob_param.setValue(0.f);
+  range = &Duration::mediumRange;
+  rotation = 0.f;
 
   const auto expected = Duration::mediumRange.lower_bound;
   ASSERT_NEAR(duration.seconds(), expected, expected * tolerance);
 }
 
-TEST_F(DurationTest, mediumRange_middleDuration_isOneTenthOfMediumRangeUpperBound) {
-  switch_param.setValue(medium_range_switch_position);
-  knob_param.setValue(0.5f);
+TEST_F(DurationTest,
+       mediumRange_middleDuration_isOneTenthOfMediumRangeUpperBound) {
+  range = &Duration::mediumRange;
+  rotation = 0.5f;
 
   const auto expected = Duration::mediumRange.upper_bound / 10.f;
   ASSERT_NEAR(duration.seconds(), expected, expected * tolerance);
 }
 
 TEST_F(DurationTest, mediumRange_maximumDuration_isMediumRangeUpperBound) {
-  switch_param.setValue(medium_range_switch_position);
-  knob_param.setValue(1.f);
+  range = &Duration::mediumRange;
+  rotation = 1.f;
 
   const auto expected = Duration::mediumRange.upper_bound;
   ASSERT_NEAR(duration.seconds(), expected, expected * tolerance);
 }
 
 TEST_F(DurationTest, longRange_minimumDuration_isLongRangeLowerBound) {
-  switch_param.setValue(long_range_switch_position);
-  knob_param.setValue(0.f);
+  range = &Duration::longRange;
+  rotation = 0.f;
 
   const auto expected = Duration::longRange.lower_bound;
   ASSERT_NEAR(duration.seconds(), expected, expected * tolerance);
 }
 
 TEST_F(DurationTest, longRange_middleDuration_isOneTenthOfLongRangeUpperBound) {
-  switch_param.setValue(long_range_switch_position);
-  knob_param.setValue(0.5f);
+  range = &Duration::longRange;
+  rotation = 0.5f;
 
   const auto expected = Duration::longRange.upper_bound / 10.f;
   ASSERT_NEAR(duration.seconds(), expected, expected * tolerance);
 }
 
 TEST_F(DurationTest, longRange_maximumDuration_isLongRangeUpperBound) {
-  switch_param.setValue(long_range_switch_position);
-  knob_param.setValue(1.f);
+  range = &Duration::longRange;
+  rotation = 1.f;
 
   const auto expected = Duration::longRange.upper_bound;
   ASSERT_NEAR(duration.seconds(), expected, expected * tolerance);
 }
-} // namespace
+} // namespace DHE
