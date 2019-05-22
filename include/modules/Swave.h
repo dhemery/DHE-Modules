@@ -1,8 +1,8 @@
 #pragma once
 
-#include <memory>
 #include "Module.h"
 #include "modules/controls/CurvatureControl.h"
+#include <memory>
 
 namespace DHE {
 

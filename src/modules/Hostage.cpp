@@ -19,7 +19,8 @@ Hostage::Hostage()
 
   Duration::configKnob(this, DURATION_KNOB, DURATION_RANGE_SWITCH);
   Duration::configSwitch(this, DURATION_RANGE_SWITCH);
-  duration = Duration::withCvAndSwitch(this, DURATION_KNOB, DURATION_CV, DURATION_RANGE_SWITCH);
+  duration = Duration::withCvAndSwitch(this, DURATION_KNOB, DURATION_CV,
+                                       DURATION_RANGE_SWITCH);
 
   configParam(HOSTAGE_MODE_SWITCH, 0.f, 1.f, 0.f, "Mode");
 

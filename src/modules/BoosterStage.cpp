@@ -27,11 +27,13 @@ BoosterStage::BoosterStage()
 
   Duration::configKnob(this, DURATION_KNOB, DURATION_RANGE_SWITCH);
   Duration::configSwitch(this, DURATION_RANGE_SWITCH);
-  duration = Duration::withCvAndSwitch(this, DURATION_KNOB, DURATION_CV, DURATION_RANGE_SWITCH);
+  duration = Duration::withCvAndSwitch(this, DURATION_KNOB, DURATION_CV,
+                                       DURATION_RANGE_SWITCH);
 
   Level::configKnob(this, LEVEL_KNOB, LEVEL_RANGE_SWITCH);
   Level::configSwitch(this, LEVEL_RANGE_SWITCH);
-  level = Level::withCvAndSwitch(this, LEVEL_KNOB, LEVEL_CV, LEVEL_RANGE_SWITCH);
+  level =
+      Level::withCvAndSwitch(this, LEVEL_KNOB, LEVEL_CV, LEVEL_RANGE_SWITCH);
 
   configParam(CURVE_KNOB, 0.f, 1.f, 0.5f, "Curvature", "%", 0.f, 100.f, 0.f);
   configParam(SHAPE_SWITCH, 0.f, 1.f, 0.f, "Curve Shape");

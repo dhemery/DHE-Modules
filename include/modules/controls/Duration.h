@@ -3,8 +3,8 @@
 #include <array>
 #include <functional>
 
-#include <engine/Module.hpp>
 #include "Controls.h"
+#include <engine/Module.hpp>
 
 #include "util/range.h"
 
@@ -34,6 +34,7 @@ auto range(int switchPosition) -> Range const *;
 auto withCvAndSwitch(rack::engine::Module *module, int knobId, int cvId,
                      int switchId) -> std::function<float()>;
 
-auto withRange(rack::engine::Module *module, int knobId, Range const &range) -> std::function<float()>;
+auto withRange(rack::engine::Module *module, int knobId, Range const &range)
+    -> std::function<float()>;
 } // namespace Duration
 } // namespace DHE

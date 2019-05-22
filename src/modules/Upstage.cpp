@@ -9,7 +9,8 @@ Upstage::Upstage() {
 
   Level::configKnob(this, LEVEL_KNOB, LEVEL_RANGE_SWITCH);
   Level::configSwitch(this, LEVEL_RANGE_SWITCH);
-  level = Level::withCvAndSwitch(this, LEVEL_KNOB, LEVEL_CV, LEVEL_RANGE_SWITCH);
+  level =
+      Level::withCvAndSwitch(this, LEVEL_KNOB, LEVEL_CV, LEVEL_RANGE_SWITCH);
 
   configParam(TRIGGER_BUTTON, 0.f, 1.f, 0.f, "Trigger");
   configParam(WAIT_BUTTON, 0.f, 1.f, 0.f, "Wait");

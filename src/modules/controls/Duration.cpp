@@ -31,7 +31,8 @@ auto withCvAndSwitch(rack::engine::Module *module, int knobId, int cvId,
   };
 }
 
-auto withRange(rack::engine::Module *module, int knobId, Range const &range) -> std::function<float()> {
+auto withRange(rack::engine::Module *module, int knobId, Range const &range)
+    -> std::function<float()> {
   auto knobParam = &module->params[knobId];
   return [knobParam, range]() -> float {
     auto const rotation = knobParam->getValue();
