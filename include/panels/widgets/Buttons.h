@@ -1,10 +1,8 @@
 #pragma once
-#include <utility>
+
+#include <string>
 
 #include <app/SvgSwitch.hpp>
-#include <componentlibrary.hpp>
-
-#include "Buttons.h"
 
 namespace DHE {
 

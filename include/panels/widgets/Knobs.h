@@ -1,7 +1,7 @@
-#include <string>
-#include <utility>
+#pragma once
 
-#include <app/SvgSwitch.hpp>
+#include <string>
+
 #include <componentlibrary.hpp>
 
 namespace DHE {

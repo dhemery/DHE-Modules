@@ -104,8 +104,8 @@ protected:
     return param<C<P, N>>(x, y, index);
   }
 
-  template <int N> auto toggle(float x, float y, int index) -> Toggles<P, N> * {
-    return param<Toggles<P, N>>(x, y, index);
+  template <int N> auto toggle(float x, float y, int index) -> Toggle<P, N> * {
+    return param<Toggle<P, N>>(x, y, index);
   }
 
   void input(float x, float y, int index) {
