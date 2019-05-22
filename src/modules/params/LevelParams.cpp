@@ -3,6 +3,7 @@
 #include <engine/Module.hpp>
 #include <engine/ParamQuantity.hpp>
 
+#include "modules/controls/Controls.h"
 #include "modules/controls/Level.h"
 #include "modules/params/LevelParams.h"
 
@@ -33,30 +34,31 @@ public:
 };
 
 void configKnob(rack::engine::Module *module, int knobId,
-                std::function<Range const *()> const &range) {
-  module->configParam<KnobParamQuantity>(knobId, 0.f, 1.f, 0.5f, "Level", " V");
+                std::function<Range const *()> const &range,
+                std::string const &name, float initialPosition) {
+  module->configParam<KnobParamQuantity>(knobId, 0.f, 1.f, initialPosition,
+                                         name, " V");
   auto knobParamQuantity =
       dynamic_cast<KnobParamQuantity *>(module->paramQuantities[knobId]);
   knobParamQuantity->range = range;
 }
 
-void configKnob(rack::engine::Module *module, int knobId, int switchId) {
-  auto switchParam = &module->params[switchId];
-  auto getRange = [switchParam]() -> Range const * {
-    return level::range(static_cast<int>(switchParam->getValue()));
-  };
-  configKnob(module, knobId, getRange);
+void configKnob(rack::engine::Module *module, int knobId, int switchId,
+                std::string const &name, float initialPosition) {
+  auto getRange = control::range::selection<2>(module, switchId, level::ranges);
+  configKnob(module, knobId, getRange, name, initialPosition);
 }
 
-void configKnob(rack::engine::Module *module, int knobId, Range const &range) {
+void configKnob(rack::engine::Module *module, int knobId, Range const &range,
+                std::string const &name, float initialPosition) {
   auto getRange = [range]() -> Range const * { return &range; };
-  configKnob(module, knobId, getRange);
+  configKnob(module, knobId, getRange, name, initialPosition);
 }
 
 void configSwitch(rack::engine::Module *module, int switchId,
-                  int initialPosition) {
+                  std::string const &name, int initialPosition) {
   module->configParam<RangeSwitchParamQuantity>(switchId, 0.f, 1.f,
-                                                initialPosition, "Level Range");
+                                                initialPosition, name);
 }
 } // namespace level
 } // namespace dhe

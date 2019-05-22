@@ -39,31 +39,35 @@ public:
 };
 
 void configKnob(rack::engine::Module *module, int knobId,
-                std::function<Range const *()> const &getRange) {
-  module->configParam<KnobParamQuantity>(knobId, 0.f, 1.f, 0.5f, "Duration",
-                                         " s");
+                std::function<Range const *()> const &getRange,
+                std::string const &name, float initialPosition) {
+  module->configParam<KnobParamQuantity>(knobId, 0.f, 1.f, initialPosition,
+                                         name, " s");
   auto knobParamQuantity =
       dynamic_cast<KnobParamQuantity *>(module->paramQuantities[knobId]);
   knobParamQuantity->range = getRange;
 }
 
-void configKnob(rack::engine::Module *module, int knobId, Range const &range) {
+void configKnob(rack::engine::Module *module, int knobId, Range const &range,
+                std::string const &name, float initialPosition) {
   auto const getRange = [range]() -> Range const * { return &range; };
-  configKnob(module, knobId, getRange);
+  configKnob(module, knobId, getRange, name, initialPosition);
 }
 
-void configKnob(rack::engine::Module *module, int knobId, int switchId) {
+void configKnob(rack::engine::Module *module, int knobId, int switchId,
+                std::string const &name, float initialPosition) {
   auto *switchParam = &module->params[switchId];
   auto const getRange = [switchParam]() -> Range const * {
     auto const selection = static_cast<int>(switchParam->getValue());
     return duration::ranges[selection];
   };
-  configKnob(module, knobId, getRange);
+  configKnob(module, knobId, getRange, name, initialPosition);
 }
 
-void configSwitch(rack::engine::Module *module, int switchId) {
-  module->configParam<RangeSwitchParamQuantity>(switchId, 0.f, 2.f, 1.f,
-                                                "Duration Range");
+void configSwitch(rack::engine::Module *module, int switchId,
+                  std::string const &name, int initialPosition) {
+  module->configParam<RangeSwitchParamQuantity>(switchId, 0.f, 2.f,
+                                                initialPosition, name);
 }
 } // namespace duration
 } // namespace dhe

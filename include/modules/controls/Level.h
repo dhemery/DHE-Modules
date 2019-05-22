@@ -21,6 +21,9 @@ auto range(float switchPosition) -> Range const *;
 auto withSelectableRange(rack::engine::Module *module, int knobId, int cvId,
                          int switchId) -> std::function<float()>;
 
+auto withSelectableRange(rack::engine::Module *module, int knobId, int cvId,
+                         int avId, int switchId) -> std::function<float()>;
+
 auto withFixedRange(rack::engine::Module *module, int knobId,
                     Range const &range) -> std::function<float()>;
 } // namespace level

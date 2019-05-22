@@ -1,10 +1,8 @@
 #pragma once
 
-#include <memory>
+#include <functional>
 
 #include "Module.h"
-#include "modules/controls/LevelControl.h"
-#include "modules/controls/ModulatedKnob.h"
 
 namespace dhe {
 
@@ -15,23 +13,23 @@ public:
   void process(const ProcessArgs &args) override;
 
   enum ParameterIds {
-    LEVEL_KNOB,
-    LEVEL_AV,
-    LIMIT_1_KNOB,
-    LIMIT_1_AV,
-    LIMIT_1_RANGE_SWITCH,
-    LIMIT_2_KNOB,
-    LIMIT_2_AV,
-    LIMIT_2_RANGE_SWITCH,
-    PARAMETER_COUNT
+    LevelKnob,
+    LevelAv,
+    CcwLimitKnob,
+    CcwLimitAv,
+    CcwLimitRangeSwitch,
+    CwLimitKnob,
+    CwLimitAv,
+    CwLimitRangeSwitch,
+    ParameterCount
   };
-  enum InputIds { LEVEL_CV, LIMIT_1_CV, LIMIT_2_CV, INPUT_COUNT };
-  enum OutputIds { MAIN_OUT, OUTPUT_COUNT };
+  enum InputIds { LevelCv, CcwLimitCv, CwLimitCv, InputCount };
+  enum OutputIds { MainOut, OutputCount };
 
 private:
-  std::unique_ptr<LevelControl> zeroRotationLevel;
-  std::unique_ptr<LevelControl> fullRotationLevel;
-  std::unique_ptr<ModulatedKnob> level;
+  std::function<float()> ccwLimit;
+  std::function<float()> cwLimit;
+  std::function<float()> level;
 };
 
 } // namespace dhe

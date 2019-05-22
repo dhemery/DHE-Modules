@@ -17,6 +17,9 @@
       <option name="TEMPLATE_CALL_ARGUMENTS_ALIGN_MULTILINE" value="true" />
       <option name="ALIGN_INIT_LIST_IN_COLUMNS" value="false" />
       <option name="HEADER_GUARD_STYLE_PATTERN" value="${PROJECT_NAME}_${PROJECT_REL_PATH}_${FILE_NAME}_${EXT}" />
+      <option name="NAMESPACES_NAMING_CONVENTION">
+        <value prefix="" style="SNAKE_CASE" suffix="" />
+      </option>
       <option name="CLASSES_AND_STRUCTS_NAMING_CONVENTION">
         <value prefix="" style="PASCAL_CASE" suffix="" />
       </option>

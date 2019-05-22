@@ -1,6 +1,7 @@
 #pragma once
 
 #include <functional>
+#include <string>
 
 #include <engine/Module.hpp>
 
@@ -9,14 +10,17 @@
 namespace dhe {
 
 namespace duration {
-void configKnob(rack::engine::Module *module, int knobId, Range const &);
+void configKnob(rack::engine::Module *module, int knobId, Range const &,
+                std::string const &name = "Duration",
+                float initialPosition = 0.5);
 
-void configKnob(rack::engine::Module *module, int knobId, int switchId);
+void configKnob(rack::engine::Module *module, int knobId, int switchId,
+                std::string const &name = "Duration",
+                float initialPosition = 0.5);
 
-void configKnob(rack::engine::Module *module, int knobId,
-                std::function<Range const *()> const &getRange);
-
-void configSwitch(rack::engine::Module *module, int switchId);
+void configSwitch(rack::engine::Module *module, int switchId,
+                  std::string const &name = "Duration Range",
+                  int initialPosition = 1);
 } // namespace duration
 
 } // namespace dhe

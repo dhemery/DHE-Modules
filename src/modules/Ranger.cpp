@@ -1,38 +1,35 @@
 #include "modules/Ranger.h"
 
+#include "modules/controls/Controls.h"
+#include "modules/controls/Level.h"
+#include "modules/params/LevelParams.h"
+
 namespace dhe {
 
 Ranger::Ranger() {
-  config(PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT);
+  config(ParameterCount, InputCount, OutputCount);
 
-  configKnob(LEVEL_KNOB, "Level");
-  configCvGain(LEVEL_AV, "Level");
+  configKnob(LevelKnob, "Level");
+  configCvGain(LevelAv, "Level");
 
-  configKnob(LIMIT_1_KNOB, "Limit 1");
-  configCvGain(LIMIT_1_AV, "Limit 1");
-  configSignalRange(LIMIT_1_RANGE_SWITCH, "Limit 1");
+  level::configKnob(this, CcwLimitKnob, CcwLimitRangeSwitch, "CCW Limit", 0.2f);
+  level::configSwitch(this, CcwLimitRangeSwitch, "CCW Limit Range", 0);
+  configCvGain(CcwLimitAv, "CCW Limit");
 
-  configKnob(LIMIT_2_KNOB, "Limit 2");
-  configCvGain(LIMIT_2_AV, "Limit 2");
-  configSignalRange(LIMIT_2_RANGE_SWITCH, "Limit 2");
+  level::configKnob(this, CwLimitKnob, CwLimitRangeSwitch, "CW Limit", 0.8f);
+  level::configSwitch(this, CwLimitRangeSwitch, "CW Limit Range", 0);
+  configCvGain(CwLimitAv, "CW Limit");
 
-  level = std::unique_ptr<ModulatedKnob>(new ModulatedKnob(
-      params[LEVEL_KNOB], inputs[LEVEL_CV], params[LEVEL_AV]));
-  zeroRotationLevel = std::unique_ptr<LevelControl>(
-      new LevelControl(params[LIMIT_1_KNOB], params[LIMIT_1_RANGE_SWITCH],
-                       inputs[LIMIT_1_CV], params[LIMIT_1_AV]));
-  fullRotationLevel = std::unique_ptr<LevelControl>(
-      new LevelControl(params[LIMIT_2_KNOB], params[LIMIT_2_RANGE_SWITCH],
-                       inputs[LIMIT_2_CV], params[LIMIT_1_AV]));
+  level = control::knob::rotation(this, LevelKnob, LevelCv, LevelAv);
+  ccwLimit = level::withSelectableRange(this, CcwLimitKnob, CcwLimitCv,
+                                        CcwLimitAv, CcwLimitRangeSwitch);
+  cwLimit = level::withSelectableRange(this, CwLimitKnob, CwLimitCv, CwLimitAv,
+                                       CwLimitRangeSwitch);
 }
 
 void Ranger::process(const ProcessArgs &args) {
-  auto const levelRotation = level->rotation();
-  auto const zeroRotationVoltage = zeroRotationLevel->voltage();
-  auto const fullRotationVoltage = fullRotationLevel->voltage();
-  auto const outputVoltage =
-      scale(levelRotation, zeroRotationVoltage, fullRotationVoltage);
-  outputs[MAIN_OUT].setVoltage(outputVoltage);
+  auto const outputVoltage = scale(level(), ccwLimit(), cwLimit());
+  outputs[MainOut].setVoltage(outputVoltage);
 }
 
 } // namespace dhe
