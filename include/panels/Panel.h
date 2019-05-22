@@ -16,7 +16,9 @@
 #include <math.hpp>
 #include <widget/Widget.hpp>
 
-#include "Controls.h"
+#include "panels/widgets/Buttons.h"
+#include "panels/widgets/Knobs.h"
+#include "panels/widgets/Toggles.h"
 
 extern rack::plugin::Plugin *pluginInstance;
 
@@ -97,8 +99,13 @@ protected:
     return param<C<P>>(x, y, index);
   }
 
-  template <int N> auto toggle(float x, float y, int index) -> Toggle<P, N> * {
-    return param<Toggle<P, N>>(x, y, index);
+  template <template <typename, int> class C, int N>
+  auto toggle(float x, float y, int index) -> C<P, N> * {
+    return param<C<P, N>>(x, y, index);
+  }
+
+  template <int N> auto toggle(float x, float y, int index) -> Toggles<P, N> * {
+    return param<Toggles<P, N>>(x, y, index);
   }
 
   void input(float x, float y, int index) {

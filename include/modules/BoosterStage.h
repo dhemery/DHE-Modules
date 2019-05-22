@@ -6,8 +6,8 @@
 #include "Module.h"
 
 #include "envelopes/StageStateMachine.h"
-#include "modules/controls/Duration.h"
 #include "modules/controls/CurvatureControl.h"
+#include "modules/controls/Duration.h"
 #include "modules/controls/LevelControl.h"
 #include "util/sigmoid.h"
 
@@ -27,7 +27,7 @@ public:
   void setEoc(bool eoc);
   auto stageGateIn() -> bool;
 
-  void setDurationRange(float switchPosition) {
+  void setDurationRange(int switchPosition) {
     durationRange = Duration::range(switchPosition);
   }
 

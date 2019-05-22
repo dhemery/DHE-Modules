@@ -15,7 +15,7 @@
     {
       "Blossom": {
         "name": "Blossom",
-        "description": "Generates a pair of complex, evolving, pulsing LFO signals",
+        "description": "Generates a pair of complex, pulsing LFO signals",
         "tags": [
           "Envelope Generator"
         ]
@@ -114,7 +114,7 @@
     {
       "Xycloid": {
         "name": "Xycloid",
-        "description": "Generates a pair of complex, evolving, pulsing LFO signals",
+        "description": "Generates a pair of complex, pulsing LFO signals",
         "tags": [
           "LFO"
         ]

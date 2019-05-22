@@ -8,7 +8,7 @@ const float Duration::knobTaperCurvature = 0.8018017;
 const std::array<Range const *, 3> Duration::ranges{&shortRange, &mediumRange,
                                                     &longRange};
 
-auto Duration::range(float switchPosition) -> Range const * {
+auto Duration::range(int switchPosition) -> Range const * {
   return ranges[static_cast<int>(switchPosition)];
 }
 

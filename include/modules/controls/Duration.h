@@ -26,7 +26,7 @@ extern std::array<Range const *, 3> const ranges;
  * Returns the range for the given range switch position.
  * @param switchPosition the position of the range switch
  */
-auto range(float switchPosition) -> Range const *;
+auto range(int switchPosition) -> Range const *;
 
 /**
  * Creates a function that computes a duration (in seconds) from the given
