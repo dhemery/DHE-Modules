@@ -1,5 +1,7 @@
 #pragma once
 
+#include <functional>
+
 namespace DHE {
 template <typename P> class MultiplicationRangeStepper : public Toggle<P, 4> {
 public:
