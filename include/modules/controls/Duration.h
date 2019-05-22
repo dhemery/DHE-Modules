@@ -3,6 +3,9 @@
 #include <array>
 #include <functional>
 
+#include <engine/Module.hpp>
+#include "Controls.h"
+
 #include "util/range.h"
 
 namespace DHE {
