@@ -1,12 +1,10 @@
 #pragma once
 
 #include <functional>
-#include <memory>
 
 #include "Module.h"
 
 #include "envelopes/HostageStateMachine.h"
-#include "modules/controls/Duration.h"
 
 namespace dhe {
 
@@ -15,13 +13,13 @@ public:
   Hostage();
   void process(const ProcessArgs &args) override;
 
-  auto defer_gate_in() -> bool;
-  auto defer_gate_is_active() const -> bool;
+  auto deferGateIn() -> bool;
+  auto deferGateIsActive() const -> bool;
   void forward();
-  auto is_sustain_mode() -> bool;
-  void set_active(bool active);
-  void set_eoc(bool eoc);
-  auto stage_gate_in() -> bool;
+  auto isSustainMode() -> bool;
+  void setActive(bool active);
+  void setEoc(bool eoc);
+  auto stageGateIn() -> bool;
 
   enum InputIds {
     DEFER_GATE_IN,
@@ -41,10 +39,10 @@ public:
   };
 
 private:
-  auto envelope_in() -> float;
-  void send_out(float voltage);
+  auto envelopeIn() -> float;
+  void sendOut(float voltage);
 
   std::function<float()> duration;
-  HostageStateMachine state_machine;
+  HostageStateMachine stateMachine;
 };
 } // namespace dhe

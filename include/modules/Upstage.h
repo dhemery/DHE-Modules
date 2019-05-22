@@ -25,10 +25,10 @@ public:
   enum OutputIds { TRIGGER_OUT, MAIN_OUT, OUTPUT_COUNT };
 
 private:
-  void send_envelope(float voltage);
-  void send_trigger(bool is_triggered);
-  auto trigger_in() -> bool;
-  auto wait_in() -> bool;
+  void sendEnvelope(float voltage);
+  void sendTrigger(bool isTriggered);
+  auto triggerIn() -> bool;
+  auto waitIn() -> bool;
 
   std::function<float()> level;
 };

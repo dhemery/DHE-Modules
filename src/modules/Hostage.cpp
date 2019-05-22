@@ -1,73 +1,62 @@
-#include <utility>
-
 #include "modules/Hostage.h"
-#include "modules/controls/Controls.h"
-#include "modules/controls/ModulatedKnob.h"
-#include "modules/controls/RackControls.h"
+#include "modules/controls/Duration.h"
 #include "modules/params/DurationParams.h"
 
 namespace dhe {
 Hostage::Hostage()
-    : state_machine{[this]() -> bool { return defer_gate_is_active(); },
-                    [this]() -> bool { return defer_gate_in(); },
-                    [this]() -> bool { return stage_gate_in(); },
-                    [this]() -> bool { return is_sustain_mode(); },
-                    [this]() -> float { return duration(); },
-                    [this](float) { forward(); },
-                    [this](bool active) { set_active(active); },
-                    [this](bool eoc) { set_eoc(eoc); }} {
+    : stateMachine{[this]() -> bool { return deferGateIsActive(); },
+                   [this]() -> bool { return deferGateIn(); },
+                   [this]() -> bool { return stageGateIn(); },
+                   [this]() -> bool { return isSustainMode(); },
+                   [this]() -> float { return duration(); },
+                   [this](float) { forward(); },
+                   [this](bool active) { setActive(active); },
+                   [this](bool eoc) { setEoc(eoc); }} {
   config(PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT);
-
-  using namespace control;
 
   duration::configKnob(this, DURATION_KNOB, DURATION_RANGE_SWITCH);
   duration::configSwitch(this, DURATION_RANGE_SWITCH);
-  auto const durationRotation =
-      knob::rotation(this, DURATION_KNOB, DURATION_CV);
-  auto const durationKnobTaper = duration::knobTaper();
-  auto const selectedDurationRange =
-      range::selection<3>(this, DURATION_RANGE_SWITCH, duration::ranges);
-  auto const toDurationRange = scale::toRange(selectedDurationRange);
-  duration = knob::scaled(durationRotation, durationKnobTaper, toDurationRange);
+  duration = duration::withSelectableRange(this, DURATION_KNOB, DURATION_CV,
+                                           DURATION_RANGE_SWITCH);
 
   configParam(HOSTAGE_MODE_SWITCH, 0.f, 1.f, 0.f, "Mode");
 
-  state_machine.start();
+  stateMachine.start();
 }
 
 void Hostage::process(const ProcessArgs &args) {
-  state_machine.step(args.sampleTime);
+  stateMachine.step(args.sampleTime);
 }
 
-void Hostage::forward() { send_out(envelope_in()); }
+void Hostage::forward() { sendOut(envelopeIn()); }
 
-auto Hostage::defer_gate_is_active() const -> bool {
+auto Hostage::deferGateIsActive() const -> bool {
   return inputs[DEFER_GATE_IN].active;
 }
 
-auto Hostage::is_sustain_mode() -> bool {
+auto Hostage::isSustainMode() -> bool {
   return params[HOSTAGE_MODE_SWITCH].getValue() > 0.5f;
 }
 
-void Hostage::set_active(bool active) {
+void Hostage::setActive(bool active) {
   const auto voltage = active ? 10.f : 0.f;
   outputs[ACTIVE_OUT].setVoltage(voltage);
 }
 
-void Hostage::set_eoc(bool eoc) {
+void Hostage::setEoc(bool eoc) {
   const auto voltage = eoc ? 10.f : 0.f;
   outputs[EOC_OUT].setVoltage(voltage);
 }
 
-auto Hostage::defer_gate_in() -> bool {
+auto Hostage::deferGateIn() -> bool {
   return inputs[DEFER_GATE_IN].getVoltage() > 0.1f;
 }
 
-auto Hostage::stage_gate_in() -> bool {
+auto Hostage::stageGateIn() -> bool {
   return inputs[STAGE_GATE_IN].getVoltage() > 0.1f;
 }
 
-auto Hostage::envelope_in() -> float { return inputs[MAIN_IN].getVoltage(); }
+auto Hostage::envelopeIn() -> float { return inputs[MAIN_IN].getVoltage(); }
 
-void Hostage::send_out(float voltage) { outputs[MAIN_OUT].setVoltage(voltage); }
+void Hostage::sendOut(float voltage) { outputs[MAIN_OUT].setVoltage(voltage); }
 } // namespace dhe

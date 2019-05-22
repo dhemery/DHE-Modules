@@ -1,83 +1,74 @@
-#include <utility>
-
 #include "modules/Stage.h"
-#include "modules/controls/Controls.h"
+#include "modules/controls/Duration.h"
 #include "modules/controls/Level.h"
 #include "modules/params/DurationParams.h"
 #include "modules/params/LevelParams.h"
-#include "util/sigmoid.h"
-#include "util/signal.h"
 
 namespace dhe {
 Stage::Stage()
-    : state_machine{[this]() -> bool { return defer_gate_is_active(); },
-                    [this]() -> bool { return defer_gate_in(); },
-                    [this]() -> bool { return stage_gate_in(); },
-                    [this]() -> float { return duration(); },
-                    [this](float) { forward(); },
-                    [this]() { prepare_to_generate(); },
-                    [this](float phase) { generate(phase); },
-                    [this](bool active) { set_active(active); },
-                    [this](bool eoc) { set_eoc(eoc); }} {
+    : stateMachine{[this]() -> bool { return deferGateIsActive(); },
+                   [this]() -> bool { return deferGateIn(); },
+                   [this]() -> bool { return stageGateIn(); },
+                   [this]() -> float { return duration(); },
+                   [this](float) { forward(); },
+                   [this]() { prepareToGenerate(); },
+                   [this](float phase) { generate(phase); },
+                   [this](bool active) { setActive(active); },
+                   [this](bool eoc) { setEoc(eoc); }} {
   config(PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT);
 
   configParam(CURVE_KNOB, 0.f, 1.f, 0.5f, "Curvature", "%", 0.f, 200.f, -100.f);
 
-  using namespace control;
+  auto const durationRange = duration::mediumRange;
+  duration::configKnob(this, DURATION_KNOB, durationRange);
+  duration = duration::withFixedRange(this, DURATION_KNOB, durationRange);
 
-  duration::configKnob(this, DURATION_KNOB, duration::mediumRange);
-  auto const durationRotation = knob::rotation(this, DURATION_KNOB);
-  auto const durationKnobTaper = duration::knobTaper();
-  auto const toDurationRange = scale::toRange(duration::mediumRange);
-  duration = knob::scaled(durationRotation, durationKnobTaper, toDurationRange);
-
-  level::configKnob(this, LEVEL_KNOB, LevelControl::unipolar_range);
-  auto const levelRotation = knob::rotation(this, LEVEL_KNOB);
-  auto const toLevelRange = scale::toRange(level::unipolarRange);
-  level = knob::scaled(levelRotation, toLevelRange);
+  auto const levelRange = level::unipolarRange;
+  level::configKnob(this, LEVEL_KNOB, levelRange);
+  level = level::withFixedRange(this, LEVEL_KNOB, levelRange);
 
   shape = std::unique_ptr<CurvatureControl>(
       new CurvatureControl(params[CURVE_KNOB]));
 
-  state_machine.start();
+  stateMachine.start();
 }
 
-auto Stage::defer_gate_in() -> bool {
+auto Stage::deferGateIn() -> bool {
   return inputs[DEFER_GATE_IN].getVoltage() > 0.1;
 }
 
-auto Stage::defer_gate_is_active() const -> bool {
+auto Stage::deferGateIsActive() const -> bool {
   return inputs[DEFER_GATE_IN].active;
 }
 
-auto Stage::envelope_in() -> float { return inputs[ENVELOPE_IN].getVoltage(); }
+auto Stage::envelopeIn() -> float { return inputs[ENVELOPE_IN].getVoltage(); }
 
-void Stage::forward() { send_out(envelope_in()); }
+void Stage::forward() { sendOut(envelopeIn()); }
 
 void Stage::generate(float phase) {
   auto const taperedPhase = shape->taper(phase);
-  send_out(scale(taperedPhase, start_voltage, level()));
+  sendOut(scale(taperedPhase, startVoltage, level()));
 }
 
-void Stage::prepare_to_generate() { start_voltage = envelope_in(); }
+void Stage::prepareToGenerate() { startVoltage = envelopeIn(); }
 
-void Stage::send_out(float voltage) { outputs[MAIN_OUT].setVoltage(voltage); }
+void Stage::sendOut(float voltage) { outputs[MAIN_OUT].setVoltage(voltage); }
 
-void Stage::set_active(bool active) {
+void Stage::setActive(bool active) {
   const auto voltage = active ? 10.f : 0.f;
   outputs[ACTIVE_OUT].setVoltage(voltage);
 }
 
-void Stage::set_eoc(bool eoc) {
+void Stage::setEoc(bool eoc) {
   const auto voltage = eoc ? 10.f : 0.f;
   outputs[EOC_OUT].setVoltage(voltage);
 }
 
-auto Stage::stage_gate_in() -> bool {
+auto Stage::stageGateIn() -> bool {
   return inputs[STAGE_TRIGGER_IN].getVoltage() > 0.1;
 }
 
 void Stage::process(const ProcessArgs &args) {
-  state_machine.step(args.sampleTime);
+  stateMachine.step(args.sampleTime);
 }
 } // namespace dhe
