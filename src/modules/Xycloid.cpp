@@ -65,7 +65,7 @@ auto Xycloid::throb_speed(float sampleTime) -> float {
   constexpr auto speed_taper_curvature = 0.8f;
   auto rotation = modulated(THROB_SPEED_KNOB, THROB_SPEED_CV, THROB_SPEED_AV);
   auto scaled = throb_speed_knob_range.scale(rotation);
-  auto tapered = Sigmoid::inverse(scaled, speed_taper_curvature);
+  auto tapered = sigmoid::inverse(scaled, speed_taper_curvature);
   return -10.f * tapered * sampleTime;
 }
 

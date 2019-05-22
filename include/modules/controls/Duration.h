@@ -3,9 +3,6 @@
 #include <array>
 #include <functional>
 
-#include "Controls.h"
-#include <engine/Module.hpp>
-
 #include "util/range.h"
 
 namespace dhe {
@@ -31,10 +28,6 @@ extern std::array<Range const *, 3> const ranges;
  */
 auto range(int switchPosition) -> Range const *;
 
-auto withCvAndSwitch(rack::engine::Module *module, int knobId, int cvId,
-                     int switchId) -> std::function<float()>;
-
-auto withRange(rack::engine::Module *module, int knobId, Range const &range)
-    -> std::function<float()>;
+auto knobTaper() -> std::function<float(float)>;
 } // namespace duration
 } // namespace dhe

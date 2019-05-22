@@ -25,13 +25,13 @@ class KnobParamQuantity : public rack::engine::ParamQuantity {
 public:
   auto getDisplayValue() -> float override {
     auto const value = getValue();
-    auto const tapered = Sigmoid::j_taper(value, knobTaperCurvature);
+    auto const tapered = sigmoid::j_taper(value, knobTaperCurvature);
     return range()->scale(tapered);
   }
 
   void setDisplayValue(float displayValue) override {
     auto const normalized = range()->normalize(displayValue);
-    auto const deTapered = Sigmoid::j_taper(normalized, -knobTaperCurvature);
+    auto const deTapered = sigmoid::j_taper(normalized, -knobTaperCurvature);
     setValue(deTapered);
   }
 

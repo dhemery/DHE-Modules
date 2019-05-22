@@ -5,7 +5,7 @@
 #include "range.h"
 
 namespace dhe {
-namespace Sigmoid {
+namespace sigmoid {
 
 static constexpr auto sigmoid_range = Range{-1.f, 1.f};
 static constexpr auto proportion_range = Range{0.f, 1.f};
@@ -158,5 +158,5 @@ static inline auto taper(float input, float curvature, bool is_s) -> float {
   return is_s ? s_taper(input, curvature) : j_taper(input, curvature);
 }
 
-} // namespace Sigmoid
+} // namespace sigmoid
 } // namespace dhe

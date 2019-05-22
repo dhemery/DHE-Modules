@@ -1,6 +1,7 @@
 #include <utility>
 
 #include "modules/BoosterStage.h"
+#include "modules/controls/Controls.h"
 #include "modules/controls/Duration.h"
 #include "modules/controls/Level.h"
 #include "modules/params/DurationParams.h"
@@ -25,15 +26,25 @@ BoosterStage::BoosterStage()
                    [this](bool eoc) { setEoc(eoc); }} {
   config(PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT);
 
+  using namespace control;
+
   duration::configKnob(this, DURATION_KNOB, DURATION_RANGE_SWITCH);
   duration::configSwitch(this, DURATION_RANGE_SWITCH);
-  duration = duration::withCvAndSwitch(this, DURATION_KNOB, DURATION_CV,
-                                       DURATION_RANGE_SWITCH);
+  auto const durationRotation =
+      knob::rotation(this, DURATION_KNOB, DURATION_CV);
+  auto const durationKnobTaper = duration::knobTaper();
+  auto const selectedDurationRange =
+      range::selection<3>(this, DURATION_RANGE_SWITCH, duration::ranges);
+  auto const toDurationRange = scale::toRange(selectedDurationRange);
+  duration = knob::scaled(durationRotation, durationKnobTaper, toDurationRange);
 
   level::configKnob(this, LEVEL_KNOB, LEVEL_RANGE_SWITCH);
   level::configSwitch(this, LEVEL_RANGE_SWITCH);
-  level =
-      level::withCvAndSwitch(this, LEVEL_KNOB, LEVEL_CV, LEVEL_RANGE_SWITCH);
+  auto const levelRotation = knob::rotation(this, LEVEL_KNOB, LEVEL_CV);
+  auto const selectedLevelRange =
+      range::selection<2>(this, LEVEL_RANGE_SWITCH, level::ranges);
+  auto const toLevelRange = scale::toRange(selectedLevelRange);
+  level = knob::scaled(levelRotation, toLevelRange);
 
   configParam(CURVE_KNOB, 0.f, 1.f, 0.5f, "Curvature", "%", 0.f, 100.f, 0.f);
   configParam(SHAPE_SWITCH, 0.f, 1.f, 0.f, "Curve Shape");

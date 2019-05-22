@@ -1,9 +1,6 @@
 #pragma once
 
 #include <array>
-#include <functional>
-
-#include <engine/Module.hpp>
 
 #include "util/range.h"
 
@@ -21,10 +18,5 @@ extern std::array<Range const *, 2> const ranges;
  */
 auto range(float switchPosition) -> Range const *;
 
-auto withCvAndSwitch(rack::engine::Module *module, int knobId, int cvId,
-                     int switchId) -> std::function<float()>;
-
-auto withRange(rack::engine::Module *module, int knobId, Range const &range)
-    -> std::function<float()>;
 } // namespace level
 } // namespace dhe

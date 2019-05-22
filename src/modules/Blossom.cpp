@@ -63,7 +63,7 @@ auto Blossom::spin(float sample_time) -> float {
   static constexpr auto spin_range = Range{-1.f, 1.f};
   auto rotation = modulated(SPIN_KNOB, SPIN_CV, SPIN_AV);
   auto scaled = spin_range.scale(rotation);
-  auto tapered = Sigmoid::inverse(scaled, speed_curvature);
+  auto tapered = sigmoid::inverse(scaled, speed_curvature);
   return -10.f * tapered * sample_time;
 }
 

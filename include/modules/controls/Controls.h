@@ -1,5 +1,6 @@
 #pragma once
 
+#include <array>
 #include <functional>
 
 #include "util/range.h"
@@ -56,17 +57,17 @@ namespace scale {
 auto toRange(std::function<Range const *()> range)
     -> std::function<float(float)>;
 
-auto toRange(Range const &) -> std::function<float(float)>;
+auto toRange(Range const &range) -> std::function<float(float)>;
 
 } // namespace scale
 
 namespace range {
 template <int N>
 auto selection(rack::engine::Module *module, int switchId,
-               std::array<dhe::Range const *, N> const &ranges)
-    -> std::function<dhe::Range const *()> {
+               std::array<Range const *, N> const &ranges)
+    -> std::function<Range const *()> {
   auto switchParam = &module->params[switchId];
-  return [switchParam, ranges]() -> dhe::Range {
+  return [switchParam, ranges]() -> Range const * {
     auto const selection = static_cast<int>(switchParam->getValue());
     return ranges[selection];
   };

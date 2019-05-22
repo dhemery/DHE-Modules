@@ -1,4 +1,5 @@
 #include "modules/Upstage.h"
+#include "modules/controls/Controls.h"
 #include "modules/controls/Level.h"
 #include "modules/params/LevelParams.h"
 
@@ -9,8 +10,15 @@ Upstage::Upstage() {
 
   level::configKnob(this, LEVEL_KNOB, LEVEL_RANGE_SWITCH);
   level::configSwitch(this, LEVEL_RANGE_SWITCH);
-  level =
-      level::withCvAndSwitch(this, LEVEL_KNOB, LEVEL_CV, LEVEL_RANGE_SWITCH);
+  level::configKnob(this, LEVEL_KNOB, LEVEL_RANGE_SWITCH);
+  level::configSwitch(this, LEVEL_RANGE_SWITCH);
+
+  using namespace control;
+  auto const levelRotation = knob::rotation(this, LEVEL_KNOB, LEVEL_CV);
+  auto const selectedLevelRange =
+      range::selection<2>(this, LEVEL_RANGE_SWITCH, level::ranges);
+  auto const toLevelRange = scale::toRange(selectedLevelRange);
+  level = knob::scaled(levelRotation, toLevelRange);
 
   configParam(TRIGGER_BUTTON, 0.f, 1.f, 0.f, "Trigger");
   configParam(WAIT_BUTTON, 0.f, 1.f, 0.f, "Wait");

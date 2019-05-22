@@ -1,7 +1,8 @@
-#include <modules/controls/Level.h>
 #include <utility>
 
 #include "modules/Stage.h"
+#include "modules/controls/Controls.h"
+#include "modules/controls/Level.h"
 #include "modules/params/DurationParams.h"
 #include "modules/params/LevelParams.h"
 #include "util/sigmoid.h"
@@ -22,11 +23,18 @@ Stage::Stage()
 
   configParam(CURVE_KNOB, 0.f, 1.f, 0.5f, "Curvature", "%", 0.f, 200.f, -100.f);
 
+  using namespace control;
+
   duration::configKnob(this, DURATION_KNOB, duration::mediumRange);
-  duration = duration::withRange(this, DURATION_KNOB, duration::mediumRange);
+  auto const durationRotation = knob::rotation(this, DURATION_KNOB);
+  auto const durationKnobTaper = duration::knobTaper();
+  auto const toDurationRange = scale::toRange(duration::mediumRange);
+  duration = knob::scaled(durationRotation, durationKnobTaper, toDurationRange);
 
   level::configKnob(this, LEVEL_KNOB, LevelControl::unipolar_range);
-  level = level::withRange(this, LEVEL_KNOB, level::unipolarRange);
+  auto const levelRotation = knob::rotation(this, LEVEL_KNOB);
+  auto const toLevelRange = scale::toRange(level::unipolarRange);
+  level = knob::scaled(levelRotation, toLevelRange);
 
   shape = std::unique_ptr<CurvatureControl>(
       new CurvatureControl(params[CURVE_KNOB]));

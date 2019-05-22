@@ -1,6 +1,7 @@
 #include <utility>
 
 #include "modules/Hostage.h"
+#include "modules/controls/Controls.h"
 #include "modules/controls/ModulatedKnob.h"
 #include "modules/controls/RackControls.h"
 #include "modules/params/DurationParams.h"
@@ -17,10 +18,17 @@ Hostage::Hostage()
                     [this](bool eoc) { set_eoc(eoc); }} {
   config(PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT);
 
+  using namespace control;
+
   duration::configKnob(this, DURATION_KNOB, DURATION_RANGE_SWITCH);
   duration::configSwitch(this, DURATION_RANGE_SWITCH);
-  duration = duration::withCvAndSwitch(this, DURATION_KNOB, DURATION_CV,
-                                       DURATION_RANGE_SWITCH);
+  auto const durationRotation =
+      knob::rotation(this, DURATION_KNOB, DURATION_CV);
+  auto const durationKnobTaper = duration::knobTaper();
+  auto const selectedDurationRange =
+      range::selection<3>(this, DURATION_RANGE_SWITCH, duration::ranges);
+  auto const toDurationRange = scale::toRange(selectedDurationRange);
+  duration = knob::scaled(durationRotation, durationKnobTaper, toDurationRange);
 
   configParam(HOSTAGE_MODE_SWITCH, 0.f, 1.f, 0.f, "Mode");
 

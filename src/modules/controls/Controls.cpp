@@ -13,21 +13,21 @@ auto rotation(rack::engine::Module *module, int knobId)
 
 auto rotation(rack::engine::Module *module, int knobId, int cvId)
     -> std::function<float()> {
-  static auto constexpr cvToModulation = 0.1f;
+  static auto constexpr attenuation = 0.1f;
   auto knobParam = &module->params[knobId];
   auto cvInput = &module->inputs[cvId];
 
   return [knobParam, cvInput]() -> float {
     auto const rotation = knobParam->getValue();
     auto const controlVoltage = cvInput->getVoltage();
-    auto const modulation = controlVoltage * cvToModulation;
+    auto const modulation = controlVoltage * attenuation;
     return rotation + modulation;
   };
 }
 
 auto rotation(rack::engine::Module *module, int knobId, int cvId, int avId)
     -> std::function<float()> {
-  static auto constexpr avRange = dhe::Range{-1.f, 1.f};
+  static auto constexpr attenuationRange = Range{-0.1f, 0.1f};
   auto knobParam = &module->params[knobId];
   auto cvInput = &module->inputs[cvId];
   auto avParam = &module->params[avId];
@@ -35,8 +35,10 @@ auto rotation(rack::engine::Module *module, int knobId, int cvId, int avId)
   return [knobParam, cvInput, avParam]() -> float {
     auto const rotation = knobParam->getValue();
     auto const controlVoltage = cvInput->getVoltage();
-    auto const avMultiplier = avRange.scale(avParam->getValue());
-    auto const modulation = controlVoltage * avMultiplier;
+    auto const attenuverterRotation = avParam->getValue();
+    auto const attenuation = attenuationRange.scale(attenuverterRotation);
+    auto const modulation = controlVoltage * attenuation;
+
     return rotation + modulation;
   };
 }
@@ -59,10 +61,11 @@ auto scaled(std::function<float()> const &rotation,
 namespace scale {
 auto toRange(std::function<const Range *()> range)
     -> std::function<float(float)> {
-  return std::function<float(float)>();
+  return
+      [range](float proportion) -> float { return range()->scale(proportion); };
 }
-auto toRange(const dhe::Range &) -> std::function<float(float)> {
-  return std::function<float(float)>();
+auto toRange(const dhe::Range &range) -> std::function<float(float)> {
+  return [range](float proportion) -> float { return range.scale(proportion); };
 }
 
 } // namespace scale
