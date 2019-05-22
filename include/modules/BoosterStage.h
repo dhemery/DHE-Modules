@@ -7,9 +7,6 @@
 
 #include "envelopes/StageStateMachine.h"
 #include "modules/controls/CurvatureControl.h"
-#include "modules/controls/Duration.h"
-#include "modules/controls/Level.h"
-#include "util/sigmoid.h"
 
 namespace DHE {
 
@@ -26,14 +23,6 @@ public:
   void setActive(bool active);
   void setEoc(bool eoc);
   auto stageGateIn() -> bool;
-
-  void setDurationRange(int switchPosition) {
-    durationRange = Duration::range(switchPosition);
-  }
-
-  void setLevelRange(int switchPosition) {
-    levelRange = Level::ranges[switchPosition];
-  }
 
   enum ParameterIds {
     ACTIVE_BUTTON,
@@ -71,8 +60,6 @@ private:
   bool isActive{false};
   bool isEoc{false};
   float startVoltage{0.f};
-  Range const *durationRange;
-  Range const *levelRange;
   std::function<float()> duration;
   std::function<float()> level;
   std::unique_ptr<CurvatureControl> shape;

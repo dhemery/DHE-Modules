@@ -45,7 +45,6 @@ private:
   void send_out(float voltage);
 
   std::function<float()> duration;
-  Range const *durationRange{&Duration::mediumRange};
   HostageStateMachine state_machine;
 };
 } // namespace DHE

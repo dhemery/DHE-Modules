@@ -117,9 +117,8 @@ dev: $(DEV_PLUGIN_ZIP)
 run: dev
 	$(RACK_EXECUTABLE) $(RACK_FLAGS) -s $(RACK_SYSTEM_DIR) -u $(realpath $(DEV_DIR))
 
-debug: RACK_FLAGS += -d
-
-debug: run
+debug: dev
+	$(RACK_EXECUTABLE) $(RACK_FLAGS) -d -s $(RACK_SYSTEM_DIR) -u $(realpath $(DEV_DIR))
 
 
 

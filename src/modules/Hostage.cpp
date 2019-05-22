@@ -17,18 +17,9 @@ Hostage::Hostage()
                     [this](bool eoc) { set_eoc(eoc); }} {
   config(PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT);
 
-  auto durationKnob = ModulatedKnob{params[DURATION_KNOB], inputs[DURATION_CV],
-                                    constantFullyRotatedKnobParam};
-
-  auto getDurationRange = [this]() -> Range const * { return durationRange; };
-  Duration::configKnob(this, DURATION_KNOB, getDurationRange);
-  Duration::configSwitch(this, DURATION_RANGE_SWITCH, getDurationRange);
-
-  auto getDurationRotation = [durationKnob]() -> float {
-    return durationKnob.rotation();
-  };
-
-  duration = Duration::from(getDurationRotation, getDurationRange);
+  Duration::configKnob(this, DURATION_KNOB, DURATION_RANGE_SWITCH);
+  Duration::configSwitch(this, DURATION_RANGE_SWITCH);
+  duration = Duration::withCvAndSwitch(this, DURATION_KNOB, DURATION_CV, DURATION_RANGE_SWITCH);
 
   configParam(HOSTAGE_MODE_SWITCH, 0.f, 1.f, 0.f, "Mode");
 

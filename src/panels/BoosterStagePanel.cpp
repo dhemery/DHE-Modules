@@ -18,13 +18,7 @@ BoosterStagePanel::BoosterStagePanel(BoosterStage *module) : Panel{module, hp} {
   input(column_1, y, BoosterStage::LEVEL_CV);
   knob<LargeKnob>(column_3, y, BoosterStage::LEVEL_KNOB);
 
-  auto const setModuleLevelRange = [module](int switchPosition) {
-    module->setLevelRange(switchPosition);
-  };
-
-  auto levelRangeSwitch = toggle<AnnouncingToggle, 2>(
-      column_5, y, BoosterStage::LEVEL_RANGE_SWITCH);
-  levelRangeSwitch->announce = setModuleLevelRange;
+  toggle<2>(column_5, y, BoosterStage::LEVEL_RANGE_SWITCH);
 
   y += dy;
   input(column_1, y, BoosterStage::CURVE_CV);
@@ -35,13 +29,7 @@ BoosterStagePanel::BoosterStagePanel(BoosterStage *module) : Panel{module, hp} {
   input(column_1, y, BoosterStage::DURATION_CV);
   knob<LargeKnob>(column_3, y, BoosterStage::DURATION_KNOB);
 
-  auto const setModuleDurationRange = [module](int switchPosition) {
-    module->setDurationRange(switchPosition);
-  };
-
-  auto durationRangeSwitch = toggle<AnnouncingToggle, 3>(
-      column_5, y, BoosterStage::DURATION_RANGE_SWITCH);
-  durationRangeSwitch->announce = setModuleDurationRange;
+  toggle<3>(column_5, y, BoosterStage::DURATION_RANGE_SWITCH);
 
   y = 82.f;
   dy = 15.f;

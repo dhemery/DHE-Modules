@@ -1,3 +1,5 @@
+#include <engine/Module.hpp>
+
 #include "modules/controls/Duration.h"
 #include "util/sigmoid.h"
 
@@ -10,23 +12,31 @@ const float knobTaperCurvature = 0.8018017;
 const std::array<Range const *, 3> ranges{&shortRange, &mediumRange,
                                           &longRange};
 
-auto range(int switchPosition) -> Range const * {
+auto range(float switchPosition) -> Range const * {
   return ranges[static_cast<int>(switchPosition)];
 }
 
-auto from(const std::function<float()> &rotation,
-          const std::function<Range const *()> &range)
-    -> std::function<float()> {
-  return [rotation, range]() -> float {
-    auto const tapered = Sigmoid::j_shape.taper(rotation(), knobTaperCurvature);
-    return range()->scale(tapered);
+auto withCvAndSwitch(rack::engine::Module *module, int knobId, int cvId,
+                     int switchId) -> std::function<float()> {
+  auto knobParam = &module->params[knobId];
+  auto cvInput = &module->inputs[cvId];
+  auto switchParam = &module->params[switchId];
+  return [knobParam, cvInput, switchParam]() -> float {
+    auto const rotation = knobParam->getValue();
+    auto const controlVoltage = cvInput->getVoltage();
+    auto const range = Duration::range(switchParam->getValue());
+    auto const modulated = rotation + controlVoltage * 0.1f;
+    auto const tapered = Sigmoid::j_shape.taper(modulated, knobTaperCurvature);
+    return range->scale(tapered);
   };
 }
 
-auto from(const std::function<float()> &rotation) -> std::function<float()> {
-  return [rotation]() -> float {
-    auto const tapered = Sigmoid::j_shape.taper(rotation(), knobTaperCurvature);
-    return mediumRange.scale(tapered);
+auto withRange(rack::engine::Module *module, int knobId, Range const &range) -> std::function<float()> {
+  auto knobParam = &module->params[knobId];
+  return [knobParam, range]() -> float {
+    auto const rotation = knobParam->getValue();
+    auto const tapered = Sigmoid::j_shape.taper(rotation, knobTaperCurvature);
+    return range.scale(tapered);
   };
 }
 } // namespace Duration

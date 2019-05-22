@@ -37,7 +37,7 @@ private:
   void send_out(float voltage);
 
   std::function<float()> duration;
-  std::unique_ptr<LevelControl> level;
+  std::function<float()> level;
   std::unique_ptr<CurvatureControl> shape;
   StageStateMachine state_machine;
   float start_voltage{0.f};

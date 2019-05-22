@@ -28,23 +28,9 @@ extern std::array<Range const *, 3> const ranges;
  */
 auto range(int switchPosition) -> Range const *;
 
-/**
- * Creates a function that computes a duration (in seconds) from the given
- * rotation and range functions.
- * @param rotation a function that returns a knob rotation
- * @param range a function that returns a duration range (in seconds)
- */
-auto from(const std::function<float()> &rotation,
-          const std::function<Range const *()> &range)
-    -> std::function<float()>;
+auto withCvAndSwitch(rack::engine::Module *module, int knobId, int cvId,
+                     int switchId) -> std::function<float()>;
 
-/**
- * Creates a function that computes a medium-range duration (in seconds)
- * from the given rotation.
- * @param rotation a function that returns a knob rotation
- * @param range a function that returns a duration range (in seconds)
- */
-auto from(const std::function<float()> &rotation) -> std::function<float()>;
-
+auto withRange(rack::engine::Module *module, int knobId, Range const &range) -> std::function<float()>;
 } // namespace Duration
 } // namespace DHE

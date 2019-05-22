@@ -1,24 +1,24 @@
 #include "modules/Upstage.h"
+#include "modules/controls/Level.h"
+#include "modules/params/LevelParams.h"
 
 namespace DHE {
 
 Upstage::Upstage() {
   config(PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT);
 
-  configParam(LEVEL_KNOB, 0.f, 1.f, 0.5f, "Level", "%", 0.f, 100.f, 0.f);
-  configSignalRange(LEVEL_RANGE_SWITCH, "Level", true);
+  Level::configKnob(this, LEVEL_KNOB, LEVEL_RANGE_SWITCH);
+  Level::configSwitch(this, LEVEL_RANGE_SWITCH);
+  level = Level::withCvAndSwitch(this, LEVEL_KNOB, LEVEL_CV, LEVEL_RANGE_SWITCH);
 
   configParam(TRIGGER_BUTTON, 0.f, 1.f, 0.f, "Trigger");
   configParam(WAIT_BUTTON, 0.f, 1.f, 0.f, "Wait");
-
-  level = std::unique_ptr<LevelControl>(new LevelControl(
-      params[LEVEL_KNOB], params[LEVEL_RANGE_SWITCH], inputs[LEVEL_CV]));
 }
 
 void Upstage::process(const ProcessArgs &args) {
   auto is_triggered = trigger_in() && !wait_in();
   send_trigger(is_triggered);
-  send_envelope(level->voltage());
+  send_envelope(level());
 }
 
 void Upstage::send_envelope(float voltage) {

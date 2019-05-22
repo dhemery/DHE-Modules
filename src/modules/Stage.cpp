@@ -1,7 +1,9 @@
+#include <modules/controls/Level.h>
 #include <utility>
 
 #include "modules/Stage.h"
 #include "modules/params/DurationParams.h"
+#include "modules/params/LevelParams.h"
 #include "util/sigmoid.h"
 #include "util/signal.h"
 
@@ -18,24 +20,13 @@ Stage::Stage()
                     [this](bool eoc) { set_eoc(eoc); }} {
   config(PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT);
 
-  configParam(LEVEL_KNOB, 0.f, 1.f, 0.5f, "Level", " V", 0.f, 10.f, 0.f);
   configParam(CURVE_KNOB, 0.f, 1.f, 0.5f, "Curvature", "%", 0.f, 200.f, -100.f);
 
-  auto getDurationRange = []() -> Range const * {
-    return &Duration::mediumRange;
-  };
-  Duration::configKnob(this, DURATION_KNOB, getDurationRange);
+  Duration::configKnob(this, DURATION_KNOB, Duration::mediumRange);
+  duration = Duration::withRange(this, DURATION_KNOB, Duration::mediumRange);
 
-  auto durationKnob =
-      ModulatedKnob{params[DURATION_KNOB], constant0VoltageInput,
-                    constantFullyRotatedKnobParam};
-  auto durationKnobRotation = [durationKnob]() -> float {
-    return durationKnob.rotation();
-  };
-
-  duration = Duration::from(durationKnobRotation);
-
-  level = std::unique_ptr<LevelControl>(new LevelControl(params[LEVEL_KNOB]));
+  Level::configKnob(this, LEVEL_KNOB, LevelControl::unipolar_range);
+  level = Level::withRange(this, LEVEL_KNOB, Level::unipolarRange);
 
   shape = std::unique_ptr<CurvatureControl>(
       new CurvatureControl(params[CURVE_KNOB]));
@@ -57,7 +48,7 @@ void Stage::forward() { send_out(envelope_in()); }
 
 void Stage::generate(float phase) {
   auto const taperedPhase = shape->taper(phase);
-  send_out(scale(taperedPhase, start_voltage, level->voltage()));
+  send_out(scale(taperedPhase, start_voltage, level()));
 }
 
 void Stage::prepare_to_generate() { start_voltage = envelope_in(); }

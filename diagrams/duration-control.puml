@@ -1,49 +1,7 @@
 @startuml
 
-object durationRange
-object durationSwitchParam
-object durationKnobParam
-
-object durationKnobRotationGetter
-durationKnobRotationGetter .. durationKnobParam
-
-object durationRangeGetter
-durationRangeGetter .. durationRange
-
-object module {
-setDurationRange(int);
-}
-
-module *-- durationRange
-module *-- durationSwitchParam
-module *-- durationKnobParam
-
-class DurationSwitchQuantity
-DurationSwitchQuantity ..> durationRangeGetter
-DurationSwitchQuantity *.. durationSwitchParam
-
-class DurationSwitchWidget {
-onChange(e)
-}
-
-DurationSwitchWidget *-- DurationSwitchQuantity
-
-class DurationControl {
-durationKnobRotationGetter
-durationCvInputGetter
-durationAttenuverterRotationGetter
-durationRangeGetter
-seconds()
-}
-
-DurationControl ..> durationKnobRotationGetter
-DurationControl ..> durationRangeGetter
-
-class DurationKnobQuantity
-DurationKnobQuantity *.. durationKnobParam
-
-class DurationKnobWidget
-DurationKnobWidget *-- DurationKnobQuantity
+class DurationKnobParamQuantity
+class DurationRangeSwitchParamQuantity
 
 
 @enduml

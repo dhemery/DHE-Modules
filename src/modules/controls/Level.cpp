@@ -1,3 +1,5 @@
+#include <engine/Module.hpp>
+
 #include "modules/controls/Level.h"
 
 namespace DHE {
@@ -6,19 +8,31 @@ namespace Level {
 
 const std::array<Range const *, 2> ranges{&bipolarRange, &unipolarRange};
 
-auto range(int switchPosition) -> Range const * {
+auto range(float switchPosition) -> Range const * {
   return ranges[static_cast<int>(switchPosition)];
 }
 
-auto from(const std::function<float()> &rotation,
-          const std::function<Range const *()> &range)
-    -> std::function<float()> {
-  return [rotation, range]() -> float { return range()->scale(rotation()); };
+auto withCvAndSwitch(rack::engine::Module *module, int knobId, int cvId,
+                     int switchId) -> std::function<float()> {
+  auto knobParam = &module->params[knobId];
+  auto cvInput = &module->inputs[cvId];
+  auto switchParam = &module->params[switchId];
+  return [knobParam, cvInput, switchParam]() -> float {
+    auto const rotation = knobParam->getValue();
+    auto const controlVoltage = cvInput->getVoltage();
+    auto const range = Level::range(switchParam->getValue());
+    auto const modulated = rotation + controlVoltage * 0.1f;
+    return range->scale(modulated);
+  };
 }
 
-auto from(const std::function<float()> &rotation, Range const &range)
+auto withRange(rack::engine::Module *module, int knobId, Range const &range)
     -> std::function<float()> {
-  return [rotation, range]() -> float { return range.scale(rotation()); };
+  auto knobParam = &module->params[knobId];
+  return [knobParam, range]() -> float {
+    auto const rotation = knobParam->getValue();
+    return range.scale(rotation);
+  };
 }
 } // namespace Level
 } // namespace DHE

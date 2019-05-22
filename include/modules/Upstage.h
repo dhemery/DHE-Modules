@@ -1,12 +1,8 @@
 #pragma once
 
-#include <memory>
+#include <functional>
 
 #include "Module.h"
-
-#include "modules/controls/LevelControl.h"
-#include "util/range.h"
-#include "util/signal.h"
 
 namespace DHE {
 
@@ -29,13 +25,12 @@ public:
   enum OutputIds { TRIGGER_OUT, MAIN_OUT, OUTPUT_COUNT };
 
 private:
-  auto envelope_voltage() -> float;
   void send_envelope(float voltage);
   void send_trigger(bool is_triggered);
   auto trigger_in() -> bool;
   auto wait_in() -> bool;
 
-  std::unique_ptr<LevelControl> level;
+  std::function<float()> level;
 };
 
 } // namespace DHE

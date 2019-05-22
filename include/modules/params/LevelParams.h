@@ -9,12 +9,15 @@
 namespace DHE {
 
 namespace Level {
+void configKnob(rack::engine::Module *module, int knobId, Range const &range);
+
+void configKnob(rack::engine::Module *module, int knobId, int switchId);
+
 void configKnob(rack::engine::Module *module, int knobId,
                 std::function<Range const *()> const &getRange);
 
 void configSwitch(rack::engine::Module *module, int switchId,
-                  int initialPosition,
-                  std::function<Range const *()> const &getRange);
+                  int initialPosition = 1);
 } // namespace Level
 
 } // namespace DHE
