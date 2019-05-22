@@ -1,7 +1,7 @@
 #include "panels/FuncPanel.h"
 #include "panels/func/FuncSteppers.h"
 
-namespace DHE {
+namespace dhe {
 
 FuncPanel::FuncPanel(Func *func) : Panel{func, hp} {
   auto widget_right_edge = width();
@@ -39,4 +39,4 @@ FuncPanel::FuncPanel(Func *func) : Panel{func, hp} {
   operatorSwitch->onOperatorChange(updateRangeStepperVisibility);
 }
 
-} // namespace DHE
+} // namespace dhe

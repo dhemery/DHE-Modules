@@ -4,7 +4,7 @@
 #include <cmath>
 #include <gtest/gtest.h>
 
-namespace DHE {
+namespace dhe {
 
 struct LevelTest : public ::testing::Test {
 

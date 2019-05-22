@@ -5,7 +5,7 @@
 #include "modules/controls/RackControls.h"
 #include "modules/params/DurationParams.h"
 
-namespace DHE {
+namespace dhe {
 Hostage::Hostage()
     : state_machine{[this]() -> bool { return defer_gate_is_active(); },
                     [this]() -> bool { return defer_gate_in(); },
@@ -17,9 +17,9 @@ Hostage::Hostage()
                     [this](bool eoc) { set_eoc(eoc); }} {
   config(PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT);
 
-  Duration::configKnob(this, DURATION_KNOB, DURATION_RANGE_SWITCH);
-  Duration::configSwitch(this, DURATION_RANGE_SWITCH);
-  duration = Duration::withCvAndSwitch(this, DURATION_KNOB, DURATION_CV,
+  duration::configKnob(this, DURATION_KNOB, DURATION_RANGE_SWITCH);
+  duration::configSwitch(this, DURATION_RANGE_SWITCH);
+  duration = duration::withCvAndSwitch(this, DURATION_KNOB, DURATION_CV,
                                        DURATION_RANGE_SWITCH);
 
   configParam(HOSTAGE_MODE_SWITCH, 0.f, 1.f, 0.f, "Mode");
@@ -62,4 +62,4 @@ auto Hostage::stage_gate_in() -> bool {
 auto Hostage::envelope_in() -> float { return inputs[MAIN_IN].getVoltage(); }
 
 void Hostage::send_out(float voltage) { outputs[MAIN_OUT].setVoltage(voltage); }
-} // namespace DHE
+} // namespace dhe

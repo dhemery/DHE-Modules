@@ -7,8 +7,8 @@
 
 #include "util/range.h"
 
-namespace DHE {
-namespace Level {
+namespace dhe {
+namespace level {
 
 static Range constexpr unipolarRange{0.f, 10.f};
 static Range constexpr bipolarRange{-5.f, 5.f};
@@ -26,5 +26,5 @@ auto withCvAndSwitch(rack::engine::Module *module, int knobId, int cvId,
 
 auto withRange(rack::engine::Module *module, int knobId, Range const &range)
     -> std::function<float()>;
-} // namespace Level
-} // namespace DHE
+} // namespace level
+} // namespace dhe

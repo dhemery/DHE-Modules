@@ -3,9 +3,9 @@
 #include "modules/controls/Duration.h"
 #include "util/sigmoid.h"
 
-namespace DHE {
+namespace dhe {
 
-namespace Duration {
+namespace duration {
 
 const float knobTaperCurvature = 0.8018017;
 
@@ -24,7 +24,7 @@ auto withCvAndSwitch(rack::engine::Module *module, int knobId, int cvId,
   return [knobParam, cvInput, switchParam]() -> float {
     auto const rotation = knobParam->getValue();
     auto const controlVoltage = cvInput->getVoltage();
-    auto const range = Duration::range(switchParam->getValue());
+    auto const range = duration::range(switchParam->getValue());
     auto const modulated = rotation + controlVoltage * 0.1f;
     auto const tapered = Sigmoid::j_shape.taper(modulated, knobTaperCurvature);
     return range->scale(tapered);
@@ -40,5 +40,5 @@ auto withRange(rack::engine::Module *module, int knobId, Range const &range)
     return range.scale(tapered);
   };
 }
-} // namespace Duration
-} // namespace DHE
+} // namespace duration
+} // namespace dhe

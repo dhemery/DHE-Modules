@@ -4,7 +4,7 @@
 
 #include "StageState.h"
 
-namespace DHE {
+namespace dhe {
 
 class Idling : public StageState {
 public:
@@ -17,4 +17,4 @@ public:
             [](float) {}                           // Do nothing on each step
         } {}
 };
-} // namespace DHE
+} // namespace dhe

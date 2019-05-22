@@ -4,7 +4,7 @@
 
 #include <app/SvgSwitch.hpp>
 
-namespace DHE {
+namespace dhe {
 
 template <typename P, int N> class Toggle : public rack::app::SvgSwitch {
 public:
@@ -34,4 +34,4 @@ public:
 
   std::function<void(int switchPosition)> announce;
 };
-} // namespace DHE
+} // namespace dhe

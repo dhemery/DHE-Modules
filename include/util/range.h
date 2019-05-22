@@ -1,6 +1,6 @@
 #pragma once
 
-namespace DHE {
+namespace dhe {
 
 static inline auto scale(float proportion, float lower_bound, float upper_bound)
     -> float {
@@ -13,7 +13,7 @@ public:
       : lower_bound(lower_bound), upper_bound(upper_bound) {}
 
   auto scale(float proportion) const -> float {
-    return DHE::scale(proportion, lower_bound, upper_bound);
+    return dhe::scale(proportion, lower_bound, upper_bound);
   }
 
   auto scale(bool state) const -> float {
@@ -37,4 +37,4 @@ public:
   const float lower_bound;
   const float upper_bound;
 };
-} // namespace DHE
+} // namespace dhe

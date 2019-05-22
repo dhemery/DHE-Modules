@@ -1,6 +1,6 @@
 #include "panels/UpstagePanel.h"
 
-namespace DHE {
+namespace dhe {
 
 UpstagePanel::UpstagePanel(Upstage *module) : Panel{module, hp} {
   auto widget_right_edge = width();
@@ -34,4 +34,4 @@ UpstagePanel::UpstagePanel(Upstage *module) : Panel{module, hp} {
   y += dy;
   output(column_3, y, Upstage::MAIN_OUT);
 }
-} // namespace DHE
+} // namespace dhe

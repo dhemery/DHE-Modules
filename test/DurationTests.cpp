@@ -2,7 +2,7 @@
 
 #include <gtest/gtest.h>
 
-namespace DHE {
+namespace dhe {
 
 struct DurationTest : public ::testing::Test {
   // tolerance = 6 decimal places
@@ -21,76 +21,76 @@ struct DurationTest : public ::testing::Test {
 };
 
 TEST_F(DurationTest, shortRange_minimumDuration_isShortRangeLowerBound) {
-  range = &Duration::shortRange;
+  range = &duration::shortRange;
   rotation = 0.f;
 
-  const auto expected = Duration::shortRange.lower_bound;
+  const auto expected = duration::shortRange.lower_bound;
   ASSERT_NEAR(duration(), expected, expected * tolerance);
 }
 
 TEST_F(DurationTest,
        shortRange_middleDuration_isOneTenthOfShortRangeUpperBound) {
-  range = &Duration::shortRange;
+  range = &duration::shortRange;
   rotation = 0.5f;
 
-  const auto expected = Duration::shortRange.upper_bound / 10.f;
+  const auto expected = duration::shortRange.upper_bound / 10.f;
   ASSERT_NEAR(duration(), expected, expected * tolerance);
 }
 
 TEST_F(DurationTest, shortRange_maximumDuration_isShortRangeUpperBound) {
-  range = &Duration::shortRange;
+  range = &duration::shortRange;
   rotation = 1.f;
 
-  const auto expected = Duration::shortRange.upper_bound;
+  const auto expected = duration::shortRange.upper_bound;
   ASSERT_NEAR(duration(), expected, expected * tolerance);
 }
 
 TEST_F(DurationTest, mediumRange_minimumDuration_isMediumRangeLowerBound) {
-  range = &Duration::mediumRange;
+  range = &duration::mediumRange;
   rotation = 0.f;
 
-  const auto expected = Duration::mediumRange.lower_bound;
+  const auto expected = duration::mediumRange.lower_bound;
   ASSERT_NEAR(duration(), expected, expected * tolerance);
 }
 
 TEST_F(DurationTest,
        mediumRange_middleDuration_isOneTenthOfMediumRangeUpperBound) {
-  range = &Duration::mediumRange;
+  range = &duration::mediumRange;
   rotation = 0.5f;
 
-  const auto expected = Duration::mediumRange.upper_bound / 10.f;
+  const auto expected = duration::mediumRange.upper_bound / 10.f;
   ASSERT_NEAR(duration(), expected, expected * tolerance);
 }
 
 TEST_F(DurationTest, mediumRange_maximumDuration_isMediumRangeUpperBound) {
-  range = &Duration::mediumRange;
+  range = &duration::mediumRange;
   rotation = 1.f;
 
-  const auto expected = Duration::mediumRange.upper_bound;
+  const auto expected = duration::mediumRange.upper_bound;
   ASSERT_NEAR(duration(), expected, expected * tolerance);
 }
 
 TEST_F(DurationTest, longRange_minimumDuration_isLongRangeLowerBound) {
-  range = &Duration::longRange;
+  range = &duration::longRange;
   rotation = 0.f;
 
-  const auto expected = Duration::longRange.lower_bound;
+  const auto expected = duration::longRange.lower_bound;
   ASSERT_NEAR(duration(), expected, expected * tolerance);
 }
 
 TEST_F(DurationTest, longRange_middleDuration_isOneTenthOfLongRangeUpperBound) {
-  range = &Duration::longRange;
+  range = &duration::longRange;
   rotation = 0.5f;
 
-  const auto expected = Duration::longRange.upper_bound / 10.f;
+  const auto expected = duration::longRange.upper_bound / 10.f;
   ASSERT_NEAR(duration(), expected, expected * tolerance);
 }
 
 TEST_F(DurationTest, longRange_maximumDuration_isLongRangeUpperBound) {
-  range = &Duration::longRange;
+  range = &duration::longRange;
   rotation = 1.f;
 
-  const auto expected = Duration::longRange.upper_bound;
+  const auto expected = duration::longRange.upper_bound;
   ASSERT_NEAR(duration(), expected, expected * tolerance);
 }
 } // namespace DHE

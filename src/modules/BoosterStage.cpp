@@ -9,7 +9,7 @@
 #include "util/gain.h"
 #include "util/signal.h"
 
-namespace DHE {
+namespace dhe {
 
 using ParamQuantity = rack::engine::ParamQuantity;
 
@@ -25,15 +25,15 @@ BoosterStage::BoosterStage()
                    [this](bool eoc) { setEoc(eoc); }} {
   config(PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT);
 
-  Duration::configKnob(this, DURATION_KNOB, DURATION_RANGE_SWITCH);
-  Duration::configSwitch(this, DURATION_RANGE_SWITCH);
-  duration = Duration::withCvAndSwitch(this, DURATION_KNOB, DURATION_CV,
+  duration::configKnob(this, DURATION_KNOB, DURATION_RANGE_SWITCH);
+  duration::configSwitch(this, DURATION_RANGE_SWITCH);
+  duration = duration::withCvAndSwitch(this, DURATION_KNOB, DURATION_CV,
                                        DURATION_RANGE_SWITCH);
 
-  Level::configKnob(this, LEVEL_KNOB, LEVEL_RANGE_SWITCH);
-  Level::configSwitch(this, LEVEL_RANGE_SWITCH);
+  level::configKnob(this, LEVEL_KNOB, LEVEL_RANGE_SWITCH);
+  level::configSwitch(this, LEVEL_RANGE_SWITCH);
   level =
-      Level::withCvAndSwitch(this, LEVEL_KNOB, LEVEL_CV, LEVEL_RANGE_SWITCH);
+      level::withCvAndSwitch(this, LEVEL_KNOB, LEVEL_CV, LEVEL_RANGE_SWITCH);
 
   configParam(CURVE_KNOB, 0.f, 1.f, 0.5f, "Curvature", "%", 0.f, 100.f, 0.f);
   configParam(SHAPE_SWITCH, 0.f, 1.f, 0.f, "Curve Shape");
@@ -104,4 +104,4 @@ void BoosterStage::sendEoc() {
 void BoosterStage::sendOut(float voltage) {
   outputs[MAIN_OUT].setVoltage(voltage);
 }
-} // namespace DHE
+} // namespace dhe

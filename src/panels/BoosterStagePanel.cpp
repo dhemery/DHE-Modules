@@ -1,6 +1,6 @@
 #include "panels/BoosterStagePanel.h"
 
-namespace DHE {
+namespace dhe {
 
 BoosterStagePanel::BoosterStagePanel(BoosterStage *module) : Panel{module, hp} {
   auto widget_right_edge = width();
@@ -50,4 +50,4 @@ BoosterStagePanel::BoosterStagePanel(BoosterStage *module) : Panel{module, hp} {
   input(column_1, y, BoosterStage::ENVELOPE_IN);
   output(column_5, y, BoosterStage::MAIN_OUT);
 }
-} // namespace DHE
+} // namespace dhe

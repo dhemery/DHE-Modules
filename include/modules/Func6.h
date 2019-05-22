@@ -4,7 +4,7 @@
 
 #include "func/FuncChannel.h"
 
-namespace DHE {
+namespace dhe {
 class Func6 : public Module {
   static constexpr auto channel_count = 6;
 
@@ -27,4 +27,4 @@ public:
 
   std::vector<FuncChannel> channels{};
 };
-} // namespace DHE
+} // namespace dhe

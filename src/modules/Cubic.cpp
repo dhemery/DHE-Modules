@@ -4,7 +4,7 @@
 #include "util/gain.h"
 #include "util/range.h"
 
-namespace DHE {
+namespace dhe {
 
 void configCoefficient(rack::engine::Module *module, int param,
                        std::string const &name) {
@@ -54,4 +54,4 @@ auto Cubic::main_in() -> float { return inputs[MAIN_IN].getVoltage(); }
 void Cubic::send_main_out(float voltage) {
   outputs[MAIN_OUT].setVoltage(voltage);
 }
-} // namespace DHE
+} // namespace dhe

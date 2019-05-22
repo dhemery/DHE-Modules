@@ -4,7 +4,7 @@
 
 #include "StageState.h"
 
-namespace DHE {
+namespace dhe {
 
 class Deferring : public StageState {
 public:
@@ -17,4 +17,4 @@ public:
             forward                               // Forward on each step
         } {}
 };
-} // namespace DHE
+} // namespace dhe

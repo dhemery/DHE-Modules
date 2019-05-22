@@ -6,7 +6,7 @@
 #include "StateMachine.h"
 #include "Sustaining.h"
 
-namespace DHE {
+namespace dhe {
 
 class HostageStateMachine : public StateMachine {
 public:
@@ -44,4 +44,4 @@ private:
   Holding holding;
   Sustaining sustaining;
 };
-} // namespace DHE
+} // namespace dhe

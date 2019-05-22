@@ -2,15 +2,15 @@
 #include "modules/controls/Level.h"
 #include "modules/params/LevelParams.h"
 
-namespace DHE {
+namespace dhe {
 
 Upstage::Upstage() {
   config(PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT);
 
-  Level::configKnob(this, LEVEL_KNOB, LEVEL_RANGE_SWITCH);
-  Level::configSwitch(this, LEVEL_RANGE_SWITCH);
+  level::configKnob(this, LEVEL_KNOB, LEVEL_RANGE_SWITCH);
+  level::configSwitch(this, LEVEL_RANGE_SWITCH);
   level =
-      Level::withCvAndSwitch(this, LEVEL_KNOB, LEVEL_CV, LEVEL_RANGE_SWITCH);
+      level::withCvAndSwitch(this, LEVEL_KNOB, LEVEL_CV, LEVEL_RANGE_SWITCH);
 
   configParam(TRIGGER_BUTTON, 0.f, 1.f, 0.f, "Trigger");
   configParam(WAIT_BUTTON, 0.f, 1.f, 0.f, "Wait");
@@ -43,4 +43,4 @@ auto Upstage::wait_in() -> bool {
   return wait_button || wait_input;
 }
 
-} // namespace DHE
+} // namespace dhe

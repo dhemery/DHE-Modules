@@ -8,8 +8,8 @@
 
 #include "util/range.h"
 
-namespace DHE {
-namespace Duration {
+namespace dhe {
+namespace duration {
 
 static Range constexpr shortRange{0.001f, 1.f};
 static Range constexpr mediumRange{0.01f, 10.f};
@@ -36,5 +36,5 @@ auto withCvAndSwitch(rack::engine::Module *module, int knobId, int cvId,
 
 auto withRange(rack::engine::Module *module, int knobId, Range const &range)
     -> std::function<float()>;
-} // namespace Duration
-} // namespace DHE
+} // namespace duration
+} // namespace dhe

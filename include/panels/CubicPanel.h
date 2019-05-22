@@ -3,7 +3,7 @@
 #include "Panel.h"
 #include "modules/Cubic.h"
 
-namespace DHE {
+namespace dhe {
 
 class CubicPanel : public Panel<CubicPanel> {
 public:
@@ -11,4 +11,4 @@ public:
   static constexpr auto module_slug = "cubic";
   static constexpr auto hp = 5;
 };
-} // namespace DHE
+} // namespace dhe

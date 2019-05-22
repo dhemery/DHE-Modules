@@ -2,7 +2,7 @@
 #include <functional>
 #include <utility>
 
-namespace DHE {
+namespace dhe {
 
 class StageState {
 public:
@@ -18,4 +18,4 @@ public:
   const std::function<void()> enter;
   const std::function<void(float)> step;
 };
-} // namespace DHE
+} // namespace dhe

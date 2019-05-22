@@ -7,7 +7,7 @@
 #include "util/sigmoid.h"
 #include "util/signal.h"
 
-namespace DHE {
+namespace dhe {
 Stage::Stage()
     : state_machine{[this]() -> bool { return defer_gate_is_active(); },
                     [this]() -> bool { return defer_gate_in(); },
@@ -22,11 +22,11 @@ Stage::Stage()
 
   configParam(CURVE_KNOB, 0.f, 1.f, 0.5f, "Curvature", "%", 0.f, 200.f, -100.f);
 
-  Duration::configKnob(this, DURATION_KNOB, Duration::mediumRange);
-  duration = Duration::withRange(this, DURATION_KNOB, Duration::mediumRange);
+  duration::configKnob(this, DURATION_KNOB, duration::mediumRange);
+  duration = duration::withRange(this, DURATION_KNOB, duration::mediumRange);
 
-  Level::configKnob(this, LEVEL_KNOB, LevelControl::unipolar_range);
-  level = Level::withRange(this, LEVEL_KNOB, Level::unipolarRange);
+  level::configKnob(this, LEVEL_KNOB, LevelControl::unipolar_range);
+  level = level::withRange(this, LEVEL_KNOB, level::unipolarRange);
 
   shape = std::unique_ptr<CurvatureControl>(
       new CurvatureControl(params[CURVE_KNOB]));
@@ -72,4 +72,4 @@ auto Stage::stage_gate_in() -> bool {
 void Stage::process(const ProcessArgs &args) {
   state_machine.step(args.sampleTime);
 }
-} // namespace DHE
+} // namespace dhe

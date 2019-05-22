@@ -3,7 +3,7 @@
 #include "modules/controls/LevelControl.h"
 #include "util/range.h"
 
-namespace DHE {
+namespace dhe {
 
 const Range LevelControl::unipolar_range{0.f, 10.f};
 const Range LevelControl::bipolar_range{-5.f, 5.f};
@@ -20,4 +20,4 @@ auto LevelControl::range() -> Range const * {
   return ranges[rangeChoice];
 }
 
-} // namespace DHE
+} // namespace dhe

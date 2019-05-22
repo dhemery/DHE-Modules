@@ -2,7 +2,7 @@
 #include <algorithm>
 #include <utility>
 
-namespace DHE {
+namespace dhe {
 
 /**
  * Advances a "phase" value from 0 to 1 over time.
@@ -49,4 +49,4 @@ private:
   const std::function<void(float)> on_advance;
   const std::function<void()> on_finish;
 };
-} // namespace DHE
+} // namespace dhe

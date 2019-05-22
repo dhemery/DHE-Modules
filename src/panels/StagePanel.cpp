@@ -1,6 +1,6 @@
 #include "panels/StagePanel.h"
 
-namespace DHE {
+namespace dhe {
 StagePanel::StagePanel(Stage *module) : Panel{module, hp} {
   auto widget_right_edge = width();
 
@@ -33,4 +33,4 @@ StagePanel::StagePanel(Stage *module) : Panel{module, hp} {
   input(column_1, y, Stage::ENVELOPE_IN);
   output(column_3, y, Stage::MAIN_OUT);
 }
-} // namespace DHE
+} // namespace dhe

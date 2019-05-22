@@ -1,7 +1,7 @@
 #include "panels/Func6Panel.h"
 #include "panels/func/FuncSteppers.h"
 
-namespace DHE {
+namespace dhe {
 Func6Panel::Func6Panel(Func6 *func6) : Panel{func6, hp} {
   auto widget_right_edge = width();
 
@@ -44,4 +44,4 @@ Func6Panel::Func6Panel(Func6 *func6) : Panel{func6, hp} {
   }
 }
 
-} // namespace DHE
+} // namespace dhe

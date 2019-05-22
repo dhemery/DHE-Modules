@@ -22,7 +22,7 @@
 
 extern rack::plugin::Plugin *pluginInstance;
 
-namespace DHE {
+namespace dhe {
 template <typename P> class Jack : public rack::app::SvgPort {
 public:
   Jack() { setSvg(P::svg("port")); }
@@ -156,4 +156,4 @@ private:
     }
   }
 };
-} // namespace DHE
+} // namespace dhe

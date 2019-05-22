@@ -6,7 +6,7 @@
 #include "modules/controls/CurvatureControl.h"
 #include "modules/controls/LevelControl.h"
 
-namespace DHE {
+namespace dhe {
 
 class Tapers : public Module {
 public:
@@ -39,4 +39,4 @@ private:
   std::unique_ptr<CurvatureControl> curvature2;
 };
 
-} // namespace DHE
+} // namespace dhe

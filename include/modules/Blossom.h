@@ -4,7 +4,7 @@
 
 #include "modules/components/Rotor.h"
 
-namespace DHE {
+namespace dhe {
 
 class Blossom : public Module {
 public:
@@ -54,4 +54,4 @@ private:
   Rotor spinner{};
   Rotor bouncer{};
 };
-} // namespace DHE
+} // namespace dhe

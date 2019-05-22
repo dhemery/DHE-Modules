@@ -3,7 +3,7 @@
 #include "util/sigmoid.h"
 #include "util/signal.h"
 
-namespace DHE {
+namespace dhe {
 
 auto taper(LevelControl *level, CurvatureControl *curvature) -> float {
   auto tapered = curvature->taper(level->rotation());
@@ -49,4 +49,4 @@ void Tapers::process(const ProcessArgs &args) {
   outputs[OUT_1].setVoltage(taper(level1.get(), curvature1.get()));
   outputs[OUT_2].setVoltage(taper(level2.get(), curvature2.get()));
 }
-} // namespace DHE
+} // namespace dhe

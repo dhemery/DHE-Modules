@@ -3,7 +3,7 @@
 #include "Panel.h"
 #include "modules/Swave.h"
 
-namespace DHE {
+namespace dhe {
 
 class SwavePanel : public Panel<SwavePanel> {
 public:
@@ -12,4 +12,4 @@ public:
   static constexpr auto hp = 4;
 };
 
-} // namespace DHE
+} // namespace dhe

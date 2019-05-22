@@ -3,7 +3,7 @@
 #include "util/range.h"
 #include "util/signal.h"
 
-namespace DHE {
+namespace dhe {
 namespace Signal {
 
 auto ranges() -> std::array<Range const *, 2> const & {
@@ -16,4 +16,4 @@ auto range(bool is_uni) -> Range const & {
   return is_uni ? unipolar_range : bipolar_range;
 }
 } // namespace Signal
-} // namespace DHE
+} // namespace dhe

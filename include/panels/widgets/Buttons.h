@@ -4,7 +4,7 @@
 
 #include <app/SvgSwitch.hpp>
 
-namespace DHE {
+namespace dhe {
 
 template <typename P> class Button : public rack::app::SvgSwitch {
 public:
@@ -20,4 +20,4 @@ public:
   ReverseButton() : Button<P>("button-reversed") {}
 };
 
-} // namespace DHE
+} // namespace dhe

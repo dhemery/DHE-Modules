@@ -3,7 +3,7 @@
 #include "util/sigmoid.h"
 #include "util/signal.h"
 
-namespace DHE {
+namespace dhe {
 
 Blossom::Blossom() {
   config(PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT);
@@ -95,4 +95,4 @@ auto Blossom::y_gain_in() -> float {
 
 auto Blossom::y_offset() -> float { return offset(Y_RANGE_SWITCH); }
 
-} // namespace DHE
+} // namespace dhe

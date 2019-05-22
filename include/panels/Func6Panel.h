@@ -3,7 +3,7 @@
 #include "Panel.h"
 #include "modules/Func6.h"
 
-namespace DHE {
+namespace dhe {
 
 class Func6Panel : public Panel<Func6Panel> {
 public:
@@ -11,4 +11,4 @@ public:
   static constexpr auto module_slug = "func-6";
   static constexpr auto hp = 12;
 };
-} // namespace DHE
+} // namespace dhe

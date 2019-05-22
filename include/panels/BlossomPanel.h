@@ -3,7 +3,7 @@
 #include "Panel.h"
 #include "modules/Blossom.h"
 
-namespace DHE {
+namespace dhe {
 
 class BlossomPanel : public Panel<BlossomPanel> {
 public:
@@ -11,4 +11,4 @@ public:
   static constexpr auto module_slug = "blossom";
   static constexpr auto hp = 11;
 };
-} // namespace DHE
+} // namespace dhe

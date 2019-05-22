@@ -2,7 +2,7 @@
 
 #include <functional>
 
-namespace DHE {
+namespace dhe {
 template <typename P> class MultiplicationRangeStepper : public Toggle<P, 4> {
 public:
   MultiplicationRangeStepper() : Toggle<P, 4>("stepper-mult") {}
@@ -29,4 +29,4 @@ private:
   std::function<void(bool)> operatorChangedTo = [](bool) {};
 };
 
-} // namespace DHE
+} // namespace dhe

@@ -1,6 +1,6 @@
 #include "modules/Func.h"
 
-namespace DHE {
+namespace dhe {
 Func::Func() {
   config(PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT);
 
@@ -15,4 +15,4 @@ Func::Func() {
 }
 
 void Func::process(const ProcessArgs &args) { channel->apply(0.f); }
-} // namespace DHE
+} // namespace dhe

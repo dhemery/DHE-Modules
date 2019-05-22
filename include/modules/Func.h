@@ -8,7 +8,7 @@
 
 #include "func/FuncChannel.h"
 
-namespace DHE {
+namespace dhe {
 class Func : public Module {
 public:
   Func();
@@ -29,4 +29,4 @@ public:
 
   std::unique_ptr<FuncChannel> channel;
 };
-} // namespace DHE
+} // namespace dhe

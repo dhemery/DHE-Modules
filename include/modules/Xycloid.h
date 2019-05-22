@@ -5,7 +5,7 @@
 #include "modules/components/Rotor.h"
 #include "util/range.h"
 
-namespace DHE {
+namespace dhe {
 
 class Xycloid : public Module {
 public:
@@ -59,4 +59,4 @@ private:
   Rotor wobbler{};
   Rotor throbber{};
 };
-} // namespace DHE
+} // namespace dhe

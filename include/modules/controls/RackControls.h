@@ -3,7 +3,7 @@
 #include <engine/Param.hpp>
 #include <engine/Port.hpp>
 
-namespace DHE {
+namespace dhe {
 
 using Input = rack::engine::Input;
 using Param = rack::engine::Param;
@@ -22,4 +22,4 @@ public:
 extern ConstantInput constant0VoltageInput;
 extern ConstantParam constantFullyRotatedKnobParam;
 
-} // namespace DHE
+} // namespace dhe

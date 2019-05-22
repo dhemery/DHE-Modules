@@ -4,7 +4,7 @@
 
 #include "StageState.h"
 
-namespace DHE {
+namespace dhe {
 
 class Sustaining : public StageState {
 public:
@@ -28,4 +28,4 @@ private:
   const std::function<void(bool)> set_active;
   const std::function<void(float)> forward;
 };
-} // namespace DHE
+} // namespace dhe

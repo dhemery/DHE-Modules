@@ -5,7 +5,7 @@
 #include "util/range.h"
 #include <engine/Module.hpp>
 
-namespace DHE {
+namespace dhe {
 
 namespace control {
 
@@ -63,14 +63,14 @@ auto toRange(Range const &) -> std::function<float(float)>;
 namespace range {
 template <int N>
 auto selection(rack::engine::Module *module, int switchId,
-               std::array<DHE::Range const *, N> const &ranges)
-    -> std::function<DHE::Range const *()> {
+               std::array<dhe::Range const *, N> const &ranges)
+    -> std::function<dhe::Range const *()> {
   auto switchParam = &module->params[switchId];
-  return [switchParam, ranges]() -> DHE::Range {
+  return [switchParam, ranges]() -> dhe::Range {
     auto const selection = static_cast<int>(switchParam->getValue());
     return ranges[selection];
   };
 }
 } // namespace range
 } // namespace control
-} // namespace DHE
+} // namespace dhe

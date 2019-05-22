@@ -2,7 +2,7 @@
 
 #include "engine/Module.hpp"
 
-namespace DHE {
+namespace dhe {
 class Module : public rack::engine::Module {
 public:
   auto modulated(int knob_param, int cv_input) -> float;
@@ -14,4 +14,4 @@ protected:
   void configGain(int index, const std::string &target);
   void configSignalRange(int index, const std::string &target, bool uni = true);
 };
-} // namespace DHE
+} // namespace dhe

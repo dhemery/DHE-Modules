@@ -2,7 +2,7 @@
 
 #include <gmock/gmock.h>
 
-namespace DHE {
+namespace dhe {
 
 using ::testing::AnyNumber;
 using ::testing::AtMost;

@@ -1,6 +1,6 @@
 #include "util/sigmoid.h"
 
-namespace DHE {
+namespace dhe {
 
 namespace Sigmoid {
 
@@ -9,4 +9,4 @@ auto shapes() -> std::array<Shape const *, 2> const & {
   return ranges;
 }
 } // namespace Sigmoid
-} // namespace DHE
+} // namespace dhe

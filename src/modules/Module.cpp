@@ -1,7 +1,7 @@
 #include "modules/Module.h"
 #include "util/range.h"
 
-namespace DHE {
+namespace dhe {
 
 constexpr auto av_range = Range{-1.f, 1.f};
 
@@ -44,4 +44,4 @@ void Module::configSignalRange(int index, const std::string &target, bool uni) {
   const auto initial_value = uni ? 1.f : 0.f;
   configParam(index, 0.f, 1.f, initial_value, target + " range");
 }
-} // namespace DHE
+} // namespace dhe

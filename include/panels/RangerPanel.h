@@ -3,7 +3,7 @@
 #include "Panel.h"
 #include "modules/Ranger.h"
 
-namespace DHE {
+namespace dhe {
 
 class RangerPanel : public Panel<RangerPanel> {
 public:
@@ -11,4 +11,4 @@ public:
   static constexpr auto module_slug = "ranger";
   static constexpr auto hp = 6;
 };
-} // namespace DHE
+} // namespace dhe

@@ -10,7 +10,7 @@
 #include "modules/controls/Duration.h"
 #include "modules/controls/LevelControl.h"
 
-namespace DHE {
+namespace dhe {
 
 class Stage : public Module {
 public:
@@ -42,4 +42,4 @@ private:
   StageStateMachine state_machine;
   float start_voltage{0.f};
 };
-} // namespace DHE
+} // namespace dhe

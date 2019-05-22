@@ -8,7 +8,7 @@
 #include "envelopes/HostageStateMachine.h"
 #include "modules/controls/Duration.h"
 
-namespace DHE {
+namespace dhe {
 
 class Hostage : public Module {
 public:
@@ -47,4 +47,4 @@ private:
   std::function<float()> duration;
   HostageStateMachine state_machine;
 };
-} // namespace DHE
+} // namespace dhe

@@ -10,7 +10,7 @@
 #include "Idling.h"
 #include "StageState.h"
 
-namespace DHE {
+namespace dhe {
 
 class StateMachine {
 public:
@@ -47,4 +47,4 @@ private:
   EndOfCyclePulseGenerator eoc_generator;
   EdgeDetector stage_gate;
 };
-} // namespace DHE
+} // namespace dhe

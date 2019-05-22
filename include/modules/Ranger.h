@@ -6,7 +6,7 @@
 #include "modules/controls/LevelControl.h"
 #include "modules/controls/ModulatedKnob.h"
 
-namespace DHE {
+namespace dhe {
 
 class Ranger : public Module {
 public:
@@ -34,4 +34,4 @@ private:
   std::unique_ptr<ModulatedKnob> level;
 };
 
-} // namespace DHE
+} // namespace dhe

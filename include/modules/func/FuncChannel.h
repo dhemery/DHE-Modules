@@ -8,7 +8,7 @@
 #include "util/gain.h"
 #include "util/signal.h"
 
-namespace DHE {
+namespace dhe {
 
 class FuncChannel {
 public:
@@ -32,4 +32,4 @@ private:
   auto add(float in, float rotation) const -> float;
   auto multiply(float in, float rotation) const -> float;
 };
-} // namespace DHE
+} // namespace dhe

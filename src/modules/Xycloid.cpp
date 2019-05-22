@@ -6,7 +6,7 @@
 #include "util/sigmoid.h"
 #include "util/signal.h"
 
-namespace DHE {
+namespace dhe {
 
 Xycloid::Xycloid() {
   config(PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT);
@@ -118,4 +118,4 @@ auto Xycloid::y_gain_in() -> float {
 
 auto Xycloid::y_offset() -> float { return offset(Y_RANGE_SWITCH); }
 
-} // namespace DHE
+} // namespace dhe

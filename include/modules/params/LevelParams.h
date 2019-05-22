@@ -6,18 +6,18 @@
 
 #include "util/range.h"
 
-namespace DHE {
+namespace dhe {
 
-namespace Level {
+namespace level {
 void configKnob(rack::engine::Module *module, int knobId, Range const &range);
 
 void configKnob(rack::engine::Module *module, int knobId, int switchId);
 
 void configKnob(rack::engine::Module *module, int knobId,
-                std::function<Range const *()> const &getRange);
+                std::function<Range const *()> const &range);
 
 void configSwitch(rack::engine::Module *module, int switchId,
                   int initialPosition = 1);
-} // namespace Level
+} // namespace level
 
-} // namespace DHE
+} // namespace dhe

@@ -1,6 +1,6 @@
 #include "modules/envelopes/StateMachine.h"
 
-namespace DHE {
+namespace dhe {
 
 StateMachine::StateMachine(std::function<bool()> defer_gate_is_active,
                            std::function<bool()> defer_gate_is_up,
@@ -58,4 +58,4 @@ void StateMachine::stop_deferring() {
     finish_stage();
   }
 }
-} // namespace DHE
+} // namespace dhe

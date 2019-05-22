@@ -2,7 +2,7 @@
 
 #include "util/gain.h"
 
-namespace DHE {
+namespace dhe {
 BlossomPanel::BlossomPanel(Blossom *blossom) : Panel{blossom, hp} {
   auto widget_right_edge = width();
 
@@ -49,4 +49,4 @@ BlossomPanel::BlossomPanel(Blossom *blossom) : Panel{blossom, hp} {
   toggle<2>(column_3, y, Blossom::Y_RANGE_SWITCH);
   output(column_4, y + output_port_offset, Blossom::Y_OUT);
 }
-} // namespace DHE
+} // namespace dhe

@@ -6,7 +6,7 @@
 
 #include "util/range.h"
 
-namespace DHE {
+namespace dhe {
 
 class CurvatureControl : public ModulatedKnob {
   static ConstantParam constantJShapeSwitch;
@@ -24,4 +24,4 @@ private:
   Param &shapeSwitch;
 };
 
-} // namespace DHE
+} // namespace dhe

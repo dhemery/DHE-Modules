@@ -5,7 +5,7 @@
 #include "Generating.h"
 #include "StateMachine.h"
 
-namespace DHE {
+namespace dhe {
 
 class StageStateMachine : public StateMachine {
 public:
@@ -31,4 +31,4 @@ public:
 private:
   Generating generating;
 };
-} // namespace DHE
+} // namespace dhe

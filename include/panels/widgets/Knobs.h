@@ -4,7 +4,7 @@
 
 #include <componentlibrary.hpp>
 
-namespace DHE {
+namespace dhe {
 
 template <typename P> class Knob : public rack::componentlibrary::RoundKnob {
 public:
@@ -33,4 +33,4 @@ template <typename P> class TinyKnob : public Knob<P> {
 public:
   TinyKnob() : Knob<P>("tiny") {}
 };
-} // namespace DHE
+} // namespace dhe

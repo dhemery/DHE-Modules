@@ -2,7 +2,7 @@
 
 #include "modules/Func6.h"
 
-namespace DHE {
+namespace dhe {
 Func6::Func6() {
   config(PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT);
   for (int i = 0; i < channel_count; i++) {
@@ -29,4 +29,4 @@ void Func6::process(const ProcessArgs &args) {
   }
 }
 
-} // namespace DHE
+} // namespace dhe

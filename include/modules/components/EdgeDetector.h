@@ -2,7 +2,7 @@
 #include <functional>
 #include <utility>
 
-namespace DHE {
+namespace dhe {
 
 /**
  * Tracks a boolean value and generates an event whenever the value changes.
@@ -34,4 +34,4 @@ private:
   const std::function<void()> on_rise;
   const std::function<void()> on_fall;
 };
-} // namespace DHE
+} // namespace dhe

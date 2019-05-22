@@ -6,9 +6,9 @@
 
 #include "util/range.h"
 
-namespace DHE {
+namespace dhe {
 
-namespace Duration {
+namespace duration {
 void configKnob(rack::engine::Module *module, int knobId, Range const &);
 
 void configKnob(rack::engine::Module *module, int knobId, int switchId);
@@ -17,6 +17,6 @@ void configKnob(rack::engine::Module *module, int knobId,
                 std::function<Range const *()> const &getRange);
 
 void configSwitch(rack::engine::Module *module, int switchId);
-} // namespace Duration
+} // namespace duration
 
-} // namespace DHE
+} // namespace dhe

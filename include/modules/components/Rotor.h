@@ -2,7 +2,7 @@
 #include <cmath>
 
 // TODO: Make this class immutable?
-namespace DHE {
+namespace dhe {
 class Rotor {
 public:
   void advance(float delta, float offset = 0.f) {
@@ -21,4 +21,4 @@ private:
   float phase{0.f};
   float offset{0.f};
 };
-} // namespace DHE
+} // namespace dhe

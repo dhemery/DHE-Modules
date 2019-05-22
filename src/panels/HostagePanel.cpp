@@ -1,6 +1,6 @@
 #include "panels/HostagePanel.h"
 
-namespace DHE {
+namespace dhe {
 
 HostagePanel::HostagePanel(Hostage *module) : Panel{module, hp} {
   auto widget_right_edge = width();
@@ -35,4 +35,4 @@ HostagePanel::HostagePanel(Hostage *module) : Panel{module, hp} {
   input(column_1, y, Hostage::MAIN_IN);
   output(column_3, y, Hostage::MAIN_OUT);
 }
-} // namespace DHE
+} // namespace dhe

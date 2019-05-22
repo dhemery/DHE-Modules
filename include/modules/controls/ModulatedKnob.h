@@ -2,7 +2,7 @@
 
 #include "modules/controls/RackControls.h"
 
-namespace DHE {
+namespace dhe {
 
 class ModulatedKnob {
 public:
@@ -17,4 +17,4 @@ private:
   Param &avParam;
 };
 
-} // namespace DHE
+} // namespace dhe

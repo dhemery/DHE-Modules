@@ -8,7 +8,7 @@
 #include "envelopes/StageStateMachine.h"
 #include "modules/controls/CurvatureControl.h"
 
-namespace DHE {
+namespace dhe {
 
 class BoosterStage : public Module {
 public:
@@ -64,4 +64,4 @@ private:
   std::function<float()> level;
   std::unique_ptr<CurvatureControl> shape;
 };
-} // namespace DHE
+} // namespace dhe

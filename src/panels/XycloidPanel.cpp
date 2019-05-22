@@ -2,7 +2,7 @@
 
 #include "util/gain.h"
 
-namespace DHE {
+namespace dhe {
 
 XycloidPanel::XycloidPanel(Xycloid *module) : Panel{module, hp} {
   auto widget_right_edge = width();
@@ -49,4 +49,4 @@ XycloidPanel::XycloidPanel(Xycloid *module) : Panel{module, hp} {
   output(column_4, y + output_port_offset, Xycloid::Y_OUT);
 }
 
-} // namespace DHE
+} // namespace dhe

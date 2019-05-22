@@ -2,7 +2,7 @@
 
 #include "util/range.h"
 
-namespace DHE {
+namespace dhe {
 namespace Gain {
 
 static constexpr auto range = Range{0.f, 2.f};
@@ -12,4 +12,4 @@ static inline auto multiplier(float gain_amount) -> float {
 }
 
 } // namespace Gain
-} // namespace DHE
+} // namespace dhe

@@ -2,7 +2,7 @@
 
 #include "modules/func/FuncChannel.h"
 
-namespace DHE {
+namespace dhe {
 
 static constexpr auto attenuation_range = Range{0.f, 1.f};
 static constexpr auto invertible_attenuation_range = Range{-1.f, 1.f};
@@ -51,4 +51,4 @@ auto FuncChannel::multiply(float in, float rotation) const -> float {
   auto range = multiplicationRanges[rangeSelection];
   return in * range->scale(rotation);
 }
-} // namespace DHE
+} // namespace dhe

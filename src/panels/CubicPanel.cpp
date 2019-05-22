@@ -1,6 +1,6 @@
 #include "panels/CubicPanel.h"
 
-namespace DHE {
+namespace dhe {
 
 CubicPanel::CubicPanel(Cubic *module) : Panel{module, hp} {
   auto widget_right_edge = width();
@@ -38,4 +38,4 @@ CubicPanel::CubicPanel(Cubic *module) : Panel{module, hp} {
   input(column_1, y, Cubic::MAIN_IN);
   output(column_2, y, Cubic::MAIN_OUT);
 }
-} // namespace DHE
+} // namespace dhe

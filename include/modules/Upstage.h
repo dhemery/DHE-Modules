@@ -4,7 +4,7 @@
 
 #include "Module.h"
 
-namespace DHE {
+namespace dhe {
 
 class Upstage : public Module {
 public:
@@ -33,4 +33,4 @@ private:
   std::function<float()> level;
 };
 
-} // namespace DHE
+} // namespace dhe

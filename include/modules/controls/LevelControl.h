@@ -6,7 +6,7 @@
 
 #include "util/range.h"
 
-namespace DHE {
+namespace dhe {
 
 class LevelControl : public ModulatedKnob {
   static ConstantParam constantUnipolarLevelRangeSwitch;
@@ -29,4 +29,4 @@ private:
   rack::engine::Param &rangeSwitch;
 };
 
-} // namespace DHE
+} // namespace dhe

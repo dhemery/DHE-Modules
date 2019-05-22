@@ -4,7 +4,7 @@
 #include "util/sigmoid.h"
 #include "util/signal.h"
 
-namespace DHE {
+namespace dhe {
 
 Swave::Swave() {
   config(PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT);
@@ -27,4 +27,4 @@ void Swave::sendSignal(float voltage) { outputs[MAIN_OUT].setVoltage(voltage); }
 
 auto Swave::signalIn() -> float { return inputs[MAIN_IN].getVoltage(); }
 
-} // namespace DHE
+} // namespace dhe

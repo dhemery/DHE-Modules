@@ -1,6 +1,6 @@
 #include "panels/SwavePanel.h"
 
-namespace DHE {
+namespace dhe {
 
 SwavePanel::SwavePanel(Swave *module) : Panel{module, hp} {
   auto widget_right_edge = width();
@@ -27,4 +27,4 @@ SwavePanel::SwavePanel(Swave *module) : Panel{module, hp} {
   y += dy;
   output(x, y, Swave::MAIN_OUT);
 }
-} // namespace DHE
+} // namespace dhe

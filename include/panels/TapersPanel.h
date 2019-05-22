@@ -3,7 +3,7 @@
 #include "Panel.h"
 #include "modules/Tapers.h"
 
-namespace DHE {
+namespace dhe {
 
 class TapersPanel : public Panel<TapersPanel> {
 public:
@@ -11,4 +11,4 @@ public:
   static constexpr auto module_slug = "tapers";
   static constexpr auto hp = 9;
 };
-} // namespace DHE
+} // namespace dhe

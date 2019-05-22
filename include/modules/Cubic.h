@@ -2,7 +2,7 @@
 
 #include "Module.h"
 
-namespace DHE {
+namespace dhe {
 
 class Cubic : public Module {
 public:
@@ -39,4 +39,4 @@ private:
   auto main_in() -> float;
   void send_main_out(float voltage);
 };
-} // namespace DHE
+} // namespace dhe

@@ -1,6 +1,6 @@
 #include "modules/Ranger.h"
 
-namespace DHE {
+namespace dhe {
 
 Ranger::Ranger() {
   config(PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT);
@@ -35,4 +35,4 @@ void Ranger::process(const ProcessArgs &args) {
   outputs[MAIN_OUT].setVoltage(outputVoltage);
 }
 
-} // namespace DHE
+} // namespace dhe

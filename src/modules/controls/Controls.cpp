@@ -1,7 +1,7 @@
 #include "modules/controls/Controls.h"
 #include "util/range.h"
 
-namespace DHE {
+namespace dhe {
 
 namespace control {
 namespace knob {
@@ -27,7 +27,7 @@ auto rotation(rack::engine::Module *module, int knobId, int cvId)
 
 auto rotation(rack::engine::Module *module, int knobId, int cvId, int avId)
     -> std::function<float()> {
-  static auto constexpr avRange = DHE::Range{-1.f, 1.f};
+  static auto constexpr avRange = dhe::Range{-1.f, 1.f};
   auto knobParam = &module->params[knobId];
   auto cvInput = &module->inputs[cvId];
   auto avParam = &module->params[avId];
@@ -61,10 +61,10 @@ auto toRange(std::function<const Range *()> range)
     -> std::function<float(float)> {
   return std::function<float(float)>();
 }
-auto toRange(const DHE::Range &) -> std::function<float(float)> {
+auto toRange(const dhe::Range &) -> std::function<float(float)> {
   return std::function<float(float)>();
 }
 
 } // namespace scale
 } // namespace control
-} // namespace DHE
+} // namespace dhe

@@ -7,9 +7,9 @@
 #include "modules/params/DurationParams.h"
 #include "util/sigmoid.h"
 
-namespace DHE {
+namespace dhe {
 
-namespace Duration {
+namespace duration {
 
 class RangeSwitchParamQuantity : public rack::engine::ParamQuantity {
 public:
@@ -56,7 +56,7 @@ void configKnob(rack::engine::Module *module, int knobId, int switchId) {
   auto *switchParam = &module->params[switchId];
   auto const getRange = [switchParam]() -> Range const * {
     auto const selection = static_cast<int>(switchParam->getValue());
-    return Duration::ranges[selection];
+    return duration::ranges[selection];
   };
   configKnob(module, knobId, getRange);
 }
@@ -65,5 +65,5 @@ void configSwitch(rack::engine::Module *module, int switchId) {
   module->configParam<RangeSwitchParamQuantity>(switchId, 0.f, 2.f, 1.f,
                                                 "Duration Range");
 }
-} // namespace Duration
-} // namespace DHE
+} // namespace duration
+} // namespace dhe

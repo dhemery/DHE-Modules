@@ -3,7 +3,7 @@
 #include "Panel.h"
 #include "modules/Upstage.h"
 
-namespace DHE {
+namespace dhe {
 
 class UpstagePanel : public Panel<UpstagePanel> {
 public:
@@ -12,4 +12,4 @@ public:
   static constexpr auto hp = 5;
 };
 
-} // namespace DHE
+} // namespace dhe

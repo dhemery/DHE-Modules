@@ -3,7 +3,7 @@
 #include "modules/controls/CurvatureControl.h"
 #include "util/sigmoid.h"
 
-namespace DHE {
+namespace dhe {
 
 ConstantParam CurvatureControl::constantJShapeSwitch{0.f};
 
@@ -15,4 +15,4 @@ auto CurvatureControl::taper(float input) -> float {
   return shape->taper(input, curvature);
 }
 
-} // namespace DHE
+} // namespace dhe

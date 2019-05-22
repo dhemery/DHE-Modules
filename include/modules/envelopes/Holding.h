@@ -5,7 +5,7 @@
 #include "StageState.h"
 #include "modules/components/PhaseAccumulator.h"
 
-namespace DHE {
+namespace dhe {
 
 class Holding : public StageState {
 public:
@@ -35,4 +35,4 @@ private:
   const std::function<void(float)> forward;
   PhaseAccumulator generator;
 };
-} // namespace DHE
+} // namespace dhe

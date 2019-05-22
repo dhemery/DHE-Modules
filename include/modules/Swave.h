@@ -4,7 +4,7 @@
 #include "modules/controls/CurvatureControl.h"
 #include <memory>
 
-namespace DHE {
+namespace dhe {
 
 class Swave : public Module {
 public:
@@ -21,4 +21,4 @@ private:
   std::unique_ptr<CurvatureControl> shape;
 };
 
-} // namespace DHE
+} // namespace dhe

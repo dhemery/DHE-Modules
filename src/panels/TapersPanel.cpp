@@ -1,6 +1,6 @@
 #include "panels/TapersPanel.h"
 
-namespace DHE {
+namespace dhe {
 
 TapersPanel::TapersPanel(Tapers *module) : Panel{module, hp} {
   auto widget_right_edge = width();
@@ -39,4 +39,4 @@ TapersPanel::TapersPanel(Tapers *module) : Panel{module, hp} {
   toggle<2>(column_2, y, Tapers::RANGE_2_SWITCH);
   output(column_3, y, Tapers::OUT_2);
 }
-} // namespace DHE
+} // namespace dhe

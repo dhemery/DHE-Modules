@@ -1,6 +1,6 @@
 #include "panels/RangerPanel.h"
 
-namespace DHE {
+namespace dhe {
 
 RangerPanel::RangerPanel(Ranger *module) : Panel{module, hp} {
   auto widget_right_edge = width();
@@ -35,4 +35,4 @@ RangerPanel::RangerPanel(Ranger *module) : Panel{module, hp} {
   input(column_1, y, Ranger::LIMIT_2_CV);
   knob<TinyKnob>(column_2, y, Ranger::LIMIT_2_AV);
 }
-} // namespace DHE
+} // namespace dhe

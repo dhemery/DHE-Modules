@@ -2,9 +2,9 @@
 
 #include "modules/controls/Level.h"
 
-namespace DHE {
+namespace dhe {
 
-namespace Level {
+namespace level {
 
 const std::array<Range const *, 2> ranges{&bipolarRange, &unipolarRange};
 
@@ -20,7 +20,7 @@ auto withCvAndSwitch(rack::engine::Module *module, int knobId, int cvId,
   return [knobParam, cvInput, switchParam]() -> float {
     auto const rotation = knobParam->getValue();
     auto const controlVoltage = cvInput->getVoltage();
-    auto const range = Level::range(switchParam->getValue());
+    auto const range = level::range(switchParam->getValue());
     auto const modulated = rotation + controlVoltage * 0.1f;
     return range->scale(modulated);
   };
@@ -34,5 +34,5 @@ auto withRange(rack::engine::Module *module, int knobId, Range const &range)
     return range.scale(rotation);
   };
 }
-} // namespace Level
-} // namespace DHE
+} // namespace level
+} // namespace dhe
