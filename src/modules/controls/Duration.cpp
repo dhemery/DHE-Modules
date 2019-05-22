@@ -3,17 +3,19 @@
 
 namespace DHE {
 
-const float Duration::knobTaperCurvature = 0.8018017;
+namespace Duration {
 
-const std::array<Range const *, 3> Duration::ranges{&shortRange, &mediumRange,
-                                                    &longRange};
+const float knobTaperCurvature = 0.8018017;
 
-auto Duration::range(int switchPosition) -> Range const * {
+const std::array<Range const *, 3> ranges{&shortRange, &mediumRange,
+                                          &longRange};
+
+auto range(int switchPosition) -> Range const * {
   return ranges[static_cast<int>(switchPosition)];
 }
 
-auto Duration::from(const std::function<float()> &rotation,
-                    const std::function<Range const *()> &range)
+auto from(const std::function<float()> &rotation,
+          const std::function<Range const *()> &range)
     -> std::function<float()> {
   return [rotation, range]() -> float {
     auto const tapered = Sigmoid::j_shape.taper(rotation(), knobTaperCurvature);
@@ -21,11 +23,11 @@ auto Duration::from(const std::function<float()> &rotation,
   };
 }
 
-auto Duration::from(const std::function<float()> &rotation)
-    -> std::function<float()> {
+auto from(const std::function<float()> &rotation) -> std::function<float()> {
   return [rotation]() -> float {
     auto const tapered = Sigmoid::j_shape.taper(rotation(), knobTaperCurvature);
     return mediumRange.scale(tapered);
   };
 }
+} // namespace Duration
 } // namespace DHE

@@ -8,7 +8,7 @@
 #include "envelopes/StageStateMachine.h"
 #include "modules/controls/CurvatureControl.h"
 #include "modules/controls/Duration.h"
-#include "modules/controls/LevelControl.h"
+#include "modules/controls/Level.h"
 #include "util/sigmoid.h"
 
 namespace DHE {
@@ -29,6 +29,10 @@ public:
 
   void setDurationRange(int switchPosition) {
     durationRange = Duration::range(switchPosition);
+  }
+
+  void setLevelRange(int switchPosition) {
+    levelRange = Level::ranges[switchPosition];
   }
 
   enum ParameterIds {
@@ -68,8 +72,9 @@ private:
   bool isEoc{false};
   float startVoltage{0.f};
   Range const *durationRange;
+  Range const *levelRange;
   std::function<float()> duration;
-  std::unique_ptr<LevelControl> level;
+  std::function<float()> level;
   std::unique_ptr<CurvatureControl> shape;
 };
 } // namespace DHE

@@ -5,13 +5,12 @@
 #include <engine/Module.hpp>
 #include <engine/ParamQuantity.hpp>
 
-#include "modules/controls/Duration.h"
-#include "modules/params/DurationParams.h"
-#include "util/sigmoid.h"
+#include "modules/controls/Level.h"
+#include "modules/params/LevelParams.h"
 
 namespace DHE {
 
-namespace Duration {
+namespace Level {
 
 class RangeSwitchParamQuantity : public rack::engine::ParamQuantity {
 public:
@@ -20,7 +19,7 @@ public:
     auto stringStream =
         std::ostringstream{}
         << std::fixed << std::setprecision(getDisplayPrecision())
-        << range->lower_bound << "–" << range->upper_bound << "s";
+        << range->lower_bound << "–" << range->upper_bound << "V";
     return stringStream.str();
   }
 
@@ -30,15 +29,13 @@ public:
 class KnobParamQuantity : public rack::engine::ParamQuantity {
 public:
   auto getDisplayValue() -> float override {
-    auto const value = getValue();
-    auto const tapered = Sigmoid::j_taper(value, knobTaperCurvature);
-    return getRange()->scale(tapered);
+    auto const rotation = getValue();
+    return getRange()->scale(rotation);
   }
 
   void setDisplayValue(float displayValue) override {
     auto const normalized = getRange()->normalize(displayValue);
-    auto const deTapered = Sigmoid::j_taper(normalized, -knobTaperCurvature);
-    setValue(deTapered);
+    setValue(normalized);
   }
 
   std::function<Range const *()> getRange;
@@ -46,20 +43,20 @@ public:
 
 void configKnob(rack::engine::Module *module, int knobId,
                 std::function<Range const *()> const &getRange) {
-  module->configParam<KnobParamQuantity>(knobId, 0.f, 1.f, 0.5f, "Duration",
-                                         "s");
+  module->configParam<KnobParamQuantity>(knobId, 0.f, 1.f, 0.5f, "Level", "V");
   auto knobParamQuantity =
       dynamic_cast<KnobParamQuantity *>(module->paramQuantities[knobId]);
   knobParamQuantity->getRange = getRange;
 }
 
 void configSwitch(rack::engine::Module *module, int switchId,
+                  int initialPosition,
                   std::function<Range const *()> const &getRange) {
-  module->configParam<RangeSwitchParamQuantity>(switchId, 0.f, 2.f, 1.f,
-                                                "Duration Range");
+  module->configParam<RangeSwitchParamQuantity>(switchId, 0.f, 1.f,
+                                                initialPosition, "Level Range");
   auto switchParamQuantity = dynamic_cast<RangeSwitchParamQuantity *>(
       module->paramQuantities[switchId]);
   switchParamQuantity->getRange = getRange;
 }
-} // namespace Duration
+} // namespace Level
 } // namespace DHE

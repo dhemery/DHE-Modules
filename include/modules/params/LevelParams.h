@@ -8,12 +8,13 @@
 
 namespace DHE {
 
-namespace Duration {
+namespace Level {
 void configKnob(rack::engine::Module *module, int knobId,
                 std::function<Range const *()> const &getRange);
 
 void configSwitch(rack::engine::Module *module, int switchId,
+                  int initialPosition,
                   std::function<Range const *()> const &getRange);
-} // namespace Duration
+} // namespace Level
 
 } // namespace DHE

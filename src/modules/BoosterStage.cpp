@@ -2,6 +2,7 @@
 
 #include "modules/BoosterStage.h"
 #include "modules/params/DurationParams.h"
+#include "modules/params/LevelParams.h"
 
 #include "util/gain.h"
 #include "util/signal.h"
@@ -22,30 +23,38 @@ BoosterStage::BoosterStage()
                    [this](bool eoc) { setEoc(eoc); }} {
   config(PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT);
 
-  auto getDurationRange = [this]() -> Range const * { return durationRange; };
+  auto const getDurationRange = [this]() -> Range const * {
+    return durationRange;
+  };
   Duration::configKnob(this, DURATION_KNOB, getDurationRange);
   Duration::configSwitch(this, DURATION_RANGE_SWITCH, getDurationRange);
 
-  auto durationKnob = ModulatedKnob{params[DURATION_KNOB], inputs[DURATION_CV],
-                                    constantFullyRotatedKnobParam};
-  auto durationKnobRotation = [durationKnob]() -> float {
+  auto const durationKnob =
+      ModulatedKnob{params[DURATION_KNOB], inputs[DURATION_CV],
+                    constantFullyRotatedKnobParam};
+  auto const durationKnobRotation = [durationKnob]() -> float {
     return durationKnob.rotation();
   };
   duration = Duration::from(durationKnobRotation, getDurationRange);
 
-  configParam(LEVEL_KNOB, 0.f, 1.f, 0.5f, "Level", "%", 0.f, 100.f, 0.f);
-  configParam(CURVE_KNOB, 0.f, 1.f, 0.5f, "Curvature", "%", 0.f, 100.f, 0.f);
+  auto const getLevelRange = [this]() -> Range const * { return levelRange; };
+  Level::configKnob(this, LEVEL_KNOB, getLevelRange);
+  Level::configSwitch(this, LEVEL_RANGE_SWITCH, 1, getLevelRange);
 
-  configSignalRange(LEVEL_RANGE_SWITCH, "Level");
+  auto const levelKnob = ModulatedKnob{params[LEVEL_KNOB], inputs[LEVEL_CV],
+                                       constantFullyRotatedKnobParam};
+  auto const levelKnobRotation = [levelKnob]() -> float {
+    return levelKnob.rotation();
+  };
+  level = Level::from(levelKnobRotation, getLevelRange);
+
+  configParam(CURVE_KNOB, 0.f, 1.f, 0.5f, "Curvature", "%", 0.f, 100.f, 0.f);
   configParam(SHAPE_SWITCH, 0.f, 1.f, 0.f, "Curve Shape");
 
   configParam(ACTIVE_BUTTON, 0.f, 1.f, 0.f, "Active");
   configParam(DEFER_BUTTON, 0.f, 1.f, 0.f, "Defer");
   configParam(EOC_BUTTON, 0.f, 1.f, 0.f, "EOC");
   configParam(TRIGGER_BUTTON, 0.f, 1.f, 0.f, "TRIGGER");
-
-  level = std::unique_ptr<LevelControl>(new LevelControl(
-      params[LEVEL_KNOB], params[LEVEL_RANGE_SWITCH], inputs[LEVEL_CV]));
 
   shape = std::unique_ptr<CurvatureControl>(new CurvatureControl(
       params[CURVE_KNOB], params[SHAPE_SWITCH], inputs[CURVE_CV]));
@@ -64,7 +73,7 @@ void BoosterStage::forward() { sendOut(envelopeIn()); }
 
 void BoosterStage::generate(float phase) {
   auto const taperedPhase = shape->taper(phase);
-  sendOut(scale(taperedPhase, startVoltage, level->voltage()));
+  sendOut(scale(taperedPhase, startVoltage, level()));
 }
 
 void BoosterStage::setActive(bool active) { isActive = active; }
