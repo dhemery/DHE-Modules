@@ -1,9 +1,9 @@
 #include <utility>
 
 #include "modules/Hostage.h"
-#include "modules/config/DurationConfig.h"
 #include "modules/controls/ModulatedKnob.h"
 #include "modules/controls/RackControls.h"
+#include "modules/params/DurationParams.h"
 
 namespace DHE {
 Hostage::Hostage()
@@ -11,7 +11,7 @@ Hostage::Hostage()
                     [this]() -> bool { return defer_gate_in(); },
                     [this]() -> bool { return stage_gate_in(); },
                     [this]() -> bool { return is_sustain_mode(); },
-                    [this]() -> float { return duration->seconds(); },
+                    [this]() -> float { return duration(); },
                     [this](float) { forward(); },
                     [this](bool active) { set_active(active); },
                     [this](bool eoc) { set_eoc(eoc); }} {
@@ -21,15 +21,14 @@ Hostage::Hostage()
                                     constantFullyRotatedKnobParam};
 
   auto getDurationRange = [this]() -> Range const * { return durationRange; };
-  Duration::config(this, DURATION_KNOB, DURATION_RANGE_SWITCH,
-                   getDurationRange);
+  Duration::configKnob(this, DURATION_KNOB, getDurationRange);
+  Duration::configSwitch(this, DURATION_RANGE_SWITCH, getDurationRange);
 
   auto getDurationRotation = [durationKnob]() -> float {
     return durationKnob.rotation();
   };
-  auto durationControl =
-      new Duration::Control(getDurationRotation, getDurationRange);
-  duration = std::unique_ptr<Duration::Control>(durationControl);
+
+  duration = Duration::from(getDurationRotation, getDurationRange);
 
   configParam(HOSTAGE_MODE_SWITCH, 0.f, 1.f, 0.f, "Mode");
 

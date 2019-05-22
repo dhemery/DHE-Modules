@@ -1,8 +1,7 @@
 #include <utility>
 
 #include "modules/Stage.h"
-#include "modules/components/Duration.h"
-#include "modules/config/DurationConfig.h"
+#include "modules/params/DurationParams.h"
 #include "util/sigmoid.h"
 #include "util/signal.h"
 
@@ -11,7 +10,7 @@ Stage::Stage()
     : state_machine{[this]() -> bool { return defer_gate_is_active(); },
                     [this]() -> bool { return defer_gate_in(); },
                     [this]() -> bool { return stage_gate_in(); },
-                    [this]() -> float { return duration->seconds(); },
+                    [this]() -> float { return duration(); },
                     [this](float) { forward(); },
                     [this]() { prepare_to_generate(); },
                     [this](float phase) { generate(phase); },
@@ -25,7 +24,7 @@ Stage::Stage()
   auto getDurationRange = []() -> Range const * {
     return &Duration::mediumRange;
   };
-  Duration::config(this, DURATION_KNOB, getDurationRange);
+  Duration::configKnob(this, DURATION_KNOB, getDurationRange);
 
   auto durationKnob =
       ModulatedKnob{params[DURATION_KNOB], constant0VoltageInput,
@@ -33,9 +32,8 @@ Stage::Stage()
   auto durationKnobRotation = [durationKnob]() -> float {
     return durationKnob.rotation();
   };
-  auto durationControl =
-      new Duration::Control(durationKnobRotation, getDurationRange);
-  duration = std::unique_ptr<Duration::Control>(durationControl);
+
+  duration = Duration::from(durationKnobRotation);
 
   level = std::unique_ptr<LevelControl>(new LevelControl(params[LEVEL_KNOB]));
 

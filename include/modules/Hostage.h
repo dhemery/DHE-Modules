@@ -1,12 +1,12 @@
 #pragma once
 
+#include <functional>
 #include <memory>
 
 #include "Module.h"
 
-#include "components/Duration.h"
 #include "envelopes/HostageStateMachine.h"
-#include "modules/controls/DurationControl.h"
+#include "modules/controls/Duration.h"
 
 namespace DHE {
 
@@ -44,7 +44,7 @@ private:
   auto envelope_in() -> float;
   void send_out(float voltage);
 
-  std::unique_ptr<Duration::Control> duration;
+  std::function<float()> duration;
   Range const *durationRange{&Duration::mediumRange};
   HostageStateMachine state_machine;
 };

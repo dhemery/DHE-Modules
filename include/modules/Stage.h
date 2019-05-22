@@ -1,12 +1,13 @@
 #pragma once
 
+#include <functional>
 #include <memory>
 
 #include "Module.h"
 
 #include "envelopes/StageStateMachine.h"
+#include "modules/controls/Duration.h"
 #include "modules/controls/CurvatureControl.h"
-#include "modules/controls/DurationControl.h"
 #include "modules/controls/LevelControl.h"
 
 namespace DHE {
@@ -35,7 +36,7 @@ private:
   auto envelope_in() -> float;
   void send_out(float voltage);
 
-  std::unique_ptr<Duration::Control> duration;
+  std::function<float()> duration;
   std::unique_ptr<LevelControl> level;
   std::unique_ptr<CurvatureControl> shape;
   StageStateMachine state_machine;

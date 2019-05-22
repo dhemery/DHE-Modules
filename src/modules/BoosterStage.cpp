@@ -1,7 +1,7 @@
 #include <utility>
 
 #include "modules/BoosterStage.h"
-#include "modules/config/DurationConfig.h"
+#include "modules/params/DurationParams.h"
 
 #include "util/gain.h"
 #include "util/signal.h"
@@ -14,7 +14,7 @@ BoosterStage::BoosterStage()
     : stateMachine{[this]() -> bool { return deferGateIsActive(); },
                    [this]() -> bool { return deferGateIn(); },
                    [this]() -> bool { return stageGateIn(); },
-                   [this]() -> float { return duration->seconds(); },
+                   [this]() -> float { return duration(); },
                    [this](float) { forward(); },
                    [this]() { prepareToGenerate(); },
                    [this](float phase) { generate(phase); },
@@ -23,17 +23,15 @@ BoosterStage::BoosterStage()
   config(PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT);
 
   auto getDurationRange = [this]() -> Range const * { return durationRange; };
-  Duration::config(this, DURATION_KNOB, DURATION_RANGE_SWITCH,
-                   getDurationRange);
+  Duration::configKnob(this, DURATION_KNOB, getDurationRange);
+  Duration::configSwitch(this, DURATION_RANGE_SWITCH, getDurationRange);
 
   auto durationKnob = ModulatedKnob{params[DURATION_KNOB], inputs[DURATION_CV],
                                     constantFullyRotatedKnobParam};
   auto durationKnobRotation = [durationKnob]() -> float {
     return durationKnob.rotation();
   };
-  auto durationControl =
-      new Duration::Control(durationKnobRotation, getDurationRange);
-  duration = std::unique_ptr<Duration::Control>(durationControl);
+  duration = Duration::from(durationKnobRotation, getDurationRange);
 
   configParam(LEVEL_KNOB, 0.f, 1.f, 0.5f, "Level", "%", 0.f, 100.f, 0.f);
   configParam(CURVE_KNOB, 0.f, 1.f, 0.5f, "Curvature", "%", 0.f, 100.f, 0.f);

@@ -1,12 +1,13 @@
 #pragma once
 
+#include <functional>
 #include <memory>
 
 #include "Module.h"
 
 #include "envelopes/StageStateMachine.h"
+#include "modules/controls/Duration.h"
 #include "modules/controls/CurvatureControl.h"
-#include "modules/controls/DurationControl.h"
 #include "modules/controls/LevelControl.h"
 #include "util/sigmoid.h"
 
@@ -29,6 +30,7 @@ public:
   void setDurationRange(float switchPosition) {
     durationRange = Duration::range(switchPosition);
   }
+
   enum ParameterIds {
     ACTIVE_BUTTON,
     CURVE_KNOB,
@@ -66,7 +68,7 @@ private:
   bool isEoc{false};
   float startVoltage{0.f};
   Range const *durationRange;
-  std::unique_ptr<Duration::Control> duration;
+  std::function<float()> duration;
   std::unique_ptr<LevelControl> level;
   std::unique_ptr<CurvatureControl> shape;
 };
