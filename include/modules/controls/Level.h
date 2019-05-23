@@ -18,12 +18,34 @@ extern std::array<Range const *, 2> const ranges;
  */
 auto range(float switchPosition) -> Range const *;
 
+/**
+ * Creates a function that yields the level (in volts) selected by a
+ * cv-modulated knob and a level range switch.
+ * @param knobId the ID of the level knob param
+ * @param cvId the ID of the control voltage input
+ * @param switchId the ID of the level range switch
+ */
 auto withSelectableRange(rack::engine::Module *module, int knobId, int cvId,
                          int switchId) -> std::function<float()>;
 
+/**
+ * Creates a function that yields the level (in volts) selected by a
+ * cv-modulated knob and a level range switch. The control voltage is further
+ * modulated by an attenuverter.
+ * @param knobId the ID of the level knob param
+ * @param cvId the ID of the control voltage input
+ * @param avId the ID of the attenuverter param
+ * @param switchId the ID of the level range switch
+ */
 auto withSelectableRange(rack::engine::Module *module, int knobId, int cvId,
                          int avId, int switchId) -> std::function<float()>;
 
+/**
+ * Creates a function that yields the level (in volts) selected by a knob
+ * from a given range.
+ * @param knobId the ID of the level knob param
+ * @param range the range from which to select a voltage
+ */
 auto withFixedRange(rack::engine::Module *module, int knobId,
                     Range const &range) -> std::function<float()>;
 } // namespace level

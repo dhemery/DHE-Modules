@@ -24,15 +24,15 @@ public:
 class KnobParamQuantity : public rack::engine::ParamQuantity {
 public:
   auto getDisplayValue() -> float override {
-    auto const value = getValue();
-    auto const tapered = sigmoid::j_taper(value, knobTaperCurvature);
-    return range()->scale(tapered);
+    static auto const durationTaperFor = duration::rotationToDurationTaper();
+    auto const rotation = getValue();
+    return range()->scale(durationTaperFor(rotation));
   }
 
-  void setDisplayValue(float displayValue) override {
-    auto const normalized = range()->normalize(displayValue);
-    auto const deTapered = sigmoid::j_taper(normalized, -knobTaperCurvature);
-    setValue(deTapered);
+  void setDisplayValue(float durationSeconds) override {
+    static auto const rotationFor = duration::durationTaperToRotation();
+    auto const durationTaper = range()->normalize(durationSeconds);
+    setValue(rotationFor(durationTaper));
   }
 
   std::function<Range const *()> range;
