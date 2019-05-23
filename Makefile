@@ -58,6 +58,7 @@ test: all
 test: $(TEST_RUNNER)
 	$<
 
+.PHONY: test
 
 
 
@@ -67,20 +68,24 @@ test: $(TEST_RUNNER)
 #
 ########################################################################
 
-# Tell clang to emit a compilation database entry for each source file
-# when building the project target
-project: FLAGS += -MJ $@.json
+COMPILATION_DATABASE_JSONS_DIR = .jsons
+COMPILATION_DATABASE_FILE = compile_commands.json
 
-COMPILATION_DATABASE_JSONS := $(patsubst %, %.json, $(OBJECTS) $(TEST_OBJECTS) )
+COMPILATION_DATABASE_JSONS := $(patsubst src/%.cpp, $(COMPILATION_DATABASE_JSONS_DIR)/%.json, $(SOURCES) )
 
-$(COMPILATION_DATABASE_JSONS): $(OBJECTS) $(TEST_OBJECTS)
+$(COMPILATION_DATABASE_JSONS_DIR)/%.json: src/%.cpp
+	@mkdir -p $(@D)
+	$(CXX) $(CXXFLAGS) -E -MJ $@ -o $@.i $<
 
-# Aggregate the compilation database entries
-compile_commands.json: $(COMPILATION_DATABASE_JSONS)
+$(COMPILATION_DATABASE_FILE): $(COMPILATION_DATABASE_JSONS)
 	sed -e '1s/^/[/' -e '$$s/,$$/]/' $^ | json_pp > $@
 
-# Run as 'make -B project' to force compile all sources
-project: compile_commands.json
+db: $(COMPILATION_DATABASE_FILE)
+
+undb:
+	rm -rf $(COMPILATION_DATABASE_FILE) $(COMPILATION_DATABASE_JSONS_DIR)
+
+.PHONY: undb
 
 
 
@@ -120,6 +125,7 @@ run: dev
 debug: dev
 	$(RACK_EXECUTABLE) $(RACK_FLAGS) -d -s $(RACK_SYSTEM_DIR) -u $(realpath $(DEV_DIR))
 
+.PHONY: unplug undev run debug
 
 
 
@@ -145,10 +151,10 @@ gui:
 tidy:
 	find src include -name *.h -o -name *.cpp | xargs clang-format -i -style=file
 
-clobber: clean
+clobber: fresh
 	cd gui && rake clobber
 
-fresh: clean undev test
+fresh: clean undev undb
 
-.PHONY: clean clobber fresh gui tidy uninstall
+.PHONY: clobber fresh gui tidy
 
