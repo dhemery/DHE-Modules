@@ -1,9 +1,9 @@
 #pragma once
-#include <functional>
-#include <utility>
-
 #include "Generating.h"
 #include "StateMachine.h"
+
+#include <functional>
+#include <utility>
 
 namespace dhe {
 

@@ -1,8 +1,8 @@
 #pragma once
 
-#include <string>
-
 #include <app/SvgSwitch.hpp>
+
+#include <string>
 
 namespace dhe {
 

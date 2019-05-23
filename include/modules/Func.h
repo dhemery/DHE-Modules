@@ -1,12 +1,10 @@
-#include <utility>
-
 #pragma once
-
-#include <memory>
 
 #include "Module.h"
 
 #include "func/FuncChannel.h"
+
+#include <memory>
 
 namespace dhe {
 class Func : public Module {

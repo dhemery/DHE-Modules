@@ -1,8 +1,8 @@
 #pragma once
 
-#include <string>
-
 #include <componentlibrary.hpp>
+
+#include <string>
 
 namespace dhe {
 

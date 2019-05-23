@@ -1,8 +1,7 @@
 #pragma once
-#include <algorithm>
-#include <random>
-#include <string>
-#include <utility>
+#include "panels/widgets/Buttons.h"
+#include "panels/widgets/Knobs.h"
+#include "panels/widgets/Toggles.h"
 
 #include <app.hpp>
 #include <app/ModuleWidget.hpp>
@@ -16,9 +15,10 @@
 #include <math.hpp>
 #include <widget/Widget.hpp>
 
-#include "panels/widgets/Buttons.h"
-#include "panels/widgets/Knobs.h"
-#include "panels/widgets/Toggles.h"
+#include <algorithm>
+#include <random>
+#include <string>
+#include <utility>
 
 extern rack::plugin::Plugin *pluginInstance;
 

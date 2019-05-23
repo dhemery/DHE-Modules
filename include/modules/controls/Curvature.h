@@ -1,10 +1,10 @@
 #pragma once
 
-#include <functional>
+#include "util/sigmoid.h"
 
 #include <engine/Module.hpp>
 
-#include "util/sigmoid.h"
+#include <functional>
 
 namespace dhe {
 namespace curvature {

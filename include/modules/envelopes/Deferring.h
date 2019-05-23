@@ -1,8 +1,9 @@
 #pragma once
-#include <functional>
-#include <utility>
 
 #include "StageState.h"
+
+#include <functional>
+#include <utility>
 
 namespace dhe {
 

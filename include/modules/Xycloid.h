@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Module.h"
-
 #include "modules/components/Rotor.h"
 #include "util/range.h"
 

@@ -1,9 +1,10 @@
 #pragma once
+#include "StageState.h"
+
+#include "modules/components/PhaseAccumulator.h"
+
 #include <functional>
 #include <utility>
-
-#include "StageState.h"
-#include "modules/components/PhaseAccumulator.h"
 
 namespace dhe {
 

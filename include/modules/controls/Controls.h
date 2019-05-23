@@ -1,13 +1,14 @@
 #pragma once
 
-#include <array>
-#include <functional>
+#include "modules/controls/Curvature.h"
+
+#include "util/range.h"
+#include "util/sigmoid.h"
 
 #include <engine/Module.hpp>
 
-#include "modules/controls/Curvature.h"
-#include "util/range.h"
-#include "util/sigmoid.h"
+#include <array>
+#include <functional>
 
 namespace dhe {
 

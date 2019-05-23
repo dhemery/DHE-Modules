@@ -1,7 +1,8 @@
 #pragma once
-#include <array>
 
 #include "range.h"
+
+#include <array>
 
 namespace dhe {
 namespace Signal {

@@ -1,8 +1,8 @@
 #pragma once
 
-#include <functional>
-
 #include "Module.h"
+
+#include <functional>
 
 namespace dhe {
 

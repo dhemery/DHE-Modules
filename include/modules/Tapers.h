@@ -1,9 +1,10 @@
 #pragma once
 
-#include <functional>
-
 #include "Module.h"
+
 #include "util/range.h"
+
+#include <functional>
 
 namespace dhe {
 

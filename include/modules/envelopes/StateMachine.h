@@ -1,14 +1,14 @@
 #pragma once
-#include <functional>
-#include <utility>
-
-#include "modules/components/EdgeDetector.h"
-
 #include "Deferring.h"
 #include "EndOfCyclePulseGenerator.h"
 #include "Forwarding.h"
 #include "Idling.h"
 #include "StageState.h"
+
+#include "modules/components/EdgeDetector.h"
+
+#include <functional>
+#include <utility>
 
 namespace dhe {
 

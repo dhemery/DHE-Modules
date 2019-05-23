@@ -1,11 +1,11 @@
 #pragma once
 
-#include <array>
-#include <functional>
+#include "util/range.h"
 
 #include <engine/Module.hpp>
 
-#include "util/range.h"
+#include <array>
+#include <functional>
 
 namespace dhe {
 namespace duration {

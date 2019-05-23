@@ -1,10 +1,10 @@
 #pragma once
 
-#include <functional>
-
 #include "Module.h"
 
 #include "envelopes/StageStateMachine.h"
+
+#include <functional>
 
 namespace dhe {
 

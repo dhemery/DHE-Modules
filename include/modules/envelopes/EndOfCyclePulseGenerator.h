@@ -1,8 +1,8 @@
 #pragma once
+#include "modules/components/PhaseAccumulator.h"
+
 #include <functional>
 #include <utility>
-
-#include "modules/components/PhaseAccumulator.h"
 
 namespace dhe {
 

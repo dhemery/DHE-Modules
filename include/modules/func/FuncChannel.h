@@ -1,11 +1,11 @@
 #pragma once
 
-#include <array>
+#include "util/gain.h"
+#include "util/signal.h"
 
 #include <engine/Module.hpp>
 
-#include "util/gain.h"
-#include "util/signal.h"
+#include <array>
 
 namespace dhe {
 
