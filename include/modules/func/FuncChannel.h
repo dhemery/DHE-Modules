@@ -4,7 +4,6 @@
 
 #include <engine/Module.hpp>
 
-#include "modules/controls/RackControls.h"
 #include "util/gain.h"
 #include "util/signal.h"
 
@@ -22,12 +21,12 @@ public:
   static const std::array<Range const *, 4> multiplicationRanges;
 
 private:
-  Input &input;
-  Param &operand;
-  Output &output;
-  Param &operatorSwitch;
-  Param &additionRangeSwitch;
-  Param &multiplicationRangeSwitch;
+  rack::engine::Input &input;
+  rack::engine::Param &operand;
+  rack::engine::Output &output;
+  rack::engine::Param &operatorSwitch;
+  rack::engine::Param &additionRangeSwitch;
+  rack::engine::Param &multiplicationRangeSwitch;
 
   auto add(float in, float rotation) const -> float;
   auto multiply(float in, float rotation) const -> float;
