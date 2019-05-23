@@ -6,11 +6,11 @@ namespace dhe {
 namespace curvature {
 static float constexpr curveKnobCurvature = 0.65f;
 
-auto rotationToTaper() -> std::function<float(float)> {
+auto rotationToCurvature() -> std::function<float(float)> {
   return [](float rotation) -> float { return sigmoid::curvature(rotation); };
 }
 
-auto taperToRotation() -> std::function<float(float)> {
+auto curvatureToRotation() -> std::function<float(float)> {
   return [](float taper) -> float {
     return sigmoid::s_taper(taper, -curveKnobCurvature);
   };

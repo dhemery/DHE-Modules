@@ -18,12 +18,12 @@ public:
 class KnobParamQuantity : public rack::engine::ParamQuantity {
 public:
   auto getDisplayValue() -> float override {
-    static auto const curvatureTaperFor = curvature::rotationToTaper();
+    static auto const curvatureTaperFor = curvature::rotationToCurvature();
     return curvatureTaperFor(getValue());
   }
 
   void setDisplayValue(float taperedCurvature) override {
-    static auto const rotationFor = curvature::taperToRotation();
+    static auto const rotationFor = curvature::curvatureToRotation();
     setValue(rotationFor(taperedCurvature));
   }
 };

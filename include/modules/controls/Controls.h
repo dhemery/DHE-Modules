@@ -57,14 +57,28 @@ auto scaled(std::function<float()> const &rotation,
 } // namespace knob
 
 namespace scale {
+/**
+ * Creates a function that scales a rotation to the range supplied by the given
+ * function.
+ */
 auto toRange(std::function<Range const *()> const &range)
     -> std::function<float(float)>;
 
+/**
+ * Creates a function that scales a rotation to the given range.
+ */
 auto toRange(Range const &range) -> std::function<float(float)>;
 
 } // namespace scale
 
 namespace range {
+
+/**
+ * Creates a function that uses a switch to select a range.
+ * @tparam N the number of ranges in the array
+ * @param switchId the ID of the switch to select the range
+ * @param ranges an array of ranges to select from
+ */
 template <int N>
 auto selection(rack::engine::Module *module, int switchId,
                std::array<Range const *, N> const &ranges)

@@ -42,14 +42,14 @@ auto withFixedRange(rack::engine::Module *module, int knobId,
                     Range const &range) -> std::function<float()>;
 
 /**
- * Creates a function that  maps a rotation to a "duration-tapered" value. The
+ * Creates a function that maps a rotation to a "duration-tapered" value. The
  * duration-tapered value is useful for selecting a duration from one of the
  * duration ranges.
  */
 auto rotationToTaper() -> std::function<float(float)>;
 
 /**
- * Creates a function that maps a duration-tapered value [0.0–1.0] to a
+ * Creates a function that maps a duration-tapered value [0.0, 1.0] to a
  * rotation.
  */
 auto taperToRotation() -> std::function<float(float)>;
