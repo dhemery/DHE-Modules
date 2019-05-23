@@ -1,52 +1,57 @@
 #include "modules/Tapers.h"
 
+#include "modules/controls/Controls.h"
+#include "modules/controls/Level.h"
+#include "modules/params/LevelParams.h"
+
 #include "util/sigmoid.h"
 #include "util/signal.h"
 
 namespace dhe {
 
-auto taper(LevelControl *level, CurvatureControl *curvature) -> float {
-  auto tapered = curvature->taper(level->rotation());
-  return level->range()->scale(tapered);
+auto taper(float level, Range const *range, CurvatureControl *curvature)
+    -> float {
+  auto tapered = curvature->taper(level);
+  return range->scale(tapered);
 }
 
 Tapers::Tapers() {
-  config(PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT);
+  config(ParameterCount, InputCount, OutputCount);
 
-  configParam(LEVEL_1_KNOB, 0.f, 1.f, 0.5f, "Taper 1 level", "%", 0.f, 100.f,
-              0.f);
-  configSignalRange(RANGE_1_SWITCH, "Taper 1 level");
-  configCvGain(LEVEL_1_AV, "Taper 1 level");
-  configParam(CURVE_1_KNOB, 0.f, 1.f, 0.5f, "Taper 1 curvature", "%", 0.f,
-              100.f, 0.f);
-  configCvGain(CURVE_1_AV, "Taper 1 level");
-  configParam(SHAPE_1_SWITCH, 0.f, 1.f, 0.f, "Taper 1 shape");
+  level::configKnob(this, Level1Knob, Range1Switch, "Level 1");
+  level::configSwitch(this, Range1Switch, "Level 1 range");
 
-  configParam(LEVEL_2_KNOB, 0.f, 1.f, 0.5f, "Taper 2 level", "%", 0.f, 100.f,
-              0.f);
-  configSignalRange(RANGE_2_SWITCH, "Taper 2 level");
-  configCvGain(LEVEL_2_AV, "Taper 2 level");
-  configParam(CURVE_2_KNOB, 0.f, 1.f, 0.5f, "Taper 2 curvature", "%", 0.f,
-              100.f, 0.f);
-  configCvGain(CURVE_2_AV, "Taper 2 level");
-  configParam(SHAPE_2_SWITCH, 0.f, 1.f, 0.f, "Taper 2 shape");
+  configCvGain(Level1Av, "Level 1");
+  configParam(Curve1Knob, 0.f, 1.f, 0.5f, "Curvature 1", "%", 0.f, 100.f, 0.f);
+  configCvGain(Curve1Av, "Curvature 1");
+  configParam(Shape1Switch, 0.f, 1.f, 0.f, "Shape 1");
 
-  level1 = std::unique_ptr<LevelControl>(
-      new LevelControl(params[LEVEL_1_KNOB], params[RANGE_1_SWITCH],
-                       inputs[LEVEL_1_CV], params[LEVEL_1_AV]));
+  level::configKnob(this, Level2Knob, Range2Switch, "Level 2");
+  level::configSwitch(this, Range2Switch, "Level 2 range");
+  configCvGain(Level2Av, "Level 2");
+  configParam(Curve2Knob, 0.f, 1.f, 0.5f, "Curvature 2", "%", 0.f, 100.f, 0.f);
+  configCvGain(Curve2Av, "Curvature 2");
+  configParam(Shape2Switch, 0.f, 1.f, 0.f, "Shape 2");
+
+  using namespace control;
+
+  level1Rotation = knob::rotation(this, Level1Knob, Level1Cv, Level1Av);
+  level1Range = range::selection<2>(this, Range1Switch, level::ranges);
   curvature1 = std::unique_ptr<CurvatureControl>(
-      new CurvatureControl(params[CURVE_1_KNOB], params[SHAPE_1_SWITCH],
-                           inputs[CURVE_1_CV], params[CURVE_1_AV]));
-  level2 = std::unique_ptr<LevelControl>(
-      new LevelControl(params[LEVEL_2_KNOB], params[RANGE_2_SWITCH],
-                       inputs[LEVEL_2_CV], params[LEVEL_2_AV]));
+      new CurvatureControl(params[Curve1Knob], params[Shape1Switch],
+                           inputs[Curve1Cv], params[Curve1Av]));
+
+  level2Rotation = knob::rotation(this, Level2Knob, Level2Cv, Level2Av);
+  level2Range = range::selection<2>(this, Range2Switch, level::ranges);
   curvature2 = std::unique_ptr<CurvatureControl>(
-      new CurvatureControl(params[CURVE_2_KNOB], params[SHAPE_2_SWITCH],
-                           inputs[CURVE_2_CV], params[CURVE_2_AV]));
+      new CurvatureControl(params[Curve2Knob], params[Shape2Switch],
+                           inputs[Curve2Cv], params[Curve2Av]));
 }
 
 void Tapers::process(const ProcessArgs &args) {
-  outputs[OUT_1].setVoltage(taper(level1.get(), curvature1.get()));
-  outputs[OUT_2].setVoltage(taper(level2.get(), curvature2.get()));
+  outputs[Out1].setVoltage(
+      taper(level1Rotation(), level1Range(), curvature1.get()));
+  outputs[Out2].setVoltage(
+      taper(level2Rotation(), level2Range(), curvature2.get()));
 }
 } // namespace dhe
