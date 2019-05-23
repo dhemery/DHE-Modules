@@ -8,24 +8,24 @@ namespace dhe {
 
 class Sustaining : public StageState {
 public:
-  Sustaining(const std::function<void()> &finish_sustaining,
+  Sustaining(const std::function<void()> &finishSustaining,
              std::function<void(float)> forward,
-             std::function<void(bool)> set_active)
+             std::function<void(bool)> setActive)
       : StageState{
             []() {},               // Ignore stage gate rise
-            finish_sustaining,     // Finish sustaining on stage gate fall
+            finishSustaining,      // Finish sustaining on stage gate fall
             [this]() { start(); }, // Start sustaining on entry
             [](float) {}           // Do nothing on each step
         },
-        set_active{std::move(set_active)}, forward{std::move(forward)} {}
+        setActive{std::move(setActive)}, forward{std::move(forward)} {}
 
   void start() {
-    set_active(true);
+    setActive(true);
     forward(0.f);
   }
 
 private:
-  const std::function<void(bool)> set_active;
+  const std::function<void(bool)> setActive;
   const std::function<void(float)> forward;
 };
 } // namespace dhe

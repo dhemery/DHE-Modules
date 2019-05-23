@@ -9,6 +9,8 @@
 namespace dhe {
 namespace curvature {
 
+float constexpr centeredRotation = 0.5f;
+
 /**
  * Creates a function that applies a taper with a selectable shape and
  * curvature.
@@ -61,7 +63,7 @@ auto shape(rack::engine::Module *module, int switchId)
 
 void configKnob(rack::engine::Module *module, int knobId,
                 std::string const &name = "Curvature",
-                float initialPosition = 0.5f);
+                float initialPosition = centeredRotation);
 
 void configSwitch(rack::engine::Module *module, int switchId,
                   std::string const &name = "Shape", int initialPosition = 0);

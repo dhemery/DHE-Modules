@@ -10,17 +10,17 @@ namespace dhe {
 class PhaseAccumulator {
 public:
   explicit PhaseAccumulator(std::function<float()> duration,
-                            std::function<void()> on_start,
-                            std::function<void(float)> on_advance,
-                            std::function<void()> on_finish)
-      : duration{std::move(duration)}, on_start{std::move(on_start)},
-        on_advance{std::move(on_advance)}, on_finish{std::move(on_finish)} {}
+                            std::function<void()> onStart,
+                            std::function<void(float)> onAdvance,
+                            std::function<void()> onFinish)
+      : duration{std::move(duration)}, onStart{std::move(onStart)},
+        onAdvance{std::move(onAdvance)}, onFinish{std::move(onFinish)} {}
   /**
    * Sets the phase to 0 and generates an on_start event.
    */
   void start() {
     phase = 0.f;
-    on_start();
+    onStart();
   }
 
   /**
@@ -33,9 +33,9 @@ public:
       return;
     };
     phase = std::min(1.f, phase + sampleTime / duration());
-    on_advance(phase);
+    onAdvance(phase);
     if (phase >= 1.f) {
-      on_finish();
+      onFinish();
     };
   }
 
@@ -45,8 +45,8 @@ protected:
 private:
   float phase{0.f};
   const std::function<float()> duration;
-  const std::function<void()> on_start;
-  const std::function<void(float)> on_advance;
-  const std::function<void()> on_finish;
+  const std::function<void()> onStart;
+  const std::function<void(float)> onAdvance;
+  const std::function<void()> onFinish;
 };
 } // namespace dhe

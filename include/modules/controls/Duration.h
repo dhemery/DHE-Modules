@@ -9,6 +9,7 @@
 
 namespace dhe {
 namespace duration {
+static float constexpr centeredRotation = 0.5f;
 
 static Range constexpr shortRange{0.001f, 1.f};
 static Range constexpr mediumRange{0.01f, 10.f};
@@ -56,11 +57,11 @@ auto taperToRotation() -> std::function<float(float)>;
 
 void configKnob(rack::engine::Module *module, int knobId, Range const &,
                 std::string const &name = "Duration",
-                float initialPosition = 0.5);
+                float initialPosition = centeredRotation);
 
 void configKnob(rack::engine::Module *module, int knobId, int switchId,
                 std::string const &name = "Duration",
-                float initialPosition = 0.5);
+                float initialPosition = centeredRotation);
 
 void configSwitch(rack::engine::Module *module, int switchId,
                   std::string const &name = "Duration Range",

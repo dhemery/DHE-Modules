@@ -14,12 +14,12 @@ namespace dhe {
 
 class StateMachine {
 public:
-  StateMachine(std::function<bool()> defer_gate_is_active,
-               std::function<bool()> defer_gate_is_up,
-               std::function<bool()> const &stage_gate_is_up,
-               std::function<void()> const &start_generating,
-               std::function<void(bool)> const &set_active,
-               std::function<void(bool)> const &set_eoc,
+  StateMachine(std::function<bool()> deferGateIsActive,
+               std::function<bool()> deferGateIsUp,
+               std::function<bool()> const &stageGateIsUp,
+               std::function<void()> const &startGenerating,
+               std::function<void(bool)> const &setActive,
+               std::function<void(bool)> const &setEoc,
                std::function<void(float)> const &forward);
 
   void start();
@@ -27,24 +27,24 @@ public:
 
 protected:
   void enter(StageState *incoming);
-  void finish_stage();
+  void finishStage();
 
 private:
-  void on_stage_gate_rise();
-  void on_stage_gate_fall();
-  void stop_deferring();
+  void onStageGateRise();
+  void onStageGateFall();
+  void stopDeferring();
 
-  const std::function<bool()> defer_gate_is_active;
-  const std::function<bool()> stage_gate_is_up;
-  const std::function<void()> start_generating;
+  const std::function<bool()> deferGateIsActive;
+  const std::function<bool()> stageGateIsUp;
+  const std::function<void()> startGenerating;
 
   Deferring deferring;
   Forwarding forwarding;
   Idling idling;
   StageState *state{&forwarding};
 
-  EdgeDetector defer_gate;
-  EndOfCyclePulseGenerator eoc_generator;
-  EdgeDetector stage_gate;
+  EdgeDetector deferGate;
+  EndOfCyclePulseGenerator eocGenerator;
+  EdgeDetector stageGate;
 };
 } // namespace dhe

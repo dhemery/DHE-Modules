@@ -70,11 +70,15 @@ test: $(TEST_RUNNER)
 
 COMPILATION_DATABASE_FILE = compile_commands.json
 
-COMPILATION_DATABASE_JSONS := $(patsubst %, build/%.json, $(SOURCES) )
+COMPILATION_DATABASE_JSONS := $(patsubst %, build/%.json, $(SOURCES) $(TEST_SOURCES) )
 
-build/%.json: %
+build/src/%.json: src/%
 	@mkdir -p $(@D)
 	$(CXX) $(CXXFLAGS) -MJ $@ -c -o build/$^.o $^
+
+build/test/%.json: test/%
+	@mkdir -p $(@D)
+	$(CXX) $(CXXFLAGS) $(TESTFLAGS) -MJ $@ -c -o build/$^.o $^
 
 $(COMPILATION_DATABASE_FILE): $(COMPILATION_DATABASE_JSONS)
 	sed -e '1s/^/[/' -e '$$s/,$$/]/' $^ | json_pp > $@
@@ -146,8 +150,25 @@ gui:
 #
 ########################################################################
 
-# Apply .clang-format to all source files
+TIDY_INCLUDES =  -I$(RACK_DIR)/include -I$(RACK_DIR)/dep/include -I./include
+
+TIDY_FLAGS = \
+	-fPIC \
+	-std=c++11 \
+	-stdlib=libc++ \
+	-DARCH_MAC \
+	-mmacosx-version-min=10.7  \
+	-MMD \
+	-MP \
+	-g \
+	-O3 \
+	-march=nocona \
+	-funsafe-math-optimizations
+
 tidy:
+	find src include -name *.h -o -name *.cpp | xargs -I % clang-tidy % -- $(TIDY_INCLUDES) $(TIDY_FLAGS)
+
+format:
 	find src include -name *.h -o -name *.cpp | xargs clang-format -i -style=file
 
 clobber: fresh

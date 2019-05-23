@@ -8,14 +8,14 @@ namespace dhe {
 
 class Forwarding : public StageState {
 public:
-  Forwarding(std::function<void()> start_generating,
+  Forwarding(std::function<void()> startGenerating,
              std::function<void(float)> const &forward,
-             std::function<void(bool)> const &set_active)
+             std::function<void(bool)> const &setActive)
       : StageState{
-            std::move(start_generating), // Start generating on stage gate rise
-            []() {},                     // Ignore stage gate fall
-            [set_active]() { set_active(true); }, // Become active on entry
-            forward                               // Forward on each step
+            std::move(startGenerating), // Start generating on stage gate rise
+            []() {},                    // Ignore stage gate fall
+            [setActive]() { setActive(true); }, // Become active on entry
+            forward                             // Forward on each step
         } {}
 };
 } // namespace dhe

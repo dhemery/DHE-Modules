@@ -32,15 +32,15 @@ Blossom::Blossom() {
 }
 
 void Blossom::process(const ProcessArgs &args) {
-  auto spin_rate = spin(args.sampleTime);
-  auto bounce_ratio = is_bounce_free() ? bounce() : std::round(bounce());
-  auto bounce_depth = depth();
+  auto spinRate = spin(args.sampleTime);
+  auto bounceRatio = is_bounce_free() ? bounce() : std::round(bounce());
+  auto bounceDepth = depth();
 
-  spinner.advance(spin_rate, 0.f);
-  bouncer.advance(spin_rate * bounce_ratio, phase());
+  spinner.advance(spinRate, 0.f);
+  bouncer.advance(spinRate * bounceRatio, phase());
 
   auto angle = spinner.angle();
-  auto radius = (1.f - bounce_depth) + bounce_depth * bouncer.radius();
+  auto radius = (1.f - bounceDepth) + bounceDepth * bouncer.radius();
 
   auto x = radius * std::cos(angle);
   auto y = radius * std::sin(angle);
@@ -55,23 +55,23 @@ auto Blossom::offset(int param) -> float {
 }
 
 auto Blossom::bounce() -> float {
-  static constexpr auto bounce_range = Range{1.f, 17.f};
+  static constexpr auto bounceRange = Range{1.f, 17.f};
   auto rotation = modulated(BOUNCE_KNOB, BOUNCE_CV, BOUNCE_AV);
-  return bounce_range.scale(rotation);
+  return bounceRange.scale(rotation);
 }
 
 auto Blossom::spin(float sample_time) -> float {
-  static constexpr auto spin_range = Range{-1.f, 1.f};
+  static constexpr auto spinRange = Range{-1.f, 1.f};
   auto rotation = modulated(SPIN_KNOB, SPIN_CV, SPIN_AV);
-  auto scaled = spin_range.scale(rotation);
+  auto scaled = spinRange.scale(rotation);
   auto tapered = sigmoid::inverse(scaled, speed_curvature);
   return -10.f * tapered * sample_time;
 }
 
 auto Blossom::depth() -> float {
-  static constexpr auto depth_range = Range{0.f, 1.f};
+  static constexpr auto depthRange = Range{0.f, 1.f};
   auto rotation = modulated(DEPTH_KNOB, DEPTH_CV, DEPTH_AV);
-  return depth_range.clamp(rotation);
+  return depthRange.clamp(rotation);
 }
 
 auto Blossom::is_bounce_free() -> bool {
@@ -79,9 +79,9 @@ auto Blossom::is_bounce_free() -> bool {
 }
 
 auto Blossom::phase() -> float {
-  static constexpr auto phase_range = Range{0.f, 1.f};
+  static constexpr auto phaseRange = Range{0.f, 1.f};
   auto rotation = modulated(PHASE_KNOB, PHASE_CV, PHASE_AV);
-  return phase_range.clamp(rotation);
+  return phaseRange.clamp(rotation);
 }
 
 auto Blossom::x_offset() -> float { return offset(X_RANGE_SWITCH); }

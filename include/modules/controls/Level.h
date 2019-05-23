@@ -8,6 +8,7 @@
 
 namespace dhe {
 namespace level {
+static float constexpr centeredRotation = 0.5;
 
 static Range constexpr unipolarRange{0.f, 10.f};
 static Range constexpr bipolarRange{-5.f, 5.f};
@@ -52,10 +53,12 @@ auto withFixedRange(rack::engine::Module *module, int knobId,
                     Range const &range) -> std::function<float()>;
 
 void configKnob(rack::engine::Module *module, int knobId, Range const &range,
-                std::string const &name = "Level", float initialPosition = 0.5);
+                std::string const &name = "Level",
+                float initialPosition = centeredRotation);
 
 void configKnob(rack::engine::Module *module, int knobId, int switchId,
-                std::string const &name = "Level", float initialPosition = 0.5);
+                std::string const &name = "Level",
+                float initialPosition = centeredRotation);
 
 void configSwitch(rack::engine::Module *module, int switchId,
                   std::string const &name = "Level Range",

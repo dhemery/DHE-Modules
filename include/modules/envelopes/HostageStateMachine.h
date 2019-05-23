@@ -11,29 +11,31 @@ namespace dhe {
 
 class HostageStateMachine : public StateMachine {
 public:
-  HostageStateMachine(std::function<bool()> defer_gate_is_active,
-                      std::function<bool()> defer_gate_is_up,
-                      std::function<bool()> const &stage_gate_is_up,
-                      std::function<bool()> is_sustain_mode,
+  HostageStateMachine(std::function<bool()> deferGateIsActive,
+                      std::function<bool()> deferGateIsUp,
+                      std::function<bool()> const &stageGateIsUp,
+                      std::function<bool()> isSustainMode,
                       std::function<float()> duration,
                       std::function<void(float)> const &forward,
-                      std::function<void(bool)> const &set_active,
-                      std::function<void(bool)> const &set_eoc)
-      : StateMachine{std::move(defer_gate_is_active),
-                     std::move(defer_gate_is_up),
-                     stage_gate_is_up,
-                     [this]() { start_generating(); },
-                     set_active,
-                     set_eoc,
+                      std::function<void(bool)> const &setActive,
+                      std::function<void(bool)> const &setEoc)
+      : StateMachine{std::move(deferGateIsActive),
+                     std::move(deferGateIsUp),
+                     stageGateIsUp,
+                     [this]() { startGenerating(); },
+                     setActive,
+                     setEoc,
                      forward},
-        is_sustain_mode{std::move(is_sustain_mode)},
-        holding{[this]() { finish_stage(); }, std::move(duration), forward,
-                set_active},
-        sustaining{[this]() { finish_stage(); }, forward, set_active} {}
+        isSustainMode{std::move(isSustainMode)}, holding{[this]() {
+                                                           finishStage();
+                                                         },
+                                                         std::move(duration),
+                                                         forward, setActive},
+        sustaining{[this]() { finishStage(); }, forward, setActive} {}
 
 protected:
-  void start_generating() {
-    if (is_sustain_mode()) {
+  void startGenerating() {
+    if (isSustainMode()) {
       this->enter(&sustaining);
     } else {
       this->enter(&holding);
@@ -41,7 +43,7 @@ protected:
   }
 
 private:
-  const std::function<bool()> is_sustain_mode;
+  const std::function<bool()> isSustainMode;
   Holding holding;
   Sustaining sustaining;
 };

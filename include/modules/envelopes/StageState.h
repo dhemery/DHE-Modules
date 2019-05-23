@@ -6,15 +6,15 @@ namespace dhe {
 
 class StageState {
 public:
-  explicit StageState(std::function<void()> on_stage_gate_rise,
-                      std::function<void()> on_stage_gate_fall,
-                      std::function<void()> on_entry,
-                      std::function<void(float)> on_step)
-      : on_stage_gate_rise{std::move(on_stage_gate_rise)},
-        on_stage_gate_fall{std::move(on_stage_gate_fall)},
-        enter{std::move(on_entry)}, step{std::move(on_step)} {}
-  const std::function<void()> on_stage_gate_rise;
-  const std::function<void()> on_stage_gate_fall;
+  explicit StageState(std::function<void()> onStageGateRise,
+                      std::function<void()> onStageGateFall,
+                      std::function<void()> onEntry,
+                      std::function<void(float)> onStep)
+      : onStageGateRise{std::move(onStageGateRise)}, onStageGateFall{std::move(
+                                                         onStageGateFall)},
+        enter{std::move(onEntry)}, step{std::move(onStep)} {}
+  const std::function<void()> onStageGateRise;
+  const std::function<void()> onStageGateFall;
   const std::function<void()> enter;
   const std::function<void(float)> step;
 };

@@ -9,24 +9,24 @@ namespace dhe {
 
 class StageStateMachine : public StateMachine {
 public:
-  StageStateMachine(std::function<bool()> defer_gate_is_active,
-                    std::function<bool()> defer_gate_is_up,
-                    std::function<bool()> const &stage_trigger_is_up,
+  StageStateMachine(std::function<bool()> deferGateIsActive,
+                    std::function<bool()> deferGateIsUp,
+                    std::function<bool()> const &stageTriggerIsUp,
                     std::function<float()> duration,
                     std::function<void(float)> const &forward,
                     std::function<void()> prepare,
                     std::function<void(float)> generate,
-                    std::function<void(bool)> const &set_active,
-                    std::function<void(bool)> const &set_eoc)
-      : StateMachine{std::move(defer_gate_is_active),
-                     std::move(defer_gate_is_up),
-                     stage_trigger_is_up,
+                    std::function<void(bool)> const &setActive,
+                    std::function<void(bool)> const &setEoc)
+      : StateMachine{std::move(deferGateIsActive),
+                     std::move(deferGateIsUp),
+                     stageTriggerIsUp,
                      [this]() { enter(&generating); },
-                     set_active,
-                     set_eoc,
+                     setActive,
+                     setEoc,
                      forward},
-        generating{[this]() { this->finish_stage(); }, std::move(duration),
-                   std::move(prepare), std::move(generate), set_active} {}
+        generating{[this]() { this->finishStage(); }, std::move(duration),
+                   std::move(prepare), std::move(generate), setActive} {}
 
 private:
   Generating generating;
