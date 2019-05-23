@@ -2,6 +2,8 @@
 
 #include "util/range.h"
 
+#include <engine/Module.hpp>
+
 #include <array>
 
 namespace dhe {

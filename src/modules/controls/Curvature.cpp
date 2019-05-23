@@ -1,9 +1,9 @@
+#include "modules/controls/Curvature.h"
+#include "modules/controls/Controls.h"
+#include "util/sigmoid.h"
+
 #include <engine/Module.hpp>
 #include <engine/ParamQuantity.hpp>
-
-#include "modules/controls/Controls.h"
-#include "modules/controls/Curvature.h"
-#include "util/sigmoid.h"
 
 namespace dhe {
 namespace curvature {

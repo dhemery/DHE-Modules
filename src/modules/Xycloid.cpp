@@ -1,10 +1,10 @@
-#include <array>
-
 #include "modules/Xycloid.h"
 
 #include "util/gain.h"
 #include "util/sigmoid.h"
 #include "util/signal.h"
+
+#include <array>
 
 namespace dhe {
 

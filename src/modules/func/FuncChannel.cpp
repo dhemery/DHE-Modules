@@ -1,6 +1,6 @@
-#include <utility>
-
 #include "modules/func/FuncChannel.h"
+
+#include <utility>
 
 namespace dhe {
 

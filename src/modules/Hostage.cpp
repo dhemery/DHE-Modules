@@ -1,4 +1,5 @@
 #include "modules/Hostage.h"
+
 #include "modules/controls/Duration.h"
 
 namespace dhe {

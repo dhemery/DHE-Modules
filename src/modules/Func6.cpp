@@ -1,6 +1,6 @@
-#include <string>
-
 #include "modules/Func6.h"
+
+#include <string>
 
 namespace dhe {
 Func6::Func6() {

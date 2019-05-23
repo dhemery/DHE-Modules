@@ -1,7 +1,5 @@
 #include "panels/XycloidPanel.h"
 
-#include "util/gain.h"
-
 namespace dhe {
 
 XycloidPanel::XycloidPanel(Xycloid *module) : Panel{module, hp} {

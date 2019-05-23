@@ -1,9 +1,3 @@
-#include <algorithm>
-
-#include "rack.hpp"
-
-#include "plugin/Plugin.hpp"
-
 #include "panels/BlossomPanel.h"
 #include "panels/BoosterStagePanel.h"
 #include "panels/CubicPanel.h"
@@ -16,6 +10,12 @@
 #include "panels/TapersPanel.h"
 #include "panels/UpstagePanel.h"
 #include "panels/XycloidPanel.h"
+
+#include "plugin/Plugin.hpp"
+
+#include "rack.hpp"
+
+#include <algorithm>
 
 rack::plugin::Plugin *pluginInstance;
 

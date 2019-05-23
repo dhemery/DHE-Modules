@@ -1,7 +1,5 @@
 #include "panels/BlossomPanel.h"
 
-#include "util/gain.h"
-
 namespace dhe {
 BlossomPanel::BlossomPanel(Blossom *blossom) : Panel{blossom, hp} {
   auto widget_right_edge = width();
