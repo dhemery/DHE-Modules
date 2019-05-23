@@ -30,6 +30,21 @@ auto withSelectableShape(rack::engine::Module *module, int knobId, int cvId,
   };
 }
 
+auto withSelectableShape(rack::engine::Module *module, int knobId, int cvId,
+                         int avId, int switchId)
+    -> std::function<float(float)> {
+  using namespace control;
+  auto const rotation = knob::rotation(module, knobId, cvId, avId);
+  auto const shapeSwitch = &module->params[switchId];
+  return [rotation, shapeSwitch](float input) -> float {
+    auto const curvature = sigmoid::curvature(rotation());
+    auto const shapeSelection = static_cast<int>(shapeSwitch->getValue());
+    auto const shape = sigmoid::shapes[shapeSelection];
+
+    return shape->taper(input, curvature);
+  };
+}
+
 auto withFixedShape(rack::engine::Module *module, int knobId,
                     sigmoid::Shape const *shape)
     -> std::function<float(float)> {

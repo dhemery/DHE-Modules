@@ -1,10 +1,9 @@
 #pragma once
 
 #include <functional>
-#include <memory>
 
 #include "Module.h"
-#include "modules/controls/CurvatureControl.h"
+#include "util/range.h"
 
 namespace dhe {
 
@@ -35,10 +34,10 @@ public:
 private:
   std::function<float()> level1Rotation;
   std::function<Range const *()> level1Range;
-  std::unique_ptr<CurvatureControl> curvature1;
+  std::function<float(float)> taper1;
   std::function<float()> level2Rotation;
   std::function<Range const *()> level2Range;
-  std::unique_ptr<CurvatureControl> curvature2;
+  std::function<float(float)> taper2;
 };
 
 } // namespace dhe

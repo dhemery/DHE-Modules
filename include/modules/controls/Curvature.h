@@ -12,6 +12,9 @@ namespace curvature {
 auto withSelectableShape(rack::engine::Module *module, int knobId, int cvId,
                          int switchId) -> std::function<float(float)>;
 
+auto withSelectableShape(rack::engine::Module *module, int knobId, int cvId,
+                         int avId, int switchId) -> std::function<float(float)>;
+
 auto withFixedShape(rack::engine::Module *module, int knobId,
                     sigmoid::Shape const *shape) -> std::function<float(float)>;
 
