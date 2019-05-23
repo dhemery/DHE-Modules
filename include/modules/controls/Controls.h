@@ -1,16 +1,12 @@
 #pragma once
 
-#include "modules/controls/Curvature.h"
-
-#include "util/range.h"
-#include "util/sigmoid.h"
-
 #include <engine/Module.hpp>
 
 #include <array>
 #include <functional>
 
 namespace dhe {
+class Range;
 
 namespace control {
 
