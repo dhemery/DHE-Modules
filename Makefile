@@ -74,7 +74,7 @@ COMPILATION_DATABASE_JSONS := $(patsubst %, build/%.json, $(SOURCES) )
 
 build/%.json: %
 	@mkdir -p $(@D)
-	$(CXX) $(CXXFLAGS) -E -MJ $@ -o $@.i $<
+	$(CXX) $(CXXFLAGS) -MJ $@ -c -o build/$^.o $^
 
 $(COMPILATION_DATABASE_FILE): $(COMPILATION_DATABASE_JSONS)
 	sed -e '1s/^/[/' -e '$$s/,$$/]/' $^ | json_pp > $@
