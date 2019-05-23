@@ -2,9 +2,6 @@
 #include "modules/controls/Curvature.h"
 #include "modules/controls/Duration.h"
 #include "modules/controls/Level.h"
-#include "modules/params/CurveParams.h"
-#include "modules/params/DurationParams.h"
-#include "modules/params/LevelParams.h"
 
 namespace dhe {
 

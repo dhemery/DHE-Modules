@@ -1,6 +1,5 @@
 #include "modules/Hostage.h"
 #include "modules/controls/Duration.h"
-#include "modules/params/DurationParams.h"
 
 namespace dhe {
 Hostage::Hostage()

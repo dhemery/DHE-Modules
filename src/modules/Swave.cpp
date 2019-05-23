@@ -1,11 +1,10 @@
 #include "modules/Swave.h"
 
 #include "modules/controls/Curvature.h"
-#include "modules/params/CurveParams.h"
+#include "modules/controls/Level.h"
 
 #include "util/range.h"
 #include "util/sigmoid.h"
-#include "util/signal.h"
 
 namespace dhe {
 
@@ -19,9 +18,9 @@ Swave::Swave() {
 }
 
 void Swave::process(const ProcessArgs &args) {
-  auto const normalized = Signal::bipolar_range.normalize(signalIn());
+  auto const normalized = level::bipolarRange.normalize(signalIn());
   auto const shaped = taper(normalized);
-  auto const outputVoltage = Signal::bipolar_range.scale(shaped);
+  auto const outputVoltage = level::bipolarRange.scale(shaped);
   sendSignal(outputVoltage);
 }
 

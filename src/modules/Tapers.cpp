@@ -3,11 +3,8 @@
 #include "modules/controls/Controls.h"
 #include "modules/controls/Curvature.h"
 #include "modules/controls/Level.h"
-#include "modules/params/CurveParams.h"
-#include "modules/params/LevelParams.h"
 
 #include "util/sigmoid.h"
-#include "util/signal.h"
 
 namespace dhe {
 

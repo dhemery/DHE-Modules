@@ -58,6 +58,13 @@ auto curvatureToRotation() -> std::function<float(float)>;
  */
 auto shape(rack::engine::Module *module, int switchId)
     -> std::function<sigmoid::Shape const *()>;
+
+void configKnob(rack::engine::Module *module, int knobId,
+                std::string const &name = "Curvature",
+                float initialPosition = 0.5f);
+
+void configSwitch(rack::engine::Module *module, int switchId,
+                  std::string const &name = "Shape", int initialPosition = 0);
 } // namespace curvature
 
 } // namespace dhe
