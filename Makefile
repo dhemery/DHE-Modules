@@ -68,12 +68,11 @@ test: $(TEST_RUNNER)
 #
 ########################################################################
 
-COMPILATION_DATABASE_JSONS_DIR = .jsons
 COMPILATION_DATABASE_FILE = compile_commands.json
 
-COMPILATION_DATABASE_JSONS := $(patsubst src/%.cpp, $(COMPILATION_DATABASE_JSONS_DIR)/%.json, $(SOURCES) )
+COMPILATION_DATABASE_JSONS := $(patsubst %, build/%.json, $(SOURCES) )
 
-$(COMPILATION_DATABASE_JSONS_DIR)/%.json: src/%.cpp
+build/%.json: %
 	@mkdir -p $(@D)
 	$(CXX) $(CXXFLAGS) -E -MJ $@ -o $@.i $<
 
@@ -83,7 +82,7 @@ $(COMPILATION_DATABASE_FILE): $(COMPILATION_DATABASE_JSONS)
 db: $(COMPILATION_DATABASE_FILE)
 
 undb:
-	rm -rf $(COMPILATION_DATABASE_FILE) $(COMPILATION_DATABASE_JSONS_DIR)
+	rm -rf $(COMPILATION_DATABASE_FILE) $(COMPILATION_DATABASE_JSONS)
 
 .PHONY: undb
 
