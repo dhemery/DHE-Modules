@@ -1,12 +1,10 @@
 #pragma once
 
 #include <functional>
-#include <memory>
 
 #include "Module.h"
 
 #include "envelopes/StageStateMachine.h"
-#include "modules/controls/CurvatureControl.h"
 
 namespace dhe {
 
@@ -24,11 +22,11 @@ public:
   void setEoc(bool eoc);
   auto stageGateIn() -> bool;
 
-  enum ParameterIds { DURATION_KNOB, LEVEL_KNOB, CURVE_KNOB, PARAMETER_COUNT };
+  enum ParameterIds { DurationKnob, LevelKnob, CurveKnob, ParameterCount };
 
-  enum InputIds { ENVELOPE_IN, STAGE_TRIGGER_IN, DEFER_GATE_IN, INPUT_COUNT };
+  enum InputIds { EnvelopeIn, StageTriggerIn, DeferGateIn, InputCount };
 
-  enum OutputIds { MAIN_OUT, EOC_OUT, ACTIVE_OUT, OUTPUT_COUNT };
+  enum OutputIds { MainOut, EocOut, ActiveOut, OutputCount };
 
 private:
   auto envelopeIn() -> float;
@@ -36,7 +34,7 @@ private:
 
   std::function<float()> duration;
   std::function<float()> level;
-  std::unique_ptr<CurvatureControl> shape;
+  std::function<float(float)> taper;
   StageStateMachine stateMachine;
   float startVoltage{0.f};
 };

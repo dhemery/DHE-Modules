@@ -34,7 +34,7 @@ BoosterStage::BoosterStage()
 
   curvature::configKnob(this, CurveKnob);
   curvature::configSwitch(this, ShapeSwitch);
-  taper = curvature::selectableTaper(this, CurveKnob, CurveCv, ShapeSwitch);
+  taper = curvature::withSelectableShape(this, CurveKnob, CurveCv, ShapeSwitch);
 
   configParam(ActiveButton, 0.f, 1.f, 0.f, "Active");
   configParam(DeferButton, 0.f, 1.f, 0.f, "Defer");

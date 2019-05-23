@@ -29,7 +29,7 @@ public:
 };
 
 void configKnob(rack::engine::Module *module, int knobId,
-                std::string const &name, int initialPosition) {
+                std::string const &name, float initialPosition) {
   module->configParam<KnobParamQuantity>(knobId, 0.f, 1.f, initialPosition,
                                          name);
 }

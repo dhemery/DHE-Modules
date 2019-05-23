@@ -1,6 +1,8 @@
 #include "modules/Stage.h"
+#include "modules/controls/Curvature.h"
 #include "modules/controls/Duration.h"
 #include "modules/controls/Level.h"
+#include "modules/params/CurveParams.h"
 #include "modules/params/DurationParams.h"
 #include "modules/params/LevelParams.h"
 
@@ -15,57 +17,54 @@ Stage::Stage()
                    [this](float phase) { generate(phase); },
                    [this](bool active) { setActive(active); },
                    [this](bool eoc) { setEoc(eoc); }} {
-  config(PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT);
-
-  configParam(CURVE_KNOB, 0.f, 1.f, 0.5f, "Curvature", "%", 0.f, 200.f, -100.f);
+  config(ParameterCount, InputCount, OutputCount);
 
   auto const durationRange = duration::mediumRange;
-  duration::configKnob(this, DURATION_KNOB, durationRange);
-  duration = duration::withFixedRange(this, DURATION_KNOB, durationRange);
+  duration::configKnob(this, DurationKnob, durationRange);
+  duration = duration::withFixedRange(this, DurationKnob, durationRange);
 
   auto const levelRange = level::unipolarRange;
-  level::configKnob(this, LEVEL_KNOB, levelRange);
-  level = level::withFixedRange(this, LEVEL_KNOB, levelRange);
+  level::configKnob(this, LevelKnob, levelRange);
+  level = level::withFixedRange(this, LevelKnob, levelRange);
 
-  shape = std::unique_ptr<CurvatureControl>(
-      new CurvatureControl(params[CURVE_KNOB]));
+  curvature::configKnob(this, CurveKnob);
+  taper = curvature::withFixedShape(this, CurveKnob, &sigmoid::j_shape);
 
   stateMachine.start();
 }
 
 auto Stage::deferGateIn() -> bool {
-  return inputs[DEFER_GATE_IN].getVoltage() > 0.1;
+  return inputs[DeferGateIn].getVoltage() > 0.1;
 }
 
 auto Stage::deferGateIsActive() const -> bool {
-  return inputs[DEFER_GATE_IN].active;
+  return inputs[DeferGateIn].active;
 }
 
-auto Stage::envelopeIn() -> float { return inputs[ENVELOPE_IN].getVoltage(); }
+auto Stage::envelopeIn() -> float { return inputs[EnvelopeIn].getVoltage(); }
 
 void Stage::forward() { sendOut(envelopeIn()); }
 
 void Stage::generate(float phase) {
-  auto const taperedPhase = shape->taper(phase);
-  sendOut(scale(taperedPhase, startVoltage, level()));
+  sendOut(scale(taper(phase), startVoltage, level()));
 }
 
 void Stage::prepareToGenerate() { startVoltage = envelopeIn(); }
 
-void Stage::sendOut(float voltage) { outputs[MAIN_OUT].setVoltage(voltage); }
+void Stage::sendOut(float voltage) { outputs[MainOut].setVoltage(voltage); }
 
 void Stage::setActive(bool active) {
   const auto voltage = active ? 10.f : 0.f;
-  outputs[ACTIVE_OUT].setVoltage(voltage);
+  outputs[ActiveOut].setVoltage(voltage);
 }
 
 void Stage::setEoc(bool eoc) {
   const auto voltage = eoc ? 10.f : 0.f;
-  outputs[EOC_OUT].setVoltage(voltage);
+  outputs[EocOut].setVoltage(voltage);
 }
 
 auto Stage::stageGateIn() -> bool {
-  return inputs[STAGE_TRIGGER_IN].getVoltage() > 0.1;
+  return inputs[StageTriggerIn].getVoltage() > 0.1;
 }
 
 void Stage::process(const ProcessArgs &args) {

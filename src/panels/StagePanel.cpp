@@ -11,26 +11,26 @@ StagePanel::StagePanel(Stage *module) : Panel{module, hp} {
   auto y = 25.f;
   auto dy = 18.5f;
 
-  knob<LargeKnob>(column_2, y, Stage::LEVEL_KNOB);
+  knob<LargeKnob>(column_2, y, Stage::LevelKnob);
 
   y += dy;
-  knob<LargeKnob>(column_2, y, Stage::CURVE_KNOB);
+  knob<LargeKnob>(column_2, y, Stage::CurveKnob);
 
   y += dy;
-  knob<LargeKnob>(column_2, y, Stage::DURATION_KNOB);
+  knob<LargeKnob>(column_2, y, Stage::DurationKnob);
 
   y = 82.f;
   dy = 15.f;
 
-  input(column_1, y, Stage::DEFER_GATE_IN);
-  output(column_3, y, Stage::ACTIVE_OUT);
+  input(column_1, y, Stage::DeferGateIn);
+  output(column_3, y, Stage::ActiveOut);
 
   y += dy;
-  input(column_1, y, Stage::STAGE_TRIGGER_IN);
-  output(column_3, y, Stage::EOC_OUT);
+  input(column_1, y, Stage::StageTriggerIn);
+  output(column_3, y, Stage::EocOut);
 
   y += dy;
-  input(column_1, y, Stage::ENVELOPE_IN);
-  output(column_3, y, Stage::MAIN_OUT);
+  input(column_1, y, Stage::EnvelopeIn);
+  output(column_3, y, Stage::MainOut);
 }
 } // namespace dhe

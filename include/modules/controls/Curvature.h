@@ -9,8 +9,11 @@
 namespace dhe {
 namespace curvature {
 
-auto selectableTaper(rack::engine::Module *module, int knobId, int cvId,
-                     int switchId) -> std::function<float(float)>;
+auto withSelectableShape(rack::engine::Module *module, int knobId, int cvId,
+                         int switchId) -> std::function<float(float)>;
+
+auto withFixedShape(rack::engine::Module *module, int knobId,
+                    sigmoid::Shape const *shape) -> std::function<float(float)>;
 
 auto rotationToTaper() -> std::function<float(float)>;
 auto taperToRotation() -> std::function<float(float)>;
