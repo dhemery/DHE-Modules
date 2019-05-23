@@ -59,15 +59,16 @@ auto scaled(std::function<float()> const &rotation,
 } // namespace knob
 
 namespace scale {
-auto toRange(std::function<const Range *()> range)
+auto toRange(std::function<Range const *()> const &range)
     -> std::function<float(float)> {
   return
       [range](float proportion) -> float { return range()->scale(proportion); };
 }
-auto toRange(const dhe::Range &range) -> std::function<float(float)> {
+auto toRange(Range const &range) -> std::function<float(float)> {
   return [range](float proportion) -> float { return range.scale(proportion); };
 }
 
 } // namespace scale
+
 } // namespace control
 } // namespace dhe

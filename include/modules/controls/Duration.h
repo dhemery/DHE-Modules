@@ -46,13 +46,13 @@ auto withFixedRange(rack::engine::Module *module, int knobId,
  * duration-tapered value is useful for selecting a duration from one of the
  * duration ranges.
  */
-auto rotationToDurationTaper() -> std::function<float(float)>;
+auto rotationToTaper() -> std::function<float(float)>;
 
 /**
  * Creates a function that maps a duration-tapered value [0.0–1.0] to a
  * rotation.
  */
-auto durationTaperToRotation() -> std::function<float(float)>;
+auto taperToRotation() -> std::function<float(float)>;
 
 } // namespace duration
 } // namespace dhe

@@ -14,7 +14,7 @@ namespace duration {
  * yields a duration equal to 1/10 of the range's upper bound (to within 7
  * decimal places).
  */
-float const knobTaperCurvature = 0.8018017;
+float const durationKnobCurvature = 0.8018017;
 
 const std::array<Range const *, 3> ranges{&shortRange, &mediumRange,
                                           &longRange};
@@ -23,15 +23,15 @@ auto range(float switchPosition) -> Range const * {
   return ranges[static_cast<int>(switchPosition)];
 }
 
-auto rotationToDurationTaper() -> std::function<float(float)> {
+auto rotationToTaper() -> std::function<float(float)> {
   return [](float rotation) -> float {
-    return sigmoid::j_taper(rotation, knobTaperCurvature);
+    return sigmoid::j_taper(rotation, durationKnobCurvature);
   };
 }
 
-auto durationTaperToRotation() -> std::function<float(float)> {
+auto taperToRotation() -> std::function<float(float)> {
   return [](float rotation) -> float {
-    return sigmoid::j_taper(rotation, -knobTaperCurvature);
+    return sigmoid::j_taper(rotation, -durationKnobCurvature);
   };
 }
 
@@ -39,7 +39,7 @@ auto withFixedRange(rack::engine::Module *module, int knobId,
                     Range const &range) -> std::function<float()> {
   using namespace control;
   auto const durationRotation = knob::rotation(module, knobId);
-  auto const durationKnobTaper = duration::rotationToDurationTaper();
+  auto const durationKnobTaper = duration::rotationToTaper();
   auto const toDurationRange = scale::toRange(range);
   return knob::scaled(durationRotation, durationKnobTaper, toDurationRange);
 }
@@ -48,7 +48,7 @@ auto withSelectableRange(rack::engine::Module *module, int knobId, int cvId,
                          int switchId) -> std::function<float()> {
   using namespace control;
   auto const durationRotation = knob::rotation(module, knobId, cvId);
-  auto const durationKnobTaper = duration::rotationToDurationTaper();
+  auto const durationKnobTaper = duration::rotationToTaper();
   auto const selectedDurationRange =
       range::selection<3>(module, switchId, duration::ranges);
   auto const toDurationRange = scale::toRange(selectedDurationRange);

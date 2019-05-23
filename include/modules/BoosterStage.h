@@ -25,30 +25,30 @@ public:
   auto stageGateIn() -> bool;
 
   enum ParameterIds {
-    ACTIVE_BUTTON,
-    CURVE_KNOB,
-    DEFER_BUTTON,
-    DURATION_KNOB,
-    DURATION_RANGE_SWITCH,
-    EOC_BUTTON,
-    LEVEL_KNOB,
-    LEVEL_RANGE_SWITCH,
-    SHAPE_SWITCH,
-    TRIGGER_BUTTON,
-    PARAMETER_COUNT
+    ActiveButton,
+    CurveKnob,
+    DeferButton,
+    DurationKnob,
+    DurationRangeSwitch,
+    EocButton,
+    LevelKnob,
+    LevelRangeSwitch,
+    ShapeSwitch,
+    TriggerButton,
+    ParameterCount
   };
 
   enum InputIds {
-    CURVE_CV,
-    DEFER_GATE_IN,
-    DURATION_CV,
-    LEVEL_CV,
-    ENVELOPE_IN,
-    STAGE_TRIGGER_IN,
-    INPUT_COUNT
+    CurveCv,
+    DeferGateIn,
+    DurationCv,
+    LevelCv,
+    EnvelopeIn,
+    StageTriggerIn,
+    InputCount
   };
 
-  enum OutputIds { ACTIVE_OUT, EOC_OUT, MAIN_OUT, OUTPUT_COUNT };
+  enum OutputIds { ActiveOut, EocOut, MainOut, OutputCount };
 
 private:
   auto envelopeIn() -> float;
@@ -62,6 +62,6 @@ private:
   float startVoltage{0.f};
   std::function<float()> duration;
   std::function<float()> level;
-  std::unique_ptr<CurvatureControl> shape;
+  std::function<float(float)> taper;
 };
 } // namespace dhe

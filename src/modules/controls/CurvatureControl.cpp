@@ -10,7 +10,7 @@ ConstantParam CurvatureControl::constantJShapeSwitch{0.f};
 auto CurvatureControl::taper(float input) -> float {
   auto const curvature = sigmoid::curvature(rotation());
   auto const shapeSelection = static_cast<int>(shapeSwitch.getValue());
-  auto const shape = sigmoid::shapes()[shapeSelection];
+  auto const shape = sigmoid::shapes[shapeSelection];
 
   return shape->taper(input, curvature);
 }

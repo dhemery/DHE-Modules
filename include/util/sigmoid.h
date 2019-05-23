@@ -119,9 +119,10 @@ public:
     return sigmoid_range.normalize(tapered);
   }
 };
+
 static constexpr auto s_shape = SShape{};
 
-auto shapes() -> std::array<Shape const *, 2> const &;
+extern std::array<Shape const *, 2> const shapes;
 
 /**
  * Applies a gentle S-shaped transfer function to map an input in the range

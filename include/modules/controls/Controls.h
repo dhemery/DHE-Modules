@@ -3,8 +3,11 @@
 #include <array>
 #include <functional>
 
-#include "util/range.h"
 #include <engine/Module.hpp>
+
+#include "modules/controls/Curvature.h"
+#include "util/range.h"
+#include "util/sigmoid.h"
 
 namespace dhe {
 
@@ -54,7 +57,7 @@ auto scaled(std::function<float()> const &rotation,
 } // namespace knob
 
 namespace scale {
-auto toRange(std::function<Range const *()> range)
+auto toRange(std::function<Range const *()> const &range)
     -> std::function<float(float)>;
 
 auto toRange(Range const &range) -> std::function<float(float)>;
@@ -72,6 +75,8 @@ auto selection(rack::engine::Module *module, int switchId,
     return ranges[selection];
   };
 }
+
 } // namespace range
+
 } // namespace control
 } // namespace dhe

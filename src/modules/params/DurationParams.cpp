@@ -24,13 +24,13 @@ public:
 class KnobParamQuantity : public rack::engine::ParamQuantity {
 public:
   auto getDisplayValue() -> float override {
-    static auto const durationTaperFor = duration::rotationToDurationTaper();
+    static auto const durationTaperFor = duration::rotationToTaper();
     auto const rotation = getValue();
     return range()->scale(durationTaperFor(rotation));
   }
 
   void setDisplayValue(float durationSeconds) override {
-    static auto const rotationFor = duration::durationTaperToRotation();
+    static auto const rotationFor = duration::taperToRotation();
     auto const durationTaper = range()->normalize(durationSeconds);
     setValue(rotationFor(durationTaper));
   }
