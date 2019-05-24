@@ -5,13 +5,13 @@
 #include <array>
 
 namespace dhe {
-namespace Signal {
+namespace signal {
 
-  static constexpr auto bipolar_range = Range{-5.f, 5.f};
-  static constexpr auto unipolar_range = Range{0.f, 10.f};
+  static constexpr auto bipolarRange = Range{-5.f, 5.f};
+  static constexpr auto unipolarRange = Range{0.f, 10.f};
 
-  auto range(bool is_uni) -> Range const &;
+  auto range(bool isUni) -> Range const &;
 
   auto ranges() -> std::array<Range const *, 2> const &;
-} // namespace Signal
+} // namespace signal
 } // namespace dhe

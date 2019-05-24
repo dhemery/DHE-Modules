@@ -21,32 +21,32 @@ Cubic::Cubic() {
   configGain(OutputGainKnob, "Output");
 }
 
-void Cubic::process(const ProcessArgs &args) {
+void Cubic::process(const ProcessArgs & /*args*/) {
   auto a = coefficient(ACoefficientKnob, ACoefficientCvInput);
   auto b = coefficient(BCoefficientKnob, BCoefficientCvInput);
   auto c = coefficient(CCoefficientKnob, CCoefficientCvInput);
   auto d = coefficient(DCoefficientKnob, DCoefficientCvInput);
-  auto input_gain = gain(InputGainKnob, InputGainCvInput);
-  auto output_gain = gain(OutputGainKnob, OutputGainCvInput);
+  auto inputGain = gain(InputGainKnob, InputGainCvInput);
+  auto outputGain = gain(OutputGainKnob, OutputGainCvInput);
 
-  auto x = input_gain * main_in() * 0.2f;
+  auto x = inputGain * mainIn() * 0.2f;
   auto x2 = x * x;
   auto x3 = x2 * x;
   auto y = a * x3 + b * x2 + c * x + d;
-  auto output_voltage = output_gain * y * 5.f;
-  send_main_out(output_voltage);
+  auto outputVoltage = outputGain * y * 5.f;
+  sendMainOut(outputVoltage);
 }
 
-auto Cubic::coefficient(Cubic::ParameterIds knob_param, Cubic::InputIds cv_param) -> float {
-  static auto constexpr coefficient_range = Range{-2.0f, 2.0f};
-  return coefficient_range.scale(modulated(knob_param, cv_param));
+auto Cubic::coefficient(Cubic::ParameterIds knobParam, Cubic::InputIds cvParam) -> float {
+  static auto constexpr coefficientRange = Range{-2.0f, 2.0f};
+  return coefficientRange.scale(modulated(knobParam, cvParam));
 }
 
-auto Cubic::gain(const Cubic::ParameterIds knob_param, const Cubic::InputIds cv_input) -> float {
-  return Gain::multiplier(modulated(knob_param, cv_input));
+auto Cubic::gain(const Cubic::ParameterIds knobParam, const Cubic::InputIds cvInput) -> float {
+  return Gain::multiplier(modulated(knobParam, cvInput));
 }
 
-auto Cubic::main_in() -> float { return inputs[CubicInput].getVoltage(); }
+auto Cubic::mainIn() -> float { return inputs[CubicInput].getVoltage(); }
 
-void Cubic::send_main_out(float voltage) { outputs[CubicOutput].setVoltage(voltage); }
+void Cubic::sendMainOut(float voltage) { outputs[CubicOutput].setVoltage(voltage); }
 } // namespace dhe

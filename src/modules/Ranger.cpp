@@ -24,7 +24,7 @@ Ranger::Ranger() {
   cwLimit = level::withSelectableRange(this, CwLimitKnob, CwLimitCvInput, CwLimitAvKnob, CwLimitRangeSwitch);
 }
 
-void Ranger::process(const ProcessArgs &args) {
+void Ranger::process(const ProcessArgs & /*args*/) {
   auto const outputVoltage = scale(level(), ccwLimit(), cwLimit());
   outputs[RangerOutput].setVoltage(outputVoltage);
 }

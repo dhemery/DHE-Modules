@@ -12,26 +12,26 @@ UpstagePanel::UpstagePanel(Upstage *module) : Panel{module, hp} {
   auto y = 25.f;
   auto dy = 18.5f;
 
-  knob<LargeKnob>(column_2, y, Upstage::LEVEL_KNOB);
+  knob<LargeKnob>(column_2, y, Upstage::LevelKnob);
 
   y += dy;
-  input(column_1, y, Upstage::LEVEL_CV);
-  toggle<2>(column_3, y, Upstage::LEVEL_RANGE_SWITCH);
+  input(column_1, y, Upstage::LevelCvInput);
+  toggle<2>(column_3, y, Upstage::LevelRangeSwitch);
 
   y += dy;
-  button(column_1, y, Upstage::WAIT_BUTTON);
-  button(column_3, y, Upstage::TRIGGER_BUTTON);
+  button(column_1, y, Upstage::WaitButton);
+  button(column_3, y, Upstage::TriggerButton);
 
   y = 82.f;
   dy = 15.f;
 
-  input(column_1, y, Upstage::WAIT_IN);
+  input(column_1, y, Upstage::WaitInput);
 
   y += dy;
-  input(column_1, y, Upstage::TRIGGER_IN);
-  output(column_3, y, Upstage::TRIGGER_OUT);
+  input(column_1, y, Upstage::TriggerInput);
+  output(column_3, y, Upstage::TriggerOutput);
 
   y += dy;
-  output(column_3, y, Upstage::MAIN_OUT);
+  output(column_3, y, Upstage::EnvelopeOutput);
 }
 } // namespace dhe

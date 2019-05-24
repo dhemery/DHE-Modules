@@ -40,7 +40,7 @@ namespace level {
 
   class RangeSwitchParamQuantity : public rack::engine::ParamQuantity {
   public:
-    auto getDisplayValueString() -> std::string override { return getValue() < 0.5 ? "±5 V" : "0–10 V"; }
+    auto getDisplayValueString() -> std::string override { return getValue() < 0.5F ? "±5 V" : "0–10 V"; }
   };
 
   class KnobParamQuantity : public rack::engine::ParamQuantity {

@@ -32,11 +32,11 @@ public:
   enum OutputIds { Taper1Output, Taper2Output, OutputCount };
 
 private:
-  std::function<float()> level1Rotation;
-  std::function<Range const *()> level1Range;
+  std::function<float()> levelRotation1;
+  std::function<Range const *()> levelRange1;
   std::function<float(float)> taper1;
-  std::function<float()> level2Rotation;
-  std::function<Range const *()> level2Range;
+  std::function<float()> levelRotation2;
+  std::function<Range const *()> levelRange2;
   std::function<float(float)> taper2;
 };
 

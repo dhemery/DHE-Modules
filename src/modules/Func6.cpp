@@ -5,7 +5,7 @@
 namespace dhe {
 Func6::Func6() {
   config(ParameterCount, InputCount, OutputCount);
-  for (int i = 0; i < channel_count; i++) {
+  for (int i = 0; i < channelCount; i++) {
     auto channelNumber = std::to_string(i + 1);
 
     configKnob(OperandKnob + i, "Operand " + channelNumber);
@@ -18,7 +18,7 @@ Func6::Func6() {
   }
 }
 
-void Func6::process(const ProcessArgs &args) {
+void Func6::process(const ProcessArgs & /*ignored*/) {
   auto upstream = 0.f;
   for (auto &channel : channels) {
     upstream = channel.apply(upstream);

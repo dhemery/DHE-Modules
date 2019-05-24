@@ -13,36 +13,36 @@ public:
   void process(const ProcessArgs &args) override;
 
   enum ParameterIds {
-    WOBBLE_RATIO_KNOB,
-    WOBBLE_RATIO_AV,
-    WOBBLE_RANGE_SWITCH,
-    WOBBLE_DEPTH_KNOB,
-    WOBBLE_DEPTH_AV,
-    THROB_SPEED_KNOB,
-    THROB_SPEED_AV,
-    X_GAIN_KNOB,
-    Y_GAIN_KNOB,
-    X_RANGE_SWITCH,
-    Y_RANGE_SWITCH,
-    WOBBLE_RATIO_FREEDOM_SWITCH,
-    WOBBLE_PHASE_KNOB,
-    PARAMETER_COUNT
+    WobbleRatioKnob,
+    WobbleRatioAvKnob,
+    WobbleRatioRangeSwitch,
+    WobbleDepthKnob,
+    WobbleDepthAvKnob,
+    ThrobSpeedKnob,
+    ThrobSpeedAvKnob,
+    XGainKnob,
+    YGainKnob,
+    XRangeSwitch,
+    YRangeSwitch,
+    WobbleFreedomSwitch,
+    WobblePhaseKnob,
+    ParameterCount
   };
-  enum InputIds { WOBBLE_RATIO_CV, WOBBLE_DEPTH_CV, THROB_SPEED_CV, X_GAIN_CV, Y_GAIN_CV, INPUT_COUNT };
-  enum OutputIds { X_OUT, Y_OUT, OUTPUT_COUNT };
+  enum InputIds { WobbleRatioCvInput, WobbleDepthCvInput, ThrobSpeedCvInput, XGainCvInput, YGainCvInput, InputCount };
+  enum OutputIds { XOutput, YOutput, OutputCount };
 
 private:
-  auto is_wobble_ratio_free() -> bool;
+  auto wobbleRatioIsFree() -> bool;
   auto offset(int param) -> float;
-  auto throb_speed(float sampleTime) -> float;
-  auto wobble_depth() -> float;
-  auto wobble_phase_in() -> float;
-  auto wobble_ratio_range() -> const Range &;
-  auto wobble_ratio() -> float;
-  auto x_offset() -> float;
-  auto x_gain_in() -> float;
-  auto y_gain_in() -> float;
-  auto y_offset() -> float;
+  auto throbSpeed(float sampleTime) -> float;
+  auto wobbleDepth() -> float;
+  auto wobblePhase() -> float;
+  auto wobbleRatioRange() -> const Range &;
+  auto wobbleRatio() -> float;
+  auto xOffset() -> float;
+  auto xGain() -> float;
+  auto yGain() -> float;
+  auto yOffset() -> float;
 
   static constexpr auto throb_speed_knob_range = Range{-1.f, 1.f};
   static constexpr auto wobble_depth_range = Range{0.f, 1.f};

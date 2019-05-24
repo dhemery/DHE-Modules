@@ -13,38 +13,38 @@ XycloidPanel::XycloidPanel(Xycloid *module) : Panel{module, hp} {
   auto y = 30.f;
   auto dy = 22.f;
 
-  input(column_1, y, Xycloid::WOBBLE_RATIO_CV);
-  knob<TinyKnob>(column_2, y, Xycloid::WOBBLE_RATIO_AV);
-  knob<LargeKnob>(column_3, y, Xycloid::WOBBLE_RATIO_KNOB);
-  toggle<2>(column_4, y, Xycloid::WOBBLE_RATIO_FREEDOM_SWITCH);
+  input(column_1, y, Xycloid::WobbleRatioCvInput);
+  knob<TinyKnob>(column_2, y, Xycloid::WobbleRatioAvKnob);
+  knob<LargeKnob>(column_3, y, Xycloid::WobbleRatioKnob);
+  toggle<2>(column_4, y, Xycloid::WobbleFreedomSwitch);
 
   y += dy;
-  input(column_1, y, Xycloid::WOBBLE_DEPTH_CV);
-  knob<TinyKnob>(column_2, y, Xycloid::WOBBLE_DEPTH_AV);
-  knob<LargeKnob>(column_3, y, Xycloid::WOBBLE_DEPTH_KNOB);
-  toggle<3>(column_4, y, Xycloid::WOBBLE_RANGE_SWITCH);
+  input(column_1, y, Xycloid::WobbleDepthCvInput);
+  knob<TinyKnob>(column_2, y, Xycloid::WobbleDepthAvKnob);
+  knob<LargeKnob>(column_3, y, Xycloid::WobbleDepthKnob);
+  toggle<3>(column_4, y, Xycloid::WobbleRatioRangeSwitch);
 
   y += dy;
-  input(column_1, y, Xycloid::THROB_SPEED_CV);
-  knob<TinyKnob>(column_2, y, Xycloid::THROB_SPEED_AV);
-  knob<LargeKnob>(column_3, y, Xycloid::THROB_SPEED_KNOB);
-  knob<SmallKnob>(column_4, y, Xycloid::WOBBLE_PHASE_KNOB);
+  input(column_1, y, Xycloid::ThrobSpeedCvInput);
+  knob<TinyKnob>(column_2, y, Xycloid::ThrobSpeedAvKnob);
+  knob<LargeKnob>(column_3, y, Xycloid::ThrobSpeedKnob);
+  knob<SmallKnob>(column_4, y, Xycloid::WobblePhaseKnob);
 
   y = 82.f;
   dy = 15.f;
   const auto output_port_offset = 1.25f;
 
   y += dy;
-  input(column_1, y, Xycloid::X_GAIN_CV);
-  knob<SmallKnob>(column_2, y, Xycloid::X_GAIN_KNOB);
-  toggle<2>(column_3, y, Xycloid::X_RANGE_SWITCH);
-  output(column_4, y + output_port_offset, Xycloid::X_OUT);
+  input(column_1, y, Xycloid::XGainCvInput);
+  knob<SmallKnob>(column_2, y, Xycloid::XGainKnob);
+  toggle<2>(column_3, y, Xycloid::XRangeSwitch);
+  output(column_4, y + output_port_offset, Xycloid::XOutput);
 
   y += dy;
-  input(column_1, y, Xycloid::Y_GAIN_CV);
-  knob<SmallKnob>(column_2, y, Xycloid::Y_GAIN_KNOB);
-  toggle<2>(column_3, y, Xycloid::Y_RANGE_SWITCH);
-  output(column_4, y + output_port_offset, Xycloid::Y_OUT);
+  input(column_1, y, Xycloid::YGainCvInput);
+  knob<SmallKnob>(column_2, y, Xycloid::YGainKnob);
+  toggle<2>(column_3, y, Xycloid::YRangeSwitch);
+  output(column_4, y + output_port_offset, Xycloid::YOutput);
 }
 
 } // namespace dhe

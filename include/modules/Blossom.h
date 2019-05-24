@@ -15,7 +15,7 @@ public:
     SpinAvKNob,
     BounceKnob,
     BounceAvKnob,
-    BounceLockSwitch,
+    BounceFreedomSwitch,
     DepthKnob,
     DepthAvKnob,
     PhaseKnob,

@@ -32,17 +32,17 @@ Tapers::Tapers() {
 
   using namespace control;
 
-  level1Rotation = knob::rotation(this, LevelKnob1, Level1Cv, LevelAvKnob1);
-  level1Range = range::selection<2>(this, LevelRangeSwitch1, level::ranges);
+  levelRotation1 = knob::rotation(this, LevelKnob1, Level1Cv, LevelAvKnob1);
+  levelRange1 = range::selection<2>(this, LevelRangeSwitch1, level::ranges);
   taper1 = curvature::withSelectableShape(this, CurveKnob1, Curve1Cv, CurveAvKnob1, ShapeSwitch1);
 
-  level2Rotation = knob::rotation(this, LevelKnob2, Level2Cv, LevelAvKnob2);
-  level2Range = range::selection<2>(this, LevelRangeSwitch2, level::ranges);
+  levelRotation2 = knob::rotation(this, LevelKnob2, Level2Cv, LevelAvKnob2);
+  levelRange2 = range::selection<2>(this, LevelRangeSwitch2, level::ranges);
   taper2 = curvature::withSelectableShape(this, Curve2Knob, Curve2Cv, Curve2Av, Shape2Switch);
 }
 
-void Tapers::process(const ProcessArgs &args) {
-  outputs[Taper1Output].setVoltage(level1Range()->scale(taper1(level1Rotation())));
-  outputs[Taper2Output].setVoltage(level2Range()->scale(taper2(level2Rotation())));
+void Tapers::process(const ProcessArgs & /*args*/) {
+  outputs[Taper1Output].setVoltage(levelRange1()->scale(taper1(levelRotation1())));
+  outputs[Taper2Output].setVoltage(levelRange2()->scale(taper2(levelRotation2())));
 }
 } // namespace dhe

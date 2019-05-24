@@ -4,6 +4,6 @@ namespace dhe {
 
 namespace sigmoid {
 
-  std::array<Shape const *, 2> const shapes{&j_shape, &s_shape};
+  std::array<Shape const *, 2> const shapes{&jShape, &sShape};
 } // namespace sigmoid
 } // namespace dhe

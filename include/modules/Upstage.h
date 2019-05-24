@@ -12,11 +12,11 @@ public:
 
   void process(const ProcessArgs &args) override;
 
-  enum ParameterIds { LEVEL_KNOB, TRIGGER_BUTTON, WAIT_BUTTON, LEVEL_RANGE_SWITCH, PARAMETER_COUNT };
+  enum ParameterIds { LevelKnob, TriggerButton, WaitButton, LevelRangeSwitch, ParameterCount };
 
-  enum InputIds { TRIGGER_IN, WAIT_IN, LEVEL_CV, INPUT_COUNT };
+  enum InputIds { TriggerInput, WaitInput, LevelCvInput, InputCount };
 
-  enum OutputIds { TRIGGER_OUT, MAIN_OUT, OUTPUT_COUNT };
+  enum OutputIds { TriggerOutput, EnvelopeOutput, OutputCount };
 
 private:
   void sendEnvelope(float voltage);

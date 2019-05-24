@@ -4,26 +4,26 @@
 
 namespace dhe {
 
-constexpr auto av_range = Range{-1.f, 1.f};
+constexpr auto avRange = Range{-1.f, 1.f};
 
-auto cv_offset(float bipolar_voltage) -> float {
-  static constexpr auto cv_to_offset = 0.1f;
-  return bipolar_voltage * cv_to_offset;
+auto cvOffset(float bipolarVoltage) -> float {
+  static constexpr auto cvToOffset = 0.1f;
+  return bipolarVoltage * cvToOffset;
 }
 
-auto av_multiplier(float av_amount) -> float { return av_range.scale(av_amount); }
+auto avMultiplier(float avAmount) -> float { return avRange.scale(avAmount); }
 
 auto Module::modulated(int knobId, int cvId) -> float {
   auto rotation = params[knobId].getValue();
   auto cv = inputs[cvId].getVoltage();
-  return rotation + cv_offset(cv);
+  return rotation + cvOffset(cv);
 }
 
 auto Module::modulated(int knobId, int cvId, int avId) -> float {
   auto rotation = params[knobId].getValue();
   auto cv = inputs[cvId].getVoltage();
   auto av = params[avId].getValue();
-  return rotation + av_multiplier(av) * cv_offset(cv);
+  return rotation + avMultiplier(av) * cvOffset(cv);
 }
 
 void Module::configKnob(int index, const std::string &name) { configParam(index, 0.f, 1.f, 0.5f, name); }
@@ -37,7 +37,7 @@ void Module::configGain(int index, const std::string &target) {
 }
 
 void Module::configSignalRange(int index, const std::string &target, bool uni) {
-  const auto initial_value = uni ? 1.f : 0.f;
-  configParam(index, 0.f, 1.f, initial_value, target + " range");
+  const auto initialValue = uni ? 1.f : 0.f;
+  configParam(index, 0.f, 1.f, initialValue, target + " range");
 }
 } // namespace dhe

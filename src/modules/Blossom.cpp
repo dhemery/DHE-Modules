@@ -27,7 +27,7 @@ Blossom::Blossom() {
   configSignalRange(XRangeSwitch, "X", false);
   configSignalRange(YRangeSwitch, "Y", false);
 
-  configParam(BounceLockSwitch, 0.0, 1.0, 1.0, "Bounce lock");
+  configParam(BounceFreedomSwitch, 0.0, 1.0, 1.0, "Bounce lock");
 }
 
 void Blossom::process(const ProcessArgs &args) {
@@ -73,7 +73,7 @@ auto Blossom::depth() -> float {
   return depthRange.clamp(rotation);
 }
 
-auto Blossom::isBounceFree() -> bool { return params[BounceLockSwitch].getValue() > 0.1f; }
+auto Blossom::isBounceFree() -> bool { return params[BounceFreedomSwitch].getValue() > 0.1f; }
 
 auto Blossom::phase() -> float {
   static constexpr auto phaseRange = Range{0.f, 1.f};

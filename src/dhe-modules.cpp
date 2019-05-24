@@ -11,9 +11,9 @@
 #include "panels/UpstagePanel.h"
 #include "panels/XycloidPanel.h"
 #include "plugin/Plugin.hpp"
-#include "rack.hpp"
 
 #include <algorithm>
+#include <rack.hpp>
 
 rack::plugin::Plugin *pluginInstance;
 

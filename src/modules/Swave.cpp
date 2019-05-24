@@ -16,7 +16,7 @@ Swave::Swave() {
   taper = curvature::withSelectableShape(this, CurveKnob, CurveCv, ShapeSwitch);
 }
 
-void Swave::process(const ProcessArgs &args) {
+void Swave::process(const ProcessArgs & /*args*/) {
   auto const normalized = level::bipolarRange.normalize(signalIn());
   auto const shaped = taper(normalized);
   auto const outputVoltage = level::bipolarRange.scale(shaped);

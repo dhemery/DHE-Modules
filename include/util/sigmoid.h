@@ -87,7 +87,7 @@ namespace sigmoid {
       return inverse(proportion_range.clamp(input), curvature);
     }
   };
-  static constexpr auto j_shape = JShape{};
+  static constexpr auto jShape = JShape{};
 
   /**
    * Applies an S-shaped transfer function to the input.
@@ -117,7 +117,7 @@ namespace sigmoid {
     }
   };
 
-  static constexpr auto s_shape = SShape{};
+  static constexpr auto sShape = SShape{};
 
   extern std::array<Shape const *, 2> const shapes;
 

@@ -4,18 +4,18 @@
 
 namespace dhe {
 
-static constexpr auto attenuation_range = Range{0.f, 1.f};
-static constexpr auto invertible_attenuation_range = Range{-1.f, 1.f};
-static constexpr auto invertible_gain_range = Range{-2.f, 2.f};
+static constexpr auto attenuationRange = Range{0.f, 1.f};
+static constexpr auto invertibleAttenuationRange = Range{-1.f, 1.f};
+static constexpr auto invertibleGainRange = Range{-2.f, 2.f};
 
-static constexpr auto half_bipolar_range = Range{0.f, 5.f};
-static constexpr auto invertible_unipolar_range = Range{-10.f, 10.f};
+static constexpr auto halfBipolarRange = Range{0.f, 5.f};
+static constexpr auto invertibleUnipolarRange = Range{-10.f, 10.f};
 
-const std::array<Range const *, 4> FuncChannel::multiplicationRanges{&attenuation_range, &invertible_attenuation_range,
-                                                                     &Gain::range, &invertible_gain_range};
+const std::array<Range const *, 4> FuncChannel::multiplicationRanges{&attenuationRange, &invertibleAttenuationRange,
+                                                                     &Gain::range, &invertibleGainRange};
 
-const std::array<Range const *, 4> FuncChannel::additionRanges{&half_bipolar_range, &Signal::bipolar_range,
-                                                               &Signal::unipolar_range, &invertible_unipolar_range};
+const std::array<Range const *, 4> FuncChannel::additionRanges{&halfBipolarRange, &signal::bipolarRange,
+                                                               &signal::unipolarRange, &invertibleUnipolarRange};
 
 FuncChannel::FuncChannel(rack::engine::Module *module, int inputIndex, int operandIndex, int outputIndex,
                          int operatorSwitchIndex, int additionRangeSwitchIndex, int multiplicationRangeSwitchIndex) :

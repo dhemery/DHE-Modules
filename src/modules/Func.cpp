@@ -12,5 +12,5 @@ Func::Func() {
                                                          AdditionRangeSwitch, MultiplicationRangeSwitch));
 }
 
-void Func::process(const ProcessArgs &args) { channel->apply(0.f); }
+void Func::process(const ProcessArgs & /*args*/) { channel->apply(0.f); }
 } // namespace dhe
