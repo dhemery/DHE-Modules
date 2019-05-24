@@ -31,12 +31,12 @@ public:
   void step(float sampleTime) {
     if (phase >= 1.f) {
       return;
-    };
+    }
     phase = std::min(1.f, phase + sampleTime / duration());
     onAdvance(phase);
     if (phase >= 1.f) {
       onFinish();
-    };
+    }
   }
 
   void stop() { phase = 1.f; }

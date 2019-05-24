@@ -10,10 +10,8 @@
 #include "panels/TapersPanel.h"
 #include "panels/UpstagePanel.h"
 #include "panels/XycloidPanel.h"
-#include "plugin/Plugin.hpp"
 
-#include <algorithm>
-#include <rack.hpp>
+#include <plugin/Plugin.hpp>
 
 rack::plugin::Plugin *pluginInstance;
 

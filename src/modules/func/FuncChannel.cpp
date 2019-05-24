@@ -1,7 +1,5 @@
 #include "modules/func/FuncChannel.h"
 
-#include <utility>
-
 namespace dhe {
 
 static constexpr auto attenuationRange = Range{0.f, 1.f};

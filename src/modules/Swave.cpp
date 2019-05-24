@@ -2,8 +2,6 @@
 
 #include "modules/controls/Curvature.h"
 #include "modules/controls/Level.h"
-#include "util/range.h"
-#include "util/sigmoid.h"
 
 namespace dhe {
 

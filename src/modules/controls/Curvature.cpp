@@ -15,7 +15,7 @@ namespace curvature {
   }
 
   auto curvatureToRotation() -> std::function<float(float)> {
-    return [](float taper) -> float { return sigmoid::s_taper(taper, -curveKnobCurvature); };
+    return [](float taper) -> float { return sigmoid::sTaper(taper, -curveKnobCurvature); };
   }
 
   auto withSelectableShape(rack::engine::Module *module, int knobId, int cvId, int switchId)

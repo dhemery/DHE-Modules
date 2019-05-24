@@ -2,7 +2,6 @@
 
 #include "util/gain.h"
 #include "util/sigmoid.h"
-#include "util/signal.h"
 
 #include <array>
 

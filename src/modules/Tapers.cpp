@@ -3,7 +3,6 @@
 #include "modules/controls/Controls.h"
 #include "modules/controls/Curvature.h"
 #include "modules/controls/Level.h"
-#include "util/sigmoid.h"
 
 namespace dhe {
 

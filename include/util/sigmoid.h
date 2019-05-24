@@ -7,8 +7,8 @@
 namespace dhe {
 namespace sigmoid {
 
-  static constexpr auto sigmoid_range = Range{-1.f, 1.f};
-  static constexpr auto proportion_range = Range{0.f, 1.f};
+  static constexpr auto sigmoidRange = Range{-1.f, 1.f};
+  static constexpr auto proportionRange = Range{0.f, 1.f};
 
   /**
    * Applies an inverse sigmoid function to the input.
@@ -29,11 +29,11 @@ namespace sigmoid {
    */
   static inline auto inverse(float input, float curvature) -> float {
     static constexpr auto precision = 1e-4f;
-    static constexpr auto max_curvature = 1.0f - precision;
-    static constexpr auto curvature_range = Range{-max_curvature, max_curvature};
+    static constexpr auto maxCurvature = 1.0f - precision;
+    static constexpr auto curvatureRange = Range{-maxCurvature, maxCurvature};
 
-    curvature = curvature_range.clamp(curvature);
-    input = sigmoid_range.clamp(input);
+    curvature = curvatureRange.clamp(curvature);
+    input = sigmoidRange.clamp(input);
 
     return (input - input * curvature) / (curvature - std::abs(input) * 2.0f * curvature + 1.0f);
   }
@@ -84,7 +84,7 @@ namespace sigmoid {
      * @param curvature the intensity of the taper
      */
     auto taper(float input, float curvature) const -> float override {
-      return inverse(proportion_range.clamp(input), curvature);
+      return inverse(proportionRange.clamp(input), curvature);
     }
   };
   static constexpr auto jShape = JShape{};
@@ -111,9 +111,9 @@ namespace sigmoid {
      * @param curvature the intensity of the taper
      */
     auto taper(float input, float curvature) const -> float override {
-      const auto scaled = sigmoid_range.scale(input);
+      const auto scaled = sigmoidRange.scale(input);
       const auto tapered = curve(scaled, curvature);
-      return sigmoid_range.normalize(tapered);
+      return sigmoidRange.normalize(tapered);
     }
   };
 
@@ -135,23 +135,23 @@ namespace sigmoid {
   static inline auto curvature(float input) -> float {
     // This curvature creates a gentle S curve, increasing sensitivity in the
     // middle of the input range and decreasing sensitivity toward the extremes.
-    static constexpr auto gentle_s = 0.65f;
-    auto scaled = sigmoid_range.scale(input);
-    return curve(scaled, gentle_s);
+    static constexpr auto gentleS = 0.65f;
+    auto scaled = sigmoidRange.scale(input);
+    return curve(scaled, gentleS);
   }
 
-  static inline auto j_taper(float input, float curvature) -> float {
-    return inverse(proportion_range.clamp(input), curvature);
+  static inline auto jTaper(float input, float curvature) -> float {
+    return inverse(proportionRange.clamp(input), curvature);
   }
 
-  static inline auto s_taper(float input, float curvature) -> float {
-    const auto scaled = sigmoid_range.scale(input);
+  static inline auto sTaper(float input, float curvature) -> float {
+    const auto scaled = sigmoidRange.scale(input);
     const auto tapered = curve(scaled, curvature);
-    return sigmoid_range.normalize(tapered);
+    return sigmoidRange.normalize(tapered);
   }
 
-  static inline auto taper(float input, float curvature, bool is_s) -> float {
-    return is_s ? s_taper(input, curvature) : j_taper(input, curvature);
+  static inline auto taper(float input, float curvature, bool isS) -> float {
+    return isS ? sTaper(input, curvature) : jTaper(input, curvature);
   }
 
 } // namespace sigmoid

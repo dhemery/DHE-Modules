@@ -23,11 +23,11 @@ namespace duration {
   auto range(float switchPosition) -> Range const * { return ranges[static_cast<int>(switchPosition)]; }
 
   auto rotationToTaper() -> std::function<float(float)> {
-    return [](float rotation) -> float { return sigmoid::j_taper(rotation, durationKnobCurvature); };
+    return [](float rotation) -> float { return sigmoid::jTaper(rotation, durationKnobCurvature); };
   }
 
   auto taperToRotation() -> std::function<float(float)> {
-    return [](float rotation) -> float { return sigmoid::j_taper(rotation, -durationKnobCurvature); };
+    return [](float rotation) -> float { return sigmoid::jTaper(rotation, -durationKnobCurvature); };
   }
 
   auto withFixedRange(rack::engine::Module *module, int knobId, Range const &range) -> std::function<float()> {
