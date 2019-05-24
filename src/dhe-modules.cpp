@@ -12,6 +12,7 @@
 #include "panels/XycloidPanel.h"
 
 #include <plugin/Plugin.hpp>
+#include <plugin/callbacks.hpp>
 
 rack::plugin::Plugin *pluginInstance;
 
