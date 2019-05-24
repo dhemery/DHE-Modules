@@ -62,6 +62,7 @@ test: $(TEST_RUNNER)
 
 
 
+
 ########################################################################
 #
 # Build the compilation database that configures CLion
@@ -83,7 +84,7 @@ build/test/%.json: test/%
 $(COMPILATION_DATABASE_FILE): $(COMPILATION_DATABASE_JSONS)
 	sed -e '1s/^/[/' -e '$$s/,$$/]/' $^ | json_pp > $@
 
-db: $(COMPILATION_DATABASE_FILE)
+project: $(COMPILATION_DATABASE_FILE)
 
 undb:
 	rm -rf $(COMPILATION_DATABASE_FILE) $(COMPILATION_DATABASE_JSONS)
@@ -132,6 +133,7 @@ debug: dev
 
 
 
+
 ########################################################################
 #
 # Build the SVG files for the GUI
@@ -150,26 +152,13 @@ gui:
 #
 ########################################################################
 
-TIDY_INCLUDES =  -I$(RACK_DIR)/include -I$(RACK_DIR)/dep/include -I./include
-
-TIDY_FLAGS = \
-	-fPIC \
-	-std=c++11 \
-	-stdlib=libc++ \
-	-DARCH_MAC \
-	-mmacosx-version-min=10.7  \
-	-MMD \
-	-MP \
-	-g \
-	-O3 \
-	-march=nocona \
-	-funsafe-math-optimizations
+HEADERS = $(shell find include -name *.h)
 
 tidy:
-	find src include -name *.h -o -name *.cpp | xargs -I % clang-tidy % -- $(TIDY_INCLUDES) $(TIDY_FLAGS)
+	clang-tidy $(SOURCES)
 
 format:
-	find src include -name *.h -o -name *.cpp | xargs clang-format -i -style=file
+	clang-format -i -style=file $(SOURCES) $(HEADERS)
 
 clobber: fresh
 	cd gui && rake clobber
