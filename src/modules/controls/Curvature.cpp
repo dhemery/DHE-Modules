@@ -8,7 +8,7 @@
 
 namespace dhe {
 namespace curvature {
-  static float constexpr curveKnobCurvature = 0.65f;
+  static float constexpr curveKnobCurvature = 0.65F;
 
   auto rotationToCurvature() -> std::function<float(float)> {
     return [](float rotation) -> float { return sigmoid::curvature(rotation); };
@@ -84,11 +84,11 @@ namespace curvature {
   };
 
   void configKnob(rack::engine::Module *module, int knobId, std::string const &name, float initialPosition) {
-    module->configParam<KnobParamQuantity>(knobId, 0.f, 1.f, initialPosition, name);
+    module->configParam<KnobParamQuantity>(knobId, 0.F, 1.F, initialPosition, name);
   }
 
   void configSwitch(rack::engine::Module *module, int switchId, std::string const &name, int initialPosition) {
-    module->configParam<ShapeSwitchParamQuantity>(switchId, 0.f, 1.f, initialPosition, name);
+    module->configParam<ShapeSwitchParamQuantity>(switchId, 0.F, 1.F, initialPosition, name);
   }
 } // namespace curvature
 } // namespace dhe

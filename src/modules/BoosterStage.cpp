@@ -13,7 +13,7 @@ BoosterStage::BoosterStage() :
                  [this]() -> bool { return deferGateIn(); },
                  [this]() -> bool { return stageGateIn(); },
                  [this]() -> float { return duration(); },
-                 [this](float) { forward(); },
+                 [this](float /*unused*/) { forward(); },
                  [this]() { prepareToGenerate(); },
                  [this](float phase) { generate(phase); },
                  [this](bool active) { setActive(active); },
@@ -32,10 +32,10 @@ BoosterStage::BoosterStage() :
   curvature::configSwitch(this, ShapeSwitch);
   taper = curvature::withSelectableShape(this, CurveKnob, CurveCvInput, ShapeSwitch);
 
-  configParam(ActiveButton, 0.f, 1.f, 0.f, "Active");
-  configParam(DeferButton, 0.f, 1.f, 0.f, "Defer");
-  configParam(EocButton, 0.f, 1.f, 0.f, "EOC");
-  configParam(TriggerButton, 0.f, 1.f, 0.f, "TRIGGER");
+  configParam(ActiveButton, 0.F, 1.F, 0.F, "Active");
+  configParam(DeferButton, 0.F, 1.F, 0.F, "Defer");
+  configParam(EocButton, 0.F, 1.F, 0.F, "EOC");
+  configParam(TriggerButton, 0.F, 1.F, 0.F, "TRIGGER");
 
   stateMachine.start();
 }
@@ -64,8 +64,8 @@ void BoosterStage::prepareToGenerate() { startVoltage = envelopeIn(); }
 auto BoosterStage::deferGateIsActive() const -> bool { return inputs[DeferGateInput].active; }
 
 auto BoosterStage::deferGateIn() -> bool {
-  auto const deferButton = params[DeferButton].getValue() > 0.5f;
-  auto const deferInput = inputs[DeferGateInput].getVoltage() > 0.1f;
+  auto const deferButton = params[DeferButton].getValue() > 0.5F;
+  auto const deferInput = inputs[DeferGateInput].getVoltage() > 0.1F;
   return deferButton || deferInput;
 }
 
@@ -74,14 +74,14 @@ void BoosterStage::setEoc(bool eoc) { isEoc = eoc; }
 auto BoosterStage::envelopeIn() -> float { return inputs[EnvelopeInput].getVoltage(); }
 
 void BoosterStage::sendActive() {
-  auto const activeButton = params[ActiveButton].getValue() > 0.5f;
-  auto const voltage = isActive || activeButton ? 10.f : 0.f;
+  auto const activeButton = params[ActiveButton].getValue() > 0.5F;
+  auto const voltage = isActive || activeButton ? 10.F : 0.F;
   outputs[ActiveOutput].setVoltage(voltage);
 }
 
 void BoosterStage::sendEoc() {
-  auto const eocButton = params[EocButton].getValue() > 0.5f;
-  auto const voltage = isEoc || eocButton ? 10.f : 0.f;
+  auto const eocButton = params[EocButton].getValue() > 0.5F;
+  auto const voltage = isEoc || eocButton ? 10.F : 0.F;
   outputs[EocOutput].setVoltage(voltage);
 }
 

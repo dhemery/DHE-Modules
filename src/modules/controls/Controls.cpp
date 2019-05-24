@@ -12,7 +12,7 @@ namespace control {
     }
 
     auto rotation(rack::engine::Module *module, int knobId, int cvId) -> std::function<float()> {
-      static auto constexpr attenuation = 0.1f;
+      static auto constexpr attenuation = 0.1F;
       auto knobParam = &module->params[knobId];
       auto cvInput = &module->inputs[cvId];
 
@@ -25,7 +25,7 @@ namespace control {
     }
 
     auto rotation(rack::engine::Module *module, int knobId, int cvId, int avId) -> std::function<float()> {
-      static auto constexpr attenuationRange = Range{-0.1f, 0.1f};
+      static auto constexpr attenuationRange = Range{-0.1F, 0.1F};
       auto knobParam = &module->params[knobId];
       auto cvInput = &module->inputs[cvId];
       auto avParam = &module->params[avId];

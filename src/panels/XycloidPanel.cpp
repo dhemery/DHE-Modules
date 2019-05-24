@@ -5,13 +5,13 @@ namespace dhe {
 XycloidPanel::XycloidPanel(Xycloid *module) : Panel{module, hp} {
   auto widgetRightEdge = width();
 
-  auto column1 = widgetRightEdge / 7.f;
+  auto column1 = widgetRightEdge / 7.F;
   auto column4 = widgetRightEdge - column1;
-  auto column2 = (column4 - column1) / 3.f + column1;
+  auto column2 = (column4 - column1) / 3.F + column1;
   auto column3 = widgetRightEdge - column2;
 
-  auto y = 30.f;
-  auto dy = 22.f;
+  auto y = 30.F;
+  auto dy = 22.F;
 
   input(column1, y, Xycloid::WobbleRatioCvInput);
   knob<TinyKnob>(column2, y, Xycloid::WobbleRatioAvKnob);
@@ -30,9 +30,9 @@ XycloidPanel::XycloidPanel(Xycloid *module) : Panel{module, hp} {
   knob<LargeKnob>(column3, y, Xycloid::ThrobSpeedKnob);
   knob<SmallKnob>(column4, y, Xycloid::WobblePhaseKnob);
 
-  y = 82.f;
-  dy = 15.f;
-  const auto outputPortOffset = 1.25f;
+  y = 82.F;
+  dy = 15.F;
+  const auto outputPortOffset = 1.25F;
 
   y += dy;
   input(column1, y, Xycloid::XGainCvInput);

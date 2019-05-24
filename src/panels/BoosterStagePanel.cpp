@@ -5,15 +5,15 @@ namespace dhe {
 BoosterStagePanel::BoosterStagePanel(BoosterStage *module) : Panel{module, hp} {
   auto widgetRightEdge = width();
 
-  auto column1 = widgetRightEdge / 6.f + 0.3333333f;
-  auto column3 = widgetRightEdge / 2.f;
+  auto column1 = widgetRightEdge / 6.F + 0.3333333F;
+  auto column3 = widgetRightEdge / 2.F;
   auto column5 = widgetRightEdge - column1;
-  auto buttonPortDistance = 7.891f;
+  auto buttonPortDistance = 7.891F;
   auto column2 = column1 + buttonPortDistance;
   auto column4 = column5 - buttonPortDistance;
 
-  auto y = 25.f;
-  auto dy = 18.5f;
+  auto y = 25.F;
+  auto dy = 18.5F;
 
   input(column1, y, BoosterStage::LevelCvInput);
   knob<LargeKnob>(column3, y, BoosterStage::LevelKnob);
@@ -31,8 +31,8 @@ BoosterStagePanel::BoosterStagePanel(BoosterStage *module) : Panel{module, hp} {
 
   toggle<3>(column5, y, BoosterStage::DurationRangeSwitch);
 
-  y = 82.f;
-  dy = 15.f;
+  y = 82.F;
+  dy = 15.F;
 
   input(column1, y, BoosterStage::DeferGateInput);
   button(column2, y, BoosterStage::DeferButton);

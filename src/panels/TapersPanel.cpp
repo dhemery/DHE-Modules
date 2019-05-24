@@ -5,13 +5,13 @@ namespace dhe {
 TapersPanel::TapersPanel(Tapers *module) : Panel{module, hp} {
   auto widgetRightEdge = width();
 
-  auto column1 = width() / 5.f + 0.333333333f;
-  auto column2 = widgetRightEdge / 2.f;
+  auto column1 = width() / 5.F + 0.333333333F;
+  auto column2 = widgetRightEdge / 2.F;
   auto column3 = widgetRightEdge - column1;
 
-  auto y = 24.f;
-  auto dy = 16.f;
-  auto panelBuffer = 4.f;
+  auto y = 24.F;
+  auto dy = 16.F;
+  auto panelBuffer = 4.F;
 
   input(column1, y, Tapers::Level1Cv);
   knob<TinyKnob>(column2, y, Tapers::LevelAvKnob1);

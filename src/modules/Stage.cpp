@@ -10,7 +10,7 @@ Stage::Stage() :
                  [this]() -> bool { return deferGateIn(); },
                  [this]() -> bool { return stageGateIn(); },
                  [this]() -> float { return duration(); },
-                 [this](float) { forward(); },
+                 [this](float /*unused*/) { forward(); },
                  [this]() { prepareToGenerate(); },
                  [this](float phase) { generate(phase); },
                  [this](bool active) { setActive(active); },
@@ -46,12 +46,12 @@ void Stage::prepareToGenerate() { startVoltage = envelopeIn(); }
 void Stage::sendOut(float voltage) { outputs[EnvelopeOutput].setVoltage(voltage); }
 
 void Stage::setActive(bool active) {
-  const auto voltage = active ? 10.f : 0.f;
+  const auto voltage = active ? 10.F : 0.F;
   outputs[ActiveOutput].setVoltage(voltage);
 }
 
 void Stage::setEoc(bool eoc) {
-  const auto voltage = eoc ? 10.f : 0.f;
+  const auto voltage = eoc ? 10.F : 0.F;
   outputs[EocOutput].setVoltage(voltage);
 }
 

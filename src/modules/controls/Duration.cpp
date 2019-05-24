@@ -75,7 +75,7 @@ namespace duration {
 
   void configKnob(rack::engine::Module *module, int knobId, std::function<Range const *()> const &getRange,
                   std::string const &name, float initialPosition) {
-    module->configParam<KnobParamQuantity>(knobId, 0.f, 1.f, initialPosition, name, " s");
+    module->configParam<KnobParamQuantity>(knobId, 0.F, 1.F, initialPosition, name, " s");
     auto knobParamQuantity = dynamic_cast<KnobParamQuantity *>(module->paramQuantities[knobId]);
     knobParamQuantity->range = getRange;
   }
@@ -97,7 +97,7 @@ namespace duration {
   }
 
   void configSwitch(rack::engine::Module *module, int switchId, std::string const &name, int initialPosition) {
-    module->configParam<RangeSwitchParamQuantity>(switchId, 0.f, 2.f, initialPosition, name);
+    module->configParam<RangeSwitchParamQuantity>(switchId, 0.F, 2.F, initialPosition, name);
   }
 } // namespace duration
 } // namespace dhe

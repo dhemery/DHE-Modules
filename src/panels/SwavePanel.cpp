@@ -5,10 +5,10 @@ namespace dhe {
 SwavePanel::SwavePanel(Swave *module) : Panel{module, hp} {
   auto widgetRightEdge = width();
 
-  auto x = widgetRightEdge / 2.f;
+  auto x = widgetRightEdge / 2.F;
 
-  auto y = 25.f;
-  auto dy = 18.5f;
+  auto y = 25.F;
+  auto dy = 18.5F;
 
   toggle<2>(x, y, Swave::ShapeSwitch);
 
@@ -18,8 +18,8 @@ SwavePanel::SwavePanel(Swave *module) : Panel{module, hp} {
   y += dy;
   input(x, y, Swave::CurveCv);
 
-  y = 82.f;
-  dy = 15.f;
+  y = 82.F;
+  dy = 15.F;
 
   y += dy;
   input(x, y, Swave::SwaveInput);

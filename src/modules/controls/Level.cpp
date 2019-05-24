@@ -60,7 +60,7 @@ namespace level {
 
   void configKnob(rack::engine::Module *module, int knobId, std::function<Range const *()> const &range,
                   std::string const &name, float initialPosition) {
-    module->configParam<KnobParamQuantity>(knobId, 0.f, 1.f, initialPosition, name, " V");
+    module->configParam<KnobParamQuantity>(knobId, 0.F, 1.F, initialPosition, name, " V");
     auto knobParamQuantity = dynamic_cast<KnobParamQuantity *>(module->paramQuantities[knobId]);
     knobParamQuantity->range = range;
   }
@@ -78,7 +78,7 @@ namespace level {
   }
 
   void configSwitch(rack::engine::Module *module, int switchId, std::string const &name, int initialPosition) {
-    module->configParam<RangeSwitchParamQuantity>(switchId, 0.f, 1.f, initialPosition, name);
+    module->configParam<RangeSwitchParamQuantity>(switchId, 0.F, 1.F, initialPosition, name);
   }
 } // namespace level
 } // namespace dhe

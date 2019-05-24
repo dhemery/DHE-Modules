@@ -2,10 +2,10 @@
 
 namespace dhe {
 
-CubicPanel::CubicPanel(Cubic *module) : Panel{module, hp} {
+CubicPanel::CubicPanel(Cubic *cubic) : Panel{cubic, hp} {
   auto widgetRightEdge = width();
 
-  auto column1 = width() / 4.F + 0.333333f;
+  auto column1 = width() / 4.F + 0.333333F;
   auto column2 = widgetRightEdge - column1;
 
   auto y = 20.F;

@@ -11,11 +11,11 @@ Ranger::Ranger() {
   configKnob(LevelKnob, "Level");
   configCvGain(LevelAvKnob, "Level");
 
-  level::configKnob(this, CcwLimitKnob, CcwLimitRangeSwitch, "CCW Limit", 0.f);
+  level::configKnob(this, CcwLimitKnob, CcwLimitRangeSwitch, "CCW Limit", 0.F);
   level::configSwitch(this, CcwLimitRangeSwitch, "CCW Limit Range", 0);
   configCvGain(CcwLimitAvKnob, "CCW Limit");
 
-  level::configKnob(this, CwLimitKnob, CwLimitRangeSwitch, "CW Limit", 1.f);
+  level::configKnob(this, CwLimitKnob, CwLimitRangeSwitch, "CW Limit", 1.F);
   level::configSwitch(this, CwLimitRangeSwitch, "CW Limit Range", 0);
   configCvGain(CwLimitAvKnob, "CW Limit");
 

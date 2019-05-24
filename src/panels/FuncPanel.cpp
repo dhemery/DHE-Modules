@@ -7,13 +7,13 @@ namespace dhe {
 FuncPanel::FuncPanel(Func *func) : Panel{func, hp} {
   auto widgetRightEdge = width();
 
-  auto x = widgetRightEdge / 2.f;
+  auto x = widgetRightEdge / 2.F;
 
-  auto top = 23.f;
-  auto bottom = 108.f;
+  auto top = 23.F;
+  auto bottom = 108.F;
   auto rowCount = 6;
   auto rowSpacing = (bottom - top) / (rowCount - 1);
-  auto portOffset = 1.25f;
+  auto portOffset = 1.25F;
 
   auto row1 = top + portOffset;
   auto row2 = top + rowSpacing;

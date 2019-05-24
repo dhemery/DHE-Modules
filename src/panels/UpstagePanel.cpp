@@ -5,12 +5,12 @@ namespace dhe {
 UpstagePanel::UpstagePanel(Upstage *module) : Panel{module, hp} {
   auto widgetRightEdge = width();
 
-  auto column1 = width() / 4.f + 0.333333333f;
-  auto column2 = widgetRightEdge / 2.f;
+  auto column1 = width() / 4.F + 0.333333333F;
+  auto column2 = widgetRightEdge / 2.F;
   auto column3 = widgetRightEdge - column1;
 
-  auto y = 25.f;
-  auto dy = 18.5f;
+  auto y = 25.F;
+  auto dy = 18.5F;
 
   knob<LargeKnob>(column2, y, Upstage::LevelKnob);
 
@@ -22,8 +22,8 @@ UpstagePanel::UpstagePanel(Upstage *module) : Panel{module, hp} {
   button(column1, y, Upstage::WaitButton);
   button(column3, y, Upstage::TriggerButton);
 
-  y = 82.f;
-  dy = 15.f;
+  y = 82.F;
+  dy = 15.F;
 
   input(column1, y, Upstage::WaitInput);
 

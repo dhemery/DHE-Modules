@@ -4,13 +4,13 @@ namespace dhe {
 BlossomPanel::BlossomPanel(Blossom *blossom) : Panel{blossom, hp} {
   auto widgetRightEdge = width();
 
-  auto column1 = widgetRightEdge / 7.f;
+  auto column1 = widgetRightEdge / 7.F;
   auto column4 = widgetRightEdge - column1;
-  auto column2 = (column4 - column1) / 3.f + column1;
+  auto column2 = (column4 - column1) / 3.F + column1;
   auto column3 = widgetRightEdge - column2;
 
-  auto y = 25.f;
-  auto dy = 18.5f;
+  auto y = 25.F;
+  auto dy = 18.5F;
 
   input(column1, y, Blossom::SpinCvInput);
   knob<TinyKnob>(column2, y, Blossom::SpinAvKNob);
@@ -32,9 +32,9 @@ BlossomPanel::BlossomPanel(Blossom *blossom) : Panel{blossom, hp} {
   knob<TinyKnob>(column2, y, Blossom::PhaseAvKnob);
   knob<LargeKnob>(column3, y, Blossom::PhaseKnob);
 
-  y = 97.f;
-  dy = 15.f;
-  const auto outputPortOffset = 1.25f;
+  y = 97.F;
+  dy = 15.F;
+  const auto outputPortOffset = 1.25F;
 
   input(column1, y, Blossom::XGainCvInput);
   knob<SmallKnob>(column2, y, Blossom::XGainKnob);

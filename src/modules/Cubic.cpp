@@ -7,7 +7,7 @@
 namespace dhe {
 
 void configCoefficient(rack::engine::Module *module, int param, std::string const &name) {
-  module->configParam(param, 0.f, 1.f, 0.5f, name + " coefficient", "", 0.f, 4.f, -2.f);
+  module->configParam(param, 0.F, 1.F, 0.5F, name + " coefficient", "", 0.F, 4.F, -2.F);
 }
 
 Cubic::Cubic() {
@@ -28,16 +28,16 @@ void Cubic::process(const ProcessArgs & /*args*/) {
   auto inputGain = gain(InputGainKnob, InputGainCvInput);
   auto outputGain = gain(OutputGainKnob, OutputGainCvInput);
 
-  auto x = inputGain * mainIn() * 0.2f;
+  auto x = inputGain * mainIn() * 0.2F;
   auto x2 = x * x;
   auto x3 = x2 * x;
   auto y = a * x3 + b * x2 + c * x + d;
-  auto outputVoltage = outputGain * y * 5.f;
+  auto outputVoltage = outputGain * y * 5.F;
   sendMainOut(outputVoltage);
 }
 
 auto Cubic::coefficient(Cubic::ParameterIds knobParam, Cubic::InputIds cvParam) -> float {
-  static auto constexpr coefficientRange = Range{-2.0f, 2.0f};
+  static auto constexpr coefficientRange = Range{-2.0F, 2.0F};
   return coefficientRange.scale(modulated(knobParam, cvParam));
 }
 

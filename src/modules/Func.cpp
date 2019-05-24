@@ -5,12 +5,12 @@ Func::Func() {
   config(ParameterCount, InputCount, OutputCount);
 
   configKnob(OperandKnob, "Operand");
-  configParam(OperatorSwitch, 0.f, 1.f, 0.f, "Operation");
-  configParam(AdditionRangeSwitch, 0.f, 3.f, 1.f, "Addition operand range");
-  configParam(MultiplicationRangeSwitch, 0.f, 3.f, 2.f, "Multiplication operand range");
+  configParam(OperatorSwitch, 0.F, 1.F, 0.F, "Operation");
+  configParam(AdditionRangeSwitch, 0.F, 3.F, 1.F, "Addition operand range");
+  configParam(MultiplicationRangeSwitch, 0.F, 3.F, 2.F, "Multiplication operand range");
   channel = FuncChannel{
       this, FuncInput, OperandKnob, FuncOutput, OperatorSwitch, AdditionRangeSwitch, MultiplicationRangeSwitch};
 }
 
-void Func::process(const ProcessArgs & /*args*/) { channel.apply(0.f); }
+void Func::process(const ProcessArgs & /*args*/) { channel.apply(0.F); }
 } // namespace dhe

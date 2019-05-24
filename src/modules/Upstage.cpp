@@ -11,8 +11,8 @@ Upstage::Upstage() {
   level::configSwitch(this, LevelRangeSwitch);
   level = level::withSelectableRange(this, LevelKnob, LevelCvInput, LevelRangeSwitch);
 
-  configParam(TriggerButton, 0.f, 1.f, 0.f, "Trigger");
-  configParam(WaitButton, 0.f, 1.f, 0.f, "Wait");
+  configParam(TriggerButton, 0.F, 1.F, 0.F, "Trigger");
+  configParam(WaitButton, 0.F, 1.F, 0.F, "Wait");
 }
 
 void Upstage::process(const ProcessArgs & /*args*/) {
@@ -24,19 +24,19 @@ void Upstage::process(const ProcessArgs & /*args*/) {
 void Upstage::sendEnvelope(float voltage) { outputs[EnvelopeOutput].setVoltage(voltage); }
 
 void Upstage::sendTrigger(bool isTriggered) {
-  const auto voltage = isTriggered ? 10.f : 0.f;
+  const auto voltage = isTriggered ? 10.F : 0.F;
   outputs[TriggerOutput].setVoltage(voltage);
 }
 
 auto Upstage::triggerIn() -> bool {
-  auto triggerButton = params[TriggerButton].getValue() > 0.1f;
-  auto triggerInput = inputs[TriggerInput].getVoltage() > 0.1f;
+  auto triggerButton = params[TriggerButton].getValue() > 0.1F;
+  auto triggerInput = inputs[TriggerInput].getVoltage() > 0.1F;
   return triggerButton || triggerInput;
 }
 
 auto Upstage::waitIn() -> bool {
-  auto waitButton = params[WaitButton].getValue() > 0.1f;
-  auto waitInput = inputs[WaitInput].getVoltage() > 0.1f;
+  auto waitButton = params[WaitButton].getValue() > 0.1F;
+  auto waitInput = inputs[WaitInput].getVoltage() > 0.1F;
   return waitButton || waitInput;
 }
 

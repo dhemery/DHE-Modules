@@ -2,12 +2,12 @@
 
 namespace dhe {
 
-static constexpr auto attenuationRange = Range{0.f, 1.f};
-static constexpr auto invertibleAttenuationRange = Range{-1.f, 1.f};
-static constexpr auto invertibleGainRange = Range{-2.f, 2.f};
+static constexpr auto attenuationRange = Range{0.F, 1.F};
+static constexpr auto invertibleAttenuationRange = Range{-1.F, 1.F};
+static constexpr auto invertibleGainRange = Range{-2.F, 2.F};
 
-static constexpr auto halfBipolarRange = Range{0.f, 5.f};
-static constexpr auto invertibleUnipolarRange = Range{-10.f, 10.f};
+static constexpr auto halfBipolarRange = Range{0.F, 5.F};
+static constexpr auto invertibleUnipolarRange = Range{-10.F, 10.F};
 
 const std::array<Range const *, 4> FuncChannel::multiplicationRanges{&attenuationRange, &invertibleAttenuationRange,
                                                                      &Gain::range, &invertibleGainRange};
@@ -27,7 +27,7 @@ FuncChannel::FuncChannel(rack::engine::Module *module, int inputIndex, int opera
 auto FuncChannel::apply(float upstream) -> float {
   auto const in = input->getNormalVoltage(upstream);
   auto const rotation = operand->getValue();
-  auto const isMultiplication = operatorSwitch->getValue() > 0.5f;
+  auto const isMultiplication = operatorSwitch->getValue() > 0.5F;
   auto const voltage = isMultiplication ? multiply(in, rotation) : add(in, rotation);
   output->setVoltage(voltage);
   return voltage;

@@ -6,17 +6,17 @@ namespace dhe {
 Func6Panel::Func6Panel(Func6 *func6) : Panel{func6, hp} {
   auto widgetRightEdge = width();
 
-  auto column3 = widgetRightEdge / 2.f;
-  auto column1 = widgetRightEdge / 7.f;
+  auto column3 = widgetRightEdge / 2.F;
+  auto column1 = widgetRightEdge / 7.F;
   auto column5 = widgetRightEdge - column1;
-  auto column2 = (column3 - column1) / 2.f + column1;
+  auto column2 = (column3 - column1) / 2.F + column1;
   auto column4 = widgetRightEdge - column2;
 
-  auto top = 23.f;
-  auto bottom = 108.f;
+  auto top = 23.F;
+  auto bottom = 108.F;
   auto rowCount = 6;
   auto rowSpacing = (bottom - top) / (rowCount - 1);
-  auto portOffset = 1.25f;
+  auto portOffset = 1.25F;
 
   for (auto row = 0; row < rowCount; row++) {
     auto y = top + row * rowSpacing;

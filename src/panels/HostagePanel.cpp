@@ -5,12 +5,12 @@ namespace dhe {
 HostagePanel::HostagePanel(Hostage *module) : Panel{module, hp} {
   auto widgetRightEdge = width();
 
-  auto column1 = width() / 4.f + 0.333333f;
-  auto column2 = widgetRightEdge / 2.f;
+  auto column1 = width() / 4.F + 0.333333F;
+  auto column2 = widgetRightEdge / 2.F;
   auto column3 = widgetRightEdge - column1;
 
-  auto y = 25.f;
-  auto dy = 18.5f;
+  auto y = 25.F;
+  auto dy = 18.5F;
 
   toggle<2>(column2, y, Hostage::ModeSwitch);
 
@@ -21,8 +21,8 @@ HostagePanel::HostagePanel(Hostage *module) : Panel{module, hp} {
   y += dy;
   knob<LargeKnob>(column2, y, Hostage::DurationKnob);
 
-  y = 82.f;
-  dy = 15.f;
+  y = 82.F;
+  dy = 15.F;
 
   input(column1, y, Hostage::DeferGateInput);
   output(column3, y, Hostage::ActiveOutput);
