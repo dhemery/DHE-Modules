@@ -8,9 +8,9 @@ Func::Func() {
   configParam(OperatorSwitch, 0.f, 1.f, 0.f, "Operation");
   configParam(AdditionRangeSwitch, 0.f, 3.f, 1.f, "Addition operand range");
   configParam(MultiplicationRangeSwitch, 0.f, 3.f, 2.f, "Multiplication operand range");
-  channel = std::unique_ptr<FuncChannel>(new FuncChannel(this, FuncInput, OperandKnob, FuncOutput, OperatorSwitch,
-                                                         AdditionRangeSwitch, MultiplicationRangeSwitch));
+  channel = FuncChannel{
+      this, FuncInput, OperandKnob, FuncOutput, OperatorSwitch, AdditionRangeSwitch, MultiplicationRangeSwitch};
 }
 
-void Func::process(const ProcessArgs & /*args*/) { channel->apply(0.f); }
+void Func::process(const ProcessArgs & /*args*/) { channel.apply(0.f); }
 } // namespace dhe

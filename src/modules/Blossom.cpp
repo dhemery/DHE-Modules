@@ -49,8 +49,8 @@ void Blossom::process(const ProcessArgs &args) {
 }
 
 auto Blossom::offset(int param) -> float {
-  auto is_uni = params[param].getValue() > 0.5f;
-  return is_uni ? 1.f : 0.f;
+  auto isUni = params[param].getValue() > 0.5f;
+  return isUni ? 1.f : 0.f;
 }
 
 auto Blossom::bounce() -> float {
@@ -59,12 +59,12 @@ auto Blossom::bounce() -> float {
   return bounceRange.scale(rotation);
 }
 
-auto Blossom::spin(float sample_time) -> float {
+auto Blossom::spin(float sampleTime) -> float {
   static constexpr auto spinRange = Range{-1.f, 1.f};
   auto rotation = modulated(SpinKnob, SpinCvInput, SpinAvKNob);
   auto scaled = spinRange.scale(rotation);
   auto tapered = sigmoid::inverse(scaled, speedCurvature);
-  return -10.f * tapered * sample_time;
+  return -10.f * tapered * sampleTime;
 }
 
 auto Blossom::depth() -> float {

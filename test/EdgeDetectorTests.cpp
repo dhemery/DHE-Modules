@@ -5,9 +5,6 @@
 namespace dhe {
 
 using ::testing::AnyNumber;
-using ::testing::AtMost;
-using ::testing::Expectation;
-using ::testing::NiceMock;
 using ::testing::Return;
 
 struct Signal {
@@ -20,69 +17,64 @@ struct Runnable {
 
 struct EdgeDetectorTest : public ::testing::Test {
   Signal signal;
-  Runnable on_rise;
-  Runnable on_fall;
-  EdgeDetector edge_detector{[this]() -> bool { return signal.get(); },
-                                  [this]() { on_rise.run(); },
-                                  [this]() { on_fall.run(); }};
+  Runnable onRise;
+  Runnable onFall;
+  EdgeDetector edgeDetector{[this]() -> bool { return signal.get(); }, [this]() { onRise.run(); },
+                            [this]() { onFall.run(); }};
 
-  void given_signal_is(bool state) {
-    EXPECT_CALL(signal, get()).WillOnce(Return(state));
-  }
+  void givenSignalIs(bool state) { EXPECT_CALL(signal, get()).WillOnce(Return(state)); }
 
-  void given_state_is_high() {
+  void givenStateIsHigh() {
     EXPECT_CALL(signal, get()).WillOnce(Return(true));
-    EXPECT_CALL(on_rise, run()).Times(AnyNumber());
-    edge_detector.step();
-    EXPECT_CALL(on_rise, run()).Times(0);
+    EXPECT_CALL(onRise, run()).Times(AnyNumber());
+    edgeDetector.step();
+    EXPECT_CALL(onRise, run()).Times(0);
   }
 
-  void given_state_is_low() {
+  void givenStateIsLow() {
     EXPECT_CALL(signal, get()).WillOnce(Return(false));
-    EXPECT_CALL(on_fall, run()).Times(AnyNumber());
-    edge_detector.step();
-    EXPECT_CALL(on_fall, run()).Times(0);
+    EXPECT_CALL(onFall, run()).Times(AnyNumber());
+    edgeDetector.step();
+    EXPECT_CALL(onFall, run()).Times(0);
   }
 };
 
 TEST_F(EdgeDetectorTest, step_callsOnRise_ifSignalIsTrue_whenStateIsLow) {
-  given_state_is_low();
-  given_signal_is(true);
+  givenStateIsLow();
+  givenSignalIs(true);
 
-  EXPECT_CALL(on_rise, run());
+  EXPECT_CALL(onRise, run());
 
-  edge_detector.step();
+  edgeDetector.step();
 }
 
 TEST_F(EdgeDetectorTest, step_callsOnFall_ifSignalIsFalse_whenStateIsHigh) {
-  given_state_is_high();
-  given_signal_is(false);
+  givenStateIsHigh();
+  givenSignalIs(false);
 
-  EXPECT_CALL(on_fall, run());
+  EXPECT_CALL(onFall, run());
 
-  edge_detector.step();
+  edgeDetector.step();
 }
 
-TEST_F(EdgeDetectorTest,
-       step_generatesNoEvents_ifSignalIsTrue_whenStateIsHigh) {
-  given_state_is_high();
-  given_signal_is(true);
+TEST_F(EdgeDetectorTest, step_generatesNoEvents_ifSignalIsTrue_whenStateIsHigh) {
+  givenStateIsHigh();
+  givenSignalIs(true);
 
-  EXPECT_CALL(on_fall, run()).Times(0);
-  EXPECT_CALL(on_rise, run()).Times(0);
+  EXPECT_CALL(onFall, run()).Times(0);
+  EXPECT_CALL(onRise, run()).Times(0);
 
-  edge_detector.step();
+  edgeDetector.step();
 }
 
-TEST_F(EdgeDetectorTest,
-       step_generatesNoEvents_ifSignalIsFalse_whenStateIsLow) {
-  given_state_is_low();
-  given_signal_is(false);
+TEST_F(EdgeDetectorTest, step_generatesNoEvents_ifSignalIsFalse_whenStateIsLow) {
+  givenStateIsLow();
+  givenSignalIs(false);
 
-  EXPECT_CALL(on_fall, run()).Times(0);
-  EXPECT_CALL(on_rise, run()).Times(0);
+  EXPECT_CALL(onFall, run()).Times(0);
+  EXPECT_CALL(onRise, run()).Times(0);
 
-  edge_detector.step();
+  edgeDetector.step();
 }
 
-} // namespace
+} // namespace dhe

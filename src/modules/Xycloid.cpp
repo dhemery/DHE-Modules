@@ -1,5 +1,3 @@
-#pragma clang diagnostic push
-#pragma ide diagnostic ignored "cppcoreguidelines-pro-bounds-constant-array-index"
 #include "modules/Xycloid.h"
 
 #include "util/gain.h"
@@ -107,5 +105,3 @@ auto Xycloid::yGain() -> float { return Gain::multiplier(modulated(YGainKnob, YG
 auto Xycloid::yOffset() -> float { return offset(YRangeSwitch); }
 
 } // namespace dhe
-
-#pragma clang diagnostic pop

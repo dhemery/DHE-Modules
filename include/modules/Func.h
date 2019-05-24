@@ -3,8 +3,6 @@
 #include "Module.h"
 #include "func/FuncChannel.h"
 
-#include <memory>
-
 namespace dhe {
 class Func : public Module {
 public:
@@ -18,6 +16,6 @@ public:
 
   enum OutputIds { FuncOutput, OutputCount };
 
-  std::unique_ptr<FuncChannel> channel;
+  FuncChannel channel{};
 };
 } // namespace dhe
