@@ -33,31 +33,31 @@ template <typename P> class OutputJack : public Jack<P> {};
 
 static inline auto mmvec(float x, float y) -> rack::math::Vec { return rack::app::mm2px(rack::math::Vec{x, y}); }
 
-static inline auto plugin_asset_dir() -> std::string {
+static inline auto pluginAssetDir() -> std::string {
   static const auto dir = rack::asset::plugin(pluginInstance, std::string("svg/"));
   return dir;
 }
 
 template <typename P> class Panel : public rack::app::ModuleWidget {
 public:
-  Panel(rack::engine::Module *module, int widget_hp) {
+  Panel(rack::engine::Module *module, int widgetHp) {
     setModule(module);
-    box.size = rack::math::Vec{widget_hp * rack::app::RACK_GRID_WIDTH, rack::app::RACK_GRID_HEIGHT};
+    box.size = rack::math::Vec{widgetHp * rack::app::RACK_GRID_WIDTH, rack::app::RACK_GRID_HEIGHT};
 
     auto panel = new rack::app::SvgPanel();
-    panel->setBackground(panel_svg());
+    panel->setBackground(panelSvg());
     addChild(panel);
 
-    install_screws();
+    installScrews();
   }
 
   static auto svg(const std::string &filename) -> std::shared_ptr<rack::Svg> {
-    static const auto module_asset_dir = plugin_asset_dir() + P::module_slug + "/";
-    return rack::APP->window->loadSvg(module_asset_dir + filename + ".svg");
+    static const auto moduleAssetDir = pluginAssetDir() + P::module_slug + "/";
+    return rack::APP->window->loadSvg(moduleAssetDir + filename + ".svg");
   }
 
-  static auto panel_svg() -> std::shared_ptr<rack::Svg> {
-    return rack::APP->window->loadSvg(plugin_asset_dir() + P::module_slug + ".svg");
+  static auto panelSvg() -> std::shared_ptr<rack::Svg> {
+    return rack::APP->window->loadSvg(pluginAssetDir() + P::module_slug + ".svg");
   }
 
 protected:
@@ -112,27 +112,27 @@ private:
     addChild(rack::createWidgetCentered<T>(rack::app::mm2px(pos)));
   }
 
-  void install_screws() {
-    auto screw_diameter = rack::app::RACK_GRID_WIDTH * rack::app::MM_PER_IN / rack::app::SVG_DPI;
-    auto screw_radius = screw_diameter / 2.f;
+  void installScrews() {
+    auto screwDiameter = rack::app::RACK_GRID_WIDTH * rack::app::MM_PER_IN / rack::app::SVG_DPI;
+    auto screwRadius = screwDiameter / 2.f;
 
-    auto top = screw_radius;
+    auto top = screwRadius;
     auto bottom = height() - top;
 
-    auto max_screw_inset = screw_diameter * 1.5f;
-    auto left = std::min(width() / 4.f, max_screw_inset);
+    auto maxScrewInset = screwDiameter * 1.5f;
+    auto left = std::min(width() / 4.f, maxScrewInset);
     auto right = width() - left;
 
-    auto screw_positions = std::vector<rack::math::Vec>{{left, top}, {left, bottom}, {right, top}, {right, bottom}};
+    auto screwPositions = std::vector<rack::math::Vec>{{left, top}, {left, bottom}, {right, top}, {right, bottom}};
 
-    std::shuffle(screw_positions.begin(), screw_positions.end(), std::mt19937(std::random_device()()));
+    std::shuffle(screwPositions.begin(), screwPositions.end(), std::mt19937(std::random_device()()));
 
-    auto p_special = screw_positions.back();
-    screw<rack::componentlibrary::ScrewBlack>(p_special);
+    auto positionOfSpecialScrew = screwPositions.back();
+    screw<rack::componentlibrary::ScrewBlack>(positionOfSpecialScrew);
 
-    screw_positions.pop_back();
+    screwPositions.pop_back();
 
-    for (auto p : screw_positions) {
+    for (auto p : screwPositions) {
       screw<rack::componentlibrary::ScrewSilver>(p);
     }
   }

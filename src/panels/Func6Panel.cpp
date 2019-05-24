@@ -4,31 +4,31 @@
 
 namespace dhe {
 Func6Panel::Func6Panel(Func6 *func6) : Panel{func6, hp} {
-  auto widget_right_edge = width();
+  auto widgetRightEdge = width();
 
-  auto column_3 = widget_right_edge / 2.f;
-  auto column_1 = widget_right_edge / 7.f;
-  auto column_5 = widget_right_edge - column_1;
-  auto column_2 = (column_3 - column_1) / 2.f + column_1;
-  auto column_4 = widget_right_edge - column_2;
+  auto column3 = widgetRightEdge / 2.f;
+  auto column1 = widgetRightEdge / 7.f;
+  auto column5 = widgetRightEdge - column1;
+  auto column2 = (column3 - column1) / 2.f + column1;
+  auto column4 = widgetRightEdge - column2;
 
   auto top = 23.f;
   auto bottom = 108.f;
-  auto row_count = 6;
-  auto row_spacing = (bottom - top) / (row_count - 1);
-  auto port_offset = 1.25f;
+  auto rowCount = 6;
+  auto rowSpacing = (bottom - top) / (rowCount - 1);
+  auto portOffset = 1.25f;
 
-  for (auto row = 0; row < row_count; row++) {
-    auto y = top + row * row_spacing;
-    auto port_y = y + port_offset;
+  for (auto row = 0; row < rowCount; row++) {
+    auto y = top + row * rowSpacing;
+    auto portY = y + portOffset;
 
-    input(column_1, port_y, Func6::FuncInput + row);
-    knob<LargeKnob>(column_3, y, Func6::OperandKnob + row);
-    output(column_5, port_y, Func6::FuncOutput + row);
+    input(column1, portY, Func6::FuncInput + row);
+    knob<LargeKnob>(column3, y, Func6::OperandKnob + row);
+    output(column5, portY, Func6::FuncOutput + row);
 
-    auto additionRangeStepper = toggle<AdditionRangeStepper>(column_4, y, Func6::AdditionRangeSwitch + row);
+    auto additionRangeStepper = toggle<AdditionRangeStepper>(column4, y, Func6::AdditionRangeSwitch + row);
     auto multiplicationRangeStepper
-        = toggle<MultiplicationRangeStepper>(column_4, y, Func6::MultiplicationRangeSwitch + row);
+        = toggle<MultiplicationRangeStepper>(column4, y, Func6::MultiplicationRangeSwitch + row);
     multiplicationRangeStepper->visible = false;
 
     auto updateRangeStepperVisibility = [additionRangeStepper, multiplicationRangeStepper](bool isMultiply) {
@@ -36,7 +36,7 @@ Func6Panel::Func6Panel(Func6 *func6) : Panel{func6, hp} {
       multiplicationRangeStepper->visible = isMultiply;
     };
 
-    auto operatorSwitch = toggle<OperatorSwitch>(column_2, y, Func6::OperatorSwitch + row);
+    auto operatorSwitch = toggle<OperatorSwitch>(column2, y, Func6::OperatorSwitch + row);
 
     operatorSwitch->onOperatorChange(updateRangeStepperVisibility);
   }

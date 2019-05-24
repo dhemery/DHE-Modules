@@ -5,31 +5,31 @@
 namespace dhe {
 
 FuncPanel::FuncPanel(Func *func) : Panel{func, hp} {
-  auto widget_right_edge = width();
+  auto widgetRightEdge = width();
 
-  auto x = widget_right_edge / 2.f;
+  auto x = widgetRightEdge / 2.f;
 
   auto top = 23.f;
   auto bottom = 108.f;
-  auto row_count = 6;
-  auto row_spacing = (bottom - top) / (row_count - 1);
-  auto port_offset = 1.25f;
+  auto rowCount = 6;
+  auto rowSpacing = (bottom - top) / (rowCount - 1);
+  auto portOffset = 1.25f;
 
-  auto row_1 = top + port_offset;
-  auto row_2 = top + row_spacing;
-  auto row_3 = top + row_spacing * 2;
-  auto row_4 = top + row_spacing * 3;
-  auto row_6 = top + row_spacing * 5 + port_offset;
+  auto row1 = top + portOffset;
+  auto row2 = top + rowSpacing;
+  auto row3 = top + rowSpacing * 2;
+  auto row4 = top + rowSpacing * 3;
+  auto row6 = top + rowSpacing * 5 + portOffset;
 
-  input(x, row_1, Func::FuncInput);
-  knob<LargeKnob>(x, row_3, Func::OperandKnob);
-  output(x, row_6, Func::FuncOutput);
+  input(x, row1, Func::FuncInput);
+  knob<LargeKnob>(x, row3, Func::OperandKnob);
+  output(x, row6, Func::FuncOutput);
 
-  auto additionRangeStepper = toggle<AdditionRangeStepper>(x, row_4, Func::AdditionRangeSwitch);
-  auto multiplicationRangeStepper = toggle<MultiplicationRangeStepper>(x, row_4, Func::MultiplicationRangeSwitch);
+  auto additionRangeStepper = toggle<AdditionRangeStepper>(x, row4, Func::AdditionRangeSwitch);
+  auto multiplicationRangeStepper = toggle<MultiplicationRangeStepper>(x, row4, Func::MultiplicationRangeSwitch);
   multiplicationRangeStepper->visible = false;
 
-  auto operatorSwitch = toggle<OperatorSwitch>(x, row_2, Func::OperatorSwitch);
+  auto operatorSwitch = toggle<OperatorSwitch>(x, row2, Func::OperatorSwitch);
   auto updateRangeStepperVisibility = [additionRangeStepper, multiplicationRangeStepper](bool isMultiply) {
     additionRangeStepper->visible = !isMultiply;
     multiplicationRangeStepper->visible = isMultiply;

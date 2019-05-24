@@ -3,9 +3,9 @@
 namespace dhe {
 
 SwavePanel::SwavePanel(Swave *module) : Panel{module, hp} {
-  auto widget_right_edge = width();
+  auto widgetRightEdge = width();
 
-  auto x = widget_right_edge / 2.f;
+  auto x = widgetRightEdge / 2.f;
 
   auto y = 25.f;
   auto dy = 18.5f;
