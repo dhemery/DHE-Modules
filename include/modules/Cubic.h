@@ -11,27 +11,27 @@ public:
   void process(const ProcessArgs &args) override;
 
   enum ParameterIds {
-    A_KNOB,
-    B_KNOB,
-    C_KNOB,
-    D_KNOB,
-    INPUT_GAIN_KNOB,
-    OUTPUT_GAIN_KNOB,
-    PARAMETER_COUNT
+    ACoefficientKnob,
+    BCoefficientKnob,
+    CCoefficientKnob,
+    DCoefficientKnob,
+    InputGainKnob,
+    OutputGainKnob,
+    ParameterCount
   };
 
   enum InputIds {
-    MAIN_IN,
-    A_CV,
-    B_CV,
-    C_CV,
-    D_CV,
-    INPUT_GAIN_CV,
-    OUTPUT_GAIN_CV,
-    INPUT_COUNT
+    CubicInput,
+    ACoefficientCvInput,
+    BCoefficientCvInput,
+    CCoefficientCvInput,
+    DCoefficientCvInput,
+    InputGainCvInput,
+    OutputGainCvInput,
+    InputCount
   };
 
-  enum OutputIds { MAIN_OUT, OUTPUT_COUNT };
+  enum OutputIds { CubicOutput, OutputCount };
 
 private:
   auto coefficient(ParameterIds knob_param, InputIds cv_param) -> float;

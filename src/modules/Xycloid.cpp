@@ -11,8 +11,7 @@ namespace dhe {
 Xycloid::Xycloid() {
   config(PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT);
 
-  configParam(THROB_SPEED_KNOB, 0.f, 1.f, 0.65f, "Throb speed", "", 0.f, 2.f,
-              -1.f);
+  configParam(THROB_SPEED_KNOB, 0.f, 1.f, 0.65f, "Throb speed", "", 0.f, 2.f, -1.f);
   configCvGain(THROB_SPEED_AV, "Throb speed");
 
   configKnob(WOBBLE_RATIO_KNOB, "Wobble ratio");
@@ -23,8 +22,7 @@ Xycloid::Xycloid() {
   configCvGain(WOBBLE_DEPTH_AV, "Wobble depth");
 
   configParam(WOBBLE_RATIO_FREEDOM_SWITCH, 0.f, 1.f, 1.f, "Wobble freedom");
-  configParam(WOBBLE_PHASE_KNOB, 0.f, 1.f, 0.5f, "Wobble phase offset", "°",
-              0.f, 360.f, -180.f);
+  configParam(WOBBLE_PHASE_KNOB, 0.f, 1.f, 0.5f, "Wobble phase offset", "°", 0.f, 360.f, -180.f);
 
   configGain(X_GAIN_KNOB, "X");
   configSignalRange(X_RANGE_SWITCH, "X", false);
@@ -52,9 +50,7 @@ void Xycloid::process(const ProcessArgs &args) {
   outputs[Y_OUT].setVoltage(5.f * y_gain_in() * (y + y_offset()));
 }
 
-auto Xycloid::is_wobble_ratio_free() -> bool {
-  return params[WOBBLE_RATIO_FREEDOM_SWITCH].getValue() > 0.1f;
-}
+auto Xycloid::is_wobble_ratio_free() -> bool { return params[WOBBLE_RATIO_FREEDOM_SWITCH].getValue() > 0.1f; }
 
 auto Xycloid::offset(int param) -> float {
   auto is_uni = params[param].getValue() > 0.5f;
@@ -70,8 +66,7 @@ auto Xycloid::throb_speed(float sampleTime) -> float {
 }
 
 auto Xycloid::wobble_depth() -> float {
-  auto rotation =
-      modulated(WOBBLE_DEPTH_KNOB, WOBBLE_DEPTH_CV, WOBBLE_DEPTH_AV);
+  auto rotation = modulated(WOBBLE_DEPTH_KNOB, WOBBLE_DEPTH_CV, WOBBLE_DEPTH_AV);
   return wobble_depth_range.clamp(rotation);
 }
 
@@ -82,15 +77,11 @@ auto Xycloid::wobble_phase_in() -> float {
 
 auto Xycloid::wobble_ratio_range() -> const Range & {
   static constexpr auto wobble_ratio_max = 16.f;
-  static constexpr auto inward_wobble_ratio_range =
-      Range{0.f, wobble_ratio_max};
-  static constexpr auto outward_wobble_ratio_range =
-      Range{0.f, -wobble_ratio_max};
-  static constexpr auto bidirectional_wobble_ratio_range =
-      Range{wobble_ratio_max, -wobble_ratio_max};
-  static constexpr std::array<Range, 3> wobble_ratio_ranges{
-      inward_wobble_ratio_range, bidirectional_wobble_ratio_range,
-      outward_wobble_ratio_range};
+  static constexpr auto inward_wobble_ratio_range = Range{0.f, wobble_ratio_max};
+  static constexpr auto outward_wobble_ratio_range = Range{0.f, -wobble_ratio_max};
+  static constexpr auto bidirectional_wobble_ratio_range = Range{wobble_ratio_max, -wobble_ratio_max};
+  static constexpr std::array<Range, 3> wobble_ratio_ranges{inward_wobble_ratio_range, bidirectional_wobble_ratio_range,
+                                                            outward_wobble_ratio_range};
 
   const auto param = params[WOBBLE_RANGE_SWITCH].getValue();
   const auto selection = static_cast<int>(param);
@@ -99,22 +90,16 @@ auto Xycloid::wobble_ratio_range() -> const Range & {
 }
 
 auto Xycloid::wobble_ratio() -> float {
-  auto wobble_ratio_amount =
-      modulated(WOBBLE_RATIO_KNOB, WOBBLE_RATIO_CV, WOBBLE_RATIO_AV);
-  auto wobble_ratio =
-      wobble_ratio_range().scale(wobble_ratio_amount) + wobble_ratio_offset;
+  auto wobble_ratio_amount = modulated(WOBBLE_RATIO_KNOB, WOBBLE_RATIO_CV, WOBBLE_RATIO_AV);
+  auto wobble_ratio = wobble_ratio_range().scale(wobble_ratio_amount) + wobble_ratio_offset;
   return is_wobble_ratio_free() ? wobble_ratio : std::round(wobble_ratio);
 }
 
-auto Xycloid::x_gain_in() -> float {
-  return Gain::multiplier(modulated(X_GAIN_KNOB, X_GAIN_CV));
-}
+auto Xycloid::x_gain_in() -> float { return Gain::multiplier(modulated(X_GAIN_KNOB, X_GAIN_CV)); }
 
 auto Xycloid::x_offset() -> float { return offset(X_RANGE_SWITCH); }
 
-auto Xycloid::y_gain_in() -> float {
-  return Gain::multiplier(modulated(Y_GAIN_KNOB, Y_GAIN_CV));
-}
+auto Xycloid::y_gain_in() -> float { return Gain::multiplier(modulated(Y_GAIN_KNOB, Y_GAIN_CV)); }
 
 auto Xycloid::y_offset() -> float { return offset(Y_RANGE_SWITCH); }
 

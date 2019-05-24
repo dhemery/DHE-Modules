@@ -1,7 +1,6 @@
 #pragma once
 
 #include <componentlibrary.hpp>
-
 #include <string>
 
 namespace dhe {

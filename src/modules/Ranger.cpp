@@ -9,26 +9,24 @@ Ranger::Ranger() {
   config(ParameterCount, InputCount, OutputCount);
 
   configKnob(LevelKnob, "Level");
-  configCvGain(LevelAv, "Level");
+  configCvGain(LevelAvKnob, "Level");
 
   level::configKnob(this, CcwLimitKnob, CcwLimitRangeSwitch, "CCW Limit", 0.f);
   level::configSwitch(this, CcwLimitRangeSwitch, "CCW Limit Range", 0);
-  configCvGain(CcwLimitAv, "CCW Limit");
+  configCvGain(CcwLimitAvKnob, "CCW Limit");
 
   level::configKnob(this, CwLimitKnob, CwLimitRangeSwitch, "CW Limit", 1.f);
   level::configSwitch(this, CwLimitRangeSwitch, "CW Limit Range", 0);
-  configCvGain(CwLimitAv, "CW Limit");
+  configCvGain(CwLimitAvKnob, "CW Limit");
 
-  level = control::knob::rotation(this, LevelKnob, LevelCv, LevelAv);
-  ccwLimit = level::withSelectableRange(this, CcwLimitKnob, CcwLimitCv,
-                                        CcwLimitAv, CcwLimitRangeSwitch);
-  cwLimit = level::withSelectableRange(this, CwLimitKnob, CwLimitCv, CwLimitAv,
-                                       CwLimitRangeSwitch);
+  level = control::knob::rotation(this, LevelKnob, LevelCvInput, LevelAvKnob);
+  ccwLimit = level::withSelectableRange(this, CcwLimitKnob, CcwLimitCvInput, CcwLimitAvKnob, CcwLimitRangeSwitch);
+  cwLimit = level::withSelectableRange(this, CwLimitKnob, CwLimitCvInput, CwLimitAvKnob, CwLimitRangeSwitch);
 }
 
 void Ranger::process(const ProcessArgs &args) {
   auto const outputVoltage = scale(level(), ccwLimit(), cwLimit());
-  outputs[MainOut].setVoltage(outputVoltage);
+  outputs[RangerOutput].setVoltage(outputVoltage);
 }
 
 } // namespace dhe

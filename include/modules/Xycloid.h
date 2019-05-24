@@ -28,14 +28,7 @@ public:
     WOBBLE_PHASE_KNOB,
     PARAMETER_COUNT
   };
-  enum InputIds {
-    WOBBLE_RATIO_CV,
-    WOBBLE_DEPTH_CV,
-    THROB_SPEED_CV,
-    X_GAIN_CV,
-    Y_GAIN_CV,
-    INPUT_COUNT
-  };
+  enum InputIds { WOBBLE_RATIO_CV, WOBBLE_DEPTH_CV, THROB_SPEED_CV, X_GAIN_CV, Y_GAIN_CV, INPUT_COUNT };
   enum OutputIds { X_OUT, Y_OUT, OUTPUT_COUNT };
 
 private:

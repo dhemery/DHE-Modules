@@ -10,9 +10,7 @@
 #include "panels/TapersPanel.h"
 #include "panels/UpstagePanel.h"
 #include "panels/XycloidPanel.h"
-
 #include "plugin/Plugin.hpp"
-
 #include "rack.hpp"
 
 #include <algorithm>
@@ -23,8 +21,7 @@ void init(rack::plugin::Plugin *p) {
   pluginInstance = p;
 
   p->addModel(rack::createModel<dhe::Blossom, dhe::BlossomPanel>("Blossom"));
-  p->addModel(rack::createModel<dhe::BoosterStage, dhe::BoosterStagePanel>(
-      "BoosterStage"));
+  p->addModel(rack::createModel<dhe::BoosterStage, dhe::BoosterStagePanel>("BoosterStage"));
   p->addModel(rack::createModel<dhe::Cubic, dhe::CubicPanel>("Cubic"));
   p->addModel(rack::createModel<dhe::Func, dhe::FuncPanel>("Func"));
   p->addModel(rack::createModel<dhe::Func6, dhe::Func6Panel>("Func 6"));

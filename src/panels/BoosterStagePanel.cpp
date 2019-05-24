@@ -15,18 +15,18 @@ BoosterStagePanel::BoosterStagePanel(BoosterStage *module) : Panel{module, hp} {
   auto y = 25.f;
   auto dy = 18.5f;
 
-  input(column_1, y, BoosterStage::LevelCv);
+  input(column_1, y, BoosterStage::LevelCvInput);
   knob<LargeKnob>(column_3, y, BoosterStage::LevelKnob);
 
   toggle<2>(column_5, y, BoosterStage::LevelRangeSwitch);
 
   y += dy;
-  input(column_1, y, BoosterStage::CurveCv);
+  input(column_1, y, BoosterStage::CurveCvInput);
   knob<LargeKnob>(column_3, y, BoosterStage::CurveKnob);
   toggle<2>(column_5, y, BoosterStage::ShapeSwitch);
 
   y += dy;
-  input(column_1, y, BoosterStage::DurationCv);
+  input(column_1, y, BoosterStage::DurationCvInput);
   knob<LargeKnob>(column_3, y, BoosterStage::DurationKnob);
 
   toggle<3>(column_5, y, BoosterStage::DurationRangeSwitch);
@@ -34,20 +34,20 @@ BoosterStagePanel::BoosterStagePanel(BoosterStage *module) : Panel{module, hp} {
   y = 82.f;
   dy = 15.f;
 
-  input(column_1, y, BoosterStage::DeferGateIn);
+  input(column_1, y, BoosterStage::DeferGateInput);
   button(column_2, y, BoosterStage::DeferButton);
 
   button<ReverseButton>(column_4, y, BoosterStage::ActiveButton);
-  output(column_5, y, BoosterStage::ActiveOut);
+  output(column_5, y, BoosterStage::ActiveOutput);
 
   y += dy;
-  input(column_1, y, BoosterStage::StageTriggerIn);
+  input(column_1, y, BoosterStage::TriggerInput);
   button(column_2, y, BoosterStage::TriggerButton);
   button<ReverseButton>(column_4, y, BoosterStage::EocButton);
-  output(column_5, y, BoosterStage::EocOut);
+  output(column_5, y, BoosterStage::EocOutput);
 
   y += dy;
-  input(column_1, y, BoosterStage::EnvelopeIn);
-  output(column_5, y, BoosterStage::MainOut);
+  input(column_1, y, BoosterStage::EnvelopeInput);
+  output(column_5, y, BoosterStage::EnvelopeOutput);
 }
 } // namespace dhe

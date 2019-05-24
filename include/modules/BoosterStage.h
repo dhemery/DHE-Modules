@@ -1,7 +1,5 @@
 #pragma once
-
 #include "Module.h"
-
 #include "envelopes/StageStateMachine.h"
 
 #include <functional>
@@ -37,16 +35,16 @@ public:
   };
 
   enum InputIds {
-    CurveCv,
-    DeferGateIn,
-    DurationCv,
-    LevelCv,
-    EnvelopeIn,
-    StageTriggerIn,
+    CurveCvInput,
+    DeferGateInput,
+    DurationCvInput,
+    LevelCvInput,
+    EnvelopeInput,
+    TriggerInput,
     InputCount
   };
 
-  enum OutputIds { ActiveOut, EocOut, MainOut, OutputCount };
+  enum OutputIds { ActiveOutput, EocOutput, EnvelopeOutput, OutputCount };
 
 private:
   auto envelopeIn() -> float;

@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Module.h"
-
 #include "envelopes/HostageStateMachine.h"
 
 #include <functional>
@@ -21,22 +20,11 @@ public:
   void setEoc(bool eoc);
   auto stageGateIn() -> bool;
 
-  enum InputIds {
-    DEFER_GATE_IN,
-    DURATION_CV,
-    MAIN_IN,
-    STAGE_GATE_IN,
-    INPUT_COUNT
-  };
+  enum ParameterIds { DurationKnob, DurationRangeSwitch, ModeSwitch, ParameterCount };
 
-  enum OutputIds { ACTIVE_OUT, MAIN_OUT, EOC_OUT, OUTPUT_COUNT };
+  enum InputIds { DeferGateInput, DurationCvInput, EnvelopeInput, GateInput, InputCount };
 
-  enum ParameterIds {
-    DURATION_KNOB,
-    DURATION_RANGE_SWITCH,
-    HOSTAGE_MODE_SWITCH,
-    PARAMETER_COUNT
-  };
+  enum OutputIds { ActiveOutput, EnvelopeOutput, EocOutput, OutputCount };
 
 private:
   auto envelopeIn() -> float;

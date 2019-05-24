@@ -1,12 +1,11 @@
 #pragma once
 
 #include "Module.h"
-
 #include "func/FuncChannel.h"
 
 namespace dhe {
 class Func6 : public Module {
-  static constexpr auto channel_count = 6;
+  static constexpr auto channelCount = 6;
 
 public:
   Func6();
@@ -14,16 +13,16 @@ public:
   void process(const ProcessArgs &args) override;
 
   enum ParameterIds {
-    KNOB,
-    OPERATOR_SWITCH = KNOB + channel_count,
-    ADDITION_RANGE_SWITCH = OPERATOR_SWITCH + channel_count,
-    MULTIPLICATION_RANGE_SWITCH = ADDITION_RANGE_SWITCH + channel_count,
-    PARAMETER_COUNT = MULTIPLICATION_RANGE_SWITCH + channel_count
+    OperandKnob,
+    OperatorSwitch = OperandKnob + channelCount,
+    AdditionRangeSwitch = OperatorSwitch + channelCount,
+    MultiplicationRangeSwitch = AdditionRangeSwitch + channelCount,
+    ParameterCount = MultiplicationRangeSwitch + channelCount
   };
 
-  enum InputIds { IN, INPUT_COUNT = IN + channel_count };
+  enum InputIds { FuncInput, InputCount = FuncInput + channelCount };
 
-  enum OutputIds { OUT, OUTPUT_COUNT = OUT + channel_count };
+  enum OutputIds { FuncOutput, OutputCount = FuncOutput + channelCount };
 
   std::vector<FuncChannel> channels{};
 };

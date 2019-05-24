@@ -14,9 +14,7 @@ static float constexpr oneMillisecond = 1e-3;
  */
 class EndOfCyclePulseGenerator : public PhaseAccumulator {
 public:
-  EndOfCyclePulseGenerator(std::function<void()> onEocRise,
-                           std::function<void()> onEocFall)
-      : PhaseAccumulator{[]() { return oneMillisecond; }, std::move(onEocRise),
-                         [](float) {}, std::move(onEocFall)} {}
+  EndOfCyclePulseGenerator(std::function<void()> onEocRise, std::function<void()> onEocFall) :
+      PhaseAccumulator{[]() { return oneMillisecond; }, std::move(onEocRise), [](float) {}, std::move(onEocFall)} {}
 };
 } // namespace dhe

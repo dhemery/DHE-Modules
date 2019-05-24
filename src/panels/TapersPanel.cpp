@@ -14,29 +14,29 @@ TapersPanel::TapersPanel(Tapers *module) : Panel{module, hp} {
   auto panel_buffer = 4.f;
 
   input(column_1, y, Tapers::Level1Cv);
-  knob<TinyKnob>(column_2, y, Tapers::Level1Av);
-  knob<MediumKnob>(column_3, y, Tapers::Level1Knob);
+  knob<TinyKnob>(column_2, y, Tapers::LevelAvKnob1);
+  knob<MediumKnob>(column_3, y, Tapers::LevelKnob1);
   y += dy;
   input(column_1, y, Tapers::Curve1Cv);
-  knob<TinyKnob>(column_2, y, Tapers::Curve1Av);
-  knob<MediumKnob>(column_3, y, Tapers::Curve1Knob);
+  knob<TinyKnob>(column_2, y, Tapers::CurveAvKnob1);
+  knob<MediumKnob>(column_3, y, Tapers::CurveKnob1);
   y += dy;
-  toggle<2>(column_1, y, Tapers::Shape1Switch);
-  toggle<2>(column_2, y, Tapers::Range1Switch);
-  output(column_3, y, Tapers::Out1);
+  toggle<2>(column_1, y, Tapers::ShapeSwitch1);
+  toggle<2>(column_2, y, Tapers::LevelRangeSwitch1);
+  output(column_3, y, Tapers::Taper1Output);
 
   y += dy + panel_buffer;
 
   input(column_1, y, Tapers::Level2Cv);
-  knob<TinyKnob>(column_2, y, Tapers::Level2Av);
-  knob<MediumKnob>(column_3, y, Tapers::Level2Knob);
+  knob<TinyKnob>(column_2, y, Tapers::LevelAvKnob2);
+  knob<MediumKnob>(column_3, y, Tapers::LevelKnob2);
   y += dy;
   input(column_1, y, Tapers::Curve2Cv);
   knob<TinyKnob>(column_2, y, Tapers::Curve2Av);
   knob<MediumKnob>(column_3, y, Tapers::Curve2Knob);
   y += dy;
   toggle<2>(column_1, y, Tapers::Shape2Switch);
-  toggle<2>(column_2, y, Tapers::Range2Switch);
-  output(column_3, y, Tapers::Out2);
+  toggle<2>(column_2, y, Tapers::LevelRangeSwitch2);
+  output(column_3, y, Tapers::Taper2Output);
 }
 } // namespace dhe

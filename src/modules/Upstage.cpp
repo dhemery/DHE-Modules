@@ -9,8 +9,7 @@ Upstage::Upstage() {
 
   level::configKnob(this, LEVEL_KNOB, LEVEL_RANGE_SWITCH);
   level::configSwitch(this, LEVEL_RANGE_SWITCH);
-  level = level::withSelectableRange(this, LEVEL_KNOB, LEVEL_CV,
-                                     LEVEL_RANGE_SWITCH);
+  level = level::withSelectableRange(this, LEVEL_KNOB, LEVEL_CV, LEVEL_RANGE_SWITCH);
 
   configParam(TRIGGER_BUTTON, 0.f, 1.f, 0.f, "Trigger");
   configParam(WAIT_BUTTON, 0.f, 1.f, 0.f, "Wait");
@@ -22,9 +21,7 @@ void Upstage::process(const ProcessArgs &args) {
   sendEnvelope(level());
 }
 
-void Upstage::sendEnvelope(float voltage) {
-  outputs[MAIN_OUT].setVoltage(voltage);
-}
+void Upstage::sendEnvelope(float voltage) { outputs[MAIN_OUT].setVoltage(voltage); }
 
 void Upstage::sendTrigger(bool isTriggered) {
   const auto voltage = isTriggered ? 10.f : 0.f;

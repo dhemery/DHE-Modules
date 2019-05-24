@@ -5,16 +5,16 @@
 #include "modules/controls/Level.h"
 
 namespace dhe {
-Stage::Stage()
-    : stateMachine{[this]() -> bool { return deferGateIsActive(); },
-                   [this]() -> bool { return deferGateIn(); },
-                   [this]() -> bool { return stageGateIn(); },
-                   [this]() -> float { return duration(); },
-                   [this](float) { forward(); },
-                   [this]() { prepareToGenerate(); },
-                   [this](float phase) { generate(phase); },
-                   [this](bool active) { setActive(active); },
-                   [this](bool eoc) { setEoc(eoc); }} {
+Stage::Stage() :
+    stateMachine{[this]() -> bool { return deferGateIsActive(); },
+                 [this]() -> bool { return deferGateIn(); },
+                 [this]() -> bool { return stageGateIn(); },
+                 [this]() -> float { return duration(); },
+                 [this](float) { forward(); },
+                 [this]() { prepareToGenerate(); },
+                 [this](float phase) { generate(phase); },
+                 [this](bool active) { setActive(active); },
+                 [this](bool eoc) { setEoc(eoc); }} {
   config(ParameterCount, InputCount, OutputCount);
 
   auto const durationRange = duration::mediumRange;
@@ -31,41 +31,31 @@ Stage::Stage()
   stateMachine.start();
 }
 
-auto Stage::deferGateIn() -> bool {
-  return inputs[DeferGateIn].getVoltage() > 0.1;
-}
+auto Stage::deferGateIn() -> bool { return inputs[DeferGateInput].getVoltage() > 0.1; }
 
-auto Stage::deferGateIsActive() const -> bool {
-  return inputs[DeferGateIn].active;
-}
+auto Stage::deferGateIsActive() const -> bool { return inputs[DeferGateInput].active; }
 
-auto Stage::envelopeIn() -> float { return inputs[EnvelopeIn].getVoltage(); }
+auto Stage::envelopeIn() -> float { return inputs[EnvelopeInput].getVoltage(); }
 
 void Stage::forward() { sendOut(envelopeIn()); }
 
-void Stage::generate(float phase) {
-  sendOut(scale(taper(phase), startVoltage, level()));
-}
+void Stage::generate(float phase) { sendOut(scale(taper(phase), startVoltage, level())); }
 
 void Stage::prepareToGenerate() { startVoltage = envelopeIn(); }
 
-void Stage::sendOut(float voltage) { outputs[MainOut].setVoltage(voltage); }
+void Stage::sendOut(float voltage) { outputs[EnvelopeOutput].setVoltage(voltage); }
 
 void Stage::setActive(bool active) {
   const auto voltage = active ? 10.f : 0.f;
-  outputs[ActiveOut].setVoltage(voltage);
+  outputs[ActiveOutput].setVoltage(voltage);
 }
 
 void Stage::setEoc(bool eoc) {
   const auto voltage = eoc ? 10.f : 0.f;
-  outputs[EocOut].setVoltage(voltage);
+  outputs[EocOutput].setVoltage(voltage);
 }
 
-auto Stage::stageGateIn() -> bool {
-  return inputs[StageTriggerIn].getVoltage() > 0.1;
-}
+auto Stage::stageGateIn() -> bool { return inputs[TriggerInput].getVoltage() > 0.1; }
 
-void Stage::process(const ProcessArgs &args) {
-  stateMachine.step(args.sampleTime);
-}
+void Stage::process(const ProcessArgs &args) { stateMachine.step(args.sampleTime); }
 } // namespace dhe

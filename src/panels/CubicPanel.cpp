@@ -11,31 +11,31 @@ CubicPanel::CubicPanel(Cubic *module) : Panel{module, hp} {
   auto y = 20.F;
   auto dy = 15.F;
 
-  input(column1, y, Cubic::A_CV);
-  knob<SmallKnob>(column_2, y, Cubic::A_KNOB);
+  input(column1, y, Cubic::ACoefficientCvInput);
+  knob<SmallKnob>(column_2, y, Cubic::ACoefficientKnob);
 
   y += dy;
-  input(column1, y, Cubic::B_CV);
-  knob<SmallKnob>(column_2, y, Cubic::B_KNOB);
+  input(column1, y, Cubic::BCoefficientCvInput);
+  knob<SmallKnob>(column_2, y, Cubic::BCoefficientKnob);
 
   y += dy;
-  input(column1, y, Cubic::C_CV);
-  knob<SmallKnob>(column_2, y, Cubic::C_KNOB);
+  input(column1, y, Cubic::CCoefficientCvInput);
+  knob<SmallKnob>(column_2, y, Cubic::CCoefficientKnob);
 
   y += dy;
-  input(column1, y, Cubic::D_CV);
-  knob<SmallKnob>(column_2, y, Cubic::D_KNOB);
+  input(column1, y, Cubic::DCoefficientCvInput);
+  knob<SmallKnob>(column_2, y, Cubic::DCoefficientKnob);
 
   y = 82.F;
-  knob<SmallKnob>(column1, y, Cubic::INPUT_GAIN_KNOB);
-  knob<SmallKnob>(column_2, y, Cubic::OUTPUT_GAIN_KNOB);
+  knob<SmallKnob>(column1, y, Cubic::InputGainKnob);
+  knob<SmallKnob>(column_2, y, Cubic::OutputGainKnob);
 
   y += dy;
-  input(column1, y, Cubic::INPUT_GAIN_CV);
-  input(column_2, y, Cubic::OUTPUT_GAIN_CV);
+  input(column1, y, Cubic::InputGainCvInput);
+  input(column_2, y, Cubic::OutputGainCvInput);
 
   y += dy;
-  input(column1, y, Cubic::MAIN_IN);
-  output(column_2, y, Cubic::MAIN_OUT);
+  input(column1, y, Cubic::CubicInput);
+  output(column_2, y, Cubic::CubicOutput);
 }
 } // namespace dhe

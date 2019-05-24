@@ -2,7 +2,6 @@
 
 #include "modules/controls/Curvature.h"
 #include "modules/controls/Level.h"
-
 #include "util/range.h"
 #include "util/sigmoid.h"
 
@@ -24,8 +23,8 @@ void Swave::process(const ProcessArgs &args) {
   sendSignal(outputVoltage);
 }
 
-void Swave::sendSignal(float voltage) { outputs[MainOut].setVoltage(voltage); }
+void Swave::sendSignal(float voltage) { outputs[SwaveOutput].setVoltage(voltage); }
 
-auto Swave::signalIn() -> float { return inputs[MainIn].getVoltage(); }
+auto Swave::signalIn() -> float { return inputs[SwaveInput].getVoltage(); }
 
 } // namespace dhe

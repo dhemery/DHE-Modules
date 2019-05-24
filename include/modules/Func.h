@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Module.h"
-
 #include "func/FuncChannel.h"
 
 #include <memory>
@@ -13,17 +12,11 @@ public:
 
   void process(const ProcessArgs &args) override;
 
-  enum ParameterIds {
-    KNOB,
-    OPERATOR_SWITCH,
-    ADDITION_RANGE_SWITCH,
-    MULTIPLICATION_RANGE_SWITCH,
-    PARAMETER_COUNT
-  };
+  enum ParameterIds { OperandKnob, OperatorSwitch, AdditionRangeSwitch, MultiplicationRangeSwitch, ParameterCount };
 
-  enum InputIds { IN, INPUT_COUNT };
+  enum InputIds { FuncInput, InputCount };
 
-  enum OutputIds { OUT, OUTPUT_COUNT };
+  enum OutputIds { FuncOutput, OutputCount };
 
   std::unique_ptr<FuncChannel> channel;
 };

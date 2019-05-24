@@ -9,12 +9,12 @@ namespace dhe {
  */
 class PhaseAccumulator {
 public:
-  explicit PhaseAccumulator(std::function<float()> duration,
-                            std::function<void()> onStart,
-                            std::function<void(float)> onAdvance,
-                            std::function<void()> onFinish)
-      : duration{std::move(duration)}, onStart{std::move(onStart)},
-        onAdvance{std::move(onAdvance)}, onFinish{std::move(onFinish)} {}
+  explicit PhaseAccumulator(std::function<float()> duration, std::function<void()> onStart,
+                            std::function<void(float)> onAdvance, std::function<void()> onFinish) :
+      duration{std::move(duration)},
+      onStart{std::move(onStart)},
+      onAdvance{std::move(onAdvance)},
+      onFinish{std::move(onFinish)} {}
   /**
    * Sets the phase to 0 and generates an on_start event.
    */

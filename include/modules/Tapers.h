@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Module.h"
-
 #include "util/range.h"
 
 #include <functional>
@@ -15,22 +14,22 @@ public:
   void process(const ProcessArgs &args) override;
 
   enum ParameterIds {
-    Level1Knob,
-    Level1Av,
-    Range1Switch,
-    Curve1Knob,
-    Curve1Av,
-    Shape1Switch,
-    Level2Knob,
-    Level2Av,
-    Range2Switch,
+    LevelKnob1,
+    LevelAvKnob1,
+    LevelRangeSwitch1,
+    CurveKnob1,
+    CurveAvKnob1,
+    ShapeSwitch1,
+    LevelKnob2,
+    LevelAvKnob2,
+    LevelRangeSwitch2,
     Curve2Knob,
     Curve2Av,
     Shape2Switch,
     ParameterCount
   };
   enum InputIds { Level1Cv, Curve1Cv, Level2Cv, Curve2Cv, InputCount };
-  enum OutputIds { Out1, Out2, OutputCount };
+  enum OutputIds { Taper1Output, Taper2Output, OutputCount };
 
 private:
   std::function<float()> level1Rotation;

@@ -12,13 +12,7 @@ public:
 
   void process(const ProcessArgs &args) override;
 
-  enum ParameterIds {
-    LEVEL_KNOB,
-    TRIGGER_BUTTON,
-    WAIT_BUTTON,
-    LEVEL_RANGE_SWITCH,
-    PARAMETER_COUNT
-  };
+  enum ParameterIds { LEVEL_KNOB, TRIGGER_BUTTON, WAIT_BUTTON, LEVEL_RANGE_SWITCH, PARAMETER_COUNT };
 
   enum InputIds { TRIGGER_IN, WAIT_IN, LEVEL_CV, INPUT_COUNT };
 

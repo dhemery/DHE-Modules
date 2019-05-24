@@ -4,21 +4,17 @@
 
 namespace dhe {
 Func6::Func6() {
-  config(PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT);
+  config(ParameterCount, InputCount, OutputCount);
   for (int i = 0; i < channel_count; i++) {
     auto channelNumber = std::to_string(i + 1);
 
-    configKnob(KNOB + i, "Operand " + channelNumber);
-    configParam(OPERATOR_SWITCH + i, 0.f, 1.f, 0.f,
-                "Operation " + channelNumber);
-    configParam(ADDITION_RANGE_SWITCH + i, 0.f, 3.f, 1.f,
-                "Addition operand " + channelNumber + " range");
-    configParam(MULTIPLICATION_RANGE_SWITCH + i, 0.f, 3.f, 2.f,
-                "Multiplication operand " + channelNumber + " range");
+    configKnob(OperandKnob + i, "Operand " + channelNumber);
+    configParam(OperatorSwitch + i, 0.f, 1.f, 0.f, "Operation " + channelNumber);
+    configParam(AdditionRangeSwitch + i, 0.f, 3.f, 1.f, "Addition operand " + channelNumber + " range");
+    configParam(MultiplicationRangeSwitch + i, 0.f, 3.f, 2.f, "Multiplication operand " + channelNumber + " range");
 
-    channels.emplace_back(this, IN + i, KNOB + i, OUT + i, OPERATOR_SWITCH + i,
-                          ADDITION_RANGE_SWITCH + i,
-                          MULTIPLICATION_RANGE_SWITCH + i);
+    channels.emplace_back(this, FuncInput + i, OperandKnob + i, FuncOutput + i, OperatorSwitch + i,
+                          AdditionRangeSwitch + i, MultiplicationRangeSwitch + i);
   }
 }
 

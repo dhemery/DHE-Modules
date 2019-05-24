@@ -12,8 +12,8 @@ public:
   void process(const ProcessArgs &args) override;
 
   enum ParameterIds { CurveKnob, ShapeSwitch, ParameterCount };
-  enum InputIds { CurveCv, MainIn, InputCount };
-  enum OutputIds { MainOut, OutputCount };
+  enum InputIds { CurveCv, SwaveInput, InputCount };
+  enum OutputIds { SwaveOutput, OutputCount };
 
 private:
   void sendSignal(float voltage);

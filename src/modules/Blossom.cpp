@@ -7,33 +7,32 @@
 namespace dhe {
 
 Blossom::Blossom() {
-  config(PARAMETER_COUNT, INPUT_COUNT, OUTPUT_COUNT);
+  config(ParameterCount, InputCount, OutputCount);
 
-  configParam(SPIN_KNOB, 0.f, 1.f, 0.65f, "Spin", "", 0.f, 2.f, -1.f);
-  configCvGain(SPIN_AV, "Spin");
+  configParam(SpinKnob, 0.f, 1.f, 0.65f, "Spin", "", 0.f, 2.f, -1.f);
+  configCvGain(SpinAvKNob, "Spin");
 
-  configKnob(BOUNCE_KNOB, "Bounce");
-  configCvGain(BOUNCE_AV, "Bounce");
+  configKnob(BounceKnob, "Bounce");
+  configCvGain(BounceAvKnob, "Bounce");
 
-  configParam(DEPTH_KNOB, 0.f, 1.f, 0.5f, "Depth", "%", 0.f, 100.f);
-  configCvGain(DEPTH_AV, "Depth");
+  configParam(DepthKnob, 0.f, 1.f, 0.5f, "Depth", "%", 0.f, 100.f);
+  configCvGain(DepthAvKnob, "Depth");
 
-  configParam(PHASE_KNOB, 0.f, 1.f, 0.5f, "Bounce phase offset", "°", 0.f,
-              360.f, -180.f);
-  configCvGain(PHASE_AV, "Bounce phase offset");
+  configParam(PhaseKnob, 0.f, 1.f, 0.5f, "Bounce phase offset", "°", 0.f, 360.f, -180.f);
+  configCvGain(PhaseAvKnob, "Bounce phase offset");
 
-  configGain(X_GAIN_KNOB, "X output");
-  configGain(Y_GAIN_KNOB, "Y output");
+  configGain(XGainKnob, "X output");
+  configGain(YGainKnob, "Y output");
 
-  configSignalRange(X_RANGE_SWITCH, "X", false);
-  configSignalRange(Y_RANGE_SWITCH, "Y", false);
+  configSignalRange(XRangeSwitch, "X", false);
+  configSignalRange(YRangeSwitch, "Y", false);
 
-  configParam(BOUNCE_LOCK_SWITCH, 0.0, 1.0, 1.0, "Bounce lock");
+  configParam(BounceLockSwitch, 0.0, 1.0, 1.0, "Bounce lock");
 }
 
 void Blossom::process(const ProcessArgs &args) {
   auto spinRate = spin(args.sampleTime);
-  auto bounceRatio = is_bounce_free() ? bounce() : std::round(bounce());
+  auto bounceRatio = isBounceFree() ? bounce() : std::round(bounce());
   auto bounceDepth = depth();
 
   spinner.advance(spinRate, 0.f);
@@ -45,8 +44,8 @@ void Blossom::process(const ProcessArgs &args) {
   auto x = radius * std::cos(angle);
   auto y = radius * std::sin(angle);
 
-  outputs[X_OUT].setVoltage(5.f * x_gain_in() * (x + x_offset()));
-  outputs[Y_OUT].setVoltage(5.f * y_gain_in() * (y + y_offset()));
+  outputs[XOutput].setVoltage(5.f * xGain() * (x + xOffset()));
+  outputs[YOutput].setVoltage(5.f * yGain() * (y + yOffset()));
 }
 
 auto Blossom::offset(int param) -> float {
@@ -56,44 +55,38 @@ auto Blossom::offset(int param) -> float {
 
 auto Blossom::bounce() -> float {
   static constexpr auto bounceRange = Range{1.f, 17.f};
-  auto rotation = modulated(BOUNCE_KNOB, BOUNCE_CV, BOUNCE_AV);
+  auto rotation = modulated(BounceKnob, BounceCvInput, BounceAvKnob);
   return bounceRange.scale(rotation);
 }
 
 auto Blossom::spin(float sample_time) -> float {
   static constexpr auto spinRange = Range{-1.f, 1.f};
-  auto rotation = modulated(SPIN_KNOB, SPIN_CV, SPIN_AV);
+  auto rotation = modulated(SpinKnob, SpinCvInput, SpinAvKNob);
   auto scaled = spinRange.scale(rotation);
-  auto tapered = sigmoid::inverse(scaled, speed_curvature);
+  auto tapered = sigmoid::inverse(scaled, speedCurvature);
   return -10.f * tapered * sample_time;
 }
 
 auto Blossom::depth() -> float {
   static constexpr auto depthRange = Range{0.f, 1.f};
-  auto rotation = modulated(DEPTH_KNOB, DEPTH_CV, DEPTH_AV);
+  auto rotation = modulated(DepthKnob, DepthCvInput, DepthAvKnob);
   return depthRange.clamp(rotation);
 }
 
-auto Blossom::is_bounce_free() -> bool {
-  return params[BOUNCE_LOCK_SWITCH].getValue() > 0.1f;
-}
+auto Blossom::isBounceFree() -> bool { return params[BounceLockSwitch].getValue() > 0.1f; }
 
 auto Blossom::phase() -> float {
   static constexpr auto phaseRange = Range{0.f, 1.f};
-  auto rotation = modulated(PHASE_KNOB, PHASE_CV, PHASE_AV);
+  auto rotation = modulated(PhaseKnob, PhaseCvInput, PhaseAvKnob);
   return phaseRange.clamp(rotation);
 }
 
-auto Blossom::x_offset() -> float { return offset(X_RANGE_SWITCH); }
+auto Blossom::xOffset() -> float { return offset(XRangeSwitch); }
 
-auto Blossom::x_gain_in() -> float {
-  return Gain::multiplier(modulated(X_GAIN_KNOB, X_GAIN_CV));
-}
+auto Blossom::xGain() -> float { return Gain::multiplier(modulated(XGainKnob, XGainCvInput)); }
 
-auto Blossom::y_gain_in() -> float {
-  return Gain::multiplier(modulated(Y_GAIN_KNOB, Y_GAIN_CV));
-}
+auto Blossom::yGain() -> float { return Gain::multiplier(modulated(YGainKnob, YGainCvInput)); }
 
-auto Blossom::y_offset() -> float { return offset(Y_RANGE_SWITCH); }
+auto Blossom::yOffset() -> float { return offset(YRangeSwitch); }
 
 } // namespace dhe

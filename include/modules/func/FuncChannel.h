@@ -3,16 +3,14 @@
 #include "util/gain.h"
 #include "util/signal.h"
 
-#include <engine/Module.hpp>
-
 #include <array>
+#include <engine/Module.hpp>
 
 namespace dhe {
 
 class FuncChannel {
 public:
-  FuncChannel(rack::engine::Module *module, int inputIndex, int operandIndex,
-              int outputIndex, int operatorSwitchIndex,
+  FuncChannel(rack::engine::Module *module, int inputIndex, int operandIndex, int outputIndex, int operatorSwitchIndex,
               int additionRangeSwitchIndex, int multiplicationRangeSwitchIndex);
 
   auto apply(float upstream) -> float;

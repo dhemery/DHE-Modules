@@ -12,27 +12,27 @@ HostagePanel::HostagePanel(Hostage *module) : Panel{module, hp} {
   auto y = 25.f;
   auto dy = 18.5f;
 
-  toggle<2>(column_2, y, Hostage::HOSTAGE_MODE_SWITCH);
+  toggle<2>(column_2, y, Hostage::ModeSwitch);
 
   y += dy;
-  input(column_1, y, Hostage::DURATION_CV);
-  toggle<3>(column_3, y, Hostage::DURATION_RANGE_SWITCH);
+  input(column_1, y, Hostage::DurationCvInput);
+  toggle<3>(column_3, y, Hostage::DurationRangeSwitch);
 
   y += dy;
-  knob<LargeKnob>(column_2, y, Hostage::DURATION_KNOB);
+  knob<LargeKnob>(column_2, y, Hostage::DurationKnob);
 
   y = 82.f;
   dy = 15.f;
 
-  input(column_1, y, Hostage::DEFER_GATE_IN);
-  output(column_3, y, Hostage::ACTIVE_OUT);
+  input(column_1, y, Hostage::DeferGateInput);
+  output(column_3, y, Hostage::ActiveOutput);
 
   y += dy;
-  input(column_1, y, Hostage::STAGE_GATE_IN);
-  output(column_3, y, Hostage::EOC_OUT);
+  input(column_1, y, Hostage::GateInput);
+  output(column_3, y, Hostage::EocOutput);
 
   y += dy;
-  input(column_1, y, Hostage::MAIN_IN);
-  output(column_3, y, Hostage::MAIN_OUT);
+  input(column_1, y, Hostage::EnvelopeInput);
+  output(column_3, y, Hostage::EnvelopeOutput);
 }
 } // namespace dhe

@@ -12,39 +12,39 @@ BlossomPanel::BlossomPanel(Blossom *blossom) : Panel{blossom, hp} {
   auto y = 25.f;
   auto dy = 18.5f;
 
-  input(column_1, y, Blossom::SPIN_CV);
-  knob<TinyKnob>(column_2, y, Blossom::SPIN_AV);
-  knob<LargeKnob>(column_3, y, Blossom::SPIN_KNOB);
+  input(column_1, y, Blossom::SpinCvInput);
+  knob<TinyKnob>(column_2, y, Blossom::SpinAvKNob);
+  knob<LargeKnob>(column_3, y, Blossom::SpinKnob);
 
   y += dy;
-  input(column_1, y, Blossom::BOUNCE_CV);
-  knob<TinyKnob>(column_2, y, Blossom::BOUNCE_AV);
-  knob<LargeKnob>(column_3, y, Blossom::BOUNCE_KNOB);
-  toggle<2>(column_4, y, Blossom::BOUNCE_LOCK_SWITCH);
+  input(column_1, y, Blossom::BounceCvInput);
+  knob<TinyKnob>(column_2, y, Blossom::BounceAvKnob);
+  knob<LargeKnob>(column_3, y, Blossom::BounceKnob);
+  toggle<2>(column_4, y, Blossom::BounceLockSwitch);
 
   y += dy;
-  input(column_1, y, Blossom::DEPTH_CV);
-  knob<TinyKnob>(column_2, y, Blossom::DEPTH_AV);
-  knob<LargeKnob>(column_3, y, Blossom::DEPTH_KNOB);
+  input(column_1, y, Blossom::DepthCvInput);
+  knob<TinyKnob>(column_2, y, Blossom::DepthAvKnob);
+  knob<LargeKnob>(column_3, y, Blossom::DepthKnob);
 
   y += dy;
-  input(column_1, y, Blossom::PHASE_CV);
-  knob<TinyKnob>(column_2, y, Blossom::PHASE_AV);
-  knob<LargeKnob>(column_3, y, Blossom::PHASE_KNOB);
+  input(column_1, y, Blossom::PhaseCvInput);
+  knob<TinyKnob>(column_2, y, Blossom::PhaseAvKnob);
+  knob<LargeKnob>(column_3, y, Blossom::PhaseKnob);
 
   y = 97.f;
   dy = 15.f;
   const auto output_port_offset = 1.25f;
 
-  input(column_1, y, Blossom::X_GAIN_CV);
-  knob<SmallKnob>(column_2, y, Blossom::X_GAIN_KNOB);
-  toggle<2>(column_3, y, Blossom::X_RANGE_SWITCH);
-  output(column_4, y + output_port_offset, Blossom::X_OUT);
+  input(column_1, y, Blossom::XGainCvInput);
+  knob<SmallKnob>(column_2, y, Blossom::XGainKnob);
+  toggle<2>(column_3, y, Blossom::XRangeSwitch);
+  output(column_4, y + output_port_offset, Blossom::XOutput);
 
   y += dy;
-  input(column_1, y, Blossom::Y_GAIN_CV);
-  knob<SmallKnob>(column_2, y, Blossom::Y_GAIN_KNOB);
-  toggle<2>(column_3, y, Blossom::Y_RANGE_SWITCH);
-  output(column_4, y + output_port_offset, Blossom::Y_OUT);
+  input(column_1, y, Blossom::YGainCvInput);
+  knob<SmallKnob>(column_2, y, Blossom::YGainKnob);
+  toggle<2>(column_3, y, Blossom::YRangeSwitch);
+  output(column_4, y + output_port_offset, Blossom::YOutput);
 }
 } // namespace dhe

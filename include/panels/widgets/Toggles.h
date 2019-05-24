@@ -1,7 +1,6 @@
 #pragma once
 
 #include <app/SvgSwitch.hpp>
-
 #include <string>
 
 namespace dhe {

@@ -22,9 +22,9 @@ SwavePanel::SwavePanel(Swave *module) : Panel{module, hp} {
   dy = 15.f;
 
   y += dy;
-  input(x, y, Swave::MainIn);
+  input(x, y, Swave::SwaveInput);
 
   y += dy;
-  output(x, y, Swave::MainOut);
+  output(x, y, Swave::SwaveOutput);
 }
 } // namespace dhe

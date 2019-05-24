@@ -1,4 +1,5 @@
 #include "panels/FuncPanel.h"
+
 #include "panels/func/FuncSteppers.h"
 
 namespace dhe {
@@ -20,22 +21,19 @@ FuncPanel::FuncPanel(Func *func) : Panel{func, hp} {
   auto row_4 = top + row_spacing * 3;
   auto row_6 = top + row_spacing * 5 + port_offset;
 
-  input(x, row_1, Func::IN);
-  knob<LargeKnob>(x, row_3, Func::KNOB);
-  output(x, row_6, Func::OUT);
+  input(x, row_1, Func::FuncInput);
+  knob<LargeKnob>(x, row_3, Func::OperandKnob);
+  output(x, row_6, Func::FuncOutput);
 
-  auto additionRangeStepper =
-      toggle<AdditionRangeStepper>(x, row_4, Func::ADDITION_RANGE_SWITCH);
-  auto multiplicationRangeStepper = toggle<MultiplicationRangeStepper>(
-      x, row_4, Func::MULTIPLICATION_RANGE_SWITCH);
+  auto additionRangeStepper = toggle<AdditionRangeStepper>(x, row_4, Func::AdditionRangeSwitch);
+  auto multiplicationRangeStepper = toggle<MultiplicationRangeStepper>(x, row_4, Func::MultiplicationRangeSwitch);
   multiplicationRangeStepper->visible = false;
 
-  auto operatorSwitch = toggle<OperatorSwitch>(x, row_2, Func::OPERATOR_SWITCH);
-  auto updateRangeStepperVisibility =
-      [additionRangeStepper, multiplicationRangeStepper](bool isMultiply) {
-        additionRangeStepper->visible = !isMultiply;
-        multiplicationRangeStepper->visible = isMultiply;
-      };
+  auto operatorSwitch = toggle<OperatorSwitch>(x, row_2, Func::OperatorSwitch);
+  auto updateRangeStepperVisibility = [additionRangeStepper, multiplicationRangeStepper](bool isMultiply) {
+    additionRangeStepper->visible = !isMultiply;
+    multiplicationRangeStepper->visible = isMultiply;
+  };
   operatorSwitch->onOperatorChange(updateRangeStepperVisibility);
 }
 

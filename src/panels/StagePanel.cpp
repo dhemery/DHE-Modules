@@ -22,15 +22,15 @@ StagePanel::StagePanel(Stage *module) : Panel{module, hp} {
   y = 82.f;
   dy = 15.f;
 
-  input(column_1, y, Stage::DeferGateIn);
-  output(column_3, y, Stage::ActiveOut);
+  input(column_1, y, Stage::DeferGateInput);
+  output(column_3, y, Stage::ActiveOutput);
 
   y += dy;
-  input(column_1, y, Stage::StageTriggerIn);
-  output(column_3, y, Stage::EocOut);
+  input(column_1, y, Stage::TriggerInput);
+  output(column_3, y, Stage::EocOutput);
 
   y += dy;
-  input(column_1, y, Stage::EnvelopeIn);
-  output(column_3, y, Stage::MainOut);
+  input(column_1, y, Stage::EnvelopeInput);
+  output(column_3, y, Stage::EnvelopeOutput);
 }
 } // namespace dhe

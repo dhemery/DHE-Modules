@@ -14,17 +14,17 @@ public:
 
   enum ParameterIds {
     LevelKnob,
-    LevelAv,
+    LevelAvKnob,
     CcwLimitKnob,
-    CcwLimitAv,
+    CcwLimitAvKnob,
     CcwLimitRangeSwitch,
     CwLimitKnob,
-    CwLimitAv,
+    CwLimitAvKnob,
     CwLimitRangeSwitch,
     ParameterCount
   };
-  enum InputIds { LevelCv, CcwLimitCv, CwLimitCv, InputCount };
-  enum OutputIds { MainOut, OutputCount };
+  enum InputIds { LevelCvInput, CcwLimitCvInput, CwLimitCvInput, InputCount };
+  enum OutputIds { RangerOutput, OutputCount };
 
 private:
   std::function<float()> ccwLimit;

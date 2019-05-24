@@ -21,9 +21,7 @@ public:
     operatorChangedTo(isMultiply);
   }
 
-  void onOperatorChange(const std::function<void(bool)> &action) {
-    operatorChangedTo = action;
-  }
+  void onOperatorChange(const std::function<void(bool)> &action) { operatorChangedTo = action; }
 
 private:
   std::function<void(bool)> operatorChangedTo = [](bool) {};

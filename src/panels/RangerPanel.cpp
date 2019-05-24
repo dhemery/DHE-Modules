@@ -13,26 +13,26 @@ RangerPanel::RangerPanel(Ranger *module) : Panel{module, hp} {
   auto panel_buffer = 4.f;
 
   knob<MediumKnob>(column_1, y, Ranger::LevelKnob);
-  output(column_2, y, Ranger::MainOut);
+  output(column_2, y, Ranger::RangerOutput);
 
   y += dy;
-  input(column_1, y, Ranger::LevelCv);
-  knob<TinyKnob>(column_2, y, Ranger::LevelAv);
+  input(column_1, y, Ranger::LevelCvInput);
+  knob<TinyKnob>(column_2, y, Ranger::LevelAvKnob);
 
   y += dy + panel_buffer;
   knob<MediumKnob>(column_1, y, Ranger::CcwLimitKnob);
   toggle<2>(column_2, y, Ranger::CcwLimitRangeSwitch);
 
   y += dy;
-  input(column_1, y, Ranger::CcwLimitCv);
-  knob<TinyKnob>(column_2, y, Ranger::CcwLimitAv);
+  input(column_1, y, Ranger::CcwLimitCvInput);
+  knob<TinyKnob>(column_2, y, Ranger::CcwLimitAvKnob);
 
   y += dy + panel_buffer;
   knob<MediumKnob>(column_1, y, Ranger::CwLimitKnob);
   toggle<2>(column_2, y, Ranger::CwLimitRangeSwitch);
 
   y += dy;
-  input(column_1, y, Ranger::CwLimitCv);
-  knob<TinyKnob>(column_2, y, Ranger::CwLimitAv);
+  input(column_1, y, Ranger::CwLimitCvInput);
+  knob<TinyKnob>(column_2, y, Ranger::CwLimitAvKnob);
 }
 } // namespace dhe
