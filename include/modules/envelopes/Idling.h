@@ -14,7 +14,7 @@ public:
           std::move(startGenerating),          // Start generating on stage gate rise
           []() {},                             // Ignore stage gate fall
           [setActive]() { setActive(false); }, // Become inactive on entry
-          [](float) {}                         // Do nothing on each step
+          [](float /*unused*/) {}              // Do nothing on each step
       } {}
 };
 } // namespace dhe

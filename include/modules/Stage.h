@@ -35,6 +35,6 @@ private:
   std::function<float()> level;
   std::function<float(float)> taper;
   StageStateMachine stateMachine;
-  float startVoltage{0.f};
+  float startVoltage{0.F};
 };
 } // namespace dhe

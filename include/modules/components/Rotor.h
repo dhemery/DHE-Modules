@@ -5,7 +5,7 @@
 namespace dhe {
 class Rotor {
 public:
-  void advance(float delta, float offset = 0.f) {
+  void advance(float delta, float offset = 0.F) {
     this->offset = offset;
     phase += delta;
     phase -= std::trunc(phase);
@@ -17,8 +17,8 @@ public:
   auto y() const -> float { return std::sin(angle()); }
 
 private:
-  float const twoPi{2.f * std::acos(-1.f)};
-  float phase{0.f};
-  float offset{0.f};
+  float const twoPi{2.F * std::acos(-1.F)};
+  float phase{0.F};
+  float offset{0.F};
 };
 } // namespace dhe

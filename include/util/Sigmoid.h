@@ -7,8 +7,8 @@
 namespace dhe {
 namespace sigmoid {
 
-  static constexpr auto sigmoidRange = Range{-1.f, 1.f};
-  static constexpr auto proportionRange = Range{0.f, 1.f};
+  static constexpr auto sigmoidRange = Range{-1.F, 1.F};
+  static constexpr auto proportionRange = Range{0.F, 1.F};
 
   /**
    * Applies an inverse sigmoid function to the input.
@@ -28,14 +28,14 @@ namespace sigmoid {
    * @return the sigmoid function result
    */
   static inline auto inverse(float input, float curvature) -> float {
-    static constexpr auto precision = 1e-4f;
-    static constexpr auto maxCurvature = 1.0f - precision;
+    static constexpr auto precision = 1e-4F;
+    static constexpr auto maxCurvature = 1.0F - precision;
     static constexpr auto curvatureRange = Range{-maxCurvature, maxCurvature};
 
     curvature = curvatureRange.clamp(curvature);
     input = sigmoidRange.clamp(input);
 
-    return (input - input * curvature) / (curvature - std::abs(input) * 2.0f * curvature + 1.0f);
+    return (input - input * curvature) / (curvature - std::abs(input) * 2.0F * curvature + 1.0F);
   }
 
   /**
@@ -135,7 +135,7 @@ namespace sigmoid {
   static inline auto curvature(float input) -> float {
     // This curvature creates a gentle S curve, increasing sensitivity in the
     // middle of the input range and decreasing sensitivity toward the extremes.
-    static constexpr auto gentleS = 0.65f;
+    static constexpr auto gentleS = 0.65F;
     auto scaled = sigmoidRange.scale(input);
     return curve(scaled, gentleS);
   }

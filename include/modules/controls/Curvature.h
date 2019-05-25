@@ -8,7 +8,7 @@
 namespace dhe {
 namespace curvature {
 
-  float constexpr centeredRotation = 0.5f;
+  float constexpr centeredRotation = 0.5F;
 
   /**
    * Creates a function that applies a taper with a selectable shape and

@@ -2,7 +2,6 @@
 
 #include "modules/controls/Controls.h"
 #include "modules/controls/Level.h"
-#include "util/Gain.h"
 #include "util/Sigmoid.h"
 
 #include <array>
@@ -26,10 +25,10 @@ Blossom::Blossom() {
   configParam(PhaseKnob, 0.F, 1.F, 0.5F, "Bounce phase offset", "°", 0.F, 360.F, -180.F);
   attenuverter::config(this, PhaseAvKnob, "Bounce phase offset CV gain");
 
-  gain_knob::config(this, XGainKnob, "X gain");
+  gain::config(this, XGainKnob, "X gain");
   level::configSwitch(this, XRangeSwitch, "X range", 0);
 
-  gain_knob::config(this, YGainKnob, "Y gain");
+  gain::config(this, YGainKnob, "Y gain");
   level::configSwitch(this, YRangeSwitch, "Y range", 0);
 }
 
@@ -86,9 +85,15 @@ auto Blossom::phase() -> float {
 
 auto Blossom::xOffset() -> float { return offset(XRangeSwitch); }
 
-auto Blossom::xGain() -> float { return gain::multiplier(modulated(XGainKnob, XGainCvInput)); }
+auto Blossom::xGain() -> float {
+  float gainAmount = modulated(XGainKnob, XGainCvInput);
+  return gain::range.scale(gainAmount);
+}
 
-auto Blossom::yGain() -> float { return gain::multiplier(modulated(YGainKnob, YGainCvInput)); }
+auto Blossom::yGain() -> float {
+  float gainAmount = modulated(YGainKnob, YGainCvInput);
+  return gain::range.scale(gainAmount);
+}
 
 auto Blossom::yOffset() -> float { return offset(YRangeSwitch); }
 

@@ -19,12 +19,12 @@ public:
       },
       setActive{std::move(setActive)},
       forward{std::move(forward)},
-      generator{std::move(duration), []() {}, [](float) {}, std::move(finishHolding)} {}
+      generator{std::move(duration), []() {}, [](float /*unused*/) {}, std::move(finishHolding)} {}
 
 private:
   void start() {
     setActive(true);
-    forward(0.f);
+    forward(0.F);
     generator.start();
   }
 

@@ -23,6 +23,60 @@ static void configFrameWidgetControl(rack::engine::Module *module, int paramId, 
   controlDisplay->setFrameNames(stateNames);
 }
 
+namespace attenuator {
+  void config(rack::engine::Module *module, int knobId, std::string const &knobName) {
+    knob::configPercentage(module, knobId, knobName, range);
+  }
+} // namespace attenuator
+
+namespace attenuverter {
+  void config(rack::engine::Module *module, int knobId, std::string const &knobName) {
+    knob::configPercentage(module, knobId, knobName, range);
+  }
+} // namespace attenuverter
+
+namespace button {
+  void config(rack::engine::Module *module, int buttonId, std::string const &buttonName,
+              std::array<std::string, 2> const &stateNames, int initialState) {
+    configFrameWidgetControl<2>(module, buttonId, buttonName, stateNames, initialState);
+  }
+} // namespace button
+
+namespace control {
+  namespace range {
+    template <int N>
+    auto selection(rack::engine::Module *module, int switchId, std::array<Range const *, N> const &ranges)
+        -> std::function<Range const *()> {
+      auto switchParam = &module->params[switchId];
+      return [switchParam, ranges]() -> Range const * {
+        auto const selection = static_cast<int>(switchParam->getValue());
+        return ranges[selection];
+      };
+    }
+
+    template auto selection<2>(rack::engine::Module *module, int switchId, std::array<Range const *, 2> const &ranges)
+        -> std::function<Range const *()>;
+    template auto selection<3>(rack::engine::Module *module, int switchId, std::array<Range const *, 3> const &ranges)
+        -> std::function<Range const *()>;
+  } // namespace range
+
+  namespace scale {
+    auto toRange(std::function<Range const *()> const &range) -> std::function<float(float)> {
+      return [range](float proportion) -> float { return range()->scale(proportion); };
+    }
+    auto toRange(Range const &range) -> std::function<float(float)> {
+      return [range](float proportion) -> float { return range.scale(proportion); };
+    }
+
+  } // namespace scale
+} // namespace control
+
+namespace gain {
+  void config(rack::engine::Module *module, int knobId, std::string const &knobName) {
+    knob::configPercentage(module, knobId, knobName, range);
+  }
+} // namespace gain
+
 namespace knob {
   auto rotation(rack::engine::Module *module, int knobId) -> std::function<float()> {
     auto knobParam = &module->params[knobId];
@@ -68,28 +122,16 @@ namespace knob {
               std::function<float(float)> const &scale) -> std::function<float()> {
     return [rotation, taper, scale]() -> float { return scale(taper(rotation())); };
   }
-} // namespace knob
 
-namespace control {
-
-  namespace scale {
-    auto toRange(std::function<Range const *()> const &range) -> std::function<float(float)> {
-      return [range](float proportion) -> float { return range()->scale(proportion); };
-    }
-    auto toRange(Range const &range) -> std::function<float(float)> {
-      return [range](float proportion) -> float { return range.scale(proportion); };
-    }
-
-  } // namespace scale
-
-} // namespace control
-
-namespace button {
-  void config(rack::engine::Module *module, int buttonId, std::string const &buttonName,
-              std::array<std::string, 2> const &stateNames, int initialState) {
-    configFrameWidgetControl<2>(module, buttonId, buttonName, stateNames, initialState);
+  void config(rack::engine::Module *module, int knobId, std::string const &knobName, std::string const &units,
+              Range const &range) {
+    module->configParam(knobId, 0.F, 1.F, 0.5F, knobName, units, 0.F, range.size(), range.lowerBound);
   }
-} // namespace button
+
+  void configPercentage(rack::engine::Module *module, int knobId, std::string const &knobName, Range const &range) {
+    module->configParam(knobId, 0.F, 1.F, 0.5F, knobName, "%", 0.F, range.size() * 100.F, range.lowerBound * 100.F);
+  }
+} // namespace knob
 
 namespace toggle {
   template <int N>
@@ -105,5 +147,4 @@ namespace toggle {
   template void config<4>(rack::engine::Module *module, int toggleId, std::string const &toggleName,
                           std::array<std::string, 4> const &stateNames, int initialState);
 } // namespace toggle
-
 } // namespace dhe

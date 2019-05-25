@@ -68,7 +68,7 @@ protected:
   template <typename T> auto param(float x, float y, int index) -> T * {
     auto const &pos = mmvec(x, y);
     auto *widget = rack::createParamCentered<T>(pos, module, index);
-    widget->shadow->opacity = 0.f;
+    widget->shadow->opacity = 0.F;
     addParam(widget);
     return widget;
   }
@@ -96,14 +96,14 @@ protected:
   void input(float x, float y, int index) {
     auto const &pos = mmvec(x, y);
     auto *input = rack::createInputCentered<InputJack<P>>(pos, module, index);
-    input->shadow->opacity = 0.f;
+    input->shadow->opacity = 0.F;
     addInput(input);
   }
 
   void output(float x, float y, int index) {
     auto const &pos = mmvec(x, y);
     auto *output = rack::createOutputCentered<OutputJack<P>>(pos, module, index);
-    output->shadow->opacity = 0.f;
+    output->shadow->opacity = 0.F;
     addOutput(output);
   }
 
@@ -114,13 +114,13 @@ private:
 
   void installScrews() {
     auto screwDiameter = rack::app::RACK_GRID_WIDTH * rack::app::MM_PER_IN / rack::app::SVG_DPI;
-    auto screwRadius = screwDiameter / 2.f;
+    auto screwRadius = screwDiameter / 2.F;
 
     auto top = screwRadius;
     auto bottom = height() - top;
 
-    auto maxScrewInset = screwDiameter * 1.5f;
-    auto left = std::min(width() / 4.f, maxScrewInset);
+    auto maxScrewInset = screwDiameter * 1.5F;
+    auto left = std::min(width() / 4.F, maxScrewInset);
     auto right = width() - left;
 
     auto screwPositions = std::vector<rack::math::Vec>{{left, top}, {left, bottom}, {right, top}, {right, bottom}};

@@ -7,10 +7,12 @@
 
 namespace dhe {
 namespace level {
-  static float constexpr centeredRotation = 0.5;
+  static float constexpr centeredRotation = 0.5F;
 
-  static Range constexpr unipolarRange{0.f, 10.f};
-  static Range constexpr bipolarRange{-5.f, 5.f};
+  static Range constexpr bipolarRange{-5.F, 5.F};
+  static Range constexpr rectifiedBipolarRange{0.F, 5.F};
+  static Range constexpr unipolarRange{0.F, 10.F};
+  static Range constexpr invertibleUnipolarRange{-10.F, 10.F};
 
   extern std::array<Range const *, 2> const ranges;
 

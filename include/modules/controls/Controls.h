@@ -1,11 +1,27 @@
 #pragma once
+#include "util/Range.h"
+
 #include <array>
 #include <engine/Module.hpp>
 #include <functional>
 #include <string>
 
 namespace dhe {
-class Range;
+
+namespace attenuator {
+  static constexpr auto range = Range{0.F, 1.F};
+  void config(rack::engine::Module *module, int knobId, std::string const &knobName);
+} // namespace attenuator
+
+namespace attenuverter {
+  static constexpr auto range = Range{-1.F, 1.F};
+  void config(rack::engine::Module *module, int knobId, std::string const &knobName);
+} // namespace attenuverter
+
+namespace button {
+  void config(rack::engine::Module *module, int buttonId, std::string const &buttonName,
+              std::array<std::string, 2> const &stateNames, int initialState);
+}
 
 namespace control {
   namespace scale {
@@ -23,7 +39,6 @@ namespace control {
   } // namespace scale
 
   namespace range {
-
     /**
      * Creates a function that uses a switch to select a range.
      * @tparam N the number of ranges in the array
@@ -32,17 +47,17 @@ namespace control {
      */
     template <int N>
     auto selection(rack::engine::Module *module, int switchId, std::array<Range const *, N> const &ranges)
-        -> std::function<Range const *()> {
-      auto switchParam = &module->params[switchId];
-      return [switchParam, ranges]() -> Range const * {
-        auto const selection = static_cast<int>(switchParam->getValue());
-        return ranges[selection];
-      };
-    }
-
+        -> std::function<Range const *()>;
   } // namespace range
 
 } // namespace control
+
+namespace gain {
+  static constexpr auto range = Range{0.F, 2.F};
+  static constexpr auto invertibleRange = Range{-2.F, 2.F};
+
+  void config(rack::engine::Module *module, int knobId, std::string const &knobName);
+} // namespace gain
 
 namespace knob {
   /**
@@ -80,24 +95,11 @@ namespace knob {
   auto scaled(std::function<float()> const &rotation, std::function<float(float)> const &taper,
               std::function<float(float)> const &scale) -> std::function<float()>;
 
+  void config(rack::engine::Module *module, int knobId, std::string const &knobName, std::string const &units,
+              Range const &range);
+
+  void configPercentage(rack::engine::Module *module, int knobId, std::string const &knobName, Range const &range);
 } // namespace knob
-
-namespace attenuverter {
-  inline void config(rack::engine::Module *module, int knobId, std::string const &knobName) {
-    module->configParam(knobId, 0.F, 1.F, 0.5F, knobName, "%", 0.F, 200.F, -100.F);
-  }
-} // namespace attenuverter
-
-namespace gain_knob {
-  inline void config(rack::engine::Module *module, int knobId, std::string const &knobName) {
-    module->configParam(knobId, 0.F, 1.F, 0.5F, knobName, "%", 0.F, 200.F, 0.F);
-  }
-} // namespace gain_knob
-
-namespace button {
-  void config(rack::engine::Module *module, int buttonId, std::string const &buttonName,
-              std::array<std::string, 2> const &stateNames, int initialState);
-}
 
 namespace toggle {
   template <int N>

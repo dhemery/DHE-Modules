@@ -19,7 +19,7 @@ public:
    * Sets the phase to 0 and generates an on_start event.
    */
   void start() {
-    phase = 0.f;
+    phase = 0.F;
     onStart();
   }
 
@@ -29,21 +29,21 @@ public:
    * on_finish event and stops.
    */
   void step(float sampleTime) {
-    if (phase >= 1.f) {
+    if (phase >= 1.F) {
       return;
     }
-    phase = std::min(1.f, phase + sampleTime / duration());
+    phase = std::min(1.F, phase + sampleTime / duration());
     onAdvance(phase);
-    if (phase >= 1.f) {
+    if (phase >= 1.F) {
       onFinish();
     }
   }
 
-  void stop() { phase = 1.f; }
+  void stop() { phase = 1.F; }
 
 protected:
 private:
-  float phase{0.f};
+  float phase{0.F};
   const std::function<float()> duration;
   const std::function<void()> onStart;
   const std::function<void(float)> onAdvance;

@@ -11,17 +11,17 @@ public:
   Sustaining(const std::function<void()> &finishSustaining, std::function<void(float)> forward,
              std::function<void(bool)> setActive) :
       StageState{
-          []() {},               // Ignore stage gate rise
-          finishSustaining,      // Finish sustaining on stage gate fall
-          [this]() { start(); }, // Start sustaining on entry
-          [](float) {}           // Do nothing on each step
+          []() {},                // Ignore stage gate rise
+          finishSustaining,       // Finish sustaining on stage gate fall
+          [this]() { start(); },  // Start sustaining on entry
+          [](float /*unused*/) {} // Do nothing on each step
       },
       setActive{std::move(setActive)},
       forward{std::move(forward)} {}
 
   void start() {
     setActive(true);
-    forward(0.f);
+    forward(0.F);
   }
 
 private:

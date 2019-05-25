@@ -2,7 +2,6 @@
 
 #include "modules/controls/Controls.h"
 #include "modules/controls/Level.h"
-#include "util/Gain.h"
 #include "util/Sigmoid.h"
 
 #include <array>
@@ -26,10 +25,10 @@ Xycloid::Xycloid() {
   attenuverter::config(this, WobbleDepthAvKnob, "Wobble depth CV gain");
   configParam(WobblePhaseOffsetKnob, 0.F, 1.F, 0.5F, "Wobble phase offset", "°", 0.F, 360.F, -180.F);
 
-  gain_knob::config(this, XGainKnob, "X gain");
+  gain::config(this, XGainKnob, "X gain");
   level::configSwitch(this, XRangeSwitch, "X range", 0);
 
-  gain_knob::config(this, YGainKnob, "Y gain");
+  gain::config(this, YGainKnob, "Y gain");
   level::configSwitch(this, YRangeSwitch, "Y range", 0);
 }
 
@@ -99,11 +98,17 @@ auto Xycloid::wobbleRatio() -> float {
   return wobbleRatioIsFree() ? wobbleRatio : std::round(wobbleRatio);
 }
 
-auto Xycloid::xGain() -> float { return gain::multiplier(modulated(XGainKnob, XGainCvInput)); }
+auto Xycloid::xGain() -> float {
+  float gainAmount = modulated(XGainKnob, XGainCvInput);
+  return gain::range.scale(gainAmount);
+}
 
 auto Xycloid::xOffset() -> float { return offset(XRangeSwitch); }
 
-auto Xycloid::yGain() -> float { return gain::multiplier(modulated(YGainKnob, YGainCvInput)); }
+auto Xycloid::yGain() -> float {
+  float gainAmount = modulated(YGainKnob, YGainCvInput);
+  return gain::range.scale(gainAmount);
+}
 
 auto Xycloid::yOffset() -> float { return offset(YRangeSwitch); }
 

@@ -1,6 +1,6 @@
 Checks:          '-*,bugprone-*,misc-*,modernize-*,performance-*,portability-*,readability-*'
 WarningsAsErrors: ''
-HeaderFilterRegex: ''
+HeaderFilterRegex: '\./include/.*'
 AnalyzeTemporaryDtors: false
 FormatStyle:     file
 User:            Dale

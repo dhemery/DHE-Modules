@@ -23,7 +23,7 @@ Func6Panel::Func6Panel(Func6 *func6) : Panel{func6, hp} {
     auto const portY = y + portOffset;
 
     input(column1, portY, Func6::FuncInput + row);
-    knob<LargeKnob>(column3, y, Func6::OperandKnob + row);
+    knob<LargeKnob>(column3, y, Func6::AmountKnob + row);
     output(column5, portY, Func6::FuncOutput + row);
 
     auto additionRangeStepper = toggle<AdditionRangeStepper>(column4, y, Func6::OffsetRangeSwitch + row);

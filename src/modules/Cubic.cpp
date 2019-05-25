@@ -1,24 +1,20 @@
 #include "modules/Cubic.h"
 
 #include "modules/controls/Controls.h"
-#include "util/Gain.h"
 
 #include <string>
 
 namespace dhe {
-
-void configCoefficient(rack::engine::Module *module, int param, std::string const &name) {
-  module->configParam(param, 0.F, 1.F, 0.5F, name, "", 0.F, 4.F, -2.F);
-}
+static auto constexpr coefficientRange = Range{-2.F, 2.F};
 
 Cubic::Cubic() {
   config(ParameterCount, InputCount, OutputCount);
-  configCoefficient(this, ACoefficientKnob, "x³ coefficient");
-  configCoefficient(this, BCoefficientKnob, "x² coefficient");
-  configCoefficient(this, CCoefficientKnob, "x¹ coefficient");
-  configCoefficient(this, DCoefficientKnob, "x⁰ coefficient");
-  gain_knob::config(this, InputGainKnob, "Input gain");
-  gain_knob::config(this, OutputGainKnob, "Output gain");
+  knob::config(this, ACoefficientKnob, "x³ coefficient", "", coefficientRange);
+  knob::config(this, BCoefficientKnob, "x² coefficient", "", coefficientRange);
+  knob::config(this, CCoefficientKnob, "x¹ coefficient", "", coefficientRange);
+  knob::config(this, DCoefficientKnob, "x⁰ coefficient", "", coefficientRange);
+  gain::config(this, InputGainKnob, "Input gain");
+  gain::config(this, OutputGainKnob, "Output gain");
 }
 
 void Cubic::process(const ProcessArgs & /*args*/) {
@@ -43,7 +39,7 @@ auto Cubic::coefficient(Cubic::ParameterIds knobParam, Cubic::InputIds cvParam) 
 }
 
 auto Cubic::gain(const Cubic::ParameterIds knobParam, const Cubic::InputIds cvInput) -> float {
-  return gain::multiplier(modulated(knobParam, cvInput));
+  return gain::range.scale(modulated(knobParam, cvInput));
 }
 
 auto Cubic::mainIn() -> float { return inputs[CubicInput].getVoltage(); }

@@ -13,8 +13,8 @@ public:
   void process(const ProcessArgs &args) override;
 
   enum ParameterIds {
-    OperandKnob,
-    OperationSwitch = OperandKnob + channelCount,
+    AmountKnob,
+    OperationSwitch = AmountKnob + channelCount,
     OffsetRangeSwitch = OperationSwitch + channelCount,
     MultiplierRangeSwitch = OffsetRangeSwitch + channelCount,
     ParameterCount = MultiplierRangeSwitch + channelCount

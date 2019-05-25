@@ -24,7 +24,7 @@ public:
   void onOperatorChange(const std::function<void(bool)> &action) { operatorChangedTo = action; }
 
 private:
-  std::function<void(bool)> operatorChangedTo = [](bool) {};
+  std::function<void(bool)> operatorChangedTo = [](bool /*unused*/) {};
 };
 
 } // namespace dhe

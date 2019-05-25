@@ -55,7 +55,7 @@ private:
   StageStateMachine stateMachine;
   bool isActive{false};
   bool isEoc{false};
-  float startVoltage{0.f};
+  float startVoltage{0.F};
   std::function<float()> duration;
   std::function<float()> level;
   std::function<float(float)> taper;

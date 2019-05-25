@@ -22,11 +22,11 @@ FuncPanel::FuncPanel(Func *func) : Panel{func, hp} {
   auto constexpr row6 = top + rowSpacing * 5 + portOffset;
 
   input(x, row1, Func::FuncInput);
-  knob<LargeKnob>(x, row3, Func::OperandKnob);
+  knob<LargeKnob>(x, row3, Func::AmountKnob);
   output(x, row6, Func::FuncOutput);
 
-  auto additionRangeStepper = toggle<AdditionRangeStepper>(x, row4, Func::AddendRangeSwitch);
-  auto multiplicationRangeStepper = toggle<MultiplicationRangeStepper>(x, row4, Func::MultiplicandRangeSwitch);
+  auto additionRangeStepper = toggle<AdditionRangeStepper>(x, row4, Func::OffsetRangeSwitch);
+  auto multiplicationRangeStepper = toggle<MultiplicationRangeStepper>(x, row4, Func::MultiplierRangeSwitch);
   multiplicationRangeStepper->visible = false;
 
   auto operatorSwitch = toggle<OperatorSwitch>(x, row2, Func::OperationSwitch);
