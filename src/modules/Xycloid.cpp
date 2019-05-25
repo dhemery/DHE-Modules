@@ -15,15 +15,15 @@ Xycloid::Xycloid() {
   config(ParameterCount, InputCount, OutputCount);
 
   configParam(ThrobSpeedKnob, 0.F, 1.F, 0.65F, "Throb speed", "", 0.F, 2.F, -1.F);
-  configCvGain(ThrobSpeedAvKnob, "Throb speed");
+  attenuverter::config(this, ThrobSpeedAvKnob, "Throb speed CV gain");
 
   configKnob(WobbleRatioKnob, "Wobble ratio");
-  configCvGain(WobbleRatioAvKnob, "Wobble ratio");
+  attenuverter::config(this, WobbleRatioAvKnob, "Wobble ratio CV gain");
   toggle::config<3>(this, WobbleDirectionSwitch, "Wobble direction", {"Inward", "Both", "Outward"}, 1);
   toggle::config<2>(this, WobbleRatioModeSwitch, "Wobble ratio mode", {"Quantized", "Free"}, 1);
 
   configParam(WobbleDepthKnob, 0.F, 1.F, 0.5F, "Wobble depth", "%", 0.F, 100.F);
-  configCvGain(WobbleDepthAvKnob, "Wobble depth");
+  attenuverter::config(this, WobbleDepthAvKnob, "Wobble depth CV gain");
   configParam(WobblePhaseOffsetKnob, 0.F, 1.F, 0.5F, "Wobble phase offset", "°", 0.F, 360.F, -180.F);
 
   configGain(XGainKnob, "X");

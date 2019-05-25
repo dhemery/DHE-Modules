@@ -83,6 +83,10 @@ namespace control {
 
 } // namespace control
 
+namespace attenuverter {
+  void config(rack::engine::Module *, int knobId, std::string const &knobName);
+}
+
 namespace button {
   void config(rack::engine::Module *module, int buttonId, std::string const &buttonName,
               std::array<std::string, 2> const &stateNames, int initialState);

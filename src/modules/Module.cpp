@@ -28,10 +28,6 @@ auto Module::modulated(int knobId, int cvId, int avId) -> float {
 
 void Module::configKnob(int index, const std::string &name) { configParam(index, 0.F, 1.F, 0.5F, name); }
 
-void Module::configCvGain(int index, const std::string &target) {
-  configParam(index, 0.F, 1.F, 0.5F, target + " CV gain", "%", 0.F, 200.F, -100.F);
-}
-
 void Module::configGain(int index, const std::string &target) {
   configParam(index, 0.F, 1.F, 0.5F, target + " gain", "%", 0.F, 200.F);
 }

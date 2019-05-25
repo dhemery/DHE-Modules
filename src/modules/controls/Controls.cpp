@@ -83,11 +83,17 @@ namespace control {
 
 } // namespace control
 
+namespace attenuverter {
+  void config(rack::engine::Module *module, int knobId, std::string const &knobName) {
+    module->configParam(knobId, 0.F, 1.F, 0.5F, knobName, "%", 0.F, 200.F, -100.F);
+  }
+} // namespace attenuverter
+
 namespace button {
   void config(rack::engine::Module *module, int buttonId, std::string const &buttonName,
               std::array<std::string, 2> const &stateNames, int initialState) {
     configFrameWidgetControl<2>(module, buttonId, buttonName, stateNames, initialState);
-  } // namespace button
+  }
 } // namespace button
 
 namespace toggle {

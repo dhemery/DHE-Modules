@@ -15,18 +15,18 @@ Tapers::Tapers() {
 
   level::configKnob(this, LevelKnob1, LevelRangeSwitch1, "Level 1");
   level::configSwitch(this, LevelRangeSwitch1, "Level 1 range", 0);
-  configCvGain(LevelAvKnob1, "Level 1");
+  attenuverter::config(this, LevelAvKnob1, "Level 1 CV gain");
 
   curvature::configKnob(this, CurveKnob1, "Curvature 1");
-  configCvGain(CurveAvKnob1, "Curvature 1");
+  attenuverter::config(this, CurveAvKnob1, "Curvature 1 CV gain");
   curvature::configSwitch(this, ShapeSwitch1, "Shape 1");
 
   level::configKnob(this, LevelKnob2, LevelRangeSwitch2, "Level 2");
   level::configSwitch(this, LevelRangeSwitch2, "Level 2 range", 0);
-  configCvGain(LevelAvKnob2, "Level 2");
+  attenuverter::config(this, LevelAvKnob2, "Level 2 CV gain");
 
   curvature::configKnob(this, Curve2Knob, "Curvature 2");
-  configCvGain(Curve2Av, "Curvature 2");
+  attenuverter::config(this, Curve2Av, "Curvature 2 CV gain");
   curvature::configSwitch(this, Shape2Switch, "Shape 2");
 
   using namespace control;

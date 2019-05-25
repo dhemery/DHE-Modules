@@ -14,17 +14,17 @@ Blossom::Blossom() {
   config(ParameterCount, InputCount, OutputCount);
 
   configParam(SpinKnob, 0.F, 1.F, 0.65F, "Spin", "", 0.F, 2.F, -1.F);
-  configCvGain(SpinAvKNob, "Spin");
+  attenuverter::config(this, SpinAvKNob, "Spin CV gain");
 
   configKnob(BounceRatioKnob, "Bounce ratio");
-  configCvGain(BounceRatioAvKnob, "Bounce ratio");
+  attenuverter::config(this, BounceRatioAvKnob, "Bounce ratio CV gain");
   toggle::config<2>(this, BounceRatioModeSwitch, "Bounce ratio mode", {"Quantized", "Free"}, 1);
 
   configParam(BounceDepthKnob, 0.F, 1.F, 0.5F, "Bounce depth", "%", 0.F, 100.F);
-  configCvGain(BounceDepthAvKnob, "Bounce depth");
+  attenuverter::config(this, BounceDepthAvKnob, "Bounce depth CV gain");
 
   configParam(PhaseKnob, 0.F, 1.F, 0.5F, "Bounce phase offset", "°", 0.F, 360.F, -180.F);
-  configCvGain(PhaseAvKnob, "Bounce phase offset");
+  attenuverter::config(this, PhaseAvKnob, "Bounce phase offset CV gain");
 
   configGain(XGainKnob, "X");
   level::configSwitch(this, XRangeSwitch, "X range", 0);

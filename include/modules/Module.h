@@ -10,7 +10,6 @@ public:
 
 protected:
   void configKnob(int index, const std::string &name);
-  void configCvGain(int index, const std::string &target);
   void configGain(int index, const std::string &target);
 };
 } // namespace dhe
