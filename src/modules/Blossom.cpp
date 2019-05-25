@@ -26,10 +26,10 @@ Blossom::Blossom() {
   configParam(PhaseKnob, 0.F, 1.F, 0.5F, "Bounce phase offset", "°", 0.F, 360.F, -180.F);
   attenuverter::config(this, PhaseAvKnob, "Bounce phase offset CV gain");
 
-  configGain(XGainKnob, "X");
+  gain_knob::config(this, XGainKnob, "X gain");
   level::configSwitch(this, XRangeSwitch, "X range", 0);
 
-  configGain(YGainKnob, "Y");
+  gain_knob::config(this, YGainKnob, "Y gain");
   level::configSwitch(this, YRangeSwitch, "Y range", 0);
 }
 

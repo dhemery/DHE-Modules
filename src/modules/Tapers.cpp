@@ -29,14 +29,12 @@ Tapers::Tapers() {
   attenuverter::config(this, Curve2Av, "Curvature 2 CV gain");
   curvature::configSwitch(this, Shape2Switch, "Shape 2");
 
-  using namespace control;
-
   levelRotation1 = knob::rotation(this, LevelKnob1, Level1Cv, LevelAvKnob1);
-  levelRange1 = range::selection<2>(this, LevelRangeSwitch1, level::ranges);
+  levelRange1 = control::range::selection<2>(this, LevelRangeSwitch1, level::ranges);
   taper1 = curvature::withSelectableShape(this, CurveKnob1, Curve1Cv, CurveAvKnob1, ShapeSwitch1);
 
   levelRotation2 = knob::rotation(this, LevelKnob2, Level2Cv, LevelAvKnob2);
-  levelRange2 = range::selection<2>(this, LevelRangeSwitch2, level::ranges);
+  levelRange2 = control::range::selection<2>(this, LevelRangeSwitch2, level::ranges);
   taper2 = curvature::withSelectableShape(this, Curve2Knob, Curve2Cv, Curve2Av, Shape2Switch);
 }
 

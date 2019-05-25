@@ -1,5 +1,6 @@
 #include "modules/Cubic.h"
 
+#include "modules/controls/Controls.h"
 #include "util/Gain.h"
 
 #include <string>
@@ -16,8 +17,8 @@ Cubic::Cubic() {
   configCoefficient(this, BCoefficientKnob, "x² coefficient");
   configCoefficient(this, CCoefficientKnob, "x¹ coefficient");
   configCoefficient(this, DCoefficientKnob, "x⁰ coefficient");
-  configGain(InputGainKnob, "Input");
-  configGain(OutputGainKnob, "Output");
+  gain_knob::config(this, InputGainKnob, "Input gain");
+  gain_knob::config(this, OutputGainKnob, "Output gain");
 }
 
 void Cubic::process(const ProcessArgs & /*args*/) {

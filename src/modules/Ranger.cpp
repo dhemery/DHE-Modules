@@ -19,7 +19,7 @@ Ranger::Ranger() {
   level::configSwitch(this, CwLimitRangeSwitch, "CW limit range", 0);
   attenuverter::config(this, CwLimitAvKnob, "CW limit CV gain");
 
-  level = control::knob::rotation(this, LevelKnob, LevelCvInput, LevelAvKnob);
+  level = knob::rotation(this, LevelKnob, LevelCvInput, LevelAvKnob);
   ccwLimit = level::withSelectableRange(this, CcwLimitKnob, CcwLimitCvInput, CcwLimitAvKnob, CcwLimitRangeSwitch);
   cwLimit = level::withSelectableRange(this, CwLimitKnob, CwLimitCvInput, CwLimitAvKnob, CwLimitRangeSwitch);
 }

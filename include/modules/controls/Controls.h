@@ -8,45 +8,6 @@ namespace dhe {
 class Range;
 
 namespace control {
-
-  namespace knob {
-    /**
-     * Creates a function that returns the rotation of a knob.
-     * @param knobId the ID of the knob param
-     */
-    auto rotation(rack::engine::Module *module, int knobId) -> std::function<float()>;
-
-    /**
-     * Creates a function that returns the modulated rotation of a knob. The amount of modulation is determined by the
-     * voltage of a CV input.
-     * @param knobId the ID of the knob param
-     * @param cvId the ID of the CV input
-     */
-    auto rotation(rack::engine::Module *module, int knobId, int cvId) -> std::function<float()>;
-
-    /**
-     * Creates a function that returns the modulated rotation of a knob. The amount of modulation is determined by the
-     * voltage of a CV input, multiplied by the value of an attenuverter.
-     * @param knobId the ID of the knob param
-     * @param cvId the ID of the CV input
-     * @param avId the ID of the attenuverter param
-     */
-    auto rotation(rack::engine::Module *module, int knobId, int cvId, int avId) -> std::function<float()>;
-
-    /**
-     * Creates a function that scales a rotation.
-     */
-    auto scaled(std::function<float()> const &rotation, std::function<float(float)> const &scale)
-        -> std::function<float()>;
-
-    /**
-     * Creates a function that scales a tapered rotation
-     */
-    auto scaled(std::function<float()> const &rotation, std::function<float(float)> const &taper,
-                std::function<float(float)> const &scale) -> std::function<float()>;
-
-  } // namespace knob
-
   namespace scale {
     /**
      * Creates a function that scales a rotation to the range supplied by the
@@ -83,9 +44,55 @@ namespace control {
 
 } // namespace control
 
+namespace knob {
+  /**
+   * Creates a function that returns the rotation of a knob.
+   * @param knobId the ID of the knob param
+   */
+  auto rotation(rack::engine::Module *module, int knobId) -> std::function<float()>;
+
+  /**
+   * Creates a function that returns the modulated rotation of a knob. The amount of modulation is determined by the
+   * voltage of a CV input.
+   * @param knobId the ID of the knob param
+   * @param cvId the ID of the CV input
+   */
+  auto rotation(rack::engine::Module *module, int knobId, int cvId) -> std::function<float()>;
+
+  /**
+   * Creates a function that returns the modulated rotation of a knob. The amount of modulation is determined by the
+   * voltage of a CV input, multiplied by the value of an attenuverter.
+   * @param knobId the ID of the knob param
+   * @param cvId the ID of the CV input
+   * @param avId the ID of the attenuverter param
+   */
+  auto rotation(rack::engine::Module *module, int knobId, int cvId, int avId) -> std::function<float()>;
+
+  /**
+   * Creates a function that scales a rotation.
+   */
+  auto scaled(std::function<float()> const &rotation, std::function<float(float)> const &scale)
+      -> std::function<float()>;
+
+  /**
+   * Creates a function that scales a tapered rotation
+   */
+  auto scaled(std::function<float()> const &rotation, std::function<float(float)> const &taper,
+              std::function<float(float)> const &scale) -> std::function<float()>;
+
+} // namespace knob
+
 namespace attenuverter {
-  void config(rack::engine::Module *, int knobId, std::string const &knobName);
-}
+  inline void config(rack::engine::Module *module, int knobId, std::string const &knobName) {
+    module->configParam(knobId, 0.F, 1.F, 0.5F, knobName, "%", 0.F, 200.F, -100.F);
+  }
+} // namespace attenuverter
+
+namespace gain_knob {
+  inline void config(rack::engine::Module *module, int knobId, std::string const &knobName) {
+    module->configParam(knobId, 0.F, 1.F, 0.5F, knobName, "%", 0.F, 200.F, 0.F);
+  }
+} // namespace gain_knob
 
 namespace button {
   void config(rack::engine::Module *module, int buttonId, std::string const &buttonName,

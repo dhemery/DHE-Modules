@@ -10,6 +10,5 @@ public:
 
 protected:
   void configKnob(int index, const std::string &name);
-  void configGain(int index, const std::string &target);
 };
 } // namespace dhe
