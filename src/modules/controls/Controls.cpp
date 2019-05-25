@@ -42,34 +42,32 @@ namespace button {
   }
 } // namespace button
 
-namespace control {
-  namespace range {
-    template <int N>
-    auto selection(rack::engine::Module *module, int switchId, std::array<Range const *, N> const &ranges)
-        -> std::function<Range const *()> {
-      auto switchParam = &module->params[switchId];
-      return [switchParam, ranges]() -> Range const * {
-        auto const selection = static_cast<int>(switchParam->getValue());
-        return ranges[selection];
-      };
-    }
+namespace range {
+  auto scaleTo(std::function<Range const *()> const &range) -> std::function<float(float)> {
+    return [range](float proportion) -> float { return range()->scale(proportion); };
+  }
 
-    template auto selection<2>(rack::engine::Module *module, int switchId, std::array<Range const *, 2> const &ranges)
-        -> std::function<Range const *()>;
-    template auto selection<3>(rack::engine::Module *module, int switchId, std::array<Range const *, 3> const &ranges)
-        -> std::function<Range const *()>;
-  } // namespace range
+  auto scaleTo(Range const &range) -> std::function<float(float)> {
+    return [range](float proportion) -> float { return range.scale(proportion); };
+  }
 
-  namespace scale {
-    auto toRange(std::function<Range const *()> const &range) -> std::function<float(float)> {
-      return [range](float proportion) -> float { return range()->scale(proportion); };
-    }
-    auto toRange(Range const &range) -> std::function<float(float)> {
-      return [range](float proportion) -> float { return range.scale(proportion); };
-    }
+  template <int N>
+  auto selector(rack::engine::Module *module, int switchId, std::array<Range const *, N> const &ranges)
+      -> std::function<Range const *()> {
+    auto switchParam = &module->params[switchId];
+    return [switchParam, ranges]() -> Range const * {
+      auto const selection = static_cast<int>(switchParam->getValue());
+      return ranges[selection];
+    };
+  }
 
-  } // namespace scale
-} // namespace control
+  template auto selector<2>(rack::engine::Module *module, int switchId, std::array<Range const *, 2> const &ranges)
+      -> std::function<Range const *()>;
+
+  template auto selector<3>(rack::engine::Module *module, int switchId, std::array<Range const *, 3> const &ranges)
+      -> std::function<Range const *()>;
+
+} // namespace range
 
 namespace gain {
   void config(rack::engine::Module *module, int knobId, std::string const &knobName) {

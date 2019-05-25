@@ -23,35 +23,6 @@ namespace button {
               std::array<std::string, 2> const &stateNames, int initialState);
 }
 
-namespace control {
-  namespace scale {
-    /**
-     * Creates a function that scales a rotation to the range supplied by the
-     * given function.
-     */
-    auto toRange(std::function<Range const *()> const &range) -> std::function<float(float)>;
-
-    /**
-     * Creates a function that scales a rotation to the given range.
-     */
-    auto toRange(Range const &range) -> std::function<float(float)>;
-
-  } // namespace scale
-
-  namespace range {
-    /**
-     * Creates a function that uses a switch to select a range.
-     * @tparam N the number of ranges in the array
-     * @param switchId the ID of the switch to select the range
-     * @param ranges an array of ranges to select from
-     */
-    template <int N>
-    auto selection(rack::engine::Module *module, int switchId, std::array<Range const *, N> const &ranges)
-        -> std::function<Range const *()>;
-  } // namespace range
-
-} // namespace control
-
 namespace gain {
   static constexpr auto range = Range{0.F, 2.F};
   static constexpr auto invertibleRange = Range{-2.F, 2.F};
@@ -100,6 +71,29 @@ namespace knob {
 
   void configPercentage(rack::engine::Module *module, int knobId, std::string const &knobName, Range const &range);
 } // namespace knob
+
+namespace range {
+  /**
+   * Creates a function that scales a proportion to the range supplied by the
+   * given function.
+   */
+  auto scaleTo(std::function<Range const *()> const &range) -> std::function<float(float)>;
+
+  /**
+   * Creates a function that scales a proportion to the given range.
+   */
+  auto scaleTo(Range const &range) -> std::function<float(float)>;
+
+  /**
+   * Creates a function that uses a switch to select a range.
+   * @tparam N the number of ranges in the array
+   * @param switchId the ID of the switch to select the range
+   * @param ranges an array of ranges to select from
+   */
+  template <int N>
+  auto selector(rack::engine::Module *module, int switchId, std::array<Range const *, N> const &ranges)
+      -> std::function<Range const *()>;
+} // namespace range
 
 namespace toggle {
   template <int N>

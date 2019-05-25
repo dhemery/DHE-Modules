@@ -31,19 +31,17 @@ namespace duration {
   }
 
   auto withFixedRange(rack::engine::Module *module, int knobId, Range const &range) -> std::function<float()> {
-    using namespace control;
     auto const durationRotation = knob::rotation(module, knobId);
     auto const durationKnobTaper = duration::rotationToTaper();
-    auto const toDurationRange = scale::toRange(range);
+    auto const toDurationRange = range::scaleTo(range);
     return knob::scaled(durationRotation, durationKnobTaper, toDurationRange);
   }
 
   auto withSelectableRange(rack::engine::Module *module, int knobId, int cvId, int switchId) -> std::function<float()> {
-    using namespace control;
     auto const durationRotation = knob::rotation(module, knobId, cvId);
     auto const durationKnobTaper = duration::rotationToTaper();
-    auto const selectedDurationRange = range::selection<3>(module, switchId, duration::ranges);
-    auto const toDurationRange = scale::toRange(selectedDurationRange);
+    auto const selectedDurationRange = range::selector<3>(module, switchId, duration::ranges);
+    auto const toDurationRange = range::scaleTo(selectedDurationRange);
     return knob::scaled(durationRotation, durationKnobTaper, toDurationRange);
   }
 

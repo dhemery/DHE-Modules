@@ -52,12 +52,12 @@ namespace level {
   auto withFixedRange(rack::engine::Module *module, int knobId, Range const &range) -> std::function<float()>;
 
   void configKnob(rack::engine::Module *module, int knobId, Range const &range, std::string const &name = "Level",
-                  float initialPosition = centeredRotation);
+                  float initialRotation = centeredRotation);
 
   void configKnob(rack::engine::Module *module, int knobId, int switchId, std::string const &name = "Level",
-                  float initialPosition = centeredRotation);
+                  float initialRotation = centeredRotation);
 
   void configSwitch(rack::engine::Module *module, int switchId, std::string const &name = "Level Range",
-                    int initialPosition = 1);
+                    int initialState = 1);
 } // namespace level
 } // namespace dhe
