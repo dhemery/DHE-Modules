@@ -26,5 +26,4 @@ auto Module::modulated(int knobId, int cvId, int avId) -> float {
   return rotation + avMultiplier(av) * cvOffset(cv);
 }
 
-void Module::configKnob(int index, const std::string &name) { configParam(index, 0.F, 1.F, 0.5F, name); }
 } // namespace dhe

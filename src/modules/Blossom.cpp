@@ -16,7 +16,7 @@ Blossom::Blossom() {
   configParam(SpinKnob, 0.F, 1.F, 0.65F, "Spin", "", 0.F, 2.F, -1.F);
   attenuverter::config(this, SpinAvKNob, "Spin CV gain");
 
-  configKnob(BounceRatioKnob, "Bounce ratio");
+  configParam(BounceRatioKnob, 0.F, 1.F, 0.5F, "Bounce ratio");
   attenuverter::config(this, BounceRatioAvKnob, "Bounce ratio CV gain");
   toggle::config<2>(this, BounceRatioModeSwitch, "Bounce ratio mode", {"Quantized", "Free"}, 1);
 
