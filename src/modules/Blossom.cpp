@@ -1,10 +1,14 @@
 #include "modules/Blossom.h"
 
 #include "modules/controls/Level.h"
+#include "modules/controls/ToggleControls.h"
 #include "util/Gain.h"
 #include "util/Sigmoid.h"
 
+#include <array>
+
 namespace dhe {
+static auto constexpr speedCurvature = 0.8f;
 
 Blossom::Blossom() {
   config(ParameterCount, InputCount, OutputCount);
@@ -14,6 +18,7 @@ Blossom::Blossom() {
 
   configKnob(BounceRatioKnob, "Bounce ratio");
   configCvGain(BounceRatioAvKnob, "Bounce ratio");
+  toggle::config<2>(this, BounceRatioModeSwitch, "Bounce ratio mode", {"Quantized", "Free"}, 1);
 
   configParam(BounceDepthKnob, 0.F, 1.F, 0.5F, "Bounce depth", "%", 0.F, 100.F);
   configCvGain(BounceDepthAvKnob, "Bounce depth");
@@ -26,8 +31,6 @@ Blossom::Blossom() {
 
   configGain(YGainKnob, "Y output");
   level::configSwitch(this, YRangeSwitch, "Y output range", 0);
-
-  configParam(BounceRatioFreedomSwitch, 0.0, 1.0, 1.0, "Bounce ratio quantization");
 }
 
 void Blossom::process(const ProcessArgs &args) {
@@ -73,7 +76,7 @@ auto Blossom::depth() -> float {
   return depthRange.clamp(rotation);
 }
 
-auto Blossom::isBounceFree() -> bool { return params[BounceRatioFreedomSwitch].getValue() > 0.1F; }
+auto Blossom::isBounceFree() -> bool { return params[BounceRatioModeSwitch].getValue() > 0.1F; }
 
 auto Blossom::phase() -> float {
   static constexpr auto phaseRange = Range{0.F, 1.F};

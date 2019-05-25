@@ -15,7 +15,7 @@ public:
     SpinAvKNob,
     BounceRatioKnob,
     BounceRatioAvKnob,
-    BounceRatioFreedomSwitch,
+    BounceRatioModeSwitch,
     BounceDepthKnob,
     BounceDepthAvKnob,
     PhaseKnob,
@@ -49,7 +49,6 @@ private:
   auto yGain() -> float;
   auto yOffset() -> float;
 
-  static auto constexpr speedCurvature = 0.8f;
   Rotor spinner{};
   Rotor bouncer{};
 };

@@ -20,7 +20,7 @@ BlossomPanel::BlossomPanel(Blossom *blossom) : Panel{blossom, hp} {
   input(column1, y, Blossom::BounceRatioCvInput);
   knob<TinyKnob>(column2, y, Blossom::BounceRatioAvKnob);
   knob<LargeKnob>(column3, y, Blossom::BounceRatioKnob);
-  toggle<2>(column4, y, Blossom::BounceRatioFreedomSwitch);
+  toggle<2>(column4, y, Blossom::BounceRatioModeSwitch);
 
   y += dy;
   input(column1, y, Blossom::BounceDepthCvInput);

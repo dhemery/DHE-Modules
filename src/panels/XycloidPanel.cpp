@@ -16,7 +16,7 @@ XycloidPanel::XycloidPanel(Xycloid *module) : Panel{module, hp} {
   input(column1, y, Xycloid::WobbleRatioCvInput);
   knob<TinyKnob>(column2, y, Xycloid::WobbleRatioAvKnob);
   knob<LargeKnob>(column3, y, Xycloid::WobbleRatioKnob);
-  toggle<2>(column4, y, Xycloid::WobbleFreedomSwitch);
+  toggle<2>(column4, y, Xycloid::WobbleRatioModeSwitch);
 
   y += dy;
   input(column1, y, Xycloid::WobbleDepthCvInput);

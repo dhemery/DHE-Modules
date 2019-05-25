@@ -24,7 +24,7 @@ public:
     YGainKnob,
     XRangeSwitch,
     YRangeSwitch,
-    WobbleFreedomSwitch,
+    WobbleRatioModeSwitch,
     WobblePhaseKnob,
     ParameterCount
   };
@@ -44,10 +44,7 @@ private:
   auto yGain() -> float;
   auto yOffset() -> float;
 
-  static constexpr auto throb_speed_knob_range = Range{-1.f, 1.f};
-  static constexpr auto wobble_depth_range = Range{0.f, 1.f};
-
-  float wobble_ratio_offset{0.f};
+  float wobbleRatioOffset{0.f};
   Rotor wobbler{};
   Rotor throbber{};
 };

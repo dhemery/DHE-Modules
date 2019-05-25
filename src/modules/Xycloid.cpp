@@ -1,12 +1,15 @@
 #include "modules/Xycloid.h"
 
 #include "modules/controls/Level.h"
+#include "modules/controls/ToggleControls.h"
 #include "util/Gain.h"
 #include "util/Sigmoid.h"
 
 #include <array>
 
 namespace dhe {
+static constexpr auto throbSpeedKnobRange = Range{-1.f, 1.f};
+static constexpr auto wobbleDepthRange = Range{0.f, 1.f};
 
 Xycloid::Xycloid() {
   config(ParameterCount, InputCount, OutputCount);
@@ -17,11 +20,10 @@ Xycloid::Xycloid() {
   configKnob(WobbleRatioKnob, "Wobble ratio");
   configCvGain(WobbleRatioAvKnob, "Wobble ratio");
   configParam(WobbleRatioRangeSwitch, 0.F, 2.F, 2.F, "Wobble direction");
+  toggle::config<2>(this, WobbleRatioModeSwitch, "Wobble ratio mode", {"Quantized", "Free"}, 1);
 
   configParam(WobbleDepthKnob, 0.F, 1.F, 0.5F, "Wobble depth", "%", 0.F, 100.F);
   configCvGain(WobbleDepthAvKnob, "Wobble depth");
-
-  configParam(WobbleFreedomSwitch, 0.F, 1.F, 1.F, "Wobble ration quantization");
   configParam(WobblePhaseKnob, 0.F, 1.F, 0.5F, "Wobble phase offset", "°", 0.F, 360.F, -180.F);
 
   configGain(XGainKnob, "X");
@@ -52,7 +54,7 @@ void Xycloid::process(const ProcessArgs &args) {
   outputs[YOutput].setVoltage(5.F * yGain() * (y + yOffset()));
 }
 
-auto Xycloid::wobbleRatioIsFree() -> bool { return params[WobbleFreedomSwitch].getValue() > 0.1F; }
+auto Xycloid::wobbleRatioIsFree() -> bool { return params[WobbleRatioModeSwitch].getValue() > 0.1F; }
 
 auto Xycloid::offset(int param) -> float {
   auto isUni = params[param].getValue() > 0.5F;
@@ -62,14 +64,14 @@ auto Xycloid::offset(int param) -> float {
 auto Xycloid::throbSpeed(float sampleTime) -> float {
   constexpr auto speedTaperCurvature = 0.8F;
   auto rotation = modulated(ThrobSpeedKnob, ThrobSpeedCvInput, ThrobSpeedAvKnob);
-  auto scaled = throb_speed_knob_range.scale(rotation);
+  auto scaled = throbSpeedKnobRange.scale(rotation);
   auto tapered = sigmoid::inverse(scaled, speedTaperCurvature);
   return -10.F * tapered * sampleTime;
 }
 
 auto Xycloid::wobbleDepth() -> float {
   auto rotation = modulated(WobbleDepthKnob, WobbleDepthCvInput, WobbleDepthAvKnob);
-  return wobble_depth_range.clamp(rotation);
+  return wobbleDepthRange.clamp(rotation);
 }
 
 auto Xycloid::wobblePhase() -> float {
@@ -93,7 +95,7 @@ auto Xycloid::wobbleRatioRange() -> const Range & {
 
 auto Xycloid::wobbleRatio() -> float {
   auto wobbleRatioAmount = modulated(WobbleRatioKnob, WobbleRatioCvInput, WobbleRatioAvKnob);
-  auto wobbleRatio = wobbleRatioRange().scale(wobbleRatioAmount) + wobble_ratio_offset;
+  auto wobbleRatio = wobbleRatioRange().scale(wobbleRatioAmount) + wobbleRatioOffset;
   return wobbleRatioIsFree() ? wobbleRatio : std::round(wobbleRatio);
 }
 
