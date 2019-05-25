@@ -9,6 +9,7 @@
 namespace dhe {
 static constexpr auto throbSpeedKnobRange = Range{-1.F, 1.F};
 static constexpr auto wobbleDepthRange = Range{0.F, 1.F};
+static auto constexpr phaseOffsetRange = Range{-180.F, 180.F};
 
 Xycloid::Xycloid() {
   config(ParameterCount, InputCount, OutputCount);
@@ -21,9 +22,9 @@ Xycloid::Xycloid() {
   toggle::config<3>(this, WobbleDirectionSwitch, "Wobble direction", {"Inward", "Both", "Outward"}, 1);
   toggle::config<2>(this, WobbleRatioModeSwitch, "Wobble ratio mode", {"Quantized", "Free"}, 1);
 
-  configParam(WobbleDepthKnob, 0.F, 1.F, 0.5F, "Wobble depth", "%", 0.F, 100.F);
+  knob::configPercentage(this, WobbleDepthKnob, "Wobble depth", {0.F, 1.F});
   attenuverter::config(this, WobbleDepthAvKnob, "Wobble depth CV gain");
-  configParam(WobblePhaseOffsetKnob, 0.F, 1.F, 0.5F, "Wobble phase offset", "°", 0.F, 360.F, -180.F);
+  knob::config(this, WobblePhaseOffsetKnob, "Wobble phase offset", "°", phaseOffsetRange);
 
   gain::config(this, XGainKnob, "X gain");
   level::configSwitch(this, XRangeSwitch, "X range", 0);

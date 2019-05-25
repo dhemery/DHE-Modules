@@ -8,6 +8,7 @@
 
 namespace dhe {
 static auto constexpr speedCurvature = 0.8F;
+static auto constexpr phaseOffsetRange = Range{-180.F, 180.F};
 
 Blossom::Blossom() {
   config(ParameterCount, InputCount, OutputCount);
@@ -19,11 +20,11 @@ Blossom::Blossom() {
   attenuverter::config(this, BounceRatioAvKnob, "Bounce ratio CV gain");
   toggle::config<2>(this, BounceRatioModeSwitch, "Bounce ratio mode", {"Quantized", "Free"}, 1);
 
-  configParam(BounceDepthKnob, 0.F, 1.F, 0.5F, "Bounce depth", "%", 0.F, 100.F);
+  knob::configPercentage(this, BounceDepthKnob, "Bounce depth", {0.F, 1.F});
   attenuverter::config(this, BounceDepthAvKnob, "Bounce depth CV gain");
 
-  configParam(PhaseKnob, 0.F, 1.F, 0.5F, "Bounce phase offset", "°", 0.F, 360.F, -180.F);
-  attenuverter::config(this, PhaseAvKnob, "Bounce phase offset CV gain");
+  knob::config(this, BouncePhaseOffsetKnob, "Bounce phase offset", "°", phaseOffsetRange);
+  attenuverter::config(this, BouncePhaseOffsetAvKnob, "Bounce phase offset CV gain");
 
   gain::config(this, XGainKnob, "X gain");
   level::configSwitch(this, XRangeSwitch, "X range", 0);
@@ -79,7 +80,7 @@ auto Blossom::isBounceFree() -> bool { return params[BounceRatioModeSwitch].getV
 
 auto Blossom::phase() -> float {
   static constexpr auto phaseRange = Range{0.F, 1.F};
-  auto rotation = modulated(PhaseKnob, PhaseCvInput, PhaseAvKnob);
+  auto rotation = modulated(BouncePhaseOffsetKnob, PhaseCvInput, BouncePhaseOffsetAvKnob);
   return phaseRange.clamp(rotation);
 }
 
