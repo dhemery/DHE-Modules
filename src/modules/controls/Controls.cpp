@@ -101,6 +101,8 @@ namespace toggle {
                           std::array<std::string, 2> const &stateNames, int initialState);
   template void config<3>(rack::engine::Module *module, int toggleId, std::string const &toggleName,
                           std::array<std::string, 3> const &stateNames, int initialState);
+  template void config<4>(rack::engine::Module *module, int toggleId, std::string const &toggleName,
+                          std::array<std::string, 4> const &stateNames, int initialState);
 } // namespace toggle
 
 } // namespace dhe

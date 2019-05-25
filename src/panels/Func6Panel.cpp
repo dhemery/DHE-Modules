@@ -26,9 +26,9 @@ Func6Panel::Func6Panel(Func6 *func6) : Panel{func6, hp} {
     knob<LargeKnob>(column3, y, Func6::OperandKnob + row);
     output(column5, portY, Func6::FuncOutput + row);
 
-    auto additionRangeStepper = toggle<AdditionRangeStepper>(column4, y, Func6::AdditionRangeSwitch + row);
+    auto additionRangeStepper = toggle<AdditionRangeStepper>(column4, y, Func6::OffsetRangeSwitch + row);
     auto multiplicationRangeStepper
-        = toggle<MultiplicationRangeStepper>(column4, y, Func6::MultiplicationRangeSwitch + row);
+        = toggle<MultiplicationRangeStepper>(column4, y, Func6::MultiplierRangeSwitch + row);
     multiplicationRangeStepper->visible = false;
 
     auto updateRangeStepperVisibility = [additionRangeStepper, multiplicationRangeStepper](bool isMultiply) {

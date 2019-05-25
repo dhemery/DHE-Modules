@@ -15,9 +15,9 @@ public:
   enum ParameterIds {
     OperandKnob,
     OperationSwitch = OperandKnob + channelCount,
-    AdditionRangeSwitch = OperationSwitch + channelCount,
-    MultiplicationRangeSwitch = AdditionRangeSwitch + channelCount,
-    ParameterCount = MultiplicationRangeSwitch + channelCount
+    OffsetRangeSwitch = OperationSwitch + channelCount,
+    MultiplierRangeSwitch = OffsetRangeSwitch + channelCount,
+    ParameterCount = MultiplierRangeSwitch + channelCount
   };
 
   enum InputIds { FuncInput, InputCount = FuncInput + channelCount };

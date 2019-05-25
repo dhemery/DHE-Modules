@@ -25,8 +25,8 @@ FuncPanel::FuncPanel(Func *func) : Panel{func, hp} {
   knob<LargeKnob>(x, row3, Func::OperandKnob);
   output(x, row6, Func::FuncOutput);
 
-  auto additionRangeStepper = toggle<AdditionRangeStepper>(x, row4, Func::AdditionRangeSwitch);
-  auto multiplicationRangeStepper = toggle<MultiplicationRangeStepper>(x, row4, Func::MultiplicationRangeSwitch);
+  auto additionRangeStepper = toggle<AdditionRangeStepper>(x, row4, Func::AddendRangeSwitch);
+  auto multiplicationRangeStepper = toggle<MultiplicationRangeStepper>(x, row4, Func::MultiplicandRangeSwitch);
   multiplicationRangeStepper->visible = false;
 
   auto operatorSwitch = toggle<OperatorSwitch>(x, row2, Func::OperationSwitch);
