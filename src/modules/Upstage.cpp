@@ -1,5 +1,6 @@
 #include "modules/Upstage.h"
 
+#include "modules/controls/Controls.h"
 #include "modules/controls/Level.h"
 
 namespace dhe {
@@ -11,8 +12,8 @@ Upstage::Upstage() {
   level::configSwitch(this, LevelRangeSwitch);
   level = level::withSelectableRange(this, LevelKnob, LevelCvInput, LevelRangeSwitch);
 
-  configParam(TriggerButton, 0.F, 1.F, 0.F, "Trigger");
-  configParam(WaitButton, 0.F, 1.F, 0.F, "Wait");
+  button::config(this, TriggerButton, "TRIG", {"From input", "High"}, 0);
+  button::config(this, WaitButton, "WAIT", {"From input", "High"}, 0);
 }
 
 void Upstage::process(const ProcessArgs & /*args*/) {

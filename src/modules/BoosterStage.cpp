@@ -36,13 +36,10 @@ BoosterStage::BoosterStage() :
   curvature::configSwitch(this, ShapeSwitch);
   taper = curvature::withSelectableShape(this, CurveKnob, CurveCvInput, ShapeSwitch);
 
-  auto const outputButtonPositionNames = std::array<std::string, 2>{"Generated", "On"};
-  auto const inputButtonPositionNames = std::array<std::string, 2>{"From port", "On"};
-
-  button::config(this, DeferButton, "Defer", inputButtonPositionNames, 0);
-  button::config(this, TriggerButton, "Trigger", inputButtonPositionNames, 0);
-  button::config(this, ActiveButton, "Active", outputButtonPositionNames, 0);
-  button::config(this, EocButton, "EOC", outputButtonPositionNames, 0);
+  button::config(this, DeferButton, "DEFER", {"From input", "High"}, 0);
+  button::config(this, TriggerButton, "TRIG", {"From input", "High"}, 0);
+  button::config(this, ActiveButton, "ACTIVE", {"Generated", "High"}, 0);
+  button::config(this, EocButton, "EOC", {"Generated", "High"}, 0);
 
   stateMachine.start();
 }
