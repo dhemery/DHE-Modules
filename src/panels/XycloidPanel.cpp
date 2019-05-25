@@ -22,13 +22,13 @@ XycloidPanel::XycloidPanel(Xycloid *module) : Panel{module, hp} {
   input(column1, y, Xycloid::WobbleDepthCvInput);
   knob<TinyKnob>(column2, y, Xycloid::WobbleDepthAvKnob);
   knob<LargeKnob>(column3, y, Xycloid::WobbleDepthKnob);
-  toggle<3>(column4, y, Xycloid::WobbleRatioRangeSwitch);
+  toggle<3>(column4, y, Xycloid::WobbleDirectionSwitch);
 
   y += dy;
   input(column1, y, Xycloid::ThrobSpeedCvInput);
   knob<TinyKnob>(column2, y, Xycloid::ThrobSpeedAvKnob);
   knob<LargeKnob>(column3, y, Xycloid::ThrobSpeedKnob);
-  knob<SmallKnob>(column4, y, Xycloid::WobblePhaseKnob);
+  knob<SmallKnob>(column4, y, Xycloid::WobblePhaseOffsetKnob);
 
   y = 82.F;
   dy = 15.F;

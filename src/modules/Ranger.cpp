@@ -11,13 +11,13 @@ Ranger::Ranger() {
   configParam(LevelKnob, 0.F, 1.F, 0.5F, "Level", "%", 0.F, 100.F, 0.F);
   configCvGain(LevelAvKnob, "Level");
 
-  level::configKnob(this, CcwLimitKnob, CcwLimitRangeSwitch, "CCW Limit", 0.F);
-  level::configSwitch(this, CcwLimitRangeSwitch, "CCW Limit Range", 0);
-  configCvGain(CcwLimitAvKnob, "CCW Limit");
+  level::configKnob(this, CcwLimitKnob, CcwLimitRangeSwitch, "CCW limit", 0.F);
+  level::configSwitch(this, CcwLimitRangeSwitch, "CCW limit range", 0);
+  configCvGain(CcwLimitAvKnob, "CCW limit");
 
-  level::configKnob(this, CwLimitKnob, CwLimitRangeSwitch, "CW Limit", 1.F);
-  level::configSwitch(this, CwLimitRangeSwitch, "CW Limit Range", 0);
-  configCvGain(CwLimitAvKnob, "CW Limit");
+  level::configKnob(this, CwLimitKnob, CwLimitRangeSwitch, "CW limit", 1.F);
+  level::configSwitch(this, CwLimitRangeSwitch, "CW limit range", 0);
+  configCvGain(CwLimitAvKnob, "CW limit");
 
   level = control::knob::rotation(this, LevelKnob, LevelCvInput, LevelAvKnob);
   ccwLimit = level::withSelectableRange(this, CcwLimitKnob, CcwLimitCvInput, CcwLimitAvKnob, CcwLimitRangeSwitch);

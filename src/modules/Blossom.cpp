@@ -26,11 +26,11 @@ Blossom::Blossom() {
   configParam(PhaseKnob, 0.F, 1.F, 0.5F, "Bounce phase offset", "°", 0.F, 360.F, -180.F);
   configCvGain(PhaseAvKnob, "Bounce phase offset");
 
-  configGain(XGainKnob, "X output");
-  level::configSwitch(this, XRangeSwitch, "X output range", 0);
+  configGain(XGainKnob, "X");
+  level::configSwitch(this, XRangeSwitch, "X range", 0);
 
-  configGain(YGainKnob, "Y output");
-  level::configSwitch(this, YRangeSwitch, "Y output range", 0);
+  configGain(YGainKnob, "Y");
+  level::configSwitch(this, YRangeSwitch, "Y range", 0);
 }
 
 void Blossom::process(const ProcessArgs &args) {

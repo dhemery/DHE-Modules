@@ -15,7 +15,7 @@ public:
   enum ParameterIds {
     WobbleRatioKnob,
     WobbleRatioAvKnob,
-    WobbleRatioRangeSwitch,
+    WobbleDirectionSwitch,
     WobbleDepthKnob,
     WobbleDepthAvKnob,
     ThrobSpeedKnob,
@@ -25,7 +25,7 @@ public:
     XRangeSwitch,
     YRangeSwitch,
     WobbleRatioModeSwitch,
-    WobblePhaseKnob,
+    WobblePhaseOffsetKnob,
     ParameterCount
   };
   enum InputIds { WobbleRatioCvInput, WobbleDepthCvInput, ThrobSpeedCvInput, XGainCvInput, YGainCvInput, InputCount };

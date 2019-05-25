@@ -19,18 +19,18 @@ Xycloid::Xycloid() {
 
   configKnob(WobbleRatioKnob, "Wobble ratio");
   configCvGain(WobbleRatioAvKnob, "Wobble ratio");
-  configParam(WobbleRatioRangeSwitch, 0.F, 2.F, 2.F, "Wobble direction");
+  toggle::config<3>(this, WobbleDirectionSwitch, "Wobble direction", {"Inward", "Both", "Outward"}, 1);
   toggle::config<2>(this, WobbleRatioModeSwitch, "Wobble ratio mode", {"Quantized", "Free"}, 1);
 
   configParam(WobbleDepthKnob, 0.F, 1.F, 0.5F, "Wobble depth", "%", 0.F, 100.F);
   configCvGain(WobbleDepthAvKnob, "Wobble depth");
-  configParam(WobblePhaseKnob, 0.F, 1.F, 0.5F, "Wobble phase offset", "°", 0.F, 360.F, -180.F);
+  configParam(WobblePhaseOffsetKnob, 0.F, 1.F, 0.5F, "Wobble phase offset", "°", 0.F, 360.F, -180.F);
 
   configGain(XGainKnob, "X");
-  level::configSwitch(this, XRangeSwitch, "X output range", 0);
+  level::configSwitch(this, XRangeSwitch, "X range", 0);
 
   configGain(YGainKnob, "Y");
-  level::configSwitch(this, YRangeSwitch, "Y output range", 0);
+  level::configSwitch(this, YRangeSwitch, "Y range", 0);
 }
 
 void Xycloid::process(const ProcessArgs &args) {
@@ -75,7 +75,7 @@ auto Xycloid::wobbleDepth() -> float {
 }
 
 auto Xycloid::wobblePhase() -> float {
-  auto rotation = params[WobblePhaseKnob].getValue();
+  auto rotation = params[WobblePhaseOffsetKnob].getValue();
   return rotation - 0.5F;
 }
 
@@ -87,7 +87,7 @@ auto Xycloid::wobbleRatioRange() -> const Range & {
   static constexpr std::array<Range, 3> wobbleRatioRanges{inwardWobbleRatioRange, bidirectionalWobbleRatioRange,
                                                           outwardWobbleRatioRange};
 
-  const auto param = params[WobbleRatioRangeSwitch].getValue();
+  const auto param = params[WobbleDirectionSwitch].getValue();
   const auto selection = static_cast<int>(param);
 
   return wobbleRatioRanges[selection];

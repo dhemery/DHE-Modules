@@ -7,15 +7,15 @@
 namespace dhe {
 
 void configCoefficient(rack::engine::Module *module, int param, std::string const &name) {
-  module->configParam(param, 0.F, 1.F, 0.5F, name + " coefficient", "", 0.F, 4.F, -2.F);
+  module->configParam(param, 0.F, 1.F, 0.5F, name, "", 0.F, 4.F, -2.F);
 }
 
 Cubic::Cubic() {
   config(ParameterCount, InputCount, OutputCount);
-  configCoefficient(this, ACoefficientKnob, "x^3");
-  configCoefficient(this, BCoefficientKnob, "x^2");
-  configCoefficient(this, CCoefficientKnob, "x^1");
-  configCoefficient(this, DCoefficientKnob, "x^0");
+  configCoefficient(this, ACoefficientKnob, "x³ coefficient");
+  configCoefficient(this, BCoefficientKnob, "x² coefficient");
+  configCoefficient(this, CCoefficientKnob, "x¹ coefficient");
+  configCoefficient(this, DCoefficientKnob, "x⁰ coefficient");
   configGain(InputGainKnob, "Input");
   configGain(OutputGainKnob, "Output");
 }
