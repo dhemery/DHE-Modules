@@ -42,7 +42,7 @@ auto Cubic::coefficient(Cubic::ParameterIds knobParam, Cubic::InputIds cvParam) 
 }
 
 auto Cubic::gain(const Cubic::ParameterIds knobParam, const Cubic::InputIds cvInput) -> float {
-  return Gain::multiplier(modulated(knobParam, cvInput));
+  return gain::multiplier(modulated(knobParam, cvInput));
 }
 
 auto Cubic::mainIn() -> float { return inputs[CubicInput].getVoltage(); }

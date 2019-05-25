@@ -83,9 +83,9 @@ auto Blossom::phase() -> float {
 
 auto Blossom::xOffset() -> float { return offset(XRangeSwitch); }
 
-auto Blossom::xGain() -> float { return Gain::multiplier(modulated(XGainKnob, XGainCvInput)); }
+auto Blossom::xGain() -> float { return gain::multiplier(modulated(XGainKnob, XGainCvInput)); }
 
-auto Blossom::yGain() -> float { return Gain::multiplier(modulated(YGainKnob, YGainCvInput)); }
+auto Blossom::yGain() -> float { return gain::multiplier(modulated(YGainKnob, YGainCvInput)); }
 
 auto Blossom::yOffset() -> float { return offset(YRangeSwitch); }
 

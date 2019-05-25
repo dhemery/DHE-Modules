@@ -97,11 +97,11 @@ auto Xycloid::wobbleRatio() -> float {
   return wobbleRatioIsFree() ? wobbleRatio : std::round(wobbleRatio);
 }
 
-auto Xycloid::xGain() -> float { return Gain::multiplier(modulated(XGainKnob, XGainCvInput)); }
+auto Xycloid::xGain() -> float { return gain::multiplier(modulated(XGainKnob, XGainCvInput)); }
 
 auto Xycloid::xOffset() -> float { return offset(XRangeSwitch); }
 
-auto Xycloid::yGain() -> float { return Gain::multiplier(modulated(YGainKnob, YGainCvInput)); }
+auto Xycloid::yGain() -> float { return gain::multiplier(modulated(YGainKnob, YGainCvInput)); }
 
 auto Xycloid::yOffset() -> float { return offset(YRangeSwitch); }
 

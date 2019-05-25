@@ -55,14 +55,17 @@ namespace level {
       setValue(normalized);
     }
 
+    void setRangeSupplier(std::function<Range const *()> const &supplier) { this->range = supplier; }
+
+  private:
     std::function<Range const *()> range;
   };
 
-  void configKnob(rack::engine::Module *module, int knobId, std::function<Range const *()> const &range,
+  void configKnob(rack::engine::Module *module, int knobId, std::function<Range const *()> const &rangeSupplier,
                   std::string const &name, float initialPosition) {
     module->configParam<KnobParamQuantity>(knobId, 0.F, 1.F, initialPosition, name, " V");
     auto knobParamQuantity = dynamic_cast<KnobParamQuantity *>(module->paramQuantities[knobId]);
-    knobParamQuantity->range = range;
+    knobParamQuantity->setRangeSupplier(rangeSupplier);
   }
 
   void configKnob(rack::engine::Module *module, int knobId, int switchId, std::string const &name,
@@ -78,7 +81,7 @@ namespace level {
   }
 
   void configSwitch(rack::engine::Module *module, int switchId, std::string const &name, int initialPosition) {
-    module->configParam<RangeSwitchParamQuantity>(switchId, 0.F, 1.F, initialPosition, name);
+    module->configParam<RangeSwitchParamQuantity>(switchId, 0.F, 1.F, (float) initialPosition, name);
   }
 } // namespace level
 } // namespace dhe

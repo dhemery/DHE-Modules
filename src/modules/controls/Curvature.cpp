@@ -71,7 +71,6 @@ namespace curvature {
   };
 
   class KnobParamQuantity : public rack::engine::ParamQuantity {
-  public:
     auto getDisplayValue() -> float override {
       static auto const curvatureTaperFor = curvature::rotationToCurvature();
       return curvatureTaperFor(getValue());
@@ -88,7 +87,7 @@ namespace curvature {
   }
 
   void configSwitch(rack::engine::Module *module, int switchId, std::string const &name, int initialPosition) {
-    module->configParam<ShapeSwitchParamQuantity>(switchId, 0.F, 1.F, initialPosition, name);
+    module->configParam<ShapeSwitchParamQuantity>(switchId, 0.F, 1.F, (float) initialPosition, name);
   }
 } // namespace curvature
 } // namespace dhe

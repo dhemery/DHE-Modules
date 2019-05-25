@@ -1,4 +1,5 @@
 #include "modules/func/FuncChannel.h"
+#include "modules/controls/Level.h"
 
 namespace dhe {
 
@@ -10,10 +11,10 @@ static constexpr auto halfBipolarRange = Range{0.F, 5.F};
 static constexpr auto invertibleUnipolarRange = Range{-10.F, 10.F};
 
 const std::array<Range const *, 4> FuncChannel::multiplicationRanges{&attenuationRange, &invertibleAttenuationRange,
-                                                                     &Gain::range, &invertibleGainRange};
+                                                                     &gain::range, &invertibleGainRange};
 
-const std::array<Range const *, 4> FuncChannel::additionRanges{&halfBipolarRange, &signal::bipolarRange,
-                                                               &signal::unipolarRange, &invertibleUnipolarRange};
+const std::array<Range const *, 4> FuncChannel::additionRanges{&halfBipolarRange, &level::bipolarRange,
+                                                               &level::unipolarRange, &invertibleUnipolarRange};
 
 FuncChannel::FuncChannel(rack::engine::Module *module, int inputIndex, int operandIndex, int outputIndex,
                          int operatorSwitchIndex, int additionRangeSwitchIndex, int multiplicationRangeSwitchIndex) :

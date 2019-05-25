@@ -6,21 +6,21 @@ namespace dhe {
 Func6Panel::Func6Panel(Func6 *func6) : Panel{func6, hp} {
   auto widgetRightEdge = width();
 
-  auto column3 = widgetRightEdge / 2.F;
-  auto column1 = widgetRightEdge / 7.F;
-  auto column5 = widgetRightEdge - column1;
-  auto column2 = (column3 - column1) / 2.F + column1;
-  auto column4 = widgetRightEdge - column2;
+  auto const column3 = widgetRightEdge / 2.F;
+  auto const column1 = widgetRightEdge / 7.F;
+  auto const column5 = widgetRightEdge - column1;
+  auto const column2 = (column3 - column1) / 2.F + column1;
+  auto const column4 = widgetRightEdge - column2;
 
-  auto top = 23.F;
-  auto bottom = 108.F;
-  auto rowCount = 6;
-  auto rowSpacing = (bottom - top) / (rowCount - 1);
-  auto portOffset = 1.25F;
+  auto constexpr top = 23.F;
+  auto constexpr bottom = 108.F;
+  auto constexpr rowCount = 6.F;
+  auto constexpr rowSpacing = (bottom - top) / (rowCount - 1.F);
+  auto constexpr portOffset = 1.25F;
 
   for (auto row = 0; row < rowCount; row++) {
-    auto y = top + row * rowSpacing;
-    auto portY = y + portOffset;
+    auto const y = top + row * rowSpacing;
+    auto const portY = y + portOffset;
 
     input(column1, portY, Func6::FuncInput + row);
     knob<LargeKnob>(column3, y, Func6::OperandKnob + row);

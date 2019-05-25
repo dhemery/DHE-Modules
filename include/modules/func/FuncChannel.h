@@ -1,7 +1,6 @@
 #pragma once
 
 #include "util/Gain.h"
-#include "util/Signal.h"
 
 #include <array>
 #include <engine/Module.hpp>

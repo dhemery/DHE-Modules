@@ -56,7 +56,8 @@ namespace duration {
     }
   };
 
-  struct KnobParamQuantity : public rack::engine::ParamQuantity {
+  class KnobParamQuantity : public rack::engine::ParamQuantity {
+  public:
     auto getDisplayValue() -> float override {
       static auto const durationTaperFor = duration::rotationToTaper();
       auto const rotation = getValue();
@@ -69,14 +70,17 @@ namespace duration {
       setValue(rotationFor(durationTaper));
     }
 
-    std::function<Range const *()> range{};
+    void setRangeSupplier(std::function<Range const *()> const &supplier) { this->range = supplier; }
+
+  private:
+    std::function<Range const *()> range;
   };
 
   void configKnob(rack::engine::Module *module, int knobId, std::function<Range const *()> const &getRange,
                   std::string const &name, float initialPosition) {
     module->configParam<KnobParamQuantity>(knobId, 0.F, 1.F, initialPosition, name, " s");
     auto knobParamQuantity = dynamic_cast<KnobParamQuantity *>(module->paramQuantities[knobId]);
-    knobParamQuantity->range = getRange;
+    knobParamQuantity->setRangeSupplier(getRange);
   }
 
   void configKnob(rack::engine::Module *module, int knobId, Range const &range, std::string const &name,
@@ -96,7 +100,7 @@ namespace duration {
   }
 
   void configSwitch(rack::engine::Module *module, int switchId, std::string const &name, int initialPosition) {
-    module->configParam<RangeSwitchParamQuantity>(switchId, 0.F, 2.F, initialPosition, name);
+    module->configParam<RangeSwitchParamQuantity>(switchId, 0.F, 2.F, (float) initialPosition, name);
   }
 } // namespace duration
 } // namespace dhe

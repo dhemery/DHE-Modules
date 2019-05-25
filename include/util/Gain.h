@@ -3,7 +3,7 @@
 #include "util/Range.h"
 
 namespace dhe {
-namespace Gain {
+namespace gain {
 
   static constexpr auto range = Range{0.f, 2.f};
 

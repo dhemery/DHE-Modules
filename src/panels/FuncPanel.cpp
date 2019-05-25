@@ -5,21 +5,21 @@
 namespace dhe {
 
 FuncPanel::FuncPanel(Func *func) : Panel{func, hp} {
-  auto widgetRightEdge = width();
+  auto const widgetRightEdge = width();
 
-  auto x = widgetRightEdge / 2.F;
+  auto const x = widgetRightEdge / 2.F;
 
-  auto top = 23.F;
-  auto bottom = 108.F;
-  auto rowCount = 6;
-  auto rowSpacing = (bottom - top) / (rowCount - 1);
-  auto portOffset = 1.25F;
+  auto constexpr top = 23.F;
+  auto constexpr bottom = 108.F;
+  auto constexpr rowCount = 6.F;
+  auto constexpr rowSpacing = (bottom - top) / (rowCount - 1.F);
+  auto constexpr portOffset = 1.25F;
 
-  auto row1 = top + portOffset;
-  auto row2 = top + rowSpacing;
-  auto row3 = top + rowSpacing * 2;
-  auto row4 = top + rowSpacing * 3;
-  auto row6 = top + rowSpacing * 5 + portOffset;
+  auto constexpr row1 = top + portOffset;
+  auto constexpr row2 = top + rowSpacing;
+  auto constexpr row3 = top + rowSpacing * 2;
+  auto constexpr row4 = top + rowSpacing * 3;
+  auto constexpr row6 = top + rowSpacing * 5 + portOffset;
 
   input(x, row1, Func::FuncInput);
   knob<LargeKnob>(x, row3, Func::OperandKnob);
