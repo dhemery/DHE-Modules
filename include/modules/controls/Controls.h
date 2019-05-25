@@ -79,6 +79,5 @@ namespace control {
     }
 
   } // namespace range
-
 } // namespace control
 } // namespace dhe

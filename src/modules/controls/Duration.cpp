@@ -1,6 +1,7 @@
 #include "modules/controls/Duration.h"
 
 #include "modules/controls/Controls.h"
+#include "modules/controls/ToggleControls.h"
 #include "util/Sigmoid.h"
 
 #include <engine/Module.hpp>
@@ -47,15 +48,6 @@ namespace duration {
     return knob::scaled(durationRotation, durationKnobTaper, toDurationRange);
   }
 
-  class RangeSwitchParamQuantity : public rack::engine::ParamQuantity {
-  public:
-    auto getDisplayValueString() -> std::string override {
-      static auto const descriptions = std::array<std::string, 3>{"0.001–1.0 s", "0.01–10.0 s", "0.1–100.0 s"};
-      auto const selection = static_cast<int>(getValue());
-      return descriptions[selection];
-    }
-  };
-
   class KnobParamQuantity : public rack::engine::ParamQuantity {
   public:
     auto getDisplayValue() -> float override {
@@ -100,7 +92,8 @@ namespace duration {
   }
 
   void configSwitch(rack::engine::Module *module, int switchId, std::string const &name, int initialPosition) {
-    module->configParam<RangeSwitchParamQuantity>(switchId, 0.F, 2.F, (float) initialPosition, name);
+    static auto const positionNames = std::array<std::string, 3>{"0.001–1.0 s", "0.01–10.0 s", "0.1–100.0 s"};
+    toggle::config<3>(module, switchId, name, positionNames, initialPosition);
   }
 } // namespace duration
 } // namespace dhe

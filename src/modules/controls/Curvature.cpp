@@ -1,6 +1,7 @@
 #include "modules/controls/Curvature.h"
 
 #include "modules/controls/Controls.h"
+#include "modules/controls/ToggleControls.h"
 #include "util/Sigmoid.h"
 
 #include <engine/Module.hpp>
@@ -65,11 +66,6 @@ namespace curvature {
     };
   }
 
-  class ShapeSwitchParamQuantity : public rack::engine::ParamQuantity {
-  public:
-    auto getDisplayValueString() -> std::string override { return getValue() < 0.5 ? "J" : "S"; }
-  };
-
   class KnobParamQuantity : public rack::engine::ParamQuantity {
     auto getDisplayValue() -> float override {
       static auto const curvatureTaperFor = curvature::rotationToCurvature();
@@ -87,7 +83,8 @@ namespace curvature {
   }
 
   void configSwitch(rack::engine::Module *module, int switchId, std::string const &name, int initialPosition) {
-    module->configParam<ShapeSwitchParamQuantity>(switchId, 0.F, 1.F, (float) initialPosition, name);
+    static auto const positionNames = std::array<std::string, 2>{"J", "S"};
+    toggle::config<2>(module, switchId, name, positionNames, initialPosition);
   }
 } // namespace curvature
 } // namespace dhe

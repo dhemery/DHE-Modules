@@ -1,6 +1,7 @@
 #include "modules/controls/Level.h"
 
 #include "modules/controls/Controls.h"
+#include "modules/controls/ToggleControls.h"
 
 #include <engine/Module.hpp>
 #include <engine/ParamQuantity.hpp>
@@ -37,11 +38,6 @@ namespace level {
     auto const rotation = knob::rotation(module, knobId, cvId, avId);
     return knob::scaled(rotation, toSelectedRange(module, switchId));
   }
-
-  class RangeSwitchParamQuantity : public rack::engine::ParamQuantity {
-  public:
-    auto getDisplayValueString() -> std::string override { return getValue() < 0.5F ? "±5 V" : "0–10 V"; }
-  };
 
   class KnobParamQuantity : public rack::engine::ParamQuantity {
   public:
@@ -81,7 +77,8 @@ namespace level {
   }
 
   void configSwitch(rack::engine::Module *module, int switchId, std::string const &name, int initialPosition) {
-    module->configParam<RangeSwitchParamQuantity>(switchId, 0.F, 1.F, (float) initialPosition, name);
+    static auto const positionNames = std::array<std::string, 2>{"±5 V", "0–10 V"};
+    toggle::config<2>(module, switchId, name, positionNames, initialPosition);
   }
 } // namespace level
 } // namespace dhe
