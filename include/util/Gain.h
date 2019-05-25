@@ -9,5 +9,5 @@ namespace gain {
 
   static inline auto multiplier(float gainAmount) -> float { return range.scale(gainAmount); }
 
-} // namespace Gain
+} // namespace gain
 } // namespace dhe
