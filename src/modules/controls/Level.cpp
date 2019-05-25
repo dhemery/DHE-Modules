@@ -1,7 +1,6 @@
 #include "modules/controls/Level.h"
 
 #include "modules/controls/Controls.h"
-#include "modules/controls/ToggleControls.h"
 
 #include <engine/Module.hpp>
 #include <engine/ParamQuantity.hpp>

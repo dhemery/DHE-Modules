@@ -1,6 +1,6 @@
 #include "modules/Func6.h"
 
-#include "modules/controls/ToggleControls.h"
+#include "modules/controls/Controls.h"
 
 #include <string>
 
@@ -11,7 +11,7 @@ Func6::Func6() {
     auto channelNumber = std::to_string(i + 1);
 
     configKnob(OperandKnob + i, "Operand " + channelNumber);
-    toggle::config<2>(this, OperationSwitch + i, "Operation " + channelNumber, {"Add", "Multiply"});
+    toggle::config<2>(this, OperationSwitch + i, "Operation " + channelNumber, {"Add", "Multiply"}, 0);
     configParam(AdditionRangeSwitch + i, 0.F, 3.F, 1.F, "Addition operand " + channelNumber + " range");
     configParam(MultiplicationRangeSwitch + i, 0.F, 3.F, 2.F, "Multiplication operand " + channelNumber + " range");
 

@@ -1,7 +1,7 @@
 #include "modules/Hostage.h"
 
+#include "modules/controls/Controls.h"
 #include "modules/controls/Duration.h"
-#include "modules/controls/ToggleControls.h"
 
 namespace dhe {
 Hostage::Hostage() :
@@ -15,7 +15,7 @@ Hostage::Hostage() :
   duration::configSwitch(this, DurationRangeSwitch);
   duration = duration::withSelectableRange(this, DurationKnob, DurationCvInput, DurationRangeSwitch);
 
-  toggle::config<2>(this, ModeSwitch, "Mode", {"Hold", "Sustain"});
+  toggle::config<2>(this, ModeSwitch, "Mode", {"Hold", "Sustain"}, 0);
 
   stateMachine.start();
 }

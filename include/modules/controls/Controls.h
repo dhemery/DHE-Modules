@@ -2,6 +2,7 @@
 #include <array>
 #include <engine/Module.hpp>
 #include <functional>
+#include <string>
 
 namespace dhe {
 class Range;
@@ -79,5 +80,18 @@ namespace control {
     }
 
   } // namespace range
+
 } // namespace control
+
+namespace button {
+  void config(rack::engine::Module *module, int buttonId, std::string const &buttonName,
+              std::array<std::string, 2> const &stateNames, int initialState);
+}
+
+namespace toggle {
+  template <int N>
+  void config(rack::engine::Module *module, int toggleId, std::string const &toggleName,
+              std::array<std::string, N> const &stateNames, int initialState);
+}
+
 } // namespace dhe

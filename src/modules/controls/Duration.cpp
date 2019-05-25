@@ -1,7 +1,6 @@
 #include "modules/controls/Duration.h"
 
 #include "modules/controls/Controls.h"
-#include "modules/controls/ToggleControls.h"
 #include "util/Sigmoid.h"
 
 #include <engine/Module.hpp>

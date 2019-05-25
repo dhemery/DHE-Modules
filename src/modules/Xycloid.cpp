@@ -1,15 +1,15 @@
 #include "modules/Xycloid.h"
 
+#include "modules/controls/Controls.h"
 #include "modules/controls/Level.h"
-#include "modules/controls/ToggleControls.h"
 #include "util/Gain.h"
 #include "util/Sigmoid.h"
 
 #include <array>
 
 namespace dhe {
-static constexpr auto throbSpeedKnobRange = Range{-1.f, 1.f};
-static constexpr auto wobbleDepthRange = Range{0.f, 1.f};
+static constexpr auto throbSpeedKnobRange = Range{-1.F, 1.F};
+static constexpr auto wobbleDepthRange = Range{0.F, 1.F};
 
 Xycloid::Xycloid() {
   config(ParameterCount, InputCount, OutputCount);

@@ -1,14 +1,14 @@
 #include "modules/Blossom.h"
 
+#include "modules/controls/Controls.h"
 #include "modules/controls/Level.h"
-#include "modules/controls/ToggleControls.h"
 #include "util/Gain.h"
 #include "util/Sigmoid.h"
 
 #include <array>
 
 namespace dhe {
-static auto constexpr speedCurvature = 0.8f;
+static auto constexpr speedCurvature = 0.8F;
 
 Blossom::Blossom() {
   config(ParameterCount, InputCount, OutputCount);

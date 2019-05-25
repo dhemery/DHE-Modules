@@ -1,12 +1,12 @@
 #include "modules/Func.h"
 
-#include "modules/controls/ToggleControls.h"
+#include "modules/controls/Controls.h"
 
 namespace dhe {
 Func::Func() {
   config(ParameterCount, InputCount, OutputCount);
 
-  toggle::config<2>(this, OperationSwitch, "Operation", {"Add", "Multiply"});
+  toggle::config<2>(this, OperationSwitch, "Operation", {"Add", "Multiply"}, 0);
   configKnob(OperandKnob, "Operand");
   configParam(AdditionRangeSwitch, 0.F, 3.F, 1.F, "Addition operand range");
   configParam(MultiplicationRangeSwitch, 0.F, 3.F, 2.F, "Multiplication operand range");
