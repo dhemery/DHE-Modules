@@ -1,8 +1,12 @@
 #include "modules/BoosterStage.h"
 
+#include "modules/controls/ButtonControls.h"
 #include "modules/controls/Curvature.h"
 #include "modules/controls/Duration.h"
 #include "modules/controls/Level.h"
+
+#include <array>
+#include <string>
 
 namespace dhe {
 
@@ -32,10 +36,13 @@ BoosterStage::BoosterStage() :
   curvature::configSwitch(this, ShapeSwitch);
   taper = curvature::withSelectableShape(this, CurveKnob, CurveCvInput, ShapeSwitch);
 
-  configParam(ActiveButton, 0.F, 1.F, 0.F, "Active");
-  configParam(DeferButton, 0.F, 1.F, 0.F, "Defer");
-  configParam(EocButton, 0.F, 1.F, 0.F, "EOC");
-  configParam(TriggerButton, 0.F, 1.F, 0.F, "TRIGGER");
+  auto const outputButtonPositionNames = std::array<std::string, 2>{"Generated", "On"};
+  auto const inputButtonPositionNames = std::array<std::string, 2>{"From port", "On"};
+
+  button::config(this, DeferButton, "Defer", inputButtonPositionNames, 0);
+  button::config(this, TriggerButton, "Trigger", inputButtonPositionNames, 0);
+  button::config(this, ActiveButton, "Active", outputButtonPositionNames, 0);
+  button::config(this, EocButton, "EOC", outputButtonPositionNames, 0);
 
   stateMachine.start();
 }
