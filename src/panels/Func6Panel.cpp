@@ -36,7 +36,7 @@ Func6Panel::Func6Panel(Func6 *func6) : Panel{func6, hp} {
       multiplicationRangeStepper->visible = isMultiply;
     };
 
-    auto operatorSwitch = toggle<OperatorSwitch>(column2, y, Func6::OperatorSwitch + row);
+    auto operatorSwitch = toggle<OperatorSwitch>(column2, y, Func6::OperationSwitch + row);
 
     operatorSwitch->onOperatorChange(updateRangeStepperVisibility);
   }

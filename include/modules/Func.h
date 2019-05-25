@@ -10,7 +10,7 @@ public:
 
   void process(const ProcessArgs &args) override;
 
-  enum ParameterIds { OperandKnob, OperatorSwitch, AdditionRangeSwitch, MultiplicationRangeSwitch, ParameterCount };
+  enum ParameterIds { OperandKnob, OperationSwitch, AdditionRangeSwitch, MultiplicationRangeSwitch, ParameterCount };
 
   enum InputIds { FuncInput, InputCount };
 

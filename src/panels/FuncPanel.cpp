@@ -29,7 +29,7 @@ FuncPanel::FuncPanel(Func *func) : Panel{func, hp} {
   auto multiplicationRangeStepper = toggle<MultiplicationRangeStepper>(x, row4, Func::MultiplicationRangeSwitch);
   multiplicationRangeStepper->visible = false;
 
-  auto operatorSwitch = toggle<OperatorSwitch>(x, row2, Func::OperatorSwitch);
+  auto operatorSwitch = toggle<OperatorSwitch>(x, row2, Func::OperationSwitch);
   auto updateRangeStepperVisibility = [additionRangeStepper, multiplicationRangeStepper](bool isMultiply) {
     additionRangeStepper->visible = !isMultiply;
     multiplicationRangeStepper->visible = isMultiply;

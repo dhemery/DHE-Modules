@@ -14,8 +14,8 @@ public:
 
   enum ParameterIds {
     OperandKnob,
-    OperatorSwitch = OperandKnob + channelCount,
-    AdditionRangeSwitch = OperatorSwitch + channelCount,
+    OperationSwitch = OperandKnob + channelCount,
+    AdditionRangeSwitch = OperationSwitch + channelCount,
     MultiplicationRangeSwitch = AdditionRangeSwitch + channelCount,
     ParameterCount = MultiplicationRangeSwitch + channelCount
   };
