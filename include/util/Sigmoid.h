@@ -87,7 +87,6 @@ namespace sigmoid {
       return inverse(proportionRange.clamp(input), curvature);
     }
   };
-  static constexpr auto jShape = JShape{};
 
   /**
    * Applies an S-shaped transfer function to the input.
@@ -117,9 +116,6 @@ namespace sigmoid {
     }
   };
 
-  static constexpr auto sShape = SShape{};
-
-  extern std::array<Shape const *, 2> const shapes;
 
   /**
    * Applies a gentle S-shaped transfer function to map an input in the range
@@ -150,9 +146,9 @@ namespace sigmoid {
     return sigmoidRange.normalize(tapered);
   }
 
-  static inline auto taper(float input, float curvature, bool isS) -> float {
-    return isS ? sTaper(input, curvature) : jTaper(input, curvature);
-  }
+    static constexpr auto jShape = JShape{};
+    static constexpr auto sShape = SShape{};
+    extern std::array<Shape const *, 2> const shapes;
 
 } // namespace sigmoid
 } // namespace dhe
