@@ -1,6 +1,6 @@
 #include "modules/Cubic.h"
 
-#include "util/gain.h"
+#include "util/Gain.h"
 
 #include <string>
 

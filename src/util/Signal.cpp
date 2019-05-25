@@ -1,4 +1,4 @@
-#include "util/signal.h"
+#include "util/Signal.h"
 
 namespace dhe {
 namespace signal {

@@ -1,7 +1,7 @@
 #include "modules/controls/Duration.h"
 
 #include "modules/controls/Controls.h"
-#include "util/sigmoid.h"
+#include "util/Sigmoid.h"
 
 #include <engine/Module.hpp>
 #include <engine/ParamQuantity.hpp>

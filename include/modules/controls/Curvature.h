@@ -1,6 +1,6 @@
 #pragma once
 
-#include "util/sigmoid.h"
+#include "util/Sigmoid.h"
 
 #include <engine/Module.hpp>
 #include <functional>

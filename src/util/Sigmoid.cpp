@@ -1,4 +1,4 @@
-#include "util/sigmoid.h"
+#include "util/Sigmoid.h"
 
 namespace dhe {
 

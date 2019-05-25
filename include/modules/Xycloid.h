@@ -2,7 +2,7 @@
 
 #include "Module.h"
 #include "modules/components/Rotor.h"
-#include "util/range.h"
+#include "util/Range.h"
 
 namespace dhe {
 

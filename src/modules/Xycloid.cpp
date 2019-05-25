@@ -1,8 +1,8 @@
 #include "modules/Xycloid.h"
 
 #include "modules/controls/Level.h"
-#include "util/gain.h"
-#include "util/sigmoid.h"
+#include "util/Gain.h"
+#include "util/Sigmoid.h"
 
 #include <array>
 
