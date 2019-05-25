@@ -154,7 +154,7 @@ gui:
 
 HEADERS = $(shell find include -name *.h)
 
-tidy:
+tidy: project
 	clang-tidy $(SOURCES)
 
 format:

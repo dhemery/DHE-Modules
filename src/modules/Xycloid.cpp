@@ -1,5 +1,6 @@
 #include "modules/Xycloid.h"
 
+#include "modules/controls/Level.h"
 #include "util/gain.h"
 #include "util/sigmoid.h"
 
@@ -17,16 +18,17 @@ Xycloid::Xycloid() {
   configCvGain(WobbleRatioAvKnob, "Wobble ratio");
   configParam(WobbleRatioRangeSwitch, 0.F, 2.F, 2.F, "Wobble direction");
 
-  configKnob(WobbleDepthKnob, "Wobble depth");
+  configParam(WobbleDepthKnob, 0.F, 1.F, 0.5F, "Wobble depth", "%", 0.F, 100.F);
   configCvGain(WobbleDepthAvKnob, "Wobble depth");
 
-  configParam(WobbleFreedomSwitch, 0.F, 1.F, 1.F, "Wobble freedom");
+  configParam(WobbleFreedomSwitch, 0.F, 1.F, 1.F, "Wobble ration quantization");
   configParam(WobblePhaseKnob, 0.F, 1.F, 0.5F, "Wobble phase offset", "°", 0.F, 360.F, -180.F);
 
   configGain(XGainKnob, "X");
-  configSignalRange(XRangeSwitch, "X", false);
+  level::configSwitch(this, XRangeSwitch, "X output range", 0);
+
   configGain(YGainKnob, "Y");
-  configSignalRange(YRangeSwitch, "Y", false);
+  level::configSwitch(this, YRangeSwitch, "Y output range", 0);
 }
 
 void Xycloid::process(const ProcessArgs &args) {

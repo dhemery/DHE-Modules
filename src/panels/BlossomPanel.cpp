@@ -17,15 +17,15 @@ BlossomPanel::BlossomPanel(Blossom *blossom) : Panel{blossom, hp} {
   knob<LargeKnob>(column3, y, Blossom::SpinKnob);
 
   y += dy;
-  input(column1, y, Blossom::BounceCvInput);
-  knob<TinyKnob>(column2, y, Blossom::BounceAvKnob);
-  knob<LargeKnob>(column3, y, Blossom::BounceKnob);
-  toggle<2>(column4, y, Blossom::BounceFreedomSwitch);
+  input(column1, y, Blossom::BounceRatioCvInput);
+  knob<TinyKnob>(column2, y, Blossom::BounceRatioAvKnob);
+  knob<LargeKnob>(column3, y, Blossom::BounceRatioKnob);
+  toggle<2>(column4, y, Blossom::BounceRatioFreedomSwitch);
 
   y += dy;
-  input(column1, y, Blossom::DepthCvInput);
-  knob<TinyKnob>(column2, y, Blossom::DepthAvKnob);
-  knob<LargeKnob>(column3, y, Blossom::DepthKnob);
+  input(column1, y, Blossom::BounceDepthCvInput);
+  knob<TinyKnob>(column2, y, Blossom::BounceDepthAvKnob);
+  knob<LargeKnob>(column3, y, Blossom::BounceDepthKnob);
 
   y += dy;
   input(column1, y, Blossom::PhaseCvInput);

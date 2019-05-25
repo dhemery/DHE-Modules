@@ -56,8 +56,7 @@ namespace duration {
     }
   };
 
-  class KnobParamQuantity : public rack::engine::ParamQuantity {
-  public:
+  struct KnobParamQuantity : public rack::engine::ParamQuantity {
     auto getDisplayValue() -> float override {
       static auto const durationTaperFor = duration::rotationToTaper();
       auto const rotation = getValue();
@@ -70,7 +69,7 @@ namespace duration {
       setValue(rotationFor(durationTaper));
     }
 
-    std::function<Range const *()> range;
+    std::function<Range const *()> range{};
   };
 
   void configKnob(rack::engine::Module *module, int knobId, std::function<Range const *()> const &getRange,

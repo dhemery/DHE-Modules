@@ -13,11 +13,11 @@ public:
   enum ParameterIds {
     SpinKnob,
     SpinAvKNob,
-    BounceKnob,
-    BounceAvKnob,
-    BounceFreedomSwitch,
-    DepthKnob,
-    DepthAvKnob,
+    BounceRatioKnob,
+    BounceRatioAvKnob,
+    BounceRatioFreedomSwitch,
+    BounceDepthKnob,
+    BounceDepthAvKnob,
     PhaseKnob,
     PhaseAvKnob,
     XGainKnob,
@@ -26,7 +26,15 @@ public:
     YRangeSwitch,
     ParameterCount
   };
-  enum InputIds { SpinCvInput, BounceCvInput, DepthCvInput, PhaseCvInput, XGainCvInput, YGainCvInput, InputCount };
+  enum InputIds {
+    SpinCvInput,
+    BounceRatioCvInput,
+    BounceDepthCvInput,
+    PhaseCvInput,
+    XGainCvInput,
+    YGainCvInput,
+    InputCount
+  };
   enum OutputIds { XOutput, YOutput, OutputCount };
 
 private:

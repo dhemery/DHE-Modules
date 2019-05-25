@@ -8,7 +8,7 @@ namespace dhe {
 Ranger::Ranger() {
   config(ParameterCount, InputCount, OutputCount);
 
-  configKnob(LevelKnob, "Level");
+  configParam(LevelKnob, 0.F, 1.F, 0.5F, "Level", "%", 0.F, 100.F, 0.F);
   configCvGain(LevelAvKnob, "Level");
 
   level::configKnob(this, CcwLimitKnob, CcwLimitRangeSwitch, "CCW Limit", 0.F);

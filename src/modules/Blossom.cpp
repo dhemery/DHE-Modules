@@ -1,5 +1,6 @@
 #include "modules/Blossom.h"
 
+#include "modules/controls/Level.h"
 #include "util/gain.h"
 #include "util/sigmoid.h"
 
@@ -11,22 +12,22 @@ Blossom::Blossom() {
   configParam(SpinKnob, 0.F, 1.F, 0.65F, "Spin", "", 0.F, 2.F, -1.F);
   configCvGain(SpinAvKNob, "Spin");
 
-  configKnob(BounceKnob, "Bounce");
-  configCvGain(BounceAvKnob, "Bounce");
+  configKnob(BounceRatioKnob, "Bounce ratio");
+  configCvGain(BounceRatioAvKnob, "Bounce ratio");
 
-  configParam(DepthKnob, 0.F, 1.F, 0.5F, "Depth", "%", 0.F, 100.F);
-  configCvGain(DepthAvKnob, "Depth");
+  configParam(BounceDepthKnob, 0.F, 1.F, 0.5F, "Bounce depth", "%", 0.F, 100.F);
+  configCvGain(BounceDepthAvKnob, "Bounce depth");
 
   configParam(PhaseKnob, 0.F, 1.F, 0.5F, "Bounce phase offset", "°", 0.F, 360.F, -180.F);
   configCvGain(PhaseAvKnob, "Bounce phase offset");
 
   configGain(XGainKnob, "X output");
+  level::configSwitch(this, XRangeSwitch, "X output range", 0);
+
   configGain(YGainKnob, "Y output");
+  level::configSwitch(this, YRangeSwitch, "Y output range", 0);
 
-  configSignalRange(XRangeSwitch, "X", false);
-  configSignalRange(YRangeSwitch, "Y", false);
-
-  configParam(BounceFreedomSwitch, 0.0, 1.0, 1.0, "Bounce lock");
+  configParam(BounceRatioFreedomSwitch, 0.0, 1.0, 1.0, "Bounce ratio quantization");
 }
 
 void Blossom::process(const ProcessArgs &args) {
@@ -54,7 +55,7 @@ auto Blossom::offset(int param) -> float {
 
 auto Blossom::bounce() -> float {
   static constexpr auto bounceRange = Range{1.F, 17.F};
-  auto rotation = modulated(BounceKnob, BounceCvInput, BounceAvKnob);
+  auto rotation = modulated(BounceRatioKnob, BounceRatioCvInput, BounceRatioAvKnob);
   return bounceRange.scale(rotation);
 }
 
@@ -68,11 +69,11 @@ auto Blossom::spin(float sampleTime) -> float {
 
 auto Blossom::depth() -> float {
   static constexpr auto depthRange = Range{0.F, 1.F};
-  auto rotation = modulated(DepthKnob, DepthCvInput, DepthAvKnob);
+  auto rotation = modulated(BounceDepthKnob, BounceDepthCvInput, BounceDepthAvKnob);
   return depthRange.clamp(rotation);
 }
 
-auto Blossom::isBounceFree() -> bool { return params[BounceFreedomSwitch].getValue() > 0.1F; }
+auto Blossom::isBounceFree() -> bool { return params[BounceRatioFreedomSwitch].getValue() > 0.1F; }
 
 auto Blossom::phase() -> float {
   static constexpr auto phaseRange = Range{0.F, 1.F};
