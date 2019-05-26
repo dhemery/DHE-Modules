@@ -8,11 +8,17 @@
 
 namespace dhe {
 namespace curvature {
-  static auto constexpr curveKnobCurvature = 0.65F;
+  static auto constexpr gentleSCurvature = 0.65F;
+  static inline auto curvatureFor(float curveKnobRotation) -> float {
+    // This curvature creates a gentle S curve, increasing sensitivity in the
+    // middle of the input range and decreasing sensitivity toward the extremes.
+    auto scaled = sigmoid::sigmoidRange.scale(curveKnobRotation);
+    return sigmoid::curve(scaled, gentleSCurvature);
+  }
 
   auto rotationToCurvature() -> std::function<float(float)> {
     return [](float rotation) -> float {
-      auto const tapered = sigmoid::sTaper(rotation, curveKnobCurvature);
+      auto const tapered = sigmoid::sTaper(rotation, gentleSCurvature);
       return sigmoid::curvatureRange.scale(tapered);
     };
   }
@@ -20,7 +26,7 @@ namespace curvature {
   auto curvatureToRotation() -> std::function<float(float)> {
     return [](float curvature) -> float {
       auto const tapered = sigmoid::curvatureRange.normalize(curvature);
-      return sigmoid::sTaper(tapered, -curveKnobCurvature);
+      return sigmoid::sTaper(tapered, -gentleSCurvature);
     };
   }
 
@@ -29,11 +35,10 @@ namespace curvature {
     auto const rotation = knob::rotation(module, knobId, cvId);
     auto const shapeSwitch = &module->params[switchId];
     return [rotation, shapeSwitch](float input) -> float {
-      auto const curvature = sigmoid::curvature(rotation());
       auto const shapeSelection = static_cast<int>(shapeSwitch->getValue());
       auto const shape = sigmoid::shapes[shapeSelection];
 
-      return shape->taper(input, curvature);
+      return shape->taper(input, curvatureFor(rotation()));
     };
   }
 
@@ -42,22 +47,17 @@ namespace curvature {
     auto const rotation = knob::rotation(module, knobId, cvId, avId);
     auto const shapeSwitch = &module->params[switchId];
     return [rotation, shapeSwitch](float input) -> float {
-      auto const curvature = sigmoid::curvature(rotation());
       auto const shapeSelection = static_cast<int>(shapeSwitch->getValue());
       auto const shape = sigmoid::shapes[shapeSelection];
 
-      return shape->taper(input, curvature);
+      return shape->taper(input, curvatureFor(rotation()));
     };
   }
 
   auto withFixedShape(rack::engine::Module *module, int knobId, sigmoid::Shape const *shape)
       -> std::function<float(float)> {
     auto const rotation = knob::rotation(module, knobId);
-    return [rotation, shape](float input) -> float {
-      auto const curvature = sigmoid::curvature(rotation());
-
-      return shape->taper(input, curvature);
-    };
+    return [rotation, shape](float input) -> float { return shape->taper(input, curvatureFor(rotation())); };
   }
 
   auto shape(rack::engine::Module *module, int switchId) -> std::function<sigmoid::Shape const *()> {

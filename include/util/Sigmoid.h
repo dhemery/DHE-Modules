@@ -14,30 +14,6 @@ namespace sigmoid {
   static constexpr auto curvatureRange = Range{-maxCurvature, maxCurvature};
 
   /**
-   * Applies an inverse sigmoid function to the input.
-   * <p>
-   * The curvature determines the shape and intensity of the transfer function.
-   * A positive curvature applies an inverted S-shaped transfer function.
-   * A curvature of 0 applies a linear transfer function.
-   * A negative curvature applies an S-shaped transfer function.
-   * <p>
-   * Before the function is applied:
-   * <ul>
-   * <li>The input is clamped to the range [-1.0, 1.0].</li>
-   * <li>The curvature is clamped to the range [-0.9999, 0.9999].</li>
-   * </ul>
-   * @param input the input to the inverse sigmoid function
-   * @param curvature the intensity and direction of the curvature
-   * @return the sigmoid function result
-   */
-  static inline auto inverse(float input, float curvature) -> float {
-    curvature = curvatureRange.clamp(curvature);
-    input = sigmoidRange.clamp(input);
-
-    return (input - input * curvature) / (curvature - std::abs(input) * 2.0F * curvature + 1.0F);
-  }
-
-  /**
    * Applies a sigmoid function to the input.
    * <p>
    * The curvature determines the shape and intensity of the transfer function.
@@ -54,7 +30,12 @@ namespace sigmoid {
    * @param curvature the intensity and direction of the curvature
    * @return the sigmoid function result
    */
-  static inline auto curve(float input, float curvature) -> float { return inverse(input, -curvature); }
+  static inline auto curve(float input, float curvature) -> float {
+    curvature = -curvatureRange.clamp(curvature);
+    input = sigmoidRange.clamp(input);
+
+    return (input - input * curvature) / (curvature - std::abs(input) * 2.0F * curvature + 1.0F);
+  }
 
   class Shape {
   public:
@@ -83,7 +64,7 @@ namespace sigmoid {
      * @param curvature the intensity of the taper
      */
     auto taper(float input, float curvature) const -> float override {
-      return inverse(proportionRange.clamp(input), curvature);
+      return curve(proportionRange.clamp(input), -curvature);
     }
   };
 
@@ -115,27 +96,27 @@ namespace sigmoid {
     }
   };
 
-  /**
-   * Applies a gentle S-shaped transfer function to map an input in the range
-   * [0.0, 1.0] to an output in the range [-1.0, 1.0]. The transfer function
-   * makes the output more sensitive to changes in inputs near 0.5 and less
-   * sensitive to changes near 0.0 and 1.0. <p> This function is intended to
-   * translate DHE-Modules CURVE knob rotation to a curvature value suitable to
-   * pass to the curve(), inverse(), j_taper(), and s_taper() functions.
-   *
-   * @param input the value to map to a curvature
-   * @return the curvature
-   */
-  static inline auto curvature(float input) -> float {
-    // This curvature creates a gentle S curve, increasing sensitivity in the
-    // middle of the input range and decreasing sensitivity toward the extremes.
-    static constexpr auto gentleS = 0.65F;
-    auto scaled = sigmoidRange.scale(input);
-    return curve(scaled, gentleS);
-  }
+  //  /**
+  //   * Applies a gentle S-shaped transfer function to map an input in the range
+  //   * [0.0, 1.0] to an output in the range [-1.0, 1.0]. The transfer function
+  //   * makes the output more sensitive to changes in inputs near 0.5 and less
+  //   * sensitive to changes near 0.0 and 1.0. <p> This function is intended to
+  //   * translate DHE-Modules CURVE knob rotation to a curvature value suitable to
+  //   * pass to the curve(), inverse(), j_taper(), and s_taper() functions.
+  //   *
+  //   * @param input the value to map to a curvature
+  //   * @return the curvature
+  //   */
+  //  static inline auto curvature(float input) -> float {
+  //    // This curvature creates a gentle S curve, increasing sensitivity in the
+  //    // middle of the input range and decreasing sensitivity toward the extremes.
+  //    static constexpr auto gentleS = 0.65F;
+  //    auto scaled = sigmoidRange.scale(input);
+  //    return curve(scaled, gentleS);
+  //  }
 
   static inline auto jTaper(float input, float curvature) -> float {
-    return inverse(proportionRange.clamp(input), curvature);
+    return curve(proportionRange.clamp(input), -curvature);
   }
 
   static inline auto sTaper(float input, float curvature) -> float {
