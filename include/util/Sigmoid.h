@@ -116,7 +116,6 @@ namespace sigmoid {
     }
   };
 
-
   /**
    * Applies a gentle S-shaped transfer function to map an input in the range
    * [0.0, 1.0] to an output in the range [-1.0, 1.0]. The transfer function
@@ -146,9 +145,9 @@ namespace sigmoid {
     return sigmoidRange.normalize(tapered);
   }
 
-    static constexpr auto jShape = JShape{};
-    static constexpr auto sShape = SShape{};
-    extern std::array<Shape const *, 2> const shapes;
+  static constexpr auto jShape = JShape{};
+  static constexpr auto sShape = SShape{};
+  extern std::array<Shape const *, 2> const shapes;
 
 } // namespace sigmoid
 } // namespace dhe

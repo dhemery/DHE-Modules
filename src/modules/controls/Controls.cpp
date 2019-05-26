@@ -122,8 +122,8 @@ namespace knob {
   }
 
   void config(rack::engine::Module *module, int knobId, std::string const &knobName, std::string const &units,
-              Range const &range) {
-    module->configParam(knobId, 0.F, 1.F, 0.5F, knobName, units, 0.F, range.size(), range.lowerBound);
+              Range const &range, float initialRotation) {
+    module->configParam(knobId, 0.F, 1.F, initialRotation, knobName, units, 0.F, range.size(), range.lowerBound);
   }
 
   void configPercentage(rack::engine::Module *module, int knobId, std::string const &knobName, Range const &range) {

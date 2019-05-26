@@ -67,7 +67,7 @@ namespace knob {
               std::function<float(float)> const &scale) -> std::function<float()>;
 
   void config(rack::engine::Module *module, int knobId, std::string const &knobName, std::string const &units,
-              Range const &range);
+              Range const &range, float initialRotation = 0.5F);
 
   void configPercentage(rack::engine::Module *module, int knobId, std::string const &knobName, Range const &range);
 } // namespace knob

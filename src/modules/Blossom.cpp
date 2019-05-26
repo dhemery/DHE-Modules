@@ -9,14 +9,16 @@
 namespace dhe {
 static auto constexpr speedCurvature = 0.8F;
 static auto constexpr phaseOffsetRange = Range{-180.F, 180.F};
+static auto constexpr bounceRatioRange = Range{1.F, 17.F};
+static auto constexpr spinRange = Range{-10.F, 10.F};
 
 Blossom::Blossom() {
   config(ParameterCount, InputCount, OutputCount);
 
-  configParam(SpinKnob, 0.F, 1.F, 0.65F, "Spin", "", 0.F, 2.F, -1.F);
+  knob::config(this, SpinKnob, "Spin", " Hz", spinRange, 0.65F);
   attenuverter::config(this, SpinAvKNob, "Spin CV gain");
 
-  configParam(BounceRatioKnob, 0.F, 1.F, 0.5F, "Bounce ratio");
+  knob::config(this, BounceRatioKnob, "Bounce ratio", "/spin", bounceRatioRange);
   attenuverter::config(this, BounceRatioAvKnob, "Bounce ratio CV gain");
   toggle::config<2>(this, BounceRatioModeSwitch, "Bounce ratio mode", {"Quantized", "Free"}, 1);
 
@@ -57,17 +59,14 @@ auto Blossom::offset(int param) -> float {
 }
 
 auto Blossom::bounce() -> float {
-  static constexpr auto bounceRange = Range{1.F, 17.F};
   auto rotation = modulated(BounceRatioKnob, BounceRatioCvInput, BounceRatioAvKnob);
-  return bounceRange.scale(rotation);
+  return bounceRatioRange.scale(rotation);
 }
 
 auto Blossom::spin(float sampleTime) -> float {
-  static constexpr auto spinRange = Range{-1.F, 1.F};
   auto rotation = modulated(SpinKnob, SpinCvInput, SpinAvKNob);
-  auto scaled = spinRange.scale(rotation);
-  auto tapered = sigmoid::inverse(scaled, speedCurvature);
-  return -10.F * tapered * sampleTime;
+  auto tapered = sigmoid::sTaper(rotation, -speedCurvature);
+  return spinRange.scale(tapered) * sampleTime;
 }
 
 auto Blossom::depth() -> float {
