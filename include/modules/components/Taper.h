@@ -37,7 +37,7 @@ namespace taper {
 
   class FixedJTaper : public FixedTaper {
   public:
-    explicit FixedJTaper(float curvature) : curvature{curvature} {}
+    explicit constexpr FixedJTaper(float curvature) : curvature{curvature} {}
 
     auto apply(float proportion) const -> float override { return taper.apply(proportion, curvature); }
 
@@ -50,7 +50,7 @@ namespace taper {
 
   class FixedSTaper : public FixedTaper {
   public:
-    explicit FixedSTaper(float curvature) : curvature{curvature} {}
+    explicit constexpr FixedSTaper(float curvature) : curvature{curvature} {}
 
     auto apply(float proportion) const -> float override { return taper.apply(proportion, curvature); }
 

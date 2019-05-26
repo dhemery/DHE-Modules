@@ -98,6 +98,21 @@ namespace knob {
     module->configParam(knobId, 0.F, 1.F, 0.5F, knobName, "%", 0.F, range.size() * 100.F, range.lowerBound * 100.F);
   }
 
+  auto scaled(rack::engine::Module *module, int knobId, int cvId, int avId, Range const &range)
+      -> std::function<float()> {
+    auto const knobRotation = rotation(module, knobId, cvId, avId);
+    return [knobRotation, range]() { return range.scale(knobRotation()); };
+  }
+
+  auto taperedAndScaled(rack::engine::Module *module, int knobId, int cvId, int avId, taper::FixedTaper const &taper,
+                        Range const &range) -> std::function<float()> {
+    auto const rotation = knob::rotation(module, knobId, cvId, avId);
+    return [rotation, range, &taper]() {
+      auto tapered = taper.apply(rotation());
+      return range.scale(tapered);
+    };
+  }
+
   auto taperedAndScaled(std::function<float()> const &rotation, const taper::FixedTaper &taper, Range const &range)
       -> std::function<float()> {
     return [rotation, range, &taper]() {

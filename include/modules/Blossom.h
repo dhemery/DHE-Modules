@@ -38,17 +38,17 @@ public:
   enum OutputIds { XOutput, YOutput, OutputCount };
 
 private:
-  auto bounce() -> float;
-  auto depth() -> float;
   auto isBounceFree() -> bool;
   auto offset(int param) -> float;
   auto phase() -> float;
-  auto spin(float sampleTime) -> float;
   auto xGain() -> float;
   auto xOffset() -> float;
   auto yGain() -> float;
   auto yOffset() -> float;
 
+  std::function<float()> bounce;
+  std::function<float()> depth;
+  std::function<float()> spin;
   Rotor spinner{};
   Rotor bouncer{};
 };

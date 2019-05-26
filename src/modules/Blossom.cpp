@@ -12,19 +12,43 @@ static auto constexpr speedCurvature = -0.8F;
 static auto constexpr phaseOffsetRange = Range{-180.F, 180.F};
 static auto constexpr bounceRatioRange = Range{1.F, 17.F};
 static auto constexpr spinRange = Range{-10.F, 10.F};
+static auto constexpr spinKnobTaper = taper::FixedSTaper{speedCurvature};
+static auto constexpr initialSpinHz(1.F);
+
+inline auto rotationToSpin(float rotation) -> float {
+  auto const tapered = spinKnobTaper.apply(rotation);
+  return spinRange.scale(tapered);
+}
+
+inline auto spinToRotation(float spin) -> float {
+  auto const tapered = spinRange.normalize(spin);
+  return spinKnobTaper.invert(tapered);
+}
+
+static auto const initialSpinKnobRotation = spinToRotation(initialSpinHz);
+
+class SpinKnobParamQuantity : public rack::engine::ParamQuantity {
+  auto getDisplayValue() -> float override { return rotationToSpin(getValue()); }
+
+  void setDisplayValue(float spin) override { setValue(spinToRotation(spin)); }
+}; // namespace curvature
 
 Blossom::Blossom() {
   config(ParameterCount, InputCount, OutputCount);
 
-  knob::config(this, SpinKnob, "Spin", " Hz", spinRange, 0.65F);
+  configParam<SpinKnobParamQuantity>(SpinKnob, 0.F, 1.F, initialSpinKnobRotation, "Spin", " Hz");
   attenuverter::config(this, SpinAvKNob, "Spin CV gain");
+  spin = knob::taperedAndScaled(this, SpinKnob, SpinCvInput, SpinAvKNob, spinKnobTaper, spinRange);
 
-  knob::config(this, BounceRatioKnob, "Bounce ratio", "/spin", bounceRatioRange);
+  knob::config(this, BounceRatioKnob, "Bounce ratio", " per spin", bounceRatioRange);
   attenuverter::config(this, BounceRatioAvKnob, "Bounce ratio CV gain");
+  bounce = knob::scaled(this, BounceRatioKnob, BounceRatioCvInput, BounceRatioAvKnob, bounceRatioRange);
+
   toggle::config<2>(this, BounceRatioModeSwitch, "Bounce ratio mode", {"Quantized", "Free"}, 1);
 
   knob::configPercentage(this, BounceDepthKnob, "Bounce depth", {0.F, 1.F});
   attenuverter::config(this, BounceDepthAvKnob, "Bounce depth CV gain");
+  depth = knob::rotation(this, BounceDepthKnob, BounceRatioCvInput, BounceRatioAvKnob);
 
   knob::config(this, BouncePhaseOffsetKnob, "Bounce phase offset", "°", phaseOffsetRange);
   attenuverter::config(this, BouncePhaseOffsetAvKnob, "Bounce phase offset CV gain");
@@ -37,12 +61,12 @@ Blossom::Blossom() {
 }
 
 void Blossom::process(const ProcessArgs &args) {
-  auto spinRate = spin(args.sampleTime);
+  auto spinDelta = -spin() * args.sampleTime;
   auto bounceRatio = isBounceFree() ? bounce() : std::round(bounce());
-  auto bounceDepth = depth();
+  auto bounceDepth = knob::rotationRange.clamp(depth());
 
-  spinner.advance(spinRate, 0.F);
-  bouncer.advance(spinRate * bounceRatio, phase());
+  spinner.advance(spinDelta, 0.F);
+  bouncer.advance(spinDelta * bounceRatio, phase());
 
   auto angle = spinner.angle();
   auto radius = (1.F - bounceDepth) + bounceDepth * bouncer.radius();
@@ -57,24 +81,6 @@ void Blossom::process(const ProcessArgs &args) {
 auto Blossom::offset(int param) -> float {
   auto isUni = params[param].getValue() > 0.5F;
   return isUni ? 1.F : 0.F;
-}
-
-auto Blossom::bounce() -> float {
-  auto rotation = modulated(BounceRatioKnob, BounceRatioCvInput, BounceRatioAvKnob);
-  return bounceRatioRange.scale(rotation);
-}
-
-auto Blossom::spin(float sampleTime) -> float {
-  static const auto taper = taper::VariableSTaper{};
-  auto rotation = modulated(SpinKnob, SpinCvInput, SpinAvKNob);
-  auto tapered = taper.apply(rotation, speedCurvature);
-  return -spinRange.scale(tapered) * sampleTime;
-}
-
-auto Blossom::depth() -> float {
-  static constexpr auto depthRange = Range{0.F, 1.F};
-  auto rotation = modulated(BounceDepthKnob, BounceDepthCvInput, BounceDepthAvKnob);
-  return depthRange.clamp(rotation);
 }
 
 auto Blossom::isBounceFree() -> bool { return params[BounceRatioModeSwitch].getValue() > 0.1F; }

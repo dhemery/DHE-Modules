@@ -32,6 +32,7 @@ namespace gain {
 } // namespace gain
 
 namespace knob {
+  static constexpr auto rotationRange = Range{0.F, 1.F};
   static auto constexpr centered = 0.5F;
 
   /**
@@ -63,6 +64,11 @@ namespace knob {
   auto scaled(std::function<float()> const &rotation, std::function<float(float)> const &scale)
       -> std::function<float()>;
 
+  auto scaled(rack::engine::Module *module, int knobId, int cvId, int avId, Range const &range)
+      -> std::function<float()>;
+
+  auto taperedAndScaled(rack::engine::Module *module, int knobId, int cvId, int avId, taper::FixedTaper const &taper,
+                        Range const &range) -> std::function<float()>;
   /**
    * Creates a function that tapers and scales a rotation
    */
