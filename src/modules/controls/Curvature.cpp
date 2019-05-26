@@ -8,14 +8,20 @@
 
 namespace dhe {
 namespace curvature {
-  static float constexpr curveKnobCurvature = 0.65F;
+  static auto constexpr curveKnobCurvature = 0.65F;
 
   auto rotationToCurvature() -> std::function<float(float)> {
-    return [](float rotation) -> float { return sigmoid::curvature(rotation); };
+    return [](float rotation) -> float {
+      auto const tapered = sigmoid::sTaper(rotation, curveKnobCurvature);
+      return sigmoid::curvatureRange.scale(tapered);
+    };
   }
 
   auto curvatureToRotation() -> std::function<float(float)> {
-    return [](float taper) -> float { return sigmoid::sTaper(taper, -curveKnobCurvature); };
+    return [](float curvature) -> float {
+      auto const tapered = sigmoid::curvatureRange.normalize(curvature);
+      return sigmoid::sTaper(tapered, -curveKnobCurvature);
+    };
   }
 
   auto withSelectableShape(rack::engine::Module *module, int knobId, int cvId, int switchId)
@@ -68,9 +74,9 @@ namespace curvature {
       return curvatureTaperFor(getValue());
     }
 
-    void setDisplayValue(float taperedCurvature) override {
+    void setDisplayValue(float curvature) override {
       static auto const rotationFor = curvature::curvatureToRotation();
-      setValue(rotationFor(taperedCurvature));
+      setValue(rotationFor(curvature));
     }
   };
 

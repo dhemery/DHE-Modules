@@ -9,6 +9,9 @@ namespace sigmoid {
 
   static constexpr auto sigmoidRange = Range{-1.F, 1.F};
   static constexpr auto proportionRange = Range{0.F, 1.F};
+  static constexpr auto precision = 1e-4F;
+  static constexpr auto maxCurvature = 1.0F - precision;
+  static constexpr auto curvatureRange = Range{-maxCurvature, maxCurvature};
 
   /**
    * Applies an inverse sigmoid function to the input.
@@ -28,10 +31,6 @@ namespace sigmoid {
    * @return the sigmoid function result
    */
   static inline auto inverse(float input, float curvature) -> float {
-    static constexpr auto precision = 1e-4F;
-    static constexpr auto maxCurvature = 1.0F - precision;
-    static constexpr auto curvatureRange = Range{-maxCurvature, maxCurvature};
-
     curvature = curvatureRange.clamp(curvature);
     input = sigmoidRange.clamp(input);
 
