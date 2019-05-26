@@ -26,7 +26,7 @@ Stage::Stage() :
   level = level::withFixedRange(this, LevelKnob, levelRange);
 
   curvature::configKnob(this, CurveKnob);
-  taper = curvature::withFixedShape(this, CurveKnob, &sigmoid::jShape);
+  taper = taper::jShaped(this, CurveKnob);
 
   stateMachine.start();
 }

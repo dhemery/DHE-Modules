@@ -6,10 +6,6 @@
 
 namespace dhe {
 
-auto taper(float level, Range const *range, std::function<float(float)> const &taper) -> float {
-  return range->scale(taper(level));
-}
-
 Tapers::Tapers() {
   config(ParameterCount, InputCount, OutputCount);
 
@@ -25,21 +21,21 @@ Tapers::Tapers() {
   level::configSwitch(this, LevelRangeSwitch2, "Level 2 range", 0);
   attenuverter::config(this, LevelAvKnob2, "Level 2 CV gain");
 
-  curvature::configKnob(this, Curve2Knob, "Curvature 2");
-  attenuverter::config(this, Curve2Av, "Curvature 2 CV gain");
-  curvature::configSwitch(this, Shape2Switch, "Shape 2");
+  curvature::configKnob(this, CurveKnob2, "Curvature 2");
+  attenuverter::config(this, CurveAv2, "Curvature 2 CV gain");
+  curvature::configSwitch(this, ShapeSwitch2, "Shape 2");
 
   levelRotation1 = knob::rotation(this, LevelKnob1, Level1Cv, LevelAvKnob1);
   levelRange1 = range::selector<2>(this, LevelRangeSwitch1, level::ranges);
-  taper1 = curvature::withSelectableShape(this, CurveKnob1, Curve1Cv, CurveAvKnob1, ShapeSwitch1);
+  taper1 = taper::withSelectableShape(this, CurveKnob1, Curve1Cv, CurveAvKnob1, ShapeSwitch1);
 
   levelRotation2 = knob::rotation(this, LevelKnob2, Level2Cv, LevelAvKnob2);
   levelRange2 = range::selector<2>(this, LevelRangeSwitch2, level::ranges);
-  taper2 = curvature::withSelectableShape(this, Curve2Knob, Curve2Cv, Curve2Av, Shape2Switch);
+  taper2 = taper::withSelectableShape(this, CurveKnob2, CurveCv2, CurveAv2, ShapeSwitch2);
 }
 
 void Tapers::process(const ProcessArgs & /*args*/) {
-  outputs[Taper1Output].setVoltage(levelRange1()->scale(taper1(levelRotation1())));
+  outputs[TaperOutput1].setVoltage(levelRange1()->scale(taper1(levelRotation1())));
   outputs[Taper2Output].setVoltage(levelRange2()->scale(taper2(levelRotation2())));
 }
 } // namespace dhe

@@ -16,8 +16,8 @@ namespace duration {
    * yields a duration equal to 1/10 of the range's upper bound (to within 7
    * decimal places).
    */
-  static auto const durationKnobCurvature = 0.8018017F;
-  static auto const durationKnobTaper = taper::FixedJTaper{durationKnobCurvature};
+  static auto const knobTaperCurvature = 0.8018017F;
+  static auto const knobTaper = taper::FixedJTaper{knobTaperCurvature};
 
   const std::array<Range const *, 3> ranges{&shortRange, &mediumRange, &longRange};
 
@@ -25,26 +25,26 @@ namespace duration {
 
   auto withFixedRange(rack::engine::Module *module, int knobId, Range const &range) -> std::function<float()> {
     auto const rotation = knob::rotation(module, knobId);
-    return knob::taperedAndScaled(rotation, durationKnobTaper, range);
+    return knob::taperedAndScaled(rotation, knobTaper, range);
   }
 
   auto withSelectableRange(rack::engine::Module *module, int knobId, int cvId, int switchId) -> std::function<float()> {
     auto const rotation = knob::rotation(module, knobId, cvId);
     auto const rangeSelector = range::selector<3>(module, switchId, duration::ranges);
-    return knob::taperedAndScaled(rotation, durationKnobTaper, rangeSelector);
+    return knob::taperedAndScaled(rotation, knobTaper, rangeSelector);
   }
 
   class KnobParamQuantity : public rack::engine::ParamQuantity {
   public:
     auto getDisplayValue() -> float override {
       auto const rotation = getValue();
-      auto const tapered = durationKnobTaper.apply(rotation);
+      auto const tapered = knobTaper.apply(rotation);
       return range()->scale(tapered);
     }
 
     void setDisplayValue(float durationSeconds) override {
       auto const tapered = range()->normalize(durationSeconds);
-      auto const rotation = durationKnobTaper.invert(tapered)
+      auto const rotation = knobTaper.invert(tapered);
       setValue(rotation);
     }
 

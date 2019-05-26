@@ -23,13 +23,13 @@ public:
     LevelKnob2,
     LevelAvKnob2,
     LevelRangeSwitch2,
-    Curve2Knob,
-    Curve2Av,
-    Shape2Switch,
+    CurveKnob2,
+    CurveAv2,
+    ShapeSwitch2,
     ParameterCount
   };
-  enum InputIds { Level1Cv, Curve1Cv, Level2Cv, Curve2Cv, InputCount };
-  enum OutputIds { Taper1Output, Taper2Output, OutputCount };
+  enum InputIds { Level1Cv, Curve1Cv, Level2Cv, CurveCv2, InputCount };
+  enum OutputIds { TaperOutput1, Taper2Output, OutputCount };
 
 private:
   std::function<float()> levelRotation1;

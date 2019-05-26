@@ -16,8 +16,8 @@ Swave::Swave() {
 
 void Swave::process(const ProcessArgs & /*args*/) {
   auto const normalized = level::bipolarRange.normalize(signalIn());
-  auto const shaped = taper(normalized);
-  auto const outputVoltage = level::bipolarRange.scale(shaped);
+  auto const tapered = taper(normalized);
+  auto const outputVoltage = level::bipolarRange.scale(tapered);
   sendSignal(outputVoltage);
 }
 

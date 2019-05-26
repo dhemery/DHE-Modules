@@ -23,7 +23,7 @@ TapersPanel::TapersPanel(Tapers *module) : Panel{module, hp} {
   y += dy;
   toggle<2>(column1, y, Tapers::ShapeSwitch1);
   toggle<2>(column2, y, Tapers::LevelRangeSwitch1);
-  output(column3, y, Tapers::Taper1Output);
+  output(column3, y, Tapers::TaperOutput1);
 
   y += dy + panelBuffer;
 
@@ -31,11 +31,11 @@ TapersPanel::TapersPanel(Tapers *module) : Panel{module, hp} {
   knob<TinyKnob>(column2, y, Tapers::LevelAvKnob2);
   knob<MediumKnob>(column3, y, Tapers::LevelKnob2);
   y += dy;
-  input(column1, y, Tapers::Curve2Cv);
-  knob<TinyKnob>(column2, y, Tapers::Curve2Av);
-  knob<MediumKnob>(column3, y, Tapers::Curve2Knob);
+  input(column1, y, Tapers::CurveCv2);
+  knob<TinyKnob>(column2, y, Tapers::CurveAv2);
+  knob<MediumKnob>(column3, y, Tapers::CurveKnob2);
   y += dy;
-  toggle<2>(column1, y, Tapers::Shape2Switch);
+  toggle<2>(column1, y, Tapers::ShapeSwitch2);
   toggle<2>(column2, y, Tapers::LevelRangeSwitch2);
   output(column3, y, Tapers::Taper2Output);
 }

@@ -24,7 +24,7 @@ namespace taper {
   public:
     auto apply(float proportion, float curvature) const -> float override {
       auto const sigmoidInput = sigmoidRange.scale(proportion);
-      auto const sigmoidOutput = sigmoid::curve(sigmoidInput, curvature);
+      auto const sigmoidOutput = sigmoid::curve(sigmoidInput, -curvature);
       return sigmoidRange.normalize(sigmoidOutput);
     }
   };
@@ -61,5 +61,7 @@ namespace taper {
     float curvature;
   };
 
+  static auto constexpr variableJTaper = VariableJTaper{};
+  static auto constexpr variableSTaper = VariableSTaper{};
 } // namespace taper
 } // namespace dhe

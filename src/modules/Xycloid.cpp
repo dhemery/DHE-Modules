@@ -7,7 +7,7 @@
 #include <array>
 
 namespace dhe {
-constexpr auto speedKnobTaperCurvature = 0.8F;
+constexpr auto speedKnobTaperCurvature = -0.8F;
 static constexpr auto throbSpeedRange = Range{-10.F, 10.F};
 static constexpr auto wobbleDepthRange = Range{0.F, 1.F};
 static auto constexpr phaseOffsetRange = Range{-180.F, 180.F};
@@ -61,7 +61,7 @@ auto Xycloid::offset(int param) -> float {
 
 auto Xycloid::throbSpeed(float sampleTime) -> float {
   auto rotation = modulated(ThrobSpeedKnob, ThrobSpeedCvInput, ThrobSpeedAvKnob);
-  auto tapered = sigmoid::sTaper(rotation, -speedKnobTaperCurvature);
+  auto tapered = taper::variableSTaper.apply(rotation, speedKnobTaperCurvature);
   return throbSpeedRange.scale(tapered) * sampleTime;
 }
 

@@ -8,11 +8,10 @@
 #include <array>
 
 namespace dhe {
-static auto constexpr speedCurvature = 0.8F;
+static auto constexpr speedCurvature = -0.8F;
 static auto constexpr phaseOffsetRange = Range{-180.F, 180.F};
 static auto constexpr bounceRatioRange = Range{1.F, 17.F};
 static auto constexpr spinRange = Range{-10.F, 10.F};
-
 
 Blossom::Blossom() {
   config(ParameterCount, InputCount, OutputCount);
@@ -68,7 +67,7 @@ auto Blossom::bounce() -> float {
 auto Blossom::spin(float sampleTime) -> float {
   static const auto taper = taper::VariableSTaper{};
   auto rotation = modulated(SpinKnob, SpinCvInput, SpinAvKNob);
-  auto tapered = taper.apply(rotation, -speedCurvature);
+  auto tapered = taper.apply(rotation, speedCurvature);
   return spinRange.scale(tapered) * sampleTime;
 }
 

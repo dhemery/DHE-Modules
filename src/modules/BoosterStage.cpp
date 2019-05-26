@@ -34,7 +34,7 @@ BoosterStage::BoosterStage() :
 
   curvature::configKnob(this, CurveKnob);
   curvature::configSwitch(this, ShapeSwitch);
-  taper = curvature::withSelectableShape(this, CurveKnob, CurveCvInput, ShapeSwitch);
+  taper = taper::withSelectableShape(this, CurveKnob, CurveCvInput, ShapeSwitch);
 
   button::config(this, DeferButton, "DEFER", {"From input", "High"}, 0);
   button::config(this, TriggerButton, "TRIG", {"From input", "High"}, 0);

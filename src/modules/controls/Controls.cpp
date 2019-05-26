@@ -42,33 +42,6 @@ namespace button {
   }
 } // namespace button
 
-namespace range {
-  auto scaleTo(std::function<Range const *()> const &range) -> std::function<float(float)> {
-    return [range](float proportion) -> float { return range()->scale(proportion); };
-  }
-
-  auto scaleTo(Range const &range) -> std::function<float(float)> {
-    return [range](float proportion) -> float { return range.scale(proportion); };
-  }
-
-  template <int N>
-  auto selector(rack::engine::Module *module, int switchId, std::array<Range const *, N> const &ranges)
-      -> std::function<Range const *()> {
-    auto switchParam = &module->params[switchId];
-    return [switchParam, ranges]() -> Range const * {
-      auto const selection = static_cast<int>(switchParam->getValue());
-      return ranges[selection];
-    };
-  }
-
-  template auto selector<2>(rack::engine::Module *module, int switchId, std::array<Range const *, 2> const &ranges)
-      -> std::function<Range const *()>;
-
-  template auto selector<3>(rack::engine::Module *module, int switchId, std::array<Range const *, 3> const &ranges)
-      -> std::function<Range const *()>;
-
-} // namespace range
-
 namespace gain {
   void config(rack::engine::Module *module, int knobId, std::string const &knobName) {
     knob::configPercentage(module, knobId, knobName, range);
@@ -134,8 +107,8 @@ namespace knob {
     };
   }
 
-  auto knob::taperedAndScaled(std::function<float()> const &rotation, taper::FixedTaper const &taper,
-                              std::function<Range const *()> const &range) -> std::function<float()> {
+  auto taperedAndScaled(std::function<float()> const &rotation, taper::FixedTaper const &taper,
+                        std::function<Range const *()> const &range) -> std::function<float()> {
     return [rotation, range, &taper]() {
       auto const tapered = taper.apply(rotation());
       auto const scaled = range()->scale(tapered);
@@ -143,6 +116,33 @@ namespace knob {
     };
   }
 } // namespace knob
+
+namespace range {
+  auto scaleTo(std::function<Range const *()> const &range) -> std::function<float(float)> {
+    return [range](float proportion) -> float { return range()->scale(proportion); };
+  }
+
+  auto scaleTo(Range const &range) -> std::function<float(float)> {
+    return [range](float proportion) -> float { return range.scale(proportion); };
+  }
+
+  template <int N>
+  auto selector(rack::engine::Module *module, int switchId, std::array<Range const *, N> const &ranges)
+      -> std::function<Range const *()> {
+    auto switchParam = &module->params[switchId];
+    return [switchParam, ranges]() -> Range const * {
+      auto const selection = static_cast<int>(switchParam->getValue());
+      return ranges[selection];
+    };
+  }
+
+  template auto selector<2>(rack::engine::Module *module, int switchId, std::array<Range const *, 2> const &ranges)
+      -> std::function<Range const *()>;
+
+  template auto selector<3>(rack::engine::Module *module, int switchId, std::array<Range const *, 3> const &ranges)
+      -> std::function<Range const *()>;
+
+} // namespace range
 
 namespace toggle {
   template <int N>
@@ -158,4 +158,5 @@ namespace toggle {
   template void config<4>(rack::engine::Module *module, int toggleId, std::string const &toggleName,
                           std::array<std::string, 4> const &stateNames, int initialState);
 } // namespace toggle
+
 } // namespace dhe
