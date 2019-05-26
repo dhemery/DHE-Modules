@@ -10,7 +10,7 @@ namespace curvature {
                   float initialRotation = knob::centered);
 
   void configSwitch(rack::engine::Module *module, int switchId, std::string const &name = "Shape",
-                    int initialShape = 0);
+                    int initialState = 0);
 
   auto knob(rack::engine::Module *module, int knobId) -> std::function<float()>;
   auto knob(rack::engine::Module *module, int knobId, int cvId) -> std::function<float()>;

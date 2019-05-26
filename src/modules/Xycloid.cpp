@@ -20,7 +20,7 @@ Xycloid::Xycloid() {
 
   configParam(WobbleRatioKnob, 0.F, 1.F, 0.5F, "Wobble ratio");
   attenuverter::config(this, WobbleRatioAvKnob, "Wobble ratio CV gain");
-  toggle::config<3>(this, WobbleDirectionSwitch, "Wobble direction", {"Inward", "Both", "Outward"}, 1);
+  toggle::config<3>(this, WobbleDirectionSwitch, "Wobble direction", {"Inward", "Both", "Outward"}, 2);
   toggle::config<2>(this, WobbleRatioModeSwitch, "Wobble ratio mode", {"Quantized", "Free"}, 1);
 
   knob::configPercentage(this, WobbleDepthKnob, "Wobble depth", {0.F, 1.F});
@@ -62,7 +62,7 @@ auto Xycloid::offset(int param) -> float {
 auto Xycloid::throbSpeed(float sampleTime) -> float {
   auto rotation = modulated(ThrobSpeedKnob, ThrobSpeedCvInput, ThrobSpeedAvKnob);
   auto tapered = taper::variableSTaper.apply(rotation, speedKnobTaperCurvature);
-  return throbSpeedRange.scale(tapered) * sampleTime;
+  return -throbSpeedRange.scale(tapered) * sampleTime;
 }
 
 auto Xycloid::wobbleDepth() -> float {

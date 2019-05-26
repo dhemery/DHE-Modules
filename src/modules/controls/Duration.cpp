@@ -62,19 +62,19 @@ namespace duration {
   }
 
   void configKnob(rack::engine::Module *module, int knobId, Range const &range, std::string const &name,
-                  float initialPosition) {
+                  float initialRotation) {
     auto const getRange = [range]() -> Range const * { return &range; };
-    configKnob(module, knobId, getRange, name, initialPosition);
+    configKnob(module, knobId, getRange, name, initialRotation);
   }
 
   void configKnob(rack::engine::Module *module, int knobId, int switchId, std::string const &name,
-                  float initialPosition) {
+                  float initialRotation) {
     auto *switchParam = &module->params[switchId];
     auto const getRange = [switchParam]() -> Range const * {
       auto const selection = static_cast<int>(switchParam->getValue());
       return duration::ranges[selection];
     };
-    configKnob(module, knobId, getRange, name, initialPosition);
+    configKnob(module, knobId, getRange, name, initialRotation);
   }
 
   void configSwitch(rack::engine::Module *module, int switchId, std::string const &name, int initialPosition) {

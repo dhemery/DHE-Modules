@@ -39,7 +39,7 @@ namespace duration {
   auto withFixedRange(rack::engine::Module *module, int knobId, Range const &range) -> std::function<float()>;
 
   void configKnob(rack::engine::Module *module, int knobId, Range const & /*range*/,
-                  std::string const &name = "Duration", float initialRoation = knob::centered);
+                  std::string const &name = "Duration", float initialRotation = knob::centered);
 
   void configKnob(rack::engine::Module *module, int knobId, int switchId, std::string const &name = "Duration",
                   float initialRotation = knob::centered);

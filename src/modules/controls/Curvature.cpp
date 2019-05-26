@@ -9,8 +9,8 @@
 namespace dhe {
 namespace curvature {
   /**
-   * This curvature creates a gentle S taper, increasing sensitivity in the middle of the input range and decreasing
-   * sensitivity toward the extremes.
+   * This curvature creates a gentle inverted S taper, increasing sensitivity in the middle of the input range and
+   * decreasing sensitivity toward the extremes.
    */
   static auto constexpr knobTaperCurvature = -0.65F;
   static auto constexpr knobRotationRange = Range{0.F, 1.F};

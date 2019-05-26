@@ -68,7 +68,7 @@ auto Blossom::spin(float sampleTime) -> float {
   static const auto taper = taper::VariableSTaper{};
   auto rotation = modulated(SpinKnob, SpinCvInput, SpinAvKNob);
   auto tapered = taper.apply(rotation, speedCurvature);
-  return spinRange.scale(tapered) * sampleTime;
+  return -spinRange.scale(tapered) * sampleTime;
 }
 
 auto Blossom::depth() -> float {
