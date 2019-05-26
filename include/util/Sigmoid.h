@@ -24,7 +24,7 @@ namespace sigmoid {
    * Before the function is applied:
    * <ul>
    * <li>The input is clamped to the range [-1.0, 1.0].</li>
-   * <li>The curvature is clamped to the range [0.0001, 0.9999].</li>
+   * <li>The curvature is clamped to the range [-0.9999, 0.9999].</li>
    * </ul>
    * @param input the input to the inverse sigmoid function
    * @param curvature the intensity and direction of the curvature
@@ -48,7 +48,7 @@ namespace sigmoid {
    * Before the function is applied:
    * <ul>
    * <li>The input is clamped to the range [-1.0, 1.0].</li>
-   * <li>The curvature is clamped to the range [0.0001, 0.9999].</li>
+   * <li>The curvature is clamped to the range [-0.9999, 0.9999].</li>
    * </ul>
    * @param input the input to the sigmoid function
    * @param curvature the intensity and direction of the curvature
