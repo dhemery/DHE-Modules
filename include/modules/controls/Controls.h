@@ -1,4 +1,5 @@
 #pragma once
+#include "modules/components/Taper.h"
 #include "util/Range.h"
 
 #include <array>
@@ -31,6 +32,8 @@ namespace gain {
 } // namespace gain
 
 namespace knob {
+  static auto constexpr centered = 0.5F;
+
   /**
    * Creates a function that returns the rotation of a knob.
    * @param knobId the ID of the knob param
@@ -61,13 +64,19 @@ namespace knob {
       -> std::function<float()>;
 
   /**
-   * Creates a function that scales a tapered rotation
+   * Creates a function that tapers and scales a rotation
    */
-  auto scaled(std::function<float()> const &rotation, std::function<float(float)> const &taper,
-              std::function<float(float)> const &scale) -> std::function<float()>;
+  auto taperedAndScaled(std::function<float()> const &rotation, taper::FixedTaper const &taper, Range const &range)
+      -> std::function<float()>;
+
+  /**
+   * Creates a function that tapers and scales a rotation
+   */
+  auto taperedAndScaled(std::function<float()> const &rotation, taper::FixedTaper const &taper,
+                        std::function<Range const *()> const &range) -> std::function<float()>;
 
   void config(rack::engine::Module *module, int knobId, std::string const &knobName, std::string const &units,
-              Range const &range, float initialRotation = 0.5F);
+              Range const &range, float initialRotation = centered);
 
   void configPercentage(rack::engine::Module *module, int knobId, std::string const &knobName, Range const &range);
 } // namespace knob
@@ -94,6 +103,11 @@ namespace range {
   auto selector(rack::engine::Module *module, int switchId, std::array<Range const *, N> const &ranges)
       -> std::function<Range const *()>;
 } // namespace range
+
+namespace selector {
+  template <typename T, int N>
+  auto of(rack::engine::Module *module, int switchId, std::array<T, N> const &items) -> std::function<T()>;
+}
 
 namespace toggle {
   template <int N>

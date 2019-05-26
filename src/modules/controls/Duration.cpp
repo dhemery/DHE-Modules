@@ -1,7 +1,7 @@
 #include "modules/controls/Duration.h"
 
+#include "modules/components/Taper.h"
 #include "modules/controls/Controls.h"
-#include "util/Sigmoid.h"
 
 #include <engine/Module.hpp>
 #include <engine/ParamQuantity.hpp>
@@ -16,47 +16,36 @@ namespace duration {
    * yields a duration equal to 1/10 of the range's upper bound (to within 7
    * decimal places).
    */
-  float const durationKnobCurvature = 0.8018017;
+  static auto const durationKnobCurvature = 0.8018017F;
+  static auto const durationKnobTaper = taper::FixedJTaper{durationKnobCurvature};
 
   const std::array<Range const *, 3> ranges{&shortRange, &mediumRange, &longRange};
 
   auto range(float switchPosition) -> Range const * { return ranges[static_cast<int>(switchPosition)]; }
 
-  auto rotationToTaper() -> std::function<float(float)> {
-    return [](float rotation) -> float { return sigmoid::jTaper(rotation, durationKnobCurvature); };
-  }
-
-  auto taperToRotation() -> std::function<float(float)> {
-    return [](float rotation) -> float { return sigmoid::jTaper(rotation, -durationKnobCurvature); };
-  }
-
   auto withFixedRange(rack::engine::Module *module, int knobId, Range const &range) -> std::function<float()> {
-    auto const durationRotation = knob::rotation(module, knobId);
-    auto const durationKnobTaper = duration::rotationToTaper();
-    auto const toDurationRange = range::scaleTo(range);
-    return knob::scaled(durationRotation, durationKnobTaper, toDurationRange);
+    auto const rotation = knob::rotation(module, knobId);
+    return knob::taperedAndScaled(rotation, durationKnobTaper, range);
   }
 
   auto withSelectableRange(rack::engine::Module *module, int knobId, int cvId, int switchId) -> std::function<float()> {
-    auto const durationRotation = knob::rotation(module, knobId, cvId);
-    auto const durationKnobTaper = duration::rotationToTaper();
-    auto const selectedDurationRange = range::selector<3>(module, switchId, duration::ranges);
-    auto const toDurationRange = range::scaleTo(selectedDurationRange);
-    return knob::scaled(durationRotation, durationKnobTaper, toDurationRange);
+    auto const rotation = knob::rotation(module, knobId, cvId);
+    auto const rangeSelector = range::selector<3>(module, switchId, duration::ranges);
+    return knob::taperedAndScaled(rotation, durationKnobTaper, rangeSelector);
   }
 
   class KnobParamQuantity : public rack::engine::ParamQuantity {
   public:
     auto getDisplayValue() -> float override {
-      static auto const durationTaperFor = duration::rotationToTaper();
       auto const rotation = getValue();
-      return range()->scale(durationTaperFor(rotation));
+      auto const tapered = durationKnobTaper.apply(rotation);
+      return range()->scale(tapered);
     }
 
     void setDisplayValue(float durationSeconds) override {
-      static auto const rotationFor = duration::taperToRotation();
-      auto const durationTaper = range()->normalize(durationSeconds);
-      setValue(rotationFor(durationTaper));
+      auto const tapered = range()->normalize(durationSeconds);
+      auto const rotation = durationKnobTaper.invert(tapered)
+      setValue(rotation);
     }
 
     void setRangeSupplier(std::function<Range const *()> const &supplier) { this->range = supplier; }

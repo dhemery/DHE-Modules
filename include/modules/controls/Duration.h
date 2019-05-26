@@ -2,14 +2,14 @@
 
 #include "util/Range.h"
 
+#include "Controls.h"
+
 #include <array>
 #include <engine/Module.hpp>
 #include <functional>
 
 namespace dhe {
 namespace duration {
-  static float constexpr centeredRotation = 0.5F;
-
   static Range constexpr shortRange{0.001F, 1.F};
   static Range constexpr mediumRange{0.01F, 10.F};
   static Range constexpr longRange{0.1F, 100.F};
@@ -39,24 +39,11 @@ namespace duration {
    */
   auto withFixedRange(rack::engine::Module *module, int knobId, Range const &range) -> std::function<float()>;
 
-  /**
-   * Creates a function that maps a rotation to a "duration-tapered" value. The
-   * duration-tapered value is useful for selecting a duration from one of the
-   * duration ranges.
-   */
-  auto rotationToTaper() -> std::function<float(float)>;
-
-  /**
-   * Creates a function that maps a duration-tapered value [0.0, 1.0] to a
-   * rotation.
-   */
-  auto taperToRotation() -> std::function<float(float)>;
-
   void configKnob(rack::engine::Module *module, int knobId, Range const & /*range*/,
-                  std::string const &name = "Duration", float initialPosition = centeredRotation);
+                  std::string const &name = "Duration", float initialRoation = knob::centered);
 
   void configKnob(rack::engine::Module *module, int knobId, int switchId, std::string const &name = "Duration",
-                  float initialPosition = centeredRotation);
+                  float initialRotation = knob::centered);
 
   void configSwitch(rack::engine::Module *module, int switchId, std::string const &name = "Duration Range",
                     int initialPosition = 1);

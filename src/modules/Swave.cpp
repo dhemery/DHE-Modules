@@ -11,7 +11,7 @@ Swave::Swave() {
   curvature::configKnob(this, CurveKnob);
   curvature::configSwitch(this, ShapeSwitch);
 
-  taper = curvature::withSelectableShape(this, CurveKnob, CurveCv, ShapeSwitch);
+  taper = taper::withSelectableShape(this, CurveKnob, CurveCv, ShapeSwitch);
 }
 
 void Swave::process(const ProcessArgs & /*args*/) {

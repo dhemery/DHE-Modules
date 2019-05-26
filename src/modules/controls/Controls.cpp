@@ -116,11 +116,6 @@ namespace knob {
     return [rotation, scale]() -> float { return scale(rotation()); };
   }
 
-  auto scaled(std::function<float()> const &rotation, std::function<float(float)> const &taper,
-              std::function<float(float)> const &scale) -> std::function<float()> {
-    return [rotation, taper, scale]() -> float { return scale(taper(rotation())); };
-  }
-
   void config(rack::engine::Module *module, int knobId, std::string const &knobName, std::string const &units,
               Range const &range, float initialRotation) {
     module->configParam(knobId, 0.F, 1.F, initialRotation, knobName, units, 0.F, range.size(), range.lowerBound);
@@ -128,6 +123,24 @@ namespace knob {
 
   void configPercentage(rack::engine::Module *module, int knobId, std::string const &knobName, Range const &range) {
     module->configParam(knobId, 0.F, 1.F, 0.5F, knobName, "%", 0.F, range.size() * 100.F, range.lowerBound * 100.F);
+  }
+
+  auto taperedAndScaled(std::function<float()> const &rotation, const taper::FixedTaper &taper, Range const &range)
+      -> std::function<float()> {
+    return [rotation, range, &taper]() {
+      auto const tapered = taper.apply(rotation());
+      auto const scaled = range.scale(tapered);
+      return scaled;
+    };
+  }
+
+  auto knob::taperedAndScaled(std::function<float()> const &rotation, taper::FixedTaper const &taper,
+                              std::function<Range const *()> const &range) -> std::function<float()> {
+    return [rotation, range, &taper]() {
+      auto const tapered = taper.apply(rotation());
+      auto const scaled = range()->scale(tapered);
+      return scaled;
+    };
   }
 } // namespace knob
 
