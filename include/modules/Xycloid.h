@@ -44,7 +44,6 @@ private:
   auto yGain() -> float;
   auto yOffset() -> float;
 
-  float wobbleRatioOffset{0.F};
   Rotor wobbler{};
   Rotor throbber{};
 };

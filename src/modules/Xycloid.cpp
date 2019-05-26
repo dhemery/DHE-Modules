@@ -91,7 +91,7 @@ auto Xycloid::wobbleRatioRange() -> const Range & {
 
 auto Xycloid::wobbleRatio() -> float {
   auto wobbleRatioAmount = modulated(WobbleRatioKnob, WobbleRatioCvInput, WobbleRatioAvKnob);
-  auto wobbleRatio = wobbleRatioRange().scale(wobbleRatioAmount) + wobbleRatioOffset;
+  auto wobbleRatio = wobbleRatioRange().scale(wobbleRatioAmount);
   return wobbleRatioIsFree() ? wobbleRatio : std::round(wobbleRatio);
 }
 
