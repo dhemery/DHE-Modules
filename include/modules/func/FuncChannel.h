@@ -2,6 +2,7 @@
 
 #include <array>
 #include <engine/Module.hpp>
+#include <string>
 
 namespace dhe {
 
@@ -11,7 +12,7 @@ class FuncChannel {
 public:
   FuncChannel() = default;
   FuncChannel(rack::engine::Module *module, int inputIndex, int amountIndex, int outputIndex, int operationSwitchIndex,
-              int offsetRangeSwitchIndex, int multiplierRangeSwitchIndex);
+              int offsetRangeSwitchIndex, int multiplierRangeSwitchIndex, std::string const &channelDescription = "");
 
   auto apply(float upstream) -> float;
 
