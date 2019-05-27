@@ -8,29 +8,26 @@
 namespace dhe {
 
 namespace level {
-  const std::array<Range const *, 2> ranges{&bipolarRange, &unipolarRange};
+  auto const bipolarRange = Range{-5.F, 5.F};
+  auto const unipolarRange = Range{0.F, 10.F};
 
-  auto toSelectedRange(rack::engine::Module *module, int switchId) -> std::function<float(float)> {
-    auto const selectedRange = range::selector<2>(module, switchId, level::ranges);
-    return range::scaleTo(selectedRange);
-  }
+  const std::array<Range const *, 2> ranges{&bipolarRange, &unipolarRange};
 
   auto range(float switchPosition) -> Range const * { return ranges[static_cast<int>(switchPosition)]; }
 
   auto withFixedRange(rack::engine::Module *module, int knobId, Range const &range) -> std::function<float()> {
-    auto const rotation = knob::rotation(module, knobId);
-    return knob::scaled(rotation, range::scaleTo(range));
+    return knob::scaled(module, knobId, range);
   }
 
   auto withSelectableRange(rack::engine::Module *module, int knobId, int cvId, int switchId) -> std::function<float()> {
-    auto const rotation = knob::rotation(module, knobId, cvId);
-    return knob::scaled(rotation, toSelectedRange(module, switchId));
+    auto const selectedRange = range::selected<2>(module, switchId, level::ranges);
+    return knob::scaled(module, knobId, cvId, selectedRange);
   }
 
   auto withSelectableRange(rack::engine::Module *module, int knobId, int cvId, int avId, int switchId)
       -> std::function<float()> {
-    auto const rotation = knob::rotation(module, knobId, cvId, avId);
-    return knob::scaled(rotation, toSelectedRange(module, switchId));
+    auto const selectedRange = range::selected<2>(module, switchId, level::ranges);
+    return knob::scaled(module, knobId, cvId, avId, selectedRange);
   }
 
   class KnobParamQuantity : public rack::engine::ParamQuantity {
@@ -60,7 +57,7 @@ namespace level {
 
   void configKnob(rack::engine::Module *module, int knobId, int switchId, std::string const &name,
                   float initialRotation) {
-    auto getRange = range::selector<2>(module, switchId, level::ranges);
+    auto getRange = range::selected<2>(module, switchId, level::ranges);
     configKnob(module, knobId, getRange, name, initialRotation);
   }
 

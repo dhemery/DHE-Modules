@@ -8,10 +8,8 @@
 
 namespace dhe {
 namespace level {
-  static Range constexpr bipolarRange{-5.F, 5.F};
-  static Range constexpr rectifiedBipolarRange{0.F, 5.F};
-  static Range constexpr unipolarRange{0.F, 10.F};
-  static Range constexpr invertibleUnipolarRange{-10.F, 10.F};
+  extern Range const bipolarRange;
+  extern Range const unipolarRange;
 
   extern std::array<Range const *, 2> const ranges;
 

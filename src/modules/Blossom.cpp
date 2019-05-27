@@ -13,6 +13,7 @@ namespace spin {
   static auto constexpr knobTaperCurvature = -0.8F;
   static auto constexpr knobTaper = taper::FixedSTaper{knobTaperCurvature};
   static auto constexpr range = Range{-10.F, 10.F};
+  static auto constexpr initialSpinHz(1.F);
 
   inline auto fromRotation(float rotation) -> float {
     auto const tapered = knobTaper.apply(rotation);
@@ -31,7 +32,6 @@ namespace spin {
   };
 
   void config(Blossom *blossom, int knobId) {
-    static auto constexpr initialSpinHz(0.5F);
     static auto const initialSpinKnobRotation = spin::toRotation(initialSpinHz);
     blossom->configParam<spin::KnobParamQuantity>(knobId, 0.F, 1.F, initialSpinKnobRotation, "Spin", " Hz");
   }

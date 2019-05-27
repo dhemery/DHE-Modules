@@ -5,11 +5,15 @@
 
 namespace dhe {
 
-const std::array<Range const *, 4> multiplierRanges{&attenuator::range, &attenuverter::range, &gain::range,
-                                                    &gain::invertibleRange};
+static const auto minusTwoToPlusTwoRange = Range{-2.F, 2.F};
+static const auto minusTenToPlusTenRange = Range{-10.F, 10.F};
+static const auto zeroToFiveRange = Range{0.F, 5.F};
 
-const std::array<Range const *, 4> offsetRanges{&level::rectifiedBipolarRange, &level::bipolarRange,
-                                                &level::unipolarRange, &level::invertibleUnipolarRange};
+const std::array<Range const *, 4> multiplierRanges{&attenuator::range, &attenuverter::range, &gain::range,
+                                                    &minusTwoToPlusTwoRange};
+
+const std::array<Range const *, 4> offsetRanges{&zeroToFiveRange, &level::bipolarRange, &level::unipolarRange,
+                                                &minusTenToPlusTenRange};
 
 class FuncOperandKnobParamQuantity : public rack::engine::ParamQuantity {
 public:
@@ -49,8 +53,8 @@ FuncChannel::FuncChannel(rack::engine::Module *module, int inputIndex, int opera
   toggle::config<4>(module, multiplierRangeSwitchIndex, "Multiplier " + channelName + " range",
                     {"0–1", "±1", "0–2", "±2"}, 2);
 
-  offsetRange = range::selector<4>(module, offsetRangeSwitchIndex, offsetRanges);
-  multiplierRange = range::selector<4>(module, multiplierRangeSwitchIndex, multiplierRanges);
+  offsetRange = range::selected<4>(module, offsetRangeSwitchIndex, offsetRanges);
+  multiplierRange = range::selected<4>(module, multiplierRangeSwitchIndex, multiplierRanges);
 
   auto const operandKnobParamQuantity
       = dynamic_cast<FuncOperandKnobParamQuantity *>(module->paramQuantities[operandIndex]);

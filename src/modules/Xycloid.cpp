@@ -14,6 +14,7 @@ namespace speed {
   static auto constexpr knobTaperCurvature = -0.8F;
   static auto constexpr knobTaper = taper::FixedSTaper{knobTaperCurvature};
   static auto constexpr range = Range{-10.F, 10.F};
+  static auto constexpr initialSpeedHz(1.F);
 
   inline auto fromRotation(float rotation) -> float {
     auto const tapered = knobTaper.apply(rotation);
@@ -32,7 +33,6 @@ namespace speed {
   };
 
   void config(Xycloid *xycloid, int knobId) {
-    static auto constexpr initialSpeedHz(0.5F);
     static auto const initialRotation = toRotation(initialSpeedHz);
     xycloid->configParam<KnobParamQuantity>(knobId, 0.F, 1.F, initialRotation, "Throb speed", " Hz");
   }
@@ -87,7 +87,7 @@ Xycloid::Xycloid() {
   throbSpeed = knob::taperedAndScaled(this, ThrobSpeedKnob, ThrobSpeedCvInput, ThrobSpeedAvKnob, speed::knobTaper,
                                       speed::range);
 
-  wobbleRatioRange = range::selector<3>(this, WobbleDirectionSwitch, ratio::ranges);
+  wobbleRatioRange = range::selected<3>(this, WobbleDirectionSwitch, ratio::ranges);
   wobbleRatioIsFree = [this]() -> bool { return params[WobbleRatioModeSwitch].getValue() > 0.5F; };
   ratio::config(this, WobbleRatioKnob, wobbleRatioRange, wobbleRatioIsFree);
   attenuverter::config(this, WobbleRatioAvKnob, "Wobble ratio CV gain");
@@ -115,7 +115,7 @@ void Xycloid::process(const ProcessArgs &args) {
   auto const throbDepth = 1.F - wobbleDepth;
 
   throbber.advance(throbSpeed);
-  wobbler.advance(wobbleSpeed, wobblePhaseOffset);
+  wobbler.advance(wobbleSpeed, -wobblePhaseOffset);
   auto const x = throbDepth * throbber.x() + wobbleDepth * wobbler.x();
   auto const y = throbDepth * throbber.y() + wobbleDepth * wobbler.y();
 

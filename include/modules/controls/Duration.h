@@ -9,9 +9,9 @@
 
 namespace dhe {
 namespace duration {
-  static Range constexpr shortRange{0.001F, 1.F};
-  static Range constexpr mediumRange{0.01F, 10.F};
-  static Range constexpr longRange{0.1F, 100.F};
+  extern Range const shortRange;
+  extern Range const mediumRange;
+  extern Range const longRange;
 
   extern std::array<Range const *, 3> const ranges;
 

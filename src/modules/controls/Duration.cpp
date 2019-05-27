@@ -19,19 +19,21 @@ namespace duration {
   static auto const knobTaperCurvature = 0.8018017F;
   static auto const knobTaper = taper::FixedJTaper{knobTaperCurvature};
 
+  auto const shortRange = Range{0.001F, 1.F};
+  auto const mediumRange = Range{0.01F, 10.F};
+  auto const longRange = Range{0.1F, 100.F};
+
   const std::array<Range const *, 3> ranges{&shortRange, &mediumRange, &longRange};
 
   auto range(float switchPosition) -> Range const * { return ranges[static_cast<int>(switchPosition)]; }
 
   auto withFixedRange(rack::engine::Module *module, int knobId, Range const &range) -> std::function<float()> {
-    auto const rotation = knob::rotation(module, knobId);
-    return knob::taperedAndScaled(rotation, knobTaper, range);
+    return knob::taperedAndScaled(module, knobId, knobTaper, range);
   }
 
   auto withSelectableRange(rack::engine::Module *module, int knobId, int cvId, int switchId) -> std::function<float()> {
-    auto const rotation = knob::rotation(module, knobId, cvId);
-    auto const rangeSelector = range::selector<3>(module, switchId, duration::ranges);
-    return knob::taperedAndScaled(rotation, knobTaper, rangeSelector);
+    auto const selectedRange = range::selected<3>(module, switchId, duration::ranges);
+    return knob::taperedAndScaled(module, knobId, cvId, knobTaper, selectedRange);
   }
 
   class KnobParamQuantity : public rack::engine::ParamQuantity {
