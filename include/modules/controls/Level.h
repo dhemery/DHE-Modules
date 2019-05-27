@@ -20,8 +20,8 @@ namespace level {
   auto range(float switchPosition) -> Range const *;
 
   /**
-   * Creates a function that yields the level (in volts) selected by a
-   * cv-modulated knob and a level range switch.
+   * Creates a function that yields the level (in volts) selected by a modulated knob and a level range switch.  The
+   * amount of modulation is determined by the voltage of a CV input.
    * @param knobId the ID of the level knob param
    * @param cvId the ID of the control voltage input
    * @param switchId the ID of the level range switch
@@ -29,9 +29,8 @@ namespace level {
   auto withSelectableRange(rack::engine::Module *module, int knobId, int cvId, int switchId) -> std::function<float()>;
 
   /**
-   * Creates a function that yields the level (in volts) selected by a
-   * cv-modulated knob and a level range switch. The control voltage is further
-   * modulated by an attenuverter.
+   * Creates a function that yields the level (in volts) selected by a modulated knob and a level range switch.  The
+   * amount of modulation is determined by the voltage of a CV input, multiplied by the value of an attenuverter.
    * @param knobId the ID of the level knob param
    * @param cvId the ID of the control voltage input
    * @param avId the ID of the attenuverter param
@@ -41,12 +40,11 @@ namespace level {
       -> std::function<float()>;
 
   /**
-   * Creates a function that yields the level (in volts) selected by a knob
-   * from a given range.
+   * Creates a function that yields the level (in volts) selected by a knob from the unipolar range.
    * @param knobId the ID of the level knob param
    * @param range the range from which to select a voltage
    */
-  auto withFixedRange(rack::engine::Module *module, int knobId, Range const &range) -> std::function<float()>;
+  auto withUnipolarRange(rack::engine::Module *module, int knobId) -> std::function<float()>;
 
   void configKnob(rack::engine::Module *module, int knobId, Range const &range, std::string const &name = "Level",
                   float initialRotation = knob::centered);

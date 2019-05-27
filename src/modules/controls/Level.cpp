@@ -15,10 +15,6 @@ namespace level {
 
   auto range(float switchPosition) -> Range const * { return ranges[static_cast<int>(switchPosition)]; }
 
-  auto withFixedRange(rack::engine::Module *module, int knobId, Range const &range) -> std::function<float()> {
-    return knob::scaled(module, knobId, range);
-  }
-
   auto withSelectableRange(rack::engine::Module *module, int knobId, int cvId, int switchId) -> std::function<float()> {
     auto const selectedRange = range::selected<2>(module, switchId, level::ranges);
     return knob::scaled(module, knobId, cvId, selectedRange);
@@ -28,6 +24,10 @@ namespace level {
       -> std::function<float()> {
     auto const selectedRange = range::selected<2>(module, switchId, level::ranges);
     return knob::scaled(module, knobId, cvId, avId, selectedRange);
+  }
+
+  auto withUnipolarRange(rack::engine::Module *module, int knobId) -> std::function<float()> {
+    return knob::scaled(module, knobId, unipolarRange);
   }
 
   class KnobParamQuantity : public rack::engine::ParamQuantity {

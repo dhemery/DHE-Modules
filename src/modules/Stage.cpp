@@ -23,7 +23,7 @@ Stage::Stage() :
 
   auto const levelRange = level::unipolarRange;
   level::configKnob(this, LevelKnob, levelRange);
-  level = level::withFixedRange(this, LevelKnob, levelRange);
+  level = level::withUnipolarRange(this, LevelKnob);
 
   curvature::configKnob(this, CurveKnob);
   taper = taper::jShaped(this, CurveKnob);
