@@ -3,6 +3,9 @@
 #include "Module.h"
 #include "func/FuncChannel.h"
 
+#include <array>
+#include <vector>
+
 namespace dhe {
 class Func6 : public Module {
   static constexpr auto channelCount = 6;
@@ -24,6 +27,7 @@ public:
 
   enum OutputIds { FuncOutput, OutputCount = FuncOutput + channelCount };
 
-  std::vector<FuncChannel> channels{};
+private:
+  std::vector<std::unique_ptr<FuncChannel>> channels;
 };
 } // namespace dhe

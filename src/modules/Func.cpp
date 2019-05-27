@@ -4,9 +4,9 @@ namespace dhe {
 Func::Func() {
   config(ParameterCount, InputCount, OutputCount);
 
-  channel
-      = FuncChannel{this, FuncInput, AmountKnob, FuncOutput, OperationSwitch, OffsetRangeSwitch, MultiplierRangeSwitch};
+  channel = std::unique_ptr<FuncChannel>(new FuncChannel(this, FuncInput, AmountKnob, FuncOutput, OperationSwitch,
+                                                         OffsetRangeSwitch, MultiplierRangeSwitch));
 }
 
-void Func::process(const ProcessArgs & /*args*/) { channel.apply(0.F); }
+void Func::process(const ProcessArgs & /*args*/) { channel->apply(0.F); }
 } // namespace dhe
