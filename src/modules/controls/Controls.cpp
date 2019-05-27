@@ -157,6 +157,9 @@ namespace range {
   template auto selector<3>(rack::engine::Module *module, int switchId, std::array<Range const *, 3> const &ranges)
       -> std::function<Range const *()>;
 
+  template auto selector<4>(rack::engine::Module *module, int switchId, std::array<Range const *, 4> const &ranges)
+      -> std::function<Range const *()>;
+
 } // namespace range
 
 namespace toggle {

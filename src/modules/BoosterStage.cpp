@@ -10,8 +10,6 @@
 
 namespace dhe {
 
-using ParamQuantity = rack::engine::ParamQuantity;
-
 BoosterStage::BoosterStage() :
     stateMachine{[this]() -> bool { return deferGateIsActive(); },
                  [this]() -> bool { return deferGateIn(); },
