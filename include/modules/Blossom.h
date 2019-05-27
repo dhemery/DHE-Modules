@@ -39,7 +39,6 @@ public:
   enum OutputIds { XOutput, YOutput, OutputCount };
 
 private:
-  auto offset(int param) -> float;
   auto phase() -> float;
   auto xGain() -> float;
   auto xOffset() -> float;

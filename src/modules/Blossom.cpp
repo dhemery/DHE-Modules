@@ -9,63 +9,79 @@
 #include <math.h>
 
 namespace dhe {
-static auto constexpr throbSpeedKnobCurvature = -0.8F;
-static auto constexpr phaseOffsetRange = Range{-180.F, 180.F};
-static auto constexpr bounceRatioRange = Range{1.F, 17.F};
-static auto constexpr spinRange = Range{-10.F, 10.F};
-static auto constexpr spinKnobTaper = taper::FixedSTaper{throbSpeedKnobCurvature};
+namespace spin {
+  static auto constexpr knobTaperCurvature = -0.8F;
+  static auto constexpr knobTaper = taper::FixedSTaper{knobTaperCurvature};
+  static auto constexpr range = Range{-10.F, 10.F};
 
-inline auto rotationToSpin(float rotation) -> float {
-  auto const tapered = spinKnobTaper.apply(rotation);
-  return spinRange.scale(tapered);
-}
-
-inline auto spinToRotation(float spin) -> float {
-  auto const tapered = spinRange.normalize(spin);
-  return spinKnobTaper.invert(tapered);
-}
-
-class SpinKnobParamQuantity : public rack::engine::ParamQuantity {
-  auto getDisplayValue() -> float override { return rotationToSpin(getValue()); }
-
-  void setDisplayValue(float spin) override { setValue(spinToRotation(spin)); }
-};
-
-class BounceRatioKnobParamQuantity : public rack::engine::ParamQuantity {
-public:
-  auto getDisplayValue() -> float override {
-    auto const rotation = getValue();
-    auto const freeBounceRatio = bounceRatioRange.scale(rotation);
-    auto const spin = blossom->isBounceFree() ? freeBounceRatio : std::round(freeBounceRatio);
-    return spin;
+  inline auto fromRotation(float rotation) -> float {
+    auto const tapered = knobTaper.apply(rotation);
+    return range.scale(tapered);
   }
 
-  void setDisplayValue(float bounceRatio) override {
-    auto const rotation = bounceRatioRange.normalize(bounceRatio);
-    setValue(rotation);
+  inline auto toRotation(float spin) -> float {
+    auto const tapered = range.normalize(spin);
+    return knobTaper.invert(tapered);
   }
 
-  void setBlossom(Blossom *theBlossom) { blossom = theBlossom; }
+  class KnobParamQuantity : public rack::engine::ParamQuantity {
+    auto getDisplayValue() -> float override { return fromRotation(getValue()); }
 
-private:
-  Blossom *blossom;
-};
+    void setDisplayValue(float spin) override { setValue(toRotation(spin)); }
+  };
+
+  void config(Blossom *blossom, int knobId) {
+    static auto constexpr initialSpinHz(0.5F);
+    static auto const initialSpinKnobRotation = spin::toRotation(initialSpinHz);
+    blossom->configParam<spin::KnobParamQuantity>(knobId, 0.F, 1.F, initialSpinKnobRotation, "Spin", " Hz");
+  }
+} // namespace spin
+
+namespace bounce {
+  static auto constexpr range = Range{1.F, 17.F};
+
+  class KnobParamQuantity : public rack::engine::ParamQuantity {
+  public:
+    auto getDisplayValue() -> float override {
+      auto const rotation = getValue();
+      auto const freeBounceRatio = range.scale(rotation);
+      auto const spin = blossom->isBounceFree() ? freeBounceRatio : std::round(freeBounceRatio);
+      return spin;
+    }
+
+    void setDisplayValue(float bounceRatio) override {
+      auto const rotation = range.normalize(bounceRatio);
+      setValue(rotation);
+    }
+
+    void setBlossom(Blossom *theBlossom) { blossom = theBlossom; }
+
+  private:
+    Blossom *blossom;
+  };
+
+  void config(Blossom *blossom, int knobId) {
+    blossom->configParam<bounce::KnobParamQuantity>(knobId, 0.F, 1.F, knob::centered, "Bounce ratio", " per spin");
+    auto const paramQuantity = blossom->paramQuantities[knobId];
+    auto const bounceRatioParamQuantity = dynamic_cast<bounce::KnobParamQuantity *>(paramQuantity);
+    bounceRatioParamQuantity->setBlossom(blossom);
+  }
+} // namespace bounce
+
+namespace phase {
+  static auto constexpr displayRange = Range{-180.F, 180.F};
+}
 
 Blossom::Blossom() {
   config(ParameterCount, InputCount, OutputCount);
 
-  static auto constexpr initialSpinHz(0.5F);
-  static auto const initialSpinKnobRotation = spinToRotation(initialSpinHz);
-  configParam<SpinKnobParamQuantity>(SpinKnob, 0.F, 1.F, initialSpinKnobRotation, "Spin", " Hz");
+  spin::config(this, SpinKnob);
   attenuverter::config(this, SpinAvKNob, "Spin CV gain");
-  spin = knob::taperedAndScaled(this, SpinKnob, SpinCvInput, SpinAvKNob, spinKnobTaper, spinRange);
+  spin = knob::taperedAndScaled(this, SpinKnob, SpinCvInput, SpinAvKNob, spin::knobTaper, spin::range);
 
-  configParam<BounceRatioKnobParamQuantity>(BounceRatioKnob, 0.F, 1.F, knob::centered, "Bounce ratio", " per spin");
-  auto const bounceRatioParamQuantity = dynamic_cast<BounceRatioKnobParamQuantity *>(paramQuantities[BounceRatioKnob]);
-  bounceRatioParamQuantity->setBlossom(this);
-
+  bounce::config(this, BounceRatioKnob);
   attenuverter::config(this, BounceRatioAvKnob, "Bounce ratio CV gain");
-  bounce = knob::scaled(this, BounceRatioKnob, BounceRatioCvInput, BounceRatioAvKnob, bounceRatioRange);
+  bounce = knob::scaled(this, BounceRatioKnob, BounceRatioCvInput, BounceRatioAvKnob, bounce::range);
 
   toggle::config<2>(this, BounceRatioModeSwitch, "Bounce ratio mode", {"Quantized", "Free"}, 1);
 
@@ -73,7 +89,7 @@ Blossom::Blossom() {
   attenuverter::config(this, BounceDepthAvKnob, "Bounce depth CV gain");
   depth = knob::rotation(this, BounceDepthKnob, BounceDepthCvInput, BounceDepthAvKnob);
 
-  knob::config(this, BouncePhaseOffsetKnob, "Bounce phase offset", "°", phaseOffsetRange);
+  knob::config(this, BouncePhaseOffsetKnob, "Bounce phase offset", "°", phase::displayRange);
   attenuverter::config(this, BouncePhaseOffsetAvKnob, "Bounce phase offset CV gain");
 
   gain::config(this, XGainKnob, "X gain");
@@ -103,11 +119,6 @@ void Blossom::process(const ProcessArgs &args) {
   outputs[YOutput].setVoltage(yVoltage);
 }
 
-auto Blossom::offset(int param) -> float {
-  auto isUni = params[param].getValue() > 0.5F;
-  return isUni ? 1.F : 0.F;
-}
-
 auto Blossom::isBounceFree() -> bool { return params[BounceRatioModeSwitch].getValue() > 0.1F; }
 
 auto Blossom::phase() -> float {
@@ -115,7 +126,7 @@ auto Blossom::phase() -> float {
   return rotation - 0.5F;
 }
 
-auto Blossom::xOffset() -> float { return offset(XRangeSwitch); }
+auto Blossom::xOffset() -> float { return params[XRangeSwitch].getValue(); }
 
 auto Blossom::xGain() -> float {
   float gainAmount = modulated(XGainKnob, XGainCvInput);
@@ -127,6 +138,6 @@ auto Blossom::yGain() -> float {
   return gain::range.scale(gainAmount);
 }
 
-auto Blossom::yOffset() -> float { return offset(YRangeSwitch); }
+auto Blossom::yOffset() -> float { return params[YRangeSwitch].getValue(); }
 
 } // namespace dhe
