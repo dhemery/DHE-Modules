@@ -11,15 +11,6 @@ public:
   BoosterStage();
   void process(const ProcessArgs &args) override;
 
-  auto deferGateIn() -> bool;
-  auto deferGateIsActive() const -> bool;
-  void forward();
-  void generate(float phase);
-  void prepareToGenerate();
-  void setActive(bool active);
-  void setEoc(bool eoc);
-  auto stageGateIn() -> bool;
-
   enum ParameterIds {
     ActiveButton,
     CurveKnob,
@@ -47,10 +38,18 @@ public:
   enum OutputIds { ActiveOutput, EocOutput, EnvelopeOutput, OutputCount };
 
 private:
+  auto deferGateIn() -> bool;
+  auto deferGateIsActive() const -> bool;
   auto envelopeIn() -> float;
+  void forward();
+  void generate(float phase);
+  void prepareToGenerate();
   void sendActive();
   void sendEoc();
   void sendOut(float voltage);
+  void setActive(bool active);
+  void setEoc(bool eoc);
+  auto stageGateIn() -> bool;
 
   StageStateMachine stateMachine;
   bool isActive{false};

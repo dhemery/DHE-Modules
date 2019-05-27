@@ -12,15 +12,6 @@ public:
   Stage();
   void process(const ProcessArgs &args) override;
 
-  auto deferGateIn() -> bool;
-  auto deferGateIsActive() const -> bool;
-  void forward();
-  void generate(float phase);
-  void prepareToGenerate();
-  void setActive(bool active);
-  void setEoc(bool eoc);
-  auto stageGateIn() -> bool;
-
   enum ParameterIds { DurationKnob, LevelKnob, CurveKnob, ParameterCount };
 
   enum InputIds { EnvelopeInput, TriggerInput, DeferGateInput, InputCount };
@@ -28,8 +19,16 @@ public:
   enum OutputIds { EnvelopeOutput, EocOutput, ActiveOutput, OutputCount };
 
 private:
+  auto deferGateIn() -> bool;
+  auto deferGateIsActive() const -> bool;
   auto envelopeIn() -> float;
+  void forward();
+  void generate(float phase);
+  void prepareToGenerate();
   void sendOut(float voltage);
+  void setActive(bool active);
+  void setEoc(bool eoc);
+  auto stageGateIn() -> bool;
 
   std::function<float()> duration;
   std::function<float()> level;

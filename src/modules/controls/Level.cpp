@@ -13,8 +13,6 @@ namespace level {
 
   const std::array<Range const *, 2> ranges{&bipolarRange, &unipolarRange};
 
-  auto range(float switchPosition) -> Range const * { return ranges[static_cast<int>(switchPosition)]; }
-
   auto withSelectableRange(rack::engine::Module *module, int knobId, int cvId, int switchId) -> std::function<float()> {
     auto const selectedRange = range::selected<2>(module, switchId, level::ranges);
     return knob::scaled(module, knobId, cvId, selectedRange);

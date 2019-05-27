@@ -12,14 +12,6 @@ public:
   Hostage();
   void process(const ProcessArgs &args) override;
 
-  auto deferGateIn() -> bool;
-  auto deferGateIsActive() const -> bool;
-  void forward();
-  auto isSustainMode() -> bool;
-  void setActive(bool active);
-  void setEoc(bool eoc);
-  auto stageGateIn() -> bool;
-
   enum ParameterIds { DurationKnob, DurationRangeSwitch, ModeSwitch, ParameterCount };
 
   enum InputIds { DeferGateInput, DurationCvInput, EnvelopeInput, GateInput, InputCount };
@@ -27,8 +19,15 @@ public:
   enum OutputIds { ActiveOutput, EnvelopeOutput, EocOutput, OutputCount };
 
 private:
+  auto deferGateIn() -> bool;
+  auto deferGateIsActive() const -> bool;
   auto envelopeIn() -> float;
+  void forward();
+  auto isSustainMode() -> bool;
   void sendOut(float voltage);
+  void setActive(bool active);
+  void setEoc(bool eoc);
+  auto stageGateIn() -> bool;
 
   std::function<float()> duration;
   HostageStateMachine stateMachine;

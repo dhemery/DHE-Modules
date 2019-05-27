@@ -14,13 +14,7 @@ namespace level {
   extern std::array<Range const *, 2> const ranges;
 
   /**
-   * Returns the range for the given range switch position.
-   * @param switchPosition the position of the range switch
-   */
-  auto range(float switchPosition) -> Range const *;
-
-  /**
-   * Creates a function that yields the level (in volts) selected by a modulated knob and a level range switch.  The
+   * Creates a function that yields the level (in volts) selected by a modulated knob and a level range switch. The
    * amount of modulation is determined by the voltage of a CV input.
    * @param knobId the ID of the level knob param
    * @param cvId the ID of the control voltage input
@@ -29,7 +23,7 @@ namespace level {
   auto withSelectableRange(rack::engine::Module *module, int knobId, int cvId, int switchId) -> std::function<float()>;
 
   /**
-   * Creates a function that yields the level (in volts) selected by a modulated knob and a level range switch.  The
+   * Creates a function that yields the level (in volts) selected by a modulated knob and a level range switch. The
    * amount of modulation is determined by the voltage of a CV input, multiplied by the value of an attenuverter.
    * @param knobId the ID of the level knob param
    * @param cvId the ID of the control voltage input

@@ -25,7 +25,7 @@ void Upstage::process(const ProcessArgs & /*args*/) {
 void Upstage::sendEnvelope(float voltage) { outputs[EnvelopeOutput].setVoltage(voltage); }
 
 void Upstage::sendTrigger(bool isTriggered) {
-  const auto voltage = isTriggered ? 10.F : 0.F;
+  const auto voltage = level::unipolarRange.scale(isTriggered);
   outputs[TriggerOutput].setVoltage(voltage);
 }
 

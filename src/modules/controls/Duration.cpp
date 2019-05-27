@@ -25,10 +25,8 @@ namespace duration {
 
   const std::array<Range const *, 3> ranges{&shortRange, &mediumRange, &longRange};
 
-  auto range(float switchPosition) -> Range const * { return ranges[static_cast<int>(switchPosition)]; }
-
-  auto withFixedRange(rack::engine::Module *module, int knobId, Range const &range) -> std::function<float()> {
-    return knob::taperedAndScaled(module, knobId, knobTaper, range);
+  auto withMediumRange(rack::engine::Module *module, int knobId) -> std::function<float()> {
+    return knob::taperedAndScaled(module, knobId, knobTaper, mediumRange);
   }
 
   auto withSelectableRange(rack::engine::Module *module, int knobId, int cvId, int switchId) -> std::function<float()> {

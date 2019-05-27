@@ -17,12 +17,10 @@ Stage::Stage() :
                  [this](bool eoc) { setEoc(eoc); }} {
   config(ParameterCount, InputCount, OutputCount);
 
-  auto const durationRange = duration::mediumRange;
-  duration::configKnob(this, DurationKnob, durationRange);
-  duration = duration::withFixedRange(this, DurationKnob, durationRange);
+  duration::configKnob(this, DurationKnob, duration::mediumRange);
+  duration = duration::withMediumRange(this, DurationKnob);
 
-  auto const levelRange = level::unipolarRange;
-  level::configKnob(this, LevelKnob, levelRange);
+  level::configKnob(this, LevelKnob, level::unipolarRange);
   level = level::withUnipolarRange(this, LevelKnob);
 
   curvature::configKnob(this, CurveKnob);
@@ -46,12 +44,12 @@ void Stage::prepareToGenerate() { startVoltage = envelopeIn(); }
 void Stage::sendOut(float voltage) { outputs[EnvelopeOutput].setVoltage(voltage); }
 
 void Stage::setActive(bool active) {
-  const auto voltage = active ? 10.F : 0.F;
+  const auto voltage = level::unipolarRange.scale(active);
   outputs[ActiveOutput].setVoltage(voltage);
 }
 
 void Stage::setEoc(bool eoc) {
-  const auto voltage = eoc ? 10.F : 0.F;
+  const auto voltage = level::unipolarRange.scale(eoc);
   outputs[EocOutput].setVoltage(voltage);
 }
 

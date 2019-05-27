@@ -77,13 +77,13 @@ auto BoosterStage::envelopeIn() -> float { return inputs[EnvelopeInput].getVolta
 
 void BoosterStage::sendActive() {
   auto const activeButton = params[ActiveButton].getValue() > 0.5F;
-  auto const voltage = isActive || activeButton ? 10.F : 0.F;
+  auto const voltage = level::unipolarRange.scale(isActive || activeButton);
   outputs[ActiveOutput].setVoltage(voltage);
 }
 
 void BoosterStage::sendEoc() {
   auto const eocButton = params[EocButton].getValue() > 0.5F;
-  auto const voltage = isEoc || eocButton ? 10.F : 0.F;
+  auto const voltage = level::unipolarRange.scale(isEoc || eocButton);
   outputs[EocOutput].setVoltage(voltage);
 }
 
