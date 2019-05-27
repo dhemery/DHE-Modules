@@ -7,16 +7,37 @@
 #include <array>
 
 namespace dhe {
-constexpr auto speedKnobTaperCurvature = -0.8F;
-static constexpr auto throbSpeedRange = Range{-10.F, 10.F};
-static constexpr auto wobbleDepthRange = Range{0.F, 1.F};
+static auto constexpr throbSpeedKnobCurvature = -0.8F;
+static auto constexpr throbSpeedRange = Range{-10.F, 10.F};
+static auto constexpr throbSpeedKnobTaper = taper::FixedSTaper{throbSpeedKnobCurvature};
+static auto constexpr wobbleDepthRange = Range{0.F, 1.F};
 static auto constexpr phaseOffsetRange = Range{-180.F, 180.F};
+
+inline auto rotationToThrobSpeed(float rotation) -> float {
+  auto const tapered = throbSpeedKnobTaper.apply(rotation);
+  return throbSpeedRange.scale(tapered);
+}
+
+inline auto throbSpeedToRotation(float throbSpeed) -> float {
+  auto const tapered = throbSpeedRange.normalize(throbSpeed);
+  return throbSpeedKnobTaper.invert(tapered);
+}
+
+class ThrobSpeedKnobParamQuantity : public rack::engine::ParamQuantity {
+  auto getDisplayValue() -> float override { return rotationToThrobSpeed(getValue()); }
+
+  void setDisplayValue(float throbSpeed) override { setValue(throbSpeedToRotation(throbSpeed)); }
+}; // namespace curvature
 
 Xycloid::Xycloid() {
   config(ParameterCount, InputCount, OutputCount);
 
-  knob::config(this, ThrobSpeedKnob, "Throb speed", " Hz", throbSpeedRange, 0.65F);
+  static auto constexpr initialThrobSpeedHz(0.5F);
+  auto const initialSpinKnobRotation = throbSpeedToRotation(initialThrobSpeedHz);
+  configParam<ThrobSpeedKnobParamQuantity>(ThrobSpeedKnob, 0.F, 1.F, initialSpinKnobRotation, "Throb speed", " Hz");
   attenuverter::config(this, ThrobSpeedAvKnob, "Throb speed CV gain");
+  throbSpeed = knob::taperedAndScaled(this, ThrobSpeedKnob, ThrobSpeedCvInput, ThrobSpeedAvKnob, throbSpeedKnobTaper,
+                                      throbSpeedRange);
 
   configParam(WobbleRatioKnob, 0.F, 1.F, 0.5F, "Wobble ratio");
   attenuverter::config(this, WobbleRatioAvKnob, "Wobble ratio CV gain");
@@ -38,7 +59,7 @@ void Xycloid::process(const ProcessArgs &args) {
   auto const wobbleRatio = this->wobbleRatio();
   auto const wobblePhaseOffset = wobbleRatio < 0.F ? -wobblePhase() : wobblePhase();
 
-  auto const throbSpeed = this->throbSpeed(args.sampleTime);
+  auto const throbSpeed = -this->throbSpeed() * args.sampleTime;
   auto const wobbleSpeed = wobbleRatio * throbSpeed;
   auto const wobbleDepth = this->wobbleDepth();
   auto const throbDepth = 1.F - wobbleDepth;
@@ -57,12 +78,6 @@ auto Xycloid::wobbleRatioIsFree() -> bool { return params[WobbleRatioModeSwitch]
 auto Xycloid::offset(int param) -> float {
   auto isUni = params[param].getValue() > 0.5F;
   return isUni ? 1.F : 0.F;
-}
-
-auto Xycloid::throbSpeed(float sampleTime) -> float {
-  auto rotation = modulated(ThrobSpeedKnob, ThrobSpeedCvInput, ThrobSpeedAvKnob);
-  auto tapered = taper::variableSTaper.apply(rotation, speedKnobTaperCurvature);
-  return -throbSpeedRange.scale(tapered) * sampleTime;
 }
 
 auto Xycloid::wobbleDepth() -> float {

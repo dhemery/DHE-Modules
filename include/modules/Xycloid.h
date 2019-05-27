@@ -34,7 +34,6 @@ public:
 private:
   auto wobbleRatioIsFree() -> bool;
   auto offset(int param) -> float;
-  auto throbSpeed(float sampleTime) -> float;
   auto wobbleDepth() -> float;
   auto wobblePhase() -> float;
   auto wobbleRatioRange() -> const Range &;
@@ -44,6 +43,7 @@ private:
   auto yGain() -> float;
   auto yOffset() -> float;
 
+  std::function<float()> throbSpeed;
   Rotor wobbler{};
   Rotor throbber{};
 };

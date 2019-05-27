@@ -8,12 +8,11 @@
 #include <array>
 
 namespace dhe {
-static auto constexpr speedCurvature = -0.8F;
+static auto constexpr throbSpeedKnobCurvature = -0.8F;
 static auto constexpr phaseOffsetRange = Range{-180.F, 180.F};
 static auto constexpr bounceRatioRange = Range{1.F, 17.F};
 static auto constexpr spinRange = Range{-10.F, 10.F};
-static auto constexpr spinKnobTaper = taper::FixedSTaper{speedCurvature};
-static auto constexpr initialSpinHz(1.F);
+static auto constexpr spinKnobTaper = taper::FixedSTaper{throbSpeedKnobCurvature};
 
 inline auto rotationToSpin(float rotation) -> float {
   auto const tapered = spinKnobTaper.apply(rotation);
@@ -25,8 +24,6 @@ inline auto spinToRotation(float spin) -> float {
   return spinKnobTaper.invert(tapered);
 }
 
-static auto const initialSpinKnobRotation = spinToRotation(initialSpinHz);
-
 class SpinKnobParamQuantity : public rack::engine::ParamQuantity {
   auto getDisplayValue() -> float override { return rotationToSpin(getValue()); }
 
@@ -36,6 +33,8 @@ class SpinKnobParamQuantity : public rack::engine::ParamQuantity {
 Blossom::Blossom() {
   config(ParameterCount, InputCount, OutputCount);
 
+  static auto constexpr initialSpinHz(0.5F);
+  static auto const initialSpinKnobRotation = spinToRotation(initialSpinHz);
   configParam<SpinKnobParamQuantity>(SpinKnob, 0.F, 1.F, initialSpinKnobRotation, "Spin", " Hz");
   attenuverter::config(this, SpinAvKNob, "Spin CV gain");
   spin = knob::taperedAndScaled(this, SpinKnob, SpinCvInput, SpinAvKNob, spinKnobTaper, spinRange);
