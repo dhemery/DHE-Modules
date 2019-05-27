@@ -4,6 +4,8 @@
 #include "modules/components/Rotor.h"
 #include "util/Range.h"
 
+#include <functional>
+
 namespace dhe {
 
 class Xycloid : public Module {
@@ -32,17 +34,17 @@ public:
   enum OutputIds { XOutput, YOutput, OutputCount };
 
 private:
-  auto wobbleRatioIsFree() -> bool;
   auto offset(int param) -> float;
   auto wobbleDepth() -> float;
   auto wobblePhase() -> float;
-  auto wobbleRatioRange() -> const Range &;
   auto wobbleRatio() -> float;
   auto xOffset() -> float;
   auto xGain() -> float;
   auto yGain() -> float;
   auto yOffset() -> float;
 
+  std::function<Range const *()> wobbleRatioRange;
+  std::function<bool()> wobbleRatioIsFree;
   std::function<float()> throbSpeed;
   Rotor wobbler{};
   Rotor throbber{};

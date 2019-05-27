@@ -7,41 +7,91 @@
 #include <array>
 
 namespace dhe {
-static auto constexpr throbSpeedKnobCurvature = -0.8F;
-static auto constexpr throbSpeedRange = Range{-10.F, 10.F};
-static auto constexpr throbSpeedKnobTaper = taper::FixedSTaper{throbSpeedKnobCurvature};
 static auto constexpr wobbleDepthRange = Range{0.F, 1.F};
 static auto constexpr phaseOffsetRange = Range{-180.F, 180.F};
 
-inline auto rotationToThrobSpeed(float rotation) -> float {
-  auto const tapered = throbSpeedKnobTaper.apply(rotation);
-  return throbSpeedRange.scale(tapered);
-}
+namespace speed {
+  static auto constexpr knobTaperCurvature = -0.8F;
+  static auto constexpr knobTaper = taper::FixedSTaper{knobTaperCurvature};
+  static auto constexpr range = Range{-10.F, 10.F};
 
-inline auto throbSpeedToRotation(float throbSpeed) -> float {
-  auto const tapered = throbSpeedRange.normalize(throbSpeed);
-  return throbSpeedKnobTaper.invert(tapered);
-}
+  inline auto fromRotation(float rotation) -> float {
+    auto const tapered = knobTaper.apply(rotation);
+    return range.scale(tapered);
+  }
 
-class ThrobSpeedKnobParamQuantity : public rack::engine::ParamQuantity {
-  auto getDisplayValue() -> float override { return rotationToThrobSpeed(getValue()); }
+  inline auto toRotation(float spin) -> float {
+    auto const tapered = range.normalize(spin);
+    return knobTaper.invert(tapered);
+  }
 
-  void setDisplayValue(float throbSpeed) override { setValue(throbSpeedToRotation(throbSpeed)); }
-}; // namespace curvature
+  class KnobParamQuantity : public rack::engine::ParamQuantity {
+    auto getDisplayValue() -> float override { return fromRotation(getValue()); }
+
+    void setDisplayValue(float spin) override { setValue(toRotation(spin)); }
+  };
+
+  void config(Xycloid *xycloid, int knobId) {
+    static auto constexpr initialSpeedHz(0.5F);
+    static auto const initialRotation = toRotation(initialSpeedHz);
+    xycloid->configParam<KnobParamQuantity>(knobId, 0.F, 1.F, initialRotation, "Throb speed", " Hz");
+  }
+} // namespace speed
+
+namespace ratio {
+  static constexpr auto maxRatio = 16.F;
+  static constexpr auto inward = Range{0.F, -maxRatio};
+  static constexpr auto outward = Range{0.F, maxRatio};
+  static constexpr auto bidirectional = Range{-maxRatio, maxRatio};
+  static constexpr std::array<Range const *, 3> const ranges{&inward, &bidirectional, &outward};
+
+  class KnobParamQuantity : public rack::engine::ParamQuantity {
+  public:
+    auto getDisplayValue() -> float override {
+      auto const rotation = getValue();
+      auto const freeRatio = range()->scale(rotation);
+      auto const ratio = ratioIsFree() ? freeRatio : std::round(freeRatio);
+      return ratio;
+    }
+
+    void setDisplayValue(float bounceRatio) override {
+      auto const rotation = range()->normalize(bounceRatio);
+      setValue(rotation);
+    }
+
+    void initialize(std::function<Range const *()> const &wobbleRatioRange,
+                    std::function<bool()> const &wobbleRatioIsFree) {
+      range = wobbleRatioRange;
+      ratioIsFree = wobbleRatioIsFree;
+    }
+
+  private:
+    std::function<bool()> ratioIsFree;
+    std::function<Range const *()> range;
+  };
+
+  void config(Xycloid *xycloid, int knobId, std::function<Range const *()> const &wobbleRatioRange,
+              std::function<bool()> const &wobbleRatioIsFree) {
+    xycloid->configParam<KnobParamQuantity>(knobId, 0.F, 1.F, knob::centered, "Wobble ratio", " per throb");
+    auto const paramQuantity = xycloid->paramQuantities[knobId];
+    auto const bounceRatioParamQuantity = dynamic_cast<KnobParamQuantity *>(paramQuantity);
+    bounceRatioParamQuantity->initialize(wobbleRatioRange, wobbleRatioIsFree);
+  }
+} // namespace ratio
 
 Xycloid::Xycloid() {
   config(ParameterCount, InputCount, OutputCount);
 
-  static auto constexpr initialThrobSpeedHz(0.5F);
-  auto const initialSpinKnobRotation = throbSpeedToRotation(initialThrobSpeedHz);
-  configParam<ThrobSpeedKnobParamQuantity>(ThrobSpeedKnob, 0.F, 1.F, initialSpinKnobRotation, "Throb speed", " Hz");
+  speed::config(this, ThrobSpeedKnob);
   attenuverter::config(this, ThrobSpeedAvKnob, "Throb speed CV gain");
-  throbSpeed = knob::taperedAndScaled(this, ThrobSpeedKnob, ThrobSpeedCvInput, ThrobSpeedAvKnob, throbSpeedKnobTaper,
-                                      throbSpeedRange);
+  throbSpeed = knob::taperedAndScaled(this, ThrobSpeedKnob, ThrobSpeedCvInput, ThrobSpeedAvKnob, speed::knobTaper,
+                                      speed::range);
 
-  configParam(WobbleRatioKnob, 0.F, 1.F, 0.5F, "Wobble ratio");
+  wobbleRatioRange = range::selector<3>(this, WobbleDirectionSwitch, ratio::ranges);
+  wobbleRatioIsFree = [this]() -> bool { return params[WobbleRatioModeSwitch].getValue() > 0.5F; };
+  ratio::config(this, WobbleRatioKnob, wobbleRatioRange, wobbleRatioIsFree);
   attenuverter::config(this, WobbleRatioAvKnob, "Wobble ratio CV gain");
-  toggle::config<3>(this, WobbleDirectionSwitch, "Wobble direction", {"Inward", "Both", "Outward"}, 2);
+  toggle::config<3>(this, WobbleDirectionSwitch, "Wobble direction", {"In", "-In +Out", "Out"}, 2);
   toggle::config<2>(this, WobbleRatioModeSwitch, "Wobble ratio mode", {"Quantized", "Free"}, 1);
 
   knob::configPercentage(this, WobbleDepthKnob, "Wobble depth", {0.F, 1.F});
@@ -60,7 +110,7 @@ void Xycloid::process(const ProcessArgs &args) {
   auto const wobblePhaseOffset = wobbleRatio < 0.F ? -wobblePhase() : wobblePhase();
 
   auto const throbSpeed = -this->throbSpeed() * args.sampleTime;
-  auto const wobbleSpeed = wobbleRatio * throbSpeed;
+  auto const wobbleSpeed = -wobbleRatio * throbSpeed;
   auto const wobbleDepth = this->wobbleDepth();
   auto const throbDepth = 1.F - wobbleDepth;
 
@@ -72,8 +122,6 @@ void Xycloid::process(const ProcessArgs &args) {
   outputs[XOutput].setVoltage(5.F * xGain() * (x + xOffset()));
   outputs[YOutput].setVoltage(5.F * yGain() * (y + yOffset()));
 }
-
-auto Xycloid::wobbleRatioIsFree() -> bool { return params[WobbleRatioModeSwitch].getValue() > 0.1F; }
 
 auto Xycloid::offset(int param) -> float {
   auto isUni = params[param].getValue() > 0.5F;
@@ -90,23 +138,9 @@ auto Xycloid::wobblePhase() -> float {
   return rotation - 0.5F;
 }
 
-auto Xycloid::wobbleRatioRange() -> const Range & {
-  static constexpr auto wobbleRatioMax = 16.F;
-  static constexpr auto inwardWobbleRatioRange = Range{0.F, wobbleRatioMax};
-  static constexpr auto outwardWobbleRatioRange = Range{0.F, -wobbleRatioMax};
-  static constexpr auto bidirectionalWobbleRatioRange = Range{wobbleRatioMax, -wobbleRatioMax};
-  static constexpr std::array<Range, 3> wobbleRatioRanges{inwardWobbleRatioRange, bidirectionalWobbleRatioRange,
-                                                          outwardWobbleRatioRange};
-
-  const auto param = params[WobbleDirectionSwitch].getValue();
-  const auto selection = static_cast<int>(param);
-
-  return wobbleRatioRanges[selection];
-}
-
 auto Xycloid::wobbleRatio() -> float {
   auto wobbleRatioAmount = modulated(WobbleRatioKnob, WobbleRatioCvInput, WobbleRatioAvKnob);
-  auto wobbleRatio = wobbleRatioRange().scale(wobbleRatioAmount);
+  auto wobbleRatio = wobbleRatioRange()->scale(wobbleRatioAmount);
   return wobbleRatioIsFree() ? wobbleRatio : std::round(wobbleRatio);
 }
 

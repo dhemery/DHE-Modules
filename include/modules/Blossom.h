@@ -3,13 +3,14 @@
 #include "Module.h"
 #include "modules/components/Rotor.h"
 
+#include <functional>
+
 namespace dhe {
 
 class Blossom : public Module {
 public:
   Blossom();
   void process(const ProcessArgs &args) override;
-  auto isBounceFree() -> bool;
 
   enum ParameterIds {
     SpinKnob,
@@ -46,6 +47,7 @@ private:
   auto yOffset() -> float;
 
   std::function<float()> bounce;
+  std::function<bool()> bounceIsFree;
   std::function<float()> depth;
   std::function<float()> spin;
   Rotor spinner{};

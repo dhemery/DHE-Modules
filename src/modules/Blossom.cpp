@@ -6,7 +6,7 @@
 #include "util/Sigmoid.h"
 
 #include <array>
-#include <math.h>
+#include <cmath>
 
 namespace dhe {
 namespace spin {
@@ -45,7 +45,7 @@ namespace bounce {
     auto getDisplayValue() -> float override {
       auto const rotation = getValue();
       auto const freeBounceRatio = range.scale(rotation);
-      auto const spin = blossom->isBounceFree() ? freeBounceRatio : std::round(freeBounceRatio);
+      auto const spin = bounceIsFree() ? freeBounceRatio : std::round(freeBounceRatio);
       return spin;
     }
 
@@ -54,17 +54,17 @@ namespace bounce {
       setValue(rotation);
     }
 
-    void setBlossom(Blossom *theBlossom) { blossom = theBlossom; }
+    void initialize(std::function<bool()> const &bounceIsFree) { this->bounceIsFree = bounceIsFree; }
 
   private:
-    Blossom *blossom;
+    std::function<bool()> bounceIsFree;
   };
 
-  void config(Blossom *blossom, int knobId) {
+  void config(Blossom *blossom, int knobId, std::function<bool()> const &bounceIsFree) {
     blossom->configParam<bounce::KnobParamQuantity>(knobId, 0.F, 1.F, knob::centered, "Bounce ratio", " per spin");
     auto const paramQuantity = blossom->paramQuantities[knobId];
     auto const bounceRatioParamQuantity = dynamic_cast<bounce::KnobParamQuantity *>(paramQuantity);
-    bounceRatioParamQuantity->setBlossom(blossom);
+    bounceRatioParamQuantity->initialize(bounceIsFree);
   }
 } // namespace bounce
 
@@ -79,11 +79,12 @@ Blossom::Blossom() {
   attenuverter::config(this, SpinAvKNob, "Spin CV gain");
   spin = knob::taperedAndScaled(this, SpinKnob, SpinCvInput, SpinAvKNob, spin::knobTaper, spin::range);
 
-  bounce::config(this, BounceRatioKnob);
+  toggle::config<2>(this, BounceRatioModeSwitch, "Bounce ratio mode", {"Quantized", "Free"}, 1);
+  bounceIsFree = [this]() -> bool { return params[BounceRatioModeSwitch].getValue() > 0.1F; };
+
+  bounce::config(this, BounceRatioKnob, bounceIsFree);
   attenuverter::config(this, BounceRatioAvKnob, "Bounce ratio CV gain");
   bounce = knob::scaled(this, BounceRatioKnob, BounceRatioCvInput, BounceRatioAvKnob, bounce::range);
-
-  toggle::config<2>(this, BounceRatioModeSwitch, "Bounce ratio mode", {"Quantized", "Free"}, 1);
 
   knob::configPercentage(this, BounceDepthKnob, "Bounce depth", {0.F, 1.F});
   attenuverter::config(this, BounceDepthAvKnob, "Bounce depth CV gain");
@@ -101,7 +102,7 @@ Blossom::Blossom() {
 
 void Blossom::process(const ProcessArgs &args) {
   auto spinDelta = -spin() * args.sampleTime;
-  auto bounceRatio = isBounceFree() ? bounce() : std::round(bounce());
+  auto bounceRatio = bounceIsFree() ? bounce() : std::round(bounce());
   auto bounceDepth = knob::rotationRange.clamp(depth());
 
   spinner.advance(spinDelta, 0.F);
@@ -118,8 +119,6 @@ void Blossom::process(const ProcessArgs &args) {
   auto const yVoltage = 5.F * yGain() * (y + yOffset());
   outputs[YOutput].setVoltage(yVoltage);
 }
-
-auto Blossom::isBounceFree() -> bool { return params[BounceRatioModeSwitch].getValue() > 0.1F; }
 
 auto Blossom::phase() -> float {
   auto const rotation = modulated(BouncePhaseOffsetKnob, BouncePhaseCvInput, BouncePhaseOffsetAvKnob);
