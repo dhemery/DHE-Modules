@@ -9,6 +9,7 @@ class Blossom : public Module {
 public:
   Blossom();
   void process(const ProcessArgs &args) override;
+  auto isBounceFree() -> bool;
 
   enum ParameterIds {
     SpinKnob,
@@ -38,7 +39,6 @@ public:
   enum OutputIds { XOutput, YOutput, OutputCount };
 
 private:
-  auto isBounceFree() -> bool;
   auto offset(int param) -> float;
   auto phase() -> float;
   auto xGain() -> float;

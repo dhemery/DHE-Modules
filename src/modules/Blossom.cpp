@@ -6,6 +6,7 @@
 #include "util/Sigmoid.h"
 
 #include <array>
+#include <math.h>
 
 namespace dhe {
 static auto constexpr throbSpeedKnobCurvature = -0.8F;
@@ -28,7 +29,27 @@ class SpinKnobParamQuantity : public rack::engine::ParamQuantity {
   auto getDisplayValue() -> float override { return rotationToSpin(getValue()); }
 
   void setDisplayValue(float spin) override { setValue(spinToRotation(spin)); }
-}; // namespace curvature
+};
+
+class BounceRatioKnobParamQuantity : public rack::engine::ParamQuantity {
+public:
+  auto getDisplayValue() -> float override {
+    auto const rotation = getValue();
+    auto const freeBounceRatio = bounceRatioRange.scale(rotation);
+    auto const spin = blossom->isBounceFree() ? freeBounceRatio : std::round(freeBounceRatio);
+    return spin;
+  }
+
+  void setDisplayValue(float bounceRatio) override {
+    auto const rotation = bounceRatioRange.normalize(bounceRatio);
+    setValue(rotation);
+  }
+
+  void setBlossom(Blossom *theBlossom) { blossom = theBlossom; }
+
+private:
+  Blossom *blossom;
+};
 
 Blossom::Blossom() {
   config(ParameterCount, InputCount, OutputCount);
@@ -39,7 +60,10 @@ Blossom::Blossom() {
   attenuverter::config(this, SpinAvKNob, "Spin CV gain");
   spin = knob::taperedAndScaled(this, SpinKnob, SpinCvInput, SpinAvKNob, spinKnobTaper, spinRange);
 
-  knob::config(this, BounceRatioKnob, "Bounce ratio", " per spin", bounceRatioRange);
+  configParam<BounceRatioKnobParamQuantity>(BounceRatioKnob, 0.F, 1.F, knob::centered, "Bounce ratio", " per spin");
+  auto const bounceRatioParamQuantity = dynamic_cast<BounceRatioKnobParamQuantity *>(paramQuantities[BounceRatioKnob]);
+  bounceRatioParamQuantity->setBlossom(this);
+
   attenuverter::config(this, BounceRatioAvKnob, "Bounce ratio CV gain");
   bounce = knob::scaled(this, BounceRatioKnob, BounceRatioCvInput, BounceRatioAvKnob, bounceRatioRange);
 
