@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Controls.h"
 #include "util/Range.h"
 
 #include <array>
@@ -7,8 +8,6 @@
 
 namespace dhe {
 namespace level {
-  static float constexpr centeredRotation = 0.5F;
-
   static Range constexpr bipolarRange{-5.F, 5.F};
   static Range constexpr rectifiedBipolarRange{0.F, 5.F};
   static Range constexpr unipolarRange{0.F, 10.F};
@@ -52,10 +51,10 @@ namespace level {
   auto withFixedRange(rack::engine::Module *module, int knobId, Range const &range) -> std::function<float()>;
 
   void configKnob(rack::engine::Module *module, int knobId, Range const &range, std::string const &name = "Level",
-                  float initialRotation = centeredRotation);
+                  float initialRotation = knob::centered);
 
   void configKnob(rack::engine::Module *module, int knobId, int switchId, std::string const &name = "Level",
-                  float initialRotation = centeredRotation);
+                  float initialRotation = knob::centered);
 
   void configSwitch(rack::engine::Module *module, int switchId, std::string const &name = "Level Range",
                     int initialState = 1);

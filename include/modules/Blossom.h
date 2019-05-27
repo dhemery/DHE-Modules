@@ -30,7 +30,7 @@ public:
     SpinCvInput,
     BounceRatioCvInput,
     BounceDepthCvInput,
-    PhaseCvInput,
+    BouncePhaseCvInput,
     XGainCvInput,
     YGainCvInput,
     InputCount

@@ -47,7 +47,7 @@ Blossom::Blossom() {
 
   knob::configPercentage(this, BounceDepthKnob, "Bounce depth", {0.F, 1.F});
   attenuverter::config(this, BounceDepthAvKnob, "Bounce depth CV gain");
-  depth = knob::rotation(this, BounceDepthKnob, BounceRatioCvInput, BounceRatioAvKnob);
+  depth = knob::rotation(this, BounceDepthKnob, BounceDepthCvInput, BounceDepthAvKnob);
 
   knob::config(this, BouncePhaseOffsetKnob, "Bounce phase offset", "°", phaseOffsetRange);
   attenuverter::config(this, BouncePhaseOffsetAvKnob, "Bounce phase offset CV gain");
@@ -68,13 +68,15 @@ void Blossom::process(const ProcessArgs &args) {
   bouncer.advance(spinDelta * bounceRatio, phase());
 
   auto angle = spinner.angle();
+
   auto radius = (1.F - bounceDepth) + bounceDepth * bouncer.radius();
-
   auto x = radius * std::cos(angle);
-  auto y = radius * std::sin(angle);
+  auto const xVoltage = 5.F * xGain() * (x + xOffset());
+  outputs[XOutput].setVoltage(xVoltage);
 
-  outputs[XOutput].setVoltage(5.F * xGain() * (x + xOffset()));
-  outputs[YOutput].setVoltage(5.F * yGain() * (y + yOffset()));
+  auto y = radius * std::sin(angle);
+  auto const yVoltage = 5.F * yGain() * (y + yOffset());
+  outputs[YOutput].setVoltage(yVoltage);
 }
 
 auto Blossom::offset(int param) -> float {
@@ -85,9 +87,8 @@ auto Blossom::offset(int param) -> float {
 auto Blossom::isBounceFree() -> bool { return params[BounceRatioModeSwitch].getValue() > 0.1F; }
 
 auto Blossom::phase() -> float {
-  static constexpr auto phaseRange = Range{0.F, 1.F};
-  auto rotation = modulated(BouncePhaseOffsetKnob, PhaseCvInput, BouncePhaseOffsetAvKnob);
-  return phaseRange.clamp(rotation);
+  auto const rotation = modulated(BouncePhaseOffsetKnob, BouncePhaseCvInput, BouncePhaseOffsetAvKnob);
+  return rotation - 0.5F;
 }
 
 auto Blossom::xOffset() -> float { return offset(XRangeSwitch); }

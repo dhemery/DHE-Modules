@@ -28,7 +28,7 @@ BlossomPanel::BlossomPanel(Blossom *blossom) : Panel{blossom, hp} {
   knob<LargeKnob>(column3, y, Blossom::BounceDepthKnob);
 
   y += dy;
-  input(column1, y, Blossom::PhaseCvInput);
+  input(column1, y, Blossom::BouncePhaseCvInput);
   knob<TinyKnob>(column2, y, Blossom::BouncePhaseOffsetAvKnob);
   knob<LargeKnob>(column3, y, Blossom::BouncePhaseOffsetKnob);
 
