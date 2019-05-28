@@ -13,7 +13,6 @@ namespace curvature {
    * decreasing sensitivity toward the extremes.
    */
   static auto constexpr knobTaperCurvature = -0.65F;
-  static auto constexpr knobRotationRange = Range{0.F, 1.F};
   static auto constexpr sigmoidRange = Range{-1.F, 1.F};
 
   inline auto toCurvature(float rotation) -> float {
@@ -32,6 +31,13 @@ namespace curvature {
     void setDisplayValue(float curvature) override { setValue(toRotation(curvature)); }
   }; // namespace curvature
 
+  inline auto knob(std::function<float()> const &rotation) -> std::function<float()> {
+    return [rotation]() -> float {
+      auto const clampedRotation = knob::rotationRange.clamp(rotation());
+      return curvature::toCurvature(clampedRotation);
+    };
+  }
+
   void configKnob(rack::engine::Module *module, int knobId, std::string const &name, float initialRotation) {
     module->configParam<KnobParamQuantity>(knobId, 0.F, 1.F, initialRotation, name);
   }
@@ -41,37 +47,12 @@ namespace curvature {
     toggle::config<2>(module, switchId, name, stateNames, initialState);
   }
 
-  auto knob(std::function<float()> const &rotation) -> std::function<float()> {
-    return [rotation]() -> float {
-      auto const clampedRotation = knobRotationRange.clamp(rotation());
-      return toCurvature(clampedRotation);
-    };
-  }
-
-  auto knob(rack::engine::Module *module, int knobId, int cvId) -> std::function<float()> {
-    auto modulatedRotation = knob::rotation(module, knobId, cvId);
-    return knob(modulatedRotation);
-  }
-  auto knob(rack::engine::Module *module, int knobId) -> std::function<float()> {
-    auto rotation = knob::rotation(module, knobId);
-    return knob(rotation);
-  }
-
-  auto knob(rack::engine::Module *module, int knobId, int cvId, int avId) -> std::function<float()> {
-    auto modulatedRotation = knob::rotation(module, knobId, cvId, avId);
-    return knob(modulatedRotation);
-  }
 } // namespace curvature
 
 namespace taper {
   const std::array<taper::VariableTaper const *, 2> variableTapers{&variableJTaper, &variableSTaper};
 
-  auto jShaped(rack::engine::Module *module, int knobId) -> std::function<float(float)> {
-    auto const curvature = curvature::knob(module, knobId);
-    return [curvature](float input) -> float { return variableJTaper.apply(input, curvature()); };
-  }
-
-  auto withSelectableShape(std::function<float()> const &curvature, rack::engine::Param *switchParam)
+  inline auto withSelectableShape(std::function<float()> const &curvature, rack::engine::Param *switchParam)
       -> std::function<float(float)> {
     return [curvature, switchParam](float input) -> float {
       auto const taperSelection = static_cast<int>(switchParam->getValue());
@@ -80,16 +61,21 @@ namespace taper {
     };
   }
 
+  auto jShaped(rack::engine::Module *module, int knobId) -> std::function<float(float)> {
+    auto const curvature = curvature::knob(knob::rotation(module, knobId));
+    return [curvature](float input) -> float { return variableJTaper.apply(input, curvature()); };
+  }
+
   auto withSelectableShape(rack::engine::Module *module, int knobId, int cvId, int switchId)
       -> std::function<float(float)> {
-    auto const curvature = curvature::knob(module, knobId, cvId);
+    auto const curvature = curvature::knob(knob::rotation(module, knobId, cvId));
     auto const switchParam = &module->params[switchId];
     return withSelectableShape(curvature, switchParam);
   }
 
   auto withSelectableShape(rack::engine::Module *module, int knobId, int cvId, int avId, int switchId)
       -> std::function<float(float)> {
-    auto const curvature = curvature::knob(module, knobId, cvId, avId);
+    auto const curvature = curvature::knob(knob::rotation(module, knobId, cvId, avId));
     auto const switchParam = &module->params[switchId];
     return withSelectableShape(curvature, switchParam);
   }
