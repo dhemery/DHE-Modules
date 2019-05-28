@@ -5,23 +5,17 @@
 #include "modules/controls/Level.h"
 
 namespace dhe {
-Stage::Stage() :
-    stateMachine{deferGateIsConnected,
-                 isDeferring,
-                 triggered,
-                 duration,
-                 [this](float /*unused*/) { forward(); },
-                 [this]() { prepareToGenerate(); },
-                 [this](float phase) { generate(phase); },
-                 [this](bool active) { setActive(active); },
-                 [this](bool eoc) { setEoc(eoc); }} {
+Stage::Stage() {
   config(ParameterCount, InputCount, OutputCount);
+
   duration::configKnob(this, DurationKnob, duration::mediumRange);
   level::configKnob(this, LevelKnob, level::unipolarRange);
   curvature::configKnob(this, CurveKnob);
 
   stateMachine.start();
 }
+
+void Stage::process(const ProcessArgs &args) { stateMachine.step(args.sampleTime); }
 
 auto Stage::envelopeIn() -> float { return inputs[EnvelopeInput].getVoltage(); }
 
@@ -43,5 +37,4 @@ void Stage::setEoc(bool eoc) {
   outputs[EocOutput].setVoltage(voltage);
 }
 
-void Stage::process(const ProcessArgs &args) { stateMachine.step(args.sampleTime); }
 } // namespace dhe

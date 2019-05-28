@@ -121,6 +121,12 @@ namespace input {
   auto isHigh(rack::engine::Module *module, int inputId) -> std::function<bool()> {
     return [module, inputId]() -> bool { return module->inputs[inputId].getVoltage() > 1.F; };
   }
+
+  auto isHigh(rack::engine::Module *module, int inputId, int buttonId) -> std::function<bool()> {
+    return [module, inputId, buttonId]() -> bool {
+      return module->inputs[inputId].getVoltage() > 1.F || module->params[buttonId].getValue() > 0.5F;
+    };
+  }
 } // namespace input
 
 namespace knob {

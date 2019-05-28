@@ -60,6 +60,11 @@ namespace input {
    * Creates a function that returns whether an input is high (above 1 volt).
    */
   auto isHigh(rack::engine::Module *module, int inputId) -> std::function<bool()>;
+
+  /**
+   * Creates a function that returns whether an input is high (above 1 volt) or a button is pressed.
+   */
+  auto isHigh(rack::engine::Module *module, int inputId, int buttonId) -> std::function<bool()>;
 } // namespace input
 
 namespace knob {

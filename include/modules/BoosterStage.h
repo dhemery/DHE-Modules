@@ -34,7 +34,6 @@ public:
   enum OutputIds { ActiveOutput, EocOutput, EnvelopeOutput, OutputCount };
 
 private:
-  auto deferGateIsActive() const -> bool;
   auto envelopeIn() -> float;
   void forward();
   void generate(float phase);
@@ -45,20 +44,22 @@ private:
   void setActive(bool active);
   void setEoc(bool eoc);
 
-  std::function<bool()> activeButton{button::state(this, ActiveButton)};
-  std::function<bool()> deferIsConnected{input::isConnected(this, DeferInput)};
-  std::function<bool()> deferButton{button::state(this, DeferButton)};
-  std::function<bool()> deferInput{input::isHigh(this, DeferInput)};
-  std::function<float()> duration{
-      duration::withSelectableRange(this, DurationKnob, DurationCvInput, DurationRangeSwitch)};
-  std::function<bool()> eocButton{button::state(this, EocButton)};
-  std::function<float()> level{level::withSelectableRange(this, LevelKnob, LevelCvInput, LevelRangeSwitch)};
+  std::function<bool()> const activeButton{button::state(this, ActiveButton)};
+  std::function<bool()> const eocButton{button::state(this, EocButton)};
+  std::function<float()> const level{level::withSelectableRange(this, LevelKnob, LevelCvInput, LevelRangeSwitch)};
+  std::function<float(float)> const taper{taper::withSelectableShape(this, CurveKnob, CurveCvInput, ShapeSwitch)};
 
-  std::function<bool()> triggerButton{button::state(this, TriggerButton)};
-  std::function<bool()> triggerInput{input::isHigh(this, TriggerInput)};
-  std::function<float(float)> taper{taper::withSelectableShape(this, CurveKnob, CurveCvInput, ShapeSwitch)};
+  StageStateMachine stateMachine{
+      input::isConnected(this, DeferInput),
+      input::isHigh(this, DeferInput, DeferButton),
+      input::isHigh(this, TriggerInput, TriggerButton),
+      duration::withSelectableRange(this, DurationKnob, DurationCvInput, DurationRangeSwitch),
+      [this](float /*unused*/) { forward(); },
+      [this]() { prepareToGenerate(); },
+      [this](float phase) { generate(phase); },
+      [this](bool active) { setActive(active); },
+      [this](bool eoc) { setEoc(eoc); }};
 
-  StageStateMachine stateMachine;
   bool isActive{false};
   bool isEoc{false};
   float startVoltage{0.F};

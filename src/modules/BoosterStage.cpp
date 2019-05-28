@@ -10,16 +10,7 @@
 
 namespace dhe {
 
-BoosterStage::BoosterStage() :
-    stateMachine{deferIsConnected,
-                 [this]() -> bool { return deferButton() || deferInput(); },
-                 [this]() -> bool { return triggerButton() || triggerInput(); },
-                 duration,
-                 [this](float /*unused*/) { forward(); },
-                 [this]() { prepareToGenerate(); },
-                 [this](float phase) { generate(phase); },
-                 [this](bool active) { setActive(active); },
-                 [this](bool eoc) { setEoc(eoc); }} {
+BoosterStage::BoosterStage() {
   config(ParameterCount, InputCount, OutputCount);
 
   duration::configKnob(this, DurationKnob, DurationRangeSwitch);
@@ -53,8 +44,6 @@ void BoosterStage::generate(float phase) { sendOut(scale(taper(phase), startVolt
 void BoosterStage::setActive(bool active) { isActive = active; }
 
 void BoosterStage::prepareToGenerate() { startVoltage = envelopeIn(); }
-
-auto BoosterStage::deferGateIsActive() const -> bool { return inputs[DeferInput].active; }
 
 void BoosterStage::setEoc(bool eoc) { isEoc = eoc; }
 
