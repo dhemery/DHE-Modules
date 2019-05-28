@@ -34,7 +34,7 @@ BoosterStagePanel::BoosterStagePanel(BoosterStage *module) : Panel{module, hp} {
   y = 82.F;
   dy = 15.F;
 
-  input(column1, y, BoosterStage::DeferGateInput);
+  input(column1, y, BoosterStage::DeferInput);
   button(column2, y, BoosterStage::DeferButton);
 
   button<ReverseButton>(column4, y, BoosterStage::ActiveButton);

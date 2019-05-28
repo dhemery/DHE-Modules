@@ -54,7 +54,7 @@ namespace bounce {
       setValue(rotation);
     }
 
-    void initialize(std::function<bool()> const &bounceIsFree) { this->bounceIsFree = bounceIsFree; }
+    void initialize(std::function<bool()> const &bounceIsFreeSupplier) { bounceIsFree = bounceIsFreeSupplier; }
 
   private:
     std::function<bool()> bounceIsFree;

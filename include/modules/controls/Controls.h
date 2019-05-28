@@ -34,6 +34,11 @@ namespace button {
    */
   void config(rack::engine::Module *module, int buttonId, std::string const &buttonName,
               std::array<std::string, 2> const &stateNames, int initialState);
+
+  /**
+   * Creates a function that returns the state of a button.
+   */
+  auto state(rack::engine::Module *module, int buttonId) -> std::function<bool()>;
 } // namespace button
 
 namespace gain {
@@ -44,6 +49,18 @@ namespace gain {
    */
   void config(rack::engine::Module *module, int knobId, std::string const &knobName);
 } // namespace gain
+
+namespace input {
+  /**
+   * Creates a function that returns whether an input is active.
+   */
+  auto isConnected(rack::engine::Module *module, int inputId) -> std::function<bool()>;
+
+  /**
+   * Creates a function that returns whether an input is high (above 1 volt).
+   */
+  auto isHigh(rack::engine::Module *module, int inputId) -> std::function<bool()>;
+} // namespace input
 
 namespace knob {
   extern Range const rotationRange;
@@ -124,28 +141,29 @@ namespace knob {
 
 } // namespace knob
 
-namespace range {
-  /**
-   * Creates a function that returns the range selected by a switch.
-   */
-  template <int N>
-  auto selected(rack::engine::Module *module, int switchId, std::array<Range const *, N> const &ranges)
-      -> std::function<Range const *()>;
-} // namespace range
-
 namespace selection {
   /**
    * Creates a function that returns the item selected by a switch from a given array.
    */
   template <typename T, int N>
   auto of(rack::engine::Module *module, int switchId, std::array<T, N> const &items) -> std::function<T()> {
-    auto const switchParam = &module->params[switchId];
-    return [switchParam, items]() -> T {
-      auto const selection = static_cast<int>(switchParam->getValue());
+    return [module, switchId, items]() -> T {
+      auto const selection = static_cast<int>(module->params[switchId].getValue());
       return items[selection];
     };
   }
 } // namespace selection
+
+namespace range {
+  /**
+   * Creates a function that returns the range selected by a switch.
+   */
+  template <int N>
+  auto selected(rack::engine::Module *module, int switchId, std::array<Range const *, N> const &ranges)
+      -> std::function<Range const *()> {
+    return selection::of<Range const *, N>(module, switchId, ranges);
+  }
+} // namespace range
 
 namespace toggle {
   /**

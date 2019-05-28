@@ -1,6 +1,10 @@
 #pragma once
 #include "Module.h"
 #include "envelopes/StageStateMachine.h"
+#include "modules/controls/Controls.h"
+#include "modules/controls/Curvature.h"
+#include "modules/controls/Duration.h"
+#include "modules/controls/Level.h"
 
 #include <functional>
 
@@ -25,20 +29,11 @@ public:
     ParameterCount
   };
 
-  enum InputIds {
-    CurveCvInput,
-    DeferGateInput,
-    DurationCvInput,
-    LevelCvInput,
-    EnvelopeInput,
-    TriggerInput,
-    InputCount
-  };
+  enum InputIds { CurveCvInput, DeferInput, DurationCvInput, LevelCvInput, EnvelopeInput, TriggerInput, InputCount };
 
   enum OutputIds { ActiveOutput, EocOutput, EnvelopeOutput, OutputCount };
 
 private:
-  auto deferGateIn() -> bool;
   auto deferGateIsActive() const -> bool;
   auto envelopeIn() -> float;
   void forward();
@@ -49,14 +44,23 @@ private:
   void sendOut(float voltage);
   void setActive(bool active);
   void setEoc(bool eoc);
-  auto stageGateIn() -> bool;
+
+  std::function<bool()> activeButton{button::state(this, ActiveButton)};
+  std::function<bool()> deferIsConnected{input::isConnected(this, DeferInput)};
+  std::function<bool()> deferButton{button::state(this, DeferButton)};
+  std::function<bool()> deferInput{input::isHigh(this, DeferInput)};
+  std::function<float()> duration{
+      duration::withSelectableRange(this, DurationKnob, DurationCvInput, DurationRangeSwitch)};
+  std::function<bool()> eocButton{button::state(this, EocButton)};
+  std::function<float()> level{level::withSelectableRange(this, LevelKnob, LevelCvInput, LevelRangeSwitch)};
+
+  std::function<bool()> triggerButton{button::state(this, TriggerButton)};
+  std::function<bool()> triggerInput{input::isHigh(this, TriggerInput)};
+  std::function<float(float)> taper{taper::withSelectableShape(this, CurveKnob, CurveCvInput, ShapeSwitch)};
 
   StageStateMachine stateMachine;
   bool isActive{false};
   bool isEoc{false};
   float startVoltage{0.F};
-  std::function<float()> duration;
-  std::function<float()> level;
-  std::function<float(float)> taper;
 };
 } // namespace dhe

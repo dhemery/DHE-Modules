@@ -11,10 +11,10 @@
 namespace dhe {
 
 BoosterStage::BoosterStage() :
-    stateMachine{[this]() -> bool { return deferGateIsActive(); },
-                 [this]() -> bool { return deferGateIn(); },
-                 [this]() -> bool { return stageGateIn(); },
-                 [this]() -> float { return duration(); },
+    stateMachine{deferIsConnected,
+                 [this]() -> bool { return deferButton() || deferInput(); },
+                 [this]() -> bool { return triggerButton() || triggerInput(); },
+                 duration,
                  [this](float /*unused*/) { forward(); },
                  [this]() { prepareToGenerate(); },
                  [this](float phase) { generate(phase); },
@@ -24,15 +24,12 @@ BoosterStage::BoosterStage() :
 
   duration::configKnob(this, DurationKnob, DurationRangeSwitch);
   duration::configSwitch(this, DurationRangeSwitch);
-  duration = duration::withSelectableRange(this, DurationKnob, DurationCvInput, DurationRangeSwitch);
 
   level::configKnob(this, LevelKnob, LevelRangeSwitch);
   level::configSwitch(this, LevelRangeSwitch);
-  level = level::withSelectableRange(this, LevelKnob, LevelCvInput, LevelRangeSwitch);
 
   curvature::configKnob(this, CurveKnob);
   curvature::configSwitch(this, ShapeSwitch);
-  taper = taper::withSelectableShape(this, CurveKnob, CurveCvInput, ShapeSwitch);
 
   button::config(this, DeferButton, "DEFER", {"From input", "High"}, 0);
   button::config(this, TriggerButton, "TRIG", {"From input", "High"}, 0);
@@ -55,35 +52,21 @@ void BoosterStage::generate(float phase) { sendOut(scale(taper(phase), startVolt
 
 void BoosterStage::setActive(bool active) { isActive = active; }
 
-auto BoosterStage::stageGateIn() -> bool {
-  auto const triggerButton = params[TriggerButton].getValue() > 0.5;
-  auto const triggerInput = inputs[TriggerInput].getVoltage() > 0.1;
-  return triggerButton || triggerInput;
-}
-
 void BoosterStage::prepareToGenerate() { startVoltage = envelopeIn(); }
 
-auto BoosterStage::deferGateIsActive() const -> bool { return inputs[DeferGateInput].active; }
-
-auto BoosterStage::deferGateIn() -> bool {
-  auto const deferButton = params[DeferButton].getValue() > 0.5F;
-  auto const deferInput = inputs[DeferGateInput].getVoltage() > 0.1F;
-  return deferButton || deferInput;
-}
+auto BoosterStage::deferGateIsActive() const -> bool { return inputs[DeferInput].active; }
 
 void BoosterStage::setEoc(bool eoc) { isEoc = eoc; }
 
 auto BoosterStage::envelopeIn() -> float { return inputs[EnvelopeInput].getVoltage(); }
 
 void BoosterStage::sendActive() {
-  auto const activeButton = params[ActiveButton].getValue() > 0.5F;
-  auto const voltage = level::unipolarRange.scale(isActive || activeButton);
+  auto const voltage = level::unipolarRange.scale(isActive || activeButton());
   outputs[ActiveOutput].setVoltage(voltage);
 }
 
 void BoosterStage::sendEoc() {
-  auto const eocButton = params[EocButton].getValue() > 0.5F;
-  auto const voltage = level::unipolarRange.scale(isEoc || eocButton);
+  auto const voltage = level::unipolarRange.scale(isEoc || eocButton());
   outputs[EocOutput].setVoltage(voltage);
 }
 

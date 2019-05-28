@@ -22,7 +22,7 @@ StagePanel::StagePanel(Stage *module) : Panel{module, hp} {
   y = 82.F;
   dy = 15.F;
 
-  input(column1, y, Stage::DeferGateInput);
+  input(column1, y, Stage::DeferInput);
   output(column3, y, Stage::ActiveOutput);
 
   y += dy;

@@ -36,14 +36,14 @@ void configFrameWidgetStates(rack::engine::Module *module, int paramId, std::str
 /**
  * Creates a function that scales the supplied rotation to the given range.
  */
-inline auto scaled(std::function<float()> const &rotation, Range const &range) -> std::function<float()> {
+static inline auto scaled(std::function<float()> const &rotation, Range const &range) -> std::function<float()> {
   return [rotation, range]() { return range.scale(rotation()); };
 }
 
 /**
  * Creates a function that scales the supplied rotation to the supplied range.
  */
-inline auto scaled(std::function<float()> const &rotation, std::function<Range const *()> const &range)
+static inline auto scaled(std::function<float()> const &rotation, std::function<Range const *()> const &range)
     -> std::function<float()> {
   return [rotation, range]() { return range()->scale(rotation()); };
 }
@@ -51,8 +51,8 @@ inline auto scaled(std::function<float()> const &rotation, std::function<Range c
 /**
  * Creates a function that tapers the supplied rotation and scales the result to the given range.
  */
-inline auto taperedAndScaled(std::function<float()> const &rotation, taper::FixedTaper const &taper, Range const &range)
-    -> std::function<float()> {
+static inline auto taperedAndScaled(std::function<float()> const &rotation, taper::FixedTaper const &taper,
+                                    Range const &range) -> std::function<float()> {
   return [rotation, range, &taper]() {
     auto const tapered = taper.apply(rotation());
     auto const scaled = range.scale(tapered);
@@ -63,8 +63,8 @@ inline auto taperedAndScaled(std::function<float()> const &rotation, taper::Fixe
 /**
  * Creates a function that tapers the supplied rotation and scales the result to the supplied range.
  */
-inline auto taperedAndScaled(std::function<float()> const &rotation, taper::FixedTaper const &taper,
-                             std::function<Range const *()> const &range) -> std::function<float()> {
+static inline auto taperedAndScaled(std::function<float()> const &rotation, taper::FixedTaper const &taper,
+                                    std::function<Range const *()> const &range) -> std::function<float()> {
   return [rotation, range, &taper]() {
     auto const tapered = taper.apply(rotation());
     auto const scaled = range()->scale(tapered);
@@ -99,6 +99,10 @@ namespace button {
               std::array<std::string, 2> const &stateNames, int initialState) {
     configFrameWidgetStates<2>(module, buttonId, buttonName, stateNames, initialState);
   }
+
+  auto state(rack::engine::Module *module, int buttonId) -> std::function<bool()> {
+    return [module, buttonId]() -> bool { return module->params[buttonId].getValue() > 0.5F; };
+  }
 } // namespace button
 
 namespace gain {
@@ -108,6 +112,16 @@ namespace gain {
     knob::configPercentage(module, knobId, knobName, range);
   }
 } // namespace gain
+
+namespace input {
+  auto isConnected(rack::engine::Module *module, int inputId) -> std::function<bool()> {
+    return [module, inputId]() -> bool { return module->inputs[inputId].isConnected() > 1.F; };
+  }
+
+  auto isHigh(rack::engine::Module *module, int inputId) -> std::function<bool()> {
+    return [module, inputId]() -> bool { return module->inputs[inputId].getVoltage() > 1.F; };
+  }
+} // namespace input
 
 namespace knob {
   const auto rotationRange = Range{0.F, 1.F};
@@ -122,18 +136,15 @@ namespace knob {
   }
 
   auto rotation(rack::engine::Module *module, int knobId) -> std::function<float()> {
-    auto const knobParam = &module->params[knobId];
-    return [knobParam]() -> float { return knobParam->getValue(); };
+    return [module, knobId]() -> float { return module->params[knobId].getValue(); };
   }
 
   auto rotation(rack::engine::Module *module, int knobId, int cvId) -> std::function<float()> {
     static auto constexpr attenuation = 0.1F;
-    auto const knobParam = &module->params[knobId];
-    auto const cvInput = &module->inputs[cvId];
 
-    return [knobParam, cvInput]() -> float {
-      auto const rotation = knobParam->getValue();
-      auto const controlVoltage = cvInput->getVoltage();
+    return [module, knobId, cvId]() -> float {
+      auto const rotation = module->params[knobId].getValue();
+      auto const controlVoltage = module->inputs[cvId].getVoltage();
       auto const modulation = controlVoltage * attenuation;
       return rotation + modulation;
     };
@@ -141,14 +152,10 @@ namespace knob {
 
   auto rotation(rack::engine::Module *module, int knobId, int cvId, int avId) -> std::function<float()> {
     static auto constexpr attenuationRange = Range{-0.1F, 0.1F};
-    auto const knobParam = &module->params[knobId];
-    auto const cvInput = &module->inputs[cvId];
-    auto const avParam = &module->params[avId];
-
-    return [knobParam, cvInput, avParam]() -> float {
-      auto const rotation = knobParam->getValue();
-      auto const controlVoltage = cvInput->getVoltage();
-      auto const attenuverterRotation = avParam->getValue();
+    return [module, knobId, cvId, avId]() -> float {
+      auto const rotation = module->params[knobId].getValue();
+      auto const controlVoltage = module->inputs[cvId].getVoltage();
+      auto const attenuverterRotation = module->params[avId].getValue();
       auto const attenuation = attenuationRange.scale(attenuverterRotation);
       auto const modulation = controlVoltage * attenuation;
 
@@ -191,28 +198,6 @@ namespace knob {
   }
 
 } // namespace knob
-
-namespace range {
-  template <int N>
-  auto selected(rack::engine::Module *module, int switchId, std::array<Range const *, N> const &ranges)
-      -> std::function<Range const *()> {
-    auto const switchParam = &module->params[switchId];
-    return [switchParam, ranges]() -> Range const * {
-      auto const selection = static_cast<int>(switchParam->getValue());
-      return ranges[selection];
-    };
-  }
-
-  // Instantiate for arrays with 2, 3, and 4 ranges
-  template auto selected<2>(rack::engine::Module *module, int switchId, std::array<Range const *, 2> const &ranges)
-      -> std::function<Range const *()>;
-
-  template auto selected<3>(rack::engine::Module *module, int switchId, std::array<Range const *, 3> const &ranges)
-      -> std::function<Range const *()>;
-
-  template auto selected<4>(rack::engine::Module *module, int switchId, std::array<Range const *, 4> const &ranges)
-      -> std::function<Range const *()>;
-} // namespace range
 
 namespace toggle {
   template <int N>
