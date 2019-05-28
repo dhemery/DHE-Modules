@@ -2,6 +2,8 @@
 
 #include "Module.h"
 #include "envelopes/HostageStateMachine.h"
+#include "modules/controls/Controls.h"
+#include "modules/controls/Duration.h"
 
 #include <functional>
 
@@ -14,22 +16,25 @@ public:
 
   enum ParameterIds { DurationKnob, DurationRangeSwitch, ModeSwitch, ParameterCount };
 
-  enum InputIds { DeferGateInput, DurationCvInput, EnvelopeInput, GateInput, InputCount };
+  enum InputIds { DeferInput, DurationCvInput, EnvelopeInput, TriggerInput, InputCount };
 
   enum OutputIds { ActiveOutput, EnvelopeOutput, EocOutput, OutputCount };
 
 private:
-  auto deferGateIn() -> bool;
-  auto deferGateIsActive() const -> bool;
   auto envelopeIn() -> float;
   void forward();
-  auto isSustainMode() -> bool;
   void sendOut(float voltage);
   void setActive(bool active);
   void setEoc(bool eoc);
-  auto stageGateIn() -> bool;
 
-  std::function<float()> duration;
-  HostageStateMachine stateMachine;
+  HostageStateMachine stateMachine{
+      input::isConnected(this, DeferInput),
+      input::isHigh(this, DeferInput),
+      input::isHigh(this, TriggerInput),
+      button::state(this, ModeSwitch),
+      duration::withSelectableRange(this, DurationKnob, DurationCvInput, DurationRangeSwitch),
+      [this](float /*unused*/) { forward(); },
+      [this](bool active) { setActive(active); },
+      [this](bool eoc) { setEoc(eoc); }};
 };
 } // namespace dhe

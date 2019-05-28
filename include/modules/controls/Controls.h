@@ -80,7 +80,8 @@ namespace knob {
   /**
    * Configures the param and display for a knob with a fixed, linear range, displayed as a percentage.
    */
-  void configPercentage(rack::engine::Module *module, int knobId, std::string const &knobName, Range const &range);
+  void configPercentage(rack::engine::Module *module, int knobId, std::string const &knobName,
+                        Range const &range = {0.F, 1.F});
 
   /**
    * Creates a function that returns the rotation of a knob.
@@ -102,6 +103,12 @@ namespace knob {
    * Creates a function that returns the rotation of a knob, scaled to the given range.
    */
   auto scaled(rack::engine::Module *module, int knobId, Range const &range) -> std::function<float()>;
+
+  /**
+   * Creates a function that returns the rotation of a knob, modulated and scaled to the given range. The amount of
+   * modulation is determined by the voltage of a CV input.
+   */
+  auto scaled(rack::engine::Module *module, int knobId, int cvId, Range const &range) -> std::function<float()>;
 
   /**
    * Creates a function that returns the rotation of a knob, modulated and scaled to the given range. The amount of

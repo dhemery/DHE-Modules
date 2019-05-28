@@ -173,6 +173,10 @@ namespace knob {
     return scaled(rotation(module, knobId), range);
   }
 
+  auto scaled(rack::engine::Module *module, int knobId, int cvId, Range const &range) -> std::function<float()> {
+    return scaled(rotation(module, knobId, cvId), range);
+  }
+
   auto scaled(rack::engine::Module *module, int knobId, int cvId, int avId, Range const &range)
       -> std::function<float()> {
     return scaled(rotation(module, knobId, cvId, avId), range);

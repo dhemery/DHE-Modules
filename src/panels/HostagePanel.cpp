@@ -24,11 +24,11 @@ HostagePanel::HostagePanel(Hostage *module) : Panel{module, hp} {
   y = 82.F;
   dy = 15.F;
 
-  input(column1, y, Hostage::DeferGateInput);
+  input(column1, y, Hostage::DeferInput);
   output(column3, y, Hostage::ActiveOutput);
 
   y += dy;
-  input(column1, y, Hostage::GateInput);
+  input(column1, y, Hostage::TriggerInput);
   output(column3, y, Hostage::EocOutput);
 
   y += dy;
