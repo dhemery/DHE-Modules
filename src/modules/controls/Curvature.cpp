@@ -52,15 +52,6 @@ namespace curvature {
 namespace taper {
   const std::array<taper::VariableTaper const *, 2> variableTapers{&variableJTaper, &variableSTaper};
 
-  inline auto withSelectableShape(std::function<float()> const &curvature, rack::engine::Param *switchParam)
-      -> std::function<float(float)> {
-    return [curvature, switchParam](float input) -> float {
-      auto const taperSelection = static_cast<int>(switchParam->getValue());
-      auto const taper = variableTapers[taperSelection];
-      return taper->apply(input, curvature());
-    };
-  }
-
   auto jShaped(rack::engine::Module *module, int knobId) -> std::function<float(float)> {
     auto const curvature = curvature::knob(knob::rotation(module, knobId));
     return [curvature](float input) -> float { return variableJTaper.apply(input, curvature()); };
@@ -69,15 +60,24 @@ namespace taper {
   auto withSelectableShape(rack::engine::Module *module, int knobId, int cvId, int switchId)
       -> std::function<float(float)> {
     auto const curvature = curvature::knob(knob::rotation(module, knobId, cvId));
-    auto const switchParam = &module->params[switchId];
-    return withSelectableShape(curvature, switchParam);
+    auto const taper = selection::of<VariableTaper const *, 2>(module, switchId, variableTapers);
+    return [curvature, taper](float input) -> float { return taper()->apply(input, curvature()); };
   }
 
   auto withSelectableShape(rack::engine::Module *module, int knobId, int cvId, int avId, int switchId)
       -> std::function<float(float)> {
     auto const curvature = curvature::knob(knob::rotation(module, knobId, cvId, avId));
-    auto const switchParam = &module->params[switchId];
-    return withSelectableShape(curvature, switchParam);
+    auto const taper = selection::of<VariableTaper const *, 2>(module, switchId, variableTapers);
+    return [curvature, taper](float input) -> float { return taper()->apply(input, curvature()); };
   }
+
 } // namespace taper
+
+namespace selection {
+  // Instantiate selection::of for variable tapers
+  template auto of<taper::VariableTaper const *, 2>(rack::engine::Module *module, int switchId,
+                                                    std::array<taper::VariableTaper const *, 2> const &items)
+      -> std::function<taper::VariableTaper const *()>;
+} // namespace selection
+
 } // namespace dhe

@@ -133,6 +133,20 @@ namespace range {
       -> std::function<Range const *()>;
 } // namespace range
 
+namespace selection {
+  /**
+   * Creates a function that returns the item selected by a switch from a given array.
+   */
+  template <typename T, int N>
+  auto of(rack::engine::Module *module, int switchId, std::array<T, N> const &items) -> std::function<T()> {
+    auto const switchParam = &module->params[switchId];
+    return [switchParam, items]() -> T {
+      auto const selection = static_cast<int>(switchParam->getValue());
+      return items[selection];
+    };
+  }
+} // namespace selection
+
 namespace toggle {
   /**
    * Configures the param and display for a toggle that represents a sequence of states.
