@@ -115,7 +115,7 @@ namespace gain {
 
 namespace input {
   auto isConnected(rack::engine::Module *module, int inputId) -> std::function<bool()> {
-    return [module, inputId]() -> bool { return module->inputs[inputId].isConnected() > 1.F; };
+    return [module, inputId]() -> bool { return module->inputs[inputId].isConnected(); };
   }
 
   auto isHigh(rack::engine::Module *module, int inputId) -> std::function<bool()> {

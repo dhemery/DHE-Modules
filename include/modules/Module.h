@@ -1,11 +1,12 @@
 #pragma once
-
 #include "engine/Module.hpp"
+#include "modules/controls/Inputs.h"
 
 namespace dhe {
 class Module : public rack::engine::Module {
 public:
-  auto modulated(int knobId, int cvId) -> float;
-  auto modulated(int knobId, int cvId, int avId) -> float;
+  inline auto modulated(int knobId, int cvId) -> float { return rotation(this, knobId, cvId); }
+
+  inline auto modulated(int knobId, int cvId, int avId) -> float { return rotation(this, knobId, cvId, avId); }
 };
 } // namespace dhe
