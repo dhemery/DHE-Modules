@@ -8,7 +8,7 @@
 namespace dhe {
 
 inline auto isPressed(rack::engine::Module *module, int buttonId) -> bool {
-  return static_cast<int>(module->params[buttonId].getValue() > 0.5F);
+  return module->params[buttonId].getValue() > 0.5F;
 }
 
 inline auto position(rack::engine::Module *module, int switchId) -> int {
