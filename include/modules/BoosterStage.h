@@ -4,6 +4,7 @@
 #include "modules/controls/Controls.h"
 #include "modules/controls/Curvature.h"
 #include "modules/controls/Duration.h"
+#include "modules/controls/Inputs.h"
 #include "modules/controls/Level.h"
 
 #include <functional>
@@ -44,8 +45,9 @@ private:
   void setActive(bool active);
   void setEoc(bool eoc);
 
-  std::function<bool()> const activeButton{button::state(this, ActiveButton)};
-  std::function<bool()> const eocButton{button::state(this, EocButton)};
+  auto activeButton() -> bool { return isPressed(this, ActiveButton); }
+  auto eocButton() -> bool { return isPressed(this, EocButton); }
+
   std::function<float()> const level{level::withSelectableRange(this, LevelKnob, LevelCvInput, LevelRangeSwitch)};
   std::function<float(float)> const taper{taper::withSelectableShape(this, CurveKnob, CurveCvInput, ShapeSwitch)};
 

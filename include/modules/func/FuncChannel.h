@@ -34,7 +34,5 @@ private:
   auto add(float in, float rotation) const -> float;
   auto multiply(float in, float rotation) const -> float;
   auto isMultiplication() const -> bool;
-  std::string operatorName(int selection);
-  std::string operandName(int selection);
 };
 } // namespace dhe
