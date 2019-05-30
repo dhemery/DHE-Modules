@@ -20,8 +20,6 @@ namespace curvature {
 } // namespace curvature
 
 namespace taper {
-  extern std::array<taper::VariableTaper const *, 2> const variableTapers;
-
   /**
    * Creates a function that applies a J taper with curvature controlled by a knob.
    */

@@ -6,6 +6,16 @@ static inline auto scale(float proportion, float lowerBound, float upperBound) -
   return proportion * (upperBound - lowerBound) + lowerBound;
 }
 
+static inline auto clamp(float value, float lowerBound, float upperBound) -> float {
+  if (value < lowerBound) {
+    return lowerBound;
+  }
+  if (value > upperBound) {
+    return upperBound;
+  }
+  return value;
+}
+
 class Range {
 public:
   constexpr Range(float lowerBound, float upperBound) noexcept : lowerBound(lowerBound), upperBound(upperBound) {}
@@ -18,15 +28,7 @@ public:
 
   auto normalize(float member) const -> float { return (member - lowerBound) / size(); }
 
-  auto clamp(float f) const -> float {
-    if (f < lowerBound) {
-      return lowerBound;
-    }
-    if (f > upperBound) {
-      return upperBound;
-    }
-    return f;
-  }
+  auto clamp(float f) const -> float { return dhe::clamp(f, lowerBound, upperBound); }
 
   const float lowerBound;
   const float upperBound;

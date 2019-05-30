@@ -37,27 +37,4 @@ void BoosterStage::process(const ProcessArgs &args) {
   sendEoc();
 }
 
-void BoosterStage::forward() { sendOut(envelopeIn()); }
-
-void BoosterStage::generate(float phase) { sendOut(scale(taper(phase), startVoltage, level())); }
-
-void BoosterStage::setActive(bool active) { isActive = active; }
-
-void BoosterStage::prepareToGenerate() { startVoltage = envelopeIn(); }
-
-void BoosterStage::setEoc(bool eoc) { isEoc = eoc; }
-
-auto BoosterStage::envelopeIn() -> float { return inputs[EnvelopeInput].getVoltage(); }
-
-void BoosterStage::sendActive() {
-  auto const voltage = level::unipolarRange.scale(isActive || activeButton());
-  outputs[ActiveOutput].setVoltage(voltage);
-}
-
-void BoosterStage::sendEoc() {
-  auto const voltage = level::unipolarRange.scale(isEoc || eocButton());
-  outputs[EocOutput].setVoltage(voltage);
-}
-
-void BoosterStage::sendOut(float voltage) { outputs[EnvelopeOutput].setVoltage(voltage); }
 } // namespace dhe

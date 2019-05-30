@@ -50,8 +50,6 @@ namespace curvature {
 } // namespace curvature
 
 namespace taper {
-  const std::array<taper::VariableTaper const *, 2> variableTapers{&variableJTaper, &variableSTaper};
-
   static inline auto withSelectableShape(std::function<float()> const &curvature,
                                          std::function<VariableTaper const *()> const &taper)
       -> std::function<float(float)> {

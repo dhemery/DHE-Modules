@@ -1,8 +1,8 @@
 #pragma once
 #include "Module.h"
 #include "envelopes/StageStateMachine.h"
+#include "modules/components/Taper.h"
 #include "modules/controls/Controls.h"
-#include "modules/controls/Curvature.h"
 #include "modules/controls/Duration.h"
 #include "modules/controls/Inputs.h"
 #include "modules/controls/Level.h"
@@ -35,21 +35,34 @@ public:
   enum OutputIds { ActiveOutput, EocOutput, EnvelopeOutput, OutputCount };
 
 private:
-  auto envelopeIn() -> float;
-  void forward();
-  void generate(float phase);
-  void prepareToGenerate();
-  void sendActive();
-  void sendEoc();
-  void sendOut(float voltage);
-  void setActive(bool active);
-  void setEoc(bool eoc);
-
+  auto envelopeIn() -> float { return inputs[EnvelopeInput].getVoltage(); }
   auto activeButton() -> bool { return isPressed(this, ActiveButton); }
   auto eocButton() -> bool { return isPressed(this, EocButton); }
 
-  std::function<float()> const level{level::withSelectableRange(this, LevelKnob, LevelCvInput, LevelRangeSwitch)};
-  std::function<float(float)> const taper{taper::withSelectableShape(this, CurveKnob, CurveCvInput, ShapeSwitch)};
+  auto level() -> float { return scaled<2>(this, LevelKnob, LevelCvInput, LevelRangeSwitch, level::ranges); }
+
+  auto taper(float input) -> float {
+    auto const k = curv(this, CurveKnob, CurveCvInput);
+    auto const taper = selected<taper::VariableTaper const *, 2>(this, ShapeSwitch, taper::variableTapers);
+    return taper->apply(input, k);
+  }
+
+  void forward() { sendOut(envelopeIn()); }
+  void prepareToGenerate() { startVoltage = envelopeIn(); }
+  void generate(float phase) { sendOut(scale(taper(phase), startVoltage, level())); }
+  void setActive(bool active) { isActive = active; }
+  void setEoc(bool eoc) { isEoc = eoc; }
+
+  void sendActive() {
+    auto const voltage = level::unipolarRange.scale(isActive || activeButton());
+    outputs[ActiveOutput].setVoltage(voltage);
+  }
+
+  void sendEoc() {
+    auto const voltage = level::unipolarRange.scale(isEoc || eocButton());
+    outputs[EocOutput].setVoltage(voltage);
+  }
+  void sendOut(float voltage) { outputs[EnvelopeOutput].setVoltage(voltage); }
 
   StageStateMachine stateMachine{
       input::isConnected(this, DeferInput),

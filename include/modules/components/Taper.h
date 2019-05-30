@@ -63,5 +63,6 @@ namespace taper {
 
   static auto constexpr variableJTaper = VariableJTaper{};
   static auto constexpr variableSTaper = VariableSTaper{};
+  static auto constexpr variableTapers = std::array<taper::VariableTaper const *, 2>{&variableJTaper, &variableSTaper};
 } // namespace taper
 } // namespace dhe
