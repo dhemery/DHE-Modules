@@ -1,6 +1,6 @@
 #include "modules/Stage.h"
 
-#include "modules/controls/Curvature.h"
+#include "modules/controls/CurvatureControls.h"
 #include "modules/controls/Duration.h"
 #include "modules/controls/Level.h"
 
@@ -10,7 +10,7 @@ Stage::Stage() {
 
   duration::configKnob(this, DurationKnob, duration::mediumRange);
   level::configKnob(this, LevelKnob, level::unipolarRange);
-  curvature::configKnob(this, CurveKnob);
+  configCurvatureKnob(this, CurveKnob);
 
   stateMachine.start();
 }

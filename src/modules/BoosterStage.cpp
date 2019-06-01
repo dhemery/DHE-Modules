@@ -1,7 +1,7 @@
 #include "modules/BoosterStage.h"
 
 #include "modules/controls/Controls.h"
-#include "modules/controls/Curvature.h"
+#include "modules/controls/CurvatureControls.h"
 #include "modules/controls/Duration.h"
 #include "modules/controls/Level.h"
 
@@ -19,8 +19,8 @@ BoosterStage::BoosterStage() {
   level::configKnob(this, LevelKnob, LevelRangeSwitch);
   level::configSwitch(this, LevelRangeSwitch);
 
-  curvature::configKnob(this, CurveKnob);
-  curvature::configSwitch(this, ShapeSwitch);
+  configCurvatureKnob(this, CurveKnob);
+  configShapeSwitch(this, ShapeSwitch);
 
   button::config(this, DeferButton, "DEFER", {"From input", "High"}, 0);
   button::config(this, TriggerButton, "TRIG", {"From input", "High"}, 0);

@@ -19,13 +19,13 @@ namespace duration {
    * Configures the param and display for a duration knob with a fixed range.
    */
   void configKnob(rack::engine::Module *module, int knobId, Range const & /*range*/,
-                  std::string const &name = "Duration", float initialRotation = knob::centered);
+                  std::string const &name = "Duration", float initialRotation = centeredRotation);
 
   /**
    * Configures the param and display for a duration knob with a range selected by a switch.
    */
   void configKnob(rack::engine::Module *module, int knobId, int switchId, std::string const &name = "Duration",
-                  float initialRotation = knob::centered);
+                  float initialRotation = centeredRotation);
 
   /**
    * Configures the param and display for a duration range switch.

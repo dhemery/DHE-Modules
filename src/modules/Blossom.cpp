@@ -49,7 +49,7 @@ public:
 };
 
 static inline void configBounceKnob(Blossom *blossom, int knobId) {
-  blossom->configParam<BounceKnobParamQuantity>(knobId, 0.F, 1.F, knob::centered, "Bounce ratio", " per spin");
+  blossom->configParam<BounceKnobParamQuantity>(knobId, 0.F, 1.F, centeredRotation, "Bounce ratio", " per spin");
 }
 
 Blossom::Blossom() {
@@ -78,21 +78,21 @@ Blossom::Blossom() {
 }
 
 void Blossom::process(const ProcessArgs &args) {
-  auto spinDelta = -spin() * args.sampleTime;
-  auto bounceRatio = bounceIsFree() ? bounce() : std::round(bounce());
-  auto bounceDepth = knob::rotationRange.clamp(depth());
+  auto const spinDelta = -spin() * args.sampleTime;
+  auto const bounceRatio = bounceIsFree() ? bounce() : std::round(bounce());
+  auto const bounceDepth = rotationRange.clamp(depth());
 
   spinner.advance(spinDelta, 0.F);
   bouncer.advance(spinDelta * bounceRatio, phase());
 
-  auto angle = spinner.angle();
+  auto const angle = spinner.angle();
 
-  auto radius = (1.F - bounceDepth) + bounceDepth * bouncer.radius();
-  auto x = radius * std::cos(angle);
+  auto const radius = (1.F - bounceDepth) + bounceDepth * bouncer.radius();
+  auto const x = radius * std::cos(angle);
   auto const xVoltage = 5.F * xGain() * (x + xOffset());
   outputs[XOutput].setVoltage(xVoltage);
 
-  auto y = radius * std::sin(angle);
+  auto const y = radius * std::sin(angle);
   auto const yVoltage = 5.F * yGain() * (y + yOffset());
   outputs[YOutput].setVoltage(yVoltage);
 }

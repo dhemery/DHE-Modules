@@ -1,17 +1,18 @@
 #include "modules/Swave.h"
 
-#include "modules/controls/Curvature.h"
+#include "modules/controls/CurvatureControls.h"
 #include "modules/controls/Level.h"
+#include "modules/controls/TaperControls.h"
 
 namespace dhe {
 
 Swave::Swave() {
   config(ParameterCount, InputCount, OutputCount);
 
-  curvature::configKnob(this, CurveKnob);
-  curvature::configSwitch(this, ShapeSwitch);
+  configCurvatureKnob(this, CurveKnob);
+  configShapeSwitch(this, ShapeSwitch);
 
-  taper = taper::withSelectableShape(this, CurveKnob, CurveCv, ShapeSwitch);
+  taper = selectableShapeTaperFunction(this, CurveKnob, CurveCv, ShapeSwitch);
 }
 
 void Swave::process(const ProcessArgs & /*args*/) {

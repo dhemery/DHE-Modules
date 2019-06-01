@@ -1,4 +1,5 @@
 #pragma once
+#include "Inputs.h"
 #include "modules/components/Taper.h"
 #include "util/Range.h"
 
@@ -68,14 +69,11 @@ namespace input {
 } // namespace input
 
 namespace knob {
-  extern Range const rotationRange;
-  static auto constexpr centered = 0.5F;
-
   /**
    * Configures the param and display for a knob with a fixed, linear range.
    */
   void config(rack::engine::Module *module, int knobId, std::string const &knobName, std::string const &units,
-              Range const &range, float initialRotation = centered);
+              Range const &range, float initialRotation = centeredRotation);
 
   /**
    * Configures the param and display for a knob with a fixed, linear range, displayed as a percentage.

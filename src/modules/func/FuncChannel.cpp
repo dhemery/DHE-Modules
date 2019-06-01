@@ -46,7 +46,7 @@ FuncChannel::FuncChannel(rack::engine::Module *module, int inputIndex, int opera
     output{&module->outputs[outputIndex]},
     operationSwitch{&module->params[operationSwitchIndex]},
     channelName{channelName} {
-  module->configParam<FuncOperandKnobParamQuantity>(operandIndex, 0.F, 1.F, knob::centered);
+  module->configParam<FuncOperandKnobParamQuantity>(operandIndex, 0.F, 1.F, centeredRotation);
   toggle::config<2>(module, operationSwitchIndex, "Operator" + channelName, {"Add (offset)", "Multiply (scale)"}, 0);
   toggle::config<4>(module, offsetRangeSwitchIndex, "Offset " + channelName + " range",
                     {"0–5 V", "±5 V", "0–10 V", "±10 V"}, 1);

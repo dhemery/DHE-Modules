@@ -7,7 +7,6 @@
 namespace dhe {
 namespace sigmoid {
 
-  // TODO: Remove comment about clamping (unless I restore clamping)
   /**
    * Applies a sigmoid function to the input.
    * <p>
@@ -15,12 +14,6 @@ namespace sigmoid {
    * A positive curvature applies an S-shaped transfer function.
    * A curvature of 0 applies a linear transfer function.
    * A negative curvature applies an inverted S-shaped transfer function.
-   * <p>
-   * Before the function is applied:
-   * <ul>
-   * <li>The input is clamped to the range [-1.0, 1.0].</li>
-   * <li>The curvature is clamped to the range [-0.9999, 0.9999].</li>
-   * </ul>
    * @param input the input to the sigmoid function
    * @param curvature the intensity and direction of the curvature
    * @return the sigmoid function result
@@ -28,5 +21,12 @@ namespace sigmoid {
   static inline auto curve(float input, float curvature) -> float {
     return (input - input * curvature) / (curvature - std::abs(input) * 2.0F * curvature + 1.0F);
   }
+
+  /**
+   * The range over which the curve() function's input and curvature are defined. Input and curvature values within this
+   * range will always produce outputs in this range. The curve() function's behavior for values outside this range is
+   * undefined.
+   */
+  static auto constexpr range = Range{-1.F, 1.F};
 } // namespace sigmoid
 } // namespace dhe

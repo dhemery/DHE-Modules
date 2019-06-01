@@ -72,7 +72,7 @@ namespace ratio {
 
   void config(Xycloid *xycloid, int knobId, std::function<Range const *()> const &wobbleRatioRange,
               std::function<bool()> const &wobbleRatioIsFree) {
-    xycloid->configParam<KnobParamQuantity>(knobId, 0.F, 1.F, knob::centered, "Wobble ratio", " per throb");
+    xycloid->configParam<KnobParamQuantity>(knobId, 0.F, 1.F, centeredRotation, "Wobble ratio", " per throb");
     auto const paramQuantity = xycloid->paramQuantities[knobId];
     auto const bounceRatioParamQuantity = dynamic_cast<KnobParamQuantity *>(paramQuantity);
     bounceRatioParamQuantity->initialize(wobbleRatioRange, wobbleRatioIsFree);

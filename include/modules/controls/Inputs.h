@@ -7,8 +7,8 @@
 
 namespace dhe {
 
-static auto constexpr knobTaperCurvature = -0.65F;
-static auto constexpr sigmoidRange = Range{-1.F, 1.F};
+static auto constexpr rotationRange = Range{0.F, 1.F};
+static auto constexpr centeredRotation = 0.5F;
 
 template <typename T, int N>
 auto selected(rack::engine::Module *module, int switchId, std::array<T, N> const &items) -> T {
@@ -24,25 +24,27 @@ inline auto position(rack::engine::Module *module, int switchId) -> int {
   return static_cast<int>(module->params[switchId].getValue());
 }
 
+inline auto rotation(rack::engine::Module *module, int knobId) -> float {
+  auto const rotation = module->params[knobId].getValue();
+  return rotation;
+}
+
 inline auto rotation(rack::engine::Module *module, int knobId, int cvId) -> float {
-  static constexpr auto cvToModulation = 0.1F;
+  static constexpr auto cvModulationRatio = 0.1F;
   auto const rotation = module->params[knobId].getValue();
   auto const cv = module->inputs[cvId].getVoltage();
-  auto const modulation = cv * cvToModulation;
+  auto const modulation = cv * cvModulationRatio;
   return rotation + modulation;
 }
 
 inline auto rotation(rack::engine::Module *module, int knobId, int cvId, int avId) -> float {
+  static auto constexpr avModulationRange = Range{-0.1F, 0.1F};
   auto const rotation = module->params[knobId].getValue();
   auto const cv = module->inputs[cvId].getVoltage();
   auto const av = module->params[avId].getValue();
-  return rotation + scale(av, -.1F, .1F) * cv;
-}
-
-inline auto curv(rack::engine::Module *module, int knobId, int cvId) -> float {
-  auto const clampedRotation = clamp(rotation(module, knobId, cvId), 0.F, 1.F);
-  auto const sigmoidInput = scale(clampedRotation, -1.F, 1.F);
-  return sigmoid::curve(sigmoidInput, knobTaperCurvature);
+  auto const cvModulationRatio = avModulationRange.scale(av);
+  auto const modulation = cv * cvModulationRatio;
+  return rotation + modulation;
 }
 
 inline auto scaled(rack::engine::Module *module, int knobId, int cvId, Range const &range) -> float {

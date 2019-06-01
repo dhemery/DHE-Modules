@@ -3,9 +3,11 @@
 #include "envelopes/StageStateMachine.h"
 #include "modules/components/Taper.h"
 #include "modules/controls/Controls.h"
+#include "modules/controls/CurvatureControls.h"
 #include "modules/controls/Duration.h"
 #include "modules/controls/Inputs.h"
 #include "modules/controls/Level.h"
+#include "modules/controls/TaperControls.h"
 
 #include <functional>
 
@@ -42,9 +44,9 @@ private:
   auto level() -> float { return scaled<2>(this, LevelKnob, LevelCvInput, LevelRangeSwitch, level::ranges); }
 
   auto taper(float input) -> float {
-    auto const k = curv(this, CurveKnob, CurveCvInput);
-    auto const taper = selected<taper::VariableTaper const *, 2>(this, ShapeSwitch, taper::variableTapers);
-    return taper->apply(input, k);
+    auto const curvature = dhe::curvature(this, CurveKnob, CurveCvInput);
+    auto const taper = selectedTaper(this, ShapeSwitch);
+    return taper->apply(input, curvature);
   }
 
   void forward() { sendOut(envelopeIn()); }
