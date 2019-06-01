@@ -23,7 +23,7 @@ void init(rack::plugin::Plugin *p) {
   p->addModel(rack::createModel<dhe::BoosterStage, dhe::BoosterStagePanel>("BoosterStage"));
   p->addModel(rack::createModel<dhe::Cubic, dhe::CubicPanel>("Cubic"));
   p->addModel(rack::createModel<dhe::Func, dhe::FuncPanel>("Func"));
-  p->addModel(rack::createModel<dhe::Func6, dhe::Func6Panel>("Func 6"));
+  p->addModel(rack::createModel<dhe::Func6, dhe::Func6Panel>("Func6"));
   p->addModel(rack::createModel<dhe::Hostage, dhe::HostagePanel>("Hostage"));
   p->addModel(rack::createModel<dhe::Stage, dhe::StagePanel>("Stage"));
   p->addModel(rack::createModel<dhe::Ranger, dhe::RangerPanel>("Ranger"));
