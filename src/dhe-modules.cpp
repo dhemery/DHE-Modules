@@ -27,7 +27,7 @@ void init(rack::plugin::Plugin *p) {
       "BoosterStage"));
   p->addModel(rack::createModel<DHE::Cubic, DHE::CubicPanel>("Cubic"));
   p->addModel(rack::createModel<DHE::Func, DHE::FuncPanel>("Func"));
-  p->addModel(rack::createModel<DHE::Func6, DHE::Func6Panel>("Func 6"));
+  p->addModel(rack::createModel<DHE::Func6, DHE::Func6Panel>("Func6"));
   p->addModel(rack::createModel<DHE::Hostage, DHE::HostagePanel>("Hostage"));
   p->addModel(rack::createModel<DHE::Stage, DHE::StagePanel>("Stage"));
   p->addModel(rack::createModel<DHE::Ranger, DHE::RangerPanel>("Ranger"));
