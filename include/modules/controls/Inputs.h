@@ -7,8 +7,16 @@
 
 namespace dhe {
 
+static auto constexpr attenuatorRange = Range{0.F, 1.F};
+static auto constexpr attenuverterRange = Range{-1.F, 1.F};
+static auto constexpr gainRange = Range{-2.F, 2.F};
+
 static auto constexpr rotationRange = Range{0.F, 1.F};
-static auto constexpr centeredRotation = 0.5F;
+
+static auto constexpr bipolarSignalRange = Range{-5.F, 5.F};
+static auto constexpr unipolarSignalRange = Range{0.F, 10.F};
+
+extern std::array<Range const *, 2> const signalRanges;
 
 template <typename T> auto nonConst(T const *pointerToConst) -> T * { return const_cast<T *>(pointerToConst); }
 

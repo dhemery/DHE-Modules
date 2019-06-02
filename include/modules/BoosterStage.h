@@ -1,11 +1,10 @@
 #pragma once
 #include "envelopes/StageStateMachine.h"
 #include "modules/components/Taper.h"
-#include "modules/controls/Controls.h"
-#include "modules/controls/CurvatureControls.h"
-#include "modules/controls/Duration.h"
+#include "modules/controls/CurvatureInputs.h"
+#include "modules/controls/DurationConfig.h"
+#include "modules/controls/Functions.h"
 #include "modules/controls/Inputs.h"
-#include "modules/controls/Level.h"
 
 #include <engine/Module.hpp>
 
@@ -40,7 +39,7 @@ private:
   auto eocButton() const -> bool { return buttonIsPressed(this, EocButton); }
 
   auto level() const -> float {
-    return scaledRotation<2>(this, LevelKnob, LevelCvInput, LevelRangeSwitch, level::ranges);
+    return scaledRotation<2>(this, LevelKnob, LevelCvInput, LevelRangeSwitch, signalRanges);
   }
 
   auto taper(float input) const -> float {
@@ -56,12 +55,12 @@ private:
   void setEoc(bool eoc) { isEoc = eoc; }
 
   void sendActive() {
-    auto const voltage = level::unipolarRange.scale(isActive || activeButton());
+    auto const voltage = unipolarSignalRange.scale(isActive || activeButton());
     outputs[ActiveOutput].setVoltage(voltage);
   }
 
   void sendEoc() {
-    auto const voltage = level::unipolarRange.scale(isEoc || eocButton());
+    auto const voltage = unipolarSignalRange.scale(isEoc || eocButton());
     outputs[EocOutput].setVoltage(voltage);
   }
   void sendOut(float voltage) { outputs[EnvelopeOutput].setVoltage(voltage); }

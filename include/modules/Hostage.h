@@ -1,9 +1,8 @@
 #pragma once
 
 #include "envelopes/HostageStateMachine.h"
-#include "modules/controls/Controls.h"
-#include "modules/controls/Duration.h"
-#include "modules/controls/Level.h"
+#include "modules/controls/Functions.h"
+#include "modules/controls/DurationConfig.h"
 
 #include <engine/Module.hpp>
 
@@ -24,12 +23,12 @@ private:
   void forward() { sendOut(envelopeIn()); }
 
   void setActive(bool active) {
-    auto const voltage = level::unipolarRange.scale(active);
+    auto const voltage = unipolarSignalRange.scale(active);
     outputs[ActiveOutput].setVoltage(voltage);
   }
 
   void setEoc(bool eoc) {
-    auto const voltage = level::unipolarRange.scale(eoc);
+    auto const voltage = unipolarSignalRange.scale(eoc);
     outputs[EocOutput].setVoltage(voltage);
   }
 

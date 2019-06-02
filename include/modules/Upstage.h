@@ -1,6 +1,6 @@
 #pragma once
 
-#include "modules/controls/Level.h"
+#include "modules/controls/Inputs.h"
 
 #include <engine/Module.hpp>
 
@@ -22,7 +22,7 @@ private:
   void sendEnvelope(float voltage) { outputs[EnvelopeOutput].setVoltage(voltage); }
 
   void sendTrigger(bool isTriggered) {
-    const auto voltage = level::unipolarRange.scale(isTriggered);
+    const auto voltage = unipolarSignalRange.scale(isTriggered);
     outputs[TriggerOutput].setVoltage(voltage);
   }
 
@@ -31,7 +31,7 @@ private:
   auto waitIn() const -> bool { return inputIsHigh(this, WaitInput) || buttonIsPressed(this, WaitButton); }
 
   auto level() const -> float {
-    return scaledRotation<2>(this, LevelKnob, LevelCvInput, LevelRangeSwitch, level::ranges);
+    return scaledRotation<2>(this, LevelKnob, LevelCvInput, LevelRangeSwitch, signalRanges);
   }
 };
 

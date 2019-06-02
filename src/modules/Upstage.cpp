@@ -1,15 +1,15 @@
 #include "modules/Upstage.h"
 
-#include "modules/controls/Controls.h"
-#include "modules/controls/Level.h"
+#include "modules/controls/Config.h"
+#include "modules/controls/LevelConfig.h"
 
 namespace dhe {
 
 Upstage::Upstage() {
   config(ParameterCount, InputCount, OutputCount);
 
-  level::configKnob(this, LevelKnob, LevelRangeSwitch);
-  level::configSwitch(this, LevelRangeSwitch);
+  configLevelKnob(this, LevelKnob, LevelRangeSwitch);
+  configLevelRangeSwitch(this, LevelRangeSwitch);
 
   configButton(this, TriggerButton, "TRIG", {"From input", "High"}, 0);
   configButton(this, WaitButton, "WAIT", {"From input", "High"}, 0);

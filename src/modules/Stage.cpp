@@ -1,15 +1,15 @@
 #include "modules/Stage.h"
 
-#include "modules/controls/CurvatureControls.h"
-#include "modules/controls/Duration.h"
-#include "modules/controls/Level.h"
+#include "modules/controls/CurvatureConfig.h"
+#include "modules/controls/DurationConfig.h"
+#include "modules/controls/LevelConfig.h"
 
 namespace dhe {
 Stage::Stage() {
   config(ParameterCount, InputCount, OutputCount);
 
   duration::configKnob(this, DurationKnob, duration::mediumRange);
-  level::configKnob(this, LevelKnob, level::unipolarRange);
+  configLevelKnob(this, LevelKnob, unipolarSignalRange);
   configCurvatureKnob(this, CurveKnob);
 
   stateMachine.start();

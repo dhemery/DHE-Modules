@@ -1,9 +1,9 @@
 #include "modules/BoosterStage.h"
 
-#include "modules/controls/Controls.h"
-#include "modules/controls/CurvatureControls.h"
-#include "modules/controls/Duration.h"
-#include "modules/controls/Level.h"
+#include "modules/controls/Config.h"
+#include "modules/controls/CurvatureConfig.h"
+#include "modules/controls/DurationConfig.h"
+#include "modules/controls/LevelConfig.h"
 
 #include <array>
 #include <string>
@@ -16,11 +16,11 @@ BoosterStage::BoosterStage() {
   duration::configKnob(this, DurationKnob, DurationRangeSwitch);
   duration::configSwitch(this, DurationRangeSwitch);
 
-  level::configKnob(this, LevelKnob, LevelRangeSwitch);
-  level::configSwitch(this, LevelRangeSwitch);
+  configLevelKnob(this, LevelKnob, LevelRangeSwitch);
+  configLevelRangeSwitch(this, LevelRangeSwitch);
 
   configCurvatureKnob(this, CurveKnob);
-  configShapeSwitch(this, ShapeSwitch);
+  configCurveShapeSwitch(this, ShapeSwitch);
 
   configButton(this, DeferButton, "DEFER", {"From input", "High"}, 0);
   configButton(this, TriggerButton, "TRIG", {"From input", "High"}, 0);

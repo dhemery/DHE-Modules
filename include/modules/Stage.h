@@ -1,10 +1,9 @@
 #pragma once
 
 #include "envelopes/StageStateMachine.h"
-#include "modules/controls/Controls.h"
-#include "modules/controls/CurvatureControls.h"
-#include "modules/controls/Duration.h"
-#include "modules/controls/Level.h"
+#include "modules/controls/CurvatureInputs.h"
+#include "modules/controls/DurationConfig.h"
+#include "modules/controls/Functions.h"
 
 #include <engine/Module.hpp>
 
@@ -28,19 +27,19 @@ private:
 
   void generate(float phase) { sendOut(scale(taper(phase), startVoltage, level())); }
 
-  auto level() const -> float { return scaledRotation(this, LevelKnob, level::unipolarRange); }
+  auto level() const -> float { return scaledRotation(this, LevelKnob, unipolarSignalRange); }
 
   void prepareToGenerate() { startVoltage = envelopeIn(); }
 
   void sendOut(float voltage) { outputs[EnvelopeOutput].setVoltage(voltage); }
 
   void setActive(bool active) {
-    const auto voltage = level::unipolarRange.scale(active);
+    const auto voltage = unipolarSignalRange.scale(active);
     outputs[ActiveOutput].setVoltage(voltage);
   }
 
   void setEoc(bool eoc) {
-    const auto voltage = level::unipolarRange.scale(eoc);
+    const auto voltage = unipolarSignalRange.scale(eoc);
     outputs[EocOutput].setVoltage(voltage);
   }
 

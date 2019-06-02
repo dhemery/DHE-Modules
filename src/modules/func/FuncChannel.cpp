@@ -1,7 +1,7 @@
 #include "modules/func/FuncChannel.h"
 
-#include "modules/controls/Controls.h"
-#include "modules/controls/Level.h"
+#include "modules/controls/Config.h"
+#include "modules/controls/Functions.h"
 
 namespace dhe {
 
@@ -12,7 +12,7 @@ static const auto zeroToFiveRange = Range{0.F, 5.F};
 const std::array<Range const *, 4> multiplierRanges{&attenuatorRange, &attenuverterRange, &gainRange,
                                                     &minusTwoToPlusTwoRange};
 
-const std::array<Range const *, 4> offsetRanges{&zeroToFiveRange, &level::bipolarRange, &level::unipolarRange,
+const std::array<Range const *, 4> offsetRanges{&zeroToFiveRange, &bipolarSignalRange, &unipolarSignalRange,
                                                 &minusTenToPlusTenRange};
 
 class FuncOperandKnobParamQuantity : public rack::engine::ParamQuantity {

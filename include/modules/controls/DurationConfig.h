@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Inputs.h"
+#include "Config.h"
 #include "util/Range.h"
 
 #include <array>

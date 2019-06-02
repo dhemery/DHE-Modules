@@ -1,20 +1,20 @@
 #include "modules/Swave.h"
 
-#include "modules/controls/CurvatureControls.h"
-#include "modules/controls/Level.h"
+#include "modules/controls/CurvatureConfig.h"
+#include "modules/controls/LevelConfig.h"
 
 namespace dhe {
 
 Swave::Swave() {
   config(ParameterCount, InputCount, OutputCount);
   configCurvatureKnob(this, CurveKnob);
-  configShapeSwitch(this, ShapeSwitch);
+  configCurveShapeSwitch(this, ShapeSwitch);
 }
 
 void Swave::process(const ProcessArgs & /*args*/) {
-  auto const normalized = level::bipolarRange.normalize(signalIn());
+  auto const normalized = bipolarSignalRange.normalize(signalIn());
   auto const tapered = taper(normalized);
-  auto const outputVoltage = level::bipolarRange.scale(tapered);
+  auto const outputVoltage = bipolarSignalRange.scale(tapered);
   sendSignal(outputVoltage);
 }
 } // namespace dhe

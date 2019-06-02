@@ -1,7 +1,7 @@
-#include "modules/controls/Duration.h"
+#include "modules/controls/DurationConfig.h"
 
 #include "modules/components/Taper.h"
-#include "modules/controls/Controls.h"
+#include "modules/controls/Functions.h"
 
 #include <engine/Module.hpp>
 #include <engine/ParamQuantity.hpp>

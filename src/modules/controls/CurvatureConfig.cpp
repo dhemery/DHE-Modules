@@ -1,6 +1,5 @@
-#include "modules/controls/CurvatureControls.h"
-
-#include "modules/controls/Controls.h"
+#include "modules/controls/Config.h"
+#include "modules/controls/CurvatureInputs.h"
 #include "util/Sigmoid.h"
 
 #include <engine/Module.hpp>
@@ -24,7 +23,8 @@ void configCurvatureKnob(rack::engine::Module const *module, int knobId, std::st
   nonConst(module)->configParam<KnobParamQuantity>(knobId, 0.F, 1.F, initialRotation, name);
 }
 
-void configShapeSwitch(rack::engine::Module const *module, int switchId, std::string const &name, int initialState) {
+void configCurveShapeSwitch(rack::engine::Module const *module, int switchId, std::string const &name,
+                            int initialState) {
   static auto const stateNames = std::array<std::string, 2>{"J", "S"};
   configToggle<2>(module, switchId, name, stateNames, initialState);
 }

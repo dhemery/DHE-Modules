@@ -1,6 +1,6 @@
 #pragma once
 
-#include "modules/controls/Controls.h"
+#include "modules/controls/Functions.h"
 #include "modules/controls/Inputs.h"
 #include "util/Range.h"
 

@@ -1,8 +1,7 @@
 #include "modules/Xycloid.h"
 
-#include "modules/controls/Controls.h"
-#include "modules/controls/Inputs.h"
-#include "modules/controls/Level.h"
+#include "modules/controls/Config.h"
+#include "modules/controls/LevelConfig.h"
 #include "util/Sigmoid.h"
 
 #include <array>
@@ -82,10 +81,10 @@ Xycloid::Xycloid() {
   configKnob(this, WobblePhaseOffsetKnob, "Wobble phase offset", "°", phaseOffsetRange);
 
   configGain(this, XGainKnob, "X gain");
-  level::configSwitch(this, XRangeSwitch, "X range", 0);
+  configLevelRangeSwitch(this, XRangeSwitch, "X range", 0);
 
   configGain(this, YGainKnob, "Y gain");
-  level::configSwitch(this, YRangeSwitch, "Y range", 0);
+  configLevelRangeSwitch(this, YRangeSwitch, "Y range", 0);
 }
 
 void Xycloid::process(const ProcessArgs &args) {
