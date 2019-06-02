@@ -1,12 +1,12 @@
 #pragma once
 
-#include "Module.h"
 #include "func/FuncChannel.h"
 
+#include <engine/Module.hpp>
 #include <memory>
 
 namespace dhe {
-class Func : public Module {
+class Func : public rack::engine::Module {
 public:
   Func();
 

@@ -90,18 +90,6 @@ static inline auto taperedAndScaledRotation(rack::engine::Module *module, int kn
   return range.scale(taper.apply(rotation(module, knobId, cvId, avId)));
 }
 
-static inline auto taperedAndScaledRotation(rack::engine::Module *module, int knobId, int cvId,
-                                            taper::FixedTaper const &taper, Range const &range) -> float {
-  return range.scale(taper.apply(rotation(module, knobId, cvId)));
-}
-
-template <int N>
-static inline auto taperedAndScaledRotation(rack::engine::Module *module, int knobId, taper::FixedTaper const &taper,
-                                            int switchId, std::array<Range const *, N> const &ranges) -> float {
-  auto const range = selectedRange<N>(module, switchId);
-  return range->scale(taper.apply(rotation(module, knobId)));
-}
-
 template <int N>
 static inline auto taperedAndScaledRotation(rack::engine::Module *module, int knobId, int cvId,
                                             taper::FixedTaper const &taper, int switchId,

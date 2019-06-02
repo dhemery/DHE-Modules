@@ -1,5 +1,4 @@
 #pragma once
-#include "Module.h"
 #include "envelopes/StageStateMachine.h"
 #include "modules/components/Taper.h"
 #include "modules/controls/Controls.h"
@@ -9,11 +8,12 @@
 #include "modules/controls/Level.h"
 #include "modules/controls/TaperControls.h"
 
+#include <engine/Module.hpp>
 #include <functional>
 
 namespace dhe {
 
-class BoosterStage : public Module {
+class BoosterStage : public rack::engine::Module {
 public:
   BoosterStage();
   void process(const ProcessArgs &args) override;

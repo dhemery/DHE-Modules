@@ -1,12 +1,11 @@
 #pragma once
 
-#include "Module.h"
-
+#include <engine/Module.hpp>
 #include <functional>
 
 namespace dhe {
 
-class Swave : public Module {
+class Swave : public rack::engine::Module {
 public:
   Swave();
   void process(const ProcessArgs &args) override;

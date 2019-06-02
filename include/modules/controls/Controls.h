@@ -31,14 +31,33 @@ void configButton(rack::engine::Module *module, int buttonId, std::string const 
                   std::array<std::string, 2> const &stateNames, int initialState);
 
 /**
- * Creates a function that returns the state of a button.
- */
-auto buttonStateFunction(rack::engine::Module *module, int buttonId) -> std::function<bool()>;
-
-/**
  * Configures the param and display for a gain knob.
  */
 void configGain(rack::engine::Module *module, int knobId, std::string const &knobName);
+
+/**
+ * Configures the param and display for a knob with a fixed, linear range.
+ */
+void configKnob(rack::engine::Module *module, int knobId, std::string const &knobName, std::string const &units,
+                Range const &range, float initialRotation = centeredRotation);
+
+/**
+ * Configures the param and display for a knob with a fixed, linear range, displayed as a percentage.
+ */
+void configPercentageKnob(rack::engine::Module *module, int knobId, std::string const &knobName,
+                          Range const &range = {0.F, 1.F});
+
+/**
+ * Configures the param and display for a toggle that represents a sequence of states.
+ */
+template <int N>
+void configToggle(rack::engine::Module *module, int toggleId, std::string const &toggleName,
+                  std::array<std::string, N> const &stateNames, int initialState);
+
+/**
+ * Creates a function that returns the state of a button.
+ */
+auto buttonStateFunction(rack::engine::Module *module, int buttonId) -> std::function<bool()>;
 
 /**
  * Creates a function that returns whether an input is active.
@@ -57,28 +76,6 @@ auto inputIsHighOrButtonIsPressedFunction(rack::engine::Module *module, int inpu
     -> std::function<bool()>;
 
 /**
- * Configures the param and display for a knob with a fixed, linear range.
- */
-void configKnob(rack::engine::Module *module, int knobId, std::string const &knobName, std::string const &units,
-                Range const &range, float initialRotation = centeredRotation);
-
-/**
- * Configures the param and display for a knob with a fixed, linear range, displayed as a percentage.
- */
-void configPercentageKnob(rack::engine::Module *module, int knobId, std::string const &knobName,
-                          Range const &range = {0.F, 1.F});
-
-/**
- * Creates a function that returns the rotation of a knob.
- */
-auto rotationFunction(rack::engine::Module *module, int knobId) -> std::function<float()>;
-
-/**
- * Creates a function that returns the modulated rotation of a knob. The amount of modulation is determined by the
- * voltage of a CV input.
- */
-auto rotationFunction(rack::engine::Module *module, int knobId, int cvId) -> std::function<float()>;
-/**
  * Creates a function that returns the modulated rotation of a knob. The amount of modulation is determined by the
  * voltage of a CV input, multiplied by the value of an attenuverter.
  */
@@ -90,33 +87,9 @@ auto rotationFunction(rack::engine::Module *module, int knobId, int cvId, int av
 auto scaledRotationFunction(rack::engine::Module *module, int knobId, Range const &range) -> std::function<float()>;
 
 /**
- * Creates a function that returns the rotation of a knob, modulated and scaled to the given range. The amount of
- * modulation is determined by the voltage of a CV input.
+ * Creates a function that returns the rotation of a knob, scaled to a range selected by a switch from an array of
+ * ranges.
  */
-auto scaledRotationFunction(rack::engine::Module *module, int knobId, int cvId, Range const &range)
-    -> std::function<float()>;
-
-/**
- * Creates a function that returns the rotation of a knob, modulated and scaled to the given range. The amount of
- * modulation is determined by the voltage of a CV input, multiplied by the value of an attenuverter.
- */
-auto scaledRotationFunction(rack::engine::Module *module, int knobId, int cvId, int avId, Range const &range)
-    -> std::function<float()>;
-
-/**
- * Creates a function that returns the rotation of a knob, modulated scaled to the supplied range. The amount of
- * modulation is determined by the voltage of a CV input.
- */
-auto scaledRotationFunction(rack::engine::Module *module, int knobId, int cvId,
-                            std::function<Range const *()> const &range) -> std::function<float()>;
-
-/**
- * Creates a function that returns the rotation of a knob, modulated scaled to the supplied range. The amount of
- * modulation is determined by the voltage of a CV input, multiplied by the value of an attenuverter.
- */
-auto scaledRotationFunction(rack::engine::Module *module, int knobId, int cvId, int avId,
-                            std::function<Range const *()> const &range) -> std::function<float()>;
-
 template <int N>
 auto scaledRotationFunction(rack::engine::Module *module, int knobId, int cvId, int switchId,
                             std::array<Range const *, N> const &ranges) -> std::function<float()> {
@@ -125,6 +98,10 @@ auto scaledRotationFunction(rack::engine::Module *module, int knobId, int cvId, 
   };
 }
 
+/**
+ * Creates a function that returns the rotation of a knob, scaled to a range selected by a switch from an array of
+ * ranges.
+ */
 template <int N>
 auto scaledRotationFunction(rack::engine::Module *module, int knobId, int cvId, int avId, int switchId,
                             std::array<Range const *, N> const &ranges) -> std::function<float()> {
@@ -147,29 +124,11 @@ auto taperedAndScaledRotationFunction(rack::engine::Module *module, int knobId, 
                                       taper::FixedTaper const &taper, Range const &range) -> std::function<float()>;
 
 template <int N>
-auto taperedAndScaledRotationFunction(rack::engine::Module *module, int knobId, taper::FixedTaper const &taper,
-                                      int switchId, std::array<Range const *, N> const &ranges)
-    -> std::function<float()> {
-  return [module, knobId, &taper, switchId, ranges]() -> float {
-    return taperedAndScaledRotation<N>(module, knobId, taper, switchId, ranges);
-  };
-}
-
-template <int N>
 auto taperedAndScaledRotationFunction(rack::engine::Module *module, int knobId, int cvId,
                                       taper::FixedTaper const &taper, int switchId,
                                       std::array<Range const *, N> const &ranges) -> std::function<float()> {
   return [module, knobId, cvId, &taper, switchId, ranges]() -> float {
     return taperedAndScaledRotation<N>(module, knobId, cvId, taper, switchId, ranges);
-  };
-}
-
-template <int N>
-auto taperedAndScaledRotationFunction(rack::engine::Module *module, int knobId, int cvId, int avId,
-                                      taper::FixedTaper const &taper, int switchId,
-                                      std::array<Range const *, N> const &ranges) -> std::function<float()> {
-  return [module, knobId, cvId, avId, &taper, switchId, ranges]() -> float {
-    return taperedAndScaledRotation<N>(module, knobId, cvId, avId, taper, switchId, ranges);
   };
 }
 
@@ -189,11 +148,4 @@ auto rangeSelectorFunction(rack::engine::Module *module, int switchId, std::arra
     -> std::function<Range const *()> {
   return selectorFunction<Range const *, N>(module, switchId, ranges);
 }
-
-/**
- * Configures the param and display for a toggle that represents a sequence of states.
- */
-template <int N>
-void configToggle(rack::engine::Module *module, int toggleId, std::string const &toggleName,
-                  std::array<std::string, N> const &stateNames, int initialState);
 } // namespace dhe

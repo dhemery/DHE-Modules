@@ -1,13 +1,13 @@
 #pragma once
 
-#include "Module.h"
 #include "func/FuncChannel.h"
 
 #include <array>
+#include <engine/Module.hpp>
 #include <vector>
 
 namespace dhe {
-class Func6 : public Module {
+class Func6 : public rack::engine::Module {
   static constexpr auto channelCount = 6;
 
 public:

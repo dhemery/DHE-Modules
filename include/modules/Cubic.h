@@ -1,10 +1,10 @@
 #pragma once
 
-#include "Module.h"
+#include <engine/Module.hpp>
 
 namespace dhe {
 
-class Cubic : public Module {
+class Cubic : public rack::engine::Module {
 public:
   Cubic();
 

@@ -1,15 +1,15 @@
 #pragma once
 
-#include "Module.h"
 #include "envelopes/HostageStateMachine.h"
 #include "modules/controls/Controls.h"
 #include "modules/controls/Duration.h"
 
+#include <engine/Module.hpp>
 #include <functional>
 
 namespace dhe {
 
-class Hostage : public Module {
+class Hostage : public rack::engine::Module {
 public:
   Hostage();
   void process(const ProcessArgs &args) override;

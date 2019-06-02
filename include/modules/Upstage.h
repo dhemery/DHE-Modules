@@ -1,12 +1,11 @@
 #pragma once
 
-#include "Module.h"
-
+#include <engine/Module.hpp>
 #include <functional>
 
 namespace dhe {
 
-class Upstage : public Module {
+class Upstage : public rack::engine::Module {
 public:
   Upstage();
 

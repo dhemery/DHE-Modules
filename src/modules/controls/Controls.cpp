@@ -52,12 +52,27 @@ void configButton(rack::engine::Module *module, int buttonId, std::string const 
   configFrameWidgetStates<2>(module, buttonId, buttonName, stateNames, initialState);
 }
 
-auto buttonStateFunction(rack::engine::Module *module, int buttonId) -> std::function<bool()> {
-  return [module, buttonId]() -> bool { return module->params[buttonId].getValue() > 0.5F; };
-}
-
 void configGain(rack::engine::Module *module, int knobId, std::string const &knobName) {
   configPercentageKnob(module, knobId, knobName, gainRange);
+}
+
+void configKnob(rack::engine::Module *module, int knobId, std::string const &knobName, std::string const &units,
+                Range const &range, float initialRotation) {
+  module->configParam(knobId, 0.F, 1.F, initialRotation, knobName, units, 0.F, range.size(), range.lowerBound);
+}
+
+void configPercentageKnob(rack::engine::Module *module, int knobId, std::string const &knobName, Range const &range) {
+  module->configParam(knobId, 0.F, 1.F, 0.5F, knobName, "%", 0.F, range.size() * 100.F, range.lowerBound * 100.F);
+}
+
+template <int N>
+void configToggle(rack::engine::Module *module, int toggleId, std::string const &toggleName,
+                  std::array<std::string, N> const &stateNames, int initialState) {
+  configFrameWidgetStates<N>(module, toggleId, toggleName, stateNames, initialState);
+}
+
+auto buttonStateFunction(rack::engine::Module *module, int buttonId) -> std::function<bool()> {
+  return [module, buttonId]() -> bool { return module->params[buttonId].getValue() > 0.5F; };
 }
 
 auto inputIsConnectedFunction(rack::engine::Module *module, int inputId) -> std::function<bool()> {
@@ -75,23 +90,6 @@ auto inputIsHighOrButtonIsPressedFunction(rack::engine::Module *module, int inpu
   };
 }
 
-void configKnob(rack::engine::Module *module, int knobId, std::string const &knobName, std::string const &units,
-                Range const &range, float initialRotation) {
-  module->configParam(knobId, 0.F, 1.F, initialRotation, knobName, units, 0.F, range.size(), range.lowerBound);
-}
-
-void configPercentageKnob(rack::engine::Module *module, int knobId, std::string const &knobName, Range const &range) {
-  module->configParam(knobId, 0.F, 1.F, 0.5F, knobName, "%", 0.F, range.size() * 100.F, range.lowerBound * 100.F);
-}
-
-auto rotationFunction(rack::engine::Module *module, int knobId) -> std::function<float()> {
-  return [module, knobId]() -> float { return module->params[knobId].getValue(); };
-}
-
-auto rotationFunction(rack::engine::Module *module, int knobId, int cvId) -> std::function<float()> {
-  return [module, knobId, cvId]() -> float { return rotation(module, knobId, cvId); };
-}
-
 auto rotationFunction(rack::engine::Module *module, int knobId, int cvId, int avId) -> std::function<float()> {
   return [module, knobId, cvId, avId]() -> float { return rotation(module, knobId, cvId, avId); };
 }
@@ -100,26 +98,9 @@ auto scaledRotationFunction(rack::engine::Module *module, int knobId, Range cons
   return [module, knobId, range]() -> float { return scaledRotation(module, knobId, range); };
 }
 
-auto scaledRotationFunction(rack::engine::Module *module, int knobId, int cvId, Range const &range)
-    -> std::function<float()> {
-  return [module, knobId, cvId, range]() -> float { return scaledRotation(module, knobId, cvId, range); };
-}
-
-auto scaledRotationFunction(rack::engine::Module *module, int knobId, int cvId, int avId, Range const &range)
-    -> std::function<float()> {
-  return [module, knobId, cvId, avId, range]() -> float { return scaledRotation(module, knobId, cvId, avId, range); };
-}
-
 auto taperedAndScaledRotationFunction(rack::engine::Module *module, int knobId, taper::FixedTaper const &taper,
                                       Range const &range) -> std::function<float()> {
   return [module, knobId, &taper, &range]() -> float { return taperedAndScaledRotation(module, knobId, taper, range); };
-}
-
-auto taperedAndScaledRotationFunction(rack::engine::Module *module, int knobId, int cvId,
-                                      taper::FixedTaper const &taper, Range const &range) -> std::function<float()> {
-  return [module, knobId, cvId, &taper, &range]() -> float {
-    return taperedAndScaledRotation(module, knobId, cvId, taper, range);
-  };
 }
 
 auto taperedAndScaledRotationFunction(rack::engine::Module *module, int knobId, int cvId, int avId,
@@ -127,12 +108,6 @@ auto taperedAndScaledRotationFunction(rack::engine::Module *module, int knobId, 
   return [module, knobId, cvId, avId, &taper, &range]() -> float {
     return taperedAndScaledRotation(module, knobId, cvId, avId, taper, range);
   };
-}
-
-template <int N>
-void configToggle(rack::engine::Module *module, int toggleId, std::string const &toggleName,
-                  std::array<std::string, N> const &stateNames, int initialState) {
-  configFrameWidgetStates<N>(module, toggleId, toggleName, stateNames, initialState);
 }
 
 // Instantiate for toggles with 2, 3, and 4 states

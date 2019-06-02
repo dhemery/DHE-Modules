@@ -1,10 +1,10 @@
 #pragma once
 
-#include "Module.h"
 #include "modules/components/Rotor.h"
 #include "modules/controls/Controls.h"
 #include "modules/controls/Inputs.h"
 
+#include <engine/Module.hpp>
 #include <functional>
 
 namespace dhe {

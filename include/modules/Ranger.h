@@ -1,15 +1,15 @@
 #pragma once
 
-#include "Module.h"
 #include "modules/controls/Controls.h"
 #include "modules/controls/Inputs.h"
 #include "modules/controls/Level.h"
 
+#include <engine/Module.hpp>
 #include <functional>
 
 namespace dhe {
 
-class Ranger : public Module {
+class Ranger : public rack::engine::Module {
 public:
   Ranger();
 

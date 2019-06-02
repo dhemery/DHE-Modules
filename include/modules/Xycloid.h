@@ -1,14 +1,14 @@
 #pragma once
 
-#include "Module.h"
 #include "modules/components/Rotor.h"
 #include "util/Range.h"
 
+#include <engine/Module.hpp>
 #include <functional>
 
 namespace dhe {
 
-class Xycloid : public Module {
+class Xycloid : public rack::engine::Module {
 public:
   Xycloid();
 

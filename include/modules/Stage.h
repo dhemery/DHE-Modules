@@ -1,17 +1,17 @@
 #pragma once
 
-#include "Module.h"
 #include "envelopes/StageStateMachine.h"
 #include "modules/controls/CurvatureControls.h"
 #include "modules/controls/Duration.h"
 #include "modules/controls/Level.h"
 #include "modules/controls/TaperControls.h"
 
+#include <engine/Module.hpp>
 #include <functional>
 
 namespace dhe {
 
-class Stage : public Module {
+class Stage : public rack::engine::Module {
 public:
   Stage();
   void process(const ProcessArgs &args) override;

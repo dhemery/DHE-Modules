@@ -19,7 +19,7 @@ namespace level {
 
   auto withSelectableRange(rack::engine::Module *module, int knobId, int cvId, int avId, int switchId)
       -> std::function<float()> {
-    return scaledRotationFunction<2>(module, knobId, cvId, avId, level::ranges);
+    return scaledRotationFunction<2>(module, knobId, cvId, avId, switchId, level::ranges);
   }
 
   auto withUnipolarRange(rack::engine::Module *module, int knobId) -> std::function<float()> {

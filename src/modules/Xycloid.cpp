@@ -1,6 +1,7 @@
 #include "modules/Xycloid.h"
 
 #include "modules/controls/Controls.h"
+#include "modules/controls/Inputs.h"
 #include "modules/controls/Level.h"
 #include "util/Sigmoid.h"
 
@@ -139,7 +140,7 @@ auto Xycloid::wobblePhase() -> float {
 }
 
 auto Xycloid::wobbleRatio() -> float {
-  auto wobbleRatioAmount = modulated(WobbleRatioKnob, WobbleRatioCvInput, WobbleRatioAvKnob);
+  auto wobbleRatioAmount = rotation(this, WobbleRatioKnob, WobbleRatioCvInput, WobbleRatioAvKnob);
   auto wobbleRatio = wobbleRatioRange()->scale(wobbleRatioAmount);
   return wobbleRatioIsFree() ? wobbleRatio : std::round(wobbleRatio);
 }

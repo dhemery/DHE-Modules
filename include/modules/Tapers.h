@@ -1,13 +1,13 @@
 #pragma once
 
-#include "Module.h"
 #include "util/Range.h"
 
+#include <engine/Module.hpp>
 #include <functional>
 
 namespace dhe {
 
-class Tapers : public Module {
+class Tapers : public rack::engine::Module {
 public:
   Tapers();
 
