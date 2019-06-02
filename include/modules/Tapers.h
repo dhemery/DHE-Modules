@@ -1,5 +1,9 @@
 #pragma once
 
+#include "modules/controls/CurvatureControls.h"
+#include "modules/controls/Inputs.h"
+#include "modules/controls/Level.h"
+#include "modules/controls/TaperControls.h"
 #include "util/Range.h"
 
 #include <engine/Module.hpp>
@@ -24,20 +28,29 @@ public:
     LevelAvKnob2,
     LevelRangeSwitch2,
     CurveKnob2,
-    CurveAv2,
+    CurveAvKnob2,
     ShapeSwitch2,
     ParameterCount
   };
-  enum InputIds { Level1Cv, Curve1Cv, Level2Cv, CurveCv2, InputCount };
-  enum OutputIds { TaperOutput1, Taper2Output, OutputCount };
+  enum InputIds { LevelCvInput1, CurveCvInput1, LevelCvInput2, CurveCvInput2, InputCount };
+  enum OutputIds { TaperOutput1, TaperOutput2, OutputCount };
 
 private:
-  std::function<float()> levelRotation1;
-  std::function<Range const *()> levelRange1;
-  std::function<float(float)> taper1;
-  std::function<float()> levelRotation2;
-  std::function<Range const *()> levelRange2;
-  std::function<float(float)> taper2;
+  auto levelRotation1() const -> float { return rotation(this, LevelKnob1, LevelCvInput1, LevelAvKnob1); };
+  auto levelRange1() const -> Range const * { return selectedRange<2>(this, LevelRangeSwitch1, level::ranges); }
+  auto taper1(float input) const -> float {
+    auto const taper = selectedTaper(this, ShapeSwitch1);
+    auto const taperCurvature = curvature(this, CurveKnob1, CurveCvInput1, CurveAvKnob1);
+    return taper->apply(input, taperCurvature);
+  }
+
+  auto levelRotation2() const -> float { return rotation(this, LevelKnob2, LevelCvInput2, LevelAvKnob2); };
+  auto levelRange2() const -> Range const * { return selectedRange<2>(this, LevelRangeSwitch2, level::ranges); }
+  auto taper2(float input) const -> float {
+    auto const taper = selectedTaper(this, ShapeSwitch2);
+    auto const taperCurvature = curvature(this, CurveKnob2, CurveCvInput2, CurveAvKnob2);
+    return taper->apply(input, taperCurvature);
+  }
 };
 
 } // namespace dhe
