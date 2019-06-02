@@ -1,12 +1,10 @@
 #include "modules/Cubic.h"
 
 #include "modules/controls/Controls.h"
-#include "modules/controls/Inputs.h"
 
 #include <string>
 
 namespace dhe {
-static auto constexpr coefficientRange = Range{-2.F, 2.F};
 
 Cubic::Cubic() {
   config(ParameterCount, InputCount, OutputCount);
@@ -33,17 +31,4 @@ void Cubic::process(const ProcessArgs & /*args*/) {
   auto outputVoltage = outputGain * y * 5.F;
   sendMainOut(outputVoltage);
 }
-
-auto Cubic::coefficient(Cubic::ParameterIds knobParam, Cubic::InputIds cvParam) -> float {
-  static auto constexpr coefficientRange = Range{-2.0F, 2.0F};
-  return coefficientRange.scale(rotation(this, knobParam, cvParam));
-}
-
-auto Cubic::gain(const Cubic::ParameterIds knobParam, const Cubic::InputIds cvInput) -> float {
-  return gainRange.scale(rotation(this, knobParam, cvInput));
-}
-
-auto Cubic::mainIn() -> float { return inputs[CubicInput].getVoltage(); }
-
-void Cubic::sendMainOut(float voltage) { outputs[CubicOutput].setVoltage(voltage); }
 } // namespace dhe

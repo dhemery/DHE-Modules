@@ -1,5 +1,9 @@
 #pragma once
 
+#include "modules/controls/Controls.h"
+#include "modules/controls/Inputs.h"
+#include "util/Range.h"
+
 #include <engine/Module.hpp>
 
 namespace dhe {
@@ -34,9 +38,18 @@ public:
   enum OutputIds { CubicOutput, OutputCount };
 
 private:
-  auto coefficient(ParameterIds knobParam, InputIds cvParam) -> float;
-  auto gain(ParameterIds knobParam, InputIds cvInput) -> float;
-  auto mainIn() -> float;
-  void sendMainOut(float voltage);
+  static auto constexpr coefficientRange = Range{-2.F, 2.F};
+
+  auto coefficient(Cubic::ParameterIds knobParam, Cubic::InputIds cvParam) -> float {
+    return scaledRotation(this, knobParam, cvParam, coefficientRange);
+  }
+
+  auto gain(const Cubic::ParameterIds knobParam, const Cubic::InputIds cvInput) -> float {
+    return scaledRotation(this, knobParam, cvInput, gainRange);
+  }
+
+  auto mainIn() -> float { return inputs[CubicInput].getVoltage(); }
+
+  void sendMainOut(float voltage) { outputs[CubicOutput].setVoltage(voltage); }
 };
 } // namespace dhe
