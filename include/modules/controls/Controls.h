@@ -57,7 +57,7 @@ void configToggle(rack::engine::Module *module, int toggleId, std::string const 
 /**
  * Creates a function that returns the state of a button.
  */
-auto buttonStateFunction(rack::engine::Module *module, int buttonId) -> std::function<bool()>;
+auto buttonIsPressedFunction(rack::engine::Module *module, int buttonId) -> std::function<bool()>;
 
 /**
  * Creates a function that returns whether an input is active.

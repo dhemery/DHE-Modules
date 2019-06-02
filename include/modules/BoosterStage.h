@@ -37,8 +37,8 @@ public:
 
 private:
   auto envelopeIn() -> float { return inputs[EnvelopeInput].getVoltage(); }
-  auto activeButton() -> bool { return isPressed(this, ActiveButton); }
-  auto eocButton() -> bool { return isPressed(this, EocButton); }
+  auto activeButton() -> bool { return buttonIsPressed(this, ActiveButton); }
+  auto eocButton() -> bool { return buttonIsPressed(this, EocButton); }
 
   auto level() -> float { return scaledRotation<2>(this, LevelKnob, LevelCvInput, LevelRangeSwitch, level::ranges); }
 

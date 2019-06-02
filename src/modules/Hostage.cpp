@@ -2,7 +2,6 @@
 
 #include "modules/controls/Controls.h"
 #include "modules/controls/Duration.h"
-#include "modules/controls/Level.h"
 
 namespace dhe {
 Hostage::Hostage() {
@@ -18,19 +17,4 @@ Hostage::Hostage() {
 
 void Hostage::process(const ProcessArgs &args) { stateMachine.step(args.sampleTime); }
 
-void Hostage::forward() { sendOut(envelopeIn()); }
-
-void Hostage::setActive(bool active) {
-  auto const voltage = level::unipolarRange.scale(active);
-  outputs[ActiveOutput].setVoltage(voltage);
-}
-
-void Hostage::setEoc(bool eoc) {
-  auto const voltage = level::unipolarRange.scale(eoc);
-  outputs[EocOutput].setVoltage(voltage);
-}
-
-auto Hostage::envelopeIn() -> float { return inputs[EnvelopeInput].getVoltage(); }
-
-void Hostage::sendOut(float voltage) { outputs[EnvelopeOutput].setVoltage(voltage); }
 } // namespace dhe

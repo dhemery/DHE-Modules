@@ -10,25 +10,25 @@
 
 namespace dhe {
 
-static inline auto rotationToSpin(float rotation) -> float {
+static inline auto rotationToSpeed(float rotation) -> float {
   auto const tapered = spinKnobTaper.apply(rotation);
   return spinRange.scale(tapered);
 }
 
-static inline auto spinToRotation(float spin) -> float {
+static inline auto speedToRotation(float spin) -> float {
   auto const tapered = spinRange.normalize(spin);
   return spinKnobTaper.invert(tapered);
 }
 
 class SpinKnobParamQuantity : public rack::engine::ParamQuantity {
-  auto getDisplayValue() -> float override { return rotationToSpin(getValue()); }
+  auto getDisplayValue() -> float override { return rotationToSpeed(getValue()); }
 
-  void setDisplayValue(float spin) override { setValue(spinToRotation(spin)); }
+  void setDisplayValue(float spin) override { setValue(speedToRotation(spin)); }
 };
 
 inline void configSpinKnob(Blossom *blossom, int knobId) {
   static auto constexpr initialSpinHz(1.F);
-  static auto const initialSpinKnobRotation = spinToRotation(initialSpinHz);
+  static auto const initialSpinKnobRotation = speedToRotation(initialSpinHz);
   blossom->configParam<SpinKnobParamQuantity>(knobId, 0.F, 1.F, initialSpinKnobRotation, "Spin", " Hz");
 }
 

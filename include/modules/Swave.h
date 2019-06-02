@@ -1,7 +1,9 @@
 #pragma once
 
+#include "modules/controls/CurvatureControls.h"
+#include "modules/controls/TaperControls.h"
+
 #include <engine/Module.hpp>
-#include <functional>
 
 namespace dhe {
 
@@ -15,9 +17,14 @@ public:
   enum OutputIds { SwaveOutput, OutputCount };
 
 private:
-  void sendSignal(float voltage);
-  auto signalIn() -> float;
-  std::function<float(float)> taper;
+  void sendSignal(float voltage) { outputs[SwaveOutput].setVoltage(voltage); }
+
+  auto signalIn() -> float { return inputs[SwaveInput].getVoltage(); }
+
+  auto taper(float input) -> float {
+    auto const taper = selectedTaper(this, ShapeSwitch);
+    return taper->apply(input, curvature(this, CurveKnob, CurveCv));
+  }
 };
 
 } // namespace dhe

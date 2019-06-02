@@ -3,6 +3,7 @@
 #include "envelopes/HostageStateMachine.h"
 #include "modules/controls/Controls.h"
 #include "modules/controls/Duration.h"
+#include "modules/controls/Level.h"
 
 #include <engine/Module.hpp>
 
@@ -20,17 +21,27 @@ public:
   enum OutputIds { ActiveOutput, EnvelopeOutput, EocOutput, OutputCount };
 
 private:
-  auto envelopeIn() -> float;
-  void forward();
-  void sendOut(float voltage);
-  void setActive(bool active);
-  void setEoc(bool eoc);
+  void forward() { sendOut(envelopeIn()); }
+
+  void setActive(bool active) {
+    auto const voltage = level::unipolarRange.scale(active);
+    outputs[ActiveOutput].setVoltage(voltage);
+  }
+
+  void setEoc(bool eoc) {
+    auto const voltage = level::unipolarRange.scale(eoc);
+    outputs[EocOutput].setVoltage(voltage);
+  }
+
+  auto envelopeIn() -> float { return inputs[EnvelopeInput].getVoltage(); }
+
+  void sendOut(float voltage) { outputs[EnvelopeOutput].setVoltage(voltage); }
 
   HostageStateMachine stateMachine{
       inputIsConnectedFunction(this, DeferInput),
       inputIsHighFunction(this, DeferInput),
       inputIsHighFunction(this, TriggerInput),
-      buttonStateFunction(this, ModeSwitch),
+      buttonIsPressedFunction(this, ModeSwitch),
       duration::withSelectableRange(this, DurationKnob, DurationCvInput, DurationRangeSwitch),
       [this](float /*unused*/) { forward(); },
       [this](bool active) { setActive(active); },

@@ -1,7 +1,8 @@
 #pragma once
 
+#include "modules/controls/Level.h"
+
 #include <engine/Module.hpp>
-#include <functional>
 
 namespace dhe {
 
@@ -18,12 +19,26 @@ public:
   enum OutputIds { TriggerOutput, EnvelopeOutput, OutputCount };
 
 private:
-  void sendEnvelope(float voltage);
-  void sendTrigger(bool isTriggered);
-  auto triggerIn() -> bool;
-  auto waitIn() -> bool;
+  void sendEnvelope(float voltage) { outputs[EnvelopeOutput].setVoltage(voltage); }
 
-  std::function<float()> level;
+  void sendTrigger(bool isTriggered) {
+    const auto voltage = level::unipolarRange.scale(isTriggered);
+    outputs[TriggerOutput].setVoltage(voltage);
+  }
+
+  auto triggerIn() -> bool {
+    auto triggerButton = params[TriggerButton].getValue() > 0.1F;
+    auto triggerInput = inputs[TriggerInput].getVoltage() > 0.1F;
+    return triggerButton || triggerInput;
+  }
+
+  auto waitIn() -> bool {
+    auto waitButton = params[WaitButton].getValue() > 0.1F;
+    auto waitInput = inputs[WaitInput].getVoltage() > 0.1F;
+    return waitButton || waitInput;
+  }
+
+  auto level() -> float { return scaledRotation<2>(this, LevelKnob, LevelCvInput, LevelRangeSwitch, level::ranges); }
 };
 
 } // namespace dhe

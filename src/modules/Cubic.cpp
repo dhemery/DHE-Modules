@@ -5,6 +5,7 @@
 #include <string>
 
 namespace dhe {
+Range const Cubic::coefficientRange{-2.F, 2.F};
 
 Cubic::Cubic() {
   config(ParameterCount, InputCount, OutputCount);

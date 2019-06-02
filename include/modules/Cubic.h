@@ -38,7 +38,7 @@ public:
   enum OutputIds { CubicOutput, OutputCount };
 
 private:
-  static auto constexpr coefficientRange = Range{-2.F, 2.F};
+  static Range const coefficientRange;
 
   auto coefficient(Cubic::ParameterIds knobParam, Cubic::InputIds cvParam) -> float {
     return scaledRotation(this, knobParam, cvParam, coefficientRange);

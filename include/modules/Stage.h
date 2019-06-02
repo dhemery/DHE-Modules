@@ -8,7 +8,6 @@
 #include "modules/controls/TaperControls.h"
 
 #include <engine/Module.hpp>
-#include <functional>
 
 namespace dhe {
 
@@ -24,19 +23,31 @@ public:
   enum OutputIds { EnvelopeOutput, EocOutput, ActiveOutput, OutputCount };
 
 private:
-  auto envelopeIn() -> float;
-  void forward();
-  void generate(float phase);
-  void prepareToGenerate();
-  void sendOut(float voltage);
-  void setActive(bool active);
-  void setEoc(bool eoc);
+  auto envelopeIn() -> float { return inputs[EnvelopeInput].getVoltage(); }
+
+  void forward() { sendOut(envelopeIn()); }
+
+  void generate(float phase) { sendOut(scale(taper(phase), startVoltage, level())); }
+
+  auto level() -> float { return scaledRotation(this, LevelKnob, level::unipolarRange); }
+
+  void prepareToGenerate() { startVoltage = envelopeIn(); }
+
+  void sendOut(float voltage) { outputs[EnvelopeOutput].setVoltage(voltage); }
+
+  void setActive(bool active) {
+    const auto voltage = level::unipolarRange.scale(active);
+    outputs[ActiveOutput].setVoltage(voltage);
+  }
+
+  void setEoc(bool eoc) {
+    const auto voltage = level::unipolarRange.scale(eoc);
+    outputs[EocOutput].setVoltage(voltage);
+  }
+
+  auto taper(float input) -> float { return taper::variableJTaper.apply(input, curvature(this, CurveKnob)); }
 
   float startVoltage{0.F};
-
-  std::function<float()> const level{level::withUnipolarRange(this, LevelKnob)};
-  std::function<float(float)> const taper{jTaperFunction(this, CurveKnob)};
-
   StageStateMachine stateMachine{
       inputIsConnectedFunction(this, DeferInput), inputIsHighFunction(this, DeferInput),
       inputIsHighFunction(this, TriggerInput),    duration::withMediumRange(this, DurationKnob),

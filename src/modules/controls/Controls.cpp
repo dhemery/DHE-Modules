@@ -71,23 +71,21 @@ void configToggle(rack::engine::Module *module, int toggleId, std::string const 
   configFrameWidgetStates<N>(module, toggleId, toggleName, stateNames, initialState);
 }
 
-auto buttonStateFunction(rack::engine::Module *module, int buttonId) -> std::function<bool()> {
-  return [module, buttonId]() -> bool { return module->params[buttonId].getValue() > 0.5F; };
+auto buttonIsPressedFunction(rack::engine::Module *module, int buttonId) -> std::function<bool()> {
+  return [module, buttonId]() -> bool { return buttonIsPressed(module, buttonId); };
 }
 
 auto inputIsConnectedFunction(rack::engine::Module *module, int inputId) -> std::function<bool()> {
-  return [module, inputId]() -> bool { return module->inputs[inputId].isConnected(); };
+  return [module, inputId]() -> bool { return inputIsConnected(module, inputId); };
 }
 
 auto inputIsHighFunction(rack::engine::Module *module, int inputId) -> std::function<bool()> {
-  return [module, inputId]() -> bool { return module->inputs[inputId].getVoltage() > 1.F; };
+  return [module, inputId]() -> bool { return inputIsHigh(module, inputId); };
 }
 
 auto inputIsHighOrButtonIsPressedFunction(rack::engine::Module *module, int inputId, int buttonId)
     -> std::function<bool()> {
-  return [module, inputId, buttonId]() -> bool {
-    return module->inputs[inputId].getVoltage() > 1.F || module->params[buttonId].getValue() > 0.5F;
-  };
+  return [module, inputId, buttonId]() -> bool { return inputIsHighOrButtonIsPressed(module, inputId, buttonId); };
 }
 
 auto rotationFunction(rack::engine::Module *module, int knobId, int cvId, int avId) -> std::function<float()> {

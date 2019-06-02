@@ -1,10 +1,12 @@
 #pragma once
 
 #include "modules/components/Rotor.h"
+#include "modules/components/Taper.h"
+#include "modules/controls/Controls.h"
+#include "modules/controls/Inputs.h"
 #include "util/Range.h"
 
 #include <engine/Module.hpp>
-#include <functional>
 
 namespace dhe {
 
@@ -13,6 +15,14 @@ public:
   Xycloid();
 
   void process(const ProcessArgs &args) override;
+
+  auto wobbleRatioRange() -> Range const * { return selectedRange<3>(this, WobbleDirectionSwitch, wobbleRatioRanges); }
+  auto wobbleRatioIsFree() -> bool { return position(this, WobbleRatioModeSwitch) == 1; }
+
+  static const std::array<const Range *, 3> wobbleRatioRanges;
+  static auto constexpr speedKnobTaperCurvature = -0.8F;
+  static auto constexpr speedRange = Range{-10.F, 10.F};
+  static auto constexpr speedKnobTaper = taper::FixedSTaper{speedKnobTaperCurvature};
 
   enum ParameterIds {
     WobbleRatioKnob,
@@ -34,18 +44,23 @@ public:
   enum OutputIds { XOutput, YOutput, OutputCount };
 
 private:
-  auto offset(int param) -> float;
+  auto xGain() -> float { return scaledRotation(this, XGainKnob, XGainCvInput, gainRange); }
+
+  auto xOffset() -> float { return buttonIsPressed(this, XRangeSwitch) ? 1.F : 0.F; }
+
+  auto yGain() -> float { return scaledRotation(this, YGainKnob, YGainCvInput, gainRange); }
+
+  auto yOffset() -> float { return buttonIsPressed(this, YRangeSwitch) ? 1.F : 0.F; }
+
+  auto throbSpeed() -> float {
+    return taperedAndScaledRotation(this, ThrobSpeedKnob, ThrobSpeedCvInput, ThrobSpeedAvKnob, speedKnobTaper,
+                                    speedRange);
+  }
+
   auto wobbleDepth() -> float;
   auto wobblePhase() -> float;
   auto wobbleRatio() -> float;
-  auto xOffset() -> float;
-  auto xGain() -> float;
-  auto yGain() -> float;
-  auto yOffset() -> float;
 
-  std::function<Range const *()> wobbleRatioRange;
-  std::function<bool()> wobbleRatioIsFree;
-  std::function<float()> throbSpeed;
   Rotor wobbler{};
   Rotor throbber{};
 };

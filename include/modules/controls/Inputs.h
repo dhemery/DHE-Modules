@@ -22,8 +22,20 @@ auto selectedRange(rack::engine::Module *module, int switchId, std::array<Range 
   return selected<Range const *, N>(module, switchId, ranges);
 }
 
-static inline auto isPressed(rack::engine::Module *module, int buttonId) -> bool {
+static inline auto buttonIsPressed(rack::engine::Module *module, int buttonId) -> bool {
   return module->params[buttonId].getValue() > 0.5F;
+}
+
+static inline auto inputIsConnected(rack::engine::Module *module, int inputId) -> bool {
+  return module->inputs[inputId].isConnected();
+}
+
+static inline auto inputIsHigh(rack::engine::Module *module, int inputId) -> bool {
+  return module->inputs[inputId].getVoltage() > 1.F;
+}
+
+static inline auto inputIsHighOrButtonIsPressed(rack::engine::Module *module, int inputId, int buttonId) -> bool {
+  return module->inputs[inputId].getVoltage() > 1.F || module->params[buttonId].getValue() > 0.5F;
 }
 
 static inline auto position(rack::engine::Module *module, int switchId) -> int {
