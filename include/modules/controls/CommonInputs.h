@@ -110,9 +110,18 @@ auto scaledRotation(rack::engine::Module const *module, int knobId, int cvId, in
   return range->scale(rotation(module, knobId, cvId, avId));
 }
 
+static inline auto taperedAndScaledRotation(rack::engine::Module const *module, int knobId,
+                                            taper::FixedTaper const &taper, Range const &range) -> float {
+  return range.scale(taper.apply(rotation(module, knobId)));
+}
+
+static inline auto taperedAndScaledRotation(rack::engine::Module const *module, int knobId, int cvId,
+                                            taper::FixedTaper const &taper, Range const &range) -> float {
+  return range.scale(taper.apply(rotation(module, knobId, cvId)));
+}
+
 static inline auto taperedAndScaledRotation(rack::engine::Module const *module, int knobId, int cvId, int avId,
                                             taper::FixedTaper const &taper, Range const &range) -> float {
   return range.scale(taper.apply(rotation(module, knobId, cvId, avId)));
 }
-
 } // namespace dhe

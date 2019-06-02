@@ -9,14 +9,6 @@
 
 namespace dhe {
 
-/**
- * Each duration range is of the form [n, 1000n]. Given ranges of that form,
- * this curvature tapers the rotation so a knob positioned dead center
- * yields a duration equal to 1/10 of the range's upper bound (to within 7
- * decimal places).
- */
-static auto constexpr durationKnobTaper = taper::FixedJTaper{durationKnobTaperCurvature};
-
 class DurationKnobParamQuantity : public rack::engine::ParamQuantity {
 public:
   auto getDisplayValue() -> float override {

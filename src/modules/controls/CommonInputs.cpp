@@ -5,8 +5,5 @@
 #include <array>
 
 namespace dhe {
-static auto constexpr bipolar{bipolarSignalRange};
-static auto constexpr unipolar{unipolarSignalRange};
-
-auto const signalRanges = std::array<Range const *, 2>{&bipolar, &unipolar};
+auto const signalRanges = std::array<Range const *, 2>{&bipolarSignalRange, &unipolarSignalRange};
 } // namespace dhe
