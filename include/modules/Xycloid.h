@@ -15,12 +15,6 @@ public:
 
   void process(const ProcessArgs &args) override;
 
-  auto wobbleRatioRange() const -> Range const * {
-    return selectedRange<3>(this, WobbleDirectionSwitch, wobbleRatioRanges);
-  }
-  auto wobbleRatioIsFree() const -> bool { return switchPosition(this, WobbleRatioModeSwitch) == 1; }
-
-  static const std::array<const Range *, 3> wobbleRatioRanges;
   static auto constexpr speedKnobTaperCurvature = -0.8F;
   static auto constexpr speedRange = Range{-10.F, 10.F};
   static auto constexpr speedKnobTaper = taper::FixedSTaper{speedKnobTaperCurvature};

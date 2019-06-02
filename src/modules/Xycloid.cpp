@@ -15,7 +15,7 @@ static auto constexpr outwardWobbleRatioRange = Range{0.F, maxWobbleRatio};
 static auto constexpr bidirectionalWobbleRatioRange = Range{-maxWobbleRatio, maxWobbleRatio};
 static auto constexpr initialSpeedHz(1.F);
 
-auto const Xycloid::wobbleRatioRanges
+static auto const wobbleRatioRanges
     = std::array<Range const *, 3>{&inwardWobbleRatioRange, &bidirectionalWobbleRatioRange, &outwardWobbleRatioRange};
 
 static inline auto rotationToSpeed(float rotation) -> float {
@@ -39,31 +39,34 @@ static void configSpeedKnob(Xycloid *xycloid, int knobId) {
   xycloid->configParam<SpeedKnobParamQuantity>(knobId, 0.F, 1.F, initialRotation, "Throb speed", " Hz");
 }
 
+static inline auto wobbleRatioRange(Xycloid const *xycloid) -> Range const * {
+  return selectedRange<3>(xycloid, Xycloid::WobbleDirectionSwitch, wobbleRatioRanges);
+}
+
+static inline auto wobbleRatioIsFree(Xycloid const *xycloid) -> bool {
+  return switchPosition(xycloid, Xycloid::WobbleRatioModeSwitch) == 1;
+}
+
+static inline auto wobbleRatio(Xycloid const *xycloid, float rotation) -> float {
+  auto wobbleRatio = wobbleRatioRange(xycloid)->scale(rotation);
+  return wobbleRatioIsFree(xycloid) ? wobbleRatio : std::round(wobbleRatio);
+}
+
 class WobbleRatioKnobParamQuantity : public rack::engine::ParamQuantity {
 public:
-  auto getDisplayValue() -> float override {
-    auto const rotation = getValue();
-    auto const freeRatio = xycloid->wobbleRatioRange()->scale(rotation);
-    auto const ratio = xycloid->wobbleRatioIsFree() ? freeRatio : std::round(freeRatio);
-    return ratio;
-  }
+  auto getDisplayValue() -> float override { return wobbleRatio(xycloid(), getValue()); }
 
   void setDisplayValue(float bounceRatio) override {
-    auto const rotation = xycloid->wobbleRatioRange()->normalize(bounceRatio);
+    auto const range = wobbleRatioRange(xycloid());
+    auto const rotation = range->normalize(bounceRatio);
     setValue(rotation);
   }
 
-  void initialize(Xycloid *theXycloid) { xycloid = theXycloid; }
-
-private:
-  Xycloid *xycloid;
+  auto xycloid() const -> Xycloid const * { return (Xycloid *) module; }
 };
 
 void configWobbleRatioKnob(Xycloid *xycloid, int knobId) {
   xycloid->configParam<WobbleRatioKnobParamQuantity>(knobId, 0.F, 1.F, centeredRotation, "Wobble ratio", " per throb");
-  auto const paramQuantity = xycloid->paramQuantities[knobId];
-  auto const bounceRatioParamQuantity = dynamic_cast<WobbleRatioKnobParamQuantity *>(paramQuantity);
-  bounceRatioParamQuantity->initialize(xycloid);
 }
 
 Xycloid::Xycloid() {
@@ -116,9 +119,7 @@ auto Xycloid::wobblePhase() const -> float {
 }
 
 auto Xycloid::wobbleRatio() const -> float {
-  auto wobbleRatioAmount = rotation(this, WobbleRatioKnob, WobbleRatioCvInput, WobbleRatioAvKnob);
-  auto wobbleRatio = wobbleRatioRange()->scale(wobbleRatioAmount);
-  return wobbleRatioIsFree() ? wobbleRatio : std::round(wobbleRatio);
+  return dhe::wobbleRatio(this, rotation(this, WobbleRatioKnob, WobbleRatioCvInput, WobbleRatioAvKnob));
 }
 
 } // namespace dhe

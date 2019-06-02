@@ -16,7 +16,6 @@ class Blossom : public rack::engine::Module {
 public:
   Blossom();
   void process(const ProcessArgs &args) override;
-  inline auto bounceIsFree() const -> bool { return switchPosition(this, BounceRatioModeSwitch) == 1; }
 
   enum ParameterIds {
     SpinKnob,
@@ -49,6 +48,8 @@ private:
   inline auto bounce() const -> float {
     return scaledRotation(this, BounceRatioKnob, BounceRatioCvInput, BounceRatioAvKnob, bounceRange);
   }
+
+  inline auto bounceIsFree() const -> bool { return switchPosition(this, BounceRatioModeSwitch) == 1; }
 
   inline auto depth() const -> float { return rotation(this, BounceDepthKnob, BounceDepthCvInput, BounceDepthAvKnob); }
 

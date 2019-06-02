@@ -9,25 +9,25 @@
 
 namespace dhe {
 
-static inline auto rotationToSpeed(float rotation) -> float {
+static inline auto rotationToSpin(float rotation) -> float {
   auto const tapered = spinKnobTaper.apply(rotation);
   return spinRange.scale(tapered);
 }
 
-static inline auto speedToRotation(float spin) -> float {
+static inline auto spinToRotation(float spin) -> float {
   auto const tapered = spinRange.normalize(spin);
   return spinKnobTaper.invert(tapered);
 }
 
 class SpinKnobParamQuantity : public rack::engine::ParamQuantity {
-  auto getDisplayValue() -> float override { return rotationToSpeed(getValue()); }
+  auto getDisplayValue() -> float override { return rotationToSpin(getValue()); }
 
-  void setDisplayValue(float spin) override { setValue(speedToRotation(spin)); }
+  void setDisplayValue(float spin) override { setValue(spinToRotation(spin)); }
 };
 
-inline void configSpinKnob(Blossom *blossom, int knobId) {
+static inline void configSpinKnob(Blossom *blossom, int knobId) {
   static auto constexpr initialSpinHz(1.F);
-  static auto const initialSpinKnobRotation = speedToRotation(initialSpinHz);
+  static auto const initialSpinKnobRotation = spinToRotation(initialSpinHz);
   blossom->configParam<SpinKnobParamQuantity>(knobId, 0.F, 1.F, initialSpinKnobRotation, "Spin", " Hz");
 }
 
@@ -37,7 +37,8 @@ public:
     auto const rotation = getValue();
     auto const freeBounceRatio = bounceRange.scale(rotation);
     auto const blossom = dynamic_cast<Blossom *>(module);
-    auto const spin = blossom->bounceIsFree() ? freeBounceRatio : std::round(freeBounceRatio);
+    auto const spin
+        = switchPosition(blossom, Blossom::BounceRatioModeSwitch) == 1 ? freeBounceRatio : std::round(freeBounceRatio);
     return spin;
   }
 
