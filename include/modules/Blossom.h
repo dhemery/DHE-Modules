@@ -17,7 +17,7 @@ class Blossom : public rack::engine::Module {
 public:
   Blossom();
   void process(const ProcessArgs &args) override;
-  inline auto bounceIsFree() -> bool { return switchPosition(this, BounceRatioModeSwitch) == 1; }
+  inline auto bounceIsFree() const -> bool { return switchPosition(this, BounceRatioModeSwitch) == 1; }
 
   enum ParameterIds {
     SpinKnob,
@@ -47,25 +47,25 @@ public:
   enum OutputIds { XOutput, YOutput, OutputCount };
 
 private:
-  inline auto bounce() -> float {
+  inline auto bounce() const -> float {
     return scaledRotation(this, BounceRatioKnob, BounceRatioCvInput, BounceRatioAvKnob, bounceRange);
   }
 
-  inline auto depth() -> float { return rotation(this, BounceDepthKnob, BounceDepthCvInput, BounceDepthAvKnob); }
+  inline auto depth() const -> float { return rotation(this, BounceDepthKnob, BounceDepthCvInput, BounceDepthAvKnob); }
 
-  inline auto phase() -> float {
+  inline auto phase() const -> float {
     return scaledRotation(this, BouncePhaseOffsetKnob, BouncePhaseCvInput, BouncePhaseOffsetAvKnob, {-0.5, 0.5});
   }
 
-  inline auto spin() -> float {
+  inline auto spin() const -> float {
     return taperedAndScaledRotation(this, SpinKnob, SpinCvInput, SpinAvKNob, spinKnobTaper, spinRange);
   }
 
-  inline auto xGain() -> float { return scaledRotation(this, XGainKnob, XGainCvInput, gainRange); }
-  inline auto xOffset() -> float { return selected<float, 2>(this, XRangeSwitch, {0.F, 1.F}); };
+  inline auto xGain() const -> float { return scaledRotation(this, XGainKnob, XGainCvInput, gainRange); }
+  inline auto xOffset() const -> float { return selected<float, 2>(this, XRangeSwitch, {0.F, 1.F}); };
 
-  inline auto yGain() -> float { return scaledRotation(this, YGainKnob, YGainCvInput, gainRange); }
-  inline auto yOffset() -> float { return selected<float, 2>(this, YRangeSwitch, {0.F, 1.F}); };
+  inline auto yGain() const -> float { return scaledRotation(this, YGainKnob, YGainCvInput, gainRange); }
+  inline auto yOffset() const -> float { return selected<float, 2>(this, YRangeSwitch, {0.F, 1.F}); };
 
   Rotor spinner{};
   Rotor bouncer{};

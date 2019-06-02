@@ -80,8 +80,8 @@ static inline auto scaledRotation(rack::engine::Module const *module, int knobId
   return range.scale(rotation(module, knobId, cvId));
 }
 
-static inline auto scaledRotation(rack::engine::Module *module, int knobId, int cvId, int avId, Range const &range)
-    -> float {
+static inline auto scaledRotation(rack::engine::Module const *module, int knobId, int cvId, int avId,
+                                  Range const &range) -> float {
   return range.scale(rotation(module, knobId, cvId, avId));
 }
 
