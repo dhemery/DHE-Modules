@@ -19,7 +19,7 @@ class CurvatureKnobParamQuantity : public rack::engine::ParamQuantity {
 };
 
 void configCurvatureKnob(rack::engine::Module *module, int knobId, std::string const &name, float initialRotation) {
-  nonConst(module)->configParam<CurvatureKnobParamQuantity>(knobId, 0.F, 1.F, initialRotation, name);
+  module->configParam<CurvatureKnobParamQuantity>(knobId, 0.F, 1.F, initialRotation, name);
 }
 
 void configCurveShapeSwitch(rack::engine::Module *module, int switchId, std::string const &name, int initialState) {

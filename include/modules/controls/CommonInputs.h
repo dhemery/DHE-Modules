@@ -18,14 +18,12 @@ static auto constexpr unipolarSignalRange = Range{0.F, 10.F};
 
 extern std::array<Range const *, 2> const signalRanges;
 
-template <typename T> auto nonConst(T const *pointerToConst) -> T * { return const_cast<T *>(pointerToConst); }
-
 static inline auto paramValue(rack::engine::Module const *module, int paramId) -> float {
-  return nonConst(module)->params[paramId].getValue();
+  return const_cast<rack::engine::Module *>(module)->params[paramId].getValue();
 }
 
 static inline auto inputVoltage(rack::engine::Module const *module, int inputId) -> float {
-  return nonConst(module)->inputs[inputId].getVoltage();
+  return const_cast<rack::engine::Module *>(module)->inputs[inputId].getVoltage();
 }
 
 static inline auto switchPosition(rack::engine::Module const *module, int switchId) -> int {
@@ -37,7 +35,7 @@ static inline auto buttonIsPressed(rack::engine::Module const *module, int butto
 }
 
 static inline auto inputIsConnected(rack::engine::Module const *module, int inputId) -> bool {
-  return nonConst(module)->inputs[inputId].isConnected();
+  return const_cast<rack::engine::Module *>(module)->inputs[inputId].isConnected();
 }
 
 static inline auto inputIsHigh(rack::engine::Module const *module, int inputId) -> bool {

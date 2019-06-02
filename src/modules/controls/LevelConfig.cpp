@@ -27,7 +27,7 @@ private:
 
 void configLevelKnob(rack::engine::Module *module, int knobId, std::function<Range const *()> const &rangeSupplier,
                      std::string const &name, float initialPosition) {
-  nonConst(module)->configParam<LevelKnobParamQuantity>(knobId, 0.F, 1.F, initialPosition, name, " V");
+  module->configParam<LevelKnobParamQuantity>(knobId, 0.F, 1.F, initialPosition, name, " V");
   auto knobParamQuantity = dynamic_cast<LevelKnobParamQuantity *>(module->paramQuantities[knobId]);
   knobParamQuantity->setRangeSupplier(rangeSupplier);
 }

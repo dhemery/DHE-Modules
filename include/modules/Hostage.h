@@ -21,16 +21,16 @@ public:
 private:
   auto deferIsConnected() const -> bool { return inputIsConnected(this, DeferInput); }
 
-  auto duration() const -> float {
-    return selectableDuration(this, DurationKnob, DurationCvInput, DurationRangeSwitch);
-  }
+  auto duration() const -> float { return dhe::duration(this, DurationKnob, DurationCvInput, DurationRangeSwitch); }
 
   auto envelopeIn() const -> float { return paramValue(this, EnvelopeInput); }
 
   void forward() { sendOut(envelopeIn()); }
 
   auto isDeferring() const -> bool { return inputIsHigh(this, DeferInput); }
+
   auto isSustainMode() const -> bool { return switchPosition(this, ModeSwitch) == 1; }
+
   auto isTriggered() const -> bool { return inputIsHigh(this, TriggerInput); }
 
   void sendOut(float voltage) { outputs[EnvelopeOutput].setVoltage(voltage); }
@@ -48,7 +48,7 @@ private:
   HostageStateMachine stateMachine{
       [this]() -> bool { return deferIsConnected(); }, [this]() -> bool { return isDeferring(); },
       [this]() -> bool { return isTriggered(); },      [this]() -> bool { return isSustainMode(); },
-      [this]() -> float { return duration(); },        [this](float /*unused*/) { forward(); },
+      [this]() -> float { return duration(); },        [this](float /*phase*/) { forward(); },
       [this](bool active) { setActive(active); },      [this](bool eoc) { setEoc(eoc); }};
 };
 } // namespace dhe

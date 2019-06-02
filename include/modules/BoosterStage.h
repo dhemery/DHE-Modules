@@ -34,25 +34,35 @@ public:
   enum OutputIds { ActiveOutput, EocOutput, EnvelopeOutput, OutputCount };
 
 private:
-  auto envelopeIn() const -> float { return inputVoltage(this, EnvelopeInput); }
   auto activeButton() const -> bool { return buttonIsPressed(this, ActiveButton); }
+
+  auto deferIsConnected() const -> bool { return inputIsConnected(this, DeferInput); }
+
+  auto duration() const -> float { return dhe::duration(this, DurationKnob, DurationCvInput, DurationRangeSwitch); }
+
+  auto envelopeIn() const -> float { return inputVoltage(this, EnvelopeInput); }
+
   auto eocButton() const -> bool { return buttonIsPressed(this, EocButton); }
+
+  void forward() { sendOut(envelopeIn()); }
+
+  void generate(float phase) { sendOut(scale(taper(phase), startVoltage, level())); }
+
+  auto isDeferring() const -> bool { return inputIsHigh(this, DeferInput) || buttonIsPressed(this, DeferButton); }
+
+  auto isTriggered() const -> bool { return inputIsHigh(this, TriggerInput) || buttonIsPressed(this, TriggerButton); }
 
   auto level() const -> float {
     return scaledRotation<2>(this, LevelKnob, LevelCvInput, LevelRangeSwitch, signalRanges);
   }
+
+  void prepareToGenerate() { startVoltage = envelopeIn(); }
 
   auto taper(float input) const -> float {
     auto const curvature = dhe::curvature(this, CurveKnob, CurveCvInput);
     auto const taper = selectedTaper(this, ShapeSwitch);
     return taper->apply(input, curvature);
   }
-
-  void forward() { sendOut(envelopeIn()); }
-  void prepareToGenerate() { startVoltage = envelopeIn(); }
-  void generate(float phase) { sendOut(scale(taper(phase), startVoltage, level())); }
-  void setActive(bool active) { isActive = active; }
-  void setEoc(bool eoc) { isEoc = eoc; }
 
   void sendActive() {
     auto const voltage = unipolarSignalRange.scale(isActive || activeButton());
@@ -63,22 +73,18 @@ private:
     auto const voltage = unipolarSignalRange.scale(isEoc || eocButton());
     outputs[EocOutput].setVoltage(voltage);
   }
+
+  void setActive(bool active) { isActive = active; }
+
+  void setEoc(bool eoc) { isEoc = eoc; }
+
   void sendOut(float voltage) { outputs[EnvelopeOutput].setVoltage(voltage); }
-
-  auto deferIsConnected() const -> bool { return inputIsConnected(this, DeferInput); }
-
-  auto isDeferring() const -> bool { return inputIsHigh(this, DeferInput) || buttonIsPressed(this, DeferButton); }
-  auto isTriggered() const -> bool { return inputIsHigh(this, TriggerInput) || buttonIsPressed(this, TriggerButton); }
-
-  auto duration() const -> float {
-    return selectableDuration(this, DurationKnob, DurationCvInput, DurationRangeSwitch);
-  }
 
   StageStateMachine stateMachine{[this]() -> bool { return deferIsConnected(); },
                                  [this]() -> bool { return isDeferring(); },
                                  [this]() -> bool { return isTriggered(); },
                                  [this]() -> float { return duration(); },
-                                 [this](float /*unused*/) { forward(); },
+                                 [this](float /*phase*/) { forward(); },
                                  [this]() { prepareToGenerate(); },
                                  [this](float phase) { generate(phase); },
                                  [this](bool active) { setActive(active); },

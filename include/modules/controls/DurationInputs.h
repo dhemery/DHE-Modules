@@ -33,7 +33,7 @@ static inline auto duration(rack::engine::Module const *module, int knobId, Rang
   return duration(rotation(module, knobId), &range);
 }
 
-static inline auto selectableDuration(rack::engine::Module const *module, int knobId, int cvId, int switchId) -> float {
+static inline auto duration(rack::engine::Module const *module, int knobId, int cvId, int switchId) -> float {
   auto const range = durationRange(module, switchId);
   return duration(rotation(module, knobId, cvId), range);
 }

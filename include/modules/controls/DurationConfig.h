@@ -11,7 +11,7 @@ namespace dhe {
 /**
  * Configures the param and display for a duration knob with a fixed range.
  */
-void configDurationKnob(rack::engine::Module *module, int knobId, Range const & /*range*/,
+void configDurationKnob(rack::engine::Module *module, int knobId, Range const &range,
                         std::string const &name = "Duration", float initialRotation = centeredRotation);
 
 /**

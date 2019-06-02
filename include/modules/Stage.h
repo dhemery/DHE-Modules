@@ -55,7 +55,7 @@ private:
                                  [this]() -> bool { return isDeferring(); },
                                  [this]() -> bool { return isTriggered(); },
                                  [this]() -> float { return duration(); },
-                                 [this](float /*unused*/) { forward(); },
+                                 [this](float /*phase*/) { forward(); },
                                  [this]() { prepareToGenerate(); },
                                  [this](float phase) { generate(phase); },
                                  [this](bool active) { setActive(active); },
