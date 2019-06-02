@@ -13,72 +13,42 @@ namespace dhe {
 /**
  * Creates a function that returns the state of a button.
  */
-auto buttonIsPressedFunction(rack::engine::Module const *module, int buttonId) -> std::function<bool()>;
+static inline auto buttonIsPressedFunction(rack::engine::Module const *module, int buttonId) -> std::function<bool()> {
+  return [module, buttonId]() -> bool { return buttonIsPressed(module, buttonId); };
+}
 
 /**
  * Creates a function that returns whether an input is active.
  */
-auto inputIsConnectedFunction(rack::engine::Module const *module, int inputId) -> std::function<bool()>;
+static inline auto inputIsConnectedFunction(rack::engine::Module const *module, int inputId) -> std::function<bool()> {
+  return [module, inputId]() -> bool { return inputIsConnected(module, inputId); };
+}
 
 /**
  * Creates a function that returns whether an input is high (above 1 volt).
  */
-auto inputIsHighFunction(rack::engine::Module const *module, int inputId) -> std::function<bool()>;
+static inline auto inputIsHighFunction(rack::engine::Module const *module, int inputId) -> std::function<bool()> {
+  return [module, inputId]() -> bool { return inputIsHigh(module, inputId); };
+}
 
 /**
  * Creates a function that returns whether an input is high (above 1 volt) or a button is pressed.
  */
-auto inputIsHighOrButtonIsPressedFunction(rack::engine::Module const *module, int inputId, int buttonId)
-    -> std::function<bool()>;
-
-/**
- * Creates a function that returns the modulated rotation of a knob. The amount of modulation is determined by the
- * voltage of a CV input, multiplied by the value of an attenuverter.
- */
-auto rotationFunction(rack::engine::Module const *module, int knobId, int cvId, int avId) -> std::function<float()>;
-
-/**
- * Creates a function that returns the rotation of a knob, scaled to the given range.
- */
-auto scaledRotationFunction(rack::engine::Module const *module, int knobId, Range const &range)
-    -> std::function<float()>;
-
-/**
- * Creates a function that returns the rotation of a knob, scaled to a range selected by a switch from an array of
- * ranges.
- */
-template <int N>
-auto scaledRotationFunction(rack::engine::Module const *module, int knobId, int cvId, int switchId,
-                            std::array<Range const *, N> const &ranges) -> std::function<float()> {
-  return [module, knobId, cvId, switchId, ranges]() -> float {
-    return scaledRotation<N>(module, knobId, cvId, switchId, ranges);
-  };
-}
-
-/**
- * Creates a function that returns the rotation of a knob, scaled to a range selected by a switch from an array of
- * ranges.
- */
-template <int N>
-auto scaledRotationFunction(rack::engine::Module const *module, int knobId, int cvId, int avId, int switchId,
-                            std::array<Range const *, N> const &ranges) -> std::function<float()> {
-  return [module, knobId, cvId, avId, switchId, ranges]() -> float {
-    return scaledRotation<N>(module, knobId, cvId, avId, switchId, ranges);
+static inline auto inputIsHighOrButtonIsPressedFunction(rack::engine::Module const *module, int inputId, int buttonId)
+    -> std::function<bool()> {
+  return [module, inputId, buttonId]() -> bool {
+    return inputIsHigh(module, inputId) || buttonIsPressed(module, buttonId);
   };
 }
 
 /**
  * Creates a function that returns the rotation of a knob, tapered and scaled to the given range.
  */
-auto taperedAndScaledRotationFunction(rack::engine::Module const *module, int knobId, taper::FixedTaper const &taper,
-                                      Range const &range) -> std::function<float()>;
-
-/**
- * Creates a function that returns the rotation of a knob, modulated, tapered, and scaled to the given range. The
- * amount of modulation is determined by the voltage of a CV input, multiplied by the value of an attenuverter.
- */
-auto taperedAndScaledRotationFunction(rack::engine::Module const *module, int knobId, int cvId, int avId,
-                                      taper::FixedTaper const &taper, Range const &range) -> std::function<float()>;
+static inline auto taperedAndScaledRotationFunction(rack::engine::Module const *module, int knobId,
+                                                    taper::FixedTaper const &taper, Range const &range)
+    -> std::function<float()> {
+  return [module, knobId, &taper, &range]() -> float { return taperedAndScaledRotation(module, knobId, taper, range); };
+}
 
 template <int N>
 auto taperedAndScaledRotationFunction(rack::engine::Module const *module, int knobId, int cvId,
