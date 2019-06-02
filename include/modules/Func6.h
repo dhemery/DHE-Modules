@@ -2,7 +2,6 @@
 
 #include "func/FuncChannel.h"
 
-#include <array>
 #include <engine/Module.hpp>
 #include <vector>
 

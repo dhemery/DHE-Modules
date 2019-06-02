@@ -5,7 +5,6 @@
 #include "modules/controls/Duration.h"
 
 #include <engine/Module.hpp>
-#include <functional>
 
 namespace dhe {
 

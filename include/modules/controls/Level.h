@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Controls.h"
+#include "Inputs.h"
 #include "util/Range.h"
 
 #include <array>
@@ -18,13 +18,6 @@ namespace level {
    * amount of modulation is determined by the voltage of a CV input.
    */
   auto withSelectableRange(rack::engine::Module *module, int knobId, int cvId, int switchId) -> std::function<float()>;
-
-  /**
-   * Creates a function that yields the level (in volts) selected by a modulated knob and a level range switch. The
-   * amount of modulation is determined by the voltage of a CV input, multiplied by the value of an attenuverter.
-   */
-  auto withSelectableRange(rack::engine::Module *module, int knobId, int cvId, int avId, int switchId)
-      -> std::function<float()>;
 
   /**
    * Creates a function that yields the level (in volts) selected by a knob from the unipolar range.
