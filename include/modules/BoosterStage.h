@@ -3,6 +3,7 @@
 #include "modules/components/Taper.h"
 #include "modules/controls/CurvatureInputs.h"
 #include "modules/controls/DurationConfig.h"
+#include "modules/controls/DurationInputs.h"
 #include "modules/controls/Functions.h"
 #include "modules/controls/Inputs.h"
 
@@ -65,16 +66,24 @@ private:
   }
   void sendOut(float voltage) { outputs[EnvelopeOutput].setVoltage(voltage); }
 
-  StageStateMachine stateMachine{
-      inputIsConnectedFunction(this, DeferInput),
-      inputIsHighOrButtonIsPressedFunction(this, DeferInput, DeferButton),
-      inputIsHighOrButtonIsPressedFunction(this, TriggerInput, TriggerButton),
-      duration::withSelectableRange(this, DurationKnob, DurationCvInput, DurationRangeSwitch),
-      [this](float /*unused*/) { forward(); },
-      [this]() { prepareToGenerate(); },
-      [this](float phase) { generate(phase); },
-      [this](bool active) { setActive(active); },
-      [this](bool eoc) { setEoc(eoc); }};
+  auto deferIsConnected() const -> bool { return inputIsConnected(this, DeferInput); }
+
+  auto isDeferring() const -> bool { return inputIsHigh(this, DeferInput) || buttonIsPressed(this, DeferButton); }
+  auto isTriggered() const -> bool { return inputIsHigh(this, TriggerInput) || buttonIsPressed(this, TriggerButton); }
+
+  auto duration() const -> float {
+    return selectableDuration(this, DurationKnob, DurationCvInput, DurationRangeSwitch);
+  }
+
+  StageStateMachine stateMachine{[this]() -> bool { return deferIsConnected(); },
+                                 [this]() -> bool { return isDeferring(); },
+                                 [this]() -> bool { return isTriggered(); },
+                                 [this]() -> float { return duration(); },
+                                 [this](float /*unused*/) { forward(); },
+                                 [this]() { prepareToGenerate(); },
+                                 [this](float phase) { generate(phase); },
+                                 [this](bool active) { setActive(active); },
+                                 [this](bool eoc) { setEoc(eoc); }};
 
   bool isActive{false};
   bool isEoc{false};

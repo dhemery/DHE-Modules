@@ -8,7 +8,7 @@ namespace dhe {
 Stage::Stage() {
   config(ParameterCount, InputCount, OutputCount);
 
-  duration::configKnob(this, DurationKnob, duration::mediumRange);
+  configDurationKnob(this, DurationKnob, mediumDurationRange);
   configLevelKnob(this, LevelKnob, unipolarSignalRange);
   configCurvatureKnob(this, CurveKnob);
 

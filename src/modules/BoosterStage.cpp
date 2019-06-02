@@ -13,8 +13,8 @@ namespace dhe {
 BoosterStage::BoosterStage() {
   config(ParameterCount, InputCount, OutputCount);
 
-  duration::configKnob(this, DurationKnob, DurationRangeSwitch);
-  duration::configSwitch(this, DurationRangeSwitch);
+  configDurationKnob(this, DurationKnob, DurationRangeSwitch);
+  configDurationRangeSwitch(this, DurationRangeSwitch);
 
   configLevelKnob(this, LevelKnob, LevelRangeSwitch);
   configLevelRangeSwitch(this, LevelRangeSwitch);

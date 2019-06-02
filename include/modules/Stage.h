@@ -2,7 +2,7 @@
 
 #include "envelopes/StageStateMachine.h"
 #include "modules/controls/CurvatureInputs.h"
-#include "modules/controls/DurationConfig.h"
+#include "modules/controls/DurationInputs.h"
 #include "modules/controls/Functions.h"
 
 #include <engine/Module.hpp>
@@ -21,6 +21,8 @@ public:
   enum OutputIds { EnvelopeOutput, EocOutput, ActiveOutput, OutputCount };
 
 private:
+  auto duration() const -> float { return dhe::duration(this, DurationKnob, mediumDurationRange); }
+
   auto envelopeIn() const -> float { return inputVoltage(this, EnvelopeInput); }
 
   void forward() { sendOut(envelopeIn()); }
@@ -46,11 +48,10 @@ private:
   auto taper(float input) const -> float { return taper::variableJTaper.apply(input, curvature(this, CurveKnob)); }
 
   float startVoltage{0.F};
-  StageStateMachine stateMachine{
-      inputIsConnectedFunction(this, DeferInput), inputIsHighFunction(this, DeferInput),
-      inputIsHighFunction(this, TriggerInput),    duration::withMediumRange(this, DurationKnob),
-      [this](float /*unused*/) { forward(); },    [this]() { prepareToGenerate(); },
-      [this](float phase) { generate(phase); },   [this](bool active) { setActive(active); },
-      [this](bool eoc) { setEoc(eoc); }};
+  StageStateMachine stateMachine{inputIsConnectedFunction(this, DeferInput), inputIsHighFunction(this, DeferInput),
+                                 inputIsHighFunction(this, TriggerInput),    [this]() -> float { return duration(); },
+                                 [this](float /*unused*/) { forward(); },    [this]() { prepareToGenerate(); },
+                                 [this](float phase) { generate(phase); },   [this](bool active) { setActive(active); },
+                                 [this](bool eoc) { setEoc(eoc); }};
 };
 } // namespace dhe
