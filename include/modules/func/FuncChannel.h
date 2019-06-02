@@ -12,11 +12,12 @@ class Range;
 
 class FuncChannel {
 public:
-  FuncChannel() = default;
   FuncChannel(rack::engine::Module *module, int inputId, int operandKnobId, int outputId, int operationSwitchId,
-              int offsetRangeSwitchId, int multiplierRangeSwitchId, std::string const &channelName = "");
+              int offsetRangeSwitchId, int multiplierRangeSwitchId, std::string channelName = "");
 
-  auto apply(float upstream) -> float;
+  auto apply(float upstream) const -> float;
+
+  void config();
 
   auto currentOperandName() const -> std::string;
 

@@ -27,6 +27,6 @@ public:
   enum OutputIds { FuncOutput, OutputCount = FuncOutput + channelCount };
 
 private:
-  std::vector<std::unique_ptr<FuncChannel>> channels;
+  std::vector<FuncChannel> channels;
 };
 } // namespace dhe

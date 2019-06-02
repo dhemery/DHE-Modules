@@ -3,6 +3,8 @@
 #include "modules/controls/CommonConfig.h"
 #include "modules/controls/CommonInputs.h"
 
+#include <utility>
+
 namespace dhe {
 
 static const auto minusTwoToPlusTwoRange = Range{-2.F, 2.F};
@@ -32,23 +34,25 @@ public:
     setValue(rotation);
   }
 
-  void setChannel(FuncChannel *newChannel) { channel = newChannel; }
+  void setChannel(FuncChannel const *newChannel) { channel = newChannel; }
 
 private:
-  FuncChannel *channel;
+  FuncChannel const *channel;
 };
 
 FuncChannel::FuncChannel(rack::engine::Module *module, int inputId, int operandKnobId, int outputId,
                          int operationSwitchId, int offsetRangeSwitchId, int multiplierRangeSwitchId,
-                         std::string const &channelName) :
+                         std::string channelName) :
     module{module},
-    channelName{channelName},
+    channelName{std::move(channelName)},
     inputId{inputId},
     multiplierRangeSwitchId{multiplierRangeSwitchId},
     offsetRangeSwitchId{offsetRangeSwitchId},
     operandKnobId{operandKnobId},
     operationSwitchId{operationSwitchId},
-    outputId{outputId} {
+    outputId{outputId} {}
+
+void FuncChannel::config() {
   module->configParam<FuncOperandKnobParamQuantity>(operandKnobId, 0.F, 1.F, centeredRotation);
   configToggle<2>(module, operationSwitchId, "Operator" + channelName, {"Add (offset)", "Multiply (scale)"}, 0);
   configToggle<4>(module, offsetRangeSwitchId, "Offset " + channelName + " range", {"0–5 V", "±5 V", "0–10 V", "±10 V"},
@@ -62,7 +66,7 @@ FuncChannel::FuncChannel(rack::engine::Module *module, int inputId, int operandK
   operandKnobParamQuantity->setChannel(this);
 }
 
-auto FuncChannel::apply(float upstream) -> float {
+auto FuncChannel::apply(float upstream) const -> float {
   auto const in = module->inputs[inputId].getNormalVoltage(upstream);
   auto const voltage = isMultiplication() ? multiply(in) : add(in);
   module->outputs[outputId].setVoltage(voltage);
