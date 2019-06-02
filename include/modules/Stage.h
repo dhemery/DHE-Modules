@@ -47,11 +47,19 @@ private:
 
   auto taper(float input) const -> float { return taper::variableJTaper.apply(input, curvature(this, CurveKnob)); }
 
+  auto deferIsConnected() const -> bool { return inputIsConnected(this, DeferInput); }
+  auto isDeferring() const -> bool { return inputIsHigh(this, DeferInput); }
+  auto isTriggered() const -> bool { return inputIsHigh(this, TriggerInput); }
+
   float startVoltage{0.F};
-  StageStateMachine stateMachine{inputIsConnectedFunction(this, DeferInput), inputIsHighFunction(this, DeferInput),
-                                 inputIsHighFunction(this, TriggerInput),    [this]() -> float { return duration(); },
-                                 [this](float /*unused*/) { forward(); },    [this]() { prepareToGenerate(); },
-                                 [this](float phase) { generate(phase); },   [this](bool active) { setActive(active); },
+  StageStateMachine stateMachine{[this]() -> bool { return deferIsConnected(); },
+                                 [this]() -> bool { return isDeferring(); },
+                                 [this]() -> bool { return isTriggered(); },
+                                 [this]() -> float { return duration(); },
+                                 [this](float /*unused*/) { forward(); },
+                                 [this]() { prepareToGenerate(); },
+                                 [this](float phase) { generate(phase); },
+                                 [this](bool active) { setActive(active); },
                                  [this](bool eoc) { setEoc(eoc); }};
 };
 } // namespace dhe
