@@ -1,8 +1,8 @@
 #pragma once
 
 #include "envelopes/HostageStateMachine.h"
-#include "modules/controls/Functions.h"
 #include "modules/controls/DurationConfig.h"
+#include "modules/controls/Functions.h"
 
 #include <engine/Module.hpp>
 
