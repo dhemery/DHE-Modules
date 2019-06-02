@@ -17,7 +17,7 @@ class Blossom : public rack::engine::Module {
 public:
   Blossom();
   void process(const ProcessArgs &args) override;
-  inline auto bounceIsFree() -> bool { return position(this, BounceRatioModeSwitch) == 1; }
+  inline auto bounceIsFree() -> bool { return switchPosition(this, BounceRatioModeSwitch) == 1; }
 
   enum ParameterIds {
     SpinKnob,

@@ -106,17 +106,17 @@ void Xycloid::process(const ProcessArgs &args) {
   outputs[YOutput].setVoltage(5.F * yGain() * (y + yOffset()));
 }
 
-auto Xycloid::wobbleDepth() -> float {
+auto Xycloid::wobbleDepth() const -> float {
   auto rotation = dhe::rotation(this, WobbleDepthKnob, WobbleDepthCvInput, WobbleDepthAvKnob);
   return wobbleDepthRange.clamp(rotation);
 }
 
-auto Xycloid::wobblePhase() -> float {
-  auto rotation = params[WobblePhaseOffsetKnob].getValue();
+auto Xycloid::wobblePhase() const -> float {
+  auto rotation = paramValue(this, WobblePhaseOffsetKnob);
   return rotation - 0.5F;
 }
 
-auto Xycloid::wobbleRatio() -> float {
+auto Xycloid::wobbleRatio() const -> float {
   auto wobbleRatioAmount = rotation(this, WobbleRatioKnob, WobbleRatioCvInput, WobbleRatioAvKnob);
   auto wobbleRatio = wobbleRatioRange()->scale(wobbleRatioAmount);
   return wobbleRatioIsFree() ? wobbleRatio : std::round(wobbleRatio);

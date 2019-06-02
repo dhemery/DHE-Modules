@@ -16,8 +16,10 @@ public:
 
   void process(const ProcessArgs &args) override;
 
-  auto wobbleRatioRange() -> Range const * { return selectedRange<3>(this, WobbleDirectionSwitch, wobbleRatioRanges); }
-  auto wobbleRatioIsFree() -> bool { return position(this, WobbleRatioModeSwitch) == 1; }
+  auto wobbleRatioRange() const -> Range const * {
+    return selectedRange<3>(this, WobbleDirectionSwitch, wobbleRatioRanges);
+  }
+  auto wobbleRatioIsFree() const -> bool { return switchPosition(this, WobbleRatioModeSwitch) == 1; }
 
   static const std::array<const Range *, 3> wobbleRatioRanges;
   static auto constexpr speedKnobTaperCurvature = -0.8F;
@@ -44,22 +46,22 @@ public:
   enum OutputIds { XOutput, YOutput, OutputCount };
 
 private:
-  auto xGain() -> float { return scaledRotation(this, XGainKnob, XGainCvInput, gainRange); }
+  auto xGain() const -> float { return scaledRotation(this, XGainKnob, XGainCvInput, gainRange); }
 
-  auto xOffset() -> float { return buttonIsPressed(this, XRangeSwitch) ? 1.F : 0.F; }
+  auto xOffset() const -> float { return buttonIsPressed(this, XRangeSwitch) ? 1.F : 0.F; }
 
-  auto yGain() -> float { return scaledRotation(this, YGainKnob, YGainCvInput, gainRange); }
+  auto yGain() const -> float { return scaledRotation(this, YGainKnob, YGainCvInput, gainRange); }
 
-  auto yOffset() -> float { return buttonIsPressed(this, YRangeSwitch) ? 1.F : 0.F; }
+  auto yOffset() const -> float { return buttonIsPressed(this, YRangeSwitch) ? 1.F : 0.F; }
 
-  auto throbSpeed() -> float {
+  auto throbSpeed() const -> float {
     return taperedAndScaledRotation(this, ThrobSpeedKnob, ThrobSpeedCvInput, ThrobSpeedAvKnob, speedKnobTaper,
                                     speedRange);
   }
 
-  auto wobbleDepth() -> float;
-  auto wobblePhase() -> float;
-  auto wobbleRatio() -> float;
+  auto wobbleDepth() const -> float;
+  auto wobblePhase() const -> float;
+  auto wobbleRatio() const -> float;
 
   Rotor wobbler{};
   Rotor throbber{};
