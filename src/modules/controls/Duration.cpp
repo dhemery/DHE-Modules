@@ -26,12 +26,11 @@ namespace duration {
   const std::array<Range const *, 3> ranges{&shortRange, &mediumRange, &longRange};
 
   auto withMediumRange(rack::engine::Module *module, int knobId) -> std::function<float()> {
-    return knob::taperedAndScaled(module, knobId, knobTaper, mediumRange);
+    return taperedAndScaledRotationFunction(module, knobId, knobTaper, mediumRange);
   }
 
   auto withSelectableRange(rack::engine::Module *module, int knobId, int cvId, int switchId) -> std::function<float()> {
-    auto const selectedRange = range::selected<3>(module, switchId, duration::ranges);
-    return knob::taperedAndScaled(module, knobId, cvId, knobTaper, selectedRange);
+    return taperedAndScaledRotationFunction<3>(module, knobId, cvId, knobTaper, switchId, duration::ranges);
   }
 
   class KnobParamQuantity : public rack::engine::ParamQuantity {
@@ -79,7 +78,7 @@ namespace duration {
 
   void configSwitch(rack::engine::Module *module, int switchId, std::string const &name, int initialPosition) {
     static auto const positionNames = std::array<std::string, 3>{"0.001–1.0 s", "0.01–10.0 s", "0.1–100.0 s"};
-    toggle::config<3>(module, switchId, name, positionNames, initialPosition);
+    configToggle<3>(module, switchId, name, positionNames, initialPosition);
   }
 } // namespace duration
 } // namespace dhe

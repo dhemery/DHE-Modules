@@ -33,194 +33,114 @@ void configFrameWidgetStates(rack::engine::Module *module, int paramId, std::str
   controlDisplay->setFrameNames(stateNames);
 }
 
-/**
- * Creates a function that scales the supplied rotation to the given range.
- */
-static inline auto scaled(std::function<float()> const &rotation, Range const &range) -> std::function<float()> {
-  return [rotation, range]() { return range.scale(rotation()); };
-}
-
-/**
- * Creates a function that scales the supplied rotation to the supplied range.
- */
-static inline auto scaled(std::function<float()> const &rotation, std::function<Range const *()> const &range)
-    -> std::function<float()> {
-  return [rotation, range]() { return range()->scale(rotation()); };
-}
-
-/**
- * Creates a function that tapers the supplied rotation and scales the result to the given range.
- */
-static inline auto taperedAndScaled(std::function<float()> const &rotation, taper::FixedTaper const &taper,
-                                    Range const &range) -> std::function<float()> {
-  return [rotation, range, &taper]() {
-    auto const tapered = taper.apply(rotation());
-    auto const scaled = range.scale(tapered);
-    return scaled;
-  };
-}
-
-/**
- * Creates a function that tapers the supplied rotation and scales the result to the supplied range.
- */
-static inline auto taperedAndScaled(std::function<float()> const &rotation, taper::FixedTaper const &taper,
-                                    std::function<Range const *()> const &range) -> std::function<float()> {
-  return [rotation, range, &taper]() {
-    auto const tapered = taper.apply(rotation());
-    auto const scaled = range()->scale(tapered);
-    return scaled;
-  };
-}
-
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 //
 // Public functions
 //
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
-namespace attenuator {
-  const auto range = Range{0.F, 1.F};
+void configAttenuator(rack::engine::Module *module, int knobId, std::string const &knobName) {
+  configPercentageKnob(module, knobId, knobName, attenuatorRange);
+}
 
-  void config(rack::engine::Module *module, int knobId, std::string const &knobName) {
-    knob::configPercentage(module, knobId, knobName, range);
-  }
-} // namespace attenuator
+void configAttenuverter(rack::engine::Module *module, int knobId, std::string const &knobName) {
+  configPercentageKnob(module, knobId, knobName, attenuverterRange);
+}
 
-namespace attenuverter {
-  const auto range = Range{-1.F, 1.F};
+void configButton(rack::engine::Module *module, int buttonId, std::string const &buttonName,
+                  std::array<std::string, 2> const &stateNames, int initialState) {
+  configFrameWidgetStates<2>(module, buttonId, buttonName, stateNames, initialState);
+}
 
-  void config(rack::engine::Module *module, int knobId, std::string const &knobName) {
-    knob::configPercentage(module, knobId, knobName, range);
-  }
-} // namespace attenuverter
+auto buttonStateFunction(rack::engine::Module *module, int buttonId) -> std::function<bool()> {
+  return [module, buttonId]() -> bool { return module->params[buttonId].getValue() > 0.5F; };
+}
 
-namespace button {
-  void config(rack::engine::Module *module, int buttonId, std::string const &buttonName,
-              std::array<std::string, 2> const &stateNames, int initialState) {
-    configFrameWidgetStates<2>(module, buttonId, buttonName, stateNames, initialState);
-  }
+void configGain(rack::engine::Module *module, int knobId, std::string const &knobName) {
+  configPercentageKnob(module, knobId, knobName, gainRange);
+}
 
-  auto state(rack::engine::Module *module, int buttonId) -> std::function<bool()> {
-    return [module, buttonId]() -> bool { return module->params[buttonId].getValue() > 0.5F; };
-  }
-} // namespace button
+auto inputIsConnectedFunction(rack::engine::Module *module, int inputId) -> std::function<bool()> {
+  return [module, inputId]() -> bool { return module->inputs[inputId].isConnected(); };
+}
 
-namespace gain {
-  const auto range = Range{-0.F, 2.F};
+auto inputIsHighFunction(rack::engine::Module *module, int inputId) -> std::function<bool()> {
+  return [module, inputId]() -> bool { return module->inputs[inputId].getVoltage() > 1.F; };
+}
 
-  void config(rack::engine::Module *module, int knobId, std::string const &knobName) {
-    knob::configPercentage(module, knobId, knobName, range);
-  }
-} // namespace gain
+auto inputIsHighOrButtonIsPressedFunction(rack::engine::Module *module, int inputId, int buttonId)
+    -> std::function<bool()> {
+  return [module, inputId, buttonId]() -> bool {
+    return module->inputs[inputId].getVoltage() > 1.F || module->params[buttonId].getValue() > 0.5F;
+  };
+}
 
-namespace input {
-  auto isConnected(rack::engine::Module *module, int inputId) -> std::function<bool()> {
-    return [module, inputId]() -> bool { return module->inputs[inputId].isConnected(); };
-  }
+void configKnob(rack::engine::Module *module, int knobId, std::string const &knobName, std::string const &units,
+                Range const &range, float initialRotation) {
+  module->configParam(knobId, 0.F, 1.F, initialRotation, knobName, units, 0.F, range.size(), range.lowerBound);
+}
 
-  auto isHigh(rack::engine::Module *module, int inputId) -> std::function<bool()> {
-    return [module, inputId]() -> bool { return module->inputs[inputId].getVoltage() > 1.F; };
-  }
+void configPercentageKnob(rack::engine::Module *module, int knobId, std::string const &knobName, Range const &range) {
+  module->configParam(knobId, 0.F, 1.F, 0.5F, knobName, "%", 0.F, range.size() * 100.F, range.lowerBound * 100.F);
+}
 
-  auto isHigh(rack::engine::Module *module, int inputId, int buttonId) -> std::function<bool()> {
-    return [module, inputId, buttonId]() -> bool {
-      return module->inputs[inputId].getVoltage() > 1.F || module->params[buttonId].getValue() > 0.5F;
-    };
-  }
-} // namespace input
+auto rotationFunction(rack::engine::Module *module, int knobId) -> std::function<float()> {
+  return [module, knobId]() -> float { return module->params[knobId].getValue(); };
+}
 
-namespace knob {
-  void config(rack::engine::Module *module, int knobId, std::string const &knobName, std::string const &units,
-              Range const &range, float initialRotation) {
-    module->configParam(knobId, 0.F, 1.F, initialRotation, knobName, units, 0.F, range.size(), range.lowerBound);
-  }
+auto rotationFunction(rack::engine::Module *module, int knobId, int cvId) -> std::function<float()> {
+  return [module, knobId, cvId]() -> float { return rotation(module, knobId, cvId); };
+}
 
-  void configPercentage(rack::engine::Module *module, int knobId, std::string const &knobName, Range const &range) {
-    module->configParam(knobId, 0.F, 1.F, 0.5F, knobName, "%", 0.F, range.size() * 100.F, range.lowerBound * 100.F);
-  }
+auto rotationFunction(rack::engine::Module *module, int knobId, int cvId, int avId) -> std::function<float()> {
+  return [module, knobId, cvId, avId]() -> float { return rotation(module, knobId, cvId, avId); };
+}
 
-  auto rotation(rack::engine::Module *module, int knobId) -> std::function<float()> {
-    return [module, knobId]() -> float { return module->params[knobId].getValue(); };
-  }
+auto scaledRotationFunction(rack::engine::Module *module, int knobId, Range const &range) -> std::function<float()> {
+  return [module, knobId, range]() -> float { return scaledRotation(module, knobId, range); };
+}
 
-  auto rotation(rack::engine::Module *module, int knobId, int cvId) -> std::function<float()> {
-    static auto constexpr attenuation = 0.1F;
+auto scaledRotationFunction(rack::engine::Module *module, int knobId, int cvId, Range const &range)
+    -> std::function<float()> {
+  return [module, knobId, cvId, range]() -> float { return scaledRotation(module, knobId, cvId, range); };
+}
 
-    return [module, knobId, cvId]() -> float {
-      auto const rotation = module->params[knobId].getValue();
-      auto const controlVoltage = module->inputs[cvId].getVoltage();
-      auto const modulation = controlVoltage * attenuation;
-      return rotation + modulation;
-    };
-  }
+auto scaledRotationFunction(rack::engine::Module *module, int knobId, int cvId, int avId, Range const &range)
+    -> std::function<float()> {
+  return [module, knobId, cvId, avId, range]() -> float { return scaledRotation(module, knobId, cvId, avId, range); };
+}
 
-  auto rotation(rack::engine::Module *module, int knobId, int cvId, int avId) -> std::function<float()> {
-    static auto constexpr attenuationRange = Range{-0.1F, 0.1F};
-    return [module, knobId, cvId, avId]() -> float {
-      auto const rotation = module->params[knobId].getValue();
-      auto const controlVoltage = module->inputs[cvId].getVoltage();
-      auto const attenuverterRotation = module->params[avId].getValue();
-      auto const attenuation = attenuationRange.scale(attenuverterRotation);
-      auto const modulation = controlVoltage * attenuation;
+auto taperedAndScaledRotationFunction(rack::engine::Module *module, int knobId, taper::FixedTaper const &taper,
+                                      Range const &range) -> std::function<float()> {
+  return [module, knobId, &taper, &range]() -> float { return taperedAndScaledRotation(module, knobId, taper, range); };
+}
 
-      return rotation + modulation;
-    };
-  }
+auto taperedAndScaledRotationFunction(rack::engine::Module *module, int knobId, int cvId,
+                                      taper::FixedTaper const &taper, Range const &range) -> std::function<float()> {
+  return [module, knobId, cvId, &taper, &range]() -> float {
+    return taperedAndScaledRotation(module, knobId, cvId, taper, range);
+  };
+}
 
-  auto scaled(rack::engine::Module *module, int knobId, Range const &range) -> std::function<float()> {
-    return scaled(rotation(module, knobId), range);
-  }
+auto taperedAndScaledRotationFunction(rack::engine::Module *module, int knobId, int cvId, int avId,
+                                      taper::FixedTaper const &taper, Range const &range) -> std::function<float()> {
+  return [module, knobId, cvId, avId, &taper, &range]() -> float {
+    return taperedAndScaledRotation(module, knobId, cvId, avId, taper, range);
+  };
+}
 
-  auto scaled(rack::engine::Module *module, int knobId, int cvId, Range const &range) -> std::function<float()> {
-    return scaled(rotation(module, knobId, cvId), range);
-  }
+template <int N>
+void configToggle(rack::engine::Module *module, int toggleId, std::string const &toggleName,
+                  std::array<std::string, N> const &stateNames, int initialState) {
+  configFrameWidgetStates<N>(module, toggleId, toggleName, stateNames, initialState);
+}
 
-  auto scaled(rack::engine::Module *module, int knobId, int cvId, int avId, Range const &range)
-      -> std::function<float()> {
-    return scaled(rotation(module, knobId, cvId, avId), range);
-  }
-
-  auto scaled(rack::engine::Module *module, int knobId, int cvId, std::function<Range const *()> const &range)
-      -> std::function<float()> {
-    return scaled(rotation(module, knobId, cvId), range);
-  }
-
-  auto scaled(rack::engine::Module *module, int knobId, int cvId, int avId, std::function<Range const *()> const &range)
-      -> std::function<float()> {
-    return scaled(rotation(module, knobId, cvId, avId), range);
-  }
-
-  auto taperedAndScaled(rack::engine::Module *module, int knobId, taper::FixedTaper const &taper, Range const &range)
-      -> std::function<float()> {
-    return taperedAndScaled(rotation(module, knobId), taper, range);
-  }
-
-  auto taperedAndScaled(rack::engine::Module *module, int knobId, int cvId, int avId, taper::FixedTaper const &taper,
-                        Range const &range) -> std::function<float()> {
-    return taperedAndScaled(rotation(module, knobId, cvId, avId), taper, range);
-  }
-
-  auto taperedAndScaled(rack::engine::Module *module, int knobId, int cvId, taper::FixedTaper const &taper,
-                        std::function<Range const *()> const &range) -> std::function<float()> {
-    return taperedAndScaled(rotation(module, knobId, cvId), taper, range);
-  }
-
-} // namespace knob
-
-namespace toggle {
-  template <int N>
-  void config(rack::engine::Module *module, int toggleId, std::string const &toggleName,
-              std::array<std::string, N> const &stateNames, int initialState) {
-    configFrameWidgetStates<N>(module, toggleId, toggleName, stateNames, initialState);
-  }
-
-  // Instantiate for arrays with 2, 3, and 4 names
-  template void config<2>(rack::engine::Module *module, int toggleId, std::string const &toggleName,
-                          std::array<std::string, 2> const &stateNames, int initialState);
-  template void config<3>(rack::engine::Module *module, int toggleId, std::string const &toggleName,
-                          std::array<std::string, 3> const &stateNames, int initialState);
-  template void config<4>(rack::engine::Module *module, int toggleId, std::string const &toggleName,
-                          std::array<std::string, 4> const &stateNames, int initialState);
-} // namespace toggle
+// Instantiate for toggles with 2, 3, and 4 states
+template void configToggle<2>(rack::engine::Module *module, int toggleId, std::string const &toggleName,
+                              std::array<std::string, 2> const &stateNames, int initialState);
+template void configToggle<3>(rack::engine::Module *module, int toggleId, std::string const &toggleName,
+                              std::array<std::string, 3> const &stateNames, int initialState);
+template void configToggle<4>(rack::engine::Module *module, int toggleId, std::string const &toggleName,
+                              std::array<std::string, 4> const &stateNames, int initialState);
 
 } // namespace dhe

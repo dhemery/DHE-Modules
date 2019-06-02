@@ -22,10 +22,10 @@ BoosterStage::BoosterStage() {
   configCurvatureKnob(this, CurveKnob);
   configShapeSwitch(this, ShapeSwitch);
 
-  button::config(this, DeferButton, "DEFER", {"From input", "High"}, 0);
-  button::config(this, TriggerButton, "TRIG", {"From input", "High"}, 0);
-  button::config(this, ActiveButton, "ACTIVE", {"Generated", "High"}, 0);
-  button::config(this, EocButton, "EOC", {"Generated", "High"}, 0);
+  configButton(this, DeferButton, "DEFER", {"From input", "High"}, 0);
+  configButton(this, TriggerButton, "TRIG", {"From input", "High"}, 0);
+  configButton(this, ActiveButton, "ACTIVE", {"Generated", "High"}, 0);
+  configButton(this, EocButton, "EOC", {"Generated", "High"}, 0);
 
   stateMachine.start();
 }

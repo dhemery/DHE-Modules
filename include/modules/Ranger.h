@@ -2,6 +2,7 @@
 
 #include "Module.h"
 #include "modules/controls/Controls.h"
+#include "modules/controls/Inputs.h"
 #include "modules/controls/Level.h"
 
 #include <functional>
@@ -29,11 +30,15 @@ public:
   enum OutputIds { RangerOutput, OutputCount };
 
 private:
-  std::function<float()> ccwLimit{
-      level::withSelectableRange(this, CcwLimitKnob, CcwLimitCvInput, CcwLimitAvKnob, CcwLimitRangeSwitch)};
-  std::function<float()> cwLimit{
-      level::withSelectableRange(this, CwLimitKnob, CwLimitCvInput, CwLimitAvKnob, CwLimitRangeSwitch)};
-  std::function<float()> level{knob::rotation(this, LevelKnob, LevelCvInput, LevelAvKnob)};
+  auto level() -> float { return rotation(this, LevelKnob, LevelCvInput, LevelAvKnob); }
+
+  auto ccwLimit() -> float {
+    return scaledRotation<2>(this, CcwLimitKnob, CcwLimitCvInput, CcwLimitAvKnob, CcwLimitRangeSwitch, level::ranges);
+  }
+
+  auto cwLimit() -> float {
+    return scaledRotation<2>(this, CwLimitKnob, CwLimitCvInput, CwLimitAvKnob, CwLimitRangeSwitch, level::ranges);
+  }
 };
 
 } // namespace dhe

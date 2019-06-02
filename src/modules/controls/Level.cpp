@@ -14,18 +14,16 @@ namespace level {
   const std::array<Range const *, 2> ranges{&bipolarRange, &unipolarRange};
 
   auto withSelectableRange(rack::engine::Module *module, int knobId, int cvId, int switchId) -> std::function<float()> {
-    auto const selectedRange = range::selected<2>(module, switchId, level::ranges);
-    return knob::scaled(module, knobId, cvId, selectedRange);
+    return scaledRotationFunction<2>(module, knobId, cvId, switchId, level::ranges);
   }
 
   auto withSelectableRange(rack::engine::Module *module, int knobId, int cvId, int avId, int switchId)
       -> std::function<float()> {
-    auto const selectedRange = range::selected<2>(module, switchId, level::ranges);
-    return knob::scaled(module, knobId, cvId, avId, selectedRange);
+    return scaledRotationFunction<2>(module, knobId, cvId, avId, level::ranges);
   }
 
   auto withUnipolarRange(rack::engine::Module *module, int knobId) -> std::function<float()> {
-    return knob::scaled(module, knobId, unipolarRange);
+    return scaledRotationFunction(module, knobId, unipolarRange);
   }
 
   class KnobParamQuantity : public rack::engine::ParamQuantity {
@@ -55,7 +53,7 @@ namespace level {
 
   void configKnob(rack::engine::Module *module, int knobId, int switchId, std::string const &name,
                   float initialRotation) {
-    auto getRange = range::selected<2>(module, switchId, level::ranges);
+    auto getRange = rangeSelectorFunction<2>(module, switchId, level::ranges);
     configKnob(module, knobId, getRange, name, initialRotation);
   }
 
@@ -67,7 +65,7 @@ namespace level {
 
   void configSwitch(rack::engine::Module *module, int switchId, std::string const &name, int initialState) {
     static auto const stateNames = std::array<std::string, 2>{"±5 V", "0–10 V"};
-    toggle::config<2>(module, switchId, name, stateNames, initialState);
+    configToggle<2>(module, switchId, name, stateNames, initialState);
   }
 } // namespace level
 } // namespace dhe

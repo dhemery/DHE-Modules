@@ -41,7 +41,7 @@ private:
   auto activeButton() -> bool { return isPressed(this, ActiveButton); }
   auto eocButton() -> bool { return isPressed(this, EocButton); }
 
-  auto level() -> float { return scaled<2>(this, LevelKnob, LevelCvInput, LevelRangeSwitch, level::ranges); }
+  auto level() -> float { return scaledRotation<2>(this, LevelKnob, LevelCvInput, LevelRangeSwitch, level::ranges); }
 
   auto taper(float input) -> float {
     auto const curvature = dhe::curvature(this, CurveKnob, CurveCvInput);
@@ -67,9 +67,9 @@ private:
   void sendOut(float voltage) { outputs[EnvelopeOutput].setVoltage(voltage); }
 
   StageStateMachine stateMachine{
-      input::isConnected(this, DeferInput),
-      input::isHigh(this, DeferInput, DeferButton),
-      input::isHigh(this, TriggerInput, TriggerButton),
+      inputIsConnectedFunction(this, DeferInput),
+      inputIsHighOrButtonIsPressedFunction(this, DeferInput, DeferButton),
+      inputIsHighOrButtonIsPressedFunction(this, TriggerInput, TriggerButton),
       duration::withSelectableRange(this, DurationKnob, DurationCvInput, DurationRangeSwitch),
       [this](float /*unused*/) { forward(); },
       [this]() { prepareToGenerate(); },

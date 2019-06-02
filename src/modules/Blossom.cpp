@@ -56,24 +56,24 @@ Blossom::Blossom() {
   config(ParameterCount, InputCount, OutputCount);
 
   configSpinKnob(this, SpinKnob);
-  attenuverter::config(this, SpinAvKNob, "Spin CV gain");
+  configAttenuverter(this, SpinAvKNob, "Spin CV gain");
 
-  toggle::config<2>(this, BounceRatioModeSwitch, "Bounce ratio mode", {"Quantized", "Free"}, 1);
+  configToggle<2>(this, BounceRatioModeSwitch, "Bounce ratio mode", {"Quantized", "Free"}, 1);
 
   configBounceKnob(this, BounceRatioKnob);
-  attenuverter::config(this, BounceRatioAvKnob, "Bounce ratio CV gain");
+  configAttenuverter(this, BounceRatioAvKnob, "Bounce ratio CV gain");
 
-  knob::configPercentage(this, BounceDepthKnob, "Bounce depth");
-  attenuverter::config(this, BounceDepthAvKnob, "Bounce depth CV gain");
+  configPercentageKnob(this, BounceDepthKnob, "Bounce depth");
+  configAttenuverter(this, BounceDepthAvKnob, "Bounce depth CV gain");
 
   static auto constexpr phaseDisplayRange = Range{-180.F, 180.F};
-  knob::config(this, BouncePhaseOffsetKnob, "Bounce phase offset", "°", phaseDisplayRange);
-  attenuverter::config(this, BouncePhaseOffsetAvKnob, "Bounce phase offset CV gain");
+  configKnob(this, BouncePhaseOffsetKnob, "Bounce phase offset", "°", phaseDisplayRange);
+  configAttenuverter(this, BouncePhaseOffsetAvKnob, "Bounce phase offset CV gain");
 
-  gain::config(this, XGainKnob, "X gain");
+  configGain(this, XGainKnob, "X gain");
   level::configSwitch(this, XRangeSwitch, "X range", 0);
 
-  gain::config(this, YGainKnob, "Y gain");
+  configGain(this, YGainKnob, "Y gain");
   level::configSwitch(this, YRangeSwitch, "Y range", 0);
 }
 

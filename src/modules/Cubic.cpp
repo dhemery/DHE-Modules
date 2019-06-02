@@ -1,6 +1,7 @@
 #include "modules/Cubic.h"
 
 #include "modules/controls/Controls.h"
+#include "modules/controls/Inputs.h"
 
 #include <string>
 
@@ -9,12 +10,12 @@ static auto constexpr coefficientRange = Range{-2.F, 2.F};
 
 Cubic::Cubic() {
   config(ParameterCount, InputCount, OutputCount);
-  knob::config(this, ACoefficientKnob, "x³ coefficient", "", coefficientRange);
-  knob::config(this, BCoefficientKnob, "x² coefficient", "", coefficientRange);
-  knob::config(this, CCoefficientKnob, "x¹ coefficient", "", coefficientRange);
-  knob::config(this, DCoefficientKnob, "x⁰ coefficient", "", coefficientRange);
-  gain::config(this, InputGainKnob, "Input gain");
-  gain::config(this, OutputGainKnob, "Output gain");
+  configKnob(this, ACoefficientKnob, "x³ coefficient", "", coefficientRange);
+  configKnob(this, BCoefficientKnob, "x² coefficient", "", coefficientRange);
+  configKnob(this, CCoefficientKnob, "x¹ coefficient", "", coefficientRange);
+  configKnob(this, DCoefficientKnob, "x⁰ coefficient", "", coefficientRange);
+  configGain(this, InputGainKnob, "Input gain");
+  configGain(this, OutputGainKnob, "Output gain");
 }
 
 void Cubic::process(const ProcessArgs & /*args*/) {
@@ -35,11 +36,11 @@ void Cubic::process(const ProcessArgs & /*args*/) {
 
 auto Cubic::coefficient(Cubic::ParameterIds knobParam, Cubic::InputIds cvParam) -> float {
   static auto constexpr coefficientRange = Range{-2.0F, 2.0F};
-  return coefficientRange.scale(modulated(knobParam, cvParam));
+  return coefficientRange.scale(rotation(this, knobParam, cvParam));
 }
 
 auto Cubic::gain(const Cubic::ParameterIds knobParam, const Cubic::InputIds cvInput) -> float {
-  return gain::range.scale(modulated(knobParam, cvInput));
+  return gainRange.scale(rotation(this, knobParam, cvInput));
 }
 
 auto Cubic::mainIn() -> float { return inputs[CubicInput].getVoltage(); }

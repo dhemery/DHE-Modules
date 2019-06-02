@@ -25,7 +25,7 @@ void configCurvatureKnob(rack::engine::Module *module, int knobId, std::string c
 
 void configShapeSwitch(rack::engine::Module *module, int switchId, std::string const &name, int initialState) {
   static auto const stateNames = std::array<std::string, 2>{"J", "S"};
-  toggle::config<2>(module, switchId, name, stateNames, initialState);
+  configToggle<2>(module, switchId, name, stateNames, initialState);
 }
 
 } // namespace dhe

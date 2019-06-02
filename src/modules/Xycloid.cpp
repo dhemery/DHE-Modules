@@ -83,25 +83,25 @@ Xycloid::Xycloid() {
   config(ParameterCount, InputCount, OutputCount);
 
   speed::config(this, ThrobSpeedKnob);
-  attenuverter::config(this, ThrobSpeedAvKnob, "Throb speed CV gain");
-  throbSpeed = knob::taperedAndScaled(this, ThrobSpeedKnob, ThrobSpeedCvInput, ThrobSpeedAvKnob, speed::knobTaper,
-                                      speed::range);
+  configAttenuverter(this, ThrobSpeedAvKnob, "Throb speed CV gain");
+  throbSpeed = taperedAndScaledRotationFunction(this, ThrobSpeedKnob, ThrobSpeedCvInput, ThrobSpeedAvKnob,
+                                                speed::knobTaper, speed::range);
 
-  wobbleRatioRange = range::selected<3>(this, WobbleDirectionSwitch, ratio::ranges);
+  wobbleRatioRange = rangeSelectorFunction<3>(this, WobbleDirectionSwitch, ratio::ranges);
   wobbleRatioIsFree = [this]() -> bool { return params[WobbleRatioModeSwitch].getValue() > 0.5F; };
   ratio::config(this, WobbleRatioKnob, wobbleRatioRange, wobbleRatioIsFree);
-  attenuverter::config(this, WobbleRatioAvKnob, "Wobble ratio CV gain");
-  toggle::config<3>(this, WobbleDirectionSwitch, "Wobble direction", {"In", "-In +Out", "Out"}, 2);
-  toggle::config<2>(this, WobbleRatioModeSwitch, "Wobble ratio mode", {"Quantized", "Free"}, 1);
+  configAttenuverter(this, WobbleRatioAvKnob, "Wobble ratio CV gain");
+  configToggle<3>(this, WobbleDirectionSwitch, "Wobble direction", {"In", "-In +Out", "Out"}, 2);
+  configToggle<2>(this, WobbleRatioModeSwitch, "Wobble ratio mode", {"Quantized", "Free"}, 1);
 
-  knob::configPercentage(this, WobbleDepthKnob, "Wobble depth", {0.F, 1.F});
-  attenuverter::config(this, WobbleDepthAvKnob, "Wobble depth CV gain");
-  knob::config(this, WobblePhaseOffsetKnob, "Wobble phase offset", "°", phaseOffsetRange);
+  configPercentageKnob(this, WobbleDepthKnob, "Wobble depth", {0.F, 1.F});
+  configAttenuverter(this, WobbleDepthAvKnob, "Wobble depth CV gain");
+  configKnob(this, WobblePhaseOffsetKnob, "Wobble phase offset", "°", phaseOffsetRange);
 
-  gain::config(this, XGainKnob, "X gain");
+  configGain(this, XGainKnob, "X gain");
   level::configSwitch(this, XRangeSwitch, "X range", 0);
 
-  gain::config(this, YGainKnob, "Y gain");
+  configGain(this, YGainKnob, "Y gain");
   level::configSwitch(this, YRangeSwitch, "Y range", 0);
 }
 
@@ -129,7 +129,7 @@ auto Xycloid::offset(int param) -> float {
 }
 
 auto Xycloid::wobbleDepth() -> float {
-  auto rotation = modulated(WobbleDepthKnob, WobbleDepthCvInput, WobbleDepthAvKnob);
+  auto rotation = dhe::rotation(this, WobbleDepthKnob, WobbleDepthCvInput, WobbleDepthAvKnob);
   return wobbleDepthRange.clamp(rotation);
 }
 
@@ -145,15 +145,15 @@ auto Xycloid::wobbleRatio() -> float {
 }
 
 auto Xycloid::xGain() -> float {
-  float gainAmount = modulated(XGainKnob, XGainCvInput);
-  return gain::range.scale(gainAmount);
+  float gainAmount = rotation(this, XGainKnob, XGainCvInput);
+  return gainRange.scale(gainAmount);
 }
 
 auto Xycloid::xOffset() -> float { return offset(XRangeSwitch); }
 
 auto Xycloid::yGain() -> float {
-  float gainAmount = modulated(YGainKnob, YGainCvInput);
-  return gain::range.scale(gainAmount);
+  float gainAmount = rotation(this, YGainKnob, YGainCvInput);
+  return gainRange.scale(gainAmount);
 }
 
 auto Xycloid::yOffset() -> float { return offset(YRangeSwitch); }

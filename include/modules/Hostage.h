@@ -28,10 +28,10 @@ private:
   void setEoc(bool eoc);
 
   HostageStateMachine stateMachine{
-      input::isConnected(this, DeferInput),
-      input::isHigh(this, DeferInput),
-      input::isHigh(this, TriggerInput),
-      button::state(this, ModeSwitch),
+      inputIsConnectedFunction(this, DeferInput),
+      inputIsHighFunction(this, DeferInput),
+      inputIsHighFunction(this, TriggerInput),
+      buttonStateFunction(this, ModeSwitch),
       duration::withSelectableRange(this, DurationKnob, DurationCvInput, DurationRangeSwitch),
       [this](float /*unused*/) { forward(); },
       [this](bool active) { setActive(active); },

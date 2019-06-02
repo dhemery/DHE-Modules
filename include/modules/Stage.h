@@ -37,10 +37,10 @@ private:
   std::function<float(float)> const taper{jTaperFunction(this, CurveKnob)};
 
   StageStateMachine stateMachine{
-      input::isConnected(this, DeferInput),     input::isHigh(this, DeferInput),
-      input::isHigh(this, TriggerInput),        duration::withMediumRange(this, DurationKnob),
-      [this](float /*unused*/) { forward(); },  [this]() { prepareToGenerate(); },
-      [this](float phase) { generate(phase); }, [this](bool active) { setActive(active); },
+      inputIsConnectedFunction(this, DeferInput), inputIsHighFunction(this, DeferInput),
+      inputIsHighFunction(this, TriggerInput),    duration::withMediumRange(this, DurationKnob),
+      [this](float /*unused*/) { forward(); },    [this]() { prepareToGenerate(); },
+      [this](float phase) { generate(phase); },   [this](bool active) { setActive(active); },
       [this](bool eoc) { setEoc(eoc); }};
 };
 } // namespace dhe

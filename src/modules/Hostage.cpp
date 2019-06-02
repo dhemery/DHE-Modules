@@ -11,7 +11,7 @@ Hostage::Hostage() {
   duration::configKnob(this, DurationKnob, DurationRangeSwitch);
   duration::configSwitch(this, DurationRangeSwitch);
 
-  toggle::config<2>(this, ModeSwitch, "Mode", {"Hold", "Sustain"}, 0);
+  configToggle<2>(this, ModeSwitch, "Mode", {"Hold", "Sustain"}, 0);
 
   stateMachine.start();
 }

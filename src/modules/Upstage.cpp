@@ -12,8 +12,8 @@ Upstage::Upstage() {
   level::configSwitch(this, LevelRangeSwitch);
   level = level::withSelectableRange(this, LevelKnob, LevelCvInput, LevelRangeSwitch);
 
-  button::config(this, TriggerButton, "TRIG", {"From input", "High"}, 0);
-  button::config(this, WaitButton, "WAIT", {"From input", "High"}, 0);
+  configButton(this, TriggerButton, "TRIG", {"From input", "High"}, 0);
+  configButton(this, WaitButton, "WAIT", {"From input", "High"}, 0);
 }
 
 void Upstage::process(const ProcessArgs & /*args*/) {
