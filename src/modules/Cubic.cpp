@@ -1,6 +1,6 @@
 #include "modules/Cubic.h"
 
-#include "modules/controls/Config.h"
+#include "modules/controls/CommonConfig.h"
 
 #include <string>
 

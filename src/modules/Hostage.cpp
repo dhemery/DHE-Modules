@@ -1,6 +1,6 @@
 #include "modules/Hostage.h"
 
-#include "modules/controls/Config.h"
+#include "modules/controls/CommonConfig.h"
 #include "modules/controls/DurationConfig.h"
 
 namespace dhe {

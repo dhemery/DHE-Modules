@@ -1,7 +1,7 @@
 #include "modules/func/FuncChannel.h"
 
-#include "modules/controls/Config.h"
-#include "modules/controls/Inputs.h"
+#include "modules/controls/CommonConfig.h"
+#include "modules/controls/CommonInputs.h"
 
 namespace dhe {
 
@@ -63,26 +63,16 @@ FuncChannel::FuncChannel(rack::engine::Module *module, int inputId, int operandK
 }
 
 auto FuncChannel::apply(float upstream) -> float {
-  auto const in = nonConst(module)->inputs[inputId].getNormalVoltage(upstream);
-  auto const rotation = dhe::rotation(module, operandKnobId);
-  auto const voltage = isMultiplication() ? multiply(in, rotation) : add(in, rotation);
-  nonConst(module)->outputs[outputId].setVoltage(voltage);
+  auto const in = module->inputs[inputId].getNormalVoltage(upstream);
+  auto const voltage = isMultiplication() ? multiply(in) : add(in);
+  module->outputs[outputId].setVoltage(voltage);
   return voltage;
 }
 
-auto FuncChannel::add(float in, float rotation) const -> float { return in + offsetRange()->scale(rotation); }
-
-auto FuncChannel::multiply(float in, float rotation) const -> float { return in * multiplierRange()->scale(rotation); }
-
-auto FuncChannel::isMultiplication() const -> bool { return switchPosition(module, operationSwitchId) == 1; }
-
 auto FuncChannel::currentOperandName() const -> std::string {
-  auto const operandName = isMultiplication() ? "Multiplier" : "Offset";
+  static auto const operandNames = std::array<std::string, 2>{"Offset", "Multiplier"};
+  auto const operandName = selected<std::string, 2>(module, operationSwitchId, operandNames);
   return operandName + channelName;
-}
-
-auto FuncChannel::currentOperandRange() const -> const Range * {
-  return isMultiplication() ? multiplierRange() : offsetRange();
 }
 
 } // namespace dhe

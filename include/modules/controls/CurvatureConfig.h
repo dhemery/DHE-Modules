@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Config.h"
+#include "CommonConfig.h"
 
 #include <engine/Module.hpp>
 #include <string>

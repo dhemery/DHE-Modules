@@ -1,7 +1,7 @@
 #pragma once
 
 #include "modules/components/Rotor.h"
-#include "modules/controls/Inputs.h"
+#include "modules/controls/CommonInputs.h"
 
 #include <engine/Module.hpp>
 

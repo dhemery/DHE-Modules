@@ -1,6 +1,6 @@
 #pragma once
 
-#include "modules/controls/Inputs.h"
+#include "modules/controls/CommonInputs.h"
 
 #include <array>
 #include <engine/Module.hpp>
@@ -20,13 +20,13 @@ public:
 
   auto currentOperandName() const -> std::string;
 
-  auto currentOperandRange() const -> Range const *;
+  auto currentOperandRange() const -> const Range * { return isMultiplication() ? multiplierRange() : offsetRange(); }
 
 private:
   static const std::array<Range const *, 4> multiplierRanges;
   static const std::array<Range const *, 4> offsetRanges;
 
-  rack::engine::Module const *module;
+  rack::engine::Module *module;
   std::string channelName;
 
   int const inputId{};
@@ -36,14 +36,18 @@ private:
   int const operationSwitchId{};
   int const outputId{};
 
+  auto add(float in) const -> float { return in + offsetRange()->scale(operand()); }
+
+  auto isMultiplication() const -> bool { return switchPosition(module, operationSwitchId) == 1; }
+
   auto multiplierRange() const -> Range const * {
     return selectedRange<4>(module, multiplierRangeSwitchId, multiplierRanges);
   };
 
+  auto multiply(float in) const -> float { return in * multiplierRange()->scale(operand()); }
+
   auto offsetRange() const -> Range const * { return selectedRange<4>(module, offsetRangeSwitchId, offsetRanges); };
 
-  auto add(float in, float rotation) const -> float;
-  auto multiply(float in, float rotation) const -> float;
-  auto isMultiplication() const -> bool;
+  auto operand() const -> float { return rotation(module, operandKnobId); }
 };
 } // namespace dhe

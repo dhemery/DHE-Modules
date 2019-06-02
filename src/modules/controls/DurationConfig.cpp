@@ -1,8 +1,8 @@
 #include "modules/controls/DurationConfig.h"
 
 #include "modules/components/Taper.h"
+#include "modules/controls/CommonInputs.h"
 #include "modules/controls/DurationInputs.h"
-#include "modules/controls/Inputs.h"
 
 #include <engine/Module.hpp>
 #include <engine/ParamQuantity.hpp>

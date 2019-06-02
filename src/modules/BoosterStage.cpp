@@ -1,6 +1,6 @@
 #include "modules/BoosterStage.h"
 
-#include "modules/controls/Config.h"
+#include "modules/controls/CommonConfig.h"
 #include "modules/controls/CurvatureConfig.h"
 #include "modules/controls/DurationConfig.h"
 #include "modules/controls/LevelConfig.h"

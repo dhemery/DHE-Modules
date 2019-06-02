@@ -1,6 +1,6 @@
 #pragma once
 
-#include "modules/controls/Inputs.h"
+#include "modules/controls/CommonInputs.h"
 #include "util/Range.h"
 
 #include <engine/Module.hpp>

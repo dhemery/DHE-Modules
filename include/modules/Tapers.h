@@ -1,7 +1,7 @@
 #pragma once
 
+#include "modules/controls/CommonInputs.h"
 #include "modules/controls/CurvatureInputs.h"
-#include "modules/controls/Inputs.h"
 #include "util/Range.h"
 
 #include <engine/Module.hpp>

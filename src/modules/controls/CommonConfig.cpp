@@ -1,6 +1,6 @@
-#include "modules/controls/Config.h"
+#include "modules/controls/CommonConfig.h"
 
-#include "modules/controls/Inputs.h"
+#include "modules/controls/CommonInputs.h"
 
 namespace dhe {
 

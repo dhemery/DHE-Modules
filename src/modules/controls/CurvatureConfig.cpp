@@ -1,4 +1,4 @@
-#include "modules/controls/Config.h"
+#include "modules/controls/CommonConfig.h"
 #include "modules/controls/CurvatureInputs.h"
 #include "util/Sigmoid.h"
 
