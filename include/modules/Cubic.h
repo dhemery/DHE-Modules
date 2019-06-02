@@ -40,15 +40,15 @@ public:
 private:
   static Range const coefficientRange;
 
-  auto coefficient(Cubic::ParameterIds knobParam, Cubic::InputIds cvParam) -> float {
+  auto coefficient(Cubic::ParameterIds knobParam, Cubic::InputIds cvParam) const -> float {
     return scaledRotation(this, knobParam, cvParam, coefficientRange);
   }
 
-  auto gain(const Cubic::ParameterIds knobParam, const Cubic::InputIds cvInput) -> float {
+  auto gain(const Cubic::ParameterIds knobParam, const Cubic::InputIds cvInput) const -> float {
     return scaledRotation(this, knobParam, cvInput, gainRange);
   }
 
-  auto mainIn() -> float { return inputs[CubicInput].getVoltage(); }
+  auto mainIn() const -> float { return inputVoltage(this, CubicInput); }
 
   void sendMainOut(float voltage) { outputs[CubicOutput].setVoltage(voltage); }
 };

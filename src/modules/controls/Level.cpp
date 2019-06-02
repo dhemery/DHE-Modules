@@ -13,11 +13,12 @@ namespace level {
 
   const std::array<Range const *, 2> ranges{&bipolarRange, &unipolarRange};
 
-  auto withSelectableRange(rack::engine::Module *module, int knobId, int cvId, int switchId) -> std::function<float()> {
+  auto withSelectableRange(rack::engine::Module const *module, int knobId, int cvId, int switchId)
+      -> std::function<float()> {
     return scaledRotationFunction<2>(module, knobId, cvId, switchId, level::ranges);
   }
 
-  auto withUnipolarRange(rack::engine::Module *module, int knobId) -> std::function<float()> {
+  auto withUnipolarRange(rack::engine::Module const *module, int knobId) -> std::function<float()> {
     return scaledRotationFunction(module, knobId, unipolarRange);
   }
 
@@ -39,26 +40,26 @@ namespace level {
     std::function<Range const *()> range;
   };
 
-  void configKnob(rack::engine::Module *module, int knobId, std::function<Range const *()> const &rangeSupplier,
+  void configKnob(rack::engine::Module const *module, int knobId, std::function<Range const *()> const &rangeSupplier,
                   std::string const &name, float initialPosition) {
-    module->configParam<KnobParamQuantity>(knobId, 0.F, 1.F, initialPosition, name, " V");
+    nonConst(module)->configParam<KnobParamQuantity>(knobId, 0.F, 1.F, initialPosition, name, " V");
     auto knobParamQuantity = dynamic_cast<KnobParamQuantity *>(module->paramQuantities[knobId]);
     knobParamQuantity->setRangeSupplier(rangeSupplier);
   }
 
-  void configKnob(rack::engine::Module *module, int knobId, int switchId, std::string const &name,
+  void configKnob(rack::engine::Module const *module, int knobId, int switchId, std::string const &name,
                   float initialRotation) {
     auto getRange = rangeSelectorFunction<2>(module, switchId, level::ranges);
     configKnob(module, knobId, getRange, name, initialRotation);
   }
 
-  void configKnob(rack::engine::Module *module, int knobId, Range const &range, std::string const &name,
+  void configKnob(rack::engine::Module const *module, int knobId, Range const &range, std::string const &name,
                   float initialRotation) {
     auto getRange = [range]() -> Range const * { return &range; };
     configKnob(module, knobId, getRange, name, initialRotation);
   }
 
-  void configSwitch(rack::engine::Module *module, int switchId, std::string const &name, int initialState) {
+  void configSwitch(rack::engine::Module const *module, int switchId, std::string const &name, int initialState) {
     static auto const stateNames = std::array<std::string, 2>{"±5 V", "0–10 V"};
     configToggle<2>(module, switchId, name, stateNames, initialState);
   }

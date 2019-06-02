@@ -10,14 +10,14 @@
 #include <engine/ParamQuantity.hpp>
 
 namespace dhe {
-auto jTaperFunction(rack::engine::Module *module, int knobId) -> std::function<float(float)> {
+auto jTaperFunction(rack::engine::Module const *module, int knobId) -> std::function<float(float)> {
   return [module, knobId](float input) -> float {
     auto const curvature = dhe::curvature(module, knobId);
     return taper::variableJTaper.apply(input, curvature);
   };
 }
 
-auto selectableShapeTaperFunction(rack::engine::Module *module, int knobId, int cvId, int switchId)
+auto selectableShapeTaperFunction(rack::engine::Module const *module, int knobId, int cvId, int switchId)
     -> std::function<float(float)> {
   return [module, knobId, cvId, switchId](float input) -> float {
     auto const curvature = dhe::curvature(module, knobId, cvId);
@@ -26,7 +26,7 @@ auto selectableShapeTaperFunction(rack::engine::Module *module, int knobId, int 
   };
 }
 
-auto selectableShapeTaperFunction(rack::engine::Module *module, int knobId, int cvId, int avId, int switchId)
+auto selectableShapeTaperFunction(rack::engine::Module const *module, int knobId, int cvId, int avId, int switchId)
     -> std::function<float(float)> {
   return [module, knobId, cvId, avId, switchId](float input) -> float {
     auto const curvature = dhe::curvature(module, knobId, cvId, avId);

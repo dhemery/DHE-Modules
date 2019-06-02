@@ -14,13 +14,13 @@ static auto constexpr curvatureKnobTaperCurvature = -0.65F;
 /**
  * Configures the param and display for a curvature knob.
  */
-void configCurvatureKnob(rack::engine::Module *module, int knobId, std::string const &name = "Curvature",
+void configCurvatureKnob(rack::engine::Module const *module, int knobId, std::string const &name = "Curvature",
                          float initialRotation = centeredRotation);
 
 /**
  * Configures the param and display for a curve shape switch.
  */
-void configShapeSwitch(rack::engine::Module *module, int switchId, std::string const &name = "Shape",
+void configShapeSwitch(rack::engine::Module const *module, int switchId, std::string const &name = "Shape",
                        int initialState = 0);
 
 static inline auto curvature(float rotation) -> float {
@@ -30,15 +30,15 @@ static inline auto curvature(float rotation) -> float {
   return curvature;
 }
 
-static inline auto curvature(rack::engine::Module *module, int knobId) -> float {
+static inline auto curvature(rack::engine::Module const *module, int knobId) -> float {
   return curvature(rotation(module, knobId));
 }
 
-static inline auto curvature(rack::engine::Module *module, int knobId, int cvId) -> float {
+static inline auto curvature(rack::engine::Module const *module, int knobId, int cvId) -> float {
   return curvature(rotation(module, knobId, cvId));
 }
 
-static inline auto curvature(rack::engine::Module *module, int knobId, int cvId, int avId) -> float {
+static inline auto curvature(rack::engine::Module const *module, int knobId, int cvId, int avId) -> float {
   return curvature(rotation(module, knobId, cvId, avId));
 }
 } // namespace dhe

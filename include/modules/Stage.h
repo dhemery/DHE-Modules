@@ -23,13 +23,13 @@ public:
   enum OutputIds { EnvelopeOutput, EocOutput, ActiveOutput, OutputCount };
 
 private:
-  auto envelopeIn() -> float { return inputs[EnvelopeInput].getVoltage(); }
+  auto envelopeIn() const -> float { return inputVoltage(this, EnvelopeInput); }
 
   void forward() { sendOut(envelopeIn()); }
 
   void generate(float phase) { sendOut(scale(taper(phase), startVoltage, level())); }
 
-  auto level() -> float { return scaledRotation(this, LevelKnob, level::unipolarRange); }
+  auto level() const -> float { return scaledRotation(this, LevelKnob, level::unipolarRange); }
 
   void prepareToGenerate() { startVoltage = envelopeIn(); }
 
@@ -45,7 +45,7 @@ private:
     outputs[EocOutput].setVoltage(voltage);
   }
 
-  auto taper(float input) -> float { return taper::variableJTaper.apply(input, curvature(this, CurveKnob)); }
+  auto taper(float input) const -> float { return taper::variableJTaper.apply(input, curvature(this, CurveKnob)); }
 
   float startVoltage{0.F};
   StageStateMachine stateMachine{

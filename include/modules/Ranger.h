@@ -29,13 +29,13 @@ public:
   enum OutputIds { RangerOutput, OutputCount };
 
 private:
-  auto level() -> float { return rotation(this, LevelKnob, LevelCvInput, LevelAvKnob); }
+  auto level() const -> float { return rotation(this, LevelKnob, LevelCvInput, LevelAvKnob); }
 
-  auto ccwLimit() -> float {
+  auto ccwLimit() const -> float {
     return scaledRotation<2>(this, CcwLimitKnob, CcwLimitCvInput, CcwLimitAvKnob, CcwLimitRangeSwitch, level::ranges);
   }
 
-  auto cwLimit() -> float {
+  auto cwLimit() const -> float {
     return scaledRotation<2>(this, CwLimitKnob, CwLimitCvInput, CwLimitAvKnob, CwLimitRangeSwitch, level::ranges);
   }
 };

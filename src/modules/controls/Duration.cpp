@@ -25,11 +25,12 @@ namespace duration {
 
   const std::array<Range const *, 3> ranges{&shortRange, &mediumRange, &longRange};
 
-  auto withMediumRange(rack::engine::Module *module, int knobId) -> std::function<float()> {
+  auto withMediumRange(rack::engine::Module const *module, int knobId) -> std::function<float()> {
     return taperedAndScaledRotationFunction(module, knobId, knobTaper, mediumRange);
   }
 
-  auto withSelectableRange(rack::engine::Module *module, int knobId, int cvId, int switchId) -> std::function<float()> {
+  auto withSelectableRange(rack::engine::Module const *module, int knobId, int cvId, int switchId)
+      -> std::function<float()> {
     return taperedAndScaledRotationFunction<3>(module, knobId, cvId, knobTaper, switchId, duration::ranges);
   }
 
@@ -53,30 +54,29 @@ namespace duration {
     std::function<Range const *()> range;
   };
 
-  void configKnob(rack::engine::Module *module, int knobId, std::function<Range const *()> const &getRange,
+  void configKnob(rack::engine::Module const *module, int knobId, std::function<Range const *()> const &getRange,
                   std::string const &name, float initialPosition) {
-    module->configParam<KnobParamQuantity>(knobId, 0.F, 1.F, initialPosition, name, " s");
+    nonConst(module)->configParam<KnobParamQuantity>(knobId, 0.F, 1.F, initialPosition, name, " s");
     auto knobParamQuantity = dynamic_cast<KnobParamQuantity *>(module->paramQuantities[knobId]);
     knobParamQuantity->setRangeSupplier(getRange);
   }
 
-  void configKnob(rack::engine::Module *module, int knobId, Range const &range, std::string const &name,
+  void configKnob(rack::engine::Module const *module, int knobId, Range const &range, std::string const &name,
                   float initialRotation) {
     auto const getRange = [range]() -> Range const * { return &range; };
     configKnob(module, knobId, getRange, name, initialRotation);
   }
 
-  void configKnob(rack::engine::Module *module, int knobId, int switchId, std::string const &name,
+  void configKnob(rack::engine::Module const *module, int knobId, int switchId, std::string const &name,
                   float initialRotation) {
-    auto *switchParam = &module->params[switchId];
-    auto const getRange = [switchParam]() -> Range const * {
-      auto const selection = static_cast<int>(switchParam->getValue());
+    auto const getRange = [module, switchId]() -> Range const * {
+      auto const selection = switchPosition(module, switchId);
       return duration::ranges[selection];
     };
     configKnob(module, knobId, getRange, name, initialRotation);
   }
 
-  void configSwitch(rack::engine::Module *module, int switchId, std::string const &name, int initialPosition) {
+  void configSwitch(rack::engine::Module const *module, int switchId, std::string const &name, int initialPosition) {
     static auto const positionNames = std::array<std::string, 3>{"0.001–1.0 s", "0.01–10.0 s", "0.1–100.0 s"};
     configToggle<3>(module, switchId, name, positionNames, initialPosition);
   }

@@ -19,11 +19,12 @@ class KnobParamQuantity : public rack::engine::ParamQuantity {
   }
 };
 
-void configCurvatureKnob(rack::engine::Module *module, int knobId, std::string const &name, float initialRotation) {
-  module->configParam<KnobParamQuantity>(knobId, 0.F, 1.F, initialRotation, name);
+void configCurvatureKnob(rack::engine::Module const *module, int knobId, std::string const &name,
+                         float initialRotation) {
+  nonConst(module)->configParam<KnobParamQuantity>(knobId, 0.F, 1.F, initialRotation, name);
 }
 
-void configShapeSwitch(rack::engine::Module *module, int switchId, std::string const &name, int initialState) {
+void configShapeSwitch(rack::engine::Module const *module, int switchId, std::string const &name, int initialState) {
   static auto const stateNames = std::array<std::string, 2>{"J", "S"};
   configToggle<2>(module, switchId, name, stateNames, initialState);
 }

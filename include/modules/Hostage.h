@@ -33,7 +33,7 @@ private:
     outputs[EocOutput].setVoltage(voltage);
   }
 
-  auto envelopeIn() -> float { return inputs[EnvelopeInput].getVoltage(); }
+  auto envelopeIn() const -> float { return paramValue(this, EnvelopeInput); }
 
   void sendOut(float voltage) { outputs[EnvelopeOutput].setVoltage(voltage); }
 

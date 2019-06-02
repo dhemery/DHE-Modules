@@ -26,19 +26,13 @@ private:
     outputs[TriggerOutput].setVoltage(voltage);
   }
 
-  auto triggerIn() -> bool {
-    auto triggerButton = params[TriggerButton].getValue() > 0.1F;
-    auto triggerInput = inputs[TriggerInput].getVoltage() > 0.1F;
-    return triggerButton || triggerInput;
-  }
+  auto triggerIn() const -> bool { return inputIsHigh(this, TriggerInput) || buttonIsPressed(this, TriggerButton); }
 
-  auto waitIn() -> bool {
-    auto waitButton = params[WaitButton].getValue() > 0.1F;
-    auto waitInput = inputs[WaitInput].getVoltage() > 0.1F;
-    return waitButton || waitInput;
-  }
+  auto waitIn() const -> bool { return inputIsHigh(this, WaitInput) || buttonIsPressed(this, WaitButton); }
 
-  auto level() -> float { return scaledRotation<2>(this, LevelKnob, LevelCvInput, LevelRangeSwitch, level::ranges); }
+  auto level() const -> float {
+    return scaledRotation<2>(this, LevelKnob, LevelCvInput, LevelRangeSwitch, level::ranges);
+  }
 };
 
 } // namespace dhe
