@@ -1,6 +1,5 @@
 #include "modules/controls/LevelConfig.h"
 
-#include "modules/controls/Functions.h"
 #include "modules/controls/Inputs.h"
 
 #include <engine/Module.hpp>
@@ -35,14 +34,15 @@ void configLevelKnob(rack::engine::Module *module, int knobId, std::function<Ran
 
 void configLevelKnob(rack::engine::Module *module, int knobId, int switchId, std::string const &name,
                      float initialRotation) {
-  auto getRange = rangeSelectorFunction<2>(module, switchId, signalRanges);
-  configLevelKnob(module, knobId, getRange, name, initialRotation);
+  auto const rangeSupplier
+      = [module, switchId]() -> Range const * { return selectedRange<2>(module, switchId, signalRanges); };
+  configLevelKnob(module, knobId, rangeSupplier, name, initialRotation);
 }
 
 void configLevelKnob(rack::engine::Module *module, int knobId, Range const &range, std::string const &name,
                      float initialRotation) {
-  auto getRange = [range]() -> Range const * { return &range; };
-  configLevelKnob(module, knobId, getRange, name, initialRotation);
+  auto const rangeSupplier = [range]() -> Range const * { return &range; };
+  configLevelKnob(module, knobId, rangeSupplier, name, initialRotation);
 }
 
 void configLevelRangeSwitch(rack::engine::Module *module, int switchId, std::string const &name, int initialState) {

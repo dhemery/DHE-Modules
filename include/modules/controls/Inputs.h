@@ -9,7 +9,7 @@ namespace dhe {
 
 static auto constexpr attenuatorRange = Range{0.F, 1.F};
 static auto constexpr attenuverterRange = Range{-1.F, 1.F};
-static auto constexpr gainRange = Range{-2.F, 2.F};
+static auto constexpr gainRange = Range{0.F, 2.F};
 
 static auto constexpr rotationRange = Range{0.F, 1.F};
 

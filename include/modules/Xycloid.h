@@ -2,7 +2,6 @@
 
 #include "modules/components/Rotor.h"
 #include "modules/components/Taper.h"
-#include "modules/controls/Functions.h"
 #include "modules/controls/Inputs.h"
 #include "util/Range.h"
 

@@ -4,7 +4,6 @@
 #include "modules/controls/CurvatureInputs.h"
 #include "modules/controls/DurationConfig.h"
 #include "modules/controls/DurationInputs.h"
-#include "modules/controls/Functions.h"
 #include "modules/controls/Inputs.h"
 
 #include <engine/Module.hpp>
