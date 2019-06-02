@@ -3,7 +3,6 @@
 #include "modules/controls/CurvatureControls.h"
 #include "modules/controls/Inputs.h"
 #include "modules/controls/Level.h"
-#include "modules/controls/TaperControls.h"
 #include "util/Range.h"
 
 #include <engine/Module.hpp>

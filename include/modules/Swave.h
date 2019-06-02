@@ -1,7 +1,6 @@
 #pragma once
 
 #include "modules/controls/CurvatureControls.h"
-#include "modules/controls/TaperControls.h"
 
 #include <engine/Module.hpp>
 

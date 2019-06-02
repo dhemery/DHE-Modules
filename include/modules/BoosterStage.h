@@ -6,7 +6,6 @@
 #include "modules/controls/Duration.h"
 #include "modules/controls/Inputs.h"
 #include "modules/controls/Level.h"
-#include "modules/controls/TaperControls.h"
 
 #include <engine/Module.hpp>
 

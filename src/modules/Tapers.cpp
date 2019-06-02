@@ -3,7 +3,6 @@
 #include "modules/controls/Controls.h"
 #include "modules/controls/CurvatureControls.h"
 #include "modules/controls/Level.h"
-#include "modules/controls/TaperControls.h"
 
 namespace dhe {
 
