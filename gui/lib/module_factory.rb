@@ -59,11 +59,15 @@ class ModuleFactory
   end
 
   def separator(y:)
-    @faceplate_shapes << Line.new(color: @foreground, left: 0, right: @width, y: y)
+    @faceplate_shapes << Line.new(color: @foreground, x1: 0, y1: y, x2: @width, y2: y)
+  end
+
+  def line(x1:, y1:, x2:, y2:)
+    @faceplate_shapes << Line.new(color: @foreground, x1: x1, x2: x2, y1: y1, y2: y2)
   end
 
   def connector(left:, right:, y:)
-    @faceplate_shapes << Line.new(color: @foreground, left: left, right: right, y: y)
+    @faceplate_shapes << Line.new(color: @foreground, x1: left, x2: right, y1: y, y2: y)
   end
 
   def button(x:, y:, label: nil, style: :normal)

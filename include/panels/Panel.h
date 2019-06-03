@@ -61,6 +61,10 @@ public:
   }
 
 protected:
+  static auto mmPerHp() -> float {
+    static auto const mmPerHp = rack::app::RACK_GRID_WIDTH * rack::app::MM_PER_IN / rack::app::SVG_DPI;
+    return mmPerHp;
+  }
   auto height() const -> float { return box.size.y * rack::app::MM_PER_IN / rack::app::SVG_DPI; }
 
   auto width() const -> float { return box.size.x * rack::app::MM_PER_IN / rack::app::SVG_DPI; }
