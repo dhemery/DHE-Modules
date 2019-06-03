@@ -48,7 +48,7 @@ public:
     panel->setBackground(panelSvg());
     addChild(panel);
 
-    installScrews();
+    installScrews(widgetHp);
   }
 
   static auto svg(const std::string &filename) -> std::shared_ptr<rack::Svg> {
@@ -112,28 +112,31 @@ private:
     addChild(rack::createWidgetCentered<T>(rack::app::mm2px(pos)));
   }
 
-  void installScrews() {
+  void installScrews(int widgetHp) {
     auto screwDiameter = rack::app::RACK_GRID_WIDTH * rack::app::MM_PER_IN / rack::app::SVG_DPI;
     auto screwRadius = screwDiameter / 2.F;
 
-    auto top = screwRadius;
-    auto bottom = height() - top;
+    auto const top = screwRadius;
+    auto const bottom = height() - top;
 
-    auto maxScrewInset = screwDiameter * 1.5F;
-    auto left = std::min(width() / 4.F, maxScrewInset);
-    auto right = width() - left;
+    auto const left = widgetHp < 3 ? screwRadius : screwRadius + screwDiameter;
+    auto const right = width() - left;
 
-    auto screwPositions = std::vector<rack::math::Vec>{{left, top}, {left, bottom}, {right, top}, {right, bottom}};
+    auto screwPositions = std::vector<rack::math::Vec>{{left, top}, {right, bottom}};
+    if (widgetHp > 4) {
+      screwPositions.emplace_back(right, top);
+      screwPositions.emplace_back(left, bottom);
+    }
 
     std::shuffle(screwPositions.begin(), screwPositions.end(), std::mt19937(std::random_device()()));
 
-    auto positionOfSpecialScrew = screwPositions.back();
+    auto const positionOfSpecialScrew = screwPositions.back();
     screw<rack::componentlibrary::ScrewBlack>(positionOfSpecialScrew);
 
     screwPositions.pop_back();
 
-    for (auto p : screwPositions) {
-      screw<rack::componentlibrary::ScrewSilver>(p);
+    for (auto const screwPosition : screwPositions) {
+      screw<rack::componentlibrary::ScrewSilver>(screwPosition);
     }
   }
 };
