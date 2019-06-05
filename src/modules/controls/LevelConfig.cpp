@@ -4,6 +4,7 @@
 
 #include <engine/Module.hpp>
 #include <engine/ParamQuantity.hpp>
+#include <functional>
 
 namespace dhe {
 
