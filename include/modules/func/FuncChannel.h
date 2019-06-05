@@ -24,8 +24,8 @@ public:
   auto currentOperandRange() const -> const Range * { return isMultiplication() ? multiplierRange() : offsetRange(); }
 
 private:
-  static const std::array<Range const *, 4> multiplierRanges;
-  static const std::array<Range const *, 4> offsetRanges;
+  static std::array<Range const *, 4> const multiplierRanges;
+  static std::array<Range const *, 4> const offsetRanges;
 
   rack::engine::Module *module;
   std::string channelName;
