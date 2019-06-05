@@ -11,11 +11,11 @@ static const auto minusTwoToPlusTwoRange = Range{-2.F, 2.F};
 static const auto minusTenToPlusTenRange = Range{-10.F, 10.F};
 static const auto zeroToFiveRange = Range{0.F, 5.F};
 
-auto const FuncChannel::offsetRanges = std::array<Range const *, 4>{&zeroToFiveRange, &bipolarSignalRange,
-                                                                    &unipolarSignalRange, &minusTenToPlusTenRange};
+std::array<Range const *, 4> const FuncChannel::offsetRanges{&zeroToFiveRange, &bipolarSignalRange,
+                                                             &unipolarSignalRange, &minusTenToPlusTenRange};
 
-auto const FuncChannel::multiplierRanges
-    = std::array<Range const *, 4>{&attenuatorRange, &attenuverterRange, &gainRange, &minusTwoToPlusTwoRange};
+std::array<Range const *, 4> const FuncChannel::multiplierRanges{&attenuatorRange, &attenuverterRange, &gainRange,
+                                                                 &minusTwoToPlusTwoRange};
 
 class FuncOperandKnobParamQuantity : public rack::engine::ParamQuantity {
 public:
