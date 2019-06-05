@@ -1,0 +1,33 @@
+@startuml
+
+hide empty description
+Deferring : active:true
+Deferring : process: track
+
+Forwarding : active: true
+Forwarding : process: track
+
+Generating: active: true
+Generating: on entry: start generator
+Generating : process: generate
+
+Idling: active: false
+Idling : process: noop
+
+[*] --> Forwarding
+
+Idling --> Deferring : DEFER ︎↑
+Idling --> Generating : TRIG ↑
+
+Forwarding --> Deferring : DEFER ︎↑
+Forwarding --> Generating : TRIG ↑
+
+Deferring --> Generating : DEFER ↓ [TRIG]
+Deferring --> Idling : DEFER ↓ [¬TRIG]
+
+Generating --> Deferring : DEFER ︎↑
+Generating --> Generating : TRIG ↑
+Generating --> Idling : TRIG ↓
+
+@enduml
+
