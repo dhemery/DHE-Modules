@@ -6,6 +6,7 @@
 
 #include <engine/Module.hpp>
 #include <functional>
+#include <modules/controls/LevelInputs.h>
 
 namespace dhe {
 
@@ -35,7 +36,7 @@ public:
 
 private:
   auto levelRotation1() const -> float { return rotation(this, LevelKnob1, LevelCvInput1, LevelAvKnob1); };
-  auto levelRange1() const -> Range const * { return selectedRange<2>(this, LevelRangeSwitch1, signalRanges); }
+  auto levelRange1() const -> Range const * { return levelRange(this, LevelRangeSwitch1); }
   auto taper1(float input) const -> float {
     auto const taper = selectedTaper(this, ShapeSwitch1);
     auto const taperCurvature = curvature(this, CurveKnob1, CurveCvInput1, CurveAvKnob1);
@@ -43,7 +44,7 @@ private:
   }
 
   auto levelRotation2() const -> float { return rotation(this, LevelKnob2, LevelCvInput2, LevelAvKnob2); };
-  auto levelRange2() const -> Range const * { return selectedRange<2>(this, LevelRangeSwitch2, signalRanges); }
+  auto levelRange2() const -> Range const * { return levelRange(this, LevelRangeSwitch2); }
   auto taper2(float input) const -> float {
     auto const taper = selectedTaper(this, ShapeSwitch2);
     auto const taperCurvature = curvature(this, CurveKnob2, CurveCvInput2, CurveAvKnob2);

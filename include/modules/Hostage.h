@@ -1,9 +1,9 @@
 #pragma once
 
 #include "envelopes/HostageStateMachine.h"
+#include "modules/controls/DurationInputs.h"
 
 #include <engine/Module.hpp>
-#include <modules/controls/DurationInputs.h>
 
 namespace dhe {
 
@@ -21,7 +21,9 @@ public:
 private:
   auto deferIsConnected() const -> bool { return inputIsConnected(this, DeferInput); }
 
-  auto duration() const -> float { return dhe::duration(this, DurationKnob, DurationCvInput, DurationRangeSwitch); }
+  auto duration() const -> float {
+    return selectableDuration(this, DurationKnob, DurationCvInput, DurationRangeSwitch);
+  }
 
   auto envelopeIn() const -> float { return paramValue(this, EnvelopeInput); }
 

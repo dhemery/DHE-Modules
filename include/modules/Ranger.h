@@ -1,6 +1,7 @@
 #pragma once
 
 #include "modules/controls/CommonInputs.h"
+#include "modules/controls/LevelInputs.h"
 
 #include <engine/Module.hpp>
 
@@ -30,11 +31,11 @@ private:
   auto level() const -> float { return rotation(this, LevelKnob, LevelCvInput, LevelAvKnob); }
 
   auto ccwLimit() const -> float {
-    return scaledRotation<2>(this, CcwLimitKnob, CcwLimitCvInput, CcwLimitAvKnob, CcwLimitRangeSwitch, signalRanges);
+    return selectableLevel(this, CcwLimitKnob, CcwLimitCvInput, CcwLimitAvKnob, CcwLimitRangeSwitch);
   }
 
   auto cwLimit() const -> float {
-    return scaledRotation<2>(this, CwLimitKnob, CwLimitCvInput, CwLimitAvKnob, CwLimitRangeSwitch, signalRanges);
+    return selectableLevel(this, CwLimitKnob, CwLimitCvInput, CwLimitAvKnob, CwLimitRangeSwitch);
   }
 };
 
