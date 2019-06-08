@@ -11,8 +11,8 @@ public:
   Swave();
   void process(const ProcessArgs &args) override;
 
-  enum ParameterIds { CurveKnob, ShapeSwitch, ParameterCount };
-  enum InputIds { CurveCv, SwaveInput, InputCount };
+  enum ParameterIds { CurveKnob, ShapeSwitch, CurveAvKnob, ParameterCount };
+  enum InputIds { CurveCvInput, SwaveInput, InputCount };
   enum OutputIds { SwaveOutput, OutputCount };
 
 private:
@@ -22,7 +22,7 @@ private:
 
   auto taper(float input) const -> float {
     auto const taper = selectedTaper(this, ShapeSwitch);
-    return taper->apply(input, curvature(this, CurveKnob, CurveCv));
+    return taper->apply(input, curvature(this, CurveKnob, CurveCvInput, CurveAvKnob));
   }
 };
 

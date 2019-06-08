@@ -14,6 +14,9 @@ y += dy
 large_knob(x: x, y: y, label: 'CURVE')
 
 y += dy
+attenuverter(x: x, y: y)
+
+y += dy
 cv_port(x: x, y: y)
 
 y = 82.0

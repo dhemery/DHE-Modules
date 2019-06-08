@@ -16,7 +16,10 @@ SwavePanel::SwavePanel(Swave *module) : Panel{module, hp} {
   knob<LargeKnob>(x, y, Swave::CurveKnob);
 
   y += dy;
-  input(x, y, Swave::CurveCv);
+  knob<TinyKnob>(x, y, Swave::CurveAvKnob);
+
+  y += dy;
+  input(x, y, Swave::CurveCvInput);
 
   y = 82.F;
   dy = 15.F;
