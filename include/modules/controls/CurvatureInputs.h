@@ -12,9 +12,8 @@ namespace dhe {
 static auto constexpr curvatureKnobTaperCurvature = -0.65F;
 
 static inline auto curvature(float rotation) -> float {
-  auto const sigmoidScaledRotation = sigmoid::range.scale(rotation);
-  auto const sigmoidClampedRotation = sigmoid::range.clamp(sigmoidScaledRotation);
-  auto const curvature = sigmoid::curve(sigmoidClampedRotation, curvatureKnobTaperCurvature);
+  auto const input = sigmoid::range.scale(rotation);
+  auto const curvature = sigmoid::curve(input, curvatureKnobTaperCurvature);
   auto const safeCurvature = sigmoid::safeCurvatureRange.clamp(curvature);
   return safeCurvature;
 }
