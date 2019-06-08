@@ -2,11 +2,11 @@
 
 #include "modules/controls/CommonInputs.h"
 #include "modules/controls/CurvatureInputs.h"
+#include "modules/controls/LevelInputs.h"
 #include "util/Range.h"
 
 #include <engine/Module.hpp>
 #include <functional>
-#include <modules/controls/LevelInputs.h>
 
 namespace dhe {
 

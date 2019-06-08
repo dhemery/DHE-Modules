@@ -28,5 +28,7 @@ namespace sigmoid {
    * undefined.
    */
   static auto constexpr range = Range{-1.F, 1.F};
+
+  static auto constexpr safeCurvatureRange = Range{-0.9999F, 0.9999F};
 } // namespace sigmoid
 } // namespace dhe
