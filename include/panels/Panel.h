@@ -22,6 +22,8 @@
 extern rack::plugin::Plugin *pluginInstance;
 
 namespace dhe {
+static inline auto hp2px(int hp) -> float { return rack::app::RACK_GRID_WIDTH * (float) hp; }
+
 template <typename P> class Jack : public rack::app::SvgPort {
 public:
   Jack() { setSvg(P::svg("port")); }
@@ -42,7 +44,7 @@ template <typename P> class Panel : public rack::app::ModuleWidget {
 public:
   Panel(rack::engine::Module *module, int widgetHp) {
     setModule(module);
-    box.size = rack::math::Vec{widgetHp * rack::app::RACK_GRID_WIDTH, rack::app::RACK_GRID_HEIGHT};
+    box.size = rack::math::Vec{hp2px(widgetHp), rack::app::RACK_GRID_HEIGHT};
 
     auto panel = new rack::app::SvgPanel();
     panel->setBackground(panelSvg());
