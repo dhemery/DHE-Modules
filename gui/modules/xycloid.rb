@@ -8,9 +8,16 @@ right = width - left
 left_center = (right - left) / 3.0 + left
 right_center = width - left_center
 
-y = 30.0
-delta_y = 22.0
+y = 25.0
+delta_y = 18.5
 port_offset = 1.25
+
+connector(left: left, right: right_center, y: y)
+cv_port(x: left, y: y)
+attenuverter(x: left_center, y: y)
+large_knob(x: right_center, y: y, label: 'SPEED')
+
+y += delta_y
 
 connector(left: left, right: right, y: y)
 cv_port(x: left, y: y)
@@ -31,8 +38,7 @@ y += delta_y
 connector(left: left, right: right_center, y: y)
 cv_port(x: left, y: y)
 attenuverter(x: left_center, y: y)
-large_knob(x: right_center, y: y, label: 'SPEED')
-small_knob(x: right, y: y, label: 'PHASE')
+large_knob(x: right_center, y: y, label: 'PHASE')
 
 y = 97.0
 delta_y = 15.0

@@ -10,13 +10,13 @@
 namespace dhe {
 
 static inline auto rotationToSpin(float rotation) -> float {
-  auto const tapered = spinKnobTaper.apply(rotation);
-  return spinRange.scale(tapered);
+  auto const tapered = speedKnobTaper.apply(rotation);
+  return speedRange.scale(tapered);
 }
 
 static inline auto spinToRotation(float spin) -> float {
-  auto const tapered = spinRange.normalize(spin);
-  return spinKnobTaper.invert(tapered);
+  auto const tapered = speedRange.normalize(spin);
+  return speedKnobTaper.invert(tapered);
 }
 
 class SpinKnobParamQuantity : public rack::engine::ParamQuantity {
@@ -25,50 +25,50 @@ class SpinKnobParamQuantity : public rack::engine::ParamQuantity {
   void setDisplayValue(float spin) override { setValue(spinToRotation(spin)); }
 };
 
-static inline void configSpinKnob(Blossom *blossom, int knobId) {
+static inline void configSpeedKnob(Blossom *blossom, int knobId) {
   static auto constexpr initialSpinHz(1.F);
   static auto const initialSpinKnobRotation = spinToRotation(initialSpinHz);
-  blossom->configParam<SpinKnobParamQuantity>(knobId, 0.F, 1.F, initialSpinKnobRotation, "Spin", " Hz");
+  blossom->configParam<SpinKnobParamQuantity>(knobId, 0.F, 1.F, initialSpinKnobRotation, "Speed", " Hz");
 }
 
 class BounceKnobParamQuantity : public rack::engine::ParamQuantity {
 public:
   auto getDisplayValue() -> float override {
     auto const rotation = getValue();
-    auto const freeBounceRatio = bounceRange.scale(rotation);
+    auto const freeBounceRatio = ratioRange.scale(rotation);
     auto const blossom = dynamic_cast<Blossom *>(module);
     auto const spin
-        = switchPosition(blossom, Blossom::BounceRatioModeSwitch) == 1 ? freeBounceRatio : std::round(freeBounceRatio);
+        = switchPosition(blossom, Blossom::FreeRatioSwitch) == 1 ? freeBounceRatio : std::round(freeBounceRatio);
     return spin;
   }
 
   void setDisplayValue(float bounceRatio) override {
-    auto const rotation = bounceRange.normalize(bounceRatio);
+    auto const rotation = ratioRange.normalize(bounceRatio);
     setValue(rotation);
   }
 };
 
 static inline void configBounceKnob(Blossom *blossom, int knobId) {
-  blossom->configParam<BounceKnobParamQuantity>(knobId, 0.F, 1.F, centeredRotation, "Bounce ratio", " per spin");
+  blossom->configParam<BounceKnobParamQuantity>(knobId, 0.F, 1.F, centeredRotation, "Ratio", "x");
 }
 
 Blossom::Blossom() {
   config(ParameterCount, InputCount, OutputCount);
 
-  configSpinKnob(this, SpinKnob);
-  configAttenuverter(this, SpinAvKNob, "Spin CV gain");
+  configSpeedKnob(this, SpeedKnob);
+  configAttenuverter(this, SpeedAvKNob, "Speed CV gain");
 
-  configToggle<2>(this, BounceRatioModeSwitch, "Bounce ratio mode", {"Quantized", "Free"}, 1);
+  configToggle<2>(this, FreeRatioSwitch, "Ratio mode", {"Quantized", "Free"}, 1);
 
-  configBounceKnob(this, BounceRatioKnob);
-  configAttenuverter(this, BounceRatioAvKnob, "Bounce ratio CV gain");
+  configBounceKnob(this, RatioKnob);
+  configAttenuverter(this, RatioAvKnob, "Ratio CV gain");
 
-  configPercentageKnob(this, BounceDepthKnob, "Bounce depth");
-  configAttenuverter(this, BounceDepthAvKnob, "Bounce depth CV gain");
+  configPercentageKnob(this, DepthKnob, "Depth");
+  configAttenuverter(this, DepthAvKnob, "Depth CV gain");
 
   static auto constexpr phaseDisplayRange = Range{-180.F, 180.F};
-  configKnob(this, BouncePhaseOffsetKnob, "Bounce phase offset", "°", phaseDisplayRange);
-  configAttenuverter(this, BouncePhaseOffsetAvKnob, "Bounce phase offset CV gain");
+  configKnob(this, PhaseOffsetKnob, "Phase", "°", phaseDisplayRange);
+  configAttenuverter(this, PhaseOffsetAvKnob, "Phase CV gain");
 
   configGain(this, XGainKnob, "X gain");
   configLevelRangeSwitch(this, XRangeSwitch, "X range", 0);
@@ -78,8 +78,8 @@ Blossom::Blossom() {
 }
 
 void Blossom::process(const ProcessArgs &args) {
-  auto const spinDelta = -spin() * args.sampleTime;
-  auto const bounceRatio = bounceIsFree() ? bounce() : std::round(bounce());
+  auto const spinDelta = -speed() * args.sampleTime;
+  auto const bounceRatio = ratioIsFree() ? ratio() : std::round(ratio());
   auto const bounceDepth = rotationRange.clamp(depth());
 
   spinner.advance(spinDelta, 0.F);

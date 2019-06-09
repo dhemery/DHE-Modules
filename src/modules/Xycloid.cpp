@@ -36,19 +36,19 @@ class SpeedKnobParamQuantity : public rack::engine::ParamQuantity {
 
 static void configSpeedKnob(Xycloid *xycloid, int knobId) {
   static auto const initialRotation = speedToRotation(initialSpeedHz);
-  xycloid->configParam<SpeedKnobParamQuantity>(knobId, 0.F, 1.F, initialRotation, "Throb speed", " Hz");
+  xycloid->configParam<SpeedKnobParamQuantity>(knobId, 0.F, 1.F, initialRotation, "Speed", " Hz");
 }
 
 static inline auto wobbleRatioRange(Xycloid const *xycloid) -> Range const * {
-  return selectedRange<3>(xycloid, Xycloid::WobbleDirectionSwitch, wobbleRatioRanges);
+  return selectedRange<3>(xycloid, Xycloid::DirectionSwitch, wobbleRatioRanges);
 }
 
 static inline auto wobbleRatioIsFree(Xycloid const *xycloid) -> bool {
-  return switchPosition(xycloid, Xycloid::WobbleRatioModeSwitch) == 1;
+  return switchPosition(xycloid, Xycloid::FreeRatioSwitch) == 1;
 }
 
 static inline auto wobbleRatio(Xycloid const *xycloid, float rotation) -> float {
-  auto wobbleRatio = wobbleRatioRange(xycloid)->scale(rotation);
+  auto const wobbleRatio = wobbleRatioRange(xycloid)->scale(rotation);
   return wobbleRatioIsFree(xycloid) ? wobbleRatio : std::round(wobbleRatio);
 }
 
@@ -66,22 +66,25 @@ public:
 };
 
 void configWobbleRatioKnob(Xycloid *xycloid, int knobId) {
-  xycloid->configParam<WobbleRatioKnobParamQuantity>(knobId, 0.F, 1.F, centeredRotation, "Wobble ratio", " per throb");
+  xycloid->configParam<WobbleRatioKnobParamQuantity>(knobId, 0.F, 1.F, centeredRotation, "Ratio", "x");
 }
 
 Xycloid::Xycloid() {
   config(ParameterCount, InputCount, OutputCount);
 
-  configSpeedKnob(this, ThrobSpeedKnob);
-  configAttenuverter(this, ThrobSpeedAvKnob, "Throb speed CV gain");
-  configWobbleRatioKnob(this, WobbleRatioKnob);
-  configAttenuverter(this, WobbleRatioAvKnob, "Wobble ratio CV gain");
-  configToggle<3>(this, WobbleDirectionSwitch, "Wobble direction", {"In", "-In +Out", "Out"}, 2);
-  configToggle<2>(this, WobbleRatioModeSwitch, "Wobble ratio mode", {"Quantized", "Free"}, 1);
+  configSpeedKnob(this, SpeedKnob);
+  configAttenuverter(this, SpeedAvKnob, "Speed CV gain");
 
-  configPercentageKnob(this, WobbleDepthKnob, "Wobble depth", {0.F, 1.F});
-  configAttenuverter(this, WobbleDepthAvKnob, "Wobble depth CV gain");
-  configKnob(this, WobblePhaseOffsetKnob, "Wobble phase offset", "°", phaseOffsetRange);
+  configWobbleRatioKnob(this, RatioKnob);
+  configAttenuverter(this, RatioAvKnob, "Ratio CV gain");
+  configToggle<3>(this, DirectionSwitch, "Direction", {"In", "-In +Out", "Out"}, 2);
+  configToggle<2>(this, FreeRatioSwitch, "Ratio mode", {"Quantized", "Free"}, 1);
+
+  configPercentageKnob(this, DepthKnob, "Depth", {0.F, 1.F});
+  configAttenuverter(this, DepthAvKnob, "Depth CV gain");
+
+  configKnob(this, PhaseOffsetKnob, "Phase", "°", phaseOffsetRange);
+  configAttenuverter(this, PhaseOffsetAvKnob, "Phase CV gain");
 
   configGain(this, XGainKnob, "X gain");
   configLevelRangeSwitch(this, XRangeSwitch, "X range", 0);
@@ -91,12 +94,12 @@ Xycloid::Xycloid() {
 }
 
 void Xycloid::process(const ProcessArgs &args) {
-  auto const wobbleRatio = this->wobbleRatio();
-  auto const wobblePhaseOffset = wobbleRatio < 0.F ? -wobblePhase() : wobblePhase();
+  auto const wobbleRatio = ratio();
+  auto const wobblePhaseOffset = wobbleRatio < 0.F ? -phase() : phase();
 
-  auto const throbSpeed = -this->throbSpeed() * args.sampleTime;
+  auto const throbSpeed = -speed() * args.sampleTime;
   auto const wobbleSpeed = -wobbleRatio * throbSpeed;
-  auto const wobbleDepth = this->wobbleDepth();
+  auto const wobbleDepth = depth();
   auto const throbDepth = 1.F - wobbleDepth;
 
   throbber.advance(throbSpeed);
@@ -108,18 +111,18 @@ void Xycloid::process(const ProcessArgs &args) {
   outputs[YOutput].setVoltage(5.F * yGain() * (y + yOffset()));
 }
 
-auto Xycloid::wobbleDepth() const -> float {
-  auto rotation = dhe::rotation(this, WobbleDepthKnob, WobbleDepthCvInput, WobbleDepthAvKnob);
+auto Xycloid::depth() const -> float {
+  auto rotation = dhe::rotation(this, DepthKnob, DepthCvInput, DepthAvKnob);
   return wobbleDepthRange.clamp(rotation);
 }
 
-auto Xycloid::wobblePhase() const -> float {
-  auto rotation = paramValue(this, WobblePhaseOffsetKnob);
+auto Xycloid::phase() const -> float {
+  auto rotation = dhe::rotation(this, PhaseOffsetKnob, PhaseCvInput, PhaseOffsetAvKnob);
   return rotation - 0.5F;
 }
 
-auto Xycloid::wobbleRatio() const -> float {
-  return dhe::wobbleRatio(this, rotation(this, WobbleRatioKnob, WobbleRatioCvInput, WobbleRatioAvKnob));
+auto Xycloid::ratio() const -> float {
+  return dhe::wobbleRatio(this, rotation(this, RatioKnob, RatioCvInput, RatioAvKnob));
 }
 
 } // namespace dhe

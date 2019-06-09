@@ -2,39 +2,39 @@
 
 namespace dhe {
 BlossomPanel::BlossomPanel(Blossom *blossom) : Panel{blossom, hp} {
-  auto widgetRightEdge = width();
+  auto const widgetRightEdge = width();
 
-  auto column1 = widgetRightEdge / 7.F;
-  auto column4 = widgetRightEdge - column1;
-  auto column2 = (column4 - column1) / 3.F + column1;
-  auto column3 = widgetRightEdge - column2;
+  auto const column1 = widgetRightEdge / 7.F;
+  auto const column4 = widgetRightEdge - column1;
+  auto const column2 = (column4 - column1) / 3.F + column1;
+  auto const column3 = widgetRightEdge - column2;
 
   auto y = 25.F;
   auto dy = 18.5F;
 
-  input(column1, y, Blossom::SpinCvInput);
-  knob<TinyKnob>(column2, y, Blossom::SpinAvKNob);
-  knob<LargeKnob>(column3, y, Blossom::SpinKnob);
+  input(column1, y, Blossom::SpeedCvInput);
+  knob<TinyKnob>(column2, y, Blossom::SpeedAvKNob);
+  knob<LargeKnob>(column3, y, Blossom::SpeedKnob);
 
   y += dy;
-  input(column1, y, Blossom::BounceRatioCvInput);
-  knob<TinyKnob>(column2, y, Blossom::BounceRatioAvKnob);
-  knob<LargeKnob>(column3, y, Blossom::BounceRatioKnob);
-  toggle<2>(column4, y, Blossom::BounceRatioModeSwitch);
+  input(column1, y, Blossom::RatioCvInput);
+  knob<TinyKnob>(column2, y, Blossom::RatioAvKnob);
+  knob<LargeKnob>(column3, y, Blossom::RatioKnob);
+  toggle<2>(column4, y, Blossom::FreeRatioSwitch);
 
   y += dy;
-  input(column1, y, Blossom::BounceDepthCvInput);
-  knob<TinyKnob>(column2, y, Blossom::BounceDepthAvKnob);
-  knob<LargeKnob>(column3, y, Blossom::BounceDepthKnob);
+  input(column1, y, Blossom::DepthCvInput);
+  knob<TinyKnob>(column2, y, Blossom::DepthAvKnob);
+  knob<LargeKnob>(column3, y, Blossom::DepthKnob);
 
   y += dy;
-  input(column1, y, Blossom::BouncePhaseCvInput);
-  knob<TinyKnob>(column2, y, Blossom::BouncePhaseOffsetAvKnob);
-  knob<LargeKnob>(column3, y, Blossom::BouncePhaseOffsetKnob);
+  input(column1, y, Blossom::PhaseCvInput);
+  knob<TinyKnob>(column2, y, Blossom::PhaseOffsetAvKnob);
+  knob<LargeKnob>(column3, y, Blossom::PhaseOffsetKnob);
 
   y = 97.F;
   dy = 15.F;
-  const auto outputPortOffset = 1.25F;
+  auto const outputPortOffset = 1.25F;
 
   input(column1, y, Blossom::XGainCvInput);
   knob<SmallKnob>(column2, y, Blossom::XGainKnob);
