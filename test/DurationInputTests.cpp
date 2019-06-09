@@ -9,7 +9,7 @@ struct DurationInputTest : public ::testing::Test {
   static auto constexpr tolerance = 0.000001F;
   static auto constexpr durationKnob = 0;
 
-  DurationInputTest() { module.config(1, 1, 0); }
+  void SetUp() override { module.config(1, 1, 0); }
 
   void setParam(int param, float value) { module.params[param].setValue(value); }
 
@@ -21,7 +21,7 @@ TEST_F(DurationInputTest, shortRange_minimumDuration_isShortRangeLowerBound) {
 
   auto const duration = dhe::duration(&module, durationKnob, shortDurationRange);
 
-  auto const expected = shortDurationRange.lowerBound;
+  auto const expected = shortDurationRange.lowerBound();
   ASSERT_NEAR(duration, expected, expected * tolerance);
 }
 
@@ -30,7 +30,7 @@ TEST_F(DurationInputTest, shortRange_middleDuration_isOneTenthOfShortRangeUpperB
 
   auto const duration = dhe::duration(&module, durationKnob, shortDurationRange);
 
-  auto const expected = shortDurationRange.upperBound * 0.1F;
+  auto const expected = shortDurationRange.upperBound() * 0.1F;
   ASSERT_NEAR(duration, expected, expected * tolerance);
 }
 
@@ -39,7 +39,7 @@ TEST_F(DurationInputTest, shortRange_maximumDuration_isShortRangeUpperBound) {
 
   auto const duration = dhe::duration(&module, durationKnob, shortDurationRange);
 
-  auto const expected = shortDurationRange.upperBound;
+  auto const expected = shortDurationRange.upperBound();
   ASSERT_NEAR(duration, expected, expected * tolerance);
 }
 
@@ -48,7 +48,7 @@ TEST_F(DurationInputTest, mediumRange_minimumDuration_isMediumRangeLowerBound) {
 
   auto const duration = dhe::duration(&module, durationKnob, mediumDurationRange);
 
-  auto const expected = mediumDurationRange.lowerBound;
+  auto const expected = mediumDurationRange.lowerBound();
   ASSERT_NEAR(duration, expected, expected * tolerance);
 }
 
@@ -57,7 +57,7 @@ TEST_F(DurationInputTest, mediumRange_middleDuration_isOneTenthOfMediumRangeUppe
 
   auto const duration = dhe::duration(&module, durationKnob, mediumDurationRange);
 
-  auto const expected = mediumDurationRange.upperBound * 0.1F;
+  auto const expected = mediumDurationRange.upperBound() * 0.1F;
   ASSERT_NEAR(duration, expected, expected * tolerance);
 }
 
@@ -66,7 +66,7 @@ TEST_F(DurationInputTest, mediumRange_maximumDuration_isMediumRangeUpperBound) {
 
   auto const duration = dhe::duration(&module, durationKnob, mediumDurationRange);
 
-  auto const expected = mediumDurationRange.upperBound;
+  auto const expected = mediumDurationRange.upperBound();
   ASSERT_NEAR(duration, expected, expected * tolerance);
 }
 
@@ -75,7 +75,7 @@ TEST_F(DurationInputTest, longRange_minimumDuration_isLongRangeLowerBound) {
 
   auto const duration = dhe::duration(&module, durationKnob, longDurationRange);
 
-  auto const expected = longDurationRange.lowerBound;
+  auto const expected = longDurationRange.lowerBound();
   ASSERT_NEAR(duration, expected, expected * tolerance);
 }
 
@@ -84,7 +84,7 @@ TEST_F(DurationInputTest, longRange_middleDuration_isOneTenthOfLongRangeUpperBou
 
   auto const duration = dhe::duration(&module, durationKnob, longDurationRange);
 
-  auto const expected = longDurationRange.upperBound * 0.1F;
+  auto const expected = longDurationRange.upperBound() * 0.1F;
   ASSERT_NEAR(duration, expected, expected * tolerance);
 }
 
@@ -93,7 +93,7 @@ TEST_F(DurationInputTest, longRange_maximumDuration_isLongRangeUpperBound) {
 
   auto const duration = dhe::duration(&module, durationKnob, longDurationRange);
 
-  auto const expected = longDurationRange.upperBound;
+  auto const expected = longDurationRange.upperBound();
   ASSERT_NEAR(duration, expected, expected * tolerance);
 }
 } // namespace dhe

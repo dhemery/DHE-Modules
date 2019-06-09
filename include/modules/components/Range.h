@@ -18,19 +18,24 @@ static inline auto clamp(float value, float lowerBound, float upperBound) -> flo
 
 class Range {
 public:
-  constexpr Range(float lowerBound, float upperBound) noexcept : lowerBound(lowerBound), upperBound(upperBound) {}
+  constexpr Range(float lowerBound, float upperBound) noexcept : lower{lowerBound}, upper{upperBound} {}
 
-  auto size() const -> float { return upperBound - lowerBound; }
+  auto lowerBound() const -> float { return lower; }
 
-  auto scale(float proportion) const -> float { return dhe::scale(proportion, lowerBound, upperBound); }
+  auto upperBound() const -> float { return upper; }
 
-  auto scale(bool state) const -> float { return state ? upperBound : lowerBound; }
+  auto size() const -> float { return upper - lower; }
 
-  auto normalize(float member) const -> float { return (member - lowerBound) / size(); }
+  auto scale(float proportion) const -> float { return dhe::scale(proportion, lower, upper); }
 
-  auto clamp(float f) const -> float { return dhe::clamp(f, lowerBound, upperBound); }
+  auto scale(bool state) const -> float { return state ? upper : lower; }
 
-  const float lowerBound;
-  const float upperBound;
+  auto normalize(float scaled) const -> float { return (scaled - lower) / size(); }
+
+  auto clamp(float scaled) const -> float { return dhe::clamp(scaled, lower, upper); }
+
+private:
+  const float lower;
+  const float upper;
 };
 } // namespace dhe

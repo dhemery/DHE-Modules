@@ -8,13 +8,14 @@ namespace dhe {
 
 struct LevelInputTest : public ::testing::Test {
   // tolerance = 6 decimal places
-  static constexpr float tolerance = 0.000001F;
-  static constexpr int levelKnob = 0;
+  static auto constexpr tolerance = 0.000001F;
+  static auto constexpr levelKnob = 0;
 
-  rack::engine::Module module{};
-  LevelInputTest() { module.config(1, 1, 0); }
+  void SetUp() override { module.config(1, 1, 0); }
 
   void setParam(int param, float value) { module.params[param].setValue(value); }
+
+  rack::engine::Module module{};
 };
 
 TEST_F(LevelInputTest, bipolarRange_minimumLevel_isBipolarRangeLowerBound) {
@@ -22,7 +23,7 @@ TEST_F(LevelInputTest, bipolarRange_minimumLevel_isBipolarRangeLowerBound) {
 
   auto const level = dhe::level(&module, levelKnob, bipolarSignalRange);
 
-  auto const expected = bipolarSignalRange.lowerBound;
+  auto const expected = bipolarSignalRange.lowerBound();
   ASSERT_NEAR(level, expected, std::abs(expected * tolerance));
 }
 
@@ -31,8 +32,7 @@ TEST_F(LevelInputTest, bipolarRange_middleLevel_isMidpointOfBipolarRange) {
 
   auto const level = dhe::level(&module, levelKnob, bipolarSignalRange);
 
-  auto const expected
-      = (bipolarSignalRange.upperBound - bipolarSignalRange.lowerBound) * 0.5 + bipolarSignalRange.lowerBound;
+  auto const expected = bipolarSignalRange.size() * 0.5 + bipolarSignalRange.lowerBound();
   ASSERT_NEAR(level, expected, std::abs(expected * tolerance));
 }
 
@@ -41,7 +41,7 @@ TEST_F(LevelInputTest, bipolarRange_maximumLevel_isBipolarRangeUpperBound) {
 
   auto const level = dhe::level(&module, levelKnob, bipolarSignalRange);
 
-  auto const expected = bipolarSignalRange.upperBound;
+  auto const expected = bipolarSignalRange.upperBound();
   ASSERT_NEAR(level, expected, std::abs(expected * tolerance));
 }
 
@@ -50,7 +50,7 @@ TEST_F(LevelInputTest, UnipolarRange_minimumLevel_isUnipolarRangeLowerBound) {
 
   auto const level = dhe::level(&module, levelKnob, unipolarSignalRange);
 
-  auto const expected = unipolarSignalRange.lowerBound;
+  auto const expected = unipolarSignalRange.lowerBound();
   ASSERT_NEAR(level, expected, std::abs(expected * tolerance));
 }
 
@@ -59,8 +59,7 @@ TEST_F(LevelInputTest, UnipolarRange_middleLevel_isMidpointOfUnipolarRange) {
 
   auto const level = dhe::level(&module, levelKnob, unipolarSignalRange);
 
-  auto const expected
-      = (unipolarSignalRange.upperBound - unipolarSignalRange.lowerBound) * 0.5 + unipolarSignalRange.lowerBound;
+  auto const expected = unipolarSignalRange.size() * 0.5 + unipolarSignalRange.lowerBound();
   ASSERT_NEAR(level, expected, std::abs(expected * tolerance));
 }
 
@@ -69,7 +68,7 @@ TEST_F(LevelInputTest, UnipolarRange_maximumLevel_isUnipolarRangeUpperBound) {
 
   auto const level = dhe::level(&module, levelKnob, unipolarSignalRange);
 
-  auto const expected = unipolarSignalRange.upperBound;
+  auto const expected = unipolarSignalRange.upperBound();
   ASSERT_NEAR(level, expected, std::abs(expected * tolerance));
 }
 
