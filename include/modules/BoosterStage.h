@@ -46,11 +46,15 @@ private:
 
   auto eocButton() const -> bool { return buttonIsPressed(this, EocButton); }
 
+  void finishEoc() { isEoc = false; }
+
   void forward() { sendOut(envelopeIn()); }
 
-  void generate(float phase) { sendOut(scale(taper(phase), startVoltage, level())); }
+  void generate() { sendOut(scale(taper(stagePhase), startVoltage, level())); }
 
   auto level() const -> float { return selectableLevel(this, LevelKnob, LevelCvInput, LevelRangeSwitch); }
+
+  void resetTrigger() { triggerWasHigh = false; }
 
   void sendActive() {
     auto const voltage = unipolarSignalRange.scale(isActive || activeButton());
@@ -64,9 +68,15 @@ private:
 
   void sendOut(float voltage) { outputs[EnvelopeOutput].setVoltage(voltage); }
 
-  void setActive(bool active) { isActive = active; }
+  void startEoc() {
+    isEoc = true;
+    eocPhase = 0.F;
+  }
 
-  void setEoc(bool eoc) { isEoc = eoc; }
+  void startTrackingInput() {
+    isTrackingInput = true;
+    isActive = false;
+  }
 
   auto taper(float input) const -> float {
     auto const curvature = dhe::curvature(this, CurveKnob, CurveCvInput);
@@ -74,24 +84,32 @@ private:
     return taper->apply(input, curvature);
   }
 
+  void trackInput() { sendOut(envelopeIn()); }
+
+  void trackLevel() { sendOut(level()); }
+
   auto triggerIsHigh() const -> bool { return inputIsHigh(this, TriggerInput) || buttonIsPressed(this, TriggerButton); }
 
-  void finishGenerating();
-  void processEoc(float sampleTime);
-  bool processDefer();
-  void processTrigger();
-  void processGenerator(float sampleTime);
-  void trackInput();
-  void beginDeferring();
-  void stopDeferring();
-  void startGenerating();
+  bool checkDeferGate();
+  void startDeferring();
+  void finishDeferring();
 
-  bool deferWasHigh{false};
-  float eocPhase{1.F};
-  bool isActive{false};
-  bool isEoc{false};
-  float stagePhase{1.F};
-  float startVoltage{0.F};
-  bool triggerWasHigh{false};
+  void checkStageTrigger();
+  void startGenerating();
+  void advancePhase(float sampleTime);
+  void finishGenerating();
+
+  void advanceEoc(float sampleTime);
+
+  bool deferWasHigh = false;
+  float eocPhase = 1.F;
+  bool isActive = false;
+  bool isEoc = false;
+  bool isGenerating = false;
+  bool isTrackingInput = false;
+  float stagePhase = 0.F;
+  float startVoltage = 0.F;
+  bool triggerWasHigh = false;
+  void startTrackingLevel();
 };
 } // namespace dhe

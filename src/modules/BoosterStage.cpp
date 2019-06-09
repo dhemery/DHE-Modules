@@ -30,45 +30,49 @@ BoosterStage::BoosterStage() {
 }
 
 void BoosterStage::process(const ProcessArgs &args) {
-  processEoc(args.sampleTime);
-
-  if (!processDefer()) {
-    processTrigger();
-    processGenerator(args.sampleTime);
+  if (!checkDeferGate()) {
+    checkStageTrigger();
+    if (isGenerating) {
+      advancePhase(args.sampleTime);
+    } else if (isTrackingInput) {
+      trackInput();
+    } else {
+      trackLevel();
+    }
   }
 
+  advanceEoc(args.sampleTime);
   sendActive();
   sendEoc();
 }
 
-bool BoosterStage::processDefer() {
+bool BoosterStage::checkDeferGate() {
   auto const deferIsHigh = BoosterStage::deferIsHigh();
   if (deferIsHigh) {
     trackInput();
     if (!deferWasHigh) { // On defer rise…
-      beginDeferring();
+      startDeferring();
     }
   } else if (deferWasHigh) { // On defer fall…
-    stopDeferring();
+    finishDeferring();
   }
   deferWasHigh = deferIsHigh;
 
   return deferIsHigh;
 }
 
-void BoosterStage::beginDeferring() {
-  setActive(true);
+void BoosterStage::startDeferring() {
+  isGenerating = false;
+  isActive = true;
 }
 
-void BoosterStage::trackInput() { sendOut(envelopeIn()); }
-
-void BoosterStage::stopDeferring() {
-  setActive(false);
-  triggerWasHigh = false;
-  startVoltage = envelopeIn();
+void BoosterStage::finishDeferring() {
+  isActive = false;
+  resetTrigger();
+  startTrackingInput();
 }
 
-void BoosterStage::processTrigger() {
+void BoosterStage::checkStageTrigger() {
   auto const triggerIsHigh = BoosterStage::triggerIsHigh();
   if (triggerIsHigh && !triggerWasHigh) { // On trigger rise…
     startGenerating();
@@ -76,32 +80,39 @@ void BoosterStage::processTrigger() {
   triggerWasHigh = triggerIsHigh;
 }
 
-void BoosterStage::processGenerator(float sampleTime) {
+void BoosterStage::startGenerating() {
+  isActive = true;
+  isGenerating = true;
+  startVoltage = envelopeIn();
+  stagePhase = 0.F;
+}
+
+void BoosterStage::advancePhase(float sampleTime) {
   if (stagePhase < 1.F) {
     stagePhase = std::min(1.F, stagePhase + sampleTime / duration());
-    generate(stagePhase);
     if (stagePhase == 1.F) {
       finishGenerating();
     }
   }
+  generate();
 }
 
-void BoosterStage::startGenerating() {
-  setActive(true);
-  stagePhase = 0.F;
-}
 void BoosterStage::finishGenerating() {
-  setActive(false);
-  setEoc(true);
-  eocPhase = 0.F;
+  isGenerating = false;
+  startEoc();
+  startTrackingLevel();
 }
 
-void BoosterStage::processEoc(float sampleTime) {
+void BoosterStage::startTrackingLevel() {
+  isActive = false;
+  isTrackingInput = false;
+}
+
+void BoosterStage::advanceEoc(float sampleTime) {
   if (eocPhase < 1.F) {
     eocPhase = std::min(1.F, eocPhase + sampleTime / 1e-3F);
-    generate(eocPhase);
     if (eocPhase == 1.F) {
-      setEoc(false);
+      finishEoc();
     }
   }
 }
