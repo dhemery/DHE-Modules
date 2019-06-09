@@ -1,6 +1,6 @@
+#include "modules/components/Sigmoid.h"
 #include "modules/controls/CommonConfig.h"
 #include "modules/controls/CurvatureInputs.h"
-#include "util/Sigmoid.h"
 
 #include <engine/Module.hpp>
 #include <engine/ParamQuantity.hpp>

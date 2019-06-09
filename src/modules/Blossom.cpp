@@ -1,8 +1,8 @@
 #include "modules/Blossom.h"
 
+#include "modules/components/Sigmoid.h"
 #include "modules/components/Taper.h"
 #include "modules/controls/LevelConfig.h"
-#include "util/Sigmoid.h"
 
 #include <array>
 #include <cmath>

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "CommonInputs.h"
-#include "util/Range.h"
+#include "modules/components/Range.h"
 
 #include <engine/Module.hpp>
 #include <string>
