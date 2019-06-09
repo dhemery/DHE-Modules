@@ -1,6 +1,6 @@
+#include "modules/components/Sigmoid.h"
 #include "modules/controls/CommonConfig.h"
 #include "modules/controls/CurvatureInputs.h"
-#include "util/Sigmoid.h"
 
 #include <engine/Module.hpp>
 #include <engine/ParamQuantity.hpp>
@@ -9,8 +9,8 @@ namespace dhe {
 class CurvatureKnobParamQuantity : public rack::engine::ParamQuantity {
   auto getDisplayValue() -> float override { return curvature(getValue()); }
 
-  void setDisplayValue(float duration) override {
-    auto const sigmoidClampedCurvature = sigmoid::range.clamp(duration);
+  void setDisplayValue(float curvature) override {
+    auto const sigmoidClampedCurvature = sigmoid::safeCurvatureRange.clamp(curvature);
     // Unexpected, but true: Negating the taper curvature inverts the taper.
     auto const sigmoidScaledRotation = sigmoid::curve(sigmoidClampedCurvature, -curvatureKnobTaperCurvature);
     auto const rotation = sigmoid::range.normalize(sigmoidScaledRotation);

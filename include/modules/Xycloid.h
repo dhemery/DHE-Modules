@@ -1,9 +1,9 @@
 #pragma once
 
+#include "modules/components/Range.h"
 #include "modules/components/Rotor.h"
 #include "modules/components/Taper.h"
 #include "modules/controls/CommonInputs.h"
-#include "util/Range.h"
 
 #include <engine/Module.hpp>
 
@@ -20,22 +20,23 @@ public:
   static auto constexpr speedKnobTaper = taper::FixedSTaper{speedKnobTaperCurvature};
 
   enum ParameterIds {
-    WobbleRatioKnob,
-    WobbleRatioAvKnob,
-    WobbleDirectionSwitch,
-    WobbleDepthKnob,
-    WobbleDepthAvKnob,
-    ThrobSpeedKnob,
-    ThrobSpeedAvKnob,
+    RatioKnob,
+    RatioAvKnob,
+    DirectionSwitch,
+    DepthKnob,
+    DepthAvKnob,
+    SpeedKnob,
+    SpeedAvKnob,
     XGainKnob,
     YGainKnob,
     XRangeSwitch,
     YRangeSwitch,
-    WobbleRatioModeSwitch,
-    WobblePhaseOffsetKnob,
+    FreeRatioSwitch,
+    PhaseOffsetKnob,
+    PhaseOffsetAvKnob,
     ParameterCount
   };
-  enum InputIds { WobbleRatioCvInput, WobbleDepthCvInput, ThrobSpeedCvInput, XGainCvInput, YGainCvInput, InputCount };
+  enum InputIds { RatioCvInput, DepthCvInput, SpeedCvInput, XGainCvInput, YGainCvInput, PhaseCvInput, InputCount };
   enum OutputIds { XOutput, YOutput, OutputCount };
 
 private:
@@ -47,14 +48,13 @@ private:
 
   auto yOffset() const -> float { return buttonIsPressed(this, YRangeSwitch) ? 1.F : 0.F; }
 
-  auto throbSpeed() const -> float {
-    return taperedAndScaledRotation(this, ThrobSpeedKnob, ThrobSpeedCvInput, ThrobSpeedAvKnob, speedKnobTaper,
-                                    speedRange);
+  auto speed() const -> float {
+    return taperedAndScaledRotation(this, SpeedKnob, SpeedCvInput, SpeedAvKnob, speedKnobTaper, speedRange);
   }
 
-  auto wobbleDepth() const -> float;
-  auto wobblePhase() const -> float;
-  auto wobbleRatio() const -> float;
+  auto depth() const -> float;
+  auto phase() const -> float;
+  auto ratio() const -> float;
 
   Rotor wobbler{};
   Rotor throbber{};

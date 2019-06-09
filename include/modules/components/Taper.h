@@ -1,12 +1,10 @@
 #pragma once
 
-#include "util/Sigmoid.h"
+#include "Sigmoid.h"
 
 namespace dhe {
 
 namespace taper {
-  auto constexpr sigmoidRange = Range{-1.F, 1.F};
-
   class VariableTaper {
   public:
     virtual auto apply(float proportion, float curvature) const -> float = 0;
@@ -16,16 +14,19 @@ namespace taper {
   class VariableJTaper : public VariableTaper {
   public:
     auto apply(float proportion, float curvature) const -> float override {
-      return sigmoid::curve(proportion, curvature);
+      static auto constexpr safeProportionRange = Range{0.F, 1.F};
+      auto const safeProportion = safeProportionRange.clamp(proportion);
+      return sigmoid::curve(safeProportion, curvature);
     }
   };
 
   class VariableSTaper : public VariableTaper {
   public:
     auto apply(float proportion, float curvature) const -> float override {
-      auto const sigmoidInput = sigmoidRange.scale(proportion);
-      auto const sigmoidOutput = sigmoid::curve(sigmoidInput, -curvature);
-      return sigmoidRange.normalize(sigmoidOutput);
+      auto const input = sigmoid::range.scale(proportion);
+      auto const safeInput = sigmoid::range.clamp(input);
+      auto const output = sigmoid::curve(safeInput, -curvature);
+      return sigmoid::range.normalize(output);
     }
   };
 

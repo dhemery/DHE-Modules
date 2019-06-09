@@ -3,8 +3,8 @@
 #include "modules/components/Taper.h"
 #include "modules/controls/CommonInputs.h"
 #include "modules/controls/CurvatureInputs.h"
-#include "modules/controls/DurationConfig.h"
 #include "modules/controls/DurationInputs.h"
+#include "modules/controls/LevelInputs.h"
 
 #include <engine/Module.hpp>
 
@@ -38,7 +38,9 @@ private:
 
   auto deferIsHigh() const -> bool { return inputIsHigh(this, DeferInput) || buttonIsPressed(this, DeferButton); }
 
-  auto duration() const -> float { return dhe::duration(this, DurationKnob, DurationCvInput, DurationRangeSwitch); }
+  auto duration() const -> float {
+    return selectableDuration(this, DurationKnob, DurationCvInput, DurationRangeSwitch);
+  }
 
   auto envelopeIn() const -> float { return inputVoltage(this, EnvelopeInput); }
 
@@ -48,9 +50,7 @@ private:
 
   void generate(float phase) { sendOut(scale(taper(phase), startVoltage, level())); }
 
-  auto level() const -> float {
-    return scaledRotation<2>(this, LevelKnob, LevelCvInput, LevelRangeSwitch, signalRanges);
-  }
+  auto level() const -> float { return selectableLevel(this, LevelKnob, LevelCvInput, LevelRangeSwitch); }
 
   void sendActive() {
     auto const voltage = unipolarSignalRange.scale(isActive || activeButton());

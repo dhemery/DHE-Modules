@@ -32,9 +32,6 @@ include $(RACK_DIR)/plugin.mk
 ########################################################################
 
 TEST_SOURCES =  $(wildcard \
-					src/modules/components/*.cpp \
-					src/modules/controls/*.cpp \
-					src/util/*.cpp \
 					test/*.cpp \
 					)
 TEST_OBJECTS := $(patsubst %, build/%.o, $(TEST_SOURCES))

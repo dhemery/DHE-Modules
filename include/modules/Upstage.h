@@ -1,6 +1,7 @@
 #pragma once
 
 #include "modules/controls/CommonInputs.h"
+#include "modules/controls/LevelInputs.h"
 
 #include <engine/Module.hpp>
 
@@ -30,9 +31,7 @@ private:
 
   auto waitIn() const -> bool { return inputIsHigh(this, WaitInput) || buttonIsPressed(this, WaitButton); }
 
-  auto level() const -> float {
-    return scaledRotation<2>(this, LevelKnob, LevelCvInput, LevelRangeSwitch, signalRanges);
-  }
+  auto level() const -> float { return selectableLevel(this, LevelKnob, LevelCvInput, LevelRangeSwitch); }
 };
 
 } // namespace dhe

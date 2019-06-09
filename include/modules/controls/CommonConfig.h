@@ -1,7 +1,7 @@
 #pragma once
 
 #include "CommonInputs.h"
-#include "util/Range.h"
+#include "modules/components/Range.h"
 
 #include <engine/Module.hpp>
 #include <string>
@@ -14,7 +14,7 @@ static auto constexpr centeredRotation = 0.5F;
  */
 static inline void configKnob(rack::engine::Module *module, int knobId, std::string const &knobName,
                               std::string const &units, Range const &range, float initialRotation = centeredRotation) {
-  module->configParam(knobId, 0.F, 1.F, initialRotation, knobName, units, 0.F, range.size(), range.lowerBound);
+  module->configParam(knobId, 0.F, 1.F, initialRotation, knobName, units, 0.F, range.size(), range.lowerBound());
 }
 
 /**
@@ -22,7 +22,7 @@ static inline void configKnob(rack::engine::Module *module, int knobId, std::str
  */
 static inline void configPercentageKnob(rack::engine::Module *module, int knobId, std::string const &knobName,
                                         Range const &range = rotationRange) {
-  module->configParam(knobId, 0.F, 1.F, 0.5F, knobName, "%", 0.F, range.size() * 100.F, range.lowerBound * 100.F);
+  module->configParam(knobId, 0.F, 1.F, 0.5F, knobName, "%", 0.F, range.size() * 100.F, range.lowerBound() * 100.F);
 }
 
 /**

@@ -3,6 +3,7 @@
 #include "envelopes/StageStateMachine.h"
 #include "modules/controls/CurvatureInputs.h"
 #include "modules/controls/DurationInputs.h"
+#include "modules/controls/LevelInputs.h"
 
 #include <engine/Module.hpp>
 
@@ -28,7 +29,7 @@ private:
 
   void generate(float phase) { sendOut(scale(taper(phase), startVoltage, level())); }
 
-  auto level() const -> float { return scaledRotation(this, LevelKnob, unipolarSignalRange); }
+  auto level() const -> float { return dhe::level(this, LevelKnob, unipolarSignalRange); }
 
   void prepareToGenerate() { startVoltage = envelopeIn(); }
 

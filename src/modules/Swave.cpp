@@ -8,6 +8,7 @@ namespace dhe {
 Swave::Swave() {
   config(ParameterCount, InputCount, OutputCount);
   configCurvatureKnob(this, CurveKnob);
+  configAttenuverter(this, CurveAvKnob, "Curvature CV gain");
   configCurveShapeSwitch(this, ShapeSwitch);
 }
 

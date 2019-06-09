@@ -15,14 +15,14 @@ port_offset = 1.25
 connector(left: left, right: right_center, y: y)
 cv_port(x: left, y: y)
 attenuverter(x: left_center, y: y)
-large_knob(x: right_center, y: y, label: 'SPIN')
+large_knob(x: right_center, y: y, label: 'SPEED')
 
 y += delta_y
 
 connector(left: left, right: right, y: y)
 cv_port(x: left, y: y)
 attenuverter(x: left_center, y: y)
-large_knob(x: right_center, y: y, label: 'BOUNCE')
+large_knob(x: right_center, y: y, label: 'RATIO')
 toggle(x: right, y: y, labels: %w(LOCK FREE), selection: 2)
 
 y += delta_y
@@ -42,7 +42,7 @@ large_knob(x: right_center, y: y, label: 'PHASE')
 y = 97.0
 delta_y = 15.0
 
-connector(left: left, right: right, y: y)
+connector(left: left, right: right_center, y: y)
 cv_port(x: left, y: y)
 small_knob(x: left_center, y: y, label: 'GAIN')
 polarity_toggle(x: right_center, y: y)
