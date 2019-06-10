@@ -27,7 +27,7 @@ private:
 
   auto deferIsHigh() const -> bool override { return inputIsHigh(this, DeferInput); }
 
-  auto isSustainMode() const -> bool { return switchPosition(this, ModeSwitch) == 1; }
+  auto isSustainMode() const -> bool override { return switchPosition(this, ModeSwitch) == 1; }
 
   void sendOut(float voltage) override { outputs[EnvelopeOutput].setVoltage(voltage); }
 

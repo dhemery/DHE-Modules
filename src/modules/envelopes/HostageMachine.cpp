@@ -36,10 +36,14 @@ HostageMachine::State HostageMachine::identifyState() {
   if (state == Deferring) {
     return TrackingInput;
   }
-  if (stageGateRise()) {
+  if (isSustainMode()) {
+    if (stageGateIsHigh()) {
+      return Sustaining;
+    }
+  } else if (stageGateRise()) {
     return Holding;
   }
-  return state;
+  return Idle;
 }
 
 void HostageMachine::enter(HostageMachine::State newState) {
@@ -49,6 +53,9 @@ void HostageMachine::enter(HostageMachine::State newState) {
 
   if (newState == Holding || newState == Sustaining) {
     resetHold();
+  }
+  if (newState == Idle) {
+    startEoc();
   }
   state = newState;
 }
@@ -71,12 +78,12 @@ void HostageMachine::advanceHold(float sampleTime) {
   if (holdPhase < 1.F) {
     holdPhase = std::min(1.F, holdPhase + sampleTime / duration());
     if (holdPhase == 1.F) {
-      finishHolding();
+      finishStage();
     }
   }
 }
 
-void HostageMachine::finishHolding() {
+void HostageMachine::finishStage() {
   startEoc();
   enter(Idle);
 }
