@@ -4,15 +4,16 @@
 #include "modules/controls/CurvatureInputs.h"
 #include "modules/controls/DurationInputs.h"
 #include "modules/controls/LevelInputs.h"
+#include "modules/envelopes/StageMachine.h"
 
 #include <engine/Module.hpp>
 
 namespace dhe {
 
-class Stage : public rack::engine::Module {
+class Stage : public StageMachine, public rack::engine::Module {
 public:
   Stage();
-  void process(const ProcessArgs &args) override;
+  void process(const ProcessArgs &args) override { StageMachine::process(args.sampleTime); }
 
   enum ParameterIds { DurationKnob, LevelKnob, CurveKnob, ParameterCount };
 
@@ -21,45 +22,30 @@ public:
   enum OutputIds { EnvelopeOutput, EocOutput, ActiveOutput, OutputCount };
 
 private:
-  auto duration() const -> float { return dhe::duration(this, DurationKnob, mediumDurationRange); }
+  auto deferIsHigh() const -> bool override { return inputIsHigh(this, DeferInput); }
 
-  auto envelopeIn() const -> float { return inputVoltage(this, EnvelopeInput); }
+  auto duration() const -> float override { return dhe::duration(this, DurationKnob, mediumDurationRange); }
 
-  void forward() { sendOut(envelopeIn()); }
+  auto envelopeIn() const -> float override { return inputVoltage(this, EnvelopeInput); }
 
-  void generate(float phase) { sendOut(scale(taper(phase), startVoltage, level())); }
+  auto level() const -> float override { return dhe::level(this, LevelKnob, unipolarSignalRange); }
 
-  auto level() const -> float { return dhe::level(this, LevelKnob, unipolarSignalRange); }
-
-  void prepareToGenerate() { startVoltage = envelopeIn(); }
-
-  void sendOut(float voltage) { outputs[EnvelopeOutput].setVoltage(voltage); }
-
-  void setActive(bool active) {
+  void sendActive(bool active) override {
     const auto voltage = unipolarSignalRange.scale(active);
     outputs[ActiveOutput].setVoltage(voltage);
   }
 
-  void setEoc(bool eoc) {
+  void sendEoc(bool eoc) override {
     const auto voltage = unipolarSignalRange.scale(eoc);
     outputs[EocOutput].setVoltage(voltage);
   }
 
-  auto taper(float input) const -> float { return taper::variableJTaper.apply(input, curvature(this, CurveKnob)); }
+  void sendOut(float voltage) override { outputs[EnvelopeOutput].setVoltage(voltage); }
 
-  auto deferIsConnected() const -> bool { return inputIsConnected(this, DeferInput); }
-  auto isDeferring() const -> bool { return inputIsHigh(this, DeferInput); }
-  auto isTriggered() const -> bool { return inputIsHigh(this, TriggerInput); }
+  auto taper(float input) const -> float override {
+    return taper::variableJTaper.apply(input, curvature(this, CurveKnob));
+  }
 
-  float startVoltage{0.F};
-  StageStateMachine stateMachine{[this]() -> bool { return deferIsConnected(); },
-                                 [this]() -> bool { return isDeferring(); },
-                                 [this]() -> bool { return isTriggered(); },
-                                 [this]() -> float { return duration(); },
-                                 [this](float /*phase*/) { forward(); },
-                                 [this]() { prepareToGenerate(); },
-                                 [this](float phase) { generate(phase); },
-                                 [this](bool active) { setActive(active); },
-                                 [this](bool eoc) { setEoc(eoc); }};
+  auto triggerIsHigh() const -> bool override { return inputIsHigh(this, TriggerInput); }
 };
 } // namespace dhe

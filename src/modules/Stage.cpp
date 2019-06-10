@@ -11,10 +11,6 @@ Stage::Stage() {
   configDurationKnob(this, DurationKnob, mediumDurationRange);
   configLevelKnob(this, LevelKnob, unipolarSignalRange);
   configCurvatureKnob(this, CurveKnob);
-
-  stateMachine.start();
 }
-
-void Stage::process(const ProcessArgs &args) { stateMachine.step(args.sampleTime); }
 
 } // namespace dhe
