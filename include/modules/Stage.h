@@ -1,6 +1,5 @@
 #pragma once
 
-#include "envelopes/StageStateMachine.h"
 #include "modules/controls/CurvatureInputs.h"
 #include "modules/controls/DurationInputs.h"
 #include "modules/controls/LevelInputs.h"
