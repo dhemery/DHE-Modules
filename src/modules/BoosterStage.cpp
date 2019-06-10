@@ -5,11 +5,105 @@
 #include "modules/controls/DurationConfig.h"
 #include "modules/controls/LevelConfig.h"
 
-#include <array>
-#include <ldap.h>
 #include <string>
 
 namespace dhe {
+
+void StageMachine::process(float sampleTime) {
+  auto const newState = identifyState();
+  if (state != newState) {
+    transition(state, newState);
+  }
+  state = newState;
+
+  switch (state) {
+  case Generating:
+    generate(sampleTime);
+    break;
+  case TrackingLevel:
+    sendOut(level());
+    break;
+  case Deferring:
+  case TrackingInput:
+    sendOut(envelopeIn());
+  }
+
+  advanceEoc(sampleTime);
+  sendActive(state == Deferring || state == Generating);
+  sendEoc(isEoc);
+}
+
+void StageMachine::resetGenerator() {
+  startVoltage = envelopeIn();
+  stagePhase = 0.F;
+}
+
+void StageMachine::generate(float sampleTime) {
+  if (stagePhase < 1.F) {
+    stagePhase = std::min(1.F, stagePhase + sampleTime / duration());
+    sendOut(scale(taper(stagePhase), startVoltage, level()));
+    if (stagePhase == 1.F) {
+      finishGenerating();
+    }
+  }
+}
+
+void StageMachine::finishGenerating() {
+  startEoc();
+  state = TrackingLevel;
+}
+
+void StageMachine::advanceEoc(float sampleTime) {
+  if (eocPhase < 1.F) {
+    eocPhase = std::min(1.F, eocPhase + sampleTime / 1e-3F);
+    if (eocPhase == 1.F) {
+      finishEoc();
+    }
+  }
+}
+
+StageMachine::State StageMachine::identifyState() {
+  if (deferIsHigh()) {
+    return Deferring;
+  }
+  if (triggerRise()) {
+    return Generating;
+  }
+  return state;
+}
+
+void StageMachine::transition(StageMachine::State fromState, StageMachine::State toState) {
+  switch (fromState) {
+  case Deferring:
+    stopDeferring();
+    break;
+  case Generating:
+    startEoc();
+    break;
+  default:;
+  }
+
+  if (toState == Generating) {
+    resetGenerator();
+  }
+}
+
+bool StageMachine::triggerRise() {
+  auto const isHigh = triggerIsHigh();
+  auto const isRise = isHigh && !triggerWasHigh;
+  triggerWasHigh = isHigh;
+  return isRise;
+}
+
+void StageMachine::finishEoc() { isEoc = false; }
+void StageMachine::startEoc() {
+  isEoc = true;
+  eocPhase = 0.F;
+}
+void StageMachine::stopDeferring() {
+  triggerWasHigh = false;
+  state = TrackingInput;
+}
 
 BoosterStage::BoosterStage() {
   config(ParameterCount, InputCount, OutputCount);
@@ -27,93 +121,5 @@ BoosterStage::BoosterStage() {
   configButton(this, TriggerButton, "TRIG", {"From input", "High"}, 0);
   configButton(this, ActiveButton, "ACTIVE", {"Generated", "High"}, 0);
   configButton(this, EocButton, "EOC", {"Generated", "High"}, 0);
-}
-
-void BoosterStage::process(const ProcessArgs &args) {
-  if (!checkDeferGate()) {
-    checkStageTrigger();
-    if (isGenerating) {
-      advancePhase(args.sampleTime);
-    } else if (isTrackingInput) {
-      trackInput();
-    } else {
-      trackLevel();
-    }
-  }
-
-  advanceEoc(args.sampleTime);
-  sendActive();
-  sendEoc();
-}
-
-bool BoosterStage::checkDeferGate() {
-  auto const deferIsHigh = BoosterStage::deferIsHigh();
-  if (deferIsHigh) {
-    trackInput();
-    if (!deferWasHigh) { // On defer rise…
-      startDeferring();
-    }
-  } else if (deferWasHigh) { // On defer fall…
-    finishDeferring();
-  }
-  deferWasHigh = deferIsHigh;
-
-  return deferIsHigh;
-}
-
-void BoosterStage::startDeferring() {
-  isGenerating = false;
-  isActive = true;
-}
-
-void BoosterStage::finishDeferring() {
-  isActive = false;
-  resetTrigger();
-  startTrackingInput();
-}
-
-void BoosterStage::checkStageTrigger() {
-  auto const triggerIsHigh = BoosterStage::triggerIsHigh();
-  if (triggerIsHigh && !triggerWasHigh) { // On trigger rise…
-    startGenerating();
-  }
-  triggerWasHigh = triggerIsHigh;
-}
-
-void BoosterStage::startGenerating() {
-  isActive = true;
-  isGenerating = true;
-  startVoltage = envelopeIn();
-  stagePhase = 0.F;
-}
-
-void BoosterStage::advancePhase(float sampleTime) {
-  if (stagePhase < 1.F) {
-    stagePhase = std::min(1.F, stagePhase + sampleTime / duration());
-    if (stagePhase == 1.F) {
-      finishGenerating();
-    }
-  }
-  generate();
-}
-
-void BoosterStage::finishGenerating() {
-  isGenerating = false;
-  startEoc();
-  startTrackingLevel();
-}
-
-void BoosterStage::startTrackingLevel() {
-  isActive = false;
-  isTrackingInput = false;
-}
-
-void BoosterStage::advanceEoc(float sampleTime) {
-  if (eocPhase < 1.F) {
-    eocPhase = std::min(1.F, eocPhase + sampleTime / 1e-3F);
-    if (eocPhase == 1.F) {
-      finishEoc();
-    }
-  }
 }
 } // namespace dhe

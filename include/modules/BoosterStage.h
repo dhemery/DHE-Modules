@@ -10,10 +10,51 @@
 
 namespace dhe {
 
-class BoosterStage : public rack::engine::Module {
+class StageMachine {
+protected:
+  void process(float sampleTime);
+
+  virtual auto envelopeIn() const -> float = 0;
+  virtual auto level() const -> float = 0;
+  virtual auto deferIsHigh() const -> bool = 0;
+  virtual auto duration() const -> float = 0;
+  virtual void sendActive(bool isActive) = 0;
+  virtual void sendEoc(bool isActive) = 0;
+  virtual void sendOut(float voltage) = 0;
+  virtual auto taper(float input) const -> float = 0;
+  virtual auto triggerIsHigh() const -> bool = 0;
+
+private:
+  enum State {
+    Deferring,
+    Generating,
+    TrackingInput,
+    TrackingLevel,
+  };
+
+  void advanceEoc(float sampleTime);
+  void finishEoc();
+  void finishGenerating();
+  void generate(float sampleTime);
+  auto identifyState() -> State;
+  void resetGenerator();
+  void startEoc();
+  void stopDeferring();
+  void transition(State fromState, State const toState);
+  auto triggerRise() -> bool;
+
+  float eocPhase = 1.F;
+  bool isEoc = false;
+  float stagePhase = 0.F;
+  float startVoltage = 0.F;
+  State state = TrackingInput;
+  bool triggerWasHigh = false;
+};
+
+class BoosterStage : public StageMachine, public rack::engine::Module {
 public:
   BoosterStage();
-  void process(const ProcessArgs &args) override;
+  void process(const ProcessArgs &args) override { StageMachine::process(args.sampleTime); }
 
   enum ParameterIds {
     ActiveButton,
@@ -36,80 +77,40 @@ public:
 private:
   auto activeButton() const -> bool { return buttonIsPressed(this, ActiveButton); }
 
-  auto deferIsHigh() const -> bool { return inputIsHigh(this, DeferInput) || buttonIsPressed(this, DeferButton); }
+  auto deferIsHigh() const -> bool override {
+    return inputIsHigh(this, DeferInput) || buttonIsPressed(this, DeferButton);
+  }
 
-  auto duration() const -> float {
+  auto duration() const -> float override {
     return selectableDuration(this, DurationKnob, DurationCvInput, DurationRangeSwitch);
   }
 
-  auto envelopeIn() const -> float { return inputVoltage(this, EnvelopeInput); }
+  auto envelopeIn() const -> float override { return inputVoltage(this, EnvelopeInput); }
 
   auto eocButton() const -> bool { return buttonIsPressed(this, EocButton); }
 
-  void finishEoc() { isEoc = false; }
+  auto level() const -> float override { return selectableLevel(this, LevelKnob, LevelCvInput, LevelRangeSwitch); }
 
-  void forward() { sendOut(envelopeIn()); }
-
-  void generate() { sendOut(scale(taper(stagePhase), startVoltage, level())); }
-
-  auto level() const -> float { return selectableLevel(this, LevelKnob, LevelCvInput, LevelRangeSwitch); }
-
-  void resetTrigger() { triggerWasHigh = false; }
-
-  void sendActive() {
+  void sendActive(bool isActive) override {
     auto const voltage = unipolarSignalRange.scale(isActive || activeButton());
     outputs[ActiveOutput].setVoltage(voltage);
   }
 
-  void sendEoc() {
+  void sendEoc(bool isEoc) override {
     auto const voltage = unipolarSignalRange.scale(isEoc || eocButton());
     outputs[EocOutput].setVoltage(voltage);
   }
 
-  void sendOut(float voltage) { outputs[EnvelopeOutput].setVoltage(voltage); }
+  void sendOut(float voltage) override { outputs[EnvelopeOutput].setVoltage(voltage); }
 
-  void startEoc() {
-    isEoc = true;
-    eocPhase = 0.F;
-  }
-
-  void startTrackingInput() {
-    isTrackingInput = true;
-    isActive = false;
-  }
-
-  auto taper(float input) const -> float {
+  auto taper(float input) const -> float override {
     auto const curvature = dhe::curvature(this, CurveKnob, CurveCvInput);
     auto const taper = selectedTaper(this, ShapeSwitch);
     return taper->apply(input, curvature);
   }
 
-  void trackInput() { sendOut(envelopeIn()); }
-
-  void trackLevel() { sendOut(level()); }
-
-  auto triggerIsHigh() const -> bool { return inputIsHigh(this, TriggerInput) || buttonIsPressed(this, TriggerButton); }
-
-  bool checkDeferGate();
-  void startDeferring();
-  void finishDeferring();
-
-  void checkStageTrigger();
-  void startGenerating();
-  void advancePhase(float sampleTime);
-  void finishGenerating();
-
-  void advanceEoc(float sampleTime);
-
-  bool deferWasHigh = false;
-  float eocPhase = 1.F;
-  bool isActive = false;
-  bool isEoc = false;
-  bool isGenerating = false;
-  bool isTrackingInput = false;
-  float stagePhase = 0.F;
-  float startVoltage = 0.F;
-  bool triggerWasHigh = false;
-  void startTrackingLevel();
+  auto triggerIsHigh() const -> bool override {
+    return inputIsHigh(this, TriggerInput) || buttonIsPressed(this, TriggerButton);
+  }
 };
 } // namespace dhe
