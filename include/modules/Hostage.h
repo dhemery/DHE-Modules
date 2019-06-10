@@ -1,16 +1,16 @@
 #pragma once
 
-#include "envelopes/HostageStateMachine.h"
 #include "modules/controls/DurationInputs.h"
+#include "modules/envelopes/HostageMachine.h"
 
 #include <engine/Module.hpp>
 
 namespace dhe {
 
-class Hostage : public rack::engine::Module {
+class Hostage : public HostageMachine, public rack::engine::Module {
 public:
   Hostage();
-  void process(const ProcessArgs &args) override;
+  void process(const ProcessArgs &args) override { HostageMachine::process(args.sampleTime); }
 
   enum ParameterIds { DurationKnob, DurationRangeSwitch, ModeSwitch, ParameterCount };
 
@@ -19,38 +19,28 @@ public:
   enum OutputIds { ActiveOutput, EnvelopeOutput, EocOutput, OutputCount };
 
 private:
-  auto deferIsConnected() const -> bool { return inputIsConnected(this, DeferInput); }
-
-  auto duration() const -> float {
+  auto duration() const -> float override {
     return selectableDuration(this, DurationKnob, DurationCvInput, DurationRangeSwitch);
   }
 
-  auto envelopeIn() const -> float { return paramValue(this, EnvelopeInput); }
+  auto envelopeIn() const -> float override { return inputVoltage(this, EnvelopeInput); }
 
-  void forward() { sendOut(envelopeIn()); }
-
-  auto isDeferring() const -> bool { return inputIsHigh(this, DeferInput); }
+  auto deferIsHigh() const -> bool override { return inputIsHigh(this, DeferInput); }
 
   auto isSustainMode() const -> bool { return switchPosition(this, ModeSwitch) == 1; }
 
-  auto isTriggered() const -> bool { return inputIsHigh(this, TriggerInput); }
+  void sendOut(float voltage) override { outputs[EnvelopeOutput].setVoltage(voltage); }
 
-  void sendOut(float voltage) { outputs[EnvelopeOutput].setVoltage(voltage); }
-
-  void setActive(bool active) {
+  void sendActive(bool active) override {
     auto const voltage = unipolarSignalRange.scale(active);
     outputs[ActiveOutput].setVoltage(voltage);
   }
 
-  void setEoc(bool eoc) {
+  void sendEoc(bool eoc) override {
     auto const voltage = unipolarSignalRange.scale(eoc);
     outputs[EocOutput].setVoltage(voltage);
   }
 
-  HostageStateMachine stateMachine{
-      [this]() -> bool { return deferIsConnected(); }, [this]() -> bool { return isDeferring(); },
-      [this]() -> bool { return isTriggered(); },      [this]() -> bool { return isSustainMode(); },
-      [this]() -> float { return duration(); },        [this](float /*phase*/) { forward(); },
-      [this](bool active) { setActive(active); },      [this](bool eoc) { setEoc(eoc); }};
+  auto stageGateIsHigh() const -> bool override { return inputIsHigh(this, TriggerInput); }
 };
 } // namespace dhe
