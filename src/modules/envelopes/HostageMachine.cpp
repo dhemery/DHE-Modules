@@ -33,18 +33,22 @@ HostageMachine::State HostageMachine::identifyState() {
   if (deferIsHigh()) {
     return Deferring;
   }
-  if (state == Deferring) {
-    return TrackingInput;
-  }
   if (isSustainMode()) {
     if (stageGateIsHigh()) {
       return Sustaining;
     }
-  } else if (stageGateRise()) {
+    if (state == Sustaining) {
+      return Idle;
+    }
+  }
+  if (state == Deferring) {
+    return TrackingInput;
+  }
+  if (stageGateRise()) {
     return Holding;
   }
-  return Idle;
-}
+  return state;
+} // namespace dhe
 
 void HostageMachine::enter(HostageMachine::State newState) {
   if (state == Deferring) {
@@ -54,6 +58,7 @@ void HostageMachine::enter(HostageMachine::State newState) {
   if (newState == Holding || newState == Sustaining) {
     resetHold();
   }
+
   if (newState == Idle) {
     startEoc();
   }
