@@ -10,11 +10,11 @@ Ranger::Ranger() {
   configAttenuator(this, LevelKnob, "Level");
   configAttenuverter(this, LevelAvKnob, "Level CV gain");
 
-  configLevelKnob(this, CcwLimitKnob, CcwLimitRangeSwitch, "CCW limit", 0.F);
+  configLevelKnob(this, CcwLimitKnob, CcwLimitRangeSwitch, "CCW limit");
   configLevelRangeSwitch(this, CcwLimitRangeSwitch, "CCW limit range", 0);
   configAttenuverter(this, CcwLimitAvKnob, "CCW limit CV gain");
 
-  configLevelKnob(this, CwLimitKnob, CwLimitRangeSwitch, "CW limit", 1.F);
+  configLevelKnob(this, CwLimitKnob, CwLimitRangeSwitch, "CW limit");
   configLevelRangeSwitch(this, CwLimitRangeSwitch, "CW limit range", 0);
   configAttenuverter(this, CwLimitAvKnob, "CW limit CV gain");
 }
