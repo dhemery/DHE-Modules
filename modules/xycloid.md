@@ -19,6 +19,9 @@ See:
     More fun and less helpful than the current manual.
 
 ## Controls
+- **SPEED:**
+    The throb cycle frequency.
+
 - **RATIO:**
     The number of wobble cycles
     per throb cycle.
@@ -77,9 +80,6 @@ See:
     determines the direction
     in which the wobble angle advances.
 
-- **SPEED:**
-    The throb frequency.
-
 - **PHASE:**
     Offsets the phase of the wobble angle.
 
@@ -105,18 +105,6 @@ See:
 - **CV:**
     A [control voltage]({{ '/technical/modulation/' | relative_url }}) signal
     to modulate the associated parameter.  Some CV signals have attenuverters.
-
-## Menu Options
-
-- **Musical Ratios:**
-    Determines the range of the _RATIO_ knob.
-
-    When checked
-    the maximum wobble-to-throb ratio is 16.
-
-    When unchecked
-    the maximum wobble-to-throb ratio is either 15 or 17,
-    depending on the position of the _IN / OUT_ switch.
 
 ## Using Xycloid
 

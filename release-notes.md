@@ -2,16 +2,25 @@
 title: Release Notes
 ---
 
-Current Release: 
-- [Release 0.6.5](#release-065)
+# DHE Modules Release Notes
 
-Previous Releases:
-- [Release 0.6.4](#release-064)
-- [Release 0.6.3](#release-063)
-- [Release 0.6.2](#release-062)
-- [Release 0.6.1](#release-061)
-- [Release 0.6.0](#release-060)
-- [Release 0.5.0](#release-050)
+## Version 1.0.1
+
+- Xycloid
+  - Added phase CV with attenuverter.
+  - Reordered controls to match Blossom.
+- Swave
+  - Added a CV attenuverter.
+
+## Version 1.0.0
+
+- All modules
+  - Added parameter tooltips.
+  - Added the ability to specify parameter values via keyboard.
+- Ranger
+  - Renamed and reoriented the limit controls to better convey their effects on the **LEVEL** knob.
+- Swave
+  - Restored the shape switch.
 
 ## Release 0.6.5
 

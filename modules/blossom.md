@@ -12,11 +12,11 @@ The resulting two-dimensional shape
 generates a pair of complex, evolving, pulsing LFO signals.
 
 ## Controls
-- **SPIN:**
+- **SPEED:**
     The speed at which the point
     traces around the circle.
 
-- **BOUNCE:**
+- **RATIO:**
     The number of times
     the radius bounces in and out
     on each rotation.
@@ -25,7 +25,7 @@ generates a pair of complex, evolving, pulsing LFO signals.
     Determines whether to round the _BOUNCE_ value
     to the nearest integer.
 
-    _LOCK_ rounds the _BOUNCE_ value
+    _LOCK_ rounds the _RATIO_
     to the nearest integer,
     causing _Blossoms's_ pattern of accents
     to repeat on every rotation.

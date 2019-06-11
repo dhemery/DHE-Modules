@@ -3,7 +3,7 @@ title: The Tapers Module
 ---
 <img class="faceplate" src="tapers.svg" alt="The Tapers Faceplate" />
 
-A a pair of modulatable knobs with adjustable, modulatable tapers.
+A pair of modulatable knobs with adjustable, modulatable tapers.
 
 A
 _[taper](https://en.wikipedia.org/wiki/Potentiometer#Resistance–position_relationship:_"taper")_
