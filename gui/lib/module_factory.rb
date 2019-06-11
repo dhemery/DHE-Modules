@@ -152,7 +152,7 @@ class ModuleFactory
   end
 
   def attenuverter(x:, y:)
-    knob(x: x, y: y, size: :tiny, label: '<tspan font-size="larger">-&#160;&#160;+</tspan>', label_size: :large)
+    knob(x: x, y: y, size: :tiny, label: '- +', label_size: :large)
   end
 
   def toggle(x:, y:, labels:, selection:)
