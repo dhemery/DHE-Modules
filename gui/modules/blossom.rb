@@ -42,7 +42,7 @@ large_knob(x: right_center, y: y, label: 'PHASE')
 y = 97.0
 delta_y = 15.0
 
-connector(left: left, right: right_center, y: y)
+connector(left: left, right: right, y: y)
 cv_port(x: left, y: y)
 small_knob(x: left_center, y: y, label: 'GAIN')
 polarity_toggle(x: right_center, y: y)
