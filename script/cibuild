@@ -11,7 +11,7 @@ unzip rack-sdk.zip
 
 make dist
 
-if [ "$TRAVIS_OS_NAME" = "linux" ]
+if [ "$TRAVIS_OS_NAME" = "linux" ]; then
   sudo apt-get install -y libglu1-mesa-dev
   git submodule update --init --recursive
   pushd googletest
