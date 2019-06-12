@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+set -o errexit
+set -o nounset
+set -o xtrace
+
+rack_sdk_version=1.dev.439b3f6
+export RACK_DIR="$PWD/Rack-SDK/"
+
+git submodule update --init --recursive
+
+pushd googletest
+cmake .
+make
+popd
+
+curl -o rack-sdk.zip https://vcvrack.com/downloads/Rack-SDK-${rack_sdk_version}.zip
+unzip rack-sdk.zip
+
+make test
