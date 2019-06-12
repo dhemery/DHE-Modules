@@ -7,7 +7,7 @@ matrix:
   - os: windows
 
 before_install:
-  - sudo apt-get install -y libglu1-mesa-dev
+  - if [ "$TRAVIS_OS_NAME" = "linux" ]; sudo apt-get install -y libglu1-mesa-dev; fi
 
 script:
 - script/cibuild
