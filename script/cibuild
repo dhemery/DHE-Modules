@@ -6,14 +6,18 @@ set -o xtrace
 rack_sdk_version=1.dev.439b3f6
 export RACK_DIR="$PWD/Rack-SDK/"
 
-git submodule update --init --recursive
-
-pushd googletest
-cmake .
-cmake --build .
-popd
-
 curl -o rack-sdk.zip https://vcvrack.com/downloads/Rack-SDK-${rack_sdk_version}.zip
 unzip rack-sdk.zip
 
-make test
+make dist
+
+if [ "$TRAVIS_OS_NAME" = "linux" ]
+  sudo apt-get install -y libglu1-mesa-dev
+  git submodule update --init --recursive
+  pushd googletest
+  cmake .
+  cmake --build .
+  popd
+  make test
+fi
+
