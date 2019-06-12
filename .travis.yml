@@ -1,9 +1,15 @@
 language: cpp
 
+ignore: "sudo apt install git gdb curl cmake libx11-dev libglu1-mesa-dev libxrandr-dev libxinerama-dev libxcursor-dev libxi-dev zlib1g-dev libasound2-dev libgtk2.0-dev libjack-jackd2-dev jq"
+
 matrix:
   include:
   - os: linux
     dist: xenial
+
+before_install:
+  - sudo apt-get update
+  - sudo apt-get install -y libglu1-mesa-dev jq
 
 script:
 - script/cibuild
