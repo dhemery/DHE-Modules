@@ -10,7 +10,7 @@ git submodule update --init --recursive
 
 pushd googletest
 cmake .
-make
+cmake --build .
 popd
 
 curl -o rack-sdk.zip https://vcvrack.com/downloads/Rack-SDK-${rack_sdk_version}.zip
