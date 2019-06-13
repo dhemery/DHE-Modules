@@ -3,7 +3,7 @@ set -o errexit
 set -o nounset
 set -o xtrace
 
-rack_sdk_version=1.dev.439b3f6
+rack_sdk_version=1.dev.b4bd09a
 export RACK_DIR="$PWD/Rack-SDK/"
 
 curl -o rack-sdk.zip https://vcvrack.com/downloads/Rack-SDK-${rack_sdk_version}.zip
