@@ -13,8 +13,6 @@ require_relative 'shapes/stepper'
 require_relative 'shapes/toggle'
 
 class ModuleFactory
-  MM_PER_HP = 5.08
-  MODULE_HEIGHT = 128.5
   MODULE_LABEL_INSET = 9.0
 
   attr_reader :source_file, :width, :slug, :faceplate_shape, :image_shape, :control_shapes
@@ -47,7 +45,7 @@ class ModuleFactory
   end
 
   def hp(hp)
-    @width = hp * MM_PER_HP
+    @width = hp2mm(hp)
   end
 
   def foreground(color)
