@@ -124,10 +124,10 @@ undev:
 dev: $(DEV_PLUGIN_ZIP)
 
 run: dev
-	$(RACK_EXECUTABLE) $(RACK_FLAGS) -s $(RACK_SYSTEM_DIR) -u $(realpath $(DEV_DIR))
+	$(RACK_EXECUTABLE) $(RACK_FLAGS) -u $(realpath $(DEV_DIR))
 
 debug: dev
-	$(RACK_EXECUTABLE) $(RACK_FLAGS) -d -s $(RACK_SYSTEM_DIR) -u $(realpath $(DEV_DIR))
+	$(RACK_EXECUTABLE) $(RACK_FLAGS) -d -u $(realpath $(DEV_DIR))
 
 .PHONY: unplug undev run debug
 
