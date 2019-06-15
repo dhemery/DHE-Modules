@@ -103,8 +103,11 @@ DEV_DIR = .dev
 DEV_PLUGIN_DIR = $(DEV_DIR)/plugins-v1
 DEV_PLUGIN_ZIP = $(DEV_PLUGIN_DIR)/$(PLUGIN_ZIP_NAME)
 
-RACK_EXECUTABLE = $(RACK_APP_DIR)/Rack.app/Contents/MacOS/Rack
-RACK_SYSTEM_DIR = $(RACK_APP_DIR)/Rack.app/Contents/Resources
+RACK_APP_DIR ?= /Applications
+RACK_APP = $(RACK_APP_DIR)/Rack.app
+
+RACK_EXECUTABLE = $(RACK_APP)/Contents/MacOS/Rack
+RACK_SYSTEM_DIR = $(RACK_APP)/Contents/Resources
 
 $(DEV_DIR) $(DEV_PLUGIN_DIR):
 	mkdir -p $@
