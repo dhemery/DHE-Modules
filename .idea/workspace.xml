@@ -2,27 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="83224cbc-5238-416e-b15e-8435af893faa" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/DHE-Modules.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/DHE-Modules.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/modules/stage/stage-state-model.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Gemfile.lock" beforeDir="false" afterPath="$PROJECT_DIR$/Gemfile.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/blossom.md" beforeDir="false" afterPath="$PROJECT_DIR$/modules/blossom.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/blossom/blossom.svg" beforeDir="false" afterPath="$PROJECT_DIR$/modules/blossom/blossom.svg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/booster-stage/booster-stage.svg" beforeDir="false" afterPath="$PROJECT_DIR$/modules/booster-stage/booster-stage.svg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/cubic/cubic.svg" beforeDir="false" afterPath="$PROJECT_DIR$/modules/cubic/cubic.svg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/func-6/func-6.svg" beforeDir="false" afterPath="$PROJECT_DIR$/modules/func-6/func-6.svg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/func/func.svg" beforeDir="false" afterPath="$PROJECT_DIR$/modules/func/func.svg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/hostage/hostage.svg" beforeDir="false" afterPath="$PROJECT_DIR$/modules/hostage/hostage.svg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/ranger.md" beforeDir="false" afterPath="$PROJECT_DIR$/modules/ranger.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/ranger/ranger.svg" beforeDir="false" afterPath="$PROJECT_DIR$/modules/ranger/ranger.svg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/stage/stage.svg" beforeDir="false" afterPath="$PROJECT_DIR$/modules/stage/stage.svg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/swave/swave.svg" beforeDir="false" afterPath="$PROJECT_DIR$/modules/swave/swave.svg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/tapers.md" beforeDir="false" afterPath="$PROJECT_DIR$/modules/tapers.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/tapers/tapers.svg" beforeDir="false" afterPath="$PROJECT_DIR$/modules/tapers/tapers.svg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/upstage/upstage.svg" beforeDir="false" afterPath="$PROJECT_DIR$/modules/upstage/upstage.svg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/xycloid.md" beforeDir="false" afterPath="$PROJECT_DIR$/modules/xycloid.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/xycloid/xycloid.svg" beforeDir="false" afterPath="$PROJECT_DIR$/modules/xycloid/xycloid.svg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/release-notes.md" beforeDir="false" afterPath="$PROJECT_DIR$/release-notes.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/booster-stage.md" beforeDir="false" afterPath="$PROJECT_DIR$/modules/booster-stage.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/stage.md" beforeDir="false" afterPath="$PROJECT_DIR$/modules/stage.md" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -33,11 +16,11 @@
   <component name="FileEditorManager">
     <leaf>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/release-notes.md">
+        <entry file="file://$PROJECT_DIR$/modules/booster-stage.md">
           <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
             <state split_layout="FIRST">
-              <first_editor relative-caret-position="90">
-                <caret line="6" column="16" lean-forward="true" selection-start-line="6" selection-start-column="16" selection-end-line="6" selection-end-column="16" />
+              <first_editor relative-caret-position="287">
+                <caret line="143" column="36" selection-start-line="143" selection-start-column="36" selection-end-line="143" selection-end-column="36" />
               </first_editor>
               <second_editor />
             </state>
@@ -50,7 +33,11 @@
     <findStrings>
       <find>xyc</find>
       <find>musical</find>
+      <find>_Stage_</find>
     </findStrings>
+    <replaceStrings>
+      <replace>_Booster Stage_</replace>
+    </replaceStrings>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -64,6 +51,8 @@
         <option value="$PROJECT_DIR$/modules/xycloid.md" />
         <option value="$PROJECT_DIR$/modules/ranger.md" />
         <option value="$PROJECT_DIR$/modules/tapers.md" />
+        <option value="$PROJECT_DIR$/modules/stage.md" />
+        <option value="$PROJECT_DIR$/modules/booster-stage.md" />
       </list>
     </option>
   </component>
@@ -89,12 +78,29 @@
             <path>
               <item name="DHE-Modules" type="b2602c69:ProjectViewProjectNode" />
               <item name="DHE-Modules" type="462c0819:PsiDirectoryNode" />
-              <item name="_site" type="462c0819:PsiDirectoryNode" />
+              <item name="_diagrams" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="DHE-Modules" type="b2602c69:ProjectViewProjectNode" />
               <item name="DHE-Modules" type="462c0819:PsiDirectoryNode" />
               <item name="modules" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="DHE-Modules" type="b2602c69:ProjectViewProjectNode" />
+              <item name="DHE-Modules" type="462c0819:PsiDirectoryNode" />
+              <item name="modules" type="462c0819:PsiDirectoryNode" />
+              <item name="stage" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="DHE-Modules" type="b2602c69:ProjectViewProjectNode" />
+              <item name="DHE-Modules" type="462c0819:PsiDirectoryNode" />
+              <item name="technical" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="DHE-Modules" type="b2602c69:ProjectViewProjectNode" />
+              <item name="DHE-Modules" type="462c0819:PsiDirectoryNode" />
+              <item name="technical" type="462c0819:PsiDirectoryNode" />
+              <item name="sigmoid" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -105,17 +111,19 @@
   <component name="PropertiesComponent">
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/modules/stage" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
     <property name="settings.editor.selected.configurable" value="preferences.keymap" />
   </component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/modules/stage" />
+      <recent name="$PROJECT_DIR$/modules" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$" />
       <recent name="$PROJECT_DIR$/guides" />
-    </key>
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/modules" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -145,11 +153,12 @@
       <workItem from="1553986960444" duration="4265000" />
       <workItem from="1560227217193" duration="263000" />
       <workItem from="1560230262765" duration="1500000" />
+      <workItem from="1560744623767" duration="2714000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="6088000" />
+    <option name="totallyTimeSpent" value="8802000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="19" y="27" width="1042" height="820" extended-state="0" />
@@ -252,8 +261,52 @@
     <entry file="file://$PROJECT_DIR$/release-notes.md">
       <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
         <state split_layout="FIRST">
-          <first_editor relative-caret-position="90">
-            <caret line="6" column="16" lean-forward="true" selection-start-line="6" selection-start-column="16" selection-end-line="6" selection-end-column="16" />
+          <first_editor relative-caret-position="225">
+            <caret line="15" selection-start-line="15" selection-end-line="15" />
+          </first_editor>
+          <second_editor />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/technical/how-stages-work-together.md">
+      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+        <state split_layout="FIRST">
+          <first_editor relative-caret-position="-1285" />
+          <second_editor />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/_diagrams/stage-state-model.png">
+      <provider selected="true" editor-type-id="images" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/technical/sigmoid.md">
+      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+        <state split_layout="FIRST">
+          <first_editor relative-caret-position="348">
+            <caret line="57" column="25" lean-forward="true" selection-start-line="57" selection-start-column="25" selection-end-line="57" selection-end-column="25" />
+          </first_editor>
+          <second_editor />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/_diagrams/stage-state-model.puml">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/modules/stage.md">
+      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+        <state split_layout="FIRST">
+          <first_editor relative-caret-position="387">
+            <caret line="153" lean-forward="true" selection-start-line="84" selection-end-line="153" />
+          </first_editor>
+          <second_editor />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/modules/booster-stage.md">
+      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+        <state split_layout="FIRST">
+          <first_editor relative-caret-position="287">
+            <caret line="143" column="36" selection-start-line="143" selection-start-column="36" selection-end-line="143" selection-end-column="36" />
           </first_editor>
           <second_editor />
         </state>

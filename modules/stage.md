@@ -85,17 +85,69 @@ See also:
 ## Notes
 
 - While an envelope stage is in progress,
-    all of the knobs are "live."
-    If you adjust a knob,
-    _Stage_ applies the new value
-    to the remainder of the stage.
+  all of the knobs are "live."
+  If you adjust a knob,
+  _Stage_ applies the new value
+  to the remainder of the stage.
+
+- Before _Stage_ first becomes active
+  (by either a trigger or a _DEFER_ gate),
+  it "tracks" its input
+  by sending its _IN_ voltage to its _OUT_ port.
+  Stage also enters this mode
+  when its _DEFER_ gate falls (unless the _TRIG_ port is high). 
 
 - After _Stage_ completes an envelope stage,
-    the _LEVEL_ knob remains live
-    until the _DEFER_ gate goes high.
-    If you adjust the _LEVEL_ knob,
-    the _OUT_ signal follows.
+  it "tracks" the _LEVEL_ knob
+  by sending the _LEVEL_ voltage to the _OUT_ port.
 
-- Before _Stage_ becomes active for the first time
-    (by either a trigger or a _DEFER_ gate),
-    it outputs 0V.
+## State Model
+
+![Stage State Model](stage-state-model.png)
+
+### TrackingInput Mode
+_Stage_ starts in _TrackingInput_ mode.
+While _Stage_ is _TrackingInput_:
+- it is inactive
+- it "tracks" its input by sending its _IN_ voltage to its _OUT_ port
+- if _DEFER_ rises, _Stage_ enters _Deferring_ mode 
+- if _TRIG_ rises, _Stage_ enters _Generating_ mode
+
+### Deferring Mode
+
+Whatever mode _Stage_ is in,
+whenever its _DEFER_ gate rises,
+it enters _Deferring_ mode.
+While _Stage_ is _Deferring:
+
+- it is active
+- it sends its _IN_ voltage to its _OUT_ port
+- it ignores its _TRIG_ port
+
+When the _DEFER_ gate falls,
+_Stage_ resumes _TrackingInput_.
+
+### Generating Mode
+
+If the _TRIG_ port rises
+while _Stage_ is not _Deferring_,
+it begins _Generating_ a stage.
+While _Stage_ is _Generating_:
+
+- it is active
+- it advances its phase and generates the appropriate voltage at its _OUT_ port
+- if the stage completes,
+  _Stage_ initiates a short pulse on its _EOC_ port
+  and enters _TrackingLevel_ mode
+- if _DEFER_ rises, _Stage_ enters _Deferring_ mode 
+- if _TRIG_ rises, _Stage_ abandons the stage it is generating and begins a new one
+
+
+### TrackingLevel Mode
+
+While _Stage_ is _TrackingLevel_:
+
+- it is inactive
+- it sends the voltage of its _LEVEL_ knob to its _OUT_ port
+- if _DEFER_ rises, _Stage_ enters _Deferring_ mode 
+- if _TRIG_ rises, _Stage_ enters _Generating_ mode

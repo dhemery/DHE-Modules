@@ -1,0 +1,21 @@
+@startuml
+[*] --> TrackingInput
+
+Deferring : ACTIVE : true
+Deferring --> TrackingInput : DEFER ⇩
+
+Generating : ACTIVE : true
+Generating --> Deferring : DEFER ⇧
+Generating --> Generating : TRIG ⇧
+Generating --> TrackingLevel : Stage Completed
+
+TrackingInput : ACTIVE : false
+TrackingInput --> Deferring : DEFER ⇧
+TrackingInput --> Generating : TRIG ⇧
+
+TrackingLevel : ACTIVE : false
+TrackingLevel --> Deferring : DEFER ⇧
+TrackingLevel --> Generating : TRIG ⇧
+
+@enduml
+
