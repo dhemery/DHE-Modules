@@ -68,7 +68,7 @@ class ModuleFactory
     @faceplate_shapes << Line.new(color: @foreground, x1: left, x2: right, y1: y, y2: y)
   end
 
-  def button(x:, y:, label: nil, style: :normal)
+  def button(x:, y:, label: '', style: :normal)
     pressed = Button.new(foreground: @foreground, background: @background, style: style, state: :pressed)
     released = Button.new(foreground: @foreground, background: @background, style: style, state: :released)
     @control_shapes.append(pressed, released)
@@ -79,6 +79,18 @@ class ModuleFactory
     label_color = style == :normal ? @foreground : @background
     faceplate_label = Label.new(text: label, color: label_color, size: :small, alignment: :above)
                           .translate(image_button.x, image_button.top - PADDING)
+    @faceplate_shapes << faceplate_label
+  end
+
+  def port(x:, y:, label: '')
+    port = Port.new(foreground: @foreground, background: @background)
+    @control_shapes << port
+
+    image_port = port.translate(x, y)
+    @image_shapes << image_port
+
+    faceplate_label = Label.new(text: label, color: @foreground, size: :large)
+                          .translate(image_port.x, image_port.top - PADDING)
     @faceplate_shapes << faceplate_label
   end
 
