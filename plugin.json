@@ -43,6 +43,12 @@
       "tags": ["Utility"]
     },
     {
+      "slug": "Gator",
+      "name": "Gator",
+      "description": "Computes eight common logic functions for up to 16 inputs",
+      "tags": ["Logic"]
+    },
+    {
       "slug": "Hostage",
       "name": "Hostage",
       "description": "Generates a hold or sustain envelope stage",

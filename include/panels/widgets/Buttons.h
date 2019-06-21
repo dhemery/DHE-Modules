@@ -19,4 +19,12 @@ public:
   ReverseButton() : Button<P>("button-reversed") {}
 };
 
+template <typename P> class ToggleButton : public rack::app::SvgSwitch {
+public:
+  explicit ToggleButton(const std::string &name = "button") {
+    addFrame(P::svg(name + "-1"));
+    addFrame(P::svg(name + "-2"));
+  }
+}; // namespace DHE
+
 } // namespace dhe

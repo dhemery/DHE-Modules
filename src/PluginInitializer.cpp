@@ -3,6 +3,7 @@
 #include "panels/CubicPanel.h"
 #include "panels/Func6Panel.h"
 #include "panels/FuncPanel.h"
+#include "panels/GatorPanel.h"
 #include "panels/HostagePanel.h"
 #include "panels/RangerPanel.h"
 #include "panels/StagePanel.h"
@@ -24,6 +25,7 @@ void init(rack::plugin::Plugin *p) {
   p->addModel(rack::createModel<dhe::Cubic, dhe::CubicPanel>("Cubic"));
   p->addModel(rack::createModel<dhe::Func, dhe::FuncPanel>("Func"));
   p->addModel(rack::createModel<dhe::Func6, dhe::Func6Panel>("Func6"));
+  p->addModel(rack::createModel<dhe::Gator, dhe::GatorPanel>("Gator"));
   p->addModel(rack::createModel<dhe::Hostage, dhe::HostagePanel>("Hostage"));
   p->addModel(rack::createModel<dhe::Stage, dhe::StagePanel>("Stage"));
   p->addModel(rack::createModel<dhe::Ranger, dhe::RangerPanel>("Ranger"));

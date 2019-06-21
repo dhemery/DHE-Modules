@@ -22,7 +22,12 @@
 extern rack::plugin::Plugin *pluginInstance;
 
 namespace dhe {
-static inline auto hp2px(int hp) -> float { return rack::app::RACK_GRID_WIDTH * (float) hp; }
+static inline auto mmPerHp() -> float {
+  static auto const mmPerHp = rack::app::RACK_GRID_WIDTH * rack::app::MM_PER_IN / rack::app::SVG_DPI;
+  return mmPerHp;
+}
+static inline auto hp2px(float hp) -> float { return rack::app::RACK_GRID_WIDTH * (float) hp; }
+static inline auto hp2mm(float hp) -> float { return hp * mmPerHp(); }
 
 template <typename P> class Jack : public rack::app::SvgPort {
 public:
@@ -63,10 +68,6 @@ public:
   }
 
 protected:
-  static auto mmPerHp() -> float {
-    static auto const mmPerHp = rack::app::RACK_GRID_WIDTH * rack::app::MM_PER_IN / rack::app::SVG_DPI;
-    return mmPerHp;
-  }
   auto height() const -> float { return box.size.y * rack::app::MM_PER_IN / rack::app::SVG_DPI; }
 
   auto width() const -> float { return box.size.x * rack::app::MM_PER_IN / rack::app::SVG_DPI; }
