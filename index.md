@@ -6,6 +6,7 @@ layout: base
 
 The DHE-Modules suite includes
 [envelope generators](#envelope-generators),
+[logic modules](#logic),
 [low frequency oscillators](#low-frequency-oscillators),
 [utilities](#utilities).
 and
@@ -41,6 +42,14 @@ inject triggers,
 suppress retriggers,
 set an envelope's starting voltage,
 and more.
+
+### Logic
+
+[![_Gator_](modules/gator/gator.svg)](modules/gator/)
+
+**[_Gator_](modules/gator/)**
+computes eight common logic functions
+for up to 16 inputs.
 
 ### Low Frequency Oscillators
 
