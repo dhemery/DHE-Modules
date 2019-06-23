@@ -9,8 +9,9 @@ public:
   void process(const ProcessArgs &args) override;
 
   void setOutputs(int outputId, int negatedOutputId, float value) {
-    outputs[outputId].setVoltage(value);
-    outputs[negatedOutputId].setVoltage(10.F - value);
+    auto const voltage = 10.F * value;
+    outputs[outputId].setVoltage(voltage);
+    outputs[negatedOutputId].setVoltage(10.F - voltage);
   }
 
   enum ParameterIds { NegateAButtons, NegateBButtons = NegateAButtons + 2, ParameterCount = NegateBButtons + 2 };
