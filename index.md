@@ -45,7 +45,11 @@ and more.
 
 ### Logic
 
+[![_Flogic_](modules/flogic/flogic.svg)](modules/flogic/)
 [![_Gator_](modules/gator/gator.svg)](modules/gator/)
+
+**[_Flogic_](modules/flogic/)**
+computes eight fuzzy logic functions.
 
 **[_Gator_](modules/gator/)**
 computes eight common logic functions

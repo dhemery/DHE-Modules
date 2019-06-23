@@ -4,6 +4,10 @@ title: Release Notes
 
 # DHE Modules Release Notes
 
+## Version 1.0.3
+
+- Added [_Flogic_]({{ '/modules/flogic' | relative_url }}).
+
 ## Version 1.0.2
 
 - Added [_Gator_]({{ '/modules/gator' | relative_url }}).
