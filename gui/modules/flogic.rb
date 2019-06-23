@@ -1,0 +1,53 @@
+name 'FLOGIC'
+hp 9
+
+hue = 240
+foreground [hue, 100, 30]
+background [hue, 100, 97]
+
+left = hp2mm(1.5)
+lc = hp2mm(3.25)
+rc = hp2mm(5.75)
+right = hp2mm(7.5)
+
+dy = 3
+
+top = 4.5
+
+y = hp2mm(top + 0 * dy)
+port(x: left, y: y, label: 'A')
+button(x: lc, y: y, label: '¬')
+button(x: rc, y: y, label: '¬')
+port(x: right, y: y, label: 'B')
+
+y = hp2mm(top + 1 * dy)
+output_port(x: left, y: y, label: 'MAX')
+output_port(x: lc, y: y, label: '¬MAX')
+output_port(x: rc, y: y, label: 'MIN')
+output_port(x: right, y: y, label: '¬MIN')
+
+y = hp2mm(top + 2 * dy)
+output_port(x: left, y: y, label: 'AND')
+output_port(x: lc, y: y, label: '¬AND')
+output_port(x: rc, y: y, label: 'OR')
+output_port(x: right, y: y, label: '¬OR')
+
+top += 10
+
+y = hp2mm(top + 0 * dy)
+port(x: left, y: y, label: 'A')
+button(x: lc, y: y, label: '¬')
+button(x: rc, y: y, label: '¬')
+port(x: right, y: y, label: 'B')
+
+y = hp2mm(top + 1 * dy)
+output_port(x: left, y: y, label: 'MAX')
+output_port(x: lc, y: y, label: '¬MAX')
+output_port(x: rc, y: y, label: 'MIN')
+output_port(x: right, y: y, label: '¬MIN')
+
+y = hp2mm(top + 2 * dy)
+output_port(x: left, y: y, label: 'AND')
+output_port(x: lc, y: y, label: '¬AND')
+output_port(x: rc, y: y, label: 'OR')
+output_port(x: right, y: y, label: '¬OR')
