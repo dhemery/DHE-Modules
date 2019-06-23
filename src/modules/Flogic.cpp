@@ -18,13 +18,13 @@ Flogic::Flogic() {
 
 void Flogic::process(const rack::engine::Module::ProcessArgs & /*ignored*/) {
   for (int i = 0; i < 2; i++) {
-    auto const aInput = 0.1F * inputs[AInputs + i].getVoltage();
-    auto const bInput = 0.1F * inputs[BInputs + i].getVoltage();
-    auto const a = buttonIsPressed(this, NegateAButtons + i) ? 1.F - aInput : aInput;
-    auto const b = buttonIsPressed(this, NegateBButtons + i) ? 1.F - bInput : bInput;
+    auto const aInput = inputs[AInputs + i].getVoltage();
+    auto const bInput = inputs[BInputs + i].getVoltage();
+    auto const a = buttonIsPressed(this, NegateAButtons + i) ? 10.F - aInput : aInput;
+    auto const b = buttonIsPressed(this, NegateBButtons + i) ? 10.F - bInput : bInput;
     auto const max = std::max(a, b);
     auto const min = std::min(a, b);
-    auto const fuzzyAnd = a * b;
+    auto const fuzzyAnd = a * b * 0.1F;
     auto const fuzzyOr = a + b - fuzzyAnd;
     setOutputs(MaxOutputs + i, NegatedMaxOutputs + i, max);
     setOutputs(MinOutputs + i, NegatedMinOutputs + i, min);

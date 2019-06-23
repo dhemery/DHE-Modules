@@ -18,16 +18,16 @@ FlogicPanel::FlogicPanel(Flogic *gator) : Panel{gator, hp} {
   input(right, y, Flogic::BInputs + 0);
 
   y = top + 1.F * dy;
-  output(left, y, Flogic::MaxOutputs + 0);
-  output(lc, y, Flogic::NegatedMaxOutputs + 0);
-  output(rc, y, Flogic::NegatedMinOutputs + 0);
-  output(right, y, Flogic::MinOutputs + 0);
-
-  y = top + 2.F * dy;
   output(left, y, Flogic::AndOutputs + 0);
   output(lc, y, Flogic::NegatedAndOutputs + 0);
   output(rc, y, Flogic::OrOutputs + 0);
   output(right, y, Flogic::NegatedOrOutputs + 0);
+
+  y = top + 2.F * dy;
+  output(left, y, Flogic::MaxOutputs + 0);
+  output(lc, y, Flogic::NegatedMaxOutputs + 0);
+  output(rc, y, Flogic::NegatedMinOutputs + 0);
+  output(right, y, Flogic::MinOutputs + 0);
 
   top += hp2mm(10.F);
 
@@ -38,15 +38,15 @@ FlogicPanel::FlogicPanel(Flogic *gator) : Panel{gator, hp} {
   input(right, y, Flogic::BInputs + 1);
 
   y = top + 1.F * dy;
-  output(left, y, Flogic::MaxOutputs + 1);
-  output(lc, y, Flogic::NegatedMaxOutputs + 1);
-  output(rc, y, Flogic::MinOutputs + 1);
-  output(right, y, Flogic::NegatedMinOutputs + 1);
-
-  y = top + 2.F * dy;
   output(left, y, Flogic::AndOutputs + 1);
   output(lc, y, Flogic::NegatedAndOutputs + 1);
   output(rc, y, Flogic::NegatedOrOutputs + 1);
   output(right, y, Flogic::OrOutputs + 1);
+
+  y = top + 2.F * dy;
+  output(left, y, Flogic::MaxOutputs + 1);
+  output(lc, y, Flogic::NegatedMaxOutputs + 1);
+  output(rc, y, Flogic::MinOutputs + 1);
+  output(right, y, Flogic::NegatedMinOutputs + 1);
 }
 } // namespace dhe

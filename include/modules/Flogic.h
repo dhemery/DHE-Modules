@@ -8,8 +8,7 @@ public:
   Flogic();
   void process(const ProcessArgs &args) override;
 
-  void setOutputs(int outputId, int negatedOutputId, float value) {
-    auto const voltage = 10.F * value;
+  void setOutputs(int outputId, int negatedOutputId, float voltage) {
     outputs[outputId].setVoltage(voltage);
     outputs[negatedOutputId].setVoltage(10.F - voltage);
   }
