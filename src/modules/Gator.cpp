@@ -7,15 +7,6 @@
 
 namespace dhe {
 
-template <typename LogicOperator>
-auto reduce(std::vector<bool> const &values, bool identity, LogicOperator op) -> bool {
-  auto accumulated = identity;
-  for (auto const value : values) {
-    accumulated = op(accumulated, value);
-  }
-  return accumulated;
-}
-
 Gator::Gator() {
   config(ParameterCount, InputCount, OutputCount);
   for (auto i = 0; i < inputCount; i++) {

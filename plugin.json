@@ -31,6 +31,12 @@
       "tags": ["Waveshaper"]
     },
     {
+      "slug": "Flogic",
+      "name": "Flogic",
+      "description": "Computes eight fuzzy logic functions",
+      "tags": ["Logic", "Dual"]
+    },
+    {
       "slug": "Func",
       "name": "Func",
       "description": "A knob with a selectable range to offset or scale its input signal",
