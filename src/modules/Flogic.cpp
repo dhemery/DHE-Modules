@@ -10,10 +10,10 @@ namespace dhe {
 
 Flogic::Flogic() {
   config(ParameterCount, InputCount, OutputCount);
-  for (auto i = 0; i < 2; i++) {
-    configParam(ANotButtons + i, 0.F, 1.F, 0.F, "Negate A");
-    configParam(BNotButtons + i, 0.F, 1.F, 0.F, "Negate B");
-  }
+  configParam(ANotButtons + 0, 0.F, 1.F, 0.F, "Negate A");
+  configParam(BNotButtons + 0, 0.F, 1.F, 0.F, "Negate B");
+  configParam(ANotButtons + 1, 0.F, 1.F, 0.F, "Negate C");
+  configParam(BNotButtons + 1, 0.F, 1.F, 0.F, "Negate D");
 }
 
 void Flogic::process(const rack::engine::Module::ProcessArgs & /*ignored*/) {
