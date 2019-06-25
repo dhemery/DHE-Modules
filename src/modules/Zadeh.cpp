@@ -27,7 +27,7 @@ void Zadeh::process(const rack::engine::Module::ProcessArgs & /*ignored*/) {
     auto const aOrB = std::max(a, b);
     auto const aXorB = a + b - (aAndB + aAndB);
     auto const aImpliesB = 10.F - std::min(a, 10.F - b);
-    auto const bImpliesA = 10.F - std::min(1.F - a, b);
+    auto const bImpliesA = 10.F - std::min(10.F - a, b);
 
     setOutputs(AndOutputs + i, NandOutputs + i, aAndB);
     setOutputs(OrOutputs + i, NorOutputs + i, aOrB);
