@@ -13,40 +13,40 @@ FlogicPanel::FlogicPanel(Flogic *gator) : Panel{gator, hp} {
 
   auto y = top + 0.F * dy;
   input(left, y, Flogic::AInputs + 0);
-  button<ToggleButton>(lc, y, Flogic::NegateAButtons + 0);
-  button<ToggleButton>(rc, y, Flogic::NegateBButtons + 0);
+  button<ToggleButton>(lc, y, Flogic::ANotButtons + 0);
+  button<ToggleButton>(rc, y, Flogic::BNotButtons + 0);
   input(right, y, Flogic::BInputs + 0);
 
   y = top + 1.F * dy;
-  output(left, y, Flogic::AndOutputs + 0);
-  output(lc, y, Flogic::NegatedAndOutputs + 0);
-  output(rc, y, Flogic::OrOutputs + 0);
-  output(right, y, Flogic::NegatedOrOutputs + 0);
+  output(left, y, Flogic::ZAndOutputs + 0);
+  output(lc, y, Flogic::ZNandOutputs + 0);
+  output(rc, y, Flogic::ZNorOutputs + 0);
+  output(right, y, Flogic::ZOrOutputs + 0);
 
   y = top + 2.F * dy;
-  output(left, y, Flogic::MaxOutputs + 0);
-  output(lc, y, Flogic::NegatedMaxOutputs + 0);
-  output(rc, y, Flogic::NegatedMinOutputs + 0);
-  output(right, y, Flogic::MinOutputs + 0);
+  output(left, y, Flogic::PAndOutputs + 0);
+  output(lc, y, Flogic::PNandOutputs + 0);
+  output(rc, y, Flogic::PNorOutputs + 0);
+  output(right, y, Flogic::POrOutputs + 0);
 
   top += hp2mm(10.F);
 
   y = top + 0.F * dy;
   input(left, y, Flogic::AInputs + 1);
-  button<ToggleButton>(lc, y, Flogic::NegateAButtons + 1);
-  button<ToggleButton>(rc, y, Flogic::NegateBButtons + 1);
+  button<ToggleButton>(lc, y, Flogic::ANotButtons + 1);
+  button<ToggleButton>(rc, y, Flogic::BNotButtons + 1);
   input(right, y, Flogic::BInputs + 1);
 
   y = top + 1.F * dy;
-  output(left, y, Flogic::AndOutputs + 1);
-  output(lc, y, Flogic::NegatedAndOutputs + 1);
-  output(rc, y, Flogic::NegatedOrOutputs + 1);
-  output(right, y, Flogic::OrOutputs + 1);
+  output(left, y, Flogic::ZAndOutputs + 1);
+  output(lc, y, Flogic::ZNandOutputs + 1);
+  output(rc, y, Flogic::ZNorOutputs + 1);
+  output(right, y, Flogic::ZOrOutputs + 1);
 
   y = top + 2.F * dy;
-  output(left, y, Flogic::MaxOutputs + 1);
-  output(lc, y, Flogic::NegatedMaxOutputs + 1);
-  output(rc, y, Flogic::MinOutputs + 1);
-  output(right, y, Flogic::NegatedMinOutputs + 1);
+  output(left, y, Flogic::PAndOutputs + 1);
+  output(lc, y, Flogic::PNandOutputs + 1);
+  output(rc, y, Flogic::PNorOutputs + 1);
+  output(right, y, Flogic::POrOutputs + 1);
 }
 } // namespace dhe

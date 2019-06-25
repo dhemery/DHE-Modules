@@ -13,20 +13,20 @@ public:
     outputs[negatedOutputId].setVoltage(10.F - voltage);
   }
 
-  enum ParameterIds { NegateAButtons, NegateBButtons = NegateAButtons + 2, ParameterCount = NegateBButtons + 2 };
+  enum ParameterIds { ANotButtons, BNotButtons = ANotButtons + 2, ParameterCount = BNotButtons + 2 };
 
   enum InputIds { AInputs, BInputs = AInputs + 2, InputCount = BInputs + 2 };
 
   enum OutputIds {
-    MaxOutputs,
-    NegatedMaxOutputs = MaxOutputs + 2,
-    MinOutputs = NegatedMaxOutputs + 2,
-    NegatedMinOutputs = MinOutputs + 2,
-    AndOutputs = NegatedMinOutputs + 2,
-    NegatedAndOutputs = AndOutputs + 2,
-    OrOutputs = NegatedAndOutputs + 2,
-    NegatedOrOutputs = OrOutputs + 2,
-    OutputCount = NegatedOrOutputs + 2
+    ZOrOutputs,
+    ZNorOutputs = ZOrOutputs + 2,
+    ZAndOutputs = ZNorOutputs + 2,
+    ZNandOutputs = ZAndOutputs + 2,
+    PAndOutputs = ZNandOutputs + 2,
+    PNandOutputs = PAndOutputs + 2,
+    POrOutputs = PNandOutputs + 2,
+    PNorOutputs = POrOutputs + 2,
+    OutputCount = PNorOutputs + 2
   };
 };
 

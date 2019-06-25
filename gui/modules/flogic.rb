@@ -21,16 +21,16 @@ button(x: rc, y: y, label: '¬')
 port(x: right, y: y, label: 'B')
 
 y = hp2mm(top + 1 * dy)
-output_port(x: left, y: y, label: 'AND')
+output_port(x: left, y: y, label: 'A∧B')
 output_port(x: lc, y: y, label: '¬')
 output_port(x: rc, y: y, label: '¬')
-output_port(x: right, y: y, label: 'OR')
+output_port(x: right, y: y, label: 'A∨B')
 
 y = hp2mm(top + 2 * dy)
-output_port(x: left, y: y, label: 'MAX')
 output_port(x: lc, y: y, label: '¬')
+output_port(x: left, y: y, label: 'P(A∧B)')
 output_port(x: rc, y: y, label: '¬')
-output_port(x: right, y: y, label: 'MIN')
+output_port(x: right, y: y, label: 'P(A∨B)')
 
 top += 10
 
@@ -41,14 +41,13 @@ button(x: rc, y: y, label: '¬')
 port(x: right, y: y, label: 'B')
 
 y = hp2mm(top + 1 * dy)
-output_port(x: left, y: y, label: 'AND')
+output_port(x: left, y: y, label: 'A∧B')
 output_port(x: lc, y: y, label: '¬')
 output_port(x: rc, y: y, label: '¬')
-output_port(x: right, y: y, label: 'OR')
+output_port(x: right, y: y, label: 'A∨B')
 
 y = hp2mm(top + 2 * dy)
-output_port(x: left, y: y, label: 'MAX')
 output_port(x: lc, y: y, label: '¬')
+output_port(x: left, y: y, label: 'P(A∧B)')
 output_port(x: rc, y: y, label: '¬')
-output_port(x: right, y: y, label: 'MIN')
-
+output_port(x: right, y: y, label: 'P(A∨B)')
