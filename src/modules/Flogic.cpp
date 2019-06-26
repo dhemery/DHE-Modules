@@ -1,6 +1,5 @@
 #include "modules/Flogic.h"
 
-#include "modules/controls/CommonConfig.h"
 #include "modules/controls/CommonInputs.h"
 
 #include <algorithm>
@@ -10,27 +9,36 @@ namespace dhe {
 
 Flogic::Flogic() {
   config(ParameterCount, InputCount, OutputCount);
-  configParam(ANotButtons + 0, 0.F, 1.F, 0.F, "Negate A");
-  configParam(BNotButtons + 0, 0.F, 1.F, 0.F, "Negate B");
-  configParam(ANotButtons + 1, 0.F, 1.F, 0.F, "Negate C");
-  configParam(BNotButtons + 1, 0.F, 1.F, 0.F, "Negate D");
+  configParam(NotAButton, 0.F, 1.F, 0.F, "Negate A");
+  configParam(NotBButton, 0.F, 1.F, 0.F, "Negate B");
 }
 
 void Flogic::process(const rack::engine::Module::ProcessArgs & /*ignored*/) {
-  for (int i = 0; i < 2; i++) {
-    auto const aInput = inputs[AInputs + i].getVoltage();
-    auto const bInput = inputs[BInputs + i].getVoltage();
-    auto const a = buttonIsPressed(this, ANotButtons + i) ? 10.F - aInput : aInput;
-    auto const b = buttonIsPressed(this, BNotButtons + i) ? 10.F - bInput : bInput;
-    auto const zOr = std::max(a, b);
-    auto const zAnd = std::min(a, b);
-    auto const pAnd = a * b * 0.1F;
-    auto const pOr = a + b - pAnd;
-    setOutputs(PAndOutputs + i, PNandOutputs + i, pAnd);
-    setOutputs(POrOutputs + i, PNorOutputs + i, pOr);
-    setOutputs(ZOrOutputs + i, ZNorOutputs + i, zOr);
-    setOutputs(ZAndOutputs + i, ZNandOutputs + i, zAnd);
-  }
+  auto const aInput = inputs[AInput].getVoltage();
+  auto const bInput = inputs[BInput].getVoltage();
+  auto const a = buttonIsPressed(this, NotAButton) ? 10.F - aInput : aInput;
+  auto const notA = 10.F - a;
+  auto const b = buttonIsPressed(this, NotBButton) ? 10.F - bInput : bInput;
+  auto const notB = 10.F - b;
+
+  auto const aAndB = std::min(a, b);
+  auto const aOrB = std::max(a, b);
+  auto const aXorB = a + b - (aAndB + aAndB);
+  auto const probAAndB = a * b * 0.1F;
+  auto const probAOrb = a + b - probAAndB;
+  auto const aImpliesB = 10.F - std::min(a, notB);
+  auto const bImpliesA = 10.F - std::min(notA, b);
+
+  setOutputs(AndOutput, NandOutput, aAndB);
+  setOutputs(OrOutput, NorOutput, aOrB);
+  setOutputs(XorOutput, XnorOutput, aXorB);
+  setOutputs(PAndOutput, PNandOutput, probAAndB);
+  setOutputs(POrOutput, PNorOutput, probAOrb);
+  setOutputs(AImpliesBOutput, ANotImpliesBOutput, aImpliesB);
+  setOutputs(BImpliesAOutput, BNotImpliesAOutput, bImpliesA);
+
+  outputs[NotAOutput].setVoltage(notA);
+  outputs[NotBOutput].setVoltage(notB);
 }
 
 } // namespace dhe

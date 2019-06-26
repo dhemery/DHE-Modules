@@ -125,15 +125,6 @@
       "tags": [
         "LFO"
       ]
-    },
-    {
-      "slug": "Zadeh",
-      "name": "Zadeh",
-      "description": "Computes fuzzy logic functions",
-      "tags": [
-        "Logic",
-        "Dual"
-      ]
     }
   ]
 }

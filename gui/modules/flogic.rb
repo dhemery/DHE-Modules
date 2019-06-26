@@ -10,7 +10,7 @@ lc = hp2mm(3.25)
 rc = hp2mm(5.75)
 right = hp2mm(7.5)
 
-top = 5
+top = 4.75
 dy = 4
 
 y = hp2mm(top + 0 * dy)
@@ -31,15 +31,14 @@ output_port(x: lc, y: y, label: '¬B')
 output_port(x: rc, y: y, label: '¬')
 output_port(x: right, y: y, label: 'A⊻B')
 
-y = hp2mm(top + 4 * dy)
-output_port(x: left, y: y, label: 'A⊃B')
-output_port(x: lc, y: y, label: '¬')
-output_port(x: rc, y: y, label: '¬')
-output_port(x: right, y: y, label: 'A⊂B')
-
 y = hp2mm(top + 3 * dy)
 output_port(x: left, y: y, label: 'A⋂B')
 output_port(x: lc, y: y, label: '¬')
 output_port(x: rc, y: y, label: '¬')
 output_port(x: right, y: y, label: 'A⋃B')
 
+y = hp2mm(top + 4 * dy)
+output_port(x: left, y: y, label: 'A⊃B')
+output_port(x: lc, y: y, label: '¬')
+output_port(x: rc, y: y, label: '¬')
+output_port(x: right, y: y, label: 'A⊂B')

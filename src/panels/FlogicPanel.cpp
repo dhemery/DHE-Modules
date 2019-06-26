@@ -2,51 +2,43 @@
 
 namespace dhe {
 
-FlogicPanel::FlogicPanel(Flogic *flogic) : Panel{flogic, hp} {
+FlogicPanel::FlogicPanel(Flogic *zadeh) : Panel{zadeh, hp} {
   auto const left = hp2mm(1.5F);
   auto const lc = hp2mm(3.25F);
   auto const rc = hp2mm(5.75F);
   auto const right = hp2mm(7.5F);
 
-  auto const dy = hp2mm(3.F);
-  auto top = hp2mm(4.5F);
+  auto top = hp2mm(4.75F);
+  auto const dy = hp2mm(4.F);
 
   auto y = top + 0.F * dy;
-  input(left, y, Flogic::AInputs + 0);
-  button<ToggleButton>(lc, y, Flogic::ANotButtons + 0);
-  button<ToggleButton>(rc, y, Flogic::BNotButtons + 0);
-  input(right, y, Flogic::BInputs + 0);
+  input(left, y, Flogic::AInput);
+  button<ToggleButton>(lc, y, Flogic::NotAButton);
+  button<ToggleButton>(rc, y, Flogic::NotBButton);
+  input(right, y, Flogic::BInput);
 
   y = top + 1.F * dy;
-  output(left, y, Flogic::ZAndOutputs + 0);
-  output(lc, y, Flogic::ZNandOutputs + 0);
-  output(rc, y, Flogic::ZNorOutputs + 0);
-  output(right, y, Flogic::ZOrOutputs + 0);
+  output(left, y, Flogic::AndOutput);
+  output(lc, y, Flogic::NandOutput);
+  output(rc, y, Flogic::NorOutput);
+  output(right, y, Flogic::OrOutput);
 
   y = top + 2.F * dy;
-  output(left, y, Flogic::PAndOutputs + 0);
-  output(lc, y, Flogic::PNandOutputs + 0);
-  output(rc, y, Flogic::PNorOutputs + 0);
-  output(right, y, Flogic::POrOutputs + 0);
+  output(left, y, Flogic::NotAOutput);
+  output(lc, y, Flogic::NotBOutput);
+  output(rc, y, Flogic::XnorOutput);
+  output(right, y, Flogic::XorOutput);
 
-  top += hp2mm(10.F);
+  y = top + 4.F * dy;
+  output(left, y, Flogic::PAndOutput);
+  output(lc, y, Flogic::PNandOutput);
+  output(rc, y, Flogic::PNorOutput);
+  output(right, y, Flogic::POrOutput);
 
-  y = top + 0.F * dy;
-  input(left, y, Flogic::AInputs + 1);
-  button<ToggleButton>(lc, y, Flogic::ANotButtons + 1);
-  button<ToggleButton>(rc, y, Flogic::BNotButtons + 1);
-  input(right, y, Flogic::BInputs + 1);
-
-  y = top + 1.F * dy;
-  output(left, y, Flogic::ZAndOutputs + 1);
-  output(lc, y, Flogic::ZNandOutputs + 1);
-  output(rc, y, Flogic::ZNorOutputs + 1);
-  output(right, y, Flogic::ZOrOutputs + 1);
-
-  y = top + 2.F * dy;
-  output(left, y, Flogic::PAndOutputs + 1);
-  output(lc, y, Flogic::PNandOutputs + 1);
-  output(rc, y, Flogic::PNorOutputs + 1);
-  output(right, y, Flogic::POrOutputs + 1);
+  y = top + 3.F * dy;
+  output(left, y, Flogic::AImpliesBOutput);
+  output(lc, y, Flogic::ANotImpliesBOutput);
+  output(rc, y, Flogic::BNotImpliesAOutput);
+  output(right, y, Flogic::BImpliesAOutput);
 }
 } // namespace dhe

@@ -12,9 +12,7 @@
 #include "panels/TapersPanel.h"
 #include "panels/UpstagePanel.h"
 #include "panels/XycloidPanel.h"
-#include "panels/ZadehPanel.h"
 
-#include <modules/Zadeh.h>
 #include <plugin/Plugin.hpp>
 #include <plugin/callbacks.hpp>
 
@@ -37,5 +35,4 @@ void init(rack::plugin::Plugin *p) {
   p->addModel(rack::createModel<dhe::Tapers, dhe::TapersPanel>("Tapers"));
   p->addModel(rack::createModel<dhe::Upstage, dhe::UpstagePanel>("Upstage"));
   p->addModel(rack::createModel<dhe::Xycloid, dhe::XycloidPanel>("Xycloid"));
-  p->addModel(rack::createModel<dhe::Zadeh, dhe::ZadehPanel>("Zadeh"));
 }
