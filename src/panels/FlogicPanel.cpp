@@ -2,7 +2,7 @@
 
 namespace dhe {
 
-FlogicPanel::FlogicPanel(Flogic *zadeh) : Panel{zadeh, hp} {
+FlogicPanel::FlogicPanel(Flogic *flogic) : Panel{flogic, hp} {
   auto const left = hp2mm(1.5F);
   auto const lc = hp2mm(3.25F);
   auto const rc = hp2mm(5.75F);
