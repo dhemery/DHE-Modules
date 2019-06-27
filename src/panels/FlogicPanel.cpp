@@ -8,8 +8,8 @@ FlogicPanel::FlogicPanel(Flogic *flogic) : Panel{flogic, hp} {
   auto const rc = hp2mm(5.75F);
   auto const right = hp2mm(7.5F);
 
-  auto top = hp2mm(4.75F);
-  auto const dy = hp2mm(4.F);
+  auto const top = hp2mm(4.F);
+  auto const dy = hp2mm(3.5F);
 
   auto y = top + 0.F * dy;
   input(left, y, Flogic::AInput);
@@ -18,27 +18,33 @@ FlogicPanel::FlogicPanel(Flogic *flogic) : Panel{flogic, hp} {
   input(right, y, Flogic::BInput);
 
   y = top + 1.F * dy;
-  output(left, y, Flogic::AndOutput);
-  output(lc, y, Flogic::NandOutput);
-  output(rc, y, Flogic::NorOutput);
-  output(right, y, Flogic::OrOutput);
+  output(left, y, Flogic::ZAndOutput);
+  output(lc, y, Flogic::ZNandOutput);
+  output(rc, y, Flogic::HNandOutput);
+  output(right, y, Flogic::HAndOutput);
 
   y = top + 2.F * dy;
-  output(left, y, Flogic::NotAOutput);
-  output(lc, y, Flogic::NotBOutput);
-  output(rc, y, Flogic::XnorOutput);
-  output(right, y, Flogic::XorOutput);
-
-  y = top + 4.F * dy;
-  output(left, y, Flogic::PAndOutput);
-  output(lc, y, Flogic::PNandOutput);
-  output(rc, y, Flogic::PNorOutput);
-  output(right, y, Flogic::POrOutput);
+  output(left, y, Flogic::ZOrOutput);
+  output(lc, y, Flogic::ZNorOutput);
+  output(rc, y, Flogic::HXnorOutput);
+  output(right, y, Flogic::HXorOutput);
 
   y = top + 3.F * dy;
-  output(left, y, Flogic::AImpliesBOutput);
-  output(lc, y, Flogic::ANotImpliesBOutput);
-  output(rc, y, Flogic::BNotImpliesAOutput);
-  output(right, y, Flogic::BImpliesAOutput);
+  output(left, y, Flogic::ZXorOutput);
+  output(lc, y, Flogic::ZXnorOutput);
+  output(rc, y, Flogic::HXnorOutput);
+  output(right, y, Flogic::HXorOutput);
+
+  y = top + 4.F * dy;
+  output(left, y, Flogic::ZImplicationOutput);
+  output(lc, y, Flogic::ZNonimplicationOutput);
+  output(rc, y, Flogic::HNonimplicationOutput);
+  output(right, y, Flogic::HImplicationOutput);
+
+  y = top + 5.F * dy;
+  output(left, y, Flogic::ZConverseImplicationOutput);
+  output(lc, y, Flogic::ZConverseNonimplicationOutput);
+  output(rc, y, Flogic::HConverseNonimplicationOutput);
+  output(right, y, Flogic::HConverseImplicationOutput);
 }
 } // namespace dhe
