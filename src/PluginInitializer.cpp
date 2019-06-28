@@ -1,9 +1,9 @@
 #include "panels/BlossomPanel.h"
 #include "panels/BoosterStagePanel.h"
 #include "panels/CubicPanel.h"
-#include "panels/FlogicPanel.h"
 #include "panels/Func6Panel.h"
 #include "panels/FuncPanel.h"
+#include "panels/FuzzyHPanel.h"
 #include "panels/GatorPanel.h"
 #include "panels/HostagePanel.h"
 #include "panels/RangerPanel.h"
@@ -25,7 +25,7 @@ void init(rack::plugin::Plugin *p) {
   p->addModel(rack::createModel<dhe::BoosterStage, dhe::BoosterStagePanel>("BoosterStage"));
   p->addModel(rack::createModel<dhe::Cubic, dhe::CubicPanel>("Cubic"));
   p->addModel(rack::createModel<dhe::Func, dhe::FuncPanel>("Func"));
-  p->addModel(rack::createModel<dhe::Flogic, dhe::FlogicPanel>("Flogic"));
+  p->addModel(rack::createModel<dhe::FuzzyH, dhe::FuzzyHPanel>("FuzzyH"));
   p->addModel(rack::createModel<dhe::Func6, dhe::Func6Panel>("Func6"));
   p->addModel(rack::createModel<dhe::Gator, dhe::GatorPanel>("Gator"));
   p->addModel(rack::createModel<dhe::Hostage, dhe::HostagePanel>("Hostage"));

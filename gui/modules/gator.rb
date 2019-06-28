@@ -1,6 +1,6 @@
 name 'GATOR'
 hp 9
-# hue = 165
+
 hue = 240
 foreground [hue, 100, 30]
 background [hue, 100, 97]
