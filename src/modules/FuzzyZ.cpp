@@ -1,4 +1,4 @@
-#include "modules/FuzzyH.h"
+#include "modules/FuzzyZ.h"
 
 #include "modules/controls/CommonInputs.h"
 
@@ -7,7 +7,7 @@
 
 namespace dhe {
 
-FuzzyH::FuzzyH() {
+FuzzyZ::FuzzyZ() {
   config(ParameterCount, InputCount, OutputCount);
   configParam(NotAButtons + 0, 0.F, 1.F, 0.F, "Negate A");
   configParam(NotBButtons + 0, 0.F, 1.F, 0.F, "Negate B");
@@ -15,7 +15,7 @@ FuzzyH::FuzzyH() {
   configParam(NotBButtons + 1, 0.F, 1.F, 0.F, "Negate D");
 }
 
-void FuzzyH::process(const rack::engine::Module::ProcessArgs & /*ignored*/) {
+void FuzzyZ::process(const rack::engine::Module::ProcessArgs & /*ignored*/) {
   for (int i = 0; i < 2; i++) {
     auto const aInput = inputs[AInputs + i].getVoltage();
     auto const bInput = inputs[BInputs + i].getVoltage();
@@ -24,11 +24,11 @@ void FuzzyH::process(const rack::engine::Module::ProcessArgs & /*ignored*/) {
     auto const b = buttonIsPressed(this, NotBButtons + i) ? 10.F - bInput : bInput;
     auto const notB = 10.F - b;
 
-    auto const conjunction = a * b * 0.1F;
-    auto const disjunction = a + b - conjunction;
+    auto const conjunction = std::min(a, b);
+    auto const disjunction = std::max(a, b);
     auto const exclusiveDisjunction = disjunction - conjunction;
-    auto const implication = notA + conjunction;
-    auto const converseImplication = notB + conjunction;
+    auto const implication = 10.F - std::min(a, notB);
+    auto const converseImplication = 10.F - std::min(notA, b);
 
     setOutputs(AndOutputs + i, NandOutputs + i, conjunction);
     setOutputs(OrOutputs + i, NorOutputs + i, disjunction);
