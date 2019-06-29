@@ -6,7 +6,8 @@ title: Release Notes
 
 ## Version 1.0.3
 
-- Added [_Flogic_]({{ '/modules/flogic' | relative_url }}).
+- Added [_Fuzzy Logic H_]({{ '/modules/fuzzy-logic-h' | relative_url }}).
+- Added [_Fuzzy Logic Z_]({{ '/modules/fuzzy-logic-z' | relative_url }}).
 
 ## Version 1.0.2
 

@@ -45,11 +45,17 @@ and more.
 
 ### Logic
 
-[![_Flogic_](modules/flogic/flogic.svg)](modules/flogic/)
+[![_Fuzzy Logic H_](modules/fuzzy-logic-h/fuzzy-logic-h.svg)](modules/fuzzy-logic-h/)
+[![_Fuzzy Logic Z_](modules/fuzzy-logic-z/fuzzy-logic-z.svg)](modules/fuzzy-logic-z/)
 [![_Gator_](modules/gator/gator.svg)](modules/gator/)
 
-**[_Flogic_](modules/flogic/)**
-computes eight fuzzy logic functions.
+**[_Fuzzy Logic H_](modules/fuzzy-logic-h/)**
+combines signals by applying ten fuzzy logic operators
+based on hyperbolic paraboloids.
+
+**[_Fuzzy Logic Z_](modules/fuzzy-logic-z/)**
+combines signals by applying ten fuzzy logic operators
+defined by Lofti Zadah.
 
 **[_Gator_](modules/gator/)**
 computes eight common logic functions
