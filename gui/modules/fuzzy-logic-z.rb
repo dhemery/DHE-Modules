@@ -1,4 +1,4 @@
-name 'FUZZY Z'
+name 'FUZZY LOGIC Z'
 hp 9
 
 hue = 240

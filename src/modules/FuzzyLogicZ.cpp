@@ -1,4 +1,4 @@
-#include "modules/FuzzyZ.h"
+#include "modules/FuzzyLogicZ.h"
 
 #include "modules/controls/CommonInputs.h"
 
@@ -7,7 +7,7 @@
 
 namespace dhe {
 
-FuzzyZ::FuzzyZ() {
+FuzzyLogicZ::FuzzyLogicZ() {
   config(ParameterCount, InputCount, OutputCount);
   configParam(NotAButtons + 0, 0.F, 1.F, 0.F, "Negate A");
   configParam(NotBButtons + 0, 0.F, 1.F, 0.F, "Negate B");
@@ -15,7 +15,7 @@ FuzzyZ::FuzzyZ() {
   configParam(NotBButtons + 1, 0.F, 1.F, 0.F, "Negate D");
 }
 
-void FuzzyZ::process(const rack::engine::Module::ProcessArgs & /*ignored*/) {
+void FuzzyLogicZ::process(const rack::engine::Module::ProcessArgs & /*ignored*/) {
   for (int i = 0; i < 2; i++) {
     auto const aInput = inputs[AInputs + i].getVoltage();
     auto const bInput = inputs[BInputs + i].getVoltage();

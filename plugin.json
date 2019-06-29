@@ -37,8 +37,8 @@
       ]
     },
     {
-      "slug": "FuzzyH",
-      "name": "Fuzzy H",
+      "slug": "FuzzyLogicH",
+      "name": "Fuzzy Logic H",
       "description": "Computes ten hyperbolic parabaloid fuzzy logic functions",
       "tags": [
         "Logic",
@@ -46,8 +46,8 @@
       ]
     },
     {
-      "slug": "FuzzyZ",
-      "name": "Fuzzy Z",
+      "slug": "FuzzyLogicZ",
+      "name": "Fuzzy Logic Z",
       "description": "Computes ten “Zadeh” fuzzy logic functions",
       "tags": [
         "Logic",

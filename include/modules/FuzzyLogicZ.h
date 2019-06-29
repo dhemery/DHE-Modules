@@ -3,9 +3,9 @@
 
 namespace dhe {
 
-class FuzzyH : public rack::engine::Module {
+class FuzzyLogicZ : public rack::engine::Module {
 public:
-  FuzzyH();
+  FuzzyLogicZ();
   void process(const ProcessArgs &args) override;
 
   void setOutputs(int outputId, int negatedOutputId, float voltage) {
