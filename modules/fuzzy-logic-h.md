@@ -16,9 +16,9 @@ _Fuzzy Logic H_
 can emit **very large voltages.**
 Before using _Fuzzy Logic H_
 with audio signals,
-before feeding _Fuzzy Logic H_'s outputs
+and before feeding _Fuzzy Logic H_'s outputs
 back into its inputs,
-**[read the warnings carefully](#warnings).**
+***[READ THE WARNINGS CAREFULLY](#warnings)!***
 
 ## Ports
 - **A** and **B**:
@@ -77,7 +77,7 @@ if given input voltages above 10V or below 0V.**
   between 0V and 10V.
 - Input signals above 10V or below 0V
   can produce large output signals.
-- Input signal even _moderately_ above 10V or below 0V
+- Input signals even _moderately_ above 10V or below 0V
   can produce ***VERY*** large output signals.
 - Feeding _Fuzzy Logic H_'s outputs
   back into its inputs
