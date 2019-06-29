@@ -24,17 +24,17 @@ void FuzzyLogicZ::process(const rack::engine::Module::ProcessArgs & /*ignored*/)
     auto const b = buttonIsPressed(this, NotBButtons + i) ? 10.F - bInput : bInput;
     auto const notB = 10.F - b;
 
-    auto const conjunction = std::min(a, b);
-    auto const disjunction = std::max(a, b);
-    auto const exclusiveDisjunction = disjunction - conjunction;
-    auto const implication = 10.F - std::min(a, notB);
-    auto const converseImplication = 10.F - std::min(notA, b);
+    auto const aAndB = std::min(a, b);
+    auto const aOrB = std::max(a, b);
+    auto const aXorB = aOrB - aAndB;
+    auto const aImpliesB = std::max(notA, b);
+    auto const bImpliesA = std::max(a, notB);
 
-    setOutputs(AndOutputs + i, NandOutputs + i, conjunction);
-    setOutputs(OrOutputs + i, NorOutputs + i, disjunction);
-    setOutputs(XorOutputs + i, XnorOutputs + i, exclusiveDisjunction);
-    setOutputs(ImplicationOutputs + i, NonimplicationOutputs + i, implication);
-    setOutputs(ConverseImplicationOutputs + i, ConverseNonimplicationOutputs + i, converseImplication);
+    setOutputs(AndOutputs + i, NandOutputs + i, aAndB);
+    setOutputs(OrOutputs + i, NorOutputs + i, aOrB);
+    setOutputs(XorOutputs + i, XnorOutputs + i, aXorB);
+    setOutputs(ImplicationOutputs + i, NonimplicationOutputs + i, aImpliesB);
+    setOutputs(ConverseImplicationOutputs + i, ConverseNonimplicationOutputs + i, bImpliesA);
   }
 }
 

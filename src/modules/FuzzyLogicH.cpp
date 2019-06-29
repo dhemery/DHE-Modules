@@ -24,17 +24,17 @@ void FuzzyLogicH::process(const rack::engine::Module::ProcessArgs & /*ignored*/)
     auto const b = buttonIsPressed(this, NotBButtons + i) ? 10.F - bInput : bInput;
     auto const notB = 10.F - b;
 
-    auto const conjunction = a * b * 0.1F;
-    auto const disjunction = a + b - conjunction;
-    auto const exclusiveDisjunction = disjunction - conjunction;
-    auto const implication = notA + conjunction;
-    auto const converseImplication = notB + conjunction;
+    auto const aAndB = a * b * 0.1F;
+    auto const aOrB = a + b - aAndB;
+    auto const aXorB = aOrB - aAndB;
+    auto const aImpliesB = notA + aAndB;
+    auto const bImpliesA = notB + aAndB;
 
-    setOutputs(AndOutputs + i, NandOutputs + i, conjunction);
-    setOutputs(OrOutputs + i, NorOutputs + i, disjunction);
-    setOutputs(XorOutputs + i, XnorOutputs + i, exclusiveDisjunction);
-    setOutputs(ImplicationOutputs + i, NonimplicationOutputs + i, implication);
-    setOutputs(ConverseImplicationOutputs + i, ConverseNonimplicationOutputs + i, converseImplication);
+    setOutputs(AndOutputs + i, NandOutputs + i, aAndB);
+    setOutputs(OrOutputs + i, NorOutputs + i, aOrB);
+    setOutputs(XorOutputs + i, XnorOutputs + i, aXorB);
+    setOutputs(ImplicationOutputs + i, NonimplicationOutputs + i, aImpliesB);
+    setOutputs(ConverseImplicationOutputs + i, ConverseNonimplicationOutputs + i, bImpliesA);
   }
 }
 
