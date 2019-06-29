@@ -55,7 +55,7 @@ based on hyperbolic paraboloids.
 
 **[_Fuzzy Logic Z_](modules/fuzzy-logic-z/)**
 combines signals by applying ten fuzzy logic operators
-defined by Lofti Zadah.
+defined by Lofti Zadeh.
 
 **[_Gator_](modules/gator/)**
 computes eight common logic functions
