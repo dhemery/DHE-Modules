@@ -11,6 +11,15 @@ with identical functionality.
 Only the left column, which operates on the A and B inputs, is described below.
 The right column applies the same operators to the C and D inputs.
 
+**WARNING:**
+_Fuzzy Logic H_
+can emit **very large voltages.**
+Before using _Fuzzy Logic H_
+with audio signals,
+before feeding _Fuzzy Logic H_'s outputs
+back into its inputs,
+**[read the warnings carefully](#warnings).**
+
 ## Ports
 - **A** and **B**:
     The inputs to the operators.
@@ -56,3 +65,37 @@ The right column applies the same operators to the C and D inputs.
 - **Alternate Fuzzy Logic.**
   For fuzzy logic based on Lofti Zadeh's more standard definitions of the same operators,
   try **[_Fuzzy Logic Z_]({{ 'modules/fuzzy-logic-z/'  | relative_url }} ).**
+  
+  
+## Warnings
+
+**_Fuzzy Logic H_ can produce _VERY_ large output voltages
+if given input voltages above 10V or below 0V.**
+
+- _Fuzzy Logic H_
+  is well-defined and well-behaved for input signals
+  between 0V and 10V.
+- Input signals above 10V or below 0V
+  can produce large output signals.
+- Input signal even _moderately_ above 10V or below 0V
+  can produce ***VERY*** large output signals.
+- Feeding _Fuzzy Logic H_'s outputs
+  back into its inputs
+  can produce ***VERY*** large output signals
+  if the inputs are only _slightly_
+  above 10V or below 0V. 
+
+**Using _Fuzzy Logic H_ with audio signals.**
+Audio signals fall outside of _Fuzzy Logic H_'s
+"well-behaved" input range.
+If you want send audio signals to _Fuzzy Logic H_'s inputs,
+consider:
+- Before sending an audio signal to _Fuzzy Logic H_,
+  offset it by +5V
+  to translate it into the range \[0V, 10V\].
+- Note that some audio signals peak above 5V or below -5V.
+  You may need to attenuate such signals
+  or otherwise adjust them
+  before sending them into _Fuzzy Logic H_.
+- Offset each _Fuzzy Logic H_ output signal by -5V
+  to translate it into audio range. 
