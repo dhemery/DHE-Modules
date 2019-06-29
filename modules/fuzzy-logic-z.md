@@ -24,10 +24,10 @@ The right column applies the same operators to the C and D inputs.
 - **XOR:**
   emits _A+B-2*min(A,B)_.
 
-- **A ▶ B** (A implies B):
+- **A &#x25b6; B** (A implies B):
   emits _1-min(A,1-B)_.
 
-- **A ◀︎ B** (B implies A):
+- **A &#x25c0; B** (B implies A):
   emits _1-min(1-A,B)_.
 
 - **¬ port**:
@@ -55,4 +55,4 @@ The right column applies the same operators to the C and D inputs.
   to scale it to the "unipolar voltage" range \[0V, 10V\].
 - **Alternate Fuzzy Logic.**
   For fuzzy logic based on the less common "hyperbolic paraboloid" fuzzy operators,
-  try **[_Fuzzy Logic H_]({{ 'modules/fuzzy-logic-H/'  | relative_url }} ).**
+  try **[_Fuzzy Logic H_]({{ 'modules/fuzzy-logic-h/'  | relative_url }} ).**

@@ -24,10 +24,10 @@ The right column applies the same operators to the C and D inputs.
 - **XOR:**
   emits _A+B-(2*A*B)_.
 
-- **A ▶ B** (A implies B):
+- **A &#x25b6; B** (A implies B):
   emits _1-A+(A*B)_.
 
-- **A ◀︎ B** (B implies A):
+- **A &#x25c0; B** (B implies A):
   emits _1-B+(A*B)_.
 
 - **¬ port**:
