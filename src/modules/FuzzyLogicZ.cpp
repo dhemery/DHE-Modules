@@ -1,6 +1,8 @@
 #include "modules/FuzzyLogicZ.h"
 
 #include "modules/controls/CommonInputs.h"
+#include "modules/controls/LevelConfig.h"
+#include "modules/controls/LevelInputs.h"
 
 #include <algorithm>
 #include <panels/Panel.h>
@@ -13,12 +15,14 @@ FuzzyLogicZ::FuzzyLogicZ() {
   configParam(NotBButtons + 0, 0.F, 1.F, 0.F, "Negate B");
   configParam(NotAButtons + 1, 0.F, 1.F, 0.F, "Negate C");
   configParam(NotBButtons + 1, 0.F, 1.F, 0.F, "Negate D");
+  configLevelRangeSwitch(this, LevelRangeSwitch, "Level Range");
 }
 
 void FuzzyLogicZ::process(const rack::engine::Module::ProcessArgs & /*ignored*/) {
+  auto const voltageOffset = 10.F - levelRange(this, LevelRangeSwitch)->upperBound();
   for (int i = 0; i < 2; i++) {
-    auto const aInput = inputs[AInputs + i].getVoltage();
-    auto const bInput = inputs[BInputs + i].getVoltage();
+    auto const aInput = inputs[AInputs + i].getVoltage() + voltageOffset;
+    auto const bInput = inputs[BInputs + i].getVoltage() + voltageOffset;
     auto const a = buttonIsPressed(this, NotAButtons + i) ? 10.F - aInput : aInput;
     auto const notA = 10.F - a;
     auto const b = buttonIsPressed(this, NotBButtons + i) ? 10.F - bInput : bInput;
@@ -30,11 +34,11 @@ void FuzzyLogicZ::process(const rack::engine::Module::ProcessArgs & /*ignored*/)
     auto const aImpliesB = std::max(notA, b);
     auto const bImpliesA = std::max(a, notB);
 
-    setOutputs(AndOutputs + i, NandOutputs + i, aAndB);
-    setOutputs(OrOutputs + i, NorOutputs + i, aOrB);
-    setOutputs(XorOutputs + i, XnorOutputs + i, aXorB);
-    setOutputs(ImplicationOutputs + i, NonimplicationOutputs + i, aImpliesB);
-    setOutputs(ConverseImplicationOutputs + i, ConverseNonimplicationOutputs + i, bImpliesA);
+    setOutputs(AndOutputs + i, NandOutputs + i, aAndB - voltageOffset);
+    setOutputs(OrOutputs + i, NorOutputs + i, aOrB - voltageOffset);
+    setOutputs(XorOutputs + i, XnorOutputs + i, aXorB - voltageOffset);
+    setOutputs(ImplicationOutputs + i, NonimplicationOutputs + i, aImpliesB - voltageOffset);
+    setOutputs(ConverseImplicationOutputs + i, ConverseNonimplicationOutputs + i, bImpliesA - voltageOffset);
   }
 }
 

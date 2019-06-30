@@ -13,7 +13,7 @@ public:
     outputs[negatedOutputId].setVoltage(10.F - voltage);
   }
 
-  enum ParameterIds { NotAButtons, NotBButtons = NotAButtons + 2, ParameterCount = NotBButtons + 2 };
+  enum ParameterIds { NotAButtons, NotBButtons = NotAButtons + 2, LevelRangeSwitch = NotBButtons + 2, ParameterCount };
 
   enum InputIds { AInputs, BInputs = AInputs + 2, InputCount = BInputs + 2 };
 

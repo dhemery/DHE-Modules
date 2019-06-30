@@ -39,7 +39,7 @@
     {
       "slug": "FuzzyLogicH",
       "name": "Fuzzy Logic H",
-      "description": "Computes ten hyperbolic parabaloid fuzzy logic functions",
+      "description": "Combines signals by applying hyperbolic paraboloid fuzzy logic operators",
       "tags": [
         "Logic",
         "Dual"
@@ -48,7 +48,7 @@
     {
       "slug": "FuzzyLogicZ",
       "name": "Fuzzy Logic Z",
-      "description": "Computes ten “Zadeh” fuzzy logic functions",
+      "description": "Combines signals by applying Lofti Zadeh’s fuzzy logic operators",
       "tags": [
         "Logic",
         "Dual"
