@@ -2,7 +2,6 @@
 
 #include "modules/controls/CommonInputs.h"
 #include "modules/controls/LevelConfig.h"
-#include "modules/controls/LevelInputs.h"
 
 #include <algorithm>
 #include <panels/Panel.h>
@@ -19,7 +18,7 @@ FuzzyLogicZ::FuzzyLogicZ() {
 }
 
 void FuzzyLogicZ::process(const rack::engine::Module::ProcessArgs & /*ignored*/) {
-  auto const voltageOffset = 10.F - levelRange(this, LevelRangeSwitch)->upperBound();
+  auto const voltageOffset = switchPosition(this, LevelRangeSwitch) == 1 ? 0.F : 5.F;
   for (int i = 0; i < 2; i++) {
     auto const aInput = inputs[AInputs + i].getVoltage() + voltageOffset;
     auto const bInput = inputs[BInputs + i].getVoltage() + voltageOffset;
@@ -34,11 +33,11 @@ void FuzzyLogicZ::process(const rack::engine::Module::ProcessArgs & /*ignored*/)
     auto const aImpliesB = std::max(notA, b);
     auto const bImpliesA = std::max(a, notB);
 
-    setOutputs(AndOutputs + i, NandOutputs + i, aAndB - voltageOffset);
-    setOutputs(OrOutputs + i, NorOutputs + i, aOrB - voltageOffset);
-    setOutputs(XorOutputs + i, XnorOutputs + i, aXorB - voltageOffset);
-    setOutputs(ImplicationOutputs + i, NonimplicationOutputs + i, aImpliesB - voltageOffset);
-    setOutputs(ConverseImplicationOutputs + i, ConverseNonimplicationOutputs + i, bImpliesA - voltageOffset);
+    setOutputs(AndOutputs + i, NandOutputs + i, aAndB, voltageOffset);
+    setOutputs(OrOutputs + i, NorOutputs + i, aOrB, voltageOffset);
+    setOutputs(XorOutputs + i, XnorOutputs + i, aXorB, voltageOffset);
+    setOutputs(ImplicationOutputs + i, NonimplicationOutputs + i, aImpliesB, voltageOffset);
+    setOutputs(ConverseImplicationOutputs + i, ConverseNonimplicationOutputs + i, bImpliesA, voltageOffset);
   }
 }
 

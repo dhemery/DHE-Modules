@@ -8,9 +8,9 @@ public:
   FuzzyLogicH();
   void process(const ProcessArgs &args) override;
 
-  void setOutputs(int outputId, int negatedOutputId, float voltage) {
-    outputs[outputId].setVoltage(voltage);
-    outputs[negatedOutputId].setVoltage(10.F - voltage);
+  void setOutputs(int outputId, int negatedOutputId, float voltage, float offset) {
+    outputs[outputId].setVoltage(voltage - offset);
+    outputs[negatedOutputId].setVoltage(10.F - voltage - offset);
   }
 
   enum ParameterIds { NotAButtons, NotBButtons = NotAButtons + 2, LevelRangeSwitch = NotBButtons + 2, ParameterCount };
