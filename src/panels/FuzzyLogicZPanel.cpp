@@ -38,8 +38,8 @@ FuzzyLogicZPanel::FuzzyLogicZPanel(FuzzyLogicZ *fuzzy) : Panel{fuzzy, hp} {
   y = top + 3.F * dy;
   output(abOuterColumn, y, FuzzyLogicZ::OrOutputs + 0);
   output(abInnerColumn, y, FuzzyLogicZ::NorOutputs + 0);
-  output(cdInnerColumn, y, FuzzyLogicZ::XnorOutputs + 1);
-  output(cdOuterColumn, y, FuzzyLogicZ::XorOutputs + 1);
+  output(cdInnerColumn, y, FuzzyLogicZ::NorOutputs + 1);
+  output(cdOuterColumn, y, FuzzyLogicZ::OrOutputs + 1);
 
   y = top + 4.F * dy;
   output(abOuterColumn, y, FuzzyLogicZ::XorOutputs + 0);
