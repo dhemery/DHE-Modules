@@ -4,6 +4,15 @@ title: Release Notes
 
 # DHE Modules Release Notes
 
+## Version 1.0.4
+
+- _Fuzzy Logic H_ and  _Fuzzy Logic Z_
+  - Add a _UNI / BI_ switch
+    to allow operating
+    on audio and other bipolar signals (-5V to 5V).
+  - The _OR_ and _NOR_ output port widgets for inputs _C_ and _D_
+    were incorrectly connected to the _XOR_ and _XNOR_ outputs.
+
 ## Version 1.0.3
 
 - Added [_Fuzzy Logic H_]({{ '/modules/fuzzy-logic-h' | relative_url }}).

@@ -50,11 +50,11 @@ and more.
 [![_Gator_](modules/gator/gator.svg)](modules/gator/)
 
 **[_Fuzzy Logic H_](modules/fuzzy-logic-h/)**
-combines signals by applying ten fuzzy logic operators
+combines signals by applying fuzzy logic operators
 based on hyperbolic paraboloids.
 
 **[_Fuzzy Logic Z_](modules/fuzzy-logic-z/)**
-combines signals by applying ten fuzzy logic operators
+combines signals by applying fuzzy logic operators
 defined by Lofti Zadeh.
 
 **[_Gator_](modules/gator/)**
