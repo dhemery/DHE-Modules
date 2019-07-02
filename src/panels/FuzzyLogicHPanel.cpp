@@ -32,8 +32,8 @@ FuzzyLogicHPanel::FuzzyLogicHPanel(FuzzyLogicH *fuzzy) : Panel{fuzzy, hp} {
   y = top + 3.F * dy;
   output(left, y, FuzzyLogicH::OrOutputs + 0);
   output(lc, y, FuzzyLogicH::NorOutputs + 0);
-  output(rc, y, FuzzyLogicH::XnorOutputs + 1);
-  output(right, y, FuzzyLogicH::XorOutputs + 1);
+  output(rc, y, FuzzyLogicH::NorOutputs + 1);
+  output(right, y, FuzzyLogicH::OrOutputs + 1);
 
   y = top + 4.F * dy;
   output(left, y, FuzzyLogicH::XorOutputs + 0);
