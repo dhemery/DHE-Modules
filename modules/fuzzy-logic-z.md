@@ -13,10 +13,29 @@ The right column applies the same operators to the C and D inputs.
 
 **WARNING:**
 _Fuzzy Logic Z_
-can emit **very large voltages**
+can produce **very large output voltages**
 if the input voltages
 are above or below the selected range.
 Please ***[READ THE WARNINGS CAREFULLY](#warnings)!***
+
+## Controls
+- **¬ button:**
+  Negates the corresponding input
+  by applying the _NOT_ unary operator
+  before applying the binary operators.
+  _NOT(x)_ is defined as _1-x_.
+
+- **UNI / BI:**
+    The input voltage range for which _Fuzzy Logic Z_ is well-behaved.
+    0 to 10V (UNI)
+    or -5 to 5V (BI).
+
+    If the input signals are within the selected range,
+    the output signals will also be within the selected range.
+
+    Input signals
+    above or below the selected range
+    **[can produce very large output voltages](#warnings).**
 
 ## Ports
 - **A** and **B**:
@@ -41,25 +60,40 @@ Please ***[READ THE WARNINGS CAREFULLY](#warnings)!***
   Emits the negation of the operator it is grouped with.
   _NOT(x)_ is defined as _1-x_.
 
-## Controls
-- **UNI / BI:**
-    The voltage range for which _Fuzzy Logic Z_ is well-behaved.
-    0 to 10V (UNI)
-    or -5 to 5V (BI).
+## Usage Ideas
 
-    Input signals
-    above or below the selected range
-    **[can produce very large output votages](#warnings).**
+- **Disconnected inputs.**
+  Leave one input disconnected.
+  _Fuzzy Logic Z_ treates a disconnected input
+  as a 0V input signal.
+  How it interprets 0V depends on the position of the range switch.
+  In _UNI_ range (0V to 10V),
+  0V means _absolutely false._
+  In _BI_ range (-5V to 5V),
+  0V means _half true_.
 
-    If the input signals are within the selected range,
-    the output signals will also be within the selected range.
+- **Sequences of Operators.**
+  Send the outputs of the A/B column
+  to the C and D inputs
+  (or vice versa)
+  to form compound logic expressions.
 
-- **¬ button:**
-  Negates the corresponding input
-  before applying the logic operators.
-  _NOT(x)_ is defined as _1-x_.
+- **Feedback.**
+  Connect one or both inputs of each column
+  to outputs from the other column.
+  This can generate very complex output signals
+  from simple input signals.
+  **WARNING:**
+  if any input voltage is above or below the selected range,
+  feedback loops like this can generate
+  **[very high output voltages](#warnings).**
 
-## Notes
+- **Alternate Fuzzy Logic.**
+  For fuzzy logic based on the less common "hyperbolic paraboloid" fuzzy operators,
+  try **[_Fuzzy Logic H_]({{ 'modules/fuzzy-logic-h/' | relative_url }} ).**
+
+## Voltage and Truth
+
 - **Scaling the Inputs.**
   Before applying the operators,
   _Fuzzy Logic Z_ scales its inputs
@@ -69,18 +103,24 @@ Please ***[READ THE WARNINGS CAREFULLY](#warnings)!***
   1.0 means _completely true_,
   and a value in between
   represents some degree of truth.
+
 - **Scaling the Outputs.**
   After applying the fuzzy logic operators,
   _Fuzzy Logic Z_ scales each result
   to the range selected by the _UNI / BI_ switch.
-- **Alternate Fuzzy Logic.**
-  For fuzzy logic based on the less common "hyperbolic paraboloid" fuzzy operators,
-  try **[_Fuzzy Logic H_]({{ 'modules/fuzzy-logic-H/'  | relative_url }} ).**
+
+- It may be interesting to consider
+  the meaning
+  of signals above or below the selected input range.
+  More true than absolutely true?
+  More false than absolutely false?
+  If you connect input signals outside the selected range,
+  be sure to heed the warnings below.
 
 ## Warnings
 
 **_Fuzzy Logic Z_ can produce _VERY_ large output voltages
-if the input are above or below
+if the input voltages are above or below
 the the range selected by the _UNI / BI_ switch.**
 
 - _Fuzzy Logic Z_
