@@ -84,7 +84,7 @@ Please ***[READ THE WARNINGS CAREFULLY](#warnings)!***
   This can generate very complex output signals
   from simple input signals.
   **WARNING:**
-  if any input voltage is above or below the selected range,
+  If any input voltage is above or below the selected range,
   feedback loops like this can generate
   **[very high output voltages](#warnings).**
 
