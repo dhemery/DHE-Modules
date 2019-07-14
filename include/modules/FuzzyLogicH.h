@@ -13,22 +13,22 @@ public:
     outputs[negatedOutputId].setVoltage(10.F - voltage - offset);
   }
 
-  enum ParameterIds { NotAButtons, NotBButtons = NotAButtons + 2, LevelRangeSwitch = NotBButtons + 2, ParameterCount };
+  enum ParameterIds { ENUMS(NotAButtons, 2), ENUMS(NotBButtons, 2), LevelRangeSwitch, ParameterCount };
 
-  enum InputIds { AInputs, BInputs = AInputs + 2, InputCount = BInputs + 2 };
+  enum InputIds { ENUMS(AInputs, 2), ENUMS(BInputs, 2), InputCount };
 
   enum OutputIds {
-    AndOutputs,
-    NandOutputs = AndOutputs + 2,
-    OrOutputs = NandOutputs + 2,
-    NorOutputs = OrOutputs + 2,
-    XorOutputs = NorOutputs + 2,
-    XnorOutputs = XorOutputs + 2,
-    ImplicationOutputs = XnorOutputs + 2,
-    NonimplicationOutputs = ImplicationOutputs + 2,
-    ConverseImplicationOutputs = NonimplicationOutputs + 2,
-    ConverseNonimplicationOutputs = ConverseImplicationOutputs + 2,
-    OutputCount = ConverseNonimplicationOutputs + 2
+    ENUMS(AndOutputs, 2),
+    ENUMS(NandOutputs, 2),
+    ENUMS(OrOutputs, 2),
+    ENUMS(NorOutputs, 2),
+    ENUMS(XorOutputs, 2),
+    ENUMS(XnorOutputs, 2),
+    ENUMS(ImplicationOutputs, 2),
+    ENUMS(NonimplicationOutputs, 2),
+    ENUMS(ConverseImplicationOutputs, 2),
+    ENUMS(ConverseNonimplicationOutputs, 2),
+    OutputCount
   };
 };
 

@@ -22,9 +22,9 @@ public:
 
   static auto constexpr inputCount = 16;
 
-  enum ParameterIds { NegateButtons, ParameterCount = NegateButtons + inputCount };
+  enum ParameterIds { ENUMS(NegateButtons, inputCount), ParameterCount };
 
-  enum InputIds { Inputs, InputCount = Inputs + inputCount };
+  enum InputIds { ENUMS(Inputs, inputCount), InputCount };
 
   enum OutputIds {
     AndOutput,

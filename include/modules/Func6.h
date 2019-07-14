@@ -15,11 +15,11 @@ public:
   void process(const ProcessArgs &args) override;
 
   enum ParameterIds {
-    AmountKnob,
-    OperationSwitch = AmountKnob + channelCount,
-    OffsetRangeSwitch = OperationSwitch + channelCount,
-    MultiplierRangeSwitch = OffsetRangeSwitch + channelCount,
-    ParameterCount = MultiplierRangeSwitch + channelCount
+    ENUMS(AmountKnob, channelCount),
+    ENUMS(OperationSwitch, channelCount),
+    ENUMS(OffsetRangeSwitch, channelCount),
+    ENUMS(MultiplierRangeSwitch, channelCount),
+    ParameterCount
   };
 
   enum InputIds { FuncInput, InputCount = FuncInput + channelCount };
