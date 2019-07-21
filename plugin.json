@@ -37,6 +37,14 @@
       ]
     },
     {
+      "slug": "CurveSequencer8",
+      "name": "Curve Sequencer 8",
+      "description": "Generates a sequence of curved envelope segments",
+      "tags": [
+        "Sequencer", "Envelope Generator", "LFO"
+      ]
+    },
+    {
       "slug": "FuzzyLogicH",
       "name": "Fuzzy Logic H",
       "description": "Combines signals by applying hyperbolic paraboloid fuzzy logic operators",
