@@ -1,10 +1,12 @@
-name 'CURVE  SEQUENCER'
-hp 34
+name 'CURVE  SEQUENCER 16'
+width_hp = 49
+hp width_hp
 
-foreground [40, 0, 1]
-background [220, 100, 93]
+hue = 30
+foreground [hue, 100, 10]
+background [hue, 10, 93]
 
-stages = 8
+stages = 16
 
 left = hp2mm(2)
 
@@ -25,14 +27,14 @@ line_top = hp2mm(3.5)
 line_bottom = hp2mm(23)
 
 stage_x = hp2mm(10)
-stage_dx = hp2mm(2.75)
+stage_dx = hp2mm(2.25)
 
 label_x = stage_x - 0.6 * stage_dx
 label x: label_x, y: enabled_label_y, text: 'ON', alignment: :left_of, size: :large
 label x: label_x, y: mode_y, text: 'MODE', alignment: :left_of, size: :large
 label x: label_x, y: (shape_y + curve_y) / 2, text: 'CURVE', alignment: :left_of, size: :large
 label x: label_x, y: level_y, text: 'LEVEL', alignment: :left_of, size: :large
-label x: label_x, y: duration_y, text: 'DUR ', alignment: :left_of, size: :large
+label x: label_x, y: duration_y, text: 'DURATION', alignment: :left_of, size: :large
 label x: label_x, y: eos_y, text: 'EOS', alignment: :left_of, size: :large
 
 (0...stages).each do |stage|
@@ -47,8 +49,11 @@ label x: label_x, y: eos_y, text: 'EOS', alignment: :left_of, size: :large
   small_knob y: level_y, x: x, label: ''
   small_knob y: duration_y, x: x, label: ''
   stepper y: mode_y, x: x, name: 'mode', labels: %w[RISE FALL EDGE EOS LOW HIGH], selection: 1
-  output_port y: eos_y, x: x, label: ''
+  port y: eos_y, x: x, label: ''
 end
+
+line_x = stage_x + (stages - 0.5) * stage_dx
+line x1: line_x, x2: line_x, y1: line_top, y2: line_bottom
 
 module_inputs_x = left
 module_params_x = left + hp2mm(2)
@@ -62,7 +67,7 @@ loop_y = top + 3 * input_dy
 start_y = top + 4 * input_dy
 steps_y = top + 5 * input_dy
 
-connector left: module_inputs_x, right: module_params_x, y: steps_y
+connector left: module_inputs_x, right: module_params_x, y: run_y
 port x: module_inputs_x, y: run_y, label: 'RUN'
 button x: module_params_x, y: run_y
 
@@ -86,9 +91,7 @@ connector left: module_inputs_x, right: module_params_x, y: steps_y
 port x: module_inputs_x, y: steps_y, label: 'STEPS'
 small_knob x: module_params_x, y: steps_y
 
-toggle_x = stage_x + stages * stage_dx
-line_x = toggle_x - stage_dx / 2.0
-line x1: line_x, x2: line_x, y1: line_top, y2: line_bottom
+toggle_x = hp2mm(width_hp - 2)
 polarity_toggle x: toggle_x, y: level_y, selection: 2
 duration_toggle x: toggle_x, y: duration_y
 output_port x: toggle_x, y: eos_y, label: 'EOC'
