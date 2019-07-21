@@ -3,8 +3,8 @@ require_relative '../dimensions'
 
 class Label < BoundedShape
   STYLE_FOR_SIZE = 'font-family:Proxima Nova;font-weight:bold;font-size:%spx'
-  BASELINES = { above: 'alphabetic', below: 'hanging', right_of: 'middle' }
-  ANCHORS = { above: 'middle', below: 'middle', right_of: 'start' }
+  BASELINES = { above: 'alphabetic', below: 'hanging', right_of: 'middle', left_of: 'middle' }
+  ANCHORS = { above: 'middle', below: 'middle', right_of: 'start', left_of: 'end' }
   ASCENT_RATIO = 2.0 / 3.0 # Approximately correct for Proxima Nova font
   SIZES = { title: 12.0 / PX_PER_MM, large: 9.0 / PX_PER_MM, small: 7.0 / PX_PER_MM }
 
@@ -18,6 +18,8 @@ class Label < BoundedShape
     height = @size * ASCENT_RATIO
     width = 0.1 # Ignore the actual width of the label
     left = case alignment
+             when :left_of
+               0.0
              when :right_of
                0.0
              else # above or below
@@ -26,6 +28,8 @@ class Label < BoundedShape
     top = case alignment
             when :above
               -height
+            when :left_of
+              -height / 2.0
             when :right_of
               -height / 2.0
             else # below

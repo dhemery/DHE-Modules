@@ -243,4 +243,9 @@ class ModuleFactory
                             stroke: @foreground, fill: @foreground)
     @faceplate_shapes.append(faceplate_box, faceplate_label)
   end
+
+  def label(x:, y:, text:, color: @foreground, size: :small, alignment: :right_of)
+    @faceplate_shapes << Label.new(text: text, color: color, size: size, alignment: alignment)
+                             .translate(x, y)
+  end
 end

@@ -1,76 +1,83 @@
 name 'CURVE  SEQUENCER'
-hp 26
+hp 34
 
 foreground [40, 0, 1]
 background [220, 100, 93]
 
 stages = 8
 
-left = hp2mm(1.5)
+left = hp2mm(2)
 top = hp2mm(5)
 
-dx = hp2mm(3)
-dy = hp2mm(3.4)
+stage_label_y = hp2mm(3)
+enabled_button_y = hp2mm(4)
+enabled_port_y = enabled_button_y + hp2mm(1.6)
+enabled_label_y = (enabled_button_y + enabled_port_y) / 2
+mode_y = hp2mm(8.7)
+level_y = hp2mm(11.2)
+shape_y = hp2mm(14)
+curve_y = shape_y + hp2mm(1.6)
+duration_y = hp2mm(18.5)
+eos_y = hp2mm(22)
 
-module_port_x = left + 0 * dx
-module_control_x = left + 0.7 * dx
+stage_x = hp2mm(10)
+stage_dx = hp2mm(2.75)
 
-steps_y = top + 0 * dy
-start_y = top + 1 * dy
-loop_y = top + 2 * dy
-reset_y = top + 3 * dy
-gate_y = top + 4 * dy
-out_y = top + 5 * dy
+label_x = stage_x - 0.6 * stage_dx
+label x: label_x, y: enabled_label_y, text: 'ON', alignment: :left_of, size: :large
+label x: label_x, y: mode_y, text: 'MODE', alignment: :left_of, size: :large
+label x: label_x, y: (shape_y + curve_y) / 2, text: 'CURVE', alignment: :left_of, size: :large
+label x: label_x, y: level_y, text: 'LEVEL', alignment: :left_of, size: :large
+label x: label_x, y: duration_y, text: 'DUR ', alignment: :left_of, size: :large
+label x: label_x, y: eos_y, text: 'EOS', alignment: :left_of, size: :large
 
-connector left: module_port_x, right: module_control_x, y: steps_y
-port x: module_port_x, y: steps_y
-small_knob x: module_control_x, y: steps_y, label: 'STEPS'
-
-connector left: module_port_x, right: module_control_x, y: start_y
-port x: module_port_x, y: start_y
-small_knob x: module_control_x, y: start_y, label: 'START'
-
-connector left: module_port_x, right: module_control_x, y: loop_y
-port x: module_port_x, y: loop_y, label: 'LOOP'
-button x: module_control_x, y: loop_y
-
-connector left: module_port_x, right: module_control_x, y: reset_y
-port x: module_port_x, y: reset_y, label: 'RESET'
-button x: module_control_x, y: reset_y
-
-connector left: module_port_x, right: module_control_x, y: gate_y
-port x: module_port_x, y: gate_y, label: 'GATE'
-button x: module_control_x, y: gate_y
-
-output_port x: module_port_x, y: out_y, label: 'OUT'
-output_port x: module_port_x + dy, y: out_y, label: 'EOC'
-
-# polarity_toggle x: module_control_x, y: eoc_y
-# duration_toggle x: module_control_x, y: out_y
-
-left += hp2mm(7.5)
-dx = hp2mm(2.5)
-dy = hp2mm(2.1)
-
-enabled_port_x = left + 0 * dx
-enabled_button_x = left + 0.7 * dx
-level_x = left + 1.7 * dx
-duration_x = left + 2.7 * dx
-curve_x = left + 3.7 * dx
-shape_x = left + 4.4 * dx
-mode_x = left + 5.2 * dx
-eos_x = left + 6.2 * dx
-
-(0..stages).each do |stage|
-  y = top + stage * dy
-  connector left: enabled_port_x, right: enabled_button_x, y: y
-  port x: enabled_port_x, y: y, label: stage == 0 ? 'ON ' : ''
-  button x: enabled_button_x, y: y, label: ''
-  small_knob x: level_x, y: y, label: stage == 0 ? 'LEVEL' : ''
-  connector left: curve_x, right: shape_x, y: y
-  small_knob x: curve_x, y: y, label: stage == 0 ? 'CURVE' : ''
-  stepper x: shape_x, y: y, name: 'shape', labels: %w[S J], selection: 1
-  small_knob x: duration_x, y: y, label: stage == 0 ? 'DUR' : ' '
-  stepper x: mode_x, y: y, name: 'mode', labels: %w[RISE FALL EDGE EOS LOW HIGH], selection: 1
-  output_port x: eos_x, y: y, label: stage == 0 ? 'EOS' : ' '
+(0...stages).each do |stage|
+  x = stage_x + stage * stage_dx
+  label x: x, y: stage_label_y, text: (stage + 1).to_s, alignment: :above, size: :large
+  button y: enabled_button_y, x: x, label: ''
+  port y: enabled_port_y, x: x, label: ''
+  stepper x: x, y: shape_y, name: 'shape', labels: %w[J S]
+  small_knob y: curve_y, x: x, label: ''
+  small_knob y: level_y, x: x, label: ''
+  small_knob y: duration_y, x: x, label: ''
+  stepper y: mode_y, x: x, name: 'mode', labels: %w[RISE FALL EDGE EOS LOW HIGH], selection: 1
+  output_port y: eos_y, x: x, label: ''
 end
+
+module_inputs_x = left
+module_params_x = left + hp2mm(2)
+
+steps_y = enabled_label_y
+out_y = eos_y
+input_dy = (eos_y - steps_y) / 5
+start_y = top + 1 * input_dy
+loop_y = top + 2 * input_dy
+reset_y = top + 3 * input_dy
+gate_y = top + 4 * input_dy
+
+connector left: module_inputs_x, right: module_params_x, y: steps_y
+port x: module_inputs_x, y: steps_y
+small_knob x: module_params_x, y: steps_y, label: 'STEPS'
+
+connector left: module_inputs_x, right: module_params_x, y: start_y
+port x: module_inputs_x, y: start_y
+small_knob x: module_params_x, y: start_y, label: 'START'
+
+connector left: module_inputs_x, right: module_params_x, y: loop_y
+port x: module_inputs_x, y: loop_y, label: 'LOOP'
+button x: module_params_x, y: loop_y
+
+connector left: module_inputs_x, right: module_params_x, y: reset_y
+port x: module_inputs_x, y: reset_y, label: 'RESET'
+button x: module_params_x, y: reset_y
+
+connector left: module_inputs_x, right: module_params_x, y: gate_y
+port x: module_inputs_x, y: gate_y, label: 'GATE'
+button x: module_params_x, y: gate_y
+
+output_port x: module_inputs_x, y: out_y, label: 'OUT'
+
+toggle_x = stage_x + stages * stage_dx
+polarity_toggle x: toggle_x, y: level_y, selection: 2
+duration_toggle x: toggle_x, y: duration_y
+output_port x: toggle_x, y: out_y, label: 'EOC'
