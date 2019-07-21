@@ -2,16 +2,25 @@
 
 namespace dhe {
 
+template <typename P> class ShapeStepper : public Toggle<P, 2> {
+public:
+  ShapeStepper() : Toggle<P, 2>("stepper-shape") {}
+};
+
+template <typename P> class ModeStepper : public Toggle<P, 6> {
+public:
+  ModeStepper() : Toggle<P, 6>("stepper-mode") {}
+};
+
 CurveSequencer8Panel::CurveSequencer8Panel(CurveSequencer8 *sequencer) : Panel{sequencer, hp} {
   auto const left = hp2mm(2.F);
   auto const moduleInputsX = left;
   auto const moduleParamsX = left + hp2mm(2.F);
   auto const moduleOutputsX = width() - hp2mm(2.F);
 
-  auto const stageX = hp2mm(10.F);
-  auto const stageDx = hp2mm(2.25F);
+  auto const StepX = hp2mm(10.F);
+  auto const stepDx = hp2mm(2.25F);
 
-  auto const stageLabelY = hp2mm(3.F);
   auto const enabledButtonY = hp2mm(4.F);
   auto const enabledPortY = enabledButtonY + hp2mm(1.6F);
   auto const enabledLabelY = (enabledButtonY + enabledPortY) / 2.F;
@@ -35,7 +44,7 @@ CurveSequencer8Panel::CurveSequencer8Panel(CurveSequencer8 *sequencer) : Panel{s
   auto const stepsY = top + 5.F * inputDy;
 
   input(moduleInputsX, runY, CurveSequencer8::RunInput);
-  button(moduleParamsX, runY, CurveSequencer8::RunButton);
+  button<ToggleButton>(moduleParamsX, runY, CurveSequencer8::RunButton);
 
   input(moduleInputsX, gateY, CurveSequencer8::GateInput);
   button(moduleParamsX, gateY, CurveSequencer8::GateButton);
@@ -44,7 +53,7 @@ CurveSequencer8Panel::CurveSequencer8Panel(CurveSequencer8 *sequencer) : Panel{s
   button(moduleParamsX, resetY, CurveSequencer8::ResetButton);
 
   input(moduleInputsX, loopY, CurveSequencer8::LoopInput);
-  button(moduleParamsX, loopY, CurveSequencer8::LoopButton);
+  button<ToggleButton>(moduleParamsX, loopY, CurveSequencer8::LoopButton);
 
   input(moduleInputsX, startY, CurveSequencer8::StartCVInput);
   knob<SmallKnob>(moduleParamsX, startY, CurveSequencer8::StartKnob);
@@ -57,5 +66,21 @@ CurveSequencer8Panel::CurveSequencer8Panel(CurveSequencer8 *sequencer) : Panel{s
 
   output(moduleOutputsX, enabledPortY, CurveSequencer8::OutOutput);
   output(moduleOutputsX, eosY, CurveSequencer8::EOCOutput);
+
+  for (int step = 0; step < CurveSequencer8::numberOfSteps; step++) {
+    auto const x = StepX + step * stepDx;
+    button<ToggleButton>(x, enabledButtonY, CurveSequencer8::EnabledButtons + step);
+    input(x, enabledPortY, CurveSequencer8::EnabledInputs + step);
+
+    toggle<ShapeStepper>(x, shapeY, CurveSequencer8::ShapeSwitches + step);
+
+    knob<SmallKnob>(x, curveY, CurveSequencer8::CurveKnobs + step);
+    knob<SmallKnob>(x, levelY, CurveSequencer8::LevelKnobs + step);
+    knob<SmallKnob>(x, durationY, CurveSequencer8::DurationKnobs + step);
+
+    toggle<ModeStepper>(x, modeY, CurveSequencer8::ModeSwitches + step);
+
+    output(x, eosY, CurveSequencer8::EosOutputs + step);
+  }
 }
 } // namespace dhe
