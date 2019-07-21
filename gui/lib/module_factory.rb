@@ -149,7 +149,7 @@ class ModuleFactory
     @faceplate_shapes << faceplate_label
   end
 
-  def small_knob(x:, y:, label:)
+  def small_knob(x:, y:, label: '')
     knob(x: x, y: y, size: :small, label: label, label_size: :small)
   end
 
