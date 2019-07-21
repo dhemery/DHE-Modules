@@ -1,4 +1,4 @@
-#include "modules/CurveSequencer8.h"
+#include "modules/CurveSequencer16.h"
 
 #include <modules/controls/CurvatureConfig.h>
 #include <modules/controls/DurationConfig.h>
@@ -6,7 +6,7 @@
 
 namespace dhe {
 
-CurveSequencer8::CurveSequencer8() {
+CurveSequencer16::CurveSequencer16() {
   config(ParameterCount, InputCount, OutputCount);
   configButton(this, RunButton, "Running", {"When input is high", "Yes"}, 1);
   configButton(this, GateButton, "Gate", {"Tracks input voltage", "High"}, 0);
@@ -33,5 +33,5 @@ CurveSequencer8::CurveSequencer8() {
   }
 }
 
-void CurveSequencer8::process(const ProcessArgs & /*args*/) {}
+void CurveSequencer16::process(const ProcessArgs & /*args*/) {}
 } // namespace dhe

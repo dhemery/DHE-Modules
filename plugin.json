@@ -39,7 +39,15 @@
     {
       "slug": "CurveSequencer8",
       "name": "Curve Sequencer 8",
-      "description": "Generates a sequence of curved envelope segments",
+      "description": "Generates an 8 step sequence of curve",
+      "tags": [
+        "Sequencer", "Envelope Generator", "LFO"
+      ]
+    },
+    {
+      "slug": "CurveSequencer16",
+      "name": "Curve Sequencer 16",
+      "description": "Generates a 16 step sequence of curves",
       "tags": [
         "Sequencer", "Envelope Generator", "LFO"
       ]
