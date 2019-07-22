@@ -26,7 +26,7 @@ public:
     auto const moduleParamsX = left + hp2mm(2.F);
     auto const moduleOutputsX = hp2mm(HP - 2.F);
 
-    auto const StepX = hp2mm(10.F);
+    auto const stepX = hp2mm(10.F);
     auto const stepDx = hp2mm(2.25F);
 
     auto const enabledButtonY = hp2mm(4.F);
@@ -76,7 +76,7 @@ public:
     this->output(moduleOutputsX, eosY, CurveSequencer<NS>::EOCOutput);
 
     for (int step = 0; step < NS; step++) {
-      auto const x = StepX + step * stepDx;
+      auto const x = stepX + step * stepDx;
       this->template button<ToggleButton>(x, enabledButtonY, CurveSequencer<NS>::EnabledButtons + step);
       this->input(x, enabledPortY, CurveSequencer<NS>::EnabledInputs + step);
 
@@ -88,7 +88,7 @@ public:
 
       this->template toggle<ModeStepper> (x, modeY, CurveSequencer<NS>::ModeSwitches + step);
 
-      this->output(x, eosY, CurveSequencer<NS>::EosOutputs + step);
+      this->light(x, eosY, CurveSequencer<NS>::ActivityLights + step);
     }
   }
 }; // namespace dhe

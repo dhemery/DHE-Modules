@@ -10,7 +10,8 @@ namespace dhe {
 template <int NS> class CurveSequencer : public rack::engine::Module {
 public:
   CurveSequencer() {
-    config(ParameterCount, InputCount, OutputCount);
+    config(ParameterCount, InputCount, OutputCount, LightCount);
+
     configButton(this, RunButton, "Run", {"RUN input", "Yes"}, 1);
     configButton(this, GateButton, "Gate", {"GATE input", "High"}, 0);
     configButton(this, ResetButton, "Reset", {"RESET input", "High"}, 0);
@@ -67,6 +68,8 @@ public:
     InputCount
   };
 
-  enum OutputIds { EOCOutput, OutOutput, ENUMS(EosOutputs, NS), OutputCount };
+  enum OutputIds { EOCOutput, OutOutput, OutputCount };
+
+  enum LightIds { ENUMS(ActivityLights, NS), LightCount };
 };
 } // namespace dhe

@@ -90,7 +90,7 @@ protected:
 
   void light(float x, float y, int index) {
     auto const &pos = mmvec(x, y);
-    auto *light = rack::createLightCentered<rack::componentlibrary::SmallLight<rack::componentlibrary::GreenRedLight>>(
+    auto *light = rack::createLightCentered<rack::componentlibrary::SmallLight<rack::componentlibrary::GreenLight>>(
         pos, module, index);
     addChild(light);
   }
