@@ -88,6 +88,13 @@ protected:
     return param<B<P>>(x, y, index);
   }
 
+  void light(float x, float y, int index) {
+    auto const &pos = mmvec(x, y);
+    auto *light = rack::createLightCentered<rack::componentlibrary::SmallLight<rack::componentlibrary::GreenRedLight>>(
+        pos, module, index);
+    addChild(light);
+  }
+
   template <template <typename> class C> auto toggle(float x, float y, int index) -> C<P> * {
     return param<C<P>>(x, y, index);
   }
