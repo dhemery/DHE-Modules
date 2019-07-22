@@ -1,71 +1,41 @@
-name 'CURVE  SEQUENCER 16'
+name 'CURVE SEQUENCER 16'
+
+steps = 16
 width_hp = 49
+
 hp width_hp
 
 hue = 30
 foreground [hue, 100, 10]
 background [hue, 10, 93]
 
-stages = 16
-
 left = hp2mm(2)
+right = hp2mm(width_hp - 2)
+top = hp2mm(4)
+bottom = hp2mm(23)
 
-stage_label_y = hp2mm(3)
-enabled_button_y = hp2mm(4)
-enabled_port_y = enabled_button_y + hp2mm(1.6)
-enabled_label_y = (enabled_button_y + enabled_port_y) / 2
-mode_y = hp2mm(8.7)
-level_y = hp2mm(11.2)
-shape_y = hp2mm(14)
-curve_y = shape_y + hp2mm(1.6)
-duration_y = hp2mm(18.5)
-eos_y = hp2mm(22)
 
-top = enabled_label_y
-bottom = eos_y
-line_top = hp2mm(3.5)
-line_bottom = hp2mm(23)
 
-stage_x = hp2mm(10)
-stage_dx = hp2mm(2.25)
 
-label_x = stage_x - 0.6 * stage_dx
-label x: label_x, y: enabled_label_y, text: 'ON', alignment: :left_of, size: :large
-label x: label_x, y: mode_y, text: 'MODE', alignment: :left_of, size: :large
-label x: label_x, y: (shape_y + curve_y) / 2, text: 'CURVE', alignment: :left_of, size: :large
-label x: label_x, y: level_y, text: 'LEVEL', alignment: :left_of, size: :large
-label x: label_x, y: duration_y, text: 'DURATION', alignment: :left_of, size: :large
-label x: label_x, y: eos_y, text: 'EOS', alignment: :left_of, size: :large
 
-(0...stages).each do |stage|
-  x = stage_x + stage * stage_dx
-  line_x = x - stage_dx / 2.0
-  line x1: line_x, x2: line_x, y1: line_top, y2: line_bottom
-  label x: x, y: stage_label_y, text: (stage + 1).to_s, alignment: :above, size: :large
-  button y: enabled_button_y, x: x, label: ''
-  port y: enabled_port_y, x: x, label: ''
-  stepper x: x, y: shape_y, name: 'shape', labels: %w[J S]
-  small_knob y: curve_y, x: x, label: ''
-  small_knob y: level_y, x: x, label: ''
-  small_knob y: duration_y, x: x, label: ''
-  stepper y: mode_y, x: x, name: 'mode', labels: %w[RISE FALL EDGE EOS LOW HIGH], selection: 1
-  port y: eos_y, x: x, label: ''
-end
+###############################################################################
+#
+# Sequence Controls
+#
+###############################################################################
 
-line_x = stage_x + (stages - 0.5) * stage_dx
-line x1: line_x, x2: line_x, y1: line_top, y2: line_bottom
+input_top = top + 7.0
+input_bottom = bottom - 4.2
+input_dy = (input_bottom - input_top) / 5
+run_y = input_top + 0 * input_dy
+gate_y = input_top + 1 * input_dy
+reset_y = input_top + 2 * input_dy
+loop_y = input_top + 3 * input_dy
+start_y = input_top + 4 * input_dy
+steps_y = input_top + 5 * input_dy
 
 module_inputs_x = left
 module_params_x = left + hp2mm(2)
-
-input_dy = (bottom - top) / 5
-
-run_y = top + 0 * input_dy
-gate_y = top + 1 * input_dy
-reset_y = top + 2 * input_dy
-loop_y = top + 3 * input_dy
-start_y = top + 4 * input_dy
-steps_y = top + 5 * input_dy
 
 connector left: module_inputs_x, right: module_params_x, y: run_y
 port x: module_inputs_x, y: run_y, label: 'RUN'
@@ -91,8 +61,66 @@ connector left: module_inputs_x, right: module_params_x, y: steps_y
 port x: module_inputs_x, y: steps_y, label: 'STEPS'
 small_knob x: module_params_x, y: steps_y
 
-toggle_x = hp2mm(width_hp - 2)
-polarity_toggle x: toggle_x, y: level_y, selection: 2
-duration_toggle x: toggle_x, y: duration_y
-output_port x: toggle_x, y: eos_y, label: 'EOC'
-output_port x: toggle_x, y: enabled_port_y, label: 'OUT'
+
+
+
+###############################################################################
+#
+# Step Controls
+#
+###############################################################################
+
+step_x = hp2mm(10)
+step_dx = hp2mm(2.25)
+
+active_y = top + Light::RADIUS
+mode_y = top + hp2mm(2.5)
+level_y = top + hp2mm(5.25)
+shape_y = top + hp2mm(8.5)
+curve_y = top + hp2mm(10.75)
+duration_y = top + hp2mm(13.75)
+enabled_port_y = bottom - Port::DIAMETER / 2.0
+enabled_button_y = enabled_port_y - Port::DIAMETER / 2.0 - Button::DIAMETER / 2.0 - 1.0
+
+label_x = step_x - 0.6 * step_dx
+label x: label_x, y: active_y, text: 'ACTIVE', alignment: :left_of, size: :large
+label x: label_x, y: mode_y, text: 'MODE', alignment: :left_of, size: :large
+label x: label_x, y: level_y, text: 'LEVEL', alignment: :left_of, size: :large
+label x: label_x, y: shape_y, text: 'SHAPE', alignment: :left_of, size: :large
+label x: label_x, y: curve_y, text: 'CURVE', alignment: :left_of, size: :large
+label x: label_x, y: duration_y, text: 'DURATION', alignment: :left_of, size: :large
+label x: label_x, y: enabled_button_y, text: 'ENABLED', alignment: :left_of, size: :large
+
+line_x = step_x - step_dx / 2.0
+line x1: line_x, x2: line_x, y1: top, y2: bottom
+
+step_label_y = top - hp2mm(0.5)
+(0...steps).each do |step|
+  x = step_x + step * step_dx
+  label x: x, y: step_label_y, text: (step + 1).to_s, alignment: :above, size: :large
+  button y: enabled_button_y, x: x, label: ''
+  port y: enabled_port_y, x: x, label: ''
+  shape_toggle x: x, y: shape_y
+  small_knob y: curve_y, x: x, label: ''
+  small_knob y: level_y, x: x, label: ''
+  small_knob y: duration_y, x: x, label: ''
+  stepper y: mode_y, x: x, name: 'mode', labels: %w[RISE FALL EDGE EOC LOW HIGH], selection: 4
+  light x: x, y: active_y
+  line_x = x + step_dx / 2.0
+  line x1: line_x, x2: line_x, y1: top, y2: bottom
+end
+
+
+
+
+###############################################################################
+#
+# Output Controls
+#
+###############################################################################
+
+output_x = right
+out_y = bottom - Port::DIAMETER / 2.0 - 1.0
+polarity_toggle x: output_x, y: level_y, selection: 2
+duration_toggle x: output_x, y: duration_y
+output_port x: output_x, y: out_y, label: 'OUT'

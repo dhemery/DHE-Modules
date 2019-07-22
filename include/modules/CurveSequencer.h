@@ -40,35 +40,35 @@ public:
   void process(const ProcessArgs &args) override {}
 
   enum ParameterIds {
-    RunButton,
+    DurationRangeSwitch,
     GateButton,
-    ResetButton,
+    LevelRangeSwitch,
     LoopButton,
+    ResetButton,
+    RunButton,
     StartKnob,
     StepsKnob,
-    LevelRangeSwitch,
-    DurationRangeSwitch,
-    ENUMS(EnabledButtons, NS),
-    ENUMS(ShapeSwitches, NS),
-    ENUMS(LevelKnobs, NS),
     ENUMS(CurveKnobs, NS),
     ENUMS(DurationKnobs, NS),
+    ENUMS(EnabledButtons, NS),
+    ENUMS(LevelKnobs, NS),
     ENUMS(ModeSwitches, NS),
+    ENUMS(ShapeSwitches, NS),
     ParameterCount
   };
 
   enum InputIds {
-    RunInput,
+    GateInput,
     LoopInput,
     ResetInput,
-    GateInput,
+    RunInput,
     StartCVInput,
     StepsCVInput,
     ENUMS(EnabledInputs, NS),
     InputCount
   };
 
-  enum OutputIds { EOCOutput, OutOutput, OutputCount };
+  enum OutputIds { OutOutput, OutputCount };
 
   enum LightIds { ENUMS(ActivityLights, NS), LightCount };
 };

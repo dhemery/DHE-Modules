@@ -8,6 +8,7 @@ require_relative 'shapes/faceplate'
 require_relative 'shapes/knob'
 require_relative 'shapes/label'
 require_relative 'shapes/line'
+require_relative 'shapes/light'
 require_relative 'shapes/port'
 require_relative 'shapes/stepper'
 require_relative 'shapes/toggle'
@@ -247,5 +248,9 @@ class ModuleFactory
   def label(x:, y:, text:, color: @foreground, size: :small, alignment: :right_of)
     @faceplate_shapes << Label.new(text: text, color: color, size: size, alignment: alignment)
                              .translate(x, y)
+  end
+
+  def light(x:, y:, color: @foreground)
+    @faceplate_shapes << Light.new(color: color).translate(x, y)
   end
 end
