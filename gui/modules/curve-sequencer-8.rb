@@ -15,9 +15,6 @@ top = hp2mm(4)
 bottom = hp2mm(23)
 
 
-
-
-
 ###############################################################################
 #
 # Sequence Controls
@@ -26,13 +23,12 @@ bottom = hp2mm(23)
 
 input_top = top + 7.0
 input_bottom = bottom - 4.2
-input_dy = (input_bottom - input_top) / 5
+input_dy = (input_bottom - input_top) / 4
 run_y = input_top + 0 * input_dy
 gate_y = input_top + 1 * input_dy
 reset_y = input_top + 2 * input_dy
-loop_y = input_top + 3 * input_dy
-start_y = input_top + 4 * input_dy
-steps_y = input_top + 5 * input_dy
+start_y = input_top + 3 * input_dy
+steps_y = input_top + 4 * input_dy
 
 module_inputs_x = left
 module_params_x = left + hp2mm(2)
@@ -40,10 +36,6 @@ module_params_x = left + hp2mm(2)
 connector left: module_inputs_x, right: module_params_x, y: run_y
 port x: module_inputs_x, y: run_y, label: 'RUN'
 button x: module_params_x, y: run_y
-
-connector left: module_inputs_x, right: module_params_x, y: loop_y
-port x: module_inputs_x, y: loop_y, label: 'LOOP'
-button x: module_params_x, y: loop_y
 
 connector left: module_inputs_x, right: module_params_x, y: reset_y
 port x: module_inputs_x, y: reset_y, label: 'RESET'
@@ -62,8 +54,6 @@ port x: module_inputs_x, y: steps_y, label: 'STEPS'
 small_knob x: module_params_x, y: steps_y
 
 
-
-
 ###############################################################################
 #
 # Step Controls
@@ -74,17 +64,18 @@ step_x = hp2mm(10)
 step_dx = hp2mm(2.25)
 
 active_y = top + Light::RADIUS
-mode_y = top + hp2mm(2.5)
-level_y = top + hp2mm(5.25)
-shape_y = top + hp2mm(8.5)
-curve_y = top + hp2mm(10.75)
-duration_y = top + hp2mm(13.75)
+generate_mode_y = top + hp2mm(2.25)
+sustain_mode_y = top + hp2mm(4.5)
+level_y = top + hp2mm(6.75)
+shape_y = top + hp2mm(9.25)
+curve_y = top + hp2mm(11.75)
+duration_y = top + hp2mm(14.25)
 enabled_port_y = bottom - Port::DIAMETER / 2.0
 enabled_button_y = enabled_port_y - Port::DIAMETER / 2.0 - Button::DIAMETER / 2.0 - 1.0
 
 label_x = step_x - 0.6 * step_dx
-label x: label_x, y: active_y, text: 'ACTIVE', alignment: :left_of, size: :large
-label x: label_x, y: mode_y, text: 'MODE', alignment: :left_of, size: :large
+label x: label_x, y: generate_mode_y, text: 'GENERATE', alignment: :left_of, size: :large
+label x: label_x, y: sustain_mode_y, text: 'SUSTAIN', alignment: :left_of, size: :large
 label x: label_x, y: level_y, text: 'LEVEL', alignment: :left_of, size: :large
 label x: label_x, y: shape_y, text: 'SHAPE', alignment: :left_of, size: :large
 label x: label_x, y: curve_y, text: 'CURVE', alignment: :left_of, size: :large
@@ -97,20 +88,20 @@ line x1: line_x, x2: line_x, y1: top, y2: bottom
 step_label_y = top - hp2mm(0.5)
 (0...steps).each do |step|
   x = step_x + step * step_dx
+  light x: x - Light::DIAMETER, y: active_y
+  light x: x + Light::DIAMETER, y: active_y
+  stepper x: x, y: generate_mode_y, name: 'generate', labels: %w[RISE FALL EDGE EOC LOW HIGH], selection: 4
+  stepper x: x, y: sustain_mode_y, name: 'sustain', labels: %w[RISE FALL EDGE EOC LOW HIGH], selection: 4
   label x: x, y: step_label_y, text: (step + 1).to_s, alignment: :above, size: :large
-  button y: enabled_button_y, x: x, label: ''
-  port y: enabled_port_y, x: x, label: ''
   shape_toggle x: x, y: shape_y
   small_knob y: curve_y, x: x, label: ''
   small_knob y: level_y, x: x, label: ''
   small_knob y: duration_y, x: x, label: ''
-  stepper y: mode_y, x: x, name: 'mode', labels: %w[RISE FALL EDGE EOC LOW HIGH], selection: 4
-  light x: x, y: active_y
+  button y: enabled_button_y, x: x, label: ''
+  port y: enabled_port_y, x: x, label: ''
   line_x = x + step_dx / 2.0
   line x1: line_x, x2: line_x, y1: top, y2: bottom
 end
-
-
 
 
 ###############################################################################
