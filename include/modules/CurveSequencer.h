@@ -15,7 +15,6 @@ public:
     configButton(this, RunButton, "Run", {"RUN input", "Yes"}, 1);
     configButton(this, GateButton, "Gate", {"GATE input", "High"}, 0);
     configButton(this, ResetButton, "Reset", {"RESET input", "High"}, 0);
-    configButton(this, LoopButton, "Loop", {"LOOP input", "Yes"}, 0);
 
     configKnob(this, StartKnob, "Start step", "", Range{1.F, NS}, 0.F);
     configKnob(this, StepsKnob, "Steps", "", Range{1.F, NS}, 1.F);
@@ -24,16 +23,22 @@ public:
     configDurationRangeSwitch(this, DurationRangeSwitch);
 
     for (int step = 0; step < NS; step++) {
-      auto const stepDescription = std::string{"Step "} + std::to_string(step + 1);
-      configButton(this, EnabledButtons + step, stepDescription + " enabled", {"ENABLED input", "Yes"}, 1);
-      configToggle<6>(this, ModeSwitches + step, stepDescription + " ends when",
-                      {"Gate rises", "Gate falls", "Gate changes", "Curve completes", "Gate is low while step holds",
-                       "Gate is high while step holds"},
-                      3);
-      configLevelKnob(this, LevelKnobs + step, LevelRangeSwitch, stepDescription + " level");
-      configCurveShapeSwitch(this, ShapeSwitches + step, stepDescription + " shape");
-      configCurvatureKnob(this, CurveKnobs + step, stepDescription + " curvature");
-      configDurationKnob(this, DurationKnobs + step, DurationRangeSwitch, stepDescription + " duration");
+      configToggle<7>(this, GenerateModeSwitches + step, "Generate mode",
+                      {"Interrupt if gate rises", "Interrupt if gate falls", "Interrupt if gate changes",
+                       "Skip/interrupt if gate is high", "Skip/interrupt if gate is low", "Skip", "Run to completion"},
+                      6);
+      configToggle<6>(this, SustainModeSwitches + step, "Sustain mode",
+                      {"End when gate rises", "End when gate falls", "End when gate changes",
+                       "Skip/end if gate is high", "Skip/end if gate is low", "Skip"},
+                      5);
+      configLevelKnob(this, LevelKnobs + step, LevelRangeSwitch, "Level");
+      configCurveShapeSwitch(this, ShapeSwitches + step, "Shape");
+      configCurvatureKnob(this, CurveKnobs + step, "Curvature");
+      configDurationKnob(this, DurationKnobs + step, DurationRangeSwitch, "Duration");
+      configButton(this, EnabledButtons + step, "Enabled", {"ENABLED input", "Yes"}, 1);
+      auto const intensity = ((float) step) / ((float) NS);
+      lights[GeneratingLights + step].setBrightness(intensity);
+      lights[SustainingLights + step].setBrightness(1.F - intensity);
     }
   }
 
@@ -43,7 +48,6 @@ public:
     DurationRangeSwitch,
     GateButton,
     LevelRangeSwitch,
-    LoopButton,
     ResetButton,
     RunButton,
     StartKnob,
@@ -52,14 +56,14 @@ public:
     ENUMS(DurationKnobs, NS),
     ENUMS(EnabledButtons, NS),
     ENUMS(LevelKnobs, NS),
-    ENUMS(ModeSwitches, NS),
+    ENUMS(GenerateModeSwitches, NS),
+    ENUMS(SustainModeSwitches, NS),
     ENUMS(ShapeSwitches, NS),
     ParameterCount
   };
 
   enum InputIds {
     GateInput,
-    LoopInput,
     ResetInput,
     RunInput,
     StartCVInput,
@@ -70,6 +74,6 @@ public:
 
   enum OutputIds { OutOutput, OutputCount };
 
-  enum LightIds { ENUMS(ActivityLights, NS), LightCount };
+  enum LightIds { ENUMS(GeneratingLights, NS), ENUMS(SustainingLights, NS), LightCount };
 };
 } // namespace dhe

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   id="svg10"
+   viewBox="0 0 6.000 11.161"
+   height="11.161mm"
+   width="6.000mm"
+   version="1.1">
+  <metadata
+     id="metadata16">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs14" />
+  <g
+     id="g8"
+     transform="translate(3,5.58)">
+    <g
+       id="g4"
+       transform="translate(0,-4)">
+      <g
+         id="text2"
+         style="font-weight:bold;font-size:2.37100005px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#331a00"
+         aria-label="FIN">
+        <path
+           id="path18"
+           style="font-weight:bold;font-size:2.37100005px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#331a00"
+           d="m -1.7074349,0 h 0.336682 v -0.65913801 h 0.76583299 V -0.94840002 H -1.3707529 V -1.292195 h 0.78242999 V -1.581457 H -1.7074349 Z" />
+        <path
+           id="path20"
+           style="font-weight:bold;font-size:2.37100005px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#331a00"
+           d="m -0.35522394,0 h 0.33668201 v -1.581457 h -0.33668201 z" />
+        <path
+           id="path22"
+           style="font-weight:bold;font-size:2.37100005px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#331a00"
+           d="m 1.3837563,0 h 0.324827 v -1.581457 h -0.336682 v 1.02427199 L 0.63926227,-1.581457 H 0.29309626 V 0 h 0.33668201 v -1.062208 z" />
+      </g>
+    </g>
+    <path
+       id="circle6"
+       d="M 2.5,0 A 2.5,2.5 0 0 1 0,2.5 2.5,2.5 0 0 1 -2.5,0 2.5,2.5 0 0 1 0,-2.5 2.5,2.5 0 0 1 2.5,0 Z"
+       style="fill:#331a00;stroke:#331a00;stroke-width:1" />
+  </g>
+</svg>
