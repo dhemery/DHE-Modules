@@ -16,8 +16,8 @@ public:
     configButton(this, GateButton, "Gate", {"GATE input", "High"}, 0);
     configButton(this, ResetButton, "Reset", {"RESET input", "High"}, 0);
 
-    configKnob(this, StartKnob, "Start step", "", Range{1.F, NS}, 0.F);
-    configKnob(this, StepsKnob, "Steps", "", Range{1.F, NS}, 1.F);
+    configParam(StartKnob, 1.F, NS, 1.F, "Start step");
+    configParam(StepsKnob, 1.F, NS, NS, "Steps");
 
     configLevelRangeSwitch(this, LevelRangeSwitch);
     configDurationRangeSwitch(this, DurationRangeSwitch);

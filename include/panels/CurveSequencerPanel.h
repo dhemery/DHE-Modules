@@ -56,11 +56,12 @@ public:
     this->template button(moduleParamsX, resetY, CurveSequencer<NS>::ResetButton);
 
     this->input(moduleInputsX, startY, CurveSequencer<NS>::StartCVInput);
-    this->template knob<SmallKnob>(moduleParamsX, startY, CurveSequencer<NS>::StartKnob);
+    auto *startKnob = this->template knob<SmallKnob>(moduleParamsX, startY, CurveSequencer<NS>::StartKnob);
+    startKnob->snap = true;
 
     this->input(moduleInputsX, stepsY, CurveSequencer<NS>::StepsCVInput);
-    this->template knob<SmallKnob>(moduleParamsX, stepsY, CurveSequencer<NS>::StepsKnob);
-
+    auto *stepsKnob = this->template knob<SmallKnob>(moduleParamsX, stepsY, CurveSequencer<NS>::StepsKnob);
+    stepsKnob->snap = true;
 
 
     auto const stepX = hp2mm(10.F);
