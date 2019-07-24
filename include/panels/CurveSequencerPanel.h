@@ -15,6 +15,22 @@ public:
   SustainModeStepper() : Toggle<P, 6>("stepper-sustain") {}
 };
 
+template <typename P>
+class StartMarker : public rack::widget::SvgWidget {
+public:
+  StartMarker(){
+    setSvg(P::svg("marker-start"));
+  }
+};
+
+template <typename P>
+class EndMarker : public rack::widget::SvgWidget {
+public:
+  EndMarker(){
+    setSvg(P::svg("marker-end"));
+  }
+};
+
 template <int NS, int HP> class CurveSequencerPanel : public Panel<CurveSequencerPanel<NS, HP>> {
 public:
   static constexpr auto moduleSlug = NS == 8 ? "curve-sequencer-8" : "curve-sequencer-16";
@@ -110,6 +126,11 @@ public:
     this->template toggle<2>(moduleOutputsX, levelY, CurveSequencer<NS>::LevelRangeSwitch);
     this->template toggle<3>(moduleOutputsX, durationY, CurveSequencer<NS>::DurationRangeSwitch);
     this->output(moduleOutputsX, outY, CurveSequencer<NS>::OutOutput);
+
+    auto const markerMiddle = hp2mm(13);
+    this->addChild(rack::createWidgetCentered<StartMarker<CurveSequencerPanel<NS,HP>>>(rack::app::mm2px({stepX, markerMiddle})));
+    this->addChild(rack::createWidgetCentered<EndMarker<CurveSequencerPanel<NS,HP>>>(rack::app::mm2px({stepX, markerMiddle})));
+//    this->addChild(rack::createWidgetCentered<EndMarker<CurveSequencerPanel<NS,HP>>>(rack::app::mm2px({stepX + stepDx * (NS-1.F), markerMiddle})));
   }
 }; // namespace dhe
 } // namespace dhe

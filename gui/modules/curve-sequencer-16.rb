@@ -14,6 +14,36 @@ right = hp2mm(width_hp - 2)
 top = hp2mm(4)
 bottom = hp2mm(23)
 
+class Marker < BoundedShape
+  attr_reader :slug
+  TOP = hp2mm(-1)
+  BOTTOM = hp2mm(19.25)
+  WIDTH = hp2mm(2.25)
+  RIGHT = WIDTH / 2.0
+  LEFT = -RIGHT
+  NIB = hp2mm(0.5)
+  THICKNESS = STROKE_WIDTH
+
+  def initialize(type:, color:)
+    @color = color
+    @slug = Pathname("marker-#{type}")
+    @outer = type == :start ? LEFT : RIGHT
+    @inner = type == :start ? LEFT + NIB : RIGHT - NIB
+    super(top: TOP, right: RIGHT, bottom: BOTTOM, left: LEFT)
+  end
+
+  def draw(canvas)
+    canvas.line(x1: @outer, y1: TOP, x2: @outer, y2: BOTTOM, 'stroke-width' => THICKNESS, 'stroke-linecap' => "square", stroke: @color)
+    canvas.line(x1: @outer, y1: TOP, x2: @inner, y2: TOP, 'stroke-width' => THICKNESS, 'stroke-linecap' => "square", stroke: @color)
+    canvas.line(x1: @outer, y1: BOTTOM, x2: @inner, y2: BOTTOM, 'stroke-width' => THICKNESS, 'stroke-linecap' => "square", stroke: @color)
+  end
+end
+
+def position_marker(x:, y:, type:)
+  marker = Marker.new(type: type, color: @foreground)
+  @control_shapes << marker
+  @image_shapes << marker.translate(x, y)
+end
 
 ###############################################################################
 #
@@ -103,6 +133,8 @@ step_label_y = top - hp2mm(0.5)
   line x1: line_x, x2: line_x, y1: top, y2: bottom
 end
 
+position_marker(x: step_x, y: top, type: :start)
+position_marker(x: step_x + step_dx * (steps - 1), y: top, type: :end)
 
 ###############################################################################
 #

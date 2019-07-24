@@ -1,0 +1,7 @@
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="11.430mm" height="102.870mm" viewBox="0 0 11.430 102.870">
+  <g transform="translate(5.715 5.080)">
+    <line x1="-5.715" y1="-5.080" x2="-5.715" y2="97.790" stroke-width="0.350" stroke-linecap="square" stroke="#331a00"/>
+    <line x1="-5.715" y1="-5.080" x2="-3.175" y2="-5.080" stroke-width="0.350" stroke-linecap="square" stroke="#331a00"/>
+    <line x1="-5.715" y1="97.790" x2="-3.175" y2="97.790" stroke-width="0.350" stroke-linecap="square" stroke="#331a00"/>
+  </g>
+</svg>
