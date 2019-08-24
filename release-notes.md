@@ -4,10 +4,16 @@ title: Release Notes
 
 # DHE Modules Release Notes
 
+## Version 1.0.5
+
+- _Stage,_ _Booster Stage,_ and _Hostage._
+  - Fixed a defect that prevented these modules from retriggering
+    while a stage was in progress.
+
 ## Version 1.0.4
 
 - _Fuzzy Logic H_ and  _Fuzzy Logic Z_
-  - Add a _UNI / BI_ switch
+  - Added a _UNI / BI_ switch
     to allow operating
     on audio and other bipolar signals (-5V to 5V).
   - The _OR_ and _NOR_ output port widgets for inputs _C_ and _D_
