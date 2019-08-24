@@ -45,6 +45,7 @@ HostageMachine::State HostageMachine::identifyState() {
     return TrackingInput;
   }
   if (stageGateRise()) {
+    enter(Holding);
     return Holding;
   }
   return state;

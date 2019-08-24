@@ -37,6 +37,7 @@ StageMachine::State StageMachine::identifyState() {
     return TrackingInput;
   }
   if (triggerRise()) {
+    enter(Generating);
     return Generating;
   }
   return state;
