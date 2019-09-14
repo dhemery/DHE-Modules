@@ -15,20 +15,14 @@ public:
   SustainModeStepper() : Toggle<P, 6>("stepper-sustain") {}
 };
 
-template <typename P>
-class StartMarker : public rack::widget::SvgWidget {
+template <typename P> class StartMarker : public rack::widget::SvgWidget {
 public:
-  StartMarker(){
-    setSvg(P::svg("marker-start"));
-  }
+  StartMarker() { setSvg(P::svg("marker-start")); }
 };
 
-template <typename P>
-class EndMarker : public rack::widget::SvgWidget {
+template <typename P> class EndMarker : public rack::widget::SvgWidget {
 public:
-  EndMarker(){
-    setSvg(P::svg("marker-end"));
-  }
+  EndMarker() { setSvg(P::svg("marker-end")); }
 };
 
 template <int NS, int HP> class CurveSequencerPanel : public Panel<CurveSequencerPanel<NS, HP>> {
@@ -45,9 +39,6 @@ public:
     auto const right = hp2mm(HP - 2.F);
     auto const top = hp2mm(4.F);
     auto const bottom = hp2mm(23);
-
-
-
 
     auto const inputTop = top + 7.F;
     auto const inputBottom = bottom - 4.2F;
@@ -79,7 +70,6 @@ public:
     auto *stepsKnob = this->template knob<SmallKnob>(moduleParamsX, stepsY, CurveSequencer<NS>::StepsKnob);
     stepsKnob->snap = true;
 
-
     auto const stepX = hp2mm(10.F);
     auto const stepDx = hp2mm(2.25F);
 
@@ -95,11 +85,11 @@ public:
 
     auto const activeLightXOffset = lightRadius * 2.F;
 
-
     for (int step = 0; step < NS; step++) {
       auto const x = stepX + step * stepDx;
       this->light(x - activeLightXOffset, activeY, CurveSequencer<NS>::GeneratingLights + step);
-      this->template light<rack::componentlibrary::YellowLight>(x + activeLightXOffset, activeY, CurveSequencer<NS>::SustainingLights + step);
+      this->template light<rack::componentlibrary::YellowLight>(x + activeLightXOffset, activeY,
+                                                                CurveSequencer<NS>::SustainingLights + step);
 
       this->template toggle<GenerateModeStepper>(x, generatingModeY, CurveSequencer<NS>::GenerateModeSwitches + step);
       this->template toggle<SustainModeStepper>(x, sustainingModeY, CurveSequencer<NS>::SustainModeSwitches + step);
@@ -115,11 +105,6 @@ public:
       this->input(x, enabledPortY, CurveSequencer<NS>::EnabledInputs + step);
     }
 
-
-
-
-
-
     auto const moduleOutputsX = right;
     auto const outY = bottom - portRadius - 1.F;
 
@@ -127,10 +112,12 @@ public:
     this->template toggle<3>(moduleOutputsX, durationY, CurveSequencer<NS>::DurationRangeSwitch);
     this->output(moduleOutputsX, outY, CurveSequencer<NS>::OutOutput);
 
-    auto const markerMiddle = hp2mm(13);
-    this->addChild(rack::createWidgetCentered<StartMarker<CurveSequencerPanel<NS,HP>>>(rack::app::mm2px({stepX, markerMiddle})));
-    this->addChild(rack::createWidgetCentered<EndMarker<CurveSequencerPanel<NS,HP>>>(rack::app::mm2px({stepX, markerMiddle})));
-//    this->addChild(rack::createWidgetCentered<EndMarker<CurveSequencerPanel<NS,HP>>>(rack::app::mm2px({stepX + stepDx * (NS-1.F), markerMiddle})));
+    this->addChild(rack::createWidgetCentered<StartMarker<CurveSequencerPanel<NS, HP>>>(
+        rack::app::mm2px({stepX - activeLightXOffset, activeY})));
+    this->addChild(rack::createWidgetCentered<EndMarker<CurveSequencerPanel<NS, HP>>>(
+        rack::app::mm2px({stepX + activeLightXOffset, activeY})));
+    //    this->addChild(rack::createWidgetCentered<EndMarker<CurveSequencerPanel<NS,HP>>>(rack::app::mm2px({stepX +
+    //    stepDx * (NS-1.F), markerMiddle})));
   }
 }; // namespace dhe
 } // namespace dhe
