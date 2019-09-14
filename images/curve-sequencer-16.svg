@@ -5103,10 +5103,10 @@
     </g>
     <g
        id="g1998"
-       transform="translate(50.8,20.32)">
+       transform="translate(50.8,21.408)">
       <path
          id="line1992"
-         d="M -5.7150002,-5.0799999 V 97.790001"
+         d="M -5.7150002,-5.0799999 V 5.0799999"
          style="stroke:#331a00;stroke-width:0.34999999;stroke-linecap:square" />
       <path
          id="line1994"
@@ -5114,15 +5114,15 @@
          style="stroke:#331a00;stroke-width:0.34999999;stroke-linecap:square" />
       <path
          id="line1996"
-         d="M -5.7150002,97.790001 H -3.175"
+         d="M -5.7150002,5.0799999 H -3.175"
          style="stroke:#331a00;stroke-width:0.34999999;stroke-linecap:square" />
     </g>
     <g
        id="g2006"
-       transform="translate(222.25,20.32)">
+       transform="translate(222.25,21.408)">
       <path
          id="line2000"
-         d="M 5.7150002,-5.0799999 V 97.790001"
+         d="M 5.7150002,-5.0799999 V 5.0799999"
          style="stroke:#331a00;stroke-width:0.34999999;stroke-linecap:square" />
       <path
          id="line2002"
@@ -5130,7 +5130,7 @@
          style="stroke:#331a00;stroke-width:0.34999999;stroke-linecap:square" />
       <path
          id="line2004"
-         d="M 5.7150002,97.790001 H 3.175"
+         d="M 5.7150002,5.0799999 H 3.175"
          style="stroke:#331a00;stroke-width:0.34999999;stroke-linecap:square" />
     </g>
     <g

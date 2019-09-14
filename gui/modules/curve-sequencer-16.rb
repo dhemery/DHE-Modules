@@ -16,12 +16,11 @@ bottom = hp2mm(23)
 
 class Marker < BoundedShape
   attr_reader :slug
-  TOP = hp2mm(-1)
-  BOTTOM = hp2mm(19.25)
-  WIDTH = hp2mm(2.25)
-  RIGHT = WIDTH / 2.0
-  LEFT = -RIGHT
-  NIB = hp2mm(0.5)
+  TOP = -Light::DIAMETER
+  BOTTOM = Light::DIAMETER
+  RIGHT = Light::DIAMETER
+  LEFT = -Light::DIAMETER
+  NIB = Light::DIAMETER
   THICKNESS = STROKE_WIDTH
 
   def initialize(type:, color:)
@@ -112,8 +111,10 @@ label x: label_x, y: curve_y, text: 'CURVE', alignment: :left_of, size: :large
 label x: label_x, y: duration_y, text: 'DURATION', alignment: :left_of, size: :large
 label x: label_x, y: enabled_button_y, text: 'ENABLED', alignment: :left_of, size: :large
 
+channel_separator_top = top + hp2mm(1.25)
+
 line_x = step_x - step_dx / 2.0
-line x1: line_x, x2: line_x, y1: top, y2: bottom
+line x1: line_x, x2: line_x, y1: channel_separator_top, y2: bottom
 
 step_label_y = top - hp2mm(0.5)
 (0...steps).each do |step|
@@ -130,11 +131,11 @@ step_label_y = top - hp2mm(0.5)
   button y: enabled_button_y, x: x, label: ''
   port y: enabled_port_y, x: x, label: ''
   line_x = x + step_dx / 2.0
-  line x1: line_x, x2: line_x, y1: top, y2: bottom
+  line x1: line_x, x2: line_x, y1: channel_separator_top, y2: bottom
 end
 
-position_marker(x: step_x, y: top, type: :start)
-position_marker(x: step_x + step_dx * (steps - 1), y: top, type: :end)
+position_marker(x: step_x - Light::DIAMETER, y: active_y, type: :start)
+position_marker(x: step_x + step_dx * (steps - 1) + Light::DIAMETER, y: active_y, type: :end)
 
 ###############################################################################
 #
