@@ -1,24 +1,42 @@
 
+#include <gmock/gmock-actions.h>
+#include <gmock/gmock.h>
 #include <gtest/gtest.h>
 
 namespace dhe {
 
-template <typename M> class CurveSequencerEngine {
+constexpr float sampleTime = 1.F / 44000.F;
+
+using ::testing::Return;
+using ::testing::StrictMock;
+
+struct CurveSequencerModule {
+  virtual auto isRunning() -> bool = 0;
+  virtual void send(float voltage) = 0;
+};
+
+struct FakeCurveSequencer : public CurveSequencerModule {
+  MOCK_METHOD(bool, isRunning, (), ());
+  MOCK_METHOD(void, send, (float), ());
+};
+
+class CurveSequencerEngine {
 public:
-  explicit CurveSequencerEngine(M &module, int stageCount) {}
+  explicit CurveSequencerEngine(CurveSequencerModule &module, int numberOfStages) : module{module} {}
+
+  void process(float sampleTime) { module.isRunning(); }
+
+private:
+  CurveSequencerModule &module;
 };
 
-class FakeCurveSequencer {
-public:
-  explicit FakeCurveSequencer(int stageCount) {}
+struct IfNotRunning : public ::testing::Test {
+  StrictMock<FakeCurveSequencer> sequencer; // Fails if unspecified function called
+  CurveSequencerEngine engine{sequencer, 4};
+
+  void SetUp() override { EXPECT_CALL(sequencer, isRunning()).WillRepeatedly(Return(false)); }
 };
 
-struct CurveSequencerEngineTest : public ::testing::Test {
-  FakeCurveSequencer sequencer{4};
-  CurveSequencerEngine<FakeCurveSequencer> engine{sequencer, 4};
-  void SetUp() override {}
-};
+TEST_F(IfNotRunning, doesNothing) { engine.process(sampleTime); }
 
-TEST_F(CurveSequencerEngineTest, foo) {}
-
-} // namespace dhe
+} // namespace dhegs
