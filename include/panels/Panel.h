@@ -88,11 +88,9 @@ protected:
     return param<B<P>>(x, y, index);
   }
 
-  template <typename L = rack::componentlibrary::GreenLight>
-  void light(float x, float y, int index) {
+  template <typename L = rack::componentlibrary::GreenLight> void light(float x, float y, int index) {
     auto const &pos = mmvec(x, y);
-    auto *light = rack::createLightCentered<rack::componentlibrary::SmallLight<L>>(
-        pos, module, index);
+    auto *light = rack::createLightCentered<rack::componentlibrary::SmallLight<L>>(pos, module, index);
     addChild(light);
   }
 

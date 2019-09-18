@@ -25,8 +25,8 @@ void init(rack::plugin::Plugin *p) {
 
   p->addModel(rack::createModel<dhe::Blossom, dhe::BlossomPanel>("Blossom"));
   p->addModel(rack::createModel<dhe::BoosterStage, dhe::BoosterStagePanel>("BoosterStage"));
-  p->addModel(rack::createModel<dhe::CurveSequencer<8>, dhe::CurveSequencerPanel<8,31>>("CurveSequencer8"));
-  p->addModel(rack::createModel<dhe::CurveSequencer<16>, dhe::CurveSequencerPanel<16,49>>("CurveSequencer16"));
+  p->addModel(rack::createModel<dhe::CurveSequencerModule<8>, dhe::CurveSequencerPanel<8, 31>>("CurveSequencer8"));
+  p->addModel(rack::createModel<dhe::CurveSequencerModule<16>, dhe::CurveSequencerPanel<16, 49>>("CurveSequencer16"));
   p->addModel(rack::createModel<dhe::Cubic, dhe::CubicPanel>("Cubic"));
   p->addModel(rack::createModel<dhe::Func, dhe::FuncPanel>("Func"));
   p->addModel(rack::createModel<dhe::FuzzyLogicH, dhe::FuzzyLogicHPanel>("FuzzyLogicH"));

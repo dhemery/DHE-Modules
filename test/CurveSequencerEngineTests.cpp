@@ -1,4 +1,6 @@
 
+#include "modules/CurveSequencer.h"
+
 #include <gmock/gmock-actions.h>
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
@@ -10,24 +12,19 @@ constexpr float sampleTime = 1.F / 44000.F;
 using ::testing::Return;
 using ::testing::StrictMock;
 
-struct CurveSequencerModule {
-  virtual auto isRunning() -> bool = 0;
-  virtual void send(float voltage) = 0;
-};
-
-struct FakeCurveSequencer : public CurveSequencerModule {
+struct FakeCurveSequencer : public CurveSequencer {
   MOCK_METHOD(bool, isRunning, (), ());
   MOCK_METHOD(void, send, (float), ());
 };
 
 class CurveSequencerEngine {
 public:
-  explicit CurveSequencerEngine(CurveSequencerModule &module, int numberOfStages) : module{module} {}
+  explicit CurveSequencerEngine(CurveSequencer &module, int numberOfStages) : module{module} {}
 
   void process(float sampleTime) { module.isRunning(); }
 
 private:
-  CurveSequencerModule &module;
+  CurveSequencer &module;
 };
 
 struct IfNotRunning : public ::testing::Test {
