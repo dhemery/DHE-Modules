@@ -10,9 +10,11 @@ template <int NS> class CurveSequencerModule : public rack::engine::Module, publ
 public:
   CurveSequencerModule();
 
-  bool isRunning() override;
+  auto gate() -> int override;
+  auto isRunning() -> bool override;
   void process(const ProcessArgs &args) override;
   void send(float voltage) override;
+  auto startStep() -> int override;
 
   enum ParameterIds {
     DurationRangeSwitch,

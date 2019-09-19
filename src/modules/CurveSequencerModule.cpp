@@ -39,11 +39,13 @@ template <int NS> CurveSequencerModule<NS>::CurveSequencerModule() {
     configCurvatureKnob(this, CurveKnobs + step, "Curvature");
     configDurationKnob(this, DurationKnobs + step, DurationRangeSwitch, "Duration");
     configButton(this, EnabledButtons + step, "Enabled", {"ENABLED input", "Yes"}, 1);
-    auto const intensity = ((float) step) / ((float) NS);
-    lights[GeneratingLights + step].setBrightness(intensity);
-    lights[SustainingLights + step].setBrightness(1.F - intensity);
+
+    lights[GeneratingLights + step].setBrightness(0.F);
+    lights[SustainingLights + step].setBrightness(0.F);
   }
 }
+template <int NS> auto CurveSequencerModule<NS>::gate() -> int { return 0; }
+template <int NS> auto CurveSequencerModule<NS>::startStep() -> int { return 0; }
 
 template class CurveSequencerModule<8>;
 template class CurveSequencerModule<16>;
