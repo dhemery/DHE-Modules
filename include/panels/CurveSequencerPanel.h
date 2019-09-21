@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Panel.h"
-#include "modules/CurveSequencerModule.h"
+#include "modules/CurveSequencer.h"
 
 namespace dhe {
 
@@ -30,7 +30,7 @@ public:
   static constexpr auto moduleSlug = NS == 8 ? "curve-sequencer-8" : "curve-sequencer-16";
   static constexpr auto hp = HP;
 
-  CurveSequencerPanel(CurveSequencerModule<NS> *sequencer) : Panel<CurveSequencerPanel<NS, HP>>(sequencer, HP) {
+  CurveSequencerPanel(CurveSequencer<NS> *sequencer) : Panel<CurveSequencerPanel<NS, HP>>(sequencer, HP) {
     auto const portRadius = 4.2F;
     auto const buttonRadius = 3.F;
     auto const lightRadius = 1.088F;
@@ -53,21 +53,21 @@ public:
     auto const startY = inputTop + 3.F * inputDy;
     auto const stepsY = inputTop + 4.F * inputDy;
 
-    this->input(moduleInputsX, runY, CurveSequencerModule<NS>::RunInput);
-    this->template button<ToggleButton>(moduleParamsX, runY, CurveSequencerModule<NS>::RunButton);
+    this->input(moduleInputsX, runY, CurveSequencer<NS>::RunInput);
+    this->template button<ToggleButton>(moduleParamsX, runY, CurveSequencer<NS>::RunButton);
 
-    this->input(moduleInputsX, gateY, CurveSequencerModule<NS>::GateInput);
-    this->template button(moduleParamsX, gateY, CurveSequencerModule<NS>::GateButton);
+    this->input(moduleInputsX, gateY, CurveSequencer<NS>::GateInput);
+    this->template button(moduleParamsX, gateY, CurveSequencer<NS>::GateButton);
 
-    this->input(moduleInputsX, resetY, CurveSequencerModule<NS>::ResetInput);
-    this->template button(moduleParamsX, resetY, CurveSequencerModule<NS>::ResetButton);
+    this->input(moduleInputsX, resetY, CurveSequencer<NS>::ResetInput);
+    this->template button(moduleParamsX, resetY, CurveSequencer<NS>::ResetButton);
 
-    this->input(moduleInputsX, startY, CurveSequencerModule<NS>::StartCVInput);
-    auto *startKnob = this->template knob<SmallKnob>(moduleParamsX, startY, CurveSequencerModule<NS>::StartKnob);
+    this->input(moduleInputsX, startY, CurveSequencer<NS>::StartCVInput);
+    auto *startKnob = this->template knob<SmallKnob>(moduleParamsX, startY, CurveSequencer<NS>::StartKnob);
     startKnob->snap = true;
 
-    this->input(moduleInputsX, stepsY, CurveSequencerModule<NS>::StepsCVInput);
-    auto *stepsKnob = this->template knob<SmallKnob>(moduleParamsX, stepsY, CurveSequencerModule<NS>::StepsKnob);
+    this->input(moduleInputsX, stepsY, CurveSequencer<NS>::StepsCVInput);
+    auto *stepsKnob = this->template knob<SmallKnob>(moduleParamsX, stepsY, CurveSequencer<NS>::StepsKnob);
     stepsKnob->snap = true;
 
     auto const stepX = hp2mm(10.F);
@@ -87,32 +87,30 @@ public:
 
     for (int step = 0; step < NS; step++) {
       auto const x = stepX + step * stepDx;
-      this->light(x - activeLightXOffset, activeY, CurveSequencerModule<NS>::GeneratingLights + step);
+      this->light(x - activeLightXOffset, activeY, CurveSequencer<NS>::GeneratingLights + step);
       this->template light<rack::componentlibrary::YellowLight>(x + activeLightXOffset, activeY,
-                                                                CurveSequencerModule<NS>::SustainingLights + step);
+                                                                CurveSequencer<NS>::SustainingLights + step);
 
-      this->template toggle<GenerateModeStepper>(x, generatingModeY,
-                                                 CurveSequencerModule<NS>::GenerateModeSwitches + step);
-      this->template toggle<SustainModeStepper>(x, sustainingModeY,
-                                                CurveSequencerModule<NS>::SustainModeSwitches + step);
+      this->template toggle<GenerateModeStepper>(x, generatingModeY, CurveSequencer<NS>::GenerateModeSwitches + step);
+      this->template toggle<SustainModeStepper>(x, sustainingModeY, CurveSequencer<NS>::SustainModeSwitches + step);
 
-      this->template knob<SmallKnob>(x, levelY, CurveSequencerModule<NS>::LevelKnobs + step);
+      this->template knob<SmallKnob>(x, levelY, CurveSequencer<NS>::LevelKnobs + step);
 
-      this->template toggle<2>(x, shapeY, CurveSequencerModule<NS>::ShapeSwitches + step);
-      this->template knob<SmallKnob>(x, curveY, CurveSequencerModule<NS>::CurveKnobs + step);
+      this->template toggle<2>(x, shapeY, CurveSequencer<NS>::ShapeSwitches + step);
+      this->template knob<SmallKnob>(x, curveY, CurveSequencer<NS>::CurveKnobs + step);
 
-      this->template knob<SmallKnob>(x, durationY, CurveSequencerModule<NS>::DurationKnobs + step);
+      this->template knob<SmallKnob>(x, durationY, CurveSequencer<NS>::DurationKnobs + step);
 
-      this->template button<ToggleButton>(x, enabledButtonY, CurveSequencerModule<NS>::EnabledButtons + step);
-      this->input(x, enabledPortY, CurveSequencerModule<NS>::EnabledInputs + step);
+      this->template button<ToggleButton>(x, enabledButtonY, CurveSequencer<NS>::EnabledButtons + step);
+      this->input(x, enabledPortY, CurveSequencer<NS>::EnabledInputs + step);
     }
 
     auto const moduleOutputsX = right;
     auto const outY = bottom - portRadius - 1.F;
 
-    this->template toggle<2>(moduleOutputsX, levelY, CurveSequencerModule<NS>::LevelRangeSwitch);
-    this->template toggle<3>(moduleOutputsX, durationY, CurveSequencerModule<NS>::DurationRangeSwitch);
-    this->output(moduleOutputsX, outY, CurveSequencerModule<NS>::OutOutput);
+    this->template toggle<2>(moduleOutputsX, levelY, CurveSequencer<NS>::LevelRangeSwitch);
+    this->template toggle<3>(moduleOutputsX, durationY, CurveSequencer<NS>::DurationRangeSwitch);
+    this->output(moduleOutputsX, outY, CurveSequencer<NS>::OutOutput);
 
     this->addChild(rack::createWidgetCentered<StartMarker<CurveSequencerPanel<NS, HP>>>(
         rack::app::mm2px({stepX - activeLightXOffset, activeY})));
