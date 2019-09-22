@@ -1,30 +1,8 @@
+#include "modules/curve-sequencer/Sequence.h"
+
 #include <gmock/gmock-actions.h>
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
-
-namespace dhe {
-
-namespace curve_sequencer {
-
-  template <typename M> class Step {};
-
-  template <typename M, typename StepT = Step<M>> class Sequence {
-  public:
-    explicit Sequence(M &module) : module{module} {}
-
-    void process(float sampleTime) {
-      if (!module.isRunning()) {
-        return;
-      }
-      module.step(0).start();
-    }
-
-  private:
-    M &module;
-  };
-} // namespace curve_sequencer
-
-} // namespace dhe
 
 struct FakeStep {
   MOCK_METHOD(bool, isAvailable, ());

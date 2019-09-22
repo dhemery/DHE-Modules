@@ -33,6 +33,7 @@ include $(RACK_DIR)/plugin.mk
 
 TEST_SOURCES =  $(wildcard \
 					test/*.cpp \
+					test/*/*.cpp \
 					)
 TEST_OBJECTS := $(patsubst %, build/%.o, $(TEST_SOURCES))
 
