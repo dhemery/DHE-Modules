@@ -2,21 +2,31 @@
 
 #include "modules/curve-sequencer/Step.h"
 
+#include <array>
+
 namespace dhe {
 namespace curve_sequencer {
-  template <typename M, typename StepT = Step<M>> class Sequence {
+  /**
+   * Controls the sequence in a CurveSequencer module.
+   * @tparam M the type of module that owns this sequence
+   * @tparam S the type of step container for the sequence
+   */
+  template <typename M, typename S = std::vector<Step<M>>> class Sequence {
   public:
-    explicit Sequence(M &module) : module{module} {}
+    Sequence(M &module, S &steps) : module{module}, steps{steps} {}
 
     void process(float sampleTime) {
       if (!module.isRunning()) {
         return;
       }
-      module.step(0).start();
+      if (module.gate()) {
+        steps[0].start();
+      }
     }
 
   private:
     M &module;
+    S &steps;
   };
 } // namespace curve_sequencer
 } // namespace dhe

@@ -1,5 +1,7 @@
+#pragma clang diagnostic push
 #include "modules/curve-sequencer/Sequence.h"
 
+#include <array>
 #include <gmock/gmock-actions.h>
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
@@ -16,36 +18,39 @@ struct FakeModule {
   MOCK_METHOD(FakeStep &, step, (int) );
 };
 
+using ::testing::NiceMock;
 using ::testing::Return;
 using ::testing::ReturnRef;
-using Sequence = dhe::curve_sequencer::Sequence<FakeModule, FakeStep>;
+using ::testing::StrictMock;
+using Sequence = dhe::curve_sequencer::Sequence<FakeModule, std::vector<FakeStep>>;
 
 float constexpr sampleTime = 1.F / 44000.F;
 
-struct SequenceTest : ::testing::Test {
+struct WhileNotRunning : public ::testing::Test {
+  StrictMock<FakeModule> module;
+  std::vector<FakeStep> steps{};
+  Sequence sequence = Sequence{module, steps};
+
+  void SetUp() override { EXPECT_CALL(module, isRunning()).WillOnce(Return(false)); }
+};
+
+// TODO: How to positively set it to idle?
+struct WhileIdle : public ::testing::Test {
   FakeModule module;
-  Sequence sequence = Sequence{module};
-};
-
-struct WhileNotRunning : public SequenceTest {
-  void SetUp() { ON_CALL(module, isRunning()).WillByDefault(Return(false)); }
-};
-
-struct WhileIdle : public SequenceTest {
-  void SetUp() { ON_CALL(module, isRunning()).WillByDefault(Return(true)); }
+  std::vector<FakeStep> steps{4};
+  Sequence sequence = Sequence{module, steps};
+  void SetUp() override { EXPECT_CALL(module, isRunning()).WillOnce(Return(true)); }
 };
 
 TEST_F(WhileNotRunning, doesNothing) { sequence.process(sampleTime); }
 
 TEST_F(WhileIdle, gateRiseStartsFirstAvailableStep) {
-  FakeStep step0;
   auto firstAvailableStep = 0;
   ON_CALL(module, gate()).WillByDefault(Return(true));
   ON_CALL(module, startStep()).WillByDefault(Return(firstAvailableStep));
-  ON_CALL(module, step(firstAvailableStep)).WillByDefault(ReturnRef(step0));
-  ON_CALL(step0, isAvailable()).WillByDefault(Return(true));
+  ON_CALL(steps[firstAvailableStep], isAvailable()).WillByDefault(Return(true));
 
-  EXPECT_CALL(step0, start());
+  EXPECT_CALL(steps[firstAvailableStep], start());
 
   sequence.process(sampleTime);
 }

@@ -6,14 +6,22 @@
 #include "modules/controls/LevelConfig.h"
 
 #include <engine/Module.hpp>
+#include <modules/curve-sequencer/Sequence.h>
+#include <modules/curve-sequencer/Step.h>
 
 namespace dhe {
 
-template <int NS> class CurveSequencer : public rack::engine::Module {
+template <int N> class CurveSequencer : public rack::engine::Module {
 public:
   CurveSequencer();
 
-  void process(const ProcessArgs &args) override;
+  void process(const ProcessArgs &args) override { sequence.process(args.sampleRate); };
+
+  auto isRunning() -> bool { return inputIsHigh(this, RunInput) || buttonIsPressed(this, RunInput); }
+
+  auto gate() -> bool { return inputIsHigh(this, GateInput) || buttonIsPressed(this, GateButton); }
+
+  void setGenerating(int step, bool state) { lights[step].setBrightness(state ? 10.F : 0.F); }
 
   enum ParameterIds {
     DurationRangeSwitch,
@@ -23,39 +31,42 @@ public:
     RunButton,
     StartKnob,
     StepsKnob,
-    ENUMS(CurveKnobs, NS),
-    ENUMS(DurationKnobs, NS),
-    ENUMS(EnabledButtons, NS),
-    ENUMS(LevelKnobs, NS),
-    ENUMS(GenerateModeSwitches, NS),
-    ENUMS(SustainModeSwitches, NS),
-    ENUMS(ShapeSwitches, NS),
+    ENUMS(CurveKnobs, N),
+    ENUMS(DurationKnobs, N),
+    ENUMS(EnabledButtons, N),
+    ENUMS(LevelKnobs, N),
+    ENUMS(GenerateModeSwitches, N),
+    ENUMS(SustainModeSwitches, N),
+    ENUMS(ShapeSwitches, N),
     ParameterCount
   };
 
-  enum InputIds { GateInput, ResetInput, RunInput, StartCVInput, StepsCVInput, ENUMS(EnabledInputs, NS), InputCount };
+  enum InputIds { GateInput, ResetInput, RunInput, StartCVInput, StepsCVInput, ENUMS(EnabledInputs, N), InputCount };
 
   enum OutputIds { OutOutput, OutputCount };
 
-  enum LightIds { ENUMS(GeneratingLights, NS), ENUMS(SustainingLights, NS), LightCount };
+  enum LightIds { ENUMS(GeneratingLights, N), ENUMS(SustainingLights, N), LightCount };
+
+  using StepsT = std::vector<dhe::curve_sequencer::Step<CurveSequencer<N>>>;
+  using SequenceT = dhe::curve_sequencer::Sequence<CurveSequencer<N>, StepsT>;
+  StepsT steps{};
+  SequenceT sequence{*this, steps};
 };
 
-template <int NS> void CurveSequencer<NS>::process(const rack::engine::Module::ProcessArgs &args) {}
-
-template <int NS> CurveSequencer<NS>::CurveSequencer() {
+template <int N> CurveSequencer<N>::CurveSequencer() {
   config(ParameterCount, InputCount, OutputCount, LightCount);
 
   configButton(this, RunButton, "Run", {"RUN input", "Yes"}, 1);
   configButton(this, GateButton, "Gate", {"GATE input", "High"}, 0);
   configButton(this, ResetButton, "Reset", {"RESET input", "High"}, 0);
 
-  configParam(StartKnob, 1.F, NS, 1.F, "Start step");
-  configParam(StepsKnob, 1.F, NS, NS, "Steps");
+  configParam(StartKnob, 1.F, N, 1.F, "Start step");
+  configParam(StepsKnob, 1.F, N, N, "Steps");
 
   configLevelRangeSwitch(this, LevelRangeSwitch);
   configDurationRangeSwitch(this, DurationRangeSwitch);
 
-  for (int step = 0; step < NS; step++) {
+  for (int step = 0; step < N; step++) {
     configToggle<7>(this, GenerateModeSwitches + step, "Generate mode",
                     {"Interrupt if gate rises", "Interrupt if gate falls", "Interrupt if gate changes",
                      "Skip/interrupt if gate is high", "Skip/interrupt if gate is low", "Skip", "Run to completion"},
@@ -72,6 +83,8 @@ template <int NS> CurveSequencer<NS>::CurveSequencer() {
 
     lights[GeneratingLights + step].setBrightness(0.F);
     lights[SustainingLights + step].setBrightness(0.F);
+
+    steps.push_back({*this, step});
   }
 }
 } // namespace dhe
