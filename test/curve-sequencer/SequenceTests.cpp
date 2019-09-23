@@ -1,4 +1,3 @@
-#pragma clang diagnostic push
 #include "modules/curve-sequencer/Sequence.h"
 
 #include <array>
@@ -18,9 +17,7 @@ struct FakeModule {
   MOCK_METHOD(FakeStep &, step, (int) );
 };
 
-using ::testing::NiceMock;
 using ::testing::Return;
-using ::testing::ReturnRef;
 using ::testing::StrictMock;
 using Sequence = dhe::curve_sequencer::Sequence<FakeModule, std::vector<FakeStep>>;
 
