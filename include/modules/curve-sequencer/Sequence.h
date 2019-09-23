@@ -2,7 +2,7 @@
 
 #include "modules/curve-sequencer/Step.h"
 
-#include <array>
+#include <vector>
 
 namespace dhe {
 namespace curve_sequencer {

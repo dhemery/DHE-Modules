@@ -1,9 +1,9 @@
 #include "modules/curve-sequencer/Sequence.h"
 
-#include <array>
 #include <gmock/gmock-actions.h>
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
+#include <vector>
 
 struct FakeStep {
   MOCK_METHOD(bool, isAvailable, ());
