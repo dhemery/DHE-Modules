@@ -40,11 +40,11 @@ static void configSpeedKnob(Xycloid *xycloid, int knobId) {
 }
 
 static inline auto wobbleRatioRange(Xycloid const *xycloid) -> Range const * {
-  return selectedRange<3>(xycloid, Xycloid::DirectionSwitch, wobbleRatioRanges);
+  return selectedRange<3>(xycloid->params[Xycloid::DirectionSwitch], wobbleRatioRanges);
 }
 
 static inline auto wobbleRatioIsFree(Xycloid const *xycloid) -> bool {
-  return switchPosition(xycloid, Xycloid::FreeRatioSwitch) == 1;
+  return switchPosition(xycloid->params[Xycloid::FreeRatioSwitch]) == 1;
 }
 
 static inline auto wobbleRatio(Xycloid const *xycloid, float rotation) -> float {
@@ -112,17 +112,15 @@ void Xycloid::process(const ProcessArgs &args) {
 }
 
 auto Xycloid::depth() const -> float {
-  auto rotation = dhe::rotation(this, DepthKnob, DepthCvInput, DepthAvKnob);
-  return wobbleDepthRange.clamp(rotation);
+  return wobbleDepthRange.clamp(rotation(params[DepthKnob], inputs[DepthCvInput], params[DepthAvKnob]));
 }
 
 auto Xycloid::phase() const -> float {
-  auto rotation = dhe::rotation(this, PhaseOffsetKnob, PhaseCvInput, PhaseOffsetAvKnob);
-  return rotation - 0.5F;
+  return rotation(params[PhaseOffsetKnob], inputs[PhaseCvInput], params[PhaseOffsetAvKnob]) - 0.5F;
 }
 
 auto Xycloid::ratio() const -> float {
-  return dhe::wobbleRatio(this, rotation(this, RatioKnob, RatioCvInput, RatioAvKnob));
+  return wobbleRatio(this, rotation(params[RatioKnob], inputs[RatioCvInput], params[RatioAvKnob]));
 }
 
 } // namespace dhe

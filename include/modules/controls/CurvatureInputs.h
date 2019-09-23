@@ -19,14 +19,14 @@ static inline auto curvature(float rotation) -> float {
 }
 
 static inline auto curvature(rack::engine::Module const *module, int knobId) -> float {
-  return curvature(rotation(module, knobId));
+  return curvature(paramValue(module->params[knobId]));
 }
 
 static inline auto curvature(rack::engine::Module const *module, int knobId, int cvId) -> float {
-  return curvature(rotation(module, knobId, cvId));
+  return curvature(rotation(module->params[knobId], module->inputs[cvId]));
 }
 
 static inline auto curvature(rack::engine::Module const *module, int knobId, int cvId, int avId) -> float {
-  return curvature(rotation(module, knobId, cvId, avId));
+  return curvature(rotation(module->params[knobId], module->inputs[cvId], module->params[avId]));
 }
 } // namespace dhe

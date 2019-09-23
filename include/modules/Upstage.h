@@ -27,9 +27,9 @@ private:
     outputs[TriggerOutput].setVoltage(voltage);
   }
 
-  auto triggerIn() const -> bool { return inputIsHigh(this, TriggerInput) || buttonIsPressed(this, TriggerButton); }
+  auto triggerIn() const -> bool { return inputIsHigh(inputs[TriggerInput]) || buttonIsPressed(params[TriggerButton]); }
 
-  auto waitIn() const -> bool { return inputIsHigh(this, WaitInput) || buttonIsPressed(this, WaitButton); }
+  auto waitIn() const -> bool { return inputIsHigh(inputs[WaitInput]) || buttonIsPressed(params[WaitButton]); }
 
   auto level() const -> float { return selectableLevel(this, LevelKnob, LevelCvInput, LevelRangeSwitch); }
 };

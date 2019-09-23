@@ -39,16 +39,18 @@ private:
 
   auto add(float in) const -> float { return in + offsetRange()->scale(operand()); }
 
-  auto isMultiplication() const -> bool { return switchPosition(module, operationSwitchId) == 1; }
+  auto isMultiplication() const -> bool { return switchPosition(module->params[operationSwitchId]) == 1; }
 
   auto multiplierRange() const -> Range const * {
-    return selectedRange<4>(module, multiplierRangeSwitchId, multiplierRanges);
+    return selectedRange<4>(module->params[multiplierRangeSwitchId], multiplierRanges);
   };
 
   auto multiply(float in) const -> float { return in * multiplierRange()->scale(operand()); }
 
-  auto offsetRange() const -> Range const * { return selectedRange<4>(module, offsetRangeSwitchId, offsetRanges); };
+  auto offsetRange() const -> Range const * {
+    return selectedRange<4>(module->params[offsetRangeSwitchId], offsetRanges);
+  };
 
-  auto operand() const -> float { return rotation(module, operandKnobId); }
+  auto operand() const -> float { return paramValue(module->params[operandKnobId]); }
 };
 } // namespace dhe

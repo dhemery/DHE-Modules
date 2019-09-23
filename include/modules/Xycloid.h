@@ -40,16 +40,17 @@ public:
   enum OutputIds { XOutput, YOutput, OutputCount };
 
 private:
-  auto xGain() const -> float { return scaledRotation(this, XGainKnob, XGainCvInput, gainRange); }
+  auto xGain() const -> float { return gainRange.scale(rotation(params[XGainKnob], inputs[XGainCvInput])); }
 
-  auto xOffset() const -> float { return buttonIsPressed(this, XRangeSwitch) ? 1.F : 0.F; }
+  auto xOffset() const -> float { return buttonIsPressed(params[XRangeSwitch]) ? 1.F : 0.F; }
 
-  auto yGain() const -> float { return scaledRotation(this, YGainKnob, YGainCvInput, gainRange); }
+  auto yGain() const -> float { return gainRange.scale(rotation(params[YGainKnob], inputs[YGainCvInput])); }
 
-  auto yOffset() const -> float { return buttonIsPressed(this, YRangeSwitch) ? 1.F : 0.F; }
+  auto yOffset() const -> float { return buttonIsPressed(params[YRangeSwitch]) ? 1.F : 0.F; }
 
   auto speed() const -> float {
-    return taperedAndScaledRotation(this, SpeedKnob, SpeedCvInput, SpeedAvKnob, speedKnobTaper, speedRange);
+    return taperedAndScaledRotation(params[SpeedKnob], inputs[SpeedCvInput], params[SpeedAvKnob], speedKnobTaper,
+                                    speedRange);
   }
 
   auto depth() const -> float;

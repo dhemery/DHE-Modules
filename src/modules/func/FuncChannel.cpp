@@ -75,7 +75,7 @@ auto FuncChannel::apply(float upstream) const -> float {
 
 auto FuncChannel::currentOperandName() const -> std::string {
   static auto const operandNames = std::array<std::string, 2>{"Offset", "Multiplier"};
-  auto const operandName = selected<std::string, 2>(module, operationSwitchId, operandNames);
+  auto const operandName = selected<std::string, 2>(module->params[operationSwitchId], operandNames);
   return operandName + channelName;
 }
 

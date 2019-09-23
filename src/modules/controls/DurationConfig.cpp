@@ -45,7 +45,7 @@ void configDurationKnob(rack::engine::Module *module, int knobId, Range const &r
 void configDurationKnob(rack::engine::Module *module, int knobId, int switchId, std::string const &name,
                         float initialRotation) {
   auto const rangeSupplier
-      = [module, switchId]() -> Range const * { return selectedRange<3>(module, switchId, durationRanges); };
+      = [module, switchId]() -> Range const * { return selectedRange<3>(module->params[switchId], durationRanges); };
   configDurationKnob(module, knobId, rangeSupplier, name, initialRotation);
 }
 

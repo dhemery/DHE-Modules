@@ -18,10 +18,10 @@ public:
 private:
   void sendSignal(float voltage) { outputs[SwaveOutput].setVoltage(voltage); }
 
-  auto signalIn() const -> float { return inputVoltage(this, SwaveInput); }
+  auto signalIn() const -> float { return inputVoltage(inputs[SwaveInput]); }
 
   auto taper(float input) const -> float {
-    auto const taper = selectedTaper(this, ShapeSwitch);
+    auto const taper = selectedTaper(params[ShapeSwitch]);
     return taper->apply(input, curvature(this, CurveKnob, CurveCvInput, CurveAvKnob));
   }
 };

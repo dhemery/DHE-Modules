@@ -35,19 +35,19 @@ public:
   enum OutputIds { ActiveOutput, EocOutput, EnvelopeOutput, OutputCount };
 
 private:
-  auto activeButton() const -> bool { return buttonIsPressed(this, ActiveButton); }
+  auto activeButton() const -> bool { return buttonIsPressed(params[ActiveButton]); }
 
   auto deferIsHigh() const -> bool override {
-    return inputIsHigh(this, DeferInput) || buttonIsPressed(this, DeferButton);
+    return inputIsHigh(inputs[DeferInput]) || buttonIsPressed(params[DeferButton]);
   }
 
   auto duration() const -> float override {
     return selectableDuration(this, DurationKnob, DurationCvInput, DurationRangeSwitch);
   }
 
-  auto envelopeIn() const -> float override { return inputVoltage(this, EnvelopeInput); }
+  auto envelopeIn() const -> float override { return inputVoltage(inputs[EnvelopeInput]); }
 
-  auto eocButton() const -> bool { return buttonIsPressed(this, EocButton); }
+  auto eocButton() const -> bool { return buttonIsPressed(params[EocButton]); }
 
   auto level() const -> float override { return selectableLevel(this, LevelKnob, LevelCvInput, LevelRangeSwitch); }
 
@@ -65,12 +65,12 @@ private:
 
   auto taper(float input) const -> float override {
     auto const curvature = dhe::curvature(this, CurveKnob, CurveCvInput);
-    auto const taper = selectedTaper(this, ShapeSwitch);
+    auto const taper = selectedTaper(params[ShapeSwitch]);
     return taper->apply(input, curvature);
   }
 
   auto triggerIsHigh() const -> bool override {
-    return inputIsHigh(this, TriggerInput) || buttonIsPressed(this, TriggerButton);
+    return inputIsHigh(inputs[TriggerInput]) || buttonIsPressed(params[TriggerButton]);
   }
 };
 } // namespace dhe

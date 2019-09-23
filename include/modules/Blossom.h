@@ -37,25 +37,29 @@ public:
   enum OutputIds { XOutput, YOutput, OutputCount };
 
 private:
-  inline auto ratio() const -> float { return scaledRotation(this, RatioKnob, RatioCvInput, RatioAvKnob, ratioRange); }
+  inline auto ratio() const -> float {
+    return ratioRange.scale(rotation(params[RatioKnob], inputs[RatioCvInput], params[RatioAvKnob]));
+  }
 
-  inline auto ratioIsFree() const -> bool { return switchPosition(this, FreeRatioSwitch) == 1; }
+  inline auto ratioIsFree() const -> bool { return switchPosition(params[FreeRatioSwitch]) == 1; }
 
-  inline auto depth() const -> float { return rotation(this, DepthKnob, DepthCvInput, DepthAvKnob); }
+  inline auto depth() const -> float { return rotation(params[DepthKnob], inputs[DepthCvInput], params[DepthAvKnob]); }
 
   inline auto phase() const -> float {
-    return scaledRotation(this, PhaseOffsetKnob, PhaseCvInput, PhaseOffsetAvKnob, {-0.5, 0.5});
+    static auto constexpr phaseRange = Range{-0.5F, 0.5F};
+    return phaseRange.scale(rotation(params[PhaseOffsetKnob], inputs[PhaseCvInput], params[PhaseOffsetAvKnob]));
   }
 
   inline auto speed() const -> float {
-    return taperedAndScaledRotation(this, SpeedKnob, SpeedCvInput, SpeedAvKNob, speedKnobTaper, speedRange);
+    return taperedAndScaledRotation(params[SpeedKnob], inputs[SpeedCvInput], params[SpeedAvKNob], speedKnobTaper,
+                                    speedRange);
   }
 
-  inline auto xGain() const -> float { return scaledRotation(this, XGainKnob, XGainCvInput, gainRange); }
-  inline auto xOffset() const -> float { return selected<float, 2>(this, XRangeSwitch, {0.F, 1.F}); };
+  inline auto xGain() const -> float { return gainRange.scale(rotation(params[XGainKnob], inputs[XGainCvInput])); }
+  inline auto xOffset() const -> float { return selected<float, 2>(params[XRangeSwitch], {0.F, 1.F}); };
 
-  inline auto yGain() const -> float { return scaledRotation(this, YGainKnob, YGainCvInput, gainRange); }
-  inline auto yOffset() const -> float { return selected<float, 2>(this, YRangeSwitch, {0.F, 1.F}); };
+  inline auto yGain() const -> float { return gainRange.scale(rotation(params[YGainKnob], inputs[YGainCvInput])); }
+  inline auto yOffset() const -> float { return selected<float, 2>(params[YRangeSwitch], {0.F, 1.F}); };
 
   Rotor spinner{};
   Rotor bouncer{};

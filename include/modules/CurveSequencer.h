@@ -17,9 +17,9 @@ public:
 
   void process(const ProcessArgs &args) override { sequence.process(args.sampleRate); };
 
-  auto isRunning() -> bool { return inputIsHigh(this, RunInput) || buttonIsPressed(this, RunInput); }
+  auto isRunning() -> bool { return inputIsHigh(inputs[RunInput]) || buttonIsPressed(params[RunInput]); }
 
-  auto gate() -> bool { return inputIsHigh(this, GateInput) || buttonIsPressed(this, GateButton); }
+  auto gate() -> bool { return inputIsHigh(inputs[GateInput]) || buttonIsPressed(params[GateButton]); }
 
   void setGenerating(int step, bool state) { lights[step].setBrightness(state ? 10.F : 0.F); }
 

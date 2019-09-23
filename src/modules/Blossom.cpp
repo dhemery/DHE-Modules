@@ -37,8 +37,8 @@ public:
     auto const rotation = getValue();
     auto const freeBounceRatio = ratioRange.scale(rotation);
     auto const blossom = dynamic_cast<Blossom *>(module);
-    auto const spin
-        = switchPosition(blossom, Blossom::FreeRatioSwitch) == 1 ? freeBounceRatio : std::round(freeBounceRatio);
+    auto const spin = switchPosition(blossom->params[Blossom::FreeRatioSwitch]) == 1 ? freeBounceRatio
+                                                                                     : std::round(freeBounceRatio);
     return spin;
   }
 

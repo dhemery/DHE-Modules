@@ -23,11 +23,11 @@ private:
     return selectableDuration(this, DurationKnob, DurationCvInput, DurationRangeSwitch);
   }
 
-  auto envelopeIn() const -> float override { return inputVoltage(this, EnvelopeInput); }
+  auto envelopeIn() const -> float override { return inputVoltage(inputs[EnvelopeInput]); }
 
-  auto deferIsHigh() const -> bool override { return inputIsHigh(this, DeferInput); }
+  auto deferIsHigh() const -> bool override { return inputIsHigh(inputs[DeferInput]); }
 
-  auto isSustainMode() const -> bool override { return switchPosition(this, ModeSwitch) == 1; }
+  auto isSustainMode() const -> bool override { return switchPosition(params[ModeSwitch]) == 1; }
 
   void sendOut(float voltage) override { outputs[EnvelopeOutput].setVoltage(voltage); }
 
@@ -41,6 +41,6 @@ private:
     outputs[EocOutput].setVoltage(voltage);
   }
 
-  auto stageGateIsHigh() const -> bool override { return inputIsHigh(this, TriggerInput); }
+  auto stageGateIsHigh() const -> bool override { return inputIsHigh(inputs[TriggerInput]); }
 };
 } // namespace dhe

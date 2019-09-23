@@ -3,7 +3,8 @@
 #include "modules/components/Range.h"
 #include "modules/components/Taper.h"
 
-#include <engine/Module.hpp>
+#include <engine/Param.hpp>
+#include <engine/Port.hpp>
 
 namespace dhe {
 
@@ -18,110 +19,72 @@ static auto constexpr unipolarSignalRange = Range{0.F, 10.F};
 
 extern std::array<Range const *, 2> const signalRanges;
 
-static inline auto paramValue(rack::engine::Module const *module, int paramId) -> float {
-  return const_cast<rack::engine::Module *>(module)->params[paramId].getValue();
+static inline auto paramValue(rack::engine::Param const &param) -> float {
+  return const_cast<rack::engine::Param &>(param).getValue();
 }
 
-static inline auto inputVoltage(rack::engine::Module const *module, int inputId) -> float {
-  return const_cast<rack::engine::Module *>(module)->inputs[inputId].getVoltage();
+static inline auto inputVoltage(rack::engine::Input const &input) -> float {
+  return const_cast<rack::engine::Input &>(input).getVoltage();
 }
 
-static inline auto switchPosition(rack::engine::Module const *module, int switchId) -> int {
-  return static_cast<int>(paramValue(module, switchId));
+static inline auto switchPosition(rack::engine::Param const &switchParam) -> int {
+  return static_cast<int>(paramValue(switchParam));
 }
 
-static inline auto buttonIsPressed(rack::engine::Module const *module, int buttonId) -> bool {
-  return paramValue(module, buttonId) > 0.5F;
-}
+static inline auto buttonIsPressed(rack::engine::Param const &button) -> bool { return paramValue(button) > 0.5F; }
 
-static inline auto inputIsConnected(rack::engine::Module const *module, int inputId) -> bool {
-  return const_cast<rack::engine::Module *>(module)->inputs[inputId].isConnected();
-}
+static inline auto inputIsHigh(rack::engine::Input const &input) -> bool { return inputVoltage(input) > 1.F; }
 
-static inline auto inputIsHigh(rack::engine::Module const *module, int inputId) -> bool {
-  return inputVoltage(module, inputId) > 1.F;
-}
-
-template <typename T, int N>
-auto selected(rack::engine::Module const *module, int switchId, std::array<T, N> const &items) -> T {
-  return items[switchPosition(module, switchId)];
+template <typename T, int N> auto selected(rack::engine::Param const &switchParam, std::array<T, N> const &items) -> T {
+  return items[switchPosition(switchParam)];
 }
 
 template <int N>
-auto selectedRange(rack::engine::Module const *module, int switchId, std::array<Range const *, N> const &ranges)
+auto selectedRange(rack::engine::Param const &switchParam, std::array<Range const *, N> const &ranges)
     -> Range const * {
-  return selected<Range const *, N>(module, switchId, ranges);
+  return selected<Range const *, N>(switchParam, ranges);
 }
 
 /**
  * Returns the taper selected by the given switch.
  */
-static inline auto selectedTaper(rack::engine::Module const *module, int switchId) -> taper::VariableTaper const * {
-  return selected<taper::VariableTaper const *, 2>(module, switchId, taper::variableTapers);
+static inline auto selectedTaper(rack::engine::Param const &switchParam) -> taper::VariableTaper const * {
+  return selected<taper::VariableTaper const *, 2>(switchParam, taper::variableTapers);
 }
 
-static inline auto rotation(rack::engine::Module const *module, int knobId) -> float {
-  return paramValue(module, knobId);
-}
-
-static inline auto rotation(rack::engine::Module const *module, int knobId, int cvId) -> float {
+static inline auto rotation(rack::engine::Param const &knob, rack::engine::Input const &cvInput) -> float {
   static constexpr auto cvModulationRatio = 0.1F;
-  auto const rotation = paramValue(module, knobId);
-  auto const cv = inputVoltage(module, cvId);
+  auto const rotation = paramValue(knob);
+  auto const cv = inputVoltage(cvInput);
   auto const modulation = cv * cvModulationRatio;
   return rotation + modulation;
 }
 
-static inline auto rotation(rack::engine::Module const *module, int knobId, int cvId, int avId) -> float {
+static inline auto rotation(rack::engine::Param const &knob, rack::engine::Input const &cvInput,
+                            rack::engine::Param const &avKnob) -> float {
   static auto constexpr avModulationRange = Range{-0.1F, 0.1F};
-  auto const rotation = paramValue(module, knobId);
-  auto const cv = inputVoltage(module, cvId);
-  auto const av = paramValue(module, avId);
+  auto const rotation = paramValue(knob);
+  auto const cv = inputVoltage(cvInput);
+  auto const av = paramValue(avKnob);
   auto const cvModulationRatio = avModulationRange.scale(av);
   auto const modulation = cv * cvModulationRatio;
   return rotation + modulation;
 }
 
-static inline auto scaledRotation(rack::engine::Module const *module, int knobId, Range const &range) -> float {
-  return range.scale(rotation(module, knobId));
+static inline auto taperedAndScaledRotation(rack::engine::Param const &knob, taper::FixedTaper const &taper,
+                                            Range const &range) -> float {
+  return range.scale(taper.apply(paramValue(knob)));
 }
 
-static inline auto scaledRotation(rack::engine::Module const *module, int knobId, int cvId, Range const &range)
-    -> float {
-  return range.scale(rotation(module, knobId, cvId));
-}
-
-static inline auto scaledRotation(rack::engine::Module const *module, int knobId, int cvId, int avId,
-                                  Range const &range) -> float {
-  return range.scale(rotation(module, knobId, cvId, avId));
-}
-
-template <int N>
-auto scaledRotation(rack::engine::Module const *module, int knobId, int cvId, int rangeSwitchId,
-                    std::array<Range const *, N> ranges) -> float {
-  auto const range = selected<Range const *, N>(module, rangeSwitchId, ranges);
-  return range->scale(rotation(module, knobId, cvId));
-}
-
-template <int N>
-auto scaledRotation(rack::engine::Module const *module, int knobId, int cvId, int avId, int rangeSwitchId,
-                    std::array<Range const *, N> ranges) -> float {
-  auto const range = selectedRange<N>(module, rangeSwitchId, ranges);
-  return range->scale(rotation(module, knobId, cvId, avId));
-}
-
-static inline auto taperedAndScaledRotation(rack::engine::Module const *module, int knobId,
+static inline auto taperedAndScaledRotation(rack::engine::Param const &knob, rack::engine::Input const &cvInput,
                                             taper::FixedTaper const &taper, Range const &range) -> float {
-  return range.scale(taper.apply(rotation(module, knobId)));
+  return range.scale(taper.apply(rotation(knob, cvInput)));
 }
 
-static inline auto taperedAndScaledRotation(rack::engine::Module const *module, int knobId, int cvId,
-                                            taper::FixedTaper const &taper, Range const &range) -> float {
-  return range.scale(taper.apply(rotation(module, knobId, cvId)));
+static inline auto taperedAndScaledRotation(rack::engine::Param const &knob, rack::engine::Input const &cvInput,
+                                            rack::engine::Param const &avKnob, taper::FixedTaper const &taper,
+                                            Range const &range) -> float {
+  return range.scale(taper.apply(rotation(knob, cvInput, avKnob)));
 }
 
-static inline auto taperedAndScaledRotation(rack::engine::Module const *module, int knobId, int cvId, int avId,
-                                            taper::FixedTaper const &taper, Range const &range) -> float {
-  return range.scale(taper.apply(rotation(module, knobId, cvId, avId)));
-}
 } // namespace dhe

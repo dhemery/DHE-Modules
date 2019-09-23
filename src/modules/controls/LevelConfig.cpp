@@ -36,7 +36,7 @@ void configLevelKnob(rack::engine::Module *module, int knobId, std::function<Ran
 void configLevelKnob(rack::engine::Module *module, int knobId, int switchId, std::string const &name,
                      float initialRotation) {
   auto const rangeSupplier
-      = [module, switchId]() -> Range const * { return selectedRange<2>(module, switchId, signalRanges); };
+      = [module, switchId]() -> Range const * { return selectedRange<2>(module->params[switchId], signalRanges); };
   configLevelKnob(module, knobId, rangeSupplier, name, initialRotation);
 }
 

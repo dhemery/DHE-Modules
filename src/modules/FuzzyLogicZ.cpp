@@ -18,13 +18,13 @@ FuzzyLogicZ::FuzzyLogicZ() {
 }
 
 void FuzzyLogicZ::process(const rack::engine::Module::ProcessArgs & /*ignored*/) {
-  auto const voltageOffset = switchPosition(this, LevelRangeSwitch) == 1 ? 0.F : 5.F;
+  auto const voltageOffset = switchPosition(params[LevelRangeSwitch]) == 1 ? 0.F : 5.F;
   for (int i = 0; i < 2; i++) {
     auto const aInput = inputs[AInputs + i].getVoltage() + voltageOffset;
     auto const bInput = inputs[BInputs + i].getVoltage() + voltageOffset;
-    auto const a = buttonIsPressed(this, NotAButtons + i) ? 10.F - aInput : aInput;
+    auto const a = buttonIsPressed(params[NotAButtons + i]) ? 10.F - aInput : aInput;
     auto const notA = 10.F - a;
-    auto const b = buttonIsPressed(this, NotBButtons + i) ? 10.F - bInput : bInput;
+    auto const b = buttonIsPressed(params[NotBButtons + i]) ? 10.F - bInput : bInput;
     auto const notB = 10.F - b;
 
     auto const aAndB = std::min(a, b);
