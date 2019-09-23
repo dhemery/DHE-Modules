@@ -20,7 +20,7 @@ public:
 
 private:
   auto duration() const -> float override {
-    return selectableDuration(this, DurationKnob, DurationCvInput, DurationRangeSwitch);
+    return selectableDuration(params[DurationKnob], inputs[DurationCvInput], params[DurationRangeSwitch]);
   }
 
   auto envelopeIn() const -> float override { return inputVoltage(inputs[EnvelopeInput]); }

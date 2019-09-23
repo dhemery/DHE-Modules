@@ -23,7 +23,7 @@ public:
 private:
   auto deferIsHigh() const -> bool override { return inputIsHigh(inputs[DeferInput]); }
 
-  auto duration() const -> float override { return dhe::duration(this, DurationKnob, mediumDurationRange); }
+  auto duration() const -> float override { return dhe::duration(params[DurationKnob], mediumDurationRange); }
 
   auto envelopeIn() const -> float override { return inputVoltage(inputs[EnvelopeInput]); }
 
