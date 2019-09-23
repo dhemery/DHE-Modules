@@ -1,9 +1,5 @@
 language: cpp
 
-branches:
-  except:
-  - /^dale\/.*/
-
 matrix:
   include:
   - os: linux
