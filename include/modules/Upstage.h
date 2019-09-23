@@ -31,7 +31,9 @@ private:
 
   auto waitIn() const -> bool { return inputIsHigh(inputs[WaitInput]) || buttonIsPressed(params[WaitButton]); }
 
-  auto level() const -> float { return selectableLevel(this, LevelKnob, LevelCvInput, LevelRangeSwitch); }
+  auto level() const -> float {
+    return selectableLevel(params[LevelKnob], inputs[LevelCvInput], params[LevelRangeSwitch]);
+  }
 };
 
 } // namespace dhe

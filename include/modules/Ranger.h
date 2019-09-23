@@ -31,11 +31,13 @@ private:
   auto level() const -> float { return rotation(params[LevelKnob], inputs[LevelCvInput], params[LevelAvKnob]); }
 
   auto ccwLimit() const -> float {
-    return selectableLevel(this, CcwLimitKnob, CcwLimitCvInput, CcwLimitAvKnob, CcwLimitRangeSwitch);
+    return selectableLevel(params[CcwLimitKnob], inputs[CcwLimitCvInput], params[CcwLimitAvKnob],
+                           params[CcwLimitRangeSwitch]);
   }
 
   auto cwLimit() const -> float {
-    return selectableLevel(this, CwLimitKnob, CwLimitCvInput, CwLimitAvKnob, CwLimitRangeSwitch);
+    return selectableLevel(params[CwLimitKnob], inputs[CwLimitCvInput], params[CwLimitAvKnob],
+                           params[CwLimitRangeSwitch]);
   }
 };
 

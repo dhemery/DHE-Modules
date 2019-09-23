@@ -38,7 +38,7 @@ private:
   auto levelRotation1() const -> float {
     return rotation(params[LevelKnob1], inputs[LevelCvInput1], params[LevelAvKnob1]);
   };
-  auto levelRange1() const -> Range const * { return levelRange(this, LevelRangeSwitch1); }
+  auto levelRange1() const -> Range const * { return levelRange(params[LevelRangeSwitch1]); }
   auto taper1(float input) const -> float {
     auto const taper = selectedTaper(params[ShapeSwitch1]);
     auto const taperCurvature = curvature(this, CurveKnob1, CurveCvInput1, CurveAvKnob1);
@@ -48,7 +48,7 @@ private:
   auto levelRotation2() const -> float {
     return rotation(params[LevelKnob2], inputs[LevelCvInput2], params[LevelAvKnob2]);
   };
-  auto levelRange2() const -> Range const * { return levelRange(this, LevelRangeSwitch2); }
+  auto levelRange2() const -> Range const * { return levelRange(params[LevelRangeSwitch2]); }
   auto taper2(float input) const -> float {
     auto const taper = selectedTaper(params[ShapeSwitch2]);
     auto const taperCurvature = curvature(this, CurveKnob2, CurveCvInput2, CurveAvKnob2);

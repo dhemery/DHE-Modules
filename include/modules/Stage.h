@@ -27,7 +27,7 @@ private:
 
   auto envelopeIn() const -> float override { return inputVoltage(inputs[EnvelopeInput]); }
 
-  auto level() const -> float override { return dhe::level(this, LevelKnob, unipolarSignalRange); }
+  auto level() const -> float override { return dhe::level(params[LevelKnob], unipolarSignalRange); }
 
   void sendActive(bool active) override {
     const auto voltage = unipolarSignalRange.scale(active);

@@ -49,7 +49,9 @@ private:
 
   auto eocButton() const -> bool { return buttonIsPressed(params[EocButton]); }
 
-  auto level() const -> float override { return selectableLevel(this, LevelKnob, LevelCvInput, LevelRangeSwitch); }
+  auto level() const -> float override {
+    return selectableLevel(params[LevelKnob], inputs[LevelCvInput], params[LevelRangeSwitch]);
+  }
 
   void sendActive(bool isActive) override {
     auto const voltage = unipolarSignalRange.scale(isActive || activeButton());
