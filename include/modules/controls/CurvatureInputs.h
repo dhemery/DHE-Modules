@@ -2,7 +2,8 @@
 
 #include "CommonInputs.h"
 
-#include <engine/Module.hpp>
+#include <engine/Param.hpp>
+#include <engine/Port.hpp>
 
 namespace dhe {
 /**
@@ -18,15 +19,15 @@ static inline auto curvature(float rotation) -> float {
   return safeCurvature;
 }
 
-static inline auto curvature(rack::engine::Module const *module, int knobId) -> float {
-  return curvature(paramValue(module->params[knobId]));
+static inline auto curvature(rack::engine::Param const &knob) -> float { return curvature(paramValue(knob)); }
+
+static inline auto curvature(rack::engine::Param const &knob, rack::engine::Input const &cvInput) -> float {
+  return curvature(rotation(knob, cvInput));
 }
 
-static inline auto curvature(rack::engine::Module const *module, int knobId, int cvId) -> float {
-  return curvature(rotation(module->params[knobId], module->inputs[cvId]));
+static inline auto curvature(rack::engine::Param const &knob, rack::engine::Input const &cvInput,
+                             rack::engine::Param const &avKnob) -> float {
+  return curvature(rotation(knob, cvInput, avKnob));
 }
 
-static inline auto curvature(rack::engine::Module const *module, int knobId, int cvId, int avId) -> float {
-  return curvature(rotation(module->params[knobId], module->inputs[cvId], module->params[avId]));
-}
 } // namespace dhe

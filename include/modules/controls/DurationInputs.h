@@ -34,8 +34,8 @@ static inline auto duration(rack::engine::Param const &knob, Range const &range)
 }
 
 static inline auto selectableDuration(rack::engine::Param const &knob, rack::engine::Input const &cvInput,
-                                      rack::engine::Param const &switchParam) -> float {
-  auto const range = selectedRange<3>(switchParam, durationRanges);
+                                      rack::engine::Param const &toggle) -> float {
+  auto const range = selectedRange<3>(toggle, durationRanges);
   return taperedAndScaledRotation(knob, cvInput, durationKnobTaper, *range);
 }
 

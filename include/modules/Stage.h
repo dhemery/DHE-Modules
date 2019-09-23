@@ -42,7 +42,7 @@ private:
   void sendOut(float voltage) override { outputs[EnvelopeOutput].setVoltage(voltage); }
 
   auto taper(float input) const -> float override {
-    return taper::variableJTaper.apply(input, curvature(this, CurveKnob));
+    return taper::variableJTaper.apply(input, curvature(params[CurveKnob]));
   }
 
   auto triggerIsHigh() const -> bool override { return inputIsHigh(inputs[TriggerInput]); }

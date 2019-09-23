@@ -27,29 +27,29 @@ static inline auto inputVoltage(rack::engine::Input const &input) -> float {
   return const_cast<rack::engine::Input &>(input).getVoltage();
 }
 
-static inline auto switchPosition(rack::engine::Param const &switchParam) -> int {
-  return static_cast<int>(paramValue(switchParam));
+static inline auto switchPosition(rack::engine::Param const &toggle) -> int {
+  return static_cast<int>(paramValue(toggle));
 }
 
 static inline auto buttonIsPressed(rack::engine::Param const &button) -> bool { return paramValue(button) > 0.5F; }
 
 static inline auto inputIsHigh(rack::engine::Input const &input) -> bool { return inputVoltage(input) > 1.F; }
 
-template <typename T, int N> auto selected(rack::engine::Param const &switchParam, std::array<T, N> const &items) -> T {
-  return items[switchPosition(switchParam)];
+template <typename T, int N> auto selected(rack::engine::Param const &toggle, std::array<T, N> const &items) -> T {
+  return items[switchPosition(toggle)];
 }
 
 template <int N>
-auto selectedRange(rack::engine::Param const &switchParam, std::array<Range const *, N> const &ranges)
+auto selectedRange(rack::engine::Param const &toggle, std::array<Range const *, N> const &ranges)
     -> Range const * {
-  return selected<Range const *, N>(switchParam, ranges);
+  return selected<Range const *, N>(toggle, ranges);
 }
 
 /**
  * Returns the taper selected by the given switch.
  */
-static inline auto selectedTaper(rack::engine::Param const &switchParam) -> taper::VariableTaper const * {
-  return selected<taper::VariableTaper const *, 2>(switchParam, taper::variableTapers);
+static inline auto selectedTaper(rack::engine::Param const &toggle) -> taper::VariableTaper const * {
+  return selected<taper::VariableTaper const *, 2>(toggle, taper::variableTapers);
 }
 
 static inline auto rotation(rack::engine::Param const &knob, rack::engine::Input const &cvInput) -> float {

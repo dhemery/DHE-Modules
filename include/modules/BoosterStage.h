@@ -66,7 +66,7 @@ private:
   void sendOut(float voltage) override { outputs[EnvelopeOutput].setVoltage(voltage); }
 
   auto taper(float input) const -> float override {
-    auto const curvature = dhe::curvature(this, CurveKnob, CurveCvInput);
+    auto const curvature = dhe::curvature(params[CurveKnob], inputs[CurveCvInput]);
     auto const taper = selectedTaper(params[ShapeSwitch]);
     return taper->apply(input, curvature);
   }

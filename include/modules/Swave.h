@@ -22,7 +22,7 @@ private:
 
   auto taper(float input) const -> float {
     auto const taper = selectedTaper(params[ShapeSwitch]);
-    return taper->apply(input, curvature(this, CurveKnob, CurveCvInput, CurveAvKnob));
+    return taper->apply(input, curvature(params[CurveKnob], inputs[CurveCvInput], params[CurveAvKnob]));
   }
 };
 
