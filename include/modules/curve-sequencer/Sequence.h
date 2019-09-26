@@ -15,7 +15,7 @@ namespace curve_sequencer {
   public:
     Sequence(M &module, S &steps) : module{module}, steps{steps} {}
 
-    void process(float sampleTime) {
+    void process(float /*sampleTime*/) {
       if (!module.isRunning()) {
         return;
       }

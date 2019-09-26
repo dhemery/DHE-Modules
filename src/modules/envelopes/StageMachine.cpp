@@ -29,7 +29,7 @@ void StageMachine::process(float sampleTime) {
   sendEoc(isEoc);
 }
 
-StageMachine::State StageMachine::identifyState() {
+auto StageMachine::identifyState() -> StageMachine::State {
   if (deferIsHigh()) {
     return Deferring;
   }
@@ -56,7 +56,7 @@ void StageMachine::enter(StageMachine::State newState) {
 
 void StageMachine::resetTrigger() { triggerWasHigh = false; }
 
-bool StageMachine::triggerRise() {
+auto StageMachine::triggerRise() -> bool {
   auto const isHigh = triggerIsHigh();
   auto const isRise = isHigh && !triggerWasHigh;
   triggerWasHigh = isHigh;

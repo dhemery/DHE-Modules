@@ -85,8 +85,8 @@ public:
 
     auto const activeLightXOffset = lightRadius * 2.F;
 
-    for (int step = 0; step < NS; step++) {
-      auto const x = stepX + step * stepDx;
+    for (float step = 0; step < NS; step++) {
+      auto const x = stepX + stepDx * (float) step;
       this->light(x - activeLightXOffset, activeY, CurveSequencer<NS>::GeneratingLights + step);
       this->template light<rack::componentlibrary::YellowLight>(x + activeLightXOffset, activeY,
                                                                 CurveSequencer<NS>::SustainingLights + step);

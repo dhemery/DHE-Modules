@@ -26,7 +26,8 @@ static inline auto mmPerHp() -> float {
   static auto const mmPerHp = rack::app::RACK_GRID_WIDTH * rack::app::MM_PER_IN / rack::app::SVG_DPI;
   return mmPerHp;
 }
-static inline auto hp2px(float hp) -> float { return rack::app::RACK_GRID_WIDTH * (float) hp; }
+static inline auto hp2px(float hp) -> float { return rack::app::RACK_GRID_WIDTH * hp; }
+static inline auto hp2px(int hp) -> float { return hp2px((float) hp); }
 static inline auto hp2mm(float hp) -> float { return hp * mmPerHp(); }
 
 template <typename P> class Jack : public rack::app::SvgPort {

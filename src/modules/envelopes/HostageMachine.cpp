@@ -29,7 +29,7 @@ void HostageMachine::process(float sampleTime) {
   sendEoc(isEoc);
 }
 
-HostageMachine::State HostageMachine::identifyState() {
+auto HostageMachine::identifyState() -> HostageMachine::State {
   if (deferIsHigh()) {
     return Deferring;
   }
@@ -68,7 +68,7 @@ void HostageMachine::enter(HostageMachine::State newState) {
 
 void HostageMachine::resetStageGate() { stageGateWasHigh = false; }
 
-bool HostageMachine::stageGateRise() {
+auto HostageMachine::stageGateRise() -> bool {
   auto const isHigh = stageGateIsHigh();
   auto const isRise = isHigh && !stageGateWasHigh;
   stageGateWasHigh = isHigh;

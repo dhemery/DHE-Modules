@@ -49,6 +49,8 @@ public:
 
   using StepsT = std::vector<dhe::curve_sequencer::Step<CurveSequencer<N>>>;
   using SequenceT = dhe::curve_sequencer::Sequence<CurveSequencer<N>, StepsT>;
+
+private:
   StepsT steps{};
   SequenceT sequence{*this, steps};
 };
