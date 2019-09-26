@@ -40,8 +40,7 @@ template <typename T, int N> auto selected(rack::engine::Param const &toggle, st
 }
 
 template <int N>
-auto selectedRange(rack::engine::Param const &toggle, std::array<Range const *, N> const &ranges)
-    -> Range const * {
+auto selectedRange(rack::engine::Param const &toggle, std::array<Range const *, N> const &ranges) -> Range const * {
   return selected<Range const *, N>(toggle, ranges);
 }
 
