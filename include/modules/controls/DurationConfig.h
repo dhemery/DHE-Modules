@@ -5,7 +5,6 @@
 
 #include <array>
 #include <engine/Module.hpp>
-#include <functional>
 
 namespace dhe {
 /**
