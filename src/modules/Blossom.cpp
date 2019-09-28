@@ -82,12 +82,12 @@ void Blossom::process(const ProcessArgs &args) {
   auto const bounceRatio = ratioIsFree() ? ratio() : std::round(ratio());
   auto const bounceDepth = rotationRange.clamp(depth());
 
-  spinner.advance(spinDelta, 0.F);
-  bouncer.advance(spinDelta * bounceRatio, phase());
+  spinner.advance(spinDelta);
+  bouncer.advance(spinDelta * bounceRatio);
 
   auto const angle = spinner.angle();
 
-  auto const radius = (1.F - bounceDepth) + bounceDepth * bouncer.radius();
+  auto const radius = (1.F - bounceDepth) + bounceDepth * bouncer.sin(phaseOffset());
   auto const x = radius * std::cos(angle);
   auto const xVoltage = 5.F * xGain() * (x + xOffset());
   outputs[XOutput].setVoltage(xVoltage);

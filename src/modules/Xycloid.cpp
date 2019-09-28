@@ -103,9 +103,9 @@ void Xycloid::process(const ProcessArgs &args) {
   auto const throbDepth = 1.F - wobbleDepth;
 
   throbber.advance(throbSpeed);
-  wobbler.advance(wobbleSpeed, -wobblePhaseOffset);
-  auto const x = throbDepth * throbber.x() + wobbleDepth * wobbler.x();
-  auto const y = throbDepth * throbber.y() + wobbleDepth * wobbler.y();
+  wobbler.advance(wobbleSpeed);
+  auto const x = throbDepth * throbber.cos() + wobbleDepth * wobbler.cos(-wobblePhaseOffset);
+  auto const y = throbDepth * throbber.sin() + wobbleDepth * wobbler.sin(-wobblePhaseOffset);
 
   outputs[XOutput].setVoltage(5.F * xGain() * (x + xOffset()));
   outputs[YOutput].setVoltage(5.F * yGain() * (y + yOffset()));

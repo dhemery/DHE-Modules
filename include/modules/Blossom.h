@@ -1,6 +1,6 @@
 #pragma once
 
-#include "modules/components/Rotor.h"
+#include "modules/components/PhaseAccumulator.h"
 #include "modules/controls/CommonInputs.h"
 
 #include <engine/Module.hpp>
@@ -45,7 +45,7 @@ private:
 
   inline auto depth() const -> float { return rotation(params[DepthKnob], inputs[DepthCvInput], params[DepthAvKnob]); }
 
-  inline auto phase() const -> float {
+  inline auto phaseOffset() const -> float {
     static auto constexpr phaseRange = Range{-0.5F, 0.5F};
     return phaseRange.scale(rotation(params[PhaseOffsetKnob], inputs[PhaseCvInput], params[PhaseOffsetAvKnob]));
   }
@@ -61,7 +61,7 @@ private:
   inline auto yGain() const -> float { return gainRange.scale(rotation(params[YGainKnob], inputs[YGainCvInput])); }
   inline auto yOffset() const -> float { return selected<float, 2>(params[YRangeSwitch], {0.F, 1.F}); };
 
-  Rotor spinner{};
-  Rotor bouncer{};
+  PhaseAccumulator spinner{};
+  PhaseAccumulator bouncer{};
 };
 } // namespace dhe
