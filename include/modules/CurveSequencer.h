@@ -52,7 +52,9 @@ public:
 
 private:
   StepsT steps{};
-  SequenceT sequence{*this, steps};
+  Latch runLatch;
+  Latch gateLatch;
+  SequenceT sequence{*this, steps, runLatch, gateLatch};
 };
 
 template <int N> CurveSequencer<N>::CurveSequencer() {

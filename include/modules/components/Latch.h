@@ -3,29 +3,31 @@
 namespace dhe {
 class Latch {
 public:
-  Latch(bool state = false, bool edge = false) : state{state}, edge{edge} {}
+  Latch(bool state = false, bool edge = false) : state{state}, changed{edge} {}
 
   void step(bool newState) {
-    edge = state != newState;
+    changed = state != newState;
     state = newState;
   }
 
   void set() {
     state = true;
-    edge = false;
+    changed = false;
   }
 
   void reset() {
     state = false;
-    edge = false;
+    changed = false;
   }
 
-  auto isHigh() -> bool { return state; }
+  auto high() -> bool { return state; }
 
-  auto isEdge() -> bool { return edge; }
+  auto edge() -> bool { return changed; }
+
+  auto rise() -> bool { return edge() && high(); }
 
 private:
   bool state;
-  bool edge;
+  bool changed;
 };
 } // namespace dhe

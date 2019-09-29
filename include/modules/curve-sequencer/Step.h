@@ -10,7 +10,7 @@ namespace curve_sequencer {
   public:
     Step(M &module, int index) : module{module}, index{index} {}
 
-    void start() { module.setGenerating(index, true); }
+    void process(float /*sampleTime*/) { module.setGenerating(index, true); }
 
   private:
     M &module;

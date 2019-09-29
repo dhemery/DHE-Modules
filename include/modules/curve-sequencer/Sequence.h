@@ -2,6 +2,7 @@
 
 #include "modules/curve-sequencer/Step.h"
 
+#include <modules/components/Latch.h>
 #include <vector>
 
 namespace dhe {
@@ -11,22 +12,27 @@ namespace curve_sequencer {
    * @tparam M the type of module that owns this sequence
    * @tparam S the type of step container for the sequence
    */
-  template <typename M, typename S = std::vector<Step<M>>> class Sequence {
+  template <typename M, typename S = std::vector<Step<M>>, typename L = Latch> class Sequence {
   public:
-    Sequence(M &module, S &steps) : module{module}, steps{steps} {}
+    Sequence(M &module, S &steps, L &runLatch, L &gateLatch) :
+        module{module}, steps{steps}, runLatch{runLatch}, gateLatch{gateLatch} {}
 
-    void process(float /*sampleTime*/) {
-      if (!module.isRunning()) {
+    void process(float sampleTime) {
+      runLatch.step(module.isRunning());
+      if (!runLatch.high()) {
         return;
       }
-      if (module.gate()) {
-        steps[0].start();
+      gateLatch.step(module.gate());
+      if (gateLatch.rise()) {
+        steps[0].process(sampleTime);
       }
     }
 
   private:
     M &module;
     S &steps;
+    L &runLatch;
+    L &gateLatch;
   };
 } // namespace curve_sequencer
 } // namespace dhe
