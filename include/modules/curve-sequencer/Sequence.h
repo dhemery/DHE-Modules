@@ -3,36 +3,35 @@
 #include "modules/curve-sequencer/Step.h"
 
 #include <modules/components/Latch.h>
+#include <utility>
 #include <vector>
 
 namespace dhe {
 namespace curve_sequencer {
   /**
    * Controls the sequence in a CurveSequencer module.
-   * @tparam M the type of module that owns this sequence
-   * @tparam S the type of step container for the sequence
    */
-  template <typename M, typename S = std::vector<Step<M>>, typename L = Latch> class Sequence {
+  class Sequence {
   public:
-    Sequence(M &module, S &steps, L &runLatch, L &gateLatch) :
-        module{module}, steps{steps}, runLatch{runLatch}, gateLatch{gateLatch} {}
+    Sequence(Latch &runLatch, Latch &gateLatch, std::vector<std::unique_ptr<Step>> const &steps) :
+        runLatch{runLatch}, gateLatch{gateLatch}, steps{steps} {}
 
     void process(float sampleTime) {
-      runLatch.step(module.isRunning());
-      if (!runLatch.high()) {
+      runLatch.step();
+      gateLatch.step();
+
+      if (!runLatch.isHigh()) {
         return;
       }
-      gateLatch.step(module.gate());
-      if (gateLatch.rise()) {
-        steps[0].process(sampleTime);
+      if (gateLatch.isHigh()) {
+        steps[0]->process(sampleTime);
       }
     }
 
   private:
-    M &module;
-    S &steps;
-    L &runLatch;
-    L &gateLatch;
+    Latch &runLatch;
+    Latch &gateLatch;
+    std::vector<std::unique_ptr<Step>> const &steps;
   };
 } // namespace curve_sequencer
 } // namespace dhe

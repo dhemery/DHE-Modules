@@ -1,33 +1,20 @@
+#include <utility>
+
 #pragma once
 
 namespace dhe {
 class Latch {
 public:
-  Latch(bool state = false, bool edge = false) : state{state}, changed{edge} {}
+  virtual ~Latch() = default;
 
-  void step(bool newState) {
-    changed = state != newState;
-    state = newState;
-  }
+  virtual void step() = 0;
+  virtual void set(bool state, bool edge = false) = 0;
 
-  void set() {
-    state = true;
-    changed = false;
-  }
+  virtual auto isEdge() const -> bool = 0;
+  virtual auto isHigh() const -> bool = 0;
 
-  void reset() {
-    state = false;
-    changed = false;
-  }
-
-  auto high() -> bool { return state; }
-
-  auto edge() -> bool { return changed; }
-
-  auto rise() -> bool { return edge() && high(); }
-
-private:
-  bool state;
-  bool changed;
+  auto isLow() const -> bool { return !isHigh(); };
+  auto isFall() -> bool { return isEdge() && isLow(); };
+  auto isRise() -> bool { return isEdge() && isHigh(); };
 };
 } // namespace dhe

@@ -6,60 +6,66 @@
 #include <memory>
 #include <vector>
 
-struct FakeStep {
-  MOCK_METHOD(bool, isAvailable, ());
-  MOCK_METHOD(void, process, (float));
+using dhe::Latch;
+using dhe::curve_sequencer::Sequence;
+using dhe::curve_sequencer::Step;
+
+struct MockLatch : public Latch {
+  MOCK_METHOD(void, step, (), (override));
+  MOCK_METHOD(void, set, (bool, bool), (override));
+  MOCK_METHOD(bool, isHigh, (), (const, override));
+  MOCK_METHOD(bool, isEdge, (), (const, override));
 };
 
-struct FakeModule {
-  MOCK_METHOD(bool, isRunning, ());
-  MOCK_METHOD(bool, gate, ());
-  MOCK_METHOD(int, startStep, ());
+struct MockStep : public Step {
+  MOCK_METHOD(bool, isAvailable, (), (const, override));
+  MOCK_METHOD(void, process, (float), (override));
 };
-
-struct FakeLatch {
-  MOCK_METHOD(void, step, (bool) );
-  MOCK_METHOD(bool, high, (), (const));
-  MOCK_METHOD(bool, rise, (), (const));
-};
-
-using ::testing::Return;
-using ::testing::StrictMock;
-using Sequence = dhe::curve_sequencer::Sequence<FakeModule, std::vector<FakeStep>, FakeLatch>;
 
 float constexpr sampleTime = 1.F / 44000.F;
 
+using ::testing::NiceMock;
+using ::testing::Return;
+
 class SequenceTest : public ::testing::Test {
 protected:
-  FakeModule module;
-  std::vector<FakeStep> steps{8};
-  FakeLatch runLatch;
-  FakeLatch gateLatch;
-  Sequence sequence{module, steps, runLatch, gateLatch};
+  NiceMock<MockLatch> runLatch;
+  NiceMock<MockLatch> gateLatch;
+  std::vector<MockStep *> mockSteps;
+  std::vector<std::unique_ptr<Step>> steps{};
+  Sequence sequence{runLatch, gateLatch, steps};
+
+  void SetUp() override {
+    for (int i = 0; i < 8; i++) {
+      auto step = new NiceMock<MockStep>;
+      mockSteps.push_back(step);
+      steps.emplace_back(std::unique_ptr<Step>{step});
+    }
+  };
 
   void givenRunning(bool state, bool edge) {
-    ON_CALL(module, isRunning()).WillByDefault(Return(state));
-    ON_CALL(runLatch, step(state)).WillByDefault(Return());
-    ON_CALL(runLatch, high()).WillByDefault(Return(state));
-    ON_CALL(runLatch, rise()).WillByDefault(Return(edge && state));
+    ON_CALL(runLatch, isHigh()).WillByDefault(Return(state));
+    ON_CALL(runLatch, isEdge()).WillByDefault(Return(edge));
   }
 
   void givenGate(bool state, bool edge) {
-    ON_CALL(module, gate()).WillByDefault(Return(state));
-    ON_CALL(gateLatch, step(state)).WillByDefault(Return());
-    ON_CALL(gateLatch, rise()).WillByDefault(Return(edge && state));
+    ON_CALL(gateLatch, isHigh()).WillByDefault(Return(state));
+    ON_CALL(gateLatch, isEdge()).WillByDefault(Return(edge));
   }
 
-  void givenStartStep(int step) { ON_CALL(module, startStep()).WillByDefault(Return(step)); }
+  void givenStartStep(int step) {}
 
   void givenAvailable(int step, bool isAvailable) {
-    ON_CALL(steps[step], isAvailable()).WillByDefault(Return(isAvailable));
+    ON_CALL(*mockSteps[step], isAvailable()).WillByDefault(Return(isAvailable));
   }
 };
 
 class SequenceNotRunning : public SequenceTest {
 protected:
-  void SetUp() override { givenRunning(false, false); }
+  void SetUp() override {
+    SequenceTest::SetUp();
+    givenRunning(false, false);
+  }
 };
 
 TEST_F(SequenceNotRunning, processDoesNothing) { sequence.process(sampleTime); }
@@ -67,6 +73,7 @@ TEST_F(SequenceNotRunning, processDoesNothing) { sequence.process(sampleTime); }
 class SequenceRunningWithGateLow : public SequenceTest {
 protected:
   void SetUp() override {
+    SequenceTest::SetUp();
     givenRunning(true, false);
     givenGate(false, false);
     sequence.process(sampleTime);
@@ -80,7 +87,7 @@ TEST_F(SequenceRunningWithGateLow, gateRiseStartsFirstAvailableStep) {
   givenStartStep(firstAvailableStep);
   givenAvailable(firstAvailableStep, true);
 
-  EXPECT_CALL(steps[firstAvailableStep], process(sampleTime));
+  EXPECT_CALL(*mockSteps[firstAvailableStep], process(sampleTime));
 
   sequence.process(sampleTime);
 }

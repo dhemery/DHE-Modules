@@ -1,27 +1,34 @@
 #pragma once
 
+#include "modules/components/FunctionLatch.h"
 #include "modules/controls/CommonConfig.h"
 #include "modules/controls/CurvatureConfig.h"
 #include "modules/controls/DurationConfig.h"
 #include "modules/controls/LevelConfig.h"
+#include "modules/curve-sequencer/ModuleStep.h"
+#include "modules/curve-sequencer/Sequence.h"
+#include "modules/curve-sequencer/Step.h"
 
 #include <engine/Module.hpp>
-#include <modules/curve-sequencer/Sequence.h>
-#include <modules/curve-sequencer/Step.h>
 
 namespace dhe {
 
 template <int N> class CurveSequencer : public rack::engine::Module {
 public:
   CurveSequencer();
+  ~CurveSequencer() override = default;
 
   void process(const ProcessArgs &args) override { sequence.process(args.sampleRate); };
 
-  auto isRunning() -> bool { return inputIsHigh(inputs[RunInput]) || buttonIsPressed(params[RunInput]); }
+  auto isRunning() const -> bool { return inputIsHigh(inputs[RunInput]) || buttonIsPressed(params[RunButton]); }
 
-  auto gate() -> bool { return inputIsHigh(inputs[GateInput]) || buttonIsPressed(params[GateButton]); }
+  auto gate() const -> bool { return inputIsHigh(inputs[GateInput]) || buttonIsPressed(params[GateButton]); }
 
-  void setGenerating(int step, bool state) { lights[step].setBrightness(state ? 10.F : 0.F); }
+  void setGenerating(int step, bool state) { lights[GeneratingLights + step].setBrightness(state ? 10.F : 0.F); }
+
+  auto isEnabled(int step) const -> bool {
+    return inputIsHigh(inputs[EnabledInputs + step]) || buttonIsPressed(params[EnabledButtons + step]);
+  };
 
   enum ParameterIds {
     DurationRangeSwitch,
@@ -47,14 +54,12 @@ public:
 
   enum LightIds { ENUMS(GeneratingLights, N), ENUMS(SustainingLights, N), LightCount };
 
-  using StepsT = std::vector<dhe::curve_sequencer::Step<CurveSequencer<N>>>;
-  using SequenceT = dhe::curve_sequencer::Sequence<CurveSequencer<N>, StepsT>;
-
 private:
-  StepsT steps{};
-  Latch runLatch;
-  Latch gateLatch;
-  SequenceT sequence{*this, steps, runLatch, gateLatch};
+  FunctionLatch runLatch{[this]() -> bool { return isRunning(); }};
+  FunctionLatch gateLatch{[this]() -> bool { return gate(); }};
+  std::vector<std::unique_ptr<curve_sequencer::Step>> steps;
+
+  curve_sequencer::Sequence sequence{runLatch, gateLatch, steps};
 };
 
 template <int N> CurveSequencer<N>::CurveSequencer() {
@@ -88,7 +93,7 @@ template <int N> CurveSequencer<N>::CurveSequencer() {
     lights[GeneratingLights + step].setBrightness(0.F);
     lights[SustainingLights + step].setBrightness(0.F);
 
-    steps.push_back({*this, step});
+    steps.emplace_back(new dhe::curve_sequencer::ModuleStep<CurveSequencer<N>>(this, step));
   }
 }
 } // namespace dhe
