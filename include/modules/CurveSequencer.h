@@ -10,15 +10,34 @@
 #include "modules/curve-sequencer/Step.h"
 
 #include <engine/Module.hpp>
+#include <memory>
 
 namespace dhe {
 
 template <int N> class CurveSequencer : public rack::engine::Module {
+  using Step = curve_sequencer::Step;
+  template <typename T> using PtrT = std::unique_ptr<T>;
+  using Sequence = curve_sequencer::Sequence<PtrT>;
+
+  template <typename M> static auto makeSequence(M *module, int stepCount) -> std::unique_ptr<Sequence> {
+    auto runLatch = PtrT<Latch>{new FunctionLatch([module]() -> bool { return module->isRunning(); })};
+    auto gateLatch = std::unique_ptr<Latch>{new FunctionLatch([module]() -> bool { return module->gate(); })};
+
+    std::vector<std::unique_ptr<Step>> steps;
+    for (int i = 0; i < stepCount; i++) {
+      steps.emplace_back(new curve_sequencer::ModuleStep<M>(module, i));
+    }
+    auto sequence = new Sequence{std::move(runLatch), std::move(gateLatch), std::move(steps)};
+    runLatch.release();
+    gateLatch.release();
+    return std::unique_ptr<Sequence>{sequence};
+  }
+
 public:
   CurveSequencer();
   ~CurveSequencer() override = default;
 
-  void process(const ProcessArgs &args) override { sequence.process(args.sampleRate); };
+  void process(const ProcessArgs &args) override { sequence->process(args.sampleRate); };
 
   auto isRunning() const -> bool { return inputIsHigh(inputs[RunInput]) || buttonIsPressed(params[RunButton]); }
 
@@ -55,11 +74,7 @@ public:
   enum LightIds { ENUMS(GeneratingLights, N), ENUMS(SustainingLights, N), LightCount };
 
 private:
-  FunctionLatch runLatch{[this]() -> bool { return isRunning(); }};
-  FunctionLatch gateLatch{[this]() -> bool { return gate(); }};
-  std::vector<std::unique_ptr<curve_sequencer::Step>> steps;
-
-  curve_sequencer::Sequence sequence{runLatch, gateLatch, steps};
+  std::unique_ptr<Sequence> sequence = makeSequence<CurveSequencer<N>>(this, N);
 };
 
 template <int N> CurveSequencer<N>::CurveSequencer() {
@@ -92,8 +107,6 @@ template <int N> CurveSequencer<N>::CurveSequencer() {
 
     lights[GeneratingLights + step].setBrightness(0.F);
     lights[SustainingLights + step].setBrightness(0.F);
-
-    steps.emplace_back(new dhe::curve_sequencer::ModuleStep<CurveSequencer<N>>(this, step));
   }
 }
 } // namespace dhe

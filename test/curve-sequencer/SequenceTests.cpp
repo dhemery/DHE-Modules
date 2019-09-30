@@ -23,41 +23,41 @@ struct MockStep : public Step {
 };
 
 float constexpr sampleTime = 1.F / 44000.F;
+int constexpr stepCount = 8;
 
 using ::testing::NiceMock;
 using ::testing::Return;
 
 class SequenceTest : public ::testing::Test {
 protected:
-  NiceMock<MockLatch> runLatch;
-  NiceMock<MockLatch> gateLatch;
-  std::vector<MockStep *> mockSteps;
-  std::vector<std::unique_ptr<Step>> steps{};
-  Sequence sequence{runLatch, gateLatch, steps};
+  std::shared_ptr<MockLatch> runLatch = std::make_shared<NiceMock<MockLatch>>();
+  std::shared_ptr<MockLatch> gateLatch = std::make_shared<NiceMock<MockLatch>>();
+  std::vector<std::shared_ptr<Step>> steps{};
+  Sequence<std::shared_ptr> sequence{runLatch, gateLatch, steps};
 
   void SetUp() override {
-    for (int i = 0; i < 8; i++) {
+    for (int i = 0; i < stepCount; i++) {
       auto step = new NiceMock<MockStep>;
-      mockSteps.push_back(step);
-      steps.emplace_back(std::unique_ptr<Step>{step});
+      steps.emplace_back(step);
     }
   };
-
   void givenRunning(bool state, bool edge) {
-    ON_CALL(runLatch, isHigh()).WillByDefault(Return(state));
-    ON_CALL(runLatch, isEdge()).WillByDefault(Return(edge));
+    ON_CALL(*runLatch, isHigh()).WillByDefault(Return(state));
+    ON_CALL(*runLatch, isEdge()).WillByDefault(Return(edge));
   }
 
   void givenGate(bool state, bool edge) {
-    ON_CALL(gateLatch, isHigh()).WillByDefault(Return(state));
-    ON_CALL(gateLatch, isEdge()).WillByDefault(Return(edge));
+    ON_CALL(*gateLatch, isHigh()).WillByDefault(Return(state));
+    ON_CALL(*gateLatch, isEdge()).WillByDefault(Return(edge));
   }
 
-  void givenStartStep(int step) {}
+  void givenStartStep(int index) {}
 
-  void givenAvailable(int step, bool isAvailable) {
-    ON_CALL(*mockSteps[step], isAvailable()).WillByDefault(Return(isAvailable));
+  void givenAvailable(int index, bool isAvailable) {
+    ON_CALL(step(index), isAvailable()).WillByDefault(Return(isAvailable));
   }
+
+  auto step(int index) -> MockStep & { return *dynamic_cast<MockStep *>(steps[index].get()); }
 };
 
 class SequenceNotRunning : public SequenceTest {
@@ -87,7 +87,7 @@ TEST_F(SequenceRunningWithGateLow, gateRiseStartsFirstAvailableStep) {
   givenStartStep(firstAvailableStep);
   givenAvailable(firstAvailableStep, true);
 
-  EXPECT_CALL(*mockSteps[firstAvailableStep], process(sampleTime));
+  EXPECT_CALL(step(firstAvailableStep), process(sampleTime));
 
   sequence.process(sampleTime);
 }
