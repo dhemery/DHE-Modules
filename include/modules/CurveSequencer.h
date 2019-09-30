@@ -55,7 +55,7 @@ private:
   auto isRunning() const -> bool { return inputIsHigh(inputs[RunInput]) || buttonIsPressed(params[RunButton]); }
 
   auto gate() const -> bool { return inputIsHigh(inputs[GateInput]) || buttonIsPressed(params[GateButton]); }
-  auto startStep() const -> int { return paramValue(params[StartKnob]); }
+  auto startStep() const -> int { return paramValue(params[StartKnob]) - 1; }
   auto sequenceLength() const -> int { return paramValue(params[StepsKnob]); }
 
   FunctionLatch runLatch{[this]() -> bool { return isRunning(); }};

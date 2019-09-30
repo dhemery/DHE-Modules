@@ -41,9 +41,11 @@ namespace curve_sequencer {
     void start(float sampleTime) {
       auto const first = selectionStart();
       auto const length = selectionLength();
+      auto const mask = steps.size() - 1;
 
       for (int i = 0; i < length; i++) {
-        auto &step = steps[first + i];
+        auto const index = (first + i) & mask;
+        auto &step = steps[index];
         if (step->isAvailable()) {
           step->process(sampleTime);
           return;
