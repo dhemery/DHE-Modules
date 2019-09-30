@@ -27,13 +27,18 @@ int constexpr stepCount = 8;
 
 using ::testing::NiceMock;
 using ::testing::Return;
+using ::testing::A;
 
 class SequenceTest : public ::testing::Test {
+  int start;
+  int length = stepCount;
 protected:
+  std::function<int()> selectionStart{[this]() -> int { return start;}};
+  std::function<int()> selectionLength{[this]() -> int { return length;}};
   NiceMock<MockLatch> runLatch;
   NiceMock<MockLatch> gateLatch;
   std::vector<std::unique_ptr<Step>> steps{};
-  Sequence sequence{runLatch, gateLatch, steps};
+  Sequence sequence{runLatch, gateLatch, selectionStart, selectionLength, steps};
 
   void SetUp() override {
     for (int i = 0; i < stepCount; i++) {
@@ -51,7 +56,10 @@ protected:
     ON_CALL(gateLatch, isEdge()).WillByDefault(Return(edge));
   }
 
-  void givenStartStep(int index) {}
+  void givenSelection(int start, int length) {
+    this->start = start;
+    this->length = length;
+  }
 
   void givenAvailable(int index, bool isAvailable) {
     ON_CALL(step(index), isAvailable()).WillByDefault(Return(isAvailable));
@@ -80,13 +88,24 @@ protected:
   }
 };
 
-TEST_F(SequenceRunningWithGateLow, gateRiseStartsFirstAvailableStep) {
-  auto firstAvailableStep = 0;
+TEST_F(SequenceRunningWithGateLow, gateRiseProcessesFirstAvailableStep) {
+  givenSelection(0, stepCount);
+
+  auto firstAvailableStep = 3;
 
   givenGate(true, true);
-  givenStartStep(firstAvailableStep);
-  givenAvailable(firstAvailableStep, true);
 
+  for(int i = 0 ; i < firstAvailableStep ; i++) {
+    ON_CALL(step(i), isAvailable()).WillByDefault(Return(false));
+    EXPECT_CALL(step(i), process(A<float>())).Times(0);
+  }
+
+  for(int i = firstAvailableStep + 1 ; i < stepCount ; i++) {
+    EXPECT_CALL(step(i), isAvailable()).Times(0);
+    EXPECT_CALL(step(i), process(A<float>())).Times(0);
+  }
+
+  ON_CALL(step(firstAvailableStep), isAvailable()).WillByDefault(Return(true));
   EXPECT_CALL(step(firstAvailableStep), process(sampleTime));
 
   sequence.process(sampleTime);

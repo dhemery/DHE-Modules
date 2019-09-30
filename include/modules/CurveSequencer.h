@@ -21,10 +21,6 @@ public:
 
   void process(const ProcessArgs &args) override { sequence.process(args.sampleRate); };
 
-  auto isRunning() const -> bool { return inputIsHigh(inputs[RunInput]) || buttonIsPressed(params[RunButton]); }
-
-  auto gate() const -> bool { return inputIsHigh(inputs[GateInput]) || buttonIsPressed(params[GateButton]); }
-
   void setGenerating(int step, bool state) { lights[GeneratingLights + step].setBrightness(state ? 10.F : 0.F); }
 
   auto isEnabled(int step) const -> bool {
@@ -56,11 +52,19 @@ public:
   enum LightIds { ENUMS(GeneratingLights, N), ENUMS(SustainingLights, N), LightCount };
 
 private:
+  auto isRunning() const -> bool { return inputIsHigh(inputs[RunInput]) || buttonIsPressed(params[RunButton]); }
+
+  auto gate() const -> bool { return inputIsHigh(inputs[GateInput]) || buttonIsPressed(params[GateButton]); }
+  auto startStep() const -> int { return paramValue(params[StartKnob]); }
+  auto sequenceLength() const -> int { return paramValue(params[StepsKnob]); }
+
   FunctionLatch runLatch{[this]() -> bool { return isRunning(); }};
   FunctionLatch gateLatch{[this]() -> bool { return gate(); }};
+  std::function<int()> selectionStart{[this]() -> int { return startStep(); }};
+  std::function<int()> selectionLength{[this]() -> int { return sequenceLength(); }};
   std::vector<std::unique_ptr<curve_sequencer::Step>> steps{};
 
-  curve_sequencer::Sequence sequence{runLatch, gateLatch, steps};
+  curve_sequencer::Sequence sequence{runLatch, gateLatch, selectionStart, selectionLength, steps};
 };
 
 template <int N> CurveSequencer<N>::CurveSequencer() {
