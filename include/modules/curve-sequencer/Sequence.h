@@ -4,6 +4,7 @@
 #include "modules/curve-sequencer/Step.h"
 
 #include <vector>
+#include <memory>
 
 namespace dhe {
 namespace curve_sequencer {
