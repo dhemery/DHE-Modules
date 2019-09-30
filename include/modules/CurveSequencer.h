@@ -67,6 +67,8 @@ private:
   curve_sequencer::Sequence sequence{runLatch, gateLatch, selectionStart, selectionLength, steps};
 };
 
+enum Modes { Rise, Fall, Edge, High, Low, Skip, FullDuration, ModeCount };
+
 template <int N> CurveSequencer<N>::CurveSequencer() {
   config(ParameterCount, InputCount, OutputCount, LightCount);
 
@@ -80,15 +82,20 @@ template <int N> CurveSequencer<N>::CurveSequencer() {
   configLevelRangeSwitch(this, LevelRangeSwitch);
   configDurationRangeSwitch(this, DurationRangeSwitch);
 
+  static std::array<std::string, ModeCount> generateModeNames{"Interrupt if gate rises",
+                                                              "Interrupt if gate falls",
+                                                              "Interrupt if gate changes",
+                                                              "Skip/interrupt if gate is high",
+                                                              "Skip/interrupt if gate is low",
+                                                              "Skip",
+                                                              "Run full duration"};
+
+  static std::array<std::string, ModeCount - 1> sustainModeNames{};
+  std::copy_n(generateModeNames.begin(), sustainModeNames.size(), sustainModeNames.begin());
+
   for (int step = 0; step < N; step++) {
-    configToggle<7>(this, GenerateModeSwitches + step, "Generate mode",
-                    {"Interrupt if gate rises", "Interrupt if gate falls", "Interrupt if gate changes",
-                     "Skip/interrupt if gate is high", "Skip/interrupt if gate is low", "Skip", "Run to completion"},
-                    6);
-    configToggle<6>(this, SustainModeSwitches + step, "Sustain mode",
-                    {"End when gate rises", "End when gate falls", "End when gate changes", "Skip/end if gate is high",
-                     "Skip/end if gate is low", "Skip"},
-                    5);
+    configToggle<7>(this, GenerateModeSwitches + step, "Generate mode", generateModeNames, 6);
+    configToggle<6>(this, SustainModeSwitches + step, "Sustain mode", sustainModeNames, 5);
     configLevelKnob(this, LevelKnobs + step, LevelRangeSwitch, "Level");
     configCurveShapeSwitch(this, ShapeSwitches + step, "Shape");
     configCurvatureKnob(this, CurveKnobs + step, "Curvature");

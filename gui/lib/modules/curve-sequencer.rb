@@ -117,7 +117,7 @@ step_label_y = top - hp2mm(0.5)
   x = step_x + step * step_dx
   light x: x - Light::DIAMETER, y: active_y
   light x: x + Light::DIAMETER, y: active_y
-  stepper x: x, y: generate_mode_y, name: 'generate', labels: %w[RISE FALL EDGE HIGH LOW SKIP FIN], selection: 7
+  stepper x: x, y: generate_mode_y, name: 'generate', labels: %w[RISE FALL EDGE HIGH LOW SKIP DUR], selection: 7
   stepper x: x, y: sustain_mode_y, name: 'sustain', labels: %w[RISE FALL EDGE HIGH LOW SKIP], selection: 6
   label x: x, y: step_label_y, text: (step + 1).to_s, alignment: :above, size: :large
   shape_toggle x: x, y: shape_y
