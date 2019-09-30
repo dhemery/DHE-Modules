@@ -30,10 +30,10 @@ using ::testing::Return;
 
 class SequenceTest : public ::testing::Test {
 protected:
-  std::shared_ptr<MockLatch> runLatch = std::make_shared<NiceMock<MockLatch>>();
-  std::shared_ptr<MockLatch> gateLatch = std::make_shared<NiceMock<MockLatch>>();
-  std::vector<std::shared_ptr<Step>> steps{};
-  Sequence<std::shared_ptr> sequence{runLatch, gateLatch, steps};
+  NiceMock<MockLatch> runLatch;
+  NiceMock<MockLatch> gateLatch;
+  std::vector<std::unique_ptr<Step>> steps{};
+  Sequence sequence{runLatch, gateLatch, steps};
 
   void SetUp() override {
     for (int i = 0; i < stepCount; i++) {
@@ -42,13 +42,13 @@ protected:
     }
   };
   void givenRunning(bool state, bool edge) {
-    ON_CALL(*runLatch, isHigh()).WillByDefault(Return(state));
-    ON_CALL(*runLatch, isEdge()).WillByDefault(Return(edge));
+    ON_CALL(runLatch, isHigh()).WillByDefault(Return(state));
+    ON_CALL(runLatch, isEdge()).WillByDefault(Return(edge));
   }
 
   void givenGate(bool state, bool edge) {
-    ON_CALL(*gateLatch, isHigh()).WillByDefault(Return(state));
-    ON_CALL(*gateLatch, isEdge()).WillByDefault(Return(edge));
+    ON_CALL(gateLatch, isHigh()).WillByDefault(Return(state));
+    ON_CALL(gateLatch, isEdge()).WillByDefault(Return(edge));
   }
 
   void givenStartStep(int index) {}
