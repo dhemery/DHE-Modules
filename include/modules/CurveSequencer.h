@@ -5,31 +5,61 @@
 #include "modules/controls/CurvatureConfig.h"
 #include "modules/controls/DurationConfig.h"
 #include "modules/controls/LevelConfig.h"
-#include "modules/curve-sequencer/ModuleStep.h"
+#include "modules/curve-sequencer/IndexedStep.h"
 #include "modules/curve-sequencer/Sequence.h"
+#include "modules/curve-sequencer/SequenceControls.h"
 #include "modules/curve-sequencer/Step.h"
+#include "modules/curve-sequencer/StepControls.h"
 
 #include <engine/Module.hpp>
 #include <memory>
 
 namespace dhe {
 
-template <int N> class CurveSequencer : public rack::engine::Module {
+template <int N>
+class CurveSequencer : public rack::engine::Module,
+                       public curve_sequencer::SequenceControls,
+                       public curve_sequencer::StepControls {
+  using Step = curve_sequencer::Step;
+  using Sequence = curve_sequencer::Sequence;
+  using IndexedStep = curve_sequencer::IndexedStep;
+
 public:
   CurveSequencer();
   ~CurveSequencer() override = default;
 
   void process(const ProcessArgs &args) override { sequence.process(args.sampleRate); };
 
-  void setGenerating(int step, bool state) { lights[GeneratingLights + step].setBrightness(state ? 10.F : 0.F); }
-  void setSustaining(int step, bool state) { lights[SustainingLights + step].setBrightness(state ? 10.F : 0.F); }
+  auto isRunning() const -> bool override {
+    return inputIsHigh(rack::engine::Module::inputs[RunInput])
+           || buttonIsPressed(rack::engine::Module::params[RunButton]);
+  }
 
-  auto generateMode(int step) const -> int { return static_cast<int>(paramValue(params[GenerateModeSwitches + step])); }
-  auto sustainMode(int step) const -> int { return static_cast<int>(paramValue(params[SustainModeSwitches + step])); }
+  auto gate() const -> bool override {
+    return inputIsHigh(rack::engine::Module::inputs[GateInput])
+           || buttonIsPressed(rack::engine::Module::params[GateButton]);
+  }
 
-  auto isEnabled(int step) const -> bool {
-    return inputIsHigh(inputs[EnabledInputs + step]) || buttonIsPressed(params[EnabledButtons + step]);
-  };
+  auto selectionLength() const -> int override { return paramValue(rack::engine::Module::params[StepsKnob]); }
+
+  auto selectionStart() const -> int override { return paramValue(rack::engine::Module::params[StartKnob]) - 1; }
+
+  void setGenerating(int step, bool state) override {
+    rack::engine::Module::lights[GeneratingLights + step].setBrightness(state ? 10.F : 0.F);
+  }
+  void setSustaining(int step, bool state) override {
+    rack::engine::Module::lights[SustainingLights + step].setBrightness(state ? 10.F : 0.F);
+  }
+  auto generateMode(int step) const -> int override {
+    return static_cast<int>(paramValue(rack::engine::Module::params[GenerateModeSwitches + step]));
+  }
+  auto sustainMode(int step) const -> int override {
+    return static_cast<int>(paramValue(rack::engine::Module::params[SustainModeSwitches + step]));
+  }
+  auto isEnabled(int step) const -> bool override {
+    return inputIsHigh(rack::engine::Module::inputs[EnabledInputs + step])
+           || buttonIsPressed(rack::engine::Module::params[EnabledButtons + step]);
+  }
 
   enum ParameterIds {
     DurationRangeSwitch,
@@ -56,19 +86,19 @@ public:
   enum LightIds { ENUMS(GeneratingLights, N), ENUMS(SustainingLights, N), LightCount };
 
 private:
-  auto isRunning() const -> bool { return inputIsHigh(inputs[RunInput]) || buttonIsPressed(params[RunButton]); }
-
-  auto gate() const -> bool { return inputIsHigh(inputs[GateInput]) || buttonIsPressed(params[GateButton]); }
-  auto startStep() const -> int { return paramValue(params[StartKnob]) - 1; }
-  auto sequenceLength() const -> int { return paramValue(params[StepsKnob]); }
-
-  FunctionLatch runLatch{[this]() -> bool { return isRunning(); }};
   FunctionLatch gateLatch{[this]() -> bool { return gate(); }};
-  std::function<int()> selectionStart{[this]() -> int { return startStep(); }};
-  std::function<int()> selectionLength{[this]() -> int { return sequenceLength(); }};
-  std::vector<std::unique_ptr<curve_sequencer::Step>> steps{};
+  FunctionLatch runLatch{[this]() -> bool { return isRunning(); }};
+  std::vector<std::unique_ptr<Step>> steps = makeSteps(*this);
+  Sequence sequence{*this, runLatch, gateLatch, steps};
 
-  curve_sequencer::Sequence sequence{runLatch, gateLatch, selectionStart, selectionLength, steps};
+  static auto makeSteps(StepControls &stepControls) -> std::vector<std::unique_ptr<Step>> {
+    std::vector<std::unique_ptr<Step>> steps{};
+    steps.reserve(N);
+    for (int i = 0; i < N; i++) {
+      steps.emplace_back(new IndexedStep(stepControls, i));
+    }
+    return steps;
+  }
 };
 
 enum Modes { Rise, Fall, Edge, High, Low, Skip, FullDuration, ModeCount };
@@ -108,8 +138,6 @@ template <int N> CurveSequencer<N>::CurveSequencer() {
 
     lights[GeneratingLights + step].setBrightness(0.F);
     lights[SustainingLights + step].setBrightness(0.F);
-
-    steps.emplace_back(new curve_sequencer::ModuleStep<CurveSequencer<N>>(this, step));
   }
 }
 } // namespace dhe

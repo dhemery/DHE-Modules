@@ -1,10 +1,10 @@
 #pragma once
 
 #include "modules/components/Latch.h"
+#include "modules/curve-sequencer/SequenceControls.h"
 #include "modules/curve-sequencer/Step.h"
 
 #include <memory>
-#include <utility>
 #include <vector>
 
 namespace dhe {
@@ -15,13 +15,8 @@ namespace curve_sequencer {
    */
   class Sequence {
   public:
-    Sequence(Latch &runLatch, Latch &gateLatch, std::function<int()> selectionStart,
-             std::function<int()> selectionLength, std::vector<std::unique_ptr<Step>> &steps) :
-        runLatch{runLatch},
-        gateLatch{gateLatch},
-        selectionStart{std::move(selectionStart)},
-        selectionLength{std::move(selectionLength)},
-        steps{steps} {}
+    Sequence(SequenceControls &controls, Latch &runLatch, Latch &gateLatch, std::vector<std::unique_ptr<Step>> &steps) :
+        controls{controls}, runLatch{runLatch}, gateLatch{gateLatch}, steps{steps} {}
 
     ~Sequence() = default;
 
@@ -39,8 +34,8 @@ namespace curve_sequencer {
 
   private:
     void start(float sampleTime) {
-      auto const first = selectionStart();
-      auto const length = selectionLength();
+      auto const first = controls.selectionStart();
+      auto const length = controls.selectionLength();
       auto const mask = steps.size() - 1;
 
       for (int i = 0; i < length; i++) {
@@ -53,10 +48,9 @@ namespace curve_sequencer {
       }
     }
 
+    SequenceControls &controls;
     Latch &runLatch;
     Latch &gateLatch;
-    std::function<int()> selectionStart;
-    std::function<int()> selectionLength;
     std::vector<std::unique_ptr<Step>> &steps;
   };
 } // namespace curve_sequencer

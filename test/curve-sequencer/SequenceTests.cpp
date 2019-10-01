@@ -1,4 +1,6 @@
 #include "modules/curve-sequencer/Sequence.h"
+#include "modules/curve-sequencer/SequenceControls.h"
+#include "modules/curve-sequencer/Step.h"
 
 #include <gmock/gmock-actions.h>
 #include <gmock/gmock.h>
@@ -8,18 +10,26 @@
 
 using dhe::Latch;
 using dhe::curve_sequencer::Sequence;
+using dhe::curve_sequencer::SequenceControls;
 using dhe::curve_sequencer::Step;
 
 struct MockLatch : public Latch {
-  MOCK_METHOD(void, step, (), (override));
-  MOCK_METHOD(void, set, (bool, bool), (override));
-  MOCK_METHOD(bool, isHigh, (), (const, override));
   MOCK_METHOD(bool, isEdge, (), (const, override));
+  MOCK_METHOD(bool, isHigh, (), (const, override));
+  MOCK_METHOD(void, set, (bool, bool), (override));
+  MOCK_METHOD(void, step, (), (override));
 };
 
 struct MockStep : public Step {
   MOCK_METHOD(bool, isAvailable, (), (const, override));
   MOCK_METHOD(void, process, (float), (override));
+};
+
+struct MockSequenceControls : public SequenceControls {
+  MOCK_METHOD(bool, gate, (), (const, override));
+  MOCK_METHOD(bool, isRunning, (), (const, override));
+  MOCK_METHOD(int, selectionLength, (), (const, override));
+  MOCK_METHOD(int, selectionStart, (), (const, override));
 };
 
 float constexpr sampleTime = 1.F / 44000.F;
@@ -30,16 +40,12 @@ using ::testing::NiceMock;
 using ::testing::Return;
 
 class SequenceTest : public ::testing::Test {
-  int start;
-  int length = stepCount;
-
 protected:
-  std::function<int()> selectionStart{[this]() -> int { return start; }};
-  std::function<int()> selectionLength{[this]() -> int { return length; }};
+  NiceMock<MockSequenceControls> controls;
   NiceMock<MockLatch> runLatch;
   NiceMock<MockLatch> gateLatch;
   std::vector<std::unique_ptr<Step>> steps{};
-  Sequence sequence{runLatch, gateLatch, selectionStart, selectionLength, steps};
+  Sequence sequence{controls, runLatch, gateLatch, steps};
 
   void SetUp() override {
     for (int i = 0; i < stepCount; i++) {
@@ -58,8 +64,8 @@ protected:
   }
 
   void givenSelection(int start, int length) {
-    this->start = start;
-    this->length = length;
+    ON_CALL(controls, selectionStart()).WillByDefault(Return(start));
+    ON_CALL(controls, selectionLength()).WillByDefault(Return(length));
   }
 
   void givenAvailable(int index, bool isAvailable) {

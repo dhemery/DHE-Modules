@@ -89,7 +89,7 @@ public:
       auto const x = stepX + stepDx * (float) step;
       this->light(x - activeLightXOffset, activeY, CurveSequencer<NS>::GeneratingLights + step);
       this->template light<rack::componentlibrary::RedLight>(x + activeLightXOffset, activeY,
-                                                                CurveSequencer<NS>::SustainingLights + step);
+                                                             CurveSequencer<NS>::SustainingLights + step);
 
       this->template toggle<GenerateModeStepper>(x, generatingModeY, CurveSequencer<NS>::GenerateModeSwitches + step);
       this->template toggle<SustainModeStepper>(x, sustainingModeY, CurveSequencer<NS>::SustainModeSwitches + step);
