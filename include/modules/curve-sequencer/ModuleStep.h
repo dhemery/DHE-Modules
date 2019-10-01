@@ -11,8 +11,16 @@ namespace curve_sequencer {
     ModuleStep(M *module, int stepIndex) : module{module}, stepIndex{stepIndex} {}
     ~ModuleStep() override = default;
 
+    enum Mode { Rise, Fall, Edge, High, Low, Skip, Duration };
+
     auto isAvailable() const -> bool override { return module->isEnabled(stepIndex); }
-    void process(float /*sampleTime*/) override { module->setGenerating(stepIndex, true); }
+    void process(float /*sampleTime*/) override {
+      if (module->generateMode(stepIndex) != Skip) {
+        module->setGenerating(stepIndex, true);
+      } else if (module->sustainMode(stepIndex) != Skip) {
+        module->setSustaining(stepIndex, true);
+      }
+    }
 
   private:
     M *module;

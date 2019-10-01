@@ -112,19 +112,19 @@ TEST_F(SequenceRunningWithGateLow, gateRiseProcessesFirstAvailableStep) {
   sequence.process(sampleTime);
 }
 
-TEST_F(SequenceRunningWithGateLow, calculationOfFirstAvailableWraps) {
-  auto constexpr firstSelected = 6;
+TEST_F(SequenceRunningWithGateLow, ifNoAvailableStepAboveFirstSelected_continueSeekingFromStep0) {
+  auto constexpr firstSelected = 6; // Will have to wrap to reach first available
   givenSelection(firstSelected, stepCount);
 
-  auto firstAvailable = 3;
-
-  // Will try 6, 7…
+  // Will check 6 and 7
   for (int i = firstSelected; i < stepCount; i++) {
     ON_CALL(step(i), isAvailable()).WillByDefault(Return(false));
     EXPECT_CALL(step(i), process(A<float>())).Times(0);
   }
 
-  // Will try 0, 1, 2
+  auto constexpr firstAvailable = 3;
+
+  // Will check 0, 1, 2
   for (int i = 0; i < firstAvailable; i++) {
     ON_CALL(step(i), isAvailable()).WillByDefault(Return(false));
     EXPECT_CALL(step(i), process(A<float>())).Times(0);
@@ -143,6 +143,3 @@ TEST_F(SequenceRunningWithGateLow, calculationOfFirstAvailableWraps) {
 
   sequence.process(sampleTime);
 }
-
-
-

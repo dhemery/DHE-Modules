@@ -22,6 +22,10 @@ public:
   void process(const ProcessArgs &args) override { sequence.process(args.sampleRate); };
 
   void setGenerating(int step, bool state) { lights[GeneratingLights + step].setBrightness(state ? 10.F : 0.F); }
+  void setSustaining(int step, bool state) { lights[SustainingLights + step].setBrightness(state ? 10.F : 0.F); }
+
+  auto generateMode(int step) const -> int { return static_cast<int>(paramValue(params[GenerateModeSwitches + step])); }
+  auto sustainMode(int step) const -> int { return static_cast<int>(paramValue(params[SustainModeSwitches + step])); }
 
   auto isEnabled(int step) const -> bool {
     return inputIsHigh(inputs[EnabledInputs + step]) || buttonIsPressed(params[EnabledButtons + step]);
