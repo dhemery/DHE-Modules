@@ -111,7 +111,7 @@ template <int N> CurveSequencer<N>::CurveSequencer() {
   configButton(this, ResetButton, "Reset", {"RESET input", "High"}, 0);
 
   configParam(StartKnob, 1.F, N, 1.F, "Start step");
-  configParam(StepsKnob, 1.F, N, N, "Steps");
+  configParam(StepsKnob, 1.F, N, N, "Sequence length", " steps");
 
   configLevelRangeSwitch(this, LevelRangeSwitch);
   configDurationRangeSwitch(this, DurationRangeSwitch);

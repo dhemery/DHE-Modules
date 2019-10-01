@@ -75,7 +75,7 @@ port x: module_inputs_x, y: start_y, label: 'START'
 small_knob x: module_params_x, y: start_y
 
 connector left: module_inputs_x, right: module_params_x, y: steps_y
-port x: module_inputs_x, y: steps_y, label: 'STEPS'
+port x: module_inputs_x, y: steps_y, label: 'LENGTH'
 small_knob x: module_params_x, y: steps_y
 
 
