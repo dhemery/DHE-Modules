@@ -5,9 +5,11 @@
 #include <gtest/gtest.h>
 
 using dhe::curve_sequencer::ComboStep;
+using dhe::curve_sequencer::Step;
 using dhe::curve_sequencer::StepControls;
+using Mode = Step::Mode;
 
-struct FakeStepControls : public StepControls {
+struct MockStepControls : public StepControls {
   MOCK_METHOD(bool, isEnabled, (int), (const, override));
   MOCK_METHOD(int, generateMode, (int), (const, override));
   MOCK_METHOD(void, setGenerating, (int, bool), (override));
@@ -15,56 +17,73 @@ struct FakeStepControls : public StepControls {
   MOCK_METHOD(void, setSustaining, (int, bool), (override));
 };
 
-float constexpr sampleTime = 1.F / 44000.F;
+struct MockStep : public Step {
+  MOCK_METHOD(bool, isAvailable, (), (const, override));
+  MOCK_METHOD(void, process, (float), (override));
+};
+
+auto constexpr sampleTime = 1.F / 44000.F;
+auto constexpr stepIndex = 3;
 
 using ::testing::NiceMock;
 using ::testing::Return;
 
-class IndexedStepTest : public ::testing::Test {
+class ComboStepTest : public ::testing::Test {
 public:
-  int stepIndex = 3;
-  NiceMock<FakeStepControls> module;
-  ComboStep step{module, stepIndex};
+  NiceMock<MockStepControls> controls;
+  MockStep *generateStep = new NiceMock<MockStep>;
+  MockStep *sustainStep = new NiceMock<MockStep>;
 
-  using Mode = ComboStep::Mode;
-  void setModes(Mode generateMode, Mode sustainMode) {
-    ON_CALL(module, generateMode(stepIndex)).WillByDefault(Return(generateMode));
-    ON_CALL(module, sustainMode(stepIndex)).WillByDefault(Return(sustainMode));
+  ComboStep step{controls, stepIndex, generateStep, sustainStep};
+
+  void setEnabledByControls(bool enabled) { ON_CALL(controls, isEnabled(stepIndex)).WillByDefault(Return(enabled)); }
+
+  void setAvailableSteps(bool generateAvailable, bool sustainAvailable) {
+    ON_CALL(*generateStep, isAvailable()).WillByDefault(Return(generateAvailable));
+    ON_CALL(*sustainStep, isAvailable()).WillByDefault(Return(sustainAvailable));
   }
 };
 
-class InactiveStep : public IndexedStepTest {};
+class InactiveComboStep : public ComboStepTest {};
 
-TEST_F(InactiveStep, isAvailableIfEnabledInModule) {
-  ON_CALL(module, isEnabled(stepIndex)).WillByDefault(Return(true));
-
-  EXPECT_EQ(step.isAvailable(), true);
-
-  ON_CALL(module, isEnabled(stepIndex)).WillByDefault(Return(false));
+TEST_F(InactiveComboStep, isUnavailableIfDisabledByControls) {
+  setEnabledByControls(false);
 
   EXPECT_EQ(step.isAvailable(), false);
 }
 
-class InactiveStepAvailableToGenerate : public InactiveStep {
+class EnabledInactiveComboStep : public ComboStepTest {
 public:
   void SetUp() override {
-    ON_CALL(module, generateMode(stepIndex)).WillByDefault(Return(Mode::Duration));
+    ComboStepTest::SetUp();
+    setEnabledByControls(true);
   }
 };
 
-TEST_F(InactiveStepAvailableToGenerate, setsGeneratingTrueWhenProcessed) {
-  EXPECT_CALL(module, setGenerating(stepIndex, true));
+class InactiveComboStepAvailableToGenerate : public EnabledInactiveComboStep {
+public:
+  void SetUp() override {
+    EnabledInactiveComboStep::SetUp();
+    setAvailableSteps(true, false);
+  }
+};
+
+TEST_F(InactiveComboStepAvailableToGenerate, process_processesGenerateStep) {
+  EXPECT_CALL(*generateStep, process(sampleTime));
 
   step.process(sampleTime);
 }
 
-class InactiveStepAvailableToSustain : public InactiveStep {
+class InactiveComboStepAvailableToSustain : public EnabledInactiveComboStep {
 public:
-  void SetUp() override { setModes(Mode::Skip, Mode::Fall); }
+  void SetUp() override {
+    EnabledInactiveComboStep::SetUp();
+    setAvailableSteps(false, true);
+  }
 };
 
-TEST_F(InactiveStepAvailableToSustain, setsSustainingTrueWhenProcessed) {
-  EXPECT_CALL(module, setSustaining(stepIndex, true));
+TEST_F(InactiveComboStepAvailableToSustain, process_processesSustainStep) {
+  EXPECT_CALL(*sustainStep, process(sampleTime));
 
   step.process(sampleTime);
 }

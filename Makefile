@@ -34,6 +34,7 @@ include $(RACK_DIR)/plugin.mk
 TEST_SOURCES =  $(wildcard \
 					test/*.cpp \
 					test/*/*.cpp \
+					src/modules/curve-sequencer/*.cpp \
 					)
 TEST_OBJECTS := $(patsubst %, build/%.o, $(TEST_SOURCES))
 

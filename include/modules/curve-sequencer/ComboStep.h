@@ -1,31 +1,31 @@
 #pragma once
 
+#include "GenerateStep.h"
 #include "Step.h"
 #include "StepControls.h"
+#include "SustainStep.h"
+
+#include <iostream>
+#include <memory>
 
 namespace dhe {
 
 namespace curve_sequencer {
 
-  class IndexedStep : public Step {
+  class ComboStep : public Step {
   public:
-    enum Mode { Rise, Fall, Edge, High, Low, Skip, Duration };
+    ComboStep(StepControls &controls, int stepIndex);
+    auto isAvailable() const -> bool override;
+    void process(float sampleTime) override;
 
-    IndexedStep(StepControls &controls, int index) : controls{controls}, index{index} {}
-
-    auto isAvailable() const -> bool override { return controls.isEnabled(index); }
-
-    void process(float /*sampleTime*/) override {
-      if (controls.generateMode(index) != Skip) {
-        controls.setGenerating(index, true);
-      } else if (controls.sustainMode(index) != Skip) {
-        controls.setSustaining(index, true);
-      }
-    }
+    // Constructor for testing
+    ComboStep(StepControls &controls, int stepIndex, Step *generateStep, Step *sustainStep);
 
   private:
     StepControls &controls;
-    int index;
+    int stepIndex;
+    std::unique_ptr<Step> generateStep;
+    std::unique_ptr<Step> sustainStep;
   };
 } // namespace curve_sequencer
 } // namespace dhe
