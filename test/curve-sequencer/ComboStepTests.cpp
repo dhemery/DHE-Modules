@@ -1,10 +1,10 @@
-#include "modules/curve-sequencer/IndexedStep.h"
+#include "modules/curve-sequencer/ComboStep.h"
 
 #include <gmock/gmock-actions.h>
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
 
-using dhe::curve_sequencer::IndexedStep;
+using dhe::curve_sequencer::ComboStep;
 using dhe::curve_sequencer::StepControls;
 
 struct FakeStepControls : public StepControls {
@@ -24,9 +24,9 @@ class IndexedStepTest : public ::testing::Test {
 public:
   int stepIndex = 3;
   NiceMock<FakeStepControls> module;
-  IndexedStep step{module, stepIndex};
+  ComboStep step{module, stepIndex};
 
-  using Mode = IndexedStep::Mode;
+  using Mode = ComboStep::Mode;
   void setModes(Mode generateMode, Mode sustainMode) {
     ON_CALL(module, generateMode(stepIndex)).WillByDefault(Return(generateMode));
     ON_CALL(module, sustainMode(stepIndex)).WillByDefault(Return(sustainMode));
