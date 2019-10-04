@@ -5,6 +5,7 @@
 #include "modules/curve-sequencer/SequenceControls.h"
 #include "modules/curve-sequencer/Step.h"
 #include "modules/curve-sequencer/StepControls.h"
+#include "modules/curve-sequencer/StepMode.h"
 
 #include <engine/Module.hpp>
 #include <memory>
@@ -15,12 +16,14 @@ template <int N>
 class CurveSequencer : public rack::engine::Module,
                        public curve_sequencer::SequenceControls,
                        public curve_sequencer::StepControls {
+  using StepMode = curve_sequencer::StepMode;
+
 public:
   CurveSequencer();
   ~CurveSequencer() override = default;
 
   auto gate() const -> bool override;
-  auto generateMode(int stepIndex) const -> Mode override;
+  auto generateMode(int stepIndex) const -> StepMode override;
   auto isEnabled(int stepIndex) const -> bool override;
   auto isRunning() const -> bool override;
   void process(const ProcessArgs &args) override;
@@ -28,7 +31,7 @@ public:
   auto selectionStart() const -> int override;
   void setGenerating(int stepIndex, bool state) override;
   void setSustaining(int stepIndex, bool state) override;
-  auto sustainMode(int stepIndex) const -> Mode override;
+  auto sustainMode(int stepIndex) const -> StepMode override;
 
   enum ParameterIds {
     DurationRangeSwitch,

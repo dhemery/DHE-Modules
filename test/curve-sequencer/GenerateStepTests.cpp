@@ -1,5 +1,4 @@
 #include "modules/curve-sequencer/GenerateStep.h"
-#include "modules/curve-sequencer/Step.h"
 #include "modules/curve-sequencer/StepControls.h"
 
 #include <gmock/gmock-actions.h>
@@ -8,13 +7,13 @@
 
 using dhe::curve_sequencer::GenerateStep;
 using dhe::curve_sequencer::StepControls;
-using Mode = dhe::curve_sequencer::StepControls::Mode;
+using StepMode = dhe::curve_sequencer::StepMode;
 
 struct MockStepControls : public StepControls {
   MOCK_METHOD(bool, isEnabled, (int), (const, override));
-  MOCK_METHOD(Mode, generateMode, (int), (const, override));
+  MOCK_METHOD(StepMode, generateMode, (int), (const, override));
   MOCK_METHOD(void, setGenerating, (int, bool), (override));
-  MOCK_METHOD(Mode, sustainMode, (int), (const, override));
+  MOCK_METHOD(StepMode, sustainMode, (int), (const, override));
   MOCK_METHOD(void, setSustaining, (int, bool), (override));
 };
 
@@ -30,17 +29,17 @@ public:
 
   GenerateStep step{controls, stepIndex};
 
-  void setMode(Mode mode) { ON_CALL(controls, generateMode(stepIndex)).WillByDefault(Return(mode)); }
+  void setMode(StepMode mode) { ON_CALL(controls, generateMode(stepIndex)).WillByDefault(Return(mode)); }
 };
 
 TEST_F(GenerateStepTest, isUnvailableInSkipMode) {
-  setMode(Mode::Skip);
+  setMode(StepMode::Skip);
 
   EXPECT_EQ(step.isAvailable(), false);
 }
 
 TEST_F(GenerateStepTest, isAvailableIfNotInSkipMode) {
-  setMode(Mode::Rise);
+  setMode(StepMode::Rise);
 
   EXPECT_EQ(step.isAvailable(), true);
 }

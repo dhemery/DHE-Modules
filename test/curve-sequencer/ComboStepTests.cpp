@@ -7,13 +7,13 @@
 using dhe::curve_sequencer::ComboStep;
 using dhe::curve_sequencer::Step;
 using dhe::curve_sequencer::StepControls;
-using Mode = Step::Mode;
+using StepMode = dhe::curve_sequencer::StepMode;
 
 struct MockStepControls : public StepControls {
   MOCK_METHOD(bool, isEnabled, (int), (const, override));
-  MOCK_METHOD(int, generateMode, (int), (const, override));
+  MOCK_METHOD(StepMode, generateMode, (int), (const, override));
   MOCK_METHOD(void, setGenerating, (int, bool), (override));
-  MOCK_METHOD(int, sustainMode, (int), (const, override));
+  MOCK_METHOD(StepMode, sustainMode, (int), (const, override));
   MOCK_METHOD(void, setSustaining, (int, bool), (override));
 };
 

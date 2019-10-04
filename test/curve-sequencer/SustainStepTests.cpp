@@ -8,13 +8,13 @@
 
 using dhe::curve_sequencer::StepControls;
 using dhe::curve_sequencer::SustainStep;
-using Mode = dhe::curve_sequencer::Step::Mode;
+using StepMode = dhe::curve_sequencer::StepMode;
 
 struct MockStepControls : public StepControls {
   MOCK_METHOD(bool, isEnabled, (int), (const, override));
-  MOCK_METHOD(int, generateMode, (int), (const, override));
+  MOCK_METHOD(StepMode, generateMode, (int), (const, override));
   MOCK_METHOD(void, setGenerating, (int, bool), (override));
-  MOCK_METHOD(int, sustainMode, (int), (const, override));
+  MOCK_METHOD(StepMode, sustainMode, (int), (const, override));
   MOCK_METHOD(void, setSustaining, (int, bool), (override));
 };
 
@@ -30,17 +30,17 @@ public:
 
   SustainStep step{controls, stepIndex};
 
-  void setMode(Mode mode) { ON_CALL(controls, sustainMode(stepIndex)).WillByDefault(Return(mode)); }
+  void setMode(StepMode mode) { ON_CALL(controls, sustainMode(stepIndex)).WillByDefault(Return(mode)); }
 };
 
 TEST_F(SustainStepTest, isUnvailableInSkipMode) {
-  setMode(Mode::Skip);
+  setMode(StepMode::Skip);
 
   EXPECT_EQ(step.isAvailable(), false);
 }
 
 TEST_F(SustainStepTest, isAvailableIfNotInSkipMode) {
-  setMode(Mode::Rise);
+  setMode(StepMode::Rise);
 
   EXPECT_EQ(step.isAvailable(), true);
 }
