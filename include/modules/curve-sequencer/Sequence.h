@@ -15,38 +15,12 @@ namespace curve_sequencer {
    */
   class Sequence {
   public:
-    Sequence(SequenceControls &controls, Latch &runLatch, Latch &gateLatch, std::vector<std::unique_ptr<Step>> &steps) :
-        controls{controls}, runLatch{runLatch}, gateLatch{gateLatch}, steps{steps} {}
-
+    Sequence(SequenceControls &controls, Latch &runLatch, Latch &gateLatch, std::vector<std::unique_ptr<Step>> &steps);
     ~Sequence() = default;
-
-    void process(float sampleTime) {
-      runLatch.step();
-      gateLatch.step();
-
-      if (runLatch.isLow()) {
-        return;
-      }
-      if (gateLatch.isRise()) {
-        start(sampleTime);
-      }
-    }
+    void process(float sampleTime);
 
   private:
-    void start(float sampleTime) {
-      auto const first = controls.selectionStart();
-      auto const length = controls.selectionLength();
-      auto const mask = steps.size() - 1;
-
-      for (int i = 0; i < length; i++) {
-        auto const index = (first + i) & mask;
-        auto &step = steps[index];
-        if (step->isAvailable()) {
-          step->process(sampleTime);
-          return;
-        }
-      }
-    }
+    void start(float sampleTime);
 
     SequenceControls &controls;
     Latch &runLatch;
