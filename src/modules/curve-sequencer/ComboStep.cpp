@@ -1,5 +1,6 @@
 #include "modules/curve-sequencer/ComboStep.h"
 
+#include "modules/components/Latch.h"
 #include "modules/curve-sequencer/GenerateStep.h"
 #include "modules/curve-sequencer/Step.h"
 #include "modules/curve-sequencer/StepControls.h"
@@ -12,18 +13,21 @@ namespace curve_sequencer {
       ComboStep{controls, stepIndex, new GenerateStep{controls, stepIndex}, new SustainStep{controls, stepIndex}} {}
 
   ComboStep::ComboStep(StepControls &controls, int stepIndex, Step *generateStep, Step *sustainStep) :
-      controls{controls}, stepIndex{stepIndex}, generateStep{generateStep}, sustainStep{sustainStep} {}
+      controls{controls},
+      stepIndex{stepIndex},
+      generateStep{generateStep},
+      sustainStep{sustainStep} {}
 
   auto ComboStep::isAvailable() const -> bool { return controls.isEnabled(stepIndex); }
 
-  void ComboStep::process(float sampleTime) {
+  void ComboStep::process(Latch const &gateLatch, float sampleTime) {
     if (!controls.isEnabled(stepIndex)) {
       return;
     }
     if (generateStep->isAvailable()) {
-      generateStep->process(sampleTime);
+      generateStep->process(gateLatch, sampleTime);
     } else if (sustainStep->isAvailable()) {
-      sustainStep->process(sampleTime);
+      sustainStep->process(gateLatch, sampleTime);
     }
   }
 

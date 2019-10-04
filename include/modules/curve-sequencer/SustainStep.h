@@ -9,7 +9,7 @@ namespace curve_sequencer {
   public:
     SustainStep(StepControls &controls, int stepIndex);
     auto isAvailable() const -> bool override;
-    void process(float sampleTime) override;
+    void process(Latch const &gateLatch, float sampleTime) override;
 
   private:
     StepControls &controls;

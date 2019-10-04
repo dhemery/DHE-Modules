@@ -8,7 +8,7 @@ namespace curve_sequencer {
 
   auto GenerateStep::isAvailable() const -> bool { return controls.generateMode(stepIndex) != StepMode::Skip; }
 
-  void GenerateStep::process(float sampleTime) { controls.setGenerating(stepIndex, true); }
+  void GenerateStep::process(Latch const &gateLatch, float sampleTime) { controls.setGenerating(stepIndex, true); }
 
 } // namespace curve_sequencer
 } // namespace dhe

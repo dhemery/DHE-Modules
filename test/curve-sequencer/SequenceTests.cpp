@@ -1,3 +1,4 @@
+#include "modules/components/Latch.h"
 #include "modules/curve-sequencer/Sequence.h"
 #include "modules/curve-sequencer/SequenceControls.h"
 #include "modules/curve-sequencer/Step.h"
@@ -22,7 +23,7 @@ struct MockLatch : public Latch {
 
 struct MockStep : public Step {
   MOCK_METHOD(bool, isAvailable, (), (const, override));
-  MOCK_METHOD(void, process, (float), (override));
+  MOCK_METHOD(void, process, (Latch const &, float), (override));
 };
 
 struct MockSequenceControls : public SequenceControls {
@@ -104,16 +105,16 @@ TEST_F(SequenceRunningWithGateLow, gateRiseProcessesFirstAvailableStep) {
 
   for (int i = 0; i < firstAvailableStep; i++) {
     ON_CALL(step(i), isAvailable()).WillByDefault(Return(false));
-    EXPECT_CALL(step(i), process(A<float>())).Times(0);
+    EXPECT_CALL(step(i), process(A<Latch const &>(), A<float>())).Times(0);
   }
 
   for (int i = firstAvailableStep + 1; i < stepCount; i++) {
     EXPECT_CALL(step(i), isAvailable()).Times(0);
-    EXPECT_CALL(step(i), process(A<float>())).Times(0);
+    EXPECT_CALL(step(i), process(A<Latch const &>(), A<float>())).Times(0);
   }
 
   ON_CALL(step(firstAvailableStep), isAvailable()).WillByDefault(Return(true));
-  EXPECT_CALL(step(firstAvailableStep), process(sampleTime));
+  EXPECT_CALL(step(firstAvailableStep), process(A<Latch const &>(), sampleTime));
 
   sequence.process(sampleTime);
 }
@@ -125,7 +126,7 @@ TEST_F(SequenceRunningWithGateLow, ifNoAvailableStepAboveFirstSelected_continueS
   // Will check 6 and 7
   for (int i = firstSelected; i < stepCount; i++) {
     ON_CALL(step(i), isAvailable()).WillByDefault(Return(false));
-    EXPECT_CALL(step(i), process(A<float>())).Times(0);
+    EXPECT_CALL(step(i), process(A<Latch const &>(), A<float>())).Times(0);
   }
 
   auto constexpr firstAvailable = 3;
@@ -133,16 +134,16 @@ TEST_F(SequenceRunningWithGateLow, ifNoAvailableStepAboveFirstSelected_continueS
   // Will check 0, 1, 2
   for (int i = 0; i < firstAvailable; i++) {
     ON_CALL(step(i), isAvailable()).WillByDefault(Return(false));
-    EXPECT_CALL(step(i), process(A<float>())).Times(0);
+    EXPECT_CALL(step(i), process(A<Latch const &>(), A<float>())).Times(0);
   }
 
   ON_CALL(step(firstAvailable), isAvailable()).WillByDefault(Return(true));
-  EXPECT_CALL(step(firstAvailable), process(sampleTime));
+  EXPECT_CALL(step(firstAvailable), process(A<Latch const &>(), sampleTime));
 
   // Will not check 4, 5
   for (int i = firstAvailable + 1; i < firstSelected; i++) {
     EXPECT_CALL(step(i), isAvailable()).Times(0);
-    EXPECT_CALL(step(i), process(A<float>())).Times(0);
+    EXPECT_CALL(step(i), process(A<Latch const &>(), A<float>())).Times(0);
   }
 
   givenGate(true, true);

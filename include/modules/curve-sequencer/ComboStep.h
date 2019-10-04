@@ -13,7 +13,7 @@ namespace curve_sequencer {
   public:
     ComboStep(StepControls &controls, int stepIndex);
     auto isAvailable() const -> bool override;
-    void process(float sampleTime) override;
+    void process(Latch const &gateLatch, float sampleTime) override;
 
     // Constructor for testing
     ComboStep(StepControls &controls, int stepIndex, Step *generateStep, Step *sustainStep);

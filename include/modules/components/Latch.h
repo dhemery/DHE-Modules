@@ -14,7 +14,7 @@ public:
   virtual auto isHigh() const -> bool = 0;
 
   auto isLow() const -> bool { return !isHigh(); };
-  auto isFall() -> bool { return isEdge() && isLow(); };
-  auto isRise() -> bool { return isEdge() && isHigh(); };
+  auto isFall() const -> bool { return isEdge() && isLow(); };
+  auto isRise() const -> bool { return isEdge() && isHigh(); };
 };
 } // namespace dhe

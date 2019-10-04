@@ -35,7 +35,7 @@ namespace curve_sequencer {
       auto const index = (first + i) & mask;
       auto &step = steps[index];
       if (step->isAvailable()) {
-        step->process(sampleTime);
+        step->process(gateLatch, sampleTime);
         return;
       }
     }
