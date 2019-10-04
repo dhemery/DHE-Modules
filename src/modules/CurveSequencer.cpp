@@ -5,12 +5,11 @@
 #include "modules/controls/DurationConfig.h"
 #include "modules/controls/LevelConfig.h"
 #include "modules/curve-sequencer/ComboStep.h"
+#include "modules/curve-sequencer/StepMode.h"
 
 namespace dhe {
 
-using curve_sequencer::ComboStep;
-
-enum Modes { Rise, Fall, Edge, High, Low, Skip, FullDuration, ModeCount };
+using rack::engine::Module;
 
 template <int N>
 CurveSequencer<N>::CurveSequencer() :
@@ -29,16 +28,19 @@ CurveSequencer<N>::CurveSequencer() :
   configLevelRangeSwitch(this, LevelRangeSwitch);
   configDurationRangeSwitch(this, DurationRangeSwitch);
 
-  static std::array<std::string, ModeCount> generateModeNames{"Interrupt if gate rises",
-                                                              "Interrupt if gate falls",
-                                                              "Interrupt if gate changes",
-                                                              "Skip/interrupt if gate is high",
-                                                              "Skip/interrupt if gate is low",
-                                                              "Skip",
-                                                              "Run full duration"};
+  constexpr auto generateModeCount = static_cast<size_t>(curve_sequencer::StepMode::Count);
+  constexpr auto sustainModeCount = generateModeCount - 1;
 
-  static std::array<std::string, ModeCount - 1> sustainModeNames{};
-  std::copy_n(generateModeNames.begin(), sustainModeNames.size(), sustainModeNames.begin());
+  auto generateModeNames = std::array<std::string, generateModeCount>{"Interrupt if gate rises",
+                                                                      "Interrupt if gate falls",
+                                                                      "Interrupt if gate changes",
+                                                                      "Skip/interrupt if gate is high",
+                                                                      "Skip/interrupt if gate is low",
+                                                                      "Skip",
+                                                                      "Run full duration"};
+
+  auto sustainModeNames = std::array<std::string, sustainModeCount>{};
+  std::copy_n(generateModeNames.begin(), sustainModeCount, sustainModeNames.begin());
 
   steps.reserve(N);
 
@@ -54,39 +56,34 @@ CurveSequencer<N>::CurveSequencer() :
     lights[GeneratingLights + stepIndex].setBrightness(0.F);
     lights[SustainingLights + stepIndex].setBrightness(0.F);
 
-    steps.emplace_back(new ComboStep(*this, stepIndex));
+    steps.emplace_back(new curve_sequencer::ComboStep(*this, stepIndex));
   }
 }
 
 template <int N> auto CurveSequencer<N>::gate() const -> bool {
-  return inputIsHigh(rack::engine::Module::inputs[GateInput])
-         || buttonIsPressed(rack::engine::Module::params[GateButton]);
+  return inputIsHigh(inputs[GateInput]) || buttonIsPressed(params[GateButton]);
 }
 
 template <int N> auto CurveSequencer<N>::generateMode(int stepIndex) const -> StepMode {
-  return static_cast<StepMode>(paramValue(rack::engine::Module::params[GenerateModeSwitches + stepIndex]));
+  return static_cast<StepMode>(paramValue(params[GenerateModeSwitches + stepIndex]));
 }
 
 template <int N> auto CurveSequencer<N>::isEnabled(int stepIndex) const -> bool {
-  return inputIsHigh(rack::engine::Module::inputs[EnabledInputs + stepIndex])
-         || buttonIsPressed(rack::engine::Module::params[EnabledButtons + stepIndex]);
+  return inputIsHigh(inputs[EnabledInputs + stepIndex]) || buttonIsPressed(params[EnabledButtons + stepIndex]);
 }
 
 template <int N> auto CurveSequencer<N>::isRunning() const -> bool {
-  return inputIsHigh(rack::engine::Module::inputs[RunInput])
-         || buttonIsPressed(rack::engine::Module::params[RunButton]);
+  return inputIsHigh(inputs[RunInput]) || buttonIsPressed(params[RunButton]);
 }
 
-template <int N> void CurveSequencer<N>::process(const rack::engine::Module::ProcessArgs &args) {
-  sequence.process(args.sampleRate);
-}
+template <int N> void CurveSequencer<N>::process(const ProcessArgs &args) { sequence.process(args.sampleRate); }
 
 template <int N> auto CurveSequencer<N>::selectionLength() const -> int {
-  return paramValue(rack::engine::Module::params[StepsKnob]);
+  return paramValue(params[StepsKnob]);
 }
 
 template <int N> auto CurveSequencer<N>::selectionStart() const -> int {
-  return paramValue(rack::engine::Module::params[StartKnob]) - 1;
+  return paramValue(params[StartKnob]) - 1;
 }
 
 template <int N> void CurveSequencer<N>::setGenerating(int stepIndex, bool state) {
@@ -98,7 +95,7 @@ template <int N> void CurveSequencer<N>::setSustaining(int stepIndex, bool state
 }
 
 template <int N> auto CurveSequencer<N>::sustainMode(int stepIndex) const -> StepMode {
-  return static_cast<StepMode>(paramValue(rack::engine::Module::params[SustainModeSwitches + stepIndex]));
+  return static_cast<StepMode>(paramValue(params[SustainModeSwitches + stepIndex]));
 }
 
 template class CurveSequencer<8>;

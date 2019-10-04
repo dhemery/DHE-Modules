@@ -2,6 +2,6 @@
 
 namespace dhe {
 namespace curve_sequencer {
-  enum class StepMode { Rise, Fall, Edge, High, Low, Skip, Duration };
+  enum class StepMode { Rise, Fall, Edge, High, Low, Skip, Duration, Count };
 }
 } // namespace dhe

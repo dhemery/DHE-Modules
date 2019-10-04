@@ -1,4 +1,6 @@
 #include "modules/curve-sequencer/ComboStep.h"
+#include "modules/curve-sequencer/GenerateStep.h"
+#include "modules/curve-sequencer/SustainStep.h"
 
 #include "modules/curve-sequencer/Step.h"
 #include "modules/curve-sequencer/StepControls.h"

@@ -5,7 +5,6 @@
 #include "StepControls.h"
 #include "SustainStep.h"
 
-#include <iostream>
 #include <memory>
 
 namespace dhe {
