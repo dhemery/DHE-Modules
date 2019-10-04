@@ -1,31 +1,14 @@
-#include "modules/components/Latch.h"
-#include "modules/curve-sequencer/StepControls.h"
 #include "modules/curve-sequencer/StepMode.h"
 #include "modules/curve-sequencer/SustainStep.h"
 
 #include <gmock/gmock-actions.h>
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
+#include <mocks/MockLatch.h>
+#include <mocks/MockStepControls.h>
 
-using dhe::Latch;
-using dhe::curve_sequencer::StepControls;
 using dhe::curve_sequencer::StepMode;
 using dhe::curve_sequencer::SustainStep;
-
-struct MockStepControls : public StepControls {
-  MOCK_METHOD(bool, isEnabled, (int), (const, override));
-  MOCK_METHOD(StepMode, generateMode, (int), (const, override));
-  MOCK_METHOD(void, setGenerating, (int, bool), (override));
-  MOCK_METHOD(StepMode, sustainMode, (int), (const, override));
-  MOCK_METHOD(void, setSustaining, (int, bool), (override));
-};
-
-struct MockLatch : public Latch {
-  MOCK_METHOD(bool, isEdge, (), (const, override));
-  MOCK_METHOD(bool, isHigh, (), (const, override));
-  MOCK_METHOD(void, set, (bool, bool), (override));
-  MOCK_METHOD(void, step, (), (override));
-};
 
 auto constexpr sampleTime = 1.F / 44000.F;
 auto constexpr stepIndex = 3;

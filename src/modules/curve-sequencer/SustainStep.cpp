@@ -9,14 +9,14 @@ namespace curve_sequencer {
   auto SustainStep::isAvailable() const -> bool { return controls.sustainMode(stepIndex) != StepMode::Skip; }
 
   void SustainStep::process(Latch const &gateLatch, float) {
-    if(controls.sustainMode(stepIndex) == StepMode::Rise) {
-      if(gateLatch.isRise()) {
+    if (controls.sustainMode(stepIndex) == StepMode::Rise) {
+      if (gateLatch.isRise()) {
         controls.setSustaining(stepIndex, false);
         return;
       }
     }
-    if(controls.sustainMode(stepIndex) == StepMode::Fall) {
-      if(gateLatch.isFall()) {
+    if (controls.sustainMode(stepIndex) == StepMode::Fall) {
+      if (gateLatch.isFall()) {
         controls.setSustaining(stepIndex, false);
         return;
       }

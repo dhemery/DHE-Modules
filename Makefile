@@ -38,7 +38,7 @@ TEST_SOURCES =  $(wildcard \
 					)
 TEST_OBJECTS := $(patsubst %, build/%.o, $(TEST_SOURCES))
 
-TESTFLAGS += -Igoogletest/googletest/include/ -Igoogletest/googlemock/include/
+TESTFLAGS += -Itest/ -Igoogletest/googletest/include/ -Igoogletest/googlemock/include/
 TESTLDFLAGS += -Lgoogletest/lib -lgmock_main -lgtest -lgmock
 
 ifdef ARCH_LIN

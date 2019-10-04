@@ -13,10 +13,7 @@ namespace curve_sequencer {
       ComboStep{controls, stepIndex, new GenerateStep{controls, stepIndex}, new SustainStep{controls, stepIndex}} {}
 
   ComboStep::ComboStep(StepControls &controls, int stepIndex, Step *generateStep, Step *sustainStep) :
-      controls{controls},
-      stepIndex{stepIndex},
-      generateStep{generateStep},
-      sustainStep{sustainStep} {}
+      controls{controls}, stepIndex{stepIndex}, generateStep{generateStep}, sustainStep{sustainStep} {}
 
   auto ComboStep::isAvailable() const -> bool { return controls.isEnabled(stepIndex); }
 

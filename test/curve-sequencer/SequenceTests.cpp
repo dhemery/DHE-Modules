@@ -1,6 +1,5 @@
 #include "modules/components/Latch.h"
 #include "modules/curve-sequencer/Sequence.h"
-#include "modules/curve-sequencer/SequenceControls.h"
 #include "modules/curve-sequencer/Step.h"
 
 #include <gmock/gmock-actions.h>
@@ -8,30 +7,13 @@
 #include <gtest/gtest.h>
 #include <memory>
 #include <vector>
+#include <mocks/MockLatch.h>
+#include <mocks/MockStep.h>
+#include <mocks/MockSequenceControls.h>
 
 using dhe::Latch;
 using dhe::curve_sequencer::Sequence;
-using dhe::curve_sequencer::SequenceControls;
 using dhe::curve_sequencer::Step;
-
-struct MockLatch : public Latch {
-  MOCK_METHOD(bool, isEdge, (), (const, override));
-  MOCK_METHOD(bool, isHigh, (), (const, override));
-  MOCK_METHOD(void, set, (bool, bool), (override));
-  MOCK_METHOD(void, step, (), (override));
-};
-
-struct MockStep : public Step {
-  MOCK_METHOD(bool, isAvailable, (), (const, override));
-  MOCK_METHOD(void, process, (Latch const &, float), (override));
-};
-
-struct MockSequenceControls : public SequenceControls {
-  MOCK_METHOD(bool, gate, (), (const, override));
-  MOCK_METHOD(bool, isRunning, (), (const, override));
-  MOCK_METHOD(int, selectionLength, (), (const, override));
-  MOCK_METHOD(int, selectionStart, (), (const, override));
-};
 
 float constexpr sampleTime = 1.F / 44000.F;
 int constexpr stepCount = 8;
