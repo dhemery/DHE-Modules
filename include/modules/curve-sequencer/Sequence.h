@@ -16,7 +16,7 @@ namespace curve_sequencer {
   class Sequence {
   public:
     Sequence(SequenceControls &controls, Latch &runLatch, Latch &gateLatch, std::vector<std::unique_ptr<Step>> &steps);
-//    ~Sequence() = default;
+    //    ~Sequence() = default;
     void process(float sampleTime);
 
   private:

@@ -78,13 +78,9 @@ template <int N> auto CurveSequencer<N>::isRunning() const -> bool {
 
 template <int N> void CurveSequencer<N>::process(const ProcessArgs &args) { sequence.process(args.sampleRate); }
 
-template <int N> auto CurveSequencer<N>::selectionLength() const -> int {
-  return paramValue(params[StepsKnob]);
-}
+template <int N> auto CurveSequencer<N>::selectionLength() const -> int { return paramValue(params[StepsKnob]); }
 
-template <int N> auto CurveSequencer<N>::selectionStart() const -> int {
-  return paramValue(params[StartKnob]) - 1;
-}
+template <int N> auto CurveSequencer<N>::selectionStart() const -> int { return paramValue(params[StartKnob]) - 1; }
 
 template <int N> void CurveSequencer<N>::setGenerating(int stepIndex, bool state) {
   lights[GeneratingLights + stepIndex].setBrightness(state ? 10.F : 0.F);

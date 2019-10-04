@@ -1,9 +1,7 @@
 #pragma once
 
-#include "GenerateStep.h"
 #include "Step.h"
 #include "StepControls.h"
-#include "SustainStep.h"
 
 #include <memory>
 
