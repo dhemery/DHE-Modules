@@ -10,7 +10,6 @@
 
 using dhe::Latch;
 using dhe::curve_sequencer::ComboStep;
-using dhe::curve_sequencer::Step;
 using ::testing::A;
 
 auto constexpr sampleTime = 1.F / 44000.F;
@@ -19,8 +18,7 @@ auto constexpr stepIndex = 3;
 using ::testing::NiceMock;
 using ::testing::Return;
 
-class ComboStepTest : public ::testing::Test {
-public:
+struct ComboStepTest : public ::testing::Test {
   NiceMock<MockStepControls> controls;
   NiceMock<MockLatch> gateLatch;
   MockStep *generateStep = new NiceMock<MockStep>;
@@ -28,7 +26,7 @@ public:
 
   ComboStep step{controls, stepIndex, generateStep, sustainStep};
 
-  void setEnabledByControls(bool enabled) { ON_CALL(controls, isEnabled(stepIndex)).WillByDefault(Return(enabled)); }
+  void setEnabled(bool enabled) { ON_CALL(controls, isEnabled(stepIndex)).WillByDefault(Return(enabled)); }
 
   void setAvailableSteps(bool generateAvailable, bool sustainAvailable) {
     ON_CALL(*generateStep, isAvailable()).WillByDefault(Return(generateAvailable));
@@ -36,24 +34,43 @@ public:
   }
 };
 
-class InactiveComboStep : public ComboStepTest {};
+struct DisabledComboStep : public ComboStepTest {
+  void SetUp() override {
+    ComboStepTest::SetUp();
+    setEnabled(false);
+  }
+};
 
-TEST_F(InactiveComboStep, isUnavailableIfDisabledByControls) {
-  setEnabledByControls(false);
+TEST_F(DisabledComboStep, isUnavailable) { EXPECT_EQ(step.isAvailable(), false); }
+
+struct EnabledComboStep : public ComboStepTest {
+  void SetUp() override {
+    ComboStepTest::SetUp();
+    setEnabled(true);
+  }
+};
+
+TEST_F(EnabledComboStep, isAvailableIfGenerateSubstepIsAvailable) {
+  setAvailableSteps(true, false);
+
+  EXPECT_EQ(step.isAvailable(), true);
+}
+
+TEST_F(EnabledComboStep, isAvailableIfSustainSubstepIsAvailable) {
+  setAvailableSteps(false, true);
+
+  EXPECT_EQ(step.isAvailable(), true);
+}
+
+TEST_F(EnabledComboStep, isUnavailableIfBothSubstepsAreUnavailable) {
+  setAvailableSteps(false, false);
 
   EXPECT_EQ(step.isAvailable(), false);
 }
 
-class EnabledInactiveComboStep : public ComboStepTest {
-public:
-  void SetUp() override {
-    ComboStepTest::SetUp();
-    setEnabledByControls(true);
-  }
-};
+struct EnabledInactiveComboStep : public EnabledComboStep {};
 
-class InactiveComboStepAvailableToGenerate : public EnabledInactiveComboStep {
-public:
+struct InactiveComboStepAvailableToGenerate : public EnabledInactiveComboStep {
   void SetUp() override {
     EnabledInactiveComboStep::SetUp();
     setAvailableSteps(true, false);
@@ -66,8 +83,7 @@ TEST_F(InactiveComboStepAvailableToGenerate, process_processesGenerateStep) {
   step.process(gateLatch, sampleTime);
 }
 
-class InactiveComboStepAvailableToSustain : public EnabledInactiveComboStep {
-public:
+struct InactiveComboStepAvailableToSustain : public EnabledInactiveComboStep {
   void SetUp() override {
     EnabledInactiveComboStep::SetUp();
     setAvailableSteps(false, true);

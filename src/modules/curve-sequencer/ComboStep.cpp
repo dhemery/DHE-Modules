@@ -15,7 +15,9 @@ namespace curve_sequencer {
   ComboStep::ComboStep(StepControls &controls, int stepIndex, Step *generateStep, Step *sustainStep) :
       controls{controls}, stepIndex{stepIndex}, generateStep{generateStep}, sustainStep{sustainStep} {}
 
-  auto ComboStep::isAvailable() const -> bool { return controls.isEnabled(stepIndex); }
+  auto ComboStep::isAvailable() const -> bool {
+    return controls.isEnabled(stepIndex) && (generateStep->isAvailable() || sustainStep->isAvailable());
+  }
 
   auto ComboStep::process(Latch const &gateLatch, float sampleTime) -> State {
     if (generateStep->isAvailable()) {
