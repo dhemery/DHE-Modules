@@ -23,7 +23,7 @@ namespace curve_sequencer {
   auto GenerateStep::isAvailable() const -> bool { return mode() != Mode::Skip; }
 
   auto GenerateStep::process(Latch const &gateLatch, float /* ignored */) -> State {
-    Mode mode = this->mode();
+    auto const mode = this->mode();
     if (gateLatch.isRise()) {
       return process(continuesOnRise(mode));
     }
@@ -36,7 +36,7 @@ namespace curve_sequencer {
     return process(continuesOnLow(mode));
   }
 
-  auto GenerateStep::process(bool isGenerating) -> Step::State {
+  auto GenerateStep::process(bool isGenerating) -> State {
     controls.setGenerating(stepIndex, isGenerating);
     return isGenerating ? State::Running : State::Finished;
   }

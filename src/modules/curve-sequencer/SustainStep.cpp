@@ -23,7 +23,7 @@ namespace curve_sequencer {
   auto SustainStep::isAvailable() const -> bool { return mode() != Mode::Skip; }
 
   auto SustainStep::process(Latch const &gateLatch, float /* ignored */) -> State {
-    Mode mode = this->mode();
+    auto const mode = this->mode();
     if (gateLatch.isRise()) {
       return process(continuesOnRise(mode));
     }
@@ -36,7 +36,7 @@ namespace curve_sequencer {
     return process(continuesOnLow(mode));
   }
 
-  auto SustainStep::process(bool isSustaining) -> Step::State {
+  auto SustainStep::process(bool isSustaining) -> State {
     controls.setSustaining(stepIndex, isSustaining);
     return isSustaining ? State::Running : State::Finished;
   }
