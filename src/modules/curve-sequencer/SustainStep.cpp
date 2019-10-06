@@ -4,7 +4,6 @@
 
 namespace dhe {
 namespace curve_sequencer {
-
   static auto continuesOnRise(Step::Mode mode) -> bool {
     auto const ends = mode == Step::Mode::Rise || mode == Step::Mode::Edge || mode == Step::Mode::High;
     return !ends;

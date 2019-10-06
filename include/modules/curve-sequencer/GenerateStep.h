@@ -13,6 +13,7 @@ namespace curve_sequencer {
 
   private:
     auto mode() const -> Mode { return static_cast<Mode>(controls.generateMode(stepIndex)); }
+    auto process(bool ends) -> State;
 
     StepControls &controls;
     int stepIndex;
