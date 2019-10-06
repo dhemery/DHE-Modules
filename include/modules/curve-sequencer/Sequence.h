@@ -13,8 +13,7 @@ namespace curve_sequencer {
   /**
    * Controls the sequence in a CurveSequencer module.
    */
-  class Sequence {
-  public:
+  struct Sequence {
     Sequence(SequenceControls &controls, Latch &runLatch, Latch &gateLatch, std::vector<std::unique_ptr<Step>> &steps);
     void process(float sampleTime);
 

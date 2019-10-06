@@ -17,15 +17,14 @@ namespace curve_sequencer {
 
   auto ComboStep::isAvailable() const -> bool { return controls.isEnabled(stepIndex); }
 
-  void ComboStep::process(Latch const &gateLatch, float sampleTime) {
-    if (!controls.isEnabled(stepIndex)) {
-      return;
-    }
+  auto ComboStep::process(Latch const &gateLatch, float sampleTime) -> State {
     if (generateStep->isAvailable()) {
-      generateStep->process(gateLatch, sampleTime);
-    } else if (sustainStep->isAvailable()) {
-      sustainStep->process(gateLatch, sampleTime);
+      return generateStep->process(gateLatch, sampleTime);
     }
+    if (sustainStep->isAvailable()) {
+      return sustainStep->process(gateLatch, sampleTime);
+    }
+    return State::Finished;
   }
 
 } // namespace curve_sequencer

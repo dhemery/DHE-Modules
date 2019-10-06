@@ -9,11 +9,10 @@ namespace dhe {
 
 namespace curve_sequencer {
 
-  class ComboStep : public Step {
-  public:
+  struct ComboStep : public Step {
     ComboStep(StepControls &controls, int stepIndex);
     auto isAvailable() const -> bool override;
-    void process(Latch const &gateLatch, float sampleTime) override;
+    auto process(Latch const &gateLatch, float sampleTime) -> State override;
 
     // Constructor for testing
     ComboStep(StepControls &controls, int stepIndex, Step *generateStep, Step *sustainStep);

@@ -4,10 +4,12 @@
 
 namespace dhe {
 namespace curve_sequencer {
-  class Step {
-  public:
+  struct Step {
+    enum class State { Running, Finished };
+    enum class Mode { Rise, Fall, Edge, High, Low, Skip, Duration, Count };
+
     virtual auto isAvailable() const -> bool = 0;
-    virtual void process(Latch const &gateLatch, float sampleTime) = 0;
+    virtual auto process(Latch const &gateLatch, float sampleTime) -> State = 0;
     virtual ~Step() = default;
   };
 } // namespace curve_sequencer
