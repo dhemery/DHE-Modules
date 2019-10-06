@@ -7,5 +7,5 @@
 
 struct MockStep : public dhe::curve_sequencer::Step {
   MOCK_METHOD(bool, isAvailable, (), (const, override));
-  MOCK_METHOD(void, process, (dhe::Latch const &, float), (override));
+  MOCK_METHOD(Step::State, process, (dhe::Latch const &, float), (override));
 };

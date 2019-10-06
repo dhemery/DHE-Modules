@@ -1,6 +1,5 @@
 #include "modules/components/Latch.h"
 #include "modules/curve-sequencer/ComboStep.h"
-#include "modules/curve-sequencer/StepMode.h"
 
 #include <gmock/gmock-actions.h>
 #include <gmock/gmock.h>
@@ -11,7 +10,7 @@
 
 using dhe::Latch;
 using dhe::curve_sequencer::ComboStep;
-using StepMode = dhe::curve_sequencer::StepMode;
+using dhe::curve_sequencer::Step;
 using ::testing::A;
 
 auto constexpr sampleTime = 1.F / 44000.F;

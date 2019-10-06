@@ -1,5 +1,4 @@
 #include "modules/curve-sequencer/GenerateStep.h"
-#include "modules/curve-sequencer/StepMode.h"
 
 #include <gmock/gmock-actions.h>
 #include <gmock/gmock.h>
@@ -8,7 +7,7 @@
 #include <mocks/MockStepControls.h>
 
 using dhe::curve_sequencer::GenerateStep;
-using StepMode = dhe::curve_sequencer::StepMode;
+using dhe::curve_sequencer::Step;
 
 auto constexpr sampleTime = 1.F / 44000.F;
 auto constexpr stepIndex = 3;
@@ -23,17 +22,20 @@ public:
   GenerateStep step{controls, stepIndex};
   NiceMock<MockLatch> gateLatch;
 
-  void setMode(StepMode mode) { ON_CALL(controls, generateMode(stepIndex)).WillByDefault(Return(mode)); }
+  void setMode(Step::Mode mode) {
+    auto const modeIndex = static_cast<int>(mode);
+    ON_CALL(controls, generateMode(stepIndex)).WillByDefault(Return(modeIndex));
+  }
 };
 
 TEST_F(GenerateStepTest, isUnvailableInSkipMode) {
-  setMode(StepMode::Skip);
+  setMode(Step::Mode::Skip);
 
   EXPECT_EQ(step.isAvailable(), false);
 }
 
 TEST_F(GenerateStepTest, isAvailableIfNotInSkipMode) {
-  setMode(StepMode::Rise);
+  setMode(Step::Mode::Rise);
 
   EXPECT_EQ(step.isAvailable(), true);
 }

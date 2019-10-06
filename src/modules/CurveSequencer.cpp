@@ -63,8 +63,8 @@ template <int N> auto CurveSequencer<N>::gate() const -> bool {
   return inputIsHigh(inputs[GateInput]) || buttonIsPressed(params[GateButton]);
 }
 
-template <int N> auto CurveSequencer<N>::generateMode(int stepIndex) const -> Step::Mode {
-  return static_cast<Step::Mode>(paramValue(params[GenerateModeSwitches + stepIndex]));
+template <int N> auto CurveSequencer<N>::generateMode(int stepIndex) const -> int {
+  return static_cast<int>(paramValue(params[GenerateModeSwitches + stepIndex]));
 }
 
 template <int N> auto CurveSequencer<N>::isEnabled(int stepIndex) const -> bool {
@@ -89,8 +89,8 @@ template <int N> void CurveSequencer<N>::setSustaining(int stepIndex, bool state
   lights[SustainingLights + stepIndex].setBrightness(state ? 10.F : 0.F);
 }
 
-template <int N> auto CurveSequencer<N>::sustainMode(int stepIndex) const -> Step::Mode {
-  return static_cast<Step::Mode>(paramValue(params[SustainModeSwitches + stepIndex]));
+template <int N> auto CurveSequencer<N>::sustainMode(int stepIndex) const -> int {
+  return static_cast<int>(paramValue(params[SustainModeSwitches + stepIndex]));
 }
 
 template class CurveSequencer<8>;

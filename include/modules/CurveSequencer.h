@@ -22,7 +22,7 @@ public:
   ~CurveSequencer() override = default;
 
   auto gate() const -> bool override;
-  auto generateMode(int stepIndex) const -> Step::Mode override;
+  auto generateMode(int stepIndex) const -> int override;
   auto isEnabled(int stepIndex) const -> bool override;
   auto isRunning() const -> bool override;
   void process(const ProcessArgs &args) override;
@@ -30,7 +30,7 @@ public:
   auto selectionStart() const -> int override;
   void setGenerating(int stepIndex, bool state) override;
   void setSustaining(int stepIndex, bool state) override;
-  auto sustainMode(int stepIndex) const -> Step::Mode override;
+  auto sustainMode(int stepIndex) const -> int override;
 
   enum ParameterIds {
     DurationRangeSwitch,

@@ -12,6 +12,9 @@ namespace curve_sequencer {
     auto process(Latch const &gateLatch, float sampleTime) -> State override;
 
   private:
+    auto mode() const -> Mode { return static_cast<Mode>(controls.sustainMode(stepIndex)); }
+    auto process(bool ends) -> State;
+
     StepControls &controls;
     int stepIndex;
   };
