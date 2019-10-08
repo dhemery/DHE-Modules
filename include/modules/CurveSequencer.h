@@ -1,6 +1,5 @@
 #pragma once
 
-#include "modules/components/FunctionLatch.h"
 #include "modules/curve-sequencer/Sequence.h"
 #include "modules/curve-sequencer/SequenceControls.h"
 #include "modules/curve-sequencer/Step.h"
@@ -58,8 +57,6 @@ public:
 
 private:
   std::vector<std::unique_ptr<curve_sequencer::Step>> steps{};
-  FunctionLatch runLatch;
-  FunctionLatch gateLatch;
   curve_sequencer::Sequence sequence;
 };
 

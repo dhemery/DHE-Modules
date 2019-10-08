@@ -4,9 +4,9 @@
 #include <gmock/gmock-actions.h>
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
-#include <mocks/MockLatch.h>
 #include <mocks/MockStepControls.h>
 
+using dhe::Latch;
 using dhe::curve_sequencer::Step;
 using dhe::curve_sequencer::SustainStep;
 
@@ -17,8 +17,8 @@ using ::testing::NiceMock;
 using ::testing::Return;
 
 struct SustainStepTest : public ::testing::Test {
+  Latch gateLatch;
   NiceMock<MockStepControls> controls;
-  NiceMock<MockLatch> gateLatch;
 
   SustainStep step{controls, stepIndex};
 
@@ -27,9 +27,9 @@ struct SustainStepTest : public ::testing::Test {
     ON_CALL(controls, sustainMode(stepIndex)).WillByDefault(Return(modeIndex));
   }
 
-  void setGate(bool state, bool edge) {
-    ON_CALL(gateLatch, isHigh()).WillByDefault(Return(state));
-    ON_CALL(gateLatch, isEdge()).WillByDefault(Return(edge));
+  void setGateLatch(bool state, bool edge) {
+    gateLatch.clock(state == !edge);
+    gateLatch.clock(state);
   }
 };
 
@@ -52,7 +52,7 @@ class SustainStepRiseMode : public SustainStepTest {
 TEST_F(SustainStepRiseMode, isAvailable) { EXPECT_EQ(step.isAvailable(), true); }
 
 TEST_F(SustainStepRiseMode, finishesIfGateRises) {
-  setGate(true, true);
+  setGateLatch(true, true);
 
   EXPECT_CALL(controls, setSustaining(stepIndex, false));
 
@@ -62,7 +62,7 @@ TEST_F(SustainStepRiseMode, finishesIfGateRises) {
 }
 
 TEST_F(SustainStepRiseMode, continuesIfGateDoesNotRise) {
-  setGate(true, false);
+  setGateLatch(true, false);
 
   auto const state = step.process(gateLatch, sampleTime);
 
@@ -76,7 +76,7 @@ class SustainStepFallMode : public SustainStepTest {
 TEST_F(SustainStepFallMode, isAvailable) { EXPECT_EQ(step.isAvailable(), true); }
 
 TEST_F(SustainStepFallMode, finishesIfGateFalls) {
-  setGate(false, true);
+  setGateLatch(false, true);
 
   EXPECT_CALL(controls, setSustaining(stepIndex, false));
 
@@ -86,7 +86,7 @@ TEST_F(SustainStepFallMode, finishesIfGateFalls) {
 }
 
 TEST_F(SustainStepFallMode, continuesIfGateDoesNotFall) {
-  setGate(false, false);
+  setGateLatch(false, false);
 
   auto const state = step.process(gateLatch, sampleTime);
 
@@ -100,7 +100,7 @@ class SustainStepEdgeMode : public SustainStepTest {
 TEST_F(SustainStepEdgeMode, isAvailable) { EXPECT_EQ(step.isAvailable(), true); }
 
 TEST_F(SustainStepEdgeMode, finishesIfGateRises) {
-  setGate(true, true);
+  setGateLatch(true, true);
 
   EXPECT_CALL(controls, setSustaining(stepIndex, false));
 
@@ -110,7 +110,7 @@ TEST_F(SustainStepEdgeMode, finishesIfGateRises) {
 }
 
 TEST_F(SustainStepEdgeMode, finishesIfGateFalls) {
-  setGate(false, true);
+  setGateLatch(false, true);
 
   EXPECT_CALL(controls, setSustaining(stepIndex, false));
 
@@ -120,7 +120,7 @@ TEST_F(SustainStepEdgeMode, finishesIfGateFalls) {
 }
 
 TEST_F(SustainStepEdgeMode, continuesIfGateHasNoEdge) {
-  setGate(false, false);
+  setGateLatch(false, false);
 
   auto const state = step.process(gateLatch, sampleTime);
 
@@ -134,7 +134,7 @@ class SustainStepHighMode : public SustainStepTest {
 TEST_F(SustainStepHighMode, isAvailable) { EXPECT_EQ(step.isAvailable(), true); }
 
 TEST_F(SustainStepHighMode, finishesIfGateIsHigh) {
-  setGate(true, false);
+  setGateLatch(true, false);
 
   EXPECT_CALL(controls, setSustaining(stepIndex, false));
 
@@ -144,7 +144,7 @@ TEST_F(SustainStepHighMode, finishesIfGateIsHigh) {
 }
 
 TEST_F(SustainStepHighMode, continuesIfGateIsLow) {
-  setGate(false, false);
+  setGateLatch(false, false);
 
   auto const state = step.process(gateLatch, sampleTime);
 
@@ -158,7 +158,7 @@ class SustainStepLowMode : public SustainStepTest {
 TEST_F(SustainStepLowMode, isAvailable) { EXPECT_EQ(step.isAvailable(), true); }
 
 TEST_F(SustainStepLowMode, finishesIfGateIsLow) {
-  setGate(false, false);
+  setGateLatch(false, false);
 
   EXPECT_CALL(controls, setSustaining(stepIndex, false));
 
@@ -168,7 +168,7 @@ TEST_F(SustainStepLowMode, finishesIfGateIsLow) {
 }
 
 TEST_F(SustainStepLowMode, continuesIfGateIsLow) {
-  setGate(true, false);
+  setGateLatch(true, false);
 
   auto const state = step.process(gateLatch, sampleTime);
 

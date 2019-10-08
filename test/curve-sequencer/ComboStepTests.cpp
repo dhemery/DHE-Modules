@@ -4,7 +4,6 @@
 #include <gmock/gmock-actions.h>
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
-#include <mocks/MockLatch.h>
 #include <mocks/MockStep.h>
 #include <mocks/MockStepControls.h>
 
@@ -19,8 +18,8 @@ using ::testing::NiceMock;
 using ::testing::Return;
 
 struct ComboStepTest : public ::testing::Test {
+  Latch gateLatch;
   NiceMock<MockStepControls> controls;
-  NiceMock<MockLatch> gateLatch;
   MockStep *generateStep = new NiceMock<MockStep>;
   MockStep *sustainStep = new NiceMock<MockStep>;
 

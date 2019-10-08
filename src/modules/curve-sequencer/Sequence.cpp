@@ -10,13 +10,9 @@
 namespace dhe {
 namespace curve_sequencer {
 
-  Sequence::Sequence(SequenceControls &controls, Latch &runLatch, Latch &gateLatch,
-                     std::vector<std::unique_ptr<Step>> &steps) :
-      controls{controls}, runLatch{runLatch}, gateLatch{gateLatch}, steps{steps} {}
-
   void Sequence::process(float sampleTime) {
-    runLatch.step();
-    gateLatch.step();
+    runLatch.clock(controls.isRunning());
+    gateLatch.clock(controls.gate());
 
     if (runLatch.isLow()) {
       return;

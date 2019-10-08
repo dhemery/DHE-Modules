@@ -1,13 +1,14 @@
+#include "modules/components/Latch.h"
 #include "modules/curve-sequencer/GenerateStep.h"
 
 #include <gmock/gmock-actions.h>
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
-#include <mocks/MockLatch.h>
 #include <mocks/MockStepControls.h>
 
 using dhe::curve_sequencer::GenerateStep;
 using dhe::curve_sequencer::Step;
+using dhe::Latch;
 
 auto constexpr sampleTime = 1.F / 44000.F;
 auto constexpr stepIndex = 3;
@@ -18,18 +19,18 @@ using ::testing::Return;
 class GenerateStepTest : public ::testing::Test {
 public:
   NiceMock<MockStepControls> controls;
+  Latch gateLatch;
 
   GenerateStep step{controls, stepIndex};
-  NiceMock<MockLatch> gateLatch;
 
   void setMode(Step::Mode mode) {
     auto const modeIndex = static_cast<int>(mode);
     ON_CALL(controls, generateMode(stepIndex)).WillByDefault(Return(modeIndex));
   }
 
-  void setGate(bool state, bool edge) {
-    ON_CALL(gateLatch, isHigh()).WillByDefault(Return(state));
-    ON_CALL(gateLatch, isEdge()).WillByDefault(Return(edge));
+  void setGateLatch(bool state, bool edge) {
+    gateLatch.clock(state == !edge);
+    gateLatch.clock(state);
   }
 };
 
@@ -52,7 +53,7 @@ class GenerateStepRiseMode : public GenerateStepTest {
 TEST_F(GenerateStepRiseMode, isAvailable) { EXPECT_EQ(step.isAvailable(), true); }
 
 TEST_F(GenerateStepRiseMode, finishesIfGateRises) {
-  setGate(true, true);
+  setGateLatch(true, true);
 
   EXPECT_CALL(controls, setGenerating(stepIndex, false));
 
@@ -62,7 +63,7 @@ TEST_F(GenerateStepRiseMode, finishesIfGateRises) {
 }
 
 TEST_F(GenerateStepRiseMode, continuesIfGateDoesNotRise) {
-  setGate(true, false);
+  setGateLatch(true, false);
 
   auto const state = step.process(gateLatch, sampleTime);
 
@@ -76,7 +77,7 @@ class GenerateStepFallMode : public GenerateStepTest {
 TEST_F(GenerateStepFallMode, isAvailable) { EXPECT_EQ(step.isAvailable(), true); }
 
 TEST_F(GenerateStepFallMode, finishesIfGateFalls) {
-  setGate(false, true);
+  setGateLatch(false, true);
 
   EXPECT_CALL(controls, setGenerating(stepIndex, false));
 
@@ -86,7 +87,7 @@ TEST_F(GenerateStepFallMode, finishesIfGateFalls) {
 }
 
 TEST_F(GenerateStepFallMode, continuesIfGateDoesNotFall) {
-  setGate(false, false);
+  setGateLatch(false, false);
 
   auto const state = step.process(gateLatch, sampleTime);
 
@@ -100,7 +101,7 @@ class GenerateStepEdgeMode : public GenerateStepTest {
 TEST_F(GenerateStepEdgeMode, isAvailable) { EXPECT_EQ(step.isAvailable(), true); }
 
 TEST_F(GenerateStepEdgeMode, finishesIfGateRises) {
-  setGate(true, true);
+  setGateLatch(true, true);
 
   EXPECT_CALL(controls, setGenerating(stepIndex, false));
 
@@ -110,7 +111,7 @@ TEST_F(GenerateStepEdgeMode, finishesIfGateRises) {
 }
 
 TEST_F(GenerateStepEdgeMode, finishesIfGateFalls) {
-  setGate(false, true);
+  setGateLatch(false, true);
 
   EXPECT_CALL(controls, setGenerating(stepIndex, false));
 
@@ -120,7 +121,7 @@ TEST_F(GenerateStepEdgeMode, finishesIfGateFalls) {
 }
 
 TEST_F(GenerateStepEdgeMode, continuesIfGateHasNoEdge) {
-  setGate(false, false);
+  setGateLatch(false, false);
 
   auto const state = step.process(gateLatch, sampleTime);
 
@@ -134,7 +135,7 @@ class GenerateStepHighMode : public GenerateStepTest {
 TEST_F(GenerateStepHighMode, isAvailable) { EXPECT_EQ(step.isAvailable(), true); }
 
 TEST_F(GenerateStepHighMode, finishesIfGateIsHigh) {
-  setGate(true, false);
+  setGateLatch(true, false);
 
   EXPECT_CALL(controls, setGenerating(stepIndex, false));
 
@@ -144,7 +145,7 @@ TEST_F(GenerateStepHighMode, finishesIfGateIsHigh) {
 }
 
 TEST_F(GenerateStepHighMode, continuesIfGateIsLow) {
-  setGate(false, false);
+  setGateLatch(false, false);
 
   auto const state = step.process(gateLatch, sampleTime);
 
@@ -158,7 +159,7 @@ class GenerateStepLowMode : public GenerateStepTest {
 TEST_F(GenerateStepLowMode, isAvailable) { EXPECT_EQ(step.isAvailable(), true); }
 
 TEST_F(GenerateStepLowMode, finishesIfGateIsLow) {
-  setGate(false, false);
+  setGateLatch(false, false);
 
   EXPECT_CALL(controls, setGenerating(stepIndex, false));
 
@@ -168,7 +169,7 @@ TEST_F(GenerateStepLowMode, finishesIfGateIsLow) {
 }
 
 TEST_F(GenerateStepLowMode, continuesIfGateIsHigh) {
-  setGate(true, false);
+  setGateLatch(true, false);
 
   auto const state = step.process(gateLatch, sampleTime);
 
@@ -182,7 +183,7 @@ class GenerateStepDurationMode : public GenerateStepTest {
 TEST_F(GenerateStepDurationMode, isAvailable) { EXPECT_EQ(step.isAvailable(), true); }
 
 TEST_F(GenerateStepDurationMode, continuesIfGateRises) {
-  setGate(true, true);
+  setGateLatch(true, true);
 
   auto const state = step.process(gateLatch, sampleTime);
 
@@ -190,7 +191,7 @@ TEST_F(GenerateStepDurationMode, continuesIfGateRises) {
 }
 
 TEST_F(GenerateStepDurationMode, continuesIfGateFalls) {
-  setGate(false, true);
+  setGateLatch(false, true);
 
   auto const state = step.process(gateLatch, sampleTime);
 
@@ -198,7 +199,7 @@ TEST_F(GenerateStepDurationMode, continuesIfGateFalls) {
 }
 
 TEST_F(GenerateStepDurationMode, continuesIfGateIsHigh) {
-  setGate(false, false);
+  setGateLatch(false, false);
 
   auto const state = step.process(gateLatch, sampleTime);
 
@@ -206,7 +207,7 @@ TEST_F(GenerateStepDurationMode, continuesIfGateIsHigh) {
 }
 
 TEST_F(GenerateStepDurationMode, continuesIfGateIsLow) {
-  setGate(false, false);
+  setGateLatch(false, false);
 
   auto const state = step.process(gateLatch, sampleTime);
 

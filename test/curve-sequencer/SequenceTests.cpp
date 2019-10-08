@@ -6,10 +6,9 @@
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
 #include <memory>
-#include <vector>
-#include <mocks/MockLatch.h>
-#include <mocks/MockStep.h>
 #include <mocks/MockSequenceControls.h>
+#include <mocks/MockStep.h>
+#include <vector>
 
 using dhe::Latch;
 using dhe::curve_sequencer::Sequence;
@@ -22,13 +21,11 @@ using ::testing::A;
 using ::testing::NiceMock;
 using ::testing::Return;
 
-class SequenceTest : public ::testing::Test {
+class NewSequence : public ::testing::Test {
 protected:
   NiceMock<MockSequenceControls> controls;
-  NiceMock<MockLatch> runLatch;
-  NiceMock<MockLatch> gateLatch;
   std::vector<std::unique_ptr<Step>> steps{};
-  Sequence sequence{controls, runLatch, gateLatch, steps};
+  Sequence sequence{controls, steps};
 
   void SetUp() override {
     for (int i = 0; i < stepCount; i++) {
@@ -36,15 +33,10 @@ protected:
       steps.emplace_back(step);
     }
   };
-  void givenRunning(bool state, bool edge) {
-    ON_CALL(runLatch, isHigh()).WillByDefault(Return(state));
-    ON_CALL(runLatch, isEdge()).WillByDefault(Return(edge));
-  }
 
-  void givenGate(bool state, bool edge) {
-    ON_CALL(gateLatch, isHigh()).WillByDefault(Return(state));
-    ON_CALL(gateLatch, isEdge()).WillByDefault(Return(edge));
-  }
+  void givenRunInput(bool isRunning) { ON_CALL(controls, isRunning()).WillByDefault(Return(isRunning)); }
+
+  void givenGateInput(bool gate) { ON_CALL(controls, gate()).WillByDefault(Return(gate)); }
 
   void givenSelection(int start, int length) {
     ON_CALL(controls, selectionStart()).WillByDefault(Return(start));
@@ -58,32 +50,33 @@ protected:
   auto step(int index) -> MockStep & { return *dynamic_cast<MockStep *>(steps[index].get()); }
 };
 
-class SequenceNotRunning : public SequenceTest {
+class SequenceNotRunning : public NewSequence {
 protected:
   void SetUp() override {
-    SequenceTest::SetUp();
-    givenRunning(false, false);
+    NewSequence::SetUp();
+    givenRunInput(false);
+    sequence.process(0.F);
   }
 };
 
 TEST_F(SequenceNotRunning, processDoesNothing) { sequence.process(sampleTime); }
 
-class SequenceRunningWithGateLow : public SequenceTest {
+class IdleSequence : public NewSequence {
 protected:
   void SetUp() override {
-    SequenceTest::SetUp();
-    givenRunning(true, false);
-    givenGate(false, false);
+    NewSequence::SetUp();
+    givenRunInput(true);
+    givenGateInput(false);
     sequence.process(sampleTime);
   }
 };
 
-TEST_F(SequenceRunningWithGateLow, gateRiseProcessesFirstAvailableStep) {
+TEST_F(IdleSequence, gateRiseProcessesFirstAvailableStep) {
   givenSelection(0, stepCount);
 
   auto firstAvailableStep = 3;
 
-  givenGate(true, true);
+  givenGateInput(true);
 
   for (int i = 0; i < firstAvailableStep; i++) {
     ON_CALL(step(i), isAvailable()).WillByDefault(Return(false));
@@ -101,7 +94,7 @@ TEST_F(SequenceRunningWithGateLow, gateRiseProcessesFirstAvailableStep) {
   sequence.process(sampleTime);
 }
 
-TEST_F(SequenceRunningWithGateLow, ifNoAvailableStepAboveFirstSelected_continueSeekingFromStep0) {
+TEST_F(IdleSequence, ifNoAvailableStepAboveFirstSelected_continueSeekingFromStep0) {
   auto constexpr firstSelected = 6; // Will have to wrap to reach first available
   givenSelection(firstSelected, stepCount);
 
@@ -128,7 +121,7 @@ TEST_F(SequenceRunningWithGateLow, ifNoAvailableStepAboveFirstSelected_continueS
     EXPECT_CALL(step(i), process(A<Latch const &>(), A<float>())).Times(0);
   }
 
-  givenGate(true, true);
+  givenGateInput(true);
 
   sequence.process(sampleTime);
 }

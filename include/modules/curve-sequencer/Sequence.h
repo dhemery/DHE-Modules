@@ -14,16 +14,18 @@ namespace curve_sequencer {
    * Controls the sequence in a CurveSequencer module.
    */
   struct Sequence {
-    Sequence(SequenceControls &controls, Latch &runLatch, Latch &gateLatch, std::vector<std::unique_ptr<Step>> &steps);
+    Sequence(SequenceControls &controls, std::vector<std::unique_ptr<Step>> &steps) :
+        controls{controls}, steps{steps} {}
+
     void process(float sampleTime);
 
   private:
     void start(float sampleTime);
 
     SequenceControls &controls;
-    Latch &runLatch;
-    Latch &gateLatch;
     std::vector<std::unique_ptr<Step>> &steps;
+    Latch runLatch{};
+    Latch gateLatch{};
   };
 } // namespace curve_sequencer
 } // namespace dhe
