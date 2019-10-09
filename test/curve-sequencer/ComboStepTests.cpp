@@ -17,23 +17,24 @@ auto constexpr stepIndex = 3;
 using ::testing::NiceMock;
 using ::testing::Return;
 
-struct ComboStepTest : public ::testing::Test {
-  Latch gateLatch;
-  NiceMock<MockStepControls> controls;
-  MockStep *generateStep = new NiceMock<MockStep>;
-  MockStep *sustainStep = new NiceMock<MockStep>;
-
-  ComboStep step{controls, stepIndex, generateStep, sustainStep};
-
+class ComboStepTest : public ::testing::Test {
+protected:
   void setEnabled(bool enabled) { ON_CALL(controls, isEnabled(stepIndex)).WillByDefault(Return(enabled)); }
 
   void setAvailableSteps(bool generateAvailable, bool sustainAvailable) {
     ON_CALL(*generateStep, isAvailable()).WillByDefault(Return(generateAvailable));
     ON_CALL(*sustainStep, isAvailable()).WillByDefault(Return(sustainAvailable));
   }
+
+  NiceMock<MockStepControls> controls;
+  MockStep *generateStep = new NiceMock<MockStep>;
+  MockStep *sustainStep = new NiceMock<MockStep>;
+
+  ComboStep step{controls, stepIndex, generateStep, sustainStep};
+
 };
 
-struct DisabledComboStep : public ComboStepTest {
+class DisabledComboStep : public ComboStepTest {
   void SetUp() override {
     ComboStepTest::SetUp();
     setEnabled(false);
@@ -42,7 +43,8 @@ struct DisabledComboStep : public ComboStepTest {
 
 TEST_F(DisabledComboStep, isUnavailable) { EXPECT_EQ(step.isAvailable(), false); }
 
-struct EnabledComboStep : public ComboStepTest {
+class EnabledComboStep : public ComboStepTest {
+protected:
   void SetUp() override {
     ComboStepTest::SetUp();
     setEnabled(true);
@@ -67,9 +69,9 @@ TEST_F(EnabledComboStep, isUnavailableIfBothSubstepsAreUnavailable) {
   EXPECT_EQ(step.isAvailable(), false);
 }
 
-struct EnabledInactiveComboStep : public EnabledComboStep {};
+class EnabledInactiveComboStep : public EnabledComboStep {};
 
-struct InactiveComboStepAvailableToGenerate : public EnabledInactiveComboStep {
+class InactiveComboStepAvailableToGenerate : public EnabledInactiveComboStep {
   void SetUp() override {
     EnabledInactiveComboStep::SetUp();
     setAvailableSteps(true, false);
@@ -79,10 +81,10 @@ struct InactiveComboStepAvailableToGenerate : public EnabledInactiveComboStep {
 TEST_F(InactiveComboStepAvailableToGenerate, process_processesGenerateStep) {
   EXPECT_CALL(*generateStep, process(A<Latch const &>(), sampleTime));
 
-  step.process(gateLatch, sampleTime);
+  step.process(Latch{}, sampleTime);
 }
 
-struct InactiveComboStepAvailableToSustain : public EnabledInactiveComboStep {
+class InactiveComboStepAvailableToSustain : public EnabledInactiveComboStep {
   void SetUp() override {
     EnabledInactiveComboStep::SetUp();
     setAvailableSteps(false, true);
@@ -92,5 +94,5 @@ struct InactiveComboStepAvailableToSustain : public EnabledInactiveComboStep {
 TEST_F(InactiveComboStepAvailableToSustain, process_processesSustainStep) {
   EXPECT_CALL(*sustainStep, process(A<Latch const &>(), sampleTime));
 
-  step.process(gateLatch, sampleTime);
+  step.process(Latch{}, sampleTime);
 }

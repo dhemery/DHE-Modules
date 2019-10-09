@@ -13,7 +13,8 @@ namespace curve_sequencer {
   /**
    * Controls the sequence in a CurveSequencer module.
    */
-  struct Sequence {
+  class Sequence {
+  public:
     Sequence(SequenceControls &controls, std::vector<std::unique_ptr<Step>> &steps) :
         controls{controls}, steps{steps} {}
 

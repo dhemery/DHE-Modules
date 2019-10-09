@@ -4,7 +4,8 @@
 using dhe::Latch;
 using ::testing::Test;
 
-struct DefaultLatch : public Test {
+class DefaultLatch : public Test {
+protected:
   Latch latch{};
 };
 
@@ -19,7 +20,8 @@ TEST_F(DefaultLatch, isNotEdge) {
   EXPECT_EQ(latch.isFall(), false);
 }
 
-struct LowLatch : public Test {
+class LowLatch : public Test {
+protected:
   Latch latch{false, false};
 };
 
@@ -43,7 +45,8 @@ TEST_F(LowLatch, risesOnHighSignal) {
   EXPECT_EQ(latch.isFall(), false);
 }
 
-struct FallenLatch : public Test {
+class FallenLatch : public Test {
+protected:
   Latch latch{false, true};
 };
 
@@ -67,7 +70,8 @@ TEST_F(FallenLatch, risesOnHighSignal) {
   EXPECT_EQ(latch.isFall(), false);
 }
 
-struct HighLatch : public Test {
+class HighLatch : public Test {
+protected:
   Latch latch{true, false};
 };
 
@@ -91,7 +95,8 @@ TEST_F(HighLatch, isUnchangedOnHighSignal) {
   EXPECT_EQ(latch.isFall(), false);
 }
 
-struct RisenLatch : public Test {
+class RisenLatch : public Test {
+protected:
   Latch latch{true, true};
 };
 

@@ -4,7 +4,8 @@
 
 namespace dhe {
 
-struct DurationInputTest : public ::testing::Test {
+class DurationInputTest : public ::testing::Test {
+protected:
   // tolerance = 6 decimal places
   static auto constexpr tolerance = 0.000001F;
 

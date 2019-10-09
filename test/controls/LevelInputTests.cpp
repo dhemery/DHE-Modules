@@ -6,7 +6,8 @@
 
 namespace dhe {
 
-struct LevelInputTest : public ::testing::Test {
+class LevelInputTest : public ::testing::Test {
+protected:
   // tolerance = 6 decimal places
   static auto constexpr tolerance = 0.000001F;
 

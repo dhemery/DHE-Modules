@@ -3,7 +3,8 @@
 #pragma once
 
 namespace dhe {
-struct Latch {
+class Latch {
+public:
   Latch() = default;
   Latch(bool state, bool edge) : state{state}, edge{edge} {}
 

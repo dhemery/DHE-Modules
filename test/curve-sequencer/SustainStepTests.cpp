@@ -16,43 +16,37 @@ auto constexpr stepIndex = 3;
 using ::testing::NiceMock;
 using ::testing::Return;
 
-struct SustainStepTest : public ::testing::Test {
-  Latch gateLatch;
-  NiceMock<MockStepControls> controls;
-
-  SustainStep step{controls, stepIndex};
-
-  void setMode(Step::Mode mode) {
+class SustainStepTest : public ::testing::Test {
+protected:
+  void givenMode(Step::Mode mode) {
     auto const modeIndex = static_cast<int>(mode);
     ON_CALL(controls, sustainMode(stepIndex)).WillByDefault(Return(modeIndex));
   }
 
-  void setGateLatch(bool state, bool edge) {
-    gateLatch.clock(state == !edge);
-    gateLatch.clock(state);
-  }
+  NiceMock<MockStepControls> controls;
+  SustainStep step{controls, stepIndex};
 };
 
 TEST_F(SustainStepTest, processSetsSustainingLight) {
   EXPECT_CALL(controls, setSustaining(stepIndex, true));
 
-  step.process(gateLatch, sampleTime);
+  step.process(Latch{}, sampleTime);
 }
 
 class SustainStepSkipMode : public SustainStepTest {
-  void SetUp() override { setMode(Step::Mode::Skip); }
+  void SetUp() override { givenMode(Step::Mode::Skip); }
 };
 
 TEST_F(SustainStepSkipMode, isUnvailable) { EXPECT_EQ(step.isAvailable(), false); }
 
 class SustainStepRiseMode : public SustainStepTest {
-  void SetUp() override { setMode(Step::Mode::Rise); }
+  void SetUp() override { givenMode(Step::Mode::Rise); }
 };
 
 TEST_F(SustainStepRiseMode, isAvailable) { EXPECT_EQ(step.isAvailable(), true); }
 
 TEST_F(SustainStepRiseMode, finishesIfGateRises) {
-  setGateLatch(true, true);
+  Latch gateLatch{true, true};
 
   EXPECT_CALL(controls, setSustaining(stepIndex, false));
 
@@ -62,7 +56,7 @@ TEST_F(SustainStepRiseMode, finishesIfGateRises) {
 }
 
 TEST_F(SustainStepRiseMode, continuesIfGateDoesNotRise) {
-  setGateLatch(true, false);
+  Latch gateLatch{true, false};
 
   auto const state = step.process(gateLatch, sampleTime);
 
@@ -70,13 +64,13 @@ TEST_F(SustainStepRiseMode, continuesIfGateDoesNotRise) {
 }
 
 class SustainStepFallMode : public SustainStepTest {
-  void SetUp() override { setMode(Step::Mode::Fall); }
+  void SetUp() override { givenMode(Step::Mode::Fall); }
 };
 
 TEST_F(SustainStepFallMode, isAvailable) { EXPECT_EQ(step.isAvailable(), true); }
 
 TEST_F(SustainStepFallMode, finishesIfGateFalls) {
-  setGateLatch(false, true);
+  Latch gateLatch{false, true};
 
   EXPECT_CALL(controls, setSustaining(stepIndex, false));
 
@@ -86,7 +80,7 @@ TEST_F(SustainStepFallMode, finishesIfGateFalls) {
 }
 
 TEST_F(SustainStepFallMode, continuesIfGateDoesNotFall) {
-  setGateLatch(false, false);
+  Latch gateLatch{false, false};
 
   auto const state = step.process(gateLatch, sampleTime);
 
@@ -94,13 +88,13 @@ TEST_F(SustainStepFallMode, continuesIfGateDoesNotFall) {
 }
 
 class SustainStepEdgeMode : public SustainStepTest {
-  void SetUp() override { setMode(Step::Mode::Edge); }
+  void SetUp() override { givenMode(Step::Mode::Edge); }
 };
 
 TEST_F(SustainStepEdgeMode, isAvailable) { EXPECT_EQ(step.isAvailable(), true); }
 
 TEST_F(SustainStepEdgeMode, finishesIfGateRises) {
-  setGateLatch(true, true);
+  Latch gateLatch{true, true};
 
   EXPECT_CALL(controls, setSustaining(stepIndex, false));
 
@@ -110,7 +104,7 @@ TEST_F(SustainStepEdgeMode, finishesIfGateRises) {
 }
 
 TEST_F(SustainStepEdgeMode, finishesIfGateFalls) {
-  setGateLatch(false, true);
+  Latch gateLatch{false, true};
 
   EXPECT_CALL(controls, setSustaining(stepIndex, false));
 
@@ -120,7 +114,7 @@ TEST_F(SustainStepEdgeMode, finishesIfGateFalls) {
 }
 
 TEST_F(SustainStepEdgeMode, continuesIfGateHasNoEdge) {
-  setGateLatch(false, false);
+  Latch gateLatch{false, false};
 
   auto const state = step.process(gateLatch, sampleTime);
 
@@ -128,13 +122,13 @@ TEST_F(SustainStepEdgeMode, continuesIfGateHasNoEdge) {
 }
 
 class SustainStepHighMode : public SustainStepTest {
-  void SetUp() override { setMode(Step::Mode::High); }
+  void SetUp() override { givenMode(Step::Mode::High); }
 };
 
 TEST_F(SustainStepHighMode, isAvailable) { EXPECT_EQ(step.isAvailable(), true); }
 
 TEST_F(SustainStepHighMode, finishesIfGateIsHigh) {
-  setGateLatch(true, false);
+  Latch gateLatch{true, false};
 
   EXPECT_CALL(controls, setSustaining(stepIndex, false));
 
@@ -144,7 +138,7 @@ TEST_F(SustainStepHighMode, finishesIfGateIsHigh) {
 }
 
 TEST_F(SustainStepHighMode, continuesIfGateIsLow) {
-  setGateLatch(false, false);
+  Latch gateLatch{false, false};
 
   auto const state = step.process(gateLatch, sampleTime);
 
@@ -152,13 +146,13 @@ TEST_F(SustainStepHighMode, continuesIfGateIsLow) {
 }
 
 class SustainStepLowMode : public SustainStepTest {
-  void SetUp() override { setMode(Step::Mode::Low); }
+  void SetUp() override { givenMode(Step::Mode::Low); }
 };
 
 TEST_F(SustainStepLowMode, isAvailable) { EXPECT_EQ(step.isAvailable(), true); }
 
 TEST_F(SustainStepLowMode, finishesIfGateIsLow) {
-  setGateLatch(false, false);
+  Latch gateLatch{false, false};
 
   EXPECT_CALL(controls, setSustaining(stepIndex, false));
 
@@ -168,7 +162,7 @@ TEST_F(SustainStepLowMode, finishesIfGateIsLow) {
 }
 
 TEST_F(SustainStepLowMode, continuesIfGateIsLow) {
-  setGateLatch(true, false);
+  Latch gateLatch{true, false};
 
   auto const state = step.process(gateLatch, sampleTime);
 

@@ -5,7 +5,8 @@
 
 #include <gmock/gmock.h>
 
-struct MockStep : public dhe::curve_sequencer::Step {
+class MockStep : public dhe::curve_sequencer::Step {
+public:
   MOCK_METHOD(bool, isAvailable, (), (const, override));
   MOCK_METHOD(Step::State, process, (dhe::Latch const &, float), (override));
 };

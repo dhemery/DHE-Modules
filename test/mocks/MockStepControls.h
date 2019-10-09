@@ -2,7 +2,8 @@
 
 #include "modules/curve-sequencer/StepControls.h"
 
-struct MockStepControls : public dhe::curve_sequencer::StepControls {
+class MockStepControls : public dhe::curve_sequencer::StepControls {
+public:
   MOCK_METHOD(bool, isEnabled, (int), (const, override));
   MOCK_METHOD(int, generateMode, (int), (const, override));
   MOCK_METHOD(void, setGenerating, (int, bool), (override));
