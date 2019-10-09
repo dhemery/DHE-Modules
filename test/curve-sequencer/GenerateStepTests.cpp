@@ -18,7 +18,7 @@ using ::testing::Return;
 
 class GenerateStepTest : public ::testing::Test {
 protected:
-  void setMode(Step::Mode mode) {
+  void givenMode(Step::Mode mode) {
     auto const modeIndex = static_cast<int>(mode);
     ON_CALL(controls, generateMode(stepIndex)).WillByDefault(Return(modeIndex));
   }
@@ -35,13 +35,13 @@ TEST_F(GenerateStepTest, processSetsGenerateingLight) {
 }
 
 class GenerateStepSkipMode : public GenerateStepTest {
-  void SetUp() override { setMode(Step::Mode::Skip); }
+  void SetUp() override { givenMode(Step::Mode::Skip); }
 };
 
 TEST_F(GenerateStepSkipMode, isUnvailable) { EXPECT_EQ(step.isAvailable(), false); }
 
 class GenerateStepRiseMode : public GenerateStepTest {
-  void SetUp() override { setMode(Step::Mode::Rise); }
+  void SetUp() override { givenMode(Step::Mode::Rise); }
 };
 
 TEST_F(GenerateStepRiseMode, isAvailable) { EXPECT_EQ(step.isAvailable(), true); }
@@ -65,7 +65,7 @@ TEST_F(GenerateStepRiseMode, continuesIfGateDoesNotRise) {
 }
 
 class GenerateStepFallMode : public GenerateStepTest {
-  void SetUp() override { setMode(Step::Mode::Fall); }
+  void SetUp() override { givenMode(Step::Mode::Fall); }
 };
 
 TEST_F(GenerateStepFallMode, isAvailable) { EXPECT_EQ(step.isAvailable(), true); }
@@ -89,7 +89,7 @@ TEST_F(GenerateStepFallMode, continuesIfGateDoesNotFall) {
 }
 
 class GenerateStepEdgeMode : public GenerateStepTest {
-  void SetUp() override { setMode(Step::Mode::Edge); }
+  void SetUp() override { givenMode(Step::Mode::Edge); }
 };
 
 TEST_F(GenerateStepEdgeMode, isAvailable) { EXPECT_EQ(step.isAvailable(), true); }
@@ -123,7 +123,7 @@ TEST_F(GenerateStepEdgeMode, continuesIfGateHasNoEdge) {
 }
 
 class GenerateStepHighMode : public GenerateStepTest {
-  void SetUp() override { setMode(Step::Mode::High); }
+  void SetUp() override { givenMode(Step::Mode::High); }
 };
 
 TEST_F(GenerateStepHighMode, isAvailable) { EXPECT_EQ(step.isAvailable(), true); }
@@ -147,7 +147,7 @@ TEST_F(GenerateStepHighMode, continuesIfGateIsLow) {
 }
 
 class GenerateStepLowMode : public GenerateStepTest {
-  void SetUp() override { setMode(Step::Mode::Low); }
+  void SetUp() override { givenMode(Step::Mode::Low); }
 };
 
 TEST_F(GenerateStepLowMode, isAvailable) { EXPECT_EQ(step.isAvailable(), true); }
@@ -171,7 +171,7 @@ TEST_F(GenerateStepLowMode, continuesIfGateIsHigh) {
 }
 
 class GenerateStepDurationMode : public GenerateStepTest {
-  void SetUp() override { setMode(Step::Mode::Duration); }
+  void SetUp() override { givenMode(Step::Mode::Duration); }
 };
 
 TEST_F(GenerateStepDurationMode, isAvailable) { EXPECT_EQ(step.isAvailable(), true); }

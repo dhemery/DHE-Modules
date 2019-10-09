@@ -23,13 +23,10 @@ using ::testing::Return;
 
 class NewSequence : public ::testing::Test {
 protected:
-  NiceMock<MockSequenceControls> controls;
-  std::vector<std::unique_ptr<Step>> steps{};
-  Sequence sequence{controls, steps};
-
   void SetUp() override {
     for (int i = 0; i < stepCount; i++) {
-      auto step = new NiceMock<MockStep>;
+      auto step = new NiceMock<MockStep>{};
+      ON_CALL(*step, isAvailable()).WillByDefault(Return(false));
       steps.emplace_back(step);
     }
   };
@@ -43,11 +40,17 @@ protected:
     ON_CALL(controls, selectionLength()).WillByDefault(Return(length));
   }
 
-  void givenAvailable(int index, bool isAvailable) {
-    ON_CALL(step(index), isAvailable()).WillByDefault(Return(isAvailable));
+  void givenAvailableSteps(std::vector<int> const &indices) {
+    for (auto const index : indices) {
+      ON_CALL(step(index), isAvailable()).WillByDefault(Return(true));
+    }
   }
 
   auto step(int index) -> MockStep & { return *dynamic_cast<MockStep *>(steps[index].get()); }
+
+  NiceMock<MockSequenceControls> controls;
+  std::vector<std::unique_ptr<Step>> steps{};
+  Sequence sequence{controls, steps};
 };
 
 class SequenceNotRunning : public NewSequence {
@@ -74,54 +77,26 @@ protected:
 TEST_F(IdleSequence, gateRiseProcessesFirstAvailableStep) {
   givenSelection(0, stepCount);
 
-  auto firstAvailableStep = 3;
+  auto constexpr firstAvailableStep = 3;
+  givenAvailableSteps({firstAvailableStep});
 
-  givenGateInput(true);
-
-  for (int i = 0; i < firstAvailableStep; i++) {
-    ON_CALL(step(i), isAvailable()).WillByDefault(Return(false));
-    EXPECT_CALL(step(i), process(A<Latch const &>(), A<float>())).Times(0);
-  }
-
-  for (int i = firstAvailableStep + 1; i < stepCount; i++) {
-    EXPECT_CALL(step(i), isAvailable()).Times(0);
-    EXPECT_CALL(step(i), process(A<Latch const &>(), A<float>())).Times(0);
-  }
-
-  ON_CALL(step(firstAvailableStep), isAvailable()).WillByDefault(Return(true));
   EXPECT_CALL(step(firstAvailableStep), process(A<Latch const &>(), sampleTime));
+
+  givenGateInput(true); // Will trigger start of sequence
 
   sequence.process(sampleTime);
 }
 
 TEST_F(IdleSequence, ifNoAvailableStepAboveFirstSelected_continueSeekingFromStep0) {
-  auto constexpr firstSelected = 6; // Will have to wrap to reach first available
-  givenSelection(firstSelected, stepCount);
+  auto constexpr firstAvailableStep = 3;
+  givenAvailableSteps({firstAvailableStep});
 
-  // Will check 6 and 7
-  for (int i = firstSelected; i < stepCount; i++) {
-    ON_CALL(step(i), isAvailable()).WillByDefault(Return(false));
-    EXPECT_CALL(step(i), process(A<Latch const &>(), A<float>())).Times(0);
-  }
+  auto constexpr selectionStart = 6; // Will have to wrap to reach first available step
+  givenSelection(selectionStart, stepCount);
 
-  auto constexpr firstAvailable = 3;
+  EXPECT_CALL(step(firstAvailableStep), process(A<Latch const &>(), sampleTime));
 
-  // Will check 0, 1, 2
-  for (int i = 0; i < firstAvailable; i++) {
-    ON_CALL(step(i), isAvailable()).WillByDefault(Return(false));
-    EXPECT_CALL(step(i), process(A<Latch const &>(), A<float>())).Times(0);
-  }
-
-  ON_CALL(step(firstAvailable), isAvailable()).WillByDefault(Return(true));
-  EXPECT_CALL(step(firstAvailable), process(A<Latch const &>(), sampleTime));
-
-  // Will not check 4, 5
-  for (int i = firstAvailable + 1; i < firstSelected; i++) {
-    EXPECT_CALL(step(i), isAvailable()).Times(0);
-    EXPECT_CALL(step(i), process(A<Latch const &>(), A<float>())).Times(0);
-  }
-
-  givenGateInput(true);
+  givenGateInput(true); // Will trigger start of sequence
 
   sequence.process(sampleTime);
 }

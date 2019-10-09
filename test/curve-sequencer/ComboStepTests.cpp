@@ -19,9 +19,9 @@ using ::testing::Return;
 
 class ComboStepTest : public ::testing::Test {
 protected:
-  void setEnabled(bool enabled) { ON_CALL(controls, isEnabled(stepIndex)).WillByDefault(Return(enabled)); }
+  void givenEnabled(bool enabled) { ON_CALL(controls, isEnabled(stepIndex)).WillByDefault(Return(enabled)); }
 
-  void setAvailableSteps(bool generateAvailable, bool sustainAvailable) {
+  void givenAvailableSteps(bool generateAvailable, bool sustainAvailable) {
     ON_CALL(*generateStep, isAvailable()).WillByDefault(Return(generateAvailable));
     ON_CALL(*sustainStep, isAvailable()).WillByDefault(Return(sustainAvailable));
   }
@@ -37,7 +37,7 @@ protected:
 class DisabledComboStep : public ComboStepTest {
   void SetUp() override {
     ComboStepTest::SetUp();
-    setEnabled(false);
+    givenEnabled(false);
   }
 };
 
@@ -47,24 +47,24 @@ class EnabledComboStep : public ComboStepTest {
 protected:
   void SetUp() override {
     ComboStepTest::SetUp();
-    setEnabled(true);
+    givenEnabled(true);
   }
 };
 
 TEST_F(EnabledComboStep, isAvailableIfGenerateSubstepIsAvailable) {
-  setAvailableSteps(true, false);
+  givenAvailableSteps(true, false);
 
   EXPECT_EQ(step.isAvailable(), true);
 }
 
 TEST_F(EnabledComboStep, isAvailableIfSustainSubstepIsAvailable) {
-  setAvailableSteps(false, true);
+  givenAvailableSteps(false, true);
 
   EXPECT_EQ(step.isAvailable(), true);
 }
 
 TEST_F(EnabledComboStep, isUnavailableIfBothSubstepsAreUnavailable) {
-  setAvailableSteps(false, false);
+  givenAvailableSteps(false, false);
 
   EXPECT_EQ(step.isAvailable(), false);
 }
@@ -74,7 +74,7 @@ class EnabledInactiveComboStep : public EnabledComboStep {};
 class InactiveComboStepAvailableToGenerate : public EnabledInactiveComboStep {
   void SetUp() override {
     EnabledInactiveComboStep::SetUp();
-    setAvailableSteps(true, false);
+    givenAvailableSteps(true, false);
   }
 };
 
@@ -87,7 +87,7 @@ TEST_F(InactiveComboStepAvailableToGenerate, process_processesGenerateStep) {
 class InactiveComboStepAvailableToSustain : public EnabledInactiveComboStep {
   void SetUp() override {
     EnabledInactiveComboStep::SetUp();
-    setAvailableSteps(false, true);
+    givenAvailableSteps(false, true);
   }
 };
 
