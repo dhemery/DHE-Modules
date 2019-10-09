@@ -21,9 +21,12 @@ class ComboStepTest : public ::testing::Test {
 protected:
   void givenEnabled(bool enabled) { ON_CALL(controls, isEnabled(stepIndex)).WillByDefault(Return(enabled)); }
 
-  void givenAvailableSteps(bool generateAvailable, bool sustainAvailable) {
-    ON_CALL(*generateStep, isAvailable()).WillByDefault(Return(generateAvailable));
-    ON_CALL(*sustainStep, isAvailable()).WillByDefault(Return(sustainAvailable));
+  void givenGenerateAvailable(bool isAvailable) {
+    ON_CALL(*generateStep, isAvailable()).WillByDefault(Return(isAvailable));
+  }
+
+  void givenSustainAvailable(bool isAvailable) {
+    ON_CALL(*sustainStep, isAvailable()).WillByDefault(Return(isAvailable));
   }
 
   NiceMock<MockStepControls> controls;
@@ -31,7 +34,6 @@ protected:
   MockStep *sustainStep = new NiceMock<MockStep>;
 
   ComboStep step{controls, stepIndex, generateStep, sustainStep};
-
 };
 
 class DisabledComboStep : public ComboStepTest {
@@ -51,22 +53,32 @@ protected:
   }
 };
 
-TEST_F(EnabledComboStep, isAvailableIfGenerateSubstepIsAvailable) {
-  givenAvailableSteps(true, false);
-
-  EXPECT_EQ(step.isAvailable(), true);
-}
-
-TEST_F(EnabledComboStep, isAvailableIfSustainSubstepIsAvailable) {
-  givenAvailableSteps(false, true);
-
-  EXPECT_EQ(step.isAvailable(), true);
-}
-
-TEST_F(EnabledComboStep, isUnavailableIfBothSubstepsAreUnavailable) {
-  givenAvailableSteps(false, false);
+TEST_F(EnabledComboStep, isUnavailableIfNeitherSubstepIsAvailable) {
+  givenGenerateAvailable(false);
+  givenSustainAvailable(false);
 
   EXPECT_EQ(step.isAvailable(), false);
+}
+
+TEST_F(EnabledComboStep, isAvailableIfGenerateIsAvailable) {
+  givenGenerateAvailable(true);
+  givenSustainAvailable(false);
+
+  EXPECT_EQ(step.isAvailable(), true);
+}
+
+TEST_F(EnabledComboStep, isAvailableIfSustainIsAvailable) {
+  givenSustainAvailable(true);
+  givenGenerateAvailable(false);
+
+  EXPECT_EQ(step.isAvailable(), true);
+}
+
+TEST_F(EnabledComboStep, isAvailableIfBothSubstepsAreAvailable) {
+  givenGenerateAvailable(true);
+  givenSustainAvailable(true);
+
+  EXPECT_EQ(step.isAvailable(), true);
 }
 
 class EnabledInactiveComboStep : public EnabledComboStep {};
@@ -74,7 +86,7 @@ class EnabledInactiveComboStep : public EnabledComboStep {};
 class InactiveComboStepAvailableToGenerate : public EnabledInactiveComboStep {
   void SetUp() override {
     EnabledInactiveComboStep::SetUp();
-    givenAvailableSteps(true, false);
+    givenGenerateAvailable(true);
   }
 };
 
@@ -87,7 +99,8 @@ TEST_F(InactiveComboStepAvailableToGenerate, process_processesGenerateStep) {
 class InactiveComboStepAvailableToSustain : public EnabledInactiveComboStep {
   void SetUp() override {
     EnabledInactiveComboStep::SetUp();
-    givenAvailableSteps(false, true);
+    givenGenerateAvailable(false);
+    givenSustainAvailable(true);
   }
 };
 
