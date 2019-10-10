@@ -15,6 +15,7 @@ namespace curve_sequencer {
     // Constructor for testing
     ComboStep(StepControls &controls, int stepIndex, Step *generateStep, Step *sustainStep);
 
+    auto index() const -> int override { return stepIndex; }
     auto isAvailable() const -> bool override;
     auto process(Latch const &gateLatch, float sampleTime) -> State override;
 

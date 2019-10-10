@@ -11,6 +11,7 @@ namespace curve_sequencer {
 
     virtual ~Step() = default;
 
+    virtual auto index() const -> int = 0;
     virtual auto isAvailable() const -> bool = 0;
     virtual auto process(Latch const &gateLatch, float sampleTime) -> State = 0;
   };

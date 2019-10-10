@@ -8,6 +8,8 @@ namespace curve_sequencer {
   class GenerateStep : public Step {
   public:
     GenerateStep(StepControls &controls, int stepIndex);
+
+    auto index() const -> int override { return stepIndex; }
     auto isAvailable() const -> bool override;
     auto process(Latch const &gateLatch, float sampleTime) -> State override;
 

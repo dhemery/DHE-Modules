@@ -22,12 +22,11 @@ namespace curve_sequencer {
     void process(float sampleTime);
 
   private:
-    auto indexOfFirstAvailableStep() const -> int;
-    auto indexOfSuccessorStep() const -> int;
+    auto nextAvailableStep() const -> Step *;
 
     Latch runLatch{};
     Latch gateLatch{};
-    int activeStepIndex{-1};
+    Step *activeStep{nullptr};
     SequenceControls &controls;
     std::vector<std::unique_ptr<Step>> &steps;
     int const stepIndexMask;

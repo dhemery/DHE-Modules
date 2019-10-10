@@ -27,6 +27,7 @@ protected:
     for (int i = 0; i < stepCount; i++) {
       auto step = new NiceMock<MockStep>{};
       ON_CALL(*step, isAvailable()).WillByDefault(Return(false));
+      ON_CALL(*step, index()).WillByDefault(Return(i));
       steps.emplace_back(step);
       givenSelection(0, stepCount);
     }

@@ -7,6 +7,7 @@
 
 class MockStep : public dhe::curve_sequencer::Step {
 public:
+  MOCK_METHOD(int, index, (), (const, override));
   MOCK_METHOD(bool, isAvailable, (), (const, override));
   MOCK_METHOD(Step::State, process, (dhe::Latch const &, float), (override));
 };

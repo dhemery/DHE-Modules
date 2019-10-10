@@ -18,52 +18,39 @@ namespace curve_sequencer {
       return;
     }
 
-    if (activeStepIndex < 0 && gateLatch.isRise()) {
-      activeStepIndex = indexOfFirstAvailableStep();
-      if (activeStepIndex < 0) { // No available step
+    if (activeStep == nullptr && gateLatch.isRise()) {
+      activeStep = nextAvailableStep();
+      if (activeStep == nullptr) { // No available step
         return;
       }
     }
 
-    if (activeStepIndex >= 0) {
-      auto const state = steps[activeStepIndex]->process(gateLatch, sampleTime);
+    if (activeStep != nullptr) {
+      auto const state = activeStep->process(gateLatch, sampleTime);
       if (state == Step::State::Terminated) {
-        activeStepIndex = indexOfSuccessorStep();
-        if (activeStepIndex < 0) { // No available step
+        activeStep = nextAvailableStep();
+        if (activeStep == nullptr) { // No available step
           return;
         }
       }
       return;
     }
   }
-  auto Sequence::indexOfFirstAvailableStep() const -> int {
+  auto Sequence::nextAvailableStep() const -> Step * {
     auto const selectionFirst = controls.selectionStart();
     auto const selectionLength = controls.selectionLength();
     auto const selectionLast = selectionFirst + selectionLength - 1;
 
-    for (int i = selectionFirst; i <= selectionLast; i++) {
+    auto const start = activeStep == nullptr ? selectionFirst : activeStep->index() + 1;
+
+    for (int i = start; i <= selectionLast; i++) {
       auto const index = i & stepIndexMask;
       auto const step = steps[index].get();
       if (step->isAvailable()) {
-        return index;
+        return step;
       }
     }
-    return -1;
-  }
-
-  auto Sequence::indexOfSuccessorStep() const -> int {
-    auto const selectionFirst = controls.selectionStart();
-    auto const selectionLength = controls.selectionLength();
-    auto const selectionLast = selectionFirst + selectionLength - 1;
-
-    for (int i = activeStepIndex + 1; i <= selectionLast; i++) {
-      auto const index = i & stepIndexMask;
-      auto const step = steps[index].get();
-      if (step->isAvailable()) {
-        return index;
-      }
-    }
-    return -1;
+    return nullptr;
   }
 } // namespace curve_sequencer
 } // namespace dhe

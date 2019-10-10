@@ -8,6 +8,8 @@ namespace curve_sequencer {
   class SustainStep : public Step {
   public:
     SustainStep(StepControls &controls, int stepIndex);
+
+    auto index() const -> int override { return stepIndex; }
     auto isAvailable() const -> bool override;
     auto process(Latch const &gateLatch, float sampleTime) -> State override;
 
