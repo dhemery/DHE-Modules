@@ -21,12 +21,13 @@ namespace curve_sequencer {
     void process(float sampleTime);
 
   private:
-    void start(float sampleTime);
+    auto firstAvailableStep() const -> Step *;
 
     SequenceControls &controls;
     std::vector<std::unique_ptr<Step>> &steps;
     Latch runLatch{};
     Latch gateLatch{};
+    Step *activeStep{};
   };
 } // namespace curve_sequencer
 } // namespace dhe

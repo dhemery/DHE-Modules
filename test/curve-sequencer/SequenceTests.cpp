@@ -28,6 +28,7 @@ protected:
       auto step = new NiceMock<MockStep>{};
       ON_CALL(*step, isAvailable()).WillByDefault(Return(false));
       steps.emplace_back(step);
+      givenSelection(0, stepCount);
     }
   };
 
@@ -97,6 +98,28 @@ TEST_F(IdleSequence, ifNoAvailableStepAboveFirstSelected_continueSeekingFromStep
   EXPECT_CALL(step(firstAvailableStep), process(A<Latch const &>(), sampleTime));
 
   givenGateInput(true); // Will trigger start of sequence
+
+  sequence.process(sampleTime);
+}
+
+class ActiveSequence : public NewSequence {
+protected:
+  void SetUp() override {
+    NewSequence::SetUp();
+
+    givenRunInput(true);
+    givenGateInput(true);
+    givenAvailableSteps({activeStep});
+    sequence.process(sampleTime);
+  }
+
+  int const activeStep = 0;
+};
+
+TEST_F(ActiveSequence, givenRunIsHigh_processesActiveStep) {
+  givenRunInput(true);
+
+  EXPECT_CALL(step(activeStep), process(A<Latch const &>(), sampleTime));
 
   sequence.process(sampleTime);
 }

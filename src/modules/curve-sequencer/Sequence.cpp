@@ -17,12 +17,18 @@ namespace curve_sequencer {
     if (runLatch.isLow()) {
       return;
     }
-    if (gateLatch.isRise()) {
-      start(sampleTime);
+
+    if (activeStep == nullptr && gateLatch.isRise()) {
+      activeStep = firstAvailableStep();
+    }
+
+    if (activeStep != nullptr) {
+      activeStep->process(gateLatch, sampleTime);
+      return;
     }
   }
 
-  void Sequence::start(float sampleTime) {
+  auto Sequence::firstAvailableStep() const -> Step * {
     auto const first = controls.selectionStart();
     auto const length = controls.selectionLength();
     auto const mask = steps.size() - 1;
@@ -31,10 +37,10 @@ namespace curve_sequencer {
       auto const index = (first + i) & mask;
       auto &step = steps[index];
       if (step->isAvailable()) {
-        step->process(gateLatch, sampleTime);
-        return;
+        return step.get();
       }
     }
+    return nullptr;
   }
 } // namespace curve_sequencer
 } // namespace dhe
