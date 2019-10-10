@@ -51,7 +51,7 @@ protected:
 
   NiceMock<MockSequenceControls> controls;
   std::vector<std::unique_ptr<Step>> steps{};
-  Sequence sequence{controls, steps};
+  Sequence sequence{controls, steps, stepCount};
 };
 
 class SequenceNotRunning : public NewSequence {

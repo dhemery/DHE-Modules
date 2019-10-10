@@ -37,13 +37,13 @@ namespace curve_sequencer {
     }
   }
   auto Sequence::indexOfFirstAvailableStep() const -> int {
-    auto const first = controls.selectionStart();
-    auto const length = controls.selectionLength();
-    auto const mask = steps.size() - 1;
+    auto const selectionFirst = controls.selectionStart();
+    auto const selectionLength = controls.selectionLength();
+    auto const selectionLast = selectionFirst + selectionLength - 1;
 
-    for (int i = 0; i < length; i++) {
-      auto const index = (first + i) & mask;
-      auto &step = steps[index];
+    for (int i = selectionFirst; i <= selectionLast; i++) {
+      auto const index = i & stepIndexMask;
+      auto const step = steps[index].get();
       if (step->isAvailable()) {
         return index;
       }
@@ -52,13 +52,13 @@ namespace curve_sequencer {
   }
 
   auto Sequence::indexOfSuccessorStep() const -> int {
-    auto const first = activeStepIndex + 1;
-    auto const length = controls.selectionLength();
-    auto const mask = steps.size() - 1;
+    auto const selectionFirst = controls.selectionStart();
+    auto const selectionLength = controls.selectionLength();
+    auto const selectionLast = selectionFirst + selectionLength - 1;
 
-    for (int i = 0; i < length; i++) {
-      auto const index = (first + i) & mask;
-      auto &step = steps[index];
+    for (int i = activeStepIndex + 1; i <= selectionLast; i++) {
+      auto const index = i & stepIndexMask;
+      auto const step = steps[index].get();
       if (step->isAvailable()) {
         return index;
       }

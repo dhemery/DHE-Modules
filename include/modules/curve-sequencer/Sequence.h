@@ -4,6 +4,7 @@
 #include "modules/curve-sequencer/SequenceControls.h"
 #include "modules/curve-sequencer/Step.h"
 
+#include <iostream>
 #include <memory>
 #include <vector>
 
@@ -15,8 +16,8 @@ namespace curve_sequencer {
    */
   class Sequence {
   public:
-    Sequence(SequenceControls &controls, std::vector<std::unique_ptr<Step>> &steps) :
-        controls{controls}, steps{steps} {}
+    Sequence(SequenceControls &controls, std::vector<std::unique_ptr<Step>> &steps, int stepCount) :
+        controls{controls}, steps{steps}, stepIndexMask{stepCount - 1} {}
 
     void process(float sampleTime);
 
@@ -24,11 +25,12 @@ namespace curve_sequencer {
     auto indexOfFirstAvailableStep() const -> int;
     auto indexOfSuccessorStep() const -> int;
 
-    SequenceControls &controls;
-    std::vector<std::unique_ptr<Step>> &steps;
     Latch runLatch{};
     Latch gateLatch{};
     int activeStepIndex{-1};
+    SequenceControls &controls;
+    std::vector<std::unique_ptr<Step>> &steps;
+    int const stepIndexMask;
   };
 } // namespace curve_sequencer
 } // namespace dhe

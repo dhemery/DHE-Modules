@@ -10,7 +10,7 @@ namespace dhe {
 
 using rack::engine::Module;
 
-template <int N> CurveSequencer<N>::CurveSequencer() : sequence{*this, steps} {
+template <int N> CurveSequencer<N>::CurveSequencer() : sequence{*this, steps, N} {
   config(ParameterCount, InputCount, OutputCount, LightCount);
 
   configButton(this, RunButton, "Run", {"RUN input", "Yes"}, 1);
