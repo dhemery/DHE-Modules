@@ -11,6 +11,8 @@
 namespace dhe {
 
 namespace curve_sequencer {
+  static auto constexpr generateModeCount = static_cast<size_t>(curve_sequencer::Step::Mode::Count);
+  static auto constexpr sustainModeCount = generateModeCount - 1;
   static auto constexpr eightSteps = 8;
   static auto constexpr sixteenSteps = 16;
 } // namespace curve_sequencer
