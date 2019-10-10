@@ -109,17 +109,30 @@ protected:
 
     givenRunInput(true);
     givenGateInput(true);
-    givenAvailableSteps({activeStep});
+    givenAvailableSteps({activeStep, successorStep});
     sequence.process(sampleTime);
   }
 
   int const activeStep = 0;
+  int const successorStep = 3;
 };
 
-TEST_F(ActiveSequence, givenRunIsHigh_processesActiveStep) {
+TEST_F(ActiveSequence, processesActiveStep) {
   givenRunInput(true);
 
   EXPECT_CALL(step(activeStep), process(A<Latch const &>(), sampleTime));
+
+  sequence.process(sampleTime);
+}
+
+TEST_F(ActiveSequence, activatesSuccessorStep_ifActiveStepTerminates) {
+  givenRunInput(true);
+
+  ON_CALL(step(activeStep), process(A<Latch const &>(), sampleTime)).WillByDefault(Return(Step::State::Terminated));
+
+  sequence.process(sampleTime);
+
+  EXPECT_CALL(step(successorStep), process(A<Latch const &>(), sampleTime));
 
   sequence.process(sampleTime);
 }

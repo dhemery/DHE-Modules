@@ -26,7 +26,7 @@ namespace curve_sequencer {
     if (sustainStep->isAvailable()) {
       return sustainStep->process(gateLatch, sampleTime);
     }
-    return State::Finished;
+    return State::Terminated;
   }
 
 } // namespace curve_sequencer

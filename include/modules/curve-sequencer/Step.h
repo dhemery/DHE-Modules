@@ -6,7 +6,7 @@ namespace dhe {
 namespace curve_sequencer {
   class Step {
   public:
-    enum class State { Running, Finished };
+    enum class State { Active, Terminated };
     enum class Mode { Rise, Fall, Edge, High, Low, Skip, Duration, Count };
 
     virtual ~Step() = default;

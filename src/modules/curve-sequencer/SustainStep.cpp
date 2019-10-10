@@ -38,7 +38,7 @@ namespace curve_sequencer {
 
   auto SustainStep::process(bool isSustaining) -> State {
     controls.setSustaining(stepIndex, isSustaining);
-    return isSustaining ? State::Running : State::Finished;
+    return isSustaining ? State::Active : State::Terminated;
   }
 
 } // namespace curve_sequencer
