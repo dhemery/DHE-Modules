@@ -36,14 +36,15 @@ namespace curve_sequencer {
       return;
     }
   }
+
   auto Sequence::nextAvailableStep() const -> Step * {
-    auto const selectionFirst = controls.selectionStart();
+    auto const selectionStart = controls.selectionStart();
     auto const selectionLength = controls.selectionLength();
-    auto const selectionLast = selectionFirst + selectionLength - 1;
 
-    auto const start = activeStep == nullptr ? selectionFirst : activeStep->index() + 1;
+    auto const searchStart = activeStep == nullptr ? selectionStart : activeStep->index() + 1;
+    auto const searchEnd = selectionStart + selectionLength - 1;
 
-    for (int i = start; i <= selectionLast; i++) {
+    for (int i = searchStart; i <= searchEnd; i++) {
       auto const index = i & stepIndexMask;
       auto const step = steps[index].get();
       if (step->isAvailable()) {

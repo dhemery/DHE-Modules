@@ -25,6 +25,8 @@ template <int N> CurveSequencer<N>::CurveSequencer() : sequence{*this, steps, N}
 
   constexpr auto generateModeCount = static_cast<size_t>(curve_sequencer::Step::Mode::Count);
   constexpr auto sustainModeCount = generateModeCount - 1;
+  constexpr auto durationMode = static_cast<int>(curve_sequencer::Step::Mode::Duration);
+  constexpr auto skipMode = static_cast<int>(curve_sequencer::Step::Mode::Skip);
 
   auto generateModeNames = std::array<std::string, generateModeCount>{"Interrupt if gate rises",
                                                                       "Interrupt if gate falls",
@@ -40,8 +42,9 @@ template <int N> CurveSequencer<N>::CurveSequencer() : sequence{*this, steps, N}
   steps.reserve(N);
 
   for (int stepIndex = 0; stepIndex < N; stepIndex++) {
-    configToggle<7>(this, GenerateModeSwitches + stepIndex, "Generate mode", generateModeNames, 6);
-    configToggle<6>(this, SustainModeSwitches + stepIndex, "Sustain mode", sustainModeNames, 5);
+    configToggle<generateModeCount>(this, GenerateModeSwitches + stepIndex, "Generate mode", generateModeNames,
+                                    durationMode);
+    configToggle<sustainModeCount>(this, SustainModeSwitches + stepIndex, "Sustain mode", sustainModeNames, skipMode);
     configLevelKnob(this, LevelKnobs + stepIndex, LevelRangeSwitch, "Level");
     configCurveShapeSwitch(this, ShapeSwitches + stepIndex, "Shape");
     configCurvatureKnob(this, CurveKnobs + stepIndex, "Curvature");
@@ -89,6 +92,6 @@ template <int N> auto CurveSequencer<N>::sustainMode(int stepIndex) const -> int
   return static_cast<int>(paramValue(params[SustainModeSwitches + stepIndex]));
 }
 
-template class CurveSequencer<8>;
-template class CurveSequencer<16>;
+template class CurveSequencer<curve_sequencer::eightSteps>;
+template class CurveSequencer<curve_sequencer::sixteenSteps>;
 } // namespace dhe

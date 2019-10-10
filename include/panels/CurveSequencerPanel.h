@@ -5,14 +5,17 @@
 
 namespace dhe {
 
-template <typename P> class GenerateModeStepper : public Toggle<P, 7> {
+static auto constexpr generateModeCount = static_cast<size_t>(curve_sequencer::Step::Mode::Count);
+static auto constexpr sustainModeCount = generateModeCount - 1;
+
+template <typename P> class GenerateModeStepper : public Toggle<P, generateModeCount> {
 public:
-  GenerateModeStepper() : Toggle<P, 7>("stepper-generate") {}
+  GenerateModeStepper() : Toggle<P, generateModeCount>("stepper-generate") {}
 };
 
-template <typename P> class SustainModeStepper : public Toggle<P, 6> {
+template <typename P> class SustainModeStepper : public Toggle<P, sustainModeCount> {
 public:
-  SustainModeStepper() : Toggle<P, 6>("stepper-sustain") {}
+  SustainModeStepper() : Toggle<P, sustainModeCount>("stepper-sustain") {}
 };
 
 template <typename P> class StartMarker : public rack::widget::SvgWidget {

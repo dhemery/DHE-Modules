@@ -15,7 +15,7 @@ namespace curve_sequencer {
 
   private:
     auto mode() const -> Mode { return static_cast<Mode>(controls.sustainMode(stepIndex)); }
-    auto process(bool ends) -> State;
+    auto process(bool isSustaining) -> State;
 
     StepControls &controls;
     int stepIndex;
