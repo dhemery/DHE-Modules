@@ -138,31 +138,11 @@ TEST_F(ComboStepEnabledGeneratingGenerateAvailableSustainUnavailable, isAvailabl
   EXPECT_EQ(step.isAvailable(), true);
 }
 
-TEST_F(ComboStepEnabledGeneratingGenerateAvailableSustainUnavailable, ifGenerateReturnsActive_processReturnsActive) {
-  givenGenerateReturns(Step::State::Active);
-
-  auto const state = step.process(Latch{}, sampleTime);
-
-  EXPECT_EQ(state, Step::State::Active);
-}
-
-TEST_F(ComboStepEnabledGeneratingGenerateAvailableSustainUnavailable, ifGenerateReturnsActive_nextProcessGenerates) {
-  givenGenerateReturns(Step::State::Active);
-
-  step.process(Latch{}, sampleTime);
-
+TEST_F(ComboStepEnabledGeneratingGenerateAvailableSustainUnavailable, process_generates) {
   EXPECT_CALL(*generateStep, process(A<Latch const &>(), sampleTime));
+  EXPECT_CALL(*sustainStep, process(A<Latch const &>(), sampleTime)).Times(0);
 
   step.process(Latch{}, sampleTime);
-}
-
-TEST_F(ComboStepEnabledGeneratingGenerateAvailableSustainUnavailable,
-       ifGenerateReturnsInactive_processReturnsInactive) {
-  givenGenerateReturns(Step::State::Inactive);
-
-  auto const state = step.process(Latch{}, sampleTime);
-
-  EXPECT_EQ(state, Step::State::Inactive);
 }
 
 class ComboStepEnabledGeneratingGenerateAvailableSustainAvailable
@@ -180,39 +160,9 @@ TEST_F(ComboStepEnabledGeneratingGenerateAvailableSustainAvailable, isAvailable)
   EXPECT_EQ(step.isAvailable(), true);
 }
 
-TEST_F(ComboStepEnabledGeneratingGenerateAvailableSustainAvailable, ifGenerateReturnsActive_processReturnsActive) {
-  givenGenerateReturns(Step::State::Active);
-
-  auto const state = step.process(Latch{}, sampleTime);
-
-  EXPECT_EQ(state, Step::State::Active);
-}
-
-TEST_F(ComboStepEnabledGeneratingGenerateAvailableSustainAvailable, ifGenerateReturnsActive_nextProcessGenerates) {
-  givenGenerateReturns(Step::State::Active);
-
-  step.process(Latch{}, sampleTime); // Generating remains active
-
+TEST_F(ComboStepEnabledGeneratingGenerateAvailableSustainAvailable, process_generates) {
   EXPECT_CALL(*generateStep, process(A<Latch const &>(), sampleTime));
-
-  step.process(Latch{}, sampleTime);
-}
-
-TEST_F(ComboStepEnabledGeneratingGenerateAvailableSustainAvailable, ifGenerateReturnsInactive_processReturnsActive) {
-  givenGenerateReturns(Step::State::Inactive);
-
-  auto const state = step.process(Latch{}, sampleTime);
-
-  EXPECT_EQ(state, Step::State::Active);
-}
-
-TEST_F(ComboStepEnabledGeneratingGenerateAvailableSustainAvailable, ifGenerateReturnsInactive_nextProcessSustains) {
-  givenGenerateReturns(Step::State::Inactive);
-
-  step.process(Latch{}, sampleTime);
-
-  EXPECT_CALL(*generateStep, process(A<Latch const &>(), sampleTime)).Times(0);
-  EXPECT_CALL(*sustainStep, process(A<Latch const &>(), sampleTime));
+  EXPECT_CALL(*sustainStep, process(A<Latch const &>(), sampleTime)).Times(0);
 
   step.process(Latch{}, sampleTime);
 }
@@ -227,6 +177,54 @@ protected:
     step.process(Latch{}, sampleTime);
   }
 };
+
+TEST_F(ComboStepGenerating, ifGenerateReturnsActive_processReturnsActive) {
+  givenGenerateReturns(Step::State::Active);
+
+  auto const state = step.process(Latch{}, sampleTime);
+
+  EXPECT_EQ(state, Step::State::Active);
+}
+
+TEST_F(ComboStepGenerating, ifGenerateReturnsActive_nextProcessGenerates) {
+  givenGenerateReturns(Step::State::Active);
+
+  step.process(Latch{}, sampleTime);
+
+  EXPECT_CALL(*generateStep, process(A<Latch const &>(), sampleTime));
+
+  step.process(Latch{}, sampleTime);
+}
+
+TEST_F(ComboStepGenerating, ifGenerateReturnsInactive_andSustainIsAvailable_processReturnsActive) {
+  givenGenerateReturns(Step::State::Inactive);
+  givenSustainAvailable(true);
+
+  auto const state = step.process(Latch{}, sampleTime);
+
+  EXPECT_EQ(state, Step::State::Active);
+}
+
+TEST_F(ComboStepGenerating, ifGenerateReturnsInactive_andSustainIsAvailable_nextProcessSustains) {
+  givenGenerateReturns(Step::State::Inactive);
+  givenSustainAvailable(true);
+
+  step.process(Latch{}, sampleTime);
+
+  EXPECT_CALL(*generateStep, process(A<Latch const &>(), sampleTime)).Times(0);
+  EXPECT_CALL(*sustainStep, process(A<Latch const &>(), sampleTime));
+
+  step.process(Latch{}, sampleTime);
+}
+
+TEST_F(ComboStepGenerating, ifGenerateReturnsInactive_andSustainIsUnavailable_processReturnsInactive) {
+  givenGenerateReturns(Step::State::Inactive);
+  givenSustainAvailable(false);
+
+  auto const state = step.process(Latch{}, sampleTime);
+
+  EXPECT_EQ(state, Step::State::Inactive);
+}
 
 TEST_F(ComboStepGenerating, isAvailable_evenIfDisabled) {
   givenEnabled(false);
@@ -267,6 +265,32 @@ protected:
     step.process(Latch{}, sampleTime);
   }
 };
+
+TEST_F(ComboStepSustaining, ifSustainReturnsActive_processReturnsActive) {
+  givenSustainReturns(Step::State::Active);
+
+  auto const state = step.process(Latch{}, sampleTime);
+
+  EXPECT_EQ(state, Step::State::Active);
+}
+
+TEST_F(ComboStepSustaining, ifSustainReturnsActive_nextProcessSustains) {
+  givenSustainReturns(Step::State::Active);
+
+  step.process(Latch{}, sampleTime);
+
+  EXPECT_CALL(*sustainStep, process(A<Latch const &>(), sampleTime));
+
+  step.process(Latch{}, sampleTime);
+}
+
+TEST_F(ComboStepSustaining, ifSustainReturnsInactive_processReturnsInactive) {
+  givenSustainReturns(Step::State::Inactive);
+
+  auto const state = step.process(Latch{}, sampleTime);
+
+  EXPECT_EQ(state, Step::State::Inactive);
+}
 
 TEST_F(ComboStepSustaining, isAvailable_evenIfDisabled) {
   givenEnabled(false);
