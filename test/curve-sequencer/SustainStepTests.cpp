@@ -45,7 +45,7 @@ class SustainStepRiseMode : public SustainStepTest {
 
 TEST_F(SustainStepRiseMode, isAvailable) { EXPECT_EQ(step.isAvailable(), true); }
 
-TEST_F(SustainStepRiseMode, finishesIfGateRises) {
+TEST_F(SustainStepRiseMode, becomesInactiveIfGateRises) {
   auto const gateLatch = Latch{true, true};
 
   EXPECT_CALL(controls, setSustaining(stepIndex, false));
@@ -55,7 +55,7 @@ TEST_F(SustainStepRiseMode, finishesIfGateRises) {
   EXPECT_EQ(state, Step::State::Inactive);
 }
 
-TEST_F(SustainStepRiseMode, continuesIfGateDoesNotRise) {
+TEST_F(SustainStepRiseMode, remainsActiveIfGateDoesNotRise) {
   auto const gateLatch = Latch{true, false};
 
   auto const state = step.process(gateLatch, sampleTime);
@@ -69,7 +69,7 @@ class SustainStepFallMode : public SustainStepTest {
 
 TEST_F(SustainStepFallMode, isAvailable) { EXPECT_EQ(step.isAvailable(), true); }
 
-TEST_F(SustainStepFallMode, finishesIfGateFalls) {
+TEST_F(SustainStepFallMode, becomesInactiveIfGateFalls) {
   auto const gateLatch = Latch{false, true};
 
   EXPECT_CALL(controls, setSustaining(stepIndex, false));
@@ -79,7 +79,7 @@ TEST_F(SustainStepFallMode, finishesIfGateFalls) {
   EXPECT_EQ(state, Step::State::Inactive);
 }
 
-TEST_F(SustainStepFallMode, continuesIfGateDoesNotFall) {
+TEST_F(SustainStepFallMode, remainsActiveIfGateDoesNotFall) {
   auto const gateLatch = Latch{false, false};
 
   auto const state = step.process(gateLatch, sampleTime);
@@ -93,7 +93,7 @@ class SustainStepEdgeMode : public SustainStepTest {
 
 TEST_F(SustainStepEdgeMode, isAvailable) { EXPECT_EQ(step.isAvailable(), true); }
 
-TEST_F(SustainStepEdgeMode, finishesIfGateRises) {
+TEST_F(SustainStepEdgeMode, becomesInactiveIfGateRises) {
   auto const gateLatch = Latch{true, true};
 
   EXPECT_CALL(controls, setSustaining(stepIndex, false));
@@ -103,7 +103,7 @@ TEST_F(SustainStepEdgeMode, finishesIfGateRises) {
   EXPECT_EQ(state, Step::State::Inactive);
 }
 
-TEST_F(SustainStepEdgeMode, finishesIfGateFalls) {
+TEST_F(SustainStepEdgeMode, becomesInactiveIfGateFalls) {
   auto const gateLatch = Latch{false, true};
 
   EXPECT_CALL(controls, setSustaining(stepIndex, false));
@@ -113,7 +113,7 @@ TEST_F(SustainStepEdgeMode, finishesIfGateFalls) {
   EXPECT_EQ(state, Step::State::Inactive);
 }
 
-TEST_F(SustainStepEdgeMode, continuesIfGateHasNoEdge) {
+TEST_F(SustainStepEdgeMode, remainsActiveIfGateHasNoEdge) {
   auto const gateLatch = Latch{false, false};
 
   auto const state = step.process(gateLatch, sampleTime);
@@ -127,7 +127,7 @@ class SustainStepHighMode : public SustainStepTest {
 
 TEST_F(SustainStepHighMode, isAvailable) { EXPECT_EQ(step.isAvailable(), true); }
 
-TEST_F(SustainStepHighMode, finishesIfGateIsHigh) {
+TEST_F(SustainStepHighMode, becomesInactiveIfGateIsHigh) {
   auto const gateLatch = Latch{true, false};
 
   EXPECT_CALL(controls, setSustaining(stepIndex, false));
@@ -137,7 +137,7 @@ TEST_F(SustainStepHighMode, finishesIfGateIsHigh) {
   EXPECT_EQ(state, Step::State::Inactive);
 }
 
-TEST_F(SustainStepHighMode, continuesIfGateIsLow) {
+TEST_F(SustainStepHighMode, remainsActiveIfGateIsLow) {
   auto const gateLatch = Latch{false, false};
 
   auto const state = step.process(gateLatch, sampleTime);
@@ -151,7 +151,7 @@ class SustainStepLowMode : public SustainStepTest {
 
 TEST_F(SustainStepLowMode, isAvailable) { EXPECT_EQ(step.isAvailable(), true); }
 
-TEST_F(SustainStepLowMode, finishesIfGateIsLow) {
+TEST_F(SustainStepLowMode, becomesInactiveIfGateIsLow) {
   auto const gateLatch = Latch{false, false};
 
   EXPECT_CALL(controls, setSustaining(stepIndex, false));
@@ -161,7 +161,7 @@ TEST_F(SustainStepLowMode, finishesIfGateIsLow) {
   EXPECT_EQ(state, Step::State::Inactive);
 }
 
-TEST_F(SustainStepLowMode, continuesIfGateIsLow) {
+TEST_F(SustainStepLowMode, remainsActiveIfGateIsLow) {
   auto const gateLatch = Latch{true, false};
 
   auto const state = step.process(gateLatch, sampleTime);
