@@ -20,14 +20,22 @@ namespace curve_sequencer {
   }
 
   auto ComboStep::process(Latch const &gateLatch, float sampleTime) -> State {
-    if (generateStep->isAvailable()) {
-      return generateStep->process(gateLatch, sampleTime);
+    if (activeStage == nullptr) {
+      if (generateStep->isAvailable()) {
+        activeStage = generateStep.get();
+      } else {
+        activeStage = sustainStep.get();
+      }
     }
-    if (sustainStep->isAvailable()) {
-      return sustainStep->process(gateLatch, sampleTime);
+    auto const state = activeStage->process(gateLatch, sampleTime);
+    if (state == State::Terminated) {
+      if (activeStage == generateStep.get() && sustainStep->isAvailable()) {
+        activeStage = sustainStep.get();
+        return State::Active;
+      }
+      activeStage = nullptr;
     }
-    return State::Terminated;
+    return state;
   }
-
 } // namespace curve_sequencer
 } // namespace dhe

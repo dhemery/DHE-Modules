@@ -156,10 +156,63 @@ TEST_F(ComboStepEnabledGeneratingGenerateAvailableSustainUnavailable, ifGenerate
   step.process(Latch{}, sampleTime);
 }
 
-TEST_F(ComboStepEnabledGeneratingGenerateAvailableSustainUnavailable, ifGenerateReturnsInactive_processReturnsInactive) {
+TEST_F(ComboStepEnabledGeneratingGenerateAvailableSustainUnavailable,
+       ifGenerateReturnsInactive_processReturnsInactive) {
   givenGenerateReturns(Step::State::Terminated);
 
   auto const state = step.process(Latch{}, sampleTime);
 
   EXPECT_EQ(state, Step::State::Terminated);
+}
+
+class ComboStepEnabledGeneratingGenerateAvailableSustainAvailable
+    : public ComboStepEnabledIdleGenerateAvailableSustainAvailable {
+protected:
+  void SetUp() override {
+    ComboStepEnabledIdleGenerateAvailableSustainAvailable::SetUp();
+
+    // Begin generating
+    step.process(Latch{}, sampleTime);
+  }
+};
+
+TEST_F(ComboStepEnabledGeneratingGenerateAvailableSustainAvailable, isAvailable) {
+  EXPECT_EQ(step.isAvailable(), true);
+}
+
+TEST_F(ComboStepEnabledGeneratingGenerateAvailableSustainAvailable, ifGenerateReturnsActive_processReturnsActive) {
+  givenGenerateReturns(Step::State::Active);
+
+  auto const state = step.process(Latch{}, sampleTime);
+
+  EXPECT_EQ(state, Step::State::Active);
+}
+
+TEST_F(ComboStepEnabledGeneratingGenerateAvailableSustainAvailable, ifGenerateReturnsActive_nextProcessGenerates) {
+  givenGenerateReturns(Step::State::Active);
+
+  step.process(Latch{}, sampleTime); // Generating remains active
+
+  EXPECT_CALL(*generateStep, process(A<Latch const &>(), sampleTime));
+
+  step.process(Latch{}, sampleTime);
+}
+
+TEST_F(ComboStepEnabledGeneratingGenerateAvailableSustainAvailable, ifGenerateReturnsInactive_processReturnsActive) {
+  givenGenerateReturns(Step::State::Terminated);
+
+  auto const state = step.process(Latch{}, sampleTime);
+
+  EXPECT_EQ(state, Step::State::Active);
+}
+
+TEST_F(ComboStepEnabledGeneratingGenerateAvailableSustainAvailable, ifGenerateReturnsInactive_nextProcessSustains) {
+  givenGenerateReturns(Step::State::Terminated);
+
+  step.process(Latch{}, sampleTime);
+
+  EXPECT_CALL(*generateStep, process(A<Latch const &>(), sampleTime)).Times(0);
+  EXPECT_CALL(*sustainStep, process(A<Latch const &>(), sampleTime));
+
+  step.process(Latch{}, sampleTime);
 }

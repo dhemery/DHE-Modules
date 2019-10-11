@@ -24,6 +24,7 @@ namespace curve_sequencer {
     int stepIndex;
     std::unique_ptr<Step> generateStep;
     std::unique_ptr<Step> sustainStep;
+    Step *activeStage{nullptr};
   };
 } // namespace curve_sequencer
 } // namespace dhe
