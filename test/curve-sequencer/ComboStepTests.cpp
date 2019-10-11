@@ -9,103 +9,157 @@
 
 using dhe::Latch;
 using dhe::curve_sequencer::ComboStep;
-using ::testing::A;
+using dhe::curve_sequencer::Step;
 
 auto constexpr sampleTime = 1.F / 44000.F;
 auto constexpr stepIndex = 3;
 
-using ::testing::NiceMock;
+using ::testing::A;
 using ::testing::Return;
 
-class ComboStepTest : public ::testing::Test {
+class ComboStepDisabledIdle : public ::testing::Test {
 protected:
+  void SetUp() override { givenEnabled(false); }
+
   void givenEnabled(bool enabled) { ON_CALL(controls, isEnabled(stepIndex)).WillByDefault(Return(enabled)); }
 
-  void givenGenerateAvailable(bool isAvailable) {
+  void givenGenerateAvailable(bool isAvailable, Step::State state = Step::State::Active) {
     ON_CALL(*generateStep, isAvailable()).WillByDefault(Return(isAvailable));
+    givenGenerateReturns(state);
   }
 
-  void givenSustainAvailable(bool isAvailable) {
+  void givenGenerateReturns(Step::State state) {
+    ON_CALL(*generateStep, process(A<Latch const &>(), A<float>())).WillByDefault(Return(state));
+  }
+
+  void givenSustainAvailable(bool isAvailable, Step::State state = Step::State::Active) {
     ON_CALL(*sustainStep, isAvailable()).WillByDefault(Return(isAvailable));
+    givenSustainReturns(state);
   }
 
-  NiceMock<MockStepControls> controls;
-  MockStep *generateStep = new NiceMock<MockStep>;
-  MockStep *sustainStep = new NiceMock<MockStep>;
+  void givenSustainReturns(Step::State state) {
+    ON_CALL(*sustainStep, process(A<Latch const &>(), A<float>())).WillByDefault(Return(state));
+  }
+
+  MockStepControls controls;
+  MockStep *generateStep = new MockStep;
+  MockStep *sustainStep = new MockStep;
 
   ComboStep step{controls, stepIndex, generateStep, sustainStep};
 };
 
-class DisabledComboStep : public ComboStepTest {
-  void SetUp() override {
-    ComboStepTest::SetUp();
-    givenEnabled(false);
-  }
-};
+TEST_F(ComboStepDisabledIdle, isUnavailable) { EXPECT_EQ(step.isAvailable(), false); }
 
-TEST_F(DisabledComboStep, isUnavailable) { EXPECT_EQ(step.isAvailable(), false); }
-
-class EnabledComboStep : public ComboStepTest {
+class ComboStepEnabledIdle : public ComboStepDisabledIdle {
 protected:
   void SetUp() override {
-    ComboStepTest::SetUp();
+    ComboStepDisabledIdle::SetUp();
     givenEnabled(true);
   }
 };
 
-TEST_F(EnabledComboStep, isUnavailableIfNeitherSubstepIsAvailable) {
-  givenGenerateAvailable(false);
-  givenSustainAvailable(false);
-
-  EXPECT_EQ(step.isAvailable(), false);
-}
-
-TEST_F(EnabledComboStep, isAvailableIfGenerateIsAvailable) {
-  givenGenerateAvailable(true);
-  givenSustainAvailable(false);
-
-  EXPECT_EQ(step.isAvailable(), true);
-}
-
-TEST_F(EnabledComboStep, isAvailableIfSustainIsAvailable) {
-  givenSustainAvailable(true);
-  givenGenerateAvailable(false);
-
-  EXPECT_EQ(step.isAvailable(), true);
-}
-
-TEST_F(EnabledComboStep, isAvailableIfBothSubstepsAreAvailable) {
-  givenGenerateAvailable(true);
-  givenSustainAvailable(true);
-
-  EXPECT_EQ(step.isAvailable(), true);
-}
-
-class EnabledInactiveComboStep : public EnabledComboStep {};
-
-class InactiveComboStepAvailableToGenerate : public EnabledInactiveComboStep {
+class ComboStepEnabledIdleGenerateUnavailableSustainUnavailable : public ComboStepEnabledIdle {
+protected:
   void SetUp() override {
-    EnabledInactiveComboStep::SetUp();
-    givenGenerateAvailable(true);
+    ComboStepEnabledIdle::SetUp();
+    givenGenerateAvailable(false);
+    givenSustainAvailable(false);
   }
 };
 
-TEST_F(InactiveComboStepAvailableToGenerate, process_processesGenerateStep) {
+TEST_F(ComboStepEnabledIdleGenerateUnavailableSustainUnavailable, isUnavailable) {
+  EXPECT_EQ(step.isAvailable(), false);
+}
+
+class ComboStepEnabledIdleGenerateAvailableSustainUnavailable : public ComboStepEnabledIdle {
+protected:
+  void SetUp() override {
+    ComboStepEnabledIdle::SetUp();
+    givenGenerateAvailable(true);
+    givenSustainAvailable(false);
+  }
+};
+
+TEST_F(ComboStepEnabledIdleGenerateAvailableSustainUnavailable, isAvailable) { EXPECT_EQ(step.isAvailable(), true); }
+
+TEST_F(ComboStepEnabledIdleGenerateAvailableSustainUnavailable, process_generates) {
   EXPECT_CALL(*generateStep, process(A<Latch const &>(), sampleTime));
+  EXPECT_CALL(*sustainStep, process(A<Latch const &>(), sampleTime)).Times(0);
 
   step.process(Latch{}, sampleTime);
 }
 
-class InactiveComboStepAvailableToSustain : public EnabledInactiveComboStep {
+class ComboStepEnabledIdleGenerateUnavailableSustainAvailable : public ComboStepEnabledIdle {
+protected:
   void SetUp() override {
-    EnabledInactiveComboStep::SetUp();
+    ComboStepEnabledIdle::SetUp();
     givenGenerateAvailable(false);
     givenSustainAvailable(true);
   }
 };
 
-TEST_F(InactiveComboStepAvailableToSustain, process_processesSustainStep) {
+TEST_F(ComboStepEnabledIdleGenerateUnavailableSustainAvailable, process_sustains) {
   EXPECT_CALL(*sustainStep, process(A<Latch const &>(), sampleTime));
+  EXPECT_CALL(*generateStep, process(A<Latch const &>(), sampleTime)).Times(0);
 
   step.process(Latch{}, sampleTime);
+}
+
+class ComboStepEnabledIdleGenerateAvailableSustainAvailable : public ComboStepEnabledIdle {
+protected:
+  void SetUp() override {
+    ComboStepEnabledIdle::SetUp();
+    givenGenerateAvailable(true);
+    givenSustainAvailable(true);
+  }
+};
+
+TEST_F(ComboStepEnabledIdleGenerateAvailableSustainAvailable, isAvailable) { EXPECT_EQ(step.isAvailable(), true); }
+
+TEST_F(ComboStepEnabledIdleGenerateAvailableSustainAvailable, process_generates) {
+  EXPECT_CALL(*generateStep, process(A<Latch const &>(), sampleTime));
+  EXPECT_CALL(*sustainStep, process(A<Latch const &>(), sampleTime)).Times(0);
+
+  step.process(Latch{}, sampleTime);
+}
+
+class ComboStepEnabledGeneratingGenerateAvailableSustainUnavailable
+    : public ComboStepEnabledIdleGenerateAvailableSustainUnavailable {
+protected:
+  void SetUp() override {
+    ComboStepEnabledIdleGenerateAvailableSustainUnavailable::SetUp();
+
+    // Begin generating
+    step.process(Latch{}, sampleTime);
+  }
+};
+
+TEST_F(ComboStepEnabledGeneratingGenerateAvailableSustainUnavailable, isAvailable) {
+  EXPECT_EQ(step.isAvailable(), true);
+}
+
+TEST_F(ComboStepEnabledGeneratingGenerateAvailableSustainUnavailable, ifGenerateReturnsActive_processReturnsActive) {
+  givenGenerateReturns(Step::State::Active);
+
+  auto const state = step.process(Latch{}, sampleTime);
+
+  EXPECT_EQ(state, Step::State::Active);
+}
+
+TEST_F(ComboStepEnabledGeneratingGenerateAvailableSustainUnavailable, ifGenerateReturnsActive_nextProcessGenerates) {
+  givenGenerateReturns(Step::State::Active);
+
+  step.process(Latch{}, sampleTime);
+
+  EXPECT_CALL(*generateStep, process(A<Latch const &>(), sampleTime));
+
+  step.process(Latch{}, sampleTime);
+}
+
+TEST_F(ComboStepEnabledGeneratingGenerateAvailableSustainUnavailable, ifGenerateReturnsInactive_processReturnsInactive) {
+  givenGenerateReturns(Step::State::Terminated);
+
+  auto const state = step.process(Latch{}, sampleTime);
+
+  EXPECT_EQ(state, Step::State::Terminated);
 }
