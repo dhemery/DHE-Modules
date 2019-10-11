@@ -216,3 +216,83 @@ TEST_F(ComboStepEnabledGeneratingGenerateAvailableSustainAvailable, ifGenerateRe
 
   step.process(Latch{}, sampleTime);
 }
+
+class ComboStepGenerating : public ComboStepEnabledIdle {
+protected:
+  void SetUp() override {
+    ComboStepEnabledIdle::SetUp();
+    givenGenerateAvailable(true);
+
+    // Begin generating
+    step.process(Latch{}, sampleTime);
+  }
+};
+
+TEST_F(ComboStepGenerating, isAvailable_evenIfDisabled) {
+  givenEnabled(false);
+
+  EXPECT_EQ(step.isAvailable(), true);
+}
+
+TEST_F(ComboStepGenerating, generates_evenIfDisabled) {
+  givenEnabled(false);
+
+  EXPECT_CALL(*generateStep, process(A<Latch const &>(), sampleTime));
+
+  step.process(Latch{}, sampleTime);
+}
+
+
+TEST_F(ComboStepGenerating, isAvailable_evenIfGenerateIsUnavailable) {
+  givenGenerateAvailable(false);
+
+  EXPECT_EQ(step.isAvailable(), true);
+}
+
+TEST_F(ComboStepGenerating, generates_evenIfGenerateIsUnavailable) {
+  givenGenerateAvailable(false);
+
+  EXPECT_CALL(*generateStep, process(A<Latch const &>(), sampleTime));
+
+  step.process(Latch{}, sampleTime);
+}
+
+class ComboStepSustaining : public ComboStepEnabledIdle {
+protected:
+  void SetUp() override {
+    ComboStepEnabledIdle::SetUp();
+    givenSustainAvailable(true);
+
+    // Begin sustaining
+    step.process(Latch{}, sampleTime);
+  }
+};
+
+TEST_F(ComboStepSustaining, isAvailable_evenIfDisabled) {
+  givenEnabled(false);
+
+  EXPECT_EQ(step.isAvailable(), true);
+}
+
+TEST_F(ComboStepSustaining, sustains_evenIfDisabled) {
+  givenEnabled(false);
+
+  EXPECT_CALL(*sustainStep, process(A<Latch const &>(), sampleTime));
+
+  step.process(Latch{}, sampleTime);
+}
+
+
+TEST_F(ComboStepSustaining, isAvailable_evenIfSustainIsUnavailable) {
+  givenSustainAvailable(false);
+
+  EXPECT_EQ(step.isAvailable(), true);
+}
+
+TEST_F(ComboStepSustaining, sustains_evenIfSustainIsUnavailable) {
+  givenSustainAvailable(false);
+
+  EXPECT_CALL(*sustainStep, process(A<Latch const &>(), sampleTime));
+
+  step.process(Latch{}, sampleTime);
+}

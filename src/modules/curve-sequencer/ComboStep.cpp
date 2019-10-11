@@ -16,7 +16,13 @@ namespace curve_sequencer {
       controls{controls}, stepIndex{stepIndex}, generateStep{generateStep}, sustainStep{sustainStep} {}
 
   auto ComboStep::isAvailable() const -> bool {
-    return controls.isEnabled(stepIndex) && (generateStep->isAvailable() || sustainStep->isAvailable());
+    if (activeStage != nullptr) {
+      return true;
+    }
+    if (!controls.isEnabled(stepIndex)) {
+      return false;
+    }
+    return generateStep->isAvailable() || sustainStep->isAvailable();
   }
 
   auto ComboStep::process(Latch const &gateLatch, float sampleTime) -> State {
