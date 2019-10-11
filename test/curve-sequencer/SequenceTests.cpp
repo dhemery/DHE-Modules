@@ -129,7 +129,7 @@ TEST_F(ActiveSequence, processesActiveStep) {
 TEST_F(ActiveSequence, activatesSuccessorStep_ifActiveStepTerminates) {
   givenRunInput(true);
 
-  ON_CALL(step(activeStep), process(A<Latch const &>(), sampleTime)).WillByDefault(Return(Step::State::Terminated));
+  ON_CALL(step(activeStep), process(A<Latch const &>(), sampleTime)).WillByDefault(Return(Step::State::Inactive));
 
   sequence.process(sampleTime);
 

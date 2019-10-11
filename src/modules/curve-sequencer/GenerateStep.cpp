@@ -38,7 +38,7 @@ namespace curve_sequencer {
 
   auto GenerateStep::process(bool isGenerating) -> State {
     controls.setGenerating(stepIndex, isGenerating);
-    return isGenerating ? State::Active : State::Terminated;
+    return isGenerating ? State::Active : State::Inactive;
   }
 } // namespace curve_sequencer
 } // namespace dhe

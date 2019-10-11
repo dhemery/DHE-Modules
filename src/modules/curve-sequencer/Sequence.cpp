@@ -27,7 +27,7 @@ namespace curve_sequencer {
 
     if (activeStep != nullptr) {
       auto const state = activeStep->process(gateLatch, sampleTime);
-      if (state == Step::State::Terminated) {
+      if (state == Step::State::Inactive) {
         activeStep = nextAvailableStep();
         if (activeStep == nullptr) { // No available step
           return;

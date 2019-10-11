@@ -28,7 +28,7 @@ namespace curve_sequencer {
       }
     }
     auto const state = activeStage->process(gateLatch, sampleTime);
-    if (state == State::Terminated) {
+    if (state == State::Inactive) {
       if (activeStage == generateStep.get() && sustainStep->isAvailable()) {
         activeStage = sustainStep.get();
         return State::Active;

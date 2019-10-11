@@ -53,7 +53,7 @@ TEST_F(GenerateStepRiseMode, finishesIfGateRises) {
 
   auto const state = step.process(gateLatch, sampleTime);
 
-  EXPECT_EQ(state, Step::State::Terminated);
+  EXPECT_EQ(state, Step::State::Inactive);
 }
 
 TEST_F(GenerateStepRiseMode, continuesIfGateDoesNotRise) {
@@ -77,7 +77,7 @@ TEST_F(GenerateStepFallMode, finishesIfGateFalls) {
 
   auto const state = step.process(gateLatch, sampleTime);
 
-  EXPECT_EQ(state, Step::State::Terminated);
+  EXPECT_EQ(state, Step::State::Inactive);
 }
 
 TEST_F(GenerateStepFallMode, continuesIfGateDoesNotFall) {
@@ -101,7 +101,7 @@ TEST_F(GenerateStepEdgeMode, finishesIfGateRises) {
 
   auto const state = step.process(gateLatch, sampleTime);
 
-  EXPECT_EQ(state, Step::State::Terminated);
+  EXPECT_EQ(state, Step::State::Inactive);
 }
 
 TEST_F(GenerateStepEdgeMode, finishesIfGateFalls) {
@@ -111,7 +111,7 @@ TEST_F(GenerateStepEdgeMode, finishesIfGateFalls) {
 
   auto const state = step.process(gateLatch, sampleTime);
 
-  EXPECT_EQ(state, Step::State::Terminated);
+  EXPECT_EQ(state, Step::State::Inactive);
 }
 
 TEST_F(GenerateStepEdgeMode, continuesIfGateHasNoEdge) {
@@ -135,7 +135,7 @@ TEST_F(GenerateStepHighMode, finishesIfGateIsHigh) {
 
   auto const state = step.process(gateLatch, sampleTime);
 
-  EXPECT_EQ(state, Step::State::Terminated);
+  EXPECT_EQ(state, Step::State::Inactive);
 }
 
 TEST_F(GenerateStepHighMode, continuesIfGateIsLow) {
@@ -159,7 +159,7 @@ TEST_F(GenerateStepLowMode, finishesIfGateIsLow) {
 
   auto const state = step.process(gateLatch, sampleTime);
 
-  EXPECT_EQ(state, Step::State::Terminated);
+  EXPECT_EQ(state, Step::State::Inactive);
 }
 
 TEST_F(GenerateStepLowMode, continuesIfGateIsHigh) {

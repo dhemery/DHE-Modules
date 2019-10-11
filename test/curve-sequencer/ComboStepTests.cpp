@@ -158,11 +158,11 @@ TEST_F(ComboStepEnabledGeneratingGenerateAvailableSustainUnavailable, ifGenerate
 
 TEST_F(ComboStepEnabledGeneratingGenerateAvailableSustainUnavailable,
        ifGenerateReturnsInactive_processReturnsInactive) {
-  givenGenerateReturns(Step::State::Terminated);
+  givenGenerateReturns(Step::State::Inactive);
 
   auto const state = step.process(Latch{}, sampleTime);
 
-  EXPECT_EQ(state, Step::State::Terminated);
+  EXPECT_EQ(state, Step::State::Inactive);
 }
 
 class ComboStepEnabledGeneratingGenerateAvailableSustainAvailable
@@ -199,7 +199,7 @@ TEST_F(ComboStepEnabledGeneratingGenerateAvailableSustainAvailable, ifGenerateRe
 }
 
 TEST_F(ComboStepEnabledGeneratingGenerateAvailableSustainAvailable, ifGenerateReturnsInactive_processReturnsActive) {
-  givenGenerateReturns(Step::State::Terminated);
+  givenGenerateReturns(Step::State::Inactive);
 
   auto const state = step.process(Latch{}, sampleTime);
 
@@ -207,7 +207,7 @@ TEST_F(ComboStepEnabledGeneratingGenerateAvailableSustainAvailable, ifGenerateRe
 }
 
 TEST_F(ComboStepEnabledGeneratingGenerateAvailableSustainAvailable, ifGenerateReturnsInactive_nextProcessSustains) {
-  givenGenerateReturns(Step::State::Terminated);
+  givenGenerateReturns(Step::State::Inactive);
 
   step.process(Latch{}, sampleTime);
 
