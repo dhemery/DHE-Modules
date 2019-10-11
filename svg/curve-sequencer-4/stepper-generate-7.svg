@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   id="svg10"
+   viewBox="0 0 6.000 11.161"
+   height="11.161mm"
+   width="6.000mm"
+   version="1.1">
+  <metadata
+     id="metadata16">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs14" />
+  <g
+     id="g8"
+     transform="translate(3,5.58)">
+    <g
+       id="g4"
+       transform="translate(0,-4)">
+      <g
+         id="text2"
+         style="font-weight:bold;font-size:2.37100005px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#331a00"
+         aria-label="DUR">
+        <path
+           id="path18"
+           style="font-weight:bold;font-size:2.37100005px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#331a00"
+           d="m -2.3210238,0 h 0.623573 c 0.495539,0 0.83933402,-0.31297201 0.83933402,-0.78954302 0,-0.47657098 -0.34379502,-0.79191398 -0.83933402,-0.79191398 h -0.623573 z m 0.336682,-0.29637501 V -1.285082 h 0.286891 c 0.324827,0 0.495539,0.215761 0.495539,0.49553898 0,0.26792301 -0.182567,0.49316801 -0.495539,0.49316801 z" />
+        <path
+           id="path20"
+           style="font-weight:bold;font-size:2.37100005px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#331a00"
+           d="m -0.61686754,-0.63068601 c 0,0.388844 0.22524501,0.65913801 0.70892902,0.65913801 0.47894201,0 0.70418701,-0.26792301 0.70418701,-0.66150901 V -1.581457 h -0.341424 v 0.93891599 c 0,0.220503 -0.12092101,0.372247 -0.36276301,0.372247 -0.24658401,0 -0.36750501,-0.151744 -0.36750501,-0.372247 V -1.581457 h -0.34142401 z" />
+        <path
+           id="path22"
+           style="font-weight:bold;font-size:2.37100005px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#331a00"
+           d="m 2.00431,0 h 0.386473 l -0.35565,-0.60223401 c 0.170712,-0.040307 0.346166,-0.18968001 0.346166,-0.46945799 0,-0.294004 -0.201535,-0.509765 -0.531104,-0.509765 H 1.110443 V 0 h 0.336682 v -0.56666901 h 0.246584 z m 0.033194,-1.074063 c 0,0.13277598 -0.101953,0.21813198 -0.2371,0.21813198 H 1.447125 V -1.292195 h 0.353279 c 0.135147,0 0.2371,0.085356 0.2371,0.218132 z" />
+      </g>
+    </g>
+    <path
+       id="circle6"
+       d="M 2.5,0 A 2.5,2.5 0 0 1 0,2.5 2.5,2.5 0 0 1 -2.5,0 2.5,2.5 0 0 1 0,-2.5 2.5,2.5 0 0 1 2.5,0 Z"
+       style="fill:#331a00;stroke:#331a00;stroke-width:1" />
+  </g>
+</svg>

@@ -37,9 +37,17 @@
       ]
     },
     {
+      "slug": "CurveSequencer4",
+      "name": "Curve Sequencer 4",
+      "description": "Generates a 4 step sequence of curves",
+      "tags": [
+        "Sequencer", "Envelope Generator", "LFO"
+      ]
+    },
+    {
       "slug": "CurveSequencer8",
       "name": "Curve Sequencer 8",
-      "description": "Generates an 8 step sequence of curve",
+      "description": "Generates an 8 step sequence of curves",
       "tags": [
         "Sequencer", "Envelope Generator", "LFO"
       ]
