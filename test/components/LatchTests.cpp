@@ -1,5 +1,6 @@
+#include "modules/components/Latch.h"
+
 #include <gtest/gtest.h>
-#include <modules/components/Latch.h>
 
 using dhe::Latch;
 using ::testing::Test;
