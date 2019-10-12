@@ -3,9 +3,14 @@
 #include "modules/components/Taper.h"
 #include "modules/curve-sequencer/StepControls.h"
 
+#include <iostream>
+
 namespace dhe {
 
 namespace curve_sequencer {
+
+  using RampState = dhe::OneShotPhaseAccumulator::State;
+
   static auto isActive(GenerateStep::Mode mode, Latch const &gateLatch) -> bool {
     switch (mode) {
     case GenerateStep::Mode::Duration:
@@ -42,14 +47,13 @@ namespace curve_sequencer {
   }
 
   auto GenerateStep::generate(float sampleTime) -> State {
-    auto const phaseDelta = sampleTime / controls.duration(stepIndex);
+    auto const duration = controls.duration(stepIndex);
+    auto const phaseDelta = sampleTime / duration;
     ramp.advance(phaseDelta);
 
-    controls.setOutput(ramp.phase() * 8.F);
+    controls.setOutput(dhe::scale(taper(ramp.phase()), 0.F, controls.level(stepIndex)));
 
-    //    controls.setOutput(dhe::scale(taper(ramp.phase()), 0.F, controls.level(stepIndex)));
-
-    if (ramp.state() == OneShotPhaseAccumulator::State::Complete) {
+    if (ramp.state() == RampState::Complete) {
       controls.setGenerating(stepIndex, false);
       ramp.reset();
       return State::Inactive;

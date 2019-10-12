@@ -34,6 +34,12 @@ protected:
 
   void givenCurvature(float curvature) { ON_CALL(controls, curvature(stepIndex)).WillByDefault(Return(curvature)); }
 
+  void SetUp() override {
+    givenDuration(1.F);
+    givenLevel(10.F);
+    givenCurvature(0.5F);
+    givenOutput(0.F);
+  }
   NiceMock<MockStepControls> controls;
   GenerateStep step{controls, stepIndex};
 };
@@ -45,13 +51,19 @@ TEST_F(GenerateStepTest, processSetsGenerateingLight) {
 }
 
 class GenerateStepSkipMode : public GenerateStepTest {
-  void SetUp() override { givenMode(Mode::Skip); }
+  void SetUp() override {
+    GenerateStepTest::SetUp();
+    givenMode(Mode::Skip);
+  }
 };
 
 TEST_F(GenerateStepSkipMode, isUnvailable) { EXPECT_EQ(step.isAvailable(), false); }
 
 class GenerateStepRiseMode : public GenerateStepTest {
-  void SetUp() override { givenMode(Mode::Rise); }
+  void SetUp() override {
+    GenerateStepTest::SetUp();
+    givenMode(Mode::Rise);
+  }
 };
 
 TEST_F(GenerateStepRiseMode, isAvailable) { EXPECT_EQ(step.isAvailable(), true); }
@@ -75,7 +87,10 @@ TEST_F(GenerateStepRiseMode, remainsActiveIfGateDoesNotRise) {
 }
 
 class GenerateStepFallMode : public GenerateStepTest {
-  void SetUp() override { givenMode(Mode::Fall); }
+  void SetUp() override {
+    GenerateStepTest::SetUp();
+    givenMode(Mode::Fall);
+  }
 };
 
 TEST_F(GenerateStepFallMode, isAvailable) { EXPECT_EQ(step.isAvailable(), true); }
@@ -99,7 +114,10 @@ TEST_F(GenerateStepFallMode, remainsActiveIfGateDoesNotFall) {
 }
 
 class GenerateStepEdgeMode : public GenerateStepTest {
-  void SetUp() override { givenMode(Mode::Edge); }
+  void SetUp() override {
+    GenerateStepTest::SetUp();
+    givenMode(Mode::Edge);
+  }
 };
 
 TEST_F(GenerateStepEdgeMode, isAvailable) { EXPECT_EQ(step.isAvailable(), true); }
@@ -133,7 +151,10 @@ TEST_F(GenerateStepEdgeMode, remainsActiveIfGateHasNoEdge) {
 }
 
 class GenerateStepHighMode : public GenerateStepTest {
-  void SetUp() override { givenMode(Mode::High); }
+  void SetUp() override {
+    GenerateStepTest::SetUp();
+    givenMode(Mode::High);
+  }
 };
 
 TEST_F(GenerateStepHighMode, isAvailable) { EXPECT_EQ(step.isAvailable(), true); }
@@ -157,7 +178,10 @@ TEST_F(GenerateStepHighMode, remainsActiveIfGateIsLow) {
 }
 
 class GenerateStepLowMode : public GenerateStepTest {
-  void SetUp() override { givenMode(Mode::Low); }
+  void SetUp() override {
+    GenerateStepTest::SetUp();
+    givenMode(Mode::Low);
+  }
 };
 
 TEST_F(GenerateStepLowMode, isAvailable) { EXPECT_EQ(step.isAvailable(), true); }
@@ -181,7 +205,10 @@ TEST_F(GenerateStepLowMode, remainsActiveIfGateIsHigh) {
 }
 
 class GenerateStepDurationMode : public GenerateStepTest {
-  void SetUp() override { givenMode(Mode::Duration); }
+  void SetUp() override {
+    GenerateStepTest::SetUp();
+    givenMode(Mode::Duration);
+  }
 };
 
 TEST_F(GenerateStepDurationMode, isAvailable) { EXPECT_EQ(step.isAvailable(), true); }
@@ -189,7 +216,7 @@ TEST_F(GenerateStepDurationMode, isAvailable) { EXPECT_EQ(step.isAvailable(), tr
 TEST_F(GenerateStepDurationMode, remainsActiveIfGateRises) {
   auto const gateLatch = Latch{true, true};
 
-  auto const state = step.process(gateLatch, 0.F);
+  auto const state = step.process(gateLatch, 0.1F);
 
   EXPECT_EQ(state, State::Active);
 }
@@ -197,7 +224,7 @@ TEST_F(GenerateStepDurationMode, remainsActiveIfGateRises) {
 TEST_F(GenerateStepDurationMode, remainsActiveIfGateFalls) {
   auto const gateLatch = Latch{false, true};
 
-  auto const state = step.process(gateLatch, 0.F);
+  auto const state = step.process(gateLatch, 0.1F);
 
   EXPECT_EQ(state, State::Active);
 }
@@ -205,7 +232,7 @@ TEST_F(GenerateStepDurationMode, remainsActiveIfGateFalls) {
 TEST_F(GenerateStepDurationMode, remainsActiveIfGateIsHigh) {
   auto const gateLatch = Latch{false, false};
 
-  auto const state = step.process(gateLatch, 0.F);
+  auto const state = step.process(gateLatch, 0.1F);
 
   EXPECT_EQ(state, State::Active);
 }
@@ -213,7 +240,7 @@ TEST_F(GenerateStepDurationMode, remainsActiveIfGateIsHigh) {
 TEST_F(GenerateStepDurationMode, remainsActiveIfGateIsLow) {
   auto const gateLatch = Latch{false, false};
 
-  auto const state = step.process(gateLatch, 0.F);
+  auto const state = step.process(gateLatch, 0.1F);
 
   EXPECT_EQ(state, State::Active);
 }

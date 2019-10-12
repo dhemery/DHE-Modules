@@ -93,7 +93,7 @@ template <int N> auto CurveSequencer<N>::output() const -> float {
   return const_cast<rack::engine::Output &>(outputs[OutOutput]).getVoltage();
 }
 
-template <int N> void CurveSequencer<N>::process(const ProcessArgs &args) { sequence.process(args.sampleRate); }
+template <int N> void CurveSequencer<N>::process(const ProcessArgs &args) { sequence.process(args.sampleTime); }
 
 template <int N> auto CurveSequencer<N>::selectionLength() const -> int { return paramValue(params[StepsKnob]); }
 
