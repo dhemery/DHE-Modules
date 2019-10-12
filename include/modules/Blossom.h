@@ -1,6 +1,6 @@
 #pragma once
 
-#include "modules/components/CyclicPhaseAccumulator.h"
+#include "modules/components/LoopingPhaseAccumulator.h"
 #include "modules/controls/CommonInputs.h"
 
 #include <engine/Module.hpp>
@@ -61,7 +61,7 @@ private:
   inline auto yGain() const -> float { return gainRange.scale(rotation(params[YGainKnob], inputs[YGainCvInput])); }
   inline auto yOffset() const -> float { return selected<float, 2>(params[YRangeSwitch], {0.F, 1.F}); };
 
-  CyclicPhaseAccumulator spinner{};
-  CyclicPhaseAccumulator bouncer{};
+  LoopingPhaseAccumulator spinner{};
+  LoopingPhaseAccumulator bouncer{};
 };
 } // namespace dhe

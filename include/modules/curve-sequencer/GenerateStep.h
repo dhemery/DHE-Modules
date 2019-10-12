@@ -3,7 +3,7 @@
 #include "Step.h"
 #include "StepControls.h"
 
-#include <modules/components/CyclicPhaseAccumulator.h>
+#include <modules/components/LoopingPhaseAccumulator.h>
 
 namespace dhe {
 namespace curve_sequencer {

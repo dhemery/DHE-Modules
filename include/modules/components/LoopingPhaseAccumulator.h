@@ -2,7 +2,7 @@
 #include <cmath>
 
 namespace dhe {
-class CyclicPhaseAccumulator {
+class LoopingPhaseAccumulator {
 public:
   auto advance(float delta) -> float {
     phase += delta;
