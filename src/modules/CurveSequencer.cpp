@@ -110,7 +110,7 @@ template <int N> void CurveSequencer<N>::setSustaining(int stepIndex, bool state
 }
 
 template <int N> auto CurveSequencer<N>::sustainMode(int stepIndex) const -> int {
-  return static_cast<int>(paramValue(params[SustainModeSwitches + stepIndex]));
+  return switchPosition(params[SustainModeSwitches + stepIndex]);
 }
 
 template <int N> auto CurveSequencer<N>::taperSelection(int stepIndex) const -> int {
