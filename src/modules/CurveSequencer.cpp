@@ -8,9 +8,13 @@
 #include "modules/controls/LevelConfig.h"
 #include "modules/controls/LevelInputs.h"
 #include "modules/curve-sequencer/ComboStep.h"
+#include "modules/curve-sequencer/GenerateStep.h"
+#include "modules/curve-sequencer/SustainStep.h"
 
 namespace dhe {
 
+using dhe::curve_sequencer::GenerateStep;
+using dhe::curve_sequencer::SustainStep;
 using rack::engine::Module;
 
 template <int N> CurveSequencer<N>::CurveSequencer() : sequence{*this, steps, N} {
@@ -26,27 +30,24 @@ template <int N> CurveSequencer<N>::CurveSequencer() : sequence{*this, steps, N}
   configLevelRangeSwitch(this, LevelRangeSwitch);
   configDurationRangeSwitch(this, DurationRangeSwitch);
 
-  constexpr auto defaultGenerateMode = static_cast<int>(curve_sequencer::Step::Mode::Duration);
-  constexpr auto defaultSustainMode = static_cast<int>(curve_sequencer::Step::Mode::Skip);
+  auto generateModeNames = std::array<std::string, GenerateStep::modeCount>{"Interrupt if gate rises",
+                                                                            "Interrupt if gate falls",
+                                                                            "Interrupt if gate changes",
+                                                                            "Skip/interrupt if gate is high",
+                                                                            "Skip/interrupt if gate is low",
+                                                                            "Skip",
+                                                                            "Run full duration"};
 
-  auto generateModeNames = std::array<std::string, curve_sequencer::generateModeCount>{"Interrupt if gate rises",
-                                                                                       "Interrupt if gate falls",
-                                                                                       "Interrupt if gate changes",
-                                                                                       "Skip/interrupt if gate is high",
-                                                                                       "Skip/interrupt if gate is low",
-                                                                                       "Skip",
-                                                                                       "Run full duration"};
-
-  auto sustainModeNames = std::array<std::string, curve_sequencer::sustainModeCount>{};
-  std::copy_n(generateModeNames.begin(), curve_sequencer::sustainModeCount, sustainModeNames.begin());
+  auto sustainModeNames = std::array<std::string, SustainStep::modeCount>{};
+  std::copy_n(generateModeNames.begin(), SustainStep::modeCount, sustainModeNames.begin());
 
   steps.reserve(N);
 
   for (int stepIndex = 0; stepIndex < N; stepIndex++) {
-    configToggle<curve_sequencer::generateModeCount>(this, GenerateModeSwitches + stepIndex, "Generate mode",
-                                                     generateModeNames, defaultGenerateMode);
-    configToggle<curve_sequencer::sustainModeCount>(this, SustainModeSwitches + stepIndex, "Sustain mode",
-                                                    sustainModeNames, defaultSustainMode);
+    configToggle<GenerateStep::modeCount>(this, GenerateModeSwitches + stepIndex, "Generate mode", generateModeNames,
+                                          GenerateStep::defaultMode);
+    configToggle<SustainStep::modeCount>(this, SustainModeSwitches + stepIndex, "Sustain mode", sustainModeNames,
+                                         SustainStep::defaultMode);
     configLevelKnob(this, LevelKnobs + stepIndex, LevelRangeSwitch, "Level");
     configCurveShapeSwitch(this, ShapeSwitches + stepIndex, "Shape");
     configCurvatureKnob(this, CurveKnobs + stepIndex, "Curvature");

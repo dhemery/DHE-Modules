@@ -8,7 +8,9 @@
 
 using dhe::Latch;
 using dhe::curve_sequencer::Step;
+using State = dhe::curve_sequencer::Step::State;
 using dhe::curve_sequencer::SustainStep;
+using Mode = dhe::curve_sequencer::SustainStep::Mode;
 
 auto constexpr sampleTime = 1.F / 44000.F;
 auto constexpr stepIndex = 3;
@@ -18,7 +20,7 @@ using ::testing::Return;
 
 class SustainStepTest : public ::testing::Test {
 protected:
-  void givenMode(Step::Mode mode) {
+  void givenMode(Mode mode) {
     auto const modeIndex = static_cast<int>(mode);
     ON_CALL(controls, sustainMode(stepIndex)).WillByDefault(Return(modeIndex));
   }
@@ -34,13 +36,13 @@ TEST_F(SustainStepTest, processSetsSustainingLight) {
 }
 
 class SustainStepSkipMode : public SustainStepTest {
-  void SetUp() override { givenMode(Step::Mode::Skip); }
+  void SetUp() override { givenMode(Mode::Skip); }
 };
 
 TEST_F(SustainStepSkipMode, isUnvailable) { EXPECT_EQ(step.isAvailable(), false); }
 
 class SustainStepRiseMode : public SustainStepTest {
-  void SetUp() override { givenMode(Step::Mode::Rise); }
+  void SetUp() override { givenMode(Mode::Rise); }
 };
 
 TEST_F(SustainStepRiseMode, isAvailable) { EXPECT_EQ(step.isAvailable(), true); }
@@ -64,7 +66,7 @@ TEST_F(SustainStepRiseMode, remainsActiveIfGateDoesNotRise) {
 }
 
 class SustainStepFallMode : public SustainStepTest {
-  void SetUp() override { givenMode(Step::Mode::Fall); }
+  void SetUp() override { givenMode(Mode::Fall); }
 };
 
 TEST_F(SustainStepFallMode, isAvailable) { EXPECT_EQ(step.isAvailable(), true); }
@@ -88,7 +90,7 @@ TEST_F(SustainStepFallMode, remainsActiveIfGateDoesNotFall) {
 }
 
 class SustainStepEdgeMode : public SustainStepTest {
-  void SetUp() override { givenMode(Step::Mode::Edge); }
+  void SetUp() override { givenMode(Mode::Edge); }
 };
 
 TEST_F(SustainStepEdgeMode, isAvailable) { EXPECT_EQ(step.isAvailable(), true); }
@@ -122,7 +124,7 @@ TEST_F(SustainStepEdgeMode, remainsActiveIfGateHasNoEdge) {
 }
 
 class SustainStepHighMode : public SustainStepTest {
-  void SetUp() override { givenMode(Step::Mode::High); }
+  void SetUp() override { givenMode(Mode::High); }
 };
 
 TEST_F(SustainStepHighMode, isAvailable) { EXPECT_EQ(step.isAvailable(), true); }
@@ -146,7 +148,7 @@ TEST_F(SustainStepHighMode, remainsActiveIfGateIsLow) {
 }
 
 class SustainStepLowMode : public SustainStepTest {
-  void SetUp() override { givenMode(Step::Mode::Low); }
+  void SetUp() override { givenMode(Mode::Low); }
 };
 
 TEST_F(SustainStepLowMode, isAvailable) { EXPECT_EQ(step.isAvailable(), true); }

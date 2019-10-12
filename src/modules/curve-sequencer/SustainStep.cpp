@@ -4,42 +4,31 @@
 
 namespace dhe {
 namespace curve_sequencer {
-  static auto continuesOnRise(Step::Mode mode) -> bool {
-    auto const ends = mode == Step::Mode::Rise || mode == Step::Mode::Edge || mode == Step::Mode::High;
-    return !ends;
+  static auto isActive(SustainStep::Mode mode, Latch const &gateLatch) -> bool {
+    switch (mode) {
+    case SustainStep::Mode::Skip:
+      return false;
+    case SustainStep::Mode::Rise:
+      return !gateLatch.isRise();
+    case SustainStep::Mode::Fall:
+      return !gateLatch.isFall();
+    case SustainStep::Mode::Edge:
+      return !gateLatch.isEdge();
+    case SustainStep::Mode::High:
+      return !gateLatch.isHigh();
+    case SustainStep::Mode::Low:
+      return !gateLatch.isLow();
+    }
   }
-
-  static auto continuesOnFall(Step::Mode mode) -> bool {
-    auto const ends = mode == Step::Mode::Fall || mode == Step::Mode::Edge || mode == Step::Mode::Low;
-    return !ends;
-  }
-
-  static auto continuesOnHigh(Step::Mode mode) -> bool { return mode != Step::Mode::High; }
-
-  static auto continuesOnLow(Step::Mode mode) -> bool { return mode != Step::Mode::Low; }
 
   SustainStep::SustainStep(StepControls &controls, int stepIndex) : controls{controls}, stepIndex{stepIndex} {}
 
   auto SustainStep::isAvailable() const -> bool { return mode() != Mode::Skip; }
 
   auto SustainStep::process(Latch const &gateLatch, float /* ignored */) -> State {
-    auto const mode = this->mode();
-    if (gateLatch.isRise()) {
-      return process(continuesOnRise(mode));
-    }
-    if (gateLatch.isFall()) {
-      return process(continuesOnFall(mode));
-    }
-    if (gateLatch.isHigh()) {
-      return process(continuesOnHigh(mode));
-    }
-    return process(continuesOnLow(mode));
-  }
-
-  auto SustainStep::process(bool isSustaining) -> State {
+    auto const isSustaining = isActive(mode(), gateLatch);
     controls.setSustaining(stepIndex, isSustaining);
     return isSustaining ? State::Active : State::Inactive;
   }
-
 } // namespace curve_sequencer
 } // namespace dhe

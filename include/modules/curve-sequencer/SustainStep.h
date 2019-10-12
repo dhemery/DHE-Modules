@@ -7,6 +7,10 @@ namespace dhe {
 namespace curve_sequencer {
   class SustainStep : public Step {
   public:
+    enum class Mode { Rise, Fall, Edge, High, Low, Skip };
+    static auto constexpr modeCount = static_cast<int>(Mode::Skip) + 1;
+    static auto constexpr defaultMode = static_cast<int>(Mode::Skip);
+
     SustainStep(StepControls &controls, int stepIndex);
 
     auto index() const -> int override { return stepIndex; }
@@ -15,7 +19,6 @@ namespace curve_sequencer {
 
   private:
     auto mode() const -> Mode { return static_cast<Mode>(controls.sustainMode(stepIndex)); }
-    auto process(bool isSustaining) -> State;
 
     StepControls &controls;
     int stepIndex;

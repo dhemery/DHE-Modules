@@ -10,6 +10,10 @@ namespace dhe {
 namespace curve_sequencer {
   class GenerateStep : public Step {
   public:
+    enum class Mode { Rise, Fall, Edge, High, Low, Skip, Duration };
+    static auto constexpr modeCount = static_cast<int>(Mode::Duration) + 1;
+    static auto constexpr defaultMode = static_cast<int>(Mode::Duration);
+
     GenerateStep(StepControls &controls, int stepIndex);
 
     auto index() const -> int override { return stepIndex; }
@@ -19,7 +23,6 @@ namespace curve_sequencer {
   private:
     auto mode() const -> Mode { return static_cast<Mode>(controls.generateMode(stepIndex)); }
     auto generate(float sampleTime) -> State;
-    auto process(float sampleTime, bool isGenerating) -> State;
     auto taper(float phase) const -> float;
 
     StepControls &controls;

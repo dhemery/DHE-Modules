@@ -10,11 +10,6 @@
 
 namespace dhe {
 
-namespace curve_sequencer {
-  static auto constexpr generateModeCount = static_cast<size_t>(curve_sequencer::Step::Mode::Count);
-  static auto constexpr sustainModeCount = generateModeCount - 1;
-} // namespace curve_sequencer
-
 template <int N>
 class CurveSequencer : public rack::engine::Module,
                        public curve_sequencer::SequenceControls,
