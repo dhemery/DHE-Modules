@@ -1,6 +1,7 @@
 #pragma once
 
 #include "modules/curve-sequencer/StepControls.h"
+#include "modules/components/Taper.h"
 
 class MockStepControls : public dhe::curve_sequencer::StepControls {
 public:
@@ -14,4 +15,5 @@ public:
   MOCK_METHOD(void, setSustaining, (int, bool), (override));
   MOCK_METHOD(void, setOutput, (float), (override));
   MOCK_METHOD(int, sustainMode, (int), (const, override));
+  MOCK_METHOD(int, taperSelection, (int), (const, override));
 };

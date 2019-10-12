@@ -1,5 +1,6 @@
 #pragma once
 
+#include "modules/components/Taper.h"
 #include "modules/curve-sequencer/Sequence.h"
 #include "modules/curve-sequencer/SequenceControls.h"
 #include "modules/curve-sequencer/Step.h"
@@ -37,6 +38,7 @@ public:
   void setGenerating(int stepIndex, bool state) override;
   void setSustaining(int stepIndex, bool state) override;
   auto sustainMode(int stepIndex) const -> int override;
+  auto taperSelection(int stepIndex) const -> int override;
 
   enum ParameterIds {
     DurationRangeSwitch,

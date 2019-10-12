@@ -62,7 +62,10 @@ namespace curve_sequencer {
   }
 
   auto GenerateStep::taper(float phase) const -> float {
-    return taper::variableJTaper.apply(phase, controls.curvature(stepIndex));
+    auto const curvature = controls.curvature(stepIndex);
+    auto const taperSelection = controls.taperSelection(stepIndex);
+    auto const taper = taper::variableTapers[taperSelection];
+    return taper->apply(phase, curvature);
   }
 } // namespace curve_sequencer
 } // namespace dhe
