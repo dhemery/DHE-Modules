@@ -22,23 +22,26 @@ namespace curve_sequencer {
 
   auto GenerateStep::isAvailable() const -> bool { return mode() != Mode::Skip; }
 
-  auto GenerateStep::process(Latch const &gateLatch, float /* ignored */) -> State {
+  auto GenerateStep::process(Latch const &gateLatch, float sampleTime) -> State {
     auto const mode = this->mode();
     if (gateLatch.isRise()) {
-      return process(continuesOnRise(mode));
+      return process(sampleTime, continuesOnRise(mode));
     }
     if (gateLatch.isFall()) {
-      return process(continuesOnFall(mode));
+      return process(sampleTime, continuesOnFall(mode));
     }
     if (gateLatch.isHigh()) {
-      return process(continuesOnHigh(mode));
+      return process(sampleTime, continuesOnHigh(mode));
     }
-    return process(continuesOnLow(mode));
+    return process(sampleTime, continuesOnLow(mode));
   }
 
-  auto GenerateStep::process(bool isGenerating) -> State {
+  auto GenerateStep::process(float sampleTime, bool isGenerating) -> State {
     controls.setGenerating(stepIndex, isGenerating);
-    return isGenerating ? State::Active : State::Inactive;
+    if (!isGenerating) {
+      return State::Inactive;
+    }
+    return State::Active;
   }
 } // namespace curve_sequencer
 } // namespace dhe

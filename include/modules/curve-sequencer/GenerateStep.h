@@ -3,6 +3,8 @@
 #include "Step.h"
 #include "StepControls.h"
 
+#include <modules/components/PhaseAccumulator.h>
+
 namespace dhe {
 namespace curve_sequencer {
   class GenerateStep : public Step {
@@ -15,7 +17,7 @@ namespace curve_sequencer {
 
   private:
     auto mode() const -> Mode { return static_cast<Mode>(controls.generateMode(stepIndex)); }
-    auto process(bool isGenerating) -> State;
+    auto process(float sampleTime, bool isGenerating) -> State;
 
     StepControls &controls;
     int stepIndex;

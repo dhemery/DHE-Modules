@@ -25,11 +25,18 @@ public:
   CurveSequencer();
   ~CurveSequencer() override = default;
 
+  void process(const ProcessArgs &args) override;
+
   auto gate() const -> bool override;
+  auto isRunning() const -> bool override;
+  auto output() const -> float override;
+  void setOutput(float voltage) override;
+
+  auto curvature(int stepIndex) const -> float override;
+  auto duration(int stepIndex) const -> float override;
   auto generateMode(int stepIndex) const -> int override;
   auto isEnabled(int stepIndex) const -> bool override;
-  auto isRunning() const -> bool override;
-  void process(const ProcessArgs &args) override;
+  auto level(int stepIndex) const -> float override;
   auto selectionLength() const -> int override;
   auto selectionStart() const -> int override;
   void setGenerating(int stepIndex, bool state) override;
