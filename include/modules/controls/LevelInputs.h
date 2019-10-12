@@ -15,6 +15,10 @@ static inline auto level(rack::engine::Param const &knob, Range const &range) ->
   return range.scale(paramValue(knob));
 }
 
+static inline auto selectableLevel(rack::engine::Param const &knob, rack::engine::Param const &toggle) -> float {
+  return levelRange(toggle)->scale(paramValue(knob));
+}
+
 static inline auto selectableLevel(rack::engine::Param const &knob, rack::engine::Input const &cvInput,
                                    rack::engine::Param const &toggle) -> float {
   return levelRange(toggle)->scale(rotation(knob, cvInput));

@@ -4,6 +4,7 @@
 #include "StepControls.h"
 
 #include <modules/components/LoopingPhaseAccumulator.h>
+#include <modules/components/OneShotPhaseAccumulator.h>
 
 namespace dhe {
 namespace curve_sequencer {
@@ -17,10 +18,13 @@ namespace curve_sequencer {
 
   private:
     auto mode() const -> Mode { return static_cast<Mode>(controls.generateMode(stepIndex)); }
+    auto generate(float sampleTime) -> State;
     auto process(float sampleTime, bool isGenerating) -> State;
+    auto taper(float phase) const -> float;
 
     StepControls &controls;
     int stepIndex;
+    OneShotPhaseAccumulator ramp;
   };
 } // namespace curve_sequencer
 } // namespace dhe

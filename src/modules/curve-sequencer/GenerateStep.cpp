@@ -1,5 +1,7 @@
 #include "modules/curve-sequencer/GenerateStep.h"
 
+#include "modules/components/Range.h"
+#include "modules/components/Taper.h"
 #include "modules/curve-sequencer/StepControls.h"
 
 namespace dhe {
@@ -38,10 +40,30 @@ namespace curve_sequencer {
 
   auto GenerateStep::process(float sampleTime, bool isGenerating) -> State {
     controls.setGenerating(stepIndex, isGenerating);
+
     if (!isGenerating) {
       return State::Inactive;
     }
+
+    return generate(sampleTime);
+  }
+
+  auto GenerateStep::generate(float sampleTime) -> State {
+    auto const phaseDelta = sampleTime / controls.duration(stepIndex);
+    ramp.advance(phaseDelta);
+
+    controls.setOutput(dhe::scale(taper(ramp.phase()), 0.F, controls.level(stepIndex)));
+
+    if (ramp.state() == OneShotPhaseAccumulator::State::Complete) {
+      controls.setGenerating(stepIndex, false);
+      ramp.reset();
+      return State::Inactive;
+    }
     return State::Active;
+  }
+
+  auto GenerateStep::taper(float phase) const -> float {
+    return taper::variableJTaper.apply(phase, controls.curvature(stepIndex));
   }
 } // namespace curve_sequencer
 } // namespace dhe

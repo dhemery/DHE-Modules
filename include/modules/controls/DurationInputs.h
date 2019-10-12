@@ -39,4 +39,9 @@ static inline auto selectableDuration(rack::engine::Param const &knob, rack::eng
   return taperedAndScaledRotation(knob, cvInput, durationKnobTaper, *range);
 }
 
+static inline auto selectableDuration(rack::engine::Param const &knob, rack::engine::Param const &toggle) -> float {
+  auto const range = selectedRange<3>(toggle, durationRanges);
+  return taperedAndScaledRotation(knob, durationKnobTaper, *range);
+}
+
 } // namespace dhe
