@@ -2,24 +2,20 @@
 
 #include "Panel.h"
 #include "modules/CurveSequencer.h"
-#include "modules/curve-sequencer/GenerateStep.h"
-#include "modules/curve-sequencer/SustainStep.h"
+#include "modules/curve-sequencer/Sequence.h"
 
 #include <string>
 
 namespace dhe {
 
-using curve_sequencer::GenerateStep;
-using curve_sequencer::SustainStep;
-
-template <typename P> class GenerateModeStepper : public Toggle<P, GenerateStep::modeCount> {
+template <typename P> class GenerateModeStepper : public Toggle<P, curve_sequencer::generateModeCount> {
 public:
-  GenerateModeStepper() : Toggle<P, GenerateStep::modeCount>("stepper-generate") {}
+  GenerateModeStepper() : Toggle<P, curve_sequencer::generateModeCount>("stepper-generate") {}
 };
 
-template <typename P> class SustainModeStepper : public Toggle<P, SustainStep::modeCount> {
+template <typename P> class SustainModeStepper : public Toggle<P, curve_sequencer::sustainModeCount> {
 public:
-  SustainModeStepper() : Toggle<P, SustainStep::modeCount>("stepper-sustain") {}
+  SustainModeStepper() : Toggle<P, curve_sequencer::sustainModeCount>("stepper-sustain") {}
 };
 
 template <typename P> class StartMarker : public rack::widget::SvgWidget {

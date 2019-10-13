@@ -1,35 +1,39 @@
 #pragma once
 
 #include "modules/components/Latch.h"
-#include "modules/curve-sequencer/SequenceControls.h"
-#include "modules/curve-sequencer/Step.h"
 
-#include <iostream>
 #include <memory>
-#include <vector>
 
 namespace dhe {
 namespace curve_sequencer {
+  static auto constexpr generateModeCount = 7;
+  static auto constexpr generateDefaultMode = 6;
+  static auto constexpr sustainModeCount = 6;
+  static auto constexpr sustainDefaultMode = 5;
 
-  /**
-   * Controls the sequence in a CurveSequencer module.
-   */
-  class Sequence {
+  template <typename C> class StepExecutor {
   public:
-    Sequence(SequenceControls &controls, std::vector<std::unique_ptr<Step>> &steps, int stepCount) :
-        controls{controls}, steps{steps}, stepIndexMask{stepCount - 1} {}
+    explicit StepExecutor(C &controls) {}
+  };
 
-    void process(float sampleTime);
+  template <typename C, typename S = StepExecutor<C>> class Sequence {
+  public:
+    Sequence(C &controls, int stepCount, S *stepExecutor) :
+        controls{controls}, maxStepIndex{stepCount - 1}, stepExecutor{stepExecutor} {}
+
+    Sequence(C &controls, int stepCount) : Sequence(controls, stepCount, new S(controls)) {}
+
+    void process(float sampleTime) {
+      runLatch.clock(controls.isRunning());
+      gateLatch.clock(controls.gate());
+    }
 
   private:
-    auto nextAvailableStep() const -> Step *;
-
     Latch runLatch{};
     Latch gateLatch{};
-    Step *activeStep{nullptr};
-    SequenceControls &controls;
-    std::vector<std::unique_ptr<Step>> &steps;
-    int const stepIndexMask;
+    C &controls;
+    int const maxStepIndex;
+    std::unique_ptr<S> stepExecutor;
   };
 } // namespace curve_sequencer
 } // namespace dhe

@@ -7,17 +7,12 @@
 #include "modules/controls/DurationInputs.h"
 #include "modules/controls/LevelConfig.h"
 #include "modules/controls/LevelInputs.h"
-#include "modules/curve-sequencer/ComboStep.h"
-#include "modules/curve-sequencer/GenerateStep.h"
-#include "modules/curve-sequencer/SustainStep.h"
 
 namespace dhe {
 
-using dhe::curve_sequencer::GenerateStep;
-using dhe::curve_sequencer::SustainStep;
 using rack::engine::Module;
 
-template <int N> CurveSequencer<N>::CurveSequencer() : sequence{*this, steps, N} {
+template <int N> CurveSequencer<N>::CurveSequencer() {
   config(ParameterCount, InputCount, OutputCount, LightCount);
 
   configButton(this, RunButton, "Run", {"RUN input", "Yes"}, 1);
@@ -30,24 +25,22 @@ template <int N> CurveSequencer<N>::CurveSequencer() : sequence{*this, steps, N}
   configLevelRangeSwitch(this, LevelRangeSwitch);
   configDurationRangeSwitch(this, DurationRangeSwitch);
 
-  auto generateModeNames = std::array<std::string, GenerateStep::modeCount>{"Interrupt if gate rises",
-                                                                            "Interrupt if gate falls",
-                                                                            "Interrupt if gate changes",
-                                                                            "Skip/interrupt if gate is high",
-                                                                            "Skip/interrupt if gate is low",
-                                                                            "Skip",
-                                                                            "Run full duration"};
+  auto generateModeNames = std::array<std::string, curve_sequencer::generateModeCount>{"Interrupt if gate rises",
+                                                                                       "Interrupt if gate falls",
+                                                                                       "Interrupt if gate changes",
+                                                                                       "Skip/interrupt if gate is high",
+                                                                                       "Skip/interrupt if gate is low",
+                                                                                       "Skip",
+                                                                                       "Run full duration"};
 
-  auto sustainModeNames = std::array<std::string, SustainStep::modeCount>{};
-  std::copy_n(generateModeNames.begin(), SustainStep::modeCount, sustainModeNames.begin());
-
-  steps.reserve(N);
+  auto sustainModeNames = std::array<std::string, curve_sequencer::sustainModeCount>{};
+  std::copy_n(generateModeNames.begin(), curve_sequencer::sustainModeCount, sustainModeNames.begin());
 
   for (int stepIndex = 0; stepIndex < N; stepIndex++) {
-    configToggle<GenerateStep::modeCount>(this, GenerateModeSwitches + stepIndex, "Generate mode", generateModeNames,
-                                          GenerateStep::defaultMode);
-    configToggle<SustainStep::modeCount>(this, SustainModeSwitches + stepIndex, "Sustain mode", sustainModeNames,
-                                         SustainStep::defaultMode);
+    configToggle<curve_sequencer::generateModeCount>(this, GenerateModeSwitches + stepIndex, "Generate mode",
+                                                     generateModeNames, curve_sequencer::generateDefaultMode);
+    configToggle<curve_sequencer::sustainModeCount>(this, SustainModeSwitches + stepIndex, "Sustain mode",
+                                                    sustainModeNames, curve_sequencer::sustainDefaultMode);
     configLevelKnob(this, LevelKnobs + stepIndex, LevelRangeSwitch, "Level");
     configCurveShapeSwitch(this, ShapeSwitches + stepIndex, "Shape");
     configCurvatureKnob(this, CurveKnobs + stepIndex, "Curvature");
@@ -56,8 +49,6 @@ template <int N> CurveSequencer<N>::CurveSequencer() : sequence{*this, steps, N}
 
     lights[GeneratingLights + stepIndex].setBrightness(0.F);
     lights[SustainingLights + stepIndex].setBrightness(0.F);
-
-    steps.emplace_back(new curve_sequencer::ComboStep(*this, stepIndex));
   }
 }
 

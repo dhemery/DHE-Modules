@@ -1,44 +1,35 @@
 #pragma once
 
-#include "modules/components/Taper.h"
 #include "modules/curve-sequencer/Sequence.h"
-#include "modules/curve-sequencer/SequenceControls.h"
-#include "modules/curve-sequencer/Step.h"
-#include "modules/curve-sequencer/StepControls.h"
 
 #include <engine/Module.hpp>
 #include <memory>
 
 namespace dhe {
 
-template <int N>
-class CurveSequencer : public rack::engine::Module,
-                       public curve_sequencer::SequenceControls,
-                       public curve_sequencer::StepControls {
-  using Step = curve_sequencer::Step;
-
+template <int N> class CurveSequencer : public rack::engine::Module {
 public:
   CurveSequencer();
   ~CurveSequencer() override = default;
 
   void process(const ProcessArgs &args) override;
 
-  auto gate() const -> bool override;
-  auto isRunning() const -> bool override;
-  auto output() const -> float override;
-  void setOutput(float voltage) override;
+  auto gate() const -> bool;
+  auto isRunning() const -> bool;
+  auto output() const -> float;
+  void setOutput(float voltage);
 
-  auto curvature(int stepIndex) const -> float override;
-  auto duration(int stepIndex) const -> float override;
-  auto generateMode(int stepIndex) const -> int override;
-  auto isEnabled(int stepIndex) const -> bool override;
-  auto level(int stepIndex) const -> float override;
-  auto selectionLength() const -> int override;
-  auto selectionStart() const -> int override;
-  void setGenerating(int stepIndex, bool state) override;
-  void setSustaining(int stepIndex, bool state) override;
-  auto sustainMode(int stepIndex) const -> int override;
-  auto taperSelection(int stepIndex) const -> int override;
+  auto curvature(int stepIndex) const -> float;
+  auto duration(int stepIndex) const -> float;
+  auto generateMode(int stepIndex) const -> int;
+  auto isEnabled(int stepIndex) const -> bool;
+  auto level(int stepIndex) const -> float;
+  auto selectionLength() const -> int;
+  auto selectionStart() const -> int;
+  void setGenerating(int stepIndex, bool state);
+  void setSustaining(int stepIndex, bool state);
+  auto sustainMode(int stepIndex) const -> int;
+  auto taperSelection(int stepIndex) const -> int;
 
   enum ParameterIds {
     DurationRangeSwitch,
@@ -65,8 +56,7 @@ public:
   enum LightIds { ENUMS(GeneratingLights, N), ENUMS(SustainingLights, N), LightCount };
 
 private:
-  std::vector<std::unique_ptr<curve_sequencer::Step>> steps{};
-  curve_sequencer::Sequence sequence;
+  curve_sequencer::Sequence<CurveSequencer<N>> sequence{*this, N};
 };
 
 } // namespace dhe
