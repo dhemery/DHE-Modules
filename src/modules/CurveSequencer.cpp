@@ -25,22 +25,13 @@ template <int N> CurveSequencer<N>::CurveSequencer() {
   configLevelRangeSwitch(this, LevelRangeSwitch);
   configDurationRangeSwitch(this, DurationRangeSwitch);
 
-  auto generateModeNames = std::array<std::string, curve_sequencer::generateModeCount>{"Interrupt if gate rises",
-                                                                                       "Interrupt if gate falls",
-                                                                                       "Interrupt if gate changes",
-                                                                                       "Skip/interrupt if gate is high",
-                                                                                       "Skip/interrupt if gate is low",
-                                                                                       "Skip",
-                                                                                       "Run full duration"};
-
-  auto sustainModeNames = std::array<std::string, curve_sequencer::sustainModeCount>{};
-  std::copy_n(generateModeNames.begin(), curve_sequencer::sustainModeCount, sustainModeNames.begin());
-
   for (int stepIndex = 0; stepIndex < N; stepIndex++) {
     configToggle<curve_sequencer::generateModeCount>(this, GenerateModeSwitches + stepIndex, "Generate mode",
-                                                     generateModeNames, curve_sequencer::generateDefaultMode);
+                                                     curve_sequencer::generateModeDescriptions,
+                                                     curve_sequencer::generateDefaultMode);
     configToggle<curve_sequencer::sustainModeCount>(this, SustainModeSwitches + stepIndex, "Sustain mode",
-                                                    sustainModeNames, curve_sequencer::sustainDefaultMode);
+                                                    curve_sequencer::sustainModeDescriptions,
+                                                    curve_sequencer::sustainDefaultMode);
     configLevelKnob(this, LevelKnobs + stepIndex, LevelRangeSwitch, "Level");
     configCurveShapeSwitch(this, ShapeSwitches + stepIndex, "Shape");
     configCurvatureKnob(this, CurveKnobs + stepIndex, "Curvature");
