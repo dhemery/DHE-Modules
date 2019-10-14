@@ -90,7 +90,7 @@ protected:
   }
 };
 
-TEST_F(SequenceIdle, gateRise_executeesEachStepFromFirstSelectedStepThroughFirstActiveStep) {
+TEST_F(SequenceIdle, gateRise_executesEachStepFromFirstSelectedStepThroughFirstActiveStep) {
   givenSelection(0, stepCount);
 
   givenGateInput(true); // Will trigger start of sequence
@@ -103,7 +103,7 @@ TEST_F(SequenceIdle, gateRise_executeesEachStepFromFirstSelectedStepThroughFirst
   sequence.execute(defaultSampleTime);
 }
 
-TEST_F(SequenceIdle, continueProcessingFromStep0_ifNoActiveStepAboveFirstSelectedStep) {
+TEST_F(SequenceIdle, continuesExecutingFromStep0_ifNoActiveStepAboveFirstSelectedStep) {
   auto constexpr firstActiveStep = 3;
   auto constexpr selectionStart = 6; // Will have to wrap to reach first active step
   givenSelection(selectionStart, stepCount);
@@ -126,7 +126,7 @@ TEST_F(SequenceIdle, continueProcessingFromStep0_ifNoActiveStepAboveFirstSelecte
   sequence.execute(defaultSampleTime);
 }
 
-TEST_F(SequenceIdle, executeesEachSelectedStepExactlyOnce_ifNoActiveStep) {
+TEST_F(SequenceIdle, executesEachSelectedStepExactlyOnce_ifNoActiveStep) {
   auto constexpr selectionStart = 0;
   auto constexpr selectionLength = stepCount;
   givenSelection(selectionStart, selectionLength);
@@ -140,7 +140,7 @@ TEST_F(SequenceIdle, executeesEachSelectedStepExactlyOnce_ifNoActiveStep) {
   sequence.execute(defaultSampleTime);
 }
 
-TEST_F(SequenceIdle, executeesOnlySelectedSteps) {
+TEST_F(SequenceIdle, executesOnlySelectedSteps) {
   auto constexpr selectionStart = 3;
   auto constexpr selectionLength = 2;
   givenSelection(selectionStart, selectionLength);
@@ -171,7 +171,7 @@ protected:
   }
 };
 
-TEST_F(SequenceActive, executeesOnlyPreviouslyActiveStep_ifPreviouslyActiveStepIsStillActive) {
+TEST_F(SequenceActive, executesOnlyPreviouslyActiveStep_ifPreviouslyActiveStepIsStillActive) {
   givenRunInput(true);
 
   EXPECT_CALL(*stepExecutor, execute(previouslyActiveStep, A<Latch const &>(), defaultSampleTime))
@@ -180,7 +180,7 @@ TEST_F(SequenceActive, executeesOnlyPreviouslyActiveStep_ifPreviouslyActiveStepI
   sequence.execute(defaultSampleTime);
 }
 
-TEST_F(SequenceActive, executeesSucessorSteps_ifPreviouslyActiveStepIsNoLongerActive) {
+TEST_F(SequenceActive, executesSucessorSteps_ifPreviouslyActiveStepIsNoLongerActive) {
   givenRunInput(true);
 
   auto constexpr firstActiveSuccessorStep = previouslyActiveStep + 3;
