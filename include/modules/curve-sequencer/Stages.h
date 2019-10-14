@@ -29,7 +29,7 @@ namespace curve_sequencer {
       "Sustain until gate rises",   "Sustain until gate falls",  "Sustain until gate changes",
       "Sustain until gate is high", "Sustain until gate is low", "No sustain"};
 
-  static auto isActive(int mode, Latch const &gateLatch) -> bool {
+  static inline auto isActive(int mode, Latch const &gateLatch) -> bool {
     switch (mode) {
     case riseMode:
       return !gateLatch.isRise();
@@ -41,6 +41,9 @@ namespace curve_sequencer {
       return !gateLatch.isHigh();
     case lowMode:
       return !gateLatch.isLow();
+    case durationMode:
+      return true;
+    case skipMode:
     default:
       return false;
     }
@@ -49,7 +52,12 @@ namespace curve_sequencer {
   template <typename C> class GenerateStage {
   public:
     GenerateStage(C &controls) : controls{controls} {}
-    auto execute(int, Latch const &, float) -> bool { return false; }
+
+    auto execute(int step, Latch const &gateLatch, float) -> bool {
+      auto const active = isActive(controls.generateMode(step), gateLatch);
+      controls.setGenerating(step, active);
+      return active;
+    }
 
   private:
     C &controls;
@@ -58,6 +66,7 @@ namespace curve_sequencer {
   template <typename C> class SustainStage {
   public:
     SustainStage(C &controls) : controls{controls} {}
+
     auto execute(int step, Latch const &gateLatch) -> bool {
       auto const active = isActive(controls.sustainMode(step), gateLatch);
       controls.setSustaining(step, active);
