@@ -21,13 +21,13 @@ namespace curve_sequencer {
   static auto constexpr sustainDefaultMode = skipMode;
 
   static auto const generateModeDescriptions = std::array<std::string, generateModeCount>{
-      "Stop curve if gate rises",   "Stop curve if gate falls",  "Stop curve if gate changes",
-      "Stop curve if gate is high", "Stop curve if gate is low", "No curve",
-      "Generate entire curve"};
+      "Advance if gate rises",       "Advance if gate falls",  "Advance if gate changes",
+      "Advance if gate is high",     "Advance if gate is low", "Skip curve",
+      "Advance when curve completes"};
 
   static auto const sustainModeDescriptions = std::array<std::string, sustainModeCount>{
       "Sustain until gate rises",   "Sustain until gate falls",  "Sustain until gate changes",
-      "Sustain until gate is high", "Sustain until gate is low", "No sustain"};
+      "Sustain until gate is high", "Sustain until gate is low", "Skip sustain"};
 
   static inline auto isActive(int mode, Latch const &gateLatch) -> bool {
     switch (mode) {
