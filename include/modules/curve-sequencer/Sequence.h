@@ -1,6 +1,7 @@
 #pragma once
 
 #include "modules/components/Latch.h"
+#include "modules/curve-sequencer/StepExecutor.h"
 
 #include <memory>
 
@@ -10,13 +11,6 @@ namespace curve_sequencer {
   static auto constexpr generateDefaultMode = 6;
   static auto constexpr sustainModeCount = 6;
   static auto constexpr sustainDefaultMode = 5;
-
-  template <typename C> class StepExecutor {
-  public:
-    explicit StepExecutor(C &controls) {}
-
-    auto process(int stepIndex, Latch const &gateLatch, float sampleTime) -> bool { return false; }
-  };
 
   template <typename C, typename S = StepExecutor<C>> class Sequence {
   public:
