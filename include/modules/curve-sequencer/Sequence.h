@@ -19,15 +19,19 @@ namespace curve_sequencer {
 
     Sequence(C &controls, int stepCount) : Sequence(controls, stepCount, new S(controls)) {}
 
-    void process(float sampleTime) {
+    void execute(float sampleTime) {
       runLatch.clock(controls.isRunning());
       gateLatch.clock(controls.gate());
 
       auto const selectionStart = controls.selectionStart();
 
-      if (!isActive || gateLatch.isRise()) {
-        isActive = true;
-        activeStep = selectionStart;
+      if (!isActive) {
+        if (gateLatch.isRise()) {
+          isActive = true;
+          activeStep = selectionStart;
+        } else {
+          return;
+        }
       }
 
       auto const selectionLength = controls.selectionLength();
@@ -35,7 +39,7 @@ namespace curve_sequencer {
 
       for (int i = activeStep; i <= selectionEnd; i++) {
         activeStep = i & stepIndexMask;
-        if (stepExecutor->process(activeStep, gateLatch, sampleTime)) {
+        if (stepExecutor->execute(activeStep, gateLatch, sampleTime)) {
           return;
         }
       }

@@ -30,7 +30,7 @@ public:
   MOCK_METHOD(void, setOutput, (float) );
 };
 
-class StepExecutorTEst : public ::testing::Test {
+class StepExecutorTest : public ::testing::Test {
 protected:
   NiceMock<MockSequenceControls> controls;
   StepExecutor<MockSequenceControls> executor{controls};
@@ -38,4 +38,3 @@ protected:
   void SetUp() override {
   };
 };
-

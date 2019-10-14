@@ -14,6 +14,7 @@ static auto constexpr defaultSampleTime = 1.F / 44100.F;
 static auto constexpr stepCount = 8;
 
 using ::testing::A;
+using ::testing::An;
 using ::testing::NiceMock;
 using ::testing::Return;
 
@@ -27,7 +28,7 @@ public:
 
 class MockStepExecutor {
 public:
-  MOCK_METHOD(bool, process, (int, Latch const &, float) );
+  MOCK_METHOD(bool, execute, (int, Latch const &, float) );
 };
 
 class NewSequence : public ::testing::Test {
@@ -47,10 +48,12 @@ protected:
 
   void givenActiveSteps(std::vector<int> const &indices) {
     for (auto const index : indices) {
-      auto const gateLatch = A<Latch const &>();
-      auto const sampleTime = A<float>();
-      ON_CALL(*stepExecutor, process(index, gateLatch, sampleTime)).WillByDefault(Return(true));
+      ON_CALL(*stepExecutor, execute(index, A<Latch const &>(), A<float>())).WillByDefault(Return(true));
     }
+  }
+
+  void failIfAnyStepExecutesUnexpectedly() {
+    EXPECT_CALL(*stepExecutor, execute(An<int>(), A<Latch const &>(), A<float>())).Times(0);
   }
 
   void SetUp() override {
@@ -65,11 +68,16 @@ protected:
   void SetUp() override {
     NewSequence::SetUp();
     givenRunInput(false);
-    sequence.process(0.F);
+    sequence.execute(0.F);
+    failIfAnyStepExecutesUnexpectedly();
   }
 };
 
-TEST_F(SequenceNotRunning, processDoesNothing) { sequence.process(0.1F); }
+TEST_F(SequenceNotRunning, executesNoSteps) {
+  EXPECT_CALL(*stepExecutor, execute(An<int>(), A<Latch const &>(), A<float>())).Times(0);
+
+  sequence.execute(0.1F);
+}
 
 class SequenceIdle : public NewSequence {
 protected:
@@ -77,21 +85,22 @@ protected:
     NewSequence::SetUp();
     givenRunInput(true);
     givenGateInput(false);
-    sequence.process(0.F);
+    sequence.execute(0.F);
+    failIfAnyStepExecutesUnexpectedly();
   }
 };
 
-TEST_F(SequenceIdle, gateRise_processesEachStepFromFirstSelectedStepThroughFirstActiveStep) {
+TEST_F(SequenceIdle, gateRise_executeesEachStepFromFirstSelectedStepThroughFirstActiveStep) {
   givenSelection(0, stepCount);
 
   givenGateInput(true); // Will trigger start of sequence
 
-  EXPECT_CALL(*stepExecutor, process(0, A<Latch const &>(), defaultSampleTime)).WillOnce(Return(false));
-  EXPECT_CALL(*stepExecutor, process(1, A<Latch const &>(), defaultSampleTime)).WillOnce(Return(false));
-  EXPECT_CALL(*stepExecutor, process(2, A<Latch const &>(), defaultSampleTime)).WillOnce(Return(false));
-  EXPECT_CALL(*stepExecutor, process(3, A<Latch const &>(), defaultSampleTime)).WillOnce(Return(true));
+  EXPECT_CALL(*stepExecutor, execute(0, A<Latch const &>(), defaultSampleTime)).WillOnce(Return(false));
+  EXPECT_CALL(*stepExecutor, execute(1, A<Latch const &>(), defaultSampleTime)).WillOnce(Return(false));
+  EXPECT_CALL(*stepExecutor, execute(2, A<Latch const &>(), defaultSampleTime)).WillOnce(Return(false));
+  EXPECT_CALL(*stepExecutor, execute(3, A<Latch const &>(), defaultSampleTime)).WillOnce(Return(true));
 
-  sequence.process(defaultSampleTime);
+  sequence.execute(defaultSampleTime);
 }
 
 TEST_F(SequenceIdle, continueProcessingFromStep0_ifNoActiveStepAboveFirstSelectedStep) {
@@ -99,58 +108,50 @@ TEST_F(SequenceIdle, continueProcessingFromStep0_ifNoActiveStepAboveFirstSelecte
   auto constexpr selectionStart = 6; // Will have to wrap to reach first active step
   givenSelection(selectionStart, stepCount);
 
-  // Will try selectionStart and higher
+  // Will execute selectionStart and higher, which will report inactive
   for (int step = selectionStart; step < stepCount; step++) {
-    EXPECT_CALL(*stepExecutor, process(step, A<Latch const &>(), defaultSampleTime)).WillOnce(Return(false));
+    EXPECT_CALL(*stepExecutor, execute(step, A<Latch const &>(), defaultSampleTime)).WillOnce(Return(false));
   }
 
-  // Then will try step 0 through the step before the first active step
+  // Then will execute step 0 through the step before the first active step, which will report inactive
   for (int step = 0; step < firstActiveStep; step++) {
-    EXPECT_CALL(*stepExecutor, process(step, A<Latch const &>(), defaultSampleTime)).WillOnce(Return(false));
+    EXPECT_CALL(*stepExecutor, execute(step, A<Latch const &>(), defaultSampleTime)).WillOnce(Return(false));
   }
 
-  // Finally, will try the first active step, then stop
-  EXPECT_CALL(*stepExecutor, process(firstActiveStep, A<Latch const &>(), defaultSampleTime)).WillOnce(Return(true));
+  // Finally, will execute the first active step, then stop
+  EXPECT_CALL(*stepExecutor, execute(firstActiveStep, A<Latch const &>(), defaultSampleTime)).WillOnce(Return(true));
 
   givenGateInput(true); // Will trigger start of sequence
 
-  sequence.process(defaultSampleTime);
+  sequence.execute(defaultSampleTime);
 }
 
-TEST_F(SequenceIdle, processesEachSelectedStepExactlyOnce_ifNoActiveStep) {
+TEST_F(SequenceIdle, executeesEachSelectedStepExactlyOnce_ifNoActiveStep) {
   auto constexpr selectionStart = 0;
   auto constexpr selectionLength = stepCount;
   givenSelection(selectionStart, selectionLength);
 
   for (int step = selectionStart; step < selectionStart + selectionLength; step++) {
-    EXPECT_CALL(*stepExecutor, process(step, A<Latch const &>(), defaultSampleTime)).WillOnce(Return(false));
+    EXPECT_CALL(*stepExecutor, execute(step, A<Latch const &>(), defaultSampleTime)).WillOnce(Return(false));
   }
 
   givenGateInput(true); // Will trigger start of sequence
 
-  sequence.process(defaultSampleTime);
+  sequence.execute(defaultSampleTime);
 }
 
-TEST_F(SequenceIdle, processesOnlySelectedSteps) {
+TEST_F(SequenceIdle, executeesOnlySelectedSteps) {
   auto constexpr selectionStart = 3;
   auto constexpr selectionLength = 2;
   givenSelection(selectionStart, selectionLength);
 
-  for (int step = 0; step < selectionStart; step++) {
-    EXPECT_CALL(*stepExecutor, process(step, A<Latch const &>(), defaultSampleTime)).Times(0);
-  }
-
   for (int step = selectionStart; step < selectionStart + selectionLength; step++) {
-    EXPECT_CALL(*stepExecutor, process(step, A<Latch const &>(), defaultSampleTime)).WillOnce(Return(false));
-  }
-
-  for (int step = selectionStart + selectionLength; step < stepCount; step++) {
-    EXPECT_CALL(*stepExecutor, process(step, A<Latch const &>(), defaultSampleTime)).Times(0);
+    EXPECT_CALL(*stepExecutor, execute(step, A<Latch const &>(), defaultSampleTime)).WillOnce(Return(false));
   }
 
   givenGateInput(true); // Will trigger start of sequence
 
-  sequence.process(defaultSampleTime);
+  sequence.execute(defaultSampleTime);
 }
 
 class SequenceActive : public NewSequence {
@@ -165,38 +166,31 @@ protected:
     givenGateInput(true);
     givenActiveSteps({previouslyActiveStep});
 
-    sequence.process(0.F);
+    sequence.execute(0.F);
+    failIfAnyStepExecutesUnexpectedly();
   }
 };
 
-TEST_F(SequenceActive, processesOnlyPreviouslyActiveStep_ifPreviouslyActiveStepIsStillActive) {
+TEST_F(SequenceActive, executeesOnlyPreviouslyActiveStep_ifPreviouslyActiveStepIsStillActive) {
   givenRunInput(true);
 
-  for (int step = 0; step < previouslyActiveStep; step++) {
-    EXPECT_CALL(*stepExecutor, process(step, A<Latch const &>(), defaultSampleTime)).Times(0);
-  }
-
-  EXPECT_CALL(*stepExecutor, process(previouslyActiveStep, A<Latch const &>(), defaultSampleTime))
+  EXPECT_CALL(*stepExecutor, execute(previouslyActiveStep, A<Latch const &>(), defaultSampleTime))
       .WillOnce(Return(true));
 
-  for (int step = previouslyActiveStep + 1; step < stepCount; step++) {
-    EXPECT_CALL(*stepExecutor, process(step, A<Latch const &>(), defaultSampleTime)).Times(0);
-  }
-
-  sequence.process(defaultSampleTime);
+  sequence.execute(defaultSampleTime);
 }
 
-TEST_F(SequenceActive, processesSucessorSteps_ifPreviouslyActiveStepIsNoLongerActive) {
+TEST_F(SequenceActive, executeesSucessorSteps_ifPreviouslyActiveStepIsNoLongerActive) {
   givenRunInput(true);
 
   auto constexpr firstActiveSuccessorStep = previouslyActiveStep + 3;
 
   for (int step = previouslyActiveStep; step < firstActiveSuccessorStep; step++) {
-    EXPECT_CALL(*stepExecutor, process(step, A<Latch const &>(), defaultSampleTime)).WillOnce(Return(false));
+    EXPECT_CALL(*stepExecutor, execute(step, A<Latch const &>(), defaultSampleTime)).WillOnce(Return(false));
   }
 
-  EXPECT_CALL(*stepExecutor, process(firstActiveSuccessorStep, A<Latch const &>(), defaultSampleTime))
+  EXPECT_CALL(*stepExecutor, execute(firstActiveSuccessorStep, A<Latch const &>(), defaultSampleTime))
       .WillOnce(Return(true));
 
-  sequence.process(defaultSampleTime);
+  sequence.execute(defaultSampleTime);
 }

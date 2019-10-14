@@ -10,7 +10,7 @@ namespace curve_sequencer {
   public:
     explicit StepExecutor(C &controls) {}
 
-    auto process(int stepIndex, Latch const &gateLatch, float sampleTime) -> bool { return false; }
+    auto execute(int stepIndex, Latch const &gateLatch, float sampleTime) -> bool { return false; }
   };
 } // namespace curve_sequencer
 } // namespace dhe
