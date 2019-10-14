@@ -1,19 +1,12 @@
 #pragma once
 
+#include "Stages.h"
 #include "modules/components/Latch.h"
 
 #include <memory>
 
 namespace dhe {
 namespace curve_sequencer {
-  template <typename C> class GenerateStage {
-  public:
-    auto execute(int, Latch const &, float) -> bool { return false; }
-  };
-  template <typename C> class SustainStage {
-  public:
-    auto execute(int, Latch const &) -> bool { return false; }
-  };
 
   template <typename C, typename G = GenerateStage<C>, typename S = SustainStage<C>> class StepExecutor {
   public:

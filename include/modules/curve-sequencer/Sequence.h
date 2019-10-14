@@ -1,17 +1,12 @@
 #pragma once
 
+#include "StepExecutor.h"
 #include "modules/components/Latch.h"
-#include "modules/curve-sequencer/StepExecutor.h"
 
 #include <memory>
 
 namespace dhe {
 namespace curve_sequencer {
-  static auto constexpr generateModeCount = 7;
-  static auto constexpr generateDefaultMode = 6;
-  static auto constexpr sustainModeCount = 6;
-  static auto constexpr sustainDefaultMode = 5;
-
   template <typename C, typename S = StepExecutor<C>> class Sequence {
   public:
     Sequence(C &controls, int stepCount, S *stepExecutor) :
