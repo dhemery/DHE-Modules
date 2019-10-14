@@ -10,9 +10,10 @@ namespace curve_sequencer {
 
   template <typename C, typename G = GenerateStage<C>, typename S = SustainStage<C>> class StepExecutor {
   public:
-    explicit StepExecutor(C &controls, G *generateStage, S *sustainStage) :
+    explicit StepExecutor(C &controls) : StepExecutor{controls, new G(controls), new S(controls)} {}
+
+    StepExecutor(C &controls, G *generateStage, S *sustainStage) :
         controls{controls}, generateStage{generateStage}, sustainStage{sustainStage} {}
-    explicit StepExecutor(C &controls) : StepExecutor{controls, new G, new S} {}
 
     auto execute(int stepIndex, Latch const &gateLatch, float sampleTime) -> bool {
       if (!controls.isEnabled(stepIndex)) {

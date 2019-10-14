@@ -5,8 +5,8 @@
 namespace dhe {
 class Latch {
 public:
-  Latch() = default;
-  Latch(bool state, bool edge) : state{state}, edge{edge} {}
+  constexpr Latch() = default;
+  constexpr Latch(bool state, bool edge) : state{state}, edge{edge} {}
 
   void clock(bool signal) {
     edge = signal != state;
