@@ -163,8 +163,8 @@ target_link_options(plugin
 add_library(racksdk INTERFACE)
 target_include_directories(racksdk
         INTERFACE
-        ../../Rack-SDK/include
-        ../../Rack-SDK/dep/include)
+        ../Rack-SDK/include
+        ../Rack-SDK/dep/include)
 target_compile_features(racksdk INTERFACE
         cxx_std_11)
 
