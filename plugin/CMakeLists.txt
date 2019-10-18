@@ -156,3 +156,26 @@ install(TARGETS plugin
         ARCHIVE DESTINATION ${PLUGIN_INSTALL_DIR})
 install(DIRECTORY ../svg DESTINATION ${PLUGIN_INSTALL_DIR})
 install(FILES ../LICENSE.txt ../plugin.json DESTINATION ${PLUGIN_INSTALL_DIR})
+
+include(FetchContent)
+include(GoogleTest)
+
+FetchContent_Declare(
+        googletest
+        GIT_REPOSITORY https://github.com/google/googletest.git
+        GIT_TAG release-1.10.0
+)
+
+FetchContent_MakeAvailable(googletest)
+
+gtest_add_tests(TARGET test
+        SOURCES
+        test/components/LatchTests.cpp
+        test/components/OneShotPhaseAccumulatorTests.cpp
+        test/controls/DurationInputTests.cpp
+        test/controls/LevelInputTests.cpp
+        test/curve-sequencer/GenerateStageTests.cpp
+        test/curve-sequencer/SequenceTests.cpp
+        test/curve-sequencer/StepExecutorTests.cpp
+        test/curve-sequencer/SustainStageTests.cpp
+        )

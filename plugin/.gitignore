@@ -1,4 +1,7 @@
-/.idea
+/.idea/
+/lib/
+/cmake-build-debug/
+
 CMakeLists.txt.user
 CMakeCache.txt
 CMakeFiles
@@ -10,3 +13,7 @@ install_manifest.txt
 compile_commands.json
 CTestTestfile.cmake
 _deps
+
+plugin.dylib
+compiler-file*.d
+DHE-Modules.cbp
