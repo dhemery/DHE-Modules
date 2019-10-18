@@ -17,3 +17,5 @@ _deps
 plugin.dylib
 compiler-file*.d
 DHE-Modules.cbp
+unittests
+*.cmake
