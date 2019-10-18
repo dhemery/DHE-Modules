@@ -217,3 +217,4 @@ set_target_properties(unittests
         )
 
 gtest_discover_tests(unittests)
+enable_testing()
