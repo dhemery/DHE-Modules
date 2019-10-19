@@ -7,24 +7,47 @@ add_library(racksdk INTERFACE)
 target_include_directories(racksdk
         INTERFACE
         ../Rack-SDK/include
-        ../Rack-SDK/dep/include)
+        ../Rack-SDK/dep/include
+        )
 target_compile_features(racksdk
         INTERFACE
         cxx_std_11
         )
 target_compile_options(racksdk
         INTERFACE
+
+        # Generate position-independent code
+        -fPIC
+
+        # Generate dependency files
+        -MMD -MP
+
+        # Debugger symbols
+        -g
+
+        # Optimization
+        -O3 -march=nocona -funsafe-math-optimizations
+
+        #Warnings
+        -Wall -Wextra -Wno-unused-parameter
+
+        # Lin and Win only
+        # -Wsuggest-override
+
+        # Mac only
         -stdlib=libc++
-        -march=nocona
-        -MMD
-        -MP
-        -O3
-        -ffast-math
-        -fno-finite-math-only
+
+        # Mac only (FLAGS and LDFLAGS)
         -mmacosx-version-min=10.7
-        -Wall
-        -Wextra
-        -Wno-unused-parameter
+        )
+target_compile_definitions(racksdk
+        INTERFACE
+        # ARCH_LIN # Linux Only
+        ARCH_MAC # Mac Only
+        # ARCH_WIN # Windows Only
+
+        # Win only
+        # _USE_MATH_DEFINES
         )
 
 add_library(components INTERFACE)
@@ -40,10 +63,6 @@ target_sources(components
 target_include_directories(components
         INTERFACE
         include
-        )
-target_compile_definitions(components
-        INTERFACE
-        ARCH_MAC
         )
 
 add_library(controls INTERFACE)
@@ -74,9 +93,9 @@ target_link_libraries(curve_sequencer
         components
         )
 
-add_library(modules OBJECT)
+add_library(modules INTERFACE)
 target_sources(modules
-        PUBLIC
+        INTERFACE
         include/modules/Blossom.h
         include/modules/BoosterStage.h
         include/modules/Cubic.h
@@ -131,16 +150,16 @@ target_sources(modules
         src/modules/func/FuncChannel.cpp
         )
 target_link_libraries(modules
-        PUBLIC
+        INTERFACE
         components
         controls
         curve_sequencer
         racksdk
         )
 
-add_library(panels OBJECT)
+add_library(panels INTERFACE)
 target_sources(panels
-        PUBLIC
+        INTERFACE
         include/panels/BlossomPanel.h
         include/panels/BoosterStagePanel.h
         include/panels/CubicPanel.h
@@ -183,12 +202,12 @@ target_sources(panels
         src/panels/XycloidPanel.cpp
         )
 target_link_libraries(panels
-        PUBLIC
+        INTERFACE
         modules
         racksdk
         )
 
-add_library(plugin
+add_library(plugin SHARED
         src/PluginInitializer.cpp
         )
 target_link_libraries(plugin
@@ -201,7 +220,12 @@ target_link_libraries(plugin
         )
 target_link_options(plugin
         PRIVATE
+
+        # Mac only
         "LINKER:-undefined,dynamic_lookup"
+
+        # Win only
+        # -L$(RACK_DIR) -lRack
         )
 set_target_properties(plugin
         PROPERTIES
@@ -238,8 +262,10 @@ target_sources(unittests
         PRIVATE
         test/components/LatchTests.cpp
         test/components/OneShotPhaseAccumulatorTests.cpp
+
         test/controls/DurationInputTests.cpp
         test/controls/LevelInputTests.cpp
+
         test/curve-sequencer/GenerateStageTests.cpp
         test/curve-sequencer/SequenceTests.cpp
         test/curve-sequencer/StepExecutorTests.cpp
