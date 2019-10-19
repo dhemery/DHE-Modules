@@ -1,7 +1,7 @@
 #include "modules/Blossom.h"
 
-#include "modules/components/Sigmoid.h"
-#include "modules/controls/LevelConfig.h"
+#include "components/Sigmoid.h"
+#include "config/LevelConfig.h"
 
 #include <cmath>
 

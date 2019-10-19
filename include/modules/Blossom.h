@@ -1,7 +1,7 @@
 #pragma once
 
-#include "modules/components/LoopingPhaseAccumulator.h"
-#include "modules/controls/CommonInputs.h"
+#include "components/LoopingPhaseAccumulator.h"
+#include "controls/CommonInputs.h"
 
 #include <engine/Module.hpp>
 

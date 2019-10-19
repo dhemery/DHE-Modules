@@ -1,17 +1,16 @@
 RACK_DIR ?= ../..
 
-FLAGS += -I./include
+FLAGS += -I./plugin -I./include
 CFLAGS +=
 CXXFLAGS +=
 LDFLAGS +=
 
 SOURCES = $(wildcard \
+			plugin/*/*[^Tests].cpp \
+			plugin/*/*/*[^Tests].cpp \
 			src/*.cpp \
-			src/modules/*.cpp \
-			src/modules/*/*.cpp \
-			src/panels/*/*.cpp \
-			src/panels/*.cpp \
-			src/util/*.cpp \
+			src/*/*.cpp \
+			src/*/*/*.cpp \
 			)
 
 DISTRIBUTABLES += LICENSE.txt svg
@@ -32,9 +31,8 @@ include $(RACK_DIR)/plugin.mk
 ########################################################################
 
 TEST_SOURCES =  $(wildcard \
-					test/*.cpp \
-					test/*/*.cpp \
-					src/modules/curve-sequencer/*.cpp \
+					plugin/*/*Tests.cpp \
+					plugin/*/*/*Tests.cpp \
 					)
 TEST_OBJECTS := $(patsubst %, build/%.o, $(TEST_SOURCES))
 

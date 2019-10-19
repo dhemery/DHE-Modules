@@ -1,7 +1,7 @@
 #include "modules/FuzzyLogicH.h"
 
-#include "modules/controls/CommonInputs.h"
-#include "modules/controls/LevelConfig.h"
+#include "config/LevelConfig.h"
+#include "controls/CommonInputs.h"
 
 #include <panels/Panel.h>
 

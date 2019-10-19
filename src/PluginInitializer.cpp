@@ -1,7 +1,7 @@
+#include "modules/curve-sequencer/CurveSequencerPanel.h"
 #include "panels/BlossomPanel.h"
 #include "panels/BoosterStagePanel.h"
 #include "panels/CubicPanel.h"
-#include "panels/CurveSequencerPanel.h"
 #include "panels/Func6Panel.h"
 #include "panels/FuncPanel.h"
 #include "panels/FuzzyLogicHPanel.h"

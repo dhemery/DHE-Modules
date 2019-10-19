@@ -1,6 +1,6 @@
 #include "modules/Gator.h"
 
-#include "modules/controls/CommonInputs.h"
+#include "controls/CommonInputs.h"
 
 #include <string>
 

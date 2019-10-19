@@ -1,7 +1,7 @@
 #include "modules/Upstage.h"
 
-#include "modules/controls/CommonConfig.h"
-#include "modules/controls/LevelConfig.h"
+#include "config/CommonConfig.h"
+#include "config/LevelConfig.h"
 
 namespace dhe {
 

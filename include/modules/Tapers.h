@@ -1,9 +1,9 @@
 #pragma once
 
-#include "modules/components/Range.h"
-#include "modules/controls/CommonInputs.h"
-#include "modules/controls/CurvatureInputs.h"
-#include "modules/controls/LevelInputs.h"
+#include "components/Range.h"
+#include "controls/CommonInputs.h"
+#include "controls/CurvatureInputs.h"
+#include "controls/LevelInputs.h"
 
 #include <engine/Module.hpp>
 

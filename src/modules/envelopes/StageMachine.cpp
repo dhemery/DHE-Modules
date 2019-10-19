@@ -1,6 +1,6 @@
 #include "modules/envelopes/StageMachine.h"
 
-#include "modules/components/Range.h"
+#include "components/Range.h"
 
 #include <algorithm>
 

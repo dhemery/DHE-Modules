@@ -1,7 +1,7 @@
 #include "modules/Hostage.h"
 
-#include "modules/controls/CommonConfig.h"
-#include "modules/controls/DurationConfig.h"
+#include "config/CommonConfig.h"
+#include "config/DurationConfig.h"
 
 namespace dhe {
 Hostage::Hostage() {

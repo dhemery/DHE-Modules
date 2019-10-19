@@ -1,8 +1,8 @@
 #include "modules/Xycloid.h"
 
-#include "modules/components/Sigmoid.h"
-#include "modules/controls/CommonConfig.h"
-#include "modules/controls/LevelConfig.h"
+#include "components/Sigmoid.h"
+#include "config/CommonConfig.h"
+#include "config/LevelConfig.h"
 
 #include <array>
 

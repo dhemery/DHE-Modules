@@ -1,8 +1,8 @@
 #pragma once
 
-#include "modules/controls/CurvatureInputs.h"
-#include "modules/controls/DurationInputs.h"
-#include "modules/controls/LevelInputs.h"
+#include "controls/CurvatureInputs.h"
+#include "controls/DurationInputs.h"
+#include "controls/LevelInputs.h"
 #include "modules/envelopes/StageMachine.h"
 
 #include <engine/Module.hpp>

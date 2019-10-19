@@ -36,13 +36,13 @@ target_compile_features(racksdk
         )
 
 add_library(components INTERFACE)
-target_include_directories(components INTERFACE include)
+target_include_directories(components INTERFACE plugin)
 
 add_library(controls OBJECT)
-target_include_directories(controls PUBLIC include)
+target_include_directories(controls PUBLIC plugin)
 target_sources(controls PRIVATE
-        src/modules/controls/CommonInputs.cpp
-        src/modules/controls/DurationInputs.cpp
+        plugin/controls/CommonInputs.cpp
+        plugin/controls/DurationInputs.cpp
         )
 target_link_libraries(controls
         PUBLIC
@@ -51,12 +51,12 @@ target_link_libraries(controls
         )
 
 add_library(config OBJECT)
-target_include_directories(config PUBLIC include)
+target_include_directories(config PUBLIC plugin)
 target_sources(config
         PRIVATE
-        src/modules/controls/LevelConfig.cpp
-        src/modules/controls/CurvatureConfig.cpp
-        src/modules/controls/DurationConfig.cpp
+        plugin/config/LevelConfig.cpp
+        plugin/config/CurvatureConfig.cpp
+        plugin/config/DurationConfig.cpp
         )
 target_link_libraries(config
         PUBLIC
@@ -78,7 +78,7 @@ target_sources(modules
         src/modules/Blossom.cpp
         src/modules/BoosterStage.cpp
         src/modules/Cubic.cpp
-        src/modules/CurveSequencer.cpp
+        plugin/modules/curve-sequencer/CurveSequencer.cpp
         src/modules/Hostage.cpp
         src/modules/Stage.cpp
         src/modules/Func.cpp
@@ -178,16 +178,16 @@ add_executable(unittests)
 
 target_sources(unittests
         PRIVATE
-        test/components/LatchTests.cpp
-        test/components/OneShotPhaseAccumulatorTests.cpp
+        plugin/components/LatchTests.cpp
+        plugin/components/OneShotPhaseAccumulatorTests.cpp
 
-        test/controls/DurationInputTests.cpp
-        test/controls/LevelInputTests.cpp
+        plugin/controls/DurationInputTests.cpp
+        plugin/controls/LevelInputTests.cpp
 
-        test/curve-sequencer/GenerateStageTests.cpp
-        test/curve-sequencer/SequenceTests.cpp
-        test/curve-sequencer/StepExecutorTests.cpp
-        test/curve-sequencer/SustainStageTests.cpp
+        plugin/modules/curve-sequencer/GenerateStageTests.cpp
+        plugin/modules/curve-sequencer/SequenceTests.cpp
+        plugin/modules/curve-sequencer/StepExecutorTests.cpp
+        plugin/modules/curve-sequencer/SustainStageTests.cpp
         )
 
 target_link_libraries(unittests

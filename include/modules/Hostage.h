@@ -1,6 +1,6 @@
 #pragma once
 
-#include "modules/controls/DurationInputs.h"
+#include "controls/DurationInputs.h"
 #include "modules/envelopes/HostageMachine.h"
 
 #include <engine/Module.hpp>
