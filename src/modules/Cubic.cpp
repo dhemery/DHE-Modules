@@ -2,8 +2,6 @@
 
 #include "modules/controls/CommonConfig.h"
 
-#include <string>
-
 namespace dhe {
 Range const Cubic::coefficientRange{-2.F, 2.F};
 
