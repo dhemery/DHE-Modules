@@ -1,4 +1,3 @@
-
 #include "LevelInputs.h"
 
 #include <cmath>

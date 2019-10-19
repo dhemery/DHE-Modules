@@ -75,27 +75,52 @@ add_library(modules OBJECT)
 target_include_directories(modules PUBLIC include)
 target_sources(modules
         PRIVATE
-        src/modules/Blossom.cpp
-        src/modules/BoosterStage.cpp
-        src/modules/Cubic.cpp
+
+        plugin/modules/blossom/Blossom.cpp
+        plugin/modules/blossom/BlossomPanel.cpp
+
+        plugin/modules/cubic/Cubic.cpp
+        plugin/modules/cubic/CubicPanel.cpp
+
         plugin/modules/curve-sequencer/CurveSequencer.cpp
-        src/modules/Hostage.cpp
-        src/modules/Stage.cpp
-        src/modules/Func.cpp
-        src/modules/Func6.cpp
-        src/modules/FuzzyLogicH.cpp
-        src/modules/FuzzyLogicZ.cpp
-        src/modules/Gator.cpp
-        src/modules/Ranger.cpp
-        src/modules/Swave.cpp
-        src/modules/Tapers.cpp
-        src/modules/Upstage.cpp
-        src/modules/Xycloid.cpp
 
-        src/modules/envelopes/StageMachine.cpp
-        src/modules/envelopes/HostageMachine.cpp
+        plugin/modules/func/Func.cpp
+        plugin/modules/func/FuncPanel.cpp
+        plugin/modules/func/Func6.cpp
+        plugin/modules/func/Func6Panel.cpp
+        plugin/modules/func/FuncChannel.cpp
 
-        src/modules/func/FuncChannel.cpp
+        plugin/modules/fuzzy-logic/FuzzyLogicH.cpp
+        plugin/modules/fuzzy-logic/FuzzyLogicHPanel.cpp
+        plugin/modules/fuzzy-logic/FuzzyLogicZ.cpp
+        plugin/modules/fuzzy-logic/FuzzyLogicZPanel.cpp
+
+        plugin/modules/gator/Gator.cpp
+        plugin/modules/gator/GatorPanel.cpp
+
+        plugin/modules/ranger/Ranger.cpp
+        plugin/modules/ranger/RangerPanel.cpp
+
+        plugin/modules/stage/BoosterStage.cpp
+        plugin/modules/stage/BoosterStagePanel.cpp
+        plugin/modules/stage/Hostage.cpp
+        plugin/modules/stage/HostageMachine.cpp
+        plugin/modules/stage/HostagePanel.cpp
+        plugin/modules/stage/Stage.cpp
+        plugin/modules/stage/StageMachine.cpp
+        plugin/modules/stage/StagePanel.cpp
+        plugin/modules/stage/Upstage.cpp
+        plugin/modules/stage/UpstagePanel.cpp
+
+        plugin/modules/swave/Swave.cpp
+        plugin/modules/swave/SwavePanel.cpp
+
+        plugin/modules/tapers/Tapers.cpp
+        plugin/modules/tapers/TapersPanel.cpp
+
+        plugin/modules/xycloid/Xycloid.cpp
+        plugin/modules/xycloid/XycloidPanel.cpp
+
         )
 target_link_libraries(modules
         PUBLIC
@@ -106,41 +131,14 @@ target_link_libraries(modules
         racksdk
         )
 
-add_library(panels OBJECT)
-target_include_directories(panels PUBLIC include)
-target_sources(panels
-        PRIVATE
-        src/panels/BlossomPanel.cpp
-        src/panels/BoosterStagePanel.cpp
-        src/panels/CubicPanel.cpp
-        src/panels/HostagePanel.cpp
-        src/panels/FuncPanel.cpp
-        src/panels/Func6Panel.cpp
-        src/panels/FuzzyLogicHPanel.cpp
-        src/panels/FuzzyLogicZPanel.cpp
-        src/panels/GatorPanel.cpp
-        src/panels/RangerPanel.cpp
-        src/panels/StagePanel.cpp
-        src/panels/SwavePanel.cpp
-        src/panels/TapersPanel.cpp
-        src/panels/UpstagePanel.cpp
-        src/panels/XycloidPanel.cpp
-        )
-target_link_libraries(panels
-        PUBLIC
-        modules
-        racksdk
-        )
-
 add_library(plugin SHARED
-        src/PluginInitializer.cpp
+        plugin/PluginInitializer.cpp
         )
 target_link_libraries(plugin
         PRIVATE
         components
         controls
         modules
-        panels
         racksdk
         )
 target_link_options(plugin
@@ -174,36 +172,62 @@ FetchContent_Declare(
 
 FetchContent_MakeAvailable(googletest)
 
-add_executable(unittests)
-
-target_sources(unittests
+add_executable(componenttests)
+target_sources(componenttests
         PRIVATE
         plugin/components/LatchTests.cpp
         plugin/components/OneShotPhaseAccumulatorTests.cpp
+        )
+target_link_libraries(componenttests
+        PRIVATE
+        components
+        gmock_main
+        )
+gtest_discover_tests(componenttests)
 
+add_executable(controltests)
+target_sources(controltests
+        PRIVATE
         plugin/controls/DurationInputTests.cpp
         plugin/controls/LevelInputTests.cpp
+        )
+target_link_libraries(controltests
+        PRIVATE
+        controls
+        gmock_main
+        )
+gtest_discover_tests(controltests)
 
+add_executable(moduletests)
+target_sources(moduletests
+        PRIVATE
         plugin/modules/curve-sequencer/GenerateStageTests.cpp
         plugin/modules/curve-sequencer/SequenceTests.cpp
         plugin/modules/curve-sequencer/StepExecutorTests.cpp
         plugin/modules/curve-sequencer/SustainStageTests.cpp
         )
-
-target_link_libraries(unittests
+target_link_libraries(moduletests
         PRIVATE
         components
         controls
         gmock_main
         )
+gtest_discover_tests(moduletests)
 
-set_target_properties(controls config modules unittests plugin
+set_target_properties(
+        componenttests
+        controls
+        controltests
+        config
+        modules
+        moduletests
+        plugin
         PROPERTIES
         CXX_STANDARD 11
         CXX_STANDARD_REQUIRED YES
         CXX_EXTENSIONS NO
         PREFIX ""
-        )
+)
 
-gtest_discover_tests(unittests)
+gtest_discover_tests(componenttests)
 enable_testing()

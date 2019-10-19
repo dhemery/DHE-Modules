@@ -2,7 +2,7 @@
 
 #include "CurveSequencer.h"
 #include "Sequence.h"
-#include "panels/Panel.h"
+#include "modules/Panel.h"
 
 #include <string>
 
