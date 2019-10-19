@@ -3,22 +3,16 @@ project(DHE-Modules
         VERSION 1.6.0
         LANGUAGES CXX)
 
-add_library(dhe_modules_headers INTERFACE)
-target_include_directories(dhe_modules_headers
+add_library(racksdk INTERFACE)
+target_include_directories(racksdk
         INTERFACE
-        include)
-target_sources(dhe_modules_headers
+        ../Rack-SDK/include
+        ../Rack-SDK/dep/include)
+target_compile_features(racksdk
         INTERFACE
-        include/modules/components/Latch.h
-        include/modules/components/OneShotPhaseAccumulator.h
-        include/modules/controls/LevelInputs.h
-        include/modules/controls/CommonInputs.h
-        include/modules/controls/DurationInputs.h
-        include/modules/curve-sequencer/Sequence.h
-        include/modules/curve-sequencer/Stages.h
-        include/modules/curve-sequencer/StepExecutor.h
+        cxx_std_11
         )
-target_compile_options(dhe_modules_headers
+target_compile_options(racksdk
         INTERFACE
         -stdlib=libc++
         -march=nocona
@@ -32,16 +26,121 @@ target_compile_options(dhe_modules_headers
         -Wextra
         -Wno-unused-parameter
         )
-target_compile_definitions(dhe_modules_headers
+
+add_library(components INTERFACE)
+target_sources(components
+        INTERFACE
+        include/modules/components/Latch.h
+        include/modules/components/LoopingPhaseAccumulator.h
+        include/modules/components/OneShotPhaseAccumulator.h
+        include/modules/components/Range.h
+        include/modules/components/Sigmoid.h
+        include/modules/components/Taper.h
+        )
+target_include_directories(components
+        INTERFACE
+        include
+        )
+target_compile_definitions(components
         INTERFACE
         ARCH_MAC
         )
-target_link_libraries(dhe_modules_headers INTERFACE racksdk)
 
-add_library(plugin)
+add_library(controls INTERFACE)
+target_sources(controls
+        INTERFACE
+        include/modules/controls/CommonInputs.h
+        include/modules/controls/CurvatureInputs.h
+        include/modules/controls/DurationInputs.h
+        include/modules/controls/LevelInputs.h
+        src/modules/controls/CommonInputs.cpp
+        src/modules/controls/DurationInputs.cpp
+        )
+target_link_libraries(controls
+        INTERFACE
+        components
+        racksdk
+        )
 
-target_sources(plugin
-        PRIVATE
+add_library(curve_sequencer INTERFACE)
+target_sources(curve_sequencer
+        INTERFACE
+        include/modules/curve-sequencer/Sequence.h
+        include/modules/curve-sequencer/Stages.h
+        include/modules/curve-sequencer/StepExecutor.h
+        )
+target_link_libraries(curve_sequencer
+        INTERFACE
+        components
+        )
+
+add_library(modules OBJECT)
+target_sources(modules
+        PUBLIC
+        include/modules/Blossom.h
+        include/modules/BoosterStage.h
+        include/modules/Cubic.h
+        include/modules/CurveSequencer.h
+        include/modules/Func.h
+        include/modules/Func6.h
+        include/modules/FuzzyLogicH.h
+        include/modules/FuzzyLogicZ.h
+        include/modules/Gator.h
+        include/modules/Hostage.h
+        include/modules/Ranger.h
+        include/modules/Stage.h
+        include/modules/Swave.h
+        include/modules/Tapers.h
+        include/modules/Upstage.h
+        include/modules/Xycloid.h
+
+        include/modules/controls/CommonConfig.h
+        include/modules/controls/CurvatureConfig.h
+        include/modules/controls/DurationConfig.h
+        include/modules/controls/LevelConfig.h
+
+        include/modules/envelopes/HostageMachine.h
+        include/modules/envelopes/StageMachine.h
+
+        include/modules/func/FuncChannel.h
+
+        src/modules/Blossom.cpp
+        src/modules/BoosterStage.cpp
+        src/modules/Cubic.cpp
+        src/modules/CurveSequencer.cpp
+        src/modules/Hostage.cpp
+        src/modules/Stage.cpp
+        src/modules/Func.cpp
+        src/modules/Func6.cpp
+        src/modules/FuzzyLogicH.cpp
+        src/modules/FuzzyLogicZ.cpp
+        src/modules/Gator.cpp
+        src/modules/Ranger.cpp
+        src/modules/Swave.cpp
+        src/modules/Tapers.cpp
+        src/modules/Upstage.cpp
+        src/modules/Xycloid.cpp
+
+        src/modules/controls/LevelConfig.cpp
+        src/modules/controls/CurvatureConfig.cpp
+        src/modules/controls/DurationConfig.cpp
+
+        src/modules/envelopes/StageMachine.cpp
+        src/modules/envelopes/HostageMachine.cpp
+
+        src/modules/func/FuncChannel.cpp
+        )
+target_link_libraries(modules
+        PUBLIC
+        components
+        controls
+        curve_sequencer
+        racksdk
+        )
+
+add_library(panels OBJECT)
+target_sources(panels
+        PUBLIC
         include/panels/BlossomPanel.h
         include/panels/BoosterStagePanel.h
         include/panels/CubicPanel.h
@@ -67,41 +166,6 @@ target_sources(plugin
         include/panels/widgets/Knobs.h
         include/panels/widgets/Toggles.h
 
-        include/modules/Blossom.h
-        include/modules/BoosterStage.h
-        include/modules/Cubic.h
-        include/modules/CurveSequencer.h
-        include/modules/Func.h
-        include/modules/Func6.h
-        include/modules/FuzzyLogicH.h
-        include/modules/FuzzyLogicZ.h
-        include/modules/Gator.h
-        include/modules/Hostage.h
-        include/modules/Ranger.h
-        include/modules/Stage.h
-        include/modules/Swave.h
-        include/modules/Tapers.h
-        include/modules/Upstage.h
-        include/modules/Xycloid.h
-
-        include/modules/controls/CommonConfig.h
-        include/modules/controls/CurvatureConfig.h
-        include/modules/controls/CurvatureInputs.h
-        include/modules/controls/DurationConfig.h
-        include/modules/controls/LevelConfig.h
-
-        include/modules/components/LoopingPhaseAccumulator.h
-        include/modules/components/Range.h
-        include/modules/components/Sigmoid.h
-        include/modules/components/Taper.h
-
-        include/modules/envelopes/HostageMachine.h
-        include/modules/envelopes/StageMachine.h
-
-        include/modules/func/FuncChannel.h
-
-        src/PluginInitializer.cpp
-
         src/panels/BlossomPanel.cpp
         src/panels/BoosterStagePanel.cpp
         src/panels/CubicPanel.cpp
@@ -117,34 +181,27 @@ target_sources(plugin
         src/panels/TapersPanel.cpp
         src/panels/UpstagePanel.cpp
         src/panels/XycloidPanel.cpp
+        )
+target_link_libraries(panels
+        PUBLIC
+        modules
+        racksdk
+        )
 
-        src/modules/Blossom.cpp
-        src/modules/BoosterStage.cpp
-        src/modules/Cubic.cpp
-        src/modules/CurveSequencer.cpp
-        src/modules/Hostage.cpp
-        src/modules/Stage.cpp
-        src/modules/Func.cpp
-        src/modules/Func6.cpp
-        src/modules/FuzzyLogicH.cpp
-        src/modules/FuzzyLogicZ.cpp
-        src/modules/Gator.cpp
-        src/modules/Ranger.cpp
-        src/modules/Swave.cpp
-        src/modules/Tapers.cpp
-        src/modules/Upstage.cpp
-        src/modules/Xycloid.cpp
-
-        src/modules/controls/CommonInputs.cpp
-        src/modules/controls/CurvatureConfig.cpp
-        src/modules/controls/DurationConfig.cpp
-        src/modules/controls/DurationInputs.cpp
-        src/modules/controls/LevelConfig.cpp
-
-        src/modules/envelopes/StageMachine.cpp
-        src/modules/envelopes/HostageMachine.cpp
-
-        src/modules/func/FuncChannel.cpp
+add_library(plugin
+        src/PluginInitializer.cpp
+        )
+target_link_libraries(plugin
+        PRIVATE
+        components
+        controls
+        modules
+        panels
+        racksdk
+        )
+target_link_options(plugin
+        PRIVATE
+        "LINKER:-undefined,dynamic_lookup"
         )
 set_target_properties(plugin
         PROPERTIES
@@ -153,20 +210,6 @@ set_target_properties(plugin
         CXX_EXTENSIONS NO
         PREFIX ""
         )
-
-target_link_libraries(plugin PUBLIC dhe_modules_headers)
-target_link_options(plugin
-        PRIVATE
-        "LINKER:-undefined,dynamic_lookup"
-        )
-
-add_library(racksdk INTERFACE)
-target_include_directories(racksdk
-        INTERFACE
-        ../Rack-SDK/include
-        ../Rack-SDK/dep/include)
-target_compile_features(racksdk INTERFACE
-        cxx_std_11)
 
 set(CMAKE_INSTALL_PREFIX ${CMAKE_CURRENT_BINARY_DIR}/rack)
 set(PLUGINS_INSTALL_DIR plugins)
@@ -204,8 +247,9 @@ target_sources(unittests
         )
 
 target_link_libraries(unittests
-        PRIVATE
-        dhe_modules_headers
+        PUBLIC
+        components
+        controls
         gmock_main
         )
 set_target_properties(unittests
