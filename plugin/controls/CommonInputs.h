@@ -1,7 +1,7 @@
 #pragma once
 
-#include "components/Range.h"
-#include "components/Taper.h"
+#include "Range.h"
+#include "Taper.h"
 
 #include <engine/Param.hpp>
 #include <engine/Port.hpp>

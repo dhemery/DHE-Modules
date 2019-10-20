@@ -1,9 +1,9 @@
 #pragma once
 
+#include "CurvatureInputs.h"
+#include "DurationInputs.h"
+#include "LevelInputs.h"
 #include "StageMachine.h"
-#include "controls/CurvatureInputs.h"
-#include "controls/DurationInputs.h"
-#include "controls/LevelInputs.h"
 
 #include <engine/Module.hpp>
 

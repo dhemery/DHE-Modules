@@ -1,7 +1,7 @@
 #pragma once
 
+#include "Panel.h"
 #include "Stage.h"
-#include "modules/Panel.h"
 
 namespace dhe {
 class StagePanel : public Panel<StagePanel> {

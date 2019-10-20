@@ -1,8 +1,8 @@
 #include "Tapers.h"
 
-#include "config/CommonConfig.h"
-#include "config/CurvatureConfig.h"
-#include "config/LevelConfig.h"
+#include "CommonConfig.h"
+#include "CurvatureConfig.h"
+#include "LevelConfig.h"
 
 namespace dhe {
 

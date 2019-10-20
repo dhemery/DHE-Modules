@@ -1,7 +1,7 @@
 #pragma once
 
+#include "Latch.h"
 #include "StepExecutor.h"
-#include "components/Latch.h"
 
 #include <memory>
 
@@ -10,9 +10,7 @@ namespace curve_sequencer {
   template <typename C, typename S = StepExecutor<C>> class Sequence {
   public:
     Sequence(C &controls, int stepCount, S *stepExecutor) :
-        controls{controls},
-        stepIndexMask{stepCount - 1},
-        stepExecutor{stepExecutor} {}
+        controls{controls}, stepIndexMask{stepCount - 1}, stepExecutor{stepExecutor} {}
 
     Sequence(C &controls, int stepCount) : Sequence(controls, stepCount, new S(controls)) {}
 

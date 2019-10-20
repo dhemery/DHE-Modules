@@ -1,9 +1,9 @@
 #pragma once
 
-#include "components/LoopingPhaseAccumulator.h"
-#include "components/Range.h"
-#include "components/Taper.h"
-#include "controls/CommonInputs.h"
+#include "CommonInputs.h"
+#include "LoopingPhaseAccumulator.h"
+#include "Range.h"
+#include "Taper.h"
 
 #include <engine/Module.hpp>
 

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "controls/CurvatureInputs.h"
+#include "CurvatureInputs.h"
 
 #include <engine/Module.hpp>
 

@@ -1,4 +1,5 @@
 #include "Sequence.h"
+
 #include "components/Latch.h"
 
 #include <gmock/gmock-actions.h>

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Gator.h"
-#include "modules/Panel.h"
+#include "Panel.h"
 
 namespace dhe {
 

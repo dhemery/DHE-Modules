@@ -1,8 +1,8 @@
 #pragma once
 
 #include "CurveSequencer.h"
+#include "Panel.h"
 #include "Sequence.h"
-#include "modules/Panel.h"
 
 #include <string>
 

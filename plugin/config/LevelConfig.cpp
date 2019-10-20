@@ -1,6 +1,6 @@
 #include "LevelConfig.h"
 
-#include "controls/CommonInputs.h"
+#include "CommonInputs.h"
 
 #include <engine/Module.hpp>
 #include <engine/ParamQuantity.hpp>

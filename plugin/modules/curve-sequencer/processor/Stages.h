@@ -1,6 +1,6 @@
 #pragma once
 
-#include "components/Latch.h"
+#include "Latch.h"
 
 #include <array>
 #include <string>

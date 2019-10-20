@@ -1,9 +1,8 @@
 #include "FuzzyLogicH.h"
 
-#include "config/LevelConfig.h"
-#include "controls/CommonInputs.h"
-
-#include <modules/Panel.h>
+#include "CommonInputs.h"
+#include "LevelConfig.h"
+#include "Panel.h"
 
 namespace dhe {
 

@@ -1,9 +1,9 @@
 #include "BoosterStage.h"
 
-#include "config/CommonConfig.h"
-#include "config/CurvatureConfig.h"
-#include "config/DurationConfig.h"
-#include "config/LevelConfig.h"
+#include "CommonConfig.h"
+#include "CurvatureConfig.h"
+#include "DurationConfig.h"
+#include "LevelConfig.h"
 
 namespace dhe {
 

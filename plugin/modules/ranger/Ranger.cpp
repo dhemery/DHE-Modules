@@ -1,7 +1,7 @@
 #include "Ranger.h"
 
-#include "config/CommonConfig.h"
-#include "config/LevelConfig.h"
+#include "CommonConfig.h"
+#include "LevelConfig.h"
 namespace dhe {
 
 Ranger::Ranger() {

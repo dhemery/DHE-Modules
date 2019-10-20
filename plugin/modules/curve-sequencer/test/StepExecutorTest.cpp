@@ -1,5 +1,6 @@
 #include "StepExecutor.h"
-#include "components/Latch.h"
+
+#include "Latch.h"
 
 #include <gmock/gmock-actions.h>
 #include <gmock/gmock.h>

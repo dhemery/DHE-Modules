@@ -1,17 +1,26 @@
 RACK_DIR ?= ../..
 
-FLAGS += -I./plugin
+ALL_DIRS = $(filter %/, $(wildcard plugin/*/ plugin/*/*/ plugin/*/*/*/ plugin/*/*/*/*/))
+TEST_DIRS = $(foreach dir,$(ALL_DIRS),$(wildcard $(dir)test/))
+SOURCE_DIRS =  $(filter-out $(TEST_DIRS), $(ALL_DIRS))
+
+SOURCES = $(foreach dir,$(SOURCE_DIRS),$(wildcard $(dir)*.cpp))
+
+INCLUDE_FLAGS = $(foreach dir,$(SOURCE_DIRS),-I$(dir))
+
+FLAGS += $(INCLUDE_FLAGS)
 CFLAGS +=
 CXXFLAGS +=
 LDFLAGS +=
 
-SOURCES = $(wildcard \
-			plugin/*[^Tests].cpp \
-			plugin/*/*[^Tests].cpp \
-			plugin/*/*/*[^Tests].cpp \
-			)
-
 DISTRIBUTABLES += LICENSE.txt svg
+
+show:
+	@echo ALL_DIRS $(ALL_DIRS)
+	@echo TEST_DIRS $(TEST_DIRS)
+	@echo SOURCE_DIRS $(SOURCE_DIRS)
+	@echo SOURCES $(SOURCES)
+	@echo INCLUDE_FLAGS $(INCLUDE_FLAGS)
 
 include $(RACK_DIR)/plugin.mk
 
@@ -24,29 +33,33 @@ include $(RACK_DIR)/plugin.mk
 
 ########################################################################
 #
-# Build and run the tests
+# Build and run the test
 #
 ########################################################################
 
-TEST_SOURCES =  $(wildcard \
-					plugin/*/*Tests.cpp \
-					plugin/*/*/*Tests.cpp \
-					)
-TEST_OBJECTS := $(patsubst %, build/%.o, $(TEST_SOURCES))
+TEST_SOURCES = $(foreach dir,$(TEST_DIRS),$(wildcard $(dir)*.cpp))
+TEST_OBJECTS = $(patsubst %, build/%.o, $(TEST_SOURCES))
+TEST_INCLUDE_FLAGS = \
+	$(foreach dir,$(TEST_DIRS),-I$(dir)) \
+	-Igoogletest/googletest/include/ \
+	-Igoogletest/googlemock/include/
 
-TESTFLAGS += -Igoogletest/googletest/include/ -Igoogletest/googlemock/include/
-TESTLDFLAGS += -Lgoogletest/lib -lgmock_main -lgtest -lgmock
+TEST_LDFLAGS += \
+	-Lgoogletest/lib \
+	-lgmock_main \
+	-lgtest \
+	-lgmock
 
 ifdef ARCH_LIN
 	TESTLDFLAGS += -lpthread
 endif
 
-$(TEST_OBJECTS): FLAGS += $(TESTFLAGS)
+$(TEST_OBJECTS): FLAGS += $(TEST_INCLUDE_FLAGS)
 
 TEST_RUNNER = build/test-runner
 
 $(TEST_RUNNER): $(TEST_OBJECTS)
-	$(CXX) -o $@ $^ $(TESTLDFLAGS)
+	$(CXX) -o $@ $^ $(TEST_LDFLAGS)
 
 test: all
 
@@ -150,13 +163,14 @@ gui:
 #
 ########################################################################
 
-HEADERS = $(shell find include -name *.h)
+TIDY_HEADERS = $(shell find plugin -name *.h)
+TIDY_SOURCES = $(shell find plugin -name *.cpp)
 
 tidy: project
-	clang-tidy $(SOURCES)
+	clang-tidy $(TIDY_SOURCES)
 
 format:
-	clang-format -i -style=file $(SOURCES) $(HEADERS)
+	clang-format -i -style=file $(TIDY_HEADERS) $(TIDY_SOURCES)
 
 clobber: fresh
 	cd gui && rake clobber

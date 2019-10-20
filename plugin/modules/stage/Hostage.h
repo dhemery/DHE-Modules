@@ -1,7 +1,7 @@
 #pragma once
 
+#include "DurationInputs.h"
 #include "HostageMachine.h"
-#include "controls/DurationInputs.h"
 
 #include <engine/Module.hpp>
 

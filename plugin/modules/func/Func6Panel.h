@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Func6.h"
-#include "modules/Panel.h"
+#include "Panel.h"
 
 namespace dhe {
 

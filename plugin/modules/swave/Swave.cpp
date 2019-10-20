@@ -1,6 +1,6 @@
 #include "Swave.h"
 
-#include "config/CurvatureConfig.h"
+#include "CurvatureConfig.h"
 
 namespace dhe {
 

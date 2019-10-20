@@ -1,11 +1,11 @@
 #pragma once
 
+#include "CommonInputs.h"
+#include "CurvatureInputs.h"
+#include "DurationInputs.h"
+#include "LevelInputs.h"
 #include "StageMachine.h"
-#include "components/Taper.h"
-#include "controls/CommonInputs.h"
-#include "controls/CurvatureInputs.h"
-#include "controls/DurationInputs.h"
-#include "controls/LevelInputs.h"
+#include "Taper.h"
 
 #include <engine/Module.hpp>
 

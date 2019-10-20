@@ -1,7 +1,7 @@
 #pragma once
 
-#include "controls/CommonInputs.h"
-#include "controls/LevelInputs.h"
+#include "CommonInputs.h"
+#include "LevelInputs.h"
 
 #include <engine/Module.hpp>
 

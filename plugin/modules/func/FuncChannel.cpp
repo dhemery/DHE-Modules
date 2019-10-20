@@ -1,7 +1,7 @@
 #include "FuncChannel.h"
 
-#include "config/CommonConfig.h"
-#include "controls/CommonInputs.h"
+#include "CommonConfig.h"
+#include "CommonInputs.h"
 
 #include <utility>
 

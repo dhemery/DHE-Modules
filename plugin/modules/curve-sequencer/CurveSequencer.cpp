@@ -1,12 +1,12 @@
 #include "CurveSequencer.h"
 
-#include "config/CommonConfig.h"
-#include "config/CurvatureConfig.h"
-#include "config/DurationConfig.h"
-#include "config/LevelConfig.h"
-#include "controls/CurvatureInputs.h"
-#include "controls/DurationInputs.h"
-#include "controls/LevelInputs.h"
+#include "CommonConfig.h"
+#include "CurvatureConfig.h"
+#include "CurvatureInputs.h"
+#include "DurationConfig.h"
+#include "DurationInputs.h"
+#include "LevelConfig.h"
+#include "LevelInputs.h"
 
 namespace dhe {
 

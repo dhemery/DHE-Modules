@@ -1,8 +1,8 @@
 #include "Stage.h"
 
-#include "config/CurvatureConfig.h"
-#include "config/DurationConfig.h"
-#include "config/LevelConfig.h"
+#include "CurvatureConfig.h"
+#include "DurationConfig.h"
+#include "LevelConfig.h"
 
 namespace dhe {
 Stage::Stage() {

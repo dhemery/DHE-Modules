@@ -1,10 +1,10 @@
 #include "FuzzyLogicZ.h"
 
-#include "config/LevelConfig.h"
-#include "controls/CommonInputs.h"
+#include "CommonInputs.h"
+#include "LevelConfig.h"
+#include "Panel.h"
 
 #include <algorithm>
-#include <modules/Panel.h>
 
 namespace dhe {
 

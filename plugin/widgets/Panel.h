@@ -1,7 +1,7 @@
 #pragma once
-#include "widgets/Buttons.h"
-#include "widgets/Knobs.h"
-#include "widgets/Toggles.h"
+#include "Buttons.h"
+#include "Knobs.h"
+#include "Toggles.h"
 
 #include <algorithm>
 #include <app.hpp>

@@ -1,7 +1,6 @@
+/.idea
 /*.dylib
 /build
 /dist
 /.dev
-/compile_commands.json
-/.idea/
 /cmake-build-debug/

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "CommonConfig.h"
-#include "components/Range.h"
+#include "Range.h"
 
 #include <array>
 #include <engine/Module.hpp>
