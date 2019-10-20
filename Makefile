@@ -1,6 +1,6 @@
 RACK_DIR ?= ../..
 
-ALL_DIRS = $(filter %/, $(wildcard plugin/*/ plugin/*/*/ plugin/*/*/*/ plugin/*/*/*/*/))
+ALL_DIRS = $(filter %/, $(wildcard plugin/ plugin/*/ plugin/*/*/ plugin/*/*/*/ plugin/*/*/*/*/))
 TEST_DIRS = $(foreach dir,$(ALL_DIRS),$(wildcard $(dir)test/))
 SOURCE_DIRS =  $(filter-out $(TEST_DIRS), $(ALL_DIRS))
 

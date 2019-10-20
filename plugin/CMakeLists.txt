@@ -20,7 +20,7 @@ set_target_properties(plugin
         PROPERTIES
         CXX_STANDARD 11
         CXX_STANDARD_REQUIRED YES
-        CXX_EXTENSIONS YES
+        CXX_EXTENSIONS NO
         PREFIX ""
         )
 target_link_options(plugin

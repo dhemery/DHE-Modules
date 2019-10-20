@@ -15,8 +15,9 @@ add_compile_options(
         # -Wsuggest-override
 
         # Mac only (FLAGS and LDFLAGS)
-        -stdlib=libc++
         -mmacosx-version-min=10.7
+
+        -stdlib=libc++
 )
 
 add_compile_definitions(
@@ -28,30 +29,11 @@ add_compile_definitions(
         # _USE_MATH_DEFINES
 )
 
-add_subdirectory(plugin)
-
-install(TARGETS plugin
-        LIBRARY DESTINATION ${PLUGIN_INSTALL_DIR}
-        ARCHIVE DESTINATION ${PLUGIN_INSTALL_DIR})
-install(DIRECTORY ../svg DESTINATION ${PLUGIN_INSTALL_DIR})
-install(FILES ../LICENSE.txt ../plugin.json DESTINATION ${PLUGIN_INSTALL_DIR})
-
-
-set(CMAKE_INSTALL_PREFIX ${CMAKE_CURRENT_BINARY_DIR}/rack)
-set(PLUGINS_INSTALL_DIR plugins)
-set(PLUGIN_INSTALL_DIR plugins/${PROJECT_NAME})
-
-install(TARGETS plugin
-        LIBRARY DESTINATION ${PLUGIN_INSTALL_DIR}
-        ARCHIVE DESTINATION ${PLUGIN_INSTALL_DIR})
-install(DIRECTORY ../svg DESTINATION ${PLUGIN_INSTALL_DIR})
-install(FILES ../LICENSE.txt ../plugin.json DESTINATION ${PLUGIN_INSTALL_DIR})
-
 include(FetchContent)
 
 FetchContent_Declare(racksdk
         URL https://vcvrack.com/downloads/Rack-SDK-1.1.5.zip
-)
+        )
 
 FetchContent_GetProperties(racksdk)
 if(NOT racksdk_POPULATED)
@@ -74,3 +56,22 @@ FetchContent_Declare(
 
 FetchContent_MakeAvailable(googletest)
 enable_testing()
+
+add_subdirectory(plugin)
+
+install(TARGETS plugin
+        LIBRARY DESTINATION ${PLUGIN_INSTALL_DIR}
+        ARCHIVE DESTINATION ${PLUGIN_INSTALL_DIR})
+install(DIRECTORY ../svg DESTINATION ${PLUGIN_INSTALL_DIR})
+install(FILES ../LICENSE.txt ../plugin.json DESTINATION ${PLUGIN_INSTALL_DIR})
+
+
+set(CMAKE_INSTALL_PREFIX ${CMAKE_CURRENT_BINARY_DIR}/rack)
+set(PLUGINS_INSTALL_DIR plugins)
+set(PLUGIN_INSTALL_DIR plugins/${PROJECT_NAME})
+
+install(TARGETS plugin
+        LIBRARY DESTINATION ${PLUGIN_INSTALL_DIR}
+        ARCHIVE DESTINATION ${PLUGIN_INSTALL_DIR})
+install(DIRECTORY ../svg DESTINATION ${PLUGIN_INSTALL_DIR})
+install(FILES ../LICENSE.txt ../plugin.json DESTINATION ${PLUGIN_INSTALL_DIR})

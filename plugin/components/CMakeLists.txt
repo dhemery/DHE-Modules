@@ -20,3 +20,5 @@ set_target_properties(component_tests
         CXX_STANDARD_REQUIRED YES
         CXX_EXTENSIONS YES
         )
+
+gtest_discover_tests(component_tests)

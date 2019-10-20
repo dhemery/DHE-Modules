@@ -41,6 +41,10 @@ target_sources(curve_sequencer_tests
         test/StepExecutorTest.cpp
         test/SustainStageTest.cpp
         )
+target_compile_options(curve_sequencer_tests
+        PRIVATE
+        -O2 # Without optimization level 2 or higher, gtest fails
+        )
 target_link_libraries(curve_sequencer_tests
         PRIVATE
         curve_sequencer_processor
@@ -52,3 +56,5 @@ set_target_properties(curve_sequencer_tests
         CXX_STANDARD_REQUIRED YES
         CXX_EXTENSIONS YES
         )
+
+gtest_discover_tests(curve_sequencer_tests)

@@ -36,3 +36,5 @@ set_target_properties(control_tests
         CXX_STANDARD_REQUIRED YES
         CXX_EXTENSIONS YES
         )
+
+gtest_discover_tests(control_tests)
