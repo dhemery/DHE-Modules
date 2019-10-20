@@ -16,7 +16,6 @@ target_sources(curve_sequencer
 target_link_libraries(curve_sequencer
         PUBLIC
         curve_sequencer_processor
-        PRIVATE
         controls
         config
         widgets

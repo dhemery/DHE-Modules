@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.15)
 add_library(controls OBJECT)
 target_include_directories(controls PUBLIC .)
 target_sources(controls
-        PUBLIC
+        PRIVATE
         CommonInputs.cpp
         DurationInputs.cpp
         )
@@ -27,6 +27,7 @@ target_sources(control_tests
         )
 target_link_libraries(control_tests
         PRIVATE
+        components
         controls
         gtest_main
         )
