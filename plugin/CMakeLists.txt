@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.15)
 project(DHE-Modules
         VERSION 1.6.0
         LANGUAGES CXX)
+enable_testing()
 
 add_compile_options(
         -Wall -Wextra -Wno-unused-parameter
@@ -51,7 +52,6 @@ FetchContent_Declare(
 )
 
 FetchContent_MakeAvailable(googletest)
-enable_testing()
 
 add_subdirectory(components)
 add_subdirectory(controls)
@@ -85,3 +85,14 @@ target_link_options(plugin
         # Win only
         # -L$(RACK_DIR) -lRack
         )
+
+set(CMAKE_INSTALL_PREFIX ${CMAKE_CURRENT_BINARY_DIR}/rack)
+set(PLUGINS_INSTALL_DIR plugins)
+set(PLUGIN_INSTALL_DIR plugins/${PROJECT_NAME})
+
+install(TARGETS plugin
+        LIBRARY DESTINATION ${PLUGIN_INSTALL_DIR}
+        ARCHIVE DESTINATION ${PLUGIN_INSTALL_DIR}
+        )
+install(DIRECTORY ../svg DESTINATION ${PLUGIN_INSTALL_DIR})
+install(FILES ../LICENSE.txt ../plugin.json DESTINATION ${PLUGIN_INSTALL_DIR})

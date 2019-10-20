@@ -47,7 +47,7 @@ include $(RACK_DIR)/plugin.mk
 #
 ########################################################################
 
-CMAKE_DIR = .cmake
+CMAKE_DIR = .cmake-dale
 
 cmake:
 	cmake -S plugin -B $(CMAKE_DIR) -DCMAKE_EXPORT_COMPILE_COMMANDS=ON

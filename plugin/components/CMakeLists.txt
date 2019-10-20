@@ -10,7 +10,7 @@ target_sources(component_tests
         test/OneShotPhaseAccumulatorTest.cpp
         )
 target_link_libraries(component_tests
-        PUBLIC
+        PRIVATE
         components
         gtest_main
         )
