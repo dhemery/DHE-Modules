@@ -1,7 +1,9 @@
-/.idea
-/*.dylib
-/build
-/dist
+/.idea/
 /cmake-build-debug/
-/.dev
-/.test
+/Testing/
+/.dev/
+/.test/
+
+/build/
+/dist/
+/*.dylib
