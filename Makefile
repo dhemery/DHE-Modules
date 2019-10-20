@@ -49,7 +49,7 @@ include $(RACK_DIR)/plugin.mk
 TEST_DIR = .test
 
 cmake:
-	cmake . -B $(TEST_DIR) -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
+	cmake plugin -B $(TEST_DIR) -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
 	cmake --build $(TEST_DIR)
 
 test: cmake
