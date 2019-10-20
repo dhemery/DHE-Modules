@@ -1,28 +1,37 @@
 RACK_DIR ?= ../..
 
-ALL_DIRS = $(filter %/, $(wildcard plugin/ plugin/*/ plugin/*/*/ plugin/*/*/*/ plugin/*/*/*/*/))
-TEST_DIRS = $(foreach dir,$(ALL_DIRS),$(wildcard $(dir)test/))
-SOURCE_DIRS =  $(filter-out $(TEST_DIRS), $(ALL_DIRS))
+DHE_FILE_PATTERNS = \
+	plugin/ \
+	plugin/*/ \
+	plugin/*/*/ \
+	plugin/*/*/*/ \
+	plugin/*/*/*/*/ \
 
-SOURCES = $(foreach dir,$(SOURCE_DIRS),$(wildcard $(dir)*.cpp))
+DHE_FILES = $(sort $(wildcard $(DHE_FILE_PATTERNS)))
+DHE_SOURCES = $(filter %.cpp, $(DHE_FILES))
+DHE_HEADERS = $(filter %.h, $(DHE_FILES))
+DHE_DIRS = $(filter %/, $(DHE_FILES))
 
-INCLUDE_FLAGS = $(foreach dir,$(SOURCE_DIRS),-I$(dir))
 
-FLAGS += $(INCLUDE_FLAGS)
+DHE_TEST_DIRS =  $(filter %/test/, $(DHE_DIRS))
+DHE_TEST_SOURCE_PATTERN = $(foreach dir, $(DHE_TEST_DIRS), $(dir)%.cpp)
+DHE_TEST_SOURCES = $(filter $(DHE_TEST_SOURCE_PATTERN), $(DHE_SOURCES))
+DHE_PRODUCTION_DIRS =  $(filter-out %/test/, $(DHE_DIRS))
+DHE_PRODUCTION_SOURCES = $(filter-out $(DHE_TEST_SOURCE_PATTERN), $(DHE_SOURCES))
+
+SOURCES = $(DHE_PRODUCTION_SOURCES)
+
+DISTRIBUTABLES += LICENSE.txt svg
+
+FLAGS += $(foreach dir,$(DHE_PRODUCTION_DIRS),-I$(dir))
 CFLAGS +=
 CXXFLAGS +=
 LDFLAGS +=
 
-DISTRIBUTABLES += LICENSE.txt svg
-
-show:
-	@echo ALL_DIRS $(ALL_DIRS)
-	@echo TEST_DIRS $(TEST_DIRS)
-	@echo SOURCE_DIRS $(SOURCE_DIRS)
-	@echo SOURCES $(SOURCES)
-	@echo INCLUDE_FLAGS $(INCLUDE_FLAGS)
-
 include $(RACK_DIR)/plugin.mk
+
+
+
 
 # Above this line: Standard plugin build configuration
 ########################################################################
@@ -33,71 +42,42 @@ include $(RACK_DIR)/plugin.mk
 
 ########################################################################
 #
-# Build and run the test
+# Build and run the tests
 #
 ########################################################################
 
-TEST_SOURCES = $(foreach dir,$(TEST_DIRS),$(wildcard $(dir)*.cpp))
-TEST_OBJECTS = $(patsubst %, build/%.o, $(TEST_SOURCES))
-TEST_INCLUDE_FLAGS = \
-	$(foreach dir,$(TEST_DIRS),-I$(dir)) \
-	-Igoogletest/googletest/include/ \
-	-Igoogletest/googlemock/include/
+TEST_DIR = .test
 
-TEST_LDFLAGS += \
-	-Lgoogletest/lib \
-	-lgmock_main \
-	-lgtest \
-	-lgmock
+cmake:
+	cmake . -B $(TEST_DIR) -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
+	cmake --build $(TEST_DIR)
 
-ifdef ARCH_LIN
-	TESTLDFLAGS += -lpthread
-endif
+test: cmake
+	cd $(TEST_DIR) && ctest --progress --output-on-failure && cd -
 
-$(TEST_OBJECTS): FLAGS += $(TEST_INCLUDE_FLAGS)
+clean-test:
+	rm -rf $(TEST_DIR)
 
-TEST_RUNNER = build/test-runner
+clean: clean-test
 
-$(TEST_RUNNER): $(TEST_OBJECTS)
-	$(CXX) -o $@ $^ $(TEST_LDFLAGS)
-
-test: all
-
-test: $(TEST_RUNNER)
-	$<
-
-.PHONY: test
+.PHONY: ctest cmake clean-test
 
 
 
 
 ########################################################################
 #
-# Build the compilation database that configures CLion
+# Analyze and format the code
 #
 ########################################################################
 
-COMPILATION_DATABASE_FILE = compile_commands.json
+format:
+	clang-format -i -style=file $(DHE_HEADERS) $(DHE_SOURCES)
 
-COMPILATION_DATABASE_JSONS := $(patsubst %, build/%.json, $(SOURCES) $(TEST_SOURCES) )
+tidy: cmake
+	clang-tidy -p=$(TEST_DIR) $(DHE_PRODUCTION_SOURCES)
 
-build/src/%.json: src/%
-	@mkdir -p $(@D)
-	$(CXX) $(CXXFLAGS) -MJ $@ -c -o build/$^.o $^
-
-build/test/%.json: test/%
-	@mkdir -p $(@D)
-	$(CXX) $(CXXFLAGS) $(TESTFLAGS) -MJ $@ -c -o build/$^.o $^
-
-$(COMPILATION_DATABASE_FILE): $(COMPILATION_DATABASE_JSONS)
-	sed -e '1s/^/[/' -e '$$s/,$$/]/' $^ | json_pp > $@
-
-project: $(COMPILATION_DATABASE_FILE)
-
-undb:
-	rm -rf $(COMPILATION_DATABASE_FILE) $(COMPILATION_DATABASE_JSONS)
-
-.PHONY: undb
+.PHONY: format tidy
 
 
 
@@ -126,13 +106,10 @@ $(DEV_DIR) $(DEV_PLUGIN_DIR):
 $(DEV_PLUGIN_ZIP): dist $(DEV_PLUGIN_DIR)
 	cp $(DIST_PLUGIN_ZIP) $(DEV_PLUGIN_DIR)
 
-unplug:
-	rm -rf $(DEV_PLUGIN_DIR)
-
-undev:
-	rm -rf $(DEV_DIR)
-
 dev: $(DEV_PLUGIN_ZIP)
+
+clean-dev:
+	rm -rf $(DEV_DIR)
 
 run: dev
 	$(RACK_EXECUTABLE) $(RACK_FLAGS) -u $(realpath $(DEV_DIR))
@@ -140,7 +117,9 @@ run: dev
 debug: dev
 	$(RACK_EXECUTABLE) $(RACK_FLAGS) -d -u $(realpath $(DEV_DIR))
 
-.PHONY: unplug undev run debug
+clean: clean-dev
+
+.PHONY: run debug clean-dev
 
 
 
@@ -154,28 +133,18 @@ debug: dev
 gui:
 	cd gui && rake install
 
+.PHONY: gui
 
 
 
 ########################################################################
 #
-# Utilities
+# Cleanup
 #
 ########################################################################
 
-TIDY_HEADERS = $(shell find plugin -name *.h)
-TIDY_SOURCES = $(shell find plugin -name *.cpp)
-
-tidy: project
-	clang-tidy $(TIDY_SOURCES)
-
-format:
-	clang-format -i -style=file $(TIDY_HEADERS) $(TIDY_SOURCES)
-
-clobber: fresh
+clobber: clean
 	cd gui && rake clobber
 
-fresh: clean undev undb
-
-.PHONY: clobber fresh gui tidy
+.PHONY: clobber gui
 
