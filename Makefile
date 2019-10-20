@@ -1,29 +1,30 @@
 RACK_DIR ?= ../..
 
-DHE_FILE_PATTERNS = \
-	plugin/ \
-	plugin/*/ \
-	plugin/*/*/ \
-	plugin/*/*/*/ \
-	plugin/*/*/*/*/ \
+SOURCE_DIRS = \
+	plugin \
+	plugin/config \
+	plugin/controls \
+	plugin/components \
+	plugin/modules \
+	plugin/modules/ranger \
+	plugin/modules/gator \
+	plugin/modules/blossom \
+	plugin/modules/swave \
+	plugin/modules/cubic \
+	plugin/modules/xycloid \
+	plugin/modules/fuzzy-logic \
+	plugin/modules/tapers \
+	plugin/modules/curve-sequencer \
+	plugin/modules/curve-sequencer/processor \
+	plugin/modules/stage \
+	plugin/modules/func \
+	plugin/widgets \
 
-DHE_FILES = $(sort $(wildcard $(DHE_FILE_PATTERNS)))
-DHE_SOURCES = $(filter %.cpp, $(DHE_FILES))
-DHE_HEADERS = $(filter %.h, $(DHE_FILES))
-DHE_DIRS = $(filter %/, $(DHE_FILES))
-
-
-DHE_TEST_DIRS =  $(filter %/test/, $(DHE_DIRS))
-DHE_TEST_SOURCE_PATTERN = $(foreach dir, $(DHE_TEST_DIRS), $(dir)%.cpp)
-DHE_TEST_SOURCES = $(filter $(DHE_TEST_SOURCE_PATTERN), $(DHE_SOURCES))
-DHE_PRODUCTION_DIRS =  $(filter-out %/test/, $(DHE_DIRS))
-DHE_PRODUCTION_SOURCES = $(filter-out $(DHE_TEST_SOURCE_PATTERN), $(DHE_SOURCES))
-
-SOURCES = $(DHE_PRODUCTION_SOURCES)
+SOURCES = $(foreach dir, $(SOURCE_DIRS), $(wildcard $(dir)/*.cpp))
 
 DISTRIBUTABLES += LICENSE.txt svg
 
-FLAGS += $(foreach dir,$(DHE_PRODUCTION_DIRS),-I$(dir))
+FLAGS += $(foreach dir,$(SOURCE_DIRS),-I$(dir))
 CFLAGS +=
 CXXFLAGS +=
 LDFLAGS +=
@@ -46,21 +47,21 @@ include $(RACK_DIR)/plugin.mk
 #
 ########################################################################
 
-TEST_DIR = .test
+CMAKE_DIR = .cmake
 
 cmake:
-	cmake plugin -B $(TEST_DIR) -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
-	cmake --build $(TEST_DIR)
+	cmake -S plugin -B $(CMAKE_DIR) -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
+	cmake --build $(CMAKE_DIR)
 
 test: cmake
-	cd $(TEST_DIR) && ctest --progress --output-on-failure && cd -
+	cd $(CMAKE_DIR) && ctest --progress --output-on-failure
 
-clean-test:
-	rm -rf $(TEST_DIR)
+clean-cmake:
+	rm -rf $(CMAKE_DIR)
 
-clean: clean-test
+clean: clean-cmake
 
-.PHONY: ctest cmake clean-test
+.PHONY: ctest cmake clean-cmake
 
 
 
@@ -71,11 +72,20 @@ clean: clean-test
 #
 ########################################################################
 
+TEST_DIRS = \
+	plugin/controls/test \
+	plugin/components/test \
+	plugin/modules/curve-sequencer/test \
+
+TEST_SOURCES = $(foreach dir, $(TEST_DIRS), $(wildcard $(dir)/*.cpp))
+
+HEADERS = $(foreach dir, $(SOURCE_DIRS), $(wildcard $(dir)/*.h))
+
 format:
-	clang-format -i -style=file $(DHE_HEADERS) $(DHE_SOURCES)
+	clang-format -i -style=file $(HEADERS) $(SOURCES) $(TEST_SOURCES)
 
 tidy: cmake
-	clang-tidy -p=$(TEST_DIR) $(DHE_PRODUCTION_SOURCES)
+	clang-tidy -p=$(CMAKE_DIR) $(SOURCES)
 
 .PHONY: format tidy
 

@@ -3,10 +3,6 @@ project(DHE-Modules
         VERSION 1.6.0
         LANGUAGES CXX)
 
-set(CMAKE_INSTALL_PREFIX ${CMAKE_CURRENT_BINARY_DIR}/rack)
-set(PLUGINS_INSTALL_DIR plugins)
-set(PLUGIN_INSTALL_DIR plugins/${PROJECT_NAME})
-
 add_compile_options(
         -Wall -Wextra -Wno-unused-parameter
         -g
@@ -43,8 +39,8 @@ endif()
 add_library(racksdk INTERFACE)
 target_include_directories(racksdk
         INTERFACE
-        ${racksdk_SOURCE_DIR}/dep/include
         ${racksdk_SOURCE_DIR}/include
+        ${racksdk_SOURCE_DIR}/dep/include
         )
 
 include(GoogleTest)
