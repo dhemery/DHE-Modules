@@ -37,7 +37,7 @@ add_executable(curve_sequencer_tests)
 target_sources(curve_sequencer_tests
         PRIVATE
         test/GenerateStageTest.cpp
-        test/StepExecutorTest.cpp
+        test/SequenceTest.cpp
         test/StepExecutorTest.cpp
         test/SustainStageTest.cpp
         )
