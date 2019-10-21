@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.15)
 
-add_library(cubic OBJECT)
+add_library(cubic)
 target_include_directories(cubic PUBLIC .)
 target_sources(cubic
         PRIVATE
@@ -14,10 +14,4 @@ target_link_libraries(cubic
         config
         widgets
         racksdk
-        )
-set_target_properties(cubic
-        PROPERTIES
-        CXX_STANDARD 11
-        CXX_STANDARD_REQUIRED YES
-        CXX_EXTENSIONS YES
         )

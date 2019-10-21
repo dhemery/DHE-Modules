@@ -1,7 +1,8 @@
 cmake_minimum_required(VERSION 3.15)
 
-add_library(config OBJECT)
-target_include_directories(config PUBLIC .)
+add_library(config)
+target_include_directories(config INTERFACE .)
+target_compile_features(config PUBLIC cxx_std_11)
 target_sources(config
         PRIVATE
         CurvatureConfig.cpp
@@ -13,10 +14,4 @@ target_link_libraries(config
         components
         controls
         racksdk
-        )
-set_target_properties(config
-        PROPERTIES
-        CXX_STANDARD 11
-        CXX_STANDARD_REQUIRED YES
-        CXX_EXTENSIONS YES
         )

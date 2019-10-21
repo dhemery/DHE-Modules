@@ -7,7 +7,7 @@ target_link_libraries(curve_sequencer_processor
         components
         )
 
-add_library(curve_sequencer OBJECT)
+add_library(curve_sequencer)
 target_include_directories(curve_sequencer PUBLIC .)
 target_sources(curve_sequencer
         PRIVATE
@@ -19,12 +19,6 @@ target_link_libraries(curve_sequencer
         controls
         config
         widgets
-        )
-set_target_properties(curve_sequencer
-        PROPERTIES
-        CXX_STANDARD 11
-        CXX_STANDARD_REQUIRED YES
-        CXX_EXTENSIONS YES
         )
 
 add_executable(curve_sequencer_tests)
@@ -45,12 +39,6 @@ target_link_libraries(curve_sequencer_tests
         PRIVATE
         curve_sequencer_processor
         gmock_main
-        )
-set_target_properties(curve_sequencer_tests
-        PROPERTIES
-        CXX_STANDARD 11
-        CXX_STANDARD_REQUIRED YES
-        CXX_EXTENSIONS YES
         )
 
 gtest_discover_tests(curve_sequencer_tests)

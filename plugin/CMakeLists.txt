@@ -26,6 +26,12 @@ add_compile_definitions(
         # _USE_MATH_DEFINES
 )
 
+set_property(GLOBAL PROPERTY
+        CXX_STANDARD 11
+        CXX_STANDARD_REQUIRED YES
+        CXX_EXTENSIONS YES
+        )
+
 include(FetchContent)
 
 FetchContent_Declare(racksdk
@@ -43,6 +49,7 @@ target_include_directories(racksdk
         ${racksdk_SOURCE_DIR}/include
         ${racksdk_SOURCE_DIR}/dep/include
         )
+target_compile_features(racksdk INTERFACE cxx_std_11)
 
 include(GoogleTest)
 FetchContent_Declare(
@@ -56,8 +63,19 @@ FetchContent_MakeAvailable(googletest)
 add_subdirectory(components)
 add_subdirectory(controls)
 add_subdirectory(config)
-add_subdirectory(modules)
 add_subdirectory(widgets)
+
+add_subdirectory(modules/blossom)
+add_subdirectory(modules/cubic)
+add_subdirectory(modules/curve-sequencer)
+add_subdirectory(modules/func)
+add_subdirectory(modules/fuzzy-logic)
+add_subdirectory(modules/gator)
+add_subdirectory(modules/ranger)
+add_subdirectory(modules/stage)
+add_subdirectory(modules/swave)
+add_subdirectory(modules/tapers)
+add_subdirectory(modules/xycloid)
 
 add_library(plugin SHARED)
 target_sources(plugin
@@ -67,14 +85,17 @@ target_sources(plugin
 
 target_link_libraries(plugin
         PRIVATE
-        modules
-        )
-set_target_properties(plugin
-        PROPERTIES
-        CXX_STANDARD 11
-        CXX_STANDARD_REQUIRED YES
-        CXX_EXTENSIONS NO
-        PREFIX ""
+        blossom
+        cubic
+        curve_sequencer
+        func
+        fuzzy_logic
+        gator
+        ranger
+        stage
+        swave
+        tapers
+        xycloid
         )
 target_link_options(plugin
         PRIVATE
@@ -85,10 +106,14 @@ target_link_options(plugin
         # Win only
         # -L$(RACK_DIR) -lRack
         )
+set_target_properties(plugin
+        PROPERTIES
+        PREFIX ""
+        )
 
 set(CMAKE_INSTALL_PREFIX ${CMAKE_CURRENT_BINARY_DIR}/rack)
-set(PLUGINS_INSTALL_DIR plugins)
-set(PLUGIN_INSTALL_DIR plugins/${PROJECT_NAME})
+set(PLUGINS_INSTALL_DIR plugins-v1)
+set(PLUGIN_INSTALL_DIR plugins-v1/${PROJECT_NAME})
 
 install(TARGETS plugin
         LIBRARY DESTINATION ${PLUGIN_INSTALL_DIR}

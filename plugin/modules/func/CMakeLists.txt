@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.15)
 
-add_library(func OBJECT)
+add_library(func)
 target_include_directories(func PUBLIC .)
 target_sources(func
         PRIVATE
@@ -17,10 +17,4 @@ target_link_libraries(func
         config
         widgets
         racksdk
-        )
-set_target_properties(func
-        PROPERTIES
-        CXX_STANDARD 11
-        CXX_STANDARD_REQUIRED YES
-        CXX_EXTENSIONS YES
         )

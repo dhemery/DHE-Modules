@@ -48,20 +48,29 @@ include $(RACK_DIR)/plugin.mk
 ########################################################################
 
 CMAKE_DIR = .cmake-dale
+CMAKE_INSTALL_DIR = $(CMAKE_DIR)/rack
 
-cmake:
+cmake-generate:
 	cmake -S plugin -B $(CMAKE_DIR) -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
-	cmake --build $(CMAKE_DIR)
 
-test: cmake
+cmake-build: cmake-generate
+	cmake --build $(CMAKE_DIR) --verbose
+
+ctest: cmake-build
 	cd $(CMAKE_DIR) && ctest --progress --output-on-failure
 
-clean-cmake:
+cmake-install: cmake-generate
+	cmake --build $(CMAKE_DIR) --target install --verbose
+
+cmake-run: cmake-install
+	$(RACK_EXECUTABLE) $(RACK_FLAGS) -u $(realpath $(CMAKE_INSTALL_DIR))
+
+cmake-clean:
 	rm -rf $(CMAKE_DIR)
 
-clean: clean-cmake
+clean: cmake-clean
 
-.PHONY: ctest cmake clean-cmake
+.PHONY: ctest cmake-clean
 
 
 
@@ -84,7 +93,7 @@ HEADERS = $(foreach dir, $(SOURCE_DIRS), $(wildcard $(dir)/*.h))
 format:
 	clang-format -i -style=file $(HEADERS) $(SOURCES) $(TEST_SOURCES)
 
-tidy: cmake
+tidy: cmake-build
 	clang-tidy -p=$(CMAKE_DIR) $(SOURCES)
 
 .PHONY: format tidy

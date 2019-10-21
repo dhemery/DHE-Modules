@@ -1,7 +1,0 @@
-<component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="All Tests" type="CLionExternalRunConfiguration" factoryName="Application" PROGRAM_PARAMS="--progress --output-on-failure" WORKING_DIR="file://$PROJECT_DIR$/cmake-build-debug" PASS_PARENT_ENVS_2="true" PROJECT_NAME="DHE-Modules" TARGET_NAME="ctest" CONFIG_NAME="ctest" RUN_PATH="/usr/local/bin/ctest">
-    <method v="2">
-      <option name="CLION.EXTERNAL.BUILD" enabled="true" />
-    </method>
-  </configuration>
-</component>
