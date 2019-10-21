@@ -10,6 +10,7 @@ set(CMAKE_CXX_EXTENSIONS NO)
 add_compile_options(
         -Wall -Wextra -Wno-unused-parameter
         -g
+        -O3
 
         # Lin and Win only
         # -Wsuggest-override
