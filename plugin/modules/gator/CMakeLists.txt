@@ -1,10 +1,8 @@
-add_library(gator)
-target_include_directories(gator PUBLIC .)
-target_sources(gator
-        PRIVATE
+add_library(gator
         Gator.cpp
         GatorPanel.cpp
         )
+target_include_directories(gator PUBLIC .)
 target_link_libraries(gator
         PUBLIC
         components

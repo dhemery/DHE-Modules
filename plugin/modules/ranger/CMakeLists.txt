@@ -1,10 +1,8 @@
-add_library(ranger)
-target_include_directories(ranger PUBLIC .)
-target_sources(ranger
-        PRIVATE
+add_library(ranger
         Ranger.cpp
         RangerPanel.cpp
         )
+target_include_directories(ranger PUBLIC .)
 target_link_libraries(ranger
         PUBLIC
         components

@@ -1,10 +1,8 @@
-add_library(controls)
-target_include_directories(controls INTERFACE .)
-target_sources(controls
-        PRIVATE
+add_library(controls
         CommonInputs.cpp
         DurationInputs.cpp
         )
+target_include_directories(controls INTERFACE .)
 target_link_libraries(controls
         PUBLIC
         components

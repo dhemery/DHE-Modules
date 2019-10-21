@@ -1,7 +1,4 @@
-add_library(stage)
-target_include_directories(stage PUBLIC .)
-target_sources(stage
-        PRIVATE
+add_library(stage
         BoosterStage.cpp
         BoosterStagePanel.cpp
         Hostage.cpp
@@ -13,6 +10,7 @@ target_sources(stage
         Upstage.cpp
         UpstagePanel.cpp
         )
+target_include_directories(stage PUBLIC .)
 target_link_libraries(stage
         PUBLIC
         components

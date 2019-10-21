@@ -5,12 +5,10 @@ target_link_libraries(curve_sequencer_processor
         components
         )
 
-add_library(curve_sequencer)
-target_include_directories(curve_sequencer PUBLIC .)
-target_sources(curve_sequencer
-        PRIVATE
+add_library(curve_sequencer
         CurveSequencer.cpp
         )
+target_include_directories(curve_sequencer PUBLIC .)
 target_link_libraries(curve_sequencer
         PUBLIC
         curve_sequencer_processor
@@ -19,9 +17,7 @@ target_link_libraries(curve_sequencer
         widgets
         )
 
-add_executable(curve_sequencer_tests)
-target_sources(curve_sequencer_tests
-        PRIVATE
+add_executable(curve_sequencer_tests
         test/GenerateStageTest.cpp
         test/SequenceTest.cpp
         test/StepExecutorTest.cpp

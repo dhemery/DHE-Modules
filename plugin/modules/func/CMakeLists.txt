@@ -1,13 +1,11 @@
-add_library(func)
-target_include_directories(func PUBLIC .)
-target_sources(func
-        PRIVATE
+add_library(func
         Func.cpp
         FuncPanel.cpp
         Func6.cpp
         Func6Panel.cpp
         FuncChannel.cpp
         )
+target_include_directories(func PUBLIC .)
 target_link_libraries(func
         PUBLIC
         components

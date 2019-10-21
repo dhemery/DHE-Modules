@@ -1,10 +1,8 @@
-add_library(tapers)
-target_include_directories(tapers PUBLIC .)
-target_sources(tapers
-        PRIVATE
+add_library(tapers
         Tapers.cpp
         TapersPanel.cpp
         )
+target_include_directories(tapers PUBLIC .)
 target_link_libraries(tapers
         PUBLIC
         components

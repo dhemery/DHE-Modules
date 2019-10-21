@@ -2,9 +2,7 @@ add_library(components INTERFACE)
 target_compile_features(components INTERFACE cxx_std_11)
 target_include_directories(components INTERFACE .)
 
-add_executable(component_tests)
-target_sources(component_tests
-        PRIVATE
+add_executable(component_tests
         test/LatchTest.cpp
         test/OneShotPhaseAccumulatorTest.cpp
         )
