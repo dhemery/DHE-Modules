@@ -1,5 +1,3 @@
-cmake_minimum_required(VERSION 3.15)
-
 add_library(cubic)
 target_include_directories(cubic PUBLIC .)
 target_sources(cubic

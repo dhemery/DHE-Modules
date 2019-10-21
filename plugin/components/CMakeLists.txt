@@ -1,5 +1,3 @@
-cmake_minimum_required(VERSION 3.15)
-
 add_library(components INTERFACE)
 target_compile_features(components INTERFACE cxx_std_11)
 target_include_directories(components INTERFACE .)

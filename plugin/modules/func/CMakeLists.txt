@@ -1,5 +1,3 @@
-cmake_minimum_required(VERSION 3.15)
-
 add_library(func)
 target_include_directories(func PUBLIC .)
 target_sources(func

@@ -1,5 +1,3 @@
-cmake_minimum_required(VERSION 3.15)
-
 add_library(stage)
 target_include_directories(stage PUBLIC .)
 target_sources(stage

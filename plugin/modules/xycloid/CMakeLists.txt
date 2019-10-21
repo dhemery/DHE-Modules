@@ -1,5 +1,3 @@
-cmake_minimum_required(VERSION 3.15)
-
 add_library(xycloid)
 target_include_directories(xycloid PUBLIC .)
 target_sources(xycloid
@@ -10,14 +8,8 @@ target_sources(xycloid
 target_link_libraries(xycloid
         PUBLIC
         components
-        controls
         config
+        controls
         widgets
         racksdk
-        )
-set_target_properties(xycloid
-        PROPERTIES
-        CXX_STANDARD 11
-        CXX_STANDARD_REQUIRED YES
-        CXX_EXTENSIONS NO
         )

@@ -1,5 +1,3 @@
-cmake_minimum_required(VERSION 3.15)
-
 add_library(curve_sequencer_processor INTERFACE)
 target_include_directories(curve_sequencer_processor INTERFACE processor)
 target_link_libraries(curve_sequencer_processor
@@ -28,12 +26,6 @@ target_sources(curve_sequencer_tests
         test/SequenceTest.cpp
         test/StepExecutorTest.cpp
         test/SustainStageTest.cpp
-        )
-target_compile_options(curve_sequencer_tests
-        PRIVATE
-        # Without optimization level 2 or higher,
-        # gtest fails on one of my computers
-        -O2
         )
 target_link_libraries(curve_sequencer_tests
         PRIVATE

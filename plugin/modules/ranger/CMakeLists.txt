@@ -1,5 +1,3 @@
-cmake_minimum_required(VERSION 3.15)
-
 add_library(ranger)
 target_include_directories(ranger PUBLIC .)
 target_sources(ranger

@@ -15,10 +15,6 @@ public:
 
   void process(const ProcessArgs &args) override;
 
-  static auto constexpr speedKnobTaperCurvature = -0.8F;
-  static auto constexpr speedRange = Range{-10.F, 10.F};
-  static auto constexpr speedKnobTaper = taper::FixedSTaper{speedKnobTaperCurvature};
-
   enum ParameterIds {
     RatioKnob,
     RatioAvKnob,
@@ -48,10 +44,7 @@ private:
 
   auto yOffset() const -> float { return buttonIsPressed(params[YRangeSwitch]) ? 1.F : 0.F; }
 
-  auto speed() const -> float {
-    return taperedAndScaledRotation(params[SpeedKnob], inputs[SpeedCvInput], params[SpeedAvKnob], speedKnobTaper,
-                                    speedRange);
-  }
+  auto speed() const -> float;
 
   auto depth() const -> float;
   auto phase() const -> float;

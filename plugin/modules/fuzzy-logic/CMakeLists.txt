@@ -1,5 +1,3 @@
-cmake_minimum_required(VERSION 3.15)
-
 add_library(fuzzy_logic)
 target_include_directories(fuzzy_logic PUBLIC .)
 target_sources(fuzzy_logic

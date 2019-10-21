@@ -13,19 +13,23 @@ static auto constexpr maxWobbleRatio = 16.F;
 static auto constexpr inwardWobbleRatioRange = Range{0.F, -maxWobbleRatio};
 static auto constexpr outwardWobbleRatioRange = Range{0.F, maxWobbleRatio};
 static auto constexpr bidirectionalWobbleRatioRange = Range{-maxWobbleRatio, maxWobbleRatio};
+
+static auto constexpr speedKnobTaperCurvature = -0.8F;
+static auto constexpr speedRange = Range{-10.F, 10.F};
+static auto constexpr speedKnobTaper = taper::FixedSTaper{speedKnobTaperCurvature};
 static auto constexpr initialSpeedHz(1.F);
 
 static auto const wobbleRatioRanges
     = std::array<Range const *, 3>{&inwardWobbleRatioRange, &bidirectionalWobbleRatioRange, &outwardWobbleRatioRange};
 
 static inline auto rotationToSpeed(float rotation) -> float {
-  auto const tapered = Xycloid::speedKnobTaper.apply(rotation);
-  return Xycloid::speedRange.scale(tapered);
+  auto const tapered = speedKnobTaper.apply(rotation);
+  return speedRange.scale(tapered);
 }
 
 static inline auto speedToRotation(float speed) -> float {
-  auto const tapered = Xycloid::speedRange.normalize(speed);
-  return Xycloid::speedKnobTaper.invert(tapered);
+  auto const tapered = speedRange.normalize(speed);
+  return speedKnobTaper.invert(tapered);
 }
 
 class SpeedKnobParamQuantity : public rack::engine::ParamQuantity {
@@ -121,6 +125,11 @@ auto Xycloid::phase() const -> float {
 
 auto Xycloid::ratio() const -> float {
   return wobbleRatio(this, rotation(params[RatioKnob], inputs[RatioCvInput], params[RatioAvKnob]));
+}
+
+auto Xycloid::speed() const -> float {
+  return taperedAndScaledRotation(params[SpeedKnob], inputs[SpeedCvInput], params[SpeedAvKnob], speedKnobTaper,
+                                  speedRange);
 }
 
 } // namespace dhe

@@ -1,5 +1,3 @@
-cmake_minimum_required(VERSION 3.15)
-
 add_library(controls)
 target_include_directories(controls INTERFACE .)
 target_sources(controls

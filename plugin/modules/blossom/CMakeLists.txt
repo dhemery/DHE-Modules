@@ -1,5 +1,3 @@
-cmake_minimum_required(VERSION 3.15)
-
 add_library(blossom)
 target_include_directories(blossom PUBLIC .)
 target_sources(blossom
