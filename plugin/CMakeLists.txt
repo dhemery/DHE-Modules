@@ -19,6 +19,7 @@ if (UNIX AND NOT APPLE)
 endif ()
 
 if (NOT UNIX)
+    set(CMAKE_CXX_COMPILER g++)
     add_compile_definitions(ARCH_WIN _USE_MATH_DEFINES)
     add_compile_options(-Wsuggest-override)
 endif ()
@@ -47,7 +48,11 @@ FetchContent_Declare(
         GIT_TAG release-1.10.0
 )
 
-FetchContent_MakeAvailable(googletest)
+FetchContent_GetProperties(googletest)
+if (NOT googletest_POPULATED)
+    FetchContent_Populate(googletest)
+    add_subdirectory(${googletest_SOURCE_DIR} ${googletest_BINARY_DIR})
+endif ()
 
 enable_testing()
 
