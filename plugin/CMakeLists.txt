@@ -1,45 +1,36 @@
 cmake_minimum_required(VERSION 3.15)
-project(DHE-Modules
-        VERSION 1.6.0
-        LANGUAGES CXX)
+
+project(DHE-Modules VERSION 1.6.0 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED YES)
 set(CMAKE_CXX_EXTENSIONS NO)
 
-add_compile_options(
-        -Wall -Wextra -Wno-unused-parameter
-        -g
-        -O3
+add_compile_options(-Wall -Wextra -Wno-unused-parameter -g -O3 -stdlib=libc++)
 
-        # Lin and Win only
-        # -Wsuggest-override
+if (APPLE)
+    add_compile_definitions(ARCH_MAC)
+    add_compile_options(-mmacosx-version-min=10.7)
+endif ()
 
-        # Mac only (FLAGS and LDFLAGS)
-        -mmacosx-version-min=10.7
+if (UNIX AND NOT APPLE)
+    add_compile_definitions(ARCH_LIN)
+    add_compile_options(-Wsuggest-override)
+endif ()
 
-        -stdlib=libc++
-)
-
-add_compile_definitions(
-        # ARCH_LIN # Linux Only
-        # ARCH_WIN # Windows Only
-        ARCH_MAC # Mac Only
-
-        # Win only
-        # _USE_MATH_DEFINES
-)
+if (NOT UNIX)
+    add_compile_definitions(ARCH_WIN _USE_MATH_DEFINES)
+    add_compile_options(-Wsuggest-override)
+endif ()
 
 include(FetchContent)
 
-FetchContent_Declare(racksdk
-        URL https://vcvrack.com/downloads/Rack-SDK-1.1.5.zip
-        )
+FetchContent_Declare(racksdk URL https://vcvrack.com/downloads/Rack-SDK-1.1.5.zip)
 
 FetchContent_GetProperties(racksdk)
-if(NOT racksdk_POPULATED)
+if (NOT racksdk_POPULATED)
     FetchContent_Populate(racksdk)
-endif()
+endif ()
 
 add_library(racksdk INTERFACE)
 target_include_directories(racksdk
@@ -82,7 +73,6 @@ target_sources(plugin
         PRIVATE
         PluginInitializer.cpp
         )
-
 target_link_libraries(plugin
         PRIVATE
         blossom
@@ -97,19 +87,13 @@ target_link_libraries(plugin
         tapers
         xycloid
         )
-target_link_options(plugin
-        PRIVATE
-
-        # Mac only
-        "LINKER:-undefined,dynamic_lookup"
-
-        # Win only
-        # -L$(RACK_DIR) -lRack
-        )
-set_target_properties(plugin
-        PROPERTIES
-        PREFIX ""
-        )
+IF (NOT UNIX)
+    target_link_options(plugin PRIVATE -L${racksdk_SOURCE_DIR} -lRack)
+endif ()
+IF (APPLE)
+    target_link_options(plugin PRIVATE "LINKER:-undefined,dynamic_lookup")
+endif ()
+set_target_properties(plugin PROPERTIES PREFIX "")
 
 set(CMAKE_INSTALL_PREFIX ${CMAKE_CURRENT_BINARY_DIR}/rack)
 set(PLUGINS_INSTALL_DIR plugins-v1)
