@@ -3,13 +3,9 @@ set -o errexit
 set -o nounset
 set -o xtrace
 
-if [ "$TRAVIS_OS_NAME" = "linux" ]; then
-  sudo apt-get install -y libglu1-mesa-dev
-fi
-
 mkdir cmake-build
 
-cmake -S plugin -B cmake-build
+cmake -Splugin -Bcmake-build
 cmake --build cmake-build
 pushd cmake-build
 ctest
