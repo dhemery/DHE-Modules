@@ -7,7 +7,7 @@ mkdir cmake-build
 pushd cmake-build
 
 cmake ../plugin
-cmake --build .
+cmake --build . --verbose
 ctest
 popd
 
