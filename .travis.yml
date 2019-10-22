@@ -10,11 +10,17 @@ matrix:
   - os: linux
     dist: xenial
   - os: windows
+    env:
+    - CMAKE_PATH="/c/Program Files/CMake/bin"
+    script:
+    - export PATH=$CMAKE_PATH:$PATH
 
 before_install:
   - if [ "$TRAVIS_OS_NAME" = "linux" ]; then sudo apt-get install -y libglu1-mesa-dev; fi
   - if [ "$TRAVIS_OS_NAME" = "windows" ]; then choco install make zip ; fi
 
 script:
-- script/cibuild
-
+- make dist
+- mkdir cmake-build && cd cmake-build
+- cmake ../plugin -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON
+- cmake --cmake-build .
