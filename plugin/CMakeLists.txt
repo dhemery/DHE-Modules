@@ -19,7 +19,6 @@ if (UNIX AND NOT APPLE)
 endif ()
 
 if (NOT UNIX)
-    set(CMAKE_CXX_COMPILER $ENV{CXX})
     add_compile_definitions(ARCH_WIN _USE_MATH_DEFINES)
     add_compile_options(-Wsuggest-override)
 endif ()
