@@ -6,11 +6,11 @@ set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED YES)
 set(CMAKE_CXX_EXTENSIONS NO)
 
-add_compile_options(-Wall -Wextra -Wno-unused-parameter -g -O3 -stdlib=libc++)
+add_compile_options(-Wall -Wextra -Wno-unused-parameter -g -O3 -std=c++11)
 
 if (APPLE)
     add_compile_definitions(ARCH_MAC)
-    add_compile_options(-mmacosx-version-min=10.7)
+    add_compile_options(-mmacosx-version-min=10.7 -stdlib=libc++)
 endif ()
 
 if (UNIX AND NOT APPLE)
