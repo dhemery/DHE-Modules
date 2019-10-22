@@ -11,9 +11,7 @@ matrix:
     dist: xenial
   - os: windows
     env:
-    - CMAKE_PATH="/c/Program Files/CMake/bin"
-    script:
-    - export PATH=$CMAKE_PATH:$PATH
+      - CMAKE_PATH="/c/Program Files/CMake/bin:$PATH"
 
 before_install:
   - if [ "$TRAVIS_OS_NAME" = "linux" ]; then sudo apt-get install -y libglu1-mesa-dev; fi
@@ -23,4 +21,4 @@ script:
 - make dist
 - mkdir cmake-build && cd cmake-build
 - cmake ../plugin -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON
-- cmake --cmake-build .
+- cmake --build .
