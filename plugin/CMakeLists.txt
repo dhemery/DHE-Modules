@@ -6,7 +6,7 @@ set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED YES)
 set(CMAKE_CXX_EXTENSIONS NO)
 
-add_compile_options(-Wall -Wextra -Wno-unused-parameter -g -O3 -std=c++11)
+add_compile_options(-Wall -Wextra -Wno-unused-parameter -g -O3 -std=c++11 -fPIC)
 
 if (APPLE)
     add_compile_definitions(ARCH_MAC)
@@ -19,7 +19,6 @@ if (UNIX AND NOT APPLE)
 endif ()
 
 if (NOT UNIX)
-    set(CMAKE_CXX_COMPILER g++)
     add_compile_definitions(ARCH_WIN _USE_MATH_DEFINES)
     add_compile_options(-Wsuggest-override)
 endif ()
