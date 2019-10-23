@@ -12,4 +12,4 @@ target_link_libraries(component_tests
         gtest_main
         )
 
-gtest_discover_tests(component_tests)
+gtest_add_tests(TARGET component_tests)

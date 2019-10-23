@@ -3,3 +3,5 @@
 /build/
 /dist/
 /*.dylib
+/cmake-build-debug/
+/.idea/workspace.xml

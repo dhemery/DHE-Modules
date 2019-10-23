@@ -1,11 +1,4 @@
-cmake_minimum_required(VERSION 3.12.4)
-
-project(DHE-Modules VERSION 1.6.0 LANGUAGES CXX)
-
-set(CMAKE_CXX_STANDARD 11)
-set(CMAKE_CXX_STANDARD_REQUIRED YES)
-set(CMAKE_CXX_EXTENSIONS NO)
-
+enable_testing()
 add_compile_options(-Wall -Wextra -Wno-unused-parameter -g -O3 -std=c++11 -fPIC)
 
 if (APPLE)
@@ -23,38 +16,6 @@ if (NOT UNIX)
     add_compile_definitions(ARCH_WIN _USE_MATH_DEFINES)
     add_compile_options(-Wsuggest-override)
 endif ()
-
-include(FetchContent)
-
-FetchContent_Declare(racksdk URL https://vcvrack.com/downloads/Rack-SDK-1.1.5.zip)
-
-FetchContent_GetProperties(racksdk)
-if (NOT racksdk_POPULATED)
-    FetchContent_Populate(racksdk)
-endif ()
-
-add_library(racksdk INTERFACE)
-target_include_directories(racksdk
-        INTERFACE
-        ${racksdk_SOURCE_DIR}/include
-        ${racksdk_SOURCE_DIR}/dep/include
-        )
-target_compile_features(racksdk INTERFACE cxx_std_11)
-
-include(GoogleTest)
-FetchContent_Declare(
-        googletest
-        GIT_REPOSITORY https://github.com/google/googletest.git
-        GIT_TAG release-1.10.0
-)
-
-FetchContent_GetProperties(googletest)
-if (NOT googletest_POPULATED)
-    FetchContent_Populate(googletest)
-    add_subdirectory(${googletest_SOURCE_DIR} ${googletest_BINARY_DIR})
-endif ()
-
-enable_testing()
 
 add_subdirectory(components)
 add_subdirectory(controls)

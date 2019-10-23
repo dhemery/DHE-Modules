@@ -18,5 +18,5 @@ before_install:
 
 script:
   - mkdir cmake-build && cd cmake-build
-  - cmake -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON ../plugin
+  - cmake -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON ../
   - cmake --build .

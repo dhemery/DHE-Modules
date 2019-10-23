@@ -51,7 +51,7 @@ CMAKE_DIR = .cmake-dale
 CMAKE_INSTALL_DIR = $(CMAKE_DIR)/rack
 
 cmake-generate:
-	cmake -S plugin -B $(CMAKE_DIR) -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
+	cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -B $(CMAKE_DIR)
 
 cmake-build: cmake-generate
 	cmake --build $(CMAKE_DIR) --verbose

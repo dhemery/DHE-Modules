@@ -29,4 +29,4 @@ target_link_libraries(curve_sequencer_tests
         gmock_main
         )
 
-gtest_discover_tests(curve_sequencer_tests)
+gtest_add_tests(TARGET curve_sequencer_tests)

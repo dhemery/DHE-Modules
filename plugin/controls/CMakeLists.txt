@@ -22,4 +22,4 @@ target_link_libraries(control_tests
         gtest_main
         )
 
-gtest_discover_tests(control_tests)
+gtest_add_tests(TARGET control_tests)
