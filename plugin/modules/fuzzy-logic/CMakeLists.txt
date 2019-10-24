@@ -4,7 +4,7 @@ add_library(fuzzy_logic
         FuzzyLogicZ.cpp
         FuzzyLogicZPanel.cpp
         )
-target_include_directories(fuzzy_logic PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+target_include_directories(fuzzy_logic PUBLIC ${CMAKE_CURRENT_LIST_DIR})
 target_link_libraries(fuzzy_logic
         PUBLIC
         components

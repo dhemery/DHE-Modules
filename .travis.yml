@@ -18,6 +18,7 @@ matrix:
       env:
         - PATH="/c/Program Files/CMake/bin:$PATH"
       script:
+        - cmake --version
         - mkdir cmake-build && cd cmake-build
         - cmake -G "MSYS Makefiles" -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON ../
         - cmake --build .

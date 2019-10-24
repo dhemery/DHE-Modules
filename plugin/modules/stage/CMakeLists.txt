@@ -10,7 +10,7 @@ add_library(stage
         Upstage.cpp
         UpstagePanel.cpp
         )
-target_include_directories(stage PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+target_include_directories(stage PUBLIC ${CMAKE_CURRENT_LIST_DIR})
 target_link_libraries(stage
         PUBLIC
         components
