@@ -1,4 +1,3 @@
-enable_testing()
 add_compile_options(-Wall -Wextra -Wno-unused-parameter -g -O3 -std=c++11 -fPIC)
 
 if (APPLE)
