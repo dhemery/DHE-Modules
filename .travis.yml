@@ -2,15 +2,19 @@ language: cpp
 compiler: gcc
 
 branches:
-   except:
-     - /^dale\/.*/
+  except:
+    - /^dale\/.*/
 
 matrix:
   include:
     - os: linux
       dist: xenial
+      env:
+        - GENERATOR="Unix Makefiles"
     - os: windows
-      env: PATH="/c/Program Files/CMake/bin:$PATH"
+      env:
+        - PATH="/c/Program Files/CMake/bin:$PATH"
+        - GENERATOR="MinGW Makefiles"
 
 before_install:
   - if [ "$TRAVIS_OS_NAME" = "linux" ]; then sudo apt-get install -y libglu1-mesa-dev; fi
@@ -18,5 +22,6 @@ before_install:
 
 script:
   - mkdir cmake-build && cd cmake-build
-  - cmake -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON ../
+  - cmake -G${GENERATOR} -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON ../
+  - ctest
   - cmake --build .

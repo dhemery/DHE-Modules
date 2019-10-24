@@ -8,7 +8,7 @@ target_link_libraries(curve_sequencer_processor
 add_library(curve_sequencer
         CurveSequencer.cpp
         )
-target_include_directories(curve_sequencer PUBLIC .)
+target_include_directories(curve_sequencer PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 target_link_libraries(curve_sequencer
         PUBLIC
         curve_sequencer_processor
