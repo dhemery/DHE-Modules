@@ -1,6 +1,6 @@
 add_library(components INTERFACE)
 target_compile_features(components INTERFACE cxx_std_11)
-target_include_directories(components INTERFACE .)
+target_include_directories(components INTERFACE ${CMAKE_CURRENT_SOURCE_DIR})
 
 add_executable(component_tests
         test/LatchTest.cpp
