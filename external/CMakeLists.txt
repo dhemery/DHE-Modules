@@ -26,9 +26,7 @@ target_include_directories(racksdk
         ${racksdk_SOURCE_DIR}/dep/include
         )
 target_compile_features(racksdk INTERFACE cxx_std_11)
-if(NOT UNIX)
-set_target_properties(racksdk
-        PROPERTIES
-        INTERFACE_LOCATION ${racksdk_SOURCE_DIR}/libRack.a
-        )
-endif()
+if (NOT UNIX)
+    target_link_directories(racksdk INTERFACE ${racksdk_SOURCE_DIR})
+    target_link_libraries(racksdk INTERFACE Rack)
+endif ()
