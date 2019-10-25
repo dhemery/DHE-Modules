@@ -1,19 +1,18 @@
 add_compile_options(-Wall -Wextra -Wno-unused-parameter -g -O3 -std=c++11 -fPIC)
 
+if (WIN32)
+    add_compile_definitions(ARCH_WIN _USE_MATH_DEFINES)
+endif ()
+
 if (APPLE)
     add_compile_definitions(ARCH_MAC)
     add_compile_options(-mmacosx-version-min=10.7 -stdlib=libc++)
+else ()
+    add_compile_options(-Wsuggest-override)
 endif ()
 
 if (UNIX AND NOT APPLE)
     add_compile_definitions(ARCH_LIN)
-    add_compile_options(-Wsuggest-override)
-endif ()
-
-if (NOT UNIX)
-#    set(CMAKE_CXX_COMPILER $ENV{CXX})
-    add_compile_definitions(ARCH_WIN _USE_MATH_DEFINES)
-    add_compile_options(-Wsuggest-override)
 endif ()
 
 add_subdirectory(components)
