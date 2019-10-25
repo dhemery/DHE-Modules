@@ -11,7 +11,7 @@ if (UNIX AND NOT APPLE)
 endif ()
 
 if (NOT UNIX)
-    set(CMAKE_CXX_COMPILER $ENV{CXX})
+#    set(CMAKE_CXX_COMPILER $ENV{CXX})
     add_compile_definitions(ARCH_WIN _USE_MATH_DEFINES)
     add_compile_options(-Wsuggest-override)
 endif ()
@@ -52,9 +52,6 @@ target_link_libraries(plugin
         tapers
         xycloid
         )
-IF (NOT UNIX)
-    target_link_options(plugin PRIVATE -L${racksdk_SOURCE_DIR} -lRack)
-endif ()
 IF (APPLE)
     target_link_options(plugin PRIVATE "LINKER:-undefined,dynamic_lookup")
 endif ()
