@@ -19,11 +19,16 @@ FetchContent_GetProperties(racksdk)
 if (NOT racksdk_POPULATED)
     FetchContent_Populate(racksdk)
 endif ()
-add_library(racksdk INTERFACE)
+add_library(racksdk INTERFACE IMPORTED GLOBAL)
 target_include_directories(racksdk
         INTERFACE
         ${racksdk_SOURCE_DIR}/include
         ${racksdk_SOURCE_DIR}/dep/include
         )
 target_compile_features(racksdk INTERFACE cxx_std_11)
-
+if(NOT UNIX)
+set_target_properties(racksdk
+        PROPERTIES
+        INTERFACE_LOCATION ${racksdk_SOURCE_DIR}/libRack.a
+        )
+endif()
