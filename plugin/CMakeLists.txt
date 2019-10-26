@@ -50,6 +50,7 @@ target_link_libraries(plugin
         swave
         tapers
         xycloid
+        Rack::SDK
         )
 IF (APPLE)
     target_link_options(plugin PRIVATE "LINKER:-undefined,dynamic_lookup")

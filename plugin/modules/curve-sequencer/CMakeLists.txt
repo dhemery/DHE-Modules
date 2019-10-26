@@ -1,20 +1,13 @@
-add_library(curve_sequencer_processor INTERFACE)
-target_include_directories(curve_sequencer_processor INTERFACE processor)
-target_link_libraries(curve_sequencer_processor
-        INTERFACE
-        components
-        )
-
 add_library(curve_sequencer
         CurveSequencer.cpp
         )
-target_include_directories(curve_sequencer PUBLIC ${CMAKE_CURRENT_LIST_DIR})
+target_include_directories(curve_sequencer PUBLIC .)
 target_link_libraries(curve_sequencer
         PUBLIC
-        curve_sequencer_processor
         controls
         config
         widgets
+        Rack::SDK
         )
 
 add_executable(curve_sequencer_tests
@@ -25,8 +18,7 @@ add_executable(curve_sequencer_tests
         )
 target_link_libraries(curve_sequencer_tests
         PRIVATE
-        curve_sequencer_processor
+        curve_sequencer
         gmock_main
         )
-
 gtest_add_tests(TARGET curve_sequencer_tests)

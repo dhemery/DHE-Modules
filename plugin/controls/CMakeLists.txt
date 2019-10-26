@@ -2,11 +2,11 @@ add_library(controls
         CommonInputs.cpp
         DurationInputs.cpp
         )
-target_include_directories(controls INTERFACE ${CMAKE_CURRENT_LIST_DIR})
+target_include_directories(controls PUBLIC .)
 target_link_libraries(controls
         PUBLIC
         components
-        racksdk
+        Rack::SDK
         )
 
 add_executable(control_tests)

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "processor/Sequence.h"
+#include "Sequence.h"
 
 #include <engine/Module.hpp>
 #include <memory>
