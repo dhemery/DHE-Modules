@@ -15,7 +15,7 @@ matrix:
         - cmake --build .
         - ctest
         - popd
-        - make dist
+        - make RACK_DIR=cmake-build/_deps/racksdk-src dist
     - os: windows
       env:
         - PATH="/c/Program Files/CMake/bin:$PATH"
@@ -26,7 +26,7 @@ matrix:
         - cmake --build .
         - ctest
         - popd
-        - make dist
+        - make RACK_DIR=cmake-build/_deps/racksdk-src dist
 
 before_install:
   - if [ "$TRAVIS_OS_NAME" = "linux" ]; then sudo apt-get install -y libglu1-mesa-dev; fi
