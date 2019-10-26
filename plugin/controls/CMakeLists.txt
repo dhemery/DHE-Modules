@@ -8,18 +8,3 @@ target_link_libraries(controls
         components
         Rack::SDK
         )
-
-add_executable(control_tests)
-target_sources(control_tests
-        PRIVATE
-        test/DurationInputTest.cpp
-        test/LevelInputTest.cpp
-        )
-target_link_libraries(control_tests
-        PRIVATE
-        components
-        controls
-        gtest_main
-        )
-
-gtest_add_tests(TARGET control_tests)

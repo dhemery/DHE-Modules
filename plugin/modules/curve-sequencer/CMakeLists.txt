@@ -9,16 +9,3 @@ target_link_libraries(curve_sequencer
         widgets
         Rack::SDK
         )
-
-add_executable(curve_sequencer_tests
-        test/GenerateStageTest.cpp
-        test/SequenceTest.cpp
-        test/StepExecutorTest.cpp
-        test/SustainStageTest.cpp
-        )
-target_link_libraries(curve_sequencer_tests
-        PRIVATE
-        curve_sequencer
-        gmock_main
-        )
-gtest_add_tests(TARGET curve_sequencer_tests)

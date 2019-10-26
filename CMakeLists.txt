@@ -8,3 +8,4 @@ set(CMAKE_CXX_EXTENSIONS NO)
 
 add_subdirectory(external)
 add_subdirectory(plugin)
+add_subdirectory(test)
