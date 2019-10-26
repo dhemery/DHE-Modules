@@ -1,30 +1,14 @@
 RACK_DIR ?= ../..
 
 SOURCE_DIRS = \
-	plugin \
-	plugin/config \
-	plugin/controls \
-	plugin/components \
-	plugin/modules \
-	plugin/modules/ranger \
-	plugin/modules/gator \
-	plugin/modules/blossom \
-	plugin/modules/swave \
-	plugin/modules/cubic \
-	plugin/modules/xycloid \
-	plugin/modules/fuzzy-logic \
-	plugin/modules/tapers \
-	plugin/modules/curve-sequencer \
-	plugin/modules/curve-sequencer/processor \
-	plugin/modules/stage \
-	plugin/modules/func \
-	plugin/widgets \
+	src/* \
+	src/*/* \
 
 SOURCES = $(foreach dir, $(SOURCE_DIRS), $(wildcard $(dir)/*.cpp))
 
 DISTRIBUTABLES += LICENSE.txt svg
 
-FLAGS += $(foreach dir,$(SOURCE_DIRS),-I$(dir))
+FLAGS += -Iinclude
 CFLAGS +=
 CXXFLAGS +=
 LDFLAGS +=
@@ -82,13 +66,16 @@ clean: cmake-clean
 ########################################################################
 
 TEST_DIRS = \
-	plugin/controls/test \
-	plugin/components/test \
-	plugin/modules/curve-sequencer/test \
+	test/* \
+	test/*/* \
+
+INCLUDE_DIRS = \
+	include/* \
+	include/*/* \
 
 TEST_SOURCES = $(foreach dir, $(TEST_DIRS), $(wildcard $(dir)/*.cpp))
 
-HEADERS = $(foreach dir, $(SOURCE_DIRS), $(wildcard $(dir)/*.h))
+HEADERS = $(foreach dir, $(INCLUDE_DIRS) $(SOURCE_DIRS), $(wildcard $(dir)/*.h))
 
 format:
 	clang-format -i -style=file $(HEADERS) $(SOURCES) $(TEST_SOURCES)

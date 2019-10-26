@@ -1,5 +1,5 @@
-#include "Latch.h"
-#include "Stages.h"
+#include "components/Latch.h"
+#include "module/curve-sequencer/Stages.h"
 
 #include <gmock/gmock-actions.h>
 #include <gmock/gmock.h>

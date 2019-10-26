@@ -15,5 +15,6 @@ if (UNIX AND NOT APPLE)
     add_compile_definitions(ARCH_LIN)
 endif ()
 
-add_subdirectory(common)
+add_subdirectory(components)
+add_subdirectory(controls)
 add_subdirectory(curve-sequencer)

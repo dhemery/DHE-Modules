@@ -1,6 +1,6 @@
-#include "StepExecutor.h"
+#include "module/curve-sequencer/StepExecutor.h"
 
-#include "Latch.h"
+#include "components/Latch.h"
 
 #include <gmock/gmock-actions.h>
 #include <gmock/gmock.h>

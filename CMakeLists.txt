@@ -7,5 +7,5 @@ set(CMAKE_CXX_STANDARD_REQUIRED YES)
 set(CMAKE_CXX_EXTENSIONS NO)
 
 add_subdirectory(external)
-add_subdirectory(plugin)
+add_subdirectory(src)
 add_subdirectory(test)
