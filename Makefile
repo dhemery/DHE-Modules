@@ -1,14 +1,12 @@
 RACK_DIR ?= ../..
 
-DHE_SOURCE_DIRS = \
-	plugin/* \
-	plugin/common/src/* \
-	plugin/common/src/*/* \
-	plugin/modules/* \
+DHE_SOURCE_DIRS += plugin/common/src/config
+DHE_SOURCE_DIRS += plugin/common/src/controls
+DHE_SOURCE_DIRS += plugin/modules/
+DHE_SOURCE_DIRS += plugin/modules/*
 
 DHE_SOURCE_FILES = $(foreach dir, $(DHE_SOURCE_DIRS), $(wildcard $(dir)/*.cpp))
-DHE_INCLUDE_DIRS = plugin/common/include
-DHE_INCLUDE_FLAGS = $(foreach dir, $(DHE_INCLUDE_DIRS), -I$(dir))
+DHE_INCLUDE_FLAGS = -Iplugin/common/include
 
 FLAGS += $(DHE_INCLUDE_FLAGS)
 CFLAGS +=
@@ -24,35 +22,50 @@ include $(RACK_DIR)/plugin.mk
 
 # Above this line: Standard plugin build configuration
 ########################################################################
-# Below this line: Special configuration and targets for Dale
+# Below this line: Special targets for Dale
 
 
 
 
 ########################################################################
 #
-# Build and run the tests
+# Build and run the plugin and the tests
 #
 ########################################################################
 
-DHE_APP_DIR ?= /Applications
-DHE_RACK_APP = $(DHE_APP_DIR)/Rack.app
-DHE_RACK_EXECUTABLE = $(DHE_RACK_APP)/Contents/MacOS/Rack
-DHE_RACK_SYSTEM_DIR = $(DHE_RACK_APP)/Contents/Resources
 DHE_BUILD_DIR = .build
-DHE_STAGING_DIR = .install
+DHE_STAGING_DIR = .stage
+DHE_RACK_STAGING_DIR = rack-user-dir
+
+DHE_CMAKE_CONFIGURATION_FLAGS += -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
+DHE_CMAKE_BUILD_FLAGS += --verbose
+DHE_CTEST_FLAGS += --progress
+DHE_CTEST_FLAGS += --output-on-failure
+
+ifdef ARCH_MAC
+	DHE_APP_DIR ?= /Applications
+	DHE_RACK_APP = $(DHE_APP_DIR)/Rack.app
+	DHE_RACK_EXECUTABLE = $(DHE_RACK_APP)/Contents/MacOS/Rack
+	DHE_RACK_SYSTEM_DIR = $(DHE_RACK_APP)/Contents/Resources
+	DHE_CMAKE_CONFIGURATION_FLAGS += -DCMAKE_INSTALL_PREFIX=$(DHE_STAGING_DIR)
+	DHE_CMAKE_CONFIGURATION_FLAGS += -DRACK_STAGING_DIR=$(DHE_RACK_STAGING_DIR)
+endif
+
+ifdef ARCH_WIN
+	DHE_CMAKE_CONFIGURATION_FLAGS += -G "MSYS Makefiles"
+endif
 
 configure:
-	cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -B $(DHE_BUILD_DIR)
+	cmake -B $(DHE_BUILD_DIR) $(DHE_CMAKE_CONFIGURATION_FLAGS)
 
 build: configure
-	cmake --build $(DHE_BUILD_DIR) --verbose
+	cmake --build $(DHE_BUILD_DIR) $(DHE_CMAKE_BUILD_FLAGS)
 
 clean-build:
 	rm -rf $(DHE_BUILD_DIR)
 
 test: build
-	cd $(DHE_BUILD_DIR) && ctest --progress --output-on-failure
+	cd $(DHE_BUILD_DIR) && ctest $(DHE_CTEST_FLAGS)
 
 stage: build
 	cmake --build $(DHE_BUILD_DIR) --target install
@@ -61,13 +74,14 @@ clean-stage:
 	rm -rf $(DHE_STAGING_DIR)
 
 run: stage
-	$(DHE_RACK_EXECUTABLE) -u $(realpath $(DHE_STAGING_DIR))
+	$(DHE_RACK_EXECUTABLE) \
+		-u $(realpath $(DHE_STAGING_DIR))/$(DHE_RACK_STAGING_DIR)
 
 debug: stage
 	$(DHE_RACK_EXECUTABLE) \
 	 	-d \
-	 	-s $(realpath $(DHE_RACK_SYSTEM_DIR)) \
-	 	-u $(realpath $(DHE_STAGING_DIR))
+	 	-u $(realpath $(DHE_STAGING_DIR))/$(DHE_RACK_STAGING_DIR) \
+	 	-s $(realpath $(DHE_RACK_SYSTEM_DIR))
 
 clean: clean-build clean-stage
 
