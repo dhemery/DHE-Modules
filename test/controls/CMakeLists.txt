@@ -11,5 +11,4 @@ target_link_libraries(control_tests
         Rack::SDK
         gtest_main
         )
-target_link_options(control_tests PRIVATE -flto)
 gtest_add_tests(TARGET control_tests)
