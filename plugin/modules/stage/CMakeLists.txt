@@ -9,6 +9,8 @@ target_sources(stage
         Stage.cpp
         StageMachine.cpp
         StagePanel.cpp
+        Upstage.cpp
+        UpstagePanel.cpp
         )
 target_link_libraries(stage
         PUBLIC

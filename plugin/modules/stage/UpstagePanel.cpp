@@ -1,4 +1,4 @@
-#include "module/stage/UpstagePanel.h"
+#include "UpstagePanel.h"
 
 namespace dhe {
 

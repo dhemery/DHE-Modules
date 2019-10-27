@@ -10,7 +10,7 @@ SOURCES = $(foreach dir, $(SOURCE_DIRS), $(wildcard $(dir)/*.cpp))
 
 DISTRIBUTABLES += LICENSE.txt svg
 
-FLAGS += -Iplugin/common/include -Iplugin/modules
+FLAGS += -Iplugin/common/include
 CFLAGS +=
 CXXFLAGS +=
 LDFLAGS +=

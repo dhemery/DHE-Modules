@@ -1,4 +1,4 @@
-#include "module/stage/Upstage.h"
+#include "Upstage.h"
 
 #include "config/CommonConfig.h"
 #include "config/LevelConfig.h"

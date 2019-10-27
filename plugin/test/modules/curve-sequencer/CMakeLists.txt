@@ -1,8 +1,7 @@
 add_executable(curve_sequencer_tests)
-get_target_property(DHE_MODULE_INCLUDES plugin INTERFACE_INCLUDE_DIRECTORIES)
 target_include_directories(curve_sequencer_tests
         PRIVATE
-        ${DHE_MODULE_INCLUDES}
+        ${PROJECT_SOURCE_DIR}/plugin/modules
         )
 target_sources(curve_sequencer_tests
         PRIVATE
