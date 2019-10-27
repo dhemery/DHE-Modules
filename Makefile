@@ -1,14 +1,16 @@
 RACK_DIR ?= ../..
 
 SOURCE_DIRS = \
-	src/* \
-	src/*/* \
+	plugin/common/src/* \
+	plugin/common/src/*/* \
+	plugin/* \
+	plugin/modules/* \
 
 SOURCES = $(foreach dir, $(SOURCE_DIRS), $(wildcard $(dir)/*.cpp))
 
 DISTRIBUTABLES += LICENSE.txt svg
 
-FLAGS += -Iinclude
+FLAGS += -Iplugin/common/include -Iplugin/modules
 CFLAGS +=
 CXXFLAGS +=
 LDFLAGS +=

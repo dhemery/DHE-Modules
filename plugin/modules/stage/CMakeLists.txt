@@ -1,0 +1,20 @@
+add_library(stage STATIC)
+target_sources(stage
+        PRIVATE
+        BoosterStage.cpp
+        BoosterStagePanel.cpp
+        Hostage.cpp
+        HostageMachine.cpp
+        HostagePanel.cpp
+        Stage.cpp
+        StageMachine.cpp
+        StagePanel.cpp
+        )
+target_link_libraries(stage
+        PUBLIC
+        components
+        controls
+        config
+        widgets
+        Rack::SDK
+        )
