@@ -1,7 +1,3 @@
-include definitions.mk
-
-default: test
-
 DHE_BUILD_DIR = .build
 DHE_STAGING_DIR = .stage
 DHE_RACK_STAGING_DIR = rack-user-dir
@@ -24,10 +20,10 @@ DHE_RACK_SYSTEM_DIR = $(DHE_RACK_APP)/Contents/Resources
 $(DHE_BUILD_DIR):
 	mkdir $@
 
-configure: $(DHE_BUILD_DIR)
+config: $(DHE_BUILD_DIR)
 	cd $(DHE_BUILD_DIR) && cmake $(DHE_CMAKE_OPTIONS) ..
 
-build: configure
+build: config
 	cmake --build $(DHE_BUILD_DIR) $(DHE_CMAKE_BUILD_OPTIONS)
 
 clean-build:
