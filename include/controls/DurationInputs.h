@@ -4,8 +4,6 @@
 #include "components/Range.h"
 
 #include <array>
-#include <engine/Param.hpp>
-#include <engine/Port.hpp>
 
 namespace dhe {
 
@@ -29,19 +27,19 @@ auto constexpr longDurationRange = Range{0.1F, 100.F};
 
 extern std::array<Range const *, 3> const durationRanges;
 
-static inline auto duration(rack::engine::Param const &knob, Range const &range) -> float {
+template <typename KnobType> auto duration(KnobType &knob, Range const &range) -> float {
   return taperedAndScaledRotation(knob, durationKnobTaper, range);
 }
 
-static inline auto selectableDuration(rack::engine::Param const &knob, rack::engine::Input const &cvInput,
-                                      rack::engine::Param const &toggle) -> float {
-  auto const range = selectedRange<3>(toggle, durationRanges);
-  return taperedAndScaledRotation(knob, cvInput, durationKnobTaper, *range);
-}
-
-static inline auto selectableDuration(rack::engine::Param const &knob, rack::engine::Param const &toggle) -> float {
+template <typename KnobType, typename ToggleType> auto selectableDuration(KnobType &knob, ToggleType &toggle) -> float {
   auto const range = selectedRange<3>(toggle, durationRanges);
   return taperedAndScaledRotation(knob, durationKnobTaper, *range);
+}
+
+template <typename KnobType, typename InputType, typename ToggleType>
+auto selectableDuration(KnobType &knob, InputType &cvInput, ToggleType &toggle) -> float {
+  auto const range = selectedRange<3>(toggle, durationRanges);
+  return taperedAndScaledRotation(knob, cvInput, durationKnobTaper, *range);
 }
 
 } // namespace dhe

@@ -2,9 +2,6 @@
 
 #include "CommonInputs.h"
 
-#include <engine/Param.hpp>
-#include <engine/Port.hpp>
-
 namespace dhe {
 /**
  * This curvature creates a gentle inverted S taper, increasing sensitivity in the middle of the knob rotation and
@@ -19,14 +16,14 @@ static inline auto curvature(float rotation) -> float {
   return safeCurvature;
 }
 
-static inline auto curvature(rack::engine::Param const &knob) -> float { return curvature(paramValue(knob)); }
+template <typename KnobType> auto curvature(KnobType &knob) -> float { return curvature(rotationOf(knob)); }
 
-static inline auto curvature(rack::engine::Param const &knob, rack::engine::Input const &cvInput) -> float {
+template <typename KnobType, typename InputType> auto curvature(KnobType &knob, InputType &cvInput) -> float {
   return curvature(rotation(knob, cvInput));
 }
 
-static inline auto curvature(rack::engine::Param const &knob, rack::engine::Input const &cvInput,
-                             rack::engine::Param const &avKnob) -> float {
+template <typename KnobType, typename InputType>
+auto curvature(KnobType &knob, InputType &cvInput, KnobType &avKnob) -> float {
   return curvature(rotation(knob, cvInput, avKnob));
 }
 

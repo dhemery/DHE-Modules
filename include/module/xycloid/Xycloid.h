@@ -38,11 +38,11 @@ public:
 private:
   auto xGain() const -> float { return gainRange.scale(rotation(params[XGainKnob], inputs[XGainCvInput])); }
 
-  auto xOffset() const -> float { return buttonIsPressed(params[XRangeSwitch]) ? 1.F : 0.F; }
+  auto xOffset() const -> float { return isPressed(params[XRangeSwitch]) ? 1.F : 0.F; }
 
   auto yGain() const -> float { return gainRange.scale(rotation(params[YGainKnob], inputs[YGainCvInput])); }
 
-  auto yOffset() const -> float { return buttonIsPressed(params[YRangeSwitch]) ? 1.F : 0.F; }
+  auto yOffset() const -> float { return isPressed(params[YRangeSwitch]) ? 1.F : 0.F; }
 
   auto speed() const -> float;
 

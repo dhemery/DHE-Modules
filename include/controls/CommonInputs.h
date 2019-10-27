@@ -3,8 +3,11 @@
 #include "components/Range.h"
 #include "components/Taper.h"
 
-#include <engine/Param.hpp>
-#include <engine/Port.hpp>
+namespace rack {
+namespace engine {
+  struct Param;
+}
+} // namespace rack
 
 namespace dhe {
 
@@ -19,70 +22,76 @@ static auto constexpr unipolarSignalRange = Range{0.F, 10.F};
 
 extern std::array<Range const *, 2> const signalRanges;
 
-static inline auto paramValue(rack::engine::Param const &param) -> float {
-  return const_cast<rack::engine::Param &>(param).getValue();
+template <typename ParamType> auto valueOf(ParamType &param) -> float { return param.getValue(); }
+
+template <typename ParamType> auto valueOf(ParamType const &param) -> float {
+  return valueOf(const_cast<ParamType &>(param));
 }
 
-static inline auto inputVoltage(rack::engine::Input const &input) -> float {
-  return const_cast<rack::engine::Input &>(input).getVoltage();
+template <typename KnobType> auto rotationOf(KnobType &knob) -> float { return valueOf(knob); }
+
+template <typename InputType> auto voltageAt(InputType &input) -> float { return input.getVoltage(); }
+
+template <typename InputType> auto voltageAt(InputType const &input) -> float {
+  return voltageAt(const_cast<InputType &>(input));
 }
 
-static inline auto switchPosition(rack::engine::Param const &toggle) -> int {
-  return static_cast<int>(paramValue(toggle));
+template <typename ToggleType> auto positionOf(ToggleType &toggle) -> int { return static_cast<int>(valueOf(toggle)); }
+
+template <typename ButtonType> auto isPressed(ButtonType &button) -> bool { return valueOf(button) > 0.5F; }
+
+template <typename T> auto isHigh(T &input) -> bool { return voltageAt(input) > 1.F; }
+
+template <typename ItemType, int N, typename ToggleType = rack::engine::Param>
+auto selected(ToggleType &toggle, std::array<ItemType, N> const &items) -> ItemType {
+  return items[positionOf(toggle)];
 }
 
-static inline auto buttonIsPressed(rack::engine::Param const &button) -> bool { return paramValue(button) > 0.5F; }
-
-static inline auto inputIsHigh(rack::engine::Input const &input) -> bool { return inputVoltage(input) > 1.F; }
-
-template <typename T, int N> auto selected(rack::engine::Param const &toggle, std::array<T, N> const &items) -> T {
-  return items[switchPosition(toggle)];
-}
-
-template <int N>
-auto selectedRange(rack::engine::Param const &toggle, std::array<Range const *, N> const &ranges) -> Range const * {
+template <int N, typename ToggleType = rack::engine::Param>
+auto selectedRange(ToggleType &toggle, std::array<Range const *, N> const &ranges) -> Range const * {
   return selected<Range const *, N>(toggle, ranges);
 }
 
 /**
  * Returns the taper selected by the given switch.
  */
-static inline auto selectedTaper(rack::engine::Param const &toggle) -> taper::VariableTaper const * {
+template <typename ToggleType> auto selectedTaper(ToggleType &toggle) -> taper::VariableTaper const * {
   return selected<taper::VariableTaper const *, 2>(toggle, taper::variableTapers);
 }
 
-static inline auto rotation(rack::engine::Param const &knob, rack::engine::Input const &cvInput) -> float {
+template <typename KnobType, typename InputType> auto rotation(KnobType &knob, InputType &cvInput) -> float {
   static constexpr auto cvModulationRatio = 0.1F;
-  auto const rotation = paramValue(knob);
-  auto const cv = inputVoltage(cvInput);
+  auto const rotation = rotationOf(knob);
+  auto const cv = voltageAt(cvInput);
   auto const modulation = cv * cvModulationRatio;
   return rotation + modulation;
 }
 
-static inline auto rotation(rack::engine::Param const &knob, rack::engine::Input const &cvInput,
-                            rack::engine::Param const &avKnob) -> float {
+template <typename KnobType, typename InputType>
+auto rotation(KnobType &knob, InputType &cvInput, KnobType &avKnob) -> float {
   static auto constexpr avModulationRange = Range{-0.1F, 0.1F};
-  auto const rotation = paramValue(knob);
-  auto const cv = inputVoltage(cvInput);
-  auto const av = paramValue(avKnob);
+  auto const rotation = rotationOf(knob);
+  auto const cv = voltageAt(cvInput);
+  auto const av = rotationOf(avKnob);
   auto const cvModulationRatio = avModulationRange.scale(av);
   auto const modulation = cv * cvModulationRatio;
   return rotation + modulation;
 }
 
-static inline auto taperedAndScaledRotation(rack::engine::Param const &knob, taper::FixedTaper const &taper,
-                                            Range const &range) -> float {
-  return range.scale(taper.apply(paramValue(knob)));
+template <typename KnobType>
+auto taperedAndScaledRotation(KnobType &knob, taper::FixedTaper const &taper, Range const &range) -> float {
+  return range.scale(taper.apply(rotationOf(knob)));
 }
 
-static inline auto taperedAndScaledRotation(rack::engine::Param const &knob, rack::engine::Input const &cvInput,
-                                            taper::FixedTaper const &taper, Range const &range) -> float {
+template <typename KnobType, typename InputType>
+auto taperedAndScaledRotation(KnobType &knob, InputType &cvInput, taper::FixedTaper const &taper, Range const &range)
+    -> float {
   return range.scale(taper.apply(rotation(knob, cvInput)));
 }
 
-static inline auto taperedAndScaledRotation(rack::engine::Param const &knob, rack::engine::Input const &cvInput,
-                                            rack::engine::Param const &avKnob, taper::FixedTaper const &taper,
-                                            Range const &range) -> float {
+template <typename KnobType, typename InputType>
+auto taperedAndScaledRotation(KnobType &knob, InputType &cvInput, KnobType &avKnob, taper::FixedTaper const &taper,
+                              Range const &range) -> float {
   return range.scale(taper.apply(rotation(knob, cvInput, avKnob)));
 }
 

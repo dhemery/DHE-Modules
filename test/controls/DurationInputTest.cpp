@@ -1,5 +1,6 @@
 #include "controls/DurationInputs.h"
 
+#include <engine/Param.hpp>
 #include <gtest/gtest.h>
 
 namespace dhe {

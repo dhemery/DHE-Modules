@@ -20,7 +20,7 @@ void Gator::process(const rack::engine::Module::ProcessArgs & /*ignored*/) {
   for (int i = 0; i < inputCount; i++) {
     if (inputs[i].isConnected()) {
       connectedCount++;
-      if (inputIsHigh(inputs[(Inputs + i)]) != buttonIsPressed(params[NegateButtons + i])) {
+      if (isHigh(inputs[(Inputs + i)]) != isPressed(params[NegateButtons + i])) {
         highCount++;
       }
     }

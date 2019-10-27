@@ -39,7 +39,7 @@ private:
 
   auto add(float in) const -> float { return in + offsetRange()->scale(operand()); }
 
-  auto isMultiplication() const -> bool { return switchPosition(module->params[operationSwitchId]) == 1; }
+  auto isMultiplication() const -> bool { return positionOf(module->params[operationSwitchId]) == 1; }
 
   auto multiplierRange() const -> Range const * {
     return selectedRange<4>(module->params[multiplierRangeSwitchId], multiplierRanges);
@@ -51,6 +51,6 @@ private:
     return selectedRange<4>(module->params[offsetRangeSwitchId], offsetRanges);
   };
 
-  auto operand() const -> float { return paramValue(module->params[operandKnobId]); }
+  auto operand() const -> float { return rotationOf(module->params[operandKnobId]); }
 };
 } // namespace dhe

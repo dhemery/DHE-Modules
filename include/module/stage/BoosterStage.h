@@ -35,19 +35,17 @@ public:
   enum OutputIds { ActiveOutput, EocOutput, EnvelopeOutput, OutputCount };
 
 private:
-  auto activeButton() const -> bool { return buttonIsPressed(params[ActiveButton]); }
+  auto activeButton() const -> bool { return isPressed(params[ActiveButton]); }
 
-  auto deferIsHigh() const -> bool override {
-    return inputIsHigh(inputs[DeferInput]) || buttonIsPressed(params[DeferButton]);
-  }
+  auto deferIsHigh() const -> bool override { return isHigh(inputs[DeferInput]) || isPressed(params[DeferButton]); }
 
   auto duration() const -> float override {
     return selectableDuration(params[DurationKnob], inputs[DurationCvInput], params[DurationRangeSwitch]);
   }
 
-  auto envelopeIn() const -> float override { return inputVoltage(inputs[EnvelopeInput]); }
+  auto envelopeIn() const -> float override { return voltageAt(inputs[EnvelopeInput]); }
 
-  auto eocButton() const -> bool { return buttonIsPressed(params[EocButton]); }
+  auto eocButton() const -> bool { return isPressed(params[EocButton]); }
 
   auto level() const -> float override {
     return selectableLevel(params[LevelKnob], inputs[LevelCvInput], params[LevelRangeSwitch]);
@@ -72,7 +70,7 @@ private:
   }
 
   auto triggerIsHigh() const -> bool override {
-    return inputIsHigh(inputs[TriggerInput]) || buttonIsPressed(params[TriggerButton]);
+    return isHigh(inputs[TriggerInput]) || isPressed(params[TriggerButton]);
   }
 };
 } // namespace dhe

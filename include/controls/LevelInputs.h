@@ -3,29 +3,27 @@
 #include "CommonInputs.h"
 #include "components/Range.h"
 
-#include <engine/Param.hpp>
-#include <engine/Port.hpp>
-
 namespace dhe {
-static inline auto levelRange(rack::engine::Param const &toggle) -> Range const * {
+template <typename ToggleType> auto levelRange(ToggleType &toggle) -> Range const * {
   return selectedRange<2>(toggle, signalRanges);
 }
 
-static inline auto level(rack::engine::Param const &knob, Range const &range) -> float {
-  return range.scale(paramValue(knob));
+template <typename KnobType> static inline auto level(KnobType &knob, Range const &range) -> float {
+  return range.scale(rotationOf(knob));
 }
 
-static inline auto selectableLevel(rack::engine::Param const &knob, rack::engine::Param const &toggle) -> float {
-  return levelRange(toggle)->scale(paramValue(knob));
+template <typename KnobType, typename ToggleType>
+static inline auto selectableLevel(KnobType &knob, ToggleType &toggle) -> float {
+  return levelRange(toggle)->scale(rotationOf(knob));
 }
 
-static inline auto selectableLevel(rack::engine::Param const &knob, rack::engine::Input const &cvInput,
-                                   rack::engine::Param const &toggle) -> float {
+template <typename KnobType, typename InputType, typename ToggleType>
+static inline auto selectableLevel(KnobType &knob, InputType &cvInput, ToggleType &toggle) -> float {
   return levelRange(toggle)->scale(rotation(knob, cvInput));
 }
 
-static inline auto selectableLevel(rack::engine::Param const &knob, rack::engine::Input const &cvInput,
-                                   rack::engine::Param const &avKnob, rack::engine::Param const &toggle) -> float {
+template <typename KnobType, typename InputType, typename ToggleType>
+static inline auto selectableLevel(KnobType &knob, InputType &cvInput, KnobType &avKnob, ToggleType &toggle) -> float {
   return levelRange(toggle)->scale(rotation(knob, cvInput, avKnob));
 }
 

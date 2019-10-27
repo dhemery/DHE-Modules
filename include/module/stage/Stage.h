@@ -21,11 +21,11 @@ public:
   enum OutputIds { EnvelopeOutput, EocOutput, ActiveOutput, OutputCount };
 
 private:
-  auto deferIsHigh() const -> bool override { return inputIsHigh(inputs[DeferInput]); }
+  auto deferIsHigh() const -> bool override { return isHigh(inputs[DeferInput]); }
 
   auto duration() const -> float override { return dhe::duration(params[DurationKnob], mediumDurationRange); }
 
-  auto envelopeIn() const -> float override { return inputVoltage(inputs[EnvelopeInput]); }
+  auto envelopeIn() const -> float override { return voltageAt(inputs[EnvelopeInput]); }
 
   auto level() const -> float override { return dhe::level(params[LevelKnob], unipolarSignalRange); }
 
@@ -45,6 +45,6 @@ private:
     return taper::variableJTaper.apply(input, curvature(params[CurveKnob]));
   }
 
-  auto triggerIsHigh() const -> bool override { return inputIsHigh(inputs[TriggerInput]); }
+  auto triggerIsHigh() const -> bool override { return isHigh(inputs[TriggerInput]); }
 };
 } // namespace dhe

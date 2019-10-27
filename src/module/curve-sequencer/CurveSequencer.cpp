@@ -52,19 +52,19 @@ template <int N> auto CurveSequencer<N>::duration(int stepIndex) const -> float 
 }
 
 template <int N> auto CurveSequencer<N>::gate() const -> bool {
-  return inputIsHigh(inputs[GateInput]) || buttonIsPressed(params[GateButton]);
+  return isHigh(inputs[GateInput]) || isPressed(params[GateButton]);
 }
 
 template <int N> auto CurveSequencer<N>::generateMode(int stepIndex) const -> int {
-  return static_cast<int>(paramValue(params[GenerateModeSwitches + stepIndex]));
+  return positionOf(params[GenerateModeSwitches + stepIndex]);
 }
 
 template <int N> auto CurveSequencer<N>::isEnabled(int stepIndex) const -> bool {
-  return inputIsHigh(inputs[EnabledInputs + stepIndex]) || buttonIsPressed(params[EnabledButtons + stepIndex]);
+  return isHigh(inputs[EnabledInputs + stepIndex]) || isPressed(params[EnabledButtons + stepIndex]);
 }
 
 template <int N> auto CurveSequencer<N>::isRunning() const -> bool {
-  return inputIsHigh(inputs[RunInput]) || buttonIsPressed(params[RunButton]);
+  return isHigh(inputs[RunInput]) || isPressed(params[RunButton]);
 }
 
 template <int N> auto CurveSequencer<N>::level(int stepIndex) const -> float {
@@ -77,9 +77,9 @@ template <int N> auto CurveSequencer<N>::output() const -> float {
 
 template <int N> void CurveSequencer<N>::process(const ProcessArgs &args) { sequence.execute(args.sampleTime); }
 
-template <int N> auto CurveSequencer<N>::selectionLength() const -> int { return paramValue(params[StepsKnob]); }
+template <int N> auto CurveSequencer<N>::selectionLength() const -> int { return valueOf(params[StepsKnob]); }
 
-template <int N> auto CurveSequencer<N>::selectionStart() const -> int { return paramValue(params[StartKnob]) - 1; }
+template <int N> auto CurveSequencer<N>::selectionStart() const -> int { return valueOf(params[StartKnob]) - 1; }
 
 template <int N> void CurveSequencer<N>::setGenerating(int stepIndex, bool state) {
   lights[GeneratingLights + stepIndex].setBrightness(state ? 10.F : 0.F);
@@ -92,11 +92,11 @@ template <int N> void CurveSequencer<N>::setSustaining(int stepIndex, bool state
 }
 
 template <int N> auto CurveSequencer<N>::sustainMode(int stepIndex) const -> int {
-  return switchPosition(params[SustainModeSwitches + stepIndex]);
+  return positionOf(params[SustainModeSwitches + stepIndex]);
 }
 
 template <int N> auto CurveSequencer<N>::taperSelection(int stepIndex) const -> int {
-  return switchPosition(params[ShapeSwitches + stepIndex]);
+  return positionOf(params[ShapeSwitches + stepIndex]);
 }
 
 template class CurveSequencer<4>;

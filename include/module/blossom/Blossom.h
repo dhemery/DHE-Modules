@@ -43,7 +43,7 @@ private:
     return ratioRange.scale(rotation(params[RatioKnob], inputs[RatioCvInput], params[RatioAvKnob]));
   }
 
-  inline auto ratioIsFree() const -> bool { return switchPosition(params[FreeRatioSwitch]) == 1; }
+  inline auto ratioIsFree() const -> bool { return positionOf(params[FreeRatioSwitch]) == 1; }
 
   inline auto depth() const -> float { return rotation(params[DepthKnob], inputs[DepthCvInput], params[DepthAvKnob]); }
 

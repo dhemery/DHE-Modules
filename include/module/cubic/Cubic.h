@@ -47,7 +47,7 @@ private:
     return gainRange.scale(rotation(params[knobParam], inputs[cvInput]));
   }
 
-  auto mainIn() const -> float { return inputVoltage(inputs[CubicInput]); }
+  auto mainIn() const -> float { return voltageAt(inputs[CubicInput]); }
 
   void sendMainOut(float voltage) { outputs[CubicOutput].setVoltage(voltage); }
 };

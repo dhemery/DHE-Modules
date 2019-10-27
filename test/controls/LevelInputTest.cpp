@@ -1,6 +1,7 @@
 #include "controls/LevelInputs.h"
 
 #include <cmath>
+#include <engine/Param.hpp>
 #include <gtest/gtest.h>
 
 namespace dhe {

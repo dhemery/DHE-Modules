@@ -48,7 +48,7 @@ static inline auto wobbleRatioRange(Xycloid const *xycloid) -> Range const * {
 }
 
 static inline auto wobbleRatioIsFree(Xycloid const *xycloid) -> bool {
-  return switchPosition(xycloid->params[Xycloid::FreeRatioSwitch]) == 1;
+  return positionOf(xycloid->params[Xycloid::FreeRatioSwitch]) == 1;
 }
 
 static inline auto wobbleRatio(Xycloid const *xycloid, float rotation) -> float {

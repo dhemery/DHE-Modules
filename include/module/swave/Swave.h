@@ -18,7 +18,7 @@ public:
 private:
   void sendSignal(float voltage) { outputs[SwaveOutput].setVoltage(voltage); }
 
-  auto signalIn() const -> float { return inputVoltage(inputs[SwaveInput]); }
+  auto signalIn() const -> float { return voltageAt(inputs[SwaveInput]); }
 
   auto taper(float input) const -> float {
     auto const taper = selectedTaper(params[ShapeSwitch]);
