@@ -20,8 +20,11 @@ DHE_RACK_APP = $(DHE_APP_DIR)/Rack.app
 DHE_RACK_EXECUTABLE = $(DHE_RACK_APP)/Contents/MacOS/Rack
 DHE_RACK_SYSTEM_DIR = $(DHE_RACK_APP)/Contents/Resources
 
-configure:
-	cmake $(DHE_CMAKE_OPTIONS) -B $(DHE_BUILD_DIR)
+$(DHE_BUILD_DIR):
+	mkdir $@
+
+configure: .build
+	cd $(DHE_BUILD_DIR) && cmake $(DHE_CMAKE_OPTIONS) ..
 
 build: configure
 	cmake --build $(DHE_BUILD_DIR) $(DHE_CMAKE_BUILD_OPTIONS)
