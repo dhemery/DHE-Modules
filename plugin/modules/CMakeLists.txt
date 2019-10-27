@@ -37,15 +37,5 @@ target_link_libraries(plugin
 IF (APPLE)
     target_link_options(plugin PUBLIC "LINKER:-undefined,dynamic_lookup")
 endif ()
+
 set_target_properties(plugin PROPERTIES PREFIX "")
-
-set(CMAKE_INSTALL_PREFIX ${CMAKE_CURRENT_BINARY_DIR}/rack)
-set(PLUGINS_INSTALL_DIR plugins-v1)
-set(PLUGIN_INSTALL_DIR plugins-v1/${PROJECT_NAME})
-
-install(TARGETS plugin
-        LIBRARY DESTINATION ${PLUGIN_INSTALL_DIR}
-        ARCHIVE DESTINATION ${PLUGIN_INSTALL_DIR}
-        )
-install(DIRECTORY ../svg DESTINATION ${PLUGIN_INSTALL_DIR})
-install(FILES ../LICENSE.txt ../plugin.json DESTINATION ${PLUGIN_INSTALL_DIR})
