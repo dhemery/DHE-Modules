@@ -9,17 +9,15 @@ matrix:
   include:
     - os: linux
       dist: xenial
-      env:
-        - CMAKE_CONFIGURATION_FLAGS=""
     - os: windows
       env:
       - PATH="/c/Program Files/CMake/bin:$PATH"
-      - CMAKE_CONFIGUATION_FLAGS="-G 'MSYS Makefiles'"
+      - CMAKE_GENERATOR="MSYS Makefiles"
 
 before_install:
   - if [ "$TRAVIS_OS_NAME" = "linux" ]; then sudo apt-get install -y libglu1-mesa-dev; fi
   - if [ "$TRAVIS_OS_NAME" = "windows" ]; then choco install make zip ; fi
 
 script:
-- make test DHE_CMAKE_CONFIGURATION_FLAGS=${CMAKE_CONFIGURATION_FLAGS}
+- make -f dale.mk test
 - make dist RACK_DIR=.build/_deps/racksdk-src
