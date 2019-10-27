@@ -1,4 +1,6 @@
-add_compile_options(-Wall -Wextra -Wno-unused-parameter -g -O3 -std=c++11 -fPIC)
+set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+
+add_compile_options(-Wall -Wextra -Wno-unused-parameter -g -O3)
 
 if (WIN32)
     add_compile_definitions(ARCH_WIN _USE_MATH_DEFINES)
