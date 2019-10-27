@@ -39,3 +39,8 @@ IF (APPLE)
 endif ()
 
 set_target_properties(plugin PROPERTIES PREFIX "")
+
+install(TARGETS plugin
+        LIBRARY DESTINATION ${PLUGIN_INSTALL_DIR}
+        ARCHIVE DESTINATION ${PLUGIN_INSTALL_DIR}
+        )

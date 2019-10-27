@@ -1,19 +1,21 @@
 RACK_DIR ?= ../..
 
-SOURCE_DIRS = \
+DHE_SOURCE_DIRS = \
+	plugin/* \
 	plugin/common/src/* \
 	plugin/common/src/*/* \
-	plugin/* \
 	plugin/modules/* \
 
-SOURCES = $(foreach dir, $(SOURCE_DIRS), $(wildcard $(dir)/*.cpp))
+DHE_SOURCE_FILES = $(foreach dir, $(DHE_SOURCE_DIRS), $(wildcard $(dir)/*.cpp))
+DHE_INCLUDE_DIRS = plugin/common/include
+DHE_INCLUDE_FLAGS = $(foreach dir, $(DHE_INCLUDE_DIRS), -I$(dir))
 
-DISTRIBUTABLES += LICENSE.txt svg
-
-FLAGS += -Iplugin/common/include
+FLAGS += $(DHE_INCLUDE_FLAGS)
 CFLAGS +=
 CXXFLAGS +=
 LDFLAGS +=
+SOURCES = $(DHE_SOURCE_FILES)
+DISTRIBUTABLES += LICENSE.txt svg
 
 include $(RACK_DIR)/plugin.mk
 
@@ -33,30 +35,43 @@ include $(RACK_DIR)/plugin.mk
 #
 ########################################################################
 
-CMAKE_DIR = .cmake-dale
-CMAKE_INSTALL_DIR = $(CMAKE_DIR)/rack
+DHE_APP_DIR ?= /Applications
+DHE_RACK_APP = $(DHE_APP_DIR)/Rack.app
+DHE_RACK_EXECUTABLE = $(DHE_RACK_APP)/Contents/MacOS/Rack
+DHE_RACK_SYSTEM_DIR = $(DHE_RACK_APP)/Contents/Resources
+DHE_BUILD_DIR = .build
+DHE_STAGING_DIR = .install
 
-cmake-generate:
-	cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -B $(CMAKE_DIR)
+configure:
+	cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -B $(DHE_BUILD_DIR)
 
-cmake-build: cmake-generate
-	cmake --build $(CMAKE_DIR) --verbose
+build: configure
+	cmake --build $(DHE_BUILD_DIR) --verbose
 
-ctest: cmake-build
-	cd $(CMAKE_DIR) && ctest --progress --output-on-failure
+clean-build:
+	rm -rf $(DHE_BUILD_DIR)
 
-cmake-install: cmake-generate
-	cmake --build $(CMAKE_DIR) --target install --verbose
+test: build
+	cd $(DHE_BUILD_DIR) && ctest --progress --output-on-failure
 
-cmake-run: cmake-install
-	$(RACK_EXECUTABLE) $(RACK_FLAGS) -u $(realpath $(CMAKE_INSTALL_DIR))
+stage: build
+	cmake --build $(DHE_BUILD_DIR) --target install
 
-cmake-clean:
-	rm -rf $(CMAKE_DIR)
+clean-stage:
+	rm -rf $(DHE_STAGING_DIR)
 
-clean: cmake-clean
+run: stage
+	$(DHE_RACK_EXECUTABLE) -u $(realpath $(DHE_STAGING_DIR))
 
-.PHONY: ctest cmake-clean
+debug: stage
+	$(DHE_RACK_EXECUTABLE) \
+	 	-d \
+	 	-s $(realpath $(DHE_RACK_SYSTEM_DIR)) \
+	 	-u $(realpath $(DHE_STAGING_DIR))
+
+clean: clean-build clean-stage
+
+.PHONY: build clean-build clean-stage configure debug run stage test
 
 
 
@@ -67,67 +82,25 @@ clean: cmake-clean
 #
 ########################################################################
 
-TEST_DIRS = \
+DHE_TEST_SOURCE_DIRS = \
 	test/* \
 	test/*/* \
 
-INCLUDE_DIRS = \
+DHE_INCLUDE_DIRS = \
 	include/* \
 	include/*/* \
 
-TEST_SOURCES = $(foreach dir, $(TEST_DIRS), $(wildcard $(dir)/*.cpp))
+DHE_TEST_SOURCE_FILES = $(foreach dir, $(TEST_SOURCE_DIRS), $(wildcard $(dir)/*.cpp))
 
-HEADERS = $(foreach dir, $(INCLUDE_DIRS) $(SOURCE_DIRS), $(wildcard $(dir)/*.h))
+DHE_HEADER_FILES = $(foreach dir, $(DHE_INCLUDE_DIRS) $(DHE_SOURCE_DIRS), $(wildcard $(dir)/*.h))
 
 format:
-	clang-format -i -style=file $(HEADERS) $(SOURCES) $(TEST_SOURCES)
+	clang-format -i -style=file $(DHE_HEADER_FILES) $(DHE_SOURCE_FILES) $(DHE_TEST_SOURCE_FILES)
 
-tidy: cmake-build
-	clang-tidy -p=$(CMAKE_DIR) $(SOURCES)
+tidy: build
+	clang-tidy -p=$(DHE_BUILD_DIR) $(DHE_SOURCE_FILES)
 
 .PHONY: format tidy
-
-
-
-
-########################################################################
-#
-# Install and run in a local directory
-#
-########################################################################
-
-PLUGIN_ZIP_NAME = $(SLUG)-$(VERSION)-$(ARCH).zip
-DIST_PLUGIN_ZIP = dist/$(PLUGIN_ZIP_NAME)
-DEV_DIR = .dev
-DEV_PLUGIN_DIR = $(DEV_DIR)/plugins-v1
-DEV_PLUGIN_ZIP = $(DEV_PLUGIN_DIR)/$(PLUGIN_ZIP_NAME)
-
-RACK_APP_DIR ?= /Applications
-RACK_APP = $(RACK_APP_DIR)/Rack.app
-
-RACK_EXECUTABLE = $(RACK_APP)/Contents/MacOS/Rack
-RACK_SYSTEM_DIR = $(RACK_APP)/Contents/Resources
-
-$(DEV_DIR) $(DEV_PLUGIN_DIR):
-	mkdir -p $@
-
-$(DEV_PLUGIN_ZIP): dist $(DEV_PLUGIN_DIR)
-	cp $(DIST_PLUGIN_ZIP) $(DEV_PLUGIN_DIR)
-
-dev: $(DEV_PLUGIN_ZIP)
-
-clean-dev:
-	rm -rf $(DEV_DIR)
-
-run: dev
-	$(RACK_EXECUTABLE) $(RACK_FLAGS) -u $(realpath $(DEV_DIR))
-
-debug: dev
-	$(RACK_EXECUTABLE) $(RACK_FLAGS) -d -u $(realpath $(DEV_DIR))
-
-clean: clean-dev
-
-.PHONY: run debug clean-dev
 
 
 
@@ -141,7 +114,13 @@ clean: clean-dev
 gui:
 	cd gui && rake install
 
-.PHONY: gui
+clobber-gui:
+	cd gui && rake clobber
+
+clobber: clobber-gui
+
+.PHONY: gui clobber-gui
+
 
 
 
@@ -152,7 +131,5 @@ gui:
 ########################################################################
 
 clobber: clean
-	cd gui && rake clobber
 
-.PHONY: clobber gui
-
+.PHONY: clobber

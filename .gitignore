@@ -1,7 +1,9 @@
-/.dev/
-/.cmake-dale/
+/.idea/workspace.xml
+/cmake-build-debug/
+
+/.build/
+/.install/
+
 /build/
 /dist/
 /*.dylib
-/cmake-build-debug/
-/.idea/workspace.xml
