@@ -17,4 +17,5 @@ before_install:
   - if [ "$TRAVIS_OS_NAME" = "windows" ]; then choco install make zip ; fi
 
 script:
-- make test dist
+- make test
+- make dist RACK_DIR=.build/_deps/racksdk-src
