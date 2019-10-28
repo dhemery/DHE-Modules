@@ -1,62 +1,56 @@
 #pragma once
 
-#include "Sequence.h"
+#include "StepExecutor.h"
+#include "components/Latch.h"
 
-#include <engine/Module.hpp>
 #include <memory>
 
 namespace dhe {
+namespace curve_sequencer {
+  template <typename C, typename S = StepExecutor<C>> class CurveSequencer {
+  public:
+    CurveSequencer(C &controls, int stepCount, S *stepExecutor) :
+        controls{controls},
+        stepIndexMask{stepCount - 1},
+        stepExecutor{stepExecutor} {}
 
-template <int N> class CurveSequencer : public rack::engine::Module {
-public:
-  CurveSequencer();
-  ~CurveSequencer() override = default;
+    CurveSequencer(C &controls, int stepCount) : CurveSequencer(controls, stepCount, new S(controls)) {}
 
-  void process(const ProcessArgs &args) override;
+    void execute(float sampleTime) {
+      runLatch.clock(controls.isRunning());
+      gateLatch.clock(controls.gate());
 
-  auto gate() const -> bool;
-  auto isRunning() const -> bool;
-  auto output() const -> float;
-  void setOutput(float voltage);
+      auto const selectionStart = controls.selectionStart();
 
-  auto curvature(int stepIndex) const -> float;
-  auto duration(int stepIndex) const -> float;
-  auto generateMode(int stepIndex) const -> int;
-  auto isEnabled(int stepIndex) const -> bool;
-  auto level(int stepIndex) const -> float;
-  auto selectionLength() const -> int;
-  auto selectionStart() const -> int;
-  void setGenerating(int stepIndex, bool state);
-  void setSustaining(int stepIndex, bool state);
-  auto sustainMode(int stepIndex) const -> int;
-  auto taperSelection(int stepIndex) const -> int;
+      if (!isActive) {
+        if (gateLatch.isRise()) {
+          isActive = true;
+          activeStep = selectionStart;
+        } else {
+          return;
+        }
+      }
 
-  enum ParameterIds {
-    DurationRangeSwitch,
-    GateButton,
-    LevelRangeSwitch,
-    ResetButton,
-    RunButton,
-    StartKnob,
-    StepsKnob,
-    ENUMS(CurveKnobs, N),
-    ENUMS(DurationKnobs, N),
-    ENUMS(EnabledButtons, N),
-    ENUMS(LevelKnobs, N),
-    ENUMS(GenerateModeSwitches, N),
-    ENUMS(SustainModeSwitches, N),
-    ENUMS(ShapeSwitches, N),
-    ParameterCount
+      auto const selectionLength = controls.selectionLength();
+      auto const selectionEnd = selectionStart + selectionLength - 1;
+
+      for (int i = activeStep; i <= selectionEnd; i++) {
+        activeStep = i & stepIndexMask;
+        if (stepExecutor->execute(activeStep, gateLatch, sampleTime)) {
+          return;
+        }
+      }
+      isActive = false;
+    }
+
+  private:
+    bool isActive{};
+    int activeStep{};
+    Latch runLatch{};
+    Latch gateLatch{};
+    C &controls;
+    int const stepIndexMask;
+    std::unique_ptr<S> stepExecutor;
   };
-
-  enum InputIds { GateInput, ResetInput, RunInput, StartCVInput, StepsCVInput, ENUMS(EnabledInputs, N), InputCount };
-
-  enum OutputIds { OutOutput, OutputCount };
-
-  enum LightIds { ENUMS(GeneratingLights, N), ENUMS(SustainingLights, N), LightCount };
-
-private:
-  curve_sequencer::Sequence<CurveSequencer<N>> sequence{*this, N};
-};
-
+} // namespace curve_sequencer
 } // namespace dhe

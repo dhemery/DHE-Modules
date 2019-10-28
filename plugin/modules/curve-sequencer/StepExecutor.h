@@ -13,7 +13,9 @@ namespace curve_sequencer {
     explicit StepExecutor(C &controls) : StepExecutor{controls, new G(controls), new S(controls)} {}
 
     StepExecutor(C &controls, G *generateStage, S *sustainStage) :
-        controls{controls}, generateStage{generateStage}, sustainStage{sustainStage} {}
+        controls{controls},
+        generateStage{generateStage},
+        sustainStage{sustainStage} {}
 
     auto execute(int stepIndex, Latch const &gateLatch, float sampleTime) -> bool {
       if (!controls.isEnabled(stepIndex)) {

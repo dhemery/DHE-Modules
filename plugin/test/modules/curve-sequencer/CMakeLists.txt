@@ -6,7 +6,7 @@ target_include_directories(curve_sequencer_tests
 target_sources(curve_sequencer_tests
         PRIVATE
         GenerateStageTest.cpp
-        SequenceTest.cpp
+        CurveSequencerTest.cpp
         StepExecutorTest.cpp
         SustainStageTest.cpp
         )

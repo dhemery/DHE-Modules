@@ -1,6 +1,5 @@
-#include "curve-sequencer/Sequence.h"
-
 #include "components/Latch.h"
+#include "curve-sequencer/CurveSequencer.h"
 
 #include <gmock/gmock-actions.h>
 #include <gmock/gmock.h>
@@ -9,7 +8,7 @@
 #include <vector>
 
 using dhe::Latch;
-using dhe::curve_sequencer::Sequence;
+using dhe::curve_sequencer::CurveSequencer;
 
 static auto constexpr defaultSampleTime = 1.F / 44100.F;
 static auto constexpr stepCount = 8;
@@ -36,7 +35,7 @@ class NewSequence : public ::testing::Test {
 protected:
   NiceMock<MockSequenceControls> controls;
   MockStepExecutor *stepExecutor = new NiceMock<MockStepExecutor>{};
-  Sequence<MockSequenceControls, MockStepExecutor> sequence{controls, stepCount, stepExecutor};
+  CurveSequencer<MockSequenceControls, MockStepExecutor> sequence{controls, stepCount, stepExecutor};
 
   void givenRunInput(bool isRunning) { ON_CALL(controls, isRunning()).WillByDefault(Return(isRunning)); }
 
