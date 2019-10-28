@@ -1,12 +1,22 @@
 #include "components/Latch.h"
+#include "curve-sequencer/CurveSequencerControls.h"
 #include "curve-sequencer/Stages.h"
 
 #include <gmock/gmock-actions.h>
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
+#include <mocks/MockLight.h>
+#include <mocks/MockParam.h>
+#include <mocks/MockPort.h>
+#include <vector>
+
+static auto constexpr stepCount = 4;
+static auto constexpr defaultStep = 3;
+static auto constexpr defaultSampleTime = 0.F;
 
 using dhe::Latch;
 using dhe::curve_sequencer::GenerateStage;
+using Controls = dhe::curve_sequencer::CurveSequencerControls<stepCount>;
 
 using ::testing::A;
 using ::testing::An;
@@ -14,14 +24,10 @@ using ::testing::NiceMock;
 using ::testing::Return;
 using ::testing::Test;
 
-class MockSequenceControls {
-public:
-  MOCK_METHOD(int, generateMode, (int), (const));
-  MOCK_METHOD(void, setGenerating, (int, bool) );
-};
-
-static auto constexpr defaultStep = 3;
-static auto constexpr defaultSampleTime = 0.F;
+using InputType = NiceMock<MockPort>;
+using OutputType = NiceMock<MockPort>;
+using ParamType = NiceMock<MockParam>;
+using LightType = NiceMock<MockLight>;
 
 static auto constexpr risenGate = Latch{true, true};
 static auto constexpr fallenGate = Latch{false, true};
@@ -30,10 +36,18 @@ static auto constexpr stableLowGate = Latch{false, false};
 
 class GenerateStageTest : public Test {
 protected:
-  NiceMock<MockSequenceControls> controls;
-  GenerateStage<MockSequenceControls> sustain{controls};
+  std::vector<InputType> inputs{Controls::InputCount};
+  std::vector<OutputType> outputs{Controls::OutputCount};
+  std::vector<ParamType> params{Controls::ParameterCount};
+  std::vector<LightType> lights{Controls::LightCount};
+  GenerateStage<stepCount, InputType, OutputType, ParamType, LightType> generateStage{inputs, outputs, params, lights};
 
-  void setMode(int mode) { ON_CALL(controls, generateMode(defaultStep)).WillByDefault(Return(mode)); }
+  void setMode(int mode) {
+    ON_CALL(params[Controls::GenerateModeSwitches + defaultStep], getValue())
+        .WillByDefault(Return(static_cast<float>(mode)));
+  }
+
+  auto generatingLight(int step) -> LightType & { return lights[Controls::GeneratingLights + step]; }
 };
 
 class GenerateStageRiseMode : public GenerateStageTest {
@@ -45,23 +59,19 @@ protected:
 };
 
 TEST_F(GenerateStageRiseMode, isActive_ifGateDoesNotRise) {
-  auto const expectedIsActive = true;
+  EXPECT_CALL(generatingLight(defaultStep), setBrightness(10.F));
 
-  EXPECT_CALL(controls, setGenerating(defaultStep, expectedIsActive));
+  auto const isActive = generateStage.execute(defaultStep, stableHighGate, defaultSampleTime);
 
-  auto const isActive = sustain.execute(defaultStep, stableHighGate, defaultSampleTime);
-
-  EXPECT_EQ(isActive, expectedIsActive);
+  EXPECT_EQ(isActive, true);
 }
 
 TEST_F(GenerateStageRiseMode, isInactive_ifGateRises) {
-  auto const expectedIsActive = false;
+  EXPECT_CALL(generatingLight(defaultStep), setBrightness(0.F));
 
-  EXPECT_CALL(controls, setGenerating(defaultStep, expectedIsActive));
+  auto const isActive = generateStage.execute(defaultStep, risenGate, defaultSampleTime);
 
-  auto const isActive = sustain.execute(defaultStep, risenGate, defaultSampleTime);
-
-  EXPECT_EQ(isActive, expectedIsActive);
+  EXPECT_EQ(isActive, false);
 }
 
 class GenerateStageFallMode : public GenerateStageTest {
@@ -73,23 +83,19 @@ protected:
 };
 
 TEST_F(GenerateStageFallMode, isActive_ifGateDoesNotFall) {
-  auto const expectedIsActive = true;
+  EXPECT_CALL(generatingLight(defaultStep), setBrightness(10.F));
 
-  EXPECT_CALL(controls, setGenerating(defaultStep, expectedIsActive));
+  auto const isActive = generateStage.execute(defaultStep, stableHighGate, defaultSampleTime);
 
-  auto const isActive = sustain.execute(defaultStep, stableHighGate, defaultSampleTime);
-
-  EXPECT_EQ(isActive, expectedIsActive);
+  EXPECT_EQ(isActive, true);
 }
 
 TEST_F(GenerateStageFallMode, isInactive_ifGateFalls) {
-  auto const expectedIsActive = false;
+  EXPECT_CALL(generatingLight(defaultStep), setBrightness(0.F));
 
-  EXPECT_CALL(controls, setGenerating(defaultStep, expectedIsActive));
+  auto const isActive = generateStage.execute(defaultStep, fallenGate, defaultSampleTime);
 
-  auto const isActive = sustain.execute(defaultStep, fallenGate, defaultSampleTime);
-
-  EXPECT_EQ(isActive, expectedIsActive);
+  EXPECT_EQ(isActive, false);
 }
 
 class GenerateStageEdgeMode : public GenerateStageTest {
@@ -101,23 +107,19 @@ protected:
 };
 
 TEST_F(GenerateStageEdgeMode, isActive_ifGateDoesNotChange) {
-  auto const expectedIsActive = true;
+  EXPECT_CALL(generatingLight(defaultStep), setBrightness(10.F));
 
-  EXPECT_CALL(controls, setGenerating(defaultStep, expectedIsActive));
+  auto const isActive = generateStage.execute(defaultStep, stableHighGate, defaultSampleTime);
 
-  auto const isActive = sustain.execute(defaultStep, stableHighGate, defaultSampleTime);
-
-  EXPECT_EQ(isActive, expectedIsActive);
+  EXPECT_EQ(isActive, true);
 }
 
 TEST_F(GenerateStageEdgeMode, isInactive_ifGateChanges) {
-  auto const expectedIsActive = false;
+  EXPECT_CALL(generatingLight(defaultStep), setBrightness(0.F));
 
-  EXPECT_CALL(controls, setGenerating(defaultStep, expectedIsActive));
+  auto const isActive = generateStage.execute(defaultStep, risenGate, defaultSampleTime);
 
-  auto const isActive = sustain.execute(defaultStep, risenGate, defaultSampleTime);
-
-  EXPECT_EQ(isActive, expectedIsActive);
+  EXPECT_EQ(isActive, false);
 }
 
 class GenerateStageHighMode : public GenerateStageTest {
@@ -129,23 +131,19 @@ protected:
 };
 
 TEST_F(GenerateStageHighMode, isActive_ifGateIsLow) {
-  auto const expectedIsActive = true;
+  EXPECT_CALL(generatingLight(defaultStep), setBrightness(10.F));
 
-  EXPECT_CALL(controls, setGenerating(defaultStep, expectedIsActive));
+  auto const isActive = generateStage.execute(defaultStep, stableLowGate, defaultSampleTime);
 
-  auto const isActive = sustain.execute(defaultStep, stableLowGate, defaultSampleTime);
-
-  EXPECT_EQ(isActive, expectedIsActive);
+  EXPECT_EQ(isActive, true);
 }
 
 TEST_F(GenerateStageHighMode, isInactive_ifGateIsHigh) {
-  auto const expectedIsActive = false;
+  EXPECT_CALL(generatingLight(defaultStep), setBrightness(0.F));
 
-  EXPECT_CALL(controls, setGenerating(defaultStep, expectedIsActive));
+  auto const isActive = generateStage.execute(defaultStep, stableHighGate, defaultSampleTime);
 
-  auto const isActive = sustain.execute(defaultStep, stableHighGate, defaultSampleTime);
-
-  EXPECT_EQ(isActive, expectedIsActive);
+  EXPECT_EQ(isActive, false);
 }
 
 class GenerateStageLowMode : public GenerateStageTest {
@@ -157,23 +155,19 @@ protected:
 };
 
 TEST_F(GenerateStageLowMode, isActive_ifGateIsHigh) {
-  auto const expectedIsActive = true;
+  EXPECT_CALL(generatingLight(defaultStep), setBrightness(10.F));
 
-  EXPECT_CALL(controls, setGenerating(defaultStep, expectedIsActive));
+  auto const isActive = generateStage.execute(defaultStep, stableHighGate, defaultSampleTime);
 
-  auto const isActive = sustain.execute(defaultStep, stableHighGate, defaultSampleTime);
-
-  EXPECT_EQ(isActive, expectedIsActive);
+  EXPECT_EQ(isActive, true);
 }
 
 TEST_F(GenerateStageLowMode, isInactive_ifGateIsLow) {
-  auto const expectedIsActive = false;
+  EXPECT_CALL(generatingLight(defaultStep), setBrightness(0.F));
 
-  EXPECT_CALL(controls, setGenerating(defaultStep, expectedIsActive));
+  auto const isActive = generateStage.execute(defaultStep, stableLowGate, defaultSampleTime);
 
-  auto const isActive = sustain.execute(defaultStep, stableLowGate, defaultSampleTime);
-
-  EXPECT_EQ(isActive, expectedIsActive);
+  EXPECT_EQ(isActive, false);
 }
 
 class GenerateStageSkipMode : public GenerateStageTest {
@@ -185,13 +179,11 @@ protected:
 };
 
 TEST_F(GenerateStageSkipMode, isInactive) {
-  auto const expectedIsActive = false;
+  EXPECT_CALL(generatingLight(defaultStep), setBrightness(0.F));
 
-  EXPECT_CALL(controls, setGenerating(defaultStep, expectedIsActive));
+  auto const isActive = generateStage.execute(defaultStep, Latch{}, defaultSampleTime);
 
-  auto const isActive = sustain.execute(defaultStep, Latch{}, defaultSampleTime);
-
-  EXPECT_EQ(isActive, expectedIsActive);
+  EXPECT_EQ(isActive, false);
 }
 
 class GenerateStageDurationMode : public GenerateStageTest {
@@ -203,11 +195,9 @@ protected:
 };
 
 TEST_F(GenerateStageDurationMode, isActive) {
-  auto const expectedIsActive = true;
+  EXPECT_CALL(generatingLight(defaultStep), setBrightness(10.F));
 
-  EXPECT_CALL(controls, setGenerating(defaultStep, expectedIsActive));
+  auto const isActive = generateStage.execute(defaultStep, stableHighGate, defaultSampleTime);
 
-  auto const isActive = sustain.execute(defaultStep, stableHighGate, defaultSampleTime);
-
-  EXPECT_EQ(isActive, expectedIsActive);
+  EXPECT_EQ(isActive, true);
 }

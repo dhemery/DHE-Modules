@@ -56,10 +56,7 @@ namespace curve_sequencer {
   public:
     GenerateStage(std::vector<InputType> &inputs, std::vector<OutputType> &outputs, std::vector<ParamType> &params,
                   std::vector<LightType> &lights) :
-        inputs{inputs},
-        outputs{outputs},
-        params{params},
-        lights{lights} {}
+        inputs{inputs}, outputs{outputs}, params{params}, lights{lights} {}
 
     auto execute(int step, Latch const &gateLatch, float) -> bool {
       auto const active = isActive(generateMode(step), gateLatch);
@@ -86,10 +83,7 @@ namespace curve_sequencer {
   public:
     SustainStage(std::vector<InputType> &inputs, std::vector<OutputType> &outputs, std::vector<ParamType> &params,
                  std::vector<LightType> &lights) :
-        inputs{inputs},
-        outputs{outputs},
-        params{params},
-        lights{lights} {}
+        inputs{inputs}, outputs{outputs}, params{params}, lights{lights} {}
 
     void setSustaining(int stepIndex, bool state) {
       lights[CurveSequencerControls<N>::SustainingLights + stepIndex].setBrightness(state ? 10.F : 0.F);

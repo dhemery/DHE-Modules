@@ -10,7 +10,9 @@
 
 namespace dhe {
 namespace curve_sequencer {
-  template <int N, typename InputType, typename OutputType, typename ParamType, typename LightType> class StepExecutor {
+  template <int N, typename InputType, typename OutputType, typename ParamType, typename LightType,
+            typename GenerateStageType, typename SustainStageType>
+  class StepExecutor {
     using GenerateStage = GenerateStage<N, InputType, OutputType, ParamType, LightType>;
     using SustainStage = SustainStage<N, InputType, OutputType, ParamType, LightType>;
 
@@ -25,7 +27,7 @@ namespace curve_sequencer {
                      new SustainStage(inputs, outputs, params, lights)} {}
 
     StepExecutor(std::vector<InputType> &inputs, std::vector<OutputType> &outputs, std::vector<ParamType> &params,
-                 std::vector<LightType> &lights, GenerateStage *generateStage, SustainStage *sustainStage) :
+                 std::vector<LightType> &lights, GenerateStageType *generateStage, SustainStageType *sustainStage) :
         inputs{inputs},
         outputs{outputs},
         params{params},
@@ -50,8 +52,8 @@ namespace curve_sequencer {
     std::vector<OutputType> &outputs;
     std::vector<ParamType> &params;
     std::vector<LightType> &lights;
-    std::unique_ptr<GenerateStage> generateStage;
-    std::unique_ptr<SustainStage> sustainStage;
+    std::unique_ptr<GenerateStageType> generateStage;
+    std::unique_ptr<SustainStageType> sustainStage;
   };
 } // namespace curve_sequencer
 } // namespace dhe

@@ -2,68 +2,60 @@
 
 #include "components/Latch.h"
 #include "curve-sequencer/CurveSequencerControls.h"
-#include "curve-sequencer/StepExecutor.h"
 
 #include <gmock/gmock-actions.h>
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
 #include <memory>
+#include <mocks/MockLight.h>
+#include <mocks/MockParam.h>
+#include <mocks/MockPort.h>
 #include <vector>
+
+static auto constexpr defaultSampleTime = 1.F / 44100.F;
+static auto constexpr stepCount = 4;
 
 using dhe::Latch;
 using dhe::curve_sequencer::CurveSequencer;
-using dhe::curve_sequencer::CurveSequencerControls;
-using dhe::curve_sequencer::StepExecutor;
-
-static auto constexpr defaultSampleTime = 1.F / 44100.F;
-static auto constexpr stepCount = 8;
+using Controls = dhe::curve_sequencer::CurveSequencerControls<stepCount>;
 
 using ::testing::A;
 using ::testing::An;
 using ::testing::NiceMock;
 using ::testing::Return;
 
-class MockSequenceControls {
-public:
-  MOCK_METHOD(bool, gate, (), (const));
-  MOCK_METHOD(bool, isRunning, (), (const));
-  MOCK_METHOD(int, selectionLength, (), (const));
-  MOCK_METHOD(int, selectionStart, (), (const));
-};
+using InputType = NiceMock<MockPort>;
+using OutputType = NiceMock<MockPort>;
+using ParamType = NiceMock<MockParam>;
+using LightType = NiceMock<MockLight>;
 
-class MockInput {
-public:
-  MOCK_METHOD(float, getValue, ());
-};
-class MockOutput {};
-class MockParam {};
-class MockLight {};
-
-class MockStepExecutor : public StepExecutor<4, MockInput, MockOutput, MockParam, MockLight> {
+class MockStepExecutor {
 public:
   MOCK_METHOD(bool, execute, (int, Latch const &, float) );
 };
 
 class NewSequence : public ::testing::Test {
-  using CurveSequencer = CurveSequencer<4, MockInput, MockOutput, MockParam, MockLight>;
+  using CurveSequencer = CurveSequencer<4, InputType, OutputType, ParamType, LightType, MockStepExecutor>;
 
 protected:
-  std::vector<MockInput> inputs;
-  std::vector<MockOutput> outputs;
-  std::vector<MockParam> params;
-  std::vector<MockLight> lights;
+  std::vector<InputType> inputs{Controls::InputCount};
+  std::vector<OutputType> outputs{Controls::OutputCount};
+  std::vector<ParamType> params{Controls::ParameterCount};
+  std::vector<LightType> lights{Controls::LightCount};
   MockStepExecutor *stepExecutor = new NiceMock<MockStepExecutor>{};
-  CurveSequencer sequence{inputs, outputs, params, lights, stepExecutor};
+  CurveSequencer curveSequencer{inputs, outputs, params, lights, stepExecutor};
 
-  void givenRunInput(bool isRunning) {
-    ON_CALL(inputs[CurveSequencerControls<4>::RunInput], getValue()).WillByDefault(Return(isRunning ? 10.F, 0.F));
+  void givenRunInput(bool state) {
+    ON_CALL(inputs[Controls::RunInput], getVoltage()).WillByDefault(Return(state ? 10.F : 0.F));
   }
 
-  void givenGateInput(bool gate) { ON_CALL(controls, gate()).WillByDefault(Return(gate)); }
+  void givenGateInput(bool state) {
+    ON_CALL(inputs[Controls::GateInput], getVoltage()).WillByDefault(Return(state ? 10.F : 0.F));
+  }
 
   void givenSelection(int start, int length) {
-    ON_CALL(controls, selectionStart()).WillByDefault(Return(start));
-    ON_CALL(controls, selectionLength()).WillByDefault(Return(length));
+    ON_CALL(params[Controls::StartKnob], getValue()).WillByDefault(Return(static_cast<float>(start)));
+    ON_CALL(params[Controls::StepsKnob], getValue()).WillByDefault(Return(static_cast<float>(length)));
   }
 
   void givenActiveSteps(std::vector<int> const &indices) {
@@ -88,7 +80,7 @@ protected:
   void SetUp() override {
     NewSequence::SetUp();
     givenRunInput(false);
-    sequence.execute(0.F);
+    curveSequencer.execute(0.F);
     failIfAnyStepExecutesUnexpectedly();
   }
 };
@@ -96,7 +88,7 @@ protected:
 TEST_F(SequenceNotRunning, executesNoSteps) {
   EXPECT_CALL(*stepExecutor, execute(An<int>(), A<Latch const &>(), A<float>())).Times(0);
 
-  sequence.execute(0.1F);
+  curveSequencer.execute(0.1F);
 }
 
 class SequenceIdle : public NewSequence {
@@ -105,7 +97,7 @@ protected:
     NewSequence::SetUp();
     givenRunInput(true);
     givenGateInput(false);
-    sequence.execute(0.F);
+    curveSequencer.execute(0.F);
     failIfAnyStepExecutesUnexpectedly();
   }
 };
@@ -120,7 +112,7 @@ TEST_F(SequenceIdle, gateRise_executesEachStepFromFirstSelectedStepThroughFirstA
   EXPECT_CALL(*stepExecutor, execute(2, A<Latch const &>(), defaultSampleTime)).WillOnce(Return(false));
   EXPECT_CALL(*stepExecutor, execute(3, A<Latch const &>(), defaultSampleTime)).WillOnce(Return(true));
 
-  sequence.execute(defaultSampleTime);
+  curveSequencer.execute(defaultSampleTime);
 }
 
 TEST_F(SequenceIdle, continuesExecutingFromStep0_ifNoActiveStepAboveFirstSelectedStep) {
@@ -143,7 +135,7 @@ TEST_F(SequenceIdle, continuesExecutingFromStep0_ifNoActiveStepAboveFirstSelecte
 
   givenGateInput(true); // Will trigger start of sequence
 
-  sequence.execute(defaultSampleTime);
+  curveSequencer.execute(defaultSampleTime);
 }
 
 TEST_F(SequenceIdle, executesEachSelectedStepExactlyOnce_ifNoActiveStep) {
@@ -157,7 +149,7 @@ TEST_F(SequenceIdle, executesEachSelectedStepExactlyOnce_ifNoActiveStep) {
 
   givenGateInput(true); // Will trigger start of sequence
 
-  sequence.execute(defaultSampleTime);
+  curveSequencer.execute(defaultSampleTime);
 }
 
 TEST_F(SequenceIdle, executesOnlySelectedSteps) {
@@ -171,7 +163,7 @@ TEST_F(SequenceIdle, executesOnlySelectedSteps) {
 
   givenGateInput(true); // Will trigger start of sequence
 
-  sequence.execute(defaultSampleTime);
+  curveSequencer.execute(defaultSampleTime);
 }
 
 class SequenceActive : public NewSequence {
@@ -186,7 +178,7 @@ protected:
     givenGateInput(true);
     givenActiveSteps({previouslyActiveStep});
 
-    sequence.execute(0.F);
+    curveSequencer.execute(0.F);
     failIfAnyStepExecutesUnexpectedly();
   }
 };
@@ -197,7 +189,7 @@ TEST_F(SequenceActive, executesOnlyPreviouslyActiveStep_ifPreviouslyActiveStepIs
   EXPECT_CALL(*stepExecutor, execute(previouslyActiveStep, A<Latch const &>(), defaultSampleTime))
       .WillOnce(Return(true));
 
-  sequence.execute(defaultSampleTime);
+  curveSequencer.execute(defaultSampleTime);
 }
 
 TEST_F(SequenceActive, executesSucessorSteps_ifPreviouslyActiveStepIsNoLongerActive) {
@@ -212,5 +204,5 @@ TEST_F(SequenceActive, executesSucessorSteps_ifPreviouslyActiveStepIsNoLongerAct
   EXPECT_CALL(*stepExecutor, execute(firstActiveSuccessorStep, A<Latch const &>(), defaultSampleTime))
       .WillOnce(Return(true));
 
-  sequence.execute(defaultSampleTime);
+  curveSequencer.execute(defaultSampleTime);
 }

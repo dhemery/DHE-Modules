@@ -1,19 +1,32 @@
 #include "curve-sequencer/StepExecutor.h"
 
 #include "components/Latch.h"
+#include "curve-sequencer/CurveSequencerControls.h"
 
 #include <gmock/gmock-actions.h>
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
+#include <mocks/MockLight.h>
+#include <mocks/MockParam.h>
+#include <mocks/MockPort.h>
 
-using dhe::Latch;
-using dhe::curve_sequencer::StepExecutor;
+static auto constexpr stepCount = 4;
+static auto constexpr defaultStep = 3;
+static auto constexpr defaultSampleTime = 1.F / 44100.F;
 
 using ::testing::A;
 using ::testing::An;
 using ::testing::NiceMock;
 using ::testing::Return;
 using ::testing::Test;
+
+using InputType = NiceMock<MockPort>;
+using OutputType = NiceMock<MockPort>;
+using ParamType = NiceMock<MockParam>;
+using LightType = NiceMock<MockLight>;
+
+using dhe::Latch;
+using Controls = dhe::curve_sequencer::CurveSequencerControls<stepCount>;
 
 class MockGenerateStage {
 public:
@@ -25,29 +38,31 @@ public:
   MOCK_METHOD(bool, execute, (int, Latch const &) );
 };
 
-class MockSequenceControls {
-public:
-  MOCK_METHOD(bool, isEnabled, (int), (const));
-};
-
-static auto constexpr defaultSampleTime = 1.F / 44100.F;
+using StepExecutor = dhe::curve_sequencer::StepExecutor<stepCount, InputType, OutputType, ParamType, LightType,
+                                                        MockGenerateStage, MockSustainStage>;
 
 class StepExecutorNew : public Test {
 protected:
-  NiceMock<MockSequenceControls> controls;
+  std::vector<InputType> inputs{Controls::InputCount};
+  std::vector<OutputType> outputs{Controls::OutputCount};
+  std::vector<ParamType> params{Controls::ParameterCount};
+  std::vector<LightType> lights{Controls::LightCount};
+
   MockGenerateStage *generateStage = new NiceMock<MockGenerateStage>;
   MockSustainStage *sustainStage = new NiceMock<MockSustainStage>;
-  StepExecutor<MockSequenceControls, MockGenerateStage, MockSustainStage> executor{controls, generateStage,
-                                                                                   sustainStage};
+  StepExecutor executor{inputs, outputs, params, lights, generateStage, sustainStage};
+
+protected:
+  void setEnabled(bool state) {
+    ON_CALL(params[Controls::EnabledButtons + defaultStep], getValue()).WillByDefault(Return(state ? 10.F : 0.F));
+  }
 };
 
 class StepExecutorDisabled : public StepExecutorNew {
 protected:
-  static auto constexpr defaultStep = 3;
-
   void SetUp() override {
     StepExecutorNew::SetUp();
-    ON_CALL(controls, isEnabled(defaultStep)).WillByDefault(Return(false));
+    setEnabled(false);
   }
 };
 
@@ -66,7 +81,7 @@ protected:
 
   void SetUp() override {
     StepExecutorNew::SetUp();
-    ON_CALL(controls, isEnabled(defaultStep)).WillByDefault(Return(true));
+    setEnabled(true);
   }
 };
 

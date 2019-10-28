@@ -9,22 +9,22 @@
 
 namespace dhe {
 namespace curve_sequencer {
-  template <int N, typename InputType, typename OutputType, typename ParamType, typename LightType>
+  template <int N, typename InputType, typename OutputType, typename ParamType, typename LightType,
+            typename StepExecutorType>
   class CurveSequencer {
-    using StepExecutor = StepExecutor<N, InputType, OutputType, ParamType, LightType>;
+    using Controls = CurveSequencerControls<N>;
+    using GenerateStage = GenerateStage<N, InputType, OutputType, ParamType, LightType>;
+    using SustainStage = SustainStage<N, InputType, OutputType, ParamType, LightType>;
+    using StepExecutor = StepExecutor<N, InputType, OutputType, ParamType, LightType, GenerateStage, SustainStage>;
 
   public:
     CurveSequencer(std::vector<InputType> &inputs, std::vector<OutputType> &outputs, std::vector<ParamType> &params,
-                   std::vector<LightType> &lights, StepExecutor *stepExecutor) :
-        inputs{inputs},
-        outputs{outputs},
-        params{params},
-        lights{lights},
-        stepExecutor{stepExecutor} {}
+                   std::vector<LightType> &lights, StepExecutorType *stepExecutor) :
+        inputs{inputs}, outputs{outputs}, params{params}, lights{lights}, stepExecutor{stepExecutor} {}
 
     CurveSequencer(std::vector<InputType> &inputs, std::vector<OutputType> &outputs, std::vector<ParamType> &params,
                    std::vector<LightType> &lights) :
-        CurveSequencer(inputs, outputs, params, lights, new StepExecutor(inputs, outputs, params, lights)) {}
+        CurveSequencer(inputs, outputs, params, lights, new StepExecutorType(inputs, outputs, params, lights)) {}
 
     void execute(float sampleTime) {
       runLatch.clock(isRunning());
@@ -54,19 +54,15 @@ namespace curve_sequencer {
     }
 
   private:
-    auto gate() const -> bool {
-      return isHigh(inputs[CurveSequencerControls<N>::GateInput])
-             || isPressed(params[CurveSequencerControls<N>::GateButton]);
-    }
+    auto gate() const -> bool { return isHigh(inputs[Controls::GateInput]) || isPressed(params[Controls::GateButton]); }
 
     auto isRunning() const -> bool {
-      return isHigh(inputs[CurveSequencerControls<N>::RunInput])
-             || isPressed(params[CurveSequencerControls<N>::RunButton]);
+      return isHigh(inputs[Controls::RunInput]) || isPressed(params[Controls::RunButton]);
     }
 
-    auto selectionLength() const -> int { return valueOf(params[CurveSequencerControls<N>::StepsKnob]); }
+    auto selectionLength() const -> int { return valueOf(params[Controls::StepsKnob]); }
 
-    auto selectionStart() const -> int { return valueOf(params[CurveSequencerControls<N>::StartKnob]) - 1; }
+    auto selectionStart() const -> int { return valueOf(params[Controls::StartKnob]) - 1; }
 
     std::vector<InputType> &inputs;
     std::vector<OutputType> &outputs;
@@ -77,7 +73,7 @@ namespace curve_sequencer {
     Latch runLatch{};
     Latch gateLatch{};
     int const stepIndexMask = N - 1;
-    std::unique_ptr<StepExecutor> stepExecutor;
+    std::unique_ptr<StepExecutorType> stepExecutor;
   };
 } // namespace curve_sequencer
 } // namespace dhe

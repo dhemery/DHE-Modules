@@ -1,10 +1,6 @@
-add_library(curve_sequencer STATIC)
-target_sources(curve_sequencer
-        PRIVATE
-        CurveSequencerModule.cpp
-        )
+add_library(curve_sequencer INTERFACE)
 target_link_libraries(curve_sequencer
-        PUBLIC
+        INTERFACE
         components
         controls
         config
