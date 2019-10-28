@@ -1,33 +1,57 @@
 #pragma once
 
+#include "CurveSequencerControls.h"
 #include "Stages.h"
 #include "components/Latch.h"
+#include "controls/CommonInputs.h"
 
 #include <memory>
+#include <vector>
 
 namespace dhe {
 namespace curve_sequencer {
+  template <int N, typename InputType, typename OutputType, typename ParamType, typename LightType> class StepExecutor {
+    using GenerateStage = GenerateStage<N, InputType, OutputType, ParamType, LightType>;
+    using SustainStage = SustainStage<N, InputType, OutputType, ParamType, LightType>;
 
-  template <typename C, typename G = GenerateStage<C>, typename S = SustainStage<C>> class StepExecutor {
   public:
-    explicit StepExecutor(C &controls) : StepExecutor{controls, new G(controls), new S(controls)} {}
+    explicit StepExecutor(std::vector<InputType> &inputs, std::vector<OutputType> &outputs,
+                          std::vector<ParamType> &params, std::vector<LightType> &lights) :
+        StepExecutor{inputs,
+                     outputs,
+                     params,
+                     lights,
+                     new GenerateStage(inputs, outputs, params, lights),
+                     new SustainStage(inputs, outputs, params, lights)} {}
 
-    StepExecutor(C &controls, G *generateStage, S *sustainStage) :
-        controls{controls},
+    StepExecutor(std::vector<InputType> &inputs, std::vector<OutputType> &outputs, std::vector<ParamType> &params,
+                 std::vector<LightType> &lights, GenerateStage *generateStage, SustainStage *sustainStage) :
+        inputs{inputs},
+        outputs{outputs},
+        params{params},
+        lights{lights},
         generateStage{generateStage},
         sustainStage{sustainStage} {}
 
     auto execute(int stepIndex, Latch const &gateLatch, float sampleTime) -> bool {
-      if (!controls.isEnabled(stepIndex)) {
+      if (!isEnabled(stepIndex)) {
         return false;
       }
       return generateStage->execute(stepIndex, gateLatch, sampleTime) || sustainStage->execute(stepIndex, gateLatch);
     }
 
+    auto isEnabled(int stepIndex) const -> bool {
+      return isHigh(inputs[CurveSequencerControls<N>::EnabledInputs + stepIndex])
+             || isPressed(params[CurveSequencerControls<N>::EnabledButtons + stepIndex]);
+    }
+
   private:
-    C &controls;
-    std::unique_ptr<G> generateStage;
-    std::unique_ptr<S> sustainStage;
+    std::vector<InputType> &inputs;
+    std::vector<OutputType> &outputs;
+    std::vector<ParamType> &params;
+    std::vector<LightType> &lights;
+    std::unique_ptr<GenerateStage> generateStage;
+    std::unique_ptr<SustainStage> sustainStage;
   };
 } // namespace curve_sequencer
 } // namespace dhe

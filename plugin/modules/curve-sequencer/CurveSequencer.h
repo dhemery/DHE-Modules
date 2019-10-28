@@ -1,40 +1,50 @@
 #pragma once
 
+#include "CurveSequencerControls.h"
 #include "StepExecutor.h"
 #include "components/Latch.h"
+#include "controls/CommonInputs.h"
 
 #include <memory>
 
 namespace dhe {
 namespace curve_sequencer {
-  template <typename C, typename S = StepExecutor<C>> class CurveSequencer {
+  template <int N, typename InputType, typename OutputType, typename ParamType, typename LightType>
+  class CurveSequencer {
+    using StepExecutor = StepExecutor<N, InputType, OutputType, ParamType, LightType>;
+
   public:
-    CurveSequencer(C &controls, int stepCount, S *stepExecutor) :
-        controls{controls},
-        stepIndexMask{stepCount - 1},
+    CurveSequencer(std::vector<InputType> &inputs, std::vector<OutputType> &outputs, std::vector<ParamType> &params,
+                   std::vector<LightType> &lights, StepExecutor *stepExecutor) :
+        inputs{inputs},
+        outputs{outputs},
+        params{params},
+        lights{lights},
         stepExecutor{stepExecutor} {}
 
-    CurveSequencer(C &controls, int stepCount) : CurveSequencer(controls, stepCount, new S(controls)) {}
+    CurveSequencer(std::vector<InputType> &inputs, std::vector<OutputType> &outputs, std::vector<ParamType> &params,
+                   std::vector<LightType> &lights) :
+        CurveSequencer(inputs, outputs, params, lights, new StepExecutor(inputs, outputs, params, lights)) {}
 
     void execute(float sampleTime) {
-      runLatch.clock(controls.isRunning());
-      gateLatch.clock(controls.gate());
+      runLatch.clock(isRunning());
+      gateLatch.clock(gate());
 
-      auto const selectionStart = controls.selectionStart();
+      auto const start = selectionStart();
 
       if (!isActive) {
         if (gateLatch.isRise()) {
           isActive = true;
-          activeStep = selectionStart;
+          activeStep = start;
         } else {
           return;
         }
       }
 
-      auto const selectionLength = controls.selectionLength();
-      auto const selectionEnd = selectionStart + selectionLength - 1;
+      auto const length = selectionLength();
+      auto const end = start + length - 1;
 
-      for (int i = activeStep; i <= selectionEnd; i++) {
+      for (int i = activeStep; i <= end; i++) {
         activeStep = i & stepIndexMask;
         if (stepExecutor->execute(activeStep, gateLatch, sampleTime)) {
           return;
@@ -44,13 +54,30 @@ namespace curve_sequencer {
     }
 
   private:
+    auto gate() const -> bool {
+      return isHigh(inputs[CurveSequencerControls<N>::GateInput])
+             || isPressed(params[CurveSequencerControls<N>::GateButton]);
+    }
+
+    auto isRunning() const -> bool {
+      return isHigh(inputs[CurveSequencerControls<N>::RunInput])
+             || isPressed(params[CurveSequencerControls<N>::RunButton]);
+    }
+
+    auto selectionLength() const -> int { return valueOf(params[CurveSequencerControls<N>::StepsKnob]); }
+
+    auto selectionStart() const -> int { return valueOf(params[CurveSequencerControls<N>::StartKnob]) - 1; }
+
+    std::vector<InputType> &inputs;
+    std::vector<OutputType> &outputs;
+    std::vector<ParamType> &params;
+    std::vector<LightType> &lights;
     bool isActive{};
     int activeStep{};
     Latch runLatch{};
     Latch gateLatch{};
-    C &controls;
-    int const stepIndexMask;
-    std::unique_ptr<S> stepExecutor;
+    int const stepIndexMask = N - 1;
+    std::unique_ptr<StepExecutor> stepExecutor;
   };
 } // namespace curve_sequencer
 } // namespace dhe

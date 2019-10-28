@@ -1,6 +1,8 @@
 #pragma once
 
+#include "CurveSequencerControls.h"
 #include "components/Latch.h"
+#include "controls/CommonInputs.h"
 
 #include <array>
 #include <string>
@@ -49,32 +51,65 @@ namespace curve_sequencer {
     }
   }
 
-  template <typename C> class GenerateStage {
+  template <int N, typename InputType, typename OutputType, typename ParamType, typename LightType>
+  class GenerateStage {
   public:
-    GenerateStage(C &controls) : controls{controls} {}
+    GenerateStage(std::vector<InputType> &inputs, std::vector<OutputType> &outputs, std::vector<ParamType> &params,
+                  std::vector<LightType> &lights) :
+        inputs{inputs},
+        outputs{outputs},
+        params{params},
+        lights{lights} {}
 
     auto execute(int step, Latch const &gateLatch, float) -> bool {
-      auto const active = isActive(controls.generateMode(step), gateLatch);
-      controls.setGenerating(step, active);
+      auto const active = isActive(generateMode(step), gateLatch);
+      setGenerating(step, active);
       return active;
     }
 
+    void setGenerating(int stepIndex, bool state) {
+      lights[CurveSequencerControls<N>::GeneratingLights + stepIndex].setBrightness(state ? 10.F : 0.F);
+    }
+
+    auto generateMode(int stepIndex) const -> int {
+      return positionOf(params[CurveSequencerControls<N>::GenerateModeSwitches + stepIndex]);
+    }
+
   private:
-    C &controls;
+    std::vector<InputType> &inputs;
+    std::vector<OutputType> &outputs;
+    std::vector<ParamType> &params;
+    std::vector<LightType> &lights;
   };
 
-  template <typename C> class SustainStage {
+  template <int N, typename InputType, typename OutputType, typename ParamType, typename LightType> class SustainStage {
   public:
-    SustainStage(C &controls) : controls{controls} {}
+    SustainStage(std::vector<InputType> &inputs, std::vector<OutputType> &outputs, std::vector<ParamType> &params,
+                 std::vector<LightType> &lights) :
+        inputs{inputs},
+        outputs{outputs},
+        params{params},
+        lights{lights} {}
+
+    void setSustaining(int stepIndex, bool state) {
+      lights[CurveSequencerControls<N>::SustainingLights + stepIndex].setBrightness(state ? 10.F : 0.F);
+    }
+
+    auto sustainMode(int stepIndex) -> int {
+      return positionOf(params[CurveSequencerControls<N>::SustainModeSwitches + stepIndex]);
+    }
 
     auto execute(int step, Latch const &gateLatch) -> bool {
-      auto const active = isActive(controls.sustainMode(step), gateLatch);
-      controls.setSustaining(step, active);
+      auto const active = isActive(sustainMode(step), gateLatch);
+      setSustaining(step, active);
       return active;
     }
 
   private:
-    C &controls;
+    std::vector<InputType> &inputs;
+    std::vector<OutputType> &outputs;
+    std::vector<ParamType> &params;
+    std::vector<LightType> &lights;
   };
 } // namespace curve_sequencer
 } // namespace dhe

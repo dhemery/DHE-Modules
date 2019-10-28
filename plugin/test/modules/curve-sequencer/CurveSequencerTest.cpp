@@ -1,5 +1,8 @@
-#include "components/Latch.h"
 #include "curve-sequencer/CurveSequencer.h"
+
+#include "components/Latch.h"
+#include "curve-sequencer/CurveSequencerControls.h"
+#include "curve-sequencer/StepExecutor.h"
 
 #include <gmock/gmock-actions.h>
 #include <gmock/gmock.h>
@@ -9,6 +12,8 @@
 
 using dhe::Latch;
 using dhe::curve_sequencer::CurveSequencer;
+using dhe::curve_sequencer::CurveSequencerControls;
+using dhe::curve_sequencer::StepExecutor;
 
 static auto constexpr defaultSampleTime = 1.F / 44100.F;
 static auto constexpr stepCount = 8;
@@ -26,18 +31,33 @@ public:
   MOCK_METHOD(int, selectionStart, (), (const));
 };
 
-class MockStepExecutor {
+class MockInput {
+public:
+  MOCK_METHOD(float, getValue, ());
+};
+class MockOutput {};
+class MockParam {};
+class MockLight {};
+
+class MockStepExecutor : public StepExecutor<4, MockInput, MockOutput, MockParam, MockLight> {
 public:
   MOCK_METHOD(bool, execute, (int, Latch const &, float) );
 };
 
 class NewSequence : public ::testing::Test {
-protected:
-  NiceMock<MockSequenceControls> controls;
-  MockStepExecutor *stepExecutor = new NiceMock<MockStepExecutor>{};
-  CurveSequencer<MockSequenceControls, MockStepExecutor> sequence{controls, stepCount, stepExecutor};
+  using CurveSequencer = CurveSequencer<4, MockInput, MockOutput, MockParam, MockLight>;
 
-  void givenRunInput(bool isRunning) { ON_CALL(controls, isRunning()).WillByDefault(Return(isRunning)); }
+protected:
+  std::vector<MockInput> inputs;
+  std::vector<MockOutput> outputs;
+  std::vector<MockParam> params;
+  std::vector<MockLight> lights;
+  MockStepExecutor *stepExecutor = new NiceMock<MockStepExecutor>{};
+  CurveSequencer sequence{inputs, outputs, params, lights, stepExecutor};
+
+  void givenRunInput(bool isRunning) {
+    ON_CALL(inputs[CurveSequencerControls<4>::RunInput], getValue()).WillByDefault(Return(isRunning ? 10.F, 0.F));
+  }
 
   void givenGateInput(bool gate) { ON_CALL(controls, gate()).WillByDefault(Return(gate)); }
 
