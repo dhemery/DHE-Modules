@@ -12,16 +12,17 @@
 namespace dhe {
 
 namespace curve_sequencer {
+  using rack::engine::Input;
+  using rack::engine::Light;
+  using rack::engine::Output;
+  using rack::engine::Param;
+
   template <int N> class CurveSequencerModule : public rack::engine::Module {
     using Controls = CurveSequencerControls<N>;
-    using GenerateStage
-        = GenerateStage<N, rack::engine::Input, rack::engine::Output, rack::engine::Param, rack::engine::Light>;
-    using SustainStage
-        = SustainStage<N, rack::engine::Input, rack::engine::Output, rack::engine::Param, rack::engine::Light>;
-    using StepExecutor = StepExecutor<N, rack::engine::Input, rack::engine::Output, rack::engine::Param,
-                                      rack::engine::Light, GenerateStage, SustainStage>;
-    using CurveSequencer = CurveSequencer<N, rack::engine::Input, rack::engine::Output, rack::engine::Param,
-                                          rack::engine::Light, StepExecutor>;
+    using GenerateStage = GenerateStage<N, Input, Output, Param, Light>;
+    using SustainStage = SustainStage<N, Input, Output, Param, Light>;
+    using StepExecutor = StepExecutor<N, Input, Output, Param, Light, GenerateStage, SustainStage>;
+    using CurveSequencer = CurveSequencer<N, Input, Output, Param, Light, StepExecutor>;
 
   public:
     CurveSequencerModule() {
@@ -55,10 +56,13 @@ namespace curve_sequencer {
 
     ~CurveSequencerModule() override = default;
 
-    void process(const ProcessArgs &args) override { sequencer.execute(args.sampleTime); }
+    void process(const ProcessArgs &args) override { curveSequencer.execute(args.sampleTime); }
 
   private:
-    CurveSequencer sequencer{inputs, outputs, params, lights};
+    GenerateStage generateStage{inputs, outputs, params, lights};
+    SustainStage sustainStage{inputs, outputs, params, lights};
+    StepExecutor stepExecutor{inputs, outputs, params, lights, generateStage, sustainStage};
+    CurveSequencer curveSequencer{inputs, outputs, params, lights, stepExecutor};
   };
 } // namespace curve_sequencer
 

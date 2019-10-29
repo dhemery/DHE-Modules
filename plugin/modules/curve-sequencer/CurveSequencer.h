@@ -9,22 +9,17 @@
 
 namespace dhe {
 namespace curve_sequencer {
-  template <int N, typename InputType, typename OutputType, typename ParamType, typename LightType,
-            typename StepExecutorType>
-  class CurveSequencer {
+  template <int N, typename I, typename O, typename P, typename L, typename StepExecutor> class CurveSequencer {
     using Controls = CurveSequencerControls<N>;
-    using GenerateStage = GenerateStage<N, InputType, OutputType, ParamType, LightType>;
-    using SustainStage = SustainStage<N, InputType, OutputType, ParamType, LightType>;
-    using StepExecutor = StepExecutor<N, InputType, OutputType, ParamType, LightType, GenerateStage, SustainStage>;
 
   public:
-    CurveSequencer(std::vector<InputType> &inputs, std::vector<OutputType> &outputs, std::vector<ParamType> &params,
-                   std::vector<LightType> &lights, StepExecutorType *stepExecutor) :
-        inputs{inputs}, outputs{outputs}, params{params}, lights{lights}, stepExecutor{stepExecutor} {}
-
-    CurveSequencer(std::vector<InputType> &inputs, std::vector<OutputType> &outputs, std::vector<ParamType> &params,
-                   std::vector<LightType> &lights) :
-        CurveSequencer(inputs, outputs, params, lights, new StepExecutorType(inputs, outputs, params, lights)) {}
+    CurveSequencer(std::vector<I> &inputs, std::vector<O> &outputs, std::vector<P> &params, std::vector<L> &lights,
+                   StepExecutor &stepExecutor) :
+        inputs{inputs},
+        outputs{outputs},
+        params{params},
+        lights{lights},
+        stepExecutor{stepExecutor} {}
 
     void execute(float sampleTime) {
       runLatch.clock(isRunning());
@@ -46,7 +41,7 @@ namespace curve_sequencer {
 
       for (int i = activeStep; i <= end; i++) {
         activeStep = i & stepIndexMask;
-        if (stepExecutor->execute(activeStep, gateLatch, sampleTime)) {
+        if (stepExecutor.execute(activeStep, gateLatch, sampleTime)) {
           return;
         }
       }
@@ -64,16 +59,16 @@ namespace curve_sequencer {
 
     auto selectionStart() const -> int { return valueOf(params[Controls::StartKnob]) - 1; }
 
-    std::vector<InputType> &inputs;
-    std::vector<OutputType> &outputs;
-    std::vector<ParamType> &params;
-    std::vector<LightType> &lights;
     bool isActive{};
     int activeStep{};
     Latch runLatch{};
     Latch gateLatch{};
     int const stepIndexMask = N - 1;
-    std::unique_ptr<StepExecutorType> stepExecutor;
+    std::vector<I> &inputs;
+    std::vector<O> &outputs;
+    std::vector<P> &params;
+    std::vector<L> &lights;
+    StepExecutor &stepExecutor;
   };
 } // namespace curve_sequencer
 } // namespace dhe

@@ -4,5 +4,6 @@
     <mapping directory="$PROJECT_DIR$" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/.build/_deps/googletest-src" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/.cmake-dale/_deps/googletest-src" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/cmake-build-debug/_deps/googletest-src" vcs="Git" />
   </component>
 </project>

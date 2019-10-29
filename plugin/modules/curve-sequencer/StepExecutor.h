@@ -5,29 +5,15 @@
 #include "components/Latch.h"
 #include "controls/CommonInputs.h"
 
-#include <memory>
 #include <vector>
 
 namespace dhe {
 namespace curve_sequencer {
-  template <int N, typename InputType, typename OutputType, typename ParamType, typename LightType,
-            typename GenerateStageType, typename SustainStageType>
+  template <int N, typename I, typename O, typename P, typename L, typename GenerateStage, typename SustainStage>
   class StepExecutor {
-    using GenerateStage = GenerateStage<N, InputType, OutputType, ParamType, LightType>;
-    using SustainStage = SustainStage<N, InputType, OutputType, ParamType, LightType>;
-
   public:
-    explicit StepExecutor(std::vector<InputType> &inputs, std::vector<OutputType> &outputs,
-                          std::vector<ParamType> &params, std::vector<LightType> &lights) :
-        StepExecutor{inputs,
-                     outputs,
-                     params,
-                     lights,
-                     new GenerateStage(inputs, outputs, params, lights),
-                     new SustainStage(inputs, outputs, params, lights)} {}
-
-    StepExecutor(std::vector<InputType> &inputs, std::vector<OutputType> &outputs, std::vector<ParamType> &params,
-                 std::vector<LightType> &lights, GenerateStageType *generateStage, SustainStageType *sustainStage) :
+    StepExecutor(std::vector<I> &inputs, std::vector<O> &outputs, std::vector<P> &params, std::vector<L> &lights,
+                 GenerateStage &generateStage, SustainStage &sustainStage) :
         inputs{inputs},
         outputs{outputs},
         params{params},
@@ -39,7 +25,7 @@ namespace curve_sequencer {
       if (!isEnabled(stepIndex)) {
         return false;
       }
-      return generateStage->execute(stepIndex, gateLatch, sampleTime) || sustainStage->execute(stepIndex, gateLatch);
+      return generateStage.execute(stepIndex, gateLatch, sampleTime) || sustainStage.execute(stepIndex, gateLatch);
     }
 
     auto isEnabled(int stepIndex) const -> bool {
@@ -48,12 +34,12 @@ namespace curve_sequencer {
     }
 
   private:
-    std::vector<InputType> &inputs;
-    std::vector<OutputType> &outputs;
-    std::vector<ParamType> &params;
-    std::vector<LightType> &lights;
-    std::unique_ptr<GenerateStageType> generateStage;
-    std::unique_ptr<SustainStageType> sustainStage;
+    std::vector<I> &inputs;
+    std::vector<O> &outputs;
+    std::vector<P> &params;
+    std::vector<L> &lights;
+    GenerateStage &generateStage;
+    SustainStage &sustainStage;
   };
 } // namespace curve_sequencer
 } // namespace dhe
