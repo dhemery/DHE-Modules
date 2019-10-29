@@ -9,17 +9,15 @@
 
 namespace dhe {
 namespace curve_sequencer {
-  template <int N, typename I, typename O, typename P, typename L, typename StepExecutor> class CurveSequencer {
+  template <int N, typename InputType, typename OutputType, typename ParamType, typename LightType,
+            typename StepExecutorType>
+  class CurveSequencer {
     using Controls = CurveSequencerControls<N>;
 
   public:
-    CurveSequencer(std::vector<I> &inputs, std::vector<O> &outputs, std::vector<P> &params, std::vector<L> &lights,
-                   StepExecutor &stepExecutor) :
-        inputs{inputs},
-        outputs{outputs},
-        params{params},
-        lights{lights},
-        stepExecutor{stepExecutor} {}
+    CurveSequencer(std::vector<InputType> &inputs, std::vector<OutputType> &outputs, std::vector<ParamType> &params,
+                   std::vector<LightType> &lights, StepExecutorType &stepExecutor) :
+        inputs{inputs}, outputs{outputs}, params{params}, lights{lights}, stepExecutor{stepExecutor} {}
 
     void execute(float sampleTime) {
       runLatch.clock(isRunning());
@@ -64,11 +62,11 @@ namespace curve_sequencer {
     Latch runLatch{};
     Latch gateLatch{};
     int const stepIndexMask = N - 1;
-    std::vector<I> &inputs;
-    std::vector<O> &outputs;
-    std::vector<P> &params;
-    std::vector<L> &lights;
-    StepExecutor &stepExecutor;
+    std::vector<InputType> &inputs;
+    std::vector<OutputType> &outputs;
+    std::vector<ParamType> &params;
+    std::vector<LightType> &lights;
+    StepExecutorType &stepExecutor;
   };
 } // namespace curve_sequencer
 } // namespace dhe

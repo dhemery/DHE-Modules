@@ -27,6 +27,7 @@ using LightType = NiceMock<MockLight>;
 
 using dhe::Latch;
 using Controls = dhe::curve_sequencer::CurveSequencerControls<stepCount>;
+using dhe::curve_sequencer::StepExecutor;
 
 class MockGenerateStage {
 public:
@@ -38,9 +39,6 @@ public:
   MOCK_METHOD(bool, execute, (int, Latch const &) );
 };
 
-using StepExecutor = dhe::curve_sequencer::StepExecutor<stepCount, InputType, OutputType, ParamType, LightType,
-                                                        MockGenerateStage, MockSustainStage>;
-
 class StepExecutorNew : public Test {
 protected:
   std::vector<InputType> inputs{Controls::InputCount};
@@ -50,7 +48,8 @@ protected:
 
   NiceMock<MockGenerateStage> generateStage{};
   NiceMock<MockSustainStage> sustainStage{};
-  StepExecutor executor{inputs, outputs, params, lights, generateStage, sustainStage};
+  StepExecutor<stepCount, InputType, OutputType, ParamType, LightType, MockGenerateStage, MockSustainStage>
+      stepExecutor{inputs, outputs, params, lights, generateStage, sustainStage};
 
 protected:
   void setEnabled(bool state) {
@@ -70,7 +69,7 @@ TEST_F(StepExecutorDisabled, executesNeitherStage) {
   EXPECT_CALL(generateStage, execute(An<int>(), A<Latch const &>(), A<float>())).Times(0);
   EXPECT_CALL(sustainStage, execute(An<int>(), A<Latch const &>())).Times(0);
 
-  auto const executed = executor.execute(defaultStep, Latch{}, defaultSampleTime);
+  auto const executed = stepExecutor.execute(defaultStep, Latch{}, defaultSampleTime);
 
   EXPECT_FALSE(executed);
 }
@@ -89,7 +88,7 @@ TEST_F(StepExecutorEnabled, executesOnlyGenerateStage_ifGenerateStageActed) {
   EXPECT_CALL(generateStage, execute(An<int>(), A<Latch const &>(), A<float>())).WillOnce(Return(true));
   EXPECT_CALL(sustainStage, execute(An<int>(), A<Latch const &>())).Times(0);
 
-  auto const executed = executor.execute(defaultStep, Latch{}, defaultSampleTime);
+  auto const executed = stepExecutor.execute(defaultStep, Latch{}, defaultSampleTime);
 
   EXPECT_TRUE(executed);
 }
@@ -98,7 +97,7 @@ TEST_F(StepExecutorEnabled, executesSustainStage_ifGenerateStageDidNotAct) {
   EXPECT_CALL(generateStage, execute(An<int>(), A<Latch const &>(), A<float>())).WillOnce(Return(false));
   EXPECT_CALL(sustainStage, execute(An<int>(), A<Latch const &>())).WillOnce(Return(true));
 
-  auto const executed = executor.execute(defaultStep, Latch{}, defaultSampleTime);
+  auto const executed = stepExecutor.execute(defaultStep, Latch{}, defaultSampleTime);
 
   EXPECT_TRUE(executed);
 }
@@ -107,7 +106,7 @@ TEST_F(StepExecutorEnabled, returnsFalse_ifNeitherStageActed) {
   EXPECT_CALL(generateStage, execute(An<int>(), A<Latch const &>(), A<float>())).WillOnce(Return(false));
   EXPECT_CALL(sustainStage, execute(An<int>(), A<Latch const &>())).WillOnce(Return(false));
 
-  auto const executed = executor.execute(defaultStep, Latch{}, defaultSampleTime);
+  auto const executed = stepExecutor.execute(defaultStep, Latch{}, defaultSampleTime);
 
   EXPECT_FALSE(executed);
 }

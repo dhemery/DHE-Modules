@@ -19,10 +19,6 @@ namespace curve_sequencer {
 
   template <int N> class CurveSequencerModule : public rack::engine::Module {
     using Controls = CurveSequencerControls<N>;
-    using GenerateStage = GenerateStage<N, Input, Output, Param, Light>;
-    using SustainStage = SustainStage<N, Input, Output, Param, Light>;
-    using StepExecutor = StepExecutor<N, Input, Output, Param, Light, GenerateStage, SustainStage>;
-    using CurveSequencer = CurveSequencer<N, Input, Output, Param, Light, StepExecutor>;
 
   public:
     CurveSequencerModule() {
@@ -59,10 +55,12 @@ namespace curve_sequencer {
     void process(const ProcessArgs &args) override { curveSequencer.execute(args.sampleTime); }
 
   private:
-    GenerateStage generateStage{inputs, outputs, params, lights};
-    SustainStage sustainStage{inputs, outputs, params, lights};
-    StepExecutor stepExecutor{inputs, outputs, params, lights, generateStage, sustainStage};
-    CurveSequencer curveSequencer{inputs, outputs, params, lights, stepExecutor};
+    GenerateStage<N, Input, Output, Param, Light> generateStage{inputs, outputs, params, lights};
+    SustainStage<N, Input, Output, Param, Light> sustainStage{inputs, outputs, params, lights};
+    StepExecutor<N, Input, Output, Param, Light, decltype(generateStage), decltype(sustainStage)> stepExecutor{
+        inputs, outputs, params, lights, generateStage, sustainStage};
+    CurveSequencer<N, Input, Output, Param, Light, decltype(stepExecutor)> curveSequencer{inputs, outputs, params,
+                                                                                          lights, stepExecutor};
   };
 } // namespace curve_sequencer
 
