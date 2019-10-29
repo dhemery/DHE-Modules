@@ -14,3 +14,5 @@ install(DIRECTORY svg
 install(FILES LICENSE.txt plugin.json
         DESTINATION ${RACK_PLUGINS_DIR}
         )
+
+message(CMAKE_HOST_SYSTEM_NAME: ${CMAKE_HOST_SYSTEM_NAME})
