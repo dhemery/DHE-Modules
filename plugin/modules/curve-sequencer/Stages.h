@@ -6,6 +6,7 @@
 
 #include <array>
 #include <string>
+#include <vector>
 
 namespace dhe {
 namespace curve_sequencer {
@@ -53,6 +54,8 @@ namespace curve_sequencer {
 
   template <int N, typename InputType, typename OutputType, typename ParamType, typename LightType>
   class GenerateStage {
+    using Controls = CurveSequencerControls<N>;
+
   public:
     GenerateStage(std::vector<InputType> &inputs, std::vector<OutputType> &outputs, std::vector<ParamType> &params,
                   std::vector<LightType> &lights) :
@@ -65,11 +68,11 @@ namespace curve_sequencer {
     }
 
     void setGenerating(int stepIndex, bool state) {
-      lights[CurveSequencerControls<N>::GeneratingLights + stepIndex].setBrightness(state ? 10.F : 0.F);
+      lights[Controls::GeneratingLights + stepIndex].setBrightness(state ? 10.F : 0.F);
     }
 
     auto generateMode(int stepIndex) const -> int {
-      return positionOf(params[CurveSequencerControls<N>::GenerateModeSwitches + stepIndex]);
+      return positionOf(params[Controls::GenerateModeSwitches + stepIndex]);
     }
 
   private:
@@ -80,18 +83,18 @@ namespace curve_sequencer {
   };
 
   template <int N, typename InputType, typename OutputType, typename ParamType, typename LightType> class SustainStage {
+    using Controls = CurveSequencerControls<N>;
+
   public:
     SustainStage(std::vector<InputType> &inputs, std::vector<OutputType> &outputs, std::vector<ParamType> &params,
                  std::vector<LightType> &lights) :
         inputs{inputs}, outputs{outputs}, params{params}, lights{lights} {}
 
     void setSustaining(int stepIndex, bool state) {
-      lights[CurveSequencerControls<N>::SustainingLights + stepIndex].setBrightness(state ? 10.F : 0.F);
+      lights[Controls::SustainingLights + stepIndex].setBrightness(state ? 10.F : 0.F);
     }
 
-    auto sustainMode(int stepIndex) -> int {
-      return positionOf(params[CurveSequencerControls<N>::SustainModeSwitches + stepIndex]);
-    }
+    auto sustainMode(int stepIndex) -> int { return positionOf(params[Controls::SustainModeSwitches + stepIndex]); }
 
     auto execute(int step, Latch const &gateLatch) -> bool {
       auto const active = isActive(sustainMode(step), gateLatch);

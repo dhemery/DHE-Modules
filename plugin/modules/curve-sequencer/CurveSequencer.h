@@ -5,7 +5,7 @@
 #include "components/Latch.h"
 #include "controls/CommonInputs.h"
 
-#include <memory>
+#include <vector>
 
 namespace dhe {
 namespace curve_sequencer {

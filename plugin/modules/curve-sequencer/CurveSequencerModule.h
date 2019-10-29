@@ -7,7 +7,6 @@
 #include "config/LevelConfig.h"
 
 #include <engine/Module.hpp>
-#include <memory>
 
 namespace dhe {
 
