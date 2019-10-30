@@ -38,7 +38,7 @@ protected:
   std::vector<OutputType> outputs{Controls::OutputCount};
   std::vector<ParamType> params{Controls::ParameterCount};
   std::vector<LightType> lights{Controls::LightCount};
-  MockStepExecutor stepExecutor{};
+  NiceMock<MockStepExecutor> stepExecutor{};
   CurveSequencer<stepCount, InputType, OutputType, ParamType, LightType, MockStepExecutor> curveSequencer{
       inputs, outputs, params, lights, stepExecutor};
 
