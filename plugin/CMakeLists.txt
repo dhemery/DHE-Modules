@@ -3,22 +3,20 @@ set(CMAKE_CXX_STANDARD_REQUIRED YES)
 set(CMAKE_CXX_EXTENSIONS NO)
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
-add_compile_options(-Wall -Wextra -Wno-unused-parameter -g -O3)
+add_compile_options(
+        -Wall -Wextra -Wno-unused-parameter -g -O3
+        $<$<STREQUAL:${CMAKE_HOST_SYSTEM_NAME},Darwin>:-mmacosx-version-min=10.7>
+        $<$<STREQUAL:${CMAKE_HOST_SYSTEM_NAME},Darwin>:-stdlib=libc++>
+        $<$<STREQUAL:${CMAKE_HOST_SYSTEM_NAME},Linux>:-Wsuggest-override>
+        $<$<STREQUAL:${CMAKE_HOST_SYSTEM_NAME},Windows>:-Wsuggest-override>
+)
 
-if (WIN32)
-    add_compile_definitions(ARCH_WIN _USE_MATH_DEFINES)
-endif ()
-
-if (APPLE)
-    add_compile_definitions(ARCH_MAC)
-    add_compile_options(-mmacosx-version-min=10.7 -stdlib=libc++)
-else ()
-    add_compile_options(-Wsuggest-override)
-endif ()
-
-if (UNIX AND NOT APPLE)
-    add_compile_definitions(ARCH_LIN)
-endif ()
+add_compile_definitions(
+        $<$<STREQUAL:${CMAKE_HOST_SYSTEM_NAME},Darwin>:ARCH_MAC>
+        $<$<STREQUAL:${CMAKE_HOST_SYSTEM_NAME},Linux>:ARCH_LIN>
+        $<$<STREQUAL:${CMAKE_HOST_SYSTEM_NAME},Windows>:ARCH_WIN>
+        $<$<STREQUAL:${CMAKE_HOST_SYSTEM_NAME},Windows>:_USE_MATH_DEFINES>
+)
 
 add_subdirectory(common)
 add_subdirectory(modules)
