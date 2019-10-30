@@ -1,4 +1,5 @@
 add_library(fuzzy_logic STATIC)
+add_library(dhe::fuzzy_logic ALIAS fuzzy_logic)
 target_sources(fuzzy_logic
         PRIVATE
         FuzzyLogicH.cpp
@@ -8,9 +9,9 @@ target_sources(fuzzy_logic
         )
 target_link_libraries(fuzzy_logic
         PUBLIC
-        components
-        controls
-        config
-        widgets
+        dhe::components
+        dhe::controls
+        dhe::config
+        dhe::widgets
         Rack::SDK
         )

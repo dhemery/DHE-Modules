@@ -1,4 +1,5 @@
 add_library(ranger STATIC)
+add_library(dhe::ranger ALIAS ranger)
 target_sources(ranger
         PRIVATE
         Ranger.cpp
@@ -6,9 +7,9 @@ target_sources(ranger
         )
 target_link_libraries(ranger
         PUBLIC
-        components
-        controls
-        config
-        widgets
+        dhe::components
+        dhe::controls
+        dhe::config
+        dhe::widgets
         Rack::SDK
         )

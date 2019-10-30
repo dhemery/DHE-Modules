@@ -1,4 +1,5 @@
 add_library(tapers STATIC)
+add_library(dhe::tapers ALIAS tapers)
 target_sources(tapers
         PRIVATE
         Tapers.cpp
@@ -6,9 +7,9 @@ target_sources(tapers
         )
 target_link_libraries(tapers
         PUBLIC
-        components
-        controls
-        config
-        widgets
+        dhe::components
+        dhe::controls
+        dhe::config
+        dhe::widgets
         Rack::SDK
         )

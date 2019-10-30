@@ -18,20 +18,20 @@ target_sources(plugin
         )
 target_link_libraries(plugin
         PRIVATE
-        components
-        controls
-        config
-        blossom
-        cubic
-        curve_sequencer
-        func
-        fuzzy_logic
-        gator
-        ranger
-        stage
-        swave
-        tapers
-        xycloid
+        dhe::components
+        dhe::controls
+        dhe::config
+        dhe::blossom
+        dhe::cubic
+        dhe::curve_sequencer
+        dhe::func
+        dhe::fuzzy_logic
+        dhe::gator
+        dhe::ranger
+        dhe::stage
+        dhe::swave
+        dhe::tapers
+        dhe::xycloid
         Rack::SDK
         )
 IF (APPLE)

@@ -1,4 +1,5 @@
 add_library(gator STATIC)
+add_library(dhe::gator ALIAS gator)
 target_sources(gator
         PRIVATE
         Gator.cpp
@@ -6,9 +7,9 @@ target_sources(gator
         )
 target_link_libraries(gator
         PUBLIC
-        components
-        controls
-        config
-        widgets
+        dhe::components
+        dhe::controls
+        dhe::config
+        dhe::widgets
         Rack::SDK
         )

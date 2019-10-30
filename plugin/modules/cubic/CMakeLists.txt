@@ -1,4 +1,5 @@
 add_library(cubic STATIC)
+add_library(dhe::cubic ALIAS cubic)
 target_sources(cubic
         PRIVATE
         Cubic.cpp
@@ -6,9 +7,9 @@ target_sources(cubic
         )
 target_link_libraries(cubic
         PUBLIC
-        components
-        controls
-        config
-        widgets
+        dhe::components
+        dhe::controls
+        dhe::config
+        dhe::widgets
         Rack::SDK
         )

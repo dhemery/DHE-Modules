@@ -13,9 +13,9 @@ target_sources(curve_sequencer_tests
         )
 target_link_libraries(curve_sequencer_tests
         PRIVATE
-        components
-        controls
-        curve_sequencer
+        dhe::components
+        dhe::controls
+        dhe::curve_sequencer
         gmock_main
         )
 gtest_add_tests(TARGET curve_sequencer_tests)

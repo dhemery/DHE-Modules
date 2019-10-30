@@ -6,7 +6,7 @@ target_sources(component_tests
         )
 target_link_libraries(component_tests
         PRIVATE
-        components
+        dhe::components
         gtest_main
         )
 

@@ -1,4 +1,5 @@
 add_library(xycloid STATIC)
+add_library(dhe::xycloid ALIAS xycloid)
 target_sources(xycloid
         PRIVATE
         Xycloid.cpp
@@ -6,9 +7,9 @@ target_sources(xycloid
         )
 target_link_libraries(xycloid
         PUBLIC
-        components
-        controls
-        config
-        widgets
+        dhe::components
+        dhe::controls
+        dhe::config
+        dhe::widgets
         Rack::SDK
         )

@@ -1,4 +1,5 @@
 add_library(blossom STATIC)
+add_library(dhe::blossom ALIAS blossom)
 target_sources(blossom
         PRIVATE
         Blossom.cpp
@@ -6,9 +7,9 @@ target_sources(blossom
         )
 target_link_libraries(blossom
         PUBLIC
-        components
-        controls
-        config
-        widgets
+        dhe::components
+        dhe::controls
+        dhe::config
+        dhe::widgets
         Rack::SDK
         )

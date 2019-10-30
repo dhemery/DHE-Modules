@@ -1,4 +1,5 @@
 add_library(stage STATIC)
+add_library(dhe::stage ALIAS stage)
 target_sources(stage
         PRIVATE
         BoosterStage.cpp
@@ -14,9 +15,9 @@ target_sources(stage
         )
 target_link_libraries(stage
         PUBLIC
-        components
-        controls
-        config
-        widgets
+        dhe::components
+        dhe::controls
+        dhe::config
+        dhe::widgets
         Rack::SDK
         )

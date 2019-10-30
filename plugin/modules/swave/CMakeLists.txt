@@ -1,4 +1,5 @@
 add_library(swave STATIC)
+add_library(dhe::swave ALIAS swave)
 target_sources(swave
         PRIVATE
         Swave.cpp
@@ -6,9 +7,9 @@ target_sources(swave
         )
 target_link_libraries(swave
         PUBLIC
-        components
-        controls
-        config
-        widgets
+        dhe::components
+        dhe::controls
+        dhe::config
+        dhe::widgets
         Rack::SDK
         )

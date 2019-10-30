@@ -6,7 +6,7 @@ target_sources(control_tests
         )
 target_link_libraries(control_tests
         PRIVATE
-        controls
+        dhe::controls
         gtest_main
         )
 gtest_add_tests(TARGET control_tests)
