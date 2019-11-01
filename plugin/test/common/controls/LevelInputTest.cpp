@@ -1,7 +1,7 @@
-#include "FakeKnob.h"
 #include "controls/LevelInputs.h"
 
 #include <cmath>
+#include <engine/Param.hpp>
 #include <gtest/gtest.h>
 
 namespace dhe {
@@ -11,7 +11,7 @@ protected:
   // tolerance = 6 decimal places
   static auto constexpr tolerance = 0.000001F;
 
-  FakeKnob knob;
+  rack::engine::Param knob{};
 };
 
 TEST_F(LevelInputTest, bipolarRange_minimumLevel_isBipolarRangeLowerBound) {

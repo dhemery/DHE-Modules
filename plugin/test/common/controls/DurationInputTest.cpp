@@ -1,6 +1,6 @@
 #include "controls/DurationInputs.h"
-#include "FakeKnob.h"
 
+#include <engine/Param.hpp>
 #include <gtest/gtest.h>
 
 namespace dhe {
@@ -8,9 +8,9 @@ namespace dhe {
 class DurationInputTest : public ::testing::Test {
 protected:
   // tolerance = 6 decimal places
-  static auto constexpr tolerance = 0.000001F;
+  static auto constexpr tolerance{0.000001F};
 
-  FakeKnob knob;
+  rack::engine::Param knob{};
 };
 
 TEST_F(DurationInputTest, shortRange_minimumDuration_isShortRangeLowerBound) {

@@ -3,12 +3,12 @@
 #include "components/Latch.h"
 #include "curve-sequencer/CurveSequencerControls.h"
 
+#include <engine/Light.hpp>
+#include <engine/Param.hpp>
+#include <engine/Port.hpp>
 #include <gmock/gmock-actions.h>
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
-#include <mocks/MockLight.h>
-#include <mocks/MockParam.h>
-#include <mocks/MockPort.h>
 #include <vector>
 
 static auto constexpr defaultSampleTime = 1.F / 44100.F;
@@ -22,10 +22,10 @@ using ::testing::An;
 using ::testing::NiceMock;
 using ::testing::Return;
 
-using InputType = NiceMock<MockPort>;
-using OutputType = NiceMock<MockPort>;
-using ParamType = NiceMock<MockParam>;
-using LightType = NiceMock<MockLight>;
+using InputType = rack::engine::Input;
+using OutputType = rack::engine::Output;
+using ParamType = rack::engine::Param;
+using LightType = rack::engine::Light;
 
 class MockStepExecutor {
 public:
@@ -42,17 +42,13 @@ protected:
   CurveSequencer<stepCount, InputType, OutputType, ParamType, LightType, MockStepExecutor> curveSequencer{
       inputs, outputs, params, lights, stepExecutor};
 
-  void givenRunInput(bool state) {
-    ON_CALL(inputs[Controls::RunInput], getVoltage()).WillByDefault(Return(state ? 10.F : 0.F));
-  }
+  void givenRunInput(bool state) { inputs[Controls::RunInput].setVoltage(state ? 10.F : 0.F); }
 
-  void givenGateInput(bool state) {
-    ON_CALL(inputs[Controls::GateInput], getVoltage()).WillByDefault(Return(state ? 10.F : 0.F));
-  }
+  void givenGateInput(bool state) { inputs[Controls::GateInput].setVoltage(state ? 10.F : 0.F); }
 
   void givenSelection(int start, int length) {
-    ON_CALL(params[Controls::StartKnob], getValue()).WillByDefault(Return(static_cast<float>(start + 1)));
-    ON_CALL(params[Controls::StepsKnob], getValue()).WillByDefault(Return(static_cast<float>(length)));
+    params[Controls::StartKnob].setValue(static_cast<float>(start + 1));
+    params[Controls::StepsKnob].setValue(static_cast<float>(length));
   }
 
   void givenActiveSteps(std::vector<int> const &indices) {

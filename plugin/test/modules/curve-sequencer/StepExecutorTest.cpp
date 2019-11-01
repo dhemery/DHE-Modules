@@ -3,12 +3,12 @@
 #include "components/Latch.h"
 #include "curve-sequencer/CurveSequencerControls.h"
 
+#include <engine/Light.hpp>
+#include <engine/Param.hpp>
+#include <engine/Port.hpp>
 #include <gmock/gmock-actions.h>
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
-#include <mocks/MockLight.h>
-#include <mocks/MockParam.h>
-#include <mocks/MockPort.h>
 
 static auto constexpr stepCount = 4;
 static auto constexpr defaultStep = 3;
@@ -20,10 +20,10 @@ using ::testing::NiceMock;
 using ::testing::Return;
 using ::testing::Test;
 
-using InputType = NiceMock<MockPort>;
-using OutputType = NiceMock<MockPort>;
-using ParamType = NiceMock<MockParam>;
-using LightType = NiceMock<MockLight>;
+using InputType = rack::engine::Input;
+using OutputType = rack::engine::Input;
+using ParamType = rack::engine::Param;
+using LightType = rack::engine::Light;
 
 using dhe::Latch;
 using Controls = dhe::curve_sequencer::CurveSequencerControls<stepCount>;
@@ -52,16 +52,14 @@ protected:
       stepExecutor{inputs, outputs, params, lights, generateStage, sustainStage};
 
 protected:
-  void setEnabled(bool state) {
-    ON_CALL(params[Controls::EnabledButtons + defaultStep], getValue()).WillByDefault(Return(state ? 10.F : 0.F));
-  }
+  void givenEnabled(bool state) { params[Controls::EnabledButtons + defaultStep].setValue(state ? 10.F : 0.F); }
 };
 
 class StepExecutorDisabled : public StepExecutorNew {
 protected:
   void SetUp() override {
     StepExecutorNew::SetUp();
-    setEnabled(false);
+    givenEnabled(false);
   }
 };
 
@@ -80,7 +78,7 @@ protected:
 
   void SetUp() override {
     StepExecutorNew::SetUp();
-    setEnabled(true);
+    givenEnabled(true);
   }
 };
 
