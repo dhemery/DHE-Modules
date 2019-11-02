@@ -45,4 +45,4 @@ namespace func {
     rack::engine::Param *additionRangeToggle;
   };
 } // namespace func
-}
+} // namespace dhe

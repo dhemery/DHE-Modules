@@ -7,6 +7,8 @@ target_sources(curve_sequencer_tests
         PRIVATE
         GenerateStageTest.cpp
         CurveSequencerTest.cpp
+        IdleModeTest.cpp
+        PauseModeTest.cpp
         StepExecutorTest.cpp
         SustainStageTest.cpp
         )

@@ -27,9 +27,7 @@ namespace func {
   public:
     Func(std::vector<rack::engine::Input> &inputs, std::vector<rack::engine::Output> &outputs,
          std::vector<rack::engine::Param> &params) :
-        inputs{inputs},
-        outputs{outputs},
-        params{params} {}
+        inputs{inputs}, outputs{outputs}, params{params} {}
 
     auto apply(int channel, float upstream) const -> float {
       auto const in = inputs[FuncControls<N>::FuncInput + channel].getNormalVoltage(upstream);
