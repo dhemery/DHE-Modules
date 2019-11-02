@@ -1,8 +1,8 @@
 #include "blossom/BlossomPanel.h"
 #include "cubic/CubicPanel.h"
 #include "curve-sequencer/CurveSequencerPanel.h"
+#include "func/Func1Panel.h"
 #include "func/Func6Panel.h"
-#include "func/FuncPanel.h"
 #include "fuzzy-logic/FuzzyLogicHPanel.h"
 #include "fuzzy-logic/FuzzyLogicZPanel.h"
 #include "gator/GatorPanel.h"
@@ -32,8 +32,8 @@ void init(rack::plugin::Plugin *p) {
   p->addModel(rack::createModel<CurveSequencerModule<8>, CurveSequencerPanel<8>>("CurveSequencer8"));
   p->addModel(rack::createModel<CurveSequencerModule<16>, CurveSequencerPanel<16>>("CurveSequencer16"));
   p->addModel(rack::createModel<dhe::Cubic, dhe::CubicPanel>("Cubic"));
-  p->addModel(rack::createModel<dhe::Func, dhe::FuncPanel>("Func"));
-  p->addModel(rack::createModel<dhe::Func6, dhe::Func6Panel>("Func6"));
+  p->addModel(rack::createModel<dhe::func::FuncModule<1>, dhe::func::Func1Panel>("Func"));
+  p->addModel(rack::createModel<dhe::func::FuncModule<6>, dhe::func::Func6Panel>("Func6"));
   p->addModel(rack::createModel<dhe::FuzzyLogicH, dhe::FuzzyLogicHPanel>("FuzzyLogicH"));
   p->addModel(rack::createModel<dhe::FuzzyLogicZ, dhe::FuzzyLogicZPanel>("FuzzyLogicZ"));
   p->addModel(rack::createModel<dhe::Gator, dhe::GatorPanel>("Gator"));
