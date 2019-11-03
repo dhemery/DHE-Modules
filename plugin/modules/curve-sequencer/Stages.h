@@ -1,6 +1,7 @@
 #pragma once
 
 #include "CurveSequencerControls.h"
+#include "InterruptModes.h"
 #include "components/Latch.h"
 #include "controls/CommonInputs.h"
 
@@ -10,18 +11,10 @@
 
 namespace dhe {
 namespace curve_sequencer {
-  static auto constexpr riseMode = 0;
-  static auto constexpr fallMode = 1;
-  static auto constexpr edgeMode = 2;
-  static auto constexpr highMode = 3;
-  static auto constexpr lowMode = 4;
-  static auto constexpr skipMode = 5;
-  static auto constexpr durationMode = 6;
-
-  static auto constexpr generateModeCount = durationMode + 1;
-  static auto constexpr generateDefaultMode = durationMode;
-  static auto constexpr sustainModeCount = skipMode + 1;
-  static auto constexpr sustainDefaultMode = skipMode;
+  static auto constexpr generateModeCount = static_cast<int>(InterruptMode::Duration) + 1;
+  static auto constexpr generateDefaultMode = static_cast<int>(InterruptMode::Duration);
+  static auto constexpr sustainModeCount = static_cast<int>(InterruptMode::Skip) + 1;
+  static auto constexpr sustainDefaultMode = static_cast<int>(InterruptMode::Skip);
 
   static auto const generateModeDescriptions = std::array<std::string, generateModeCount>{
       "Advance if gate rises",       "Advance if gate falls",  "Advance if gate changes",
@@ -31,26 +24,6 @@ namespace curve_sequencer {
   static auto const sustainModeDescriptions = std::array<std::string, sustainModeCount>{
       "Sustain until gate rises",   "Sustain until gate falls",  "Sustain until gate changes",
       "Sustain until gate is high", "Sustain until gate is low", "Skip sustain"};
-
-  static inline auto isActive(int mode, Latch const &gateLatch) -> bool {
-    switch (mode) {
-    case riseMode:
-      return !gateLatch.isRise();
-    case fallMode:
-      return !gateLatch.isFall();
-    case edgeMode:
-      return !gateLatch.isEdge();
-    case highMode:
-      return !gateLatch.isHigh();
-    case lowMode:
-      return !gateLatch.isLow();
-    case durationMode:
-      return true;
-    case skipMode:
-    default:
-      return false;
-    }
-  }
 
   template <int N, typename InputType, typename OutputType, typename ParamType, typename LightType>
   class GenerateStage {
@@ -71,8 +44,8 @@ namespace curve_sequencer {
       lights[Controls::GeneratingLights + stepIndex].setBrightness(state ? 10.F : 0.F);
     }
 
-    auto generateMode(int stepIndex) const -> int {
-      return positionOf(params[Controls::GenerateModeSwitches + stepIndex]);
+    auto generateMode(int stepIndex) const -> InterruptMode {
+      return static_cast<InterruptMode>(params[Controls::GenerateModeSwitches + stepIndex].getValue());
     }
 
   private:
@@ -94,7 +67,9 @@ namespace curve_sequencer {
       lights[Controls::SustainingLights + stepIndex].setBrightness(state ? 10.F : 0.F);
     }
 
-    auto sustainMode(int stepIndex) -> int { return positionOf(params[Controls::SustainModeSwitches + stepIndex]); }
+    auto sustainMode(int stepIndex) -> InterruptMode {
+      return static_cast<InterruptMode>(params[Controls::SustainModeSwitches + stepIndex].getValue());
+    }
 
     auto execute(int step, Latch const &gateLatch) -> bool {
       auto const active = isActive(sustainMode(step), gateLatch);

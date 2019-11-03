@@ -6,12 +6,10 @@ target_include_directories(curve_sequencer_tests
 target_sources(curve_sequencer_tests
         PRIVATE
         AdvancingModeTest.cpp
-        GenerateStageTest.cpp
         CurveSequencerTest.cpp
         IdleModeTest.cpp
         PauseModeTest.cpp
-        StepExecutorTest.cpp
-        SustainStageTest.cpp
+        SustainingModeTest.cpp
         )
 target_link_libraries(curve_sequencer_tests
         PRIVATE
@@ -22,3 +20,4 @@ target_link_libraries(curve_sequencer_tests
         gmock_main
         )
 gtest_add_tests(TARGET curve_sequencer_tests)
+
