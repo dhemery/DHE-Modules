@@ -19,15 +19,22 @@ namespace curve_sequencer {
     AdvancingMode(std::vector<Input> &inputs, std::vector<Param> &params) : inputs{inputs}, params{params} {}
     auto isTerminal() const -> bool override { return false; }
 
-    auto execute(dhe::Latch const & /*runLatch*/, dhe::Latch const & /*gateLatch*/, int start,
+    auto execute(dhe::Latch const & /*runLatch*/, dhe::Latch const & /*gateLatch*/, int currentStep,
                  float /*sampleTime*/) const -> Successor override {
-      auto const stop = selectionStart() + selectionLength();
-      for (int step = start; step < stop; step++) {
+      auto const selectionStart = this->selectionStart();
+      auto const selectionLength = this->selectionLength();
+      if (!isSelected(currentStep, selectionStart, selectionLength)) {
+        return {ModeId::Idle, currentStep};
+      }
+
+      auto const selectionStop = selectionStart + selectionLength;
+      for (int index = currentStep; index < selectionStop; index++) {
+        auto const step = index & stepMask;
         if (isEnabled(step)) {
           return {ModeId::Generating, step};
         }
       }
-      return {ModeId::Idle, start};
+      return {ModeId::Idle, currentStep};
     };
 
   private:
@@ -35,12 +42,21 @@ namespace curve_sequencer {
 
     auto selectionStart() const -> int { return static_cast<int>(valueOf(params[Controls::StartKnob])); }
     auto selectionLength() const -> int { return static_cast<int>(valueOf(params[Controls::StepsKnob])); }
+    auto isSelected(int candidate, int selectionStart, int selectionLength) const -> bool {
+      auto const selectionEnd = (selectionStart + selectionLength - 1) & stepMask;
+      if (selectionEnd >= selectionStart) {
+        return candidate >= selectionStart && candidate <= selectionEnd;
+      }
+      // else the selection wraps from highest step to lowest, e.g. [5 6 7 0 1 2]
+      return candidate >= selectionStart || candidate <= selectionEnd;
+    }
 
     auto isEnabled(int step) const -> bool {
       return isPressed(params[Controls::EnabledButtons + step]) || isHigh(inputs[Controls::EnabledInputs + step]);
     }
     std::vector<Input> &inputs;
     std::vector<Param> &params;
+    int const stepMask = N - 1;
   };
 }; // namespace curve_sequencer
 } // namespace dhe

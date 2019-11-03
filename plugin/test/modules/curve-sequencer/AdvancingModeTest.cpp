@@ -33,79 +33,150 @@ struct AdvancingModeTest : public Test {
 TEST_F(AdvancingModeTest, isNotTerminal) { ASSERT_EQ(advancingMode.isTerminal(), false); }
 
 TEST_F(AdvancingModeTest, detectsStepEnabledByButton) {
-  auto const step = 4;
+  auto const selectionStart = 0;
+  auto const selectionLength = stepCount;
+  setSelection(selectionStart, selectionLength); // [0 1 2 3 4 5 6 7]
 
-  setSelection(0, stepCount);
-  setEnabledButton(step, true);
+  auto const enabledStep = 4;
+  setEnabledButton(enabledStep, true);
 
-  auto const next = advancingMode.execute(unusedLatch, unusedLatch, step, 0.F);
+  auto const next = advancingMode.execute(unusedLatch, unusedLatch, selectionStart, 0.F);
 
-  ASSERT_EQ(next.step, step);
+  ASSERT_EQ(next.step, enabledStep);
 }
 
 TEST_F(AdvancingModeTest, detectsStepEnabledByInput) {
-  auto const step = 4;
+  auto const selectionStart = 0;
+  setSelection(selectionStart, stepCount); // [0 1 2 3 4 5 6 7]
 
-  setSelection(0, stepCount);
-  setEnabledInput(step, true);
+  auto const enabledStep = 4;
+  setEnabledInput(enabledStep, true);
 
-  auto const next = advancingMode.execute(unusedLatch, unusedLatch, step, 0.F);
+  auto const next = advancingMode.execute(unusedLatch, unusedLatch, selectionStart, 0.F);
 
-  ASSERT_EQ(next.step, step);
+  ASSERT_EQ(next.step, enabledStep);
 }
 
-TEST_F(AdvancingModeTest, ifGivenStepIsEnabled_returnsGenerateGivenStep) {
-  auto const step = 0;
+TEST_F(AdvancingModeTest, ifGivenStepIsEnabled_returnsGeneratingGivenStep) {
+  setSelection(0, stepCount); // [0 1 2 3 4 5 6 7]
 
-  setSelection(0, stepCount);
-  setEnabledButton(step, true);
+  auto const givenStep = 2;
+  setEnabledButton(givenStep, true);
 
-  auto const next = advancingMode.execute(unusedLatch, unusedLatch, step, 0.F);
+  auto const next = advancingMode.execute(unusedLatch, unusedLatch, givenStep, 0.F);
 
-  EXPECT_EQ(next.step, step);
   EXPECT_EQ(next.modeId, ModeId::Generating);
+  EXPECT_EQ(next.step, givenStep);
 }
 
 TEST_F(AdvancingModeTest, ifFirstEnabledStepInSelectionIsAboveGivenStep_returnsGeneratingEnabledStep) {
-  auto const startStep = 2;
-  auto const firstEnabledStep = startStep + 2;
+  setSelection(0, stepCount); // [0 1 2 3 4 5 6 7]
 
-  setSelection(0, stepCount);
+  auto const givenStep = 2;
+  auto const firstEnabledStep = givenStep + 2;
   setEnabledButton(firstEnabledStep, true);
 
-  auto const next = advancingMode.execute(unusedLatch, unusedLatch, startStep, 0.F);
+  auto const next = advancingMode.execute(unusedLatch, unusedLatch, givenStep, 0.F);
 
-  EXPECT_EQ(next.step, firstEnabledStep);
   EXPECT_EQ(next.modeId, ModeId::Generating);
+  EXPECT_EQ(next.step, firstEnabledStep);
 }
 
 TEST_F(AdvancingModeTest, ifFirstEnabledStepIsLastStepInSelection_returnsGeneratingEnabledStep) {
   auto const selectionStart = 2;
   auto const selectionLength = 3;
-  auto const lastStepInSelection = selectionStart + selectionLength - 1;
+  setSelection(selectionStart, selectionLength); // [2 3 4]
 
-  setSelection(selectionStart, selectionLength);
+  auto const lastStepInSelection = selectionStart + selectionLength - 1;
   setEnabledButton(lastStepInSelection, true);
 
   auto const next = advancingMode.execute(unusedLatch, unusedLatch, selectionStart, 0.F);
 
-  EXPECT_EQ(next.step, lastStepInSelection);
   EXPECT_EQ(next.modeId, ModeId::Generating);
+  EXPECT_EQ(next.step, lastStepInSelection);
 }
 
-TEST_F(AdvancingModeTest, ifNoSelectedStepIsEnabled_returnsIdle) {
+TEST_F(AdvancingModeTest, ifNoStepInSelectionIsEnabled_returnsIdle) {
   auto const selectionStart = 1;
   auto const selectionLength = 4;
-  setSelection(selectionStart, selectionLength);
+  setSelection(selectionStart, selectionLength); // [1 2 3 4]
+
   setEnabledButton(selectionStart + selectionLength, true); // Enabled but not in selection
 
-  auto const next = advancingMode.execute(unusedLatch, unusedLatch, 0, 0.F);
+  auto const next = advancingMode.execute(unusedLatch, unusedLatch, selectionStart, 0.F);
 
   EXPECT_EQ(next.modeId, ModeId::Idle);
 }
 
-// TODO: 6 012+]4[567 finds enabled step by wrapping
-// TODO: 5 0123]4[567 idle if no step enabled after wrapping
-// TODO: 1 0+23[456]7 idle if given step below selection
-// TODO: 6 0[123]45+7 idle if given step above selection
-// TODO: 4 01]23+5[67 idle if given step between selection
+TEST_F(AdvancingModeTest, ifFirstEnabledStepInWrappedSelectionIsBelowSelectionStart_returnsGeneratingEnabledStep) {
+  auto const selectionStart = 6;
+  auto const selectionLength = 4;
+  setSelection(selectionStart, selectionLength); // [6 7 0 1]
+
+  auto const enabledSelectedStepBelowSelectionStart = 1; // Must wrap to find
+  setEnabledButton(enabledSelectedStepBelowSelectionStart, true);
+
+  auto const next = advancingMode.execute(unusedLatch, unusedLatch, selectionStart, 0.F);
+
+  EXPECT_EQ(next.modeId, ModeId::Generating);
+  EXPECT_EQ(next.step, enabledSelectedStepBelowSelectionStart);
+}
+
+TEST_F(AdvancingModeTest, ifNoStepInWrappedSelectionIsEnabled_returnsIdle) {
+  auto const selectionStart = 5;
+  auto const selectionLength = 7;
+  setSelection(selectionStart, selectionLength); // [5 6 7 0 1 2 3]
+
+  auto const unselectedStep = 4; // The only enabled step is not in the selection
+  setEnabledButton(unselectedStep, true);
+
+  auto const next = advancingMode.execute(unusedLatch, unusedLatch, selectionStart, 0.F);
+
+  EXPECT_EQ(next.modeId, ModeId::Idle);
+}
+
+TEST_F(AdvancingModeTest, ifGivenStepIsBelowSelection_returnsIdle) {
+  setSelection(4, 3); // [4 5 6]
+
+  auto const givenStep = 1; // Lower than any selected step
+  setEnabledButton(givenStep, true);
+
+  auto const next = advancingMode.execute(unusedLatch, unusedLatch, givenStep, 0.F);
+
+  EXPECT_EQ(next.modeId, ModeId::Idle);
+}
+
+TEST_F(AdvancingModeTest, ifGivenStepIsAboveSelection_returnsIdle) {
+  setSelection(4, 3); // [4 5 6]
+
+  auto const givenStep = 7; // Higher than any selected step
+  setEnabledButton(givenStep, true);
+
+  auto const next = advancingMode.execute(unusedLatch, unusedLatch, givenStep, 0.F);
+
+  EXPECT_EQ(next.modeId, ModeId::Idle);
+}
+
+TEST_F(AdvancingModeTest, ifGivenStepIsBetweenEndpointsOfWrappedSelection_returnsIdle) {
+  setSelection(6, 4); // [6 7 0 1]
+
+  auto const givenStep = 5; // Above selection end, below selection start
+  setEnabledButton(givenStep, true);
+
+  auto const next = advancingMode.execute(unusedLatch, unusedLatch, givenStep, 0.F);
+
+  EXPECT_EQ(next.modeId, ModeId::Idle);
+}
+
+TEST_F(AdvancingModeTest, ifGivenStepIsEnabledAndSelectedAndBelowSelectionStart_returnsGeneratingGivenStep) {
+  auto const selectionStart = 6;
+  auto const selectionLength = 6;
+  setSelection(selectionStart, selectionLength); // [6 7 0 1 2 3]
+
+  auto const enabledSelectedStepBelowSelectionStart = 2; // Must wrap to find
+  setEnabledButton(enabledSelectedStepBelowSelectionStart, true);
+
+  auto const next = advancingMode.execute(unusedLatch, unusedLatch, enabledSelectedStepBelowSelectionStart, 0.F);
+
+  EXPECT_EQ(next.modeId, ModeId::Generating);
+}
