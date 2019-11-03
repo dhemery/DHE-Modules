@@ -20,11 +20,7 @@ protected:
   PauseMode pauseMode{};
 };
 
-TEST_F(PauseModeTest, isTerminal) {
-  auto const pauseModeIsTerminal = pauseMode.isTerminal();
-
-  ASSERT_EQ(pauseModeIsTerminal, true);
-}
+TEST_F(PauseModeTest, isTerminal) { ASSERT_EQ(pauseMode.isTerminal(), true); }
 
 TEST_F(PauseModeTest, ifRunLatchRises_nextModeIsIdle) {
   auto const next = pauseMode.execute(risenLatch, Latch{}, -1, -2.F);

@@ -2,8 +2,12 @@
 
 #include "components/Latch.h"
 
+#include <curve-sequencer/CurveSequencerControls.h>
+#include <engine/Param.hpp>
 #include <gtest/gtest.h>
 
+auto constexpr stepCount{4};
+using Controls = dhe::curve_sequencer::CurveSequencerControls<stepCount>;
 using dhe::Latch;
 using dhe::curve_sequencer::IdleMode;
 using dhe::curve_sequencer::ModeId;
@@ -17,13 +21,13 @@ static auto constexpr stableLowLatch = Latch{false, false};
 
 class IdleModeTest : public Test {
 protected:
-  IdleMode idleMode{};
+  std::vector<rack::engine::Param> params{stepCount};
+  IdleMode<stepCount> idleMode{params};
+
+  void givenStartStep(int index) { params[Controls::StartKnob].setValue(static_cast<float>(index + 1)); }
 };
 
-TEST_F(IdleModeTest, isTerminal) {
-  auto const pauseModeIsTerminal = idleMode.isTerminal();
-  ASSERT_EQ(pauseModeIsTerminal, true);
-}
+TEST_F(IdleModeTest, isTerminal) { ASSERT_EQ(idleMode.isTerminal(), true); }
 
 TEST_F(IdleModeTest, ifRunLatchFalls_nextModeIsPaused) {
   auto const next = idleMode.execute(fallenLatch, Latch{}, -1, -2.F);
@@ -33,6 +37,15 @@ TEST_F(IdleModeTest, ifRunLatchFalls_nextModeIsPaused) {
 TEST_F(IdleModeTest, ifRunLatchIsHigh_andGateLatchRises_nextModeIsAdvancing) {
   auto next = idleMode.execute(stableHighLatch, risenLatch, -1, -2.F);
   ASSERT_EQ(next.modeId, ModeId::Advancing);
+}
+
+TEST_F(IdleModeTest, ifRunLatchIsHigh_andGateLatchRises_nextStepIsStartStep) {
+  auto startStep = 2;
+  givenStartStep(startStep);
+
+  auto next = idleMode.execute(stableHighLatch, risenLatch, -1, -2.F);
+
+  ASSERT_EQ(next.step, startStep);
 }
 
 TEST_F(IdleModeTest, ifRunLatchIsHigh_andGateLatchDoesNotRise_nextModeIsIdle) {
