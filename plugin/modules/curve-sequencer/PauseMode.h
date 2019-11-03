@@ -8,9 +8,10 @@ namespace curve_sequencer {
   class PauseMode : public Mode {
   public:
     auto isTerminal() const -> bool override { return true; }
-    auto execute(dhe::Latch const &runLatch, dhe::Latch const & /*gateLatch*/, int /*step*/, float /*sampleTime*/) const
-        -> Id override {
-      return runLatch.isRise() ? Id::Idle : Id::Paused;
+    auto execute(dhe::Latch const &runLatch, dhe::Latch const & /*gateLatch*/, int step, float /*sampleTime*/) const
+        -> Successor override {
+      auto const nextMode = runLatch.isRise() ? ModeId::Idle : ModeId::Paused;
+      return {nextMode, step};
     };
   };
 }; // namespace curve_sequencer

@@ -5,7 +5,7 @@
 #include <gtest/gtest.h>
 
 using dhe::Latch;
-using dhe::curve_sequencer::Mode;
+using dhe::curve_sequencer::ModeId;
 using dhe::curve_sequencer::PauseMode;
 
 using ::testing::Test;
@@ -27,18 +27,18 @@ TEST_F(PauseModeTest, isTerminal) {
 }
 
 TEST_F(PauseModeTest, ifRunLatchRises_nextModeIsIdle) {
-  auto const nextMode = pauseMode.execute(risenLatch, Latch{}, -1, -2.F);
+  auto const next = pauseMode.execute(risenLatch, Latch{}, -1, -2.F);
 
-  ASSERT_EQ(nextMode, Mode::Id::Idle);
+  ASSERT_EQ(next.modeId, ModeId::Idle);
 }
 
 TEST_F(PauseModeTest, ifRunLatchDoesNotRise_nextModeIsPaused) {
-  auto nextMode = pauseMode.execute(fallenLatch, Latch{}, -1, -2.F);
-  EXPECT_EQ(nextMode, Mode::Id::Paused);
+  auto next = pauseMode.execute(fallenLatch, Latch{}, -1, -2.F);
+  EXPECT_EQ(next.modeId, ModeId::Paused);
 
-  nextMode = pauseMode.execute(stableHighLatch, Latch{}, -1, -2.F);
-  EXPECT_EQ(nextMode, Mode::Id::Paused);
+  next = pauseMode.execute(stableHighLatch, Latch{}, -1, -2.F);
+  EXPECT_EQ(next.modeId, ModeId::Paused);
 
-  nextMode = pauseMode.execute(stableLowLatch, Latch{}, -1, -2.F);
-  EXPECT_EQ(nextMode, Mode::Id::Paused);
+  next = pauseMode.execute(stableLowLatch, Latch{}, -1, -2.F);
+  EXPECT_EQ(next.modeId, ModeId::Paused);
 }
