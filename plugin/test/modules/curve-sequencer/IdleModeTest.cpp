@@ -21,10 +21,10 @@ static auto constexpr stableLowLatch = Latch{false, false};
 
 class IdleModeTest : public Test {
 protected:
-  std::vector<rack::engine::Param> params{stepCount};
+  std::vector<rack::engine::Param> params{Controls::ParameterCount};
   IdleMode<stepCount> idleMode{params};
 
-  void givenStartStep(int index) { params[Controls::StartKnob].setValue(static_cast<float>(index + 1)); }
+  void givenStartStep(int step) { params[Controls::StartKnob].setValue(static_cast<float>(step)); }
 };
 
 TEST_F(IdleModeTest, isTerminal) { ASSERT_EQ(idleMode.isTerminal(), true); }

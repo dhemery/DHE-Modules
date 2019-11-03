@@ -32,9 +32,9 @@ namespace curve_sequencer {
     };
 
   private:
-    auto startStep() const -> int { return static_cast<int>(valueOf(params[Controls::StartKnob])) - 1; }
+    auto startStep() const -> int { return static_cast<int>(valueOf(params[Controls::StartKnob])); }
 
-    std::vector<Param> params;
+    std::vector<Param> &params;
   };
 }; // namespace curve_sequencer
 } // namespace dhe

@@ -28,7 +28,7 @@ struct AdvancingModeTest : public Test {
 
 TEST_F(AdvancingModeTest, isNotTerminal) { ASSERT_EQ(advancingMode.isTerminal(), false); }
 
-TEST_F(AdvancingModeTest, ifCurrentStepEnabledByButton_nextStepIsCurrentStep) {
+TEST_F(AdvancingModeTest, ifGivenStepEnabledByButton_nextStepIsGivenStep) {
   auto const step = 0;
 
   setEnabledButton(step, true);
@@ -38,7 +38,7 @@ TEST_F(AdvancingModeTest, ifCurrentStepEnabledByButton_nextStepIsCurrentStep) {
   ASSERT_EQ(next.step, step);
 }
 
-TEST_F(AdvancingModeTest, ifCurrentStepEnabledByButton_nextModeIsGenerating) {
+TEST_F(AdvancingModeTest, ifGivenStepEnabledByButton_nextModeIsGenerating) {
   auto const step = 1;
 
   setEnabledButton(step, true);
@@ -48,7 +48,7 @@ TEST_F(AdvancingModeTest, ifCurrentStepEnabledByButton_nextModeIsGenerating) {
   ASSERT_EQ(next.modeId, ModeId::Generating);
 }
 
-TEST_F(AdvancingModeTest, ifCurrentStepEnabledByInput_nextStepIsCurrentStep) {
+TEST_F(AdvancingModeTest, ifGivenStepEnabledByInput_nextStepIsGivenStep) {
   auto const step = 2;
 
   setEnabledInput(step, true);
@@ -58,7 +58,7 @@ TEST_F(AdvancingModeTest, ifCurrentStepEnabledByInput_nextStepIsCurrentStep) {
   ASSERT_EQ(next.step, step);
 }
 
-TEST_F(AdvancingModeTest, ifCurrentStepEnabledByInput_nextModeIsGenerating) {
+TEST_F(AdvancingModeTest, ifGivenStepEnabledByInput_nextModeIsGenerating) {
   auto const step = 3;
 
   setEnabledInput(step, true);
