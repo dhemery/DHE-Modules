@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Controls.h"
+#include "CurveSequencerControls.h"
 #include "Mode.h"
 #include "components/Latch.h"
 #include "controls/CommonInputs.h"
@@ -36,7 +36,7 @@ namespace curve_sequencer {
     };
 
   private:
-    using Controls = Controls<N>;
+    using Controls = CurveSequencerControls<N>;
 
     auto selectionStart() const -> int { return static_cast<int>(valueOf(params[Controls::StartKnob])); }
     auto selectionLength() const -> int { return static_cast<int>(valueOf(params[Controls::StepsKnob])); }

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Advancing.h"
-#include "Controls.h"
+#include "CurveSequencerControls.h"
 #include "Generating.h"
 #include "Idle.h"
 #include "Mode.h"
@@ -15,7 +15,7 @@ namespace dhe {
 namespace curve_sequencer {
   template <int N, typename InputType, typename OutputType, typename ParamType, typename LightType>
   class CurveSequencer {
-    using Controls = Controls<N>;
+    using Controls = CurveSequencerControls<N>;
 
   public:
     CurveSequencer(std::vector<InputType> &inputs, std::vector<OutputType> &outputs, std::vector<ParamType> &params,
@@ -60,6 +60,7 @@ namespace curve_sequencer {
     }
 
     void updateState(Successor next) {
+      gateLatch.clock(gateLatch.isHigh()); // To remove the edge
       step = next.step;
       mode = next.mode;
       switch (next.mode) {

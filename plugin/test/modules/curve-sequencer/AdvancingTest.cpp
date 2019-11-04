@@ -1,6 +1,6 @@
 #include "curve-sequencer/Advancing.h"
 
-#include "curve-sequencer/Controls.h"
+#include "curve-sequencer/CurveSequencerControls.h"
 
 #include <engine/Param.hpp>
 #include <engine/Port.hpp>
@@ -10,7 +10,7 @@ static auto constexpr stepCount{8};
 
 using dhe::curve_sequencer::Advancing;
 using dhe::curve_sequencer::Mode;
-using Controls = dhe::curve_sequencer::Controls<stepCount>;
+using Controls = dhe::curve_sequencer::CurveSequencerControls<stepCount>;
 
 using ::testing::Test;
 

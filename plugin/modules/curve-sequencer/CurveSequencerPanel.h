@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Controls.h"
+#include "CurveSequencerControls.h"
 #include "CurveSequencerModule.h"
 #include "widgets/Panel.h"
 
@@ -31,7 +31,7 @@ namespace curve_sequencer {
   };
 
   template <int N> class CurveSequencerPanel : public Panel<CurveSequencerPanel<N>> {
-    using Controls = Controls<N>;
+    using Controls = CurveSequencerControls<N>;
 
   public:
     static std::string const moduleSlug;

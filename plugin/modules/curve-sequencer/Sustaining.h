@@ -1,8 +1,8 @@
 #pragma once
 
-#include "Controls.h"
-#include "InterruptModes.h"
+#include "CurveSequencerControls.h"
 #include "Mode.h"
+#include "RunModes.h"
 #include "components/Latch.h"
 #include "controls/CommonInputs.h"
 
@@ -14,18 +14,17 @@
 namespace dhe {
 namespace curve_sequencer {
 
-  static auto constexpr sustainingInterruptModeCount = static_cast<int>(InterruptMode::Skip) + 1;
-  static auto constexpr defaultSustainingInterruptMode = static_cast<int>(InterruptMode::Skip);
+  static auto constexpr sustainingInterruptModeCount = static_cast<int>(RunMode::Skip) + 1;
+  static auto constexpr defaultSustainingInterruptMode = static_cast<int>(RunMode::Skip);
   static auto const sustainingInterruptModeDescriptions = std::array<std::string, sustainingInterruptModeCount>{
-      "Sustain until gate rises",   "Sustain until gate falls",  "Sustain until gate changes",
-      "Sustain until gate is high", "Sustain until gate is low", "Skip sustain"};
+      "Sustain while gate is high", "Sustain while gate is low", "Sustain while gate is calm", "Skip sustain"};
 
   using rack::engine::Input;
   using rack::engine::Light;
   using rack::engine::Param;
 
   template <int N> class Sustaining {
-    using Controls = Controls<N>;
+    using Controls = CurveSequencerControls<N>;
 
   public:
     Sustaining(std::vector<Input> &inputs, std::vector<Param> &params, std::vector<Light> &lights) :
@@ -37,19 +36,18 @@ namespace curve_sequencer {
     }
 
     auto execute(dhe::Latch const &gateLatch) const -> Successor {
-      if (interrupted(gateLatch)) {
-        setLight(false);
-        return {Mode::Advancing, (step + 1) & stepMask};
+      if (isRunning(interruptMode(), gateLatch)) {
+        return {Mode::Sustaining, step};
       }
-      return {Mode::Sustaining, step};
+      setLight(false);
+      return {Mode::Advancing, (step + 1) & stepMask};
     };
 
     void exit() { setLight(false); }
 
   private:
-    auto interrupted(Latch const &gate) const -> bool {
-      auto const interruptMode = static_cast<InterruptMode>(params[Controls::SustainModeSwitches + step].getValue());
-      return dhe::curve_sequencer::interrupted(interruptMode, gate);
+    auto interruptMode() const -> RunMode {
+      return static_cast<RunMode>(params[Controls::SustainModeSwitches + step].getValue());
     }
 
     void setLight(const bool state) const {

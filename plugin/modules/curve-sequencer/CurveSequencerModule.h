@@ -19,17 +19,17 @@ namespace curve_sequencer {
   using rack::engine::Param;
 
   template <int N> class CurveSequencerModule : public rack::engine::Module {
-    using Controls = Controls<N>;
+    using Controls = CurveSequencerControls<N>;
 
   public:
     CurveSequencerModule() {
       config(Controls::ParameterCount, Controls::InputCount, Controls::OutputCount, Controls::LightCount);
 
-      configButton(this, Controls::RunButton, "Run", {"RUN input", "Yes"}, 1);
-      configButton(this, Controls::GateButton, "Gate", {"GATE input", "High"}, 0);
-      configButton(this, Controls::ResetButton, "Reset", {"RESET input", "High"}, 0);
+      configButton(this, Controls::RunButton, "Run", {"from input", "Yes"}, 1);
+      configButton(this, Controls::GateButton, "Gate", {"from input", "High"}, 0);
+      configButton(this, Controls::ResetButton, "Reset", {"from input", "High"}, 0);
 
-      configParam(Controls::StartKnob, 1.F, N, 1.F, "Start step");
+      configParam(Controls::StartKnob, 0.F, N - 1, 0.F, "Start step", "", 0.F, 1.F, 1.F);
       configParam(Controls::StepsKnob, 1.F, N, N, "Sequence length", " steps");
 
       configLevelRangeSwitch(this, Controls::LevelRangeSwitch);
@@ -44,7 +44,7 @@ namespace curve_sequencer {
         configCurveShapeSwitch(this, Controls::ShapeSwitches + stepIndex, "Shape");
         configCurvatureKnob(this, Controls::CurveKnobs + stepIndex, "Curvature");
         configDurationKnob(this, Controls::DurationKnobs + stepIndex, Controls::DurationRangeSwitch, "Duration");
-        configButton(this, Controls::EnabledButtons + stepIndex, "Enabled", {"ENABLED input", "Yes"}, 1);
+        configButton(this, Controls::EnabledButtons + stepIndex, "Enabled", {"from input", "Yes"}, 1);
 
         lights[Controls::GeneratingLights + stepIndex].setBrightness(0.F);
         lights[Controls::SustainingLights + stepIndex].setBrightness(0.F);

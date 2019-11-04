@@ -1,8 +1,8 @@
 #pragma once
 
-#include "Controls.h"
-#include "InterruptModes.h"
+#include "CurveSequencerControls.h"
 #include "Mode.h"
+#include "RunModes.h"
 #include "components/Latch.h"
 #include "controls/CommonInputs.h"
 
@@ -13,19 +13,18 @@
 
 namespace dhe {
 namespace curve_sequencer {
-  static auto constexpr generatingInterruptModeCount = static_cast<int>(InterruptMode::Duration) + 1;
-  static auto constexpr defaultGeneratingInterruptMode = static_cast<int>(InterruptMode::Duration);
+  static auto constexpr generatingInterruptModeCount = static_cast<int>(RunMode::Generate) + 1;
+  static auto constexpr defaultGeneratingInterruptMode = static_cast<int>(RunMode::Generate);
   static auto const generatingInterruptModeDescriptions = std::array<std::string, generatingInterruptModeCount>{
-      "Advance if gate rises",       "Advance if gate falls",  "Advance if gate changes",
-      "Advance if gate is high",     "Advance if gate is low", "Skip curve",
-      "Advance when curve completes"};
+      "Generate while gate is high", "Generate while gate is low", "Generate while gate is calm", "Skip generating",
+      "Generate until done"};
 
   using rack::engine::Input;
   using rack::engine::Light;
   using rack::engine::Param;
 
   template <int N> class Generating {
-    using Controls = Controls<N>;
+    using Controls = CurveSequencerControls<N>;
 
   public:
     Generating(std::vector<Input> &inputs, std::vector<Param> &params, std::vector<Light> &lights) :
@@ -37,18 +36,18 @@ namespace curve_sequencer {
     }
 
     auto execute(dhe::Latch const &gateLatch, float) const -> Successor {
-      if (interrupted(interruptMode(), gateLatch)) {
-        setLight(false);
-        return {Mode::Sustaining, step};
+      if (isRunning(runMode(), gateLatch)) {
+        return {Mode::Generating, step};
       }
-      return {Mode::Generating, step};
+      setLight(false);
+      return {Mode::Sustaining, step};
     };
 
     void exit() { setLight(false); }
 
   private:
-    auto interruptMode() const -> InterruptMode {
-      return static_cast<InterruptMode>(params[Controls::GenerateModeSwitches + step].getValue());
+    auto runMode() const -> RunMode {
+      return static_cast<RunMode>(params[Controls::GenerateModeSwitches + step].getValue());
     }
 
     void setLight(const bool state) const {

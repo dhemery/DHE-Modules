@@ -2,12 +2,12 @@
 
 #include "components/Latch.h"
 
-#include <curve-sequencer/Controls.h>
+#include <curve-sequencer/CurveSequencerControls.h>
 #include <engine/Param.hpp>
 #include <gtest/gtest.h>
 
 auto constexpr stepCount{4};
-using Controls = dhe::curve_sequencer::Controls<stepCount>;
+using Controls = dhe::curve_sequencer::CurveSequencerControls<stepCount>;
 using dhe::Latch;
 using dhe::curve_sequencer::Idle;
 using dhe::curve_sequencer::Mode;

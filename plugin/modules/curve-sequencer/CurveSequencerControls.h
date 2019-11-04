@@ -6,7 +6,7 @@ namespace dhe {
 
 namespace curve_sequencer {
 
-  template <int N> struct Controls {
+  template <int N> struct CurveSequencerControls {
     enum ParameterIds {
       DurationRangeSwitch,
       GateButton,
