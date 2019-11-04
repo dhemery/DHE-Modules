@@ -5,12 +5,11 @@ target_include_directories(curve_sequencer_tests
         )
 target_sources(curve_sequencer_tests
         PRIVATE
-        AdvancingModeTest.cpp
+        AdvancingTest.cpp
         CurveSequencerTest.cpp
-        GeneratingModeTest.cpp
-        IdleModeTest.cpp
-        PauseModeTest.cpp
-        SustainingModeTest.cpp
+        GeneratingTest.cpp
+        IdleTest.cpp
+        SustainingTest.cpp
         )
 target_link_libraries(curve_sequencer_tests
         PRIVATE

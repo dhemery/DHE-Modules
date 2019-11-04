@@ -2,7 +2,7 @@
 
 namespace dhe {
 namespace curve_sequencer {
-  enum class Mode { Paused, Idle, Advancing, Generating, Sustaining };
+  enum class Mode { Idle, Advancing, Generating, Sustaining };
 
   struct Successor {
     Mode mode;

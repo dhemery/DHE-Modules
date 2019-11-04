@@ -1,6 +1,6 @@
 #pragma once
 
-#include "CurveSequencerControls.h"
+#include "Controls.h"
 #include "InterruptModes.h"
 #include "Mode.h"
 #include "components/Latch.h"
@@ -24,11 +24,11 @@ namespace curve_sequencer {
   using rack::engine::Light;
   using rack::engine::Param;
 
-  template <int N> class GeneratingMode {
-    using Controls = CurveSequencerControls<N>;
+  template <int N> class Generating {
+    using Controls = Controls<N>;
 
   public:
-    GeneratingMode(std::vector<Input> &inputs, std::vector<Param> &params, std::vector<Light> &lights) :
+    Generating(std::vector<Input> &inputs, std::vector<Param> &params, std::vector<Light> &lights) :
         inputs{inputs}, params{params}, lights{lights} {}
 
     void enter(int entryStep) {

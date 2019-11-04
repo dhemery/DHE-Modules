@@ -1,12 +1,11 @@
 #pragma once
 
-#include "AdvancingMode.h"
-#include "CurveSequencerControls.h"
-#include "GeneratingMode.h"
-#include "IdleMode.h"
+#include "Advancing.h"
+#include "Controls.h"
+#include "Generating.h"
+#include "Idle.h"
 #include "Mode.h"
-#include "PauseMode.h"
-#include "SustainingMode.h"
+#include "Sustaining.h"
 #include "components/Latch.h"
 #include "controls/CommonInputs.h"
 
@@ -16,7 +15,7 @@ namespace dhe {
 namespace curve_sequencer {
   template <int N, typename InputType, typename OutputType, typename ParamType, typename LightType>
   class CurveSequencer {
-    using Controls = CurveSequencerControls<N>;
+    using Controls = Controls<N>;
 
   public:
     CurveSequencer(std::vector<InputType> &inputs, std::vector<OutputType> &outputs, std::vector<ParamType> &params,
@@ -27,22 +26,24 @@ namespace curve_sequencer {
       runLatch.clock(isRunning());
       gateLatch.clock(gate());
 
+      if (runLatch.isLow()) {
+        return;
+      }
+
       do {
         auto const next = executeMode(sampleTime);
         if (next.mode == mode) {
           return;
         }
         updateState(next);
-      } while (mode != Mode::Paused && mode != Mode::Idle);
+      } while (mode != Mode::Idle);
     }
 
   private:
     auto executeMode(float sampleTime) const -> Successor {
       switch (mode) {
-      case Mode::Paused:
-        return pauseMode.execute(runLatch);
       case Mode::Idle:
-        return idleMode.execute(runLatch, gateLatch);
+        return idleMode.execute(gateLatch);
       case Mode::Advancing:
         return advancingMode.execute(step);
       case Mode::Generating:
@@ -68,7 +69,6 @@ namespace curve_sequencer {
       case Mode::Sustaining:
         sustainingMode.enter(step);
         return;
-      case Mode::Paused:
       case Mode::Idle:
       case Mode::Advancing:
         return;
@@ -82,12 +82,11 @@ namespace curve_sequencer {
     std::vector<OutputType> &outputs;
     std::vector<ParamType> &params;
     std::vector<LightType> &lights;
-    Mode mode{Mode::Paused};
-    AdvancingMode<N> advancingMode{inputs, params};
-    GeneratingMode<N> generatingMode{inputs, params, lights};
-    IdleMode<N> idleMode{params};
-    PauseMode pauseMode{};
-    SustainingMode<N> sustainingMode{inputs, params, lights};
+    Mode mode{Mode::Idle};
+    Advancing<N> advancingMode{inputs, params};
+    Generating<N> generatingMode{inputs, params, lights};
+    Idle<N> idleMode{params};
+    Sustaining<N> sustainingMode{inputs, params, lights};
   };
 } // namespace curve_sequencer
 } // namespace dhe

@@ -1,8 +1,8 @@
 #pragma once
 
 #include "CurveSequencer.h"
-#include "GeneratingMode.h"
-#include "SustainingMode.h"
+#include "Generating.h"
+#include "Sustaining.h"
 #include "config/CommonConfig.h"
 #include "config/CurvatureConfig.h"
 #include "config/DurationConfig.h"
@@ -19,7 +19,7 @@ namespace curve_sequencer {
   using rack::engine::Param;
 
   template <int N> class CurveSequencerModule : public rack::engine::Module {
-    using Controls = CurveSequencerControls<N>;
+    using Controls = Controls<N>;
 
   public:
     CurveSequencerModule() {

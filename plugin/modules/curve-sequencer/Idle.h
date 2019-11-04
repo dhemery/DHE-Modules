@@ -1,6 +1,6 @@
 #pragma once
 
-#include "CurveSequencerControls.h"
+#include "Controls.h"
 #include "Mode.h"
 #include "components/Latch.h"
 #include "controls/CommonInputs.h"
@@ -12,16 +12,13 @@ namespace dhe {
 namespace curve_sequencer {
   using rack::engine::Param;
 
-  template <int N> class IdleMode {
-    using Controls = dhe::curve_sequencer::CurveSequencerControls<N>;
+  template <int N> class Idle {
+    using Controls = dhe::curve_sequencer::Controls<N>;
 
   public:
-    IdleMode(std::vector<Param> &params) : params{params} {}
+    Idle(std::vector<Param> &params) : params{params} {}
 
-    auto execute(dhe::Latch const &runLatch, dhe::Latch const &gateLatch) const -> Successor {
-      if (runLatch.isFall()) {
-        return {Mode::Paused, 0};
-      }
+    auto execute(dhe::Latch const &gateLatch) const -> Successor {
       if (gateLatch.isRise()) {
         return {Mode::Advancing, startStep()};
       }

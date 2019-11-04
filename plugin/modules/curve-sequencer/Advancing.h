@@ -1,6 +1,6 @@
 #pragma once
 
-#include "CurveSequencerControls.h"
+#include "Controls.h"
 #include "Mode.h"
 #include "components/Latch.h"
 #include "controls/CommonInputs.h"
@@ -14,9 +14,9 @@ namespace curve_sequencer {
   using rack::engine::Input;
   using rack::engine::Param;
 
-  template <int N> class AdvancingMode {
+  template <int N> class Advancing {
   public:
-    AdvancingMode(std::vector<Input> &inputs, std::vector<Param> &params) : inputs{inputs}, params{params} {}
+    Advancing(std::vector<Input> &inputs, std::vector<Param> &params) : inputs{inputs}, params{params} {}
 
     auto execute(int currentStep) const -> Successor {
       auto const selectionStart = this->selectionStart();
@@ -36,7 +36,7 @@ namespace curve_sequencer {
     };
 
   private:
-    using Controls = CurveSequencerControls<N>;
+    using Controls = Controls<N>;
 
     auto selectionStart() const -> int { return static_cast<int>(valueOf(params[Controls::StartKnob])); }
     auto selectionLength() const -> int { return static_cast<int>(valueOf(params[Controls::StepsKnob])); }

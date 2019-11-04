@@ -1,6 +1,6 @@
-#include "curve-sequencer/AdvancingMode.h"
+#include "curve-sequencer/Advancing.h"
 
-#include "curve-sequencer/CurveSequencerControls.h"
+#include "curve-sequencer/Controls.h"
 
 #include <engine/Param.hpp>
 #include <engine/Port.hpp>
@@ -8,17 +8,17 @@
 
 static auto constexpr stepCount{8};
 
-using dhe::curve_sequencer::AdvancingMode;
+using dhe::curve_sequencer::Advancing;
 using dhe::curve_sequencer::Mode;
-using Controls = dhe::curve_sequencer::CurveSequencerControls<stepCount>;
+using Controls = dhe::curve_sequencer::Controls<stepCount>;
 
 using ::testing::Test;
 
-struct AdvancingModeTest : public Test {
+struct AdvancingTest : public Test {
   std::vector<rack::engine::Input> inputs{Controls::InputCount};
   std::vector<rack::engine::Param> params{Controls::ParameterCount};
 
-  AdvancingMode<stepCount> advancingMode{inputs, params};
+  Advancing<stepCount> advancingMode{inputs, params};
 
   void setEnabledButton(int step, bool state) { params[Controls::EnabledButtons + step].setValue(state ? 1.F : 0.F); }
   void setEnabledInput(int step, bool state) { inputs[Controls::EnabledInputs + step].setVoltage(state ? 10.F : 0.F); }
@@ -28,7 +28,7 @@ struct AdvancingModeTest : public Test {
   }
 };
 
-TEST_F(AdvancingModeTest, detectsStepEnabledByButton) {
+TEST_F(AdvancingTest, detectsStepEnabledByButton) {
   auto const selectionStart = 0;
   auto const selectionLength = stepCount;
   setSelection(selectionStart, selectionLength); // [0 1 2 3 4 5 6 7]
@@ -41,7 +41,7 @@ TEST_F(AdvancingModeTest, detectsStepEnabledByButton) {
   ASSERT_EQ(next.step, enabledStep);
 }
 
-TEST_F(AdvancingModeTest, detectsStepEnabledByInput) {
+TEST_F(AdvancingTest, detectsStepEnabledByInput) {
   auto const selectionStart = 0;
   setSelection(selectionStart, stepCount); // [0 1 2 3 4 5 6 7]
 
@@ -53,7 +53,7 @@ TEST_F(AdvancingModeTest, detectsStepEnabledByInput) {
   ASSERT_EQ(next.step, enabledStep);
 }
 
-TEST_F(AdvancingModeTest, ifGivenStepIsEnabled_returnsGeneratingGivenStep) {
+TEST_F(AdvancingTest, ifGivenStepIsEnabled_returnsGeneratingGivenStep) {
   setSelection(0, stepCount); // [0 1 2 3 4 5 6 7]
 
   auto const givenStep = 2;
@@ -65,7 +65,7 @@ TEST_F(AdvancingModeTest, ifGivenStepIsEnabled_returnsGeneratingGivenStep) {
   EXPECT_EQ(next.step, givenStep);
 }
 
-TEST_F(AdvancingModeTest, ifFirstEnabledStepInSelectionIsAboveGivenStep_returnsGeneratingEnabledStep) {
+TEST_F(AdvancingTest, ifFirstEnabledStepInSelectionIsAboveGivenStep_returnsGeneratingEnabledStep) {
   setSelection(0, stepCount); // [0 1 2 3 4 5 6 7]
 
   auto const givenStep = 2;
@@ -78,7 +78,7 @@ TEST_F(AdvancingModeTest, ifFirstEnabledStepInSelectionIsAboveGivenStep_returnsG
   EXPECT_EQ(next.step, firstEnabledStep);
 }
 
-TEST_F(AdvancingModeTest, ifFirstEnabledStepIsLastStepInSelection_returnsGeneratingEnabledStep) {
+TEST_F(AdvancingTest, ifFirstEnabledStepIsLastStepInSelection_returnsGeneratingEnabledStep) {
   auto const selectionStart = 2;
   auto const selectionLength = 3;
   setSelection(selectionStart, selectionLength); // [2 3 4]
@@ -92,7 +92,7 @@ TEST_F(AdvancingModeTest, ifFirstEnabledStepIsLastStepInSelection_returnsGenerat
   EXPECT_EQ(next.step, lastStepInSelection);
 }
 
-TEST_F(AdvancingModeTest, ifNoStepInSelectionIsEnabled_returnsIdle) {
+TEST_F(AdvancingTest, ifNoStepInSelectionIsEnabled_returnsIdle) {
   auto const selectionStart = 1;
   auto const selectionLength = 4;
   setSelection(selectionStart, selectionLength); // [1 2 3 4]
@@ -104,7 +104,7 @@ TEST_F(AdvancingModeTest, ifNoStepInSelectionIsEnabled_returnsIdle) {
   EXPECT_EQ(next.mode, Mode::Idle);
 }
 
-TEST_F(AdvancingModeTest, ifFirstEnabledStepInWrappedSelectionIsBelowSelectionStart_returnsGeneratingEnabledStep) {
+TEST_F(AdvancingTest, ifFirstEnabledStepInWrappedSelectionIsBelowSelectionStart_returnsGeneratingEnabledStep) {
   auto const selectionStart = 6;
   auto const selectionLength = 4;
   setSelection(selectionStart, selectionLength); // [6 7 0 1]
@@ -118,7 +118,7 @@ TEST_F(AdvancingModeTest, ifFirstEnabledStepInWrappedSelectionIsBelowSelectionSt
   EXPECT_EQ(next.step, enabledSelectedStepBelowSelectionStart);
 }
 
-TEST_F(AdvancingModeTest, ifNoStepInWrappedSelectionIsEnabled_returnsIdle) {
+TEST_F(AdvancingTest, ifNoStepInWrappedSelectionIsEnabled_returnsIdle) {
   auto const selectionStart = 5;
   auto const selectionLength = 7;
   setSelection(selectionStart, selectionLength); // [5 6 7 0 1 2 3]
@@ -131,7 +131,7 @@ TEST_F(AdvancingModeTest, ifNoStepInWrappedSelectionIsEnabled_returnsIdle) {
   EXPECT_EQ(next.mode, Mode::Idle);
 }
 
-TEST_F(AdvancingModeTest, ifGivenStepIsBelowSelection_returnsIdle) {
+TEST_F(AdvancingTest, ifGivenStepIsBelowSelection_returnsIdle) {
   setSelection(4, 3); // [4 5 6]
 
   auto const givenStep = 1; // Lower than any selected step
@@ -142,7 +142,7 @@ TEST_F(AdvancingModeTest, ifGivenStepIsBelowSelection_returnsIdle) {
   EXPECT_EQ(next.mode, Mode::Idle);
 }
 
-TEST_F(AdvancingModeTest, ifGivenStepIsAboveSelection_returnsIdle) {
+TEST_F(AdvancingTest, ifGivenStepIsAboveSelection_returnsIdle) {
   setSelection(4, 3); // [4 5 6]
 
   auto const givenStep = 7; // Higher than any selected step
@@ -153,7 +153,7 @@ TEST_F(AdvancingModeTest, ifGivenStepIsAboveSelection_returnsIdle) {
   EXPECT_EQ(next.mode, Mode::Idle);
 }
 
-TEST_F(AdvancingModeTest, ifGivenStepIsBetweenEndpointsOfWrappedSelection_returnsIdle) {
+TEST_F(AdvancingTest, ifGivenStepIsBetweenEndpointsOfWrappedSelection_returnsIdle) {
   setSelection(6, 4); // [6 7 0 1]
 
   auto const givenStep = 5; // Above selection end, below selection start
@@ -164,7 +164,7 @@ TEST_F(AdvancingModeTest, ifGivenStepIsBetweenEndpointsOfWrappedSelection_return
   EXPECT_EQ(next.mode, Mode::Idle);
 }
 
-TEST_F(AdvancingModeTest, ifGivenStepIsEnabledAndSelectedAndBelowSelectionStart_returnsGeneratingGivenStep) {
+TEST_F(AdvancingTest, ifGivenStepIsEnabledAndSelectedAndBelowSelectionStart_returnsGeneratingGivenStep) {
   auto const selectionStart = 6;
   auto const selectionLength = 6;
   setSelection(selectionStart, selectionLength); // [6 7 0 1 2 3]
