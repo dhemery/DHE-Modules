@@ -17,7 +17,6 @@ using dhe::curve_sequencer::ModeId;
 using dhe::curve_sequencer::SustainingMode;
 using Controls = dhe::curve_sequencer::CurveSequencerControls<stepCount>;
 
-static auto constexpr ignoredRunLatch = Latch{};
 static auto constexpr risenGate = Latch{true, true};
 static auto constexpr fallenGate = Latch{false, true};
 static auto constexpr stableHighGate = Latch{true, false};
@@ -37,133 +36,172 @@ struct SustainingModeTest : public Test {
   }
 };
 
-TEST_F(SustainingModeTest, isNotTerminal) { ASSERT_EQ(sustainingMode.isTerminal(), false); }
+TEST_F(SustainingModeTest, enter_lightsStepGeneratingLight) {
+  auto const step = 4;
+
+  lights[Controls::SustainingLights + step].setBrightness(22.F);
+
+  sustainingMode.enter(step);
+
+  EXPECT_EQ(lights[Controls::SustainingLights + step].getBrightness(), 10.F);
+}
+
+TEST_F(SustainingModeTest, exit_dimsStepGeneratingLight) {
+  auto const step = 5;
+
+  sustainingMode.enter(step);
+  sustainingMode.exit();
+
+  EXPECT_EQ(lights[Controls::SustainingLights + step].getBrightness(), 0.F);
+}
 
 TEST_F(SustainingModeTest, riseMode_returnsAdvancing_ifGateRises) {
   auto const step = 0;
   setInterruptMode(step, InterruptMode::Rise);
 
-  auto next = sustainingMode.execute(ignoredRunLatch, risenGate, step, 0.F);
+  sustainingMode.enter(step);
 
-  EXPECT_EQ(next.modeId, ModeId::Advancing);
+  auto next = sustainingMode.execute(risenGate);
+
+  EXPECT_EQ(next.mode, ModeId::Advancing);
 }
 
 TEST_F(SustainingModeTest, riseMode_returnsSustaining_ifGateDoesNotRise) {
   auto const step = 1;
   setInterruptMode(step, InterruptMode::Rise);
 
-  auto next = sustainingMode.execute(ignoredRunLatch, fallenGate, step, 0.F);
-  EXPECT_EQ(next.modeId, ModeId::Sustaining);
+  sustainingMode.enter(step);
 
-  next = sustainingMode.execute(ignoredRunLatch, stableHighGate, step, 0.F);
-  EXPECT_EQ(next.modeId, ModeId::Sustaining);
+  auto next = sustainingMode.execute(fallenGate);
+  EXPECT_EQ(next.mode, ModeId::Sustaining);
 
-  next = sustainingMode.execute(ignoredRunLatch, stableLowGate, step, 0.F);
-  EXPECT_EQ(next.modeId, ModeId::Sustaining);
+  next = sustainingMode.execute(stableHighGate);
+  EXPECT_EQ(next.mode, ModeId::Sustaining);
+
+  next = sustainingMode.execute(stableLowGate);
+  EXPECT_EQ(next.mode, ModeId::Sustaining);
 }
 
 TEST_F(SustainingModeTest, fallMode_returnsAdvancing_ifGateFalls) {
   auto const step = 2;
   setInterruptMode(step, InterruptMode::Fall);
 
-  auto next = sustainingMode.execute(ignoredRunLatch, fallenGate, step, 0.F);
+  sustainingMode.enter(step);
 
-  EXPECT_EQ(next.modeId, ModeId::Advancing);
+  auto next = sustainingMode.execute(fallenGate);
+
+  EXPECT_EQ(next.mode, ModeId::Advancing);
 }
 
 TEST_F(SustainingModeTest, fallMode_returnsSustaining_ifGateDoesNotFall) {
   auto const step = 3;
   setInterruptMode(step, InterruptMode::Fall);
 
-  auto next = sustainingMode.execute(ignoredRunLatch, risenGate, step, 0.F);
-  EXPECT_EQ(next.modeId, ModeId::Sustaining);
+  sustainingMode.enter(step);
 
-  next = sustainingMode.execute(ignoredRunLatch, stableHighGate, step, 0.F);
-  EXPECT_EQ(next.modeId, ModeId::Sustaining);
+  auto next = sustainingMode.execute(risenGate);
+  EXPECT_EQ(next.mode, ModeId::Sustaining);
 
-  next = sustainingMode.execute(ignoredRunLatch, stableLowGate, step, 0.F);
-  EXPECT_EQ(next.modeId, ModeId::Sustaining);
+  next = sustainingMode.execute(stableHighGate);
+  EXPECT_EQ(next.mode, ModeId::Sustaining);
+
+  next = sustainingMode.execute(stableLowGate);
+  EXPECT_EQ(next.mode, ModeId::Sustaining);
 }
 
 TEST_F(SustainingModeTest, edgeMode_returnsAdvancing_ifGateChanges) {
   auto const step = 4;
   setInterruptMode(step, InterruptMode::Edge);
 
-  auto next = sustainingMode.execute(ignoredRunLatch, risenGate, step, 0.F);
-  EXPECT_EQ(next.modeId, ModeId::Advancing);
+  sustainingMode.enter(step);
 
-  next = sustainingMode.execute(ignoredRunLatch, fallenGate, step, 0.F);
-  EXPECT_EQ(next.modeId, ModeId::Advancing);
+  auto next = sustainingMode.execute(risenGate);
+  EXPECT_EQ(next.mode, ModeId::Advancing);
+
+  next = sustainingMode.execute(fallenGate);
+  EXPECT_EQ(next.mode, ModeId::Advancing);
 }
 
 TEST_F(SustainingModeTest, edgeMode_returnsSustaining_ifGateDoesNotChange) {
   auto const step = 5;
   setInterruptMode(step, InterruptMode::Edge);
 
-  auto next = sustainingMode.execute(ignoredRunLatch, stableHighGate, step, 0.F);
-  EXPECT_EQ(next.modeId, ModeId::Sustaining);
+  sustainingMode.enter(step);
 
-  next = sustainingMode.execute(ignoredRunLatch, stableLowGate, step, 0.F);
-  EXPECT_EQ(next.modeId, ModeId::Sustaining);
+  auto next = sustainingMode.execute(stableHighGate);
+  EXPECT_EQ(next.mode, ModeId::Sustaining);
+
+  next = sustainingMode.execute(stableLowGate);
+  EXPECT_EQ(next.mode, ModeId::Sustaining);
 }
 
 TEST_F(SustainingModeTest, highMode_returnsAdvancing_ifGateIsHigh) {
   auto const step = 6;
   setInterruptMode(step, InterruptMode::High);
 
-  auto next = sustainingMode.execute(ignoredRunLatch, risenGate, step, 0.F);
-  EXPECT_EQ(next.modeId, ModeId::Advancing);
+  sustainingMode.enter(step);
 
-  next = sustainingMode.execute(ignoredRunLatch, stableHighGate, step, 0.F);
-  EXPECT_EQ(next.modeId, ModeId::Advancing);
+  auto next = sustainingMode.execute(risenGate);
+  EXPECT_EQ(next.mode, ModeId::Advancing);
+
+  next = sustainingMode.execute(stableHighGate);
+  EXPECT_EQ(next.mode, ModeId::Advancing);
 }
 
 TEST_F(SustainingModeTest, highMode_returnsSustaining_ifGateIsNotHigh) {
   auto const step = 7;
   setInterruptMode(step, InterruptMode::High);
 
-  auto next = sustainingMode.execute(ignoredRunLatch, fallenGate, step, 0.F);
-  EXPECT_EQ(next.modeId, ModeId::Sustaining);
+  sustainingMode.enter(step);
 
-  next = sustainingMode.execute(ignoredRunLatch, stableLowGate, step, 0.F);
-  EXPECT_EQ(next.modeId, ModeId::Sustaining);
+  auto next = sustainingMode.execute(fallenGate);
+  EXPECT_EQ(next.mode, ModeId::Sustaining);
+
+  next = sustainingMode.execute(stableLowGate);
+  EXPECT_EQ(next.mode, ModeId::Sustaining);
 }
 
 TEST_F(SustainingModeTest, lowMode_returnsAdvancing_ifGateIsLow) {
   auto const step = 0;
   setInterruptMode(step, InterruptMode::Low);
 
-  auto next = sustainingMode.execute(ignoredRunLatch, fallenGate, step, 0.F);
-  EXPECT_EQ(next.modeId, ModeId::Advancing);
+  sustainingMode.enter(step);
 
-  next = sustainingMode.execute(ignoredRunLatch, stableLowGate, step, 0.F);
-  EXPECT_EQ(next.modeId, ModeId::Advancing);
+  auto next = sustainingMode.execute(fallenGate);
+  EXPECT_EQ(next.mode, ModeId::Advancing);
+
+  next = sustainingMode.execute(stableLowGate);
+  EXPECT_EQ(next.mode, ModeId::Advancing);
 }
 
 TEST_F(SustainingModeTest, lowMode_returnsSustaining_ifGateIsNotLow) {
   auto const step = 1;
   setInterruptMode(step, InterruptMode::Low);
 
-  auto next = sustainingMode.execute(ignoredRunLatch, risenGate, step, 0.F);
-  EXPECT_EQ(next.modeId, ModeId::Sustaining);
+  sustainingMode.enter(step);
 
-  next = sustainingMode.execute(ignoredRunLatch, stableHighGate, step, 0.F);
-  EXPECT_EQ(next.modeId, ModeId::Sustaining);
+  auto next = sustainingMode.execute(risenGate);
+  EXPECT_EQ(next.mode, ModeId::Sustaining);
+
+  next = sustainingMode.execute(stableHighGate);
+  EXPECT_EQ(next.mode, ModeId::Sustaining);
 }
 
 TEST_F(SustainingModeTest, skipMode_returnsAdvancing_forEveryGateState) {
   auto const step = 0;
   setInterruptMode(step, InterruptMode::Skip);
 
-  auto next = sustainingMode.execute(ignoredRunLatch, risenGate, step, 0.F);
-  EXPECT_EQ(next.modeId, ModeId::Advancing);
+  sustainingMode.enter(step);
 
-  next = sustainingMode.execute(ignoredRunLatch, fallenGate, step, 0.F);
-  EXPECT_EQ(next.modeId, ModeId::Advancing);
+  auto next = sustainingMode.execute(risenGate);
+  EXPECT_EQ(next.mode, ModeId::Advancing);
 
-  next = sustainingMode.execute(ignoredRunLatch, stableHighGate, step, 0.F);
-  EXPECT_EQ(next.modeId, ModeId::Advancing);
+  next = sustainingMode.execute(fallenGate);
+  EXPECT_EQ(next.mode, ModeId::Advancing);
 
-  next = sustainingMode.execute(ignoredRunLatch, stableLowGate, step, 0.F);
-  EXPECT_EQ(next.modeId, ModeId::Advancing);
+  next = sustainingMode.execute(stableHighGate);
+  EXPECT_EQ(next.mode, ModeId::Advancing);
+
+  next = sustainingMode.execute(stableLowGate);
+  EXPECT_EQ(next.mode, ModeId::Advancing);
 }

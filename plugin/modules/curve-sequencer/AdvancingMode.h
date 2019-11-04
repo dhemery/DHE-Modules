@@ -14,13 +14,11 @@ namespace curve_sequencer {
   using rack::engine::Input;
   using rack::engine::Param;
 
-  template <int N> class AdvancingMode : public Mode {
+  template <int N> class AdvancingMode {
   public:
     AdvancingMode(std::vector<Input> &inputs, std::vector<Param> &params) : inputs{inputs}, params{params} {}
-    auto isTerminal() const -> bool override { return false; }
 
-    auto execute(dhe::Latch const & /*runLatch*/, dhe::Latch const & /*gateLatch*/, int currentStep,
-                 float /*sampleTime*/) const -> Successor override {
+    auto execute(int currentStep) const -> Successor {
       auto const selectionStart = this->selectionStart();
       auto const selectionLength = this->selectionLength();
       if (!isSelected(currentStep, selectionStart, selectionLength)) {

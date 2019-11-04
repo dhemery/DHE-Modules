@@ -5,13 +5,11 @@
 
 namespace dhe {
 namespace curve_sequencer {
-  class PauseMode : public Mode {
+  class PauseMode {
   public:
-    auto isTerminal() const -> bool override { return true; }
-    auto execute(dhe::Latch const &runLatch, dhe::Latch const & /*gateLatch*/, int step, float /*sampleTime*/) const
-        -> Successor override {
+    auto execute(dhe::Latch const &runLatch) const -> Successor {
       auto const nextMode = runLatch.isRise() ? ModeId::Idle : ModeId::Paused;
-      return {nextMode, step};
+      return {nextMode, 0};
     };
   };
 }; // namespace curve_sequencer

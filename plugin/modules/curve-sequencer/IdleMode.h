@@ -12,23 +12,20 @@ namespace dhe {
 namespace curve_sequencer {
   using rack::engine::Param;
 
-  template <int N> class IdleMode : public Mode {
+  template <int N> class IdleMode {
     using Controls = dhe::curve_sequencer::CurveSequencerControls<N>;
 
   public:
     IdleMode(std::vector<Param> &params) : params{params} {}
 
-    auto isTerminal() const -> bool override { return true; }
-
-    auto execute(dhe::Latch const &runLatch, dhe::Latch const &gateLatch, int step, float /*sampleTime*/) const
-        -> Successor override {
+    auto execute(dhe::Latch const &runLatch, dhe::Latch const &gateLatch) const -> Successor {
       if (runLatch.isFall()) {
-        return {ModeId::Paused, step};
+        return {ModeId::Paused, 0};
       }
       if (gateLatch.isRise()) {
         return {ModeId::Advancing, startStep()};
       }
-      return {ModeId::Idle, step};
+      return {ModeId::Idle, 0};
     };
 
   private:

@@ -10,14 +10,14 @@ namespace dhe {
 
 namespace curve_sequencer {
 
-  template <typename P> class GenerateModeStepper : public Toggle<P, generateModeCount> {
+  template <typename P> class GenerateModeStepper : public Toggle<P, generateInterruptModeCount> {
   public:
-    GenerateModeStepper() : Toggle<P, generateModeCount>("stepper-generate") {}
+    GenerateModeStepper() : Toggle<P, generateInterruptModeCount>("stepper-generate") {}
   };
 
-  template <typename P> class SustainModeStepper : public Toggle<P, sustainModeCount> {
+  template <typename P> class SustainModeStepper : public Toggle<P, sustainInterruptModeCount> {
   public:
-    SustainModeStepper() : Toggle<P, sustainModeCount>("stepper-sustain") {}
+    SustainModeStepper() : Toggle<P, sustainInterruptModeCount>("stepper-sustain") {}
   };
 
   template <typename P> class StartMarker : public rack::widget::SvgWidget {

@@ -7,23 +7,23 @@ namespace curve_sequencer {
 
   enum class InterruptMode { Rise, Fall, Edge, High, Low, Skip, Duration };
 
-  static inline auto isActive(InterruptMode mode, dhe::Latch const &gateLatch) -> bool {
+  static inline auto interrupted(InterruptMode mode, dhe::Latch const &gate) -> bool {
     switch (mode) {
     case InterruptMode::Rise:
-      return !gateLatch.isRise();
+      return gate.isRise();
     case InterruptMode::Fall:
-      return !gateLatch.isFall();
+      return gate.isFall();
     case InterruptMode::Edge:
-      return !gateLatch.isEdge();
+      return gate.isEdge();
     case InterruptMode::High:
-      return !gateLatch.isHigh();
+      return gate.isHigh();
     case InterruptMode::Low:
-      return !gateLatch.isLow();
+      return gate.isLow();
     case InterruptMode::Duration:
-      return true;
+      return false;
     case InterruptMode::Skip:
     default:
-      return false;
+      return true;
     }
   }
 } // namespace curve_sequencer

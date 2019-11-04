@@ -20,21 +20,19 @@ protected:
   PauseMode pauseMode{};
 };
 
-TEST_F(PauseModeTest, isTerminal) { ASSERT_EQ(pauseMode.isTerminal(), true); }
-
 TEST_F(PauseModeTest, ifRunLatchRises_nextModeIsIdle) {
-  auto const next = pauseMode.execute(risenLatch, Latch{}, -1, -2.F);
+  auto const next = pauseMode.execute(risenLatch);
 
-  ASSERT_EQ(next.modeId, ModeId::Idle);
+  ASSERT_EQ(next.mode, ModeId::Idle);
 }
 
 TEST_F(PauseModeTest, ifRunLatchDoesNotRise_nextModeIsPaused) {
-  auto next = pauseMode.execute(fallenLatch, Latch{}, -1, -2.F);
-  EXPECT_EQ(next.modeId, ModeId::Paused);
+  auto next = pauseMode.execute(fallenLatch);
+  EXPECT_EQ(next.mode, ModeId::Paused);
 
-  next = pauseMode.execute(stableHighLatch, Latch{}, -1, -2.F);
-  EXPECT_EQ(next.modeId, ModeId::Paused);
+  next = pauseMode.execute(stableHighLatch);
+  EXPECT_EQ(next.mode, ModeId::Paused);
 
-  next = pauseMode.execute(stableLowLatch, Latch{}, -1, -2.F);
-  EXPECT_EQ(next.modeId, ModeId::Paused);
+  next = pauseMode.execute(stableLowLatch);
+  EXPECT_EQ(next.mode, ModeId::Paused);
 }

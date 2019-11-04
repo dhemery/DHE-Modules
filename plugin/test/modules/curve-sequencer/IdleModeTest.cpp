@@ -27,34 +27,32 @@ protected:
   void givenStartStep(int step) { params[Controls::StartKnob].setValue(static_cast<float>(step)); }
 };
 
-TEST_F(IdleModeTest, isTerminal) { ASSERT_EQ(idleMode.isTerminal(), true); }
-
 TEST_F(IdleModeTest, ifRunLatchFalls_nextModeIsPaused) {
-  auto const next = idleMode.execute(fallenLatch, Latch{}, -1, -2.F);
-  ASSERT_EQ(next.modeId, ModeId::Paused);
+  auto const next = idleMode.execute(fallenLatch, Latch{});
+  ASSERT_EQ(next.mode, ModeId::Paused);
 }
 
 TEST_F(IdleModeTest, ifRunLatchIsHigh_andGateLatchRises_nextModeIsAdvancing) {
-  auto next = idleMode.execute(stableHighLatch, risenLatch, -1, -2.F);
-  ASSERT_EQ(next.modeId, ModeId::Advancing);
+  auto next = idleMode.execute(stableHighLatch, risenLatch);
+  ASSERT_EQ(next.mode, ModeId::Advancing);
 }
 
 TEST_F(IdleModeTest, ifRunLatchIsHigh_andGateLatchRises_nextStepIsStartStep) {
   auto startStep = 2;
   givenStartStep(startStep);
 
-  auto next = idleMode.execute(stableHighLatch, risenLatch, -1, -2.F);
+  auto next = idleMode.execute(stableHighLatch, risenLatch);
 
   ASSERT_EQ(next.step, startStep);
 }
 
 TEST_F(IdleModeTest, ifRunLatchIsHigh_andGateLatchDoesNotRise_nextModeIsIdle) {
-  auto next = idleMode.execute(stableHighLatch, stableLowLatch, -1, -2.F);
-  ASSERT_EQ(next.modeId, ModeId::Idle);
+  auto next = idleMode.execute(stableHighLatch, stableLowLatch);
+  ASSERT_EQ(next.mode, ModeId::Idle);
 
-  next = idleMode.execute(stableHighLatch, stableHighLatch, -1, -2.F);
-  ASSERT_EQ(next.modeId, ModeId::Idle);
+  next = idleMode.execute(stableHighLatch, stableHighLatch);
+  ASSERT_EQ(next.mode, ModeId::Idle);
 
-  next = idleMode.execute(stableHighLatch, fallenLatch, -1, -2.F);
-  ASSERT_EQ(next.modeId, ModeId::Idle);
+  next = idleMode.execute(stableHighLatch, fallenLatch);
+  ASSERT_EQ(next.mode, ModeId::Idle);
 }

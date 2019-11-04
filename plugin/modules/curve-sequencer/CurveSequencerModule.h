@@ -1,6 +1,8 @@
 #pragma once
 
 #include "CurveSequencer.h"
+#include "GeneratingMode.h"
+#include "SustainingMode.h"
 #include "config/CommonConfig.h"
 #include "config/CurvatureConfig.h"
 #include "config/DurationConfig.h"
@@ -34,10 +36,10 @@ namespace curve_sequencer {
       configDurationRangeSwitch(this, Controls::DurationRangeSwitch);
 
       for (int stepIndex = 0; stepIndex < N; stepIndex++) {
-        configToggle<generateModeCount>(this, Controls::GenerateModeSwitches + stepIndex, "Generate mode",
-                                        generateModeDescriptions, generateDefaultMode);
-        configToggle<sustainModeCount>(this, Controls::SustainModeSwitches + stepIndex, "Sustain mode",
-                                       sustainModeDescriptions, sustainDefaultMode);
+        configToggle<generateInterruptModeCount>(this, Controls::GenerateModeSwitches + stepIndex, "Generate mode",
+                                                 generateInterruptModeDescriptions, defaultGenerateinterruptMode);
+        configToggle<sustainInterruptModeCount>(this, Controls::SustainModeSwitches + stepIndex, "Sustain mode",
+                                                sustainInterruptModeDescriptions, defaultSustainInterruptMode);
         configLevelKnob(this, Controls::LevelKnobs + stepIndex, Controls::LevelRangeSwitch, "Level");
         configCurveShapeSwitch(this, Controls::ShapeSwitches + stepIndex, "Shape");
         configCurvatureKnob(this, Controls::CurveKnobs + stepIndex, "Curvature");
@@ -54,12 +56,7 @@ namespace curve_sequencer {
     void process(const ProcessArgs &args) override { curveSequencer.execute(args.sampleTime); }
 
   private:
-    GenerateStage<N, Input, Output, Param, Light> generateStage{inputs, outputs, params, lights};
-    SustainStage<N, Input, Output, Param, Light> sustainStage{inputs, outputs, params, lights};
-    StepExecutor<N, Input, Output, Param, Light, decltype(generateStage), decltype(sustainStage)> stepExecutor{
-        inputs, outputs, params, lights, generateStage, sustainStage};
-    CurveSequencer<N, Input, Output, Param, Light, decltype(stepExecutor)> curveSequencer{inputs, outputs, params,
-                                                                                          lights, stepExecutor};
+    CurveSequencer<N, Input, Output, Param, Light> curveSequencer{inputs, outputs, params, lights};
   };
 } // namespace curve_sequencer
 
