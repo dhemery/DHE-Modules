@@ -13,9 +13,9 @@
 
 namespace dhe {
 namespace curve_sequencer {
-  static auto constexpr generateInterruptModeCount = static_cast<int>(InterruptMode::Duration) + 1;
-  static auto constexpr defaultGenerateinterruptMode = static_cast<int>(InterruptMode::Duration);
-  static auto const generateInterruptModeDescriptions = std::array<std::string, generateInterruptModeCount>{
+  static auto constexpr generatingInterruptModeCount = static_cast<int>(InterruptMode::Duration) + 1;
+  static auto constexpr defaultGeneratingInterruptMode = static_cast<int>(InterruptMode::Duration);
+  static auto const generatingInterruptModeDescriptions = std::array<std::string, generatingInterruptModeCount>{
       "Advance if gate rises",       "Advance if gate falls",  "Advance if gate changes",
       "Advance if gate is high",     "Advance if gate is low", "Skip curve",
       "Advance when curve completes"};
@@ -39,9 +39,9 @@ namespace curve_sequencer {
     auto execute(dhe::Latch const &gateLatch, float) const -> Successor {
       if (interrupted(interruptMode(), gateLatch)) {
         setLight(false);
-        return {ModeId::Advancing, step};
+        return {Mode::Sustaining, step};
       }
-      return {ModeId::Generating, step};
+      return {Mode::Generating, step};
     };
 
     void exit() { setLight(false); }

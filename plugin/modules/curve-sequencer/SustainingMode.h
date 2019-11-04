@@ -14,9 +14,9 @@
 namespace dhe {
 namespace curve_sequencer {
 
-  static auto constexpr sustainInterruptModeCount = static_cast<int>(InterruptMode::Skip) + 1;
-  static auto constexpr defaultSustainInterruptMode = static_cast<int>(InterruptMode::Skip);
-  static auto const sustainInterruptModeDescriptions = std::array<std::string, sustainInterruptModeCount>{
+  static auto constexpr sustainingInterruptModeCount = static_cast<int>(InterruptMode::Skip) + 1;
+  static auto constexpr defaultSustainingInterruptMode = static_cast<int>(InterruptMode::Skip);
+  static auto const sustainingInterruptModeDescriptions = std::array<std::string, sustainingInterruptModeCount>{
       "Sustain until gate rises",   "Sustain until gate falls",  "Sustain until gate changes",
       "Sustain until gate is high", "Sustain until gate is low", "Skip sustain"};
 
@@ -39,9 +39,9 @@ namespace curve_sequencer {
     auto execute(dhe::Latch const &gateLatch) const -> Successor {
       if (interrupted(gateLatch)) {
         setLight(false);
-        return {ModeId::Advancing, step};
+        return {Mode::Advancing, (step + 1) & stepMask};
       }
-      return {ModeId::Sustaining, step};
+      return {Mode::Sustaining, step};
     };
 
     void exit() { setLight(false); }
@@ -56,6 +56,7 @@ namespace curve_sequencer {
       lights[Controls::SustainingLights + step].setBrightness(state ? 10.F : 0.F);
     }
 
+    static auto constexpr stepMask = N - 1;
     std::vector<Input> &inputs;
     std::vector<Param> &params;
     std::vector<Light> &lights;

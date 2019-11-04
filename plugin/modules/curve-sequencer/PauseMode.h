@@ -8,7 +8,7 @@ namespace curve_sequencer {
   class PauseMode {
   public:
     auto execute(dhe::Latch const &runLatch) const -> Successor {
-      auto const nextMode = runLatch.isRise() ? ModeId::Idle : ModeId::Paused;
+      auto const nextMode = runLatch.isRise() ? Mode::Idle : Mode::Paused;
       return {nextMode, 0};
     };
   };

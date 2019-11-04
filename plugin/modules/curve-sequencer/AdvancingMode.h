@@ -22,17 +22,17 @@ namespace curve_sequencer {
       auto const selectionStart = this->selectionStart();
       auto const selectionLength = this->selectionLength();
       if (!isSelected(currentStep, selectionStart, selectionLength)) {
-        return {ModeId::Idle, currentStep};
+        return {Mode::Idle, currentStep};
       }
 
       auto const selectionStop = selectionStart + selectionLength;
       for (int index = currentStep; index < selectionStop; index++) {
         auto const step = index & stepMask;
         if (isEnabled(step)) {
-          return {ModeId::Generating, step};
+          return {Mode::Generating, step};
         }
       }
-      return {ModeId::Idle, currentStep};
+      return {Mode::Idle, currentStep};
     };
 
   private:

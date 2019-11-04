@@ -33,21 +33,21 @@ namespace curve_sequencer {
           return;
         }
         updateState(next);
-      } while (mode != ModeId::Paused && mode != ModeId::Idle);
+      } while (mode != Mode::Paused && mode != Mode::Idle);
     }
 
   private:
     auto executeMode(float sampleTime) const -> Successor {
       switch (mode) {
-      case ModeId::Paused:
+      case Mode::Paused:
         return pauseMode.execute(runLatch);
-      case ModeId::Idle:
+      case Mode::Idle:
         return idleMode.execute(runLatch, gateLatch);
-      case ModeId::Advancing:
+      case Mode::Advancing:
         return advancingMode.execute(step);
-      case ModeId::Generating:
+      case Mode::Generating:
         return generatingMode.execute(gateLatch, sampleTime);
-      case ModeId::Sustaining:
+      case Mode::Sustaining:
         return sustainingMode.execute(gateLatch);
       }
     }
@@ -60,16 +60,17 @@ namespace curve_sequencer {
 
     void updateState(Successor next) {
       step = next.step;
+      mode = next.mode;
       switch (next.mode) {
-      case ModeId::Generating:
+      case Mode::Generating:
         generatingMode.enter(step);
         return;
-      case ModeId::Sustaining:
+      case Mode::Sustaining:
         sustainingMode.enter(step);
         return;
-      case ModeId::Paused:
-      case ModeId::Idle:
-      case ModeId::Advancing:
+      case Mode::Paused:
+      case Mode::Idle:
+      case Mode::Advancing:
         return;
       }
     }
@@ -81,7 +82,7 @@ namespace curve_sequencer {
     std::vector<OutputType> &outputs;
     std::vector<ParamType> &params;
     std::vector<LightType> &lights;
-    ModeId mode{ModeId::Paused};
+    Mode mode{Mode::Paused};
     AdvancingMode<N> advancingMode{inputs, params};
     GeneratingMode<N> generatingMode{inputs, params, lights};
     IdleMode<N> idleMode{params};

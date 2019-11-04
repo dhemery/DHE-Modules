@@ -36,10 +36,10 @@ namespace curve_sequencer {
       configDurationRangeSwitch(this, Controls::DurationRangeSwitch);
 
       for (int stepIndex = 0; stepIndex < N; stepIndex++) {
-        configToggle<generateInterruptModeCount>(this, Controls::GenerateModeSwitches + stepIndex, "Generate mode",
-                                                 generateInterruptModeDescriptions, defaultGenerateinterruptMode);
-        configToggle<sustainInterruptModeCount>(this, Controls::SustainModeSwitches + stepIndex, "Sustain mode",
-                                                sustainInterruptModeDescriptions, defaultSustainInterruptMode);
+        configToggle<generatingInterruptModeCount>(this, Controls::GenerateModeSwitches + stepIndex, "Generate mode",
+                                                   generatingInterruptModeDescriptions, defaultGeneratingInterruptMode);
+        configToggle<sustainingInterruptModeCount>(this, Controls::SustainModeSwitches + stepIndex, "Sustain mode",
+                                                   sustainingInterruptModeDescriptions, defaultSustainingInterruptMode);
         configLevelKnob(this, Controls::LevelKnobs + stepIndex, Controls::LevelRangeSwitch, "Level");
         configCurveShapeSwitch(this, Controls::ShapeSwitches + stepIndex, "Shape");
         configCurvatureKnob(this, Controls::CurveKnobs + stepIndex, "Curvature");

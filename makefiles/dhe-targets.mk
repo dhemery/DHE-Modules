@@ -27,25 +27,25 @@ $(DHE_BUILD_DIRNAME):
 config: $(DHE_BUILD_DIRNAME)
 	cd $(DHE_BUILD_DIRNAME) && cmake $(DHE_CMAKE_OPTIONS) ..
 
-build:
+build: config
 	cmake --build $(DHE_BUILD_DIRNAME) $(DHE_CMAKE_BUILD_OPTIONS)
 
 clean-build:
 	rm -rf $(DHE_BUILD_DIRNAME)
 
-test:
+test: build
 	cd $(DHE_BUILD_DIRNAME) && ctest $(DHE_CTEST_OPTIONS)
 
-stage:
+stage: build
 	cmake --build $(DHE_BUILD_DIRNAME) --target install  $(DHE_CMAKE_BUILD_OPTIONS)
 
 clean-stage:
 	rm -rf $(DHE_STAGING_DIRNAME)
 
-run:
+run: stage
 	$(DHE_RACK_EXECUTABLE_PATH) -u $(DHE_RACK_USER_DIRPATH)
 
-debug:
+debug: stage
 	$(DHE_RACK_EXECUTABLE_PATH) -d -u $(DHE_RACK_USER_DIRPATH) -s $(DHE_RACK_SYSTEM_DIRPATH)
 
 clean: clean-build clean-stage

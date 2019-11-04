@@ -20,12 +20,12 @@ namespace curve_sequencer {
 
     auto execute(dhe::Latch const &runLatch, dhe::Latch const &gateLatch) const -> Successor {
       if (runLatch.isFall()) {
-        return {ModeId::Paused, 0};
+        return {Mode::Paused, 0};
       }
       if (gateLatch.isRise()) {
-        return {ModeId::Advancing, startStep()};
+        return {Mode::Advancing, startStep()};
       }
-      return {ModeId::Idle, 0};
+      return {Mode::Idle, 0};
     };
 
   private:

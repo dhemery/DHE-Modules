@@ -13,7 +13,7 @@ static auto constexpr stepCount{8};
 
 using dhe::Latch;
 using dhe::curve_sequencer::InterruptMode;
-using dhe::curve_sequencer::ModeId;
+using dhe::curve_sequencer::Mode;
 using dhe::curve_sequencer::SustainingMode;
 using Controls = dhe::curve_sequencer::CurveSequencerControls<stepCount>;
 
@@ -63,7 +63,7 @@ TEST_F(SustainingModeTest, riseMode_returnsAdvancing_ifGateRises) {
 
   auto next = sustainingMode.execute(risenGate);
 
-  EXPECT_EQ(next.mode, ModeId::Advancing);
+  EXPECT_EQ(next.mode, Mode::Advancing);
 }
 
 TEST_F(SustainingModeTest, riseMode_returnsSustaining_ifGateDoesNotRise) {
@@ -73,13 +73,13 @@ TEST_F(SustainingModeTest, riseMode_returnsSustaining_ifGateDoesNotRise) {
   sustainingMode.enter(step);
 
   auto next = sustainingMode.execute(fallenGate);
-  EXPECT_EQ(next.mode, ModeId::Sustaining);
+  EXPECT_EQ(next.mode, Mode::Sustaining);
 
   next = sustainingMode.execute(stableHighGate);
-  EXPECT_EQ(next.mode, ModeId::Sustaining);
+  EXPECT_EQ(next.mode, Mode::Sustaining);
 
   next = sustainingMode.execute(stableLowGate);
-  EXPECT_EQ(next.mode, ModeId::Sustaining);
+  EXPECT_EQ(next.mode, Mode::Sustaining);
 }
 
 TEST_F(SustainingModeTest, fallMode_returnsAdvancing_ifGateFalls) {
@@ -90,7 +90,7 @@ TEST_F(SustainingModeTest, fallMode_returnsAdvancing_ifGateFalls) {
 
   auto next = sustainingMode.execute(fallenGate);
 
-  EXPECT_EQ(next.mode, ModeId::Advancing);
+  EXPECT_EQ(next.mode, Mode::Advancing);
 }
 
 TEST_F(SustainingModeTest, fallMode_returnsSustaining_ifGateDoesNotFall) {
@@ -100,13 +100,13 @@ TEST_F(SustainingModeTest, fallMode_returnsSustaining_ifGateDoesNotFall) {
   sustainingMode.enter(step);
 
   auto next = sustainingMode.execute(risenGate);
-  EXPECT_EQ(next.mode, ModeId::Sustaining);
+  EXPECT_EQ(next.mode, Mode::Sustaining);
 
   next = sustainingMode.execute(stableHighGate);
-  EXPECT_EQ(next.mode, ModeId::Sustaining);
+  EXPECT_EQ(next.mode, Mode::Sustaining);
 
   next = sustainingMode.execute(stableLowGate);
-  EXPECT_EQ(next.mode, ModeId::Sustaining);
+  EXPECT_EQ(next.mode, Mode::Sustaining);
 }
 
 TEST_F(SustainingModeTest, edgeMode_returnsAdvancing_ifGateChanges) {
@@ -116,10 +116,10 @@ TEST_F(SustainingModeTest, edgeMode_returnsAdvancing_ifGateChanges) {
   sustainingMode.enter(step);
 
   auto next = sustainingMode.execute(risenGate);
-  EXPECT_EQ(next.mode, ModeId::Advancing);
+  EXPECT_EQ(next.mode, Mode::Advancing);
 
   next = sustainingMode.execute(fallenGate);
-  EXPECT_EQ(next.mode, ModeId::Advancing);
+  EXPECT_EQ(next.mode, Mode::Advancing);
 }
 
 TEST_F(SustainingModeTest, edgeMode_returnsSustaining_ifGateDoesNotChange) {
@@ -129,10 +129,10 @@ TEST_F(SustainingModeTest, edgeMode_returnsSustaining_ifGateDoesNotChange) {
   sustainingMode.enter(step);
 
   auto next = sustainingMode.execute(stableHighGate);
-  EXPECT_EQ(next.mode, ModeId::Sustaining);
+  EXPECT_EQ(next.mode, Mode::Sustaining);
 
   next = sustainingMode.execute(stableLowGate);
-  EXPECT_EQ(next.mode, ModeId::Sustaining);
+  EXPECT_EQ(next.mode, Mode::Sustaining);
 }
 
 TEST_F(SustainingModeTest, highMode_returnsAdvancing_ifGateIsHigh) {
@@ -142,10 +142,10 @@ TEST_F(SustainingModeTest, highMode_returnsAdvancing_ifGateIsHigh) {
   sustainingMode.enter(step);
 
   auto next = sustainingMode.execute(risenGate);
-  EXPECT_EQ(next.mode, ModeId::Advancing);
+  EXPECT_EQ(next.mode, Mode::Advancing);
 
   next = sustainingMode.execute(stableHighGate);
-  EXPECT_EQ(next.mode, ModeId::Advancing);
+  EXPECT_EQ(next.mode, Mode::Advancing);
 }
 
 TEST_F(SustainingModeTest, highMode_returnsSustaining_ifGateIsNotHigh) {
@@ -155,10 +155,10 @@ TEST_F(SustainingModeTest, highMode_returnsSustaining_ifGateIsNotHigh) {
   sustainingMode.enter(step);
 
   auto next = sustainingMode.execute(fallenGate);
-  EXPECT_EQ(next.mode, ModeId::Sustaining);
+  EXPECT_EQ(next.mode, Mode::Sustaining);
 
   next = sustainingMode.execute(stableLowGate);
-  EXPECT_EQ(next.mode, ModeId::Sustaining);
+  EXPECT_EQ(next.mode, Mode::Sustaining);
 }
 
 TEST_F(SustainingModeTest, lowMode_returnsAdvancing_ifGateIsLow) {
@@ -168,10 +168,10 @@ TEST_F(SustainingModeTest, lowMode_returnsAdvancing_ifGateIsLow) {
   sustainingMode.enter(step);
 
   auto next = sustainingMode.execute(fallenGate);
-  EXPECT_EQ(next.mode, ModeId::Advancing);
+  EXPECT_EQ(next.mode, Mode::Advancing);
 
   next = sustainingMode.execute(stableLowGate);
-  EXPECT_EQ(next.mode, ModeId::Advancing);
+  EXPECT_EQ(next.mode, Mode::Advancing);
 }
 
 TEST_F(SustainingModeTest, lowMode_returnsSustaining_ifGateIsNotLow) {
@@ -181,10 +181,10 @@ TEST_F(SustainingModeTest, lowMode_returnsSustaining_ifGateIsNotLow) {
   sustainingMode.enter(step);
 
   auto next = sustainingMode.execute(risenGate);
-  EXPECT_EQ(next.mode, ModeId::Sustaining);
+  EXPECT_EQ(next.mode, Mode::Sustaining);
 
   next = sustainingMode.execute(stableHighGate);
-  EXPECT_EQ(next.mode, ModeId::Sustaining);
+  EXPECT_EQ(next.mode, Mode::Sustaining);
 }
 
 TEST_F(SustainingModeTest, skipMode_returnsAdvancing_forEveryGateState) {
@@ -194,14 +194,14 @@ TEST_F(SustainingModeTest, skipMode_returnsAdvancing_forEveryGateState) {
   sustainingMode.enter(step);
 
   auto next = sustainingMode.execute(risenGate);
-  EXPECT_EQ(next.mode, ModeId::Advancing);
+  EXPECT_EQ(next.mode, Mode::Advancing);
 
   next = sustainingMode.execute(fallenGate);
-  EXPECT_EQ(next.mode, ModeId::Advancing);
+  EXPECT_EQ(next.mode, Mode::Advancing);
 
   next = sustainingMode.execute(stableHighGate);
-  EXPECT_EQ(next.mode, ModeId::Advancing);
+  EXPECT_EQ(next.mode, Mode::Advancing);
 
   next = sustainingMode.execute(stableLowGate);
-  EXPECT_EQ(next.mode, ModeId::Advancing);
+  EXPECT_EQ(next.mode, Mode::Advancing);
 }

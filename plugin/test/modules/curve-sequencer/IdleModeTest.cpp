@@ -10,7 +10,7 @@ auto constexpr stepCount{4};
 using Controls = dhe::curve_sequencer::CurveSequencerControls<stepCount>;
 using dhe::Latch;
 using dhe::curve_sequencer::IdleMode;
-using dhe::curve_sequencer::ModeId;
+using dhe::curve_sequencer::Mode;
 
 using ::testing::Test;
 
@@ -29,12 +29,12 @@ protected:
 
 TEST_F(IdleModeTest, ifRunLatchFalls_nextModeIsPaused) {
   auto const next = idleMode.execute(fallenLatch, Latch{});
-  ASSERT_EQ(next.mode, ModeId::Paused);
+  ASSERT_EQ(next.mode, Mode::Paused);
 }
 
 TEST_F(IdleModeTest, ifRunLatchIsHigh_andGateLatchRises_nextModeIsAdvancing) {
   auto next = idleMode.execute(stableHighLatch, risenLatch);
-  ASSERT_EQ(next.mode, ModeId::Advancing);
+  ASSERT_EQ(next.mode, Mode::Advancing);
 }
 
 TEST_F(IdleModeTest, ifRunLatchIsHigh_andGateLatchRises_nextStepIsStartStep) {
@@ -48,11 +48,11 @@ TEST_F(IdleModeTest, ifRunLatchIsHigh_andGateLatchRises_nextStepIsStartStep) {
 
 TEST_F(IdleModeTest, ifRunLatchIsHigh_andGateLatchDoesNotRise_nextModeIsIdle) {
   auto next = idleMode.execute(stableHighLatch, stableLowLatch);
-  ASSERT_EQ(next.mode, ModeId::Idle);
+  ASSERT_EQ(next.mode, Mode::Idle);
 
   next = idleMode.execute(stableHighLatch, stableHighLatch);
-  ASSERT_EQ(next.mode, ModeId::Idle);
+  ASSERT_EQ(next.mode, Mode::Idle);
 
   next = idleMode.execute(stableHighLatch, fallenLatch);
-  ASSERT_EQ(next.mode, ModeId::Idle);
+  ASSERT_EQ(next.mode, Mode::Idle);
 }

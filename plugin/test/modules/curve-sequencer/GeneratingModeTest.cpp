@@ -14,7 +14,7 @@ static auto constexpr stepCount{8};
 using dhe::Latch;
 using dhe::curve_sequencer::GeneratingMode;
 using dhe::curve_sequencer::InterruptMode;
-using dhe::curve_sequencer::ModeId;
+using dhe::curve_sequencer::Mode;
 using Controls = dhe::curve_sequencer::CurveSequencerControls<stepCount>;
 
 static auto constexpr risenGate = Latch{true, true};
@@ -62,7 +62,7 @@ TEST_F(GeneratingModeTest, riseMode_returnsAdvancing_ifGateRises) {
   generatingMode.enter(step);
   auto next = generatingMode.execute(risenGate, 0.F);
 
-  EXPECT_EQ(next.mode, ModeId::Advancing);
+  EXPECT_EQ(next.mode, Mode::Sustaining);
 }
 
 TEST_F(GeneratingModeTest, riseMode_returnsGenerating_ifGateDoesNotRise) {
@@ -72,13 +72,13 @@ TEST_F(GeneratingModeTest, riseMode_returnsGenerating_ifGateDoesNotRise) {
   generatingMode.enter(step);
 
   auto next = generatingMode.execute(fallenGate, 0.F);
-  EXPECT_EQ(next.mode, ModeId::Generating);
+  EXPECT_EQ(next.mode, Mode::Generating);
 
   next = generatingMode.execute(stableHighGate, 0.F);
-  EXPECT_EQ(next.mode, ModeId::Generating);
+  EXPECT_EQ(next.mode, Mode::Generating);
 
   next = generatingMode.execute(stableLowGate, 0.F);
-  EXPECT_EQ(next.mode, ModeId::Generating);
+  EXPECT_EQ(next.mode, Mode::Generating);
 }
 
 TEST_F(GeneratingModeTest, fallMode_returnsAdvancing_ifGateFalls) {
@@ -89,7 +89,7 @@ TEST_F(GeneratingModeTest, fallMode_returnsAdvancing_ifGateFalls) {
 
   auto next = generatingMode.execute(fallenGate, 0.F);
 
-  EXPECT_EQ(next.mode, ModeId::Advancing);
+  EXPECT_EQ(next.mode, Mode::Sustaining);
 }
 
 TEST_F(GeneratingModeTest, fallMode_returnsGenerating_ifGateDoesNotFall) {
@@ -99,13 +99,13 @@ TEST_F(GeneratingModeTest, fallMode_returnsGenerating_ifGateDoesNotFall) {
   generatingMode.enter(step);
 
   auto next = generatingMode.execute(risenGate, 0.F);
-  EXPECT_EQ(next.mode, ModeId::Generating);
+  EXPECT_EQ(next.mode, Mode::Generating);
 
   next = generatingMode.execute(stableHighGate, 0.F);
-  EXPECT_EQ(next.mode, ModeId::Generating);
+  EXPECT_EQ(next.mode, Mode::Generating);
 
   next = generatingMode.execute(stableLowGate, 0.F);
-  EXPECT_EQ(next.mode, ModeId::Generating);
+  EXPECT_EQ(next.mode, Mode::Generating);
 }
 
 TEST_F(GeneratingModeTest, edgeMode_returnsAdvancing_ifGateChanges) {
@@ -115,10 +115,10 @@ TEST_F(GeneratingModeTest, edgeMode_returnsAdvancing_ifGateChanges) {
   generatingMode.enter(step);
 
   auto next = generatingMode.execute(risenGate, 0.F);
-  EXPECT_EQ(next.mode, ModeId::Advancing);
+  EXPECT_EQ(next.mode, Mode::Sustaining);
 
   next = generatingMode.execute(fallenGate, 0.F);
-  EXPECT_EQ(next.mode, ModeId::Advancing);
+  EXPECT_EQ(next.mode, Mode::Sustaining);
 }
 
 TEST_F(GeneratingModeTest, edgeMode_returnsGenerating_ifGateDoesNotChange) {
@@ -128,10 +128,10 @@ TEST_F(GeneratingModeTest, edgeMode_returnsGenerating_ifGateDoesNotChange) {
   generatingMode.enter(step);
 
   auto next = generatingMode.execute(stableHighGate, 0.F);
-  EXPECT_EQ(next.mode, ModeId::Generating);
+  EXPECT_EQ(next.mode, Mode::Generating);
 
   next = generatingMode.execute(stableLowGate, 0.F);
-  EXPECT_EQ(next.mode, ModeId::Generating);
+  EXPECT_EQ(next.mode, Mode::Generating);
 }
 
 TEST_F(GeneratingModeTest, highMode_returnsAdvancing_ifGateIsHigh) {
@@ -141,10 +141,10 @@ TEST_F(GeneratingModeTest, highMode_returnsAdvancing_ifGateIsHigh) {
   generatingMode.enter(step);
 
   auto next = generatingMode.execute(risenGate, 0.F);
-  EXPECT_EQ(next.mode, ModeId::Advancing);
+  EXPECT_EQ(next.mode, Mode::Sustaining);
 
   next = generatingMode.execute(stableHighGate, 0.F);
-  EXPECT_EQ(next.mode, ModeId::Advancing);
+  EXPECT_EQ(next.mode, Mode::Sustaining);
 }
 
 TEST_F(GeneratingModeTest, highMode_returnsGenerating_ifGateIsNotHigh) {
@@ -154,10 +154,10 @@ TEST_F(GeneratingModeTest, highMode_returnsGenerating_ifGateIsNotHigh) {
   generatingMode.enter(step);
 
   auto next = generatingMode.execute(fallenGate, 0.F);
-  EXPECT_EQ(next.mode, ModeId::Generating);
+  EXPECT_EQ(next.mode, Mode::Generating);
 
   next = generatingMode.execute(stableLowGate, 0.F);
-  EXPECT_EQ(next.mode, ModeId::Generating);
+  EXPECT_EQ(next.mode, Mode::Generating);
 }
 
 TEST_F(GeneratingModeTest, lowMode_returnsAdvancing_ifGateIsLow) {
@@ -167,10 +167,10 @@ TEST_F(GeneratingModeTest, lowMode_returnsAdvancing_ifGateIsLow) {
   generatingMode.enter(step);
 
   auto next = generatingMode.execute(fallenGate, 0.F);
-  EXPECT_EQ(next.mode, ModeId::Advancing);
+  EXPECT_EQ(next.mode, Mode::Sustaining);
 
   next = generatingMode.execute(stableLowGate, 0.F);
-  EXPECT_EQ(next.mode, ModeId::Advancing);
+  EXPECT_EQ(next.mode, Mode::Sustaining);
 }
 
 TEST_F(GeneratingModeTest, lowMode_returnsGenerating_ifGateIsNotLow) {
@@ -180,10 +180,10 @@ TEST_F(GeneratingModeTest, lowMode_returnsGenerating_ifGateIsNotLow) {
   generatingMode.enter(step);
 
   auto next = generatingMode.execute(risenGate, 0.F);
-  EXPECT_EQ(next.mode, ModeId::Generating);
+  EXPECT_EQ(next.mode, Mode::Generating);
 
   next = generatingMode.execute(stableHighGate, 0.F);
-  EXPECT_EQ(next.mode, ModeId::Generating);
+  EXPECT_EQ(next.mode, Mode::Generating);
 }
 
 TEST_F(GeneratingModeTest, skipMode_returnsAdvancing_forEveryGateState) {
@@ -193,14 +193,14 @@ TEST_F(GeneratingModeTest, skipMode_returnsAdvancing_forEveryGateState) {
   generatingMode.enter(step);
 
   auto next = generatingMode.execute(risenGate, 0.F);
-  EXPECT_EQ(next.mode, ModeId::Advancing);
+  EXPECT_EQ(next.mode, Mode::Sustaining);
 
   next = generatingMode.execute(fallenGate, 0.F);
-  EXPECT_EQ(next.mode, ModeId::Advancing);
+  EXPECT_EQ(next.mode, Mode::Sustaining);
 
   next = generatingMode.execute(stableHighGate, 0.F);
-  EXPECT_EQ(next.mode, ModeId::Advancing);
+  EXPECT_EQ(next.mode, Mode::Sustaining);
 
   next = generatingMode.execute(stableLowGate, 0.F);
-  EXPECT_EQ(next.mode, ModeId::Advancing);
+  EXPECT_EQ(next.mode, Mode::Sustaining);
 }
