@@ -2,10 +2,10 @@
 
 #include "Advancing.h"
 #include "CurveSequencerControls.h"
-#include "Generating.h"
+#include "GenerateStage.h"
 #include "Idle.h"
 #include "SequenceMode.h"
-#include "Sustaining.h"
+#include "SustainStage.h"
 #include "components/Latch.h"
 #include "controls/CommonInputs.h"
 
@@ -47,9 +47,9 @@ namespace curve_sequencer {
       case SequenceMode::Advancing:
         return advancingMode.execute(step);
       case SequenceMode::Generating:
-        return generatingMode.execute(gateLatch, sampleTime);
+        return generateStage.execute(gateLatch, sampleTime);
       case SequenceMode::Sustaining:
-        return sustainingMode.execute(gateLatch);
+        return sustainStage.execute(gateLatch);
       }
     }
 
@@ -65,10 +65,10 @@ namespace curve_sequencer {
       mode = next.mode;
       switch (next.mode) {
       case SequenceMode::Generating:
-        generatingMode.enter(step);
+        generateStage.enter(step);
         return;
       case SequenceMode::Sustaining:
-        sustainingMode.enter(step);
+        sustainStage.enter(step);
         return;
       case SequenceMode::Idle:
       case SequenceMode::Advancing:
@@ -84,10 +84,10 @@ namespace curve_sequencer {
     std::vector<ParamType> &params;
     std::vector<LightType> &lights;
     SequenceMode mode{SequenceMode::Idle};
-    Advancing<N> advancingMode{inputs, params};
-    Generating<N> generatingMode{inputs, params, lights};
     Idle<N> idleMode{params};
-    Sustaining<N> sustainingMode{inputs, params, lights};
+    Advancing<N> advancingMode{inputs, params};
+    GenerateStage<N> generateStage{inputs, params, lights};
+    SustainStage<N> sustainStage{inputs, params, lights};
   };
 } // namespace curve_sequencer
 } // namespace dhe

@@ -1,8 +1,8 @@
 #pragma once
 
 #include "CurveSequencer.h"
-#include "Generating.h"
-#include "Sustaining.h"
+#include "GenerateStage.h"
+#include "SustainStage.h"
 #include "config/CommonConfig.h"
 #include "config/CurvatureConfig.h"
 #include "config/DurationConfig.h"
@@ -17,6 +17,17 @@ namespace curve_sequencer {
   using rack::engine::Light;
   using rack::engine::Output;
   using rack::engine::Param;
+
+  static auto constexpr generateModeCount = static_cast<int>(StageMode::Generate) + 1;
+  static auto constexpr defaultGenerateMode = static_cast<int>(StageMode::Generate);
+  static auto const generateModeDescriptions = std::array<std::string, generateModeCount>{
+      "Generate while gate is high", "Generate while gate is low", "Generate while gate is calm", "Skip generating",
+      "Generate until done"};
+
+  static auto constexpr sustainModeCount = static_cast<int>(StageMode::Skip) + 1;
+  static auto constexpr defaultSustainMode = static_cast<int>(StageMode::Skip);
+  static auto const sustainModeDescriptions = std::array<std::string, sustainModeCount>{
+      "Sustain while gate is high", "Sustain while gate is low", "Sustain while gate is calm", "Skip sustain"};
 
   template <int N> class CurveSequencerModule : public rack::engine::Module {
     using Controls = CurveSequencerControls<N>;
@@ -36,10 +47,10 @@ namespace curve_sequencer {
       configDurationRangeSwitch(this, Controls::DurationRangeSwitch);
 
       for (int stepIndex = 0; stepIndex < N; stepIndex++) {
-        configToggle<generatingInterruptModeCount>(this, Controls::GenerateModeSwitches + stepIndex, "Generate mode",
-                                                   generatingInterruptModeDescriptions, defaultGeneratingInterruptMode);
-        configToggle<sustainingInterruptModeCount>(this, Controls::SustainModeSwitches + stepIndex, "Sustain mode",
-                                                   sustainingInterruptModeDescriptions, defaultSustainingInterruptMode);
+        configToggle<generateModeCount>(this, Controls::GenerateModeSwitches + stepIndex, "Generate mode",
+                                        generateModeDescriptions, defaultGenerateMode);
+        configToggle<sustainModeCount>(this, Controls::SustainModeSwitches + stepIndex, "Sustain mode",
+                                       sustainModeDescriptions, defaultSustainMode);
         configLevelKnob(this, Controls::LevelKnobs + stepIndex, Controls::LevelRangeSwitch, "Level");
         configCurveShapeSwitch(this, Controls::ShapeSwitches + stepIndex, "Shape");
         configCurvatureKnob(this, Controls::CurveKnobs + stepIndex, "Curvature");

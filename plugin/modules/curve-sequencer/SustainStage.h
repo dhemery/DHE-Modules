@@ -3,7 +3,7 @@
 #include "CurveSequencerControls.h"
 #include "SequenceMode.h"
 #include "SequencerState.h"
-#include "StepMode.h"
+#include "StageMode.h"
 #include "components/Latch.h"
 #include "controls/CommonInputs.h"
 
@@ -14,21 +14,15 @@
 
 namespace dhe {
 namespace curve_sequencer {
-
-  static auto constexpr sustainingInterruptModeCount = static_cast<int>(StepMode::Skip) + 1;
-  static auto constexpr defaultSustainingInterruptMode = static_cast<int>(StepMode::Skip);
-  static auto const sustainingInterruptModeDescriptions = std::array<std::string, sustainingInterruptModeCount>{
-      "Sustain while gate is high", "Sustain while gate is low", "Sustain while gate is calm", "Skip sustain"};
-
   using rack::engine::Input;
   using rack::engine::Light;
   using rack::engine::Param;
 
-  template <int N> class Sustaining {
+  template <int N> class SustainStage {
     using Controls = CurveSequencerControls<N>;
 
   public:
-    Sustaining(std::vector<Input> &inputs, std::vector<Param> &params, std::vector<Light> &lights) :
+    SustainStage(std::vector<Input> &inputs, std::vector<Param> &params, std::vector<Light> &lights) :
         inputs{inputs}, params{params}, lights{lights} {}
 
     void enter(int entryStep) {
@@ -47,8 +41,8 @@ namespace curve_sequencer {
     void exit() { setLight(false); }
 
   private:
-    auto runMode() const -> StepMode {
-      return static_cast<StepMode>(params[Controls::SustainModeSwitches + step].getValue());
+    auto runMode() const -> StageMode {
+      return static_cast<StageMode>(params[Controls::SustainModeSwitches + step].getValue());
     }
 
     void setLight(const bool state) const {
