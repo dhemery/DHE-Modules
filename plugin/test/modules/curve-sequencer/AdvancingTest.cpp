@@ -9,7 +9,7 @@
 static auto constexpr stepCount{8};
 
 using dhe::curve_sequencer::Advancing;
-using dhe::curve_sequencer::Mode;
+using dhe::curve_sequencer::SequenceMode;
 using Controls = dhe::curve_sequencer::CurveSequencerControls<stepCount>;
 
 using ::testing::Test;
@@ -18,7 +18,7 @@ struct AdvancingTest : public Test {
   std::vector<rack::engine::Input> inputs{Controls::InputCount};
   std::vector<rack::engine::Param> params{Controls::ParameterCount};
 
-  Advancing<stepCount> advancingMode{inputs, params};
+  Advancing<stepCount> advancing{inputs, params};
 
   void setEnabledButton(int step, bool state) { params[Controls::EnabledButtons + step].setValue(state ? 1.F : 0.F); }
   void setEnabledInput(int step, bool state) { inputs[Controls::EnabledInputs + step].setVoltage(state ? 10.F : 0.F); }
@@ -36,7 +36,7 @@ TEST_F(AdvancingTest, detectsStepEnabledByButton) {
   auto const enabledStep = 4;
   setEnabledButton(enabledStep, true);
 
-  auto const next = advancingMode.execute(selectionStart);
+  auto const next = advancing.execute(selectionStart);
 
   ASSERT_EQ(next.step, enabledStep);
 }
@@ -48,7 +48,7 @@ TEST_F(AdvancingTest, detectsStepEnabledByInput) {
   auto const enabledStep = 4;
   setEnabledInput(enabledStep, true);
 
-  auto const next = advancingMode.execute(selectionStart);
+  auto const next = advancing.execute(selectionStart);
 
   ASSERT_EQ(next.step, enabledStep);
 }
@@ -59,9 +59,9 @@ TEST_F(AdvancingTest, ifGivenStepIsEnabled_returnsGeneratingGivenStep) {
   auto const givenStep = 2;
   setEnabledButton(givenStep, true);
 
-  auto const next = advancingMode.execute(givenStep);
+  auto const next = advancing.execute(givenStep);
 
-  EXPECT_EQ(next.mode, Mode::Generating);
+  EXPECT_EQ(next.mode, SequenceMode::Generating);
   EXPECT_EQ(next.step, givenStep);
 }
 
@@ -72,9 +72,9 @@ TEST_F(AdvancingTest, ifFirstEnabledStepInSelectionIsAboveGivenStep_returnsGener
   auto const firstEnabledStep = givenStep + 2;
   setEnabledButton(firstEnabledStep, true);
 
-  auto const next = advancingMode.execute(givenStep);
+  auto const next = advancing.execute(givenStep);
 
-  EXPECT_EQ(next.mode, Mode::Generating);
+  EXPECT_EQ(next.mode, SequenceMode::Generating);
   EXPECT_EQ(next.step, firstEnabledStep);
 }
 
@@ -86,9 +86,9 @@ TEST_F(AdvancingTest, ifFirstEnabledStepIsLastStepInSelection_returnsGeneratingE
   auto const lastStepInSelection = selectionStart + selectionLength - 1;
   setEnabledButton(lastStepInSelection, true);
 
-  auto const next = advancingMode.execute(selectionStart);
+  auto const next = advancing.execute(selectionStart);
 
-  EXPECT_EQ(next.mode, Mode::Generating);
+  EXPECT_EQ(next.mode, SequenceMode::Generating);
   EXPECT_EQ(next.step, lastStepInSelection);
 }
 
@@ -99,9 +99,9 @@ TEST_F(AdvancingTest, ifNoStepInSelectionIsEnabled_returnsIdle) {
 
   setEnabledButton(selectionStart + selectionLength, true); // Enabled but not in selection
 
-  auto const next = advancingMode.execute(selectionStart);
+  auto const next = advancing.execute(selectionStart);
 
-  EXPECT_EQ(next.mode, Mode::Idle);
+  EXPECT_EQ(next.mode, SequenceMode::Idle);
 }
 
 TEST_F(AdvancingTest, ifFirstEnabledStepInWrappedSelectionIsBelowSelectionStart_returnsGeneratingEnabledStep) {
@@ -112,9 +112,9 @@ TEST_F(AdvancingTest, ifFirstEnabledStepInWrappedSelectionIsBelowSelectionStart_
   auto const enabledSelectedStepBelowSelectionStart = 1; // Must wrap to find
   setEnabledButton(enabledSelectedStepBelowSelectionStart, true);
 
-  auto const next = advancingMode.execute(selectionStart);
+  auto const next = advancing.execute(selectionStart);
 
-  EXPECT_EQ(next.mode, Mode::Generating);
+  EXPECT_EQ(next.mode, SequenceMode::Generating);
   EXPECT_EQ(next.step, enabledSelectedStepBelowSelectionStart);
 }
 
@@ -126,9 +126,9 @@ TEST_F(AdvancingTest, ifNoStepInWrappedSelectionIsEnabled_returnsIdle) {
   auto const unselectedStep = 4; // The only enabled step is not in the selection
   setEnabledButton(unselectedStep, true);
 
-  auto const next = advancingMode.execute(selectionStart);
+  auto const next = advancing.execute(selectionStart);
 
-  EXPECT_EQ(next.mode, Mode::Idle);
+  EXPECT_EQ(next.mode, SequenceMode::Idle);
 }
 
 TEST_F(AdvancingTest, ifGivenStepIsBelowSelection_returnsIdle) {
@@ -137,9 +137,9 @@ TEST_F(AdvancingTest, ifGivenStepIsBelowSelection_returnsIdle) {
   auto const givenStep = 1; // Lower than any selected step
   setEnabledButton(givenStep, true);
 
-  auto const next = advancingMode.execute(givenStep);
+  auto const next = advancing.execute(givenStep);
 
-  EXPECT_EQ(next.mode, Mode::Idle);
+  EXPECT_EQ(next.mode, SequenceMode::Idle);
 }
 
 TEST_F(AdvancingTest, ifGivenStepIsAboveSelection_returnsIdle) {
@@ -148,9 +148,9 @@ TEST_F(AdvancingTest, ifGivenStepIsAboveSelection_returnsIdle) {
   auto const givenStep = 7; // Higher than any selected step
   setEnabledButton(givenStep, true);
 
-  auto const next = advancingMode.execute(givenStep);
+  auto const next = advancing.execute(givenStep);
 
-  EXPECT_EQ(next.mode, Mode::Idle);
+  EXPECT_EQ(next.mode, SequenceMode::Idle);
 }
 
 TEST_F(AdvancingTest, ifGivenStepIsBetweenEndpointsOfWrappedSelection_returnsIdle) {
@@ -159,9 +159,9 @@ TEST_F(AdvancingTest, ifGivenStepIsBetweenEndpointsOfWrappedSelection_returnsIdl
   auto const givenStep = 5; // Above selection end, below selection start
   setEnabledButton(givenStep, true);
 
-  auto const next = advancingMode.execute(givenStep);
+  auto const next = advancing.execute(givenStep);
 
-  EXPECT_EQ(next.mode, Mode::Idle);
+  EXPECT_EQ(next.mode, SequenceMode::Idle);
 }
 
 TEST_F(AdvancingTest, ifGivenStepIsEnabledAndSelectedAndBelowSelectionStart_returnsGeneratingGivenStep) {
@@ -172,7 +172,7 @@ TEST_F(AdvancingTest, ifGivenStepIsEnabledAndSelectedAndBelowSelectionStart_retu
   auto const enabledSelectedStepBelowSelectionStart = 2; // Must wrap to find
   setEnabledButton(enabledSelectedStepBelowSelectionStart, true);
 
-  auto const next = advancingMode.execute(enabledSelectedStepBelowSelectionStart);
+  auto const next = advancing.execute(enabledSelectedStepBelowSelectionStart);
 
-  EXPECT_EQ(next.mode, Mode::Generating);
+  EXPECT_EQ(next.mode, SequenceMode::Generating);
 }

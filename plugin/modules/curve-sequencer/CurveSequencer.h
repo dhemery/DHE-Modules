@@ -4,7 +4,7 @@
 #include "CurveSequencerControls.h"
 #include "Generating.h"
 #include "Idle.h"
-#include "Mode.h"
+#include "SequenceMode.h"
 #include "Sustaining.h"
 #include "components/Latch.h"
 #include "controls/CommonInputs.h"
@@ -36,19 +36,19 @@ namespace curve_sequencer {
           return;
         }
         updateState(next);
-      } while (mode != Mode::Idle);
+      } while (mode != SequenceMode::Idle);
     }
 
   private:
-    auto executeMode(float sampleTime) const -> Successor {
+    auto executeMode(float sampleTime) const -> SequencerState {
       switch (mode) {
-      case Mode::Idle:
+      case SequenceMode::Idle:
         return idleMode.execute(gateLatch);
-      case Mode::Advancing:
+      case SequenceMode::Advancing:
         return advancingMode.execute(step);
-      case Mode::Generating:
+      case SequenceMode::Generating:
         return generatingMode.execute(gateLatch, sampleTime);
-      case Mode::Sustaining:
+      case SequenceMode::Sustaining:
         return sustainingMode.execute(gateLatch);
       }
     }
@@ -59,19 +59,19 @@ namespace curve_sequencer {
       return isHigh(inputs[Controls::RunInput]) || isPressed(params[Controls::RunButton]);
     }
 
-    void updateState(Successor next) {
+    void updateState(SequencerState next) {
       gateLatch.clock(gateLatch.isHigh()); // To remove the edge
       step = next.step;
       mode = next.mode;
       switch (next.mode) {
-      case Mode::Generating:
+      case SequenceMode::Generating:
         generatingMode.enter(step);
         return;
-      case Mode::Sustaining:
+      case SequenceMode::Sustaining:
         sustainingMode.enter(step);
         return;
-      case Mode::Idle:
-      case Mode::Advancing:
+      case SequenceMode::Idle:
+      case SequenceMode::Advancing:
         return;
       }
     }
@@ -83,7 +83,7 @@ namespace curve_sequencer {
     std::vector<OutputType> &outputs;
     std::vector<ParamType> &params;
     std::vector<LightType> &lights;
-    Mode mode{Mode::Idle};
+    SequenceMode mode{SequenceMode::Idle};
     Advancing<N> advancingMode{inputs, params};
     Generating<N> generatingMode{inputs, params, lights};
     Idle<N> idleMode{params};

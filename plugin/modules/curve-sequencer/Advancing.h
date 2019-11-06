@@ -1,7 +1,8 @@
 #pragma once
 
 #include "CurveSequencerControls.h"
-#include "Mode.h"
+#include "SequenceMode.h"
+#include "SequencerState.h"
 #include "components/Latch.h"
 #include "controls/CommonInputs.h"
 
@@ -18,21 +19,21 @@ namespace curve_sequencer {
   public:
     Advancing(std::vector<Input> &inputs, std::vector<Param> &params) : inputs{inputs}, params{params} {}
 
-    auto execute(int currentStep) const -> Successor {
+    auto execute(int currentStep) const -> SequencerState {
       auto const selectionStart = this->selectionStart();
       auto const selectionLength = this->selectionLength();
       if (!isSelected(currentStep, selectionStart, selectionLength)) {
-        return {Mode::Idle, currentStep};
+        return {SequenceMode::Idle, currentStep};
       }
 
       auto const selectionStop = selectionStart + selectionLength;
       for (int index = currentStep; index < selectionStop; index++) {
         auto const step = index & stepMask;
         if (isEnabled(step)) {
-          return {Mode::Generating, step};
+          return {SequenceMode::Generating, step};
         }
       }
-      return {Mode::Idle, currentStep};
+      return {SequenceMode::Idle, currentStep};
     };
 
   private:

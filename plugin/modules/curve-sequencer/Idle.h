@@ -1,7 +1,8 @@
 #pragma once
 
 #include "CurveSequencerControls.h"
-#include "Mode.h"
+#include "SequenceMode.h"
+#include "SequencerState.h"
 #include "components/Latch.h"
 #include "controls/CommonInputs.h"
 
@@ -18,11 +19,11 @@ namespace curve_sequencer {
   public:
     Idle(std::vector<Param> &params) : params{params} {}
 
-    auto execute(dhe::Latch const &gateLatch) const -> Successor {
+    auto execute(dhe::Latch const &gateLatch) const -> SequencerState {
       if (gateLatch.isRise()) {
-        return {Mode::Advancing, startStep()};
+        return {SequenceMode::Advancing, startStep()};
       }
-      return {Mode::Idle, 0};
+      return {SequenceMode::Idle, 0};
     };
 
   private:

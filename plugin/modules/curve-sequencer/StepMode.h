@@ -5,19 +5,19 @@
 namespace dhe {
 namespace curve_sequencer {
 
-  enum class RunMode { High, Low, Calm, Skip, Generate };
+  enum class StepMode { High, Low, Calm, Skip, Generate };
 
-  static inline auto isRunning(RunMode mode, dhe::Latch const &gate) -> bool {
+  static inline auto isActive(StepMode mode, dhe::Latch const &gate) -> bool {
     switch (mode) {
-    case RunMode::High:
+    case StepMode::High:
       return gate.isHigh();
-    case RunMode::Low:
+    case StepMode::Low:
       return gate.isLow();
-    case RunMode::Calm:
+    case StepMode::Calm:
       return !gate.isEdge();
-    case RunMode::Generate:
+    case StepMode::Generate:
       return true;
-    case RunMode::Skip:
+    case StepMode::Skip:
     default:
       return false;
     }
