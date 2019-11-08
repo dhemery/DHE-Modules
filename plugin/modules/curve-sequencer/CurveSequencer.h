@@ -40,7 +40,7 @@ namespace curve_sequencer {
     }
 
   private:
-    auto executeMode(float sampleTime) const -> SequencerState {
+    auto executeMode(float sampleTime) -> SequencerState {
       switch (mode) {
       case SequenceMode::Idle:
         return idleMode.execute(gateLatch);
@@ -83,10 +83,11 @@ namespace curve_sequencer {
     std::vector<OutputType> &outputs;
     std::vector<ParamType> &params;
     std::vector<LightType> &lights;
+    OneShotPhaseAccumulator phase;
     SequenceMode mode{SequenceMode::Idle};
     Idle<N> idleMode{params};
     Advancing<N> advancingMode{inputs, params};
-    GenerateStage<N> generateStage{inputs, params, lights};
+    GenerateStage<N, OneShotPhaseAccumulator> generateStage{inputs, outputs, params, lights, phase};
     SustainStage<N> sustainStage{inputs, params, lights};
   };
 } // namespace curve_sequencer

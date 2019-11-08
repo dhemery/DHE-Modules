@@ -1,6 +1,7 @@
+#include "curve-sequencer/GenerateStage.h"
+
 #include "components/Latch.h"
 #include "curve-sequencer/CurveSequencerControls.h"
-#include "curve-sequencer/GenerateStage.h"
 #include "curve-sequencer/SequenceMode.h"
 #include "curve-sequencer/StageMode.h"
 
@@ -26,10 +27,12 @@ using ::testing::Test;
 
 struct GenerateStageTest : public Test {
   std::vector<rack::engine::Input> inputs{Controls::InputCount};
+  std::vector<rack::engine::Output> outputs{Controls::OutputCount};
   std::vector<rack::engine::Param> params{Controls::ParameterCount};
   std::vector<rack::engine::Light> lights{Controls::LightCount};
+  dhe::OneShotPhaseAccumulator phase;
 
-  GenerateStage<stepCount> generateStage{inputs, params, lights};
+  GenerateStage<stepCount, dhe::OneShotPhaseAccumulator> generateStage{inputs, outputs, params, lights, phase};
 
   void setInterruptMode(int step, StageMode mode) {
     params[Controls::GenerateModeSwitches + step].setValue(static_cast<float>(mode));
