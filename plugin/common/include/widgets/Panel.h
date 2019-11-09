@@ -61,11 +61,11 @@ public:
 
   static auto svg(const std::string &filename) -> std::shared_ptr<rack::Svg> {
     static const auto moduleAssetDir = pluginAssetDir() + P::moduleSlug + "/";
-    return rack::APP->window->loadSvg(moduleAssetDir + filename + ".svg");
+    return APP->window->loadSvg(moduleAssetDir + filename + ".svg");
   }
 
   static auto panelSvg() -> std::shared_ptr<rack::Svg> {
-    return rack::APP->window->loadSvg(pluginAssetDir() + P::moduleSlug + ".svg");
+    return APP->window->loadSvg(pluginAssetDir() + P::moduleSlug + ".svg");
   }
 
 protected:

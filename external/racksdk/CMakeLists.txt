@@ -1,7 +1,7 @@
 include(FetchContent)
 
 FetchContent_Declare(racksdk
-        URL https://vcvrack.com/downloads/Rack-SDK-1.1.5.zip
+        URL https://vcvrack.com/downloads/Rack-SDK-1.1.6.zip
         )
 FetchContent_GetProperties(racksdk)
 if (NOT racksdk_POPULATED)
