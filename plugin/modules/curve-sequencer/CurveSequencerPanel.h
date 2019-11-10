@@ -40,44 +40,46 @@ namespace curve_sequencer {
     static auto constexpr hp = static_cast<int>(sequenceControlsWidth + N * stepWidth);
 
     CurveSequencerPanel(CurveSequencerModule<N> *module) : Panel<CurveSequencerPanel<N>>(module, hp) {
-      auto const portRadius = 4.2F;
-      auto const buttonRadius = 3.F;
-      auto const lightRadius = 1.088F;
+      auto constexpr portRadius = 4.2F;
+      auto constexpr buttonRadius = 3.F;
+      auto constexpr lightRadius = 1.088F;
+      auto constexpr buttonPortDistance = 7.891F;
 
       auto const left = hp2mm(2.F);
       auto const right = hp2mm(hp - 2.F);
       auto const top = hp2mm(4.F);
       auto const bottom = hp2mm(23);
 
-      auto const inputTop = top + 7.F;
-      auto const inputBottom = bottom - 4.2F;
+      auto const inputTop = top + hp2mm(2.75);
+      auto const inputBottom = bottom - portRadius - 1.F;
       auto const inputDy = (inputBottom - inputTop) / 4.F;
-
-      auto const moduleInputsX = left;
-      auto const moduleParamsX = left + hp2mm(2.F);
 
       auto const runY = inputTop + 0.F * inputDy;
       auto const gateY = inputTop + 1.F * inputDy;
-      auto const resetY = inputTop + 2.F * inputDy;
-      auto const startY = inputTop + 3.F * inputDy;
-      auto const stepsY = inputTop + 4.F * inputDy;
+      auto const selectionY = inputTop + 2.F * inputDy;
+      auto const loopY = inputTop + 3.F * inputDy;
+      auto const resetY = inputTop + 4.F * inputDy;
 
-      this->input(moduleInputsX, runY, Controls::RunInput);
-      this->template button<ToggleButton>(moduleParamsX, runY, Controls::RunButton);
+      this->input(left, runY, Controls::RunInput);
+      this->template button<ToggleButton>(left + buttonPortDistance, runY, Controls::RunButton);
 
-      this->input(moduleInputsX, gateY, Controls::GateInput);
-      this->template button(moduleParamsX, gateY, Controls::GateButton);
+      this->input(left, gateY, Controls::GateInput);
+      this->template button(left + buttonPortDistance, gateY, Controls::GateButton);
 
-      this->input(moduleInputsX, resetY, Controls::ResetInput);
-      this->template button(moduleParamsX, resetY, Controls::ResetButton);
+      auto *sequenceStartKnob = this->template knob<SmallKnob>(left, selectionY, Controls::SelectionStartKnob);
+      sequenceStartKnob->snap = true;
 
-      this->input(moduleInputsX, startY, Controls::StartCVInput);
-      auto *startKnob = this->template knob<SmallKnob>(moduleParamsX, startY, Controls::SelectionStartKnob);
-      startKnob->snap = true;
+      auto const selectionLengthX = left + hp2mm(2.F);
 
-      this->input(moduleInputsX, stepsY, Controls::StepsCVInput);
-      auto *stepsKnob = this->template knob<SmallKnob>(moduleParamsX, stepsY, Controls::SelectionLengthKnob);
-      stepsKnob->snap = true;
+      auto *sequenceLengthKnob
+          = this->template knob<SmallKnob>(selectionLengthX, selectionY, Controls::SelectionLengthKnob);
+      sequenceLengthKnob->snap = true;
+
+      this->input(left, loopY, Controls::LoopInput);
+      this->template button<ToggleButton>(left + buttonPortDistance, loopY, Controls::LoopButton);
+
+      this->input(left, resetY, Controls::ResetInput);
+      this->template button(left + buttonPortDistance, resetY, Controls::ResetButton);
 
       auto const stepX = hp2mm(10.F);
       auto const stepDx = hp2mm(2.25F);
@@ -114,12 +116,14 @@ namespace curve_sequencer {
         this->input(x, enabledPortY, Controls::EnabledInputs + step);
       }
 
-      auto const moduleOutputsX = right;
       auto const outY = bottom - portRadius - 1.F;
+      auto const eosY = top + hp2mm(2.75);
 
-      this->template toggle<2>(moduleOutputsX, levelY, Controls::LevelRangeSwitch);
-      this->template toggle<3>(moduleOutputsX, durationY, Controls::DurationRangeSwitch);
-      this->output(moduleOutputsX, outY, Controls::OutOutput);
+      this->input(right, eosY, Controls::CurveSequencerInput);
+
+      this->template toggle<2>(right, levelY, Controls::LevelRangeSwitch);
+      this->template toggle<3>(right, durationY, Controls::DurationRangeSwitch);
+      this->output(right, outY, Controls::CurveSequencerOutput);
 
       this->addChild(rack::createWidgetCentered<StartMarker<CurveSequencerPanel<N>>>(
           rack::app::mm2px({stepX - activeLightXOffset, activeY})));

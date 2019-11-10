@@ -38,6 +38,7 @@ namespace curve_sequencer {
 
       configButton(this, Controls::RunButton, "Run", {"from input", "Yes"}, 1);
       configButton(this, Controls::GateButton, "Gate", {"from input", "High"}, 0);
+      configButton(this, Controls::LoopButton, "Loop", {"from input", "Yes"}, 0);
       configButton(this, Controls::ResetButton, "Reset", {"from input", "High"}, 0);
 
       configParam(Controls::SelectionStartKnob, 0.F, N - 1, 0.F, "Start step", "", 0.F, 1.F, 1.F);

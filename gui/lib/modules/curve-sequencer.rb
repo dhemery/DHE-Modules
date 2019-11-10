@@ -40,41 +40,37 @@ top = hp2mm(4)
 bottom = hp2mm(23)
 
 
+
+
 ###############################################################################
 #
-# Sequence Controls
+# Sequence Controls (Left)
 #
 ###############################################################################
 
-input_top = top + hp2mm(2.75)
-input_bottom = bottom - Port::DIAMETER / 2.0 - 1.0
-input_dy = (input_bottom - input_top) / 4
-run_y = input_top + 0 * input_dy
-selection_y = input_top + 1 * input_dy
-gate_y = input_top + 2 * input_dy
-reset_y = input_top + 3 * input_dy
-in_y = input_top + 4 * input_dy
+sequence_controls_top = top + hp2mm(2.75)
+sequence_controls_bottom = bottom - Port::DIAMETER / 2.0 - 1.0
+sequence_controls_dy = (sequence_controls_bottom - sequence_controls_top) / 4
+run_y = sequence_controls_top + 0 * sequence_controls_dy
+gate_y = sequence_controls_top + 1 * sequence_controls_dy
+selection_y = sequence_controls_top + 2 * sequence_controls_dy
+loop_y = sequence_controls_top + 3 * sequence_controls_dy
+reset_y = sequence_controls_top + 4 * sequence_controls_dy
 
-module_inputs_x = left
-module_params_x = left + hp2mm(2)
+input_button_port x: left, y: run_y, label: 'RUN'
 
-connector left: module_inputs_x, right: module_params_x, y: run_y
-input_button_port x: module_inputs_x, y: run_y, label: 'RUN'
-# button x: module_params_x, y: run_y
+input_button_port x: left, y: gate_y, label: 'GATE'
 
-connector left: module_inputs_x, right: module_params_x, y: reset_y
-input_button_port x: module_inputs_x, y: reset_y, label: 'RESET'
-# button x: module_params_x, y: reset_y
+selection_length_x = left + hp2mm(2)
+connector left: left, right: selection_length_x, y: selection_y
+small_knob x: left, y: selection_y, label: 'START'
+small_knob x: selection_length_x, y: selection_y, label: 'LENGTH'
 
-connector left: module_inputs_x, right: module_params_x, y: gate_y
-input_button_port x: module_inputs_x, y: gate_y, label: 'GATE'
-# button x: module_params_x, y: gate_y
+input_button_port x: left, y: loop_y, label: 'LOOP'
 
-connector left: module_inputs_x, right: module_params_x, y: selection_y
-small_knob x: module_inputs_x, y: selection_y, label: 'START'
-small_knob x: module_params_x, y: selection_y, label: 'LENGTH'
+input_button_port x: left, y: reset_y, label: 'RESET'
 
-input_port x: module_inputs_x, y: in_y, label: 'IN'
+
 
 
 ###############################################################################
@@ -132,22 +128,24 @@ end
 position_marker(x: step_x - Light::DIAMETER, y: active_y, type: :start)
 position_marker(x: step_x + step_dx * (steps - 1) + Light::DIAMETER, y: active_y, type: :end)
 
+
+
+
 ###############################################################################
 #
-# Output Controls
+# Sequence Controls (Right)
 #
 ###############################################################################
 
-output_x = right
 out_y = bottom - Port::DIAMETER / 2.0 - 1.0
-eos_y = top + hp2mm(2.75)
+in_y = top + hp2mm(2.75)
 
-output_port x: output_x, y: eos_y, label: 'EOS'
+input_port x: right, y: in_y, label: 'IN'
 
-connector left: line_x, right: output_x, y: level_y
-polarity_toggle x: output_x, y: level_y, selection: 2
+connector left: line_x, right: right, y: level_y
+polarity_toggle x: right, y: level_y, selection: 2
 
-connector left: line_x, right: output_x, y: duration_y
-duration_toggle x: output_x, y: duration_y
+connector left: line_x, right: right, y: duration_y
+duration_toggle x: right, y: duration_y
 
-output_port x: output_x, y: out_y, label: 'OUT'
+output_port x: right, y: out_y, label: 'OUT'

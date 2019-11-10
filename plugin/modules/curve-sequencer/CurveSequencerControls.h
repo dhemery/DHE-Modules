@@ -9,10 +9,11 @@ namespace curve_sequencer {
   template <int N> struct CurveSequencerControls {
     enum ParameterIds {
       RunButton,
-      ResetButton,
       GateButton,
       SelectionStartKnob,
       SelectionLengthKnob,
+      LoopButton,
+      ResetButton,
       DurationRangeSwitch,
       LevelRangeSwitch,
       ENUMS(CurveKnobs, N),
@@ -25,9 +26,17 @@ namespace curve_sequencer {
       ParameterCount
     };
 
-    enum InputIds { GateInput, ResetInput, RunInput, StartCVInput, StepsCVInput, ENUMS(EnabledInputs, N), InputCount };
+    enum InputIds {
+      CurveSequencerInput,
+      GateInput,
+      LoopInput,
+      ResetInput,
+      RunInput,
+      ENUMS(EnabledInputs, N),
+      InputCount
+    };
 
-    enum OutputIds { OutOutput, OutputCount };
+    enum OutputIds { CurveSequencerOutput, OutputCount };
 
     enum LightIds { ENUMS(GeneratingLights, N), ENUMS(SustainingLights, N), LightCount };
   };

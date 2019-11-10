@@ -34,7 +34,7 @@ namespace curve_sequencer {
     void enter(int entryStep) {
       step = entryStep;
       phase.reset();
-      startVoltage = outputs[Controls::OutOutput].getVoltage();
+      startVoltage = outputs[Controls::CurveSequencerOutput].getVoltage();
       setLight(true);
     }
 
@@ -62,7 +62,7 @@ namespace curve_sequencer {
 
     void generate(float sampleTime) {
       phase.advance(sampleTime / duration());
-      outputs[Controls::OutOutput].setVoltage(scale(taper(phase.phase()), startVoltage, level()));
+      outputs[Controls::CurveSequencerOutput].setVoltage(scale(taper(phase.phase()), startVoltage, level()));
     }
 
     auto runMode() const -> StageMode {
