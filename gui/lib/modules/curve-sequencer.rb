@@ -46,36 +46,35 @@ bottom = hp2mm(23)
 #
 ###############################################################################
 
-input_top = top + 7.0
-input_bottom = bottom - 4.2
+input_top = top + hp2mm(2.75)
+input_bottom = bottom - Port::DIAMETER / 2.0 - 1.0
 input_dy = (input_bottom - input_top) / 4
 run_y = input_top + 0 * input_dy
-gate_y = input_top + 1 * input_dy
-reset_y = input_top + 2 * input_dy
-selection_y = input_top + 3 * input_dy
+selection_y = input_top + 1 * input_dy
+gate_y = input_top + 2 * input_dy
+reset_y = input_top + 3 * input_dy
 in_y = input_top + 4 * input_dy
 
 module_inputs_x = left
 module_params_x = left + hp2mm(2)
 
 connector left: module_inputs_x, right: module_params_x, y: run_y
-port x: module_inputs_x, y: run_y, label: 'RUN'
-button x: module_params_x, y: run_y
+input_button_port x: module_inputs_x, y: run_y, label: 'RUN'
+# button x: module_params_x, y: run_y
 
 connector left: module_inputs_x, right: module_params_x, y: reset_y
-port x: module_inputs_x, y: reset_y, label: 'RESET'
-button x: module_params_x, y: reset_y
+input_button_port x: module_inputs_x, y: reset_y, label: 'RESET'
+# button x: module_params_x, y: reset_y
 
 connector left: module_inputs_x, right: module_params_x, y: gate_y
-port x: module_inputs_x, y: gate_y, label: 'GATE'
-button x: module_params_x, y: gate_y
+input_button_port x: module_inputs_x, y: gate_y, label: 'GATE'
+# button x: module_params_x, y: gate_y
 
 connector left: module_inputs_x, right: module_params_x, y: selection_y
 small_knob x: module_inputs_x, y: selection_y, label: 'START'
 small_knob x: module_params_x, y: selection_y, label: 'LENGTH'
 
 input_port x: module_inputs_x, y: in_y, label: 'IN'
-
 
 
 ###############################################################################
@@ -125,6 +124,7 @@ step_label_y = top - hp2mm(0.5)
   small_knob y: duration_y, x: x, label: ''
   button y: enabled_button_y, x: x, label: ''
   port y: enabled_port_y, x: x, label: ''
+  line x1: x, x2: x, y1: enabled_button_y, y2: enabled_port_y
   line_x = x + step_dx / 2.0
   line x1: line_x, x2: line_x, y1: channel_separator_top, y2: bottom
 end
@@ -140,6 +140,9 @@ position_marker(x: step_x + step_dx * (steps - 1) + Light::DIAMETER, y: active_y
 
 output_x = right
 out_y = bottom - Port::DIAMETER / 2.0 - 1.0
+eos_y = top + hp2mm(2.75)
+
+output_port x: output_x, y: eos_y, label: 'EOS'
 
 connector left: line_x, right: output_x, y: level_y
 polarity_toggle x: output_x, y: level_y, selection: 2
