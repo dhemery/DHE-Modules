@@ -52,8 +52,8 @@ input_dy = (input_bottom - input_top) / 4
 run_y = input_top + 0 * input_dy
 gate_y = input_top + 1 * input_dy
 reset_y = input_top + 2 * input_dy
-start_y = input_top + 3 * input_dy
-steps_y = input_top + 4 * input_dy
+selection_y = input_top + 3 * input_dy
+in_y = input_top + 4 * input_dy
 
 module_inputs_x = left
 module_params_x = left + hp2mm(2)
@@ -70,13 +70,12 @@ connector left: module_inputs_x, right: module_params_x, y: gate_y
 port x: module_inputs_x, y: gate_y, label: 'GATE'
 button x: module_params_x, y: gate_y
 
-connector left: module_inputs_x, right: module_params_x, y: start_y
-port x: module_inputs_x, y: start_y, label: 'START'
-small_knob x: module_params_x, y: start_y
+connector left: module_inputs_x, right: module_params_x, y: selection_y
+small_knob x: module_inputs_x, y: selection_y, label: 'START'
+small_knob x: module_params_x, y: selection_y, label: 'LENGTH'
 
-connector left: module_inputs_x, right: module_params_x, y: steps_y
-port x: module_inputs_x, y: steps_y, label: 'LENGTH'
-small_knob x: module_params_x, y: steps_y
+input_port x: module_inputs_x, y: in_y, label: 'IN'
+
 
 
 ###############################################################################
@@ -141,6 +140,11 @@ position_marker(x: step_x + step_dx * (steps - 1) + Light::DIAMETER, y: active_y
 
 output_x = right
 out_y = bottom - Port::DIAMETER / 2.0 - 1.0
+
+connector left: line_x, right: output_x, y: level_y
 polarity_toggle x: output_x, y: level_y, selection: 2
+
+connector left: line_x, right: output_x, y: duration_y
 duration_toggle x: output_x, y: duration_y
+
 output_port x: output_x, y: out_y, label: 'OUT'
