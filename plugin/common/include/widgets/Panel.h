@@ -74,7 +74,7 @@ protected:
   auto width() const -> float { return box.size.x * rack::app::MM_PER_IN / rack::app::SVG_DPI; }
 
   template <typename T> auto param(float x, float y, int index) -> T * {
-    auto const &pos = mmvec(x, y);
+    auto const pos = mmvec(x, y);
     auto *widget = rack::createParamCentered<T>(pos, module, index);
     widget->shadow->opacity = 0.F;
     addParam(widget);
@@ -90,7 +90,7 @@ protected:
   }
 
   template <typename L = rack::componentlibrary::GreenLight> void light(float x, float y, int index) {
-    auto const &pos = mmvec(x, y);
+    auto const pos = mmvec(x, y);
     auto *light = rack::createLightCentered<rack::componentlibrary::SmallLight<L>>(pos, module, index);
     addChild(light);
   }
@@ -108,14 +108,14 @@ protected:
   }
 
   void input(float x, float y, int index) {
-    auto const &pos = mmvec(x, y);
+    auto const pos = mmvec(x, y);
     auto *input = rack::createInputCentered<InputJack<P>>(pos, module, index);
     input->shadow->opacity = 0.F;
     addInput(input);
   }
 
   void output(float x, float y, int index) {
-    auto const &pos = mmvec(x, y);
+    auto const pos = mmvec(x, y);
     auto *output = rack::createOutputCentered<OutputJack<P>>(pos, module, index);
     output->shadow->opacity = 0.F;
     addOutput(output);
