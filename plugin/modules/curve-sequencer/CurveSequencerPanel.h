@@ -9,6 +9,8 @@
 namespace dhe {
 
 namespace curve_sequencer {
+  auto constexpr stepX = hp2mm(10.F);
+  auto constexpr stepDx = hp2mm(2.25F);
 
   template <typename P> class GenerateModeStepper : public Toggle<P, generateModeCount> {
   public:
@@ -23,11 +25,15 @@ namespace curve_sequencer {
   template <typename P> class StartMarker : public rack::widget::SvgWidget {
   public:
     StartMarker() { setSvg(P::svg("marker-start")); }
+    void move(int step) { this->box.pos.x = mm2px(x(step)); }
+    static auto constexpr x(int step) -> float { return stepX + static_cast<float>(step) * stepDx - lightDiameter; }
   };
 
   template <typename P> class EndMarker : public rack::widget::SvgWidget {
   public:
     EndMarker() { setSvg(P::svg("marker-end")); }
+    void move(int step) { this->box.pos.x = mm2px(x(step)); }
+    static auto constexpr x(int step) -> float { return stepX + static_cast<float>(step) * stepDx + lightDiameter; }
   };
 
   template <int N> class CurveSequencerPanel : public Panel<CurveSequencerPanel<N>> {
@@ -40,25 +46,20 @@ namespace curve_sequencer {
     static auto constexpr hp = static_cast<int>(sequenceControlsWidth + N * stepWidth);
 
     CurveSequencerPanel(CurveSequencerModule<N> *module) : Panel<CurveSequencerPanel<N>>(module, hp) {
-      auto constexpr portRadius = 4.2F;
-      auto constexpr buttonRadius = 3.F;
-      auto constexpr lightRadius = 1.088F;
-      auto constexpr buttonPortDistance = 7.891F;
+      auto constexpr left = hp2mm(2.F);
+      auto constexpr right = hp2mm(hp - 2.F);
+      auto constexpr top = hp2mm(4.F);
+      auto constexpr bottom = hp2mm(23);
 
-      auto const left = hp2mm(2.F);
-      auto const right = hp2mm(hp - 2.F);
-      auto const top = hp2mm(4.F);
-      auto const bottom = hp2mm(23);
+      auto constexpr inputTop = top + hp2mm(2.75);
+      auto constexpr inputBottom = bottom - portRadius - 1.F;
+      auto constexpr inputDy = (inputBottom - inputTop) / 4.F;
 
-      auto const inputTop = top + hp2mm(2.75);
-      auto const inputBottom = bottom - portRadius - 1.F;
-      auto const inputDy = (inputBottom - inputTop) / 4.F;
-
-      auto const runY = inputTop + 0.F * inputDy;
-      auto const gateY = inputTop + 1.F * inputDy;
-      auto const selectionY = inputTop + 2.F * inputDy;
-      auto const loopY = inputTop + 3.F * inputDy;
-      auto const resetY = inputTop + 4.F * inputDy;
+      auto constexpr runY = inputTop + 0.F * inputDy;
+      auto constexpr gateY = inputTop + 1.F * inputDy;
+      auto constexpr selectionY = inputTop + 2.F * inputDy;
+      auto constexpr loopY = inputTop + 3.F * inputDy;
+      auto constexpr resetY = inputTop + 4.F * inputDy;
 
       this->input(left, runY, Controls::RunInput);
       this->template button<ToggleButton>(left + buttonPortDistance, runY, Controls::RunButton);
@@ -69,7 +70,7 @@ namespace curve_sequencer {
       auto *sequenceStartKnob = this->template knob<SmallKnob>(left, selectionY, Controls::SelectionStartKnob);
       sequenceStartKnob->snap = true;
 
-      auto const selectionLengthX = left + hp2mm(2.F);
+      auto constexpr selectionLengthX = left + hp2mm(2.F);
 
       auto *sequenceLengthKnob
           = this->template knob<SmallKnob>(selectionLengthX, selectionY, Controls::SelectionLengthKnob);
@@ -81,25 +82,20 @@ namespace curve_sequencer {
       this->input(left, resetY, Controls::ResetInput);
       this->template button(left + buttonPortDistance, resetY, Controls::ResetButton);
 
-      auto const stepX = hp2mm(10.F);
-      auto const stepDx = hp2mm(2.25F);
-
-      auto const activeY = top + lightRadius;
-      auto const generatingModeY = top + hp2mm(2.25F);
-      auto const sustainingModeY = top + hp2mm(4.5F);
-      auto const levelY = top + hp2mm(6.75F);
-      auto const shapeY = top + hp2mm(9.25F);
-      auto const curveY = top + hp2mm(11.75F);
-      auto const durationY = top + hp2mm(14.25F);
-      auto const enabledPortY = bottom - portRadius;
-      auto const enabledButtonY = enabledPortY - portRadius - buttonRadius - 1.F;
-
-      auto const activeLightXOffset = lightRadius * 2.F;
+      auto constexpr activeY = top + lightRadius;
+      auto constexpr generatingModeY = top + hp2mm(2.25F);
+      auto constexpr sustainingModeY = top + hp2mm(4.5F);
+      auto constexpr levelY = top + hp2mm(6.75F);
+      auto constexpr shapeY = top + hp2mm(9.25F);
+      auto constexpr curveY = top + hp2mm(11.75F);
+      auto constexpr durationY = top + hp2mm(14.25F);
+      auto constexpr enabledPortY = bottom - portRadius;
+      auto constexpr enabledButtonY = enabledPortY - portRadius - buttonRadius - 1.F;
 
       for (float step = 0; step < N; step++) {
         auto const x = stepX + stepDx * (float) step;
-        this->light(x - activeLightXOffset, activeY, Controls::GeneratingLights + step);
-        this->template light<rack::componentlibrary::RedLight>(x + activeLightXOffset, activeY,
+        this->light(x - lightDiameter, activeY, Controls::GeneratingLights + step);
+        this->template light<rack::componentlibrary::RedLight>(x + lightDiameter, activeY,
                                                                Controls::SustainingLights + step);
 
         this->template toggle<GenerateModeStepper>(x, generatingModeY, Controls::GenerateModeSwitches + step);
@@ -116,8 +112,8 @@ namespace curve_sequencer {
         this->input(x, enabledPortY, Controls::EnabledInputs + step);
       }
 
-      auto const outY = bottom - portRadius - 1.F;
-      auto const eosY = top + hp2mm(2.75);
+      auto constexpr outY = bottom - portRadius - 1.F;
+      auto constexpr eosY = top + hp2mm(2.75);
 
       this->input(right, eosY, Controls::CurveSequencerInput);
 
@@ -126,9 +122,9 @@ namespace curve_sequencer {
       this->output(right, outY, Controls::CurveSequencerOutput);
 
       this->addChild(rack::createWidgetCentered<StartMarker<CurveSequencerPanel<N>>>(
-          rack::app::mm2px({stepX - activeLightXOffset, activeY})));
+          mm2px(StartMarker<CurveSequencerPanel<N>>::x(0), activeY)));
       this->addChild(rack::createWidgetCentered<EndMarker<CurveSequencerPanel<N>>>(
-          rack::app::mm2px({stepX + activeLightXOffset, activeY})));
+          mm2px(EndMarker<CurveSequencerPanel<N>>::x(0), activeY)));
     }
   }; // namespace dhe
 

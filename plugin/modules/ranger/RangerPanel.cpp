@@ -5,11 +5,11 @@ namespace dhe {
 RangerPanel::RangerPanel(Ranger *module) : Panel{module, hp} {
   auto widgetRightEdge = width();
 
-  auto column1 = 1.5F * mmPerHp();
+  auto constexpr column1 = mm2hp(1.5F);
   auto column2 = widgetRightEdge - column1;
 
   auto y = 14.5F;
-  auto dy = 15.F;
+  auto constexpr dy = 15.F;
 
   y += dy * 0.75F;
   knob<MediumKnob>(column1, y, Ranger::LevelKnob);

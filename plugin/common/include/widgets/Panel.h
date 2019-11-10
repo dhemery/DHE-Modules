@@ -22,13 +22,25 @@
 extern rack::plugin::Plugin *pluginInstance;
 
 namespace dhe {
-static inline auto mmPerHp() -> float {
-  static auto const mmPerHp = rack::app::RACK_GRID_WIDTH * rack::app::MM_PER_IN / rack::app::SVG_DPI;
-  return mmPerHp;
-}
-static inline auto hp2px(float hp) -> float { return rack::app::RACK_GRID_WIDTH * hp; }
-static inline auto hp2px(int hp) -> float { return hp2px((float) hp); }
-static inline auto hp2mm(float hp) -> float { return hp * mmPerHp(); }
+auto constexpr pxPerHp = 15.F;
+auto constexpr mmPerIn = 25.4F;
+auto constexpr pxPerIn = 75.F;
+auto constexpr mmPerHp = 5.08F;
+auto constexpr pxPerMm = pxPerIn / mmPerIn;
+
+auto constexpr hp2px(float hp) -> float { return hp * pxPerHp; }
+auto constexpr hp2mm(float hp) -> float { return hp * mmPerHp; }
+auto constexpr mm2px(float mm) -> float { return mm * pxPerMm; };
+auto constexpr mm2hp(float mm) -> float { return mm / mmPerHp; };
+
+static inline auto mm2px(float x, float y) -> rack::math::Vec { return {mm2px(x), mm2px(y)}; }
+// static inline auto mm2px(rack::math::Vec const &mm) -> rack::math::Vec { return mm2px(mm.x, mm.y); }
+
+auto constexpr portRadius = 4.2F;
+auto constexpr buttonRadius = 3.F;
+auto constexpr lightRadius = 1.088F;
+auto constexpr lightDiameter = lightRadius * 2.F;
+auto constexpr buttonPortDistance = 7.891F;
 
 template <typename P> class Jack : public rack::app::SvgPort {
 public:
@@ -39,8 +51,6 @@ template <typename P> class InputJack : public Jack<P> {};
 
 template <typename P> class OutputJack : public Jack<P> {};
 
-static inline auto mmvec(float x, float y) -> rack::math::Vec { return rack::app::mm2px(rack::math::Vec{x, y}); }
-
 static inline auto pluginAssetDir() -> std::string {
   static const auto dir = rack::asset::plugin(pluginInstance, std::string("svg/"));
   return dir;
@@ -50,7 +60,7 @@ template <typename P> class Panel : public rack::app::ModuleWidget {
 public:
   Panel(rack::engine::Module *module, int widgetHp) {
     setModule(module);
-    box.size = rack::math::Vec{hp2px(widgetHp), rack::app::RACK_GRID_HEIGHT};
+    box.size = rack::math::Vec{hp2px((float) widgetHp), rack::app::RACK_GRID_HEIGHT};
 
     auto panel = new rack::app::SvgPanel();
     panel->setBackground(panelSvg());
@@ -74,8 +84,7 @@ protected:
   auto width() const -> float { return box.size.x * rack::app::MM_PER_IN / rack::app::SVG_DPI; }
 
   template <typename T> auto param(float x, float y, int index) -> T * {
-    auto const pos = mmvec(x, y);
-    auto *widget = rack::createParamCentered<T>(pos, module, index);
+    auto *widget = rack::createParamCentered<T>(mm2px(x, y), module, index);
     widget->shadow->opacity = 0.F;
     addParam(widget);
     return widget;
@@ -90,8 +99,7 @@ protected:
   }
 
   template <typename L = rack::componentlibrary::GreenLight> void light(float x, float y, int index) {
-    auto const pos = mmvec(x, y);
-    auto *light = rack::createLightCentered<rack::componentlibrary::SmallLight<L>>(pos, module, index);
+    auto *light = rack::createLightCentered<rack::componentlibrary::SmallLight<L>>(mm2px(x, y), module, index);
     addChild(light);
   }
 
@@ -108,15 +116,13 @@ protected:
   }
 
   void input(float x, float y, int index) {
-    auto const pos = mmvec(x, y);
-    auto *input = rack::createInputCentered<InputJack<P>>(pos, module, index);
+    auto *input = rack::createInputCentered<InputJack<P>>(mm2px(x, y), module, index);
     input->shadow->opacity = 0.F;
     addInput(input);
   }
 
   void output(float x, float y, int index) {
-    auto const pos = mmvec(x, y);
-    auto *output = rack::createOutputCentered<OutputJack<P>>(pos, module, index);
+    auto *output = rack::createOutputCentered<OutputJack<P>>(mm2px(x, y), module, index);
     output->shadow->opacity = 0.F;
     addOutput(output);
   }
