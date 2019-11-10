@@ -40,8 +40,8 @@ namespace curve_sequencer {
       configButton(this, Controls::GateButton, "Gate", {"from input", "High"}, 0);
       configButton(this, Controls::ResetButton, "Reset", {"from input", "High"}, 0);
 
-      configParam(Controls::StartKnob, 0.F, N - 1, 0.F, "Start step", "", 0.F, 1.F, 1.F);
-      configParam(Controls::StepsKnob, 1.F, N, N, "Sequence length", " steps");
+      configParam(Controls::SelectionStartKnob, 0.F, N - 1, 0.F, "Start step", "", 0.F, 1.F, 1.F);
+      configParam(Controls::SelectionLengthKnob, 1.F, N, N, "Sequence length", " steps");
 
       configLevelRangeSwitch(this, Controls::LevelRangeSwitch);
       configDurationRangeSwitch(this, Controls::DurationRangeSwitch);

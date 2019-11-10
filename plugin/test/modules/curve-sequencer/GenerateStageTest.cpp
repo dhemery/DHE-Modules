@@ -34,7 +34,7 @@ struct GenerateStageTest : public Test {
 
   GenerateStage<stepCount, dhe::OneShotPhaseAccumulator> generateStage{inputs, outputs, params, lights, phase};
 
-  void setInterruptMode(int step, StageMode mode) {
+  void givenGenerateMode(int step, StageMode mode) {
     params[Controls::GenerateModeSwitches + step].setValue(static_cast<float>(mode));
   }
 };
@@ -60,7 +60,7 @@ TEST_F(GenerateStageTest, exit_dimsStepGeneratingLight) {
 
 TEST_F(GenerateStageTest, highMode_returnsGenerating_ifGateIsHigh) {
   auto const step = 7;
-  setInterruptMode(step, StageMode::High);
+  givenGenerateMode(step, StageMode::High);
 
   generateStage.enter(step);
 
@@ -73,7 +73,7 @@ TEST_F(GenerateStageTest, highMode_returnsGenerating_ifGateIsHigh) {
 
 TEST_F(GenerateStageTest, highMode_returnsSustaining_ifGateIsLow) {
   auto const step = 6;
-  setInterruptMode(step, StageMode::High);
+  givenGenerateMode(step, StageMode::High);
 
   generateStage.enter(step);
 
@@ -86,7 +86,7 @@ TEST_F(GenerateStageTest, highMode_returnsSustaining_ifGateIsLow) {
 
 TEST_F(GenerateStageTest, lowMode_returnsGenerating_ifGateIsLow) {
   auto const step = 1;
-  setInterruptMode(step, StageMode::Low);
+  givenGenerateMode(step, StageMode::Low);
 
   generateStage.enter(step);
 
@@ -99,7 +99,7 @@ TEST_F(GenerateStageTest, lowMode_returnsGenerating_ifGateIsLow) {
 
 TEST_F(GenerateStageTest, lowMode_returnsSustaining_ifGateIsHigh) {
   auto const step = 0;
-  setInterruptMode(step, StageMode::Low);
+  givenGenerateMode(step, StageMode::Low);
 
   generateStage.enter(step);
 
@@ -112,7 +112,7 @@ TEST_F(GenerateStageTest, lowMode_returnsSustaining_ifGateIsHigh) {
 
 TEST_F(GenerateStageTest, calmMode_returnsGenerating_ifGateIsStable) {
   auto const step = 5;
-  setInterruptMode(step, StageMode::Calm);
+  givenGenerateMode(step, StageMode::Calm);
 
   generateStage.enter(step);
 
@@ -125,7 +125,7 @@ TEST_F(GenerateStageTest, calmMode_returnsGenerating_ifGateIsStable) {
 
 TEST_F(GenerateStageTest, calmMode_returnsSustaining_ifGateChanges) {
   auto const step = 4;
-  setInterruptMode(step, StageMode::Calm);
+  givenGenerateMode(step, StageMode::Calm);
 
   generateStage.enter(step);
 
@@ -138,7 +138,7 @@ TEST_F(GenerateStageTest, calmMode_returnsSustaining_ifGateChanges) {
 
 TEST_F(GenerateStageTest, skipMode_returnsSustaining_forEveryGateState) {
   auto const step = 0;
-  setInterruptMode(step, StageMode::Skip);
+  givenGenerateMode(step, StageMode::Skip);
 
   generateStage.enter(step);
 

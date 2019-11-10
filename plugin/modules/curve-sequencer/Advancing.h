@@ -39,8 +39,8 @@ namespace curve_sequencer {
   private:
     using Controls = CurveSequencerControls<N>;
 
-    auto selectionStart() const -> int { return static_cast<int>(valueOf(params[Controls::StartKnob])); }
-    auto selectionLength() const -> int { return static_cast<int>(valueOf(params[Controls::StepsKnob])); }
+    auto selectionStart() const -> int { return static_cast<int>(valueOf(params[Controls::SelectionStartKnob])); }
+    auto selectionLength() const -> int { return static_cast<int>(valueOf(params[Controls::SelectionLengthKnob])); }
     auto isSelected(int candidate, int selectionStart, int selectionLength) const -> bool {
       auto const selectionEnd = (selectionStart + selectionLength - 1) & stepMask;
       if (selectionEnd >= selectionStart) {

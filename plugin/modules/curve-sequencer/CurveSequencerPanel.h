@@ -72,11 +72,11 @@ namespace curve_sequencer {
       this->template button(moduleParamsX, resetY, Controls::ResetButton);
 
       this->input(moduleInputsX, startY, Controls::StartCVInput);
-      auto *startKnob = this->template knob<SmallKnob>(moduleParamsX, startY, Controls::StartKnob);
+      auto *startKnob = this->template knob<SmallKnob>(moduleParamsX, startY, Controls::SelectionStartKnob);
       startKnob->snap = true;
 
       this->input(moduleInputsX, stepsY, Controls::StepsCVInput);
-      auto *stepsKnob = this->template knob<SmallKnob>(moduleParamsX, stepsY, Controls::StepsKnob);
+      auto *stepsKnob = this->template knob<SmallKnob>(moduleParamsX, stepsY, Controls::SelectionLengthKnob);
       stepsKnob->snap = true;
 
       auto const stepX = hp2mm(10.F);

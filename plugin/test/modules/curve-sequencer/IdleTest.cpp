@@ -24,12 +24,12 @@ protected:
   std::vector<rack::engine::Param> params{Controls::ParameterCount};
   Idle<stepCount> idle{params};
 
-  void givenStartStep(int step) { params[Controls::StartKnob].setValue(static_cast<float>(step)); }
+  void givenSelectionStart(int step) { params[Controls::SelectionStartKnob].setValue(static_cast<float>(step)); }
 };
 
 TEST_F(IdleTest, ifGateLatchRises_returnsAdvancingFromStartStep) {
   auto startStep = 2;
-  givenStartStep(startStep);
+  givenSelectionStart(startStep);
 
   auto next = idle.execute(risenLatch);
 

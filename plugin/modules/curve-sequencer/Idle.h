@@ -27,7 +27,7 @@ namespace curve_sequencer {
     };
 
   private:
-    auto startStep() const -> int { return static_cast<int>(valueOf(params[Controls::StartKnob])); }
+    auto startStep() const -> int { return static_cast<int>(valueOf(params[Controls::SelectionStartKnob])); }
 
     std::vector<Param> &params;
   };

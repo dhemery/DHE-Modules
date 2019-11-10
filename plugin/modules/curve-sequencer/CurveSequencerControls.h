@@ -8,13 +8,13 @@ namespace curve_sequencer {
 
   template <int N> struct CurveSequencerControls {
     enum ParameterIds {
-      DurationRangeSwitch,
-      GateButton,
-      LevelRangeSwitch,
-      ResetButton,
       RunButton,
-      StartKnob,
-      StepsKnob,
+      ResetButton,
+      GateButton,
+      SelectionStartKnob,
+      SelectionLengthKnob,
+      DurationRangeSwitch,
+      LevelRangeSwitch,
       ENUMS(CurveKnobs, N),
       ENUMS(DurationKnobs, N),
       ENUMS(EnabledButtons, N),

@@ -32,7 +32,7 @@ struct SustainStageTest : public Test {
 
   SustainStage<stepCount> sustainStage{inputs, params, lights};
 
-  void setInterruptMode(int step, StageMode mode) {
+  void givenSustainMode(int step, StageMode mode) {
     params[Controls::SustainModeSwitches + step].setValue(static_cast<float>(mode));
   }
 };
@@ -58,7 +58,7 @@ TEST_F(SustainStageTest, exit_dimsStepGeneratingLight) {
 
 TEST_F(SustainStageTest, highMode_returnsSustaining_ifGateIsHigh) {
   auto const step = 7;
-  setInterruptMode(step, StageMode::High);
+  givenSustainMode(step, StageMode::High);
 
   sustainStage.enter(step);
 
@@ -71,7 +71,7 @@ TEST_F(SustainStageTest, highMode_returnsSustaining_ifGateIsHigh) {
 
 TEST_F(SustainStageTest, highMode_returnsAdvancing_ifGateIsLow) {
   auto const step = 6;
-  setInterruptMode(step, StageMode::High);
+  givenSustainMode(step, StageMode::High);
 
   sustainStage.enter(step);
 
@@ -84,7 +84,7 @@ TEST_F(SustainStageTest, highMode_returnsAdvancing_ifGateIsLow) {
 
 TEST_F(SustainStageTest, lowMode_returnsSustaining_ifGateIsLow) {
   auto const step = 1;
-  setInterruptMode(step, StageMode::Low);
+  givenSustainMode(step, StageMode::Low);
 
   sustainStage.enter(step);
 
@@ -97,7 +97,7 @@ TEST_F(SustainStageTest, lowMode_returnsSustaining_ifGateIsLow) {
 
 TEST_F(SustainStageTest, lowMode_returnsAdvancing_ifGateIsHigh) {
   auto const step = 0;
-  setInterruptMode(step, StageMode::Low);
+  givenSustainMode(step, StageMode::Low);
 
   sustainStage.enter(step);
 
@@ -110,7 +110,7 @@ TEST_F(SustainStageTest, lowMode_returnsAdvancing_ifGateIsHigh) {
 
 TEST_F(SustainStageTest, calmMode_returnsSustaining_ifGateIsStable) {
   auto const step = 5;
-  setInterruptMode(step, StageMode::Calm);
+  givenSustainMode(step, StageMode::Calm);
 
   sustainStage.enter(step);
 
@@ -123,7 +123,7 @@ TEST_F(SustainStageTest, calmMode_returnsSustaining_ifGateIsStable) {
 
 TEST_F(SustainStageTest, calmMode_returnsAdvancing_ifGateChanges) {
   auto const step = 4;
-  setInterruptMode(step, StageMode::Calm);
+  givenSustainMode(step, StageMode::Calm);
 
   sustainStage.enter(step);
 
@@ -136,7 +136,7 @@ TEST_F(SustainStageTest, calmMode_returnsAdvancing_ifGateChanges) {
 
 TEST_F(SustainStageTest, skipMode_returnsAdvancing_forEveryGateState) {
   auto const step = 0;
-  setInterruptMode(step, StageMode::Skip);
+  givenSustainMode(step, StageMode::Skip);
 
   sustainStage.enter(step);
 
