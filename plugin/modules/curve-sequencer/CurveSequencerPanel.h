@@ -22,19 +22,52 @@ namespace curve_sequencer {
     SustainModeStepper() : Toggle<P, sustainModeCount>("stepper-sustain") {}
   };
 
+  template <typename P> class SelectionKnob : public SmallKnob<P> {
+  public:
+    void onChange(const rack::event::Change &e) override {
+      Knob<P>::onChange(e);
+      knobChangedTo(static_cast<int>(this->paramQuantity->getValue()));
+    }
+
+    void onKnobChange(const std::function<void(int)> &action) { knobChangedTo = action; }
+
+  private:
+    std::function<void(int)> knobChangedTo = [](int /*unused*/) {};
+  };
+
   template <typename P> class StartMarker : public rack::widget::SvgWidget {
   public:
     StartMarker() { setSvg(P::svg("marker-start")); }
-    void move(int step) { this->box.pos.x = mm2px(x(step)); }
-    static auto constexpr x(int step) -> float { return stepX + static_cast<float>(step) * stepDx - lightDiameter; }
+    void setSelectionStart(int step) {
+      auto constexpr baseX = stepX - 2.F * lightDiameter;
+      auto const x = baseX + stepDx * static_cast<float>(step);
+      this->box.pos.x = mm2px(x);
+    }
   };
 
-  template <typename P> class EndMarker : public rack::widget::SvgWidget {
+  template <template <int> class P, int N> class EndMarker : public rack::widget::SvgWidget {
   public:
-    EndMarker() { setSvg(P::svg("marker-end")); }
-    void move(int step) { this->box.pos.x = mm2px(x(step)); }
-    static auto constexpr x(int step) -> float { return stepX + static_cast<float>(step) * stepDx + lightDiameter; }
-  };
+    EndMarker() { setSvg(P<N>::svg("marker-end")); }
+    void setSelectionStart(int step) {
+      this->selectionStart = step;
+      move();
+    }
+    void setSelectionLength(int length) {
+      this->selectionLength = length;
+      move();
+    }
+
+  private:
+    void move() {
+      auto const selectionEnd = (selectionStart + selectionLength - 1) & stepMask;
+      auto const x = stepX + stepDx * static_cast<float>(selectionEnd);
+      this->box.pos.x = mm2px(x);
+    }
+
+    int selectionStart{};
+    int selectionLength{};
+    int const stepMask = N - 1;
+  }; // namespace curve_sequencer
 
   template <int N> class CurveSequencerPanel : public Panel<CurveSequencerPanel<N>> {
     using Controls = CurveSequencerControls<N>;
@@ -67,14 +100,14 @@ namespace curve_sequencer {
       this->input(left, gateY, Controls::GateInput);
       this->template button(left + buttonPortDistance, gateY, Controls::GateButton);
 
-      auto *sequenceStartKnob = this->template knob<SmallKnob>(left, selectionY, Controls::SelectionStartKnob);
-      sequenceStartKnob->snap = true;
+      auto *selectionStartKnob = this->template knob<SelectionKnob>(left, selectionY, Controls::SelectionStartKnob);
+      selectionStartKnob->snap = true;
 
       auto constexpr selectionLengthX = left + hp2mm(2.F);
 
-      auto *sequenceLengthKnob
-          = this->template knob<SmallKnob>(selectionLengthX, selectionY, Controls::SelectionLengthKnob);
-      sequenceLengthKnob->snap = true;
+      auto *selectionLengthKnob
+          = this->template knob<SelectionKnob>(selectionLengthX, selectionY, Controls::SelectionLengthKnob);
+      selectionLengthKnob->snap = true;
 
       this->input(left, loopY, Controls::LoopInput);
       this->template button<ToggleButton>(left + buttonPortDistance, loopY, Controls::LoopButton);
@@ -121,10 +154,18 @@ namespace curve_sequencer {
       this->template toggle<3>(right, durationY, Controls::DurationRangeSwitch);
       this->output(right, outY, Controls::CurveSequencerOutput);
 
-      this->addChild(rack::createWidgetCentered<StartMarker<CurveSequencerPanel<N>>>(
-          mm2px(StartMarker<CurveSequencerPanel<N>>::x(0), activeY)));
-      this->addChild(rack::createWidgetCentered<EndMarker<CurveSequencerPanel<N>>>(
-          mm2px(EndMarker<CurveSequencerPanel<N>>::x(0), activeY)));
+      auto *startMarker = rack::createWidgetCentered<StartMarker<CurveSequencerPanel<N>>>(mm2px(0.F, activeY));
+      this->addChild(startMarker);
+
+      auto *endMarker = rack::createWidgetCentered<EndMarker<CurveSequencerPanel, N>>(mm2px(0.F, activeY));
+      this->addChild(endMarker);
+
+      selectionStartKnob->onKnobChange([startMarker, endMarker](int step) {
+        startMarker->setSelectionStart(step);
+        endMarker->setSelectionStart(step);
+      });
+
+      selectionLengthKnob->onKnobChange([endMarker](int length) { endMarker->setSelectionLength(length); });
     }
   }; // namespace dhe
 
