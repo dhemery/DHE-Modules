@@ -1,59 +1,58 @@
 #include "curve-sequencer/SustainStage.h"
 
 #include "components/Latch.h"
-#include "curve-sequencer/CurveSequencerControls.h"
 #include "curve-sequencer/SequenceMode.h"
 #include "curve-sequencer/StageMode.h"
 
-#include <engine/Light.hpp>
-#include <engine/Param.hpp>
-#include <engine/Port.hpp>
+#include <gmock/gmock-actions.h>
+#include <gmock/gmock.h>
 #include <gtest/gtest.h>
-
-static auto constexpr stepCount{8};
 
 using dhe::Latch;
 using dhe::curve_sequencer::SequenceMode;
 using dhe::curve_sequencer::StageMode;
 using dhe::curve_sequencer::SustainStage;
-using Controls = dhe::curve_sequencer::CurveSequencerControls<stepCount>;
 
 static auto constexpr risenGate = Latch{true, true};
 static auto constexpr fallenGate = Latch{false, true};
 static auto constexpr stableHighGate = Latch{true, false};
 static auto constexpr stableLowGate = Latch{false, false};
 
+using ::testing::An;
+using ::testing::NiceMock;
+using ::testing::Return;
 using ::testing::Test;
 
+class MockControls {
+public:
+  MOCK_METHOD(void, showSustaining, (int, bool) );
+  MOCK_METHOD(StageMode, sustainMode, (int), (const));
+};
+
 struct SustainStageTest : public Test {
-  std::vector<rack::engine::Input> inputs{Controls::InputCount};
-  std::vector<rack::engine::Param> params{Controls::ParameterCount};
-  std::vector<rack::engine::Light> lights{Controls::LightCount};
+  static auto constexpr stepCount = 8;
+  NiceMock<MockControls> controls{};
+  SustainStage<MockControls> sustainStage{controls, stepCount};
 
-  SustainStage<stepCount> sustainStage{inputs, params, lights};
-
-  void givenSustainMode(int step, StageMode mode) {
-    params[Controls::SustainModeSwitches + step].setValue(static_cast<float>(mode));
-  }
+  void givenSustainMode(int step, StageMode mode) { ON_CALL(controls, sustainMode(step)).WillByDefault(Return(mode)); }
 };
 
 TEST_F(SustainStageTest, enter_lightsStepGeneratingLight) {
   auto const step = 4;
 
-  lights[Controls::SustainingLights + step].setBrightness(22.F);
+  EXPECT_CALL(controls, showSustaining(step, true));
 
   sustainStage.enter(step);
-
-  EXPECT_EQ(lights[Controls::SustainingLights + step].getBrightness(), 10.F);
 }
 
 TEST_F(SustainStageTest, exit_dimsStepGeneratingLight) {
   auto const step = 5;
 
   sustainStage.enter(step);
-  sustainStage.exit();
 
-  EXPECT_EQ(lights[Controls::SustainingLights + step].getBrightness(), 0.F);
+  EXPECT_CALL(controls, showSustaining(step, false));
+
+  sustainStage.exit();
 }
 
 TEST_F(SustainStageTest, highMode_returnsSustaining_ifGateIsHigh) {

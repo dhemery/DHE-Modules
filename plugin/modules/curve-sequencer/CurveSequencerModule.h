@@ -70,9 +70,9 @@ namespace curve_sequencer {
     Idle<Controls> idle{controls};
     Advancing<Controls> advancing{controls, N};
     GenerateStage<Controls> generating{controls, phase};
-    SustainStage<N> sustaining{inputs, params, lights};
+    SustainStage<Controls> sustaining{controls, N};
 
-    CurveSequencer<N, Controls, Idle<Controls>, Advancing<Controls>, GenerateStage<Controls>, SustainStage<N>>
+    CurveSequencer<N, Controls, Idle<Controls>, Advancing<Controls>, GenerateStage<Controls>, SustainStage<Controls>>
         curveSequencer{controls, idle, advancing, generating, sustaining};
   };
 } // namespace curve_sequencer
