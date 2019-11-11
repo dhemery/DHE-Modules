@@ -1,61 +1,71 @@
 #include "curve-sequencer/GenerateStage.h"
 
 #include "components/Latch.h"
-#include "curve-sequencer/CurveSequencerControls.h"
+#include "components/Taper.h"
 #include "curve-sequencer/SequenceMode.h"
 #include "curve-sequencer/StageMode.h"
 
-#include <engine/Light.hpp>
-#include <engine/Param.hpp>
-#include <engine/Port.hpp>
+#include <gmock/gmock-actions.h>
+#include <gmock/gmock.h>
 #include <gtest/gtest.h>
-
-static auto constexpr stepCount{8};
 
 using dhe::Latch;
 using dhe::curve_sequencer::GenerateStage;
 using dhe::curve_sequencer::SequenceMode;
 using dhe::curve_sequencer::StageMode;
-using Controls = dhe::curve_sequencer::CurveSequencerControls<stepCount>;
 
 static auto constexpr risenGate = Latch{true, true};
 static auto constexpr fallenGate = Latch{false, true};
 static auto constexpr stableHighGate = Latch{true, false};
 static auto constexpr stableLowGate = Latch{false, false};
 
+using ::testing::An;
+using ::testing::NiceMock;
+using ::testing::Return;
 using ::testing::Test;
 
-struct GenerateStageTest : public Test {
-  std::vector<rack::engine::Input> inputs{Controls::InputCount};
-  std::vector<rack::engine::Output> outputs{Controls::OutputCount};
-  std::vector<rack::engine::Param> params{Controls::ParameterCount};
-  std::vector<rack::engine::Light> lights{Controls::LightCount};
-  dhe::OneShotPhaseAccumulator phase;
+class MockControls {
+public:
+  MOCK_METHOD(float, curvature, (int), (const));
+  MOCK_METHOD(float, duration, (int), (const));
+  MOCK_METHOD(StageMode, generateMode, (int), (const));
+  MOCK_METHOD(float, input, (), (const));
+  MOCK_METHOD(float, level, (int), (const));
+  MOCK_METHOD(void, output, (float) );
+  MOCK_METHOD(float, output, (), (const));
+  MOCK_METHOD(void, showGenerating, (int, bool) );
+  MOCK_METHOD(dhe::taper::VariableTaper const *, taper, (int), (const));
+};
 
-  GenerateStage<stepCount, dhe::OneShotPhaseAccumulator> generateStage{inputs, outputs, params, lights, phase};
+struct GenerateStageTest : public Test {
+  NiceMock<MockControls> controls{};
+  dhe::OneShotPhaseAccumulator phase{};
+
+  GenerateStage<MockControls> generateStage{controls, phase};
 
   void givenGenerateMode(int step, StageMode mode) {
-    params[Controls::GenerateModeSwitches + step].setValue(static_cast<float>(mode));
+    ON_CALL(controls, generateMode(step)).WillByDefault(Return(mode));
   }
+
+  void SetUp() override { ON_CALL(controls, taper(An<int>())).WillByDefault(Return(dhe::taper::variableTapers[0])); }
 };
 
 TEST_F(GenerateStageTest, enter_lightsStepGeneratingLight) {
   auto const step = 4;
 
-  lights[Controls::GeneratingLights + step].setBrightness(22.F);
+  EXPECT_CALL(controls, showGenerating(step, true));
 
   generateStage.enter(step);
-
-  EXPECT_EQ(lights[Controls::GeneratingLights + step].getBrightness(), 10.F);
 }
 
 TEST_F(GenerateStageTest, exit_dimsStepGeneratingLight) {
   auto const step = 5;
 
   generateStage.enter(step);
-  generateStage.exit();
 
-  EXPECT_EQ(lights[Controls::GeneratingLights + step].getBrightness(), 0.F);
+  EXPECT_CALL(controls, showGenerating(step, false));
+
+  generateStage.exit();
 }
 
 TEST_F(GenerateStageTest, highMode_returnsGenerating_ifGateIsHigh) {

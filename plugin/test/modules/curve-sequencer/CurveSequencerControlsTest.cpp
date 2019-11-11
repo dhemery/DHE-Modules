@@ -133,6 +133,11 @@ TEST_F(CurveSequencerControlsTest, output_setsVoltageAtOutputPort) {
   ASSERT_EQ(outputs[Controls::CurveSequencerInput].getVoltage(), 5.3F);
 }
 
+TEST_F(CurveSequencerControlsTest, output_reportsVoltageAtOutputPort) {
+  outputs[Controls::CurveSequencerInput].setVoltage(7.1F);
+  ASSERT_EQ(controls.output(), 7.1F);
+}
+
 TEST_F(CurveSequencerControlsTest, stepCurvature_reportsCurvatureForStepCurvatureParam) {
   auto constexpr step = 5;
   auto constexpr curveKnobRotation = 0.3F;
@@ -217,4 +222,24 @@ TEST_F(CurveSequencerControlsTest, stepSustainMode_isModeSelectedByStepSustainMo
   modeSelectedByStepper = StageMode::Skip;
   params[Controls::SustainModeSwitches + step].setValue(static_cast<float>(modeSelectedByStepper));
   EXPECT_EQ(controls.sustainMode(step), modeSelectedByStepper);
+}
+
+TEST_F(CurveSequencerControlsTest, showGenerating_setsStepGeneratingLightBrightness) {
+  auto constexpr step = 3;
+
+  controls.showGenerating(step, true);
+  EXPECT_EQ(lights[Controls::GeneratingLights + step].getBrightness(), 10.F);
+
+  controls.showGenerating(step, false);
+  EXPECT_EQ(lights[Controls::GeneratingLights + step].getBrightness(), 0.F);
+}
+
+TEST_F(CurveSequencerControlsTest, showSustaining_setsStepSustainingLightBrightness) {
+  auto constexpr step = 6;
+
+  controls.showSustaining(step, true);
+  EXPECT_EQ(lights[Controls::SustainingLights + step].getBrightness(), 10.F);
+
+  controls.showSustaining(step, false);
+  EXPECT_EQ(lights[Controls::SustainingLights + step].getBrightness(), 0.F);
 }

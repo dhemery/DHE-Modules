@@ -69,11 +69,11 @@ namespace curve_sequencer {
     Controls controls{inputs, outputs, params, lights};
     Idle<Controls> idle{controls};
     Advancing<Controls> advancing{controls, N};
-    GenerateStage<N> generating{inputs, outputs, params, lights, phase};
+    GenerateStage<Controls> generating{controls, phase};
     SustainStage<N> sustaining{inputs, params, lights};
 
-    CurveSequencer<N, Controls, Idle<Controls>, Advancing<Controls>, GenerateStage<N>, SustainStage<N>> curveSequencer{
-        controls, idle, advancing, generating, sustaining};
+    CurveSequencer<N, Controls, Idle<Controls>, Advancing<Controls>, GenerateStage<Controls>, SustainStage<N>>
+        curveSequencer{controls, idle, advancing, generating, sustaining};
   };
 } // namespace curve_sequencer
 

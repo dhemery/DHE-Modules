@@ -61,11 +61,17 @@ namespace curve_sequencer {
       return dhe::selectableLevel(params[LevelKnobs + step], params[LevelRangeSwitch]);
     }
 
+    auto output() const -> float { return outputs[CurveSequencerOutput].getVoltage(); }
+
     void output(float voltage) { outputs[CurveSequencerOutput].setVoltage(voltage); }
 
     auto selectionStart() const -> int { return static_cast<int>(params[SelectionStartKnob].getValue()); }
 
     auto selectionLength() const -> int { return static_cast<int>(params[SelectionLengthKnob].getValue()); }
+
+    void showGenerating(int step, bool state) { lights[GeneratingLights + step].setBrightness(state ? 10.F : 0.F); }
+
+    void showSustaining(int step, bool state) { lights[SustainingLights + step].setBrightness(state ? 10.F : 0.F); }
 
     auto sustainMode(int step) const -> StageMode {
       return static_cast<StageMode>(params[SustainModeSwitches + step].getValue());
