@@ -19,9 +19,9 @@ using dhe::curve_sequencer::StageMode;
 
 struct CurveSequencerControlsTest : public Test {
   std::vector<rack::engine::Input> inputs{Controls::InputCount};
-  std::vector<rack::engine::Output> outputs{Controls::InputCount};
+  std::vector<rack::engine::Output> outputs{Controls::OutputCount};
   std::vector<rack::engine::Param> params{Controls::ParameterCount};
-  std::vector<rack::engine::Light> lights{Controls::InputCount};
+  std::vector<rack::engine::Light> lights{Controls::LightCount};
 
   Controls controls{inputs, outputs, params, lights};
 };
