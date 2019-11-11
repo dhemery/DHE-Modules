@@ -68,11 +68,12 @@ namespace curve_sequencer {
     OneShotPhaseAccumulator phase{};
     CurveSequencerControls<N> controls{inputs, outputs, params, lights};
     Idle<N> idle{params};
-    Advancing<N> advancing{inputs, params};
+    Advancing<N, CurveSequencerControls<N>> advancing{controls};
     GenerateStage<N> generating{inputs, outputs, params, lights, phase};
     SustainStage<N> sustaining{inputs, params, lights};
 
-    CurveSequencer<N, CurveSequencerControls<N>, Idle<N>, Advancing<N>, GenerateStage<N>, SustainStage<N>>
+    CurveSequencer<N, CurveSequencerControls<N>, Idle<N>, Advancing<N, CurveSequencerControls<N>>, GenerateStage<N>,
+                   SustainStage<N>>
         curveSequencer{controls, idle, advancing, generating, sustaining};
   };
 } // namespace curve_sequencer

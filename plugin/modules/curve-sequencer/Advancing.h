@@ -1,27 +1,22 @@
 #pragma once
 
-#include "CurveSequencerControls.h"
 #include "SequenceMode.h"
 #include "SequencerState.h"
 #include "components/Latch.h"
 #include "controls/CommonInputs.h"
 
-#include <engine/Param.hpp>
-#include <engine/Port.hpp>
 #include <vector>
 
 namespace dhe {
 namespace curve_sequencer {
-  using rack::engine::Input;
-  using rack::engine::Param;
 
-  template <int N> class Advancing {
+  template <int N, typename Controls> class Advancing {
   public:
-    Advancing(std::vector<Input> &inputs, std::vector<Param> &params) : inputs{inputs}, params{params} {}
+    Advancing(Controls &controls) : controls{controls} {}
 
     auto execute(int currentStep) const -> SequencerState {
-      auto const selectionStart = this->selectionStart();
-      auto const selectionLength = this->selectionLength();
+      auto const selectionStart = controls.selectionStart();
+      auto const selectionLength = controls.selectionLength();
       if (!isSelected(currentStep, selectionStart, selectionLength)) {
         return {SequenceMode::Idle, currentStep};
       }
@@ -29,7 +24,7 @@ namespace curve_sequencer {
       auto const selectionStop = selectionStart + selectionLength;
       for (int index = currentStep; index < selectionStop; index++) {
         auto const step = index & stepMask;
-        if (isEnabled(step)) {
+        if (controls.isEnabled(step)) {
           return {SequenceMode::Generating, step};
         }
       }
@@ -37,10 +32,6 @@ namespace curve_sequencer {
     };
 
   private:
-    using Controls = CurveSequencerControls<N>;
-
-    auto selectionStart() const -> int { return static_cast<int>(valueOf(params[Controls::SelectionStartKnob])); }
-    auto selectionLength() const -> int { return static_cast<int>(valueOf(params[Controls::SelectionLengthKnob])); }
     auto isSelected(int candidate, int selectionStart, int selectionLength) const -> bool {
       auto const selectionEnd = (selectionStart + selectionLength - 1) & stepMask;
       if (selectionEnd >= selectionStart) {
@@ -50,11 +41,7 @@ namespace curve_sequencer {
       return candidate >= selectionStart || candidate <= selectionEnd;
     }
 
-    auto isEnabled(int step) const -> bool {
-      return isPressed(params[Controls::EnabledButtons + step]) || isHigh(inputs[Controls::EnabledInputs + step]);
-    }
-    std::vector<Input> &inputs;
-    std::vector<Param> &params;
+    Controls &controls;
     int const stepMask = N - 1;
   };
 }; // namespace curve_sequencer
