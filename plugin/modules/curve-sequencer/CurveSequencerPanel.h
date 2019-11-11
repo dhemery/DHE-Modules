@@ -4,6 +4,7 @@
 #include "CurveSequencerModule.h"
 #include "widgets/Panel.h"
 
+#include <functional>
 #include <string>
 
 namespace dhe {

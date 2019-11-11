@@ -50,6 +50,8 @@ namespace curve_sequencer {
         return generateStage.execute(gateLatch, sampleTime);
       case SequenceMode::Sustaining:
         return sustainStage.execute(gateLatch);
+      default:
+        return {SequenceMode::Idle, 0};
       }
     }
 
