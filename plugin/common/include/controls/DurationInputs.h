@@ -27,19 +27,23 @@ auto constexpr longDurationRange = Range{0.1F, 100.F};
 
 extern std::array<Range const *, 3> const durationRanges;
 
+static inline auto duration(float rotation, Range const &range) -> float {
+  return taperedAndScaledRotation(rotation, durationKnobTaper, range);
+}
+
 template <typename KnobType> auto duration(KnobType &knob, Range const &range) -> float {
-  return taperedAndScaledRotation(knob, durationKnobTaper, range);
+  return duration(rotationOf(knob), range);
 }
 
 template <typename KnobType, typename ToggleType> auto selectableDuration(KnobType &knob, ToggleType &toggle) -> float {
   auto const range = selectedRange<3>(toggle, durationRanges);
-  return taperedAndScaledRotation(knob, durationKnobTaper, *range);
+  return duration(rotationOf(knob), *range);
 }
 
 template <typename KnobType, typename InputType, typename ToggleType>
 auto selectableDuration(KnobType &knob, InputType &cvInput, ToggleType &toggle) -> float {
   auto const range = selectedRange<3>(toggle, durationRanges);
-  return taperedAndScaledRotation(knob, cvInput, durationKnobTaper, *range);
+  return duration(rotation(knob, cvInput), *range);
 }
 
 } // namespace dhe

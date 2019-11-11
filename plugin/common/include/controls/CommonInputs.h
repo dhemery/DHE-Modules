@@ -78,21 +78,26 @@ auto rotation(KnobType &knob, InputType &cvInput, KnobType &avKnob) -> float {
   return rotation + modulation;
 }
 
+static inline auto taperedAndScaledRotation(float rotation, taper::FixedTaper const &taper, Range const &range)
+    -> float {
+  return range.scale(taper.apply(rotation));
+}
+
 template <typename KnobType>
 auto taperedAndScaledRotation(KnobType &knob, taper::FixedTaper const &taper, Range const &range) -> float {
-  return range.scale(taper.apply(rotationOf(knob)));
+  return taperedAndScaledRotation(rotationOf(knob), taper, range);
 }
 
 template <typename KnobType, typename InputType>
 auto taperedAndScaledRotation(KnobType &knob, InputType &cvInput, taper::FixedTaper const &taper, Range const &range)
     -> float {
-  return range.scale(taper.apply(rotation(knob, cvInput)));
+  return taperedAndScaledRotation(rotation(knob, cvInput), taper, range);
 }
 
 template <typename KnobType, typename InputType>
 auto taperedAndScaledRotation(KnobType &knob, InputType &cvInput, KnobType &avKnob, taper::FixedTaper const &taper,
                               Range const &range) -> float {
-  return range.scale(taper.apply(rotation(knob, cvInput, avKnob)));
+  return taperedAndScaledRotation(rotation(knob, cvInput, avKnob), taper, range);
 }
 
 } // namespace dhe
