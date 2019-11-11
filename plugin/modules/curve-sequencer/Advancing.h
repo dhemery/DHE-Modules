@@ -2,17 +2,13 @@
 
 #include "SequenceMode.h"
 #include "SequencerState.h"
-#include "components/Latch.h"
-#include "controls/CommonInputs.h"
-
-#include <vector>
 
 namespace dhe {
 namespace curve_sequencer {
 
-  template <int N, typename Controls> class Advancing {
+  template <typename Controls> class Advancing {
   public:
-    Advancing(Controls &controls) : controls{controls} {}
+    Advancing(Controls &controls, int stepCount) : controls{controls}, stepMask{stepCount - 1} {}
 
     auto execute(int currentStep) const -> SequencerState {
       auto const selectionStart = controls.selectionStart();
@@ -42,7 +38,7 @@ namespace curve_sequencer {
     }
 
     Controls &controls;
-    int const stepMask = N - 1;
+    int const stepMask;
   };
 }; // namespace curve_sequencer
 } // namespace dhe

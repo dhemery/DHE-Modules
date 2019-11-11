@@ -4,8 +4,6 @@
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
 
-static auto constexpr stepCount{8};
-
 using dhe::curve_sequencer::Advancing;
 using dhe::curve_sequencer::SequenceMode;
 
@@ -21,8 +19,9 @@ public:
 };
 
 struct AdvancingTest : public Test {
+  static auto constexpr stepCount{8};
   NiceMock<MockControls> controls;
-  Advancing<stepCount, MockControls> advancing{controls};
+  Advancing<MockControls> advancing{controls, stepCount};
 
   void givenEnabled(int step, bool state) { ON_CALL(controls, isEnabled(step)).WillByDefault(Return(state)); }
 
