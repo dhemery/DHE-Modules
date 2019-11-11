@@ -1,7 +1,9 @@
 #pragma once
 
+#include "Advancing.h"
 #include "CurveSequencer.h"
 #include "GenerateStage.h"
+#include "Idle.h"
 #include "SustainStage.h"
 #include "config/CommonConfig.h"
 #include "config/CurvatureConfig.h"
@@ -13,11 +15,6 @@
 namespace dhe {
 
 namespace curve_sequencer {
-  using rack::engine::Input;
-  using rack::engine::Light;
-  using rack::engine::Output;
-  using rack::engine::Param;
-
   static auto constexpr generateModeCount = static_cast<int>(StageMode::Generate) + 1;
   static auto constexpr defaultGenerateMode = static_cast<int>(StageMode::Generate);
   static auto const generateModeDescriptions = std::array<std::string, generateModeCount>{
@@ -68,7 +65,15 @@ namespace curve_sequencer {
     void process(const ProcessArgs &args) override { curveSequencer.execute(args.sampleTime); }
 
   private:
-    CurveSequencer<N, Input, Output, Param, Light> curveSequencer{inputs, outputs, params, lights};
+    OneShotPhaseAccumulator phase{};
+    CurveSequencerControls<N> controls{inputs, outputs, params, lights};
+    Idle<N> idle{params};
+    Advancing<N> advancing{inputs, params};
+    GenerateStage<N> generating{inputs, outputs, params, lights, phase};
+    SustainStage<N> sustaining{inputs, params, lights};
+
+    CurveSequencer<N, CurveSequencerControls<N>, Idle<N>, Advancing<N>, GenerateStage<N>, SustainStage<N>>
+        curveSequencer{controls, idle, advancing, generating, sustaining};
   };
 } // namespace curve_sequencer
 

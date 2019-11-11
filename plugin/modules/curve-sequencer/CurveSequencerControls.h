@@ -34,30 +34,47 @@ namespace curve_sequencer {
         inputs{inputs}, outputs{outputs}, params{params}, lights{lights} {}
 
     auto curvature(int step) const -> float { return dhe::curvature(params[CurveKnobs + step]); }
+
     auto duration(int step) const -> float {
       return dhe::selectableDuration(params[DurationKnobs + step], params[DurationRangeSwitch]);
     }
+
+    auto generateMode(int step) const -> StageMode {
+      return static_cast<StageMode>(params[GenerateModeSwitches + step].getValue());
+    }
+
     auto input() const -> float { return inputs[CurveSequencerInput].getVoltage(); }
+
     auto isEnabled(int step) const -> bool {
       return isPressed(params[EnabledButtons + step]) || isHigh(inputs[EnabledInputs + step]);
     }
+
     auto isGated() const -> bool { return isHigh(inputs[GateInput]) || isPressed(params[GateButton]); }
+
     auto isLooping() const -> bool { return isPressed(params[LoopButton]) || isHigh(inputs[LoopInput]); }
+
     auto isReset() const -> bool { return isHigh(inputs[ResetInput]) || isPressed(params[ResetButton]); }
+
     auto isRunning() const -> bool { return isPressed(params[RunButton]) || isHigh(inputs[RunInput]); }
+
     auto level(int step) const -> float {
       return dhe::selectableLevel(params[LevelKnobs + step], params[LevelRangeSwitch]);
     }
+
     void output(float voltage) { outputs[CurveSequencerOutput].setVoltage(voltage); }
+
     auto selectionStart() const -> int { return static_cast<int>(params[SelectionStartKnob].getValue()); }
+
     auto selectionLength() const -> int { return static_cast<int>(params[SelectionLengthKnob].getValue()); }
+
+    auto sustainMode(int step) const -> StageMode {
+      return static_cast<StageMode>(params[SustainModeSwitches + step].getValue());
+    }
+
     auto taper(int step) const -> taper::VariableTaper const * {
       auto const selection = static_cast<int>(params[ShapeSwitches + step].getValue());
       return taper::variableTapers[selection];
     }
-
-    auto generateMode(int step) const -> StageMode { return StageMode::Skip; }
-    auto sustainMode(int step) const -> StageMode { return StageMode::Skip; }
 
     enum ParameterIds {
       RunButton,
