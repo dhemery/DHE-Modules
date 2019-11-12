@@ -18,7 +18,6 @@ static auto constexpr fallenGate = Latch{false, true};
 static auto constexpr stableHighGate = Latch{true, false};
 static auto constexpr stableLowGate = Latch{false, false};
 
-using ::testing::An;
 using ::testing::NiceMock;
 using ::testing::Return;
 using ::testing::Test;
@@ -30,9 +29,8 @@ public:
 };
 
 struct SustainStageTest : public Test {
-  static auto constexpr stepCount = 8;
   NiceMock<MockControls> controls{};
-  SustainStage<MockControls> sustainStage{controls, stepCount};
+  SustainStage<MockControls> sustainStage{controls};
 
   void givenSustainMode(int step, StageMode mode) { ON_CALL(controls, sustainMode(step)).WillByDefault(Return(mode)); }
 };

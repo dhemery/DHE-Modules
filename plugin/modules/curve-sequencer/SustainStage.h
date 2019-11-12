@@ -8,7 +8,7 @@ namespace dhe {
 namespace curve_sequencer {
   template <typename Controls> class SustainStage {
   public:
-    SustainStage(Controls &controls, int stepCount) : controls{controls}, stepMask{stepCount - 1} {}
+    SustainStage(Controls &controls) : controls{controls} {}
 
     void enter(int entryStep) {
       step = entryStep;
@@ -32,7 +32,6 @@ namespace curve_sequencer {
 
     int step{0};
     Controls &controls;
-    int const stepMask;
   };
 } // namespace curve_sequencer
 } // namespace dhe

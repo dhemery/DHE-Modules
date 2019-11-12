@@ -69,7 +69,7 @@ namespace curve_sequencer {
     Controls controls{inputs, outputs, params, lights};
     StepSelector<Controls> selector{controls, N};
     GenerateStage<Controls, OneShotPhaseAccumulator> generating{controls, phase};
-    SustainStage<Controls> sustaining{controls, N};
+    SustainStage<Controls> sustaining{controls};
 
     CurveSequencer<N, Controls, StepSelector<Controls>, GenerateStage<Controls, OneShotPhaseAccumulator>,
                    SustainStage<Controls>>
