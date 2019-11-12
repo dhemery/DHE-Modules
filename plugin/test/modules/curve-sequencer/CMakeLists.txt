@@ -10,6 +10,7 @@ target_sources(curve_sequencer_tests
         CurveSequencerControlsTest.cpp
         GenerateStageTest.cpp
         IdleTest.cpp
+        StepSelectorTest.cpp
         SustainStageTest.cpp
         )
 target_link_libraries(curve_sequencer_tests

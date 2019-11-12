@@ -1,0 +1,18 @@
+@startuml
+
+title Curve Sequencer State Diagram
+
+[*] -> Paused
+Paused --> Running : RunRise
+Running --> Paused : RunFall
+
+state Running {
+    [*] -> Idle
+    Idle --> Advancing : GateRise
+    Advancing --> Idle : EndOfSelection
+    Advancing --> Generating : StepEnabled
+    Generating -> Sustaining : DoneGenerating
+    Sustaining --> Advancing : DoneSustaining
+}
+
+@enduml
