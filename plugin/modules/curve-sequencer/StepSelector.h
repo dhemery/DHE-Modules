@@ -1,7 +1,6 @@
 #pragma once
 
 #include "SequenceMode.h"
-#include "SequencerState.h"
 
 namespace dhe {
 namespace curve_sequencer {
@@ -48,5 +47,5 @@ namespace curve_sequencer {
     Controls &controls;
     int const stepMask;
   };
-}; // namespace curve_sequencer
+} // namespace curve_sequencer
 } // namespace dhe

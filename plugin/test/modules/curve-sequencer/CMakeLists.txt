@@ -5,11 +5,9 @@ target_include_directories(curve_sequencer_tests
         )
 target_sources(curve_sequencer_tests
         PRIVATE
-        AdvancingTest.cpp
         CurveSequencerTest.cpp
         CurveSequencerControlsTest.cpp
         GenerateStageTest.cpp
-        IdleTest.cpp
         StepSelectorTest.cpp
         SustainStageTest.cpp
         )

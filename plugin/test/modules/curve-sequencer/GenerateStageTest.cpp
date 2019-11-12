@@ -1,6 +1,7 @@
 #include "curve-sequencer/GenerateStage.h"
 
 #include "components/Latch.h"
+#include "components/OneShotPhaseAccumulator.h"
 #include "components/Taper.h"
 #include "curve-sequencer/SequenceMode.h"
 #include "curve-sequencer/StageMode.h"
@@ -41,7 +42,7 @@ struct GenerateStageTest : public Test {
   NiceMock<MockControls> controls{};
   dhe::OneShotPhaseAccumulator phase{};
 
-  GenerateStage<MockControls> generateStage{controls, phase};
+  GenerateStage<MockControls, dhe::OneShotPhaseAccumulator> generateStage{controls, phase};
 
   void givenGenerateMode(int step, StageMode mode) {
     ON_CALL(controls, generateMode(step)).WillByDefault(Return(mode));
@@ -75,10 +76,10 @@ TEST_F(GenerateStageTest, highMode_returnsGenerating_ifGateIsHigh) {
   generateStage.enter(step);
 
   auto next = generateStage.execute(risenGate, 0.F);
-  EXPECT_EQ(next.mode, SequenceMode::Generating);
+  EXPECT_EQ(next, SequenceMode::Generating);
 
   next = generateStage.execute(stableHighGate, 0.F);
-  EXPECT_EQ(next.mode, SequenceMode::Generating);
+  EXPECT_EQ(next, SequenceMode::Generating);
 }
 
 TEST_F(GenerateStageTest, highMode_returnsSustaining_ifGateIsLow) {
@@ -88,10 +89,10 @@ TEST_F(GenerateStageTest, highMode_returnsSustaining_ifGateIsLow) {
   generateStage.enter(step);
 
   auto next = generateStage.execute(fallenGate, 0.F);
-  EXPECT_EQ(next.mode, SequenceMode::Sustaining);
+  EXPECT_EQ(next, SequenceMode::Sustaining);
 
   next = generateStage.execute(stableLowGate, 0.F);
-  EXPECT_EQ(next.mode, SequenceMode::Sustaining);
+  EXPECT_EQ(next, SequenceMode::Sustaining);
 }
 
 TEST_F(GenerateStageTest, lowMode_returnsGenerating_ifGateIsLow) {
@@ -101,10 +102,10 @@ TEST_F(GenerateStageTest, lowMode_returnsGenerating_ifGateIsLow) {
   generateStage.enter(step);
 
   auto next = generateStage.execute(fallenGate, 0.F);
-  EXPECT_EQ(next.mode, SequenceMode::Generating);
+  EXPECT_EQ(next, SequenceMode::Generating);
 
   next = generateStage.execute(stableLowGate, 0.F);
-  EXPECT_EQ(next.mode, SequenceMode::Generating);
+  EXPECT_EQ(next, SequenceMode::Generating);
 }
 
 TEST_F(GenerateStageTest, lowMode_returnsSustaining_ifGateIsHigh) {
@@ -114,10 +115,10 @@ TEST_F(GenerateStageTest, lowMode_returnsSustaining_ifGateIsHigh) {
   generateStage.enter(step);
 
   auto next = generateStage.execute(risenGate, 0.F);
-  EXPECT_EQ(next.mode, SequenceMode::Sustaining);
+  EXPECT_EQ(next, SequenceMode::Sustaining);
 
   next = generateStage.execute(stableHighGate, 0.F);
-  EXPECT_EQ(next.mode, SequenceMode::Sustaining);
+  EXPECT_EQ(next, SequenceMode::Sustaining);
 }
 
 TEST_F(GenerateStageTest, calmMode_returnsGenerating_ifGateIsStable) {
@@ -127,10 +128,10 @@ TEST_F(GenerateStageTest, calmMode_returnsGenerating_ifGateIsStable) {
   generateStage.enter(step);
 
   auto next = generateStage.execute(stableHighGate, 0.F);
-  EXPECT_EQ(next.mode, SequenceMode::Generating);
+  EXPECT_EQ(next, SequenceMode::Generating);
 
   next = generateStage.execute(stableLowGate, 0.F);
-  EXPECT_EQ(next.mode, SequenceMode::Generating);
+  EXPECT_EQ(next, SequenceMode::Generating);
 }
 
 TEST_F(GenerateStageTest, calmMode_returnsSustaining_ifGateChanges) {
@@ -140,10 +141,10 @@ TEST_F(GenerateStageTest, calmMode_returnsSustaining_ifGateChanges) {
   generateStage.enter(step);
 
   auto next = generateStage.execute(risenGate, 0.F);
-  EXPECT_EQ(next.mode, SequenceMode::Sustaining);
+  EXPECT_EQ(next, SequenceMode::Sustaining);
 
   next = generateStage.execute(fallenGate, 0.F);
-  EXPECT_EQ(next.mode, SequenceMode::Sustaining);
+  EXPECT_EQ(next, SequenceMode::Sustaining);
 }
 
 TEST_F(GenerateStageTest, skipMode_returnsSustaining_forEveryGateState) {
@@ -153,14 +154,14 @@ TEST_F(GenerateStageTest, skipMode_returnsSustaining_forEveryGateState) {
   generateStage.enter(step);
 
   auto next = generateStage.execute(risenGate, 0.F);
-  EXPECT_EQ(next.mode, SequenceMode::Sustaining);
+  EXPECT_EQ(next, SequenceMode::Sustaining);
 
   next = generateStage.execute(fallenGate, 0.F);
-  EXPECT_EQ(next.mode, SequenceMode::Sustaining);
+  EXPECT_EQ(next, SequenceMode::Sustaining);
 
   next = generateStage.execute(stableHighGate, 0.F);
-  EXPECT_EQ(next.mode, SequenceMode::Sustaining);
+  EXPECT_EQ(next, SequenceMode::Sustaining);
 
   next = generateStage.execute(stableLowGate, 0.F);
-  EXPECT_EQ(next.mode, SequenceMode::Sustaining);
+  EXPECT_EQ(next, SequenceMode::Sustaining);
 }

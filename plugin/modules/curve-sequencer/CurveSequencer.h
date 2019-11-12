@@ -1,24 +1,15 @@
 #pragma once
 
-#include "Advancing.h"
-#include "CurveSequencerControls.h"
-#include "GenerateStage.h"
-#include "Idle.h"
 #include "SequenceMode.h"
-#include "SustainStage.h"
 #include "components/Latch.h"
-#include "controls/CommonInputs.h"
-
-#include <vector>
 
 namespace dhe {
 namespace curve_sequencer {
-  template <int N, typename Controls, typename Idle, typename Advancing, typename Generating, typename Sustaining>
+  template <int N, typename Controls, typename Selector, typename Generating, typename Sustaining>
   class CurveSequencer {
   public:
-    CurveSequencer(Controls &controls, Idle &idle, Advancing &advancing, Generating &generating,
-                   Sustaining &sustaining) :
-        controls{controls}, idle{idle}, advancing{advancing}, generating{generating}, sustaining{sustaining} {}
+    CurveSequencer(Controls &controls, Selector &stepSelector, Generating &generating, Sustaining &sustaining) :
+        controls{controls}, stepSelector{stepSelector}, generating{generating}, sustaining{sustaining} {}
 
     void execute(float sampleTime) {
       runLatch.clock(controls.isRunning());
@@ -30,7 +21,7 @@ namespace curve_sequencer {
 
       do {
         auto const next = executeMode(sampleTime);
-        if (next.mode == mode) {
+        if (next == mode) {
           return;
         }
         updateState(next);
@@ -38,26 +29,30 @@ namespace curve_sequencer {
     }
 
   private:
-    auto executeMode(float sampleTime) -> SequencerState {
+    auto executeMode(float sampleTime) -> SequenceMode {
       switch (mode) {
       case SequenceMode::Idle:
-        return idle.execute(gateLatch);
+        if (gateLatch.isRise()) {
+          step = stepSelector.first();
+          return step >= 0 ? SequenceMode::Generating : SequenceMode::Idle;
+        }
+        return SequenceMode::Idle;
       case SequenceMode::Advancing:
-        return advancing.execute(step);
+        step = stepSelector.successor(step);
+        return step >= 0 ? SequenceMode::Generating : SequenceMode::Idle;
       case SequenceMode::Generating:
         return generating.execute(gateLatch, sampleTime);
       case SequenceMode::Sustaining:
         return sustaining.execute(gateLatch);
       default:
-        return {SequenceMode::Idle, 0};
+        return SequenceMode::Idle;
       }
     }
 
-    void updateState(SequencerState next) {
+    void updateState(SequenceMode next) {
       gateLatch.clock(gateLatch.isHigh()); // To remove the edge
-      step = next.step;
-      mode = next.mode;
-      switch (next.mode) {
+      mode = next;
+      switch (mode) {
       case SequenceMode::Generating:
         generating.enter(step);
         return;
@@ -75,8 +70,7 @@ namespace curve_sequencer {
     Latch gateLatch{};
     SequenceMode mode{SequenceMode::Idle};
     Controls &controls;
-    Idle &idle;
-    Advancing &advancing;
+    Selector &stepSelector;
     Generating &generating;
     Sustaining &sustaining;
   };

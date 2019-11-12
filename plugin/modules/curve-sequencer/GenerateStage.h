@@ -1,18 +1,16 @@
 #pragma once
 
 #include "SequenceMode.h"
-#include "SequencerState.h"
 #include "StageMode.h"
 #include "components/Latch.h"
-#include "components/OneShotPhaseAccumulator.h"
 #include "components/Range.h"
 
 namespace dhe {
 namespace curve_sequencer {
 
-  template <typename Controls, typename Phase = OneShotPhaseAccumulator> class GenerateStage {
+  template <typename Controls, typename PhaseAccumulator> class GenerateStage {
   public:
-    GenerateStage(Controls &controls, Phase &phase) : controls{controls}, phase{phase} {}
+    GenerateStage(Controls &controls, PhaseAccumulator &phase) : controls{controls}, phase{phase} {}
 
     void enter(int entryStep) {
       step = entryStep;
@@ -21,15 +19,15 @@ namespace curve_sequencer {
       showActive(true);
     }
 
-    auto execute(dhe::Latch const &gateLatch, float sampleTime) -> SequencerState {
+    auto execute(dhe::Latch const &gateLatch, float sampleTime) -> SequenceMode {
       if (isActive(generateMode(), gateLatch)) {
         generate(sampleTime);
-        if (phase.state() == OneShotPhaseAccumulator::State::Incomplete) {
-          return {SequenceMode::Generating, step};
+        if (phase.state() == PhaseAccumulator::State::Incomplete) {
+          return SequenceMode::Generating;
         }
       }
       showActive(false);
-      return {SequenceMode::Sustaining, step};
+      return SequenceMode::Sustaining;
     };
 
     void exit() { showActive(false); }
@@ -55,9 +53,9 @@ namespace curve_sequencer {
     }
 
     Controls &controls;
-    Phase &phase;
+    PhaseAccumulator &phase;
     int step;
     float startVoltage;
   }; // namespace curve_sequencer
-};   // namespace curve_sequencer
+} // namespace curve_sequencer
 } // namespace dhe

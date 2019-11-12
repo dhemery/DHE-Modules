@@ -1,15 +1,15 @@
 #pragma once
 
-#include "Advancing.h"
 #include "CurveSequencer.h"
 #include "GenerateStage.h"
-#include "Idle.h"
+#include "StepSelector.h"
 #include "SustainStage.h"
 #include "config/CommonConfig.h"
 #include "config/CurvatureConfig.h"
 #include "config/DurationConfig.h"
 #include "config/LevelConfig.h"
 
+#include <components/OneShotPhaseAccumulator.h>
 #include <engine/Module.hpp>
 
 namespace dhe {
@@ -67,13 +67,13 @@ namespace curve_sequencer {
   private:
     OneShotPhaseAccumulator phase{};
     Controls controls{inputs, outputs, params, lights};
-    Idle<Controls> idle{controls};
-    Advancing<Controls> advancing{controls, N};
-    GenerateStage<Controls> generating{controls, phase};
+    StepSelector<Controls> selector{controls, N};
+    GenerateStage<Controls, OneShotPhaseAccumulator> generating{controls, phase};
     SustainStage<Controls> sustaining{controls, N};
 
-    CurveSequencer<N, Controls, Idle<Controls>, Advancing<Controls>, GenerateStage<Controls>, SustainStage<Controls>>
-        curveSequencer{controls, idle, advancing, generating, sustaining};
+    CurveSequencer<N, Controls, StepSelector<Controls>, GenerateStage<Controls, OneShotPhaseAccumulator>,
+                   SustainStage<Controls>>
+        curveSequencer{controls, selector, generating, sustaining};
   };
 } // namespace curve_sequencer
 

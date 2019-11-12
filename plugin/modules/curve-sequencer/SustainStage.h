@@ -1,7 +1,6 @@
 #pragma once
 
 #include "SequenceMode.h"
-#include "SequencerState.h"
 #include "StageMode.h"
 #include "components/Latch.h"
 
@@ -16,12 +15,12 @@ namespace curve_sequencer {
       showActive(true);
     }
 
-    auto execute(dhe::Latch const &gateLatch) const -> SequencerState {
+    auto execute(dhe::Latch const &gateLatch) const -> SequenceMode {
       if (isActive(sustainMode(), gateLatch)) {
-        return {SequenceMode::Sustaining, step};
+        return SequenceMode::Sustaining;
       }
       showActive(false);
-      return {SequenceMode::Advancing, (step + 1) & stepMask};
+      return SequenceMode::Advancing;
     };
 
     void exit() { showActive(false); }
@@ -35,5 +34,5 @@ namespace curve_sequencer {
     Controls &controls;
     int const stepMask;
   };
-}; // namespace curve_sequencer
+} // namespace curve_sequencer
 } // namespace dhe
