@@ -14,18 +14,18 @@ namespace curve_sequencer {
       if (controls.isEnabled(selectionStart)) {
         return selectionStart;
       }
-      return successor(selectionStart, selectionStart, controls.selectionLength());
+      return successor(selectionStart, selectionStart, controls.selectionLength(), false);
     }
 
-    auto successor(int current) const -> int {
-      return successor(current, controls.selectionStart(), controls.selectionLength());
+    auto successor(int current, bool isLooping) const -> int {
+      return successor(current, controls.selectionStart(), controls.selectionLength(), isLooping);
     }
 
   private:
-    auto successor(int current, int selectionStart, int selectionLength) const -> int {
+    auto successor(int current, int selectionStart, int selectionLength, bool isLooping) const -> int {
       auto const selectionEnd = (selectionStart + selectionLength - 1) & stepMask;
       if (current == selectionEnd) {
-        return -1;
+        return isLooping ? first() : -1;
       }
       for (int i = current + 1; i < selectionStart + selectionLength; i++) {
         auto const candidate = i & stepMask;
@@ -33,7 +33,7 @@ namespace curve_sequencer {
           return candidate;
         }
       }
-      return -1;
+      return isLooping ? first() : -1;
     };
 
     auto isSelected(int candidate, int selectionStart, int selectionEnd) const -> bool {

@@ -12,10 +12,9 @@ namespace curve_sequencer {
         controls{controls}, stepSelector{stepSelector}, generating{generating}, sustaining{sustaining} {}
 
     void execute(float sampleTime) {
-      runLatch.clock(controls.isRunning());
       gateLatch.clock(controls.isGated());
 
-      if (runLatch.isLow()) {
+      if (!controls.isRunning()) {
         return;
       }
 
@@ -38,7 +37,7 @@ namespace curve_sequencer {
         }
         return SequenceMode::Idle;
       case SequenceMode::Advancing:
-        step = stepSelector.successor(step);
+        step = stepSelector.successor(step, controls.isLooping());
         return step >= 0 ? SequenceMode::Generating : SequenceMode::Idle;
       case SequenceMode::Generating:
         return generating.execute(gateLatch, sampleTime);
@@ -66,7 +65,6 @@ namespace curve_sequencer {
     }
 
     int step{0};
-    Latch runLatch{};
     Latch gateLatch{};
     SequenceMode mode{SequenceMode::Idle};
     Controls &controls;
