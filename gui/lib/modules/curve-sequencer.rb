@@ -52,9 +52,9 @@ sequence_controls_top = top + hp2mm(2.75)
 sequence_controls_bottom = bottom - Port::DIAMETER / 2.0 - 1.0
 sequence_controls_dy = (sequence_controls_bottom - sequence_controls_top) / 4
 run_y = sequence_controls_top + 0 * sequence_controls_dy
-gate_y = sequence_controls_top + 1 * sequence_controls_dy
+loop_y = sequence_controls_top + 1 * sequence_controls_dy
 selection_y = sequence_controls_top + 2 * sequence_controls_dy
-loop_y = sequence_controls_top + 3 * sequence_controls_dy
+gate_y = sequence_controls_top + 3 * sequence_controls_dy
 reset_y = sequence_controls_top + 4 * sequence_controls_dy
 
 input_button_port x: left, y: run_y, label: 'RUN'

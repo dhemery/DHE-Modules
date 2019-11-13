@@ -15,7 +15,6 @@ namespace curve_sequencer {
       resetLatch.clock(controls.isReset());
       if (resetLatch.isRise()) {
         enter(SequenceMode::Idle);
-        controls.output(0.F);
       }
 
       gateLatch.clock(controls.isGated());
@@ -41,6 +40,9 @@ namespace curve_sequencer {
           step = stepSelector.first();
           return step >= 0 ? SequenceMode::Generating : SequenceMode::Idle;
         }
+        if (resetLatch.isHigh()) {
+          controls.output(controls.input());
+        }
         return SequenceMode::Idle;
       case SequenceMode::Advancing:
         step = stepSelector.successor(step, controls.isLooping());
@@ -55,7 +57,19 @@ namespace curve_sequencer {
     }
 
     void enter(SequenceMode incomingMode) {
+      switch (mode) {
+      case SequenceMode::Generating:
+        generating.exit();
+        break;
+      case SequenceMode::Sustaining:
+        sustaining.exit();
+        break;
+      default:
+        break;
+      }
+
       gateLatch.clock(gateLatch.isHigh()); // To remove the edge
+
       mode = incomingMode;
       switch (mode) {
       case SequenceMode::Generating:

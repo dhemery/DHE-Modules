@@ -90,16 +90,16 @@ namespace curve_sequencer {
       auto constexpr inputDy = (inputBottom - inputTop) / 4.F;
 
       auto constexpr runY = inputTop + 0.F * inputDy;
-      auto constexpr gateY = inputTop + 1.F * inputDy;
+      auto constexpr loopY = inputTop + 1.F * inputDy;
       auto constexpr selectionY = inputTop + 2.F * inputDy;
-      auto constexpr loopY = inputTop + 3.F * inputDy;
+      auto constexpr gateY = inputTop + 3.F * inputDy;
       auto constexpr resetY = inputTop + 4.F * inputDy;
 
       this->input(left, runY, Controls::RunInput);
       this->template button<ToggleButton>(left + buttonPortDistance, runY, Controls::RunButton);
 
-      this->input(left, gateY, Controls::GateInput);
-      this->template button(left + buttonPortDistance, gateY, Controls::GateButton);
+      this->input(left, loopY, Controls::LoopInput);
+      this->template button<ToggleButton>(left + buttonPortDistance, loopY, Controls::LoopButton);
 
       auto *selectionStartKnob = this->template knob<SelectionKnob>(left, selectionY, Controls::SelectionStartKnob);
       selectionStartKnob->snap = true;
@@ -110,8 +110,8 @@ namespace curve_sequencer {
           = this->template knob<SelectionKnob>(selectionLengthX, selectionY, Controls::SelectionLengthKnob);
       selectionLengthKnob->snap = true;
 
-      this->input(left, loopY, Controls::LoopInput);
-      this->template button<ToggleButton>(left + buttonPortDistance, loopY, Controls::LoopButton);
+      this->input(left, gateY, Controls::GateInput);
+      this->template button(left + buttonPortDistance, gateY, Controls::GateButton);
 
       this->input(left, resetY, Controls::ResetInput);
       this->template button(left + buttonPortDistance, resetY, Controls::ResetButton);
