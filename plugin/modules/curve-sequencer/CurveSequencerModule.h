@@ -67,13 +67,12 @@ namespace curve_sequencer {
   private:
     OneShotPhaseAccumulator phase{};
     Controls controls{inputs, outputs, params, lights};
-    StepSelector<Controls> selector{controls, N};
     GenerateStage<Controls, OneShotPhaseAccumulator> generating{controls, phase};
     SustainStage<Controls> sustaining{controls};
+    StepSelector<Controls, decltype(generating), decltype(sustaining)> selector{controls, generating, sustaining, N};
 
-    CurveSequencer<N, Controls, StepSelector<Controls>, GenerateStage<Controls, OneShotPhaseAccumulator>,
-                   SustainStage<Controls>>
-        curveSequencer{controls, selector, generating, sustaining};
+    CurveSequencer<N, Controls, decltype(selector), decltype(generating), decltype(sustaining)> curveSequencer{
+        controls, selector, generating, sustaining};
   };
 } // namespace curve_sequencer
 

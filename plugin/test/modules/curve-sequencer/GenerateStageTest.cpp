@@ -31,6 +31,7 @@ public:
   MOCK_METHOD(float, duration, (int), (const));
   MOCK_METHOD(StageMode, generateMode, (int), (const));
   MOCK_METHOD(float, input, (), (const));
+  MOCK_METHOD(bool, isEnabled, (int), (const));
   MOCK_METHOD(float, level, (int), (const));
   MOCK_METHOD(void, output, (float) );
   MOCK_METHOD(float, output, (), (const));
@@ -43,6 +44,8 @@ struct GenerateStageTest : public Test {
   dhe::OneShotPhaseAccumulator phase{};
 
   GenerateStage<MockControls, dhe::OneShotPhaseAccumulator> generateStage{controls, phase};
+
+  void givenEnabled(int step, bool state) { ON_CALL(controls, isEnabled(step)).WillByDefault(Return(state)); }
 
   void givenGenerateMode(int step, StageMode mode) {
     ON_CALL(controls, generateMode(step)).WillByDefault(Return(mode));
@@ -67,6 +70,24 @@ TEST_F(GenerateStageTest, exit_dimsStepGeneratingLight) {
   EXPECT_CALL(controls, showGenerating(step, false));
 
   generateStage.exit();
+}
+
+TEST_F(GenerateStageTest, highMode_isAvailable_ifEnabled_andGateIsHigh) {
+  auto constexpr step = 0;
+  givenGenerateMode(step, StageMode::High);
+  givenEnabled(step, true);
+
+  EXPECT_TRUE(generateStage.isAvailable(step, risenGate));
+  EXPECT_TRUE(generateStage.isAvailable(step, stableHighGate));
+}
+
+TEST_F(GenerateStageTest, highMode_isUnavailable_ifEnabled_andGateIsLow) {
+  auto constexpr step = 1;
+  givenGenerateMode(step, StageMode::High);
+  givenEnabled(step, false);
+
+  EXPECT_FALSE(generateStage.isAvailable(step, fallenGate));
+  EXPECT_FALSE(generateStage.isAvailable(step, stableLowGate));
 }
 
 TEST_F(GenerateStageTest, highMode_returnsGenerating_ifGateIsHigh) {
@@ -95,6 +116,24 @@ TEST_F(GenerateStageTest, highMode_returnsSustaining_ifGateIsLow) {
   EXPECT_EQ(next, SequenceMode::Sustaining);
 }
 
+TEST_F(GenerateStageTest, lowMode_isAvailable_ifEnabled_andGateIsLow) {
+  auto constexpr step = 0;
+  givenGenerateMode(step, StageMode::Low);
+  givenEnabled(step, true);
+
+  EXPECT_TRUE(generateStage.isAvailable(step, fallenGate));
+  EXPECT_TRUE(generateStage.isAvailable(step, stableLowGate));
+}
+
+TEST_F(GenerateStageTest, lowMode_isUnavailable_ifEnabled_andGateIsHigh) {
+  auto constexpr step = 1;
+  givenGenerateMode(step, StageMode::Low);
+  givenEnabled(step, true);
+
+  EXPECT_FALSE(generateStage.isAvailable(step, risenGate));
+  EXPECT_FALSE(generateStage.isAvailable(step, stableHighGate));
+}
+
 TEST_F(GenerateStageTest, lowMode_returnsGenerating_ifGateIsLow) {
   auto const step = 1;
   givenGenerateMode(step, StageMode::Low);
@@ -119,6 +158,24 @@ TEST_F(GenerateStageTest, lowMode_returnsSustaining_ifGateIsHigh) {
 
   next = generateStage.execute(stableHighGate, 0.F);
   EXPECT_EQ(next, SequenceMode::Sustaining);
+}
+
+TEST_F(GenerateStageTest, calmMode_isAvailable_ifEnabled_andGateIsCalm) {
+  auto constexpr step = 0;
+  givenGenerateMode(step, StageMode::Calm);
+  givenEnabled(step, true);
+
+  EXPECT_TRUE(generateStage.isAvailable(step, stableHighGate));
+  EXPECT_TRUE(generateStage.isAvailable(step, stableLowGate));
+}
+
+TEST_F(GenerateStageTest, calmMode_isUnavailable_ifEnabled_andGateIsEdge) {
+  auto constexpr step = 1;
+  givenGenerateMode(step, StageMode::Calm);
+  givenEnabled(step, true);
+
+  EXPECT_FALSE(generateStage.isAvailable(step, risenGate));
+  EXPECT_FALSE(generateStage.isAvailable(step, fallenGate));
 }
 
 TEST_F(GenerateStageTest, calmMode_returnsGenerating_ifGateIsStable) {
@@ -147,6 +204,23 @@ TEST_F(GenerateStageTest, calmMode_returnsSustaining_ifGateChanges) {
   EXPECT_EQ(next, SequenceMode::Sustaining);
 }
 
+TEST_F(GenerateStageTest, skipMode_isUnavailable_regardlessOfEnablementAndGate) {
+  auto constexpr step = 1;
+  givenGenerateMode(step, StageMode::Skip);
+
+  givenEnabled(step, true);
+  EXPECT_FALSE(generateStage.isAvailable(step, stableHighGate));
+  EXPECT_FALSE(generateStage.isAvailable(step, stableLowGate));
+  EXPECT_FALSE(generateStage.isAvailable(step, risenGate));
+  EXPECT_FALSE(generateStage.isAvailable(step, fallenGate));
+
+  givenEnabled(step, false);
+  EXPECT_FALSE(generateStage.isAvailable(step, stableHighGate));
+  EXPECT_FALSE(generateStage.isAvailable(step, stableLowGate));
+  EXPECT_FALSE(generateStage.isAvailable(step, risenGate));
+  EXPECT_FALSE(generateStage.isAvailable(step, fallenGate));
+}
+
 TEST_F(GenerateStageTest, skipMode_returnsSustaining_forEveryGateState) {
   auto const step = 0;
   givenGenerateMode(step, StageMode::Skip);
@@ -164,4 +238,21 @@ TEST_F(GenerateStageTest, skipMode_returnsSustaining_forEveryGateState) {
 
   next = generateStage.execute(stableLowGate, 0.F);
   EXPECT_EQ(next, SequenceMode::Sustaining);
+}
+
+TEST_F(GenerateStageTest, ifDisabled_isUnavailable_regardlessOfModeAndGate) {
+  auto constexpr step = 5;
+  givenEnabled(step, false);
+
+  givenGenerateMode(step, StageMode::High);
+  EXPECT_FALSE(generateStage.isAvailable(step, stableHighGate));
+  EXPECT_FALSE(generateStage.isAvailable(step, risenGate));
+
+  givenGenerateMode(step, StageMode::Low);
+  EXPECT_FALSE(generateStage.isAvailable(step, stableLowGate));
+  EXPECT_FALSE(generateStage.isAvailable(step, fallenGate));
+
+  givenGenerateMode(step, StageMode::Calm);
+  EXPECT_FALSE(generateStage.isAvailable(step, stableLowGate));
+  EXPECT_FALSE(generateStage.isAvailable(step, stableHighGate));
 }

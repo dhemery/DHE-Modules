@@ -37,7 +37,7 @@ namespace curve_sequencer {
       switch (mode) {
       case SequenceMode::Idle:
         if (gateLatch.isRise()) {
-          step = stepSelector.first();
+          step = stepSelector.first(gateLatch);
           return step >= 0 ? SequenceMode::Generating : SequenceMode::Idle;
         }
         if (resetLatch.isHigh()) {
@@ -45,7 +45,7 @@ namespace curve_sequencer {
         }
         return SequenceMode::Idle;
       case SequenceMode::Advancing:
-        step = stepSelector.successor(step, controls.isLooping());
+        step = stepSelector.successor(step, gateLatch, controls.isLooping());
         return step >= 0 ? SequenceMode::Generating : SequenceMode::Idle;
       case SequenceMode::Generating:
         return generating.execute(gateLatch, sampleTime);

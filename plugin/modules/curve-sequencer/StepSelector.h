@@ -1,39 +1,47 @@
 #pragma once
 
 #include "SequenceMode.h"
+#include "components/Latch.h"
 
 namespace dhe {
 namespace curve_sequencer {
+  using dhe::Latch;
 
-  template <typename Controls> class StepSelector {
+  template <typename Controls, typename Generate, typename Sustain> class StepSelector {
   public:
-    StepSelector(Controls &controls, int stepCount) : controls{controls}, stepMask{stepCount - 1} {}
+    StepSelector(Controls &controls, Generate &generate, Sustain &sustain, int stepCount) :
+        controls{controls}, generate{generate}, sustain{sustain}, stepMask{stepCount - 1} {}
 
-    auto first() const -> int {
+    auto first(Latch const &gate) const -> int {
       auto const selectionStart = controls.selectionStart();
-      if (controls.isEnabled(selectionStart)) {
+      if (isAvailable(selectionStart, gate)) {
         return selectionStart;
       }
-      return successor(selectionStart, selectionStart, controls.selectionLength(), false);
+      return successor(selectionStart, gate, selectionStart, controls.selectionLength(), false);
     }
 
-    auto successor(int current, bool isLooping) const -> int {
-      return successor(current, controls.selectionStart(), controls.selectionLength(), isLooping);
+    auto successor(int current, Latch const &gate, bool isLooping) const -> int {
+      return successor(current, gate, controls.selectionStart(), controls.selectionLength(), isLooping);
     }
 
   private:
-    auto successor(int current, int selectionStart, int selectionLength, bool isLooping) const -> int {
+    bool isAvailable(int step, Latch const &gate) const {
+      return generate.isAvailable(step, gate) || sustain.isAvailable(step, gate);
+    }
+
+    auto successor(int current, Latch const &gate, int selectionStart, int selectionLength, bool isLooping) const
+        -> int {
       auto const selectionEnd = (selectionStart + selectionLength - 1) & stepMask;
       if (current == selectionEnd) {
-        return isLooping ? first() : -1;
+        return isLooping ? first(gate) : -1;
       }
       for (int i = current + 1; i < selectionStart + selectionLength; i++) {
         auto const candidate = i & stepMask;
-        if (isSelected(candidate, selectionStart, selectionEnd) && controls.isEnabled(candidate)) {
+        if (isSelected(candidate, selectionStart, selectionEnd) && isAvailable(candidate, gate)) {
           return candidate;
         }
       }
-      return isLooping ? first() : -1;
+      return isLooping ? first(gate) : -1;
     };
 
     auto isSelected(int candidate, int selectionStart, int selectionEnd) const -> bool {
@@ -45,6 +53,8 @@ namespace curve_sequencer {
     }
 
     Controls &controls;
+    Generate &generate;
+    Sustain &sustain;
     int const stepMask;
   };
 } // namespace curve_sequencer

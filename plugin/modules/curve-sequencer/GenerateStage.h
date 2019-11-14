@@ -12,6 +12,14 @@ namespace curve_sequencer {
   public:
     GenerateStage(Controls &controls, PhaseAccumulator &phase) : controls{controls}, phase{phase} {}
 
+    auto isAvailable(int candidateStep, Latch const &gateLatch) const -> bool {
+      if (!controls.isEnabled(candidateStep)) {
+        return false;
+      }
+      auto const mode = controls.generateMode(candidateStep);
+      return isActive(mode, gateLatch);
+    }
+
     void enter(int entryStep) {
       step = entryStep;
       phase.reset();

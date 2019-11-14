@@ -10,6 +10,14 @@ namespace curve_sequencer {
   public:
     SustainStage(Controls &controls) : controls{controls} {}
 
+    auto isAvailable(int candidateStep, Latch const &gateLatch) const -> bool {
+      if (!controls.isEnabled(candidateStep)) {
+        return false;
+      }
+      auto const mode = controls.sustainMode(candidateStep);
+      return isActive(mode, gateLatch);
+    }
+
     void enter(int entryStep) {
       step = entryStep;
       showActive(true);
