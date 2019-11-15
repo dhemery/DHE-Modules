@@ -5,8 +5,7 @@
 
 namespace dhe {
 namespace curve_sequencer {
-  template <int N, typename Controls, typename Selector, typename Generating, typename Sustaining>
-  class CurveSequencer {
+  template <typename Controls, typename Selector, typename Generating, typename Sustaining> class CurveSequencer {
   public:
     CurveSequencer(Controls &controls, Selector &stepSelector, Generating &generating, Sustaining &sustaining) :
         controls{controls}, stepSelector{stepSelector}, generating{generating}, sustaining{sustaining} {}

@@ -4,10 +4,9 @@
 #include "components/OneShotPhaseAccumulator.h"
 #include "components/Taper.h"
 #include "curve-sequencer/SequenceMode.h"
-#include "curve-sequencer/StageMode.h"
+#include "mocks.h"
 
 #include <gmock/gmock-actions.h>
-#include <gmock/gmock.h>
 #include <gtest/gtest.h>
 
 using dhe::Latch;
@@ -24,20 +23,6 @@ using ::testing::An;
 using ::testing::NiceMock;
 using ::testing::Return;
 using ::testing::Test;
-
-class MockControls {
-public:
-  MOCK_METHOD(float, curvature, (int), (const));
-  MOCK_METHOD(float, duration, (int), (const));
-  MOCK_METHOD(StageMode, generateMode, (int), (const));
-  MOCK_METHOD(float, input, (), (const));
-  MOCK_METHOD(bool, isEnabled, (int), (const));
-  MOCK_METHOD(float, level, (int), (const));
-  MOCK_METHOD(void, output, (float) );
-  MOCK_METHOD(float, output, (), (const));
-  MOCK_METHOD(void, showGenerating, (int, bool) );
-  MOCK_METHOD(dhe::taper::VariableTaper const *, taper, (int), (const));
-};
 
 struct GenerateStageTest : public Test {
   NiceMock<MockControls> controls{};

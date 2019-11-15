@@ -71,7 +71,7 @@ namespace curve_sequencer {
     SustainStage<Controls> sustaining{controls};
     StepSelector<Controls, decltype(generating), decltype(sustaining)> selector{controls, generating, sustaining, N};
 
-    CurveSequencer<N, Controls, decltype(selector), decltype(generating), decltype(sustaining)> curveSequencer{
+    CurveSequencer<Controls, decltype(selector), decltype(generating), decltype(sustaining)> curveSequencer{
         controls, selector, generating, sustaining};
   };
 } // namespace curve_sequencer
