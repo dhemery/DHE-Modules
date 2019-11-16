@@ -15,12 +15,12 @@ namespace curve_sequencer {
 
   template <typename P> class GenerateModeStepper : public Toggle<P, modeCount> {
   public:
-    GenerateModeStepper() : Toggle<P, modeCount>("stepper-generate") {}
+    GenerateModeStepper() : Toggle<P, modeCount>("stepper-mode") {}
   };
 
   template <typename P> class SustainModeStepper : public Toggle<P, conditionCount> {
   public:
-    SustainModeStepper() : Toggle<P, conditionCount>("stepper-sustain") {}
+    SustainModeStepper() : Toggle<P, conditionCount>("stepper-condition") {}
   };
 
   template <typename P> class SelectionKnob : public SmallKnob<P> {

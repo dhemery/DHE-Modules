@@ -32,23 +32,23 @@
       <g
          id="text2"
          style="font-weight:bold;font-size:2.37100005px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#331a00"
-         aria-label="NONE">
+         aria-label="TIME">
         <path
            id="path18"
            style="font-weight:bold;font-size:2.37100005px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#331a00"
-           d="m -2.0801265,0 h 0.324827 v -1.581457 h -0.336682 v 1.02427199 L -2.8246205,-1.581457 h -0.346166 V 0 h 0.336682 v -1.062208 z" />
+           d="m -2.1990099,0 h 0.339053 v -1.285082 h 0.459974 v -0.296375 h -1.261372 v 0.296375 h 0.462345 z" />
         <path
            id="path20"
            style="font-weight:bold;font-size:2.37100005px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#331a00"
-           d="m -1.519348,-0.78954302 c 0,0.47657101 0.348537,0.81799502 0.82510802,0.81799502 0.47894202,0 0.82747902,-0.34142401 0.82747902,-0.81799502 0,-0.47657098 -0.348537,-0.81799498 -0.82747902,-0.81799498 -0.47657102,0 -0.82510802,0.341424 -0.82510802,0.81799498 z m 1.30642104,0 c 0,0.29400401 -0.18968001,0.51924901 -0.48131302,0.51924901 -0.291633,0 -0.47894202,-0.225245 -0.47894202,-0.51924901 0,-0.29637498 0.18730902,-0.51924898 0.47894202,-0.51924898 0.29163301,0 0.48131302,0.222874 0.48131302,0.51924898 z" />
+           d="m -1.1841478,0 h 0.33668205 V -1.581457 H -1.1841478 Z" />
         <path
            id="path22"
            style="font-weight:bold;font-size:2.37100005px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#331a00"
-           d="m 1.4624808,0 h 0.324827 v -1.581457 h -0.336682 v 1.02427199 L 0.71798679,-1.581457 H 0.37182078 V 0 h 0.336682 v -1.062208 z" />
+           d="M 0.83935259,0 H 1.1784056 V -1.581457 H 0.70420559 L 0.32010358,-0.59512101 -0.06399843,-1.581457 H -0.53582744 V 0 h 0.33668201 V -1.13808 L 0.24660258,0 h 0.147002 l 0.44574801,-1.13808 z" />
         <path
            id="path24"
            style="font-weight:bold;font-size:2.37100005px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#331a00"
-           d="M 2.0991314,0 H 3.2182435 V -0.29163301 H 2.4358134 v -0.367505 H 3.2016465 V -0.94840002 H 2.4358134 V -1.292195 H 3.2182435 V -1.581457 H 2.0991314 Z" />
+           d="m 1.4924891,0 h 1.119112 v -0.29163301 h -0.78243 v -0.367505 h 0.765833 V -0.94840002 H 1.8291711 V -1.292195 h 0.78243 v -0.289262 h -1.119112 z" />
       </g>
     </g>
     <path

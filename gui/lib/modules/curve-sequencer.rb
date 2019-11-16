@@ -112,7 +112,7 @@ step_label_y = top - hp2mm(0.5)
   light x: x - Light::DIAMETER, y: active_y
   light x: x + Light::DIAMETER, y: active_y
   stepper x: x, y: generator_y, name: 'mode', labels: %w[CURV HOLD SUST], selection: 1
-  stepper x: x, y: gate_mode_y, name: 'condition', labels: %w[NONE HIGH LOW RISE FALL EDGE], selection: 1
+  stepper x: x, y: gate_mode_y, name: 'condition', labels: %w[TIME HIGH LOW RISE FALL EDGE], selection: 1
   label x: x, y: step_label_y, text: (step + 1).to_s, alignment: :above, size: :large
   shape_toggle x: x, y: shape_y
   small_knob y: curve_y, x: x, label: ''

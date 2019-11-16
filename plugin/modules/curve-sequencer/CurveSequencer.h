@@ -49,10 +49,16 @@ namespace curve_sequencer {
         step = stepSelector.successor(step, gateLatch, controls.isLooping());
         return step >= 0 ? SequenceMode::Generating : SequenceMode::Idle;
       case SequenceMode::Generating:
-        return stepController.execute(gateLatch, sampleTime);
+        return generate(sampleTime);
       default:
         return SequenceMode::Idle;
       }
+    }
+
+    auto generate(float sampleTime) -> SequenceMode {
+      auto const nextMode = stepController.execute(gateLatch, sampleTime);
+      gateLatch.clock(gateLatch.isHigh());
+      return nextMode;
     }
 
     void enter(SequenceMode incomingMode) {

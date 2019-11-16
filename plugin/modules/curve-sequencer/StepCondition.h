@@ -6,7 +6,7 @@
 namespace dhe {
 namespace curve_sequencer {
 
-  enum class StepCondition { DoneGenerating, GateIsLow, GateIsHigh, GateRises, GateFalls, GateChanges };
+  enum class StepCondition { TimerExpires, GateIsLow, GateIsHigh, GateRises, GateFalls, GateChanges };
 
   static inline auto isSatisfied(StepMode mode, StepCondition condition, dhe::Latch const &gate) -> bool {
     switch (condition) {
@@ -20,7 +20,7 @@ namespace curve_sequencer {
       return gate.isFall();
     case StepCondition::GateChanges:
       return gate.isEdge();
-    case StepCondition::DoneGenerating:
+    case StepCondition::TimerExpires:
     default:
       return mode == StepMode::Sustain;
     }

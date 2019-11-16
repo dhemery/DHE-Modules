@@ -1,8 +1,8 @@
 #pragma once
 
 #include "CurveSequencer.h"
-#include "Step.h"
 #include "StepCondition.h"
+#include "StepController.h"
 #include "StepMode.h"
 #include "StepSelector.h"
 #include "config/CommonConfig.h"
@@ -18,14 +18,13 @@ namespace dhe {
 namespace curve_sequencer {
   static auto constexpr modeCount = static_cast<int>(StepMode::Sustain) + 1;
   static auto constexpr defaultMode = static_cast<int>(StepMode::Curve);
-  static auto const modeDescriptions
-      = std::array<std::string, modeCount>{"Generate a curve", "Hold for the duration", "Sustain"};
+  static auto const modeDescriptions = std::array<std::string, modeCount>{"Curve", "Hold", "Sustain"};
 
   static auto constexpr conditionCount = static_cast<int>(StepCondition::GateChanges) + 1;
-  static auto constexpr defaultCondition = static_cast<int>(StepCondition::DoneGenerating);
+  static auto constexpr defaultCondition = static_cast<int>(StepCondition::TimerExpires);
   static auto const conditionDescriptions
-      = std::array<std::string, conditionCount>{"Until done generating", "While gate is high", "While gate is low",
-                                                "Until gate rises",      "Until gate falls",   "Until gate changes"};
+      = std::array<std::string, conditionCount>{"Until timer expires", "While gate is high", "While gate is low",
+                                                "Until gate rises",    "Until gate falls",   "Until gate changes"};
 
   template <int N> class CurveSequencerModule : public rack::engine::Module {
     using Controls = CurveSequencerControls<N>;
@@ -66,7 +65,7 @@ namespace curve_sequencer {
   private:
     OneShotPhaseAccumulator phase{};
     Controls controls{inputs, outputs, params, lights};
-    Step<Controls, OneShotPhaseAccumulator> stepController{controls, phase};
+    StepController<Controls, OneShotPhaseAccumulator> stepController{controls, phase};
     StepSelector<Controls, decltype(stepController)> selector{controls, stepController, N};
 
     CurveSequencer<Controls, decltype(selector), decltype(stepController)> curveSequencer{controls, selector,

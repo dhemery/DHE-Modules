@@ -197,7 +197,7 @@ TEST_F(CurveSequencerControlsTest, stepMode_isModeSelectedByStepModeSwitch) {
 TEST_F(CurveSequencerControlsTest, stepCondition_isConditionSelectedByStepConditionSwitch) {
   auto constexpr step = 0;
 
-  auto conditionSelectedBySwitch = StepCondition::DoneGenerating;
+  auto conditionSelectedBySwitch = StepCondition::TimerExpires;
   params[Controls::ConditionSwitches + step].setValue(static_cast<float>(conditionSelectedBySwitch));
   EXPECT_EQ(controls.condition(step), conditionSelectedBySwitch);
 

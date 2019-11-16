@@ -8,9 +8,9 @@
 namespace dhe {
 namespace curve_sequencer {
 
-  template <typename Controls, typename PhaseAccumulator> class Step {
+  template <typename Controls, typename PhaseAccumulator> class StepController {
   public:
-    Step(Controls &controls, PhaseAccumulator &phase) : controls{controls}, phase{phase} {}
+    StepController(Controls &controls, PhaseAccumulator &phase) : controls{controls}, phase{phase} {}
 
     auto isAvailable(int candidateStep, Latch const &gateLatch) const -> bool {
       if (!controls.isEnabled(candidateStep)) {
@@ -29,8 +29,14 @@ namespace curve_sequencer {
     }
 
     auto execute(dhe::Latch const &gateLatch, float sampleTime) -> SequenceMode {
-      if (isSatisfied(mode(), condition(), gateLatch)) {
-        generate(sampleTime);
+      StepMode stepMode = mode();
+      if (!isSatisfied(stepMode, condition(), gateLatch)) {
+        if(stepMode != StepMode::Sustain) {
+          phase.advance(sampleTime / duration());
+        }
+        if(stepMode == StepMode::Curve) {
+          controls.output(scale(taper(phase.phase()), startVoltage, level()));
+        }
         if (phase.state() == PhaseAccumulator::State::Incomplete) {
           return SequenceMode::Generating;
         }
