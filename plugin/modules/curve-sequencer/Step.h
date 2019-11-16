@@ -1,23 +1,24 @@
 #pragma once
 
 #include "SequenceMode.h"
-#include "StageMode.h"
+#include "StepCondition.h"
 #include "components/Latch.h"
 #include "components/Range.h"
 
 namespace dhe {
 namespace curve_sequencer {
 
-  template <typename Controls, typename PhaseAccumulator> class GenerateStage {
+  template <typename Controls, typename PhaseAccumulator> class Step {
   public:
-    GenerateStage(Controls &controls, PhaseAccumulator &phase) : controls{controls}, phase{phase} {}
+    Step(Controls &controls, PhaseAccumulator &phase) : controls{controls}, phase{phase} {}
 
     auto isAvailable(int candidateStep, Latch const &gateLatch) const -> bool {
       if (!controls.isEnabled(candidateStep)) {
         return false;
       }
-      auto const mode = controls.generateMode(candidateStep);
-      return isActive(mode, gateLatch);
+      auto const mode = controls.mode(candidateStep);
+      auto const condition = controls.condition(candidateStep);
+      return !isSatisfied(mode, condition, gateLatch);
     }
 
     void enter(int entryStep) {
@@ -28,19 +29,21 @@ namespace curve_sequencer {
     }
 
     auto execute(dhe::Latch const &gateLatch, float sampleTime) -> SequenceMode {
-      if (isActive(generateMode(), gateLatch)) {
+      if (isSatisfied(mode(), condition(), gateLatch)) {
         generate(sampleTime);
         if (phase.state() == PhaseAccumulator::State::Incomplete) {
           return SequenceMode::Generating;
         }
       }
       showActive(false);
-      return SequenceMode::Sustaining;
+      return SequenceMode::Advancing;
     };
 
     void exit() { showActive(false); }
 
   private:
+    auto condition() const -> StepCondition { return controls.condition(step); }
+
     auto duration() const -> float { return controls.duration(step); }
 
     auto level() const -> float { return controls.level(step); }
@@ -50,9 +53,9 @@ namespace curve_sequencer {
       controls.output(scale(taper(phase.phase()), startVoltage, level()));
     }
 
-    auto generateMode() const -> StageMode { return controls.generateMode(step); }
+    auto mode() const -> StepMode { return controls.mode(step); }
 
-    void showActive(bool state) const { controls.showGenerating(step, state); }
+    void showActive(bool state) const { controls.showActive(step, state); }
 
     auto taper(float input) const -> float {
       auto const curvature = controls.curvature(step);

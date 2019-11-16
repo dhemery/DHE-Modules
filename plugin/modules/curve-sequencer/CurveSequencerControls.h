@@ -1,6 +1,7 @@
 #pragma once
 
-#include "StageMode.h"
+#include "StepCondition.h"
+#include "StepMode.h"
 #include "controls/CommonInputs.h"
 #include "controls/CurvatureInputs.h"
 
@@ -31,16 +32,19 @@ namespace curve_sequencer {
   public:
     CurveSequencerControls(std::vector<Input> &inputs, std::vector<Output> &outputs, std::vector<Param> &params,
                            std::vector<Light> &lights) :
-        inputs{inputs}, outputs{outputs}, params{params}, lights{lights} {}
+        inputs{inputs},
+        outputs{outputs},
+        params{params},
+        lights{lights} {}
+
+    auto condition(int step) const -> StepCondition {
+      return static_cast<StepCondition>(params[ConditionSwitches + step].getValue());
+    }
 
     auto curvature(int step) const -> float { return dhe::curvature(params[CurveKnobs + step]); }
 
     auto duration(int step) const -> float {
       return dhe::selectableDuration(params[DurationKnobs + step], params[DurationRangeSwitch]);
-    }
-
-    auto generateMode(int step) const -> StageMode {
-      return static_cast<StageMode>(params[GenerateModeSwitches + step].getValue());
     }
 
     auto input() const -> float { return inputs[CurveSequencerInput].getVoltage(); }
@@ -61,6 +65,8 @@ namespace curve_sequencer {
       return dhe::selectableLevel(params[LevelKnobs + step], params[LevelRangeSwitch]);
     }
 
+    auto mode(int step) const -> StepMode { return static_cast<StepMode>(params[ModeSwitches + step].getValue()); }
+
     auto output() const -> float { return outputs[CurveSequencerOutput].getVoltage(); }
 
     void output(float voltage) { outputs[CurveSequencerOutput].setVoltage(voltage); }
@@ -69,13 +75,7 @@ namespace curve_sequencer {
 
     auto selectionLength() const -> int { return static_cast<int>(params[SelectionLengthKnob].getValue()); }
 
-    void showGenerating(int step, bool state) { lights[GeneratingLights + step].setBrightness(state ? 10.F : 0.F); }
-
-    void showSustaining(int step, bool state) { lights[SustainingLights + step].setBrightness(state ? 10.F : 0.F); }
-
-    auto sustainMode(int step) const -> StageMode {
-      return static_cast<StageMode>(params[SustainModeSwitches + step].getValue());
-    }
+    void showActive(int step, bool state) { lights[ActivityLights + step].setBrightness(state ? 10.F : 0.F); }
 
     auto taper(int step) const -> taper::VariableTaper const * {
       auto const selection = static_cast<int>(params[ShapeSwitches + step].getValue());
@@ -95,8 +95,8 @@ namespace curve_sequencer {
       ENUMS(DurationKnobs, N),
       ENUMS(EnabledButtons, N),
       ENUMS(LevelKnobs, N),
-      ENUMS(GenerateModeSwitches, N),
-      ENUMS(SustainModeSwitches, N),
+      ENUMS(ModeSwitches, N),
+      ENUMS(ConditionSwitches, N),
       ENUMS(ShapeSwitches, N),
       ParameterCount
     };
@@ -113,7 +113,7 @@ namespace curve_sequencer {
 
     enum OutputIds { CurveSequencerOutput, OutputCount };
 
-    enum LightIds { ENUMS(GeneratingLights, N), ENUMS(SustainingLights, N), LightCount };
+    enum LightIds { ENUMS(ActivityLights, N), LightCount };
   };
 
 } // namespace curve_sequencer

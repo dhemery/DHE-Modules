@@ -7,9 +7,8 @@ target_sources(curve_sequencer_tests
         PRIVATE
         CurveSequencerTest.cpp
         CurveSequencerControlsTest.cpp
-        GenerateStageTest.cpp
+        StepTest.cpp
         StepSelectorTest.cpp
-        SustainStageTest.cpp
         )
 target_link_libraries(curve_sequencer_tests
         PRIVATE

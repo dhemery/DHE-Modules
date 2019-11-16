@@ -5,10 +5,12 @@
 
 namespace dhe {
 namespace curve_sequencer {
-  template <typename Controls, typename Selector, typename Generating, typename Sustaining> class CurveSequencer {
+  template <typename Controls, typename StepSelector, typename StepController> class CurveSequencer {
   public:
-    CurveSequencer(Controls &controls, Selector &stepSelector, Generating &generating, Sustaining &sustaining) :
-        controls{controls}, stepSelector{stepSelector}, generating{generating}, sustaining{sustaining} {}
+    CurveSequencer(Controls &controls, StepSelector &stepSelector, StepController &generating) :
+        controls{controls},
+        stepSelector{stepSelector},
+        stepController{generating} {}
 
     void execute(float sampleTime) {
       resetLatch.clock(controls.isReset());
@@ -47,9 +49,7 @@ namespace curve_sequencer {
         step = stepSelector.successor(step, gateLatch, controls.isLooping());
         return step >= 0 ? SequenceMode::Generating : SequenceMode::Idle;
       case SequenceMode::Generating:
-        return generating.execute(gateLatch, sampleTime);
-      case SequenceMode::Sustaining:
-        return sustaining.execute(gateLatch);
+        return stepController.execute(gateLatch, sampleTime);
       default:
         return SequenceMode::Idle;
       }
@@ -58,10 +58,7 @@ namespace curve_sequencer {
     void enter(SequenceMode incomingMode) {
       switch (mode) {
       case SequenceMode::Generating:
-        generating.exit();
-        break;
-      case SequenceMode::Sustaining:
-        sustaining.exit();
+        stepController.exit();
         break;
       default:
         break;
@@ -72,10 +69,7 @@ namespace curve_sequencer {
       mode = incomingMode;
       switch (mode) {
       case SequenceMode::Generating:
-        generating.enter(step);
-        return;
-      case SequenceMode::Sustaining:
-        sustaining.enter(step);
+        stepController.enter(step);
         return;
       case SequenceMode::Idle:
       case SequenceMode::Advancing:
@@ -88,9 +82,8 @@ namespace curve_sequencer {
     Latch resetLatch{};
     SequenceMode mode{SequenceMode::Idle};
     Controls &controls;
-    Selector &stepSelector;
-    Generating &generating;
-    Sustaining &sustaining;
+    StepSelector &stepSelector;
+    StepController &stepController;
   };
 } // namespace curve_sequencer
 } // namespace dhe

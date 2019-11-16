@@ -2,7 +2,6 @@
 
 #include "components/Latch.h"
 #include "curve-sequencer/SequenceMode.h"
-
 #include "mocks.h"
 
 #include <gmock/gmock-actions.h>
@@ -22,10 +21,9 @@ protected:
 
   NiceMock<MockControls> controls{};
   NiceMock<MockStepSelector> stepSelector{};
-  NiceMock<MockGenerateMode> generateMode{};
-  NiceMock<MockSustainMode> sustainMode{};
-  CurveSequencer<MockControls, MockStepSelector, MockGenerateMode, MockSustainMode> curveSequencer{
-      controls, stepSelector, generateMode, sustainMode};
+  NiceMock<MockStepController> stepController{};
+  CurveSequencer<MockControls, MockStepSelector, MockStepController> curveSequencer{controls, stepSelector,
+                                                                                    stepController};
 
   void givenGate(bool state) { ON_CALL(controls, isGated()).WillByDefault(Return(state)); }
 
@@ -34,8 +32,7 @@ protected:
   void givenInitialized() {
     Mock::VerifyAndClear(&controls);
     Mock::VerifyAndClear(&stepSelector);
-    Mock::VerifyAndClear(&generateMode);
-    Mock::VerifyAndClear(&sustainMode);
+    Mock::VerifyAndClear(&stepController);
   }
   void givenIdling() {
     givenInitialized();
@@ -69,8 +66,8 @@ TEST_F(CurveSequencerTest, gateRiseWhileIdling_generatesFirstAvailableStep) {
 
   ON_CALL(stepSelector, first(A<Latch const &>())).WillByDefault(Return(step));
 
-  EXPECT_CALL(generateMode, enter(step));
-  EXPECT_CALL(generateMode, execute(A<Latch const &>(), sampleTime)).WillOnce(Return(SequenceMode::Generating));
+  EXPECT_CALL(stepController, enter(step));
+  EXPECT_CALL(stepController, execute(A<Latch const &>(), sampleTime)).WillOnce(Return(SequenceMode::Generating));
 
   curveSequencer.execute(sampleTime);
 }

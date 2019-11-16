@@ -13,14 +13,14 @@ namespace curve_sequencer {
   auto constexpr stepX = hp2mm(10.F);
   auto constexpr stepDx = hp2mm(2.25F);
 
-  template <typename P> class GenerateModeStepper : public Toggle<P, generateModeCount> {
+  template <typename P> class GenerateModeStepper : public Toggle<P, modeCount> {
   public:
-    GenerateModeStepper() : Toggle<P, generateModeCount>("stepper-generate") {}
+    GenerateModeStepper() : Toggle<P, modeCount>("stepper-generate") {}
   };
 
-  template <typename P> class SustainModeStepper : public Toggle<P, sustainModeCount> {
+  template <typename P> class SustainModeStepper : public Toggle<P, conditionCount> {
   public:
-    SustainModeStepper() : Toggle<P, sustainModeCount>("stepper-sustain") {}
+    SustainModeStepper() : Toggle<P, conditionCount>("stepper-sustain") {}
   };
 
   template <typename P> class SelectionKnob : public SmallKnob<P> {
@@ -128,12 +128,10 @@ namespace curve_sequencer {
 
       for (float step = 0; step < N; step++) {
         auto const x = stepX + stepDx * (float) step;
-        this->light(x - lightDiameter, activeY, Controls::GeneratingLights + step);
-        this->template light<rack::componentlibrary::RedLight>(x + lightDiameter, activeY,
-                                                               Controls::SustainingLights + step);
+        this->light(x - lightDiameter, activeY, Controls::ActivityLights + step);
 
-        this->template toggle<GenerateModeStepper>(x, generatingModeY, Controls::GenerateModeSwitches + step);
-        this->template toggle<SustainModeStepper>(x, sustainingModeY, Controls::SustainModeSwitches + step);
+        this->template toggle<GenerateModeStepper>(x, generatingModeY, Controls::ModeSwitches + step);
+        this->template toggle<SustainModeStepper>(x, sustainingModeY, Controls::ConditionSwitches + step);
 
         this->template knob<SmallKnob>(x, levelY, Controls::LevelKnobs + step);
 

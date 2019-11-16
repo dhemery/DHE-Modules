@@ -7,10 +7,12 @@ namespace dhe {
 namespace curve_sequencer {
   using dhe::Latch;
 
-  template <typename Controls, typename Generate, typename Sustain> class StepSelector {
+  template <typename Controls, typename StepController> class StepSelector {
   public:
-    StepSelector(Controls &controls, Generate &generate, Sustain &sustain, int stepCount) :
-        controls{controls}, generate{generate}, sustain{sustain}, stepMask{stepCount - 1} {}
+    StepSelector(Controls &controls, StepController &stepController, int stepCount) :
+        controls{controls},
+        stepController{stepController},
+        stepMask{stepCount - 1} {}
 
     auto first(Latch const &gate) const -> int {
       auto const selectionStart = controls.selectionStart();
@@ -25,9 +27,7 @@ namespace curve_sequencer {
     }
 
   private:
-    bool isAvailable(int step, Latch const &gate) const {
-      return generate.isAvailable(step, gate) || sustain.isAvailable(step, gate);
-    }
+    bool isAvailable(int step, Latch const &gate) const { return stepController.isAvailable(step, gate); }
 
     auto successor(int current, Latch const &gate, int selectionStart, int selectionLength, bool isLooping) const
         -> int {
@@ -53,8 +53,7 @@ namespace curve_sequencer {
     }
 
     Controls &controls;
-    Generate &generate;
-    Sustain &sustain;
+    StepController &stepController;
     int const stepMask;
   };
 } // namespace curve_sequencer

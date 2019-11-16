@@ -83,8 +83,8 @@ step_x = hp2mm(10)
 step_dx = hp2mm(2.25)
 
 active_y = top + Light::RADIUS
-generate_mode_y = top + hp2mm(2.25)
-sustain_mode_y = top + hp2mm(4.5)
+generator_y = top + hp2mm(2.25)
+gate_mode_y = top + hp2mm(4.5)
 level_y = top + hp2mm(6.75)
 shape_y = top + hp2mm(9.25)
 curve_y = top + hp2mm(11.75)
@@ -93,13 +93,13 @@ enabled_port_y = bottom - Port::DIAMETER / 2.0
 enabled_button_y = enabled_port_y - Port::DIAMETER / 2.0 - Button::DIAMETER / 2.0 - 1.0
 
 label_x = step_x - 0.6 * step_dx
-label x: label_x, y: generate_mode_y, text: 'GENERATE', alignment: :left_of, size: :large
-label x: label_x, y: sustain_mode_y, text: 'SUSTAIN', alignment: :left_of, size: :large
+label x: label_x, y: generator_y, text: 'MODE', alignment: :left_of, size: :large
+label x: label_x, y: gate_mode_y, text: 'CONDITION', alignment: :left_of, size: :large
 label x: label_x, y: level_y, text: 'LEVEL', alignment: :left_of, size: :large
 label x: label_x, y: shape_y, text: 'SHAPE', alignment: :left_of, size: :large
 label x: label_x, y: curve_y, text: 'CURVE', alignment: :left_of, size: :large
 label x: label_x, y: duration_y, text: 'DURATION', alignment: :left_of, size: :large
-label x: label_x, y: enabled_button_y, text: 'ENABLED', alignment: :left_of, size: :large
+label x: label_x, y: (enabled_button_y + enabled_port_y) / 2, text: 'ENABLED', alignment: :left_of, size: :large
 
 channel_separator_top = top + hp2mm(1.25)
 
@@ -111,8 +111,8 @@ step_label_y = top - hp2mm(0.5)
   x = step_x + step * step_dx
   light x: x - Light::DIAMETER, y: active_y
   light x: x + Light::DIAMETER, y: active_y
-  stepper x: x, y: generate_mode_y, name: 'generate', labels: %w[HIGH LOW CALM SKIP GEN], selection: 5
-  stepper x: x, y: sustain_mode_y, name: 'sustain', labels: %w[HIGH LOW CALM SKIP], selection: 4
+  stepper x: x, y: generator_y, name: 'mode', labels: %w[CURV HOLD SUST], selection: 1
+  stepper x: x, y: gate_mode_y, name: 'condition', labels: %w[NONE HIGH LOW RISE FALL EDGE], selection: 1
   label x: x, y: step_label_y, text: (step + 1).to_s, alignment: :above, size: :large
   shape_toggle x: x, y: shape_y
   small_knob y: curve_y, x: x, label: ''

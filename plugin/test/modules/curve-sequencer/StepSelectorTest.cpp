@@ -29,20 +29,10 @@ struct StepSelectorTest : public Test {
   static auto constexpr stepCount{8};
   NiceMock<MockControls> controls{};
   NiceMock<MockStage> generateStage{};
-  NiceMock<MockStage> sustainStage{};
-  StepSelector<MockControls, MockStage, MockStage> selector{controls, generateStage, sustainStage, stepCount};
-
-  void givenGenerateStageAvailable(int step) {
-    ON_CALL(generateStage, isAvailable(step, A<Latch const &>())).WillByDefault(Return(true));
-  }
-
-  void givenSustainStageAvailable(int step) {
-    ON_CALL(sustainStage, isAvailable(step, A<Latch const &>())).WillByDefault(Return(true));
-  }
+  StepSelector<MockControls, MockStage> selector{controls, generateStage, stepCount};
 
   void givenAvailable(int step) {
-    givenGenerateStageAvailable(step);
-    givenSustainStageAvailable(step);
+    ON_CALL(generateStage, isAvailable(step, A<Latch const &>())).WillByDefault(Return(true));
   }
 
   void givenSelection(int start, int length) {

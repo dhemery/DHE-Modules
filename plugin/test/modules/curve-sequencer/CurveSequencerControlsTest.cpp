@@ -4,7 +4,8 @@
 #include "controls/CurvatureInputs.h"
 #include "controls/DurationInputs.h"
 #include "controls/LevelInputs.h"
-#include "curve-sequencer/StageMode.h"
+#include "curve-sequencer/StepCondition.h"
+#include "curve-sequencer/StepMode.h"
 
 #include <engine/Light.hpp>
 #include <engine/Param.hpp>
@@ -15,7 +16,8 @@ static auto constexpr stepCount{8};
 
 using ::testing::Test;
 using Controls = dhe::curve_sequencer::CurveSequencerControls<stepCount>;
-using dhe::curve_sequencer::StageMode;
+using dhe::curve_sequencer::StepCondition;
+using dhe::curve_sequencer::StepMode;
 
 struct CurveSequencerControlsTest : public Test {
   std::vector<rack::engine::Input> inputs{Controls::InputCount};
@@ -180,66 +182,52 @@ TEST_F(CurveSequencerControlsTest, stepShape_isTaperSelectedByStepShapeSwitch) {
   EXPECT_EQ(controls.taper(step), dhe::taper::variableTapers[shapeSelection]);
 }
 
-TEST_F(CurveSequencerControlsTest, stepGenerateMode_isModeSelectedByStepGenerateModeStepper) {
+TEST_F(CurveSequencerControlsTest, stepMode_isModeSelectedByStepModeSwitch) {
   auto constexpr step = 6;
 
-  auto modeSelectedByStepper = StageMode::High;
-  params[Controls::GenerateModeSwitches + step].setValue(static_cast<float>(modeSelectedByStepper));
-  EXPECT_EQ(controls.generateMode(step), modeSelectedByStepper);
+  auto modeSelectedBySwitch = StepMode::Curve;
+  params[Controls::ModeSwitches + step].setValue(static_cast<float>(modeSelectedBySwitch));
+  EXPECT_EQ(controls.mode(step), modeSelectedBySwitch);
 
-  modeSelectedByStepper = StageMode::Low;
-  params[Controls::GenerateModeSwitches + step].setValue(static_cast<float>(modeSelectedByStepper));
-  EXPECT_EQ(controls.generateMode(step), modeSelectedByStepper);
-
-  modeSelectedByStepper = StageMode::Calm;
-  params[Controls::GenerateModeSwitches + step].setValue(static_cast<float>(modeSelectedByStepper));
-  EXPECT_EQ(controls.generateMode(step), modeSelectedByStepper);
-
-  modeSelectedByStepper = StageMode::Skip;
-  params[Controls::GenerateModeSwitches + step].setValue(static_cast<float>(modeSelectedByStepper));
-  EXPECT_EQ(controls.generateMode(step), modeSelectedByStepper);
-
-  modeSelectedByStepper = StageMode::Generate;
-  params[Controls::GenerateModeSwitches + step].setValue(static_cast<float>(modeSelectedByStepper));
-  EXPECT_EQ(controls.generateMode(step), modeSelectedByStepper);
+  modeSelectedBySwitch = StepMode::Hold;
+  params[Controls::ModeSwitches + step].setValue(static_cast<float>(modeSelectedBySwitch));
+  EXPECT_EQ(controls.mode(step), modeSelectedBySwitch);
 }
 
-TEST_F(CurveSequencerControlsTest, stepSustainMode_isModeSelectedByStepSustainModeStepper) {
+TEST_F(CurveSequencerControlsTest, stepCondition_isConditionSelectedByStepConditionSwitch) {
   auto constexpr step = 0;
 
-  auto modeSelectedByStepper = StageMode::High;
-  params[Controls::SustainModeSwitches + step].setValue(static_cast<float>(modeSelectedByStepper));
-  EXPECT_EQ(controls.sustainMode(step), modeSelectedByStepper);
+  auto conditionSelectedBySwitch = StepCondition::DoneGenerating;
+  params[Controls::ConditionSwitches + step].setValue(static_cast<float>(conditionSelectedBySwitch));
+  EXPECT_EQ(controls.condition(step), conditionSelectedBySwitch);
 
-  modeSelectedByStepper = StageMode::Low;
-  params[Controls::SustainModeSwitches + step].setValue(static_cast<float>(modeSelectedByStepper));
-  EXPECT_EQ(controls.sustainMode(step), modeSelectedByStepper);
+  conditionSelectedBySwitch = StepCondition::GateIsHigh;
+  params[Controls::ConditionSwitches + step].setValue(static_cast<float>(conditionSelectedBySwitch));
+  EXPECT_EQ(controls.condition(step), conditionSelectedBySwitch);
 
-  modeSelectedByStepper = StageMode::Calm;
-  params[Controls::SustainModeSwitches + step].setValue(static_cast<float>(modeSelectedByStepper));
-  EXPECT_EQ(controls.sustainMode(step), modeSelectedByStepper);
+  conditionSelectedBySwitch = StepCondition::GateIsLow;
+  params[Controls::ConditionSwitches + step].setValue(static_cast<float>(conditionSelectedBySwitch));
+  EXPECT_EQ(controls.condition(step), conditionSelectedBySwitch);
 
-  modeSelectedByStepper = StageMode::Skip;
-  params[Controls::SustainModeSwitches + step].setValue(static_cast<float>(modeSelectedByStepper));
-  EXPECT_EQ(controls.sustainMode(step), modeSelectedByStepper);
+  conditionSelectedBySwitch = StepCondition::GateRises;
+  params[Controls::ConditionSwitches + step].setValue(static_cast<float>(conditionSelectedBySwitch));
+  EXPECT_EQ(controls.condition(step), conditionSelectedBySwitch);
+
+  conditionSelectedBySwitch = StepCondition::GateFalls;
+  params[Controls::ConditionSwitches + step].setValue(static_cast<float>(conditionSelectedBySwitch));
+  EXPECT_EQ(controls.condition(step), conditionSelectedBySwitch);
+
+  conditionSelectedBySwitch = StepCondition::GateChanges;
+  params[Controls::ConditionSwitches + step].setValue(static_cast<float>(conditionSelectedBySwitch));
+  EXPECT_EQ(controls.condition(step), conditionSelectedBySwitch);
 }
 
-TEST_F(CurveSequencerControlsTest, showGenerating_setsStepGeneratingLightBrightness) {
+TEST_F(CurveSequencerControlsTest, showActive_setsStepActivityLightBrightness) {
   auto constexpr step = 3;
 
-  controls.showGenerating(step, true);
-  EXPECT_EQ(lights[Controls::GeneratingLights + step].getBrightness(), 10.F);
+  controls.showActive(step, true);
+  EXPECT_EQ(lights[Controls::ActivityLights + step].getBrightness(), 10.F);
 
-  controls.showGenerating(step, false);
-  EXPECT_EQ(lights[Controls::GeneratingLights + step].getBrightness(), 0.F);
-}
-
-TEST_F(CurveSequencerControlsTest, showSustaining_setsStepSustainingLightBrightness) {
-  auto constexpr step = 6;
-
-  controls.showSustaining(step, true);
-  EXPECT_EQ(lights[Controls::SustainingLights + step].getBrightness(), 10.F);
-
-  controls.showSustaining(step, false);
-  EXPECT_EQ(lights[Controls::SustainingLights + step].getBrightness(), 0.F);
+  controls.showActive(step, false);
+  EXPECT_EQ(lights[Controls::ActivityLights + step].getBrightness(), 0.F);
 }
