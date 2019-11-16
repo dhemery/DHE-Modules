@@ -1,12 +1,31 @@
 #pragma once
 
-#include "SequenceMode.h"
 #include "StepCondition.h"
+#include "StepEvent.h"
+#include "StepMode.h"
 #include "components/Latch.h"
 #include "components/Range.h"
 
 namespace dhe {
 namespace curve_sequencer {
+
+  static inline auto isSatisfied(StepMode mode, StepCondition condition, dhe::Latch const &gate) -> bool {
+    switch (condition) {
+    case StepCondition::GateIsHigh:
+      return gate.isHigh();
+    case StepCondition::GateIsLow:
+      return gate.isLow();
+    case StepCondition::GateRises:
+      return gate.isRise();
+    case StepCondition::GateFalls:
+      return gate.isFall();
+    case StepCondition::GateChanges:
+      return gate.isEdge();
+    case StepCondition::TimerExpires:
+    default:
+      return mode == StepMode::Sustain;
+    }
+  }
 
   template <typename Controls, typename PhaseAccumulator> class StepController {
   public:
@@ -28,21 +47,21 @@ namespace curve_sequencer {
       showActive(true);
     }
 
-    auto execute(dhe::Latch const &gateLatch, float sampleTime) -> SequenceMode {
+    auto execute(dhe::Latch const &gateLatch, float sampleTime) -> StepEvent {
       StepMode stepMode = mode();
       if (!isSatisfied(stepMode, condition(), gateLatch)) {
-        if(stepMode != StepMode::Sustain) {
+        if (stepMode != StepMode::Sustain) {
           phase.advance(sampleTime / duration());
         }
-        if(stepMode == StepMode::Curve) {
+        if (stepMode == StepMode::Curve) {
           controls.output(scale(taper(phase.phase()), startVoltage, level()));
         }
         if (phase.state() == PhaseAccumulator::State::Incomplete) {
-          return SequenceMode::Generating;
+          return StepEvent::Generated;
         }
       }
       showActive(false);
-      return SequenceMode::Advancing;
+      return StepEvent::Completed;
     };
 
     void exit() { showActive(false); }

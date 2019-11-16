@@ -4,7 +4,6 @@
 #include "controls/CurvatureInputs.h"
 #include "controls/DurationInputs.h"
 #include "controls/LevelInputs.h"
-#include "curve-sequencer/StepCondition.h"
 #include "curve-sequencer/StepMode.h"
 
 #include <engine/Light.hpp>

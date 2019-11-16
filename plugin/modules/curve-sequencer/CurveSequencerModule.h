@@ -1,7 +1,6 @@
 #pragma once
 
 #include "CurveSequencer.h"
-#include "StepCondition.h"
 #include "StepController.h"
 #include "StepMode.h"
 #include "StepSelector.h"

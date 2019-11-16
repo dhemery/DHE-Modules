@@ -1,6 +1,5 @@
 #pragma once
 
-#include "SequenceMode.h"
 #include "components/Latch.h"
 
 namespace dhe {
@@ -10,9 +9,7 @@ namespace curve_sequencer {
   template <typename Controls, typename StepController> class StepSelector {
   public:
     StepSelector(Controls &controls, StepController &stepController, int stepCount) :
-        controls{controls},
-        stepController{stepController},
-        stepMask{stepCount - 1} {}
+        controls{controls}, stepController{stepController}, stepMask{stepCount - 1} {}
 
     auto first(Latch const &gate) const -> int {
       auto const selectionStart = controls.selectionStart();

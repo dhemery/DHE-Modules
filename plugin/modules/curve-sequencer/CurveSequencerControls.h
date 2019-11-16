@@ -32,10 +32,7 @@ namespace curve_sequencer {
   public:
     CurveSequencerControls(std::vector<Input> &inputs, std::vector<Output> &outputs, std::vector<Param> &params,
                            std::vector<Light> &lights) :
-        inputs{inputs},
-        outputs{outputs},
-        params{params},
-        lights{lights} {}
+        inputs{inputs}, outputs{outputs}, params{params}, lights{lights} {}
 
     auto condition(int step) const -> StepCondition {
       return static_cast<StepCondition>(params[ConditionSwitches + step].getValue());

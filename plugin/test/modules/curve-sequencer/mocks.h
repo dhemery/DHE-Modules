@@ -36,6 +36,6 @@ public:
 class MockStepController {
 public:
   MOCK_METHOD(void, enter, (int) );
-  MOCK_METHOD(dhe::curve_sequencer::SequenceMode, execute, (dhe::Latch const &, float) );
+  MOCK_METHOD(dhe::curve_sequencer::StepEvent, execute, (dhe::Latch const &, float) );
   MOCK_METHOD(void, exit, ());
 };

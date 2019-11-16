@@ -2,6 +2,6 @@
 
 namespace dhe {
 namespace curve_sequencer {
-  enum class StepMode { Curve, Hold, Sustain };
+  enum class StepEvent { Generated, Completed };
 } // namespace curve_sequencer
 } // namespace dhe

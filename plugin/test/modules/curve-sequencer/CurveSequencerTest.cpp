@@ -1,7 +1,7 @@
 #include "curve-sequencer/CurveSequencer.h"
 
 #include "components/Latch.h"
-#include "curve-sequencer/SequenceMode.h"
+#include "curve-sequencer/StepEvent.h"
 #include "mocks.h"
 
 #include <gmock/gmock-actions.h>
@@ -9,7 +9,7 @@
 
 using dhe::Latch;
 using dhe::curve_sequencer::CurveSequencer;
-using dhe::curve_sequencer::SequenceMode;
+using dhe::curve_sequencer::StepEvent;
 using ::testing::A;
 using ::testing::Mock;
 using ::testing::NiceMock;
@@ -67,7 +67,7 @@ TEST_F(CurveSequencerTest, gateRiseWhileIdling_generatesFirstAvailableStep) {
   ON_CALL(stepSelector, first(A<Latch const &>())).WillByDefault(Return(step));
 
   EXPECT_CALL(stepController, enter(step));
-  EXPECT_CALL(stepController, execute(A<Latch const &>(), sampleTime)).WillOnce(Return(SequenceMode::Generating));
+  EXPECT_CALL(stepController, execute(A<Latch const &>(), sampleTime)).WillOnce(Return(StepEvent::Generated));
 
   curveSequencer.execute(sampleTime);
 }

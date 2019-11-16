@@ -1,9 +1,9 @@
 #include "components/Latch.h"
 #include "components/OneShotPhaseAccumulator.h"
 #include "components/Taper.h"
-#include "curve-sequencer/SequenceMode.h"
 #include "curve-sequencer/StepCondition.h"
 #include "curve-sequencer/StepController.h"
+#include "curve-sequencer/StepEvent.h"
 #include "curve-sequencer/StepMode.h"
 #include "mocks.h"
 
@@ -11,9 +11,9 @@
 #include <gtest/gtest.h>
 
 using dhe::Latch;
-using dhe::curve_sequencer::SequenceMode;
 using dhe::curve_sequencer::StepCondition;
 using dhe::curve_sequencer::StepController;
+using dhe::curve_sequencer::StepEvent;
 using dhe::curve_sequencer::StepMode;
 
 static auto constexpr risenGate = Latch{true, true};
@@ -142,7 +142,7 @@ TEST_F(StepTest, curveMode_isUnavailable_ifConditionIsSatisfied) {
   EXPECT_FALSE(stepController.isAvailable(step, fallenGate));
 }
 
-TEST_F(StepTest, curveMode_returnsGenerating_ifConditionIsNotSatisfied) {
+TEST_F(StepTest, curveMode_returnsGenerated_ifConditionIsNotSatisfied) {
   auto const step = 7;
   givenMode(step, StepMode::Curve);
   givenCondition(step, StepCondition::GateIsHigh);
@@ -150,13 +150,13 @@ TEST_F(StepTest, curveMode_returnsGenerating_ifConditionIsNotSatisfied) {
   stepController.enter(step);
 
   auto next = stepController.execute(lowGate, 0.F);
-  EXPECT_EQ(next, SequenceMode::Generating);
+  EXPECT_EQ(next, StepEvent::Generated);
 
   next = stepController.execute(fallenGate, 0.F);
-  EXPECT_EQ(next, SequenceMode::Generating);
+  EXPECT_EQ(next, StepEvent::Generated);
 }
 
-TEST_F(StepTest, curveMode_returnsAdvancing_ifConditionIsSatisfied) {
+TEST_F(StepTest, curveMode_returnsCompleted_ifConditionIsSatisfied) {
   auto const step = 6;
   givenMode(step, StepMode::Curve);
   givenCondition(step, StepCondition::GateIsHigh);
@@ -164,10 +164,10 @@ TEST_F(StepTest, curveMode_returnsAdvancing_ifConditionIsSatisfied) {
   stepController.enter(step);
 
   auto next = stepController.execute(highGate, 0.F);
-  EXPECT_EQ(next, SequenceMode::Advancing);
+  EXPECT_EQ(next, StepEvent::Completed);
 
   next = stepController.execute(risenGate, 0.F);
-  EXPECT_EQ(next, SequenceMode::Advancing);
+  EXPECT_EQ(next, StepEvent::Completed);
 }
 
 TEST_F(StepTest, holdMode_isAvailable_ifEnabled_andConditionIsNotSatisfied) {
@@ -251,7 +251,7 @@ TEST_F(StepTest, holdMode_isUnavailable_ifConditionIsSatisfied) {
   EXPECT_FALSE(stepController.isAvailable(step, fallenGate));
 }
 
-TEST_F(StepTest, holdMode_returnsGenerating_ifConditionIsNotSatisfied) {
+TEST_F(StepTest, holdMode_returnsGenerated_ifConditionIsNotSatisfied) {
   auto const step = 7;
   givenMode(step, StepMode::Hold);
   givenCondition(step, StepCondition::GateIsHigh);
@@ -259,13 +259,13 @@ TEST_F(StepTest, holdMode_returnsGenerating_ifConditionIsNotSatisfied) {
   stepController.enter(step);
 
   auto next = stepController.execute(lowGate, 0.F);
-  EXPECT_EQ(next, SequenceMode::Generating);
+  EXPECT_EQ(next, StepEvent::Generated);
 
   next = stepController.execute(fallenGate, 0.F);
-  EXPECT_EQ(next, SequenceMode::Generating);
+  EXPECT_EQ(next, StepEvent::Generated);
 }
 
-TEST_F(StepTest, holdMode_returnsAdvancing_ifConditionIsSatisfied) {
+TEST_F(StepTest, holdMode_returnsCompleted_ifConditionIsSatisfied) {
   auto const step = 6;
   givenMode(step, StepMode::Hold);
   givenCondition(step, StepCondition::GateIsHigh);
@@ -273,10 +273,10 @@ TEST_F(StepTest, holdMode_returnsAdvancing_ifConditionIsSatisfied) {
   stepController.enter(step);
 
   auto next = stepController.execute(highGate, 0.F);
-  EXPECT_EQ(next, SequenceMode::Advancing);
+  EXPECT_EQ(next, StepEvent::Completed);
 
   next = stepController.execute(risenGate, 0.F);
-  EXPECT_EQ(next, SequenceMode::Advancing);
+  EXPECT_EQ(next, StepEvent::Completed);
 }
 
 TEST_F(StepTest, sustainMode_isAvailable_ifEnabled_andConditionIsNotSatisfied) {
@@ -360,7 +360,7 @@ TEST_F(StepTest, sustainMode_isUnavailable_ifConditionIsSatisfied) {
   EXPECT_FALSE(stepController.isAvailable(step, fallenGate));
 }
 
-TEST_F(StepTest, sustainMode_returnsGenerating_ifConditionIsNotSatisfied) {
+TEST_F(StepTest, sustainMode_returnsGenerated_ifConditionIsNotSatisfied) {
   auto const step = 7;
   givenMode(step, StepMode::Sustain);
   givenCondition(step, StepCondition::GateIsHigh);
@@ -368,13 +368,13 @@ TEST_F(StepTest, sustainMode_returnsGenerating_ifConditionIsNotSatisfied) {
   stepController.enter(step);
 
   auto next = stepController.execute(lowGate, 0.F);
-  EXPECT_EQ(next, SequenceMode::Generating);
+  EXPECT_EQ(next, StepEvent::Generated);
 
   next = stepController.execute(fallenGate, 0.F);
-  EXPECT_EQ(next, SequenceMode::Generating);
+  EXPECT_EQ(next, StepEvent::Generated);
 }
 
-TEST_F(StepTest, sustainMode_returnsAdvancing_ifConditionIsSatisfied) {
+TEST_F(StepTest, sustainMode_returnsCompleted_ifConditionIsSatisfied) {
   auto const step = 6;
   givenMode(step, StepMode::Sustain);
   givenCondition(step, StepCondition::GateIsHigh);
@@ -382,8 +382,8 @@ TEST_F(StepTest, sustainMode_returnsAdvancing_ifConditionIsSatisfied) {
   stepController.enter(step);
 
   auto next = stepController.execute(highGate, 0.F);
-  EXPECT_EQ(next, SequenceMode::Advancing);
+  EXPECT_EQ(next, StepEvent::Completed);
 
   next = stepController.execute(risenGate, 0.F);
-  EXPECT_EQ(next, SequenceMode::Advancing);
+  EXPECT_EQ(next, StepEvent::Completed);
 }
