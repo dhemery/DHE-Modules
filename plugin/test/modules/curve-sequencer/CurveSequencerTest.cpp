@@ -54,6 +54,7 @@ protected:
     Mock::VerifyAndClear(&stepSelector);
     Mock::VerifyAndClear(&stepController);
   }
+
   void givenIdling() {
     givenInitialized();
     givenRun(true);

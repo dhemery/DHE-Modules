@@ -7,8 +7,6 @@ namespace dhe {
 namespace curve_sequencer {
 
   template <typename Controls, typename StepSelector, typename StepController> class CurveSequencer {
-    enum class SequenceMode { Idle, Advancing, Generating };
-
   public:
     CurveSequencer(Controls &controls, StepSelector &stepSelector, StepController &generating) :
         controls{controls}, stepSelector{stepSelector}, stepController{generating} {}
@@ -17,7 +15,7 @@ namespace curve_sequencer {
       resetLatch.clock(controls.isReset());
 
       if (resetLatch.isRise()) {
-        enter(SequenceMode::Idle);
+        becomeIdle();
       }
 
       gateLatch.clock(controls.isGated());
@@ -26,70 +24,59 @@ namespace curve_sequencer {
         return;
       }
 
-      do {
-        auto const next = executeMode(sampleTime);
-        if (next == mode) {
-          return;
-        }
-        enter(next);
-      } while (mode != SequenceMode::Idle);
+      if (step >= 0) {
+        generate(sampleTime);
+      } else {
+        idle(sampleTime);
+      }
     }
 
   private:
-    auto executeMode(float sampleTime) -> SequenceMode {
-      switch (mode) {
-      default:
-      case SequenceMode::Idle:
-        return idle();
-      case SequenceMode::Advancing:
-        return advance();
-      case SequenceMode::Generating:
-        return generate(sampleTime);
+    void becomeIdle() {
+      if (step >= 0) {
+        stepController.exit();
       }
+      step = -1;
     }
 
-    auto advance() -> SequenceMode {
-      step = stepSelector.successor(step, gateLatch, controls.isLooping());
-      return step >= 0 ? SequenceMode::Generating : SequenceMode::Idle;
-    }
-
-    auto idle() -> SequenceMode {
-      if (gateLatch.isRise()) {
-        step = stepSelector.first(gateLatch);
-        return step >= 0 ? SequenceMode::Generating : SequenceMode::Idle;
-      }
+    void idle(float sampleTime) {
       if (resetLatch.isHigh()) {
         controls.output(controls.input());
       }
-      return SequenceMode::Idle;
-    }
-
-    auto generate(float sampleTime) -> SequenceMode {
-      auto const result = stepController.execute(gateLatch, sampleTime);
-      return (result == StepEvent::Generated) ? SequenceMode::Generating : SequenceMode::Advancing;
-    }
-
-    void enter(SequenceMode incomingMode) {
-      if (mode == SequenceMode::Generating) {
-        stepController.exit();
+      if (gateLatch.isRise()) {
+        becomeActive(sampleTime);
       }
+    }
 
-      gateLatch.clock(gateLatch.isHigh()); // To remove the edge
+    void generate(float sampleTime) {
+      auto const result = stepController.execute(gateLatch, sampleTime);
+      if (result == StepEvent::Completed) {
+        advanceSequence();
+      }
+    }
 
-      mode = incomingMode;
+    void becomeActive(float sampleTime) {
+      step = stepSelector.first(gateLatch);
+      if (step >= 0) {
+        stepController.enter(step);
+        generate(sampleTime);
+      }
+    }
 
-      if (mode == SequenceMode::Generating) {
+    void advanceSequence() {
+      gateLatch.clock(gateLatch.isHigh());
+      step = stepSelector.successor(step, gateLatch, controls.isLooping());
+      if (step >= 0) {
         stepController.enter(step);
       }
     }
 
-    int step{0};
+    int step{-1};
     Latch gateLatch{};
     Latch resetLatch{};
-    SequenceMode mode{SequenceMode::Idle};
     Controls &controls;
     StepSelector &stepSelector;
     StepController &stepController;
-  };
+  }; // namespace curve_sequencer
 } // namespace curve_sequencer
 } // namespace dhe

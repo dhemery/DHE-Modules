@@ -88,10 +88,10 @@ namespace curve_sequencer {
       return taper->apply(input, curvature);
     }
 
+    int step{0};
+    float startVoltage{0.F};
     Controls &controls;
     PhaseAccumulator &phase;
-    int step;
-    float startVoltage;
   }; // namespace curve_sequencer
 } // namespace curve_sequencer
 } // namespace dhe
