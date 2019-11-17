@@ -56,6 +56,7 @@ namespace curve_sequencer {
     }
 
     void becomeActive(float sampleTime) {
+      gateLatch.clock(gateLatch.isHigh());
       step = stepSelector.first(gateLatch);
       if (step >= 0) {
         stepController.enter(step);
