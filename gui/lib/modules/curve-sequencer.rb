@@ -40,8 +40,6 @@ top = hp2mm(4)
 bottom = hp2mm(23)
 
 
-
-
 ###############################################################################
 #
 # Sequence Controls (Left)
@@ -71,8 +69,6 @@ input_button_port x: left, y: loop_y, label: 'LOOP'
 input_button_port x: left, y: reset_y, label: 'RESET'
 
 
-
-
 ###############################################################################
 #
 # Step Controls
@@ -94,7 +90,7 @@ enabled_button_y = enabled_port_y - Port::DIAMETER / 2.0 - Button::DIAMETER / 2.
 
 label_x = step_x - 0.6 * step_dx
 label x: label_x, y: generator_y, text: 'MODE', alignment: :left_of, size: :large
-label x: label_x, y: gate_mode_y, text: 'CONDITION', alignment: :left_of, size: :large
+label x: label_x, y: gate_mode_y, text: 'ADVANCE', alignment: :left_of, size: :large
 label x: label_x, y: level_y, text: 'LEVEL', alignment: :left_of, size: :large
 label x: label_x, y: shape_y, text: 'SHAPE', alignment: :left_of, size: :large
 label x: label_x, y: curve_y, text: 'CURVE', alignment: :left_of, size: :large
@@ -109,10 +105,9 @@ line x1: line_x, x2: line_x, y1: channel_separator_top, y2: bottom
 step_label_y = top - hp2mm(0.5)
 (0...steps).each do |step|
   x = step_x + step * step_dx
-  light x: x - Light::DIAMETER, y: active_y
-  light x: x + Light::DIAMETER, y: active_y
+  light x: x, y: active_y
   stepper x: x, y: generator_y, name: 'mode', labels: %w[CURV HOLD SUST], selection: 1
-  stepper x: x, y: gate_mode_y, name: 'condition', labels: %w[TIME HIGH LOW RISE FALL EDGE], selection: 1
+  stepper x: x, y: gate_mode_y, name: 'advance', labels: %w[TIME RISE FALL EDGE HIGH LOW], selection: 1
   label x: x, y: step_label_y, text: (step + 1).to_s, alignment: :above, size: :large
   shape_toggle x: x, y: shape_y
   small_knob y: curve_y, x: x, label: ''
@@ -127,8 +122,6 @@ end
 
 position_marker(x: step_x - Light::DIAMETER, y: active_y, type: :start)
 position_marker(x: step_x + step_dx * (steps - 1) + Light::DIAMETER, y: active_y, type: :end)
-
-
 
 
 ###############################################################################

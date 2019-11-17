@@ -18,9 +18,9 @@ namespace curve_sequencer {
     GenerateModeStepper() : Toggle<P, modeCount>("stepper-mode") {}
   };
 
-  template <typename P> class SustainModeStepper : public Toggle<P, conditionCount> {
+  template <typename P> class SustainModeStepper : public Toggle<P, advanceConditionCount> {
   public:
-    SustainModeStepper() : Toggle<P, conditionCount>("stepper-condition") {}
+    SustainModeStepper() : Toggle<P, advanceConditionCount>("stepper-advance") {}
   };
 
   template <typename P> class SelectionKnob : public SmallKnob<P> {
@@ -128,7 +128,7 @@ namespace curve_sequencer {
 
       for (float step = 0; step < N; step++) {
         auto const x = stepX + stepDx * (float) step;
-        this->light(x - lightDiameter, activeY, Controls::ActivityLights + step);
+        this->light(x, activeY, Controls::ActivityLights + step);
 
         this->template toggle<GenerateModeStepper>(x, generatingModeY, Controls::ModeSwitches + step);
         this->template toggle<SustainModeStepper>(x, sustainingModeY, Controls::ConditionSwitches + step);

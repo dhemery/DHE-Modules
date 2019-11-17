@@ -19,11 +19,10 @@ namespace curve_sequencer {
   static auto constexpr defaultMode = static_cast<int>(StepMode::Curve);
   static auto const modeDescriptions = std::array<std::string, modeCount>{"Curve", "Hold", "Sustain"};
 
-  static auto constexpr conditionCount = static_cast<int>(StepCondition::GateChanges) + 1;
-  static auto constexpr defaultCondition = static_cast<int>(StepCondition::TimerExpires);
-  static auto const conditionDescriptions
-      = std::array<std::string, conditionCount>{"Until timer expires", "While gate is high", "While gate is low",
-                                                "Until gate rises",    "Until gate falls",   "Until gate changes"};
+  static auto constexpr advanceConditionCount = static_cast<int>(AdvanceCondition::GateIsLow) + 1;
+  static auto constexpr defaultAdvanceCondition = static_cast<int>(AdvanceCondition::TimerExpires);
+  static auto const advanceConditionDescriptions = std::array<std::string, advanceConditionCount>{
+      "Timer expires", "Gate rises", "Gate falls", "Gate changes", "Gate is high", "Gate is low"};
 
   template <int N> class CurveSequencerModule : public rack::engine::Module {
     using Controls = CurveSequencerControls<N>;
@@ -45,8 +44,8 @@ namespace curve_sequencer {
 
       for (int stepIndex = 0; stepIndex < N; stepIndex++) {
         configToggle<modeCount>(this, Controls::ModeSwitches + stepIndex, "Mode", modeDescriptions, defaultMode);
-        configToggle<conditionCount>(this, Controls::ConditionSwitches + stepIndex, "Condition", conditionDescriptions,
-                                     defaultCondition);
+        configToggle<advanceConditionCount>(this, Controls::ConditionSwitches + stepIndex, "Advance when",
+                                            advanceConditionDescriptions, defaultAdvanceCondition);
         configLevelKnob(this, Controls::LevelKnobs + stepIndex, Controls::LevelRangeSwitch, "Level");
         configCurveShapeSwitch(this, Controls::ShapeSwitches + stepIndex, "Shape");
         configCurvatureKnob(this, Controls::CurveKnobs + stepIndex, "Curvature");

@@ -15,7 +15,7 @@ static auto constexpr stepCount{8};
 
 using ::testing::Test;
 using Controls = dhe::curve_sequencer::CurveSequencerControls<stepCount>;
-using dhe::curve_sequencer::StepCondition;
+using dhe::curve_sequencer::AdvanceCondition;
 using dhe::curve_sequencer::StepMode;
 
 class CurveSequencerControlsTest : public Test {
@@ -197,27 +197,27 @@ TEST_F(CurveSequencerControlsTest, stepMode_isModeSelectedByStepModeSwitch) {
 TEST_F(CurveSequencerControlsTest, stepCondition_isConditionSelectedByStepConditionSwitch) {
   auto constexpr step = 0;
 
-  auto conditionSelectedBySwitch = StepCondition::TimerExpires;
+  auto conditionSelectedBySwitch = AdvanceCondition::TimerExpires;
   params[Controls::ConditionSwitches + step].setValue(static_cast<float>(conditionSelectedBySwitch));
   EXPECT_EQ(controls.condition(step), conditionSelectedBySwitch);
 
-  conditionSelectedBySwitch = StepCondition::GateIsHigh;
+  conditionSelectedBySwitch = AdvanceCondition::GateIsHigh;
   params[Controls::ConditionSwitches + step].setValue(static_cast<float>(conditionSelectedBySwitch));
   EXPECT_EQ(controls.condition(step), conditionSelectedBySwitch);
 
-  conditionSelectedBySwitch = StepCondition::GateIsLow;
+  conditionSelectedBySwitch = AdvanceCondition::GateIsLow;
   params[Controls::ConditionSwitches + step].setValue(static_cast<float>(conditionSelectedBySwitch));
   EXPECT_EQ(controls.condition(step), conditionSelectedBySwitch);
 
-  conditionSelectedBySwitch = StepCondition::GateRises;
+  conditionSelectedBySwitch = AdvanceCondition::GateRises;
   params[Controls::ConditionSwitches + step].setValue(static_cast<float>(conditionSelectedBySwitch));
   EXPECT_EQ(controls.condition(step), conditionSelectedBySwitch);
 
-  conditionSelectedBySwitch = StepCondition::GateFalls;
+  conditionSelectedBySwitch = AdvanceCondition::GateFalls;
   params[Controls::ConditionSwitches + step].setValue(static_cast<float>(conditionSelectedBySwitch));
   EXPECT_EQ(controls.condition(step), conditionSelectedBySwitch);
 
-  conditionSelectedBySwitch = StepCondition::GateChanges;
+  conditionSelectedBySwitch = AdvanceCondition::GateChanges;
   params[Controls::ConditionSwitches + step].setValue(static_cast<float>(conditionSelectedBySwitch));
   EXPECT_EQ(controls.condition(step), conditionSelectedBySwitch);
 }

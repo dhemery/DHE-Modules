@@ -2,6 +2,6 @@
 
 namespace dhe {
 namespace curve_sequencer {
-  enum class StepCondition { TimerExpires, GateIsLow, GateIsHigh, GateRises, GateFalls, GateChanges };
+  enum class AdvanceCondition { TimerExpires, GateRises, GateFalls, GateChanges, GateIsHigh, GateIsLow };
 } // namespace curve_sequencer
 } // namespace dhe

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "StepCondition.h"
+#include "AdvanceCondition.h"
 #include "StepEvent.h"
 #include "StepMode.h"
 #include "components/Latch.h"
@@ -9,19 +9,19 @@
 namespace dhe {
 namespace curve_sequencer {
 
-  static inline auto isSatisfied(StepMode mode, StepCondition condition, dhe::Latch const &gate) -> bool {
+  static inline auto isSatisfied(StepMode mode, AdvanceCondition condition, dhe::Latch const &gate) -> bool {
     switch (condition) {
-    case StepCondition::GateIsHigh:
+    case AdvanceCondition::GateIsHigh:
       return gate.isHigh();
-    case StepCondition::GateIsLow:
+    case AdvanceCondition::GateIsLow:
       return gate.isLow();
-    case StepCondition::GateRises:
+    case AdvanceCondition::GateRises:
       return gate.isRise();
-    case StepCondition::GateFalls:
+    case AdvanceCondition::GateFalls:
       return gate.isFall();
-    case StepCondition::GateChanges:
+    case AdvanceCondition::GateChanges:
       return gate.isEdge();
-    case StepCondition::TimerExpires:
+    case AdvanceCondition::TimerExpires:
     default:
       return mode == StepMode::Sustain;
     }
@@ -67,7 +67,7 @@ namespace curve_sequencer {
     void exit() { showActive(false); }
 
   private:
-    auto condition() const -> StepCondition { return controls.condition(step); }
+    auto condition() const -> AdvanceCondition { return controls.condition(step); }
 
     auto duration() const -> float { return controls.duration(step); }
 

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "StepCondition.h"
+#include "AdvanceCondition.h"
 #include "StepMode.h"
 #include "controls/CommonInputs.h"
 #include "controls/CurvatureInputs.h"
@@ -34,8 +34,8 @@ namespace curve_sequencer {
                            std::vector<Light> &lights) :
         inputs{inputs}, outputs{outputs}, params{params}, lights{lights} {}
 
-    auto condition(int step) const -> StepCondition {
-      return static_cast<StepCondition>(params[ConditionSwitches + step].getValue());
+    auto condition(int step) const -> AdvanceCondition {
+      return static_cast<AdvanceCondition>(params[ConditionSwitches + step].getValue());
     }
 
     auto curvature(int step) const -> float { return dhe::curvature(params[CurveKnobs + step]); }
