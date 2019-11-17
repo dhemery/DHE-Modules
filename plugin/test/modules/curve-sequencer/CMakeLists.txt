@@ -7,7 +7,7 @@ target_sources(curve_sequencer_tests
         PRIVATE
         CurveSequencerTest.cpp
         CurveSequencerControlsTest.cpp
-        StepTest.cpp
+        StepControllerTest.cpp
         StepSelectorTest.cpp
         )
 target_link_libraries(curve_sequencer_tests

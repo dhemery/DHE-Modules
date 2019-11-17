@@ -14,18 +14,19 @@ using ::testing::NiceMock;
 using ::testing::Return;
 using ::testing::Test;
 
-class MockControls {
-public:
-  MOCK_METHOD(int, selectionStart, (), (const));
-  MOCK_METHOD(int, selectionLength, (), (const));
-};
+class StepSelectorTest : public Test {
+  class MockControls {
+  public:
+    MOCK_METHOD(int, selectionStart, (), (const));
+    MOCK_METHOD(int, selectionLength, (), (const));
+  };
 
-class MockStage {
-public:
-  MOCK_METHOD(bool, isAvailable, (int, Latch const &), (const));
-};
+  class MockStage {
+  public:
+    MOCK_METHOD(bool, isAvailable, (int, Latch const &), (const));
+  };
 
-struct StepSelectorTest : public Test {
+protected:
   static auto constexpr stepCount{8};
   NiceMock<MockControls> controls{};
   NiceMock<MockStage> generateStage{};

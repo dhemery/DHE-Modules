@@ -2,9 +2,9 @@
 
 #include "components/Latch.h"
 #include "curve-sequencer/StepEvent.h"
-#include "mocks.h"
 
 #include <gmock/gmock-actions.h>
+#include <gmock/gmock.h>
 #include <gtest/gtest.h>
 
 using dhe::Latch;
@@ -16,6 +16,26 @@ using ::testing::NiceMock;
 using ::testing::Return;
 
 class CurveSequencerTest : public ::testing::Test {
+  struct MockControls {
+    MOCK_METHOD(float, input, (), (const));
+    MOCK_METHOD(bool, isGated, (), (const));
+    MOCK_METHOD(bool, isLooping, (), (const));
+    MOCK_METHOD(bool, isReset, (), (const));
+    MOCK_METHOD(bool, isRunning, (), (const));
+    MOCK_METHOD(void, output, (float) );
+  };
+
+  struct MockStepSelector {
+    MOCK_METHOD(int, first, (dhe::Latch const &), (const));
+    MOCK_METHOD(int, successor, (int, dhe::Latch const &, bool), (const));
+  };
+
+  struct MockStepController {
+    MOCK_METHOD(void, enter, (int) );
+    MOCK_METHOD(dhe::curve_sequencer::StepEvent, execute, (dhe::Latch const &, float) );
+    MOCK_METHOD(void, exit, ());
+  };
+
 protected:
   static auto constexpr sampleTime{1.F / 12345.F};
 

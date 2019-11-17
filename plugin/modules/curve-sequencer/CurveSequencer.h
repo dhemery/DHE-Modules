@@ -1,12 +1,14 @@
 #pragma once
 
-#include "SequenceMode.h"
 #include "StepEvent.h"
 #include "components/Latch.h"
 
 namespace dhe {
 namespace curve_sequencer {
+
   template <typename Controls, typename StepSelector, typename StepController> class CurveSequencer {
+    enum class SequenceMode { Idle, Advancing, Generating };
+
   public:
     CurveSequencer(Controls &controls, StepSelector &stepSelector, StepController &generating) :
         controls{controls}, stepSelector{stepSelector}, stepController{generating} {}

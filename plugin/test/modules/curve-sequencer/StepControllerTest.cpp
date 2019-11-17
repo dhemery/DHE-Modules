@@ -5,9 +5,9 @@
 #include "curve-sequencer/StepController.h"
 #include "curve-sequencer/StepEvent.h"
 #include "curve-sequencer/StepMode.h"
-#include "mocks.h"
 
 #include <gmock/gmock-actions.h>
+#include <gmock/gmock.h>
 #include <gtest/gtest.h>
 
 using dhe::Latch;
@@ -26,7 +26,21 @@ using ::testing::NiceMock;
 using ::testing::Return;
 using ::testing::Test;
 
-struct StepTest : public Test {
+class StepControllerTest : public Test {
+  struct MockControls {
+    MOCK_METHOD(dhe::curve_sequencer::StepCondition, condition, (int), (const));
+    MOCK_METHOD(float, curvature, (int), (const));
+    MOCK_METHOD(float, duration, (int), (const));
+    MOCK_METHOD(bool, isEnabled, (int), (const));
+    MOCK_METHOD(float, level, (int), (const));
+    MOCK_METHOD(dhe::curve_sequencer::StepMode, mode, (int), (const));
+    MOCK_METHOD(float, output, (), (const));
+    MOCK_METHOD(void, output, (float) );
+    MOCK_METHOD(void, showActive, (int, bool) );
+    MOCK_METHOD(dhe::taper::VariableTaper const *, taper, (int), (const));
+  };
+
+protected:
   NiceMock<MockControls> controls{};
   dhe::OneShotPhaseAccumulator phase{};
 
@@ -43,7 +57,7 @@ struct StepTest : public Test {
   void SetUp() override { ON_CALL(controls, taper(An<int>())).WillByDefault(Return(dhe::taper::variableTapers[0])); }
 };
 
-TEST_F(StepTest, enter_lightsStepActivityLight) {
+TEST_F(StepControllerTest, enter_lightsStepActivityLight) {
   auto constexpr step = 0;
 
   EXPECT_CALL(controls, showActive(step, true));
@@ -51,7 +65,7 @@ TEST_F(StepTest, enter_lightsStepActivityLight) {
   stepController.enter(step);
 }
 
-TEST_F(StepTest, exit_dimsStepActivityLight) {
+TEST_F(StepControllerTest, exit_dimsStepActivityLight) {
   auto constexpr step = 1;
 
   stepController.enter(step);
@@ -61,7 +75,7 @@ TEST_F(StepTest, exit_dimsStepActivityLight) {
   stepController.exit();
 }
 
-TEST_F(StepTest, curveMode_isAvailable_ifEnabled_andConditionIsNotSatisfied) {
+TEST_F(StepControllerTest, curveMode_isAvailable_ifEnabled_andConditionIsNotSatisfied) {
   auto constexpr step = 1;
   givenMode(step, StepMode::Curve);
   givenEnabled(step, true);
@@ -96,7 +110,7 @@ TEST_F(StepTest, curveMode_isAvailable_ifEnabled_andConditionIsNotSatisfied) {
   EXPECT_TRUE(stepController.isAvailable(step, highGate));
 }
 
-TEST_F(StepTest, curveMode_isUnavailable_ifNotEnabled) {
+TEST_F(StepControllerTest, curveMode_isUnavailable_ifNotEnabled) {
   auto constexpr step = 0;
   givenMode(step, StepMode::Curve);
   givenEnabled(step, false);
@@ -118,7 +132,7 @@ TEST_F(StepTest, curveMode_isUnavailable_ifNotEnabled) {
   EXPECT_FALSE(stepController.isAvailable(step, fallenGate));
 }
 
-TEST_F(StepTest, curveMode_isUnavailable_ifConditionIsSatisfied) {
+TEST_F(StepControllerTest, curveMode_isUnavailable_ifConditionIsSatisfied) {
   auto constexpr step = 0;
   givenMode(step, StepMode::Curve);
   givenEnabled(step, true);
@@ -142,7 +156,7 @@ TEST_F(StepTest, curveMode_isUnavailable_ifConditionIsSatisfied) {
   EXPECT_FALSE(stepController.isAvailable(step, fallenGate));
 }
 
-TEST_F(StepTest, curveMode_returnsGenerated_ifConditionIsNotSatisfied) {
+TEST_F(StepControllerTest, curveMode_returnsGenerated_ifConditionIsNotSatisfied) {
   auto const step = 7;
   givenMode(step, StepMode::Curve);
   givenCondition(step, StepCondition::GateIsHigh);
@@ -156,7 +170,7 @@ TEST_F(StepTest, curveMode_returnsGenerated_ifConditionIsNotSatisfied) {
   EXPECT_EQ(next, StepEvent::Generated);
 }
 
-TEST_F(StepTest, curveMode_returnsCompleted_ifConditionIsSatisfied) {
+TEST_F(StepControllerTest, curveMode_returnsCompleted_ifConditionIsSatisfied) {
   auto const step = 6;
   givenMode(step, StepMode::Curve);
   givenCondition(step, StepCondition::GateIsHigh);
@@ -170,7 +184,7 @@ TEST_F(StepTest, curveMode_returnsCompleted_ifConditionIsSatisfied) {
   EXPECT_EQ(next, StepEvent::Completed);
 }
 
-TEST_F(StepTest, holdMode_isAvailable_ifEnabled_andConditionIsNotSatisfied) {
+TEST_F(StepControllerTest, holdMode_isAvailable_ifEnabled_andConditionIsNotSatisfied) {
   auto constexpr step = 1;
   givenMode(step, StepMode::Hold);
   givenEnabled(step, true);
@@ -205,7 +219,7 @@ TEST_F(StepTest, holdMode_isAvailable_ifEnabled_andConditionIsNotSatisfied) {
   EXPECT_TRUE(stepController.isAvailable(step, highGate));
 }
 
-TEST_F(StepTest, holdMode_isUnavailable_ifNotEnabled) {
+TEST_F(StepControllerTest, holdMode_isUnavailable_ifNotEnabled) {
   auto constexpr step = 0;
   givenMode(step, StepMode::Hold);
   givenEnabled(step, false);
@@ -227,7 +241,7 @@ TEST_F(StepTest, holdMode_isUnavailable_ifNotEnabled) {
   EXPECT_FALSE(stepController.isAvailable(step, fallenGate));
 }
 
-TEST_F(StepTest, holdMode_isUnavailable_ifConditionIsSatisfied) {
+TEST_F(StepControllerTest, holdMode_isUnavailable_ifConditionIsSatisfied) {
   auto constexpr step = 0;
   givenMode(step, StepMode::Hold);
   givenEnabled(step, true);
@@ -251,7 +265,7 @@ TEST_F(StepTest, holdMode_isUnavailable_ifConditionIsSatisfied) {
   EXPECT_FALSE(stepController.isAvailable(step, fallenGate));
 }
 
-TEST_F(StepTest, holdMode_returnsGenerated_ifConditionIsNotSatisfied) {
+TEST_F(StepControllerTest, holdMode_returnsGenerated_ifConditionIsNotSatisfied) {
   auto const step = 7;
   givenMode(step, StepMode::Hold);
   givenCondition(step, StepCondition::GateIsHigh);
@@ -265,7 +279,7 @@ TEST_F(StepTest, holdMode_returnsGenerated_ifConditionIsNotSatisfied) {
   EXPECT_EQ(next, StepEvent::Generated);
 }
 
-TEST_F(StepTest, holdMode_returnsCompleted_ifConditionIsSatisfied) {
+TEST_F(StepControllerTest, holdMode_returnsCompleted_ifConditionIsSatisfied) {
   auto const step = 6;
   givenMode(step, StepMode::Hold);
   givenCondition(step, StepCondition::GateIsHigh);
@@ -279,7 +293,7 @@ TEST_F(StepTest, holdMode_returnsCompleted_ifConditionIsSatisfied) {
   EXPECT_EQ(next, StepEvent::Completed);
 }
 
-TEST_F(StepTest, sustainMode_isAvailable_ifEnabled_andConditionIsNotSatisfied) {
+TEST_F(StepControllerTest, sustainMode_isAvailable_ifEnabled_andConditionIsNotSatisfied) {
   auto constexpr step = 1;
   givenMode(step, StepMode::Sustain);
   givenEnabled(step, true);
@@ -307,7 +321,7 @@ TEST_F(StepTest, sustainMode_isAvailable_ifEnabled_andConditionIsNotSatisfied) {
   EXPECT_TRUE(stepController.isAvailable(step, highGate));
 }
 
-TEST_F(StepTest, sustainMode_isUnavailable_ifNotEnabled) {
+TEST_F(StepControllerTest, sustainMode_isUnavailable_ifNotEnabled) {
   auto constexpr step = 0;
   givenMode(step, StepMode::Sustain);
   givenEnabled(step, false);
@@ -329,7 +343,7 @@ TEST_F(StepTest, sustainMode_isUnavailable_ifNotEnabled) {
   EXPECT_FALSE(stepController.isAvailable(step, fallenGate));
 }
 
-TEST_F(StepTest, sustainMode_isUnavailable_ifConditionIsSatisfied) {
+TEST_F(StepControllerTest, sustainMode_isUnavailable_ifConditionIsSatisfied) {
   auto constexpr step = 0;
   givenMode(step, StepMode::Sustain);
   givenEnabled(step, true);
@@ -360,7 +374,7 @@ TEST_F(StepTest, sustainMode_isUnavailable_ifConditionIsSatisfied) {
   EXPECT_FALSE(stepController.isAvailable(step, fallenGate));
 }
 
-TEST_F(StepTest, sustainMode_returnsGenerated_ifConditionIsNotSatisfied) {
+TEST_F(StepControllerTest, sustainMode_returnsGenerated_ifConditionIsNotSatisfied) {
   auto const step = 7;
   givenMode(step, StepMode::Sustain);
   givenCondition(step, StepCondition::GateIsHigh);
@@ -374,7 +388,7 @@ TEST_F(StepTest, sustainMode_returnsGenerated_ifConditionIsNotSatisfied) {
   EXPECT_EQ(next, StepEvent::Generated);
 }
 
-TEST_F(StepTest, sustainMode_returnsCompleted_ifConditionIsSatisfied) {
+TEST_F(StepControllerTest, sustainMode_returnsCompleted_ifConditionIsSatisfied) {
   auto const step = 6;
   givenMode(step, StepMode::Sustain);
   givenCondition(step, StepCondition::GateIsHigh);

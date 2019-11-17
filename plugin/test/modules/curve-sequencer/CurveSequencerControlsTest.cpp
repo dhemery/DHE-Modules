@@ -18,7 +18,8 @@ using Controls = dhe::curve_sequencer::CurveSequencerControls<stepCount>;
 using dhe::curve_sequencer::StepCondition;
 using dhe::curve_sequencer::StepMode;
 
-struct CurveSequencerControlsTest : public Test {
+class CurveSequencerControlsTest : public Test {
+protected:
   std::vector<rack::engine::Input> inputs{Controls::InputCount};
   std::vector<rack::engine::Output> outputs{Controls::OutputCount};
   std::vector<rack::engine::Param> params{Controls::ParameterCount};
