@@ -200,9 +200,9 @@ class ModuleFactory
     toggle(x: x, y: y, labels: %w(J S), selection: 1)
   end
 
-  def stepper(x:, y:, name:, labels:, selection: 1, hidden: false)
+  def stepper(x:, y:, name:, labels:, selection: 1, hidden: false, width: Button::DIAMETER)
     steppers = labels.each_with_index.map do |label, index|
-      Stepper.new(color: @foreground, name: name, text: label, position: index + 1)
+      Stepper.new(foreground: @foreground, background: @background, name: name, text: label, position: index + 1, width: width)
     end
     @control_shapes += steppers
 

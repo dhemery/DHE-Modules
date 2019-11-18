@@ -5,13 +5,13 @@
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns="http://www.w3.org/2000/svg"
-   id="svg10"
-   viewBox="0 0 6.000 11.161"
+   id="svg14"
+   viewBox="0 0 8.000 11.161"
    height="11.161mm"
-   width="6.000mm"
+   width="8.000mm"
    version="1.1">
   <metadata
-     id="metadata16">
+     id="metadata20">
     <rdf:RDF>
       <cc:Work
          rdf:about="">
@@ -22,10 +22,10 @@
     </rdf:RDF>
   </metadata>
   <defs
-     id="defs14" />
+     id="defs18" />
   <g
-     id="g8"
-     transform="translate(3,5.58)">
+     id="g12"
+     transform="translate(4,5.58)">
     <g
        id="g4"
        transform="translate(0,-4)">
@@ -34,11 +34,11 @@
          style="font-weight:bold;font-size:2.37100005px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#0044cc"
          aria-label="±5">
         <path
-           id="path18"
+           id="path22"
            style="font-weight:bold;font-size:2.37100005px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#0044cc"
            d="m -0.61566351,-0.77294602 h 0.42440901 v -0.184938 H -0.61566351 V -1.424971 h -0.206277 v 0.46708698 H -1.2487205 v 0.184938 h 0.42677999 v 0.48368401 h 0.206277 z M -1.2487205,0 h 1.057466 v -0.184938 h -1.057466 z" />
         <path
-           id="path20"
+           id="path24"
            style="font-weight:bold;font-size:2.37100005px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#0044cc"
            d="m -0.00653877,-0.208648 c 0.13514701,0.147002 0.33431101,0.2371 0.60934702,0.2371 0.38173101,0 0.63305705,-0.211019 0.63305705,-0.54533001 0,-0.32008501 -0.23947104,-0.50976499 -0.50739405,-0.50976499 -0.144631,0 -0.27266501,0.056904 -0.35565001,0.13040498 V -1.292195 H 1.1291703 V -1.581457 H 0.04325224 v 0.90335099 l 0.234729,0.064017 c 0.09484,-0.090098 0.20153501,-0.13040501 0.33194001,-0.13040501 0.180196,0 0.28452,0.097211 0.28452,0.24184201 0,0.130405 -0.106695,0.2371 -0.294004,0.2371 -0.16597001,0 -0.31297201,-0.059275 -0.42203801,-0.170712 z" />
       </g>
@@ -47,5 +47,13 @@
        id="circle6"
        d="M 2.5,0 A 2.5,2.5 0 0 1 0,2.5 2.5,2.5 0 0 1 -2.5,0 2.5,2.5 0 0 1 0,-2.5 2.5,2.5 0 0 1 2.5,0 Z"
        style="fill:#0044cc;stroke:#0044cc;stroke-width:1" />
+    <path
+       id="line8"
+       d="m -0.75,0 h 1.5"
+       style="stroke:#faf7f0;stroke-width:0.49000001;stroke-linecap:round" />
+    <path
+       id="line10"
+       d="m 0,-0.75 v 1.5"
+       style="stroke:#faf7f0;stroke-width:0.49000001;stroke-linecap:round" />
   </g>
 </svg>

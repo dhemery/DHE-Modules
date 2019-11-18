@@ -5,13 +5,13 @@
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns="http://www.w3.org/2000/svg"
-   id="svg10"
-   viewBox="0 0 6.000 11.161"
+   id="svg14"
+   viewBox="0 0 8.000 11.161"
    height="11.161mm"
-   width="6.000mm"
+   width="8.000mm"
    version="1.1">
   <metadata
-     id="metadata16">
+     id="metadata20">
     <rdf:RDF>
       <cc:Work
          rdf:about="">
@@ -22,10 +22,10 @@
     </rdf:RDF>
   </metadata>
   <defs
-     id="defs14" />
+     id="defs18" />
   <g
-     id="g8"
-     transform="translate(3,5.58)">
+     id="g12"
+     transform="translate(4,5.58)">
     <g
        id="g4"
        transform="translate(0,-4)">
@@ -34,11 +34,11 @@
          style="font-weight:bold;font-size:2.37100005px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#0044cc"
          aria-label="±1">
         <path
-           id="path18"
+           id="path22"
            style="font-weight:bold;font-size:2.37100005px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#0044cc"
            d="m -0.3818051,-0.77294602 h 0.42440901 v -0.184938 H -0.3818051 V -1.424971 h -0.20627701 v 0.46708698 H -1.0148621 v 0.184938 h 0.42677999 v 0.48368401 H -0.3818051 Z M -1.0148621,0 H 0.04260391 V -0.184938 H -1.0148621 Z" />
         <path
-           id="path20"
+           id="path24"
            style="font-weight:bold;font-size:2.37100005px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#0044cc"
            d="m 0.59008265,0 h 0.339053 v -1.581457 h -0.294004 l -0.49791001,0.500281 0.192051,0.20153498 0.26081001,-0.26792298 z" />
       </g>
@@ -47,5 +47,13 @@
        id="circle6"
        d="M 2.5,0 A 2.5,2.5 0 0 1 0,2.5 2.5,2.5 0 0 1 -2.5,0 2.5,2.5 0 0 1 0,-2.5 2.5,2.5 0 0 1 2.5,0 Z"
        style="fill:#0044cc;stroke:#0044cc;stroke-width:1" />
+    <path
+       id="line8"
+       d="m -0.75,0 h 1.5"
+       style="stroke:#faf7f0;stroke-width:0.49000001;stroke-linecap:round" />
+    <path
+       id="line10"
+       d="m 0,-0.75 v 1.5"
+       style="stroke:#faf7f0;stroke-width:0.49000001;stroke-linecap:round" />
   </g>
 </svg>

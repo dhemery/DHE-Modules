@@ -106,7 +106,7 @@ step_label_y = top - hp2mm(0.5)
 (0...steps).each do |step|
   x = step_x + step * step_dx
   light x: x, y: active_y
-  stepper x: x, y: generator_y, name: 'mode', labels: %w[CURV HOLD SUST], selection: 1
+  stepper x: x, y: generator_y, name: 'mode', labels: %w[CURVE HOLD SUSTAIN], selection: 1, width: 10
   stepper x: x, y: gate_mode_y, name: 'advance', labels: %w[TIME RISE FALL EDGE HIGH LOW], selection: 1
   label x: x, y: step_label_y, text: (step + 1).to_s, alignment: :above, size: :large
   shape_toggle x: x, y: shape_y
