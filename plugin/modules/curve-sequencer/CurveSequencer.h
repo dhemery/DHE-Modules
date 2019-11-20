@@ -12,22 +12,25 @@ namespace curve_sequencer {
         controls{controls}, stepSelector{stepSelector}, stepController{generating} {}
 
     void execute(float sampleTime) {
-      resetLatch.clock(controls.isReset());
+      // Process the gate latch even if not running, so that if GATE rises or falls at the same time as RUN rises, the
+      // latch detects the edge.
+      gateLatch.clock(controls.isGated());
 
+      // Reset even if not running.
+      resetLatch.clock(controls.isReset());
       if (resetLatch.isRise()) {
         becomeIdle();
       }
-
-      gateLatch.clock(controls.isGated());
 
       if (!controls.isRunning()) {
         return;
       }
 
+      if (step < 0) {
+        idle();
+      }
       if (step >= 0) {
         generate(sampleTime);
-      } else {
-        idle(sampleTime);
       }
     }
 
@@ -39,14 +42,15 @@ namespace curve_sequencer {
       step = -1;
     }
 
-    void idle(float sampleTime) {
+    void idle() {
       if (resetLatch.isHigh()) {
+        // If RESET is high while idle, copy the input voltage to the output port
         controls.output(controls.input());
       }
       if (gateLatch.isRise()) {
-        // Consume the edge, so that the first step doesn't immediately exit if it advances on edge
+        // Consume the edge, so that the first step doesn't immediately exit if it is set to advance on gate change.
         gateLatch.clock(gateLatch.isHigh());
-        becomeActive(sampleTime);
+        startSequence();
       }
     }
 
@@ -57,11 +61,10 @@ namespace curve_sequencer {
       }
     }
 
-    void becomeActive(float sampleTime) {
+    void startSequence() {
       step = stepSelector.first();
       if (step >= 0) {
         stepController.enter(step);
-        generate(sampleTime);
       }
     }
 
