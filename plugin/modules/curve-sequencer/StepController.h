@@ -41,8 +41,10 @@ namespace curve_sequencer {
       StepMode stepMode = mode();
       if (!isSatisfied(stepMode, condition(), gateLatch)) {
         if (stepMode == StepMode::Sustain) {
+          // Reset to prevent a voltage jump if we subsequently cycle to curve mode. Because we reset here, any
+          // subsequent curve will start where sustain left off.
           reset();
-        } else {
+        } else { // curve or hold mode
           phase.advance(sampleTime / duration());
         }
         if (stepMode == StepMode::Curve) {
@@ -52,6 +54,7 @@ namespace curve_sequencer {
           return StepEvent::Generated;
         }
       }
+      // This step is done, because either the gate satisfied the condition or advancing the phase completed it.
       showActive(false);
       return StepEvent::Completed;
     };
