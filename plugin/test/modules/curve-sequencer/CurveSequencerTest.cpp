@@ -26,8 +26,8 @@ class CurveSequencerTest : public ::testing::Test {
   };
 
   struct MockStepSelector {
-    MOCK_METHOD(int, first, (dhe::Latch const &), (const));
-    MOCK_METHOD(int, successor, (int, dhe::Latch const &, bool), (const));
+    MOCK_METHOD(int, first, (), (const));
+    MOCK_METHOD(int, successor, (int, bool), (const));
   };
 
   struct MockStepController {
@@ -74,7 +74,7 @@ TEST_F(CurveSequencerTest, runRiseWhilePaused_BeginsIdling) {
 TEST_F(CurveSequencerTest, gateLowWhileIdling_doesNothing) {
   givenIdling();
 
-  EXPECT_CALL(stepSelector, first(A<Latch const &>())).Times(0);
+  EXPECT_CALL(stepSelector, first()).Times(0);
 
   curveSequencer.execute(sampleTime);
 }
@@ -85,7 +85,7 @@ TEST_F(CurveSequencerTest, gateRiseWhileIdling_generatesFirstAvailableStep) {
 
   auto constexpr step{3};
 
-  ON_CALL(stepSelector, first(A<Latch const &>())).WillByDefault(Return(step));
+  ON_CALL(stepSelector, first()).WillByDefault(Return(step));
 
   EXPECT_CALL(stepController, enter(step));
   EXPECT_CALL(stepController, execute(A<Latch const &>(), sampleTime)).WillOnce(Return(StepEvent::Generated));

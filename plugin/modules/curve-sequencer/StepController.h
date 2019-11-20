@@ -31,15 +31,6 @@ namespace curve_sequencer {
   public:
     StepController(Controls &controls, PhaseAccumulator &phase) : controls{controls}, phase{phase} {}
 
-    auto isAvailable(int candidateStep, Latch const &gateLatch) const -> bool {
-      if (!controls.isEnabled(candidateStep)) {
-        return false;
-      }
-      auto const mode = controls.mode(candidateStep);
-      auto const condition = controls.condition(candidateStep);
-      return !isSatisfied(mode, condition, gateLatch);
-    }
-
     void enter(int entryStep) {
       step = entryStep;
       phase.reset();
@@ -71,12 +62,12 @@ namespace curve_sequencer {
 
     auto duration() const -> float { return controls.duration(step); }
 
-    auto level() const -> float { return controls.level(step); }
-
     void generate(float sampleTime) {
       phase.advance(sampleTime / duration());
       controls.output(scale(taper(phase.phase()), startVoltage, level()));
     }
+
+    auto level() const -> float { return controls.level(step); }
 
     auto mode() const -> StepMode { return controls.mode(step); }
 

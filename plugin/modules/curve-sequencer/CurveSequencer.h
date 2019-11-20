@@ -44,6 +44,8 @@ namespace curve_sequencer {
         controls.output(controls.input());
       }
       if (gateLatch.isRise()) {
+        // Consume the edge, so that the first step doesn't immediately exit if it advances on edge
+        gateLatch.clock(gateLatch.isHigh());
         becomeActive(sampleTime);
       }
     }
@@ -56,8 +58,7 @@ namespace curve_sequencer {
     }
 
     void becomeActive(float sampleTime) {
-      gateLatch.clock(gateLatch.isHigh());
-      step = stepSelector.first(gateLatch);
+      step = stepSelector.first();
       if (step >= 0) {
         stepController.enter(step);
         generate(sampleTime);
@@ -65,8 +66,7 @@ namespace curve_sequencer {
     }
 
     void advanceSequence() {
-      gateLatch.clock(gateLatch.isHigh());
-      step = stepSelector.successor(step, gateLatch, controls.isLooping());
+      step = stepSelector.successor(step, controls.isLooping());
       if (step >= 0) {
         stepController.enter(step);
       }

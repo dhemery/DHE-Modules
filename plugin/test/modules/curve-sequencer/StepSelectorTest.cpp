@@ -1,12 +1,9 @@
 #include "curve-sequencer/StepSelector.h"
 
-#include "components/Latch.h"
-
 #include <gmock/gmock-actions.h>
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
 
-using dhe::Latch;
 using dhe::curve_sequencer::StepSelector;
 
 using ::testing::A;
@@ -19,22 +16,15 @@ class StepSelectorTest : public Test {
   public:
     MOCK_METHOD(int, selectionStart, (), (const));
     MOCK_METHOD(int, selectionLength, (), (const));
-  };
-
-  class MockStage {
-  public:
-    MOCK_METHOD(bool, isAvailable, (int, Latch const &), (const));
+    MOCK_METHOD(bool, isEnabled, (int), (const));
   };
 
 protected:
   static auto constexpr stepCount{8};
   NiceMock<MockControls> controls{};
-  NiceMock<MockStage> generateStage{};
-  StepSelector<MockControls, MockStage> selector{controls, generateStage, stepCount};
+  StepSelector<MockControls> selector{controls, stepCount};
 
-  void givenAvailable(int step) {
-    ON_CALL(generateStage, isAvailable(step, A<Latch const &>())).WillByDefault(Return(true));
-  }
+  void givenEnabled(int step) { ON_CALL(controls, isEnabled(step)).WillByDefault(Return(true)); }
 
   void givenSelection(int start, int length) {
     ON_CALL(controls, selectionStart()).WillByDefault(Return(start));
@@ -46,9 +36,9 @@ TEST_F(StepSelectorTest, findsSuccessorAboveGivenStep) {
   givenSelection(0, stepCount); // [0 1 2 3 4 5 6 7]
   auto const givenStep = 2;
   auto const expectedSuccessor = givenStep + 2; // Later in selection
-  givenAvailable(expectedSuccessor);
+  givenEnabled(expectedSuccessor);
 
-  auto const successor = selector.successor(givenStep, Latch{}, false);
+  auto const successor = selector.successor(givenStep, false);
 
   ASSERT_EQ(successor, expectedSuccessor);
 }
@@ -58,9 +48,9 @@ TEST_F(StepSelectorTest, findsSuccessorBelowGivenStep_ifSelectionWraps) {
   auto const selectionLength = 4;
   givenSelection(selectionStart, selectionLength); // 0 1] 2 3 4 5 [6 7
   auto const expectedSuccessor = 1;                // Must wrap to find
-  givenAvailable(expectedSuccessor);
+  givenEnabled(expectedSuccessor);
 
-  auto const successor = selector.successor(selectionStart, Latch{}, false);
+  auto const successor = selector.successor(selectionStart, false);
 
   ASSERT_EQ(successor, expectedSuccessor);
 }
@@ -70,9 +60,9 @@ TEST_F(StepSelectorTest, selectionEndCanBeSuccessor) {
   auto const selectionLength = 3;
   givenSelection(selectionStart, selectionLength); // 0 1 [2 3 4] 5 6 7
   auto const selectionEnd = selectionStart + selectionLength - 1;
-  givenAvailable(selectionEnd);
+  givenEnabled(selectionEnd);
 
-  auto const successor = selector.successor(selectionStart, Latch{}, false);
+  auto const successor = selector.successor(selectionStart, false);
 
   ASSERT_EQ(successor, selectionEnd);
 }
@@ -82,9 +72,9 @@ TEST_F(StepSelectorTest, noSuccessor_ifNoSelectedStepIsEnabled) {
   auto const selectionLength = 4;
   givenSelection(selectionStart, selectionLength); // 0 [1 2 3 4] 5 6 7
   auto const onlyEnabledStep = 6;
-  givenAvailable(onlyEnabledStep); // Enabled but not in selection
+  givenEnabled(onlyEnabledStep); // Enabled but not in selection
 
-  auto const successor = selector.successor(selectionStart, Latch{}, true);
+  auto const successor = selector.successor(selectionStart, true);
 
   ASSERT_LT(successor, 0);
 }
@@ -94,9 +84,9 @@ TEST_F(StepSelectorTest, noSuccessor_ifSelectionWraps_andNoSelectedStepIsEnabled
   auto const selectionLength = 7;
   givenSelection(selectionStart, selectionLength); // 0 1 2 3] 4 [5 6 7
   auto const onlyEnabledStep = 4;                  // The only enabled step is not in the selection
-  givenAvailable(onlyEnabledStep);
+  givenEnabled(onlyEnabledStep);
 
-  auto const successor = selector.successor(selectionStart, Latch{}, true);
+  auto const successor = selector.successor(selectionStart, true);
 
   ASSERT_LE(successor, 0);
 }
@@ -104,9 +94,9 @@ TEST_F(StepSelectorTest, noSuccessor_ifSelectionWraps_andNoSelectedStepIsEnabled
 TEST_F(StepSelectorTest, noSuccessor_ifGivenStepIsBelowSelection) {
   givenSelection(4, 3);     // 0 1 2 3 [4 5 6] 7
   auto const givenStep = 3; // Lower than any selected step
-  givenAvailable(givenStep);
+  givenEnabled(givenStep);
 
-  auto const successor = selector.successor(givenStep, Latch{}, true);
+  auto const successor = selector.successor(givenStep, true);
 
   ASSERT_LE(successor, 0);
 }
@@ -114,9 +104,9 @@ TEST_F(StepSelectorTest, noSuccessor_ifGivenStepIsBelowSelection) {
 TEST_F(StepSelectorTest, noSuccessor_ifGivenStepIsAboveSelection) {
   givenSelection(4, 3);     // 0 1 2 3 [4 5 6] 7
   auto const givenStep = 7; // Higher than any selected step
-  givenAvailable(givenStep);
+  givenEnabled(givenStep);
 
-  auto const successor = selector.successor(givenStep, Latch{}, true);
+  auto const successor = selector.successor(givenStep, true);
 
   ASSERT_LE(successor, 0);
 }
@@ -124,9 +114,9 @@ TEST_F(StepSelectorTest, noSuccessor_ifGivenStepIsAboveSelection) {
 TEST_F(StepSelectorTest, noSuccessor_ifGivenStepNotIncludedInWrappedSelection) {
   givenSelection(6, 4);     // 0 1] 2 3 4 5 [6 7
   auto const givenStep = 5; // Above selection end, below selection start
-  givenAvailable(givenStep);
+  givenEnabled(givenStep);
 
-  auto const successor = selector.successor(givenStep, Latch{}, true);
+  auto const successor = selector.successor(givenStep, true);
 
   ASSERT_LE(successor, 0);
 }
@@ -135,7 +125,7 @@ TEST_F(StepSelectorTest, noSuccessor_ifGivenStepIsSelectionEnd_andSequencerIsNot
   auto constexpr step = 3;
   givenSelection(1, step); // 0 [1 2 3] 4 5 6 7
 
-  auto const successor = selector.successor(step, Latch{}, false);
+  auto const successor = selector.successor(step, false);
 
   ASSERT_LT(successor, 0);
 }
@@ -143,9 +133,9 @@ TEST_F(StepSelectorTest, noSuccessor_ifGivenStepIsSelectionEnd_andSequencerIsNot
 TEST_F(StepSelectorTest, first_returnsSelectionStart_ifSelectionStartIsEnabled) {
   auto constexpr selectionStart = 3;
   givenSelection(selectionStart, 4);
-  givenAvailable(selectionStart);
+  givenEnabled(selectionStart);
 
-  auto const first = selector.first(Latch{});
+  auto const first = selector.first();
 
   ASSERT_EQ(first, selectionStart);
 }
@@ -154,10 +144,10 @@ TEST_F(StepSelectorTest, first_returnsSuccessorOfSelectionStart_ifSelectionStart
   auto constexpr selectionStart = 3;
   givenSelection(selectionStart, 4); // Not enabled
   auto constexpr enabledSelectedStep = 5;
-  givenAvailable(enabledSelectedStep);
+  givenEnabled(enabledSelectedStep);
 
-  auto const first = selector.first(Latch{});
-  auto const successorOfSelectionStart = selector.successor(selectionStart, Latch{}, false);
+  auto const first = selector.first();
+  auto const successorOfSelectionStart = selector.successor(selectionStart, false);
 
   ASSERT_EQ(first, successorOfSelectionStart);
 }
@@ -165,7 +155,7 @@ TEST_F(StepSelectorTest, first_returnsSuccessorOfSelectionStart_ifSelectionStart
 TEST_F(StepSelectorTest, noFirst_ifNoSelectedStepIsEnabled) {
   givenSelection(0, stepCount); // All selected, but none enabled
 
-  auto const first = selector.first(Latch{});
+  auto const first = selector.first();
 
   ASSERT_LT(first, 0);
 }
@@ -174,9 +164,9 @@ TEST_F(StepSelectorTest, findsSuccessorEarlierInSelection_ifIfSequencerIsLooping
   givenSelection(0, stepCount); // [0 1 2 3 4 5 6 7]
   auto constexpr step = 3;
   auto constexpr expectedSuccessor = step - 2; // Earlier in selection
-  givenAvailable(expectedSuccessor);
+  givenEnabled(expectedSuccessor);
 
-  auto const successor = selector.successor(step, Latch{}, true);
+  auto const successor = selector.successor(step, true);
 
   ASSERT_EQ(successor, expectedSuccessor);
 }
@@ -184,9 +174,9 @@ TEST_F(StepSelectorTest, findsSuccessorEarlierInSelection_ifIfSequencerIsLooping
 TEST_F(StepSelectorTest, givenStepCanBeItsOwnSuccessor_ifSequencerIsLooping) {
   givenSelection(0, stepCount); // [0 1 2 3 4 5 6 7]
   auto constexpr step = 3;
-  givenAvailable(step); // The only enabled step
+  givenEnabled(step); // The only enabled step
 
-  auto const successor = selector.successor(step, Latch{}, true);
+  auto const successor = selector.successor(step, true);
 
   ASSERT_EQ(successor, step);
 }

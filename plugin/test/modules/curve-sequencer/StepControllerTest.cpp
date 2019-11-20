@@ -32,7 +32,6 @@ class StepControllerTest : public Test {
     MOCK_METHOD(dhe::curve_sequencer::AdvanceCondition, condition, (int), (const));
     MOCK_METHOD(float, curvature, (int), (const));
     MOCK_METHOD(float, duration, (int), (const));
-    MOCK_METHOD(bool, isEnabled, (int), (const));
     MOCK_METHOD(float, level, (int), (const));
     MOCK_METHOD(dhe::curve_sequencer::StepMode, mode, (int), (const));
     MOCK_METHOD(float, output, (), (const));
@@ -46,8 +45,6 @@ protected:
   dhe::OneShotPhaseAccumulator phase{};
 
   StepController<MockControls, dhe::OneShotPhaseAccumulator> stepController{controls, phase};
-
-  void givenEnabled(int step, bool state) { ON_CALL(controls, isEnabled(step)).WillByDefault(Return(state)); }
 
   void givenMode(int step, StepMode mode) { ON_CALL(controls, mode(step)).WillByDefault(Return(mode)); }
 
@@ -76,329 +73,195 @@ TEST_F(StepControllerTest, exit_dimsStepActivityLight) {
   stepController.exit();
 }
 
-TEST_F(StepControllerTest, curveMode_isAvailable_ifEnabled_andConditionIsNotSatisfied) {
-  auto constexpr step = 1;
-  givenMode(step, StepMode::Curve);
-  givenEnabled(step, true);
+// TODO: advance on time returns generated if timer does not expire
+// TODO: advance on time returns completed if timer expires
 
-  // DoneGenerating is never true for curve mode
-  givenCondition(step, AdvanceCondition::TimerExpires);
-  EXPECT_TRUE(stepController.isAvailable(step, highGate));
-  EXPECT_TRUE(stepController.isAvailable(step, lowGate));
-  EXPECT_TRUE(stepController.isAvailable(step, risenGate));
-  EXPECT_TRUE(stepController.isAvailable(step, fallenGate));
-
-  givenCondition(step, AdvanceCondition::GateIsHigh);
-  EXPECT_TRUE(stepController.isAvailable(step, lowGate));
-  EXPECT_TRUE(stepController.isAvailable(step, fallenGate));
-
-  givenCondition(step, AdvanceCondition::GateIsLow);
-  EXPECT_TRUE(stepController.isAvailable(step, highGate));
-  EXPECT_TRUE(stepController.isAvailable(step, risenGate));
-
+TEST_F(StepControllerTest, advanceOnGateRise_returnsCompleted_ifGateRises) {
+  auto const step = 2;
   givenCondition(step, AdvanceCondition::GateRises);
-  EXPECT_TRUE(stepController.isAvailable(step, highGate));
-  EXPECT_TRUE(stepController.isAvailable(step, lowGate));
-  EXPECT_TRUE(stepController.isAvailable(step, fallenGate));
-
-  givenCondition(step, AdvanceCondition::GateFalls);
-  EXPECT_TRUE(stepController.isAvailable(step, highGate));
-  EXPECT_TRUE(stepController.isAvailable(step, lowGate));
-  EXPECT_TRUE(stepController.isAvailable(step, risenGate));
-
-  givenCondition(step, AdvanceCondition::GateChanges);
-  EXPECT_TRUE(stepController.isAvailable(step, lowGate));
-  EXPECT_TRUE(stepController.isAvailable(step, highGate));
-}
-
-TEST_F(StepControllerTest, curveMode_isUnavailable_ifNotEnabled) {
-  auto constexpr step = 0;
-  givenMode(step, StepMode::Curve);
-  givenEnabled(step, false);
-
-  givenCondition(step, AdvanceCondition::GateIsHigh);
-  EXPECT_FALSE(stepController.isAvailable(step, highGate));
-
-  givenCondition(step, AdvanceCondition::GateIsLow);
-  EXPECT_FALSE(stepController.isAvailable(step, lowGate));
-
-  givenCondition(step, AdvanceCondition::GateRises);
-  EXPECT_FALSE(stepController.isAvailable(step, risenGate));
-
-  givenCondition(step, AdvanceCondition::GateFalls);
-  EXPECT_FALSE(stepController.isAvailable(step, fallenGate));
-
-  givenCondition(step, AdvanceCondition::GateChanges);
-  EXPECT_FALSE(stepController.isAvailable(step, risenGate));
-  EXPECT_FALSE(stepController.isAvailable(step, fallenGate));
-}
-
-TEST_F(StepControllerTest, curveMode_isUnavailable_ifConditionIsSatisfied) {
-  auto constexpr step = 0;
-  givenMode(step, StepMode::Curve);
-  givenEnabled(step, true);
-
-  givenCondition(step, AdvanceCondition::GateIsHigh);
-  EXPECT_FALSE(stepController.isAvailable(step, risenGate));
-  EXPECT_FALSE(stepController.isAvailable(step, highGate));
-
-  givenCondition(step, AdvanceCondition::GateIsLow);
-  EXPECT_FALSE(stepController.isAvailable(step, fallenGate));
-  EXPECT_FALSE(stepController.isAvailable(step, lowGate));
-
-  givenCondition(step, AdvanceCondition::GateRises);
-  EXPECT_FALSE(stepController.isAvailable(step, risenGate));
-
-  givenCondition(step, AdvanceCondition::GateFalls);
-  EXPECT_FALSE(stepController.isAvailable(step, fallenGate));
-
-  givenCondition(step, AdvanceCondition::GateChanges);
-  EXPECT_FALSE(stepController.isAvailable(step, risenGate));
-  EXPECT_FALSE(stepController.isAvailable(step, fallenGate));
-}
-
-TEST_F(StepControllerTest, curveMode_returnsGenerated_ifConditionIsNotSatisfied) {
-  auto const step = 7;
-  givenMode(step, StepMode::Curve);
-  givenCondition(step, AdvanceCondition::GateIsHigh);
 
   stepController.enter(step);
 
-  auto next = stepController.execute(lowGate, 0.F);
-  EXPECT_EQ(next, StepEvent::Generated);
+  givenMode(step, StepMode::Curve);
+  EXPECT_EQ(stepController.execute(risenGate, 0.F), StepEvent::Completed);
 
-  next = stepController.execute(fallenGate, 0.F);
-  EXPECT_EQ(next, StepEvent::Generated);
+  givenMode(step, StepMode::Hold);
+  EXPECT_EQ(stepController.execute(risenGate, 0.F), StepEvent::Completed);
+
+  givenMode(step, StepMode::Sustain);
+  EXPECT_EQ(stepController.execute(risenGate, 0.F), StepEvent::Completed);
 }
 
-TEST_F(StepControllerTest, curveMode_returnsCompleted_ifConditionIsSatisfied) {
+TEST_F(StepControllerTest, advanceOnGateRise_returnsGenerated_ifGateDoesNotRise) {
+  auto const step = 3;
+  givenCondition(step, AdvanceCondition::GateRises);
+
+  stepController.enter(step);
+
+  givenMode(step, StepMode::Curve);
+  EXPECT_EQ(stepController.execute(highGate, 0.F), StepEvent::Generated);
+  EXPECT_EQ(stepController.execute(lowGate, 0.F), StepEvent::Generated);
+  EXPECT_EQ(stepController.execute(fallenGate, 0.F), StepEvent::Generated);
+
+  givenMode(step, StepMode::Hold);
+  EXPECT_EQ(stepController.execute(highGate, 0.F), StepEvent::Generated);
+  EXPECT_EQ(stepController.execute(lowGate, 0.F), StepEvent::Generated);
+  EXPECT_EQ(stepController.execute(fallenGate, 0.F), StepEvent::Generated);
+
+  givenMode(step, StepMode::Sustain);
+  EXPECT_EQ(stepController.execute(highGate, 0.F), StepEvent::Generated);
+  EXPECT_EQ(stepController.execute(lowGate, 0.F), StepEvent::Generated);
+  EXPECT_EQ(stepController.execute(fallenGate, 0.F), StepEvent::Generated);
+}
+
+TEST_F(StepControllerTest, advanceOnGateFall_returnsCompleted_ifGateFalls) {
+  auto const step = 2;
+  givenCondition(step, AdvanceCondition::GateFalls);
+
+  stepController.enter(step);
+
+  givenMode(step, StepMode::Curve);
+  EXPECT_EQ(stepController.execute(fallenGate, 0.F), StepEvent::Completed);
+
+  givenMode(step, StepMode::Hold);
+  EXPECT_EQ(stepController.execute(fallenGate, 0.F), StepEvent::Completed);
+
+  givenMode(step, StepMode::Sustain);
+  EXPECT_EQ(stepController.execute(fallenGate, 0.F), StepEvent::Completed);
+}
+
+TEST_F(StepControllerTest, advanceOnGateFall_returnsGenerated_ifGateDoesNotFall) {
+  auto const step = 3;
+  givenCondition(step, AdvanceCondition::GateFalls);
+
+  stepController.enter(step);
+
+  givenMode(step, StepMode::Curve);
+  EXPECT_EQ(stepController.execute(highGate, 0.F), StepEvent::Generated);
+  EXPECT_EQ(stepController.execute(lowGate, 0.F), StepEvent::Generated);
+  EXPECT_EQ(stepController.execute(risenGate, 0.F), StepEvent::Generated);
+
+  givenMode(step, StepMode::Hold);
+  EXPECT_EQ(stepController.execute(highGate, 0.F), StepEvent::Generated);
+  EXPECT_EQ(stepController.execute(lowGate, 0.F), StepEvent::Generated);
+  EXPECT_EQ(stepController.execute(risenGate, 0.F), StepEvent::Generated);
+
+  givenMode(step, StepMode::Sustain);
+  EXPECT_EQ(stepController.execute(highGate, 0.F), StepEvent::Generated);
+  EXPECT_EQ(stepController.execute(lowGate, 0.F), StepEvent::Generated);
+  EXPECT_EQ(stepController.execute(risenGate, 0.F), StepEvent::Generated);
+}
+
+TEST_F(StepControllerTest, advanceOnGateChange_returnsCompleted_ifGateChanges) {
+  auto const step = 4;
+  givenCondition(step, AdvanceCondition::GateChanges);
+
+  stepController.enter(step);
+
+  givenMode(step, StepMode::Curve);
+  EXPECT_EQ(stepController.execute(risenGate, 0.F), StepEvent::Completed);
+  EXPECT_EQ(stepController.execute(fallenGate, 0.F), StepEvent::Completed);
+
+  givenMode(step, StepMode::Hold);
+  EXPECT_EQ(stepController.execute(risenGate, 0.F), StepEvent::Completed);
+  EXPECT_EQ(stepController.execute(fallenGate, 0.F), StepEvent::Completed);
+
+  givenMode(step, StepMode::Sustain);
+  EXPECT_EQ(stepController.execute(risenGate, 0.F), StepEvent::Completed);
+  EXPECT_EQ(stepController.execute(fallenGate, 0.F), StepEvent::Completed);
+}
+
+TEST_F(StepControllerTest, advanceOnGateChange_returnsGenerated_ifGateDoesNotChange) {
+  auto const step = 5;
+  givenCondition(step, AdvanceCondition::GateChanges);
+
+  stepController.enter(step);
+
+  givenMode(step, StepMode::Curve);
+  EXPECT_EQ(stepController.execute(highGate, 0.F), StepEvent::Generated);
+  EXPECT_EQ(stepController.execute(lowGate, 0.F), StepEvent::Generated);
+
+  givenMode(step, StepMode::Hold);
+  EXPECT_EQ(stepController.execute(highGate, 0.F), StepEvent::Generated);
+  EXPECT_EQ(stepController.execute(lowGate, 0.F), StepEvent::Generated);
+
+  givenMode(step, StepMode::Sustain);
+  EXPECT_EQ(stepController.execute(highGate, 0.F), StepEvent::Generated);
+  EXPECT_EQ(stepController.execute(lowGate, 0.F), StepEvent::Generated);
+}
+
+TEST_F(StepControllerTest, advanceOnGateHigh_returnsGenerated_ifGateIsLow) {
   auto const step = 6;
+  givenCondition(step, AdvanceCondition::GateIsHigh);
+
+  stepController.enter(step);
+
   givenMode(step, StepMode::Curve);
-  givenCondition(step, AdvanceCondition::GateIsHigh);
+  EXPECT_EQ(stepController.execute(lowGate, 0.F), StepEvent::Generated);
+  EXPECT_EQ(stepController.execute(fallenGate, 0.F), StepEvent::Generated);
 
-  stepController.enter(step);
-
-  auto next = stepController.execute(highGate, 0.F);
-  EXPECT_EQ(next, StepEvent::Completed);
-
-  next = stepController.execute(risenGate, 0.F);
-  EXPECT_EQ(next, StepEvent::Completed);
-}
-
-TEST_F(StepControllerTest, holdMode_isAvailable_ifEnabled_andConditionIsNotSatisfied) {
-  auto constexpr step = 1;
   givenMode(step, StepMode::Hold);
-  givenEnabled(step, true);
+  EXPECT_EQ(stepController.execute(lowGate, 0.F), StepEvent::Generated);
+  EXPECT_EQ(stepController.execute(fallenGate, 0.F), StepEvent::Generated);
 
-  // DoneGenerating is never true for hold mode
-  givenCondition(step, AdvanceCondition::TimerExpires);
-  EXPECT_TRUE(stepController.isAvailable(step, highGate));
-  EXPECT_TRUE(stepController.isAvailable(step, lowGate));
-  EXPECT_TRUE(stepController.isAvailable(step, risenGate));
-  EXPECT_TRUE(stepController.isAvailable(step, fallenGate));
-
-  givenCondition(step, AdvanceCondition::GateIsHigh);
-  EXPECT_TRUE(stepController.isAvailable(step, lowGate));
-  EXPECT_TRUE(stepController.isAvailable(step, fallenGate));
-
-  givenCondition(step, AdvanceCondition::GateIsLow);
-  EXPECT_TRUE(stepController.isAvailable(step, highGate));
-  EXPECT_TRUE(stepController.isAvailable(step, risenGate));
-
-  givenCondition(step, AdvanceCondition::GateRises);
-  EXPECT_TRUE(stepController.isAvailable(step, highGate));
-  EXPECT_TRUE(stepController.isAvailable(step, lowGate));
-  EXPECT_TRUE(stepController.isAvailable(step, fallenGate));
-
-  givenCondition(step, AdvanceCondition::GateFalls);
-  EXPECT_TRUE(stepController.isAvailable(step, highGate));
-  EXPECT_TRUE(stepController.isAvailable(step, lowGate));
-  EXPECT_TRUE(stepController.isAvailable(step, risenGate));
-
-  givenCondition(step, AdvanceCondition::GateChanges);
-  EXPECT_TRUE(stepController.isAvailable(step, lowGate));
-  EXPECT_TRUE(stepController.isAvailable(step, highGate));
+  givenMode(step, StepMode::Sustain);
+  EXPECT_EQ(stepController.execute(lowGate, 0.F), StepEvent::Generated);
+  EXPECT_EQ(stepController.execute(fallenGate, 0.F), StepEvent::Generated);
 }
 
-TEST_F(StepControllerTest, holdMode_isUnavailable_ifNotEnabled) {
-  auto constexpr step = 0;
-  givenMode(step, StepMode::Hold);
-  givenEnabled(step, false);
-
-  givenCondition(step, AdvanceCondition::GateIsHigh);
-  EXPECT_FALSE(stepController.isAvailable(step, highGate));
-
-  givenCondition(step, AdvanceCondition::GateIsLow);
-  EXPECT_FALSE(stepController.isAvailable(step, lowGate));
-
-  givenCondition(step, AdvanceCondition::GateRises);
-  EXPECT_FALSE(stepController.isAvailable(step, risenGate));
-
-  givenCondition(step, AdvanceCondition::GateFalls);
-  EXPECT_FALSE(stepController.isAvailable(step, fallenGate));
-
-  givenCondition(step, AdvanceCondition::GateChanges);
-  EXPECT_FALSE(stepController.isAvailable(step, risenGate));
-  EXPECT_FALSE(stepController.isAvailable(step, fallenGate));
-}
-
-TEST_F(StepControllerTest, holdMode_isUnavailable_ifConditionIsSatisfied) {
-  auto constexpr step = 0;
-  givenMode(step, StepMode::Hold);
-  givenEnabled(step, true);
-
-  givenCondition(step, AdvanceCondition::GateIsHigh);
-  EXPECT_FALSE(stepController.isAvailable(step, risenGate));
-  EXPECT_FALSE(stepController.isAvailable(step, highGate));
-
-  givenCondition(step, AdvanceCondition::GateIsLow);
-  EXPECT_FALSE(stepController.isAvailable(step, fallenGate));
-  EXPECT_FALSE(stepController.isAvailable(step, lowGate));
-
-  givenCondition(step, AdvanceCondition::GateRises);
-  EXPECT_FALSE(stepController.isAvailable(step, risenGate));
-
-  givenCondition(step, AdvanceCondition::GateFalls);
-  EXPECT_FALSE(stepController.isAvailable(step, fallenGate));
-
-  givenCondition(step, AdvanceCondition::GateChanges);
-  EXPECT_FALSE(stepController.isAvailable(step, risenGate));
-  EXPECT_FALSE(stepController.isAvailable(step, fallenGate));
-}
-
-TEST_F(StepControllerTest, holdMode_returnsGenerated_ifConditionIsNotSatisfied) {
+TEST_F(StepControllerTest, advanceOnGateHigh_returnsCompleted_ifGateIsHigh) {
   auto const step = 7;
+  givenCondition(step, AdvanceCondition::GateIsHigh);
+
+  stepController.enter(step);
+
+  givenMode(step, StepMode::Curve);
+  EXPECT_EQ(stepController.execute(highGate, 0.F), StepEvent::Completed);
+  EXPECT_EQ(stepController.execute(risenGate, 0.F), StepEvent::Completed);
+
   givenMode(step, StepMode::Hold);
-  givenCondition(step, AdvanceCondition::GateIsHigh);
+  EXPECT_EQ(stepController.execute(highGate, 0.F), StepEvent::Completed);
+  EXPECT_EQ(stepController.execute(risenGate, 0.F), StepEvent::Completed);
+
+  givenMode(step, StepMode::Sustain);
+  EXPECT_EQ(stepController.execute(highGate, 0.F), StepEvent::Completed);
+  EXPECT_EQ(stepController.execute(risenGate, 0.F), StepEvent::Completed);
+}
+
+TEST_F(StepControllerTest, advanceOnGateLow_returnsGenerated_ifGateIsHigh) {
+  auto const step = 0;
+  givenCondition(step, AdvanceCondition::GateIsLow);
 
   stepController.enter(step);
 
-  auto next = stepController.execute(lowGate, 0.F);
-  EXPECT_EQ(next, StepEvent::Generated);
+  givenMode(step, StepMode::Curve);
+  EXPECT_EQ(stepController.execute(highGate, 0.F), StepEvent::Generated);
+  EXPECT_EQ(stepController.execute(risenGate, 0.F), StepEvent::Generated);
 
-  next = stepController.execute(fallenGate, 0.F);
-  EXPECT_EQ(next, StepEvent::Generated);
-}
-
-TEST_F(StepControllerTest, holdMode_returnsCompleted_ifConditionIsSatisfied) {
-  auto const step = 6;
   givenMode(step, StepMode::Hold);
-  givenCondition(step, AdvanceCondition::GateIsHigh);
+  EXPECT_EQ(stepController.execute(highGate, 0.F), StepEvent::Generated);
+  EXPECT_EQ(stepController.execute(risenGate, 0.F), StepEvent::Generated);
+
+  givenMode(step, StepMode::Sustain);
+  EXPECT_EQ(stepController.execute(highGate, 0.F), StepEvent::Generated);
+  EXPECT_EQ(stepController.execute(risenGate, 0.F), StepEvent::Generated);
+}
+
+TEST_F(StepControllerTest, advanceOnGateLow_returnsCompleted_ifGateIsLow) {
+  auto const step = 1;
+  givenCondition(step, AdvanceCondition::GateIsLow);
 
   stepController.enter(step);
 
-  auto next = stepController.execute(highGate, 0.F);
-  EXPECT_EQ(next, StepEvent::Completed);
+  givenMode(step, StepMode::Curve);
+  EXPECT_EQ(stepController.execute(lowGate, 0.F), StepEvent::Completed);
+  EXPECT_EQ(stepController.execute(fallenGate, 0.F), StepEvent::Completed);
 
-  next = stepController.execute(risenGate, 0.F);
-  EXPECT_EQ(next, StepEvent::Completed);
-}
+  givenMode(step, StepMode::Hold);
+  EXPECT_EQ(stepController.execute(lowGate, 0.F), StepEvent::Completed);
+  EXPECT_EQ(stepController.execute(fallenGate, 0.F), StepEvent::Completed);
 
-TEST_F(StepControllerTest, sustainMode_isAvailable_ifEnabled_andConditionIsNotSatisfied) {
-  auto constexpr step = 1;
   givenMode(step, StepMode::Sustain);
-  givenEnabled(step, true);
-
-  givenCondition(step, AdvanceCondition::GateIsHigh);
-  EXPECT_TRUE(stepController.isAvailable(step, lowGate));
-  EXPECT_TRUE(stepController.isAvailable(step, fallenGate));
-
-  givenCondition(step, AdvanceCondition::GateIsLow);
-  EXPECT_TRUE(stepController.isAvailable(step, highGate));
-  EXPECT_TRUE(stepController.isAvailable(step, risenGate));
-
-  givenCondition(step, AdvanceCondition::GateRises);
-  EXPECT_TRUE(stepController.isAvailable(step, highGate));
-  EXPECT_TRUE(stepController.isAvailable(step, lowGate));
-  EXPECT_TRUE(stepController.isAvailable(step, fallenGate));
-
-  givenCondition(step, AdvanceCondition::GateFalls);
-  EXPECT_TRUE(stepController.isAvailable(step, highGate));
-  EXPECT_TRUE(stepController.isAvailable(step, lowGate));
-  EXPECT_TRUE(stepController.isAvailable(step, risenGate));
-
-  givenCondition(step, AdvanceCondition::GateChanges);
-  EXPECT_TRUE(stepController.isAvailable(step, lowGate));
-  EXPECT_TRUE(stepController.isAvailable(step, highGate));
-}
-
-TEST_F(StepControllerTest, sustainMode_isUnavailable_ifNotEnabled) {
-  auto constexpr step = 0;
-  givenMode(step, StepMode::Sustain);
-  givenEnabled(step, false);
-
-  givenCondition(step, AdvanceCondition::GateIsHigh);
-  EXPECT_FALSE(stepController.isAvailable(step, highGate));
-
-  givenCondition(step, AdvanceCondition::GateIsLow);
-  EXPECT_FALSE(stepController.isAvailable(step, lowGate));
-
-  givenCondition(step, AdvanceCondition::GateRises);
-  EXPECT_FALSE(stepController.isAvailable(step, risenGate));
-
-  givenCondition(step, AdvanceCondition::GateFalls);
-  EXPECT_FALSE(stepController.isAvailable(step, fallenGate));
-
-  givenCondition(step, AdvanceCondition::GateChanges);
-  EXPECT_FALSE(stepController.isAvailable(step, risenGate));
-  EXPECT_FALSE(stepController.isAvailable(step, fallenGate));
-}
-
-TEST_F(StepControllerTest, sustainMode_isUnavailable_ifConditionIsSatisfied) {
-  auto constexpr step = 0;
-  givenMode(step, StepMode::Sustain);
-  givenEnabled(step, true);
-
-  // DoneGenerating is always true for sustain mode
-  givenCondition(step, AdvanceCondition::TimerExpires);
-  EXPECT_FALSE(stepController.isAvailable(step, highGate));
-  EXPECT_FALSE(stepController.isAvailable(step, lowGate));
-  EXPECT_FALSE(stepController.isAvailable(step, risenGate));
-  EXPECT_FALSE(stepController.isAvailable(step, fallenGate));
-
-  givenCondition(step, AdvanceCondition::GateIsHigh);
-  EXPECT_FALSE(stepController.isAvailable(step, risenGate));
-  EXPECT_FALSE(stepController.isAvailable(step, highGate));
-
-  givenCondition(step, AdvanceCondition::GateIsLow);
-  EXPECT_FALSE(stepController.isAvailable(step, fallenGate));
-  EXPECT_FALSE(stepController.isAvailable(step, lowGate));
-
-  givenCondition(step, AdvanceCondition::GateRises);
-  EXPECT_FALSE(stepController.isAvailable(step, risenGate));
-
-  givenCondition(step, AdvanceCondition::GateFalls);
-  EXPECT_FALSE(stepController.isAvailable(step, fallenGate));
-
-  givenCondition(step, AdvanceCondition::GateChanges);
-  EXPECT_FALSE(stepController.isAvailable(step, risenGate));
-  EXPECT_FALSE(stepController.isAvailable(step, fallenGate));
-}
-
-TEST_F(StepControllerTest, sustainMode_returnsGenerated_ifConditionIsNotSatisfied) {
-  auto const step = 7;
-  givenMode(step, StepMode::Sustain);
-  givenCondition(step, AdvanceCondition::GateIsHigh);
-
-  stepController.enter(step);
-
-  auto next = stepController.execute(lowGate, 0.F);
-  EXPECT_EQ(next, StepEvent::Generated);
-
-  next = stepController.execute(fallenGate, 0.F);
-  EXPECT_EQ(next, StepEvent::Generated);
-}
-
-TEST_F(StepControllerTest, sustainMode_returnsCompleted_ifConditionIsSatisfied) {
-  auto const step = 6;
-  givenMode(step, StepMode::Sustain);
-  givenCondition(step, AdvanceCondition::GateIsHigh);
-
-  stepController.enter(step);
-
-  auto next = stepController.execute(highGate, 0.F);
-  EXPECT_EQ(next, StepEvent::Completed);
-
-  next = stepController.execute(risenGate, 0.F);
-  EXPECT_EQ(next, StepEvent::Completed);
+  EXPECT_EQ(stepController.execute(lowGate, 0.F), StepEvent::Completed);
+  EXPECT_EQ(stepController.execute(fallenGate, 0.F), StepEvent::Completed);
 }

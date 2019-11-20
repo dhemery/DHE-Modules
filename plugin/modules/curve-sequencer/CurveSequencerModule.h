@@ -64,7 +64,7 @@ namespace curve_sequencer {
     OneShotPhaseAccumulator phase{};
     Controls controls{inputs, outputs, params, lights};
     StepController<Controls, OneShotPhaseAccumulator> stepController{controls, phase};
-    StepSelector<Controls, decltype(stepController)> selector{controls, stepController, N};
+    StepSelector<Controls> selector{controls, N};
 
     CurveSequencer<Controls, decltype(selector), decltype(stepController)> curveSequencer{controls, selector,
                                                                                           stepController};
