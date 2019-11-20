@@ -33,15 +33,16 @@ namespace curve_sequencer {
 
     void enter(int entryStep) {
       step = entryStep;
-      phase.reset();
-      startVoltage = controls.output();
+      reset();
       showActive(true);
     }
 
     auto execute(dhe::Latch const &gateLatch, float sampleTime) -> StepEvent {
       StepMode stepMode = mode();
       if (!isSatisfied(stepMode, condition(), gateLatch)) {
-        if (stepMode != StepMode::Sustain) {
+        if (stepMode == StepMode::Sustain) {
+          reset();
+        } else {
           phase.advance(sampleTime / duration());
         }
         if (stepMode == StepMode::Curve) {
@@ -70,6 +71,11 @@ namespace curve_sequencer {
     auto level() const -> float { return controls.level(step); }
 
     auto mode() const -> StepMode { return controls.mode(step); }
+
+    void reset() {
+      phase.reset();
+      startVoltage = controls.output();
+    }
 
     void showActive(bool state) const { controls.showActive(step, state); }
 
