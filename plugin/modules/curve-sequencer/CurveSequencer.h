@@ -8,16 +8,16 @@ namespace curve_sequencer {
 
   template <typename Controls, typename StepSelector, typename StepController> class CurveSequencer {
   public:
-    CurveSequencer(Controls &controls, StepSelector &stepSelector, StepController &generating) :
-        controls{controls}, stepSelector{stepSelector}, stepController{generating} {}
+    CurveSequencer(Controls &controls, StepSelector &stepSelector, StepController &stepController) :
+        controls{controls}, stepSelector{stepSelector}, stepController{stepController} {}
 
     void execute(float sampleTime) {
-      // Process the gate latch even if not running, so that if GATE rises or falls at the same time as RUN rises, the
-      // latch detects the edge.
+      // Process the latches even if not running. This ensures that we detect and react to edges that happen on the same
+      // sample when RUN rises.
       gateLatch.clock(controls.isGated());
+      resetLatch.clock(controls.isReset());
 
       // Reset even if not running.
-      resetLatch.clock(controls.isReset());
       if (resetLatch.isRise()) {
         becomeIdle();
       }
@@ -44,7 +44,7 @@ namespace curve_sequencer {
 
     void idle() {
       if (resetLatch.isHigh()) {
-        // If RESET is high while idle, copy the input voltage to the output port
+        // If RESET is high while idle, copy the input voltage to the output port.
         controls.output(controls.input());
       }
       if (gateLatch.isRise()) {
