@@ -20,6 +20,10 @@ public:
   auto isFall() const -> bool { return isEdge() && isLow(); };
   auto isRise() const -> bool { return isEdge() && isHigh(); };
 
+  friend auto operator==(Latch const &left, Latch const &right) -> bool {
+    return left.state == right.state && left.edge == right.edge;
+  }
+
 private:
   bool state{};
   bool edge{};

@@ -5,17 +5,38 @@
 using dhe::Latch;
 using ::testing::Test;
 
-class DefaultLatch : public Test {
+TEST(LatchEqualityTest, equalIfSameStateAndEdge) {
+  EXPECT_TRUE((Latch{false, false} == Latch{false, false}));
+  EXPECT_TRUE((Latch{false, true} == Latch{false, true}));
+  EXPECT_TRUE((Latch{true, false} == Latch{true, false}));
+  EXPECT_TRUE((Latch{true, true} == Latch{true, true}));
+}
+
+TEST(LatchEqualityTest, unequalIfStatesDiffer) {
+  EXPECT_FALSE((Latch{false, false} == Latch{true, false}));
+  EXPECT_FALSE((Latch{false, true} == Latch{true, true}));
+  EXPECT_FALSE((Latch{true, false} == Latch{false, false}));
+  EXPECT_FALSE((Latch{true, true} == Latch{false, true}));
+}
+
+TEST(LatchEqualityTest, unequalIfEdgesDiffer) {
+  EXPECT_FALSE((Latch{false, false} == Latch{false, true}));
+  EXPECT_FALSE((Latch{false, true} == Latch{false, false}));
+  EXPECT_FALSE((Latch{true, false} == Latch{true, true}));
+  EXPECT_FALSE((Latch{true, true} == Latch{true, false}));
+}
+
+class LatchTest : public Test {
 protected:
   Latch latch{};
 };
 
-TEST_F(DefaultLatch, isLow) {
+TEST_F(LatchTest, defaultLatch_isLow) {
   EXPECT_EQ(latch.isLow(), true);
   EXPECT_EQ(latch.isHigh(), false);
 }
 
-TEST_F(DefaultLatch, isNotEdge) {
+TEST_F(LatchTest, defaultLatch_isNotEdge) {
   EXPECT_EQ(latch.isEdge(), false);
   EXPECT_EQ(latch.isRise(), false);
   EXPECT_EQ(latch.isFall(), false);
@@ -120,3 +141,4 @@ TEST_F(RisenLatch, losesEdgeOnHighSignal) {
   EXPECT_EQ(latch.isRise(), false);
   EXPECT_EQ(latch.isFall(), false);
 }
+

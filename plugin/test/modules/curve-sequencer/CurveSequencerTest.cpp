@@ -11,6 +11,7 @@ using dhe::Latch;
 using dhe::curve_sequencer::CurveSequencer;
 using dhe::curve_sequencer::StepEvent;
 using ::testing::A;
+using ::testing::An;
 using ::testing::Mock;
 using ::testing::NiceMock;
 using ::testing::Return;
@@ -32,13 +33,11 @@ class CurveSequencerTest : public ::testing::Test {
 
   struct MockStepController {
     MOCK_METHOD(void, enter, (int) );
-    MOCK_METHOD(dhe::curve_sequencer::StepEvent, execute, (dhe::Latch const &, float) );
+    MOCK_METHOD(StepEvent, execute, (Latch const &, float) );
     MOCK_METHOD(void, exit, ());
   };
 
 protected:
-  static auto constexpr sampleTime{1.F / 12345.F};
-
   NiceMock<MockControls> controls{};
   NiceMock<MockStepSelector> stepSelector{};
   NiceMock<MockStepController> stepController{};
@@ -46,53 +45,129 @@ protected:
                                                                                     stepController};
 
   void givenGate(bool state) { ON_CALL(controls, isGated()).WillByDefault(Return(state)); }
-
+  void givenInput(float input) { ON_CALL(controls, input()).WillByDefault(Return(input)); }
+  void givenReset(bool state) { ON_CALL(controls, isReset()).WillByDefault(Return(state)); }
   void givenRun(bool state) { ON_CALL(controls, isRunning()).WillByDefault(Return(state)); }
 
-  void givenInitialized() {
-    Mock::VerifyAndClear(&controls);
-    Mock::VerifyAndClear(&stepSelector);
-    Mock::VerifyAndClear(&stepController);
+  void givenPaused() {
+    givenRun(false);
+    curveSequencer.execute(0.F);
   }
 
-  void givenIdling() {
-    givenInitialized();
+  void givenIdle() {
+    givenRun(false);
+    givenReset(true);
+    givenGate(false);
+    curveSequencer.execute(0.F);
+
     givenRun(true);
+    givenReset(false);
+    givenGate(false);
+    curveSequencer.execute(0.F);
+  }
+
+  void expectNoControlsCommands() { EXPECT_CALL(controls, output(A<float>())).Times(0); }
+
+  void expectNoStepCommands() {
+    EXPECT_CALL(stepController, enter(An<int>())).Times(0);
+    EXPECT_CALL(stepController, execute(A<Latch const &>(), A<float>())).Times(0);
+    EXPECT_CALL(stepController, exit()).Times(0);
+  }
+
+  void expectNoCommands() {
+    expectNoControlsCommands();
+    expectNoStepCommands();
   }
 };
 
-TEST_F(CurveSequencerTest, runLowWhilePaused_doesNothing) {
+TEST_F(CurveSequencerTest, whilePaused_runLow_emitsNothing) {
+  givenPaused();
   givenRun(false);
-  // TODO: Test for no interactions on step selector, generate mode, and sustain mode.
+
+  expectNoCommands();
+
+  curveSequencer.execute(0.F);
 }
 
-TEST_F(CurveSequencerTest, runRiseWhilePaused_BeginsIdling) {
-  givenInitialized();
-  // TODO: How to test for idling?
+TEST_F(CurveSequencerTest, whileIdle_gateLow_remainsIdle) {
+  givenIdle();
+  givenGate(false);
+
+  // TODO: How to detect idle more definitively?
+  expectNoCommands();
+
+  curveSequencer.execute(0.F);
 }
 
-TEST_F(CurveSequencerTest, gateLowWhileIdling_doesNothing) {
-  givenIdling();
-
-  EXPECT_CALL(stepSelector, first()).Times(0);
-
-  curveSequencer.execute(sampleTime);
-}
-
-TEST_F(CurveSequencerTest, gateRiseWhileIdling_generatesFirstAvailableStep) {
-  givenIdling();
+TEST_F(CurveSequencerTest,
+       whileIdleWithAvailableSteps_gateRise_executesFirstAvailableStepWithEdgelessGateLatchAndSampleTime) {
+  givenIdle();
   givenGate(true);
 
   auto constexpr step{3};
+  auto constexpr sampleTime{0.39947};
 
   ON_CALL(stepSelector, first()).WillByDefault(Return(step));
 
+  auto constexpr edgelessHighGateLatch = Latch{true, false};
   EXPECT_CALL(stepController, enter(step));
-  EXPECT_CALL(stepController, execute(A<Latch const &>(), sampleTime)).WillOnce(Return(StepEvent::Generated));
+  EXPECT_CALL(stepController, execute(edgelessHighGateLatch, sampleTime)).WillOnce(Return(StepEvent::Generated));
 
   curveSequencer.execute(sampleTime);
 }
 
-// TODO: Idling + Gate rise sustains first if generating returns sustaining
+TEST_F(CurveSequencerTest, whileIdleWithNoAvailableStep_gateRise_changesNothing) {
+  givenIdle();
+  givenGate(true);
 
-// TODO: Idling + Gate rise does nothing if no available step
+  ON_CALL(stepSelector, first()).WillByDefault(Return(-1));
+
+  expectNoCommands();
+
+  curveSequencer.execute(0.F);
+}
+
+TEST_F(CurveSequencerTest, whilePaused_resetHigh_doesNotEmitOutput) {
+  givenPaused();
+  givenReset(true);
+
+  givenInput(0.63483F);
+
+  EXPECT_CALL(controls, output(A<float>())).Times(0);
+
+  curveSequencer.execute(0.F);
+}
+
+TEST_F(CurveSequencerTest, whilePaused_resetLow_doesNotEmitOutput) {
+  givenPaused();
+  givenReset(false);
+
+  givenInput(0.7867233F);
+
+  EXPECT_CALL(controls, output(A<float>())).Times(0);
+
+  curveSequencer.execute(0.F);
+}
+
+TEST_F(CurveSequencerTest, whileIdle_resetHigh_copiesInputVoltageToOutput) {
+  givenIdle();
+  givenReset(true);
+
+  auto constexpr input{0.12938F};
+  givenInput(input);
+
+  EXPECT_CALL(controls, output(input));
+
+  curveSequencer.execute(0.F);
+}
+
+TEST_F(CurveSequencerTest, whileIdle_resetLow_doesNotEmitOutput) {
+  givenIdle();
+  givenReset(false);
+
+  givenInput(0.934F);
+
+  EXPECT_CALL(controls, output(A<float>())).Times(0);
+
+  curveSequencer.execute(0.F);
+}
