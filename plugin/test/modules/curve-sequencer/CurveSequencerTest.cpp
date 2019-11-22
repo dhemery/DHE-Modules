@@ -45,6 +45,7 @@ protected:
 
   void givenGate(bool state) { ON_CALL(controls, isGated()).WillByDefault(Return(state)); }
   void givenInput(float input) { ON_CALL(controls, input()).WillByDefault(Return(input)); }
+  void givenLooping(bool state) { ON_CALL(controls, isLooping()).WillByDefault(Return(state)); }
   void givenReset(bool state) { ON_CALL(controls, isReset()).WillByDefault(Return(state)); }
   void givenRun(bool state) { ON_CALL(controls, isRunning()).WillByDefault(Return(state)); }
 
@@ -73,22 +74,18 @@ class PausedIdleCurveSequencer : public CurveSequencerTest {
   }
 };
 
-TEST_F(PausedIdleCurveSequencer, resetLow_doesNotEmitOutput) {
+TEST_F(PausedIdleCurveSequencer, resetLow_doesNothing) {
   givenReset(false);
 
-  givenInput(0.7867233F);
-
-  EXPECT_CALL(controls, output(A<float>())).Times(0);
+  expectNoCommands();
 
   curveSequencer.execute(0.F);
 }
 
-TEST_F(PausedIdleCurveSequencer, resetHigh_doesNotEmitOutput) {
+TEST_F(PausedIdleCurveSequencer, resetHigh_doesNothing) {
   givenReset(true);
 
-  givenInput(0.63483F);
-
-  EXPECT_CALL(controls, output(A<float>())).Times(0);
+  expectNoCommands();
 
   curveSequencer.execute(0.123F);
 }
@@ -101,7 +98,7 @@ TEST_F(PausedIdleCurveSequencer, gateLow_doesNothing) {
   curveSequencer.execute(0.1F);
 }
 
-TEST_F(PausedIdleCurveSequencer, gateHigh_doesNothing) {
+TEST_F(PausedIdleCurveSequencer, gateRise_doesNothing) {
   givenGate(true);
 
   expectNoCommands();
@@ -127,12 +124,10 @@ TEST_F(RunningIdleCurveSequencer, resetHigh_copiesInputVoltageToOutput) {
   curveSequencer.execute(0.F);
 }
 
-TEST_F(RunningIdleCurveSequencer, resetLow_doesNotEmitOutput) {
+TEST_F(RunningIdleCurveSequencer, resetLow_doesNothing) {
   givenReset(false);
 
-  givenInput(0.934F);
-
-  EXPECT_CALL(controls, output(A<float>())).Times(0);
+  expectNoCommands();
 
   curveSequencer.execute(0.F);
 }
@@ -145,7 +140,7 @@ TEST_F(RunningIdleCurveSequencer, gateLow_doesNothing) {
   curveSequencer.execute(0.1F);
 }
 
-TEST_F(RunningIdleCurveSequencer, gateRise_executesFirstEnabledStep) {
+TEST_F(RunningIdleCurveSequencer, gateRise_executesFirstStep) {
   givenGate(true);
 
   auto constexpr firstEnabledStep{3};
@@ -162,7 +157,7 @@ TEST_F(RunningIdleCurveSequencer, gateRise_executesFirstEnabledStep) {
   curveSequencer.execute(sampleTime);
 }
 
-TEST_F(RunningIdleCurveSequencer, gateRise_doesNothing_ifNoEnabledStep) {
+TEST_F(RunningIdleCurveSequencer, gateRise_doesNothing_ifNoFirstStep) {
   givenGate(true);
 
   ON_CALL(stepSelector, first()).WillByDefault(Return(-1));
@@ -170,4 +165,147 @@ TEST_F(RunningIdleCurveSequencer, gateRise_doesNothing_ifNoEnabledStep) {
   expectNoCommands();
 
   curveSequencer.execute(0.F);
+}
+
+class RunningActiveCurveSequencer : public CurveSequencerTest {
+protected:
+  int const activeStep{3};
+
+  void SetUp() override {
+    CurveSequencerTest::SetUp();
+    givenRun(true);
+
+    ON_CALL(stepSelector, first()).WillByDefault(Return(activeStep));
+    ON_CALL(stepController, execute(A<Latch const &>(), A<float>())).WillByDefault(Return(StepEvent::Generated));
+
+    givenGate(true);
+    curveSequencer.execute(0.F);
+  }
+};
+
+TEST_F(RunningActiveCurveSequencer, executesActiveStepWithGateStateAndSampleTime) {
+  auto constexpr sampleTime{0.34901F};
+
+  // Test starts with gate high and no edge
+
+  givenGate(true); // Stays high, clears edge
+  EXPECT_CALL(stepController, execute(Latch{true, false}, sampleTime)).Times(1);
+  curveSequencer.execute(sampleTime);
+
+  givenGate(false); // Fall
+  EXPECT_CALL(stepController, execute(Latch{false, true}, sampleTime)).Times(1);
+  curveSequencer.execute(sampleTime);
+
+  givenGate(false); // Stays low, clears edge
+  EXPECT_CALL(stepController, execute(Latch{false, false}, sampleTime)).Times(1);
+  curveSequencer.execute(sampleTime);
+
+  givenGate(true); // Rise
+  EXPECT_CALL(stepController, execute(Latch{true, true}, sampleTime)).Times(1);
+  curveSequencer.execute(sampleTime);
+}
+
+TEST_F(RunningActiveCurveSequencer, entersNextStep_ifActiveStepCompletes) {
+  auto const successorStep{activeStep + 3};
+
+  ON_CALL(stepController, execute(A<Latch const &>(), A<float>())).WillByDefault(Return(StepEvent::Completed));
+  ON_CALL(stepSelector, successor(activeStep, false)).WillByDefault(Return(successorStep));
+
+  EXPECT_CALL(stepController, enter(successorStep));
+
+  curveSequencer.execute(0.F);
+}
+
+TEST_F(RunningActiveCurveSequencer, passesLoopStateWhenSeekingSuccessor_ifActiveStepCompletes) {
+  auto const secondStep{activeStep + 1};
+  auto const thirdStep{secondStep + 1};
+
+  ON_CALL(stepController, execute(A<Latch const &>(), A<float>())).WillByDefault(Return(StepEvent::Completed));
+
+  givenLooping(true);
+  EXPECT_CALL(stepSelector, successor(activeStep, true)).WillOnce(Return(secondStep));
+  curveSequencer.execute(0.F);
+
+  givenLooping(false);
+  EXPECT_CALL(stepSelector, successor(secondStep, false)).WillOnce(Return(thirdStep));
+  curveSequencer.execute(0.F);
+}
+
+TEST_F(RunningActiveCurveSequencer, doesNothing_ifActiveStepCompletes_andNoSuccessor) {
+  expectNoCommands();
+
+  EXPECT_CALL(stepController, execute(A<Latch const &>(), A<float>())).WillOnce(Return(StepEvent::Completed));
+  ON_CALL(stepSelector, successor(activeStep, false)).WillByDefault(Return(-1));
+
+  curveSequencer.execute(0.F);
+}
+
+TEST_F(RunningActiveCurveSequencer, resetRise_exitsActiveStep) {
+  expectNoStepCommands();
+  EXPECT_CALL(stepController, exit()).Times(1);
+
+  givenReset(true);
+  curveSequencer.execute(0.F);
+}
+
+TEST_F(RunningActiveCurveSequencer, resetRise_copiesInputVoltageToOutput) {
+  givenReset(true);
+
+  auto constexpr input{0.89347F};
+  givenInput(input);
+
+  EXPECT_CALL(controls, output(input));
+
+  curveSequencer.execute(0.F);
+}
+
+class PausedActiveCurveSequencer : public CurveSequencerTest {
+protected:
+  int const activeStep{3};
+
+  void SetUp() override {
+    CurveSequencerTest::SetUp();
+    givenRun(true);
+
+    ON_CALL(stepSelector, first()).WillByDefault(Return(activeStep));
+    ON_CALL(stepController, execute(A<Latch const &>(), A<float>())).WillByDefault(Return(StepEvent::Generated));
+
+    givenGate(true);
+    curveSequencer.execute(0.F);
+
+    givenRun(false); // PausedActive = not running, but a step in progress
+  }
+};
+
+TEST_F(PausedActiveCurveSequencer, gateLow_doesNothing) {
+  givenGate(false);
+
+  expectNoCommands();
+
+  curveSequencer.execute(0.1F);
+}
+
+TEST_F(PausedActiveCurveSequencer, gateRise_doesNothing) {
+  givenGate(true);
+
+  expectNoCommands();
+
+  curveSequencer.execute(0.1F);
+}
+
+TEST_F(PausedActiveCurveSequencer, resetLow_doesNothing) {
+  givenReset(false);
+
+  expectNoCommands();
+
+  curveSequencer.execute(0.F);
+}
+
+TEST_F(PausedActiveCurveSequencer, resetRise_exitsActiveStep_andDoesNothingElse) {
+  givenReset(true);
+
+  expectNoCommands();
+  EXPECT_CALL(stepController, exit()).Times(1);
+
+  curveSequencer.execute(0.123F);
 }
