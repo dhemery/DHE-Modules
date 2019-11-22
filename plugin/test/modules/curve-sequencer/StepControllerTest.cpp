@@ -36,7 +36,7 @@ class StepControllerTest : public Test {
     MOCK_METHOD(dhe::curve_sequencer::StepMode, mode, (int), (const));
     MOCK_METHOD(float, output, (), (const));
     MOCK_METHOD(void, output, (float) );
-    MOCK_METHOD(void, showActive, (int, bool) );
+    MOCK_METHOD(void, showInactive, (int) );
     MOCK_METHOD(void, showProgress, (int, float) );
     MOCK_METHOD(dhe::taper::VariableTaper const *, taper, (int), (const));
   };
@@ -56,20 +56,20 @@ protected:
   void SetUp() override { ON_CALL(controls, taper(An<int>())).WillByDefault(Return(dhe::taper::variableTapers[0])); }
 };
 
-TEST_F(StepControllerTest, enter_lightsStepActivityLight) {
+TEST_F(StepControllerTest, enter_showsStepIsAt0Progress) {
   auto constexpr step = 0;
 
-  EXPECT_CALL(controls, showActive(step, true));
+  EXPECT_CALL(controls, showProgress(step, 0.F));
 
   stepController.enter(step);
 }
 
-TEST_F(StepControllerTest, exit_dimsStepActivityLight) {
+TEST_F(StepControllerTest, exit_showsStepInactive) {
   auto constexpr step = 1;
 
   stepController.enter(step);
 
-  EXPECT_CALL(controls, showActive(step, false));
+  EXPECT_CALL(controls, showInactive(step));
 
   stepController.exit();
 }

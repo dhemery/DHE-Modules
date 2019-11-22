@@ -52,8 +52,7 @@ namespace curve_sequencer {
         configDurationKnob(this, Controls::DurationKnobs + step, Controls::DurationRangeSwitch, "Duration");
         configButton(this, Controls::EnabledButtons + step, "Enabled", {"from input", "Yes"}, 1);
 
-        controls.showProgress(step, 0.F);
-        controls.showActive(step, false);
+        controls.showInactive(step);
       }
     }
 

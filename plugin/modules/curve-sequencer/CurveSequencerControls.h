@@ -72,17 +72,16 @@ namespace curve_sequencer {
 
     auto selectionLength() const -> int { return static_cast<int>(params[SelectionLengthKnob].getValue()); }
 
-    void showActive(int step, bool state) {
-      lights[ProgressLights + step + step + 1].setBrightness(state ? 1.F : 0.F);
-      lights[ProgressLights + step + step].setBrightness(0.F);
-    }
+    void showInactive(int step) { setLights(step, 0.F, 0.F); }
 
     void showProgress(int step, float progress) {
-      static auto constexpr brightnessScale{1.5F};
-      static auto constexpr brightnessRange = Range{1.F - brightnessScale, brightnessScale};
-      auto const brightness = brightnessRange.scale(progress);
-      lights[ProgressLights + step + step + 1].setBrightness(brightnessScale - brightness);
-      lights[ProgressLights + step + step].setBrightness(brightness);
+      // Skew the progress::brightness ratio so that the "remaining" light stays fully lit for a little while during
+      // early progress, and the "completed" reaches fully lit a little while before progress is complete.
+      static auto constexpr brightnessSkew = 0.7F;
+      static auto constexpr brightnessRange = Range{-brightnessSkew, 1.F + brightnessSkew};
+      auto const completedBrightness = brightnessRange.scale(progress);
+      auto const remainingBrightness = 1.F - completedBrightness;
+      setLights(step, completedBrightness, remainingBrightness);
     }
 
     auto taper(int step) const -> taper::VariableTaper const * {
@@ -122,8 +121,15 @@ namespace curve_sequencer {
     enum OutputIds { CurveSequencerOutput, OutputCount };
 
     enum LightIds { ENUMS(ProgressLights, N * 2), LightCount };
-  };
 
+  private:
+    void setLights(int step, float completedBrightness, float remainingBrightness) {
+      auto const completedLight = ProgressLights + step + step;
+      auto const remainingLight = completedLight + 1;
+      lights[completedLight].setBrightness(completedBrightness);
+      lights[remainingLight].setBrightness(remainingBrightness);
+    }
+  };
 } // namespace curve_sequencer
 
 } // namespace dhe

@@ -222,12 +222,13 @@ TEST_F(CurveSequencerControlsTest, stepCondition_isConditionSelectedByStepCondit
   EXPECT_EQ(controls.condition(step), conditionSelectedBySwitch);
 }
 
-TEST_F(CurveSequencerControlsTest, showActive_setsStepActivityLightBrightness) {
+TEST_F(CurveSequencerControlsTest, showInactive_dimsStepProgressLights) {
   auto constexpr step = 3;
+  auto constexpr completedProgressLightIndex = step + step;
+  auto constexpr remainingProgressLightIndex = step + step + 1;
 
-  controls.showActive(step, true);
-  EXPECT_EQ(lights[Controls::ProgressLights + step * 2].getBrightness(), 1.F);
+  controls.showInactive(step);
 
-  controls.showActive(step, false);
-  EXPECT_EQ(lights[Controls::ProgressLights + step * 2].getBrightness(), 0.F);
+  EXPECT_EQ(lights[Controls::ProgressLights + completedProgressLightIndex].getBrightness(), 0.F);
+  EXPECT_EQ(lights[Controls::ProgressLights + remainingProgressLightIndex].getBrightness(), 0.F);
 }
