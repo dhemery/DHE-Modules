@@ -42,17 +42,18 @@ namespace curve_sequencer {
       configLevelRangeSwitch(this, Controls::LevelRangeSwitch);
       configDurationRangeSwitch(this, Controls::DurationRangeSwitch);
 
-      for (int stepIndex = 0; stepIndex < N; stepIndex++) {
-        configToggle<modeCount>(this, Controls::ModeSwitches + stepIndex, "Mode", modeDescriptions, defaultMode);
-        configToggle<advanceConditionCount>(this, Controls::ConditionSwitches + stepIndex, "Advance when",
+      for (int step = 0; step < N; step++) {
+        configToggle<modeCount>(this, Controls::ModeSwitches + step, "Mode", modeDescriptions, defaultMode);
+        configToggle<advanceConditionCount>(this, Controls::ConditionSwitches + step, "Advance when",
                                             advanceConditionDescriptions, defaultAdvanceCondition);
-        configLevelKnob(this, Controls::LevelKnobs + stepIndex, Controls::LevelRangeSwitch, "Level");
-        configCurveShapeSwitch(this, Controls::ShapeSwitches + stepIndex, "Shape");
-        configCurvatureKnob(this, Controls::CurveKnobs + stepIndex, "Curvature");
-        configDurationKnob(this, Controls::DurationKnobs + stepIndex, Controls::DurationRangeSwitch, "Duration");
-        configButton(this, Controls::EnabledButtons + stepIndex, "Enabled", {"from input", "Yes"}, 1);
+        configLevelKnob(this, Controls::LevelKnobs + step, Controls::LevelRangeSwitch, "Level");
+        configCurveShapeSwitch(this, Controls::ShapeSwitches + step, "Shape");
+        configCurvatureKnob(this, Controls::CurveKnobs + step, "Curvature");
+        configDurationKnob(this, Controls::DurationKnobs + step, Controls::DurationRangeSwitch, "Duration");
+        configButton(this, Controls::EnabledButtons + step, "Enabled", {"from input", "Yes"}, 1);
 
-        lights[Controls::ActivityLights + stepIndex].setBrightness(0.F);
+        controls.showProgress(step, 0.F);
+        controls.showActive(step, false);
       }
     }
 

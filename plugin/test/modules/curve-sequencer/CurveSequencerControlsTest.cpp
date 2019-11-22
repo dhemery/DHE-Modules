@@ -226,8 +226,8 @@ TEST_F(CurveSequencerControlsTest, showActive_setsStepActivityLightBrightness) {
   auto constexpr step = 3;
 
   controls.showActive(step, true);
-  EXPECT_EQ(lights[Controls::ActivityLights + step].getBrightness(), 10.F);
+  EXPECT_EQ(lights[Controls::ProgressLights + step * 2].getBrightness(), 1.F);
 
   controls.showActive(step, false);
-  EXPECT_EQ(lights[Controls::ActivityLights + step].getBrightness(), 0.F);
+  EXPECT_EQ(lights[Controls::ProgressLights + step * 2].getBrightness(), 0.F);
 }

@@ -34,7 +34,7 @@ namespace curve_sequencer {
     void enter(int entryStep) {
       step = entryStep;
       reset();
-      showActive(true);
+      showProgress(0.F);
     }
 
     auto execute(dhe::Latch const &gateLatch, float sampleTime) -> StepEvent {
@@ -47,6 +47,7 @@ namespace curve_sequencer {
         } else { // curve or hold mode
           phase.advance(sampleTime / duration());
         }
+        showProgress(phase.phase());
         if (stepMode == StepMode::Curve) {
           controls.output(scale(taper(phase.phase()), startVoltage, level()));
         }
@@ -55,7 +56,7 @@ namespace curve_sequencer {
         }
       }
       // This step is done, because either the gate satisfied the condition or advancing the phase completed it.
-      showActive(false);
+      exit();
       return StepEvent::Completed;
     };
 
@@ -65,11 +66,6 @@ namespace curve_sequencer {
     auto condition() const -> AdvanceCondition { return controls.condition(step); }
 
     auto duration() const -> float { return controls.duration(step); }
-
-    void generate(float sampleTime) {
-      phase.advance(sampleTime / duration());
-      controls.output(scale(taper(phase.phase()), startVoltage, level()));
-    }
 
     auto level() const -> float { return controls.level(step); }
 
@@ -81,6 +77,7 @@ namespace curve_sequencer {
     }
 
     void showActive(bool state) const { controls.showActive(step, state); }
+    void showProgress(float progress) const { controls.showProgress(step, progress); }
 
     auto taper(float input) const -> float {
       auto const curvature = controls.curvature(step);

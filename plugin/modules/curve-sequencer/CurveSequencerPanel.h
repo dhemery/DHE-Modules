@@ -128,7 +128,7 @@ namespace curve_sequencer {
 
       for (float step = 0; step < N; step++) {
         auto const x = stepX + stepDx * (float) step;
-        this->light(x, activeY, Controls::ActivityLights + step);
+        this->template light<rack::componentlibrary::GreenRedLight>(x, activeY, Controls::ProgressLights + step + step);
 
         this->template toggle<GenerateModeStepper>(x, generatingModeY, Controls::ModeSwitches + step);
         this->template toggle<SustainModeStepper>(x, sustainingModeY, Controls::ConditionSwitches + step);

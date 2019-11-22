@@ -72,7 +72,18 @@ namespace curve_sequencer {
 
     auto selectionLength() const -> int { return static_cast<int>(params[SelectionLengthKnob].getValue()); }
 
-    void showActive(int step, bool state) { lights[ActivityLights + step].setBrightness(state ? 10.F : 0.F); }
+    void showActive(int step, bool state) {
+      lights[ProgressLights + step + step + 1].setBrightness(state ? 1.F : 0.F);
+      lights[ProgressLights + step + step].setBrightness(0.F);
+    }
+
+    void showProgress(int step, float progress) {
+      static auto constexpr brightnessScale{1.5F};
+      static auto constexpr brightnessRange = Range{1.F - brightnessScale, brightnessScale};
+      auto const brightness = brightnessRange.scale(progress);
+      lights[ProgressLights + step + step + 1].setBrightness(brightnessScale - brightness);
+      lights[ProgressLights + step + step].setBrightness(brightness);
+    }
 
     auto taper(int step) const -> taper::VariableTaper const * {
       auto const selection = static_cast<int>(params[ShapeSwitches + step].getValue());
@@ -110,7 +121,7 @@ namespace curve_sequencer {
 
     enum OutputIds { CurveSequencerOutput, OutputCount };
 
-    enum LightIds { ENUMS(ActivityLights, N), LightCount };
+    enum LightIds { ENUMS(ProgressLights, N * 2), LightCount };
   };
 
 } // namespace curve_sequencer

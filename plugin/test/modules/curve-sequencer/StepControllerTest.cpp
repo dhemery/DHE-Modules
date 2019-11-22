@@ -37,6 +37,7 @@ class StepControllerTest : public Test {
     MOCK_METHOD(float, output, (), (const));
     MOCK_METHOD(void, output, (float) );
     MOCK_METHOD(void, showActive, (int, bool) );
+    MOCK_METHOD(void, showProgress, (int, float) );
     MOCK_METHOD(dhe::taper::VariableTaper const *, taper, (int), (const));
   };
 
