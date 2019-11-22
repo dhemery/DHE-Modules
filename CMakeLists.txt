@@ -11,6 +11,9 @@ add_subdirectory(plugin)
 install(DIRECTORY svg
         DESTINATION ${RACK_PLUGINS_DIR}
         )
+install(DIRECTORY presets
+        DESTINATION ${RACK_PLUGINS_DIR}
+        )
 install(FILES LICENSE.txt plugin.json
         DESTINATION ${RACK_PLUGINS_DIR}
         )
