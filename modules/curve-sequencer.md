@@ -3,6 +3,8 @@ title: The Curve Sequencer Modules
 ---
 <img class="faceplate" src="curve-sequencer.svg" alt="The Curve Sequencer 4 Faceplate" />
 
+**NOTE: This page is a work in progress. These modules have not yet been released.**
+
 Generates a sequence of curves.
 
 DHE Modules includes three _Curve Sequencer_ modules:
@@ -115,7 +117,7 @@ and controls for each step in the sequence.
 
     - _TIME:_
         The sequencer advances to the next step
-        only when this step completes its full duration.
+        when this step completes its full duration.
         The state of the _GATE_ is ignored.
 
     - _RISE:_
@@ -129,7 +131,7 @@ and controls for each step in the sequence.
         the sequencer advances to the next step.
 
     - _EDGE:_
-        if the _GATE_ rises or falls
+        If the _GATE_ rises or falls
         while this step is active,
         the sequencer advances to the next step.
 
@@ -175,34 +177,10 @@ and controls for each step in the sequence.
 
 ## Usage Notes
 
-**To restart a sequence in progress.**
+**To restart a sequence.**
 Send a rising edge to both _RESET_ and _GATE._
 The rising _RESET_ resets the sequencer to idle.
 The rising _GATE_ immediately starts the next sequence.
-
-**To generate a standard ADSR envelope.**
-- Enable four steps.
-- Attack:
-  Set the first step to _CURVE_ mode, 
-  and configure its level, curve, shape, and duration to generate the Attack stage.
-- Decay:
-  Set the second step to _CURVE_ mode, 
-  and configure its curve, shape, and duration to generate the Decay stage.
-  Set its level to define the sustain level.
-- Sustain:
-  Set the third step to _SUSTAIN_ mode.
-- Release:
-  Set the fourth step to _CURVE_ mode, 
-  and configure its curve, shape, and duration to generate the Release stage.
-- Set the the attack, decay, and sustain stages
-  to advance on _LOW._
-- Set the release step to advance on _TIME_
-  (or any other condition other than _LOW_).
-
-If the _GATE_ goes low during the attack, decay, or sustain stage,
-the sequencer interrupts the stage,
-skips any intervening stages (because they are set to advance when the _GATE_ is low),
-and execute the release step. 
 
 **To track the _IN_ voltage.**
 
