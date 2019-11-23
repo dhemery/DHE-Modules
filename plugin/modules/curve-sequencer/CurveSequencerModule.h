@@ -5,12 +5,12 @@
 #include "StepController.h"
 #include "StepMode.h"
 #include "StepSelector.h"
+#include "components/PhaseTimer.h"
 #include "config/CommonConfig.h"
 #include "config/CurvatureConfig.h"
 #include "config/DurationConfig.h"
 #include "config/LevelConfig.h"
 
-#include <components/OneShotPhaseAccumulator.h>
 #include <engine/Module.hpp>
 
 namespace dhe {
@@ -60,9 +60,9 @@ namespace curve_sequencer {
     void process(const ProcessArgs &args) override { curveSequencer.execute(args.sampleTime); }
 
   private:
-    OneShotPhaseAccumulator phase{};
+    PhaseTimer timer{};
     Controls controls{inputs, outputs, params, lights};
-    StepController<Controls, OneShotPhaseAccumulator> stepController{controls, phase};
+    StepController<Controls, PhaseTimer> stepController{controls, timer};
     StepSelector<Controls> selector{controls, N};
 
     CurveSequencer<Controls, decltype(selector), decltype(stepController)> curveSequencer{controls, selector,

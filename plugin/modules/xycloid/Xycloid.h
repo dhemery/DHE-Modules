@@ -1,6 +1,6 @@
 #pragma once
 
-#include "components/LoopingPhaseAccumulator.h"
+#include "components/PhaseRotor.h"
 #include "components/Range.h"
 #include "components/Taper.h"
 #include "controls/CommonInputs.h"
@@ -50,7 +50,7 @@ private:
   auto phase() const -> float;
   auto ratio() const -> float;
 
-  LoopingPhaseAccumulator wobbler{};
-  LoopingPhaseAccumulator throbber{};
+  PhaseRotor wobbler{};
+  PhaseRotor throbber{};
 };
 } // namespace dhe

@@ -2,12 +2,11 @@
 #include <cmath>
 
 namespace dhe {
-class LoopingPhaseAccumulator {
+class PhaseRotor {
 public:
-  auto advance(float delta) -> float {
+  void advance(float delta) {
     phase += delta;
     phase -= std::trunc(phase);
-    return phase;
   }
 
   auto angle(float offset = 0.F) -> float {

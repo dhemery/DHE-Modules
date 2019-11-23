@@ -1,6 +1,6 @@
 #pragma once
 
-#include "components/LoopingPhaseAccumulator.h"
+#include "components/PhaseRotor.h"
 #include "components/Range.h"
 #include "components/Taper.h"
 #include "controls/CommonInputs.h"
@@ -63,7 +63,7 @@ private:
   inline auto yGain() const -> float { return gainRange.scale(rotation(params[YGainKnob], inputs[YGainCvInput])); }
   inline auto yOffset() const -> float { return selected<float, 2>(params[YRangeSwitch], {0.F, 1.F}); };
 
-  LoopingPhaseAccumulator spinner{};
-  LoopingPhaseAccumulator bouncer{};
+  PhaseRotor spinner{};
+  PhaseRotor bouncer{};
 };
 } // namespace dhe

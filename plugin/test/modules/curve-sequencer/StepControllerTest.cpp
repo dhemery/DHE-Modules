@@ -1,7 +1,7 @@
 #include "curve-sequencer/StepController.h"
 
 #include "components/Latch.h"
-#include "components/OneShotPhaseAccumulator.h"
+#include "components/PhaseTimer.h"
 #include "components/Taper.h"
 #include "curve-sequencer/AdvanceCondition.h"
 #include "curve-sequencer/StepEvent.h"
@@ -43,9 +43,9 @@ class StepControllerTest : public Test {
 
 protected:
   NiceMock<MockControls> controls{};
-  dhe::OneShotPhaseAccumulator phase{};
+  dhe::PhaseTimer phase{};
 
-  StepController<MockControls, dhe::OneShotPhaseAccumulator> stepController{controls, phase};
+  StepController<MockControls, dhe::PhaseTimer> stepController{controls, phase};
 
   void givenMode(int step, StepMode mode) { ON_CALL(controls, mode(step)).WillByDefault(Return(mode)); }
 

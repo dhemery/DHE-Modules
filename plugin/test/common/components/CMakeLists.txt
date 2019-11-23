@@ -2,7 +2,7 @@ add_executable(component_tests)
 target_sources(component_tests
         PRIVATE
         LatchTest.cpp
-        OneShotPhaseAccumulatorTest.cpp
+        PhaseTimerTest.cpp
         )
 target_link_libraries(component_tests
         PRIVATE

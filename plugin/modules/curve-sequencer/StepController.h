@@ -27,9 +27,9 @@ namespace curve_sequencer {
     }
   }
 
-  template <typename Controls, typename PhaseAccumulator> class StepController {
+  template <typename Controls, typename Timer> class StepController {
   public:
-    StepController(Controls &controls, PhaseAccumulator &phase) : controls{controls}, phase{phase} {}
+    StepController(Controls &controls, Timer &timer) : controls{controls}, timer{timer} {}
 
     void enter(int entryStep) {
       step = entryStep;
@@ -45,13 +45,13 @@ namespace curve_sequencer {
           // subsequent curve will start where sustain left off.
           reset();
         } else { // curve or hold mode
-          phase.advance(sampleTime / duration());
+          timer.advance(sampleTime / duration());
         }
-        controls.showProgress(step, phase.phase());
+        controls.showProgress(step, timer.phase());
         if (stepMode == StepMode::Curve) {
-          controls.output(scale(taper(phase.phase()), startVoltage, level()));
+          controls.output(scale(taper(timer.phase()), startVoltage, level()));
         }
-        if (phase.state() == PhaseAccumulator::State::Incomplete) {
+        if (!timer.isExpired()) {
           return StepEvent::Generated;
         }
       }
@@ -72,7 +72,7 @@ namespace curve_sequencer {
     auto mode() const -> StepMode { return controls.mode(step); }
 
     void reset() {
-      phase.reset();
+      timer.reset();
       startVoltage = controls.output();
     }
 
@@ -85,7 +85,7 @@ namespace curve_sequencer {
     int step{0};
     float startVoltage{0.F};
     Controls &controls;
-    PhaseAccumulator &phase;
+    Timer &timer;
   }; // namespace curve_sequencer
 } // namespace curve_sequencer
 } // namespace dhe
