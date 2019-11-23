@@ -3,8 +3,6 @@ title: The Curve Sequencer Modules
 ---
 <img class="faceplate" src="curve-sequencer.svg" alt="The Curve Sequencer 4 Faceplate" />
 
-**NOTE: This page is a work in progress. These modules have not yet been released.**
-
 Generates a sequence of curves.
 
 DHE Modules includes three _Curve Sequencer_ modules:
@@ -15,11 +13,13 @@ DHE Modules includes three _Curve Sequencer_ modules:
 The three modules operate identically, except for the number of steps.
 
 See:
+- [Factory Presets](#factory-presets)
+    for descriptions of the presets included with the modules.
 - [Usage Notes](#usage-notes)
     for basic ideas about how to use these modules.
-    
 - [Details](#details)
     for explanations of several non-intuitive aspects of these modules.
+- [J and S Curves]({{ '/technical/curves/' | relative_url }})
 
 ## Controls
 
@@ -38,9 +38,9 @@ and controls for each step in the sequence.
 
 - **LOOP:**
     If _LOOP_ is on when a sequence ends,
-    the sequencer immediately restarts the sequence.
+    the sequencer immediately begins a new sequence.
    
-    When _LOOP_ is off when a sequence ends,
+    If _LOOP_ is off when a sequence ends,
     the sequencer becomes idle.
 
 - **START** and **LENGTH**
@@ -50,21 +50,21 @@ and controls for each step in the sequence.
     indicate the currently selected steps.   
 
 - **GATE:**
-    Controls the start and advancement of the sequence.
-    
+    Controls when a sequence starts,
+    and may influence when the sequence advances.
+
     If _GATE_ rises
     while the sequencer is idle,
-    the sequencer starts the sequence
-    with the first available step.
-    
-    While the sequence is in progress,
-    the active step may observe the state of the _GATE_
-    to determine whether to advance
-    to the next step.
-    (See the _ADVANCE_ step controls.)
+    the sequencer starts the sequence,
+    activating the first selected, enabled step.
+
+    See the _ADVANCE_ step controls
+    for details of how an individual step
+    may react to _GATE_ conditions.
     
 - **RESET:**
-    When _RESET_ rises, the sequencer becomes idle.
+    When _RESET_ rises, the sequencer becomes idle,
+    abandoning any paused or in-progress sequence.
 
     See [details](#details)
     for explanations of several likely non-intuitive aspects of the _RESET_ feature.
@@ -92,7 +92,7 @@ and controls for each step in the sequence.
     not *voltage.*
 
 - **MODE:**
-    Selects what the step generates:
+    Selects what kind of envelope stage this step generates:
 
     - _CURVE_ mode
         generates a curve
@@ -101,17 +101,18 @@ and controls for each step in the sequence.
         the sequencer advances to the next enabled step.
 
     - _HOLD_ mode
-        sustains the _OUT_ port voltage
+        holds the _OUT_ port at its current voltage
         for the duration selected by the _DURATION_ controls.
         When the duration elapses, 
         the sequencer advances to the next enabled step.
 
-    - _SUSTAIN_ mode sustains the _OUT_ port voltage.
-        until the _GATE_ event or condition
+    - _SUSTAIN_ mode
+        sustains the _OUT_ port at its current voltage
+        until the _GATE_ condition
         selected by the _ADVANCE_ stepper occurs.
 
 - **ADVANCE:**
-    Selects the event or condition
+    Selects the condition
     that triggers the sequencer
     to advance from this step to the next.
 
@@ -119,6 +120,10 @@ and controls for each step in the sequence.
         The sequencer advances to the next step
         when this step completes its full duration.
         The state of the _GATE_ is ignored.
+
+        Selecting this option
+        for a step in _SUSTAIN_ mode
+        disables the step.
 
     - _RISE:_
         If the _GATE_ rises
@@ -146,19 +151,19 @@ and controls for each step in the sequence.
         the sequencer advances to the next step.
 
 - **LEVEL:**
-    Selects the voltage at which the curve ends.
+    The voltage at which the curve ends.
     The range of each _LEVEL_ knob
     is set by the common **LEVEL RANGE** switch
     (to the right of the _LEVEL_ knobs).
     
 - **SHAPE:**
-    Sets the shape of the curve.
+    Selects the shape of the curve.
 
 - **CURVE:**
-    Sets the curvature of the curve.
+    The curvature of the curve.
     
 - **DURATION:**
-    Sets the duration of the _CURVE_ or _HOLD_.
+    The duration of the _CURVE_ or _HOLD_.
     The range of each _DURATION_ knob
     is set by the common **DURATION RANGE** switch
     (to the right of the _DURATION_ knobs).
@@ -168,44 +173,146 @@ and controls for each step in the sequence.
     When _ENABLED_ is off,
     the sequencer bypasses this step when advancing.
 
-    NOTE:
-    The sequencer observes the _ENABLED_ controls
-    only when advancing from one step to the next.
-    Once a step starts,
-    it always proceeds as if enabled,
-    even if _ENABLED_ is turned off while the step is in progress.
+## Factory Presets
+
+The _Curve Sequencer 4_ module
+includes these factory presets:
+
+- **AD:**
+    Generates an Attack Decay envelope.
+- **ADHR:**
+    Generates an Attack Decay Hold Release envelope.
+- **ADSR:**
+    Generates an Attack Decay Sustain Release envelope.
+- **AHR:**
+    Generates an Attack Hold Release envelope.
+- **ASR:**
+    Generates an Attack Sustain Release envelope.
+- **Batman:**
+    Calls for help.
 
 ## Usage Notes
 
 **To restart a sequence.**
-Send a rising edge to both _RESET_ and _GATE._
+To interrupt a sequence
+and start a new sequence,
+send a rising edge to both _RESET_ and _GATE._
 The rising _RESET_ resets the sequencer to idle.
 The rising _GATE_ immediately starts the next sequence.
 
+**To start a sequence at a specified voltage.**
+- Feed the _IN_ port a signal with the desired voltage.
+- Send a rising edge to both _RESET_ and _GATE._
+  The rising _RESET_ 
+  copies the _IN_ voltage to the _OUT_ port.
+  The rising _GATE_ immediately starts a new sequence
+  starting from the _OUT_ port voltage.
+
+**To skip a series of steps.**
+Set a series of adjacent steps to advance on the same _GATE_ value
+--
+either _HIGH_ or _LOW_.
+If the selected value appears at the _GATE_
+while any of those steps is active,
+the sequencer immediately completes the active step
+and all of the successive steps with the same _ADVANCE_ condition,
+and executes the next available step that has a different _ADVANCE_ condition.
+
+For example, to generate an ADSR envelope
+that jumps to the Release step when the _GATE_ goes low,
+set the _ADVANCE_ condition
+of the Attack, Decay, and Sustain steps
+to _LOW._
+
 **To track the _IN_ voltage.**
+If _RESET_ is high
+while the sequencer is idle,
+the sequencer copies the _IN_ voltage to the _OUT_ port.
+So if you want the _OUT_ port to "track" the _IN_ port:
 
+- Send a rising signal to _RESET._
+    The sequencer interrupts any sequence in progress and becomes idle.
+- Hold _RESET_ high.
+    As long as _RESET_ is high
+    and the sequencer is idle,
+    the sequencer copies _IN_ to _OUT_.
+- Prevent _GATE_ from rising.
+    If _GATE_ rises while the sequencer is idle,
+    the sequencer starts a sequence.
+    When this happens,
+    the sequencer stops tracking _IN._
+- To stop tracking, set _RESET_ low or send a rising signal to _GATE._
 
-
+**Pausing and resuming a sequence.**
+Turning _RUN_ off
+while a sequence is in progress
+_pauses_ the sequence.
+When _RUN_ turns on,
+the sequence resumes from the point where it was paused.
 
 ## Details
 
-Several non-intuitive aspects of the _Curve Sequencer_ modules
-require explanation.
+Several aspects of the _Curve Sequencer_ modules,
+though purposefully designed,
+may be unexpected:
+
+- **_CURVE,_ _HOLD,_ and _ADVANCE._**
+    If the active step is in _CURVE_ mode or _HOLD_ mode,
+    the sequencer advances to the next step
+    as soon as either or both of these things occurs:
+
+    - The active step completes its duration.
+    - The _GATE_ satisfies the _ADVANCE_ condition.
+    
+    If the active step completes its duration,
+    the sequencer advances to the next step
+    regardless of whether the _GATE_ 
+    satisfies the _ADVANCE_ condition.
+
+    If the _GATE_ satisfies the _ADVANCE_ condition,
+    the sequencer advances to the next step
+    regardless of whether the active step
+    regardless of whether the active step
+    has completed its duration.
+
+- **Each sequence starts at the _OUT_ voltage.**
+    The sequencer starts each sequence
+    at the current _OUT_ port voltage.
+    This prevents the voltage from jumping
+    at the start of each sequence.
+
+- **Once started, a step always completes.**
+    Once a step starts,
+    it always proceeds as if enabled,
+    even if _ENABLED_ is turned off while the step is in progress.    
 
 - **_RESET_ and _RUN._**
     A rising _RESET_
-    sets the sequencer to idle
+    resets the sequencer to idle
     even while _RUN_ is off.
-
-- **Sequence starts at _OUT_ voltage.**
-    The sequencer starts each sequence
-    at the current _OUT_ port voltage.
-    This ensures that each step starts
-    at the same voltage where the previous step ended.
+    If _RUN_ is on,
+    a rising _RESET_
+    abandons any sequence in progress.
+    If _RUN_ is off,
+    a rising _RESET_
+    abandons any paused sequence.
 
 - **_RESET,_ idle mode, and the _IN_ port.**
-    If _RESET_ is high while the sequencer is idle,
+    While the sequencer is idle
+    and _RESET_ is high,
     the sequencer copies the _IN_ port voltage
     to the _OUT_ port.
+    In fact,
+    this is the _only_ time
+    the sequencer reads the _IN_ port.
 
-- **Reading the _IN_ port.**
+- **Changing _MODE._**
+    While a step is in progress:
+    - Changing from _SUSTAIN_ mode to _CURVE_ mode
+        restarts the step's timer.
+        The curve starts afresh,
+        and runs for the full duration.
+    - Changing from _CURVE_ mode to _HOLD_ mode
+        does _not_ restart the step's timer.
+        The hold inherits whatever time
+        remains on the timer.

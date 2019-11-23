@@ -4,6 +4,12 @@ title: Release Notes
 
 # DHE Modules Release Notes
 
+## Version 1.1.0
+
+- Added [_Curve Sequencer 4_]({{ '/modules/curve-sequencer' | relative_url }}).
+- Added _Curve Sequencer 8_.
+- Added _Curve Sequencer 16_.
+
 ## Version 1.0.5
 
 - _Stage,_ _Booster Stage,_ and _Hostage._

@@ -14,6 +14,8 @@ and
 
 ### Envelope Generators
 
+#### Composable Envelope Generators
+
 [![_Stage_](modules/stage/stage.svg)](modules/stage/)
 [![_Booster Stage_](modules/booster-stage/booster-stage.svg)](modules/booster-stage/)
 [![_Hostage_](modules/hostage/hostage.svg)](modules/hostage/)
@@ -42,6 +44,20 @@ inject triggers,
 suppress retriggers,
 set an envelope's starting voltage,
 and more.
+
+#### Multi-Stage Envelope Generators
+
+[![_Curve Sequencer 4_](modules/curve-sequencer/curve-sequencer.svg)](modules/curve-sequencer/)
+
+**[_Curve Sequencer 4_](modules/curve-sequencer/)**
+is a four-step envelope generator
+that offers control
+over the individual steps
+and the overall sequence.
+**_Curve Sequencer 8_**
+and
+**_Curve Sequencer 16_**
+expand the same functionality to even more steps.
 
 ### Logic
 
