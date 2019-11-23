@@ -1,10 +1,6 @@
 language: cpp
 compiler: gcc
 
-#branches:
-#  except:
-#    - /^dale\/.*/
-
 matrix:
   include:
     - os: linux

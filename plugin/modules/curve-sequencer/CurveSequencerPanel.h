@@ -1,7 +1,6 @@
 #pragma once
 
 #include "CurveSequencerControls.h"
-#include "CurveSequencerModule.h"
 #include "widgets/Panel.h"
 
 #include <functional>
@@ -79,7 +78,7 @@ namespace curve_sequencer {
     static auto constexpr sequenceControlsWidth = 13.F;
     static auto constexpr hp = static_cast<int>(sequenceControlsWidth + N * stepWidth);
 
-    CurveSequencerPanel(CurveSequencerModule<N> *module) : Panel<CurveSequencerPanel<N>>(module, hp) {
+    CurveSequencerPanel(rack::engine::Module *module) : Panel<CurveSequencerPanel<N>>(module, hp) {
       auto constexpr left = hp2mm(2.F);
       auto constexpr right = hp2mm(hp - 2.F);
       auto constexpr top = hp2mm(4.F);

@@ -1,15 +1,51 @@
 #pragma once
 
-#include "Upstage.h"
+#include "UpstageControls.h"
 #include "widgets/Panel.h"
 
-namespace dhe {
+#include <engine/Module.hpp>
 
-class UpstagePanel : public Panel<UpstagePanel> {
-public:
-  explicit UpstagePanel(Upstage *module);
-  static constexpr auto moduleSlug = "upstage";
-  static constexpr auto hp = 5;
-};
+namespace dhe {
+namespace stage {
+  class UpstagePanel : public Panel<UpstagePanel> {
+    using Controls = UpstageControls;
+
+  public:
+    UpstagePanel(rack::engine::Module *module) : Panel{module, hp} {
+      auto widgetRightEdge = width();
+
+      auto column1 = width() / 4.F + 0.333333333F;
+      auto column2 = widgetRightEdge / 2.F;
+      auto column3 = widgetRightEdge - column1;
+
+      auto y = 25.F;
+      auto dy = 18.5F;
+
+      knob<LargeKnob>(column2, y, Controls::LevelKnob);
+
+      y += dy;
+      input(column1, y, Controls::LevelCvInput);
+      toggle<2>(column3, y, Controls::LevelRangeSwitch);
+
+      y += dy;
+      button(column1, y, Controls::WaitButton);
+      button(column3, y, Controls::TriggerButton);
+
+      y = 82.F;
+      dy = 15.F;
+
+      input(column1, y, Controls::WaitInput);
+
+      y += dy;
+      input(column1, y, Controls::TriggerInput);
+      output(column3, y, Controls::TriggerOutput);
+
+      y += dy;
+      output(column3, y, Controls::EnvelopeOutput);
+    }
+    static constexpr auto moduleSlug = "upstage";
+    static constexpr auto hp = 5;
+  };
+} // namespace stage
 
 } // namespace dhe

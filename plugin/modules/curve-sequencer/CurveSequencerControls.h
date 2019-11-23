@@ -4,10 +4,9 @@
 #include "StepMode.h"
 #include "controls/CommonInputs.h"
 #include "controls/CurvatureInputs.h"
+#include "controls/DurationInputs.h"
+#include "controls/LevelInputs.h"
 
-#include <common.hpp>
-#include <controls/DurationInputs.h>
-#include <controls/LevelInputs.h>
 #include <engine/Light.hpp>
 #include <engine/Param.hpp>
 #include <engine/Port.hpp>

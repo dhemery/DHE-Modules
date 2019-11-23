@@ -1,39 +1,28 @@
 #pragma once
 
+#include "UpstageControls.h"
+#include "config/CommonConfig.h"
+#include "config/LevelConfig.h"
 #include "controls/CommonInputs.h"
 #include "controls/LevelInputs.h"
 
 #include <engine/Module.hpp>
 
 namespace dhe {
+namespace stage {
 
-class Upstage : public rack::engine::Module {
-public:
-  Upstage();
+  template <typename Controls> class Upstage {
+  public:
+    Upstage(Controls &controls) : controls{controls} {}
 
-  void process(const ProcessArgs &args) override;
+    void process() {
+      auto isTriggered = controls.isTriggered() && !controls.isWaiting();
+      controls.sendTrigger(isTriggered);
+      controls.sendEnvelope(controls.level());
+    }
 
-  enum ParameterIds { LevelKnob, TriggerButton, WaitButton, LevelRangeSwitch, ParameterCount };
-
-  enum InputIds { TriggerInput, WaitInput, LevelCvInput, InputCount };
-
-  enum OutputIds { TriggerOutput, EnvelopeOutput, OutputCount };
-
-private:
-  void sendEnvelope(float voltage) { outputs[EnvelopeOutput].setVoltage(voltage); }
-
-  void sendTrigger(bool isTriggered) {
-    const auto voltage = unipolarSignalRange.scale(isTriggered);
-    outputs[TriggerOutput].setVoltage(voltage);
-  }
-
-  auto triggerIn() const -> bool { return isHigh(inputs[TriggerInput]) || isPressed(params[TriggerButton]); }
-
-  auto waitIn() const -> bool { return isHigh(inputs[WaitInput]) || isPressed(params[WaitButton]); }
-
-  auto level() const -> float {
-    return selectableLevel(params[LevelKnob], inputs[LevelCvInput], params[LevelRangeSwitch]);
-  }
-};
-
+  private:
+    Controls &controls;
+  };
+} // namespace stage
 } // namespace dhe

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "CurveSequencer.h"
+#include "CurveSequencerControls.h"
 #include "StepController.h"
 #include "StepMode.h"
 #include "StepSelector.h"
@@ -15,11 +16,9 @@
 namespace dhe {
 
 namespace curve_sequencer {
-  static auto constexpr modeCount = static_cast<int>(StepMode::Sustain) + 1;
   static auto constexpr defaultMode = static_cast<int>(StepMode::Curve);
   static auto const modeDescriptions = std::array<std::string, modeCount>{"Curve", "Hold", "Sustain"};
 
-  static auto constexpr advanceConditionCount = static_cast<int>(AdvanceCondition::GateIsLow) + 1;
   static auto constexpr defaultAdvanceCondition = static_cast<int>(AdvanceCondition::TimerExpires);
   static auto const advanceConditionDescriptions = std::array<std::string, advanceConditionCount>{
       "Timer expires", "Gate rises", "Gate falls", "Gate changes", "Gate is high", "Gate is low"};
