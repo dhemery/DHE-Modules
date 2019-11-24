@@ -8,10 +8,16 @@
 namespace dhe {
 namespace stage {
 
-  template <typename Controls, typename DeferMode, typename InputMode, typename GenerateMode> class StageEngine {
+  template <typename Controls, typename DeferMode, typename InputMode, typename GenerateMode, typename LevelMode>
+  class StageEngine {
   public:
-    StageEngine(Controls &controls, DeferMode &deferMode, InputMode &inputMode, GenerateMode &generateMode) :
-        controls{controls}, deferMode{deferMode}, inputMode{inputMode}, generateMode{generateMode} {}
+    StageEngine(Controls &controls, DeferMode &deferMode, InputMode &inputMode, GenerateMode &generateMode,
+                LevelMode &levelMode) :
+        controls{controls},
+        deferMode{deferMode},
+        inputMode{inputMode},
+        generateMode{generateMode},
+        levelMode{levelMode} {}
 
     void process(float sampleTime) {
       auto const newState = identifyState();
@@ -24,13 +30,13 @@ namespace stage {
         generate(sampleTime);
         break;
       case TrackingLevel:
-        trackLevel();
+        levelMode.execute();
         break;
       case Deferring:
-        defer();
+        deferMode.execute();
         break;
       case TrackingInput:
-        trackInput();
+        inputMode.execute();
         break;
       }
 
@@ -73,6 +79,7 @@ namespace stage {
         inputMode.exit();
         break;
       case TrackingLevel:
+        levelMode.exit();
         break;
       }
 
@@ -83,12 +90,13 @@ namespace stage {
         deferMode.enter();
         break;
       case Generating:
-        generateMode.enter(controls.input());
+        generateMode.enter();
         break;
       case TrackingInput:
         inputMode.enter();
         break;
       case TrackingLevel:
+        levelMode.enter();
         break;
       }
     }
@@ -100,15 +108,6 @@ namespace stage {
       auto const isRise = isHigh && !triggerWasHigh;
       triggerWasHigh = isHigh;
       return isRise;
-    }
-
-    void defer() { deferMode.execute(); }
-
-    void trackInput() { inputMode.execute(); }
-
-    void trackLevel() {
-      controls.showActive(false);
-      controls.output(controls.level());
     }
 
     void generate(float sampleTime) {
@@ -142,6 +141,7 @@ namespace stage {
     DeferMode &deferMode;
     InputMode &inputMode;
     GenerateMode &generateMode;
+    LevelMode &levelMode;
   };
 } // namespace stage
 } // namespace dhe

@@ -33,8 +33,10 @@ namespace stage {
     DeferMode<Controls> deferMode{controls};
     InputMode<Controls> inputMode{controls};
     GenerateMode<Controls, PhaseTimer> generateMode{controls, timer};
-    StageEngine<Controls, DeferMode<Controls>, InputMode<Controls>, GenerateMode<Controls, PhaseTimer>> machine{
-        controls, deferMode, inputMode, generateMode};
+    LevelMode<Controls> levelMode{controls};
+    StageEngine<Controls, DeferMode<Controls>, InputMode<Controls>, GenerateMode<Controls, PhaseTimer>,
+                LevelMode<Controls>>
+        machine{controls, deferMode, inputMode, generateMode, levelMode};
   };
 } // namespace stage
 } // namespace dhe

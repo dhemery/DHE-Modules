@@ -57,15 +57,29 @@ protected:
 TEST_F(GenerateModeTest, enter_resetsTimer) {
   timer.advance(0.5F);
 
-  generateMode.enter(0.F);
+  generateMode.enter();
 
   EXPECT_EQ(timer.phase(), 0.F);
+}
+
+TEST_F(GenerateModeTest, enter_setsCurveStartingVoltageToInputVoltage) {
+  auto constexpr input{5.3948F};
+  givenInput(input);
+
+  generateMode.enter();
+  timer.reset();
+
+  EXPECT_CALL(controls, output(input));
+
+  // sample time = 0 leaves phase at 0, so generate mode outputs the phase 0 voltage, which is the voltage captured
+  // during enter()
+  generateMode.execute(0.F);
 }
 
 TEST_F(GenerateModeTest, enter_showsStageActive) {
   EXPECT_CALL(controls, showActive(true));
 
-  generateMode.enter(0.F);
+  generateMode.enter();
 }
 
 TEST_F(GenerateModeTest, exit_showsStageInactive) {
@@ -104,10 +118,10 @@ TEST_F(GenerateModeTest, execute_outputsCurveVoltage) {
   givenPhase(0.F);
 
   // Configure linear curve rising from 4V to 6V over 1s.
-  givenCurvature(0.F);     // 0 curvature -> linear curve
-  givenDuration(1.F);      // 1s ramp
-  generateMode.enter(4.F); // Start curve at 4V
-  givenLevel(6.F);         // End curve at 6V
+  givenCurvature(0.F); // 0 curvature -> linear curve
+  givenDuration(1.F);  // 1s ramp
+  givenInput(4.F);     // Start curve at 4V
+  givenLevel(6.F);     // End curve at 6V
   // The full range of the curve is 2V = 6V - 4V.
 
   // Sample time is 1/10 of duration. So execute will raise the output by 0.2V (1/10 of the full curve).
@@ -116,5 +130,6 @@ TEST_F(GenerateModeTest, execute_outputsCurveVoltage) {
   // Execute must raise output by 0.2V from 4V to 4.2V.
   EXPECT_CALL(controls, output(4.2F));
 
+  generateMode.enter(); // To set starting voltage
   generateMode.execute(sampleTime);
 }

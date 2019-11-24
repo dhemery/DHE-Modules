@@ -1,4 +1,4 @@
-#include "stage/InputMode.h"
+#include "stage/LevelMode.h"
 
 #include <gmock/gmock-actions.h>
 #include <gmock/gmock.h>
@@ -9,10 +9,10 @@ using ::testing::NiceMock;
 using ::testing::Return;
 using ::testing::Test;
 
-class InputModeTest : public Test {
+class LevelModeTest : public Test {
   class Controls {
   public:
-    MOCK_METHOD(float, input, (), (const));
+    MOCK_METHOD(float, level, (), (const));
     MOCK_METHOD(void, showActive, (bool), ());
     MOCK_METHOD(void, output, (float), ());
   };
@@ -20,29 +20,29 @@ class InputModeTest : public Test {
 protected:
   NiceMock<Controls> controls{};
 
-  dhe::stage::InputMode<Controls> levelMode{controls};
+  dhe::stage::LevelMode<Controls> levelMode{controls};
 
-  void givenInput(float input) { ON_CALL(controls, input()).WillByDefault(Return(input)); }
+  void givenLevel(float level) { ON_CALL(controls, level()).WillByDefault(Return(level)); }
 };
 
-TEST_F(InputModeTest, enter_showsStageInactive) {
+TEST_F(LevelModeTest, enter_showsStageInactive) {
   EXPECT_CALL(controls, showActive(false));
 
   levelMode.enter();
 }
 
-TEST_F(InputModeTest, exit_showsStageInactive) {
+TEST_F(LevelModeTest, exit_showsStageInactive) {
   EXPECT_CALL(controls, showActive(false));
 
   levelMode.exit();
 }
 
-TEST_F(InputModeTest, execute_outputsInput) {
-  auto constexpr input{5.34908F};
+TEST_F(LevelModeTest, execute_outputsLevel) {
+  auto constexpr level{5.34908F};
 
-  givenInput(input);
+  givenLevel(level);
 
-  EXPECT_CALL(controls, output(input));
+  EXPECT_CALL(controls, output(level));
 
   levelMode.execute();
 }

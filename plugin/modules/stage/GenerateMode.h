@@ -22,9 +22,9 @@ namespace stage {
       return timer.isExpired() ? Event::Completed : Event::Generated;
     }
 
-    void enter(float curveStartingVoltage) {
-      startVoltage = curveStartingVoltage;
+    void enter() {
       controls.showActive(true);
+      startVoltage = controls.input();
       timer.reset();
     }
 

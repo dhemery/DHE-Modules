@@ -1,6 +1,5 @@
 #include "stage/StageEngine.h"
 
-#include "components/PhaseTimer.h"
 #include "stage/Event.h"
 
 #include <gmock/gmock-actions.h>
@@ -34,7 +33,7 @@ class StageEngineTest : public Test {
 
   class GenerateMode {
   public:
-    MOCK_METHOD(void, enter, (float), ());
+    MOCK_METHOD(void, enter, (), ());
     MOCK_METHOD(dhe::stage::Event, execute, (float), ());
     MOCK_METHOD(void, exit, (), ());
   };
@@ -44,18 +43,18 @@ protected:
   NiceMock<EventlessMode> deferMode{};
   NiceMock<EventlessMode> inputMode{};
   NiceMock<GenerateMode> generateMode{};
-  dhe::stage::StageEngine<Controls, EventlessMode, EventlessMode, GenerateMode> engine{controls, deferMode, inputMode,
-                                                                                       generateMode};
+  NiceMock<EventlessMode> levelMode{};
+  dhe::stage::StageEngine<Controls, EventlessMode, EventlessMode, GenerateMode, EventlessMode> engine{
+      controls, deferMode, inputMode, generateMode, levelMode};
 
   void givenDefer(bool isDeferring) { ON_CALL(controls, isDeferring()).WillByDefault(Return(isDeferring)); }
   void givenInput(float input) { ON_CALL(controls, input()).WillByDefault(Return(input)); }
-  void givenLevel(float level) { ON_CALL(controls, level()).WillByDefault(Return(level)); }
   void givenTrigger(bool isTriggered) { ON_CALL(controls, isTriggered()).WillByDefault(Return(isTriggered)); }
 };
 
 TEST_F(StageEngineTest, startsInInputMode) {
   EXPECT_CALL(inputMode, execute());
-  
+
   engine.process(0.F);
 }
 
@@ -92,13 +91,11 @@ TEST_F(StageEngineInputMode, beginsGenerating_ifTriggerRisesAndDeferIsLow) {
   auto constexpr input{4.234};
   givenInput(input);
 
-  auto constexpr sampleTime = 0.1F;
-
   EXPECT_CALL(inputMode, exit());
-  EXPECT_CALL(generateMode, enter(input));
-  EXPECT_CALL(generateMode, execute(sampleTime));
+  EXPECT_CALL(generateMode, enter());
+  EXPECT_CALL(generateMode, execute(A<float>()));
 
-  engine.process(sampleTime);
+  engine.process(0.F);
 }
 
 class StageEngineDeferMode : public StageEngineTest {
@@ -125,15 +122,13 @@ TEST_F(StageEngineDeferMode, executesDeferMode_regardlessOfTrigger_ifDeferIsHigh
 //  sample, even if TRIG is high. Is this necessary? If DEFER falls and TRIG is high, shouldn't we we immediately start
 //  generating? If we don't, TRIG might be low on the next sample, and we've missed the signal to generate.
 TEST_F(StageEngineDeferMode, beginsTrackingInput_ifDeferFalls) {
-  givenDefer(false);    // If no longer deferring...
-  engine.process(0.1F); // ... should transition to TrackingInput mode
+  givenDefer(false);
 
-  // Assert that the following process starts generating, which implies that we are indeed tracking input.
-  givenTrigger(true);
-  EXPECT_CALL(generateMode, enter(A<float>()));
-  EXPECT_CALL(generateMode, execute(A<float>()));
+  EXPECT_CALL(deferMode, exit());
+  EXPECT_CALL(inputMode, enter());
+  EXPECT_CALL(inputMode, execute());
 
-  engine.process(0.1F);
+  engine.process(0.F);
 }
 
 class StageEngineGenerateMode : public StageEngineTest {
@@ -157,12 +152,34 @@ TEST_F(StageEngineGenerateMode, beginsDeferring_ifDeferRises) {
   engine.process(0.F);
 }
 
+TEST_F(StageEngineGenerateMode, executesGenerateMode_ifDeferIsLowAndTriggerDoesNotRise) {
+  auto constexpr sampleTime{0.04534F};
+
+  givenDefer(false);
+  givenTrigger(false);
+
+  EXPECT_CALL(generateMode, execute(sampleTime));
+
+  engine.process(sampleTime);
+}
+
+TEST_F(StageEngineGenerateMode, restartsGenerateMode_ifTriggerRisesAndDeferIsLow) {
+  givenDefer(false);
+  givenTrigger(true);
+
+  EXPECT_CALL(generateMode, exit());
+  EXPECT_CALL(generateMode, enter());
+  EXPECT_CALL(generateMode, execute(A<float>()));
+
+  engine.process(0.F);
+}
+
 TEST_F(StageEngineGenerateMode, raisesEoc_ifDoneGenerating) {
   ON_CALL(generateMode, execute(A<float>())).WillByDefault(Return(Event::Completed));
 
   EXPECT_CALL(controls, showEoc(true));
 
-  engine.process(0.0001F);
+  engine.process(0.F);
 }
 
 class StageEngineLevelMode : public StageEngineTest {
@@ -172,30 +189,41 @@ class StageEngineLevelMode : public StageEngineTest {
     // Start generating
     givenTrigger(true);
     ON_CALL(generateMode, execute(A<float>())).WillByDefault(Return(Event::Generated));
-    engine.process(0.0001F);
+    engine.process(0.F);
 
     // Finish generating, which enters TrackingLevel mode
     givenTrigger(false);
     ON_CALL(generateMode, execute(A<float>())).WillByDefault(Return(Event::Completed));
-    engine.process(0.0001F);
+    engine.process(0.F);
   }
 };
 
-TEST_F(StageEngineLevelMode, outputsLevel_ifTriggerDoesNotRise) {
-  auto constexpr level{4.3498F};
-  givenLevel(level);
-  givenTrigger(false);
+TEST_F(StageEngineLevelMode, beginsDeferring_ifDeferRises) {
+  givenDefer(true);
 
-  EXPECT_CALL(controls, output(level));
+  EXPECT_CALL(levelMode, exit());
+  EXPECT_CALL(deferMode, enter());
+  EXPECT_CALL(deferMode, execute());
 
   engine.process(0.F);
 }
 
-TEST_F(StageEngineLevelMode, beginsGenerating_ifTriggerRises) {
+TEST_F(StageEngineLevelMode, executesLevelMode_ifTriggerDoesNotRiseAndDeferIsLow) {
+  givenDefer(false);
+  givenTrigger(false);
+
+  EXPECT_CALL(levelMode, execute());
+
+  engine.process(0.F);
+}
+
+TEST_F(StageEngineLevelMode, beginsGenerating_ifTriggerRisesAndDeferIsLow) {
+  givenDefer(false);
   givenTrigger(true);
 
-  EXPECT_CALL(generateMode, enter(A<float>()));
+  EXPECT_CALL(levelMode, exit());
+  EXPECT_CALL(generateMode, enter());
   EXPECT_CALL(generateMode, execute(A<float>()));
 
-  engine.process(0.1F);
+  engine.process(0.F);
 }
