@@ -33,12 +33,12 @@ namespace stage {
 
     void output(float voltage) { outputs[EnvelopeOutput].setVoltage(voltage); }
 
-    void sendActive(bool active) {
+    void showActive(bool active) {
       const auto voltage = unipolarSignalRange.scale(active);
       outputs[ActiveOutput].setVoltage(voltage);
     }
 
-    void sendEoc(bool eoc) {
+    void showEoc(bool eoc) {
       const auto voltage = unipolarSignalRange.scale(eoc);
       outputs[EocOutput].setVoltage(voltage);
     }

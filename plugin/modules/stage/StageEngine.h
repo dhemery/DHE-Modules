@@ -1,15 +1,17 @@
 #pragma once
 
+#include "Event.h"
 #include "components/Range.h"
 
 #include <algorithm>
+#include <iostream>
 
 namespace dhe {
 namespace stage {
 
-  template <typename Controls> class StageEngine {
+  template <typename Controls, typename GenerateMode> class StageEngine {
   public:
-    StageEngine(Controls &controls) : controls{controls} {}
+    StageEngine(Controls &controls, GenerateMode &generateMode) : controls{controls}, generateMode{generateMode} {}
 
     void process(float sampleTime) {
       auto const newState = identifyState();
@@ -19,19 +21,23 @@ namespace stage {
 
       switch (state) {
       case Generating:
+        std::cerr << "executing generating mode" << std::endl;
         generate(sampleTime);
         break;
       case TrackingLevel:
         controls.output(controls.level());
         break;
       case Deferring:
+        controls.output(controls.input());
+        break;
       case TrackingInput:
         controls.output(controls.input());
+        break;
       }
 
       advanceEoc(sampleTime);
-      controls.sendActive(state == Deferring || state == Generating);
-      controls.sendEoc(isEoc);
+      controls.showActive(state == Deferring || state == Generating);
+      controls.showEoc(isEoc);
     }
 
   private:
@@ -57,14 +63,32 @@ namespace stage {
     }
 
     void enter(State newState) {
-      if (state == Deferring) {
+      switch (state) {
+      case Generating:
+        generateMode.exit();
+        break;
+      case Deferring:
         resetTrigger();
+        break;
+      case TrackingInput:
+        break;
+      case TrackingLevel:
+        break;
       }
 
-      if (newState == Generating) {
-        resetGenerator();
-      }
       state = newState;
+
+      switch (state) {
+      case Generating:
+        generateMode.enter(controls.input());
+        break;
+      case Deferring:
+        break;
+      case TrackingInput:
+        break;
+      case TrackingLevel:
+        break;
+      }
     }
 
     void resetTrigger() { triggerWasHigh = false; }
@@ -76,36 +100,13 @@ namespace stage {
       return isRise;
     }
 
-    void resetGenerator() {
-      startVoltage = controls.input();
-      stagePhase = 0.F;
-    }
-
     void generate(float sampleTime) {
-      if (stagePhase < 1.F) {
-        auto const duration = controls.duration();
-        auto const phaseDelta = sampleTime / duration;
-        stagePhase = std::min(1.F, stagePhase + phaseDelta);
-
-        auto const *taper = controls.taper();
-        auto const level = controls.level();
-        auto const curvature = controls.curvature();
-        auto const taperedPhase = taper->apply(stagePhase, curvature);
-        controls.output(scale(taperedPhase, startVoltage, level));
-        if (stagePhase == 1.F) {
-          finishGenerating();
-        }
+      auto const event = generateMode.execute(sampleTime);
+      if (event == Event::Completed) {
+        isEoc = true;
+        eocPhase = 0.F;
+        enter(TrackingLevel);
       }
-    }
-
-    void finishGenerating() {
-      startEoc();
-      enter(TrackingLevel);
-    }
-
-    void startEoc() {
-      isEoc = true;
-      eocPhase = 0.F;
     }
 
     void advanceEoc(float sampleTime) {
@@ -121,11 +122,10 @@ namespace stage {
 
     float eocPhase{1.F};
     bool isEoc{false};
-    float stagePhase{0.F};
-    float startVoltage{0.F};
     State state{TrackingInput};
     bool triggerWasHigh{false};
     Controls &controls;
+    GenerateMode &generateMode;
   };
 } // namespace stage
 } // namespace dhe

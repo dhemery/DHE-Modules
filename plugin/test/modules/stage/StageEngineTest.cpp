@@ -1,11 +1,13 @@
 #include "stage/StageEngine.h"
 
-#include "components/Taper.h"
+#include "components/PhaseTimer.h"
+#include "stage/Event.h"
 
 #include <gmock/gmock-actions.h>
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
 
+using Event = dhe::stage::Event;
 using ::testing::A;
 using ::testing::NiceMock;
 using ::testing::Return;
@@ -14,37 +16,33 @@ using ::testing::Test;
 class StageEngineTest : public Test {
   class Controls {
   public:
-    MOCK_METHOD(float, curvature, (), (const));
     MOCK_METHOD(float, input, (), (const));
-    MOCK_METHOD(float, duration, (), (const));
     MOCK_METHOD(bool, isDeferring, (), (const));
     MOCK_METHOD(bool, isTriggered, (), (const));
     MOCK_METHOD(float, level, (), (const));
-    MOCK_METHOD(void, sendActive, (bool), ());
-    MOCK_METHOD(void, sendEoc, (bool), ());
+    MOCK_METHOD(void, showActive, (bool), ());
+    MOCK_METHOD(void, showEoc, (bool), ());
     MOCK_METHOD(void, output, (float), ());
-    MOCK_METHOD(dhe::taper::VariableTaper const *, taper, (), (const));
+  };
+
+  class GenerateMode {
+  public:
+    MOCK_METHOD(void, enter, (float), ());
+    MOCK_METHOD(dhe::stage::Event, execute, (float), ());
+    MOCK_METHOD(void, exit, (), ());
   };
 
 protected:
-  static auto constexpr defaultDuration{1.F};
-
   NiceMock<Controls> controls{};
-  dhe::stage::StageEngine<Controls> engine{controls};
+  NiceMock<GenerateMode> generateMode{};
+  dhe::stage::StageEngine<Controls, GenerateMode> engine{controls, generateMode};
 
-  void givenCurvature(float curvature) { ON_CALL(controls, curvature()).WillByDefault(Return(curvature)); }
   void givenDeferring(bool isDeferring) { ON_CALL(controls, isDeferring()).WillByDefault(Return(isDeferring)); }
-  void givenDuration(float duration) { ON_CALL(controls, duration()).WillByDefault(Return(duration)); }
   void givenInput(float input) { ON_CALL(controls, input()).WillByDefault(Return(input)); }
   void givenLevel(float level) { ON_CALL(controls, level()).WillByDefault(Return(level)); }
   void givenTriggered(bool isTriggered) { ON_CALL(controls, isTriggered()).WillByDefault(Return(isTriggered)); }
-  void givenTaper(dhe::taper::VariableTaper const *taper) { ON_CALL(controls, taper()).WillByDefault(Return(taper)); }
 
-  void SetUp() override {
-    Test::SetUp();
-    givenTaper(dhe::taper::variableTapers[0]);
-    givenDuration(defaultDuration);
-  }
+  void SetUp() override { Test::SetUp(); }
 };
 
 class StageEngineTrackingInput : public StageEngineTest {
@@ -55,7 +53,7 @@ class StageEngineTrackingInput : public StageEngineTest {
 };
 
 TEST_F(StageEngineTrackingInput, reportsInactive) {
-  EXPECT_CALL(controls, sendActive(false));
+  EXPECT_CALL(controls, showActive(false));
   engine.process(0.F);
 }
 
@@ -73,17 +71,15 @@ TEST_F(StageEngineTrackingInput, outputsInput_ifTriggerDoesNotRise) {
 TEST_F(StageEngineTrackingInput, beginsGenerating_ifTriggerRises) {
   givenTriggered(true);
 
-  givenCurvature(0.F); // 0 curvature -> linear ramp
-  givenDuration(1.F);  // 1s ramp
-  givenInput(4.F);     // Start ramp at 4V
-  givenLevel(6.F);     // End ramp at 6V
+  auto constexpr input{4.234};
+  givenInput(input);
 
-  // Ramp runs from 4V to 6V over 1s
-  auto constexpr sampleTime = 0.1F; // So will advance ramp from 4V to 4.2V
+  auto constexpr sampleTime = 0.1F;
 
-  EXPECT_CALL(controls, output(4.2F));
+  EXPECT_CALL(generateMode, enter(input));
+  EXPECT_CALL(generateMode, execute(sampleTime));
 
-  engine.process(sampleTime); // 0.1s per sample
+  engine.process(sampleTime);
 }
 
 class StageEngineDeferring : public StageEngineTest {
@@ -95,7 +91,7 @@ class StageEngineDeferring : public StageEngineTest {
 };
 
 TEST_F(StageEngineDeferring, reportsActive) {
-  EXPECT_CALL(controls, sendActive(true));
+  EXPECT_CALL(controls, showActive(true));
   engine.process(0.F);
 }
 
@@ -123,27 +119,18 @@ TEST_F(StageEngineDeferring, beginsTrackingInput_ifDeferFalls) {
   givenDeferring(false); // If no longer deferring...
   engine.process(0.1F);  // ... should transition to TrackingInput mode
 
-  // The rest of this test asserts that we are in TrackingInput mode.
-  // We assert this by sending a rising Trigger, and asserting that we started generating.
-  // If we were still Deferring, the trigger would not start generating.
-  // TODO: Create a generator component, then use a mock here to make sure we call it.
+  // Assert that the following process starts generating, which implies that we are indeed tracking input.
   givenTriggered(true);
+  EXPECT_CALL(generateMode, enter(A<float>()));
+  EXPECT_CALL(generateMode, execute(A<float>()));
 
-  givenCurvature(0.F); // 0 curvature -> linear ramp
-  givenInput(4.F);     // Output ramps from 4V...
-  givenLevel(6.F);     // ... to 6V ...
-  givenDuration(1.F);  // ... over 1s. That's a 2v increase over 1s.
-
-  auto constexpr sampleTime = 0.1F; // Sample time of 1/10s raises output by 0.2V on this sample, from 4V to 4.2V.
-
-  EXPECT_CALL(controls, output(4.2F));
-
-  engine.process(sampleTime); // 0.1s per sample
+  engine.process(0.1F);
 }
 
 class StageEngineGenerating : public StageEngineTest {
   void SetUp() override {
     StageEngineTest::SetUp();
+    ON_CALL(generateMode, execute(A<float>())).WillByDefault(Return(Event::Generated));
     givenTriggered(true);
     engine.process(0.F);
     givenTriggered(false);
@@ -152,31 +139,26 @@ class StageEngineGenerating : public StageEngineTest {
 };
 
 TEST_F(StageEngineGenerating, raisesEoc_ifDoneGenerating) {
-  auto constexpr eocPulseDuration{1e-3F};
-  // sample time must be less than EOC pulse, or else the EOC pulse
-  // will immediately finish on the same sample where it starts.
-  auto constexpr sampleTime{eocPulseDuration / 2.F};
-  auto constexpr duration{sampleTime * 2.F};
+  ON_CALL(generateMode, execute(A<float>())).WillByDefault(Return(Event::Completed));
 
-  givenDuration(duration);
+  EXPECT_CALL(controls, showEoc(true));
 
-  engine.process(sampleTime); // Advance halfway to duration
-
-  EXPECT_CALL(controls, sendEoc(true));
-
-  engine.process(sampleTime); // Advance to end of duration
+  engine.process(0.0001F);
 }
 
 class StageEngineTrackingLevel : public StageEngineTest {
   void SetUp() override {
     StageEngineTest::SetUp();
+
+    // Start generating
     givenTriggered(true);
-    givenDuration(1.F);
-    givenInput(0.F);
-    engine.process(1.00001F); // Consume enture duration plus a little extra
-    givenDuration(defaultDuration);
-    givenTriggered(false); // To clear the edge
-    engine.process(0.F);
+    ON_CALL(generateMode, execute(A<float>())).WillByDefault(Return(Event::Generated));
+    engine.process(0.0001F);
+
+    // Finish generating, which enters TrackingLevel mode
+    givenTriggered(false);
+    ON_CALL(generateMode, execute(A<float>())).WillByDefault(Return(Event::Completed));
+    engine.process(0.0001F);
   }
 };
 
@@ -192,16 +174,8 @@ TEST_F(StageEngineTrackingLevel, outputsLevel_ifTriggerDoesNotRise) {
 
 TEST_F(StageEngineTrackingLevel, beginsGenerating_ifTriggerRises) {
   givenTriggered(true);
+  EXPECT_CALL(generateMode, enter(A<float>()));
+  EXPECT_CALL(generateMode, execute(A<float>()));
 
-  givenCurvature(0.F); // 0 curvature -> linear ramp
-  givenDuration(1.F);  // 1s ramp
-  givenInput(4.F);     // Start ramp at 4V
-  givenLevel(6.F);     // End ramp at 6V
-
-  // Ramp runs from 4V to 6V over 1s
-  auto constexpr sampleTime = 0.1F; // So will advance ramp from 4V to 4.2V
-
-  EXPECT_CALL(controls, output(4.2F));
-
-  engine.process(sampleTime); // 0.1s per sample
+  engine.process(0.1F);
 }

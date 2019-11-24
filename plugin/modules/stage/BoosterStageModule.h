@@ -1,6 +1,7 @@
 #pragma once
 
 #include "BoosterStageControls.h"
+#include "GenerateMode.h"
 #include "StageEngine.h"
 #include "config/CurvatureConfig.h"
 #include "config/DurationConfig.h"
@@ -36,7 +37,9 @@ namespace stage {
 
   private:
     Controls controls{inputs, params, outputs};
-    StageEngine<Controls> machine{controls};
+    PhaseTimer timer{};
+    GenerateMode<Controls, PhaseTimer> generateMode{controls, timer};
+    StageEngine<Controls, GenerateMode<Controls, PhaseTimer>> machine{controls, generateMode};
   };
 } // namespace stage
 } // namespace dhe

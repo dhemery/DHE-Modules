@@ -24,7 +24,9 @@ namespace stage {
 
   private:
     StageControls controls{inputs, params, outputs};
-    StageEngine<StageControls> machine{controls};
+    PhaseTimer timer{};
+    GenerateMode<StageControls, PhaseTimer> generateMode{controls, timer};
+    StageEngine<StageControls, GenerateMode<StageControls, PhaseTimer>> machine{controls, generateMode};
   };
 } // namespace stage
 } // namespace dhe

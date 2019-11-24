@@ -1,15 +1,15 @@
 #pragma once
 
+#include "Event.h"
 #include "components/Range.h"
 
 namespace dhe {
 namespace stage {
   template <typename Controls, typename Timer> class GenerateMode {
   public:
-    enum class Result { Generated, Completed };
     GenerateMode(Controls &controls, Timer &timer) : controls{controls}, timer{timer} {}
 
-    auto execute(float sampleTime) -> Result {
+    auto execute(float sampleTime) -> Event {
       auto const level = controls.level();
       auto const curvature = controls.curvature();
       auto const *taper = controls.taper();
@@ -19,12 +19,13 @@ namespace stage {
 
       controls.output(scale(taperedPhase, startVoltage, level));
 
-      return timer.isExpired() ? Result::Completed : Result::Generated;
+      return timer.isExpired() ? Event::Completed : Event::Generated;
     }
 
-    void enter(float startVoltage) {
-      this->startVoltage = startVoltage;
+    void enter(float curveStartingVoltage) {
+      startVoltage = curveStartingVoltage;
       controls.showActive(true);
+      timer.reset();
     }
 
     void exit() { controls.showActive(false); }

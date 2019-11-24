@@ -2,11 +2,13 @@
 
 #include "components/PhaseTimer.h"
 #include "components/Taper.h"
+#include "stage/Event.h"
 
 #include <gmock/gmock-actions.h>
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
 
+using dhe::stage::Event;
 using ::testing::A;
 using ::testing::NiceMock;
 using ::testing::Return;
@@ -26,7 +28,6 @@ class GenerateModeTest : public Test {
   };
 
 protected:
-  using Result = dhe::stage::GenerateMode<Controls, dhe::PhaseTimer>::Result;
   static auto constexpr defaultDuration{1.F};
   static auto constexpr defaultTaper{&dhe::taper::variableJTaper};
 
@@ -53,6 +54,14 @@ protected:
   }
 };
 
+TEST_F(GenerateModeTest, enter_resetsTimer) {
+  timer.advance(0.5F);
+
+  mode.enter(0.F);
+
+  EXPECT_EQ(timer.phase(), 0.F);
+}
+
 TEST_F(GenerateModeTest, enter_showsStageActive) {
   EXPECT_CALL(controls, showActive(true));
 
@@ -69,14 +78,14 @@ TEST_F(GenerateModeTest, execute_returnsGenerated_ifTimerNotExpired) {
   givenDuration(1.F);
   givenPhase(0.F);
 
-  EXPECT_EQ(mode.execute(0.1F), Result::Generated);
+  EXPECT_EQ(mode.execute(0.1F), Event::Generated);
 }
 
 TEST_F(GenerateModeTest, execute_returnsCompleted_ifTimerExpired) {
   givenDuration(1.F);
   givenPhase(0.9999F);
 
-  EXPECT_EQ(mode.execute(0.1F), Result::Completed);
+  EXPECT_EQ(mode.execute(0.1F), Event::Completed);
 }
 
 TEST_F(GenerateModeTest, execute_advancesPhase) {
