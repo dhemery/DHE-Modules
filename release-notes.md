@@ -4,6 +4,10 @@ title: Release Notes
 
 # DHE Modules Release Notes
 
+## Version 1.1.1
+
+- Fixed an error in the _Ranger_ GUI.
+
 ## Version 1.1.0
 
 - Added [_Curve Sequencer 4_]({{ '/modules/curve-sequencer' | relative_url }}).
