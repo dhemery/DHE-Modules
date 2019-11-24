@@ -1,4 +1,4 @@
-add_executable(stage_tests)
+add_executable(stage_tests GenerateModeTest.cpp)
 target_include_directories(stage_tests
         PRIVATE
         ${PROJECT_SOURCE_DIR}/plugin/modules

@@ -5,7 +5,6 @@
 #include <gmock/gmock-actions.h>
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
-#include <iostream>
 
 using ::testing::A;
 using ::testing::NiceMock;
@@ -28,6 +27,8 @@ class StageEngineTest : public Test {
   };
 
 protected:
+  static auto constexpr defaultDuration{1.F};
+
   NiceMock<Controls> controls{};
   dhe::stage::StageEngine<Controls> engine{controls};
 
@@ -42,7 +43,7 @@ protected:
   void SetUp() override {
     Test::SetUp();
     givenTaper(dhe::taper::variableTapers[0]);
-    givenDuration(1.F);
+    givenDuration(defaultDuration);
   }
 };
 
@@ -152,8 +153,8 @@ class StageEngineGenerating : public StageEngineTest {
 
 TEST_F(StageEngineGenerating, raisesEoc_ifDoneGenerating) {
   auto constexpr eocPulseDuration{1e-3F};
-  // sample time must be less that EOC pulse, or else the EOC pulse
-  // will start, and then immediately finish on the same sample
+  // sample time must be less than EOC pulse, or else the EOC pulse
+  // will immediately finish on the same sample where it starts.
   auto constexpr sampleTime{eocPulseDuration / 2.F};
   auto constexpr duration{sampleTime * 2.F};
 
@@ -166,4 +167,41 @@ TEST_F(StageEngineGenerating, raisesEoc_ifDoneGenerating) {
   engine.process(sampleTime); // Advance to end of duration
 }
 
-class StageEngineTrackingLevel : public StageEngineTest {};
+class StageEngineTrackingLevel : public StageEngineTest {
+  void SetUp() override {
+    StageEngineTest::SetUp();
+    givenTriggered(true);
+    givenDuration(1.F);
+    givenInput(0.F);
+    engine.process(1.00001F); // Consume enture duration plus a little extra
+    givenDuration(defaultDuration);
+    givenTriggered(false); // To clear the edge
+    engine.process(0.F);
+  }
+};
+
+TEST_F(StageEngineTrackingLevel, outputsLevel_ifTriggerDoesNotRise) {
+  auto constexpr level{4.3498F};
+  givenLevel(level);
+  givenTriggered(false);
+
+  EXPECT_CALL(controls, output(level));
+
+  engine.process(0.F);
+}
+
+TEST_F(StageEngineTrackingLevel, beginsGenerating_ifTriggerRises) {
+  givenTriggered(true);
+
+  givenCurvature(0.F); // 0 curvature -> linear ramp
+  givenDuration(1.F);  // 1s ramp
+  givenInput(4.F);     // Start ramp at 4V
+  givenLevel(6.F);     // End ramp at 6V
+
+  // Ramp runs from 4V to 6V over 1s
+  auto constexpr sampleTime = 0.1F; // So will advance ramp from 4V to 4.2V
+
+  EXPECT_CALL(controls, output(4.2F));
+
+  engine.process(sampleTime); // 0.1s per sample
+}
