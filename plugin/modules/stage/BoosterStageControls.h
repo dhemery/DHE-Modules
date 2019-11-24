@@ -24,15 +24,13 @@ namespace stage {
 
     auto curvature() const -> float { return dhe::curvature(params[CurveKnob], inputs[CurveCvInput]); }
 
+    auto defer() const -> bool { return isHigh(inputs[DeferInput]) || isPressed(params[DeferButton]); }
+
     auto duration() const -> float {
       return selectableDuration(params[DurationKnob], inputs[DurationCvInput], params[DurationRangeSwitch]);
     }
 
     auto input() const -> float { return voltageAt(inputs[EnvelopeInput]); }
-
-    auto isDeferring() const -> bool { return isHigh(inputs[DeferInput]) || isPressed(params[DeferButton]); }
-
-    auto isTriggered() const -> bool { return isHigh(inputs[TriggerInput]) || isPressed(params[TriggerButton]); }
 
     auto level() const -> float {
       return selectableLevel(params[LevelKnob], inputs[LevelCvInput], params[LevelRangeSwitch]);
@@ -51,6 +49,8 @@ namespace stage {
     }
 
     auto taper() const -> taper::VariableTaper const * { return selectedTaper(params[ShapeSwitch]); }
+
+    auto trigger() const -> bool { return isHigh(inputs[TriggerInput]) || isPressed(params[TriggerButton]); }
 
     enum ParameterIds {
       ActiveButton,

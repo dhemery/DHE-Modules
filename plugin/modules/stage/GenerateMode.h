@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Event.h"
+#include "components/Latch.h"
 #include "components/Range.h"
 
 namespace dhe {
@@ -9,7 +10,10 @@ namespace stage {
   public:
     GenerateMode(Controls &controls, Timer &timer) : controls{controls}, timer{timer} {}
 
-    auto execute(float sampleTime) -> Event {
+    auto execute(Latch const &retrigger, float sampleTime) -> Event {
+      if (retrigger.isRise()) {
+        initializeCurve();
+      }
       auto const level = controls.level();
       auto const curvature = controls.curvature();
       auto const *taper = controls.taper();
@@ -24,13 +28,17 @@ namespace stage {
 
     void enter() {
       controls.showActive(true);
-      startVoltage = controls.input();
-      timer.reset();
+      initializeCurve();
     }
 
     void exit() { controls.showActive(false); }
 
   private:
+    void initializeCurve() {
+      startVoltage = controls.input();
+      timer.reset();
+    }
+
     float startVoltage{0.F};
     Controls &controls;
     Timer &timer;

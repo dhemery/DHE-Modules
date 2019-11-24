@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Event.h"
+#include "components/Latch.h"
 #include "components/Range.h"
 
 #include <algorithm>
@@ -20,6 +21,9 @@ namespace stage {
         levelMode{levelMode} {}
 
     void process(float sampleTime) {
+      defer.clock(controls.defer());
+      trigger.clock(controls.trigger());
+
       auto const newState = identifyState();
       if (state != newState) {
         enter(newState);
@@ -53,14 +57,13 @@ namespace stage {
     };
 
     auto identifyState() -> StageEngine::State {
-      if (controls.isDeferring()) {
+      if (defer.isHigh()) {
         return Deferring;
       }
-      if (state == Deferring) {
+      if (defer.isFall()) {
         return TrackingInput;
       }
-      if (triggerRise()) {
-        enter(Generating);
+      if (trigger.isRise()) {
         return Generating;
       }
       return state;
@@ -73,7 +76,7 @@ namespace stage {
         break;
       case Deferring:
         deferMode.exit();
-        resetTrigger();
+        trigger.clock(false);
         break;
       case TrackingInput:
         inputMode.exit();
@@ -101,17 +104,8 @@ namespace stage {
       }
     }
 
-    void resetTrigger() { triggerWasHigh = false; }
-
-    auto triggerRise() -> bool {
-      auto const isHigh = controls.isTriggered();
-      auto const isRise = isHigh && !triggerWasHigh;
-      triggerWasHigh = isHigh;
-      return isRise;
-    }
-
     void generate(float sampleTime) {
-      auto const event = generateMode.execute(sampleTime);
+      auto const event = generateMode.execute(trigger, sampleTime);
       if (event == Event::Completed) {
         beginEocPulse();
         enter(TrackingLevel);
@@ -136,7 +130,8 @@ namespace stage {
     float eocPhase{1.F};
     bool isEoc{false};
     State state{TrackingInput};
-    bool triggerWasHigh{false};
+    Latch defer{};
+    Latch trigger{};
     Controls &controls;
     DeferMode &deferMode;
     InputMode &inputMode;

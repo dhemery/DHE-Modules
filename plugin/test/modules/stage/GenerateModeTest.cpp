@@ -1,5 +1,6 @@
 #include "stage/GenerateMode.h"
 
+#include "components/Latch.h"
 #include "components/PhaseTimer.h"
 #include "components/Taper.h"
 #include "stage/Event.h"
@@ -8,6 +9,8 @@
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
 
+using dhe::Latch;
+using dhe::PhaseTimer;
 using dhe::stage::Event;
 using ::testing::A;
 using ::testing::NiceMock;
@@ -32,7 +35,7 @@ protected:
   static auto constexpr defaultTaper{&dhe::taper::variableJTaper};
 
   NiceMock<Controls> controls{};
-  dhe::PhaseTimer timer{};
+  PhaseTimer timer{};
 
   dhe::stage::GenerateMode<Controls, dhe::PhaseTimer> generateMode{controls, timer};
 
@@ -67,13 +70,12 @@ TEST_F(GenerateModeTest, enter_setsCurveStartingVoltageToInputVoltage) {
   givenInput(input);
 
   generateMode.enter();
-  timer.reset();
 
   EXPECT_CALL(controls, output(input));
 
   // sample time = 0 leaves phase at 0, so generate mode outputs the phase 0 voltage, which is the voltage captured
   // during enter()
-  generateMode.execute(0.F);
+  generateMode.execute(Latch{}, 0.F);
 }
 
 TEST_F(GenerateModeTest, enter_showsStageActive) {
@@ -92,14 +94,33 @@ TEST_F(GenerateModeTest, execute_returnsGenerated_ifTimerNotExpired) {
   givenDuration(1.F);
   givenPhase(0.F);
 
-  EXPECT_EQ(generateMode.execute(0.1F), Event::Generated);
+  EXPECT_EQ(generateMode.execute(Latch{}, 0.1F), Event::Generated);
 }
 
 TEST_F(GenerateModeTest, execute_returnsCompleted_ifTimerExpired) {
   givenDuration(1.F);
   givenPhase(0.9999F);
 
-  EXPECT_EQ(generateMode.execute(0.1F), Event::Completed);
+  EXPECT_EQ(generateMode.execute(Latch{}, 0.1F), Event::Completed);
+}
+
+TEST_F(GenerateModeTest, execute_resetsTimer_ifRetriggerRises) {
+  timer.advance(0.5F);
+
+  generateMode.execute(Latch{true, true}, 0.F);
+
+  EXPECT_EQ(timer.phase(), 0.F);
+}
+
+TEST_F(GenerateModeTest, execute_setsCurveStartingVoltageToInputVoltage_ifRetriggerRises) {
+  auto constexpr input{5.3948F};
+  givenInput(input);
+
+  EXPECT_CALL(controls, output(input));
+
+  // sample time = 0 leaves phase at 0, so generate mode outputs the phase 0 voltage, which is the voltage captured
+  // during enter()
+  generateMode.execute(Latch{true, true}, 0.F);
 }
 
 TEST_F(GenerateModeTest, execute_advancesPhase) {
@@ -109,7 +130,7 @@ TEST_F(GenerateModeTest, execute_advancesPhase) {
   givenPhase(0.F);
   givenDuration(duration);
 
-  generateMode.execute(sampleTime);
+  generateMode.execute(Latch{}, sampleTime);
 
   EXPECT_EQ(timer.phase(), sampleTime / duration);
 }
@@ -131,5 +152,5 @@ TEST_F(GenerateModeTest, execute_outputsCurveVoltage) {
   EXPECT_CALL(controls, output(4.2F));
 
   generateMode.enter(); // To set starting voltage
-  generateMode.execute(sampleTime);
+  generateMode.execute(Latch{}, sampleTime);
 }
