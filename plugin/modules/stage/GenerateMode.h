@@ -36,4 +36,4 @@ namespace stage {
     Timer &timer;
   };
 } // namespace stage
-}
+} // namespace dhe

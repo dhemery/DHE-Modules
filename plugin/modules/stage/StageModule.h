@@ -11,6 +11,8 @@
 namespace dhe {
 namespace stage {
   class StageModule : public rack::engine::Module {
+    using Controls = StageControls;
+
   public:
     StageModule() : rack::engine::Module{} {
       config(StageControls::ParameterCount, StageControls::InputCount, StageControls::OutputCount);
@@ -25,8 +27,10 @@ namespace stage {
   private:
     StageControls controls{inputs, params, outputs};
     PhaseTimer timer{};
-    GenerateMode<StageControls, PhaseTimer> generateMode{controls, timer};
-    StageEngine<StageControls, GenerateMode<StageControls, PhaseTimer>> machine{controls, generateMode};
+    DeferMode<Controls> deferMode{controls};
+    GenerateMode<Controls, PhaseTimer> generateMode{controls, timer};
+    StageEngine<Controls, DeferMode<Controls>, GenerateMode<Controls, PhaseTimer>> machine{controls, deferMode,
+                                                                                           generateMode};
   };
 } // namespace stage
 } // namespace dhe
