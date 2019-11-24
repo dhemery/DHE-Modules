@@ -5,6 +5,7 @@
 #include <gmock/gmock-actions.h>
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
+#include <iostream>
 
 using ::testing::A;
 using ::testing::NiceMock;
@@ -41,6 +42,7 @@ protected:
   void SetUp() override {
     Test::SetUp();
     givenTaper(dhe::taper::variableTapers[0]);
+    givenDuration(1.F);
   }
 };
 
@@ -138,6 +140,30 @@ TEST_F(StageEngineDeferring, beginsTrackingInput_ifDeferFalls) {
   engine.process(sampleTime); // 0.1s per sample
 }
 
-class StageEngineGenerating : public StageEngineTest {};
+class StageEngineGenerating : public StageEngineTest {
+  void SetUp() override {
+    StageEngineTest::SetUp();
+    givenTriggered(true);
+    engine.process(0.F);
+    givenTriggered(false);
+    engine.process(0.F);
+  }
+};
+
+TEST_F(StageEngineGenerating, raisesEoc_ifDoneGenerating) {
+  auto constexpr eocPulseDuration{1e-3F};
+  // sample time must be less that EOC pulse, or else the EOC pulse
+  // will start, and then immediately finish on the same sample
+  auto constexpr sampleTime{eocPulseDuration / 2.F};
+  auto constexpr duration{sampleTime * 2.F};
+
+  givenDuration(duration);
+
+  engine.process(sampleTime); // Advance halfway to duration
+
+  EXPECT_CALL(controls, sendEoc(true));
+
+  engine.process(sampleTime); // Advance to end of duration
+}
 
 class StageEngineTrackingLevel : public StageEngineTest {};

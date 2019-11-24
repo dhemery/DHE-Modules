@@ -84,7 +84,8 @@ namespace stage {
     void generate(float sampleTime) {
       if (stagePhase < 1.F) {
         auto const duration = controls.duration();
-        stagePhase = std::min(1.F, stagePhase + sampleTime / duration);
+        auto const phaseDelta = sampleTime / duration;
+        stagePhase = std::min(1.F, stagePhase + phaseDelta);
 
         auto const *taper = controls.taper();
         auto const level = controls.level();
