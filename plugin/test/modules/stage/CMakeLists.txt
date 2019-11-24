@@ -7,6 +7,7 @@ target_sources(stage_tests
         PRIVATE
         DeferModeTest.cpp
         GenerateModeTest.cpp
+        InputModeTest.cpp
         StageEngineTest.cpp
         )
 target_link_libraries(stage_tests

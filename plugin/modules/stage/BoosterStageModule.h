@@ -3,6 +3,7 @@
 #include "BoosterStageControls.h"
 #include "DeferMode.h"
 #include "GenerateMode.h"
+#include "InputMode.h"
 #include "StageEngine.h"
 #include "config/CurvatureConfig.h"
 #include "config/DurationConfig.h"
@@ -40,9 +41,10 @@ namespace stage {
     Controls controls{inputs, params, outputs};
     PhaseTimer timer{};
     DeferMode<Controls> deferMode{controls};
+    InputMode<Controls> inputMode{controls};
     GenerateMode<Controls, PhaseTimer> generateMode{controls, timer};
-    StageEngine<Controls, DeferMode<Controls>, GenerateMode<Controls, PhaseTimer>> machine{controls, deferMode,
-                                                                                           generateMode};
+    StageEngine<Controls, DeferMode<Controls>, InputMode<Controls>, GenerateMode<Controls, PhaseTimer>> machine{
+        controls, deferMode, inputMode, generateMode};
   };
 } // namespace stage
 } // namespace dhe

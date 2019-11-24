@@ -8,10 +8,10 @@
 namespace dhe {
 namespace stage {
 
-  template <typename Controls, typename DeferMode, typename GenerateMode> class StageEngine {
+  template <typename Controls, typename DeferMode, typename InputMode, typename GenerateMode> class StageEngine {
   public:
-    StageEngine(Controls &controls, DeferMode &deferMode, GenerateMode &generateMode) :
-        controls{controls}, deferMode{deferMode}, generateMode{generateMode} {}
+    StageEngine(Controls &controls, DeferMode &deferMode, InputMode &inputMode, GenerateMode &generateMode) :
+        controls{controls}, deferMode{deferMode}, inputMode{inputMode}, generateMode{generateMode} {}
 
     void process(float sampleTime) {
       auto const newState = identifyState();
@@ -70,6 +70,7 @@ namespace stage {
         resetTrigger();
         break;
       case TrackingInput:
+        inputMode.exit();
         break;
       case TrackingLevel:
         break;
@@ -85,6 +86,7 @@ namespace stage {
         generateMode.enter(controls.input());
         break;
       case TrackingInput:
+        inputMode.enter();
         break;
       case TrackingLevel:
         break;
@@ -102,10 +104,7 @@ namespace stage {
 
     void defer() { deferMode.execute(); }
 
-    void trackInput() {
-      controls.showActive(false);
-      controls.output(controls.input());
-    }
+    void trackInput() { inputMode.execute(); }
 
     void trackLevel() {
       controls.showActive(false);
@@ -141,6 +140,7 @@ namespace stage {
     bool triggerWasHigh{false};
     Controls &controls;
     DeferMode &deferMode;
+    InputMode &inputMode;
     GenerateMode &generateMode;
   };
 } // namespace stage
