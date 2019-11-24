@@ -4,12 +4,16 @@
 #include "StepEvent.h"
 #include "StepMode.h"
 #include "components/Latch.h"
+#include "components/PhaseTimer.h"
 #include "components/Range.h"
 
 namespace dhe {
 namespace curve_sequencer {
 
-  static inline auto isSatisfied(StepMode mode, AdvanceCondition condition, dhe::Latch const &gate) -> bool {
+  using dhe::Latch;
+  using dhe::PhaseTimer;
+
+  static inline auto isSatisfied(StepMode mode, AdvanceCondition condition, Latch const &gate) -> bool {
     switch (condition) {
     case AdvanceCondition::GateIsHigh:
       return gate.isHigh();
@@ -27,9 +31,9 @@ namespace curve_sequencer {
     }
   }
 
-  template <typename Controls, typename Timer> class StepController {
+  template <typename Controls> class StepController {
   public:
-    StepController(Controls &controls, Timer &timer) : controls{controls}, timer{timer} {}
+    StepController(Controls &controls, PhaseTimer &timer) : controls{controls}, timer{timer} {}
 
     void enter(int entryStep) {
       step = entryStep;
@@ -37,7 +41,7 @@ namespace curve_sequencer {
       controls.showProgress(step, 0.F);
     }
 
-    auto execute(dhe::Latch const &gateLatch, float sampleTime) -> StepEvent {
+    auto execute(Latch const &gateLatch, float sampleTime) -> StepEvent {
       StepMode stepMode = mode();
       if (!isSatisfied(stepMode, condition(), gateLatch)) {
         if (stepMode == StepMode::Sustain) {
@@ -51,7 +55,7 @@ namespace curve_sequencer {
         if (stepMode == StepMode::Curve) {
           controls.output(scale(taper(timer.phase()), startVoltage, level()));
         }
-        if (!timer.isExpired()) {
+        if (timer.inProgress()) {
           return StepEvent::Generated;
         }
       }
@@ -85,7 +89,7 @@ namespace curve_sequencer {
     int step{0};
     float startVoltage{0.F};
     Controls &controls;
-    Timer &timer;
+    PhaseTimer &timer;
   }; // namespace curve_sequencer
 } // namespace curve_sequencer
 } // namespace dhe

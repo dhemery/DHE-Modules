@@ -62,7 +62,7 @@ namespace curve_sequencer {
   private:
     PhaseTimer timer{};
     Controls controls{inputs, outputs, params, lights};
-    StepController<Controls, PhaseTimer> stepController{controls, timer};
+    StepController<Controls> stepController{controls, timer};
     StepSelector<Controls> selector{controls, N};
 
     CurveSequencer<Controls, decltype(selector), decltype(stepController)> curveSequencer{controls, selector,

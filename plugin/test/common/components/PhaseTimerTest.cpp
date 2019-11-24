@@ -4,19 +4,19 @@
 
 using dhe::PhaseTimer;
 
-TEST(PhaseTimerTest, defaultRamp_phaseIsZero) {
+TEST(PhaseTimerTest, startsAtPhase0ByDefault) {
   PhaseTimer timer{};
 
   EXPECT_EQ(timer.phase(), 0.F);
 }
 
-TEST(PhaseTimerTest, defaultRamp_isNotExpired) {
+TEST(PhaseTimerTest, startsInProgressByDefault) {
   PhaseTimer timer{};
 
-  EXPECT_FALSE(timer.isExpired());
+  EXPECT_TRUE(timer.inProgress());
 }
 
-TEST(PhaseTimerTest, operatorPlusEquals_addsDeltaToPhase) {
+TEST(PhaseTimerTest, advance_addsDeltaToPhase) {
   PhaseTimer timer{};
 
   timer.advance(0.38F);
@@ -28,16 +28,16 @@ TEST(PhaseTimerTest, operatorPlusEquals_addsDeltaToPhase) {
   EXPECT_EQ(timer.phase(), 0.57F);
 }
 
-TEST(PhaseTimerTest, isNotExpired_ifPhaseIsLessThanOne) {
+TEST(PhaseTimerTest, isInProgress_ifPhaseIsLessThanOne) {
   PhaseTimer timer{0.9999F};
 
-  EXPECT_FALSE(timer.isExpired());
+  EXPECT_TRUE(timer.inProgress());
 }
 
-TEST(PhaseTimerTest, isExpired_ifPhaseIsAtLeastOne) {
+TEST(PhaseTimerTest, isNotInProgress_ifPhaseIsAtLeastOne) {
   PhaseTimer timer{1.F};
 
-  EXPECT_TRUE(timer.isExpired());
+  EXPECT_FALSE(timer.inProgress());
 }
 
 TEST(PhaseTimerTest, maximumPhaseIsOne) {
@@ -56,10 +56,10 @@ TEST(PhaseTimerTest, phaseIsZero_afterReset) {
   EXPECT_EQ(timer.phase(), 0.F);
 }
 
-TEST(PhaseTimerTest, isNotExpired_afterReset) {
+TEST(PhaseTimerTest, isInProgress_afterReset) {
   PhaseTimer timer{1.F};
 
   timer.reset();
 
-  EXPECT_FALSE(timer.isExpired());
+  EXPECT_TRUE(timer.inProgress());
 }

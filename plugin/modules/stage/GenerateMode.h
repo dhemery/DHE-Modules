@@ -23,7 +23,7 @@ namespace stage {
 
       controls.output(scale(taperedPhase, startVoltage, level));
 
-      return timer.isExpired() ? Event::Completed : Event::Generated;
+      return timer.inProgress() ? Event::Generated : Event::Completed;
     }
 
     void enter() {

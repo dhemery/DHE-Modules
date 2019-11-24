@@ -12,6 +12,7 @@
 #include <gtest/gtest.h>
 
 using dhe::Latch;
+using dhe::PhaseTimer;
 using dhe::curve_sequencer::AdvanceCondition;
 using dhe::curve_sequencer::StepController;
 using dhe::curve_sequencer::StepEvent;
@@ -43,9 +44,9 @@ class StepControllerTest : public Test {
 
 protected:
   NiceMock<MockControls> controls{};
-  dhe::PhaseTimer phase{};
+  PhaseTimer timer{};
 
-  StepController<MockControls, dhe::PhaseTimer> stepController{controls, phase};
+  StepController<MockControls> stepController{controls, timer};
 
   void givenMode(int step, StepMode mode) { ON_CALL(controls, mode(step)).WillByDefault(Return(mode)); }
 
@@ -53,7 +54,10 @@ protected:
     ON_CALL(controls, condition(step)).WillByDefault(Return(condition));
   }
 
-  void SetUp() override { ON_CALL(controls, taper(An<int>())).WillByDefault(Return(dhe::taper::variableTapers[0])); }
+  void SetUp() override {
+    ON_CALL(controls, duration(An<int>())).WillByDefault(Return(1.F));
+    ON_CALL(controls, taper(An<int>())).WillByDefault(Return(dhe::taper::variableTapers[0]));
+  }
 };
 
 TEST_F(StepControllerTest, enter_showsStepIsAt0Progress) {

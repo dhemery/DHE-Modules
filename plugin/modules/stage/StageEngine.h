@@ -2,6 +2,7 @@
 
 #include "Event.h"
 #include "components/Latch.h"
+#include "components/PhaseTimer.h"
 #include "components/Range.h"
 
 #include <algorithm>
@@ -44,8 +45,8 @@ namespace stage {
         break;
       }
 
-      advanceEoc(sampleTime);
-      controls.showEoc(isEoc);
+      eocTimer.advance(sampleTime / 1e-3F);
+      controls.showEoc(eocTimer.inProgress());
     }
 
   private:
@@ -107,28 +108,12 @@ namespace stage {
     void generate(float sampleTime) {
       auto const event = generateMode.execute(trigger, sampleTime);
       if (event == Event::Completed) {
-        beginEocPulse();
+        eocTimer.reset();
         enter(TrackingLevel);
       }
     }
-    void advanceEoc(float sampleTime) {
-      if (eocPhase < 1.F) {
-        eocPhase = std::min(1.F, eocPhase + sampleTime / 1e-3F);
-        if (eocPhase == 1.F) {
-          finishEocPulse();
-        }
-      }
-    }
 
-    void beginEocPulse() {
-      isEoc = true;
-      eocPhase = 0.F;
-    }
-
-    void finishEocPulse() { isEoc = false; }
-
-    float eocPhase{1.F};
-    bool isEoc{false};
+    PhaseTimer eocTimer{1.F};
     State state{TrackingInput};
     Latch defer{};
     Latch trigger{};

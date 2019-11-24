@@ -9,7 +9,7 @@ public:
 
   void advance(float delta) { accumulatedPhase = std::min(accumulatedPhase + delta, 1.F); }
 
-  auto isExpired() const -> bool { return accumulatedPhase >= 1.F; }
+  auto inProgress() const -> bool { return accumulatedPhase < 1.F; }
 
   auto phase() const -> float { return accumulatedPhase; }
 
