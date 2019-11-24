@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Upstage.h"
 #include "UpstageControls.h"
+#include "UpstageEngine.h"
 #include "config/CommonConfig.h"
 #include "config/LevelConfig.h"
 
@@ -27,7 +27,7 @@ namespace stage {
 
   private:
     Controls controls{inputs, params, outputs};
-    Upstage<Controls> machine{controls};
+    UpstageEngine<Controls> machine{controls};
   };
 } // namespace stage
 } // namespace dhe

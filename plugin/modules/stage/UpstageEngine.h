@@ -11,9 +11,9 @@
 namespace dhe {
 namespace stage {
 
-  template <typename Controls> class Upstage {
+  template <typename Controls> class UpstageEngine {
   public:
-    Upstage(Controls &controls) : controls{controls} {}
+    UpstageEngine(Controls &controls) : controls{controls} {}
 
     void process() {
       auto isTriggered = controls.isTriggered() && !controls.isWaiting();

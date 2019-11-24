@@ -1,13 +1,15 @@
 #pragma once
 
+#include "components/Range.h"
+
 #include <algorithm>
 
 namespace dhe {
 namespace stage {
 
-  template <typename Controls> class Stage {
+  template <typename Controls> class StageEngine {
   public:
-    Stage(Controls &controls) : controls{controls} {}
+    StageEngine(Controls &controls) : controls{controls} {}
 
     void process(float sampleTime) {
       auto const newState = identifyState();
@@ -20,11 +22,11 @@ namespace stage {
         generate(sampleTime);
         break;
       case TrackingLevel:
-        controls.sendOut(controls.level());
+        controls.output(controls.level());
         break;
       case Deferring:
       case TrackingInput:
-        controls.sendOut(controls.envelopeIn());
+        controls.output(controls.input());
       }
 
       advanceEoc(sampleTime);
@@ -40,7 +42,7 @@ namespace stage {
       TrackingLevel,
     };
 
-    auto identifyState() -> Stage::State {
+    auto identifyState() -> StageEngine::State {
       if (controls.isDeferring()) {
         return Deferring;
       }
@@ -75,7 +77,7 @@ namespace stage {
     }
 
     void resetGenerator() {
-      startVoltage = controls.envelopeIn();
+      startVoltage = controls.input();
       stagePhase = 0.F;
     }
 
@@ -88,7 +90,7 @@ namespace stage {
         auto const level = controls.level();
         auto const curvature = controls.curvature();
         auto const taperedPhase = taper->apply(stagePhase, curvature);
-        controls.sendOut(scale(taperedPhase, startVoltage, level));
+        controls.output(scale(taperedPhase, startVoltage, level));
         if (stagePhase == 1.F) {
           finishGenerating();
         }

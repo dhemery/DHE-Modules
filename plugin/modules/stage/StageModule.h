@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Stage.h"
 #include "StageControls.h"
+#include "StageEngine.h"
 #include "config/CurvatureConfig.h"
 #include "config/DurationConfig.h"
 #include "config/LevelConfig.h"
@@ -24,7 +24,7 @@ namespace stage {
 
   private:
     StageControls controls{inputs, params, outputs};
-    Stage<StageControls> machine{controls};
+    StageEngine<StageControls> machine{controls};
   };
 } // namespace stage
 } // namespace dhe

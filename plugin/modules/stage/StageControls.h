@@ -23,13 +23,15 @@ namespace stage {
 
     auto duration() const -> float { return dhe::duration(params[DurationKnob], mediumDurationRange); }
 
-    auto envelopeIn() const -> float { return voltageAt(inputs[EnvelopeInput]); }
-
-    auto isTriggered() const -> bool { return isHigh(inputs[TriggerInput]); }
+    auto input() const -> float { return voltageAt(inputs[EnvelopeInput]); }
 
     auto isDeferring() const -> bool { return isHigh(inputs[DeferInput]); }
 
+    auto isTriggered() const -> bool { return isHigh(inputs[TriggerInput]); }
+
     auto level() const -> float { return dhe::level(params[LevelKnob], unipolarSignalRange); }
+
+    void output(float voltage) { outputs[EnvelopeOutput].setVoltage(voltage); }
 
     void sendActive(bool active) {
       const auto voltage = unipolarSignalRange.scale(active);
@@ -40,8 +42,6 @@ namespace stage {
       const auto voltage = unipolarSignalRange.scale(eoc);
       outputs[EocOutput].setVoltage(voltage);
     }
-
-    void sendOut(float voltage) { outputs[EnvelopeOutput].setVoltage(voltage); }
 
     auto taper() const -> taper::VariableTaper const * { return &taper::variableJTaper; };
 

@@ -4,7 +4,7 @@
 
 namespace dhe {
 namespace stage {
-  template <typename Controls> class Hostage {
+  template <typename Controls> class HostageEngine {
   private:
     enum State {
       Deferring,
@@ -15,7 +15,7 @@ namespace stage {
     };
 
   public:
-    Hostage(Controls &controls) : controls{controls} {}
+    HostageEngine(Controls &controls) : controls{controls} {}
 
     void process(float sampleTime) {
       auto const newState = identifyState();

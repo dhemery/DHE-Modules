@@ -28,7 +28,7 @@ namespace stage {
       return selectableDuration(params[DurationKnob], inputs[DurationCvInput], params[DurationRangeSwitch]);
     }
 
-    auto envelopeIn() const -> float { return voltageAt(inputs[EnvelopeInput]); }
+    auto input() const -> float { return voltageAt(inputs[EnvelopeInput]); }
 
     auto isDeferring() const -> bool { return isHigh(inputs[DeferInput]) || isPressed(params[DeferButton]); }
 
@@ -37,6 +37,8 @@ namespace stage {
     auto level() const -> float {
       return selectableLevel(params[LevelKnob], inputs[LevelCvInput], params[LevelRangeSwitch]);
     }
+
+    void output(float voltage) { outputs[EnvelopeOutput].setVoltage(voltage); }
 
     void sendActive(bool isActive) {
       auto const voltage = unipolarSignalRange.scale(isActive || activeButton());
@@ -47,8 +49,6 @@ namespace stage {
       auto const voltage = unipolarSignalRange.scale(isEoc || eocButton());
       outputs[EocOutput].setVoltage(voltage);
     }
-
-    void sendOut(float voltage) { outputs[EnvelopeOutput].setVoltage(voltage); }
 
     auto taper() const -> taper::VariableTaper const * { return selectedTaper(params[ShapeSwitch]); }
 

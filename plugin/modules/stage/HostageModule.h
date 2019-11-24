@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Hostage.h"
 #include "HostageControls.h"
+#include "HostageEngine.h"
 #include "config/DurationConfig.h"
 
 #include <engine/Module.hpp>
@@ -26,7 +26,7 @@ namespace stage {
 
   private:
     Controls controls{inputs, params, outputs};
-    Hostage<Controls> machine{controls};
+    HostageEngine<Controls> machine{controls};
   };
 } // namespace stage
 } // namespace dhe
