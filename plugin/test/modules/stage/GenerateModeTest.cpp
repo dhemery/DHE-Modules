@@ -34,7 +34,7 @@ protected:
   NiceMock<Controls> controls{};
   dhe::PhaseTimer timer{};
 
-  dhe::stage::GenerateMode<Controls, dhe::PhaseTimer> mode{controls, timer};
+  dhe::stage::GenerateMode<Controls, dhe::PhaseTimer> generateMode{controls, timer};
 
   void givenCurvature(float curvature) { ON_CALL(controls, curvature()).WillByDefault(Return(curvature)); }
   void givenDuration(float duration) { ON_CALL(controls, duration()).WillByDefault(Return(duration)); }
@@ -57,7 +57,7 @@ protected:
 TEST_F(GenerateModeTest, enter_resetsTimer) {
   timer.advance(0.5F);
 
-  mode.enter(0.F);
+  generateMode.enter(0.F);
 
   EXPECT_EQ(timer.phase(), 0.F);
 }
@@ -65,27 +65,27 @@ TEST_F(GenerateModeTest, enter_resetsTimer) {
 TEST_F(GenerateModeTest, enter_showsStageActive) {
   EXPECT_CALL(controls, showActive(true));
 
-  mode.enter(0.F);
+  generateMode.enter(0.F);
 }
 
 TEST_F(GenerateModeTest, exit_showsStageInactive) {
   EXPECT_CALL(controls, showActive(false));
 
-  mode.exit();
+  generateMode.exit();
 }
 
 TEST_F(GenerateModeTest, execute_returnsGenerated_ifTimerNotExpired) {
   givenDuration(1.F);
   givenPhase(0.F);
 
-  EXPECT_EQ(mode.execute(0.1F), Event::Generated);
+  EXPECT_EQ(generateMode.execute(0.1F), Event::Generated);
 }
 
 TEST_F(GenerateModeTest, execute_returnsCompleted_ifTimerExpired) {
   givenDuration(1.F);
   givenPhase(0.9999F);
 
-  EXPECT_EQ(mode.execute(0.1F), Event::Completed);
+  EXPECT_EQ(generateMode.execute(0.1F), Event::Completed);
 }
 
 TEST_F(GenerateModeTest, execute_advancesPhase) {
@@ -95,7 +95,7 @@ TEST_F(GenerateModeTest, execute_advancesPhase) {
   givenPhase(0.F);
   givenDuration(duration);
 
-  mode.execute(sampleTime);
+  generateMode.execute(sampleTime);
 
   EXPECT_EQ(timer.phase(), sampleTime / duration);
 }
@@ -104,10 +104,10 @@ TEST_F(GenerateModeTest, execute_outputsCurveVoltage) {
   givenPhase(0.F);
 
   // Configure linear curve rising from 4V to 6V over 1s.
-  givenCurvature(0.F); // 0 curvature -> linear curve
-  givenDuration(1.F);  // 1s ramp
-  mode.enter(4.F);     // Start curve at 4V
-  givenLevel(6.F);     // End curve at 6V
+  givenCurvature(0.F);     // 0 curvature -> linear curve
+  givenDuration(1.F);      // 1s ramp
+  generateMode.enter(4.F); // Start curve at 4V
+  givenLevel(6.F);         // End curve at 6V
   // The full range of the curve is 2V = 6V - 4V.
 
   // Sample time is 1/10 of duration. So execute will raise the output by 0.2V (1/10 of the full curve).
@@ -116,5 +116,5 @@ TEST_F(GenerateModeTest, execute_outputsCurveVoltage) {
   // Execute must raise output by 0.2V from 4V to 4.2V.
   EXPECT_CALL(controls, output(4.2F));
 
-  mode.execute(sampleTime);
+  generateMode.execute(sampleTime);
 }

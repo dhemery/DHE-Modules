@@ -4,7 +4,6 @@
 #include "components/Range.h"
 
 #include <algorithm>
-#include <iostream>
 
 namespace dhe {
 namespace stage {
@@ -21,22 +20,20 @@ namespace stage {
 
       switch (state) {
       case Generating:
-        std::cerr << "executing generating mode" << std::endl;
         generate(sampleTime);
         break;
       case TrackingLevel:
-        controls.output(controls.level());
+        trackLevel();
         break;
       case Deferring:
-        controls.output(controls.input());
+        defer();
         break;
       case TrackingInput:
-        controls.output(controls.input());
+        trackInput();
         break;
       }
 
       advanceEoc(sampleTime);
-      controls.showActive(state == Deferring || state == Generating);
       controls.showEoc(isEoc);
     }
 
@@ -78,16 +75,8 @@ namespace stage {
 
       state = newState;
 
-      switch (state) {
-      case Generating:
+      if (state == Generating) {
         generateMode.enter(controls.input());
-        break;
-      case Deferring:
-        break;
-      case TrackingInput:
-        break;
-      case TrackingLevel:
-        break;
       }
     }
 
@@ -100,25 +89,43 @@ namespace stage {
       return isRise;
     }
 
+    void defer() {
+      controls.showActive(true);
+      controls.output(controls.input());
+    }
+
+    void trackInput() {
+      controls.showActive(false);
+      controls.output(controls.input());
+    }
+
+    void trackLevel() {
+      controls.showActive(false);
+      controls.output(controls.level());
+    }
+
     void generate(float sampleTime) {
       auto const event = generateMode.execute(sampleTime);
       if (event == Event::Completed) {
-        isEoc = true;
-        eocPhase = 0.F;
+        beginEocPulse();
         enter(TrackingLevel);
       }
     }
-
     void advanceEoc(float sampleTime) {
       if (eocPhase < 1.F) {
         eocPhase = std::min(1.F, eocPhase + sampleTime / 1e-3F);
         if (eocPhase == 1.F) {
-          finishEoc();
+          finishEocPulse();
         }
       }
     }
 
-    void finishEoc() { isEoc = false; }
+    void beginEocPulse() {
+      isEoc = true;
+      eocPhase = 0.F;
+    }
+
+    void finishEocPulse() { isEoc = false; }
 
     float eocPhase{1.F};
     bool isEoc{false};

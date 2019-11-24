@@ -1,10 +1,12 @@
-add_executable(stage_tests GenerateModeTest.cpp)
+add_executable(stage_tests)
 target_include_directories(stage_tests
         PRIVATE
         ${PROJECT_SOURCE_DIR}/plugin/modules
         )
 target_sources(stage_tests
         PRIVATE
+        DeferModeTest.cpp
+        GenerateModeTest.cpp
         StageEngineTest.cpp
         )
 target_link_libraries(stage_tests
