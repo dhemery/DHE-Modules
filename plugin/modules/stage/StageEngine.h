@@ -57,6 +57,7 @@ namespace stage {
       TrackingLevel,
     };
 
+    // TODO: Check for TRIG rise before checking for DEFER fall, so that we start generating as soon as DEFER falls.
     auto identifyState() -> StageEngine::State {
       if (defer.isHigh()) {
         return Deferring;

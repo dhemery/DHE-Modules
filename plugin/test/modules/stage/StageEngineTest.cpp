@@ -130,9 +130,17 @@ TEST_F(StageEngineDeferMode, beginsTrackingInput_ifDeferFalls) {
   engine.process(0.F);
 }
 
-// TODO: On DEFER fall, StageEngine currently discards the TRIG edge. As a result, tne engine tracks input for this
-//  sample, even if TRIG is high. Is this necessary? If DEFER falls and TRIG is high, shouldn't we we immediately start
-//  generating? If we don't, TRIG might be low on the next sample, and we've missed the signal to generate.
+/**
+ * This is a characterization test for a current quirk: On DEFER fall, the engine pretends that TRIG is low, even if it
+ * is high. As a result, when DEFER falls, the engine ignores TRIG for that sample.
+ *
+ * This behavior is a kludge to deal with what I suspect is a mistake elsewhere in the state machine.
+ *
+ * The mistake: When DEFER falls, the state machine *always* transitions to TrackingInput, regardness of TRIG state.
+ *
+ * The kludge: When DEFER falls, pretend that TRIG was low so that, on the subsequent sample, the continuing EOC from
+ * the upstream module looks like TRIG rise, and starts this module generating.
+ */
 TEST_F(StageEngineDeferMode, tracksInputInsteadOfGenerating_ifTrigRisesWhenDeferFalls) {
   givenDefer(true);
   givenTrigger(false);
