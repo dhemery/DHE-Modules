@@ -13,4 +13,4 @@ namespace stage {
   };
 
 } // namespace stage
-}
+} // namespace dhe

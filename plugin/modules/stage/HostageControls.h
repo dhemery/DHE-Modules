@@ -16,9 +16,7 @@ namespace stage {
   class HostageControls {
   public:
     HostageControls(std::vector<Input> const &inputs, std::vector<Param> const &params, std::vector<Output> &outputs) :
-        inputs{inputs},
-        params{params},
-        outputs{outputs} {};
+        inputs{inputs}, params{params}, outputs{outputs} {};
 
     auto defer() const -> bool { return isHigh(inputs[DeferInput]); }
 
