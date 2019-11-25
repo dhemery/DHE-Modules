@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Event.h"
+#include "Mode.h"
 #include "components/Latch.h"
 #include "components/PhaseTimer.h"
 
@@ -8,21 +9,18 @@
 
 namespace dhe {
 namespace stage {
-  template <typename Controls, typename InputMode, typename DeferMode, typename HoldMode, typename IdleMode>
+  template <typename Controls, typename InputMode, typename DeferMode, typename HoldMode, typename SustainMode,
+            typename IdleMode>
   class HostageEngine {
-  private:
-    enum State {
-      Deferring,
-      Holding,
-      Idle,
-      Sustaining,
-      TrackingInput,
-    };
-
   public:
     HostageEngine(Controls &controls, InputMode &inputMode, DeferMode &deferMode, HoldMode &holdMode,
-                  IdleMode &idleMode) :
-        controls{controls}, inputMode{inputMode}, deferMode{deferMode}, holdMode{holdMode}, idleMode{idleMode} {}
+                  SustainMode &sustainMode, IdleMode &idleMode) :
+        controls{controls},
+        inputMode{inputMode},
+        deferMode{deferMode},
+        holdMode{holdMode},
+        sustainMode{sustainMode},
+        idleMode{idleMode} {}
 
     void process(float sampleTime) {
       defer.clock(controls.defer());
@@ -35,104 +33,113 @@ namespace stage {
       }
 
       switch (state) {
-      case Deferring:
+      case Mode::Defer:
         deferMode.execute();
         break;
-      case Holding:
-        hold(sampleTime);
-      case Idle:
+      case Mode::Hold:
+        if (holdMode.execute(gate, sampleTime) == Event::Completed) {
+          enter(Mode::Idle);
+        }
+        break;
+      case Mode::Idle:
         idleMode.execute();
         break;
-      case Sustaining:
+      case Mode::Sustain:
+        if (sustainMode.execute(gate) == Event::Completed) {
+          enter(Mode::Idle);
+        }
         break;
-      case TrackingInput:
+      case Mode::TrackInput:
         inputMode.execute();
+        break;
+      default:
         break;
       }
 
-      controls.showActive(state != Idle && state != TrackingInput);
+      controls.showActive(state != Mode::Idle && state != Mode::TrackInput);
       eocTimer.advance(sampleTime / controls.duration());
       controls.showEoc(eocTimer.inProgress());
     }
 
   private:
-    auto identifyState() -> State {
-      if (defer.isHigh()) {
-        return Deferring;
+    auto identifyState() -> Mode {
+      if (defer.isHigh()) { // DEFER trumps all
+        return Mode::Defer;
       }
-      if (controls.isSustainMode()) {
-        if (gate.isHigh()) {
-          return Sustaining;
+      if (controls.mode() == Mode::Sustain) { // Sustain mode is selected
+        if (gate.isHigh()) {                  // If the GATE is high, start or continue sustaining
+          return Mode::Sustain;
         }
-        if (state == Sustaining) {
-          return Idle;
+        // Sustain mode is selected and GATE is low
+        if (state == Mode::Sustain) { // If already sustaining, go idle
+          return Mode::Idle;
         }
       }
-      if (state == Deferring) {
-        return TrackingInput;
+      if (defer.isFall()) {
+        return Mode::TrackInput;
       }
       if (gate.isRise()) {
-        enter(Holding);
-        return Holding;
+        return Mode::Hold;
       }
       return state;
     }
 
-    void enter(State newState) {
+    void enter(Mode newState) {
       switch (state) {
-      case Deferring:
+      case Mode::Defer:
         deferMode.exit();
         gate.clock(false);
         break;
-      case Holding:
+      case Mode::Hold:
         holdMode.exit();
         break;
-      case Idle:
+      case Mode::Idle:
         idleMode.exit();
         break;
-      case Sustaining:
+      case Mode::Sustain:
+        sustainMode.exit();
         break;
-      case TrackingInput:
+      case Mode::TrackInput:
         inputMode.exit();
+        break;
+      default:
         break;
       }
 
       state = newState;
 
       switch (state) {
-      case Deferring:
+      case Mode::Defer:
         deferMode.enter();
+        gate.clock(false);
         break;
-      case Holding:
+      case Mode::Hold:
         holdMode.enter();
         break;
-      case Idle:
+      case Mode::Idle:
         idleMode.enter();
+        eocTimer.reset();
         break;
-      case Sustaining:
+      case Mode::Sustain:
+        sustainMode.enter();
         break;
-      case TrackingInput:
+      case Mode::TrackInput:
         inputMode.enter();
         break;
+      default:
+        break;
       }
     }
 
-    void hold(float sampleTime) {
-      auto const event = holdMode.execute(gate, sampleTime);
-      if (event == dhe::stage::Event::Completed) {
-        eocTimer.reset();
-        enter(Idle);
-      }
-    }
-
+    Mode state{Mode::TrackInput};
     PhaseTimer eocTimer{1.F};
-    State state{TrackingInput};
     Latch defer{};
     Latch gate{};
     Controls &controls;
     InputMode &inputMode;
     DeferMode &deferMode;
     HoldMode &holdMode;
+    SustainMode &sustainMode;
     IdleMode &idleMode;
   };
 } // namespace stage

@@ -12,7 +12,7 @@ namespace stage {
 
     auto execute(Latch const &retrigger, float sampleTime) -> Event {
       if (retrigger.isRise()) {
-        initializeHold();
+        timer.reset();
       }
       timer.advance(sampleTime / controls.duration());
       return timer.inProgress() ? Event::Generated : Event::Completed;
@@ -20,18 +20,12 @@ namespace stage {
 
     void enter() {
       controls.showActive(true);
-      initializeHold();
+      timer.reset();
     }
 
     void exit() { controls.showActive(false); }
 
   private:
-    void initializeHold() {
-      startVoltage = controls.input();
-      timer.reset();
-    }
-
-    float startVoltage{0.F};
     Controls &controls;
     PhaseTimer &timer;
   };

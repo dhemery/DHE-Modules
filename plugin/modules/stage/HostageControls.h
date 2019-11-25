@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Mode.h"
 #include "controls/DurationInputs.h"
 
 #include <engine/Param.hpp>
@@ -15,7 +16,9 @@ namespace stage {
   class HostageControls {
   public:
     HostageControls(std::vector<Input> const &inputs, std::vector<Param> const &params, std::vector<Output> &outputs) :
-        inputs{inputs}, params{params}, outputs{outputs} {};
+        inputs{inputs},
+        params{params},
+        outputs{outputs} {};
 
     auto defer() const -> bool { return isHigh(inputs[DeferInput]); }
 
@@ -27,7 +30,7 @@ namespace stage {
 
     auto input() const -> float { return voltageAt(inputs[EnvelopeInput]); }
 
-    auto isSustainMode() const -> bool { return positionOf(params[ModeSwitch]) == 1; }
+    auto mode() const -> Mode { return positionOf(params[ModeSwitch]) == 1 ? Mode::Sustain : Mode::Hold; }
 
     void output(float voltage) { outputs[EnvelopeOutput].setVoltage(voltage); }
 

@@ -2,6 +2,7 @@
 
 #include "components/Latch.h"
 #include "stage/Event.h"
+#include "stage/Mode.h"
 
 #include <gmock/gmock-actions.h>
 #include <gmock/gmock.h>
@@ -9,6 +10,7 @@
 
 using dhe::Latch;
 using Event = dhe::stage::Event;
+using Mode = dhe::stage::Mode;
 using ::testing::A;
 using ::testing::NiceMock;
 using ::testing::Return;
@@ -19,8 +21,7 @@ class HostageEngineTest : public Test {
   public:
     MOCK_METHOD(bool, defer, (), (const));
     MOCK_METHOD(float, duration, (), (const));
-    MOCK_METHOD(float, input, (), (const));
-    MOCK_METHOD(bool, isSustainMode, (), (const));
+    MOCK_METHOD(Mode, mode, (), (const));
     MOCK_METHOD(float, level, (), (const));
     MOCK_METHOD(void, output, (float), ());
     MOCK_METHOD(void, showActive, (bool), ());
@@ -42,21 +43,30 @@ class HostageEngineTest : public Test {
     MOCK_METHOD(void, exit, (), ());
   };
 
+  class SustainMode {
+  public:
+    MOCK_METHOD(void, enter, (), ());
+    MOCK_METHOD(dhe::stage::Event, execute, (Latch const &), ());
+    MOCK_METHOD(void, exit, (), ());
+  };
+
 protected:
+  static auto constexpr defaultDuration{1.F};
   NiceMock<Controls> controls{};
   NiceMock<EventlessMode> deferMode{};
   NiceMock<HoldMode> holdMode{};
+  NiceMock<SustainMode> sustainMode{};
   NiceMock<EventlessMode> idleMode{};
   NiceMock<EventlessMode> inputMode{};
-  dhe::stage::HostageEngine<Controls, EventlessMode, EventlessMode, HoldMode, EventlessMode> engine{
-      controls, inputMode, deferMode, holdMode, idleMode};
+  dhe::stage::HostageEngine<Controls, EventlessMode, EventlessMode, HoldMode, SustainMode, EventlessMode> engine{
+      controls, inputMode, deferMode, holdMode, sustainMode, idleMode};
 
   void givenDefer(bool defer) { ON_CALL(controls, defer()).WillByDefault(Return(defer)); }
-  void givenGate(bool gate) { ON_CALL(controls, gate()).WillByDefault(Return(gate)); }
-  void givenInput(float input) { ON_CALL(controls, input()).WillByDefault(Return(input)); }
   void givenDuration(float duration) { ON_CALL(controls, duration()).WillByDefault(Return(duration)); }
+  void givenGate(bool gate) { ON_CALL(controls, gate()).WillByDefault(Return(gate)); }
+  void givenMode(Mode mode) { ON_CALL(controls, mode()).WillByDefault(Return(mode)); }
 
-  void SetUp() override { givenDuration(1.F); }
+  void SetUp() override { givenDuration(defaultDuration); }
 };
 
 TEST_F(HostageEngineTest, startsInInputMode) {
@@ -91,16 +101,26 @@ TEST_F(HostageEngineInputMode, executesInputMode_ifTriggerDoesNotRiseAndDeferIsL
   engine.process(0.F);
 }
 
-TEST_F(HostageEngineInputMode, beginsHolding_ifTriggerRisesAndDeferIsLow) {
+TEST_F(HostageEngineInputMode, beginsHolding_ifTriggerRises_ifDeferIsLow_ifHoldModeSelected) {
   givenDefer(false);
   givenGate(true);
-
-  auto constexpr input{4.234};
-  givenInput(input);
+  givenMode(Mode::Hold);
 
   EXPECT_CALL(inputMode, exit());
   EXPECT_CALL(holdMode, enter());
   EXPECT_CALL(holdMode, execute(A<Latch const &>(), A<float>()));
+
+  engine.process(0.F);
+}
+
+TEST_F(HostageEngineInputMode, beginsSustaining_ifTriggerRises_ifDeferIsLow_ifSustainModeSelected) {
+  givenDefer(false);
+  givenGate(true);
+  givenMode(Mode::Sustain);
+
+  EXPECT_CALL(inputMode, exit());
+  EXPECT_CALL(sustainMode, enter());
+  EXPECT_CALL(sustainMode, execute(A<Latch const &>()));
 
   engine.process(0.F);
 }

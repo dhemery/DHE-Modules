@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Event.h"
+#include "Mode.h"
 #include "components/Latch.h"
 #include "components/PhaseTimer.h"
 #include "components/Range.h"
@@ -31,17 +32,19 @@ namespace stage {
       }
 
       switch (state) {
-      case Generating:
+      case Mode::Generate:
         generate(sampleTime);
         break;
-      case TrackingLevel:
+      case Mode::TrackLevel:
         levelMode.execute();
         break;
-      case Deferring:
+      case Mode::Defer:
         deferMode.execute();
         break;
-      case TrackingInput:
+      case Mode::TrackInput:
         inputMode.execute();
+        break;
+      default:
         break;
       }
 
@@ -50,58 +53,55 @@ namespace stage {
     }
 
   private:
-    enum State {
-      Deferring,
-      Generating,
-      TrackingInput,
-      TrackingLevel,
-    };
-
     // TODO: Check for TRIG rise before checking for DEFER fall, so that we start generating as soon as DEFER falls.
-    auto identifyState() -> StageEngine::State {
+    auto identifyState() -> Mode {
       if (defer.isHigh()) {
-        return Deferring;
+        return Mode::Defer;
       }
       if (defer.isFall()) {
-        return TrackingInput;
+        return Mode::TrackInput;
       }
       if (trigger.isRise()) {
-        return Generating;
+        return Mode::Generate;
       }
       return state;
     }
 
-    void enter(State newState) {
+    void enter(Mode newState) {
       switch (state) {
-      case Generating:
+      case Mode::Generate:
         generateMode.exit();
         break;
-      case Deferring:
+      case Mode::Defer:
         deferMode.exit();
         trigger.clock(false);
         break;
-      case TrackingInput:
+      case Mode::TrackInput:
         inputMode.exit();
         break;
-      case TrackingLevel:
+      case Mode::TrackLevel:
         levelMode.exit();
+        break;
+      default:
         break;
       }
 
       state = newState;
 
       switch (state) {
-      case Deferring:
+      case Mode::Defer:
         deferMode.enter();
         break;
-      case Generating:
+      case Mode::Generate:
         generateMode.enter();
         break;
-      case TrackingInput:
+      case Mode::TrackInput:
         inputMode.enter();
         break;
-      case TrackingLevel:
+      case Mode::TrackLevel:
         levelMode.enter();
+        break;
+      default:
         break;
       }
     }
@@ -110,12 +110,12 @@ namespace stage {
       auto const event = generateMode.execute(trigger, sampleTime);
       if (event == Event::Completed) {
         eocTimer.reset();
-        enter(TrackingLevel);
+        enter(Mode::TrackLevel);
       }
     }
 
     PhaseTimer eocTimer{1.F};
-    State state{TrackingInput};
+    Mode state{Mode::TrackInput};
     Latch defer{};
     Latch trigger{};
     Controls &controls;

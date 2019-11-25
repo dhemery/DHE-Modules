@@ -6,6 +6,7 @@
 #include "HostageEngine.h"
 #include "IdleMode.h"
 #include "InputMode.h"
+#include "SustainMode.h"
 #include "config/DurationConfig.h"
 
 #include <engine/Module.hpp>
@@ -34,9 +35,11 @@ namespace stage {
     PhaseTimer holdTimer{};
     HoldMode<Controls> holdMode{controls, holdTimer};
     IdleMode<Controls> idleMode{controls};
+    SustainMode<Controls> sustainMode{controls};
     InputMode<Controls> inputMode{controls};
-    HostageEngine<Controls, InputMode<Controls>, DeferMode<Controls>, HoldMode<Controls>, IdleMode<Controls>> machine{
-        controls, inputMode, deferMode, holdMode, idleMode};
+    HostageEngine<Controls, InputMode<Controls>, DeferMode<Controls>, HoldMode<Controls>, SustainMode<Controls>,
+                  IdleMode<Controls>>
+        machine{controls, inputMode, deferMode, holdMode, sustainMode, idleMode};
   };
 } // namespace stage
 } // namespace dhe

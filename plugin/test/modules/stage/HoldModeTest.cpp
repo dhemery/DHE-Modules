@@ -2,7 +2,6 @@
 
 #include "components/Latch.h"
 #include "components/PhaseTimer.h"
-#include "components/Taper.h"
 #include "stage/Event.h"
 
 #include <gmock/gmock-actions.h>
@@ -20,30 +19,21 @@ using ::testing::Test;
 class HoldModeTest : public Test {
   class Controls {
   public:
-    MOCK_METHOD(float, curvature, (), (const));
-    MOCK_METHOD(float, input, (), (const));
     MOCK_METHOD(float, duration, (), (const));
-    MOCK_METHOD(float, level, (), (const));
     MOCK_METHOD(void, showActive, (bool), ());
     MOCK_METHOD(void, showEoc, (bool), ());
     MOCK_METHOD(void, output, (float), ());
-    MOCK_METHOD(dhe::taper::VariableTaper const *, taper, (), (const));
   };
 
 protected:
   static auto constexpr defaultDuration{1.F};
-  static auto constexpr defaultTaper{&dhe::taper::variableJTaper};
 
   NiceMock<Controls> controls{};
   PhaseTimer timer{};
 
   dhe::stage::HoldMode<Controls> holdMode{controls, timer};
 
-  void givenCurvature(float curvature) { ON_CALL(controls, curvature()).WillByDefault(Return(curvature)); }
   void givenDuration(float duration) { ON_CALL(controls, duration()).WillByDefault(Return(duration)); }
-  void givenInput(float input) { ON_CALL(controls, input()).WillByDefault(Return(input)); }
-  void givenLevel(float level) { ON_CALL(controls, level()).WillByDefault(Return(level)); }
-  void givenTaper(dhe::taper::VariableTaper const *taper) { ON_CALL(controls, taper()).WillByDefault(Return(taper)); }
 
   void givenPhase(float phase) {
     timer.reset();
@@ -52,7 +42,6 @@ protected:
 
   void SetUp() override {
     Test::SetUp();
-    givenTaper(defaultTaper);
     givenDuration(defaultDuration);
   }
 };
@@ -97,11 +86,6 @@ TEST_F(HoldModeTest, execute_resetsTimer_ifRetriggerRises) {
   holdMode.execute(Latch{true, true}, 0.F);
 
   EXPECT_EQ(timer.phase(), 0.F);
-}
-
-// TODO: How to test this?
-TEST_F(HoldModeTest, execute_setsCurveStartingVoltageToInputVoltage_ifRetriggerRises) {
-  holdMode.execute(Latch{true, true}, 0.F);
 }
 
 TEST_F(HoldModeTest, execute_advancesPhase) {
