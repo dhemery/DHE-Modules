@@ -1,0 +1,22 @@
+@startuml
+[*] --> Input
+
+Defer : ACTIVE : true
+Defer --> Input : DEFER ⇩ / GATE low
+Defer --> Hold : DEFER ⇩ / GATE high
+
+Hold : ACTIVE : true
+Hold --> Defer : DEFER ⇧
+Hold --> Hold : GATE ⇧
+Hold --> Idle : Stage Completed
+
+Input : ACTIVE : false
+Input --> Defer : DEFER ⇧
+Input --> Hold : GATE ⇧
+
+Idle : ACTIVE : false
+Idle --> Defer : DEFER ⇧
+Idle --> Hold : GATE ⇧
+
+@enduml
+
