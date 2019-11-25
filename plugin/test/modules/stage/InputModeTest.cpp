@@ -20,7 +20,7 @@ class InputModeTest : public Test {
 protected:
   NiceMock<Controls> controls{};
 
-  dhe::stage::InputMode<Controls> levelMode{controls};
+  dhe::stage::InputMode<Controls> inputMode{controls};
 
   void givenInput(float input) { ON_CALL(controls, input()).WillByDefault(Return(input)); }
 };
@@ -28,13 +28,13 @@ protected:
 TEST_F(InputModeTest, enter_showsStageInactive) {
   EXPECT_CALL(controls, showActive(false));
 
-  levelMode.enter();
+  inputMode.enter();
 }
 
 TEST_F(InputModeTest, exit_showsStageInactive) {
   EXPECT_CALL(controls, showActive(false));
 
-  levelMode.exit();
+  inputMode.exit();
 }
 
 TEST_F(InputModeTest, execute_outputsInput) {
@@ -44,5 +44,5 @@ TEST_F(InputModeTest, execute_outputsInput) {
 
   EXPECT_CALL(controls, output(input));
 
-  levelMode.execute();
+  inputMode.execute();
 }

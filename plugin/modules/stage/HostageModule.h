@@ -1,7 +1,11 @@
 #pragma once
 
+#include "DeferMode.h"
+#include "HoldMode.h"
 #include "HostageControls.h"
 #include "HostageEngine.h"
+#include "IdleMode.h"
+#include "InputMode.h"
 #include "config/DurationConfig.h"
 
 #include <engine/Module.hpp>
@@ -26,7 +30,13 @@ namespace stage {
 
   private:
     Controls controls{inputs, params, outputs};
-    HostageEngine<Controls> machine{controls};
+    DeferMode<Controls> deferMode{controls};
+    PhaseTimer holdTimer{};
+    HoldMode<Controls> holdMode{controls, holdTimer};
+    IdleMode<Controls> idleMode{controls};
+    InputMode<Controls> inputMode{controls};
+    HostageEngine<Controls, InputMode<Controls>, DeferMode<Controls>, HoldMode<Controls>, IdleMode<Controls>> machine{
+        controls, inputMode, deferMode, holdMode, idleMode};
   };
 } // namespace stage
 } // namespace dhe

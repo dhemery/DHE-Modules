@@ -1,52 +1,67 @@
 #pragma once
 
+#include "Event.h"
+#include "components/Latch.h"
+#include "components/PhaseTimer.h"
+
 #include <algorithm>
 
 namespace dhe {
 namespace stage {
-  template <typename Controls> class HostageEngine {
+  template <typename Controls, typename InputMode, typename DeferMode, typename HoldMode, typename IdleMode>
+  class HostageEngine {
   private:
     enum State {
       Deferring,
       Holding,
-      Sustaining,
       Idle,
+      Sustaining,
       TrackingInput,
     };
 
   public:
-    HostageEngine(Controls &controls) : controls{controls} {}
+    HostageEngine(Controls &controls, InputMode &inputMode, DeferMode &deferMode, HoldMode &holdMode,
+                  IdleMode &idleMode) :
+        controls{controls}, inputMode{inputMode}, deferMode{deferMode}, holdMode{holdMode}, idleMode{idleMode} {}
 
     void process(float sampleTime) {
+      defer.clock(controls.defer());
+      gate.clock(controls.gate());
+
       auto const newState = identifyState();
+
       if (state != newState) {
         enter(newState);
       }
 
       switch (state) {
-      case Holding:
-        advanceHold(sampleTime);
-      case Sustaining:
-      case Idle:
-        controls.sendOut(heldVoltage);
-        break;
       case Deferring:
+        deferMode.execute();
+        break;
+      case Holding:
+        hold(sampleTime);
+      case Idle:
+        idleMode.execute();
+        break;
+      case Sustaining:
+        break;
       case TrackingInput:
-        controls.sendOut(controls.envelopeIn());
+        inputMode.execute();
+        break;
       }
 
-      controls.sendActive(state != Idle && state != TrackingInput);
-      advanceEoc(sampleTime);
-      controls.sendEoc(isEoc);
+      controls.showActive(state != Idle && state != TrackingInput);
+      eocTimer.advance(sampleTime / controls.duration());
+      controls.showEoc(eocTimer.inProgress());
     }
 
   private:
     auto identifyState() -> State {
-      if (controls.isDeferring()) {
+      if (defer.isHigh()) {
         return Deferring;
       }
       if (controls.isSustainMode()) {
-        if (controls.isGated()) {
+        if (gate.isHigh()) {
           return Sustaining;
         }
         if (state == Sustaining) {
@@ -56,7 +71,7 @@ namespace stage {
       if (state == Deferring) {
         return TrackingInput;
       }
-      if (stageGateRise()) {
+      if (gate.isRise()) {
         enter(Holding);
         return Holding;
       }
@@ -64,71 +79,61 @@ namespace stage {
     }
 
     void enter(State newState) {
-      if (state == Deferring) {
-        resetStageGate();
+      switch (state) {
+      case Deferring:
+        deferMode.exit();
+        gate.clock(false);
+        break;
+      case Holding:
+        holdMode.exit();
+        break;
+      case Idle:
+        idleMode.exit();
+        break;
+      case Sustaining:
+        break;
+      case TrackingInput:
+        inputMode.exit();
+        break;
       }
 
-      if (newState == Holding || newState == Sustaining) {
-        resetHold();
-      }
-
-      if (newState == Idle) {
-        startEoc();
-      }
       state = newState;
-    }
 
-    void resetStageGate() { stageGateWasHigh = false; }
-
-    auto stageGateRise() -> bool {
-      auto const isHigh = controls.isGated();
-      auto const isRise = isHigh && !stageGateWasHigh;
-      stageGateWasHigh = isHigh;
-      return isRise;
-    }
-
-    void resetHold() {
-      heldVoltage = controls.envelopeIn();
-      holdPhase = 0.F;
-    }
-
-    void advanceHold(float sampleTime) {
-      if (holdPhase < 1.F) {
-        holdPhase = std::min(1.F, holdPhase + sampleTime / controls.duration());
-        if (holdPhase == 1.F) {
-          finishStage();
-        }
+      switch (state) {
+      case Deferring:
+        deferMode.enter();
+        break;
+      case Holding:
+        holdMode.enter();
+        break;
+      case Idle:
+        idleMode.enter();
+        break;
+      case Sustaining:
+        break;
+      case TrackingInput:
+        inputMode.enter();
+        break;
       }
     }
 
-    void finishStage() {
-      startEoc();
-      enter(Idle);
-    }
-
-    void startEoc() {
-      isEoc = true;
-      eocPhase = 0.F;
-    }
-
-    void advanceEoc(float sampleTime) {
-      if (eocPhase < 1.F) {
-        eocPhase = std::min(1.F, eocPhase + sampleTime / 1e-3F);
-        if (eocPhase == 1.F) {
-          finishEoc();
-        }
+    void hold(float sampleTime) {
+      auto const event = holdMode.execute(gate, sampleTime);
+      if (event == dhe::stage::Event::Completed) {
+        eocTimer.reset();
+        enter(Idle);
       }
     }
 
-    void finishEoc() { isEoc = false; }
-
-    float eocPhase{1.F};
-    bool isEoc{false};
-    float holdPhase{0.F};
-    float heldVoltage{0.F};
+    PhaseTimer eocTimer{1.F};
     State state{TrackingInput};
-    bool stageGateWasHigh{false};
+    Latch defer{};
+    Latch gate{};
     Controls &controls;
+    InputMode &inputMode;
+    DeferMode &deferMode;
+    HoldMode &holdMode;
+    IdleMode &idleMode;
   };
 } // namespace stage
 } // namespace dhe

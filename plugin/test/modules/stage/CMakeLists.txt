@@ -7,6 +7,9 @@ target_sources(stage_tests
         PRIVATE
         DeferModeTest.cpp
         GenerateModeTest.cpp
+        HoldModeTest.cpp
+        HostageEngineTest.cpp
+        IdleModeTest.cpp
         InputModeTest.cpp
         LevelModeTest.cpp
         StageEngineTest.cpp

@@ -17,29 +17,29 @@ namespace stage {
     HostageControls(std::vector<Input> const &inputs, std::vector<Param> const &params, std::vector<Output> &outputs) :
         inputs{inputs}, params{params}, outputs{outputs} {};
 
+    auto defer() const -> bool { return isHigh(inputs[DeferInput]); }
+
     auto duration() const -> float {
       return selectableDuration(params[DurationKnob], inputs[DurationCvInput], params[DurationRangeSwitch]);
     }
 
-    auto envelopeIn() const -> float { return voltageAt(inputs[EnvelopeInput]); }
+    auto gate() const -> bool { return isHigh(inputs[TriggerInput]); }
 
-    auto isDeferring() const -> bool { return isHigh(inputs[DeferInput]); }
-
-    auto isGated() const -> bool { return isHigh(inputs[TriggerInput]); }
+    auto input() const -> float { return voltageAt(inputs[EnvelopeInput]); }
 
     auto isSustainMode() const -> bool { return positionOf(params[ModeSwitch]) == 1; }
 
-    void sendActive(bool active) {
+    void output(float voltage) { outputs[EnvelopeOutput].setVoltage(voltage); }
+
+    void showActive(bool active) {
       auto const voltage = unipolarSignalRange.scale(active);
       outputs[ActiveOutput].setVoltage(voltage);
     }
 
-    void sendEoc(bool eoc) {
+    void showEoc(bool eoc) {
       auto const voltage = unipolarSignalRange.scale(eoc);
       outputs[EocOutput].setVoltage(voltage);
     }
-
-    void sendOut(float voltage) { outputs[EnvelopeOutput].setVoltage(voltage); }
 
     enum ParameterIds { DurationKnob, DurationRangeSwitch, ModeSwitch, ParameterCount };
 
