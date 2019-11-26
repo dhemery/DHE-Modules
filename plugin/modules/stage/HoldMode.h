@@ -12,20 +12,24 @@ namespace stage {
 
     auto execute(Latch const &retrigger, float sampleTime) -> Event {
       if (retrigger.isRise()) {
-        timer.reset();
+        reset();
       }
       timer.advance(sampleTime / controls.duration());
       return timer.inProgress() ? Event::Generated : Event::Completed;
     }
-
     void enter() {
       controls.showActive(true);
-      timer.reset();
+      reset();
     }
 
     void exit() { controls.showActive(false); }
 
   private:
+    void reset() const {
+      controls.output(controls.input());
+      timer.reset();
+    }
+
     Controls &controls;
     PhaseTimer &timer;
   };

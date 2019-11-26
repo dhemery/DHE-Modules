@@ -52,6 +52,7 @@ class HostageEngineTest : public Test {
 
 protected:
   static auto constexpr defaultDuration{1.F};
+  static auto constexpr defaultModeSelection{Mode::Hold};
   NiceMock<Controls> controls{};
   NiceMock<EventlessMode> deferMode{};
   NiceMock<HoldMode> holdMode{};
@@ -64,9 +65,12 @@ protected:
   void givenDefer(bool defer) { ON_CALL(controls, defer()).WillByDefault(Return(defer)); }
   void givenDuration(float duration) { ON_CALL(controls, duration()).WillByDefault(Return(duration)); }
   void givenGate(bool gate) { ON_CALL(controls, gate()).WillByDefault(Return(gate)); }
-  void givenMode(Mode mode) { ON_CALL(controls, mode()).WillByDefault(Return(mode)); }
+  void givenModeSelection(Mode mode) { ON_CALL(controls, mode()).WillByDefault(Return(mode)); }
 
-  void SetUp() override { givenDuration(defaultDuration); }
+  void SetUp() override {
+    givenDuration(defaultDuration);
+    givenModeSelection(defaultModeSelection);
+  }
 };
 
 TEST_F(HostageEngineTest, startsInInputMode) {
@@ -104,7 +108,7 @@ TEST_F(HostageEngineInputMode, executesInputMode_ifTriggerDoesNotRiseAndDeferIsL
 TEST_F(HostageEngineInputMode, beginsHolding_ifTriggerRises_ifDeferIsLow_ifHoldModeSelected) {
   givenDefer(false);
   givenGate(true);
-  givenMode(Mode::Hold);
+  givenModeSelection(Mode::Hold);
 
   EXPECT_CALL(inputMode, exit());
   EXPECT_CALL(holdMode, enter());
@@ -116,7 +120,7 @@ TEST_F(HostageEngineInputMode, beginsHolding_ifTriggerRises_ifDeferIsLow_ifHoldM
 TEST_F(HostageEngineInputMode, beginsSustaining_ifTriggerRises_ifDeferIsLow_ifSustainModeSelected) {
   givenDefer(false);
   givenGate(true);
-  givenMode(Mode::Sustain);
+  givenModeSelection(Mode::Sustain);
 
   EXPECT_CALL(inputMode, exit());
   EXPECT_CALL(sustainMode, enter());
@@ -166,7 +170,7 @@ TEST_F(HostageEngineDeferMode, beginsTrackingInput_ifDeferFalls) {
  * The kludge: When DEFER falls, pretend that TRIG was low so that, on the subsequent sample, the continuing EOC from
  * the upstream module looks like TRIG rise, and starts this module holding.
  */
-TEST_F(HostageEngineDeferMode, tracksInputInsteadOfHolding_ifTrigRisesWhenDeferFalls) {
+TEST_F(HostageEngineDeferMode, beginsHolding_ifTrigRisesWhenDeferFalls) {
   givenDefer(true);
   givenGate(false);
   engine.process(0.F); // Get trigger to be low while defer is high
@@ -175,10 +179,8 @@ TEST_F(HostageEngineDeferMode, tracksInputInsteadOfHolding_ifTrigRisesWhenDeferF
   givenDefer(false); // ... along with DEFER fall
 
   EXPECT_CALL(deferMode, exit());
-  EXPECT_CALL(inputMode, enter());
-  EXPECT_CALL(inputMode, execute());
-  EXPECT_CALL(holdMode, enter()).Times(0);
-  EXPECT_CALL(holdMode, execute(A<Latch const &>(), A<float>())).Times(0);
+  EXPECT_CALL(holdMode, enter());
+  EXPECT_CALL(holdMode, execute(A<Latch const &>(), A<float>()));
 
   engine.process(0.F);
 }
@@ -186,6 +188,7 @@ TEST_F(HostageEngineDeferMode, tracksInputInsteadOfHolding_ifTrigRisesWhenDeferF
 class HostageEngineHoldMode : public HostageEngineTest {
   void SetUp() override {
     HostageEngineTest::SetUp();
+    givenModeSelection(Mode::Hold);
     ON_CALL(holdMode, execute(A<Latch const &>(), A<float>())).WillByDefault(Return(Event::Generated));
     givenGate(true);
     engine.process(0.F);
@@ -204,7 +207,7 @@ TEST_F(HostageEngineHoldMode, beginsDeferring_ifDeferRises) {
   engine.process(0.F);
 }
 
-TEST_F(HostageEngineHoldMode, executesGenerateMode_ifDeferIsLowAndTriggerDoesNotRise) {
+TEST_F(HostageEngineHoldMode, executesHoldMode_ifDeferIsLowAndTriggerDoesNotRise) {
   auto constexpr sampleTime{0.04534F};
 
   givenDefer(false);
@@ -248,15 +251,16 @@ TEST_F(HostageEngineHoldMode, raisesEoc_ifDoneGenerating) {
 class HostageEngineIdleMode : public HostageEngineTest {
   void SetUp() override {
     HostageEngineTest::SetUp();
+    givenModeSelection(Mode::Sustain);
 
-    // Start holding
+    // Start sustaining
     givenGate(true);
-    ON_CALL(holdMode, execute(A<Latch const &>(), A<float>())).WillByDefault(Return(Event::Generated));
+    ON_CALL(sustainMode, execute(A<Latch const &>())).WillByDefault(Return(Event::Generated));
     engine.process(0.F);
 
-    // Finish holding, which enters Idle mode
+    // Finish sustaining, which enters Idle mode
     givenGate(false);
-    ON_CALL(holdMode, execute(A<Latch const &>(), A<float>())).WillByDefault(Return(Event::Completed));
+    ON_CALL(sustainMode, execute(A<Latch const &>())).WillByDefault(Return(Event::Completed));
     engine.process(0.F);
   }
 };
@@ -280,13 +284,13 @@ TEST_F(HostageEngineIdleMode, executesIdleMode_ifTriggerDoesNotRiseAndDeferIsLow
   engine.process(0.F);
 }
 
-TEST_F(HostageEngineIdleMode, beginsHolding_ifTriggerRisesAndDeferIsLow) {
+TEST_F(HostageEngineIdleMode, beginsSustaining_ifTriggerRisesAndDeferIsLow) {
   givenDefer(false);
   givenGate(true);
 
   EXPECT_CALL(idleMode, exit());
-  EXPECT_CALL(holdMode, enter());
-  EXPECT_CALL(holdMode, execute(A<Latch const &>(), A<float>()));
+  EXPECT_CALL(sustainMode, enter());
+  EXPECT_CALL(sustainMode, execute(A<Latch const &>()));
 
   engine.process(0.F);
 }

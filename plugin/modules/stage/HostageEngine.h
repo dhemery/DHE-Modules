@@ -24,7 +24,7 @@ namespace stage {
 
     void process(float sampleTime) {
       defer.clock(controls.defer());
-      gate.clock(controls.gate());
+      gate.clock(controls.gate() && !defer.isHigh());
 
       auto const newState = identifyState();
 
@@ -56,7 +56,6 @@ namespace stage {
         break;
       }
 
-      controls.showActive(state != Mode::Idle && state != Mode::TrackInput);
       eocTimer.advance(sampleTime / controls.duration());
       controls.showEoc(eocTimer.inProgress());
     }
@@ -66,29 +65,35 @@ namespace stage {
       if (defer.isHigh()) { // DEFER trumps all
         return Mode::Defer;
       }
-      if (controls.mode() == Mode::Sustain) { // Sustain mode is selected
-        if (gate.isHigh()) {                  // If the GATE is high, start or continue sustaining
-          return Mode::Sustain;
+      switch (state) {
+      case Mode::Defer: // Leaving Defer mode
+        if (controls.mode() == Mode::Sustain) {
+          return gate.isHigh() ? Mode::Sustain : Mode::Idle;
         }
-        // Sustain mode is selected and GATE is low
-        if (state == Mode::Sustain) { // If already sustaining, go idle
-          return Mode::Idle;
+        return gate.isRise() ? Mode::Hold : Mode::TrackInput;
+      case Mode::Hold:
+        if (controls.mode() == Mode::Sustain) {
+          return gate.isHigh() ? Mode::Sustain : Mode::Idle;
         }
-      }
-      if (defer.isFall()) {
-        return Mode::TrackInput;
-      }
-      if (gate.isRise()) {
+        if (gate.isRise()) {
+          holdMode.enter();
+        }
         return Mode::Hold;
+      case Mode::Idle:
+        return gate.isRise() ? controls.mode() : Mode::Idle;
+      case Mode::TrackInput:
+        return gate.isRise() ? controls.mode() : Mode::TrackInput;
+      case Mode::Sustain:
+        return gate.isHigh() ? Mode::Sustain : Mode::Idle;
+      default:
+        return state;
       }
-      return state;
     }
 
     void enter(Mode newState) {
       switch (state) {
       case Mode::Defer:
         deferMode.exit();
-        gate.clock(false);
         break;
       case Mode::Hold:
         holdMode.exit();
@@ -111,7 +116,6 @@ namespace stage {
       switch (state) {
       case Mode::Defer:
         deferMode.enter();
-        gate.clock(false);
         break;
       case Mode::Hold:
         holdMode.enter();

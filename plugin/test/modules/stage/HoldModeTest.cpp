@@ -20,6 +20,7 @@ class HoldModeTest : public Test {
   class Controls {
   public:
     MOCK_METHOD(float, duration, (), (const));
+    MOCK_METHOD(float, input, (), (const));
     MOCK_METHOD(void, showActive, (bool), ());
     MOCK_METHOD(void, showEoc, (bool), ());
     MOCK_METHOD(void, output, (float), ());
