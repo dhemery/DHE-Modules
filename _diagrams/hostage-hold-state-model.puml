@@ -1,7 +1,10 @@
 @startuml
+title Hostage State Model (HOLD)
+
 [*] --> Input
 
 Defer : ACTIVE : true
+Defer : IN → OUT
 Defer --> Input : DEFER ⇩ / GATE low
 Defer --> Hold : DEFER ⇩ / GATE high
 
@@ -11,6 +14,7 @@ Hold --> Hold : GATE ⇧
 Hold --> Idle : Stage Completed
 
 Input : ACTIVE : false
+Input : IN → OUT
 Input --> Defer : DEFER ⇧
 Input --> Hold : GATE ⇧
 

@@ -1,0 +1,13 @@
+@startuml
+title Hostage State Model (SUSTAIN)
+
+Sustain --> Hold : → HOLD
+Sustain --> [*] : GATE ⇩
+
+Hold --> Sustain : → SUSTAIN | Gate high
+Hold --> [*] : → SUSTAIN | Gate low
+
+Hold --> [*] : Completed
+
+@enduml
+

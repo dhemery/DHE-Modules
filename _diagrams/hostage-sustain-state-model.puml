@@ -1,0 +1,25 @@
+@startuml
+title Hostage State Model (SUSTAIN)
+
+[*] --> Input
+
+Defer : ACTIVE : true
+Defer : IN → OUT
+Defer --> Input : DEFER ⇩ / GATE low
+Defer --> Sustain : DEFER ⇩ / GATE high
+
+Sustain : ACTIVE : true
+Sustain --> Defer : DEFER ⇧
+Sustain --> Idle : GATE ⇩
+
+Input : ACTIVE : false
+Input : IN → OUT
+Input --> Defer : DEFER ⇧
+Input --> Sustain : GATE ⇧
+
+Idle : ACTIVE : false
+Idle --> Defer : DEFER ⇧
+Idle --> Sustain : GATE ⇧
+
+@enduml
+
