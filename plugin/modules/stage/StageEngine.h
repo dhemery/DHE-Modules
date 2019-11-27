@@ -27,11 +27,11 @@ namespace stage {
       trigger.clock(controls.trigger());
 
       auto const newState = identifyState();
-      if (state != newState) {
+      if (mode != newState) {
         enter(newState);
       }
 
-      switch (state) {
+      switch (mode) {
       case Mode::Generate:
         generate(sampleTime);
         break;
@@ -64,11 +64,11 @@ namespace stage {
       if (trigger.isRise()) {
         return Mode::Generate;
       }
-      return state;
+      return mode;
     }
 
     void enter(Mode newState) {
-      switch (state) {
+      switch (mode) {
       case Mode::Generate:
         generateMode.exit();
         break;
@@ -86,9 +86,9 @@ namespace stage {
         break;
       }
 
-      state = newState;
+      mode = newState;
 
-      switch (state) {
+      switch (mode) {
       case Mode::Defer:
         deferMode.enter();
         break;
@@ -115,7 +115,7 @@ namespace stage {
     }
 
     PhaseTimer eocTimer{1.F};
-    Mode state{Mode::TrackInput};
+    Mode mode{Mode::TrackInput};
     Latch defer{};
     Latch trigger{};
     Controls &controls;

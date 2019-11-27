@@ -26,13 +26,13 @@ namespace stage {
       defer.clock(controls.defer());
       gate.clock(controls.gate() && !defer.isHigh());
 
-      auto const newState = identifyState();
+      auto const newMode = identifyMode();
 
-      if (state != newState) {
-        enter(newState);
+      if (mode != newMode) {
+        enter(newMode);
       }
 
-      switch (state) {
+      switch (mode) {
       case Mode::Defer:
         deferMode.execute();
         break;
@@ -61,11 +61,11 @@ namespace stage {
     }
 
   private:
-    auto identifyState() -> Mode {
+    auto identifyMode() -> Mode {
       if (defer.isHigh()) { // DEFER trumps all
         return Mode::Defer;
       }
-      switch (state) {
+      switch (mode) {
       case Mode::Defer: // Leaving Defer mode
         if (controls.mode() == Mode::Sustain) {
           return gate.isHigh() ? Mode::Sustain : Mode::Idle;
@@ -75,7 +75,7 @@ namespace stage {
         if (controls.mode() == Mode::Sustain) {
           return gate.isHigh() ? Mode::Sustain : Mode::Idle;
         }
-        if (gate.isRise()) {
+        if (gate.isRise()) { // Restart hold on GATE rise
           holdMode.enter();
         }
         return Mode::Hold;
@@ -86,12 +86,12 @@ namespace stage {
       case Mode::Sustain:
         return gate.isHigh() ? Mode::Sustain : Mode::Idle;
       default:
-        return state;
+        return mode;
       }
     }
 
-    void enter(Mode newState) {
-      switch (state) {
+    void enter(Mode newMode) {
+      switch (mode) {
       case Mode::Defer:
         deferMode.exit();
         break;
@@ -111,9 +111,9 @@ namespace stage {
         break;
       }
 
-      state = newState;
+      mode = newMode;
 
-      switch (state) {
+      switch (mode) {
       case Mode::Defer:
         deferMode.enter();
         break;
@@ -135,7 +135,7 @@ namespace stage {
       }
     }
 
-    Mode state{Mode::TrackInput};
+    Mode mode{Mode::TrackInput};
     PhaseTimer eocTimer{1.F};
     Latch defer{};
     Latch gate{};
