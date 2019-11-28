@@ -62,16 +62,13 @@ namespace stage {
 
   private:
     auto identifyMode() -> Mode {
-      if (defer.isHigh()) { // DEFER trumps all
+      if (defer.isHigh()) {
         return Mode::Defer;
       }
       switch (mode) {
-      case Mode::Defer: // Leaving Defer mode
-        if (controls.mode() == Mode::Hold) {
-          return gate.isRise() ? Mode::Hold : Mode::Input;
-        }
-        return gate.isHigh() ? Mode::Sustain : Mode::Idle;
-      case Mode::Idle: // Fall through to Mode::Input
+      case Mode::Defer:
+        return gate.isRise() ? controls.mode() : Mode::Input;
+      case Mode::Idle:
       case Mode::Input:
         return gate.isRise() ? controls.mode() : mode;
       case Mode::Hold:
@@ -112,13 +109,14 @@ namespace stage {
         holdMode.enter();
         break;
       case Mode::Idle:
-        idleMode.enter();
         eocTimer.reset();
+        idleMode.enter();
         break;
       case Mode::Sustain:
         sustainMode.enter();
         break;
       case Mode::Input:
+        eocTimer.reset();
         inputMode.enter();
         break;
       default:

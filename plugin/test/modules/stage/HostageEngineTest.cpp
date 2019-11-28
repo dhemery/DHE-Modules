@@ -133,6 +133,16 @@ TEST_F(HostageEngineDeferMode, withHoldModeSelected_beginsTrackingInput_ifGateIs
   engine.process(0.F);
 }
 
+TEST_F(HostageEngineDeferMode, withHoldModeSelected_raisesEoc_ifGateIsLowWhenDeferFalls) {
+  givenDefer(false);
+  givenGate(false);
+  givenModeSelection(Mode::Hold);
+
+  EXPECT_CALL(controls, showEoc(true));
+
+  engine.process(0.F);
+}
+
 TEST_F(HostageEngineDeferMode, withSustainModeSelected_beginsSustaining_ifGateIsHighWhenDeferFalls) {
   givenDefer(false);
   givenGate(true);
@@ -145,14 +155,24 @@ TEST_F(HostageEngineDeferMode, withSustainModeSelected_beginsSustaining_ifGateIs
   engine.process(0.F);
 }
 
-TEST_F(HostageEngineDeferMode, withSustainModeSelected_beginsIdling_ifGateIsLowWhenDeferFalls) {
+TEST_F(HostageEngineDeferMode, withSustainModeSelected_beginsTrackingInput_ifGateIsLowWhenDeferFalls) {
   givenDefer(false);
   givenGate(false);
   givenModeSelection(Mode::Sustain);
 
   EXPECT_CALL(deferMode, exit());
-  EXPECT_CALL(idleMode, enter());
-  EXPECT_CALL(idleMode, execute());
+  EXPECT_CALL(inputMode, enter());
+  EXPECT_CALL(inputMode, execute());
+
+  engine.process(0.F);
+}
+
+TEST_F(HostageEngineDeferMode, withSustainModeSelected_raisesEoc_ifGateIsLowWhenDeferFalls) {
+  givenDefer(false);
+  givenGate(false);
+  givenModeSelection(Mode::Sustain);
+
+  EXPECT_CALL(controls, showEoc(true));
 
   engine.process(0.F);
 }
@@ -213,7 +233,7 @@ TEST_F(HostageEngineHoldMode, passesGateStateWhenExecutingGenerateMode) {
   engine.process(0.F);
 }
 
-TEST_F(HostageEngineHoldMode, raisesEoc_ifHoldeModeCompletes) {
+TEST_F(HostageEngineHoldMode, raisesEoc_ifHoldModeCompletes) {
   ON_CALL(holdMode, execute(A<Latch const &>(), A<float>())).WillByDefault(Return(Event::Completed));
 
   EXPECT_CALL(controls, showEoc(true));
