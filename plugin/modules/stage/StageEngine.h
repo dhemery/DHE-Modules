@@ -35,13 +35,13 @@ namespace stage {
       case Mode::Generate:
         generate(sampleTime);
         break;
-      case Mode::TrackLevel:
+      case Mode::Level:
         levelMode.execute();
         break;
       case Mode::Defer:
         deferMode.execute();
         break;
-      case Mode::TrackInput:
+      case Mode::Input:
         inputMode.execute();
         break;
       default:
@@ -59,7 +59,7 @@ namespace stage {
         return Mode::Defer;
       }
       if (defer.isFall()) {
-        return Mode::TrackInput;
+        return Mode::Input;
       }
       if (trigger.isRise()) {
         return Mode::Generate;
@@ -76,10 +76,10 @@ namespace stage {
         deferMode.exit();
         trigger.clock(false);
         break;
-      case Mode::TrackInput:
+      case Mode::Input:
         inputMode.exit();
         break;
-      case Mode::TrackLevel:
+      case Mode::Level:
         levelMode.exit();
         break;
       default:
@@ -95,10 +95,10 @@ namespace stage {
       case Mode::Generate:
         generateMode.enter();
         break;
-      case Mode::TrackInput:
+      case Mode::Input:
         inputMode.enter();
         break;
-      case Mode::TrackLevel:
+      case Mode::Level:
         levelMode.enter();
         break;
       default:
@@ -110,12 +110,12 @@ namespace stage {
       auto const event = generateMode.execute(trigger, sampleTime);
       if (event == Event::Completed) {
         eocTimer.reset();
-        enter(Mode::TrackLevel);
+        enter(Mode::Level);
       }
     }
 
     PhaseTimer eocTimer{1.F};
-    Mode mode{Mode::TrackInput};
+    Mode mode{Mode::Input};
     Latch defer{};
     Latch trigger{};
     Controls &controls;

@@ -49,14 +49,14 @@ namespace stage {
           enter(Mode::Idle);
         }
         break;
-      case Mode::TrackInput:
+      case Mode::Input:
         inputMode.execute();
         break;
       default:
         break;
       }
 
-      eocTimer.advance(sampleTime / controls.duration());
+      eocTimer.advance(sampleTime / 1e-3F);
       controls.showEoc(eocTimer.inProgress());
     }
 
@@ -67,24 +67,15 @@ namespace stage {
       }
       switch (mode) {
       case Mode::Defer: // Leaving Defer mode
-        if (controls.mode() == Mode::Sustain) {
-          return gate.isHigh() ? Mode::Sustain : Mode::Idle;
+        if (controls.mode() == Mode::Hold) {
+          return gate.isRise() ? Mode::Hold : Mode::Input;
         }
-        return gate.isRise() ? Mode::Hold : Mode::TrackInput;
-      case Mode::Hold:
-        if (controls.mode() == Mode::Sustain) {
-          return gate.isHigh() ? Mode::Sustain : Mode::Idle;
-        }
-        if (gate.isRise()) { // Restart hold on GATE rise
-          holdMode.enter();
-        }
-        return Mode::Hold;
-      case Mode::Idle:
-        return gate.isRise() ? controls.mode() : Mode::Idle;
-      case Mode::TrackInput:
-        return gate.isRise() ? controls.mode() : Mode::TrackInput;
-      case Mode::Sustain:
         return gate.isHigh() ? Mode::Sustain : Mode::Idle;
+      case Mode::Idle: // Fall through to Mode::Input
+      case Mode::Input:
+        return gate.isRise() ? controls.mode() : mode;
+      case Mode::Hold:
+      case Mode::Sustain:
       default:
         return mode;
       }
@@ -104,7 +95,7 @@ namespace stage {
       case Mode::Sustain:
         sustainMode.exit();
         break;
-      case Mode::TrackInput:
+      case Mode::Input:
         inputMode.exit();
         break;
       default:
@@ -127,7 +118,7 @@ namespace stage {
       case Mode::Sustain:
         sustainMode.enter();
         break;
-      case Mode::TrackInput:
+      case Mode::Input:
         inputMode.enter();
         break;
       default:
@@ -135,7 +126,7 @@ namespace stage {
       }
     }
 
-    Mode mode{Mode::TrackInput};
+    Mode mode{Mode::Input};
     PhaseTimer eocTimer{1.F};
     Latch defer{};
     Latch gate{};
