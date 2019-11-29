@@ -37,6 +37,7 @@ namespace stage {
         break;
       case Mode::Hold:
         if (holdMode.execute(gate, sampleTime) == Event::Completed) {
+          eocTimer.reset();
           enter(Mode::Idle);
         }
         break;
@@ -45,6 +46,7 @@ namespace stage {
         break;
       case Mode::Sustain:
         if (sustainMode.execute(gate) == Event::Completed) {
+          eocTimer.reset();
           enter(Mode::Idle);
         }
         break;
@@ -68,7 +70,11 @@ namespace stage {
         return controls.mode();
       }
       if (defer.isFall()) {
-        return controls.mode() == Mode::Sustain ? Mode::Idle : Mode::Input;
+        if (controls.mode() == Mode::Sustain) {
+          eocTimer.reset();
+          return Mode::Idle;
+        }
+        return Mode::Input;
       }
       return mode;
     }
@@ -104,7 +110,6 @@ namespace stage {
         holdMode.enter();
         break;
       case Mode::Idle:
-        eocTimer.reset();
         idleMode.enter();
         break;
       case Mode::Sustain:

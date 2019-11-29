@@ -141,4 +141,3 @@ TEST_F(RisenLatch, losesEdgeOnHighSignal) {
   EXPECT_EQ(latch.isRise(), false);
   EXPECT_EQ(latch.isFall(), false);
 }
-

@@ -196,7 +196,16 @@ TEST_F(StageEngineGenerateMode, passesGateStateToGenerateMode_ifDeferIsLowAndGat
   stageEngine.process(0.F);
 }
 
-TEST_F(StageEngineGenerateMode, raisesEoc_ifDoneGenerating) {
+TEST_F(StageEngineGenerateMode, beginsTrackingLevel_ifGenerateModeCompletes) {
+  ON_CALL(generateMode, execute(A<Latch const &>(), A<float>())).WillByDefault(Return(Event::Completed));
+
+  EXPECT_CALL(generateMode, exit());
+  EXPECT_CALL(levelMode, enter());
+
+  stageEngine.process(0.F);
+}
+
+TEST_F(StageEngineGenerateMode, raisesEoc_ifGenerateModeCompletes) {
   ON_CALL(generateMode, execute(A<Latch const &>(), A<float>())).WillByDefault(Return(Event::Completed));
 
   EXPECT_CALL(controls, showEoc(true));

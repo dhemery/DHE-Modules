@@ -37,6 +37,7 @@ namespace stage {
         break;
       case Mode::Generate: {
         if (generateMode.execute(gate, sampleTime) == Event::Completed) {
+          eocTimer.reset();
           enter(Mode::Level);
         }
       } break;
@@ -96,7 +97,6 @@ namespace stage {
         inputMode.enter();
         break;
       case Mode::Level:
-        eocTimer.reset();
         levelMode.enter();
         break;
       default:
