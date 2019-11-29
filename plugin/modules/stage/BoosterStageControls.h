@@ -30,6 +30,8 @@ namespace stage {
       return selectableDuration(params[DurationKnob], inputs[DurationCvInput], params[DurationRangeSwitch]);
     }
 
+    auto gate() const -> bool { return isHigh(inputs[TriggerInput]) || isPressed(params[TriggerButton]); }
+
     auto input() const -> float { return voltageAt(inputs[EnvelopeInput]); }
 
     auto level() const -> float {
@@ -49,8 +51,6 @@ namespace stage {
     }
 
     auto taper() const -> taper::VariableTaper const * { return selectedTaper(params[ShapeSwitch]); }
-
-    auto trigger() const -> bool { return isHigh(inputs[TriggerInput]) || isPressed(params[TriggerButton]); }
 
     enum ParameterIds {
       ActiveButton,

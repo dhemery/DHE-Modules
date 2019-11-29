@@ -27,7 +27,6 @@ namespace stage {
       gate.clock(controls.gate() && !defer.isHigh());
 
       auto const newMode = identifyMode();
-
       if (mode != newMode) {
         enter(newMode);
       }
@@ -65,17 +64,13 @@ namespace stage {
       if (defer.isHigh()) {
         return Mode::Defer;
       }
-      switch (mode) {
-      case Mode::Defer:
-        return gate.isRise() ? controls.mode() : Mode::Input;
-      case Mode::Idle:
-      case Mode::Input:
-        return gate.isRise() ? controls.mode() : mode;
-      case Mode::Hold:
-      case Mode::Sustain:
-      default:
-        return mode;
+      if (gate.isRise()) {
+        return controls.mode();
       }
+      if (defer.isFall()) {
+        return controls.mode() == Mode::Sustain ? Mode::Idle : Mode::Input;
+      }
+      return mode;
     }
 
     void enter(Mode newMode) {
@@ -89,11 +84,11 @@ namespace stage {
       case Mode::Idle:
         idleMode.exit();
         break;
-      case Mode::Sustain:
-        sustainMode.exit();
-        break;
       case Mode::Input:
         inputMode.exit();
+        break;
+      case Mode::Sustain:
+        sustainMode.exit();
         break;
       default:
         break;
@@ -116,7 +111,6 @@ namespace stage {
         sustainMode.enter();
         break;
       case Mode::Input:
-        eocTimer.reset();
         inputMode.enter();
         break;
       default:
@@ -134,6 +128,6 @@ namespace stage {
     HoldMode &holdMode;
     SustainMode &sustainMode;
     IdleMode &idleMode;
-  };
+  }; // namespace stage
 } // namespace stage
 } // namespace dhe

@@ -23,7 +23,7 @@ class StageEngineTest : public Test {
     MOCK_METHOD(void, output, (float), ());
     MOCK_METHOD(void, showActive, (bool), ());
     MOCK_METHOD(void, showEoc, (bool), ());
-    MOCK_METHOD(bool, trigger, (), (const));
+    MOCK_METHOD(bool, gate, (), (const));
   };
 
   class EventlessMode {
@@ -46,24 +46,24 @@ protected:
   NiceMock<EventlessMode> inputMode{};
   NiceMock<GenerateMode> generateMode{};
   NiceMock<EventlessMode> levelMode{};
-  dhe::stage::StageEngine<Controls, EventlessMode, EventlessMode, GenerateMode, EventlessMode> engine{
+  dhe::stage::StageEngine<Controls, EventlessMode, EventlessMode, GenerateMode, EventlessMode> stageEngine{
       controls, deferMode, inputMode, generateMode, levelMode};
 
   void givenDefer(bool defer) { ON_CALL(controls, defer()).WillByDefault(Return(defer)); }
   void givenInput(float input) { ON_CALL(controls, input()).WillByDefault(Return(input)); }
-  void givenTrigger(bool trigger) { ON_CALL(controls, trigger()).WillByDefault(Return(trigger)); }
+  void givenGate(bool gate) { ON_CALL(controls, gate()).WillByDefault(Return(gate)); }
 };
 
 TEST_F(StageEngineTest, startsInInputMode) {
   EXPECT_CALL(inputMode, execute());
 
-  engine.process(0.F);
+  stageEngine.process(0.F);
 }
 
 class StageEngineInputMode : public StageEngineTest {
   void SetUp() override {
     StageEngineTest::SetUp();
-    engine.process(0.F);
+    stageEngine.process(0.F);
   }
 };
 
@@ -74,21 +74,21 @@ TEST_F(StageEngineInputMode, beginsDeferring_ifDeferRises) {
   EXPECT_CALL(deferMode, enter());
   EXPECT_CALL(deferMode, execute());
 
-  engine.process(0.F);
+  stageEngine.process(0.F);
 }
 
-TEST_F(StageEngineInputMode, executesInputMode_ifTriggerDoesNotRiseAndDeferIsLow) {
+TEST_F(StageEngineInputMode, executesInputMode_ifGateDoesNotRiseAndDeferIsLow) {
   givenDefer(false);
-  givenTrigger(false);
+  givenGate(false);
 
   EXPECT_CALL(inputMode, execute());
 
-  engine.process(0.F);
+  stageEngine.process(0.F);
 }
 
-TEST_F(StageEngineInputMode, beginsGenerating_ifTriggerRisesAndDeferIsLow) {
+TEST_F(StageEngineInputMode, beginsGenerating_ifGateRisesAndDeferIsLow) {
   givenDefer(false);
-  givenTrigger(true);
+  givenGate(true);
 
   auto constexpr input{4.234};
   givenInput(input);
@@ -97,75 +97,59 @@ TEST_F(StageEngineInputMode, beginsGenerating_ifTriggerRisesAndDeferIsLow) {
   EXPECT_CALL(generateMode, enter());
   EXPECT_CALL(generateMode, execute(A<Latch const &>(), A<float>()));
 
-  engine.process(0.F);
+  stageEngine.process(0.F);
 }
 
 class StageEngineDeferMode : public StageEngineTest {
   void SetUp() override {
     StageEngineTest::SetUp();
     givenDefer(true);
-    engine.process(0.F);
+    stageEngine.process(0.F);
   }
 };
 
-TEST_F(StageEngineDeferMode, executesDeferMode_regardlessOfTrigger_ifDeferIsHigh) {
+TEST_F(StageEngineDeferMode, executesDeferMode_regardlessOfGate_ifDeferIsHigh) {
   givenDefer(true);
 
-  givenTrigger(false);
+  givenGate(false);
   EXPECT_CALL(deferMode, execute());
-  engine.process(0.F);
+  stageEngine.process(0.F);
 
-  givenTrigger(true);
+  givenGate(true);
   EXPECT_CALL(deferMode, execute());
-  engine.process(0.F);
+  stageEngine.process(0.F);
 }
 
-TEST_F(StageEngineDeferMode, beginsTrackingInput_ifDeferFalls) {
+TEST_F(StageEngineDeferMode, beginsTrackingInput_ifGateIsLowWhenDeferFalls) {
   givenDefer(false);
+  givenGate(false);
 
   EXPECT_CALL(deferMode, exit());
   EXPECT_CALL(inputMode, enter());
   EXPECT_CALL(inputMode, execute());
 
-  engine.process(0.F);
+  stageEngine.process(0.F);
 }
 
-/**
- * This is a characterization test for a current quirk: On DEFER fall, the engine pretends that TRIG is low, even if it
- * is high. As a result, when DEFER falls, the engine ignores TRIG for that sample.
- *
- * This behavior is a kludge to deal with what I suspect is a mistake elsewhere in the state machine.
- *
- * The mistake: When DEFER falls, the state machine *always* transitions to TrackingInput, regardness of TRIG state.
- *
- * The kludge: When DEFER falls, pretend that TRIG was low so that, on the subsequent sample, the continuing EOC from
- * the upstream module looks like TRIG rise, and starts this module generating.
- */
-TEST_F(StageEngineDeferMode, tracksInputInsteadOfGenerating_ifTrigRisesWhenDeferFalls) {
-  givenDefer(true);
-  givenTrigger(false);
-  engine.process(0.F); // Get trigger to be low while defer is high
-
-  givenTrigger(true); // Generate TRIG rise...
-  givenDefer(false);  // ... along with DEFER fall
+TEST_F(StageEngineDeferMode, beginsGenerating_ifGateIsHighWhenDeferFalls) {
+  givenDefer(false);
+  givenGate(true);
 
   EXPECT_CALL(deferMode, exit());
-  EXPECT_CALL(inputMode, enter());
-  EXPECT_CALL(inputMode, execute());
-  EXPECT_CALL(generateMode, enter()).Times(0);
-  EXPECT_CALL(generateMode, execute(A<Latch const &>(), A<float>())).Times(0);
+  EXPECT_CALL(generateMode, enter());
+  EXPECT_CALL(generateMode, execute(A<Latch const &>(), A<float>()));
 
-  engine.process(0.F);
+  stageEngine.process(0.F);
 }
 
 class StageEngineGenerateMode : public StageEngineTest {
   void SetUp() override {
     StageEngineTest::SetUp();
     ON_CALL(generateMode, execute(A<Latch const &>(), A<float>())).WillByDefault(Return(Event::Generated));
-    givenTrigger(true);
-    engine.process(0.F);
-    givenTrigger(false);
-    engine.process(0.F);
+    givenGate(true);
+    stageEngine.process(0.F);
+    givenGate(false);
+    stageEngine.process(0.F);
   }
 };
 
@@ -176,40 +160,40 @@ TEST_F(StageEngineGenerateMode, beginsDeferring_ifDeferRises) {
   EXPECT_CALL(deferMode, enter());
   EXPECT_CALL(deferMode, execute());
 
-  engine.process(0.F);
+  stageEngine.process(0.F);
 }
 
-TEST_F(StageEngineGenerateMode, executesGenerateMode_ifDeferIsLowAndTriggerDoesNotRise) {
+TEST_F(StageEngineGenerateMode, executesGenerateMode_ifDeferIsLowAndGateDoesNotRise) {
   auto constexpr sampleTime{0.04534F};
 
   givenDefer(false);
-  givenTrigger(false);
+  givenGate(false);
 
   EXPECT_CALL(generateMode, execute(A<Latch const &>(), sampleTime));
 
-  engine.process(sampleTime);
+  stageEngine.process(sampleTime);
 }
 
-TEST_F(StageEngineGenerateMode, passesTriggerStateToGenerateMode_ifDeferIsLowAndTriggerDoesNotRise) {
+TEST_F(StageEngineGenerateMode, passesGateStateToGenerateMode_ifDeferIsLowAndGateDoesNotRise) {
   givenDefer(false);
-  givenTrigger(false);
-  engine.process(0.F); // Set latch low
+  givenGate(false);
+  stageEngine.process(0.F); // Set latch low
 
-  givenTrigger(false); // Low with no edge
+  givenGate(false); // Low with no edge
   EXPECT_CALL(generateMode, execute(Latch{false, false}, A<float>()));
-  engine.process(0.F);
+  stageEngine.process(0.F);
 
-  givenTrigger(true); // Rise
+  givenGate(true); // Rise
   EXPECT_CALL(generateMode, execute(Latch{true, true}, A<float>()));
-  engine.process(0.F);
+  stageEngine.process(0.F);
 
-  givenTrigger(true); // High with no edge
+  givenGate(true); // High with no edge
   EXPECT_CALL(generateMode, execute(Latch{true, false}, A<float>()));
-  engine.process(0.F);
+  stageEngine.process(0.F);
 
-  givenTrigger(false); // Fall
+  givenGate(false); // Fall
   EXPECT_CALL(generateMode, execute(Latch{false, true}, A<float>()));
-  engine.process(0.F);
+  stageEngine.process(0.F);
 }
 
 TEST_F(StageEngineGenerateMode, raisesEoc_ifDoneGenerating) {
@@ -217,7 +201,7 @@ TEST_F(StageEngineGenerateMode, raisesEoc_ifDoneGenerating) {
 
   EXPECT_CALL(controls, showEoc(true));
 
-  engine.process(0.F);
+  stageEngine.process(0.F);
 }
 
 class StageEngineLevelMode : public StageEngineTest {
@@ -225,14 +209,14 @@ class StageEngineLevelMode : public StageEngineTest {
     StageEngineTest::SetUp();
 
     // Start generating
-    givenTrigger(true);
+    givenGate(true);
     ON_CALL(generateMode, execute(A<Latch const &>(), A<float>())).WillByDefault(Return(Event::Generated));
-    engine.process(0.F);
+    stageEngine.process(0.F);
 
     // Finish generating, which enters TrackingLevel mode
-    givenTrigger(false);
+    givenGate(false);
     ON_CALL(generateMode, execute(A<Latch const &>(), A<float>())).WillByDefault(Return(Event::Completed));
-    engine.process(0.F);
+    stageEngine.process(0.F);
   }
 };
 
@@ -243,25 +227,25 @@ TEST_F(StageEngineLevelMode, beginsDeferring_ifDeferRises) {
   EXPECT_CALL(deferMode, enter());
   EXPECT_CALL(deferMode, execute());
 
-  engine.process(0.F);
+  stageEngine.process(0.F);
 }
 
-TEST_F(StageEngineLevelMode, executesLevelMode_ifTriggerDoesNotRiseAndDeferIsLow) {
+TEST_F(StageEngineLevelMode, executesLevelMode_ifGateDoesNotRiseAndDeferIsLow) {
   givenDefer(false);
-  givenTrigger(false);
+  givenGate(false);
 
   EXPECT_CALL(levelMode, execute());
 
-  engine.process(0.F);
+  stageEngine.process(0.F);
 }
 
-TEST_F(StageEngineLevelMode, beginsGenerating_ifTriggerRisesAndDeferIsLow) {
+TEST_F(StageEngineLevelMode, beginsGenerating_ifGateRisesAndDeferIsLow) {
   givenDefer(false);
-  givenTrigger(true);
+  givenGate(true);
 
   EXPECT_CALL(levelMode, exit());
   EXPECT_CALL(generateMode, enter());
   EXPECT_CALL(generateMode, execute(A<Latch const &>(), A<float>()));
 
-  engine.process(0.F);
+  stageEngine.process(0.F);
 }

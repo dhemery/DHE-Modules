@@ -25,6 +25,8 @@ namespace stage {
 
     auto duration() const -> float { return dhe::duration(params[DurationKnob], mediumDurationRange); }
 
+    auto gate() const -> bool { return isHigh(inputs[TriggerInput]); }
+
     auto input() const -> float { return voltageAt(inputs[EnvelopeInput]); }
 
     auto level() const -> float { return dhe::level(params[LevelKnob], unipolarSignalRange); }
@@ -42,8 +44,6 @@ namespace stage {
     }
 
     auto taper() const -> taper::VariableTaper const * { return &taper::variableJTaper; };
-
-    auto trigger() const -> bool { return isHigh(inputs[TriggerInput]); }
 
     enum ParameterIds { DurationKnob, LevelKnob, CurveKnob, ParameterCount };
 

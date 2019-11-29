@@ -24,25 +24,27 @@ namespace stage {
 
     void process(float sampleTime) {
       defer.clock(controls.defer());
-      trigger.clock(controls.trigger());
+      gate.clock(controls.gate() && !defer.isHigh());
 
-      auto const newState = identifyState();
-      if (mode != newState) {
-        enter(newState);
+      auto const newMode = identifyMode();
+      if (mode != newMode) {
+        enter(newMode);
       }
 
       switch (mode) {
-      case Mode::Generate:
-        generate(sampleTime);
-        break;
-      case Mode::Level:
-        levelMode.execute();
-        break;
       case Mode::Defer:
         deferMode.execute();
         break;
+      case Mode::Generate: {
+        if (generateMode.execute(gate, sampleTime) == Event::Completed) {
+          enter(Mode::Level);
+        }
+      } break;
       case Mode::Input:
         inputMode.execute();
+        break;
+      case Mode::Level:
+        levelMode.execute();
         break;
       default:
         break;
@@ -53,28 +55,23 @@ namespace stage {
     }
 
   private:
-    // TODO: Check for TRIG rise before checking for DEFER fall, so that we start generating as soon as DEFER falls.
-    auto identifyState() -> Mode {
+    auto identifyMode() -> Mode {
       if (defer.isHigh()) {
         return Mode::Defer;
       }
-      if (defer.isFall()) {
-        return Mode::Input;
-      }
-      if (trigger.isRise()) {
+      if (gate.isRise()) {
         return Mode::Generate;
       }
-      return mode;
+      return defer.isFall() ? Mode::Input : mode;
     }
 
-    void enter(Mode newState) {
+    void enter(Mode newMode) {
       switch (mode) {
-      case Mode::Generate:
-        generateMode.exit();
-        break;
       case Mode::Defer:
         deferMode.exit();
-        trigger.clock(false);
+        break;
+      case Mode::Generate:
+        generateMode.exit();
         break;
       case Mode::Input:
         inputMode.exit();
@@ -86,7 +83,7 @@ namespace stage {
         break;
       }
 
-      mode = newState;
+      mode = newMode;
 
       switch (mode) {
       case Mode::Defer:
@@ -99,6 +96,7 @@ namespace stage {
         inputMode.enter();
         break;
       case Mode::Level:
+        eocTimer.reset();
         levelMode.enter();
         break;
       default:
@@ -106,18 +104,10 @@ namespace stage {
       }
     }
 
-    void generate(float sampleTime) {
-      auto const event = generateMode.execute(trigger, sampleTime);
-      if (event == Event::Completed) {
-        eocTimer.reset();
-        enter(Mode::Level);
-      }
-    }
-
     PhaseTimer eocTimer{1.F};
     Mode mode{Mode::Input};
     Latch defer{};
-    Latch trigger{};
+    Latch gate{};
     Controls &controls;
     DeferMode &deferMode;
     InputMode &inputMode;
