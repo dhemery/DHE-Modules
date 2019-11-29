@@ -1,0 +1,52 @@
+@startuml
+
+title Hostage State Model
+
+Defer -d-> Available : DEFER↓
+Available -u-> Defer : DEFER↑
+
+state Available {
+    state Input
+    state deferFall <<choice>>
+
+    [*] --> deferFall : DEFER↓
+    deferFall --> Hold : [GATE=High]\n[MODE=Hold]
+    deferFall --> Idle : [GATE=Low]\n[MODE=Sustain]
+    deferFall --> Input : [GATE=Low]\n[MODE=Hold]
+    deferFall --> Sustain : [GATE=High]\n[MODE=Sustain]
+
+    Hold --> Hold : GATE↑\n[MODE=Hold]
+    Hold --> Idle : Hold\nTimer\nDone
+    Hold -l-> Sustain : GATE↑\n[MODE=Sustain]
+
+    Idle --> Hold : GATE↑\n[MODE=Hold]
+    Idle --> Sustain : GATE↑\n[MODE=Sustain]
+
+    note top of Input: Initial state
+    Input --> Hold : GATE↑\n[MODE=Hold]
+    Input --> Sustain : GATE↑\n[MODE=Sustain]
+
+    Sustain --> Idle : GATE↓
+}
+
+Defer : Active: Yes
+Defer: Execute: IN→OUT
+
+Hold : Active: Yes
+Hold: Enter: IN→OUT
+Hold : Enter: Start hold timer
+Hold: Execute: No op
+
+Idle: Active: No
+Idle: Enter: Start EOC
+Idle: Execute: No op
+
+Input: Active: No
+Input: Execute: IN→OUT
+
+Sustain : Active: Yes
+Sustain: Enter: IN→OUT
+Sustain: Execute: No op
+
+@enduml
+

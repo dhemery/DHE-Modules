@@ -1,0 +1,37 @@
+@startuml
+
+Defer --> Available : DEFER↓
+Available --> Defer : DEFER↑
+
+state Available {
+    state deferFall <<choice>>
+    [*] --> deferFall : DEFER↓
+    deferFall --> Input : [GATE=High]
+    deferFall --> Generate : [GATE=Low]
+
+    Generate -> Generate : GATE↑
+    Generate -> Level : Curve\nDone
+
+    note top of Input: Initial state
+    Input -> Generate : GATE↑
+
+    Level --> Generate : GATE↑
+}
+
+Defer: Active: Yes
+Defer: Execute: IN→OUT
+
+Generate: Active: Yes
+Generate: Enter: Start curve
+Generate: Enter: IN→OUT
+Generate: Execute: curve→OUT
+
+Input: Active: No
+Input: Execute: IN→OUT
+
+Level : Active: No
+Level: Enter: Start EOC
+Level : Execute: LEVEL→OUT
+
+@enduml
+
