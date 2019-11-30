@@ -1,7 +1,7 @@
 #pragma once
 
 #include "FuncModule.h"
-#include "FuncSteppers.h"
+#include "RangeSteppers.h"
 #include "widgets/Panel.h"
 
 namespace dhe {
