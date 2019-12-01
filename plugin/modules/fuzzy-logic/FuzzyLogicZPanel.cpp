@@ -1,8 +1,14 @@
 #include "FuzzyLogicZPanel.h"
 
+#include "FuzzyLogicZ.h"
+
 namespace dhe {
 
-FuzzyLogicZPanel::FuzzyLogicZPanel(FuzzyLogicZ *fuzzy) : Panel{fuzzy, hp} {
+FuzzyLogicZPanel::FuzzyLogicZPanel(rack::engine::Module *module) {
+  setModule(module);
+  setPanel(backgroundSvg<FuzzyLogicZPanel>());
+  installScrews(this);
+
   auto const abOuterColumn = hp2mm(1.5F);
   auto const abButtonColumn = hp2mm(3.F);
   auto const abInnerColumn = hp2mm(3.25F);

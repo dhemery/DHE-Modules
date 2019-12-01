@@ -1,13 +1,12 @@
 #pragma once
 
-#include "FuzzyLogicZ.h"
 #include "widgets/Panel.h"
 
 namespace dhe {
 
 class FuzzyLogicZPanel : public Panel<FuzzyLogicZPanel> {
 public:
-  explicit FuzzyLogicZPanel(FuzzyLogicZ *fuzzy);
+  explicit FuzzyLogicZPanel(rack::engine::Module *module);
   static constexpr auto moduleSlug = "fuzzy-logic-z";
   static constexpr auto hp = 9;
 };

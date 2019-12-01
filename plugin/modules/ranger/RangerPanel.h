@@ -1,13 +1,12 @@
 #pragma once
 
-#include "Ranger.h"
 #include "widgets/Panel.h"
 
 namespace dhe {
 
 class RangerPanel : public Panel<RangerPanel> {
 public:
-  explicit RangerPanel(Ranger *module);
+  explicit RangerPanel(rack::engine::Module *module);
   static constexpr auto moduleSlug = "ranger";
   static constexpr auto hp = 6;
 };

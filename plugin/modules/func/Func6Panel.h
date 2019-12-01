@@ -1,6 +1,6 @@
 #pragma once
 
-#include "FuncModule.h"
+#include "FuncControls.h"
 #include "RangeSteppers.h"
 #include "widgets/Panel.h"
 
@@ -9,14 +9,18 @@ namespace func {
 
   class Func6Panel : public Panel<Func6Panel> {
   public:
-    explicit Func6Panel(FuncModule<6> *func6) : Panel<Func6Panel>{func6, hp} {
-      auto widgetRightEdge = width();
+    explicit Func6Panel(rack::engine::Module *module) {
+      setModule(module);
+      setPanel(backgroundSvg<Func6Panel>());
+      installScrews(this);
 
-      auto const column3 = widgetRightEdge / 2.F;
-      auto const column1 = widgetRightEdge / 7.F;
-      auto const column5 = widgetRightEdge - column1;
+      auto width = hp2mm(hp);
+
+      auto const column3 = width / 2.F;
+      auto const column1 = width / 7.F;
+      auto const column5 = width - column1;
       auto const column2 = (column3 - column1) / 2.F + column1;
-      auto const column4 = widgetRightEdge - column2;
+      auto const column4 = width - column2;
 
       auto constexpr top = 23.F;
       auto constexpr bottom = 108.F;

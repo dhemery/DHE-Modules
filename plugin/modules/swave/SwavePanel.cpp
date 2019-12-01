@@ -1,11 +1,17 @@
 #include "SwavePanel.h"
 
+#include "Swave.h"
+
 namespace dhe {
 
-SwavePanel::SwavePanel(Swave *module) : Panel{module, hp} {
-  auto widgetRightEdge = width();
+SwavePanel::SwavePanel(rack::engine::Module *module) {
+  setModule(module);
+  setPanel(backgroundSvg<SwavePanel>());
+  installScrews(this);
 
-  auto x = widgetRightEdge / 2.F;
+  auto width = hp2mm(hp);
+
+  auto x = width / 2.F;
 
   auto y = 25.F;
   auto dy = 18.5F;

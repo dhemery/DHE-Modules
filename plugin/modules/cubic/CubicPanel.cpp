@@ -2,11 +2,15 @@
 
 namespace dhe {
 
-CubicPanel::CubicPanel(Cubic *cubic) : Panel{cubic, hp} {
-  auto widgetRightEdge = width();
+CubicPanel::CubicPanel(rack::engine::Module *module) {
+  setModule(module);
+  setPanel(backgroundSvg<CubicPanel>());
+  installScrews(this);
 
-  auto column1 = width() / 4.F + 0.333333F;
-  auto column2 = widgetRightEdge - column1;
+  auto width = hp2mm(hp);
+
+  auto column1 = width / 4.F + 0.333333F;
+  auto column2 = width - column1;
 
   auto y = 20.F;
   auto dy = 15.F;

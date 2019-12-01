@@ -1,10 +1,16 @@
 #include "RangerPanel.h"
 
+#include "Ranger.h"
+
 namespace dhe {
 
-RangerPanel::RangerPanel(Ranger *module) : Panel{module, hp} {
+RangerPanel::RangerPanel(rack::engine::Module *module) {
+  setModule(module);
+  setPanel(backgroundSvg<RangerPanel>());
+  installScrews(this);
+
   auto constexpr left = hp2mm(1.5F);
-  auto const right = width() - left;
+  auto const right = hp2mm(hp) - left;
 
   auto y = 14.5F;
   auto constexpr dy = 15.F;

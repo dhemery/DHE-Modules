@@ -10,12 +10,16 @@ namespace stage {
     using Controls = BoosterStageControls;
 
   public:
-    explicit BoosterStagePanel(rack::engine::Module *module) : Panel{module, hp} {
-      auto widgetRightEdge = width();
+    explicit BoosterStagePanel(rack::engine::Module *module) {
+      setModule(module);
+      setPanel(backgroundSvg<BoosterStagePanel>());
+      installScrews(this);
 
-      auto column1 = widgetRightEdge / 6.F + 0.3333333F;
-      auto column3 = widgetRightEdge / 2.F;
-      auto column5 = widgetRightEdge - column1;
+      auto width = hp2mm(hp);
+
+      auto column1 = width / 6.F + 0.3333333F;
+      auto column3 = width / 2.F;
+      auto column5 = width - column1;
       auto buttonPortDistance = 7.891F;
       auto column2 = column1 + buttonPortDistance;
       auto column4 = column5 - buttonPortDistance;

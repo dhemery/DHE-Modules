@@ -1,13 +1,12 @@
 #pragma once
 
-#include "Tapers.h"
 #include "widgets/Panel.h"
 
 namespace dhe {
 
 class TapersPanel : public Panel<TapersPanel> {
 public:
-  explicit TapersPanel(Tapers *module);
+  explicit TapersPanel(rack::engine::Module *module);
   static constexpr auto moduleSlug = "tapers";
   static constexpr auto hp = 9;
 };

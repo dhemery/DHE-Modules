@@ -12,6 +12,8 @@ namespace curve_sequencer {
   auto constexpr stepX = hp2mm(10.F);
   auto constexpr stepDx = hp2mm(2.25F);
 
+  using ProgressLight = rack::componentlibrary::SmallLight<rack::componentlibrary::GreenRedLight>;
+
   template <typename P> class GenerateModeStepper : public Toggle<P, modeCount> {
   public:
     GenerateModeStepper() : Toggle<P, modeCount>("stepper-mode") {}
@@ -78,7 +80,11 @@ namespace curve_sequencer {
     static auto constexpr sequenceControlsWidth = 13.F;
     static auto constexpr hp = static_cast<int>(sequenceControlsWidth + N * stepWidth);
 
-    CurveSequencerPanel(rack::engine::Module *module) : Panel<CurveSequencerPanel<N>>(module, hp) {
+    CurveSequencerPanel(rack::engine::Module *module) {
+      this->setModule(module);
+      this->setPanel(backgroundSvg<CurveSequencerPanel<N>>());
+      installScrews(this);
+
       auto constexpr left = hp2mm(2.F);
       auto constexpr right = hp2mm(hp - 2.F);
       auto constexpr top = hp2mm(4.F);
@@ -127,7 +133,7 @@ namespace curve_sequencer {
 
       for (float step = 0; step < N; step++) {
         auto const x = stepX + stepDx * (float) step;
-        this->template light<rack::componentlibrary::GreenRedLight>(x, activeY, Controls::ProgressLights + step + step);
+        this->template light<ProgressLight>(x, activeY, Controls::ProgressLights + step + step);
 
         this->template toggle<GenerateModeStepper>(x, generatingModeY, Controls::ModeSwitches + step);
         this->template toggle<SustainModeStepper>(x, sustainingModeY, Controls::ConditionSwitches + step);

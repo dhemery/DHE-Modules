@@ -1,14 +1,20 @@
 #include "XycloidPanel.h"
 
+#include "Xycloid.h"
+
 namespace dhe {
 
-XycloidPanel::XycloidPanel(Xycloid *module) : Panel{module, hp} {
-  auto const widgetRightEdge = width();
+XycloidPanel::XycloidPanel(rack::engine::Module *module) {
+  setModule(module);
+  setPanel(backgroundSvg<XycloidPanel>());
+  installScrews(this);
 
-  auto const column1 = widgetRightEdge / 7.F;
-  auto const column4 = widgetRightEdge - column1;
+  auto constexpr width = hp2mm(hp);
+
+  auto const column1 = width / 7.F;
+  auto const column4 = width - column1;
   auto const column2 = (column4 - column1) / 3.F + column1;
-  auto const column3 = widgetRightEdge - column2;
+  auto const column3 = width - column2;
 
   auto y = 25.F;
   auto dy = 18.5F;

@@ -1,13 +1,19 @@
 #include "TapersPanel.h"
 
+#include "Tapers.h"
+
 namespace dhe {
 
-TapersPanel::TapersPanel(Tapers *module) : Panel{module, hp} {
-  auto widgetRightEdge = width();
+TapersPanel::TapersPanel(rack::engine::Module *module) {
+  setModule(module);
+  setPanel(backgroundSvg<TapersPanel>());
+  installScrews(this);
 
-  auto column1 = width() / 5.F + 0.333333333F;
-  auto column2 = widgetRightEdge / 2.F;
-  auto column3 = widgetRightEdge - column1;
+  auto width = hp2mm(hp);
+
+  auto column1 = width / 5.F + 0.333333333F;
+  auto column2 = width / 2.F;
+  auto column3 = width - column1;
 
   auto y = 24.F;
   auto dy = 16.F;

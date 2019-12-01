@@ -13,7 +13,7 @@ static inline auto loadSvg(std::string const &assetPath) -> std::shared_ptr<rack
   return APP->window->loadSvg(pluginAssetDir + assetPath);
 }
 
-template <typename P> auto panelSvg() -> std::shared_ptr<rack::Svg> {
+template <typename P> auto backgroundSvg() -> std::shared_ptr<rack::Svg> {
   return loadSvg(std::string{P::moduleSlug} + ".svg");
 }
 

@@ -1,8 +1,14 @@
 #include "GatorPanel.h"
 
+#include "Gator.h"
+
 namespace dhe {
 
-GatorPanel::GatorPanel(Gator *gator) : Panel{gator, hp} {
+GatorPanel::GatorPanel(rack::engine::Module *module) {
+  setModule(module);
+  setPanel(backgroundSvg<GatorPanel>());
+  installScrews(this);
+
   auto const top = hp2mm(3.5F);
   auto const dy = hp2mm(1.75F);
 

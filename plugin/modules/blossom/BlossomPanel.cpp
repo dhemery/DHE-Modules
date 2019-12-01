@@ -1,13 +1,17 @@
 #include "BlossomPanel.h"
 
 namespace dhe {
-BlossomPanel::BlossomPanel(Blossom *blossom) : Panel{blossom, hp} {
-  auto const widgetRightEdge = width();
+BlossomPanel::BlossomPanel(rack::engine::Module *module) {
+  setModule(module);
+  setPanel(backgroundSvg<BlossomPanel>());
+  installScrews(this);
 
-  auto const column1 = widgetRightEdge / 7.F;
-  auto const column4 = widgetRightEdge - column1;
+  auto const width = hp2mm(hp);
+
+  auto const column1 = width / 7.F;
+  auto const column4 = width - column1;
   auto const column2 = (column4 - column1) / 3.F + column1;
-  auto const column3 = widgetRightEdge - column2;
+  auto const column3 = width - column2;
 
   auto y = 25.F;
   auto dy = 18.5F;

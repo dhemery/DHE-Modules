@@ -10,12 +10,16 @@ namespace stage {
     using Controls = StageControls;
 
   public:
-    explicit StagePanel(rack::engine::Module *module) : Panel{module, hp} {
-      auto widgetRightEdge = width();
+    explicit StagePanel(rack::engine::Module *module) {
+      setModule(module);
+      setPanel(backgroundSvg<StagePanel>());
+      installScrews(this);
 
-      auto column1 = width() / 4.F + 0.333333F;
-      auto column2 = widgetRightEdge / 2.F;
-      auto column3 = widgetRightEdge - column1;
+      auto width = hp2mm(hp);
+
+      auto column1 = width / 4.F + 0.333333F;
+      auto column2 = width / 2.F;
+      auto column3 = width - column1;
 
       auto y = 25.F;
       auto dy = 18.5F;
