@@ -8,9 +8,11 @@
 namespace dhe {
 
 FuzzyLogicHPanel::FuzzyLogicHPanel(rack::engine::Module *module) {
+  auto constexpr hp = 9;
+
   setModule(module);
   setPanel(backgroundSvg<FuzzyLogicHPanel>());
-  installScrews(this);
+  installScrews(this, hp);
 
   auto const abOuterColumn = hp2mm(1.5F);
   auto const abButtonColumn = hp2mm(3.F);

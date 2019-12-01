@@ -85,14 +85,15 @@ namespace curve_sequencer {
 
   public:
     static std::string const moduleSlug;
-    static auto constexpr stepWidth = 2.25F;
-    static auto constexpr sequenceControlsWidth = 13.F;
-    static auto constexpr hp = static_cast<int>(sequenceControlsWidth + N * stepWidth);
 
     CurveSequencerPanel(rack::engine::Module *module) {
+      static auto constexpr stepWidth = 2.25F;
+      static auto constexpr sequenceControlsWidth = 13.F;
+      static auto constexpr hp = static_cast<int>(sequenceControlsWidth + N * stepWidth);
+
       this->setModule(module);
       this->setPanel(backgroundSvg<CurveSequencerPanel<N>>());
-      installScrews(this);
+      installScrews(this, hp);
 
       auto constexpr left = hp2mm(2.F);
       auto constexpr right = hp2mm(hp - 2.F);

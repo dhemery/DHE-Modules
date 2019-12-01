@@ -13,9 +13,11 @@ namespace stage {
 
   public:
     explicit StagePanel(rack::engine::Module *module) {
+      auto constexpr hp = 5;
+
       setModule(module);
       setPanel(backgroundSvg<StagePanel>());
-      installScrews(this);
+      installScrews(this, hp);
 
       auto width = hp2mm(hp);
 
@@ -49,7 +51,6 @@ namespace stage {
       installOutput(this, module, column3, y, Controls::EnvelopeOutput);
     }
     static constexpr auto moduleSlug = "stage";
-    static constexpr auto hp = 5;
   };
 } // namespace stage
 } // namespace dhe

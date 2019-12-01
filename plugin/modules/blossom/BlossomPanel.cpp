@@ -8,16 +8,18 @@
 namespace dhe {
 
 BlossomPanel::BlossomPanel(rack::engine::Module *module) {
+  auto constexpr hp = 11;
+
   setModule(module);
   setPanel(backgroundSvg<BlossomPanel>());
-  installScrews(this);
+  installScrews(this, hp);
 
-  auto const width = hp2mm(hp);
+  auto constexpr width = hp2mm(hp);
 
-  auto const column1 = width / 7.F;
-  auto const column4 = width - column1;
-  auto const column2 = (column4 - column1) / 3.F + column1;
-  auto const column3 = width - column2;
+  auto constexpr column1 = width / 7.F;
+  auto constexpr column4 = width - column1;
+  auto constexpr column2 = (column4 - column1) / 3.F + column1;
+  auto constexpr column3 = width - column2;
 
   auto y = 25.F;
   auto dy = 18.5F;

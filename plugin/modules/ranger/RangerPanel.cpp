@@ -8,9 +8,11 @@
 namespace dhe {
 
 RangerPanel::RangerPanel(rack::engine::Module *module) {
+  auto constexpr hp = 6;
+
   setModule(module);
   setPanel(backgroundSvg<RangerPanel>());
-  installScrews(this);
+  installScrews(this, hp);
 
   auto constexpr left = hp2mm(1.5F);
   auto const right = hp2mm(hp) - left;

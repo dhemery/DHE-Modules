@@ -8,13 +8,15 @@
 namespace dhe {
 
 SwavePanel::SwavePanel(rack::engine::Module *module) {
+  auto constexpr hp = 4;
+
   setModule(module);
   setPanel(backgroundSvg<SwavePanel>());
-  installScrews(this);
+  installScrews(this, hp);
 
-  auto width = hp2mm(hp);
+  auto constexpr width = hp2mm(hp);
 
-  auto x = width / 2.F;
+  auto constexpr x = width / 2.F;
 
   auto y = 25.F;
   auto dy = 18.5F;

@@ -11,9 +11,11 @@ namespace func {
   class Func1Panel : public rack::app::ModuleWidget {
   public:
     explicit Func1Panel(rack::engine::Module *module) {
+      auto constexpr hp = 3;
+
       setModule(module);
       setPanel(backgroundSvg<Func1Panel>());
-      installScrews(this);
+      installScrews(this, hp);
 
       auto const width = hp2mm(hp);
 
@@ -50,7 +52,6 @@ namespace func {
     }
 
     static constexpr auto moduleSlug = "func";
-    static constexpr auto hp = 3;
   };
 } // namespace func
 } // namespace dhe

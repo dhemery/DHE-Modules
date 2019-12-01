@@ -8,7 +8,6 @@ class SwavePanel : public rack::app::ModuleWidget {
 public:
   explicit SwavePanel(rack::engine::Module *module);
   static constexpr auto moduleSlug = "swave";
-  static constexpr auto hp = 4;
 };
 
 } // namespace dhe

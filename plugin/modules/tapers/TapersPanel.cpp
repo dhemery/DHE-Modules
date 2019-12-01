@@ -8,9 +8,11 @@
 namespace dhe {
 
 TapersPanel::TapersPanel(rack::engine::Module *module) {
+  auto constexpr hp = 9;
+
   setModule(module);
   setPanel(backgroundSvg<TapersPanel>());
-  installScrews(this);
+  installScrews(this, hp);
 
   auto width = hp2mm(hp);
 

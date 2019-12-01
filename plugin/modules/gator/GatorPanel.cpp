@@ -9,9 +9,11 @@
 namespace dhe {
 
 GatorPanel::GatorPanel(rack::engine::Module *module) {
+  auto constexpr hp = 9;
+
   setModule(module);
   setPanel(backgroundSvg<GatorPanel>());
-  installScrews(this);
+  installScrews(this, hp);
 
   auto const top = hp2mm(3.5F);
   auto const dy = hp2mm(1.75F);

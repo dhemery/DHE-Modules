@@ -7,9 +7,11 @@
 namespace dhe {
 
 CubicPanel::CubicPanel(rack::engine::Module *module) {
+  auto constexpr hp = 5;
+
   setModule(module);
   setPanel(backgroundSvg<CubicPanel>());
-  installScrews(this);
+  installScrews(this, hp);
 
   auto width = hp2mm(hp);
 

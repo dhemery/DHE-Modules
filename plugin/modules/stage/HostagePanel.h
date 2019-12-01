@@ -12,9 +12,11 @@ namespace stage {
 
   public:
     HostagePanel(rack::engine::Module *module) {
+      auto constexpr hp = 5;
+
       setModule(module);
       setPanel(backgroundSvg<HostagePanel>());
-      installScrews(this);
+      installScrews(this, hp);
 
       auto width = hp2mm(hp);
 
@@ -49,7 +51,6 @@ namespace stage {
       installOutput(this, module, column3, y, Controls::EnvelopeOutput);
     }
     static constexpr auto moduleSlug = "hostage";
-    static constexpr auto hp = 5;
   };
 } // namespace stage
 } // namespace dhe

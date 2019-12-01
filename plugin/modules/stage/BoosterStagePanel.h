@@ -12,9 +12,11 @@ namespace stage {
 
   public:
     explicit BoosterStagePanel(rack::engine::Module *module) {
+      auto constexpr hp = 8;
+
       setModule(module);
       setPanel(backgroundSvg<BoosterStagePanel>());
-      installScrews(this);
+      installScrews(this, hp);
 
       auto width = hp2mm(hp);
 
@@ -64,7 +66,6 @@ namespace stage {
       installOutput(this, module, column5, y, Controls::EnvelopeOutput);
     }
     static constexpr auto moduleSlug = "booster-stage";
-    static constexpr auto hp = 8;
   };
 
 } // namespace stage
