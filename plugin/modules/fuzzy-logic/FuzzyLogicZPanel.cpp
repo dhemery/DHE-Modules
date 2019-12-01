@@ -11,7 +11,7 @@ FuzzyLogicZPanel::FuzzyLogicZPanel(rack::engine::Module *module) {
   auto constexpr hp = 9;
 
   setModule(module);
-  setPanel(backgroundSvg<FuzzyLogicZPanel>());
+  setPanel(backgroundSvg(moduleSlug));
   installScrews(this, hp);
 
   auto const abOuterColumn = hp2mm(1.5F);
@@ -32,7 +32,7 @@ FuzzyLogicZPanel::FuzzyLogicZPanel(rack::engine::Module *module) {
   installInput(this, module, cdOuterColumn, y, FuzzyLogicZ::AInputs + 1);
 
   y = top + 0.5F * dy;
-  install<Toggle, 2>(this, module, switchColumn, y, FuzzyLogicZ::LevelRangeSwitch);
+  install<Toggle<2>>(this, module, switchColumn, y, FuzzyLogicZ::LevelRangeSwitch);
 
   y = top + 1.F * dy;
   installInput(this, module, abOuterColumn, y, FuzzyLogicZ::BInputs + 0);

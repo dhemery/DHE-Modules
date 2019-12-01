@@ -11,7 +11,7 @@ XycloidPanel::XycloidPanel(rack::engine::Module *module) {
   auto constexpr hp = 11;
 
   setModule(module);
-  setPanel(backgroundSvg<XycloidPanel>());
+  setPanel(backgroundSvg(moduleSlug));
   installScrews(this, hp);
 
   auto constexpr width = hp2mm(hp);
@@ -32,13 +32,13 @@ XycloidPanel::XycloidPanel(rack::engine::Module *module) {
   installInput(this, module, column1, y, Xycloid::RatioCvInput);
   install<TinyKnob>(this, module, column2, y, Xycloid::RatioAvKnob);
   install<LargeKnob>(this, module, column3, y, Xycloid::RatioKnob);
-  install<Toggle, 2>(this, module, column4, y, Xycloid::FreeRatioSwitch);
+  install<Toggle<2>>(this, module, column4, y, Xycloid::FreeRatioSwitch);
 
   y += dy;
   installInput(this, module, column1, y, Xycloid::DepthCvInput);
   install<TinyKnob>(this, module, column2, y, Xycloid::DepthAvKnob);
   install<LargeKnob>(this, module, column3, y, Xycloid::DepthKnob);
-  install<Toggle, 3>(this, module, column4, y, Xycloid::DirectionSwitch);
+  install<Toggle<3>>(this, module, column4, y, Xycloid::DirectionSwitch);
 
   y += dy;
   installInput(this, module, column1, y, Xycloid::PhaseCvInput);
@@ -52,13 +52,13 @@ XycloidPanel::XycloidPanel(rack::engine::Module *module) {
   y += dy;
   installInput(this, module, column1, y, Xycloid::XGainCvInput);
   install<SmallKnob>(this, module, column2, y, Xycloid::XGainKnob);
-  install<Toggle, 2>(this, module, column3, y, Xycloid::XRangeSwitch);
+  install<Toggle<2>>(this, module, column3, y, Xycloid::XRangeSwitch);
   installOutput(this, module, column4, y + outputPortOffset, Xycloid::XOutput);
 
   y += dy;
   installInput(this, module, column1, y, Xycloid::YGainCvInput);
   install<SmallKnob>(this, module, column2, y, Xycloid::YGainKnob);
-  install<Toggle, 2>(this, module, column3, y, Xycloid::YRangeSwitch);
+  install<Toggle<2>>(this, module, column3, y, Xycloid::YRangeSwitch);
   installOutput(this, module, column4, y + outputPortOffset, Xycloid::YOutput);
 }
 

@@ -9,14 +9,13 @@ namespace stage {
 
   class StagePanel : public rack::app::ModuleWidget {
     using Controls = StageControls;
-    using MainKnob = LargeKnob<StagePanel>;
 
   public:
     explicit StagePanel(rack::engine::Module *module) {
       auto constexpr hp = 5;
 
       setModule(module);
-      setPanel(backgroundSvg<StagePanel>());
+      setPanel(backgroundSvg(moduleSlug));
       installScrews(this, hp);
 
       auto width = hp2mm(hp);

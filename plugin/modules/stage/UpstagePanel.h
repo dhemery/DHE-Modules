@@ -8,14 +8,13 @@ namespace dhe {
 namespace stage {
   class UpstagePanel : public rack::app::ModuleWidget {
     using Controls = UpstageControls;
-    using MainKnob = LargeKnob<UpstagePanel>;
 
   public:
     UpstagePanel(rack::engine::Module *module) {
       auto constexpr hp = 5;
 
       setModule(module);
-      setPanel(backgroundSvg<UpstagePanel>());
+      setPanel(backgroundSvg(moduleSlug));
       installScrews(this, hp);
 
       auto width = hp2mm(hp);
@@ -31,7 +30,7 @@ namespace stage {
 
       y += dy;
       installInput(this, module, column1, y, Controls::LevelCvInput);
-      install<Toggle, 2>(this, module, column3, y, Controls::LevelRangeSwitch);
+      install<Toggle<2>>(this, module, column3, y, Controls::LevelRangeSwitch);
 
       y += dy;
       install<MomentaryButton>(this, module, column1, y, Controls::WaitButton);

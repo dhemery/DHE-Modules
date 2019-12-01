@@ -11,7 +11,7 @@ RangerPanel::RangerPanel(rack::engine::Module *module) {
   auto constexpr hp = 6;
 
   setModule(module);
-  setPanel(backgroundSvg<RangerPanel>());
+  setPanel(backgroundSvg(moduleSlug));
   installScrews(this, hp);
 
   auto constexpr left = hp2mm(1.5F);
@@ -42,7 +42,7 @@ RangerPanel::RangerPanel(rack::engine::Module *module) {
   installInput(this, module, right, y, Ranger::CwLimitCvInput);
 
   y += dy;
-  install<Toggle, 2>(this, module, left, y, Ranger::CcwLimitRangeSwitch);
-  install<Toggle, 2>(this, module, right, y, Ranger::CwLimitRangeSwitch);
+  install<Toggle<2>>(this, module, left, y, Ranger::CcwLimitRangeSwitch);
+  install<Toggle<2>>(this, module, right, y, Ranger::CwLimitRangeSwitch);
 }
 } // namespace dhe

@@ -13,12 +13,12 @@ static inline auto loadSvg(std::string const &assetPath) -> std::shared_ptr<rack
   return APP->window->loadSvg(pluginAssetDir + assetPath);
 }
 
-template <typename P> auto backgroundSvg() -> std::shared_ptr<rack::Svg> {
-  return loadSvg(std::string{P::moduleSlug} + ".svg");
+static inline auto backgroundSvg(std::string const &moduleSlug) -> std::shared_ptr<rack::Svg> {
+  return loadSvg(moduleSlug + ".svg");
 }
 
-template <typename P> static inline auto controlSvg(std::string const &controlName) -> std::shared_ptr<rack::Svg> {
-  static auto const moduleAssetDir = std::string{P::moduleSlug} + "/";
-  return loadSvg(moduleAssetDir + controlName + ".svg");
+static inline auto controlSvg(std::string const &moduleSlug, std::string const &controlName)
+    -> std::shared_ptr<rack::Svg> {
+  return loadSvg(moduleSlug + "/" + controlName + ".svg");
 }
 } // namespace dhe

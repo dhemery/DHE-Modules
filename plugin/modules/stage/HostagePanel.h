@@ -8,14 +8,13 @@ namespace dhe {
 namespace stage {
   class HostagePanel : public rack::app::ModuleWidget {
     using Controls = HostageControls;
-    using MainKnob = LargeKnob<HostagePanel>;
 
   public:
     HostagePanel(rack::engine::Module *module) {
       auto constexpr hp = 5;
 
       setModule(module);
-      setPanel(backgroundSvg<HostagePanel>());
+      setPanel(backgroundSvg(moduleSlug));
       installScrews(this, hp);
 
       auto width = hp2mm(hp);
@@ -27,11 +26,11 @@ namespace stage {
       auto y = 25.F;
       auto dy = 18.5F;
 
-      install<Toggle, 2>(this, module, column2, y, Controls::ModeSwitch);
+      install<Toggle<2>>(this, module, column2, y, Controls::ModeSwitch);
 
       y += dy;
       installInput(this, module, column1, y, Controls::DurationCvInput);
-      install<Toggle, 3>(this, module, column3, y, Controls::DurationRangeSwitch);
+      install<Toggle<3>>(this, module, column3, y, Controls::DurationRangeSwitch);
 
       y += dy;
       install<LargeKnob>(this, module, column2, y, Controls::DurationKnob);

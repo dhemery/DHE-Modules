@@ -2,7 +2,6 @@
 
 #include "Gator.h"
 #include "widgets/Buttons.h"
-#include "widgets/Knobs.h"
 #include "widgets/Screws.h"
 #include "widgets/Toggles.h"
 
@@ -12,7 +11,7 @@ GatorPanel::GatorPanel(rack::engine::Module *module) {
   auto constexpr hp = 9;
 
   setModule(module);
-  setPanel(backgroundSvg<GatorPanel>());
+  setPanel(backgroundSvg(moduleSlug));
   installScrews(this, hp);
 
   auto const top = hp2mm(3.5F);

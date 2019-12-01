@@ -11,7 +11,7 @@ BlossomPanel::BlossomPanel(rack::engine::Module *module) {
   auto constexpr hp = 11;
 
   setModule(module);
-  setPanel(backgroundSvg<BlossomPanel>());
+  setPanel(backgroundSvg(moduleSlug));
   installScrews(this, hp);
 
   auto constexpr width = hp2mm(hp);
@@ -32,7 +32,7 @@ BlossomPanel::BlossomPanel(rack::engine::Module *module) {
   installInput(this, module, column1, y, Blossom::RatioCvInput);
   install<TinyKnob>(this, module, column2, y, Blossom::RatioAvKnob);
   install<LargeKnob>(this, module, column3, y, Blossom::RatioKnob);
-  install<Toggle, 2>(this, module, column4, y, Blossom::FreeRatioSwitch);
+  install<Toggle<2>>(this, module, column4, y, Blossom::FreeRatioSwitch);
 
   y += dy;
   installInput(this, module, column1, y, Blossom::DepthCvInput);
@@ -50,13 +50,13 @@ BlossomPanel::BlossomPanel(rack::engine::Module *module) {
 
   installInput(this, module, column1, y, Blossom::XGainCvInput);
   install<SmallKnob>(this, module, column2, y, Blossom::XGainKnob);
-  install<Toggle, 2>(this, module, column3, y, Blossom::XRangeSwitch);
+  install<Toggle<2>>(this, module, column3, y, Blossom::XRangeSwitch);
   installOutput(this, module, column4, y + outputPortOffset, Blossom::XOutput);
 
   y += dy;
   installInput(this, module, column1, y, Blossom::YGainCvInput);
   install<SmallKnob>(this, module, column2, y, Blossom::YGainKnob);
-  install<Toggle, 2>(this, module, column3, y, Blossom::YRangeSwitch);
+  install<Toggle<2>>(this, module, column3, y, Blossom::YRangeSwitch);
   installOutput(this, module, column4, y + outputPortOffset, Blossom::YOutput);
 }
 } // namespace dhe

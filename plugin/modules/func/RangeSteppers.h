@@ -9,17 +9,17 @@
 namespace dhe {
 namespace func {
 
-  template <typename P> class MultiplicationRangeStepper : public Toggle<P, 4> {
+  class MultiplicationRangeStepper : public Toggle<4> {
   public:
-    MultiplicationRangeStepper() : Toggle<P, 4>("stepper-mult") {}
+    MultiplicationRangeStepper() : Toggle<4>("stepper-mult") {}
   };
 
-  template <typename P> class AdditionRangeStepper : public Toggle<P, 4> {
+  class AdditionRangeStepper : public Toggle<4> {
   public:
-    AdditionRangeStepper() : Toggle<P, 4>("stepper-add") {}
+    AdditionRangeStepper() : Toggle<4>("stepper-add") {}
   };
 
-  template <typename P> class OperatorSwitch : public Toggle<P, 2> {
+  class OperatorSwitch : public Toggle<2> {
   public:
     void onChange(const rack::event::Change &e) override {
       rack::app::SvgSwitch::onChange(e);

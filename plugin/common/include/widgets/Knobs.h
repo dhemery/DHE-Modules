@@ -1,18 +1,21 @@
 #pragma once
 
+#include "CommonWidgets.h"
 #include "PanelAssets.h"
 
 #include <componentlibrary.hpp>
 #include <string>
-#include <utility>
 
 namespace dhe {
 
-template <typename P> class Knob : public rack::componentlibrary::RoundKnob {
+class Knob : public rack::componentlibrary::RoundKnob {
 public:
   explicit Knob(std::string sizeName) : sizeName{std::move(sizeName)} {}
 
-  void setGraphics(P *panel) { setSvg(controlSvg<P>(controlName(sizeName))); }
+  void setGraphics(std::string const &moduleSlug, float x, float y) {
+    setSvg(controlSvg(moduleSlug, controlName(sizeName)));
+    positionCentered(this, x, y);
+  }
 
 private:
   static auto controlName(std::string const &sizeName) -> std::string {
@@ -23,23 +26,23 @@ private:
   std::string const sizeName;
 };
 
-template <typename P> class LargeKnob : public Knob<P> {
+class LargeKnob : public Knob {
 public:
-  LargeKnob() : Knob<P>("large") {}
+  LargeKnob() : Knob("large") {}
 };
 
-template <typename P> class MediumKnob : public Knob<P> {
+class MediumKnob : public Knob {
 public:
-  MediumKnob() : Knob<P>("medium") {}
+  MediumKnob() : Knob("medium") {}
 };
 
-template <typename P> class SmallKnob : public Knob<P> {
+class SmallKnob : public Knob {
 public:
-  SmallKnob() : Knob<P>("small") {}
+  SmallKnob() : Knob("small") {}
 };
 
-template <typename P> class TinyKnob : public Knob<P> {
+class TinyKnob : public Knob {
 public:
-  TinyKnob() : Knob<P>("tiny") {}
+  TinyKnob() : Knob("tiny") {}
 };
 } // namespace dhe

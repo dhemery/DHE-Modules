@@ -11,7 +11,7 @@ SwavePanel::SwavePanel(rack::engine::Module *module) {
   auto constexpr hp = 4;
 
   setModule(module);
-  setPanel(backgroundSvg<SwavePanel>());
+  setPanel(backgroundSvg(moduleSlug));
   installScrews(this, hp);
 
   auto constexpr width = hp2mm(hp);
@@ -21,7 +21,7 @@ SwavePanel::SwavePanel(rack::engine::Module *module) {
   auto y = 25.F;
   auto dy = 18.5F;
 
-  install<Toggle, 2>(this, module, x, y, Swave::ShapeSwitch);
+  install<Toggle<2>>(this, module, x, y, Swave::ShapeSwitch);
 
   y += dy;
   install<LargeKnob>(this, module, x, y, Swave::CurveKnob);

@@ -5,18 +5,15 @@
 
 #include <app/SvgSwitch.hpp>
 #include <string>
-#include <utility>
-
-#include <iostream>
 
 namespace dhe {
 
-template <typename P> class Button : public rack::app::SvgSwitch {
+class Button : public rack::app::SvgSwitch {
 public:
-  void setGraphics(P *panel) {
-    std::cerr << "Loading Button " << buttonName << " in panel " << P::moduleSlug << std::endl;
-    this->addFrame(controlSvg<P>(buttonName + "-1"));
-    this->addFrame(controlSvg<P>(buttonName + "-2"));
+  void setGraphics(std::string const &moduleSlug, float x, float y) {
+    this->addFrame(controlSvg(moduleSlug, buttonName + "-1"));
+    this->addFrame(controlSvg(moduleSlug, buttonName + "-2"));
+    positionCentered(this, x, y);
   }
 
 protected:
@@ -26,19 +23,19 @@ private:
   std::string const buttonName;
 }; // namespace DHE
 
-template <typename P> class MomentaryButton : public Button<P> {
+class MomentaryButton : public Button {
 public:
-  explicit MomentaryButton(std::string const &name = "button") : Button<P>{name, true} {}
+  explicit MomentaryButton(std::string const &name = "button") : Button{name, true} {}
 }; // namespace DHE
 
-template <typename P> class ReverseMomentaryButton : public MomentaryButton<P> {
+class ReverseMomentaryButton : public MomentaryButton {
 public:
-  ReverseMomentaryButton(std::string const &name = "button-reversed") : MomentaryButton<P>(name) {}
+  ReverseMomentaryButton(std::string const &name = "button-reversed") : MomentaryButton(name) {}
 };
 
-template <typename P> class ToggleButton : public Button<P> {
+class ToggleButton : public Button {
 public:
-  explicit ToggleButton(std::string const &name = "button") : Button<P>{name, false} {}
+  explicit ToggleButton(std::string const &name = "button") : Button{name, false} {}
 }; // namespace DHE
 
 } // namespace dhe

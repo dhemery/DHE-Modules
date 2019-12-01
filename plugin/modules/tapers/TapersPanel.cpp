@@ -11,7 +11,7 @@ TapersPanel::TapersPanel(rack::engine::Module *module) {
   auto constexpr hp = 9;
 
   setModule(module);
-  setPanel(backgroundSvg<TapersPanel>());
+  setPanel(backgroundSvg(moduleSlug));
   installScrews(this, hp);
 
   auto width = hp2mm(hp);
@@ -32,8 +32,8 @@ TapersPanel::TapersPanel(rack::engine::Module *module) {
   install<TinyKnob>(this, module, column2, y, Tapers::CurveAvKnob1);
   install<MediumKnob>(this, module, column3, y, Tapers::CurveKnob1);
   y += dy;
-  install<Toggle, 2>(this, module, column1, y, Tapers::ShapeSwitch1);
-  install<Toggle, 2>(this, module, column2, y, Tapers::LevelRangeSwitch1);
+  install<Toggle<2>>(this, module, column1, y, Tapers::ShapeSwitch1);
+  install<Toggle<2>>(this, module, column2, y, Tapers::LevelRangeSwitch1);
   installOutput(this, module, column3, y, Tapers::TaperOutput1);
 
   y += dy + panelBuffer;
@@ -46,8 +46,8 @@ TapersPanel::TapersPanel(rack::engine::Module *module) {
   install<TinyKnob>(this, module, column2, y, Tapers::CurveAvKnob2);
   install<MediumKnob>(this, module, column3, y, Tapers::CurveKnob2);
   y += dy;
-  install<Toggle, 2>(this, module, column1, y, Tapers::ShapeSwitch2);
-  install<Toggle, 2>(this, module, column2, y, Tapers::LevelRangeSwitch2);
+  install<Toggle<2>>(this, module, column1, y, Tapers::ShapeSwitch2);
+  install<Toggle<2>>(this, module, column2, y, Tapers::LevelRangeSwitch2);
   installOutput(this, module, column3, y, Tapers::TaperOutput2);
 }
 } // namespace dhe

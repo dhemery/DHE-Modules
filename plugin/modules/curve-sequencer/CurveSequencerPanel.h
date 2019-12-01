@@ -19,36 +19,32 @@ namespace curve_sequencer {
 
   using ProgressLight = rack::componentlibrary::SmallLight<rack::componentlibrary::GreenRedLight>;
 
-  template <typename P> class GenerateModeStepper : public Toggle<P, modeCount> {
+  class GenerateModeStepper : public Toggle<modeCount> {
   public:
-    GenerateModeStepper() : Toggle<P, modeCount>("stepper-mode") {}
+    GenerateModeStepper() : Toggle<modeCount>("stepper-mode") {}
   };
 
-  template <typename P> class SustainModeStepper : public Toggle<P, advanceConditionCount> {
+  class SustainModeStepper : public Toggle<advanceConditionCount> {
   public:
-    SustainModeStepper() : Toggle<P, advanceConditionCount>("stepper-advance") {}
+    SustainModeStepper() : Toggle<advanceConditionCount>("stepper-advance") {}
   };
 
-  template <typename P> class SelectionKnob : public SmallKnob<P> {
+  class SelectionKnob : public SmallKnob {
   public:
     void onChange(const rack::event::Change &e) override {
-      Knob<P>::onChange(e);
+      Knob::onChange(e);
       knobChangedTo(static_cast<int>(this->paramQuantity->getValue()));
     }
 
     void onKnobChange(const std::function<void(int)> &action) { knobChangedTo = action; }
 
-    static auto install(P *panel, rack::engine::Module *module, float x, float y, int index) -> SelectionKnob<P> * {
-      return installParam<SelectionKnob<P>>(panel, module, x, y, index);
-    }
-
   private:
     std::function<void(int)> knobChangedTo = [](int /*unused*/) {};
   };
 
-  template <typename P> class StartMarker : public rack::widget::SvgWidget {
+  class StartMarker : public rack::widget::SvgWidget {
   public:
-    StartMarker() { setSvg(controlSvg<P>("marker-start")); }
+    void setGraphics(std::string const &moduleSlug) { setSvg(controlSvg(moduleSlug, "marker-start")); }
     void setSelectionStart(int step) {
       auto constexpr baseX = stepX - 2.F * lightDiameter;
       auto const x = baseX + stepDx * static_cast<float>(step);
@@ -56,9 +52,9 @@ namespace curve_sequencer {
     }
   };
 
-  template <template <int> class P, int N> class EndMarker : public rack::widget::SvgWidget {
+  template <int N> class EndMarker : public rack::widget::SvgWidget {
   public:
-    EndMarker() { setSvg(controlSvg<P<N>>("marker-end")); }
+    void setGraphics(std::string const &moduleSlug) { setSvg(controlSvg(moduleSlug, "marker-end")); }
     void setSelectionStart(int step) {
       this->selectionStart = step;
       move();
@@ -92,7 +88,7 @@ namespace curve_sequencer {
       static auto constexpr hp = static_cast<int>(sequenceControlsWidth + N * stepWidth);
 
       this->setModule(module);
-      this->setPanel(backgroundSvg<CurveSequencerPanel<N>>());
+      this->setPanel(backgroundSvg(moduleSlug));
       installScrews(this, hp);
 
       auto constexpr left = hp2mm(2.F);
@@ -150,7 +146,7 @@ namespace curve_sequencer {
 
         install<SmallKnob>(this, module, x, levelY, Controls::LevelKnobs + step);
 
-        install<Toggle, 2>(this, module, x, shapeY, Controls::ShapeSwitches + step);
+        install<Toggle<2>>(this, module, x, shapeY, Controls::ShapeSwitches + step);
         install<SmallKnob>(this, module, x, curveY, Controls::CurveKnobs + step);
 
         install<SmallKnob>(this, module, x, durationY, Controls::DurationKnobs + step);
@@ -164,14 +160,16 @@ namespace curve_sequencer {
 
       installInput(this, module, right, eosY, Controls::CurveSequencerInput);
 
-      install<Toggle, 2>(this, module, right, levelY, Controls::LevelRangeSwitch);
-      install<Toggle, 3>(this, module, right, durationY, Controls::DurationRangeSwitch);
+      install<Toggle<2>>(this, module, right, levelY, Controls::LevelRangeSwitch);
+      install<Toggle<3>>(this, module, right, durationY, Controls::DurationRangeSwitch);
       installOutput(this, module, right, outY, Controls::CurveSequencerOutput);
 
-      auto *startMarker = rack::createWidgetCentered<StartMarker<CurveSequencerPanel<N>>>(mm2px(0.F, activeY));
+      auto *startMarker = rack::createWidgetCentered<StartMarker>(mm2px(0.F, activeY));
+      startMarker->setGraphics(moduleSlug);
       this->addChild(startMarker);
 
-      auto *endMarker = rack::createWidgetCentered<EndMarker<CurveSequencerPanel, N>>(mm2px(0.F, activeY));
+      auto *endMarker = rack::createWidgetCentered<EndMarker<N>>(mm2px(0.F, activeY));
+      endMarker->setGraphics(moduleSlug);
       this->addChild(endMarker);
 
       selectionStartKnob->onKnobChange([startMarker, endMarker](int step) {

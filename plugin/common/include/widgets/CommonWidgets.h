@@ -5,57 +5,61 @@
 #include <app/SvgPort.hpp>
 #include <engine/Module.hpp>
 #include <helpers.hpp>
-#include <iostream>
 #include <math.hpp>
+#include <widget/Widget.hpp>
 
 namespace dhe {
 
-template <typename Widget, typename Panel> auto installWidget(Panel *panel, rack::math::Vec pos) -> Widget * {
-  auto *widget = rack::createWidgetCentered<Widget>(mm2px(pos));
+static inline void positionCentered(rack::widget::Widget *widget, rack::math::Vec centermm) {
+  widget->box.pos = mm2px(centermm).minus(widget->box.size.div(2));
+}
+
+static inline void positionCentered(rack::widget::Widget *widget, float xmm, float ymm) {
+  positionCentered(widget, {xmm, ymm});
+}
+
+template <typename Widget, typename Panel> auto installWidget(Panel *panel, rack::math::Vec centermm) -> Widget * {
+  auto *widget = rack::createWidget<Widget>({});
+  positionCentered(widget, centermm);
   panel->addChild(widget);
   return widget;
 }
 
 template <typename Param, typename Panel>
 auto installParam(Panel *panel, rack::engine::Module *module, float x, float y, int index) -> Param * {
-  auto *param = new Param;
+  auto *param = rack::createParam<Param>({}, module, index);
   param->shadow->opacity = 0.F;
-  param->box.pos = mm2px(x, y);
-  param->setGraphics(panel);
-  param->box.pos = param->box.pos.minus(param->box.size.div(2));
-  if (module) {
-    param->paramQuantity = module->paramQuantities[index];
-  }
+  param->setGraphics(Panel::moduleSlug, x, y);
   panel->addParam(param);
   return param;
 }
 
-template <template <typename> class Param, typename Panel>
-static auto install(Panel *panel, rack::engine::Module *module, float x, float y, int index) -> Param<Panel> * {
-  return installParam<Param<Panel>>(panel, module, x, y, index);
-}
-
-template <template <typename, int> class Param, int N, typename Panel>
-static auto install(Panel *panel, rack::engine::Module *module, float x, float y, int index) -> Param<Panel, N> * {
-  return installParam<Param<Panel, N>>(panel, module, x, y, index);
+template <typename Param, typename Panel>
+static auto install(Panel *panel, rack::engine::Module *module, float x, float y, int index) -> Param * {
+  return installParam<Param>(panel, module, x, y, index);
 }
 
 template <typename Light, typename Panel>
 auto installLight(Panel *panel, rack::engine::Module *module, float x, float y, int index) -> Light * {
-  auto *light = rack::createLightCentered<Light>(mm2px(x, y), module, index);
+  auto *light = rack::createLight<Light>({}, module, index);
+  positionCentered(light, x, y);
   panel->addChild(light);
   return light;
 }
 
-template <typename P> class Jack : public rack::app::SvgPort {
+class Jack : public rack::app::SvgPort {
 public:
-  Jack() { setSvg(controlSvg<P>("port")); }
+  Jack() { shadow->opacity = 0.F; }
+  void setGraphics(std::string const &moduleSlug, float x, float y) {
+    setSvg(controlSvg(moduleSlug, "port"));
+    positionCentered(this, x, y);
+  }
 };
 
 template <typename Panel>
-static auto installInput(Panel *panel, rack::engine::Module *module, float x, float y, int index) -> Jack<Panel> * {
-  auto *input = rack::createInputCentered<Jack<Panel>>(mm2px(x, y), module, index);
-  input->shadow->opacity = 0.F;
+static auto installInput(Panel *panel, rack::engine::Module *module, float x, float y, int index) -> Jack * {
+  auto *input = rack::createInput<Jack>({}, module, index);
+  input->setGraphics(Panel::moduleSlug, x, y);
   panel->addInput(input);
   return input;
 }
@@ -64,9 +68,9 @@ static auto installInput(Panel *panel, rack::engine::Module *module, float x, fl
  * Install an output port.
  */
 template <typename Panel>
-static auto installOutput(Panel *panel, rack::engine::Module *module, float x, float y, int index) -> Jack<Panel> * {
-  auto *output = rack::createOutputCentered<Jack<Panel>>(mm2px(x, y), module, index);
-  output->shadow->opacity = 0.F;
+static auto installOutput(Panel *panel, rack::engine::Module *module, float x, float y, int index) -> Jack * {
+  auto *output = rack::createOutput<Jack>({}, module, index);
+  output->setGraphics(Panel::moduleSlug, x, y);
   panel->addOutput(output);
   return output;
 }

@@ -10,7 +10,7 @@ CubicPanel::CubicPanel(rack::engine::Module *module) {
   auto constexpr hp = 5;
 
   setModule(module);
-  setPanel(backgroundSvg<CubicPanel>());
+  setPanel(backgroundSvg(moduleSlug));
   installScrews(this, hp);
 
   auto width = hp2mm(hp);

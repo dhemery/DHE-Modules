@@ -14,7 +14,7 @@ namespace func {
       auto constexpr hp = 3;
 
       setModule(module);
-      setPanel(backgroundSvg<Func1Panel>());
+      setPanel(backgroundSvg(moduleSlug));
       installScrews(this, hp);
 
       auto const width = hp2mm(hp);

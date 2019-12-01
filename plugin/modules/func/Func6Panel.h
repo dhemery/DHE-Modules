@@ -9,14 +9,12 @@ namespace dhe {
 namespace func {
 
   class Func6Panel : public rack::app::ModuleWidget {
-    using MainKnob = LargeKnob<Func6Panel>;
-
   public:
     explicit Func6Panel(rack::engine::Module *module) {
       auto constexpr hp = 12;
 
       setModule(module);
-      setPanel(backgroundSvg<Func6Panel>());
+      setPanel(backgroundSvg(moduleSlug));
       installScrews(this, hp);
 
       auto width = hp2mm(hp);
