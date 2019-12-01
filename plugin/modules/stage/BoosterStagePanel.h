@@ -50,15 +50,15 @@ namespace stage {
       dy = 15.F;
 
       installInput(this, module, column1, y, Controls::DeferInput);
-      install<Button>(this, module, column2, y, Controls::DeferButton);
+      install<MomentaryButton>(this, module, column2, y, Controls::DeferButton);
 
-      install<ReverseButton>(this, module, column4, y, Controls::ActiveButton);
+      install<ReverseMomentaryButton>(this, module, column4, y, Controls::ActiveButton);
       installOutput(this, module, column5, y, Controls::ActiveOutput);
 
       y += dy;
       installInput(this, module, column1, y, Controls::TriggerInput);
-      install<Button>(this, module, column2, y, Controls::TriggerButton);
-      install<ReverseButton>(this, module, column4, y, Controls::EocButton);
+      install<MomentaryButton>(this, module, column2, y, Controls::TriggerButton);
+      install<ReverseMomentaryButton>(this, module, column4, y, Controls::EocButton);
       installOutput(this, module, column5, y, Controls::EocOutput);
 
       y += dy;

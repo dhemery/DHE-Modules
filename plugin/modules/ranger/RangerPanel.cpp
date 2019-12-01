@@ -21,7 +21,7 @@ RangerPanel::RangerPanel(rack::engine::Module *module) {
   auto constexpr dy = 15.F;
 
   y += dy * 0.75F;
-  install<LargeKnob>(this, module, left, y, Ranger::LevelKnob);
+  install<MediumKnob>(this, module, left, y, Ranger::LevelKnob);
   installOutput(this, module, right, y, Ranger::RangerOutput);
 
   y += dy;
@@ -30,8 +30,8 @@ RangerPanel::RangerPanel(rack::engine::Module *module) {
 
   y += dy / 2.F;
   y += dy * 0.75F;
-  install<LargeKnob>(this, module, left, y, Ranger::CcwLimitKnob);
-  install<LargeKnob>(this, module, right, y, Ranger::CwLimitKnob);
+  install<MediumKnob>(this, module, left, y, Ranger::CcwLimitKnob);
+  install<MediumKnob>(this, module, right, y, Ranger::CwLimitKnob);
 
   y += dy;
   install<TinyKnob>(this, module, left, y, Ranger::CcwLimitAvKnob);

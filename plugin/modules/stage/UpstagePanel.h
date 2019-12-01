@@ -34,8 +34,8 @@ namespace stage {
       install<Toggle, 2>(this, module, column3, y, Controls::LevelRangeSwitch);
 
       y += dy;
-      install<Button>(this, module, column1, y, Controls::WaitButton);
-      install<Button>(this, module, column3, y, Controls::TriggerButton);
+      install<MomentaryButton>(this, module, column1, y, Controls::WaitButton);
+      install<MomentaryButton>(this, module, column3, y, Controls::TriggerButton);
 
       y = 82.F;
       dy = 15.F;

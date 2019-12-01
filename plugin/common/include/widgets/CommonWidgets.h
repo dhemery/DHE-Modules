@@ -5,6 +5,7 @@
 #include <app/SvgPort.hpp>
 #include <engine/Module.hpp>
 #include <helpers.hpp>
+#include <iostream>
 #include <math.hpp>
 
 namespace dhe {
@@ -17,10 +18,16 @@ template <typename Widget, typename Panel> auto installWidget(Panel *panel, rack
 
 template <typename Param, typename Panel>
 auto installParam(Panel *panel, rack::engine::Module *module, float x, float y, int index) -> Param * {
-  auto *widget = rack::createParamCentered<Param>(mm2px(x, y), module, index);
-  widget->shadow->opacity = 0.F;
-  panel->addParam(widget);
-  return widget;
+  auto *param = new Param;
+  param->shadow->opacity = 0.F;
+  param->box.pos = mm2px(x, y);
+  param->setGraphics(panel);
+  param->box.pos = param->box.pos.minus(param->box.size.div(2));
+  if (module) {
+    param->paramQuantity = module->paramQuantities[index];
+  }
+  panel->addParam(param);
+  return param;
 }
 
 template <template <typename> class Param, typename Panel>

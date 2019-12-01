@@ -126,10 +126,10 @@ namespace curve_sequencer {
       selectionLengthKnob->snap = true;
 
       installInput(this, module, left, gateY, Controls::GateInput);
-      install<Button>(this, module, left + buttonPortDistance, gateY, Controls::GateButton);
+      install<MomentaryButton>(this, module, left + buttonPortDistance, gateY, Controls::GateButton);
 
       installInput(this, module, left, resetY, Controls::ResetInput);
-      install<Button>(this, module, left + buttonPortDistance, resetY, Controls::ResetButton);
+      install<MomentaryButton>(this, module, left + buttonPortDistance, resetY, Controls::ResetButton);
 
       auto constexpr activeY = top + lightRadius;
       auto constexpr generatingModeY = top + hp2mm(2.25F);

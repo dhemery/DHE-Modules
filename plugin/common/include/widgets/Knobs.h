@@ -4,15 +4,23 @@
 
 #include <componentlibrary.hpp>
 #include <string>
+#include <utility>
 
 namespace dhe {
 
 template <typename P> class Knob : public rack::componentlibrary::RoundKnob {
 public:
-  explicit Knob(std::string const &size) {
-    static const auto prefix = std::string{"knob-"};
-    setSvg(controlSvg<P>(prefix + size));
+  explicit Knob(std::string sizeName) : sizeName{std::move(sizeName)} {}
+
+  void setGraphics(P *panel) { setSvg(controlSvg<P>(controlName(sizeName))); }
+
+private:
+  static auto controlName(std::string const &sizeName) -> std::string {
+    static const auto controlNamePrefix = std::string{"knob-"};
+    return controlNamePrefix + sizeName;
   }
+
+  std::string const sizeName;
 };
 
 template <typename P> class LargeKnob : public Knob<P> {
