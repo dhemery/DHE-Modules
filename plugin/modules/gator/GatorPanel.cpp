@@ -1,6 +1,9 @@
 #include "GatorPanel.h"
 
 #include "Gator.h"
+#include "widgets/Jacks.h"
+#include "widgets/Knobs.h"
+#include "widgets/Screws.h"
 
 namespace dhe {
 
@@ -19,23 +22,23 @@ GatorPanel::GatorPanel(rack::engine::Module *module) {
 
   auto y = top;
   for (int i = 0; i < Gator::inputCount / 2; i++) {
-    input(left, y, Gator::Inputs + i);
+    installInput(this, module, left, y, Gator::Inputs + i);
     button<ToggleButton>(lc, y, Gator::NegateButtons + i);
     button<ToggleButton>(rc, y, Gator::NegateButtons + i + Gator::inputCount / 2);
-    input(right, y, Gator::Inputs + i + Gator::inputCount / 2);
+    installInput(this, module, right, y, Gator::Inputs + i + Gator::inputCount / 2);
     y += dy;
   }
 
   auto row = top + 8.75 * dy;
-  output(left, row, Gator::AndOutput);
-  output(lc, row, Gator::NandOutput);
-  output(rc, row, Gator::OrOutput);
-  output(right, row, Gator::NorOutput);
+  installOutput(this, module, left, row, Gator::AndOutput);
+  installOutput(this, module, lc, row, Gator::NandOutput);
+  installOutput(this, module, rc, row, Gator::OrOutput);
+  installOutput(this, module, right, row, Gator::NorOutput);
 
   row += hp2mm(2.75);
-  output(left, row, Gator::EvenOutput);
-  output(lc, row, Gator::OddOutput);
-  output(rc, row, Gator::XorOutput);
-  output(right, row, Gator::XnorOutput);
+  installOutput(this, module, left, row, Gator::EvenOutput);
+  installOutput(this, module, lc, row, Gator::OddOutput);
+  installOutput(this, module, rc, row, Gator::XorOutput);
+  installOutput(this, module, right, row, Gator::XnorOutput);
 }
 } // namespace dhe

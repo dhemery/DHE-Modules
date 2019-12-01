@@ -1,6 +1,9 @@
 #include "SwavePanel.h"
 
 #include "Swave.h"
+#include "widgets/Jacks.h"
+#include "widgets/Knobs.h"
+#include "widgets/Screws.h"
 
 namespace dhe {
 
@@ -25,15 +28,15 @@ SwavePanel::SwavePanel(rack::engine::Module *module) {
   knob<TinyKnob>(x, y, Swave::CurveAvKnob);
 
   y += dy;
-  input(x, y, Swave::CurveCvInput);
+  installInput(this, module, x, y, Swave::CurveCvInput);
 
   y = 82.F;
   dy = 15.F;
 
   y += dy;
-  input(x, y, Swave::SwaveInput);
+  installInput(this, module, x, y, Swave::SwaveInput);
 
   y += dy;
-  output(x, y, Swave::SwaveOutput);
+  installOutput(this, module, x, y, Swave::SwaveOutput);
 }
 } // namespace dhe

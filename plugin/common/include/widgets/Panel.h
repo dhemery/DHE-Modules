@@ -1,12 +1,7 @@
 #pragma once
 
-#include "Buttons.h"
 #include "CommonWidgets.h"
-#include "Dimensions.h"
-#include "Jacks.h"
-#include "Knobs.h"
-#include "PanelAssets.h"
-#include "Screws.h"
+#include "Buttons.h"
 #include "Toggles.h"
 
 #include <app/ModuleWidget.hpp>
@@ -33,18 +28,6 @@ protected:
 
   template <int N> auto toggle(float x, float y, int index) -> Toggle<P, N> * {
     return installParam<Toggle<P, N>>(this, module, x, y, index);
-  }
-
-  // TODO: Inline the following functions
-
-  template <typename Light> auto light(float x, float y, int index) -> Light * {
-    return installLight<Light>(this, module, x, y, index);
-  }
-
-  auto input(float x, float y, int index) -> InputJack<P> * { return InputJack<P>::install(this, module, x, y, index); }
-
-  auto output(float x, float y, int index) -> OutputJack<P> * {
-    return OutputJack<P>::install(this, module, x, y, index);
   }
 };
 } // namespace dhe

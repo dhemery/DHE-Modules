@@ -26,7 +26,7 @@ namespace stage {
       toggle<2>(column2, y, Controls::ModeSwitch);
 
       y += dy;
-      input(column1, y, Controls::DurationCvInput);
+      installInput(this, module, column1, y, Controls::DurationCvInput);
       toggle<3>(column3, y, Controls::DurationRangeSwitch);
 
       y += dy;
@@ -35,16 +35,16 @@ namespace stage {
       y = 82.F;
       dy = 15.F;
 
-      input(column1, y, Controls::DeferInput);
-      output(column3, y, Controls::ActiveOutput);
+      installInput(this, module, column1, y, Controls::DeferInput);
+      installOutput(this, module, column3, y, Controls::ActiveOutput);
 
       y += dy;
-      input(column1, y, Controls::TriggerInput);
-      output(column3, y, Controls::EocOutput);
+      installInput(this, module, column1, y, Controls::TriggerInput);
+      installOutput(this, module, column3, y, Controls::EocOutput);
 
       y += dy;
-      input(column1, y, Controls::EnvelopeInput);
-      output(column3, y, Controls::EnvelopeOutput);
+      installInput(this, module, column1, y, Controls::EnvelopeInput);
+      installOutput(this, module, column3, y, Controls::EnvelopeOutput);
     }
     static constexpr auto moduleSlug = "hostage";
     static constexpr auto hp = 5;

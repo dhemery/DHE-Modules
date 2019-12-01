@@ -28,7 +28,7 @@ namespace stage {
       knob<LargeKnob>(column2, y, Controls::LevelKnob);
 
       y += dy;
-      input(column1, y, Controls::LevelCvInput);
+      installInput(this, module, column1, y, Controls::LevelCvInput);
       toggle<2>(column3, y, Controls::LevelRangeSwitch);
 
       y += dy;
@@ -38,14 +38,14 @@ namespace stage {
       y = 82.F;
       dy = 15.F;
 
-      input(column1, y, Controls::WaitInput);
+      installInput(this, module, column1, y, Controls::WaitInput);
 
       y += dy;
-      input(column1, y, Controls::TriggerInput);
-      output(column3, y, Controls::TriggerOutput);
+      installInput(this, module, column1, y, Controls::TriggerInput);
+      installOutput(this, module, column3, y, Controls::TriggerOutput);
 
       y += dy;
-      output(column3, y, Controls::EnvelopeOutput);
+      installOutput(this, module, column3, y, Controls::EnvelopeOutput);
     }
     static constexpr auto moduleSlug = "upstage";
     static constexpr auto hp = 5;

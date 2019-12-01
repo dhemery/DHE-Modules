@@ -30,9 +30,9 @@ namespace func {
       auto constexpr row4 = top + rowSpacing * 3;
       auto constexpr row6 = top + rowSpacing * 5 + portOffset;
 
-      input(x, row1, FuncControls<1>::FuncInput);
+      installInput(this, module, x, row1, FuncControls<1>::FuncInput);
       knob<LargeKnob>(x, row3, FuncControls<1>::AmountKnob);
-      output(x, row6, FuncControls<1>::FuncOutput);
+      installOutput(this, module, x, row6, FuncControls<1>::FuncOutput);
 
       auto additionRangeStepper = toggle<AdditionRangeStepper>(x, row4, FuncControls<1>::OffsetRangeSwitch);
       auto multiplicationRangeStepper

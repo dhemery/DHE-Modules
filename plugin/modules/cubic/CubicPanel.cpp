@@ -1,5 +1,9 @@
 #include "CubicPanel.h"
 
+#include "widgets/Jacks.h"
+#include "widgets/Knobs.h"
+#include "widgets/Screws.h"
+
 namespace dhe {
 
 CubicPanel::CubicPanel(rack::engine::Module *module) {
@@ -15,19 +19,19 @@ CubicPanel::CubicPanel(rack::engine::Module *module) {
   auto y = 20.F;
   auto dy = 15.F;
 
-  input(column1, y, Cubic::ACoefficientCvInput);
+  installInput(this, module, column1, y, Cubic::ACoefficientCvInput);
   knob<SmallKnob>(column2, y, Cubic::ACoefficientKnob);
 
   y += dy;
-  input(column1, y, Cubic::BCoefficientCvInput);
+  installInput(this, module, column1, y, Cubic::BCoefficientCvInput);
   knob<SmallKnob>(column2, y, Cubic::BCoefficientKnob);
 
   y += dy;
-  input(column1, y, Cubic::CCoefficientCvInput);
+  installInput(this, module, column1, y, Cubic::CCoefficientCvInput);
   knob<SmallKnob>(column2, y, Cubic::CCoefficientKnob);
 
   y += dy;
-  input(column1, y, Cubic::DCoefficientCvInput);
+  installInput(this, module, column1, y, Cubic::DCoefficientCvInput);
   knob<SmallKnob>(column2, y, Cubic::DCoefficientKnob);
 
   y = 82.F;
@@ -35,11 +39,11 @@ CubicPanel::CubicPanel(rack::engine::Module *module) {
   knob<SmallKnob>(column2, y, Cubic::OutputGainKnob);
 
   y += dy;
-  input(column1, y, Cubic::InputGainCvInput);
-  input(column2, y, Cubic::OutputGainCvInput);
+  installInput(this, module, column1, y, Cubic::InputGainCvInput);
+  installInput(this, module, column2, y, Cubic::OutputGainCvInput);
 
   y += dy;
-  input(column1, y, Cubic::CubicInput);
-  output(column2, y, Cubic::CubicOutput);
+  installInput(this, module, column1, y, Cubic::CubicInput);
+  installOutput(this, module, column2, y, Cubic::CubicOutput);
 }
 } // namespace dhe

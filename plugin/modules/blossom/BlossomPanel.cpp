@@ -1,5 +1,9 @@
 #include "BlossomPanel.h"
 
+#include "widgets/Jacks.h"
+#include "widgets/Knobs.h"
+#include "widgets/Screws.h"
+
 namespace dhe {
 BlossomPanel::BlossomPanel(rack::engine::Module *module) {
   setModule(module);
@@ -16,23 +20,23 @@ BlossomPanel::BlossomPanel(rack::engine::Module *module) {
   auto y = 25.F;
   auto dy = 18.5F;
 
-  input(column1, y, Blossom::SpeedCvInput);
+  installInput(this, module, column1, y, Blossom::SpeedCvInput);
   knob<TinyKnob>(column2, y, Blossom::SpeedAvKNob);
   knob<LargeKnob>(column3, y, Blossom::SpeedKnob);
 
   y += dy;
-  input(column1, y, Blossom::RatioCvInput);
+  installInput(this, module, column1, y, Blossom::RatioCvInput);
   knob<TinyKnob>(column2, y, Blossom::RatioAvKnob);
   knob<LargeKnob>(column3, y, Blossom::RatioKnob);
   toggle<2>(column4, y, Blossom::FreeRatioSwitch);
 
   y += dy;
-  input(column1, y, Blossom::DepthCvInput);
+  installInput(this, module, column1, y, Blossom::DepthCvInput);
   knob<TinyKnob>(column2, y, Blossom::DepthAvKnob);
   knob<LargeKnob>(column3, y, Blossom::DepthKnob);
 
   y += dy;
-  input(column1, y, Blossom::PhaseCvInput);
+  installInput(this, module, column1, y, Blossom::PhaseCvInput);
   knob<TinyKnob>(column2, y, Blossom::PhaseOffsetAvKnob);
   knob<LargeKnob>(column3, y, Blossom::PhaseOffsetKnob);
 
@@ -40,15 +44,15 @@ BlossomPanel::BlossomPanel(rack::engine::Module *module) {
   dy = 15.F;
   auto const outputPortOffset = 1.25F;
 
-  input(column1, y, Blossom::XGainCvInput);
+  installInput(this, module, column1, y, Blossom::XGainCvInput);
   knob<SmallKnob>(column2, y, Blossom::XGainKnob);
   toggle<2>(column3, y, Blossom::XRangeSwitch);
-  output(column4, y + outputPortOffset, Blossom::XOutput);
+  installOutput(this, module, column4, y + outputPortOffset, Blossom::XOutput);
 
   y += dy;
-  input(column1, y, Blossom::YGainCvInput);
+  installInput(this, module, column1, y, Blossom::YGainCvInput);
   knob<SmallKnob>(column2, y, Blossom::YGainKnob);
   toggle<2>(column3, y, Blossom::YRangeSwitch);
-  output(column4, y + outputPortOffset, Blossom::YOutput);
+  installOutput(this, module, column4, y + outputPortOffset, Blossom::YOutput);
 }
 } // namespace dhe

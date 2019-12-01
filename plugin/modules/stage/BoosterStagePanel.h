@@ -27,18 +27,18 @@ namespace stage {
       auto y = 25.F;
       auto dy = 18.5F;
 
-      input(column1, y, Controls::LevelCvInput);
+      installInput(this, module, column1, y, Controls::LevelCvInput);
       knob<LargeKnob>(column3, y, Controls::LevelKnob);
 
       toggle<2>(column5, y, Controls::LevelRangeSwitch);
 
       y += dy;
-      input(column1, y, Controls::CurveCvInput);
+      installInput(this, module, column1, y, Controls::CurveCvInput);
       knob<LargeKnob>(column3, y, Controls::CurveKnob);
       toggle<2>(column5, y, Controls::ShapeSwitch);
 
       y += dy;
-      input(column1, y, Controls::DurationCvInput);
+      installInput(this, module, column1, y, Controls::DurationCvInput);
       knob<LargeKnob>(column3, y, Controls::DurationKnob);
 
       toggle<3>(column5, y, Controls::DurationRangeSwitch);
@@ -46,21 +46,21 @@ namespace stage {
       y = 82.F;
       dy = 15.F;
 
-      input(column1, y, Controls::DeferInput);
+      installInput(this, module, column1, y, Controls::DeferInput);
       button(column2, y, Controls::DeferButton);
 
       button<ReverseButton>(column4, y, Controls::ActiveButton);
-      output(column5, y, Controls::ActiveOutput);
+      installOutput(this, module, column5, y, Controls::ActiveOutput);
 
       y += dy;
-      input(column1, y, Controls::TriggerInput);
+      installInput(this, module, column1, y, Controls::TriggerInput);
       button(column2, y, Controls::TriggerButton);
       button<ReverseButton>(column4, y, Controls::EocButton);
-      output(column5, y, Controls::EocOutput);
+      installOutput(this, module, column5, y, Controls::EocOutput);
 
       y += dy;
-      input(column1, y, Controls::EnvelopeInput);
-      output(column5, y, Controls::EnvelopeOutput);
+      installInput(this, module, column1, y, Controls::EnvelopeInput);
+      installOutput(this, module, column5, y, Controls::EnvelopeOutput);
     }
     static constexpr auto moduleSlug = "booster-stage";
     static constexpr auto hp = 8;

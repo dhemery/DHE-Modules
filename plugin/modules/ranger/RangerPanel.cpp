@@ -1,6 +1,9 @@
 #include "RangerPanel.h"
 
 #include "Ranger.h"
+#include "widgets/Jacks.h"
+#include "widgets/Knobs.h"
+#include "widgets/Screws.h"
 
 namespace dhe {
 
@@ -17,10 +20,10 @@ RangerPanel::RangerPanel(rack::engine::Module *module) {
 
   y += dy * 0.75F;
   knob<MediumKnob>(left, y, Ranger::LevelKnob);
-  output(right, y, Ranger::RangerOutput);
+  installOutput(this, module, right, y, Ranger::RangerOutput);
 
   y += dy;
-  input(left, y, Ranger::LevelCvInput);
+  installInput(this, module, left, y, Ranger::LevelCvInput);
   knob<TinyKnob>(right, y, Ranger::LevelAvKnob);
 
   y += dy / 2.F;
@@ -33,8 +36,8 @@ RangerPanel::RangerPanel(rack::engine::Module *module) {
   knob<TinyKnob>(right, y, Ranger::CwLimitAvKnob);
 
   y += dy;
-  input(left, y, Ranger::CcwLimitCvInput);
-  input(right, y, Ranger::CwLimitCvInput);
+  installInput(this, module, left, y, Ranger::CcwLimitCvInput);
+  installInput(this, module, right, y, Ranger::CwLimitCvInput);
 
   y += dy;
   toggle<2>(left, y, Ranger::CcwLimitRangeSwitch);

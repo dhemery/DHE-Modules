@@ -1,8 +1,12 @@
 #pragma once
 
 #include "CurveSequencerControls.h"
+#include "widgets/Jacks.h"
+#include "widgets/Knobs.h"
 #include "widgets/Panel.h"
+#include "widgets/Screws.h"
 
+#include <componentlibrary.hpp>
 #include <functional>
 #include <string>
 
@@ -100,10 +104,10 @@ namespace curve_sequencer {
       auto constexpr gateY = inputTop + 3.F * inputDy;
       auto constexpr resetY = inputTop + 4.F * inputDy;
 
-      this->input(left, runY, Controls::RunInput);
+      installInput(this, module, left, runY, Controls::RunInput);
       this->template button<ToggleButton>(left + buttonPortDistance, runY, Controls::RunButton);
 
-      this->input(left, loopY, Controls::LoopInput);
+      installInput(this, module, left, loopY, Controls::LoopInput);
       this->template button<ToggleButton>(left + buttonPortDistance, loopY, Controls::LoopButton);
 
       auto *selectionStartKnob = this->template knob<SelectionKnob>(left, selectionY, Controls::SelectionStartKnob);
@@ -115,10 +119,10 @@ namespace curve_sequencer {
           = this->template knob<SelectionKnob>(selectionLengthX, selectionY, Controls::SelectionLengthKnob);
       selectionLengthKnob->snap = true;
 
-      this->input(left, gateY, Controls::GateInput);
+      installInput(this, module, left, gateY, Controls::GateInput);
       this->template button(left + buttonPortDistance, gateY, Controls::GateButton);
 
-      this->input(left, resetY, Controls::ResetInput);
+      installInput(this, module, left, resetY, Controls::ResetInput);
       this->template button(left + buttonPortDistance, resetY, Controls::ResetButton);
 
       auto constexpr activeY = top + lightRadius;
@@ -133,7 +137,7 @@ namespace curve_sequencer {
 
       for (float step = 0; step < N; step++) {
         auto const x = stepX + stepDx * (float) step;
-        this->template light<ProgressLight>(x, activeY, Controls::ProgressLights + step + step);
+        installLight<ProgressLight>(this, module, x, activeY, Controls::ProgressLights + step + step);
 
         this->template toggle<GenerateModeStepper>(x, generatingModeY, Controls::ModeSwitches + step);
         this->template toggle<SustainModeStepper>(x, sustainingModeY, Controls::ConditionSwitches + step);
@@ -146,17 +150,17 @@ namespace curve_sequencer {
         this->template knob<SmallKnob>(x, durationY, Controls::DurationKnobs + step);
 
         this->template button<ToggleButton>(x, enabledButtonY, Controls::EnabledButtons + step);
-        this->input(x, enabledPortY, Controls::EnabledInputs + step);
+        installInput(this, module, x, enabledPortY, Controls::EnabledInputs + step);
       }
 
       auto constexpr outY = bottom - portRadius - 1.F;
       auto constexpr eosY = top + hp2mm(2.75);
 
-      this->input(right, eosY, Controls::CurveSequencerInput);
+      installInput(this, module, right, eosY, Controls::CurveSequencerInput);
 
       this->template toggle<2>(right, levelY, Controls::LevelRangeSwitch);
       this->template toggle<3>(right, durationY, Controls::DurationRangeSwitch);
-      this->output(right, outY, Controls::CurveSequencerOutput);
+      installOutput(this, module, right, outY, Controls::CurveSequencerOutput);
 
       auto *startMarker = rack::createWidgetCentered<StartMarker<CurveSequencerPanel<N>>>(mm2px(0.F, activeY));
       this->addChild(startMarker);
