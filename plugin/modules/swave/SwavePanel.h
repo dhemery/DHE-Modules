@@ -1,10 +1,11 @@
 #pragma once
 
-#include "widgets/Panel.h"
+#include <app/ModuleWidget.hpp>
+#include <engine/Module.hpp>
 
 namespace dhe {
 
-class SwavePanel : public Panel<SwavePanel> {
+class SwavePanel : public rack::app::ModuleWidget {
 public:
   explicit SwavePanel(rack::engine::Module *module);
   static constexpr auto moduleSlug = "swave";

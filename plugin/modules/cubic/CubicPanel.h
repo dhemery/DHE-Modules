@@ -1,11 +1,11 @@
 #pragma once
 
-#include "Cubic.h"
-#include "widgets/Panel.h"
+#include <app/ModuleWidget.hpp>
+#include <engine/Module.hpp>
 
 namespace dhe {
 
-class CubicPanel : public Panel<CubicPanel> {
+class CubicPanel : public rack::app::ModuleWidget {
 public:
   explicit CubicPanel(rack::engine::Module *module);
   static constexpr auto moduleSlug = "cubic";

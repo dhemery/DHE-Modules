@@ -1,12 +1,14 @@
 #pragma once
 
 #include "BoosterStageControls.h"
-#include "widgets/Panel.h"
+
+#include <app/ModuleWidget.hpp>
+#include <engine/Module.hpp>
 
 namespace dhe {
 namespace stage {
 
-  class BoosterStagePanel : public Panel<BoosterStagePanel> {
+  class BoosterStagePanel : public rack::app::ModuleWidget {
     using Controls = BoosterStageControls;
 
   public:

@@ -1,13 +1,13 @@
 #pragma once
 
 #include "UpstageControls.h"
-#include "widgets/Panel.h"
 
+#include <app/ModuleWidget.hpp>
 #include <engine/Module.hpp>
 
 namespace dhe {
 namespace stage {
-  class UpstagePanel : public Panel<UpstagePanel> {
+  class UpstagePanel : public rack::app::ModuleWidget {
     using Controls = UpstageControls;
     using MainKnob = LargeKnob<UpstagePanel>;
 

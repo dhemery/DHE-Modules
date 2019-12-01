@@ -1,4 +1,6 @@
+#include "blossom/Blossom.h"
 #include "blossom/BlossomPanel.h"
+#include "cubic/Cubic.h"
 #include "cubic/CubicPanel.h"
 #include "curve-sequencer/CurveSequencerModule.h"
 #include "curve-sequencer/CurveSequencerPanel.h"

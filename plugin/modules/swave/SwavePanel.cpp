@@ -3,6 +3,7 @@
 #include "Swave.h"
 #include "widgets/Knobs.h"
 #include "widgets/Screws.h"
+#include "widgets/Toggles.h"
 
 namespace dhe {
 

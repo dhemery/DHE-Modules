@@ -1,8 +1,10 @@
 #include "GatorPanel.h"
 
 #include "Gator.h"
+#include "widgets/Buttons.h"
 #include "widgets/Knobs.h"
 #include "widgets/Screws.h"
+#include "widgets/Toggles.h"
 
 namespace dhe {
 

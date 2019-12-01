@@ -2,12 +2,14 @@
 
 #include "FuncControls.h"
 #include "RangeSteppers.h"
-#include "widgets/Panel.h"
+
+#include <app/ModuleWidget.hpp>
+#include <engine/Module.hpp>
 
 namespace dhe {
 namespace func {
 
-  class Func1Panel : public Panel<Func1Panel> {
+  class Func1Panel : public rack::app::ModuleWidget {
   public:
     explicit Func1Panel(rack::engine::Module *module) {
       setModule(module);

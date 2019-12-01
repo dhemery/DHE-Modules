@@ -2,12 +2,14 @@
 
 #include "FuncControls.h"
 #include "RangeSteppers.h"
-#include "widgets/Panel.h"
+
+#include <app/ModuleWidget.hpp>
+#include <engine/Module.hpp>
 
 namespace dhe {
 namespace func {
 
-  class Func6Panel : public Panel<Func6Panel> {
+  class Func6Panel : public rack::app::ModuleWidget {
     using MainKnob = LargeKnob<Func6Panel>;
 
   public:

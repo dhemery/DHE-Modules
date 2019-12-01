@@ -1,11 +1,13 @@
 #pragma once
 
 #include "HostageControls.h"
-#include "widgets/Panel.h"
+
+#include <app/ModuleWidget.hpp>
+#include <engine/Module.hpp>
 
 namespace dhe {
 namespace stage {
-  class HostagePanel : public Panel<HostagePanel> {
+  class HostagePanel : public rack::app::ModuleWidget {
     using Controls = HostageControls;
     using MainKnob = LargeKnob<HostagePanel>;
 

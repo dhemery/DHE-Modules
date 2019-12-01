@@ -2,7 +2,6 @@
 
 #include "config/LevelConfig.h"
 #include "controls/CommonInputs.h"
-#include "widgets/Panel.h"
 
 #include <algorithm>
 

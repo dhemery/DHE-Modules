@@ -1,11 +1,14 @@
 #pragma once
 
 #include "CurveSequencerControls.h"
+#include "widgets/Buttons.h"
 #include "widgets/Knobs.h"
-#include "widgets/Panel.h"
 #include "widgets/Screws.h"
+#include "widgets/Toggles.h"
 
+#include <app/ModuleWidget.hpp>
 #include <componentlibrary.hpp>
+#include <engine/Module.hpp>
 #include <functional>
 #include <string>
 
@@ -78,7 +81,7 @@ namespace curve_sequencer {
     int const stepMask = N - 1;
   }; // namespace curve_sequencer
 
-  template <int N> class CurveSequencerPanel : public Panel<CurveSequencerPanel<N>> {
+  template <int N> class CurveSequencerPanel : public rack::app::ModuleWidget {
     using Controls = CurveSequencerControls<N>;
 
   public:
