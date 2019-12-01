@@ -37,7 +37,7 @@ namespace curve_sequencer {
 
   template <typename P> class StartMarker : public rack::widget::SvgWidget {
   public:
-    StartMarker() { setSvg(P::svg("marker-start")); }
+    StartMarker() { setSvg(controlSvg<P>("marker-start")); }
     void setSelectionStart(int step) {
       auto constexpr baseX = stepX - 2.F * lightDiameter;
       auto const x = baseX + stepDx * static_cast<float>(step);
@@ -47,7 +47,7 @@ namespace curve_sequencer {
 
   template <template <int> class P, int N> class EndMarker : public rack::widget::SvgWidget {
   public:
-    EndMarker() { setSvg(P<N>::svg("marker-end")); }
+    EndMarker() { setSvg(controlSvg<P<N>>("marker-end")); }
     void setSelectionStart(int step) {
       this->selectionStart = step;
       move();

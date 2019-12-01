@@ -1,5 +1,7 @@
 #pragma once
 
+#include "PanelAssets.h"
+
 #include <componentlibrary.hpp>
 #include <string>
 
@@ -7,9 +9,9 @@ namespace dhe {
 
 template <typename P> class Knob : public rack::componentlibrary::RoundKnob {
 public:
-  explicit Knob(const std::string &size) {
+  explicit Knob(std::string const &size) {
     static const auto prefix = std::string{"knob-"};
-    setSvg(P::svg(prefix + size));
+    setSvg(controlSvg<P>(prefix + size));
   }
 };
 

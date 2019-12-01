@@ -1,5 +1,7 @@
 #pragma once
 
+#include "PanelAssets.h"
+
 #include <app/SvgSwitch.hpp>
 #include <string>
 
@@ -7,10 +9,10 @@ namespace dhe {
 
 template <typename P> class Button : public rack::app::SvgSwitch {
 public:
-  explicit Button(const std::string &name = "button") {
+  explicit Button(std::string const &name = "button") {
     momentary = true;
-    addFrame(P::svg(name + "-1"));
-    addFrame(P::svg(name + "-2"));
+    addFrame(controlSvg<P>(name + "-1"));
+    addFrame(controlSvg<P>(name + "-2"));
   }
 }; // namespace DHE
 
@@ -21,9 +23,9 @@ public:
 
 template <typename P> class ToggleButton : public rack::app::SvgSwitch {
 public:
-  explicit ToggleButton(const std::string &name = "button") {
-    addFrame(P::svg(name + "-1"));
-    addFrame(P::svg(name + "-2"));
+  explicit ToggleButton(std::string const &name = "button") {
+    addFrame(controlSvg<P>(name + "-1"));
+    addFrame(controlSvg<P>(name + "-2"));
   }
 }; // namespace DHE
 
