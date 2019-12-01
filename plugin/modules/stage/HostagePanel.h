@@ -7,6 +7,7 @@ namespace dhe {
 namespace stage {
   class HostagePanel : public Panel<HostagePanel> {
     using Controls = HostageControls;
+    using MainKnob = LargeKnob<HostagePanel>;
 
   public:
     HostagePanel(rack::engine::Module *module) {
@@ -30,7 +31,7 @@ namespace stage {
       toggle<3>(column3, y, Controls::DurationRangeSwitch);
 
       y += dy;
-      knob<LargeKnob>(column2, y, Controls::DurationKnob);
+      MainKnob::install(this, module, column2, y, Controls::DurationKnob);
 
       y = 82.F;
       dy = 15.F;

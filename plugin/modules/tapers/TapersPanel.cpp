@@ -7,6 +7,9 @@
 
 namespace dhe {
 
+using AvKnob = TinyKnob<TapersPanel>;
+using MainKnob = MediumKnob<TapersPanel>;
+
 TapersPanel::TapersPanel(rack::engine::Module *module) {
   setModule(module);
   setPanel(backgroundSvg<TapersPanel>());
@@ -23,12 +26,12 @@ TapersPanel::TapersPanel(rack::engine::Module *module) {
   auto panelBuffer = 4.F;
 
   installInput(this, module, column1, y, Tapers::LevelCvInput1);
-  knob<TinyKnob>(column2, y, Tapers::LevelAvKnob1);
-  knob<MediumKnob>(column3, y, Tapers::LevelKnob1);
+  AvKnob::install(this, module, column2, y, Tapers::LevelAvKnob1);
+  MainKnob::install(this, module, column3, y, Tapers::LevelKnob1);
   y += dy;
   installInput(this, module, column1, y, Tapers::CurveCvInput1);
-  knob<TinyKnob>(column2, y, Tapers::CurveAvKnob1);
-  knob<MediumKnob>(column3, y, Tapers::CurveKnob1);
+  AvKnob::install(this, module, column2, y, Tapers::CurveAvKnob1);
+  MainKnob::install(this, module, column3, y, Tapers::CurveKnob1);
   y += dy;
   toggle<2>(column1, y, Tapers::ShapeSwitch1);
   toggle<2>(column2, y, Tapers::LevelRangeSwitch1);
@@ -37,12 +40,12 @@ TapersPanel::TapersPanel(rack::engine::Module *module) {
   y += dy + panelBuffer;
 
   installInput(this, module, column1, y, Tapers::LevelCvInput2);
-  knob<TinyKnob>(column2, y, Tapers::LevelAvKnob2);
-  knob<MediumKnob>(column3, y, Tapers::LevelKnob2);
+  AvKnob::install(this, module, column2, y, Tapers::LevelAvKnob2);
+  MainKnob::install(this, module, column3, y, Tapers::LevelKnob2);
   y += dy;
   installInput(this, module, column1, y, Tapers::CurveCvInput2);
-  knob<TinyKnob>(column2, y, Tapers::CurveAvKnob2);
-  knob<MediumKnob>(column3, y, Tapers::CurveKnob2);
+  AvKnob::install(this, module, column2, y, Tapers::CurveAvKnob2);
+  MainKnob::install(this, module, column3, y, Tapers::CurveKnob2);
   y += dy;
   toggle<2>(column1, y, Tapers::ShapeSwitch2);
   toggle<2>(column2, y, Tapers::LevelRangeSwitch2);

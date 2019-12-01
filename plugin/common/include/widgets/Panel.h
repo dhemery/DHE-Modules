@@ -10,10 +10,6 @@ namespace dhe {
 
 template <typename P> class Panel : public rack::app::ModuleWidget {
 protected:
-  template <template <typename> class K> auto knob(float x, float y, int index) -> K<P> * {
-    return installParam<K<P>>(this, module, x, y, index);
-  }
-
   template <template <typename> class B = Button> auto button(float x, float y, int index) -> B<P> * {
     return installParam<B<P>>(this, module, x, y, index);
   }

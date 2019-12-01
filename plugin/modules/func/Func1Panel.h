@@ -8,6 +8,8 @@ namespace dhe {
 namespace func {
 
   class Func1Panel : public Panel<Func1Panel> {
+    using MainKnob = LargeKnob<Func1Panel>;
+
   public:
     explicit Func1Panel(rack::engine::Module *module) {
       setModule(module);
@@ -31,7 +33,7 @@ namespace func {
       auto constexpr row6 = top + rowSpacing * 5 + portOffset;
 
       installInput(this, module, x, row1, FuncControls<1>::FuncInput);
-      knob<LargeKnob>(x, row3, FuncControls<1>::AmountKnob);
+      MainKnob::install(this, module, x, row3, FuncControls<1>::AmountKnob);
       installOutput(this, module, x, row6, FuncControls<1>::FuncOutput);
 
       auto additionRangeStepper = toggle<AdditionRangeStepper>(x, row4, FuncControls<1>::OffsetRangeSwitch);

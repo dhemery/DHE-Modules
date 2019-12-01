@@ -8,6 +8,7 @@ namespace stage {
 
   class StagePanel : public Panel<StagePanel> {
     using Controls = StageControls;
+    using MainKnob = LargeKnob<StagePanel>;
 
   public:
     explicit StagePanel(rack::engine::Module *module) {
@@ -24,13 +25,13 @@ namespace stage {
       auto y = 25.F;
       auto dy = 18.5F;
 
-      knob<LargeKnob>(column2, y, Controls::LevelKnob);
+      MainKnob::install(this, module, column2, y, Controls::LevelKnob);
 
       y += dy;
-      knob<LargeKnob>(column2, y, Controls::CurveKnob);
+      MainKnob::install(this, module, column2, y, Controls::CurveKnob);
 
       y += dy;
-      knob<LargeKnob>(column2, y, Controls::DurationKnob);
+      MainKnob::install(this, module, column2, y, Controls::DurationKnob);
 
       y = 82.F;
       dy = 15.F;

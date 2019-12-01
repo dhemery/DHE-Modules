@@ -37,6 +37,10 @@ namespace curve_sequencer {
 
     void onKnobChange(const std::function<void(int)> &action) { knobChangedTo = action; }
 
+    static auto install(P *panel, rack::engine::Module *module, float x, float y, int index) -> SelectionKnob<P> * {
+      return installParam<SelectionKnob<P>>(panel, module, x, y, index);
+    }
+
   private:
     std::function<void(int)> knobChangedTo = [](int /*unused*/) {};
   };
@@ -77,6 +81,8 @@ namespace curve_sequencer {
 
   template <int N> class CurveSequencerPanel : public Panel<CurveSequencerPanel<N>> {
     using Controls = CurveSequencerControls<N>;
+    using MainStepKnob = SmallKnob<CurveSequencerPanel<N>>;
+    using SelectionKnob = SelectionKnob<CurveSequencerPanel<N>>;
 
   public:
     static std::string const moduleSlug;
@@ -110,13 +116,13 @@ namespace curve_sequencer {
       installInput(this, module, left, loopY, Controls::LoopInput);
       this->template button<ToggleButton>(left + buttonPortDistance, loopY, Controls::LoopButton);
 
-      auto *selectionStartKnob = this->template knob<SelectionKnob>(left, selectionY, Controls::SelectionStartKnob);
+      auto *selectionStartKnob = SelectionKnob::install(this, module, left, selectionY, Controls::SelectionStartKnob);
       selectionStartKnob->snap = true;
 
       auto constexpr selectionLengthX = left + hp2mm(2.F);
 
       auto *selectionLengthKnob
-          = this->template knob<SelectionKnob>(selectionLengthX, selectionY, Controls::SelectionLengthKnob);
+          = SelectionKnob::install(this, module, selectionLengthX, selectionY, Controls::SelectionLengthKnob);
       selectionLengthKnob->snap = true;
 
       installInput(this, module, left, gateY, Controls::GateInput);
@@ -142,12 +148,12 @@ namespace curve_sequencer {
         this->template toggle<GenerateModeStepper>(x, generatingModeY, Controls::ModeSwitches + step);
         this->template toggle<SustainModeStepper>(x, sustainingModeY, Controls::ConditionSwitches + step);
 
-        this->template knob<SmallKnob>(x, levelY, Controls::LevelKnobs + step);
+        MainStepKnob::install(this, module, x, levelY, Controls::LevelKnobs + step);
 
         this->template toggle<2>(x, shapeY, Controls::ShapeSwitches + step);
-        this->template knob<SmallKnob>(x, curveY, Controls::CurveKnobs + step);
+        MainStepKnob::install(this, module, x, curveY, Controls::CurveKnobs + step);
 
-        this->template knob<SmallKnob>(x, durationY, Controls::DurationKnobs + step);
+        MainStepKnob::install(this, module, x, durationY, Controls::DurationKnobs + step);
 
         this->template button<ToggleButton>(x, enabledButtonY, Controls::EnabledButtons + step);
         installInput(this, module, x, enabledPortY, Controls::EnabledInputs + step);

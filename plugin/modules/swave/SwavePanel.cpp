@@ -7,6 +7,9 @@
 
 namespace dhe {
 
+using AvKnob = TinyKnob<SwavePanel>;
+using MainKnob = LargeKnob<SwavePanel>;
+
 SwavePanel::SwavePanel(rack::engine::Module *module) {
   setModule(module);
   setPanel(backgroundSvg<SwavePanel>());
@@ -22,10 +25,10 @@ SwavePanel::SwavePanel(rack::engine::Module *module) {
   toggle<2>(x, y, Swave::ShapeSwitch);
 
   y += dy;
-  knob<LargeKnob>(x, y, Swave::CurveKnob);
+  MainKnob::install(this, module, x, y, Swave::CurveKnob);
 
   y += dy;
-  knob<TinyKnob>(x, y, Swave::CurveAvKnob);
+  AvKnob::install(this, module, x, y, Swave::CurveAvKnob);
 
   y += dy;
   installInput(this, module, x, y, Swave::CurveCvInput);

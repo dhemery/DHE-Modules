@@ -6,6 +6,9 @@
 
 namespace dhe {
 
+using CoefficientKnob = SmallKnob<CubicPanel>;
+using GainKnob = SmallKnob<CubicPanel>;
+
 CubicPanel::CubicPanel(rack::engine::Module *module) {
   setModule(module);
   setPanel(backgroundSvg<CubicPanel>());
@@ -20,23 +23,23 @@ CubicPanel::CubicPanel(rack::engine::Module *module) {
   auto dy = 15.F;
 
   installInput(this, module, column1, y, Cubic::ACoefficientCvInput);
-  knob<SmallKnob>(column2, y, Cubic::ACoefficientKnob);
+  CoefficientKnob::install(this, module, column2, y, Cubic::ACoefficientKnob);
 
   y += dy;
   installInput(this, module, column1, y, Cubic::BCoefficientCvInput);
-  knob<SmallKnob>(column2, y, Cubic::BCoefficientKnob);
+  CoefficientKnob::install(this, module, column2, y, Cubic::BCoefficientKnob);
 
   y += dy;
   installInput(this, module, column1, y, Cubic::CCoefficientCvInput);
-  knob<SmallKnob>(column2, y, Cubic::CCoefficientKnob);
+  CoefficientKnob::install(this, module, column2, y, Cubic::CCoefficientKnob);
 
   y += dy;
   installInput(this, module, column1, y, Cubic::DCoefficientCvInput);
-  knob<SmallKnob>(column2, y, Cubic::DCoefficientKnob);
+  CoefficientKnob::install(this, module, column2, y, Cubic::DCoefficientKnob);
 
   y = 82.F;
-  knob<SmallKnob>(column1, y, Cubic::InputGainKnob);
-  knob<SmallKnob>(column2, y, Cubic::OutputGainKnob);
+  GainKnob::install(this, module, column1, y, Cubic::InputGainKnob);
+  GainKnob::install(this, module, column2, y, Cubic::OutputGainKnob);
 
   y += dy;
   installInput(this, module, column1, y, Cubic::InputGainCvInput);

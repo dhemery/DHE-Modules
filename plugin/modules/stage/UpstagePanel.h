@@ -9,6 +9,7 @@ namespace dhe {
 namespace stage {
   class UpstagePanel : public Panel<UpstagePanel> {
     using Controls = UpstageControls;
+    using MainKnob = LargeKnob<UpstagePanel>;
 
   public:
     UpstagePanel(rack::engine::Module *module) {
@@ -25,7 +26,7 @@ namespace stage {
       auto y = 25.F;
       auto dy = 18.5F;
 
-      knob<LargeKnob>(column2, y, Controls::LevelKnob);
+      MainKnob::install(this, module, column2, y, Controls::LevelKnob);
 
       y += dy;
       installInput(this, module, column1, y, Controls::LevelCvInput);

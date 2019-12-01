@@ -8,6 +8,7 @@ namespace stage {
 
   class BoosterStagePanel : public Panel<BoosterStagePanel> {
     using Controls = BoosterStageControls;
+    using MainKnob = LargeKnob<BoosterStagePanel>;
 
   public:
     explicit BoosterStagePanel(rack::engine::Module *module) {
@@ -28,18 +29,18 @@ namespace stage {
       auto dy = 18.5F;
 
       installInput(this, module, column1, y, Controls::LevelCvInput);
-      knob<LargeKnob>(column3, y, Controls::LevelKnob);
+      MainKnob::install(this, module, column3, y, Controls::LevelKnob);
 
       toggle<2>(column5, y, Controls::LevelRangeSwitch);
 
       y += dy;
       installInput(this, module, column1, y, Controls::CurveCvInput);
-      knob<LargeKnob>(column3, y, Controls::CurveKnob);
+      MainKnob::install(this, module, column3, y, Controls::CurveKnob);
       toggle<2>(column5, y, Controls::ShapeSwitch);
 
       y += dy;
       installInput(this, module, column1, y, Controls::DurationCvInput);
-      knob<LargeKnob>(column3, y, Controls::DurationKnob);
+      MainKnob::install(this, module, column3, y, Controls::DurationKnob);
 
       toggle<3>(column5, y, Controls::DurationRangeSwitch);
 

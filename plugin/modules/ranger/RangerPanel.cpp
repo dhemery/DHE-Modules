@@ -7,6 +7,9 @@
 
 namespace dhe {
 
+using AvKnob = TinyKnob<RangerPanel>;
+using MainKnob = MediumKnob<RangerPanel>;
+
 RangerPanel::RangerPanel(rack::engine::Module *module) {
   setModule(module);
   setPanel(backgroundSvg<RangerPanel>());
@@ -19,21 +22,21 @@ RangerPanel::RangerPanel(rack::engine::Module *module) {
   auto constexpr dy = 15.F;
 
   y += dy * 0.75F;
-  knob<MediumKnob>(left, y, Ranger::LevelKnob);
+  MainKnob::install(this, module, left, y, Ranger::LevelKnob);
   installOutput(this, module, right, y, Ranger::RangerOutput);
 
   y += dy;
   installInput(this, module, left, y, Ranger::LevelCvInput);
-  knob<TinyKnob>(right, y, Ranger::LevelAvKnob);
+  AvKnob::install(this, module, right, y, Ranger::LevelAvKnob);
 
   y += dy / 2.F;
   y += dy * 0.75F;
-  knob<MediumKnob>(left, y, Ranger::CcwLimitKnob);
-  knob<MediumKnob>(right, y, Ranger::CwLimitKnob);
+  MainKnob::install(this, module, left, y, Ranger::CcwLimitKnob);
+  MainKnob::install(this, module, right, y, Ranger::CwLimitKnob);
 
   y += dy;
-  knob<TinyKnob>(left, y, Ranger::CcwLimitAvKnob);
-  knob<TinyKnob>(right, y, Ranger::CwLimitAvKnob);
+  AvKnob::install(this, module, left, y, Ranger::CcwLimitAvKnob);
+  AvKnob::install(this, module, right, y, Ranger::CwLimitAvKnob);
 
   y += dy;
   installInput(this, module, left, y, Ranger::CcwLimitCvInput);
