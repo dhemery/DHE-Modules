@@ -3,7 +3,6 @@
 #include "BoosterStageControls.h"
 
 #include <app/ModuleWidget.hpp>
-#include <engine/Module.hpp>
 
 namespace dhe {
 namespace stage {

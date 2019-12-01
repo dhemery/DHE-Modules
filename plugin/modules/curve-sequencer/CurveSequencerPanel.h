@@ -8,7 +8,6 @@
 
 #include <app/ModuleWidget.hpp>
 #include <componentlibrary.hpp>
-#include <engine/Module.hpp>
 #include <functional>
 #include <string>
 

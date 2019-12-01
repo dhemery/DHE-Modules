@@ -3,7 +3,6 @@
 #include "UpstageControls.h"
 
 #include <app/ModuleWidget.hpp>
-#include <engine/Module.hpp>
 
 namespace dhe {
 namespace stage {

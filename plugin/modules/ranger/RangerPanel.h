@@ -1,7 +1,6 @@
 #pragma once
 
 #include <app/ModuleWidget.hpp>
-#include <engine/Module.hpp>
 
 namespace dhe {
 

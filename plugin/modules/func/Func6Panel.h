@@ -4,7 +4,6 @@
 #include "RangeSteppers.h"
 
 #include <app/ModuleWidget.hpp>
-#include <engine/Module.hpp>
 
 namespace dhe {
 namespace func {
