@@ -1,9 +1,8 @@
 #include "RangerPanel.h"
 
 #include "Ranger.h"
-#include "widgets/Knobs.h"
+#include "widgets/ControlWidgets.h"
 #include "widgets/Screws.h"
-#include "widgets/Toggles.h"
 
 namespace dhe {
 

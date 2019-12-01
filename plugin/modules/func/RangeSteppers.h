@@ -1,6 +1,6 @@
 #pragma once
 
-#include "widgets/Toggles.h"
+#include "widgets/ControlWidgets.h"
 
 #include <app/SvgSwitch.hpp>
 #include <event.hpp>

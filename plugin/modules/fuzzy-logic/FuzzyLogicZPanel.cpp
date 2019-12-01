@@ -1,9 +1,8 @@
 #include "FuzzyLogicZPanel.h"
 
 #include "FuzzyLogicZ.h"
-#include "widgets/Buttons.h"
+#include "widgets/ControlWidgets.h"
 #include "widgets/Screws.h"
-#include "widgets/Toggles.h"
 
 namespace dhe {
 
