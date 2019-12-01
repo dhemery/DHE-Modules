@@ -22,23 +22,23 @@ CubicPanel::CubicPanel(rack::engine::Module *module) {
   auto dy = 15.F;
 
   installInput(this, module, column1, y, Cubic::ACoefficientCvInput);
-  install<SmallKnob>(this, module, column2, y, Cubic::ACoefficientKnob);
+  addParam(Knob::small(moduleSlug, module, column2, y, Cubic::ACoefficientKnob));
 
   y += dy;
   installInput(this, module, column1, y, Cubic::BCoefficientCvInput);
-  install<SmallKnob>(this, module, column2, y, Cubic::BCoefficientKnob);
+  addParam(Knob::small(moduleSlug, module, column2, y, Cubic::BCoefficientKnob));
 
   y += dy;
   installInput(this, module, column1, y, Cubic::CCoefficientCvInput);
-  install<SmallKnob>(this, module, column2, y, Cubic::CCoefficientKnob);
+  addParam(Knob::small(moduleSlug, module, column2, y, Cubic::CCoefficientKnob));
 
   y += dy;
   installInput(this, module, column1, y, Cubic::DCoefficientCvInput);
-  install<SmallKnob>(this, module, column2, y, Cubic::DCoefficientKnob);
+  addParam(Knob::small(moduleSlug, module, column2, y, Cubic::DCoefficientKnob));
 
   y = 82.F;
-  install<SmallKnob>(this, module, column1, y, Cubic::InputGainKnob);
-  install<SmallKnob>(this, module, column2, y, Cubic::OutputGainKnob);
+  addParam(Knob::small(moduleSlug, module, column1, y, Cubic::InputGainKnob));
+  addParam(Knob::small(moduleSlug, module, column2, y, Cubic::OutputGainKnob));
 
   y += dy;
   installInput(this, module, column1, y, Cubic::InputGainCvInput);

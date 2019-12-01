@@ -36,7 +36,7 @@ namespace func {
         auto const portY = y + portOffset;
 
         installInput(this, module, column1, portY, FuncControls<6>::FuncInput + row);
-        install<LargeKnob>(this, module, column3, y, FuncControls<6>::AmountKnob + row);
+        addParam(Knob::large(moduleSlug, module, column3, y, FuncControls<6>::AmountKnob + row));
         installOutput(this, module, column5, portY, FuncControls<6>::FuncOutput + row);
 
         auto additionRangeStepper

@@ -24,25 +24,25 @@ XycloidPanel::XycloidPanel(rack::engine::Module *module) {
   auto dy = 18.5F;
 
   installInput(this, module, column1, y, Xycloid::SpeedCvInput);
-  install<TinyKnob>(this, module, column2, y, Xycloid::SpeedAvKnob);
-  install<LargeKnob>(this, module, column3, y, Xycloid::SpeedKnob);
+  addParam(Knob::tiny(moduleSlug, module, column2, y, Xycloid::SpeedAvKnob));
+  addParam(Knob::large(moduleSlug, module, column3, y, Xycloid::SpeedKnob));
 
   y += dy;
   installInput(this, module, column1, y, Xycloid::RatioCvInput);
-  install<TinyKnob>(this, module, column2, y, Xycloid::RatioAvKnob);
-  install<LargeKnob>(this, module, column3, y, Xycloid::RatioKnob);
+  addParam(Knob::tiny(moduleSlug, module, column2, y, Xycloid::RatioAvKnob));
+  addParam(Knob::large(moduleSlug, module, column3, y, Xycloid::RatioKnob));
   install<Toggle<2>>(this, module, column4, y, Xycloid::FreeRatioSwitch);
 
   y += dy;
   installInput(this, module, column1, y, Xycloid::DepthCvInput);
-  install<TinyKnob>(this, module, column2, y, Xycloid::DepthAvKnob);
-  install<LargeKnob>(this, module, column3, y, Xycloid::DepthKnob);
+  addParam(Knob::tiny(moduleSlug, module, column2, y, Xycloid::DepthAvKnob));
+  addParam(Knob::large(moduleSlug, module, column3, y, Xycloid::DepthKnob));
   install<Toggle<3>>(this, module, column4, y, Xycloid::DirectionSwitch);
 
   y += dy;
   installInput(this, module, column1, y, Xycloid::PhaseCvInput);
-  install<TinyKnob>(this, module, column2, y, Xycloid::PhaseOffsetAvKnob);
-  install<LargeKnob>(this, module, column3, y, Xycloid::PhaseOffsetKnob);
+  addParam(Knob::tiny(moduleSlug, module, column2, y, Xycloid::PhaseOffsetAvKnob));
+  addParam(Knob::large(moduleSlug, module, column3, y, Xycloid::PhaseOffsetKnob));
 
   y = 82.F;
   dy = 15.F;
@@ -50,13 +50,13 @@ XycloidPanel::XycloidPanel(rack::engine::Module *module) {
 
   y += dy;
   installInput(this, module, column1, y, Xycloid::XGainCvInput);
-  install<SmallKnob>(this, module, column2, y, Xycloid::XGainKnob);
+  addParam(Knob::small(moduleSlug, module, column2, y, Xycloid::XGainKnob));
   install<Toggle<2>>(this, module, column3, y, Xycloid::XRangeSwitch);
   installOutput(this, module, column4, y + outputPortOffset, Xycloid::XOutput);
 
   y += dy;
   installInput(this, module, column1, y, Xycloid::YGainCvInput);
-  install<SmallKnob>(this, module, column2, y, Xycloid::YGainKnob);
+  addParam(Knob::small(moduleSlug, module, column2, y, Xycloid::YGainKnob));
   install<Toggle<2>>(this, module, column3, y, Xycloid::YRangeSwitch);
   installOutput(this, module, column4, y + outputPortOffset, Xycloid::YOutput);
 }

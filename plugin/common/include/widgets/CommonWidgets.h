@@ -18,6 +18,14 @@ static inline void positionCentered(rack::widget::Widget *widget, float xmm, flo
   positionCentered(widget, {xmm, ymm});
 }
 
+template <typename Param>
+auto create(std::string const &moduleSlug, rack::engine::Module *module, float x, float y, int index) -> Param * {
+  auto *param = rack::createParam<Param>({}, module, index);
+  param->shadow->opacity = 0.F;
+  param->setGraphics(moduleSlug, x, y);
+  return param;
+}
+
 template <typename Widget, typename Panel> auto installWidget(Panel *panel, rack::math::Vec centermm) -> Widget * {
   auto *widget = rack::createWidget<Widget>({});
   positionCentered(widget, centermm);
@@ -27,9 +35,7 @@ template <typename Widget, typename Panel> auto installWidget(Panel *panel, rack
 
 template <typename Param, typename Panel>
 auto installParam(Panel *panel, rack::engine::Module *module, float x, float y, int index) -> Param * {
-  auto *param = rack::createParam<Param>({}, module, index);
-  param->shadow->opacity = 0.F;
-  param->setGraphics(Panel::moduleSlug, x, y);
+  auto *param = create<Param>(Panel::moduleSlug, module, x, y, index);
   panel->addParam(param);
   return param;
 }

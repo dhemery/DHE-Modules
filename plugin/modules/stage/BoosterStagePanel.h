@@ -31,18 +31,18 @@ namespace stage {
       auto dy = 18.5F;
 
       installInput(this, module, column1, y, Controls::LevelCvInput);
-      install<LargeKnob>(this, module, column3, y, Controls::LevelKnob);
+      addParam(Knob::large(moduleSlug, module, column3, y, Controls::LevelKnob));
 
       install<Toggle<2>>(this, module, column5, y, Controls::LevelRangeSwitch);
 
       y += dy;
       installInput(this, module, column1, y, Controls::CurveCvInput);
-      install<LargeKnob>(this, module, column3, y, Controls::CurveKnob);
+      addParam(Knob::large(moduleSlug, module, column3, y, Controls::CurveKnob));
       install<Toggle<2>>(this, module, column5, y, Controls::ShapeSwitch);
 
       y += dy;
       installInput(this, module, column1, y, Controls::DurationCvInput);
-      install<LargeKnob>(this, module, column3, y, Controls::DurationKnob);
+      addParam(Knob::large(moduleSlug, module, column3, y, Controls::DurationKnob));
 
       install<Toggle<3>>(this, module, column5, y, Controls::DurationRangeSwitch);
 
@@ -50,15 +50,15 @@ namespace stage {
       dy = 15.F;
 
       installInput(this, module, column1, y, Controls::DeferInput);
-      install<MomentaryButton>(this, module, column2, y, Controls::DeferButton);
+      addParam(Button::momentary(moduleSlug, module, column2, y, Controls::DeferButton));
 
-      install<ReverseMomentaryButton>(this, module, column4, y, Controls::ActiveButton);
+      addParam(Button::reverse(moduleSlug, module, column4, y, Controls::ActiveButton));
       installOutput(this, module, column5, y, Controls::ActiveOutput);
 
       y += dy;
       installInput(this, module, column1, y, Controls::TriggerInput);
-      install<MomentaryButton>(this, module, column2, y, Controls::TriggerButton);
-      install<ReverseMomentaryButton>(this, module, column4, y, Controls::EocButton);
+      addParam(Button::momentary(moduleSlug, module, column2, y, Controls::TriggerButton));
+      addParam(Button::reverse(moduleSlug, module, column4, y, Controls::EocButton));
       installOutput(this, module, column5, y, Controls::EocOutput);
 
       y += dy;

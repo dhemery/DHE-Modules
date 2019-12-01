@@ -33,7 +33,7 @@ namespace stage {
       install<Toggle<3>>(this, module, column3, y, Controls::DurationRangeSwitch);
 
       y += dy;
-      install<LargeKnob>(this, module, column2, y, Controls::DurationKnob);
+      addParam(Knob::large(moduleSlug, module, column2, y, Controls::DurationKnob));
 
       y = 82.F;
       dy = 15.F;

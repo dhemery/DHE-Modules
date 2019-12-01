@@ -24,8 +24,8 @@ GatorPanel::GatorPanel(rack::engine::Module *module) {
   auto y = top;
   for (int i = 0; i < Gator::inputCount / 2; i++) {
     installInput(this, module, left, y, Gator::Inputs + i);
-    install<ToggleButton>(this, module, lc, y, Gator::NegateButtons + i);
-    install<ToggleButton>(this, module, rc, y, Gator::NegateButtons + i + Gator::inputCount / 2);
+    addParam(Button::toggle(moduleSlug, module, lc, y, Gator::NegateButtons + i));
+    addParam(Button::toggle(moduleSlug, module, rc, y, Gator::NegateButtons + i + Gator::inputCount / 2));
     installInput(this, module, right, y, Gator::Inputs + i + Gator::inputCount / 2);
     y += dy;
   }

@@ -27,13 +27,13 @@ namespace stage {
       auto y = 25.F;
       auto dy = 18.5F;
 
-      install<LargeKnob>(this, module, column2, y, Controls::LevelKnob);
+      addParam(Knob::large(moduleSlug, module, column2, y, Controls::LevelKnob));
 
       y += dy;
-      install<LargeKnob>(this, module, column2, y, Controls::CurveKnob);
+      addParam(Knob::large(moduleSlug, module, column2, y, Controls::CurveKnob));
 
       y += dy;
-      install<LargeKnob>(this, module, column2, y, Controls::DurationKnob);
+      addParam(Knob::large(moduleSlug, module, column2, y, Controls::DurationKnob));
 
       y = 82.F;
       dy = 15.F;

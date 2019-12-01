@@ -11,70 +11,67 @@ namespace dhe {
 
 class Button : public rack::app::SvgSwitch {
 public:
-  void setGraphics(std::string const &moduleSlug, float x, float y) {
-    this->addFrame(controlSvg(moduleSlug, buttonName + "-1"));
-    this->addFrame(controlSvg(moduleSlug, buttonName + "-2"));
-    positionCentered(this, x, y);
+  static inline auto reverse(std::string const &moduleSlug, rack::engine::Module *module, float x, float y, int index)
+      -> Button * {
+    return new Button{moduleSlug, "button-reversed", true, module, x, y, index};
   }
 
-protected:
-  Button(std::string name, bool momentary) : buttonName{std::move(name)} { this->momentary = momentary; }
+  static inline auto toggle(std::string const &moduleSlug, rack::engine::Module *module, float x, float y, int index)
+      -> Button * {
+    return new Button{moduleSlug, "button", false, module, x, y, index};
+  }
+
+  static inline auto momentary(std::string const &moduleSlug, rack::engine::Module *module, float x, float y, int index)
+      -> Button * {
+    return new Button{moduleSlug, "button", true, module, x, y, index};
+  }
 
 private:
-  std::string const buttonName;
-}; // namespace DHE
-
-class MomentaryButton : public Button {
-public:
-  explicit MomentaryButton(std::string const &name = "button") : Button{name, true} {}
-}; // namespace DHE
-
-class ReverseMomentaryButton : public MomentaryButton {
-public:
-  ReverseMomentaryButton(std::string const &name = "button-reversed") : MomentaryButton(name) {}
+  Button(std::string const &moduleSlug, std::string const &buttonName, bool isMomentary, rack::engine::Module *module,
+         float x, float y, int index) {
+    rack::app::SvgSwitch::momentary = isMomentary;
+    this->addFrame(controlSvg(moduleSlug, buttonName + "-1"));
+    this->addFrame(controlSvg(moduleSlug, buttonName + "-2"));
+    shadow->opacity = 0.F;
+    positionCentered(this, x, y);
+    if (module) {
+      paramQuantity = module->paramQuantities[index];
+    }
+  }
 };
-
-class ToggleButton : public Button {
-public:
-  explicit ToggleButton(std::string const &name = "button") : Button{name, false} {}
-}; // namespace DHE
 
 class Knob : public rack::componentlibrary::RoundKnob {
 public:
-  explicit Knob(std::string sizeName) : sizeName{std::move(sizeName)} {}
+  static inline auto large(std::string const &moduleSlug, rack::engine::Module *module, float x, float y, int index)
+      -> Knob * {
+    return new Knob{moduleSlug, "knob-large", module, x, y, index};
+  }
 
-  void setGraphics(std::string const &moduleSlug, float x, float y) {
-    setSvg(controlSvg(moduleSlug, controlName(sizeName)));
+  static inline auto medium(std::string const &moduleSlug, rack::engine::Module *module, float x, float y, int index)
+      -> Knob * {
+    return new Knob{moduleSlug, "knob-medium", module, x, y, index};
+  }
+
+  static inline auto small(std::string const &moduleSlug, rack::engine::Module *module, float x, float y, int index)
+      -> Knob * {
+    return new Knob{moduleSlug, "knob-small", module, x, y, index};
+  }
+
+  static inline auto tiny(std::string const &moduleSlug, rack::engine::Module *module, float x, float y, int index)
+      -> Knob * {
+    return new Knob{moduleSlug, "knob-tiny", module, x, y, index};
+  }
+
+protected:
+  Knob(std::string const &moduleSlug, std::string const &knobName, rack::engine::Module *module, float x, float y,
+       int index) {
+    setSvg(controlSvg(moduleSlug, knobName));
+    shadow->opacity = 0.F;
     positionCentered(this, x, y);
+    if (module) {
+      paramQuantity = module->paramQuantities[index];
+    }
   }
-
-private:
-  static auto controlName(std::string const &sizeName) -> std::string {
-    static const auto controlNamePrefix = std::string{"knob-"};
-    return controlNamePrefix + sizeName;
-  }
-
-  std::string const sizeName;
-};
-
-class LargeKnob : public Knob {
-public:
-  LargeKnob() : Knob("large") {}
-};
-
-class MediumKnob : public Knob {
-public:
-  MediumKnob() : Knob("medium") {}
-};
-
-class SmallKnob : public Knob {
-public:
-  SmallKnob() : Knob("small") {}
-};
-
-class TinyKnob : public Knob {
-public:
-  TinyKnob() : Knob("tiny") {}
 };
 
 template <int N> class Toggle : public rack::app::SvgSwitch {

@@ -26,17 +26,17 @@ FuzzyLogicHPanel::FuzzyLogicHPanel(rack::engine::Module *module) {
 
   auto y = top + 0.F * dy;
   installInput(this, module, abOuterColumn, y, FuzzyLogicH::AInputs + 0);
-  install<ToggleButton>(this, module, abButtonColumn, y, FuzzyLogicH::NotAButtons + 0);
-  install<ToggleButton>(this, module, cdButtonColumn, y, FuzzyLogicH::NotAButtons + 1);
+  addParam(Button::toggle(moduleSlug, module, abButtonColumn, y, FuzzyLogicH::NotAButtons + 0));
+  addParam(Button::toggle(moduleSlug, module, cdButtonColumn, y, FuzzyLogicH::NotAButtons + 1));
   installInput(this, module, cdOuterColumn, y, FuzzyLogicH::AInputs + 1);
 
   y = top + 0.5F * dy;
-  install<Toggle<2>>(this, module, switchColumn, y, FuzzyLogicH::LevelRangeSwitch);
+  addParam(create<Toggle<2>>(moduleSlug, module, switchColumn, y, FuzzyLogicH::LevelRangeSwitch));
 
   y = top + 1.F * dy;
   installInput(this, module, abOuterColumn, y, FuzzyLogicH::BInputs + 0);
-  install<ToggleButton>(this, module, abButtonColumn, y, FuzzyLogicH::NotBButtons + 0);
-  install<ToggleButton>(this, module, cdButtonColumn, y, FuzzyLogicH::NotBButtons + 1);
+  addParam(Button::toggle(moduleSlug, module, abButtonColumn, y, FuzzyLogicH::NotBButtons + 0));
+  addParam(Button::toggle(moduleSlug, module, cdButtonColumn, y, FuzzyLogicH::NotBButtons + 1));
   installInput(this, module, cdOuterColumn, y, FuzzyLogicH::BInputs + 1);
 
   y = top + 2.F * dy;

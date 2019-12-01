@@ -27,22 +27,30 @@ namespace curve_sequencer {
     SustainModeStepper() : Toggle<advanceConditionCount>("stepper-advance") {}
   };
 
-  class SelectionKnob : public SmallKnob {
+  class SelectionKnob : public Knob {
   public:
+    SelectionKnob(const std::function<void(int)> &action, std::string const &moduleSlug, rack::engine::Module *module,
+                  float x, float y, int index) :
+        Knob{moduleSlug, "knob-small", module, x, y, index}, knobChangedTo{action} {
+      snap = true;
+    }
+
     void onChange(const rack::event::Change &e) override {
       Knob::onChange(e);
       knobChangedTo(static_cast<int>(this->paramQuantity->getValue()));
     }
 
-    void onKnobChange(const std::function<void(int)> &action) { knobChangedTo = action; }
-
   private:
-    std::function<void(int)> knobChangedTo = [](int /*unused*/) {};
+    std::function<void(int)> knobChangedTo;
   };
 
   class StartMarker : public rack::widget::SvgWidget {
   public:
-    void setGraphics(std::string const &moduleSlug) { setSvg(controlSvg(moduleSlug, "marker-start")); }
+    StartMarker(std::string const &moduleSlug, float x, float y) {
+      setSvg(controlSvg(moduleSlug, "marker-start"));
+      positionCentered(this, x, y);
+    }
+
     void setSelectionStart(int step) {
       auto constexpr baseX = stepX - 2.F * lightDiameter;
       auto const x = baseX + stepDx * static_cast<float>(step);
@@ -52,7 +60,11 @@ namespace curve_sequencer {
 
   template <int N> class EndMarker : public rack::widget::SvgWidget {
   public:
-    void setGraphics(std::string const &moduleSlug) { setSvg(controlSvg(moduleSlug, "marker-end")); }
+    EndMarker(std::string const &moduleSlug, float x, float y) {
+      setSvg(controlSvg(moduleSlug, "marker-end"));
+      positionCentered(this, x, y);
+    }
+
     void setSelectionStart(int step) {
       this->selectionStart = step;
       move();
@@ -104,28 +116,38 @@ namespace curve_sequencer {
       auto constexpr gateY = inputTop + 3.F * inputDy;
       auto constexpr resetY = inputTop + 4.F * inputDy;
 
+      auto constexpr activeY = top + lightRadius;
+
       installInput(this, module, left, runY, Controls::RunInput);
-      install<ToggleButton>(this, module, left + buttonPortDistance, runY, Controls::RunButton);
+      addParam(Button::toggle(moduleSlug, module, left + buttonPortDistance, runY, Controls::RunButton));
 
       installInput(this, module, left, loopY, Controls::LoopInput);
-      install<ToggleButton>(this, module, left + buttonPortDistance, loopY, Controls::LoopButton);
+      addParam(Button::toggle(moduleSlug, module, left + buttonPortDistance, loopY, Controls::LoopButton));
 
-      auto *selectionStartKnob = install<SelectionKnob>(this, module, left, selectionY, Controls::SelectionStartKnob);
-      selectionStartKnob->snap = true;
+      auto *startMarker = new StartMarker(moduleSlug, 0.F, activeY);
+      this->addChild(startMarker);
 
+      auto *endMarker = new EndMarker<N>(moduleSlug, 0.F, activeY);
+      this->addChild(endMarker);
+
+      auto onSelectionStartChange = [startMarker, endMarker](int step) {
+        startMarker->setSelectionStart(step);
+        endMarker->setSelectionStart(step);
+      };
+      addParam(new SelectionKnob(onSelectionStartChange, moduleSlug, module, left, selectionY,
+                                 Controls::SelectionStartKnob));
+
+      auto onSelectionEndChange = [endMarker](int length) { endMarker->setSelectionLength(length); };
       auto constexpr selectionLengthX = left + hp2mm(2.F);
-
-      auto *selectionLengthKnob
-          = install<SelectionKnob>(this, module, selectionLengthX, selectionY, Controls::SelectionLengthKnob);
-      selectionLengthKnob->snap = true;
+      addParam(new SelectionKnob(onSelectionEndChange, moduleSlug, module, selectionLengthX, selectionY,
+                                 Controls::SelectionLengthKnob));
 
       installInput(this, module, left, gateY, Controls::GateInput);
-      install<MomentaryButton>(this, module, left + buttonPortDistance, gateY, Controls::GateButton);
+      addParam(Button::momentary(moduleSlug, module, left + buttonPortDistance, gateY, Controls::GateButton));
 
       installInput(this, module, left, resetY, Controls::ResetInput);
-      install<MomentaryButton>(this, module, left + buttonPortDistance, resetY, Controls::ResetButton);
+      addParam(Button::momentary(moduleSlug, module, left + buttonPortDistance, resetY, Controls::ResetButton));
 
-      auto constexpr activeY = top + lightRadius;
       auto constexpr generatingModeY = top + hp2mm(2.25F);
       auto constexpr sustainingModeY = top + hp2mm(4.5F);
       auto constexpr levelY = top + hp2mm(6.75F);
@@ -142,14 +164,14 @@ namespace curve_sequencer {
         install<GenerateModeStepper>(this, module, x, generatingModeY, Controls::ModeSwitches + step);
         install<SustainModeStepper>(this, module, x, sustainingModeY, Controls::ConditionSwitches + step);
 
-        install<SmallKnob>(this, module, x, levelY, Controls::LevelKnobs + step);
+        addParam(Knob::small(moduleSlug, module, x, levelY, Controls::LevelKnobs + step));
 
         install<Toggle<2>>(this, module, x, shapeY, Controls::ShapeSwitches + step);
-        install<SmallKnob>(this, module, x, curveY, Controls::CurveKnobs + step);
+        addParam(Knob::small(moduleSlug, module, x, curveY, Controls::CurveKnobs + step));
 
-        install<SmallKnob>(this, module, x, durationY, Controls::DurationKnobs + step);
+        addParam(Knob::small(moduleSlug, module, x, durationY, Controls::DurationKnobs + step));
 
-        install<ToggleButton>(this, module, x, enabledButtonY, Controls::EnabledButtons + step);
+        addParam(Button::toggle(moduleSlug, module, x, enabledButtonY, Controls::EnabledButtons + step));
         installInput(this, module, x, enabledPortY, Controls::EnabledInputs + step);
       }
 
@@ -161,21 +183,6 @@ namespace curve_sequencer {
       install<Toggle<2>>(this, module, right, levelY, Controls::LevelRangeSwitch);
       install<Toggle<3>>(this, module, right, durationY, Controls::DurationRangeSwitch);
       installOutput(this, module, right, outY, Controls::CurveSequencerOutput);
-
-      auto *startMarker = rack::createWidgetCentered<StartMarker>(mm2px(0.F, activeY));
-      startMarker->setGraphics(moduleSlug);
-      this->addChild(startMarker);
-
-      auto *endMarker = rack::createWidgetCentered<EndMarker<N>>(mm2px(0.F, activeY));
-      endMarker->setGraphics(moduleSlug);
-      this->addChild(endMarker);
-
-      selectionStartKnob->onKnobChange([startMarker, endMarker](int step) {
-        startMarker->setSelectionStart(step);
-        endMarker->setSelectionStart(step);
-      });
-
-      selectionLengthKnob->onKnobChange([endMarker](int length) { endMarker->setSelectionLength(length); });
     }
   }; // namespace dhe
 

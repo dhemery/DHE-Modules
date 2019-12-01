@@ -24,12 +24,12 @@ TapersPanel::TapersPanel(rack::engine::Module *module) {
   auto panelBuffer = 4.F;
 
   installInput(this, module, column1, y, Tapers::LevelCvInput1);
-  install<TinyKnob>(this, module, column2, y, Tapers::LevelAvKnob1);
-  install<MediumKnob>(this, module, column3, y, Tapers::LevelKnob1);
+  addParam(Knob::tiny(moduleSlug, module, column2, y, Tapers::LevelAvKnob1));
+  addParam(Knob::medium(moduleSlug, module, column3, y, Tapers::LevelKnob1));
   y += dy;
   installInput(this, module, column1, y, Tapers::CurveCvInput1);
-  install<TinyKnob>(this, module, column2, y, Tapers::CurveAvKnob1);
-  install<MediumKnob>(this, module, column3, y, Tapers::CurveKnob1);
+  addParam(Knob::tiny(moduleSlug, module, column2, y, Tapers::CurveAvKnob1));
+  addParam(Knob::medium(moduleSlug, module, column3, y, Tapers::CurveKnob1));
   y += dy;
   install<Toggle<2>>(this, module, column1, y, Tapers::ShapeSwitch1);
   install<Toggle<2>>(this, module, column2, y, Tapers::LevelRangeSwitch1);
@@ -38,12 +38,12 @@ TapersPanel::TapersPanel(rack::engine::Module *module) {
   y += dy + panelBuffer;
 
   installInput(this, module, column1, y, Tapers::LevelCvInput2);
-  install<TinyKnob>(this, module, column2, y, Tapers::LevelAvKnob2);
-  install<MediumKnob>(this, module, column3, y, Tapers::LevelKnob2);
+  addParam(Knob::tiny(moduleSlug, module, column2, y, Tapers::LevelAvKnob2));
+  addParam(Knob::medium(moduleSlug, module, column3, y, Tapers::LevelKnob2));
   y += dy;
   installInput(this, module, column1, y, Tapers::CurveCvInput2);
-  install<TinyKnob>(this, module, column2, y, Tapers::CurveAvKnob2);
-  install<MediumKnob>(this, module, column3, y, Tapers::CurveKnob2);
+  addParam(Knob::tiny(moduleSlug, module, column2, y, Tapers::CurveAvKnob2));
+  addParam(Knob::medium(moduleSlug, module, column3, y, Tapers::CurveKnob2));
   y += dy;
   install<Toggle<2>>(this, module, column1, y, Tapers::ShapeSwitch2);
   install<Toggle<2>>(this, module, column2, y, Tapers::LevelRangeSwitch2);

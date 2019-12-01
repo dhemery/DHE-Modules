@@ -20,21 +20,21 @@ RangerPanel::RangerPanel(rack::engine::Module *module) {
   auto constexpr dy = 15.F;
 
   y += dy * 0.75F;
-  install<MediumKnob>(this, module, left, y, Ranger::LevelKnob);
+  addParam(Knob::medium(moduleSlug, module, left, y, Ranger::LevelKnob));
   installOutput(this, module, right, y, Ranger::RangerOutput);
 
   y += dy;
   installInput(this, module, left, y, Ranger::LevelCvInput);
-  install<TinyKnob>(this, module, right, y, Ranger::LevelAvKnob);
+  addParam(Knob::tiny(moduleSlug, module, right, y, Ranger::LevelAvKnob));
 
   y += dy / 2.F;
   y += dy * 0.75F;
-  install<MediumKnob>(this, module, left, y, Ranger::CcwLimitKnob);
-  install<MediumKnob>(this, module, right, y, Ranger::CwLimitKnob);
+  addParam(Knob::medium(moduleSlug, module, left, y, Ranger::CcwLimitKnob));
+  addParam(Knob::medium(moduleSlug, module, right, y, Ranger::CwLimitKnob));
 
   y += dy;
-  install<TinyKnob>(this, module, left, y, Ranger::CcwLimitAvKnob);
-  install<TinyKnob>(this, module, right, y, Ranger::CwLimitAvKnob);
+  addParam(Knob::tiny(moduleSlug, module, left, y, Ranger::CcwLimitAvKnob));
+  addParam(Knob::tiny(moduleSlug, module, right, y, Ranger::CwLimitAvKnob));
 
   y += dy;
   installInput(this, module, left, y, Ranger::CcwLimitCvInput);

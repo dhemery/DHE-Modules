@@ -34,7 +34,7 @@ namespace func {
       auto constexpr row6 = top + rowSpacing * 5 + portOffset;
 
       installInput(this, module, x, row1, FuncControls<1>::FuncInput);
-      install<LargeKnob>(this, module, x, row3, FuncControls<1>::AmountKnob);
+      addParam(Knob::large(moduleSlug, module, x, row3, FuncControls<1>::AmountKnob));
       installOutput(this, module, x, row6, FuncControls<1>::FuncOutput);
 
       auto additionRangeStepper

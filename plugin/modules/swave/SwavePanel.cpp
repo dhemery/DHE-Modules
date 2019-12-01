@@ -23,10 +23,10 @@ SwavePanel::SwavePanel(rack::engine::Module *module) {
   install<Toggle<2>>(this, module, x, y, Swave::ShapeSwitch);
 
   y += dy;
-  install<LargeKnob>(this, module, x, y, Swave::CurveKnob);
+  addParam(Knob::large(moduleSlug, module, x, y, Swave::CurveKnob));
 
   y += dy;
-  install<TinyKnob>(this, module, x, y, Swave::CurveAvKnob);
+  addParam(Knob::tiny(moduleSlug, module, x, y, Swave::CurveAvKnob));
 
   y += dy;
   installInput(this, module, x, y, Swave::CurveCvInput);
