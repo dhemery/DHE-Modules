@@ -1,7 +1,6 @@
 #pragma once
 
 #include "CurveSequencerControls.h"
-#include "widgets/Jacks.h"
 #include "widgets/Knobs.h"
 #include "widgets/Panel.h"
 #include "widgets/Screws.h"
@@ -81,8 +80,6 @@ namespace curve_sequencer {
 
   template <int N> class CurveSequencerPanel : public Panel<CurveSequencerPanel<N>> {
     using Controls = CurveSequencerControls<N>;
-    using MainStepKnob = SmallKnob<CurveSequencerPanel<N>>;
-    using SelectionKnob = SelectionKnob<CurveSequencerPanel<N>>;
 
   public:
     static std::string const moduleSlug;
@@ -111,25 +108,25 @@ namespace curve_sequencer {
       auto constexpr resetY = inputTop + 4.F * inputDy;
 
       installInput(this, module, left, runY, Controls::RunInput);
-      this->template button<ToggleButton>(left + buttonPortDistance, runY, Controls::RunButton);
+      install<ToggleButton>(this, module, left + buttonPortDistance, runY, Controls::RunButton);
 
       installInput(this, module, left, loopY, Controls::LoopInput);
-      this->template button<ToggleButton>(left + buttonPortDistance, loopY, Controls::LoopButton);
+      install<ToggleButton>(this, module, left + buttonPortDistance, loopY, Controls::LoopButton);
 
-      auto *selectionStartKnob = SelectionKnob::install(this, module, left, selectionY, Controls::SelectionStartKnob);
+      auto *selectionStartKnob = install<SelectionKnob>(this, module, left, selectionY, Controls::SelectionStartKnob);
       selectionStartKnob->snap = true;
 
       auto constexpr selectionLengthX = left + hp2mm(2.F);
 
       auto *selectionLengthKnob
-          = SelectionKnob::install(this, module, selectionLengthX, selectionY, Controls::SelectionLengthKnob);
+          = install<SelectionKnob>(this, module, selectionLengthX, selectionY, Controls::SelectionLengthKnob);
       selectionLengthKnob->snap = true;
 
       installInput(this, module, left, gateY, Controls::GateInput);
-      this->template button(left + buttonPortDistance, gateY, Controls::GateButton);
+      install<Button>(this, module, left + buttonPortDistance, gateY, Controls::GateButton);
 
       installInput(this, module, left, resetY, Controls::ResetInput);
-      this->template button(left + buttonPortDistance, resetY, Controls::ResetButton);
+      install<Button>(this, module, left + buttonPortDistance, resetY, Controls::ResetButton);
 
       auto constexpr activeY = top + lightRadius;
       auto constexpr generatingModeY = top + hp2mm(2.25F);
@@ -145,17 +142,17 @@ namespace curve_sequencer {
         auto const x = stepX + stepDx * (float) step;
         installLight<ProgressLight>(this, module, x, activeY, Controls::ProgressLights + step + step);
 
-        this->template toggle<GenerateModeStepper>(x, generatingModeY, Controls::ModeSwitches + step);
-        this->template toggle<SustainModeStepper>(x, sustainingModeY, Controls::ConditionSwitches + step);
+        install<GenerateModeStepper>(this, module, x, generatingModeY, Controls::ModeSwitches + step);
+        install<SustainModeStepper>(this, module, x, sustainingModeY, Controls::ConditionSwitches + step);
 
-        MainStepKnob::install(this, module, x, levelY, Controls::LevelKnobs + step);
+        install<SmallKnob>(this, module, x, levelY, Controls::LevelKnobs + step);
 
-        this->template toggle<2>(x, shapeY, Controls::ShapeSwitches + step);
-        MainStepKnob::install(this, module, x, curveY, Controls::CurveKnobs + step);
+        install<Toggle, 2>(this, module, x, shapeY, Controls::ShapeSwitches + step);
+        install<SmallKnob>(this, module, x, curveY, Controls::CurveKnobs + step);
 
-        MainStepKnob::install(this, module, x, durationY, Controls::DurationKnobs + step);
+        install<SmallKnob>(this, module, x, durationY, Controls::DurationKnobs + step);
 
-        this->template button<ToggleButton>(x, enabledButtonY, Controls::EnabledButtons + step);
+        install<ToggleButton>(this, module, x, enabledButtonY, Controls::EnabledButtons + step);
         installInput(this, module, x, enabledPortY, Controls::EnabledInputs + step);
       }
 
@@ -164,8 +161,8 @@ namespace curve_sequencer {
 
       installInput(this, module, right, eosY, Controls::CurveSequencerInput);
 
-      this->template toggle<2>(right, levelY, Controls::LevelRangeSwitch);
-      this->template toggle<3>(right, durationY, Controls::DurationRangeSwitch);
+      install<Toggle, 2>(this, module, right, levelY, Controls::LevelRangeSwitch);
+      install<Toggle, 3>(this, module, right, durationY, Controls::DurationRangeSwitch);
       installOutput(this, module, right, outY, Controls::CurveSequencerOutput);
 
       auto *startMarker = rack::createWidgetCentered<StartMarker<CurveSequencerPanel<N>>>(mm2px(0.F, activeY));

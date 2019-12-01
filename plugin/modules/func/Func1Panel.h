@@ -8,8 +8,6 @@ namespace dhe {
 namespace func {
 
   class Func1Panel : public Panel<Func1Panel> {
-    using MainKnob = LargeKnob<Func1Panel>;
-
   public:
     explicit Func1Panel(rack::engine::Module *module) {
       setModule(module);
@@ -33,15 +31,16 @@ namespace func {
       auto constexpr row6 = top + rowSpacing * 5 + portOffset;
 
       installInput(this, module, x, row1, FuncControls<1>::FuncInput);
-      MainKnob::install(this, module, x, row3, FuncControls<1>::AmountKnob);
+      install<LargeKnob>(this, module, x, row3, FuncControls<1>::AmountKnob);
       installOutput(this, module, x, row6, FuncControls<1>::FuncOutput);
 
-      auto additionRangeStepper = toggle<AdditionRangeStepper>(x, row4, FuncControls<1>::OffsetRangeSwitch);
+      auto additionRangeStepper
+          = install<AdditionRangeStepper>(this, module, x, row4, FuncControls<1>::OffsetRangeSwitch);
       auto multiplicationRangeStepper
-          = toggle<MultiplicationRangeStepper>(x, row4, FuncControls<1>::MultiplierRangeSwitch);
+          = install<MultiplicationRangeStepper>(this, module, x, row4, FuncControls<1>::MultiplierRangeSwitch);
       multiplicationRangeStepper->visible = false;
 
-      auto operatorSwitch = toggle<OperatorSwitch>(x, row2, FuncControls<1>::OperationSwitch);
+      auto operatorSwitch = install<OperatorSwitch>(this, module, x, row2, FuncControls<1>::OperationSwitch);
       auto updateRangeStepperVisibility = [additionRangeStepper, multiplicationRangeStepper](bool isMultiply) {
         additionRangeStepper->visible = !isMultiply;
         multiplicationRangeStepper->visible = isMultiply;

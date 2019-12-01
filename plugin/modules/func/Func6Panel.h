@@ -35,12 +35,13 @@ namespace func {
         auto const portY = y + portOffset;
 
         installInput(this, module, column1, portY, FuncControls<6>::FuncInput + row);
-        MainKnob::install(this, module, column3, y, FuncControls<6>::AmountKnob + row);
+        install<LargeKnob>(this, module, column3, y, FuncControls<6>::AmountKnob + row);
         installOutput(this, module, column5, portY, FuncControls<6>::FuncOutput + row);
 
-        auto additionRangeStepper = toggle<AdditionRangeStepper>(column4, y, FuncControls<6>::OffsetRangeSwitch + row);
-        auto multiplicationRangeStepper
-            = toggle<MultiplicationRangeStepper>(column4, y, FuncControls<6>::MultiplierRangeSwitch + row);
+        auto additionRangeStepper
+            = install<AdditionRangeStepper>(this, module, column4, y, FuncControls<6>::OffsetRangeSwitch + row);
+        auto multiplicationRangeStepper = install<MultiplicationRangeStepper>(
+            this, module, column4, y, FuncControls<6>::MultiplierRangeSwitch + row);
         multiplicationRangeStepper->visible = false;
 
         auto updateRangeStepperVisibility = [additionRangeStepper, multiplicationRangeStepper](bool isMultiply) {
@@ -48,7 +49,7 @@ namespace func {
           multiplicationRangeStepper->visible = isMultiply;
         };
 
-        auto operatorSwitch = toggle<OperatorSwitch>(column2, y, FuncControls<6>::OperationSwitch + row);
+        auto operatorSwitch = install<OperatorSwitch>(this, module, column2, y, FuncControls<6>::OperationSwitch + row);
 
         operatorSwitch->onOperatorChange(updateRangeStepperVisibility);
       }

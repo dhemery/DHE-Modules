@@ -1,14 +1,10 @@
 #include "SwavePanel.h"
 
 #include "Swave.h"
-#include "widgets/Jacks.h"
 #include "widgets/Knobs.h"
 #include "widgets/Screws.h"
 
 namespace dhe {
-
-using AvKnob = TinyKnob<SwavePanel>;
-using MainKnob = LargeKnob<SwavePanel>;
 
 SwavePanel::SwavePanel(rack::engine::Module *module) {
   setModule(module);
@@ -22,13 +18,13 @@ SwavePanel::SwavePanel(rack::engine::Module *module) {
   auto y = 25.F;
   auto dy = 18.5F;
 
-  toggle<2>(x, y, Swave::ShapeSwitch);
+  install<Toggle, 2>(this, module, x, y, Swave::ShapeSwitch);
 
   y += dy;
-  MainKnob::install(this, module, x, y, Swave::CurveKnob);
+  install<LargeKnob>(this, module, x, y, Swave::CurveKnob);
 
   y += dy;
-  AvKnob::install(this, module, x, y, Swave::CurveAvKnob);
+  install<TinyKnob>(this, module, x, y, Swave::CurveAvKnob);
 
   y += dy;
   installInput(this, module, x, y, Swave::CurveCvInput);

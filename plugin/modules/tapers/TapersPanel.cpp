@@ -1,14 +1,10 @@
 #include "TapersPanel.h"
 
 #include "Tapers.h"
-#include "widgets/Jacks.h"
 #include "widgets/Knobs.h"
 #include "widgets/Screws.h"
 
 namespace dhe {
-
-using AvKnob = TinyKnob<TapersPanel>;
-using MainKnob = MediumKnob<TapersPanel>;
 
 TapersPanel::TapersPanel(rack::engine::Module *module) {
   setModule(module);
@@ -26,29 +22,29 @@ TapersPanel::TapersPanel(rack::engine::Module *module) {
   auto panelBuffer = 4.F;
 
   installInput(this, module, column1, y, Tapers::LevelCvInput1);
-  AvKnob::install(this, module, column2, y, Tapers::LevelAvKnob1);
-  MainKnob::install(this, module, column3, y, Tapers::LevelKnob1);
+  install<TinyKnob>(this, module, column2, y, Tapers::LevelAvKnob1);
+  install<LargeKnob>(this, module, column3, y, Tapers::LevelKnob1);
   y += dy;
   installInput(this, module, column1, y, Tapers::CurveCvInput1);
-  AvKnob::install(this, module, column2, y, Tapers::CurveAvKnob1);
-  MainKnob::install(this, module, column3, y, Tapers::CurveKnob1);
+  install<TinyKnob>(this, module, column2, y, Tapers::CurveAvKnob1);
+  install<LargeKnob>(this, module, column3, y, Tapers::CurveKnob1);
   y += dy;
-  toggle<2>(column1, y, Tapers::ShapeSwitch1);
-  toggle<2>(column2, y, Tapers::LevelRangeSwitch1);
+  install<Toggle, 2>(this, module, column1, y, Tapers::ShapeSwitch1);
+  install<Toggle, 2>(this, module, column2, y, Tapers::LevelRangeSwitch1);
   installOutput(this, module, column3, y, Tapers::TaperOutput1);
 
   y += dy + panelBuffer;
 
   installInput(this, module, column1, y, Tapers::LevelCvInput2);
-  AvKnob::install(this, module, column2, y, Tapers::LevelAvKnob2);
-  MainKnob::install(this, module, column3, y, Tapers::LevelKnob2);
+  install<TinyKnob>(this, module, column2, y, Tapers::LevelAvKnob2);
+  install<LargeKnob>(this, module, column3, y, Tapers::LevelKnob2);
   y += dy;
   installInput(this, module, column1, y, Tapers::CurveCvInput2);
-  AvKnob::install(this, module, column2, y, Tapers::CurveAvKnob2);
-  MainKnob::install(this, module, column3, y, Tapers::CurveKnob2);
+  install<TinyKnob>(this, module, column2, y, Tapers::CurveAvKnob2);
+  install<LargeKnob>(this, module, column3, y, Tapers::CurveKnob2);
   y += dy;
-  toggle<2>(column1, y, Tapers::ShapeSwitch2);
-  toggle<2>(column2, y, Tapers::LevelRangeSwitch2);
+  install<Toggle, 2>(this, module, column1, y, Tapers::ShapeSwitch2);
+  install<Toggle, 2>(this, module, column2, y, Tapers::LevelRangeSwitch2);
   installOutput(this, module, column3, y, Tapers::TaperOutput2);
 }
 } // namespace dhe

@@ -26,15 +26,15 @@ namespace stage {
       auto y = 25.F;
       auto dy = 18.5F;
 
-      MainKnob::install(this, module, column2, y, Controls::LevelKnob);
+      install<LargeKnob>(this, module, column2, y, Controls::LevelKnob);
 
       y += dy;
       installInput(this, module, column1, y, Controls::LevelCvInput);
-      toggle<2>(column3, y, Controls::LevelRangeSwitch);
+      install<Toggle, 2>(this, module, column3, y, Controls::LevelRangeSwitch);
 
       y += dy;
-      button(column1, y, Controls::WaitButton);
-      button(column3, y, Controls::TriggerButton);
+      install<Button>(this, module, column1, y, Controls::WaitButton);
+      install<Button>(this, module, column3, y, Controls::TriggerButton);
 
       y = 82.F;
       dy = 15.F;

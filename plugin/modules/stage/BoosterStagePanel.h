@@ -8,7 +8,6 @@ namespace stage {
 
   class BoosterStagePanel : public Panel<BoosterStagePanel> {
     using Controls = BoosterStageControls;
-    using MainKnob = LargeKnob<BoosterStagePanel>;
 
   public:
     explicit BoosterStagePanel(rack::engine::Module *module) {
@@ -29,34 +28,34 @@ namespace stage {
       auto dy = 18.5F;
 
       installInput(this, module, column1, y, Controls::LevelCvInput);
-      MainKnob::install(this, module, column3, y, Controls::LevelKnob);
+      install<LargeKnob>(this, module, column3, y, Controls::LevelKnob);
 
-      toggle<2>(column5, y, Controls::LevelRangeSwitch);
+      install<Toggle, 2>(this, module, column5, y, Controls::LevelRangeSwitch);
 
       y += dy;
       installInput(this, module, column1, y, Controls::CurveCvInput);
-      MainKnob::install(this, module, column3, y, Controls::CurveKnob);
-      toggle<2>(column5, y, Controls::ShapeSwitch);
+      install<LargeKnob>(this, module, column3, y, Controls::CurveKnob);
+      install<Toggle, 2>(this, module, column5, y, Controls::ShapeSwitch);
 
       y += dy;
       installInput(this, module, column1, y, Controls::DurationCvInput);
-      MainKnob::install(this, module, column3, y, Controls::DurationKnob);
+      install<LargeKnob>(this, module, column3, y, Controls::DurationKnob);
 
-      toggle<3>(column5, y, Controls::DurationRangeSwitch);
+      install<Toggle, 3>(this, module, column5, y, Controls::DurationRangeSwitch);
 
       y = 82.F;
       dy = 15.F;
 
       installInput(this, module, column1, y, Controls::DeferInput);
-      button(column2, y, Controls::DeferButton);
+      install<Button>(this, module, column2, y, Controls::DeferButton);
 
-      button<ReverseButton>(column4, y, Controls::ActiveButton);
+      install<ReverseButton>(this, module, column4, y, Controls::ActiveButton);
       installOutput(this, module, column5, y, Controls::ActiveOutput);
 
       y += dy;
       installInput(this, module, column1, y, Controls::TriggerInput);
-      button(column2, y, Controls::TriggerButton);
-      button<ReverseButton>(column4, y, Controls::EocButton);
+      install<Button>(this, module, column2, y, Controls::TriggerButton);
+      install<ReverseButton>(this, module, column4, y, Controls::EocButton);
       installOutput(this, module, column5, y, Controls::EocOutput);
 
       y += dy;

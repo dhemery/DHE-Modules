@@ -24,14 +24,14 @@ namespace stage {
       auto y = 25.F;
       auto dy = 18.5F;
 
-      toggle<2>(column2, y, Controls::ModeSwitch);
+      install<Toggle, 2>(this, module, column2, y, Controls::ModeSwitch);
 
       y += dy;
       installInput(this, module, column1, y, Controls::DurationCvInput);
-      toggle<3>(column3, y, Controls::DurationRangeSwitch);
+      install<Toggle, 3>(this, module, column3, y, Controls::DurationRangeSwitch);
 
       y += dy;
-      MainKnob::install(this, module, column2, y, Controls::DurationKnob);
+      install<LargeKnob>(this, module, column2, y, Controls::DurationKnob);
 
       y = 82.F;
       dy = 15.F;

@@ -1,7 +1,7 @@
 #include "FuzzyLogicHPanel.h"
 
 #include "FuzzyLogicH.h"
-#include "widgets/Jacks.h"
+#include "widgets/Buttons.h"
 #include "widgets/Knobs.h"
 #include "widgets/Screws.h"
 
@@ -25,17 +25,17 @@ FuzzyLogicHPanel::FuzzyLogicHPanel(rack::engine::Module *module) {
 
   auto y = top + 0.F * dy;
   installInput(this, module, abOuterColumn, y, FuzzyLogicH::AInputs + 0);
-  button<ToggleButton>(abButtonColumn, y, FuzzyLogicH::NotAButtons + 0);
-  button<ToggleButton>(cdButtonColumn, y, FuzzyLogicH::NotAButtons + 1);
+  install<ToggleButton>(this, module, abButtonColumn, y, FuzzyLogicH::NotAButtons + 0);
+  install<ToggleButton>(this, module, cdButtonColumn, y, FuzzyLogicH::NotAButtons + 1);
   installInput(this, module, cdOuterColumn, y, FuzzyLogicH::AInputs + 1);
 
   y = top + 0.5F * dy;
-  toggle<2>(switchColumn, y, FuzzyLogicH::LevelRangeSwitch);
+  install<Toggle, 2>(this, module, switchColumn, y, FuzzyLogicH::LevelRangeSwitch);
 
   y = top + 1.F * dy;
   installInput(this, module, abOuterColumn, y, FuzzyLogicH::BInputs + 0);
-  button<ToggleButton>(abButtonColumn, y, FuzzyLogicH::NotBButtons + 0);
-  button<ToggleButton>(cdButtonColumn, y, FuzzyLogicH::NotBButtons + 1);
+  install<ToggleButton>(this, module, abButtonColumn, y, FuzzyLogicH::NotBButtons + 0);
+  install<ToggleButton>(this, module, cdButtonColumn, y, FuzzyLogicH::NotBButtons + 1);
   installInput(this, module, cdOuterColumn, y, FuzzyLogicH::BInputs + 1);
 
   y = top + 2.F * dy;

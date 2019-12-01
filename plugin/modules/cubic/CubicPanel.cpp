@@ -1,13 +1,9 @@
 #include "CubicPanel.h"
 
-#include "widgets/Jacks.h"
 #include "widgets/Knobs.h"
 #include "widgets/Screws.h"
 
 namespace dhe {
-
-using CoefficientKnob = SmallKnob<CubicPanel>;
-using GainKnob = SmallKnob<CubicPanel>;
 
 CubicPanel::CubicPanel(rack::engine::Module *module) {
   setModule(module);
@@ -23,23 +19,23 @@ CubicPanel::CubicPanel(rack::engine::Module *module) {
   auto dy = 15.F;
 
   installInput(this, module, column1, y, Cubic::ACoefficientCvInput);
-  CoefficientKnob::install(this, module, column2, y, Cubic::ACoefficientKnob);
+  install<SmallKnob>(this, module, column2, y, Cubic::ACoefficientKnob);
 
   y += dy;
   installInput(this, module, column1, y, Cubic::BCoefficientCvInput);
-  CoefficientKnob::install(this, module, column2, y, Cubic::BCoefficientKnob);
+  install<SmallKnob>(this, module, column2, y, Cubic::BCoefficientKnob);
 
   y += dy;
   installInput(this, module, column1, y, Cubic::CCoefficientCvInput);
-  CoefficientKnob::install(this, module, column2, y, Cubic::CCoefficientKnob);
+  install<SmallKnob>(this, module, column2, y, Cubic::CCoefficientKnob);
 
   y += dy;
   installInput(this, module, column1, y, Cubic::DCoefficientCvInput);
-  CoefficientKnob::install(this, module, column2, y, Cubic::DCoefficientKnob);
+  install<SmallKnob>(this, module, column2, y, Cubic::DCoefficientKnob);
 
   y = 82.F;
-  GainKnob::install(this, module, column1, y, Cubic::InputGainKnob);
-  GainKnob::install(this, module, column2, y, Cubic::OutputGainKnob);
+  install<SmallKnob>(this, module, column1, y, Cubic::InputGainKnob);
+  install<SmallKnob>(this, module, column2, y, Cubic::OutputGainKnob);
 
   y += dy;
   installInput(this, module, column1, y, Cubic::InputGainCvInput);

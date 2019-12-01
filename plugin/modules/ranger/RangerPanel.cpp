@@ -1,14 +1,10 @@
 #include "RangerPanel.h"
 
 #include "Ranger.h"
-#include "widgets/Jacks.h"
 #include "widgets/Knobs.h"
 #include "widgets/Screws.h"
 
 namespace dhe {
-
-using AvKnob = TinyKnob<RangerPanel>;
-using MainKnob = MediumKnob<RangerPanel>;
 
 RangerPanel::RangerPanel(rack::engine::Module *module) {
   setModule(module);
@@ -22,28 +18,28 @@ RangerPanel::RangerPanel(rack::engine::Module *module) {
   auto constexpr dy = 15.F;
 
   y += dy * 0.75F;
-  MainKnob::install(this, module, left, y, Ranger::LevelKnob);
+  install<LargeKnob>(this, module, left, y, Ranger::LevelKnob);
   installOutput(this, module, right, y, Ranger::RangerOutput);
 
   y += dy;
   installInput(this, module, left, y, Ranger::LevelCvInput);
-  AvKnob::install(this, module, right, y, Ranger::LevelAvKnob);
+  install<TinyKnob>(this, module, right, y, Ranger::LevelAvKnob);
 
   y += dy / 2.F;
   y += dy * 0.75F;
-  MainKnob::install(this, module, left, y, Ranger::CcwLimitKnob);
-  MainKnob::install(this, module, right, y, Ranger::CwLimitKnob);
+  install<LargeKnob>(this, module, left, y, Ranger::CcwLimitKnob);
+  install<LargeKnob>(this, module, right, y, Ranger::CwLimitKnob);
 
   y += dy;
-  AvKnob::install(this, module, left, y, Ranger::CcwLimitAvKnob);
-  AvKnob::install(this, module, right, y, Ranger::CwLimitAvKnob);
+  install<TinyKnob>(this, module, left, y, Ranger::CcwLimitAvKnob);
+  install<TinyKnob>(this, module, right, y, Ranger::CwLimitAvKnob);
 
   y += dy;
   installInput(this, module, left, y, Ranger::CcwLimitCvInput);
   installInput(this, module, right, y, Ranger::CwLimitCvInput);
 
   y += dy;
-  toggle<2>(left, y, Ranger::CcwLimitRangeSwitch);
-  toggle<2>(right, y, Ranger::CwLimitRangeSwitch);
+  install<Toggle, 2>(this, module, left, y, Ranger::CcwLimitRangeSwitch);
+  install<Toggle, 2>(this, module, right, y, Ranger::CwLimitRangeSwitch);
 }
 } // namespace dhe

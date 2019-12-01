@@ -1,14 +1,9 @@
 #include "BlossomPanel.h"
 
-#include "widgets/Jacks.h"
 #include "widgets/Knobs.h"
 #include "widgets/Screws.h"
 
 namespace dhe {
-
-using AvKnob = TinyKnob<BlossomPanel>;
-using GainKnob = SmallKnob<BlossomPanel>;
-using MainKnob = LargeKnob<BlossomPanel>;
 
 BlossomPanel::BlossomPanel(rack::engine::Module *module) {
   setModule(module);
@@ -26,38 +21,38 @@ BlossomPanel::BlossomPanel(rack::engine::Module *module) {
   auto dy = 18.5F;
 
   installInput(this, module, column1, y, Blossom::SpeedCvInput);
-  AvKnob::install(this, module, column2, y, Blossom::SpeedAvKNob);
-  MainKnob::install(this, module, column3, y, Blossom::SpeedKnob);
+  install<TinyKnob>(this, module, column2, y, Blossom::SpeedAvKNob);
+  install<LargeKnob>(this, module, column3, y, Blossom::SpeedKnob);
 
   y += dy;
   installInput(this, module, column1, y, Blossom::RatioCvInput);
-  AvKnob::install(this, module, column2, y, Blossom::RatioAvKnob);
-  MainKnob::install(this, module, column3, y, Blossom::RatioKnob);
-  toggle<2>(column4, y, Blossom::FreeRatioSwitch);
+  install<TinyKnob>(this, module, column2, y, Blossom::RatioAvKnob);
+  install<LargeKnob>(this, module, column3, y, Blossom::RatioKnob);
+  install<Toggle, 2>(this, module, column4, y, Blossom::FreeRatioSwitch);
 
   y += dy;
   installInput(this, module, column1, y, Blossom::DepthCvInput);
-  AvKnob::install(this, module, column2, y, Blossom::DepthAvKnob);
-  MainKnob::install(this, module, column3, y, Blossom::DepthKnob);
+  install<TinyKnob>(this, module, column2, y, Blossom::DepthAvKnob);
+  install<LargeKnob>(this, module, column3, y, Blossom::DepthKnob);
 
   y += dy;
   installInput(this, module, column1, y, Blossom::PhaseCvInput);
-  AvKnob::install(this, module, column2, y, Blossom::PhaseOffsetAvKnob);
-  MainKnob::install(this, module, column3, y, Blossom::PhaseOffsetKnob);
+  install<TinyKnob>(this, module, column2, y, Blossom::PhaseOffsetAvKnob);
+  install<LargeKnob>(this, module, column3, y, Blossom::PhaseOffsetKnob);
 
   y = 97.F;
   dy = 15.F;
   auto const outputPortOffset = 1.25F;
 
   installInput(this, module, column1, y, Blossom::XGainCvInput);
-  GainKnob::install(this, module, column2, y, Blossom::XGainKnob);
-  toggle<2>(column3, y, Blossom::XRangeSwitch);
+  install<SmallKnob>(this, module, column2, y, Blossom::XGainKnob);
+  install<Toggle, 2>(this, module, column3, y, Blossom::XRangeSwitch);
   installOutput(this, module, column4, y + outputPortOffset, Blossom::XOutput);
 
   y += dy;
   installInput(this, module, column1, y, Blossom::YGainCvInput);
-  GainKnob::install(this, module, column2, y, Blossom::YGainKnob);
-  toggle<2>(column3, y, Blossom::YRangeSwitch);
+  install<SmallKnob>(this, module, column2, y, Blossom::YGainKnob);
+  install<Toggle, 2>(this, module, column3, y, Blossom::YRangeSwitch);
   installOutput(this, module, column4, y + outputPortOffset, Blossom::YOutput);
 }
 } // namespace dhe

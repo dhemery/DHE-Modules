@@ -1,5 +1,6 @@
 #pragma once
 
+#include "CommonWidgets.h"
 #include "PanelAssets.h"
 
 #include <app/SvgSwitch.hpp>
