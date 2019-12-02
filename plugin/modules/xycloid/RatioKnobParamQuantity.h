@@ -10,10 +10,10 @@ namespace dhe {
 namespace xycloid {
   using Controls = XycloidControls;
 
-static auto constexpr maxRatio = 16.F;
-static auto constexpr inwardRatioRange = Range{0.F, -maxRatio};
-static auto constexpr outwardRatioRange = Range{0.F, maxRatio};
-static auto constexpr bidirectionalRatioRange = Range{-maxRatio, maxRatio};
+  static auto constexpr maxRatio = 16.F;
+  static auto constexpr inwardRatioRange = Range{0.F, -maxRatio};
+  static auto constexpr outwardRatioRange = Range{0.F, maxRatio};
+  static auto constexpr bidirectionalRatioRange = Range{-maxRatio, maxRatio};
 
   static auto const ratioRanges
       = std::array<Range const *, 3>{&inwardRatioRange, &bidirectionalRatioRange, &outwardRatioRange};

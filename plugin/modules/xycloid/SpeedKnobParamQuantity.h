@@ -1,11 +1,16 @@
 #pragma once
 
+#include "components/Range.h"
+#include "components/Taper.h"
+
+#include <engine/Module.hpp>
+#include <engine/ParamQuantity.hpp>
+
 namespace dhe {
 namespace xycloid {
   static auto constexpr speedKnobTaperCurvature = -0.8F;
-  static auto constexpr speedRange = Range{-10.F, 10.F};
   static auto constexpr speedKnobTaper = taper::FixedSTaper{speedKnobTaperCurvature};
-  static auto constexpr initialSpeedHz(1.F);
+  static auto constexpr speedRange = Range{-10.F, 10.F};
 
   static inline auto rotationToSpeed(float rotation) -> float {
     auto const tapered = speedKnobTaper.apply(rotation);
@@ -24,6 +29,7 @@ namespace xycloid {
   };
 
   static void configSpeedKnob(rack::engine::Module *module, int knobId) {
+    static auto constexpr initialSpeedHz{1.F};
     static auto const initialRotation = speedToRotation(initialSpeedHz);
     module->configParam<SpeedKnobParamQuantity>(knobId, 0.F, 1.F, initialRotation, "Speed", " Hz");
   }

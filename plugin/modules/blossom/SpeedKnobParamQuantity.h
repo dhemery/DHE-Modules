@@ -1,5 +1,9 @@
 #pragma once
 
+#include "components/Range.h"
+#include "components/Taper.h"
+
+#include <engine/Module.hpp>
 #include <engine/ParamQuantity.hpp>
 
 namespace dhe {
@@ -26,8 +30,8 @@ namespace blossom {
 
   static inline void configSpeedKnob(rack::engine::Module *module, int knobId) {
     static auto constexpr initialSpinHz(1.F);
-    static auto const initialSpinKnobRotation = spinToRotation(initialSpinHz);
-    module->configParam<SpeedKnobParamQuantity>(knobId, 0.F, 1.F, initialSpinKnobRotation, "Speed", " Hz");
+    static auto const initialRotation = spinToRotation(initialSpinHz);
+    module->configParam<SpeedKnobParamQuantity>(knobId, 0.F, 1.F, initialRotation, "Speed", " Hz");
   }
 
 } // namespace blossom
