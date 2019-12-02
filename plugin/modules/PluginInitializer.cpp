@@ -50,6 +50,8 @@ using dhe::stage::StageModule;
 using dhe::stage::StagePanel;
 using dhe::stage::UpstageModule;
 using dhe::stage::UpstagePanel;
+using dhe::xycloid::Xycloid;
+using dhe::xycloid::XycloidPanel;
 
 void init(rack::plugin::Plugin *p) {
   pluginInstance = p;
@@ -71,5 +73,5 @@ void init(rack::plugin::Plugin *p) {
   p->addModel(rack::createModel<dhe::Swave, dhe::SwavePanel>("Swave"));
   p->addModel(rack::createModel<dhe::Tapers, dhe::TapersPanel>("Tapers"));
   p->addModel(rack::createModel<UpstageModule, UpstagePanel>("Upstage"));
-  p->addModel(rack::createModel<dhe::Xycloid, dhe::XycloidPanel>("Xycloid"));
+  p->addModel(rack::createModel<Xycloid, XycloidPanel>("Xycloid"));
 }
