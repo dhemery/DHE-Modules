@@ -15,7 +15,7 @@ Cubic::Cubic() {
   configGain(this, OutputGainKnob, "Output gain");
 }
 
-void Cubic::process(const ProcessArgs & /*args*/) {
+void Cubic::process(ProcessArgs const & /*args*/) {
   auto a = coefficient(ACoefficientKnob, ACoefficientCvInput);
   auto b = coefficient(BCoefficientKnob, BCoefficientCvInput);
   auto c = coefficient(CCoefficientKnob, CCoefficientCvInput);

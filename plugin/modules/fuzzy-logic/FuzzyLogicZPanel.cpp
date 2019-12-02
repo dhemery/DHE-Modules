@@ -7,23 +7,23 @@
 namespace dhe {
 
 FuzzyLogicZPanel::FuzzyLogicZPanel(rack::engine::Module *module) {
-  auto const slug = std::string{"fuzzy-logic-z"};
+  auto constexpr slug = "fuzzy-logic-z";
   auto constexpr hp = 9;
 
   setModule(module);
   setPanel(backgroundSvg(slug));
   installScrews(this, hp);
 
-  auto const abOuterColumn = hp2mm(1.5F);
-  auto const abButtonColumn = hp2mm(3.F);
-  auto const abInnerColumn = hp2mm(3.25F);
-  auto const switchColumn = hp2mm(4.5F);
-  auto const cdInnerColumn = hp2mm(5.75F);
-  auto const cdButtonColumn = hp2mm(6.F);
-  auto const cdOuterColumn = hp2mm(7.5F);
+  auto constexpr abOuterColumn = hp2mm(1.5F);
+  auto constexpr abButtonColumn = hp2mm(3.F);
+  auto constexpr abInnerColumn = hp2mm(3.25F);
+  auto constexpr switchColumn = hp2mm(4.5F);
+  auto constexpr cdInnerColumn = hp2mm(5.75F);
+  auto constexpr cdButtonColumn = hp2mm(6.F);
+  auto constexpr cdOuterColumn = hp2mm(7.5F);
 
-  auto const top = hp2mm(4.F);
-  auto const dy = hp2mm(3.F);
+  auto constexpr top = hp2mm(4.F);
+  auto constexpr dy = hp2mm(3.F);
 
   auto y = top + 0.F * dy;
   addInput(Jack::input(slug, module, abOuterColumn, y, FuzzyLogicZ::AInputs + 0));

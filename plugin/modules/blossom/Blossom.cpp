@@ -75,7 +75,7 @@ Blossom::Blossom() {
   configLevelRangeSwitch(this, YRangeSwitch, "Y range", 0);
 }
 
-void Blossom::process(const ProcessArgs &args) {
+void Blossom::process(ProcessArgs const &args) {
   auto const spinDelta = -speed() * args.sampleTime;
   auto const bounceRatio = ratioIsFree() ? ratio() : std::round(ratio());
   auto const bounceDepth = rotationRange.clamp(depth());

@@ -99,8 +99,8 @@ namespace curve_sequencer {
       auto constexpr sequenceControlsWidth = 13.F;
       auto constexpr hp = static_cast<int>(sequenceControlsWidth + N * stepWidth);
 
-      this->setModule(module);
-      this->setPanel(backgroundSvg(slug));
+      setModule(module);
+      setPanel(backgroundSvg(slug));
       installScrews(this, hp);
 
       auto constexpr left = hp2mm(2.F);
@@ -127,18 +127,18 @@ namespace curve_sequencer {
       addParam(Toggle::button(slug, module, left + buttonPortDistance, loopY, Controls::LoopButton));
 
       auto *startMarker = new StartMarker(slug, 0.F, activeY);
-      this->addChild(startMarker);
+      addChild(startMarker);
 
       auto *endMarker = new EndMarker<N>(slug, 0.F, activeY);
-      this->addChild(endMarker);
+      addChild(endMarker);
 
-      auto onSelectionStartChange = [startMarker, endMarker](int step) {
+      auto const onSelectionStartChange = [startMarker, endMarker](int step) {
         startMarker->setSelectionStart(step);
         endMarker->setSelectionStart(step);
       };
       addParam(new SelectionKnob(onSelectionStartChange, slug, module, left, selectionY, Controls::SelectionStartKnob));
 
-      auto onSelectionEndChange = [endMarker](int length) { endMarker->setSelectionLength(length); };
+      auto const onSelectionEndChange = [endMarker](int length) { endMarker->setSelectionLength(length); };
       auto constexpr selectionLengthX = left + hp2mm(2.F);
       addParam(new SelectionKnob(onSelectionEndChange, slug, module, selectionLengthX, selectionY,
                                  Controls::SelectionLengthKnob));
@@ -158,7 +158,7 @@ namespace curve_sequencer {
       auto constexpr enabledPortY = bottom - portRadius;
       auto constexpr enabledButtonY = enabledPortY - portRadius - buttonRadius - 1.F;
 
-      for (int step = 0; step < N; step++) {
+      for (auto step = 0; step < N; step++) {
         auto const x = stepX + stepDx * (float) step;
         addChild(rack::createLightCentered<ProgressLight>(mm2px(x, activeY), module,
                                                           Controls::ProgressLights + step + step));

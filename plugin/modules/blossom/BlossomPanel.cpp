@@ -7,8 +7,7 @@
 namespace dhe {
 
 BlossomPanel::BlossomPanel(rack::engine::Module *module) {
-  auto const slug = std::string{"blossom"};
-
+  auto constexpr slug = "blossom";
   auto constexpr hp = 11;
 
   setModule(module);
@@ -47,7 +46,7 @@ BlossomPanel::BlossomPanel(rack::engine::Module *module) {
 
   y = 97.F;
   dy = 15.F;
-  auto const outputPortOffset = 1.25F;
+  auto constexpr outputPortOffset = 1.25F;
 
   addInput(Jack::input(slug, module, column1, y, Blossom::XGainCvInput));
   addParam(Knob::small(slug, module, column2, y, Blossom::XGainKnob));

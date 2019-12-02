@@ -31,7 +31,7 @@ namespace stage {
     void sendEnvelope(float voltage) { outputs[EnvelopeOutput].setVoltage(voltage); }
 
     void sendTrigger(bool isTriggered) {
-      const auto voltage = unipolarSignalRange.scale(isTriggered);
+      auto const voltage = unipolarSignalRange.scale(isTriggered);
       outputs[TriggerOutput].setVoltage(voltage);
     }
 

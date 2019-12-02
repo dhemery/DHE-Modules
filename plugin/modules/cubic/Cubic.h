@@ -11,7 +11,7 @@ class Cubic : public rack::engine::Module {
 public:
   Cubic();
 
-  void process(const ProcessArgs &args) override;
+  void process(ProcessArgs const &args) override;
 
   enum ParameterIds {
     ACoefficientKnob,

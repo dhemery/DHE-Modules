@@ -14,9 +14,9 @@ FuzzyLogicH::FuzzyLogicH() {
   configLevelRangeSwitch(this, LevelRangeSwitch, "Level Range");
 }
 
-void FuzzyLogicH::process(const rack::engine::Module::ProcessArgs & /*ignored*/) {
+void FuzzyLogicH::process(ProcessArgs const & /*ignored*/) {
   auto const voltageOffset = positionOf(params[LevelRangeSwitch]) == 1 ? 0.F : 5.F;
-  for (int i = 0; i < 2; i++) {
+  for (auto i = 0; i < 2; i++) {
     auto const aInput = inputs[AInputs + i].getVoltage() + voltageOffset;
     auto const bInput = inputs[BInputs + i].getVoltage() + voltageOffset;
     auto const a = isPressed(params[(NotAButtons + i)]) ? 10.F - aInput : aInput;

@@ -32,7 +32,7 @@ protected:
   Toggle(std::string const &toggleName, int size, std::string const &moduleSvgDir, rack::engine::Module *module,
          float x, float y, int index) {
     auto const toggleNamePrefix = toggleName + "-";
-    for (int position = 1; position <= size; position++) {
+    for (auto position = 1; position <= size; position++) {
       addFrame(controlSvg(moduleSvgDir, toggleNamePrefix + std::to_string(position)));
     }
     shadow->opacity = 0.F;

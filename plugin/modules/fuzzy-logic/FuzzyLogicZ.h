@@ -6,7 +6,7 @@ namespace dhe {
 class FuzzyLogicZ : public rack::engine::Module {
 public:
   FuzzyLogicZ();
-  void process(const ProcessArgs &args) override;
+  void process(ProcessArgs const &args) override;
 
   void setOutputs(int outputId, int negatedOutputId, float voltage, float offset) {
     outputs[outputId].setVoltage(voltage - offset);

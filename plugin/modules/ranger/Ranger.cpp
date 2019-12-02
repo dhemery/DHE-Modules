@@ -20,7 +20,7 @@ Ranger::Ranger() {
   configAttenuverter(this, CwLimitAvKnob, "CW limit CV gain");
 }
 
-void Ranger::process(const ProcessArgs & /*args*/) {
+void Ranger::process(ProcessArgs const & /*args*/) {
   auto const outputVoltage = scale(level(), ccwLimit(), cwLimit());
   outputs[RangerOutput].setVoltage(outputVoltage);
 }

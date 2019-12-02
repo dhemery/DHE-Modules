@@ -35,7 +35,7 @@ public:
   auto clamp(float scaled) const -> float { return dhe::clamp(scaled, lower, upper); }
 
 private:
-  const float lower;
-  const float upper;
+  float const lower;
+  float const upper;
 };
 } // namespace dhe

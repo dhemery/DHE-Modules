@@ -12,24 +12,24 @@ namespace stage {
 
   public:
     explicit BoosterStagePanel(rack::engine::Module *module) {
-      auto const slug = std::string{"booster-stage"};
+      auto constexpr slug = "booster-stage";
       auto constexpr hp = 8;
 
       setModule(module);
       setPanel(backgroundSvg(slug));
       installScrews(this, hp);
 
-      auto width = hp2mm(hp);
+      auto constexpr width = hp2mm(hp);
 
-      auto column1 = width / 6.F + 0.3333333F;
-      auto column3 = width / 2.F;
-      auto column5 = width - column1;
-      auto buttonPortDistance = 7.891F;
-      auto column2 = column1 + buttonPortDistance;
-      auto column4 = column5 - buttonPortDistance;
+      auto constexpr column1 = width / 6.F + 0.3333333F;
+      auto constexpr column3 = width / 2.F;
+      auto constexpr column5 = width - column1;
+      auto constexpr buttonPortDistance = 7.891F;
+      auto constexpr column2 = column1 + buttonPortDistance;
+      auto constexpr column4 = column5 - buttonPortDistance;
 
-      auto y = 25.F;
       auto dy = 18.5F;
+      auto y = 25.F;
 
       addInput(Jack::input(slug, module, column1, y, Controls::LevelCvInput));
       addParam(Knob::large(slug, module, column3, y, Controls::LevelKnob));

@@ -7,7 +7,7 @@
 namespace dhe {
 
 XycloidPanel::XycloidPanel(rack::engine::Module *module) {
-  auto const slug = std::string{"xycloid"};
+  auto constexpr slug = "xycloid";
   auto constexpr hp = 11;
 
   setModule(module);
@@ -47,7 +47,7 @@ XycloidPanel::XycloidPanel(rack::engine::Module *module) {
 
   y = 82.F;
   dy = 15.F;
-  auto const outputPortOffset = 1.25F;
+  auto constexpr outputPortOffset = 1.25F;
 
   y += dy;
   addInput(Jack::input(slug, module, column1, y, Xycloid::XGainCvInput));

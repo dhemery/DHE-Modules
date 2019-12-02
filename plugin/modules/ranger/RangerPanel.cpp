@@ -7,7 +7,7 @@
 namespace dhe {
 
 RangerPanel::RangerPanel(rack::engine::Module *module) {
-  auto const slug = std::string{"ranger"};
+  auto constexpr slug = "ranger";
   auto constexpr hp = 6;
 
   setModule(module);
@@ -15,10 +15,10 @@ RangerPanel::RangerPanel(rack::engine::Module *module) {
   installScrews(this, hp);
 
   auto constexpr left = hp2mm(1.5F);
-  auto const right = hp2mm(hp) - left;
+  auto constexpr right = hp2mm(hp) - left;
 
-  auto y = 14.5F;
   auto constexpr dy = 15.F;
+  auto y = 14.5F;
 
   y += dy * 0.75F;
   addParam(Knob::medium(slug, module, left, y, Ranger::LevelKnob));

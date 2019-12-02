@@ -7,7 +7,7 @@
 namespace dhe {
 
 SwavePanel::SwavePanel(rack::engine::Module *module) {
-  auto const slug = std::string{"swave"};
+  auto constexpr slug = "swave";
   auto constexpr hp = 4;
 
   setModule(module);

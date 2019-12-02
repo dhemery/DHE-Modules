@@ -7,22 +7,22 @@
 namespace dhe {
 
 TapersPanel::TapersPanel(rack::engine::Module *module) {
-  auto const slug = std::string{"tapers"};
+  auto constexpr slug = "tapers";
   auto constexpr hp = 9;
 
   setModule(module);
   setPanel(backgroundSvg(slug));
   installScrews(this, hp);
 
-  auto width = hp2mm(hp);
+  auto constexpr width = hp2mm(hp);
 
-  auto column1 = width / 5.F + 0.333333333F;
-  auto column2 = width / 2.F;
-  auto column3 = width - column1;
+  auto constexpr column1 = width / 5.F + 0.333333333F;
+  auto constexpr column2 = width / 2.F;
+  auto constexpr column3 = width - column1;
 
+  auto constexpr dy = 16.F;
+  auto constexpr panelBuffer = 4.F;
   auto y = 24.F;
-  auto dy = 16.F;
-  auto panelBuffer = 4.F;
 
   addInput(Jack::input(slug, module, column1, y, Tapers::LevelCvInput1));
   addParam(Knob::tiny(slug, module, column2, y, Tapers::LevelAvKnob1));

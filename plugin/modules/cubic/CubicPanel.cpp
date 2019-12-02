@@ -7,20 +7,20 @@
 namespace dhe {
 
 CubicPanel::CubicPanel(rack::engine::Module *module) {
-  auto const slug = std::string{"cubic"};
+  auto constexpr slug = "cubic";
   auto constexpr hp = 5;
 
   setModule(module);
   setPanel(backgroundSvg(slug));
   installScrews(this, hp);
 
-  auto width = hp2mm(hp);
+  auto constexpr width = hp2mm(hp);
 
-  auto column1 = width / 4.F + 0.333333F;
-  auto column2 = width - column1;
+  auto constexpr column1 = width / 4.F + 0.333333F;
+  auto constexpr column2 = width - column1;
 
   auto y = 20.F;
-  auto dy = 15.F;
+  auto constexpr dy = 15.F;
 
   addInput(Jack::input(slug, module, column1, y, Cubic::ACoefficientCvInput));
   addParam(Knob::small(slug, module, column2, y, Cubic::ACoefficientKnob));

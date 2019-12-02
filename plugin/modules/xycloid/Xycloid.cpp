@@ -97,7 +97,7 @@ Xycloid::Xycloid() {
   configLevelRangeSwitch(this, YRangeSwitch, "Y range", 0);
 }
 
-void Xycloid::process(const ProcessArgs &args) {
+void Xycloid::process(ProcessArgs const &args) {
   auto const wobbleRatio = ratio();
   auto const wobblePhaseOffset = wobbleRatio < 0.F ? -phase() : phase();
 

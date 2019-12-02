@@ -17,12 +17,12 @@ namespace func {
     FuncModule() {
       config(Controls::ParameterCount, Controls::InputCount, Controls::OutputCount);
 
-      for (int i = 0; i < N; i++) {
+      for (auto i = 0; i < N; i++) {
         configChannel(i);
       }
     }
 
-    void process(const ProcessArgs & /*ignored*/) override {
+    void process(ProcessArgs const & /*ignored*/) override {
       auto upstream = 0.F;
       for (auto i = 0; i < N; i++) {
         upstream = funcEngine.apply(i, upstream);

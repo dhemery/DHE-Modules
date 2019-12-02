@@ -25,7 +25,7 @@ namespace stage {
       configCurvatureKnob(this, StageControls::CurveKnob);
     }
 
-    void process(const ProcessArgs &args) override { machine.process(args.sampleTime); }
+    void process(ProcessArgs const &args) override { machine.process(args.sampleTime); }
 
   private:
     Controls controls{inputs, params, outputs};

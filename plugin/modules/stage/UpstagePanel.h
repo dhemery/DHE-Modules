@@ -11,18 +11,18 @@ namespace stage {
 
   public:
     UpstagePanel(rack::engine::Module *module) {
-      auto const slug = std::string{"upstage"};
+      auto constexpr slug = "upstage";
       auto constexpr hp = 5;
 
       setModule(module);
       setPanel(backgroundSvg(slug));
       installScrews(this, hp);
 
-      auto width = hp2mm(hp);
+      auto constexpr width = hp2mm(hp);
 
-      auto column1 = width / 4.F + 0.333333333F;
-      auto column2 = width / 2.F;
-      auto column3 = width - column1;
+      auto constexpr column1 = width / 4.F + 0.333333333F;
+      auto constexpr column2 = width / 2.F;
+      auto constexpr column3 = width - column1;
 
       auto y = 25.F;
       auto dy = 18.5F;

@@ -23,7 +23,7 @@ namespace stage {
       configButton(this, Controls::WaitButton, "WAIT", {"From input", "High"}, 0);
     }
 
-    void process(const ProcessArgs & /*args*/) override { machine.process(); }
+    void process(ProcessArgs const & /*args*/) override { machine.process(); }
 
   private:
     Controls controls{inputs, params, outputs};

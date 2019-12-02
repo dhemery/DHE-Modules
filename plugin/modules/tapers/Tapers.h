@@ -13,7 +13,7 @@ class Tapers : public rack::engine::Module {
 public:
   Tapers();
 
-  void process(const ProcessArgs &args) override;
+  void process(ProcessArgs const &args) override;
 
   enum ParameterIds {
     LevelKnob1,

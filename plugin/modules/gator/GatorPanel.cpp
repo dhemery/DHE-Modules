@@ -7,23 +7,23 @@
 namespace dhe {
 
 GatorPanel::GatorPanel(rack::engine::Module *module) {
-  auto const slug = std::string{"gator"};
+  auto constexpr slug = "gator";
   auto constexpr hp = 9;
 
   setModule(module);
   setPanel(backgroundSvg(slug));
   installScrews(this, hp);
 
-  auto const top = hp2mm(3.5F);
-  auto const dy = hp2mm(1.75F);
+  auto constexpr top = hp2mm(3.5F);
+  auto constexpr dy = hp2mm(1.75F);
 
-  auto const left = hp2mm(1.5F);
-  auto const lc = hp2mm(3.25F);
-  auto const rc = hp2mm(5.75F);
-  auto const right = hp2mm(7.5F);
+  auto constexpr left = hp2mm(1.5F);
+  auto constexpr lc = hp2mm(3.25F);
+  auto constexpr rc = hp2mm(5.75F);
+  auto constexpr right = hp2mm(7.5F);
 
   auto y = top;
-  for (int i = 0; i < Gator::inputCount / 2; i++) {
+  for (auto i = 0; i < Gator::inputCount / 2; i++) {
     addInput(Jack::input(slug, module, left, y, Gator::Inputs + i));
     addParam(Toggle::button(slug, module, lc, y, Gator::NegateButtons + i));
     addParam(Toggle::button(slug, module, rc, y, Gator::NegateButtons + i + Gator::inputCount / 2));

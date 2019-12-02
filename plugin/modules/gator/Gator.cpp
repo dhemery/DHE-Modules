@@ -13,11 +13,11 @@ Gator::Gator() {
   }
 }
 
-void Gator::process(const rack::engine::Module::ProcessArgs & /*ignored*/) {
+void Gator::process(ProcessArgs const & /*ignored*/) {
   auto connectedCount = 0;
   auto highCount = 0;
 
-  for (int i = 0; i < inputCount; i++) {
+  for (auto i = 0; i < inputCount; i++) {
     if (inputs[i].isConnected()) {
       connectedCount++;
       if (isHigh(inputs[(Inputs + i)]) != isPressed(params[NegateButtons + i])) {

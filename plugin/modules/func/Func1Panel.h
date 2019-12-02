@@ -9,18 +9,21 @@ namespace dhe {
 namespace func {
 
   class Func1Panel : public rack::app::ModuleWidget {
+    static auto constexpr channelCount = 1;
+    using Controls = FuncControls<channelCount>;
+
   public:
     explicit Func1Panel(rack::engine::Module *module) {
-      auto const slug = std::string{"func"};
+      auto constexpr slug = "func";
       auto constexpr hp = 3;
 
       setModule(module);
       setPanel(backgroundSvg(slug));
       installScrews(this, hp);
 
-      auto const width = hp2mm(hp);
+      auto constexpr width = hp2mm(hp);
 
-      auto const x = width / 2.F;
+      auto constexpr x = width / 2.F;
 
       auto constexpr top = 23.F;
       auto constexpr bottom = 108.F;
@@ -34,23 +37,21 @@ namespace func {
       auto constexpr row4 = top + rowSpacing * 3;
       auto constexpr row6 = top + rowSpacing * 5 + portOffset;
 
-      addInput(Jack::input(slug, module, x, row1, FuncControls<1>::FuncInput));
-      addParam(Knob::large(slug, module, x, row3, FuncControls<1>::AmountKnob));
-      addOutput(Jack::output(slug, module, x, row6, FuncControls<1>::FuncOutput));
+      addInput(Jack::input(slug, module, x, row1, Controls::FuncInput));
+      addParam(Knob::large(slug, module, x, row3, Controls::AmountKnob));
+      addOutput(Jack::output(slug, module, x, row6, Controls::FuncOutput));
 
-      auto *additionRangeStepper
-          = new AdditionRangeStepper{slug, module, x, row4, FuncControls<1>::OffsetRangeSwitch};
+      auto *additionRangeStepper = new AdditionRangeStepper{slug, module, x, row4, Controls::OffsetRangeSwitch};
       addParam(additionRangeStepper);
       auto *multiplicationRangeStepper
-          = new MultiplicationRangeStepper{slug, module, x, row4, FuncControls<1>::MultiplierRangeSwitch};
+          = new MultiplicationRangeStepper{slug, module, x, row4, Controls::MultiplierRangeSwitch};
       addParam(multiplicationRangeStepper);
 
-      auto updateRangeStepperVisibility = [additionRangeStepper, multiplicationRangeStepper](bool isMultiply) {
+      auto const updateRangeStepperVisibility = [additionRangeStepper, multiplicationRangeStepper](bool isMultiply) {
         additionRangeStepper->visible = !isMultiply;
         multiplicationRangeStepper->visible = isMultiply;
       };
-      addParam(new OperatorSwitch{updateRangeStepperVisibility, slug, module, x, row2,
-                                  FuncControls<1>::OperationSwitch});
+      addParam(new OperatorSwitch{updateRangeStepperVisibility, slug, module, x, row2, Controls::OperationSwitch});
     }
   };
 } // namespace func

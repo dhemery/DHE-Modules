@@ -6,10 +6,10 @@ namespace dhe {
 class Gator : public rack::engine::Module {
 public:
   Gator();
-  void process(const ProcessArgs &args) override;
+  void process(ProcessArgs const &args) override;
 
   void setAllOutputsFalse() {
-    for (int i = 0; i < OutputCount; i++) {
+    for (auto i = 0; i < OutputCount; i++) {
       outputs[i].setVoltage(0.F);
     }
   }

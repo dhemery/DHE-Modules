@@ -26,7 +26,7 @@ namespace curve_sequencer {
       if (current == selectionEnd) {
         return isLooping ? first() : -1;
       }
-      for (int i = current + 1; i < selectionStart + selectionLength; i++) {
+      for (auto i = current + 1; i < selectionStart + selectionLength; i++) {
         auto const candidate = i & stepMask;
         if (isSelected(candidate, selectionStart, selectionEnd) && isEnabled(candidate)) {
           return candidate;

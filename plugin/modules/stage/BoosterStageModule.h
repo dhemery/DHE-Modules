@@ -36,7 +36,7 @@ namespace stage {
       configButton(this, Controls::EocButton, "EOC", {"Generated", "High"}, 0);
     }
 
-    void process(const ProcessArgs &args) override { machine.process(args.sampleTime); }
+    void process(ProcessArgs const &args) override { machine.process(args.sampleTime); }
 
   private:
     Controls controls{inputs, params, outputs};

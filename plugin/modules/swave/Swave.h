@@ -9,7 +9,7 @@ namespace dhe {
 class Swave : public rack::engine::Module {
 public:
   Swave();
-  void process(const ProcessArgs &args) override;
+  void process(ProcessArgs const &args) override;
 
   enum ParameterIds { CurveKnob, ShapeSwitch, CurveAvKnob, ParameterCount };
   enum InputIds { CurveCvInput, SwaveInput, InputCount };

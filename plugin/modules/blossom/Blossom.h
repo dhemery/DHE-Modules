@@ -17,7 +17,7 @@ static auto constexpr speedRange = Range{-10.F, 10.F};
 class Blossom : public rack::engine::Module {
 public:
   Blossom();
-  void process(const ProcessArgs &args) override;
+  void process(ProcessArgs const &args) override;
 
   enum ParameterIds {
     SpeedKnob,

@@ -11,7 +11,7 @@ Swave::Swave() {
   configCurveShapeSwitch(this, ShapeSwitch);
 }
 
-void Swave::process(const ProcessArgs & /*args*/) {
+void Swave::process(ProcessArgs const & /*args*/) {
   auto const normalized = bipolarSignalRange.normalize(signalIn());
   auto const tapered = taper(normalized);
   auto const outputVoltage = bipolarSignalRange.scale(tapered);

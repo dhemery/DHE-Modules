@@ -41,7 +41,7 @@ namespace curve_sequencer {
       configLevelRangeSwitch(this, Controls::LevelRangeSwitch);
       configDurationRangeSwitch(this, Controls::DurationRangeSwitch);
 
-      for (int step = 0; step < N; step++) {
+      for (auto step = 0; step < N; step++) {
         configToggle<modeCount>(this, Controls::ModeSwitches + step, "Mode", modeDescriptions, defaultMode);
         configToggle<advanceConditionCount>(this, Controls::ConditionSwitches + step, "Advance when",
                                             advanceConditionDescriptions, defaultAdvanceCondition);
@@ -57,7 +57,7 @@ namespace curve_sequencer {
 
     ~CurveSequencerModule() override = default;
 
-    void process(const ProcessArgs &args) override { curveSequencer.execute(args.sampleTime); }
+    void process(ProcessArgs const &args) override { curveSequencer.execute(args.sampleTime); }
 
   private:
     PhaseTimer timer{};

@@ -26,7 +26,7 @@ Tapers::Tapers() {
   configLevelRangeSwitch(this, ShapeSwitch2, "Shape 2");
 }
 
-void Tapers::process(const ProcessArgs & /*args*/) {
+void Tapers::process(ProcessArgs const & /*args*/) {
   outputs[TaperOutput1].setVoltage(levelRange1()->scale(taper1(levelRotation1())));
   outputs[TaperOutput2].setVoltage(levelRange2()->scale(taper2(levelRotation2())));
 }

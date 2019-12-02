@@ -13,7 +13,7 @@ class Xycloid : public rack::engine::Module {
 public:
   Xycloid();
 
-  void process(const ProcessArgs &args) override;
+  void process(ProcessArgs const &args) override;
 
   enum ParameterIds {
     RatioKnob,
