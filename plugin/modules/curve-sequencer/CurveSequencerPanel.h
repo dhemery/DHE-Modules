@@ -162,7 +162,8 @@ namespace curve_sequencer {
 
       for (int step = 0; step < N; step++) {
         auto const x = stepX + stepDx * (float) step;
-        installLight<ProgressLight>(this, module, x, activeY, Controls::ProgressLights + step + step);
+        addChild(rack::createLightCentered<ProgressLight>(mm2px(x, activeY), module,
+                                                          Controls::ProgressLights + step + step));
 
         addParam(new GenerateModeStepper{moduleSlug, module, x, generatingModeY, Controls::ModeSwitches + step});
         addParam(new SustainModeStepper{moduleSlug, module, x, sustainingModeY, Controls::ConditionSwitches + step});

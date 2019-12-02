@@ -1,6 +1,5 @@
 #pragma once
 
-#include "CommonWidgets.h"
 #include "Dimensions.h"
 
 #include <app/ModuleWidget.hpp>

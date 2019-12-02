@@ -1,6 +1,6 @@
 #pragma once
 
-#include "CommonWidgets.h"
+#include "Dimensions.h"
 #include "PanelAssets.h"
 
 #include <app/SvgSwitch.hpp>
@@ -8,6 +8,10 @@
 #include <string>
 
 namespace dhe {
+
+static inline void positionCentered(rack::widget::Widget *widget, float xmm, float ymm) {
+  widget->box.pos = mm2px(xmm, ymm).minus(widget->box.size.div(2));
+}
 
 class Toggle : public rack::app::SvgSwitch {
 public:
