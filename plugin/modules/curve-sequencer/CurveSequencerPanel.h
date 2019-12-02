@@ -20,21 +20,21 @@ namespace curve_sequencer {
 
   class GenerateModeStepper : public Toggle {
   public:
-    GenerateModeStepper(std::string const &moduleSlug, rack::engine::Module *module, float x, float y, int index) :
-        Toggle("stepper-mode", modeCount, moduleSlug, module, x, y, index) {}
+    GenerateModeStepper(std::string const &moduleSvgDir, rack::engine::Module *module, float x, float y, int index) :
+        Toggle("stepper-mode", modeCount, moduleSvgDir, module, x, y, index) {}
   };
 
   class SustainModeStepper : public Toggle {
   public:
-    SustainModeStepper(std::string const &moduleSlug, rack::engine::Module *module, float x, float y, int index) :
-        Toggle("stepper-advance", advanceConditionCount, moduleSlug, module, x, y, index) {}
+    SustainModeStepper(std::string const &moduleSvgDir, rack::engine::Module *module, float x, float y, int index) :
+        Toggle("stepper-advance", advanceConditionCount, moduleSvgDir, module, x, y, index) {}
   };
 
   class SelectionKnob : public Knob {
   public:
-    SelectionKnob(std::function<void(int)> action, std::string const &moduleSlug, rack::engine::Module *module, float x,
-                  float y, int index) :
-        Knob{moduleSlug, "knob-small", module, x, y, index}, knobChangedTo{std::move(action)} {
+    SelectionKnob(std::function<void(int)> action, std::string const &moduleSvgDir, rack::engine::Module *module,
+                  float x, float y, int index) :
+        Knob{moduleSvgDir, "knob-small", module, x, y, index}, knobChangedTo{std::move(action)} {
       snap = true;
     }
 
@@ -49,8 +49,8 @@ namespace curve_sequencer {
 
   class StartMarker : public rack::widget::SvgWidget {
   public:
-    StartMarker(std::string const &moduleSlug, float x, float y) {
-      setSvg(controlSvg(moduleSlug, "marker-start"));
+    StartMarker(std::string const &moduleSvgDir, float x, float y) {
+      setSvg(controlSvg(moduleSvgDir, "marker-start"));
       positionCentered(this, x, y);
     }
 
@@ -63,8 +63,8 @@ namespace curve_sequencer {
 
   template <int N> class EndMarker : public rack::widget::SvgWidget {
   public:
-    EndMarker(std::string const &moduleSlug, float x, float y) {
-      setSvg(controlSvg(moduleSlug, "marker-end"));
+    EndMarker(std::string const &moduleSvgDir, float x, float y) {
+      setSvg(controlSvg(moduleSvgDir, "marker-end"));
       positionCentered(this, x, y);
     }
 
@@ -93,15 +93,14 @@ namespace curve_sequencer {
     using Controls = CurveSequencerControls<N>;
 
   public:
-    static std::string const moduleSlug;
-
     CurveSequencerPanel(rack::engine::Module *module) {
-      static auto constexpr stepWidth = 2.25F;
-      static auto constexpr sequenceControlsWidth = 13.F;
-      static auto constexpr hp = static_cast<int>(sequenceControlsWidth + N * stepWidth);
+      auto const slug = std::string{"curve-sequencer-"} + std::to_string(N);
+      auto constexpr stepWidth = 2.25F;
+      auto constexpr sequenceControlsWidth = 13.F;
+      auto constexpr hp = static_cast<int>(sequenceControlsWidth + N * stepWidth);
 
       this->setModule(module);
-      this->setPanel(backgroundSvg(moduleSlug));
+      this->setPanel(backgroundSvg(slug));
       installScrews(this, hp);
 
       auto constexpr left = hp2mm(2.F);
@@ -121,35 +120,34 @@ namespace curve_sequencer {
 
       auto constexpr activeY = top + lightRadius;
 
-      addInput(Jack::input(moduleSlug, module, left, runY, Controls::RunInput));
-      addParam(Toggle::button(moduleSlug, module, left + buttonPortDistance, runY, Controls::RunButton));
+      addInput(Jack::input(slug, module, left, runY, Controls::RunInput));
+      addParam(Toggle::button(slug, module, left + buttonPortDistance, runY, Controls::RunButton));
 
-      addInput(Jack::input(moduleSlug, module, left, loopY, Controls::LoopInput));
-      addParam(Toggle::button(moduleSlug, module, left + buttonPortDistance, loopY, Controls::LoopButton));
+      addInput(Jack::input(slug, module, left, loopY, Controls::LoopInput));
+      addParam(Toggle::button(slug, module, left + buttonPortDistance, loopY, Controls::LoopButton));
 
-      auto *startMarker = new StartMarker(moduleSlug, 0.F, activeY);
+      auto *startMarker = new StartMarker(slug, 0.F, activeY);
       this->addChild(startMarker);
 
-      auto *endMarker = new EndMarker<N>(moduleSlug, 0.F, activeY);
+      auto *endMarker = new EndMarker<N>(slug, 0.F, activeY);
       this->addChild(endMarker);
 
       auto onSelectionStartChange = [startMarker, endMarker](int step) {
         startMarker->setSelectionStart(step);
         endMarker->setSelectionStart(step);
       };
-      addParam(new SelectionKnob(onSelectionStartChange, moduleSlug, module, left, selectionY,
-                                 Controls::SelectionStartKnob));
+      addParam(new SelectionKnob(onSelectionStartChange, slug, module, left, selectionY, Controls::SelectionStartKnob));
 
       auto onSelectionEndChange = [endMarker](int length) { endMarker->setSelectionLength(length); };
       auto constexpr selectionLengthX = left + hp2mm(2.F);
-      addParam(new SelectionKnob(onSelectionEndChange, moduleSlug, module, selectionLengthX, selectionY,
+      addParam(new SelectionKnob(onSelectionEndChange, slug, module, selectionLengthX, selectionY,
                                  Controls::SelectionLengthKnob));
 
-      addInput(Jack::input(moduleSlug, module, left, gateY, Controls::GateInput));
-      addParam(Button::momentary(moduleSlug, module, left + buttonPortDistance, gateY, Controls::GateButton));
+      addInput(Jack::input(slug, module, left, gateY, Controls::GateInput));
+      addParam(Button::momentary(slug, module, left + buttonPortDistance, gateY, Controls::GateButton));
 
-      addInput(Jack::input(moduleSlug, module, left, resetY, Controls::ResetInput));
-      addParam(Button::momentary(moduleSlug, module, left + buttonPortDistance, resetY, Controls::ResetButton));
+      addInput(Jack::input(slug, module, left, resetY, Controls::ResetInput));
+      addParam(Button::momentary(slug, module, left + buttonPortDistance, resetY, Controls::ResetButton));
 
       auto constexpr generatingModeY = top + hp2mm(2.25F);
       auto constexpr sustainingModeY = top + hp2mm(4.5F);
@@ -165,31 +163,29 @@ namespace curve_sequencer {
         addChild(rack::createLightCentered<ProgressLight>(mm2px(x, activeY), module,
                                                           Controls::ProgressLights + step + step));
 
-        addParam(new GenerateModeStepper{moduleSlug, module, x, generatingModeY, Controls::ModeSwitches + step});
-        addParam(new SustainModeStepper{moduleSlug, module, x, sustainingModeY, Controls::ConditionSwitches + step});
+        addParam(new GenerateModeStepper{slug, module, x, generatingModeY, Controls::ModeSwitches + step});
+        addParam(new SustainModeStepper{slug, module, x, sustainingModeY, Controls::ConditionSwitches + step});
 
-        addParam(Knob::small(moduleSlug, module, x, levelY, Controls::LevelKnobs + step));
+        addParam(Knob::small(slug, module, x, levelY, Controls::LevelKnobs + step));
 
-        addParam(Toggle::stepper(2, moduleSlug, module, x, shapeY, Controls::ShapeSwitches + step));
-        addParam(Knob::small(moduleSlug, module, x, curveY, Controls::CurveKnobs + step));
+        addParam(Toggle::stepper(2, slug, module, x, shapeY, Controls::ShapeSwitches + step));
+        addParam(Knob::small(slug, module, x, curveY, Controls::CurveKnobs + step));
 
-        addParam(Knob::small(moduleSlug, module, x, durationY, Controls::DurationKnobs + step));
+        addParam(Knob::small(slug, module, x, durationY, Controls::DurationKnobs + step));
 
-        addParam(Toggle::button(moduleSlug, module, x, enabledButtonY, Controls::EnabledButtons + step));
-        addInput(Jack::input(moduleSlug, module, x, enabledPortY, Controls::EnabledInputs + step));
+        addParam(Toggle::button(slug, module, x, enabledButtonY, Controls::EnabledButtons + step));
+        addInput(Jack::input(slug, module, x, enabledPortY, Controls::EnabledInputs + step));
       }
 
       auto constexpr outY = bottom - portRadius - 1.F;
       auto constexpr eosY = top + hp2mm(2.75);
 
-      addInput(Jack::input(moduleSlug, module, right, eosY, Controls::CurveSequencerInput));
+      addInput(Jack::input(slug, module, right, eosY, Controls::CurveSequencerInput));
 
-      addParam(Toggle::stepper(2, moduleSlug, module, right, levelY, Controls::LevelRangeSwitch));
-      addParam(Toggle::stepper(3, moduleSlug, module, right, durationY, Controls::DurationRangeSwitch));
-      addOutput(Jack::output(moduleSlug, module, right, outY, Controls::CurveSequencerOutput));
+      addParam(Toggle::stepper(2, slug, module, right, levelY, Controls::LevelRangeSwitch));
+      addParam(Toggle::stepper(3, slug, module, right, durationY, Controls::DurationRangeSwitch));
+      addOutput(Jack::output(slug, module, right, outY, Controls::CurveSequencerOutput));
     }
   }; // namespace dhe
-
-  template <int N> const std::string CurveSequencerPanel<N>::moduleSlug = "curve-sequencer-" + std::to_string(N);
 } // namespace curve_sequencer
 } // namespace dhe

@@ -11,10 +11,11 @@ namespace func {
   class Func1Panel : public rack::app::ModuleWidget {
   public:
     explicit Func1Panel(rack::engine::Module *module) {
+      auto const slug = std::string{"func"};
       auto constexpr hp = 3;
 
       setModule(module);
-      setPanel(backgroundSvg(moduleSlug));
+      setPanel(backgroundSvg(slug));
       installScrews(this, hp);
 
       auto const width = hp2mm(hp);
@@ -33,26 +34,24 @@ namespace func {
       auto constexpr row4 = top + rowSpacing * 3;
       auto constexpr row6 = top + rowSpacing * 5 + portOffset;
 
-      addInput(Jack::input(moduleSlug, module, x, row1, FuncControls<1>::FuncInput));
-      addParam(Knob::large(moduleSlug, module, x, row3, FuncControls<1>::AmountKnob));
-      addOutput(Jack::output(moduleSlug, module, x, row6, FuncControls<1>::FuncOutput));
+      addInput(Jack::input(slug, module, x, row1, FuncControls<1>::FuncInput));
+      addParam(Knob::large(slug, module, x, row3, FuncControls<1>::AmountKnob));
+      addOutput(Jack::output(slug, module, x, row6, FuncControls<1>::FuncOutput));
 
       auto *additionRangeStepper
-          = new AdditionRangeStepper{moduleSlug, module, x, row4, FuncControls<1>::OffsetRangeSwitch};
+          = new AdditionRangeStepper{slug, module, x, row4, FuncControls<1>::OffsetRangeSwitch};
       addParam(additionRangeStepper);
       auto *multiplicationRangeStepper
-          = new MultiplicationRangeStepper{moduleSlug, module, x, row4, FuncControls<1>::MultiplierRangeSwitch};
+          = new MultiplicationRangeStepper{slug, module, x, row4, FuncControls<1>::MultiplierRangeSwitch};
       addParam(multiplicationRangeStepper);
 
       auto updateRangeStepperVisibility = [additionRangeStepper, multiplicationRangeStepper](bool isMultiply) {
         additionRangeStepper->visible = !isMultiply;
         multiplicationRangeStepper->visible = isMultiply;
       };
-      addParam(new OperatorSwitch{updateRangeStepperVisibility, moduleSlug, module, x, row2,
+      addParam(new OperatorSwitch{updateRangeStepperVisibility, slug, module, x, row2,
                                   FuncControls<1>::OperationSwitch});
     }
-
-    static constexpr auto moduleSlug = "func";
   };
 } // namespace func
 } // namespace dhe

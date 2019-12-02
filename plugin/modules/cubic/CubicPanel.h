@@ -7,6 +7,5 @@ namespace dhe {
 class CubicPanel : public rack::app::ModuleWidget {
 public:
   explicit CubicPanel(rack::engine::Module *module);
-  static constexpr auto moduleSlug = "cubic";
 };
 } // namespace dhe

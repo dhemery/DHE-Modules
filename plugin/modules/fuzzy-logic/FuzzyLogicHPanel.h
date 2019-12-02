@@ -6,7 +6,6 @@ namespace dhe {
 
 class FuzzyLogicHPanel : public rack::app::ModuleWidget {
 public:
-  explicit FuzzyLogicHPanel(rack::engine::Module *fuzzy);
-  static constexpr auto moduleSlug = "fuzzy-logic-h";
+  explicit FuzzyLogicHPanel(rack::engine::Module *module);
 };
 } // namespace dhe

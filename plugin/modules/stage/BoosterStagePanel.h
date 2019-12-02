@@ -12,10 +12,11 @@ namespace stage {
 
   public:
     explicit BoosterStagePanel(rack::engine::Module *module) {
+      auto const slug = std::string{"booster-stage"};
       auto constexpr hp = 8;
 
       setModule(module);
-      setPanel(backgroundSvg(moduleSlug));
+      setPanel(backgroundSvg(slug));
       installScrews(this, hp);
 
       auto width = hp2mm(hp);
@@ -30,42 +31,41 @@ namespace stage {
       auto y = 25.F;
       auto dy = 18.5F;
 
-      addInput(Jack::input(moduleSlug, module, column1, y, Controls::LevelCvInput));
-      addParam(Knob::large(moduleSlug, module, column3, y, Controls::LevelKnob));
+      addInput(Jack::input(slug, module, column1, y, Controls::LevelCvInput));
+      addParam(Knob::large(slug, module, column3, y, Controls::LevelKnob));
 
-      addParam(Toggle::stepper(2, moduleSlug, module, column5, y, Controls::LevelRangeSwitch));
-
-      y += dy;
-      addInput(Jack::input(moduleSlug, module, column1, y, Controls::CurveCvInput));
-      addParam(Knob::large(moduleSlug, module, column3, y, Controls::CurveKnob));
-      addParam(Toggle::stepper(2, moduleSlug, module, column5, y, Controls::ShapeSwitch));
+      addParam(Toggle::stepper(2, slug, module, column5, y, Controls::LevelRangeSwitch));
 
       y += dy;
-      addInput(Jack::input(moduleSlug, module, column1, y, Controls::DurationCvInput));
-      addParam(Knob::large(moduleSlug, module, column3, y, Controls::DurationKnob));
+      addInput(Jack::input(slug, module, column1, y, Controls::CurveCvInput));
+      addParam(Knob::large(slug, module, column3, y, Controls::CurveKnob));
+      addParam(Toggle::stepper(2, slug, module, column5, y, Controls::ShapeSwitch));
 
-      addParam(Toggle::stepper(3, moduleSlug, module, column5, y, Controls::DurationRangeSwitch));
+      y += dy;
+      addInput(Jack::input(slug, module, column1, y, Controls::DurationCvInput));
+      addParam(Knob::large(slug, module, column3, y, Controls::DurationKnob));
+
+      addParam(Toggle::stepper(3, slug, module, column5, y, Controls::DurationRangeSwitch));
 
       y = 82.F;
       dy = 15.F;
 
-      addInput(Jack::input(moduleSlug, module, column1, y, Controls::DeferInput));
-      addParam(Button::momentary(moduleSlug, module, column2, y, Controls::DeferButton));
+      addInput(Jack::input(slug, module, column1, y, Controls::DeferInput));
+      addParam(Button::momentary(slug, module, column2, y, Controls::DeferButton));
 
-      addParam(Button::reverse(moduleSlug, module, column4, y, Controls::ActiveButton));
-      addOutput(Jack::output(moduleSlug, module, column5, y, Controls::ActiveOutput));
-
-      y += dy;
-      addInput(Jack::input(moduleSlug, module, column1, y, Controls::TriggerInput));
-      addParam(Button::momentary(moduleSlug, module, column2, y, Controls::TriggerButton));
-      addParam(Button::reverse(moduleSlug, module, column4, y, Controls::EocButton));
-      addOutput(Jack::output(moduleSlug, module, column5, y, Controls::EocOutput));
+      addParam(Button::reverse(slug, module, column4, y, Controls::ActiveButton));
+      addOutput(Jack::output(slug, module, column5, y, Controls::ActiveOutput));
 
       y += dy;
-      addInput(Jack::input(moduleSlug, module, column1, y, Controls::EnvelopeInput));
-      addOutput(Jack::output(moduleSlug, module, column5, y, Controls::EnvelopeOutput));
+      addInput(Jack::input(slug, module, column1, y, Controls::TriggerInput));
+      addParam(Button::momentary(slug, module, column2, y, Controls::TriggerButton));
+      addParam(Button::reverse(slug, module, column4, y, Controls::EocButton));
+      addOutput(Jack::output(slug, module, column5, y, Controls::EocOutput));
+
+      y += dy;
+      addInput(Jack::input(slug, module, column1, y, Controls::EnvelopeInput));
+      addOutput(Jack::output(slug, module, column5, y, Controls::EnvelopeOutput));
     }
-    static constexpr auto moduleSlug = "booster-stage";
   };
 
 } // namespace stage

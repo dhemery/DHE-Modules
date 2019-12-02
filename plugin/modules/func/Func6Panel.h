@@ -11,10 +11,11 @@ namespace func {
   class Func6Panel : public rack::app::ModuleWidget {
   public:
     explicit Func6Panel(rack::engine::Module *module) {
+      auto const slug = std::string{"func-6"};
       auto constexpr hp = 12;
 
       setModule(module);
-      setPanel(backgroundSvg(moduleSlug));
+      setPanel(backgroundSvg(slug));
       installScrews(this, hp);
 
       auto width = hp2mm(hp);
@@ -35,14 +36,14 @@ namespace func {
         auto const y = top + row * rowSpacing;
         auto const portY = y + portOffset;
 
-        addInput(Jack::input(moduleSlug, module, column1, portY, FuncControls<6>::FuncInput + row));
-        addParam(Knob::large(moduleSlug, module, column3, y, FuncControls<6>::AmountKnob + row));
-        addOutput(Jack::output(moduleSlug, module, column5, portY, FuncControls<6>::FuncOutput + row));
+        addInput(Jack::input(slug, module, column1, portY, FuncControls<6>::FuncInput + row));
+        addParam(Knob::large(slug, module, column3, y, FuncControls<6>::AmountKnob + row));
+        addOutput(Jack::output(slug, module, column5, portY, FuncControls<6>::FuncOutput + row));
 
         auto *additionRangeStepper
-            = new AdditionRangeStepper{moduleSlug, module, column4, y, FuncControls<6>::OffsetRangeSwitch + row};
+            = new AdditionRangeStepper{slug, module, column4, y, FuncControls<6>::OffsetRangeSwitch + row};
         addParam(additionRangeStepper);
-        auto *multiplicationRangeStepper = new MultiplicationRangeStepper{moduleSlug, module, column4, y,
+        auto *multiplicationRangeStepper = new MultiplicationRangeStepper{slug, module, column4, y,
                                                                           FuncControls<6>::MultiplierRangeSwitch + row};
         addParam(multiplicationRangeStepper);
 
@@ -51,11 +52,10 @@ namespace func {
           multiplicationRangeStepper->visible = isMultiply;
         };
 
-        addParam(new OperatorSwitch{updateRangeStepperVisibility, moduleSlug, module, column2, y,
+        addParam(new OperatorSwitch{updateRangeStepperVisibility, slug, module, column2, y,
                                     FuncControls<6>::OperationSwitch + row});
       }
     }
-    static constexpr auto moduleSlug = "func-6";
   };
 } // namespace func
 } // namespace dhe

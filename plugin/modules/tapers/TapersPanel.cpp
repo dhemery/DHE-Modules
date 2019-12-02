@@ -7,10 +7,11 @@
 namespace dhe {
 
 TapersPanel::TapersPanel(rack::engine::Module *module) {
+  auto const slug = std::string{"tapers"};
   auto constexpr hp = 9;
 
   setModule(module);
-  setPanel(backgroundSvg(moduleSlug));
+  setPanel(backgroundSvg(slug));
   installScrews(this, hp);
 
   auto width = hp2mm(hp);
@@ -23,30 +24,30 @@ TapersPanel::TapersPanel(rack::engine::Module *module) {
   auto dy = 16.F;
   auto panelBuffer = 4.F;
 
-  addInput(Jack::input(moduleSlug, module, column1, y, Tapers::LevelCvInput1));
-  addParam(Knob::tiny(moduleSlug, module, column2, y, Tapers::LevelAvKnob1));
-  addParam(Knob::medium(moduleSlug, module, column3, y, Tapers::LevelKnob1));
+  addInput(Jack::input(slug, module, column1, y, Tapers::LevelCvInput1));
+  addParam(Knob::tiny(slug, module, column2, y, Tapers::LevelAvKnob1));
+  addParam(Knob::medium(slug, module, column3, y, Tapers::LevelKnob1));
   y += dy;
-  addInput(Jack::input(moduleSlug, module, column1, y, Tapers::CurveCvInput1));
-  addParam(Knob::tiny(moduleSlug, module, column2, y, Tapers::CurveAvKnob1));
-  addParam(Knob::medium(moduleSlug, module, column3, y, Tapers::CurveKnob1));
+  addInput(Jack::input(slug, module, column1, y, Tapers::CurveCvInput1));
+  addParam(Knob::tiny(slug, module, column2, y, Tapers::CurveAvKnob1));
+  addParam(Knob::medium(slug, module, column3, y, Tapers::CurveKnob1));
   y += dy;
-  addParam(Toggle::stepper(2, moduleSlug, module, column1, y, Tapers::ShapeSwitch1));
-  addParam(Toggle::stepper(2, moduleSlug, module, column2, y, Tapers::LevelRangeSwitch1));
-  addOutput(Jack::output(moduleSlug, module, column3, y, Tapers::TaperOutput1));
+  addParam(Toggle::stepper(2, slug, module, column1, y, Tapers::ShapeSwitch1));
+  addParam(Toggle::stepper(2, slug, module, column2, y, Tapers::LevelRangeSwitch1));
+  addOutput(Jack::output(slug, module, column3, y, Tapers::TaperOutput1));
 
   y += dy + panelBuffer;
 
-  addInput(Jack::input(moduleSlug, module, column1, y, Tapers::LevelCvInput2));
-  addParam(Knob::tiny(moduleSlug, module, column2, y, Tapers::LevelAvKnob2));
-  addParam(Knob::medium(moduleSlug, module, column3, y, Tapers::LevelKnob2));
+  addInput(Jack::input(slug, module, column1, y, Tapers::LevelCvInput2));
+  addParam(Knob::tiny(slug, module, column2, y, Tapers::LevelAvKnob2));
+  addParam(Knob::medium(slug, module, column3, y, Tapers::LevelKnob2));
   y += dy;
-  addInput(Jack::input(moduleSlug, module, column1, y, Tapers::CurveCvInput2));
-  addParam(Knob::tiny(moduleSlug, module, column2, y, Tapers::CurveAvKnob2));
-  addParam(Knob::medium(moduleSlug, module, column3, y, Tapers::CurveKnob2));
+  addInput(Jack::input(slug, module, column1, y, Tapers::CurveCvInput2));
+  addParam(Knob::tiny(slug, module, column2, y, Tapers::CurveAvKnob2));
+  addParam(Knob::medium(slug, module, column3, y, Tapers::CurveKnob2));
   y += dy;
-  addParam(Toggle::stepper(2, moduleSlug, module, column1, y, Tapers::ShapeSwitch2));
-  addParam(Toggle::stepper(2, moduleSlug, module, column2, y, Tapers::LevelRangeSwitch2));
-  addOutput(Jack::output(moduleSlug, module, column3, y, Tapers::TaperOutput2));
+  addParam(Toggle::stepper(2, slug, module, column1, y, Tapers::ShapeSwitch2));
+  addParam(Toggle::stepper(2, slug, module, column2, y, Tapers::LevelRangeSwitch2));
+  addOutput(Jack::output(slug, module, column3, y, Tapers::TaperOutput2));
 }
 } // namespace dhe

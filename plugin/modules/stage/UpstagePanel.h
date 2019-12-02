@@ -11,10 +11,11 @@ namespace stage {
 
   public:
     UpstagePanel(rack::engine::Module *module) {
+      auto const slug = std::string{"upstage"};
       auto constexpr hp = 5;
 
       setModule(module);
-      setPanel(backgroundSvg(moduleSlug));
+      setPanel(backgroundSvg(slug));
       installScrews(this, hp);
 
       auto width = hp2mm(hp);
@@ -26,29 +27,28 @@ namespace stage {
       auto y = 25.F;
       auto dy = 18.5F;
 
-      addParam(Knob::large(moduleSlug, module, column2, y, Controls::LevelKnob));
+      addParam(Knob::large(slug, module, column2, y, Controls::LevelKnob));
 
       y += dy;
-      addInput(Jack::input(moduleSlug, module, column1, y, Controls::LevelCvInput));
-      addParam(Toggle::stepper(2, moduleSlug, module, column3, y, Controls::LevelRangeSwitch));
+      addInput(Jack::input(slug, module, column1, y, Controls::LevelCvInput));
+      addParam(Toggle::stepper(2, slug, module, column3, y, Controls::LevelRangeSwitch));
 
       y += dy;
-      addParam(Button::momentary(moduleSlug, module, column1, y, Controls::WaitButton));
-      addParam(Button::momentary(moduleSlug, module, column3, y, Controls::TriggerButton));
+      addParam(Button::momentary(slug, module, column1, y, Controls::WaitButton));
+      addParam(Button::momentary(slug, module, column3, y, Controls::TriggerButton));
 
       y = 82.F;
       dy = 15.F;
 
-      addInput(Jack::input(moduleSlug, module, column1, y, Controls::WaitInput));
+      addInput(Jack::input(slug, module, column1, y, Controls::WaitInput));
 
       y += dy;
-      addInput(Jack::input(moduleSlug, module, column1, y, Controls::TriggerInput));
-      addOutput(Jack::output(moduleSlug, module, column3, y, Controls::TriggerOutput));
+      addInput(Jack::input(slug, module, column1, y, Controls::TriggerInput));
+      addOutput(Jack::output(slug, module, column3, y, Controls::TriggerOutput));
 
       y += dy;
-      addOutput(Jack::output(moduleSlug, module, column3, y, Controls::EnvelopeOutput));
+      addOutput(Jack::output(slug, module, column3, y, Controls::EnvelopeOutput));
     }
-    static constexpr auto moduleSlug = "upstage";
   };
 } // namespace stage
 
