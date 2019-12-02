@@ -10,8 +10,9 @@ namespace dhe {
 namespace xycloid {
 
   class XycloidPanel : public rack::app::ModuleWidget {
-  public:
     using Controls = XycloidControls;
+
+  public:
     explicit XycloidPanel(rack::engine::Module *module) {
       auto constexpr slug = "xycloid";
       auto constexpr hp = 11;

@@ -19,6 +19,8 @@ namespace xycloid {
 
   class Xycloid : public rack::engine::Module {
     using Controls = XycloidControls;
+    static auto constexpr wobbleDepthRange = Range{0.F, 1.F};
+    static auto constexpr phaseOffsetRange = Range{-180.F, 180.F};
 
   public:
     Xycloid() {
@@ -27,7 +29,7 @@ namespace xycloid {
       configSpeedKnob(this, Controls::SpeedKnob);
       configAttenuverter(this, Controls::SpeedAvKnob, "Speed CV gain");
 
-      configWobbleRatioKnob(this, Controls::RatioKnob);
+      configRatioKnob(this, Controls::RatioKnob);
       configAttenuverter(this, Controls::RatioAvKnob, "Ratio CV gain");
       configToggle<3>(this, Controls::DirectionSwitch, "Direction", {"In", "-In +Out", "Out"}, 2);
       configToggle<2>(this, Controls::FreeRatioSwitch, "Ratio mode", {"Quantized", "Free"}, 1);
@@ -88,7 +90,7 @@ namespace xycloid {
     }
 
     auto ratio() const -> float {
-      return wobbleRatio(
+      return xycloid::ratio(
           this, rotation(params[Controls::RatioKnob], inputs[Controls::RatioCvInput], params[Controls::RatioAvKnob]));
     }
 
