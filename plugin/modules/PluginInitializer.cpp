@@ -35,6 +35,8 @@
 
 rack::plugin::Plugin *pluginInstance;
 
+using dhe::blossom::Blossom;
+using dhe::blossom::BlossomPanel;
 using dhe::curve_sequencer::CurveSequencerModule;
 using dhe::curve_sequencer::CurveSequencerPanel;
 using dhe::func::Func1Panel;
@@ -52,7 +54,7 @@ using dhe::stage::UpstagePanel;
 void init(rack::plugin::Plugin *p) {
   pluginInstance = p;
 
-  p->addModel(rack::createModel<dhe::Blossom, dhe::BlossomPanel>("Blossom"));
+  p->addModel(rack::createModel<Blossom, BlossomPanel>("Blossom"));
   p->addModel(rack::createModel<BoosterStageModule, BoosterStagePanel>("BoosterStage"));
   p->addModel(rack::createModel<CurveSequencerModule<4>, CurveSequencerPanel<4>>("CurveSequencer4"));
   p->addModel(rack::createModel<CurveSequencerModule<8>, CurveSequencerPanel<8>>("CurveSequencer8"));
