@@ -37,18 +37,19 @@ namespace func {
       addParam(Knob::large(moduleSlug, module, x, row3, FuncControls<1>::AmountKnob));
       installOutput(this, module, x, row6, FuncControls<1>::FuncOutput);
 
-      auto additionRangeStepper
-          = install<AdditionRangeStepper>(this, module, x, row4, FuncControls<1>::OffsetRangeSwitch);
-      auto multiplicationRangeStepper
-          = install<MultiplicationRangeStepper>(this, module, x, row4, FuncControls<1>::MultiplierRangeSwitch);
-      multiplicationRangeStepper->visible = false;
+      auto *additionRangeStepper
+          = new AdditionRangeStepper{moduleSlug, module, x, row4, FuncControls<1>::OffsetRangeSwitch};
+      addParam(additionRangeStepper);
+      auto *multiplicationRangeStepper
+          = new MultiplicationRangeStepper{moduleSlug, module, x, row4, FuncControls<1>::MultiplierRangeSwitch};
+      addParam(multiplicationRangeStepper);
 
-      auto operatorSwitch = install<OperatorSwitch>(this, module, x, row2, FuncControls<1>::OperationSwitch);
       auto updateRangeStepperVisibility = [additionRangeStepper, multiplicationRangeStepper](bool isMultiply) {
         additionRangeStepper->visible = !isMultiply;
         multiplicationRangeStepper->visible = isMultiply;
       };
-      operatorSwitch->onOperatorChange(updateRangeStepperVisibility);
+      addParam(new OperatorSwitch{updateRangeStepperVisibility, moduleSlug, module, x, row2,
+                                  FuncControls<1>::OperationSwitch});
     }
 
     static constexpr auto moduleSlug = "func";

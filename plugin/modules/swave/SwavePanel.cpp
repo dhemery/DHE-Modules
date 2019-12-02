@@ -20,7 +20,7 @@ SwavePanel::SwavePanel(rack::engine::Module *module) {
   auto y = 25.F;
   auto dy = 18.5F;
 
-  install<Toggle<2>>(this, module, x, y, Swave::ShapeSwitch);
+  addParam(Toggle::stepper(2, moduleSlug, module, x, y, Swave::ShapeSwitch));
 
   y += dy;
   addParam(Knob::large(moduleSlug, module, x, y, Swave::CurveKnob));

@@ -31,8 +31,8 @@ TapersPanel::TapersPanel(rack::engine::Module *module) {
   addParam(Knob::tiny(moduleSlug, module, column2, y, Tapers::CurveAvKnob1));
   addParam(Knob::medium(moduleSlug, module, column3, y, Tapers::CurveKnob1));
   y += dy;
-  install<Toggle<2>>(this, module, column1, y, Tapers::ShapeSwitch1);
-  install<Toggle<2>>(this, module, column2, y, Tapers::LevelRangeSwitch1);
+  addParam(Toggle::stepper(2, moduleSlug, module, column1, y, Tapers::ShapeSwitch1));
+  addParam(Toggle::stepper(2, moduleSlug, module, column2, y, Tapers::LevelRangeSwitch1));
   installOutput(this, module, column3, y, Tapers::TaperOutput1);
 
   y += dy + panelBuffer;
@@ -45,8 +45,8 @@ TapersPanel::TapersPanel(rack::engine::Module *module) {
   addParam(Knob::tiny(moduleSlug, module, column2, y, Tapers::CurveAvKnob2));
   addParam(Knob::medium(moduleSlug, module, column3, y, Tapers::CurveKnob2));
   y += dy;
-  install<Toggle<2>>(this, module, column1, y, Tapers::ShapeSwitch2);
-  install<Toggle<2>>(this, module, column2, y, Tapers::LevelRangeSwitch2);
+  addParam(Toggle::stepper(2, moduleSlug, module, column1, y, Tapers::ShapeSwitch2));
+  addParam(Toggle::stepper(2, moduleSlug, module, column2, y, Tapers::LevelRangeSwitch2));
   installOutput(this, module, column3, y, Tapers::TaperOutput2);
 }
 } // namespace dhe

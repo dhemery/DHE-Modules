@@ -33,18 +33,18 @@ namespace stage {
       installInput(this, module, column1, y, Controls::LevelCvInput);
       addParam(Knob::large(moduleSlug, module, column3, y, Controls::LevelKnob));
 
-      install<Toggle<2>>(this, module, column5, y, Controls::LevelRangeSwitch);
+      addParam(Toggle::stepper(2, moduleSlug, module, column5, y, Controls::LevelRangeSwitch));
 
       y += dy;
       installInput(this, module, column1, y, Controls::CurveCvInput);
       addParam(Knob::large(moduleSlug, module, column3, y, Controls::CurveKnob));
-      install<Toggle<2>>(this, module, column5, y, Controls::ShapeSwitch);
+      addParam(Toggle::stepper(2, moduleSlug, module, column5, y, Controls::ShapeSwitch));
 
       y += dy;
       installInput(this, module, column1, y, Controls::DurationCvInput);
       addParam(Knob::large(moduleSlug, module, column3, y, Controls::DurationKnob));
 
-      install<Toggle<3>>(this, module, column5, y, Controls::DurationRangeSwitch);
+      addParam(Toggle::stepper(3, moduleSlug, module, column5, y, Controls::DurationRangeSwitch));
 
       y = 82.F;
       dy = 15.F;

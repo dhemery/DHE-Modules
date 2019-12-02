@@ -5,29 +5,37 @@
 #include <app/SvgSwitch.hpp>
 #include <event.hpp>
 #include <functional>
+#include <utility>
 
 namespace dhe {
 namespace func {
 
-  class MultiplicationRangeStepper : public Toggle<4> {
+  class MultiplicationRangeStepper : public Toggle {
   public:
-    MultiplicationRangeStepper() : Toggle<4>("stepper-mult") {}
+    MultiplicationRangeStepper(std::string const &moduleSlug, rack::engine::Module *module, float x, float y,
+                               int index) :
+        Toggle("stepper-mult", 4, moduleSlug, module, x, y, index) {
+      visible = false;
+    }
   };
 
-  class AdditionRangeStepper : public Toggle<4> {
+  class AdditionRangeStepper : public Toggle {
   public:
-    AdditionRangeStepper() : Toggle<4>("stepper-add") {}
+    AdditionRangeStepper(std::string const &moduleSlug, rack::engine::Module *module, float x, float y, int index) :
+        Toggle("stepper-add", 4, moduleSlug, module, x, y, index) {}
   };
 
-  class OperatorSwitch : public Toggle<2> {
+  class OperatorSwitch : public Toggle {
   public:
+    OperatorSwitch(std::function<void(bool)> onOperatorChange, std::string const &moduleSlug,
+                   rack::engine::Module *module, float x, float y, int index) :
+        Toggle{2, moduleSlug, module, x, y, index}, operatorChangedTo{std::move(onOperatorChange)} {}
+
     void onChange(const rack::event::Change &e) override {
       rack::app::SvgSwitch::onChange(e);
       auto isMultiply = this->paramQuantity->getValue() > 0.5;
       operatorChangedTo(isMultiply);
     }
-
-    void onOperatorChange(const std::function<void(bool)> &action) { operatorChangedTo = action; }
 
   private:
     std::function<void(bool)> operatorChangedTo = [](bool /*unused*/) {};

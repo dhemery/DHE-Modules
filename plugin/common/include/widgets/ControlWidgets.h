@@ -40,6 +40,31 @@ private:
   }
 };
 
+class Toggle : public rack::app::SvgSwitch {
+public:
+  static inline auto stepper(int size, std::string const &moduleSlug, rack::engine::Module *module, float x, float y,
+                             int index) -> Toggle * {
+    return new Toggle{size, moduleSlug, module, x, y, index};
+  }
+
+protected:
+  Toggle(int size, std::string const &moduleSlug, rack::engine::Module *module, float x, float y, int index) :
+      Toggle{"toggle-" + std::to_string(size), size, moduleSlug, module, x, y, index} {}
+
+  Toggle(std::string const &toggleName, int size, std::string const &moduleSlug, rack::engine::Module *module, float x,
+         float y, int index) {
+    auto const toggleNamePrefix = toggleName + "-";
+    for (int position = 1; position <= size; position++) {
+      addFrame(controlSvg(moduleSlug, toggleNamePrefix + std::to_string(position)));
+    }
+    shadow->opacity = 0.F;
+    positionCentered(this, x, y);
+    if (module) {
+      paramQuantity = module->paramQuantities[index];
+    }
+  }
+};
+
 class Knob : public rack::componentlibrary::RoundKnob {
 public:
   static inline auto large(std::string const &moduleSlug, rack::engine::Module *module, float x, float y, int index)
@@ -73,22 +98,4 @@ protected:
     }
   }
 };
-
-template <int N> class Toggle : public rack::app::SvgSwitch {
-public:
-  explicit Toggle(std::string name = "toggle-" + std::to_string(N)) : toggleName{std::move(name)} {}
-
-  void setGraphics(std::string const &moduleSlug, float x, float y) {
-    auto const controlNamePrefix = toggleName + "-";
-    for (int position = 1; position <= size; position++) {
-      addFrame(controlSvg(moduleSlug, controlNamePrefix + std::to_string(position)));
-    }
-    positionCentered(this, x, y);
-  }
-
-private:
-  std::string const toggleName;
-  static constexpr auto size = N;
-};
-
 } // namespace dhe

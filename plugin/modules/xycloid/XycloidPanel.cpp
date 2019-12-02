@@ -31,13 +31,13 @@ XycloidPanel::XycloidPanel(rack::engine::Module *module) {
   installInput(this, module, column1, y, Xycloid::RatioCvInput);
   addParam(Knob::tiny(moduleSlug, module, column2, y, Xycloid::RatioAvKnob));
   addParam(Knob::large(moduleSlug, module, column3, y, Xycloid::RatioKnob));
-  install<Toggle<2>>(this, module, column4, y, Xycloid::FreeRatioSwitch);
+  addParam(Toggle::stepper(2, moduleSlug, module, column4, y, Xycloid::FreeRatioSwitch));
 
   y += dy;
   installInput(this, module, column1, y, Xycloid::DepthCvInput);
   addParam(Knob::tiny(moduleSlug, module, column2, y, Xycloid::DepthAvKnob));
   addParam(Knob::large(moduleSlug, module, column3, y, Xycloid::DepthKnob));
-  install<Toggle<3>>(this, module, column4, y, Xycloid::DirectionSwitch);
+  addParam(Toggle::stepper(3, moduleSlug, module, column4, y, Xycloid::DirectionSwitch));
 
   y += dy;
   installInput(this, module, column1, y, Xycloid::PhaseCvInput);
@@ -51,13 +51,13 @@ XycloidPanel::XycloidPanel(rack::engine::Module *module) {
   y += dy;
   installInput(this, module, column1, y, Xycloid::XGainCvInput);
   addParam(Knob::small(moduleSlug, module, column2, y, Xycloid::XGainKnob));
-  install<Toggle<2>>(this, module, column3, y, Xycloid::XRangeSwitch);
+  addParam(Toggle::stepper(2, moduleSlug, module, column3, y, Xycloid::XRangeSwitch));
   installOutput(this, module, column4, y + outputPortOffset, Xycloid::XOutput);
 
   y += dy;
   installInput(this, module, column1, y, Xycloid::YGainCvInput);
   addParam(Knob::small(moduleSlug, module, column2, y, Xycloid::YGainKnob));
-  install<Toggle<2>>(this, module, column3, y, Xycloid::YRangeSwitch);
+  addParam(Toggle::stepper(2, moduleSlug, module, column3, y, Xycloid::YRangeSwitch));
   installOutput(this, module, column4, y + outputPortOffset, Xycloid::YOutput);
 }
 

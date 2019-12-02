@@ -26,11 +26,11 @@ namespace stage {
       auto y = 25.F;
       auto dy = 18.5F;
 
-      install<Toggle<2>>(this, module, column2, y, Controls::ModeSwitch);
+      addParam(Toggle::stepper(2, moduleSlug, module, column2, y, Controls::ModeSwitch));
 
       y += dy;
       installInput(this, module, column1, y, Controls::DurationCvInput);
-      install<Toggle<3>>(this, module, column3, y, Controls::DurationRangeSwitch);
+      addParam(Toggle::stepper(3, moduleSlug, module, column3, y, Controls::DurationRangeSwitch));
 
       y += dy;
       addParam(Knob::large(moduleSlug, module, column2, y, Controls::DurationKnob));

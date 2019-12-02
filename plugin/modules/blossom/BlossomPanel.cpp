@@ -31,7 +31,7 @@ BlossomPanel::BlossomPanel(rack::engine::Module *module) {
   installInput(this, module, column1, y, Blossom::RatioCvInput);
   addParam(Knob::tiny(moduleSlug, module, column2, y, Blossom::RatioAvKnob));
   addParam(Knob::large(moduleSlug, module, column3, y, Blossom::RatioKnob));
-  install<Toggle<2>>(this, module, column4, y, Blossom::FreeRatioSwitch);
+  addParam(Toggle::stepper(2, moduleSlug, module, column4, y, Blossom::FreeRatioSwitch));
 
   y += dy;
   installInput(this, module, column1, y, Blossom::DepthCvInput);
@@ -49,13 +49,13 @@ BlossomPanel::BlossomPanel(rack::engine::Module *module) {
 
   installInput(this, module, column1, y, Blossom::XGainCvInput);
   addParam(Knob::small(moduleSlug, module, column2, y, Blossom::XGainKnob));
-  install<Toggle<2>>(this, module, column3, y, Blossom::XRangeSwitch);
+  addParam(Toggle::stepper(2, moduleSlug, module, column3, y, Blossom::XRangeSwitch));
   installOutput(this, module, column4, y + outputPortOffset, Blossom::XOutput);
 
   y += dy;
   installInput(this, module, column1, y, Blossom::YGainCvInput);
   addParam(Knob::small(moduleSlug, module, column2, y, Blossom::YGainKnob));
-  install<Toggle<2>>(this, module, column3, y, Blossom::YRangeSwitch);
+  addParam(Toggle::stepper(2, moduleSlug, module, column3, y, Blossom::YRangeSwitch));
   installOutput(this, module, column4, y + outputPortOffset, Blossom::YOutput);
 }
 } // namespace dhe

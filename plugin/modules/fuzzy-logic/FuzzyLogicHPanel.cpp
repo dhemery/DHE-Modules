@@ -31,7 +31,7 @@ FuzzyLogicHPanel::FuzzyLogicHPanel(rack::engine::Module *module) {
   installInput(this, module, cdOuterColumn, y, FuzzyLogicH::AInputs + 1);
 
   y = top + 0.5F * dy;
-  addParam(create<Toggle<2>>(moduleSlug, module, switchColumn, y, FuzzyLogicH::LevelRangeSwitch));
+  addParam(Toggle::stepper(2, moduleSlug, module, switchColumn, y, FuzzyLogicH::LevelRangeSwitch));
 
   y = top + 1.F * dy;
   installInput(this, module, abOuterColumn, y, FuzzyLogicH::BInputs + 0);

@@ -39,20 +39,20 @@ namespace func {
         addParam(Knob::large(moduleSlug, module, column3, y, FuncControls<6>::AmountKnob + row));
         installOutput(this, module, column5, portY, FuncControls<6>::FuncOutput + row);
 
-        auto additionRangeStepper
-            = install<AdditionRangeStepper>(this, module, column4, y, FuncControls<6>::OffsetRangeSwitch + row);
-        auto multiplicationRangeStepper = install<MultiplicationRangeStepper>(
-            this, module, column4, y, FuncControls<6>::MultiplierRangeSwitch + row);
-        multiplicationRangeStepper->visible = false;
+        auto *additionRangeStepper
+            = new AdditionRangeStepper{moduleSlug, module, column4, y, FuncControls<6>::OffsetRangeSwitch + row};
+        addParam(additionRangeStepper);
+        auto *multiplicationRangeStepper = new MultiplicationRangeStepper{moduleSlug, module, column4, y,
+                                                                          FuncControls<6>::MultiplierRangeSwitch + row};
+        addParam(multiplicationRangeStepper);
 
         auto updateRangeStepperVisibility = [additionRangeStepper, multiplicationRangeStepper](bool isMultiply) {
           additionRangeStepper->visible = !isMultiply;
           multiplicationRangeStepper->visible = isMultiply;
         };
 
-        auto operatorSwitch = install<OperatorSwitch>(this, module, column2, y, FuncControls<6>::OperationSwitch + row);
-
-        operatorSwitch->onOperatorChange(updateRangeStepperVisibility);
+        addParam(new OperatorSwitch{updateRangeStepperVisibility, moduleSlug, module, column2, y,
+                                    FuncControls<6>::OperationSwitch + row});
       }
     }
     static constexpr auto moduleSlug = "func-6";

@@ -41,7 +41,7 @@ RangerPanel::RangerPanel(rack::engine::Module *module) {
   installInput(this, module, right, y, Ranger::CwLimitCvInput);
 
   y += dy;
-  install<Toggle<2>>(this, module, left, y, Ranger::CcwLimitRangeSwitch);
-  install<Toggle<2>>(this, module, right, y, Ranger::CwLimitRangeSwitch);
+  addParam(Toggle::stepper(2, moduleSlug, module, left, y, Ranger::CcwLimitRangeSwitch));
+  addParam(Toggle::stepper(2, moduleSlug, module, right, y, Ranger::CwLimitRangeSwitch));
 }
 } // namespace dhe

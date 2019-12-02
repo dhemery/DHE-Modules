@@ -31,7 +31,7 @@ FuzzyLogicZPanel::FuzzyLogicZPanel(rack::engine::Module *module) {
   installInput(this, module, cdOuterColumn, y, FuzzyLogicZ::AInputs + 1);
 
   y = top + 0.5F * dy;
-  install<Toggle<2>>(this, module, switchColumn, y, FuzzyLogicZ::LevelRangeSwitch);
+  addParam(Toggle::stepper(2, moduleSlug, module, switchColumn, y, FuzzyLogicZ::LevelRangeSwitch));
 
   y = top + 1.F * dy;
   installInput(this, module, abOuterColumn, y, FuzzyLogicZ::BInputs + 0);

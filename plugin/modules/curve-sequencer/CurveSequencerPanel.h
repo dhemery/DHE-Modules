@@ -8,6 +8,7 @@
 #include <componentlibrary.hpp>
 #include <functional>
 #include <string>
+#include <utility>
 
 namespace dhe {
 
@@ -17,21 +18,23 @@ namespace curve_sequencer {
 
   using ProgressLight = rack::componentlibrary::SmallLight<rack::componentlibrary::GreenRedLight>;
 
-  class GenerateModeStepper : public Toggle<modeCount> {
+  class GenerateModeStepper : public Toggle {
   public:
-    GenerateModeStepper() : Toggle<modeCount>("stepper-mode") {}
+    GenerateModeStepper(std::string const &moduleSlug, rack::engine::Module *module, float x, float y, int index) :
+        Toggle("stepper-mode", modeCount, moduleSlug, module, x, y, index) {}
   };
 
-  class SustainModeStepper : public Toggle<advanceConditionCount> {
+  class SustainModeStepper : public Toggle {
   public:
-    SustainModeStepper() : Toggle<advanceConditionCount>("stepper-advance") {}
+    SustainModeStepper(std::string const &moduleSlug, rack::engine::Module *module, float x, float y, int index) :
+        Toggle("stepper-advance", advanceConditionCount, moduleSlug, module, x, y, index) {}
   };
 
   class SelectionKnob : public Knob {
   public:
-    SelectionKnob(const std::function<void(int)> &action, std::string const &moduleSlug, rack::engine::Module *module,
-                  float x, float y, int index) :
-        Knob{moduleSlug, "knob-small", module, x, y, index}, knobChangedTo{action} {
+    SelectionKnob(std::function<void(int)> action, std::string const &moduleSlug, rack::engine::Module *module, float x,
+                  float y, int index) :
+        Knob{moduleSlug, "knob-small", module, x, y, index}, knobChangedTo{std::move(action)} {
       snap = true;
     }
 
@@ -157,16 +160,16 @@ namespace curve_sequencer {
       auto constexpr enabledPortY = bottom - portRadius;
       auto constexpr enabledButtonY = enabledPortY - portRadius - buttonRadius - 1.F;
 
-      for (float step = 0; step < N; step++) {
+      for (int step = 0; step < N; step++) {
         auto const x = stepX + stepDx * (float) step;
         installLight<ProgressLight>(this, module, x, activeY, Controls::ProgressLights + step + step);
 
-        install<GenerateModeStepper>(this, module, x, generatingModeY, Controls::ModeSwitches + step);
-        install<SustainModeStepper>(this, module, x, sustainingModeY, Controls::ConditionSwitches + step);
+        addParam(new GenerateModeStepper{moduleSlug, module, x, generatingModeY, Controls::ModeSwitches + step});
+        addParam(new SustainModeStepper{moduleSlug, module, x, sustainingModeY, Controls::ConditionSwitches + step});
 
         addParam(Knob::small(moduleSlug, module, x, levelY, Controls::LevelKnobs + step));
 
-        install<Toggle<2>>(this, module, x, shapeY, Controls::ShapeSwitches + step);
+        addParam(Toggle::stepper(2, moduleSlug, module, x, shapeY, Controls::ShapeSwitches + step));
         addParam(Knob::small(moduleSlug, module, x, curveY, Controls::CurveKnobs + step));
 
         addParam(Knob::small(moduleSlug, module, x, durationY, Controls::DurationKnobs + step));
@@ -180,8 +183,8 @@ namespace curve_sequencer {
 
       installInput(this, module, right, eosY, Controls::CurveSequencerInput);
 
-      install<Toggle<2>>(this, module, right, levelY, Controls::LevelRangeSwitch);
-      install<Toggle<3>>(this, module, right, durationY, Controls::DurationRangeSwitch);
+      addParam(Toggle::stepper(2, moduleSlug, module, right, levelY, Controls::LevelRangeSwitch));
+      addParam(Toggle::stepper(3, moduleSlug, module, right, durationY, Controls::DurationRangeSwitch));
       installOutput(this, module, right, outY, Controls::CurveSequencerOutput);
     }
   }; // namespace dhe

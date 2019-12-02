@@ -30,7 +30,7 @@ namespace stage {
 
       y += dy;
       installInput(this, module, column1, y, Controls::LevelCvInput);
-      install<Toggle<2>>(this, module, column3, y, Controls::LevelRangeSwitch);
+      addParam(Toggle::stepper(2, moduleSlug, module, column3, y, Controls::LevelRangeSwitch));
 
       y += dy;
       addParam(Button::momentary(moduleSlug, module, column1, y, Controls::WaitButton));
