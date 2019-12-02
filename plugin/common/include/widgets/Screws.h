@@ -24,21 +24,21 @@ static inline void installScrews(rack::app::ModuleWidget *panel, int hp) {
   auto const left = hp < 3 ? screwRadius : screwRadius + screwDiameter;
   auto const right = panelWidth - left;
 
-  auto screwPositions = std::vector<rack::math::Vec>{{left, top}, {right, bottom}};
+  auto screwPositions = std::vector<rack::math::Vec>{mm2px(left, top), mm2px(right, bottom)};
   if (hp > 4) {
-    screwPositions.emplace_back(right, top);
-    screwPositions.emplace_back(left, bottom);
+    screwPositions.push_back(mm2px(right, top));
+    screwPositions.push_back(mm2px(left, bottom));
   }
 
   std::shuffle(screwPositions.begin(), screwPositions.end(), std::mt19937(std::random_device()()));
 
   auto const positionOfSpecialScrew = screwPositions.back();
-  installWidget<SpecialScrew>(panel, positionOfSpecialScrew);
+  panel->addChild(rack::createWidgetCentered<SpecialScrew>(positionOfSpecialScrew));
 
   screwPositions.pop_back();
 
   for (auto const screwPosition : screwPositions) {
-    installWidget<NormalScrew>(panel, screwPosition);
+    panel->addChild(rack::createWidgetCentered<NormalScrew>(screwPosition));
   }
 }
 

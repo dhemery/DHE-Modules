@@ -29,15 +29,15 @@ SwavePanel::SwavePanel(rack::engine::Module *module) {
   addParam(Knob::tiny(moduleSlug, module, x, y, Swave::CurveAvKnob));
 
   y += dy;
-  installInput(this, module, x, y, Swave::CurveCvInput);
+  addInput(Jack::input(moduleSlug, module, x, y, Swave::CurveCvInput));
 
   y = 82.F;
   dy = 15.F;
 
   y += dy;
-  installInput(this, module, x, y, Swave::SwaveInput);
+  addInput(Jack::input(moduleSlug, module, x, y, Swave::SwaveInput));
 
   y += dy;
-  installOutput(this, module, x, y, Swave::SwaveOutput);
+  addOutput(Jack::output(moduleSlug, module, x, y, Swave::SwaveOutput));
 }
 } // namespace dhe

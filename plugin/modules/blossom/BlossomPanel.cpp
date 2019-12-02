@@ -23,23 +23,23 @@ BlossomPanel::BlossomPanel(rack::engine::Module *module) {
   auto y = 25.F;
   auto dy = 18.5F;
 
-  installInput(this, module, column1, y, Blossom::SpeedCvInput);
+  addInput(Jack::input(moduleSlug, module, column1, y, Blossom::SpeedCvInput));
   addParam(Knob::tiny(moduleSlug, module, column2, y, Blossom::SpeedAvKNob));
   addParam(Knob::large(moduleSlug, module, column3, y, Blossom::SpeedKnob));
 
   y += dy;
-  installInput(this, module, column1, y, Blossom::RatioCvInput);
+  addInput(Jack::input(moduleSlug, module, column1, y, Blossom::RatioCvInput));
   addParam(Knob::tiny(moduleSlug, module, column2, y, Blossom::RatioAvKnob));
   addParam(Knob::large(moduleSlug, module, column3, y, Blossom::RatioKnob));
   addParam(Toggle::stepper(2, moduleSlug, module, column4, y, Blossom::FreeRatioSwitch));
 
   y += dy;
-  installInput(this, module, column1, y, Blossom::DepthCvInput);
+  addInput(Jack::input(moduleSlug, module, column1, y, Blossom::DepthCvInput));
   addParam(Knob::tiny(moduleSlug, module, column2, y, Blossom::DepthAvKnob));
   addParam(Knob::large(moduleSlug, module, column3, y, Blossom::DepthKnob));
 
   y += dy;
-  installInput(this, module, column1, y, Blossom::PhaseCvInput);
+  addInput(Jack::input(moduleSlug, module, column1, y, Blossom::PhaseCvInput));
   addParam(Knob::tiny(moduleSlug, module, column2, y, Blossom::PhaseOffsetAvKnob));
   addParam(Knob::large(moduleSlug, module, column3, y, Blossom::PhaseOffsetKnob));
 
@@ -47,15 +47,15 @@ BlossomPanel::BlossomPanel(rack::engine::Module *module) {
   dy = 15.F;
   auto const outputPortOffset = 1.25F;
 
-  installInput(this, module, column1, y, Blossom::XGainCvInput);
+  addInput(Jack::input(moduleSlug, module, column1, y, Blossom::XGainCvInput));
   addParam(Knob::small(moduleSlug, module, column2, y, Blossom::XGainKnob));
   addParam(Toggle::stepper(2, moduleSlug, module, column3, y, Blossom::XRangeSwitch));
-  installOutput(this, module, column4, y + outputPortOffset, Blossom::XOutput);
+  addOutput(Jack::output(moduleSlug, module, column4, y + outputPortOffset, Blossom::XOutput));
 
   y += dy;
-  installInput(this, module, column1, y, Blossom::YGainCvInput);
+  addInput(Jack::input(moduleSlug, module, column1, y, Blossom::YGainCvInput));
   addParam(Knob::small(moduleSlug, module, column2, y, Blossom::YGainKnob));
   addParam(Toggle::stepper(2, moduleSlug, module, column3, y, Blossom::YRangeSwitch));
-  installOutput(this, module, column4, y + outputPortOffset, Blossom::YOutput);
+  addOutput(Jack::output(moduleSlug, module, column4, y + outputPortOffset, Blossom::YOutput));
 }
 } // namespace dhe

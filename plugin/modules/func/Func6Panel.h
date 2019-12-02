@@ -35,9 +35,9 @@ namespace func {
         auto const y = top + row * rowSpacing;
         auto const portY = y + portOffset;
 
-        installInput(this, module, column1, portY, FuncControls<6>::FuncInput + row);
+        addInput(Jack::input(moduleSlug, module, column1, portY, FuncControls<6>::FuncInput + row));
         addParam(Knob::large(moduleSlug, module, column3, y, FuncControls<6>::AmountKnob + row));
-        installOutput(this, module, column5, portY, FuncControls<6>::FuncOutput + row);
+        addOutput(Jack::output(moduleSlug, module, column5, portY, FuncControls<6>::FuncOutput + row));
 
         auto *additionRangeStepper
             = new AdditionRangeStepper{moduleSlug, module, column4, y, FuncControls<6>::OffsetRangeSwitch + row};

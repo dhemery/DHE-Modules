@@ -29,7 +29,7 @@ namespace stage {
       addParam(Toggle::stepper(2, moduleSlug, module, column2, y, Controls::ModeSwitch));
 
       y += dy;
-      installInput(this, module, column1, y, Controls::DurationCvInput);
+      addInput(Jack::input(moduleSlug, module, column1, y, Controls::DurationCvInput));
       addParam(Toggle::stepper(3, moduleSlug, module, column3, y, Controls::DurationRangeSwitch));
 
       y += dy;
@@ -38,16 +38,16 @@ namespace stage {
       y = 82.F;
       dy = 15.F;
 
-      installInput(this, module, column1, y, Controls::DeferInput);
-      installOutput(this, module, column3, y, Controls::ActiveOutput);
+      addInput(Jack::input(moduleSlug, module, column1, y, Controls::DeferInput));
+      addOutput(Jack::output(moduleSlug, module, column3, y, Controls::ActiveOutput));
 
       y += dy;
-      installInput(this, module, column1, y, Controls::TriggerInput);
-      installOutput(this, module, column3, y, Controls::EocOutput);
+      addInput(Jack::input(moduleSlug, module, column1, y, Controls::TriggerInput));
+      addOutput(Jack::output(moduleSlug, module, column3, y, Controls::EocOutput));
 
       y += dy;
-      installInput(this, module, column1, y, Controls::EnvelopeInput);
-      installOutput(this, module, column3, y, Controls::EnvelopeOutput);
+      addInput(Jack::input(moduleSlug, module, column1, y, Controls::EnvelopeInput));
+      addOutput(Jack::output(moduleSlug, module, column3, y, Controls::EnvelopeOutput));
     }
     static constexpr auto moduleSlug = "hostage";
   };

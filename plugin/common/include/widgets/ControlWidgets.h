@@ -9,42 +9,16 @@
 
 namespace dhe {
 
-class Button : public rack::app::SvgSwitch {
-public:
-  static inline auto reverse(std::string const &moduleSlug, rack::engine::Module *module, float x, float y, int index)
-      -> Button * {
-    return new Button{moduleSlug, "button-reversed", true, module, x, y, index};
-  }
-
-  static inline auto toggle(std::string const &moduleSlug, rack::engine::Module *module, float x, float y, int index)
-      -> Button * {
-    return new Button{moduleSlug, "button", false, module, x, y, index};
-  }
-
-  static inline auto momentary(std::string const &moduleSlug, rack::engine::Module *module, float x, float y, int index)
-      -> Button * {
-    return new Button{moduleSlug, "button", true, module, x, y, index};
-  }
-
-private:
-  Button(std::string const &moduleSlug, std::string const &buttonName, bool isMomentary, rack::engine::Module *module,
-         float x, float y, int index) {
-    rack::app::SvgSwitch::momentary = isMomentary;
-    this->addFrame(controlSvg(moduleSlug, buttonName + "-1"));
-    this->addFrame(controlSvg(moduleSlug, buttonName + "-2"));
-    shadow->opacity = 0.F;
-    positionCentered(this, x, y);
-    if (module) {
-      paramQuantity = module->paramQuantities[index];
-    }
-  }
-};
-
 class Toggle : public rack::app::SvgSwitch {
 public:
   static inline auto stepper(int size, std::string const &moduleSlug, rack::engine::Module *module, float x, float y,
                              int index) -> Toggle * {
     return new Toggle{size, moduleSlug, module, x, y, index};
+  }
+
+  static inline auto button(std::string const &moduleSlug, rack::engine::Module *module, float x, float y, int index)
+      -> Toggle * {
+    return new Toggle{"button", 2, moduleSlug, module, x, y, index};
   }
 
 protected:
@@ -59,9 +33,30 @@ protected:
     }
     shadow->opacity = 0.F;
     positionCentered(this, x, y);
-    if (module) {
+    momentary = false;
+    if (module != nullptr) {
       paramQuantity = module->paramQuantities[index];
     }
+  }
+};
+
+class Button : public Toggle {
+public:
+  static inline auto momentary(std::string const &moduleSlug, rack::engine::Module *module, float x, float y, int index)
+      -> Button * {
+    return new Button{"button", moduleSlug, module, x, y, index};
+  }
+
+  static inline auto reverse(std::string const &moduleSlug, rack::engine::Module *module, float x, float y, int index)
+      -> Button * {
+    return new Button("button-reversed", moduleSlug, module, x, y, index);
+  }
+
+private:
+  Button(std::string const &buttonName, std::string const &moduleSlug, rack::engine::Module *module, float x, float y,
+         int index) :
+      Toggle{buttonName, 2, moduleSlug, module, x, y, index} {
+    Toggle::momentary = true;
   }
 };
 
@@ -93,9 +88,33 @@ protected:
     setSvg(controlSvg(moduleSlug, knobName));
     shadow->opacity = 0.F;
     positionCentered(this, x, y);
-    if (module) {
+    if (module != nullptr) {
       paramQuantity = module->paramQuantities[index];
     }
+  }
+};
+
+class Jack : public rack::app::SvgPort {
+public:
+  static inline auto input(std::string const &moduleSlug, rack::engine::Module *module, float x, float y, int index)
+      -> Jack * {
+    return new Jack{rack::app::PortWidget::Type::INPUT, moduleSlug, module, x, y, index};
+  }
+
+  static inline auto output(std::string const &moduleSlug, rack::engine::Module *module, float x, float y, int index)
+      -> Jack * {
+    return new Jack{rack::app::PortWidget::Type::OUTPUT, moduleSlug, module, x, y, index};
+  }
+
+private:
+  Jack(rack::app::PortWidget::Type type, std::string const &moduleSlug, rack::engine::Module *module, float x, float y,
+       int index) {
+    setSvg(controlSvg(moduleSlug, "port"));
+    shadow->opacity = 0.F;
+    positionCentered(this, x, y);
+    this->module = module;
+    this->type = type;
+    portId = index;
   }
 };
 } // namespace dhe

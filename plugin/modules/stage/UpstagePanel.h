@@ -29,7 +29,7 @@ namespace stage {
       addParam(Knob::large(moduleSlug, module, column2, y, Controls::LevelKnob));
 
       y += dy;
-      installInput(this, module, column1, y, Controls::LevelCvInput);
+      addInput(Jack::input(moduleSlug, module, column1, y, Controls::LevelCvInput));
       addParam(Toggle::stepper(2, moduleSlug, module, column3, y, Controls::LevelRangeSwitch));
 
       y += dy;
@@ -39,14 +39,14 @@ namespace stage {
       y = 82.F;
       dy = 15.F;
 
-      installInput(this, module, column1, y, Controls::WaitInput);
+      addInput(Jack::input(moduleSlug, module, column1, y, Controls::WaitInput));
 
       y += dy;
-      installInput(this, module, column1, y, Controls::TriggerInput);
-      installOutput(this, module, column3, y, Controls::TriggerOutput);
+      addInput(Jack::input(moduleSlug, module, column1, y, Controls::TriggerInput));
+      addOutput(Jack::output(moduleSlug, module, column3, y, Controls::TriggerOutput));
 
       y += dy;
-      installOutput(this, module, column3, y, Controls::EnvelopeOutput);
+      addOutput(Jack::output(moduleSlug, module, column3, y, Controls::EnvelopeOutput));
     }
     static constexpr auto moduleSlug = "upstage";
   };

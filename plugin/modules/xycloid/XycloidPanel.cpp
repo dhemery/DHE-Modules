@@ -23,24 +23,24 @@ XycloidPanel::XycloidPanel(rack::engine::Module *module) {
   auto y = 25.F;
   auto dy = 18.5F;
 
-  installInput(this, module, column1, y, Xycloid::SpeedCvInput);
+  addInput(Jack::input(moduleSlug, module, column1, y, Xycloid::SpeedCvInput));
   addParam(Knob::tiny(moduleSlug, module, column2, y, Xycloid::SpeedAvKnob));
   addParam(Knob::large(moduleSlug, module, column3, y, Xycloid::SpeedKnob));
 
   y += dy;
-  installInput(this, module, column1, y, Xycloid::RatioCvInput);
+  addInput(Jack::input(moduleSlug, module, column1, y, Xycloid::RatioCvInput));
   addParam(Knob::tiny(moduleSlug, module, column2, y, Xycloid::RatioAvKnob));
   addParam(Knob::large(moduleSlug, module, column3, y, Xycloid::RatioKnob));
   addParam(Toggle::stepper(2, moduleSlug, module, column4, y, Xycloid::FreeRatioSwitch));
 
   y += dy;
-  installInput(this, module, column1, y, Xycloid::DepthCvInput);
+  addInput(Jack::input(moduleSlug, module, column1, y, Xycloid::DepthCvInput));
   addParam(Knob::tiny(moduleSlug, module, column2, y, Xycloid::DepthAvKnob));
   addParam(Knob::large(moduleSlug, module, column3, y, Xycloid::DepthKnob));
   addParam(Toggle::stepper(3, moduleSlug, module, column4, y, Xycloid::DirectionSwitch));
 
   y += dy;
-  installInput(this, module, column1, y, Xycloid::PhaseCvInput);
+  addInput(Jack::input(moduleSlug, module, column1, y, Xycloid::PhaseCvInput));
   addParam(Knob::tiny(moduleSlug, module, column2, y, Xycloid::PhaseOffsetAvKnob));
   addParam(Knob::large(moduleSlug, module, column3, y, Xycloid::PhaseOffsetKnob));
 
@@ -49,16 +49,16 @@ XycloidPanel::XycloidPanel(rack::engine::Module *module) {
   auto const outputPortOffset = 1.25F;
 
   y += dy;
-  installInput(this, module, column1, y, Xycloid::XGainCvInput);
+  addInput(Jack::input(moduleSlug, module, column1, y, Xycloid::XGainCvInput));
   addParam(Knob::small(moduleSlug, module, column2, y, Xycloid::XGainKnob));
   addParam(Toggle::stepper(2, moduleSlug, module, column3, y, Xycloid::XRangeSwitch));
-  installOutput(this, module, column4, y + outputPortOffset, Xycloid::XOutput);
+  addOutput(Jack::output(moduleSlug, module, column4, y + outputPortOffset, Xycloid::XOutput));
 
   y += dy;
-  installInput(this, module, column1, y, Xycloid::YGainCvInput);
+  addInput(Jack::input(moduleSlug, module, column1, y, Xycloid::YGainCvInput));
   addParam(Knob::small(moduleSlug, module, column2, y, Xycloid::YGainKnob));
   addParam(Toggle::stepper(2, moduleSlug, module, column3, y, Xycloid::YRangeSwitch));
-  installOutput(this, module, column4, y + outputPortOffset, Xycloid::YOutput);
+  addOutput(Jack::output(moduleSlug, module, column4, y + outputPortOffset, Xycloid::YOutput));
 }
 
 } // namespace dhe

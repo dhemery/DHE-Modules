@@ -21,10 +21,10 @@ RangerPanel::RangerPanel(rack::engine::Module *module) {
 
   y += dy * 0.75F;
   addParam(Knob::medium(moduleSlug, module, left, y, Ranger::LevelKnob));
-  installOutput(this, module, right, y, Ranger::RangerOutput);
+  addOutput(Jack::output(moduleSlug, module, right, y, Ranger::RangerOutput));
 
   y += dy;
-  installInput(this, module, left, y, Ranger::LevelCvInput);
+  addInput(Jack::input(moduleSlug, module, left, y, Ranger::LevelCvInput));
   addParam(Knob::tiny(moduleSlug, module, right, y, Ranger::LevelAvKnob));
 
   y += dy / 2.F;
@@ -37,8 +37,8 @@ RangerPanel::RangerPanel(rack::engine::Module *module) {
   addParam(Knob::tiny(moduleSlug, module, right, y, Ranger::CwLimitAvKnob));
 
   y += dy;
-  installInput(this, module, left, y, Ranger::CcwLimitCvInput);
-  installInput(this, module, right, y, Ranger::CwLimitCvInput);
+  addInput(Jack::input(moduleSlug, module, left, y, Ranger::CcwLimitCvInput));
+  addInput(Jack::input(moduleSlug, module, right, y, Ranger::CwLimitCvInput));
 
   y += dy;
   addParam(Toggle::stepper(2, moduleSlug, module, left, y, Ranger::CcwLimitRangeSwitch));

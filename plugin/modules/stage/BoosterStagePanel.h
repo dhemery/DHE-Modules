@@ -30,18 +30,18 @@ namespace stage {
       auto y = 25.F;
       auto dy = 18.5F;
 
-      installInput(this, module, column1, y, Controls::LevelCvInput);
+      addInput(Jack::input(moduleSlug, module, column1, y, Controls::LevelCvInput));
       addParam(Knob::large(moduleSlug, module, column3, y, Controls::LevelKnob));
 
       addParam(Toggle::stepper(2, moduleSlug, module, column5, y, Controls::LevelRangeSwitch));
 
       y += dy;
-      installInput(this, module, column1, y, Controls::CurveCvInput);
+      addInput(Jack::input(moduleSlug, module, column1, y, Controls::CurveCvInput));
       addParam(Knob::large(moduleSlug, module, column3, y, Controls::CurveKnob));
       addParam(Toggle::stepper(2, moduleSlug, module, column5, y, Controls::ShapeSwitch));
 
       y += dy;
-      installInput(this, module, column1, y, Controls::DurationCvInput);
+      addInput(Jack::input(moduleSlug, module, column1, y, Controls::DurationCvInput));
       addParam(Knob::large(moduleSlug, module, column3, y, Controls::DurationKnob));
 
       addParam(Toggle::stepper(3, moduleSlug, module, column5, y, Controls::DurationRangeSwitch));
@@ -49,21 +49,21 @@ namespace stage {
       y = 82.F;
       dy = 15.F;
 
-      installInput(this, module, column1, y, Controls::DeferInput);
+      addInput(Jack::input(moduleSlug, module, column1, y, Controls::DeferInput));
       addParam(Button::momentary(moduleSlug, module, column2, y, Controls::DeferButton));
 
       addParam(Button::reverse(moduleSlug, module, column4, y, Controls::ActiveButton));
-      installOutput(this, module, column5, y, Controls::ActiveOutput);
+      addOutput(Jack::output(moduleSlug, module, column5, y, Controls::ActiveOutput));
 
       y += dy;
-      installInput(this, module, column1, y, Controls::TriggerInput);
+      addInput(Jack::input(moduleSlug, module, column1, y, Controls::TriggerInput));
       addParam(Button::momentary(moduleSlug, module, column2, y, Controls::TriggerButton));
       addParam(Button::reverse(moduleSlug, module, column4, y, Controls::EocButton));
-      installOutput(this, module, column5, y, Controls::EocOutput);
+      addOutput(Jack::output(moduleSlug, module, column5, y, Controls::EocOutput));
 
       y += dy;
-      installInput(this, module, column1, y, Controls::EnvelopeInput);
-      installOutput(this, module, column5, y, Controls::EnvelopeOutput);
+      addInput(Jack::input(moduleSlug, module, column1, y, Controls::EnvelopeInput));
+      addOutput(Jack::output(moduleSlug, module, column5, y, Controls::EnvelopeOutput));
     }
     static constexpr auto moduleSlug = "booster-stage";
   };

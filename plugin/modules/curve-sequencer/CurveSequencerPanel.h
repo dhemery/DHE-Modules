@@ -121,11 +121,11 @@ namespace curve_sequencer {
 
       auto constexpr activeY = top + lightRadius;
 
-      installInput(this, module, left, runY, Controls::RunInput);
-      addParam(Button::toggle(moduleSlug, module, left + buttonPortDistance, runY, Controls::RunButton));
+      addInput(Jack::input(moduleSlug, module, left, runY, Controls::RunInput));
+      addParam(Toggle::button(moduleSlug, module, left + buttonPortDistance, runY, Controls::RunButton));
 
-      installInput(this, module, left, loopY, Controls::LoopInput);
-      addParam(Button::toggle(moduleSlug, module, left + buttonPortDistance, loopY, Controls::LoopButton));
+      addInput(Jack::input(moduleSlug, module, left, loopY, Controls::LoopInput));
+      addParam(Toggle::button(moduleSlug, module, left + buttonPortDistance, loopY, Controls::LoopButton));
 
       auto *startMarker = new StartMarker(moduleSlug, 0.F, activeY);
       this->addChild(startMarker);
@@ -145,10 +145,10 @@ namespace curve_sequencer {
       addParam(new SelectionKnob(onSelectionEndChange, moduleSlug, module, selectionLengthX, selectionY,
                                  Controls::SelectionLengthKnob));
 
-      installInput(this, module, left, gateY, Controls::GateInput);
+      addInput(Jack::input(moduleSlug, module, left, gateY, Controls::GateInput));
       addParam(Button::momentary(moduleSlug, module, left + buttonPortDistance, gateY, Controls::GateButton));
 
-      installInput(this, module, left, resetY, Controls::ResetInput);
+      addInput(Jack::input(moduleSlug, module, left, resetY, Controls::ResetInput));
       addParam(Button::momentary(moduleSlug, module, left + buttonPortDistance, resetY, Controls::ResetButton));
 
       auto constexpr generatingModeY = top + hp2mm(2.25F);
@@ -174,18 +174,18 @@ namespace curve_sequencer {
 
         addParam(Knob::small(moduleSlug, module, x, durationY, Controls::DurationKnobs + step));
 
-        addParam(Button::toggle(moduleSlug, module, x, enabledButtonY, Controls::EnabledButtons + step));
-        installInput(this, module, x, enabledPortY, Controls::EnabledInputs + step);
+        addParam(Toggle::button(moduleSlug, module, x, enabledButtonY, Controls::EnabledButtons + step));
+        addInput(Jack::input(moduleSlug, module, x, enabledPortY, Controls::EnabledInputs + step));
       }
 
       auto constexpr outY = bottom - portRadius - 1.F;
       auto constexpr eosY = top + hp2mm(2.75);
 
-      installInput(this, module, right, eosY, Controls::CurveSequencerInput);
+      addInput(Jack::input(moduleSlug, module, right, eosY, Controls::CurveSequencerInput));
 
       addParam(Toggle::stepper(2, moduleSlug, module, right, levelY, Controls::LevelRangeSwitch));
       addParam(Toggle::stepper(3, moduleSlug, module, right, durationY, Controls::DurationRangeSwitch));
-      installOutput(this, module, right, outY, Controls::CurveSequencerOutput);
+      addOutput(Jack::output(moduleSlug, module, right, outY, Controls::CurveSequencerOutput));
     }
   }; // namespace dhe
 
