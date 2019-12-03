@@ -1,29 +1,43 @@
 #pragma once
 
+#include "SwaveControls.h"
+#include "config/CurvatureConfig.h"
 #include "controls/CurvatureInputs.h"
 
 #include <engine/Module.hpp>
 
 namespace dhe {
+namespace swave {
 
-class Swave : public rack::engine::Module {
-public:
-  Swave();
-  void process(ProcessArgs const &args) override;
+  class Swave : public rack::engine::Module {
+    using Controls = SwaveControls;
 
-  enum ParameterIds { CurveKnob, ShapeSwitch, CurveAvKnob, ParameterCount };
-  enum InputIds { CurveCvInput, SwaveInput, InputCount };
-  enum OutputIds { SwaveOutput, OutputCount };
+  public:
+    Swave() {
+      config(Controls::ParameterCount, Controls::InputCount, Controls::OutputCount);
+      configCurvatureKnob(this, Controls::CurveKnob);
+      configAttenuverter(this, Controls::CurveAvKnob, "Curvature CV gain");
+      configCurveShapeSwitch(this, Controls::ShapeSwitch);
+    }
 
-private:
-  void sendSignal(float voltage) { outputs[SwaveOutput].setVoltage(voltage); }
+    void process(ProcessArgs const & /*args*/) override {
+      auto const normalized = bipolarSignalRange.normalize(signalIn());
+      auto const tapered = taper(normalized);
+      auto const outputVoltage = bipolarSignalRange.scale(tapered);
+      sendSignal(outputVoltage);
+    }
 
-  auto signalIn() const -> float { return voltageAt(inputs[SwaveInput]); }
+  private:
+    void sendSignal(float voltage) { outputs[Controls::SwaveOutput].setVoltage(voltage); }
 
-  auto taper(float input) const -> float {
-    auto const taper = selectedTaper(params[ShapeSwitch]);
-    return taper->apply(input, curvature(params[CurveKnob], inputs[CurveCvInput], params[CurveAvKnob]));
-  }
-};
+    auto signalIn() const -> float { return voltageAt(inputs[Controls::SwaveInput]); }
 
+    auto taper(float input) const -> float {
+      auto const taper = selectedTaper(params[Controls::ShapeSwitch]);
+      return taper->apply(
+          input, curvature(params[Controls::CurveKnob], inputs[Controls::CurveCvInput], params[Controls::CurveAvKnob]));
+    }
+  };
+
+} // namespace swave
 } // namespace dhe

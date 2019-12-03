@@ -1,12 +1,7 @@
-add_library(tapers STATIC)
+add_library(tapers INTERFACE)
 add_library(dhe::tapers ALIAS tapers)
-target_sources(tapers
-        PRIVATE
-        Tapers.cpp
-        TapersPanel.cpp
-        )
 target_link_libraries(tapers
-        PUBLIC
+        INTERFACE
         dhe::components
         dhe::controls
         dhe::config

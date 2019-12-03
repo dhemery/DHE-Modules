@@ -1,6 +1,10 @@
 #pragma once
 
+#include "TapersControls.h"
 #include "components/Range.h"
+#include "config/CommonConfig.h"
+#include "config/CurvatureConfig.h"
+#include "config/LevelConfig.h"
 #include "controls/CommonInputs.h"
 #include "controls/CurvatureInputs.h"
 #include "controls/LevelInputs.h"
@@ -8,51 +12,60 @@
 #include <engine/Module.hpp>
 
 namespace dhe {
+namespace tapers {
 
-class Tapers : public rack::engine::Module {
-public:
-  Tapers();
+  class Tapers : public rack::engine::Module {
+    using Controls = TapersControls;
 
-  void process(ProcessArgs const &args) override;
+  public:
+    Tapers() {
+      config(Controls::ParameterCount, Controls::InputCount, Controls::OutputCount);
 
-  enum ParameterIds {
-    LevelKnob1,
-    LevelAvKnob1,
-    LevelRangeSwitch1,
-    CurveKnob1,
-    CurveAvKnob1,
-    ShapeSwitch1,
-    LevelKnob2,
-    LevelAvKnob2,
-    LevelRangeSwitch2,
-    CurveKnob2,
-    CurveAvKnob2,
-    ShapeSwitch2,
-    ParameterCount
+      configLevelKnob(this, Controls::LevelKnob1, Controls::LevelRangeSwitch1, "Level 1");
+      configLevelRangeSwitch(this, Controls::LevelRangeSwitch1, "Level 1 range", 0);
+      configAttenuverter(this, Controls::LevelAvKnob1, "Level 1 CV gain");
+
+      configCurvatureKnob(this, Controls::CurveKnob1, "Curvature 1");
+      configAttenuverter(this, Controls::CurveAvKnob1, "Curvature 1 CV gain");
+      configLevelRangeSwitch(this, Controls::ShapeSwitch1, "Shape 1");
+
+      configLevelKnob(this, Controls::LevelKnob2, Controls::LevelRangeSwitch2, "Level 2");
+      configLevelRangeSwitch(this, Controls::LevelRangeSwitch2, "Level 2 range", 0);
+      configAttenuverter(this, Controls::LevelAvKnob2, "Level 2 CV gain");
+
+      configCurvatureKnob(this, Controls::CurveKnob2, "Curvature 2");
+      configAttenuverter(this, Controls::CurveAvKnob2, "Curvature 2 CV gain");
+      configLevelRangeSwitch(this, Controls::ShapeSwitch2, "Shape 2");
+    }
+
+    void process(ProcessArgs const & /*args*/) override {
+      outputs[Controls::TaperOutput1].setVoltage(levelRange1()->scale(taper1(levelRotation1())));
+      outputs[Controls::TaperOutput2].setVoltage(levelRange2()->scale(taper2(levelRotation2())));
+    }
+
+  private:
+    auto levelRotation1() const -> float {
+      return rotation(params[Controls::LevelKnob1], inputs[Controls::LevelCvInput1], params[Controls::LevelAvKnob1]);
+    };
+    auto levelRange1() const -> Range const * { return levelRange(params[Controls::LevelRangeSwitch1]); }
+    auto taper1(float input) const -> float {
+      auto const taper = selectedTaper(params[Controls::ShapeSwitch1]);
+      auto const taperCurvature
+          = curvature(params[Controls::CurveKnob1], inputs[Controls::CurveCvInput1], params[Controls::CurveAvKnob1]);
+      return taper->apply(input, taperCurvature);
+    }
+
+    auto levelRotation2() const -> float {
+      return rotation(params[Controls::LevelKnob2], inputs[Controls::LevelCvInput2], params[Controls::LevelAvKnob2]);
+    };
+    auto levelRange2() const -> Range const * { return levelRange(params[Controls::LevelRangeSwitch2]); }
+    auto taper2(float input) const -> float {
+      auto const taper = selectedTaper(params[Controls::ShapeSwitch2]);
+      auto const taperCurvature
+          = curvature(params[Controls::CurveKnob2], inputs[Controls::CurveCvInput2], params[Controls::CurveAvKnob2]);
+      return taper->apply(input, taperCurvature);
+    }
   };
-  enum InputIds { LevelCvInput1, CurveCvInput1, LevelCvInput2, CurveCvInput2, InputCount };
-  enum OutputIds { TaperOutput1, TaperOutput2, OutputCount };
 
-private:
-  auto levelRotation1() const -> float {
-    return rotation(params[LevelKnob1], inputs[LevelCvInput1], params[LevelAvKnob1]);
-  };
-  auto levelRange1() const -> Range const * { return levelRange(params[LevelRangeSwitch1]); }
-  auto taper1(float input) const -> float {
-    auto const taper = selectedTaper(params[ShapeSwitch1]);
-    auto const taperCurvature = curvature(params[CurveKnob1], inputs[CurveCvInput1], params[CurveAvKnob1]);
-    return taper->apply(input, taperCurvature);
-  }
-
-  auto levelRotation2() const -> float {
-    return rotation(params[LevelKnob2], inputs[LevelCvInput2], params[LevelAvKnob2]);
-  };
-  auto levelRange2() const -> Range const * { return levelRange(params[LevelRangeSwitch2]); }
-  auto taper2(float input) const -> float {
-    auto const taper = selectedTaper(params[ShapeSwitch2]);
-    auto const taperCurvature = curvature(params[CurveKnob2], inputs[CurveCvInput2], params[CurveAvKnob2]);
-    return taper->apply(input, taperCurvature);
-  }
-};
-
+} // namespace tapers
 } // namespace dhe

@@ -60,6 +60,10 @@ using dhe::stage::StageModule;
 using dhe::stage::StagePanel;
 using dhe::stage::UpstageModule;
 using dhe::stage::UpstagePanel;
+using dhe::swave::Swave;
+using dhe::swave::SwavePanel;
+using dhe::tapers::Tapers;
+using dhe::tapers::TapersPanel;
 using dhe::xycloid::Xycloid;
 using dhe::xycloid::XycloidPanel;
 
@@ -80,8 +84,8 @@ void init(rack::plugin::Plugin *p) {
   p->addModel(rack::createModel<HostageModule, HostagePanel>("Hostage"));
   p->addModel(rack::createModel<StageModule, StagePanel>("Stage"));
   p->addModel(rack::createModel<Ranger, RangerPanel>("Ranger"));
-  p->addModel(rack::createModel<dhe::Swave, dhe::SwavePanel>("Swave"));
-  p->addModel(rack::createModel<dhe::Tapers, dhe::TapersPanel>("Tapers"));
+  p->addModel(rack::createModel<Swave, SwavePanel>("Swave"));
+  p->addModel(rack::createModel<Tapers, TapersPanel>("Tapers"));
   p->addModel(rack::createModel<UpstageModule, UpstagePanel>("Upstage"));
   p->addModel(rack::createModel<Xycloid, XycloidPanel>("Xycloid"));
 }
