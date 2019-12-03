@@ -37,6 +37,8 @@ rack::plugin::Plugin *pluginInstance;
 
 using dhe::blossom::Blossom;
 using dhe::blossom::BlossomPanel;
+using dhe::cubic::Cubic;
+using dhe::cubic::CubicPanel;
 using dhe::curve_sequencer::CurveSequencerModule;
 using dhe::curve_sequencer::CurveSequencerPanel;
 using dhe::func::Func1Panel;
@@ -65,7 +67,7 @@ void init(rack::plugin::Plugin *p) {
   p->addModel(rack::createModel<CurveSequencerModule<4>, CurveSequencerPanel<4>>("CurveSequencer4"));
   p->addModel(rack::createModel<CurveSequencerModule<8>, CurveSequencerPanel<8>>("CurveSequencer8"));
   p->addModel(rack::createModel<CurveSequencerModule<16>, CurveSequencerPanel<16>>("CurveSequencer16"));
-  p->addModel(rack::createModel<dhe::Cubic, dhe::CubicPanel>("Cubic"));
+  p->addModel(rack::createModel<Cubic, CubicPanel>("Cubic"));
   p->addModel(rack::createModel<FuncModule<1>, Func1Panel>("Func"));
   p->addModel(rack::createModel<FuncModule<6>, Func6Panel>("Func6"));
   p->addModel(rack::createModel<FuzzyLogicH, FuzzyLogicHPanel>("FuzzyLogicH"));
