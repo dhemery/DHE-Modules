@@ -15,17 +15,11 @@ target_link_libraries(controls
         dhe::components
         )
 
-add_library(config STATIC)
+add_library(config INTERFACE)
 add_library(dhe::config ALIAS config)
-target_include_directories(config PUBLIC include)
-target_sources(config
-        PRIVATE
-        src/config/CurvatureConfig.cpp
-        src/config/DurationConfig.cpp
-        src/config/LevelConfig.cpp
-        )
+target_include_directories(config INTERFACE include)
 target_link_libraries(config
-        PUBLIC
+        INTERFACE
         dhe::components
         dhe::controls
         Rack::SDK
