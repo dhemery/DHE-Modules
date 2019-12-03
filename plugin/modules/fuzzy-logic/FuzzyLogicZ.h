@@ -22,7 +22,7 @@ namespace fuzzy_logic {
       configLevelRangeSwitch(this, Controls::LevelRangeSwitch, "Level Range");
     }
 
-    void process(ProcessArgs const & /*ignored*/) {
+    void process(ProcessArgs const & /*ignored*/) override {
       auto const voltageOffset = positionOf(params[Controls::LevelRangeSwitch]) == 1 ? 0.F : 5.F;
       for (auto i = 0; i < 2; i++) {
         auto const aInput = inputs[Controls::AInputs + i].getVoltage() + voltageOffset;
