@@ -72,18 +72,18 @@ void init(rack::plugin::Plugin *p) {
 
   p->addModel(rack::createModel<Blossom, BlossomPanel>("Blossom"));
   p->addModel(rack::createModel<BoosterStageModule, BoosterStagePanel>("BoosterStage"));
+  p->addModel(rack::createModel<Cubic, CubicPanel>("Cubic"));
   p->addModel(rack::createModel<CurveSequencerModule<4>, CurveSequencerPanel<4>>("CurveSequencer4"));
   p->addModel(rack::createModel<CurveSequencerModule<8>, CurveSequencerPanel<8>>("CurveSequencer8"));
   p->addModel(rack::createModel<CurveSequencerModule<16>, CurveSequencerPanel<16>>("CurveSequencer16"));
-  p->addModel(rack::createModel<Cubic, CubicPanel>("Cubic"));
   p->addModel(rack::createModel<FuncModule<1>, Func1Panel>("Func"));
   p->addModel(rack::createModel<FuncModule<6>, Func6Panel>("Func6"));
   p->addModel(rack::createModel<FuzzyLogicH, FuzzyLogicHPanel>("FuzzyLogicH"));
   p->addModel(rack::createModel<FuzzyLogicZ, FuzzyLogicZPanel>("FuzzyLogicZ"));
   p->addModel(rack::createModel<Gator, GatorPanel>("Gator"));
   p->addModel(rack::createModel<HostageModule, HostagePanel>("Hostage"));
-  p->addModel(rack::createModel<StageModule, StagePanel>("Stage"));
   p->addModel(rack::createModel<Ranger, RangerPanel>("Ranger"));
+  p->addModel(rack::createModel<StageModule, StagePanel>("Stage"));
   p->addModel(rack::createModel<Swave, SwavePanel>("Swave"));
   p->addModel(rack::createModel<Tapers, TapersPanel>("Tapers"));
   p->addModel(rack::createModel<UpstageModule, UpstagePanel>("Upstage"));

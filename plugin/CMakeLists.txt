@@ -32,14 +32,14 @@ target_include_directories(plugin
         )
 target_sources(plugin
         PRIVATE
-        PluginInitializer.cpp
+        Plugin.cpp
         )
 target_link_libraries(plugin
         PRIVATE
-        dhe::components
-        dhe::controls
-        dhe::config
         dhe::blossom
+        dhe::components
+        dhe::config
+        dhe::controls
         dhe::cubic
         dhe::curve_sequencer
         dhe::func
@@ -49,6 +49,7 @@ target_link_libraries(plugin
         dhe::stage
         dhe::swave
         dhe::tapers
+        dhe::widgets
         dhe::xycloid
         Rack::SDK
         )
