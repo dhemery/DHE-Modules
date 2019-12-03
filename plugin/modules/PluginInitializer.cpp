@@ -48,6 +48,8 @@ using dhe::fuzzy_logic::FuzzyLogicH;
 using dhe::fuzzy_logic::FuzzyLogicHPanel;
 using dhe::fuzzy_logic::FuzzyLogicZ;
 using dhe::fuzzy_logic::FuzzyLogicZPanel;
+using dhe::gator::Gator;
+using dhe::gator::GatorPanel;
 using dhe::stage::BoosterStageModule;
 using dhe::stage::BoosterStagePanel;
 using dhe::stage::HostageModule;
@@ -72,7 +74,7 @@ void init(rack::plugin::Plugin *p) {
   p->addModel(rack::createModel<FuncModule<6>, Func6Panel>("Func6"));
   p->addModel(rack::createModel<FuzzyLogicH, FuzzyLogicHPanel>("FuzzyLogicH"));
   p->addModel(rack::createModel<FuzzyLogicZ, FuzzyLogicZPanel>("FuzzyLogicZ"));
-  p->addModel(rack::createModel<dhe::Gator, dhe::GatorPanel>("Gator"));
+  p->addModel(rack::createModel<Gator, GatorPanel>("Gator"));
   p->addModel(rack::createModel<HostageModule, HostagePanel>("Hostage"));
   p->addModel(rack::createModel<StageModule, StagePanel>("Stage"));
   p->addModel(rack::createModel<dhe::Ranger, dhe::RangerPanel>("Ranger"));
