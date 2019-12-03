@@ -1,4 +1,4 @@
-#include "stage/IdleMode.h"
+#include "modules/stage/IdleMode.h"
 
 #include <gmock/gmock-actions.h>
 #include <gmock/gmock.h>

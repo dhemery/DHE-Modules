@@ -4,6 +4,10 @@ target_sources(control_tests
         DurationInputTest.cpp
         LevelInputTest.cpp
         )
+target_include_directories(control_tests
+        PRIVATE
+        ${PROJECT_SOURCE_DIR}/plugin
+        )
 target_link_libraries(control_tests
         PRIVATE
         dhe::controls

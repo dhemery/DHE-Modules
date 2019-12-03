@@ -1,11 +1,11 @@
-#include "curve-sequencer/StepController.h"
+#include "modules/curve-sequencer/StepController.h"
 
 #include "components/Latch.h"
 #include "components/PhaseTimer.h"
 #include "components/Taper.h"
-#include "curve-sequencer/AdvanceCondition.h"
-#include "curve-sequencer/StepEvent.h"
-#include "curve-sequencer/StepMode.h"
+#include "modules/curve-sequencer/AdvanceCondition.h"
+#include "modules/curve-sequencer/StepEvent.h"
+#include "modules/curve-sequencer/StepMode.h"
 
 #include <gmock/gmock-actions.h>
 #include <gmock/gmock.h>

@@ -1,4 +1,4 @@
-#include "stage/InputMode.h"
+#include "modules/stage/InputMode.h"
 
 #include <gmock/gmock-actions.h>
 #include <gmock/gmock.h>

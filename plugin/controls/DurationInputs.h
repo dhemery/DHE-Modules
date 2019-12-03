@@ -25,7 +25,8 @@ auto constexpr shortDurationRange = Range{0.001F, 1.F};
 auto constexpr mediumDurationRange = Range{0.01F, 10.F};
 auto constexpr longDurationRange = Range{0.1F, 100.F};
 
-extern std::array<Range const *, 3> const durationRanges;
+static auto const durationRanges
+    = std::array<Range const *, 3>{&shortDurationRange, &mediumDurationRange, &longDurationRange};
 
 static inline auto duration(float rotation, Range const &range) -> float {
   return taperedAndScaledRotation(rotation, durationKnobTaper, range);

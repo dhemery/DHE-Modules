@@ -1,8 +1,8 @@
-#include "stage/HoldMode.h"
+#include "modules/stage/HoldMode.h"
 
 #include "components/Latch.h"
 #include "components/PhaseTimer.h"
-#include "stage/Event.h"
+#include "modules/stage/Event.h"
 
 #include <gmock/gmock-actions.h>
 #include <gmock/gmock.h>

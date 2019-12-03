@@ -1,4 +1,4 @@
-#include "curve-sequencer/StepSelector.h"
+#include "modules/curve-sequencer/StepSelector.h"
 
 #include <gmock/gmock-actions.h>
 #include <gmock/gmock.h>

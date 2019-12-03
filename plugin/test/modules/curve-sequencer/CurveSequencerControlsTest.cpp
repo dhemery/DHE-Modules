@@ -1,10 +1,10 @@
-#include "curve-sequencer/CurveSequencerControls.h"
+#include "modules/curve-sequencer/CurveSequencerControls.h"
 
 #include "components/Taper.h"
 #include "controls/CurvatureInputs.h"
 #include "controls/DurationInputs.h"
 #include "controls/LevelInputs.h"
-#include "curve-sequencer/StepMode.h"
+#include "modules/curve-sequencer/StepMode.h"
 
 #include <engine/Light.hpp>
 #include <engine/Param.hpp>

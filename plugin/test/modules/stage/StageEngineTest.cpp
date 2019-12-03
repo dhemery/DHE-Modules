@@ -1,7 +1,7 @@
-#include "stage/StageEngine.h"
+#include "modules/stage/StageEngine.h"
 
 #include "components/Latch.h"
-#include "stage/Event.h"
+#include "modules/stage/Event.h"
 
 #include <gmock/gmock-actions.h>
 #include <gmock/gmock.h>

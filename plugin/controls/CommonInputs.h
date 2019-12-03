@@ -3,6 +3,8 @@
 #include "components/Range.h"
 #include "components/Taper.h"
 
+#include <array>
+
 namespace rack {
 namespace engine {
   struct Param;
@@ -20,7 +22,7 @@ static auto constexpr rotationRange = Range{0.F, 1.F};
 static auto constexpr bipolarSignalRange = Range{-5.F, 5.F};
 static auto constexpr unipolarSignalRange = Range{0.F, 10.F};
 
-extern std::array<Range const *, 2> const signalRanges;
+static auto const signalRanges = std::array<Range const *, 2>{&bipolarSignalRange, &unipolarSignalRange};
 
 template <typename ParamType> auto valueOf(ParamType &param) -> float { return param.getValue(); }
 

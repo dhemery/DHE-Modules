@@ -1,8 +1,8 @@
-#include "stage/HostageEngine.h"
+#include "modules/stage/HostageEngine.h"
 
 #include "components/Latch.h"
-#include "stage/Event.h"
-#include "stage/Mode.h"
+#include "modules/stage/Event.h"
+#include "modules/stage/Mode.h"
 
 #include <gmock/gmock-actions.h>
 #include <gmock/gmock.h>

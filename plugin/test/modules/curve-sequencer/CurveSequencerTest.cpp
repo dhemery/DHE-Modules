@@ -1,7 +1,7 @@
-#include "curve-sequencer/CurveSequencer.h"
+#include "modules/curve-sequencer/CurveSequencer.h"
 
 #include "components/Latch.h"
-#include "curve-sequencer/StepEvent.h"
+#include "modules/curve-sequencer/StepEvent.h"
 
 #include <gmock/gmock-actions.h>
 #include <gmock/gmock.h>

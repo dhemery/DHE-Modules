@@ -1,9 +1,9 @@
-#include "stage/GenerateMode.h"
+#include "modules/stage/GenerateMode.h"
 
 #include "components/Latch.h"
 #include "components/PhaseTimer.h"
 #include "components/Taper.h"
-#include "stage/Event.h"
+#include "modules/stage/Event.h"
 
 #include <gmock/gmock-actions.h>
 #include <gmock/gmock.h>
