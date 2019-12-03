@@ -1,11 +1,13 @@
 #pragma once
 
-#include <app/ModuleWidget.hpp>
+#include "FuzzyLogicPanel.h"
 
 namespace dhe {
 
-class FuzzyLogicHPanel : public rack::app::ModuleWidget {
-public:
-  explicit FuzzyLogicHPanel(rack::engine::Module *module);
-};
+namespace fuzzy_logic {
+  class FuzzyLogicHPanel : public FuzzyLogicPanel {
+  public:
+    explicit FuzzyLogicHPanel(rack::engine::Module *module) : FuzzyLogicPanel{"fuzzy-logic-h", module} {}
+  };
+} // namespace fuzzy_logic
 } // namespace dhe

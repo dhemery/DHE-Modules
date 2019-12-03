@@ -20,10 +20,10 @@ namespace xycloid {
   class Xycloid : public rack::engine::Module {
     using Controls = XycloidControls;
     static auto constexpr wobbleDepthRange = Range{0.F, 1.F};
-    static auto constexpr phaseOffsetRange = Range{-180.F, 180.F};
 
   public:
     Xycloid() {
+      static auto constexpr phaseOffsetRange = Range{-180.F, 180.F};
       config(Controls::ParameterCount, Controls::InputCount, Controls::OutputCount);
 
       configSpeedKnob(this, Controls::SpeedKnob);
