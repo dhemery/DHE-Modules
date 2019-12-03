@@ -1,12 +1,7 @@
-add_library(ranger STATIC)
+add_library(ranger INTERFACE)
 add_library(dhe::ranger ALIAS ranger)
-target_sources(ranger
-        PRIVATE
-        Ranger.cpp
-        RangerPanel.cpp
-        )
 target_link_libraries(ranger
-        PUBLIC
+        INTERFACE
         dhe::components
         dhe::controls
         dhe::config
