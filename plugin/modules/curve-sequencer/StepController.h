@@ -44,16 +44,25 @@ namespace curve_sequencer {
     auto execute(Latch const &gateLatch, float sampleTime) -> StepEvent {
       StepMode stepMode = mode();
       if (!isSatisfied(stepMode, condition(), gateLatch)) {
-        if (stepMode == StepMode::Sustain) {
-          // Reset to prevent a voltage jump if we subsequently cycle to curve mode. Because we reset here, any
-          // subsequent curve will start where sustain left off.
-          reset();
-        } else { // curve or hold mode
+        if (stepMode != StepMode::Sustain) { // Sustain has no duration
           timer.advance(sampleTime / duration());
         }
         controls.showProgress(step, timer.phase());
-        if (stepMode == StepMode::Curve) {
+        switch (stepMode) {
+        case StepMode::Curve:
           controls.output(scale(taper(timer.phase()), startVoltage, level()));
+          break;
+        case StepMode::Input:
+          controls.output(controls.input());
+          break;
+        case StepMode::Chase:
+          controls.output(scale(taper(timer.phase()), startVoltage, controls.input()));
+          break;
+        case StepMode::Level:
+          controls.output(level());
+          break;
+        default: // Hold and sustain
+          break;
         }
         if (timer.inProgress()) {
           return StepEvent::Generated;

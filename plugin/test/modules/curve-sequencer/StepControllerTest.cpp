@@ -33,6 +33,7 @@ class StepControllerTest : public Test {
     MOCK_METHOD(dhe::curve_sequencer::AdvanceCondition, condition, (int), (const));
     MOCK_METHOD(float, curvature, (int), (const));
     MOCK_METHOD(float, duration, (int), (const));
+    MOCK_METHOD(float, input, (), (const));
     MOCK_METHOD(float, level, (int), (const));
     MOCK_METHOD(dhe::curve_sequencer::StepMode, mode, (int), (const));
     MOCK_METHOD(float, output, (), (const));
@@ -43,6 +44,8 @@ class StepControllerTest : public Test {
   };
 
 protected:
+  std::vector<StepMode> const allModes{StepMode::Curve, StepMode::Hold,  StepMode::Sustain,
+                                       StepMode::Input, StepMode::Chase, StepMode::Level};
   NiceMock<MockControls> controls{};
   PhaseTimer timer{};
 
@@ -87,14 +90,10 @@ TEST_F(StepControllerTest, advanceOnGateRise_returnsCompleted_ifGateRises) {
 
   stepController.enter(step);
 
-  givenMode(step, StepMode::Curve);
-  EXPECT_EQ(stepController.execute(risenGate, 0.F), StepEvent::Completed);
-
-  givenMode(step, StepMode::Hold);
-  EXPECT_EQ(stepController.execute(risenGate, 0.F), StepEvent::Completed);
-
-  givenMode(step, StepMode::Sustain);
-  EXPECT_EQ(stepController.execute(risenGate, 0.F), StepEvent::Completed);
+  std::for_each(allModes.cbegin(), allModes.cend(), [this](StepMode const mode) {
+    givenMode(step, mode);
+    EXPECT_EQ(stepController.execute(risenGate, 0.F), StepEvent::Completed);
+  });
 }
 
 TEST_F(StepControllerTest, advanceOnGateRise_returnsGenerated_ifGateDoesNotRise) {
@@ -103,20 +102,12 @@ TEST_F(StepControllerTest, advanceOnGateRise_returnsGenerated_ifGateDoesNotRise)
 
   stepController.enter(step);
 
-  givenMode(step, StepMode::Curve);
-  EXPECT_EQ(stepController.execute(highGate, 0.F), StepEvent::Generated);
-  EXPECT_EQ(stepController.execute(lowGate, 0.F), StepEvent::Generated);
-  EXPECT_EQ(stepController.execute(fallenGate, 0.F), StepEvent::Generated);
-
-  givenMode(step, StepMode::Hold);
-  EXPECT_EQ(stepController.execute(highGate, 0.F), StepEvent::Generated);
-  EXPECT_EQ(stepController.execute(lowGate, 0.F), StepEvent::Generated);
-  EXPECT_EQ(stepController.execute(fallenGate, 0.F), StepEvent::Generated);
-
-  givenMode(step, StepMode::Sustain);
-  EXPECT_EQ(stepController.execute(highGate, 0.F), StepEvent::Generated);
-  EXPECT_EQ(stepController.execute(lowGate, 0.F), StepEvent::Generated);
-  EXPECT_EQ(stepController.execute(fallenGate, 0.F), StepEvent::Generated);
+  std::for_each(allModes.cbegin(), allModes.cend(), [this](StepMode const mode) {
+    givenMode(step, mode);
+    EXPECT_EQ(stepController.execute(highGate, 0.F), StepEvent::Generated);
+    EXPECT_EQ(stepController.execute(lowGate, 0.F), StepEvent::Generated);
+    EXPECT_EQ(stepController.execute(fallenGate, 0.F), StepEvent::Generated);
+  });
 }
 
 TEST_F(StepControllerTest, advanceOnGateFall_returnsCompleted_ifGateFalls) {
@@ -125,14 +116,10 @@ TEST_F(StepControllerTest, advanceOnGateFall_returnsCompleted_ifGateFalls) {
 
   stepController.enter(step);
 
-  givenMode(step, StepMode::Curve);
-  EXPECT_EQ(stepController.execute(fallenGate, 0.F), StepEvent::Completed);
-
-  givenMode(step, StepMode::Hold);
-  EXPECT_EQ(stepController.execute(fallenGate, 0.F), StepEvent::Completed);
-
-  givenMode(step, StepMode::Sustain);
-  EXPECT_EQ(stepController.execute(fallenGate, 0.F), StepEvent::Completed);
+  std::for_each(allModes.cbegin(), allModes.cend(), [this](StepMode const mode) {
+    givenMode(step, mode);
+    EXPECT_EQ(stepController.execute(fallenGate, 0.F), StepEvent::Completed);
+  });
 }
 
 TEST_F(StepControllerTest, advanceOnGateFall_returnsGenerated_ifGateDoesNotFall) {
@@ -141,20 +128,12 @@ TEST_F(StepControllerTest, advanceOnGateFall_returnsGenerated_ifGateDoesNotFall)
 
   stepController.enter(step);
 
-  givenMode(step, StepMode::Curve);
-  EXPECT_EQ(stepController.execute(highGate, 0.F), StepEvent::Generated);
-  EXPECT_EQ(stepController.execute(lowGate, 0.F), StepEvent::Generated);
-  EXPECT_EQ(stepController.execute(risenGate, 0.F), StepEvent::Generated);
-
-  givenMode(step, StepMode::Hold);
-  EXPECT_EQ(stepController.execute(highGate, 0.F), StepEvent::Generated);
-  EXPECT_EQ(stepController.execute(lowGate, 0.F), StepEvent::Generated);
-  EXPECT_EQ(stepController.execute(risenGate, 0.F), StepEvent::Generated);
-
-  givenMode(step, StepMode::Sustain);
-  EXPECT_EQ(stepController.execute(highGate, 0.F), StepEvent::Generated);
-  EXPECT_EQ(stepController.execute(lowGate, 0.F), StepEvent::Generated);
-  EXPECT_EQ(stepController.execute(risenGate, 0.F), StepEvent::Generated);
+  std::for_each(allModes.cbegin(), allModes.cend(), [this](StepMode const mode) {
+    givenMode(step, mode);
+    EXPECT_EQ(stepController.execute(highGate, 0.F), StepEvent::Generated);
+    EXPECT_EQ(stepController.execute(lowGate, 0.F), StepEvent::Generated);
+    EXPECT_EQ(stepController.execute(risenGate, 0.F), StepEvent::Generated);
+  });
 }
 
 TEST_F(StepControllerTest, advanceOnGateChange_returnsCompleted_ifGateChanges) {
@@ -163,17 +142,11 @@ TEST_F(StepControllerTest, advanceOnGateChange_returnsCompleted_ifGateChanges) {
 
   stepController.enter(step);
 
-  givenMode(step, StepMode::Curve);
-  EXPECT_EQ(stepController.execute(risenGate, 0.F), StepEvent::Completed);
-  EXPECT_EQ(stepController.execute(fallenGate, 0.F), StepEvent::Completed);
-
-  givenMode(step, StepMode::Hold);
-  EXPECT_EQ(stepController.execute(risenGate, 0.F), StepEvent::Completed);
-  EXPECT_EQ(stepController.execute(fallenGate, 0.F), StepEvent::Completed);
-
-  givenMode(step, StepMode::Sustain);
-  EXPECT_EQ(stepController.execute(risenGate, 0.F), StepEvent::Completed);
-  EXPECT_EQ(stepController.execute(fallenGate, 0.F), StepEvent::Completed);
+  std::for_each(allModes.cbegin(), allModes.cend(), [this](StepMode const mode) {
+    givenMode(step, mode);
+    EXPECT_EQ(stepController.execute(risenGate, 0.F), StepEvent::Completed);
+    EXPECT_EQ(stepController.execute(fallenGate, 0.F), StepEvent::Completed);
+  });
 }
 
 TEST_F(StepControllerTest, advanceOnGateChange_returnsGenerated_ifGateDoesNotChange) {
@@ -182,17 +155,11 @@ TEST_F(StepControllerTest, advanceOnGateChange_returnsGenerated_ifGateDoesNotCha
 
   stepController.enter(step);
 
-  givenMode(step, StepMode::Curve);
-  EXPECT_EQ(stepController.execute(highGate, 0.F), StepEvent::Generated);
-  EXPECT_EQ(stepController.execute(lowGate, 0.F), StepEvent::Generated);
-
-  givenMode(step, StepMode::Hold);
-  EXPECT_EQ(stepController.execute(highGate, 0.F), StepEvent::Generated);
-  EXPECT_EQ(stepController.execute(lowGate, 0.F), StepEvent::Generated);
-
-  givenMode(step, StepMode::Sustain);
-  EXPECT_EQ(stepController.execute(highGate, 0.F), StepEvent::Generated);
-  EXPECT_EQ(stepController.execute(lowGate, 0.F), StepEvent::Generated);
+  std::for_each(allModes.cbegin(), allModes.cend(), [this](StepMode const mode) {
+    givenMode(step, mode);
+    EXPECT_EQ(stepController.execute(highGate, 0.F), StepEvent::Generated);
+    EXPECT_EQ(stepController.execute(lowGate, 0.F), StepEvent::Generated);
+  });
 }
 
 TEST_F(StepControllerTest, advanceOnGateHigh_returnsGenerated_ifGateIsLow) {
@@ -201,17 +168,11 @@ TEST_F(StepControllerTest, advanceOnGateHigh_returnsGenerated_ifGateIsLow) {
 
   stepController.enter(step);
 
-  givenMode(step, StepMode::Curve);
-  EXPECT_EQ(stepController.execute(lowGate, 0.F), StepEvent::Generated);
-  EXPECT_EQ(stepController.execute(fallenGate, 0.F), StepEvent::Generated);
-
-  givenMode(step, StepMode::Hold);
-  EXPECT_EQ(stepController.execute(lowGate, 0.F), StepEvent::Generated);
-  EXPECT_EQ(stepController.execute(fallenGate, 0.F), StepEvent::Generated);
-
-  givenMode(step, StepMode::Sustain);
-  EXPECT_EQ(stepController.execute(lowGate, 0.F), StepEvent::Generated);
-  EXPECT_EQ(stepController.execute(fallenGate, 0.F), StepEvent::Generated);
+  std::for_each(allModes.cbegin(), allModes.cend(), [this](StepMode const mode) {
+    givenMode(step, mode);
+    EXPECT_EQ(stepController.execute(lowGate, 0.F), StepEvent::Generated);
+    EXPECT_EQ(stepController.execute(fallenGate, 0.F), StepEvent::Generated);
+  });
 }
 
 TEST_F(StepControllerTest, advanceOnGateHigh_returnsCompleted_ifGateIsHigh) {
@@ -220,17 +181,11 @@ TEST_F(StepControllerTest, advanceOnGateHigh_returnsCompleted_ifGateIsHigh) {
 
   stepController.enter(step);
 
-  givenMode(step, StepMode::Curve);
-  EXPECT_EQ(stepController.execute(highGate, 0.F), StepEvent::Completed);
-  EXPECT_EQ(stepController.execute(risenGate, 0.F), StepEvent::Completed);
-
-  givenMode(step, StepMode::Hold);
-  EXPECT_EQ(stepController.execute(highGate, 0.F), StepEvent::Completed);
-  EXPECT_EQ(stepController.execute(risenGate, 0.F), StepEvent::Completed);
-
-  givenMode(step, StepMode::Sustain);
-  EXPECT_EQ(stepController.execute(highGate, 0.F), StepEvent::Completed);
-  EXPECT_EQ(stepController.execute(risenGate, 0.F), StepEvent::Completed);
+  std::for_each(allModes.cbegin(), allModes.cend(), [this](StepMode const mode) {
+    givenMode(step, mode);
+    EXPECT_EQ(stepController.execute(highGate, 0.F), StepEvent::Completed);
+    EXPECT_EQ(stepController.execute(risenGate, 0.F), StepEvent::Completed);
+  });
 }
 
 TEST_F(StepControllerTest, advanceOnGateLow_returnsGenerated_ifGateIsHigh) {
@@ -239,17 +194,11 @@ TEST_F(StepControllerTest, advanceOnGateLow_returnsGenerated_ifGateIsHigh) {
 
   stepController.enter(step);
 
-  givenMode(step, StepMode::Curve);
-  EXPECT_EQ(stepController.execute(highGate, 0.F), StepEvent::Generated);
-  EXPECT_EQ(stepController.execute(risenGate, 0.F), StepEvent::Generated);
-
-  givenMode(step, StepMode::Hold);
-  EXPECT_EQ(stepController.execute(highGate, 0.F), StepEvent::Generated);
-  EXPECT_EQ(stepController.execute(risenGate, 0.F), StepEvent::Generated);
-
-  givenMode(step, StepMode::Sustain);
-  EXPECT_EQ(stepController.execute(highGate, 0.F), StepEvent::Generated);
-  EXPECT_EQ(stepController.execute(risenGate, 0.F), StepEvent::Generated);
+  std::for_each(allModes.cbegin(), allModes.cend(), [this](StepMode const mode) {
+    givenMode(step, mode);
+    EXPECT_EQ(stepController.execute(highGate, 0.F), StepEvent::Generated);
+    EXPECT_EQ(stepController.execute(risenGate, 0.F), StepEvent::Generated);
+  });
 }
 
 TEST_F(StepControllerTest, advanceOnGateLow_returnsCompleted_ifGateIsLow) {
@@ -258,15 +207,9 @@ TEST_F(StepControllerTest, advanceOnGateLow_returnsCompleted_ifGateIsLow) {
 
   stepController.enter(step);
 
-  givenMode(step, StepMode::Curve);
-  EXPECT_EQ(stepController.execute(lowGate, 0.F), StepEvent::Completed);
-  EXPECT_EQ(stepController.execute(fallenGate, 0.F), StepEvent::Completed);
-
-  givenMode(step, StepMode::Hold);
-  EXPECT_EQ(stepController.execute(lowGate, 0.F), StepEvent::Completed);
-  EXPECT_EQ(stepController.execute(fallenGate, 0.F), StepEvent::Completed);
-
-  givenMode(step, StepMode::Sustain);
-  EXPECT_EQ(stepController.execute(lowGate, 0.F), StepEvent::Completed);
-  EXPECT_EQ(stepController.execute(fallenGate, 0.F), StepEvent::Completed);
+  std::for_each(allModes.cbegin(), allModes.cend(), [this](StepMode const mode) {
+    givenMode(step, mode);
+    EXPECT_EQ(stepController.execute(lowGate, 0.F), StepEvent::Completed);
+    EXPECT_EQ(stepController.execute(fallenGate, 0.F), StepEvent::Completed);
+  });
 }

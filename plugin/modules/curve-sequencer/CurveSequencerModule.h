@@ -17,7 +17,8 @@ namespace dhe {
 
 namespace curve_sequencer {
   static auto constexpr defaultMode = static_cast<int>(StepMode::Curve);
-  static auto const modeDescriptions = std::array<std::string, modeCount>{"Curve", "Hold", "Sustain"};
+  static auto const modeDescriptions
+      = std::array<std::string, modeCount>{"Curve", "Hold", "Sustain", "Input", "Chase", "Level"};
 
   static auto constexpr defaultAdvanceCondition = static_cast<int>(AdvanceCondition::TimerExpires);
   static auto const advanceConditionDescriptions = std::array<std::string, advanceConditionCount>{
