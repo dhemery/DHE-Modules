@@ -72,10 +72,6 @@ and controls for each step in the sequence.
 - **IN:**
     The input signal to the curve sequencer.
 
-    See [details](#details)
-    for explanations of several likely non-intuitive aspects
-    of how and when the sequencer reads the _IN_ port.
-
 - **OUT:**
     The output signal from the curve sequencer.
 
@@ -260,7 +256,8 @@ to _LOW._
 If _RESET_ is high
 while the sequencer is idle,
 the sequencer copies the _IN_ voltage to the _OUT_ port.
-So if you want the _OUT_ port to "track" the _IN_ port:
+So if you want control the sequencer externally
+to "track" the _IN_ signal:
 
 - Send a rising signal to _RESET._
     The sequencer interrupts any sequence in progress and becomes idle.
@@ -270,9 +267,9 @@ So if you want the _OUT_ port to "track" the _IN_ port:
     the sequencer copies _IN_ to _OUT_.
 - Prevent _GATE_ from rising.
     If _GATE_ rises while the sequencer is idle,
-    the sequencer starts a sequence.
-    When this happens,
-    the sequencer stops tracking _IN._
+    the sequencer starts a sequence
+    and stops tracking _IN_
+    (unless the first selected step is in _INPUT_ mode).
 - To stop tracking, set _RESET_ low or send a rising signal to _GATE._
 
 **Pausing and resuming a sequence.**
@@ -289,7 +286,7 @@ though purposefully designed,
 may be unexpected:
 
 - **_ADVANCE_ options and _timed_ modes.**
-    If the active step is in one of the _timed modes
+    If the active step is in one of the _timed_ modes
     (_CURVE, HOLD, INPUT, CHASE,_ or _LEVEL_), 
     the sequencer advances to the next step
     as soon as either or both of these things occurs:
@@ -308,11 +305,19 @@ may be unexpected:
     regardless of whether the active step
     has completed its duration.
 
-- **Each sequence starts at the _OUT_ voltage.**
-    The sequencer starts each sequence
-    at the current _OUT_ port voltage.
-    This prevents the voltage from jumping
-    at the start of each sequence.
+- **The starting voltage of each mode.**
+    A step in _CURVE, HOLD, SUSTAIN,_ or _CHASE_ mode
+    starts at the current _OUT_ port voltage.
+
+    A step in _INPUT_ mode
+    starts at the the voltage at the _IN_ port.
+    and tracks the _IN_ signal
+    for the duration.
+
+    A step in _LEVEL_ mode
+    starts at the voltage specified by the _LEVEL_ controls
+    and tracks the value of those controls
+    for the duration.
 
 - **Once started, a step always completes.**
     Once a step starts,
@@ -335,6 +340,3 @@ may be unexpected:
     and _RESET_ is high,
     the sequencer copies the _IN_ port voltage
     to the _OUT_ port.
-    In fact,
-    this is the _only_ time
-    the sequencer reads the _IN_ port.
