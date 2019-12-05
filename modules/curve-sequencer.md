@@ -85,7 +85,8 @@ and controls for each step in the sequence.
     indicate which step is active (if any),
     and how far the active step has progressed.
     When a step starts, its light is red.
-    If the step is in _CURVE_ or _HOLD_ mode,
+    If the step is in a timed mode
+    (_CURVE, HOLD, INPUT, CHASE,_ or _LEVEL_), 
     the light transitions from red to green
     over the step's duration.
     Note that the light indicates *progress,*
@@ -96,20 +97,35 @@ and controls for each step in the sequence.
 
     - _CURVE_ mode
         generates a curve
-        controlled by the _LEVEL,_ _SHAPE,_ _CURVE,_ and _DURATION_ controls.
-        When the step finishes generating the curve,
-        the sequencer advances to the next enabled step.
+        ending at the _LEVEL_ voltage.
+        The _SHAPE,_ _CURVE,_ and _DURATION_ controls
+        govern the shape and duration of the curve.
 
     - _HOLD_ mode
         holds the _OUT_ port at its current voltage
         for the duration selected by the _DURATION_ controls.
-        When the duration elapses, 
-        the sequencer advances to the next enabled step.
 
     - _SUSTAIN_ mode
         sustains the _OUT_ port at its current voltage
         until the _GATE_ condition
         selected by the _ADVANCE_ stepper occurs.
+
+    - _INPUT_ mode
+        (coming soon)
+        sends the _IN_ signal to the _OUT_ port
+        for the duration selected by the _DURATION_ controls.
+
+    - _CHASE_ mode
+        (coming soon)
+        generates a curve
+        that progressively approaches
+        the _IN_ voltage.
+        The _SHAPE,_ _CURVE,_ and _DURATION_ controls
+        govern the shape and duration of the approach.
+
+    - _LEVEL_ mode
+        (coming soon)
+        sends the _LEVEL_ voltage to the _OUT_ port.
 
 - **ADVANCE:**
     Selects the condition
@@ -167,7 +183,7 @@ and controls for each step in the sequence.
     The range of each _DURATION_ knob
     is set by the common **DURATION RANGE** switch
     (to the right of the _DURATION_ knobs).
-    
+
 - **ENABLED:**
     Determines whether the sequencer can enter this step.
     When _ENABLED_ is off,
@@ -192,6 +208,22 @@ includes these factory presets:
     Calls for help.
 
 ## Usage Notes
+
+**To create a traditional sequencer step.**
+Select _LEVEL_ mode
+and set it to _ADVANCE_ on _RISE._
+Note that using the other _ADVANCE_ options
+give you a great deal of flexibility
+compared to a traditional sequencer.
+
+**_INPUT_ mode**
+essentially bypasses the sequencer
+for the duration of the step.
+
+**_CHASE_ mode**
+generates a curve
+that chases a moving target:
+The voltage at the _IN_ port.
 
 **To restart a sequence.**
 To interrupt a sequence
@@ -256,8 +288,9 @@ Several aspects of the _Curve Sequencer_ modules,
 though purposefully designed,
 may be unexpected:
 
-- **_CURVE,_ _HOLD,_ and _ADVANCE._**
-    If the active step is in _CURVE_ mode or _HOLD_ mode,
+- **_ADVANCE_ options and _timed_ modes.**
+    If the active step is in one of the _timed modes
+    (_CURVE, HOLD, INPUT, CHASE,_ or _LEVEL_), 
     the sequencer advances to the next step
     as soon as either or both of these things occurs:
 
@@ -305,14 +338,3 @@ may be unexpected:
     In fact,
     this is the _only_ time
     the sequencer reads the _IN_ port.
-
-- **Changing _MODE._**
-    While a step is in progress:
-    - Changing from _SUSTAIN_ mode to _CURVE_ mode
-        restarts the step's timer.
-        The curve starts afresh,
-        and runs for the full duration.
-    - Changing from _CURVE_ mode to _HOLD_ mode
-        does _not_ restart the step's timer.
-        The hold inherits whatever time
-        remains on the timer.
