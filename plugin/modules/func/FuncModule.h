@@ -42,7 +42,7 @@ namespace func {
       auto const operandKnobParamQuantity
           = dynamic_cast<OperandParamQuantity<Controls> *>(paramQuantities[Controls::AmountKnob + channel]);
 
-      operandKnobParamQuantity->configure(&controls, channel);
+      operandKnobParamQuantity->configure(&controls, channel, channelName);
     }
 
   private:

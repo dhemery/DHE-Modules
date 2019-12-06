@@ -10,7 +10,7 @@ namespace func {
   public:
     auto getLabel() -> std::string override {
       static auto operandLabels = std::array<std::string, 2>{"Offset", "Multiplier"};
-      return operandLabels[static_cast<int>(operation())];
+      return operandLabels[static_cast<int>(operation())] + channelName;
     }
 
     auto getDisplayValue() -> float override {
@@ -26,9 +26,10 @@ namespace func {
       setValue(rotation);
     }
 
-    void configure(Controls const *theControls, int theChannel) {
+    void configure(Controls const *theControls, int theChannel, std::string theChannelName) {
       controls = theControls;
       channel = theChannel;
+      channelName = theChannelName;
     }
 
   private:
@@ -43,6 +44,7 @@ namespace func {
     auto offsetRange() const -> Range const * { return controls->offsetRange(channel); }
 
     int channel{0};
+    std::string channelName;
     Controls const *controls{};
   };
 } // namespace func
