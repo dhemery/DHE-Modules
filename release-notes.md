@@ -4,6 +4,13 @@ title: Release Notes
 
 # DHE Modules Release Notes
 
+## Version 1.2.0
+
+- Added three new modes to the Curve Sequencer modules:
+  - _INPUT_ mode copies the _IN_ signal to the _OUT_ port.
+  - _LEVEL_ mode copies the _LEVEL_ voltage to the _OUT_ port.
+  - _CURVE_ mode generates a curve that gradually approaches the _IN_ signal.
+
 ## Version 1.1.1
 
 - Fixed an error in the _Ranger_ GUI.
