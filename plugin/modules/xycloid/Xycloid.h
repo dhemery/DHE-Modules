@@ -47,7 +47,7 @@ namespace xycloid {
       configLevelRangeSwitch(this, Controls::YRangeSwitch, "Y range", 0);
     }
 
-    void process(ProcessArgs const &args) {
+    void process(ProcessArgs const &args) override {
       auto const wobbleRatio = ratio();
       auto const wobblePhaseOffset = wobbleRatio < 0.F ? -phase() : phase();
 
