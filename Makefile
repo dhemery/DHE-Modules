@@ -59,9 +59,6 @@ clean-stage:
 run: stage
 	$(DHE_RACK_EXECUTABLE_PATH) -u $(DHE_RACK_USER_DIRPATH)
 
-debug: stage
-	$(DHE_RACK_EXECUTABLE_PATH) -d -u $(DHE_RACK_USER_DIRPATH) -s $(DHE_RACK_SYSTEM_DIRPATH)
-
 clean: clean-stage
 
 .PHONY: debug run clean-stage
