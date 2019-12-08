@@ -204,7 +204,8 @@ includes these factory presets:
 
 **To create a traditional sequencer step.**
 Select _LEVEL_ mode
-and set it to _ADVANCE_ on _RISE._
+and set the step to _ADVANCE_ on _RISE._
+Then set the duration longer than the clock cycle.
 Note that using the other _ADVANCE_ options
 give you a great deal of flexibility
 compared to a traditional sequencer.
