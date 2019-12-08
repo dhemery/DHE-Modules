@@ -107,12 +107,10 @@ and controls for each step in the sequence.
         selected by the _ADVANCE_ stepper occurs.
 
     - _INPUT_ mode
-        (coming soon)
         sends the _IN_ signal to the _OUT_ port
         for the duration selected by the _DURATION_ controls.
 
     - _CHASE_ mode
-        (coming soon)
         generates a curve
         that progressively approaches
         the _IN_ voltage.
@@ -120,7 +118,6 @@ and controls for each step in the sequence.
         govern the shape and duration of the approach.
 
     - _LEVEL_ mode
-        (coming soon)
         sends the _LEVEL_ voltage to the _OUT_ port.
 
 - **ADVANCE:**
