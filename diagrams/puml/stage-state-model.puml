@@ -1,5 +1,7 @@
 @startuml
 
+title Stage State Model
+
 Defer --> Available : DEFER↓
 Available --> Defer : DEFER↑
 
