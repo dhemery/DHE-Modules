@@ -1,3 +1,5 @@
+include(${CMAKE_SOURCE_DIR}/cmake/compile-options.cmake)
+
 add_subdirectory(components)
 add_subdirectory(config)
 add_subdirectory(controls)
