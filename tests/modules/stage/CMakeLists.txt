@@ -1,7 +1,7 @@
 add_executable(stage_tests)
 target_include_directories(stage_tests
         PRIVATE
-        ${PROJECT_SOURCE_DIR}/plugin
+        ${PROJECT_SOURCE_DIR}/src
         )
 target_sources(stage_tests
         PRIVATE
