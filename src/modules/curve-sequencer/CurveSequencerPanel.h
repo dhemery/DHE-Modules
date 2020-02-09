@@ -2,8 +2,8 @@
 
 #include "CurveSequencerControls.h"
 #include "widgets/ControlWidgets.h"
+#include "widgets/Picklist.h"
 #include "widgets/Screws.h"
-#include "widgets/Selector.h"
 
 #include <app/ModuleWidget.hpp>
 #include <componentlibrary.hpp>
@@ -159,12 +159,12 @@ namespace curve_sequencer {
                                                           Controls::ProgressLights + step + step));
 
         auto *generateModeButton
-            = Selector::button(module, generateModeLabels, x, generatingModeY, Controls::ModeSwitches + step);
+            = picklist::button(module, generateModeLabels, x, generatingModeY, Controls::ModeSwitches + step);
         addParam(generateModeButton);
         popupMenus.push_back(generateModeButton->menu());
 
         auto *advanceModeButton
-            = Selector::button(module, advanceModeLabels, x, advanceModeY, Controls::ConditionSwitches + step);
+            = picklist::button(module, advanceModeLabels, x, advanceModeY, Controls::ConditionSwitches + step);
         addParam(advanceModeButton);
         popupMenus.push_back(advanceModeButton->menu());
 

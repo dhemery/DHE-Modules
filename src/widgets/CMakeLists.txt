@@ -4,8 +4,8 @@ target_sources(widgets INTERFACE
         ${CMAKE_CURRENT_SOURCE_DIR}/ControlWidgets.h
         ${CMAKE_CURRENT_SOURCE_DIR}/Dimensions.h
         ${CMAKE_CURRENT_SOURCE_DIR}/PanelAssets.h
+        ${CMAKE_CURRENT_SOURCE_DIR}/Picklist.h
         ${CMAKE_CURRENT_SOURCE_DIR}/Screws.h
-        ${CMAKE_CURRENT_SOURCE_DIR}/Selector.h
         )
 
 target_include_directories(widgets INTERFACE
