@@ -13,7 +13,7 @@ public:
 
 private:
   std::vector<rack::ui::Label *> labels{};
-  int selection{};
+  unsigned int selection{};
 
   auto makeLabel(std::string text) -> rack::ui::Label * {
     auto *label = new rack::ui::Label;
@@ -27,6 +27,7 @@ private:
     if (module != nullptr) {
       paramQuantity = module->paramQuantities[index];
     }
+
     setSize(rack::math::Vec{hp2px(1.F), hp2px(1.F)});
     positionCentered(this, x, y);
     labels.push_back(makeLabel("foo"));
@@ -34,6 +35,26 @@ private:
     labels.push_back(makeLabel("baz"));
   }
 
+public:
+  void onAction(rack::event::Action const &action) override {
+    selection++;
+    if (selection >= labels.size()) {
+      selection = 0;
+    }
+    paramQuantity->setValue(static_cast<float>(selection));
+    action.consume(this);
+  }
+
+  void onButton(rack::event::Button const &buttonEvent) override {
+    static auto const buttonPressed = rack::event::Action{};
+
+    if (buttonEvent.action == GLFW_PRESS && buttonEvent.button == GLFW_MOUSE_BUTTON_LEFT) {
+      buttonEvent.consume(this);
+      onAction(buttonPressed);
+    }
+  }
+
+private:
   void draw(const DrawArgs &args) override { labels[selection]->draw(args); }
 };
 
