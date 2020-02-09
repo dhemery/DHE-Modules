@@ -19,18 +19,6 @@ namespace curve_sequencer {
 
   using ProgressLight = rack::componentlibrary::SmallLight<rack::componentlibrary::GreenRedLight>;
 
-  class GenerateModeStepper : public Toggle {
-  public:
-    GenerateModeStepper(std::string const &moduleSvgDir, rack::engine::Module *module, float x, float y, int index) :
-        Toggle("stepper-mode", modeCount, moduleSvgDir, module, x, y, index) {}
-  };
-
-  class SustainModeStepper : public Toggle {
-  public:
-    SustainModeStepper(std::string const &moduleSvgDir, rack::engine::Module *module, float x, float y, int index) :
-        Toggle("stepper-advance", advanceConditionCount, moduleSvgDir, module, x, y, index) {}
-  };
-
   class SelectionKnob : public Knob {
   public:
     SelectionKnob(std::function<void(int)> action, std::string const &moduleSvgDir, rack::engine::Module *module,
@@ -121,8 +109,6 @@ namespace curve_sequencer {
 
       auto constexpr activeY = top + lightRadius;
 
-      addParam(Menu::button(module, left, top, Controls::GenerateModeMenu));
-
       addInput(Jack::input(slug, module, left, runY, Controls::RunInput));
       addParam(Toggle::button(slug, module, left + buttonPortDistance, runY, Controls::RunButton));
 
@@ -153,7 +139,7 @@ namespace curve_sequencer {
       addParam(Button::momentary(slug, module, left + buttonPortDistance, resetY, Controls::ResetButton));
 
       auto constexpr generatingModeY = top + hp2mm(2.25F);
-      auto constexpr sustainingModeY = top + hp2mm(4.5F);
+      auto constexpr advanceModeY = top + hp2mm(4.5F);
       auto constexpr levelY = top + hp2mm(6.75F);
       auto constexpr shapeY = top + hp2mm(9.25F);
       auto constexpr curveY = top + hp2mm(11.75F);
@@ -161,13 +147,16 @@ namespace curve_sequencer {
       auto constexpr enabledPortY = bottom - portRadius;
       auto constexpr enabledButtonY = enabledPortY - portRadius - buttonRadius - 1.F;
 
+      auto const generateModeLabels = std::vector<std::string>{"curve", "hold", "sustain", "input", "chase", "level"};
+      auto const advanceModeLabels = std::vector<std::string>{"time", "rise", "fall", "change", "high", "low"};
+
       for (auto step = 0; step < N; step++) {
         auto const x = stepX + stepDx * (float) step;
         addChild(rack::createLightCentered<ProgressLight>(mm2px(x, activeY), module,
                                                           Controls::ProgressLights + step + step));
 
-        addParam(new GenerateModeStepper{slug, module, x, generatingModeY, Controls::ModeSwitches + step});
-        addParam(new SustainModeStepper{slug, module, x, sustainingModeY, Controls::ConditionSwitches + step});
+        addParam(Menu::button(module, generateModeLabels, x, generatingModeY, Controls::ModeSwitches + step));
+        addParam(Menu::button(module, advanceModeLabels, x, advanceModeY, Controls::ConditionSwitches + step));
 
         addParam(Knob::small(slug, module, x, levelY, Controls::LevelKnobs + step));
 
