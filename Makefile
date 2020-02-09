@@ -72,17 +72,9 @@ clean: clean-stage
 #
 ########################################################################
 
-DHE_TEST_SOURCE_DIRS = \
-	test/* \
-	test/*/* \
+DHE_TEST_SOURCE_FILES = $(wildcard tests/*.cpp tests/*/*.cpp tests/*/*/*.cpp)
 
-DHE_INCLUDE_DIRS = \
-	include/* \
-	include/*/* \
-
-DHE_TEST_SOURCE_FILES = $(foreach dir, $(TEST_SOURCE_DIRS), $(wildcard $(dir)/*.cpp))
-
-DHE_HEADER_FILES = $(foreach dir, $(DHE_INCLUDE_DIRS) $(DHE_SOURCE_DIRS), $(wildcard $(dir)/*.h))
+DHE_HEADER_FILES = $(wildcard src/*.h src/*/*.h src/*/*/*.h)
 
 format:
 	clang-format -i -style=file $(DHE_HEADER_FILES) $(DHE_SOURCE_FILES) $(DHE_TEST_SOURCE_FILES)
