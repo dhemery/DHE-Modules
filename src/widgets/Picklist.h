@@ -12,24 +12,26 @@ namespace picklist {
 
   class Option : public rack::ui::MenuItem {
   public:
-    Option(float value, const std::string &text, std::function<void(float, std::string const &)> onSelection) :
-        value{value}, onSelection{std::move(onSelection)} {
-      this->text = text;
+    Option(int index, const std::string &label, std::function<void(int)> onSelection) :
+        index{index}, onSelection{std::move(onSelection)} {
+      this->text = label;
     }
 
-    void onAction(const rack::event::Action &action) override {
-      onSelection(value, text);
-      rack::ui::MenuItem::onAction(action);
+    void onAction(rack::event::Action const &action) override {
+      MenuItem::onAction(action);
+      onSelection(index);
+      action.consume(this);
     }
 
   private:
-    float value;
-    std::function<void(float, std::string const &)> onSelection;
+    int index;
+    std::function<void(int)> onSelection;
   };
 
   class Button : public rack::app::ParamWidget {
   public:
-    Button(rack::engine::Module *module, const std::vector<std::string> &optionNames, float xmm, float ymm, int index) {
+    Button(rack::engine::Module *module, const std::vector<std::string> &labels, float xmm, float ymm, int index) :
+        labels{labels} {
       if (module != nullptr) {
         paramQuantity = module->paramQuantities[index];
       }
@@ -37,24 +39,23 @@ namespace picklist {
       setSize(rack::math::Vec{hp2px(2.F), hp2px(1.F)});
       positionCentered(this, xmm, ymm);
 
-      auto updateSelection = [this](float value, std::string const &label) { select(value, label); };
+      auto updateSelection = [this](int index) { select(index); };
 
-      for (size_t i = 0; i < optionNames.size(); i++) {
-        auto optionValue = static_cast<float>(i);
-        auto optionName = optionNames[i];
-        auto *option = new Option(optionValue, optionName, updateSelection);
+      for (size_t i = 0; i < labels.size(); i++) {
+        auto *option = new Option(i, labels[i], updateSelection);
         popupMenu->addChild(option);
       }
 
       popupMenu->hide();
       positionCentered(popupMenu, xmm, ymm);
 
-      selection->text = optionNames[0];
-      selection->color = nvgRGBf(1.F, 0.F, 0.F);
-      addChild(selection);
+      label->text = labels[0];
+      label->color = nvgRGBf(1.F, 0.F, 0.F);
+      addChild(label);
     }
 
     void onAction(rack::event::Action const &action) override {
+      ParamWidget::onAction(action);
       if (popupMenu->visible) {
         popupMenu->hide();
       } else {
@@ -64,6 +65,7 @@ namespace picklist {
     }
 
     void onButton(rack::event::Button const &buttonEvent) override {
+      ParamWidget::onButton(buttonEvent);
       static auto const buttonPressed = rack::event::Action{};
 
       if (buttonEvent.action == GLFW_PRESS && buttonEvent.button == GLFW_MOUSE_BUTTON_LEFT) {
@@ -72,17 +74,24 @@ namespace picklist {
       }
     }
 
+    void onChange(rack::event::Change const &changeEvent) override {
+      ParamWidget::onChange(changeEvent);
+      auto selection = static_cast<int>(paramQuantity->getValue());
+      label->text = labels[selection];
+      changeEvent.consume(this);
+    }
+
     auto menu() -> rack::ui::Menu * { return popupMenu; }
 
   private:
-    void select(float value, const std::string &label) const {
-      selection->text = label;
-      paramQuantity->setValue(value);
+    void select(int selection) const {
+      paramQuantity->setValue(static_cast<float>(selection));
       popupMenu->hide();
     }
 
     rack::ui::Menu *const popupMenu{new rack::ui::Menu};
-    rack::ui::Label *const selection{new rack::ui::Label};
+    rack::ui::Label *const label{new rack::ui::Label};
+    std::vector<std::string> const labels;
   };
 
   static inline auto button(rack::engine::Module *module, const std::vector<std::string> &labels, float xmm, float ymm,
