@@ -104,6 +104,7 @@ namespace curve_sequencer {
       ENUMS(ModeSwitches, N),
       ENUMS(ConditionSwitches, N),
       ENUMS(ShapeSwitches, N),
+      GenerateModeMenu,
       ParameterCount
     };
 

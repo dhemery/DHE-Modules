@@ -2,6 +2,7 @@
 
 #include "CurveSequencerControls.h"
 #include "widgets/ControlWidgets.h"
+#include "widgets/MenuWidgets.h"
 #include "widgets/Screws.h"
 
 #include <app/ModuleWidget.hpp>
@@ -120,6 +121,7 @@ namespace curve_sequencer {
 
       auto constexpr activeY = top + lightRadius;
 
+      addParam(Menu::button(module, left + buttonPortDistance, runY, Controls::RunButton));
       addInput(Jack::input(slug, module, left, runY, Controls::RunInput));
       addParam(Toggle::button(slug, module, left + buttonPortDistance, runY, Controls::RunButton));
 
