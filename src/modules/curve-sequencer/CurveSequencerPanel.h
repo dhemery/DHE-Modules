@@ -150,13 +150,23 @@ namespace curve_sequencer {
       auto const generateModeLabels = std::vector<std::string>{"curve", "hold", "sustain", "input", "chase", "level"};
       auto const advanceModeLabels = std::vector<std::string>{"time", "rise", "fall", "change", "high", "low"};
 
+      // Gather popup menus to add after all other controls, so the menus display on top of the other controls
+      auto popupMenus = std::vector<rack::ui::Menu *>{};
+
       for (auto step = 0; step < N; step++) {
         auto const x = stepX + stepDx * (float) step;
         addChild(rack::createLightCentered<ProgressLight>(mm2px(x, activeY), module,
                                                           Controls::ProgressLights + step + step));
 
-        addParam(new Selector(module, generateModeLabels, x, generatingModeY, Controls::ModeSwitches + step));
-        addParam(new Selector(module, advanceModeLabels, x, advanceModeY, Controls::ConditionSwitches + step));
+        auto *generateModeButton
+            = Selector::button(module, generateModeLabels, x, generatingModeY, Controls::ModeSwitches + step);
+        addParam(generateModeButton);
+        popupMenus.push_back(generateModeButton->menu());
+
+        auto *advanceModeButton
+            = Selector::button(module, advanceModeLabels, x, advanceModeY, Controls::ConditionSwitches + step);
+        addParam(advanceModeButton);
+        popupMenus.push_back(advanceModeButton->menu());
 
         addParam(Knob::small(slug, module, x, levelY, Controls::LevelKnobs + step));
 
@@ -177,6 +187,10 @@ namespace curve_sequencer {
       addParam(Toggle::stepper(2, slug, module, right, levelY, Controls::LevelRangeSwitch));
       addParam(Toggle::stepper(3, slug, module, right, durationY, Controls::DurationRangeSwitch));
       addOutput(Jack::output(slug, module, right, outY, Controls::CurveSequencerOutput));
+
+      for (auto popupMenu : popupMenus) {
+        addChild(popupMenu);
+      }
     }
   }; // namespace dhe
 } // namespace curve_sequencer
