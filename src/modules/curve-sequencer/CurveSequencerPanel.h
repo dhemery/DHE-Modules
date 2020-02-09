@@ -2,8 +2,8 @@
 
 #include "CurveSequencerControls.h"
 #include "widgets/ControlWidgets.h"
-#include "widgets/MenuWidgets.h"
 #include "widgets/Screws.h"
+#include "widgets/Selector.h"
 
 #include <app/ModuleWidget.hpp>
 #include <componentlibrary.hpp>
@@ -155,8 +155,8 @@ namespace curve_sequencer {
         addChild(rack::createLightCentered<ProgressLight>(mm2px(x, activeY), module,
                                                           Controls::ProgressLights + step + step));
 
-        addParam(Menu::button(module, generateModeLabels, x, generatingModeY, Controls::ModeSwitches + step));
-        addParam(Menu::button(module, advanceModeLabels, x, advanceModeY, Controls::ConditionSwitches + step));
+        addParam(new Selector(module, generateModeLabels, x, generatingModeY, Controls::ModeSwitches + step));
+        addParam(new Selector(module, advanceModeLabels, x, advanceModeY, Controls::ConditionSwitches + step));
 
         addParam(Knob::small(slug, module, x, levelY, Controls::LevelKnobs + step));
 
