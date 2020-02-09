@@ -15,11 +15,10 @@ private:
   std::vector<rack::ui::Label *> labels{};
   int selection{};
 
-  auto makeLabel(std::string text, float xmm, float ymm) -> rack::ui::Label * {
+  auto makeLabel(std::string text) -> rack::ui::Label * {
     auto *label = new rack::ui::Label;
     label->text = std::move(text);
-    label->color = nvgRGBf(0.1F, 0.1F, 0.1F);
-    positionCentered(label, xmm, ymm);
+    label->color = nvgRGBf(1.F, 0.F, 0.F);
     addChild(label);
     return label;
   }
@@ -28,10 +27,11 @@ private:
     if (module != nullptr) {
       paramQuantity = module->paramQuantities[index];
     }
-//    positionCentered(this, x, y);
-    labels.push_back(makeLabel("foo", x, y));
-    labels.push_back(makeLabel("bar", x, y));
-    labels.push_back(makeLabel("baz", x, y));
+    setSize(rack::math::Vec{hp2px(1.F), hp2px(1.F)});
+    positionCentered(this, x, y);
+    labels.push_back(makeLabel("foo"));
+    labels.push_back(makeLabel("bar"));
+    labels.push_back(makeLabel("baz"));
   }
 
   void draw(const DrawArgs &args) override { labels[selection]->draw(args); }

@@ -121,7 +121,7 @@ namespace curve_sequencer {
 
       auto constexpr activeY = top + lightRadius;
 
-      addParam(Menu::button(module, left + buttonPortDistance, top - hp2mm(2.F), Controls::GenerateModeMenu));
+      addParam(Menu::button(module, left, top, Controls::GenerateModeMenu));
 
       addInput(Jack::input(slug, module, left, runY, Controls::RunInput));
       addParam(Toggle::button(slug, module, left + buttonPortDistance, runY, Controls::RunButton));
