@@ -28,6 +28,35 @@ namespace picklist {
     std::function<void(int)> onSelection;
   };
 
+  class Menu : public rack::ui::Menu {
+  public:
+    void hideIfInactive() {
+      if (!isActive) {
+        hide();
+      }
+    }
+
+    void onEnter(const rack::event::Enter &entryEvent) override {
+      Widget::onEnter(entryEvent);
+      isActive = true;
+      entryEvent.consume(this);
+    }
+
+    void onHover(const rack::event::Hover &hoverEvent) override {
+      OpaqueWidget::onHover(hoverEvent);
+      hoverEvent.consume(this); // registers for Enter and Leave events
+    }
+
+    void onLeave(const rack::event::Leave &exitEvent) override {
+      Widget::onLeave(exitEvent);
+      isActive = false;
+      exitEvent.consume(this);
+    }
+
+  private:
+    bool isActive{};
+  };
+
   class Button : public rack::app::ParamWidget {
   public:
     Button(rack::engine::Module *module, const std::vector<std::string> &labels, float xmm, float ymm, int index) :
@@ -39,10 +68,10 @@ namespace picklist {
       setSize(rack::math::Vec{hp2px(2.F), hp2px(1.F)});
       positionCentered(this, xmm, ymm);
 
-      auto updateSelection = [this](int index) { select(index); };
+      auto onOptionSelection = [this](int index) { paramQuantity->setValue(static_cast<float>(index)); };
 
       for (size_t i = 0; i < labels.size(); i++) {
-        auto *option = new Option(i, labels[i], updateSelection);
+        auto *option = new Option(i, labels[i], onOptionSelection);
         popupMenu->addChild(option);
       }
 
@@ -70,7 +99,7 @@ namespace picklist {
 
       if (buttonEvent.action == GLFW_PRESS && buttonEvent.button == GLFW_MOUSE_BUTTON_LEFT) {
         onAction(buttonPressed);
-        buttonEvent.consume(this);
+        buttonEvent.consume(this); // registers for Deselect events
       }
     }
 
@@ -78,18 +107,20 @@ namespace picklist {
       ParamWidget::onChange(changeEvent);
       auto selection = static_cast<int>(paramQuantity->getValue());
       label->text = labels[selection];
+      popupMenu->hide();
       changeEvent.consume(this);
+    }
+
+    void onDeselect(const rack::event::Deselect &deselectionEvent) override {
+      Widget::onDeselect(deselectionEvent);
+      popupMenu->hideIfInactive();
+      deselectionEvent.consume(this);
     }
 
     auto menu() -> rack::ui::Menu * { return popupMenu; }
 
   private:
-    void select(int selection) const {
-      paramQuantity->setValue(static_cast<float>(selection));
-      popupMenu->hide();
-    }
-
-    rack::ui::Menu *const popupMenu{new rack::ui::Menu};
+    Menu *const popupMenu{new Menu};
     rack::ui::Label *const label{new rack::ui::Label};
     std::vector<std::string> const labels;
   };
