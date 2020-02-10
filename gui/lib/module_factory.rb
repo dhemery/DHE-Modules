@@ -30,16 +30,15 @@ class ModuleFactory
     instance_eval(@source_file.read, @source_file.to_s)
     faceplate = Faceplate.new(top: 0, right: @width, bottom: MODULE_HEIGHT, left: 0, stroke: @foreground, fill: @background)
     module_label = Label.new(text: @name, size: :title, color: @foreground)
-                       .translate(width / 2, MODULE_LABEL_INSET)
+                        .translate(width / 2, MODULE_LABEL_INSET)
     author_label = Label.new(text: 'DHE', size: :title, color: @foreground, alignment: :below)
-                       .translate(width / 2, MODULE_HEIGHT - MODULE_LABEL_INSET)
+                        .translate(width / 2, MODULE_HEIGHT - MODULE_LABEL_INSET)
     @faceplate_shapes.prepend(faceplate, module_label, author_label)
     @faceplate_shape = CompositeShape.new(shapes: @faceplate_shapes)
     @image_shapes.prepend(@faceplate_shape)
     @image_shape = CompositeShape.new(shapes: @image_shapes)
     self
   end
-
 
   def name(name)
     @name = name
@@ -79,7 +78,7 @@ class ModuleFactory
 
     label_color = style == :normal ? @foreground : @background
     faceplate_label = Label.new(text: label, color: label_color, size: :small, alignment: :above)
-                          .translate(image_button.x, image_button.top - PADDING)
+                           .translate(image_button.x, image_button.top - PADDING)
     @faceplate_shapes << faceplate_label
   end
 
@@ -91,7 +90,7 @@ class ModuleFactory
     @image_shapes << image_port
 
     faceplate_label = Label.new(text: label, color: @foreground, size: :large)
-                          .translate(image_port.x, image_port.top - PADDING)
+                           .translate(image_port.x, image_port.top - PADDING)
     @faceplate_shapes << faceplate_label
   end
 
@@ -103,7 +102,7 @@ class ModuleFactory
     @image_shapes << image_port
 
     faceplate_label = Label.new(text: label, color: @foreground, size: :small)
-                          .translate(image_port.x, image_port.top - PADDING)
+                           .translate(image_port.x, image_port.top - PADDING)
     faceplate_box = Box.new(top: faceplate_label.top - PADDING, right: image_port.right + PADDING,
                             bottom: image_port.bottom + PADDING, left: image_port.left - PADDING,
                             stroke: @foreground, fill: @background)
@@ -118,7 +117,7 @@ class ModuleFactory
     @image_shapes << image_port
 
     faceplate_label = Label.new(text: label, color: @background, size: :small)
-                          .translate(image_port.x, image_port.top - PADDING)
+                           .translate(image_port.x, image_port.top - PADDING)
     faceplate_box = Box.new(top: faceplate_label.top - PADDING, right: image_port.right + PADDING,
                             bottom: image_port.bottom + PADDING, left: image_port.left - PADDING,
                             stroke: @foreground, fill: @foreground)
@@ -134,7 +133,7 @@ class ModuleFactory
     @image_shapes << image_port
 
     faceplate_label = Label.new(text: 'cv', color: @foreground, size: :large)
-                          .translate(image_port.x, image_port.top - PADDING)
+                           .translate(image_port.x, image_port.top - PADDING)
     @faceplate_shapes << faceplate_label
   end
 
@@ -146,7 +145,7 @@ class ModuleFactory
     @image_shapes << image_knob
 
     faceplate_label = Label.new(text: label, color: @foreground, size: label_size)
-                          .translate(image_knob.x, image_knob.top - PADDING)
+                           .translate(image_knob.x, image_knob.top - PADDING)
     @faceplate_shapes << faceplate_label
   end
 
@@ -176,14 +175,14 @@ class ModuleFactory
     @image_shapes.append(image_toggle)
 
     low_label = Label.new(text: labels.first, color: @foreground, size: :small, alignment: :below)
-                    .translate(image_toggle.x, image_toggle.bottom + PADDING)
+                     .translate(image_toggle.x, image_toggle.bottom + PADDING)
     high_label = Label.new(text: labels.last, color: @foreground, size: :small, alignment: :above)
-                     .translate(image_toggle.x, image_toggle.top - PADDING)
+                      .translate(image_toggle.x, image_toggle.top - PADDING)
     @faceplate_shapes.append(low_label, high_label)
 
     if labels.size == 3
       mid_label = Label.new(text: labels[1], color: @foreground, size: :small, alignment: :right_of)
-                      .translate(image_toggle.right + PADDING, image_toggle.y)
+                       .translate(image_toggle.right + PADDING, image_toggle.y)
       @faceplate_shapes << mid_label
     end
   end
@@ -209,6 +208,25 @@ class ModuleFactory
     @image_shapes << steppers[selection - 1].translate(x, y) unless hidden
   end
 
+  def picklist(x:, y:, name:, labels:, selection: 1, width:)
+    # options = labels.each_with_index.map do |label, index|
+    #   PicklistOption.new(color: @foreground, name: name, text: label, position: index + 1)
+    # end
+    #
+    # @control_shapes += options
+
+    default_option = Label.new(text: labels[0], size: :small, alignment: :center, color: @foreground)
+                          .translate(x, y)
+
+    option_box = Box.new(top: default_option.top - PADDING, right: x + width / 2.0,
+                      bottom: default_option.bottom + PADDING, left: x - width / 2.0,
+                      stroke: @foreground, fill: @background)
+
+    @faceplate_shapes << option_box
+
+    @image_shapes << default_option
+  end
+
   def input_button_port(x:, y:, label:)
     port = Port.new(foreground: @foreground, background: @background)
     pressed_button = Button.new(foreground: @foreground, background: @background, state: :pressed)
@@ -220,7 +238,7 @@ class ModuleFactory
     @image_shapes.append(image_port, image_button)
 
     faceplate_label = Label.new(text: label, color: @foreground, size: :small)
-                          .translate(image_port.x, image_port.top - PADDING)
+                           .translate(image_port.x, image_port.top - PADDING)
     faceplate_box = Box.new(top: faceplate_label.top - PADDING, right: image_button.right + PADDING,
                             bottom: image_port.bottom + PADDING, left: image_port.left - PADDING,
                             stroke: @foreground, fill: @background)
@@ -238,7 +256,7 @@ class ModuleFactory
     @image_shapes.append(image_port, image_button)
 
     faceplate_label = Label.new(text: label, color: @background, size: :small)
-                          .translate(image_port.x, image_port.top - PADDING)
+                           .translate(image_port.x, image_port.top - PADDING)
     faceplate_box = Box.new(top: faceplate_label.top - PADDING, right: image_port.right + PADDING,
                             bottom: image_port.bottom + PADDING, left: image_button.left - PADDING,
                             stroke: @foreground, fill: @foreground)
@@ -247,7 +265,7 @@ class ModuleFactory
 
   def label(x:, y:, text:, color: @foreground, size: :small, alignment: :right_of)
     @faceplate_shapes << Label.new(text: text, color: color, size: size, alignment: alignment)
-                             .translate(x, y)
+                              .translate(x, y)
   end
 
   def light(x:, y:, color: @foreground)
