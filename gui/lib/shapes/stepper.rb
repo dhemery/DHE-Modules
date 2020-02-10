@@ -1,5 +1,6 @@
 require_relative 'shape'
 require_relative 'button'
+require_relative 'label'
 require_relative '../dimensions'
 
 class Stepper < BoundedShape
@@ -12,7 +13,7 @@ class Stepper < BoundedShape
     left = -right
     @button = Button.new(foreground: foreground, background: foreground, state: :released)
     @label = Label.new(color: foreground, alignment: :above, size: :small, text: text)
-                 .translate(0.0, @button.top - PADDING)
+                  .translate(0.0, @button.top - PADDING)
     @slug = Pathname("stepper-#{name}-#{position}")
     @marker_color = background
     super(top: @label.top, right: right, bottom: -@label.top, left: left)

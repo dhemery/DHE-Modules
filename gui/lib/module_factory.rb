@@ -9,6 +9,7 @@ require_relative 'shapes/knob'
 require_relative 'shapes/label'
 require_relative 'shapes/line'
 require_relative 'shapes/light'
+require_relative 'shapes/picklist_option'
 require_relative 'shapes/port'
 require_relative 'shapes/stepper'
 require_relative 'shapes/toggle'
@@ -208,23 +209,13 @@ class ModuleFactory
     @image_shapes << steppers[selection - 1].translate(x, y) unless hidden
   end
 
-  def picklist(x:, y:, name:, labels:, selection: 1, width:)
-    # options = labels.each_with_index.map do |label, index|
-    #   PicklistOption.new(color: @foreground, name: name, text: label, position: index + 1)
-    # end
-    #
-    # @control_shapes += options
+  def picklist(x:, y:, name:, labels:, selection: 1, width:, hidden: false)
+    options = labels.each_with_index.map do |label, index|
+      PicklistOption.new(color: @foreground, name: name, text: label, position: index + 1, width: width)
+    end
+    @control_shapes += options
 
-    default_option = Label.new(text: labels[0], size: :small, alignment: :center, color: @foreground)
-                          .translate(x, y)
-
-    option_box = Box.new(top: default_option.top - PADDING, right: x + width / 2.0,
-                      bottom: default_option.bottom + PADDING, left: x - width / 2.0,
-                      stroke: @foreground, fill: @background)
-
-    @faceplate_shapes << option_box
-
-    @image_shapes << default_option
+    @image_shapes << options[selection - 1].translate(x, y) unless hidden
   end
 
   def input_button_port(x:, y:, label:)
