@@ -1,7 +1,7 @@
 GEM
   remote: https://rubygems.org/
   specs:
-    builder (3.2.3)
+    builder (3.2.4)
     color (1.8)
     rake (12.3.3)
 
@@ -14,4 +14,4 @@ DEPENDENCIES
   rake (~> 12.3)
 
 BUNDLED WITH
-   2.0.2
+   2.1.4
