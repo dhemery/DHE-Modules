@@ -1,3 +1,5 @@
+require 'delegate'
+
 class Translated < SimpleDelegator
   def initialize(dx:, dy:, shape:)
     @dx = dx
