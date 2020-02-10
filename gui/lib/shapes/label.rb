@@ -8,7 +8,7 @@ class Label < BoundedShape
   ASCENT_RATIO = 2.0 / 3.0 # Approximately correct for Proxima Nova font
   SIZES = { title: 12.0 / PX_PER_MM, large: 9.0 / PX_PER_MM, small: 7.0 / PX_PER_MM }
 
-  def initialize(text:, size:, color:, alignment: :above)
+  def initialize(text:, size:, color:, alignment: :above, underline: false)
     @text = text
     @text_attributes = {}
     @text_attributes['dominant-baseline'] = BASELINES[alignment]
@@ -16,6 +16,7 @@ class Label < BoundedShape
     @text_attributes[:fill] = color
     font_size = SIZES[size.to_sym]
     @text_attributes[:style] = STYLE_FOR_SIZE % font_size
+    @text_attributes['text-decoration'] = 'underline' if underline
     height = font_size * ASCENT_RATIO
     width = 0.1 # Ignore the actual width of the label
     left = case alignment
