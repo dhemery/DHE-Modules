@@ -11,7 +11,6 @@ require_relative 'shapes/line'
 require_relative 'shapes/light'
 require_relative 'shapes/picklist_option'
 require_relative 'shapes/port'
-require_relative 'shapes/stepper'
 require_relative 'shapes/toggle'
 
 class ModuleFactory
@@ -198,15 +197,6 @@ class ModuleFactory
 
   def shape_toggle(x:, y:)
     toggle(x: x, y: y, labels: %w(J S), selection: 1)
-  end
-
-  def stepper(x:, y:, name:, labels:, selection: 1, hidden: false, width: Button::DIAMETER)
-    steppers = labels.each_with_index.map do |label, index|
-      Stepper.new(foreground: @foreground, background: @background, name: name, text: label, position: index + 1, width: width)
-    end
-    @control_shapes += steppers
-
-    @image_shapes << steppers[selection - 1].translate(x, y) unless hidden
   end
 
   def picklist(x:, y:, name:, labels:, selection: 1, width:, hidden: false)
