@@ -23,8 +23,8 @@ y += delta_y
 large_knob(x: center, y: y, label: ' ')
 
 y += delta_y
-stepper(x: center, y: y, name: 'add', labels: %w(0–5 ±5 0–10 ±10), selection: 2)
-stepper(x: center, y: y, name: 'mult', labels: %w(0–1 ±1 0–2 ±2), selection: 2, hidden: true)
+picklist x: center, y: y, name: 'add', labels: %w(0–5 ±5 0–10 ±10), selection: 2, width: 8
+picklist x: center, y: y, name: 'mult', labels: %w(0–1 ±1 0–2 ±2), selection: 2, width: 8, hidden: true
 
 y += 2.0 * delta_y
 output_port(x: center, y: y + port_offset)
