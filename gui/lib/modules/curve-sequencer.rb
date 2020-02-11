@@ -89,7 +89,7 @@ enabled_port_y = bottom - Port::DIAMETER / 2.0
 enabled_button_y = enabled_port_y - Port::DIAMETER / 2.0 - Button::DIAMETER / 2.0 - 1.0
 
 label_x = step_x - 0.6 * step_dx
-label x: label_x, y: generator_y, text: 'MODE', alignment: :left_of, size: :large
+label x: label_x, y: generator_y, text: 'GENERATE', alignment: :left_of, size: :large
 label x: label_x, y: gate_mode_y, text: 'ADVANCE', alignment: :left_of, size: :large
 label x: label_x, y: level_y, text: 'LEVEL', alignment: :left_of, size: :large
 label x: label_x, y: shape_y, text: 'SHAPE', alignment: :left_of, size: :large
@@ -106,8 +106,8 @@ step_label_y = top - hp2mm(0.5)
 (0...steps).each do |step|
   x = step_x + step * step_dx
   light x: x, y: active_y
-  picklist x: x, y: generator_y, name: 'generate', labels: %w[CURVE HOLD SUSTAIN INPUT CHASE LEVEL], selection: 1, width: 10
-  picklist x: x, y: gate_mode_y, name: 'advance', labels: %w[TIME RISE FALL EDGE HIGH LOW], selection: 1, width: 10
+  picklist x: x, y: generator_y, name: 'generate', labels: %w[CURVE HOLD SUST INPUT CHASE LEVEL], selection: 1, width: 9
+  picklist x: x, y: gate_mode_y, name: 'advance', labels: %w[TIME RISE FALL EDGE HIGH LOW], selection: 1, width: 9
   label x: x, y: step_label_y, text: (step + 1).to_s, alignment: :above, size: :large
   shape_toggle x: x, y: shape_y
   small_knob y: curve_y, x: x, label: ''

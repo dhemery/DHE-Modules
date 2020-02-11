@@ -3,43 +3,69 @@ require_relative '../dimensions'
 
 class Label < BoundedShape
   STYLE_FOR_SIZE = 'font-family:Proxima Nova;font-weight:bold;font-size:%spx'
-  BASELINES = { center: 'middle', above: 'alphabetic', below: 'hanging', right_of: 'middle', left_of: 'middle' }
-  ANCHORS = { center: 'middle', above: 'middle', below: 'middle', right_of: 'start', left_of: 'end' }
+  ALIGNMENT_TYPES = {
+    above: {
+      dominant_baseline: 'alphabetic',
+      text_anchor: 'middle',
+      portion_below: 0.0,
+      portion_right: 0.5,
+      baseline_shift: 0.0
+    },
+    center: {
+      dominant_baseline: 'middle',
+      text_anchor: 'middle',
+      portion_below: 0.5,
+      portion_right: 0.5,
+      baseline_shift: 0.18,
+    },
+    left_of: {
+      dominant_baseline: 'middle',
+      text_anchor: 'end',
+      portion_below: 0.5,
+      portion_right: 0.0,
+      baseline_shift: 0.18,
+    },
+    right_of: {
+      dominant_baseline: 'middle',
+      text_anchor: 'start',
+      portion_below: 0.5,
+      portion_right: 1.0,
+      baseline_shift: 0.18,
+    },
+    below: {
+      dominant_baseline: 'hanging',
+      text_anchor: 'middle',
+      portion_below: 1.0,
+      portion_right: 0.5,
+      baseline_shift: 0.07,
+    }
+  }
   ASCENT_RATIO = 2.0 / 3.0 # Approximately correct for Proxima Nova font
   SIZES = { title: 12.0 / PX_PER_MM, large: 9.0 / PX_PER_MM, small: 7.0 / PX_PER_MM }
 
-  def initialize(text:, size:, color:, alignment: :above, underline: false)
+  def initialize(text:, size:, color:, alignment: :above)
+    width = 0.1 # Ignore the actual width of the label for now
     @text = text
     @text_attributes = {}
-    @text_attributes['dominant-baseline'] = BASELINES[alignment]
-    @text_attributes['text-anchor'] = ANCHORS[alignment]
-    @text_attributes[:fill] = color
     font_size = SIZES[size.to_sym]
     @text_attributes[:style] = STYLE_FOR_SIZE % font_size
-    @text_attributes['text-decoration'] = 'underline' if underline
+    alignment_type = ALIGNMENT_TYPES[alignment]
+    @text_attributes['dominant-baseline'] = alignment_type[:dominant_baseline]
+    @text_attributes['text-anchor'] = alignment_type[:text_anchor]
+    @text_attributes[:fill] = color
     height = font_size * ASCENT_RATIO
-    width = 0.1 # Ignore the actual width of the label
-    left = case alignment
-           when :left_of, :right_of
-             0.0
-           else # center, above, or below
-             -width / 2.0
-           end
-    baseline = -height / 5.0
-    top = case alignment
-          when :above
-            baseline - height
-          when :left_of, :right_of, :center
-            baseline - height / 2.0
-          else # below
-            baseline
-          end
-    bottom = top + height
-    right = left + width
+    @text_attributes[:y] = height * alignment_type[:baseline_shift]
+    right = width * alignment_type[:portion_right]
+    bottom = height * alignment_type[:portion_below]
+    top = bottom - height
+    left = right - width
     super(top: top, right: right, bottom: bottom, left: left)
   end
 
   def draw(canvas)
+    # canvas.line(x1: -5, x2: 5, y1: top, y2: top, stroke: @text_attributes[:fill], 'stroke-width' => '0.01mm')
+    # canvas.line(x1: -3.5, x2: 3.5, stroke: @text_attributes[:fill], 'stroke-width' => '0.01mm')
+    # canvas.line(x1: -5, x2: 5, y1: bottom, y2: bottom, stroke: @text_attributes[:fill], 'stroke-width' => '0.01mm')
     canvas.text(@text_attributes) do |text|
       text << @text
     end
