@@ -133,7 +133,7 @@ class ModuleFactory
     image_port = port.translate(x, y)
     @image_shapes << image_port
 
-    faceplate_label = Label.new(text: 'cv', color: @foreground, size: :large)
+    faceplate_label = Label.new(text: 'CV', color: @foreground, size: :small)
                            .translate(image_port.x, image_port.top - PADDING)
     @faceplate_shapes << faceplate_label
   end
@@ -211,11 +211,13 @@ class ModuleFactory
 
   def picklist(x:, y:, name:, labels:, selection: 1, width:, hidden: false)
     options = labels.each_with_index.map do |label, index|
-      PicklistOption.new(color: @foreground, name: name, text: label, position: index + 1, width: width)
+      PicklistOption.new(foreground: @background, background: @foreground, name: name, text: label, position: index + 1, width: width)
     end
     @control_shapes += options
 
-    @image_shapes << options[selection - 1].translate(x, y) unless hidden
+    default_option = options[selection - 1].translate(x, y)
+
+    @image_shapes << default_option unless hidden
   end
 
   def input_button_port(x:, y:, label:)
