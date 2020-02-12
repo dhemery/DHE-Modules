@@ -138,7 +138,7 @@ namespace curve_sequencer {
       addInput(Jack::input(slug, module, left, resetY, Controls::ResetInput));
       addParam(Button::momentary(slug, module, left + buttonPortDistance, resetY, Controls::ResetButton));
 
-      auto constexpr generatingModeY = top + hp2mm(2.25F);
+      auto constexpr generateModeY = top + hp2mm(2.25F);
       auto constexpr advanceModeY = top + hp2mm(4.5F);
       auto constexpr levelY = top + hp2mm(6.75F);
       auto constexpr shapeY = top + hp2mm(9.25F);
@@ -158,13 +158,13 @@ namespace curve_sequencer {
         addChild(rack::createLightCentered<ProgressLight>(mm2px(x, activeY), module,
                                                           Controls::ProgressLights + step + step));
 
-        auto *generateModeButton
-            = picklist::button(module, generateModeLabels, x, generatingModeY, Controls::ModeSwitches + step);
+        auto *generateModeButton = picklist::button("generate", generateModeLabels, slug, module, x, generateModeY,
+                                                    Controls::ModeSwitches + step);
         addParam(generateModeButton);
         popupMenus.push_back(generateModeButton->menu());
 
-        auto *advanceModeButton
-            = picklist::button(module, advanceModeLabels, x, advanceModeY, Controls::ConditionSwitches + step);
+        auto *advanceModeButton = picklist::button("advance", advanceModeLabels, slug, module, x, advanceModeY,
+                                                   Controls::ConditionSwitches + step);
         addParam(advanceModeButton);
         popupMenus.push_back(advanceModeButton->menu());
 

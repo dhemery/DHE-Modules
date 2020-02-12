@@ -6,26 +6,22 @@
 #include <helpers.hpp>
 #include <ui/Label.hpp>
 #include <utility>
+#include <widget/SvgWidget.hpp>
 
 namespace dhe {
 namespace picklist {
-
   class Option : public rack::ui::MenuItem {
   public:
-    Option(int index, const std::string &label, std::function<void(int)> onSelection) :
-        index{index}, onSelection{std::move(onSelection)} {
-      this->text = label;
-    }
+    Option(std::string const &label, std::function<void()> onPick) : onPick{std::move(onPick)} { this->text = label; }
 
     void onAction(rack::event::Action const &action) override {
       MenuItem::onAction(action);
-      onSelection(index);
+      onPick();
       action.consume(this);
     }
 
   private:
-    int index;
-    std::function<void(int)> onSelection;
+    std::function<void()> onPick;
   };
 
   class Menu : public rack::ui::Menu {
@@ -57,10 +53,19 @@ namespace picklist {
     bool isActive{};
   };
 
+  class Label : public rack::widget::SvgWidget {
+  public:
+    Label(std::string const &listName, int index, std::string const &moduleSvgDir) {
+      static auto const basename = std::string{"picklist-"};
+      auto const filename = basename + listName + '-' + std::to_string(index + 1);
+      setSvg(controlSvg(moduleSvgDir, filename));
+    }
+  };
+
   class Button : public rack::app::ParamWidget {
   public:
-    Button(rack::engine::Module *module, const std::vector<std::string> &labels, float xmm, float ymm, int index) :
-        labels{labels} {
+    Button(std::string const &listName, std::vector<std::string> const &optionNames, std::string const &moduleSvgDir,
+           rack::engine::Module *module, float xmm, float ymm, int index) {
       if (module != nullptr) {
         paramQuantity = module->paramQuantities[index];
       }
@@ -68,19 +73,26 @@ namespace picklist {
       setSize(rack::math::Vec{hp2px(2.F), hp2px(1.F)});
       positionCentered(this, xmm, ymm);
 
-      auto onOptionSelection = [this](int index) { paramQuantity->setValue(static_cast<float>(index)); };
-
-      for (size_t i = 0; i < labels.size(); i++) {
-        auto *option = new Option(i, labels[i], onOptionSelection);
+      for (size_t i = 0; i < optionNames.size(); i++) {
+        auto const onPick = [this, i]() {
+          auto const value = static_cast<float>(i);
+          paramQuantity->setValue(value);
+        };
+        auto *option = new Option(optionNames[i], onPick);
         popupMenu->addChild(option);
       }
 
       popupMenu->hide();
       positionCentered(popupMenu, xmm, ymm);
 
-      label->text = labels[0];
-      label->color = nvgRGBf(1.F, 0.F, 0.F);
-      addChild(label);
+      for (size_t i = 0; i < optionNames.size(); i++) {
+        auto *optionLabel = new Label(listName, i, moduleSvgDir);
+        optionLabel->hide();
+        optionLabels.push_back(optionLabel);
+        addChild(optionLabel);
+      }
+      selectedOptionLabel = optionLabels[0];
+      selectedOptionLabel->show();
     }
 
     void onAction(rack::event::Action const &action) override {
@@ -105,8 +117,10 @@ namespace picklist {
 
     void onChange(rack::event::Change const &changeEvent) override {
       ParamWidget::onChange(changeEvent);
-      auto selection = static_cast<int>(paramQuantity->getValue());
-      label->text = labels[selection];
+      auto const selection = static_cast<int>(paramQuantity->getValue());
+      selectedOptionLabel->hide();
+      selectedOptionLabel = optionLabels[selection];
+      selectedOptionLabel->show();
       popupMenu->hide();
       changeEvent.consume(this);
     }
@@ -121,13 +135,14 @@ namespace picklist {
 
   private:
     Menu *const popupMenu{new Menu};
-    rack::ui::Label *const label{new rack::ui::Label};
-    std::vector<std::string> const labels;
+    std::vector<Label *> optionLabels;
+    Label *selectedOptionLabel;
   };
 
-  static inline auto button(rack::engine::Module *module, const std::vector<std::string> &labels, float xmm, float ymm,
+  static inline auto button(std::string const &listName, std::vector<std::string> const &optionLabels,
+                            std::string const &moduleSvgDir, rack::engine::Module *module, float xmm, float ymm,
                             int index) -> Button * {
-    return new Button(module, labels, xmm, ymm, index);
+    return new Button(listName, optionLabels, moduleSvgDir, module, xmm, ymm, index);
   }
 } // namespace picklist
 
