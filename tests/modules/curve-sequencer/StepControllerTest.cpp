@@ -3,9 +3,9 @@
 #include "components/Latch.h"
 #include "components/PhaseTimer.h"
 #include "components/Taper.h"
-#include "modules/curve-sequencer/AdvanceCondition.h"
+#include "modules/curve-sequencer/AdvanceMode.h"
+#include "modules/curve-sequencer/GenerateMode.h"
 #include "modules/curve-sequencer/StepEvent.h"
-#include "modules/curve-sequencer/StepMode.h"
 
 #include <gmock/gmock-actions.h>
 #include <gmock/gmock.h>
@@ -13,10 +13,10 @@
 
 using dhe::Latch;
 using dhe::PhaseTimer;
-using dhe::curve_sequencer::AdvanceCondition;
+using dhe::curve_sequencer::AdvanceMode;
+using dhe::curve_sequencer::GenerateMode;
 using dhe::curve_sequencer::StepController;
 using dhe::curve_sequencer::StepEvent;
-using dhe::curve_sequencer::StepMode;
 
 static auto constexpr risenGate = Latch{true, true};
 static auto constexpr fallenGate = Latch{false, true};
@@ -30,12 +30,12 @@ using ::testing::Test;
 
 class StepControllerTest : public Test {
   struct MockControls {
-    MOCK_METHOD(dhe::curve_sequencer::AdvanceCondition, condition, (int), (const));
+    MOCK_METHOD(dhe::curve_sequencer::AdvanceMode, condition, (int), (const));
     MOCK_METHOD(float, curvature, (int), (const));
     MOCK_METHOD(float, duration, (int), (const));
     MOCK_METHOD(float, input, (), (const));
     MOCK_METHOD(float, level, (int), (const));
-    MOCK_METHOD(dhe::curve_sequencer::StepMode, mode, (int), (const));
+    MOCK_METHOD(dhe::curve_sequencer::GenerateMode, mode, (int), (const));
     MOCK_METHOD(float, output, (), (const));
     MOCK_METHOD(void, output, (float) );
     MOCK_METHOD(void, showInactive, (int) );
@@ -44,16 +44,16 @@ class StepControllerTest : public Test {
   };
 
 protected:
-  std::vector<StepMode> const allModes{StepMode::Curve, StepMode::Hold,  StepMode::Sustain,
-                                       StepMode::Input, StepMode::Chase, StepMode::Level};
+  std::vector<GenerateMode> const allModes{GenerateMode::Curve, GenerateMode::Hold,  GenerateMode::Sustain,
+                                           GenerateMode::Input, GenerateMode::Chase, GenerateMode::Level};
   NiceMock<MockControls> controls{};
   PhaseTimer timer{};
 
   StepController<MockControls> stepController{controls, timer};
 
-  void givenMode(int step, StepMode mode) { ON_CALL(controls, mode(step)).WillByDefault(Return(mode)); }
+  void givenMode(int step, GenerateMode mode) { ON_CALL(controls, mode(step)).WillByDefault(Return(mode)); }
 
-  void givenCondition(int step, AdvanceCondition condition) {
+  void givenCondition(int step, AdvanceMode condition) {
     ON_CALL(controls, condition(step)).WillByDefault(Return(condition));
   }
 
@@ -86,11 +86,11 @@ TEST_F(StepControllerTest, exit_showsStepInactive) {
 
 TEST_F(StepControllerTest, advanceOnGateRise_returnsCompleted_ifGateRises) {
   auto const step = 2;
-  givenCondition(step, AdvanceCondition::GateRises);
+  givenCondition(step, AdvanceMode::GateRises);
 
   stepController.enter(step);
 
-  std::for_each(allModes.cbegin(), allModes.cend(), [this](StepMode const mode) {
+  std::for_each(allModes.cbegin(), allModes.cend(), [this](GenerateMode const mode) {
     givenMode(step, mode);
     EXPECT_EQ(stepController.execute(risenGate, 0.F), StepEvent::Completed);
   });
@@ -98,11 +98,11 @@ TEST_F(StepControllerTest, advanceOnGateRise_returnsCompleted_ifGateRises) {
 
 TEST_F(StepControllerTest, advanceOnGateRise_returnsGenerated_ifGateDoesNotRise) {
   auto const step = 3;
-  givenCondition(step, AdvanceCondition::GateRises);
+  givenCondition(step, AdvanceMode::GateRises);
 
   stepController.enter(step);
 
-  std::for_each(allModes.cbegin(), allModes.cend(), [this](StepMode const mode) {
+  std::for_each(allModes.cbegin(), allModes.cend(), [this](GenerateMode const mode) {
     givenMode(step, mode);
     EXPECT_EQ(stepController.execute(highGate, 0.F), StepEvent::Generated);
     EXPECT_EQ(stepController.execute(lowGate, 0.F), StepEvent::Generated);
@@ -112,11 +112,11 @@ TEST_F(StepControllerTest, advanceOnGateRise_returnsGenerated_ifGateDoesNotRise)
 
 TEST_F(StepControllerTest, advanceOnGateFall_returnsCompleted_ifGateFalls) {
   auto const step = 2;
-  givenCondition(step, AdvanceCondition::GateFalls);
+  givenCondition(step, AdvanceMode::GateFalls);
 
   stepController.enter(step);
 
-  std::for_each(allModes.cbegin(), allModes.cend(), [this](StepMode const mode) {
+  std::for_each(allModes.cbegin(), allModes.cend(), [this](GenerateMode const mode) {
     givenMode(step, mode);
     EXPECT_EQ(stepController.execute(fallenGate, 0.F), StepEvent::Completed);
   });
@@ -124,11 +124,11 @@ TEST_F(StepControllerTest, advanceOnGateFall_returnsCompleted_ifGateFalls) {
 
 TEST_F(StepControllerTest, advanceOnGateFall_returnsGenerated_ifGateDoesNotFall) {
   auto const step = 3;
-  givenCondition(step, AdvanceCondition::GateFalls);
+  givenCondition(step, AdvanceMode::GateFalls);
 
   stepController.enter(step);
 
-  std::for_each(allModes.cbegin(), allModes.cend(), [this](StepMode const mode) {
+  std::for_each(allModes.cbegin(), allModes.cend(), [this](GenerateMode const mode) {
     givenMode(step, mode);
     EXPECT_EQ(stepController.execute(highGate, 0.F), StepEvent::Generated);
     EXPECT_EQ(stepController.execute(lowGate, 0.F), StepEvent::Generated);
@@ -138,11 +138,11 @@ TEST_F(StepControllerTest, advanceOnGateFall_returnsGenerated_ifGateDoesNotFall)
 
 TEST_F(StepControllerTest, advanceOnGateChange_returnsCompleted_ifGateChanges) {
   auto const step = 4;
-  givenCondition(step, AdvanceCondition::GateChanges);
+  givenCondition(step, AdvanceMode::GateChanges);
 
   stepController.enter(step);
 
-  std::for_each(allModes.cbegin(), allModes.cend(), [this](StepMode const mode) {
+  std::for_each(allModes.cbegin(), allModes.cend(), [this](GenerateMode const mode) {
     givenMode(step, mode);
     EXPECT_EQ(stepController.execute(risenGate, 0.F), StepEvent::Completed);
     EXPECT_EQ(stepController.execute(fallenGate, 0.F), StepEvent::Completed);
@@ -151,11 +151,11 @@ TEST_F(StepControllerTest, advanceOnGateChange_returnsCompleted_ifGateChanges) {
 
 TEST_F(StepControllerTest, advanceOnGateChange_returnsGenerated_ifGateDoesNotChange) {
   auto const step = 5;
-  givenCondition(step, AdvanceCondition::GateChanges);
+  givenCondition(step, AdvanceMode::GateChanges);
 
   stepController.enter(step);
 
-  std::for_each(allModes.cbegin(), allModes.cend(), [this](StepMode const mode) {
+  std::for_each(allModes.cbegin(), allModes.cend(), [this](GenerateMode const mode) {
     givenMode(step, mode);
     EXPECT_EQ(stepController.execute(highGate, 0.F), StepEvent::Generated);
     EXPECT_EQ(stepController.execute(lowGate, 0.F), StepEvent::Generated);
@@ -164,11 +164,11 @@ TEST_F(StepControllerTest, advanceOnGateChange_returnsGenerated_ifGateDoesNotCha
 
 TEST_F(StepControllerTest, advanceOnGateHigh_returnsGenerated_ifGateIsLow) {
   auto const step = 6;
-  givenCondition(step, AdvanceCondition::GateIsHigh);
+  givenCondition(step, AdvanceMode::GateIsHigh);
 
   stepController.enter(step);
 
-  std::for_each(allModes.cbegin(), allModes.cend(), [this](StepMode const mode) {
+  std::for_each(allModes.cbegin(), allModes.cend(), [this](GenerateMode const mode) {
     givenMode(step, mode);
     EXPECT_EQ(stepController.execute(lowGate, 0.F), StepEvent::Generated);
     EXPECT_EQ(stepController.execute(fallenGate, 0.F), StepEvent::Generated);
@@ -177,11 +177,11 @@ TEST_F(StepControllerTest, advanceOnGateHigh_returnsGenerated_ifGateIsLow) {
 
 TEST_F(StepControllerTest, advanceOnGateHigh_returnsCompleted_ifGateIsHigh) {
   auto const step = 7;
-  givenCondition(step, AdvanceCondition::GateIsHigh);
+  givenCondition(step, AdvanceMode::GateIsHigh);
 
   stepController.enter(step);
 
-  std::for_each(allModes.cbegin(), allModes.cend(), [this](StepMode const mode) {
+  std::for_each(allModes.cbegin(), allModes.cend(), [this](GenerateMode const mode) {
     givenMode(step, mode);
     EXPECT_EQ(stepController.execute(highGate, 0.F), StepEvent::Completed);
     EXPECT_EQ(stepController.execute(risenGate, 0.F), StepEvent::Completed);
@@ -190,11 +190,11 @@ TEST_F(StepControllerTest, advanceOnGateHigh_returnsCompleted_ifGateIsHigh) {
 
 TEST_F(StepControllerTest, advanceOnGateLow_returnsGenerated_ifGateIsHigh) {
   auto const step = 0;
-  givenCondition(step, AdvanceCondition::GateIsLow);
+  givenCondition(step, AdvanceMode::GateIsLow);
 
   stepController.enter(step);
 
-  std::for_each(allModes.cbegin(), allModes.cend(), [this](StepMode const mode) {
+  std::for_each(allModes.cbegin(), allModes.cend(), [this](GenerateMode const mode) {
     givenMode(step, mode);
     EXPECT_EQ(stepController.execute(highGate, 0.F), StepEvent::Generated);
     EXPECT_EQ(stepController.execute(risenGate, 0.F), StepEvent::Generated);
@@ -203,11 +203,11 @@ TEST_F(StepControllerTest, advanceOnGateLow_returnsGenerated_ifGateIsHigh) {
 
 TEST_F(StepControllerTest, advanceOnGateLow_returnsCompleted_ifGateIsLow) {
   auto const step = 1;
-  givenCondition(step, AdvanceCondition::GateIsLow);
+  givenCondition(step, AdvanceMode::GateIsLow);
 
   stepController.enter(step);
 
-  std::for_each(allModes.cbegin(), allModes.cend(), [this](StepMode const mode) {
+  std::for_each(allModes.cbegin(), allModes.cend(), [this](GenerateMode const mode) {
     givenMode(step, mode);
     EXPECT_EQ(stepController.execute(lowGate, 0.F), StepEvent::Completed);
     EXPECT_EQ(stepController.execute(fallenGate, 0.F), StepEvent::Completed);

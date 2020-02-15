@@ -1,7 +1,7 @@
 #pragma once
 
-#include "AdvanceCondition.h"
-#include "StepMode.h"
+#include "AdvanceMode.h"
+#include "GenerateMode.h"
 #include "controls/CommonInputs.h"
 #include "controls/CurvatureInputs.h"
 #include "controls/DurationInputs.h"
@@ -33,8 +33,8 @@ namespace curve_sequencer {
                            std::vector<Light> &lights) :
         inputs{inputs}, outputs{outputs}, params{params}, lights{lights} {}
 
-    auto condition(int step) const -> AdvanceCondition {
-      return static_cast<AdvanceCondition>(params[ConditionSwitches + step].getValue());
+    auto condition(int step) const -> AdvanceMode {
+      return static_cast<AdvanceMode>(params[ConditionSwitches + step].getValue());
     }
 
     auto curvature(int step) const -> float { return dhe::curvature(params[CurveKnobs + step]); }
@@ -61,7 +61,9 @@ namespace curve_sequencer {
       return dhe::selectableLevel(params[LevelKnobs + step], params[LevelRangeSwitch]);
     }
 
-    auto mode(int step) const -> StepMode { return static_cast<StepMode>(params[ModeSwitches + step].getValue()); }
+    auto mode(int step) const -> GenerateMode {
+      return static_cast<GenerateMode>(params[ModeSwitches + step].getValue());
+    }
 
     auto output() const -> float { return outputs[CurveSequencerOutput].getVoltage(); }
 
@@ -75,7 +77,7 @@ namespace curve_sequencer {
 
     void showProgress(int step, float progress) {
       // Skew the progress::brightness ratio so that the "remaining" light stays fully lit for a little while during
-      // early progress, and the "completed" reaches fully lit a little while before progress is complete.
+      // early progress, and the "completed" light reaches fully lit a little while before progress is complete.
       static auto constexpr brightnessSkew = 0.7F;
       static auto constexpr brightnessRange = Range{-brightnessSkew, 1.F + brightnessSkew};
       auto const completedBrightness = brightnessRange.scale(progress);

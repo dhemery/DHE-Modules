@@ -1,8 +1,8 @@
 #pragma once
 
-#include "AdvanceCondition.h"
+#include "AdvanceMode.h"
+#include "GenerateMode.h"
 #include "StepEvent.h"
-#include "StepMode.h"
 #include "components/Latch.h"
 #include "components/PhaseTimer.h"
 #include "components/Range.h"
@@ -13,21 +13,21 @@ namespace curve_sequencer {
   using dhe::Latch;
   using dhe::PhaseTimer;
 
-  static inline auto isSatisfied(StepMode mode, AdvanceCondition condition, Latch const &gate) -> bool {
+  static inline auto isSatisfied(GenerateMode mode, AdvanceMode condition, Latch const &gate) -> bool {
     switch (condition) {
-    case AdvanceCondition::GateIsHigh:
+    case AdvanceMode::GateIsHigh:
       return gate.isHigh();
-    case AdvanceCondition::GateIsLow:
+    case AdvanceMode::GateIsLow:
       return gate.isLow();
-    case AdvanceCondition::GateRises:
+    case AdvanceMode::GateRises:
       return gate.isRise();
-    case AdvanceCondition::GateFalls:
+    case AdvanceMode::GateFalls:
       return gate.isFall();
-    case AdvanceCondition::GateChanges:
+    case AdvanceMode::GateChanges:
       return gate.isEdge();
-    case AdvanceCondition::TimerExpires:
+    case AdvanceMode::TimerExpires:
     default:
-      return mode == StepMode::Sustain;
+      return mode == GenerateMode::Sustain;
     }
   }
 
@@ -42,23 +42,23 @@ namespace curve_sequencer {
     }
 
     auto execute(Latch const &gateLatch, float sampleTime) -> StepEvent {
-      StepMode stepMode = mode();
+      GenerateMode stepMode = mode();
       if (!isSatisfied(stepMode, condition(), gateLatch)) {
-        if (stepMode != StepMode::Sustain) { // Sustain has no duration
+        if (stepMode != GenerateMode::Sustain) { // Sustain has no duration
           timer.advance(sampleTime / duration());
         }
         controls.showProgress(step, timer.phase());
         switch (stepMode) {
-        case StepMode::Curve:
+        case GenerateMode::Curve:
           controls.output(scale(taper(timer.phase()), startVoltage, level()));
           break;
-        case StepMode::Input:
+        case GenerateMode::Input:
           controls.output(controls.input());
           break;
-        case StepMode::Chase:
+        case GenerateMode::Chase:
           controls.output(scale(taper(timer.phase()), startVoltage, controls.input()));
           break;
-        case StepMode::Level:
+        case GenerateMode::Level:
           controls.output(level());
           break;
         default: // Hold and sustain
@@ -76,13 +76,13 @@ namespace curve_sequencer {
     void exit() { controls.showInactive(step); }
 
   private:
-    auto condition() const -> AdvanceCondition { return controls.condition(step); }
+    auto condition() const -> AdvanceMode { return controls.condition(step); }
 
     auto duration() const -> float { return controls.duration(step); }
 
     auto level() const -> float { return controls.level(step); }
 
-    auto mode() const -> StepMode { return controls.mode(step); }
+    auto mode() const -> GenerateMode { return controls.mode(step); }
 
     void reset() {
       timer.reset();

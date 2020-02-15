@@ -2,8 +2,8 @@
 
 #include "CurveSequencer.h"
 #include "CurveSequencerControls.h"
+#include "GenerateMode.h"
 #include "StepController.h"
-#include "StepMode.h"
 #include "StepSelector.h"
 #include "components/PhaseTimer.h"
 #include "config/CommonConfig.h"
@@ -16,12 +16,12 @@
 namespace dhe {
 
 namespace curve_sequencer {
-  static auto constexpr defaultMode = static_cast<int>(StepMode::Curve);
-  static auto const modeDescriptions
-      = std::array<std::string, modeCount>{"Curve", "Hold", "Sustain", "Input", "Chase", "Level"};
+  static auto constexpr defaultGenerateMode = static_cast<int>(GenerateMode::Curve);
+  static auto const generateModeDescriptions
+      = std::array<std::string, generateModeCount>{"Curve", "Hold", "Sustain", "Input", "Chase", "Level"};
 
-  static auto constexpr defaultAdvanceCondition = static_cast<int>(AdvanceCondition::TimerExpires);
-  static auto const advanceConditionDescriptions = std::array<std::string, advanceConditionCount>{
+  static auto constexpr defaultAdvanceMode = static_cast<int>(AdvanceMode::TimerExpires);
+  static auto const advanceModeDescriptions = std::array<std::string, advanceModeCount>{
       "Timer expires", "Gate rises", "Gate falls", "Gate changes", "Gate is high", "Gate is low"};
 
   template <int N> class CurveSequencerModule : public rack::engine::Module {
@@ -43,9 +43,10 @@ namespace curve_sequencer {
       configDurationRangeSwitch(this, Controls::DurationRangeSwitch);
 
       for (auto step = 0; step < N; step++) {
-        configToggle<modeCount>(this, Controls::ModeSwitches + step, "Mode", modeDescriptions, defaultMode);
-        configToggle<advanceConditionCount>(this, Controls::ConditionSwitches + step, "Advance when",
-                                            advanceConditionDescriptions, defaultAdvanceCondition);
+        configToggle<generateModeCount>(this, Controls::ModeSwitches + step, "Generate Mode", generateModeDescriptions,
+                                        defaultGenerateMode);
+        configToggle<advanceModeCount>(this, Controls::ConditionSwitches + step, "Advance Mode",
+                                       advanceModeDescriptions, defaultAdvanceMode);
         configLevelKnob(this, Controls::LevelKnobs + step, Controls::LevelRangeSwitch, "Level");
         configCurveShapeSwitch(this, Controls::ShapeSwitches + step, "Shape");
         configCurvatureKnob(this, Controls::CurveKnobs + step, "Curvature");
