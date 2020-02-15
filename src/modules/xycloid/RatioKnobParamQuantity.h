@@ -39,7 +39,7 @@ namespace xycloid {
     }
   };
 
-  inline void configRatioKnob(rack::engine::Module *module, int knobId) {
+  static inline void configRatioKnob(rack::engine::Module *module, int knobId) {
     module->configParam<RatioKnobParamQuantity>(knobId, 0.F, 1.F, centeredRotation, "Ratio", "x");
   }
 

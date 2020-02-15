@@ -80,6 +80,6 @@ format:
 	clang-format -i -style=file $(DHE_HEADER_FILES) $(DHE_SOURCE_FILES) $(DHE_TEST_SOURCE_FILES)
 
 tidy: build
-	clang-tidy -p=$(DHE_BUILD_DIRNAME) $(DHE_SOURCE_FILES)
+	clang-tidy -header-filter=.* -p=$(DHE_BUILD_DIRNAME) $(DHE_SOURCE_FILES)
 
 .PHONY: format tidy

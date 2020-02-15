@@ -18,7 +18,7 @@ namespace stage {
     using Controls = HostageControls;
 
   public:
-    HostageModule() : rack::engine::Module{} {
+    HostageModule() {
       config(Controls::ParameterCount, Controls::InputCount, Controls::OutputCount);
 
       configDurationKnob(this, Controls::DurationKnob, Controls::DurationRangeSwitch);

@@ -17,7 +17,7 @@ namespace stage {
     using Controls = StageControls;
 
   public:
-    StageModule() : rack::engine::Module{} {
+    StageModule() {
       config(StageControls::ParameterCount, StageControls::InputCount, StageControls::OutputCount);
 
       configDurationKnob(this, StageControls::DurationKnob, mediumDurationRange);

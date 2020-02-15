@@ -67,17 +67,22 @@ using dhe::tapers::TapersPanel;
 using dhe::xycloid::Xycloid;
 using dhe::xycloid::XycloidPanel;
 
+static auto constexpr cs4Steps{4};
+static auto constexpr cs8Steps{8};
+static auto constexpr cs16Steps{16};
+static auto constexpr func6Channels{6};
+
 void init(rack::plugin::Plugin *p) {
   pluginInstance = p;
 
   p->addModel(rack::createModel<Blossom, BlossomPanel>("Blossom"));
   p->addModel(rack::createModel<BoosterStageModule, BoosterStagePanel>("BoosterStage"));
   p->addModel(rack::createModel<Cubic, CubicPanel>("Cubic"));
-  p->addModel(rack::createModel<CurveSequencerModule<4>, CurveSequencerPanel<4>>("CurveSequencer4"));
-  p->addModel(rack::createModel<CurveSequencerModule<8>, CurveSequencerPanel<8>>("CurveSequencer8"));
-  p->addModel(rack::createModel<CurveSequencerModule<16>, CurveSequencerPanel<16>>("CurveSequencer16"));
+  p->addModel(rack::createModel<CurveSequencerModule<cs4Steps>, CurveSequencerPanel<cs4Steps>>("CurveSequencer4"));
+  p->addModel(rack::createModel<CurveSequencerModule<cs8Steps>, CurveSequencerPanel<cs8Steps>>("CurveSequencer8"));
+  p->addModel(rack::createModel<CurveSequencerModule<cs16Steps>, CurveSequencerPanel<cs16Steps>>("CurveSequencer16"));
   p->addModel(rack::createModel<FuncModule<1>, Func1Panel>("Func"));
-  p->addModel(rack::createModel<FuncModule<6>, Func6Panel>("Func6"));
+  p->addModel(rack::createModel<FuncModule<func6Channels>, Func6Panel>("Func6"));
   p->addModel(rack::createModel<FuzzyLogicH, FuzzyLogicHPanel>("FuzzyLogicH"));
   p->addModel(rack::createModel<FuzzyLogicZ, FuzzyLogicZPanel>("FuzzyLogicZ"));
   p->addModel(rack::createModel<Gator, GatorPanel>("Gator"));
