@@ -31,9 +31,6 @@
 #include "modules/xycloid/XycloidPanel.h"
 
 #include <plugin/Plugin.hpp>
-#include <plugin/callbacks.hpp>
-
-rack::plugin::Plugin *pluginInstance;
 
 using dhe::blossom::Blossom;
 using dhe::blossom::BlossomPanel;
@@ -67,12 +64,17 @@ using dhe::tapers::TapersPanel;
 using dhe::xycloid::Xycloid;
 using dhe::xycloid::XycloidPanel;
 
-static auto constexpr cs4Steps{4};
-static auto constexpr cs8Steps{8};
-static auto constexpr cs16Steps{16};
-static auto constexpr func6Channels{6};
+rack::plugin::Plugin *pluginInstance;
 
-void init(rack::plugin::Plugin *p) {
+/**
+ * Register a model of each module. This funciton is called by Rack when the module is loaded.
+ */
+extern "C" void init(rack::plugin::Plugin *p) {
+  static auto constexpr func6Channels{6};
+  static auto constexpr cs4Steps{4};
+  static auto constexpr cs8Steps{8};
+  static auto constexpr cs16Steps{16};
+
   pluginInstance = p;
 
   p->addModel(rack::createModel<Blossom, BlossomPanel>("Blossom"));
