@@ -4,7 +4,7 @@
 #include "controls/CurvatureInputs.h"
 #include "controls/DurationInputs.h"
 #include "controls/LevelInputs.h"
-#include "modules/curve-sequencer/StepMode.h"
+#include "modules/curve-sequencer/GenerateMode.h"
 
 #include <engine/Light.hpp>
 #include <engine/Param.hpp>
@@ -15,8 +15,8 @@ static auto constexpr stepCount{8};
 
 using ::testing::Test;
 using Controls = dhe::curve_sequencer::CurveSequencerControls<stepCount>;
-using dhe::curve_sequencer::AdvanceCondition;
-using dhe::curve_sequencer::StepMode;
+using dhe::curve_sequencer::AdvanceMode;
+using dhe::curve_sequencer::GenerateMode;
 
 class CurveSequencerControlsTest : public Test {
 protected:
@@ -185,11 +185,11 @@ TEST_F(CurveSequencerControlsTest, stepShape_isTaperSelectedByStepShapeSwitch) {
 TEST_F(CurveSequencerControlsTest, stepMode_isModeSelectedByStepModeSwitch) {
   auto constexpr step = 6;
 
-  auto modeSelectedBySwitch = StepMode::Curve;
+  auto modeSelectedBySwitch = GenerateMode::Curve;
   params[Controls::ModeSwitches + step].setValue(static_cast<float>(modeSelectedBySwitch));
   EXPECT_EQ(controls.mode(step), modeSelectedBySwitch);
 
-  modeSelectedBySwitch = StepMode::Hold;
+  modeSelectedBySwitch = GenerateMode::Hold;
   params[Controls::ModeSwitches + step].setValue(static_cast<float>(modeSelectedBySwitch));
   EXPECT_EQ(controls.mode(step), modeSelectedBySwitch);
 }
@@ -197,27 +197,27 @@ TEST_F(CurveSequencerControlsTest, stepMode_isModeSelectedByStepModeSwitch) {
 TEST_F(CurveSequencerControlsTest, stepCondition_isConditionSelectedByStepConditionSwitch) {
   auto constexpr step = 0;
 
-  auto conditionSelectedBySwitch = AdvanceCondition::TimerExpires;
+  auto conditionSelectedBySwitch = AdvanceMode::TimerExpires;
   params[Controls::ConditionSwitches + step].setValue(static_cast<float>(conditionSelectedBySwitch));
   EXPECT_EQ(controls.condition(step), conditionSelectedBySwitch);
 
-  conditionSelectedBySwitch = AdvanceCondition::GateIsHigh;
+  conditionSelectedBySwitch = AdvanceMode::GateIsHigh;
   params[Controls::ConditionSwitches + step].setValue(static_cast<float>(conditionSelectedBySwitch));
   EXPECT_EQ(controls.condition(step), conditionSelectedBySwitch);
 
-  conditionSelectedBySwitch = AdvanceCondition::GateIsLow;
+  conditionSelectedBySwitch = AdvanceMode::GateIsLow;
   params[Controls::ConditionSwitches + step].setValue(static_cast<float>(conditionSelectedBySwitch));
   EXPECT_EQ(controls.condition(step), conditionSelectedBySwitch);
 
-  conditionSelectedBySwitch = AdvanceCondition::GateRises;
+  conditionSelectedBySwitch = AdvanceMode::GateRises;
   params[Controls::ConditionSwitches + step].setValue(static_cast<float>(conditionSelectedBySwitch));
   EXPECT_EQ(controls.condition(step), conditionSelectedBySwitch);
 
-  conditionSelectedBySwitch = AdvanceCondition::GateFalls;
+  conditionSelectedBySwitch = AdvanceMode::GateFalls;
   params[Controls::ConditionSwitches + step].setValue(static_cast<float>(conditionSelectedBySwitch));
   EXPECT_EQ(controls.condition(step), conditionSelectedBySwitch);
 
-  conditionSelectedBySwitch = AdvanceCondition::GateChanges;
+  conditionSelectedBySwitch = AdvanceMode::GateChanges;
   params[Controls::ConditionSwitches + step].setValue(static_cast<float>(conditionSelectedBySwitch));
   EXPECT_EQ(controls.condition(step), conditionSelectedBySwitch);
 }

@@ -148,7 +148,7 @@ namespace curve_sequencer {
       auto constexpr enabledButtonY = enabledPortY - portRadius - buttonRadius - 1.F;
 
       auto const generateModeLabels = std::vector<std::string>{"curve", "hold", "sustain", "input", "chase", "level"};
-      auto const advanceModeLabels = std::vector<std::string>{"time", "rise", "fall", "change", "high", "low"};
+      auto const advanceModeLabels = std::vector<std::string>{"time", "rise", "fall", "edge", "high", "low"};
 
       // Gather popup menus to add after all other controls, so the menus display on top of the other controls
       auto popupMenus = std::vector<rack::ui::Menu *>{};
