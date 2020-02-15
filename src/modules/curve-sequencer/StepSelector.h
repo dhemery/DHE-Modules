@@ -19,7 +19,7 @@ namespace curve_sequencer {
     }
 
   private:
-    bool isEnabled(int step) const { return controls.isEnabled(step); }
+    auto isEnabled(int step) const -> bool { return controls.isEnabled(step); }
 
     auto successor(int current, int selectionStart, int selectionLength, bool isLooping) const -> int {
       auto const selectionEnd = (selectionStart + selectionLength - 1) & stepMask;

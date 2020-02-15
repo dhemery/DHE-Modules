@@ -18,7 +18,7 @@ namespace stage {
     using Controls = BoosterStageControls;
 
   public:
-    BoosterStageModule() : rack::engine::Module{} {
+    BoosterStageModule() {
       config(Controls::ParameterCount, Controls::InputCount, Controls::OutputCount);
 
       configDurationKnob(this, Controls::DurationKnob, Controls::DurationRangeSwitch);

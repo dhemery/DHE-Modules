@@ -26,7 +26,7 @@ namespace func {
       setValue(rotation);
     }
 
-    void configure(Controls const *theControls, int theChannel, std::string theChannelName) {
+    void configure(Controls const *theControls, int theChannel, const std::string &theChannelName) {
       controls = theControls;
       channel = theChannel;
       channelName = theChannelName;

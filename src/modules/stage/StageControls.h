@@ -43,7 +43,7 @@ namespace stage {
       outputs[EocOutput].setVoltage(voltage);
     }
 
-    auto taper() const -> taper::VariableTaper const * { return &taper::variableJTaper; };
+    static auto taper() -> taper::VariableTaper const * { return &taper::variableJTaper; };
 
     enum ParameterIds { DurationKnob, LevelKnob, CurveKnob, ParameterCount };
 
