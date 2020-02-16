@@ -4,6 +4,8 @@
 #include <app/ParamWidget.hpp>
 #include <engine/Module.hpp>
 #include <helpers.hpp>
+#include <random.hpp>
+#include <random>
 #include <ui/Label.hpp>
 #include <utility>
 #include <widget/SvgWidget.hpp>
@@ -169,6 +171,14 @@ namespace picklist {
     void onHide(const rack::event::Hide &hideEvent) override {
       popupMenu->hide();
       Widget::onHide(hideEvent);
+    }
+
+    void reset() override { paramQuantity->reset(); }
+
+    void randomize() override {
+      float value
+          = paramQuantity->getMinValue() + std::floor(rack::random::uniform() * (paramQuantity->getRange() + 1));
+      paramQuantity->setValue(value);
     }
 
     auto menu() -> rack::ui::Menu * { return popupMenu; }
