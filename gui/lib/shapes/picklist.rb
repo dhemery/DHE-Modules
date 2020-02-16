@@ -3,23 +3,36 @@ require_relative 'label'
 require_relative '../dimensions'
 
 module Picklist
-  BOX_STROKE_WIDTH = 0.25
-  BOX_CORNER_RADIUS = BOX_STROKE_WIDTH * 2
+  STROKE_WIDTH = 0.25
+  CORNER_RADIUS = STROKE_WIDTH * 2
 
   class Option < CenteredShape
     attr_reader :slug
 
-    def initialize(name:, text:, position:, foreground:, background:, width:)
-      @background = background
-      @slug = Pathname("picklist-#{name}-#{position}")
-      @label = Label.new(color: foreground, alignment: :center, size: :small, text: text)
-      super(width: width, height: @label.height + 2 * PADDING)
+    def initialize(name:, text:, text_color_on:, text_color_off:, width:, position:, selected:)
+      @border = text_color_on
+      if selected
+        @fill = text_color_off
+        color = text_color_on
+      else
+        @fill = text_color_on
+        color = text_color_off
+      end
+      @slug = Pathname("picklist-#{name}-option-#{position}-#{selected ? 'on' : 'off'}")
+      @label = Label.new(color: color, alignment: :center, size: :small, text: text)
+      height = @label.height + 2 * PADDING
+      super(width: width, height: height)
     end
 
     def draw(canvas)
-      canvas.rect(x: left, width: width, y: top, height: height,
-                  rx: BOX_CORNER_RADIUS, ry: BOX_CORNER_RADIUS,
-                  stroke: 'none', fill: @background)
+      inner_height = height - STROKE_WIDTH
+      inner_width = width - STROKE_WIDTH
+      inner_top = inner_height / -2.0
+      inner_left = inner_width / -2.0
+      canvas.rect(x: inner_left, y: inner_top, width: inner_width, height: inner_height,
+                  rx: CORNER_RADIUS, ry: CORNER_RADIUS,
+                  'stroke-width' => STROKE_WIDTH,
+                  stroke: @border, fill: @fill)
       @label.draw(canvas)
     end
 
@@ -31,36 +44,23 @@ module Picklist
   class Menu < CenteredShape
     attr_reader :slug
 
-    def initialize(name:, options:, foreground:, background:, width:)
-      labels = options.map { |option| Label.new(color: foreground, alignment: :center, size: :small, text: option) }
-      label_height = labels[0].height + 2 * PADDING
-      super(width: width + BOX_STROKE_WIDTH, height: labels.size * label_height + BOX_STROKE_WIDTH)
+    def initialize(name:, border:, fill:, width:, height:)
+      super(width: width, height: height)
 
-      @stroke = foreground
-      @fill = background
-      @slug = Pathname("picklist-#{name}")
-      label_origin_y = 0 - (height - label_height - BOX_STROKE_WIDTH) / 2
-      @labels = labels.each_with_index.map { |label, index| label.translate(0, label_origin_y + label_height * index) }
-      @labels = labels.each_with_index.map { |label, index| label.translate(0, label_origin_y + label_height * index) }
+      @stroke = border
+      @fill = fill
+      @slug = Pathname("picklist-#{name}-menu")
     end
 
     def draw(canvas)
-      canvas.rect(x: left, width: width, y: top, height: height,
-                  rx: BOX_CORNER_RADIUS, ry: BOX_CORNER_RADIUS,
-                  'stroke-width' => BOX_STROKE_WIDTH,
+      inner_height = height - STROKE_WIDTH
+      inner_width = width - STROKE_WIDTH
+      inner_top = inner_height / -2.0
+      inner_left = inner_width / -2.0
+      canvas.rect(x: inner_left, width: inner_width, y: inner_top, height: inner_height,
+                  rx: CORNER_RADIUS, ry: CORNER_RADIUS,
+                  'stroke-width' => STROKE_WIDTH,
                   stroke: @stroke, fill: @fill)
-      @labels.each do |label|
-        canvas.rect(x: (BOX_STROKE_WIDTH - width) / 2, y: label.top - PADDING,
-                    width: width, height: label.height + 2 * PADDING,
-                    rx: BOX_CORNER_RADIUS, ry: BOX_CORNER_RADIUS,
-                    'stroke-width' => BOX_STROKE_WIDTH,
-                    stroke: @stroke, fill: @fill)
-        label.draw(canvas)
-      end
-    end
-
-    def has_text?
-      true
     end
   end
 end
