@@ -151,19 +151,19 @@ namespace curve_sequencer {
       auto const advanceModeLabels = std::vector<std::string>{"time", "rise", "fall", "edge", "high", "low"};
 
       // Gather popup menus to add after all other controls, so the menus display on top of the other controls
-      auto popupMenus = std::vector<rack::ui::Menu *>{};
+      auto popupMenus = std::vector<rack::widget::Widget *>{};
 
       for (auto step = 0; step < N; step++) {
         auto const x = stepX + stepDx * (float) step;
         addChild(rack::createLightCentered<ProgressLight>(mm2px(x, activeY), module,
                                                           Controls::ProgressLights + step + step));
 
-        auto *generateModeButton = picklist::button("generate", generateModeLabels, slug, module, x, generateModeY,
+        auto *generateModeButton = picklist::button(slug, "generate-mode", generateModeLabels, module, x, generateModeY,
                                                     Controls::ModeSwitches + step);
         addParam(generateModeButton);
         popupMenus.push_back(generateModeButton->menu());
 
-        auto *advanceModeButton = picklist::button("advance", advanceModeLabels, slug, module, x, advanceModeY,
+        auto *advanceModeButton = picklist::button(slug, "advance-mode", advanceModeLabels, module, x, advanceModeY,
                                                    Controls::ConditionSwitches + step);
         addParam(advanceModeButton);
         popupMenus.push_back(advanceModeButton->menu());

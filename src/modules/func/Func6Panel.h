@@ -34,7 +34,7 @@ namespace func {
       auto constexpr rowSpacing = (bottom - top) / (channelCount - 1.F);
       auto constexpr portOffset = 1.25F;
 
-      auto popupMenus = std::vector<rack::ui::Menu *>{};
+      auto popupMenus = std::vector<rack::widget::Widget *>{};
 
       for (auto row = 0; row < channelCount; row++) {
         auto const y = top + row * rowSpacing;
@@ -44,13 +44,13 @@ namespace func {
         addParam(Knob::large(slug, module, column3, y, Controls::AmountKnob + row));
         addOutput(Jack::output(slug, module, column5, portY, Controls::FuncOutput + row));
 
-        auto *offsetRangePicklist = picklist::button("add", {"0–5", "±5", "0–10", "±10"}, slug, module, column4, y,
-                                                     Controls::OffsetRangeSwitch + row);
+        auto *offsetRangePicklist = picklist::button(slug, "offset-range", {"0–5", "±5", "0–10", "±10"}, module,
+                                                     column4, y, Controls::OffsetRangeSwitch + row);
         addParam(offsetRangePicklist);
         popupMenus.push_back(offsetRangePicklist->menu());
 
-        auto *multiplierRangePicklist = picklist::button("mult", {"0–1", "±1", "0–2", "±2"}, slug, module, column4, y,
-                                                         Controls::MultiplierRangeSwitch + row);
+        auto *multiplierRangePicklist = picklist::button(slug, "multiplier-range", {"0–1", "±1", "0–2", "±2"}, module,
+                                                         column4, y, Controls::MultiplierRangeSwitch + row);
         addParam(multiplierRangePicklist);
         popupMenus.push_back(multiplierRangePicklist->menu());
 

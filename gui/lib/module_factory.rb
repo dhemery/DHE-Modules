@@ -9,7 +9,7 @@ require_relative 'shapes/knob'
 require_relative 'shapes/label'
 require_relative 'shapes/line'
 require_relative 'shapes/light'
-require_relative 'shapes/picklist'
+require_relative 'shapes/pick_list'
 require_relative 'shapes/port'
 require_relative 'shapes/toggle'
 
@@ -199,35 +199,37 @@ class ModuleFactory
     toggle(x: x, y: y, labels: %w(J S), selection: 1)
   end
 
-  def picklist(x:, y:, name:, options:, selection: 1, width:, hidden: false)
-    selected_options = options.each_with_index.map do |option, index|
-      Picklist::Option.new(
+  def pick_list(x:, y:, name:, options:, selection: 1, width:, hidden: false)
+    buttons = options.each_with_index.map do |option, index|
+      PickList::Button.new(
         name: name,
         text: option,
         position: index + 1,
-        text_color_on: @foreground, text_color_off: @background,
-        width: width,
-        selected: true)
+        color: @background, fill: @foreground,
+        width: width
+      )
     end
-    unselected_options = options.each_with_index.map do |option, index|
-      Picklist::Option.new(
+    items = options.each_with_index.map do |option, index|
+      PickList::Item.new(
         name: name,
         text: option,
         position: index + 1,
-        text_color_on: @foreground, text_color_off: @background,
-        width: width,
-        selected: false)
+        color: @foreground, fill: @background,
+        width: width
+      )
     end
-    @control_shapes += selected_options
-    @control_shapes += unselected_options
-    @control_shapes << Picklist::Menu.new(
+    menu = PickList::Menu.new(
       name: name,
       border: @foreground, fill: @background,
-      width: width, height: selected_options[0].height * options.size)
+      width: width, height: items[0].height * items.size)
 
-    default_option = selected_options[selection - 1].translate(x, y)
+    @control_shapes += buttons
+    @control_shapes += items
+    @control_shapes << menu
 
-    @image_shapes << default_option unless hidden
+    default_button = buttons[selection - 1].translate(x, y)
+
+    @image_shapes << default_button unless hidden
   end
 
   def input_button_port(x:, y:, label:)

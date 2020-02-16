@@ -41,12 +41,12 @@ namespace func {
       addParam(Knob::large(slug, module, x, row3, Controls::AmountKnob));
       addOutput(Jack::output(slug, module, x, row6, Controls::FuncOutput));
 
-      auto *offsetRangePicklist
-          = picklist::button("add", {"0–5", "±5", "0–10", "±10"}, slug, module, x, row4, Controls::OffsetRangeSwitch);
+      auto *offsetRangePicklist = picklist::button(slug, "offset-range", {"0–5", "±5", "0–10", "±10"}, module, x, row4,
+                                                   Controls::OffsetRangeSwitch);
       addParam(offsetRangePicklist);
 
-      auto *multiplierRangePicklist = picklist::button("mult", {"0–1", "±1", "0–2", "±2"}, slug, module, x, row4,
-                                                       Controls::MultiplierRangeSwitch);
+      auto *multiplierRangePicklist = picklist::button(slug, "multiplier-range", {"0–1", "±1", "0–2", "±2"}, module, x,
+                                                       row4, Controls::MultiplierRangeSwitch);
       addParam(multiplierRangePicklist);
 
       auto const updateRangeStepperVisibility = [offsetRangePicklist, multiplierRangePicklist](bool isMultiply) {
