@@ -9,7 +9,7 @@ require_relative 'shapes/knob'
 require_relative 'shapes/label'
 require_relative 'shapes/line'
 require_relative 'shapes/light'
-require_relative 'shapes/picklist_option'
+require_relative 'shapes/picklist'
 require_relative 'shapes/port'
 require_relative 'shapes/toggle'
 
@@ -199,13 +199,14 @@ class ModuleFactory
     toggle(x: x, y: y, labels: %w(J S), selection: 1)
   end
 
-  def picklist(x:, y:, name:, labels:, selection: 1, width:, hidden: false)
-    options = labels.each_with_index.map do |label, index|
-      PicklistOption.new(foreground: @background, background: @foreground, name: name, text: label, position: index + 1, width: width)
+  def picklist(x:, y:, name:, options:, selection: 1, width:, hidden: false)
+    option_shapes = options.each_with_index.map do |option, index|
+      Picklist::Option.new(foreground: @background, background: @foreground, name: name, text: option, position: index + 1, width: width)
     end
-    @control_shapes += options
+    @control_shapes += option_shapes
+    @control_shapes << Picklist::Menu.new(foreground: @foreground, background: @background, name: name, options: options, width: width)
 
-    default_option = options[selection - 1].translate(x, y)
+    default_option = option_shapes[selection - 1].translate(x, y)
 
     @image_shapes << default_option unless hidden
   end

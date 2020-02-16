@@ -106,8 +106,8 @@ step_label_y = top - hp2mm(0.5)
 (0...steps).each do |step|
   x = step_x + step * step_dx
   light x: x, y: active_y
-  picklist x: x, y: generator_y, name: 'generate', labels: %w[CURVE HOLD SUST INPUT CHASE LEVEL], selection: 1, width: 9
-  picklist x: x, y: gate_mode_y, name: 'advance', labels: %w[TIME RISE FALL EDGE HIGH LOW], selection: 1, width: 9
+  picklist x: x, y: generator_y, name: 'generate', options: %w[CURVE HOLD SUST INPUT CHASE LEVEL], selection: 1, width: 9
+  picklist x: x, y: gate_mode_y, name: 'advance', options: %w[TIME RISE FALL EDGE HIGH LOW], selection: 1, width: 9
   label x: x, y: step_label_y, text: (step + 1).to_s, alignment: :above, size: :large
   shape_toggle x: x, y: shape_y
   small_knob y: curve_y, x: x, label: ''
