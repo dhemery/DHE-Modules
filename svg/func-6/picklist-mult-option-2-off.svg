@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   id="svg8"
+   viewBox="0 0 7.000 3.580"
+   height="3.580mm"
+   width="7.000mm"
+   version="1.1">
+  <metadata
+     id="metadata14">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs12" />
+  <g
+     id="g6"
+     transform="translate(3.5,1.79)">
+    <path
+       id="rect2"
+       d="m -2.875,-1.665 h 5.75 c 0.277,0 0.5,0.223 0.5,0.5 v 2.33 c 0,0.277 -0.223,0.5 -0.5,0.5 h -5.75 c -0.277,0 -0.5,-0.223 -0.5,-0.5 v -2.33 c 0,-0.277 0.223,-0.5 0.5,-0.5 z"
+       style="fill:#0044cc;stroke:#0044cc;stroke-width:0.25" />
+    <g
+       id="text4"
+       style="font-weight:bold;font-size:2.37100005px;font-family:'Proxima Nova';dominant-baseline:middle;text-anchor:middle;fill:#faf7f0"
+       aria-label="±1">
+      <path
+         id="path17"
+         style="font-weight:bold;font-size:2.37100005px;font-family:'Proxima Nova';dominant-baseline:middle;text-anchor:middle;fill:#faf7f0"
+         d="m -0.3818051,0.08365048 h 0.42440901 v -0.184938 H -0.3818051 v -0.46708701 h -0.20627701 v 0.46708701 H -1.0148621 v 0.184938 h 0.42677999 V 0.56733449 H -0.3818051 Z M -1.0148621,0.8565965 H 0.04260391 V 0.6716585 H -1.0148621 Z" />
+      <path
+         id="path19"
+         style="font-weight:bold;font-size:2.37100005px;font-family:'Proxima Nova';dominant-baseline:middle;text-anchor:middle;fill:#faf7f0"
+         d="m 0.59008265,0.8565965 h 0.339053 v -1.58145703 h -0.294004 l -0.49791001,0.50028101 0.192051,0.201535 0.26081001,-0.26792301 z" />
+    </g>
+  </g>
+</svg>

@@ -200,13 +200,32 @@ class ModuleFactory
   end
 
   def picklist(x:, y:, name:, options:, selection: 1, width:, hidden: false)
-    option_shapes = options.each_with_index.map do |option, index|
-      Picklist::Option.new(foreground: @background, background: @foreground, name: name, text: option, position: index + 1, width: width)
+    selected_options = options.each_with_index.map do |option, index|
+      Picklist::Option.new(
+        name: name,
+        text: option,
+        position: index + 1,
+        text_color_on: @foreground, text_color_off: @background,
+        width: width,
+        selected: true)
     end
-    @control_shapes += option_shapes
-    @control_shapes << Picklist::Menu.new(foreground: @foreground, background: @background, name: name, options: options, width: width)
+    unselected_options = options.each_with_index.map do |option, index|
+      Picklist::Option.new(
+        name: name,
+        text: option,
+        position: index + 1,
+        text_color_on: @foreground, text_color_off: @background,
+        width: width,
+        selected: false)
+    end
+    @control_shapes += selected_options
+    @control_shapes += unselected_options
+    @control_shapes << Picklist::Menu.new(
+      name: name,
+      border: @foreground, fill: @background,
+      width: width, height: selected_options[0].height * options.size)
 
-    default_option = option_shapes[selection - 1].translate(x, y)
+    default_option = selected_options[selection - 1].translate(x, y)
 
     @image_shapes << default_option unless hidden
   end
