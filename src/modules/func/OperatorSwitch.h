@@ -2,29 +2,12 @@
 
 #include "widgets/ControlWidgets.h"
 
-#include <app/SvgSwitch.hpp>
 #include <event.hpp>
 #include <functional>
 #include <utility>
 
 namespace dhe {
 namespace func {
-
-  class MultiplicationRangeStepper : public Toggle {
-  public:
-    MultiplicationRangeStepper(std::string const &moduleSvgDir, rack::engine::Module *module, float x, float y,
-                               int index) :
-        Toggle("stepper-mult", 4, moduleSvgDir, module, x, y, index) {
-      visible = false;
-    }
-  };
-
-  class AdditionRangeStepper : public Toggle {
-  public:
-    AdditionRangeStepper(std::string const &moduleSvgDir, rack::engine::Module *module, float x, float y, int index) :
-        Toggle("stepper-add", 4, moduleSvgDir, module, x, y, index) {}
-  };
-
   class OperatorSwitch : public Toggle {
   public:
     OperatorSwitch(std::function<void(bool)> onOperatorChange, std::string const &moduleSvgDir,
@@ -32,7 +15,7 @@ namespace func {
         Toggle{2, moduleSvgDir, module, x, y, index}, operatorChangedTo{std::move(onOperatorChange)} {}
 
     void onChange(const rack::event::Change &e) override {
-      rack::app::SvgSwitch::onChange(e);
+      Toggle::onChange(e);
       auto isMultiply = this->paramQuantity->getValue() > 0.5;
       operatorChangedTo(isMultiply);
     }
