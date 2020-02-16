@@ -2,26 +2,21 @@ require_relative 'shape'
 require_relative 'label'
 require_relative '../dimensions'
 
-module Picklist
+module PickList
   STROKE_WIDTH = 0.25
   CORNER_RADIUS = STROKE_WIDTH * 2
 
   class Option < CenteredShape
     attr_reader :slug
 
-    def initialize(name:, text:, text_color_on:, text_color_off:, width:, position:, selected:)
-      @border = text_color_on
-      if selected
-        @fill = text_color_off
-        color = text_color_on
-      else
-        @fill = text_color_on
-        color = text_color_off
-      end
-      @slug = Pathname("picklist-#{name}-option-#{position}-#{selected ? 'on' : 'off'}")
+    def initialize(name:, text:, color:, border:, fill:, width:, position:, type:)
       @label = Label.new(color: color, alignment: :center, size: :small, text: text)
       height = @label.height + 2 * PADDING
       super(width: width, height: height)
+
+      @slug = Pathname("#{name}-#{type}-#{position}")
+      @border = border
+      @fill = fill
     end
 
     def draw(canvas)
@@ -41,6 +36,26 @@ module Picklist
     end
   end
 
+  class Button < Option
+    def initialize(name:, text:, color:, fill:, width:, position:)
+      super(
+        name: name, text: text, position: position,
+        color: color, fill: fill, border: fill,
+        width: width, type: 'button'
+      )
+    end
+  end
+
+  class Item < Option
+    def initialize(name:, text:, color:, fill:, width:, position:)
+      super(
+        name: name, text: text, position: position,
+        color: color, fill: fill, border: color,
+        width: width, type: 'item'
+      )
+    end
+  end
+
   class Menu < CenteredShape
     attr_reader :slug
 
@@ -49,7 +64,7 @@ module Picklist
 
       @stroke = border
       @fill = fill
-      @slug = Pathname("picklist-#{name}-menu")
+      @slug = Pathname("#{name}-menu")
     end
 
     def draw(canvas)
