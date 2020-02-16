@@ -5,10 +5,10 @@
 #include <engine/Module.hpp>
 #include <helpers.hpp>
 #include <random.hpp>
-#include <random>
-#include <ui/Label.hpp>
 #include <utility>
+#include <widget/FramebufferWidget.hpp>
 #include <widget/SvgWidget.hpp>
+#include <window.hpp>
 
 namespace dhe {
 namespace picklist {
@@ -72,24 +72,26 @@ namespace picklist {
     bool isActive{};
   };
 
-  class Label : public rack::widget::SvgWidget {
-  public:
-    Label(std::string const &listName, int index, std::string const &moduleSvgDir) {
-      static auto const basename = std::string{"picklist-"};
-      auto const filename = basename + listName + '-' + std::to_string(index + 1);
-      setSvg(controlSvg(moduleSvgDir, filename));
-    }
-  };
-
   class Button : public rack::app::ParamWidget {
   public:
     Button(std::string const &listName, std::vector<std::string> const &optionNames, std::string const &moduleSvgDir,
            rack::engine::Module *module, float xmm, float ymm, int index) {
+      frameBuffer = new rack::widget::FramebufferWidget{};
+      addChild(frameBuffer);
+
+      selectionWidget = new rack::widget::SvgWidget{};
+      frameBuffer->addChild(selectionWidget);
+
+      for (size_t i = 0; i < optionNames.size(); i++) {
+        static auto const basename = std::string{"picklist-"};
+        auto const filename = basename + listName + '-' + std::to_string(i + 1);
+        addFrame(controlSvg(moduleSvgDir, filename));
+      }
+
       if (module != nullptr) {
         paramQuantity = module->paramQuantities[index];
       }
 
-      setSize(rack::math::Vec{hp2px(2.F), hp2px(1.F)});
       positionCentered(this, xmm, ymm);
 
       for (size_t i = 0; i < optionNames.size(); i++) {
@@ -103,15 +105,6 @@ namespace picklist {
 
       popupMenu->hide();
       positionCentered(popupMenu, xmm, ymm);
-
-      for (size_t i = 0; i < optionNames.size(); i++) {
-        auto *optionLabel = new Label(listName, i, moduleSvgDir);
-        optionLabel->hide();
-        optionLabels.push_back(optionLabel);
-        addChild(optionLabel);
-      }
-      selectedOptionLabel = optionLabels[0];
-      selectedOptionLabel->show();
     }
 
     /**
@@ -141,18 +134,16 @@ namespace picklist {
     }
 
     /**
-     * When the param value changes, dismiss the menu
-     * and update the button label to display the newly selected option.
+     * When the param value changes, dismiss the menu and display the newly selected option.
      * If the change came from a menu selection, we no longer need the menu.
      * If the change came from somewhere else, dismissing the already-hidden menu is harmless.
      */
     void onChange(rack::event::Change const &changeEvent) override {
-      ParamWidget::onChange(changeEvent);
       auto const selection = static_cast<int>(paramQuantity->getValue());
-      selectedOptionLabel->hide();
-      selectedOptionLabel = optionLabels[selection];
-      selectedOptionLabel->show();
+      selectionWidget->setSvg(optionSvgs[selection]);
+      frameBuffer->dirty = true;
       popupMenu->hide();
+      ParamWidget::onChange(changeEvent);
       changeEvent.consume(this);
     }
 
@@ -184,9 +175,20 @@ namespace picklist {
     auto menu() -> rack::ui::Menu * { return popupMenu; }
 
   private:
+    void addFrame(std::shared_ptr<rack::Svg> const &svg) {
+      optionSvgs.push_back(svg);
+      // If this is our first frame, automatically set SVG and size
+      if (!selectionWidget->svg) {
+        selectionWidget->setSvg(svg);
+        box.size = selectionWidget->box.size;
+        frameBuffer->box.size = selectionWidget->box.size;
+      }
+    }
+
+    std::vector<std::shared_ptr<rack::Svg>> optionSvgs{};
+    rack::widget::FramebufferWidget *frameBuffer{};
+    rack::widget::SvgWidget *selectionWidget{};
     Menu *const popupMenu{new Menu};
-    std::vector<Label *> optionLabels;
-    Label *selectedOptionLabel;
   };
 
   static inline auto button(std::string const &listName, std::vector<std::string> const &optionLabels,
