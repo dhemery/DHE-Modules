@@ -98,6 +98,7 @@ namespace picklist {
         auto const onPick = [this, i]() {
           auto const value = static_cast<float>(i);
           paramQuantity->setValue(value);
+          popupMenu->hide();
         };
         auto *option = new Option(optionNames[i], onPick);
         popupMenu->addChild(option);
@@ -134,15 +135,12 @@ namespace picklist {
     }
 
     /**
-     * When the param value changes, dismiss the menu and display the newly selected option.
-     * If the change came from a menu selection, we no longer need the menu.
-     * If the change came from somewhere else, dismissing the already-hidden menu is harmless.
+     * When the param value changes, display the newly selected option.
      */
     void onChange(rack::event::Change const &changeEvent) override {
       auto const selection = static_cast<int>(paramQuantity->getValue());
       selectionWidget->setSvg(optionSvgs[selection]);
       frameBuffer->dirty = true;
-      popupMenu->hide();
       ParamWidget::onChange(changeEvent);
       changeEvent.consume(this);
     }

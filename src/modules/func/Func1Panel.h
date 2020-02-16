@@ -41,17 +41,28 @@ namespace func {
       addParam(Knob::large(slug, module, x, row3, Controls::AmountKnob));
       addOutput(Jack::output(slug, module, x, row6, Controls::FuncOutput));
 
-      auto *additionRangeStepper = new AdditionRangeStepper{slug, module, x, row4, Controls::OffsetRangeSwitch};
-      addParam(additionRangeStepper);
-      auto *multiplicationRangeStepper
-          = new MultiplicationRangeStepper{slug, module, x, row4, Controls::MultiplierRangeSwitch};
-      addParam(multiplicationRangeStepper);
+      auto *offsetRangePicklist
+          = picklist::button("add", {"0–5", "±5", "0–10", "±10"}, slug, module, x, row4, Controls::OffsetRangeSwitch);
+      addParam(offsetRangePicklist);
 
-      auto const updateRangeStepperVisibility = [additionRangeStepper, multiplicationRangeStepper](bool isMultiply) {
-        additionRangeStepper->visible = !isMultiply;
-        multiplicationRangeStepper->visible = isMultiply;
+      auto *multiplierRangePicklist = picklist::button("mult", {"0–1", "±1", "0–2", "±2"}, slug, module, x, row4,
+                                                       Controls::MultiplierRangeSwitch);
+      addParam(multiplierRangePicklist);
+
+      auto const updateRangeStepperVisibility = [offsetRangePicklist, multiplierRangePicklist](bool isMultiply) {
+        if (isMultiply) {
+          offsetRangePicklist->hide();
+          multiplierRangePicklist->show();
+        } else {
+          offsetRangePicklist->show();
+          multiplierRangePicklist->hide();
+        }
       };
       addParam(new OperatorSwitch{updateRangeStepperVisibility, slug, module, x, row2, Controls::OperationSwitch});
+
+      // Add these last so they overlay all other controls
+      addChild(offsetRangePicklist->menu());
+      addChild(multiplierRangePicklist->menu());
     }
   };
 } // namespace func
