@@ -1,7 +1,7 @@
 #pragma once
 
 #include "FuncControls.h"
-#include "RangeSteppers.h"
+#include "OperatorSwitch.h"
 
 #include <app/ModuleWidget.hpp>
 

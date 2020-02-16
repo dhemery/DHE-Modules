@@ -8,7 +8,7 @@ target_sources(func INTERFACE
         ${CMAKE_CURRENT_SOURCE_DIR}/FuncModule.h
         ${CMAKE_CURRENT_SOURCE_DIR}/OperandParamQuantity.h
         ${CMAKE_CURRENT_SOURCE_DIR}/Operation.h
-        ${CMAKE_CURRENT_SOURCE_DIR}/RangeSteppers.h
+        ${CMAKE_CURRENT_SOURCE_DIR}/OperatorSwitch.h
         )
 
 target_include_directories(func INTERFACE
