@@ -2,7 +2,7 @@ require_relative 'shape'
 require_relative 'label'
 require_relative '../dimensions'
 
-class PicklistOption < BoundedShape
+class PicklistOption < CenteredShape
   BOX_CORNER_RADIUS = 0.5
   attr_reader :slug
 
@@ -12,7 +12,7 @@ class PicklistOption < BoundedShape
     @background = background
     @slug = Pathname("picklist-#{name}-#{position}")
     @label = Label.new(color: foreground, alignment: :center, size: :small, text: text)
-    super(top: @label.top - PADDING, right: right, bottom: PADDING - @label.top, left: left)
+    super(width: width, height: @label.height + 2 * PADDING)
   end
 
   def draw(canvas)
