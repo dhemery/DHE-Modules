@@ -2,7 +2,7 @@
 
 #include "CurveSequencerControls.h"
 #include "widgets/ControlWidgets.h"
-#include "widgets/Picklist.h"
+#include "widgets/PickList.h"
 #include "widgets/Screws.h"
 
 #include <app/ModuleWidget.hpp>
