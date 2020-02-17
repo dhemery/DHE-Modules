@@ -200,35 +200,19 @@ class ModuleFactory
   end
 
   def pick_list(x:, y:, name:, options:, selection: 1, width:, hidden: false)
-    buttons = options.each_with_index.map do |option, index|
-      PickList::Button.new(
-        name: name,
-        text: option,
-        position: index + 1,
-        color: @background, fill: @foreground,
-        width: width
-      )
-    end
     items = options.each_with_index.map do |option, index|
-      PickList::Item.new(
-        name: name,
-        text: option,
-        position: index + 1,
-        color: @foreground, fill: @background,
-        width: width
-      )
+      PickList::Item.new(name: name, text: option, position: index + 1, color: @foreground, fill: @background, width: width)
     end
     menu = PickList::Menu.new(
       name: name, color: @foreground,
       width: width + PADDING, height: items[0].height * items.size + PADDING)
 
-    @control_shapes += buttons
     @control_shapes += items
     @control_shapes << menu
 
-    default_button = buttons[selection - 1].translate(x, y)
+    image_item = items[selection - 1].translate(x, y)
 
-    @image_shapes << default_button unless hidden
+    @image_shapes << image_item unless hidden
   end
 
   def input_button_port(x:, y:, label:)

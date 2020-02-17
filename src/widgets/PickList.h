@@ -17,7 +17,7 @@ namespace picklist {
   public:
     Item(std::string const &svgDir, std::string const &menuName, int index, std::function<void(int)> onPick) :
         index{index}, onPick{std::move(onPick)} {
-      auto const controlName = menuName + "-item-" + std::to_string(index + 1);
+      auto const controlName = menuName + '-' + std::to_string(index + 1);
       setSvg(controlSvg(svgDir, controlName));
     }
 
@@ -122,7 +122,7 @@ namespace picklist {
       frameBuffer->addChild(selectedOption);
 
       for (int optionIndex = 0; optionIndex < size; optionIndex++) {
-        auto const controlName = menuName + "-item-" + std::to_string(optionIndex + 1);
+        auto const controlName = menuName + '-' + std::to_string(optionIndex + 1);
         addFrame(controlSvg(svgDir, controlName));
       }
 
