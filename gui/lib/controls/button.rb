@@ -1,7 +1,9 @@
-require_relative 'shape'
+require_relative '../shapes/circle'
 
 class Button < RoundShape
   DIAMETER = 6.0
+  HOUSING_THICKNESS = DIAMETER / 6.0
+  RADIUS = (DIAMETER - HOUSING_THICKNESS) / 2.0
 
   attr_reader :slug
 
@@ -10,16 +12,14 @@ class Button < RoundShape
     foreground, background = background, foreground unless style == :normal
     @stroke = foreground
     @fill = state == :pressed ? background : foreground
+    shape = Circle.new(radius: RADIUS, fill: @fill, stroke: @stroke, stroke_width: HOUSING_THICKNESS)
+    @shapes = [shape]
     style_slug = style == :reversed ? '-reversed' : ''
     state_slug = state == :pressed ? '-2' : '-1'
     @slug = Pathname("button#{style_slug}#{state_slug}")
   end
 
   def draw(canvas)
-    stroke_width = diameter / 6.0
-    circle_diameter = diameter - stroke_width
-    circle_radius = circle_diameter / 2.0
-    canvas.circle(cx: 0, cy: 0, r: circle_radius,
-                  'stroke-width' => stroke_width, fill: @fill, stroke: @stroke)
+    @shapes.each { |shape| shape.draw(canvas) }
   end
 end

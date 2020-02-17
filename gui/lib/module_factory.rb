@@ -3,7 +3,7 @@ require 'pathname'
 
 require_relative 'dimensions'
 require_relative 'shapes/box'
-require_relative 'shapes/button'
+require_relative 'controls/button'
 require_relative 'shapes/faceplate'
 require_relative 'shapes/knob'
 require_relative 'shapes/label'
