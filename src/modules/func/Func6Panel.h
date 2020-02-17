@@ -2,6 +2,7 @@
 
 #include "FuncControls.h"
 #include "OperatorSwitch.h"
+#include "widgets/PickList.h"
 
 #include <app/ModuleWidget.hpp>
 
