@@ -158,13 +158,13 @@ namespace curve_sequencer {
         addChild(rack::createLightCentered<ProgressLight>(mm2px(x, activeY), module,
                                                           Controls::ProgressLights + step + step));
 
-        auto *generateModeButton = picklist::button(slug, "generate-mode", generateModeLabels, module, x, generateModeY,
-                                                    Controls::ModeSwitches + step);
+        auto *generateModeButton = picklist::button(slug, "generate-mode", generateModeLabels.size(), module, x,
+                                                    generateModeY, Controls::ModeSwitches + step);
         addParam(generateModeButton);
         popupMenus.push_back(generateModeButton->menu());
 
-        auto *advanceModeButton = picklist::button(slug, "advance-mode", advanceModeLabels, module, x, advanceModeY,
-                                                   Controls::ConditionSwitches + step);
+        auto *advanceModeButton = picklist::button(slug, "advance-mode", advanceModeLabels.size(), module, x,
+                                                   advanceModeY, Controls::ConditionSwitches + step);
         addParam(advanceModeButton);
         popupMenus.push_back(advanceModeButton->menu());
 
