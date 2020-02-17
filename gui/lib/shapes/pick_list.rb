@@ -3,10 +3,10 @@ require_relative 'label'
 require_relative '../dimensions'
 
 module PickList
-  STROKE_WIDTH = 0.25
-  CORNER_RADIUS = STROKE_WIDTH * 2
 
   class Option < CenteredShape
+    STROKE_WIDTH = 0.25
+    CORNER_RADIUS = STROKE_WIDTH * 2
     attr_reader :slug
 
     def initialize(name:, text:, color:, border:, fill:, width:, position:, type:)
@@ -57,25 +57,20 @@ module PickList
   end
 
   class Menu < CenteredShape
+    CORNER_RADIUS = 1.0
     attr_reader :slug
 
-    def initialize(name:, border:, fill:, width:, height:)
+    def initialize(name:, color:, width:, height:)
       super(width: width, height: height)
 
-      @stroke = border
-      @fill = fill
+      @color = color
       @slug = Pathname("#{name}-menu")
     end
 
     def draw(canvas)
-      inner_height = height - STROKE_WIDTH
-      inner_width = width - STROKE_WIDTH
-      inner_top = inner_height / -2.0
-      inner_left = inner_width / -2.0
-      canvas.rect(x: inner_left, width: inner_width, y: inner_top, height: inner_height,
+      canvas.rect(x: left, y: top, width: width, height: height,
                   rx: CORNER_RADIUS, ry: CORNER_RADIUS,
-                  'stroke-width' => STROKE_WIDTH,
-                  stroke: @stroke, fill: @fill)
+                  stroke: 'none', fill: @color)
     end
   end
 end

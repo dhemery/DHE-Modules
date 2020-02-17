@@ -219,9 +219,8 @@ class ModuleFactory
       )
     end
     menu = PickList::Menu.new(
-      name: name,
-      border: @foreground, fill: @background,
-      width: width, height: items[0].height * items.size)
+      name: name, color: @foreground,
+      width: width + PADDING, height: items[0].height * items.size + PADDING)
 
     @control_shapes += buttons
     @control_shapes += items
