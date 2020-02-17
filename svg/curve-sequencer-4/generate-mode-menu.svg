@@ -1,5 +1,5 @@
-<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="9.000mm" height="21.483mm" viewBox="0 0 9.000 21.483">
-  <g transform="translate(4.500 10.741)">
-    <rect x="-4.375" width="8.750" y="-10.616" height="21.233" rx="0.500" ry="0.500" stroke-width="0.250" stroke="#331a00" fill="#efedeb"/>
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="10.000mm" height="22.483mm" viewBox="0 0 10.000 22.483">
+  <g transform="translate(5.000 11.241)">
+    <rect x="-5.000" y="-11.241" width="10.000" height="22.483" rx="1.000" ry="1.000" stroke="none" fill="#331a00"/>
   </g>
 </svg>

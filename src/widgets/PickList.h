@@ -15,12 +15,10 @@ namespace picklist {
 
   class Item : public rack::widget::SvgWidget {
   public:
-    Item(std::string const &svgDir, std::string const &menuName, int index, float top,
-         std::function<void(int)> onPick) :
+    Item(std::string const &svgDir, std::string const &menuName, int index, std::function<void(int)> onPick) :
         index{index}, onPick{std::move(onPick)} {
       auto const controlName = menuName + "-item-" + std::to_string(index + 1);
       setSvg(controlSvg(svgDir, controlName));
-      setPosition({0.F, top});
     }
 
     /**
@@ -57,9 +55,11 @@ namespace picklist {
     Menu(std::string const &svgDir, std::string const &menuName, int size, std::function<void(int)> const &onPick) {
       auto const controlName = menuName + "-menu";
       setSvg(controlSvg(svgDir, controlName));
-      auto itemTop = 0.F;
+      auto const inset = mm2px(0.5F);
+      auto itemTop = inset;
       for (auto optionIndex = 0; optionIndex < size; optionIndex++) {
-        auto *item = new Item{svgDir, menuName, optionIndex, itemTop, onPick};
+        auto *item = new Item{svgDir, menuName, optionIndex, onPick};
+        item->setPosition({inset, itemTop});
         addChild(item);
         itemTop += item->box.size.y;
       }
@@ -122,7 +122,7 @@ namespace picklist {
       frameBuffer->addChild(selectedOption);
 
       for (int optionIndex = 0; optionIndex < size; optionIndex++) {
-        auto const controlName = menuName + "-button-" + std::to_string(optionIndex + 1);
+        auto const controlName = menuName + "-item-" + std::to_string(optionIndex + 1);
         addFrame(controlSvg(svgDir, controlName));
       }
 
