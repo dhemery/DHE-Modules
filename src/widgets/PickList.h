@@ -138,7 +138,7 @@ namespace picklist {
       };
 
       popupMenu = new Menu{svgDir, menuName, size, onPick};
-      positionCentered(popupMenu, xmm, ymm);
+      popupMenu->setPosition({box.pos.x, box.pos.y + box.size.y});
     }
 
     /**
