@@ -57,15 +57,15 @@ class ModuleFactory
   end
 
   def separator(y:)
-    @faceplate_shapes << Line.new(color: @foreground, x1: 0, y1: y, x2: @width, y2: y)
+    @faceplate_shapes << Line.new(stroke: @foreground, x1: 0, y1: y, x2: @width, y2: y)
   end
 
   def line(x1:, y1:, x2:, y2:)
-    @faceplate_shapes << Line.new(color: @foreground, x1: x1, x2: x2, y1: y1, y2: y2)
+    @faceplate_shapes << Line.new(stroke: @foreground, x1: x1, x2: x2, y1: y1, y2: y2)
   end
 
   def connector(left:, right:, y:)
-    @faceplate_shapes << Line.new(color: @foreground, x1: left, x2: right, y1: y, y2: y)
+    @faceplate_shapes << Line.new(stroke: @foreground, x1: left, x2: right, y1: y, y2: y)
   end
 
   def button(x:, y:, label: '', style: :normal)
@@ -138,7 +138,7 @@ class ModuleFactory
   end
 
   def knob(x:, y:, size:, label:, label_size:)
-    knob = Knob.new(knob_color: @foreground, pointer_color: @background, size: size)
+    knob = Knob.new(foreground: @foreground, background: @background, size: size)
     @control_shapes << knob
 
     image_knob = knob.translate(x, y)

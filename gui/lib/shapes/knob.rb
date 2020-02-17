@@ -5,19 +5,19 @@ class Knob < RoundShape
 
   attr_reader :slug
 
-  def initialize(size:, knob_color:, pointer_color:)
+  def initialize(size:, foreground:, background:)
     super(DIAMETERS[size])
-    @knob_color = knob_color
-    @pointer_color = pointer_color
     @slug = Pathname("knob-#{size}")
+
+    @shapes = []
+    @shapes << Circle.new(radius: DIAMETERS[size] / 2.0, fill: foreground)
+
+    pointer_width = radius / 8.0
+    pointer_length = radius - pointer_width
+    @shapes << Line.new(y2: -pointer_length, width: pointer_width, stroke: background, cap: 'round')
   end
 
   def draw(canvas)
-    pointer_width = radius / 8.0
-    pointer_length = radius - pointer_width
-    canvas.g(stroke: @pointer_color, fill: @knob_color) do |g|
-      g.circle(r: radius, stroke: 'none')
-      g.line(y2: -pointer_length, 'stroke-width' => pointer_width, 'stroke-linecap' => 'round')
-    end
+    @shapes.each { |shape| shape.draw(canvas) }
   end
 end
