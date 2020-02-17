@@ -13,19 +13,22 @@
 namespace dhe {
 namespace picklist {
 
-  class Item : public rack::widget::SvgWidget {
+  class Item : public rack::widget::OpaqueWidget {
   public:
     Item(std::string const &svgDir, std::string const &menuName, int index, std::function<void(int)> onPick) :
         index{index}, onPick{std::move(onPick)} {
       auto const controlName = menuName + '-' + std::to_string(index + 1);
-      setSvg(controlSvg(svgDir, controlName));
+      auto label = new rack::widget::SvgWidget{};
+      label->setSvg(controlSvg(svgDir, controlName));
+      addChild(label);
+      setSize(label->box.size);
     }
 
     /**
      * Pass this item's index to <tt>onPick(int)</tt> and hide the parent menu.
      */
     void onAction(rack::event::Action const &action) override {
-      SvgWidget::onAction(action);
+      OpaqueWidget::onAction(action);
       onPick(index);
       parent->hide();
       action.consume(this);
@@ -35,8 +38,7 @@ namespace picklist {
      * Take action if the button event is a left mouse button press.
      */
     void onButton(rack::event::Button const &buttonEvent) override {
-      SvgWidget::onButton(buttonEvent);
-      buttonEvent.stopPropagating();
+      OpaqueWidget::onButton(buttonEvent);
       if (buttonEvent.button == GLFW_MOUSE_BUTTON_LEFT) {
         if (buttonEvent.action == GLFW_PRESS) {
           onAction(rack::event::Action{});
@@ -50,11 +52,14 @@ namespace picklist {
     std::function<void(int)> onPick;
   };
 
-  class Menu : public rack::widget::SvgWidget {
+  class Menu : public rack::widget::OpaqueWidget {
   public:
     Menu(std::string const &svgDir, std::string const &menuName, int size, std::function<void(int)> const &onPick) {
       auto const controlName = menuName + "-menu";
-      setSvg(controlSvg(svgDir, controlName));
+      auto background = new rack::widget::SvgWidget{};
+      background->setSvg(controlSvg(svgDir, controlName));
+      addChild(background);
+      setSize(background->box.size);
       auto const inset = mm2px(0.5F);
       auto itemTop = inset;
       for (auto optionIndex = 0; optionIndex < size; optionIndex++) {
@@ -79,7 +84,7 @@ namespace picklist {
      * Note that the mouse is now hovering over this menu.
      */
     void onEnter(const rack::event::Enter &entryEvent) override {
-      SvgWidget::onEnter(entryEvent);
+      OpaqueWidget::onEnter(entryEvent);
       isHovered = true;
       entryEvent.consume(this);
     }
@@ -88,8 +93,7 @@ namespace picklist {
      * Consume the hover events so that Rack will report Enter and Leave events.
      */
     void onHover(const rack::event::Hover &hoverEvent) override {
-      SvgWidget::onHover(hoverEvent);
-      hoverEvent.stopPropagating();
+      OpaqueWidget::onHover(hoverEvent);
       hoverEvent.consume(this); // registers for Enter and Leave events
     }
 
@@ -97,14 +101,9 @@ namespace picklist {
      * Note that the mouse is no longer hovering over this menu.
      */
     void onLeave(const rack::event::Leave &exitEvent) override {
-      SvgWidget::onLeave(exitEvent);
+      OpaqueWidget::onLeave(exitEvent);
       isHovered = false;
       exitEvent.consume(this);
-    }
-
-    void draw(const DrawArgs &args) override {
-      SvgWidget::draw(args);
-      Widget::draw(args); // Because SvgWidget::draw() does not draw children
     }
 
   private:
@@ -118,8 +117,8 @@ namespace picklist {
       frameBuffer = new rack::widget::FramebufferWidget{};
       addChild(frameBuffer);
 
-      selectedOption = new rack::widget::SvgWidget{};
-      frameBuffer->addChild(selectedOption);
+      label = new rack::widget::SvgWidget{};
+      frameBuffer->addChild(label);
 
       for (int optionIndex = 0; optionIndex < size; optionIndex++) {
         auto const controlName = menuName + '-' + std::to_string(optionIndex + 1);
@@ -174,7 +173,7 @@ namespace picklist {
      */
     void onChange(rack::event::Change const &changeEvent) override {
       auto const selection = static_cast<int>(paramQuantity->getValue());
-      selectedOption->setSvg(optionSvgs[selection]);
+      label->setSvg(labelSvgs[selection]);
       frameBuffer->dirty = true;
       ParamWidget::onChange(changeEvent);
       changeEvent.consume(this);
@@ -197,14 +196,6 @@ namespace picklist {
       popupMenu->hide();
     }
 
-    /**
-     * Don't propagate over events to whatever is behind this button.
-     */
-    void onHover(const rack::event::Hover &hoverEvent) override {
-      ParamWidget::onHover(hoverEvent);
-      hoverEvent.stopPropagating();
-    }
-
     void reset() override { paramQuantity->reset(); }
 
     void randomize() override {
@@ -217,17 +208,17 @@ namespace picklist {
 
   private:
     void addFrame(std::shared_ptr<rack::Svg> const &svg) {
-      optionSvgs.push_back(svg);
-      if (!selectedOption->svg) {
-        selectedOption->setSvg(svg);
-        box.size = selectedOption->box.size;
-        frameBuffer->box.size = selectedOption->box.size;
+      labelSvgs.push_back(svg);
+      if (!label->svg) {
+        label->setSvg(svg);
+        setSize(label->box.size);
+        frameBuffer->setSize(label->box.size);
       }
     }
 
-    std::vector<std::shared_ptr<rack::Svg>> optionSvgs{};
+    std::vector<std::shared_ptr<rack::Svg>> labelSvgs{};
     rack::widget::FramebufferWidget *frameBuffer{};
-    rack::widget::SvgWidget *selectedOption{};
+    rack::widget::SvgWidget *label{};
     Menu *popupMenu;
   };
 
