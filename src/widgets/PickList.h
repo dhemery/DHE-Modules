@@ -15,60 +15,55 @@ namespace picklist {
 
   class Item : public rack::widget::SvgWidget {
   public:
-    Item(std::string const &svgDir, std::string const &menuName, unsigned int index, float top,
+    Item(std::string const &svgDir, std::string const &menuName, int index, float top,
          std::function<void(int)> onPick) :
         index{index}, onPick{std::move(onPick)} {
-      auto const filename = menuName + "-item-" + std::to_string(index + 1);
-      setSvg(controlSvg(svgDir, filename));
+      auto const controlName = menuName + "-item-" + std::to_string(index + 1);
+      setSvg(controlSvg(svgDir, controlName));
       setPosition({0.F, top});
-      DEBUG("picklist::Item created: %s %d x:%5.4f, y:%5.4f", menuName.c_str(), index, box.pos.x, box.pos.y);
     }
 
     /**
-     * When selected, execute the <tt>onPick()</tt> function and hide the parent menu.
+     * Pass this item's index to <tt>onPick(int)</tt> and hide the parent menu.
      */
     void onAction(rack::event::Action const &action) override {
       SvgWidget::onAction(action);
-      DEBUG("picklist::Item.onAction() index: %d", index);
       onPick(index);
-      DEBUG("picklist::Item.onAction() hiding parent menu");
       parent->hide();
       action.consume(this);
     }
 
     /**
-     * If the button event is a left mouse button press, generate a toggle menu visibility action.
+     * Take action if the button event is a left mouse button press.
      */
     void onButton(rack::event::Button const &buttonEvent) override {
       SvgWidget::onButton(buttonEvent);
-      static auto const selected = rack::event::Action{};
-
-      if (buttonEvent.action == GLFW_PRESS && buttonEvent.button == GLFW_MOUSE_BUTTON_LEFT) {
-        DEBUG("picklist::Item pressed");
-        onAction(selected);
+      buttonEvent.stopPropagating();
+      if (buttonEvent.button == GLFW_MOUSE_BUTTON_LEFT) {
+        if (buttonEvent.action == GLFW_PRESS) {
+          onAction(rack::event::Action{});
+        }
+        buttonEvent.consume(this);
       }
     }
 
   private:
-    unsigned int const index;
+    int const index;
     std::function<void(int)> onPick;
   };
 
-  class Menu : public rack::widget::Widget {
+  class Menu : public rack::widget::SvgWidget {
   public:
-    Menu(std::string const &svgDir, std::string const &menuName, std::vector<std::string> const &optionNames,
-         std::function<void(int)> const &onPick) {
-      auto height = 0.F;
-      auto width = 0.F;
-      for (unsigned int optionIndex = 0; optionIndex < optionNames.size(); optionIndex++) {
-        auto *item = new Item{svgDir, menuName, optionIndex, height, onPick};
+    Menu(std::string const &svgDir, std::string const &menuName, int size, std::function<void(int)> const &onPick) {
+      auto const controlName = menuName + "-menu";
+      setSvg(controlSvg(svgDir, controlName));
+      auto itemTop = 0.F;
+      for (auto optionIndex = 0; optionIndex < size; optionIndex++) {
+        auto *item = new Item{svgDir, menuName, optionIndex, itemTop, onPick};
         addChild(item);
-        height += item->box.size.y;
-        width = std::max(width, item->box.size.x);
+        itemTop += item->box.size.y;
       }
-      setSize({width, height});
       hide();
-      DEBUG("picklist::Menu created: %s", menuName.c_str());
     }
 
     /**
@@ -81,42 +76,35 @@ namespace picklist {
     }
 
     /**
-     * Note when the mouse begins hovering over this menu.
+     * Note that the mouse is now hovering over this menu.
      */
     void onEnter(const rack::event::Enter &entryEvent) override {
-      DEBUG("picklist::Menu.onEnter()");
-      Widget::onEnter(entryEvent);
+      SvgWidget::onEnter(entryEvent);
       isHovered = true;
       entryEvent.consume(this);
     }
 
     /**
-     * While the mouse hovers over this menu, consume the hover events
-     * so that Rack will report Enter and Leave events.
+     * Consume the hover events so that Rack will report Enter and Leave events.
      */
     void onHover(const rack::event::Hover &hoverEvent) override {
-      Widget::onHover(hoverEvent);
+      SvgWidget::onHover(hoverEvent);
+      hoverEvent.stopPropagating();
       hoverEvent.consume(this); // registers for Enter and Leave events
     }
 
     /**
-     * Note when the mouse stops hovering over this menu.
+     * Note that the mouse is no longer hovering over this menu.
      */
     void onLeave(const rack::event::Leave &exitEvent) override {
-      DEBUG("picklist::Menu.onLeave()");
-      Widget::onLeave(exitEvent);
+      SvgWidget::onLeave(exitEvent);
       isHovered = false;
       exitEvent.consume(this);
     }
 
-    void onShow(const rack::event::Show &e) override {
-      Widget::onShow(e);
-      DEBUG("picklist::Menu.onShow()");
-    }
-
-    void onHide(const rack::event::Hide &e) override {
-      Widget::onHide(e);
-      DEBUG("picklist::Menu.onHide()");
+    void draw(const DrawArgs &args) override {
+      SvgWidget::draw(args);
+      Widget::draw(args); // Because SvgWidget::draw() does not draw children
     }
 
   private:
@@ -125,17 +113,17 @@ namespace picklist {
 
   class Button : public rack::app::ParamWidget {
   public:
-    Button(std::string const &svgDir, std::string const &menuName, std::vector<std::string> const &optionNames,
-           rack::engine::Module *module, float xmm, float ymm, int index) {
+    Button(std::string const &svgDir, std::string const &menuName, int size, rack::engine::Module *module, float xmm,
+           float ymm, int index) {
       frameBuffer = new rack::widget::FramebufferWidget{};
       addChild(frameBuffer);
 
       selectedOption = new rack::widget::SvgWidget{};
       frameBuffer->addChild(selectedOption);
 
-      for (size_t optionIndex = 0; optionIndex < optionNames.size(); optionIndex++) {
-        auto const filename = menuName + "-button-" + std::to_string(optionIndex + 1);
-        addFrame(controlSvg(svgDir, filename));
+      for (int optionIndex = 0; optionIndex < size; optionIndex++) {
+        auto const controlName = menuName + "-button-" + std::to_string(optionIndex + 1);
+        addFrame(controlSvg(svgDir, controlName));
       }
 
       if (module != nullptr) {
@@ -149,46 +137,43 @@ namespace picklist {
         paramQuantity->setValue(value);
       };
 
-      popupMenu = new Menu{svgDir, menuName, optionNames, onPick};
+      popupMenu = new Menu{svgDir, menuName, size, onPick};
       positionCentered(popupMenu, xmm, ymm);
-      DEBUG("picklist::Button created: %s", menuName.c_str());
     }
 
     /**
-     * When the button is pressed, toggle the visibility of the menu.
+     * Toggle the menu visibility.
      */
     void onAction(rack::event::Action const &toggleMenuVisibility) override {
       ParamWidget::onAction(toggleMenuVisibility);
       if (popupMenu->visible) {
-        DEBUG("picklist::Button.onAction() hiding menu");
         popupMenu->hide();
       } else {
-        DEBUG("picklist::Button.onAction() showing menu");
         popupMenu->show();
       }
       toggleMenuVisibility.consume(this);
     }
 
     /**
-     * If the button event is a left mouse button press, generate a toggle menu visibility action.
+     * Take action if the button event is a left mouse button press.
      */
     void onButton(rack::event::Button const &buttonEvent) override {
       ParamWidget::onButton(buttonEvent);
-      static auto const toggleMenuVisibility = rack::event::Action{};
 
-      if (buttonEvent.action == GLFW_PRESS && buttonEvent.button == GLFW_MOUSE_BUTTON_LEFT) {
-        DEBUG("picklist::Button pressed");
-        onAction(toggleMenuVisibility);
-        buttonEvent.consume(this); // registers for Deselect events
+      buttonEvent.stopPropagating();
+      if (buttonEvent.button == GLFW_MOUSE_BUTTON_LEFT) {
+        if (buttonEvent.action == GLFW_PRESS) {
+          onAction(rack::event::Action{});
+        }
+        buttonEvent.consume(this);
       }
     }
 
     /**
-     * When the param value changes, display the newly selected option.
+     * Display the newly selected option.
      */
     void onChange(rack::event::Change const &changeEvent) override {
       auto const selection = static_cast<int>(paramQuantity->getValue());
-      DEBUG("picklist::Button.onChange() selection: %d", selection);
       selectedOption->setSvg(optionSvgs[selection]);
       frameBuffer->dirty = true;
       ParamWidget::onChange(changeEvent);
@@ -196,22 +181,28 @@ namespace picklist {
     }
 
     /**
-     * When another widget is selected, dismiss the menu unless it is the newly selected widget.
+     * Dismiss the menu unless it now selected.
      */
     void onDeselect(const rack::event::Deselect &deselectionEvent) override {
-      Widget::onDeselect(deselectionEvent);
-      DEBUG("picklist::Button.onDeselect() dismissing menu if inactive");
+      ParamWidget::onDeselect(deselectionEvent);
       popupMenu->hideIfInactive();
       deselectionEvent.consume(this);
     }
 
     /**
-     * When this button is hidden, also dismiss the menu.
+     * Dismiss the menu.
      */
     void onHide(const rack::event::Hide &hideEvent) override {
-      DEBUG("picklist::Button.onHide() hiding menu");
+      ParamWidget::onHide(hideEvent);
       popupMenu->hide();
-      Widget::onHide(hideEvent);
+    }
+
+    /**
+     * Don't propagate over events to whatever is behind this button.
+     */
+    void onHover(const rack::event::Hover &hoverEvent) override {
+      ParamWidget::onHover(hoverEvent);
+      hoverEvent.stopPropagating();
     }
 
     void reset() override { paramQuantity->reset(); }
@@ -227,7 +218,6 @@ namespace picklist {
   private:
     void addFrame(std::shared_ptr<rack::Svg> const &svg) {
       optionSvgs.push_back(svg);
-      // If this is our first frame, automatically set SVG and size
       if (!selectedOption->svg) {
         selectedOption->setSvg(svg);
         box.size = selectedOption->box.size;
@@ -241,10 +231,9 @@ namespace picklist {
     Menu *popupMenu;
   };
 
-  static inline auto button(std::string const &svgDir, std::string const &listName,
-                            std::vector<std::string> const &optionLabels, rack::engine::Module *module, float xmm,
-                            float ymm, int index) -> Button * {
-    return new Button{svgDir, listName, optionLabels, module, xmm, ymm, index};
+  static inline auto button(std::string const &svgDir, std::string const &name, int size, rack::engine::Module *module,
+                            float xmm, float ymm, int index) -> Button * {
+    return new Button{svgDir, name, size, module, xmm, ymm, index};
   }
 } // namespace picklist
 

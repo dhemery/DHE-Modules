@@ -45,27 +45,27 @@ namespace func {
         addParam(Knob::large(slug, module, column3, y, Controls::AmountKnob + row));
         addOutput(Jack::output(slug, module, column5, portY, Controls::FuncOutput + row));
 
-        auto *offsetRangePicklist = picklist::button(slug, "offset-range", {"0–5", "±5", "0–10", "±10"}, module,
-                                                     column4, y, Controls::OffsetRangeSwitch + row);
-        addParam(offsetRangePicklist);
-        popupMenus.push_back(offsetRangePicklist->menu());
+        auto *offsetRangePickList = picklist::button(slug, "offset-range", offsetRanges.size(), module, column4, y,
+                                                     Controls::OffsetRangeSwitch + row);
+        addParam(offsetRangePickList);
+        popupMenus.push_back(offsetRangePickList->menu());
 
-        auto *multiplierRangePicklist = picklist::button(slug, "multiplier-range", {"0–1", "±1", "0–2", "±2"}, module,
+        auto *multiplierRangePickList = picklist::button(slug, "multiplier-range", multiplierRanges.size(), module,
                                                          column4, y, Controls::MultiplierRangeSwitch + row);
-        addParam(multiplierRangePicklist);
-        popupMenus.push_back(multiplierRangePicklist->menu());
+        addParam(multiplierRangePickList);
+        popupMenus.push_back(multiplierRangePickList->menu());
 
-        auto const updateRangePicklist = [offsetRangePicklist, multiplierRangePicklist](bool isMultiply) {
+        auto const updateRangePickList = [offsetRangePickList, multiplierRangePickList](bool isMultiply) {
           if (isMultiply) {
-            offsetRangePicklist->hide();
-            multiplierRangePicklist->show();
+            offsetRangePickList->hide();
+            multiplierRangePickList->show();
           } else {
-            offsetRangePicklist->show();
-            multiplierRangePicklist->hide();
+            offsetRangePickList->show();
+            multiplierRangePickList->hide();
           }
         };
 
-        addParam(new OperatorSwitch{updateRangePicklist, slug, module, column2, y, Controls::OperationSwitch + row});
+        addParam(new OperatorSwitch{updateRangePickList, slug, module, column2, y, Controls::OperationSwitch + row});
       }
 
       for (auto popupMenu : popupMenus) {

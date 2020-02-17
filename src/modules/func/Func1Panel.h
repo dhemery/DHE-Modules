@@ -42,28 +42,28 @@ namespace func {
       addParam(Knob::large(slug, module, x, row3, Controls::AmountKnob));
       addOutput(Jack::output(slug, module, x, row6, Controls::FuncOutput));
 
-      auto *offsetRangePicklist = picklist::button(slug, "offset-range", {"0–5", "±5", "0–10", "±10"}, module, x, row4,
-                                                   Controls::OffsetRangeSwitch);
-      addParam(offsetRangePicklist);
+      auto *offsetRangePickList
+          = picklist::button(slug, "offset-range", offsetRanges.size(), module, x, row4, Controls::OffsetRangeSwitch);
+      addParam(offsetRangePickList);
 
-      auto *multiplierRangePicklist = picklist::button(slug, "multiplier-range", {"0–1", "±1", "0–2", "±2"}, module, x,
+      auto *multiplierRangePickList = picklist::button(slug, "multiplier-range", multiplierRanges.size(), module, x,
                                                        row4, Controls::MultiplierRangeSwitch);
-      addParam(multiplierRangePicklist);
+      addParam(multiplierRangePickList);
 
-      auto const updateRangeStepperVisibility = [offsetRangePicklist, multiplierRangePicklist](bool isMultiply) {
+      auto const updateRangeStepperVisibility = [offsetRangePickList, multiplierRangePickList](bool isMultiply) {
         if (isMultiply) {
-          offsetRangePicklist->hide();
-          multiplierRangePicklist->show();
+          offsetRangePickList->hide();
+          multiplierRangePickList->show();
         } else {
-          offsetRangePicklist->show();
-          multiplierRangePicklist->hide();
+          offsetRangePickList->show();
+          multiplierRangePickList->hide();
         }
       };
       addParam(new OperatorSwitch{updateRangeStepperVisibility, slug, module, x, row2, Controls::OperationSwitch});
 
       // Add these last so they overlay all other controls
-      addChild(offsetRangePicklist->menu());
-      addChild(multiplierRangePicklist->menu());
+      addChild(offsetRangePickList->menu());
+      addChild(multiplierRangePickList->menu());
     }
   };
 } // namespace func
