@@ -4,15 +4,22 @@ require_relative 'shape'
 class Box < BoundedShape
   CORNER_RADIUS = 1.0
 
-  def initialize(top:, right:, bottom:, left:, stroke:, fill:)
+  def initialize(top: 0, right: 0, bottom: 0, left: 0, fill:, stroke: 'none', stroke_width: STROKE_WIDTH, corner_radius: CORNER_RADIUS)
     super(top: top, right: right, bottom: bottom, left: left)
-    @stroke = stroke
-    @fill = fill
+    @rect_attributes = {
+      x: left,
+      y: top,
+      width: width,
+      height: height,
+      fill: fill,
+      stroke: stroke,
+      'stroke-width' => stroke_width,
+      rx: corner_radius,
+      ry: corner_radius
+    }
   end
 
   def draw(canvas)
-    canvas.rect(x: left, y: top, width: width, height: height,
-                rx: CORNER_RADIUS, ry: CORNER_RADIUS,
-                stroke: @stroke, fill: @fill, 'stroke-width' => STROKE_WIDTH)
+    canvas.rect(**@rect_attributes)
   end
 end

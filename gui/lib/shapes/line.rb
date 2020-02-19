@@ -4,7 +4,7 @@ require_relative '../dimensions'
 class Line < BoundedShape
   def initialize(x1: 0, y1: 0, x2: 0, y2: 0, stroke:, width: STROKE_WIDTH, cap: 'square')
     super(top: [y1, y2].min, right: [x1, x2].max, bottom: [y1, y2].max, left: [x1, x2].min)
-    @attributes = {
+    @line_attributes = {
       x1: x1, y1: y1,
       x2: x2, y2: y2,
       stroke: stroke, 'stroke-width' => width, 'stroke-linecap' => cap
@@ -12,6 +12,6 @@ class Line < BoundedShape
   end
 
   def draw(canvas)
-    canvas.line(**@attributes)
+    canvas.line(**@line_attributes)
   end
 end

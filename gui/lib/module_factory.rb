@@ -3,15 +3,15 @@ require 'pathname'
 
 require_relative 'dimensions'
 require_relative 'shapes/box'
-require_relative 'controls/button'
-require_relative 'shapes/faceplate'
-require_relative 'shapes/knob'
 require_relative 'shapes/label'
 require_relative 'shapes/line'
 require_relative 'shapes/light'
 require_relative 'shapes/pick_list'
 require_relative 'shapes/port'
 require_relative 'shapes/toggle'
+
+require_relative 'controls/button'
+require_relative 'controls/knob'
 
 class ModuleFactory
   MODULE_LABEL_INSET = 9.0
@@ -28,12 +28,13 @@ class ModuleFactory
 
   def build
     instance_eval(@source_file.read, @source_file.to_s)
-    faceplate = Faceplate.new(top: 0, right: @width, bottom: MODULE_HEIGHT, left: 0, stroke: @foreground, fill: @background)
+    faceplate_background = Box.new(top: 0, right: @width, bottom: MODULE_HEIGHT, left: 0, stroke: @foreground, fill: @background,
+                                   stroke_width: 1)
     module_label = Label.new(text: @name, size: :title, color: @foreground)
                         .translate(width / 2, MODULE_LABEL_INSET)
     author_label = Label.new(text: 'DHE', size: :title, color: @foreground, alignment: :below)
                         .translate(width / 2, MODULE_HEIGHT - MODULE_LABEL_INSET)
-    @faceplate_shapes.prepend(faceplate, module_label, author_label)
+    @faceplate_shapes.prepend(faceplate_background, module_label, author_label)
     @faceplate_shape = CompositeShape.new(shapes: @faceplate_shapes)
     @image_shapes.prepend(@faceplate_shape)
     @image_shape = CompositeShape.new(shapes: @image_shapes)
