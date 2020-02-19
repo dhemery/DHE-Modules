@@ -10,12 +10,13 @@ class Knob < RoundShape
     super(DIAMETERS[size])
     @slug = Pathname("knob-#{size}")
 
-    @shapes = []
-    @shapes << Circle.new(radius: DIAMETERS[size] / 2.0, fill: foreground)
-
     pointer_width = radius / 8.0
     pointer_length = radius - pointer_width
-    @shapes << Line.new(y2: -pointer_length, width: pointer_width, stroke: background, cap: 'round')
+
+    @shapes = [
+      Circle.new(radius: DIAMETERS[size] / 2.0, fill: foreground),
+      Line.new(y2: -pointer_length, width: pointer_width, stroke: background, cap: 'round'),
+    ]
   end
 
   def draw(canvas)

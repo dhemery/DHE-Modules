@@ -6,12 +6,12 @@ require_relative 'shapes/box'
 require_relative 'shapes/label'
 require_relative 'shapes/line'
 require_relative 'shapes/light'
-require_relative 'shapes/port'
 require_relative 'shapes/toggle'
 
 require_relative 'controls/button'
 require_relative 'controls/knob'
 require_relative 'controls/pick_list'
+require_relative 'controls/port'
 
 class ModuleFactory
   MODULE_LABEL_INSET = 9.0

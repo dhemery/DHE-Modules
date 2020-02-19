@@ -14,10 +14,11 @@ class Button < RoundShape
     @slug = Pathname("button#{style_slug}#{state_slug}")
 
     foreground, background = background, foreground unless style == :normal
-    @stroke = foreground
-    @fill = state == :pressed ? background : foreground
-    shape = Circle.new(radius: RADIUS, fill: @fill, stroke: @stroke, stroke_width: HOUSING_THICKNESS)
-    @shapes = [shape]
+    fill = state == :pressed ? background : foreground
+
+    @shapes = [
+      Circle.new(radius: RADIUS, fill: fill, stroke: foreground, stroke_width: HOUSING_THICKNESS)
+    ]
   end
 
   def draw(canvas)

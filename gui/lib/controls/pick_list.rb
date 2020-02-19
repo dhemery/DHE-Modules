@@ -18,7 +18,9 @@ module PickList
 
       bottom = (height - STROKE_WIDTH) / 2
       right = (width - STROKE_WIDTH) / 2
-      box = Box.new(top: -bottom, right: right, bottom: bottom, left: -right, fill: fill, stroke: color, corner_radius: CORNER_RADIUS, stroke_width: STROKE_WIDTH)
+
+      box = Box.new(top: -bottom, right: right, bottom: bottom, left: -right,
+                    fill: fill, stroke: color, corner_radius: CORNER_RADIUS, stroke_width: STROKE_WIDTH)
       @shapes = [box, label]
     end
 
@@ -39,8 +41,9 @@ module PickList
       super(width: width, height: height)
       @slug = Pathname("#{name}-menu")
 
-      box = Box.new(top: top, right: right, bottom: bottom, left: left, fill: color, corner_radius: CORNER_RADIUS)
-      @shapes = [box]
+      @shapes = [
+        Box.new(top: top, right: right, bottom: bottom, left: left, fill: color, corner_radius: CORNER_RADIUS)
+      ]
     end
 
     def draw(canvas)
