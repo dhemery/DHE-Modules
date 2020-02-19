@@ -16,11 +16,8 @@ module PickList
       height = label.height + 2 * PADDING
       super(width: width, height: height)
 
-      bottom = (height - STROKE_WIDTH) / 2
-      right = (width - STROKE_WIDTH) / 2
-
-      box = Box.new(top: -bottom, right: right, bottom: bottom, left: -right,
-                    fill: fill, stroke: color, corner_radius: CORNER_RADIUS, stroke_width: STROKE_WIDTH)
+      box = Box.centered(height: height - STROKE_WIDTH, width: width - STROKE_WIDTH,
+                         fill: fill, stroke: color, corner_radius: CORNER_RADIUS, stroke_width: STROKE_WIDTH)
       @shapes = [box, label]
     end
 

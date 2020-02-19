@@ -22,4 +22,11 @@ class Box < BoundedShape
   def draw(canvas)
     canvas.rect(**@rect_attributes)
   end
+
+  def self.centered(width: 0, height: 0, fill:, stroke: 'none', stroke_width: STROKE_WIDTH, corner_radius: CORNER_RADIUS)
+    right = width / 2
+    bottom = height / 2
+    Box.new(top: -bottom, right: right, bottom: bottom, left: -right,
+            fill: fill, stroke: stroke, stroke_width: stroke_width, corner_radius: corner_radius)
+  end
 end

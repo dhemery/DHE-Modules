@@ -28,8 +28,8 @@ class ModuleFactory
 
   def build
     instance_eval(@source_file.read, @source_file.to_s)
-    faceplate_background = Box.new(top: 0, right: @width, bottom: MODULE_HEIGHT, left: 0, stroke: @foreground, fill: @background,
-                                   stroke_width: 1)
+    faceplate_background = Box.new(right: @width, bottom: MODULE_HEIGHT,
+                                   fill: @background, stroke: @foreground, stroke_width: 1)
     module_label = Label.new(text: @name, size: :title, color: @foreground)
                         .translate(width / 2, MODULE_LABEL_INSET)
     author_label = Label.new(text: 'DHE', size: :title, color: @foreground, alignment: :below)
