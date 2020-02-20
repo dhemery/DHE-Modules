@@ -90,9 +90,13 @@ class ModuleFactory
     image_port = port.translate(x, y)
     @image_shapes << image_port
 
-    faceplate_label = Label.new(text: label, color: @foreground, size: :large)
+    faceplate_label = Label.new(text: label, color: @foreground, size: :small)
                            .translate(image_port.x, image_port.top - PADDING)
     @faceplate_shapes << faceplate_label
+  end
+
+  def cv_port(x:, y:)
+    port(x: x, y: y, label: 'CV')
   end
 
   def input_port(x:, y:, label: 'IN')
@@ -123,18 +127,6 @@ class ModuleFactory
                             bottom: image_port.bottom + PADDING, left: image_port.left - PADDING,
                             stroke: @foreground, fill: @foreground)
     @faceplate_shapes.append(faceplate_box, faceplate_label)
-    @faceplate_shapes << faceplate_label
-  end
-
-  def cv_port(x:, y:)
-    port = Port.new(foreground: @foreground, background: @background)
-    @control_shapes << port
-
-    image_port = port.translate(x, y)
-    @image_shapes << image_port
-
-    faceplate_label = Label.new(text: 'CV', color: @foreground, size: :small)
-                           .translate(image_port.x, image_port.top - PADDING)
     @faceplate_shapes << faceplate_label
   end
 
@@ -189,15 +181,15 @@ class ModuleFactory
   end
 
   def polarity_toggle(x:, y:, selection: 1)
-    toggle(x: x, y: y, labels: %w(BI UNI), selection: selection)
+    toggle(x: x, y: y, labels: %w[BI UNI], selection: selection)
   end
 
   def duration_toggle(x:, y:)
-    toggle(x: x, y: y, labels: %w(1 10 100), selection: 2)
+    toggle(x: x, y: y, labels: %w[1 10 100], selection: 2)
   end
 
   def shape_toggle(x:, y:)
-    toggle(x: x, y: y, labels: %w(J S), selection: 1)
+    toggle(x: x, y: y, labels: %w[J S], selection: 1)
   end
 
   def pick_list(x:, y:, name:, options:, selection: 1, width:, hidden: false)
