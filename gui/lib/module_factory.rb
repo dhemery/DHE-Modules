@@ -6,12 +6,12 @@ require_relative 'shapes/box'
 require_relative 'shapes/label'
 require_relative 'shapes/line'
 require_relative 'shapes/light'
-require_relative 'shapes/toggle'
 
 require_relative 'controls/button'
 require_relative 'controls/knob'
 require_relative 'controls/pick_list'
 require_relative 'controls/port'
+require_relative 'controls/slide_switch'
 
 class ModuleFactory
   MODULE_LABEL_INSET = 9.0
@@ -168,7 +168,7 @@ class ModuleFactory
 
   def toggle(x:, y:, labels:, selection:)
     toggles = (1..labels.size).map do |position|
-      Toggle::new(foreground: @foreground, background: @background, size: labels.size, position: position)
+      SlideSwitch::new(foreground: @foreground, background: @background, size: labels.size, position: position)
     end
     @control_shapes += toggles
 
