@@ -57,16 +57,16 @@ class ModuleFactory
     @background = "##{Color::HSL.new(*color).to_rgb.hex}"
   end
 
-  def separator(y:)
-    @faceplate_shapes << Line.new(stroke: @foreground, x1: 0, y1: y, x2: @width, y2: y)
-  end
-
-  def line(x1:, y1:, x2:, y2:)
+  def line(x1:, y1:, x2: x1, y2: y1)
     @faceplate_shapes << Line.new(stroke: @foreground, x1: x1, x2: x2, y1: y1, y2: y2)
   end
 
+  def separator(y:)
+    line(x1: 0, y1: y, x2: @width)
+  end
+
   def connector(left:, right:, y:)
-    @faceplate_shapes << Line.new(stroke: @foreground, x1: left, x2: right, y1: y, y2: y)
+    line(x1: left, x2: right, y1: y)
   end
 
   def button(x:, y:, label: '', style: :normal)
