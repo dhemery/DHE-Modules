@@ -204,12 +204,12 @@ class ModuleFactory
   end
 
   def button(x:, y:, label: nil, name: 'button')
-    pressed = Button.new(name: name, button_color: @background, ring_color: @foreground, state: :pressed)
-    released = Button.new(name: name, button_color: @foreground, ring_color: @foreground, state: :released)
-    @control_shapes.append(pressed, released)
+    button = Button.new(name: name, pressed_color: @background, released_color: @foreground)
+    @control_shapes += button.frames
 
-    image_button = released.translated(x, y)
-                           .padded(all: PADDING)
+    image_button = button.released
+                         .translated(x, y)
+                         .padded(all: PADDING)
     @image_shapes << image_button
 
     return if label.nil?
@@ -221,14 +221,16 @@ class ModuleFactory
 
   def input_button_port(x:, y:, label:)
     port = Port.new(metal_color: @background, shadow_color: @foreground)
-    pressed_button = Button.new(button_color: @background, ring_color: @foreground, state: :pressed)
-    released_button = Button.new(button_color: @foreground, ring_color: @foreground, state: :released)
-    @control_shapes.append(port, pressed_button, released_button)
+    @control_shapes << port
+
+    button = Button.new(pressed_color: @background, released_color: @foreground)
+    @control_shapes += button.frames
 
     image_port = port.translated(x, y)
                      .padded(all: PADDING)
-    image_button = released_button.translated(image_port.right + released_button.right, image_port.y)
-                                  .padded(all: PADDING, left: 0.0)
+    image_button = button.released
+                         .translated(image_port.right + button.released.right, image_port.y)
+                         .padded(all: PADDING, left: 0.0)
     @image_shapes.append(image_port, image_button)
 
     faceplate_label = Label.new(text: label, color: @foreground, size: :small)
@@ -241,14 +243,15 @@ class ModuleFactory
 
   def output_button_port(x:, y:, label:)
     port = Port.new(metal_color: @background, shadow_color: @foreground)
-    pressed_button = Button.new(name: 'output-button', button_color: @foreground, ring_color: @background, state: :pressed)
-    released_button = Button.new(name: 'output-button', button_color: @background, ring_color: @background, state: :released)
-    @control_shapes.append(port, pressed_button, released_button)
+    @control_shapes << port
+
+    button = Button.new(name: 'output-button', pressed_color: @foreground, released_color: @background)
+    @control_shapes += button.frames
 
     image_port = port.translated(x, y)
                      .padded(all: PADDING)
-    image_button = released_button.translated(image_port.left + released_button.left, image_port.y)
-                                  .padded(all: PADDING, right: 0.0)
+    image_button = button.released.translated(image_port.left + button.released.left, image_port.y)
+                         .padded(all: PADDING, right: 0.0)
     @image_shapes.append(image_port, image_button)
 
     faceplate_label = Label.new(text: label, color: @background, size: :small)
