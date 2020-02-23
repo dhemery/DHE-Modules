@@ -7,7 +7,7 @@ class Knob < RoundShape
 
   attr_reader :slug
 
-  def initialize(knob:, pointer:, size:)
+  def initialize(knob_color:, pointer_color:, size:)
     super(DIAMETERS[size])
     @slug = Pathname("knob-#{size}")
 
@@ -15,8 +15,8 @@ class Knob < RoundShape
     pointer_length = radius - pointer_width
 
     @shapes = [
-      Circle.new(radius: DIAMETERS[size] / 2.0, fill: knob),
-      Line.new(y2: -pointer_length, width: pointer_width, stroke: pointer, cap: 'round'),
+      Circle.new(radius: DIAMETERS[size] / 2.0, fill: knob_color, stroke: :none, stroke_width: 0),
+      Line.new(x1: 0, y1: 0, x2: 0, y2: -pointer_length, width: pointer_width, stroke: pointer_color, cap: :round),
     ]
 
   end

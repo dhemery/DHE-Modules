@@ -33,7 +33,8 @@ class SlideSwitch < CenteredShape
     knurl_offset = KNURL_OFFSETS[size][position - 1]
     knurls = (-2..2).map { |index| KNURL_SPACING * index }
                     .map do |knurl_y|
-      Line.new(x1: KNURL_LEFT, x2: KNURL_RIGHT, y1: knurl_y + knurl_offset,
+      Line.new(x1: KNURL_LEFT, y1: knurl_y + knurl_offset,
+               x2: KNURL_RIGHT, y2: knurl_y + knurl_offset,
                width: KNURL_THICKNESS,
                stroke: foreground, cap: 'round')
     end

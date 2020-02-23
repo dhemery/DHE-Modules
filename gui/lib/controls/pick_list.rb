@@ -9,15 +9,15 @@ module PickList
     CORNER_RADIUS = STROKE_WIDTH * 2
     attr_reader :slug
 
-    def initialize(name:, text:, color:, fill:, width:, position:)
+    def initialize(name:, text:, text_color:, fill:, width:, position:)
       @slug = Pathname("#{name}-#{position}")
 
-      label = Label.new(color: color, alignment: :center, size: :small, text: text)
+      label = Label.new(color: text_color, alignment: :center, size: :small, text: text)
       height = label.height + 2 * PADDING
       super(width: width, height: height)
 
       box = Box.centered(height: height - STROKE_WIDTH, width: width - STROKE_WIDTH,
-                         fill: fill, stroke: color, corner_radius: CORNER_RADIUS, stroke_width: STROKE_WIDTH)
+                         fill: fill, stroke: text_color, corner_radius: CORNER_RADIUS, stroke_width: STROKE_WIDTH)
       @shapes = [box, label]
     end
 
@@ -39,7 +39,10 @@ module PickList
       @slug = Pathname("#{name}-menu")
 
       @shapes = [
-        Box.new(top: top, right: right, bottom: bottom, left: left, fill: color, corner_radius: CORNER_RADIUS)
+        Box.new(top: top, right: right, bottom: bottom, left: left,
+                fill: color, corner_radius: CORNER_RADIUS,
+                stroke: :none, stroke_width: 0,
+        )
       ]
     end
 

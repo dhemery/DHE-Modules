@@ -5,6 +5,6 @@ class Light < Circle
   DIAMETER = RADIUS * 2
 
   def initialize(color:)
-    super(radius: RADIUS, fill: color)
+    super(radius: RADIUS, fill: color, stroke: :none, stroke_width: 0)
   end
 end

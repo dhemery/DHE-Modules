@@ -4,7 +4,7 @@ require_relative 'shape'
 class Box < BoundedShape
   CORNER_RADIUS = 1.0
 
-  def initialize(top: 0, right: 0, bottom: 0, left: 0, fill:, stroke: 'none', stroke_width: STROKE_WIDTH, corner_radius: CORNER_RADIUS)
+  def initialize(top:, right:, bottom:, left:, fill:, stroke:, stroke_width:, corner_radius: CORNER_RADIUS)
     super(top: top, right: right, bottom: bottom, left: left)
     @rect_attributes = {
       x: left,
@@ -15,7 +15,7 @@ class Box < BoundedShape
       stroke: stroke,
       'stroke-width' => stroke_width,
       rx: corner_radius,
-      ry: corner_radius
+      ry: corner_radius,
     }
   end
 
@@ -23,7 +23,7 @@ class Box < BoundedShape
     canvas.rect(**@rect_attributes)
   end
 
-  def self.centered(width: 0, height: 0, fill:, stroke: 'none', stroke_width: STROKE_WIDTH, corner_radius: CORNER_RADIUS)
+  def self.centered(width: 0, height: 0, fill: nil, stroke: nil, stroke_width: nil, corner_radius: CORNER_RADIUS)
     right = width / 2
     bottom = height / 2
     Box.new(top: -bottom, right: right, bottom: bottom, left: -right,

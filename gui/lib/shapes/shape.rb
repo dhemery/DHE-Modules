@@ -107,8 +107,6 @@ class CompositeShape < BoundedShape
   end
 
   def draw(canvas)
-    @shapes.each do |shape|
-      shape.draw(canvas)
-    end
+    @shapes.each { |shape| shape.draw(canvas) }
   end
 end

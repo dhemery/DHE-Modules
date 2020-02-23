@@ -9,14 +9,14 @@ class Port < RoundShape
 
   attr_reader :slug
 
-  def initialize(metal:, shadow:)
+  def initialize(metal_color:, shadow_color:)
     super(DIAMETER)
     @slug = Pathname('port')
 
     @shapes = [
-      Circle.new(radius: radius, fill: shadow),
-      Circle.new(radius: SLEEVE_DIAMETER / 2.0, stroke: metal, stroke_width: METAL_THICKNESS),
-      Circle.new(radius: RING_DIAMETER / 2.0, stroke: metal, stroke_width: METAL_THICKNESS),
+      Circle.new(radius: radius, fill: shadow_color, stroke: :none, stroke_width: 0,),
+      Circle.new(radius: SLEEVE_DIAMETER / 2.0, stroke: metal_color, stroke_width: METAL_THICKNESS, fill: :none),
+      Circle.new(radius: RING_DIAMETER / 2.0, stroke: metal_color, stroke_width: METAL_THICKNESS, fill: :none),
     ]
   end
 

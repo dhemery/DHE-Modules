@@ -28,7 +28,7 @@ class ModuleFactory
 
   def build
     instance_eval(@source_file.read, @source_file.to_s)
-    faceplate_background = Box.new(right: @width, bottom: MODULE_HEIGHT,
+    faceplate_background = Box.new(top: 0, left: 0, right: @width, bottom: MODULE_HEIGHT,
                                    fill: @background, stroke: @foreground, stroke_width: 1)
     module_label = Label.new(text: @name, size: :title, color: @foreground)
                         .translate(width / 2, MODULE_LABEL_INSET)
@@ -57,20 +57,20 @@ class ModuleFactory
     @background = "##{Color::HSL.new(*color).to_rgb.hex}"
   end
 
-  def line(x1:, y1:, x2: x1, y2: y1)
-    @faceplate_shapes << Line.new(stroke: @foreground, x1: x1, x2: x2, y1: y1, y2: y2)
+  def line(x1:, y1:, x2:, y2:)
+    @faceplate_shapes << Line.new(x1: x1, x2: x2, y1: y1, y2: y2, stroke: @foreground, width: STROKE_WIDTH)
   end
 
   def separator(y:)
-    line(x1: 0, y1: y, x2: @width)
+    line(x1: 0, y1: y, x2: @width, y2: y)
   end
 
   def connector(left:, right:, y:)
-    line(x1: left, x2: right, y1: y)
+    line(x1: left, x2: right, y1: y, y2: y)
   end
 
   def port(x:, y:, label: '')
-    port = Port.new(metal: @background, shadow: @foreground)
+    port = Port.new(metal_color: @background, shadow_color: @foreground)
     @control_shapes << port
 
     image_port = port.translate(x, y)
@@ -86,7 +86,7 @@ class ModuleFactory
   end
 
   def input_port(x:, y:, label: 'IN')
-    port = Port.new(metal: @background, shadow: @foreground)
+    port = Port.new(metal_color: @background, shadow_color: @foreground)
     @control_shapes << port
 
     image_port = port.translate(x, y)
@@ -96,12 +96,12 @@ class ModuleFactory
                            .translate(image_port.x, image_port.top - PADDING)
     faceplate_box = Box.new(top: faceplate_label.top - PADDING, right: image_port.right + PADDING,
                             bottom: image_port.bottom + PADDING, left: image_port.left - PADDING,
-                            stroke: @foreground, fill: @background)
+                            stroke: @foreground, stroke_width: STROKE_WIDTH, fill: @background)
     @faceplate_shapes.append(faceplate_box, faceplate_label)
   end
 
   def output_port(x:, y:, label: 'OUT')
-    port = Port.new(metal: @background, shadow: @foreground)
+    port = Port.new(metal_color: @background, shadow_color: @foreground)
     @control_shapes << port
 
     image_port = port.translate(x, y)
@@ -111,13 +111,13 @@ class ModuleFactory
                            .translate(image_port.x, image_port.top - PADDING)
     faceplate_box = Box.new(top: faceplate_label.top - PADDING, right: image_port.right + PADDING,
                             bottom: image_port.bottom + PADDING, left: image_port.left - PADDING,
-                            stroke: @foreground, fill: @foreground)
+                            stroke: @foreground, stroke_width: STROKE_WIDTH, fill: @foreground)
     @faceplate_shapes.append(faceplate_box, faceplate_label)
     @faceplate_shapes << faceplate_label
   end
 
   def knob(x:, y:, size:, label:, label_size:)
-    knob = Knob.new(knob: @foreground, pointer: @background, size: size)
+    knob = Knob.new(knob_color: @foreground, pointer_color: @background, size: size)
     @control_shapes << knob
 
     image_knob = knob.translate(x, y)
@@ -180,7 +180,7 @@ class ModuleFactory
 
   def pick_list(x:, y:, name:, options:, selection: 1, width:, hidden: false)
     items = options.each_with_index.map do |option, index|
-      PickList::Item.new(name: name, text: option, position: index + 1, color: @foreground, fill: @background, width: width)
+      PickList::Item.new(name: name, text: option, position: index + 1, text_color: @foreground, fill: @background, width: width)
     end
     menu = PickList::Menu.new(
       name: name, color: @foreground,
@@ -195,8 +195,8 @@ class ModuleFactory
   end
 
   def button(x:, y:, label: '', name: 'button')
-    pressed = Button.new(name: name, color: @background, ring: @foreground, state: :pressed)
-    released = Button.new(name: name, color: @foreground, ring: @foreground, state: :released)
+    pressed = Button.new(name: name, button_color: @background, ring_color: @foreground, state: :pressed)
+    released = Button.new(name: name, button_color: @foreground, ring_color: @foreground, state: :released)
     @control_shapes.append(pressed, released)
 
     image_button = released.translate(x, y)
@@ -208,9 +208,9 @@ class ModuleFactory
   end
 
   def input_button_port(x:, y:, label:)
-    port = Port.new(metal: @background, shadow: @foreground)
-    pressed_button = Button.new(color: @background, ring: @foreground, state: :pressed)
-    released_button = Button.new(color: @foreground, ring: @foreground, state: :released)
+    port = Port.new(metal_color: @background, shadow_color: @foreground)
+    pressed_button = Button.new(button_color: @background, ring_color: @foreground, state: :pressed)
+    released_button = Button.new(button_color: @foreground, ring_color: @foreground, state: :released)
     @control_shapes.append(port, pressed_button, released_button)
 
     image_port = port.translate(x, y)
@@ -221,14 +221,14 @@ class ModuleFactory
                            .translate(image_port.x, image_port.top - PADDING)
     faceplate_box = Box.new(top: faceplate_label.top - PADDING, right: image_button.right + PADDING,
                             bottom: image_port.bottom + PADDING, left: image_port.left - PADDING,
-                            stroke: @foreground, fill: @background)
+                            stroke: @foreground, stroke_width: STROKE_WIDTH, fill: @background)
     @faceplate_shapes.append(faceplate_box, faceplate_label)
   end
 
   def output_button_port(x:, y:, label:)
-    port = Port.new(metal: @background, shadow: @foreground)
-    pressed_button = Button.new(name: 'output-button', color: @foreground, ring: @background, state: :pressed)
-    released_button = Button.new(name: 'output-button', color: @background, ring: @background, state: :released)
+    port = Port.new(metal_color: @background, shadow_color: @foreground)
+    pressed_button = Button.new(name: 'output-button', button_color: @foreground, ring_color: @background, state: :pressed)
+    released_button = Button.new(name: 'output-button', button_color: @background, ring_color: @background, state: :released)
     @control_shapes.append(port, pressed_button, released_button)
 
     image_port = port.translate(x, y)
@@ -239,7 +239,7 @@ class ModuleFactory
                            .translate(image_port.x, image_port.top - PADDING)
     faceplate_box = Box.new(top: faceplate_label.top - PADDING, right: image_port.right + PADDING,
                             bottom: image_port.bottom + PADDING, left: image_button.left - PADDING,
-                            stroke: @foreground, fill: @foreground)
+                            stroke: @foreground, stroke_width: STROKE_WIDTH, fill: @foreground)
     @faceplate_shapes.append(faceplate_box, faceplate_label)
   end
 

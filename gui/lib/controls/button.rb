@@ -8,13 +8,13 @@ class Button < RoundShape
 
   attr_reader :slug
 
-  def initialize(color:, ring:, name: 'button', state:)
+  def initialize(button_color:, ring_color:, name: 'button', state:)
     super(DIAMETER)
     @slug = Pathname("#{name}-#{state}")
 
     @shapes = [
-      Circle.new(radius: RING_RADIUS, fill: ring),
-      Circle.new(radius: BUTTON_RADIUS, fill: color)
+      Circle.new(radius: RING_RADIUS, fill: ring_color, stroke: :none, stroke_width: 0),
+      Circle.new(radius: BUTTON_RADIUS, fill: button_color, stroke: :none, stroke_width: 0),
     ]
   end
 
