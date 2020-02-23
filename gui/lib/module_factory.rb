@@ -97,9 +97,8 @@ class ModuleFactory
     faceplate_label = Label.new(text: label, color: @foreground, size: :small)
                            .translated(image_port.x, image_port.top)
                            .padded(top: PADDING, right: 0.0, bottom: 0.0)
-    faceplate_box = Box.new(top: faceplate_label.top, right: image_port.right,
-                            bottom: image_port.bottom, left: image_port.left,
-                            stroke: @foreground, stroke_width: STROKE_WIDTH, fill: @background)
+    faceplate_box = Box.around(shapes: [faceplate_label, image_port],
+                               stroke: @foreground, stroke_width: STROKE_WIDTH, fill: @background)
     @faceplate_shapes.append(faceplate_box, faceplate_label)
   end
 
@@ -114,9 +113,8 @@ class ModuleFactory
     faceplate_label = Label.new(text: label, color: @background, size: :small)
                            .translated(image_port.x, image_port.top)
                            .padded(top: PADDING, right: 0.0, bottom: 0.0)
-    faceplate_box = Box.new(top: faceplate_label.top, right: image_port.right,
-                            bottom: image_port.bottom, left: image_port.left,
-                            stroke: @foreground, stroke_width: STROKE_WIDTH, fill: @foreground)
+    faceplate_box = Box.around(shapes: [faceplate_label, image_port],
+                               stroke: @foreground, stroke_width: STROKE_WIDTH, fill: @foreground)
     @faceplate_shapes.append(faceplate_box, faceplate_label)
     @faceplate_shapes << faceplate_label
   end
@@ -236,9 +234,8 @@ class ModuleFactory
     faceplate_label = Label.new(text: label, color: @foreground, size: :small)
                            .translated(image_port.x, image_port.top)
                            .padded(top: PADDING)
-    faceplate_box = Box.new(top: faceplate_label.top, right: image_button.right,
-                            bottom: image_port.bottom, left: image_port.left,
-                            stroke: @foreground, stroke_width: STROKE_WIDTH, fill: @background)
+    faceplate_box = Box.around(shapes: [image_port, image_button, faceplate_label],
+                               stroke: @foreground, stroke_width: STROKE_WIDTH, fill: @background)
     @faceplate_shapes.append(faceplate_box, faceplate_label)
   end
 
@@ -257,9 +254,8 @@ class ModuleFactory
     faceplate_label = Label.new(text: label, color: @background, size: :small)
                            .translated(image_port.x, image_port.top)
                            .padded(top: PADDING)
-    faceplate_box = Box.new(top: faceplate_label.top, right: image_port.right,
-                            bottom: image_port.bottom, left: image_button.left,
-                            stroke: @foreground, stroke_width: STROKE_WIDTH, fill: @foreground)
+    faceplate_box = Box.around(shapes: [image_port, image_button, faceplate_label],
+                               stroke: @foreground, stroke_width: STROKE_WIDTH, fill: @foreground)
     @faceplate_shapes.append(faceplate_box, faceplate_label)
   end
 

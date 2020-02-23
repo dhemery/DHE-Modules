@@ -29,4 +29,17 @@ class Box < Shape
     Box.new(top: -bottom, right: right, bottom: bottom, left: -right,
             fill: fill, stroke: stroke, stroke_width: stroke_width, corner_radius: corner_radius)
   end
+
+  def self.around(shapes:, fill:, stroke:, stroke_width:, corner_radius: CORNER_RADIUS)
+    Box.new(
+      top: shapes.map(&:top).min,
+      right: shapes.map(&:right).max,
+      bottom: shapes.map(&:bottom).max,
+      left: shapes.map(&:left).min,
+      fill: fill,
+      stroke: stroke,
+      stroke_width: stroke_width,
+      corner_radius: corner_radius
+    )
+  end
 end
