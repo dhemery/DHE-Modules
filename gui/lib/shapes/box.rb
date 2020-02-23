@@ -1,7 +1,7 @@
 require_relative '../dimensions'
 require_relative 'shape'
 
-class Box < BoundedShape
+class Box < Shape
   CORNER_RADIUS = 1.0
 
   def initialize(top:, right:, bottom:, left:, fill:, stroke:, stroke_width:, corner_radius: CORNER_RADIUS)

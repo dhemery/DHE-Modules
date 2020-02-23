@@ -1,7 +1,8 @@
 require_relative '../shapes/circle'
 
-class Button < RoundShape
+class Button < Shape
   DIAMETER = 6.0
+  RADIUS = DIAMETER / 2.0
   RING_RADIUS = DIAMETER / 2.0
   RING_THICKNESS = DIAMETER / 6.0
   BUTTON_RADIUS = RING_RADIUS - RING_THICKNESS
@@ -9,7 +10,7 @@ class Button < RoundShape
   attr_reader :slug
 
   def initialize(button_color:, ring_color:, name: 'button', state:)
-    super(DIAMETER)
+    super(top: -RADIUS, right: RADIUS, bottom: RADIUS, left: -RADIUS)
     @slug = Pathname("#{name}-#{state}")
 
     @shapes = [

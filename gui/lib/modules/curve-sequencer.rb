@@ -1,4 +1,4 @@
-class PositionMarker < BoundedShape
+class PositionMarker < Shape
   attr_reader :slug
   TOP = -Light::DIAMETER
   BOTTOM = Light::DIAMETER

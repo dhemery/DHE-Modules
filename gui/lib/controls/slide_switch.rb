@@ -2,7 +2,7 @@ require_relative '../shapes/shape'
 require_relative '../shapes/box'
 require_relative '../shapes/line'
 
-class SlideSwitch < CenteredShape
+class SlideSwitch < Shape
   WIDTH = 3.0
   HOUSING_THICKNESS = WIDTH / 8.0
   HOUSING_INSET = HOUSING_THICKNESS / 2.0
@@ -20,7 +20,7 @@ class SlideSwitch < CenteredShape
   attr_reader :slug
 
   def initialize(foreground:, background:, size:, position:)
-    super(width: WIDTH, height: size * WIDTH)
+    super(top: -(size * WIDTH) / 2.0, right: WIDTH / 2.0, bottom: (size * WIDTH) / 2.0, left: -WIDTH / 2.0)
     @slug = Pathname("toggle-#{size}-#{position}")
 
     housing_width = width - HOUSING_THICKNESS

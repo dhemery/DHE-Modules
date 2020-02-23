@@ -1,71 +1,9 @@
-class Translated
-  def initialize(dx:, dy:, shape:)
-    @dx = dx
-    @dy = dy
-    @shape = shape
-  end
-
-  def x
-    @shape.x + @dx
-  end
-
-  def y
-    @shape.y + @dy
-  end
-
-  def top
-    @shape.top + @dy
-  end
-
-  def right
-    @shape.right + @dx
-  end
-
-  def bottom
-    @shape.bottom + @dy
-  end
-
-  def left
-    @shape.left + @dx
-  end
-
-  def width
-    @shape.width
-  end
-
-  def height
-    @shape.height
-  end
-
-  def draw(canvas)
-    canvas.g(transform: "translate(#{@dx},#{@dy})") do |g|
-      @shape.draw(g)
-    end
-  end
-end
-
 class Shape
-  def x
-    0.0
-  end
+  attr_reader :x, :y, :top, :right, :bottom, :left, :width, :height
 
-  def y
-    0.0
-  end
-
-  def translate(dx, dy)
-    Translated.new(dx: dx, dy: dy, shape: self)
-  end
-
-  def has_text?
-    false
-  end
-end
-
-class BoundedShape < Shape
-  attr_reader :top, :right, :bottom, :left, :width, :height
-
-  def initialize(top:, right:, bottom:, left:)
+  def initialize(x: 0.0, y: 0.0, top:, right:, bottom:, left:)
+    @x = x
+    @y = y
     @top = top
     @right = right
     @bottom = bottom
@@ -73,31 +11,17 @@ class BoundedShape < Shape
     @width = right - left
     @height = bottom - top
   end
-end
 
-class CenteredShape < BoundedShape
-  def initialize(width:, height:)
-    right = width / 2.0
-    bottom = height / 2.0
-    super(right: right, bottom: bottom, left: -right, top: -bottom)
+  def translated(dx, dy)
+    Translated.new(shape: self, dx: dx, dy: dy)
+  end
+
+  def has_text?
+    false
   end
 end
 
-class RoundShape < CenteredShape
-  def initialize(diameter)
-    super(width: diameter, height: diameter)
-  end
-
-  def diameter
-    width
-  end
-
-  def radius
-    right
-  end
-end
-
-class CompositeShape < BoundedShape
+class CompositeShape < Shape
   def initialize(shapes)
     super(top: shapes.map(&:top).min,
           right: shapes.map(&:right).max,
@@ -108,5 +32,31 @@ class CompositeShape < BoundedShape
 
   def draw(canvas)
     @shapes.each { |shape| shape.draw(canvas) }
+  end
+
+  def has_text?
+
+  end
+end
+
+class Translated < Shape
+  def initialize(dx:, dy:, shape:)
+    super(
+      x: shape.x + dx,
+      y: shape.y + dy,
+      top: shape.top + dy,
+      right: shape.right + dx,
+      bottom: shape.bottom + dy,
+      left: shape.left + dx
+    )
+    @dx = dx
+    @dy = dy
+    @shape = shape
+  end
+
+  def draw(canvas)
+    canvas.g(transform: "translate(#{@dx},#{@dy})") do |g|
+      @shape.draw(g)
+    end
   end
 end

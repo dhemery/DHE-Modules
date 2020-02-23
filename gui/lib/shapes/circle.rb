@@ -1,8 +1,8 @@
 require_relative '../shapes/shape'
 
-class Circle < RoundShape
+class Circle < Shape
   def initialize(radius:, fill:, stroke:, stroke_width:)
-    super(radius * 2 + stroke_width)
+    super(top: -radius, right: radius, bottom: radius, left: -radius)
     @circle_attributes = {
       cx: 0,
       cy: 0,

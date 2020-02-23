@@ -1,7 +1,7 @@
 require_relative 'shape'
 require_relative '../dimensions'
 
-class Label < BoundedShape
+class Label < Shape
   STYLE_FOR_SIZE = 'font-family:Proxima Nova;font-weight:bold;font-size:%spx'
   ALIGNMENT_TYPES = {
     above: {
