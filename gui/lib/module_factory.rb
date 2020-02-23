@@ -186,26 +186,21 @@ class ModuleFactory
   end
 
   def pick_list(x:, y:, name:, options:, selection: 1, width:, hidden: false)
-    items = options.each_with_index.map do |option, index|
-      PickList::Item.new(name: name, text: option, position: index + 1, text_color: @foreground, fill: @background, width: width)
-    end
+    picklist = PickList.new(name: name, options: options, text_color: @foreground, fill: @background, width: width)
 
-    image_item = items[selection - 1].translated(x, y)
-                                     .padded(all: PADDING)
+    @control_shapes += picklist.options
+    @control_shapes << picklist.menu
 
-    menu = PickList::Menu.new(
-      name: name, color: @foreground,
-      width: image_item.width, height: image_item.height)
-
-    @control_shapes += items
-    @control_shapes << menu
+    image_item = picklist.options[selection - 1]
+                         .translated(x, y)
+                         .padded(all: PADDING)
 
     @image_shapes << image_item unless hidden
   end
 
   def button(x:, y:, label: nil, name: 'button')
     button = Button.new(name: name, pressed_color: @background, released_color: @foreground)
-    @control_shapes += button.frames
+    @control_shapes += button.states
 
     image_button = button.released
                          .translated(x, y)
@@ -224,7 +219,7 @@ class ModuleFactory
     @control_shapes << port
 
     button = Button.new(pressed_color: @background, released_color: @foreground)
-    @control_shapes += button.frames
+    @control_shapes += button.states
 
     image_port = port.translated(x, y)
                      .padded(all: PADDING)
@@ -246,7 +241,7 @@ class ModuleFactory
     @control_shapes << port
 
     button = Button.new(name: 'output-button', pressed_color: @foreground, released_color: @background)
-    @control_shapes += button.frames
+    @control_shapes += button.states
 
     image_port = port.translated(x, y)
                      .padded(all: PADDING)

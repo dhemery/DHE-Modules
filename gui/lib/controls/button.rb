@@ -3,15 +3,15 @@ require_relative '../shapes/circle'
 class Button
   DIAMETER = 6.0
 
-  attr_reader :frames, :pressed, :released
+  attr_reader :states, :pressed, :released
 
   def initialize(name: 'button', pressed_color:, released_color:)
-    @pressed = Frame.new(slug: "#{name}-pressed", button_color: pressed_color, ring_color: released_color)
-    @released = Frame.new(slug: "#{name}-released", button_color: released_color, ring_color: released_color)
-    @frames = [pressed, released]
+    @pressed = State.new(name: name, state: :pressed, button_color: pressed_color, ring_color: released_color)
+    @released = State.new(name: name, state: :released, button_color: released_color, ring_color: released_color)
+    @states = [pressed, released]
   end
 
-  class Frame < Shape
+  class State < Shape
     RADIUS = DIAMETER / 2.0
     RING_RADIUS = DIAMETER / 2.0
     RING_THICKNESS = DIAMETER / 6.0
@@ -19,18 +19,18 @@ class Button
 
     attr_reader :slug
 
-    def initialize(slug:, button_color:, ring_color:)
+    def initialize(name:, state:, button_color:, ring_color:)
       super(top: -RADIUS, right: RADIUS, bottom: RADIUS, left: -RADIUS)
-      @slug = Pathname(slug)
+      @slug = Pathname("#{name}-#{state}")
 
-      @shapes = [
+      @states = [
         Circle.new(radius: RING_RADIUS, fill: ring_color, stroke: :none, stroke_width: 0),
         Circle.new(radius: BUTTON_RADIUS, fill: button_color, stroke: :none, stroke_width: 0),
       ]
     end
 
     def draw(canvas)
-      @shapes.each { |shape| shape.draw(canvas) }
+      @states.each { |state| state.draw(canvas) }
     end
   end
 end

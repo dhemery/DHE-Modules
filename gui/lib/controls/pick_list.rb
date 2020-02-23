@@ -2,14 +2,22 @@ require_relative '../dimensions'
 require_relative '../shapes/label'
 require_relative '../shapes/box'
 
-module PickList
+class PickList
+  attr_reader :options, :menu
 
-  class Item < Shape
+  def initialize(name:, text_color:, fill:, options:, width:)
+    @options = options.each_with_index.map do |option, index|
+      Option.new(name: name, position: index + 1, text: option, text_color: text_color, fill: fill, width: width)
+    end
+    @menu = Menu.new(name: name, color: text_color, width: width, height: @options[0].height * @options.size)
+  end
+
+  class Option < Shape
     STROKE_WIDTH = 0.25
     CORNER_RADIUS = STROKE_WIDTH * 2
     attr_reader :slug
 
-    def initialize(name:, text:, text_color:, fill:, width:, position:)
+    def initialize(name:, position:, text:, text_color:, fill:, width:)
       @slug = Pathname("#{name}-#{position}")
 
       label = Label.new(color: text_color, alignment: :center, size: :small, text: text)
