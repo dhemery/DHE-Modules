@@ -35,9 +35,9 @@ class ModuleFactory
     author_label = Label.new(text: 'DHE', size: :title, color: @foreground, alignment: :below)
                         .translate(width / 2, MODULE_HEIGHT - MODULE_LABEL_INSET)
     @faceplate_shapes.prepend(faceplate_background, module_label, author_label)
-    @faceplate_shape = CompositeShape.new(shapes: @faceplate_shapes)
+    @faceplate_shape = CompositeShape.new(@faceplate_shapes)
     @image_shapes.prepend(@faceplate_shape)
-    @image_shape = CompositeShape.new(shapes: @image_shapes)
+    @image_shape = CompositeShape.new(@image_shapes)
     self
   end
 
@@ -131,7 +131,7 @@ class ModuleFactory
   end
 
   def knob(x:, y:, size:, label:, label_size:)
-    knob = Knob.new(foreground: @foreground, background: @background, size: size)
+    knob = Knob.new(knob: @foreground, pointer: @background, size: size)
     @control_shapes << knob
 
     image_knob = knob.translate(x, y)

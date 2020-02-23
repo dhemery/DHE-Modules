@@ -98,7 +98,7 @@ class RoundShape < CenteredShape
 end
 
 class CompositeShape < BoundedShape
-  def initialize(shapes:)
+  def initialize(shapes)
     super(top: shapes.map(&:top).min,
           right: shapes.map(&:right).max,
           bottom: shapes.map(&:bottom).max,

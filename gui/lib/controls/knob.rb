@@ -1,3 +1,4 @@
+require_relative '../shapes/shape'
 require_relative '../shapes/circle'
 require_relative '../shapes/line'
 
@@ -6,7 +7,7 @@ class Knob < RoundShape
 
   attr_reader :slug
 
-  def initialize(size:, foreground:, background:)
+  def initialize(knob:, pointer:, size:)
     super(DIAMETERS[size])
     @slug = Pathname("knob-#{size}")
 
@@ -14,9 +15,10 @@ class Knob < RoundShape
     pointer_length = radius - pointer_width
 
     @shapes = [
-      Circle.new(radius: DIAMETERS[size] / 2.0, fill: foreground),
-      Line.new(y2: -pointer_length, width: pointer_width, stroke: background, cap: 'round'),
+      Circle.new(radius: DIAMETERS[size] / 2.0, fill: knob),
+      Line.new(y2: -pointer_length, width: pointer_width, stroke: pointer, cap: 'round'),
     ]
+
   end
 
   def draw(canvas)
