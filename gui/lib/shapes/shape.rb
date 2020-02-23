@@ -16,6 +16,10 @@ class Shape
     Translated.new(shape: self, dx: dx, dy: dy)
   end
 
+  def padded(all: 0.0, v: all, h: all, top: v, bottom: v, right: h, left: h)
+    Padded.new(shape: self, top: top, right: right, bottom: bottom, left: left)
+  end
+
   def has_text?
     false
   end
@@ -32,10 +36,6 @@ class CompositeShape < Shape
 
   def draw(canvas)
     @shapes.each { |shape| shape.draw(canvas) }
-  end
-
-  def has_text?
-
   end
 end
 
@@ -58,5 +58,23 @@ class Translated < Shape
     canvas.g(transform: "translate(#{@dx},#{@dy})") do |g|
       @shape.draw(g)
     end
+  end
+end
+
+class Padded < Shape
+  def initialize(shape:, top:, bottom:, right:, left:)
+    super(
+      x: shape.x,
+      y: shape.y,
+      top: shape.top - top,
+      right: shape.right + right,
+      bottom: shape.bottom + bottom,
+      left: shape.left - left
+    )
+    @shape = shape
+  end
+
+  def draw(canvas)
+    @shape.draw(canvas)
   end
 end

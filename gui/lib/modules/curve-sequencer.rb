@@ -25,7 +25,7 @@ end
 def position_marker(x:, y:, type:)
   marker = PositionMarker.new(type: type, color: @foreground)
   @control_shapes << marker
-  @image_shapes << marker.translate(x, y)
+  @image_shapes << marker.translated(x, y)
 end
 
 hp width_hp
