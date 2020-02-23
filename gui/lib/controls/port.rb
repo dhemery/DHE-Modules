@@ -2,22 +2,21 @@ require_relative '../shapes/circle'
 
 class Port < RoundShape
   DIAMETER = 8.4
-  STROKE_WIDTH = DIAMETER * 0.025
-  SLEEVE_DIAMETER = DIAMETER - STROKE_WIDTH
-  SLEEVE_RADIUS = SLEEVE_DIAMETER / 2
-  REDUCTION = SLEEVE_DIAMETER / 7
-  RING_RADIUS = SLEEVE_RADIUS - REDUCTION
-  TIP_RADIUS = RING_RADIUS - REDUCTION
+  SHADOW_THICKNESS = 0.45
+  METAL_THICKNESS = 0.95
+  SLEEVE_DIAMETER = DIAMETER - METAL_THICKNESS - SHADOW_THICKNESS
+  RING_DIAMETER = SLEEVE_DIAMETER - METAL_THICKNESS - METAL_THICKNESS - SHADOW_THICKNESS
 
   attr_reader :slug
 
-  def initialize(foreground:, background:)
+  def initialize(metal:, shadow:)
     super(DIAMETER)
     @slug = Pathname('port')
+
     @shapes = [
-      Circle.new(radius: SLEEVE_RADIUS, fill: background, stroke: foreground, stroke_width: STROKE_WIDTH),
-      Circle.new(radius: RING_RADIUS, fill: background, stroke: foreground, stroke_width: STROKE_WIDTH),
-      Circle.new(radius: TIP_RADIUS, fill: foreground, stroke: foreground, stroke_width: STROKE_WIDTH),
+      Circle.new(radius: radius, fill: shadow),
+      Circle.new(radius: SLEEVE_DIAMETER / 2.0, stroke: metal, stroke_width: METAL_THICKNESS),
+      Circle.new(radius: RING_DIAMETER / 2.0, stroke: metal, stroke_width: METAL_THICKNESS),
     ]
   end
 

@@ -70,7 +70,7 @@ class ModuleFactory
   end
 
   def port(x:, y:, label: '')
-    port = Port.new(foreground: @foreground, background: @background)
+    port = Port.new(metal: @background, shadow: @foreground)
     @control_shapes << port
 
     image_port = port.translate(x, y)
@@ -86,7 +86,7 @@ class ModuleFactory
   end
 
   def input_port(x:, y:, label: 'IN')
-    port = Port.new(foreground: @foreground, background: @background)
+    port = Port.new(metal: @background, shadow: @foreground)
     @control_shapes << port
 
     image_port = port.translate(x, y)
@@ -101,7 +101,7 @@ class ModuleFactory
   end
 
   def output_port(x:, y:, label: 'OUT')
-    port = Port.new(foreground: @foreground, background: @background)
+    port = Port.new(metal: @background, shadow: @foreground)
     @control_shapes << port
 
     image_port = port.translate(x, y)
@@ -208,7 +208,7 @@ class ModuleFactory
   end
 
   def input_button_port(x:, y:, label:)
-    port = Port.new(foreground: @foreground, background: @background)
+    port = Port.new(metal: @background, shadow: @foreground)
     pressed_button = Button.new(color: @background, ring: @foreground, state: :pressed)
     released_button = Button.new(color: @foreground, ring: @foreground, state: :released)
     @control_shapes.append(port, pressed_button, released_button)
@@ -226,7 +226,7 @@ class ModuleFactory
   end
 
   def output_button_port(x:, y:, label:)
-    port = Port.new(foreground: @foreground, background: @background)
+    port = Port.new(metal: @background, shadow: @foreground)
     pressed_button = Button.new(name: 'output-button', color: @foreground, ring: @background, state: :pressed)
     released_button = Button.new(name: 'output-button', color: @background, ring: @background, state: :released)
     @control_shapes.append(port, pressed_button, released_button)
