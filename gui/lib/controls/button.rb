@@ -2,22 +2,19 @@ require_relative '../shapes/circle'
 
 class Button < RoundShape
   DIAMETER = 6.0
-  HOUSING_THICKNESS = DIAMETER / 6.0
-  RADIUS = (DIAMETER - HOUSING_THICKNESS) / 2.0
+  RING_RADIUS = DIAMETER / 2.0
+  RING_THICKNESS = DIAMETER / 6.0
+  BUTTON_RADIUS = RING_RADIUS - RING_THICKNESS
 
   attr_reader :slug
 
-  def initialize(foreground:, background:, style: :normal, state:)
+  def initialize(color:, ring:, name: 'button', state:)
     super(DIAMETER)
-    style_slug = style == :reversed ? '-reversed' : ''
-    state_slug = state == :pressed ? '-2' : '-1'
-    @slug = Pathname("button#{style_slug}#{state_slug}")
-
-    foreground, background = background, foreground unless style == :normal
-    fill = state == :pressed ? background : foreground
+    @slug = Pathname("#{name}-#{state}")
 
     @shapes = [
-      Circle.new(radius: RADIUS, fill: fill, stroke: foreground, stroke_width: HOUSING_THICKNESS)
+      Circle.new(radius: RING_RADIUS, fill: ring),
+      Circle.new(radius: BUTTON_RADIUS, fill: color)
     ]
   end
 

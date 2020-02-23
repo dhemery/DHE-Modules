@@ -5,7 +5,7 @@ class Circle < RoundShape
     super(radius * 2 + stroke_width)
     @circle_attributes = {
       cx: 0,
-      xy: 0,
+      cy: 0,
       r: radius,
       fill: fill,
       stroke: stroke,
