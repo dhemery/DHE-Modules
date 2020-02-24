@@ -9,7 +9,7 @@ class PickList
     @options = options.each_with_index.map do |option, index|
       Option.new(name: name, position: index + 1, text: option, text_color: text_color, fill: fill, width: width)
     end
-    @menu = Menu.new(name: name, color: text_color, width: width, height: @options[0].height * @options.size)
+    @menu = Menu.new(name: name, color: text_color, example: @options[0], size: options.size)
   end
 
   def frames
@@ -24,12 +24,12 @@ class PickList
     def initialize(name:, position:, text:, text_color:, fill:, width:)
       @slug = Pathname("#{name}-#{position}")
 
-      label = Label.new(color: text_color, alignment: :center, size: :small, text: text)
-      height = label.height + 2 * PADDING
-      super(top: -height / 2.0, right: width / 2.0, bottom: height / 2.0, left: -width / 2.0)
+      label = Label.new(color: text_color, alignment: :center, size: :small, text: text, width: width)
+                   .padded(vertical: PADDING)
 
-      box = Box.centered(height: height - STROKE_WIDTH, width: width - STROKE_WIDTH,
-                         fill: fill, stroke: text_color, corner_radius: CORNER_RADIUS, stroke_width: STROKE_WIDTH)
+      box = Box.around(shapes: [label],
+                       fill: fill, stroke: text_color, corner_radius: CORNER_RADIUS, stroke_width: STROKE_WIDTH)
+      super(top: box.top, right: box.right, bottom: box.bottom, left: box.left)
       @shapes = [box, label]
     end
 
@@ -46,16 +46,18 @@ class PickList
     CORNER_RADIUS = 1.0
     attr_reader :slug
 
-    def initialize(name:, color:, width:, height:)
-      super(top: -height / 2.0, right: width / 2.0, bottom: height / 2.0, left: -width / 2.0)
+    def initialize(name:, color:, example:, size:)
       @slug = Pathname("#{name}-menu")
+      right = (example.width + PADDING) / 2.0
+      bottom = (example.height * size + PADDING) / 2.0
+      super(top: -bottom, right: right, bottom: bottom, left: -right)
 
-      @shapes = [
-        Box.new(top: top, right: right, bottom: bottom, left: left,
-                fill: color, corner_radius: CORNER_RADIUS,
-                stroke: :none, stroke_width: 0,
-        )
-      ]
+      box = Box.new(top: top, right: right, bottom: bottom, left: left,
+                    fill: color, corner_radius: CORNER_RADIUS,
+                    stroke: :none, stroke_width: 0)
+
+
+      @shapes = [box]
     end
 
     def draw(canvas)

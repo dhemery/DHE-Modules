@@ -43,8 +43,7 @@ class Label < Shape
   ASCENT_RATIO = 2.0 / 3.0 # Approximately correct for Proxima Nova font
   SIZES = { title: 12.0 / PX_PER_MM, large: 9.0 / PX_PER_MM, small: 7.0 / PX_PER_MM }
 
-  def initialize(text:, size:, color:, alignment: :above)
-    width = 0.1 # Ignore the actual width of the label for now
+  def initialize(text:, size:, color:, alignment: :above, width: 0.1)
     @text = text
     @text_attributes = {}
     font_size = SIZES[size.to_sym]

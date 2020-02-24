@@ -16,7 +16,8 @@ class Shape
     Translated.new(shape: self, dx: dx, dy: dy)
   end
 
-  def padded(all: 0.0, v: all, h: all, top: v, bottom: v, right: h, left: h)
+  def padded(all: 0.0, vertical: all, horizontal: all,
+             top: vertical, bottom: vertical, right: horizontal, left: horizontal)
     Padded.new(shape: self, top: top, right: right, bottom: bottom, left: left)
   end
 
