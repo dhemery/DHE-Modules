@@ -19,10 +19,13 @@ class Knob < Shape
       Circle.new(radius: radius, fill: knob_color, stroke: :none, stroke_width: 0),
       Line.new(x1: 0, y1: 0, x2: 0, y2: -pointer_length, width: pointer_width, stroke: pointer_color, cap: :round),
     ]
-
   end
 
   def draw(canvas)
     @shapes.each { |shape| shape.draw(canvas) }
+  end
+
+  def frames
+    [self]
   end
 end

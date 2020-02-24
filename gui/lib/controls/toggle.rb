@@ -11,6 +11,10 @@ class Toggle
     end
   end
 
+  def frames
+    states
+  end
+
   class State < Shape
     WIDTH = 3.0
     HOUSING_THICKNESS = WIDTH / 8.0

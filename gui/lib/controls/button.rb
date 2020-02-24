@@ -3,12 +3,15 @@ require_relative '../shapes/circle'
 class Button
   DIAMETER = 6.0
 
-  attr_reader :states, :pressed, :released
+  attr_reader :pressed, :released
 
   def initialize(name: 'button', pressed_color:, released_color:)
     @pressed = State.new(name: name, state: :pressed, button_color: pressed_color, ring_color: released_color)
     @released = State.new(name: name, state: :released, button_color: released_color, ring_color: released_color)
-    @states = [pressed, released]
+  end
+
+  def frames
+    [pressed, released]
   end
 
   class State < Shape
@@ -23,14 +26,14 @@ class Button
       super(top: -RADIUS, right: RADIUS, bottom: RADIUS, left: -RADIUS)
       @slug = Pathname("#{name}-#{state}")
 
-      @states = [
+      @shapes = [
         Circle.new(radius: RING_RADIUS, fill: ring_color, stroke: :none, stroke_width: 0),
         Circle.new(radius: BUTTON_RADIUS, fill: button_color, stroke: :none, stroke_width: 0),
       ]
     end
 
     def draw(canvas)
-      @states.each { |state| state.draw(canvas) }
+      @shapes.each { |state| state.draw(canvas) }
     end
   end
 end

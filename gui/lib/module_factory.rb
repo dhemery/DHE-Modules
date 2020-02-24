@@ -16,14 +16,14 @@ require_relative 'controls/toggle'
 class ModuleFactory
   MODULE_LABEL_INSET = 9.0
 
-  attr_reader :source_file, :width, :slug, :faceplate_shape, :image_shape, :control_shapes
+  attr_reader :source_file, :width, :slug, :faceplate_shape, :image_shape, :controls
 
   def initialize(source_file)
     @source_file = Pathname(source_file)
     @slug = Pathname(source_file.to_s.pathmap('%n'))
     @faceplate_shapes = []
     @image_shapes = []
-    @control_shapes = []
+    @controls = []
   end
 
   def build
@@ -71,15 +71,14 @@ class ModuleFactory
 
   def port(x:, y:, label: '')
     port = Port.new(metal_color: @background, shadow_color: @foreground)
+    @controls << port
 
     image_port = port.translated(x, y)
                      .padded(all: PADDING)
+    @image_shapes << image_port
 
     faceplate_label = Label.new(text: label, color: @foreground, size: :small)
                            .translated(image_port.x, image_port.top)
-
-    @control_shapes << port
-    @image_shapes << image_port
     @faceplate_shapes << faceplate_label
   end
 
@@ -89,7 +88,7 @@ class ModuleFactory
 
   def input_port(x:, y:, label: 'IN')
     port = Port.new(metal_color: @background, shadow_color: @foreground)
-    @control_shapes << port
+    @controls << port
 
     image_port = port.translated(x, y)
                      .padded(all: PADDING)
@@ -107,7 +106,7 @@ class ModuleFactory
 
   def output_port(x:, y:, label: 'OUT')
     port = Port.new(metal_color: @background, shadow_color: @foreground)
-    @control_shapes << port
+    @controls << port
 
     image_port = port.translated(x, y)
                      .padded(all: PADDING)
@@ -126,7 +125,7 @@ class ModuleFactory
 
   def knob(x:, y:, size:, label: nil, label_size:)
     knob = Knob.new(knob_color: @foreground, pointer_color: @background, size: size)
-    @control_shapes << knob
+    @controls << knob
 
     image_knob = knob.translated(x, y)
                      .padded(top: PADDING, right: 0.0, bottom: 0.0)
@@ -157,7 +156,7 @@ class ModuleFactory
 
   def toggle(x:, y:, labels:, selection:)
     toggle = Toggle::new(foreground: @foreground, background: @background, size: labels.size)
-    @control_shapes += toggle.states
+    @controls << toggle
 
     image_switch = toggle.states[selection - 1]
                          .translated(x, y)
@@ -191,8 +190,7 @@ class ModuleFactory
   def pick_list(x:, y:, name:, options:, selection: 1, width:, hidden: false)
     picklist = PickList.new(name: name, options: options, text_color: @foreground, fill: @background, width: width)
 
-    @control_shapes += picklist.options
-    @control_shapes << picklist.menu
+    @controls << picklist
 
     image_item = picklist.options[selection - 1]
                          .translated(x, y)
@@ -203,7 +201,7 @@ class ModuleFactory
 
   def button(x:, y:, label: nil, name: 'button')
     button = Button.new(name: name, pressed_color: @background, released_color: @foreground)
-    @control_shapes += button.states
+    @controls << button
 
     image_button = button.released
                          .translated(x, y)
@@ -219,10 +217,10 @@ class ModuleFactory
 
   def input_button_port(x:, y:, label:)
     port = Port.new(metal_color: @background, shadow_color: @foreground)
-    @control_shapes << port
+    @controls << port
 
     button = Button.new(pressed_color: @background, released_color: @foreground)
-    @control_shapes += button.states
+    @controls << button
 
     image_port = port.translated(x, y)
                      .padded(all: PADDING)
@@ -245,10 +243,10 @@ class ModuleFactory
 
   def output_button_port(x:, y:, label:)
     port = Port.new(metal_color: @background, shadow_color: @foreground)
-    @control_shapes << port
+    @controls << port
 
     button = Button.new(name: 'output-button', pressed_color: @foreground, released_color: @background)
-    @control_shapes += button.states
+    @controls << button
 
     image_port = port.translated(x, y)
                      .padded(all: PADDING)

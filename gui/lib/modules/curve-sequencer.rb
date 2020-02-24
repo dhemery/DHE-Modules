@@ -20,11 +20,15 @@ class PositionMarker < Shape
     canvas.line(x1: @outer, y1: TOP, x2: @inner, y2: TOP, 'stroke-width' => THICKNESS, 'stroke-linecap' => "square", stroke: @color)
     canvas.line(x1: @outer, y1: BOTTOM, x2: @inner, y2: BOTTOM, 'stroke-width' => THICKNESS, 'stroke-linecap' => "square", stroke: @color)
   end
+
+  def frames
+    [self]
+  end
 end
 
 def position_marker(x:, y:, type:)
   marker = PositionMarker.new(type: type, color: @foreground)
-  @control_shapes << marker
+  @controls << marker
   @image_shapes << marker.translated(x, y)
 end
 

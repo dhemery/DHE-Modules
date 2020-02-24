@@ -24,4 +24,8 @@ class Port < Shape
   def draw(canvas)
     @shapes.each { |shape| shape.draw(canvas) }
   end
+
+  def frames
+    [self]
+  end
 end

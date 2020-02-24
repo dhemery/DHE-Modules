@@ -26,7 +26,7 @@ directory svg_install_dir
 directory image_build_dir
 directory image_install_dir
 
-modules = FileList.new(modules_dir / '*.rb').map {|file| ModuleFactory.new(file).build}
+modules = FileList.new(modules_dir / '*.rb').map { |file| ModuleFactory.new(file).build }
 
 modules.each do |mod|
   module_source_file = mod.source_file
@@ -62,9 +62,11 @@ end
 controls_by_control_svg_path = {}
 
 modules.each do |mod|
-  mod.control_shapes.map do |shape|
-    control_svg_path = mod.slug / shape.slug.sub_ext('.svg')
-    controls_by_control_svg_path[control_svg_path] = {content: shape, source_file: mod.source_file}
+  mod.controls.each do |control|
+    control.frames.map do |frame|
+      control_svg_path = mod.slug / frame.slug.sub_ext('.svg')
+      controls_by_control_svg_path[control_svg_path] = { content: frame, source_file: mod.source_file }
+    end
   end
 end
 

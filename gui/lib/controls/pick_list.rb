@@ -12,6 +12,10 @@ class PickList
     @menu = Menu.new(name: name, color: text_color, width: width, height: @options[0].height * @options.size)
   end
 
+  def frames
+    options + [menu]
+  end
+
   class Option < Shape
     STROKE_WIDTH = 0.25
     CORNER_RADIUS = STROKE_WIDTH * 2
