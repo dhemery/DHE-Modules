@@ -12,7 +12,6 @@ include $(RACK_DIR)/plugin.mk
 
 
 
-
 ########################################################################
 #
 # Build and run the tests
@@ -27,8 +26,8 @@ TEST_SOURCES = $(wildcard \
 
 TEST_OBJECTS := $(patsubst %, build/%.o, $(TEST_SOURCES))
 
-TESTFLAGS += -Itest/ -I/dep/googletest/googletest/include/ -Idep/googletest/googlemock/include/
-TESTLDFLAGS += -Ldep/googletest/lib -lgmock_main -lgtest -lgmock
+TESTFLAGS += -Itest/ -Igoogletest/googletest/include/ -Igoogletest/googlemock/include/
+TESTLDFLAGS += -Lgoogletest/lib -lgmock_main -lgtest -lgmock
 
 ifdef ARCH_LIN
 	TESTLDFLAGS += -lpthread
@@ -41,12 +40,13 @@ TEST_RUNNER = build/test-runner
 $(TEST_RUNNER): $(TEST_OBJECTS)
 	$(CXX) -o $@ $^ $(TESTLDFLAGS)
 
-test: dist
-
 test: $(TEST_RUNNER)
 	$<
 
-.PHONY: test
+googletest:
+	cd googletest && cmake . && cmake --build .
+
+.PHONY: test googletest
 
 
 
