@@ -1,4 +1,7 @@
-include makefiles/file-definitions.mk
+DHE_SOURCE_FILES = $(wildcard src/*.cpp)
+DHE_INCLUDE_FLAGS = -Isrc
+
+DHE_DISTRIBUTABLES = LICENSE.txt presets svg
 
 FLAGS += $(DHE_INCLUDE_FLAGS)
 CFLAGS +=
@@ -15,34 +18,13 @@ include $(RACK_DIR)/plugin.mk
 
 ########################################################################
 #
-# Build and test the plugin via CMake and CTest
+# Stage the plugin and run Rack
 #
 ########################################################################
 
 DHE_STAGING_DIRNAME = .stage
 DHE_STAGING_DIRPATH = $(realpath .)/$(DHE_STAGING_DIRNAME)
-
 DHE_RACK_USER_DIRNAME = rack-user-dir
-
-DHE_CMAKE_OPTIONS += -DCMAKE_INSTALL_PREFIX=$(DHE_STAGING_DIRPATH)
-DHE_CMAKE_OPTIONS += -DRACK_STAGING_DIR=$(DHE_RACK_USER_DIRNAME)
-DHE_CMAKE_OPTIONS += -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
-
-DHE_CMAKE_BUILD_OPTIONS +=
-
-DHE_CTEST_OPTIONS += --progress
-DHE_CTEST_OPTIONS += --output-on-failure
-
-include makefiles/cmake-targets.mk
-
-
-
-
-########################################################################
-#
-# Stage the plugin and run Rack
-#
-########################################################################
 
 DHE_APP_DIRPATH ?= /Applications
 DHE_RACK_APP_DIRPATH = $(DHE_APP_DIRPATH)/Rack.app
