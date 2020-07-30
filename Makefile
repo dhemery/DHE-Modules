@@ -1,17 +1,52 @@
-DHE_SOURCE_FILES = $(wildcard src/*.cpp)
-DHE_INCLUDE_FLAGS = -Isrc
+RACK_DIR ?= ../..
 
-DHE_DISTRIBUTABLES = LICENSE.txt presets svg
-
-FLAGS += $(DHE_INCLUDE_FLAGS)
+FLAGS += -Isrc
 CFLAGS +=
 CXXFLAGS +=
 LDFLAGS +=
-SOURCES = $(DHE_SOURCE_FILES)
-DISTRIBUTABLES += $(DHE_DISTRIBUTABLES)
+SOURCES = $(wildcard src/*.cpp)
+DISTRIBUTABLES += LICENSE.txt presets svg
 
-RACK_DIR ?= ../..
 include $(RACK_DIR)/plugin.mk
+
+
+
+
+
+########################################################################
+#
+# Build and run the tests
+#
+########################################################################
+
+TEST_SOURCES = $(wildcard \
+ 						tests/*.cpp \
+ 						tests/*/*.cpp \
+ 						tests/*/*/*.cpp \
+ 						)
+
+TEST_OBJECTS := $(patsubst %, build/%.o, $(TEST_SOURCES))
+
+TESTFLAGS += -Itest/ -I/dep/googletest/googletest/include/ -Idep/googletest/googlemock/include/
+TESTLDFLAGS += -Ldep/googletest/lib -lgmock_main -lgtest -lgmock
+
+ifdef ARCH_LIN
+	TESTLDFLAGS += -lpthread
+endif
+
+$(TEST_OBJECTS): FLAGS += $(TESTFLAGS)
+
+TEST_RUNNER = build/test-runner
+
+$(TEST_RUNNER): $(TEST_OBJECTS)
+	$(CXX) -o $@ $^ $(TESTLDFLAGS)
+
+test: dist
+
+test: $(TEST_RUNNER)
+	$<
+
+.PHONY: test
 
 
 
@@ -22,28 +57,37 @@ include $(RACK_DIR)/plugin.mk
 #
 ########################################################################
 
-DHE_STAGING_DIRNAME = .stage
-DHE_STAGING_DIRPATH = $(realpath .)/$(DHE_STAGING_DIRNAME)
-DHE_RACK_USER_DIRNAME = rack-user-dir
+PLUGIN_ZIP_NAME = $(SLUG)-$(VERSION)-$(ARCH).zip
+DIST_PLUGIN_ZIP = dist/$(PLUGIN_ZIP_NAME)
 
-DHE_APP_DIRPATH ?= /Applications
-DHE_RACK_APP_DIRPATH = $(DHE_APP_DIRPATH)/Rack.app
-DHE_RACK_EXECUTABLE_PATH = $(DHE_RACK_APP_DIRPATH)/Contents/MacOS/Rack
-DHE_RACK_SYSTEM_DIRPATH = $(DHE_RACK_APP_DIRPATH)/Contents/Resources
-DHE_RACK_USER_DIRPATH = $(DHE_STAGING_DIRPATH)/$(DHE_RACK_USER_DIRNAME)
+STAGING_DIRNAME = .stage
+STAGING_DIR = $(realpath .)/$(STAGING_DIRNAME)
+STAGING_USER_DIRNAME = rack-user-dir
 
-stage: build
-	cmake --build $(DHE_BUILD_DIRNAME) --target install  $(DHE_CMAKE_BUILD_OPTIONS)
+STAGING_USER_DIR = $(STAGING_DIR)/$(STAGING_USER_DIRNAME)
+STAGING_PLUGIN_DIR = $(STAGING_USER_DIR)/plugins-v1
+STAGING_PLUGIN_ZIP = $(STAGING_PLUGIN_DIR)/$(PLUGIN_ZIP_NAME)
+
+APP_DIR ?= /Applications
+RACK_APP_DIR = $(APP_DIR)/Rack.app
+RACK_EXECUTABLE_PATH = $(RACK_APP_DIR)/Contents/MacOS/Rack
+RACK_SYSTEM_DIR = $(RACK_APP_DIR)/Contents/Resources
+
+$(STAGING_DIR) $(STAGING_PLUGIN_DIR):
+	mkdir -p $@
+
+stage: dist $(STAGING_PLUGIN_DIR)
+	cp $(DIST_PLUGIN_ZIP) $(STAGING_PLUGIN_DIR)
 
 clean-stage:
-	rm -rf $(DHE_STAGING_DIRNAME)
+	rm -rf $(STAGING_DIRNAME)
 
 run: stage
-	$(DHE_RACK_EXECUTABLE_PATH) -u $(DHE_RACK_USER_DIRPATH)
+	$(RACK_EXECUTABLE_PATH) -u $(STAGING_USER_DIR)
 
 clean: clean-stage
 
-.PHONY: debug run clean-stage
+.PHONY: run clean-stage
 
 
 
@@ -54,14 +98,16 @@ clean: clean-stage
 #
 ########################################################################
 
-DHE_TEST_SOURCE_FILES = $(wildcard tests/*.cpp tests/*/*.cpp tests/*/*/*.cpp)
-
-DHE_HEADER_FILES = $(wildcard src/*.h src/*/*.h src/*/*/*.h)
+HEADER_FILES = $(wildcard \
+					src/*.h \
+					src/*/*.h \
+					src/*/*/*.h \
+					)
 
 format:
-	clang-format -i -style=file $(DHE_HEADER_FILES) $(DHE_SOURCE_FILES) $(DHE_TEST_SOURCE_FILES)
+	clang-format -i -style=file $(HEADER_FILES) $(SOURCE_FILES) $(TEST_SOURCE_FILES)
 
 tidy: build
-	clang-tidy -header-filter=.* -p=$(DHE_BUILD_DIRNAME) $(DHE_SOURCE_FILES)
+	clang-tidy -header-filter=.* -p=$(BUILD_DIRNAME) $(SOURCE_FILES)
 
 .PHONY: format tidy
