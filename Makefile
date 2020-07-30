@@ -44,7 +44,7 @@ test: $(TEST_RUNNER)
 	$<
 
 googletest:
-	cd googletest && cmake . && cmake --build .
+	cd googletest && cmake . && cmake --build . && rm -rf googletest/generated
 
 .PHONY: test googletest
 
