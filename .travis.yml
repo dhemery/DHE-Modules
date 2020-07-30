@@ -12,7 +12,9 @@ before_install:
   - if [ "$TRAVIS_OS_NAME" = "windows" ]; then choco install make zip ; fi
 
 script:
+  - mkdir .rack
+  - curl -o .rack/sdk.zip https://vcvrack.com/downloads/Rack-SDK-1.1.6.zip
+  - unzip -d .rack .rack/sdk.zip
   - git submodule update --init --recursive
-  - make googletest
-  - make test
-  - make dist RACK_DIR=.build/_deps/racksdk-src
+  - make RACK_DIR=.rack/Rack-SDK googletest test dist
+  
