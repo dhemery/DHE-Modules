@@ -1,11 +1,16 @@
 language: cpp
 compiler: gcc
+env:
+  - RACK_DIR=.rack/Rack-SDK
 
 matrix:
   include:
     - os: linux
       dist: xenial
     - os: windows
+      env:
+        - PATH="/c/Program Files/CMake/bin:$PATH"
+        - CMAKE_GENERATOR="MSYS Makefiles"
 
 before_install:
   - if [ "$TRAVIS_OS_NAME" = "linux" ]; then sudo apt-get install -y libglu1-mesa-dev; fi
@@ -16,5 +21,6 @@ script:
   - curl -o .rack/sdk.zip https://vcvrack.com/downloads/Rack-SDK-1.1.6.zip
   - unzip -d .rack .rack/sdk.zip
   - git submodule update --init --recursive
-  - make RACK_DIR=.rack/Rack-SDK googletest test dist
-  
+  - make googletest
+  - make test
+  - make dist
