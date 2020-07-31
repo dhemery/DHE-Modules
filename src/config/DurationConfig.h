@@ -36,7 +36,7 @@ static inline void configDurationKnob(rack::engine::Module *module, int knobId,
                                       std::function<Range const *()> const &rangeSupplier, std::string const &name,
                                       float initialPosition) {
   module->configParam<DurationKnobParamQuantity>(knobId, 0.F, 1.F, initialPosition, name, " s");
-  auto knobParamQuantity = dynamic_cast<DurationKnobParamQuantity *>(module->paramQuantities[knobId]);
+  auto *knobParamQuantity = dynamic_cast<DurationKnobParamQuantity *>(module->paramQuantities[knobId]);
   knobParamQuantity->setRangeSupplier(rangeSupplier);
 }
 

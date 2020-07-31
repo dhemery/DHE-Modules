@@ -33,7 +33,7 @@ namespace xycloid {
     auto getDisplayValue() -> float override { return ratio(module, getValue()); }
 
     void setDisplayValue(float bounceRatio) override {
-      auto const range = ratioRange(module);
+      const auto *const range = ratioRange(module);
       auto const rotation = range->normalize(bounceRatio);
       setValue(rotation);
     }

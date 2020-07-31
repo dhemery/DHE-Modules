@@ -188,7 +188,7 @@ namespace curve_sequencer {
       addParam(Toggle::stepper(3, slug, module, right, durationY, Controls::DurationRangeSwitch));
       addOutput(Jack::output(slug, module, right, outY, Controls::CurveSequencerOutput));
 
-      for (auto popupMenu : popupMenus) {
+      for (auto *popupMenu : popupMenus) {
         addChild(popupMenu);
       }
     }

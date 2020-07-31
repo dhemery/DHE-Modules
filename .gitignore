@@ -1,8 +1,6 @@
 /.idea/workspace.xml
-
-/.build/
 /.stage/
-
 /build/
 /dist/
 /*.dylib
+/compile_commands.json

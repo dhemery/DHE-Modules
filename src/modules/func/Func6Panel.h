@@ -68,7 +68,7 @@ namespace func {
         addParam(new OperatorSwitch{updateRangePickList, slug, module, column2, y, Controls::OperationSwitch + row});
       }
 
-      for (auto popupMenu : popupMenus) {
+      for (auto *popupMenu : popupMenus) {
         addChild(popupMenu);
       }
     }

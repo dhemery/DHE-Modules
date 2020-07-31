@@ -12,6 +12,13 @@ include $(RACK_DIR)/plugin.mk
 
 
 
+# Above this line: Standard plugin build configuration
+########################################################################
+# Below this line: Special configuration and targets for Dale
+
+
+
+
 ########################################################################
 #
 # Build and run the tests
@@ -19,10 +26,10 @@ include $(RACK_DIR)/plugin.mk
 ########################################################################
 
 TEST_SOURCES = $(wildcard \
- 						tests/*.cpp \
- 						tests/*/*.cpp \
- 						tests/*/*/*.cpp \
- 						)
+		tests/*.cpp \
+		tests/*/*.cpp \
+		tests/*/*/*.cpp \
+		)
 
 TEST_OBJECTS := $(patsubst %, build/%.o, $(TEST_SOURCES))
 
@@ -98,16 +105,32 @@ clean: clean-stage
 #
 ########################################################################
 
-HEADER_FILES = $(wildcard \
-					src/*.h \
-					src/*/*.h \
-					src/*/*/*.h \
-					)
+COMPILATION_DATABASE_FILE = compile_commands.json
+
+COMPILATION_DATABASE_JSONS := $(patsubst %, build/%.json, $(SOURCES))
+
+build/src/%.json: src/%
+	@mkdir -p $(@D)
+	$(CXX) $(CXXFLAGS) -MJ $@ -c -o build/$^.o $^
+
+$(COMPILATION_DATABASE_FILE): $(COMPILATION_DATABASE_JSONS)
+	sed -e '1s/^/[/' -e '$$s/,$$/]/' $^ | json_pp > $@
+
+HEADERS = $(wildcard \
+		src/*.h \
+		src/*/*.h \
+		src/*/*/*.h \
+		)
 
 format:
-	clang-format -i -style=file $(HEADER_FILES) $(SOURCE_FILES) $(TEST_SOURCE_FILES)
+	clang-format -i -style=file $(HEADERS) $(SOURCES) $(TEST_SOURCES)
 
-tidy: build
-	clang-tidy -header-filter=.* -p=$(BUILD_DIRNAME) $(SOURCE_FILES)
+tidy: $(COMPILATION_DATABASE_FILE)
+	clang-tidy -header-filter=src/.* -p=build $(SOURCES)
 
-.PHONY: format tidy
+cleancdb:
+	rm -rf $(COMPILATION_DATABASE_FILE) $(COMPILATION_DATABASE_JSONS)
+
+clean: cleancdb
+
+.PHONY: format tidy cleancdb

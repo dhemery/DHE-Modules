@@ -33,7 +33,7 @@ namespace swave {
     auto signalIn() const -> float { return voltageAt(inputs[Controls::SwaveInput]); }
 
     auto taper(float input) const -> float {
-      auto const taper = selectedTaper(params[Controls::ShapeSwitch]);
+      auto const *const taper = selectedTaper(params[Controls::ShapeSwitch]);
       return taper->apply(
           input, curvature(params[Controls::CurveKnob], inputs[Controls::CurveCvInput], params[Controls::CurveAvKnob]));
     }
