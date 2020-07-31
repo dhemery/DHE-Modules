@@ -1,19 +1,50 @@
 language: cpp
 compiler: gcc
 
+script:
+  - export RACK_DIR=.build/_deps/racksdk-src
+  - make -f makefiles/travis.mk test
+  - make dist
+
 matrix:
   include:
     - os: linux
       dist: xenial
     - os: windows
-      env:
-      - PATH="/c/Program Files/CMake/bin:$PATH"
-      - CMAKE_GENERATOR="MSYS Makefiles"
 
 before_install:
-  - if [ "$TRAVIS_OS_NAME" = "linux" ]; then sudo apt-get install -y libglu1-mesa-dev; fi
-  - if [ "$TRAVIS_OS_NAME" = "windows" ]; then choco install make zip ; fi
+  - |-
+    case $TRAVIS_OS_NAME in
+      linux)
+        sudo apt-get install -y libglu1-mesa-dev
+        ;;
+      windows)
+        [[ ! -f C:/tools/msys64/msys2_shell.cmd ]] && rm -rf C:/tools/msys64
+        choco uninstall -y mingw
+        choco upgrade --no-progress -y msys2
+        choco install cmake make zip -y
+        export msys2='cmd //C RefreshEnv.cmd '
+        export msys2+='& set MSYS=winsymlinks:nativestrict '
+        export msys2+='& C:\\tools\\msys64\\msys2_shell.cmd -defterm -no-start'
+        export mingw64="$msys2 -mingw64 -full-path -here -c "\"\$@"\" --"
+        export msys2+=" -msys2 -c "\"\$@"\" --"
+        $msys2 pacman --sync --noconfirm --needed mingw-w64-x86_64-toolchain
+        taskkill //IM gpg-agent.exe //F  # https://travis-ci.community/t/4967
+        export PATH=/C/tools/msys64/mingw64/bin:$PATH
+        export CMAKE_GENERATOR="MinGW Makefiles"
+        ;;
+    esac
 
-script:
-- make -f makefiles/travis.mk test
-- make dist RACK_DIR=.build/_deps/racksdk-src
+before_cache:
+  - |-
+    case $TRAVIS_OS_NAME in
+      windows)
+        # https://unix.stackexchange.com/a/137322/107554
+        $msys2 pacman --sync --clean --noconfirm
+        ;;
+    esac
+
+cache:
+  directories:
+    - $HOME/AppData/Local/Temp/chocolatey
+    - /C/tools/msys64

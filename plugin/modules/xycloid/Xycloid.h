@@ -19,7 +19,6 @@ namespace xycloid {
 
   class Xycloid : public rack::engine::Module {
     using Controls = XycloidControls;
-    static auto constexpr wobbleDepthRange = Range{0.F, 1.F};
 
   public:
     Xycloid() {
@@ -47,7 +46,7 @@ namespace xycloid {
       configLevelRangeSwitch(this, Controls::YRangeSwitch, "Y range", 0);
     }
 
-    void process(ProcessArgs const &args) {
+    void process(ProcessArgs const &args) override {
       auto const wobbleRatio = ratio();
       auto const wobblePhaseOffset = wobbleRatio < 0.F ? -phase() : phase();
 
@@ -79,6 +78,7 @@ namespace xycloid {
     auto yOffset() const -> float { return isPressed(params[Controls::YRangeSwitch]) ? 1.F : 0.F; }
 
     auto depth() const -> float {
+      static auto constexpr wobbleDepthRange = Range{0.F, 1.F};
       return wobbleDepthRange.clamp(
           rotation(params[Controls::DepthKnob], inputs[Controls::DepthCvInput], params[Controls::DepthAvKnob]));
     }

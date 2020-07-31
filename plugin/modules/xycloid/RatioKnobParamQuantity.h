@@ -33,13 +33,13 @@ namespace xycloid {
     auto getDisplayValue() -> float override { return ratio(module, getValue()); }
 
     void setDisplayValue(float bounceRatio) override {
-      auto const range = ratioRange(module);
+      const auto *const range = ratioRange(module);
       auto const rotation = range->normalize(bounceRatio);
       setValue(rotation);
     }
   };
 
-  void configRatioKnob(rack::engine::Module *module, int knobId) {
+  inline void configRatioKnob(rack::engine::Module *module, int knobId) {
     module->configParam<RatioKnobParamQuantity>(knobId, 0.F, 1.F, centeredRotation, "Ratio", "x");
   }
 
