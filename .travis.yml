@@ -1,14 +1,16 @@
 language: cpp
 compiler: gcc
 env:
-  - RACK_DIR=.rack/Rack-SDK
 
 matrix:
   include:
     - os: linux
       dist: xenial
+      env:
+        - RACK_DIR=".rack/Rack-SDK"
     - os: windows
       env:
+        - RACK_DIR=".rack/Rack-SDK"
         - PATH="/c/Program Files/CMake/bin:$PATH"
         - CMAKE_GENERATOR="MSYS Makefiles"
 
