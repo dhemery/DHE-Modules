@@ -5,61 +5,60 @@
 #include "fake/FakeStepController.h"
 #include "fake/FakeStepSelector.h"
 
-#include <functional>
-
 using dhe::curve_sequencer::CurveSequencer;
 
-namespace curvesequencertest {
+namespace curve_sequencer_test {
 
-template <typename T> auto returns(T t) -> std::function<T()> {
-  return [t]() -> T { return t; };
-}
-
-TEST_SUITE("CurveSequencer") {
+TEST_CASE("CurveSequencer") {
   fake::Controls controls{};
   fake::StepSelector stepSelector{};
   fake::StepController stepController{};
   CurveSequencer<fake::Controls, fake::StepSelector, fake::StepController> curveSequencer{controls, stepSelector,
                                                                                           stepController};
-  TEST_CASE("when paused and idle") {
-    controls.inputFunc = returns(0.F);
-    controls.isGatedFunc = returns(false);
-    controls.isLoopingFunc = returns(false);
-    controls.isResetFunc = returns(false);
-    controls.isRunningFunc = returns(false);
-    curveSequencer.execute(0.1F);
+  controls.inputFunc = []()->float { return 0.F; };
+  controls.isGatedFunc = []()->bool { return false; };
+  controls.isLoopingFunc = []()->bool { return false; };
+  controls.isResetFunc = []()->bool { return false; };
+  controls.isRunningFunc = []()->bool { return false; };
 
-    SUBCASE("reset low does nothing") {
-      controls.isResetFunc = returns(false);
-      curveSequencer.execute(0.1F); // Will throw if any commands are called
-    }
+  SUBCASE("when paused") {
+    REQUIRE_FALSE(controls.isRunning());
 
-    SUBCASE("reset rise does nothing") {
-      controls.isResetFunc = returns(true);
-      curveSequencer.execute(0.1F); // Will throw if any commands are called
-    }
+    SUBCASE("and idle") {
+      curveSequencer.execute(0.1F);
+      // TODO: How to assert that the sequencer is idle?
 
-    SUBCASE("gate low does nothing") {
-      controls.isGatedFunc = returns(false);
-      curveSequencer.execute(0.1F); // Will throw if any commands are called
-    }
+      SUBCASE("reset low does nothing") {
+        controls.isResetFunc = []()->bool { return false; };
+        curveSequencer.execute(0.1F); // Will throw if any commands are called
+      }
 
-    SUBCASE("gate rise does nothing") {
-      controls.isGatedFunc = returns(true);
-      curveSequencer.execute(0.1F); // Will throw if any commands are called
+      SUBCASE("reset rise does nothing") {
+        controls.isResetFunc = []()->bool { return true; };
+        curveSequencer.execute(0.1F); // Will throw if any commands are called
+      }
+
+      SUBCASE("gate low does nothing") {
+        controls.isGatedFunc = []()->bool { return false; };
+        curveSequencer.execute(0.1F); // Will throw if any commands are called
+      }
+
+      SUBCASE("gate rise does nothing") {
+        controls.isGatedFunc = []()->bool { return true; };
+        curveSequencer.execute(0.1F); // Will throw if any commands are called
+      }
     }
+  }
+
+  SUBCASE("when running") {
+    controls.isRunningFunc = []()->bool { return false; };
+
+    SUBCASE("and idle") { curveSequencer.execute(0.1F); }
   }
 }
 
 /*
 // TODO: Test that a curve sequencer is initially idle
-
-class RunningIdleCurveSequencer : public CurveSequencerTest {
-  void SetUp() override {
-    CurveSequencerTest::SetUp();
-    givenRun(true);
-  }
-};
 
 TEST_F(RunningIdleCurveSequencer, resetHigh_copiesInputVoltageToOutput) {
   givenReset(true);
@@ -258,4 +257,4 @@ TEST_F(PausedActiveCurveSequencer, resetRise_exitsActiveStep_andDoesNothingElse)
   curveSequencer.execute(0.123F);
 }
 */
-} // namespace curvesequencertest
+} // namespace curve_sequencer_test

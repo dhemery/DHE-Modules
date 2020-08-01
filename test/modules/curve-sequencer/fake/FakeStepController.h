@@ -5,7 +5,7 @@
 
 #include <functional>
 
-namespace curvesequencertest {
+namespace curve_sequencer_test {
 namespace fake {
   using dhe::curve_sequencer::StepEvent;
   using dhe::Latch;

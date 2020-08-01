@@ -8,7 +8,7 @@
 
 #include "doctest/doctest.h"
 
-namespace curvesequencercontrolstest {
+namespace curve_sequencer_controls_test {
 
 TEST_SUITE("CurveSequencerControls") {
   static auto constexpr stepCount{8};

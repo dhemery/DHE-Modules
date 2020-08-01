@@ -2,7 +2,7 @@
 
 #include <functional>
 
-namespace curvesequencertest {
+namespace curve_sequencer_test {
 namespace fake {
   struct Controls {
     std::function<float()> inputFunc;

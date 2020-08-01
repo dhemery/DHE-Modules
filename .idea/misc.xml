@@ -5,7 +5,7 @@
     <option name="linkedExternalProjectsSettings">
       <MakefileProjectSettings>
         <option name="analyzerType" value="OUTPUT_PARSING" />
-        <option name="buildOptions" value="RACK_DIR=/Users/Dale/.rack/sdk/1.1.6" />
+        <option name="buildOptions" value="" />
         <option name="buildTarget" value="all test doctest" />
         <option name="cleanTarget" value="clean" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />

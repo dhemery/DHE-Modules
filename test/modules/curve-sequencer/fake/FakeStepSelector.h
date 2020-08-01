@@ -2,7 +2,7 @@
 
 #include <functional>
 
-namespace curvesequencertest {
+namespace curve_sequencer_test {
 namespace fake {
   struct StepSelector {
     std::function<int()> firstFunc;
