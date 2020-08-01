@@ -62,7 +62,7 @@ DOCTEST_SOURCES = $(wildcard \
 		)
 
 DOCTEST_OBJECTS := $(patsubst %, build/%.o, $(DOCTEST_SOURCES))
-DOCTEST_FLAGS += -Itest/include
+DOCTEST_FLAGS += -Itest
 
 DOCTEST_RUNNER = build/doctest
 

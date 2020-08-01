@@ -1,67 +1,66 @@
 #include "components/PhaseTimer.h"
 
-#include <doctest.h>
+#include <doctest/doctest.h>
 
 using dhe::PhaseTimer;
 
-/*
-TEST(PhaseTimerTest, startsAtPhase0ByDefault) {
-  PhaseTimer timer{};
+TEST_CASE("phase timer") {
+  SUBCASE("default") {
+    PhaseTimer timer{};
+    SUBCASE("phase is 0") { CHECK(timer.phase() == 0.F); }
 
-  EXPECT_EQ(timer.phase(), 0.F);
+    SUBCASE("is in progress") { CHECK(timer.inProgress()); }
+  }
+
+  SUBCASE("advance") {
+    PhaseTimer timer{};
+    SUBCASE("adds delta to phase") {
+      timer.advance(0.38F);
+
+      CHECK_EQ(timer.phase(), 0.38F);
+
+      timer.advance(0.19F);
+
+      CHECK_EQ(timer.phase(), 0.57F);
+    }
+  }
+
+  SUBCASE("in progress") {
+    SUBCASE("true if phase is less than 1") {
+      PhaseTimer timer{0.9999F};
+
+      CHECK(timer.inProgress());
+    }
+    SUBCASE("false if phase is at least 1") {
+      PhaseTimer timer{1.F};
+
+      CHECK_FALSE(timer.inProgress());
+    }
+  }
+
+  SUBCASE("maximum phase is 1") {
+    PhaseTimer timer{1234.56789F};
+    CHECK_EQ(timer.phase(), 1.F);
+
+    timer.advance(1234.56789F);
+    CHECK_EQ(timer.phase(), 1.F);
+  }
+
+  SUBCASE("reset") {
+    SUBCASE("sets phase to 0") {
+      PhaseTimer timer{0.74F};
+
+      timer.reset();
+
+      CHECK_EQ(timer.phase(), 0.F);
+    }
+
+    SUBCASE("leaves timer in progress") {
+      PhaseTimer timer{1.F};
+
+      timer.reset();
+
+      CHECK(timer.inProgress());
+    }
+  }
 }
-
-TEST(PhaseTimerTest, startsInProgressByDefault) {
-  PhaseTimer timer{};
-
-  EXPECT_TRUE(timer.inProgress());
-}
-
-TEST(PhaseTimerTest, advance_addsDeltaToPhase) {
-  PhaseTimer timer{};
-
-  timer.advance(0.38F);
-
-  EXPECT_EQ(timer.phase(), 0.38F);
-
-  timer.advance(0.19F);
-
-  EXPECT_EQ(timer.phase(), 0.57F);
-}
-
-TEST(PhaseTimerTest, isInProgress_ifPhaseIsLessThanOne) {
-  PhaseTimer timer{0.9999F};
-
-  EXPECT_TRUE(timer.inProgress());
-}
-
-TEST(PhaseTimerTest, isNotInProgress_ifPhaseIsAtLeastOne) {
-  PhaseTimer timer{1.F};
-
-  EXPECT_FALSE(timer.inProgress());
-}
-
-TEST(PhaseTimerTest, maximumPhaseIsOne) {
-  PhaseTimer timer{1234.56789F};
-  EXPECT_EQ(timer.phase(), 1.F);
-
-  timer.advance(1234.56789F);
-  EXPECT_EQ(timer.phase(), 1.F);
-}
-
-TEST(PhaseTimerTest, phaseIsZero_afterReset) {
-  PhaseTimer timer{0.74F};
-
-  timer.reset();
-
-  EXPECT_EQ(timer.phase(), 0.F);
-}
-
-TEST(PhaseTimerTest, isInProgress_afterReset) {
-  PhaseTimer timer{1.F};
-
-  timer.reset();
-
-  EXPECT_TRUE(timer.inProgress());
-}
-*/
