@@ -1,110 +1,58 @@
 #include "modules/curve-sequencer/CurveSequencer.h"
 
-#include "components/Latch.h"
-#include "modules/curve-sequencer/StepEvent.h"
+#include "doctest/doctest.h"
+#include "fake/FakeControls.h"
+#include "fake/FakeStepController.h"
+#include "fake/FakeStepSelector.h"
 
-#include <gmock/gmock-actions.h>
-#include <gmock/gmock.h>
-#include <gtest/gtest.h>
+#include <functional>
 
-using dhe::Latch;
 using dhe::curve_sequencer::CurveSequencer;
-using dhe::curve_sequencer::StepEvent;
-using ::testing::A;
-using ::testing::An;
-using ::testing::NiceMock;
-using ::testing::Return;
 
-class CurveSequencerTest : public ::testing::Test {
-protected:
-  struct MockControls {
-    MOCK_METHOD(float, input, (), (const));
-    MOCK_METHOD(bool, isGated, (), (const));
-    MOCK_METHOD(bool, isLooping, (), (const));
-    MOCK_METHOD(bool, isReset, (), (const));
-    MOCK_METHOD(bool, isRunning, (), (const));
-    MOCK_METHOD(void, output, (float) );
-  };
+namespace curvesequencertest {
 
-  struct MockStepSelector {
-    MOCK_METHOD(int, first, (), (const));
-    MOCK_METHOD(int, successor, (int, bool), (const));
-  };
+template <typename T> auto returns(T t) -> std::function<T()> {
+  return [t]() -> T { return t; };
+}
 
-  struct MockStepController {
-    MOCK_METHOD(void, enter, (int) );
-    MOCK_METHOD(StepEvent, execute, (Latch const &, float) );
-    MOCK_METHOD(void, exit, ());
-  };
+TEST_SUITE("CurveSequencer") {
+  fake::Controls controls{};
+  fake::StepSelector stepSelector{};
+  fake::StepController stepController{};
+  CurveSequencer<fake::Controls, fake::StepSelector, fake::StepController> curveSequencer{controls, stepSelector,
+                                                                                          stepController};
+  TEST_CASE("when paused and idle") {
+    controls.inputFunc = returns(0.F);
+    controls.isGatedFunc = returns(false);
+    controls.isLoopingFunc = returns(false);
+    controls.isResetFunc = returns(false);
+    controls.isRunningFunc = returns(false);
+    curveSequencer.execute(0.1F);
 
-  NiceMock<MockControls> controls{};
-  NiceMock<MockStepSelector> stepSelector{};
-  NiceMock<MockStepController> stepController{};
-  CurveSequencer<MockControls, MockStepSelector, MockStepController> curveSequencer{controls, stepSelector,
-                                                                                    stepController};
+    SUBCASE("reset low does nothing") {
+      controls.isResetFunc = returns(false);
+      curveSequencer.execute(0.1F); // Will throw if any commands are called
+    }
 
-  void givenGate(bool state) { ON_CALL(controls, isGated()).WillByDefault(Return(state)); }
-  void givenInput(float input) { ON_CALL(controls, input()).WillByDefault(Return(input)); }
-  void givenLooping(bool state) { ON_CALL(controls, isLooping()).WillByDefault(Return(state)); }
-  void givenReset(bool state) { ON_CALL(controls, isReset()).WillByDefault(Return(state)); }
-  void givenRun(bool state) { ON_CALL(controls, isRunning()).WillByDefault(Return(state)); }
+    SUBCASE("reset rise does nothing") {
+      controls.isResetFunc = returns(true);
+      curveSequencer.execute(0.1F); // Will throw if any commands are called
+    }
 
-  void expectNoControlsCommands() { EXPECT_CALL(controls, output(A<float>())).Times(0); }
+    SUBCASE("gate low does nothing") {
+      controls.isGatedFunc = returns(false);
+      curveSequencer.execute(0.1F); // Will throw if any commands are called
+    }
 
-  void expectNoStepCommands() {
-    EXPECT_CALL(stepController, enter(An<int>())).Times(0);
-    EXPECT_CALL(stepController, execute(A<Latch const &>(), A<float>())).Times(0);
-    EXPECT_CALL(stepController, exit()).Times(0);
+    SUBCASE("gate rise does nothing") {
+      controls.isGatedFunc = returns(true);
+      curveSequencer.execute(0.1F); // Will throw if any commands are called
+    }
   }
+}
 
-  void expectNoCommands() {
-    expectNoControlsCommands();
-    expectNoStepCommands();
-  }
-
-  void SetUp() override { ::testing::Test::SetUp(); }
-};
-
+/*
 // TODO: Test that a curve sequencer is initially idle
-
-class PausedIdleCurveSequencer : public CurveSequencerTest {
-  void SetUp() override {
-    CurveSequencerTest::SetUp();
-    givenRun(false);
-  }
-};
-
-TEST_F(PausedIdleCurveSequencer, resetLow_doesNothing) {
-  givenReset(false);
-
-  expectNoCommands();
-
-  curveSequencer.execute(0.F);
-}
-
-TEST_F(PausedIdleCurveSequencer, resetHigh_doesNothing) {
-  givenReset(true);
-
-  expectNoCommands();
-
-  curveSequencer.execute(0.123F);
-}
-
-TEST_F(PausedIdleCurveSequencer, gateLow_doesNothing) {
-  givenGate(false);
-
-  expectNoCommands();
-
-  curveSequencer.execute(0.1F);
-}
-
-TEST_F(PausedIdleCurveSequencer, gateRise_doesNothing) {
-  givenGate(true);
-
-  expectNoCommands();
-
-  curveSequencer.execute(0.1F);
-}
 
 class RunningIdleCurveSequencer : public CurveSequencerTest {
   void SetUp() override {
@@ -309,3 +257,5 @@ TEST_F(PausedActiveCurveSequencer, resetRise_exitsActiveStep_andDoesNothingElse)
 
   curveSequencer.execute(0.123F);
 }
+*/
+} // namespace curvesequencertest
