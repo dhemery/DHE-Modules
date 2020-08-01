@@ -2,14 +2,11 @@
 
 #include <functional>
 
-namespace curve_sequencer_test {
-namespace fake {
-  struct StepSelector {
-    std::function<int()> firstFunc;
-    std::function<int(int, bool)> successorFunc;
-
-    auto first() const -> int { return firstFunc(); }
-    auto successor(int step, bool looping) const -> int { return successorFunc(step, looping); }
+namespace test {
+namespace curve_sequencer {
+  struct FakeStepSelector {
+    std::function<int()> first;
+    std::function<int(int, bool)> successor;
   };
-} // namespace fake
-} // namespace curvesequencer
+} // namespace curve_sequencer
+} // namespace test

@@ -5,19 +5,15 @@
 
 #include <functional>
 
-namespace curve_sequencer_test {
-namespace fake {
-  using dhe::curve_sequencer::StepEvent;
+namespace test {
+namespace curve_sequencer {
   using dhe::Latch;
+  using dhe::curve_sequencer::StepEvent;
 
-  struct StepController {
-    std::function<void(int)> enterFunc;
-    std::function<StepEvent(Latch const &, float)> executeFunc;
-    std::function<void()> exitFunc;
-
-    void enter(int step) { return enterFunc(step); }
-    auto execute(Latch const &latch, float f) -> StepEvent { return executeFunc(latch, f); }
-    void exit() { return exitFunc(); }
+  struct FakeStepController {
+    std::function<void(int)> enter;
+    std::function<StepEvent(Latch const &, float)> execute;
+    std::function<void()> exit;
   };
-} // namespace fake
-} // namespace curvesequencertest
+} // namespace curve_sequencer
+} // namespace test

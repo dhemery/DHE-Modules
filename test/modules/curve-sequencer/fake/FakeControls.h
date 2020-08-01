@@ -2,28 +2,17 @@
 
 #include <functional>
 
-namespace curve_sequencer_test {
-namespace fake {
-  struct Controls {
-    std::function<float()> inputFunc;
-    std::function<bool()> isGatedFunc;
-    std::function<bool()> isLoopingFunc;
-    std::function<bool()> isResetFunc;
-    std::function<bool()> isRunningFunc;
-    std::function<void(float)> outputFunc;
+namespace test {
 
-    auto input() const -> float { return inputFunc(); }
-
-    auto isGated() const -> bool { return isGatedFunc(); }
-
-    auto isLooping() const -> bool { return isLoopingFunc(); }
-
-    auto isReset() const -> bool { return isResetFunc(); }
-
-    auto isRunning() const -> bool { return isRunningFunc(); }
-
-    void output(float voltage) { outputFunc(voltage); }
+namespace curve_sequencer {
+  struct FakeControls {
+    std::function<float()> input;
+    std::function<bool()> isGated;
+    std::function<bool()> isLooping;
+    std::function<bool()> isReset;
+    std::function<bool()> isRunning;
+    std::function<void(float)> output;
   };
 
-} // namespace fake
-} // namespace curvesequencer
+} // namespace curve_sequencer
+} // namespace test

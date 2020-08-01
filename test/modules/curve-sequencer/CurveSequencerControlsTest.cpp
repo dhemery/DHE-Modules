@@ -8,7 +8,9 @@
 
 #include "doctest/doctest.h"
 
-namespace curve_sequencer_controls_test {
+namespace test {
+
+namespace curve_sequencer_controls {
 
 TEST_SUITE("CurveSequencerControls") {
   static auto constexpr stepCount{8};
@@ -256,5 +258,6 @@ TEST_SUITE("CurveSequencerControls") {
     CHECK_EQ(lights[Controls::ProgressLights + completedProgressLightIndex].getBrightness(), 0.F);
     CHECK_EQ(lights[Controls::ProgressLights + remainingProgressLightIndex].getBrightness(), 0.F);
   }
+}
 }
 }
