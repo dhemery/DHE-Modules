@@ -5,7 +5,7 @@
     <option name="linkedExternalProjectsSettings">
       <MakefileProjectSettings>
         <option name="analyzerType" value="OUTPUT_PARSING" />
-        <option name="buildOptions" value="" />
+        <option name="buildOptions" value="RACK_DIR=/Users/Dale/.rack/sdk/1.1.6" />
         <option name="buildTarget" value="all test doctest" />
         <option name="cleanTarget" value="clean" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
@@ -14,7 +14,7 @@
             <option value="$PROJECT_DIR$" />
           </set>
         </option>
-        <option name="switches" value="RACK_DIR=/Users/Dale/.rack/sdk/1.1.6 --just-print --print-directory --keep-going" />
+        <option name="switches" value="--just-print --print-directory --keep-going " />
       </MakefileProjectSettings>
     </option>
   </component>
