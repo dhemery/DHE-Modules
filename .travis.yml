@@ -25,4 +25,5 @@ script:
   - git submodule update --init --recursive
   - make googletest
   - make test
+  - make doctest
   - make dist

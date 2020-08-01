@@ -6,7 +6,7 @@
       <MakefileProjectSettings>
         <option name="analyzerType" value="OUTPUT_PARSING" />
         <option name="buildOptions" value="" />
-        <option name="buildTarget" value="all test" />
+        <option name="buildTarget" value="all test doctest" />
         <option name="cleanTarget" value="clean" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
         <option name="modules">
