@@ -1,4 +1,5 @@
 #include "controls/DurationInputs.h"
+
 #include "doctest/doctest.h"
 
 namespace dhe {

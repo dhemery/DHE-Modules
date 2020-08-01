@@ -1,9 +1,7 @@
 #include "controls/LevelInputs.h"
 
-#undef INFO
-#undef WARN
-
 #include "doctest/doctest.h"
+
 namespace dhe {
 
 namespace leveltest {
