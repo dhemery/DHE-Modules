@@ -19,8 +19,8 @@ namespace curve_sequencer_step_controller {
   using dhe::curve_sequencer::GenerateMode;
   using dhe::curve_sequencer::StepController;
   using dhe::curve_sequencer::StepEvent;
-  using test::curve_sequencer::FakeControls;
   using dhe::taper::VariableTaper;
+  using test::curve_sequencer::FakeControls;
 
   static auto constexpr risenGate = Latch{true, true};
   static auto constexpr fallenGate = Latch{false, true};
@@ -81,17 +81,15 @@ namespace curve_sequencer_step_controller {
       }
 
       SUBCASE("returns generated if gate does not rise") {
-        controls.curvature = [](int step)->float { return 0.2F; };
-        controls.duration = [](int step)->float { return 0.2F; };
-        controls.getOutput = []() -> float { return 0.2F; };
-        controls.level = [](int step)->float { return 0.2F; };
+        controls.input = []() -> float { return 0.2F; };
+        controls.curvature = [](int s) -> float { return 0.2F; };
+        controls.duration = [](int s) -> float { return 0.2F; };
+        controls.level = [](int s) -> float { return 0.2F; };
         controls.setOutput = [](float f) {};
-        controls.showProgress = [](int step, float progress) {};
-        controls.showInactive = [](int step) {};
-        controls.taper = [](int step)->VariableTaper const * { return dhe::taper::variableTapers[0]; };
+        controls.taper = [](int s) -> VariableTaper const * { return dhe::taper::variableTapers[0]; };
 
         std::for_each(allModes.cbegin(), allModes.cend(), [](GenerateMode const mode) {
-          controls.mode = [mode](int step) -> GenerateMode { return mode; };
+          controls.mode = [mode](int s) -> GenerateMode { return mode; };
           CHECK_EQ(stepController.execute(highGate, 0.F), StepEvent::Generated);
           CHECK_EQ(stepController.execute(lowGate, 0.F), StepEvent::Generated);
           CHECK_EQ(stepController.execute(fallenGate, 0.F), StepEvent::Generated);

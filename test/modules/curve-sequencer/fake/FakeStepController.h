@@ -11,9 +11,10 @@ namespace curve_sequencer {
   using dhe::curve_sequencer::StepEvent;
 
   struct FakeStepController {
-    std::function<void(int)> enter;
-    std::function<StepEvent(Latch const &, float)> execute;
-    std::function<void()> exit;
+    std::function<void(int)> enter{[](int s) { throw "FakeStepController.enter(step)"; }};
+    std::function<StepEvent(Latch const &, float)> execute{
+        [](Latch const &l, int s) -> StepEvent { throw "FakeStepController.execute(gate,time)"; }};
+    std::function<void()> exit{[]() { throw "FakeStepController.exit()"; }};
   };
 } // namespace curve_sequencer
 } // namespace test

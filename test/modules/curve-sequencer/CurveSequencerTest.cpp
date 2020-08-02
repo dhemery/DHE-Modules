@@ -63,7 +63,7 @@ namespace curve_sequencer {
           controls.isReset = returns(true);
           controls.input = returns(input);
 
-          controls.output = [=](float output) { CHECK_EQ(output, input); };
+          controls.setOutput = [=](float output) { CHECK_EQ(output, input); };
 
           curveSequencer.execute(0.1F);
         }
@@ -251,7 +251,7 @@ namespace curve_sequencer {
 
             controls.input = returns(input);
 
-            controls.output = [&](float voltage) { output = voltage; };
+            controls.setOutput = [&](float voltage) { output = voltage; };
 
             curveSequencer.execute(0.F);
             CHECK_EQ(output, input);
@@ -259,7 +259,7 @@ namespace curve_sequencer {
 
           SUBCASE("exits active step") {
             controls.input = returns(0.34F);
-            controls.output = [](float voltage) {};
+            controls.setOutput = [](float voltage) {};
 
             auto calledExit = bool{};
             stepController.exit = [&]() { calledExit = true; };
