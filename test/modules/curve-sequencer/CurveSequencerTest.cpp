@@ -71,12 +71,9 @@ namespace curve_sequencer {
           controls.isReset = returns(true);
           controls.input = returns(input);
 
-          auto output = 0.F;
-          controls.output = [&](float voltage) { output = voltage; };
+          controls.output = [=](float output) { CHECK_EQ(output, input); };
 
           curveSequencer.execute(0.1F);
-
-          CHECK_EQ(output, input);
         }
 
         SUBCASE("reset low does nothing") {
@@ -98,23 +95,17 @@ namespace curve_sequencer {
             auto constexpr firstEnabledStep{3};
             stepSelector.first = returns(firstEnabledStep);
 
-            auto enteredStep = float{};
-            auto executedGateLatch = Latch{};
-            auto executedSampleTime = float{};
-            stepController.enter = [&](float s) { enteredStep = s; };
-            stepController.execute = [&](Latch const &l, float st) -> StepEvent {
-              executedGateLatch = l;
-              executedSampleTime = st;
+            auto constexpr sampleTime{0.39947F};
+
+            stepController.enter = [=](float enteredStep) { CHECK_EQ(enteredStep, firstEnabledStep); };
+
+            stepController.execute = [=](Latch const &executedGateLatch, float executedSampleTime) -> StepEvent {
+              CHECK_EQ(executedGateLatch, stableHighLatch);
+              CHECK_EQ(executedSampleTime, sampleTime);
               return StepEvent::Generated;
             };
 
-            auto constexpr sampleTime{0.39947F};
-
             curveSequencer.execute(sampleTime);
-
-            CHECK_EQ(enteredStep, firstEnabledStep);
-            CHECK_EQ(executedGateLatch, stableHighLatch);
-            CHECK_EQ(executedSampleTime, sampleTime);
           }
 
           SUBCASE("does nothing if no step is enabled") {
@@ -125,18 +116,14 @@ namespace curve_sequencer {
       }
 
       SUBCASE("and active") {
-        int constexpr selectedStep{2};
+        int constexpr stepSelectorFirstStep{2};
 
-        stepSelector.first = returns(selectedStep);
+        stepSelector.first = returns(stepSelectorFirstStep);
 
-        auto activeStep = int{};
-        stepController.enter = [&](int s) { activeStep = s; };
+        stepController.enter = [=](int enteredStep) { REQUIRE_EQ(enteredStep, stepSelectorFirstStep); };
 
-        auto executedGateLatch = Latch{};
-        auto executedSampleTime = float{};
-        stepController.execute = [&](Latch const &l, float st) -> StepEvent {
-          executedGateLatch = l;
-          executedSampleTime = st;
+        stepController.execute = [&](Latch const &executedGateLatch, float st) -> StepEvent {
+          REQUIRE_EQ(executedGateLatch, stableHighLatch);
           return StepEvent::Generated;
         };
         controls.isGated = returns(true);
@@ -147,105 +134,117 @@ namespace curve_sequencer {
         stepSelector.first = std::function<int()>{};
         stepController.enter = std::function<void(int)>{};
 
-        REQUIRE_EQ(executedGateLatch, stableHighLatch);
-        REQUIRE_EQ(activeStep, selectedStep);
-
         SUBCASE("executes active step with gate state") {
           auto constexpr sampleTime{0.34901F};
 
-          curveSequencer.execute(sampleTime); // Gate stays high
-          CHECK_EQ(executedGateLatch, stableHighLatch);
-
-          controls.isGated = returns(false); // Gate falls
+          controls.isGated = returns(true);
+          stepController.execute = [&](Latch const &executedGateLatch, float st) -> StepEvent {
+            REQUIRE_EQ(executedGateLatch, stableHighLatch);
+            return StepEvent::Generated;
+          };
           curveSequencer.execute(sampleTime);
-          CHECK_EQ(executedGateLatch, fallenLatch);
 
-          controls.isGated = returns(false); // Gate stays low, clears edge
+          controls.isGated = returns(false);
+          stepController.execute = [&](Latch const &executedGateLatch, float st) -> StepEvent {
+            REQUIRE_EQ(executedGateLatch, fallenLatch);
+            return StepEvent::Generated;
+          };
           curveSequencer.execute(sampleTime);
-          CHECK_EQ(executedGateLatch, stableLowLatch);
 
-          controls.isGated = returns(true); // Gate rises
+          controls.isGated = returns(false);
+          stepController.execute = [&](Latch const &executedGateLatch, float st) -> StepEvent {
+            REQUIRE_EQ(executedGateLatch, stableLowLatch);
+            return StepEvent::Generated;
+          };
           curveSequencer.execute(sampleTime);
-          CHECK_EQ(executedGateLatch, risenLatch);
+
+          controls.isGated = returns(true);
+          stepController.execute = [&](Latch const &executedGateLatch, float st) -> StepEvent {
+            REQUIRE_EQ(executedGateLatch, risenLatch);
+            return StepEvent::Generated;
+          };
+          curveSequencer.execute(sampleTime);
         }
 
         SUBCASE("if active step completes") {
-          stepController.execute = [&](Latch const &l, float f) -> StepEvent { return StepEvent::Completed; };
+          stepController.execute = [](Latch const &l, float f) -> StepEvent { return StepEvent::Completed; };
+          auto controlsIsLooping = bool{};
+          controls.isLooping = [&]() -> bool { return controlsIsLooping; };
 
           SUBCASE("seeks successor with active step and loop state") {
             stepController.enter = [](int s) {};
 
-            controls.isLooping = returns(true);
-            auto secondStep{activeStep + 3};
-            stepSelector.successor = [&](int startStep, bool isLooping) -> int {
-              CHECK_EQ(startStep, activeStep);
-              CHECK(isLooping);
+            auto secondStep{stepSelectorFirstStep + 3};
+            stepSelector.successor = [&](int successorStartStep, bool successorIsLooping) -> int {
+              CHECK_EQ(successorStartStep, stepSelectorFirstStep);
+              CHECK_EQ(successorIsLooping, controlsIsLooping);
               return secondStep;
             };
-
             curveSequencer.execute(0.F);
 
-            controls.isLooping = returns(false);
-            stepSelector.successor = [&](int startStep, bool isLooping) -> int {
-              CHECK_EQ(startStep, secondStep);
-              CHECK_FALSE(isLooping);
-              return startStep + 3;
+            controlsIsLooping = true;
+            auto thirdStep{secondStep + 2};
+            stepSelector.successor = [&](int successorStartStep, bool successorIsLooping) -> int {
+              CHECK_EQ(successorStartStep, secondStep);
+              CHECK_EQ(successorIsLooping, controlsIsLooping);
+              return thirdStep;
             };
-
             curveSequencer.execute(0.F);
           }
 
           SUBCASE("enters successor step") {
-            controls.isLooping = returns(false);
-
-            auto secondStep{activeStep + 2};
-            stepSelector.successor = [&](int s, bool b) -> int { return secondStep; };
-
-            auto enteredStep = int{};
-            stepController.enter = [&](int s) { enteredStep = s; };
+            auto secondStep{stepSelectorFirstStep + 2};
+            stepSelector.successor = [=](int s, bool b) -> int { return secondStep; };
+            stepController.enter = [=](int enteredStep) { CHECK_EQ(enteredStep, secondStep); };
 
             curveSequencer.execute(0.F);
-            CHECK_EQ(enteredStep, secondStep);
 
             auto thirdStep{secondStep + 3};
-            stepSelector.successor = [&](int s, bool b) -> int { return thirdStep; };
+            stepSelector.successor = [=](int s, bool b) -> int { return thirdStep; };
+            stepController.enter = [=](int enteredStep) { CHECK_EQ(enteredStep, thirdStep); };
 
             curveSequencer.execute(0.F);
-            CHECK_EQ(enteredStep, thirdStep);
+          }
+
+          SUBCASE("does nothing if no successor") {
+            stepSelector.successor = [](int s, bool l) -> int { return -1; };
+            curveSequencer.execute(0.F);
+          }
+        }
+
+        SUBCASE("if reset rises") {
+          controls.isReset = returns(true);
+
+          SUBCASE("copies input to output") {
+            stepController.exit = []() {};
+            auto input = 0.6233F;
+            auto output = float{};
+
+            controls.input = returns(input);
+
+            controls.output = [&](float voltage) {
+              output = voltage;
+            };
+
+            curveSequencer.execute(0.F);
+            CHECK_EQ(output, input);
+          }
+
+          SUBCASE("exits active step") {
+            controls.input = returns(0.34F);
+            controls.output = [](float voltage) {};
+
+            auto calledExit = bool{};
+            stepController.exit = [&]() { calledExit = true; };
+
+            curveSequencer.execute(0.F);
+            CHECK(calledExit);
           }
         }
       }
     }
 
     /*
-
-    TEST_F(RunningActiveCurveSequencer, doesNothing_ifActiveStepCompletes_andNoSuccessor) {
-      expectNoCommands();
-
-      EXPECT_CALL(stepController, execute(A<Latch const &>(), A<float>())).WillOnce(Return(StepEvent::Completed));
-      ON_CALL(stepSelector, successor(activeStep, false)).WillByDefault(Return(-1));
-
-      curveSequencer.execute(0.F);
-    }
-
-    TEST_F(RunningActiveCurveSequencer, resetRise_exitsActiveStep) {
-      expectNoStepCommands();
-      EXPECT_CALL(stepController, exit()).Times(1);
-
-      givenReset(true);
-      curveSequencer.execute(0.F);
-    }
-
-    TEST_F(RunningActiveCurveSequencer, resetRise_copiesInputVoltageToOutput) {
-      givenReset(true);
-
-      auto constexpr input{0.89347F};
-      givenInput(input);
-
-      EXPECT_CALL(controls, output(input));
-
-      curveSequencer.execute(0.F);
-    }
 
     class PausedActiveCurveSequencer : public CurveSequencerTest {
     protected:
