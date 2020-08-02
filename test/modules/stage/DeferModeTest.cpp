@@ -9,18 +9,18 @@ namespace stage {
 
     using dhe::stage::DeferMode;
 
-    TEST_SUITE("stage::DeferMode") {
+    TEST_CASE("stage::DeferMode") {
       FakeControls controls{};
       DeferMode<FakeControls> deferMode{controls};
 
-      TEST_CASE("enter activates stage") {
+      SUBCASE("enter activates stage") {
         auto active{false};
         controls.showActive = [&](bool b) { active = b; };
         deferMode.enter();
         CHECK(active);
       }
 
-      TEST_CASE("execute outputs input") {
+      SUBCASE("execute outputs input") {
         float input = 7.6344F;
         controls.input = [=]() -> float { return input; };
 
@@ -32,7 +32,7 @@ namespace stage {
         CHECK_EQ(output, input);
       }
 
-      TEST_CASE("exit deactivates stage") {
+      SUBCASE("exit deactivates stage") {
         auto active{true};
         controls.showActive = [&](bool b) { active = b; };
         deferMode.exit();

@@ -4,7 +4,7 @@
 
 using dhe::PhaseTimer;
 
-TEST_CASE("phase timer") {
+TEST_CASE("dhe::PhaseTimer") {
   SUBCASE("default") {
     PhaseTimer timer{};
     SUBCASE("phase is 0") { CHECK(timer.phase() == 0.F); }

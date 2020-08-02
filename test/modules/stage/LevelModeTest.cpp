@@ -9,18 +9,18 @@ namespace stage {
 
     using dhe::stage::LevelMode;
 
-    TEST_SUITE("stage::LevelMode") {
+    TEST_CASE("stage::LevelMode") {
       FakeControls controls{};
       LevelMode<FakeControls> levelMode{controls};
 
-      TEST_CASE("enter deactivates stage") {
+      SUBCASE("enter deactivates stage") {
         auto active{true};
         controls.showActive = [&](bool b) { active = b; };
         levelMode.enter();
         CHECK_FALSE(active);
       }
 
-      TEST_CASE("execute outputs input") {
+      SUBCASE("execute outputs input") {
         float level = 7.6344F;
         controls.level = [=]() -> float { return level; };
 
@@ -32,7 +32,7 @@ namespace stage {
         CHECK_EQ(output, level);
       }
 
-      TEST_CASE("exit deactivates stage") {
+      SUBCASE("exit deactivates stage") {
         auto active{true};
         controls.showActive = [&](bool b) { active = b; };
         levelMode.exit();

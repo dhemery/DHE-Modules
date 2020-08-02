@@ -40,7 +40,7 @@ namespace curve_sequencer {
 
     std::function<bool(int)> isEnabled{[](int s) -> bool { throw "FakeControls.isEnabled(step)"; }};
     std::function<void(int step, float progress)> showProgress{
-        [](int s, float f) { throw "FakeControls.showProgress(step)"; }};
+        [](int s, float f) { throw "FakeControls.showProgress(step,progress)"; }};
     std::function<void(int step)> showInactive{[](int s) { throw "FakeControls.showInactive(step)"; }};
   };
 

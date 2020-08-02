@@ -9,22 +9,22 @@ namespace stage {
 
     using dhe::stage::IdleMode;
 
-    TEST_SUITE("stage::IdleMode") {
+    TEST_CASE("stage::IdleMode") {
       FakeControls controls{};
       IdleMode<FakeControls> idleMode{controls};
 
-      TEST_CASE("enter deactivates stage") {
+      SUBCASE("enter deactivates stage") {
         auto active{true};
         controls.showActive = [&](bool b) { active = b; };
         idleMode.enter();
         CHECK_FALSE(active);
       }
 
-      TEST_CASE("execute outputs input") {
+      SUBCASE("execute outputs input") {
         idleMode.execute(); // Will throw if any control func called
       }
 
-      TEST_CASE("exit deactivates stage") {
+      SUBCASE("exit deactivates stage") {
         auto active{true};
         controls.showActive = [&](bool b) { active = b; };
         idleMode.exit();

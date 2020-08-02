@@ -19,11 +19,11 @@ namespace curve_sequencer_step_selector {
     controls.selectionLength = [=]() -> int { return length; };
   }
 
-  TEST_SUITE("curve_sequencer::StepSelector") {
+  TEST_CASE("curve_sequencer::StepSelector") {
     FakeControls controls{};
     StepSelector<FakeControls> selector{controls, stepCount};
 
-    TEST_CASE("successor()") {
+    SUBCASE("successor()") {
       SUBCASE("can be") {
         SUBCASE("above given step") {
           givenSelection(controls, 0, stepCount); // [0 1 2 3 4 5 6 7]
@@ -136,7 +136,7 @@ namespace curve_sequencer_step_selector {
       }
     }
 
-    TEST_CASE("first()") {
+    SUBCASE("first()") {
       SUBCASE("is selection start if start step is enabled") {
         auto constexpr selectionStart = 3;
         givenSelection(controls, selectionStart, 4);

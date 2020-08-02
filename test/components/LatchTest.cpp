@@ -4,28 +4,30 @@
 
 using dhe::Latch;
 
-TEST_CASE("latches are equal if same state and edge") {
-  CHECK((Latch{false, false} == Latch{false, false}));
-  CHECK((Latch{false, true} == Latch{false, true}));
-  CHECK((Latch{true, false} == Latch{true, false}));
-  CHECK((Latch{true, true} == Latch{true, true}));
-}
+TEST_CASE("dhe::Latch") {
+  SUBCASE("equality") {
+    SUBCASE("true if same state and edge") {
+      CHECK((Latch{false, false} == Latch{false, false}));
+      CHECK((Latch{false, true} == Latch{false, true}));
+      CHECK((Latch{true, false} == Latch{true, false}));
+      CHECK((Latch{true, true} == Latch{true, true}));
+    }
 
-TEST_CASE("latches are unequal if states differ") {
-  CHECK_FALSE((Latch{false, false} == Latch{true, false}));
-  CHECK_FALSE((Latch{false, true} == Latch{true, true}));
-  CHECK_FALSE((Latch{true, false} == Latch{false, false}));
-  CHECK_FALSE((Latch{true, true} == Latch{false, true}));
-}
+    SUBCASE("false if states differ") {
+      CHECK_FALSE((Latch{false, false} == Latch{true, false}));
+      CHECK_FALSE((Latch{false, true} == Latch{true, true}));
+      CHECK_FALSE((Latch{true, false} == Latch{false, false}));
+      CHECK_FALSE((Latch{true, true} == Latch{false, true}));
+    }
 
-TEST_CASE("latches are unequal if edges differ") {
-  CHECK_FALSE((Latch{false, false} == Latch{false, true}));
-  CHECK_FALSE((Latch{false, true} == Latch{false, false}));
-  CHECK_FALSE((Latch{true, false} == Latch{true, true}));
-  CHECK_FALSE((Latch{true, true} == Latch{true, false}));
-}
+    SUBCASE("false if edges differ") {
+      CHECK_FALSE((Latch{false, false} == Latch{false, true}));
+      CHECK_FALSE((Latch{false, true} == Latch{false, false}));
+      CHECK_FALSE((Latch{true, false} == Latch{true, true}));
+      CHECK_FALSE((Latch{true, true} == Latch{true, false}));
+    }
+  }
 
-TEST_CASE("latch") {
   SUBCASE("default") {
     Latch latch{};
     SUBCASE("is low") {

@@ -13,13 +13,19 @@ namespace stage {
     using dhe::PhaseTimer;
     using dhe::stage::Event;
     using dhe::stage::HoldMode;
+    static void prepareToExecute(FakeControls &controls) {
+      controls.input = []() -> float { return 0.F; };
+      controls.duration = []() -> float { return 1.F; };
+      controls.output = [](float v) {};
+    }
 
-    TEST_SUITE("stage:HoldMode") {
+    TEST_CASE("stage:HoldMode") {
       FakeControls controls{};
       PhaseTimer timer{};
       HoldMode<FakeControls> holdMode{controls, timer};
 
-      TEST_CASE("enter") {
+      SUBCASE("enter") {
+        controls.showActive = [](bool b) {};
         controls.input = []() -> float { return 0.F; };
         controls.output = [](float v) {};
 
@@ -51,14 +57,8 @@ namespace stage {
         }
       }
 
-      TEST_CASE("exit deactivates stage") {
-        auto active{true};
-        controls.showActive = [&](bool b) { active = b; };
-        holdMode.exit();
-        CHECK_FALSE(active);
-      }
-
-      TEST_CASE("execute") {
+      SUBCASE("execute") {
+        prepareToExecute(controls);
         SUBCASE("advances phase") {
           auto constexpr duration{3.3498F};
           auto constexpr sampleTime(0.9384F);
@@ -97,6 +97,13 @@ namespace stage {
         SUBCASE("outputs nothing") {
           holdMode.execute(Latch{}, 0.F); // Will throw if output called
         }
+      }
+
+      SUBCASE("exit deactivates stage") {
+        auto active{true};
+        controls.showActive = [&](bool b) { active = b; };
+        holdMode.exit();
+        CHECK_FALSE(active);
       }
     }
   } // namespace hostage_mode

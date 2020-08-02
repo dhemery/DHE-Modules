@@ -16,7 +16,7 @@ namespace durationtest {
 
 } // namespace durationtest
 
-TEST_CASE("duration") {
+TEST_CASE("DurationInputs") {
   Range range = Range{2.1874F, 11.09234F};
 
   SUBCASE("value at minimum rotation is range lower bound") {

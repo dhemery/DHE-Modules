@@ -14,7 +14,7 @@ namespace leveltest {
   };
 } // namespace leveltest
 
-TEST_CASE("level") {
+TEST_CASE("LevelInputs") {
   // tolerance = 6 decimal places
   static auto constexpr tolerance{0.000001F};
 

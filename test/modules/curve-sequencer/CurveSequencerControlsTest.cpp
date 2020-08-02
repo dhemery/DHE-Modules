@@ -10,7 +10,7 @@
 namespace test {
 namespace curve_sequencer_controls {
 
-  TEST_SUITE("curve_sequencer::CurveSequencerControls") {
+  TEST_CASE("curve_sequencer::CurveSequencerControls") {
     static auto constexpr stepCount{8};
 
     using Controls = dhe::curve_sequencer::CurveSequencerControls<stepCount>;
@@ -24,7 +24,7 @@ namespace curve_sequencer_controls {
 
     Controls controls{inputs, outputs, params, lights};
 
-    TEST_CASE("isGated()") {
+    SUBCASE("isGated()") {
       SUBCASE("true if gate button is pressed") {
         params[Controls::GateButton].setValue(1.F);
 
@@ -45,7 +45,7 @@ namespace curve_sequencer_controls {
       }
     }
 
-    TEST_CASE("isLooping()") {
+    SUBCASE("isLooping()") {
       SUBCASE("true if loop button is pressed") {
         params[Controls::LoopButton].setValue(1.F);
 
@@ -66,7 +66,7 @@ namespace curve_sequencer_controls {
       }
     }
 
-    TEST_CASE("isReset()") {
+    SUBCASE("isReset()") {
       SUBCASE("true if reset button is pressed") {
         params[Controls::ResetButton].setValue(1.F);
 
@@ -87,7 +87,7 @@ namespace curve_sequencer_controls {
       }
     }
 
-    TEST_CASE("isRunning()") {
+    SUBCASE("isRunning()") {
       SUBCASE("true if run button is pressed") {
         params[Controls::RunButton].setValue(1.F);
 
@@ -108,7 +108,7 @@ namespace curve_sequencer_controls {
       }
     }
 
-    TEST_CASE("isEnabled(step)") {
+    SUBCASE("isEnabled(step)") {
       SUBCASE("true if enabled button is pressed") {
         auto constexpr step = 3;
         params[Controls::EnabledButtons + step].setValue(1.F);
@@ -133,37 +133,37 @@ namespace curve_sequencer_controls {
       }
     }
 
-    TEST_CASE("selectionStart() reports selection start knob value") {
+    SUBCASE("selectionStart() reports selection start knob value") {
       params[Controls::SelectionStartKnob].setValue(3.F);
 
       CHECK_EQ(controls.selectionStart(), 3);
     }
 
-    TEST_CASE("selectionLength() reports selection length knob value") {
+    SUBCASE("selectionLength() reports selection length knob value") {
       params[Controls::SelectionLengthKnob].setValue(5.F);
 
       CHECK_EQ(controls.selectionLength(), 5);
     }
 
-    TEST_CASE("input() reports voltage at input port") {
+    SUBCASE("input() reports voltage at input port") {
       inputs[Controls::CurveSequencerInput].setVoltage(5.3F);
 
       CHECK_EQ(controls.input(), 5.3F);
     }
 
-    TEST_CASE("output() reports voltage at output port") {
+    SUBCASE("output() reports voltage at output port") {
       outputs[Controls::CurveSequencerOutput].setVoltage(7.1F);
 
       CHECK_EQ(controls.output(), 7.1F);
     }
 
-    TEST_CASE("output(voltage) sets voltage at output port") {
+    SUBCASE("output(voltage) sets voltage at output port") {
       controls.output(5.3F);
 
       CHECK_EQ(outputs[Controls::CurveSequencerOutput].getVoltage(), 5.3F);
     }
 
-    TEST_CASE("curvature(step)  reports curvature for step curvature param") {
+    SUBCASE("curvature(step)  reports curvature for step curvature param") {
       auto constexpr step = 5;
       auto constexpr curveKnobRotation = 0.3F;
       params[Controls::CurveKnobs + step].setValue(curveKnobRotation);
@@ -171,7 +171,7 @@ namespace curve_sequencer_controls {
       CHECK_EQ(controls.curvature(step), dhe::curvature(curveKnobRotation));
     }
 
-    TEST_CASE("duration(step) reports duration for duration range switch and step duration param") {
+    SUBCASE("duration(step) reports duration for duration range switch and step duration param") {
       auto constexpr step = 7;
       auto constexpr durationKnobRotation = 0.75F;
       auto constexpr durationRangeSelection = 2; // Long duration
@@ -183,7 +183,7 @@ namespace curve_sequencer_controls {
                dhe::duration(durationKnobRotation, *dhe::durationRanges[durationRangeSelection]));
     }
 
-    TEST_CASE("level(step) reports level for level range switch and step level param") {
+    SUBCASE("level(step) reports level for level range switch and step level param") {
       auto constexpr step = 3;
       auto constexpr levelKnobRotation = 0.35F;
       auto constexpr levelRangeSelection = 1; // unipolar
@@ -194,7 +194,7 @@ namespace curve_sequencer_controls {
       CHECK_EQ(controls.level(step), dhe::level(levelKnobRotation, *dhe::signalRanges[levelRangeSelection]));
     }
 
-    TEST_CASE("taper(step) is taper selected by step shape switch") {
+    SUBCASE("taper(step) is taper selected by step shape switch") {
       auto constexpr step = 3;
 
       auto shapeSelection = 0; // J
@@ -206,7 +206,7 @@ namespace curve_sequencer_controls {
       CHECK_EQ(controls.taper(step), dhe::taper::variableTapers[shapeSelection]);
     }
 
-    TEST_CASE("mode(step) is mode selected by step mode switch") {
+    SUBCASE("mode(step) is mode selected by step mode switch") {
       auto constexpr step = 6;
 
       auto modeSelectedBySwitch = GenerateMode::Curve;
@@ -218,7 +218,7 @@ namespace curve_sequencer_controls {
       CHECK_EQ(controls.mode(step), modeSelectedBySwitch);
     }
 
-    TEST_CASE("condition(step) is condition selected by step condition switch") {
+    SUBCASE("condition(step) is condition selected by step condition switch") {
       auto constexpr step = 0;
 
       auto conditionSelectedBySwitch = AdvanceMode::TimerExpires;
@@ -246,7 +246,7 @@ namespace curve_sequencer_controls {
       CHECK_EQ(controls.condition(step), conditionSelectedBySwitch);
     }
 
-    TEST_CASE("showInactive(step) dims step progress lights") {
+    SUBCASE("showInactive(step) dims step progress lights") {
       auto constexpr step = 3;
       auto constexpr completedProgressLightIndex = step + step;
       auto constexpr remainingProgressLightIndex = step + step + 1;

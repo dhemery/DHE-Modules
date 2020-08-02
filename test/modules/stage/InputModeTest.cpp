@@ -9,18 +9,18 @@ namespace stage {
 
     using dhe::stage::InputMode;
 
-    TEST_SUITE("stage::InputMode") {
+    TEST_CASE("stage::InputMode") {
       FakeControls controls{};
       InputMode<FakeControls> inputMode{controls};
 
-      TEST_CASE("enter deactivates stage") {
+      SUBCASE("enter deactivates stage") {
         auto active{true};
         controls.showActive = [&](bool b) { active = b; };
         inputMode.enter();
         CHECK_FALSE(active);
       }
 
-      TEST_CASE("execute outputs input") {
+      SUBCASE("execute outputs input") {
         float input = 7.6344F;
         controls.input = [=]() -> float { return input; };
 
@@ -32,7 +32,7 @@ namespace stage {
         CHECK_EQ(output, input);
       }
 
-      TEST_CASE("exit deactivates stage") {
+      SUBCASE("exit deactivates stage") {
         auto active{true};
         controls.showActive = [&](bool b) { active = b; };
         inputMode.exit();
