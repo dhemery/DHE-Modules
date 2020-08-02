@@ -5,37 +5,39 @@
 
 namespace test {
 namespace stage {
+  namespace defer_mode {
 
-  using dhe::stage::DeferMode;
+    using dhe::stage::DeferMode;
 
-  TEST_SUITE("stage::DeferMode") {
-    FakeControls controls{};
-    DeferMode<FakeControls> deferMode{controls};
+    TEST_SUITE("stage::DeferMode") {
+      FakeControls controls{};
+      DeferMode<FakeControls> deferMode{controls};
 
-    TEST_CASE("enter activates stage") {
-      auto active{false};
-      controls.showActive = [&](bool b) { active = b; };
-      deferMode.enter();
-      CHECK(active);
-    }
+      TEST_CASE("enter activates stage") {
+        auto active{false};
+        controls.showActive = [&](bool b) { active = b; };
+        deferMode.enter();
+        CHECK(active);
+      }
 
-    TEST_CASE("execute outputs input") {
-      float input = 7.6344F;
-      controls.input = [=]() -> float { return input; };
+      TEST_CASE("execute outputs input") {
+        float input = 7.6344F;
+        controls.input = [=]() -> float { return input; };
 
-      float output{-99.F};
-      controls.output = [&](float voltage) { output = voltage; };
+        float output{-99.F};
+        controls.output = [&](float voltage) { output = voltage; };
 
-      deferMode.execute();
+        deferMode.execute();
 
-      CHECK_EQ(input, output);
-    }
+        CHECK_EQ(output, input);
+      }
 
-    TEST_CASE("exit deactivates stage") {
-      auto active{true};
-      controls.showActive = [&](bool b) { active = b; };
-      deferMode.exit();
-      CHECK_FALSE(active);
+      TEST_CASE("exit deactivates stage") {
+        auto active{true};
+        controls.showActive = [&](bool b) { active = b; };
+        deferMode.exit();
+        CHECK_FALSE(active);
+      }
     }
   }
 } // namespace stage

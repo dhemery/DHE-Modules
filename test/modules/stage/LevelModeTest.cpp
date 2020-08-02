@@ -1,44 +1,44 @@
-#include "modules/stage/InputMode.h"
+#include "modules/stage/LevelMode.h"
 
 #include "doctest/doctest.h"
 #include "fake/FakeControls.h"
 
 namespace test {
 namespace stage {
-  namespace input_mode {
+  namespace level_mode {
 
-    using dhe::stage::InputMode;
+    using dhe::stage::LevelMode;
 
-    TEST_SUITE("stage::InputMode") {
+    TEST_SUITE("stage::LevelMode") {
       FakeControls controls{};
-      InputMode<FakeControls> inputMode{controls};
+      LevelMode<FakeControls> levelMode{controls};
 
       TEST_CASE("enter deactivates stage") {
         auto active{true};
         controls.showActive = [&](bool b) { active = b; };
-        inputMode.enter();
+        levelMode.enter();
         CHECK_FALSE(active);
       }
 
       TEST_CASE("execute outputs input") {
-        float input = 7.6344F;
-        controls.input = [=]() -> float { return input; };
+        float level = 7.6344F;
+        controls.level = [=]() -> float { return level; };
 
         float output{-99.F};
         controls.output = [&](float voltage) { output = voltage; };
 
-        inputMode.execute();
+        levelMode.execute();
 
-        CHECK_EQ(output, input);
+        CHECK_EQ(output, level);
       }
 
       TEST_CASE("exit deactivates stage") {
         auto active{true};
         controls.showActive = [&](bool b) { active = b; };
-        inputMode.exit();
+        levelMode.exit();
         CHECK_FALSE(active);
       }
     }
-  } // namespace input_mode
+  } // namespace level_mode
 } // namespace stage
 } // namespace test
