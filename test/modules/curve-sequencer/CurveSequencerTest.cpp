@@ -29,15 +29,11 @@ namespace curve_sequencer {
     controls.isGated = returns(false);
     controls.isReset = returns(false);
 
-    // TODO: Test that a curve sequencer is initially idle
+    SUBCASE("when idle") {
+      // TODO: Assert that it starts idle.
 
-    SUBCASE("when paused") {
-      controls.isRunning = returns(false);
-      REQUIRE_FALSE(controls.isRunning());
-
-      SUBCASE("and idle") {
-        curveSequencer.execute(0.1F);
-
+      SUBCASE("and paused") {
+        controls.isRunning = returns(false);
         SUBCASE("reset low does nothing") {
           controls.isReset = returns(false);
           curveSequencer.execute(0.1F); // Will throw if any commands are called
@@ -59,62 +55,8 @@ namespace curve_sequencer {
         }
       }
 
-      SUBCASE("and active") {
-        // Set running temporarily to get into active state
+      SUBCASE("and running") {
         controls.isRunning = returns(true);
-        int constexpr stepSelectorFirstStep{2};
-
-        stepSelector.first = returns(stepSelectorFirstStep);
-
-        stepController.enter = [=](int enteredStep) { REQUIRE_EQ(enteredStep, stepSelectorFirstStep); };
-
-        stepController.execute = [&](Latch const &executedGateLatch, float st) -> StepEvent {
-          REQUIRE_EQ(executedGateLatch, stableHighLatch);
-          return StepEvent::Generated;
-        };
-        controls.isGated = returns(true);
-
-        curveSequencer.execute(0.F);
-
-        // Now that a step is active, pause.
-        controls.isRunning = returns(false);
-
-        // Forbid further calls
-        stepSelector.first = std::function<int()>{};
-        stepController.enter = std::function<void(int)>{};
-
-        SUBCASE("gate low does nothing") {
-          controls.isGated = returns(false);
-          curveSequencer.execute(0.F); // Will throw if any commands are called
-        }
-
-        SUBCASE("gate rise does nothing") {
-          controls.isGated = returns(true);
-          curveSequencer.execute(0.F); // Will throw if any commands are called
-        }
-
-        SUBCASE("reset low does nothing") {
-          controls.isReset = returns(false);
-          curveSequencer.execute(0.F); // Will throw if any commands are called
-        }
-
-        SUBCASE("reset rise exits active step and does nothing else") {
-          controls.isReset = returns(true);
-          auto exitCalled = bool{};
-          stepController.exit = [&]() { exitCalled = true; };
-
-          curveSequencer.execute(0.F); // Will throw if any command except exit is called
-
-          CHECK(exitCalled);
-        }
-      }
-    }
-
-    SUBCASE("when running") {
-      controls.isRunning = returns(true);
-
-      SUBCASE("and idle") {
-        curveSequencer.execute(0.1F);
 
         SUBCASE("reset high copies input voltage to output") {
           auto constexpr input{0.12938F};
@@ -164,25 +106,62 @@ namespace curve_sequencer {
           }
         }
       }
+    }
 
-      SUBCASE("and active") {
-        int constexpr stepSelectorFirstStep{2};
+    SUBCASE("when active") {
+      controls.isRunning = returns(true);
+      int constexpr stepSelectorFirstStep{2};
 
-        stepSelector.first = returns(stepSelectorFirstStep);
+      stepSelector.first = returns(stepSelectorFirstStep);
 
-        stepController.enter = [=](int enteredStep) { REQUIRE_EQ(enteredStep, stepSelectorFirstStep); };
+      stepController.enter = [=](int enteredStep) { REQUIRE_EQ(enteredStep, stepSelectorFirstStep); };
 
-        stepController.execute = [&](Latch const &executedGateLatch, float st) -> StepEvent {
-          REQUIRE_EQ(executedGateLatch, stableHighLatch);
-          return StepEvent::Generated;
-        };
-        controls.isGated = returns(true);
+      stepController.execute = [&](Latch const &executedGateLatch, float st) -> StepEvent {
+        REQUIRE_EQ(executedGateLatch, stableHighLatch);
+        return StepEvent::Generated;
+      };
+      controls.isGated = returns(true);
 
-        curveSequencer.execute(0.F);
+      curveSequencer.execute(0.F);
 
-        // Forbid further calls
-        stepSelector.first = std::function<int()>{};
-        stepController.enter = std::function<void(int)>{};
+      // Now that a step is active, pause.
+      controls.isRunning = returns(false);
+
+      // Forbid further calls
+      stepSelector.first = std::function<int()>{};
+      stepController.enter = std::function<void(int)>{};
+
+      SUBCASE("and paused") {
+        controls.isRunning = returns(false);
+
+        SUBCASE("gate low does nothing") {
+          controls.isGated = returns(false);
+          curveSequencer.execute(0.F); // Will throw if any commands are called
+        }
+
+        SUBCASE("gate rise does nothing") {
+          controls.isGated = returns(true);
+          curveSequencer.execute(0.F); // Will throw if any commands are called
+        }
+
+        SUBCASE("reset low does nothing") {
+          controls.isReset = returns(false);
+          curveSequencer.execute(0.F); // Will throw if any commands are called
+        }
+
+        SUBCASE("reset rise exits active step and does nothing else") {
+          controls.isReset = returns(true);
+          auto exitCalled = bool{};
+          stepController.exit = [&]() { exitCalled = true; };
+
+          curveSequencer.execute(0.F); // Will throw if any command except exit is called
+
+          CHECK(exitCalled);
+        }
+      }
+
+      SUBCASE("and running") {
+        controls.isRunning = returns(true);
 
         SUBCASE("executes active step with gate state") {
           auto constexpr sampleTime{0.34901F};
