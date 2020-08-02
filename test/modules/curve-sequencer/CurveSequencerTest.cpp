@@ -19,7 +19,7 @@ namespace curve_sequencer {
   auto constexpr stableHighLatch = Latch{true, false};
   auto constexpr risenLatch = Latch{true, true};
 
-  TEST_CASE("CurveSequencer") {
+  TEST_CASE("curve_sequencer::CurveSequencer") {
     FakeControls controls{};
     FakeStepSelector stepSelector{};
     FakeStepController stepController{};

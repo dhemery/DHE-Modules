@@ -10,7 +10,7 @@
 namespace test {
 namespace curve_sequencer_controls {
 
-  TEST_SUITE("CurveSequencerControls") {
+  TEST_SUITE("curve_sequencer::CurveSequencerControls") {
     static auto constexpr stepCount{8};
 
     using Controls = dhe::curve_sequencer::CurveSequencerControls<stepCount>;
