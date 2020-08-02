@@ -58,6 +58,56 @@ namespace curve_sequencer {
           curveSequencer.execute(0.1F); // Will throw if any commands are called
         }
       }
+
+      SUBCASE("and active") {
+        // Set running temporarily to get into active state
+        controls.isRunning = returns(true);
+        int constexpr stepSelectorFirstStep{2};
+
+        stepSelector.first = returns(stepSelectorFirstStep);
+
+        stepController.enter = [=](int enteredStep) { REQUIRE_EQ(enteredStep, stepSelectorFirstStep); };
+
+        stepController.execute = [&](Latch const &executedGateLatch, float st) -> StepEvent {
+          REQUIRE_EQ(executedGateLatch, stableHighLatch);
+          return StepEvent::Generated;
+        };
+        controls.isGated = returns(true);
+
+        curveSequencer.execute(0.F);
+
+        // Now that a step is active, pause.
+        controls.isRunning = returns(false);
+
+        // Forbid further calls
+        stepSelector.first = std::function<int()>{};
+        stepController.enter = std::function<void(int)>{};
+
+        SUBCASE("gate low does nothing") {
+          controls.isGated = returns(false);
+          curveSequencer.execute(0.F); // Will throw if any commands are called
+        }
+
+        SUBCASE("gate rise does nothing") {
+          controls.isGated = returns(true);
+          curveSequencer.execute(0.F); // Will throw if any commands are called
+        }
+
+        SUBCASE("reset low does nothing") {
+          controls.isReset = returns(false);
+          curveSequencer.execute(0.F); // Will throw if any commands are called
+        }
+
+        SUBCASE("reset rise exits active step and does nothing else") {
+          controls.isReset = returns(true);
+          auto exitCalled = bool{};
+          stepController.exit = [&]() { exitCalled = true; };
+
+          curveSequencer.execute(0.F); // Will throw if any command except exit is called
+
+          CHECK(exitCalled);
+        }
+      }
     }
 
     SUBCASE("when running") {
@@ -222,9 +272,7 @@ namespace curve_sequencer {
 
             controls.input = returns(input);
 
-            controls.output = [&](float voltage) {
-              output = voltage;
-            };
+            controls.output = [&](float voltage) { output = voltage; };
 
             curveSequencer.execute(0.F);
             CHECK_EQ(output, input);
@@ -243,60 +291,6 @@ namespace curve_sequencer {
         }
       }
     }
-
-    /*
-
-    class PausedActiveCurveSequencer : public CurveSequencerTest {
-    protected:
-      int const activeStep{3};
-
-      void SetUp() override {
-        CurveSequencerTest::SetUp();
-        givenRun(true);
-
-        ON_CALL(stepSelector, first()).WillByDefault(Return(activeStep));
-        ON_CALL(stepController, execute(A<Latch const &>(), A<float>())).WillByDefault(Return(StepEvent::Generated));
-
-        givenGate(true);
-        curveSequencer.execute(0.F);
-
-        givenRun(false); // PausedActive = not running, but a step in progress
-      }
-    };
-
-    TEST_F(PausedActiveCurveSequencer, gateLow_doesNothing) {
-      givenGate(false);
-
-      expectNoCommands();
-
-      curveSequencer.execute(0.1F);
-    }
-
-    TEST_F(PausedActiveCurveSequencer, gateRise_doesNothing) {
-      givenGate(true);
-
-      expectNoCommands();
-
-      curveSequencer.execute(0.1F);
-    }
-
-    TEST_F(PausedActiveCurveSequencer, resetLow_doesNothing) {
-      givenReset(false);
-
-      expectNoCommands();
-
-      curveSequencer.execute(0.F);
-    }
-
-    TEST_F(PausedActiveCurveSequencer, resetRise_exitsActiveStep_andDoesNothingElse) {
-      givenReset(true);
-
-      expectNoCommands();
-      EXPECT_CALL(stepController, exit()).Times(1);
-
-      curveSequencer.execute(0.123F);
-    }
-    */
   }
 } // namespace curve_sequencer
 } // namespace test
