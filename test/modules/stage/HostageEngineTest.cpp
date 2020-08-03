@@ -13,18 +13,20 @@ namespace stage {
     using dhe::Latch;
     using Event = dhe::stage::Event;
     using Mode = dhe::stage::Mode;
-    using HostageEngine = dhe::stage::HostageEngine<FakeControls, SimpleFakeMode, SimpleFakeMode, TimedFakeMode,
-                                                    LatchedFakeMode, SimpleFakeMode>;
+    using HostageEngine = dhe::stage::HostageEngine<FakeControls, FakeSimpleMode, FakeSimpleMode, FakeTimedMode,
+                                                    FakeLatchedMode, FakeSimpleMode>;
 
     TEST_CASE("stage::HostageEngine") {
       FakeControls controls{};
-      SimpleFakeMode deferMode{};
-      TimedFakeMode holdMode{};
-      SimpleFakeMode idleMode{};
-      SimpleFakeMode inputMode{};
-      LatchedFakeMode sustainMode{};
+      FakeSimpleMode deferMode{};
+      FakeTimedMode holdMode{};
+      FakeSimpleMode idleMode{};
+      FakeSimpleMode inputMode{};
+      FakeLatchedMode sustainMode{};
 
       HostageEngine engine{controls, inputMode, deferMode, holdMode, sustainMode, idleMode};
+
+      controls.showEoc = [](bool e) {};
 
       SUBCASE("starts in input mode") {
         controls.defer = []() -> bool { return false; };
@@ -41,7 +43,6 @@ namespace stage {
       SUBCASE("in input mode") {
         controls.defer = []() -> bool { return false; };
         controls.gate = []() -> bool { return false; };
-        controls.showEoc = [](bool e) {};
 
         inputMode.returns(Event::Generated);
         engine.process(0.F);
@@ -79,12 +80,12 @@ namespace stage {
 
               engine.process(0.F);
 
-                CHECK(inputMode.wasExited());
-                CHECK_FALSE(inputMode.wasExecuted());
-                CHECK_FALSE(inputMode.isActive());
-                CHECK(sustainMode.wasEntered());
-                CHECK(sustainMode.wasExecuted());
-                CHECK(sustainMode.isActive());
+              CHECK(inputMode.wasExited());
+              CHECK_FALSE(inputMode.wasExecuted());
+              CHECK_FALSE(inputMode.isActive());
+              CHECK(sustainMode.wasEntered());
+              CHECK(sustainMode.wasExecuted());
+              CHECK(sustainMode.isActive());
             }
           }
         }
@@ -103,109 +104,118 @@ namespace stage {
           CHECK(deferMode.isActive());
         }
       }
+
+      SUBCASE("in defer mode") {
+        controls.defer = []() -> bool { return true; };
+        controls.gate = []() -> bool { return false; };
+        engine.process(0.F);
+        deferMode.reset();
+
+        SUBCASE("with defer high") {
+          controls.defer = []() -> bool { return true; };
+
+          SUBCASE("executes defer mode regardless of gate") {
+            controls.gate = []() -> bool { return true; };
+
+            engine.process(0.F);
+            CHECK(deferMode.wasExecuted());
+            deferMode.reset();
+
+            controls.gate = []() -> bool { return false; };
+            engine.process(0.F);
+            CHECK(deferMode.wasExecuted());
+          }
+        }
+
+        SUBCASE("if defer falls") {
+          controls.defer = []() -> bool { return false; };
+
+          SUBCASE("with hold mode selected") {
+            controls.mode = []() -> Mode { return Mode::Hold; };
+
+            SUBCASE("begins holding if gate is high") {
+              controls.gate = []() -> bool { return true; };
+
+              engine.process(0.F);
+
+              CHECK(deferMode.wasExited());
+              CHECK_FALSE(deferMode.wasExecuted());
+              CHECK_FALSE(deferMode.isActive());
+              CHECK(holdMode.wasEntered());
+              CHECK(holdMode.wasExecuted());
+              CHECK(holdMode.isActive());
+            }
+
+            SUBCASE("if gate is low") {
+              controls.gate = []() -> bool { return false; };
+
+              SUBCASE("begins tracking input") {
+                engine.process(0.F);
+
+                CHECK(deferMode.wasExited());
+                CHECK_FALSE(deferMode.wasExecuted());
+                CHECK_FALSE(deferMode.isActive());
+                CHECK(inputMode.wasEntered());
+                CHECK(inputMode.wasExecuted());
+                CHECK(inputMode.isActive());
+              }
+
+              SUBCASE("does not raise eoc") {
+                bool eoc{false};
+                controls.showEoc = [&](bool e) { eoc = e; };
+
+                engine.process(0.F);
+                CHECK_FALSE(eoc);
+              }
+            }
+          }
+
+          SUBCASE("with sustain mode selected") {
+            controls.mode = []() -> Mode { return Mode::Sustain; };
+
+            SUBCASE("begins sustaining if gate is high") {
+              controls.gate = []() -> bool { return true; };
+
+              engine.process(0.F);
+
+              CHECK(deferMode.wasExited());
+              CHECK_FALSE(deferMode.wasExecuted());
+              CHECK_FALSE(deferMode.isActive());
+              CHECK(sustainMode.wasEntered());
+              CHECK(sustainMode.wasExecuted());
+              CHECK(sustainMode.isActive());
+            }
+
+            SUBCASE("if gate is low") {
+              controls.gate = []() -> bool { return false; };
+
+              SUBCASE("becomes idle") {
+                engine.process(0.F);
+
+                CHECK(deferMode.wasExited());
+                CHECK_FALSE(deferMode.wasExecuted());
+                CHECK_FALSE(deferMode.isActive());
+                CHECK(idleMode.wasEntered());
+                CHECK(idleMode.wasExecuted());
+                CHECK(idleMode.isActive());
+              }
+
+              SUBCASE("raises eoc") {
+                bool eoc{false};
+                controls.showEoc = [&](bool e) { eoc = e; };
+
+                engine.process(0.F);
+                CHECK(eoc);
+              }
+            }
+          }
+        }
+      }
     }
 
     /*
 
-    class HostageEngineDeferMode : public HostageEngineTest {
-      void SetUp() override {
-        HostageEngineTest::SetUp();
-        givenDefer(true);
-        engine.process(0.F);
-      }
-    };
-
-    TEST_F(HostageEngineDeferMode, executesDeferMode_regardlessOfGate_ifDeferIsHigh) {
-      givenDefer(true);
-
-      givenGate(false);
-      EXPECT_CALL(deferMode, execute());
-      engine.process(0.F);
-
-      givenGate(true);
-      EXPECT_CALL(deferMode, execute());
-      engine.process(0.F);
-    }
-
-    TEST_F(HostageEngineDeferMode, beginsTrackingInput_ifDeferFalls) {
-      givenDefer(false);
-
-      EXPECT_CALL(deferMode, exit());
-      EXPECT_CALL(inputMode, enter());
-      EXPECT_CALL(inputMode, execute());
-
-      engine.process(0.F);
-    }
-
-    TEST_F(HostageEngineDeferMode, withHoldModeSelected_beginsHolding_ifGateIsHighWhenDeferFalls) {
-      givenDefer(false);
-      givenGate(true);
-      givenModeSelection(Mode::Hold);
-
-      EXPECT_CALL(deferMode, exit());
-      EXPECT_CALL(holdMode, enter());
-      EXPECT_CALL(holdMode, execute(A<Latch const &>(), A<float>()));
-
-      engine.process(0.F);
-    }
-
-    TEST_F(HostageEngineDeferMode, withHoldModeSelected_beginsTrackingInput_ifGateIsLowWhenDeferFalls) {
-      givenDefer(false);
-      givenGate(false);
-      givenModeSelection(Mode::Hold);
-
-      EXPECT_CALL(deferMode, exit());
-      EXPECT_CALL(inputMode, enter());
-      EXPECT_CALL(inputMode, execute());
-
-      engine.process(0.F);
-    }
-
-    TEST_F(HostageEngineDeferMode, withHoldModeSelected_doesNotRaiseEoc_ifGateIsLowWhenDeferFalls) {
-      givenDefer(false);
-      givenGate(false);
-      givenModeSelection(Mode::Hold);
-
-      EXPECT_CALL(controls, showEoc(false));
-
-      engine.process(0.F);
-    }
-
-    TEST_F(HostageEngineDeferMode, withSustainModeSelected_beginsSustaining_ifGateIsHighWhenDeferFalls) {
-      givenDefer(false);
-      givenGate(true);
-      givenModeSelection(Mode::Sustain);
-
-      EXPECT_CALL(deferMode, exit());
-      EXPECT_CALL(sustainMode, enter());
-      EXPECT_CALL(sustainMode, execute(A<Latch const &>()));
-
-      engine.process(0.F);
-    }
-
-    TEST_F(HostageEngineDeferMode, withSustainModeSelected_becomesIdle_ifGateIsLowWhenDeferFalls) {
-      givenDefer(false);
-      givenGate(false);
-      givenModeSelection(Mode::Sustain);
-
-      EXPECT_CALL(deferMode, exit());
-      EXPECT_CALL(idleMode, enter());
-      EXPECT_CALL(idleMode, execute());
-
-      engine.process(0.F);
-    }
-
-    TEST_F(HostageEngineDeferMode, withSustainModeSelected_raisesEoc_ifGateIsLowWhenDeferFalls) {
-      givenDefer(false);
-      givenGate(false);
-      givenModeSelection(Mode::Sustain);
-
-      EXPECT_CALL(controls, showEoc(true));
-
-      engine.process(0.F);
-    }
-
-    class HostageEngineHoldMode : public HostageEngineTest {
+class HostageEngineHoldMode : public HostageEngineTest {
       void SetUp() override {
         HostageEngineTest::SetUp();
         givenModeSelection(Mode::Hold);

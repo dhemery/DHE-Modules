@@ -42,7 +42,7 @@ namespace stage {
     }
   };
 
-  class SimpleFakeMode : public FakeMode {
+  class FakeSimpleMode : public FakeMode {
   public:
     auto execute() -> Event {
       executed = true;
@@ -50,7 +50,7 @@ namespace stage {
     }
   };
 
-  class LatchedFakeMode : public FakeMode {
+  class FakeLatchedMode : public FakeMode {
     Latch executedlatch;
 
   public:
@@ -63,7 +63,7 @@ namespace stage {
     auto latch() const -> Latch { return executedlatch; }
   };
 
-  class TimedFakeMode : public FakeMode {
+  class FakeTimedMode : public FakeMode {
     Latch executedLatch{};
     float executedSampleTime{};
 
