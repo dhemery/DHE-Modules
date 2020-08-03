@@ -16,6 +16,6 @@ script:
   - mkdir .rack
   - curl -o .rack/sdk.zip https://vcvrack.com/downloads/Rack-SDK-1.1.6.zip
   - unzip -d .rack .rack/sdk.zip
-  - export RACK_DIR="rack/Rack-SDK"
+  - export RACK_DIR=".rack/Rack-SDK"
   - make test
   - make dist
