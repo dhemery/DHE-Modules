@@ -126,9 +126,7 @@ namespace stage {
           generateMode.enter(); // To set starting voltage
 
           auto output{-99.F};
-          controls.output = [&](float v) {
-            output = v;
-          };
+          controls.output = [&](float v) { output = v; };
 
           generateMode.execute(Latch{}, sampleTime);
 

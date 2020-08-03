@@ -1,5 +1,4 @@
 #include "controls/DurationInputs.h"
-
 #include "doctest/doctest.h"
 
 namespace dhe {
@@ -12,7 +11,6 @@ namespace durationtest {
     Knob(float rotation) : rotation{rotation} {};
     auto getValue() const -> float { return rotation; }
   };
-
 
 } // namespace durationtest
 

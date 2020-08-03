@@ -26,55 +26,27 @@ include $(RACK_DIR)/plugin.mk
 ########################################################################
 
 TEST_SOURCES = $(wildcard \
-		tests/*.cpp \
-		tests/*/*.cpp \
-		tests/*/*/*.cpp \
-		)
-
-TEST_OBJECTS := $(patsubst %, build/%.o, $(TEST_SOURCES))
-
-TESTFLAGS += -Itest/ -Igoogletest/googletest/include/ -Igoogletest/googlemock/include/
-TESTLDFLAGS += -Lgoogletest/lib -lgmock_main -lgtest -lgmock
-
-ifdef ARCH_LIN
-	TESTLDFLAGS += -lpthread
-endif
-
-$(TEST_OBJECTS): FLAGS += $(TESTFLAGS)
-
-TEST_RUNNER = build/test-runner
-
-$(TEST_RUNNER): $(TEST_OBJECTS)
-	$(CXX) -o $@ $^ $(TESTLDFLAGS)
-
-test: $(TEST_RUNNER)
-	$<
-
-googletest:
-	cd googletest && cmake . && cmake --build . && rm -rf googletest/generated
-
-.PHONY: test googletest
-
-DOCTEST_SOURCES = $(wildcard \
 		test/*.cpp \
 		test/*/*.cpp \
 		test/*/*/*.cpp \
 		)
 
-DOCTEST_OBJECTS := $(patsubst %, build/%.o, $(DOCTEST_SOURCES))
-DOCTEST_FLAGS += -Itest
+TEST_OBJECTS := $(patsubst %, build/%.o, $(TEST_SOURCES))
 
-DOCTEST_RUNNER = build/doctest
+TESTFLAGS += -Itest/
 
-$(DOCTEST_OBJECTS): FLAGS += $(DOCTEST_FLAGS)
+$(TEST_OBJECTS): FLAGS += $(TESTFLAGS)
 
-$(DOCTEST_RUNNER): $(DOCTEST_OBJECTS)
+TEST_RUNNER = build/doctest
+
+$(TEST_RUNNER): $(TEST_OBJECTS)
 	$(CXX) -o $@ $^
 
-doctest: $(DOCTEST_RUNNER)
+test: $(TEST_RUNNER)
 	$<
 
-.PHONY: doctest
+.PHONY: test
+
 
 
 
@@ -127,7 +99,7 @@ clean: clean-stage
 
 COMPILATION_DATABASE_FILE = compile_commands.json
 
-COMPILATION_DATABASE_JSONS := $(patsubst %, build/%.json, $(SOURCES) $(DOCTEST_SOURCES))
+COMPILATION_DATABASE_JSONS := $(patsubst %, build/%.json, $(SOURCES) $(TEST_SOURCES))
 
 build/src/%.json: src/%
 	@mkdir -p $(@D)

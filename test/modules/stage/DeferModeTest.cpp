@@ -39,6 +39,6 @@ namespace stage {
         CHECK_FALSE(active);
       }
     }
-  }
+  } // namespace defer_mode
 } // namespace stage
 } // namespace test

@@ -114,7 +114,7 @@ namespace curve_sequencer_step_controller {
         controls.condition = [](int step) -> AdvanceMode { return AdvanceMode::GateIsLow; };
 
         SUBCASE("completes if gate is high") {
-        controls.showInactive = [](int step) {};
+          controls.showInactive = [](int step) {};
           std::for_each(allModes.cbegin(), allModes.cend(), [&controls, &stepController](GenerateMode const mode) {
             controls.mode = [mode](int step) -> GenerateMode { return mode; };
             CHECK_EQ(stepController.execute(lowGate, 0.F), StepEvent::Completed);
@@ -136,7 +136,7 @@ namespace curve_sequencer_step_controller {
         controls.condition = [](int step) -> AdvanceMode { return AdvanceMode::GateRises; };
 
         SUBCASE("completes if gate rises") {
-        controls.showInactive = [](int step) {};
+          controls.showInactive = [](int step) {};
           std::for_each(allModes.cbegin(), allModes.cend(), [&controls, &stepController](GenerateMode const mode) {
             controls.mode = [mode](int step) -> GenerateMode { return mode; };
             CHECK_EQ(stepController.execute(risenGate, 0.F), StepEvent::Completed);
@@ -158,7 +158,7 @@ namespace curve_sequencer_step_controller {
         controls.condition = [](int step) -> AdvanceMode { return AdvanceMode::GateFalls; };
 
         SUBCASE("completes if gate falls") {
-        controls.showInactive = [](int step) {};
+          controls.showInactive = [](int step) {};
           std::for_each(allModes.cbegin(), allModes.cend(), [&controls, &stepController](GenerateMode const mode) {
             controls.mode = [mode](int step) -> GenerateMode { return mode; };
             CHECK_EQ(stepController.execute(fallenGate, 0.F), StepEvent::Completed);
@@ -180,7 +180,7 @@ namespace curve_sequencer_step_controller {
         controls.condition = [](int step) -> AdvanceMode { return AdvanceMode::GateChanges; };
 
         SUBCASE("completes if gate changes") {
-        controls.showInactive = [](int step) {};
+          controls.showInactive = [](int step) {};
           std::for_each(allModes.cbegin(), allModes.cend(), [&controls, &stepController](GenerateMode const mode) {
             controls.mode = [mode](int step) -> GenerateMode { return mode; };
             CHECK_EQ(stepController.execute(risenGate, 0.F), StepEvent::Completed);
