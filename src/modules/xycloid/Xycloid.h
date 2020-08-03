@@ -19,7 +19,6 @@ namespace xycloid {
 
   class Xycloid : public rack::engine::Module {
     using Controls = XycloidControls;
-    static auto constexpr wobbleDepthRange = Range{0.F, 1.F};
 
   public:
     Xycloid() {
@@ -79,6 +78,7 @@ namespace xycloid {
     auto yOffset() const -> float { return isPressed(params[Controls::YRangeSwitch]) ? 1.F : 0.F; }
 
     auto depth() const -> float {
+      static auto constexpr wobbleDepthRange = Range{0.F, 1.F};
       return wobbleDepthRange.clamp(
           rotation(params[Controls::DepthKnob], inputs[Controls::DepthCvInput], params[Controls::DepthAvKnob]));
     }
