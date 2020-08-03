@@ -33,9 +33,9 @@ TEST_SOURCES = $(wildcard \
 
 TEST_OBJECTS := $(patsubst %, build/%.o, $(TEST_SOURCES))
 
-TESTFLAGS += -Itest/
+TEST_FLAGS += -Itest/
 
-$(TEST_OBJECTS): FLAGS += $(TESTFLAGS)
+$(TEST_OBJECTS): FLAGS += $(TEST_FLAGS)
 
 TEST_RUNNER = build/doctest
 
@@ -107,7 +107,7 @@ build/src/%.json: src/%
 
 build/test/%.json: test/%
 	@mkdir -p $(@D)
-	$(CXX) $(CXXFLAGS) $(DOCTEST_FLAGS) -MJ $@ -c -o build/$^.o $^
+	$(CXX) $(CXXFLAGS) $(TEST_FLAGS) -MJ $@ -c -o build/$^.o $^
 
 $(COMPILATION_DATABASE_FILE): $(COMPILATION_DATABASE_JSONS)
 	sed -e '1s/^/[/' -e '$$s/,$$/]/' $^ | json_pp > $@
