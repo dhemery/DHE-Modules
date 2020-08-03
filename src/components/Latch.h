@@ -1,5 +1,3 @@
-#include <utility>
-
 #pragma once
 
 namespace dhe {
@@ -7,7 +5,8 @@ class Latch {
 public:
   constexpr Latch() = default;
   constexpr Latch(bool state, bool edge) : state{state}, edge{edge} {}
-
+  //  Latch(Latch const &) = default;
+  //  auto operator=(Latch const &) -> Latch& = default;
   void clock(bool signal) {
     edge = signal != state;
     state = signal;
@@ -28,4 +27,5 @@ private:
   bool state{};
   bool edge{};
 };
+
 } // namespace dhe
