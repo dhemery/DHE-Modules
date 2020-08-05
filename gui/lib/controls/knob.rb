@@ -3,7 +3,7 @@ require_relative '../shapes/circle'
 require_relative '../shapes/line'
 
 class Knob < Shape
-  DIAMETERS = { huge: 19.0, large: 12.7, medium: 10.0, small: 8.4, tiny: 7.0, }
+  DIAMETERS = { huge: 19.0, large: 12.7, medium: 10.0, small: 8.4, tiny: 7.0, eensie: 4.5, }
 
   attr_reader :slug
 
