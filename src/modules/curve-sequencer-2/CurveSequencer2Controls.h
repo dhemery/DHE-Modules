@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Source.h"
 #include "TriggerMode.h"
 #include "controls/CommonInputs.h"
 #include "controls/CurvatureInputs.h"
@@ -50,9 +51,9 @@ namespace curve_sequencer {
 
     auto selectionLength() const -> int { return static_cast<int>(params[SelectionLengthKnob].getValue()); }
 
-    auto triggerMode(int step) const -> TriggerMode {
-      return static_cast<TriggerMode>(params[TriggerModePickers + step].getValue());
-    }
+    // Step controls
+
+    auto advanceOnEndOfStep(int step) const -> bool { return positionOf(params[OnEndOfStepSwitches + step]) == 1; }
 
     auto curvature(int step) const -> float { return dhe::curvature(params[CurveKnobs + step]); }
 
@@ -60,9 +61,15 @@ namespace curve_sequencer {
       return dhe::selectableDuration(params[DurationKnobs + step], params[DurationRangeSwitch]);
     }
 
-    auto level(int step) const -> float {
-      return dhe::selectableLevel(params[LevelKnobs + step], params[LevelRangeSwitch]);
+    auto endLevel(int step) const -> float {
+      return dhe::selectableLevel(params[EndLevelKnobs + step], params[LevelRangeSwitch]);
     }
+
+    auto endSource(int step) const -> Source {
+      return static_cast<Source>(params[EndSourceSwitches + step].getValue());
+    }
+
+    auto interruptOnTrigger(int step) const -> bool { return positionOf(params[OnInterruptSwitches + step]) == 1; }
 
     void showInactive(int step) { setLights(step, 0.F, 0.F); }
 
@@ -76,9 +83,25 @@ namespace curve_sequencer {
       setLights(step, completedBrightness, remainingBrightness);
     }
 
+    auto startLevel(int step) const -> float {
+      return dhe::selectableLevel(params[StartLevelKnobs + step], params[LevelRangeSwitch]);
+    }
+
+    auto startSource(int step) const -> Source {
+      return static_cast<Source>(params[StartSourceSwitches + step].getValue());
+    }
+
     auto taper(int step) const -> taper::VariableTaper const * {
       auto const selection = static_cast<int>(params[ShapeSwitches + step].getValue());
       return taper::variableTapers[selection];
+    }
+
+    auto trackEndSource(int step) const -> bool { return positionOf(params[TrackEndSwitches + step]) == 1; }
+
+    auto trackStartSource(int step) const -> bool { return positionOf(params[TrackStartSwitches + step]) == 1; }
+
+    auto triggerMode(int step) const -> TriggerMode {
+      return static_cast<TriggerMode>(params[TriggerModeSwitches + step].getValue());
     }
 
     enum ParameterIds {
@@ -93,9 +116,16 @@ namespace curve_sequencer {
       ENUMIDS(CurveKnobs, N),
       ENUMIDS(DurationKnobs, N),
       ENUMIDS(EnabledButtons, N),
-      ENUMIDS(LevelKnobs, N),
-      ENUMIDS(TriggerModePickers, N),
+      ENUMIDS(EndLevelKnobs, N),
+      ENUMIDS(EndSourceSwitches, N),
       ENUMIDS(ShapeSwitches, N),
+      ENUMIDS(OnEndOfStepSwitches, N),
+      ENUMIDS(OnInterruptSwitches, N),
+      ENUMIDS(StartLevelKnobs, N),
+      ENUMIDS(StartSourceSwitches, N),
+      ENUMIDS(TrackEndSwitches, N),
+      ENUMIDS(TrackStartSwitches, N),
+      ENUMIDS(TriggerModeSwitches, N),
       ParameterCount
     };
 

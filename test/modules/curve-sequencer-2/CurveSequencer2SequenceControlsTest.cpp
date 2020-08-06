@@ -4,7 +4,7 @@
 
 namespace test {
 namespace curve_sequencer_controls {
-  TEST_CASE("curve_sequencer2::CurveSequencer2SequenceControls") {
+  TEST_CASE("curve_sequencer_2::CurveSequencer2SequenceControls") {
     static auto constexpr stepCount{8};
 
     using Controls = dhe::curve_sequencer::CurveSequencer2Controls<fake::Port, fake::Param, fake::Light, stepCount>;
