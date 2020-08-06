@@ -12,9 +12,9 @@ namespace test {
 namespace curve_sequencer_step_controller {
   using dhe::Latch;
   using dhe::PhaseTimer;
-  using dhe::curve_sequencer::TriggerMode;
   using dhe::curve_sequencer::StepController2;
   using dhe::curve_sequencer::StepEvent;
+  using dhe::curve_sequencer::TriggerMode;
   using dhe::taper::VariableTaper;
   using test::curve_sequencer::FakeControls;
 
@@ -69,6 +69,34 @@ namespace curve_sequencer_step_controller {
       stepController.exit();
 
       CHECK_EQ(deactivatedStep, step);
+    }
+
+    SUBCASE("execute") {
+      SUBCASE("when interruptible") {
+        SUBCASE("completes without generating if triggered") {}
+        SUBCASE("generates if not triggered") {}
+      }
+
+      SUBCASE("when uninterruptible") {
+        SUBCASE("generates regardless of trigger") {}
+      }
+
+      SUBCASE("when advances on EOC") {}
+      SUBCASE("when holds on EOC") {}
+
+      SUBCASE("generate") {
+        // TODO: start source
+        // TODO: track start source
+        // TODO: snap start source
+        // TODO: track start -> snap start
+        // TODO: snap start -> track start
+
+        // TODO: end source
+        // TODO: track end source
+        // TODO: snap end source
+        // TODO: track end -> snap end
+        // TODO: snap end -> track end
+      }
     }
   }
 } // namespace curve_sequencer_step_controller
