@@ -8,7 +8,7 @@
 #include "modules/curve-sequencer-2/Source.h"
 
 namespace test {
-namespace curve_sequencer_2 {
+namespace curve_sequencer {
   namespace step_controls {
     static auto constexpr stepCount{8};
     using Controls = dhe::curve_sequencer::CurveSequencer2Controls<fake::Port, fake::Param, fake::Light, stepCount>;
@@ -207,5 +207,5 @@ namespace curve_sequencer_2 {
       }
     }
   } // namespace step_controls
-} // namespace curve_sequencer_2
+} // namespace curve_sequencer
 } // namespace test
