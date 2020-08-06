@@ -37,15 +37,14 @@ TEST_FLAGS += -Itest/
 
 $(TEST_OBJECTS): FLAGS += $(TEST_FLAGS)
 
-TEST_RUNNER = build/doctest
-
-$(TEST_RUNNER): $(TEST_OBJECTS)
+build/doctest: $(TEST_OBJECTS)
+	mkdir -p build
 	$(CXX) -o $@ $^
 
-test: $(TEST_RUNNER)
+test: build/doctest
 	$<
 
-.PHONY: test
+.PHONY: test test_runner
 
 
 

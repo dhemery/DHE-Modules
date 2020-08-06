@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CLionExternalBuildManager">
+    <target id="5042abed-7be8-4d4b-bcb9-ace339594a8f" name="test-runner" defaultType="MAKE">
+      <configuration id="cdcbfe10-16ad-4d09-a89c-64accbe04aba" name="test-runner" toolchainName="Default">
+        <build type="MAKE">
+          <make targetName="build/doctest" />
+        </build>
+        <clean type="MAKE">
+          <make targetName="clean" />
+        </clean>
+      </configuration>
+    </target>
+  </component>
+</project>
