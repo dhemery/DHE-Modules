@@ -15,7 +15,7 @@ namespace curve_sequencer_2 {
     using dhe::curve_sequencer_2::Source;
     using dhe::curve_sequencer_2::TriggerMode;
 
-    TEST_CASE("curve_sequencer_2::CurveSequencer2StepControls") {
+    TEST_CASE("curve_sequencer_2::StepControls") {
       std::vector<fake::Port> inputs{Controls::InputCount};
       std::vector<fake::Port> outputs{Controls::OutputCount};
       std::vector<fake::Param> params{Controls::ParameterCount};

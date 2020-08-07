@@ -38,7 +38,12 @@ namespace curve_sequencer_2 {
       controls.showProgress(step, 0.F);
     }
 
-    auto execute(Latch const &gateLatch, float sampleTime) -> StepEvent { return StepEvent::Completed; };
+    auto execute(Latch const &gateLatch, float sampleTime) -> StepEvent {
+      if (controls.interruptOnTrigger(step) && isTriggered(controls.triggerMode(step), gateLatch)) {
+        return StepEvent::Completed;
+      }
+      return StepEvent::Generated;
+    };
 
     void exit() { controls.showInactive(step); }
 
@@ -47,10 +52,7 @@ namespace curve_sequencer_2 {
 
     auto level() const -> float { return controls.level(step); }
 
-    void reset() {
-      timer.reset();
-      startVoltage = controls.output();
-    }
+    void reset() { timer.reset(); }
 
     auto taper(float input) const -> float {
       auto const curvature = controls.curvature(step);

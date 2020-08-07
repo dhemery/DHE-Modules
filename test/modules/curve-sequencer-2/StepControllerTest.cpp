@@ -8,18 +8,20 @@
 #include "modules/curve-sequencer-2/TriggerMode.h"
 #include "modules/curve-sequencer/StepEvent.h"
 
+#include <vector>
+
 namespace test {
 namespace curve_sequencer_2 {
   namespace step_controller {
     using dhe::Latch;
     using dhe::PhaseTimer;
-    using dhe::curve_sequencer_2::StepController;
     using dhe::curve_sequencer::StepEvent;
+    using dhe::curve_sequencer_2::StepController;
     using dhe::curve_sequencer_2::TriggerMode;
     using dhe::taper::VariableTaper;
 
-    static auto constexpr risenGate = Latch{true, true};
-    static auto constexpr fallenGate = Latch{false, true};
+    static auto constexpr risingGate = Latch{true, true};
+    static auto constexpr fallingGate = Latch{false, true};
     static auto constexpr highGate = Latch{true, false};
     static auto constexpr lowGate = Latch{false, false};
 
@@ -33,7 +35,7 @@ namespace curve_sequencer_2 {
       controls.taper = [](int s) -> VariableTaper const * { return dhe::taper::variableTapers[0]; };
     }
 
-    TEST_CASE("curve_sequencer::StepController") {
+    TEST_CASE("curve_sequencer_2::StepController") {
       fake::Controls controls{};
       PhaseTimer timer{};
 
@@ -73,16 +75,120 @@ namespace curve_sequencer_2 {
 
       SUBCASE("execute") {
         SUBCASE("when interruptible") {
-          SUBCASE("completes without generating if triggered") {}
-          SUBCASE("generates if not triggered") {}
+          controls.interruptOnTrigger = [](int s) -> bool { return true; };
+          auto constexpr step = 7;
+          controls.showProgress = [](int s, float p) {};
+          stepController.enter(step);
+
+          SUBCASE("completes without generating if triggered") {
+            SUBCASE("by rising gate") {
+              controls.triggerMode = [](int s) -> TriggerMode { return TriggerMode::GateRises; };
+              auto result = stepController.execute(risingGate, 0.F);
+              CHECK_EQ(result, StepEvent::Completed);
+            }
+
+            SUBCASE("by falling gate") {
+              controls.triggerMode = [](int s) -> TriggerMode { return TriggerMode::GateFalls; };
+              auto result = stepController.execute(fallingGate, 0.F);
+              CHECK_EQ(result, StepEvent::Completed);
+            }
+
+            SUBCASE("by changing gate") {
+              controls.triggerMode = [](int s) -> TriggerMode { return TriggerMode::GateChanges; };
+              auto result = stepController.execute(fallingGate, 0.F);
+              CHECK_EQ(result, StepEvent::Completed);
+              result = stepController.execute(risingGate, 0.F);
+              CHECK_EQ(result, StepEvent::Completed);
+            }
+
+            SUBCASE("by high gate") {
+              controls.triggerMode = [](int s) -> TriggerMode { return TriggerMode::GateIsHigh; };
+              auto result = stepController.execute(highGate, 0.F);
+              CHECK_EQ(result, StepEvent::Completed);
+              result = stepController.execute(risingGate, 0.F);
+              CHECK_EQ(result, StepEvent::Completed);
+            }
+
+            SUBCASE("by low gate") {
+              controls.triggerMode = [](int s) -> TriggerMode { return TriggerMode::GateIsLow; };
+              auto result = stepController.execute(lowGate, 0.F);
+              CHECK_EQ(result, StepEvent::Completed);
+              result = stepController.execute(fallingGate, 0.F);
+              CHECK_EQ(result, StepEvent::Completed);
+            }
+          }
+
+          SUBCASE("generates if not triggered") {
+            SUBCASE("waiting for rising gate") {
+              controls.triggerMode = [](int s) -> TriggerMode { return TriggerMode::GateRises; };
+              auto result = stepController.execute(highGate, 0.F);
+              CHECK_EQ(result, StepEvent::Generated);
+              result = stepController.execute(fallingGate, 0.F);
+              CHECK_EQ(result, StepEvent::Generated);
+              result = stepController.execute(lowGate, 0.F);
+              CHECK_EQ(result, StepEvent::Generated);
+            }
+
+            SUBCASE("waiting for falling gate") {
+              controls.triggerMode = [](int s) -> TriggerMode { return TriggerMode::GateFalls; };
+              auto result = stepController.execute(lowGate, 0.F);
+              CHECK_EQ(result, StepEvent::Generated);
+              result = stepController.execute(highGate, 0.F);
+              CHECK_EQ(result, StepEvent::Generated);
+              result = stepController.execute(risingGate, 0.F);
+              CHECK_EQ(result, StepEvent::Generated);
+            }
+
+            SUBCASE("waiting for changing gate") {
+              controls.triggerMode = [](int s) -> TriggerMode { return TriggerMode::GateChanges; };
+              auto result = stepController.execute(lowGate, 0.F);
+              CHECK_EQ(result, StepEvent::Generated);
+              result = stepController.execute(highGate, 0.F);
+              CHECK_EQ(result, StepEvent::Generated);
+            }
+
+            SUBCASE("waiting for high gate") {
+              controls.triggerMode = [](int s) -> TriggerMode { return TriggerMode::GateIsHigh; };
+              auto result = stepController.execute(lowGate, 0.F);
+              CHECK_EQ(result, StepEvent::Generated);
+              result = stepController.execute(fallingGate, 0.F);
+              CHECK_EQ(result, StepEvent::Generated);
+            }
+
+            SUBCASE("waiting for low gate") {
+              controls.triggerMode = [](int s) -> TriggerMode { return TriggerMode::GateIsLow; };
+              auto result = stepController.execute(highGate, 0.F);
+              CHECK_EQ(result, StepEvent::Generated);
+              result = stepController.execute(risingGate, 0.F);
+              CHECK_EQ(result, StepEvent::Generated);
+            }
+          }
         }
 
         SUBCASE("when uninterruptible") {
-          SUBCASE("generates regardless of trigger") {}
+          auto const triggerModes = std::vector<TriggerMode>{
+              TriggerMode::GateRises,  TriggerMode::GateFalls, TriggerMode::GateChanges,
+              TriggerMode::GateIsHigh, TriggerMode::GateIsLow,
+          };
+          auto const gateStates = std::vector<Latch>{risingGate, fallingGate, lowGate, highGate};
+          controls.interruptOnTrigger = [](int s) -> bool { return false; };
+
+          SUBCASE("generates regardless of trigger") {
+            std::for_each(triggerModes.cbegin(), triggerModes.cend(),
+                          [&controls, &stepController, &gateStates](TriggerMode const triggerMode) {
+                            std::for_each(gateStates.cbegin(), gateStates.cend(),
+                                          [&controls, &stepController, triggerMode](Latch const &gateState) {
+                                            controls.triggerMode
+                                                = [triggerMode](int s) -> TriggerMode { return triggerMode; };
+                                            auto result = stepController.execute(gateState, 0.F);
+                                            CHECK_EQ(result, StepEvent::Generated);
+                                          });
+                          });
+          }
         }
 
         SUBCASE("when advances on EOC") {}
-        SUBCASE("when holds on EOC") {}
+        SUBCASE("when sustains on EOC") {}
 
         SUBCASE("generate") {
           // TODO: start source
@@ -99,6 +205,6 @@ namespace curve_sequencer_2 {
         }
       }
     }
-  } // namespace curve_sequencer_step_controller
+  } // namespace step_controller
+} // namespace curve_sequencer_2
 } // namespace test
-}
