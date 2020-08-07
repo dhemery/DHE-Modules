@@ -25,7 +25,8 @@ namespace curve_sequencer {
       "Timer expires", "Gate rises", "Gate falls", "Gate changes", "Gate is high", "Gate is low"};
 
   template <int N> class CurveSequencerModule : public rack::engine::Module {
-    using Controls = CurveSequencerControls<N>;
+    using Controls = CurveSequencerControls<rack::engine::Input, rack::engine::Output, rack::engine::Param,
+                                            rack::engine::Light, N>;
 
   public:
     CurveSequencerModule() {

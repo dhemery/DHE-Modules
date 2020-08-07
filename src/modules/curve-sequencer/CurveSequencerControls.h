@@ -7,30 +7,24 @@
 #include "controls/DurationInputs.h"
 #include "controls/LevelInputs.h"
 
-#include <engine/Light.hpp>
-#include <engine/Param.hpp>
-#include <engine/Port.hpp>
 #include <vector>
+
+#define ENUMIDS(name, count) name, name##_LAST = name + (count) -1
 
 namespace dhe {
 
 namespace curve_sequencer {
 
-  using rack::engine::Input;
-  using rack::engine::Light;
-  using rack::engine::Output;
-  using rack::engine::Param;
-
-  template <int N> class CurveSequencerControls {
+  template <typename InputT, typename OutputT, typename ParamT, typename LightT, int N> class CurveSequencerControls {
   private:
-    std::vector<Input> &inputs;
-    std::vector<Output> &outputs;
-    std::vector<Param> &params;
-    std::vector<Light> &lights;
+    std::vector<InputT> &inputs;
+    std::vector<OutputT> &outputs;
+    std::vector<ParamT> &params;
+    std::vector<LightT> &lights;
 
   public:
-    CurveSequencerControls(std::vector<Input> &inputs, std::vector<Output> &outputs, std::vector<Param> &params,
-                           std::vector<Light> &lights) :
+    CurveSequencerControls(std::vector<InputT> &inputs, std::vector<OutputT> &outputs, std::vector<ParamT> &params,
+                           std::vector<LightT> &lights) :
         inputs{inputs}, outputs{outputs}, params{params}, lights{lights} {}
 
     auto condition(int step) const -> AdvanceMode {
@@ -99,13 +93,13 @@ namespace curve_sequencer {
       ResetButton,
       DurationRangeSwitch,
       LevelRangeSwitch,
-      ENUMS(CurveKnobs, N),
-      ENUMS(DurationKnobs, N),
-      ENUMS(EnabledButtons, N),
-      ENUMS(LevelKnobs, N),
-      ENUMS(ModeSwitches, N),
-      ENUMS(ConditionSwitches, N),
-      ENUMS(ShapeSwitches, N),
+      ENUMIDS(CurveKnobs, N),
+      ENUMIDS(DurationKnobs, N),
+      ENUMIDS(EnabledButtons, N),
+      ENUMIDS(LevelKnobs, N),
+      ENUMIDS(ModeSwitches, N),
+      ENUMIDS(ConditionSwitches, N),
+      ENUMIDS(ShapeSwitches, N),
       GenerateModeMenu,
       ParameterCount
     };
@@ -116,13 +110,13 @@ namespace curve_sequencer {
       LoopInput,
       ResetInput,
       RunInput,
-      ENUMS(EnabledInputs, N),
+      ENUMIDS(EnabledInputs, N),
       InputCount
     };
 
     enum OutputIds { CurveSequencerOutput, OutputCount };
 
-    enum LightIds { ENUMS(ProgressLights, N * 2), LightCount };
+    enum LightIds { ENUMIDS(ProgressLights, N * 2), LightCount };
 
   private:
     void setLights(int step, float completedBrightness, float remainingBrightness) {
