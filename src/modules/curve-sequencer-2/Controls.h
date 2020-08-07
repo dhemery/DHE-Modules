@@ -105,27 +105,28 @@ namespace curve_sequencer_2 {
     }
 
     enum ParameterIds {
-      DurationRangeSwitch,
-      GateButton,
-      LevelRangeSwitch,
-      LoopButton,
-      ResetButton,
       RunButton,
+      GateButton,
       SelectionStartKnob,
       SelectionLengthKnob,
+      LoopButton,
+      ResetButton,
+      DurationRangeSwitch,
+      LevelRangeSwitch,
       ENUMIDS(CurveKnobs, N),
       ENUMIDS(DurationKnobs, N),
       ENUMIDS(EnabledButtons, N),
-      ENUMIDS(EndLevelKnobs, N),
-      ENUMIDS(EndSourceSwitches, N),
-      ENUMIDS(OnEndOfStepSwitches, N),
-      ENUMIDS(OnInterruptSwitches, N),
+      ENUMIDS(EndLevelKnobs, N),       // Was LevelKnobs in v1.1.0
+      ENUMIDS(TriggerModeSwitches, N), // Was ModeSwitches in v1.1.0
+      ENUMIDS(OnInterruptSwitches, N), // Was ConditionSwitches in v1.1.0
       ENUMIDS(ShapeSwitches, N),
-      ENUMIDS(StartLevelKnobs, N),
+      ENUMIDS(StartLevelKnobs, N), // Was GenerateModeMenu in v1.1.0?
+      // The rest are new in 1.3.0
+      ENUMIDS(OnEndOfStepSwitches, N),
       ENUMIDS(StartSourceSwitches, N),
-      ENUMIDS(TrackEndSwitches, N),
+      ENUMIDS(EndSourceSwitches, N),
       ENUMIDS(TrackStartSwitches, N),
-      ENUMIDS(TriggerModeSwitches, N),
+      ENUMIDS(TrackEndSwitches, N),
       ParameterCount
     };
 
@@ -151,5 +152,5 @@ namespace curve_sequencer_2 {
       lights[remainingLight].setBrightness(remainingBrightness);
     }
   };
-} // namespace curve_sequencer
+} // namespace curve_sequencer_2
 } // namespace dhe
