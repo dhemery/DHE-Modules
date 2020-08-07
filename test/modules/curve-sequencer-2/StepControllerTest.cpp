@@ -1,4 +1,4 @@
-#include "modules/curve-sequencer-2/StepController2.h"
+#include "modules/curve-sequencer-2/StepController.h"
 
 #include "components/Latch.h"
 #include "components/PhaseTimer.h"
@@ -13,9 +13,9 @@ namespace curve_sequencer_2 {
   namespace step_controller {
     using dhe::Latch;
     using dhe::PhaseTimer;
-    using dhe::curve_sequencer::StepController2;
+    using dhe::curve_sequencer_2::StepController;
     using dhe::curve_sequencer::StepEvent;
-    using dhe::curve_sequencer::TriggerMode;
+    using dhe::curve_sequencer_2::TriggerMode;
     using dhe::taper::VariableTaper;
 
     static auto constexpr risenGate = Latch{true, true};
@@ -23,7 +23,7 @@ namespace curve_sequencer_2 {
     static auto constexpr highGate = Latch{true, false};
     static auto constexpr lowGate = Latch{false, false};
 
-    static inline void prepareToGenerate(FakeControls &controls) {
+    static inline void prepareToGenerate(fake::Controls &controls) {
       controls.curvature = [](int s) -> float { return 0.2F; };
       controls.duration = [](int s) -> float { return 0.2F; };
       controls.input = []() -> float { return 0.2F; };
@@ -34,10 +34,10 @@ namespace curve_sequencer_2 {
     }
 
     TEST_CASE("curve_sequencer::StepController") {
-      FakeControls controls{};
+      fake::Controls controls{};
       PhaseTimer timer{};
 
-      StepController2<FakeControls> stepController{controls, timer};
+      StepController<fake::Controls> stepController{controls, timer};
 
       SUBCASE("enter activates step at 0 progress") {
         controls.getOutput = []() -> float { return 5.5F; };

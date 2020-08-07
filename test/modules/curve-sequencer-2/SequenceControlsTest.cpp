@@ -1,15 +1,15 @@
 #include "doctest/doctest.h"
 #include "fake-rack/Controls.h"
-#include "modules/curve-sequencer-2/CurveSequencer2Controls.h"
+#include "modules/curve-sequencer-2/Controls.h"
 
 namespace test {
 namespace curve_sequencer_2 {
   namespace sequence_controls {
-    TEST_CASE("curve_sequencer::CurveSequencer2SequenceControls") {
+    TEST_CASE("curve_sequencer::SequenceControls") {
       static auto constexpr stepCount{8};
 
-      using Controls = dhe::curve_sequencer::CurveSequencer2Controls<fake::Port, fake::Param, fake::Light, stepCount>;
-      using dhe::curve_sequencer::TriggerMode;
+      using Controls = dhe::curve_sequencer_2::Controls<fake::Port, fake::Param, fake::Light, stepCount>;
+      using dhe::curve_sequencer_2::TriggerMode;
 
       std::vector<fake::Port> inputs{Controls::InputCount};
       std::vector<fake::Port> outputs{Controls::OutputCount};

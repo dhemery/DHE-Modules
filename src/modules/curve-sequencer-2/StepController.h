@@ -7,10 +7,11 @@
 #include "modules/curve-sequencer/StepEvent.h"
 
 namespace dhe {
-namespace curve_sequencer {
+namespace curve_sequencer_2 {
 
   using dhe::Latch;
   using dhe::PhaseTimer;
+  using dhe::curve_sequencer::StepEvent;
 
   static inline auto isTriggered(TriggerMode triggerMode, Latch const &gate) -> bool {
     switch (triggerMode) {
@@ -27,9 +28,9 @@ namespace curve_sequencer {
     }
   }
 
-  template <typename Controls> class StepController2 {
+  template <typename Controls> class StepController {
   public:
-    StepController2(Controls &controls, PhaseTimer &timer) : controls{controls}, timer{timer} {}
+    StepController(Controls &controls, PhaseTimer &timer) : controls{controls}, timer{timer} {}
 
     void enter(int entryStep) {
       step = entryStep;
@@ -62,5 +63,5 @@ namespace curve_sequencer {
     Controls &controls;
     PhaseTimer &timer;
   }; // namespace curve_sequencer
-} // namespace curve_sequencer
+} // namespace curve_sequencer_2
 } // namespace dhe

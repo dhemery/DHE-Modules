@@ -4,16 +4,16 @@
 #include "controls/LevelInputs.h"
 #include "doctest/doctest.h"
 #include "fake-rack/Controls.h"
-#include "modules/curve-sequencer-2/CurveSequencer2Controls.h"
+#include "modules/curve-sequencer-2/Controls.h"
 #include "modules/curve-sequencer-2/Source.h"
 
 namespace test {
 namespace curve_sequencer_2 {
   namespace step_controls {
     static auto constexpr stepCount{8};
-    using Controls = dhe::curve_sequencer::CurveSequencer2Controls<fake::Port, fake::Param, fake::Light, stepCount>;
-    using dhe::curve_sequencer::Source;
-    using dhe::curve_sequencer::TriggerMode;
+    using Controls = dhe::curve_sequencer_2::Controls<fake::Port, fake::Param, fake::Light, stepCount>;
+    using dhe::curve_sequencer_2::Source;
+    using dhe::curve_sequencer_2::TriggerMode;
 
     TEST_CASE("curve_sequencer_2::CurveSequencer2StepControls") {
       std::vector<fake::Port> inputs{Controls::InputCount};

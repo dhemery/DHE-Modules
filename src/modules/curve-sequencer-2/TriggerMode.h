@@ -1,7 +1,7 @@
 #pragma once
 
 namespace dhe {
-namespace curve_sequencer {
+namespace curve_sequencer_2 {
   enum class TriggerMode { GateRises, GateFalls, GateChanges, GateIsHigh, GateIsLow };
 
   static auto constexpr triggerModeCount = static_cast<int>(TriggerMode::GateIsLow) + 1;

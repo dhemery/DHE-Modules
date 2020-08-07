@@ -13,9 +13,9 @@
 
 namespace dhe {
 
-namespace curve_sequencer {
+namespace curve_sequencer_2 {
 
-  template <typename PortT, typename ParamT, typename LightT, int N> class CurveSequencer2Controls {
+  template <typename PortT, typename ParamT, typename LightT, int N> class Controls {
   private:
     std::vector<PortT> &inputs;
     std::vector<PortT> &outputs;
@@ -23,8 +23,8 @@ namespace curve_sequencer {
     std::vector<LightT> &lights;
 
   public:
-    CurveSequencer2Controls(std::vector<PortT> &inputs, std::vector<PortT> &outputs, std::vector<ParamT> &params,
-                            std::vector<LightT> &lights) :
+    Controls(std::vector<PortT> &inputs, std::vector<PortT> &outputs, std::vector<ParamT> &params,
+             std::vector<LightT> &lights) :
         inputs{inputs}, outputs{outputs}, params{params}, lights{lights} {}
 
     // Sequence Controls
@@ -105,22 +105,22 @@ namespace curve_sequencer {
     }
 
     enum ParameterIds {
-      RunButton,
+      DurationRangeSwitch,
       GateButton,
-      SelectionStartKnob,
-      SelectionLengthKnob,
+      LevelRangeSwitch,
       LoopButton,
       ResetButton,
-      DurationRangeSwitch,
-      LevelRangeSwitch,
+      RunButton,
+      SelectionStartKnob,
+      SelectionLengthKnob,
       ENUMIDS(CurveKnobs, N),
       ENUMIDS(DurationKnobs, N),
       ENUMIDS(EnabledButtons, N),
       ENUMIDS(EndLevelKnobs, N),
       ENUMIDS(EndSourceSwitches, N),
-      ENUMIDS(ShapeSwitches, N),
       ENUMIDS(OnEndOfStepSwitches, N),
       ENUMIDS(OnInterruptSwitches, N),
+      ENUMIDS(ShapeSwitches, N),
       ENUMIDS(StartLevelKnobs, N),
       ENUMIDS(StartSourceSwitches, N),
       ENUMIDS(TrackEndSwitches, N),
@@ -152,5 +152,4 @@ namespace curve_sequencer {
     }
   };
 } // namespace curve_sequencer
-
 } // namespace dhe

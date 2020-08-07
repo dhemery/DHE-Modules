@@ -7,20 +7,22 @@
 #include "doctest/doctest.h"
 #include "modules/curve-sequencer/GenerateMode.h"
 
+#include "fake-rack/Controls.h"
+
 namespace test {
 namespace curve_sequencer {
   namespace controls {
     static auto constexpr stepCount{8};
-    using Controls = dhe::curve_sequencer::CurveSequencerControls<stepCount>;
+    using Controls = dhe::curve_sequencer::CurveSequencerControls<fake::Port, fake::Port, fake::Param, fake::Light, stepCount>;
     using dhe::curve_sequencer::AdvanceMode;
     using dhe::curve_sequencer::GenerateMode;
 
     TEST_CASE("curve_sequencer::CurveSequencerControls") {
 
-      std::vector<rack::engine::Input> inputs{Controls::InputCount};
-      std::vector<rack::engine::Output> outputs{Controls::OutputCount};
-      std::vector<rack::engine::Param> params{Controls::ParameterCount};
-      std::vector<rack::engine::Light> lights{Controls::LightCount};
+      std::vector<fake::Port> inputs{Controls::InputCount};
+      std::vector<fake::Port> outputs{Controls::OutputCount};
+      std::vector<fake::Param> params{Controls::ParameterCount};
+      std::vector<fake::Light> lights{Controls::LightCount};
 
       Controls controls{inputs, outputs, params, lights};
 
