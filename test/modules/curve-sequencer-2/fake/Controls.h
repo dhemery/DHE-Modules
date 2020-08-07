@@ -8,7 +8,7 @@
 
 namespace test {
 
-namespace curve_sequencer {
+namespace curve_sequencer_2 {
   using dhe::curve_sequencer::TriggerMode;
   using dhe::taper::VariableTaper;
 

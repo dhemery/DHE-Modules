@@ -1,9 +1,9 @@
 #include "doctest/doctest.h"
-#include "fake/rack-controls.h"
+#include "fake-rack/Controls.h"
 #include "modules/curve-sequencer-2/CurveSequencer2Controls.h"
 
 namespace test {
-namespace curve_sequencer {
+namespace curve_sequencer_2 {
   namespace sequence_controls {
     TEST_CASE("curve_sequencer::CurveSequencer2SequenceControls") {
       static auto constexpr stepCount{8};

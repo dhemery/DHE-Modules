@@ -3,12 +3,12 @@
 #include "controls/DurationInputs.h"
 #include "controls/LevelInputs.h"
 #include "doctest/doctest.h"
-#include "fake/rack-controls.h"
+#include "fake-rack/Controls.h"
 #include "modules/curve-sequencer-2/CurveSequencer2Controls.h"
 #include "modules/curve-sequencer-2/Source.h"
 
 namespace test {
-namespace curve_sequencer {
+namespace curve_sequencer_2 {
   namespace step_controls {
     static auto constexpr stepCount{8};
     using Controls = dhe::curve_sequencer::CurveSequencer2Controls<fake::Port, fake::Param, fake::Light, stepCount>;

@@ -1,27 +1,26 @@
 #include "modules/curve-sequencer/StepSelector.h"
 
 #include "doctest/doctest.h"
-#include "fake/FakeControls.h"
+#include "fake/Controls.h"
 
 namespace test {
-namespace curve_sequencer_step_selector {
-
-  using dhe::curve_sequencer::StepSelector;
-  using test::curve_sequencer::FakeControls;
-
+namespace curve_sequencer {
+  namespace step_selector {
   static auto constexpr stepCount{8};
+  using dhe::curve_sequencer::StepSelector;
 
-  static inline void givenEnabled(FakeControls &controls, int enabledStep) {
+
+  static inline void givenEnabled(fake::Controls &controls, int enabledStep) {
     controls.isEnabled = [=](int step) -> bool { return step == enabledStep; };
   }
-  static inline void givenSelection(FakeControls &controls, int start, int length) {
+  static inline void givenSelection(fake::Controls &controls, int start, int length) {
     controls.selectionStart = [=]() -> int { return start; };
     controls.selectionLength = [=]() -> int { return length; };
   }
 
   TEST_CASE("curve_sequencer::StepSelector") {
-    FakeControls controls{};
-    StepSelector<FakeControls> selector{controls, stepCount};
+    fake::Controls controls{};
+    StepSelector<fake::Controls> selector{controls, stepCount};
 
     SUBCASE("successor()") {
       SUBCASE("can be") {
@@ -182,3 +181,4 @@ namespace curve_sequencer_step_selector {
   }
 } // namespace curve_sequencer_step_selector
 } // namespace test
+}
