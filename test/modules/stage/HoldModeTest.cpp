@@ -2,9 +2,10 @@
 
 #include "components/Latch.h"
 #include "components/PhaseTimer.h"
-#include "doctest/doctest.h"
 #include "fake/FakeControls.h"
 #include "modules/stage/Event.h"
+
+#include <doctest.h>
 
 namespace test {
 namespace stage {

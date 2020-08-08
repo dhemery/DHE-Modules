@@ -4,9 +4,10 @@
 #include "controls/CurvatureInputs.h"
 #include "controls/DurationInputs.h"
 #include "controls/LevelInputs.h"
-#include "doctest/doctest.h"
 #include "fake-rack/Controls.h"
 #include "modules/curve-sequencer/GenerateMode.h"
+
+#include <doctest.h>
 
 namespace test {
 namespace curve_sequencer {

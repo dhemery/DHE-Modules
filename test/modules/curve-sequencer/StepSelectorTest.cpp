@@ -1,7 +1,8 @@
 #include "modules/curve-sequencer/StepSelector.h"
 
-#include "doctest/doctest.h"
 #include "fake/Controls.h"
+
+#include <doctest.h>
 
 namespace test {
 namespace curve_sequencer {

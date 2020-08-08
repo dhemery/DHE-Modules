@@ -1,6 +1,6 @@
 #include "components/PhaseTimer.h"
 
-#include <doctest/doctest.h>
+#include <doctest.h>
 
 using dhe::PhaseTimer;
 

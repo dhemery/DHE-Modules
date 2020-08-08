@@ -9,7 +9,7 @@
 
 #include <vector>
 
-#define ENUMIDS(name, count) name, name##_LAST = name + (count) -1
+#define ENUMIDS(name, count) name, name##_LAST = (name) + (count) -1
 
 namespace dhe {
 

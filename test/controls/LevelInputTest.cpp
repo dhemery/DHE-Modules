@@ -1,5 +1,6 @@
 #include "controls/LevelInputs.h"
-#include "doctest/doctest.h"
+
+#include <doctest.h>
 
 namespace dhe {
 

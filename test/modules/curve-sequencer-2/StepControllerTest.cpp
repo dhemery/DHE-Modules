@@ -2,11 +2,11 @@
 
 #include "components/Latch.h"
 #include "components/PhaseTimer.h"
-#include "doctest/doctest.h"
 #include "fake/Controls.h"
 #include "modules/curve-sequencer-2/TriggerMode.h"
 #include "modules/curve-sequencer/StepEvent.h"
 
+#include <doctest.h>
 #include <vector>
 
 namespace test {

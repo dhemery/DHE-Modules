@@ -3,12 +3,12 @@
 #include "components/Latch.h"
 #include "components/PhaseTimer.h"
 #include "components/Taper.h"
-#include "doctest/doctest.h"
 #include "fake/Controls.h"
 #include "modules/curve-sequencer/AdvanceMode.h"
 #include "modules/curve-sequencer/GenerateMode.h"
 #include "modules/curve-sequencer/StepEvent.h"
 
+#include <doctest.h>
 #include <vector>
 
 namespace test {

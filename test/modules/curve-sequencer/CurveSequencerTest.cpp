@@ -1,10 +1,11 @@
 #include "modules/curve-sequencer/CurveSequencer.h"
 
-#include "doctest/doctest.h"
 #include "fake/Controls.h"
 #include "fake/StepController.h"
 #include "fake/StepSelector.h"
 #include "modules/curve-sequencer/StepEvent.h"
+
+#include <doctest.h>
 
 namespace test {
 namespace curve_sequencer {

@@ -1,7 +1,8 @@
 #include "modules/stage/IdleMode.h"
 
-#include "doctest/doctest.h"
 #include "fake/FakeControls.h"
+
+#include <doctest.h>
 
 namespace test {
 namespace stage {

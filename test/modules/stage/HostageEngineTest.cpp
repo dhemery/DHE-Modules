@@ -1,11 +1,12 @@
 #include "modules/stage/HostageEngine.h"
 
 #include "components/Latch.h"
-#include "doctest/doctest.h"
 #include "fake/FakeControls.h"
 #include "fake/FakeModes.h"
 #include "modules/stage/Event.h"
 #include "modules/stage/Mode.h"
+
+#include <doctest.h>
 
 namespace test {
 namespace stage {

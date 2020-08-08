@@ -2,10 +2,11 @@
 #include "controls/CurvatureInputs.h"
 #include "controls/DurationInputs.h"
 #include "controls/LevelInputs.h"
-#include "doctest/doctest.h"
 #include "fake-rack/Controls.h"
 #include "modules/curve-sequencer-2/Controls.h"
 #include "modules/curve-sequencer-2/Source.h"
+
+#include <doctest.h>
 
 namespace test {
 namespace curve_sequencer_2 {

@@ -36,7 +36,7 @@ TEST_OBJECTS := $(patsubst %, build/%.o, $(TEST_SOURCES))
 
 TEST_RUNNER = build/testrunner
 
-TEST_CXX_FLAGS += -Itest/
+TEST_CXX_FLAGS += -Itest/ -Idoctest/
 
 $(TEST_OBJECTS): FLAGS += $(TEST_CXX_FLAGS)
 
