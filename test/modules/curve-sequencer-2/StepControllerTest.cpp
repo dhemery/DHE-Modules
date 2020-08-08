@@ -70,27 +70,27 @@ namespace curve_sequencer_2 {
 
       SUBCASE("execute") {
         SUBCASE("when interruptible") {
-          controls.interruptOnTrigger = fake::stepControlReturning(true);
-          controls.advanceOnEndOfCurve = fake::stepControlReturning(false);
+          controls.interruptOnTrigger = stepControlReturning(true);
+          controls.advanceOnEndOfCurve = stepControlReturning(false);
           auto constexpr step{7};
           controls.showProgress = [](int s, float p) {};
           stepController.enter(step);
 
           SUBCASE("completes without generating if triggered") {
             SUBCASE("by rising gate") {
-              controls.triggerMode = fake::stepControlReturning(TriggerMode::GateRises);
+              controls.triggerMode = stepControlReturning(TriggerMode::GateRises);
               auto result = stepController.execute(risingGate, 0.F);
               CHECK_EQ(result, StepEvent::Completed);
             }
 
             SUBCASE("by falling gate") {
-              controls.triggerMode = fake::stepControlReturning(TriggerMode::GateFalls);
+              controls.triggerMode = stepControlReturning(TriggerMode::GateFalls);
               auto result = stepController.execute(fallingGate, 0.F);
               CHECK_EQ(result, StepEvent::Completed);
             }
 
             SUBCASE("by changing gate") {
-              controls.triggerMode = fake::stepControlReturning(TriggerMode::GateChanges);
+              controls.triggerMode = stepControlReturning(TriggerMode::GateChanges);
               auto result = stepController.execute(fallingGate, 0.F);
               CHECK_EQ(result, StepEvent::Completed);
               result = stepController.execute(risingGate, 0.F);
@@ -98,7 +98,7 @@ namespace curve_sequencer_2 {
             }
 
             SUBCASE("by high gate") {
-              controls.triggerMode = fake::stepControlReturning(TriggerMode::GateIsHigh);
+              controls.triggerMode = stepControlReturning(TriggerMode::GateIsHigh);
               auto result = stepController.execute(highGate, 0.F);
               CHECK_EQ(result, StepEvent::Completed);
               result = stepController.execute(risingGate, 0.F);
@@ -106,7 +106,7 @@ namespace curve_sequencer_2 {
             }
 
             SUBCASE("by low gate") {
-              controls.triggerMode = fake::stepControlReturning(TriggerMode::GateIsLow);
+              controls.triggerMode = stepControlReturning(TriggerMode::GateIsLow);
               auto result = stepController.execute(lowGate, 0.F);
               CHECK_EQ(result, StepEvent::Completed);
               result = stepController.execute(fallingGate, 0.F);
@@ -118,7 +118,7 @@ namespace curve_sequencer_2 {
             allowGenerate(controls);
 
             SUBCASE("waiting for rising gate") {
-              controls.triggerMode = fake::stepControlReturning(TriggerMode::GateRises);
+              controls.triggerMode = stepControlReturning(TriggerMode::GateRises);
               auto result = stepController.execute(highGate, 0.F);
               CHECK_EQ(result, StepEvent::Generated);
               result = stepController.execute(fallingGate, 0.F);
@@ -128,7 +128,7 @@ namespace curve_sequencer_2 {
             }
 
             SUBCASE("waiting for falling gate") {
-              controls.triggerMode = fake::stepControlReturning(TriggerMode::GateFalls);
+              controls.triggerMode = stepControlReturning(TriggerMode::GateFalls);
               auto result = stepController.execute(lowGate, 0.F);
               CHECK_EQ(result, StepEvent::Generated);
               result = stepController.execute(highGate, 0.F);
@@ -138,7 +138,7 @@ namespace curve_sequencer_2 {
             }
 
             SUBCASE("waiting for changing gate") {
-              controls.triggerMode = fake::stepControlReturning(TriggerMode::GateChanges);
+              controls.triggerMode = stepControlReturning(TriggerMode::GateChanges);
               auto result = stepController.execute(lowGate, 0.F);
               CHECK_EQ(result, StepEvent::Generated);
               result = stepController.execute(highGate, 0.F);
@@ -146,7 +146,7 @@ namespace curve_sequencer_2 {
             }
 
             SUBCASE("waiting for high gate") {
-              controls.triggerMode = fake::stepControlReturning(TriggerMode::GateIsHigh);
+              controls.triggerMode = stepControlReturning(TriggerMode::GateIsHigh);
               auto result = stepController.execute(lowGate, 0.F);
               CHECK_EQ(result, StepEvent::Generated);
               result = stepController.execute(fallingGate, 0.F);
@@ -154,7 +154,7 @@ namespace curve_sequencer_2 {
             }
 
             SUBCASE("waiting for low gate") {
-              controls.triggerMode = fake::stepControlReturning(TriggerMode::GateIsLow);
+              controls.triggerMode = stepControlReturning(TriggerMode::GateIsLow);
               auto result = stepController.execute(highGate, 0.F);
               CHECK_EQ(result, StepEvent::Generated);
               result = stepController.execute(risingGate, 0.F);
@@ -165,14 +165,14 @@ namespace curve_sequencer_2 {
 
         SUBCASE("when uninterruptible") {
           allowGenerate(controls);
-          controls.interruptOnTrigger = fake::stepControlReturning(false);
+          controls.interruptOnTrigger = stepControlReturning(false);
 
           SUBCASE("generates regardless of trigger") {
             std::for_each(triggerModes.cbegin(), triggerModes.cend(),
                           [&controls, &stepController](TriggerMode const triggerMode) {
                             std::for_each(gateStates.cbegin(), gateStates.cend(),
                                           [&controls, &stepController, triggerMode](Latch const &gateState) {
-                                            controls.triggerMode = fake::stepControlReturning(triggerMode);
+                                            controls.triggerMode = stepControlReturning(triggerMode);
                                             auto result = stepController.execute(gateState, 0.F);
                                             CHECK_EQ(result, StepEvent::Generated);
                                           });
@@ -184,12 +184,12 @@ namespace curve_sequencer_2 {
           auto constexpr step{2};
           allowGenerate(controls);
           stepController.enter(step);
-          controls.advanceOnEndOfCurve = fake::stepControlReturning(true);
+          controls.advanceOnEndOfCurve = stepControlReturning(true);
 
           SUBCASE("if curve completes") {
             timer.reset();
             timer.advance(0.99F);
-            controls.duration = fake::stepControlReturning(1.F);
+            controls.duration = stepControlReturning(1.F);
             auto constexpr sampleTime{0.1F}; // Enough to complete the step
             controls.showInactive = [](int s) {};
 
@@ -215,7 +215,7 @@ namespace curve_sequencer_2 {
 
           SUBCASE("if curve does not complete") {
             timer.reset();
-            controls.duration = fake::stepControlReturning(1.F);
+            controls.duration = stepControlReturning(1.F);
             auto constexpr sampleTime{0.1F}; // Not enough to complete the step
 
             SUBCASE("generates") {
