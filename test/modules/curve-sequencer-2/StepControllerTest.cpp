@@ -25,13 +25,24 @@ namespace curve_sequencer_2 {
     static auto constexpr highGate = Latch{true, false};
     static auto constexpr lowGate = Latch{false, false};
 
+    auto const gateStates = std::vector<Latch>{risingGate, fallingGate, lowGate, highGate};
+
+    auto const triggerModes = std::vector<TriggerMode>{
+        TriggerMode::GateRises,  TriggerMode::GateFalls, TriggerMode::GateChanges,
+        TriggerMode::GateIsHigh, TriggerMode::GateIsLow,
+    };
+
     static inline void prepareToGenerate(fake::Controls &controls) {
+      controls.interruptOnTrigger = [](int s) -> bool { return false; };
+      controls.advanceOnEndOfCurve = [](int s) -> bool { return false; };
+      controls.showProgress = [](int s, float f) {};
+
       controls.curvature = [](int s) -> float { return 0.2F; };
       controls.duration = [](int s) -> float { return 0.2F; };
       controls.input = []() -> float { return 0.2F; };
-      controls.level = [](int s) -> float { return 0.2F; };
+      controls.startLevel = [](int s) -> float { return 0.F; };
+      controls.endLevel = [](int s) -> float { return 10.F; };
       controls.setOutput = [](float f) {};
-      controls.showProgress = [](int step, float progress) {};
       controls.taper = [](int s) -> VariableTaper const * { return dhe::taper::variableTapers[0]; };
     }
 
@@ -76,7 +87,8 @@ namespace curve_sequencer_2 {
       SUBCASE("execute") {
         SUBCASE("when interruptible") {
           controls.interruptOnTrigger = [](int s) -> bool { return true; };
-          auto constexpr step = 7;
+          controls.advanceOnEndOfCurve = [](int s) -> bool { return false; };
+          auto constexpr step{7};
           controls.showProgress = [](int s, float p) {};
           stepController.enter(step);
 
@@ -119,6 +131,8 @@ namespace curve_sequencer_2 {
           }
 
           SUBCASE("generates if not triggered") {
+            prepareToGenerate(controls);
+
             SUBCASE("waiting for rising gate") {
               controls.triggerMode = [](int s) -> TriggerMode { return TriggerMode::GateRises; };
               auto result = stepController.execute(highGate, 0.F);
@@ -166,16 +180,12 @@ namespace curve_sequencer_2 {
         }
 
         SUBCASE("when uninterruptible") {
-          auto const triggerModes = std::vector<TriggerMode>{
-              TriggerMode::GateRises,  TriggerMode::GateFalls, TriggerMode::GateChanges,
-              TriggerMode::GateIsHigh, TriggerMode::GateIsLow,
-          };
-          auto const gateStates = std::vector<Latch>{risingGate, fallingGate, lowGate, highGate};
+          prepareToGenerate(controls);
           controls.interruptOnTrigger = [](int s) -> bool { return false; };
 
           SUBCASE("generates regardless of trigger") {
             std::for_each(triggerModes.cbegin(), triggerModes.cend(),
-                          [&controls, &stepController, &gateStates](TriggerMode const triggerMode) {
+                          [&controls, &stepController](TriggerMode const triggerMode) {
                             std::for_each(gateStates.cbegin(), gateStates.cend(),
                                           [&controls, &stepController, triggerMode](Latch const &gateState) {
                                             controls.triggerMode
@@ -187,7 +197,42 @@ namespace curve_sequencer_2 {
           }
         }
 
-        SUBCASE("when advances on EOC") {}
+        SUBCASE("when advances on EOC") {
+          auto constexpr step{2};
+          prepareToGenerate(controls);
+          stepController.enter(step);
+          controls.advanceOnEndOfCurve = [](int s) -> bool { return true; };
+
+          SUBCASE("if curve completes") {
+            timer.reset();
+            timer.advance(0.99F);
+            controls.duration = [=](int s) -> float { return 1.F; };
+            auto constexpr sampleTime{0.1F}; // Enough to complete the step
+            controls.showInactive = [](int s) {};
+
+            SUBCASE("generates") {
+              auto output{-992.3F};
+              controls.setOutput = [&](float v) { output = v; };
+              stepController.execute(lowGate, sampleTime);
+              CHECK_EQ(output, controls.endLevel(step));
+            }
+
+            SUBCASE("reports complete") {
+              auto result = stepController.execute(lowGate, sampleTime);
+              CHECK_EQ(result, StepEvent::Completed);
+            }
+
+            SUBCASE("deactivates step") {
+              auto deactivatedStep = -1;
+              controls.showInactive = [&](int step) { deactivatedStep = step; };
+              stepController.execute(lowGate, sampleTime);
+              CHECK_EQ(deactivatedStep, step);
+            }
+          }
+
+          SUBCASE("if curve does not complete") {}
+        }
+
         SUBCASE("when sustains on EOC") {}
 
         SUBCASE("generate") {

@@ -56,13 +56,13 @@ namespace curve_sequencer_2 {
         CHECK(controls.interruptOnTrigger(step));
       }
 
-      SUBCASE("advanceOnEndOfStep(step)") {
+      SUBCASE("advanceOnEndOfCurve(step)") {
         auto constexpr step = 6;
-        params[Controls::OnEndOfStepSwitches + step].setValue(0.F); // NOINT
-        CHECK_FALSE(controls.advanceOnEndOfStep(step));
+        params[Controls::OnEndOfCurveSwitches + step].setValue(0.F); // NOINT
+        CHECK_FALSE(controls.advanceOnEndOfCurve(step));
 
-        params[Controls::OnEndOfStepSwitches + step].setValue(1.F); // NEXT
-        CHECK(controls.advanceOnEndOfStep(step));
+        params[Controls::OnEndOfCurveSwitches + step].setValue(1.F); // NEXT
+        CHECK(controls.advanceOnEndOfCurve(step));
       }
 
       SUBCASE("trackStartSource(step)") {
@@ -207,5 +207,5 @@ namespace curve_sequencer_2 {
       }
     }
   } // namespace step_controls
-} // namespace curve_sequencer
+} // namespace curve_sequencer_2
 } // namespace test

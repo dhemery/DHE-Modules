@@ -42,6 +42,11 @@ namespace curve_sequencer_2 {
       if (controls.interruptOnTrigger(step) && isTriggered(controls.triggerMode(step), gateLatch)) {
         return StepEvent::Completed;
       }
+      controls.output(controls.endLevel(step));
+      if (controls.advanceOnEndOfCurve(step)) {
+        exit();
+        return StepEvent::Completed;
+      }
       return StepEvent::Generated;
     };
 

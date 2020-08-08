@@ -53,7 +53,7 @@ namespace curve_sequencer_2 {
 
     // Step controls
 
-    auto advanceOnEndOfStep(int step) const -> bool { return positionOf(params[OnEndOfStepSwitches + step]) == 1; }
+    auto advanceOnEndOfCurve(int step) const -> bool { return positionOf(params[OnEndOfCurveSwitches + step]) == 1; }
 
     auto curvature(int step) const -> float { return dhe::curvature(params[CurveKnobs + step]); }
 
@@ -122,7 +122,7 @@ namespace curve_sequencer_2 {
       ENUMIDS(ShapeSwitches, N),
       ENUMIDS(StartLevelKnobs, N), // Was GenerateModeMenu in v1.1.0?
       // The rest are new in 1.3.0
-      ENUMIDS(OnEndOfStepSwitches, N),
+      ENUMIDS(OnEndOfCurveSwitches, N),
       ENUMIDS(StartSourceSwitches, N),
       ENUMIDS(EndSourceSwitches, N),
       ENUMIDS(TrackStartSwitches, N),

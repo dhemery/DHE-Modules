@@ -79,7 +79,8 @@ namespace curve_sequencer {
   }; // namespace curve_sequencer
 
   template <int N> class CurveSequencerPanel : public rack::app::ModuleWidget {
-    using Controls = CurveSequencerControls<rack::engine::Input, rack::engine::Output, rack::engine::Param, rack::engine::Light, N>;
+    using Controls = CurveSequencerControls<rack::engine::Input, rack::engine::Output, rack::engine::Param,
+                                            rack::engine::Light, N>;
 
   public:
     CurveSequencerPanel(rack::engine::Module *module) {

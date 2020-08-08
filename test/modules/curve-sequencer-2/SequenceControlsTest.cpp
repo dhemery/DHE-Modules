@@ -133,5 +133,5 @@ namespace curve_sequencer_2 {
       }
     }
   } // namespace sequence_controls
-} // namespace curve_sequencer
+} // namespace curve_sequencer_2
 } // namespace test

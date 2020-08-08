@@ -31,10 +31,12 @@ namespace curve_sequencer_2 {
       std::function<TriggerMode(int step)> triggerMode{
           [](int s) -> TriggerMode { throw "Controls.triggerMode(step)"; }};
       std::function<bool(int)> interruptOnTrigger{[](int s) -> bool { throw "Controls.interruptOnTrigger(step)"; }};
+      std::function<bool(int)> advanceOnEndOfCurve{[](int s) -> bool { throw "Controls.advanceOnEndOfCurve(step)"; }};
 
       std::function<float(int step)> curvature{[](int s) -> float { throw "Controls.curvature(step)"; }};
       std::function<float(int step)> duration{[](int s) -> float { throw "Controls.duration(step)"; }};
-      std::function<float(int step)> level{[](int s) -> float { throw "Controls.level(step)"; }};
+      std::function<float(int step)> startLevel{[](int s) -> float { throw "Controls.startLevel(step)"; }};
+      std::function<float(int step)> endLevel{[](int s) -> float { throw "Controls.endLevel(step)"; }};
       std::function<VariableTaper const *(int step)> taper{
           [](int s) -> VariableTaper const * { throw "Controls.taper(step)"; }};
 
