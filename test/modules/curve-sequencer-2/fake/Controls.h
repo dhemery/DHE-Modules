@@ -36,24 +36,24 @@ namespace curve_sequencer_2 {
       std::function<float()> getOutput{[]() -> float { throw forbidden("output"); }};
       std::function<void(float)> setOutput{[](float f) { throw forbidden("output", f); }};
       std::function<int()> selectionStart{[]() -> int { throw forbidden("selectionStart"); }};
-      std::function<int()> selectionLength{[]() -> int { throw forbidden("selectionStart"); }};
+      std::function<int()> selectionLength{[]() -> int { throw forbidden("selectionLength"); }};
 
       // Step advancement controls
-      std::function<TriggerMode(int)> triggerMode{[](int s) -> TriggerMode { throw forbidden("triggerMode", s); }};
-      std::function<bool(int)> interruptOnTrigger{[](int s) -> bool { throw forbidden("interruptOnTrigger", s); }};
       std::function<bool(int)> advanceOnEndOfCurve{[](int s) -> bool { throw forbidden("advanceOnEndOfCurve", s); }};
+      std::function<bool(int)> interruptOnTrigger{[](int s) -> bool { throw forbidden("interruptOnTrigger", s); }};
+      std::function<TriggerMode(int)> triggerMode{[](int s) -> TriggerMode { throw forbidden("triggerMode", s); }};
 
       // Step curve controls
       std::function<float(int)> curvature{[](int s) -> float { throw forbidden("curvature", s); }};
       std::function<float(int)> duration{[](int s) -> float { throw forbidden("duration", s); }};
-      std::function<float(int)> startLevel{[](int s) -> float { throw forbidden("startLevel", s); }};
       std::function<float(int)> endLevel{[](int s) -> float { throw forbidden("endLevel", s); }};
+      std::function<float(int)> startLevel{[](int s) -> float { throw forbidden("startLevel", s); }};
       std::function<TaperT(int)> taper{[](int s) -> TaperT { throw forbidden("taper", s); }};
 
       // Step progress controls
       std::function<bool(int)> isEnabled{[](int s) -> bool { throw forbidden("isEnabled", s); }};
-      std::function<void(int, float)> showProgress{[](int s, float f) { throw forbidden("showProgress", s, f); }};
       std::function<void(int)> showInactive{[](int s) { throw forbidden("showInactive", s); }};
+      std::function<void(int, float)> showProgress{[](int s, float f) { throw forbidden("showProgress", s, f); }};
     };
 
   } // namespace fake
