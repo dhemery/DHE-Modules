@@ -9,20 +9,20 @@
 
 namespace test {
 namespace curve_sequencer_2 {
+  static inline auto forbidden(const std::string &name) -> std::string { return "Controls." + name + "()"; }
+
+  template <typename V> static inline auto forbidden(const std::string &name, V v) -> std::string {
+    return "Controls." + name + "(" + std::to_string(v) + ")";
+  }
+
+  template <typename V1, typename V2>
+  static inline auto forbidden(const std::string &name, V1 v1, V2 v2) -> std::string {
+    return "Controls." + name + "(" + std::to_string(v1) + "," + std::to_string(v2) + ")";
+  }
+
   namespace fake {
     using dhe::curve_sequencer_2::TriggerMode;
     using TaperT = dhe::taper::VariableTaper const *;
-
-    static inline auto forbidden(const std::string &name) -> std::string { return "Controls." + name + "()"; }
-
-    template <typename V> static inline auto forbidden(const std::string &name, V v) -> std::string {
-      return "Controls." + name + "(" + std::to_string(v) + ")";
-    }
-
-    template <typename V1, typename V2>
-    static inline auto forbidden(const std::string &name, V1 v1, V2 v2) -> std::string {
-      return "Controls." + name + "(" + std::to_string(v1) + "," + std::to_string(v2) + ")";
-    }
 
     struct Controls {
       // Sequencer controls

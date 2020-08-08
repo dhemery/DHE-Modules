@@ -75,8 +75,11 @@ namespace curve_sequencer_2 {
           auto constexpr step{7};
           controls.showProgress = [](int s, float p) {};
           stepController.enter(step);
+          controls.showProgress = [](int s, float f) { throw forbidden("showProgress", s, f); };
 
           SUBCASE("completes without generating if triggered") {
+            controls.showInactive = [](int s) {};
+
             SUBCASE("by rising gate") {
               controls.triggerMode = stepControlReturning(TriggerMode::GateRises);
               auto result = stepController.execute(risingGate, 0.F);
@@ -219,14 +222,21 @@ namespace curve_sequencer_2 {
             auto constexpr sampleTime{0.1F}; // Not enough to complete the step
 
             SUBCASE("generates") {
-              return; // TODO:
-              auto output{-992.3F};
+              auto output{-441.3F};
               controls.setOutput = [&](float v) { output = v; };
               stepController.execute(lowGate, sampleTime);
               CHECK_EQ(output, controls.endLevel(step));
             }
-            SUBCASE("reports generated") {}
-            SUBCASE("leaves step active") {}
+
+            SUBCASE("reports generated") {
+              auto const result = stepController.execute(lowGate, sampleTime);
+              CHECK_EQ(result, StepEvent::Generated);
+            }
+
+            SUBCASE("leaves step active") {
+              controls.showInactive = [](int s) { throw forbidden("showInactive", s); };
+              stepController.execute(lowGate, sampleTime);
+            }
           }
         }
 

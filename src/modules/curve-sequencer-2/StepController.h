@@ -39,15 +39,23 @@ namespace curve_sequencer_2 {
     }
 
     auto execute(Latch const &gateLatch, float sampleTime) -> StepEvent {
-      if (controls.interruptOnTrigger(step) && isTriggered(controls.triggerMode(step), gateLatch)) {
+      if (interrupted(gateLatch)) {
+        exit();
         return StepEvent::Completed;
       }
+      timer.advance(sampleTime / duration());
       controls.output(controls.endLevel(step));
-      if (controls.advanceOnEndOfCurve(step)) {
+      if (completed()) {
         exit();
         return StepEvent::Completed;
       }
       return StepEvent::Generated;
+    }
+
+    auto completed() const -> bool { return !timer.inProgress() && controls.advanceOnEndOfCurve(step); }
+
+    auto interrupted(const Latch &gateLatch) const -> bool {
+      return controls.interruptOnTrigger(step) && isTriggered(controls.triggerMode(step), gateLatch);
     };
 
     void exit() { controls.showInactive(step); }
