@@ -32,22 +32,21 @@ TEST_SOURCES = $(wildcard \
 		)
 
 TEST_OBJECTS := $(patsubst %, build/%.o, $(TEST_SOURCES))
+-include $(TEST_OBJECTS:.o=.d)
 
-TEST_FLAGS += -Itest/
+TEST_RUNNER = build/testrunner
 
-$(TEST_OBJECTS): FLAGS += $(TEST_FLAGS)
+TEST_CXX_FLAGS += -Itest/
 
-build/doctest: $(TEST_OBJECTS)
-	mkdir -p build
+$(TEST_OBJECTS): FLAGS += $(TEST_CXX_FLAGS)
+
+$(TEST_RUNNER): $(TEST_OBJECTS)
+	@mkdir -p $(@D)
 	$(CXX) -o $@ $^
 
-test: build/doctest
+.PHONY: test
+test: $(TEST_RUNNER)
 	$<
-
-.PHONY: test test_runner
-
-
--include $(TEST_OBJECTS:.o=.d)
 
 
 ########################################################################
@@ -101,14 +100,6 @@ COMPILATION_DATABASE_FILE = compile_commands.json
 
 COMPILATION_DATABASE_JSONS := $(patsubst %, build/%.json, $(SOURCES) $(TEST_SOURCES))
 
-build/src/%.json: src/%
-	@mkdir -p $(@D)
-	$(CXX) $(CXXFLAGS) -MJ $@ -c -o build/$^.o $^
-
-build/test/%.json: test/%
-	@mkdir -p $(@D)
-	$(CXX) $(CXXFLAGS) $(TEST_FLAGS) -MJ $@ -c -o build/$^.o $^
-
 $(COMPILATION_DATABASE_FILE): $(COMPILATION_DATABASE_JSONS)
 	sed -e '1s/^/[/' -e '$$s/,$$/]/' $^ | json_pp > $@
 
@@ -116,17 +107,38 @@ HEADERS = $(wildcard \
 		src/*.h \
 		src/*/*.h \
 		src/*/*/*.h \
+		test/*.h \
+		test/*/*.h \
+		test/*/*/*.h \
 		)
 
+.PHONY: format
 format:
 	clang-format -i -style=file $(HEADERS) $(SOURCES) $(TEST_SOURCES)
 
+.PHONY: tidy
 tidy: $(COMPILATION_DATABASE_FILE)
-	clang-tidy -header-filter=src/.* -p=build $(SOURCES)
+	clang-tidy -header-filter="^(src|test)/".* -p=build $(SOURCES)
 
+.PHONY: cleancdb
 cleancdb:
 	rm -rf $(COMPILATION_DATABASE_FILE) $(COMPILATION_DATABASE_JSONS)
 
 clean: cleancdb
 
-.PHONY: format tidy cleancdb
+
+
+
+########################################################################
+#
+# General rules
+#
+########################################################################
+
+build/src/%.json: src/%
+	@mkdir -p $(@D)
+	$(CXX) $(CXXFLAGS) -MJ $@ -c -o build/$^.o $^
+
+build/test/%.json: test/%
+	@mkdir -p $(@D)
+	$(CXX) $(CXXFLAGS) $(TEST_CXX_FLAGS) -MJ $@ -c -o build/$^.o $^
