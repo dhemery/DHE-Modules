@@ -47,6 +47,7 @@ test: build/doctest
 .PHONY: test test_runner
 
 
+-include $(TEST_OBJECTS:.o=.d)
 
 
 ########################################################################
