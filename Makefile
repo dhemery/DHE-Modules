@@ -4,7 +4,7 @@ FLAGS += -Isrc
 CFLAGS +=
 CXXFLAGS +=
 LDFLAGS +=
-SOURCES = $(wildcard src/*.cpp)
+SOURCES = $(shell find src -name "*.cpp")
 DISTRIBUTABLES += LICENSE.txt presets svg
 
 include $(RACK_DIR)/plugin.mk
@@ -25,11 +25,7 @@ include $(RACK_DIR)/plugin.mk
 #
 ########################################################################
 
-TEST_SOURCES = $(wildcard \
-		test/*.cpp \
-		test/*/*.cpp \
-		test/*/*/*.cpp \
-		)
+TEST_SOURCES = $(shell find test -name "*.cpp")
 
 TEST_OBJECTS := $(patsubst %, build/%.o, $(TEST_SOURCES))
 -include $(TEST_OBJECTS:.o=.d)
@@ -97,14 +93,7 @@ clean: clean-stage
 #
 ########################################################################
 
-HEADERS = $(wildcard \
-		src/*.h \
-		src/*/*.h \
-		src/*/*/*.h \
-		test/*.h \
-		test/*/*.h \
-		test/*/*/*.h \
-		)
+HEADERS = $(shell find src test -name "*.h")
 
 .PHONY: format
 format:

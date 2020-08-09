@@ -30,8 +30,7 @@ namespace curve_sequencer {
 
       // Step controls
       std::function<GenerateMode(int step)> mode{[](int s) -> GenerateMode { throw "Controls.mode(step)"; }};
-      std::function<AdvanceMode(int step)> condition{
-          [](int s) -> AdvanceMode { throw "Controls.condition(step)"; }};
+      std::function<AdvanceMode(int step)> condition{[](int s) -> AdvanceMode { throw "Controls.condition(step)"; }};
 
       std::function<float(int step)> curvature{[](int s) -> float { throw "Controls.curvature(step)"; }};
       std::function<float(int step)> duration{[](int s) -> float { throw "Controls.duration(step)"; }};
