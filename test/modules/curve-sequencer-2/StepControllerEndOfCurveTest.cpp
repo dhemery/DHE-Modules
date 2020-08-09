@@ -2,11 +2,9 @@
 #include "components/PhaseTimer.h"
 #include "fake/Controls.h"
 #include "modules/curve-sequencer-2/StepController.h"
-#include "modules/curve-sequencer-2/TriggerMode.h"
 #include "modules/curve-sequencer/StepEvent.h"
 
 #include <doctest.h>
-#include <vector>
 
 namespace test {
 namespace curve_sequencer_2 {
