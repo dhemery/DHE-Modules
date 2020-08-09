@@ -3,6 +3,8 @@
 #include "modules/curve-sequencer-2/StepController.h"
 
 #include <doctest.h>
+#include <modules/curve-sequencer-2/fake/Interrupter.h>
+#include <modules/curve-sequencer-2/fake/Sustainer.h>
 
 namespace test {
 namespace curve_sequencer_2 {
@@ -10,14 +12,18 @@ namespace curve_sequencer_2 {
     using dhe::Latch;
     using dhe::PhaseTimer;
     using dhe::curve_sequencer::StepEvent;
-    using dhe::curve_sequencer_2::StepController;
     using dhe::curve_sequencer_2::TriggerMode;
+    using test::fake::Interrupter;
+    using test::fake::Sustainer;
+    using StepController = dhe::curve_sequencer_2::StepController<fake::Controls, Interrupter, Sustainer>;
 
     TEST_CASE("curve_sequencer_2::StepController generate") {
       fake::Controls controls{};
+      Interrupter interrupter{};
+      Sustainer sustainer{};
       PhaseTimer timer{};
 
-      StepController<fake::Controls> stepController{controls, timer};
+      StepController stepController{controls, interrupter, sustainer, timer};
 
       // TODO: start source
       // TODO: track start source

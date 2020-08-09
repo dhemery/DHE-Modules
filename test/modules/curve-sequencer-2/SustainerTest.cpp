@@ -9,19 +9,19 @@ namespace test {
 namespace curve_sequencer_2 {
   using dhe::curve_sequencer_2::Sustainer;
   using dhe::curve_sequencer_2::TriggerMode;
-  using dhe::test::fallingLatch;
-  using dhe::test::highLatch;
-  using dhe::test::lowLatch;
-  using dhe::test::risingLatch;
-  using dhe::test::fake::funcReturning;
-  using dhe::test::fake::curve_sequencer_2::SustainControls;
+  using test::fallingLatch;
+  using test::highLatch;
+  using test::lowLatch;
+  using test::risingLatch;
+  using test::fake::funcReturning;
+  using test::fake::SustainControls;
 
   namespace sustainer {
 
     TEST_CASE("curve_sequencer_2::Sustainer") {
       SustainControls controls{};
 
-      Sustainer<decltype(controls)> sustainer{controls};
+      Sustainer<SustainControls> sustainer{controls};
 
       SUBCASE("when advance on end of curve") {
         controls.advanceOnEndOfCurve = funcReturning<int>(true);
