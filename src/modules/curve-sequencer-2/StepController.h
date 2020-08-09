@@ -13,22 +13,6 @@ namespace curve_sequencer_2 {
   using dhe::PhaseTimer;
   using dhe::curve_sequencer::StepEvent;
 
-  static inline auto isTriggered(TriggerMode triggerMode, Latch const &gate) -> bool {
-    switch (triggerMode) {
-    case TriggerMode::GateIsHigh:
-    default:
-      return gate.isHigh();
-    case TriggerMode::GateIsLow:
-      return gate.isLow();
-    case TriggerMode::GateRises:
-      return gate.isRise();
-    case TriggerMode::GateFalls:
-      return gate.isFall();
-    case TriggerMode::GateChanges:
-      return gate.isEdge();
-    }
-  }
-
   template <typename Controls> class StepController {
   public:
     StepController(Controls &controls, PhaseTimer &timer) : controls{controls}, timer{timer} {}

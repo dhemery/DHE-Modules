@@ -120,3 +120,6 @@ cleancdb:
 	rm -rf $(COMPILATION_DATABASE)
 
 clean: cleancdb
+
+clion: $(OBJECTS) $(TESTOBJECTS)
+
