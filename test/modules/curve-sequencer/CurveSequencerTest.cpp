@@ -1,6 +1,6 @@
 #include "modules/curve-sequencer/CurveSequencer.h"
 
-#include "fake/Controls.h"
+#include "fake/SequenceControls.h"
 #include "fake/StepController.h"
 #include "fake/StepSelector.h"
 #include "modules/curve-sequencer/StepEvent.h"
@@ -17,7 +17,8 @@ namespace curve_sequencer {
       return [=]() -> T { return t; };
     }
 
-    using dhe::curve_sequencer::CurveSequencer;
+    using CurveSequencer
+        = dhe::curve_sequencer::CurveSequencer<fake::SequenceControls, fake::StepSelector, fake::StepController>;
 
     auto constexpr stableLowLatch = Latch{false, false};
     auto constexpr fallenLatch = Latch{false, true};
@@ -25,11 +26,10 @@ namespace curve_sequencer {
     auto constexpr risenLatch = Latch{true, true};
 
     TEST_CASE("curve_sequencer::CurveSequencer") {
-      fake::Controls controls{};
+      fake::SequenceControls controls{};
       fake::StepSelector stepSelector{};
       fake::StepController stepController{};
-      CurveSequencer<fake::Controls, fake::StepSelector, fake::StepController> curveSequencer{controls, stepSelector,
-                                                                                              stepController};
+      CurveSequencer curveSequencer{controls, stepSelector, stepController};
 
       controls.isGated = returns(false);
       controls.isReset = returns(false);
@@ -68,7 +68,7 @@ namespace curve_sequencer {
             controls.isReset = returns(true);
             controls.input = returns(input);
 
-            controls.setOutput = [=](float output) { CHECK_EQ(output, input); };
+            controls.output = [=](float output) { CHECK_EQ(output, input); };
 
             curveSequencer.execute(0.1F);
           }
@@ -256,7 +256,7 @@ namespace curve_sequencer {
 
               controls.input = returns(input);
 
-              controls.setOutput = [&](float voltage) { output = voltage; };
+              controls.output = [&](float voltage) { output = voltage; };
 
               curveSequencer.execute(0.F);
               CHECK_EQ(output, input);
@@ -264,7 +264,7 @@ namespace curve_sequencer {
 
             SUBCASE("exits active step") {
               controls.input = returns(0.34F);
-              controls.setOutput = [](float voltage) {};
+              controls.output = [](float voltage) {};
 
               auto calledExit = bool{};
               stepController.exit = [&]() { calledExit = true; };
