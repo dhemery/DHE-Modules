@@ -36,7 +36,7 @@ TEST_OBJECTS := $(patsubst %, build/%.o, $(TEST_SOURCES))
 
 TEST_RUNNER = build/testrunner
 
-TEST_CXX_FLAGS += -Itest/ -Idoctest/
+TEST_CXX_FLAGS = -Itest/ -Idoctest/
 
 $(TEST_OBJECTS): FLAGS += $(TEST_CXX_FLAGS)
 
@@ -97,13 +97,6 @@ clean: clean-stage
 #
 ########################################################################
 
-COMPILATION_DATABASE_FILE = compile_commands.json
-
-COMPILATION_DATABASE_JSONS := $(patsubst %, build/%.json, $(SOURCES) $(TEST_SOURCES))
-
-$(COMPILATION_DATABASE_FILE): $(COMPILATION_DATABASE_JSONS)
-	sed -e '1s/^/[/' -e '$$s/,$$/]/' $^ | json_pp > $@
-
 HEADERS = $(wildcard \
 		src/*.h \
 		src/*/*.h \
@@ -117,29 +110,23 @@ HEADERS = $(wildcard \
 format:
 	clang-format -i -style=file $(HEADERS) $(SOURCES) $(TEST_SOURCES)
 
-.PHONY: tidy
-tidy: $(COMPILATION_DATABASE_FILE)
-	clang-tidy -header-filter="^(src|test)/".* -p=build $(SOURCES)
+COMPILATION_DB = compile_commands.json
 
-.PHONY: cleancdb
-cleancdb:
-	rm -rf $(COMPILATION_DATABASE_FILE) $(COMPILATION_DATABASE_JSONS)
+COMPILATION_DB_ENTRIES := $(patsubst %, build/%.json, $(SOURCES))
 
-clean: cleancdb
+$(COMPILATION_DB): $(COMPILATION_DB_ENTRIES)
+	sed -e '1s/^/[/' -e '$$s/,$$/]/' $^ | json_pp > $@
 
-
-
-
-########################################################################
-#
-# General rules
-#
-########################################################################
-
-build/src/%.json: src/%
+build/%.json: %
 	@mkdir -p $(@D)
 	$(CXX) $(CXXFLAGS) -MJ $@ -c -o build/$^.o $^
 
-build/test/%.json: test/%
-	@mkdir -p $(@D)
-	$(CXX) $(CXXFLAGS) $(TEST_CXX_FLAGS) -MJ $@ -c -o build/$^.o $^
+.PHONY: tidy
+tidy: $(COMPILATION_DB)
+	clang-tidy -header-filter="^src/".* -p=build $(SOURCES)
+
+.PHONY: cleancdb
+cleancdb:
+	rm -rf $(COMPILATION_DATABASE)
+
+clean: cleancdb

@@ -1,6 +1,6 @@
 #include "components/Latch.h"
 
-#include "doctest.h"
+#include <doctest.h>
 
 using dhe::Latch;
 
