@@ -16,6 +16,7 @@ namespace curve_sequencer_2 {
   static inline auto isTriggered(TriggerMode triggerMode, Latch const &gate) -> bool {
     switch (triggerMode) {
     case TriggerMode::GateIsHigh:
+    default:
       return gate.isHigh();
     case TriggerMode::GateIsLow:
       return gate.isLow();
@@ -32,48 +33,50 @@ namespace curve_sequencer_2 {
   public:
     StepController(Controls &controls, PhaseTimer &timer) : controls{controls}, timer{timer} {}
 
-    void enter(int entryStep) {
-      step = entryStep;
+    void enter(int step) {
+      currentStep = step;
       reset();
-      controls.showProgress(step, 0.F);
+      controls.showProgress(currentStep, 0.F);
     }
 
     auto execute(Latch const &gateLatch, float sampleTime) -> StepEvent {
-      if (interrupted(gateLatch)) {
-        exit();
-        return StepEvent::Completed;
+      if (!interrupted(gateLatch)) {
+        generate(sampleTime);
+        if (!completed()) {
+          return StepEvent::Generated;
+        }
       }
-      timer.advance(sampleTime / duration());
-      controls.output(controls.endLevel(step));
-      if (completed()) {
-        exit();
-        return StepEvent::Completed;
-      }
-      return StepEvent::Generated;
+      exit();
+      return StepEvent::Completed;
     }
 
-    auto completed() const -> bool { return !timer.inProgress() && controls.advanceOnEndOfCurve(step); }
-
-    auto interrupted(const Latch &gateLatch) const -> bool {
-      return controls.interruptOnTrigger(step) && isTriggered(controls.triggerMode(step), gateLatch);
-    };
-
-    void exit() { controls.showInactive(step); }
+    void exit() { controls.showInactive(currentStep); }
 
   private:
-    auto duration() const -> float { return controls.duration(step); }
+    auto completed() const -> bool { return !timer.inProgress() && controls.advanceOnEndOfCurve(currentStep); }
 
-    auto level() const -> float { return controls.level(step); }
+    auto duration() const -> float { return controls.duration(currentStep); }
+
+    void generate(float sampleTime) const {
+      timer.advance(sampleTime / duration());
+      controls.output(controls.endLevel(currentStep));
+    }
+
+    auto interrupted(Latch const &gateLatch) const -> bool {
+      return controls.interruptOnTrigger(currentStep) && isTriggered(controls.triggerMode(currentStep), gateLatch);
+    };
+
+    auto level() const -> float { return controls.level(currentStep); }
 
     void reset() { timer.reset(); }
 
     auto taper(float input) const -> float {
-      auto const curvature = controls.curvature(step);
-      auto const taper = controls.taper(step);
+      auto const curvature = controls.curvature(currentStep);
+      auto const taper = controls.taper(currentStep);
       return taper->apply(input, curvature);
     }
 
-    int step{0};
+    int currentStep{0};
     float startVoltage{0.F};
     Controls &controls;
     PhaseTimer &timer;
