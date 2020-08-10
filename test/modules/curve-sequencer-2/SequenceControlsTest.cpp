@@ -32,7 +32,7 @@ namespace curve_sequencer_2 {
           CHECK(controls.isGated());
         }
 
-        SUBCASE("true if gate button is not pressed and gate input is low") {
+        SUBCASE("false if gate button is not pressed and gate input is low") {
           params[Controls::GateButton].setValue(0.F);
           inputs[Controls::GateInput].setVoltage(0.F);
 
@@ -53,7 +53,7 @@ namespace curve_sequencer_2 {
           CHECK(controls.isLooping());
         }
 
-        SUBCASE("true if loop button is not pressed and loop input is low") {
+        SUBCASE("false if loop button is not pressed and loop input is low") {
           params[Controls::LoopButton].setValue(0.F);
           inputs[Controls::LoopInput].setVoltage(0.F);
 
@@ -74,7 +74,7 @@ namespace curve_sequencer_2 {
           CHECK(controls.isReset());
         }
 
-        SUBCASE("true if reset button is not pressed and reset input is low") {
+        SUBCASE("false if reset button is not pressed and reset input is low") {
           params[Controls::ResetButton].setValue(0.F);
           inputs[Controls::ResetInput].setVoltage(0.F);
 
@@ -95,7 +95,7 @@ namespace curve_sequencer_2 {
           CHECK(controls.isRunning());
         }
 
-        SUBCASE("true if run button is not pressed and run input is low") {
+        SUBCASE("false if run button is not pressed and run input is low") {
           params[Controls::RunButton].setValue(0.F);
           inputs[Controls::RunInput].setVoltage(0.F);
 
