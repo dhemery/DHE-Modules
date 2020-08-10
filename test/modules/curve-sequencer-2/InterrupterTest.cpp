@@ -1,6 +1,6 @@
 #include "modules/curve-sequencer-2/Interrupter.h"
 
-#include "fake/InterruptControls.h"
+#include "helpers/fake-controls.h"
 #include "helpers/latches.h"
 
 #include <doctest.h>
@@ -13,9 +13,13 @@ namespace curve_sequencer_2 {
   using test::highLatch;
   using test::lowLatch;
   using test::risingLatch;
-  using test::fake::InterruptControls;
+  using test::fake::forbidden;
 
   namespace sustainer {
+    struct InterruptControls {
+      std::function<TriggerMode(int)> triggerMode{[](int s) -> TriggerMode { throw forbidden("triggerMode", s); }};
+      std::function<bool(int)> interruptOnTrigger{[](int s) -> bool { throw forbidden("interruptOnTrigger", s); }};
+    };
 
     TEST_CASE("curve_sequencer_2::Interrupter") {
       InterruptControls controls{};
@@ -27,7 +31,7 @@ namespace curve_sequencer_2 {
 
         SUBCASE("is interrupted iff triggered") {
           SUBCASE("by rising gate") {
-            controls.triggerMode = triggerModeFunc(TriggerMode::GateRises);
+            controls.triggerMode = [](int /**/) -> TriggerMode { return TriggerMode::GateRises; };
             CHECK(interrupter.isInterrupted(2, risingLatch));
             CHECK_FALSE(interrupter.isInterrupted(3, fallingLatch));
             CHECK_FALSE(interrupter.isInterrupted(0, highLatch));
@@ -35,7 +39,7 @@ namespace curve_sequencer_2 {
           }
 
           SUBCASE("by falling gate") {
-            controls.triggerMode = triggerModeFunc(TriggerMode::GateFalls);
+            controls.triggerMode = [](int /**/) -> TriggerMode { return TriggerMode::GateFalls; };
             CHECK(interrupter.isInterrupted(5, fallingLatch));
             CHECK_FALSE(interrupter.isInterrupted(4, risingLatch));
             CHECK_FALSE(interrupter.isInterrupted(2, highLatch));
@@ -43,7 +47,7 @@ namespace curve_sequencer_2 {
           }
 
           SUBCASE("by changing gate") {
-            controls.triggerMode = triggerModeFunc(TriggerMode::GateChanges);
+            controls.triggerMode = [](int /**/) -> TriggerMode { return TriggerMode::GateChanges; };
             CHECK(interrupter.isInterrupted(5, risingLatch));
             CHECK(interrupter.isInterrupted(6, fallingLatch));
             CHECK_FALSE(interrupter.isInterrupted(3, highLatch));
@@ -51,7 +55,7 @@ namespace curve_sequencer_2 {
           }
 
           SUBCASE("by high gate") {
-            controls.triggerMode = triggerModeFunc(TriggerMode::GateIsHigh);
+            controls.triggerMode = [](int /**/) -> TriggerMode { return TriggerMode::GateIsHigh; };
             CHECK(interrupter.isInterrupted(6, risingLatch));
             CHECK(interrupter.isInterrupted(4, highLatch));
             CHECK_FALSE(interrupter.isInterrupted(7, fallingLatch));
@@ -59,7 +63,7 @@ namespace curve_sequencer_2 {
           }
 
           SUBCASE("by low gate") {
-            controls.triggerMode = triggerModeFunc(TriggerMode::GateIsLow);
+            controls.triggerMode = [](int /**/) -> TriggerMode { return TriggerMode::GateIsLow; };
             CHECK(interrupter.isInterrupted(0, fallingLatch));
             CHECK(interrupter.isInterrupted(6, lowLatch));
             CHECK_FALSE(interrupter.isInterrupted(7, risingLatch));
@@ -72,31 +76,31 @@ namespace curve_sequencer_2 {
         controls.interruptOnTrigger = [](int /*unused*/) -> bool { return false; };
 
         SUBCASE("is not interrupted regardless of gate and trigger mode") {
-          controls.triggerMode = triggerModeFunc(TriggerMode::GateRises);
+          controls.triggerMode = [](int /**/) -> TriggerMode { return TriggerMode::GateRises; };
           CHECK_FALSE(interrupter.isInterrupted(3, highLatch));
           CHECK_FALSE(interrupter.isInterrupted(4, lowLatch));
           CHECK_FALSE(interrupter.isInterrupted(6, risingLatch));
           CHECK_FALSE(interrupter.isInterrupted(7, fallingLatch));
 
-          controls.triggerMode = triggerModeFunc(TriggerMode::GateFalls);
+          controls.triggerMode = [](int /**/) -> TriggerMode { return TriggerMode::GateFalls; };
           CHECK_FALSE(interrupter.isInterrupted(3, highLatch));
           CHECK_FALSE(interrupter.isInterrupted(4, lowLatch));
           CHECK_FALSE(interrupter.isInterrupted(6, risingLatch));
           CHECK_FALSE(interrupter.isInterrupted(7, fallingLatch));
 
-          controls.triggerMode = triggerModeFunc(TriggerMode::GateChanges);
+          controls.triggerMode = [](int /**/) -> TriggerMode { return TriggerMode::GateChanges; };
           CHECK_FALSE(interrupter.isInterrupted(3, highLatch));
           CHECK_FALSE(interrupter.isInterrupted(4, lowLatch));
           CHECK_FALSE(interrupter.isInterrupted(6, risingLatch));
           CHECK_FALSE(interrupter.isInterrupted(7, fallingLatch));
 
-          controls.triggerMode = triggerModeFunc(TriggerMode::GateIsHigh);
+          controls.triggerMode = [](int /**/) -> TriggerMode { return TriggerMode::GateIsHigh; };
           CHECK_FALSE(interrupter.isInterrupted(3, highLatch));
           CHECK_FALSE(interrupter.isInterrupted(4, lowLatch));
           CHECK_FALSE(interrupter.isInterrupted(6, risingLatch));
           CHECK_FALSE(interrupter.isInterrupted(7, fallingLatch));
 
-          controls.triggerMode = triggerModeFunc(TriggerMode::GateIsLow);
+          controls.triggerMode = [](int /**/) -> TriggerMode { return TriggerMode::GateIsLow; };
           CHECK_FALSE(interrupter.isInterrupted(3, highLatch));
           CHECK_FALSE(interrupter.isInterrupted(4, lowLatch));
           CHECK_FALSE(interrupter.isInterrupted(6, risingLatch));
