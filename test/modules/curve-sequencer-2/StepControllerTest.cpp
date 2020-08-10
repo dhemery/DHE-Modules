@@ -1,10 +1,7 @@
 #include "components/Latch.h"
-#include "fake/Generator.h"
-#include "fake/Interrupter.h"
-#include "fake/Sustainer.h"
 #include "modules/curve-sequencer-2/StepController.h"
 #include "modules/curve-sequencer/StepEvent.h"
-
+#include "helpers/fake-controls.h"
 #include <doctest.h>
 
 namespace test {
@@ -13,12 +10,26 @@ namespace curve_sequencer_2 {
     using dhe::Latch;
     using dhe::curve_sequencer::StepEvent;
     using test::fake::forbidden;
-    using test::fake::Generator;
-    using test::fake::Interrupter;
-    using test::fake::Sustainer;
-    using StepController = dhe::curve_sequencer_2::StepController<Interrupter, Generator, Sustainer>;
 
-    static inline void enter(StepController &stepController, Generator &generator, int step) {
+  struct Generator {
+    std::function<void(int)> start = [](int s) { throw forbidden("start", s); };
+    std::function<bool(float)> generate{[](float t) -> bool { throw forbidden("generate", t); }};
+    std::function<void()> stop = []() { throw "stop"; };
+  };
+
+  struct Interrupter {
+    std::function<bool(int, Latch const &)> isInterrupted{
+        [](int s, Latch const &l) -> bool { throw "isInterrupted(" + std::to_string(s) + ", latch)"; }};
+  };
+
+  struct Sustainer {
+    std::function<bool(int, Latch const &)> isDone{
+        [](int s, Latch const &l) -> bool { throw forbidden("isDone", s, l.isHigh()); }};
+  };
+
+  using StepController = dhe::curve_sequencer_2::StepController<Interrupter, Generator, Sustainer>;
+
+  static inline void enter(StepController &stepController, Generator &generator, int step) {
       generator.start = [](int /**/) {};
       stepController.enter(step);
       generator.start = [](int s) { throw forbidden("start", s); };
@@ -58,8 +69,8 @@ namespace curve_sequencer_2 {
           SUBCASE("completes without generating") {
             interrupter.isInterrupted = [](int /**/, Latch const & /**/) -> bool { return true; };
             generator.generate = [](float t) -> bool { throw forbidden("generate", t); };
-            auto constexpr step{7};
 
+            auto constexpr step{7};
             enter(stepController, generator, step);
 
             auto stopped{false};
@@ -136,8 +147,6 @@ namespace curve_sequencer_2 {
 
             CHECK_EQ(result, StepEvent::Generated);
           }
-
-          SUBCASE("leaves generator running") { stepController.execute(Latch{}, 0.F); }
         }
       }
     }
