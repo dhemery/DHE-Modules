@@ -13,10 +13,11 @@ namespace curve_sequencer_2 {
   using dhe::PhaseTimer;
   using dhe::curve_sequencer::StepEvent;
 
-  template <typename Controls, typename Interrupter, typename Sustainer> class StepController {
+  template <typename Controls, typename Interrupter, typename Generator, typename Sustainer> class StepController {
   public:
-    StepController(Controls &controls, Interrupter &interrupter, Sustainer &sustainer, PhaseTimer &timer) :
-        controls{controls}, interrupter{interrupter}, sustainer{sustainer}, timer{timer} {}
+    StepController(Controls &controls, Interrupter &interrupter, Generator &generator, Sustainer &sustainer,
+                   PhaseTimer &timer) :
+        controls{controls}, interrupter{interrupter}, generator{generator}, sustainer{sustainer}, timer{timer} {}
 
     void enter(int step) {
       currentStep = step;
@@ -26,8 +27,8 @@ namespace curve_sequencer_2 {
 
     auto execute(Latch const &gateLatch, float sampleTime) -> StepEvent {
       if (!interrupted(gateLatch)) {
-        generate(sampleTime);
-        if (!completed(gateLatch)) {
+        auto const curveCompleted = generator.generate(currentStep, sampleTime);
+        if (!curveCompleted || !sustainer.isDone(currentStep, gateLatch)) {
           return StepEvent::Generated;
         }
       }
@@ -67,6 +68,7 @@ namespace curve_sequencer_2 {
     float startVoltage{0.F};
     Controls &controls;
     Interrupter &interrupter;
+    Generator &generator;
     Sustainer &sustainer;
     PhaseTimer &timer;
   }; // namespace curve_sequencer

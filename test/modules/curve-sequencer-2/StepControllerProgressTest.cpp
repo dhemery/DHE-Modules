@@ -3,6 +3,7 @@
 #include "modules/curve-sequencer-2/StepController.h"
 
 #include <doctest.h>
+#include <modules/curve-sequencer-2/fake/Generator.h>
 #include <modules/curve-sequencer-2/fake/Interrupter.h>
 #include <modules/curve-sequencer-2/fake/Sustainer.h>
 
@@ -10,17 +11,19 @@ namespace test {
 namespace curve_sequencer_2 {
   namespace step_controller {
     using dhe::PhaseTimer;
+    using test::fake::Generator;
     using test::fake::Interrupter;
     using test::fake::Sustainer;
-    using StepController = dhe::curve_sequencer_2::StepController<fake::Controls, Interrupter, Sustainer>;
+    using StepController = dhe::curve_sequencer_2::StepController<fake::Controls, Interrupter, Generator, Sustainer>;
 
     TEST_CASE("curve_sequencer_2::StepController progress") {
       fake::Controls controls{};
+      Generator generator{};
       Interrupter interrupter{};
       Sustainer sustainer{};
       PhaseTimer timer{};
 
-      StepController stepController{controls, interrupter, sustainer, timer};
+      StepController stepController{controls, interrupter, generator, sustainer, timer};
 
       SUBCASE("enter shows 0 progress") {
         controls.getOutput = []() -> float { return 5.5F; };
