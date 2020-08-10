@@ -14,10 +14,8 @@ namespace curve_sequencer_2 {
     using dhe::Latch;
     using dhe::PhaseTimer;
     using dhe::curve_sequencer::StepEvent;
-    using dhe::curve_sequencer_2::TriggerMode;
     using test::fake::Controls;
     using test::fake::forbidden;
-    using test::fake::funcReturning;
     using test::fake::Interrupter;
     using test::fake::Sustainer;
     using StepController = dhe::curve_sequencer_2::StepController<Controls, Interrupter, Sustainer>;
@@ -31,7 +29,7 @@ namespace curve_sequencer_2 {
       StepController stepController{controls, interrupter, sustainer, timer};
 
       SUBCASE("completes without generating if interrupted") {
-        interrupter.isInterrupted = funcReturning<int, Latch const &>(true);
+        interrupter.isInterrupted = [](int /*unused*/, Latch const & /*unused*/) -> bool { return true; };
         auto constexpr step{7};
 
         controls.showProgress = [](int s, float p) {};
@@ -47,8 +45,8 @@ namespace curve_sequencer_2 {
       }
 
       SUBCASE("generates if not interrupted") {
-        interrupter.isInterrupted = funcReturning<int, Latch const &>(false);
-        sustainer.isDone = funcReturning<int, Latch const &>(false);
+        interrupter.isInterrupted = [](int /**/, Latch const & /**/) -> bool { return false; };
+        sustainer.isDone = [](int /**/, Latch const & /**/) -> bool { return false; };
         allowGenerate(controls);
 
         auto result = stepController.execute(Latch{}, 0.F);

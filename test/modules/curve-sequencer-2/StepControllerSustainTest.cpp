@@ -19,7 +19,6 @@ namespace curve_sequencer_2 {
     using dhe::PhaseTimer;
     using dhe::curve_sequencer::StepEvent;
     using test::fake::forbidden;
-    using test::fake::funcReturning;
     using StepController = dhe::curve_sequencer_2::StepController<fake::Controls, Interrupter, Sustainer>;
 
     static auto constexpr lowGate = Latch{false, false};
@@ -32,7 +31,7 @@ namespace curve_sequencer_2 {
 
       StepController stepController{controls, interrupter, sustainer, timer};
 
-      interrupter.isInterrupted = funcReturning<int, Latch const &>(false);
+      interrupter.isInterrupted = [](int, Latch const &) -> bool { return false; };
 
       auto constexpr step{2};
       allowGenerate(controls);
@@ -40,7 +39,7 @@ namespace curve_sequencer_2 {
 
       SUBCASE("if curve does not complete") {
         timer.reset();
-        controls.duration = funcReturning<int>(1.F);
+        controls.duration = [](int) -> float { return 1.F; };
         auto constexpr sampleTime{0.1F}; // Not enough to complete the step
         sustainer.isDone = [](int s, Latch const &l) -> bool { throw forbidden("Sustainer.isDone", s, l.isHigh()); };
 
@@ -65,11 +64,11 @@ namespace curve_sequencer_2 {
       SUBCASE("when curve completes") {
         timer.reset();
         timer.advance(0.99F);
-        controls.duration = funcReturning<int>(1.F);
+        controls.duration = [](int) -> float { return 1.F; };
         auto constexpr sampleTime{0.1F}; // Enough to complete the step
 
         SUBCASE("if sustainer is done") {
-          sustainer.isDone = funcReturning<int, Latch const &>(true);
+          sustainer.isDone = [](int, Latch const &) -> bool { return true; };
           controls.showInactive = [](int s) {};
 
           SUBCASE("generates") {
@@ -93,7 +92,7 @@ namespace curve_sequencer_2 {
         }
 
         SUBCASE("if sustainer is not done") {
-          sustainer.isDone = funcReturning<int, Latch const &>(false);
+          sustainer.isDone = [](int, Latch const &) -> bool { return false; };
           SUBCASE("generates") {
             auto output{-441.3F};
             controls.setOutput = [&](float v) { output = v; };
