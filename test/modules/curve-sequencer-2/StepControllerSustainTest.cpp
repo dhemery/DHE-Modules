@@ -1,6 +1,4 @@
 #include "components/Latch.h"
-#include "components/PhaseTimer.h"
-#include "fake/Controls.h"
 #include "fake/Generator.h"
 #include "fake/Interrupter.h"
 #include "fake/Sustainer.h"
@@ -12,81 +10,73 @@
 
 namespace test {
 namespace curve_sequencer_2 {
+  using dhe::Latch;
+  using dhe::curve_sequencer::StepEvent;
+  using test::fake::forbidden;
   using test::fake::Generator;
   using test::fake::Interrupter;
   using test::fake::Sustainer;
+  using StepController = dhe::curve_sequencer_2::StepController<Interrupter, Generator, Sustainer>;
+
+  static inline void enter(StepController &stepController, Generator &generator, int step) {
+    generator.start = [](int /**/) {};
+    stepController.enter(step);
+    generator.start = [](int s) { throw forbidden("start", s); };
+  }
 
   namespace step_controller {
-    using dhe::Latch;
-    using dhe::PhaseTimer;
-    using dhe::curve_sequencer::StepEvent;
-    using test::fake::forbidden;
-    using StepController = dhe::curve_sequencer_2::StepController<fake::Controls, Interrupter, Generator, Sustainer>;
-
     TEST_CASE("curve_sequencer_2::StepController sustain") {
-      fake::Controls controls{};
       Interrupter interrupter{};
       Generator generator{};
       Sustainer sustainer{};
-      PhaseTimer timer{};
 
-      StepController stepController{controls, interrupter, generator, sustainer, timer};
+      StepController stepController{interrupter, generator, sustainer};
 
       interrupter.isInterrupted = [](int /*s*/, Latch const & /*l*/) -> bool { return false; };
 
       auto constexpr step{2};
-      allowGenerate(controls);
-      stepController.enter(step);
+      enter(stepController, generator, step);
 
       SUBCASE("if generator does not finish") {
-        generator.generate = [](int /**/, float /**/) -> bool { return false; };
+        generator.generate = [](float /**/) -> bool { return false; };
 
-        SUBCASE("reports generated") {
+        SUBCASE("leaves generator running and reports generated") {
+          generator.stop = []() { throw "stop"; };
+
           auto const result = stepController.execute(Latch{}, 0.F);
 
           CHECK_EQ(result, StepEvent::Generated);
         }
 
-        SUBCASE("leaves step active") {
-          controls.showInactive = [](int s) { throw forbidden("showInactive", s); };
-          stepController.execute(Latch{}, 0.F);
-        }
+        SUBCASE("leaves generator running") { stepController.execute(Latch{}, 0.F); }
       }
 
       SUBCASE("when generator finishes") {
-        generator.generate = [&](int /**/, float /**/) -> bool { return true; };
+        generator.generate = [&](float /**/) -> bool { return true; };
 
         SUBCASE("if sustainer is done") {
           sustainer.isDone = [](int /**/, Latch const & /**/) -> bool { return true; };
 
-          SUBCASE("reports completed") {
-            controls.showInactive = [](int s) {};
+          SUBCASE("stops generator and reports completed") {
+            auto stopped{false};
+            generator.stop = [&]() { stopped = true; };
 
             auto result = stepController.execute(Latch{}, 0.F);
 
             CHECK_EQ(result, StepEvent::Completed);
-          }
-
-          SUBCASE("deactivates step") {
-            auto deactivatedStep{-1};
-            controls.showInactive = [&](int s) { deactivatedStep = s; };
-            stepController.execute(Latch{}, 0.F);
-            CHECK_EQ(deactivatedStep, step);
+            CHECK(stopped);
           }
         }
 
         SUBCASE("if sustainer is not done") {
           sustainer.isDone = [](int /**/, Latch const & /**/) -> bool { return false; };
 
-          SUBCASE("reports generated") {
+          SUBCASE("leaves generator running reports generated") {
+            generator.stop = []() { throw "stop"; };
+
             auto result = stepController.execute(Latch{}, 0.F);
 
             CHECK_EQ(result, StepEvent::Generated);
-          }
-
-          SUBCASE("leaves step active") {
-            controls.showInactive = [](int s) { throw forbidden("showInactive", s); };
-            stepController.execute(Latch{}, 0.F);
           }
         }
       }

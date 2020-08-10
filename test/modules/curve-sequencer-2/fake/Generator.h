@@ -9,8 +9,9 @@ namespace fake {
 
   class Generator {
   public:
-    std::function<bool(int, float)> generate{
-        [](int s, float p) -> bool { throw forbidden("Generator.generate", s, p); }};
+    std::function<void(int)> start = [](int s) { throw forbidden("start", s); };
+    std::function<bool(float)> generate{[](float t) -> bool { throw forbidden("generate", t); }};
+    std::function<void()> stop = []() { throw "stop"; };
   };
 } // namespace fake
 } // namespace test

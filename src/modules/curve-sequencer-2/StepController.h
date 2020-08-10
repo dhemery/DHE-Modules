@@ -10,24 +10,21 @@ namespace dhe {
 namespace curve_sequencer_2 {
 
   using dhe::Latch;
-  using dhe::PhaseTimer;
   using dhe::curve_sequencer::StepEvent;
 
-  template <typename Controls, typename Interrupter, typename Generator, typename Sustainer> class StepController {
+  template <typename Interrupter, typename Generator, typename Sustainer> class StepController {
   public:
-    StepController(Controls &controls, Interrupter &interrupter, Generator &generator, Sustainer &sustainer,
-                   PhaseTimer &timer) :
-        controls{controls}, interrupter{interrupter}, generator{generator}, sustainer{sustainer}, timer{timer} {}
+    StepController(Interrupter &interrupter, Generator &generator, Sustainer &sustainer) :
+        interrupter{interrupter}, generator{generator}, sustainer{sustainer} {}
 
     void enter(int step) {
       currentStep = step;
-      reset();
-      controls.showProgress(currentStep, 0.F);
+      generator.start(step);
     }
 
     auto execute(Latch const &gateLatch, float sampleTime) -> StepEvent {
       if (!interrupted(gateLatch)) {
-        auto const curveCompleted = generator.generate(currentStep, sampleTime);
+        auto const curveCompleted = generator.generate(sampleTime);
         if (!curveCompleted || !sustainer.isDone(currentStep, gateLatch)) {
           return StepEvent::Generated;
         }
@@ -36,41 +33,17 @@ namespace curve_sequencer_2 {
       return StepEvent::Completed;
     }
 
-    void exit() { controls.showInactive(currentStep); }
+    void exit() { generator.stop(); }
 
   private:
-    auto completed(Latch const &gateLatch) const -> bool {
-      return !timer.inProgress() && sustainer.isDone(currentStep, gateLatch);
-    }
-
-    auto duration() const -> float { return controls.duration(currentStep); }
-
-    void generate(float sampleTime) const {
-      timer.advance(sampleTime / duration());
-      controls.output(controls.endLevel(currentStep));
-    }
-
     auto interrupted(Latch const &gateLatch) const -> bool {
       return interrupter.isInterrupted(currentStep, gateLatch);
     };
 
-    auto level() const -> float { return controls.level(currentStep); }
-
-    void reset() { timer.reset(); }
-
-    auto taper(float input) const -> float {
-      auto const curvature = controls.curvature(currentStep);
-      auto const taper = controls.taper(currentStep);
-      return taper->apply(input, curvature);
-    }
-
     int currentStep{0};
-    float startVoltage{0.F};
-    Controls &controls;
     Interrupter &interrupter;
     Generator &generator;
     Sustainer &sustainer;
-    PhaseTimer &timer;
   }; // namespace curve_sequencer
 } // namespace curve_sequencer_2
 } // namespace dhe

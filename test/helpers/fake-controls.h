@@ -5,12 +5,6 @@
 
 namespace test {
 namespace fake {
-  static inline auto forbidden(const std::string &name) -> std::string {
-    auto s = std::stringstream{};
-    s << name << "()";
-    return s.str();
-  }
-
   template <typename V> static inline auto forbidden(const std::string &name, V v) -> std::string {
     auto s = std::stringstream{};
     s << name << "(" + std::to_string(v) << ")";
