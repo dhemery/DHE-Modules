@@ -1,5 +1,7 @@
 #pragma once
 
+#include <string>
+
 namespace dhe {
 class Latch {
 public:

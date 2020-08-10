@@ -28,7 +28,6 @@ namespace fake {
     std::function<int()> selectionLength{[]() -> int { throw forbidden("selectionLength"); }};
 
     // Step advancement controls
-    std::function<bool(int)> advanceOnEndOfCurve{[](int s) -> bool { throw forbidden("advanceOnEndOfCurve", s); }};
     std::function<TriggerMode(int)> triggerMode{[](int s) -> TriggerMode { throw forbidden("triggerMode", s); }};
 
     // Step curve controls
@@ -57,7 +56,6 @@ namespace fake {
     controls.setOutput = [](float f) {};
     controls.showProgress = [](int s, float f) {};
 
-    controls.advanceOnEndOfCurve = stepControlReturning(false);
     controls.curvature = stepControlReturning(0.F);
     controls.duration = stepControlReturning(0.F);
     controls.startLevel = stepControlReturning(0.F);

@@ -1,9 +1,10 @@
 #pragma once
 
 #include <string>
+
 namespace test {
 namespace fake {
-  static inline auto forbidden(const std::string &name) -> std::string { return "Controls." + name + "()"; }
+  static inline auto forbidden(const std::string &name) -> std::string { return name + "()"; }
 
   template <typename V> static inline auto forbidden(const std::string &name, V v) -> std::string {
     return name + "(" + std::to_string(v) + ")";
@@ -27,7 +28,7 @@ namespace fake {
     return [v](P1 p1 __attribute__((unused))) -> V { return v; };
   }
 
-  template <typename P1, typename P2, typename V> auto funcReturning(V v) -> std::function<V(P1,P2)> {
+  template <typename P1, typename P2, typename V> auto funcReturning(V v) -> std::function<V(P1, P2)> {
     return [v](P1 p1 __attribute__((unused)), P2 pt __attribute((unused))) -> V { return v; };
   }
 } // namespace fake

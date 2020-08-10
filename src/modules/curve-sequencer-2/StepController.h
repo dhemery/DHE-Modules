@@ -25,9 +25,9 @@ namespace curve_sequencer_2 {
     }
 
     auto execute(Latch const &gateLatch, float sampleTime) -> StepEvent {
-      if (!interrupter.isInterrupted(currentStep, gateLatch)) {
+      if (!interrupted(gateLatch)) {
         generate(sampleTime);
-        if (!completed()) {
+        if (!completed(gateLatch)) {
           return StepEvent::Generated;
         }
       }
@@ -38,7 +38,9 @@ namespace curve_sequencer_2 {
     void exit() { controls.showInactive(currentStep); }
 
   private:
-    auto completed() const -> bool { return !timer.inProgress() && controls.advanceOnEndOfCurve(currentStep); }
+    auto completed(Latch const &gateLatch) const -> bool {
+      return !timer.inProgress() && sustainer.isDone(currentStep, gateLatch);
+    }
 
     auto duration() const -> float { return controls.duration(currentStep); }
 
@@ -48,7 +50,7 @@ namespace curve_sequencer_2 {
     }
 
     auto interrupted(Latch const &gateLatch) const -> bool {
-      return controls.interruptOnTrigger(currentStep) && isTriggered(controls.triggerMode(currentStep), gateLatch);
+      return interrupter.isInterrupted(currentStep, gateLatch);
     };
 
     auto level() const -> float { return controls.level(currentStep); }

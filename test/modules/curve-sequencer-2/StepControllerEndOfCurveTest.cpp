@@ -1,8 +1,8 @@
 #include "components/Latch.h"
 #include "components/PhaseTimer.h"
 #include "fake/Controls.h"
-#include "fake/Sustainer.h"
 #include "fake/Interrupter.h"
+#include "fake/Sustainer.h"
 #include "helpers/fake-controls.h"
 #include "modules/curve-sequencer-2/StepController.h"
 #include "modules/curve-sequencer/StepEvent.h"
@@ -18,8 +18,8 @@ namespace curve_sequencer_2 {
     using dhe::Latch;
     using dhe::PhaseTimer;
     using dhe::curve_sequencer::StepEvent;
-    using test::fake::funcReturning;
     using test::fake::forbidden;
+    using test::fake::funcReturning;
     using StepController = dhe::curve_sequencer_2::StepController<fake::Controls, Interrupter, Sustainer>;
 
     static auto constexpr lowGate = Latch{false, false};
@@ -32,21 +32,45 @@ namespace curve_sequencer_2 {
 
       StepController stepController{controls, interrupter, sustainer, timer};
 
-      interrupter.isInterrupted = funcReturning<int,Latch const&>(false);
+      interrupter.isInterrupted = funcReturning<int, Latch const &>(false);
 
       auto constexpr step{2};
       allowGenerate(controls);
       stepController.enter(step);
 
-      SUBCASE("when next on EOC") {
-        controls.advanceOnEndOfCurve = funcReturning<int>(true);
+      SUBCASE("if curve does not complete") {
+        timer.reset();
+        controls.duration = funcReturning<int>(1.F);
+        auto constexpr sampleTime{0.1F}; // Not enough to complete the step
+        sustainer.isDone = [](int s, Latch const &l) -> bool { throw forbidden("Sustainer.isDone", s, l.isHigh()); };
 
-        SUBCASE("if curve completes") {
-          timer.reset();
-          timer.advance(0.99F);
-          controls.duration = funcReturning<int>(1.F);
-          auto constexpr sampleTime{0.1F}; // Enough to complete the step
-          controls.showInactive = [](int s) {};
+        SUBCASE("generates") {
+          auto output{-441.3F};
+          controls.setOutput = [&](float v) { output = v; };
+          stepController.execute(lowGate, sampleTime);
+          CHECK_EQ(output, controls.endLevel(step));
+        }
+
+        SUBCASE("reports generated") {
+          auto const result = stepController.execute(lowGate, sampleTime);
+          CHECK_EQ(result, StepEvent::Generated);
+        }
+
+        SUBCASE("leaves step active") {
+          controls.showInactive = [](int s) { throw forbidden("showInactive", s); };
+          stepController.execute(lowGate, sampleTime);
+        }
+      }
+
+      SUBCASE("when curve completes") {
+        timer.reset();
+        timer.advance(0.99F);
+        controls.duration = funcReturning<int>(1.F);
+        auto constexpr sampleTime{0.1F}; // Enough to complete the step
+        controls.showInactive = [](int s) {};
+
+        SUBCASE("if sustainer is done") {
+          sustainer.isDone = funcReturning<int, Latch const &>(true);
 
           SUBCASE("generates") {
             auto output{-992.3F};
@@ -67,32 +91,7 @@ namespace curve_sequencer_2 {
             CHECK_EQ(deactivatedStep, step);
           }
         }
-
-        SUBCASE("if curve does not complete") {
-          timer.reset();
-          controls.duration = funcReturning<int>(1.F);
-          auto constexpr sampleTime{0.1F}; // Not enough to complete the step
-
-          SUBCASE("generates") {
-            auto output{-441.3F};
-            controls.setOutput = [&](float v) { output = v; };
-            stepController.execute(lowGate, sampleTime);
-            CHECK_EQ(output, controls.endLevel(step));
-          }
-
-          SUBCASE("reports generated") {
-            auto const result = stepController.execute(lowGate, sampleTime);
-            CHECK_EQ(result, StepEvent::Generated);
-          }
-
-          SUBCASE("leaves step active") {
-            controls.showInactive = [](int s) { throw forbidden("showInactive", s); };
-            stepController.execute(lowGate, sampleTime);
-          }
-        }
       }
-
-      SUBCASE("when sustains on EOC") {}
     }
   } // namespace step_controller
 } // namespace curve_sequencer_2

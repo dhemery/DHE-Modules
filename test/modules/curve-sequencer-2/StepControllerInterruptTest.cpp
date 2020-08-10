@@ -24,18 +24,6 @@ namespace curve_sequencer_2 {
     using test::fake::Sustainer;
     using StepController = dhe::curve_sequencer_2::StepController<Controls, Interrupter, Sustainer>;
 
-    static auto constexpr risingGate = Latch{true, true};
-    static auto constexpr fallingGate = Latch{false, true};
-    static auto constexpr highGate = Latch{true, false};
-    static auto constexpr lowGate = Latch{false, false};
-
-    auto const gateStates = std::vector<Latch>{risingGate, fallingGate, lowGate, highGate};
-
-    auto const triggerModes = std::vector<TriggerMode>{
-        TriggerMode::GateRises,  TriggerMode::GateFalls, TriggerMode::GateChanges,
-        TriggerMode::GateIsHigh, TriggerMode::GateIsLow,
-    };
-
     TEST_CASE("curve_sequencer_2::StepController execute") {
       Controls controls{};
       Interrupter interrupter{};
@@ -47,17 +35,22 @@ namespace curve_sequencer_2 {
       SUBCASE("completes without generating if interrupted") {
         interrupter.isInterrupted = funcReturning<int,Latch const&>(true);
         auto constexpr step{7};
+
         controls.showProgress = [](int s, float p) {};
         stepController.enter(step);
         controls.showProgress = [](int s, float f) { throw forbidden("showProgress", s, f); };
 
-        controls.showInactive = [](int s) {};
-        auto result = stepController.execute(risingGate, 0.F);
+        auto deactivatedStep{99};
+        controls.showInactive = [&](int s) { deactivatedStep = s; };
+
+        auto result = stepController.execute(Latch{}, 0.F);
         CHECK_EQ(result, StepEvent::Completed);
+        CHECK_EQ(deactivatedStep, step);
       }
 
       SUBCASE("generates if not interrupted") {
         interrupter.isInterrupted = funcReturning<int,Latch const&>(false);
+        sustainer.isDone = funcReturning<int,Latch const&>(false);
         allowGenerate(controls);
 
         auto result = stepController.execute(Latch{}, 0.F);
