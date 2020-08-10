@@ -27,9 +27,6 @@ namespace fake {
     std::function<int()> selectionStart{[]() -> int { throw forbidden("selectionStart"); }};
     std::function<int()> selectionLength{[]() -> int { throw forbidden("selectionLength"); }};
 
-    // Step advancement controls
-    std::function<TriggerMode(int)> triggerMode{[](int s) -> TriggerMode { throw forbidden("triggerMode", s); }};
-
     // Step curve controls
     std::function<float(int)> curvature{[](int s) -> float { throw forbidden("curvature", s); }};
     std::function<float(int)> duration{[](int s) -> float { throw forbidden("duration", s); }};

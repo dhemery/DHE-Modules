@@ -4,11 +4,9 @@
 #include "fake/Interrupter.h"
 #include "fake/Sustainer.h"
 #include "modules/curve-sequencer-2/StepController.h"
-#include "modules/curve-sequencer-2/TriggerMode.h"
 #include "modules/curve-sequencer/StepEvent.h"
 
 #include <doctest.h>
-#include <vector>
 
 namespace test {
 namespace curve_sequencer_2 {
@@ -24,7 +22,7 @@ namespace curve_sequencer_2 {
     using test::fake::Sustainer;
     using StepController = dhe::curve_sequencer_2::StepController<Controls, Interrupter, Sustainer>;
 
-    TEST_CASE("curve_sequencer_2::StepController execute") {
+    TEST_CASE("curve_sequencer_2::StepController interrupt") {
       Controls controls{};
       Interrupter interrupter{};
       Sustainer sustainer{};
@@ -33,7 +31,7 @@ namespace curve_sequencer_2 {
       StepController stepController{controls, interrupter, sustainer, timer};
 
       SUBCASE("completes without generating if interrupted") {
-        interrupter.isInterrupted = funcReturning<int,Latch const&>(true);
+        interrupter.isInterrupted = funcReturning<int, Latch const &>(true);
         auto constexpr step{7};
 
         controls.showProgress = [](int s, float p) {};
@@ -49,8 +47,8 @@ namespace curve_sequencer_2 {
       }
 
       SUBCASE("generates if not interrupted") {
-        interrupter.isInterrupted = funcReturning<int,Latch const&>(false);
-        sustainer.isDone = funcReturning<int,Latch const&>(false);
+        interrupter.isInterrupted = funcReturning<int, Latch const &>(false);
+        sustainer.isDone = funcReturning<int, Latch const &>(false);
         allowGenerate(controls);
 
         auto result = stepController.execute(Latch{}, 0.F);

@@ -24,7 +24,7 @@ namespace curve_sequencer_2 {
 
     static auto constexpr lowGate = Latch{false, false};
 
-    TEST_CASE("curve_sequencer_2::StepController ON EOC") {
+    TEST_CASE("curve_sequencer_2::StepController sustain") {
       fake::Controls controls{};
       Sustainer sustainer{};
       Interrupter interrupter{};
@@ -67,10 +67,10 @@ namespace curve_sequencer_2 {
         timer.advance(0.99F);
         controls.duration = funcReturning<int>(1.F);
         auto constexpr sampleTime{0.1F}; // Enough to complete the step
-        controls.showInactive = [](int s) {};
 
         SUBCASE("if sustainer is done") {
           sustainer.isDone = funcReturning<int, Latch const &>(true);
+          controls.showInactive = [](int s) {};
 
           SUBCASE("generates") {
             auto output{-992.3F};
@@ -89,6 +89,26 @@ namespace curve_sequencer_2 {
             controls.showInactive = [&](int step) { deactivatedStep = step; };
             stepController.execute(lowGate, sampleTime);
             CHECK_EQ(deactivatedStep, step);
+          }
+        }
+
+        SUBCASE("if sustainer is not done") {
+          sustainer.isDone = funcReturning<int, Latch const &>(false);
+          SUBCASE("generates") {
+            auto output{-441.3F};
+            controls.setOutput = [&](float v) { output = v; };
+            stepController.execute(lowGate, sampleTime);
+            CHECK_EQ(output, controls.endLevel(step));
+          }
+
+          SUBCASE("reports generated") {
+            auto const result = stepController.execute(lowGate, sampleTime);
+            CHECK_EQ(result, StepEvent::Generated);
+          }
+
+          SUBCASE("leaves step active") {
+            controls.showInactive = [](int s) { throw forbidden("showInactive", s); };
+            stepController.execute(lowGate, sampleTime);
           }
         }
       }
