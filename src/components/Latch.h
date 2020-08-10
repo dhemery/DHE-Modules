@@ -25,6 +25,12 @@ public:
     return left.state == right.state && left.edge == right.edge;
   }
 
+  auto str() const -> std::string {
+    std::string stateStr{state ? "true" : "false"};
+    std::string edgeStr{edge ? "true" : "false"};
+    return std::string{"Latch{"} + stateStr + "," + edgeStr + "}";
+  }
+
 private:
   bool state{};
   bool edge{};

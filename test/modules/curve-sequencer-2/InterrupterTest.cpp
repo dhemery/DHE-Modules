@@ -1,6 +1,5 @@
 #include "modules/curve-sequencer-2/Interrupter.h"
 
-#include "helpers/fake-controls.h"
 #include "helpers/latches.h"
 
 #include <doctest.h>
@@ -13,12 +12,13 @@ namespace curve_sequencer_2 {
   using test::highLatch;
   using test::lowLatch;
   using test::risingLatch;
-  using test::fake::forbidden;
 
   namespace sustainer {
     struct InterruptControls {
-      std::function<TriggerMode(int)> triggerMode{[](int s) -> TriggerMode { throw forbidden("triggerMode", s); }};
-      std::function<bool(int)> interruptOnTrigger{[](int s) -> bool { throw forbidden("interruptOnTrigger", s); }};
+      std::function<TriggerMode(int)> triggerMode{
+          [](int s) -> TriggerMode { throw "triggerMode " + std::to_string(s); }};
+      std::function<bool(int)> interruptOnTrigger{
+          [](int s) -> bool { throw "interruptOnTrigger " + std::to_string(s); }};
     };
 
     TEST_CASE("curve_sequencer_2::Interrupter") {

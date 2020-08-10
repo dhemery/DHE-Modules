@@ -1,6 +1,5 @@
 #include "modules/curve-sequencer-2/Sustainer.h"
 
-#include "helpers/fake-controls.h"
 #include "helpers/latches.h"
 
 #include <doctest.h>
@@ -13,12 +12,13 @@ namespace curve_sequencer_2 {
   using test::highLatch;
   using test::lowLatch;
   using test::risingLatch;
-  using test::fake::forbidden;
 
   namespace sustainer {
     struct SustainControls {
-      std::function<TriggerMode(int)> triggerMode{[](int s) -> TriggerMode { throw forbidden("triggerMode", s); }};
-      std::function<bool(int)> advanceOnEndOfCurve{[](int s) -> bool { throw forbidden("advanceOnEndOfCurve", s); }};
+      std::function<TriggerMode(int)> triggerMode{
+          [](int s) -> TriggerMode { throw "triggerMode " + std::to_string(s); }};
+      std::function<bool(int)> advanceOnEndOfCurve{
+          [](int s) -> bool { throw "advanceOnEndOfCurve " + std::to_string(s); }};
     };
 
     TEST_CASE("curve_sequencer_2::Sustainer") {
@@ -30,7 +30,7 @@ namespace curve_sequencer_2 {
         controls.advanceOnEndOfCurve = [](int /**/) -> bool { return true; };
 
         SUBCASE("is done regardless of gate and trigger mode") {
-          controls.triggerMode = [](int /**/) -> TriggerMode {return TriggerMode::GateRises; };
+          controls.triggerMode = [](int /**/) -> TriggerMode { return TriggerMode::GateRises; };
           CHECK(sustainer.isDone(3, highLatch));
           CHECK(sustainer.isDone(4, lowLatch));
           CHECK(sustainer.isDone(6, risingLatch));
@@ -48,7 +48,7 @@ namespace curve_sequencer_2 {
           CHECK(sustainer.isDone(6, risingLatch));
           CHECK(sustainer.isDone(7, fallingLatch));
 
-          controls.triggerMode =[](int /**/) -> TriggerMode { return TriggerMode::GateIsHigh; };
+          controls.triggerMode = [](int /**/) -> TriggerMode { return TriggerMode::GateIsHigh; };
           CHECK(sustainer.isDone(3, highLatch));
           CHECK(sustainer.isDone(4, lowLatch));
           CHECK(sustainer.isDone(6, risingLatch));

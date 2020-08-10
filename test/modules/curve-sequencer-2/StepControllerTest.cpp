@@ -1,7 +1,8 @@
-#include "components/Latch.h"
 #include "modules/curve-sequencer-2/StepController.h"
+
+#include "components/Latch.h"
 #include "modules/curve-sequencer/StepEvent.h"
-#include "helpers/fake-controls.h"
+
 #include <doctest.h>
 
 namespace test {
@@ -9,30 +10,29 @@ namespace curve_sequencer_2 {
   namespace step_controller {
     using dhe::Latch;
     using dhe::curve_sequencer::StepEvent;
-    using test::fake::forbidden;
 
-  struct Generator {
-    std::function<void(int)> start = [](int s) { throw forbidden("start", s); };
-    std::function<bool(float)> generate{[](float t) -> bool { throw forbidden("generate", t); }};
-    std::function<void()> stop = []() { throw "stop"; };
-  };
+    struct Generator {
+      std::function<void(int)> start = [](int s) { throw "start " + std::to_string(s); };
+      std::function<bool(float)> generate{[](float t) -> bool { throw "generate " + std::to_string(t); }};
+      std::function<void()> stop = []() { throw "stop"; };
+    };
 
-  struct Interrupter {
-    std::function<bool(int, Latch const &)> isInterrupted{
-        [](int s, Latch const &l) -> bool { throw "isInterrupted(" + std::to_string(s) + ", latch)"; }};
-  };
+    struct Interrupter {
+      std::function<bool(int, Latch const &)> isInterrupted{
+          [](int s, Latch const &l) -> bool { throw "isInterrupted " + std::to_string(s) + ", " + l.str(); }};
+    };
 
-  struct Sustainer {
-    std::function<bool(int, Latch const &)> isDone{
-        [](int s, Latch const &l) -> bool { throw forbidden("isDone", s, l.isHigh()); }};
-  };
+    struct Sustainer {
+      std::function<bool(int, Latch const &)> isDone{
+          [](int s, Latch const &l) -> bool { throw "isDone" + std::to_string(s) + ", " + l.str(); }};
+    };
 
-  using StepController = dhe::curve_sequencer_2::StepController<Interrupter, Generator, Sustainer>;
+    using StepController = dhe::curve_sequencer_2::StepController<Interrupter, Generator, Sustainer>;
 
-  static inline void enter(StepController &stepController, Generator &generator, int step) {
+    static inline void enter(StepController &stepController, Generator &generator, int step) {
       generator.start = [](int /**/) {};
       stepController.enter(step);
-      generator.start = [](int s) { throw forbidden("start", s); };
+      generator.start = [](int s) { throw "start " + std::to_string(s); };
     }
 
     TEST_CASE("curve_sequencer_2::StepController") {
@@ -68,7 +68,7 @@ namespace curve_sequencer_2 {
         SUBCASE("if interrupted") {
           SUBCASE("completes without generating") {
             interrupter.isInterrupted = [](int /**/, Latch const & /**/) -> bool { return true; };
-            generator.generate = [](float t) -> bool { throw forbidden("generate", t); };
+            generator.generate = [](float t) -> bool { throw std::string{"generate "} + std::to_string(t); };
 
             auto constexpr step{7};
             enter(stepController, generator, step);
