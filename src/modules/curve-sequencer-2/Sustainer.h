@@ -1,5 +1,6 @@
 #pragma once
 
+#include "TriggerMode.h"
 #include "components/Latch.h"
 
 namespace dhe {
@@ -9,6 +10,7 @@ namespace curve_sequencer_2 {
   template <typename Controls> class Sustainer {
   public:
     Sustainer(Controls &controls) : controls{controls} {}
+
     auto isDone(int step, Latch const &latch) -> bool {
       if (controls.advanceOnEndOfCurve(step)) {
         return true;
