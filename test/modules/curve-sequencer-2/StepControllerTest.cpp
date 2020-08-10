@@ -24,7 +24,7 @@ namespace curve_sequencer_2 {
       generator.start = [](int s) { throw forbidden("start", s); };
     }
 
-    TEST_CASE("curve_sequencer_2::Step") {
+    TEST_CASE("curve_sequencer_2::StepController") {
       Interrupter interrupter{};
       Generator generator{};
       Sustainer sustainer{};

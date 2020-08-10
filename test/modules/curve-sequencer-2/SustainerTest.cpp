@@ -1,6 +1,6 @@
 #include "modules/curve-sequencer-2/Sustainer.h"
 
-#include "fake/SustainControls.h"
+#include "helpers/fake-controls.h"
 #include "helpers/latches.h"
 
 #include <doctest.h>
@@ -13,9 +13,13 @@ namespace curve_sequencer_2 {
   using test::highLatch;
   using test::lowLatch;
   using test::risingLatch;
-  using test::fake::SustainControls;
+  using test::fake::forbidden;
 
   namespace sustainer {
+    struct SustainControls {
+      std::function<TriggerMode(int)> triggerMode{[](int s) -> TriggerMode { throw forbidden("triggerMode", s); }};
+      std::function<bool(int)> advanceOnEndOfCurve{[](int s) -> bool { throw forbidden("advanceOnEndOfCurve", s); }};
+    };
 
     TEST_CASE("curve_sequencer_2::Sustainer") {
       SustainControls controls{};
@@ -26,31 +30,31 @@ namespace curve_sequencer_2 {
         controls.advanceOnEndOfCurve = [](int /**/) -> bool { return true; };
 
         SUBCASE("is done regardless of gate and trigger mode") {
-          controls.triggerMode = triggerModeFunc(TriggerMode::GateRises);
+          controls.triggerMode = [](int /**/) -> TriggerMode {return TriggerMode::GateRises; };
           CHECK(sustainer.isDone(3, highLatch));
           CHECK(sustainer.isDone(4, lowLatch));
           CHECK(sustainer.isDone(6, risingLatch));
           CHECK(sustainer.isDone(7, fallingLatch));
 
-          controls.triggerMode = triggerModeFunc(TriggerMode::GateFalls);
+          controls.triggerMode = [](int /**/) -> TriggerMode { return TriggerMode::GateFalls; };
           CHECK(sustainer.isDone(3, highLatch));
           CHECK(sustainer.isDone(4, lowLatch));
           CHECK(sustainer.isDone(6, risingLatch));
           CHECK(sustainer.isDone(7, fallingLatch));
 
-          controls.triggerMode = triggerModeFunc(TriggerMode::GateChanges);
+          controls.triggerMode = [](int /**/) -> TriggerMode { return TriggerMode::GateChanges; };
           CHECK(sustainer.isDone(3, highLatch));
           CHECK(sustainer.isDone(4, lowLatch));
           CHECK(sustainer.isDone(6, risingLatch));
           CHECK(sustainer.isDone(7, fallingLatch));
 
-          controls.triggerMode = triggerModeFunc(TriggerMode::GateIsHigh);
+          controls.triggerMode =[](int /**/) -> TriggerMode { return TriggerMode::GateIsHigh; };
           CHECK(sustainer.isDone(3, highLatch));
           CHECK(sustainer.isDone(4, lowLatch));
           CHECK(sustainer.isDone(6, risingLatch));
           CHECK(sustainer.isDone(7, fallingLatch));
 
-          controls.triggerMode = triggerModeFunc(TriggerMode::GateIsLow);
+          controls.triggerMode = [](int /**/) -> TriggerMode { return TriggerMode::GateIsLow; };
           CHECK(sustainer.isDone(3, highLatch));
           CHECK(sustainer.isDone(4, lowLatch));
           CHECK(sustainer.isDone(6, risingLatch));
@@ -63,7 +67,7 @@ namespace curve_sequencer_2 {
 
         SUBCASE("is done iff triggered") {
           SUBCASE("by rising gate") {
-            controls.triggerMode = triggerModeFunc(TriggerMode::GateRises);
+            controls.triggerMode = [](int /**/) -> TriggerMode { return TriggerMode::GateRises; };
             CHECK_FALSE(sustainer.isDone(3, fallingLatch));
             CHECK_FALSE(sustainer.isDone(0, highLatch));
             CHECK_FALSE(sustainer.isDone(1, lowLatch));
@@ -71,7 +75,7 @@ namespace curve_sequencer_2 {
           }
 
           SUBCASE("by falling gate") {
-            controls.triggerMode = triggerModeFunc(TriggerMode::GateFalls);
+            controls.triggerMode = [](int /**/) -> TriggerMode { return TriggerMode::GateFalls; };
             CHECK_FALSE(sustainer.isDone(4, risingLatch));
             CHECK_FALSE(sustainer.isDone(2, highLatch));
             CHECK_FALSE(sustainer.isDone(3, lowLatch));
@@ -79,7 +83,7 @@ namespace curve_sequencer_2 {
           }
 
           SUBCASE("by changing gate") {
-            controls.triggerMode = triggerModeFunc(TriggerMode::GateChanges);
+            controls.triggerMode = [](int /**/) -> TriggerMode { return TriggerMode::GateChanges; };
             CHECK_FALSE(sustainer.isDone(3, highLatch));
             CHECK_FALSE(sustainer.isDone(4, lowLatch));
             CHECK(sustainer.isDone(5, risingLatch));
@@ -87,7 +91,7 @@ namespace curve_sequencer_2 {
           }
 
           SUBCASE("by high gate") {
-            controls.triggerMode = triggerModeFunc(TriggerMode::GateIsHigh);
+            controls.triggerMode = [](int /**/) -> TriggerMode { return TriggerMode::GateIsHigh; };
             CHECK_FALSE(sustainer.isDone(7, fallingLatch));
             CHECK_FALSE(sustainer.isDone(5, lowLatch));
             CHECK(sustainer.isDone(6, risingLatch));
@@ -95,7 +99,7 @@ namespace curve_sequencer_2 {
           }
 
           SUBCASE("by low gate") {
-            controls.triggerMode = triggerModeFunc(TriggerMode::GateIsLow);
+            controls.triggerMode = [](int /**/) -> TriggerMode { return TriggerMode::GateIsLow; };
             CHECK_FALSE(sustainer.isDone(7, risingLatch));
             CHECK_FALSE(sustainer.isDone(5, highLatch));
             CHECK(sustainer.isDone(0, fallingLatch));
