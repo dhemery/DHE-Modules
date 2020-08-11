@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Source.h"
-#include "TriggerMode.h"
+#include "Triggers.h"
 #include "controls/CommonInputs.h"
 #include "controls/CurvatureInputs.h"
 #include "controls/DurationInputs.h"

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "TriggerMode.h"
+#include "Triggers.h"
 #include "components/Latch.h"
 #include "components/PhaseTimer.h"
 #include "components/Range.h"

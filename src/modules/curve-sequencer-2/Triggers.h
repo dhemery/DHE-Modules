@@ -23,5 +23,30 @@ namespace curve_sequencer_2 {
       return gate.isEdge();
     }
   }
+
+  template <typename Controls> class Interrupter {
+  public:
+    Interrupter(Controls &controls) : controls{controls} {}
+
+    auto isInterrupted(int step, Latch const &latch) -> bool {
+      return controls.interruptOnTrigger(step) && isTriggered(controls.triggerMode(step), latch);
+    }
+
+  private:
+    Controls &controls;
+  };
+
+  template <typename Controls> class Sustainer {
+  public:
+    Sustainer(Controls &controls) : controls{controls} {}
+
+    auto isDone(int step, Latch const &latch) -> bool {
+      return controls.advanceOnEndOfCurve(step) || isTriggered(controls.triggerMode(step), latch);
+    }
+
+  private:
+    Controls &controls;
+  };
+
 } // namespace curve_sequencer_2
 } // namespace dhe

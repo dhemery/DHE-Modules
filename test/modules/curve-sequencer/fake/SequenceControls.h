@@ -2,7 +2,7 @@
 
 #include "components/Taper.h"
 #include "modules/curve-sequencer-2/Source.h"
-#include "modules/curve-sequencer-2/TriggerMode.h"
+#include "modules/curve-sequencer-2/Triggers.h"
 
 #include <functional>
 #include <string>

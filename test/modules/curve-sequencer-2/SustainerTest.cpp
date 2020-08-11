@@ -1,6 +1,5 @@
-#include "modules/curve-sequencer-2/Sustainer.h"
-
 #include "helpers/latches.h"
+#include "modules/curve-sequencer-2/Triggers.h"
 
 #include <doctest.h>
 #include <functional>
