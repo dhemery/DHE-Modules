@@ -3,6 +3,7 @@
 #include "helpers/latches.h"
 
 #include <doctest.h>
+#include <functional>
 
 namespace test {
 namespace curve_sequencer_2 {

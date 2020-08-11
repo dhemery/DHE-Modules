@@ -3,6 +3,7 @@
 
 #include <app/ParamWidget.hpp>
 #include <engine/Module.hpp>
+#include <functional>
 #include <helpers.hpp>
 #include <random.hpp>
 #include <utility>

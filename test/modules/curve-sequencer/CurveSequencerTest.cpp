@@ -6,6 +6,7 @@
 #include "modules/curve-sequencer/StepEvent.h"
 
 #include <doctest.h>
+#include <functional>
 
 namespace test {
 namespace curve_sequencer {
