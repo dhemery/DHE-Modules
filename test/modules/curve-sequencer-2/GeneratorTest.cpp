@@ -90,6 +90,16 @@ namespace curve_sequencer_2 {
           CHECK_EQ(deactivatedStep, step);
         }
       }
+
+      // TODO: generate
+      //  computes the phase delta from the sample time and duration
+      //  advances the phase timer by the phase delta
+      //  tapers the phase by applying the taper from the controls
+      //  computes output voltage from tapered phase, start voltage, and end voltage
+      //  reports progress
+      //  emits the output voltage
+      //  returns true if the phase timer is not in progress
+      //  returns false if the phase timer is in progress
     }
   } // namespace sustainer
 } // namespace curve_sequencer_2
