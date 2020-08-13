@@ -11,6 +11,8 @@ namespace curve_sequencer_2 {
     void start(int startedStep) {
       step = startedStep;
       controls.showProgress(step, 0.F);
+      startSource.snap(step);
+      endSource.snap(step);
     }
 
     auto generate(float sampleTime) -> bool { return false; }
