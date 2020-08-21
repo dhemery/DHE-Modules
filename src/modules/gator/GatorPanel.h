@@ -18,8 +18,8 @@ public:
     auto constexpr hp = 9;
 
     setModule(module);
-    setPanel(backgroundSvg(slug));
-    installScrews(this, hp);
+    setPanel(background_svg(slug));
+    install_screws(this, hp);
 
     auto constexpr top = hp2mm(3.5F);
     auto constexpr dy = hp2mm(1.75F);

@@ -11,36 +11,36 @@ namespace dhe {
 
 class Toggle : public rack::app::SvgSwitch {
 public:
-  static inline auto stepper(int size, std::string const &moduleSvgDir,
+  static inline auto stepper(int size, std::string const &module_svg_dir,
                              rack::engine::Module *module, float xmm, float ymm,
                              int index) -> Toggle * {
-    return new Toggle{size, moduleSvgDir, module, xmm, ymm, index};
+    return new Toggle{size, module_svg_dir, module, xmm, ymm, index};
   }
 
-  static inline auto button(std::string const &moduleSvgDir,
+  static inline auto button(std::string const &module_svg_dir,
                             rack::engine::Module *module, float xmm, float ymm,
                             int index) -> Toggle * {
-    return new Toggle{"button", 2, moduleSvgDir, module, xmm, ymm, index};
+    return new Toggle{"button", 2, module_svg_dir, module, xmm, ymm, index};
   }
 
 protected:
-  Toggle(int size, std::string const &moduleSvgDir,
+  Toggle(int size, std::string const &module_svg_dir,
          rack::engine::Module *module, float xmm, float ymm, int index)
       : Toggle{"toggle-" + std::to_string(size),
                size,
-               moduleSvgDir,
+               module_svg_dir,
                module,
                xmm,
                ymm,
                index} {}
 
-  Toggle(std::string const &toggleName, int size,
-         std::string const &moduleSvgDir, rack::engine::Module *module,
+  Toggle(std::string const &toggle_name, int size,
+         std::string const &module_svg_dir, rack::engine::Module *module,
          float xmm, float ymm, int index) {
-    auto const toggleNamePrefix = toggleName + "-";
+    auto const toggle_name_prefix = toggle_name + "-";
     for (auto position = 1; position <= size; position++) {
-      addFrame(controlSvg(moduleSvgDir,
-                          toggleNamePrefix + std::to_string(position)));
+      addFrame(control_svg(module_svg_dir,
+                           toggle_name_prefix + std::to_string(position)));
     }
     shadow->opacity = 0.F;
     positionCentered(this, xmm, ymm);
@@ -53,56 +53,57 @@ protected:
 
 class Button : public Toggle {
 public:
-  static inline auto momentary(std::string const &moduleSvgDir,
+  static inline auto momentary(std::string const &module_svg_dir,
                                rack::engine::Module *module, float xmm,
                                float ymm, int index) -> Button * {
-    return new Button{"button", moduleSvgDir, module, xmm, ymm, index};
+    return new Button{"button", module_svg_dir, module, xmm, ymm, index};
   }
 
-  static inline auto reverse(std::string const &moduleSvgDir,
+  static inline auto reverse(std::string const &module_svg_dir,
                              rack::engine::Module *module, float xmm, float ymm,
                              int index) -> Button * {
-    return new Button("button-reversed", moduleSvgDir, module, xmm, ymm, index);
+    return new Button("button-reversed", module_svg_dir, module, xmm, ymm,
+                      index);
   }
 
 private:
-  Button(std::string const &buttonName, std::string const &moduleSvgDir,
+  Button(std::string const &button_name, std::string const &module_svg_dir,
          rack::engine::Module *module, float xmm, float ymm, int index)
-      : Toggle{buttonName, 2, moduleSvgDir, module, xmm, ymm, index} {
+      : Toggle{button_name, 2, module_svg_dir, module, xmm, ymm, index} {
     Toggle::momentary = true;
   }
 };
 
 class Knob : public rack::componentlibrary::RoundKnob {
 public:
-  static inline auto large(std::string const &moduleSvgDir,
+  static inline auto large(std::string const &module_svg_dir,
                            rack::engine::Module *module, float xmm, float ymm,
                            int index) -> Knob * {
-    return new Knob{moduleSvgDir, "knob-large", module, xmm, ymm, index};
+    return new Knob{module_svg_dir, "knob-large", module, xmm, ymm, index};
   }
 
-  static inline auto medium(std::string const &moduleSvgDir,
+  static inline auto medium(std::string const &module_svg_dir,
                             rack::engine::Module *module, float xmm, float ymm,
                             int index) -> Knob * {
-    return new Knob{moduleSvgDir, "knob-medium", module, xmm, ymm, index};
+    return new Knob{module_svg_dir, "knob-medium", module, xmm, ymm, index};
   }
 
-  static inline auto small(std::string const &moduleSvgDir,
+  static inline auto small(std::string const &module_svg_dir,
                            rack::engine::Module *module, float xmm, float ymm,
                            int index) -> Knob * {
-    return new Knob{moduleSvgDir, "knob-small", module, xmm, ymm, index};
+    return new Knob{module_svg_dir, "knob-small", module, xmm, ymm, index};
   }
 
-  static inline auto tiny(std::string const &moduleSvgDir,
+  static inline auto tiny(std::string const &module_svg_dir,
                           rack::engine::Module *module, float xmm, float ymm,
                           int index) -> Knob * {
-    return new Knob{moduleSvgDir, "knob-tiny", module, xmm, ymm, index};
+    return new Knob{module_svg_dir, "knob-tiny", module, xmm, ymm, index};
   }
 
 protected:
-  Knob(std::string const &moduleSvgDir, std::string const &knobName,
+  Knob(std::string const &module_svg_dir, std::string const &knob_name,
        rack::engine::Module *module, float xmm, float ymm, int index) {
-    setSvg(controlSvg(moduleSvgDir, knobName));
+    setSvg(control_svg(module_svg_dir, knob_name));
     shadow->opacity = 0.F;
     positionCentered(this, xmm, ymm);
     if (module != nullptr) {
@@ -113,22 +114,22 @@ protected:
 
 class Jack : public rack::app::SvgPort {
 public:
-  static inline auto input(std::string const &moduleSvgDir,
+  static inline auto input(std::string const &module_svg_dir,
                            rack::engine::Module *module, float xmm, float ymm,
                            int index) -> Jack * {
     return new Jack{rack::app::PortWidget::Type::INPUT,
-                    moduleSvgDir,
+                    module_svg_dir,
                     module,
                     xmm,
                     ymm,
                     index};
   }
 
-  static inline auto output(std::string const &moduleSvgDir,
+  static inline auto output(std::string const &module_svg_dir,
                             rack::engine::Module *module, float xmm, float ymm,
                             int index) -> Jack * {
     return new Jack{rack::app::PortWidget::Type::OUTPUT,
-                    moduleSvgDir,
+                    module_svg_dir,
                     module,
                     xmm,
                     ymm,
@@ -136,9 +137,9 @@ public:
   }
 
 private:
-  Jack(rack::app::PortWidget::Type type, std::string const &moduleSvgDir,
+  Jack(rack::app::PortWidget::Type type, std::string const &module_svg_dir,
        rack::engine::Module *module, float xmm, float ymm, int index) {
-    setSvg(controlSvg(moduleSvgDir, "port"));
+    setSvg(control_svg(module_svg_dir, "port"));
     shadow->opacity = 0.F;
     positionCentered(this, xmm, ymm);
     this->module = module;

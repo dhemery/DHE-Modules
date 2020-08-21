@@ -19,8 +19,8 @@ public:
     auto constexpr hp = 3;
 
     setModule(module);
-    setPanel(backgroundSvg(slug));
-    installScrews(this, hp);
+    setPanel(background_svg(slug));
+    install_screws(this, hp);
 
     auto constexpr width = hp2mm(hp);
 

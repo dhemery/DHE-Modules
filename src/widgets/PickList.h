@@ -21,7 +21,7 @@ public:
       : index{index}, onPick{std::move(onPick)} {
     auto const controlName = menuName + '-' + std::to_string(index + 1);
     auto *label = new rack::widget::SvgWidget{};
-    label->setSvg(controlSvg(svgDir, controlName));
+    label->setSvg(control_svg(svgDir, controlName));
     addChild(label);
     setSize(label->box.size);
   }
@@ -60,7 +60,7 @@ public:
        std::function<void(int)> const &onPick) {
     auto const controlName = menuName + "-menu";
     auto *background = new rack::widget::SvgWidget{};
-    background->setSvg(controlSvg(svgDir, controlName));
+    background->setSvg(control_svg(svgDir, controlName));
     addChild(background);
     setSize(background->box.size);
     auto const inset = mm2px(0.5F);
@@ -125,7 +125,7 @@ public:
 
     for (int optionIndex = 0; optionIndex < size; optionIndex++) {
       auto const controlName = menuName + '-' + std::to_string(optionIndex + 1);
-      addFrame(controlSvg(svgDir, controlName));
+      addFrame(control_svg(svgDir, controlName));
     }
 
     if (module != nullptr) {

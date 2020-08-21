@@ -6,16 +6,16 @@
 #include <widget/Widget.hpp>
 
 namespace dhe {
-auto constexpr pxPerHp = 15.F;
-auto constexpr mmPerIn = 25.4F;
-auto constexpr pxPerIn = 75.F;
-auto constexpr mmPerHp = 5.08F;
-auto constexpr pxPerMm = pxPerIn / mmPerIn;
+auto constexpr px_per_hp = 15.F;
+auto constexpr mm_per_in = 25.4F;
+auto constexpr px_per_in = 75.F;
+auto constexpr mm_per_hp = 5.08F;
+auto constexpr px_per_mm = px_per_in / mm_per_in;
 
-auto constexpr hp2px(float hp) -> float { return hp * pxPerHp; }
-auto constexpr hp2mm(float hp) -> float { return hp * mmPerHp; }
-auto constexpr mm2px(float mm) -> float { return mm * pxPerMm; };
-auto constexpr mm2hp(float mm) -> float { return mm / mmPerHp; };
+auto constexpr hp2px(float hp) -> float { return hp * px_per_hp; }
+auto constexpr hp2mm(float hp) -> float { return hp * mm_per_hp; }
+auto constexpr mm2px(float mm) -> float { return mm * px_per_mm; }
+auto constexpr mm2hp(float mm) -> float { return mm / mm_per_hp; }
 
 static inline auto mm2px(float xmm, float ymm) -> rack::math::Vec {
   return {mm2px(xmm), mm2px(ymm)};

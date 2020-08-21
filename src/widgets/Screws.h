@@ -12,35 +12,35 @@ namespace dhe {
 using NormalScrew = rack::componentlibrary::ScrewSilver;
 using SpecialScrew = rack::componentlibrary::ScrewBlack;
 
-static inline void installScrews(rack::app::ModuleWidget *panel, int hp) {
-  auto constexpr screwDiameter = hp2mm(1.F);
-  auto constexpr screwRadius = screwDiameter / 2.F;
-  auto const panelWidth = hp2mm((float)hp);
+static inline void install_screws(rack::app::ModuleWidget *panel, int hp) {
+  auto constexpr screw_diameter = hp2mm(1.F);
+  auto constexpr screw_radius = screw_diameter / 2.F;
+  auto const panel_width = hp2mm((float)hp);
 
-  auto constexpr top = screwRadius;
-  auto constexpr bottom = moduleHeight - screwRadius;
+  auto constexpr top = screw_radius;
+  auto constexpr bottom = moduleHeight - screw_radius;
 
-  auto const left = hp < 3 ? screwRadius : screwRadius + screwDiameter;
-  auto const right = panelWidth - left;
+  auto const left = hp < 3 ? screw_radius : screw_radius + screw_diameter;
+  auto const right = panel_width - left;
 
-  auto screwPositions =
+  auto screw_positions =
       std::vector<rack::math::Vec>{mm2px(left, top), mm2px(right, bottom)};
   if (hp > 4) {
-    screwPositions.push_back(mm2px(right, top));
-    screwPositions.push_back(mm2px(left, bottom));
+    screw_positions.push_back(mm2px(right, top));
+    screw_positions.push_back(mm2px(left, bottom));
   }
 
-  std::shuffle(screwPositions.begin(), screwPositions.end(),
+  std::shuffle(screw_positions.begin(), screw_positions.end(),
                std::mt19937(std::random_device()()));
 
-  auto const positionOfSpecialScrew = screwPositions.back();
+  auto const position_of_special_screw = screw_positions.back();
   panel->addChild(
-      rack::createWidgetCentered<SpecialScrew>(positionOfSpecialScrew));
+      rack::createWidgetCentered<SpecialScrew>(position_of_special_screw));
 
-  screwPositions.pop_back();
+  screw_positions.pop_back();
 
-  for (auto const screwPosition : screwPositions) {
-    panel->addChild(rack::createWidgetCentered<NormalScrew>(screwPosition));
+  for (auto const screw_position : screw_positions) {
+    panel->addChild(rack::createWidgetCentered<NormalScrew>(screw_position));
   }
 }
 

@@ -42,7 +42,7 @@ private:
 class StartMarker : public rack::widget::SvgWidget {
 public:
   StartMarker(std::string const &moduleSvgDir, float x, float y) {
-    setSvg(controlSvg(moduleSvgDir, "marker-start"));
+    setSvg(control_svg(moduleSvgDir, "marker-start"));
     positionCentered(this, x, y);
   }
 
@@ -56,7 +56,7 @@ public:
 template <int N> class EndMarker : public rack::widget::SvgWidget {
 public:
   EndMarker(std::string const &moduleSvgDir, float x, float y) {
-    setSvg(controlSvg(moduleSvgDir, "marker-end"));
+    setSvg(control_svg(moduleSvgDir, "marker-end"));
     positionCentered(this, x, y);
   }
 
@@ -94,8 +94,8 @@ public:
     auto constexpr hp = static_cast<int>(sequenceControlsWidth + N * stepWidth);
 
     setModule(module);
-    setPanel(backgroundSvg(slug));
-    installScrews(this, hp);
+    setPanel(background_svg(slug));
+    install_screws(this, hp);
 
     auto constexpr left = hp2mm(2.F);
     auto constexpr right = hp2mm(hp - 2.F);
