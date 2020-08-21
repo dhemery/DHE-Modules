@@ -4,8 +4,8 @@
 #include "components/phase-timer.h"
 #include "components/taper.h"
 #include "fake/Controls.h"
-#include "modules/curve-sequencer/AdvanceMode.h"
-#include "modules/curve-sequencer/GenerateMode.h"
+#include "modules/curve-sequencer/advance-mode.h"
+#include "modules/curve-sequencer/generate-mode.h"
 #include "modules/curve-sequencer/StepEvent.h"
 
 #include <doctest.h>
@@ -36,8 +36,8 @@ static inline void prepareToGenerate(fake::Controls &controls) {
   controls.duration = [](int s) -> float { return 0.2F; };
   controls.input = []() -> float { return 0.2F; };
   controls.level = [](int s) -> float { return 0.2F; };
-  controls.setOutput = [](float f) {};
-  controls.showProgress = [](int step, float progress) {};
+  controls.set_output = [](float f) {};
+  controls.show_progress = [](int step, float progress) {};
   controls.taper = [](int s) -> VariableTaper const * {
     return dhe::taper::variable_tapers[0];
   };
@@ -54,12 +54,12 @@ TEST_CASE("curve_sequencer::StepController") {
   StepController<fake::Controls> stepController{controls, timer};
 
   SUBCASE("enter activates step at 0 progress") {
-    controls.getOutput = []() -> float { return 5.5F; };
+    controls.get_output = []() -> float { return 5.5F; };
 
     auto constexpr step = 7;
     auto shownStep = int{};
     auto shownProgress = -1.F;
-    controls.showProgress = [&](int step, float progress) {
+    controls.show_progress = [&](int step, float progress) {
       shownStep = step;
       shownProgress = progress;
     };
@@ -71,14 +71,14 @@ TEST_CASE("curve_sequencer::StepController") {
   }
 
   SUBCASE("exit deactivates step") {
-    controls.getOutput = []() -> float { return 5.5F; };
+    controls.get_output = []() -> float { return 5.5F; };
 
     auto constexpr step = 1;
-    controls.showProgress = [](int step, int progress) {};
+    controls.show_progress = [](int step, int progress) {};
     stepController.enter(step);
 
     auto deactivatedStep = -1;
-    controls.showInactive = [&](int step) { deactivatedStep = step; };
+    controls.show_inactive = [&](int step) { deactivatedStep = step; };
 
     stepController.exit();
 
@@ -87,8 +87,8 @@ TEST_CASE("curve_sequencer::StepController") {
 
   SUBCASE("advance mode") {
     auto const step = 2;
-    controls.getOutput = []() -> float { return 0.F; };
-    controls.showProgress = [](int step, float progress) {};
+    controls.get_output = []() -> float { return 0.F; };
+    controls.show_progress = [](int step, float progress) {};
     stepController.enter(step);
 
     SUBCASE("GateIsHigh") {
@@ -97,7 +97,7 @@ TEST_CASE("curve_sequencer::StepController") {
       };
 
       SUBCASE("completes if gate is high") {
-        controls.showInactive = [](int step) {};
+        controls.show_inactive = [](int step) {};
         std::for_each(allModes.cbegin(), allModes.cend(),
                       [&controls, &stepController](GenerateMode const mode) {
                         controls.mode = [mode](int step) -> GenerateMode {
@@ -131,7 +131,7 @@ TEST_CASE("curve_sequencer::StepController") {
       };
 
       SUBCASE("completes if gate is high") {
-        controls.showInactive = [](int step) {};
+        controls.show_inactive = [](int step) {};
         std::for_each(allModes.cbegin(), allModes.cend(),
                       [&controls, &stepController](GenerateMode const mode) {
                         controls.mode = [mode](int step) -> GenerateMode {
@@ -165,7 +165,7 @@ TEST_CASE("curve_sequencer::StepController") {
       };
 
       SUBCASE("completes if gate rises") {
-        controls.showInactive = [](int step) {};
+        controls.show_inactive = [](int step) {};
         std::for_each(allModes.cbegin(), allModes.cend(),
                       [&controls, &stepController](GenerateMode const mode) {
                         controls.mode = [mode](int step) -> GenerateMode {
@@ -199,7 +199,7 @@ TEST_CASE("curve_sequencer::StepController") {
       };
 
       SUBCASE("completes if gate falls") {
-        controls.showInactive = [](int step) {};
+        controls.show_inactive = [](int step) {};
         std::for_each(allModes.cbegin(), allModes.cend(),
                       [&controls, &stepController](GenerateMode const mode) {
                         controls.mode = [mode](int step) -> GenerateMode {
@@ -233,7 +233,7 @@ TEST_CASE("curve_sequencer::StepController") {
       };
 
       SUBCASE("completes if gate changes") {
-        controls.showInactive = [](int step) {};
+        controls.show_inactive = [](int step) {};
         std::for_each(allModes.cbegin(), allModes.cend(),
                       [&controls, &stepController](GenerateMode const mode) {
                         controls.mode = [mode](int step) -> GenerateMode {

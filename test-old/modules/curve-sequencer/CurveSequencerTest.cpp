@@ -1,4 +1,4 @@
-#include "modules/curve-sequencer/CurveSequencer.h"
+#include "modules/curve-sequencer/curve-sequencer.h"
 
 #include "fake/SequenceControls.h"
 #include "fake/StepController.h"
@@ -32,41 +32,41 @@ TEST_CASE("curve_sequencer::CurveSequencer") {
   fake::StepController stepController{};
   CurveSequencer curveSequencer{controls, stepSelector, stepController};
 
-  controls.isGated = returns(false);
-  controls.isReset = returns(false);
+  controls.is_gated = returns(false);
+  controls.is_reset = returns(false);
 
   SUBCASE("when idle") {
     // TODO: Assert that it starts idle.
 
     SUBCASE("and paused") {
-      controls.isRunning = returns(false);
+      controls.is_running = returns(false);
       SUBCASE("reset low does nothing") {
-        controls.isReset = returns(false);
+        controls.is_reset = returns(false);
         curveSequencer.execute(0.1F); // Will throw if any commands are called
       }
 
       SUBCASE("reset rise does nothing") {
-        controls.isReset = returns(true);
+        controls.is_reset = returns(true);
         curveSequencer.execute(0.1F); // Will throw if any commands are called
       }
 
       SUBCASE("gate low does nothing") {
-        controls.isGated = returns(false);
+        controls.is_gated = returns(false);
         curveSequencer.execute(0.1F); // Will throw if any commands are called
       }
 
       SUBCASE("gate rise does nothing") {
-        controls.isGated = returns(true);
+        controls.is_gated = returns(true);
         curveSequencer.execute(0.1F); // Will throw if any commands are called
       }
     }
 
     SUBCASE("and running") {
-      controls.isRunning = returns(true);
+      controls.is_running = returns(true);
 
       SUBCASE("reset high copies input voltage to output") {
         auto constexpr input{0.12938F};
-        controls.isReset = returns(true);
+        controls.is_reset = returns(true);
         controls.input = returns(input);
 
         controls.output = [=](float output) { CHECK_EQ(output, input); };
@@ -75,19 +75,19 @@ TEST_CASE("curve_sequencer::CurveSequencer") {
       }
 
       SUBCASE("reset low does nothing") {
-        controls.isReset = returns(false);
+        controls.is_reset = returns(false);
 
         curveSequencer.execute(0.1F); // Will throw if any commands are called
       }
 
       SUBCASE("gate low does nothing") {
-        controls.isGated = returns(false);
+        controls.is_gated = returns(false);
 
         curveSequencer.execute(0.1F); // Will throw if any commands are called
       }
 
       SUBCASE("gate rise") {
-        controls.isGated = returns(true);
+        controls.is_gated = returns(true);
 
         SUBCASE("executes first enabled step with gate edge cleared") {
           auto constexpr firstEnabledStep{3};
@@ -118,7 +118,7 @@ TEST_CASE("curve_sequencer::CurveSequencer") {
   }
 
   SUBCASE("when active") {
-    controls.isRunning = returns(true);
+    controls.is_running = returns(true);
     int constexpr stepSelectorFirstStep{2};
 
     stepSelector.first = returns(stepSelectorFirstStep);
@@ -132,37 +132,37 @@ TEST_CASE("curve_sequencer::CurveSequencer") {
       REQUIRE_EQ(executedGateLatch, stableHighLatch);
       return StepEvent::Generated;
     };
-    controls.isGated = returns(true);
+    controls.is_gated = returns(true);
 
     curveSequencer.execute(0.F);
 
     // Now that a step is active, pause.
-    controls.isRunning = returns(false);
+    controls.is_running = returns(false);
 
     // Forbid further calls
     stepSelector.first = std::function<int()>{};
     stepController.enter = std::function<void(int)>{};
 
     SUBCASE("and paused") {
-      controls.isRunning = returns(false);
+      controls.is_running = returns(false);
 
       SUBCASE("gate low does nothing") {
-        controls.isGated = returns(false);
+        controls.is_gated = returns(false);
         curveSequencer.execute(0.F); // Will throw if any commands are called
       }
 
       SUBCASE("gate rise does nothing") {
-        controls.isGated = returns(true);
+        controls.is_gated = returns(true);
         curveSequencer.execute(0.F); // Will throw if any commands are called
       }
 
       SUBCASE("reset low does nothing") {
-        controls.isReset = returns(false);
+        controls.is_reset = returns(false);
         curveSequencer.execute(0.F); // Will throw if any commands are called
       }
 
       SUBCASE("reset rise exits active step and does nothing else") {
-        controls.isReset = returns(true);
+        controls.is_reset = returns(true);
         auto exitCalled = bool{};
         stepController.exit = [&]() { exitCalled = true; };
 
@@ -174,12 +174,12 @@ TEST_CASE("curve_sequencer::CurveSequencer") {
     }
 
     SUBCASE("and running") {
-      controls.isRunning = returns(true);
+      controls.is_running = returns(true);
 
       SUBCASE("executes active step with gate state") {
         auto constexpr sampleTime{0.34901F};
 
-        controls.isGated = returns(true);
+        controls.is_gated = returns(true);
         stepController.execute = [&](Latch const &executedGateLatch,
                                      float st) -> StepEvent {
           REQUIRE_EQ(executedGateLatch, stableHighLatch);
@@ -187,7 +187,7 @@ TEST_CASE("curve_sequencer::CurveSequencer") {
         };
         curveSequencer.execute(sampleTime);
 
-        controls.isGated = returns(false);
+        controls.is_gated = returns(false);
         stepController.execute = [&](Latch const &executedGateLatch,
                                      float st) -> StepEvent {
           REQUIRE_EQ(executedGateLatch, fallenLatch);
@@ -195,7 +195,7 @@ TEST_CASE("curve_sequencer::CurveSequencer") {
         };
         curveSequencer.execute(sampleTime);
 
-        controls.isGated = returns(false);
+        controls.is_gated = returns(false);
         stepController.execute = [&](Latch const &executedGateLatch,
                                      float st) -> StepEvent {
           REQUIRE_EQ(executedGateLatch, stableLowLatch);
@@ -203,7 +203,7 @@ TEST_CASE("curve_sequencer::CurveSequencer") {
         };
         curveSequencer.execute(sampleTime);
 
-        controls.isGated = returns(true);
+        controls.is_gated = returns(true);
         stepController.execute = [&](Latch const &executedGateLatch,
                                      float st) -> StepEvent {
           REQUIRE_EQ(executedGateLatch, risenLatch);
@@ -217,7 +217,7 @@ TEST_CASE("curve_sequencer::CurveSequencer") {
           return StepEvent::Completed;
         };
         auto controlsIsLooping = bool{};
-        controls.isLooping = [&]() -> bool { return controlsIsLooping; };
+        controls.is_looping = [&]() -> bool { return controlsIsLooping; };
 
         SUBCASE("seeks successor with active step and loop state") {
           stepController.enter = [](int s) {};
@@ -271,7 +271,7 @@ TEST_CASE("curve_sequencer::CurveSequencer") {
       }
 
       SUBCASE("if reset rises") {
-        controls.isReset = returns(true);
+        controls.is_reset = returns(true);
 
         SUBCASE("copies input to output") {
           stepController.exit = []() {};

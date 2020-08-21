@@ -27,21 +27,21 @@ static inline auto forbidden(const std::string &name, V1 v1, V2 v2)
 
 namespace fake {
 struct SequenceControls {
-  std::function<bool()> isGated{[]() -> bool { throw forbidden("isGated"); }};
-  std::function<bool()> isLooping{
-      []() -> bool { throw forbidden("isLooping"); }};
-  std::function<bool()> isReset{[]() -> bool { throw forbidden("isReset"); }};
-  std::function<bool()> isRunning{
-      []() -> bool { throw forbidden("isRunning"); }};
-  std::function<int()> selectionStart{
-      []() -> int { throw forbidden("selectionStart"); }};
-  std::function<int()> selectionLength{
-      []() -> int { throw forbidden("selectionLength"); }};
+  std::function<bool()> is_gated{[]() -> bool { throw forbidden("is_gated"); }};
+  std::function<bool()> is_looping{
+      []() -> bool { throw forbidden("is_looping"); }};
+  std::function<bool()> is_reset{[]() -> bool { throw forbidden("is_reset"); }};
+  std::function<bool()> is_running{
+      []() -> bool { throw forbidden("is_running"); }};
+  std::function<int()> selection_start{
+      []() -> int { throw forbidden("selection_start"); }};
+  std::function<int()> selection_length{
+      []() -> int { throw forbidden("selection_length"); }};
   std::function<float()> input{[]() -> int { throw forbidden("input"); }};
   std::function<void(float)> output{
       [](float f) { throw forbidden("output", f); }};
-  std::function<bool(int)> isEnabled{
-      [](int s) -> bool { throw forbidden("isEnabled", s); }};
+  std::function<bool(int)> is_enabled{
+      [](int s) -> bool { throw forbidden("is_enabled", s); }};
 };
 } // namespace fake
 

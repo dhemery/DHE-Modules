@@ -1,33 +1,33 @@
 #pragma once
 
-#include "CurveSequencer.h"
-#include "CurveSequencerControls.h"
-#include "GenerateMode.h"
-#include "StepController.h"
-#include "StepSelector.h"
 #include "components/phase-timer.h"
 #include "config/common-config.h"
 #include "config/curvature-config.h"
 #include "config/duration-config.h"
 #include "config/level-config.h"
+#include "curve-sequencer-controls.h"
+#include "curve-sequencer.h"
+#include "generate-mode.h"
+#include "step-controller.h"
+#include "step-selector.h"
 
 #include <engine/Module.hpp>
 
 namespace dhe {
 
 namespace curve_sequencer {
-static auto constexpr defaultGenerateMode =
+static auto constexpr default_generate_mode =
     static_cast<int>(GenerateMode::Curve);
-static auto const generateModeDescriptions =
-    std::array<std::string, generateModeCount>{"Curve", "Hold",  "Sustain",
-                                               "Input", "Chase", "Level"};
+static auto const generate_mode_descriptions =
+    std::array<std::string, generate_mode_count>{"Curve", "Hold",  "Sustain",
+                                                 "Input", "Chase", "Level"};
 
-static auto constexpr defaultAdvanceMode =
+static auto constexpr default_advance_mode =
     static_cast<int>(AdvanceMode::TimerExpires);
-static auto const advanceModeDescriptions =
-    std::array<std::string, advanceModeCount>{"Timer expires", "Gate rises",
-                                              "Gate falls",    "Gate changes",
-                                              "Gate is high",  "Gate is low"};
+static auto const advance_mode_descriptions =
+    std::array<std::string, advance_mode_count>{"Timer expires", "Gate rises",
+                                                "Gate falls",    "Gate changes",
+                                                "Gate is high",  "Gate is low"};
 
 template <int N> class CurveSequencerModule : public rack::engine::Module {
   using Controls =
@@ -55,12 +55,12 @@ public:
     config_duration_range_switch(this, Controls::DurationRangeSwitch);
 
     for (auto step = 0; step < N; step++) {
-      config_toggle<generateModeCount>(
+      config_toggle<generate_mode_count>(
           this, Controls::ModeSwitches + step, "Generate Mode",
-          generateModeDescriptions, defaultGenerateMode);
-      config_toggle<advanceModeCount>(this, Controls::ConditionSwitches + step,
-                                      "Advance Mode", advanceModeDescriptions,
-                                      defaultAdvanceMode);
+          generate_mode_descriptions, default_generate_mode);
+      config_toggle<advance_mode_count>(
+          this, Controls::ConditionSwitches + step, "Advance Mode",
+          advance_mode_descriptions, default_advance_mode);
       config_level_knob(this, Controls::LevelKnobs + step,
                         Controls::LevelRangeSwitch, "Level");
       config_curve_shape_switch(this, Controls::ShapeSwitches + step, "Shape");
@@ -70,24 +70,24 @@ public:
       config_button(this, Controls::EnabledButtons + step, "Enabled",
                     {"from input", "Yes"}, 1);
 
-      controls.showInactive(step);
+      controls_.show_inactive(step);
     }
   }
 
   ~CurveSequencerModule() override = default;
 
   void process(ProcessArgs const &args) override {
-    curveSequencer.execute(args.sampleTime);
+    curve_sequencer_.execute(args.sampleTime);
   }
 
 private:
-  PhaseTimer timer{};
-  Controls controls{inputs, outputs, params, lights};
-  StepController<Controls> stepController{controls, timer};
-  StepSelector<Controls> selector{controls, N};
+  PhaseTimer timer_{};
+  Controls controls_{inputs, outputs, params, lights};
+  StepController<Controls> step_controller_{controls_, timer_};
+  StepSelector<Controls> selector_{controls_, N};
 
-  CurveSequencer<Controls, decltype(selector), decltype(stepController)>
-      curveSequencer{controls, selector, stepController};
+  CurveSequencer<Controls, decltype(selector_), decltype(step_controller_)>
+      curve_sequencer_{controls_, selector_, step_controller_};
 };
 } // namespace curve_sequencer
 

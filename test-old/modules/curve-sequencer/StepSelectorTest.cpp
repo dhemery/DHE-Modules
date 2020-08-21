@@ -11,12 +11,12 @@ static auto constexpr stepCount{8};
 using dhe::curve_sequencer::StepSelector;
 
 static inline void givenEnabled(fake::Controls &controls, int enabledStep) {
-  controls.isEnabled = [=](int step) -> bool { return step == enabledStep; };
+  controls.is_enabled = [=](int step) -> bool { return step == enabledStep; };
 }
 static inline void givenSelection(fake::Controls &controls, int start,
                                   int length) {
-  controls.selectionStart = [=]() -> int { return start; };
-  controls.selectionLength = [=]() -> int { return length; };
+  controls.selection_start = [=]() -> int { return start; };
+  controls.selection_length = [=]() -> int { return length; };
 }
 
 TEST_CASE("curve_sequencer::StepSelector") {
@@ -37,27 +37,27 @@ TEST_CASE("curve_sequencer::StepSelector") {
       }
 
       SUBCASE("below given step if selection wraps") {
-        auto const selectionStart = 6;
-        auto const selectionLength = 4;
-        givenSelection(controls, selectionStart,
-                       selectionLength);  // 0 1] 2 3 4 5 [6 7
+        auto const selection_start = 6;
+        auto const selection_length = 4;
+        givenSelection(controls, selection_start,
+                       selection_length);  // 0 1] 2 3 4 5 [6 7
         auto const expectedSuccessor = 1; // Must wrap to find
         givenEnabled(controls, expectedSuccessor);
 
-        auto const successor = selector.successor(selectionStart, false);
+        auto const successor = selector.successor(selection_start, false);
 
         CHECK_EQ(successor, expectedSuccessor);
       }
 
       SUBCASE("selection end") {
-        auto const selectionStart = 2;
-        auto const selectionLength = 3;
-        givenSelection(controls, selectionStart,
-                       selectionLength); // 0 1 [2 3 4] 5 6 7
-        auto const selectionEnd = selectionStart + selectionLength - 1;
+        auto const selection_start = 2;
+        auto const selection_length = 3;
+        givenSelection(controls, selection_start,
+                       selection_length); // 0 1 [2 3 4] 5 6 7
+        auto const selectionEnd = selection_start + selection_length - 1;
         givenEnabled(controls, selectionEnd);
 
-        auto const successor = selector.successor(selectionStart, false);
+        auto const successor = selector.successor(selection_start, false);
 
         CHECK_EQ(successor, selectionEnd);
       }
@@ -74,28 +74,28 @@ TEST_CASE("curve_sequencer::StepSelector") {
 
     SUBCASE("returns no step") {
       SUBCASE("if no selected step is enabled") {
-        auto const selectionStart = 1;
-        auto const selectionLength = 4;
-        givenSelection(controls, selectionStart,
-                       selectionLength); // 0 [1 2 3 4] 5 6 7
+        auto const selection_start = 1;
+        auto const selection_length = 4;
+        givenSelection(controls, selection_start,
+                       selection_length); // 0 [1 2 3 4] 5 6 7
         auto const onlyEnabledStep = 6;
         givenEnabled(controls, onlyEnabledStep); // Enabled but not in selection
 
-        auto const successor = selector.successor(selectionStart, true);
+        auto const successor = selector.successor(selection_start, true);
 
         CHECK_LT(successor, 0);
       }
 
       SUBCASE("if selection wraps and no selected step is enabled") {
-        auto const selectionStart = 5;
-        auto const selectionLength = 7;
-        givenSelection(controls, selectionStart,
-                       selectionLength); // 0 1 2 3] 4 [5 6 7
+        auto const selection_start = 5;
+        auto const selection_length = 7;
+        givenSelection(controls, selection_start,
+                       selection_length); // 0 1 2 3] 4 [5 6 7
         auto const onlyEnabledStep =
             4; // The only enabled step is not in the selection
         givenEnabled(controls, onlyEnabledStep);
 
-        auto const successor = selector.successor(selectionStart, true);
+        auto const successor = selector.successor(selection_start, true);
 
         CHECK_LE(successor, 0);
       }
@@ -143,26 +143,26 @@ TEST_CASE("curve_sequencer::StepSelector") {
 
   SUBCASE("first()") {
     SUBCASE("is selection start if start step is enabled") {
-      auto constexpr selectionStart = 3;
-      givenSelection(controls, selectionStart, 4);
-      givenEnabled(controls, selectionStart);
+      auto constexpr selection_start = 3;
+      givenSelection(controls, selection_start, 4);
+      givenEnabled(controls, selection_start);
 
       auto const first = selector.first();
 
-      CHECK_EQ(first, selectionStart);
+      CHECK_EQ(first, selection_start);
     }
 
     SUBCASE("is successor of selection start if start step is disabled") {
-      auto constexpr selectionStart = 3;
-      givenSelection(controls, selectionStart, 4); // Not enabled
+      auto constexpr selection_start = 3;
+      givenSelection(controls, selection_start, 4); // Not enabled
       auto constexpr enabledSelectedStep = 5;
       givenEnabled(controls, enabledSelectedStep);
 
       auto const first = selector.first();
-      auto const successorOfSelectionStart =
-          selector.successor(selectionStart, false);
+      auto const successorOfselection_start =
+          selector.successor(selection_start, false);
 
-      CHECK_EQ(first, successorOfSelectionStart);
+      CHECK_EQ(first, successorOfselection_start);
     }
 
     SUBCASE("is successor earlier in selection if sequencer is looping") {
@@ -178,7 +178,7 @@ TEST_CASE("curve_sequencer::StepSelector") {
 
     SUBCASE("is no step if no selected step is enabled") {
       givenSelection(controls, 0, stepCount); // All selected...
-      controls.isEnabled = [](int step) -> bool {
+      controls.is_enabled = [](int step) -> bool {
         return false;
       }; // ... but non enabled
 

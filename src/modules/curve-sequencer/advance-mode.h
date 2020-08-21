@@ -11,7 +11,7 @@ enum class AdvanceMode {
   GateIsLow
 };
 
-static auto constexpr advanceModeCount =
+static auto constexpr advance_mode_count =
     static_cast<int>(AdvanceMode::GateIsLow) + 1;
 } // namespace curve_sequencer
 } // namespace dhe
