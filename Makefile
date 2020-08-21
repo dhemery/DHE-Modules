@@ -40,7 +40,7 @@ $(DOCTEST_RUNNER): $(DOCTEST_OBJECTS)
 	@mkdir -p $(@D)
 	$(CXX) -o $@ $^
 
-.PHONY: test
+.PHONY: doctest
 doctest: $(DOCTEST_RUNNER)
 	$<
 
@@ -63,10 +63,11 @@ $(TEST_RUNNER): $(TEST_OBJECTS)
 	@mkdir -p $(@D)
 	$(CXX) -o $@ $^
 
-.PHONY: test
+.PHONY: dhetest
 dhetest: $(TEST_RUNNER)
 	$<
 
+.PHONY: test
 test: doctest dhetest
 
 

@@ -1,4 +1,4 @@
-#include "modules/curve-sequencer/StepSelector.h"
+#include "modules/curve-sequencer/step-selector.h"
 
 #include "fake/Controls.h"
 

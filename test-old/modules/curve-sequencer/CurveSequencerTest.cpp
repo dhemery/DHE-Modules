@@ -3,7 +3,7 @@
 #include "fake/SequenceControls.h"
 #include "fake/StepController.h"
 #include "fake/StepSelector.h"
-#include "modules/curve-sequencer/StepEvent.h"
+#include "modules/curve-sequencer/step-event.h"
 
 #include <doctest.h>
 #include <functional>

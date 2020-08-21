@@ -6,7 +6,7 @@
       <MakefileProjectSettings>
         <option name="analyzerType" value="OUTPUT_PARSING" />
         <option name="buildOptions" value="RACK_DIR=&quot;~/.rack/sdk/1.1.6&quot; " />
-        <option name="buildTarget" value="all build/testrunner" />
+        <option name="buildTarget" value="all build/doctest build/dheunit" />
         <option name="cleanTarget" value="clean" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
         <option name="modules">

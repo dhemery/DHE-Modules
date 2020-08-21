@@ -1,4 +1,4 @@
-#include "modules/curve-sequencer/StepController.h"
+#include "modules/curve-sequencer/step-controller.h"
 
 #include "components/latch.h"
 #include "components/phase-timer.h"
@@ -6,7 +6,7 @@
 #include "fake/Controls.h"
 #include "modules/curve-sequencer/advance-mode.h"
 #include "modules/curve-sequencer/generate-mode.h"
-#include "modules/curve-sequencer/StepEvent.h"
+#include "modules/curve-sequencer/step-event.h"
 
 #include <doctest.h>
 #include <vector>

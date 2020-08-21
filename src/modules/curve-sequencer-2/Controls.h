@@ -1,11 +1,11 @@
 #pragma once
 
-#include "Source.h"
 #include "Triggers.h"
 #include "controls/common-inputs.h"
 #include "controls/curvature-inputs.h"
 #include "controls/duration-inputs.h"
 #include "controls/level-inputs.h"
+#include "source.h"
 
 #include <vector>
 

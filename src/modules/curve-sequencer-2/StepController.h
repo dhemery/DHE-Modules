@@ -4,7 +4,7 @@
 #include "components/latch.h"
 #include "components/phase-timer.h"
 #include "components/range.h"
-#include "modules/curve-sequencer/StepEvent.h"
+#include "modules/curve-sequencer/step-event.h"
 
 namespace dhe {
 namespace curve_sequencer_2 {

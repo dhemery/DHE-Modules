@@ -4,7 +4,7 @@
 #include "controls/level-inputs.h"
 #include "fake-rack/Controls.h"
 #include "modules/curve-sequencer-2/Controls.h"
-#include "modules/curve-sequencer-2/Source.h"
+#include "modules/curve-sequencer-2/source.h"
 
 #include <doctest.h>
 

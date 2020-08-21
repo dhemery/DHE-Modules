@@ -1,7 +1,7 @@
 #pragma once
 
 #include "components/taper.h"
-#include "modules/curve-sequencer-2/Source.h"
+#include "modules/curve-sequencer-2/source.h"
 #include "modules/curve-sequencer-2/Triggers.h"
 
 #include <functional>

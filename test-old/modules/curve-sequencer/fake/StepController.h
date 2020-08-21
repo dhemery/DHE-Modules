@@ -1,7 +1,7 @@
 #pragma once
 
 #include "components/latch.h"
-#include "modules/curve-sequencer/StepEvent.h"
+#include "modules/curve-sequencer/step-event.h"
 
 #include <functional>
 

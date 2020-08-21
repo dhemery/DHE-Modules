@@ -1,7 +1,7 @@
 #include "modules/curve-sequencer-2/StepController.h"
 
 #include "components/latch.h"
-#include "modules/curve-sequencer/StepEvent.h"
+#include "modules/curve-sequencer/step-event.h"
 
 #include <doctest.h>
 #include <functional>
