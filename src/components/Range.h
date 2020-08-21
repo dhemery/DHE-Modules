@@ -2,13 +2,15 @@
 
 namespace dhe {
 
-static inline auto scale(float proportion, float lowerBound, float upperBound) -> float {
-  return proportion * (upperBound - lowerBound) + lowerBound;
+static inline auto scale(float proportion, float lower_bound, float upperBound)
+    -> float {
+  return proportion * (upperBound - lower_bound) + lower_bound;
 }
 
-static inline auto clamp(float value, float lowerBound, float upperBound) -> float {
-  if (value < lowerBound) {
-    return lowerBound;
+static inline auto clamp(float value, float lower_bound, float upperBound)
+    -> float {
+  if (value < lower_bound) {
+    return lower_bound;
   }
   if (value > upperBound) {
     return upperBound;
@@ -18,24 +20,31 @@ static inline auto clamp(float value, float lowerBound, float upperBound) -> flo
 
 class Range {
 public:
-  constexpr Range(float lowerBound, float upperBound) noexcept : lower{lowerBound}, upper{upperBound} {}
+  constexpr Range(float lower_bound, float upper_bound) noexcept
+      : lower_{lower_bound}, upper_{upper_bound} {}
 
-  auto lowerBound() const -> float { return lower; }
+  auto lower_bound() const -> float { return lower_; }
 
-  auto upperBound() const -> float { return upper; }
+  auto upper_bound() const -> float { return upper_; }
 
-  auto size() const -> float { return upper - lower; }
+  auto size() const -> float { return upper_ - lower_; }
 
-  auto scale(float proportion) const -> float { return dhe::scale(proportion, lower, upper); }
+  auto scale(float proportion) const -> float {
+    return dhe::scale(proportion, lower_, upper_);
+  }
 
-  auto scale(bool state) const -> float { return state ? upper : lower; }
+  auto scale(bool state) const -> float { return state ? upper_ : lower_; }
 
-  auto normalize(float scaled) const -> float { return (scaled - lower) / size(); }
+  auto normalize(float scaled) const -> float {
+    return (scaled - lower_) / size();
+  }
 
-  auto clamp(float scaled) const -> float { return dhe::clamp(scaled, lower, upper); }
+  auto clamp(float scaled) const -> float {
+    return dhe::clamp(scaled, lower_, upper_);
+  }
 
 private:
-  float const lower;
-  float const upper;
+  float const lower_;
+  float const upper_;
 };
 } // namespace dhe

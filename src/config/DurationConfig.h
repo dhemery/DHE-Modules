@@ -26,45 +26,59 @@ public:
     setValue(rotation);
   }
 
-  void setRangeSupplier(std::function<Range const *()> const &rangeSupplier) { this->range = rangeSupplier; }
+  void setRangeSupplier(std::function<Range const *()> const &rangeSupplier) {
+    this->range = rangeSupplier;
+  }
 
 private:
   std::function<Range const *()> range;
 };
 
-static inline void configDurationKnob(rack::engine::Module *module, int knobId,
-                                      std::function<Range const *()> const &rangeSupplier, std::string const &name,
-                                      float initialPosition) {
-  module->configParam<DurationKnobParamQuantity>(knobId, 0.F, 1.F, initialPosition, name, " s");
-  auto *knobParamQuantity = dynamic_cast<DurationKnobParamQuantity *>(module->paramQuantities[knobId]);
+static inline void
+configDurationKnob(rack::engine::Module *module, int knobId,
+                   std::function<Range const *()> const &rangeSupplier,
+                   std::string const &name, float initialPosition) {
+  module->configParam<DurationKnobParamQuantity>(knobId, 0.F, 1.F,
+                                                 initialPosition, name, " s");
+  auto *knobParamQuantity = dynamic_cast<DurationKnobParamQuantity *>(
+      module->paramQuantities[knobId]);
   knobParamQuantity->setRangeSupplier(rangeSupplier);
 }
 
 /**
  * Configures the param and display for a duration knob with a fixed range.
  */
-static inline void configDurationKnob(rack::engine::Module *module, int knobId, Range const &range,
-                                      std::string const &name = "Duration", float initialRotation = centeredRotation) {
+static inline void
+configDurationKnob(rack::engine::Module *module, int knobId, Range const &range,
+                   std::string const &name = "Duration",
+                   float initialRotation = centeredRotation) {
   auto const rangeSupplier = [range]() -> Range const * { return &range; };
   configDurationKnob(module, knobId, rangeSupplier, name, initialRotation);
 }
 
 /**
- * Configures the param and display for a duration knob with a range selected by a switch.
+ * Configures the param and display for a duration knob with a range selected by
+ * a switch.
  */
-static inline void configDurationKnob(rack::engine::Module *module, int knobId, int switchId,
-                                      std::string const &name = "Duration", float initialRotation = centeredRotation) {
-  auto const rangeSupplier
-      = [module, switchId]() -> Range const * { return selectedRange<3>(module->params[switchId], durationRanges); };
+static inline void
+configDurationKnob(rack::engine::Module *module, int knobId, int switchId,
+                   std::string const &name = "Duration",
+                   float initialRotation = centeredRotation) {
+  auto const rangeSupplier = [module, switchId]() -> Range const * {
+    return selectedRange<3>(module->params[switchId], durationRanges);
+  };
   configDurationKnob(module, knobId, rangeSupplier, name, initialRotation);
 }
 
 /**
  * Configures the param and display for a duration range switch.
  */
-static inline void configDurationRangeSwitch(rack::engine::Module *module, int switchId,
-                                             std::string const &name = "Duration Range", int initialPosition = 1) {
-  static auto const positionNames = std::array<std::string, 3>{"0.001–1.0 s", "0.01–10.0 s", "0.1–100.0 s"};
+static inline void
+configDurationRangeSwitch(rack::engine::Module *module, int switchId,
+                          std::string const &name = "Duration Range",
+                          int initialPosition = 1) {
+  static auto const positionNames =
+      std::array<std::string, 3>{"0.001–1.0 s", "0.01–10.0 s", "0.1–100.0 s"};
   configToggle<3>(module, switchId, name, positionNames, initialPosition);
 }
 } // namespace dhe

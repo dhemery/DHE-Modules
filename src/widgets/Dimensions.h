@@ -17,10 +17,15 @@ auto constexpr hp2mm(float hp) -> float { return hp * mmPerHp; }
 auto constexpr mm2px(float mm) -> float { return mm * pxPerMm; };
 auto constexpr mm2hp(float mm) -> float { return mm / mmPerHp; };
 
-static inline auto mm2px(float xmm, float ymm) -> rack::math::Vec { return {mm2px(xmm), mm2px(ymm)}; }
-static inline auto mm2px(rack::math::Vec const &mm) -> rack::math::Vec { return mm2px(mm.x, mm.y); }
+static inline auto mm2px(float xmm, float ymm) -> rack::math::Vec {
+  return {mm2px(xmm), mm2px(ymm)};
+}
+static inline auto mm2px(rack::math::Vec const &mm) -> rack::math::Vec {
+  return mm2px(mm.x, mm.y);
+}
 
-static inline void positionCentered(rack::widget::Widget *widget, float xmm, float ymm) {
+static inline void positionCentered(rack::widget::Widget *widget, float xmm,
+                                    float ymm) {
   auto const &center = mm2px(xmm, ymm);
   auto const &offset = widget->box.size.div(2);
   widget->setPosition(center.minus(offset));

@@ -11,18 +11,18 @@
 namespace dhe {
 namespace stage {
 
-  template <typename Controls> class UpstageEngine {
-  public:
-    UpstageEngine(Controls &controls) : controls{controls} {}
+template <typename Controls> class UpstageEngine {
+public:
+  UpstageEngine(Controls &controls) : controls{controls} {}
 
-    void process() {
-      auto isTriggered = controls.isTriggered() && !controls.isWaiting();
-      controls.sendTrigger(isTriggered);
-      controls.sendEnvelope(controls.level());
-    }
+  void process() {
+    auto isTriggered = controls.isTriggered() && !controls.isWaiting();
+    controls.sendTrigger(isTriggered);
+    controls.sendEnvelope(controls.level());
+  }
 
-  private:
-    Controls &controls;
-  };
+private:
+  Controls &controls;
+};
 } // namespace stage
 } // namespace dhe

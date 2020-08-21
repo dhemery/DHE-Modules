@@ -11,45 +11,54 @@
 namespace dhe {
 namespace ranger {
 
-  class Ranger : public rack::engine::Module {
-    using Controls = RangerControls;
+class Ranger : public rack::engine::Module {
+  using Controls = RangerControls;
 
-  public:
-    Ranger() {
-      config(Controls::ParameterCount, Controls::InputCount, Controls::OutputCount);
+public:
+  Ranger() {
+    config(Controls::ParameterCount, Controls::InputCount,
+           Controls::OutputCount);
 
-      configAttenuator(this, Controls::LevelKnob, "Level");
-      configAttenuverter(this, Controls::LevelAvKnob, "Level CV gain");
+    configAttenuator(this, Controls::LevelKnob, "Level");
+    configAttenuverter(this, Controls::LevelAvKnob, "Level CV gain");
 
-      configLevelKnob(this, Controls::CcwLimitKnob, Controls::CcwLimitRangeSwitch, "CCW limit");
-      configLevelRangeSwitch(this, Controls::CcwLimitRangeSwitch, "CCW limit range", 0);
-      configAttenuverter(this, Controls::CcwLimitAvKnob, "CCW limit CV gain");
+    configLevelKnob(this, Controls::CcwLimitKnob, Controls::CcwLimitRangeSwitch,
+                    "CCW limit");
+    configLevelRangeSwitch(this, Controls::CcwLimitRangeSwitch,
+                           "CCW limit range", 0);
+    configAttenuverter(this, Controls::CcwLimitAvKnob, "CCW limit CV gain");
 
-      configLevelKnob(this, Controls::CwLimitKnob, Controls::CwLimitRangeSwitch, "CW limit");
-      configLevelRangeSwitch(this, Controls::CwLimitRangeSwitch, "CW limit range", 0);
-      configAttenuverter(this, Controls::CwLimitAvKnob, "CW limit CV gain");
-    }
+    configLevelKnob(this, Controls::CwLimitKnob, Controls::CwLimitRangeSwitch,
+                    "CW limit");
+    configLevelRangeSwitch(this, Controls::CwLimitRangeSwitch, "CW limit range",
+                           0);
+    configAttenuverter(this, Controls::CwLimitAvKnob, "CW limit CV gain");
+  }
 
-    void process(ProcessArgs const & /*args*/) override {
-      auto const outputVoltage = scale(level(), ccwLimit(), cwLimit());
-      outputs[Controls::RangerOutput].setVoltage(outputVoltage);
-    }
+  void process(ProcessArgs const & /*args*/) override {
+    auto const outputVoltage = scale(level(), ccwLimit(), cwLimit());
+    outputs[Controls::RangerOutput].setVoltage(outputVoltage);
+  }
 
-  private:
-    auto level() const -> float {
-      return rotation(params[Controls::LevelKnob], inputs[Controls::LevelCvInput], params[Controls::LevelAvKnob]);
-    }
+private:
+  auto level() const -> float {
+    return rotation(params[Controls::LevelKnob], inputs[Controls::LevelCvInput],
+                    params[Controls::LevelAvKnob]);
+  }
 
-    auto ccwLimit() const -> float {
-      return selectableLevel(params[Controls::CcwLimitKnob], inputs[Controls::CcwLimitCvInput],
-                             params[Controls::CcwLimitAvKnob], params[Controls::CcwLimitRangeSwitch]);
-    }
+  auto ccwLimit() const -> float {
+    return selectableLevel(params[Controls::CcwLimitKnob],
+                           inputs[Controls::CcwLimitCvInput],
+                           params[Controls::CcwLimitAvKnob],
+                           params[Controls::CcwLimitRangeSwitch]);
+  }
 
-    auto cwLimit() const -> float {
-      return selectableLevel(params[Controls::CwLimitKnob], inputs[Controls::CwLimitCvInput],
-                             params[Controls::CwLimitAvKnob], params[Controls::CwLimitRangeSwitch]);
-    }
-  };
+  auto cwLimit() const -> float {
+    return selectableLevel(
+        params[Controls::CwLimitKnob], inputs[Controls::CwLimitCvInput],
+        params[Controls::CwLimitAvKnob], params[Controls::CwLimitRangeSwitch]);
+  }
+};
 
 } // namespace ranger
 } // namespace dhe

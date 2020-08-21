@@ -5,18 +5,18 @@
 namespace dhe {
 class PhaseTimer {
 public:
-  PhaseTimer(float phase = 0.F) : accumulatedPhase{std::min(phase, 1.F)} {}
+  PhaseTimer(float phase = 0.F) : phase_{std::min(phase, 1.F)} {}
 
-  void advance(float delta) { accumulatedPhase = std::min(accumulatedPhase + delta, 1.F); }
+  void advance(float delta) { phase_ = std::min(phase_ + delta, 1.F); }
 
-  auto inProgress() const -> bool { return accumulatedPhase < 1.F; }
+  auto in_progress() const -> bool { return phase_ < 1.F; }
 
-  auto phase() const -> float { return accumulatedPhase; }
+  auto phase() const -> float { return phase_; }
 
-  void reset() { accumulatedPhase = 0.F; }
+  void reset() { phase_ = 0.F; }
 
 private:
-  float accumulatedPhase{};
+  float phase_{};
 };
 
 } // namespace dhe

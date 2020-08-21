@@ -67,7 +67,8 @@ using dhe::xycloid::XycloidPanel;
 rack::plugin::Plugin *pluginInstance;
 
 /**
- * Register a model of each module. This funciton is called by Rack when the module is loaded.
+ * Register a model of each module. This funciton is called by Rack when the
+ * module is loaded.
  */
 extern "C" void init(rack::plugin::Plugin *p) {
   static auto constexpr func6Channels{6};
@@ -78,13 +79,21 @@ extern "C" void init(rack::plugin::Plugin *p) {
   pluginInstance = p;
 
   p->addModel(rack::createModel<Blossom, BlossomPanel>("Blossom"));
-  p->addModel(rack::createModel<BoosterStageModule, BoosterStagePanel>("BoosterStage"));
+  p->addModel(
+      rack::createModel<BoosterStageModule, BoosterStagePanel>("BoosterStage"));
   p->addModel(rack::createModel<Cubic, CubicPanel>("Cubic"));
-  p->addModel(rack::createModel<CurveSequencerModule<cs4Steps>, CurveSequencerPanel<cs4Steps>>("CurveSequencer4"));
-  p->addModel(rack::createModel<CurveSequencerModule<cs8Steps>, CurveSequencerPanel<cs8Steps>>("CurveSequencer8"));
-  p->addModel(rack::createModel<CurveSequencerModule<cs16Steps>, CurveSequencerPanel<cs16Steps>>("CurveSequencer16"));
+  p->addModel(
+      rack::createModel<CurveSequencerModule<cs4Steps>,
+                        CurveSequencerPanel<cs4Steps>>("CurveSequencer4"));
+  p->addModel(
+      rack::createModel<CurveSequencerModule<cs8Steps>,
+                        CurveSequencerPanel<cs8Steps>>("CurveSequencer8"));
+  p->addModel(
+      rack::createModel<CurveSequencerModule<cs16Steps>,
+                        CurveSequencerPanel<cs16Steps>>("CurveSequencer16"));
   p->addModel(rack::createModel<FuncModule<1>, Func1Panel>("Func"));
-  p->addModel(rack::createModel<FuncModule<func6Channels>, Func6Panel>("Func6"));
+  p->addModel(
+      rack::createModel<FuncModule<func6Channels>, Func6Panel>("Func6"));
   p->addModel(rack::createModel<FuzzyLogicH, FuzzyLogicHPanel>("FuzzyLogicH"));
   p->addModel(rack::createModel<FuzzyLogicZ, FuzzyLogicZPanel>("FuzzyLogicZ"));
   p->addModel(rack::createModel<Gator, GatorPanel>("Gator"));

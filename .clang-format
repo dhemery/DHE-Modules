@@ -1,12 +1,4 @@
 ---
 Language: Cpp
 BasedOnStyle:  LLVM
-BreakBeforeBinaryOperators: All
-BreakConstructorInitializers: AfterColon
-ColumnLimit: 120
-ConstructorInitializerAllOnOneLineOrOnePerLine: true
-IncludeBlocks: Regroup
-KeepEmptyLinesAtTheStartOfBlocks: false
-NamespaceIndentation: Inner
-SpaceAfterCStyleCast: true
 ...

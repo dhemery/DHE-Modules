@@ -2,6 +2,6 @@
 
 namespace dhe {
 namespace stage {
-  enum class Event { Generated, Completed };
+enum class Event { Generated, Completed };
 }
 } // namespace dhe

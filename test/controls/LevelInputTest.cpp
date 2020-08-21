@@ -5,13 +5,13 @@
 namespace dhe {
 
 namespace leveltest {
-  class Knob {
-    float rotation;
+class Knob {
+  float rotation;
 
-  public:
-    Knob(float rotation) : rotation{rotation} {};
-    auto getValue() const -> float { return rotation; }
-  };
+public:
+  Knob(float rotation) : rotation{rotation} {};
+  auto getValue() const -> float { return rotation; }
+};
 } // namespace leveltest
 
 TEST_CASE("LevelInputs") {
@@ -25,7 +25,7 @@ TEST_CASE("LevelInputs") {
 
     auto const level = dhe::level(knob, range);
 
-    auto const expected = range.lowerBound();
+    auto const expected = range.lower_bound();
 
     CHECK_EQ(level, doctest::Approx(expected).epsilon(tolerance));
   }
@@ -35,7 +35,7 @@ TEST_CASE("LevelInputs") {
 
     auto const level = dhe::level(knob, range);
 
-    auto const expected = range.size() * 0.5 + range.lowerBound();
+    auto const expected = range.size() * 0.5 + range.lower_bound();
     CHECK_EQ(level, doctest::Approx(expected).epsilon(tolerance));
   }
 
@@ -44,7 +44,7 @@ TEST_CASE("LevelInputs") {
 
     auto const level = dhe::level(knob, range);
 
-    auto const expected = range.upperBound();
+    auto const expected = range.upper_bound();
     CHECK_EQ(level, doctest::Approx(expected).epsilon(tolerance));
   }
 }

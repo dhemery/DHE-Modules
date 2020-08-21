@@ -9,7 +9,7 @@ TEST_CASE("dhe::PhaseTimer") {
     PhaseTimer timer{};
     SUBCASE("phase is 0") { CHECK(timer.phase() == 0.F); }
 
-    SUBCASE("is in progress") { CHECK(timer.inProgress()); }
+    SUBCASE("is in progress") { CHECK(timer.in_progress()); }
   }
 
   SUBCASE("advance") {
@@ -29,12 +29,12 @@ TEST_CASE("dhe::PhaseTimer") {
     SUBCASE("true if phase is less than 1") {
       PhaseTimer timer{0.9999F};
 
-      CHECK(timer.inProgress());
+      CHECK(timer.in_progress());
     }
     SUBCASE("false if phase is at least 1") {
       PhaseTimer timer{1.F};
 
-      CHECK_FALSE(timer.inProgress());
+      CHECK_FALSE(timer.in_progress());
     }
   }
 
@@ -60,7 +60,7 @@ TEST_CASE("dhe::PhaseTimer") {
 
       timer.reset();
 
-      CHECK(timer.inProgress());
+      CHECK(timer.in_progress());
     }
   }
 }

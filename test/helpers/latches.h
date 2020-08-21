@@ -11,6 +11,7 @@ static auto constexpr fallingLatch = Latch{false, true};
 static auto constexpr highLatch = Latch{true, false};
 static auto constexpr lowLatch = Latch{false, false};
 
-auto const allLatches = std::vector<Latch>{risingLatch, fallingLatch, lowLatch, highLatch};
+auto const allLatches =
+    std::vector<Latch>{risingLatch, fallingLatch, lowLatch, highLatch};
 
 } // namespace test
