@@ -1,6 +1,6 @@
 #pragma once
 
-#include "BlossomControls.h"
+#include "blossom-controls.h"
 #include "widgets/control-widgets.h"
 #include "widgets/screws.h"
 
@@ -55,13 +55,13 @@ public:
 
     y = 97.F;
     dy = 15.F;
-    auto constexpr outputPortOffset = 1.25F;
+    auto constexpr output_port_offset = 1.25F;
 
     addInput(Jack::input(slug, module, column1, y, Controls::XGainCvInput));
     addParam(Knob::small(slug, module, column2, y, Controls::XGainKnob));
     addParam(
         Toggle::stepper(2, slug, module, column3, y, Controls::XRangeSwitch));
-    addOutput(Jack::output(slug, module, column4, y + outputPortOffset,
+    addOutput(Jack::output(slug, module, column4, y + output_port_offset,
                            Controls::XOutput));
 
     y += dy;
@@ -69,7 +69,7 @@ public:
     addParam(Knob::small(slug, module, column2, y, Controls::YGainKnob));
     addParam(
         Toggle::stepper(2, slug, module, column3, y, Controls::YRangeSwitch));
-    addOutput(Jack::output(slug, module, column4, y + outputPortOffset,
+    addOutput(Jack::output(slug, module, column4, y + output_port_offset,
                            Controls::YOutput));
   }
 };

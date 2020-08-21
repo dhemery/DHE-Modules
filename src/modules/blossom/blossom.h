@@ -1,14 +1,14 @@
 #pragma once
 
-#include "BlossomControls.h"
-#include "RatioKnobParamQuantity.h"
-#include "SpeedKnobParamQuantity.h"
+#include "blossom-controls.h"
 #include "components/phase-rotor.h"
 #include "components/range.h"
 #include "components/sigmoid.h"
 #include "components/taper.h"
 #include "config/level-config.h"
 #include "controls/common-inputs.h"
+#include "ratio-knob-param-quantity.h"
+#include "speed-knob-param-quantity.h"
 
 #include <cmath>
 #include <engine/Module.hpp>
@@ -25,21 +25,21 @@ public:
     config(Controls::ParameterCount, Controls::InputCount,
            Controls::OutputCount);
 
-    configSpeedKnob(this, Controls::SpeedKnob);
+    config_speed_knob(this, Controls::SpeedKnob);
     config_attenuverter(this, Controls::SpeedAvKNob, "Speed CV gain");
 
     config_toggle<2>(this, Controls::FreeRatioSwitch, "Ratio mode",
                      {"Quantized", "Free"}, 1);
 
-    configRatioKnob(this, Controls::RatioKnob);
+    config_ratio_knob(this, Controls::RatioKnob);
     config_attenuverter(this, Controls::RatioAvKnob, "Ratio CV gain");
 
     config_percentage_knob(this, Controls::DepthKnob, "Depth");
     config_attenuverter(this, Controls::DepthAvKnob, "Depth CV gain");
 
-    static auto constexpr phaseDisplayRange = Range{-180.F, 180.F};
+    static auto constexpr phase_display_range = Range{-180.F, 180.F};
     config_knob(this, Controls::PhaseOffsetKnob, "Phase", "°",
-                phaseDisplayRange);
+                phase_display_range);
     config_attenuverter(this, Controls::PhaseOffsetAvKnob, "Phase CV gain");
 
     config_gain(this, Controls::XGainKnob, "X gain");
@@ -50,34 +50,34 @@ public:
   }
 
   void process(ProcessArgs const &args) override {
-    auto const spinDelta = -speed() * args.sampleTime;
-    auto const bounceRatio = ratioIsFree() ? ratio() : std::round(ratio());
-    auto const bounceDepth = rotation_range.clamp(depth());
+    auto const spin_delta = -speed() * args.sampleTime;
+    auto const bounce_ratio = ratio_is_free() ? ratio() : std::round(ratio());
+    auto const bounce_depth = rotation_range.clamp(depth());
 
-    spinner.advance(spinDelta);
-    bouncer.advance(spinDelta * bounceRatio);
+    spinner_.advance(spin_delta);
+    bouncer_.advance(spin_delta * bounce_ratio);
 
-    auto const angle = spinner.angle();
+    auto const angle = spinner_.angle();
 
     auto const radius =
-        (1.F - bounceDepth) + bounceDepth * bouncer.sin(phaseOffset());
+        (1.F - bounce_depth) + bounce_depth * bouncer_.sin(phase_offset());
     auto const x = radius * std::cos(angle);
-    auto const xVoltage = 5.F * xGain() * (x + xOffset());
-    outputs[Controls::XOutput].setVoltage(xVoltage);
+    auto const x_voltage = 5.F * x_gain() * (x + x_offset());
+    outputs[Controls::XOutput].setVoltage(x_voltage);
 
     auto const y = radius * std::sin(angle);
-    auto const yVoltage = 5.F * yGain() * (y + yOffset());
-    outputs[Controls::YOutput].setVoltage(yVoltage);
+    auto const y_voltage = 5.F * y_gain() * (y + y_offset());
+    outputs[Controls::YOutput].setVoltage(y_voltage);
   }
 
 private:
   inline auto ratio() const -> float {
-    return ratioRange.scale(rotation(params[Controls::RatioKnob],
-                                     inputs[Controls::RatioCvInput],
-                                     params[Controls::RatioAvKnob]));
+    return ratio_range.scale(rotation(params[Controls::RatioKnob],
+                                      inputs[Controls::RatioCvInput],
+                                      params[Controls::RatioAvKnob]));
   }
 
-  inline auto ratioIsFree() const -> bool {
+  inline auto ratio_is_free() const -> bool {
     return position_of(params[Controls::FreeRatioSwitch]) == 1;
   }
 
@@ -86,37 +86,37 @@ private:
                     params[Controls::DepthAvKnob]);
   }
 
-  inline auto phaseOffset() const -> float {
-    static auto constexpr phaseRange = Range{-0.5F, 0.5F};
-    return phaseRange.scale(rotation(params[Controls::PhaseOffsetKnob],
-                                     inputs[Controls::PhaseCvInput],
-                                     params[Controls::PhaseOffsetAvKnob]));
+  inline auto phase_offset() const -> float {
+    static auto constexpr phase_range = Range{-0.5F, 0.5F};
+    return phase_range.scale(rotation(params[Controls::PhaseOffsetKnob],
+                                      inputs[Controls::PhaseCvInput],
+                                      params[Controls::PhaseOffsetAvKnob]));
   }
 
   inline auto speed() const -> float {
     return tapered_and_scaled_rotation(
         params[Controls::SpeedKnob], inputs[Controls::SpeedCvInput],
-        params[Controls::SpeedAvKNob], speedKnobTaper, speedRange);
+        params[Controls::SpeedAvKNob], speed_knob_taper, speed_range);
   }
 
-  inline auto xGain() const -> float {
+  inline auto x_gain() const -> float {
     return gain_range.scale(
         rotation(params[Controls::XGainKnob], inputs[Controls::XGainCvInput]));
   }
-  inline auto xOffset() const -> float {
+  inline auto x_offset() const -> float {
     return selected<float, 2>(params[Controls::XRangeSwitch], {0.F, 1.F});
   };
 
-  inline auto yGain() const -> float {
+  inline auto y_gain() const -> float {
     return gain_range.scale(
         rotation(params[Controls::YGainKnob], inputs[Controls::YGainCvInput]));
   }
-  inline auto yOffset() const -> float {
+  inline auto y_offset() const -> float {
     return selected<float, 2>(params[Controls::YRangeSwitch], {0.F, 1.F});
   };
 
-  PhaseRotor spinner{};
-  PhaseRotor bouncer{};
+  PhaseRotor spinner_{};
+  PhaseRotor bouncer_{};
 };
 } // namespace blossom
 } // namespace dhe

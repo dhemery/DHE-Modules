@@ -1,5 +1,5 @@
-#include "modules/blossom/Blossom.h"
-#include "modules/blossom/BlossomPanel.h"
+#include "modules/blossom/blossom-panel.h"
+#include "modules/blossom/blossom.h"
 #include "modules/cubic/Cubic.h"
 #include "modules/cubic/CubicPanel.h"
 #include "modules/curve-sequencer/CurveSequencerModule.h"
