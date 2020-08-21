@@ -30,7 +30,7 @@ DOCTEST_SOURCES = $(shell find test-old -name "*.cpp")
 DOCTEST_OBJECTS := $(patsubst %, build/%.o, $(DOCTEST_SOURCES))
 -include $(TEST_OBJECTS:.o=.d)
 
-DOCTEST_RUNNER = build/doctestrunner
+DOCTEST_RUNNER = build/doctest
 
 DOCTEST_CXX_FLAGS = -Itest-old/ -Idoctest/
 
@@ -145,5 +145,5 @@ cleancdb:
 
 clean: cleancdb
 
-clion: $(OBJECTS) $(TESTOBJECTS)
+clion: $(OBJECTS) build/dheunit build/doctest
 
