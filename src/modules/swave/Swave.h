@@ -17,7 +17,7 @@ public:
     config(Controls::ParameterCount, Controls::InputCount,
            Controls::OutputCount);
     configCurvatureKnob(this, Controls::CurveKnob);
-    configAttenuverter(this, Controls::CurveAvKnob, "Curvature CV gain");
+    config_attenuverter(this, Controls::CurveAvKnob, "Curvature CV gain");
     configCurveShapeSwitch(this, Controls::ShapeSwitch);
   }
 

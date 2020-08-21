@@ -50,7 +50,7 @@ configLevelKnob(rack::engine::Module *module, int knobId,
 static inline void configLevelKnob(rack::engine::Module *module, int knobId,
                                    int switchId,
                                    std::string const &name = "Level",
-                                   float initialRotation = centeredRotation) {
+                                   float initialRotation = centered_rotation) {
   auto const rangeSupplier = [module, switchId]() -> Range const * {
     return selectedRange<2>(module->params[switchId], signalRanges);
   };
@@ -63,7 +63,7 @@ static inline void configLevelKnob(rack::engine::Module *module, int knobId,
 static inline void configLevelKnob(rack::engine::Module *module, int knobId,
                                    Range const &range,
                                    std::string const &name = "Level",
-                                   float initialRotation = centeredRotation) {
+                                   float initialRotation = centered_rotation) {
   auto const rangeSupplier = [range]() -> Range const * { return &range; };
   configLevelKnob(module, knobId, rangeSupplier, name, initialRotation);
 }
@@ -76,6 +76,6 @@ configLevelRangeSwitch(rack::engine::Module *module, int switchId,
                        std::string const &name = "Level Range",
                        int initialState = 1) {
   static auto const stateNames = std::array<std::string, 2>{"±5 V", "0–10 V"};
-  configToggle<2>(module, switchId, name, stateNames, initialState);
+  config_toggle<2>(module, switchId, name, stateNames, initialState);
 }
 } // namespace dhe

@@ -39,11 +39,12 @@ public:
     config(Controls::ParameterCount, Controls::InputCount,
            Controls::OutputCount, Controls::LightCount);
 
-    configButton(this, Controls::RunButton, "Run", {"from input", "Yes"}, 1);
-    configButton(this, Controls::GateButton, "Gate", {"from input", "High"}, 0);
-    configButton(this, Controls::LoopButton, "Loop", {"from input", "Yes"}, 0);
-    configButton(this, Controls::ResetButton, "Reset", {"from input", "High"},
-                 0);
+    config_button(this, Controls::RunButton, "Run", {"from input", "Yes"}, 1);
+    config_button(this, Controls::GateButton, "Gate", {"from input", "High"},
+                  0);
+    config_button(this, Controls::LoopButton, "Loop", {"from input", "Yes"}, 0);
+    config_button(this, Controls::ResetButton, "Reset", {"from input", "High"},
+                  0);
 
     configParam(Controls::SelectionStartKnob, 0.F, N - 1, 0.F, "Start step", "",
                 0.F, 1.F, 1.F);
@@ -54,20 +55,20 @@ public:
     configDurationRangeSwitch(this, Controls::DurationRangeSwitch);
 
     for (auto step = 0; step < N; step++) {
-      configToggle<generateModeCount>(this, Controls::ModeSwitches + step,
-                                      "Generate Mode", generateModeDescriptions,
-                                      defaultGenerateMode);
-      configToggle<advanceModeCount>(this, Controls::ConditionSwitches + step,
-                                     "Advance Mode", advanceModeDescriptions,
-                                     defaultAdvanceMode);
+      config_toggle<generateModeCount>(
+          this, Controls::ModeSwitches + step, "Generate Mode",
+          generateModeDescriptions, defaultGenerateMode);
+      config_toggle<advanceModeCount>(this, Controls::ConditionSwitches + step,
+                                      "Advance Mode", advanceModeDescriptions,
+                                      defaultAdvanceMode);
       configLevelKnob(this, Controls::LevelKnobs + step,
                       Controls::LevelRangeSwitch, "Level");
       configCurveShapeSwitch(this, Controls::ShapeSwitches + step, "Shape");
       configCurvatureKnob(this, Controls::CurveKnobs + step, "Curvature");
       configDurationKnob(this, Controls::DurationKnobs + step,
                          Controls::DurationRangeSwitch, "Duration");
-      configButton(this, Controls::EnabledButtons + step, "Enabled",
-                   {"from input", "Yes"}, 1);
+      config_button(this, Controls::EnabledButtons + step, "Enabled",
+                    {"from input", "Yes"}, 1);
 
       controls.showInactive(step);
     }

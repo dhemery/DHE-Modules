@@ -26,7 +26,8 @@ public:
                        Controls::DurationRangeSwitch);
     configDurationRangeSwitch(this, Controls::DurationRangeSwitch);
 
-    configToggle<2>(this, Controls::ModeSwitch, "Mode", {"Hold", "Sustain"}, 0);
+    config_toggle<2>(this, Controls::ModeSwitch, "Mode", {"Hold", "Sustain"},
+                     0);
   };
 
   void process(ProcessArgs const &args) override {

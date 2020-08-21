@@ -27,7 +27,7 @@ public:
 
 static inline void configRatioKnob(rack::engine::Module *module, int knobId) {
   module->configParam<RatioKnobParamQuantity>(knobId, 0.F, 1.F,
-                                              centeredRotation, "Ratio", "x");
+                                              centered_rotation, "Ratio", "x");
 }
 
 } // namespace blossom

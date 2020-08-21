@@ -30,7 +30,7 @@ class CurvatureKnobParamQuantity : public rack::engine::ParamQuantity {
 static inline void
 configCurvatureKnob(rack::engine::Module *module, int knobId,
                     std::string const &name = "Curvature",
-                    float initialRotation = centeredRotation) {
+                    float initialRotation = centered_rotation) {
   module->configParam<CurvatureKnobParamQuantity>(knobId, 0.F, 1.F,
                                                   initialRotation, name);
 }
@@ -43,7 +43,7 @@ static inline void configCurveShapeSwitch(rack::engine::Module *module,
                                           std::string const &name = "Shape",
                                           int initialState = 0) {
   static auto const stateNames = std::array<std::string, 2>{"J", "S"};
-  configToggle<2>(module, switchId, name, stateNames, initialState);
+  config_toggle<2>(module, switchId, name, stateNames, initialState);
 }
 
 } // namespace dhe

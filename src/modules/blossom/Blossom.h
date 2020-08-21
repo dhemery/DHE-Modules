@@ -26,26 +26,26 @@ public:
            Controls::OutputCount);
 
     configSpeedKnob(this, Controls::SpeedKnob);
-    configAttenuverter(this, Controls::SpeedAvKNob, "Speed CV gain");
+    config_attenuverter(this, Controls::SpeedAvKNob, "Speed CV gain");
 
-    configToggle<2>(this, Controls::FreeRatioSwitch, "Ratio mode",
-                    {"Quantized", "Free"}, 1);
+    config_toggle<2>(this, Controls::FreeRatioSwitch, "Ratio mode",
+                     {"Quantized", "Free"}, 1);
 
     configRatioKnob(this, Controls::RatioKnob);
-    configAttenuverter(this, Controls::RatioAvKnob, "Ratio CV gain");
+    config_attenuverter(this, Controls::RatioAvKnob, "Ratio CV gain");
 
-    configPercentageKnob(this, Controls::DepthKnob, "Depth");
-    configAttenuverter(this, Controls::DepthAvKnob, "Depth CV gain");
+    config_percentage_knob(this, Controls::DepthKnob, "Depth");
+    config_attenuverter(this, Controls::DepthAvKnob, "Depth CV gain");
 
     static auto constexpr phaseDisplayRange = Range{-180.F, 180.F};
-    configKnob(this, Controls::PhaseOffsetKnob, "Phase", "°",
-               phaseDisplayRange);
-    configAttenuverter(this, Controls::PhaseOffsetAvKnob, "Phase CV gain");
+    config_knob(this, Controls::PhaseOffsetKnob, "Phase", "°",
+                phaseDisplayRange);
+    config_attenuverter(this, Controls::PhaseOffsetAvKnob, "Phase CV gain");
 
-    configGain(this, Controls::XGainKnob, "X gain");
+    config_gain(this, Controls::XGainKnob, "X gain");
     configLevelRangeSwitch(this, Controls::XRangeSwitch, "X range", 0);
 
-    configGain(this, Controls::YGainKnob, "Y gain");
+    config_gain(this, Controls::YGainKnob, "Y gain");
     configLevelRangeSwitch(this, Controls::YRangeSwitch, "Y range", 0);
   }
 

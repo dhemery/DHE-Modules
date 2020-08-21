@@ -51,7 +51,7 @@ configDurationKnob(rack::engine::Module *module, int knobId,
 static inline void
 configDurationKnob(rack::engine::Module *module, int knobId, Range const &range,
                    std::string const &name = "Duration",
-                   float initialRotation = centeredRotation) {
+                   float initialRotation = centered_rotation) {
   auto const rangeSupplier = [range]() -> Range const * { return &range; };
   configDurationKnob(module, knobId, rangeSupplier, name, initialRotation);
 }
@@ -63,7 +63,7 @@ configDurationKnob(rack::engine::Module *module, int knobId, Range const &range,
 static inline void
 configDurationKnob(rack::engine::Module *module, int knobId, int switchId,
                    std::string const &name = "Duration",
-                   float initialRotation = centeredRotation) {
+                   float initialRotation = centered_rotation) {
   auto const rangeSupplier = [module, switchId]() -> Range const * {
     return selectedRange<3>(module->params[switchId], durationRanges);
   };
@@ -79,6 +79,6 @@ configDurationRangeSwitch(rack::engine::Module *module, int switchId,
                           int initialPosition = 1) {
   static auto const positionNames =
       std::array<std::string, 3>{"0.001–1.0 s", "0.01–10.0 s", "0.1–100.0 s"};
-  configToggle<3>(module, switchId, name, positionNames, initialPosition);
+  config_toggle<3>(module, switchId, name, positionNames, initialPosition);
 }
 } // namespace dhe

@@ -34,16 +34,16 @@ public:
     auto const channelName =
         N == 1 ? "" : std::string{" "} + std::to_string(channel + 1);
     configParam<OperandParamQuantity<Controls>>(Controls::AmountKnob + channel,
-                                                0.F, 1.F, centeredRotation);
-    configToggle<2>(this, Controls::OperationSwitch + channel,
-                    "Operator" + channelName,
-                    {"Add (offset)", "Multiply (scale)"}, 0);
-    configToggle<4>(this, Controls::OffsetRangeSwitch + channel,
-                    "Offset" + channelName + " range",
-                    {"0–5 V", "±5 V", "0–10 V", "±10 V"}, 1);
-    configToggle<4>(this, Controls::MultiplierRangeSwitch + channel,
-                    "Multiplier" + channelName + " range",
-                    {"0–1", "±1", "0–2", "±2"}, 2);
+                                                0.F, 1.F, centered_rotation);
+    config_toggle<2>(this, Controls::OperationSwitch + channel,
+                     "Operator" + channelName,
+                     {"Add (offset)", "Multiply (scale)"}, 0);
+    config_toggle<4>(this, Controls::OffsetRangeSwitch + channel,
+                     "Offset" + channelName + " range",
+                     {"0–5 V", "±5 V", "0–10 V", "±10 V"}, 1);
+    config_toggle<4>(this, Controls::MultiplierRangeSwitch + channel,
+                     "Multiplier" + channelName + " range",
+                     {"0–1", "±1", "0–2", "±2"}, 2);
 
     auto const operandKnobParamQuantity =
         dynamic_cast<OperandParamQuantity<Controls> *>(

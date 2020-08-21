@@ -23,16 +23,16 @@ public:
   explicit Cubic() {
     config(Controls::ParameterCount, Controls::InputCount,
            Controls::OutputCount);
-    configKnob(this, Controls::ACoefficientKnob, "x³ coefficient", "",
-               coefficientRange());
-    configKnob(this, Controls::BCoefficientKnob, "x² coefficient", "",
-               coefficientRange());
-    configKnob(this, Controls::CCoefficientKnob, "x¹ coefficient", "",
-               coefficientRange());
-    configKnob(this, Controls::DCoefficientKnob, "x⁰ coefficient", "",
-               coefficientRange());
-    configGain(this, Controls::InputGainKnob, "Input gain");
-    configGain(this, Controls::OutputGainKnob, "Output gain");
+    config_knob(this, Controls::ACoefficientKnob, "x³ coefficient", "",
+                coefficientRange());
+    config_knob(this, Controls::BCoefficientKnob, "x² coefficient", "",
+                coefficientRange());
+    config_knob(this, Controls::CCoefficientKnob, "x¹ coefficient", "",
+                coefficientRange());
+    config_knob(this, Controls::DCoefficientKnob, "x⁰ coefficient", "",
+                coefficientRange());
+    config_gain(this, Controls::InputGainKnob, "Input gain");
+    config_gain(this, Controls::OutputGainKnob, "Output gain");
   }
 
   void process(ProcessArgs const & /*args*/) override {
