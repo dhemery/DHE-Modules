@@ -87,8 +87,8 @@ public:
   }
 
   auto endLevel(int step) const -> float {
-    return dhe::selectableLevel(params[EndLevelKnobs + step],
-                                params[LevelRangeSwitch]);
+    return dhe::selectable_level(params[EndLevelKnobs + step],
+                                 params[LevelRangeSwitch]);
   }
 
   auto endSource(int step) const -> Source {
@@ -114,8 +114,8 @@ public:
   }
 
   auto startLevel(int step) const -> float {
-    return dhe::selectableLevel(params[StartLevelKnobs + step],
-                                params[LevelRangeSwitch]);
+    return dhe::selectable_level(params[StartLevelKnobs + step],
+                                 params[LevelRangeSwitch]);
   }
 
   auto startSource(int step) const -> Source {

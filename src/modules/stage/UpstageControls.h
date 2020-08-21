@@ -31,8 +31,8 @@ public:
   }
 
   auto level() const -> float {
-    return selectableLevel(params[LevelKnob], inputs[LevelCvInput],
-                           params[LevelRangeSwitch]);
+    return selectable_level(params[LevelKnob], inputs[LevelCvInput],
+                            params[LevelRangeSwitch]);
   }
 
   void sendEnvelope(float voltage) {

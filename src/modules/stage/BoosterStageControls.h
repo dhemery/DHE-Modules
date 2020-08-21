@@ -43,8 +43,8 @@ public:
   auto input() const -> float { return voltage_at(inputs[EnvelopeInput]); }
 
   auto level() const -> float {
-    return selectableLevel(params[LevelKnob], inputs[LevelCvInput],
-                           params[LevelRangeSwitch]);
+    return selectable_level(params[LevelKnob], inputs[LevelCvInput],
+                            params[LevelRangeSwitch]);
   }
 
   void output(float voltage) { outputs[EnvelopeOutput].setVoltage(voltage); }

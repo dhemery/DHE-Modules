@@ -47,14 +47,14 @@ private:
   }
 
   auto ccwLimit() const -> float {
-    return selectableLevel(params[Controls::CcwLimitKnob],
-                           inputs[Controls::CcwLimitCvInput],
-                           params[Controls::CcwLimitAvKnob],
-                           params[Controls::CcwLimitRangeSwitch]);
+    return selectable_level(params[Controls::CcwLimitKnob],
+                            inputs[Controls::CcwLimitCvInput],
+                            params[Controls::CcwLimitAvKnob],
+                            params[Controls::CcwLimitRangeSwitch]);
   }
 
   auto cwLimit() const -> float {
-    return selectableLevel(
+    return selectable_level(
         params[Controls::CwLimitKnob], inputs[Controls::CwLimitCvInput],
         params[Controls::CwLimitAvKnob], params[Controls::CwLimitRangeSwitch]);
   }

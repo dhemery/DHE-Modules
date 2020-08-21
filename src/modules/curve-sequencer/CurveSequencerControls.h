@@ -71,8 +71,8 @@ public:
   }
 
   auto level(int step) const -> float {
-    return dhe::selectableLevel(params[LevelKnobs + step],
-                                params[LevelRangeSwitch]);
+    return dhe::selectable_level(params[LevelKnobs + step],
+                                 params[LevelRangeSwitch]);
   }
 
   auto mode(int step) const -> GenerateMode {
