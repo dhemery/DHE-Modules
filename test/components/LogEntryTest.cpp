@@ -1,3 +1,4 @@
+#include "components/Latch.h"
 #include "dheunit/test.h"
 
 namespace dhe {

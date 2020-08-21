@@ -1,5 +1,7 @@
 #pragma once
 
+#include <iostream>
+#include <sstream>
 #include <string>
 
 namespace dhe {
@@ -7,8 +9,6 @@ class Latch {
 public:
   constexpr Latch() = default;
   constexpr Latch(bool state, bool edge) : state_{state}, edge_{edge} {}
-  //  Latch(Latch const &) = default;
-  //  auto operator=(Latch const &) -> Latch& = default;
   void clock(bool signal) {
     edge_ = signal != state_;
     state_ = signal;
@@ -21,14 +21,21 @@ public:
   auto is_fall() const -> bool { return is_edge() && is_low(); };
   auto is_rise() const -> bool { return is_edge() && is_high(); };
 
-  friend auto operator==(Latch const &left, Latch const &right) -> bool {
-    return left.state_ == right.state_ && left.edge_ == right.edge_;
+  auto operator==(Latch const &rhs) const -> bool {
+    return state_ == rhs.state_ && edge_ == rhs.edge_;
+  }
+  auto operator!=(Latch const &rhs) const -> bool { return !(rhs == *this); }
+
+  friend auto operator<<(std::ostream &os, Latch const &latch)
+      -> std::ostream & {
+    os << "Latch{" << latch.state_ << ',' << latch.edge_ << '}';
+    return os;
   }
 
   auto str() const -> std::string {
-    std::string state_str{state_ ? "true" : "false"};
-    std::string edge_str{edge_ ? "true" : "false"};
-    return std::string{"Latch{"} + state_str + "," + edge_str + "}";
+    auto os = std::ostringstream{};
+    os << std::boolalpha << *this;
+    return os.str();
   }
 
 private:

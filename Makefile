@@ -25,14 +25,37 @@ include $(RACK_DIR)/plugin.mk
 #
 ########################################################################
 
+DOCTEST_SOURCES = $(shell find test-old -name "*.cpp")
+
+DOCTEST_OBJECTS := $(patsubst %, build/%.o, $(DOCTEST_SOURCES))
+-include $(TEST_OBJECTS:.o=.d)
+
+DOCTEST_RUNNER = build/doctestrunner
+
+DOCTEST_CXX_FLAGS = -Itest-old/ -Idoctest/
+
+$(DOCTEST_OBJECTS): FLAGS += $(DOCTEST_CXX_FLAGS)
+
+$(DOCTEST_RUNNER): $(DOCTEST_OBJECTS)
+	@mkdir -p $(@D)
+	$(CXX) -o $@ $^
+
+.PHONY: test
+doctest: $(DOCTEST_RUNNER)
+	$<
+
+
+
+
+########### dheunit tests
 TEST_SOURCES = $(shell find test -name "*.cpp")
 
 TEST_OBJECTS := $(patsubst %, build/%.o, $(TEST_SOURCES))
 -include $(TEST_OBJECTS:.o=.d)
 
-TEST_RUNNER = build/testrunner
+TEST_RUNNER = build/dheunit
 
-TEST_CXX_FLAGS = -Itest/ -Idoctest/
+TEST_CXX_FLAGS = -Itest/
 
 $(TEST_OBJECTS): FLAGS += $(TEST_CXX_FLAGS)
 
@@ -41,10 +64,10 @@ $(TEST_RUNNER): $(TEST_OBJECTS)
 	$(CXX) -o $@ $^
 
 .PHONY: test
-test: $(TEST_RUNNER)
+dhetest: $(TEST_RUNNER)
 	$<
 
-
+test: doctest dhetest
 
 
 ########################################################################
