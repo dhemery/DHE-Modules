@@ -16,9 +16,9 @@ public:
   Swave() {
     config(Controls::ParameterCount, Controls::InputCount,
            Controls::OutputCount);
-    configCurvatureKnob(this, Controls::CurveKnob);
+    config_curvature_knob(this, Controls::CurveKnob);
     config_attenuverter(this, Controls::CurveAvKnob, "Curvature CV gain");
-    configCurveShapeSwitch(this, Controls::ShapeSwitch);
+    config_curve_shape_switch(this, Controls::ShapeSwitch);
   }
 
   void process(ProcessArgs const & /*args*/) override {

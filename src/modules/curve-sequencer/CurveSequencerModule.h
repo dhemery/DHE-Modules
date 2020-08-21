@@ -63,8 +63,8 @@ public:
                                       defaultAdvanceMode);
       configLevelKnob(this, Controls::LevelKnobs + step,
                       Controls::LevelRangeSwitch, "Level");
-      configCurveShapeSwitch(this, Controls::ShapeSwitches + step, "Shape");
-      configCurvatureKnob(this, Controls::CurveKnobs + step, "Curvature");
+      config_curve_shape_switch(this, Controls::ShapeSwitches + step, "Shape");
+      config_curvature_knob(this, Controls::CurveKnobs + step, "Curvature");
       configDurationKnob(this, Controls::DurationKnobs + step,
                          Controls::DurationRangeSwitch, "Duration");
       config_button(this, Controls::EnabledButtons + step, "Enabled",

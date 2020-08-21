@@ -29,8 +29,8 @@ public:
     configLevelKnob(this, Controls::LevelKnob, Controls::LevelRangeSwitch);
     configLevelRangeSwitch(this, Controls::LevelRangeSwitch);
 
-    configCurvatureKnob(this, Controls::CurveKnob);
-    configCurveShapeSwitch(this, Controls::ShapeSwitch);
+    config_curvature_knob(this, Controls::CurveKnob);
+    config_curve_shape_switch(this, Controls::ShapeSwitch);
 
     config_button(this, Controls::DeferButton, "DEFER", {"From input", "High"},
                   0);

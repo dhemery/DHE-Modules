@@ -23,7 +23,7 @@ public:
 
     configDurationKnob(this, StageControls::DurationKnob, mediumDurationRange);
     configLevelKnob(this, StageControls::LevelKnob, unipolarSignalRange);
-    configCurvatureKnob(this, StageControls::CurveKnob);
+    config_curvature_knob(this, StageControls::CurveKnob);
   }
 
   void process(ProcessArgs const &args) override {

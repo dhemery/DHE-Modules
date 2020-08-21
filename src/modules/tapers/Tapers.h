@@ -28,7 +28,7 @@ public:
                            0);
     config_attenuverter(this, Controls::LevelAvKnob1, "Level 1 CV gain");
 
-    configCurvatureKnob(this, Controls::CurveKnob1, "Curvature 1");
+    config_curvature_knob(this, Controls::CurveKnob1, "Curvature 1");
     config_attenuverter(this, Controls::CurveAvKnob1, "Curvature 1 CV gain");
     configLevelRangeSwitch(this, Controls::ShapeSwitch1, "Shape 1");
 
@@ -38,7 +38,7 @@ public:
                            0);
     config_attenuverter(this, Controls::LevelAvKnob2, "Level 2 CV gain");
 
-    configCurvatureKnob(this, Controls::CurveKnob2, "Curvature 2");
+    config_curvature_knob(this, Controls::CurveKnob2, "Curvature 2");
     config_attenuverter(this, Controls::CurveAvKnob2, "Curvature 2 CV gain");
     configLevelRangeSwitch(this, Controls::ShapeSwitch2, "Shape 2");
   }
