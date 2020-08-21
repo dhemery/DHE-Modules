@@ -22,9 +22,9 @@ public:
   }
 
   void process(ProcessArgs const & /*args*/) override {
-    auto const normalized = bipolarSignalRange.normalize(signalIn());
+    auto const normalized = bipolar_signal_range.normalize(signalIn());
     auto const tapered = taper(normalized);
-    auto const outputVoltage = bipolarSignalRange.scale(tapered);
+    auto const outputVoltage = bipolar_signal_range.scale(tapered);
     sendSignal(outputVoltage);
   }
 
@@ -34,11 +34,11 @@ private:
   }
 
   auto signalIn() const -> float {
-    return voltageAt(inputs[Controls::SwaveInput]);
+    return voltage_at(inputs[Controls::SwaveInput]);
   }
 
   auto taper(float input) const -> float {
-    auto const *const taper = selectedTaper(params[Controls::ShapeSwitch]);
+    auto const *const taper = selected_taper(params[Controls::ShapeSwitch]);
     return taper->apply(input, curvature(params[Controls::CurveKnob],
                                          inputs[Controls::CurveCvInput],
                                          params[Controls::CurveAvKnob]));

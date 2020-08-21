@@ -114,7 +114,7 @@ TEST_CASE("curve_sequencer_2::StepControls") {
 
     CHECK_EQ(controls.startLevel(step),
              dhe::level(startLevelKnobRotation,
-                        *dhe::signalRanges[levelRangeSelection]));
+                        *dhe::signal_ranges[levelRangeSelection]));
   }
 
   SUBCASE("endSource(step) is the source selected by the step start source "
@@ -149,7 +149,7 @@ TEST_CASE("curve_sequencer_2::StepControls") {
 
     CHECK_EQ(controls.endLevel(step),
              dhe::level(endLevelKnobRotation,
-                        *dhe::signalRanges[levelRangeSelection]));
+                        *dhe::signal_ranges[levelRangeSelection]));
   }
 
   SUBCASE("trackEndSource(step)") {

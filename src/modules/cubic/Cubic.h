@@ -63,11 +63,11 @@ private:
   }
 
   auto gain(int knobParam, int cvInput) const -> float {
-    return gainRange.scale(rotation(params[knobParam], inputs[cvInput]));
+    return gain_range.scale(rotation(params[knobParam], inputs[cvInput]));
   }
 
   auto mainIn() const -> float {
-    return voltageAt(inputs[Controls::CubicInput]);
+    return voltage_at(inputs[Controls::CubicInput]);
   }
 
   void sendMainOut(float voltage) {

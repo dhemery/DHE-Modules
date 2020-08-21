@@ -30,8 +30,8 @@ public:
     for (auto i = 0; i < Controls::inputCount; i++) {
       if (inputs[i].isConnected()) {
         connectedCount++;
-        if (isHigh(inputs[(Controls::Inputs + i)]) !=
-            isPressed(params[Controls::NegateButtons + i])) {
+        if (is_high(inputs[(Controls::Inputs + i)]) !=
+            is_pressed(params[Controls::NegateButtons + i])) {
           highCount++;
         }
       }

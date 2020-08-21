@@ -18,7 +18,7 @@ static inline auto curvature(float rotation) -> float {
 }
 
 template <typename KnobType> auto curvature(KnobType &knob) -> float {
-  return curvature(rotationOf(knob));
+  return curvature(rotation_of(knob));
 }
 
 template <typename KnobType, typename InputType>

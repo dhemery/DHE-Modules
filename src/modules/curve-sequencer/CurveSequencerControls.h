@@ -50,24 +50,24 @@ public:
   }
 
   auto isEnabled(int step) const -> bool {
-    return isPressed(params[EnabledButtons + step]) ||
-           isHigh(inputs[EnabledInputs + step]);
+    return is_pressed(params[EnabledButtons + step]) ||
+           is_high(inputs[EnabledInputs + step]);
   }
 
   auto isGated() const -> bool {
-    return isHigh(inputs[GateInput]) || isPressed(params[GateButton]);
+    return is_high(inputs[GateInput]) || is_pressed(params[GateButton]);
   }
 
   auto isLooping() const -> bool {
-    return isPressed(params[LoopButton]) || isHigh(inputs[LoopInput]);
+    return is_pressed(params[LoopButton]) || is_high(inputs[LoopInput]);
   }
 
   auto isReset() const -> bool {
-    return isHigh(inputs[ResetInput]) || isPressed(params[ResetButton]);
+    return is_high(inputs[ResetInput]) || is_pressed(params[ResetButton]);
   }
 
   auto isRunning() const -> bool {
-    return isPressed(params[RunButton]) || isHigh(inputs[RunInput]);
+    return is_pressed(params[RunButton]) || is_high(inputs[RunInput]);
   }
 
   auto level(int step) const -> float {

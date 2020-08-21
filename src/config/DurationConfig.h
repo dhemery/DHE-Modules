@@ -66,7 +66,7 @@ config_duration_knob(rack::engine::Module *module, int knob_id, int switch_id,
                      std::string const &name = "Duration",
                      float initial_rotation = centered_rotation) {
   auto const range_supplier = [module, switch_id]() -> Range const * {
-    return selectedRange<3>(module->params[switch_id], durationRanges);
+    return selected_range<3>(module->params[switch_id], durationRanges);
   };
   config_duration_knob(module, knob_id, range_supplier, name, initial_rotation);
 }

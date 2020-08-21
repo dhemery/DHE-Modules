@@ -25,17 +25,17 @@ public:
 
   void process(ProcessArgs const & /*ignored*/) override {
     auto const voltageOffset =
-        positionOf(params[Controls::LevelRangeSwitch]) == 1 ? 0.F : 5.F;
+        position_of(params[Controls::LevelRangeSwitch]) == 1 ? 0.F : 5.F;
     for (auto i = 0; i < 2; i++) {
       auto const aInput =
           inputs[Controls::AInputs + i].getVoltage() + voltageOffset;
       auto const bInput =
           inputs[Controls::BInputs + i].getVoltage() + voltageOffset;
-      auto const a = isPressed(params[(Controls::NotAButtons + i)])
+      auto const a = is_pressed(params[(Controls::NotAButtons + i)])
                          ? 10.F - aInput
                          : aInput;
       auto const notA = 10.F - a;
-      auto const b = isPressed(params[(Controls::NotBButtons + i)])
+      auto const b = is_pressed(params[(Controls::NotBButtons + i)])
                          ? 10.F - bInput
                          : bInput;
       auto const notB = 10.F - b;

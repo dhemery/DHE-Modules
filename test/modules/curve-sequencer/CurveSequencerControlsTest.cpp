@@ -198,9 +198,9 @@ TEST_CASE("curve_sequencer::CurveSequencerControls") {
     params[Controls::LevelRangeSwitch].setValue(
         static_cast<float>(levelRangeSelection));
 
-    CHECK_EQ(
-        controls.level(step),
-        dhe::level(levelKnobRotation, *dhe::signalRanges[levelRangeSelection]));
+    CHECK_EQ(controls.level(step),
+             dhe::level(levelKnobRotation,
+                        *dhe::signal_ranges[levelRangeSelection]));
   }
 
   SUBCASE("taper(step) is taper selected by step shape switch") {

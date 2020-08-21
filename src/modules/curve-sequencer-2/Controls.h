@@ -35,24 +35,24 @@ public:
   }
 
   auto isEnabled(int step) const -> bool {
-    return isPressed(params[EnabledButtons + step]) ||
-           isHigh(inputs[EnabledInputs + step]);
+    return is_pressed(params[EnabledButtons + step]) ||
+           is_high(inputs[EnabledInputs + step]);
   }
 
   auto isGated() const -> bool {
-    return isHigh(inputs[GateInput]) || isPressed(params[GateButton]);
+    return is_high(inputs[GateInput]) || is_pressed(params[GateButton]);
   }
 
   auto isLooping() const -> bool {
-    return isPressed(params[LoopButton]) || isHigh(inputs[LoopInput]);
+    return is_pressed(params[LoopButton]) || is_high(inputs[LoopInput]);
   }
 
   auto isReset() const -> bool {
-    return isHigh(inputs[ResetInput]) || isPressed(params[ResetButton]);
+    return is_high(inputs[ResetInput]) || is_pressed(params[ResetButton]);
   }
 
   auto isRunning() const -> bool {
-    return isPressed(params[RunButton]) || isHigh(inputs[RunInput]);
+    return is_pressed(params[RunButton]) || is_high(inputs[RunInput]);
   }
 
   auto output() const -> float {
@@ -74,7 +74,7 @@ public:
   // Step controls
 
   auto advanceOnEndOfCurve(int step) const -> bool {
-    return positionOf(params[OnEndOfCurveSwitches + step]) == 1;
+    return position_of(params[OnEndOfCurveSwitches + step]) == 1;
   }
 
   auto curvature(int step) const -> float {
@@ -96,7 +96,7 @@ public:
   }
 
   auto interruptOnTrigger(int step) const -> bool {
-    return positionOf(params[OnInterruptSwitches + step]) == 1;
+    return position_of(params[OnInterruptSwitches + step]) == 1;
   }
 
   void showInactive(int step) { setLights(step, 0.F, 0.F); }
@@ -129,11 +129,11 @@ public:
   }
 
   auto trackEndSource(int step) const -> bool {
-    return positionOf(params[TrackEndSwitches + step]) == 1;
+    return position_of(params[TrackEndSwitches + step]) == 1;
   }
 
   auto trackStartSource(int step) const -> bool {
-    return positionOf(params[TrackStartSwitches + step]) == 1;
+    return position_of(params[TrackStartSwitches + step]) == 1;
   }
 
   auto triggerMode(int step) const -> TriggerMode {

@@ -52,7 +52,7 @@ config_level_knob(rack::engine::Module *module, int knob_id, int switch_id,
                   std::string const &name = "Level",
                   float initial_rotation = centered_rotation) {
   auto const range_supplier = [module, switch_id]() -> Range const * {
-    return selectedRange<2>(module->params[switch_id], signalRanges);
+    return selected_range<2>(module->params[switch_id], signal_ranges);
   };
   config_level_knob(module, knob_id, range_supplier, name, initial_rotation);
 }

@@ -23,7 +23,7 @@ public:
 
     config_duration_knob(this, StageControls::DurationKnob,
                          mediumDurationRange);
-    config_level_knob(this, StageControls::LevelKnob, unipolarSignalRange);
+    config_level_knob(this, StageControls::LevelKnob, unipolar_signal_range);
     config_curvature_knob(this, StageControls::CurveKnob);
   }
 

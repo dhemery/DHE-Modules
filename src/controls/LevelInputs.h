@@ -6,7 +6,7 @@
 namespace dhe {
 template <typename ToggleType>
 auto levelRange(ToggleType &toggle) -> Range const * {
-  return selectedRange<2>(toggle, signalRanges);
+  return selected_range<2>(toggle, signal_ranges);
 }
 
 static inline auto level(float rotation, Range const &range) -> float {
@@ -15,13 +15,13 @@ static inline auto level(float rotation, Range const &range) -> float {
 
 template <typename KnobType>
 static inline auto level(KnobType &knob, Range const &range) -> float {
-  return level(rotationOf(knob), range);
+  return level(rotation_of(knob), range);
 }
 
 template <typename KnobType, typename ToggleType>
 static inline auto selectableLevel(KnobType &knob, ToggleType &toggle)
     -> float {
-  return level(rotationOf(knob), *levelRange(toggle));
+  return level(rotation_of(knob), *levelRange(toggle));
 }
 
 template <typename KnobType, typename InputType, typename ToggleType>

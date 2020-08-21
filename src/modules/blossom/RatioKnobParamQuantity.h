@@ -15,7 +15,7 @@ public:
     auto const rotation = getValue();
     auto const unquantizedRatio = ratioRange.scale(rotation);
     auto const isQuantized =
-        positionOf(module->params[BlossomControls::FreeRatioSwitch]) == 0;
+        position_of(module->params[BlossomControls::FreeRatioSwitch]) == 0;
     return isQuantized ? std::round(unquantizedRatio) : unquantizedRatio;
   }
 

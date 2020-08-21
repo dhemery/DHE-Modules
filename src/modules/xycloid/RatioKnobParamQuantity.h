@@ -20,14 +20,14 @@ static auto const ratioRanges = std::array<Range const *, 3>{
 
 static inline auto ratioRange(rack::engine::Module const *module)
     -> Range const * {
-  return selectedRange<3>(module->params[Controls::DirectionSwitch],
-                          ratioRanges);
+  return selected_range<3>(module->params[Controls::DirectionSwitch],
+                           ratioRanges);
 }
 
 static inline auto ratio(rack::engine::Module const *module, float rotation)
     -> float {
   auto const isQuantized =
-      positionOf(module->params[Controls::FreeRatioSwitch]) == 0;
+      position_of(module->params[Controls::FreeRatioSwitch]) == 0;
   auto const unquantizedRatio = ratioRange(module)->scale(rotation);
   return isQuantized ? std::round(unquantizedRatio) : unquantizedRatio;
 }

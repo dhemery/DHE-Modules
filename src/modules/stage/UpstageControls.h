@@ -23,11 +23,11 @@ public:
       : inputs{inputs}, params{params}, outputs{outputs} {}
 
   auto isTriggered() const -> bool {
-    return isHigh(inputs[TriggerInput]) || isPressed(params[TriggerButton]);
+    return is_high(inputs[TriggerInput]) || is_pressed(params[TriggerButton]);
   }
 
   auto isWaiting() const -> bool {
-    return isHigh(inputs[WaitInput]) || isPressed(params[WaitButton]);
+    return is_high(inputs[WaitInput]) || is_pressed(params[WaitButton]);
   }
 
   auto level() const -> float {
@@ -40,7 +40,7 @@ public:
   }
 
   void sendTrigger(bool isTriggered) {
-    auto const voltage = unipolarSignalRange.scale(isTriggered);
+    auto const voltage = unipolar_signal_range.scale(isTriggered);
     outputs[TriggerOutput].setVoltage(voltage);
   }
 

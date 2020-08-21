@@ -60,7 +60,7 @@ private:
     return levelRange(params[Controls::LevelRangeSwitch1]);
   }
   auto taper1(float input) const -> float {
-    auto const *const taper = selectedTaper(params[Controls::ShapeSwitch1]);
+    auto const *const taper = selected_taper(params[Controls::ShapeSwitch1]);
     auto const taperCurvature =
         curvature(params[Controls::CurveKnob1], inputs[Controls::CurveCvInput1],
                   params[Controls::CurveAvKnob1]);
@@ -76,7 +76,7 @@ private:
     return levelRange(params[Controls::LevelRangeSwitch2]);
   }
   auto taper2(float input) const -> float {
-    const auto *const taper = selectedTaper(params[Controls::ShapeSwitch2]);
+    const auto *const taper = selected_taper(params[Controls::ShapeSwitch2]);
     auto const taperCurvature =
         curvature(params[Controls::CurveKnob2], inputs[Controls::CurveCvInput2],
                   params[Controls::CurveAvKnob2]);

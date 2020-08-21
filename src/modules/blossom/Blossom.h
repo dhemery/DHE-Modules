@@ -52,7 +52,7 @@ public:
   void process(ProcessArgs const &args) override {
     auto const spinDelta = -speed() * args.sampleTime;
     auto const bounceRatio = ratioIsFree() ? ratio() : std::round(ratio());
-    auto const bounceDepth = rotationRange.clamp(depth());
+    auto const bounceDepth = rotation_range.clamp(depth());
 
     spinner.advance(spinDelta);
     bouncer.advance(spinDelta * bounceRatio);
@@ -78,7 +78,7 @@ private:
   }
 
   inline auto ratioIsFree() const -> bool {
-    return positionOf(params[Controls::FreeRatioSwitch]) == 1;
+    return position_of(params[Controls::FreeRatioSwitch]) == 1;
   }
 
   inline auto depth() const -> float {
@@ -94,13 +94,13 @@ private:
   }
 
   inline auto speed() const -> float {
-    return taperedAndScaledRotation(
+    return tapered_and_scaled_rotation(
         params[Controls::SpeedKnob], inputs[Controls::SpeedCvInput],
         params[Controls::SpeedAvKNob], speedKnobTaper, speedRange);
   }
 
   inline auto xGain() const -> float {
-    return gainRange.scale(
+    return gain_range.scale(
         rotation(params[Controls::XGainKnob], inputs[Controls::XGainCvInput]));
   }
   inline auto xOffset() const -> float {
@@ -108,7 +108,7 @@ private:
   };
 
   inline auto yGain() const -> float {
-    return gainRange.scale(
+    return gain_range.scale(
         rotation(params[Controls::YGainKnob], inputs[Controls::YGainCvInput]));
   }
   inline auto yOffset() const -> float {

@@ -20,30 +20,30 @@ public:
                   std::vector<Output> &outputs)
       : inputs{inputs}, params{params}, outputs{outputs} {};
 
-  auto defer() const -> bool { return isHigh(inputs[DeferInput]); }
+  auto defer() const -> bool { return is_high(inputs[DeferInput]); }
 
   auto duration() const -> float {
     return selectableDuration(params[DurationKnob], inputs[DurationCvInput],
                               params[DurationRangeSwitch]);
   }
 
-  auto gate() const -> bool { return isHigh(inputs[TriggerInput]); }
+  auto gate() const -> bool { return is_high(inputs[TriggerInput]); }
 
-  auto input() const -> float { return voltageAt(inputs[EnvelopeInput]); }
+  auto input() const -> float { return voltage_at(inputs[EnvelopeInput]); }
 
   auto mode() const -> Mode {
-    return positionOf(params[ModeSwitch]) == 1 ? Mode::Sustain : Mode::Hold;
+    return position_of(params[ModeSwitch]) == 1 ? Mode::Sustain : Mode::Hold;
   }
 
   void output(float voltage) { outputs[EnvelopeOutput].setVoltage(voltage); }
 
   void showActive(bool active) {
-    auto const voltage = unipolarSignalRange.scale(active);
+    auto const voltage = unipolar_signal_range.scale(active);
     outputs[ActiveOutput].setVoltage(voltage);
   }
 
   void showEoc(bool eoc) {
-    auto const voltage = unipolarSignalRange.scale(eoc);
+    auto const voltage = unipolar_signal_range.scale(eoc);
     outputs[EocOutput].setVoltage(voltage);
   }
 

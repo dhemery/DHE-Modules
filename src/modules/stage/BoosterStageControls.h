@@ -28,7 +28,7 @@ public:
   }
 
   auto defer() const -> bool {
-    return isHigh(inputs[DeferInput]) || isPressed(params[DeferButton]);
+    return is_high(inputs[DeferInput]) || is_pressed(params[DeferButton]);
   }
 
   auto duration() const -> float {
@@ -37,10 +37,10 @@ public:
   }
 
   auto gate() const -> bool {
-    return isHigh(inputs[TriggerInput]) || isPressed(params[TriggerButton]);
+    return is_high(inputs[TriggerInput]) || is_pressed(params[TriggerButton]);
   }
 
-  auto input() const -> float { return voltageAt(inputs[EnvelopeInput]); }
+  auto input() const -> float { return voltage_at(inputs[EnvelopeInput]); }
 
   auto level() const -> float {
     return selectableLevel(params[LevelKnob], inputs[LevelCvInput],
@@ -50,17 +50,18 @@ public:
   void output(float voltage) { outputs[EnvelopeOutput].setVoltage(voltage); }
 
   void showActive(bool isActive) {
-    auto const voltage = unipolarSignalRange.scale(isActive || activeButton());
+    auto const voltage =
+        unipolar_signal_range.scale(isActive || activeButton());
     outputs[ActiveOutput].setVoltage(voltage);
   }
 
   void showEoc(bool isEoc) {
-    auto const voltage = unipolarSignalRange.scale(isEoc || eocButton());
+    auto const voltage = unipolar_signal_range.scale(isEoc || eocButton());
     outputs[EocOutput].setVoltage(voltage);
   }
 
   auto taper() const -> taper::VariableTaper const * {
-    return selectedTaper(params[ShapeSwitch]);
+    return selected_taper(params[ShapeSwitch]);
   }
 
   enum ParameterIds {
@@ -90,9 +91,9 @@ public:
   enum OutputIds { ActiveOutput, EocOutput, EnvelopeOutput, OutputCount };
 
 private:
-  auto activeButton() const -> bool { return isPressed(params[ActiveButton]); }
+  auto activeButton() const -> bool { return is_pressed(params[ActiveButton]); }
 
-  auto eocButton() const -> bool { return isPressed(params[EocButton]); }
+  auto eocButton() const -> bool { return is_pressed(params[EocButton]); }
 
   std::vector<Input> const &inputs;
   std::vector<Param> const &params;

@@ -31,24 +31,24 @@ static auto const durationRanges = std::array<Range const *, 3>{
     &shortDurationRange, &mediumDurationRange, &longDurationRange};
 
 static inline auto duration(float rotation, Range const &range) -> float {
-  return taperedAndScaledRotation(rotation, durationKnobTaper, range);
+  return tapered_and_scaled_rotation(rotation, durationKnobTaper, range);
 }
 
 template <typename KnobType>
 auto duration(KnobType &knob, Range const &range) -> float {
-  return duration(rotationOf(knob), range);
+  return duration(rotation_of(knob), range);
 }
 
 template <typename KnobType, typename ToggleType>
 auto selectableDuration(KnobType &knob, ToggleType &toggle) -> float {
-  auto const range = selectedRange<3>(toggle, durationRanges);
-  return duration(rotationOf(knob), *range);
+  auto const range = selected_range<3>(toggle, durationRanges);
+  return duration(rotation_of(knob), *range);
 }
 
 template <typename KnobType, typename InputType, typename ToggleType>
 auto selectableDuration(KnobType &knob, InputType &cvInput, ToggleType &toggle)
     -> float {
-  auto const range = selectedRange<3>(toggle, durationRanges);
+  auto const range = selected_range<3>(toggle, durationRanges);
   return duration(rotation(knob, cvInput), *range);
 }
 

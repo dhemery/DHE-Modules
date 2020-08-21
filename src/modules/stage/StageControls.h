@@ -22,29 +22,29 @@ public:
 
   auto curvature() const -> float { return dhe::curvature(params[CurveKnob]); }
 
-  auto defer() const -> bool { return isHigh(inputs[DeferInput]); }
+  auto defer() const -> bool { return is_high(inputs[DeferInput]); }
 
   auto duration() const -> float {
     return dhe::duration(params[DurationKnob], mediumDurationRange);
   }
 
-  auto gate() const -> bool { return isHigh(inputs[TriggerInput]); }
+  auto gate() const -> bool { return is_high(inputs[TriggerInput]); }
 
-  auto input() const -> float { return voltageAt(inputs[EnvelopeInput]); }
+  auto input() const -> float { return voltage_at(inputs[EnvelopeInput]); }
 
   auto level() const -> float {
-    return dhe::level(params[LevelKnob], unipolarSignalRange);
+    return dhe::level(params[LevelKnob], unipolar_signal_range);
   }
 
   void output(float voltage) { outputs[EnvelopeOutput].setVoltage(voltage); }
 
   void showActive(bool active) {
-    auto const voltage = unipolarSignalRange.scale(active);
+    auto const voltage = unipolar_signal_range.scale(active);
     outputs[ActiveOutput].setVoltage(voltage);
   }
 
   void showEoc(bool eoc) {
-    auto const voltage = unipolarSignalRange.scale(eoc);
+    auto const voltage = unipolar_signal_range.scale(eoc);
     outputs[EocOutput].setVoltage(voltage);
   }
 

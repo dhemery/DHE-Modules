@@ -11,12 +11,13 @@ static auto constexpr minusTwoToPlusTwoRange = Range{-2.F, 2.F};
 static auto constexpr minusTenToPlusTenRange = Range{-10.F, 10.F};
 static auto constexpr zeroToFiveRange = Range{0.F, 5.F};
 
-static auto constexpr offsetRanges =
-    std::array<Range const *, 4>{&zeroToFiveRange, &bipolarSignalRange,
-                                 &unipolarSignalRange, &minusTenToPlusTenRange};
+static auto constexpr offsetRanges = std::array<Range const *, 4>{
+    &zeroToFiveRange, &bipolar_signal_range, &unipolar_signal_range,
+    &minusTenToPlusTenRange};
 
-static auto constexpr multiplierRanges = std::array<Range const *, 4>{
-    &attenuatorRange, &attenuverterRange, &gainRange, &minusTwoToPlusTwoRange};
+static auto constexpr multiplierRanges =
+    std::array<Range const *, 4>{&attenuator_range, &attenuverter_range,
+                                 &gain_range, &minusTwoToPlusTwoRange};
 
 template <int N> class FuncControls {
 public:
@@ -31,21 +32,21 @@ public:
   }
 
   auto multiplierRange(int channel) const -> Range const * {
-    return selectedRange<4>(params[MultiplierRangeSwitch + channel],
-                            multiplierRanges);
+    return selected_range<4>(params[MultiplierRangeSwitch + channel],
+                             multiplierRanges);
   }
 
   auto offsetRange(int channel) const -> Range const * {
-    return selectedRange<4>(params[OffsetRangeSwitch + channel], offsetRanges);
+    return selected_range<4>(params[OffsetRangeSwitch + channel], offsetRanges);
   }
 
   auto operand(int channel) const -> float {
-    return rotationOf(params[AmountKnob + channel]);
+    return rotation_of(params[AmountKnob + channel]);
   }
 
   auto operation(int channel) const -> Operation {
     return static_cast<Operation>(
-        positionOf(params[OperationSwitch + channel]));
+        position_of(params[OperationSwitch + channel]));
   }
 
   void output(int channel, float voltage) {

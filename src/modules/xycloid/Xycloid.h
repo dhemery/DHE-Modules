@@ -72,21 +72,21 @@ public:
 
 private:
   auto xGain() const -> float {
-    return gainRange.scale(
+    return gain_range.scale(
         rotation(params[Controls::XGainKnob], inputs[Controls::XGainCvInput]));
   }
 
   auto xOffset() const -> float {
-    return isPressed(params[Controls::XRangeSwitch]) ? 1.F : 0.F;
+    return is_pressed(params[Controls::XRangeSwitch]) ? 1.F : 0.F;
   }
 
   auto yGain() const -> float {
-    return gainRange.scale(
+    return gain_range.scale(
         rotation(params[Controls::YGainKnob], inputs[Controls::YGainCvInput]));
   }
 
   auto yOffset() const -> float {
-    return isPressed(params[Controls::YRangeSwitch]) ? 1.F : 0.F;
+    return is_pressed(params[Controls::YRangeSwitch]) ? 1.F : 0.F;
   }
 
   auto depth() const -> float {
@@ -110,7 +110,7 @@ private:
   }
 
   auto speed() const -> float {
-    return taperedAndScaledRotation(
+    return tapered_and_scaled_rotation(
         params[Controls::SpeedKnob], inputs[Controls::SpeedCvInput],
         params[Controls::SpeedAvKnob], speedKnobTaper, speedRange);
   }
