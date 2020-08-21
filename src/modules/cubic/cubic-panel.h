@@ -1,6 +1,6 @@
 #pragma once
 
-#include "CubicControls.h"
+#include "cubic-controls.h"
 #include "widgets/control-widgets.h"
 #include "widgets/screws.h"
 

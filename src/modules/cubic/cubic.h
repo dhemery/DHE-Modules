@@ -1,9 +1,9 @@
 #pragma once
 
-#include "CubicControls.h"
 #include "components/range.h"
 #include "config/common-config.h"
 #include "controls/common-inputs.h"
+#include "cubic-controls.h"
 
 #include <engine/Module.hpp>
 
@@ -11,9 +11,9 @@ namespace dhe {
 
 namespace cubic {
 
-static inline auto coefficientRange() -> Range const & {
-  static auto constexpr coefficientRange = Range{-2.F, 2.F};
-  return coefficientRange;
+static inline auto coefficient_range() -> Range const & {
+  static auto constexpr coefficient_range = Range{-2.F, 2.F};
+  return coefficient_range;
 }
 
 class Cubic : public rack::engine::Module {
@@ -24,13 +24,13 @@ public:
     config(Controls::ParameterCount, Controls::InputCount,
            Controls::OutputCount);
     config_knob(this, Controls::ACoefficientKnob, "x³ coefficient", "",
-                coefficientRange());
+                coefficient_range());
     config_knob(this, Controls::BCoefficientKnob, "x² coefficient", "",
-                coefficientRange());
+                coefficient_range());
     config_knob(this, Controls::CCoefficientKnob, "x¹ coefficient", "",
-                coefficientRange());
+                coefficient_range());
     config_knob(this, Controls::DCoefficientKnob, "x⁰ coefficient", "",
-                coefficientRange());
+                coefficient_range());
     config_gain(this, Controls::InputGainKnob, "Input gain");
     config_gain(this, Controls::OutputGainKnob, "Output gain");
   }
@@ -44,33 +44,33 @@ public:
         coefficient(Controls::CCoefficientKnob, Controls::CCoefficientCvInput);
     auto d =
         coefficient(Controls::DCoefficientKnob, Controls::DCoefficientCvInput);
-    auto inputGain = gain(Controls::InputGainKnob, Controls::InputGainCvInput);
-    auto outputGain =
+    auto input_gain = gain(Controls::InputGainKnob, Controls::InputGainCvInput);
+    auto output_gain =
         gain(Controls::OutputGainKnob, Controls::OutputGainCvInput);
 
-    auto x = inputGain * mainIn() * 0.2F;
+    auto x = input_gain * main_in() * 0.2F;
     auto x2 = x * x;
     auto x3 = x2 * x;
     auto y = a * x3 + b * x2 + c * x + d;
-    auto outputVoltage = outputGain * y * 5.F;
-    sendMainOut(outputVoltage);
+    auto output_voltage = output_gain * y * 5.F;
+    send_main_out(output_voltage);
   }
 
 private:
-  auto coefficient(int knobParam, int cvParam) const -> float {
-    return coefficientRange().scale(
-        rotation(params[knobParam], inputs[cvParam]));
+  auto coefficient(int knob_param, int cv_param) const -> float {
+    return coefficient_range().scale(
+        rotation(params[knob_param], inputs[cv_param]));
   }
 
-  auto gain(int knobParam, int cvInput) const -> float {
-    return gain_range.scale(rotation(params[knobParam], inputs[cvInput]));
+  auto gain(int knob_param, int cv_input) const -> float {
+    return gain_range.scale(rotation(params[knob_param], inputs[cv_input]));
   }
 
-  auto mainIn() const -> float {
+  auto main_in() const -> float {
     return voltage_at(inputs[Controls::CubicInput]);
   }
 
-  void sendMainOut(float voltage) {
+  void send_main_out(float voltage) {
     outputs[Controls::CubicOutput].setVoltage(voltage);
   }
 };
