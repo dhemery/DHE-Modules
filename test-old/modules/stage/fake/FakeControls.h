@@ -1,6 +1,6 @@
 #pragma once
 
-#include "components/Taper.h"
+#include "components/taper.h"
 #include "modules/stage/Mode.h"
 
 #include <functional>

@@ -1,8 +1,8 @@
 #pragma once
 
-#include "CommonConfig.h"
-#include "components/Range.h"
-#include "controls/CommonInputs.h"
+#include "common-config.h"
+#include "components/range.h"
+#include "controls/common-inputs.h"
 
 #include <engine/Module.hpp>
 #include <engine/ParamQuantity.hpp>

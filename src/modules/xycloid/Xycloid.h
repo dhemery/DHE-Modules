@@ -3,14 +3,14 @@
 #include "RatioKnobParamQuantity.h"
 #include "SpeedKnobParamQuantity.h"
 #include "XycloidControls.h"
-#include "components/PhaseRotor.h"
-#include "components/Range.h"
-#include "components/Taper.h"
-#include "config/CommonConfig.h"
-#include "config/LevelConfig.h"
-#include "controls/CommonInputs.h"
+#include "components/phase-rotor.h"
+#include "components/range.h"
+#include "components/taper.h"
+#include "config/common-config.h"
+#include "config/level-config.h"
+#include "controls/common-inputs.h"
 
-#include <config/CommonConfig.h>
+#include <config/common-config.h>
 #include <engine/Module.hpp>
 
 namespace dhe {

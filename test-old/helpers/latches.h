@@ -1,6 +1,6 @@
 #pragma once
 
-#include "components/Latch.h"
+#include "components/latch.h"
 
 #include <vector>
 

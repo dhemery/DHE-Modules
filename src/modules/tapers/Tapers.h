@@ -1,13 +1,13 @@
 #pragma once
 
 #include "TapersControls.h"
-#include "components/Range.h"
-#include "config/CommonConfig.h"
-#include "config/CurvatureConfig.h"
-#include "config/LevelConfig.h"
-#include "controls/CommonInputs.h"
-#include "controls/CurvatureInputs.h"
-#include "controls/LevelInputs.h"
+#include "components/range.h"
+#include "config/common-config.h"
+#include "config/curvature-config.h"
+#include "config/level-config.h"
+#include "controls/common-inputs.h"
+#include "controls/curvature-inputs.h"
+#include "controls/level-inputs.h"
 
 #include <engine/Module.hpp>
 

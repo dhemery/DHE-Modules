@@ -5,9 +5,9 @@
 #include "InputMode.h"
 #include "StageControls.h"
 #include "StageEngine.h"
-#include "config/CurvatureConfig.h"
-#include "config/DurationConfig.h"
-#include "config/LevelConfig.h"
+#include "config/curvature-config.h"
+#include "config/duration-config.h"
+#include "config/level-config.h"
 
 #include <engine/Module.hpp>
 

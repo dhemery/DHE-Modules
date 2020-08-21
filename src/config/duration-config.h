@@ -1,9 +1,9 @@
 #pragma once
 
-#include "CommonConfig.h"
-#include "components/Taper.h"
-#include "controls/CommonInputs.h"
-#include "controls/DurationInputs.h"
+#include "common-config.h"
+#include "components/taper.h"
+#include "controls/common-inputs.h"
+#include "controls/duration-inputs.h"
 
 #include <array>
 #include <engine/Module.hpp>

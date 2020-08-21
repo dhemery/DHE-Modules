@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Dimensions.h"
+#include "dimensions.h"
 
 #include <app/ModuleWidget.hpp>
 #include <componentlibrary.hpp>

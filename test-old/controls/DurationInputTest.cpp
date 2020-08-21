@@ -1,4 +1,4 @@
-#include "controls/DurationInputs.h"
+#include "controls/duration-inputs.h"
 
 #include <doctest.h>
 

@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Dimensions.h"
-#include "PanelAssets.h"
+#include "dimensions.h"
+#include "panel-assets.h"
 
 #include <app/SvgSwitch.hpp>
 #include <componentlibrary.hpp>

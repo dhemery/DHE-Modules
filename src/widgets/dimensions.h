@@ -1,6 +1,6 @@
 #pragma once
 
-#include "PanelAssets.h"
+#include "panel-assets.h"
 
 #include <string>
 #include <widget/Widget.hpp>

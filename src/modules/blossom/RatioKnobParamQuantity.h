@@ -1,7 +1,7 @@
 #pragma once
 
 #include "BlossomControls.h"
-#include "config/CommonConfig.h"
+#include "config/common-config.h"
 
 #include <engine/ParamQuantity.hpp>
 

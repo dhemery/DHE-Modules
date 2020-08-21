@@ -1,4 +1,4 @@
-#include "controls/LevelInputs.h"
+#include "controls/level-inputs.h"
 
 #include <doctest.h>
 

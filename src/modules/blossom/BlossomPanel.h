@@ -1,8 +1,8 @@
 #pragma once
 
 #include "BlossomControls.h"
-#include "widgets/ControlWidgets.h"
-#include "widgets/Screws.h"
+#include "widgets/control-widgets.h"
+#include "widgets/screws.h"
 
 #include <app/ModuleWidget.hpp>
 

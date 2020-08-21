@@ -2,7 +2,7 @@
 
 #include "FuncControls.h"
 #include "OperatorSwitch.h"
-#include "widgets/PickList.h"
+#include "widgets/pick-list.h"
 
 #include <app/ModuleWidget.hpp>
 

@@ -1,6 +1,6 @@
 #include "modules/stage/StageEngine.h"
 
-#include "components/Latch.h"
+#include "components/latch.h"
 #include "fake/FakeControls.h"
 #include "fake/FakeModes.h"
 #include "modules/stage/Event.h"

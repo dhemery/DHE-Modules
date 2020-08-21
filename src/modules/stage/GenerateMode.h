@@ -1,8 +1,8 @@
 #pragma once
 
 #include "Event.h"
-#include "components/Latch.h"
-#include "components/Range.h"
+#include "components/latch.h"
+#include "components/range.h"
 
 namespace dhe {
 namespace stage {

@@ -1,8 +1,8 @@
 #pragma once
 
 #include "XycloidControls.h"
-#include "components/Sigmoid.h"
-#include "config/CommonConfig.h"
+#include "components/sigmoid.h"
+#include "config/common-config.h"
 
 #include <array>
 

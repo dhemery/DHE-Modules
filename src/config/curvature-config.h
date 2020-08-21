@@ -1,9 +1,9 @@
 #pragma once
 
-#include "CommonConfig.h"
-#include "components/Sigmoid.h"
-#include "config/CommonConfig.h"
-#include "controls/CurvatureInputs.h"
+#include "common-config.h"
+#include "components/sigmoid.h"
+#include "config/common-config.h"
+#include "controls/curvature-inputs.h"
 
 #include <engine/Module.hpp>
 #include <engine/ParamQuantity.hpp>

@@ -2,8 +2,8 @@
 
 #include "UpstageControls.h"
 #include "UpstageEngine.h"
-#include "config/CommonConfig.h"
-#include "config/LevelConfig.h"
+#include "config/common-config.h"
+#include "config/level-config.h"
 
 #include <engine/Module.hpp>
 

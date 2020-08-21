@@ -3,9 +3,9 @@
 #include "AdvanceMode.h"
 #include "GenerateMode.h"
 #include "StepEvent.h"
-#include "components/Latch.h"
-#include "components/PhaseTimer.h"
-#include "components/Range.h"
+#include "components/latch.h"
+#include "components/phase-timer.h"
+#include "components/range.h"
 
 namespace dhe {
 namespace curve_sequencer {

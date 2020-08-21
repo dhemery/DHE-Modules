@@ -1,9 +1,9 @@
 #pragma once
 
 #include "Triggers.h"
-#include "components/Latch.h"
-#include "components/PhaseTimer.h"
-#include "components/Range.h"
+#include "components/latch.h"
+#include "components/phase-timer.h"
+#include "components/range.h"
 #include "modules/curve-sequencer/StepEvent.h"
 
 namespace dhe {

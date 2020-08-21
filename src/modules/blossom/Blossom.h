@@ -3,12 +3,12 @@
 #include "BlossomControls.h"
 #include "RatioKnobParamQuantity.h"
 #include "SpeedKnobParamQuantity.h"
-#include "components/PhaseRotor.h"
-#include "components/Range.h"
-#include "components/Sigmoid.h"
-#include "components/Taper.h"
-#include "config/LevelConfig.h"
-#include "controls/CommonInputs.h"
+#include "components/phase-rotor.h"
+#include "components/range.h"
+#include "components/sigmoid.h"
+#include "components/taper.h"
+#include "config/level-config.h"
+#include "controls/common-inputs.h"
 
 #include <cmath>
 #include <engine/Module.hpp>

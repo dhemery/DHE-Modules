@@ -1,7 +1,7 @@
 #pragma once
 
 #include "StepEvent.h"
-#include "components/Latch.h"
+#include "components/latch.h"
 
 namespace dhe {
 namespace curve_sequencer {

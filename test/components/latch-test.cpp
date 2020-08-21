@@ -1,4 +1,4 @@
-#include "components/Latch.h"
+#include "components/latch.h"
 
 #include "dheunit/test.h"
 

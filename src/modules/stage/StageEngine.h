@@ -2,9 +2,9 @@
 
 #include "Event.h"
 #include "Mode.h"
-#include "components/Latch.h"
-#include "components/PhaseTimer.h"
-#include "components/Range.h"
+#include "components/latch.h"
+#include "components/phase-timer.h"
+#include "components/range.h"
 
 #include <algorithm>
 

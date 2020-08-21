@@ -1,9 +1,9 @@
 #pragma once
 
-#include "config/CommonConfig.h"
-#include "config/LevelConfig.h"
-#include "controls/CommonInputs.h"
-#include "controls/LevelInputs.h"
+#include "config/common-config.h"
+#include "config/level-config.h"
+#include "controls/common-inputs.h"
+#include "controls/level-inputs.h"
 
 #include <engine/Param.hpp>
 #include <engine/Port.hpp>

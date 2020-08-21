@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Mode.h"
-#include "controls/DurationInputs.h"
+#include "controls/duration-inputs.h"
 
 #include <engine/Param.hpp>
 #include <engine/Port.hpp>

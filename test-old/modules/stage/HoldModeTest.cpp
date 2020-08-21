@@ -1,7 +1,7 @@
 #include "modules/stage/HoldMode.h"
 
-#include "components/Latch.h"
-#include "components/PhaseTimer.h"
+#include "components/latch.h"
+#include "components/phase-timer.h"
 #include "fake/FakeControls.h"
 #include "modules/stage/Event.h"
 

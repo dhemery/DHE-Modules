@@ -1,7 +1,7 @@
 #pragma once
 
-#include "CommonInputs.h"
-#include "components/Range.h"
+#include "common-inputs.h"
+#include "components/range.h"
 
 namespace dhe {
 template <typename ToggleType>

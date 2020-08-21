@@ -1,8 +1,8 @@
 #include "modules/curve-sequencer/StepController.h"
 
-#include "components/Latch.h"
-#include "components/PhaseTimer.h"
-#include "components/Taper.h"
+#include "components/latch.h"
+#include "components/phase-timer.h"
+#include "components/taper.h"
 #include "fake/Controls.h"
 #include "modules/curve-sequencer/AdvanceMode.h"
 #include "modules/curve-sequencer/GenerateMode.h"

@@ -1,5 +1,5 @@
 #pragma once
-#include "Dimensions.h"
+#include "dimensions.h"
 
 #include <app/ParamWidget.hpp>
 #include <engine/Module.hpp>

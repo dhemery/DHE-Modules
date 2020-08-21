@@ -1,9 +1,9 @@
 #pragma once
 
 #include "CurveSequencerControls.h"
-#include "widgets/ControlWidgets.h"
-#include "widgets/PickList.h"
-#include "widgets/Screws.h"
+#include "widgets/control-widgets.h"
+#include "widgets/pick-list.h"
+#include "widgets/screws.h"
 
 #include <app/ModuleWidget.hpp>
 #include <componentlibrary.hpp>

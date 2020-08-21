@@ -1,9 +1,9 @@
 #pragma once
 
 #include "CubicControls.h"
-#include "components/Range.h"
-#include "config/CommonConfig.h"
-#include "controls/CommonInputs.h"
+#include "components/range.h"
+#include "config/common-config.h"
+#include "controls/common-inputs.h"
 
 #include <engine/Module.hpp>
 

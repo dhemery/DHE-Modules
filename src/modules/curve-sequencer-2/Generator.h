@@ -1,5 +1,5 @@
 #pragma once
-#include "components/PhaseTimer.h"
+#include "components/phase-timer.h"
 
 namespace dhe {
 namespace curve_sequencer_2 {

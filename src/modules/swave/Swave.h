@@ -1,8 +1,8 @@
 #pragma once
 
 #include "SwaveControls.h"
-#include "config/CurvatureConfig.h"
-#include "controls/CurvatureInputs.h"
+#include "config/curvature-config.h"
+#include "controls/curvature-inputs.h"
 
 #include <engine/Module.hpp>
 

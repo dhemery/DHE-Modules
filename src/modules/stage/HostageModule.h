@@ -7,7 +7,7 @@
 #include "IdleMode.h"
 #include "InputMode.h"
 #include "SustainMode.h"
-#include "config/DurationConfig.h"
+#include "config/duration-config.h"
 
 #include <engine/Module.hpp>
 

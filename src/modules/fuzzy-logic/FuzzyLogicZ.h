@@ -1,7 +1,7 @@
 #pragma once
 #include "FuzzyLogicControls.h"
-#include "config/LevelConfig.h"
-#include "controls/CommonInputs.h"
+#include "config/level-config.h"
+#include "controls/common-inputs.h"
 
 #include <engine/Module.hpp>
 

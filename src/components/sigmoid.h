@@ -1,5 +1,5 @@
 #pragma once
-#include "Range.h"
+#include "range.h"
 
 #include <array>
 #include <cmath>

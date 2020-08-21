@@ -1,9 +1,9 @@
 #include "modules/curve-sequencer/CurveSequencerControls.h"
 
-#include "components/Taper.h"
-#include "controls/CurvatureInputs.h"
-#include "controls/DurationInputs.h"
-#include "controls/LevelInputs.h"
+#include "components/taper.h"
+#include "controls/curvature-inputs.h"
+#include "controls/duration-inputs.h"
+#include "controls/level-inputs.h"
 #include "fake-rack/Controls.h"
 #include "modules/curve-sequencer/GenerateMode.h"
 

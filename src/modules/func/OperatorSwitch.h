@@ -1,6 +1,6 @@
 #pragma once
 
-#include "widgets/ControlWidgets.h"
+#include "widgets/control-widgets.h"
 
 #include <event.hpp>
 #include <functional>

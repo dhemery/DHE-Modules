@@ -1,6 +1,6 @@
 #pragma once
 
-#include "components/Taper.h"
+#include "components/taper.h"
 #include "modules/curve-sequencer/AdvanceMode.h"
 #include "modules/curve-sequencer/GenerateMode.h"
 

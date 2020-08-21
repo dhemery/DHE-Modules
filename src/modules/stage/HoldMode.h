@@ -1,8 +1,8 @@
 #pragma once
 
 #include "Event.h"
-#include "components/Latch.h"
-#include "components/PhaseTimer.h"
+#include "components/latch.h"
+#include "components/phase-timer.h"
 
 namespace dhe {
 namespace stage {

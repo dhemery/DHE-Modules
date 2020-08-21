@@ -1,7 +1,7 @@
 #pragma once
 
-#include "components/Range.h"
-#include "components/Taper.h"
+#include "components/range.h"
+#include "components/taper.h"
 
 #include <array>
 

@@ -2,10 +2,10 @@
 
 #include "AdvanceMode.h"
 #include "GenerateMode.h"
-#include "controls/CommonInputs.h"
-#include "controls/CurvatureInputs.h"
-#include "controls/DurationInputs.h"
-#include "controls/LevelInputs.h"
+#include "controls/common-inputs.h"
+#include "controls/curvature-inputs.h"
+#include "controls/duration-inputs.h"
+#include "controls/level-inputs.h"
 
 #include <vector>
 

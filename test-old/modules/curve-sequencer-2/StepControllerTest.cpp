@@ -1,6 +1,6 @@
 #include "modules/curve-sequencer-2/StepController.h"
 
-#include "components/Latch.h"
+#include "components/latch.h"
 #include "modules/curve-sequencer/StepEvent.h"
 
 #include <doctest.h>

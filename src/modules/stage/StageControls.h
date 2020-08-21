@@ -1,8 +1,8 @@
 #pragma once
 
-#include "controls/CurvatureInputs.h"
-#include "controls/DurationInputs.h"
-#include "controls/LevelInputs.h"
+#include "controls/curvature-inputs.h"
+#include "controls/duration-inputs.h"
+#include "controls/level-inputs.h"
 
 #include <engine/Param.hpp>
 #include <engine/Port.hpp>

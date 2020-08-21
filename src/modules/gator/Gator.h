@@ -1,7 +1,7 @@
 #pragma once
 
 #include "GatorControls.h"
-#include "controls/CommonInputs.h"
+#include "controls/common-inputs.h"
 
 #include <engine/Module.hpp>
 #include <string>

@@ -2,8 +2,8 @@
 
 #include "Event.h"
 #include "Mode.h"
-#include "components/Latch.h"
-#include "components/PhaseTimer.h"
+#include "components/latch.h"
+#include "components/phase-timer.h"
 
 #include <algorithm>
 

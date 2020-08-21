@@ -1,4 +1,4 @@
-#include "components/PhaseTimer.h"
+#include "components/phase-timer.h"
 
 #include <doctest.h>
 
