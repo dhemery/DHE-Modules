@@ -22,9 +22,9 @@ public:
     config(Controls::ParameterCount, Controls::InputCount,
            Controls::OutputCount);
 
-    configDurationKnob(this, Controls::DurationKnob,
-                       Controls::DurationRangeSwitch);
-    configDurationRangeSwitch(this, Controls::DurationRangeSwitch);
+    config_duration_knob(this, Controls::DurationKnob,
+                         Controls::DurationRangeSwitch);
+    config_duration_range_switch(this, Controls::DurationRangeSwitch);
 
     configLevelKnob(this, Controls::LevelKnob, Controls::LevelRangeSwitch);
     configLevelRangeSwitch(this, Controls::LevelRangeSwitch);

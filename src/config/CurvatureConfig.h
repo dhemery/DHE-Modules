@@ -29,8 +29,8 @@ class CurvatureKnobParamQuantity : public rack::engine::ParamQuantity {
  */
 static inline void
 config_curvature_knob(rack::engine::Module *module, int knob_id,
-                    std::string const &name = "Curvature",
-                    float initial_rotation = centered_rotation) {
+                      std::string const &name = "Curvature",
+                      float initial_rotation = centered_rotation) {
   module->configParam<CurvatureKnobParamQuantity>(knob_id, 0.F, 1.F,
                                                   initial_rotation, name);
 }
@@ -39,9 +39,9 @@ config_curvature_knob(rack::engine::Module *module, int knob_id,
  * Configures the param and display for a curve shape switch.
  */
 static inline void config_curve_shape_switch(rack::engine::Module *module,
-                                          int switch_id,
-                                          std::string const &name = "Shape",
-                                          int initial_state = 0) {
+                                             int switch_id,
+                                             std::string const &name = "Shape",
+                                             int initial_state = 0) {
   static auto const state_names = std::array<std::string, 2>{"J", "S"};
   config_toggle<2>(module, switch_id, name, state_names, initial_state);
 }

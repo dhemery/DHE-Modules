@@ -21,7 +21,8 @@ public:
     config(StageControls::ParameterCount, StageControls::InputCount,
            StageControls::OutputCount);
 
-    configDurationKnob(this, StageControls::DurationKnob, mediumDurationRange);
+    config_duration_knob(this, StageControls::DurationKnob,
+                         mediumDurationRange);
     configLevelKnob(this, StageControls::LevelKnob, unipolarSignalRange);
     config_curvature_knob(this, StageControls::CurveKnob);
   }

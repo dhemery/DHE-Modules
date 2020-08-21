@@ -52,7 +52,7 @@ public:
                 " steps");
 
     configLevelRangeSwitch(this, Controls::LevelRangeSwitch);
-    configDurationRangeSwitch(this, Controls::DurationRangeSwitch);
+    config_duration_range_switch(this, Controls::DurationRangeSwitch);
 
     for (auto step = 0; step < N; step++) {
       config_toggle<generateModeCount>(
@@ -65,8 +65,8 @@ public:
                       Controls::LevelRangeSwitch, "Level");
       config_curve_shape_switch(this, Controls::ShapeSwitches + step, "Shape");
       config_curvature_knob(this, Controls::CurveKnobs + step, "Curvature");
-      configDurationKnob(this, Controls::DurationKnobs + step,
-                         Controls::DurationRangeSwitch, "Duration");
+      config_duration_knob(this, Controls::DurationKnobs + step,
+                           Controls::DurationRangeSwitch, "Duration");
       config_button(this, Controls::EnabledButtons + step, "Enabled",
                     {"from input", "Yes"}, 1);
 
