@@ -2,18 +2,18 @@
 
 namespace dhe {
 
-static inline auto scale(float proportion, float lower_bound, float upperBound)
+static inline auto scale(float proportion, float lower_bound, float upper_bound)
     -> float {
-  return proportion * (upperBound - lower_bound) + lower_bound;
+  return proportion * (upper_bound - lower_bound) + lower_bound;
 }
 
-static inline auto clamp(float value, float lower_bound, float upperBound)
+static inline auto clamp(float value, float lower_bound, float upper_bound)
     -> float {
   if (value < lower_bound) {
     return lower_bound;
   }
-  if (value > upperBound) {
-    return upperBound;
+  if (value > upper_bound) {
+    return upper_bound;
   }
   return value;
 }
