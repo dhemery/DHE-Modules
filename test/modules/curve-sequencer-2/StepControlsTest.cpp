@@ -195,7 +195,7 @@ TEST_CASE("curve_sequencer_2::StepControls") {
 
     CHECK_EQ(controls.duration(step),
              dhe::duration(durationKnobRotation,
-                           *dhe::durationRanges[durationRangeSelection]));
+                           *dhe::duration_ranges[durationRangeSelection]));
   }
 
   SUBCASE("showInactive(step) dims step progress lights") {

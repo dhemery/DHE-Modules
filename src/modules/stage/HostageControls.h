@@ -23,8 +23,8 @@ public:
   auto defer() const -> bool { return is_high(inputs[DeferInput]); }
 
   auto duration() const -> float {
-    return selectableDuration(params[DurationKnob], inputs[DurationCvInput],
-                              params[DurationRangeSwitch]);
+    return selectable_duration(params[DurationKnob], inputs[DurationCvInput],
+                               params[DurationRangeSwitch]);
   }
 
   auto gate() const -> bool { return is_high(inputs[TriggerInput]); }

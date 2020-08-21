@@ -32,8 +32,8 @@ public:
   }
 
   auto duration() const -> float {
-    return selectableDuration(params[DurationKnob], inputs[DurationCvInput],
-                              params[DurationRangeSwitch]);
+    return selectable_duration(params[DurationKnob], inputs[DurationCvInput],
+                               params[DurationRangeSwitch]);
   }
 
   auto gate() const -> bool {

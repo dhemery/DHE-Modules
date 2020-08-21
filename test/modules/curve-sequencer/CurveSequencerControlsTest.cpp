@@ -185,7 +185,7 @@ TEST_CASE("curve_sequencer::CurveSequencerControls") {
 
     CHECK_EQ(controls.duration(step),
              dhe::duration(durationKnobRotation,
-                           *dhe::durationRanges[durationRangeSelection]));
+                           *dhe::duration_ranges[durationRangeSelection]));
   }
 
   SUBCASE(

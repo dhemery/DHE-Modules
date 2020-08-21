@@ -25,7 +25,7 @@ public:
   auto defer() const -> bool { return is_high(inputs[DeferInput]); }
 
   auto duration() const -> float {
-    return dhe::duration(params[DurationKnob], mediumDurationRange);
+    return dhe::duration(params[DurationKnob], medium_duration_range);
   }
 
   auto gate() const -> bool { return is_high(inputs[TriggerInput]); }

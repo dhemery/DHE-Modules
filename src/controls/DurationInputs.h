@@ -12,7 +12,7 @@ namespace dhe {
  * the middle of the knob rotation and decreasing sensitivity toward the
  * extremes.
  */
-static auto constexpr durationKnobTaperCurvature = 0.8018017F;
+static auto constexpr duration_knob_taper_curvature = 0.8018017F;
 
 /**
  * Each duration range is of the form [n, 1000n]. Given ranges of that form,
@@ -20,18 +20,18 @@ static auto constexpr durationKnobTaperCurvature = 0.8018017F;
  * yields a duration equal to 1/10 of the range's upper bound (to within 7
  * decimal places).
  */
-static auto constexpr durationKnobTaper =
-    taper::FixedJTaper{durationKnobTaperCurvature};
+static auto constexpr duration_knob_taper =
+    taper::FixedJTaper{duration_knob_taper_curvature};
 
-auto constexpr shortDurationRange = Range{0.001F, 1.F};
-auto constexpr mediumDurationRange = Range{0.01F, 10.F};
-auto constexpr longDurationRange = Range{0.1F, 100.F};
+auto constexpr short_duration_range = Range{0.001F, 1.F};
+auto constexpr medium_duration_range = Range{0.01F, 10.F};
+auto constexpr long_duration_range = Range{0.1F, 100.F};
 
-static auto const durationRanges = std::array<Range const *, 3>{
-    &shortDurationRange, &mediumDurationRange, &longDurationRange};
+static auto constexpr duration_ranges = std::array<Range const *, 3>{
+    &short_duration_range, &medium_duration_range, &long_duration_range};
 
 static inline auto duration(float rotation, Range const &range) -> float {
-  return tapered_and_scaled_rotation(rotation, durationKnobTaper, range);
+  return tapered_and_scaled_rotation(rotation, duration_knob_taper, range);
 }
 
 template <typename KnobType>
@@ -40,16 +40,16 @@ auto duration(KnobType &knob, Range const &range) -> float {
 }
 
 template <typename KnobType, typename ToggleType>
-auto selectableDuration(KnobType &knob, ToggleType &toggle) -> float {
-  auto const range = selected_range<3>(toggle, durationRanges);
+auto selectable_duration(KnobType &knob, ToggleType &toggle) -> float {
+  auto const range = selected_range<3>(toggle, duration_ranges);
   return duration(rotation_of(knob), *range);
 }
 
 template <typename KnobType, typename InputType, typename ToggleType>
-auto selectableDuration(KnobType &knob, InputType &cvInput, ToggleType &toggle)
-    -> float {
-  auto const range = selected_range<3>(toggle, durationRanges);
-  return duration(rotation(knob, cvInput), *range);
+auto selectable_duration(KnobType &knob, InputType &cv_input,
+                         ToggleType &toggle) -> float {
+  auto const range = selected_range<3>(toggle, duration_ranges);
+  return duration(rotation(knob, cv_input), *range);
 }
 
 } // namespace dhe

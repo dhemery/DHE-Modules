@@ -82,8 +82,8 @@ public:
   }
 
   auto duration(int step) const -> float {
-    return dhe::selectableDuration(params[DurationKnobs + step],
-                                   params[DurationRangeSwitch]);
+    return dhe::selectable_duration(params[DurationKnobs + step],
+                                    params[DurationRangeSwitch]);
   }
 
   auto endLevel(int step) const -> float {
