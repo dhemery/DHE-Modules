@@ -51,7 +51,7 @@ public:
     configParam(Controls::SelectionLengthKnob, 1.F, N, N, "Sequence length",
                 " steps");
 
-    configLevelRangeSwitch(this, Controls::LevelRangeSwitch);
+    config_level_range_switch(this, Controls::LevelRangeSwitch);
     config_duration_range_switch(this, Controls::DurationRangeSwitch);
 
     for (auto step = 0; step < N; step++) {
@@ -61,8 +61,8 @@ public:
       config_toggle<advanceModeCount>(this, Controls::ConditionSwitches + step,
                                       "Advance Mode", advanceModeDescriptions,
                                       defaultAdvanceMode);
-      configLevelKnob(this, Controls::LevelKnobs + step,
-                      Controls::LevelRangeSwitch, "Level");
+      config_level_knob(this, Controls::LevelKnobs + step,
+                        Controls::LevelRangeSwitch, "Level");
       config_curve_shape_switch(this, Controls::ShapeSwitches + step, "Shape");
       config_curvature_knob(this, Controls::CurveKnobs + step, "Curvature");
       config_duration_knob(this, Controls::DurationKnobs + step,

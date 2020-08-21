@@ -44,10 +44,10 @@ public:
     config_attenuverter(this, Controls::PhaseOffsetAvKnob, "Phase CV gain");
 
     config_gain(this, Controls::XGainKnob, "X gain");
-    configLevelRangeSwitch(this, Controls::XRangeSwitch, "X range", 0);
+    config_level_range_switch(this, Controls::XRangeSwitch, "X range", 0);
 
     config_gain(this, Controls::YGainKnob, "Y gain");
-    configLevelRangeSwitch(this, Controls::YRangeSwitch, "Y range", 0);
+    config_level_range_switch(this, Controls::YRangeSwitch, "Y range", 0);
   }
 
   void process(ProcessArgs const &args) override {

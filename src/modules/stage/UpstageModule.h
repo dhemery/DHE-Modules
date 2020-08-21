@@ -17,8 +17,8 @@ public:
     config(Controls::ParameterCount, Controls::InputCount,
            Controls::OutputCount);
 
-    configLevelKnob(this, Controls::LevelKnob, Controls::LevelRangeSwitch);
-    configLevelRangeSwitch(this, Controls::LevelRangeSwitch);
+    config_level_knob(this, Controls::LevelKnob, Controls::LevelRangeSwitch);
+    config_level_range_switch(this, Controls::LevelRangeSwitch);
 
     config_button(this, Controls::TriggerButton, "TRIG", {"From input", "High"},
                   0);

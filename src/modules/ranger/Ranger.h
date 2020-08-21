@@ -22,16 +22,16 @@ public:
     config_attenuator(this, Controls::LevelKnob, "Level");
     config_attenuverter(this, Controls::LevelAvKnob, "Level CV gain");
 
-    configLevelKnob(this, Controls::CcwLimitKnob, Controls::CcwLimitRangeSwitch,
-                    "CCW limit");
-    configLevelRangeSwitch(this, Controls::CcwLimitRangeSwitch,
-                           "CCW limit range", 0);
+    config_level_knob(this, Controls::CcwLimitKnob,
+                      Controls::CcwLimitRangeSwitch, "CCW limit");
+    config_level_range_switch(this, Controls::CcwLimitRangeSwitch,
+                              "CCW limit range", 0);
     config_attenuverter(this, Controls::CcwLimitAvKnob, "CCW limit CV gain");
 
-    configLevelKnob(this, Controls::CwLimitKnob, Controls::CwLimitRangeSwitch,
-                    "CW limit");
-    configLevelRangeSwitch(this, Controls::CwLimitRangeSwitch, "CW limit range",
-                           0);
+    config_level_knob(this, Controls::CwLimitKnob, Controls::CwLimitRangeSwitch,
+                      "CW limit");
+    config_level_range_switch(this, Controls::CwLimitRangeSwitch,
+                              "CW limit range", 0);
     config_attenuverter(this, Controls::CwLimitAvKnob, "CW limit CV gain");
   }
 

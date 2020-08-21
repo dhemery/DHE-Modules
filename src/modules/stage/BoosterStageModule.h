@@ -26,8 +26,8 @@ public:
                          Controls::DurationRangeSwitch);
     config_duration_range_switch(this, Controls::DurationRangeSwitch);
 
-    configLevelKnob(this, Controls::LevelKnob, Controls::LevelRangeSwitch);
-    configLevelRangeSwitch(this, Controls::LevelRangeSwitch);
+    config_level_knob(this, Controls::LevelKnob, Controls::LevelRangeSwitch);
+    config_level_range_switch(this, Controls::LevelRangeSwitch);
 
     config_curvature_knob(this, Controls::CurveKnob);
     config_curve_shape_switch(this, Controls::ShapeSwitch);

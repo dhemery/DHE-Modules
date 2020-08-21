@@ -22,25 +22,25 @@ public:
     config(Controls::ParameterCount, Controls::InputCount,
            Controls::OutputCount);
 
-    configLevelKnob(this, Controls::LevelKnob1, Controls::LevelRangeSwitch1,
-                    "Level 1");
-    configLevelRangeSwitch(this, Controls::LevelRangeSwitch1, "Level 1 range",
-                           0);
+    config_level_knob(this, Controls::LevelKnob1, Controls::LevelRangeSwitch1,
+                      "Level 1");
+    config_level_range_switch(this, Controls::LevelRangeSwitch1,
+                              "Level 1 range", 0);
     config_attenuverter(this, Controls::LevelAvKnob1, "Level 1 CV gain");
 
     config_curvature_knob(this, Controls::CurveKnob1, "Curvature 1");
     config_attenuverter(this, Controls::CurveAvKnob1, "Curvature 1 CV gain");
-    configLevelRangeSwitch(this, Controls::ShapeSwitch1, "Shape 1");
+    config_level_range_switch(this, Controls::ShapeSwitch1, "Shape 1");
 
-    configLevelKnob(this, Controls::LevelKnob2, Controls::LevelRangeSwitch2,
-                    "Level 2");
-    configLevelRangeSwitch(this, Controls::LevelRangeSwitch2, "Level 2 range",
-                           0);
+    config_level_knob(this, Controls::LevelKnob2, Controls::LevelRangeSwitch2,
+                      "Level 2");
+    config_level_range_switch(this, Controls::LevelRangeSwitch2,
+                              "Level 2 range", 0);
     config_attenuverter(this, Controls::LevelAvKnob2, "Level 2 CV gain");
 
     config_curvature_knob(this, Controls::CurveKnob2, "Curvature 2");
     config_attenuverter(this, Controls::CurveAvKnob2, "Curvature 2 CV gain");
-    configLevelRangeSwitch(this, Controls::ShapeSwitch2, "Shape 2");
+    config_level_range_switch(this, Controls::ShapeSwitch2, "Shape 2");
   }
 
   void process(ProcessArgs const & /*args*/) override {

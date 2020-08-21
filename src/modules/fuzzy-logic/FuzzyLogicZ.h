@@ -20,7 +20,7 @@ public:
     configParam(Controls::NotBButtons + 0, 0.F, 1.F, 0.F, "Negate B");
     configParam(Controls::NotAButtons + 1, 0.F, 1.F, 0.F, "Negate C");
     configParam(Controls::NotBButtons + 1, 0.F, 1.F, 0.F, "Negate D");
-    configLevelRangeSwitch(this, Controls::LevelRangeSwitch, "Level Range");
+    config_level_range_switch(this, Controls::LevelRangeSwitch, "Level Range");
   }
 
   void process(ProcessArgs const & /*ignored*/) override {
