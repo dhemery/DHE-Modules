@@ -85,16 +85,20 @@ private:
   float const default_curvature_;
 };
 
-static auto constexpr j_taper = Taper{Range{0.F, 1.F}, 1};
-static auto constexpr s_taper = Taper{sigmoid::domain, -1};
-static auto constexpr tapers = std::array<Taper const, 2>{j_taper, s_taper};
-
-static constexpr auto s_taper_with_curvature(float curvature) -> Taper {
-  return Taper{sigmoid::domain, -1, curvature};
-}
-
+static auto constexpr j_domain = Range{0.F, 1.F};
+static auto constexpr j_quadrant_factor = 1;
+static auto constexpr j_taper = Taper{j_domain, j_quadrant_factor};
 static constexpr auto j_taper_with_curvature(float curvature) -> Taper {
-  return Taper{Range{0.F, 1.F}, 1, curvature};
+  return Taper{j_domain, j_quadrant_factor, curvature};
 }
+
+static auto constexpr s_domain = sigmoid::domain;
+static auto constexpr s_quadrant_factor = -1;
+static auto constexpr s_taper = Taper{s_domain, s_quadrant_factor};
+static constexpr auto s_taper_with_curvature(float curvature) -> Taper {
+  return Taper{s_domain, s_quadrant_factor, curvature};
+}
+
+static auto constexpr tapers = std::array<Taper const, 2>{j_taper, s_taper};
 } // namespace sigmoid
 } // namespace dhe
