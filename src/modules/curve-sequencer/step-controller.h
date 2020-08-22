@@ -97,8 +97,8 @@ private:
 
   auto taper(float input) const -> float {
     auto const curvature = controls_.curvature(step_);
-    auto const taper = controls_.taper(step_);
-    return taper->apply(input, curvature);
+    auto const &taper = controls_.taper(step_);
+    return taper.apply(input, curvature);
   }
 
   int step_{0};

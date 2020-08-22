@@ -87,7 +87,7 @@ private:
 
 static auto constexpr j_taper = Taper{Range{0.F, 1.F}, 1};
 static auto constexpr s_taper = Taper{sigmoid::domain, -1};
-static auto constexpr tapers = std::array<Taper const *, 2>{&j_taper, &s_taper};
+static auto constexpr tapers = std::array<Taper const, 2>{j_taper, s_taper};
 
 static constexpr auto s_taper_with_curvature(float curvature) -> Taper {
   return Taper{sigmoid::domain, -1, curvature};

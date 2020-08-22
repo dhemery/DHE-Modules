@@ -23,7 +23,7 @@ static inline void prepare_to_execute(FakeControls &controls) {
   controls.input = []() -> float { return 0.F; };
   controls.level = []() -> float { return 0.F; };
   controls.output = [](float v) {};
-  controls.taper = []() -> dhe::sigmoid::Taper const * {
+  controls.taper = []() -> dhe::sigmoid::Taper const & {
     return dhe::sigmoid::tapers[0];
   };
 }

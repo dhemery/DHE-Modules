@@ -123,7 +123,7 @@ public:
     return static_cast<Source>(params_[StartSourceSwitches + step].getValue());
   }
 
-  auto taper(int step) const -> sigmoid::Taper const * {
+  auto taper(int step) const -> sigmoid::Taper const & {
     auto const selection =
         static_cast<int>(params_[ShapeSwitches + step].getValue());
     return sigmoid::tapers[selection];

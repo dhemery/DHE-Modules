@@ -39,7 +39,7 @@ static inline void prepareToGenerate(fake::Controls &controls) {
   controls.level = [](int s) -> float { return 0.2F; };
   controls.set_output = [](float f) {};
   controls.show_progress = [](int step, float progress) {};
-  controls.taper = [](int /*s*/) -> Taper const * {
+  controls.taper = [](int /*s*/) -> Taper const & {
     return dhe::sigmoid::tapers[0];
   };
 }

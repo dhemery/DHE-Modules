@@ -49,7 +49,7 @@ public:
     outputs_[EocOutput].setVoltage(voltage);
   }
 
-  static auto taper() -> sigmoid::Taper const * { return &sigmoid::j_taper; };
+  static auto taper() -> sigmoid::Taper const & { return sigmoid::j_taper; };
 
   enum ParameterIds { DurationKnob, LevelKnob, CurveKnob, ParameterCount };
 

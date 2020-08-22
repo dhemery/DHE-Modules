@@ -60,7 +60,7 @@ public:
     outputs_[EocOutput].setVoltage(voltage);
   }
 
-  auto taper() const -> sigmoid::Taper const * {
+  auto taper() const -> sigmoid::Taper const & {
     return selected_taper(params_[ShapeSwitch]);
   }
 

@@ -59,7 +59,7 @@ template <typename T> auto is_high(T &input) -> bool {
 
 template <typename ItemType, int N, typename ToggleType = rack::engine::Param>
 auto selected(ToggleType &toggle, std::array<ItemType, N> const &items)
-    -> ItemType {
+    -> ItemType const& {
   return items[position_of(toggle)];
 }
 
@@ -74,8 +74,8 @@ auto selected_range(ToggleType &toggle,
  * Returns the taper selected by the given switch.
  */
 template <typename ToggleType>
-auto selected_taper(ToggleType &toggle) -> sigmoid::Taper const * {
-  return selected<sigmoid::Taper const *, 2>(toggle, sigmoid::tapers);
+auto selected_taper(ToggleType &toggle) -> sigmoid::Taper const & {
+  return selected<sigmoid::Taper const, 2>(toggle, sigmoid::tapers);
 }
 
 template <typename KnobType, typename InputType>

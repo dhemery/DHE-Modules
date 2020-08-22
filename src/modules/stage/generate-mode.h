@@ -18,10 +18,10 @@ public:
     }
     auto const level = controls_.level();
     auto const curvature = controls_.curvature();
-    auto const *taper = controls_.taper();
+    auto const &taper = controls_.taper();
 
     timer_.advance(sample_time / controls_.duration());
-    auto const tapered_phase = taper->apply(timer_.phase(), curvature);
+    auto const tapered_phase = taper.apply(timer_.phase(), curvature);
 
     controls_.output(cx::scale(tapered_phase, start_voltage_, level));
 

@@ -60,11 +60,11 @@ private:
     return level_range(params[Controls::LevelRangeSwitch1]);
   }
   auto taper_1(float input) const -> float {
-    auto const *const taper = selected_taper(params[Controls::ShapeSwitch1]);
+    auto const & taper = selected_taper(params[Controls::ShapeSwitch1]);
     auto const taper_curvature =
         curvature(params[Controls::CurveKnob1], inputs[Controls::CurveCvInput1],
                   params[Controls::CurveAvKnob1]);
-    return taper->apply(input, taper_curvature);
+    return taper.apply(input, taper_curvature);
   }
 
   auto level_rotation_2() const -> float {
@@ -76,11 +76,11 @@ private:
     return level_range(params[Controls::LevelRangeSwitch2]);
   }
   auto taper_2(float input) const -> float {
-    const auto *const taper = selected_taper(params[Controls::ShapeSwitch2]);
+    const auto & taper = selected_taper(params[Controls::ShapeSwitch2]);
     auto const taper_curvature =
         curvature(params[Controls::CurveKnob2], inputs[Controls::CurveCvInput2],
                   params[Controls::CurveAvKnob2]);
-    return taper->apply(input, taper_curvature);
+    return taper.apply(input, taper_curvature);
   }
 };
 

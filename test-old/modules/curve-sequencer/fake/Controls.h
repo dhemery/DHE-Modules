@@ -46,8 +46,8 @@ struct Controls {
       [](int s) -> float { throw "Controls.duration(step)"; }};
   std::function<float(int step)> level{
       [](int s) -> float { throw "Controls.level(step)"; }};
-  std::function<Taper const *(int step)> taper{
-      [](int s) -> Taper const * { throw "Controls.taper(step)"; }};
+  std::function<Taper const &(int step)> taper{
+      [](int s) -> Taper const & { throw "Controls.taper(step)"; }};
 
   std::function<bool(int)> is_enabled{
       [](int s) -> bool { throw "Controls.is_enabled(step)"; }};

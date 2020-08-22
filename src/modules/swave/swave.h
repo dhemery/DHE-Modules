@@ -38,8 +38,8 @@ private:
   }
 
   auto taper(float input) const -> float {
-    auto const *const taper = selected_taper(params[Controls::ShapeSwitch]);
-    return taper->apply(input, curvature(params[Controls::CurveKnob],
+    auto const & taper = selected_taper(params[Controls::ShapeSwitch]);
+    return taper.apply(input, curvature(params[Controls::CurveKnob],
                                          inputs[Controls::CurveCvInput],
                                          params[Controls::CurveAvKnob]));
   }
