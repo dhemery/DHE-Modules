@@ -7,58 +7,41 @@ namespace dhe {
 namespace taper {
 class VariableTaper {
 public:
-  virtual auto apply(float proportion, float curvature) const -> float = 0;
-  auto invert(float tapered, float curvature) const -> float {
+  constexpr VariableTaper(Range range, float quadrant_factor)
+      : range_{range}, quadrant_factor_{quadrant_factor} {}
+
+  constexpr auto apply(float proportion, float curvature) const -> float {
+    return normalized(curved(curvature, safe(scaled(proportion))));
+  };
+
+  constexpr auto invert(float tapered, float curvature) const -> float {
     return apply(tapered, -curvature);
   };
+
+private:
+  constexpr auto curved(float curvature, float input) const -> float {
+    return sigmoid::curve(input, curvature * quadrant_factor_);
+  }
+
+  constexpr auto safe(float input) const -> float {
+    return range_.clamp(input);
+  }
+  constexpr auto scaled(float proportion) const -> float {
+    return range_.scale(proportion);
+  }
+  constexpr auto normalized(float scaled) const -> float {
+    return range_.normalize(scaled);
+  }
+
+  Range const range_;
+  float const quadrant_factor_;
 };
 
-class VariableJTaper : public VariableTaper {
-  static auto constexpr input_range = Range{0.F, 1.F};
-  static auto constexpr quadrant_factor = 1;
-
-  static constexpr auto curved(float curvature, float input) -> float {
-    return sigmoid::curve(input, curvature * quadrant_factor);
-  }
-
-  static constexpr auto safe(float input) -> float {
-    return input_range.clamp(input);
-  }
-  static constexpr auto scaled(float proportion) -> float {
-    return input_range.scale(proportion);
-  }
-  static constexpr auto normalized(float scaled) -> float {
-    return input_range.normalize(scaled);
-  }
-
-public:
-  auto apply(float proportion, float curvature) const -> float override {
-    return normalized(curved(curvature, safe(scaled(proportion))));
-  }
-};
-
-class VariableSTaper : public VariableTaper {
-  static auto constexpr input_range = sigmoid::range;
-  static auto constexpr quadrant_factor = -1;
-
-  static constexpr auto normalized(float scaled) -> float {
-    return input_range.normalize(scaled);
-  }
-  static constexpr auto curved(float curvature, const float input) -> float {
-    return sigmoid::curve(input, curvature * quadrant_factor);
-  }
-  static constexpr auto safe(const float input) -> float {
-    return input_range.clamp(input);
-  }
-  static constexpr auto scaled(float proportion) -> float {
-    return input_range.scale(proportion);
-  }
-
-public:
-  auto apply(float proportion, float curvature) const -> float override {
-    return normalized(curved(curvature, safe(scaled(proportion))));
-  }
-};
+static auto constexpr variable_j_taper = VariableTaper{Range{0.F, 1.F}, 1};
+static auto constexpr variable_s_taper = VariableTaper{sigmoid::range, -1};
+static auto constexpr variable_tapers =
+    std::array<taper::VariableTaper const *, 2>{&variable_j_taper,
+                                                &variable_s_taper};
 
 class FixedTaper {
 public:
@@ -79,7 +62,7 @@ public:
   }
 
 private:
-  VariableJTaper taper_{};
+  VariableTaper taper_{variable_j_taper};
   float curvature_;
 };
 
@@ -96,14 +79,8 @@ public:
   }
 
 private:
-  VariableSTaper taper_{};
+  VariableTaper taper_{variable_s_taper};
   float curvature_;
 };
-
-static auto constexpr variable_j_taper = VariableJTaper{};
-static auto constexpr variable_s_taper = VariableSTaper{};
-static auto constexpr variable_tapers =
-    std::array<taper::VariableTaper const *, 2>{&variable_j_taper,
-                                                &variable_s_taper};
 } // namespace taper
 } // namespace dhe
