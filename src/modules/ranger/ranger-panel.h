@@ -1,6 +1,6 @@
 #pragma once
 
-#include "RangerControls.h"
+#include "ranger-controls.h"
 #include "widgets/control-widgets.h"
 #include "widgets/screws.h"
 
@@ -10,7 +10,7 @@ namespace dhe {
 namespace ranger {
 
 class RangerPanel : public rack::app::ModuleWidget {
-  using Controls = RangerControls;
+  using Controls = ranger;
 
 public:
   explicit RangerPanel(rack::engine::Module *module) {

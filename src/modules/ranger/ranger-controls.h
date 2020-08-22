@@ -4,7 +4,7 @@
 
 namespace dhe {
 namespace ranger {
-class RangerControls {
+class ranger {
 public:
   enum ParameterIds {
     LevelKnob,

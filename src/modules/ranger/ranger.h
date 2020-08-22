@@ -1,10 +1,10 @@
 #pragma once
 
-#include "RangerControls.h"
 #include "config/common-config.h"
 #include "config/level-config.h"
 #include "controls/common-inputs.h"
 #include "controls/level-inputs.h"
+#include "ranger-controls.h"
 
 #include <engine/Module.hpp>
 
@@ -12,7 +12,7 @@ namespace dhe {
 namespace ranger {
 
 class Ranger : public rack::engine::Module {
-  using Controls = RangerControls;
+  using Controls = ranger;
 
 public:
   Ranger() {
@@ -36,8 +36,8 @@ public:
   }
 
   void process(ProcessArgs const & /*args*/) override {
-    auto const outputVoltage = scale(level(), ccwLimit(), cwLimit());
-    outputs[Controls::RangerOutput].setVoltage(outputVoltage);
+    auto const output_voltage = scale(level(), ccw_limit(), cw_limit());
+    outputs[Controls::RangerOutput].setVoltage(output_voltage);
   }
 
 private:
@@ -46,14 +46,14 @@ private:
                     params[Controls::LevelAvKnob]);
   }
 
-  auto ccwLimit() const -> float {
+  auto ccw_limit() const -> float {
     return selectable_level(params[Controls::CcwLimitKnob],
                             inputs[Controls::CcwLimitCvInput],
                             params[Controls::CcwLimitAvKnob],
                             params[Controls::CcwLimitRangeSwitch]);
   }
 
-  auto cwLimit() const -> float {
+  auto cw_limit() const -> float {
     return selectable_level(
         params[Controls::CwLimitKnob], inputs[Controls::CwLimitCvInput],
         params[Controls::CwLimitAvKnob], params[Controls::CwLimitRangeSwitch]);
