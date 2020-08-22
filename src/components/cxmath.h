@@ -3,7 +3,7 @@
 namespace dhe {
 
 static constexpr auto pi{3.14159265359F};
-static constexpr auto two_pi{2.F * pi};
+static constexpr auto tau{2.F * pi};
 
 /**
  * constexpr versions of common math functions.

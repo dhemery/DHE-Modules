@@ -11,7 +11,7 @@ public:
   }
 
   constexpr auto angle(float offset = 0.F) const -> float {
-    return two_pi * (phase_ + offset);
+    return tau * (phase_ + offset);
   }
 
   auto sin(float offset = 0.F) const -> float {
