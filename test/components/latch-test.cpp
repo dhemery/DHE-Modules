@@ -10,6 +10,7 @@ using dhe::unit::TestRegistrar;
 
 namespace dhe {
 namespace components {
+namespace test {
 static auto constexpr low = Latch{false, false};
 static auto constexpr falling = Latch{false, true};
 static auto constexpr rising = Latch{true, true};
@@ -61,7 +62,7 @@ public:
   }
 };
 
-static LatchSuite latch_suite __attribute__((unused)){};
+__attribute__((unused)) static LatchSuite latch_suite{};
 
 auto check_clock(Latch l, bool signal, Latch want_latch) -> TestFunc {
   return [l, signal, want_latch](Tester &t) mutable {
@@ -94,5 +95,6 @@ auto check_equality(const Latch &a, const Latch &b, bool want_eq) -> TestFunc {
   };
 }
 
+} // namespace test
 } // namespace components
 } // namespace dhe
