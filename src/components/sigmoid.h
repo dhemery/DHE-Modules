@@ -56,6 +56,15 @@ public:
     return apply(tapered, -default_curvature_);
   };
 
+  constexpr auto operator==(const Taper &rhs) const -> bool {
+    return domain_ == rhs.domain_ && quadrant_factor_ == rhs.quadrant_factor_ &&
+           default_curvature_ == rhs.default_curvature_;
+  }
+
+  constexpr auto operator!=(const Taper &rhs) const -> bool {
+    return !(rhs == *this);
+  }
+
 private:
   constexpr auto curved(float curvature, float input) const -> float {
     return sigmoid::curve(input, curvature * quadrant_factor_);

@@ -30,6 +30,14 @@ public:
     return cx::clamp(scaled, lower_, upper_);
   }
 
+  constexpr auto operator==(const Range &rhs) const -> bool {
+    return lower_ == rhs.lower_ && upper_ == rhs.upper_;
+  }
+
+  constexpr auto operator!=(const Range &rhs) const -> bool {
+    return !(rhs == *this);
+  }
+
 private:
   float const lower_;
   float const upper_;
