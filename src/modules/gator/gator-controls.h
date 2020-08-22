@@ -4,11 +4,11 @@ namespace dhe {
 namespace gator {
 class GatorControls {
 public:
-  static auto constexpr inputCount = 16;
+  static auto constexpr input_count = 16;
 
-  enum ParameterIds { ENUMS(NegateButtons, inputCount), ParameterCount };
+  enum ParameterIds { ENUMS(NegateButtons, input_count), ParameterCount };
 
-  enum InputIds { ENUMS(Inputs, inputCount), InputCount };
+  enum InputIds { ENUMS(Inputs, input_count), InputCount };
 
   enum OutputIds {
     AndOutput,

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "GatorControls.h"
+#include "gator-controls.h"
 #include "widgets/control-widgets.h"
 #include "widgets/screws.h"
 
@@ -30,15 +30,15 @@ public:
     auto constexpr right = hp2mm(7.5F);
 
     auto y = top;
-    for (auto i = 0; i < Controls::inputCount / 2; i++) {
+    for (auto i = 0; i < Controls::InputCount / 2; i++) {
       addInput(Jack::input(slug, module, left, y, Controls::Inputs + i));
       addParam(
           Toggle::button(slug, module, lc, y, Controls::NegateButtons + i));
       addParam(Toggle::button(slug, module, rc, y,
                               Controls::NegateButtons + i +
-                                  Controls::inputCount / 2));
+                                  Controls::InputCount / 2));
       addInput(Jack::input(slug, module, right, y,
-                           Controls::Inputs + i + Controls::inputCount / 2));
+                           Controls::Inputs + i + Controls::InputCount / 2));
       y += dy;
     }
 

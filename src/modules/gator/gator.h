@@ -1,7 +1,7 @@
 #pragma once
 
-#include "GatorControls.h"
 #include "controls/common-inputs.h"
+#include "gator-controls.h"
 
 #include <engine/Module.hpp>
 #include <string>
@@ -17,49 +17,49 @@ public:
   Gator() {
     config(Controls::ParameterCount, Controls::InputCount,
            Controls::OutputCount);
-    for (auto i = 0; i < Controls::inputCount; i++) {
+    for (auto i = 0; i < Controls::InputCount; i++) {
       configParam(Controls::NegateButtons + i, 0.F, 1.F, 0.F,
                   "Negate input " + std::to_string(i + 1));
     }
   }
 
   void process(ProcessArgs const & /*ignored*/) override {
-    auto connectedCount = 0;
-    auto highCount = 0;
+    auto connected_count = 0;
+    auto high_count = 0;
 
-    for (auto i = 0; i < Controls::inputCount; i++) {
+    for (auto i = 0; i < Controls::InputCount; i++) {
       if (inputs[i].isConnected()) {
-        connectedCount++;
+        connected_count++;
         if (is_high(inputs[(Controls::Inputs + i)]) !=
             is_pressed(params[Controls::NegateButtons + i])) {
-          highCount++;
+          high_count++;
         }
       }
     }
 
-    if (connectedCount == 0) {
-      setAllOutputsFalse();
+    if (connected_count == 0) {
+      set_all_outputs_false();
     } else {
-      setOutputs(Controls::AndOutput, Controls::NandOutput,
-                 highCount == connectedCount);
-      setOutputs(Controls::OrOutput, Controls::NorOutput, highCount > 0);
-      setOutputs(Controls::OddOutput, Controls::EvenOutput,
-                 (highCount & 1) > 0);
-      setOutputs(Controls::XorOutput, Controls::XnorOutput, highCount == 1);
+      set_outputs(Controls::AndOutput, Controls::NandOutput,
+                  high_count == connected_count);
+      set_outputs(Controls::OrOutput, Controls::NorOutput, high_count > 0);
+      set_outputs(Controls::OddOutput, Controls::EvenOutput,
+                  (high_count & 1) > 0);
+      set_outputs(Controls::XorOutput, Controls::XnorOutput, high_count == 1);
     }
   }
 
 private:
-  void setAllOutputsFalse() {
+  void set_all_outputs_false() {
     for (auto i = 0; i < Controls::OutputCount; i++) {
       outputs[i].setVoltage(0.F);
     }
   }
 
-  void setOutputs(int outputId, int negatedOutputId, bool value) {
+  void set_outputs(int output_id, int negated_output_id, bool value) {
     auto const voltage = value ? 10.F : 0.F;
-    outputs[outputId].setVoltage(voltage);
-    outputs[negatedOutputId].setVoltage(10.F - voltage);
+    outputs[output_id].setVoltage(voltage);
+    outputs[negated_output_id].setVoltage(10.F - voltage);
   }
 };
 
