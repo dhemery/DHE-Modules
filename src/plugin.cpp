@@ -7,10 +7,10 @@
 #include "modules/func/func-module.h"
 #include "modules/func/func1-panel.h"
 #include "modules/func/func6-panel.h"
-#include "modules/fuzzy-logic/FuzzyLogicH.h"
-#include "modules/fuzzy-logic/FuzzyLogicHPanel.h"
-#include "modules/fuzzy-logic/FuzzyLogicZ.h"
-#include "modules/fuzzy-logic/FuzzyLogicZPanel.h"
+#include "modules/fuzzy-logic/h-module.h"
+#include "modules/fuzzy-logic/h-panel.h"
+#include "modules/fuzzy-logic/z-module.h"
+#include "modules/fuzzy-logic/z-panel.h"
 #include "modules/gator/Gator.h"
 #include "modules/gator/GatorPanel.h"
 #include "modules/ranger/Ranger.h"
@@ -41,10 +41,10 @@ using dhe::curve_sequencer::CurveSequencerPanel;
 using dhe::func::Func1Panel;
 using dhe::func::Func6Panel;
 using dhe::func::FuncModule;
-using dhe::fuzzy_logic::FuzzyLogicH;
-using dhe::fuzzy_logic::FuzzyLogicHPanel;
-using dhe::fuzzy_logic::FuzzyLogicZ;
-using dhe::fuzzy_logic::FuzzyLogicZPanel;
+using dhe::fuzzy_logic::HModule;
+using dhe::fuzzy_logic::HPanel;
+using dhe::fuzzy_logic::ZModule;
+using dhe::fuzzy_logic::ZPanel;
 using dhe::gator::Gator;
 using dhe::gator::GatorPanel;
 using dhe::ranger::Ranger;
@@ -88,8 +88,8 @@ extern "C" void init(rack::plugin::Plugin *p) {
           "CurveSequencer16"));
   p->addModel(rack::createModel<FuncModule<1>, Func1Panel>("Func"));
   p->addModel(rack::createModel<FuncModule<6>, Func6Panel>("Func6"));
-  p->addModel(rack::createModel<FuzzyLogicH, FuzzyLogicHPanel>("FuzzyLogicH"));
-  p->addModel(rack::createModel<FuzzyLogicZ, FuzzyLogicZPanel>("FuzzyLogicZ"));
+  p->addModel(rack::createModel<HModule, HPanel>("FuzzyLogicH"));
+  p->addModel(rack::createModel<ZModule, ZPanel>("FuzzyLogicZ"));
   p->addModel(rack::createModel<Gator, GatorPanel>("Gator"));
   p->addModel(rack::createModel<HostageModule, HostagePanel>("Hostage"));
   p->addModel(rack::createModel<Ranger, RangerPanel>("Ranger"));
