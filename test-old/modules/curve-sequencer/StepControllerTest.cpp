@@ -9,6 +9,7 @@
 #include "modules/curve-sequencer/step-event.h"
 
 #include <doctest.h>
+#include <algorithm>
 #include <vector>
 
 namespace test {
