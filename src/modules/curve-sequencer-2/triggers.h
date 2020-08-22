@@ -12,10 +12,10 @@ enum class TriggerMode {
   GateIsLow
 };
 
-static auto constexpr triggerModeCount =
+static auto constexpr trigger_mode_count =
     static_cast<int>(TriggerMode::GateIsLow) + 1;
 
-static inline auto isTriggered(TriggerMode mode, dhe::Latch const &gate)
+static inline auto is_triggered(TriggerMode mode, dhe::Latch const &gate)
     -> bool {
   switch (mode) {
   case TriggerMode::GateIsHigh:
@@ -34,28 +34,28 @@ static inline auto isTriggered(TriggerMode mode, dhe::Latch const &gate)
 
 template <typename Controls> class Interrupter {
 public:
-  Interrupter(Controls &controls) : controls{controls} {}
+  Interrupter(Controls &controls) : controls_{controls} {}
 
-  auto isInterrupted(int step, Latch const &latch) -> bool {
-    return controls.interruptOnTrigger(step) &&
-           isTriggered(controls.triggerMode(step), latch);
+  auto is_interrupted(int step, Latch const &latch) -> bool {
+    return controls_.interrupt_on_trigger(step) &&
+           is_triggered(controls_.trigger_mode(step), latch);
   }
 
 private:
-  Controls &controls;
+  Controls &controls_;
 };
 
 template <typename Controls> class Sustainer {
 public:
-  Sustainer(Controls &controls) : controls{controls} {}
+  Sustainer(Controls &controls) : controls_{controls} {}
 
-  auto isDone(int step, Latch const &latch) -> bool {
-    return controls.advanceOnEndOfCurve(step) ||
-           isTriggered(controls.triggerMode(step), latch);
+  auto is_done(int step, Latch const &latch) -> bool {
+    return controls_.advance_on_end_of_curve(step) ||
+           is_triggered(controls_.trigger_mode(step), latch);
   }
 
 private:
-  Controls &controls;
+  Controls &controls_;
 };
 
 } // namespace curve_sequencer_2

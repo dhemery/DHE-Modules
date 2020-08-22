@@ -1,4 +1,4 @@
-#include "modules/curve-sequencer-2/Generator.h"
+#include "modules/curve-sequencer-2/generator.h"
 
 #include <doctest.h>
 #include <functional>

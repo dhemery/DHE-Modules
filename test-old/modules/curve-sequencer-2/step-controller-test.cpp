@@ -1,4 +1,4 @@
-#include "modules/curve-sequencer-2/StepController.h"
+#include "modules/curve-sequencer-2/step-controller.h"
 
 #include "components/latch.h"
 #include "modules/curve-sequencer/step-event.h"

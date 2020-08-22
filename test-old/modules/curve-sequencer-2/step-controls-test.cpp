@@ -3,7 +3,7 @@
 #include "controls/duration-inputs.h"
 #include "controls/level-inputs.h"
 #include "fake-rack/Controls.h"
-#include "modules/curve-sequencer-2/Controls.h"
+#include "modules/curve-sequencer-2/controls.h"
 #include "modules/curve-sequencer-2/source.h"
 
 #include <doctest.h>
@@ -32,54 +32,54 @@ TEST_CASE("curve_sequencer_2::StepControls") {
     auto modeSelectedBySwitch = TriggerMode::GateIsHigh;
     params[Controls::TriggerModeSwitches + step].setValue(
         static_cast<float>(modeSelectedBySwitch));
-    CHECK_EQ(controls.triggerMode(step), modeSelectedBySwitch);
+    CHECK_EQ(controls.trigger_mode(step), modeSelectedBySwitch);
 
     modeSelectedBySwitch = TriggerMode::GateIsLow;
     params[Controls::TriggerModeSwitches + step].setValue(
         static_cast<float>(modeSelectedBySwitch));
-    CHECK_EQ(controls.triggerMode(step), modeSelectedBySwitch);
+    CHECK_EQ(controls.trigger_mode(step), modeSelectedBySwitch);
 
     modeSelectedBySwitch = TriggerMode::GateRises;
     params[Controls::TriggerModeSwitches + step].setValue(
         static_cast<float>(modeSelectedBySwitch));
-    CHECK_EQ(controls.triggerMode(step), modeSelectedBySwitch);
+    CHECK_EQ(controls.trigger_mode(step), modeSelectedBySwitch);
 
     modeSelectedBySwitch = TriggerMode::GateFalls;
     params[Controls::TriggerModeSwitches + step].setValue(
         static_cast<float>(modeSelectedBySwitch));
-    CHECK_EQ(controls.triggerMode(step), modeSelectedBySwitch);
+    CHECK_EQ(controls.trigger_mode(step), modeSelectedBySwitch);
 
     modeSelectedBySwitch = TriggerMode::GateChanges;
     params[Controls::TriggerModeSwitches + step].setValue(
         static_cast<float>(modeSelectedBySwitch));
-    CHECK_EQ(controls.triggerMode(step), modeSelectedBySwitch);
+    CHECK_EQ(controls.trigger_mode(step), modeSelectedBySwitch);
   }
 
   SUBCASE("interruptOnTrigger(step)") {
     auto constexpr step = 6;
     params[Controls::OnInterruptSwitches + step].setValue(0.F); // NOINT
-    CHECK_FALSE(controls.interruptOnTrigger(step));
+    CHECK_FALSE(controls.interrupt_on_trigger(step));
 
     params[Controls::OnInterruptSwitches + step].setValue(1.F); // NEXT
-    CHECK(controls.interruptOnTrigger(step));
+    CHECK(controls.interrupt_on_trigger(step));
   }
 
   SUBCASE("advanceOnEndOfCurve(step)") {
     auto constexpr step = 6;
     params[Controls::OnEndOfCurveSwitches + step].setValue(0.F); // NOINT
-    CHECK_FALSE(controls.advanceOnEndOfCurve(step));
+    CHECK_FALSE(controls.advance_on_end_of_curve(step));
 
     params[Controls::OnEndOfCurveSwitches + step].setValue(1.F); // NEXT
-    CHECK(controls.advanceOnEndOfCurve(step));
+    CHECK(controls.advance_on_end_of_curve(step));
   }
 
   SUBCASE("trackStartSource(step)") {
     auto constexpr step = 6;
     params[Controls::TrackStartSwitches + step].setValue(0.F); // SNAP
-    CHECK_FALSE(controls.trackStartSource(step));
+    CHECK_FALSE(controls.track_start_source(step));
 
     params[Controls::TrackStartSwitches + step].setValue(1.F); // TRACK
-    CHECK(controls.trackStartSource(step));
+    CHECK(controls.track_start_source(step));
   }
 
   SUBCASE("startSource(step) is the source selected by the step start source "
@@ -89,17 +89,17 @@ TEST_CASE("curve_sequencer_2::StepControls") {
     auto sourceSelectedBySwitch = Source::Level;
     params[Controls::StartSourceSwitches + step].setValue(
         static_cast<float>(sourceSelectedBySwitch));
-    CHECK_EQ(controls.startSource(step), sourceSelectedBySwitch);
+    CHECK_EQ(controls.start_source(step), sourceSelectedBySwitch);
 
     sourceSelectedBySwitch = Source::In;
     params[Controls::StartSourceSwitches + step].setValue(
         static_cast<float>(sourceSelectedBySwitch));
-    CHECK_EQ(controls.startSource(step), sourceSelectedBySwitch);
+    CHECK_EQ(controls.start_source(step), sourceSelectedBySwitch);
 
     sourceSelectedBySwitch = Source::Out;
     params[Controls::StartSourceSwitches + step].setValue(
         static_cast<float>(sourceSelectedBySwitch));
-    CHECK_EQ(controls.startSource(step), sourceSelectedBySwitch);
+    CHECK_EQ(controls.start_source(step), sourceSelectedBySwitch);
   }
 
   SUBCASE("startLevel(step) reports level for sequence level switch and step "
@@ -112,7 +112,7 @@ TEST_CASE("curve_sequencer_2::StepControls") {
     params[Controls::LevelRangeSwitch].setValue(
         static_cast<float>(levelRangeSelection));
 
-    CHECK_EQ(controls.startLevel(step),
+    CHECK_EQ(controls.start_level(step),
              dhe::level(startLevelKnobRotation,
                         *dhe::signal_ranges[levelRangeSelection]));
   }
@@ -124,17 +124,17 @@ TEST_CASE("curve_sequencer_2::StepControls") {
     auto sourceSelectedBySwitch = Source::Level;
     params[Controls::EndSourceSwitches + step].setValue(
         static_cast<float>(sourceSelectedBySwitch));
-    CHECK_EQ(controls.endSource(step), sourceSelectedBySwitch);
+    CHECK_EQ(controls.end_source(step), sourceSelectedBySwitch);
 
     sourceSelectedBySwitch = Source::In;
     params[Controls::EndSourceSwitches + step].setValue(
         static_cast<float>(sourceSelectedBySwitch));
-    CHECK_EQ(controls.endSource(step), sourceSelectedBySwitch);
+    CHECK_EQ(controls.end_source(step), sourceSelectedBySwitch);
 
     sourceSelectedBySwitch = Source::Out;
     params[Controls::EndSourceSwitches + step].setValue(
         static_cast<float>(sourceSelectedBySwitch));
-    CHECK_EQ(controls.endSource(step), sourceSelectedBySwitch);
+    CHECK_EQ(controls.end_source(step), sourceSelectedBySwitch);
   }
 
   SUBCASE("endLevel(step) reports level for sequence level switch and step end "
@@ -147,7 +147,7 @@ TEST_CASE("curve_sequencer_2::StepControls") {
     params[Controls::LevelRangeSwitch].setValue(
         static_cast<float>(levelRangeSelection));
 
-    CHECK_EQ(controls.endLevel(step),
+    CHECK_EQ(controls.end_level(step),
              dhe::level(endLevelKnobRotation,
                         *dhe::signal_ranges[levelRangeSelection]));
   }
@@ -155,10 +155,10 @@ TEST_CASE("curve_sequencer_2::StepControls") {
   SUBCASE("trackEndSource(step)") {
     auto constexpr step = 1;
     params[Controls::TrackEndSwitches + step].setValue(0.F); // SNAP
-    CHECK_FALSE(controls.trackEndSource(step));
+    CHECK_FALSE(controls.track_end_source(step));
 
     params[Controls::TrackEndSwitches + step].setValue(1.F); // TRACK
-    CHECK(controls.trackEndSource(step));
+    CHECK(controls.track_end_source(step));
   }
 
   SUBCASE("taper(step) is the taper selected by step shape switch") {
@@ -203,7 +203,7 @@ TEST_CASE("curve_sequencer_2::StepControls") {
     auto constexpr completedProgressLightIndex = step + step;
     auto constexpr remainingProgressLightIndex = step + step + 1;
 
-    controls.showInactive(step);
+    controls.show_inactive(step);
 
     CHECK_EQ(lights[Controls::ProgressLights + completedProgressLightIndex]
                  .getBrightness(),
@@ -218,14 +218,14 @@ TEST_CASE("curve_sequencer_2::StepControls") {
       auto constexpr step = 3;
       params[Controls::EnabledButtons + step].setValue(1.F);
 
-      CHECK(controls.isEnabled(step));
+      CHECK(controls.is_enabled(step));
     }
 
     SUBCASE("true if enabled input is high") {
       auto constexpr step = 6;
       inputs[Controls::EnabledInputs + step].setVoltage(10.F);
 
-      CHECK(controls.isEnabled(step));
+      CHECK(controls.is_enabled(step));
     }
 
     SUBCASE("false if enabled button is not pressed and enabled input is low") {
@@ -234,7 +234,7 @@ TEST_CASE("curve_sequencer_2::StepControls") {
       params[Controls::EnabledButtons + step].setValue(0.F);
       inputs[Controls::EnabledInputs + step].setVoltage(0.F);
 
-      CHECK_FALSE(controls.isEnabled(step));
+      CHECK_FALSE(controls.is_enabled(step));
     }
   }
 }
