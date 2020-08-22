@@ -1,6 +1,6 @@
 #pragma once
 
-#include "SwaveControls.h"
+#include "swave-controls.h"
 #include "widgets/control-widgets.h"
 #include "widgets/screws.h"
 
@@ -10,7 +10,7 @@ namespace dhe {
 namespace swave {
 
 class SwavePanel : public rack::app::ModuleWidget {
-  using Controls = SwaveControls;
+  using Controls = swave;
 
 public:
   explicit SwavePanel(rack::engine::Module *module) {

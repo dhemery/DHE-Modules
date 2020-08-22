@@ -1,8 +1,8 @@
 #pragma once
 
-#include "SwaveControls.h"
 #include "config/curvature-config.h"
 #include "controls/curvature-inputs.h"
+#include "swave-controls.h"
 
 #include <engine/Module.hpp>
 
@@ -10,7 +10,7 @@ namespace dhe {
 namespace swave {
 
 class Swave : public rack::engine::Module {
-  using Controls = SwaveControls;
+  using Controls = swave;
 
 public:
   Swave() {
@@ -22,18 +22,18 @@ public:
   }
 
   void process(ProcessArgs const & /*args*/) override {
-    auto const normalized = bipolar_signal_range.normalize(signalIn());
+    auto const normalized = bipolar_signal_range.normalize(signal_in());
     auto const tapered = taper(normalized);
-    auto const outputVoltage = bipolar_signal_range.scale(tapered);
-    sendSignal(outputVoltage);
+    auto const output_voltage = bipolar_signal_range.scale(tapered);
+    send_signal(output_voltage);
   }
 
 private:
-  void sendSignal(float voltage) {
+  void send_signal(float voltage) {
     outputs[Controls::SwaveOutput].setVoltage(voltage);
   }
 
-  auto signalIn() const -> float {
+  auto signal_in() const -> float {
     return voltage_at(inputs[Controls::SwaveInput]);
   }
 

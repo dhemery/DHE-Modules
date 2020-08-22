@@ -2,7 +2,7 @@
 
 namespace dhe {
 namespace swave {
-class SwaveControls {
+class swave {
 public:
   enum ParameterIds { CurveKnob, ShapeSwitch, CurveAvKnob, ParameterCount };
   enum InputIds { CurveCvInput, SwaveInput, InputCount };
