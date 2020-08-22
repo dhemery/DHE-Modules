@@ -1,14 +1,14 @@
 #pragma once
 
-#include "RatioKnobParamQuantity.h"
-#include "SpeedKnobParamQuantity.h"
-#include "XycloidControls.h"
 #include "components/phase-rotor.h"
 #include "components/range.h"
 #include "components/taper.h"
 #include "config/common-config.h"
 #include "config/level-config.h"
 #include "controls/common-inputs.h"
+#include "ratio-knob-param-quantity.h"
+#include "speed-knob-param-query.h"
+#include "xycloid-controls.h"
 
 #include <config/common-config.h>
 #include <engine/Module.hpp>
@@ -22,14 +22,14 @@ class Xycloid : public rack::engine::Module {
 
 public:
   Xycloid() {
-    static auto constexpr phaseOffsetRange = Range{-180.F, 180.F};
+    static auto constexpr phase_offset_range = Range{-180.F, 180.F};
     config(Controls::ParameterCount, Controls::InputCount,
            Controls::OutputCount);
 
-    configSpeedKnob(this, Controls::SpeedKnob);
+    config_speed_knob(this, Controls::SpeedKnob);
     config_attenuverter(this, Controls::SpeedAvKnob, "Speed CV gain");
 
-    configRatioKnob(this, Controls::RatioKnob);
+    config_ratio_knob(this, Controls::RatioKnob);
     config_attenuverter(this, Controls::RatioAvKnob, "Ratio CV gain");
     config_toggle<3>(this, Controls::DirectionSwitch, "Direction",
                      {"In", "-In +Out", "Out"}, 2);
@@ -40,7 +40,7 @@ public:
     config_attenuverter(this, Controls::DepthAvKnob, "Depth CV gain");
 
     config_knob(this, Controls::PhaseOffsetKnob, "Phase", "°",
-                phaseOffsetRange);
+                phase_offset_range);
     config_attenuverter(this, Controls::PhaseOffsetAvKnob, "Phase CV gain");
 
     config_gain(this, Controls::XGainKnob, "X gain");
@@ -51,49 +51,49 @@ public:
   }
 
   void process(ProcessArgs const &args) override {
-    auto const wobbleRatio = ratio();
-    auto const wobblePhaseOffset = wobbleRatio < 0.F ? -phase() : phase();
+    auto const wobble_ratio = ratio();
+    auto const wobble_phase_offset = wobble_ratio < 0.F ? -phase() : phase();
 
-    auto const throbSpeed = -speed() * args.sampleTime;
-    auto const wobbleSpeed = -wobbleRatio * throbSpeed;
-    auto const wobbleDepth = depth();
-    auto const throbDepth = 1.F - wobbleDepth;
+    auto const throb_speed = -speed() * args.sampleTime;
+    auto const wobble_speed = -wobble_ratio * throb_speed;
+    auto const wobble_depth = depth();
+    auto const throb_depth = 1.F - wobble_depth;
 
-    throbber.advance(throbSpeed);
-    wobbler.advance(wobbleSpeed);
-    auto const x = throbDepth * throbber.cos() +
-                   wobbleDepth * wobbler.cos(-wobblePhaseOffset);
-    auto const y = throbDepth * throbber.sin() +
-                   wobbleDepth * wobbler.sin(-wobblePhaseOffset);
+    throbber_.advance(throb_speed);
+    wobbler_.advance(wobble_speed);
+    auto const x = throb_depth * throbber_.cos() +
+                   wobble_depth * wobbler_.cos(-wobble_phase_offset);
+    auto const y = throb_depth * throbber_.sin() +
+                   wobble_depth * wobbler_.sin(-wobble_phase_offset);
 
-    outputs[Controls::XOutput].setVoltage(5.F * xGain() * (x + xOffset()));
-    outputs[Controls::YOutput].setVoltage(5.F * yGain() * (y + yOffset()));
+    outputs[Controls::XOutput].setVoltage(5.F * x_gain() * (x + x_offset()));
+    outputs[Controls::YOutput].setVoltage(5.F * y_gain() * (y + y_offset()));
   }
 
 private:
-  auto xGain() const -> float {
+  auto x_gain() const -> float {
     return gain_range.scale(
         rotation(params[Controls::XGainKnob], inputs[Controls::XGainCvInput]));
   }
 
-  auto xOffset() const -> float {
+  auto x_offset() const -> float {
     return is_pressed(params[Controls::XRangeSwitch]) ? 1.F : 0.F;
   }
 
-  auto yGain() const -> float {
+  auto y_gain() const -> float {
     return gain_range.scale(
         rotation(params[Controls::YGainKnob], inputs[Controls::YGainCvInput]));
   }
 
-  auto yOffset() const -> float {
+  auto y_offset() const -> float {
     return is_pressed(params[Controls::YRangeSwitch]) ? 1.F : 0.F;
   }
 
   auto depth() const -> float {
-    static auto constexpr wobbleDepthRange = Range{0.F, 1.F};
-    return wobbleDepthRange.clamp(rotation(params[Controls::DepthKnob],
-                                           inputs[Controls::DepthCvInput],
-                                           params[Controls::DepthAvKnob]));
+    static auto constexpr wobble_depth_range = Range{0.F, 1.F};
+    return wobble_depth_range.clamp(rotation(params[Controls::DepthKnob],
+                                             inputs[Controls::DepthCvInput],
+                                             params[Controls::DepthAvKnob]));
   }
 
   auto phase() const -> float {
@@ -112,10 +112,10 @@ private:
   auto speed() const -> float {
     return tapered_and_scaled_rotation(
         params[Controls::SpeedKnob], inputs[Controls::SpeedCvInput],
-        params[Controls::SpeedAvKnob], speedKnobTaper, speedRange);
+        params[Controls::SpeedAvKnob], speed_knob_taper, speed_range);
   }
-  PhaseRotor wobbler{};
-  PhaseRotor throbber{};
+  PhaseRotor wobbler_{};
+  PhaseRotor throbber_{};
 };
 } // namespace xycloid
 } // namespace dhe

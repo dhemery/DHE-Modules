@@ -27,8 +27,8 @@
 #include "modules/swave/swave.h"
 #include "modules/tapers/tapers-panel.h"
 #include "modules/tapers/tapers.h"
-#include "modules/xycloid/Xycloid.h"
-#include "modules/xycloid/XycloidPanel.h"
+#include "modules/xycloid/xycloid-panel.h"
+#include "modules/xycloid/xycloid.h"
 
 #include <plugin/Plugin.hpp>
 
