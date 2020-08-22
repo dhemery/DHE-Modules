@@ -8,27 +8,55 @@ namespace taper {
 class VariableTaper {
 public:
   virtual auto apply(float proportion, float curvature) const -> float = 0;
-  virtual auto invert(float tapered_value, float curvature) const -> float {
-    return apply(tapered_value, -curvature);
+  auto invert(float tapered, float curvature) const -> float {
+    return apply(tapered, -curvature);
   };
 };
 
 class VariableJTaper : public VariableTaper {
+  static auto constexpr input_range = Range{0.F, 1.F};
+  static auto constexpr quadrant_factor = 1;
+
+  static constexpr auto curved(float curvature, float input) -> float {
+    return sigmoid::curve(input, curvature * quadrant_factor);
+  }
+
+  static constexpr auto safe(float input) -> float {
+    return input_range.clamp(input);
+  }
+  static constexpr auto scaled(float proportion) -> float {
+    return input_range.scale(proportion);
+  }
+  static constexpr auto normalized(float scaled) -> float {
+    return input_range.normalize(scaled);
+  }
+
 public:
   auto apply(float proportion, float curvature) const -> float override {
-    static auto constexpr safe_proportion_range = Range{0.F, 1.F};
-    auto const safe_proportion = safe_proportion_range.clamp(proportion);
-    return sigmoid::curve(safe_proportion, curvature);
+    return normalized(curved(curvature, safe(scaled(proportion))));
   }
 };
 
 class VariableSTaper : public VariableTaper {
+  static auto constexpr input_range = sigmoid::range;
+  static auto constexpr quadrant_factor = -1;
+
+  static constexpr auto normalized(float scaled) -> float {
+    return input_range.normalize(scaled);
+  }
+  static constexpr auto curved(float curvature, const float input) -> float {
+    return sigmoid::curve(input, curvature * quadrant_factor);
+  }
+  static constexpr auto safe(const float input) -> float {
+    return input_range.clamp(input);
+  }
+  static constexpr auto scaled(float proportion) -> float {
+    return input_range.scale(proportion);
+  }
+
 public:
   auto apply(float proportion, float curvature) const -> float override {
-    auto const input = sigmoid::range.scale(proportion);
-    auto const safe_input = sigmoid::range.clamp(input);
-    auto const output = sigmoid::curve(safe_input, -curvature);
-    return sigmoid::range.normalize(output);
+    return normalized(curved(curvature, safe(scaled(proportion))));
   }
 };
 
@@ -46,8 +74,8 @@ public:
     return taper_.apply(proportion, curvature_);
   }
 
-  auto invert(float s_tapered_value) const -> float override {
-    return taper_.invert(s_tapered_value, curvature_);
+  auto invert(float tapered) const -> float override {
+    return taper_.invert(tapered, curvature_);
   }
 
 private:
@@ -63,8 +91,8 @@ public:
     return taper_.apply(proportion, curvature_);
   }
 
-  auto invert(float s_tapered_value) const -> float override {
-    return taper_.invert(s_tapered_value, curvature_);
+  auto invert(float tapered) const -> float override {
+    return taper_.invert(tapered, curvature_);
   }
 
 private:
