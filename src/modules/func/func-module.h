@@ -11,7 +11,7 @@ namespace dhe {
 namespace func {
 
 template <int N> class FuncModule : public rack::engine::Module {
-  using Controls = func<N>;
+  using Controls = FuncControls<N>;
 
 public:
   FuncModule() {
@@ -54,7 +54,7 @@ public:
 
 private:
   Controls controls_{inputs, params, outputs};
-  FuncEngine<func, N> func_engine_{controls_};
+  FuncEngine<FuncControls, N> func_engine_{controls_};
 };
 } // namespace func
 } // namespace dhe

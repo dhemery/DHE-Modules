@@ -10,7 +10,7 @@ namespace dhe {
 namespace tapers {
 
 class TapersPanel : public rack::app::ModuleWidget {
-  using Controls = tapers;
+  using Controls = TapersControls;
 
 public:
   explicit TapersPanel(rack::engine::Module *module) {

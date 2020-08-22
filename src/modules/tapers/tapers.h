@@ -15,7 +15,7 @@ namespace dhe {
 namespace tapers {
 
 class Tapers : public rack::engine::Module {
-  using Controls = tapers;
+  using Controls = TapersControls;
 
 public:
   Tapers() {

@@ -11,7 +11,7 @@ namespace func {
 
 class Func1Panel : public rack::app::ModuleWidget {
   static auto constexpr channel_count = 1;
-  using Controls = func<channel_count>;
+  using Controls = FuncControls<channel_count>;
 
 public:
   explicit Func1Panel(rack::engine::Module *module) {

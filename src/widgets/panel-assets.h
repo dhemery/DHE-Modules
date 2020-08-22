@@ -5,7 +5,7 @@
 #include <string>
 #include <window.hpp>
 
-extern rack::plugin::Plugin *pluginInstance;
+extern rack::plugin::Plugin *pluginInstance; // NOLINT
 
 namespace dhe {
 static inline auto load_svg(std::string const &asset_path)

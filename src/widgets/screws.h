@@ -18,7 +18,7 @@ static inline void install_screws(rack::app::ModuleWidget *panel, int hp) {
   auto const panel_width = hp2mm((float)hp);
 
   auto constexpr top = screw_radius;
-  auto constexpr bottom = moduleHeight - screw_radius;
+  auto constexpr bottom = module_height - screw_radius;
 
   auto const left = hp < 3 ? screw_radius : screw_radius + screw_diameter;
   auto const right = panel_width - left;

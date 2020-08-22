@@ -10,7 +10,7 @@ namespace dhe {
 namespace swave {
 
 class Swave : public rack::engine::Module {
-  using Controls = swave;
+  using Controls = SwaveControls;
 
 public:
   Swave() {

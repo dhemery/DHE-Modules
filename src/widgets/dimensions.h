@@ -24,18 +24,18 @@ static inline auto mm2px(rack::math::Vec const &mm) -> rack::math::Vec {
   return mm2px(mm.x, mm.y);
 }
 
-static inline void positionCentered(rack::widget::Widget *widget, float xmm,
-                                    float ymm) {
+static inline void position_centered(rack::widget::Widget *widget, float xmm,
+                                     float ymm) {
   auto const &center = mm2px(xmm, ymm);
   auto const &offset = widget->box.size.div(2);
   widget->setPosition(center.minus(offset));
 }
 
-auto constexpr moduleHeight = 128.5F; // mm
-auto constexpr portRadius = 4.2F;
-auto constexpr buttonRadius = 3.F;
-auto constexpr lightRadius = 1.088F;
-auto constexpr lightDiameter = lightRadius * 2.F;
-auto constexpr buttonPortDistance = 7.891F;
+auto constexpr module_height = 128.5F; // mm
+auto constexpr port_radius = 4.2F;
+auto constexpr button_radius = 3.F;
+auto constexpr light_radius = 1.088F;
+auto constexpr light_diameter = light_radius * 2.F;
+auto constexpr button_port_distance = 7.891F;
 
 } // namespace dhe

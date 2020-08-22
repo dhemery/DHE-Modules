@@ -43,11 +43,11 @@ class StartMarker : public rack::widget::SvgWidget {
 public:
   StartMarker(std::string const &module_svg_dir, float x, float y) {
     setSvg(control_svg(module_svg_dir, "marker-start"));
-    positionCentered(this, x, y);
+    position_centered(this, x, y);
   }
 
   void set_selection_start(int step) {
-    auto constexpr base_x = step_x - 2.F * lightDiameter;
+    auto constexpr base_x = step_x - 2.F * light_diameter;
     auto const x = base_x + step_dx * static_cast<float>(step);
     this->box.pos.x = mm2px(x);
   }
@@ -57,7 +57,7 @@ template <int N> class EndMarker : public rack::widget::SvgWidget {
 public:
   EndMarker(std::string const &module_svg_dir, float x, float y) {
     setSvg(control_svg(module_svg_dir, "marker-end"));
-    positionCentered(this, x, y);
+    position_centered(this, x, y);
   }
 
   void set_selection_start(int step) {
@@ -105,7 +105,7 @@ public:
     auto constexpr bottom = hp2mm(23);
 
     auto constexpr input_top = top + hp2mm(2.75);
-    auto constexpr input_bottom = bottom - portRadius - 1.F;
+    auto constexpr input_bottom = bottom - port_radius - 1.F;
     auto constexpr input_dy = (input_bottom - input_top) / 4.F;
 
     auto constexpr run_y = input_top + 0.F * input_dy;
@@ -114,14 +114,14 @@ public:
     auto constexpr gate_y = input_top + 3.F * input_dy;
     auto constexpr reset_y = input_top + 4.F * input_dy;
 
-    auto constexpr active_y = top + lightRadius;
+    auto constexpr active_y = top + light_radius;
 
     addInput(Jack::input(slug, module, left, run_y, Controls::RunInput));
-    addParam(Toggle::button(slug, module, left + buttonPortDistance, run_y,
+    addParam(Toggle::button(slug, module, left + button_port_distance, run_y,
                             Controls::RunButton));
 
     addInput(Jack::input(slug, module, left, loop_y, Controls::LoopInput));
-    addParam(Toggle::button(slug, module, left + buttonPortDistance, loop_y,
+    addParam(Toggle::button(slug, module, left + button_port_distance, loop_y,
                             Controls::LoopButton));
 
     auto *start_marker = new StartMarker(slug, 0.F, active_y);
@@ -147,12 +147,12 @@ public:
                                Controls::SelectionLengthKnob));
 
     addInput(Jack::input(slug, module, left, gate_y, Controls::GateInput));
-    addParam(Button::momentary(slug, module, left + buttonPortDistance, gate_y,
-                               Controls::GateButton));
+    addParam(Button::momentary(slug, module, left + button_port_distance,
+                               gate_y, Controls::GateButton));
 
     addInput(Jack::input(slug, module, left, reset_y, Controls::ResetInput));
-    addParam(Button::momentary(slug, module, left + buttonPortDistance, reset_y,
-                               Controls::ResetButton));
+    addParam(Button::momentary(slug, module, left + button_port_distance,
+                               reset_y, Controls::ResetButton));
 
     auto constexpr generate_mode_y = top + hp2mm(2.25F);
     auto constexpr advance_mode_y = top + hp2mm(4.5F);
@@ -160,9 +160,9 @@ public:
     auto constexpr shape_y = top + hp2mm(9.25F);
     auto constexpr curve_y = top + hp2mm(11.75F);
     auto constexpr duration_y = top + hp2mm(14.25F);
-    auto constexpr enabled_port_y = bottom - portRadius;
+    auto constexpr enabled_port_y = bottom - port_radius;
     auto constexpr enabled_button_y =
-        enabled_port_y - portRadius - buttonRadius - 1.F;
+        enabled_port_y - port_radius - button_radius - 1.F;
 
     auto const generate_mode_labels = std::vector<std::string>{
         "curve", "hold", "sustain", "input", "chase", "level"};
@@ -207,7 +207,7 @@ public:
                            Controls::EnabledInputs + step));
     }
 
-    auto constexpr out_y = bottom - portRadius - 1.F;
+    auto constexpr out_y = bottom - port_radius - 1.F;
     auto constexpr eos_y = top + hp2mm(2.75);
 
     addInput(

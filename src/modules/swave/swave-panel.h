@@ -10,7 +10,7 @@ namespace dhe {
 namespace swave {
 
 class SwavePanel : public rack::app::ModuleWidget {
-  using Controls = swave;
+  using Controls = SwaveControls;
 
 public:
   explicit SwavePanel(rack::engine::Module *module) {

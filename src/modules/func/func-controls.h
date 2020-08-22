@@ -19,11 +19,11 @@ static auto constexpr multiplier_ranges =
     std::array<Range const *, 4>{&attenuator_range, &attenuverter_range,
                                  &gain_range, &minus_two_to_plus_two_range};
 
-template <int N> class func {
+template <int N> class FuncControls {
 public:
-  func(std::vector<rack::engine::Input> const &inputs,
-       std::vector<rack::engine::Param> const &params,
-       std::vector<rack::engine::Output> &outputs)
+  FuncControls(std::vector<rack::engine::Input> const &inputs,
+               std::vector<rack::engine::Param> const &params,
+               std::vector<rack::engine::Output> &outputs)
       : inputs_{inputs}, params_{params}, outputs_{outputs} {}
 
   auto input(int channel, float voltage_if_disconnected) const -> float {

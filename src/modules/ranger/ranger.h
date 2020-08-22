@@ -12,7 +12,7 @@ namespace dhe {
 namespace ranger {
 
 class Ranger : public rack::engine::Module {
-  using Controls = ranger;
+  using Controls = RangerControls;
 
 public:
   Ranger() {

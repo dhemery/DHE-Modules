@@ -43,7 +43,7 @@ protected:
                            toggle_name_prefix + std::to_string(position)));
     }
     shadow->opacity = 0.F;
-    positionCentered(this, xmm, ymm);
+    position_centered(this, xmm, ymm);
     momentary = false;
     if (module != nullptr) {
       paramQuantity = module->paramQuantities[index];
@@ -105,7 +105,7 @@ protected:
        rack::engine::Module *module, float xmm, float ymm, int index) {
     setSvg(control_svg(module_svg_dir, knob_name));
     shadow->opacity = 0.F;
-    positionCentered(this, xmm, ymm);
+    position_centered(this, xmm, ymm);
     if (module != nullptr) {
       paramQuantity = module->paramQuantities[index];
     }
@@ -141,7 +141,7 @@ private:
        rack::engine::Module *module, float xmm, float ymm, int index) {
     setSvg(control_svg(module_svg_dir, "port"));
     shadow->opacity = 0.F;
-    positionCentered(this, xmm, ymm);
+    position_centered(this, xmm, ymm);
     this->module = module;
     this->type = type;
     portId = index;

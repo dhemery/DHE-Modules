@@ -64,7 +64,7 @@ using dhe::tapers::TapersPanel;
 using dhe::xycloid::Xycloid;
 using dhe::xycloid::XycloidPanel;
 
-rack::plugin::Plugin *pluginInstance;
+rack::plugin::Plugin *pluginInstance; // NOLINT
 
 /**
  * Register a model of each module. This funciton is called by Rack when the
@@ -87,7 +87,7 @@ extern "C" void init(rack::plugin::Plugin *p) {
       rack::createModel<CurveSequencerModule<16>, CurveSequencerPanel<16>>(
           "CurveSequencer16"));
   p->addModel(rack::createModel<FuncModule<1>, Func1Panel>("Func"));
-  p->addModel(rack::createModel<FuncModule<6>, Func6Panel>("Func6"));
+  p->addModel(rack::createModel<FuncModule<6>, Func6Panel>("Func6")); // NOLINT
   p->addModel(rack::createModel<HModule, HPanel>("FuzzyLogicH"));
   p->addModel(rack::createModel<ZModule, ZPanel>("FuzzyLogicZ"));
   p->addModel(rack::createModel<Gator, GatorPanel>("Gator"));

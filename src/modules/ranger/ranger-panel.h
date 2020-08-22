@@ -10,7 +10,7 @@ namespace dhe {
 namespace ranger {
 
 class RangerPanel : public rack::app::ModuleWidget {
-  using Controls = ranger;
+  using Controls = RangerControls;
 
 public:
   explicit RangerPanel(rack::engine::Module *module) {
