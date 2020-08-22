@@ -1,4 +1,5 @@
 #pragma once
+#include "components/cxmath.h"
 #include <cmath>
 
 namespace dhe {
@@ -8,9 +9,6 @@ public:
     phase_ += delta;
     phase_ -= std::trunc(phase_);
   }
-
-  static constexpr auto pi{3.14159265359F};
-  static constexpr auto two_pi{2.F * pi};
 
   constexpr auto angle(float offset = 0.F) const -> float {
     return two_pi * (phase_ + offset);

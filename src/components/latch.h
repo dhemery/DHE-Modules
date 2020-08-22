@@ -9,6 +9,7 @@ class Latch {
 public:
   constexpr Latch() = default;
   constexpr Latch(bool state, bool edge) : state_{state}, edge_{edge} {}
+
   void clock(bool signal) {
     edge_ = signal != state_;
     state_ = signal;

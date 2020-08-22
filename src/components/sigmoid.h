@@ -1,8 +1,8 @@
 #pragma once
+#include "cxmath.h"
 #include "range.h"
 
 #include <array>
-#include <cmath>
 
 namespace dhe {
 namespace sigmoid {
@@ -18,9 +18,9 @@ namespace sigmoid {
  * @param curvature the intensity and direction of the curvature
  * @return the sigmoid function result
  */
-static inline auto curve(float input, float curvature) -> float {
+static constexpr auto curve(float input, float curvature) -> float {
   return (input - input * curvature) /
-         (curvature - std::abs(input) * 2.0F * curvature + 1.0F);
+         (curvature - cx::abs(input) * 2.0F * curvature + 1.0F);
 }
 
 /**

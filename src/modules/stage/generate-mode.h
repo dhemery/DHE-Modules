@@ -1,5 +1,6 @@
 #pragma once
 
+#include "components/cxmath.h"
 #include "components/latch.h"
 #include "components/range.h"
 #include "event.h"
@@ -22,7 +23,7 @@ public:
     timer_.advance(sample_time / controls_.duration());
     auto const tapered_phase = taper->apply(timer_.phase(), curvature);
 
-    controls_.output(scale(tapered_phase, start_voltage_, level));
+    controls_.output(cx::scale(tapered_phase, start_voltage_, level));
 
     return timer_.in_progress() ? Event::Generated : Event::Completed;
   }

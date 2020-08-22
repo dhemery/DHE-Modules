@@ -1,11 +1,11 @@
 #pragma once
 
+#include "components/cxmath.h"
 #include "config/common-config.h"
 #include "config/level-config.h"
 #include "controls/common-inputs.h"
 #include "controls/level-inputs.h"
 #include "ranger-controls.h"
-
 #include <engine/Module.hpp>
 
 namespace dhe {
@@ -36,7 +36,7 @@ public:
   }
 
   void process(ProcessArgs const & /*args*/) override {
-    auto const output_voltage = scale(level(), ccw_limit(), cw_limit());
+    auto const output_voltage = cx::scale(level(), ccw_limit(), cw_limit());
     outputs[Controls::RangerOutput].setVoltage(output_voltage);
   }
 

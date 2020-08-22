@@ -1,6 +1,7 @@
 #pragma once
 
 #include "advance-mode.h"
+#include "components/cxmath.h"
 #include "components/latch.h"
 #include "components/phase-timer.h"
 #include "components/range.h"
@@ -52,14 +53,15 @@ public:
       controls_.show_progress(step_, timer_.phase());
       switch (step_mode) {
       case GenerateMode::Curve:
-        controls_.output(scale(taper(timer_.phase()), start_voltage_, level()));
+        controls_.output(
+            cx::scale(taper(timer_.phase()), start_voltage_, level()));
         break;
       case GenerateMode::Input:
         controls_.output(controls_.input());
         break;
       case GenerateMode::Chase:
-        controls_.output(
-            scale(taper(timer_.phase()), start_voltage_, controls_.input()));
+        controls_.output(cx::scale(taper(timer_.phase()), start_voltage_,
+                                   controls_.input()));
         break;
       case GenerateMode::Level:
         controls_.output(level());
