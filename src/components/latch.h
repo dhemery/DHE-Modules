@@ -14,17 +14,19 @@ public:
     state_ = signal;
   }
 
-  auto is_high() const -> bool { return state_; };
-  auto is_edge() const -> bool { return edge_; };
+  constexpr auto is_high() const -> bool { return state_; };
+  constexpr auto is_edge() const -> bool { return edge_; };
 
-  auto is_low() const -> bool { return !is_high(); };
-  auto is_fall() const -> bool { return is_edge() && is_low(); };
-  auto is_rise() const -> bool { return is_edge() && is_high(); };
+  constexpr auto is_low() const -> bool { return !is_high(); };
+  constexpr auto is_fall() const -> bool { return is_edge() && is_low(); };
+  constexpr auto is_rise() const -> bool { return is_edge() && is_high(); };
 
-  auto operator==(Latch const &rhs) const -> bool {
+  constexpr auto operator==(Latch const &rhs) const -> bool {
     return state_ == rhs.state_ && edge_ == rhs.edge_;
   }
-  auto operator!=(Latch const &rhs) const -> bool { return !(rhs == *this); }
+  constexpr auto operator!=(Latch const &rhs) const -> bool {
+    return !(rhs == *this);
+  }
 
   friend auto operator<<(std::ostream &os, Latch const &latch)
       -> std::ostream & {

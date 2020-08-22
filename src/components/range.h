@@ -2,8 +2,8 @@
 
 namespace dhe {
 
-static inline auto scale(float proportion, float lower_bound, float upper_bound)
-    -> float {
+static constexpr auto scale(float proportion, float lower_bound,
+                            float upper_bound) -> float {
   return proportion * (upper_bound - lower_bound) + lower_bound;
 }
 
@@ -23,17 +23,19 @@ public:
   constexpr Range(float lower_bound, float upper_bound) noexcept
       : lower_{lower_bound}, upper_{upper_bound} {}
 
-  auto lower_bound() const -> float { return lower_; }
+  constexpr auto lower_bound() const -> float { return lower_; }
 
-  auto upper_bound() const -> float { return upper_; }
+  constexpr auto upper_bound() const -> float { return upper_; }
 
-  auto size() const -> float { return upper_ - lower_; }
+  constexpr auto size() const -> float { return upper_ - lower_; }
 
-  auto scale(float proportion) const -> float {
+  constexpr auto scale(float proportion) const -> float {
     return dhe::scale(proportion, lower_, upper_);
   }
 
-  auto scale(bool state) const -> float { return state ? upper_ : lower_; }
+  constexpr auto scale(bool state) const -> float {
+    return state ? upper_ : lower_;
+  }
 
   constexpr auto normalize(float scaled) const -> float {
     return (scaled - lower_) / size();

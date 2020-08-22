@@ -12,7 +12,7 @@ public:
   static constexpr auto pi{3.14159265359F};
   static constexpr auto two_pi{2.F * pi};
 
-  auto angle(float offset = 0.F) const -> float {
+  constexpr auto angle(float offset = 0.F) const -> float {
     return two_pi * (phase_ + offset);
   }
 

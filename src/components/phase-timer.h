@@ -9,9 +9,9 @@ public:
 
   void advance(float delta) { phase_ = std::min(phase_ + delta, 1.F); }
 
-  auto in_progress() const -> bool { return phase_ < 1.F; }
+  constexpr auto in_progress() const -> bool { return phase_ < 1.F; }
 
-  auto phase() const -> float { return phase_; }
+  constexpr auto phase() const -> float { return phase_; }
 
   void reset() { phase_ = 0.F; }
 
