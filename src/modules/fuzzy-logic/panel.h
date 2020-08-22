@@ -1,6 +1,6 @@
 #pragma once
 
-#include "controls.h"
+#include "fuzzy-logic-controls.h"
 #include "widgets/control-widgets.h"
 #include "widgets/screws.h"
 
@@ -10,7 +10,7 @@ namespace dhe {
 
 namespace fuzzy_logic {
 class Panel : public rack::app::ModuleWidget {
-  using Controls = Controls;
+  using Controls = FuzzyLogicControls;
 
 public:
   explicit Panel(std::string const &slug, rack::engine::Module *module) {

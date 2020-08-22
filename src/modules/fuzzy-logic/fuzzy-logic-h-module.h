@@ -1,7 +1,7 @@
 #pragma once
 #include "config/level-config.h"
-#include "controls.h"
 #include "controls/common-inputs.h"
+#include "fuzzy-logic-controls.h"
 
 #include <engine/Module.hpp>
 
@@ -9,11 +9,11 @@ namespace dhe {
 
 namespace fuzzy_logic {
 
-class ZModule : public rack::engine::Module {
-  using Controls = Controls;
+class FuzzyLogicHModule : public rack::engine::Module {
+  using Controls = FuzzyLogicControls;
 
 public:
-  ZModule() {
+  FuzzyLogicHModule() {
     config(Controls::ParameterCount, Controls::InputCount,
            Controls::OutputCount);
     configParam(Controls::NotAButtons + 0, 0.F, 1.F, 0.F, "Negate A");
@@ -40,11 +40,11 @@ public:
                          : b_input;
       auto const not_b = 10.F - b;
 
-      auto const a_and_b = std::min(a, b);
-      auto const a_or_b = std::max(a, b);
+      auto const a_and_b = a * b * 0.1F;
+      auto const a_or_b = a + b - a_and_b;
       auto const a_xor_b = a_or_b - a_and_b;
-      auto const a_implies_b = std::max(not_a, b);
-      auto const b_implies_a = std::max(a, not_b);
+      auto const a_implies_b = not_a + a_and_b;
+      auto const b_implies_a = not_b + a_and_b;
 
       set_outputs(Controls::AndOutputs + i, Controls::NandOutputs + i, a_and_b,
                   voltage_offset);
@@ -67,6 +67,5 @@ public:
     outputs[negated_output_id].setVoltage(10.F - voltage - offset);
   }
 };
-
 } // namespace fuzzy_logic
 } // namespace dhe

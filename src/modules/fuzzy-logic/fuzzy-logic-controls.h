@@ -4,7 +4,7 @@ namespace dhe {
 
 namespace fuzzy_logic {
 
-class Controls : public rack::engine::Module {
+class FuzzyLogicControls : public rack::engine::Module {
 public:
   enum ParameterIds {
     ENUMS(NotAButtons, 2),

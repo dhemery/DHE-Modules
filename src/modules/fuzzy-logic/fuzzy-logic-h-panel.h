@@ -5,9 +5,9 @@
 namespace dhe {
 
 namespace fuzzy_logic {
-class HPanel : public Panel {
+class FuzzyLogicHPanel : public Panel {
 public:
-  explicit HPanel(rack::engine::Module *module)
+  explicit FuzzyLogicHPanel(rack::engine::Module *module)
       : Panel{"fuzzy-logic-h", module} {}
 };
 } // namespace fuzzy_logic
