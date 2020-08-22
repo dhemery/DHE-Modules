@@ -27,8 +27,8 @@ auto constexpr short_duration_range = Range{0.001F, 1.F};
 auto constexpr medium_duration_range = Range{0.01F, 10.F};
 auto constexpr long_duration_range = Range{0.1F, 100.F};
 
-static auto constexpr duration_ranges = std::array<Range const *, 3>{
-    &short_duration_range, &medium_duration_range, &long_duration_range};
+static auto constexpr duration_ranges = std::array<Range const, 3>{
+    short_duration_range, medium_duration_range, long_duration_range};
 
 static inline auto duration(float rotation, Range const &range) -> float {
   return tapered_and_scaled_rotation(rotation, duration_knob_taper, range);
@@ -42,14 +42,14 @@ auto duration(KnobType &knob, Range const &range) -> float {
 template <typename KnobType, typename ToggleType>
 auto selectable_duration(KnobType &knob, ToggleType &toggle) -> float {
   auto const range = selected_range<3>(toggle, duration_ranges);
-  return duration(rotation_of(knob), *range);
+  return duration(rotation_of(knob), range);
 }
 
 template <typename KnobType, typename InputType, typename ToggleType>
 auto selectable_duration(KnobType &knob, InputType &cv_input,
                          ToggleType &toggle) -> float {
   auto const range = selected_range<3>(toggle, duration_ranges);
-  return duration(rotation(knob, cv_input), *range);
+  return duration(rotation(knob, cv_input), range);
 }
 
 } // namespace dhe

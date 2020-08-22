@@ -114,7 +114,7 @@ TEST_CASE("curve_sequencer_2::StepControls") {
 
     CHECK_EQ(controls.start_level(step),
              dhe::level(startLevelKnobRotation,
-                        *dhe::signal_ranges[levelRangeSelection]));
+                        dhe::signal_ranges[levelRangeSelection]));
   }
 
   SUBCASE("endSource(step) is the source selected by the step start source "
@@ -149,7 +149,7 @@ TEST_CASE("curve_sequencer_2::StepControls") {
 
     CHECK_EQ(controls.end_level(step),
              dhe::level(endLevelKnobRotation,
-                        *dhe::signal_ranges[levelRangeSelection]));
+                        dhe::signal_ranges[levelRangeSelection]));
   }
 
   SUBCASE("trackEndSource(step)") {
@@ -195,7 +195,7 @@ TEST_CASE("curve_sequencer_2::StepControls") {
 
     CHECK_EQ(controls.duration(step),
              dhe::duration(durationKnobRotation,
-                           *dhe::duration_ranges[durationRangeSelection]));
+                           dhe::duration_ranges[durationRangeSelection]));
   }
 
   SUBCASE("showInactive(step) dims step progress lights") {

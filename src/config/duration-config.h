@@ -16,27 +16,27 @@ public:
   auto getDisplayValue() -> float override {
     auto const rotation = getValue();
     auto const tapered = duration_knob_taper.apply(rotation);
-    return range_()->scale(tapered);
+    return range_().scale(tapered);
   }
 
   void setDisplayValue(float duration_seconds) override {
-    auto const tapered = range_()->normalize(duration_seconds);
+    auto const tapered = range_().normalize(duration_seconds);
     auto const rotation = duration_knob_taper.invert(tapered);
     setValue(rotation);
   }
 
   void
-  set_range_supplier(std::function<Range const *()> const &range_supplier) {
+  set_range_supplier(std::function<Range const &()> const &range_supplier) {
     this->range_ = range_supplier;
   }
 
 private:
-  std::function<Range const *()> range_;
+  std::function<Range const &()> range_;
 };
 
 static inline void
 config_duration_knob(rack::engine::Module *module, int knob_id,
-                     std::function<Range const *()> const &range_supplier,
+                     std::function<Range const &()> const &range_supplier,
                      std::string const &name, float initial_position) {
   module->configParam<DurationKnobParamQuantity>(knob_id, 0.F, 1.F,
                                                  initial_position, name, " s");
@@ -52,7 +52,7 @@ static inline void
 config_duration_knob(rack::engine::Module *module, int knob_id,
                      Range const &range, std::string const &name = "Duration",
                      float initial_rotation = centered_rotation) {
-  auto const range_supplier = [range]() -> Range const * { return &range; };
+  auto const range_supplier = [range]() -> Range const & { return range; };
   config_duration_knob(module, knob_id, range_supplier, name, initial_rotation);
 }
 
@@ -64,7 +64,7 @@ static inline void
 config_duration_knob(rack::engine::Module *module, int knob_id, int switch_id,
                      std::string const &name = "Duration",
                      float initial_rotation = centered_rotation) {
-  auto const range_supplier = [module, switch_id]() -> Range const * {
+  auto const range_supplier = [module, switch_id]() -> Range const & {
     return selected_range<3>(module->params[switch_id], duration_ranges);
   };
   config_duration_knob(module, knob_id, range_supplier, name, initial_rotation);

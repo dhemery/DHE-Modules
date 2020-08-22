@@ -23,16 +23,16 @@ public:
 
 private:
   auto add(int channel, float augend) const -> float {
-    auto const addend_range = controls_.offset_range(channel);
+    auto const &addend_range = controls_.offset_range(channel);
     auto const addend_rotation = controls_.operand(channel);
-    auto const addend = addend_range->scale(addend_rotation);
+    auto const addend = addend_range.scale(addend_rotation);
     return augend + addend;
   }
 
   auto multiply(int channel, float multiplicand) const -> float {
-    auto const multiplier_range = controls_.multiplier_range(channel);
+    auto const &multiplier_range = controls_.multiplier_range(channel);
     auto const multiplier_rotation = controls_.operand(channel);
-    auto const multiplier = multiplier_range->scale(multiplier_rotation);
+    auto const multiplier = multiplier_range.scale(multiplier_rotation);
     return multiplicand * multiplier;
   }
 

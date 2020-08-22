@@ -185,7 +185,7 @@ TEST_CASE("curve_sequencer::CurveSequencerControls") {
 
     CHECK_EQ(controls.duration(step),
              dhe::duration(durationKnobRotation,
-                           *dhe::duration_ranges[durationRangeSelection]));
+                           dhe::duration_ranges[durationRangeSelection]));
   }
 
   SUBCASE(
@@ -200,7 +200,7 @@ TEST_CASE("curve_sequencer::CurveSequencerControls") {
 
     CHECK_EQ(controls.level(step),
              dhe::level(levelKnobRotation,
-                        *dhe::signal_ranges[levelRangeSelection]));
+                        dhe::signal_ranges[levelRangeSelection]));
   }
 
   SUBCASE("taper(step) is taper selected by step shape switch") {

@@ -23,7 +23,7 @@ static auto constexpr bipolar_signal_range = Range{-5.F, 5.F};
 static auto constexpr unipolar_signal_range = Range{0.F, 10.F};
 
 static auto constexpr signal_ranges =
-    std::array<Range const *, 2>{&bipolar_signal_range, &unipolar_signal_range};
+    std::array<Range const, 2>{bipolar_signal_range, unipolar_signal_range};
 
 template <typename ParamType> auto value_of(ParamType &param) -> float {
   return param.getValue();
@@ -59,15 +59,14 @@ template <typename T> auto is_high(T &input) -> bool {
 
 template <typename ItemType, int N, typename ToggleType = rack::engine::Param>
 auto selected(ToggleType &toggle, std::array<ItemType, N> const &items)
-    -> ItemType const& {
+    -> ItemType const & {
   return items[position_of(toggle)];
 }
 
 template <int N, typename ToggleType = rack::engine::Param>
 auto selected_range(ToggleType &toggle,
-                    std::array<Range const *, N> const &ranges)
-    -> Range const * {
-  return selected<Range const *, N>(toggle, ranges);
+                    std::array<Range const, N> const &ranges) -> Range const & {
+  return selected<Range const, N>(toggle, ranges);
 }
 
 /**

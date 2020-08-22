@@ -17,14 +17,14 @@ public:
 
   auto getDisplayValue() -> float override {
     auto const rotation = getValue();
-    auto const operand_range = current_operand_range();
-    auto const operand = operand_range->scale(rotation);
+    auto const &operand_range = current_operand_range();
+    auto const operand = operand_range.scale(rotation);
     return operand;
   }
 
   void setDisplayValue(float operand) override {
-    auto const operand_range = current_operand_range();
-    auto const rotation = operand_range->normalize(operand);
+    auto const &operand_range = current_operand_range();
+    auto const rotation = operand_range.normalize(operand);
     setValue(rotation);
   }
 
@@ -36,18 +36,18 @@ public:
   }
 
 private:
-  auto current_operand_range() -> Range const * {
+  auto current_operand_range() -> Range const & {
     return operation() == Operation::Multiply ? multiplier_range()
                                               : offset_range();
   }
 
   auto operation() const -> Operation { return controls_->operation(channel_); }
 
-  auto multiplier_range() const -> Range const * {
+  auto multiplier_range() const -> Range const & {
     return controls_->multiplier_range(channel_);
   }
 
-  auto offset_range() const -> Range const * {
+  auto offset_range() const -> Range const & {
     return controls_->offset_range(channel_);
   }
 

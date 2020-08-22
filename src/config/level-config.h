@@ -16,25 +16,25 @@ class LevelKnobParamQuantity : public rack::engine::ParamQuantity {
 public:
   auto getDisplayValue() -> float override {
     auto const rotation = getValue();
-    return range_()->scale(rotation);
+    return range_().scale(rotation);
   }
 
   void setDisplayValue(float display_value) override {
-    auto const normalized = range_()->normalize(display_value);
+    auto const normalized = range_().normalize(display_value);
     setValue(normalized);
   }
 
-  void set_range_supplier(std::function<Range const *()> const &supplier) {
+  void set_range_supplier(std::function<Range const &()> const &supplier) {
     this->range_ = supplier;
   }
 
 private:
-  std::function<Range const *()> range_;
+  std::function<Range const &()> range_;
 };
 
 static inline void
 config_level_knob(rack::engine::Module *module, int knob_id,
-                  std::function<Range const *()> const &range_supplier,
+                  std::function<Range const &()> const &range_supplier,
                   std::string const &name, float initial_position) {
   module->configParam<LevelKnobParamQuantity>(knob_id, 0.F, 1.F,
                                               initial_position, name, " V");
@@ -51,7 +51,7 @@ static inline void
 config_level_knob(rack::engine::Module *module, int knob_id, int switch_id,
                   std::string const &name = "Level",
                   float initial_rotation = centered_rotation) {
-  auto const range_supplier = [module, switch_id]() -> Range const * {
+  auto const range_supplier = [module, switch_id]() -> Range const & {
     return selected_range<2>(module->params[switch_id], signal_ranges);
   };
   config_level_knob(module, knob_id, range_supplier, name, initial_rotation);
@@ -64,7 +64,7 @@ static inline void
 config_level_knob(rack::engine::Module *module, int knob_id, Range const &range,
                   std::string const &name = "Level",
                   float initial_rotation = centered_rotation) {
-  auto const range_supplier = [range]() -> Range const * { return &range; };
+  auto const range_supplier = [range]() -> Range const & { return range; };
   config_level_knob(module, knob_id, range_supplier, name, initial_rotation);
 }
 

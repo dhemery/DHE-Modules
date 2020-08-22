@@ -11,13 +11,13 @@ static auto constexpr minus_two_to_plus_two_range = Range{-2.F, 2.F};
 static auto constexpr minus_ten_to_plus_ten_range = Range{-10.F, 10.F};
 static auto constexpr zero_to_five_range = Range{0.F, 5.F};
 
-static auto constexpr offset_ranges = std::array<Range const *, 4>{
-    &zero_to_five_range, &bipolar_signal_range, &unipolar_signal_range,
-    &minus_ten_to_plus_ten_range};
+static auto constexpr offset_ranges = std::array<Range const, 4>{
+    zero_to_five_range, bipolar_signal_range, unipolar_signal_range,
+    minus_ten_to_plus_ten_range};
 
 static auto constexpr multiplier_ranges =
-    std::array<Range const *, 4>{&attenuator_range, &attenuverter_range,
-                                 &gain_range, &minus_two_to_plus_two_range};
+    std::array<Range const, 4>{attenuator_range, attenuverter_range, gain_range,
+                               minus_two_to_plus_two_range};
 
 template <int N> class FuncControls {
 public:
@@ -31,12 +31,12 @@ public:
         .getNormalVoltage(voltage_if_disconnected);
   }
 
-  auto multiplier_range(int channel) const -> Range const * {
+  auto multiplier_range(int channel) const -> Range const & {
     return selected_range<4>(params_[MultiplierRangeSwitch + channel],
                              multiplier_ranges);
   }
 
-  auto offset_range(int channel) const -> Range const * {
+  auto offset_range(int channel) const -> Range const & {
     return selected_range<4>(params_[OffsetRangeSwitch + channel],
                              offset_ranges);
   }
