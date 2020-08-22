@@ -9,8 +9,10 @@ public:
     phase_ -= std::trunc(phase_);
   }
 
+  static constexpr auto pi{3.14159265359F};
+  static constexpr auto two_pi{2.F * pi};
+
   auto angle(float offset = 0.F) const -> float {
-    static float const two_pi{2.F * std::acos(-1.F)};
     return two_pi * (phase_ + offset);
   }
 

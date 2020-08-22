@@ -16,18 +16,17 @@
 namespace dhe {
 
 namespace curve_sequencer {
-static auto constexpr default_generate_mode =
-    static_cast<int>(GenerateMode::Curve);
-static auto const generate_mode_descriptions =
-    std::array<std::string, generate_mode_count>{"Curve", "Hold",  "Sustain",
-                                                 "Input", "Chase", "Level"};
+auto constexpr default_generate_mode = static_cast<int>(GenerateMode::Curve);
+auto constexpr generate_mode_descriptions =
+    std::array<char const *, generate_mode_count>{"Curve", "Hold",  "Sustain",
+                                                  "Input", "Chase", "Level"};
 
-static auto constexpr default_advance_mode =
+auto constexpr default_advance_mode =
     static_cast<int>(AdvanceMode::TimerExpires);
-static auto const advance_mode_descriptions =
-    std::array<std::string, advance_mode_count>{"Timer expires", "Gate rises",
-                                                "Gate falls",    "Gate changes",
-                                                "Gate is high",  "Gate is low"};
+auto constexpr advance_mode_descriptions =
+    std::array<char const *, advance_mode_count>{
+        "Timer expires", "Gate rises",   "Gate falls",
+        "Gate changes",  "Gate is high", "Gate is low"};
 
 template <int N> class CurveSequencerModule : public rack::engine::Module {
   using Controls =

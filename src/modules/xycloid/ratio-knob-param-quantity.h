@@ -15,7 +15,7 @@ static auto constexpr inward_ratio_range = Range{0.F, -max_ratio};
 static auto constexpr outward_ratio_range = Range{0.F, max_ratio};
 static auto constexpr bidirectional_ratio_range = Range{-max_ratio, max_ratio};
 
-static auto const ratio_ranges = std::array<Range const *, 3>{
+static auto constexpr ratio_ranges = std::array<Range const *, 3>{
     &inward_ratio_range, &bidirectional_ratio_range, &outward_ratio_range};
 
 static inline auto ratio_range(rack::engine::Module const *module)

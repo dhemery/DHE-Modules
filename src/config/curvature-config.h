@@ -35,6 +35,9 @@ config_curvature_knob(rack::engine::Module *module, int knob_id,
                                                   initial_rotation, name);
 }
 
+static auto constexpr curvature_state_names =
+    std::array<char const *, 2>{"J", "S"};
+
 /**
  * Configures the param and display for a curve shape switch.
  */
@@ -42,8 +45,8 @@ static inline void config_curve_shape_switch(rack::engine::Module *module,
                                              int switch_id,
                                              std::string const &name = "Shape",
                                              int initial_state = 0) {
-  static auto const state_names = std::array<std::string, 2>{"J", "S"};
-  config_toggle<2>(module, switch_id, name, state_names, initial_state);
+  config_toggle<2>(module, switch_id, name, curvature_state_names,
+                   initial_state);
 }
 
 } // namespace dhe

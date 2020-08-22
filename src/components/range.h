@@ -35,7 +35,7 @@ public:
 
   auto scale(bool state) const -> float { return state ? upper_ : lower_; }
 
-  auto normalize(float scaled) const -> float {
+  constexpr auto normalize(float scaled) const -> float {
     return (scaled - lower_) / size();
   }
 

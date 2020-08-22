@@ -22,7 +22,7 @@ static auto constexpr rotation_range = Range{0.F, 1.F};
 static auto constexpr bipolar_signal_range = Range{-5.F, 5.F};
 static auto constexpr unipolar_signal_range = Range{0.F, 10.F};
 
-static auto const signal_ranges =
+static auto constexpr signal_ranges =
     std::array<Range const *, 2>{&bipolar_signal_range, &unipolar_signal_range};
 
 template <typename ParamType> auto value_of(ParamType &param) -> float {

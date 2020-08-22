@@ -60,7 +60,7 @@ static inline void config_gain(rack::engine::Module *module, int knob_id,
 template <int N>
 class FrameWidgetParamQuantity : public rack::engine::ParamQuantity {
 public:
-  void set_frame_names(std::array<std::string, N> const &names) {
+  void set_frame_names(std::array<char const *, N> const &names) {
     frame_names_ = names;
   }
   auto getDisplayValueString() -> std::string override {
@@ -69,13 +69,13 @@ public:
   }
 
 private:
-  std::array<std::string, N> frame_names_;
+  std::array<char const *, N> frame_names_;
 };
 
 template <int N>
 void config_frame_widget_states(rack::engine::Module *module, int param_id,
                                 std::string const &param_name,
-                                std::array<std::string, N> const &state_names,
+                                std::array<char const *, N> const &state_names,
                                 int initial_state) {
   module->configParam<FrameWidgetParamQuantity<N>>(
       param_id, 0.F, (float)(N - 1), (float)initial_state, param_name);
@@ -89,7 +89,7 @@ void config_frame_widget_states(rack::engine::Module *module, int param_id,
  */
 static inline void config_button(rack::engine::Module *module, int button_id,
                                  std::string const &button_name,
-                                 std::array<std::string, 2> const &state_names,
+                                 std::array<char const *, 2> const &state_names,
                                  int initial_state) {
   config_frame_widget_states<2>(module, button_id, button_name, state_names,
                                 initial_state);
@@ -102,7 +102,7 @@ static inline void config_button(rack::engine::Module *module, int button_id,
 template <int N>
 void config_toggle(rack::engine::Module *module, int toggle_id,
                    std::string const &toggle_name,
-                   std::array<std::string, N> const &state_names,
+                   std::array<char const *, N> const &state_names,
                    int initial_state) {
   config_frame_widget_states<N>(module, toggle_id, toggle_name, state_names,
                                 initial_state);
