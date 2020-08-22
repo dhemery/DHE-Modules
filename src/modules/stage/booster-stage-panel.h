@@ -1,6 +1,6 @@
 #pragma once
 
-#include "BoosterStageControls.h"
+#include "booster-stage-controls.h"
 
 #include <app/ModuleWidget.hpp>
 
@@ -24,9 +24,9 @@ public:
     auto constexpr column1 = width / 6.F + 0.3333333F;
     auto constexpr column3 = width / 2.F;
     auto constexpr column5 = width - column1;
-    auto constexpr buttonPortDistance = 7.891F;
-    auto constexpr column2 = column1 + buttonPortDistance;
-    auto constexpr column4 = column5 - buttonPortDistance;
+    auto constexpr button_port_distance = 7.891F;
+    auto constexpr column2 = column1 + button_port_distance;
+    auto constexpr column4 = column5 - button_port_distance;
 
     auto dy = 18.5F;
     auto y = 25.F;

@@ -1,10 +1,10 @@
-#include "modules/stage/StageEngine.h"
+#include "modules/stage/stage-engine.h"
 
 #include "components/latch.h"
 #include "fake/FakeControls.h"
 #include "fake/FakeModes.h"
-#include "modules/stage/Event.h"
-#include "modules/stage/Mode.h"
+#include "modules/stage/event.h"
+#include "modules/stage/mode.h"
 
 #include <doctest.h>
 
@@ -20,34 +20,35 @@ using StageEngine =
 
 TEST_CASE("stage::StageEngine") {
   FakeControls controls{};
-  FakeSimpleMode deferMode{};
-  FakeTimedMode generateMode{};
-  FakeSimpleMode inputMode{};
-  FakeSimpleMode levelMode{};
+  FakeSimpleMode defer_mode{};
+  FakeTimedMode generate_mode{};
+  FakeSimpleMode input_mode{};
+  FakeSimpleMode level_mode{};
 
-  StageEngine engine{controls, deferMode, inputMode, generateMode, levelMode};
+  StageEngine engine{controls, defer_mode, input_mode, generate_mode,
+                     level_mode};
 
-  controls.showEoc = [](bool e) {};
+  controls.show_eoc = [](bool e) {};
 
   SUBCASE("starts in input mode") {
     controls.defer = []() -> bool { return false; };
     controls.gate = []() -> bool { return false; };
-    controls.showEoc = [](bool e) {};
+    controls.show_eoc = [](bool e) {};
 
-    inputMode.returns(Event::Generated);
+    input_mode.returns(Event::Generated);
 
     engine.process(0.F);
 
-    CHECK(inputMode.wasExecuted());
+    CHECK(input_mode.wasExecuted());
   }
 
   SUBCASE("in input mode") {
     controls.defer = []() -> bool { return false; };
     controls.gate = []() -> bool { return false; };
 
-    inputMode.returns(Event::Generated);
+    input_mode.returns(Event::Generated);
     engine.process(0.F);
-    inputMode.reset();
+    input_mode.reset();
 
     SUBCASE("with defer low") {
       controls.defer = []() -> bool { return false; };
@@ -57,7 +58,7 @@ TEST_CASE("stage::StageEngine") {
 
         engine.process(1.F);
 
-        CHECK(inputMode.wasExecuted());
+        CHECK(input_mode.wasExecuted());
       }
 
       SUBCASE("begins generating if gate rises") {
@@ -65,27 +66,27 @@ TEST_CASE("stage::StageEngine") {
 
         engine.process(0.F);
 
-        CHECK(inputMode.wasExited());
-        CHECK_FALSE(inputMode.wasExecuted());
-        CHECK_FALSE(inputMode.isActive());
-        CHECK(generateMode.wasEntered());
-        CHECK(generateMode.wasExecuted());
-        CHECK(generateMode.isActive());
+        CHECK(input_mode.wasExited());
+        CHECK_FALSE(input_mode.wasExecuted());
+        CHECK_FALSE(input_mode.isActive());
+        CHECK(generate_mode.wasEntered());
+        CHECK(generate_mode.wasExecuted());
+        CHECK(generate_mode.isActive());
       }
     }
 
     SUBCASE("begins deferring if defer rises") {
       controls.defer = []() -> bool { return true; };
-      deferMode.returns(Event::Generated);
+      defer_mode.returns(Event::Generated);
 
       engine.process(0.F);
 
-      CHECK(inputMode.wasExited());
-      CHECK_FALSE(inputMode.wasExecuted());
-      CHECK_FALSE(inputMode.isActive());
-      CHECK(deferMode.wasEntered());
-      CHECK(deferMode.wasExecuted());
-      CHECK(deferMode.isActive());
+      CHECK(input_mode.wasExited());
+      CHECK_FALSE(input_mode.wasExecuted());
+      CHECK_FALSE(input_mode.isActive());
+      CHECK(defer_mode.wasEntered());
+      CHECK(defer_mode.wasExecuted());
+      CHECK(defer_mode.isActive());
     }
   }
 
@@ -93,7 +94,7 @@ TEST_CASE("stage::StageEngine") {
     controls.defer = []() -> bool { return true; };
     controls.gate = []() -> bool { return false; };
     engine.process(0.F);
-    deferMode.reset();
+    defer_mode.reset();
 
     SUBCASE("with defer high") {
       controls.defer = []() -> bool { return true; };
@@ -102,12 +103,12 @@ TEST_CASE("stage::StageEngine") {
         controls.gate = []() -> bool { return true; };
 
         engine.process(0.F);
-        CHECK(deferMode.wasExecuted());
-        deferMode.reset();
+        CHECK(defer_mode.wasExecuted());
+        defer_mode.reset();
 
         controls.gate = []() -> bool { return false; };
         engine.process(0.F);
-        CHECK(deferMode.wasExecuted());
+        CHECK(defer_mode.wasExecuted());
       }
     }
 
@@ -119,12 +120,12 @@ TEST_CASE("stage::StageEngine") {
 
         engine.process(0.F);
 
-        CHECK(deferMode.wasExited());
-        CHECK_FALSE(deferMode.wasExecuted());
-        CHECK_FALSE(deferMode.isActive());
-        CHECK(generateMode.wasEntered());
-        CHECK(generateMode.wasExecuted());
-        CHECK(generateMode.isActive());
+        CHECK(defer_mode.wasExited());
+        CHECK_FALSE(defer_mode.wasExecuted());
+        CHECK_FALSE(defer_mode.isActive());
+        CHECK(generate_mode.wasEntered());
+        CHECK(generate_mode.wasExecuted());
+        CHECK(generate_mode.isActive());
       }
 
       SUBCASE("if gate is low") {
@@ -133,20 +134,20 @@ TEST_CASE("stage::StageEngine") {
         SUBCASE("begins tracking input") {
           engine.process(0.F);
 
-          CHECK(deferMode.wasExited());
-          CHECK_FALSE(deferMode.wasExecuted());
-          CHECK_FALSE(deferMode.isActive());
-          CHECK(inputMode.wasEntered());
-          CHECK(inputMode.wasExecuted());
-          CHECK(inputMode.isActive());
+          CHECK(defer_mode.wasExited());
+          CHECK_FALSE(defer_mode.wasExecuted());
+          CHECK_FALSE(defer_mode.isActive());
+          CHECK(input_mode.wasEntered());
+          CHECK(input_mode.wasExecuted());
+          CHECK(input_mode.isActive());
         }
 
         SUBCASE("does not raise eoc") {
-          bool raisedEoc{false};
-          controls.showEoc = [&](bool e) { raisedEoc = e; };
+          bool raised_eoc{false};
+          controls.show_eoc = [&](bool e) { raised_eoc = e; };
 
           engine.process(0.F);
-          CHECK_FALSE(raisedEoc);
+          CHECK_FALSE(raised_eoc);
         }
       }
     }
@@ -155,10 +156,10 @@ TEST_CASE("stage::StageEngine") {
   SUBCASE("in generate mode") {
     controls.defer = []() -> bool { return false; };
     controls.gate = []() -> bool { return true; };
-    generateMode.returns(Event::Generated);
+    generate_mode.returns(Event::Generated);
     engine.process(0.F);
     controls.gate = []() -> bool { return false; };
-    generateMode.reset();
+    generate_mode.reset();
 
     SUBCASE("with defer low") {
       controls.defer = []() -> bool { return false; };
@@ -166,12 +167,12 @@ TEST_CASE("stage::StageEngine") {
       SUBCASE("executes regardless of gate") {
         controls.gate = []() -> bool { return false; };
         engine.process(1.F);
-        CHECK(generateMode.wasExecuted());
-        generateMode.reset();
+        CHECK(generate_mode.wasExecuted());
+        generate_mode.reset();
 
         controls.gate = []() -> bool { return true; };
         engine.process(1.F);
-        CHECK(generateMode.wasExecuted());
+        CHECK(generate_mode.wasExecuted());
       }
 
       SUBCASE("passes gate state to execute") {
@@ -181,42 +182,42 @@ TEST_CASE("stage::StageEngine") {
 
         controls.gate = []() -> bool { return false; }; // Low with no edge
         engine.process(0.F);
-        CHECK_EQ(generateMode.latch(), Latch{false, false});
+        CHECK_EQ(generate_mode.latch(), Latch{false, false});
 
         controls.gate = []() -> bool { return true; }; // Rise
         engine.process(0.F);
-        CHECK_EQ(generateMode.latch(), Latch{true, true});
+        CHECK_EQ(generate_mode.latch(), Latch{true, true});
 
         controls.gate = []() -> bool { return true; }; // High with no edge
         engine.process(0.F);
-        CHECK_EQ(generateMode.latch(), Latch{true, false});
+        CHECK_EQ(generate_mode.latch(), Latch{true, false});
 
         controls.gate = []() -> bool { return false; }; // Fall
         engine.process(0.F);
-        CHECK_EQ(generateMode.latch(), Latch{false, true});
+        CHECK_EQ(generate_mode.latch(), Latch{false, true});
       }
 
       SUBCASE("if stage completes") {
-        generateMode.returns(Event::Completed);
-        levelMode.returns(Event::Generated);
-        levelMode.reset();
+        generate_mode.returns(Event::Completed);
+        level_mode.returns(Event::Generated);
+        level_mode.reset();
 
         SUBCASE("begins tracking level") {
           engine.process(0.F);
 
-          CHECK(generateMode.wasExited());
-          CHECK_FALSE(generateMode.isActive());
-          CHECK(levelMode.wasEntered());
-          CHECK(levelMode.isActive());
+          CHECK(generate_mode.wasExited());
+          CHECK_FALSE(generate_mode.isActive());
+          CHECK(level_mode.wasEntered());
+          CHECK(level_mode.isActive());
         }
 
         SUBCASE("raises eoc") {
-          bool raisedEoc{false};
-          controls.showEoc = [&](bool e) { raisedEoc = e; };
+          bool raised_eoc{false};
+          controls.show_eoc = [&](bool e) { raised_eoc = e; };
 
           engine.process(0.F);
 
-          CHECK(raisedEoc);
+          CHECK(raised_eoc);
         }
       }
     }
@@ -226,12 +227,12 @@ TEST_CASE("stage::StageEngine") {
 
       engine.process(0.F);
 
-      CHECK(generateMode.wasExited());
-      CHECK_FALSE(generateMode.wasExecuted());
-      CHECK_FALSE(generateMode.isActive());
-      CHECK(deferMode.wasEntered());
-      CHECK(deferMode.wasExecuted());
-      CHECK(deferMode.isActive());
+      CHECK(generate_mode.wasExited());
+      CHECK_FALSE(generate_mode.wasExecuted());
+      CHECK_FALSE(generate_mode.isActive());
+      CHECK(defer_mode.wasEntered());
+      CHECK(defer_mode.wasExecuted());
+      CHECK(defer_mode.isActive());
     }
   }
 
@@ -239,15 +240,15 @@ TEST_CASE("stage::StageEngine") {
     // Start generating
     controls.defer = []() -> bool { return false; };
     controls.gate = []() -> bool { return true; };
-    generateMode.returns(Event::Generated);
+    generate_mode.returns(Event::Generated);
     engine.process(0.F);
 
     // Finish generating, which enters Level mode
     controls.gate = []() -> bool { return false; };
-    generateMode.returns(Event::Completed);
+    generate_mode.returns(Event::Completed);
     engine.process(0.F);
-    generateMode.reset();
-    levelMode.reset();
+    generate_mode.reset();
+    level_mode.reset();
 
     SUBCASE("with defer low") {
       controls.defer = []() -> bool { return false; };
@@ -257,39 +258,39 @@ TEST_CASE("stage::StageEngine") {
 
         engine.process(1.F);
 
-        CHECK(levelMode.wasExecuted());
+        CHECK(level_mode.wasExecuted());
       }
 
       SUBCASE("if gate rises") {
         controls.gate = []() -> bool { return true; };
 
         SUBCASE("begins generating") {
-          generateMode.returns(Event::Generated);
+          generate_mode.returns(Event::Generated);
 
           engine.process(0.F);
 
-          CHECK(levelMode.wasExited());
-          CHECK_FALSE(levelMode.wasExecuted());
-          CHECK_FALSE(levelMode.isActive());
-          CHECK(generateMode.wasEntered());
-          CHECK(generateMode.wasExecuted());
-          CHECK(generateMode.isActive());
+          CHECK(level_mode.wasExited());
+          CHECK_FALSE(level_mode.wasExecuted());
+          CHECK_FALSE(level_mode.isActive());
+          CHECK(generate_mode.wasEntered());
+          CHECK(generate_mode.wasExecuted());
+          CHECK(generate_mode.isActive());
         }
       }
     }
 
     SUBCASE("begins deferring if defer rises") {
       controls.defer = []() -> bool { return true; };
-      deferMode.returns(Event::Generated);
+      defer_mode.returns(Event::Generated);
 
       engine.process(0.F);
 
-      CHECK(levelMode.wasExited());
-      CHECK_FALSE(levelMode.wasExecuted());
-      CHECK_FALSE(levelMode.isActive());
-      CHECK(deferMode.wasEntered());
-      CHECK(deferMode.wasExecuted());
-      CHECK(deferMode.isActive());
+      CHECK(level_mode.wasExited());
+      CHECK_FALSE(level_mode.wasExecuted());
+      CHECK_FALSE(level_mode.isActive());
+      CHECK(defer_mode.wasEntered());
+      CHECK(defer_mode.wasExecuted());
+      CHECK(defer_mode.isActive());
     }
   }
 }

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "components/taper.h"
-#include "modules/stage/Mode.h"
+#include "modules/stage/mode.h"
 
 #include <functional>
 
@@ -22,10 +22,10 @@ struct FakeControls {
   std::function<Mode()> mode{[]() -> Mode { throw "FakeControls.mode()"; }};
   std::function<void(float)> output{
       [](float v) { throw "FakeControls.output(voltage)"; }};
-  std::function<void(bool)> showActive{
-      [](bool a) { throw "FakeControls.showActive(active)"; }};
-  std::function<void(bool)> showEoc{
-      [](bool a) { throw "FakeControls.showEoc(eoc)"; }};
+  std::function<void(bool)> show_active{
+      [](bool a) { throw "FakeControls.show_active(active)"; }};
+  std::function<void(bool)> show_eoc{
+      [](bool a) { throw "FakeControls.show_eoc(eoc)"; }};
   std::function<VariableTaper const *()> taper{
       []() -> VariableTaper const * { throw "FakeControls.taper()"; }};
 };

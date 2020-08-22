@@ -1,4 +1,4 @@
-#include "modules/stage/InputMode.h"
+#include "modules/stage/input-mode.h"
 
 #include "fake/FakeControls.h"
 
@@ -12,12 +12,12 @@ using dhe::stage::InputMode;
 
 TEST_CASE("stage::InputMode") {
   FakeControls controls{};
-  InputMode<FakeControls> inputMode{controls};
+  InputMode<FakeControls> input_mode{controls};
 
   SUBCASE("enter deactivates stage") {
     auto active{true};
-    controls.showActive = [&](bool b) { active = b; };
-    inputMode.enter();
+    controls.show_active = [&](bool b) { active = b; };
+    input_mode.enter();
     CHECK_FALSE(active);
   }
 
@@ -28,15 +28,15 @@ TEST_CASE("stage::InputMode") {
     float output{-99.F};
     controls.output = [&](float voltage) { output = voltage; };
 
-    inputMode.execute();
+    input_mode.execute();
 
     CHECK_EQ(output, input);
   }
 
   SUBCASE("exit deactivates stage") {
     auto active{true};
-    controls.showActive = [&](bool b) { active = b; };
-    inputMode.exit();
+    controls.show_active = [&](bool b) { active = b; };
+    input_mode.exit();
     CHECK_FALSE(active);
   }
 }

@@ -1,9 +1,9 @@
-#include "modules/stage/HoldMode.h"
+#include "modules/stage/hold-mode.h"
 
 #include "components/latch.h"
 #include "components/phase-timer.h"
 #include "fake/FakeControls.h"
-#include "modules/stage/Event.h"
+#include "modules/stage/event.h"
 
 #include <doctest.h>
 
@@ -23,17 +23,17 @@ static void prepareToExecute(FakeControls &controls) {
 TEST_CASE("stage:HoldMode") {
   FakeControls controls{};
   PhaseTimer timer{};
-  HoldMode<FakeControls> holdMode{controls, timer};
+  HoldMode<FakeControls> hold_mode{controls, timer};
 
   SUBCASE("enter") {
-    controls.showActive = [](bool b) {};
+    controls.show_active = [](bool b) {};
     controls.input = []() -> float { return 0.F; };
     controls.output = [](float v) {};
 
     SUBCASE("activates stage") {
       auto active{false};
-      controls.showActive = [&](bool b) { active = b; };
-      holdMode.enter();
+      controls.show_active = [&](bool b) { active = b; };
+      hold_mode.enter();
       CHECK(active);
     }
 
@@ -44,7 +44,7 @@ TEST_CASE("stage:HoldMode") {
       float output{-99.F};
       controls.output = [&](float voltage) { output = voltage; };
 
-      holdMode.enter();
+      hold_mode.enter();
 
       CHECK_EQ(output, input);
     }
@@ -52,7 +52,7 @@ TEST_CASE("stage:HoldMode") {
     SUBCASE("resets timer") {
       timer.advance(0.5F);
 
-      holdMode.enter();
+      hold_mode.enter();
 
       CHECK_EQ(timer.phase(), 0.F);
     }
@@ -67,7 +67,7 @@ TEST_CASE("stage:HoldMode") {
       timer.reset();
       controls.duration = []() -> float { return duration; };
 
-      holdMode.execute(Latch{}, sampleTime);
+      hold_mode.execute(Latch{}, sampleTime);
 
       CHECK_EQ(timer.phase(), sampleTime / duration);
     }
@@ -75,7 +75,7 @@ TEST_CASE("stage:HoldMode") {
     SUBCASE("resets timer if retrigger rises") {
       timer.advance(0.5F);
 
-      holdMode.execute(Latch{true, true}, 0.F);
+      hold_mode.execute(Latch{true, true}, 0.F);
 
       CHECK_EQ(timer.phase(), 0.F);
     }
@@ -84,7 +84,7 @@ TEST_CASE("stage:HoldMode") {
       controls.duration = []() -> float { return 1.F; };
       timer.reset();
 
-      CHECK_EQ(holdMode.execute(Latch{}, 0.1F), Event::Generated);
+      CHECK_EQ(hold_mode.execute(Latch{}, 0.1F), Event::Generated);
     }
 
     SUBCASE("returns completed if timer expired") {
@@ -92,18 +92,18 @@ TEST_CASE("stage:HoldMode") {
       timer.reset();
       timer.advance(0.9999F);
 
-      CHECK_EQ(holdMode.execute(Latch{}, 0.1F), Event::Completed);
+      CHECK_EQ(hold_mode.execute(Latch{}, 0.1F), Event::Completed);
     }
 
     SUBCASE("outputs nothing") {
-      holdMode.execute(Latch{}, 0.F); // Will throw if output called
+      hold_mode.execute(Latch{}, 0.F); // Will throw if output called
     }
   }
 
   SUBCASE("exit deactivates stage") {
     auto active{true};
-    controls.showActive = [&](bool b) { active = b; };
-    holdMode.exit();
+    controls.show_active = [&](bool b) { active = b; };
+    hold_mode.exit();
     CHECK_FALSE(active);
   }
 }

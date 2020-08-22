@@ -21,47 +21,47 @@ public:
   BoosterStageControls(std::vector<Input> const &inputs,
                        std::vector<Param> const &params,
                        std::vector<Output> &outputs)
-      : inputs{inputs}, params{params}, outputs{outputs} {}
+      : inputs_{inputs}, params_{params}, outputs_{outputs} {}
 
   auto curvature() const -> float {
-    return dhe::curvature(params[CurveKnob], inputs[CurveCvInput]);
+    return dhe::curvature(params_[CurveKnob], inputs_[CurveCvInput]);
   }
 
   auto defer() const -> bool {
-    return is_high(inputs[DeferInput]) || is_pressed(params[DeferButton]);
+    return is_high(inputs_[DeferInput]) || is_pressed(params_[DeferButton]);
   }
 
   auto duration() const -> float {
-    return selectable_duration(params[DurationKnob], inputs[DurationCvInput],
-                               params[DurationRangeSwitch]);
+    return selectable_duration(params_[DurationKnob], inputs_[DurationCvInput],
+                               params_[DurationRangeSwitch]);
   }
 
   auto gate() const -> bool {
-    return is_high(inputs[TriggerInput]) || is_pressed(params[TriggerButton]);
+    return is_high(inputs_[TriggerInput]) || is_pressed(params_[TriggerButton]);
   }
 
-  auto input() const -> float { return voltage_at(inputs[EnvelopeInput]); }
+  auto input() const -> float { return voltage_at(inputs_[EnvelopeInput]); }
 
   auto level() const -> float {
-    return selectable_level(params[LevelKnob], inputs[LevelCvInput],
-                            params[LevelRangeSwitch]);
+    return selectable_level(params_[LevelKnob], inputs_[LevelCvInput],
+                            params_[LevelRangeSwitch]);
   }
 
-  void output(float voltage) { outputs[EnvelopeOutput].setVoltage(voltage); }
+  void output(float voltage) { outputs_[EnvelopeOutput].setVoltage(voltage); }
 
-  void showActive(bool isActive) {
+  void show_active(bool is_active) {
     auto const voltage =
-        unipolar_signal_range.scale(isActive || activeButton());
-    outputs[ActiveOutput].setVoltage(voltage);
+        unipolar_signal_range.scale(is_active || active_button());
+    outputs_[ActiveOutput].setVoltage(voltage);
   }
 
-  void showEoc(bool isEoc) {
-    auto const voltage = unipolar_signal_range.scale(isEoc || eocButton());
-    outputs[EocOutput].setVoltage(voltage);
+  void show_eoc(bool is_eoc) {
+    auto const voltage = unipolar_signal_range.scale(is_eoc || eoc_button());
+    outputs_[EocOutput].setVoltage(voltage);
   }
 
   auto taper() const -> taper::VariableTaper const * {
-    return selected_taper(params[ShapeSwitch]);
+    return selected_taper(params_[ShapeSwitch]);
   }
 
   enum ParameterIds {
@@ -91,13 +91,15 @@ public:
   enum OutputIds { ActiveOutput, EocOutput, EnvelopeOutput, OutputCount };
 
 private:
-  auto activeButton() const -> bool { return is_pressed(params[ActiveButton]); }
+  auto active_button() const -> bool {
+    return is_pressed(params_[ActiveButton]);
+  }
 
-  auto eocButton() const -> bool { return is_pressed(params[EocButton]); }
+  auto eoc_button() const -> bool { return is_pressed(params_[EocButton]); }
 
-  std::vector<Input> const &inputs;
-  std::vector<Param> const &params;
-  std::vector<Output> &outputs;
+  std::vector<Input> const &inputs_;
+  std::vector<Param> const &params_;
+  std::vector<Output> &outputs_;
 };
 } // namespace stage
 } // namespace dhe

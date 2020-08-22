@@ -1,4 +1,4 @@
-#include "modules/stage/LevelMode.h"
+#include "modules/stage/level-mode.h"
 
 #include "fake/FakeControls.h"
 
@@ -16,7 +16,7 @@ TEST_CASE("stage::LevelMode") {
 
   SUBCASE("enter deactivates stage") {
     auto active{true};
-    controls.showActive = [&](bool b) { active = b; };
+    controls.show_active = [&](bool b) { active = b; };
     levelMode.enter();
     CHECK_FALSE(active);
   }
@@ -35,7 +35,7 @@ TEST_CASE("stage::LevelMode") {
 
   SUBCASE("exit deactivates stage") {
     auto active{true};
-    controls.showActive = [&](bool b) { active = b; };
+    controls.show_active = [&](bool b) { active = b; };
     levelMode.exit();
     CHECK_FALSE(active);
   }

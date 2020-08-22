@@ -1,10 +1,10 @@
 #pragma once
 
-#include "UpstageControls.h"
 #include "config/common-config.h"
 #include "config/level-config.h"
 #include "controls/common-inputs.h"
 #include "controls/level-inputs.h"
+#include "upstage-controls.h"
 
 #include <engine/Module.hpp>
 
@@ -13,16 +13,16 @@ namespace stage {
 
 template <typename Controls> class UpstageEngine {
 public:
-  UpstageEngine(Controls &controls) : controls{controls} {}
+  UpstageEngine(Controls &controls) : controls_{controls} {}
 
   void process() {
-    auto isTriggered = controls.isTriggered() && !controls.isWaiting();
-    controls.sendTrigger(isTriggered);
-    controls.sendEnvelope(controls.level());
+    auto is_triggered = controls_.is_triggered() && !controls_.is_waiting();
+    controls_.send_trigger(is_triggered);
+    controls_.send_envelope(controls_.level());
   }
 
 private:
-  Controls &controls;
+  Controls &controls_;
 };
 } // namespace stage
 } // namespace dhe

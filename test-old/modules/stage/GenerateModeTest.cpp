@@ -1,10 +1,10 @@
-#include "modules/stage/GenerateMode.h"
+#include "modules/stage/generate-mode.h"
 
 #include "components/latch.h"
 #include "components/phase-timer.h"
 #include "components/taper.h"
 #include "fake/FakeControls.h"
-#include "modules/stage/Event.h"
+#include "modules/stage/event.h"
 
 #include <doctest.h>
 
@@ -17,7 +17,7 @@ using dhe::PhaseTimer;
 using dhe::stage::Event;
 using dhe::stage::GenerateMode;
 
-static inline void prepareToExecute(FakeControls &controls) {
+static inline void prepare_to_execute(FakeControls &controls) {
   controls.curvature = []() -> float { return 0.F; };
   controls.duration = []() -> float { return 1.F; };
   controls.input = []() -> float { return 0.F; };
@@ -31,23 +31,23 @@ static inline void prepareToExecute(FakeControls &controls) {
 TEST_CASE("stage::GenerateMode") {
   FakeControls controls{};
   PhaseTimer timer{};
-  GenerateMode<FakeControls, PhaseTimer> generateMode{controls, timer};
+  GenerateMode<FakeControls, PhaseTimer> generate_mode{controls, timer};
 
   SUBCASE("enter") {
-    controls.showActive = [](bool b) {};
+    controls.show_active = [](bool b) {};
     controls.input = []() -> float { return 0.F; };
 
     SUBCASE("activates stage") {
       auto active{false};
-      controls.showActive = [&](bool b) { active = b; };
-      generateMode.enter();
+      controls.show_active = [&](bool b) { active = b; };
+      generate_mode.enter();
       CHECK(active);
     }
 
     SUBCASE("resets timer") {
       timer.advance(0.5F);
 
-      generateMode.enter();
+      generate_mode.enter();
 
       CHECK_EQ(timer.phase(), 0.F);
     }
@@ -56,9 +56,9 @@ TEST_CASE("stage::GenerateMode") {
       auto constexpr input{5.3948F};
       controls.input = []() -> float { return input; };
 
-      generateMode.enter();
+      generate_mode.enter();
 
-      prepareToExecute(controls);
+      prepare_to_execute(controls);
 
       auto output{-99.F};
       controls.output = [&](float v) { output = v; };
@@ -66,32 +66,32 @@ TEST_CASE("stage::GenerateMode") {
       // After enter(), phase is 0. Executing with a sample time of 0 will leave
       // the phase at 0. At phase 0, execute outputs the captured starting
       // voltage, which is what we want to verify.
-      generateMode.execute(Latch{}, 0.F);
+      generate_mode.execute(Latch{}, 0.F);
 
       CHECK_EQ(output, input);
     }
   }
 
   SUBCASE("execute") {
-    prepareToExecute(controls);
+    prepare_to_execute(controls);
 
     SUBCASE("advances phase") {
       auto constexpr duration{3.3498F};
-      auto constexpr sampleTime(0.9384F);
+      auto constexpr sample_time(0.9384F);
 
       timer.reset();
       controls.duration = []() -> float { return duration; };
 
-      generateMode.execute(Latch{}, sampleTime);
+      generate_mode.execute(Latch{}, sample_time);
 
-      CHECK_EQ(timer.phase(), sampleTime / duration);
+      CHECK_EQ(timer.phase(), sample_time / duration);
     }
 
     SUBCASE("if retrigger rises") {
       SUBCASE("resets timer") {
         timer.advance(0.5F);
 
-        generateMode.execute(Latch{true, true}, 0.F);
+        generate_mode.execute(Latch{true, true}, 0.F);
 
         CHECK_EQ(timer.phase(), 0.F);
       }
@@ -108,7 +108,7 @@ TEST_CASE("stage::GenerateMode") {
         // If retrigger rises, execute resets the timer. Executing with a sample
         // time of 0 will leave the phase at 0. At phase 0, execute outputs the
         // captured starting voltage, which is what we want to verify.
-        generateMode.execute(Latch{true, true}, 0.F);
+        generate_mode.execute(Latch{true, true}, 0.F);
 
         CHECK_EQ(output, input);
       }
@@ -128,15 +128,15 @@ TEST_CASE("stage::GenerateMode") {
 
       // Sample time is 1/10 of duration. So execute will raise the output by
       // 0.2V (1/10 of the full curve).
-      auto constexpr sampleTime = 0.1F;
+      auto constexpr sample_time = 0.1F;
 
-      controls.showActive = [](bool b) {};
-      generateMode.enter(); // To set starting voltage
+      controls.show_active = [](bool b) {};
+      generate_mode.enter(); // To set starting voltage
 
       auto output{-99.F};
       controls.output = [&](float v) { output = v; };
 
-      generateMode.execute(Latch{}, sampleTime);
+      generate_mode.execute(Latch{}, sample_time);
 
       // Execute must raise output by 0.2V from 4V to 4.2V.
       CHECK_EQ(output, 4.2F);
@@ -146,7 +146,7 @@ TEST_CASE("stage::GenerateMode") {
       controls.duration = []() -> float { return 1.F; };
       timer.reset();
 
-      CHECK_EQ(generateMode.execute(Latch{}, 0.1F), Event::Generated);
+      CHECK_EQ(generate_mode.execute(Latch{}, 0.1F), Event::Generated);
     }
 
     SUBCASE("returns completed if timer expired") {
@@ -154,14 +154,14 @@ TEST_CASE("stage::GenerateMode") {
       timer.reset();
       timer.advance(0.9999F);
 
-      CHECK_EQ(generateMode.execute(Latch{}, 0.1F), Event::Completed);
+      CHECK_EQ(generate_mode.execute(Latch{}, 0.1F), Event::Completed);
     }
   }
 
   SUBCASE("exit deactivates stage") {
     auto active{true};
-    controls.showActive = [&](bool b) { active = b; };
-    generateMode.exit();
+    controls.show_active = [&](bool b) { active = b; };
+    generate_mode.exit();
     CHECK_FALSE(active);
   }
 }

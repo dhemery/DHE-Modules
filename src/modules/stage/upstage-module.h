@@ -1,9 +1,9 @@
 #pragma once
 
-#include "UpstageControls.h"
-#include "UpstageEngine.h"
 #include "config/common-config.h"
 #include "config/level-config.h"
+#include "upstage-controls.h"
+#include "upstage-engine.h"
 
 #include <engine/Module.hpp>
 
@@ -26,11 +26,11 @@ public:
                   0);
   }
 
-  void process(ProcessArgs const & /*args*/) override { machine.process(); }
+  void process(ProcessArgs const & /*args*/) override { machine_.process(); }
 
 private:
-  Controls controls{inputs, params, outputs};
-  UpstageEngine<Controls> machine{controls};
+  Controls controls_{inputs, params, outputs};
+  UpstageEngine<Controls> machine_{controls_};
 };
 } // namespace stage
 } // namespace dhe

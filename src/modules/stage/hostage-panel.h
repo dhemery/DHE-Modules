@@ -1,18 +1,17 @@
 #pragma once
 
-#include "StageControls.h"
+#include "hostage-controls.h"
 
 #include <app/ModuleWidget.hpp>
 
 namespace dhe {
 namespace stage {
-
-class StagePanel : public rack::app::ModuleWidget {
-  using Controls = StageControls;
+class HostagePanel : public rack::app::ModuleWidget {
+  using Controls = HostageControls;
 
 public:
-  explicit StagePanel(rack::engine::Module *module) {
-    auto constexpr slug = "stage";
+  HostagePanel(rack::engine::Module *module) {
+    auto constexpr slug = "hostage";
     auto constexpr hp = 5;
 
     setModule(module);
@@ -28,10 +27,13 @@ public:
     auto y = 25.F;
     auto dy = 18.5F;
 
-    addParam(Knob::large(slug, module, column2, y, Controls::LevelKnob));
+    addParam(
+        Toggle::stepper(2, slug, module, column2, y, Controls::ModeSwitch));
 
     y += dy;
-    addParam(Knob::large(slug, module, column2, y, Controls::CurveKnob));
+    addInput(Jack::input(slug, module, column1, y, Controls::DurationCvInput));
+    addParam(Toggle::stepper(3, slug, module, column3, y,
+                             Controls::DurationRangeSwitch));
 
     y += dy;
     addParam(Knob::large(slug, module, column2, y, Controls::DurationKnob));

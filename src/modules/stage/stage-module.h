@@ -1,13 +1,14 @@
 #pragma once
 
-#include "DeferMode.h"
-#include "GenerateMode.h"
-#include "InputMode.h"
-#include "StageControls.h"
-#include "StageEngine.h"
 #include "config/curvature-config.h"
 #include "config/duration-config.h"
 #include "config/level-config.h"
+#include "defer-mode.h"
+#include "generate-mode.h"
+#include "input-mode.h"
+#include "level-mode.h"
+#include "stage-controls.h"
+#include "stage-engine.h"
 
 #include <engine/Module.hpp>
 
@@ -28,19 +29,20 @@ public:
   }
 
   void process(ProcessArgs const &args) override {
-    machine.process(args.sampleTime);
+    machine_.process(args.sampleTime);
   }
 
 private:
-  Controls controls{inputs, params, outputs};
-  PhaseTimer timer{};
-  DeferMode<Controls> deferMode{controls};
-  InputMode<Controls> inputMode{controls};
-  GenerateMode<Controls, PhaseTimer> generateMode{controls, timer};
-  LevelMode<Controls> levelMode{controls};
+  Controls controls_{inputs, params, outputs};
+  PhaseTimer timer_{};
+  DeferMode<Controls> defer_mode_{controls_};
+  InputMode<Controls> input_mode_{controls_};
+  GenerateMode<Controls, PhaseTimer> generate_mode_{controls_, timer_};
+  LevelMode<Controls> level_mode_{controls_};
   StageEngine<Controls, DeferMode<Controls>, InputMode<Controls>,
               GenerateMode<Controls, PhaseTimer>, LevelMode<Controls>>
-      machine{controls, deferMode, inputMode, generateMode, levelMode};
+      machine_{controls_, defer_mode_, input_mode_, generate_mode_,
+               level_mode_};
 };
 } // namespace stage
 } // namespace dhe

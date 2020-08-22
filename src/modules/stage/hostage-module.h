@@ -1,13 +1,13 @@
 #pragma once
 
-#include "DeferMode.h"
-#include "HoldMode.h"
-#include "HostageControls.h"
-#include "HostageEngine.h"
-#include "IdleMode.h"
-#include "InputMode.h"
-#include "SustainMode.h"
 #include "config/duration-config.h"
+#include "defer-mode.h"
+#include "hold-mode.h"
+#include "hostage-controls.h"
+#include "hostage-engine.h"
+#include "idle-mode.h"
+#include "input-mode.h"
+#include "sustain-mode.h"
 
 #include <engine/Module.hpp>
 
@@ -31,20 +31,21 @@ public:
   };
 
   void process(ProcessArgs const &args) override {
-    machine.process(args.sampleTime);
+    machine_.process(args.sampleTime);
   }
 
 private:
-  Controls controls{inputs, params, outputs};
-  DeferMode<Controls> deferMode{controls};
-  PhaseTimer holdTimer{};
-  HoldMode<Controls> holdMode{controls, holdTimer};
-  IdleMode<Controls> idleMode{controls};
-  SustainMode<Controls> sustainMode{controls};
-  InputMode<Controls> inputMode{controls};
+  Controls controls_{inputs, params, outputs};
+  DeferMode<Controls> defer_mode_{controls_};
+  PhaseTimer hold_timer_{};
+  HoldMode<Controls> hold_mode_{controls_, hold_timer_};
+  IdleMode<Controls> idle_mode_{controls_};
+  SustainMode<Controls> sustain_mode_{controls_};
+  InputMode<Controls> input_mode_{controls_};
   HostageEngine<Controls, InputMode<Controls>, DeferMode<Controls>,
                 HoldMode<Controls>, SustainMode<Controls>, IdleMode<Controls>>
-      machine{controls, inputMode, deferMode, holdMode, sustainMode, idleMode};
+      machine_{controls_,  input_mode_,   defer_mode_,
+               hold_mode_, sustain_mode_, idle_mode_};
 };
 } // namespace stage
 } // namespace dhe

@@ -4,14 +4,14 @@ namespace dhe {
 namespace stage {
 template <typename Controls> class IdleMode {
 public:
-  IdleMode(Controls &controls) : controls{controls} {}
+  IdleMode(Controls &controls) : controls_{controls} {}
 
-  void enter() { controls.showActive(false); }
+  void enter() { controls_.show_active(false); }
   void execute() {}
-  void exit() { controls.showActive(false); }
+  void exit() { controls_.show_active(false); }
 
 private:
-  Controls &controls;
+  Controls &controls_;
 };
 } // namespace stage
 } // namespace dhe

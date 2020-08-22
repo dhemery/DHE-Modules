@@ -1,6 +1,6 @@
 #pragma once
 
-#include "UpstageControls.h"
+#include "upstage-controls.h"
 
 #include <app/ModuleWidget.hpp>
 

@@ -1,4 +1,4 @@
-#include "modules/stage/IdleMode.h"
+#include "modules/stage/idle-mode.h"
 
 #include "fake/FakeControls.h"
 
@@ -16,7 +16,7 @@ TEST_CASE("stage::IdleMode") {
 
   SUBCASE("enter deactivates stage") {
     auto active{true};
-    controls.showActive = [&](bool b) { active = b; };
+    controls.show_active = [&](bool b) { active = b; };
     idleMode.enter();
     CHECK_FALSE(active);
   }
@@ -27,7 +27,7 @@ TEST_CASE("stage::IdleMode") {
 
   SUBCASE("exit deactivates stage") {
     auto active{true};
-    controls.showActive = [&](bool b) { active = b; };
+    controls.show_active = [&](bool b) { active = b; };
     idleMode.exit();
     CHECK_FALSE(active);
   }

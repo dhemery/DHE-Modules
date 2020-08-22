@@ -20,28 +20,28 @@ public:
   UpstageControls(std::vector<Input> const &inputs,
                   std::vector<Param> const &params,
                   std::vector<Output> &outputs)
-      : inputs{inputs}, params{params}, outputs{outputs} {}
+      : inputs_{inputs}, params_{params}, outputs_{outputs} {}
 
-  auto isTriggered() const -> bool {
-    return is_high(inputs[TriggerInput]) || is_pressed(params[TriggerButton]);
+  auto is_triggered() const -> bool {
+    return is_high(inputs_[TriggerInput]) || is_pressed(params_[TriggerButton]);
   }
 
-  auto isWaiting() const -> bool {
-    return is_high(inputs[WaitInput]) || is_pressed(params[WaitButton]);
+  auto is_waiting() const -> bool {
+    return is_high(inputs_[WaitInput]) || is_pressed(params_[WaitButton]);
   }
 
   auto level() const -> float {
-    return selectable_level(params[LevelKnob], inputs[LevelCvInput],
-                            params[LevelRangeSwitch]);
+    return selectable_level(params_[LevelKnob], inputs_[LevelCvInput],
+                            params_[LevelRangeSwitch]);
   }
 
-  void sendEnvelope(float voltage) {
-    outputs[EnvelopeOutput].setVoltage(voltage);
+  void send_envelope(float voltage) {
+    outputs_[EnvelopeOutput].setVoltage(voltage);
   }
 
-  void sendTrigger(bool isTriggered) {
-    auto const voltage = unipolar_signal_range.scale(isTriggered);
-    outputs[TriggerOutput].setVoltage(voltage);
+  void send_trigger(bool is_triggered) {
+    auto const voltage = unipolar_signal_range.scale(is_triggered);
+    outputs_[TriggerOutput].setVoltage(voltage);
   }
 
   enum ParameterIds {
@@ -57,9 +57,9 @@ public:
   enum OutputIds { TriggerOutput, EnvelopeOutput, OutputCount };
 
 private:
-  std::vector<Input> const &inputs;
-  std::vector<Param> const &params;
-  std::vector<Output> &outputs;
+  std::vector<Input> const &inputs_;
+  std::vector<Param> const &params_;
+  std::vector<Output> &outputs_;
 };
 } // namespace stage
 

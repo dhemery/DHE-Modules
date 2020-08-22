@@ -1,10 +1,10 @@
-#include "modules/stage/HostageEngine.h"
+#include "modules/stage/hostage-engine.h"
 
 #include "components/latch.h"
 #include "fake/FakeControls.h"
 #include "fake/FakeModes.h"
-#include "modules/stage/Event.h"
-#include "modules/stage/Mode.h"
+#include "modules/stage/event.h"
+#include "modules/stage/mode.h"
 
 #include <doctest.h>
 
@@ -20,36 +20,36 @@ using HostageEngine =
 
 TEST_CASE("stage::HostageEngine") {
   FakeControls controls{};
-  FakeSimpleMode deferMode{};
-  FakeTimedMode holdMode{};
-  FakeSimpleMode idleMode{};
-  FakeSimpleMode inputMode{};
-  FakeLatchedMode sustainMode{};
+  FakeSimpleMode defer_mode{};
+  FakeTimedMode hold_mode{};
+  FakeSimpleMode idle_mode{};
+  FakeSimpleMode input_mode{};
+  FakeLatchedMode sustain_mode{};
 
-  HostageEngine engine{controls, inputMode,   deferMode,
-                       holdMode, sustainMode, idleMode};
+  HostageEngine engine{controls, input_mode,   defer_mode,
+                       hold_mode, sustain_mode, idle_mode};
 
-  controls.showEoc = [](bool e) {};
+  controls.show_eoc = [](bool e) {};
 
   SUBCASE("starts in input mode") {
     controls.defer = []() -> bool { return false; };
     controls.gate = []() -> bool { return false; };
-    controls.showEoc = [](bool e) {};
+    controls.show_eoc = [](bool e) {};
 
-    inputMode.returns(Event::Generated);
+    input_mode.returns(Event::Generated);
 
     engine.process(0.F);
 
-    CHECK(inputMode.wasExecuted());
+    CHECK(input_mode.wasExecuted());
   }
 
   SUBCASE("in input mode") {
     controls.defer = []() -> bool { return false; };
     controls.gate = []() -> bool { return false; };
 
-    inputMode.returns(Event::Generated);
+    input_mode.returns(Event::Generated);
     engine.process(0.F);
-    inputMode.reset();
+    input_mode.reset();
 
     SUBCASE("with defer low") {
       controls.defer = []() -> bool { return false; };
@@ -59,7 +59,7 @@ TEST_CASE("stage::HostageEngine") {
 
         engine.process(1.F);
 
-        CHECK(inputMode.wasExecuted());
+        CHECK(input_mode.wasExecuted());
       }
 
       SUBCASE("if gate rises") {
@@ -70,12 +70,12 @@ TEST_CASE("stage::HostageEngine") {
 
           engine.process(0.F);
 
-          CHECK(inputMode.wasExited());
-          CHECK_FALSE(inputMode.wasExecuted());
-          CHECK_FALSE(inputMode.isActive());
-          CHECK(holdMode.wasEntered());
-          CHECK(holdMode.wasExecuted());
-          CHECK(holdMode.isActive());
+          CHECK(input_mode.wasExited());
+          CHECK_FALSE(input_mode.wasExecuted());
+          CHECK_FALSE(input_mode.isActive());
+          CHECK(hold_mode.wasEntered());
+          CHECK(hold_mode.wasExecuted());
+          CHECK(hold_mode.isActive());
         }
 
         SUBCASE("begins sustaining if sustain mode selected") {
@@ -83,28 +83,28 @@ TEST_CASE("stage::HostageEngine") {
 
           engine.process(0.F);
 
-          CHECK(inputMode.wasExited());
-          CHECK_FALSE(inputMode.wasExecuted());
-          CHECK_FALSE(inputMode.isActive());
-          CHECK(sustainMode.wasEntered());
-          CHECK(sustainMode.wasExecuted());
-          CHECK(sustainMode.isActive());
+          CHECK(input_mode.wasExited());
+          CHECK_FALSE(input_mode.wasExecuted());
+          CHECK_FALSE(input_mode.isActive());
+          CHECK(sustain_mode.wasEntered());
+          CHECK(sustain_mode.wasExecuted());
+          CHECK(sustain_mode.isActive());
         }
       }
     }
 
     SUBCASE("begins deferring if defer rises") {
       controls.defer = []() -> bool { return true; };
-      deferMode.returns(Event::Generated);
+      defer_mode.returns(Event::Generated);
 
       engine.process(0.F);
 
-      CHECK(inputMode.wasExited());
-      CHECK_FALSE(inputMode.wasExecuted());
-      CHECK_FALSE(inputMode.isActive());
-      CHECK(deferMode.wasEntered());
-      CHECK(deferMode.wasExecuted());
-      CHECK(deferMode.isActive());
+      CHECK(input_mode.wasExited());
+      CHECK_FALSE(input_mode.wasExecuted());
+      CHECK_FALSE(input_mode.isActive());
+      CHECK(defer_mode.wasEntered());
+      CHECK(defer_mode.wasExecuted());
+      CHECK(defer_mode.isActive());
     }
   }
 
@@ -112,7 +112,7 @@ TEST_CASE("stage::HostageEngine") {
     controls.defer = []() -> bool { return true; };
     controls.gate = []() -> bool { return false; };
     engine.process(0.F);
-    deferMode.reset();
+    defer_mode.reset();
 
     SUBCASE("with defer high") {
       controls.defer = []() -> bool { return true; };
@@ -121,12 +121,12 @@ TEST_CASE("stage::HostageEngine") {
         controls.gate = []() -> bool { return true; };
 
         engine.process(0.F);
-        CHECK(deferMode.wasExecuted());
-        deferMode.reset();
+        CHECK(defer_mode.wasExecuted());
+        defer_mode.reset();
 
         controls.gate = []() -> bool { return false; };
         engine.process(0.F);
-        CHECK(deferMode.wasExecuted());
+        CHECK(defer_mode.wasExecuted());
       }
     }
 
@@ -141,12 +141,12 @@ TEST_CASE("stage::HostageEngine") {
 
           engine.process(0.F);
 
-          CHECK(deferMode.wasExited());
-          CHECK_FALSE(deferMode.wasExecuted());
-          CHECK_FALSE(deferMode.isActive());
-          CHECK(holdMode.wasEntered());
-          CHECK(holdMode.wasExecuted());
-          CHECK(holdMode.isActive());
+          CHECK(defer_mode.wasExited());
+          CHECK_FALSE(defer_mode.wasExecuted());
+          CHECK_FALSE(defer_mode.isActive());
+          CHECK(hold_mode.wasEntered());
+          CHECK(hold_mode.wasExecuted());
+          CHECK(hold_mode.isActive());
         }
 
         SUBCASE("if gate is low") {
@@ -155,20 +155,20 @@ TEST_CASE("stage::HostageEngine") {
           SUBCASE("begins tracking input") {
             engine.process(0.F);
 
-            CHECK(deferMode.wasExited());
-            CHECK_FALSE(deferMode.wasExecuted());
-            CHECK_FALSE(deferMode.isActive());
-            CHECK(inputMode.wasEntered());
-            CHECK(inputMode.wasExecuted());
-            CHECK(inputMode.isActive());
+            CHECK(defer_mode.wasExited());
+            CHECK_FALSE(defer_mode.wasExecuted());
+            CHECK_FALSE(defer_mode.isActive());
+            CHECK(input_mode.wasEntered());
+            CHECK(input_mode.wasExecuted());
+            CHECK(input_mode.isActive());
           }
 
           SUBCASE("does not raise eoc") {
-            bool raisedEoc{false};
-            controls.showEoc = [&](bool e) { raisedEoc = e; };
+            bool raised_eoc{false};
+            controls.show_eoc = [&raised_eoc](bool e) { raised_eoc = e; };
 
             engine.process(0.F);
-            CHECK_FALSE(raisedEoc);
+            CHECK_FALSE(raised_eoc);
           }
         }
       }
@@ -181,12 +181,12 @@ TEST_CASE("stage::HostageEngine") {
 
           engine.process(0.F);
 
-          CHECK(deferMode.wasExited());
-          CHECK_FALSE(deferMode.wasExecuted());
-          CHECK_FALSE(deferMode.isActive());
-          CHECK(sustainMode.wasEntered());
-          CHECK(sustainMode.wasExecuted());
-          CHECK(sustainMode.isActive());
+          CHECK(defer_mode.wasExited());
+          CHECK_FALSE(defer_mode.wasExecuted());
+          CHECK_FALSE(defer_mode.isActive());
+          CHECK(sustain_mode.wasEntered());
+          CHECK(sustain_mode.wasExecuted());
+          CHECK(sustain_mode.isActive());
         }
 
         SUBCASE("if gate is low") {
@@ -195,20 +195,20 @@ TEST_CASE("stage::HostageEngine") {
           SUBCASE("becomes idle") {
             engine.process(0.F);
 
-            CHECK(deferMode.wasExited());
-            CHECK_FALSE(deferMode.wasExecuted());
-            CHECK_FALSE(deferMode.isActive());
-            CHECK(idleMode.wasEntered());
-            CHECK(idleMode.wasExecuted());
-            CHECK(idleMode.isActive());
+            CHECK(defer_mode.wasExited());
+            CHECK_FALSE(defer_mode.wasExecuted());
+            CHECK_FALSE(defer_mode.isActive());
+            CHECK(idle_mode.wasEntered());
+            CHECK(idle_mode.wasExecuted());
+            CHECK(idle_mode.isActive());
           }
 
           SUBCASE("raises eoc") {
-            bool raisedEoc{false};
-            controls.showEoc = [&](bool e) { raisedEoc = e; };
+            bool raised_eoc{false};
+            controls.show_eoc = [&raised_eoc](bool e) { raised_eoc = e; };
 
             engine.process(0.F);
-            CHECK(raisedEoc);
+            CHECK(raised_eoc);
           }
         }
       }
@@ -219,10 +219,10 @@ TEST_CASE("stage::HostageEngine") {
     controls.defer = []() -> bool { return false; };
     controls.gate = []() -> bool { return true; };
     controls.mode = []() -> Mode { return Mode::Hold; };
-    holdMode.returns(Event::Generated);
+    hold_mode.returns(Event::Generated);
     engine.process(0.F);
     controls.gate = []() -> bool { return false; };
-    holdMode.reset();
+    hold_mode.reset();
 
     SUBCASE("with defer low") {
       controls.defer = []() -> bool { return false; };
@@ -230,12 +230,12 @@ TEST_CASE("stage::HostageEngine") {
       SUBCASE("executes regardless of gate") {
         controls.gate = []() -> bool { return false; };
         engine.process(1.F);
-        CHECK(holdMode.wasExecuted());
-        holdMode.reset();
+        CHECK(hold_mode.wasExecuted());
+        hold_mode.reset();
 
         controls.gate = []() -> bool { return true; };
         engine.process(1.F);
-        CHECK(holdMode.wasExecuted());
+        CHECK(hold_mode.wasExecuted());
       }
 
       SUBCASE("passes gate state to execute") {
@@ -245,30 +245,30 @@ TEST_CASE("stage::HostageEngine") {
 
         controls.gate = []() -> bool { return false; }; // Low with no edge
         engine.process(0.F);
-        CHECK_EQ(holdMode.latch(), Latch{false, false});
+        CHECK_EQ(hold_mode.latch(), Latch{false, false});
 
         controls.gate = []() -> bool { return true; }; // Rise
         engine.process(0.F);
-        CHECK_EQ(holdMode.latch(), Latch{true, true});
+        CHECK_EQ(hold_mode.latch(), Latch{true, true});
 
         controls.gate = []() -> bool { return true; }; // High with no edge
         engine.process(0.F);
-        CHECK_EQ(holdMode.latch(), Latch{true, false});
+        CHECK_EQ(hold_mode.latch(), Latch{true, false});
 
         controls.gate = []() -> bool { return false; }; // Fall
         engine.process(0.F);
-        CHECK_EQ(holdMode.latch(), Latch{false, true});
+        CHECK_EQ(hold_mode.latch(), Latch{false, true});
       }
 
       SUBCASE("raises eoc if hold completes") {
-        holdMode.returns(Event::Completed);
+        hold_mode.returns(Event::Completed);
 
-        bool raisedEoc{false};
-        controls.showEoc = [&](bool e) { raisedEoc = e; };
+        bool raised_eoc{false};
+        controls.show_eoc = [&raised_eoc](bool e) { raised_eoc = e; };
 
         engine.process(0.F);
 
-        CHECK(raisedEoc);
+        CHECK(raised_eoc);
       }
     }
 
@@ -277,12 +277,12 @@ TEST_CASE("stage::HostageEngine") {
 
       engine.process(0.F);
 
-      CHECK(holdMode.wasExited());
-      CHECK_FALSE(holdMode.wasExecuted());
-      CHECK_FALSE(holdMode.isActive());
-      CHECK(deferMode.wasEntered());
-      CHECK(deferMode.wasExecuted());
-      CHECK(deferMode.isActive());
+      CHECK(hold_mode.wasExited());
+      CHECK_FALSE(hold_mode.wasExecuted());
+      CHECK_FALSE(hold_mode.isActive());
+      CHECK(defer_mode.wasEntered());
+      CHECK(defer_mode.wasExecuted());
+      CHECK(defer_mode.isActive());
     }
   }
 
@@ -290,9 +290,9 @@ TEST_CASE("stage::HostageEngine") {
     controls.defer = []() -> bool { return false; };
     controls.gate = []() -> bool { return true; };
     controls.mode = []() -> Mode { return Mode::Sustain; };
-    sustainMode.returns(Event::Generated);
+    sustain_mode.returns(Event::Generated);
     engine.process(0.F);
-    sustainMode.reset();
+    sustain_mode.reset();
 
     SUBCASE("with defer low") {
       controls.defer = []() -> bool { return false; };
@@ -300,12 +300,12 @@ TEST_CASE("stage::HostageEngine") {
       SUBCASE("executes regardless of gate") {
         controls.gate = []() -> bool { return false; };
         engine.process(1.F);
-        CHECK(sustainMode.wasExecuted());
-        holdMode.reset();
+        CHECK(sustain_mode.wasExecuted());
+        hold_mode.reset();
 
         controls.gate = []() -> bool { return true; };
         engine.process(1.F);
-        CHECK(sustainMode.wasExecuted());
+        CHECK(sustain_mode.wasExecuted());
       }
 
       SUBCASE("passes gate state to execute") {
@@ -315,45 +315,45 @@ TEST_CASE("stage::HostageEngine") {
 
         controls.gate = []() -> bool { return false; }; // Low with no edge
         engine.process(0.F);
-        CHECK_EQ(sustainMode.latch(), Latch{false, false});
+        CHECK_EQ(sustain_mode.latch(), Latch{false, false});
 
         controls.gate = []() -> bool { return true; }; // Rise
         engine.process(0.F);
-        CHECK_EQ(sustainMode.latch(), Latch{true, true});
+        CHECK_EQ(sustain_mode.latch(), Latch{true, true});
 
         controls.gate = []() -> bool { return true; }; // High with no edge
         engine.process(0.F);
-        CHECK_EQ(sustainMode.latch(), Latch{true, false});
+        CHECK_EQ(sustain_mode.latch(), Latch{true, false});
 
         controls.gate = []() -> bool { return false; }; // Fall
         engine.process(0.F);
-        CHECK_EQ(sustainMode.latch(), Latch{false, true});
+        CHECK_EQ(sustain_mode.latch(), Latch{false, true});
       }
 
       SUBCASE("raises eoc if sustain completes") {
-        sustainMode.returns(Event::Completed);
+        sustain_mode.returns(Event::Completed);
 
-        bool raisedEoc{false};
-        controls.showEoc = [&](bool e) { raisedEoc = e; };
+        bool raised_eoc{false};
+        controls.show_eoc = [&raised_eoc](bool e) { raised_eoc = e; };
 
         engine.process(0.F);
 
-        CHECK(raisedEoc);
+        CHECK(raised_eoc);
       }
     }
 
     SUBCASE("begins deferring if defer rises") {
       controls.defer = []() -> bool { return true; };
-      deferMode.returns(Event::Generated);
+      defer_mode.returns(Event::Generated);
 
       engine.process(0.F);
 
-      CHECK(sustainMode.wasExited());
-      CHECK_FALSE(sustainMode.wasExecuted());
-      CHECK_FALSE(sustainMode.isActive());
-      CHECK(deferMode.wasEntered());
-      CHECK(deferMode.wasExecuted());
-      CHECK(deferMode.isActive());
+      CHECK(sustain_mode.wasExited());
+      CHECK_FALSE(sustain_mode.wasExecuted());
+      CHECK_FALSE(sustain_mode.isActive());
+      CHECK(defer_mode.wasEntered());
+      CHECK(defer_mode.wasExecuted());
+      CHECK(defer_mode.isActive());
     }
   }
 
@@ -362,15 +362,15 @@ TEST_CASE("stage::HostageEngine") {
     controls.defer = []() -> bool { return false; };
     controls.gate = []() -> bool { return true; };
     controls.mode = []() -> Mode { return Mode::Sustain; };
-    sustainMode.returns(Event::Generated);
+    sustain_mode.returns(Event::Generated);
     engine.process(0.F);
 
     // Finish sustaining, which enters Idle mode
     controls.gate = []() -> bool { return false; };
-    sustainMode.returns(Event::Completed);
+    sustain_mode.returns(Event::Completed);
     engine.process(0.F);
-    sustainMode.reset();
-    idleMode.reset();
+    sustain_mode.reset();
+    idle_mode.reset();
 
     SUBCASE("with defer low") {
       controls.defer = []() -> bool { return false; };
@@ -380,7 +380,7 @@ TEST_CASE("stage::HostageEngine") {
 
         engine.process(1.F);
 
-        CHECK(idleMode.wasExecuted());
+        CHECK(idle_mode.wasExecuted());
       }
 
       SUBCASE("if gate rises") {
@@ -388,46 +388,46 @@ TEST_CASE("stage::HostageEngine") {
 
         SUBCASE("begins holding if hold mode selected") {
           controls.mode = []() -> Mode { return Mode::Hold; };
-          holdMode.returns(Event::Generated);
+          hold_mode.returns(Event::Generated);
 
           engine.process(0.F);
 
-          CHECK(idleMode.wasExited());
-          CHECK_FALSE(idleMode.wasExecuted());
-          CHECK_FALSE(idleMode.isActive());
-          CHECK(holdMode.wasEntered());
-          CHECK(holdMode.wasExecuted());
-          CHECK(holdMode.isActive());
+          CHECK(idle_mode.wasExited());
+          CHECK_FALSE(idle_mode.wasExecuted());
+          CHECK_FALSE(idle_mode.isActive());
+          CHECK(hold_mode.wasEntered());
+          CHECK(hold_mode.wasExecuted());
+          CHECK(hold_mode.isActive());
         }
 
         SUBCASE("begins sustaining if sustain mode selected") {
           controls.mode = []() -> Mode { return Mode::Sustain; };
-          sustainMode.returns(Event::Generated);
+          sustain_mode.returns(Event::Generated);
 
           engine.process(0.F);
 
-          CHECK(idleMode.wasExited());
-          CHECK_FALSE(idleMode.wasExecuted());
-          CHECK_FALSE(idleMode.isActive());
-          CHECK(sustainMode.wasEntered());
-          CHECK(sustainMode.wasExecuted());
-          CHECK(sustainMode.isActive());
+          CHECK(idle_mode.wasExited());
+          CHECK_FALSE(idle_mode.wasExecuted());
+          CHECK_FALSE(idle_mode.isActive());
+          CHECK(sustain_mode.wasEntered());
+          CHECK(sustain_mode.wasExecuted());
+          CHECK(sustain_mode.isActive());
         }
       }
     }
 
     SUBCASE("begins deferring if defer rises") {
       controls.defer = []() -> bool { return true; };
-      deferMode.returns(Event::Generated);
+      defer_mode.returns(Event::Generated);
 
       engine.process(0.F);
 
-      CHECK(idleMode.wasExited());
-      CHECK_FALSE(idleMode.wasExecuted());
-      CHECK_FALSE(idleMode.isActive());
-      CHECK(deferMode.wasEntered());
-      CHECK(deferMode.wasExecuted());
-      CHECK(deferMode.isActive());
+      CHECK(idle_mode.wasExited());
+      CHECK_FALSE(idle_mode.wasExecuted());
+      CHECK_FALSE(idle_mode.isActive());
+      CHECK(defer_mode.wasEntered());
+      CHECK(defer_mode.wasExecuted());
+      CHECK(defer_mode.isActive());
     }
   }
 }
