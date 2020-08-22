@@ -11,7 +11,7 @@ namespace dhe {
 
 class Toggle : public rack::app::SvgSwitch {
 public:
-  static inline auto stepper(int size, std::string const &module_svg_dir,
+  static inline auto stepper(size_t size, std::string const &module_svg_dir,
                              rack::engine::Module *module, float xmm, float ymm,
                              int index) -> Toggle * {
     return new Toggle{size, module_svg_dir, module, xmm, ymm, index};
@@ -23,8 +23,15 @@ public:
     return new Toggle{"button", 2, module_svg_dir, module, xmm, ymm, index};
   }
 
+  static inline auto buttons(std::string const &module_svg_dir,
+                             std::string const &name, size_t size,
+                             rack::engine::Module *module, float xmm, float ymm,
+                             int index) -> Toggle * {
+    return new Toggle{name, size, module_svg_dir, module, xmm, ymm, index};
+  }
+
 protected:
-  Toggle(int size, std::string const &module_svg_dir,
+  Toggle(size_t size, std::string const &module_svg_dir,
          rack::engine::Module *module, float xmm, float ymm, int index)
       : Toggle{"toggle-" + std::to_string(size),
                size,
@@ -34,11 +41,11 @@ protected:
                ymm,
                index} {}
 
-  Toggle(std::string const &toggle_name, int size,
+  Toggle(std::string const &toggle_name, size_t size,
          std::string const &module_svg_dir, rack::engine::Module *module,
          float xmm, float ymm, int index) {
     auto const toggle_name_prefix = toggle_name + "-";
-    for (auto position = 1; position <= size; position++) {
+    for (size_t position = 1; position <= size; position++) {
       addFrame(control_svg(module_svg_dir,
                            toggle_name_prefix + std::to_string(position)));
     }

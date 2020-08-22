@@ -227,11 +227,12 @@ private:
   Menu *popup_menu_;
 };
 
-static inline auto button(std::string const &svg_dir, std::string const &name,
-                          int size, rack::engine::Module *module, float xmm,
-                          float ymm, int index) -> Button * {
-  return new Button{svg_dir, name, size, module, xmm, ymm, index};
-}
+// static inline auto button(std::string const &svg_dir, std::string const
+// &name,
+//                          int size, rack::engine::Module *module, float xmm,
+//                          float ymm, int index) -> Button * {
+//  return new Button{svg_dir, name, size, module, xmm, ymm, index};
+//}
 } // namespace picklist
 
 } // namespace dhe

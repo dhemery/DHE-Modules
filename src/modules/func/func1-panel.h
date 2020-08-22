@@ -43,13 +43,13 @@ public:
     addOutput(Jack::output(slug, module, x, row6, Controls::FuncOutput));
 
     auto *offset_range_pick_list =
-        picklist::button(slug, "offset-range", offset_ranges.size(), module, x,
-                         row4, Controls::OffsetRangeSwitch);
+        Toggle::buttons(slug, "offset-range", offset_ranges.size(), module, x,
+                        row4, Controls::OffsetRangeSwitch);
     addParam(offset_range_pick_list);
 
     auto *multiplier_range_pick_list =
-        picklist::button(slug, "multiplier-range", multiplier_ranges.size(),
-                         module, x, row4, Controls::MultiplierRangeSwitch);
+        Toggle::buttons(slug, "multiplier-range", multiplier_ranges.size(),
+                        module, x, row4, Controls::MultiplierRangeSwitch);
     addParam(multiplier_range_pick_list);
 
     auto const update_range_stepper_visibility =
@@ -64,10 +64,6 @@ public:
         };
     addParam(new OperatorSwitch{update_range_stepper_visibility, slug, module,
                                 x, row2, Controls::OperationSwitch});
-
-    // Add these last so they overlay all other controls
-    addChild(offset_range_pick_list->menu());
-    addChild(multiplier_range_pick_list->menu());
   }
 };
 } // namespace func

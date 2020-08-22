@@ -35,8 +35,6 @@ public:
     auto constexpr row_spacing = (bottom - top) / (channel_count - 1.F);
     auto constexpr port_offset = 1.25F;
 
-    auto popup_menus = std::vector<rack::widget::Widget *>{};
-
     for (auto row = 0; row < channel_count; row++) {
       auto const y = top + row * row_spacing;
       auto const port_y = y + port_offset;
@@ -49,16 +47,14 @@ public:
                              Controls::FuncOutput + row));
 
       auto *offset_range_pick_list =
-          picklist::button(slug, "offset-range", offset_ranges.size(), module,
-                           column4, y, Controls::OffsetRangeSwitch + row);
+          Toggle::buttons(slug, "offset-range", offset_ranges.size(), module,
+                          column4, y, Controls::OffsetRangeSwitch + row);
       addParam(offset_range_pick_list);
-      popup_menus.push_back(offset_range_pick_list->menu());
 
-      auto *multiplier_range_pick_list = picklist::button(
+      auto *multiplier_range_pick_list = Toggle::buttons(
           slug, "multiplier-range", multiplier_ranges.size(), module, column4,
           y, Controls::MultiplierRangeSwitch + row);
       addParam(multiplier_range_pick_list);
-      popup_menus.push_back(multiplier_range_pick_list->menu());
 
       auto const update_range_pick_list =
           [offset_range_pick_list,
@@ -74,10 +70,6 @@ public:
 
       addParam(new OperatorSwitch{update_range_pick_list, slug, module, column2,
                                   y, Controls::OperationSwitch + row});
-    }
-
-    for (auto *popup_menu : popup_menus) {
-      addChild(popup_menu);
     }
   }
 }; // namespace func

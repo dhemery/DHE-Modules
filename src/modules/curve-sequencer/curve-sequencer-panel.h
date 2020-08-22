@@ -2,7 +2,6 @@
 
 #include "curve-sequencer-controls.h"
 #include "widgets/control-widgets.h"
-#include "widgets/pick-list.h"
 #include "widgets/screws.h"
 
 #include <app/ModuleWidget.hpp>
@@ -169,26 +168,20 @@ public:
     auto const advance_mode_labels =
         std::vector<std::string>{"time", "rise", "fall", "edge", "high", "low"};
 
-    // Gather popup menus to add after all other controls, so the menus display
-    // on top of the other controls
-    auto popup_menus = std::vector<rack::widget::Widget *>{};
-
     for (auto step = 0; step < N; step++) {
       auto const x = step_x + step_dx * (float)step;
       addChild(rack::createLightCentered<ProgressLight>(
           mm2px(x, active_y), module, Controls::ProgressLights + step + step));
 
-      auto *generate_mode_button = picklist::button(
+      auto *generate_mode_button = Toggle::buttons(
           slug, "generate-mode", generate_mode_labels.size(), module, x,
           generate_mode_y, Controls::ModeSwitches + step);
       addParam(generate_mode_button);
-      popup_menus.push_back(generate_mode_button->menu());
 
-      auto *advance_mode_button = picklist::button(
+      auto *advance_mode_button = Toggle::buttons(
           slug, "advance-mode", advance_mode_labels.size(), module, x,
           advance_mode_y, Controls::ConditionSwitches + step);
       addParam(advance_mode_button);
-      popup_menus.push_back(advance_mode_button->menu());
 
       addParam(
           Knob::small(slug, module, x, level_y, Controls::LevelKnobs + step));
@@ -219,10 +212,6 @@ public:
                              Controls::DurationRangeSwitch));
     addOutput(Jack::output(slug, module, right, out_y,
                            Controls::CurveSequencerOutput));
-
-    for (auto *popup_menu : popup_menus) {
-      addChild(popup_menu);
-    }
   }
 }; // namespace dhe
 } // namespace curve_sequencer
