@@ -97,9 +97,9 @@ auto rotation(KnobType &knob, InputType &cv_input, KnobType &av_knob) -> float {
   return rotation + modulation;
 }
 
-static inline auto tapered_and_scaled_rotation(float rotation,
-                                               sigmoid::Taper const &taper,
-                                               Range const &range) -> float {
+static constexpr auto tapered_and_scaled_rotation(float rotation,
+                                                  sigmoid::Taper const &taper,
+                                                  Range const &range) -> float {
   return range.scale(taper.apply(rotation));
 }
 

@@ -9,7 +9,7 @@ auto level_range(ToggleType &toggle) -> Range const & {
   return selected_range<2>(toggle, signal_ranges);
 }
 
-static inline auto level(float rotation, Range const &range) -> float {
+static constexpr auto level(float rotation, Range const &range) -> float {
   return range.scale(rotation);
 }
 

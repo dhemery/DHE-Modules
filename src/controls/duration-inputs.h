@@ -23,14 +23,14 @@ static auto constexpr duration_knob_taper_curvature = 0.8018017F;
 static auto constexpr duration_knob_taper =
     sigmoid::j_taper_with_curvature(duration_knob_taper_curvature);
 
-auto constexpr short_duration_range = Range{0.001F, 1.F};
-auto constexpr medium_duration_range = Range{0.01F, 10.F};
-auto constexpr long_duration_range = Range{0.1F, 100.F};
+static auto constexpr short_duration_range = Range{0.001F, 1.F};
+static auto constexpr medium_duration_range = Range{0.01F, 10.F};
+static auto constexpr long_duration_range = Range{0.1F, 100.F};
 
 static auto constexpr duration_ranges = std::array<Range const, 3>{
     short_duration_range, medium_duration_range, long_duration_range};
 
-static inline auto duration(float rotation, Range const &range) -> float {
+static auto constexpr duration(float rotation, Range const &range) -> float {
   return tapered_and_scaled_rotation(rotation, duration_knob_taper, range);
 }
 
