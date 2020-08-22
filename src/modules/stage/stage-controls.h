@@ -48,9 +48,7 @@ public:
     outputs_[EocOutput].setVoltage(voltage);
   }
 
-  static auto taper() -> taper::VariableTaper const * {
-    return &taper::variable_j_taper;
-  };
+  static auto taper() -> taper::Taper const * { return &taper::j; };
 
   enum ParameterIds { DurationKnob, LevelKnob, CurveKnob, ParameterCount };
 

@@ -167,12 +167,12 @@ TEST_CASE("curve_sequencer_2::StepControls") {
     auto shapeSelection = 0; // J
     params[Controls::ShapeSwitches + step].setValue(
         static_cast<float>(shapeSelection));
-    CHECK_EQ(controls.taper(step), dhe::taper::variable_tapers[shapeSelection]);
+    CHECK_EQ(controls.taper(step), dhe::taper::tapers[shapeSelection]);
 
     shapeSelection = 1; // S
     params[Controls::ShapeSwitches + step].setValue(
         static_cast<float>(shapeSelection));
-    CHECK_EQ(controls.taper(step), dhe::taper::variable_tapers[shapeSelection]);
+    CHECK_EQ(controls.taper(step), dhe::taper::tapers[shapeSelection]);
   }
 
   SUBCASE("curvature(step) reports curvature for the step curvature param") {

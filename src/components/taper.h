@@ -1,21 +1,34 @@
 #pragma once
 
+#include <utility>
+
 #include "sigmoid.h"
 
 namespace dhe {
 
 namespace taper {
-class VariableTaper {
+
+class Taper {
 public:
-  constexpr VariableTaper(Range range, float quadrant_factor)
-      : range_{range}, quadrant_factor_{quadrant_factor} {}
+  constexpr Taper(Range range, float quadrant_factor,
+                  float default_curvature = 0.F)
+      : range_{range}, quadrant_factor_{quadrant_factor},
+        default_curvature_{default_curvature} {}
 
   constexpr auto apply(float proportion, float curvature) const -> float {
     return normalized(curved(curvature, safe(scaled(proportion))));
   };
 
+  constexpr auto apply(float proportion) const -> float {
+    return normalized(curved(default_curvature_, safe(scaled(proportion))));
+  };
+
   constexpr auto invert(float tapered, float curvature) const -> float {
     return apply(tapered, -curvature);
+  };
+
+  constexpr auto invert(float tapered) const -> float {
+    return apply(tapered, -default_curvature_);
   };
 
 private:
@@ -35,52 +48,19 @@ private:
 
   Range const range_;
   float const quadrant_factor_;
+  float const default_curvature_;
 };
 
-static auto constexpr variable_j_taper = VariableTaper{Range{0.F, 1.F}, 1};
-static auto constexpr variable_s_taper = VariableTaper{sigmoid::range, -1};
-static auto constexpr variable_tapers =
-    std::array<taper::VariableTaper const *, 2>{&variable_j_taper,
-                                                &variable_s_taper};
+static auto constexpr j = Taper{Range{0.F, 1.F}, 1};
+static auto constexpr s = Taper{sigmoid::range, -1};
+static auto constexpr tapers = std::array<taper::Taper const *, 2>{&j, &s};
 
-class FixedTaper {
-public:
-  virtual auto apply(float normal_value) const -> float = 0;
-  virtual auto invert(float tapered_value) const -> float = 0;
-};
+static constexpr auto s_with_curvature(float curvature) -> Taper {
+  return Taper{sigmoid::range, -1, curvature};
+}
 
-class FixedJTaper : public FixedTaper {
-public:
-  explicit constexpr FixedJTaper(float curvature) : curvature_{curvature} {}
-
-  auto apply(float proportion) const -> float override {
-    return taper_.apply(proportion, curvature_);
-  }
-
-  auto invert(float tapered) const -> float override {
-    return taper_.invert(tapered, curvature_);
-  }
-
-private:
-  VariableTaper taper_{variable_j_taper};
-  float curvature_;
-};
-
-class FixedSTaper : public FixedTaper {
-public:
-  explicit constexpr FixedSTaper(float curvature) : curvature_{curvature} {}
-
-  auto apply(float proportion) const -> float override {
-    return taper_.apply(proportion, curvature_);
-  }
-
-  auto invert(float tapered) const -> float override {
-    return taper_.invert(tapered, curvature_);
-  }
-
-private:
-  VariableTaper taper_{variable_s_taper};
-  float curvature_;
-};
+static constexpr auto j_with_curvature(float curvature) -> Taper {
+  return Taper{Range{0.F, 1.F}, 1, curvature};
+}
 } // namespace taper
 } // namespace dhe

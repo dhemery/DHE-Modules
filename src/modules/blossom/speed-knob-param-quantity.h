@@ -10,7 +10,7 @@ namespace dhe {
 namespace blossom {
 static auto constexpr speed_knob_taper_curvature = -0.8F;
 static auto constexpr speed_knob_taper =
-    taper::FixedSTaper{speed_knob_taper_curvature};
+    taper::s_with_curvature(speed_knob_taper_curvature);
 static auto constexpr speed_range = Range{-10.F, 10.F};
 
 static inline auto rotation_to_spin(float rotation) -> float {

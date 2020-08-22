@@ -8,7 +8,7 @@
 namespace test {
 namespace stage {
 using dhe::stage::Mode;
-using dhe::taper::VariableTaper;
+using dhe::taper::Taper;
 
 struct FakeControls {
   std::function<float()> curvature{
@@ -26,8 +26,8 @@ struct FakeControls {
       [](bool a) { throw "FakeControls.show_active(active)"; }};
   std::function<void(bool)> show_eoc{
       [](bool a) { throw "FakeControls.show_eoc(eoc)"; }};
-  std::function<VariableTaper const *()> taper{
-      []() -> VariableTaper const * { throw "FakeControls.taper()"; }};
+  std::function<Taper const *()> taper{
+      []() -> Taper const * { throw "FakeControls.taper()"; }};
 };
 } // namespace stage
 } // namespace test

@@ -21,7 +21,7 @@ static auto constexpr duration_knob_taper_curvature = 0.8018017F;
  * decimal places).
  */
 static auto constexpr duration_knob_taper =
-    taper::FixedJTaper{duration_knob_taper_curvature};
+    taper::j_with_curvature(duration_knob_taper_curvature);
 
 auto constexpr short_duration_range = Range{0.001F, 1.F};
 auto constexpr medium_duration_range = Range{0.01F, 10.F};

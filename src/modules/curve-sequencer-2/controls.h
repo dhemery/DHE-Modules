@@ -122,10 +122,10 @@ public:
     return static_cast<Source>(params_[StartSourceSwitches + step].getValue());
   }
 
-  auto taper(int step) const -> taper::VariableTaper const * {
+  auto taper(int step) const -> taper::Taper const * {
     auto const selection =
         static_cast<int>(params_[ShapeSwitches + step].getValue());
-    return taper::variable_tapers[selection];
+    return taper::tapers[selection];
   }
 
   auto track_end_source(int step) const -> bool {

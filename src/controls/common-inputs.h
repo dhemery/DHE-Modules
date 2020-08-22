@@ -74,9 +74,8 @@ auto selected_range(ToggleType &toggle,
  * Returns the taper selected by the given switch.
  */
 template <typename ToggleType>
-auto selected_taper(ToggleType &toggle) -> taper::VariableTaper const * {
-  return selected<taper::VariableTaper const *, 2>(toggle,
-                                                   taper::variable_tapers);
+auto selected_taper(ToggleType &toggle) -> taper::Taper const * {
+  return selected<taper::Taper const *, 2>(toggle, taper::tapers);
 }
 
 template <typename KnobType, typename InputType>
@@ -100,28 +99,27 @@ auto rotation(KnobType &knob, InputType &cv_input, KnobType &av_knob) -> float {
 }
 
 static inline auto tapered_and_scaled_rotation(float rotation,
-                                               taper::FixedTaper const &taper,
+                                               taper::Taper const &taper,
                                                Range const &range) -> float {
   return range.scale(taper.apply(rotation));
 }
 
 template <typename KnobType>
-auto tapered_and_scaled_rotation(KnobType &knob, taper::FixedTaper const &taper,
+auto tapered_and_scaled_rotation(KnobType &knob, taper::Taper const &taper,
                                  Range const &range) -> float {
   return taperedAndScaledRotation(rotation_of(knob), taper, range);
 }
 
 template <typename KnobType, typename InputType>
 auto tapered_and_scaled_rotation(KnobType &knob, InputType &cv_input,
-                                 taper::FixedTaper const &taper,
-                                 Range const &range) -> float {
+                                 taper::Taper const &taper, Range const &range)
+    -> float {
   return taperedAndScaledRotation(rotation(knob, cv_input), taper, range);
 }
 
 template <typename KnobType, typename InputType>
 auto tapered_and_scaled_rotation(KnobType &knob, InputType &cv_input,
-                                 KnobType &av_knob,
-                                 taper::FixedTaper const &taper,
+                                 KnobType &av_knob, taper::Taper const &taper,
                                  Range const &range) -> float {
   return tapered_and_scaled_rotation(rotation(knob, cv_input, av_knob), taper,
                                      range);

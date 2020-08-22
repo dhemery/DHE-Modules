@@ -23,8 +23,8 @@ static inline void prepare_to_execute(FakeControls &controls) {
   controls.input = []() -> float { return 0.F; };
   controls.level = []() -> float { return 0.F; };
   controls.output = [](float v) {};
-  controls.taper = []() -> dhe::taper::VariableTaper const * {
-    return dhe::taper::variable_tapers[0];
+  controls.taper = []() -> dhe::taper::Taper const * {
+    return dhe::taper::tapers[0];
   };
 }
 
