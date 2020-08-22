@@ -1,6 +1,6 @@
 #pragma once
 
-#include "TapersControls.h"
+#include "tapers-controls.h"
 #include "widgets/control-widgets.h"
 #include "widgets/screws.h"
 
@@ -10,7 +10,7 @@ namespace dhe {
 namespace tapers {
 
 class TapersPanel : public rack::app::ModuleWidget {
-  using Controls = TapersControls;
+  using Controls = tapers;
 
 public:
   explicit TapersPanel(rack::engine::Module *module) {
@@ -28,7 +28,7 @@ public:
     auto constexpr column3 = width - column1;
 
     auto constexpr dy = 16.F;
-    auto constexpr panelBuffer = 4.F;
+    auto constexpr panel_buffer = 4.F;
     auto y = 24.F;
 
     addInput(Jack::input(slug, module, column1, y, Controls::LevelCvInput1));
@@ -45,7 +45,7 @@ public:
                              Controls::LevelRangeSwitch1));
     addOutput(Jack::output(slug, module, column3, y, Controls::TaperOutput1));
 
-    y += dy + panelBuffer;
+    y += dy + panel_buffer;
 
     addInput(Jack::input(slug, module, column1, y, Controls::LevelCvInput2));
     addParam(Knob::tiny(slug, module, column2, y, Controls::LevelAvKnob2));

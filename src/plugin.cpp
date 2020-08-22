@@ -25,8 +25,8 @@
 #include "modules/stage/UpstagePanel.h"
 #include "modules/swave/swave-panel.h"
 #include "modules/swave/swave.h"
-#include "modules/tapers/Tapers.h"
-#include "modules/tapers/TapersPanel.h"
+#include "modules/tapers/tapers-panel.h"
+#include "modules/tapers/tapers.h"
 #include "modules/xycloid/Xycloid.h"
 #include "modules/xycloid/XycloidPanel.h"
 

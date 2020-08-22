@@ -1,7 +1,7 @@
 #pragma once
 namespace dhe {
 namespace tapers {
-class TapersControls {
+class tapers {
 public:
   enum ParameterIds {
     LevelKnob1,
