@@ -1,6 +1,6 @@
 #pragma once
 
-#include "components/taper.h"
+#include "components/sigmoid.h"
 #include "modules/curve-sequencer/advance-mode.h"
 #include "modules/curve-sequencer/generate-mode.h"
 
@@ -11,7 +11,7 @@ namespace curve_sequencer {
 namespace fake {
 using dhe::curve_sequencer::AdvanceMode;
 using dhe::curve_sequencer::GenerateMode;
-using dhe::taper::Taper;
+using dhe::sigmoid::Taper;
 
 struct Controls {
   // Sequencer controls

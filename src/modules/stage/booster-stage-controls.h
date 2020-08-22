@@ -1,6 +1,6 @@
 #pragma once
 
-#include "components/taper.h"
+#include "components/sigmoid.h"
 #include "controls/common-inputs.h"
 #include "controls/curvature-inputs.h"
 #include "controls/duration-inputs.h"
@@ -60,7 +60,7 @@ public:
     outputs_[EocOutput].setVoltage(voltage);
   }
 
-  auto taper() const -> taper::Taper const * {
+  auto taper() const -> sigmoid::Taper const * {
     return selected_taper(params_[ShapeSwitch]);
   }
 

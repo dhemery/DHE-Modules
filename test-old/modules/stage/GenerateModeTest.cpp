@@ -2,7 +2,7 @@
 
 #include "components/latch.h"
 #include "components/phase-timer.h"
-#include "components/taper.h"
+#include "components/sigmoid.h"
 #include "fake/FakeControls.h"
 #include "modules/stage/event.h"
 
@@ -23,8 +23,8 @@ static inline void prepare_to_execute(FakeControls &controls) {
   controls.input = []() -> float { return 0.F; };
   controls.level = []() -> float { return 0.F; };
   controls.output = [](float v) {};
-  controls.taper = []() -> dhe::taper::Taper const * {
-    return dhe::taper::tapers[0];
+  controls.taper = []() -> dhe::sigmoid::Taper const * {
+    return dhe::sigmoid::tapers[0];
   };
 }
 

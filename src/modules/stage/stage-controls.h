@@ -1,5 +1,6 @@
 #pragma once
 
+#include "components/sigmoid.h"
 #include "controls/curvature-inputs.h"
 #include "controls/duration-inputs.h"
 #include "controls/level-inputs.h"
@@ -48,7 +49,7 @@ public:
     outputs_[EocOutput].setVoltage(voltage);
   }
 
-  static auto taper() -> taper::Taper const * { return &taper::j; };
+  static auto taper() -> sigmoid::Taper const * { return &sigmoid::j_taper; };
 
   enum ParameterIds { DurationKnob, LevelKnob, CurveKnob, ParameterCount };
 

@@ -2,14 +2,14 @@
 
 #include "components/latch.h"
 #include "components/phase-timer.h"
-#include "components/taper.h"
+#include "components/sigmoid.h"
 #include "fake/Controls.h"
 #include "modules/curve-sequencer/advance-mode.h"
 #include "modules/curve-sequencer/generate-mode.h"
 #include "modules/curve-sequencer/step-event.h"
 
-#include <doctest.h>
 #include <algorithm>
+#include <doctest.h>
 #include <vector>
 
 namespace test {
@@ -21,7 +21,7 @@ using dhe::curve_sequencer::AdvanceMode;
 using dhe::curve_sequencer::GenerateMode;
 using dhe::curve_sequencer::StepController;
 using dhe::curve_sequencer::StepEvent;
-using dhe::taper::Taper;
+using dhe::sigmoid::Taper;
 
 static auto constexpr risenGate = Latch{true, true};
 static auto constexpr fallenGate = Latch{false, true};
@@ -39,8 +39,8 @@ static inline void prepareToGenerate(fake::Controls &controls) {
   controls.level = [](int s) -> float { return 0.2F; };
   controls.set_output = [](float f) {};
   controls.show_progress = [](int step, float progress) {};
-  controls.taper = [](int s) -> Taper const * {
-    return dhe::taper::tapers[0];
+  controls.taper = [](int /*s*/) -> Taper const * {
+    return dhe::sigmoid::tapers[0];
   };
 }
 

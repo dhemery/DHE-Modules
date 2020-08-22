@@ -1,14 +1,14 @@
 #pragma once
 
-#include "components/taper.h"
+#include "components/sigmoid.h"
 #include "modules/stage/mode.h"
 
 #include <functional>
 
 namespace test {
 namespace stage {
+using dhe::sigmoid::Taper;
 using dhe::stage::Mode;
-using dhe::taper::Taper;
 
 struct FakeControls {
   std::function<float()> curvature{

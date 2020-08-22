@@ -12,7 +12,7 @@ static auto constexpr curvature_knob_taper_curvature = -0.65F;
 
 static constexpr auto curvature(float rotation) -> float {
   return sigmoid::safe_curvature_range.clamp(sigmoid::curve(
-      sigmoid::range.scale(rotation), curvature_knob_taper_curvature));
+      sigmoid::domain.scale(rotation), curvature_knob_taper_curvature));
 }
 
 template <typename KnobType> auto curvature(KnobType &knob) -> float {

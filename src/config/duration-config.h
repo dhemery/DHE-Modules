@@ -1,7 +1,6 @@
 #pragma once
 
 #include "common-config.h"
-#include "components/taper.h"
 #include "controls/common-inputs.h"
 #include "controls/duration-inputs.h"
 

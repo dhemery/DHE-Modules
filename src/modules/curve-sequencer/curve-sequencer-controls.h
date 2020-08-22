@@ -109,10 +109,10 @@ public:
     set_lights(step, completed_brightness, remaining_brightness);
   }
 
-  auto taper(int step) const -> taper::Taper const * {
+  auto taper(int step) const -> sigmoid::Taper const * {
     auto const selection =
         static_cast<int>(params_[ShapeSwitches + step].getValue());
-    return taper::tapers[selection];
+    return sigmoid::tapers[selection];
   }
 
   enum ParameterIds {

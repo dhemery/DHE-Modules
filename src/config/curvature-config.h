@@ -19,7 +19,7 @@ class CurvatureKnobParamQuantity : public rack::engine::ParamQuantity {
     // Unexpected, but true: Negating the taper curvature inverts the taper.
     auto const sigmoid_scaled_rotation = sigmoid::curve(
         sigmoid_clamped_curvature, -curvature_knob_taper_curvature);
-    auto const rotation = sigmoid::range.normalize(sigmoid_scaled_rotation);
+    auto const rotation = sigmoid::domain.normalize(sigmoid_scaled_rotation);
     setValue(rotation);
   }
 };

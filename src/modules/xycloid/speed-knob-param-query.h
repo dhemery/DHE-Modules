@@ -1,7 +1,7 @@
 #pragma once
 
 #include "components/range.h"
-#include "components/taper.h"
+#include "components/sigmoid.h"
 
 #include <engine/Module.hpp>
 #include <engine/ParamQuantity.hpp>
@@ -10,7 +10,7 @@ namespace dhe {
 namespace xycloid {
 static auto constexpr speed_knob_taper_curvature = -0.8F;
 static auto constexpr speed_knob_taper =
-    taper::s_with_curvature(speed_knob_taper_curvature);
+    sigmoid::s_taper_with_curvature(speed_knob_taper_curvature);
 static auto constexpr speed_range = Range{-10.F, 10.F};
 
 static inline auto rotation_to_speed(float rotation) -> float {

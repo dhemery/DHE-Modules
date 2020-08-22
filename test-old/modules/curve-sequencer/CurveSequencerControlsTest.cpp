@@ -1,6 +1,6 @@
 #include "modules/curve-sequencer/curve-sequencer-controls.h"
 
-#include "components/taper.h"
+#include "components/sigmoid.h"
 #include "controls/curvature-inputs.h"
 #include "controls/duration-inputs.h"
 #include "controls/level-inputs.h"
@@ -209,12 +209,12 @@ TEST_CASE("curve_sequencer::CurveSequencerControls") {
     auto shapeSelection = 0; // J
     params[Controls::ShapeSwitches + step].setValue(
         static_cast<float>(shapeSelection));
-    CHECK_EQ(controls.taper(step), dhe::taper::tapers[shapeSelection]);
+    CHECK_EQ(controls.taper(step), dhe::sigmoid::tapers[shapeSelection]);
 
     shapeSelection = 1; // S
     params[Controls::ShapeSwitches + step].setValue(
         static_cast<float>(shapeSelection));
-    CHECK_EQ(controls.taper(step), dhe::taper::tapers[shapeSelection]);
+    CHECK_EQ(controls.taper(step), dhe::sigmoid::tapers[shapeSelection]);
   }
 
   SUBCASE("mode(step) is mode selected by step mode switch") {

@@ -4,7 +4,6 @@
 #include "components/phase-rotor.h"
 #include "components/range.h"
 #include "components/sigmoid.h"
-#include "components/taper.h"
 #include "config/level-config.h"
 #include "controls/common-inputs.h"
 #include "ratio-knob-param-quantity.h"
