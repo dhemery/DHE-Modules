@@ -20,48 +20,6 @@ TEST_CASE("curve_sequencer_2::SequenceControls") {
 
   Controls controls{inputs, outputs, params, lights};
 
-  SUBCASE("isGated()") {
-    SUBCASE("true if gate button is pressed") {
-      params[Controls::GateButton].setValue(1.F);
-
-      CHECK(controls.is_gated());
-    }
-
-    SUBCASE("true if gate input is high") {
-      inputs[Controls::GateInput].setVoltage(10.F);
-
-      CHECK(controls.is_gated());
-    }
-
-    SUBCASE("false if gate button is not pressed and gate input is low") {
-      params[Controls::GateButton].setValue(0.F);
-      inputs[Controls::GateInput].setVoltage(0.F);
-
-      CHECK_FALSE(controls.is_gated());
-    }
-  }
-
-  SUBCASE("isLooping()") {
-    SUBCASE("true if loop button is pressed") {
-      params[Controls::LoopButton].setValue(1.F);
-
-      CHECK(controls.is_looping());
-    }
-
-    SUBCASE("true if loop input is high") {
-      inputs[Controls::LoopInput].setVoltage(10.F);
-
-      CHECK(controls.is_looping());
-    }
-
-    SUBCASE("false if loop button is not pressed and loop input is low") {
-      params[Controls::LoopButton].setValue(0.F);
-      inputs[Controls::LoopInput].setVoltage(0.F);
-
-      CHECK_FALSE(controls.is_looping());
-    }
-  }
-
   SUBCASE("isReset()") {
     SUBCASE("true if reset button is pressed") {
       params[Controls::ResetButton].setValue(1.F);
