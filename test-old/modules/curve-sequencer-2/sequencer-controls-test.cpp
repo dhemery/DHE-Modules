@@ -20,48 +20,6 @@ TEST_CASE("curve_sequencer_2::SequenceControls") {
 
   Controls controls{inputs, outputs, params, lights};
 
-  SUBCASE("isReset()") {
-    SUBCASE("true if reset button is pressed") {
-      params[Controls::ResetButton].setValue(1.F);
-
-      CHECK(controls.is_reset());
-    }
-
-    SUBCASE("true if reset input is high") {
-      inputs[Controls::ResetInput].setVoltage(10.F);
-
-      CHECK(controls.is_reset());
-    }
-
-    SUBCASE("false if reset button is not pressed and reset input is low") {
-      params[Controls::ResetButton].setValue(0.F);
-      inputs[Controls::ResetInput].setVoltage(0.F);
-
-      CHECK_FALSE(controls.is_reset());
-    }
-  }
-
-  SUBCASE("isRunning()") {
-    SUBCASE("true if run button is pressed") {
-      params[Controls::RunButton].setValue(1.F);
-
-      CHECK(controls.is_running());
-    }
-
-    SUBCASE("true if run input is high") {
-      inputs[Controls::RunInput].setVoltage(10.F);
-
-      CHECK(controls.is_running());
-    }
-
-    SUBCASE("false if run button is not pressed and run input is low") {
-      params[Controls::RunButton].setValue(0.F);
-      inputs[Controls::RunInput].setVoltage(0.F);
-
-      CHECK_FALSE(controls.is_running());
-    }
-  }
-
   SUBCASE("selectionStart() reports selection start knob value") {
     params[Controls::SelectionStartKnob].setValue(3.F);
 
