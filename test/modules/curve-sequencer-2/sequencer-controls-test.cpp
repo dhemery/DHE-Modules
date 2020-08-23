@@ -125,7 +125,61 @@ public:
           module.param(Controls::RunButton).setValue(0.F);
           module.input(Controls::RunInput).setVoltage(0.F);
           if (controls.is_running()) {
-            t.error("input low and button not pressed: got false, want true");
+            t.error("input low and button not pressed: got true, want false");
+          }
+        }));
+
+    add("selection_start()",
+        test([](Tester &t, Module &module, Controls &controls) {
+          auto constexpr start = 2;
+          module.param(Controls::SelectionStartKnob).setValue(start);
+
+          int got = controls.selection_start();
+          if (got != start) {
+            t.error("got {}, want {}", got, start);
+          }
+        }));
+
+    add("selection_length()",
+        test([](Tester &t, Module &module, Controls &controls) {
+          auto constexpr length = 5;
+          module.param(Controls::SelectionLengthKnob).setValue(length);
+
+          int got = controls.selection_length();
+          if (got != length) {
+            t.error("got {}, want {}", got, length);
+          }
+        }));
+
+    add("input()", test([](Tester &t, Module &module, Controls &controls) {
+          auto constexpr input = 7.777F;
+          module.input(Controls::CurveSequencerInput).setVoltage(input);
+
+          float got = controls.input();
+          if (got != input) {
+            t.error("got {}, want {}", got, input);
+          }
+        }));
+
+    add("output()", test([](Tester &t, Module &module, Controls &controls) {
+          auto constexpr output = 3.333F;
+          module.output(Controls::CurveSequencerOutput).setVoltage(output);
+
+          float got = controls.output();
+          if (got != output) {
+            t.error("got {}, want {}", got, output);
+          }
+        }));
+
+    add("output(v)", test([](Tester &t, Module &module, Controls &controls) {
+          auto constexpr output = 4.444F;
+
+          controls.output(output);
+
+          auto const got =
+              module.output(Controls::CurveSequencerOutput).getVoltage();
+          if (got != output) {
+            t.error("got {}, want {}", got, output);
           }
         }));
   }
