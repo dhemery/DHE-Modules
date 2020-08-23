@@ -142,7 +142,7 @@ public:
         params_[TriggerModeSwitches + step].getValue());
   }
 
-  enum ParameterIds {
+  enum ParamIds {
     RunButton,
     GateButton,
     SelectionStartKnob,
@@ -165,7 +165,7 @@ public:
     ENUMIDS(EndSourceSwitches, N),
     ENUMIDS(TrackStartSwitches, N),
     ENUMIDS(TrackEndSwitches, N),
-    ParameterCount
+    ParamCount
   };
 
   enum InputIds {

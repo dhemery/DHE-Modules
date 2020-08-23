@@ -20,7 +20,7 @@ using dhe::curve_sequencer_2::TriggerMode;
 TEST_CASE("curve_sequencer_2::StepControls") {
   std::vector<fake::Port> inputs{Controls::InputCount};
   std::vector<fake::Port> outputs{Controls::OutputCount};
-  std::vector<fake::Param> params{Controls::ParameterCount};
+  std::vector<fake::Param> params{Controls::ParamCount};
   std::vector<fake::Light> lights{Controls::LightCount};
 
   Controls controls{inputs, outputs, params, lights};
