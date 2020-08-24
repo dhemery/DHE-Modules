@@ -11,10 +11,7 @@ namespace dhe {
 
 namespace cubic {
 
-static inline auto coefficient_range() -> Range const & {
-  static auto constexpr coefficient_range = Range{-2.F, 2.F};
-  return coefficient_range;
-}
+static auto constexpr coefficient_range = Range{-2.F, 2.F};
 
 class Cubic : public rack::engine::Module {
   using Controls = CubicControls;
@@ -24,13 +21,13 @@ public:
     config(Controls::ParameterCount, Controls::InputCount,
            Controls::OutputCount);
     config_knob(this, Controls::ACoefficientKnob, "x³ coefficient", "",
-                coefficient_range());
+                coefficient_range);
     config_knob(this, Controls::BCoefficientKnob, "x² coefficient", "",
-                coefficient_range());
+                coefficient_range);
     config_knob(this, Controls::CCoefficientKnob, "x¹ coefficient", "",
-                coefficient_range());
+                coefficient_range);
     config_knob(this, Controls::DCoefficientKnob, "x⁰ coefficient", "",
-                coefficient_range());
+                coefficient_range);
     config_gain(this, Controls::InputGainKnob, "Input gain");
     config_gain(this, Controls::OutputGainKnob, "Output gain");
   }
@@ -58,7 +55,7 @@ public:
 
 private:
   auto coefficient(int knob_param, int cv_param) const -> float {
-    return coefficient_range().scale(
+    return coefficient_range.scale(
         rotation(params[knob_param], inputs[cv_param]));
   }
 
