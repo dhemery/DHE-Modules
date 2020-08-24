@@ -18,7 +18,7 @@ public:
 
   void onChange(const rack::event::Change &e) override {
     Toggle::onChange(e);
-    auto is_multiply = this->paramQuantity->getValue() > 0.5;
+    auto const is_multiply = this->paramQuantity->getValue() > 0.5;
     operator_changed_to_(is_multiply);
   }
 

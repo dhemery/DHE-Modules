@@ -13,14 +13,12 @@ static auto constexpr speed_knob_taper =
     sigmoid::s_taper_with_curvature(speed_knob_taper_curvature);
 static auto constexpr speed_range = Range{-10.F, 10.F};
 
-static inline auto rotation_to_speed(float rotation) -> float {
-  auto const tapered = speed_knob_taper.apply(rotation);
-  return speed_range.scale(tapered);
+static constexpr auto rotation_to_speed(float rotation) -> float {
+  return speed_range.scale(speed_knob_taper.apply(rotation));
 }
 
-static inline auto speed_to_rotation(float speed) -> float {
-  auto const tapered = speed_range.normalize(speed);
-  return speed_knob_taper.invert(tapered);
+static constexpr auto speed_to_rotation(float speed) -> float {
+  return speed_knob_taper.invert(speed_range.normalize(speed));
 }
 
 class SpeedKnobParamQuantity : public rack::engine::ParamQuantity {
@@ -33,9 +31,9 @@ class SpeedKnobParamQuantity : public rack::engine::ParamQuantity {
   }
 };
 
+static auto constexpr initial_speed_hz{1.F};
+static auto constexpr initial_rotation = speed_to_rotation(initial_speed_hz);
 static void config_speed_knob(rack::engine::Module *module, int knob_id) {
-  static auto constexpr initial_speed_hz{1.F};
-  static auto const initial_rotation = speed_to_rotation(initial_speed_hz);
   module->configParam<SpeedKnobParamQuantity>(knob_id, 0.F, 1.F,
                                               initial_rotation, "Speed", " Hz");
 }
