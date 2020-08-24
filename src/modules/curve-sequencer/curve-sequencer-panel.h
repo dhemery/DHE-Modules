@@ -137,7 +137,7 @@ public:
     addParam(new SelectionKnob(on_selection_start_change, slug, module, left,
                                selection_y, Controls::SelectionStartKnob));
 
-    auto constexpr on_selection_end_change = [end_marker](int length) {
+    auto const on_selection_end_change = [end_marker](int length) {
       end_marker->set_selection_length(length);
     };
     auto constexpr selection_length_x = left + hp2mm(2.F);
