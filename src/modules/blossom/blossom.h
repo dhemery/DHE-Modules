@@ -18,6 +18,7 @@ namespace blossom {
 
 class Blossom : public rack::engine::Module {
   using Controls = BlossomControls;
+  static auto constexpr phase_display_range = Range{-180.F, 180.F};
 
 public:
   Blossom() {
@@ -36,7 +37,6 @@ public:
     config_percentage_knob(this, Controls::DepthKnob, "Depth");
     config_attenuverter(this, Controls::DepthAvKnob, "Depth CV gain");
 
-    static auto constexpr phase_display_range = Range{-180.F, 180.F};
     config_knob(this, Controls::PhaseOffsetKnob, "Phase", "°",
                 phase_display_range);
     config_attenuverter(this, Controls::PhaseOffsetAvKnob, "Phase CV gain");
@@ -85,8 +85,8 @@ private:
                     params[Controls::DepthAvKnob]);
   }
 
+  static auto constexpr phase_range = Range{-0.5F, 0.5F};
   inline auto phase_offset() const -> float {
-    static auto constexpr phase_range = Range{-0.5F, 0.5F};
     return phase_range.scale(rotation(params[Controls::PhaseOffsetKnob],
                                       inputs[Controls::PhaseCvInput],
                                       params[Controls::PhaseOffsetAvKnob]));
