@@ -15,12 +15,14 @@ namespace dhe {
 
 namespace xycloid {
 
+static auto constexpr phase_offset_range = Range{-180.F, 180.F};
+static auto constexpr wobble_depth_range = Range{0.F, 1.F};
+
 class Xycloid : public rack::engine::Module {
   using Controls = XycloidControls;
 
 public:
   Xycloid() {
-    static auto constexpr phase_offset_range = Range{-180.F, 180.F};
     config(Controls::ParameterCount, Controls::InputCount,
            Controls::OutputCount);
 
@@ -88,7 +90,6 @@ private:
   }
 
   auto depth() const -> float {
-    static auto constexpr wobble_depth_range = Range{0.F, 1.F};
     return wobble_depth_range.clamp(rotation(params[Controls::DepthKnob],
                                              inputs[Controls::DepthCvInput],
                                              params[Controls::DepthAvKnob]));

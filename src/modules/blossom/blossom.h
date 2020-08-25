@@ -16,9 +16,11 @@ namespace dhe {
 
 namespace blossom {
 
+static auto constexpr phase_display_range = Range{-180.F, 180.F};
+static auto constexpr phase_range = Range{-0.5F, 0.5F};
+
 class Blossom : public rack::engine::Module {
   using Controls = BlossomControls;
-  static auto constexpr phase_display_range = Range{-180.F, 180.F};
 
 public:
   Blossom() {
@@ -85,7 +87,6 @@ private:
                     params[Controls::DepthAvKnob]);
   }
 
-  static auto constexpr phase_range = Range{-0.5F, 0.5F};
   inline auto phase_offset() const -> float {
     return phase_range.scale(rotation(params[Controls::PhaseOffsetKnob],
                                       inputs[Controls::PhaseCvInput],
