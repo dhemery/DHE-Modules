@@ -80,9 +80,9 @@ private:
     return domain_.normalize(scaled);
   }
 
-  Range const domain_;
-  float const quadrant_factor_;
-  float const default_curvature_;
+  Range domain_;
+  float quadrant_factor_;
+  float default_curvature_;
 };
 
 static auto constexpr j_domain = Range{0.F, 1.F};

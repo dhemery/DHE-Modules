@@ -39,7 +39,7 @@ public:
   }
 
 private:
-  float const lower_;
-  float const upper_;
+  float lower_;
+  float upper_;
 };
 } // namespace dhe

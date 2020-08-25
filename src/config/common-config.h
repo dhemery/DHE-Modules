@@ -14,7 +14,7 @@ static auto constexpr centered_rotation = 0.5F;
  */
 static inline void config_knob(rack::engine::Module *module, int knob_id,
                                std::string const &knob_name,
-                               std::string const &units, Range const &range,
+                               std::string const &units, Range range,
                                float initial_rotation = centered_rotation) {
   module->configParam(knob_id, 0.F, 1.F, initial_rotation, knob_name, units,
                       0.F, range.size(), range.lower_bound());
@@ -27,7 +27,7 @@ static inline void config_knob(rack::engine::Module *module, int knob_id,
 static inline void config_percentage_knob(rack::engine::Module *module,
                                           int knob_id,
                                           std::string const &knob_name,
-                                          Range const &range = rotation_range) {
+                                          Range range = rotation_range) {
   module->configParam(knob_id, 0.F, 1.F, 0.5F, knob_name, "%", 0.F,
                       range.size() * 100.F, range.lower_bound() * 100.F);
 }

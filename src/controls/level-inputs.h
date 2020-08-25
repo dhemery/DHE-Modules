@@ -4,17 +4,16 @@
 #include "components/range.h"
 
 namespace dhe {
-template <typename ToggleType>
-auto level_range(ToggleType &toggle) -> Range const & {
+template <typename ToggleType> auto level_range(ToggleType &toggle) -> Range {
   return selected_range<2>(toggle, signal_ranges);
 }
 
-static constexpr auto level(float rotation, Range const &range) -> float {
+static constexpr auto level(float rotation, Range range) -> float {
   return range.scale(rotation);
 }
 
 template <typename KnobType>
-static inline auto level(KnobType &knob, Range const &range) -> float {
+static inline auto level(KnobType &knob, Range range) -> float {
   return level(rotation_of(knob), range);
 }
 

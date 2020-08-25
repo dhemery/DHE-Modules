@@ -31,12 +31,12 @@ public:
         .getNormalVoltage(voltage_if_disconnected);
   }
 
-  auto multiplier_range(int channel) const -> Range const & {
+  auto multiplier_range(int channel) const -> Range {
     return selected_range<4>(params_[MultiplierRangeSwitch + channel],
                              multiplier_ranges);
   }
 
-  auto offset_range(int channel) const -> Range const & {
+  auto offset_range(int channel) const -> Range {
     return selected_range<4>(params_[OffsetRangeSwitch + channel],
                              offset_ranges);
   }

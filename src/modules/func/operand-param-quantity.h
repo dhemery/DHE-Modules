@@ -36,18 +36,18 @@ public:
   }
 
 private:
-  auto current_operand_range() -> Range const & {
+  auto current_operand_range() -> Range {
     return operation() == Operation::Multiply ? multiplier_range()
                                               : offset_range();
   }
 
   auto operation() const -> Operation { return controls_->operation(channel_); }
 
-  auto multiplier_range() const -> Range const & {
+  auto multiplier_range() const -> Range {
     return controls_->multiplier_range(channel_);
   }
 
-  auto offset_range() const -> Range const & {
+  auto offset_range() const -> Range {
     return controls_->offset_range(channel_);
   }
 

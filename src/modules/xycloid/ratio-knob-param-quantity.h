@@ -18,8 +18,7 @@ static auto constexpr bidirectional_ratio_range = Range{-max_ratio, max_ratio};
 static auto constexpr ratio_ranges = std::array<Range const, 3>{
     inward_ratio_range, bidirectional_ratio_range, outward_ratio_range};
 
-static inline auto ratio_range(rack::engine::Module const *module)
-    -> Range const & {
+static inline auto ratio_range(rack::engine::Module const *module) -> Range {
   return selected_range<3>(module->params[Controls::DirectionSwitch],
                            ratio_ranges);
 }

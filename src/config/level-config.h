@@ -24,17 +24,17 @@ public:
     setValue(normalized);
   }
 
-  void set_range_supplier(std::function<Range const &()> const &supplier) {
+  void set_range_supplier(std::function<Range()> const &supplier) {
     this->range_ = supplier;
   }
 
 private:
-  std::function<Range const &()> range_;
+  std::function<Range()> range_;
 };
 
 static inline void
 config_level_knob(rack::engine::Module *module, int knob_id,
-                  std::function<Range const &()> const &range_supplier,
+                  std::function<Range()> const &range_supplier,
                   std::string const &name, float initial_position) {
   module->configParam<LevelKnobParamQuantity>(knob_id, 0.F, 1.F,
                                               initial_position, name, " V");
@@ -51,7 +51,7 @@ static inline void
 config_level_knob(rack::engine::Module *module, int knob_id, int switch_id,
                   std::string const &name = "Level",
                   float initial_rotation = centered_rotation) {
-  auto const range_supplier = [module, switch_id]() -> Range const & {
+  auto const range_supplier = [module, switch_id]() -> Range {
     return selected_range<2>(module->params[switch_id], signal_ranges);
   };
   config_level_knob(module, knob_id, range_supplier, name, initial_rotation);
@@ -61,10 +61,10 @@ config_level_knob(rack::engine::Module *module, int knob_id, int switch_id,
  * Configures the param and display for a level knob with a fixed range.
  */
 static inline void
-config_level_knob(rack::engine::Module *module, int knob_id, Range const &range,
+config_level_knob(rack::engine::Module *module, int knob_id, Range range,
                   std::string const &name = "Level",
                   float initial_rotation = centered_rotation) {
-  auto const range_supplier = [range]() -> Range const & { return range; };
+  auto const range_supplier = [range]() -> Range { return range; };
   config_level_knob(module, knob_id, range_supplier, name, initial_rotation);
 }
 

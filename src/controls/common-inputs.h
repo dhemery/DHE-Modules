@@ -65,7 +65,7 @@ auto selected(ToggleType &toggle, std::array<ItemType, N> const &items)
 
 template <int N, typename ToggleType = rack::engine::Param>
 auto selected_range(ToggleType &toggle,
-                    std::array<Range const, N> const &ranges) -> Range const & {
+                    std::array<Range const, N> const &ranges) -> Range {
   return selected<Range const, N>(toggle, ranges);
 }
 
@@ -99,27 +99,27 @@ auto rotation(KnobType &knob, InputType &cv_input, KnobType &av_knob) -> float {
 
 static constexpr auto tapered_and_scaled_rotation(float rotation,
                                                   sigmoid::Taper const &taper,
-                                                  Range const &range) -> float {
+                                                  Range range) -> float {
   return range.scale(taper.apply(rotation));
 }
 
 template <typename KnobType>
 auto tapered_and_scaled_rotation(KnobType &knob, sigmoid::Taper const &taper,
-                                 Range const &range) -> float {
+                                 Range range) -> float {
   return taperedAndScaledRotation(rotation_of(knob), taper, range);
 }
 
 template <typename KnobType, typename InputType>
 auto tapered_and_scaled_rotation(KnobType &knob, InputType &cv_input,
-                                 sigmoid::Taper const &taper,
-                                 Range const &range) -> float {
+                                 sigmoid::Taper const &taper, Range &range)
+    -> float {
   return taperedAndScaledRotation(rotation(knob, cv_input), taper, range);
 }
 
 template <typename KnobType, typename InputType>
 auto tapered_and_scaled_rotation(KnobType &knob, InputType &cv_input,
                                  KnobType &av_knob, sigmoid::Taper const &taper,
-                                 Range const &range) -> float {
+                                 Range range) -> float {
   return tapered_and_scaled_rotation(rotation(knob, cv_input, av_knob), taper,
                                      range);
 }

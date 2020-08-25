@@ -25,18 +25,17 @@ public:
     setValue(rotation);
   }
 
-  void
-  set_range_supplier(std::function<Range const &()> const &range_supplier) {
+  void set_range_supplier(std::function<Range()> const &range_supplier) {
     this->range_ = range_supplier;
   }
 
 private:
-  std::function<Range const &()> range_;
+  std::function<Range()> range_;
 };
 
 static inline void
 config_duration_knob(rack::engine::Module *module, int knob_id,
-                     std::function<Range const &()> const &range_supplier,
+                     std::function<Range()> const &range_supplier,
                      std::string const &name, float initial_position) {
   module->configParam<DurationKnobParamQuantity>(knob_id, 0.F, 1.F,
                                                  initial_position, name, " s");
@@ -49,10 +48,10 @@ config_duration_knob(rack::engine::Module *module, int knob_id,
  * Configures the param and display for a duration knob with a fixed range.
  */
 static inline void
-config_duration_knob(rack::engine::Module *module, int knob_id,
-                     Range const &range, std::string const &name = "Duration",
+config_duration_knob(rack::engine::Module *module, int knob_id, Range range,
+                     std::string const &name = "Duration",
                      float initial_rotation = centered_rotation) {
-  auto const range_supplier = [range]() -> Range const & { return range; };
+  auto const range_supplier = [range]() -> Range { return range; };
   config_duration_knob(module, knob_id, range_supplier, name, initial_rotation);
 }
 
@@ -64,7 +63,7 @@ static inline void
 config_duration_knob(rack::engine::Module *module, int knob_id, int switch_id,
                      std::string const &name = "Duration",
                      float initial_rotation = centered_rotation) {
-  auto const range_supplier = [module, switch_id]() -> Range const & {
+  auto const range_supplier = [module, switch_id]() -> Range {
     return selected_range<3>(module->params[switch_id], duration_ranges);
   };
   config_duration_knob(module, knob_id, range_supplier, name, initial_rotation);

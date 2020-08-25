@@ -30,12 +30,12 @@ static auto constexpr long_duration_range = Range{0.1F, 100.F};
 static auto constexpr duration_ranges = std::array<Range const, 3>{
     short_duration_range, medium_duration_range, long_duration_range};
 
-static auto constexpr duration(float rotation, Range const &range) -> float {
+static auto constexpr duration(float rotation, Range range) -> float {
   return tapered_and_scaled_rotation(rotation, duration_knob_taper, range);
 }
 
 template <typename KnobType>
-auto duration(KnobType &knob, Range const &range) -> float {
+auto duration(KnobType &knob, Range range) -> float {
   return duration(rotation_of(knob), range);
 }
 
