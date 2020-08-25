@@ -16,6 +16,13 @@ namespace dhe {
 
 namespace curve_sequencer_2 {
 
+// Skew the progress::brightness ratio so that the "remaining" light stays
+// fully lit for a little while during early progress, and the "completed"
+// light reaches fully lit a little while before progress is complete.
+static auto constexpr brightness_skew = 0.7F;
+static auto constexpr brightness_range =
+    Range{-brightness_skew, 1.F + brightness_skew};
+
 template <typename PortT, typename ParamT, typename LightT, int N>
 class Controls {
 private:
@@ -101,13 +108,6 @@ public:
   }
 
   void show_inactive(int step) { set_lights(step, 0.F, 0.F); }
-
-  // Skew the progress::brightness ratio so that the "remaining" light stays
-  // fully lit for a little while during early progress, and the "completed"
-  // light reaches fully lit a little while before progress is complete.
-  static auto constexpr brightness_skew = 0.7F;
-  static auto constexpr brightness_range =
-      Range{-brightness_skew, 1.F + brightness_skew};
 
   void show_progress(int step, float progress) {
     auto const completed_brightness = brightness_range.scale(progress);
