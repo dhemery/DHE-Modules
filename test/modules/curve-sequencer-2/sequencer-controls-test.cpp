@@ -1,4 +1,4 @@
-#include "fake/rack-controls.h"
+#include "helpers/rack-controls.h"
 #include "modules/curve-sequencer-2/controls.h"
 
 #include <dheunit/test.h>

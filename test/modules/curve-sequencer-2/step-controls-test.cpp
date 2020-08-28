@@ -1,20 +1,10 @@
 #include "components/sigmoid.h"
-#include "fake/rack-controls.h"
+#include "helpers/rack-controls.h"
 #include "modules/curve-sequencer-2/controls.h"
 #include "modules/curve-sequencer-2/triggers.h"
-#include <ostream>
 
+#include "trigger-helpers.h"
 #include <dheunit/test.h>
-
-namespace dhe {
-namespace curve_sequencer_2 {
-static inline auto operator<<(std::ostream &os, TriggerMode mode)
-    -> std::ostream & {
-  os << static_cast<int>(mode);
-  return os;
-}
-} // namespace curve_sequencer_2
-} // namespace dhe
 
 namespace test {
 namespace curve_sequencer_2 {
@@ -45,6 +35,7 @@ private:
   std::vector<fake::Param> params_{Controls::ParamCount};
   std::vector<fake::Light> lights_{Controls::LightCount};
 };
+
 auto test(const std::function<void(Tester &, Module &, Controls &)> &run)
     -> TestFunc {
   return [run](Tester &t) {
@@ -55,22 +46,27 @@ auto test(const std::function<void(Tester &, Module &, Controls &)> &run)
   };
 }
 
+auto trigger_mode_test(TriggerMode mode) -> TestFunc {
+  return test([mode](Tester &t, Module &module, Controls &controls) {
+    auto constexpr step = 4;
+    auto switch_value_for_mode = static_cast<float>(mode);
+    module.param(Controls::TriggerModeSwitches + step)
+        .setValue(switch_value_for_mode);
+    TriggerMode got = controls.trigger_mode(step);
+    if (got != mode) {
+      t.errorf("got mode {}, want {}", got, mode);
+    }
+  });
+}
+
 class StepControlsTests : Suite {
 public:
   StepControlsTests() : Suite{"dhe::curve_sequencer_2::[Step]Controls"} {}
-  void register_tests(dhe::unit::TestRegistrar add) override {
-    add("trigger_mode(s)",
-        test([](Tester &t, Module &module, Controls &controls) {
-          auto constexpr step = 0;
-
-          auto mode = TriggerMode::GateIsHigh;
-          module.param(Controls::TriggerModeSwitches + step)
-              .setValue(static_cast<float>(mode));
-          TriggerMode got = controls.trigger_mode(step);
-          if (got != mode) {
-            t.errorf("GateIsHigh got mode {}, want {}", got, mode);
-          }
-        }));
+  void register_tests(dhe::unit::TestRegistrar add_test) override {
+    for (auto mode : test::curve_sequencer_2::TriggerModeIterator()) {
+      auto const name = std::string{"trigger_mode(s): "} + name_of(mode);
+      add_test(name, trigger_mode_test(mode));
+    }
   }
 };
 
