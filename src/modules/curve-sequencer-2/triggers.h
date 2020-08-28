@@ -1,6 +1,7 @@
 #pragma once
 
 #include "components/latch.h"
+#include <array>
 
 namespace dhe {
 namespace curve_sequencer_2 {
@@ -14,6 +15,11 @@ enum class TriggerMode {
 
 static auto constexpr trigger_mode_count =
     static_cast<int>(TriggerMode::GateIsLow) + 1;
+
+static auto constexpr trigger_mode_descriptions =
+    std::array<char const *, trigger_mode_count>{"Gate rises", "Gate falls",
+                                                 "Gate changes", "Gate is high",
+                                                 "Gate is low"};
 
 static inline auto is_triggered(TriggerMode mode, dhe::Latch const &gate)
     -> bool {

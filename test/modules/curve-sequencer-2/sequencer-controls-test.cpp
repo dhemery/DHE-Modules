@@ -1,7 +1,7 @@
 #include "fake/rack-controls.h"
 #include "modules/curve-sequencer-2/controls.h"
 
-#include "dheunit/test.h"
+#include <dheunit/test.h>
 #include <functional>
 
 namespace test {
@@ -44,9 +44,10 @@ auto test(const std::function<void(Tester &, Module &, Controls &)> &run)
   };
 }
 
-class ControlsGatedTests : Suite {
+class SequenceControlsTests : Suite {
 public:
-  ControlsGatedTests() : Suite{"dhe::curve_sequencer_2::Controls"} {}
+  SequenceControlsTests()
+      : Suite{"dhe::curve_sequencer_2::[Sequence]Controls"} {}
 
   void register_tests(dhe::unit::TestRegistrar add) override {
     add("is_gated()", test([](Tester &t, Module &module, Controls &controls) {
@@ -185,7 +186,7 @@ public:
   }
 };
 
-__attribute__((unused)) static ControlsGatedTests controls_gated_tests{};
+__attribute__((unused)) static SequenceControlsTests sequence_controls_tests{};
 
 } // namespace sequence_controls
 } // namespace curve_sequencer_2
