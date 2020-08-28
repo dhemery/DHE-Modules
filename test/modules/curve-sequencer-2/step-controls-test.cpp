@@ -26,7 +26,9 @@ public:
   auto lights() -> std::vector<fake::Light> & { return lights_; };
   auto input(Controls::InputIds id) -> fake::Port & { return inputs_[id]; };
   auto output(Controls::OutputIds id) -> fake::Port & { return outputs_[id]; };
-  auto param(int id) -> fake::Param & { return params_[id]; };
+  auto param(Controls::ParamIds id, int offset = 0) -> fake::Param & {
+    return params_[id + offset];
+  };
   auto light(Controls::LightIds id) -> fake::Light & { return lights_[id]; };
 
 private:
@@ -49,9 +51,8 @@ auto test(const std::function<void(Tester &, Module &, Controls &)> &run)
 auto trigger_mode_test(TriggerMode mode) -> TestFunc {
   return test([mode](Tester &t, Module &module, Controls &controls) {
     auto constexpr step = 4;
-    auto switch_value_for_mode = static_cast<float>(mode);
-    module.param(Controls::TriggerModeSwitches + step)
-        .setValue(switch_value_for_mode);
+    auto const switch_value = static_cast<float>(mode);
+    module.param(Controls::TriggerModeSwitches, step).setValue(switch_value);
     TriggerMode got = controls.trigger_mode(step);
     if (got != mode) {
       t.errorf("got mode {}, want {}", got, mode);
@@ -67,6 +68,36 @@ public:
       auto const name = std::string{"trigger_mode(s): "} + name_of(mode);
       add_test(name, trigger_mode_test(mode));
     }
+
+    add_test("interrupt_on_trigger(s)",
+             test([](Tester &t, Module &module, Controls controls) {
+               auto constexpr step = 3;
+               module.param(Controls::OnInterruptSwitches, step).setValue(0.F);
+               auto interrupt_on_trigger = controls.interrupt_on_trigger(step);
+               if (interrupt_on_trigger) {
+                 t.errorf("with option disabled, got true, want false");
+               }
+               module.param(Controls::OnInterruptSwitches, step).setValue(1.F);
+               interrupt_on_trigger = controls.interrupt_on_trigger(step);
+               if (!interrupt_on_trigger) {
+                 t.errorf("with option enabled, got false, want true");
+               }
+             }));
+
+    add_test("advance_on_end_of_curve(s)",
+             test([](Tester &t, Module &module, Controls controls) {
+               auto constexpr step = 3;
+               module.param(Controls::OnEndOfCurveSwitches, step).setValue(0.F);
+               auto advance = controls.advance_on_end_of_curve(step);
+               if (advance) {
+                 t.errorf("with option disabled, got true, want false");
+               }
+               module.param(Controls::OnEndOfCurveSwitches, step).setValue(1.F);
+               advance = controls.advance_on_end_of_curve(step);
+               if (!advance) {
+                 t.errorf("with option enabled, got false, want true");
+               }
+             }));
   }
 };
 

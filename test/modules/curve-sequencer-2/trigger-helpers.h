@@ -14,12 +14,9 @@ static auto constexpr trigger_mode_names =
     std::array<char const *, dhe::curve_sequencer_2::trigger_mode_count>{
         "GateRises", "GateFalls", "GateChanges", "GateIsHigh", "GateIsLow"};
 
-static auto constexpr as_index(TriggerMode mode) -> std::size_t {
-  return static_cast<std::size_t>(mode);
-}
-
 static auto name_of(TriggerMode mode) -> char const * {
-  return trigger_mode_names[as_index(mode)];
+  auto const index = static_cast<std::underlying_type<TriggerMode>::type>(mode);
+  return trigger_mode_names[index];
 }
 } // namespace curve_sequencer_2
 } // namespace test

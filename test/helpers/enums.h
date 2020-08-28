@@ -1,5 +1,6 @@
 #pragma once
 
+namespace test {
 #include <type_traits>
 template <typename E, E First, E Last> class Iterator {
   using ValueT = typename std::underlying_type<E>::type;
@@ -29,3 +30,4 @@ private:
   explicit Iterator(ValueT value) : value_{value} {}
   ValueT value_;
 };
+} // namespace test

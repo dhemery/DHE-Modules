@@ -11,11 +11,10 @@
 namespace test {
 namespace curve_sequencer_2 {
 namespace step_controls {
-static auto constexpr stepCount{8};
+static auto constexpr step_count{8};
 using Controls = dhe::curve_sequencer_2::Controls<fake::Port, fake::Param,
-                                                  fake::Light, stepCount>;
+                                                  fake::Light, step_count>;
 using dhe::curve_sequencer_2::Source;
-using dhe::curve_sequencer_2::TriggerMode;
 
 TEST_CASE("curve_sequencer_2::StepControls") {
   std::vector<fake::Port> inputs{Controls::InputCount};
@@ -24,54 +23,6 @@ TEST_CASE("curve_sequencer_2::StepControls") {
   std::vector<fake::Light> lights{Controls::LightCount};
 
   Controls controls{inputs, outputs, params, lights};
-
-  SUBCASE("triggerMode(step) is the mode selected by the step trigger mode "
-          "switch") {
-    auto constexpr step = 0;
-
-    auto modeSelectedBySwitch = TriggerMode::GateIsHigh;
-    params[Controls::TriggerModeSwitches + step].setValue(
-        static_cast<float>(modeSelectedBySwitch));
-    CHECK_EQ(controls.trigger_mode(step), modeSelectedBySwitch);
-
-    modeSelectedBySwitch = TriggerMode::GateIsLow;
-    params[Controls::TriggerModeSwitches + step].setValue(
-        static_cast<float>(modeSelectedBySwitch));
-    CHECK_EQ(controls.trigger_mode(step), modeSelectedBySwitch);
-
-    modeSelectedBySwitch = TriggerMode::GateRises;
-    params[Controls::TriggerModeSwitches + step].setValue(
-        static_cast<float>(modeSelectedBySwitch));
-    CHECK_EQ(controls.trigger_mode(step), modeSelectedBySwitch);
-
-    modeSelectedBySwitch = TriggerMode::GateFalls;
-    params[Controls::TriggerModeSwitches + step].setValue(
-        static_cast<float>(modeSelectedBySwitch));
-    CHECK_EQ(controls.trigger_mode(step), modeSelectedBySwitch);
-
-    modeSelectedBySwitch = TriggerMode::GateChanges;
-    params[Controls::TriggerModeSwitches + step].setValue(
-        static_cast<float>(modeSelectedBySwitch));
-    CHECK_EQ(controls.trigger_mode(step), modeSelectedBySwitch);
-  }
-
-  SUBCASE("interruptOnTrigger(step)") {
-    auto constexpr step = 6;
-    params[Controls::OnInterruptSwitches + step].setValue(0.F); // NOINT
-    CHECK_FALSE(controls.interrupt_on_trigger(step));
-
-    params[Controls::OnInterruptSwitches + step].setValue(1.F); // NEXT
-    CHECK(controls.interrupt_on_trigger(step));
-  }
-
-  SUBCASE("advanceOnEndOfCurve(step)") {
-    auto constexpr step = 6;
-    params[Controls::OnEndOfCurveSwitches + step].setValue(0.F); // NOINT
-    CHECK_FALSE(controls.advance_on_end_of_curve(step));
-
-    params[Controls::OnEndOfCurveSwitches + step].setValue(1.F); // NEXT
-    CHECK(controls.advance_on_end_of_curve(step));
-  }
 
   SUBCASE("trackStartSource(step)") {
     auto constexpr step = 6;
@@ -86,70 +37,71 @@ TEST_CASE("curve_sequencer_2::StepControls") {
           "switch") {
     auto constexpr step = 7;
 
-    auto sourceSelectedBySwitch = Source::Level;
+    auto source_selected_by_switch = Source::Level;
     params[Controls::StartSourceSwitches + step].setValue(
-        static_cast<float>(sourceSelectedBySwitch));
-    CHECK_EQ(controls.start_source(step), sourceSelectedBySwitch);
+        static_cast<float>(source_selected_by_switch));
+    CHECK_EQ(controls.start_source(step), source_selected_by_switch);
 
-    sourceSelectedBySwitch = Source::In;
+    source_selected_by_switch = Source::In;
     params[Controls::StartSourceSwitches + step].setValue(
-        static_cast<float>(sourceSelectedBySwitch));
-    CHECK_EQ(controls.start_source(step), sourceSelectedBySwitch);
+        static_cast<float>(source_selected_by_switch));
+    CHECK_EQ(controls.start_source(step), source_selected_by_switch);
 
-    sourceSelectedBySwitch = Source::Out;
+    source_selected_by_switch = Source::Out;
     params[Controls::StartSourceSwitches + step].setValue(
-        static_cast<float>(sourceSelectedBySwitch));
-    CHECK_EQ(controls.start_source(step), sourceSelectedBySwitch);
+        static_cast<float>(source_selected_by_switch));
+    CHECK_EQ(controls.start_source(step), source_selected_by_switch);
   }
 
   SUBCASE("startLevel(step) reports level for sequence level switch and step "
           "start level param") {
     auto constexpr step = 3;
-    auto constexpr startLevelKnobRotation = 0.35F;
-    auto constexpr levelRangeSelection = 1; // unipolar
+    auto constexpr start_level_knob_rotation = 0.35F;
+    auto constexpr level_range_selection = 1; // unipolar
 
-    params[Controls::StartLevelKnobs + step].setValue(startLevelKnobRotation);
+    params[Controls::StartLevelKnobs + step].setValue(
+        start_level_knob_rotation);
     params[Controls::LevelRangeSwitch].setValue(
-        static_cast<float>(levelRangeSelection));
+        static_cast<float>(level_range_selection));
 
     CHECK_EQ(controls.start_level(step),
-             dhe::level(startLevelKnobRotation,
-                        dhe::signal_ranges[levelRangeSelection]));
+             dhe::level(start_level_knob_rotation,
+                        dhe::signal_ranges[level_range_selection]));
   }
 
   SUBCASE("endSource(step) is the source selected by the step start source "
           "switch") {
     auto constexpr step = 7;
 
-    auto sourceSelectedBySwitch = Source::Level;
+    auto source_selected_by_switch = Source::Level;
     params[Controls::EndSourceSwitches + step].setValue(
-        static_cast<float>(sourceSelectedBySwitch));
-    CHECK_EQ(controls.end_source(step), sourceSelectedBySwitch);
+        static_cast<float>(source_selected_by_switch));
+    CHECK_EQ(controls.end_source(step), source_selected_by_switch);
 
-    sourceSelectedBySwitch = Source::In;
+    source_selected_by_switch = Source::In;
     params[Controls::EndSourceSwitches + step].setValue(
-        static_cast<float>(sourceSelectedBySwitch));
-    CHECK_EQ(controls.end_source(step), sourceSelectedBySwitch);
+        static_cast<float>(source_selected_by_switch));
+    CHECK_EQ(controls.end_source(step), source_selected_by_switch);
 
-    sourceSelectedBySwitch = Source::Out;
+    source_selected_by_switch = Source::Out;
     params[Controls::EndSourceSwitches + step].setValue(
-        static_cast<float>(sourceSelectedBySwitch));
-    CHECK_EQ(controls.end_source(step), sourceSelectedBySwitch);
+        static_cast<float>(source_selected_by_switch));
+    CHECK_EQ(controls.end_source(step), source_selected_by_switch);
   }
 
   SUBCASE("endLevel(step) reports level for sequence level switch and step end "
           "level param") {
     auto constexpr step = 3;
-    auto constexpr endLevelKnobRotation = 0.35F;
-    auto constexpr levelRangeSelection = 1; // unipolar
+    auto constexpr end_level_knob_rotation = 0.35F;
+    auto constexpr level_range_selection = 1; // unipolar
 
-    params[Controls::EndLevelKnobs + step].setValue(endLevelKnobRotation);
+    params[Controls::EndLevelKnobs + step].setValue(end_level_knob_rotation);
     params[Controls::LevelRangeSwitch].setValue(
-        static_cast<float>(levelRangeSelection));
+        static_cast<float>(level_range_selection));
 
     CHECK_EQ(controls.end_level(step),
-             dhe::level(endLevelKnobRotation,
-                        dhe::signal_ranges[levelRangeSelection]));
+             dhe::level(end_level_knob_rotation,
+                        dhe::signal_ranges[level_range_selection]));
   }
 
   SUBCASE("trackEndSource(step)") {
@@ -164,51 +116,51 @@ TEST_CASE("curve_sequencer_2::StepControls") {
   SUBCASE("taper(step) is the taper selected by step shape switch") {
     auto constexpr step = 3;
 
-    auto shapeSelection = 0; // J
+    auto shape_selection = 0; // J
     params[Controls::ShapeSwitches + step].setValue(
-        static_cast<float>(shapeSelection));
-    CHECK_EQ(controls.taper(step), dhe::sigmoid::tapers[shapeSelection]);
+        static_cast<float>(shape_selection));
+    CHECK_EQ(controls.taper(step), dhe::sigmoid::tapers[shape_selection]);
 
-    shapeSelection = 1; // S
+    shape_selection = 1; // S
     params[Controls::ShapeSwitches + step].setValue(
-        static_cast<float>(shapeSelection));
-    CHECK_EQ(controls.taper(step), dhe::sigmoid::tapers[shapeSelection]);
+        static_cast<float>(shape_selection));
+    CHECK_EQ(controls.taper(step), dhe::sigmoid::tapers[shape_selection]);
   }
 
   SUBCASE("curvature(step) reports curvature for the step curvature param") {
     auto constexpr step = 5;
-    auto constexpr curveKnobRotation = 0.3F;
-    params[Controls::CurveKnobs + step].setValue(curveKnobRotation);
+    auto constexpr curve_knob_rotation = 0.3F;
+    params[Controls::CurveKnobs + step].setValue(curve_knob_rotation);
 
-    CHECK_EQ(controls.curvature(step), dhe::curvature(curveKnobRotation));
+    CHECK_EQ(controls.curvature(step), dhe::curvature(curve_knob_rotation));
   }
 
   SUBCASE("duration(step) reports duration for duration range switch and step "
           "duration param") {
     auto constexpr step = 7;
-    auto constexpr durationKnobRotation = 0.75F;
-    auto constexpr durationRangeSelection = 2; // Long duration
+    auto constexpr duration_knob_rotation = 0.75F;
+    auto constexpr duration_range_selection = 2; // Long duration
 
-    params[Controls::DurationKnobs + step].setValue(durationKnobRotation);
+    params[Controls::DurationKnobs + step].setValue(duration_knob_rotation);
     params[Controls::DurationRangeSwitch].setValue(
-        static_cast<float>(durationRangeSelection));
+        static_cast<float>(duration_range_selection));
 
     CHECK_EQ(controls.duration(step),
-             dhe::duration(durationKnobRotation,
-                           dhe::duration_ranges[durationRangeSelection]));
+             dhe::duration(duration_knob_rotation,
+                           dhe::duration_ranges[duration_range_selection]));
   }
 
   SUBCASE("showInactive(step) dims step progress lights") {
     auto constexpr step = 3;
-    auto constexpr completedProgressLightIndex = step + step;
-    auto constexpr remainingProgressLightIndex = step + step + 1;
+    auto constexpr completed_progress_light_index = step + step;
+    auto constexpr remaining_progress_light_index = step + step + 1;
 
     controls.show_inactive(step);
 
-    CHECK_EQ(lights[Controls::ProgressLights + completedProgressLightIndex]
+    CHECK_EQ(lights[Controls::ProgressLights + completed_progress_light_index]
                  .getBrightness(),
              0.F);
-    CHECK_EQ(lights[Controls::ProgressLights + remainingProgressLightIndex]
+    CHECK_EQ(lights[Controls::ProgressLights + remaining_progress_light_index]
                  .getBrightness(),
              0.F);
   }
