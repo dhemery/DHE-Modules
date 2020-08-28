@@ -1,13 +1,19 @@
 #pragma once
 #include <type_traits>
 
+template <typename E>
+static constexpr auto enum_index(E e) ->
+    typename std::underlying_type<E>::type {
+  return static_cast<typename std::underlying_type<E>::type>(e);
+}
+
 namespace dhe {
 template <typename E, E First, E Last> class EnumIterator {
   using ValueT = typename std::underlying_type<E>::type;
 
 public:
   EnumIterator() : EnumIterator{First} {}
-  explicit EnumIterator(E const &f) : value_(static_cast<ValueT>(f)) {}
+  explicit EnumIterator(E const &f) : value_(enum_index(f)) {}
 
   auto begin() -> EnumIterator { return *this; }
   auto end() -> EnumIterator {
@@ -30,4 +36,5 @@ private:
   explicit EnumIterator(ValueT value) : value_{value} {}
   ValueT value_;
 };
+
 } // namespace dhe

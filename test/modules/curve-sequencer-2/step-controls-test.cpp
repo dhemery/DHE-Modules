@@ -2,12 +2,12 @@
 #include "controls-test.h"
 #include "modules/curve-sequencer-2/controls.h"
 #include "modules/curve-sequencer-2/triggers.h"
-#include "trigger-helpers.h"
 #include <dheunit/test.h>
 
 namespace test {
 namespace curve_sequencer_2 {
 namespace step_controls {
+using dhe::curve_sequencer_2::TriggerMode;
 using dhe::unit::Suite;
 
 auto trigger_mode_test(TriggerMode mode) -> TestFunc {
@@ -26,9 +26,10 @@ class StepControlsTests : Suite {
 public:
   StepControlsTests() : Suite{"dhe::curve_sequencer_2::[Step]Controls"} {}
   void register_tests(dhe::unit::TestRegistrar add_test) override {
-    for (auto mode : test::curve_sequencer_2::TriggerModeIterator()) {
-      auto const name = std::string{"trigger_mode(s): "} + name_of(mode);
-      add_test(name, trigger_mode_test(mode));
+    for (auto trigger_mode : dhe::curve_sequencer_2::trigger_modes) {
+      auto const name =
+          std::string{"trigger_mode(s): "} + name_of(trigger_mode);
+      add_test(name, trigger_mode_test(trigger_mode));
     }
 
     add_test("interrupt_on_trigger(s)",

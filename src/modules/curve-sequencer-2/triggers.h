@@ -1,6 +1,7 @@
 #pragma once
 
 #include "components/latch.h"
+#include "types/enums.h"
 #include <array>
 
 namespace dhe {
@@ -20,6 +21,27 @@ static auto constexpr trigger_mode_descriptions =
     std::array<char const *, trigger_mode_count>{"Gate rises", "Gate falls",
                                                  "Gate changes", "Gate is high",
                                                  "Gate is low"};
+
+static auto constexpr trigger_mode_names =
+    std::array<char const *, dhe::curve_sequencer_2::trigger_mode_count>{
+        "GateRises", "GateFalls", "GateChanges", "GateIsHigh", "GateIsLow"};
+
+static auto constexpr trigger_modes =
+    std::array<TriggerMode, trigger_mode_count>{
+        TriggerMode::GateRises,   TriggerMode::GateFalls,
+        TriggerMode::GateChanges, TriggerMode::GateIsHigh,
+        TriggerMode::GateIsLow,
+    };
+
+static auto name_of(TriggerMode mode) -> char const * {
+  return trigger_mode_names[enum_index(mode)];
+}
+static inline auto operator<<(std::ostream &os,
+                              dhe::curve_sequencer_2::TriggerMode mode)
+    -> std::ostream & {
+  os << name_of(mode);
+  return os;
+}
 
 static inline auto is_triggered(TriggerMode mode, dhe::Latch const &gate)
     -> bool {
