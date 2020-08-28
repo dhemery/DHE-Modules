@@ -21,9 +21,14 @@ static auto name_of(TriggerMode mode) -> char const * {
 } // namespace curve_sequencer_2
 } // namespace test
 
+namespace dhe {
+namespace curve_sequencer_2 {
+
 static inline auto operator<<(std::ostream &os,
                               dhe::curve_sequencer_2::TriggerMode mode)
     -> std::ostream & {
   os << test::curve_sequencer_2::name_of(mode);
   return os;
 }
+} // namespace curve_sequencer_2
+} // namespace dhe
