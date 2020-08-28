@@ -48,6 +48,10 @@ doctest: $(DOCTEST_RUNNER)
 
 
 ########### dheunit tests
+
+dep/dheunit/dheunit:
+	git submodule update --init --recursive
+
 TEST_SOURCES = $(shell find test -name "*.cpp")
 
 TEST_OBJECTS := $(patsubst %, build/%.o, $(TEST_SOURCES))
@@ -55,7 +59,9 @@ TEST_OBJECTS := $(patsubst %, build/%.o, $(TEST_SOURCES))
 
 TEST_RUNNER = build/dheunit
 
-TEST_CXX_FLAGS = -Itest/
+TEST_CXX_FLAGS = -Itest/ -Idep/dheunit
+
+$(TEST_OBJECTS): dep/dheunit/dheunit
 
 $(TEST_OBJECTS): FLAGS += $(TEST_CXX_FLAGS)
 
