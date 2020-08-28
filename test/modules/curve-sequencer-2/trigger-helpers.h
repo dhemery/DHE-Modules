@@ -1,14 +1,15 @@
 #pragma once
 
-#include "helpers/enums.h"
 #include "modules/curve-sequencer-2/triggers.h"
+#include "types/enums.h"
 #include <array>
 
 namespace test {
 namespace curve_sequencer_2 {
 using TriggerMode = dhe::curve_sequencer_2::TriggerMode;
 using TriggerModeIterator =
-    Iterator<TriggerMode, TriggerMode::GateRises, TriggerMode::GateIsLow>;
+    dhe::EnumIterator<TriggerMode, TriggerMode::GateRises,
+                      TriggerMode::GateIsLow>;
 
 static auto constexpr trigger_mode_names =
     std::array<char const *, dhe::curve_sequencer_2::trigger_mode_count>{
