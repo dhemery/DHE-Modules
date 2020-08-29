@@ -25,37 +25,6 @@ TEST_CASE("curve_sequencer_2::StepControls") {
 
   Controls controls{inputs, outputs, params, lights};
 
-  SUBCASE("trackStartSource(step)") {
-    auto constexpr step = 6;
-    params[enum_index(Controls::Param::StepTracksStartSource, step)].setValue(
-        0.F); // SNAP
-    CHECK_FALSE(controls.track_start_source(step));
-
-    params[enum_index(Controls::Param::StepTracksStartSource, step)].setValue(
-        1.F); // TRACK
-    CHECK(controls.track_start_source(step));
-  }
-
-  SUBCASE("startSource(step) is the source selected by the step start source "
-          "switch") {
-    auto constexpr step = 7;
-
-    auto source_selected_by_switch = Source::Level;
-    params[enum_index(Controls::Param::StepStartSource, step)].setValue(
-        static_cast<float>(source_selected_by_switch));
-    CHECK_EQ(controls.start_source(step), source_selected_by_switch);
-
-    source_selected_by_switch = Source::In;
-    params[enum_index(Controls::Param::StepStartSource, step)].setValue(
-        static_cast<float>(source_selected_by_switch));
-    CHECK_EQ(controls.start_source(step), source_selected_by_switch);
-
-    source_selected_by_switch = Source::Out;
-    params[enum_index(Controls::Param::StepStartSource, step)].setValue(
-        static_cast<float>(source_selected_by_switch));
-    CHECK_EQ(controls.start_source(step), source_selected_by_switch);
-  }
-
   SUBCASE("startLevel(step) reports level for sequence level switch and step "
           "start level param") {
     auto constexpr step = 3;
@@ -70,26 +39,6 @@ TEST_CASE("curve_sequencer_2::StepControls") {
     CHECK_EQ(controls.start_level(step),
              dhe::level(start_level_knob_rotation,
                         dhe::signal_ranges[level_range_selection]));
-  }
-
-  SUBCASE("endSource(step) is the source selected by the step start source "
-          "switch") {
-    auto constexpr step = 7;
-
-    auto source_selected_by_switch = Source::Level;
-    params[enum_index(Controls::Param::StepEndSource, step)].setValue(
-        static_cast<float>(source_selected_by_switch));
-    CHECK_EQ(controls.end_source(step), source_selected_by_switch);
-
-    source_selected_by_switch = Source::In;
-    params[enum_index(Controls::Param::StepEndSource, step)].setValue(
-        static_cast<float>(source_selected_by_switch));
-    CHECK_EQ(controls.end_source(step), source_selected_by_switch);
-
-    source_selected_by_switch = Source::Out;
-    params[enum_index(Controls::Param::StepEndSource, step)].setValue(
-        static_cast<float>(source_selected_by_switch));
-    CHECK_EQ(controls.end_source(step), source_selected_by_switch);
   }
 
   SUBCASE("endLevel(step) reports level for sequence level switch and step end "

@@ -36,6 +36,7 @@ static auto constexpr trigger_modes =
 static auto name_of(TriggerMode mode) -> char const * {
   return trigger_mode_names[enum_index(mode)];
 }
+
 static inline auto operator<<(std::ostream &os,
                               dhe::curve_sequencer_2::TriggerMode mode)
     -> std::ostream & {

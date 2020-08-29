@@ -7,6 +7,7 @@
 namespace test {
 namespace curve_sequencer_2 {
 namespace step_controls {
+using dhe::curve_sequencer_2::Source;
 using dhe::curve_sequencer_2::TriggerMode;
 using dhe::unit::Suite;
 
@@ -59,6 +60,92 @@ public:
                advance = controls.advance_on_end_of_curve(step);
                if (!advance) {
                  t.errorf("with option enabled, got false, want true");
+               }
+             }));
+
+    add_test("track_start_source(s)",
+             test([](Tester &t, Module &module, Controls controls) {
+               auto constexpr step = 5;
+               module.set(Controls::Param::StepTracksStartSource, step, 1.F);
+               auto track = controls.track_start_source(step);
+               if (!track) {
+                 t.error("with tracking enabled: got false, want true");
+               }
+               module.set(Controls::Param::StepTracksStartSource, step, 0.F);
+               track = controls.track_start_source(step);
+               if (track) {
+                 t.error("with tracking disabled: got true, want false");
+               }
+             }));
+
+    add_test("track_end_source(s)",
+             test([](Tester &t, Module &module, Controls controls) {
+               auto constexpr step = 5;
+               module.set(Controls::Param::StepTracksEndSource, step, 1.F);
+               auto track = controls.track_end_source(step);
+               if (!track) {
+                 t.error("with tracking enabled: got false, want true");
+               }
+               module.set(Controls::Param::StepTracksEndSource, step, 0.F);
+               track = controls.track_end_source(step);
+               if (track) {
+                 t.error("with tracking disabled: got true, want false");
+               }
+             }));
+
+    add_test("start_source(s)",
+             test([](Tester &t, Module &module, Controls controls) {
+               auto constexpr step = 0;
+               auto source = Source::Level;
+               module.set(Controls::Param::StepStartSource, step,
+                          static_cast<float>(source));
+               auto got = controls.start_source(step);
+               if (got != source) {
+                 t.errorf("Source::Level: got {}, want {}", got, source);
+               }
+
+               source = Source::In;
+               module.set(Controls::Param::StepStartSource, step,
+                          static_cast<float>(source));
+               got = controls.start_source(step);
+               if (got != source) {
+                 t.errorf("Source::In: got {}, want {}", got, source);
+               }
+
+               source = Source::Out;
+               module.set(Controls::Param::StepStartSource, step,
+                          static_cast<float>(source));
+               got = controls.start_source(step);
+               if (got != source) {
+                 t.errorf("Source::Out: got {}, want {}", got, source);
+               }
+             }));
+
+    add_test("end_source(s)",
+             test([](Tester &t, Module &module, Controls controls) {
+               auto constexpr step = 6;
+               auto source = Source::Level;
+               module.set(Controls::Param::StepEndSource, step,
+                          static_cast<float>(source));
+               auto got = controls.end_source(step);
+               if (got != source) {
+                 t.errorf("Source::Level: got {}, want {}", got, source);
+               }
+
+               source = Source::In;
+               module.set(Controls::Param::StepEndSource, step,
+                          static_cast<float>(source));
+               got = controls.end_source(step);
+               if (got != source) {
+                 t.errorf("Source::In: got {}, want {}", got, source);
+               }
+
+               source = Source::Out;
+               module.set(Controls::Param::StepEndSource, step,
+                          static_cast<float>(source));
+               got = controls.end_source(step);
+               if (got != source) {
+                 t.errorf("Source::Out: got {}, want {}", got, source);
                }
              }));
   }
