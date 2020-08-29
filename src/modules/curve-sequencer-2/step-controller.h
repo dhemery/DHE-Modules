@@ -3,14 +3,14 @@
 #include "components/latch.h"
 #include "components/phase-timer.h"
 #include "components/range.h"
-#include "modules/curve-sequencer/step-event.h"
+#include "modules/old-curve-sequencer/step-event.h"
 #include "triggers.h"
 
 namespace dhe {
 namespace curve_sequencer_2 {
 
 using dhe::Latch;
-using dhe::curve_sequencer::StepEvent;
+using dhe::old_curve_sequencer::StepEvent;
 
 template <typename Interrupter, typename Generator, typename Sustainer>
 class StepController {

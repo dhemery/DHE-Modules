@@ -1,11 +1,11 @@
-#include "modules/curve-sequencer/curve-sequencer-controls.h"
+#include "modules/old-curve-sequencer/curve-sequencer-controls.h"
 
 #include "components/sigmoid.h"
 #include "controls/curvature-inputs.h"
 #include "controls/duration-inputs.h"
 #include "controls/level-inputs.h"
 #include "fake-rack/Controls.h"
-#include "modules/curve-sequencer/generate-mode.h"
+#include "modules/old-curve-sequencer/generate-mode.h"
 
 #include <doctest.h>
 
@@ -13,10 +13,10 @@ namespace test {
 namespace curve_sequencer {
 namespace controls {
 static auto constexpr stepCount{8};
-using Controls = dhe::curve_sequencer::CurveSequencerControls<
+using Controls = dhe::old_curve_sequencer::CurveSequencerControls<
     fake::Port, fake::Port, fake::Param, fake::Light, stepCount>;
-using dhe::curve_sequencer::AdvanceMode;
-using dhe::curve_sequencer::GenerateMode;
+using dhe::old_curve_sequencer::AdvanceMode;
+using dhe::old_curve_sequencer::GenerateMode;
 
 TEST_CASE("curve_sequencer::CurveSequencerControls") {
   std::vector<fake::Port> inputs{Controls::InputCount};

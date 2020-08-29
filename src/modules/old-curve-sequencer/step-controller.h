@@ -9,7 +9,7 @@
 #include "step-event.h"
 
 namespace dhe {
-namespace curve_sequencer {
+namespace old_curve_sequencer {
 
 using dhe::Latch;
 using dhe::PhaseTimer;
@@ -106,5 +106,5 @@ private:
   Controls &controls_;
   PhaseTimer &timer_;
 }; // namespace curve_sequencer
-} // namespace curve_sequencer
+} // namespace old_curve_sequencer
 } // namespace dhe

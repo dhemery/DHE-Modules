@@ -2,8 +2,6 @@
 #include "modules/blossom/blossom.h"
 #include "modules/cubic/cubic-panel.h"
 #include "modules/cubic/cubic.h"
-#include "modules/curve-sequencer/curve-sequencer-module.h"
-#include "modules/curve-sequencer/curve-sequencer-panel.h"
 #include "modules/func/func-module.h"
 #include "modules/func/func1-panel.h"
 #include "modules/func/func6-panel.h"
@@ -13,6 +11,8 @@
 #include "modules/fuzzy-logic/fuzzy-logic-z-panel.h"
 #include "modules/gator/gator-panel.h"
 #include "modules/gator/gator.h"
+#include "modules/old-curve-sequencer/curve-sequencer-module.h"
+#include "modules/old-curve-sequencer/curve-sequencer-panel.h"
 #include "modules/ranger/ranger-panel.h"
 #include "modules/ranger/ranger.h"
 #include "modules/stage/booster-stage-module.h"
@@ -36,8 +36,6 @@ using dhe::blossom::Blossom;
 using dhe::blossom::BlossomPanel;
 using dhe::cubic::Cubic;
 using dhe::cubic::CubicPanel;
-using dhe::curve_sequencer::CurveSequencerModule;
-using dhe::curve_sequencer::CurveSequencerPanel;
 using dhe::func::Func1Panel;
 using dhe::func::Func6Panel;
 using dhe::func::FuncModule;
@@ -47,6 +45,8 @@ using dhe::fuzzy_logic::FuzzyLogicZModule;
 using dhe::fuzzy_logic::FuzzyLogicZPanel;
 using dhe::gator::Gator;
 using dhe::gator::GatorPanel;
+using dhe::old_curve_sequencer::CurveSequencerModule;
+using dhe::old_curve_sequencer::CurveSequencerPanel;
 using dhe::ranger::Ranger;
 using dhe::ranger::RangerPanel;
 using dhe::stage::BoosterStageModule;

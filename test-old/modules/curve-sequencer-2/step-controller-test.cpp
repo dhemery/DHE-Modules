@@ -1,7 +1,7 @@
 #include "modules/curve-sequencer-2/step-controller.h"
 
 #include "components/latch.h"
-#include "modules/curve-sequencer/step-event.h"
+#include "modules/old-curve-sequencer/step-event.h"
 
 #include <doctest.h>
 #include <functional>
@@ -10,7 +10,7 @@ namespace test {
 namespace curve_sequencer_2 {
 namespace step_controller {
 using dhe::Latch;
-using dhe::curve_sequencer::StepEvent;
+using dhe::old_curve_sequencer::StepEvent;
 
 struct Generator {
   std::function<void(int)> start = [](int s) {

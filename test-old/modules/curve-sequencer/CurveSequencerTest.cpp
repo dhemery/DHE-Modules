@@ -1,9 +1,9 @@
-#include "modules/curve-sequencer/curve-sequencer.h"
+#include "modules/old-curve-sequencer/curve-sequencer.h"
 
 #include "fake/SequenceControls.h"
 #include "fake/StepController.h"
 #include "fake/StepSelector.h"
-#include "modules/curve-sequencer/step-event.h"
+#include "modules/old-curve-sequencer/step-event.h"
 
 #include <doctest.h>
 #include <functional>
@@ -12,13 +12,13 @@ namespace test {
 namespace curve_sequencer {
 namespace sequencer {
 using dhe::Latch;
-using dhe::curve_sequencer::StepEvent;
+using dhe::old_curve_sequencer::StepEvent;
 
 template <typename T> inline static auto returns(T t) -> std::function<T()> {
   return [=]() -> T { return t; };
 }
 
-using CurveSequencer = dhe::curve_sequencer::CurveSequencer<
+using CurveSequencer = dhe::old_curve_sequencer::CurveSequencer<
     fake::SequenceControls, fake::StepSelector, fake::StepController>;
 
 auto constexpr stableLowLatch = Latch{false, false};

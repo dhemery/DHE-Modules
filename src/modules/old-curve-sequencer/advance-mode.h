@@ -1,7 +1,7 @@
 #pragma once
 
 namespace dhe {
-namespace curve_sequencer {
+namespace old_curve_sequencer {
 enum class AdvanceMode {
   TimerExpires,
   GateRises,
@@ -13,5 +13,5 @@ enum class AdvanceMode {
 
 static auto constexpr advance_mode_count =
     static_cast<int>(AdvanceMode::GateIsLow) + 1;
-} // namespace curve_sequencer
+} // namespace old_curve_sequencer
 } // namespace dhe

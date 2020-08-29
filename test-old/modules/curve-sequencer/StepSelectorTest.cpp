@@ -1,4 +1,4 @@
-#include "modules/curve-sequencer/step-selector.h"
+#include "modules/old-curve-sequencer/step-selector.h"
 
 #include "fake/Controls.h"
 
@@ -8,7 +8,7 @@ namespace test {
 namespace curve_sequencer {
 namespace step_selector {
 static auto constexpr stepCount{8};
-using dhe::curve_sequencer::StepSelector;
+using dhe::old_curve_sequencer::StepSelector;
 
 static inline void givenEnabled(fake::Controls &controls, int enabledStep) {
   controls.is_enabled = [=](int step) -> bool { return step == enabledStep; };

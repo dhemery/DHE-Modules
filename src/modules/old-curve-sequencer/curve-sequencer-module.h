@@ -15,7 +15,7 @@
 
 namespace dhe {
 
-namespace curve_sequencer {
+namespace old_curve_sequencer {
 auto constexpr default_generate_mode = static_cast<int>(GenerateMode::Curve);
 auto constexpr generate_mode_descriptions =
     std::array<char const *, generate_mode_count>{"Curve", "Hold",  "Sustain",
@@ -88,6 +88,6 @@ private:
   CurveSequencer<Controls, decltype(selector_), decltype(step_controller_)>
       curve_sequencer_{controls_, selector_, step_controller_};
 };
-} // namespace curve_sequencer
+} // namespace old_curve_sequencer
 
 } // namespace dhe

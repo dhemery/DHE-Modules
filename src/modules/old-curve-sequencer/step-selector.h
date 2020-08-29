@@ -1,7 +1,7 @@
 #pragma once
 
 namespace dhe {
-namespace curve_sequencer {
+namespace old_curve_sequencer {
 template <typename Controls> class StepSelector {
 public:
   StepSelector(Controls &controls, int step_count)
@@ -53,5 +53,5 @@ private:
   Controls &controls_;
   int const step_mask_;
 };
-} // namespace curve_sequencer
+} // namespace old_curve_sequencer
 } // namespace dhe

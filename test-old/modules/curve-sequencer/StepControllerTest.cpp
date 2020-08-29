@@ -1,12 +1,12 @@
-#include "modules/curve-sequencer/step-controller.h"
+#include "modules/old-curve-sequencer/step-controller.h"
 
 #include "components/latch.h"
 #include "components/phase-timer.h"
 #include "components/sigmoid.h"
 #include "fake/Controls.h"
-#include "modules/curve-sequencer/advance-mode.h"
-#include "modules/curve-sequencer/generate-mode.h"
-#include "modules/curve-sequencer/step-event.h"
+#include "modules/old-curve-sequencer/advance-mode.h"
+#include "modules/old-curve-sequencer/generate-mode.h"
+#include "modules/old-curve-sequencer/step-event.h"
 
 #include <algorithm>
 #include <doctest.h>
@@ -17,10 +17,10 @@ namespace curve_sequencer {
 namespace step_controller {
 using dhe::Latch;
 using dhe::PhaseTimer;
-using dhe::curve_sequencer::AdvanceMode;
-using dhe::curve_sequencer::GenerateMode;
-using dhe::curve_sequencer::StepController;
-using dhe::curve_sequencer::StepEvent;
+using dhe::old_curve_sequencer::AdvanceMode;
+using dhe::old_curve_sequencer::GenerateMode;
+using dhe::old_curve_sequencer::StepController;
+using dhe::old_curve_sequencer::StepEvent;
 using dhe::sigmoid::Taper;
 
 static auto constexpr risenGate = Latch{true, true};

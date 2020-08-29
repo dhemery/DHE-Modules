@@ -12,7 +12,7 @@
 
 namespace dhe {
 
-namespace curve_sequencer {
+namespace old_curve_sequencer {
 auto constexpr step_x = hp2mm(10.F);
 auto constexpr step_dx = hp2mm(2.25F);
 
@@ -214,5 +214,5 @@ public:
                            Controls::CurveSequencerOutput));
   }
 }; // namespace dhe
-} // namespace curve_sequencer
+} // namespace old_curve_sequencer
 } // namespace dhe

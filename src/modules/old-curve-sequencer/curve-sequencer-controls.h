@@ -13,7 +13,7 @@
 
 namespace dhe {
 
-namespace curve_sequencer {
+namespace old_curve_sequencer {
 
 static auto constexpr brightness_skew = 0.7F;
 static auto constexpr brightness_range =
@@ -159,6 +159,6 @@ private:
     lights_[remaining_light].setBrightness(remaining_brightness);
   }
 };
-} // namespace curve_sequencer
+} // namespace old_curve_sequencer
 
 } // namespace dhe

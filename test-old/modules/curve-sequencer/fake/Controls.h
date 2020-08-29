@@ -1,16 +1,16 @@
 #pragma once
 
 #include "components/sigmoid.h"
-#include "modules/curve-sequencer/advance-mode.h"
-#include "modules/curve-sequencer/generate-mode.h"
+#include "modules/old-curve-sequencer/advance-mode.h"
+#include "modules/old-curve-sequencer/generate-mode.h"
 
 #include <functional>
 
 namespace test {
 namespace curve_sequencer {
 namespace fake {
-using dhe::curve_sequencer::AdvanceMode;
-using dhe::curve_sequencer::GenerateMode;
+using dhe::old_curve_sequencer::AdvanceMode;
+using dhe::old_curve_sequencer::GenerateMode;
 using dhe::sigmoid::Taper;
 
 struct Controls {

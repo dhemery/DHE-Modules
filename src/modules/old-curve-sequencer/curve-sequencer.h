@@ -4,7 +4,7 @@
 #include "step-event.h"
 
 namespace dhe {
-namespace curve_sequencer {
+namespace old_curve_sequencer {
 
 template <typename Controls, typename StepSelector, typename StepController>
 class CurveSequencer {
@@ -86,5 +86,5 @@ private:
   StepSelector &step_selector_;
   StepController &step_controller_;
 }; // namespace curve_sequencer
-} // namespace curve_sequencer
+} // namespace old_curve_sequencer
 } // namespace dhe

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "components/latch.h"
-#include "modules/curve-sequencer/step-event.h"
+#include "modules/old-curve-sequencer/step-event.h"
 
 #include <functional>
 
@@ -9,7 +9,7 @@ namespace test {
 namespace curve_sequencer {
 namespace fake {
 using dhe::Latch;
-using dhe::curve_sequencer::StepEvent;
+using dhe::old_curve_sequencer::StepEvent;
 
 struct StepController {
   std::function<void(int)> enter{
