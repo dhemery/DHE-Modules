@@ -8,6 +8,7 @@
 #include "source.h"
 #include "triggers.h"
 
+#include <types/enums.h>
 #include <vector>
 
 namespace dhe {
@@ -37,32 +38,28 @@ public:
   // Sequence Controls
 
   auto input() const -> float {
-    return inputs_[enum_index(Input::CurveSequencer)].getVoltage();
+    return input(Input::CurveSequencer).getVoltage();
   }
 
   auto is_enabled(int step) const -> bool {
-    return is_pressed(params_[enum_index(Param::EnableStep, step)]) ||
-           is_high(inputs_[enum_index(Input::EnableStep, step)]);
+    return is_pressed(param(Param::EnableStep, step)) ||
+           is_high(input(Input::EnableStep, step));
   }
 
   auto is_gated() const -> bool {
-    return is_high(inputs_[enum_index(Input::Gate)]) ||
-           is_pressed(params_[enum_index(Param::Gate)]);
+    return is_high(input(Input::Gate)) || is_pressed(param(Param::Gate));
   }
 
   auto is_looping() const -> bool {
-    return is_pressed(params_[enum_index(Param::Loop)]) ||
-           is_high(inputs_[enum_index(Input::Loop)]);
+    return is_pressed(param(Param::Loop)) || is_high(input(Input::Loop));
   }
 
   auto is_reset() const -> bool {
-    return is_high(inputs_[enum_index(Input::Reset)]) ||
-           is_pressed(params_[enum_index(Param::Reset)]);
+    return is_high(input(Input::Reset)) || is_pressed(param(Param::Reset));
   }
 
   auto is_running() const -> bool {
-    return is_pressed(params_[enum_index(Param::Run)]) ||
-           is_high(inputs_[enum_index(Input::Run)]);
+    return is_pressed(param(Param::Run)) || is_high(input(Input::Run));
   }
 
   auto output() const -> float {
@@ -74,45 +71,39 @@ public:
   }
 
   auto selection_start() const -> int {
-    return static_cast<int>(
-        params_[enum_index(Param::SelectionStart)].getValue());
+    return static_cast<int>(param(Param::SelectionStart).getValue());
   }
 
   auto selection_length() const -> int {
-    return static_cast<int>(
-        params_[enum_index(Param::SelectionLength)].getValue());
+    return static_cast<int>(param(Param::SelectionLength).getValue());
   }
 
   // Step controls
 
   auto advance_on_end_of_curve(int step) const -> bool {
-    return position_of(
-               params_[enum_index(Param::StepAdvancesOnEndOfCurve, step)]) == 1;
+    return position_of(param(Param::AdvanceStepOnEndOfCurve, step)) == 1;
   }
 
   auto curvature(int step) const -> float {
-    return dhe::curvature(params_[enum_index(Param::StepCurvature, step)]);
+    return dhe::curvature(param(Param::StepCurvature, step));
   }
 
   auto duration(int step) const -> float {
-    return dhe::selectable_duration(
-        params_[enum_index(Param::StepDuration, step)],
-        params_[enum_index(Param::DurationRange)]);
+    return dhe::selectable_duration(param(Param::StepDuration, step),
+                                    param(Param::DurationRange));
   }
 
   auto end_level(int step) const -> float {
-    return dhe::selectable_level(params_[enum_index(Param::StepEndLevel, step)],
-                                 params_[enum_index(Param::LevelRange)]);
+    return dhe::selectable_level(param(Param::StepEndLevel, step),
+                                 param(Param::LevelRange));
   }
 
   auto end_source(int step) const -> Source {
-    return static_cast<Source>(
-        params_[enum_index(Param::StepEndSource, step)].getValue());
+    return static_cast<Source>(param(Param::StepEndSource, step).getValue());
   }
 
   auto interrupt_on_trigger(int step) const -> bool {
-    return position_of(
-               params_[enum_index(Param::StepInterruptsOnTrigger, step)]) == 1;
+    return position_of(param(Param::InterruptStepOnTrigger, step)) == 1;
   }
 
   void show_inactive(int step) { set_lights(step, 0.F, 0.F); }
@@ -124,35 +115,31 @@ public:
   }
 
   auto start_level(int step) const -> float {
-    return dhe::selectable_level(
-        params_[enum_index(Param::StepStartLevel, step)],
-        params_[enum_index(Param::LevelRange)]);
+    return dhe::selectable_level(param(Param::StepStartLevel, step),
+                                 param(Param::LevelRange));
   }
 
   auto start_source(int step) const -> Source {
-    return static_cast<Source>(
-        params_[enum_index(Param::StepStartSource, step)].getValue());
+    return static_cast<Source>(param(Param::StepStartSource, step).getValue());
   }
 
   auto taper(int step) const -> sigmoid::Taper const & {
-    auto const selection = static_cast<int>(
-        params_[enum_index(Param::StepShape, step)].getValue());
+    auto const selection =
+        static_cast<int>(param(Param::StepShape, step).getValue());
     return sigmoid::tapers[selection];
   }
 
   auto track_end_source(int step) const -> bool {
-    return position_of(params_[enum_index(Param::StepTracksEndSource, step)]) ==
-           1;
+    return position_of(param(Param::StepTracksEndSource, step)) == 1;
   }
 
   auto track_start_source(int step) const -> bool {
-    return position_of(
-               params_[enum_index(Param::StepTracksStartSource, step)]) == 1;
+    return position_of(param(Param::StepTracksStartSource, step)) == 1;
   }
 
   auto trigger_mode(int step) const -> TriggerMode {
     return static_cast<TriggerMode>(
-        params_[enum_index(Param::StepTriggerMode, step)].getValue());
+        param(Param::StepTriggerMode, step).getValue());
   }
 
   enum class Param {
@@ -171,12 +158,12 @@ public:
     EnableStep = StepDuration + N,
     StepEndLevel = EnableStep + N,
     StepTriggerMode = StepEndLevel + N,
-    StepInterruptsOnTrigger = StepTriggerMode + N,
-    StepShape = StepInterruptsOnTrigger + N,
+    InterruptStepOnTrigger = StepTriggerMode + N,
+    StepShape = InterruptStepOnTrigger + N,
     // The rest are new in 1.3.0
     StepStartLevel = StepShape + N,
-    StepAdvancesOnEndOfCurve = StepStartLevel + N,
-    StepStartSource = StepAdvancesOnEndOfCurve + N,
+    AdvanceStepOnEndOfCurve = StepStartLevel + N,
+    StepStartSource = AdvanceStepOnEndOfCurve + N,
     StepEndSource = StepStartSource + N,
     StepTracksStartSource = StepEndSource + N,
     StepTracksEndSource = StepTracksStartSource + N,
@@ -187,7 +174,7 @@ public:
   enum class V110Params {
     LevelKnobs = enum_index(Param::StepEndLevel),
     ModeSwitches = enum_index(Param::StepTriggerMode),
-    ConditionSwitches = enum_index(Param::StepInterruptsOnTrigger),
+    ConditionSwitches = enum_index(Param::InterruptStepOnTrigger),
   };
 
   enum class Input {
@@ -205,6 +192,14 @@ public:
   enum class Light { StepProgress, Count = StepProgress + N + N };
 
 private:
+  auto input(Input id, int offset = 0) const -> PortT & {
+    return inputs_[enum_index(id, offset)];
+  }
+
+  auto param(Param id, int offset = 0) const -> ParamT & {
+    return params_[enum_index(id, offset)];
+  }
+
   void set_lights(int step, float completed_brightness,
                   float remaining_brightness) {
     auto const completed_light = enum_index(Light::StepProgress, step + step);

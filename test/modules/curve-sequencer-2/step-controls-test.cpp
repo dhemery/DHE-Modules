@@ -35,12 +35,12 @@ public:
     add_test("interrupt_on_trigger(s)",
              test([](Tester &t, Module &module, Controls controls) {
                auto constexpr step = 3;
-               module.set(Controls::Param::StepInterruptsOnTrigger, step, 0.F);
+               module.set(Controls::Param::InterruptStepOnTrigger, step, 0.F);
                auto interrupt_on_trigger = controls.interrupt_on_trigger(step);
                if (interrupt_on_trigger) {
                  t.errorf("with option disabled, got true, want false");
                }
-               module.set(Controls::Param::StepInterruptsOnTrigger, step, 1.F);
+               module.set(Controls::Param::InterruptStepOnTrigger, step, 1.F);
                interrupt_on_trigger = controls.interrupt_on_trigger(step);
                if (!interrupt_on_trigger) {
                  t.errorf("with option enabled, got false, want true");
@@ -50,12 +50,12 @@ public:
     add_test("advance_on_end_of_curve(s)",
              test([](Tester &t, Module &module, Controls controls) {
                auto constexpr step = 3;
-               module.set(Controls::Param::StepAdvancesOnEndOfCurve, step, 0.F);
+               module.set(Controls::Param::AdvanceStepOnEndOfCurve, step, 0.F);
                auto advance = controls.advance_on_end_of_curve(step);
                if (advance) {
                  t.errorf("with option disabled, got true, want false");
                }
-               module.set(Controls::Param::StepAdvancesOnEndOfCurve, step, 1.F);
+               module.set(Controls::Param::AdvanceStepOnEndOfCurve, step, 1.F);
                advance = controls.advance_on_end_of_curve(step);
                if (!advance) {
                  t.errorf("with option enabled, got false, want true");
