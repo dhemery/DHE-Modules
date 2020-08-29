@@ -62,7 +62,7 @@ public:
   }
 };
 
-__attribute__((unused)) static LatchSuite latch_suite{};
+__attribute__((unused)) static auto _ = LatchSuite{};
 
 auto check_clock(Latch l, bool signal, Latch want_latch) -> TestFunc {
   return [l, signal, want_latch](Tester &t) mutable {

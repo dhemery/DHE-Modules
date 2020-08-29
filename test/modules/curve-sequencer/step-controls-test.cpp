@@ -294,7 +294,7 @@ public:
   }
 };
 
-__attribute__((unused)) static StepControlsTests step_controls_test{};
+__attribute__((unused)) static auto _ = StepControlsTests{};
 } // namespace step_controls
 } // namespace curve_sequencer
 } // namespace test

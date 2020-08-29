@@ -112,7 +112,7 @@ public:
   }
 };
 
-__attribute__((unused)) static SequenceControlsTests sequence_controls_tests{};
+__attribute__((unused)) static auto _ = SequenceControlsTests{};
 
 } // namespace sequence_controls
 } // namespace curve_sequencer

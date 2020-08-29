@@ -72,7 +72,7 @@ public:
   }
 };
 
-__attribute__((unused)) static PhaseTimerSuite phase_timer_suite{};
+__attribute__((unused)) static auto _ = PhaseTimerSuite{};
 } // namespace test
 } // namespace components
 } // namespace dhe

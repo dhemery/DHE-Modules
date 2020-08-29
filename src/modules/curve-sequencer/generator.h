@@ -9,16 +9,16 @@ public:
       : controls_{controls}, start_source_{start_source}, end_source_{
                                                               end_source} {}
 
-  void start(int started_step) {
-    step_ = started_step;
-    controls_.showProgress(step_, 0.F);
+  void start(int step) {
+    step_ = step;
+    controls_.show_progress(step_, 0.F);
     start_source_.snap(step_);
     end_source_.snap(step_);
   }
 
   auto generate(float /*sample_time*/) -> bool { return false; }
 
-  void stop() { controls_.showInactive(step_); }
+  void stop() { controls_.show_inactive(step_); }
 
 private:
   Controls &controls_;
