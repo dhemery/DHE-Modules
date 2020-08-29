@@ -10,8 +10,6 @@
 
 #include <vector>
 
-#define ENUMIDS(name, count) name, name##_LAST = (name) + (count)-1
-
 namespace dhe {
 
 namespace curve_sequencer_2 {
@@ -152,21 +150,30 @@ public:
     ResetButton,
     DurationRangeSwitch,
     LevelRangeSwitch,
-    ENUMIDS(CurveKnobs, N),
-    ENUMIDS(DurationKnobs, N),
-    ENUMIDS(EnabledButtons, N),
-    ENUMIDS(EndLevelKnobs, N),       // Was LevelKnobs in v1.1.0
-    ENUMIDS(TriggerModeSwitches, N), // Was ModeSwitches in v1.1.0
-    ENUMIDS(OnInterruptSwitches, N), // Was ConditionSwitches in v1.1.0
-    ENUMIDS(ShapeSwitches, N),
-    ENUMIDS(StartLevelKnobs, N), // Was GenerateModeMenu in v1.1.0?
+    // Above: Overall module/sequence params
+    // Below: Step params
+    CurveKnobs,
+    DurationKnobs = CurveKnobs + N,
+    EnabledButtons = DurationKnobs + N,
+    EndLevelKnobs = EnabledButtons + N,
+    TriggerModeSwitches = EndLevelKnobs + N,
+    OnInterruptSwitches = TriggerModeSwitches + N,
+    ShapeSwitches = OnInterruptSwitches + N,
+    StartLevelKnobs = ShapeSwitches + N,
     // The rest are new in 1.3.0
-    ENUMIDS(OnEndOfCurveSwitches, N),
-    ENUMIDS(StartSourceSwitches, N),
-    ENUMIDS(EndSourceSwitches, N),
-    ENUMIDS(TrackStartSwitches, N),
-    ENUMIDS(TrackEndSwitches, N),
-    ParamCount
+    OnEndOfCurveSwitches = StartLevelKnobs + N,
+    StartSourceSwitches = OnEndOfCurveSwitches + N,
+    EndSourceSwitches = StartSourceSwitches + N,
+    TrackStartSwitches = EndSourceSwitches + N,
+    TrackEndSwitches = TrackStartSwitches + N,
+    ParamCount = TrackEndSwitches + N,
+  };
+
+  // How obsolete v1.1.0 parameter IDs map to v1.3 IDs
+  enum class V110Params {
+    LevelKnobs = EndLevelKnobs,
+    ModeSwitches = TriggerModeSwitches,
+    ConditionSwitches = OnInterruptSwitches,
   };
 
   enum InputIds {
@@ -175,13 +182,13 @@ public:
     LoopInput,
     ResetInput,
     RunInput,
-    ENUMIDS(EnabledInputs, N),
-    InputCount
+    EnabledInputs,
+    InputCount = EnabledInputs + N,
   };
 
   enum OutputIds { CurveSequencerOutput, OutputCount };
 
-  enum LightIds { ENUMIDS(ProgressLights, N * 2), LightCount };
+  enum LightIds { ProgressLights, LightCount = ProgressLights + N + N };
 
 private:
   void set_lights(int step, float completed_brightness,
