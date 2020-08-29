@@ -24,10 +24,10 @@ public:
          std::vector<fake::Param> &params, std::vector<fake::Light> &lights)
       : inputs_{inputs}, outputs_{outputs}, params_{params}, lights_{lights} {}
 
-  void set(Controls::ParamIds id, int offset, float value) {
-    params_[id + offset].setValue(value);
+  void set(Controls::Param id, int offset, float value) {
+    params_[enum_index(id, offset)].setValue(value);
   }
-  void set(Controls::ParamIds id, float value) { set(id, 0, value); }
+  void set(Controls::Param id, float value) { set(id, 0, value); }
   void set(Controls::Input id, int step, float voltage) {
     inputs_[enum_index(id, step)].setVoltage(voltage);
   }
@@ -53,7 +53,7 @@ static inline auto test(ControlsTest const &controls_test) -> TestFunc {
   return [controls_test](Tester &tester) {
     std::vector<fake::Port> inputs{enum_index(Controls::Input::Count)};
     std::vector<fake::Port> outputs{enum_index(Controls::Output::Count)};
-    std::vector<fake::Param> params{Controls::ParamCount};
+    std::vector<fake::Param> params{enum_index(Controls::Param::Count)};
     std::vector<fake::Light> lights{enum_index(Controls::Light::Count)};
 
     Module module{inputs, outputs, params, lights};

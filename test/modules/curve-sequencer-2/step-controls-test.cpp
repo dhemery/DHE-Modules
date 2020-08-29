@@ -14,7 +14,7 @@ auto trigger_mode_test(TriggerMode mode) -> TestFunc {
   return test([mode](Tester &t, Module &module, Controls &controls) {
     auto constexpr step = 4;
     auto const switch_value = static_cast<float>(mode);
-    module.set(Controls::TriggerModeSwitches, step, switch_value);
+    module.set(Controls::Param::StepTriggerMode, step, switch_value);
     TriggerMode got = controls.trigger_mode(step);
     if (got != mode) {
       t.errorf("got mode {}, want {}", got, mode);
@@ -35,12 +35,12 @@ public:
     add_test("interrupt_on_trigger(s)",
              test([](Tester &t, Module &module, Controls controls) {
                auto constexpr step = 3;
-               module.set(Controls::OnInterruptSwitches, step, 0.F);
+               module.set(Controls::Param::StepInterruptsOnTrigger, step, 0.F);
                auto interrupt_on_trigger = controls.interrupt_on_trigger(step);
                if (interrupt_on_trigger) {
                  t.errorf("with option disabled, got true, want false");
                }
-               module.set(Controls::OnInterruptSwitches, step, 1.F);
+               module.set(Controls::Param::StepInterruptsOnTrigger, step, 1.F);
                interrupt_on_trigger = controls.interrupt_on_trigger(step);
                if (!interrupt_on_trigger) {
                  t.errorf("with option enabled, got false, want true");
@@ -50,12 +50,12 @@ public:
     add_test("advance_on_end_of_curve(s)",
              test([](Tester &t, Module &module, Controls controls) {
                auto constexpr step = 3;
-               module.set(Controls::OnEndOfCurveSwitches, step, 0.F);
+               module.set(Controls::Param::StepAdvancesOnEndOfCurve, step, 0.F);
                auto advance = controls.advance_on_end_of_curve(step);
                if (advance) {
                  t.errorf("with option disabled, got true, want false");
                }
-               module.set(Controls::OnEndOfCurveSwitches, step, 1.F);
+               module.set(Controls::Param::StepAdvancesOnEndOfCurve, step, 1.F);
                advance = controls.advance_on_end_of_curve(step);
                if (!advance) {
                  t.errorf("with option enabled, got false, want true");

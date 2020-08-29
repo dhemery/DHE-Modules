@@ -14,19 +14,19 @@ public:
 
   void register_tests(dhe::unit::TestRegistrar add) override {
     add("is_gated()", test([](Tester &t, Module &module, Controls &controls) {
-          module.set(Controls::GateButton, 1.F);
+          module.set(Controls::Param::Gate, 1.F);
           module.set(Controls::Input::Gate, 0.F);
           if (!controls.is_gated()) {
             t.error("button pressed: got false, want true");
           }
 
-          module.set(Controls::GateButton, 0.F);
+          module.set(Controls::Param::Gate, 0.F);
           module.set(Controls::Input::Gate, 10.F);
           if (!controls.is_gated()) {
             t.error("input high: got false, want true");
           }
 
-          module.set(Controls::GateButton, 0.F);
+          module.set(Controls::Param::Gate, 0.F);
           module.set(Controls::Input::Gate, 0.F);
           if (controls.is_gated()) {
             t.error("input low and button released: got false, want true");
@@ -34,19 +34,19 @@ public:
         }));
 
     add("is_looping()", test([](Tester &t, Module &module, Controls &controls) {
-          module.set(Controls::LoopButton, 1.F);
+          module.set(Controls::Param::Loop, 1.F);
           module.set(Controls::Input::Loop, 0.F);
           if (!controls.is_looping()) {
             t.error("button pressed: got false, want true");
           }
 
-          module.set(Controls::LoopButton, 0.F);
+          module.set(Controls::Param::Loop, 0.F);
           module.set(Controls::Input::Loop, 10.F);
           if (!controls.is_looping()) {
             t.error("input high: got false, want true");
           }
 
-          module.set(Controls::LoopButton, 0.F);
+          module.set(Controls::Param::Loop, 0.F);
           module.set(Controls::Input::Loop, 0.F);
           if (controls.is_looping()) {
             t.error("input low and button not pressed: got false, want true");
@@ -54,19 +54,19 @@ public:
         }));
 
     add("is_reset()", test([](Tester &t, Module &module, Controls &controls) {
-          module.set(Controls::ResetButton, 1.F);
+          module.set(Controls::Param::Reset, 1.F);
           module.set(Controls::Input::Reset, 0.F);
           if (!controls.is_reset()) {
             t.error("button pressed: got false, want true");
           }
 
-          module.set(Controls::ResetButton, 0.F);
+          module.set(Controls::Param::Reset, 0.F);
           module.set(Controls::Input::Reset, 10.F);
           if (!controls.is_reset()) {
             t.error("input high: got false, want true");
           }
 
-          module.set(Controls::ResetButton, 0.F);
+          module.set(Controls::Param::Reset, 0.F);
           module.set(Controls::Input::Reset, 0.F);
           if (controls.is_reset()) {
             t.error("input low and button not pressed: got false, want true");
@@ -74,19 +74,19 @@ public:
         }));
 
     add("is_running()", test([](Tester &t, Module &module, Controls &controls) {
-          module.set(Controls::RunButton, 1.F);
+          module.set(Controls::Param::Run, 1.F);
           module.set(Controls::Input::Run, 0.F);
           if (!controls.is_running()) {
             t.error("button pressed: got false, want true");
           }
 
-          module.set(Controls::RunButton, 0.F);
+          module.set(Controls::Param::Run, 0.F);
           module.set(Controls::Input::Run, 10.F);
           if (!controls.is_running()) {
             t.error("input high: got false, want true");
           }
 
-          module.set(Controls::RunButton, 0.F);
+          module.set(Controls::Param::Run, 0.F);
           module.set(Controls::Input::Run, 0.F);
           if (controls.is_running()) {
             t.error("input low and button not pressed: got true, want false");
@@ -96,7 +96,7 @@ public:
     add("selection_start()",
         test([](Tester &t, Module &module, Controls &controls) {
           auto constexpr start = 2;
-          module.set(Controls::SelectionStartKnob, start);
+          module.set(Controls::Param::SelectionStart, start);
 
           int got = controls.selection_start();
           if (got != start) {
@@ -107,7 +107,7 @@ public:
     add("selection_length()",
         test([](Tester &t, Module &module, Controls &controls) {
           auto constexpr length = 5;
-          module.set(Controls::SelectionLengthKnob, length);
+          module.set(Controls::Param::SelectionLength, length);
 
           int got = controls.selection_length();
           if (got != length) {
