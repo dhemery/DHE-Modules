@@ -127,7 +127,7 @@ public:
 
     add("output()", test([](Tester &t, Module &module, Controls &controls) {
           auto constexpr output = 3.333F;
-          module.set(Controls::CurveSequencerOutput, output);
+          module.set(Controls::Output::CurveSequencer, output);
 
           float got = controls.output();
           if (got != output) {
@@ -140,7 +140,7 @@ public:
 
           controls.output(output);
 
-          auto const got = module.get(Controls::CurveSequencerOutput);
+          auto const got = module.get(Controls::Output::CurveSequencer);
           if (got != output) {
             t.error("got {}, want {}", got, output);
           }

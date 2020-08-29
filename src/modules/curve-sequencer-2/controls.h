@@ -62,11 +62,11 @@ public:
   }
 
   auto output() const -> float {
-    return outputs_[CurveSequencerOutput].getVoltage();
+    return outputs_[enum_index(Output::CurveSequencer)].getVoltage();
   }
 
   void output(float voltage) {
-    outputs_[CurveSequencerOutput].setVoltage(voltage);
+    outputs_[enum_index(Output::CurveSequencer)].setVoltage(voltage);
   }
 
   auto selection_start() const -> int {
@@ -186,7 +186,7 @@ public:
     InputCount = EnabledInputs + N,
   };
 
-  enum OutputIds { CurveSequencerOutput, OutputCount };
+  enum class Output { CurveSequencer, Count };
 
   enum class Light { Progress, Count = Progress + N + N };
 

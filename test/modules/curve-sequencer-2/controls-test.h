@@ -32,14 +32,14 @@ public:
     inputs_[id + step].setVoltage(voltage);
   }
   void set(Controls::InputIds id, float voltage) { set(id, 0, voltage); }
-  void set(Controls::OutputIds id, int step, float voltage) {
-    outputs_[id + step].setVoltage(voltage);
+  void set(Controls::Output id, int step, float voltage) {
+    outputs_[enum_index(id, step)].setVoltage(voltage);
   }
-  void set(Controls::OutputIds id, float voltage) { set(id, 0, voltage); }
-  auto get(Controls::OutputIds id, int step) const -> float {
-    return outputs_[id + step].getVoltage();
+  void set(Controls::Output id, float voltage) { set(id, 0, voltage); }
+  auto get(Controls::Output id, int step) const -> float {
+    return outputs_[enum_index(id, step)].getVoltage();
   }
-  auto get(Controls::OutputIds id) const -> float { return get(id, 0); }
+  auto get(Controls::Output id) const -> float { return get(id, 0); }
 
 private:
   std::vector<fake::Port> &inputs_;
@@ -52,7 +52,7 @@ template <typename ControlsTest>
 static inline auto test(ControlsTest const &controls_test) -> TestFunc {
   return [controls_test](Tester &tester) {
     std::vector<fake::Port> inputs{Controls::InputCount};
-    std::vector<fake::Port> outputs{Controls::OutputCount};
+    std::vector<fake::Port> outputs{enum_index(Controls::Output::Count)};
     std::vector<fake::Param> params{Controls::ParamCount};
     std::vector<fake::Light> lights{enum_index(Controls::Light::Count)};
 
