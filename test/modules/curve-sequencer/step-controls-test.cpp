@@ -14,6 +14,7 @@ using dhe::curve_sequencer::TriggerMode;
 using dhe::unit::is_between;
 using dhe::unit::is_equal_to;
 using dhe::unit::is_false;
+using dhe::unit::is_near;
 using dhe::unit::is_no_greater_than;
 using dhe::unit::is_no_less_than;
 using dhe::unit::is_true;
@@ -214,7 +215,7 @@ public:
                module.set(Controls::Param::StepCurvature, step, rotation);
 
                t.assert_that(controls.curvature(step),
-                             is_equal_to(dhe::curvature(rotation)));
+                             is_near(dhe::curvature(rotation), 0.00001F));
              }));
 
     add_test("show_progress(s)",
