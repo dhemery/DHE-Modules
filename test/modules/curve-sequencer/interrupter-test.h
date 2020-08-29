@@ -25,8 +25,8 @@ struct Controls {
 
 using Interrupter = dhe::curve_sequencer::Interrupter<Controls>;
 
-template <typename InterrupterTest>
-static inline auto test(InterrupterTest const &interrupter_test) -> TestFunc {
+template <typename T>
+static inline auto test(T const &interrupter_test) -> TestFunc {
   return [interrupter_test](Tester &t) {
     Controls controls{};
     Interrupter interrupter{controls};
@@ -34,9 +34,9 @@ static inline auto test(InterrupterTest const &interrupter_test) -> TestFunc {
   };
 }
 
-static auto constexpr risingGate = Latch{true, true};
-static auto constexpr fallingGate = Latch{false, true};
-static auto constexpr highGate = Latch{true, false};
-static auto constexpr lowGate = Latch{false, false};
+static auto constexpr rising_gate = Latch{true, true};
+static auto constexpr falling_gate = Latch{false, true};
+static auto constexpr high_gate = Latch{true, false};
+static auto constexpr low_gate = Latch{false, false};
 } // namespace curve_sequencer
 } // namespace test
