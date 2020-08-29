@@ -31,9 +31,9 @@ auto trigger_mode_test(TriggerMode mode) -> TestFunc {
   });
 }
 
-class StepControlsTests : Suite {
+class StepControlsSuite : Suite {
 public:
-  StepControlsTests() : Suite{"dhe::curve_sequencer::[Step]Controls"} {}
+  StepControlsSuite() : Suite{"dhe::curve_sequencer::Controls/step"} {}
   void register_tests(dhe::unit::TestRegistrar add_test) override {
     for (auto trigger_mode : dhe::curve_sequencer::trigger_modes) {
       auto const name =
@@ -294,7 +294,7 @@ public:
   }
 };
 
-__attribute__((unused)) static auto _ = StepControlsTests{};
+__attribute__((unused)) static auto _ = StepControlsSuite{};
 } // namespace step_controls
 } // namespace curve_sequencer
 } // namespace test

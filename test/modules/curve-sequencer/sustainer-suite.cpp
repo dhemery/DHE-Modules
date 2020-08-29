@@ -1,5 +1,5 @@
-#include "sustainer-test.h"
 #include "helpers/latches.h"
+#include "sustainer-test.h"
 #include <dheunit/assertions.h>
 #include <dheunit/test.h>
 
@@ -10,9 +10,9 @@ using dhe::unit::is_true;
 using dhe::unit::Suite;
 using dhe::unit::Tester;
 
-class SustainerTest : public Suite {
+class SustainerSuite : public Suite {
 public:
-  SustainerTest() : Suite{"dhe::curve_sequencer::Sustainer"} {}
+  SustainerSuite() : Suite{"dhe::curve_sequencer::Sustainer"} {}
   void register_tests(dhe::unit::TestRegistrar add) override {
     add("advance=false, mode=GateRises, is_done(s) iff gate rises",
         test([](Tester &t, Controls &controls, Sustainer &interrupter) {
@@ -151,6 +151,6 @@ public:
   }
 };
 
-__attribute__((unused)) static auto _ = SustainerTest{};
+__attribute__((unused)) static auto _ = SustainerSuite{};
 } // namespace curve_sequencer
 } // namespace test

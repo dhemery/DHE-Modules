@@ -11,9 +11,9 @@ using dhe::unit::Suite;
 using dhe::unit::Tester;
 using dhe::unit::TestFunc;
 
-class SequenceControlsTests : Suite {
+class SequenceControlsSuite : Suite {
 public:
-  SequenceControlsTests() : Suite{"dhe::curve_sequencer::[Sequence]Controls"} {}
+  SequenceControlsSuite() : Suite{"dhe::curve_sequencer::Controls/sequence"} {}
 
   void register_tests(dhe::unit::TestRegistrar add) override {
     add("is_gated()", test([](Tester &t, Module &module, Controls &controls) {
@@ -112,7 +112,7 @@ public:
   }
 };
 
-__attribute__((unused)) static auto _ = SequenceControlsTests{};
+__attribute__((unused)) static auto _ = SequenceControlsSuite{};
 
 } // namespace sequence_controls
 } // namespace curve_sequencer

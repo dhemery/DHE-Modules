@@ -8,9 +8,9 @@ using dhe::unit::is_equal_to;
 using dhe::unit::Suite;
 using dhe::unit::TestRegistrar;
 
-class GeneratorControlsTests : public Suite {
+class GeneratorControlsSuite : public Suite {
 public:
-  GeneratorControlsTests() : Suite{"dhe::curve_sequencer::Generator"} {}
+  GeneratorControlsSuite() : Suite{"dhe::curve_sequencer::Generator"} {}
   void register_tests(TestRegistrar add) override {
     add("start(s)", test([](Tester &t, Controls &controls, Source &start_source,
                             Source &end_source, Generator &generator) {
@@ -50,6 +50,6 @@ public:
   }
 };
 
-__attribute__((unused)) static auto _ = GeneratorControlsTests{};
+__attribute__((unused)) static auto _ = GeneratorControlsSuite{};
 } // namespace curve_sequencer
 } // namespace test

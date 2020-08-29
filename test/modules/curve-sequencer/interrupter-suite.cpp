@@ -1,5 +1,5 @@
-#include "interrupter-test.h"
 #include "helpers/latches.h"
+#include "interrupter-test.h"
 #include <dheunit/assertions.h>
 
 namespace test {
@@ -8,9 +8,9 @@ using dhe::unit::is_false;
 using dhe::unit::is_true;
 using dhe::unit::Suite;
 
-class InterrupterTest : public Suite {
+class InterrupterSuite : public Suite {
 public:
-  InterrupterTest() : Suite{"dhe::curve_sequencer::Interrupter"} {}
+  InterrupterSuite() : Suite{"dhe::curve_sequencer::Interrupter"} {}
   void register_tests(dhe::unit::TestRegistrar add) override {
     add("interrupt=true, mode=GateRises, is_interrupted(s) iff gate rises",
         test([](Tester &t, Controls &controls, Interrupter &interrupter) {
@@ -167,6 +167,6 @@ public:
   }
 };
 
-__attribute__((unused)) static auto _ = InterrupterTest{};
+__attribute__((unused)) static auto _ = InterrupterSuite{};
 } // namespace curve_sequencer
 } // namespace test
