@@ -3,6 +3,7 @@
 #include "range.h"
 
 #include <array>
+#include <ostream>
 
 namespace dhe {
 namespace sigmoid {
@@ -63,6 +64,13 @@ public:
 
   constexpr auto operator!=(const Taper &rhs) const -> bool {
     return !(rhs == *this);
+  }
+
+  friend auto operator<<(std::ostream &os, const Taper &taper)
+      -> std::ostream & {
+    os << "Taper{" << taper.domain_ << "," << taper.quadrant_factor_ << ","
+       << taper.default_curvature_ << '}';
+    return os;
   }
 
 private:

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "cxmath.h"
+#include <ostream>
 
 namespace dhe {
 class Range {
@@ -38,8 +39,15 @@ public:
     return !(rhs == *this);
   }
 
+  friend auto operator<<(std::ostream &os, const Range &range)
+      -> std::ostream & {
+    os << "Range{" << range.lower_ << "," << range.upper_ << '}';
+    return os;
+  }
+
 private:
   float lower_;
   float upper_;
 };
+
 } // namespace dhe

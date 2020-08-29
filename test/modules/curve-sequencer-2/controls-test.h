@@ -40,12 +40,16 @@ public:
     return outputs_[enum_index(id, step)].getVoltage();
   }
   auto get(Controls::Output id) const -> float { return get(id, 0); }
+  auto get(Controls::Light id, int offset) const -> float {
+    return lights_[enum_index(id, offset)].getBrightness();
+  }
+  auto get(Controls::Light id) const -> float { return get(id, 0); }
 
 private:
   std::vector<fake::Port> &inputs_;
   std::vector<fake::Port> &outputs_;
   std::vector<fake::Param> &params_;
-  __attribute__((unused)) std::vector<fake::Light> &lights_;
+  std::vector<fake::Light> &lights_;
 };
 
 template <typename ControlsTest>
