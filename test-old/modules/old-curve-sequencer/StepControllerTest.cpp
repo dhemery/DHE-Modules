@@ -48,7 +48,7 @@ static inline void prepareToGenerate(fake::Controls &controls) {
 // TODO: advance on time returns completed if timer expires
 // TODO: test generate
 
-TEST_CASE("curve_sequencer::StepController") {
+TEST_CASE("old_curve_sequencer::StepController") {
   fake::Controls controls{};
   PhaseTimer timer{};
 

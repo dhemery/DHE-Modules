@@ -5,10 +5,10 @@
 #include <dheunit/test.h>
 
 namespace test {
-namespace curve_sequencer_2 {
+namespace curve_sequencer {
 namespace step_controls {
-using dhe::curve_sequencer_2::Source;
-using dhe::curve_sequencer_2::TriggerMode;
+using dhe::curve_sequencer::Source;
+using dhe::curve_sequencer::TriggerMode;
 using dhe::unit::Suite;
 
 auto trigger_mode_test(TriggerMode mode) -> TestFunc {
@@ -25,9 +25,9 @@ auto trigger_mode_test(TriggerMode mode) -> TestFunc {
 
 class StepControlsTests : Suite {
 public:
-  StepControlsTests() : Suite{"dhe::curve_sequencer_2::[Step]Controls"} {}
+  StepControlsTests() : Suite{"dhe::curve_sequencer::[Step]Controls"} {}
   void register_tests(dhe::unit::TestRegistrar add_test) override {
-    for (auto trigger_mode : dhe::curve_sequencer_2::trigger_modes) {
+    for (auto trigger_mode : dhe::curve_sequencer::trigger_modes) {
       auto const name =
           std::string{"trigger_mode(s): "} + name_of(trigger_mode);
       add_test(name, trigger_mode_test(trigger_mode));
@@ -318,5 +318,5 @@ public:
 
 __attribute__((unused)) static StepControlsTests step_controls_test{};
 } // namespace step_controls
-} // namespace curve_sequencer_2
+} // namespace curve_sequencer
 } // namespace test

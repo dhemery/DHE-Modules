@@ -19,7 +19,7 @@ static inline void givenSelection(fake::Controls &controls, int start,
   controls.selection_length = [=]() -> int { return length; };
 }
 
-TEST_CASE("curve_sequencer::StepSelector") {
+TEST_CASE("old_curve_sequencer::StepSelector") {
   fake::Controls controls{};
   StepSelector<fake::Controls> selector{controls, stepCount};
 

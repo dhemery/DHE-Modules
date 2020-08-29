@@ -1,7 +1,7 @@
 #include "controls-test.h"
 
 namespace test {
-namespace curve_sequencer_2 {
+namespace curve_sequencer {
 namespace sequence_controls {
 using dhe::unit::Suite;
 using dhe::unit::Tester;
@@ -9,8 +9,7 @@ using dhe::unit::TestFunc;
 
 class SequenceControlsTests : Suite {
 public:
-  SequenceControlsTests()
-      : Suite{"dhe::curve_sequencer_2::[Sequence]Controls"} {}
+  SequenceControlsTests() : Suite{"dhe::curve_sequencer::[Sequence]Controls"} {}
 
   void register_tests(dhe::unit::TestRegistrar add) override {
     add("is_gated()", test([](Tester &t, Module &module, Controls &controls) {
@@ -151,5 +150,5 @@ public:
 __attribute__((unused)) static SequenceControlsTests sequence_controls_tests{};
 
 } // namespace sequence_controls
-} // namespace curve_sequencer_2
+} // namespace curve_sequencer
 } // namespace test

@@ -18,7 +18,7 @@ using Controls = dhe::old_curve_sequencer::CurveSequencerControls<
 using dhe::old_curve_sequencer::AdvanceMode;
 using dhe::old_curve_sequencer::GenerateMode;
 
-TEST_CASE("curve_sequencer::CurveSequencerControls") {
+TEST_CASE("old_curve_sequencer::CurveSequencerControls") {
   std::vector<fake::Port> inputs{Controls::InputCount};
   std::vector<fake::Port> outputs{Controls::OutputCount};
   std::vector<fake::Param> params{Controls::ParameterCount};

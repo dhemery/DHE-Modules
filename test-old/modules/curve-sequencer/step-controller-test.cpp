@@ -7,7 +7,7 @@
 #include <functional>
 
 namespace test {
-namespace curve_sequencer_2 {
+namespace curve_sequencer {
 namespace step_controller {
 using dhe::Latch;
 using dhe::old_curve_sequencer::StepEvent;
@@ -36,7 +36,7 @@ struct Sustainer {
 };
 
 using StepController =
-    dhe::curve_sequencer_2::StepController<Interrupter, Generator, Sustainer>;
+    dhe::curve_sequencer::StepController<Interrupter, Generator, Sustainer>;
 
 static inline void enter(StepController &stepController, Generator &generator,
                          int step) {
@@ -45,7 +45,7 @@ static inline void enter(StepController &stepController, Generator &generator,
   generator.start = [](int s) { throw "start " + std::to_string(s); };
 }
 
-TEST_CASE("curve_sequencer_2::StepController") {
+TEST_CASE("curve_sequencer::StepController") {
   Interrupter interrupter{};
   Generator generator{};
   Sustainer sustainer{};
@@ -177,5 +177,5 @@ TEST_CASE("curve_sequencer_2::StepController") {
   }
 }
 } // namespace step_controller
-} // namespace curve_sequencer_2
+} // namespace curve_sequencer
 } // namespace test

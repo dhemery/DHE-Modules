@@ -5,9 +5,9 @@
 #include <functional>
 
 namespace test {
-namespace curve_sequencer_2 {
-using dhe::curve_sequencer_2::Sustainer;
-using dhe::curve_sequencer_2::TriggerMode;
+namespace curve_sequencer {
+using dhe::curve_sequencer::Sustainer;
+using dhe::curve_sequencer::TriggerMode;
 using test::fallingLatch;
 using test::highLatch;
 using test::lowLatch;
@@ -21,7 +21,7 @@ struct SustainControls {
       [](int s) -> bool { throw "advanceOnEndOfCurve " + std::to_string(s); }};
 };
 
-TEST_CASE("curve_sequencer_2::Sustainer") {
+TEST_CASE("curve_sequencer::Sustainer") {
   SustainControls controls{};
 
   Sustainer<SustainControls> sustainer{controls};
@@ -129,5 +129,5 @@ TEST_CASE("curve_sequencer_2::Sustainer") {
   }
 }
 } // namespace sustainer
-} // namespace curve_sequencer_2
+} // namespace curve_sequencer
 } // namespace test

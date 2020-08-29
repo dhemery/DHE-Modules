@@ -13,7 +13,7 @@
 
 namespace dhe {
 
-namespace curve_sequencer_2 {
+namespace curve_sequencer {
 
 // Skew the progress::brightness ratio so that the "remaining" light stays
 // fully lit for a little while during early progress, and the "completed"
@@ -208,5 +208,5 @@ private:
     lights_[remaining_light].setBrightness(remaining_brightness);
   }
 };
-} // namespace curve_sequencer_2
+} // namespace curve_sequencer
 } // namespace dhe

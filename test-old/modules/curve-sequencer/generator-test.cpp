@@ -5,7 +5,7 @@
 #include <string>
 
 namespace test {
-namespace curve_sequencer_2 {
+namespace curve_sequencer {
 namespace sustainer {
 
 struct GeneratorControls {
@@ -23,7 +23,7 @@ struct GeneratorSource {
 };
 
 using Generator =
-    dhe::curve_sequencer_2::Generator<GeneratorControls, GeneratorSource>;
+    dhe::curve_sequencer::Generator<GeneratorControls, GeneratorSource>;
 
 static inline void setCurrentStep(Generator &generator,
                                   GeneratorControls &controls,
@@ -40,7 +40,7 @@ static inline void setCurrentStep(Generator &generator,
   endSource.snap = [](int s) { throw "end.snap" + std::to_string(s); };
 }
 
-TEST_CASE("curve_sequencer_2::Generator") {
+TEST_CASE("curve_sequencer::Generator") {
   GeneratorControls controls{};
   GeneratorSource startSource{};
   GeneratorSource endSource{};
@@ -113,5 +113,5 @@ TEST_CASE("curve_sequencer_2::Generator") {
   //  returns false if the phase timer is in progress
 }
 } // namespace sustainer
-} // namespace curve_sequencer_2
+} // namespace curve_sequencer
 } // namespace test

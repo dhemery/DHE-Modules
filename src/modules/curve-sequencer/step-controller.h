@@ -7,7 +7,7 @@
 #include "triggers.h"
 
 namespace dhe {
-namespace curve_sequencer_2 {
+namespace curve_sequencer {
 
 using dhe::Latch;
 using dhe::old_curve_sequencer::StepEvent;
@@ -48,5 +48,5 @@ private:
   Generator &generator_;
   Sustainer &sustainer_;
 }; // namespace curve_sequencer
-} // namespace curve_sequencer_2
+} // namespace curve_sequencer
 } // namespace dhe

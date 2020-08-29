@@ -5,7 +5,7 @@
 #include <array>
 
 namespace dhe {
-namespace curve_sequencer_2 {
+namespace curve_sequencer {
 enum class TriggerMode {
   GateRises,
   GateFalls,
@@ -23,7 +23,7 @@ static auto constexpr trigger_mode_descriptions =
                                                  "Gate is low"};
 
 static auto constexpr trigger_mode_names =
-    std::array<char const *, dhe::curve_sequencer_2::trigger_mode_count>{
+    std::array<char const *, dhe::curve_sequencer::trigger_mode_count>{
         "GateRises", "GateFalls", "GateChanges", "GateIsHigh", "GateIsLow"};
 
 static auto constexpr trigger_modes =
@@ -38,7 +38,7 @@ static auto name_of(TriggerMode mode) -> char const * {
 }
 
 static inline auto operator<<(std::ostream &os,
-                              dhe::curve_sequencer_2::TriggerMode mode)
+                              dhe::curve_sequencer::TriggerMode mode)
     -> std::ostream & {
   os << name_of(mode);
   return os;
@@ -87,5 +87,5 @@ private:
   Controls &controls_;
 };
 
-} // namespace curve_sequencer_2
+} // namespace curve_sequencer
 } // namespace dhe

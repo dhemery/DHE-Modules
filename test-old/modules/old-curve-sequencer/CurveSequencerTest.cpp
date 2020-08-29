@@ -26,7 +26,7 @@ auto constexpr fallenLatch = Latch{false, true};
 auto constexpr stableHighLatch = Latch{true, false};
 auto constexpr risenLatch = Latch{true, true};
 
-TEST_CASE("curve_sequencer::CurveSequencer") {
+TEST_CASE("old_curve_sequencer::CurveSequencer") {
   fake::SequenceControls controls{};
   fake::StepSelector stepSelector{};
   fake::StepController stepController{};

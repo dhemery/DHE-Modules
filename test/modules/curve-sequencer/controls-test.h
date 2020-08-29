@@ -7,7 +7,7 @@
 #include <dheunit/test.h>
 
 namespace test {
-namespace curve_sequencer_2 {
+namespace curve_sequencer {
 
 using dhe::enum_index;
 using dhe::unit::Tester;
@@ -15,8 +15,8 @@ using dhe::unit::TestFunc;
 
 static auto constexpr step_count{8};
 
-using Controls = dhe::curve_sequencer_2::Controls<fake::Port, fake::Param,
-                                                  fake::Light, step_count>;
+using Controls = dhe::curve_sequencer::Controls<fake::Port, fake::Param,
+                                                fake::Light, step_count>;
 
 class Module {
 public:
@@ -65,5 +65,5 @@ static inline auto test(ControlsTest const &controls_test) -> TestFunc {
     controls_test(tester, module, controls);
   };
 }
-} // namespace curve_sequencer_2
+} // namespace curve_sequencer
 } // namespace test

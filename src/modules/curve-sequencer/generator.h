@@ -2,7 +2,7 @@
 #include "components/phase-timer.h"
 
 namespace dhe {
-namespace curve_sequencer_2 {
+namespace curve_sequencer {
 template <typename Controls, typename Source> class Generator {
 public:
   Generator(Controls &controls, Source &start_source, Source &end_source)
@@ -27,5 +27,5 @@ private:
   PhaseTimer timer_{};
   int step_{0};
 };
-} // namespace curve_sequencer_2
+} // namespace curve_sequencer
 } // namespace dhe
