@@ -37,28 +37,32 @@ public:
   // Sequence Controls
 
   auto input() const -> float {
-    return inputs_[CurveSequencerInput].getVoltage();
+    return inputs_[enum_index(Input::CurveSequencer)].getVoltage();
   }
 
   auto is_enabled(int step) const -> bool {
     return is_pressed(params_[EnabledButtons + step]) ||
-           is_high(inputs_[EnabledInputs + step]);
+           is_high(inputs_[enum_index(Input::EnableStep, step)]);
   }
 
   auto is_gated() const -> bool {
-    return is_high(inputs_[GateInput]) || is_pressed(params_[GateButton]);
+    return is_high(inputs_[enum_index(Input::Gate)]) ||
+           is_pressed(params_[GateButton]);
   }
 
   auto is_looping() const -> bool {
-    return is_pressed(params_[LoopButton]) || is_high(inputs_[LoopInput]);
+    return is_pressed(params_[LoopButton]) ||
+           is_high(inputs_[enum_index(Input::Loop)]);
   }
 
   auto is_reset() const -> bool {
-    return is_high(inputs_[ResetInput]) || is_pressed(params_[ResetButton]);
+    return is_high(inputs_[enum_index(Input::Reset)]) ||
+           is_pressed(params_[ResetButton]);
   }
 
   auto is_running() const -> bool {
-    return is_pressed(params_[RunButton]) || is_high(inputs_[RunInput]);
+    return is_pressed(params_[RunButton]) ||
+           is_high(inputs_[enum_index(Input::Run)]);
   }
 
   auto output() const -> float {
@@ -176,24 +180,24 @@ public:
     ConditionSwitches = OnInterruptSwitches,
   };
 
-  enum InputIds {
-    CurveSequencerInput,
-    GateInput,
-    LoopInput,
-    ResetInput,
-    RunInput,
-    EnabledInputs,
-    InputCount = EnabledInputs + N,
+  enum class Input {
+    CurveSequencer,
+    Gate,
+    Loop,
+    Reset,
+    Run,
+    EnableStep,
+    Count = EnableStep + N,
   };
 
   enum class Output { CurveSequencer, Count };
 
-  enum class Light { Progress, Count = Progress + N + N };
+  enum class Light { StepProgress, Count = StepProgress + N + N };
 
 private:
   void set_lights(int step, float completed_brightness,
                   float remaining_brightness) {
-    auto const completed_light = Light::Progress + step + step;
+    auto const completed_light = enum_index(Light::StepProgress, step + step);
     auto const remaining_light = completed_light + 1;
     lights_[completed_light].setBrightness(completed_brightness);
     lights_[remaining_light].setBrightness(remaining_brightness);

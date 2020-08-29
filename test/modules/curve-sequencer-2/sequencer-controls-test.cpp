@@ -15,19 +15,19 @@ public:
   void register_tests(dhe::unit::TestRegistrar add) override {
     add("is_gated()", test([](Tester &t, Module &module, Controls &controls) {
           module.set(Controls::GateButton, 1.F);
-          module.set(Controls::GateInput, 0.F);
+          module.set(Controls::Input::Gate, 0.F);
           if (!controls.is_gated()) {
             t.error("button pressed: got false, want true");
           }
 
           module.set(Controls::GateButton, 0.F);
-          module.set(Controls::GateInput, 10.F);
+          module.set(Controls::Input::Gate, 10.F);
           if (!controls.is_gated()) {
             t.error("input high: got false, want true");
           }
 
           module.set(Controls::GateButton, 0.F);
-          module.set(Controls::GateInput, 0.F);
+          module.set(Controls::Input::Gate, 0.F);
           if (controls.is_gated()) {
             t.error("input low and button released: got false, want true");
           }
@@ -35,19 +35,19 @@ public:
 
     add("is_looping()", test([](Tester &t, Module &module, Controls &controls) {
           module.set(Controls::LoopButton, 1.F);
-          module.set(Controls::LoopInput, 0.F);
+          module.set(Controls::Input::Loop, 0.F);
           if (!controls.is_looping()) {
             t.error("button pressed: got false, want true");
           }
 
           module.set(Controls::LoopButton, 0.F);
-          module.set(Controls::LoopInput, 10.F);
+          module.set(Controls::Input::Loop, 10.F);
           if (!controls.is_looping()) {
             t.error("input high: got false, want true");
           }
 
           module.set(Controls::LoopButton, 0.F);
-          module.set(Controls::LoopInput, 0.F);
+          module.set(Controls::Input::Loop, 0.F);
           if (controls.is_looping()) {
             t.error("input low and button not pressed: got false, want true");
           }
@@ -55,19 +55,19 @@ public:
 
     add("is_reset()", test([](Tester &t, Module &module, Controls &controls) {
           module.set(Controls::ResetButton, 1.F);
-          module.set(Controls::ResetInput, 0.F);
+          module.set(Controls::Input::Reset, 0.F);
           if (!controls.is_reset()) {
             t.error("button pressed: got false, want true");
           }
 
           module.set(Controls::ResetButton, 0.F);
-          module.set(Controls::ResetInput, 10.F);
+          module.set(Controls::Input::Reset, 10.F);
           if (!controls.is_reset()) {
             t.error("input high: got false, want true");
           }
 
           module.set(Controls::ResetButton, 0.F);
-          module.set(Controls::ResetInput, 0.F);
+          module.set(Controls::Input::Reset, 0.F);
           if (controls.is_reset()) {
             t.error("input low and button not pressed: got false, want true");
           }
@@ -75,19 +75,19 @@ public:
 
     add("is_running()", test([](Tester &t, Module &module, Controls &controls) {
           module.set(Controls::RunButton, 1.F);
-          module.set(Controls::RunInput, 0.F);
+          module.set(Controls::Input::Run, 0.F);
           if (!controls.is_running()) {
             t.error("button pressed: got false, want true");
           }
 
           module.set(Controls::RunButton, 0.F);
-          module.set(Controls::RunInput, 10.F);
+          module.set(Controls::Input::Run, 10.F);
           if (!controls.is_running()) {
             t.error("input high: got false, want true");
           }
 
           module.set(Controls::RunButton, 0.F);
-          module.set(Controls::RunInput, 0.F);
+          module.set(Controls::Input::Run, 0.F);
           if (controls.is_running()) {
             t.error("input low and button not pressed: got true, want false");
           }
@@ -117,7 +117,7 @@ public:
 
     add("input()", test([](Tester &t, Module &module, Controls &controls) {
           auto constexpr input = 7.777F;
-          module.set(Controls::CurveSequencerInput, input);
+          module.set(Controls::Input::CurveSequencer, input);
 
           float got = controls.input();
           if (got != input) {

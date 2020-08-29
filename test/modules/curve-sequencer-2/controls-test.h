@@ -28,10 +28,10 @@ public:
     params_[id + offset].setValue(value);
   }
   void set(Controls::ParamIds id, float value) { set(id, 0, value); }
-  void set(Controls::InputIds id, int step, float voltage) {
-    inputs_[id + step].setVoltage(voltage);
+  void set(Controls::Input id, int step, float voltage) {
+    inputs_[enum_index(id, step)].setVoltage(voltage);
   }
-  void set(Controls::InputIds id, float voltage) { set(id, 0, voltage); }
+  void set(Controls::Input id, float voltage) { set(id, 0, voltage); }
   void set(Controls::Output id, int step, float voltage) {
     outputs_[enum_index(id, step)].setVoltage(voltage);
   }
@@ -51,7 +51,7 @@ private:
 template <typename ControlsTest>
 static inline auto test(ControlsTest const &controls_test) -> TestFunc {
   return [controls_test](Tester &tester) {
-    std::vector<fake::Port> inputs{Controls::InputCount};
+    std::vector<fake::Port> inputs{enum_index(Controls::Input::Count)};
     std::vector<fake::Port> outputs{enum_index(Controls::Output::Count)};
     std::vector<fake::Param> params{Controls::ParamCount};
     std::vector<fake::Light> lights{enum_index(Controls::Light::Count)};

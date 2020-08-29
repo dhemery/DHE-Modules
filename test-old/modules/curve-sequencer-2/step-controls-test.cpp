@@ -14,13 +14,14 @@ namespace step_controls {
 static auto constexpr step_count{8};
 using Controls = dhe::curve_sequencer_2::Controls<fake::Port, fake::Param,
                                                   fake::Light, step_count>;
+using dhe::enum_index;
 using dhe::curve_sequencer_2::Source;
 
 TEST_CASE("curve_sequencer_2::StepControls") {
-  std::vector<fake::Port> inputs{Controls::InputCount};
-  std::vector<fake::Port> outputs{Controls::OutputCount};
-  std::vector<fake::Param> params{Controls::ParamCount};
-  std::vector<fake::Light> lights{Controls::LightCount};
+  std::vector<fake::Port> inputs{enum_index(Controls::Input::Count)};
+  std::vector<fake::Port> outputs{enum_index(Controls::Output::Count)};
+  std::vector<fake::Param> params{enum_index(Controls::ParamCount)};
+  std::vector<fake::Light> lights{enum_index(Controls::Light::Count)};
 
   Controls controls{inputs, outputs, params, lights};
 
@@ -157,10 +158,12 @@ TEST_CASE("curve_sequencer_2::StepControls") {
 
     controls.show_inactive(step);
 
-    CHECK_EQ(lights[Controls::ProgressLights + completed_progress_light_index]
+    CHECK_EQ(lights[enum_index(Controls::Light::StepProgress,
+                               completed_progress_light_index)]
                  .getBrightness(),
              0.F);
-    CHECK_EQ(lights[Controls::ProgressLights + remaining_progress_light_index]
+    CHECK_EQ(lights[enum_index(Controls::Light::StepProgress,
+                               remaining_progress_light_index)]
                  .getBrightness(),
              0.F);
   }
@@ -175,7 +178,7 @@ TEST_CASE("curve_sequencer_2::StepControls") {
 
     SUBCASE("true if enabled input is high") {
       auto constexpr step = 6;
-      inputs[Controls::EnabledInputs + step].setVoltage(10.F);
+      inputs[enum_index(Controls::Input::EnableStep, step)].setVoltage(10.F);
 
       CHECK(controls.is_enabled(step));
     }
@@ -184,7 +187,7 @@ TEST_CASE("curve_sequencer_2::StepControls") {
       auto constexpr step = 7;
 
       params[Controls::EnabledButtons + step].setValue(0.F);
-      inputs[Controls::EnabledInputs + step].setVoltage(0.F);
+      inputs[enum_index(Controls::Input::EnableStep, step)].setVoltage(0.F);
 
       CHECK_FALSE(controls.is_enabled(step));
     }
