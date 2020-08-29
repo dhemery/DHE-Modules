@@ -9,6 +9,7 @@
 namespace test {
 namespace curve_sequencer_2 {
 
+using dhe::enum_index;
 using dhe::unit::Tester;
 using dhe::unit::TestFunc;
 
@@ -44,7 +45,7 @@ private:
   std::vector<fake::Port> &inputs_;
   std::vector<fake::Port> &outputs_;
   std::vector<fake::Param> &params_;
-  std::vector<fake::Light> &lights_;
+  __attribute__((unused)) std::vector<fake::Light> &lights_;
 };
 
 template <typename ControlsTest>
@@ -53,7 +54,7 @@ static inline auto test(ControlsTest const &controls_test) -> TestFunc {
     std::vector<fake::Port> inputs{Controls::InputCount};
     std::vector<fake::Port> outputs{Controls::OutputCount};
     std::vector<fake::Param> params{Controls::ParamCount};
-    std::vector<fake::Light> lights{Controls::LightCount};
+    std::vector<fake::Light> lights{enum_index(Controls::Light::Count)};
 
     Module module{inputs, outputs, params, lights};
     Controls controls{inputs, outputs, params, lights};

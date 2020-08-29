@@ -188,12 +188,12 @@ public:
 
   enum OutputIds { CurveSequencerOutput, OutputCount };
 
-  enum LightIds { ProgressLights, LightCount = ProgressLights + N + N };
+  enum class Light { Progress, Count = Progress + N + N };
 
 private:
   void set_lights(int step, float completed_brightness,
                   float remaining_brightness) {
-    auto const completed_light = ProgressLights + step + step;
+    auto const completed_light = Light::Progress + step + step;
     auto const remaining_light = completed_light + 1;
     lights_[completed_light].setBrightness(completed_brightness);
     lights_[remaining_light].setBrightness(remaining_brightness);
