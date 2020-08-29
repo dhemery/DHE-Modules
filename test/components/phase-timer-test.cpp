@@ -64,10 +64,10 @@ public:
       auto timer = PhaseTimer{};
 
       timer.advance(0.99999F);
-      t.assert_that("phase just below 1", timer.in_progress(), is_false);
+      t.assert_that("phase just below 1", timer.in_progress(), is_true);
 
       timer.advance(3.F);
-      t.assert_that("phase advanced to 1", timer.in_progress(), is_true);
+      t.assert_that("phase advanced to 1", timer.in_progress(), is_false);
     });
   }
 };
