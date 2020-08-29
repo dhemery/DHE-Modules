@@ -1,7 +1,7 @@
 #pragma once
 
-#include "modules/curve-sequencer-2/source.h"
-#include "modules/curve-sequencer-2/triggers.h"
+#include "modules/curve-sequencer/source.h"
+#include "modules/curve-sequencer/triggers.h"
 
 #include <functional>
 #include <string>

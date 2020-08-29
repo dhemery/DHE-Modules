@@ -1,7 +1,7 @@
 #include "components/sigmoid.h"
 #include "controls-test.h"
-#include "modules/curve-sequencer-2/controls.h"
-#include "modules/curve-sequencer-2/triggers.h"
+#include "modules/curve-sequencer/controls.h"
+#include "modules/curve-sequencer/triggers.h"
 #include <dheunit/test.h>
 
 namespace test {

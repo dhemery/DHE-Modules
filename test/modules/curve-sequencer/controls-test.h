@@ -1,7 +1,7 @@
 #pragma once
 
 #include "helpers/rack-controls.h"
-#include "modules/curve-sequencer-2/controls.h"
+#include "modules/curve-sequencer/controls.h"
 #include "types/enums.h"
 
 #include <dheunit/test.h>
