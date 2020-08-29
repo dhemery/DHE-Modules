@@ -1,4 +1,5 @@
 #include "interrupter-test.h"
+#include "helpers/latches.h"
 #include <dheunit/assertions.h>
 
 namespace test {

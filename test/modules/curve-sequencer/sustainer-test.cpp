@@ -1,4 +1,5 @@
 #include "sustainer-test.h"
+#include "helpers/latches.h"
 #include <dheunit/assertions.h>
 #include <dheunit/test.h>
 

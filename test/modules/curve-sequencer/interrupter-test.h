@@ -5,7 +5,6 @@
 
 namespace test {
 namespace curve_sequencer {
-using dhe::Latch;
 using dhe::curve_sequencer::TriggerMode;
 using dhe::unit::Tester;
 using dhe::unit::TestFunc;
@@ -33,10 +32,5 @@ static inline auto test(T const &interrupter_test) -> TestFunc {
     interrupter_test(t, controls, interrupter);
   };
 }
-
-static auto constexpr rising_gate = Latch{true, true};
-static auto constexpr falling_gate = Latch{false, true};
-static auto constexpr high_gate = Latch{true, false};
-static auto constexpr low_gate = Latch{false, false};
 } // namespace curve_sequencer
 } // namespace test
