@@ -7,7 +7,7 @@
 #include <string>
 
 namespace test {
-namespace curve_sequencer {
+namespace old_curve_sequencer {
 static inline auto forbidden(const std::string &name) -> std::string {
   return "Controls." + name + "()";
 }

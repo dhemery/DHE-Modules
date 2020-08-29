@@ -13,7 +13,7 @@
 #include <vector>
 
 namespace test {
-namespace curve_sequencer {
+namespace old_curve_sequencer {
 namespace step_controller {
 using dhe::Latch;
 using dhe::PhaseTimer;

@@ -7,7 +7,7 @@
 #include <functional>
 
 namespace test {
-namespace curve_sequencer {
+namespace old_curve_sequencer {
 namespace fake {
 using dhe::old_curve_sequencer::AdvanceMode;
 using dhe::old_curve_sequencer::GenerateMode;

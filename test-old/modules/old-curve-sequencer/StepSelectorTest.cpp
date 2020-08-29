@@ -5,7 +5,7 @@
 #include <doctest.h>
 
 namespace test {
-namespace curve_sequencer {
+namespace old_curve_sequencer {
 namespace step_selector {
 static auto constexpr stepCount{8};
 using dhe::old_curve_sequencer::StepSelector;

@@ -10,7 +10,7 @@
 #include <doctest.h>
 
 namespace test {
-namespace curve_sequencer {
+namespace old_curve_sequencer {
 namespace controls {
 static auto constexpr stepCount{8};
 using Controls = dhe::old_curve_sequencer::CurveSequencerControls<

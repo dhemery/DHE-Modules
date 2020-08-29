@@ -6,7 +6,7 @@
 #include <functional>
 
 namespace test {
-namespace curve_sequencer {
+namespace old_curve_sequencer {
 namespace fake {
 using dhe::Latch;
 using dhe::old_curve_sequencer::StepEvent;

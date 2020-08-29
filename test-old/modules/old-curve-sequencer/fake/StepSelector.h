@@ -3,7 +3,7 @@
 #include <functional>
 
 namespace test {
-namespace curve_sequencer {
+namespace old_curve_sequencer {
 namespace fake {
 struct StepSelector {
   std::function<int()> first{
