@@ -1,7 +1,12 @@
 #include "generator-test.h"
+#include <dheunit/assertions.h>
+#include <dheunit/test.h>
 
 namespace test {
 namespace curve_sequencer {
+using dhe::unit::is_equal_to;
+using dhe::unit::Suite;
+using dhe::unit::TestRegistrar;
 
 class GeneratorControlsTests : public Suite {
 public:

@@ -1,16 +1,11 @@
-#include "helpers/rack-controls.h"
 #include "modules/curve-sequencer/generator.h"
-#include <dheunit/assertions.h>
 #include <dheunit/test.h>
 
 namespace test {
 namespace curve_sequencer {
 
-using dhe::unit::is_equal_to;
-using dhe::unit::Suite;
 using dhe::unit::Tester;
 using dhe::unit::TestFunc;
-using dhe::unit::TestRegistrar;
 
 struct Controls {
   void show_progress(int step, float progress) {
