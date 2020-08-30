@@ -15,13 +15,15 @@ using dhe::unit::Tester;
 using dhe::unit::TestFunc;
 
 struct Controls {
-  void show_active(bool active) { active_ = active; }
-  auto input() const -> float { return input_; }
   auto duration() const -> float { return duration_; }
+  auto level() const -> float { return level_; }
+  auto input() const -> float { return input_; }
   void output(float f) { output_ = f; }
+  void show_active(bool active) { active_ = active; }
   bool active_{};    // NOLINT
   float duration_{}; // NOLINT
   float input_{};    // NOLINT
+  float level_{};    // NOLINT
   float output_{};   // NOLINT
 };
 
