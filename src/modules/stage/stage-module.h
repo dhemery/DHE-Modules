@@ -16,10 +16,10 @@ namespace dhe {
 namespace stage {
 class StageModule : public rack::engine::Module {
   using Controls = StageControls;
-  using DeferMode = DeferMode<Controls>;
-  using InputMode = InputMode<Controls>;
-  using LevelMode = LevelMode<Controls>;
-  using GenerateMode = GenerateMode<Controls, PhaseTimer>;
+  using DeferM = DeferMode<Controls>;
+  using GenerateM = GenerateMode<Controls, PhaseTimer>;
+  using InputM = InputMode<Controls>;
+  using LevelM = LevelMode<Controls>;
 
 public:
   StageModule() {
@@ -39,11 +39,11 @@ public:
 private:
   Controls controls_{inputs, params, outputs};
   PhaseTimer timer_{};
-  DeferMode defer_mode_{controls_};
-  InputMode input_mode_{controls_};
-  GenerateMode generate_mode_{controls_, timer_};
-  LevelMode level_mode_{controls_};
-  StageEngine<Controls, DeferMode, InputMode, GenerateMode, LevelMode> machine_{
+  DeferM defer_mode_{controls_};
+  InputM input_mode_{controls_};
+  GenerateM generate_mode_{controls_, timer_};
+  LevelM level_mode_{controls_};
+  StageEngine<Controls, DeferM, InputM, GenerateM, LevelM> machine_{
       controls_, defer_mode_, input_mode_, generate_mode_, level_mode_};
 };
 } // namespace stage
