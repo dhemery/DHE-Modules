@@ -6,9 +6,9 @@
 
 namespace dhe {
 namespace stage {
-template <typename Controls> class HoldMode {
+template <typename Controls, typename Timer> class HoldMode {
 public:
-  HoldMode(Controls &controls, PhaseTimer &timer)
+  HoldMode(Controls &controls, Timer &timer)
       : controls_{controls}, timer_{timer} {}
 
   auto execute(Latch const &retrigger, float sample_time) -> Event {
@@ -32,7 +32,7 @@ private:
   }
 
   Controls &controls_;
-  PhaseTimer &timer_;
+  Timer &timer_;
 };
 } // namespace stage
 } // namespace dhe

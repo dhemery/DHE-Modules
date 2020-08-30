@@ -1,4 +1,4 @@
-#include "./fixtures/mode-fixture.h"
+#include "./fixtures/simple-mode-fixture.h"
 #include "modules/stage/defer-mode.h"
 #include <dheunit/assertions.h>
 #include <dheunit/test.h>

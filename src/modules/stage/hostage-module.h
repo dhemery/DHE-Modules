@@ -16,6 +16,11 @@ namespace stage {
 
 class HostageModule : public rack::engine::Module {
   using Controls = HostageControls;
+  using HoldMode = HoldMode<Controls, PhaseTimer>;
+  using DeferMode = DeferMode<Controls>;
+  using IdleMode = IdleMode<Controls>;
+  using InputMode = InputMode<Controls>;
+  using SustainMode = SustainMode<Controls>;
 
 public:
   HostageModule() {
@@ -36,14 +41,13 @@ public:
 
 private:
   Controls controls_{inputs, params, outputs};
-  DeferMode<Controls> defer_mode_{controls_};
+  DeferMode defer_mode_{controls_};
   PhaseTimer hold_timer_{};
-  HoldMode<Controls> hold_mode_{controls_, hold_timer_};
-  IdleMode<Controls> idle_mode_{controls_};
-  SustainMode<Controls> sustain_mode_{controls_};
-  InputMode<Controls> input_mode_{controls_};
-  HostageEngine<Controls, InputMode<Controls>, DeferMode<Controls>,
-                HoldMode<Controls>, SustainMode<Controls>, IdleMode<Controls>>
+  HoldMode hold_mode_{controls_, hold_timer_};
+  IdleMode idle_mode_{controls_};
+  SustainMode sustain_mode_{controls_};
+  InputMode input_mode_{controls_};
+  HostageEngine<Controls, InputMode, DeferMode, HoldMode, SustainMode, IdleMode>
       machine_{controls_,  input_mode_,   defer_mode_,
                hold_mode_, sustain_mode_, idle_mode_};
 };

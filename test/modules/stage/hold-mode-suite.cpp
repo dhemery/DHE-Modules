@@ -1,4 +1,4 @@
-#include "./fixtures/mode-fixture.h"
+#include "./fixtures/timed-mode-fixture.h"
 #include "components/latch.h"
 #include "helpers/latches.h"
 #include "modules/stage/event.h"
@@ -21,23 +21,23 @@ using dhe::unit::Suite;
 using dhe::unit::Tester;
 using dhe::unit::TestRegistrar;
 
-using HoldMode = dhe::stage::HoldMode<Controls>;
+using HoldMode = dhe::stage::HoldMode<Controls, PhaseTimer>;
 
 class HoldModeSuite : public Suite {
 public:
   HoldModeSuite() : Suite{"dhe::stage::HoldMode"} {}
   void register_tests(TestRegistrar add) override {
     add("enter() activates stage",
-        test<HoldMode, PhaseTimer>([](Tester &t, Controls &controls,
-                                      PhaseTimer & /**/, HoldMode &mode) {
+        test<HoldMode>([](Tester &t, Controls &controls, PhaseTimer & /**/,
+                          HoldMode &mode) {
           controls.active_ = false;
           mode.enter();
           t.assert_that(controls.active_, is_true);
         }));
 
     add("enter() copies input to output",
-        test<HoldMode, PhaseTimer>([](Tester &t, Controls &controls,
-                                      PhaseTimer & /**/, HoldMode &mode) {
+        test<HoldMode>([](Tester &t, Controls &controls, PhaseTimer & /**/,
+                          HoldMode &mode) {
           auto constexpr input = 0.234F;
           controls.input_ = input;
           mode.enter();
@@ -45,7 +45,7 @@ public:
         }));
 
     add("enter() resets timer",
-        test<HoldMode, PhaseTimer>(
+        test<HoldMode>(
             [](Tester &t, Controls & /**/, PhaseTimer &timer, HoldMode &mode) {
               timer.advance(1.F);
               mode.enter();
@@ -53,8 +53,8 @@ public:
             }));
 
     add("execute(l,s) resets timer if latch rises",
-        test<HoldMode, PhaseTimer>([](Tester &t, Controls &controls,
-                                      PhaseTimer &timer, HoldMode &mode) {
+        test<HoldMode>([](Tester &t, Controls &controls, PhaseTimer &timer,
+                          HoldMode &mode) {
           timer.reset();
           timer.advance(0.9F); // nearly complete before executing
           controls.duration_ = 1.F;
@@ -64,8 +64,8 @@ public:
         }));
 
     add("execute(l,s) reports generated if timer not expired",
-        test<HoldMode, PhaseTimer>([](Tester &t, Controls &controls,
-                                      PhaseTimer &timer, HoldMode &mode) {
+        test<HoldMode>([](Tester &t, Controls &controls, PhaseTimer &timer,
+                          HoldMode &mode) {
           timer.reset();
           controls.duration_ = 1.F;
           auto constexpr sample_time = 0.1F;
@@ -74,8 +74,8 @@ public:
         }));
 
     add("execute(l,s) reports completed if timer expires",
-        test<HoldMode, PhaseTimer>([](Tester &t, Controls &controls,
-                                      PhaseTimer &timer, HoldMode &mode) {
+        test<HoldMode>([](Tester &t, Controls &controls, PhaseTimer &timer,
+                          HoldMode &mode) {
           timer.advance(0.99999F);
           controls.duration_ = 1.F;
           auto constexpr sample_time = 0.1F; // Enough to advance to 1
@@ -84,8 +84,8 @@ public:
         }));
 
     add("execute(l,s) outputs nothing",
-        test<HoldMode, PhaseTimer>([](Tester &t, Controls &controls,
-                                      PhaseTimer & /**/, HoldMode &mode) {
+        test<HoldMode>([](Tester &t, Controls &controls, PhaseTimer & /**/,
+                          HoldMode &mode) {
           float original_output = 99.F;
           controls.output_ = original_output;
           mode.execute(low_latch, 0.1F);
@@ -93,8 +93,8 @@ public:
         }));
 
     add("exit() deactivates stage",
-        test<HoldMode, PhaseTimer>([](Tester &t, Controls &controls,
-                                      PhaseTimer & /**/, HoldMode &mode) {
+        test<HoldMode>([](Tester &t, Controls &controls, PhaseTimer & /**/,
+                          HoldMode &mode) {
           controls.active_ = true;
           mode.exit();
           t.assert_that(controls.active_, is_false);
