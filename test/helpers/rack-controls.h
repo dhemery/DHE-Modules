@@ -4,6 +4,8 @@ namespace test {
 namespace fake {
 
 struct Light {
+  constexpr Light() = default;
+  constexpr explicit Light(float brightness) : brightness_{brightness} {}
   auto getBrightness() const -> float { return brightness_; } // NOLINT
   void setBrightness(float b) { brightness_ = b; }            // NOLINT
 
@@ -12,6 +14,8 @@ private:
 };
 
 struct Param {
+  constexpr Param() = default;
+  constexpr explicit Param(float value) : value_{value} {}
   auto getValue() const -> float { return value_; } // NOLINT
   void setValue(float v) { value_ = v; }            // NOLINT
 
@@ -20,6 +24,8 @@ private:
 };
 
 struct Port {
+  constexpr Port() = default;
+  constexpr explicit Port(float voltage) : voltage_{voltage} {}
   auto getVoltage() const -> float { return voltage_; } // NOLINT
   void setVoltage(float v) { voltage_ = v; }            // NOLINT
 

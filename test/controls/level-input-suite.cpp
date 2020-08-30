@@ -1,5 +1,6 @@
 #include "components/range.h"
 #include "controls/level-inputs.h"
+#include "helpers/rack-controls.h"
 #include <dheunit/assertions.h>
 #include <dheunit/test.h>
 
@@ -11,12 +12,7 @@ using dhe::unit::is_near;
 using dhe::unit::Suite;
 using dhe::unit::Tester;
 using dhe::unit::TestRegistrar;
-
-struct Knob {
-  constexpr Knob(float rotation) : rotation_{rotation} {}
-  constexpr auto getValue() const -> float { return rotation_; } // NOLINT
-  float rotation_{-99.F};                                        // NOLINT
-};
+using Knob = fake::Param;
 
 static auto constexpr range = Range{3.8423F, 9.221F};
 
