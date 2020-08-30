@@ -1,5 +1,5 @@
+#include "./fixtures/controls-fixture.h"
 #include "components/sigmoid.h"
-#include "controls-test.h"
 #include "modules/curve-sequencer/controls.h"
 #include "modules/curve-sequencer/triggers.h"
 #include <dheunit/assertions.h>

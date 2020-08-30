@@ -1,5 +1,5 @@
+#include "./fixtures/sustainer-fixture.h"
 #include "helpers/latches.h"
-#include "sustainer-test.h"
 #include <dheunit/assertions.h>
 #include <dheunit/test.h>
 

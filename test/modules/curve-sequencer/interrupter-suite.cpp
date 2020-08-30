@@ -1,5 +1,5 @@
+#include "./fixtures/interrupter-fixture.h"
 #include "helpers/latches.h"
-#include "interrupter-test.h"
 #include <dheunit/assertions.h>
 
 namespace test {

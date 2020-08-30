@@ -1,4 +1,4 @@
-#include "controls-test.h"
+#include "./fixtures/controls-fixture.h"
 #include "dheunit/assertions.h"
 
 namespace test {

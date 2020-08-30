@@ -1,4 +1,4 @@
-#include "generator-test.h"
+#include "./fixtures/generator-fixture.h"
 #include <dheunit/assertions.h>
 #include <dheunit/test.h>
 

@@ -1,5 +1,4 @@
-#include "modules/old-curve-sequencer/step-event.h"
-#include "step-controller-test.h"
+#include "./fixtures/step-controller-fixture.h"
 #include <dheunit/assertions.h>
 #include <dheunit/test.h>
 
