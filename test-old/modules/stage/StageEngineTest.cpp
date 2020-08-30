@@ -30,18 +30,6 @@ TEST_CASE("stage::StageEngine") {
 
   controls.show_eoc = [](bool e) {};
 
-  SUBCASE("starts in input mode") {
-    controls.defer = []() -> bool { return false; };
-    controls.gate = []() -> bool { return false; };
-    controls.show_eoc = [](bool e) {};
-
-    input_mode.returns(Event::Generated);
-
-    engine.process(0.F);
-
-    CHECK(input_mode.wasExecuted());
-  }
-
   SUBCASE("in input mode") {
     controls.defer = []() -> bool { return false; };
     controls.gate = []() -> bool { return false; };
