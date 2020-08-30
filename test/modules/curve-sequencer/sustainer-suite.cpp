@@ -20,13 +20,13 @@ public:
           controls.advance_on_end_of_curve_[step] = false;
           controls.trigger_mode_[step] = TriggerMode::GateRises;
 
-          t.assert_that("rising gate", interrupter.is_done(step, rising_gate),
+          t.assert_that("rising gate", interrupter.is_done(step, rising_latch),
                         is_true);
-          t.assert_that("falling gate", interrupter.is_done(step, falling_gate),
+          t.assert_that("falling gate",
+                        interrupter.is_done(step, falling_latch), is_false);
+          t.assert_that("high gate", interrupter.is_done(step, high_latch),
                         is_false);
-          t.assert_that("high gate", interrupter.is_done(step, high_gate),
-                        is_false);
-          t.assert_that("low gate", interrupter.is_done(step, low_gate),
+          t.assert_that("low gate", interrupter.is_done(step, low_latch),
                         is_false);
         }));
 
@@ -36,13 +36,13 @@ public:
           controls.advance_on_end_of_curve_[step] = false;
           controls.trigger_mode_[step] = TriggerMode::GateFalls;
 
-          t.assert_that("rising gate", sustainer.is_done(step, rising_gate),
+          t.assert_that("rising gate", sustainer.is_done(step, rising_latch),
                         is_false);
-          t.assert_that("falling gate", sustainer.is_done(step, falling_gate),
+          t.assert_that("falling gate", sustainer.is_done(step, falling_latch),
                         is_true);
-          t.assert_that("high gate", sustainer.is_done(step, high_gate),
+          t.assert_that("high gate", sustainer.is_done(step, high_latch),
                         is_false);
-          t.assert_that("low gate", sustainer.is_done(step, low_gate),
+          t.assert_that("low gate", sustainer.is_done(step, low_latch),
                         is_false);
         }));
 
@@ -52,13 +52,13 @@ public:
           controls.advance_on_end_of_curve_[step] = false;
           controls.trigger_mode_[step] = TriggerMode::GateChanges;
 
-          t.assert_that("rising gate", sustainer.is_done(step, rising_gate),
+          t.assert_that("rising gate", sustainer.is_done(step, rising_latch),
                         is_true);
-          t.assert_that("falling gate", sustainer.is_done(step, falling_gate),
+          t.assert_that("falling gate", sustainer.is_done(step, falling_latch),
                         is_true);
-          t.assert_that("high gate", sustainer.is_done(step, high_gate),
+          t.assert_that("high gate", sustainer.is_done(step, high_latch),
                         is_false);
-          t.assert_that("low gate", sustainer.is_done(step, low_gate),
+          t.assert_that("low gate", sustainer.is_done(step, low_latch),
                         is_false);
         }));
 
@@ -68,13 +68,13 @@ public:
           controls.advance_on_end_of_curve_[step] = false;
           controls.trigger_mode_[step] = TriggerMode::GateIsHigh;
 
-          t.assert_that("rising gate", sustainer.is_done(step, rising_gate),
+          t.assert_that("rising gate", sustainer.is_done(step, rising_latch),
                         is_true);
-          t.assert_that("falling gate", sustainer.is_done(step, falling_gate),
+          t.assert_that("falling gate", sustainer.is_done(step, falling_latch),
                         is_false);
-          t.assert_that("high gate", sustainer.is_done(step, high_gate),
+          t.assert_that("high gate", sustainer.is_done(step, high_latch),
                         is_true);
-          t.assert_that("low gate", sustainer.is_done(step, low_gate),
+          t.assert_that("low gate", sustainer.is_done(step, low_latch),
                         is_false);
         }));
 
@@ -84,13 +84,14 @@ public:
           controls.advance_on_end_of_curve_[step] = false;
           controls.trigger_mode_[step] = TriggerMode::GateIsLow;
 
-          t.assert_that("rising gate", sustainer.is_done(step, rising_gate),
+          t.assert_that("rising gate", sustainer.is_done(step, rising_latch),
                         is_false);
-          t.assert_that("falling gate", sustainer.is_done(step, falling_gate),
+          t.assert_that("falling gate", sustainer.is_done(step, falling_latch),
                         is_true);
-          t.assert_that("high gate", sustainer.is_done(step, high_gate),
+          t.assert_that("high gate", sustainer.is_done(step, high_latch),
                         is_false);
-          t.assert_that("low gate", sustainer.is_done(step, low_gate), is_true);
+          t.assert_that("low gate", sustainer.is_done(step, low_latch),
+                        is_true);
         }));
 
     add("advance=true, is_done(s) regardless of mode or gate",
@@ -100,53 +101,53 @@ public:
 
           controls.trigger_mode_[step] = TriggerMode::GateRises;
           t.assert_that("mode=GateRises: rising gate",
-                        sustainer.is_done(step, rising_gate), is_true);
+                        sustainer.is_done(step, rising_latch), is_true);
           t.assert_that("mode=GateRises: falling gate",
-                        sustainer.is_done(step, falling_gate), is_true);
+                        sustainer.is_done(step, falling_latch), is_true);
           t.assert_that("mode=GateRises: high gate",
-                        sustainer.is_done(step, high_gate), is_true);
+                        sustainer.is_done(step, high_latch), is_true);
           t.assert_that("mode=GateRises: low gate",
-                        sustainer.is_done(step, low_gate), is_true);
+                        sustainer.is_done(step, low_latch), is_true);
 
           controls.trigger_mode_[step] = TriggerMode::GateFalls;
           t.assert_that("mode=GateFalls: rising gate",
-                        sustainer.is_done(step, rising_gate), is_true);
+                        sustainer.is_done(step, rising_latch), is_true);
           t.assert_that("mode=GateFalls: falling gate",
-                        sustainer.is_done(step, falling_gate), is_true);
+                        sustainer.is_done(step, falling_latch), is_true);
           t.assert_that("mode=GateFalls: high gate",
-                        sustainer.is_done(step, high_gate), is_true);
+                        sustainer.is_done(step, high_latch), is_true);
           t.assert_that("mode=GateFalls: low gate",
-                        sustainer.is_done(step, low_gate), is_true);
+                        sustainer.is_done(step, low_latch), is_true);
 
           controls.trigger_mode_[step] = TriggerMode::GateChanges;
           t.assert_that("mode=GateChanges: rising gate",
-                        sustainer.is_done(step, rising_gate), is_true);
+                        sustainer.is_done(step, rising_latch), is_true);
           t.assert_that("mode=GateChanges: falling gate",
-                        sustainer.is_done(step, falling_gate), is_true);
+                        sustainer.is_done(step, falling_latch), is_true);
           t.assert_that("mode=GateChanges: high gate",
-                        sustainer.is_done(step, high_gate), is_true);
+                        sustainer.is_done(step, high_latch), is_true);
           t.assert_that("mode=GateChanges: low gate",
-                        sustainer.is_done(step, low_gate), is_true);
+                        sustainer.is_done(step, low_latch), is_true);
 
           controls.trigger_mode_[step] = TriggerMode::GateIsHigh;
           t.assert_that("mode=GateIsHigh: rising gate",
-                        sustainer.is_done(step, rising_gate), is_true);
+                        sustainer.is_done(step, rising_latch), is_true);
           t.assert_that("mode=GateIsHigh: falling gate",
-                        sustainer.is_done(step, falling_gate), is_true);
+                        sustainer.is_done(step, falling_latch), is_true);
           t.assert_that("mode=GateIsHigh: high gate",
-                        sustainer.is_done(step, high_gate), is_true);
+                        sustainer.is_done(step, high_latch), is_true);
           t.assert_that("mode=GateIsHigh: low gate",
-                        sustainer.is_done(step, low_gate), is_true);
+                        sustainer.is_done(step, low_latch), is_true);
 
           controls.trigger_mode_[step] = TriggerMode::GateIsLow;
           t.assert_that("mode=GateIsLow: rising gate",
-                        sustainer.is_done(step, rising_gate), is_true);
+                        sustainer.is_done(step, rising_latch), is_true);
           t.assert_that("mode=GateIsLow: falling gate",
-                        sustainer.is_done(step, falling_gate), is_true);
+                        sustainer.is_done(step, falling_latch), is_true);
           t.assert_that("mode=GateIsLow: high gate",
-                        sustainer.is_done(step, high_gate), is_true);
+                        sustainer.is_done(step, high_latch), is_true);
           t.assert_that("mode=GateIsLow: low gate",
-                        sustainer.is_done(step, low_gate), is_true);
+                        sustainer.is_done(step, low_latch), is_true);
         }));
   }
 };

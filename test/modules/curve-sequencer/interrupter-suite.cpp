@@ -19,13 +19,14 @@ public:
           controls.trigger_mode_[step] = TriggerMode::GateRises;
 
           t.assert_that("rising gate",
-                        interrupter.is_interrupted(step, rising_gate), is_true);
+                        interrupter.is_interrupted(step, rising_latch),
+                        is_true);
           t.assert_that("falling gate",
-                        interrupter.is_interrupted(step, falling_gate),
+                        interrupter.is_interrupted(step, falling_latch),
                         is_false);
           t.assert_that("high gate",
-                        interrupter.is_interrupted(step, high_gate), is_false);
-          t.assert_that("low gate", interrupter.is_interrupted(step, low_gate),
+                        interrupter.is_interrupted(step, high_latch), is_false);
+          t.assert_that("low gate", interrupter.is_interrupted(step, low_latch),
                         is_false);
         }));
 
@@ -36,14 +37,14 @@ public:
           controls.trigger_mode_[step] = TriggerMode::GateFalls;
 
           t.assert_that("rising gate",
-                        interrupter.is_interrupted(step, rising_gate),
+                        interrupter.is_interrupted(step, rising_latch),
                         is_false);
           t.assert_that("falling gate",
-                        interrupter.is_interrupted(step, falling_gate),
+                        interrupter.is_interrupted(step, falling_latch),
                         is_true);
           t.assert_that("high gate",
-                        interrupter.is_interrupted(step, high_gate), is_false);
-          t.assert_that("low gate", interrupter.is_interrupted(step, low_gate),
+                        interrupter.is_interrupted(step, high_latch), is_false);
+          t.assert_that("low gate", interrupter.is_interrupted(step, low_latch),
                         is_false);
         }));
 
@@ -54,13 +55,14 @@ public:
           controls.trigger_mode_[step] = TriggerMode::GateChanges;
 
           t.assert_that("rising gate",
-                        interrupter.is_interrupted(step, rising_gate), is_true);
+                        interrupter.is_interrupted(step, rising_latch),
+                        is_true);
           t.assert_that("falling gate",
-                        interrupter.is_interrupted(step, falling_gate),
+                        interrupter.is_interrupted(step, falling_latch),
                         is_true);
           t.assert_that("high gate",
-                        interrupter.is_interrupted(step, high_gate), is_false);
-          t.assert_that("low gate", interrupter.is_interrupted(step, low_gate),
+                        interrupter.is_interrupted(step, high_latch), is_false);
+          t.assert_that("low gate", interrupter.is_interrupted(step, low_latch),
                         is_false);
         }));
 
@@ -71,13 +73,14 @@ public:
           controls.trigger_mode_[step] = TriggerMode::GateIsHigh;
 
           t.assert_that("rising gate",
-                        interrupter.is_interrupted(step, rising_gate), is_true);
+                        interrupter.is_interrupted(step, rising_latch),
+                        is_true);
           t.assert_that("falling gate",
-                        interrupter.is_interrupted(step, falling_gate),
+                        interrupter.is_interrupted(step, falling_latch),
                         is_false);
           t.assert_that("high gate",
-                        interrupter.is_interrupted(step, high_gate), is_true);
-          t.assert_that("low gate", interrupter.is_interrupted(step, low_gate),
+                        interrupter.is_interrupted(step, high_latch), is_true);
+          t.assert_that("low gate", interrupter.is_interrupted(step, low_latch),
                         is_false);
         }));
 
@@ -88,14 +91,14 @@ public:
           controls.trigger_mode_[step] = TriggerMode::GateIsLow;
 
           t.assert_that("rising gate",
-                        interrupter.is_interrupted(step, rising_gate),
+                        interrupter.is_interrupted(step, rising_latch),
                         is_false);
           t.assert_that("falling gate",
-                        interrupter.is_interrupted(step, falling_gate),
+                        interrupter.is_interrupted(step, falling_latch),
                         is_true);
           t.assert_that("high gate",
-                        interrupter.is_interrupted(step, high_gate), is_false);
-          t.assert_that("low gate", interrupter.is_interrupted(step, low_gate),
+                        interrupter.is_interrupted(step, high_latch), is_false);
+          t.assert_that("low gate", interrupter.is_interrupted(step, low_latch),
                         is_true);
         }));
 
@@ -106,63 +109,63 @@ public:
 
           controls.trigger_mode_[step] = TriggerMode::GateRises;
           t.assert_that("mode=GateRises: rising gate",
-                        interrupter.is_interrupted(step, rising_gate),
+                        interrupter.is_interrupted(step, rising_latch),
                         is_false);
           t.assert_that("mode=GateRises: falling gate",
-                        interrupter.is_interrupted(step, falling_gate),
+                        interrupter.is_interrupted(step, falling_latch),
                         is_false);
           t.assert_that("mode=GateRises: high gate",
-                        interrupter.is_interrupted(step, high_gate), is_false);
+                        interrupter.is_interrupted(step, high_latch), is_false);
           t.assert_that("mode=GateRises: low gate",
-                        interrupter.is_interrupted(step, low_gate), is_false);
+                        interrupter.is_interrupted(step, low_latch), is_false);
 
           controls.trigger_mode_[step] = TriggerMode::GateFalls;
           t.assert_that("mode=GateFalls: rising gate",
-                        interrupter.is_interrupted(step, rising_gate),
+                        interrupter.is_interrupted(step, rising_latch),
                         is_false);
           t.assert_that("mode=GateFalls: falling gate",
-                        interrupter.is_interrupted(step, falling_gate),
+                        interrupter.is_interrupted(step, falling_latch),
                         is_false);
           t.assert_that("mode=GateFalls: high gate",
-                        interrupter.is_interrupted(step, high_gate), is_false);
+                        interrupter.is_interrupted(step, high_latch), is_false);
           t.assert_that("mode=GateFalls: low gate",
-                        interrupter.is_interrupted(step, low_gate), is_false);
+                        interrupter.is_interrupted(step, low_latch), is_false);
 
           controls.trigger_mode_[step] = TriggerMode::GateChanges;
           t.assert_that("mode=GateChanges: rising gate",
-                        interrupter.is_interrupted(step, rising_gate),
+                        interrupter.is_interrupted(step, rising_latch),
                         is_false);
           t.assert_that("mode=GateChanges: falling gate",
-                        interrupter.is_interrupted(step, falling_gate),
+                        interrupter.is_interrupted(step, falling_latch),
                         is_false);
           t.assert_that("mode=GateChanges: high gate",
-                        interrupter.is_interrupted(step, high_gate), is_false);
+                        interrupter.is_interrupted(step, high_latch), is_false);
           t.assert_that("mode=GateChanges: low gate",
-                        interrupter.is_interrupted(step, low_gate), is_false);
+                        interrupter.is_interrupted(step, low_latch), is_false);
 
           controls.trigger_mode_[step] = TriggerMode::GateIsHigh;
           t.assert_that("mode=GateIsHigh: rising gate",
-                        interrupter.is_interrupted(step, rising_gate),
+                        interrupter.is_interrupted(step, rising_latch),
                         is_false);
           t.assert_that("mode=GateIsHigh: falling gate",
-                        interrupter.is_interrupted(step, falling_gate),
+                        interrupter.is_interrupted(step, falling_latch),
                         is_false);
           t.assert_that("mode=GateIsHigh: high gate",
-                        interrupter.is_interrupted(step, high_gate), is_false);
+                        interrupter.is_interrupted(step, high_latch), is_false);
           t.assert_that("mode=GateIsHigh: low gate",
-                        interrupter.is_interrupted(step, low_gate), is_false);
+                        interrupter.is_interrupted(step, low_latch), is_false);
 
           controls.trigger_mode_[step] = TriggerMode::GateIsLow;
           t.assert_that("mode=GateIsLow: rising gate",
-                        interrupter.is_interrupted(step, rising_gate),
+                        interrupter.is_interrupted(step, rising_latch),
                         is_false);
           t.assert_that("mode=GateIsLow: falling gate",
-                        interrupter.is_interrupted(step, falling_gate),
+                        interrupter.is_interrupted(step, falling_latch),
                         is_false);
           t.assert_that("mode=GateIsLow: high gate",
-                        interrupter.is_interrupted(step, high_gate), is_false);
+                        interrupter.is_interrupted(step, high_latch), is_false);
           t.assert_that("mode=GateIsLow: low gate",
-                        interrupter.is_interrupted(step, low_gate), is_false);
+                        interrupter.is_interrupted(step, low_latch), is_false);
         }));
   }
 };

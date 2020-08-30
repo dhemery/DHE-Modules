@@ -26,7 +26,7 @@ public:
           t.assert_that(controls.active_, is_true);
         }));
 
-    add("execute() outputs input",
+    add("execute() copies input to output",
         test<DeferMode>([](Tester &t, Controls &controls, DeferMode &mode) {
           auto constexpr input = 0.984F;
           controls.input_ = input;
