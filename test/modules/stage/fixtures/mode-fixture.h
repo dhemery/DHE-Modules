@@ -10,7 +10,6 @@
 namespace test {
 namespace stage {
 
-using dhe::PhaseTimer;
 using dhe::stage::Event;
 using dhe::unit::Tester;
 using dhe::unit::TestFunc;
@@ -20,10 +19,10 @@ struct Controls {
   auto input() const -> float { return input_; }
   auto duration() const -> float { return duration_; }
   void output(float f) { output_ = f; }
-  bool active_;            // NOLINT
-  float duration_{-333.F}; // NOLINT
-  float input_{-444.F};    // NOLINT
-  float output_{-555.F};   // NOLINT
+  bool active_{};    // NOLINT
+  float duration_{}; // NOLINT
+  float input_{};    // NOLINT
+  float output_{};   // NOLINT
 };
 
 template <typename M>

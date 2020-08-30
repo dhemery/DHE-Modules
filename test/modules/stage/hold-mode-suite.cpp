@@ -52,35 +52,38 @@ public:
               t.assert_that(timer.phase(), is_equal_to(0.F));
             }));
 
-    add("execute(t,s) resets timer if latch rises",
-        test<HoldMode, PhaseTimer>(
-            [](Tester &t, Controls & /**/, PhaseTimer &timer, HoldMode &mode) {
-              timer.advance(1.F);
-              mode.execute(rising_latch, 0.0F);
-              t.assert_that(timer.phase(), is_equal_to(0.F));
-            }));
+    add("execute(l,s) resets timer if latch rises",
+        test<HoldMode, PhaseTimer>([](Tester &t, Controls &controls,
+                                      PhaseTimer &timer, HoldMode &mode) {
+          timer.reset();
+          timer.advance(0.9F); // nearly complete before executing
+          controls.duration_ = 1.F;
+          auto constexpr sample_time = 0.F; // Cheat: Advance by 0 after reset
+          mode.execute(rising_latch, sample_time);
+          t.assert_that(timer.phase(), is_equal_to(0.F));
+        }));
 
-    add("execute(t,s) reports generated if timer not expired",
+    add("execute(l,s) reports generated if timer not expired",
         test<HoldMode, PhaseTimer>([](Tester &t, Controls &controls,
                                       PhaseTimer &timer, HoldMode &mode) {
           timer.reset();
           controls.duration_ = 1.F;
-          float sample_time = 0.1F; // Not enough to advance the timer to 1
+          auto constexpr sample_time = 0.1F;
           auto const result = mode.execute(low_latch, sample_time);
           t.assert_that(result, is_equal_to(Event::Generated));
         }));
 
-    add("execute(t,s) reports completed if timer expires",
+    add("execute(l,s) reports completed if timer expires",
         test<HoldMode, PhaseTimer>([](Tester &t, Controls &controls,
                                       PhaseTimer &timer, HoldMode &mode) {
           timer.advance(0.99999F);
           controls.duration_ = 1.F;
-          float sample_time = 0.1F; // Enough to advance time timer to 1
+          auto constexpr sample_time = 0.1F; // Enough to advance to 1
           auto const result = mode.execute(low_latch, sample_time);
           t.assert_that(result, is_equal_to(Event::Completed));
         }));
 
-    add("execute(t,s) outputs nothing",
+    add("execute(l,s) outputs nothing",
         test<HoldMode, PhaseTimer>([](Tester &t, Controls &controls,
                                       PhaseTimer & /**/, HoldMode &mode) {
           float original_output = 99.F;
