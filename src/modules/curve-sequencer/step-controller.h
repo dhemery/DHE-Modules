@@ -3,14 +3,14 @@
 #include "components/latch.h"
 #include "components/phase-timer.h"
 #include "components/range.h"
-#include "modules/old-curve-sequencer/step-event.h"
+#include "step-event.h"
 #include "triggers.h"
 
 namespace dhe {
 namespace curve_sequencer {
 
 using dhe::Latch;
-using dhe::old_curve_sequencer::StepEvent;
+using dhe::curve_sequencer::StepEvent;
 
 template <typename Interrupter, typename Generator, typename Sustainer>
 class StepController {
@@ -28,7 +28,7 @@ public:
   auto execute(Latch const &gate, float sample_time) -> StepEvent {
     if (!interrupted(gate)) {
       auto const curve_completed = generator_.generate(sample_time);
-      if (!curve_completed || !sustainer_.isDone(current_step_, gate)) {
+      if (!curve_completed || !sustainer_.is_done(current_step_, gate)) {
         return StepEvent::Generated;
       }
     }
@@ -40,7 +40,7 @@ public:
 
 private:
   auto interrupted(Latch const &gate) const -> bool {
-    return interrupter_.isInterrupted(current_step_, gate);
+    return interrupter_.is_interrupted(current_step_, gate);
   };
 
   int current_step_{0};
