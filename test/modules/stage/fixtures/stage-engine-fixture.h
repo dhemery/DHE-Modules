@@ -64,5 +64,45 @@ template <typename EngineTest> auto test(EngineTest engine_test) -> TestFunc {
   };
 }
 
+template <typename EngineTest>
+auto in_input_mode(EngineTest engine_test) -> TestFunc {
+  return [engine_test](Tester &t) {
+    Controls controls{};
+    SimpleMode defer_mode{};
+    SimpleMode input_mode{};
+    TimedMode generate_mode{};
+    SimpleMode level_mode{};
+    StageEngine engine{controls, defer_mode, input_mode, generate_mode,
+                       level_mode};
+
+    engine.process(0.F);
+    input_mode = SimpleMode{};
+
+    engine_test(t, controls, defer_mode, input_mode, generate_mode, level_mode,
+                engine);
+  };
+}
+
+template <typename EngineTest>
+auto in_defer_mode(EngineTest engine_test) -> TestFunc {
+  return [engine_test](Tester &t) {
+    Controls controls{};
+    SimpleMode defer_mode{};
+    SimpleMode input_mode{};
+    TimedMode generate_mode{};
+    SimpleMode level_mode{};
+    StageEngine engine{controls, defer_mode, input_mode, generate_mode,
+                       level_mode};
+
+    controls.defer_ = true;
+    engine.process(0.F);
+    input_mode = SimpleMode{};
+    defer_mode = SimpleMode{};
+
+    engine_test(t, controls, defer_mode, input_mode, generate_mode, level_mode,
+                engine);
+  };
+}
+
 } // namespace stage
 } // namespace test
