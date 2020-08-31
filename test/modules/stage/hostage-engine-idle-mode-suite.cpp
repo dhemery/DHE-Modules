@@ -69,7 +69,7 @@ public:
 
     add("with hold mode selected: if gate rises with defer low: begins holding",
         test(in_idle_mode,
-             [](Tester &t, Controls &controls, SimpleMode &/*input_mode*/,
+             [](Tester &t, Controls &controls, SimpleMode & /*input_mode*/,
                 SimpleMode & /*defer_mode*/, TimedMode &hold_mode,
                 LatchedMode & /*sustain_mode*/, SimpleMode &idle_mode,
                 HostageEngine &engine) {
@@ -87,7 +87,7 @@ public:
 
     add("with hold mode selected: if gate rises with defer low: begins holding",
         test(in_idle_mode,
-             [](Tester &t, Controls &controls, SimpleMode &/*input_mode*/,
+             [](Tester &t, Controls &controls, SimpleMode & /*input_mode*/,
                 SimpleMode & /*defer_mode*/, TimedMode & /*hold_mode*/,
                 LatchedMode &sustain_mode, SimpleMode &idle_mode,
                 HostageEngine &engine) {
