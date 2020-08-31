@@ -54,8 +54,8 @@ struct TimedMode {
 using StageEngine = dhe::stage::StageEngine<Controls, SimpleMode, SimpleMode,
                                             TimedMode, SimpleMode>;
 
-template <typename EngineTest> auto test(EngineTest engine_test) -> TestFunc {
-  return [engine_test](Tester &t) {
+template <typename Run> auto test(Run run) -> TestFunc {
+  return [run](Tester &t) {
     Controls controls{};
     SimpleMode defer_mode{};
     SimpleMode input_mode{};
@@ -63,8 +63,22 @@ template <typename EngineTest> auto test(EngineTest engine_test) -> TestFunc {
     SimpleMode level_mode{};
     StageEngine engine{controls, defer_mode, input_mode, generate_mode,
                        level_mode};
-    engine_test(t, controls, defer_mode, input_mode, generate_mode, level_mode,
-                engine);
+    run(t, controls, defer_mode, input_mode, generate_mode, level_mode, engine);
+  };
+}
+template <typename Prepare, typename Run>
+auto test(Prepare prepare, Run run) -> TestFunc {
+  return [prepare, run](Tester &t) {
+    Controls controls{};
+    SimpleMode defer_mode{};
+    SimpleMode input_mode{};
+    TimedMode generate_mode{};
+    SimpleMode level_mode{};
+    StageEngine engine{controls, defer_mode, input_mode, generate_mode,
+                       level_mode};
+    prepare(controls, defer_mode, input_mode, generate_mode, level_mode,
+            engine);
+    run(t, controls, defer_mode, input_mode, generate_mode, level_mode, engine);
   };
 }
 } // namespace stage
