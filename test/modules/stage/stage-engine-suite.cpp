@@ -22,7 +22,7 @@ public:
   void register_tests(TestRegistrar add) override {
     add("starts in input mode",
         test(freshly_constructed,
-             [](Tester &t, Controls & /**/, SimpleMode /**/,
+             [](Tester &t, Controls & /**/, SimpleMode & /**/,
                 SimpleMode &input_mode, TimedMode & /**/, SimpleMode & /**/,
                 StageEngine &engine) {
                engine.process(0.F);
@@ -31,7 +31,7 @@ public:
   }
 };
 
-__attribute__((unused)) static auto engine_suite = StageEngineSuite{};
+__attribute__((unused)) static auto _ = StageEngineSuite{};
 
 } // namespace stage
 }; // namespace test

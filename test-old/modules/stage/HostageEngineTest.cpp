@@ -26,87 +26,10 @@ TEST_CASE("stage::HostageEngine") {
   FakeSimpleMode input_mode{};
   FakeLatchedMode sustain_mode{};
 
-  HostageEngine engine{controls, input_mode,   defer_mode,
+  HostageEngine engine{controls,  input_mode,   defer_mode,
                        hold_mode, sustain_mode, idle_mode};
 
   controls.show_eoc = [](bool e) {};
-
-  SUBCASE("starts in input mode") {
-    controls.defer = []() -> bool { return false; };
-    controls.gate = []() -> bool { return false; };
-    controls.show_eoc = [](bool e) {};
-
-    input_mode.returns(Event::Generated);
-
-    engine.process(0.F);
-
-    CHECK(input_mode.wasExecuted());
-  }
-
-  SUBCASE("in input mode") {
-    controls.defer = []() -> bool { return false; };
-    controls.gate = []() -> bool { return false; };
-
-    input_mode.returns(Event::Generated);
-    engine.process(0.F);
-    input_mode.reset();
-
-    SUBCASE("with defer low") {
-      controls.defer = []() -> bool { return false; };
-
-      SUBCASE("executes if gate does not rise") {
-        controls.gate = []() -> bool { return false; };
-
-        engine.process(1.F);
-
-        CHECK(input_mode.wasExecuted());
-      }
-
-      SUBCASE("if gate rises") {
-        controls.gate = []() -> bool { return true; };
-
-        SUBCASE("begins holding if hold mode selected") {
-          controls.mode = []() -> Mode { return Mode::Hold; };
-
-          engine.process(0.F);
-
-          CHECK(input_mode.wasExited());
-          CHECK_FALSE(input_mode.wasExecuted());
-          CHECK_FALSE(input_mode.isActive());
-          CHECK(hold_mode.wasEntered());
-          CHECK(hold_mode.wasExecuted());
-          CHECK(hold_mode.isActive());
-        }
-
-        SUBCASE("begins sustaining if sustain mode selected") {
-          controls.mode = []() -> Mode { return Mode::Sustain; };
-
-          engine.process(0.F);
-
-          CHECK(input_mode.wasExited());
-          CHECK_FALSE(input_mode.wasExecuted());
-          CHECK_FALSE(input_mode.isActive());
-          CHECK(sustain_mode.wasEntered());
-          CHECK(sustain_mode.wasExecuted());
-          CHECK(sustain_mode.isActive());
-        }
-      }
-    }
-
-    SUBCASE("begins deferring if defer rises") {
-      controls.defer = []() -> bool { return true; };
-      defer_mode.returns(Event::Generated);
-
-      engine.process(0.F);
-
-      CHECK(input_mode.wasExited());
-      CHECK_FALSE(input_mode.wasExecuted());
-      CHECK_FALSE(input_mode.isActive());
-      CHECK(defer_mode.wasEntered());
-      CHECK(defer_mode.wasExecuted());
-      CHECK(defer_mode.isActive());
-    }
-  }
 
   SUBCASE("in hold mode") {
     controls.defer = []() -> bool { return false; };
