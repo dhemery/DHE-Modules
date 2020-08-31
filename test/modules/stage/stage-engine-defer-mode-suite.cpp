@@ -35,7 +35,7 @@ public:
         test(in_defer_mode,
              [](Tester &t, Controls &controls, SimpleMode &defer_mode,
                 SimpleMode & /**/, TimedMode & /**/, SimpleMode & /**/,
-                test::stage::StageEngine &engine) {
+                StageEngine &engine) {
                controls.defer_ = true;
 
                controls.gate_ = true;

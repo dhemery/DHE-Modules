@@ -1,5 +1,4 @@
 #include "./fixtures/timed-mode-fixture.h"
-#include "components/latch.h"
 #include "helpers/latches.h"
 #include "modules/stage/event.h"
 #include "modules/stage/hold-mode.h"
@@ -10,7 +9,6 @@
 namespace test {
 namespace stage {
 
-using dhe::Latch;
 using dhe::PhaseTimer;
 using dhe::stage::Event;
 
