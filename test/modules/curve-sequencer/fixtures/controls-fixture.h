@@ -15,8 +15,9 @@ using dhe::unit::TestFunc;
 
 static auto constexpr step_count{8};
 
-using Controls = dhe::curve_sequencer::Controls<fake::Port, fake::Param,
-                                                fake::Light, step_count>;
+using Controls =
+    dhe::curve_sequencer::Controls<fake::Port, fake::Port, fake::Param,
+                                   fake::Light, step_count>;
 
 class Module {
 public:

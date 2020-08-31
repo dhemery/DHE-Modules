@@ -93,21 +93,20 @@ public:
 
     add("input()", test([](Tester &t, Module &module, Controls &controls) {
           auto constexpr input = 7.777F;
-          module.set(Controls::Input::CurveSequencer, input);
+          module.set(Controls::Input::In, input);
           t.assert_that(controls.input(), is_equal_to(input));
         }));
 
     add("output()", test([](Tester &t, Module &module, Controls &controls) {
           auto constexpr output = 3.333F;
-          module.set(Controls::Output::CurveSequencer, output);
+          module.set(Controls::Output::Out, output);
           t.assert_that(controls.output(), is_equal_to(output));
         }));
 
     add("output(v)", test([](Tester &t, Module &module, Controls &controls) {
           auto constexpr output = 4.444F;
           controls.output(output);
-          t.assert_that(module.get(Controls::Output::CurveSequencer),
-                        is_equal_to(output));
+          t.assert_that(module.get(Controls::Output::Out), is_equal_to(output));
         }));
   }
 };
