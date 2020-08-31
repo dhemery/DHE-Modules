@@ -63,7 +63,7 @@ public:
           t.assert_that("exit level", level_mode.exited_, is_true);
           t.assert_that("execute level", level_mode.executed_, is_false);
           t.assert_that("enter generate", generate_mode.entered_, is_true);
-          t.assert_that("execuge generate", generate_mode.executed_, is_true);
+          t.assert_that("execute generate", generate_mode.executed_, is_true);
         }));
 
     add("with defer low: executes if gate does not rise",

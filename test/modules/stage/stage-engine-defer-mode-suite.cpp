@@ -61,7 +61,7 @@ public:
           t.assert_that("exit defer", defer_mode.exited_, is_true);
           t.assert_that("execute defer", defer_mode.executed_, is_false);
           t.assert_that("enter generate", generate_mode.entered_, is_true);
-          t.assert_that("execuge generate", generate_mode.executed_, is_true);
+          t.assert_that("execute generate", generate_mode.executed_, is_true);
         }));
 
     add("if defer falls with gate low: begins tracking input without raising "
