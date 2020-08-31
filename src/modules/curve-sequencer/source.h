@@ -15,5 +15,11 @@ static inline auto operator<<(std::ostream &os,
   os << enum_index(source);
   return os;
 }
+
+template <typename ControlsT> class SourceController {
+public:
+  SourceController(ControlsT &controls) {}
+  void snap(int /*step*/) {}
+};
 } // namespace curve_sequencer
 } // namespace dhe

@@ -2,6 +2,8 @@
 #include "modules/blossom/blossom.h"
 #include "modules/cubic/cubic-panel.h"
 #include "modules/cubic/cubic.h"
+#include "modules/curve-sequencer/module.h"
+#include "modules/curve-sequencer/panel.h"
 #include "modules/func/func-module.h"
 #include "modules/func/func1-panel.h"
 #include "modules/func/func6-panel.h"
@@ -11,8 +13,6 @@
 #include "modules/fuzzy-logic/fuzzy-logic-z-panel.h"
 #include "modules/gator/gator-panel.h"
 #include "modules/gator/gator.h"
-#include "modules/old-curve-sequencer/curve-sequencer-module.h"
-#include "modules/old-curve-sequencer/curve-sequencer-panel.h"
 #include "modules/ranger/ranger-panel.h"
 #include "modules/ranger/ranger.h"
 #include "modules/stage/booster-stage-module.h"
@@ -45,8 +45,6 @@ using dhe::fuzzy_logic::FuzzyLogicZModule;
 using dhe::fuzzy_logic::FuzzyLogicZPanel;
 using dhe::gator::Gator;
 using dhe::gator::GatorPanel;
-using dhe::old_curve_sequencer::CurveSequencerModule;
-using dhe::old_curve_sequencer::CurveSequencerPanel;
 using dhe::ranger::Ranger;
 using dhe::ranger::RangerPanel;
 using dhe::stage::BoosterStageModule;
@@ -78,14 +76,14 @@ extern "C" void init(rack::plugin::Plugin *p) {
       rack::createModel<BoosterStageModule, BoosterStagePanel>("BoosterStage"));
   p->addModel(rack::createModel<Cubic, CubicPanel>("Cubic"));
   p->addModel(
-      rack::createModel<CurveSequencerModule<4>, CurveSequencerPanel<4>>(
-          "CurveSequencer4"));
+      rack::createModel<dhe::curve_sequencer::Module<4>,
+                        dhe::curve_sequencer::Panel<4>>("CurveSequencer4"));
   p->addModel(
-      rack::createModel<CurveSequencerModule<8>, CurveSequencerPanel<8>>(
-          "CurveSequencer8"));
+      rack::createModel<dhe::curve_sequencer::Module<8>,
+                        dhe::curve_sequencer::Panel<8>>("CurveSequencer8"));
   p->addModel(
-      rack::createModel<CurveSequencerModule<16>, CurveSequencerPanel<16>>(
-          "CurveSequencer16"));
+      rack::createModel<dhe::curve_sequencer::Module<16>,
+                        dhe::curve_sequencer::Panel<16>>("CurveSequencer16"));
   p->addModel(rack::createModel<FuncModule<1>, Func1Panel>("Func"));
   p->addModel(rack::createModel<FuncModule<6>, Func6Panel>("Func6")); // NOLINT
   p->addModel(

@@ -22,24 +22,23 @@ static auto constexpr brightness_skew = 0.7F;
 static auto constexpr brightness_range =
     Range{-brightness_skew, 1.F + brightness_skew};
 
-template <typename PortT, typename ParamT, typename LightT, int N>
+template <typename InputT, typename OutputT, typename ParamT, typename LightT,
+          int N>
 class Controls {
 private:
-  std::vector<PortT> &inputs_;
-  std::vector<PortT> &outputs_;
+  std::vector<InputT> &inputs_;
+  std::vector<OutputT> &outputs_;
   std::vector<ParamT> &params_;
   std::vector<LightT> &lights_;
 
 public:
-  Controls(std::vector<PortT> &inputs, std::vector<PortT> &outputs,
+  Controls(std::vector<InputT> &inputs, std::vector<OutputT> &outputs,
            std::vector<ParamT> &params, std::vector<LightT> &lights)
       : inputs_{inputs}, outputs_{outputs}, params_{params}, lights_{lights} {}
 
   // Sequence Controls
 
-  auto input() const -> float {
-    return input(Input::CurveSequencer).getVoltage();
-  }
+  auto input() const -> float { return input(Input::In).getVoltage(); }
 
   auto is_enabled(int step) const -> bool {
     return is_pressed(param(Param::EnableStep, step)) ||
@@ -63,11 +62,11 @@ public:
   }
 
   auto output() const -> float {
-    return outputs_[enum_index(Output::CurveSequencer)].getVoltage();
+    return outputs_[enum_index(Output::Out)].getVoltage();
   }
 
   void output(float voltage) {
-    outputs_[enum_index(Output::CurveSequencer)].setVoltage(voltage);
+    outputs_[enum_index(Output::Out)].setVoltage(voltage);
   }
 
   auto selection_start() const -> int {
@@ -178,7 +177,7 @@ public:
   };
 
   enum class Input {
-    CurveSequencer,
+    In,
     Gate,
     Loop,
     Reset,
@@ -187,12 +186,12 @@ public:
     Count = EnableStep + N,
   };
 
-  enum class Output { CurveSequencer, Count };
+  enum class Output { Out, Count };
 
   enum class Light { StepProgress, Count = StepProgress + N + N };
 
 private:
-  auto input(Input id, int offset = 0) const -> PortT & {
+  auto input(Input id, int offset = 0) const -> InputT & {
     return inputs_[enum_index(id, offset)];
   }
 
