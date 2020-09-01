@@ -3,7 +3,6 @@
 
 namespace test {
 namespace curve_sequencer {
-namespace sequence_controls {
 using dhe::unit::is_equal_to;
 using dhe::unit::is_false;
 using dhe::unit::is_true;
@@ -113,6 +112,5 @@ public:
 
 __attribute__((unused)) static auto _ = SequenceControlsSuite{};
 
-} // namespace sequence_controls
 } // namespace curve_sequencer
 } // namespace test

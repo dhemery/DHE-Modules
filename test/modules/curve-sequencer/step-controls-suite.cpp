@@ -8,7 +8,6 @@
 
 namespace test {
 namespace curve_sequencer {
-namespace step_controls {
 using dhe::curve_sequencer::Source;
 using dhe::curve_sequencer::TriggerMode;
 using dhe::unit::is_between;
@@ -295,6 +294,5 @@ public:
 };
 
 __attribute__((unused)) static auto _ = StepControlsSuite{};
-} // namespace step_controls
 } // namespace curve_sequencer
 } // namespace test
