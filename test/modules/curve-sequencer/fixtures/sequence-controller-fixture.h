@@ -27,6 +27,7 @@ struct Controls {
   bool reset_{};   // NOLINT
   bool running_{}; // NOLINT
 };
+
 struct StepSelector {
   auto first() -> int {
     called_ = true;
@@ -73,13 +74,15 @@ using SequenceController =
     dhe::curve_sequencer::SequenceController<Controls, StepSelector,
                                              StepController>;
 
-template <typename Run> static inline auto test(Run run) -> TestFunc {
-  return [run](Tester &t) {
+template <typename Prepare, typename Run>
+static inline auto test(Prepare prepare, Run run) -> TestFunc {
+  return [prepare, run](Tester &t) {
     Controls controls{};
     StepController step_controller{};
     StepSelector step_selector{};
     SequenceController sequence_controller{controls, step_selector,
                                            step_controller};
+    prepare(controls, step_selector, step_controller, sequence_controller);
     run(t, controls, step_selector, step_controller, sequence_controller);
   };
 }
