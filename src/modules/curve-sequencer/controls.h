@@ -8,7 +8,6 @@
 #include "source.h"
 #include "triggers.h"
 
-#include <types/enums.h>
 #include <vector>
 
 namespace dhe {
@@ -61,13 +60,9 @@ public:
     return is_pressed(param(Param::Run)) || is_high(input(Input::Run));
   }
 
-  auto output() const -> float {
-    return outputs_[enum_index(Output::Out)].getVoltage();
-  }
+  auto output() const -> float { return outputs_[Output::Out].getVoltage(); }
 
-  void output(float voltage) {
-    outputs_[enum_index(Output::Out)].setVoltage(voltage);
-  }
+  void output(float voltage) { outputs_[Output::Out].setVoltage(voltage); }
 
   auto selection_start() const -> int {
     return static_cast<int>(param(Param::SelectionStart).getValue());
@@ -141,67 +136,83 @@ public:
         param(Param::StepTriggerMode, step).getValue());
   }
 
-  enum class Param {
-    Run,
-    Gate,
-    SelectionStart,
-    SelectionLength,
-    Loop,
-    Reset,
-    DurationRange,
-    LevelRange,
-    // Above: Overall module/sequence params
-    // Below: Step params
-    StepCurvature,
-    StepDuration = StepCurvature + N,
-    EnableStep = StepDuration + N,
-    StepEndLevel = EnableStep + N,
-    StepTriggerMode = StepEndLevel + N,
-    InterruptStepOnTrigger = StepTriggerMode + N,
-    StepShape = InterruptStepOnTrigger + N,
-    // The rest are new in 1.3.0
-    StepStartLevel = StepShape + N,
-    AdvanceStepOnEndOfCurve = StepStartLevel + N,
-    StepStartSource = AdvanceStepOnEndOfCurve + N,
-    StepEndSource = StepStartSource + N,
-    StepTracksStartSource = StepEndSource + N,
-    StepTracksEndSource = StepTracksStartSource + N,
-    Count = StepTracksEndSource + N,
+  struct Param {
+    enum {
+      Run,
+      Gate,
+      SelectionStart,
+      SelectionLength,
+      Loop,
+      Reset,
+      DurationRange,
+      LevelRange,
+      // Above: Overall module/sequence params
+      // Below: Step params
+      StepCurvature,
+      StepDuration = StepCurvature + N,
+      EnableStep = StepDuration + N,
+      StepEndLevel = EnableStep + N,
+      StepTriggerMode = StepEndLevel + N,
+      InterruptStepOnTrigger = StepTriggerMode + N,
+      StepShape = InterruptStepOnTrigger + N,
+      // The rest are new in 1.3.0
+      StepStartLevel = StepShape + N,
+      AdvanceStepOnEndOfCurve = StepStartLevel + N,
+      StepStartSource = AdvanceStepOnEndOfCurve + N,
+      StepEndSource = StepStartSource + N,
+      StepTracksStartSource = StepEndSource + N,
+      StepTracksEndSource = StepTracksStartSource + N,
+      Count = StepTracksEndSource + N,
+    };
   };
 
   // How obsolete v1.1.0 parameter IDs map to v1.3 IDs
-  enum class V110Params {
-    LevelKnobs = enum_index(Param::StepEndLevel),
-    ModeSwitches = enum_index(Param::StepTriggerMode),
-    ConditionSwitches = enum_index(Param::InterruptStepOnTrigger),
+  struct V110Params {
+    enum {
+      LevelKnobs = enum_index(Param::StepEndLevel),
+      ModeSwitches = enum_index(Param::StepTriggerMode),
+      ConditionSwitches = enum_index(Param::InterruptStepOnTrigger),
+    };
   };
 
-  enum class Input {
-    In,
-    Gate,
-    Loop,
-    Reset,
-    Run,
-    EnableStep,
-    Count = EnableStep + N,
+  struct Input {
+    enum {
+      In,
+      Gate,
+      Loop,
+      Reset,
+      Run,
+      EnableStep,
+      Count = EnableStep + N,
+    };
   };
 
-  enum class Output { Out, Count };
+  struct Output {
+    enum {
+      Out,
+      Count,
+    };
+  };
 
-  enum class Light { StepProgress, Count = StepProgress + N + N };
+  struct Light {
+    enum {
+      StepProgress,
+      Count = StepProgress + N + N,
+    };
+  };
 
 private:
-  auto input(Input id, int offset = 0) const -> InputT & {
-    return inputs_[enum_index(id, offset)];
+  auto input(int id, int offset = 0) const -> InputT & {
+    return inputs_[id + offset];
   }
 
-  auto param(Param id, int offset = 0) const -> ParamT & {
-    return params_[enum_index(id, offset)];
+  auto param(int id, int offset = 0) const -> ParamT & {
+    return params_[id + offset];
   }
 
   void set_lights(int step, float completed_brightness,
                   float remaining_brightness) {
-    auto const completed_light = enum_index(Light::StepProgress, step + step);
+    auto const completed_light = Light::StepProgress + step + step;
     auto const remaining_light = completed_light + 1;
     lights_[completed_light].setBrightness(completed_brightness);
     lights_[remaining_light].setBrightness(remaining_brightness);

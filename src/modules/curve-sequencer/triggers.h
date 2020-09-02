@@ -1,7 +1,6 @@
 #pragma once
 
 #include "components/latch.h"
-#include "types/enums.h"
 #include <array>
 
 namespace dhe {
@@ -34,7 +33,7 @@ static auto constexpr trigger_modes =
     };
 
 static auto name_of(TriggerMode mode) -> char const * {
-  return trigger_mode_names[enum_index(mode)];
+  return trigger_mode_names[static_cast<int>(mode)];
 }
 
 static inline auto operator<<(std::ostream &os,

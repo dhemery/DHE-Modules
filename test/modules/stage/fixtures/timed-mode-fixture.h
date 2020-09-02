@@ -3,7 +3,6 @@
 #include "components/phase-timer.h"
 #include "components/sigmoid.h"
 #include "modules/stage/event.h"
-#include "types/enums.h"
 
 #include <dheunit/test.h>
 #include <functional>
@@ -52,7 +51,7 @@ auto test(
 namespace dhe {
 namespace stage {
 static inline auto operator<<(std::ostream &os, Event event) -> std::ostream & {
-  os << dhe::enum_index(event);
+  os << static_cast<int>(event);
   return os;
 }
 } // namespace stage

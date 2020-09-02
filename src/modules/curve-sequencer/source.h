@@ -1,6 +1,5 @@
 #pragma once
 
-#include "types/enums.h"
 #include <ostream>
 
 namespace dhe {
@@ -12,7 +11,7 @@ static auto constexpr source_count = static_cast<int>(Source::Out) + 1;
 static inline auto operator<<(std::ostream &os,
                               dhe::curve_sequencer::Source source)
     -> std::ostream & {
-  os << enum_index(source);
+  os << static_cast<int>(source);
   return os;
 }
 
