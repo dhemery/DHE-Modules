@@ -42,7 +42,7 @@ public:
       : Suite{"dhe::curve_sequencer::SequenceController: active"} {}
 
   void register_tests(dhe::unit::TestRegistrar add) override {
-    add("with run high:"
+    add("with run high: "
         "executes active step with gate state and sample time",
         test(when_active, [](Tester &t, Controls &controls,
                              StepSelector &step_selector,
@@ -76,7 +76,8 @@ public:
                         is_equal_to(rising_latch));
         }));
 
-    add("if active step completes:"
+    add("with run high: "
+        "if active step completes: "
         "seeks successor with active step and loop state",
         test(when_active,
              [](Tester &t, Controls &controls, StepSelector &step_selector,
@@ -94,7 +95,8 @@ public:
                              is_equal_to(looping));
              }));
 
-    add("if active step completes:"
+    add("with run high: "
+        "if active step completes: "
         "enters successor step",
         test(when_active, [](Tester &t, Controls &controls,
                              StepSelector &step_selector,
@@ -120,8 +122,9 @@ public:
                         step_controller.entered_step_, is_equal_to(third_step));
         }));
 
-    add("if active step completes:"
-        "if no successor:"
+    add("with run high: "
+        "if active step completes: "
+        "if no successor: "
         "does not enter another step",
         test(when_active,
              [](Tester &t, Controls &controls, StepSelector &step_selector,
@@ -135,6 +138,121 @@ public:
                sequence_controller.execute(0.F);
                t.assert_that("step controller entered",
                              step_controller.entered_, is_false);
+             }));
+
+    add("with run high: "
+        "if reset rises: "
+        "copies input to output, "
+        "exits active step, "
+        "and does not select or enter another",
+        test(when_active,
+             [](Tester &t, Controls &controls, StepSelector &step_selector,
+                StepController &step_controller,
+                SequenceController &sequence_controller) {
+               controls.running_ = true;
+               controls.reset_ = true;
+
+               auto constexpr input = 3478.233F;
+               controls.input_ = input;
+
+               sequence_controller.execute(0.F);
+               t.assert_that("output", controls.output_, is_equal_to(input));
+               t.assert_that("step controller exited", step_controller.exited_,
+                             is_true);
+               t.assert_that("step selector called", step_selector.called_,
+                             is_false);
+               t.assert_that("step controller entered",
+                             step_controller.entered_, is_false);
+             }));
+
+    add("with run low: "
+        "with gate low: "
+        "does nothing",
+        test(when_active,
+             [](Tester &t, Controls &controls, StepSelector &step_selector,
+                StepController &step_controller,
+                SequenceController &sequence_controller) {
+               controls.running_ = false;
+               controls.gate_ = false;
+
+               auto constexpr original_output = 876.342F;
+               controls.output_ = original_output;
+
+               sequence_controller.execute(0.F);
+               t.assert_that("step selector called", step_selector.called_,
+                             is_false);
+               t.assert_that("step controller called", step_controller.called_,
+                             is_false);
+               t.assert_that("output", controls.output_,
+                             is_equal_to(original_output));
+             }));
+
+    add("with run low: "
+        "if gate rises: "
+        "does nothing",
+        test(when_active,
+             [](Tester &t, Controls &controls, StepSelector &step_selector,
+                StepController &step_controller,
+                SequenceController &sequence_controller) {
+               controls.running_ = false;
+               controls.gate_ = true;
+
+               auto constexpr original_output = 876.342F;
+               controls.output_ = original_output;
+
+               sequence_controller.execute(0.F);
+               t.assert_that("step selector called", step_selector.called_,
+                             is_false);
+               t.assert_that("step controller called", step_controller.called_,
+                             is_false);
+               t.assert_that("output", controls.output_,
+                             is_equal_to(original_output));
+             }));
+
+    add("with run low: "
+        "with reset low: "
+        "does nothing",
+        test(when_active,
+             [](Tester &t, Controls &controls, StepSelector &step_selector,
+                StepController &step_controller,
+                SequenceController &sequence_controller) {
+               controls.running_ = false;
+               controls.reset_ = true;
+
+               auto constexpr original_output = 876.342F;
+               controls.output_ = original_output;
+
+               sequence_controller.execute(0.F);
+               t.assert_that("step selector called", step_selector.called_,
+                             is_false);
+               t.assert_that("step controller called", step_controller.called_,
+                             is_false);
+               t.assert_that("output", controls.output_,
+                             is_equal_to(original_output));
+             }));
+
+    add("with run low: "
+        "if reset rises: "
+        "exits active step and does not select or enter another",
+        test(when_active,
+             [](Tester &t, Controls &controls, StepSelector &step_selector,
+                StepController &step_controller,
+                SequenceController &sequence_controller) {
+               controls.running_ = false;
+               controls.reset_ = true;
+
+               auto constexpr original_output = 876.342F;
+               controls.output_ = original_output;
+
+               sequence_controller.execute(0.F);
+               t.assert_that("step selector called", step_selector.called_,
+                             is_false);
+               t.assert_that("step controller exited", step_controller.exited_,
+                             is_true);
+               t.assert_that("step controller entered",
+                             step_controller.entered_, is_false);
+               t.assert_that("output", controls.output_,
+                             is_equal_to(original_output));
              }));
   }
 };

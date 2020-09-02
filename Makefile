@@ -25,30 +25,6 @@ include $(RACK_DIR)/plugin.mk
 #
 ########################################################################
 
-DOCTEST_SOURCES = $(shell find test-old -name "*.cpp")
-
-DOCTEST_OBJECTS := $(patsubst %, build/%.o, $(DOCTEST_SOURCES))
--include $(TEST_OBJECTS:.o=.d)
-
-DOCTEST_RUNNER = build/doctest
-
-DOCTEST_CXX_FLAGS = -Itest-old/ -Idoctest/
-
-$(DOCTEST_OBJECTS): FLAGS += $(DOCTEST_CXX_FLAGS)
-
-$(DOCTEST_RUNNER): $(DOCTEST_OBJECTS)
-	@mkdir -p $(@D)
-	$(CXX) -o $@ $^
-
-.PHONY: doctest
-doctest: $(DOCTEST_RUNNER)
-	$<
-
-
-
-
-########### dheunit tests
-
 dep/dheunit/dheunit:
 	git submodule update --init --recursive
 
@@ -74,7 +50,7 @@ dhetest: $(TEST_RUNNER)
 	$<
 
 .PHONY: test
-test: doctest dhetest
+test: dhetest
 
 
 ########################################################################
@@ -151,5 +127,5 @@ cleancdb:
 
 clean: cleancdb
 
-clion: $(OBJECTS) build/dheunit build/doctest
+clion: $(OBJECTS) build/dheunit
 
