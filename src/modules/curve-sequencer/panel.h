@@ -1,7 +1,6 @@
 #pragma once
 
 #include "controls.h"
-#include "types/enums.h"
 #include "widgets/control-widgets.h"
 #include "widgets/screws.h"
 #include <app/ModuleWidget.hpp>
@@ -115,15 +114,13 @@ public:
 
     auto constexpr active_y = top + light_radius;
 
-    addInput(Jack::input(slug, module, left, run_y,
-                         enum_index(ControlsT::Input::Run)));
+    addInput(Jack::input(slug, module, left, run_y, ControlsT::Input::Run));
     addParam(Toggle::button(slug, module, left + button_port_distance, run_y,
-                            enum_index(ControlsT::Param::Run)));
+                            ControlsT::Param::Run));
 
-    addInput(Jack::input(slug, module, left, loop_y,
-                         enum_index(ControlsT::Input::Loop)));
+    addInput(Jack::input(slug, module, left, loop_y, ControlsT::Input::Loop));
     addParam(Toggle::button(slug, module, left + button_port_distance, loop_y,
-                            enum_index(ControlsT::Param::Loop)));
+                            ControlsT::Param::Loop));
 
     auto *start_marker = new StartMarker(slug, 0.F, active_y);
     addChild(start_marker);
@@ -137,8 +134,7 @@ public:
       end_marker->set_selection_start(step);
     };
     addParam(new SelectionKnob(on_selection_start_change, slug, module, left,
-                               selection_y,
-                               enum_index(ControlsT::Param::SelectionStart)));
+                               selection_y, ControlsT::Param::SelectionStart));
 
     auto const on_selection_end_change = [end_marker](int length) {
       end_marker->set_selection_length(length);
@@ -146,17 +142,15 @@ public:
     auto constexpr selection_length_x = left + hp2mm(2.F);
     addParam(new SelectionKnob(on_selection_end_change, slug, module,
                                selection_length_x, selection_y,
-                               enum_index(ControlsT::Param::SelectionLength)));
+                               ControlsT::Param::SelectionLength));
 
-    addInput(Jack::input(slug, module, left, gate_y,
-                         enum_index(ControlsT::Input::Gate)));
+    addInput(Jack::input(slug, module, left, gate_y, ControlsT::Input::Gate));
     addParam(Button::momentary(slug, module, left + button_port_distance,
-                               gate_y, enum_index(ControlsT::Param::Gate)));
+                               gate_y, ControlsT::Param::Gate));
 
-    addInput(Jack::input(slug, module, left, reset_y,
-                         enum_index(ControlsT::Input::Reset)));
+    addInput(Jack::input(slug, module, left, reset_y, ControlsT::Input::Reset));
     addParam(Button::momentary(slug, module, left + button_port_distance,
-                               reset_y, enum_index(ControlsT::Param::Reset)));
+                               reset_y, ControlsT::Param::Reset));
 
     auto constexpr level_y = top + hp2mm(6.75F);
     auto constexpr shape_y = top + hp2mm(9.25F);
@@ -175,37 +169,35 @@ public:
       auto const x = step_x + step_dx * (float)step;
       addChild(rack::createLightCentered<ProgressLight>(
           mm2px(x, active_y), module,
-          enum_index(ControlsT::Light::StepProgress, step + step)));
+          ControlsT::Light::StepProgress + step + step));
 
       addParam(Knob::small(slug, module, x, level_y,
-                           enum_index(ControlsT::Param::StepEndLevel, step)));
+                           ControlsT::Param::StepEndLevel + step));
 
       addParam(Toggle::stepper(2, slug, module, x, shape_y,
-                               enum_index(ControlsT::Param::StepShape, step)));
+                               ControlsT::Param::StepShape + step));
       addParam(Knob::small(slug, module, x, curve_y,
-                           enum_index(ControlsT::Param::StepCurvature, step)));
+                           ControlsT::Param::StepCurvature + step));
 
       addParam(Knob::small(slug, module, x, duration_y,
-                           enum_index(ControlsT::Param::StepDuration, step)));
+                           ControlsT::Param::StepDuration + step));
 
       addParam(Toggle::button(slug, module, x, enabled_button_y,
-                              enum_index(ControlsT::Param::EnableStep, step)));
+                              ControlsT::Param::EnableStep + step));
       addInput(Jack::input(slug, module, x, enabled_port_y,
-                           enum_index(ControlsT::Input::EnableStep, step)));
+                           ControlsT::Input::EnableStep + step));
     }
 
     auto constexpr out_y = bottom - port_radius - 1.F;
     auto constexpr eos_y = top + hp2mm(2.75);
 
-    addInput(Jack::input(slug, module, right, eos_y,
-                         enum_index(ControlsT::Input::In)));
+    addInput(Jack::input(slug, module, right, eos_y, ControlsT::Input::In));
 
     addParam(Toggle::stepper(2, slug, module, right, level_y,
-                             enum_index(ControlsT::Param::LevelRange)));
+                             ControlsT::Param::LevelRange));
     addParam(Toggle::stepper(3, slug, module, right, duration_y,
-                             enum_index(ControlsT::Param::DurationRange)));
-    addOutput(Jack::output(slug, module, right, out_y,
-                           enum_index(ControlsT::Output::Out)));
+                             ControlsT::Param::DurationRange));
+    addOutput(Jack::output(slug, module, right, out_y, ControlsT::Output::Out));
   }
 }; // namespace dhe
 } // namespace curve_sequencer

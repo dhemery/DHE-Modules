@@ -105,7 +105,8 @@ public:
     add("output(v)", test([](Tester &t, Module &module, Controls &controls) {
           auto constexpr output = 4.444F;
           controls.output(output);
-          t.assert_that(module.get_output(Controls::Output::Out), is_equal_to(output));
+          t.assert_that(module.get_output(Controls::Output::Out),
+                        is_equal_to(output));
         }));
   }
 };

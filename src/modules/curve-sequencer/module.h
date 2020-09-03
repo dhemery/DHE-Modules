@@ -22,41 +22,36 @@ template <int N> class Module : public rack::engine::Module {
 
 public:
   Module() {
-    config(enum_index(ControlsT::Param::Count),
-           enum_index(ControlsT::Input::Count),
-           enum_index(ControlsT::Output::Count),
-           enum_index(ControlsT::Light::Count));
+    config(ControlsT::Param::Count, ControlsT::Input::Count,
+           ControlsT::Output::Count, ControlsT::Light::Count);
 
-    config_button(this, enum_index(ControlsT::Param::Run), "Run",
-                  {"from input", "Yes"}, 1);
-    config_button(this, enum_index(ControlsT::Param::Gate), "Gate",
-                  {"from input", "High"}, 0);
-    config_button(this, enum_index(ControlsT::Param::Loop), "Loop",
-                  {"from input", "Yes"}, 0);
-    config_button(this, enum_index(ControlsT::Param::Reset), "Reset",
+    config_button(this, ControlsT::Param::Run, "Run", {"from input", "Yes"}, 1);
+    config_button(this, ControlsT::Param::Gate, "Gate", {"from input", "High"},
+                  0);
+    config_button(this, ControlsT::Param::Loop, "Loop", {"from input", "Yes"},
+                  0);
+    config_button(this, ControlsT::Param::Reset, "Reset",
                   {"from input", "High"}, 0);
 
-    configParam(enum_index(ControlsT::Param::SelectionStart), 0.F, N - 1, 0.F,
-                "Start step", "", 0.F, 1.F, 1.F);
-    configParam(enum_index(ControlsT::Param::SelectionLength), 1.F, N, N,
-                "Sequence length", " steps");
+    configParam(ControlsT::Param::SelectionStart, 0.F, N - 1, 0.F, "Start step",
+                "", 0.F, 1.F, 1.F);
+    configParam(ControlsT::Param::SelectionLength, 1.F, N, N, "Sequence length",
+                " steps");
 
-    config_level_range_switch(this, enum_index(ControlsT::Param::LevelRange));
-    config_duration_range_switch(this,
-                                 enum_index(ControlsT::Param::DurationRange));
+    config_level_range_switch(this, ControlsT::Param::LevelRange);
+    config_duration_range_switch(this, ControlsT::Param::DurationRange);
 
     for (auto step = 0; step < N; step++) {
-      config_level_knob(this, enum_index(ControlsT::Param::StepEndLevel, step),
-                        enum_index(ControlsT::Param::LevelRange), "Level");
-      config_curve_shape_switch(
-          this, enum_index(ControlsT::Param::StepShape, step), "Shape");
-      config_curvature_knob(
-          this, enum_index(ControlsT::Param::StepCurvature, step), "Curvature");
-      config_duration_knob(
-          this, enum_index(ControlsT::Param::StepDuration, step),
-          enum_index(ControlsT::Param::DurationRange), "Duration");
-      config_button(this, enum_index(ControlsT::Param::EnableStep, step),
-                    "Enabled", {"from input", "Yes"}, 1);
+      config_level_knob(this, ControlsT::Param::StepEndLevel + step,
+                        ControlsT::Param::LevelRange, "Level");
+      config_curve_shape_switch(this, ControlsT::Param::StepShape + step,
+                                "Shape");
+      config_curvature_knob(this, ControlsT::Param::StepCurvature + step,
+                            "Curvature");
+      config_duration_knob(this, ControlsT::Param::StepDuration + step,
+                           ControlsT::Param::DurationRange, "Duration");
+      config_button(this, ControlsT::Param::EnableStep + step, "Enabled",
+                    {"from input", "Yes"}, 1);
 
       controls_.show_inactive(step);
     }
