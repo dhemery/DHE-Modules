@@ -14,10 +14,10 @@ auto constexpr step_count = 8;
 struct Controls {
   auto selection_start() const -> int { return start_; }
   auto selection_length() const -> int { return length_; }
-  auto is_enabled(int step) const -> int { return enabled_[step]; }
-  int start_{};
-  int length_{};
-  std::array<bool, step_count> enabled_{};
+  auto is_enabled(int step) const -> bool { return enabled_[step]; }
+  int start_{};                            // NOLINT
+  int length_{};                           // NOLINT
+  std::array<bool, step_count> enabled_{}; // NOLINT
 };
 
 using StepSelector = dhe::curve_sequencer::StepSelector<Controls>;

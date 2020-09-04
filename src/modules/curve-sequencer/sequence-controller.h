@@ -17,7 +17,7 @@ public:
   void execute(float sample_time) {
     // Process the latches even if not running. This ensures that we detect and
     // react to edges that happen on the same sample when RUN rises.
-    gate_latch_.clock(controls_.is_gated());
+    gate_latch_.clock(controls_.gate());
     reset_latch_.clock(controls_.is_reset());
 
     // Reset even if not running.

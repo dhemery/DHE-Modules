@@ -70,7 +70,7 @@ public:
                 Sustainer &sustainer, StepController &step_controller) {
           auto constexpr step = 7;
           step_controller.enter(step);
-          generator.curve_is_done_[step] = true;
+          generator.generate_result_[step] = true;
           sustainer.is_done_[step] = true;
 
           auto const result = step_controller.execute(Latch{}, 0.F);
@@ -84,7 +84,7 @@ public:
                 Sustainer &sustainer, StepController &step_controller) {
           auto constexpr step = 0;
           step_controller.enter(step);
-          generator.curve_is_done_[step] = true;
+          generator.generate_result_[step] = true;
           sustainer.is_done_[step] = false;
 
           auto const result = step_controller.execute(Latch{}, 0.F);
@@ -98,7 +98,7 @@ public:
                 Sustainer & /**/, StepController &step_controller) {
           auto constexpr step = 0;
           step_controller.enter(step);
-          generator.curve_is_done_[step] = false;
+          generator.generate_result_[step] = false;
 
           auto const result = step_controller.execute(Latch{}, 0.F);
 

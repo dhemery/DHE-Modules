@@ -17,7 +17,7 @@ public:
     add("advance=false, mode=GateRises, is_done(s) iff gate rises",
         test([](Tester &t, Controls &controls, Sustainer &interrupter) {
           auto constexpr step = 0;
-          controls.advance_on_end_of_curve_[step] = false;
+          controls.completion_mode_[step] = false;
           controls.trigger_mode_[step] = TriggerMode::GateRises;
 
           t.assert_that("rising gate", interrupter.is_done(step, rising_latch),
@@ -33,7 +33,7 @@ public:
     add("advance=false, mode=GateFalls, is_done(s) iff gate falls",
         test([](Tester &t, Controls &controls, Sustainer &sustainer) {
           auto constexpr step = 1;
-          controls.advance_on_end_of_curve_[step] = false;
+          controls.completion_mode_[step] = false;
           controls.trigger_mode_[step] = TriggerMode::GateFalls;
 
           t.assert_that("rising gate", sustainer.is_done(step, rising_latch),
@@ -49,7 +49,7 @@ public:
     add("advance=false, mode=GateChanges, is_done(s) iff gate changes",
         test([](Tester &t, Controls &controls, Sustainer &sustainer) {
           auto constexpr step = 2;
-          controls.advance_on_end_of_curve_[step] = false;
+          controls.completion_mode_[step] = false;
           controls.trigger_mode_[step] = TriggerMode::GateChanges;
 
           t.assert_that("rising gate", sustainer.is_done(step, rising_latch),
@@ -65,7 +65,7 @@ public:
     add("advance=false, mode=GateIsHigh, is_done(s) iff gate is high",
         test([](Tester &t, Controls &controls, Sustainer &sustainer) {
           auto constexpr step = 3;
-          controls.advance_on_end_of_curve_[step] = false;
+          controls.completion_mode_[step] = false;
           controls.trigger_mode_[step] = TriggerMode::GateIsHigh;
 
           t.assert_that("rising gate", sustainer.is_done(step, rising_latch),
@@ -81,7 +81,7 @@ public:
     add("advance=false, mode=GateIsLow, is_done(s) iff gate is low",
         test([](Tester &t, Controls &controls, Sustainer &sustainer) {
           auto constexpr step = 4;
-          controls.advance_on_end_of_curve_[step] = false;
+          controls.completion_mode_[step] = false;
           controls.trigger_mode_[step] = TriggerMode::GateIsLow;
 
           t.assert_that("rising gate", sustainer.is_done(step, rising_latch),
@@ -97,7 +97,7 @@ public:
     add("advance=true, is_done(s) regardless of mode or gate",
         test([](Tester &t, Controls &controls, Sustainer &sustainer) {
           auto constexpr step = 5;
-          controls.advance_on_end_of_curve_[step] = true;
+          controls.completion_mode_[step] = true;
 
           controls.trigger_mode_[step] = TriggerMode::GateRises;
           t.assert_that("mode=GateRises: rising gate",

@@ -12,7 +12,7 @@ public:
   Interrupter(Controls &controls) : controls_{controls} {}
 
   auto is_interrupted(int step, Latch const &latch) -> bool {
-    return controls_.interrupt_on_trigger(step) &&
+    return controls_.interrupt_mode(step) &&
            is_triggered(controls_.trigger_mode(step), latch);
   }
 

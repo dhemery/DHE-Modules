@@ -19,15 +19,15 @@ public:
           module.set_param(Controls::Param::Gate, 1.F);
           module.set_input(Controls::Input::Gate, 0.F);
 
-          t.assert_that("button pressed", controls.is_gated(), is_true);
+          t.assert_that("button pressed", controls.gate(), is_true);
 
           module.set_param(Controls::Param::Gate, 0.F);
           module.set_input(Controls::Input::Gate, 10.F);
-          t.assert_that("input high", controls.is_gated(), is_true);
+          t.assert_that("input high", controls.gate(), is_true);
 
           module.set_param(Controls::Param::Gate, 0.F);
           module.set_input(Controls::Input::Gate, 0.F);
-          t.assert_that("input low, button not pressed", controls.is_gated(),
+          t.assert_that("input low, button not pressed", controls.gate(),
                         is_false);
         }));
 

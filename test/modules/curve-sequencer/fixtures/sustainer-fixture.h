@@ -7,21 +7,21 @@ namespace test {
 namespace curve_sequencer {
 using dhe::curve_sequencer::TriggerMode;
 using dhe::unit::Tester;
+using dhe::unit::TestFunc;
 
 auto constexpr step_count = 8;
+
 struct Controls {
-  auto advance_on_end_of_curve(int step) const -> bool {
-    return advance_on_end_of_curve_[step];
+  auto completion_mode(int step) const -> bool {
+    return completion_mode_[step];
   }
   auto trigger_mode(int step) const -> TriggerMode {
     return trigger_mode_[step];
   }
 
-  std::array<bool, step_count> advance_on_end_of_curve_{}; // NOLINT
-  std::array<TriggerMode, step_count> trigger_mode_{};     // NOLINT
+  std::array<bool, step_count> completion_mode_{};     // NOLINT
+  std::array<TriggerMode, step_count> trigger_mode_{}; // NOLINT
 };
-
-using dhe::unit::TestFunc;
 
 using Sustainer = dhe::curve_sequencer::Sustainer<Controls>;
 

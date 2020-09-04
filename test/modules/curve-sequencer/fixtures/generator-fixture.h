@@ -7,6 +7,12 @@ namespace curve_sequencer {
 using dhe::unit::Tester;
 using dhe::unit::TestFunc;
 
+struct Anchor {
+  void enter(int step) { entered_step_ = step; }
+
+  int entered_step_{}; // NOLINT
+};
+
 struct Controls {
   void show_progress(int step, float progress) {
     activated_step_ = step;
@@ -16,12 +22,6 @@ struct Controls {
   float progress_{};       // NOLINT
   int activated_step_{};   // NOLINT
   int deactivated_step_{}; // NOLINT
-};
-
-struct Anchor {
-  void enter(int step) { entered_step_ = step; }
-
-  int entered_step_{}; // NOLINT
 };
 
 using Generator = dhe::curve_sequencer::Generator<Controls, Anchor>;

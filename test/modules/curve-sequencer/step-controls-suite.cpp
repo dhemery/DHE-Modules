@@ -8,7 +8,7 @@
 
 namespace test {
 namespace curve_sequencer {
-using dhe::curve_sequencer::AnchorMode;
+using dhe::curve_sequencer::AnchorSource;
 using dhe::curve_sequencer::TriggerMode;
 using dhe::unit::is_between;
 using dhe::unit::is_equal_to;
@@ -53,12 +53,12 @@ public:
                module.set_param(Controls::Param::StepInterruptMode, step, 0.F);
 
                t.assert_that("interrupt disabled",
-                             controls.interrupt_on_trigger(step), is_false);
+                             controls.interrupt_mode(step), is_false);
 
                module.set_param(Controls::Param::StepInterruptMode, step, 1.F);
 
-               t.assert_that("interrupt enabled",
-                             controls.interrupt_on_trigger(step), is_true);
+               t.assert_that("interrupt enabled", controls.interrupt_mode(step),
+                             is_true);
              }));
 
     add_test("advance_on_end_of_curve(s)",
@@ -66,38 +66,39 @@ public:
                auto constexpr step = 3;
                module.set_param(Controls::Param::StepCompletionMode, step, 0.F);
 
-               t.assert_that("advance disabled",
-                             controls.advance_on_end_of_curve(step), is_false);
+               t.assert_that("advance disabled", controls.completion_mode(step),
+                             is_false);
 
                module.set_param(Controls::Param::StepCompletionMode, step, 1.F);
 
-               t.assert_that("advance enabled",
-                             controls.advance_on_end_of_curve(step), is_true);
+               t.assert_that("advance enabled", controls.completion_mode(step),
+                             is_true);
              }));
 
     add_test("start_source(s)",
              test([](Tester &t, Module &module, Controls controls) {
                auto constexpr step = 0;
 
-               auto source = AnchorMode::Level;
+               auto source = AnchorSource::Level;
                module.set_param(Controls::Param::StepStartAnchorSource, step,
                                 static_cast<float>(source));
 
-               t.assert_that("Source::Level", controls.start_source(step),
+               t.assert_that("Source::Level",
+                             controls.start_anchor_source(step),
                              is_equal_to(source));
 
-               source = AnchorMode::In;
+               source = AnchorSource::In;
                module.set_param(Controls::Param::StepStartAnchorSource, step,
                                 static_cast<float>(source));
 
-               t.assert_that("Source::In", controls.start_source(step),
+               t.assert_that("Source::In", controls.start_anchor_source(step),
                              is_equal_to(source));
 
-               source = AnchorMode::Out;
+               source = AnchorSource::Out;
                module.set_param(Controls::Param::StepStartAnchorSource, step,
                                 static_cast<float>(source));
 
-               t.assert_that("Source::Out", controls.start_source(step),
+               t.assert_that("Source::Out", controls.start_anchor_source(step),
                              is_equal_to(source));
              }));
 
@@ -108,12 +109,12 @@ public:
 
           module.set_param(Controls::Param::StepStartAnchorMode, step, 1.F);
 
-          t.assert_that("tracking enabled", controls.track_start_source(step),
+          t.assert_that("tracking enabled", controls.start_anchor_mode(step),
                         is_true);
 
           module.set_param(Controls::Param::StepStartAnchorMode, step, 0.F);
 
-          t.assert_that("tracking disabled", controls.track_start_source(step),
+          t.assert_that("tracking disabled", controls.start_anchor_mode(step),
                         is_false);
         }));
 
@@ -135,25 +136,25 @@ public:
              test([](Tester &t, Module &module, Controls controls) {
                auto constexpr step = 6;
 
-               auto source = AnchorMode::Level;
+               auto source = AnchorSource::Level;
                module.set_param(Controls::Param::StepEndAnchorSource, step,
                                 static_cast<float>(source));
 
-               t.assert_that("Source::Level", controls.end_source(step),
+               t.assert_that("Source::Level", controls.end_anchor_source(step),
                              is_equal_to(source));
 
-               source = AnchorMode::In;
+               source = AnchorSource::In;
                module.set_param(Controls::Param::StepEndAnchorSource, step,
                                 static_cast<float>(source));
 
-               t.assert_that("Source::In", controls.end_source(step),
+               t.assert_that("Source::In", controls.end_anchor_source(step),
                              is_equal_to(source));
 
-               source = AnchorMode::Out;
+               source = AnchorSource::Out;
                module.set_param(Controls::Param::StepEndAnchorSource, step,
                                 static_cast<float>(source));
 
-               t.assert_that("Source::Out", controls.end_source(step),
+               t.assert_that("Source::Out", controls.end_anchor_source(step),
                              is_equal_to(source));
              }));
 
@@ -163,13 +164,13 @@ public:
 
                module.set_param(Controls::Param::StepEndAnchorMode, step, 1.F);
 
-               t.assert_that("tracking enabled",
-                             controls.track_end_source(step), is_true);
+               t.assert_that("tracking enabled", controls.end_anchor_mode(step),
+                             is_true);
 
                module.set_param(Controls::Param::StepEndAnchorMode, step, 0.F);
 
                t.assert_that("tracking disabled",
-                             controls.track_end_source(step), is_false);
+                             controls.end_anchor_mode(step), is_false);
              }));
 
     add_test("end_level(s)",

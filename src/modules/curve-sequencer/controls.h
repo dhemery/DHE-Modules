@@ -44,7 +44,7 @@ public:
            is_high(input(Input::EnableStep, step));
   }
 
-  auto is_gated() const -> bool {
+  auto gate() const -> bool {
     return is_high(input(Input::Gate)) || is_pressed(param(Param::Gate));
   }
 
@@ -74,7 +74,7 @@ public:
 
   // Step controls
 
-  auto advance_on_end_of_curve(int step) const -> bool {
+  auto completion_mode(int step) const -> bool {
     return position_of(param(Param::StepCompletionMode, step)) == 1;
   }
 
@@ -92,12 +92,16 @@ public:
                                  param(Param::LevelRange));
   }
 
-  auto end_source(int step) const -> AnchorMode {
-    return static_cast<AnchorMode>(
+  auto end_anchor_mode(int step) const -> bool {
+    return position_of(param(Param::StepEndAnchorMode, step)) == 1;
+  }
+
+  auto end_anchor_source(int step) const -> AnchorSource {
+    return static_cast<AnchorSource>(
         param(Param::StepEndAnchorSource, step).getValue());
   }
 
-  auto interrupt_on_trigger(int step) const -> bool {
+  auto interrupt_mode(int step) const -> bool {
     return position_of(param(Param::StepInterruptMode, step)) == 1;
   }
 
@@ -109,28 +113,24 @@ public:
     set_lights(step, completed_brightness, remaining_brightness);
   }
 
+  auto start_anchor_mode(int step) const -> bool {
+    return position_of(param(Param::StepStartAnchorMode, step)) == 1;
+  }
+
+  auto start_anchor_source(int step) const -> AnchorSource {
+    return static_cast<AnchorSource>(
+        param(Param::StepStartAnchorSource, step).getValue());
+  }
+
   auto start_level(int step) const -> float {
     return dhe::selectable_level(param(Param::StepStartLevel, step),
                                  param(Param::LevelRange));
-  }
-
-  auto start_source(int step) const -> AnchorMode {
-    return static_cast<AnchorMode>(
-        param(Param::StepStartAnchorSource, step).getValue());
   }
 
   auto taper(int step) const -> sigmoid::Taper const & {
     auto const selection =
         static_cast<int>(param(Param::StepShape, step).getValue());
     return sigmoid::tapers[selection];
-  }
-
-  auto track_end_source(int step) const -> bool {
-    return position_of(param(Param::StepEndAnchorMode, step)) == 1;
-  }
-
-  auto track_start_source(int step) const -> bool {
-    return position_of(param(Param::StepStartAnchorMode, step)) == 1;
   }
 
   auto trigger_mode(int step) const -> TriggerMode {

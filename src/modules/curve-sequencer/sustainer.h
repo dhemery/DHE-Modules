@@ -12,7 +12,7 @@ public:
   Sustainer(Controls &controls) : controls_{controls} {}
 
   auto is_done(int step, Latch const &latch) -> bool {
-    return controls_.advance_on_end_of_curve(step) ||
+    return controls_.completion_mode(step) ||
            is_triggered(controls_.trigger_mode(step), latch);
   }
 

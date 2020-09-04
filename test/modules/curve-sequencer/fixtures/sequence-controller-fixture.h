@@ -14,7 +14,7 @@ using dhe::unit::TestFunc;
 auto constexpr step_count = 8;
 
 struct Controls {
-  auto is_gated() const -> bool { return gate_; }
+  auto gate() const -> bool { return gate_; }
   auto is_looping() const -> bool { return looping_; }
   auto is_reset() const -> bool { return reset_; }
   auto is_running() const -> bool { return running_; }
@@ -26,24 +26,6 @@ struct Controls {
   float output_{}; // NOLINT
   bool reset_{};   // NOLINT
   bool running_{}; // NOLINT
-};
-
-struct StepSelector {
-  auto first() -> int {
-    called_ = true;
-    return first_;
-  }
-  auto successor(int step, bool looping) -> int {
-    called_ = true;
-    step_ = step;
-    looping_ = looping;
-    return successor_;
-  }
-  bool called_{};   // NOLINT
-  int first_{};     // NOLINT
-  bool looping_{};  // NOLINT
-  int step_{};      // NOLINT
-  int successor_{}; // NOLINT
 };
 
 struct StepController {
@@ -68,6 +50,24 @@ struct StepController {
   Latch executed_latch_{};       // NOLINT
   float executed_sample_time_{}; // NOLINT
   int entered_step_{};           // NOLINT
+};
+
+struct StepSelector {
+  auto first() -> int {
+    called_ = true;
+    return first_;
+  }
+  auto successor(int step, bool looping) -> int {
+    called_ = true;
+    step_ = step;
+    looping_ = looping;
+    return successor_;
+  }
+  bool called_{};   // NOLINT
+  int first_{};     // NOLINT
+  bool looping_{};  // NOLINT
+  int step_{};      // NOLINT
+  int successor_{}; // NOLINT
 };
 
 using SequenceController =

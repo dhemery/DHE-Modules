@@ -15,7 +15,7 @@ public:
     add("interrupt=true, mode=GateRises, is_interrupted(s) iff gate rises",
         test([](Tester &t, Controls &controls, Interrupter &interrupter) {
           auto constexpr step = 0;
-          controls.interrupt_on_trigger_[step] = true;
+          controls.interrupt_mode_[step] = true;
           controls.trigger_mode_[step] = TriggerMode::GateRises;
 
           t.assert_that("rising gate",
@@ -33,7 +33,7 @@ public:
     add("interrupt=true, mode=GateFalls, is_interrupted(s) iff gate falls",
         test([](Tester &t, Controls &controls, Interrupter &interrupter) {
           auto constexpr step = 1;
-          controls.interrupt_on_trigger_[step] = true;
+          controls.interrupt_mode_[step] = true;
           controls.trigger_mode_[step] = TriggerMode::GateFalls;
 
           t.assert_that("rising gate",
@@ -51,7 +51,7 @@ public:
     add("interrupt=true, mode=GateChanges, is_interrupted(s) iff gate changes",
         test([](Tester &t, Controls &controls, Interrupter &interrupter) {
           auto constexpr step = 2;
-          controls.interrupt_on_trigger_[step] = true;
+          controls.interrupt_mode_[step] = true;
           controls.trigger_mode_[step] = TriggerMode::GateChanges;
 
           t.assert_that("rising gate",
@@ -69,7 +69,7 @@ public:
     add("interrupt=true, mode=GateIsHigh, is_interrupted(s) iff gate is high",
         test([](Tester &t, Controls &controls, Interrupter &interrupter) {
           auto constexpr step = 3;
-          controls.interrupt_on_trigger_[step] = true;
+          controls.interrupt_mode_[step] = true;
           controls.trigger_mode_[step] = TriggerMode::GateIsHigh;
 
           t.assert_that("rising gate",
@@ -87,7 +87,7 @@ public:
     add("interrupt=true, mode=GateIsLow, is_interrupted(s) iff gate is low",
         test([](Tester &t, Controls &controls, Interrupter &interrupter) {
           auto constexpr step = 4;
-          controls.interrupt_on_trigger_[step] = true;
+          controls.interrupt_mode_[step] = true;
           controls.trigger_mode_[step] = TriggerMode::GateIsLow;
 
           t.assert_that("rising gate",
@@ -105,7 +105,7 @@ public:
     add("interrupt=false, is_interrupted(s) regardless of mode or gate",
         test([](Tester &t, Controls &controls, Interrupter &interrupter) {
           auto constexpr step = 5;
-          controls.interrupt_on_trigger_[step] = false;
+          controls.interrupt_mode_[step] = false;
 
           controls.trigger_mode_[step] = TriggerMode::GateRises;
           t.assert_that("mode=GateRises: rising gate",

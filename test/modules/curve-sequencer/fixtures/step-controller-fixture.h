@@ -12,24 +12,25 @@ using dhe::unit::TestFunc;
 
 auto constexpr step_count = 8;
 
-struct Interrupter {
-  auto is_interrupted(int step, Latch const & /*gate*/) -> bool {
-    return is_interrupted_[step];
-  }
-  std::array<bool, step_count> is_interrupted_{}; // NOLINT
-};
 struct Generator {
   void start(int step) { started_step_ = step; }
   void stop() { stopped_ = true; }
   auto generate(float sample_time) -> bool {
     sample_time_ = sample_time;
-    return curve_is_done_[started_step_];
+    return generate_result_[started_step_];
   }
 
-  int started_step_ = -3;                        // NOLINT
-  float sample_time_ = -9.F;                     // NOLINT
-  bool stopped_ = false;                         // NOLINT
-  std::array<bool, step_count> curve_is_done_{}; // NOLINT
+  int started_step_ = -3;                          // NOLINT
+  float sample_time_ = -9.F;                       // NOLINT
+  bool stopped_ = false;                           // NOLINT
+  std::array<bool, step_count> generate_result_{}; // NOLINT
+};
+
+struct Interrupter {
+  auto is_interrupted(int step, Latch const & /*gate*/) -> bool {
+    return is_interrupted_[step];
+  }
+  std::array<bool, step_count> is_interrupted_{}; // NOLINT
 };
 
 struct Sustainer {
