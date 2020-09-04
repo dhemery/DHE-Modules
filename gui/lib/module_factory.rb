@@ -11,6 +11,7 @@ require_relative 'controls/button'
 require_relative 'controls/knob'
 require_relative 'controls/pick_list'
 require_relative 'controls/port'
+require_relative 'controls/stepper'
 require_relative 'controls/toggle'
 
 class ModuleFactory
@@ -197,6 +198,18 @@ class ModuleFactory
     @controls << picklist
 
     image_item = picklist.options[selection - 1]
+                         .translated(x, y)
+                         .padded(all: PADDING)
+
+    @image_shapes << image_item unless hidden
+  end
+
+  def stepper(x:, y:, name:, options:, selection: 0, width:, hidden: false)
+    stepper = Stepper.new(name: name, options: options, text_color: @foreground, fill: @background, width: width)
+
+    @controls << stepper
+
+    image_item = stepper.options[selection - 1]
                          .translated(x, y)
                          .padded(all: PADDING)
 

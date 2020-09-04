@@ -27,20 +27,20 @@
      id="g6"
      transform="translate(3.5,1.79)">
     <path
-       id="rect2"
-       d="m -2.875,-1.665 h 5.75 c 0.277,0 0.5,0.223 0.5,0.5 v 2.33 c 0,0.277 -0.223,0.5 -0.5,0.5 h -5.75 c -0.277,0 -0.5,-0.223 -0.5,-0.5 v -2.33 c 0,-0.277 0.223,-0.5 0.5,-0.5 z"
-       style="fill:#faf7f0;stroke:#0044cc;stroke-width:0.25" />
+       d="m -3,-1.79 h 6 c 0.277,0 0.5,0.223 0.5,0.5 v 2.58 c 0,0.277 -0.223,0.5 -0.5,0.5 h -6 c -0.277,0 -0.5,-0.223 -0.5,-0.5 v -2.58 c 0,-0.277 0.223,-0.5 0.5,-0.5 z"
+       style="fill:#faf7f0;stroke:#0044cc;stroke-width:0.25"
+       id="rect2" />
     <g
+       style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:middle;text-anchor:middle;fill:#0044cc"
        id="text4"
-       style="font-weight:bold;font-size:2.37100005px;font-family:'Proxima Nova';dominant-baseline:middle;text-anchor:middle;fill:#0044cc"
        aria-label="±5">
       <path
          id="path17"
-         style="font-weight:bold;font-size:2.37100005px;font-family:'Proxima Nova';dominant-baseline:middle;text-anchor:middle;fill:#0044cc"
+         style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:middle;text-anchor:middle;fill:#0044cc"
          d="m -0.61566351,0.08365048 h 0.42440901 v -0.184938 h -0.42440901 v -0.46708701 h -0.206277 v 0.46708701 H -1.2487205 v 0.184938 h 0.42677999 v 0.48368401 h 0.206277 z M -1.2487205,0.8565965 h 1.057466 v -0.184938 h -1.057466 z" />
       <path
          id="path19"
-         style="font-weight:bold;font-size:2.37100005px;font-family:'Proxima Nova';dominant-baseline:middle;text-anchor:middle;fill:#0044cc"
+         style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:middle;text-anchor:middle;fill:#0044cc"
          d="m -0.00653877,0.6479485 c 0.13514701,0.147002 0.33431101,0.2371 0.60934702,0.2371 0.38173101,0 0.63305705,-0.211019 0.63305705,-0.54533001 0,-0.32008501 -0.23947104,-0.50976501 -0.50739405,-0.50976501 -0.144631,0 -0.27266501,0.056904 -0.35565001,0.130405 V -0.43559853 H 1.1291703 v -0.289262 H 0.04325224 v 0.90335101 l 0.234729,0.064017 c 0.09484,-0.090098 0.20153501,-0.13040501 0.33194001,-0.13040501 0.180196,0 0.28452,0.097211 0.28452,0.24184201 0,0.130405 -0.106695,0.2371 -0.294004,0.2371 -0.16597001,0 -0.31297201,-0.059275 -0.42203801,-0.170712 z" />
     </g>
   </g>

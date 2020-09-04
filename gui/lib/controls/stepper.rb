@@ -1,43 +1,43 @@
-require_relative '../control'
 require_relative '../dimensions'
 require_relative '../shapes/label'
-require_relative 'button'
+require_relative '../shapes/box'
 
-class StepperState
-  attr_reader :slug, :control, :label, :button
+class Stepper
+  attr_reader :options
 
-  def initialize(control:, slug:, button:, label:)
-    @slug = slug
-    @button = button
-    @label = label
-    @label_offset = button.radius + PADDING
-  end
-
-  def draw(svg:, x:, y:)
-    @label.draw(svg: svg, x: x, y: y - @label_offset)
-    @button.default_state.draw(svg: svg, x: x, y: y)
-  end
-end
-
-class Stepper < Control
-  def initialize(x:, y:, name:, labels:, foreground:, background:, enabled:, selection:)
-    @draws_on_faceplate = enabled
-    @has_text = true
-    button = Button.new(x: x, y: y, pressed_color: background, ring_color: foreground, style: :normal)
-    label_offset = button.radius + PADDING
-    @states = labels.each_with_index.map do |label, index|
-      StepperState.new(
-          control: self,
-          slug: "stepper-#{name}-#{index + 1}",
-          label: Label.new(x: x, y: y - label_offset,
-                           color: foreground, text: label, size: :small),
-          button: button
-      )
+  def initialize(name:, options:, text_color:, fill:, width:)
+    @options = options.each_with_index.map do |option, index|
+      Option.new(name: name, index: index, text_color: text_color, fill: fill, label: option, width: width)
     end
-    @default_state = @states[selection - 1]
-    @bottom = y + (button.y - @default_state.label.top)
+  end
 
-    super(x: x, y: y,
-          top: @default_state.label.top, right: button.right, bottom: bottom, left: button.left)
+  def frames
+    options
+  end
+
+  class Option < Shape
+    STROKE_WIDTH = 0.25
+    CORNER_RADIUS = STROKE_WIDTH * 2
+    attr_reader :slug
+
+    def initialize(name:, index:, text_color:, fill:, label:, width:)
+      @slug =  Pathname("stepper-#{name}-#{index + 1}")
+      @label = label
+      label = Label.new(color: text_color, alignment: :center, size: :small, text: label, width: width)
+                   .padded(vertical: PADDING)
+
+      box = Box.around(shapes: [label],
+                       fill: fill, stroke: text_color, corner_radius: CORNER_RADIUS, stroke_width: STROKE_WIDTH)
+      super(top: box.top, right: box.right, bottom: box.bottom, left: box.left)
+      @shapes = [box, label]
+    end
+
+    def draw(canvas)
+      @shapes.each { |shape| shape.draw(canvas) }
+    end
+
+    def has_text?
+      true
+    end
   end
 end

@@ -12,7 +12,7 @@ require_relative 'lib/svg_file'
 def inkscape(from:, to:)
   from = from.expand_path.to_s
   to = to.expand_path.to_s
-  sh '/usr/local/bin/inkscape', '--export-text-to-path', "--export-plain-svg=#{to}", from
+  sh '/usr/local/bin/inkscape', '--export-text-to-path', "--export-plain-svg", "--export-filename=#{to}", from
 end
 
 modules_dir = Pathname('modules')

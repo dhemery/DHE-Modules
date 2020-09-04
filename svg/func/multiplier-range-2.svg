@@ -27,20 +27,20 @@
      id="g6"
      transform="translate(4,1.79)">
     <path
-       id="rect2"
-       d="m -3.375,-1.665 h 6.75 c 0.277,0 0.5,0.223 0.5,0.5 v 2.33 c 0,0.277 -0.223,0.5 -0.5,0.5 h -6.75 c -0.277,0 -0.5,-0.223 -0.5,-0.5 v -2.33 c 0,-0.277 0.223,-0.5 0.5,-0.5 z"
-       style="fill:#faf7f0;stroke:#0044cc;stroke-width:0.25" />
+       d="m -3.5,-1.79 h 7 c 0.277,0 0.5,0.223 0.5,0.5 v 2.58 c 0,0.277 -0.223,0.5 -0.5,0.5 h -7 C -3.777,1.79 -4,1.567 -4,1.29 v -2.58 c 0,-0.277 0.223,-0.5 0.5,-0.5 z"
+       style="fill:#faf7f0;stroke:#0044cc;stroke-width:0.25"
+       id="rect2" />
     <g
+       style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:middle;text-anchor:middle;fill:#0044cc"
        id="text4"
-       style="font-weight:bold;font-size:2.37100005px;font-family:'Proxima Nova';dominant-baseline:middle;text-anchor:middle;fill:#0044cc"
        aria-label="±1">
       <path
          id="path17"
-         style="font-weight:bold;font-size:2.37100005px;font-family:'Proxima Nova';dominant-baseline:middle;text-anchor:middle;fill:#0044cc"
+         style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:middle;text-anchor:middle;fill:#0044cc"
          d="m -0.3818051,0.08365048 h 0.42440901 v -0.184938 H -0.3818051 v -0.46708701 h -0.20627701 v 0.46708701 H -1.0148621 v 0.184938 h 0.42677999 V 0.56733449 H -0.3818051 Z M -1.0148621,0.8565965 H 0.04260391 V 0.6716585 H -1.0148621 Z" />
       <path
          id="path19"
-         style="font-weight:bold;font-size:2.37100005px;font-family:'Proxima Nova';dominant-baseline:middle;text-anchor:middle;fill:#0044cc"
+         style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:middle;text-anchor:middle;fill:#0044cc"
          d="m 0.59008265,0.8565965 h 0.339053 v -1.58145703 h -0.294004 l -0.49791001,0.50028101 0.192051,0.201535 0.26081001,-0.26792301 z" />
     </g>
   </g>

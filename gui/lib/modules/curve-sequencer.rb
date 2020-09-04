@@ -116,19 +116,19 @@ step_label_y = top - hp2mm(0.25)
   light x: x, y: active_y
   label x: x, y: step_label_y, text: (step + 1).to_s, alignment: :above, size: :large
 
-  pick_list x: x, y: advance_y, name: 'trigger', options: %w[RISE FALL EDGE HIGH LOW], selection: 1, width: 9
-  pick_list x: x, y: interrupt_y, name: 'on-interrupt', options: %w[NOINT NEXT], selection: 1, width: 9
-  pick_list x: x, y: hold_y, name: 'on-eos', options: %w[HOLD NEXT], selection: 2, width: 9
+  stepper x: x, y: advance_y, name: 'trigger-mode', options: %w[RISE FALL EDGE HIGH LOW], selection: 1, width: 9
+  stepper x: x, y: interrupt_y, name: 'on-interrupt', options: %w[NOINT NEXT], selection: 1, width: 9
+  stepper x: x, y: hold_y, name: 'on-eos', options: %w[SUST NEXT], selection: 2, width: 9
 
-  pick_list x: x, y: start_y - knob_pick_list_distance, name: 'source', options: %w[LEVEL IN OUT], selection: 3, width: 9
+  stepper x: x, y: start_y - knob_pick_list_distance, name: 'source', options: %w[LEVEL IN OUT], selection: 3, width: 9
   tiny_knob x: x, y: start_y, label: ''
-  pick_list x: x, y: start_y + knob_pick_list_distance, name: 'track', options: %w[SNAP TRACK], selection: 1, width: 9
+  stepper x: x, y: start_y + knob_pick_list_distance, name: 'track', options: %w[SNAP TRACK], selection: 1, width: 9
 
-  pick_list x: x, y: end_y - knob_pick_list_distance, name: 'source', options: %w[LEVEL IN OUT], selection: 1, width: 9
+  stepper x: x, y: end_y - knob_pick_list_distance, name: 'source', options: %w[LEVEL IN OUT], selection: 1, width: 9
   tiny_knob x: x, y: end_y, label: ''
-  pick_list x: x, y: end_y + knob_pick_list_distance, name: 'track', options: %w[SNAP TRACK], selection: 2, width: 9
+  stepper x: x, y: end_y + knob_pick_list_distance, name: 'track', options: %w[SNAP TRACK], selection: 2, width: 9
 
-  pick_list x: x, y: curve_y - knob_pick_list_distance, name: 'shape', options: %w[S J], selection: 1, width: 9
+  stepper x: x, y: curve_y - knob_pick_list_distance, name: 'shape', options: %w[S J], selection: 1, width: 9
   tiny_knob y: curve_y, x: x, label: ''
 
   tiny_knob y: duration_y, x: x, label: ''

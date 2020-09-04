@@ -1,8 +1,6 @@
 <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="7.000mm" height="7.000mm" viewBox="0 0 7.000 7.000">
   <g transform="translate(3.500 3.500)">
-    <g stroke="#fff7f0" fill="#994d00">
-      <circle r="3.500" stroke="none"/>
-      <line y2="-3.062" stroke-width="0.438" stroke-linecap="round"/>
-    </g>
+    <circle cx="0" cy="0" r="3.500" fill="#994d00" stroke="none" stroke-width="0"/>
+    <line x1="0" y1="0" x2="0" y2="-3.062" stroke="#fff7f0" stroke-width="0.438" stroke-linecap="round"/>
   </g>
 </svg>

@@ -3,7 +3,7 @@ require_relative '../shapes/circle'
 require_relative '../shapes/line'
 
 class Knob < Shape
-  DIAMETERS = { huge: 19.0, large: 12.7, medium: 10.0, small: 8.4, tiny: 7.0, eensie: 4.5, }
+  DIAMETERS = { huge: 19.0, large: 12.7, medium: 10.0, small: 8.4, tiny: 7.0, }
 
   attr_reader :slug
 
@@ -15,10 +15,9 @@ class Knob < Shape
     pointer_width = radius / 8.0
     pointer_length = radius - pointer_width
 
-    @shapes = [
-      Circle.new(radius: radius, fill: knob_color, stroke: :none, stroke_width: 0),
-      Line.new(x1: 0, y1: 0, x2: 0, y2: -pointer_length, width: pointer_width, stroke: pointer_color, cap: :round),
-    ]
+    knob = Circle.new(radius: radius, fill: knob_color, stroke: :none, stroke_width: 0)
+    pointer = Line.new(x1: 0, y1: 0, x2: 0, y2: -pointer_length, width: pointer_width, stroke: pointer_color, cap: :round)
+    @shapes = [knob, pointer]
   end
 
   def draw(canvas)
