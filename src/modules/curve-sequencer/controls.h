@@ -75,7 +75,7 @@ public:
   // Step controls
 
   auto advance_on_end_of_curve(int step) const -> bool {
-    return position_of(param(Param::AdvanceStepOnEndOfCurve, step)) == 1;
+    return position_of(param(Param::StepCompletionMode, step)) == 1;
   }
 
   auto curvature(int step) const -> float {
@@ -93,11 +93,11 @@ public:
   }
 
   auto end_source(int step) const -> Source {
-    return static_cast<Source>(param(Param::StepEndSource, step).getValue());
+    return static_cast<Source>(param(Param::StepEndAnchorSource, step).getValue());
   }
 
   auto interrupt_on_trigger(int step) const -> bool {
-    return position_of(param(Param::InterruptStepOnTrigger, step)) == 1;
+    return position_of(param(Param::StepInterruptMode, step)) == 1;
   }
 
   void show_inactive(int step) { set_lights(step, 0.F, 0.F); }
@@ -114,7 +114,7 @@ public:
   }
 
   auto start_source(int step) const -> Source {
-    return static_cast<Source>(param(Param::StepStartSource, step).getValue());
+    return static_cast<Source>(param(Param::StepStartAnchorSource, step).getValue());
   }
 
   auto taper(int step) const -> sigmoid::Taper const & {
@@ -124,11 +124,11 @@ public:
   }
 
   auto track_end_source(int step) const -> bool {
-    return position_of(param(Param::StepTracksEndSource, step)) == 1;
+    return position_of(param(Param::StepEndAnchorMode, step)) == 1;
   }
 
   auto track_start_source(int step) const -> bool {
-    return position_of(param(Param::StepTracksStartSource, step)) == 1;
+    return position_of(param(Param::StepStartAnchorMode, step)) == 1;
   }
 
   auto trigger_mode(int step) const -> TriggerMode {
@@ -153,16 +153,16 @@ public:
       EnableStep = StepDuration + N,
       StepEndLevel = EnableStep + N,
       StepTriggerMode = StepEndLevel + N,
-      InterruptStepOnTrigger = StepTriggerMode + N,
-      StepShape = InterruptStepOnTrigger + N,
+      StepInterruptMode = StepTriggerMode + N,
+      StepShape = StepInterruptMode + N,
       // The rest are new in 1.3.0
       StepStartLevel = StepShape + N,
-      AdvanceStepOnEndOfCurve = StepStartLevel + N,
-      StepStartSource = AdvanceStepOnEndOfCurve + N,
-      StepEndSource = StepStartSource + N,
-      StepTracksStartSource = StepEndSource + N,
-      StepTracksEndSource = StepTracksStartSource + N,
-      Count = StepTracksEndSource + N,
+      StepCompletionMode = StepStartLevel + N,
+      StepStartAnchorSource = StepCompletionMode + N,
+      StepEndAnchorSource = StepStartAnchorSource + N,
+      StepStartAnchorMode = StepEndAnchorSource + N,
+      StepEndAnchorMode = StepStartAnchorMode + N,
+      Count = StepEndAnchorMode + N,
     };
   };
 
@@ -171,7 +171,7 @@ public:
     enum {
       LevelKnobs = enum_index(Param::StepEndLevel),
       ModeSwitches = enum_index(Param::StepTriggerMode),
-      ConditionSwitches = enum_index(Param::InterruptStepOnTrigger),
+      ConditionSwitches = enum_index(Param::StepInterruptMode),
     };
   };
 

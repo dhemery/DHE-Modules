@@ -180,28 +180,28 @@ public:
                                ControlsT::Param::StepTriggerMode + step));
       addParam(Toggle::stepper(
           slug, "interrupt-mode", 2, module, x, interrupt_y,
-          ControlsT::Param::InterruptStepOnTrigger + step));
+          ControlsT::Param::StepInterruptMode + step));
       addParam(
           Toggle::stepper(slug, "completion-mode", 2, module, x, sustain_y,
-                          ControlsT::Param::AdvanceStepOnEndOfCurve + step));
+                          ControlsT::Param::StepCompletionMode + step));
 
       addParam(Toggle::stepper(slug, "anchor-source", source_count, module, x,
                                start_y - knob_stepper_distance,
-                               ControlsT::Param::StepStartSource + step));
+                               ControlsT::Param::StepStartAnchorSource + step));
       addParam(Knob::tiny(slug, module, x, start_y,
                           ControlsT::Param::StepStartLevel + step));
       addParam(Toggle::stepper(slug, "anchor-mode", 2, module, x,
                                start_y + knob_stepper_distance,
-                               ControlsT::Param::StepTracksStartSource + step));
+                               ControlsT::Param::StepStartAnchorMode + step));
 
       addParam(Toggle::stepper(slug, "anchor-source", source_count, module, x,
                                end_y - knob_stepper_distance,
-                               ControlsT::Param::StepEndSource + step));
+                               ControlsT::Param::StepEndAnchorSource + step));
       addParam(Knob::tiny(slug, module, x, end_y,
                           ControlsT::Param::StepEndLevel + step));
       addParam(Toggle::stepper(slug, "anchor-mode", 2, module, x,
                                end_y + knob_stepper_distance,
-                               ControlsT::Param::StepTracksEndSource + step));
+                               ControlsT::Param::StepEndAnchorMode + step));
 
       addParam(Toggle::stepper(slug, "shape", 2, module, x,
                                shape_y - knob_stepper_distance,

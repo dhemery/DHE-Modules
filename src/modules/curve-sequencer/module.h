@@ -46,25 +46,25 @@ public:
           this, ControlsT::Param::StepTriggerMode + step, "Trigger mode",
           trigger_mode_descriptions, 0);
       config_toggle<2>(
-          this, ControlsT::Param::InterruptStepOnTrigger + step, "Interrupt",
+          this, ControlsT::Param::StepInterruptMode + step, "Interrupt",
           {"Ignore triggers while generating", "Advance to next step"});
-      config_toggle<2>(this, ControlsT::Param::AdvanceStepOnEndOfCurve + step,
+      config_toggle<2>(this, ControlsT::Param::StepCompletionMode + step,
                        "At end",
                        {"Sustain until triggered", "Advance to next step"}, 0);
 
-      config_toggle<3>(this, ControlsT::Param::StepStartSource + step,
+      config_toggle<3>(this, ControlsT::Param::StepStartAnchorSource + step,
                        "Start source", {"Level knob", "IN port", "OUT port"},
                        2);
       config_level_knob(this, ControlsT::Param::StepStartLevel + step,
                         ControlsT::Param::LevelRange, "Start level");
-      config_toggle<2>(this, ControlsT::Param::StepTracksStartSource + step,
+      config_toggle<2>(this, ControlsT::Param::StepStartAnchorMode + step,
                        "Start anchor mode", {"Snapshot", "Track changes"});
 
-      config_toggle<3>(this, ControlsT::Param::StepEndSource + step,
+      config_toggle<3>(this, ControlsT::Param::StepEndAnchorSource + step,
                        "End source", {"Level knob", "IN port", "OUT port"});
       config_level_knob(this, ControlsT::Param::StepEndLevel + step,
                         ControlsT::Param::LevelRange, "End level");
-      config_toggle<2>(this, ControlsT::Param::StepTracksEndSource + step,
+      config_toggle<2>(this, ControlsT::Param::StepEndAnchorMode + step,
                        "End anchor mode", {"Snapshot", "Track changes"}, 1);
 
       config_curve_shape_switch(this, ControlsT::Param::StepShape + step,
