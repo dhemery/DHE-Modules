@@ -21,12 +21,6 @@ static auto constexpr trigger_mode_descriptions =
                                                  "Gate rises or falls",
                                                  "Gate is high", "Gate is low"};
 
-static auto constexpr trigger_mode_names =
-    std::array<char const *, trigger_mode_count>{
-        "TriggerMode::GateRises", "TriggerMode::GateFalls",
-        "TriggerMode::GateChanges", "TriggerMode::GateIsHigh",
-        "TriggerMode::GateIsLow"};
-
 static inline auto is_triggered(TriggerMode mode, dhe::Latch const &gate)
     -> bool {
   switch (mode) {
@@ -43,6 +37,12 @@ static inline auto is_triggered(TriggerMode mode, dhe::Latch const &gate)
     return gate.is_edge();
   }
 }
+
+static auto constexpr trigger_mode_names =
+    std::array<char const *, trigger_mode_count>{
+        "TriggerMode::GateRises", "TriggerMode::GateFalls",
+        "TriggerMode::GateChanges", "TriggerMode::GateIsHigh",
+        "TriggerMode::GateIsLow"};
 
 static inline auto name_of(TriggerMode mode) -> const char * {
   return trigger_mode_names[static_cast<int>(mode)];

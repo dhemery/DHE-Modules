@@ -1,6 +1,7 @@
 #pragma once
 
 #include "anchor.h"
+#include "completion-mode.h"
 #include "components/sigmoid.h"
 #include "controls/common-inputs.h"
 #include "controls/curvature-inputs.h"
@@ -74,8 +75,9 @@ public:
 
   // Step controls
 
-  auto completion_mode(int step) const -> bool {
-    return position_of(param(Param::StepCompletionMode, step)) == 1;
+  auto completion_mode(int step) const -> CompletionMode {
+    auto const selection = position_of(param(Param::StepCompletionMode, step));
+    return static_cast<CompletionMode>(selection);
   }
 
   auto curvature(int step) const -> float {

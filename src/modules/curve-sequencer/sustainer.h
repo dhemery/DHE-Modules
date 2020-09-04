@@ -1,5 +1,6 @@
 #pragma once
 
+#include "completion-mode.h"
 #include "components/latch.h"
 #include "trigger-mode.h"
 #include <array>
@@ -12,7 +13,8 @@ public:
   Sustainer(Controls &controls) : controls_{controls} {}
 
   auto is_done(int step, Latch const &latch) -> bool {
-    return controls_.completion_mode(step) ||
+
+    return (controls_.completion_mode(step) == CompletionMode::Advance) ||
            is_triggered(controls_.trigger_mode(step), latch);
   }
 

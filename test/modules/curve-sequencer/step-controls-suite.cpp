@@ -1,5 +1,6 @@
 #include "./fixtures/controls-fixture.h"
 #include "components/sigmoid.h"
+#include "modules/curve-sequencer/completion-mode.h"
 #include "modules/curve-sequencer/controls.h"
 #include "modules/curve-sequencer/trigger-mode.h"
 #include <dheunit/assertions.h>
@@ -9,6 +10,7 @@
 namespace test {
 namespace curve_sequencer {
 using dhe::curve_sequencer::AnchorSource;
+using dhe::curve_sequencer::CompletionMode;
 using dhe::curve_sequencer::TriggerMode;
 using dhe::unit::is_between;
 using dhe::unit::is_equal_to;
@@ -67,12 +69,12 @@ public:
                module.set_param(Controls::Param::StepCompletionMode, step, 0.F);
 
                t.assert_that("advance disabled", controls.completion_mode(step),
-                             is_false);
+                             is_equal_to(CompletionMode::Sustain));
 
                module.set_param(Controls::Param::StepCompletionMode, step, 1.F);
 
                t.assert_that("advance enabled", controls.completion_mode(step),
-                             is_true);
+                             is_equal_to(CompletionMode::Advance));
              }));
 
     add_test("start_anchor_source(s)",

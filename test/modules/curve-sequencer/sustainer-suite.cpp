@@ -14,10 +14,10 @@ class SustainerSuite : public Suite {
 public:
   SustainerSuite() : Suite{"dhe::curve_sequencer::Sustainer"} {}
   void register_tests(dhe::unit::TestRegistrar add) override {
-    add("advance=false, mode=GateRises, is_done(s) iff gate rises",
+    add("CompletionMode::Sustain, mode=GateRises, is_done(s) iff gate rises",
         test([](Tester &t, Controls &controls, Sustainer &interrupter) {
           auto constexpr step = 0;
-          controls.completion_mode_[step] = false;
+          controls.completion_mode_[step] = CompletionMode::Sustain;
           controls.trigger_mode_[step] = TriggerMode::GateRises;
 
           t.assert_that("rising gate", interrupter.is_done(step, rising_latch),
@@ -30,10 +30,10 @@ public:
                         is_false);
         }));
 
-    add("advance=false, mode=GateFalls, is_done(s) iff gate falls",
+    add("CompletionMode::Sustain, mode=GateFalls, is_done(s) iff gate falls",
         test([](Tester &t, Controls &controls, Sustainer &sustainer) {
           auto constexpr step = 1;
-          controls.completion_mode_[step] = false;
+          controls.completion_mode_[step] = CompletionMode::Sustain;
           controls.trigger_mode_[step] = TriggerMode::GateFalls;
 
           t.assert_that("rising gate", sustainer.is_done(step, rising_latch),
@@ -46,10 +46,11 @@ public:
                         is_false);
         }));
 
-    add("advance=false, mode=GateChanges, is_done(s) iff gate changes",
+    add("CompletionMode::Sustain, mode=GateChanges, is_done(s) iff gate "
+        "changes",
         test([](Tester &t, Controls &controls, Sustainer &sustainer) {
           auto constexpr step = 2;
-          controls.completion_mode_[step] = false;
+          controls.completion_mode_[step] = CompletionMode::Sustain;
           controls.trigger_mode_[step] = TriggerMode::GateChanges;
 
           t.assert_that("rising gate", sustainer.is_done(step, rising_latch),
@@ -62,10 +63,10 @@ public:
                         is_false);
         }));
 
-    add("advance=false, mode=GateIsHigh, is_done(s) iff gate is high",
+    add("CompletionMode::Sustain, mode=GateIsHigh, is_done(s) iff gate is high",
         test([](Tester &t, Controls &controls, Sustainer &sustainer) {
           auto constexpr step = 3;
-          controls.completion_mode_[step] = false;
+          controls.completion_mode_[step] = CompletionMode::Sustain;
           controls.trigger_mode_[step] = TriggerMode::GateIsHigh;
 
           t.assert_that("rising gate", sustainer.is_done(step, rising_latch),
@@ -78,10 +79,10 @@ public:
                         is_false);
         }));
 
-    add("advance=false, mode=GateIsLow, is_done(s) iff gate is low",
+    add("CompletionMode::Sustain, mode=GateIsLow, is_done(s) iff gate is low",
         test([](Tester &t, Controls &controls, Sustainer &sustainer) {
           auto constexpr step = 4;
-          controls.completion_mode_[step] = false;
+          controls.completion_mode_[step] = CompletionMode::Sustain;
           controls.trigger_mode_[step] = TriggerMode::GateIsLow;
 
           t.assert_that("rising gate", sustainer.is_done(step, rising_latch),
@@ -94,10 +95,10 @@ public:
                         is_true);
         }));
 
-    add("advance=true, is_done(s) regardless of mode or gate",
+    add("CompletionMode::Advance, is_done(s) regardless of mode or gate",
         test([](Tester &t, Controls &controls, Sustainer &sustainer) {
           auto constexpr step = 5;
-          controls.completion_mode_[step] = true;
+          controls.completion_mode_[step] = CompletionMode::Advance;
 
           controls.trigger_mode_[step] = TriggerMode::GateRises;
           t.assert_that("mode=GateRises: rising gate",
