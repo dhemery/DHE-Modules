@@ -1,6 +1,6 @@
 #pragma once
 
-#include "modules/curve-sequencer/triggers.h"
+#include "modules/curve-sequencer/interrupter.h"
 #include <dheunit/test.h>
 
 namespace test {

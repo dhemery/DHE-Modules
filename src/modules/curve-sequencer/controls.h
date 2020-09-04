@@ -6,7 +6,7 @@
 #include "controls/curvature-inputs.h"
 #include "controls/duration-inputs.h"
 #include "controls/level-inputs.h"
-#include "triggers.h"
+#include "trigger-mode.h"
 
 #include <vector>
 

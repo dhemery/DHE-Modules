@@ -1,7 +1,7 @@
 #include "./fixtures/controls-fixture.h"
 #include "components/sigmoid.h"
 #include "modules/curve-sequencer/controls.h"
-#include "modules/curve-sequencer/triggers.h"
+#include "modules/curve-sequencer/trigger-mode.h"
 #include <dheunit/assertions.h>
 #include <dheunit/test.h>
 #include <functional>
@@ -30,11 +30,18 @@ auto trigger_mode_test(TriggerMode mode) -> TestFunc {
   });
 }
 
+static auto constexpr trigger_modes =
+    std::array<TriggerMode, dhe::curve_sequencer::trigger_mode_count>{
+        TriggerMode::GateRises,   TriggerMode::GateFalls,
+        TriggerMode::GateChanges, TriggerMode::GateIsHigh,
+        TriggerMode::GateIsLow,
+    };
+
 class StepControlsSuite : Suite {
 public:
   StepControlsSuite() : Suite{"dhe::curve_sequencer::Controls/step"} {}
   void register_tests(dhe::unit::TestRegistrar add_test) override {
-    for (auto trigger_mode : dhe::curve_sequencer::trigger_modes) {
+    for (auto trigger_mode : trigger_modes) {
       auto const name =
           std::string{"trigger_mode(s): "} + name_of(trigger_mode);
       add_test(name, trigger_mode_test(trigger_mode));

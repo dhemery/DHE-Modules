@@ -7,9 +7,11 @@
 #include "config/level-config.h"
 #include "controls.h"
 #include "generator.h"
+#include "interrupter.h"
 #include "sequence-controller.h"
 #include "step-controller.h"
 #include "step-selector.h"
+#include "sustainer.h"
 
 #include <engine/Module.hpp>
 

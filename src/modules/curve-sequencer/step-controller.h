@@ -4,7 +4,7 @@
 #include "components/phase-timer.h"
 #include "components/range.h"
 #include "step-event.h"
-#include "triggers.h"
+#include "trigger-mode.h"
 
 namespace dhe {
 namespace curve_sequencer {
