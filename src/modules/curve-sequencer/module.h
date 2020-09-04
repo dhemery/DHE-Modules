@@ -46,30 +46,26 @@ public:
           this, ControlsT::Param::StepTriggerMode + step, "Trigger mode",
           trigger_mode_descriptions, 0);
       config_toggle<2>(
-          this, ControlsT::Param::InterruptStepOnTrigger + step,
-          "Interrupt",
-          {"No", "Yes"});
-      config_toggle<2>(
-          this, ControlsT::Param::AdvanceStepOnEndOfCurve + step,
-          "Sustain",
-          {"No", "Yes"}, 0);
+          this, ControlsT::Param::InterruptStepOnTrigger + step, "Interrupt",
+          {"Ignore triggers while generating", "Advance to next step"});
+      config_toggle<2>(this, ControlsT::Param::AdvanceStepOnEndOfCurve + step,
+                       "At end",
+                       {"Sustain until triggered", "Advance to next step"}, 0);
 
       config_toggle<3>(this, ControlsT::Param::StepStartSource + step,
-                       "Start source",
-                       {"Start level knob", "IN port", "OUT port"}, 2);
+                       "Start source", {"Level knob", "IN port", "OUT port"},
+                       2);
       config_level_knob(this, ControlsT::Param::StepStartLevel + step,
                         ControlsT::Param::LevelRange, "Start level");
       config_toggle<2>(this, ControlsT::Param::StepTracksStartSource + step,
-                       "Track start source",
-                       {"No", "Yes"});
+                       "Start anchor mode", {"Snapshot", "Track changes"});
 
       config_toggle<3>(this, ControlsT::Param::StepEndSource + step,
-                       "End source", {"End level knob", "IN port", "OUT port"});
+                       "End source", {"Level knob", "IN port", "OUT port"});
       config_level_knob(this, ControlsT::Param::StepEndLevel + step,
                         ControlsT::Param::LevelRange, "End level");
       config_toggle<2>(this, ControlsT::Param::StepTracksEndSource + step,
-                       "Track end source",
-                       {"No", "Yes"}, 1);
+                       "End anchor mode", {"Snapshot", "Track changes"}, 1);
 
       config_curve_shape_switch(this, ControlsT::Param::StepShape + step,
                                 "Shape");

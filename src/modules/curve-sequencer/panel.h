@@ -182,24 +182,24 @@ public:
           slug, "interrupt-mode", 2, module, x, interrupt_y,
           ControlsT::Param::InterruptStepOnTrigger + step));
       addParam(
-          Toggle::stepper(slug, "sustain-mode", 2, module, x, sustain_y,
+          Toggle::stepper(slug, "completion-mode", 2, module, x, sustain_y,
                           ControlsT::Param::AdvanceStepOnEndOfCurve + step));
 
-      addParam(Toggle::stepper(slug, "source-mode", source_count, module, x,
+      addParam(Toggle::stepper(slug, "anchor-source", source_count, module, x,
                                start_y - knob_stepper_distance,
                                ControlsT::Param::StepStartSource + step));
       addParam(Knob::tiny(slug, module, x, start_y,
                           ControlsT::Param::StepStartLevel + step));
-      addParam(Toggle::stepper(slug, "track-mode", 2, module, x,
+      addParam(Toggle::stepper(slug, "anchor-mode", 2, module, x,
                                start_y + knob_stepper_distance,
                                ControlsT::Param::StepTracksStartSource + step));
 
-      addParam(Toggle::stepper(slug, "source-mode", source_count, module, x,
+      addParam(Toggle::stepper(slug, "anchor-source", source_count, module, x,
                                end_y - knob_stepper_distance,
                                ControlsT::Param::StepEndSource + step));
       addParam(Knob::tiny(slug, module, x, end_y,
                           ControlsT::Param::StepEndLevel + step));
-      addParam(Toggle::stepper(slug, "track-mode", 2, module, x,
+      addParam(Toggle::stepper(slug, "anchor-mode", 2, module, x,
                                end_y + knob_stepper_distance,
                                ControlsT::Param::StepTracksEndSource + step));
 

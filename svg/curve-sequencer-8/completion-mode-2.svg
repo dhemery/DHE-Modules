@@ -33,15 +33,23 @@
     <g
        style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:middle;text-anchor:middle;fill:#331a00"
        id="text4"
-       aria-label="NO">
+       aria-label="NEXT">
       <path
          id="path17"
          style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:middle;text-anchor:middle;fill:#331a00"
-         d="m -0.52415772,0.8565965 h 0.324827 v -1.58145703 h -0.336682 V 0.29941149 L -1.2686517,-0.72486053 h -0.346166 V 0.8565965 h 0.336682 v -1.06220802 z" />
+         d="m -1.7906978,0.8565965 h 0.324827 v -1.58145703 h -0.336682 v 1.02427202 l -0.732639,-1.02427202 h -0.346166 V 0.8565965 h 0.336682 v -1.06220802 z" />
       <path
          id="path19"
          style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:middle;text-anchor:middle;fill:#331a00"
-         d="m 0.03662079,0.06705348 c 0,0.47657101 0.34853701,0.81799502 0.82510802,0.81799502 0.47894199,0 0.82747899,-0.34142401 0.82747899,-0.81799502 0,-0.47657101 -0.348537,-0.81799502 -0.82747899,-0.81799502 -0.47657101,0 -0.82510802,0.34142401 -0.82510802,0.81799502 z m 1.30642101,0 c 0,0.29400401 -0.18968,0.51924901 -0.48131299,0.51924901 -0.29163301,0 -0.47894201,-0.225245 -0.47894201,-0.51924901 0,-0.296375 0.187309,-0.51924901 0.47894201,-0.51924901 0.29163299,0 0.48131299,0.22287401 0.48131299,0.51924901 z" />
+         d="m -1.1540473,0.8565965 h 1.11911205 V 0.56496349 h -0.78243002 v -0.367505 h 0.76583302 v -0.28926201 h -0.76583302 v -0.34379501 h 0.78243002 v -0.289262 H -1.1540473 Z" />
+      <path
+         id="path21"
+         style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:middle;text-anchor:middle;fill:#331a00"
+         d="m 1.2619647,0.8565965 h 0.40307 l -0.573782,-0.81325302 0.538217,-0.76820401 h -0.405441 l -0.35802098,0.54058801 -0.362763,-0.54058801 H 0.10254571 L 0.64076272,0.04571448 0.06698071,0.8565965 h 0.40069901 l 0.398328,-0.57852401 z" />
+      <path
+         id="path23"
+         style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:middle;text-anchor:middle;fill:#331a00"
+         d="m 2.1794678,0.8565965 h 0.339053 v -1.28508203 h 0.459974 v -0.296375 h -1.261372 v 0.296375 h 0.462345 z" />
     </g>
   </g>
 </svg>
