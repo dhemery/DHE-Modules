@@ -103,7 +103,7 @@ template <int N>
 void config_toggle(rack::engine::Module *module, int toggle_id,
                    std::string const &toggle_name,
                    std::array<char const *, N> const &state_names,
-                   int initial_state) {
+                   int initial_state = 0) {
   config_frame_widget_states<N>(module, toggle_id, toggle_name, state_names,
                                 initial_state);
 }

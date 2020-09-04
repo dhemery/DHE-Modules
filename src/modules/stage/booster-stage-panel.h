@@ -34,21 +34,20 @@ public:
     addInput(Jack::input(slug, module, column1, y, Controls::LevelCvInput));
     addParam(Knob::large(slug, module, column3, y, Controls::LevelKnob));
 
-    addParam(Toggle::stepper(2, slug, module, column5, y,
-                             Controls::LevelRangeSwitch));
+    addParam(
+        Toggle::thumb(2, slug, module, column5, y, Controls::LevelRangeSwitch));
 
     y += dy;
     addInput(Jack::input(slug, module, column1, y, Controls::CurveCvInput));
     addParam(Knob::large(slug, module, column3, y, Controls::CurveKnob));
-    addParam(
-        Toggle::stepper(2, slug, module, column5, y, Controls::ShapeSwitch));
+    addParam(Toggle::thumb(2, slug, module, column5, y, Controls::ShapeSwitch));
 
     y += dy;
     addInput(Jack::input(slug, module, column1, y, Controls::DurationCvInput));
     addParam(Knob::large(slug, module, column3, y, Controls::DurationKnob));
 
-    addParam(Toggle::stepper(3, slug, module, column5, y,
-                             Controls::DurationRangeSwitch));
+    addParam(Toggle::thumb(3, slug, module, column5, y,
+                           Controls::DurationRangeSwitch));
 
     y = 82.F;
     dy = 15.F;
@@ -57,14 +56,14 @@ public:
     addParam(
         Button::momentary(slug, module, column2, y, Controls::DeferButton));
 
-    addParam(Button::reverse(slug, module, column4, y, Controls::ActiveButton));
+    addParam(Button::output(slug, module, column4, y, Controls::ActiveButton));
     addOutput(Jack::output(slug, module, column5, y, Controls::ActiveOutput));
 
     y += dy;
     addInput(Jack::input(slug, module, column1, y, Controls::TriggerInput));
     addParam(
         Button::momentary(slug, module, column2, y, Controls::TriggerButton));
-    addParam(Button::reverse(slug, module, column4, y, Controls::EocButton));
+    addParam(Button::output(slug, module, column4, y, Controls::EocButton));
     addOutput(Jack::output(slug, module, column5, y, Controls::EocOutput));
 
     y += dy;

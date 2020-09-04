@@ -25,13 +25,13 @@ public:
     config(ControlsT::Param::Count, ControlsT::Input::Count,
            ControlsT::Output::Count, ControlsT::Light::Count);
 
-    config_button(this, ControlsT::Param::Run, "Run", {"from input", "Yes"}, 1);
-    config_button(this, ControlsT::Param::Gate, "Gate", {"from input", "High"},
+    config_button(this, ControlsT::Param::Run, "Run", {"From input", "Yes"}, 1);
+    config_button(this, ControlsT::Param::Gate, "Gate", {"From input", "High"},
                   0);
-    config_button(this, ControlsT::Param::Loop, "Loop", {"from input", "Yes"},
+    config_button(this, ControlsT::Param::Loop, "Loop", {"From input", "Yes"},
                   0);
     config_button(this, ControlsT::Param::Reset, "Reset",
-                  {"from input", "High"}, 0);
+                  {"From input", "High"}, 0);
 
     configParam(ControlsT::Param::SelectionStart, 0.F, N - 1, 0.F, "Start step",
                 "", 0.F, 1.F, 1.F);
@@ -42,8 +42,36 @@ public:
     config_duration_range_switch(this, ControlsT::Param::DurationRange);
 
     for (auto step = 0; step < N; step++) {
+      config_toggle<trigger_mode_count>(
+          this, ControlsT::Param::StepTriggerMode + step,
+          "Generate trigger when", trigger_mode_descriptions, 0);
+      config_toggle<2>(this, ControlsT::Param::InterruptStepOnTrigger + step,
+                       "When triggered",
+                       {"Continue current step", "Advance to next step"});
+      config_toggle<2>(this, ControlsT::Param::AdvanceStepOnEndOfCurve + step,
+                       "When curve ends",
+                       {"Sustain current step", "Advance to next step"}, 1);
+
+      config_toggle<3>(
+          this, ControlsT::Param::StepStartSource + step, "Curve from",
+          {"Knob level", "Voltage at IN port", "Voltage at OUT port"}, 2);
+      config_level_knob(this, ControlsT::Param::StepStartLevel + step,
+                        ControlsT::Param::LevelRange, "Start level");
+      config_toggle<2>(this, ControlsT::Param::StepTracksStartSource + step,
+                       "While generating", {"Ignore changes", "Track changes"});
+
+      config_toggle<3>(
+          this, ControlsT::Param::StepEndSource + step, "Curve to",
+          {"Knob level", "Voltage at IN port", "Voltage at OUT port"});
       config_level_knob(this, ControlsT::Param::StepEndLevel + step,
-                        ControlsT::Param::LevelRange, "Level");
+                        ControlsT::Param::LevelRange, "End level");
+      config_toggle<2>(this, ControlsT::Param::StepTracksEndSource + step,
+                       "While generating", {"Ignore changes", "Track changes"},
+                       1);
+
+      config_level_knob(this, ControlsT::Param::StepEndLevel + step,
+                        ControlsT::Param::LevelRange, "Curve end level");
+
       config_curve_shape_switch(this, ControlsT::Param::StepShape + step,
                                 "Shape");
       config_curvature_knob(this, ControlsT::Param::StepCurvature + step,
@@ -51,7 +79,7 @@ public:
       config_duration_knob(this, ControlsT::Param::StepDuration + step,
                            ControlsT::Param::DurationRange, "Duration");
       config_button(this, ControlsT::Param::EnableStep + step, "Enabled",
-                    {"from input", "Yes"}, 1);
+                    {"From input", "Yes"}, 1);
 
       controls_.show_inactive(step);
     }

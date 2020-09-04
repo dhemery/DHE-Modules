@@ -43,12 +43,12 @@ public:
     addOutput(Jack::output(slug, module, x, row6, Controls::FuncOutput));
 
     auto *offset_range_pick_list =
-        Toggle::buttons(slug, "offset-range", offset_ranges.size(), module, x,
+        Toggle::stepper(slug, "offset-range", offset_ranges.size(), module, x,
                         row4, Controls::OffsetRangeSwitch);
     addParam(offset_range_pick_list);
 
     auto *multiplier_range_pick_list =
-        Toggle::buttons(slug, "multiplier-range", multiplier_ranges.size(),
+        Toggle::stepper(slug, "multiplier-range", multiplier_ranges.size(),
                         module, x, row4, Controls::MultiplierRangeSwitch);
     addParam(multiplier_range_pick_list);
 

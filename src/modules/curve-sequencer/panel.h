@@ -12,7 +12,7 @@
 namespace dhe {
 
 namespace curve_sequencer {
-auto constexpr step_x = hp2mm(10.F);
+auto constexpr step_x = hp2mm(9.5F);
 auto constexpr step_dx = hp2mm(2.25F);
 
 using ProgressLight =
@@ -99,28 +99,30 @@ public:
 
     auto constexpr left = hp2mm(2.F);
     auto constexpr right = hp2mm(hp - 2.F);
-    auto constexpr top = hp2mm(4.F);
+    auto constexpr top = hp2mm(3.5F);
     auto constexpr bottom = hp2mm(23);
 
-    auto constexpr input_top = top + hp2mm(2.75);
-    auto constexpr input_bottom = bottom - port_radius - 1.F;
-    auto constexpr input_dy = (input_bottom - input_top) / 4.F;
+    auto constexpr sequence_controls_top = top + hp2mm(2.78);
+    auto constexpr sequence_controls_bottom = bottom - port_radius - 1.F;
+    auto constexpr sequence_controls_dy =
+        (sequence_controls_bottom - sequence_controls_top) / 4.F;
 
-    auto constexpr run_y = input_top + 0.F * input_dy;
-    auto constexpr loop_y = input_top + 1.F * input_dy;
-    auto constexpr selection_y = input_top + 2.F * input_dy;
-    auto constexpr gate_y = input_top + 3.F * input_dy;
-    auto constexpr reset_y = input_top + 4.F * input_dy;
-
-    auto constexpr active_y = top + light_radius;
+    auto constexpr run_y = sequence_controls_top + 0.F * sequence_controls_dy;
+    auto constexpr loop_y = sequence_controls_top + 1.F * sequence_controls_dy;
+    auto constexpr selection_y =
+        sequence_controls_top + 2.F * sequence_controls_dy;
+    auto constexpr gate_y = sequence_controls_top + 3.F * sequence_controls_dy;
+    auto constexpr reset_y = sequence_controls_top + 4.F * sequence_controls_dy;
 
     addInput(Jack::input(slug, module, left, run_y, ControlsT::Input::Run));
-    addParam(Toggle::button(slug, module, left + button_port_distance, run_y,
+    addParam(Button::toggle(slug, module, left + button_port_distance, run_y,
                             ControlsT::Param::Run));
 
     addInput(Jack::input(slug, module, left, loop_y, ControlsT::Input::Loop));
-    addParam(Toggle::button(slug, module, left + button_port_distance, loop_y,
+    addParam(Button::toggle(slug, module, left + button_port_distance, loop_y,
                             ControlsT::Param::Loop));
+
+    auto constexpr active_y = top + light_radius * 1.5F;
 
     auto *start_marker = new StartMarker(slug, 0.F, active_y);
     addChild(start_marker);
@@ -133,13 +135,15 @@ public:
       start_marker->set_selection_start(step);
       end_marker->set_selection_start(step);
     };
-    addParam(new SelectionKnob(on_selection_start_change, slug, module, left,
-                               selection_y, ControlsT::Param::SelectionStart));
+
+    addParam(new SelectionKnob(on_selection_start_change, slug, module,
+                               left - hp2mm(0.2), selection_y,
+                               ControlsT::Param::SelectionStart));
 
     auto const on_selection_end_change = [end_marker](int length) {
       end_marker->set_selection_length(length);
     };
-    auto constexpr selection_length_x = left + hp2mm(2.F);
+    auto constexpr selection_length_x = left + hp2mm(1.63F);
     addParam(new SelectionKnob(on_selection_end_change, slug, module,
                                selection_length_x, selection_y,
                                ControlsT::Param::SelectionLength));
@@ -152,18 +156,18 @@ public:
     addParam(Button::momentary(slug, module, left + button_port_distance,
                                reset_y, ControlsT::Param::Reset));
 
-    auto constexpr level_y = top + hp2mm(6.75F);
-    auto constexpr shape_y = top + hp2mm(9.25F);
-    auto constexpr curve_y = top + hp2mm(11.75F);
-    auto constexpr duration_y = top + hp2mm(14.25F);
+    auto constexpr trigger_y = top + hp2mm(1.61F);
+    auto constexpr interrupt_y = trigger_y + hp2mm(0.8F);
+    auto constexpr eos_y = interrupt_y + hp2mm(0.8F);
+    auto constexpr start_y = top + hp2mm(5.75F);
+    auto constexpr end_y = top + hp2mm(9.5F);
+    auto constexpr duration_y = top + hp2mm(12.35F);
+    auto constexpr shape_y = top + hp2mm(15.25F);
     auto constexpr enabled_port_y = bottom - port_radius;
     auto constexpr enabled_button_y =
-        enabled_port_y - port_radius - button_radius - 1.F;
+        enabled_port_y - port_radius - button_radius - 0.5F;
 
-    auto const generate_mode_labels = std::vector<std::string>{
-        "curve", "hold", "sustain", "input", "chase", "level"};
-    auto const advance_mode_labels =
-        std::vector<std::string>{"time", "rise", "fall", "edge", "high", "low"};
+    auto constexpr knob_stepper_distance = hp2mm(1.15F);
 
     for (auto step = 0; step < N; step++) {
       auto const x = step_x + step_dx * (float)step;
@@ -171,32 +175,59 @@ public:
           mm2px(x, active_y), module,
           ControlsT::Light::StepProgress + step + step));
 
-      addParam(Knob::small(slug, module, x, level_y,
-                           ControlsT::Param::StepEndLevel + step));
+      addParam(Toggle::stepper(slug, "stepper-trigger-mode", trigger_mode_count,
+                               module, x, trigger_y,
+                               ControlsT::Param::StepTriggerMode + step));
+      addParam(Toggle::stepper(
+          slug, "stepper-on-interrupt", 2, module, x, interrupt_y,
+          ControlsT::Param::InterruptStepOnTrigger + step));
+      addParam(
+          Toggle::stepper(slug, "stepper-on-eos", 2, module, x, eos_y,
+                          ControlsT::Param::AdvanceStepOnEndOfCurve + step));
 
-      addParam(Toggle::stepper(2, slug, module, x, shape_y,
+      addParam(Toggle::stepper(slug, "stepper-source", source_count, module, x,
+                               start_y - knob_stepper_distance,
+                               ControlsT::Param::StepStartSource + step));
+      addParam(Knob::tiny(slug, module, x, start_y,
+                          ControlsT::Param::StepStartLevel + step));
+      addParam(Toggle::stepper(slug, "stepper-track", 2, module, x,
+                               start_y + knob_stepper_distance,
+                               ControlsT::Param::StepTracksStartSource + step));
+
+      addParam(Toggle::stepper(slug, "stepper-source", source_count, module, x,
+                               end_y - knob_stepper_distance,
+                               ControlsT::Param::StepEndSource + step));
+      addParam(Knob::tiny(slug, module, x, end_y,
+                          ControlsT::Param::StepEndLevel + step));
+      addParam(Toggle::stepper(slug, "stepper-track", 2, module, x,
+                               end_y + knob_stepper_distance,
+                               ControlsT::Param::StepTracksEndSource + step));
+
+      addParam(Toggle::stepper(slug, "stepper-shape", 2, module, x,
+                               shape_y - knob_stepper_distance,
                                ControlsT::Param::StepShape + step));
-      addParam(Knob::small(slug, module, x, curve_y,
+      addParam(Knob::tiny(slug, module, x, shape_y,
                            ControlsT::Param::StepCurvature + step));
 
-      addParam(Knob::small(slug, module, x, duration_y,
+      addParam(Knob::tiny(slug, module, x, duration_y,
                            ControlsT::Param::StepDuration + step));
 
-      addParam(Toggle::button(slug, module, x, enabled_button_y,
+      addParam(Button::toggle(slug, module, x, enabled_button_y,
                               ControlsT::Param::EnableStep + step));
       addInput(Jack::input(slug, module, x, enabled_port_y,
                            ControlsT::Input::EnableStep + step));
     }
 
     auto constexpr out_y = bottom - port_radius - 1.F;
-    auto constexpr eos_y = top + hp2mm(2.75);
+    auto constexpr in_y = sequence_controls_top;
 
-    addInput(Jack::input(slug, module, right, eos_y, ControlsT::Input::In));
+    addInput(Jack::input(slug, module, right, in_y, ControlsT::Input::In));
 
-    addParam(Toggle::stepper(2, slug, module, right, level_y,
-                             ControlsT::Param::LevelRange));
-    addParam(Toggle::stepper(3, slug, module, right, duration_y,
-                             ControlsT::Param::DurationRange));
+    auto constexpr polarity_y = start_y + (end_y - start_y) / 2.F;
+    addParam(Toggle::thumb(2, slug, module, right, polarity_y,
+                           ControlsT::Param::LevelRange));
+    addParam(Toggle::thumb(3, slug, module, right, duration_y,
+                           ControlsT::Param::DurationRange));
     addOutput(Jack::output(slug, module, right, out_y, ControlsT::Output::Out));
   }
 }; // namespace dhe

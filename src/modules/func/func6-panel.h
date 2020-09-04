@@ -47,11 +47,11 @@ public:
                              Controls::FuncOutput + row));
 
       auto *offset_range_pick_list =
-          Toggle::buttons(slug, "offset-range", offset_ranges.size(), module,
+          Toggle::stepper(slug, "offset-range", offset_ranges.size(), module,
                           column4, y, Controls::OffsetRangeSwitch + row);
       addParam(offset_range_pick_list);
 
-      auto *multiplier_range_pick_list = Toggle::buttons(
+      auto *multiplier_range_pick_list = Toggle::stepper(
           slug, "multiplier-range", multiplier_ranges.size(), module, column4,
           y, Controls::MultiplierRangeSwitch + row);
       addParam(multiplier_range_pick_list);

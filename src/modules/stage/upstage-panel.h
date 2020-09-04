@@ -31,7 +31,7 @@ public:
 
     y += dy;
     addInput(Jack::input(slug, module, column1, y, Controls::LevelCvInput));
-    addParam(Toggle::stepper(2, slug, module, column3, y,
+    addParam(Toggle::thumb(2, slug, module, column3, y,
                              Controls::LevelRangeSwitch));
 
     y += dy;

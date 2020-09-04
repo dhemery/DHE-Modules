@@ -33,8 +33,8 @@ public:
     for (auto i = 0; i < Controls::InputCount / 2; i++) {
       addInput(Jack::input(slug, module, left, y, Controls::Inputs + i));
       addParam(
-          Toggle::button(slug, module, lc, y, Controls::NegateButtons + i));
-      addParam(Toggle::button(slug, module, rc, y,
+          Button::toggle(slug, module, lc, y, Controls::NegateButtons + i));
+      addParam(Button::toggle(slug, module, rc, y,
                               Controls::NegateButtons + i +
                                   Controls::InputCount / 2));
       addInput(Jack::input(slug, module, right, y,

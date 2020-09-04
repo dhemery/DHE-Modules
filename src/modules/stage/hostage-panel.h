@@ -28,11 +28,11 @@ public:
     auto dy = 18.5F;
 
     addParam(
-        Toggle::stepper(2, slug, module, column2, y, Controls::ModeSwitch));
+        Toggle::thumb(2, slug, module, column2, y, Controls::ModeSwitch));
 
     y += dy;
     addInput(Jack::input(slug, module, column1, y, Controls::DurationCvInput));
-    addParam(Toggle::stepper(3, slug, module, column3, y,
+    addParam(Toggle::thumb(3, slug, module, column3, y,
                              Controls::DurationRangeSwitch));
 
     y += dy;

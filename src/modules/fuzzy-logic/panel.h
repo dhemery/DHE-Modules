@@ -34,23 +34,23 @@ public:
     auto y = top + 0.F * dy;
     addInput(
         Jack::input(slug, module, ab_outer_column, y, Controls::AInputs + 0));
-    addParam(Toggle::button(slug, module, ab_button_column, y,
+    addParam(Button::toggle(slug, module, ab_button_column, y,
                             Controls::NotAButtons + 0));
-    addParam(Toggle::button(slug, module, cd_button_column, y,
+    addParam(Button::toggle(slug, module, cd_button_column, y,
                             Controls::NotAButtons + 1));
     addInput(
         Jack::input(slug, module, cd_outer_column, y, Controls::AInputs + 1));
 
     y = top + 0.5F * dy;
-    addParam(Toggle::stepper(2, slug, module, switch_column, y,
-                             Controls::LevelRangeSwitch));
+    addParam(Toggle::thumb(2, slug, module, switch_column, y,
+                           Controls::LevelRangeSwitch));
 
     y = top + 1.F * dy;
     addInput(
         Jack::input(slug, module, ab_outer_column, y, Controls::BInputs + 0));
-    addParam(Toggle::button(slug, module, ab_button_column, y,
+    addParam(Button::toggle(slug, module, ab_button_column, y,
                             Controls::NotBButtons + 0));
-    addParam(Toggle::button(slug, module, cd_button_column, y,
+    addParam(Button::toggle(slug, module, cd_button_column, y,
                             Controls::NotBButtons + 1));
     addInput(
         Jack::input(slug, module, cd_outer_column, y, Controls::BInputs + 1));

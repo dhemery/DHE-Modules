@@ -40,9 +40,9 @@ public:
     addParam(Knob::medium(slug, module, column3, y, Controls::CurveKnob1));
     y += dy;
     addParam(
-        Toggle::stepper(2, slug, module, column1, y, Controls::ShapeSwitch1));
-    addParam(Toggle::stepper(2, slug, module, column2, y,
-                             Controls::LevelRangeSwitch1));
+        Toggle::thumb(2, slug, module, column1, y, Controls::ShapeSwitch1));
+    addParam(Toggle::thumb(2, slug, module, column2, y,
+                           Controls::LevelRangeSwitch1));
     addOutput(Jack::output(slug, module, column3, y, Controls::TaperOutput1));
 
     y += dy + panel_buffer;
@@ -56,9 +56,9 @@ public:
     addParam(Knob::medium(slug, module, column3, y, Controls::CurveKnob2));
     y += dy;
     addParam(
-        Toggle::stepper(2, slug, module, column1, y, Controls::ShapeSwitch2));
-    addParam(Toggle::stepper(2, slug, module, column2, y,
-                             Controls::LevelRangeSwitch2));
+        Toggle::thumb(2, slug, module, column1, y, Controls::ShapeSwitch2));
+    addParam(Toggle::thumb(2, slug, module, column2, y,
+                           Controls::LevelRangeSwitch2));
     addOutput(Jack::output(slug, module, column3, y, Controls::TaperOutput2));
   }
 };

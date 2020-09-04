@@ -40,15 +40,15 @@ public:
     addInput(Jack::input(slug, module, column1, y, Controls::RatioCvInput));
     addParam(Knob::tiny(slug, module, column2, y, Controls::RatioAvKnob));
     addParam(Knob::large(slug, module, column3, y, Controls::RatioKnob));
-    addParam(Toggle::stepper(2, slug, module, column4, y,
-                             Controls::FreeRatioSwitch));
+    addParam(
+        Toggle::thumb(2, slug, module, column4, y, Controls::FreeRatioSwitch));
 
     y += dy;
     addInput(Jack::input(slug, module, column1, y, Controls::DepthCvInput));
     addParam(Knob::tiny(slug, module, column2, y, Controls::DepthAvKnob));
     addParam(Knob::large(slug, module, column3, y, Controls::DepthKnob));
-    addParam(Toggle::stepper(3, slug, module, column4, y,
-                             Controls::DirectionSwitch));
+    addParam(
+        Toggle::thumb(3, slug, module, column4, y, Controls::DirectionSwitch));
 
     y += dy;
     addInput(Jack::input(slug, module, column1, y, Controls::PhaseCvInput));
@@ -63,7 +63,7 @@ public:
     addInput(Jack::input(slug, module, column1, y, Controls::XGainCvInput));
     addParam(Knob::small(slug, module, column2, y, Controls::XGainKnob));
     addParam(
-        Toggle::stepper(2, slug, module, column3, y, Controls::XRangeSwitch));
+        Toggle::thumb(2, slug, module, column3, y, Controls::XRangeSwitch));
     addOutput(Jack::output(slug, module, column4, y + output_port_offset,
                            Controls::XOutput));
 
@@ -71,7 +71,7 @@ public:
     addInput(Jack::input(slug, module, column1, y, Controls::YGainCvInput));
     addParam(Knob::small(slug, module, column2, y, Controls::YGainKnob));
     addParam(
-        Toggle::stepper(2, slug, module, column3, y, Controls::YRangeSwitch));
+        Toggle::thumb(2, slug, module, column3, y, Controls::YRangeSwitch));
     addOutput(Jack::output(slug, module, column4, y + output_port_offset,
                            Controls::YOutput));
   }

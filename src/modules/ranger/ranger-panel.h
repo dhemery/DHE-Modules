@@ -49,10 +49,10 @@ public:
     addInput(Jack::input(slug, module, right, y, Controls::CwLimitCvInput));
 
     y += dy;
-    addParam(Toggle::stepper(2, slug, module, left, y,
-                             Controls::CcwLimitRangeSwitch));
-    addParam(Toggle::stepper(2, slug, module, right, y,
-                             Controls::CwLimitRangeSwitch));
+    addParam(
+        Toggle::thumb(2, slug, module, left, y, Controls::CcwLimitRangeSwitch));
+    addParam(
+        Toggle::thumb(2, slug, module, right, y, Controls::CwLimitRangeSwitch));
   }
 };
 } // namespace ranger

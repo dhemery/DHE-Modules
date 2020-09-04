@@ -128,7 +128,7 @@ step_label_y = top - hp2mm(0.25)
   tiny_knob x: x, y: end_y, label: ''
   stepper x: x, y: end_y + knob_pick_list_distance, name: 'track', options: %w[SNAP TRACK], selection: 2, width: 9
 
-  stepper x: x, y: curve_y - knob_pick_list_distance, name: 'shape', options: %w[S J], selection: 1, width: 9
+  stepper x: x, y: curve_y - knob_pick_list_distance, name: 'shape', options: %w[J S], selection: 1, width: 9
   tiny_knob y: curve_y, x: x, label: ''
 
   tiny_knob y: duration_y, x: x, label: ''

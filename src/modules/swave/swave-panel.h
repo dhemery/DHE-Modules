@@ -28,7 +28,7 @@ public:
     auto y = 25.F;
     auto dy = 18.5F;
 
-    addParam(Toggle::stepper(2, slug, module, x, y, Controls::ShapeSwitch));
+    addParam(Toggle::thumb(2, slug, module, x, y, Controls::ShapeSwitch));
 
     y += dy;
     addParam(Knob::large(slug, module, x, y, Controls::CurveKnob));
