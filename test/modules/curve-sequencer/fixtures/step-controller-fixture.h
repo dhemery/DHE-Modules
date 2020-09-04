@@ -1,5 +1,6 @@
 #pragma once
 
+#include "./step-status-io.h"
 #include "modules/curve-sequencer/generator-status.h"
 #include "modules/curve-sequencer/step-controller.h"
 #include <array>

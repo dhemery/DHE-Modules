@@ -1,4 +1,5 @@
 #include "./fixtures/controls-fixture.h"
+#include "./fixtures/trigger-mode-io.h"
 #include "components/sigmoid.h"
 #include "modules/curve-sequencer/completion-mode.h"
 #include "modules/curve-sequencer/controls.h"

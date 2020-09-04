@@ -38,21 +38,5 @@ static inline auto is_triggered(TriggerMode mode, dhe::Latch const &gate)
   }
 }
 
-static auto constexpr trigger_mode_names =
-    std::array<char const *, trigger_mode_count>{
-        "TriggerMode::GateRises", "TriggerMode::GateFalls",
-        "TriggerMode::GateChanges", "TriggerMode::GateIsHigh",
-        "TriggerMode::GateIsLow"};
-
-static inline auto name_of(TriggerMode mode) -> const char * {
-  return trigger_mode_names[static_cast<int>(mode)];
-}
-
-static inline auto operator<<(std::ostream &os, TriggerMode mode)
-    -> std::ostream & {
-  os << name_of(mode);
-  return os;
-}
-
 } // namespace curve_sequencer
 } // namespace dhe
