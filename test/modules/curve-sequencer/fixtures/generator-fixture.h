@@ -13,27 +13,27 @@ struct Controls {
     progress_ = progress;
   }
   void show_inactive(int step) { deactivated_step_ = step; }
-  float progress_{-999.F};   // NOLINT
-  int activated_step_{-3};   // NOLINT
-  int deactivated_step_{-3}; // NOLINT
+  float progress_{};       // NOLINT
+  int activated_step_{};   // NOLINT
+  int deactivated_step_{}; // NOLINT
 };
 
-struct Source {
-  void snap(int step) { snapped_step_ = step; }
+struct Anchor {
+  void enter(int step) { entered_step_ = step; }
 
-  int snapped_step_{-3}; // NOLINT
+  int entered_step_{}; // NOLINT
 };
 
-using Generator = dhe::curve_sequencer::Generator<Controls, Source>;
+using Generator = dhe::curve_sequencer::Generator<Controls, Anchor>;
 
 template <typename GeneratorTest>
 static inline auto test(GeneratorTest const &generator_test) -> TestFunc {
   return [generator_test](Tester &t) {
     Controls controls{};
-    Source start{};
-    Source end{};
-    Generator generator{controls, start, end};
-    generator_test(t, controls, start, end, generator);
+    Anchor start_anchor{};
+    Anchor end_anchor{};
+    Generator generator{controls, start_anchor, end_anchor};
+    generator_test(t, controls, start_anchor, end_anchor, generator);
   };
 }
 

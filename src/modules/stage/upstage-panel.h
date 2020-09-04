@@ -31,8 +31,8 @@ public:
 
     y += dy;
     addInput(Jack::input(slug, module, column1, y, Controls::LevelCvInput));
-    addParam(Toggle::thumb(2, slug, module, column3, y,
-                             Controls::LevelRangeSwitch));
+    addParam(
+        Toggle::thumb(2, slug, module, column3, y, Controls::LevelRangeSwitch));
 
     y += dy;
     addParam(Button::momentary(slug, module, column1, y, Controls::WaitButton));

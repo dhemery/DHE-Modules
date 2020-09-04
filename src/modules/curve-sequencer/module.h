@@ -50,18 +50,19 @@ public:
           {"Ignore triggers while generating", "Advance to next step"});
       config_toggle<2>(this, ControlsT::Param::StepCompletionMode + step,
                        "At end",
-                       {"Sustain until triggered", "Advance to next step"}, 0);
+                       {"Sustain until triggered", "Advance to next step"}, 1);
 
       config_toggle<3>(this, ControlsT::Param::StepStartAnchorSource + step,
-                       "Start source", {"Level knob", "IN port", "OUT port"},
-                       2);
+                       "Start anchor source",
+                       {"Level knob", "IN port", "OUT port"}, 2);
       config_level_knob(this, ControlsT::Param::StepStartLevel + step,
                         ControlsT::Param::LevelRange, "Start level");
       config_toggle<2>(this, ControlsT::Param::StepStartAnchorMode + step,
                        "Start anchor mode", {"Snapshot", "Track changes"});
 
       config_toggle<3>(this, ControlsT::Param::StepEndAnchorSource + step,
-                       "End source", {"Level knob", "IN port", "OUT port"});
+                       "End anchor source",
+                       {"Level knob", "IN port", "OUT port"});
       config_level_knob(this, ControlsT::Param::StepEndLevel + step,
                         ControlsT::Param::LevelRange, "End level");
       config_toggle<2>(this, ControlsT::Param::StepEndAnchorMode + step,
@@ -89,8 +90,8 @@ public:
 private:
   PhaseTimer timer_{};
   ControlsT controls_{inputs, outputs, params, lights};
-  SourceController<ControlsT> start_source_{controls_};
-  SourceController<ControlsT> end_source_{controls_};
+  Anchor<ControlsT> start_source_{controls_};
+  Anchor<ControlsT> end_source_{controls_};
   Interrupter<ControlsT> interrupter_{controls_};
   Generator<ControlsT, decltype(start_source_)> generator_{
       controls_, start_source_, end_source_};

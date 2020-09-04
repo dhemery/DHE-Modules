@@ -27,13 +27,12 @@ public:
     auto y = 25.F;
     auto dy = 18.5F;
 
-    addParam(
-        Toggle::thumb(2, slug, module, column2, y, Controls::ModeSwitch));
+    addParam(Toggle::thumb(2, slug, module, column2, y, Controls::ModeSwitch));
 
     y += dy;
     addInput(Jack::input(slug, module, column1, y, Controls::DurationCvInput));
     addParam(Toggle::thumb(3, slug, module, column3, y,
-                             Controls::DurationRangeSwitch));
+                           Controls::DurationRangeSwitch));
 
     y += dy;
     addParam(Knob::large(slug, module, column2, y, Controls::DurationKnob));

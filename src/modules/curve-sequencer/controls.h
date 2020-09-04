@@ -1,11 +1,11 @@
 #pragma once
 
+#include "anchor.h"
 #include "components/sigmoid.h"
 #include "controls/common-inputs.h"
 #include "controls/curvature-inputs.h"
 #include "controls/duration-inputs.h"
 #include "controls/level-inputs.h"
-#include "source.h"
 #include "triggers.h"
 
 #include <vector>
@@ -92,8 +92,9 @@ public:
                                  param(Param::LevelRange));
   }
 
-  auto end_source(int step) const -> Source {
-    return static_cast<Source>(param(Param::StepEndAnchorSource, step).getValue());
+  auto end_source(int step) const -> AnchorMode {
+    return static_cast<AnchorMode>(
+        param(Param::StepEndAnchorSource, step).getValue());
   }
 
   auto interrupt_on_trigger(int step) const -> bool {
@@ -113,8 +114,9 @@ public:
                                  param(Param::LevelRange));
   }
 
-  auto start_source(int step) const -> Source {
-    return static_cast<Source>(param(Param::StepStartAnchorSource, step).getValue());
+  auto start_source(int step) const -> AnchorMode {
+    return static_cast<AnchorMode>(
+        param(Param::StepStartAnchorSource, step).getValue());
   }
 
   auto taper(int step) const -> sigmoid::Taper const & {

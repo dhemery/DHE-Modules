@@ -8,12 +8,12 @@ using dhe::unit::is_equal_to;
 using dhe::unit::Suite;
 using dhe::unit::TestRegistrar;
 
-class GeneratorControlsSuite : public Suite {
+class GeneratorSuite : public Suite {
 public:
-  GeneratorControlsSuite() : Suite{"dhe::curve_sequencer::Generator"} {}
+  GeneratorSuite() : Suite{"dhe::curve_sequencer::Generator"} {}
   void register_tests(TestRegistrar add) override {
-    add("start(s)", test([](Tester &t, Controls &controls, Source &start_source,
-                            Source &end_source, Generator &generator) {
+    add("start(s)", test([](Tester &t, Controls &controls, Anchor &start_anchor,
+                            Anchor &end_source, Generator &generator) {
           auto constexpr started_step = 3;
 
           generator.start(started_step);
@@ -23,13 +23,14 @@ public:
           t.assert_that("progress (controls)", controls.progress_,
                         is_equal_to(0.F));
           t.assert_that("snapped step (start source)",
-                        start_source.snapped_step_, is_equal_to(started_step));
-          t.assert_that("snapped step (end source)", end_source.snapped_step_,
+                        start_anchor.entered_step_, is_equal_to(started_step));
+          t.assert_that("snapped step (end source)", end_source.entered_step_,
                         is_equal_to(started_step));
         }));
 
-    add("stop()", test([](Tester &t, Controls &controls, Source & /*start*/,
-                          Source & /*end*/, Generator &generator) {
+    add("stop()",
+        test([](Tester &t, Controls &controls, Anchor & /*start_anchor*/,
+                Anchor & /*end_anchor*/, Generator &generator) {
           auto constexpr step = 5;
 
           generator.start(step);
@@ -50,6 +51,6 @@ public:
   }
 };
 
-__attribute__((unused)) static auto _ = GeneratorControlsSuite{};
+__attribute__((unused)) static auto _ = GeneratorSuite{};
 } // namespace curve_sequencer
 } // namespace test

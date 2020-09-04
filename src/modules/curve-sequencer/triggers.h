@@ -18,8 +18,8 @@ static auto constexpr trigger_mode_count =
 
 static auto constexpr trigger_mode_descriptions =
     std::array<char const *, trigger_mode_count>{"Gate rises", "Gate falls",
-                                                 "Gate changes", "Gate is high",
-                                                 "Gate is low"};
+                                                 "Gate rises or falls",
+                                                 "Gate is high", "Gate is low"};
 
 static auto constexpr trigger_mode_names =
     std::array<char const *, dhe::curve_sequencer::trigger_mode_count>{

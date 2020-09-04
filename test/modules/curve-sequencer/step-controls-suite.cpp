@@ -8,7 +8,7 @@
 
 namespace test {
 namespace curve_sequencer {
-using dhe::curve_sequencer::Source;
+using dhe::curve_sequencer::AnchorMode;
 using dhe::curve_sequencer::TriggerMode;
 using dhe::unit::is_between;
 using dhe::unit::is_equal_to;
@@ -40,55 +40,53 @@ public:
       add_test(name, trigger_mode_test(trigger_mode));
     }
 
-    add_test(
-        "interrupt_on_trigger(s)",
-        test([](Tester &t, Module &module, Controls controls) {
-          auto constexpr step = 3;
-          module.set_param(Controls::Param::StepInterruptMode, step, 0.F);
+    add_test("interrupt_on_trigger(s)",
+             test([](Tester &t, Module &module, Controls controls) {
+               auto constexpr step = 3;
+               module.set_param(Controls::Param::StepInterruptMode, step, 0.F);
 
-          t.assert_that("interrupt disabled",
-                        controls.interrupt_on_trigger(step), is_false);
+               t.assert_that("interrupt disabled",
+                             controls.interrupt_on_trigger(step), is_false);
 
-          module.set_param(Controls::Param::StepInterruptMode, step, 1.F);
+               module.set_param(Controls::Param::StepInterruptMode, step, 1.F);
 
-          t.assert_that("interrupt enabled",
-                        controls.interrupt_on_trigger(step), is_true);
-        }));
+               t.assert_that("interrupt enabled",
+                             controls.interrupt_on_trigger(step), is_true);
+             }));
 
-    add_test(
-        "advance_on_end_of_curve(s)",
-        test([](Tester &t, Module &module, Controls controls) {
-          auto constexpr step = 3;
-          module.set_param(Controls::Param::StepCompletionMode, step, 0.F);
+    add_test("advance_on_end_of_curve(s)",
+             test([](Tester &t, Module &module, Controls controls) {
+               auto constexpr step = 3;
+               module.set_param(Controls::Param::StepCompletionMode, step, 0.F);
 
-          t.assert_that("advance disabled",
-                        controls.advance_on_end_of_curve(step), is_false);
+               t.assert_that("advance disabled",
+                             controls.advance_on_end_of_curve(step), is_false);
 
-          module.set_param(Controls::Param::StepCompletionMode, step, 1.F);
+               module.set_param(Controls::Param::StepCompletionMode, step, 1.F);
 
-          t.assert_that("advance enabled",
-                        controls.advance_on_end_of_curve(step), is_true);
-        }));
+               t.assert_that("advance enabled",
+                             controls.advance_on_end_of_curve(step), is_true);
+             }));
 
     add_test("start_source(s)",
              test([](Tester &t, Module &module, Controls controls) {
                auto constexpr step = 0;
 
-               auto source = Source::Level;
+               auto source = AnchorMode::Level;
                module.set_param(Controls::Param::StepStartAnchorSource, step,
                                 static_cast<float>(source));
 
                t.assert_that("Source::Level", controls.start_source(step),
                              is_equal_to(source));
 
-               source = Source::In;
+               source = AnchorMode::In;
                module.set_param(Controls::Param::StepStartAnchorSource, step,
                                 static_cast<float>(source));
 
                t.assert_that("Source::In", controls.start_source(step),
                              is_equal_to(source));
 
-               source = Source::Out;
+               source = AnchorMode::Out;
                module.set_param(Controls::Param::StepStartAnchorSource, step,
                                 static_cast<float>(source));
 
@@ -130,21 +128,21 @@ public:
              test([](Tester &t, Module &module, Controls controls) {
                auto constexpr step = 6;
 
-               auto source = Source::Level;
+               auto source = AnchorMode::Level;
                module.set_param(Controls::Param::StepEndAnchorSource, step,
                                 static_cast<float>(source));
 
                t.assert_that("Source::Level", controls.end_source(step),
                              is_equal_to(source));
 
-               source = Source::In;
+               source = AnchorMode::In;
                module.set_param(Controls::Param::StepEndAnchorSource, step,
                                 static_cast<float>(source));
 
                t.assert_that("Source::In", controls.end_source(step),
                              is_equal_to(source));
 
-               source = Source::Out;
+               source = AnchorMode::Out;
                module.set_param(Controls::Param::StepEndAnchorSource, step,
                                 static_cast<float>(source));
 
@@ -152,21 +150,20 @@ public:
                              is_equal_to(source));
              }));
 
-    add_test(
-        "track_end_source(s)",
-        test([](Tester &t, Module &module, Controls controls) {
-          auto constexpr step = 5;
+    add_test("track_end_source(s)",
+             test([](Tester &t, Module &module, Controls controls) {
+               auto constexpr step = 5;
 
-          module.set_param(Controls::Param::StepEndAnchorMode, step, 1.F);
+               module.set_param(Controls::Param::StepEndAnchorMode, step, 1.F);
 
-          t.assert_that("tracking enabled", controls.track_end_source(step),
-                        is_true);
+               t.assert_that("tracking enabled",
+                             controls.track_end_source(step), is_true);
 
-          module.set_param(Controls::Param::StepEndAnchorMode, step, 0.F);
+               module.set_param(Controls::Param::StepEndAnchorMode, step, 0.F);
 
-          t.assert_that("tracking disabled", controls.track_end_source(step),
-                        is_false);
-        }));
+               t.assert_that("tracking disabled",
+                             controls.track_end_source(step), is_false);
+             }));
 
     add_test("end_level(s)",
              test([](Tester &t, Module &module, Controls controls) {

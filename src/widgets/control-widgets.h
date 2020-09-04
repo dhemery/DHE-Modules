@@ -12,16 +12,16 @@ namespace dhe {
 class Toggle : public rack::app::SvgSwitch {
 public:
   static inline auto thumb(size_t size, std::string const &module_svg_dir,
-                             rack::engine::Module *module, float xmm, float ymm,
-                             int index) -> Toggle * {
+                           rack::engine::Module *module, float xmm, float ymm,
+                           int index) -> Toggle * {
     return new Toggle{size, module_svg_dir, module, xmm, ymm, index};
   }
 
-//  static inline auto button(std::string const &module_svg_dir,
-//                            rack::engine::Module *module, float xmm, float ymm,
-//                            int index) -> Toggle * {
-//    return new Toggle{"button", 2, module_svg_dir, module, xmm, ymm, index};
-//  }
+  //  static inline auto button(std::string const &module_svg_dir,
+  //                            rack::engine::Module *module, float xmm, float
+  //                            ymm, int index) -> Toggle * {
+  //    return new Toggle{"button", 2, module_svg_dir, module, xmm, ymm, index};
+  //  }
 
   static inline auto stepper(std::string const &module_svg_dir,
                              std::string const &name, size_t size,
@@ -61,8 +61,8 @@ protected:
 class Button : public rack::app::SvgSwitch {
 public:
   static inline auto toggle(std::string const &module_svg_dir,
-                               rack::engine::Module *module, float xmm,
-                               float ymm, int index) -> Button * {
+                            rack::engine::Module *module, float xmm, float ymm,
+                            int index) -> Button * {
     return new Button{"button", false, module_svg_dir, module, xmm, ymm, index};
   }
 
@@ -73,15 +73,16 @@ public:
   }
 
   static inline auto output(std::string const &module_svg_dir,
-                             rack::engine::Module *module, float xmm, float ymm,
-                             int index) -> Button * {
+                            rack::engine::Module *module, float xmm, float ymm,
+                            int index) -> Button * {
     return new Button("output-button", true, module_svg_dir, module, xmm, ymm,
                       index);
   }
 
 private:
-  Button(std::string const &button_name, bool momentary, std::string const &module_svg_dir,
-         rack::engine::Module *module, float xmm, float ymm, int index) {
+  Button(std::string const &button_name, bool momentary,
+         std::string const &module_svg_dir, rack::engine::Module *module,
+         float xmm, float ymm, int index) {
     addFrame((control_svg(module_svg_dir, button_name + "-released")));
     addFrame((control_svg(module_svg_dir, button_name + "-pressed")));
     shadow->opacity = 0.F;

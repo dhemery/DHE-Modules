@@ -40,8 +40,8 @@ public:
     addInput(Jack::input(slug, module, column1, y, Controls::RatioCvInput));
     addParam(Knob::tiny(slug, module, column2, y, Controls::RatioAvKnob));
     addParam(Knob::large(slug, module, column3, y, Controls::RatioKnob));
-    addParam(Toggle::thumb(2, slug, module, column4, y,
-                             Controls::FreeRatioSwitch));
+    addParam(
+        Toggle::thumb(2, slug, module, column4, y, Controls::FreeRatioSwitch));
 
     y += dy;
     addInput(Jack::input(slug, module, column1, y, Controls::DepthCvInput));

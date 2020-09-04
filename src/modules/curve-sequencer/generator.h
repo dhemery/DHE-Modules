@@ -12,8 +12,8 @@ public:
   void start(int step) {
     step_ = step;
     controls_.show_progress(step_, 0.F);
-    start_source_.snap(step_);
-    end_source_.snap(step_);
+    start_source_.enter(step_);
+    end_source_.enter(step_);
   }
 
   auto generate(float /*sample_time*/) -> bool { return false; }
