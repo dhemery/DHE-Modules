@@ -1,8 +1,8 @@
 #pragma once
 
+#include "./anchor-source-io.h"
 #include "helpers/rack-controls.h"
 #include "modules/curve-sequencer/controls.h"
-
 #include <dheunit/test.h>
 
 namespace test {
