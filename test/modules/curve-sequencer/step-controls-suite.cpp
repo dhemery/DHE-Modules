@@ -1,6 +1,7 @@
 #include "./fixtures/controls-fixture.h"
 #include "./fixtures/trigger-mode-io.h"
 #include "components/sigmoid.h"
+#include "modules/curve-sequencer/anchor-mode.h"
 #include "modules/curve-sequencer/completion-mode.h"
 #include "modules/curve-sequencer/controls.h"
 #include "modules/curve-sequencer/interrupt-mode.h"
@@ -11,6 +12,7 @@
 
 namespace test {
 namespace curve_sequencer {
+using dhe::curve_sequencer::AnchorMode;
 using dhe::curve_sequencer::AnchorSource;
 using dhe::curve_sequencer::CompletionMode;
 using dhe::curve_sequencer::InterruptMode;
@@ -116,12 +118,12 @@ public:
           module.set_param(Controls::Param::StepStartAnchorMode, step, 1.F);
 
           t.assert_that("tracking enabled", controls.start_anchor_mode(step),
-                        is_true);
+                        is_equal_to(AnchorMode::Track));
 
           module.set_param(Controls::Param::StepStartAnchorMode, step, 0.F);
 
           t.assert_that("tracking disabled", controls.start_anchor_mode(step),
-                        is_false);
+                        is_equal_to(AnchorMode::Snap));
         }));
 
     add_test(
@@ -171,12 +173,13 @@ public:
                module.set_param(Controls::Param::StepEndAnchorMode, step, 1.F);
 
                t.assert_that("tracking enabled", controls.end_anchor_mode(step),
-                             is_true);
+                             is_equal_to(AnchorMode::Track));
 
                module.set_param(Controls::Param::StepEndAnchorMode, step, 0.F);
 
                t.assert_that("tracking disabled",
-                             controls.end_anchor_mode(step), is_false);
+                             controls.end_anchor_mode(step),
+                             is_equal_to(AnchorMode::Snap));
              }));
 
     add_test("end_level(s)",

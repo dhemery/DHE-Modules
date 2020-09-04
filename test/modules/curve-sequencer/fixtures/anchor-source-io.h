@@ -1,6 +1,6 @@
 #pragma once
 
-#include "modules/curve-sequencer/anchor.h"
+#include "modules/curve-sequencer/anchor-source.h"
 #include <ostream>
 
 namespace dhe {

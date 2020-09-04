@@ -1,5 +1,6 @@
 #pragma once
 
+#include "anchor.h"
 #include "components/phase-timer.h"
 #include "config/common-config.h"
 #include "config/curvature-config.h"

@@ -1,5 +1,6 @@
 #pragma once
 
+#include "./anchor-mode-io.h"
 #include "./anchor-source-io.h"
 #include "./completion-mode-io.h"
 #include "./interrupt-mode-io.h"

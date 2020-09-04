@@ -1,6 +1,7 @@
 #pragma once
 
-#include "anchor.h"
+#include "anchor-mode.h"
+#include "anchor-source.h"
 #include "completion-mode.h"
 #include "components/sigmoid.h"
 #include "controls/common-inputs.h"
@@ -95,8 +96,9 @@ public:
                                  param(Param::LevelRange));
   }
 
-  auto end_anchor_mode(int step) const -> bool {
-    return position_of(param(Param::StepEndAnchorMode, step)) == 1;
+  auto end_anchor_mode(int step) const -> AnchorMode {
+    auto const selection = position_of(param(Param::StepEndAnchorMode, step));
+    return static_cast<AnchorMode>(selection);
   }
 
   auto end_anchor_source(int step) const -> AnchorSource {
@@ -117,8 +119,9 @@ public:
     set_lights(step, completed_brightness, remaining_brightness);
   }
 
-  auto start_anchor_mode(int step) const -> bool {
-    return position_of(param(Param::StepStartAnchorMode, step)) == 1;
+  auto start_anchor_mode(int step) const -> AnchorMode {
+    auto const selection = position_of(param(Param::StepStartAnchorMode, step));
+    return static_cast<AnchorMode>(selection);
   }
 
   auto start_anchor_source(int step) const -> AnchorSource {
