@@ -1,8 +1,8 @@
 #pragma once
 
 #include "components/latch.h"
+#include "interrupt-mode.h"
 #include "trigger-mode.h"
-#include <array>
 
 namespace dhe {
 namespace curve_sequencer {
@@ -12,7 +12,7 @@ public:
   Interrupter(Controls &controls) : controls_{controls} {}
 
   auto is_interrupted(int step, Latch const &latch) -> bool {
-    return controls_.interrupt_mode(step) &&
+    return (controls_.interrupt_mode(step) == InterruptMode::Advance) &&
            is_triggered(controls_.trigger_mode(step), latch);
   }
 

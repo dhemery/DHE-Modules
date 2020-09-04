@@ -2,6 +2,7 @@
 
 #include "./anchor-source-io.h"
 #include "./completion-mode-io.h"
+#include "./interrupt-mode-io.h"
 #include "helpers/rack-controls.h"
 #include "modules/curve-sequencer/controls.h"
 #include <dheunit/test.h>

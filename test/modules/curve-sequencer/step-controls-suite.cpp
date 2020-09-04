@@ -3,6 +3,7 @@
 #include "components/sigmoid.h"
 #include "modules/curve-sequencer/completion-mode.h"
 #include "modules/curve-sequencer/controls.h"
+#include "modules/curve-sequencer/interrupt-mode.h"
 #include "modules/curve-sequencer/trigger-mode.h"
 #include <dheunit/assertions.h>
 #include <dheunit/test.h>
@@ -12,6 +13,7 @@ namespace test {
 namespace curve_sequencer {
 using dhe::curve_sequencer::AnchorSource;
 using dhe::curve_sequencer::CompletionMode;
+using dhe::curve_sequencer::InterruptMode;
 using dhe::curve_sequencer::TriggerMode;
 using dhe::unit::is_between;
 using dhe::unit::is_equal_to;
@@ -56,12 +58,13 @@ public:
                module.set_param(Controls::Param::StepInterruptMode, step, 0.F);
 
                t.assert_that("interrupt disabled",
-                             controls.interrupt_mode(step), is_false);
+                             controls.interrupt_mode(step),
+                             is_equal_to(InterruptMode::Ignore));
 
                module.set_param(Controls::Param::StepInterruptMode, step, 1.F);
 
                t.assert_that("interrupt enabled", controls.interrupt_mode(step),
-                             is_true);
+                             is_equal_to(InterruptMode::Advance));
              }));
 
     add_test("completion_mode(s)",

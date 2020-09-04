@@ -12,10 +12,11 @@ class InterrupterSuite : public Suite {
 public:
   InterrupterSuite() : Suite{"dhe::curve_sequencer::Interrupter"} {}
   void register_tests(dhe::unit::TestRegistrar add) override {
-    add("interrupt=true, mode=GateRises, is_interrupted(s) iff gate rises",
+    add("InterruptMode::Advance, mode=GateRises, is_interrupted(s) iff gate "
+        "rises",
         test([](Tester &t, Controls &controls, Interrupter &interrupter) {
           auto constexpr step = 0;
-          controls.interrupt_mode_[step] = true;
+          controls.interrupt_mode_[step] = InterruptMode::Advance;
           controls.trigger_mode_[step] = TriggerMode::GateRises;
 
           t.assert_that("rising gate",
@@ -30,10 +31,11 @@ public:
                         is_false);
         }));
 
-    add("interrupt=true, mode=GateFalls, is_interrupted(s) iff gate falls",
+    add("InterruptMode::Advance, mode=GateFalls, is_interrupted(s) iff gate "
+        "falls",
         test([](Tester &t, Controls &controls, Interrupter &interrupter) {
           auto constexpr step = 1;
-          controls.interrupt_mode_[step] = true;
+          controls.interrupt_mode_[step] = InterruptMode::Advance;
           controls.trigger_mode_[step] = TriggerMode::GateFalls;
 
           t.assert_that("rising gate",
@@ -48,10 +50,11 @@ public:
                         is_false);
         }));
 
-    add("interrupt=true, mode=GateChanges, is_interrupted(s) iff gate changes",
+    add("InterruptMode::Advance, mode=GateChanges, is_interrupted(s) iff gate "
+        "changes",
         test([](Tester &t, Controls &controls, Interrupter &interrupter) {
           auto constexpr step = 2;
-          controls.interrupt_mode_[step] = true;
+          controls.interrupt_mode_[step] = InterruptMode::Advance;
           controls.trigger_mode_[step] = TriggerMode::GateChanges;
 
           t.assert_that("rising gate",
@@ -66,10 +69,11 @@ public:
                         is_false);
         }));
 
-    add("interrupt=true, mode=GateIsHigh, is_interrupted(s) iff gate is high",
+    add("InterruptMode::Advance, mode=GateIsHigh, is_interrupted(s) iff gate "
+        "is high",
         test([](Tester &t, Controls &controls, Interrupter &interrupter) {
           auto constexpr step = 3;
-          controls.interrupt_mode_[step] = true;
+          controls.interrupt_mode_[step] = InterruptMode::Advance;
           controls.trigger_mode_[step] = TriggerMode::GateIsHigh;
 
           t.assert_that("rising gate",
@@ -84,10 +88,11 @@ public:
                         is_false);
         }));
 
-    add("interrupt=true, mode=GateIsLow, is_interrupted(s) iff gate is low",
+    add("InterruptMode::Advance, mode=GateIsLow, is_interrupted(s) iff gate is "
+        "low",
         test([](Tester &t, Controls &controls, Interrupter &interrupter) {
           auto constexpr step = 4;
-          controls.interrupt_mode_[step] = true;
+          controls.interrupt_mode_[step] = InterruptMode::Advance;
           controls.trigger_mode_[step] = TriggerMode::GateIsLow;
 
           t.assert_that("rising gate",
@@ -102,10 +107,11 @@ public:
                         is_true);
         }));
 
-    add("interrupt=false, is_interrupted(s) regardless of mode or gate",
+    add("InterruptMode::Ignore, is_interrupted(s) false regardless of mode or "
+        "gate",
         test([](Tester &t, Controls &controls, Interrupter &interrupter) {
           auto constexpr step = 5;
-          controls.interrupt_mode_[step] = false;
+          controls.interrupt_mode_[step] = InterruptMode::Ignore;
 
           controls.trigger_mode_[step] = TriggerMode::GateRises;
           t.assert_that("mode=GateRises: rising gate",

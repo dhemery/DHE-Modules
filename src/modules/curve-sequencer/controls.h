@@ -7,6 +7,7 @@
 #include "controls/curvature-inputs.h"
 #include "controls/duration-inputs.h"
 #include "controls/level-inputs.h"
+#include "interrupt-mode.h"
 #include "trigger-mode.h"
 
 #include <vector>
@@ -103,8 +104,9 @@ public:
         param(Param::StepEndAnchorSource, step).getValue());
   }
 
-  auto interrupt_mode(int step) const -> bool {
-    return position_of(param(Param::StepInterruptMode, step)) == 1;
+  auto interrupt_mode(int step) const -> InterruptMode {
+    auto const selection = position_of(param(Param::StepInterruptMode, step));
+    return static_cast<InterruptMode>(selection);
   }
 
   void show_inactive(int step) { set_lights(step, 0.F, 0.F); }
