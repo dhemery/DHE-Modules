@@ -43,34 +43,33 @@ public:
 
     for (auto step = 0; step < N; step++) {
       config_toggle<trigger_mode_count>(
-          this, ControlsT::Param::StepTriggerMode + step,
-          "Generate trigger when", trigger_mode_descriptions, 0);
-      config_toggle<2>(this, ControlsT::Param::InterruptStepOnTrigger + step,
-                       "When triggered",
-                       {"Continue current step", "Advance to next step"});
-      config_toggle<2>(this, ControlsT::Param::AdvanceStepOnEndOfCurve + step,
-                       "When curve ends",
-                       {"Sustain current step", "Advance to next step"}, 1);
+          this, ControlsT::Param::StepTriggerMode + step, "Trigger mode",
+          trigger_mode_descriptions, 0);
+      config_toggle<2>(
+          this, ControlsT::Param::InterruptStepOnTrigger + step,
+          "Interrupt",
+          {"No", "Yes"});
+      config_toggle<2>(
+          this, ControlsT::Param::AdvanceStepOnEndOfCurve + step,
+          "Sustain",
+          {"No", "Yes"}, 0);
 
-      config_toggle<3>(
-          this, ControlsT::Param::StepStartSource + step, "Curve from",
-          {"Knob level", "Voltage at IN port", "Voltage at OUT port"}, 2);
+      config_toggle<3>(this, ControlsT::Param::StepStartSource + step,
+                       "Start source",
+                       {"Start level knob", "IN port", "OUT port"}, 2);
       config_level_knob(this, ControlsT::Param::StepStartLevel + step,
                         ControlsT::Param::LevelRange, "Start level");
       config_toggle<2>(this, ControlsT::Param::StepTracksStartSource + step,
-                       "While generating", {"Ignore changes", "Track changes"});
+                       "Track start source",
+                       {"No", "Yes"});
 
-      config_toggle<3>(
-          this, ControlsT::Param::StepEndSource + step, "Curve to",
-          {"Knob level", "Voltage at IN port", "Voltage at OUT port"});
+      config_toggle<3>(this, ControlsT::Param::StepEndSource + step,
+                       "End source", {"End level knob", "IN port", "OUT port"});
       config_level_knob(this, ControlsT::Param::StepEndLevel + step,
                         ControlsT::Param::LevelRange, "End level");
       config_toggle<2>(this, ControlsT::Param::StepTracksEndSource + step,
-                       "While generating", {"Ignore changes", "Track changes"},
-                       1);
-
-      config_level_knob(this, ControlsT::Param::StepEndLevel + step,
-                        ControlsT::Param::LevelRange, "Curve end level");
+                       "Track end source",
+                       {"No", "Yes"}, 1);
 
       config_curve_shape_switch(this, ControlsT::Param::StepShape + step,
                                 "Shape");

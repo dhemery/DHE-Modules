@@ -21,7 +21,7 @@ class Stepper
     attr_reader :slug
 
     def initialize(name:, index:, text_color:, fill:, label:, width:)
-      @slug =  Pathname("stepper-#{name}-#{index + 1}")
+      @slug =  Pathname("#{name}-#{index + 1}")
       @label = label
       label = Label.new(color: text_color, alignment: :center, size: :small, text: label, width: width)
                    .padded(vertical: PADDING)

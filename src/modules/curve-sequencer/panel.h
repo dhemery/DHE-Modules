@@ -12,7 +12,7 @@
 namespace dhe {
 
 namespace curve_sequencer {
-auto constexpr step_x = hp2mm(9.5F);
+auto constexpr step_x = hp2mm(9.25F);
 auto constexpr step_dx = hp2mm(2.25F);
 
 using ProgressLight =
@@ -158,7 +158,7 @@ public:
 
     auto constexpr trigger_y = top + hp2mm(1.61F);
     auto constexpr interrupt_y = trigger_y + hp2mm(0.8F);
-    auto constexpr eos_y = interrupt_y + hp2mm(0.8F);
+    auto constexpr sustain_y = interrupt_y + hp2mm(0.8F);
     auto constexpr start_y = top + hp2mm(5.75F);
     auto constexpr end_y = top + hp2mm(9.5F);
     auto constexpr duration_y = top + hp2mm(12.35F);
@@ -175,35 +175,35 @@ public:
           mm2px(x, active_y), module,
           ControlsT::Light::StepProgress + step + step));
 
-      addParam(Toggle::stepper(slug, "stepper-trigger-mode", trigger_mode_count,
+      addParam(Toggle::stepper(slug, "trigger-mode", trigger_mode_count,
                                module, x, trigger_y,
                                ControlsT::Param::StepTriggerMode + step));
       addParam(Toggle::stepper(
-          slug, "stepper-on-interrupt", 2, module, x, interrupt_y,
+          slug, "interrupt-mode", 2, module, x, interrupt_y,
           ControlsT::Param::InterruptStepOnTrigger + step));
       addParam(
-          Toggle::stepper(slug, "stepper-on-eos", 2, module, x, eos_y,
+          Toggle::stepper(slug, "sustain-mode", 2, module, x, sustain_y,
                           ControlsT::Param::AdvanceStepOnEndOfCurve + step));
 
-      addParam(Toggle::stepper(slug, "stepper-source", source_count, module, x,
+      addParam(Toggle::stepper(slug, "source-mode", source_count, module, x,
                                start_y - knob_stepper_distance,
                                ControlsT::Param::StepStartSource + step));
       addParam(Knob::tiny(slug, module, x, start_y,
                           ControlsT::Param::StepStartLevel + step));
-      addParam(Toggle::stepper(slug, "stepper-track", 2, module, x,
+      addParam(Toggle::stepper(slug, "track-mode", 2, module, x,
                                start_y + knob_stepper_distance,
                                ControlsT::Param::StepTracksStartSource + step));
 
-      addParam(Toggle::stepper(slug, "stepper-source", source_count, module, x,
+      addParam(Toggle::stepper(slug, "source-mode", source_count, module, x,
                                end_y - knob_stepper_distance,
                                ControlsT::Param::StepEndSource + step));
       addParam(Knob::tiny(slug, module, x, end_y,
                           ControlsT::Param::StepEndLevel + step));
-      addParam(Toggle::stepper(slug, "stepper-track", 2, module, x,
+      addParam(Toggle::stepper(slug, "track-mode", 2, module, x,
                                end_y + knob_stepper_distance,
                                ControlsT::Param::StepTracksEndSource + step));
 
-      addParam(Toggle::stepper(slug, "stepper-shape", 2, module, x,
+      addParam(Toggle::stepper(slug, "shape", 2, module, x,
                                shape_y - knob_stepper_distance,
                                ControlsT::Param::StepShape + step));
       addParam(Knob::tiny(slug, module, x, shape_y,

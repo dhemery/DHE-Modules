@@ -79,29 +79,29 @@ input_button_port x: left, y: reset_y, label: 'RESET'
 #
 ###############################################################################
 
-step_x = hp2mm(9.5)
+step_x = hp2mm(9.25)
 step_dx = hp2mm(2.25)
 
 active_y = top + Light::RADIUS * 1.5
-advance_y = top + hp2mm(1.61)
-interrupt_y = advance_y + hp2mm(0.8)
-hold_y = interrupt_y + hp2mm(0.8)
+trigger_y = top + hp2mm(1.61)
+interrupt_y = trigger_y + hp2mm(0.8)
+sustain_y = interrupt_y + hp2mm(0.8)
 start_y = top + hp2mm(5.75)
 end_y = top + hp2mm(9.5)
 duration_y = top + hp2mm(12.35)
-curve_y = top + hp2mm(15.25)
+shape_y = top + hp2mm(15.25)
 enabled_port_y = bottom - Port::DIAMETER / 2.0
 enabled_button_y = enabled_port_y - Port::DIAMETER / 2.0 - Button::DIAMETER / 2.0 - 0.5
 
 knob_pick_list_distance = hp2mm(1.15)
 
 label_x = step_x - 0.6 * step_dx
-label x: label_x, y: advance_y, text: 'TRIG', alignment: :left_of, size: :large
-label x: label_x, y: interrupt_y, text: 'ON INT', alignment: :left_of, size: :large
-label x: label_x, y: hold_y, text: 'ON EOS', alignment: :left_of, size: :large
+label x: label_x, y: trigger_y, text: 'TRIG', alignment: :left_of, size: :large
+label x: label_x, y: interrupt_y, text: 'INT', alignment: :left_of, size: :large
+label x: label_x, y: sustain_y, text: 'SUST', alignment: :left_of, size: :large
 label x: label_x, y: start_y, text: 'START', alignment: :left_of, size: :large
 label x: label_x, y: end_y, text: 'END', alignment: :left_of, size: :large
-label x: label_x, y: curve_y-hp2mm(0.25), text: 'SHAPE', alignment: :left_of, size: :large
+label x: label_x, y: shape_y-hp2mm(0.25), text: 'SHAPE', alignment: :left_of, size: :large
 label x: label_x, y: duration_y, text: 'DUR', alignment: :left_of, size: :large
 label x: label_x, y: (enabled_button_y + enabled_port_y) / 2, text: 'ON', alignment: :left_of, size: :large
 
@@ -116,20 +116,20 @@ step_label_y = top - hp2mm(0.25)
   light x: x, y: active_y
   label x: x, y: step_label_y, text: (step + 1).to_s, alignment: :above, size: :large
 
-  stepper x: x, y: advance_y, name: 'trigger-mode', options: %w[RISE FALL EDGE HIGH LOW], selection: 1, width: 9
-  stepper x: x, y: interrupt_y, name: 'on-interrupt', options: %w[NOINT NEXT], selection: 1, width: 9
-  stepper x: x, y: hold_y, name: 'on-eos', options: %w[SUST NEXT], selection: 2, width: 9
+  stepper x: x, y: trigger_y, name: 'trigger-mode', options: %w[RISE FALL EDGE HIGH LOW], selection: 1, width: 9
+  stepper x: x, y: interrupt_y, name: 'interrupt-mode', options: %w[NO YES], selection: 1, width: 9
+  stepper x: x, y: sustain_y, name: 'sustain-mode', options: %w[NO YES], selection: 2, width: 9
 
-  stepper x: x, y: start_y - knob_pick_list_distance, name: 'source', options: %w[LEVEL IN OUT], selection: 3, width: 9
+  stepper x: x, y: start_y - knob_pick_list_distance, name: 'source-mode', options: %w[LEVEL IN OUT], selection: 3, width: 9
   tiny_knob x: x, y: start_y, label: ''
-  stepper x: x, y: start_y + knob_pick_list_distance, name: 'track', options: %w[SNAP TRACK], selection: 1, width: 9
+  stepper x: x, y: start_y + knob_pick_list_distance, name: 'track-mode', options: %w[SNAP TRACK], selection: 1, width: 9
 
-  stepper x: x, y: end_y - knob_pick_list_distance, name: 'source', options: %w[LEVEL IN OUT], selection: 1, width: 9
+  stepper x: x, y: end_y - knob_pick_list_distance, name: 'source-mode', options: %w[LEVEL IN OUT], selection: 1, width: 9
   tiny_knob x: x, y: end_y, label: ''
-  stepper x: x, y: end_y + knob_pick_list_distance, name: 'track', options: %w[SNAP TRACK], selection: 2, width: 9
+  stepper x: x, y: end_y + knob_pick_list_distance, name: 'track-mode', options: %w[SNAP TRACK], selection: 2, width: 9
 
-  stepper x: x, y: curve_y - knob_pick_list_distance, name: 'shape', options: %w[J S], selection: 1, width: 9
-  tiny_knob y: curve_y, x: x, label: ''
+  stepper x: x, y: shape_y - knob_pick_list_distance, name: 'shape', options: %w[J S], selection: 1, width: 9
+  tiny_knob y: shape_y, x: x, label: ''
 
   tiny_knob y: duration_y, x: x, label: ''
 
@@ -157,8 +157,9 @@ in_y = sequence_controls_top
 input_port x: right, y: in_y, label: 'IN'
 
 polarity_y = (start_y + end_y) / 2.0
-line x1: line_x, x2: right, y1: start_y, y2: polarity_y
-line x1: line_x, x2: right, y1: end_y, y2: polarity_y
+polarity_foo = (end_y - start_y) / 2.4
+line x1: line_x, x2: right, y1: polarity_y - polarity_foo, y2: polarity_y
+line x1: line_x, x2: right, y1: polarity_y + polarity_foo, y2: polarity_y
 polarity_toggle x: right, y: polarity_y, selection: 2
 
 connector left: line_x, right: right, y: duration_y
