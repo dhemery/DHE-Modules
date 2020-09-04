@@ -1,5 +1,6 @@
 #pragma once
 
+#include "modules/curve-sequencer/generator-status.h"
 #include "modules/curve-sequencer/step-controller.h"
 #include <array>
 #include <dheunit/test.h>
@@ -7,6 +8,7 @@
 namespace test {
 namespace curve_sequencer {
 using dhe::Latch;
+using dhe::curve_sequencer::GeneratorStatus;
 using dhe::unit::Tester;
 using dhe::unit::TestFunc;
 
@@ -15,15 +17,15 @@ auto constexpr step_count = 8;
 struct Generator {
   void start(int step) { started_step_ = step; }
   void stop() { stopped_ = true; }
-  auto generate(float sample_time) -> bool {
+  auto generate(float sample_time) -> GeneratorStatus {
     sample_time_ = sample_time;
-    return generate_result_[started_step_];
+    return status_[started_step_];
   }
 
-  int started_step_ = -3;                          // NOLINT
-  float sample_time_ = -9.F;                       // NOLINT
-  bool stopped_ = false;                           // NOLINT
-  std::array<bool, step_count> generate_result_{}; // NOLINT
+  int started_step_ = -3;                            // NOLINT
+  float sample_time_ = -9.F;                         // NOLINT
+  bool stopped_ = false;                             // NOLINT
+  std::array<GeneratorStatus, step_count> status_{}; // NOLINT
 };
 
 struct Interrupter {

@@ -1,13 +1,15 @@
 #pragma once
 
 #include "modules/curve-sequencer/sequence-controller.h"
+#include "modules/curve-sequencer/step-controller.h"
+#include "modules/curve-sequencer/step-status.h"
 #include <array>
 #include <dheunit/test.h>
 
 namespace test {
 namespace curve_sequencer {
 using dhe::Latch;
-using dhe::curve_sequencer::StepEvent;
+using dhe::curve_sequencer::StepStatus;
 using dhe::unit::Tester;
 using dhe::unit::TestFunc;
 
@@ -34,17 +36,17 @@ struct StepController {
     entered_ = true;
     entered_step_ = step;
   }
-  auto execute(Latch &latch, float sample_time) -> StepEvent {
+  auto execute(Latch &latch, float sample_time) -> StepStatus {
     called_ = true;
     executed_ = true;
     executed_latch_ = latch;
     executed_sample_time_ = sample_time;
-    return event_;
+    return status_;
   }
   void exit() { exited_ = true; }
   bool called_{};                // NOLINT
   bool entered_{};               // NOLINT
-  StepEvent event_{};            // NOLINT
+  StepStatus status_{};          // NOLINT
   bool executed_{};              // NOLINT
   bool exited_{};                // NOLINT
   Latch executed_latch_{};       // NOLINT

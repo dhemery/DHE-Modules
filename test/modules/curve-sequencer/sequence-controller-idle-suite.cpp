@@ -91,7 +91,7 @@ public:
                auto constexpr first_enabled_step = 3;
                step_selector.first_ = first_enabled_step;
 
-               step_controller.event_ = StepEvent::Generated;
+               step_controller.status_ = StepStatus::InProgress;
 
                auto constexpr sample_time = 0.39947F;
                sequence_controller.execute(sample_time);
@@ -114,7 +114,7 @@ public:
 
                step_selector.first_ = -1;
 
-               step_controller.event_ = StepEvent::Generated;
+               step_controller.status_ = StepStatus::InProgress;
 
                auto constexpr original_output = -2340.223F;
                controls.output_ = original_output;

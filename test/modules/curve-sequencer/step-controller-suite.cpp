@@ -6,7 +6,7 @@ namespace test {
 namespace curve_sequencer {
 
 using dhe::Latch;
-using dhe::curve_sequencer::StepEvent;
+using dhe::curve_sequencer::StepStatus;
 using dhe::unit::is_equal_to;
 using dhe::unit::is_false;
 using dhe::unit::is_true;
@@ -42,9 +42,9 @@ public:
           step_controller.enter(step);
           interrupter.is_interrupted_[step] = true;
 
-          auto const result = step_controller.execute(Latch{}, 0.F);
+          auto const status = step_controller.execute(Latch{}, 0.F);
 
-          t.assert_that("result", result, is_equal_to(StepEvent::Completed));
+          t.assert_that("status", status, is_equal_to(StepStatus::Completed));
           t.assert_that("generator.stopped", generator.stopped_, is_true);
         }));
 
@@ -57,52 +57,52 @@ public:
           interrupter.is_interrupted_[step] = false;
           auto constexpr sample_time = 0.117F;
 
-          auto const result = step_controller.execute(Latch{}, sample_time);
+          auto const status = step_controller.execute(Latch{}, sample_time);
 
-          t.assert_that("result", result, is_equal_to(StepEvent::Generated));
+          t.assert_that("status", status, is_equal_to(StepStatus::InProgress));
           t.assert_that("generator.sample_time", generator.sample_time_,
                         is_equal_to(sample_time));
           t.assert_that("generator.stopped", generator.stopped_, is_false);
         }));
 
-    add("execute() stops generating if not sustaining when curve is done",
+    add("execute() completes if not sustaining when generator completes",
         test([](Tester &t, Interrupter & /**/, Generator &generator,
                 Sustainer &sustainer, StepController &step_controller) {
           auto constexpr step = 7;
           step_controller.enter(step);
-          generator.generate_result_[step] = true;
+          generator.status_[step] = GeneratorStatus::Completed;
           sustainer.is_done_[step] = true;
 
-          auto const result = step_controller.execute(Latch{}, 0.F);
+          auto const status = step_controller.execute(Latch{}, 0.F);
 
-          t.assert_that("result", result, is_equal_to(StepEvent::Completed));
+          t.assert_that("status", status, is_equal_to(StepStatus::Completed));
           t.assert_that("generator.stopped", generator.stopped_, is_true);
         }));
 
-    add("execute() remains generating if sustaining when curve is done",
+    add("execute() remains in progress if sustaining when generator completes",
         test([](Tester &t, Interrupter & /**/, Generator &generator,
                 Sustainer &sustainer, StepController &step_controller) {
           auto constexpr step = 0;
           step_controller.enter(step);
-          generator.generate_result_[step] = true;
+          generator.status_[step] = GeneratorStatus::Completed;
           sustainer.is_done_[step] = false;
 
-          auto const result = step_controller.execute(Latch{}, 0.F);
+          auto const status = step_controller.execute(Latch{}, 0.F);
 
-          t.assert_that("result", result, is_equal_to(StepEvent::Generated));
+          t.assert_that("status", status, is_equal_to(StepStatus::InProgress));
           t.assert_that("generator.stopped", generator.stopped_, is_false);
         }));
 
-    add("execute() remains generating if curve is not done",
+    add("execute() remains in progress if generator generates",
         test([](Tester &t, Interrupter & /**/, Generator &generator,
                 Sustainer & /**/, StepController &step_controller) {
           auto constexpr step = 0;
           step_controller.enter(step);
-          generator.generate_result_[step] = false;
+          generator.status_[step] = GeneratorStatus::Generating;
 
-          auto const result = step_controller.execute(Latch{}, 0.F);
+          auto const status = step_controller.execute(Latch{}, 0.F);
 
-          t.assert_that("result", result, is_equal_to(StepEvent::Generated));
+          t.assert_that("status", status, is_equal_to(StepStatus::InProgress));
           t.assert_that("generator.stopped", generator.stopped_, is_false);
         }));
   }

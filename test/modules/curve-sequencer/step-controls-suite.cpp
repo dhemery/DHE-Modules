@@ -47,7 +47,7 @@ public:
       add_test(name, trigger_mode_test(trigger_mode));
     }
 
-    add_test("interrupt_on_trigger(s)",
+    add_test("interrupt_mode(s)",
              test([](Tester &t, Module &module, Controls controls) {
                auto constexpr step = 3;
                module.set_param(Controls::Param::StepInterruptMode, step, 0.F);
@@ -61,7 +61,7 @@ public:
                              is_true);
              }));
 
-    add_test("advance_on_end_of_curve(s)",
+    add_test("completion_mode(s)",
              test([](Tester &t, Module &module, Controls controls) {
                auto constexpr step = 3;
                module.set_param(Controls::Param::StepCompletionMode, step, 0.F);
@@ -75,7 +75,7 @@ public:
                              is_true);
              }));
 
-    add_test("start_source(s)",
+    add_test("start_anchor_source(s)",
              test([](Tester &t, Module &module, Controls controls) {
                auto constexpr step = 0;
 
@@ -103,7 +103,7 @@ public:
              }));
 
     add_test(
-        "track_start_source(s)",
+        "start_anchor_mode(s)",
         test([](Tester &t, Module &module, Controls controls) {
           auto constexpr step = 5;
 
@@ -132,7 +132,7 @@ public:
               is_equal_to(dhe::level(rotation, dhe::signal_ranges[range])));
         }));
 
-    add_test("end_source(s)",
+    add_test("end_anchor_source(s)",
              test([](Tester &t, Module &module, Controls controls) {
                auto constexpr step = 6;
 
@@ -158,7 +158,7 @@ public:
                              is_equal_to(source));
              }));
 
-    add_test("track_end_source(s)",
+    add_test("end_anchor_mode(s)",
              test([](Tester &t, Module &module, Controls controls) {
                auto constexpr step = 5;
 

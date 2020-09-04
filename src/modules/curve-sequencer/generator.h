@@ -1,8 +1,10 @@
 #pragma once
 #include "components/phase-timer.h"
+#include "generator-status.h"
 
 namespace dhe {
 namespace curve_sequencer {
+
 template <typename Controls, typename Source> class Generator {
 public:
   Generator(Controls &controls, Source &start_source, Source &end_source)
@@ -16,7 +18,9 @@ public:
     end_source_.enter(step_);
   }
 
-  auto generate(float /*sample_time*/) -> bool { return false; }
+  auto generate(float /*sample_time*/) -> GeneratorStatus {
+    return GeneratorStatus::Generating;
+  }
 
   void stop() { controls_.show_inactive(step_); }
 

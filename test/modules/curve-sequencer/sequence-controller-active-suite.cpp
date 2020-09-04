@@ -22,7 +22,7 @@ static inline void when_active(Controls &controls, StepSelector &step_selector,
   // Prepare to enter and execute some step
   controls.gate_ = true;
   step_selector.first_ = initially_active_step;
-  step_controller.event_ = StepEvent::Generated;
+  step_controller.status_ = StepStatus::InProgress;
 
   // Enter and execute the prepared step
   sequence_controller.execute(0.F);
@@ -49,7 +49,7 @@ public:
                              StepController &step_controller,
                              SequenceController &sequence_controller) {
           controls.running_ = true;
-          step_controller.event_ = StepEvent::Generated;
+          step_controller.status_ = StepStatus::InProgress;
           auto constexpr sample_time{0.14901F};
 
           controls.gate_ = true;
@@ -86,7 +86,7 @@ public:
                auto constexpr looping = true;
                controls.running_ = true;
                controls.looping_ = looping;
-               step_controller.event_ = StepEvent::Completed;
+               step_controller.status_ = StepStatus::Completed;
 
                sequence_controller.execute(0.F);
                t.assert_that("step", step_selector.step_,
@@ -104,7 +104,7 @@ public:
                              SequenceController &sequence_controller) {
           controls.running_ = true;
 
-          step_controller.event_ = StepEvent::Completed;
+          step_controller.status_ = StepStatus::Completed;
           auto constexpr second_step = initially_active_step + 3;
           step_selector.successor_ = second_step;
 
@@ -115,7 +115,7 @@ public:
 
           auto constexpr third_step = second_step + 3;
           step_selector.successor_ = third_step;
-          step_controller.event_ = StepEvent::Completed;
+          step_controller.status_ = StepStatus::Completed;
 
           sequence_controller.execute(0.F);
           t.assert_that("step entered when second step completed",
@@ -132,7 +132,7 @@ public:
                 SequenceController &sequence_controller) {
                controls.running_ = true;
 
-               step_controller.event_ = StepEvent::Completed;
+               step_controller.status_ = StepStatus::Completed;
                step_selector.successor_ = -1;
 
                sequence_controller.execute(0.F);

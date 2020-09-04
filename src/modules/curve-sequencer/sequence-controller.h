@@ -1,7 +1,7 @@
 #pragma once
 
 #include "components/latch.h"
-#include "step-event.h"
+#include "step-status.h"
 
 namespace dhe {
 namespace curve_sequencer {
@@ -59,8 +59,8 @@ private:
   }
 
   void generate(float sample_time) {
-    auto const result = step_controller_.execute(gate_latch_, sample_time);
-    if (result == StepEvent::Completed) {
+    auto const status = step_controller_.execute(gate_latch_, sample_time);
+    if (status == StepStatus::Completed) {
       advance_sequence();
     }
   }
