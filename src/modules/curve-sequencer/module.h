@@ -87,9 +87,9 @@ public:
 private:
   using ControlsT = Controls<rack::engine::Input, rack::engine::Output,
                              rack::engine::Param, rack::engine::Light, N>;
-  using AnchorT = Anchor<ControlsT>;
+  using StartAnchorT = StartAnchor<ControlsT>;
   using InterrupterT = Interrupter<ControlsT>;
-  using GeneratorT = Generator<ControlsT, AnchorT>;
+  using GeneratorT = Generator<ControlsT, StartAnchorT>;
   using SustainerT = Sustainer<ControlsT>;
   using StepControllerT = StepController<InterrupterT, GeneratorT, SustainerT>;
   using StepSelectorT = StepSelector<ControlsT>;
@@ -97,8 +97,8 @@ private:
       SequenceController<ControlsT, StepSelectorT, StepControllerT>;
 
   ControlsT controls_{inputs, outputs, params, lights};
-  AnchorT start_anchor_{controls_};
-  AnchorT end_anchor_{controls_};
+  StartAnchorT start_anchor_{controls_};
+  StartAnchorT end_anchor_{controls_};
   InterrupterT interrupter_{controls_};
   GeneratorT generator_{controls_, start_anchor_, end_anchor_};
   SustainerT sustainer_{controls_};
