@@ -1,6 +1,6 @@
 #pragma once
-
 #include "components/latch.h"
+#include <ostream>
 
 namespace test {
 using Latch = dhe::Latch;
