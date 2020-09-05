@@ -14,6 +14,13 @@ using dhe::unit::Tester;
 using dhe::unit::TestFunc;
 
 struct Controls {
+  auto end_level(int step) const -> float { return end_level_[step]; }
+  auto end_anchor_mode(int step) const -> AnchorMode {
+    return end_anchor_mode_[step];
+  }
+  auto end_anchor_source(int step) const -> AnchorSource {
+    return end_anchor_source_[step];
+  }
   auto input() const -> float { return input_; }
   auto output() const -> float { return output_; }
   auto start_level(int step) const -> float { return start_level_[step]; }
@@ -23,6 +30,9 @@ struct Controls {
   auto start_anchor_source(int step) const -> AnchorSource {
     return start_anchor_source_[step];
   }
+  std::array<AnchorMode, step_count> end_anchor_mode_{};       // NOLINT
+  std::array<AnchorSource, step_count> end_anchor_source_{};   // NOLINT
+  std::array<float, step_count> end_level_{};                  // NOLINT
   float input_{};                                              // NOLINT
   float output_{};                                             // NOLINT
   std::array<AnchorMode, step_count> start_anchor_mode_{};     // NOLINT
@@ -30,15 +40,9 @@ struct Controls {
   std::array<float, step_count> start_level_{};                // NOLINT
 };
 
-using StartAnchor = dhe::curve_sequencer::StartAnchor<Controls>;
+using EndAnchor = dhe::curve_sequencer::EndAnchor<Controls>;
 
-template <typename Run> static inline auto test(Run const &run) -> TestFunc {
-  return [run](Tester &t) {
-    Controls controls{};
-    StartAnchor anchor{controls};
-    run(t, controls, anchor);
-  };
-}
+using StartAnchor = dhe::curve_sequencer::StartAnchor<Controls>;
 
 } // namespace curve_sequencer
 } // namespace test

@@ -8,6 +8,14 @@ using dhe::unit::is_equal_to;
 using dhe::unit::Suite;
 using dhe::unit::TestRegistrar;
 
+template <typename Run> static inline auto test(Run const &run) -> TestFunc {
+  return [run](Tester &t) {
+    Controls controls{};
+    StartAnchor anchor{controls};
+    run(t, controls, anchor);
+  };
+}
+
 class StartAnchorSuite : public Suite {
 public:
   StartAnchorSuite() : Suite("dhe::curve_sequencer::StartAnchor") {}
