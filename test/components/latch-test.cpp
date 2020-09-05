@@ -1,6 +1,6 @@
 #include "components/latch.h"
-
 #include "dheunit/test.h"
+#include "helpers/latches.h"
 
 using dhe::Latch;
 using dhe::unit::Suite;

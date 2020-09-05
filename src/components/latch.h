@@ -1,9 +1,5 @@
 #pragma once
 
-#include <iostream>
-#include <sstream>
-#include <string>
-
 namespace dhe {
 class Latch {
 public:
@@ -27,18 +23,6 @@ public:
   }
   constexpr auto operator!=(Latch const &rhs) const -> bool {
     return !(rhs == *this);
-  }
-
-  friend auto operator<<(std::ostream &os, Latch const &latch)
-      -> std::ostream & {
-    os << "Latch{" << latch.state_ << ',' << latch.edge_ << '}';
-    return os;
-  }
-
-  auto str() const -> std::string {
-    auto os = std::ostringstream{};
-    os << std::boolalpha << *this;
-    return os.str();
   }
 
 private:
