@@ -1,10 +1,17 @@
 #pragma once
 
 #include "modules/curve-sequencer/anchor-mode.h"
+#include <array>
 #include <ostream>
 
-namespace dhe {
+namespace test {
 namespace curve_sequencer {
+using dhe::curve_sequencer::AnchorMode;
+
+static auto constexpr anchor_modes = std::array<AnchorMode, 2>{
+    AnchorMode::Snap,
+    AnchorMode::Track,
+};
 
 static auto name_of(dhe::curve_sequencer::AnchorMode mode) -> char const * {
   switch (mode) {
@@ -14,10 +21,16 @@ static auto name_of(dhe::curve_sequencer::AnchorMode mode) -> char const * {
     return "AnchorMode::Track";
   }
 }
-static inline auto operator<<(std::ostream &os,
-                              dhe::curve_sequencer::AnchorMode mode)
+
+} // namespace curve_sequencer
+} // namespace test
+
+namespace dhe {
+namespace curve_sequencer {
+
+static inline auto operator<<(std::ostream &os, AnchorMode mode)
     -> std::ostream & {
-  os << name_of(mode);
+  os << test::curve_sequencer::name_of(mode);
   return os;
 }
 

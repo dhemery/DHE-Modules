@@ -1,12 +1,20 @@
 #pragma once
 
 #include "modules/curve-sequencer/anchor-source.h"
+#include <array>
 #include <ostream>
 
-namespace dhe {
+namespace test {
 namespace curve_sequencer {
+using dhe::curve_sequencer::AnchorSource;
 
-static auto name_of(dhe::curve_sequencer::AnchorSource source) -> char const * {
+static auto constexpr anchor_sources = std::array<AnchorSource, 3>{
+    AnchorSource::In,
+    AnchorSource::Level,
+    AnchorSource::Out,
+};
+
+static auto name_of(AnchorSource source) -> char const * {
   switch (source) {
   case AnchorSource::In:
     return "AnchorSource::In";
@@ -16,10 +24,16 @@ static auto name_of(dhe::curve_sequencer::AnchorSource source) -> char const * {
     return "AnchorSource::Out";
   }
 }
+} // namespace curve_sequencer
+} // namespace test
+
+namespace dhe {
+namespace curve_sequencer {
+
 static inline auto operator<<(std::ostream &os,
                               dhe::curve_sequencer::AnchorSource source)
     -> std::ostream & {
-  os << name_of(source);
+  os << test::curve_sequencer::name_of(source);
   return os;
 }
 

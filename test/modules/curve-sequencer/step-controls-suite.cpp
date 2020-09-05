@@ -1,10 +1,8 @@
 #include "./fixtures/controls-fixture.h"
-#include "./fixtures/trigger-mode-io.h"
+#include "./fixtures/trigger-modes.h"
 #include "components/sigmoid.h"
-#include "modules/curve-sequencer/anchor-mode.h"
 #include "modules/curve-sequencer/completion-mode.h"
 #include "modules/curve-sequencer/controls.h"
-#include "modules/curve-sequencer/interrupt-mode.h"
 #include "modules/curve-sequencer/trigger-mode.h"
 #include <dheunit/assertions.h>
 #include <dheunit/test.h>
@@ -26,109 +24,99 @@ using dhe::unit::is_no_less_than;
 using dhe::unit::is_true;
 using dhe::unit::Suite;
 
-auto trigger_mode_test(TriggerMode mode) -> TestFunc {
-  return test([mode](Tester &t, Module &module, Controls &controls) {
-    auto constexpr step = 4;
-    auto const switch_value = static_cast<float>(mode);
-
-    module.set_param(Controls::Param::StepTriggerMode, step, switch_value);
-
-    t.assert_that(controls.trigger_mode(step), is_equal_to(mode));
-  });
-}
-
-static auto constexpr trigger_modes =
-    std::array<TriggerMode, dhe::curve_sequencer::trigger_mode_count>{
-        TriggerMode::GateRises,   TriggerMode::GateFalls,
-        TriggerMode::GateChanges, TriggerMode::GateIsHigh,
-        TriggerMode::GateIsLow,
-    };
-
 class StepControlsSuite : Suite {
 public:
   StepControlsSuite() : Suite{"dhe::curve_sequencer::Controls/step"} {}
   void register_tests(dhe::unit::TestRegistrar add_test) override {
-    for (auto trigger_mode : trigger_modes) {
-      auto const name =
-          std::string{"trigger_mode(s): "} + name_of(trigger_mode);
-      add_test(name, trigger_mode_test(trigger_mode));
+
+    for (auto const &mode : completion_modes) {
+      add_test(std::string{"completion_mode(s): "} + name_of(mode),
+               test([mode](Tester &t, Module &module, Controls &controls) {
+                 auto constexpr step = 3;
+                 module.set_param(Controls::Param::StepCompletionMode, step,
+                                  static_cast<float>(mode));
+
+                 t.assert_that(controls.completion_mode(step),
+                               is_equal_to(mode));
+               }));
     }
 
-    add_test("interrupt_mode(s)",
-             test([](Tester &t, Module &module, Controls controls) {
-               auto constexpr step = 3;
-               module.set_param(Controls::Param::StepInterruptMode, step, 0.F);
+    for (auto const &mode : interrupt_modes) {
+      add_test(std::string{"interrupt_mode(s): "} + name_of(mode),
+               test([mode](Tester &t, Module &module, Controls &controls) {
+                 auto constexpr step = 3;
+                 module.set_param(Controls::Param::StepInterruptMode, step,
+                                  static_cast<float>(mode));
 
-               t.assert_that("interrupt disabled",
-                             controls.interrupt_mode(step),
-                             is_equal_to(InterruptMode::Ignore));
+                 t.assert_that(controls.interrupt_mode(step),
+                               is_equal_to(mode));
+               }));
+    }
 
-               module.set_param(Controls::Param::StepInterruptMode, step, 1.F);
+    for (auto const &mode : anchor_modes) {
+      add_test(std::string{"start_anchor_mode(s): "} + name_of(mode),
+               test([mode](Tester &t, Module &module, Controls &controls) {
+                 auto constexpr step = 1;
 
-               t.assert_that("interrupt enabled", controls.interrupt_mode(step),
-                             is_equal_to(InterruptMode::Advance));
-             }));
+                 module.set_param(Controls::Param::StepStartAnchorMode, step,
+                                  static_cast<float>(mode));
 
-    add_test("completion_mode(s)",
-             test([](Tester &t, Module &module, Controls controls) {
-               auto constexpr step = 3;
-               module.set_param(Controls::Param::StepCompletionMode, step, 0.F);
+                 t.assert_that(controls.start_anchor_mode(step),
+                               is_equal_to(mode));
+               }));
 
-               t.assert_that("advance disabled", controls.completion_mode(step),
-                             is_equal_to(CompletionMode::Sustain));
+      add_test(std::string{"end_anchor_mode(s): "} + name_of(mode),
+               test([mode](Tester &t, Module &module, Controls &controls) {
+                 auto constexpr step = 2;
 
-               module.set_param(Controls::Param::StepCompletionMode, step, 1.F);
+                 module.set_param(Controls::Param::StepEndAnchorMode, step,
+                                  static_cast<float>(mode));
 
-               t.assert_that("advance enabled", controls.completion_mode(step),
-                             is_equal_to(CompletionMode::Advance));
-             }));
+                 t.assert_that(controls.end_anchor_mode(step),
+                               is_equal_to(mode));
+               }));
+    }
 
-    add_test("start_anchor_source(s)",
-             test([](Tester &t, Module &module, Controls controls) {
-               auto constexpr step = 0;
+    for (auto const &source : anchor_sources) {
+      add_test(std::string{"start_anchor_source(s): "} + name_of(source),
+               test([source](Tester &t, Module &module, Controls &controls) {
+                 auto constexpr step = 3;
 
-               auto source = AnchorSource::Level;
-               module.set_param(Controls::Param::StepStartAnchorSource, step,
-                                static_cast<float>(source));
+                 module.set_param(Controls::Param::StepStartAnchorSource, step,
+                                  static_cast<float>(source));
 
-               t.assert_that("Source::Level",
-                             controls.start_anchor_source(step),
-                             is_equal_to(source));
+                 t.assert_that(controls.start_anchor_source(step),
+                               is_equal_to(source));
+               }));
 
-               source = AnchorSource::In;
-               module.set_param(Controls::Param::StepStartAnchorSource, step,
-                                static_cast<float>(source));
+      add_test(std::string{"end_anchor_source(s): "} + name_of(source),
+               test([source](Tester &t, Module &module, Controls &controls) {
+                 auto constexpr step = 4;
 
-               t.assert_that("Source::In", controls.start_anchor_source(step),
-                             is_equal_to(source));
+                 module.set_param(Controls::Param::StepEndAnchorSource, step,
+                                  static_cast<float>(source));
 
-               source = AnchorSource::Out;
-               module.set_param(Controls::Param::StepStartAnchorSource, step,
-                                static_cast<float>(source));
+                 t.assert_that(controls.end_anchor_source(step),
+                               is_equal_to(source));
+               }));
+    }
 
-               t.assert_that("Source::Out", controls.start_anchor_source(step),
-                             is_equal_to(source));
-             }));
+    for (auto mode : trigger_modes) {
+      auto const name = std::string{"trigger_mode(s): "} + name_of(mode);
+      add_test(name,
+               test([mode](Tester &t, Module &module, Controls &controls) {
+                 auto constexpr step = 4;
 
-    add_test(
-        "start_anchor_mode(s)",
-        test([](Tester &t, Module &module, Controls controls) {
-          auto constexpr step = 5;
+                 module.set_param(Controls::Param::StepTriggerMode, step,
+                                  static_cast<float>(mode));
 
-          module.set_param(Controls::Param::StepStartAnchorMode, step, 1.F);
-
-          t.assert_that("tracking enabled", controls.start_anchor_mode(step),
-                        is_equal_to(AnchorMode::Track));
-
-          module.set_param(Controls::Param::StepStartAnchorMode, step, 0.F);
-
-          t.assert_that("tracking disabled", controls.start_anchor_mode(step),
-                        is_equal_to(AnchorMode::Snap));
-        }));
+                 t.assert_that(controls.trigger_mode(step), is_equal_to(mode));
+               }));
+    }
 
     add_test(
         "start_level(s)",
-        test([](Tester &t, Module &module, Controls controls) {
+        test([](Tester &t, Module &module, Controls &controls) {
           auto constexpr step = 7;
           auto constexpr rotation = 0.37F;
           auto constexpr range = 1; // unipolar 0–10
@@ -140,50 +128,8 @@ public:
               is_equal_to(dhe::level(rotation, dhe::signal_ranges[range])));
         }));
 
-    add_test("end_anchor_source(s)",
-             test([](Tester &t, Module &module, Controls controls) {
-               auto constexpr step = 6;
-
-               auto source = AnchorSource::Level;
-               module.set_param(Controls::Param::StepEndAnchorSource, step,
-                                static_cast<float>(source));
-
-               t.assert_that("Source::Level", controls.end_anchor_source(step),
-                             is_equal_to(source));
-
-               source = AnchorSource::In;
-               module.set_param(Controls::Param::StepEndAnchorSource, step,
-                                static_cast<float>(source));
-
-               t.assert_that("Source::In", controls.end_anchor_source(step),
-                             is_equal_to(source));
-
-               source = AnchorSource::Out;
-               module.set_param(Controls::Param::StepEndAnchorSource, step,
-                                static_cast<float>(source));
-
-               t.assert_that("Source::Out", controls.end_anchor_source(step),
-                             is_equal_to(source));
-             }));
-
-    add_test("end_anchor_mode(s)",
-             test([](Tester &t, Module &module, Controls controls) {
-               auto constexpr step = 5;
-
-               module.set_param(Controls::Param::StepEndAnchorMode, step, 1.F);
-
-               t.assert_that("tracking enabled", controls.end_anchor_mode(step),
-                             is_equal_to(AnchorMode::Track));
-
-               module.set_param(Controls::Param::StepEndAnchorMode, step, 0.F);
-
-               t.assert_that("tracking disabled",
-                             controls.end_anchor_mode(step),
-                             is_equal_to(AnchorMode::Snap));
-             }));
-
     add_test("end_level(s)",
-             test([](Tester &t, Module &module, Controls controls) {
+             test([](Tester &t, Module &module, Controls &controls) {
                auto constexpr step = 2;
                auto constexpr rotation = 0.22F;
                auto constexpr range = 0;
@@ -196,7 +142,7 @@ public:
              }));
 
     add_test("duration(s)",
-             test([](Tester &t, Module &module, Controls controls) {
+             test([](Tester &t, Module &module, Controls &controls) {
                auto constexpr step = 2;
                auto constexpr rotation = 0.22F;
                auto constexpr range = 0;
@@ -208,7 +154,8 @@ public:
                t.assert_that(controls.duration(step), is_equal_to(want));
              }));
 
-    add_test("taper(s)", test([](Tester &t, Module &module, Controls controls) {
+    add_test("taper(s)",
+             test([](Tester &t, Module &module, Controls &controls) {
                auto constexpr step = 3;
 
                auto selection = 0; // J
@@ -226,7 +173,7 @@ public:
              }));
 
     add_test("curvature(s)",
-             test([](Tester &t, Module &module, Controls controls) {
+             test([](Tester &t, Module &module, Controls &controls) {
                auto constexpr step = 5;
                auto constexpr rotation = 0.68F;
 
@@ -238,7 +185,7 @@ public:
 
     add_test(
         "show_progress(s)",
-        test([](Tester &t, Module &module, Controls controls) {
+        test([](Tester &t, Module &module, Controls &controls) {
           auto constexpr step = 6;
 
           auto constexpr completed_index = step + step;
@@ -273,7 +220,7 @@ public:
         }));
 
     add_test("show_inactive(s)",
-             test([](Tester &t, Module &module, Controls controls) {
+             test([](Tester &t, Module &module, Controls &controls) {
                auto constexpr step = 5;
 
                auto constexpr completed_index = step + step;
@@ -290,26 +237,27 @@ public:
                t.assert_that("remaining", remaining, is_equal_to(0.F));
              }));
 
-    add_test(
-        "is_enabled(s)", test([](Tester &t, Module &module, Controls controls) {
-          auto constexpr step = 3;
+    add_test("is_enabled(s)",
+             test([](Tester &t, Module &module, Controls &controls) {
+               auto constexpr step = 3;
 
-          module.set_param(Controls::Param::EnableStep, step, 1.F);
-          module.set_input(Controls::Input::EnableStep, step, 0.F);
+               module.set_param(Controls::Param::EnableStep, step, 1.F);
+               module.set_input(Controls::Input::EnableStep, step, 0.F);
 
-          t.assert_that("button pressed", controls.is_enabled(step), is_true);
+               t.assert_that("button pressed", controls.is_enabled(step),
+                             is_true);
 
-          module.set_param(Controls::Param::EnableStep, step, 0.F);
-          module.set_input(Controls::Input::EnableStep, step, 10.F);
+               module.set_param(Controls::Param::EnableStep, step, 0.F);
+               module.set_input(Controls::Input::EnableStep, step, 10.F);
 
-          t.assert_that("input high", controls.is_enabled(step), is_true);
+               t.assert_that("input high", controls.is_enabled(step), is_true);
 
-          module.set_param(Controls::Param::EnableStep, step, 0.F);
-          module.set_input(Controls::Input::EnableStep, step, 0.F);
+               module.set_param(Controls::Param::EnableStep, step, 0.F);
+               module.set_input(Controls::Input::EnableStep, step, 0.F);
 
-          t.assert_that("input low, button not pressed",
-                        controls.is_enabled(step), is_false);
-        }));
+               t.assert_that("input low, button not pressed",
+                             controls.is_enabled(step), is_false);
+             }));
   }
 };
 

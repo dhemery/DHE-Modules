@@ -1,9 +1,9 @@
 #pragma once
 
-#include "./anchor-mode-io.h"
-#include "./anchor-source-io.h"
-#include "./completion-mode-io.h"
-#include "./interrupt-mode-io.h"
+#include "./anchor-modes.h"
+#include "./anchor-sources.h"
+#include "./completion-modes.h"
+#include "./interrupt-modes.h"
 #include "helpers/rack-controls.h"
 #include "modules/curve-sequencer/controls.h"
 #include <dheunit/test.h>
