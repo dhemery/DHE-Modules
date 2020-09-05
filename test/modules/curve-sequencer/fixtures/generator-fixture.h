@@ -15,13 +15,13 @@ struct Anchor {
 
 struct Controls {
   void show_progress(int step, float progress) {
-    activated_step_ = step;
+    progress_step_ = step;
     progress_ = progress;
   }
-  void show_inactive(int step) { deactivated_step_ = step; }
-  float progress_{};       // NOLINT
-  int activated_step_{};   // NOLINT
-  int deactivated_step_{}; // NOLINT
+  void show_inactive(int step) { inactive_step_ = step; }
+  float progress_{};    // NOLINT
+  int progress_step_{}; // NOLINT
+  int inactive_step_{}; // NOLINT
 };
 
 using Generator = dhe::curve_sequencer::Generator<Controls, Anchor>;

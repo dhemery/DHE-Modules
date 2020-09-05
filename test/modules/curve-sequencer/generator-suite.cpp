@@ -18,13 +18,12 @@ public:
 
           generator.start(started_step);
 
-          t.assert_that("activated step (controls)", controls.activated_step_,
+          t.assert_that("shows progress for step", controls.progress_step_,
                         is_equal_to(started_step));
-          t.assert_that("progress (controls)", controls.progress_,
-                        is_equal_to(0.F));
-          t.assert_that("snapped step (start source)",
+          t.assert_that("shows progress", controls.progress_, is_equal_to(0.F));
+          t.assert_that("enters start anchor at step",
                         start_anchor.entered_step_, is_equal_to(started_step));
-          t.assert_that("snapped step (end source)", end_source.entered_step_,
+          t.assert_that("enters end anchor at step", end_source.entered_step_,
                         is_equal_to(started_step));
         }));
 
@@ -36,7 +35,7 @@ public:
           generator.start(step);
           generator.stop();
 
-          t.assert_that("controls.deactivated_step", controls.deactivated_step_,
+          t.assert_that("shows step inactive", controls.inactive_step_,
                         is_equal_to(step));
         }));
 
