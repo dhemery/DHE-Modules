@@ -14,7 +14,15 @@ namespace dhe {
 
 static inline auto operator<<(std::ostream &os, Latch const &latch)
     -> std::ostream & {
-  os << "Latch{" << latch.is_high() << ',' << latch.is_edge() << '}';
+  if (latch == test::rising_latch) {
+    os << "Latch::Rising";
+  } else if (latch == test::falling_latch) {
+    os << "Latch::Falling";
+  } else if (latch == test::high_latch) {
+    os << "Latch::High";
+  } else {
+    os << "Latch::Low";
+  }
   return os;
 }
 
