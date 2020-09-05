@@ -84,6 +84,10 @@ template <int N> class Panel : public rack::app::ModuleWidget {
   using ControlsT =
       curve_sequencer::Controls<rack::engine::Input, rack::engine::Output,
                                 rack::engine::Param, rack::engine::Light, N>;
+  using Param = ParamIds<N>;
+  using Input = InputIds<N>;
+  using Light = LightIds<N>;
+  using Output = OutputIds;
 
 public:
   Panel(rack::engine::Module *module) {
@@ -114,13 +118,13 @@ public:
     auto constexpr gate_y = sequence_controls_top + 3.F * sequence_controls_dy;
     auto constexpr reset_y = sequence_controls_top + 4.F * sequence_controls_dy;
 
-    addInput(Jack::input(slug, module, left, run_y, ControlsT::Input::Run));
+    addInput(Jack::input(slug, module, left, run_y, Input::Run));
     addParam(Button::toggle(slug, module, left + button_port_distance, run_y,
-                            ControlsT::Param::Run));
+                            Param::Run));
 
-    addInput(Jack::input(slug, module, left, loop_y, ControlsT::Input::Loop));
+    addInput(Jack::input(slug, module, left, loop_y, Input::Loop));
     addParam(Button::toggle(slug, module, left + button_port_distance, loop_y,
-                            ControlsT::Param::Loop));
+                            Param::Loop));
 
     auto constexpr active_y = top + light_radius * 1.5F;
 
@@ -138,7 +142,7 @@ public:
 
     addParam(new SelectionKnob(on_selection_start_change, slug, module,
                                left - hp2mm(0.2), selection_y,
-                               ControlsT::Param::SelectionStart));
+                               Param::SelectionStart));
 
     auto const on_selection_end_change = [end_marker](int length) {
       end_marker->set_selection_length(length);
@@ -146,15 +150,15 @@ public:
     auto constexpr selection_length_x = left + hp2mm(1.63F);
     addParam(new SelectionKnob(on_selection_end_change, slug, module,
                                selection_length_x, selection_y,
-                               ControlsT::Param::SelectionLength));
+                               Param::SelectionLength));
 
-    addInput(Jack::input(slug, module, left, gate_y, ControlsT::Input::Gate));
+    addInput(Jack::input(slug, module, left, gate_y, Input::Gate));
     addParam(Button::momentary(slug, module, left + button_port_distance,
-                               gate_y, ControlsT::Param::Gate));
+                               gate_y, Param::Gate));
 
-    addInput(Jack::input(slug, module, left, reset_y, ControlsT::Input::Reset));
+    addInput(Jack::input(slug, module, left, reset_y, Input::Reset));
     addParam(Button::momentary(slug, module, left + button_port_distance,
-                               reset_y, ControlsT::Param::Reset));
+                               reset_y, Param::Reset));
 
     auto constexpr trigger_y = top + hp2mm(1.61F);
     auto constexpr interrupt_y = trigger_y + hp2mm(0.8F);
@@ -172,62 +176,58 @@ public:
     for (auto step = 0; step < N; step++) {
       auto const x = step_x + step_dx * (float)step;
       addChild(rack::createLightCentered<ProgressLight>(
-          mm2px(x, active_y), module,
-          ControlsT::Light::StepProgress + step + step));
+          mm2px(x, active_y), module, Light::StepProgress + step + step));
 
       addParam(Toggle::stepper(slug, "trigger-mode", trigger_mode_count, module,
-                               x, trigger_y,
-                               ControlsT::Param::StepTriggerMode + step));
+                               x, trigger_y, Param::StepTriggerMode + step));
       addParam(Toggle::stepper(slug, "interrupt-mode", 2, module, x,
-                               interrupt_y,
-                               ControlsT::Param::StepInterruptMode + step));
+                               interrupt_y, Param::StepInterruptMode + step));
       addParam(Toggle::stepper(slug, "completion-mode", 2, module, x, sustain_y,
-                               ControlsT::Param::StepCompletionMode + step));
+                               Param::StepCompletionMode + step));
 
       addParam(Toggle::stepper(slug, "anchor-source", anchor_source_count,
                                module, x, start_y - knob_stepper_distance,
-                               ControlsT::Param::StepStartAnchorSource + step));
-      addParam(Knob::tiny(slug, module, x, start_y,
-                          ControlsT::Param::StepStartLevel + step));
+                               Param::StepStartAnchorSource + step));
+      addParam(
+          Knob::tiny(slug, module, x, start_y, Param::StepStartLevel + step));
       addParam(Toggle::stepper(slug, "anchor-mode", 2, module, x,
                                start_y + knob_stepper_distance,
-                               ControlsT::Param::StepStartAnchorMode + step));
+                               Param::StepStartAnchorMode + step));
 
       addParam(Toggle::stepper(slug, "anchor-source", anchor_source_count,
                                module, x, end_y - knob_stepper_distance,
-                               ControlsT::Param::StepEndAnchorSource + step));
-      addParam(Knob::tiny(slug, module, x, end_y,
-                          ControlsT::Param::StepEndLevel + step));
+                               Param::StepEndAnchorSource + step));
+      addParam(Knob::tiny(slug, module, x, end_y, Param::StepEndLevel + step));
       addParam(Toggle::stepper(slug, "anchor-mode", 2, module, x,
                                end_y + knob_stepper_distance,
-                               ControlsT::Param::StepEndAnchorMode + step));
+                               Param::StepEndAnchorMode + step));
 
       addParam(Toggle::stepper(slug, "shape", 2, module, x,
                                shape_y - knob_stepper_distance,
-                               ControlsT::Param::StepShape + step));
-      addParam(Knob::tiny(slug, module, x, shape_y,
-                          ControlsT::Param::StepCurvature + step));
+                               Param::StepShape + step));
+      addParam(
+          Knob::tiny(slug, module, x, shape_y, Param::StepCurvature + step));
 
-      addParam(Knob::tiny(slug, module, x, duration_y,
-                          ControlsT::Param::StepDuration + step));
+      addParam(
+          Knob::tiny(slug, module, x, duration_y, Param::StepDuration + step));
 
       addParam(Button::toggle(slug, module, x, enabled_button_y,
-                              ControlsT::Param::EnableStep + step));
+                              Param::EnableStep + step));
       addInput(Jack::input(slug, module, x, enabled_port_y,
-                           ControlsT::Input::EnableStep + step));
+                           Input::EnableStep + step));
     }
 
     auto constexpr out_y = bottom - port_radius - 1.F;
     auto constexpr in_y = sequence_controls_top;
 
-    addInput(Jack::input(slug, module, right, in_y, ControlsT::Input::In));
+    addInput(Jack::input(slug, module, right, in_y, Input::In));
 
     auto constexpr polarity_y = start_y + (end_y - start_y) / 2.F;
-    addParam(Toggle::thumb(2, slug, module, right, polarity_y,
-                           ControlsT::Param::LevelRange));
+    addParam(
+        Toggle::thumb(2, slug, module, right, polarity_y, Param::LevelRange));
     addParam(Toggle::thumb(3, slug, module, right, duration_y,
-                           ControlsT::Param::DurationRange));
-    addOutput(Jack::output(slug, module, right, out_y, ControlsT::Output::Out));
+                           Param::DurationRange));
+    addOutput(Jack::output(slug, module, right, out_y, Output::Out));
   }
 }; // namespace dhe
 } // namespace curve_sequencer

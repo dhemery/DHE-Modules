@@ -33,7 +33,7 @@ public:
       add_test(std::string{"completion_mode(s): "} + name_of(mode),
                test([mode](Tester &t, Module &module, Controls &controls) {
                  auto constexpr step = 3;
-                 module.set_param(Controls::Param::StepCompletionMode, step,
+                 module.set_param(Param::StepCompletionMode, step,
                                   static_cast<float>(mode));
 
                  t.assert_that(controls.completion_mode(step),
@@ -45,7 +45,7 @@ public:
       add_test(std::string{"interrupt_mode(s): "} + name_of(mode),
                test([mode](Tester &t, Module &module, Controls &controls) {
                  auto constexpr step = 3;
-                 module.set_param(Controls::Param::StepInterruptMode, step,
+                 module.set_param(Param::StepInterruptMode, step,
                                   static_cast<float>(mode));
 
                  t.assert_that(controls.interrupt_mode(step),
@@ -58,7 +58,7 @@ public:
                test([mode](Tester &t, Module &module, Controls &controls) {
                  auto constexpr step = 1;
 
-                 module.set_param(Controls::Param::StepStartAnchorMode, step,
+                 module.set_param(Param::StepStartAnchorMode, step,
                                   static_cast<float>(mode));
 
                  t.assert_that(controls.start_anchor_mode(step),
@@ -69,7 +69,7 @@ public:
                test([mode](Tester &t, Module &module, Controls &controls) {
                  auto constexpr step = 2;
 
-                 module.set_param(Controls::Param::StepEndAnchorMode, step,
+                 module.set_param(Param::StepEndAnchorMode, step,
                                   static_cast<float>(mode));
 
                  t.assert_that(controls.end_anchor_mode(step),
@@ -82,7 +82,7 @@ public:
                test([source](Tester &t, Module &module, Controls &controls) {
                  auto constexpr step = 3;
 
-                 module.set_param(Controls::Param::StepStartAnchorSource, step,
+                 module.set_param(Param::StepStartAnchorSource, step,
                                   static_cast<float>(source));
 
                  t.assert_that(controls.start_anchor_source(step),
@@ -93,7 +93,7 @@ public:
                test([source](Tester &t, Module &module, Controls &controls) {
                  auto constexpr step = 4;
 
-                 module.set_param(Controls::Param::StepEndAnchorSource, step,
+                 module.set_param(Param::StepEndAnchorSource, step,
                                   static_cast<float>(source));
 
                  t.assert_that(controls.end_anchor_source(step),
@@ -107,34 +107,33 @@ public:
                test([mode](Tester &t, Module &module, Controls &controls) {
                  auto constexpr step = 4;
 
-                 module.set_param(Controls::Param::StepTriggerMode, step,
+                 module.set_param(Param::StepTriggerMode, step,
                                   static_cast<float>(mode));
 
                  t.assert_that(controls.trigger_mode(step), is_equal_to(mode));
                }));
     }
 
-    add_test(
-        "start_level(s)",
-        test([](Tester &t, Module &module, Controls &controls) {
-          auto constexpr step = 7;
-          auto constexpr rotation = 0.37F;
-          auto constexpr range = 1; // unipolar 0–10
-          module.set_param(Controls::Param::StepStartLevel, step, rotation);
-          module.set_param(Controls::Param::LevelRange, range);
+    add_test("start_level(s)",
+             test([](Tester &t, Module &module, Controls &controls) {
+               auto constexpr step = 7;
+               auto constexpr rotation = 0.37F;
+               auto constexpr range = 1; // unipolar 0–10
+               module.set_param(Param::StepStartLevel, step, rotation);
+               module.set_param(Param::LevelRange, range);
 
-          t.assert_that(
-              controls.start_level(step),
-              is_equal_to(dhe::level(rotation, dhe::signal_ranges[range])));
-        }));
+               t.assert_that(controls.start_level(step),
+                             is_equal_to(dhe::level(
+                                 rotation, dhe::signal_ranges[range])));
+             }));
 
     add_test("end_level(s)",
              test([](Tester &t, Module &module, Controls &controls) {
                auto constexpr step = 2;
                auto constexpr rotation = 0.22F;
                auto constexpr range = 0;
-               module.set_param(Controls::Param::StepEndLevel, step, rotation);
-               module.set_param(Controls::Param::LevelRange, range);
+               module.set_param(Param::StepEndLevel, step, rotation);
+               module.set_param(Param::LevelRange, range);
 
                auto want = dhe::level(rotation, dhe::signal_ranges[range]);
 
@@ -146,8 +145,8 @@ public:
                auto constexpr step = 2;
                auto constexpr rotation = 0.22F;
                auto constexpr range = 0;
-               module.set_param(Controls::Param::StepDuration, step, rotation);
-               module.set_param(Controls::Param::DurationRange, range);
+               module.set_param(Param::StepDuration, step, rotation);
+               module.set_param(Param::DurationRange, range);
 
                auto want = dhe::duration(rotation, dhe::duration_ranges[range]);
 
@@ -159,14 +158,14 @@ public:
                auto constexpr step = 3;
 
                auto selection = 0; // J
-               module.set_param(Controls::Param::StepShape, step,
+               module.set_param(Param::StepShape, step,
                                 static_cast<float>(selection));
 
                t.assert_that("J", controls.taper(step),
                              is_equal_to(dhe::sigmoid::tapers[selection]));
 
                selection = 1; // S
-               module.set_param(Controls::Param::StepShape, step,
+               module.set_param(Param::StepShape, step,
                                 static_cast<float>(selection));
                t.assert_that("S", controls.taper(step),
                              is_equal_to(dhe::sigmoid::tapers[selection]));
@@ -177,47 +176,46 @@ public:
                auto constexpr step = 5;
                auto constexpr rotation = 0.68F;
 
-               module.set_param(Controls::Param::StepCurvature, step, rotation);
+               module.set_param(Param::StepCurvature, step, rotation);
 
                t.assert_that(controls.curvature(step),
                              is_near(dhe::curvature(rotation), 0.00001F));
              }));
 
-    add_test(
-        "show_progress(s)",
-        test([](Tester &t, Module &module, Controls &controls) {
-          auto constexpr step = 6;
+    add_test("show_progress(s)",
+             test([](Tester &t, Module &module, Controls &controls) {
+               auto constexpr step = 6;
 
-          auto constexpr completed_index = step + step;
-          auto constexpr remaining_index = step + step + 1;
+               auto constexpr completed_index = step + step;
+               auto constexpr remaining_index = step + step + 1;
 
-          controls.show_progress(step, 0.4F);
+               controls.show_progress(step, 0.4F);
 
-          auto const early_completed =
-              module.get_light(Controls::Light::StepProgress, completed_index);
+               auto const early_completed =
+                   module.get_light(Light::StepProgress, completed_index);
 
-          auto const early_remaining =
-              module.get_light(Controls::Light::StepProgress, remaining_index);
+               auto const early_remaining =
+                   module.get_light(Light::StepProgress, remaining_index);
 
-          t.assert_that("early completed", early_completed,
-                        is_no_less_than(0.F));
+               t.assert_that("early completed", early_completed,
+                             is_no_less_than(0.F));
 
-          t.assert_that("early remaining", early_remaining,
-                        is_no_greater_than(1.F));
+               t.assert_that("early remaining", early_remaining,
+                             is_no_greater_than(1.F));
 
-          controls.show_progress(step, 0.6F);
+               controls.show_progress(step, 0.6F);
 
-          auto const late_completed =
-              module.get_light(Controls::Light::StepProgress, completed_index);
-          auto const late_remaining =
-              module.get_light(Controls::Light::StepProgress, remaining_index);
+               auto const late_completed =
+                   module.get_light(Light::StepProgress, completed_index);
+               auto const late_remaining =
+                   module.get_light(Light::StepProgress, remaining_index);
 
-          t.assert_that("late completed", late_completed,
-                        is_between(early_completed, 1.F));
+               t.assert_that("late completed", late_completed,
+                             is_between(early_completed, 1.F));
 
-          t.assert_that("late remaining", late_remaining,
-                        is_between(0.F, early_remaining));
-        }));
+               t.assert_that("late remaining", late_remaining,
+                             is_between(0.F, early_remaining));
+             }));
 
     add_test("show_inactive(s)",
              test([](Tester &t, Module &module, Controls &controls) {
@@ -228,10 +226,10 @@ public:
 
                controls.show_inactive(step);
 
-               auto const completed = module.get_light(
-                   Controls::Light::StepProgress, completed_index);
-               auto const remaining = module.get_light(
-                   Controls::Light::StepProgress, remaining_index);
+               auto const completed =
+                   module.get_light(Light::StepProgress, completed_index);
+               auto const remaining =
+                   module.get_light(Light::StepProgress, remaining_index);
 
                t.assert_that("completed", completed, is_equal_to(0.F));
                t.assert_that("remaining", remaining, is_equal_to(0.F));
@@ -241,19 +239,19 @@ public:
              test([](Tester &t, Module &module, Controls &controls) {
                auto constexpr step = 3;
 
-               module.set_param(Controls::Param::EnableStep, step, 1.F);
-               module.set_input(Controls::Input::EnableStep, step, 0.F);
+               module.set_param(Param::EnableStep, step, 1.F);
+               module.set_input(Input::EnableStep, step, 0.F);
 
                t.assert_that("button pressed", controls.is_enabled(step),
                              is_true);
 
-               module.set_param(Controls::Param::EnableStep, step, 0.F);
-               module.set_input(Controls::Input::EnableStep, step, 10.F);
+               module.set_param(Param::EnableStep, step, 0.F);
+               module.set_input(Input::EnableStep, step, 10.F);
 
                t.assert_that("input high", controls.is_enabled(step), is_true);
 
-               module.set_param(Controls::Param::EnableStep, step, 0.F);
-               module.set_input(Controls::Input::EnableStep, step, 0.F);
+               module.set_param(Param::EnableStep, step, 0.F);
+               module.set_input(Input::EnableStep, step, 0.F);
 
                t.assert_that("input low, button not pressed",
                              controls.is_enabled(step), is_false);

@@ -5,6 +5,7 @@
 #include "./completion-modes.h"
 #include "./interrupt-modes.h"
 #include "helpers/rack-controls.h"
+#include "modules/curve-sequencer/control-ids.h"
 #include "modules/curve-sequencer/controls.h"
 #include <dheunit/test.h>
 
@@ -19,6 +20,10 @@ static auto constexpr step_count{8};
 using Controls =
     dhe::curve_sequencer::Controls<fake::Port, fake::Port, fake::Param,
                                    fake::Light, step_count>;
+using Param = dhe::curve_sequencer::ParamIds<step_count>;
+using Input = dhe::curve_sequencer::InputIds<step_count>;
+using Light = dhe::curve_sequencer::LightIds<step_count>;
+using Output = dhe::curve_sequencer::OutputIds;
 
 class Module {
 public:
@@ -57,10 +62,10 @@ private:
 template <typename ControlsTest>
 static inline auto test(ControlsTest const &controls_test) -> TestFunc {
   return [controls_test](Tester &tester) {
-    std::vector<fake::Port> inputs{Controls::Input::Count};
-    std::vector<fake::Port> outputs{Controls::Output::Count};
-    std::vector<fake::Param> params{Controls::Param::Count};
-    std::vector<fake::Light> lights{Controls::Light::Count};
+    std::vector<fake::Port> inputs{Input::Count};
+    std::vector<fake::Port> outputs{Output::Count};
+    std::vector<fake::Param> params{Param::Count};
+    std::vector<fake::Light> lights{Light::Count};
 
     Module module{inputs, outputs, params, lights};
     Controls controls{inputs, outputs, params, lights};

@@ -4,6 +4,7 @@
 #include "anchor-source.h"
 #include "completion-mode.h"
 #include "components/sigmoid.h"
+#include "control-ids.h"
 #include "controls/common-inputs.h"
 #include "controls/curvature-inputs.h"
 #include "controls/duration-inputs.h"
@@ -33,6 +34,11 @@ private:
   std::vector<ParamT> &params_;
   std::vector<LightT> &lights_;
 
+  using Input = InputIds<N>;
+  using Light = LightIds<N>;
+  using Output = OutputIds;
+  using Param = ParamIds<N>;
+
 public:
   Controls(std::vector<InputT> &inputs, std::vector<OutputT> &outputs,
            std::vector<ParamT> &params, std::vector<LightT> &lights)
@@ -40,27 +46,27 @@ public:
 
   // Sequence Controls
 
-  auto input() const -> float { return input(Input::In).getVoltage(); }
-
-  auto is_enabled(int step) const -> bool {
-    return is_pressed(param(Param::EnableStep, step)) ||
-           is_high(input(Input::EnableStep, step));
+  auto gate() const -> bool {
+    return is_high(inputs_[Input::Gate]) || is_pressed(params_[Param::Gate]);
   }
 
-  auto gate() const -> bool {
-    return is_high(input(Input::Gate)) || is_pressed(param(Param::Gate));
+  auto input() const -> float { return inputs_[Input::In].getVoltage(); }
+
+  auto is_enabled(int step) const -> bool {
+    return is_pressed(params_[Param::EnableStep + step]) ||
+           is_high(inputs_[Input::EnableStep + step]);
   }
 
   auto is_looping() const -> bool {
-    return is_pressed(param(Param::Loop)) || is_high(input(Input::Loop));
+    return is_pressed(params_[Param::Loop]) || is_high(inputs_[Input::Loop]);
   }
 
   auto is_reset() const -> bool {
-    return is_high(input(Input::Reset)) || is_pressed(param(Param::Reset));
+    return is_high(inputs_[Input::Reset]) || is_pressed(params_[Param::Reset]);
   }
 
   auto is_running() const -> bool {
-    return is_pressed(param(Param::Run)) || is_high(input(Input::Run));
+    return is_pressed(params_[Param::Run]) || is_high(inputs_[Input::Run]);
   }
 
   auto output() const -> float { return outputs_[Output::Out].getVoltage(); }
@@ -68,46 +74,49 @@ public:
   void output(float voltage) { outputs_[Output::Out].setVoltage(voltage); }
 
   auto selection_start() const -> int {
-    return static_cast<int>(param(Param::SelectionStart).getValue());
+    return static_cast<int>(params_[Param::SelectionStart].getValue());
   }
 
   auto selection_length() const -> int {
-    return static_cast<int>(param(Param::SelectionLength).getValue());
+    return static_cast<int>(params_[Param::SelectionLength].getValue());
   }
 
   // Step controls
 
   auto completion_mode(int step) const -> CompletionMode {
-    auto const selection = position_of(param(Param::StepCompletionMode, step));
+    auto const selection =
+        position_of(params_[Param::StepCompletionMode + step]);
     return static_cast<CompletionMode>(selection);
   }
 
   auto curvature(int step) const -> float {
-    return dhe::curvature(param(Param::StepCurvature, step));
+    return dhe::curvature(params_[Param::StepCurvature + step]);
   }
 
   auto duration(int step) const -> float {
-    return dhe::selectable_duration(param(Param::StepDuration, step),
-                                    param(Param::DurationRange));
+    return dhe::selectable_duration(params_[Param::StepDuration + step],
+                                    params_[Param::DurationRange]);
   }
 
   auto end_level(int step) const -> float {
-    return dhe::selectable_level(param(Param::StepEndLevel, step),
-                                 param(Param::LevelRange));
+    return dhe::selectable_level(params_[Param::StepEndLevel + step],
+                                 params_[Param::LevelRange]);
   }
 
   auto end_anchor_mode(int step) const -> AnchorMode {
-    auto const selection = position_of(param(Param::StepEndAnchorMode, step));
+    auto const selection =
+        position_of(params_[Param::StepEndAnchorMode + step]);
     return static_cast<AnchorMode>(selection);
   }
 
   auto end_anchor_source(int step) const -> AnchorSource {
     return static_cast<AnchorSource>(
-        param(Param::StepEndAnchorSource, step).getValue());
+        params_[Param::StepEndAnchorSource + step].getValue());
   }
 
   auto interrupt_mode(int step) const -> InterruptMode {
-    auto const selection = position_of(param(Param::StepInterruptMode, step));
+    auto const selection =
+        position_of(params_[Param::StepInterruptMode + step]);
     return static_cast<InterruptMode>(selection);
   }
 
@@ -120,105 +129,33 @@ public:
   }
 
   auto start_anchor_mode(int step) const -> AnchorMode {
-    auto const selection = position_of(param(Param::StepStartAnchorMode, step));
+    auto const selection =
+        position_of(params_[Param::StepStartAnchorMode + step]);
     return static_cast<AnchorMode>(selection);
   }
 
   auto start_anchor_source(int step) const -> AnchorSource {
     return static_cast<AnchorSource>(
-        param(Param::StepStartAnchorSource, step).getValue());
+        params_[Param::StepStartAnchorSource + step].getValue());
   }
 
   auto start_level(int step) const -> float {
-    return dhe::selectable_level(param(Param::StepStartLevel, step),
-                                 param(Param::LevelRange));
+    return dhe::selectable_level(params_[Param::StepStartLevel + step],
+                                 params_[Param::LevelRange]);
   }
 
   auto taper(int step) const -> sigmoid::Taper const & {
     auto const selection =
-        static_cast<int>(param(Param::StepShape, step).getValue());
+        static_cast<int>(params_[Param::StepShape + step].getValue());
     return sigmoid::tapers[selection];
   }
 
   auto trigger_mode(int step) const -> TriggerMode {
     return static_cast<TriggerMode>(
-        param(Param::StepTriggerMode, step).getValue());
+        params_[Param::StepTriggerMode + step].getValue());
   }
-
-  struct Param {
-    enum {
-      Run,
-      Gate,
-      SelectionStart,
-      SelectionLength,
-      Loop,
-      Reset,
-      DurationRange,
-      LevelRange,
-      // Above: Overall module/sequence params
-      // Below: Step params
-      StepCurvature,
-      StepDuration = StepCurvature + N,
-      EnableStep = StepDuration + N,
-      StepEndLevel = EnableStep + N,
-      StepTriggerMode = StepEndLevel + N,
-      StepInterruptMode = StepTriggerMode + N,
-      StepShape = StepInterruptMode + N,
-      // The rest are new in 1.3.0
-      StepStartLevel = StepShape + N,
-      StepCompletionMode = StepStartLevel + N,
-      StepStartAnchorSource = StepCompletionMode + N,
-      StepEndAnchorSource = StepStartAnchorSource + N,
-      StepStartAnchorMode = StepEndAnchorSource + N,
-      StepEndAnchorMode = StepStartAnchorMode + N,
-      Count = StepEndAnchorMode + N,
-    };
-  };
-
-  // How obsolete v1.1.0 parameter IDs map to v1.3 IDs
-  struct V110Params {
-    enum {
-      LevelKnobs = enum_index(Param::StepEndLevel),
-      ModeSwitches = enum_index(Param::StepTriggerMode),
-      ConditionSwitches = enum_index(Param::StepInterruptMode),
-    };
-  };
-
-  struct Input {
-    enum {
-      In,
-      Gate,
-      Loop,
-      Reset,
-      Run,
-      EnableStep,
-      Count = EnableStep + N,
-    };
-  };
-
-  struct Output {
-    enum {
-      Out,
-      Count,
-    };
-  };
-
-  struct Light {
-    enum {
-      StepProgress,
-      Count = StepProgress + N + N,
-    };
-  };
 
 private:
-  auto input(int id, int offset = 0) const -> InputT & {
-    return inputs_[id + offset];
-  }
-
-  auto param(int id, int offset = 0) const -> ParamT & {
-    return params_[id + offset];
-  }
-
   void set_lights(int step, float completed_brightness,
                   float remaining_brightness) {
     auto const completed_light = Light::StepProgress + step + step;
