@@ -16,7 +16,6 @@ template <typename Run> static inline auto test(Run const &run) -> TestFunc {
   };
 }
 
-
 class EndAnchorSuite : public Suite {
 public:
   EndAnchorSuite() : Suite("dhe::curve_sequencer::EndAnchor") {}
