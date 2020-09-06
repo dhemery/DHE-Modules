@@ -22,10 +22,10 @@ struct InterrupterTestCase {
 
   void operator()(Tester &t) const {
     auto constexpr step = 3;
-    Controls controls{};
-    Interrupter interrupter{controls};
-    controls.trigger_mode_[step] = trigger_mode_;
-    controls.interrupt_mode_[step] = interrupt_mode_;
+    Module module{};
+    Interrupter interrupter{module};
+    module.trigger_mode_[step] = trigger_mode_;
+    module.interrupt_mode_[step] = interrupt_mode_;
 
     t.assert_that(interrupter.is_interrupted(step, latch_),
                   is_equal_to(is_interrupted_));

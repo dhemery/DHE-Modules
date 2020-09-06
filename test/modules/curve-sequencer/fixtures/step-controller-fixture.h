@@ -1,7 +1,7 @@
 #pragma once
 
-#include "./step-status-io.h"
-#include "modules/curve-sequencer/generator-status.h"
+#include "./status-enums.h"
+#include "modules/curve-sequencer/status.h"
 #include "modules/curve-sequencer/step-controller.h"
 #include <array>
 #include <dheunit/test.h>
@@ -46,13 +46,13 @@ struct Sustainer {
 using StepController =
     dhe::curve_sequencer::StepController<Interrupter, Generator, Sustainer>;
 
-template <typename T> static inline auto test(T controller_test) -> TestFunc {
-  return [controller_test](Tester &t) {
+template <typename Run> static inline auto test(Run run) -> TestFunc {
+  return [run](Tester &t) {
     Interrupter interrupter{};
     Generator generator{};
     Sustainer sustainer{};
     StepController controller{interrupter, generator, sustainer};
-    controller_test(t, interrupter, generator, sustainer, controller);
+    run(t, interrupter, generator, sustainer, controller);
   };
 }
 } // namespace curve_sequencer

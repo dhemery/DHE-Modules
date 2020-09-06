@@ -1,8 +1,8 @@
 #pragma once
 
 #include "modules/curve-sequencer/sequence-controller.h"
+#include "modules/curve-sequencer/status.h"
 #include "modules/curve-sequencer/step-controller.h"
-#include "modules/curve-sequencer/step-status.h"
 #include <array>
 #include <dheunit/test.h>
 
@@ -15,7 +15,7 @@ using dhe::unit::TestFunc;
 
 auto constexpr step_count = 8;
 
-struct Controls {
+struct Module {
   auto gate() const -> bool { return gate_; }
   auto is_looping() const -> bool { return looping_; }
   auto is_reset() const -> bool { return reset_; }
@@ -73,19 +73,19 @@ struct StepSelector {
 };
 
 using SequenceController =
-    dhe::curve_sequencer::SequenceController<Controls, StepSelector,
+    dhe::curve_sequencer::SequenceController<Module, StepSelector,
                                              StepController>;
 
 template <typename Prepare, typename Run>
 static inline auto test(Prepare prepare, Run run) -> TestFunc {
   return [prepare, run](Tester &t) {
-    Controls controls{};
+    Module module{};
     StepController step_controller{};
     StepSelector step_selector{};
-    SequenceController sequence_controller{controls, step_selector,
+    SequenceController sequence_controller{module, step_selector,
                                            step_controller};
-    prepare(controls, step_selector, step_controller, sequence_controller);
-    run(t, controls, step_selector, step_controller, sequence_controller);
+    prepare(module, step_selector, step_controller, sequence_controller);
+    run(t, module, step_selector, step_controller, sequence_controller);
   };
 }
 } // namespace curve_sequencer

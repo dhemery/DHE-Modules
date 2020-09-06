@@ -1,19 +1,18 @@
 #pragma once
 #include "components/phase-timer.h"
-#include "generator-status.h"
+#include "status.h"
 
 namespace dhe {
 namespace curve_sequencer {
 
-template <typename Controls, typename Anchor> class Generator {
+template <typename Module, typename Anchor> class Generator {
 public:
-  Generator(Controls &controls, Anchor &start_anchor, Anchor &end_anchor)
-      : controls_{controls}, start_anchor_{start_anchor}, end_anchor_{
-                                                              end_anchor} {}
+  Generator(Module &module, Anchor &start_anchor, Anchor &end_anchor)
+      : module_{module}, start_anchor_{start_anchor}, end_anchor_{end_anchor} {}
 
   void start(int step) {
     step_ = step;
-    controls_.show_progress(step_, 0.F);
+    module_.show_progress(step_, 0.F);
     start_anchor_.enter(step_);
     end_anchor_.enter(step_);
   }
@@ -22,10 +21,10 @@ public:
     return GeneratorStatus::Generating;
   }
 
-  void stop() { controls_.show_inactive(step_); }
+  void stop() { module_.show_inactive(step_); }
 
 private:
-  Controls &controls_;
+  Module &module_;
   Anchor &start_anchor_;
   Anchor &end_anchor_;
   PhaseTimer timer_{};

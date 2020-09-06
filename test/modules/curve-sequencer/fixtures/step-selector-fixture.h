@@ -11,7 +11,7 @@ using dhe::unit::TestFunc;
 
 auto constexpr step_count = 8;
 
-struct Controls {
+struct Module {
   auto selection_start() const -> int { return start_; }
   auto selection_length() const -> int { return length_; }
   auto is_enabled(int step) const -> bool { return enabled_[step]; }
@@ -20,13 +20,13 @@ struct Controls {
   std::array<bool, step_count> enabled_{}; // NOLINT
 };
 
-using StepSelector = dhe::curve_sequencer::StepSelector<Controls>;
+using StepSelector = dhe::curve_sequencer::StepSelector<Module>;
 
 template <typename Run> static inline auto test(Run run) -> TestFunc {
   return [run](Tester &t) {
-    Controls controls{};
-    StepSelector selector{controls, step_count};
-    run(t, controls, selector);
+    Module module{};
+    StepSelector selector{module, step_count};
+    run(t, module, selector);
   };
 }
 } // namespace curve_sequencer

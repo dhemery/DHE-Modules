@@ -1,6 +1,5 @@
 #pragma once
 
-#include "controls.h"
 #include "widgets/control-widgets.h"
 #include "widgets/screws.h"
 #include <app/ModuleWidget.hpp>
@@ -81,9 +80,6 @@ private:
 }; // namespace curve_sequencer
 
 template <int N> class Panel : public rack::app::ModuleWidget {
-  using ControlsT =
-      curve_sequencer::Controls<rack::engine::Input, rack::engine::Output,
-                                rack::engine::Param, rack::engine::Light, N>;
   using Param = ParamIds<N>;
   using Input = InputIds<N>;
   using Light = LightIds<N>;

@@ -1,11 +1,6 @@
 #pragma once
 
 #include "components/latch.h"
-#include "components/phase-timer.h"
-#include "components/range.h"
-#include "generator-status.h"
-#include "step-selector.h"
-#include "step-status.h"
 
 namespace dhe {
 namespace curve_sequencer {

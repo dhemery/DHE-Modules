@@ -12,24 +12,24 @@ using dhe::unit::Tester;
 using dhe::unit::TestFunc;
 
 static auto constexpr initially_active_step = 1;
-static inline void when_active(Controls &controls, StepSelector &step_selector,
+static inline void when_active(Module &module, StepSelector &step_selector,
                                StepController &step_controller,
                                SequenceController &sequence_controller) {
 
-  controls.running_ = true;
-  controls.reset_ = false;
+  module.running_ = true;
+  module.reset_ = false;
 
   // Prepare to enter and execute some step
-  controls.gate_ = true;
+  module.gate_ = true;
   step_selector.first_ = initially_active_step;
   step_controller.status_ = StepStatus::InProgress;
 
   // Enter and execute the prepared step
   sequence_controller.execute(0.F);
 
-  // Reset the sequencer controls
-  controls.running_ = false;
-  controls.gate_ = false;
+  // Reset the sequencer module
+  module.running_ = false;
+  module.gate_ = false;
 
   // Reset the step selector and step controller
   step_selector = StepSelector{};
@@ -44,15 +44,15 @@ public:
   void register_tests(dhe::unit::TestRegistrar add) override {
     add("with run high: "
         "executes active step with gate state and sample time",
-        test(when_active, [](Tester &t, Controls &controls,
-                             StepSelector &step_selector,
+        test(when_active, [](Tester &t, Module &module,
+                             StepSelector & /*step_selector*/,
                              StepController &step_controller,
                              SequenceController &sequence_controller) {
-          controls.running_ = true;
+          module.running_ = true;
           step_controller.status_ = StepStatus::InProgress;
           auto constexpr sample_time{0.14901F};
 
-          controls.gate_ = true;
+          module.gate_ = true;
           sequence_controller.execute(sample_time);
           // Assume that the gate was high on the previous sample,
           // so on this sample it will be high with no edge.
@@ -61,7 +61,7 @@ public:
           t.assert_that("sample time", step_controller.executed_sample_time_,
                         is_equal_to(sample_time));
 
-          controls.gate_ = false;
+          module.gate_ = false;
           sequence_controller.execute(0.1F);
           t.assert_that("falling latch", step_controller.executed_latch_,
                         is_equal_to(falling_latch));
@@ -70,7 +70,7 @@ public:
           t.assert_that("low latch", step_controller.executed_latch_,
                         is_equal_to(low_latch));
 
-          controls.gate_ = true;
+          module.gate_ = true;
           sequence_controller.execute(0.1F);
           t.assert_that("rising latch", step_controller.executed_latch_,
                         is_equal_to(rising_latch));
@@ -80,12 +80,12 @@ public:
         "if active step completes: "
         "seeks successor with active step and loop state",
         test(when_active,
-             [](Tester &t, Controls &controls, StepSelector &step_selector,
+             [](Tester &t, Module &module, StepSelector &step_selector,
                 StepController &step_controller,
                 SequenceController &sequence_controller) {
                auto constexpr looping = true;
-               controls.running_ = true;
-               controls.looping_ = looping;
+               module.running_ = true;
+               module.looping_ = looping;
                step_controller.status_ = StepStatus::Completed;
 
                sequence_controller.execute(0.F);
@@ -98,11 +98,11 @@ public:
     add("with run high: "
         "if active step completes: "
         "enters successor step",
-        test(when_active, [](Tester &t, Controls &controls,
+        test(when_active, [](Tester &t, Module &module,
                              StepSelector &step_selector,
                              StepController &step_controller,
                              SequenceController &sequence_controller) {
-          controls.running_ = true;
+          module.running_ = true;
 
           step_controller.status_ = StepStatus::Completed;
           auto constexpr second_step = initially_active_step + 3;
@@ -127,10 +127,10 @@ public:
         "if no successor: "
         "does not enter another step",
         test(when_active,
-             [](Tester &t, Controls &controls, StepSelector &step_selector,
+             [](Tester &t, Module &module, StepSelector &step_selector,
                 StepController &step_controller,
                 SequenceController &sequence_controller) {
-               controls.running_ = true;
+               module.running_ = true;
 
                step_controller.status_ = StepStatus::Completed;
                step_selector.successor_ = -1;
@@ -146,17 +146,17 @@ public:
         "exits active step, "
         "and does not select or enter another",
         test(when_active,
-             [](Tester &t, Controls &controls, StepSelector &step_selector,
+             [](Tester &t, Module &module, StepSelector &step_selector,
                 StepController &step_controller,
                 SequenceController &sequence_controller) {
-               controls.running_ = true;
-               controls.reset_ = true;
+               module.running_ = true;
+               module.reset_ = true;
 
                auto constexpr input = 3478.233F;
-               controls.input_ = input;
+               module.input_ = input;
 
                sequence_controller.execute(0.F);
-               t.assert_that("output", controls.output_, is_equal_to(input));
+               t.assert_that("output", module.output_, is_equal_to(input));
                t.assert_that("step controller exited", step_controller.exited_,
                              is_true);
                t.assert_that("step selector called", step_selector.called_,
@@ -168,92 +168,88 @@ public:
     add("with run low: "
         "with gate low: "
         "does nothing",
-        test(when_active,
-             [](Tester &t, Controls &controls, StepSelector &step_selector,
-                StepController &step_controller,
-                SequenceController &sequence_controller) {
-               controls.running_ = false;
-               controls.gate_ = false;
+        test(when_active, [](Tester &t, Module &module,
+                             StepSelector &step_selector,
+                             StepController &step_controller,
+                             SequenceController &sequence_controller) {
+          module.running_ = false;
+          module.gate_ = false;
 
-               auto constexpr original_output = 876.342F;
-               controls.output_ = original_output;
+          auto constexpr original_output = 876.342F;
+          module.output_ = original_output;
 
-               sequence_controller.execute(0.F);
-               t.assert_that("step selector called", step_selector.called_,
-                             is_false);
-               t.assert_that("step controller called", step_controller.called_,
-                             is_false);
-               t.assert_that("output", controls.output_,
-                             is_equal_to(original_output));
-             }));
+          sequence_controller.execute(0.F);
+          t.assert_that("step selector called", step_selector.called_,
+                        is_false);
+          t.assert_that("step controller called", step_controller.called_,
+                        is_false);
+          t.assert_that("output", module.output_, is_equal_to(original_output));
+        }));
 
     add("with run low: "
         "if gate rises: "
         "does nothing",
-        test(when_active,
-             [](Tester &t, Controls &controls, StepSelector &step_selector,
-                StepController &step_controller,
-                SequenceController &sequence_controller) {
-               controls.running_ = false;
-               controls.gate_ = true;
+        test(when_active, [](Tester &t, Module &module,
+                             StepSelector &step_selector,
+                             StepController &step_controller,
+                             SequenceController &sequence_controller) {
+          module.running_ = false;
+          module.gate_ = true;
 
-               auto constexpr original_output = 876.342F;
-               controls.output_ = original_output;
+          auto constexpr original_output = 876.342F;
+          module.output_ = original_output;
 
-               sequence_controller.execute(0.F);
-               t.assert_that("step selector called", step_selector.called_,
-                             is_false);
-               t.assert_that("step controller called", step_controller.called_,
-                             is_false);
-               t.assert_that("output", controls.output_,
-                             is_equal_to(original_output));
-             }));
+          sequence_controller.execute(0.F);
+          t.assert_that("step selector called", step_selector.called_,
+                        is_false);
+          t.assert_that("step controller called", step_controller.called_,
+                        is_false);
+          t.assert_that("output", module.output_, is_equal_to(original_output));
+        }));
 
     add("with run low: "
         "with reset low: "
         "does nothing",
-        test(when_active,
-             [](Tester &t, Controls &controls, StepSelector &step_selector,
-                StepController &step_controller,
-                SequenceController &sequence_controller) {
-               controls.running_ = false;
-               controls.reset_ = true;
+        test(when_active, [](Tester &t, Module &module,
+                             StepSelector &step_selector,
+                             StepController &step_controller,
+                             SequenceController &sequence_controller) {
+          module.running_ = false;
+          module.reset_ = true;
 
-               auto constexpr original_output = 876.342F;
-               controls.output_ = original_output;
+          auto constexpr original_output = 876.342F;
+          module.output_ = original_output;
 
-               sequence_controller.execute(0.F);
-               t.assert_that("step selector called", step_selector.called_,
-                             is_false);
-               t.assert_that("step controller called", step_controller.called_,
-                             is_false);
-               t.assert_that("output", controls.output_,
-                             is_equal_to(original_output));
-             }));
+          sequence_controller.execute(0.F);
+          t.assert_that("step selector called", step_selector.called_,
+                        is_false);
+          t.assert_that("step controller called", step_controller.called_,
+                        is_false);
+          t.assert_that("output", module.output_, is_equal_to(original_output));
+        }));
 
     add("with run low: "
         "if reset rises: "
         "exits active step and does not select or enter another",
-        test(when_active,
-             [](Tester &t, Controls &controls, StepSelector &step_selector,
-                StepController &step_controller,
-                SequenceController &sequence_controller) {
-               controls.running_ = false;
-               controls.reset_ = true;
+        test(when_active, [](Tester &t, Module &module,
+                             StepSelector &step_selector,
+                             StepController &step_controller,
+                             SequenceController &sequence_controller) {
+          module.running_ = false;
+          module.reset_ = true;
 
-               auto constexpr original_output = 876.342F;
-               controls.output_ = original_output;
+          auto constexpr original_output = 876.342F;
+          module.output_ = original_output;
 
-               sequence_controller.execute(0.F);
-               t.assert_that("step selector called", step_selector.called_,
-                             is_false);
-               t.assert_that("step controller exited", step_controller.exited_,
-                             is_true);
-               t.assert_that("step controller entered",
-                             step_controller.entered_, is_false);
-               t.assert_that("output", controls.output_,
-                             is_equal_to(original_output));
-             }));
+          sequence_controller.execute(0.F);
+          t.assert_that("step selector called", step_selector.called_,
+                        is_false);
+          t.assert_that("step controller exited", step_controller.exited_,
+                        is_true);
+          t.assert_that("step controller entered", step_controller.entered_,
+                        is_false);
+          t.assert_that("output", module.output_, is_equal_to(original_output));
+        }));
   }
 };
 __attribute__((unused)) static auto _ = SequenceControllerActiveSuite{};

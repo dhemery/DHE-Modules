@@ -11,7 +11,8 @@ using dhe::unit::Tester;
 using dhe::unit::TestFunc;
 
 auto constexpr step_count = 8;
-struct Controls {
+
+struct Module {
   auto interrupt_mode(int step) const -> InterruptMode {
     return interrupt_mode_[step];
   }
@@ -23,14 +24,13 @@ struct Controls {
   std::array<TriggerMode, step_count> trigger_mode_{};     // NOLINT
 };
 
-using Interrupter = dhe::curve_sequencer::Interrupter<Controls>;
+using Interrupter = dhe::curve_sequencer::Interrupter<Module>;
 
-template <typename T>
-static inline auto test(T const &interrupter_test) -> TestFunc {
-  return [interrupter_test](Tester &t) {
-    Controls controls{};
-    Interrupter interrupter{controls};
-    interrupter_test(t, controls, interrupter);
+template <typename Run> static inline auto test(Run const &run) -> TestFunc {
+  return [run](Tester &t) {
+    Module module{};
+    Interrupter interrupter{module};
+    run(t, module, interrupter);
   };
 }
 } // namespace curve_sequencer

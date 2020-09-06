@@ -12,7 +12,7 @@ using dhe::unit::TestFunc;
 
 auto constexpr step_count = 8;
 
-struct Controls {
+struct Module {
   auto completion_mode(int step) const -> CompletionMode {
     return completion_mode_[step];
   }
@@ -24,14 +24,13 @@ struct Controls {
   std::array<TriggerMode, step_count> trigger_mode_{};       // NOLINT
 };
 
-using Sustainer = dhe::curve_sequencer::Sustainer<Controls>;
+using Sustainer = dhe::curve_sequencer::Sustainer<Module>;
 
-template <typename T>
-static inline auto test(T const &sustainer_test) -> TestFunc {
-  return [sustainer_test](Tester &t) {
-    Controls controls{};
-    Sustainer sustainer{controls};
-    sustainer_test(t, controls, sustainer);
+template <typename Run> static inline auto test(Run const &run) -> TestFunc {
+  return [run](Tester &t) {
+    Module module{};
+    Sustainer sustainer{module};
+    run(t, module, sustainer);
   };
 }
 } // namespace curve_sequencer

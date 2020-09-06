@@ -1,31 +1,31 @@
 #pragma once
 
 #include "components/latch.h"
-#include "step-status.h"
+#include "status.h"
 
 namespace dhe {
 namespace curve_sequencer {
 
-template <typename Controls, typename StepSelector, typename StepController>
+template <typename Module, typename StepSelector, typename StepController>
 class SequenceController {
 public:
-  SequenceController(Controls &controls, StepSelector &step_selector,
+  SequenceController(Module &module, StepSelector &step_selector,
                      StepController &step_controller)
-      : controls_{controls}, step_selector_{step_selector},
-        step_controller_{step_controller} {}
+      : module_{module}, step_selector_{step_selector}, step_controller_{
+                                                            step_controller} {}
 
   void execute(float sample_time) {
     // Process the latches even if not running. This ensures that we detect and
     // react to edges that happen on the same sample when RUN rises.
-    gate_latch_.clock(controls_.gate());
-    reset_latch_.clock(controls_.is_reset());
+    gate_latch_.clock(module_.gate());
+    reset_latch_.clock(module_.is_reset());
 
     // Reset even if not running.
     if (reset_latch_.is_rise()) {
       become_idle();
     }
 
-    if (!controls_.is_running()) {
+    if (!module_.is_running()) {
       return;
     }
 
@@ -48,7 +48,7 @@ private:
   void idle() {
     if (reset_latch_.is_high()) {
       // If RESET is high while idle, copy the input voltage to the output port.
-      controls_.output(controls_.input());
+      module_.output(module_.input());
     }
     if (gate_latch_.is_rise()) {
       // Consume the edge, so that the first step doesn't immediately exit if it
@@ -73,7 +73,7 @@ private:
   }
 
   void advance_sequence() {
-    step_ = step_selector_.successor(step_, controls_.is_looping());
+    step_ = step_selector_.successor(step_, module_.is_looping());
     if (step_ >= 0) {
       step_controller_.enter(step_);
     }
@@ -82,7 +82,7 @@ private:
   int step_{-1};
   Latch gate_latch_{};
   Latch reset_latch_{};
-  Controls &controls_;
+  Module &module_;
   StepSelector &step_selector_;
   StepController &step_controller_;
 }; // namespace curve_sequencer

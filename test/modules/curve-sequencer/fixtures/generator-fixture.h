@@ -13,7 +13,7 @@ struct Anchor {
   int entered_step_{}; // NOLINT
 };
 
-struct Controls {
+struct Module {
   void show_progress(int step, float progress) {
     progress_step_ = step;
     progress_ = progress;
@@ -24,16 +24,15 @@ struct Controls {
   int inactive_step_{}; // NOLINT
 };
 
-using Generator = dhe::curve_sequencer::Generator<Controls, Anchor>;
+using Generator = dhe::curve_sequencer::Generator<Module, Anchor>;
 
-template <typename GeneratorTest>
-static inline auto test(GeneratorTest const &generator_test) -> TestFunc {
-  return [generator_test](Tester &t) {
-    Controls controls{};
+template <typename Run> static inline auto test(Run const &run) -> TestFunc {
+  return [run](Tester &t) {
+    Module module{};
     Anchor start_anchor{};
     Anchor end_anchor{};
-    Generator generator{controls, start_anchor, end_anchor};
-    generator_test(t, controls, start_anchor, end_anchor, generator);
+    Generator generator{module, start_anchor, end_anchor};
+    run(t, module, start_anchor, end_anchor, generator);
   };
 }
 

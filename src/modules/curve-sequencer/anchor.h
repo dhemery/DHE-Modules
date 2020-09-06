@@ -13,9 +13,9 @@ enum class AnchorSource { Level, In, Out };
 static auto constexpr anchor_source_count =
     static_cast<int>(AnchorSource::Out) + 1;
 
-template <typename M> class Anchor {
+template <typename Module> class Anchor {
 public:
-  Anchor(M &module, AnchorType type) : module_{module}, type_{type} {}
+  Anchor(Module &module, AnchorType type) : module_{module}, type_{type} {}
 
   void enter(int step) {
     step_ = step;
@@ -28,7 +28,7 @@ public:
   }
 
 private:
-  M &module_{};
+  Module &module_{};
   AnchorType type_{};
   int step_{};
   float snapshot_{};

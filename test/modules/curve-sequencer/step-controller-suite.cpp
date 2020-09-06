@@ -1,3 +1,4 @@
+#include "./fixtures/status-enums.h"
 #include "./fixtures/step-controller-fixture.h"
 #include <dheunit/assertions.h>
 #include <dheunit/test.h>
