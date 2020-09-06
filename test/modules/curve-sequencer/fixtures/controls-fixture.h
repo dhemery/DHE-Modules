@@ -1,8 +1,7 @@
 #pragma once
 
+#include "./advancement-enums.h"
 #include "./anchor-enums.h"
-#include "./completion-modes.h"
-#include "./interrupt-modes.h"
 #include "helpers/rack-controls.h"
 #include "modules/curve-sequencer/control-ids.h"
 #include "modules/curve-sequencer/controls.h"

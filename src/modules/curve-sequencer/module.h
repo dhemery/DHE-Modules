@@ -14,6 +14,7 @@
 #include "step-controller.h"
 #include "step-selector.h"
 #include "sustainer.h"
+#include "trigger-mode.h"
 
 #include <engine/Module.hpp>
 
@@ -94,16 +95,32 @@ public:
   auto anchor_mode(AnchorType type, int step) const -> AnchorMode {
     auto const base = type == AnchorType::Start ? Param::StepStartAnchorMode
                                                 : Param::StepEndAnchorMode;
-    return static_cast<AnchorMode>(value_of(params[base + step]));
+    return static_cast<AnchorMode>(position_of(params[base + step]));
   }
 
   auto anchor_source(AnchorType type, int step) const -> AnchorSource {
     auto const base = type == AnchorType::Start ? Param::StepStartAnchorSource
                                                 : Param::StepEndAnchorSource;
-    return static_cast<AnchorSource>(value_of(params[base + step]));
+    return static_cast<AnchorSource>(position_of(params[base + step]));
+  }
+
+  auto completion_mode(int step) const -> CompletionMode {
+    auto const selection =
+        position_of(params[Param::StepCompletionMode + step]);
+    return static_cast<CompletionMode>(selection);
   }
 
   auto input() const -> float { return voltage_at(inputs[Input::In]); }
+
+  auto interrupt_mode(int step) const -> InterruptMode {
+    auto const selection = position_of(params[Param::StepInterruptMode + step]);
+    return static_cast<InterruptMode>(selection);
+  }
+
+  auto trigger_mode(int step) const -> TriggerMode {
+    auto const selection = position_of(params[Param::StepTriggerMode + step]);
+    return static_cast<TriggerMode>(selection);
+  }
 
   auto output() const -> float { return voltage_at(outputs[Output::Out]); }
 
@@ -112,9 +129,9 @@ private:
                              rack::engine::Param, rack::engine::Light, N>;
   using AnchorT = Anchor<Module<N>>;
   using GeneratorT = Generator<ControlsT, AnchorT>;
-  using SustainerT = Sustainer<ControlsT>;
+  using SustainerT = Sustainer<Module<N>>;
   using StepSelectorT = StepSelector<ControlsT>;
-  using InterrupterT = Interrupter<ControlsT>;
+  using InterrupterT = Interrupter<Module<N>>;
   using StepControllerT = StepController<InterrupterT, GeneratorT, SustainerT>;
   using SequenceControllerT =
       SequenceController<ControlsT, StepSelectorT, StepControllerT>;
@@ -122,9 +139,9 @@ private:
   AnchorT end_anchor_{*this, AnchorType::End};
   AnchorT start_anchor_{*this, AnchorType::Start};
   ControlsT controls_{inputs, outputs, params, lights};
-  InterrupterT interrupter_{controls_};
+  InterrupterT interrupter_{*this};
   GeneratorT generator_{controls_, start_anchor_, end_anchor_};
-  SustainerT sustainer_{controls_};
+  SustainerT sustainer_{*this};
   StepControllerT step_controller_{interrupter_, generator_, sustainer_};
   StepSelectorT step_selector_{controls_, N};
   SequenceControllerT sequence_controller_{controls_, step_selector_,

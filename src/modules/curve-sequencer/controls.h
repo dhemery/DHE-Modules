@@ -79,12 +79,6 @@ public:
 
   // Step controls
 
-  auto completion_mode(int step) const -> CompletionMode {
-    auto const selection =
-        position_of(params_[Param::StepCompletionMode + step]);
-    return static_cast<CompletionMode>(selection);
-  }
-
   auto curvature(int step) const -> float {
     return dhe::curvature(params_[Param::StepCurvature + step]);
   }
@@ -92,12 +86,6 @@ public:
   auto duration(int step) const -> float {
     return dhe::selectable_duration(params_[Param::StepDuration + step],
                                     params_[Param::DurationRange]);
-  }
-
-  auto interrupt_mode(int step) const -> InterruptMode {
-    auto const selection =
-        position_of(params_[Param::StepInterruptMode + step]);
-    return static_cast<InterruptMode>(selection);
   }
 
   void show_inactive(int step) { set_lights(step, 0.F, 0.F); }
@@ -112,11 +100,6 @@ public:
     auto const selection =
         static_cast<int>(params_[Param::StepShape + step].getValue());
     return sigmoid::tapers[selection];
-  }
-
-  auto trigger_mode(int step) const -> TriggerMode {
-    return static_cast<TriggerMode>(
-        params_[Param::StepTriggerMode + step].getValue());
   }
 
 private:

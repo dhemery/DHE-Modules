@@ -8,18 +8,18 @@
 namespace dhe {
 namespace curve_sequencer {
 
-template <typename Controls> class Sustainer {
+template <typename Module> class Sustainer {
 public:
-  Sustainer(Controls &controls) : controls_{controls} {}
+  Sustainer(Module &module) : module_{module} {}
 
   auto is_done(int step, Latch const &latch) -> bool {
 
-    return (controls_.completion_mode(step) == CompletionMode::Advance) ||
-           is_triggered(controls_.trigger_mode(step), latch);
+    return (module_.completion_mode(step) == CompletionMode::Advance) ||
+           is_triggered(module_.trigger_mode(step), latch);
   }
 
 private:
-  Controls &controls_;
+  Module &module_;
 };
 
 } // namespace curve_sequencer

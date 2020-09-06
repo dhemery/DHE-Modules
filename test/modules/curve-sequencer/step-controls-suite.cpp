@@ -1,5 +1,5 @@
+#include "./fixtures/advancement-enums.h"
 #include "./fixtures/controls-fixture.h"
-#include "./fixtures/trigger-modes.h"
 #include "components/sigmoid.h"
 #include "modules/curve-sequencer/controls.h"
 #include <dheunit/assertions.h>
@@ -21,43 +21,6 @@ class StepControlsSuite : Suite {
 public:
   StepControlsSuite() : Suite{"dhe::curve_sequencer::Controls/step"} {}
   void register_tests(dhe::unit::TestRegistrar add_test) override {
-
-    for (auto const &mode : completion_modes) {
-      add_test(std::string{"completion_mode(s): "} + name_of(mode),
-               test([mode](Tester &t, Module &module, Controls &controls) {
-                 auto constexpr step = 3;
-                 module.set_param(Param::StepCompletionMode, step,
-                                  static_cast<float>(mode));
-
-                 t.assert_that(controls.completion_mode(step),
-                               is_equal_to(mode));
-               }));
-    }
-
-    for (auto const &mode : interrupt_modes) {
-      add_test(std::string{"interrupt_mode(s): "} + name_of(mode),
-               test([mode](Tester &t, Module &module, Controls &controls) {
-                 auto constexpr step = 3;
-                 module.set_param(Param::StepInterruptMode, step,
-                                  static_cast<float>(mode));
-
-                 t.assert_that(controls.interrupt_mode(step),
-                               is_equal_to(mode));
-               }));
-    }
-
-    for (auto mode : trigger_modes) {
-      auto const name = std::string{"trigger_mode(s): "} + name_of(mode);
-      add_test(name,
-               test([mode](Tester &t, Module &module, Controls &controls) {
-                 auto constexpr step = 4;
-
-                 module.set_param(Param::StepTriggerMode, step,
-                                  static_cast<float>(mode));
-
-                 t.assert_that(controls.trigger_mode(step), is_equal_to(mode));
-               }));
-    }
 
     add_test("duration(s)",
              test([](Tester &t, Module &module, Controls &controls) {

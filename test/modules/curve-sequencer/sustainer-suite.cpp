@@ -1,6 +1,5 @@
-#include "./fixtures/completion-modes.h"
+#include "./fixtures/advancement-enums.h"
 #include "./fixtures/sustainer-fixture.h"
-#include "./fixtures/trigger-modes.h"
 #include "helpers/latches.h"
 #include <dheunit/assertions.h>
 #include <dheunit/test.h>

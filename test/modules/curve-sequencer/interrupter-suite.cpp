@@ -1,6 +1,5 @@
-#include "./fixtures/interrupt-modes.h"
+#include "./fixtures/advancement-enums.h"
 #include "./fixtures/interrupter-fixture.h"
-#include "./fixtures/trigger-modes.h"
 #include <dheunit/assertions.h>
 #include <helpers/latches.h>
 #include <sstream>
