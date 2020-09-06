@@ -1,4 +1,7 @@
 #include "./fixtures/anchor-fixture.h"
+
+#include "./fixtures/anchor-enums.h"
+
 #include <dheunit/assertions.h>
 #include <dheunit/test.h>
 
@@ -8,474 +11,281 @@ using dhe::unit::is_equal_to;
 using dhe::unit::Suite;
 using dhe::unit::TestRegistrar;
 
+static inline void set_all_voltages(Module &module, float voltage) {
+  module.input_ = voltage;
+  module.output_ = voltage;
+  for (int step = 0; step < step_count; step++) {
+    module.start_level_[step] = voltage;
+    module.end_level_[step] = voltage;
+  }
+}
+
 class AnchorSuite : public Suite {
 public:
   AnchorSuite() : Suite("dhe::curve_sequencer::Anchor") {}
   void register_tests(TestRegistrar add) override {
-    add("AnchorType::Start snapped AnchorSource::In: "
-        "voltage() if AnchorMode:Snap: "
-        "is snapped IN voltage regardless of voltage at current source",
+    add("AnchorType::Start: "
+        "entered with AnchorSource::In: "
+        "voltage() with AnchorMode::Snap: "
+        "is captured IN voltage",
         test(AnchorType::Start, [](Tester &t, Module &module, Anchor &anchor) {
-          auto constexpr step = 2;
-          module.start_mode_[step] = AnchorMode::Snap;
+          auto constexpr step = 1;
+          auto constexpr default_entry_voltage = 1.343F;
+
+          set_all_voltages(module, default_entry_voltage);
+          auto constexpr input_entry_voltage = default_entry_voltage + 1.F;
+          module.input_ = input_entry_voltage;
           module.start_source_[step] = AnchorSource::In;
-
-          auto constexpr initial_input_voltage = 4.234F;
-          module.input_ = initial_input_voltage;
-
           anchor.enter(step);
 
-          module.input_ = initial_input_voltage + 1.F;
-          t.assert_that("with new IN voltage", anchor.voltage(),
-                        is_equal_to(initial_input_voltage));
+          set_all_voltages(module, input_entry_voltage + 1.F);
 
-          module.start_source_[step] = AnchorSource::Level;
-          t.assert_that("with AnchorSource::Level", anchor.voltage(),
-                        is_equal_to(initial_input_voltage));
-
-          module.start_source_[step] = AnchorSource::Out;
-          module.output_ = 83.F;
-          t.assert_that("with AnchorSource::Out", anchor.voltage(),
-                        is_equal_to(initial_input_voltage));
+          for (auto const source : anchor_sources) {
+            module.start_source_[step] = source;
+            t.assert_that(name_of(source), anchor.voltage(),
+                          is_equal_to(input_entry_voltage));
+          }
         }));
 
-    add("AnchorType::Start snapped AnchorSource::Level: "
-        "voltage() if AnchorMode:Snap: "
-        "is snapped start level regardless of voltage at current source",
+    add("AnchorType::Start: "
+        "entered with AnchorSource::Level: "
+        "voltage() with AnchorMode::Snap: "
+        "is captured level voltage",
         test(AnchorType::Start, [](Tester &t, Module &module, Anchor &anchor) {
           auto constexpr step = 3;
-          module.start_mode_[step] = AnchorMode::Snap;
+          auto constexpr default_entry_voltage = 3.343F;
+
+          set_all_voltages(module, default_entry_voltage);
+          auto constexpr level_entry_voltage = default_entry_voltage + 1.F;
+          module.start_level_[step] = level_entry_voltage;
           module.start_source_[step] = AnchorSource::Level;
-
-          auto constexpr initial_level_voltage = 2.349F;
-          module.start_level_[step] = initial_level_voltage;
-
           anchor.enter(step);
 
-          module.start_level_[step] = initial_level_voltage + 1.F;
-          t.assert_that("with new level voltage", anchor.voltage(),
-                        is_equal_to(initial_level_voltage));
+          set_all_voltages(module, level_entry_voltage + 1.F);
 
-          module.start_source_[step] = AnchorSource::In;
-          t.assert_that("with AnchorSource::In", anchor.voltage(),
-                        is_equal_to(initial_level_voltage));
-
-          module.start_source_[step] = AnchorSource::Out;
-          module.output_ = 83.F;
-          t.assert_that("with AnchorSource::Out", anchor.voltage(),
-                        is_equal_to(initial_level_voltage));
+          for (auto const source : anchor_sources) {
+            module.start_source_[step] = source;
+            t.assert_that(name_of(source), anchor.voltage(),
+                          is_equal_to(level_entry_voltage));
+          }
         }));
 
-    add("AnchorType::Start snapped AnchorSource::Out: "
-        "voltage() if AnchorMode:Snap: "
-        "is snapped OUT voltage regardless of voltage at current source",
+    add("AnchorType::Start: "
+        "entered with AnchorSource::Out: "
+        "voltage() with AnchorMode::Snap: "
+        "is captured OUT voltage",
         test(AnchorType::Start, [](Tester &t, Module &module, Anchor &anchor) {
           auto constexpr step = 4;
-          module.start_mode_[step] = AnchorMode::Snap;
+          auto constexpr default_entry_voltage = 4.343F;
+
+          set_all_voltages(module, default_entry_voltage);
+          auto constexpr output_entry_voltage = default_entry_voltage + 1.F;
+          module.output_ = output_entry_voltage;
           module.start_source_[step] = AnchorSource::Out;
-
-          auto constexpr initial_level_voltage = 2.349F;
-          module.output_ = initial_level_voltage;
-
           anchor.enter(step);
 
-          module.output_ = initial_level_voltage + 1.F;
-          t.assert_that("with new OUT voltage", anchor.voltage(),
-                        is_equal_to(initial_level_voltage));
+          set_all_voltages(module, output_entry_voltage + 1.F);
 
-          module.start_source_[step] = AnchorSource::In;
-          t.assert_that("with AnchorSource::In", anchor.voltage(),
-                        is_equal_to(initial_level_voltage));
-
-          module.start_source_[step] = AnchorSource::Level;
-          module.output_ = 83.F;
-          t.assert_that("with AnchorSource::Level", anchor.voltage(),
-                        is_equal_to(initial_level_voltage));
+          for (auto const source : anchor_sources) {
+            module.start_source_[step] = source;
+            t.assert_that(name_of(source), anchor.voltage(),
+                          is_equal_to(output_entry_voltage));
+          }
         }));
 
     add("AnchorType::Start: "
-        "AnchorMode::Track: "
-        "AnchorSource::In: "
-        "voltage() is IN voltage regardless of snapped voltage",
+        "voltage() with AnchorMode::Track and AnchorSource::In: "
+        "is current IN voltage",
         test(AnchorType::Start, [](Tester &t, Module &module, Anchor &anchor) {
           auto constexpr step = 5;
-          auto constexpr snapped_voltage = 92.234F;
+          auto constexpr default_entry_voltage = 5.343F;
 
-          module.start_mode_[step] = AnchorMode::Track;
+          for (auto const source : anchor_sources) {
+            set_all_voltages(module, default_entry_voltage);
+            module.start_source_[step] = source;
+            anchor.enter(step); // Capture the voltage from this source
 
-          // Snap IN voltage
-          module.start_source_[step] = AnchorSource::In;
-          module.input_ = snapped_voltage;
-          anchor.enter(step);
-
-          // Update IN voltage
-          auto input_voltage = 2.349F;
-          module.input_ = input_voltage;
-
-          module.start_source_[step] = AnchorSource::In;
-          t.assert_that("after snapping IN", anchor.voltage(),
-                        is_equal_to(input_voltage));
-
-          // Snap Level voltage
-          module.start_source_[step] = AnchorSource::Level;
-          module.start_level_[step] = snapped_voltage;
-          anchor.enter(step);
-
-          // Update IN voltage
-          input_voltage += 1.F;
-          module.input_ = input_voltage;
-
-          module.start_source_[step] = AnchorSource::In;
-          t.assert_that("after snapping Level", anchor.voltage(),
-                        is_equal_to(input_voltage));
-
-          // Snap OUT voltage
-          module.start_source_[step] = AnchorSource::Out;
-          module.start_level_[step] = snapped_voltage;
-          anchor.enter(step);
-
-          // Updte IN voltage
-          input_voltage += 1.F;
-          module.input_ = input_voltage;
-
-          module.start_source_[step] = AnchorSource::In;
-          t.assert_that("after snapping OUT", anchor.voltage(),
-                        is_equal_to(input_voltage));
+            auto constexpr current_input_voltage = default_entry_voltage + 1.F;
+            module.input_ = current_input_voltage;
+            module.start_mode_[step] = AnchorMode::Track;
+            module.start_source_[step] = AnchorSource::In;
+            t.assert_that(name_of(source), anchor.voltage(),
+                          is_equal_to(current_input_voltage));
+          }
         }));
 
     add("AnchorType::Start: "
-        "AnchorMode::Track: "
-        "AnchorSource::Level: "
-        "voltage() is step level regardless of snapped voltage",
+        "voltage() with AnchorMode::Track and AnchorSource::Level: "
+        "is current level voltage",
         test(AnchorType::Start, [](Tester &t, Module &module, Anchor &anchor) {
-          auto constexpr step = 5;
-          auto constexpr snapped_voltage = 92.234F;
-          auto level_voltage = 2.341F;
+          auto constexpr step = 6;
+          auto constexpr default_entry_voltage = 6.343F;
 
-          module.start_mode_[step] = AnchorMode::Track;
+          for (auto const source : anchor_sources) {
+            set_all_voltages(module, default_entry_voltage);
+            module.start_source_[step] = source;
+            anchor.enter(step); // Capture the voltage from this source
 
-          // Snap IN voltage
-          module.start_source_[step] = AnchorSource::In;
-          module.input_ = snapped_voltage;
-          anchor.enter(step);
-
-          // Update Level Voltage
-          level_voltage += 1.F;
-          module.start_level_[step] = level_voltage;
-
-          module.start_source_[step] = AnchorSource::Level;
-          t.assert_that("after snapping IN", anchor.voltage(),
-                        is_equal_to(level_voltage));
-
-          // Snap Level voltage
-          module.start_source_[step] = AnchorSource::Level;
-          module.start_level_[step] = snapped_voltage;
-          anchor.enter(step);
-
-          // Update Level voltage
-          level_voltage += 1.F;
-          module.start_level_[step] = level_voltage;
-
-          module.start_source_[step] = AnchorSource::Level;
-          t.assert_that("after snapping Level", anchor.voltage(),
-                        is_equal_to(level_voltage));
-
-          // Snap OUT voltage
-          module.start_source_[step] = AnchorSource::Out;
-          module.start_level_[step] = snapped_voltage;
-          anchor.enter(step);
-
-          // Update Level voltage
-          level_voltage += 1.F;
-          module.start_level_[step] = level_voltage;
-
-          module.start_source_[step] = AnchorSource::Level;
-          t.assert_that("after snapping OUT", anchor.voltage(),
-                        is_equal_to(level_voltage));
+            auto constexpr current_level_voltage = default_entry_voltage + 1.F;
+            module.start_level_[step] = current_level_voltage;
+            module.start_mode_[step] = AnchorMode::Track;
+            module.start_source_[step] = AnchorSource::Level;
+            t.assert_that(name_of(source), anchor.voltage(),
+                          is_equal_to(current_level_voltage));
+          }
         }));
 
     add("AnchorType::Start: "
-        "AnchorMode::Track: "
-        "with AnchorSource::Out: "
-        "voltage() is OUT voltage regardless of snapped voltage",
+        "voltage() with AnchorMode::Track and AnchorSource::Out: "
+        "is current OUT voltage",
         test(AnchorType::Start, [](Tester &t, Module &module, Anchor &anchor) {
-          auto constexpr step = 5;
-          auto constexpr snapped_voltage = 92.234F;
-          auto output_voltage = 2.341F;
+          auto constexpr step = 7;
+          auto constexpr default_entry_voltage = 7.343F;
 
-          module.start_mode_[step] = AnchorMode::Track;
+          for (auto const source : anchor_sources) {
+            set_all_voltages(module, default_entry_voltage);
+            module.start_source_[step] = source;
+            anchor.enter(step); // Capture the voltage from this source
 
-          // Snap IN voltage
-          module.start_source_[step] = AnchorSource::In;
-          module.input_ = snapped_voltage;
-          anchor.enter(step);
-
-          // Update OUT Voltage
-          output_voltage += 1.F;
-          module.output_ = output_voltage;
-
-          module.start_source_[step] = AnchorSource::Out;
-          t.assert_that("after snapping IN", anchor.voltage(),
-                        is_equal_to(output_voltage));
-
-          // Snap Level voltage
-          module.start_source_[step] = AnchorSource::Level;
-          module.start_level_[step] = snapped_voltage;
-          anchor.enter(step);
-
-          // Update OUT Voltage
-          output_voltage += 1.F;
-          module.output_ = output_voltage;
-
-          module.start_source_[step] = AnchorSource::Out;
-          t.assert_that("after snapping Level", anchor.voltage(),
-                        is_equal_to(output_voltage));
-
-          // Snap OUT voltage
-          module.start_source_[step] = AnchorSource::Out;
-          module.output_ = snapped_voltage;
-          anchor.enter(step);
-
-          // Update OUT Voltage
-          output_voltage += 1.F;
-          module.output_ = output_voltage;
-
-          module.start_source_[step] = AnchorSource::Out;
-          t.assert_that("after snapping OUT", anchor.voltage(),
-                        is_equal_to(output_voltage));
+            auto constexpr current_output_voltage = default_entry_voltage + 1.F;
+            module.output_ = current_output_voltage;
+            module.start_mode_[step] = AnchorMode::Track;
+            module.start_source_[step] = AnchorSource::Out;
+            t.assert_that(name_of(source), anchor.voltage(),
+                          is_equal_to(current_output_voltage));
+          }
         }));
 
-    add("AnchorType::End snapped AnchorSource::In: "
-        "voltage() if AnchorMode:Snap: "
-        "is IN voltage regardless of voltage at current source",
+    add("AnchorType::End: "
+        "entered with AnchorSource::In: "
+        "voltage() with AnchorMode::Snap: "
+        "is captured IN voltage",
         test(AnchorType::End, [](Tester &t, Module &module, Anchor &anchor) {
-          auto constexpr step = 2;
-          module.end_mode_[step] = AnchorMode::Snap;
+          auto constexpr step = 1;
+          auto constexpr default_entry_voltage = 1.343F;
+
+          set_all_voltages(module, default_entry_voltage);
+          auto constexpr input_entry_voltage = default_entry_voltage + 1.F;
+          module.input_ = input_entry_voltage;
           module.end_source_[step] = AnchorSource::In;
-
-          auto constexpr initial_input_voltage = 4.234F;
-          module.input_ = initial_input_voltage;
-
           anchor.enter(step);
 
-          module.input_ = initial_input_voltage + 1.F;
-          t.assert_that("with new IN voltage", anchor.voltage(),
-                        is_equal_to(initial_input_voltage));
+          set_all_voltages(module, input_entry_voltage + 1.F);
 
-          module.end_source_[step] = AnchorSource::Level;
-          t.assert_that("with AnchorSource::Level", anchor.voltage(),
-                        is_equal_to(initial_input_voltage));
-
-          module.end_source_[step] = AnchorSource::Out;
-          module.output_ = 83.F;
-          t.assert_that("with AnchorSource::Out", anchor.voltage(),
-                        is_equal_to(initial_input_voltage));
+          for (auto const source : anchor_sources) {
+            module.end_source_[step] = source;
+            t.assert_that(name_of(source), anchor.voltage(),
+                          is_equal_to(input_entry_voltage));
+          }
         }));
 
-    add("AnchorType::End snapped AnchorSource::Level: "
-        "voltage() if AnchorMode:Snap: "
-        "is snapped start level regardless of voltage at current source",
+    add("AnchorType::End: "
+        "entered with AnchorSource::Level: "
+        "voltage() with AnchorMode::Snap: "
+        "is captured level voltage",
         test(AnchorType::End, [](Tester &t, Module &module, Anchor &anchor) {
           auto constexpr step = 3;
-          module.end_mode_[step] = AnchorMode::Snap;
+          auto constexpr default_entry_voltage = 3.343F;
+
+          set_all_voltages(module, default_entry_voltage);
+          auto constexpr level_entry_voltage = default_entry_voltage + 1.F;
+          module.end_level_[step] = level_entry_voltage;
           module.end_source_[step] = AnchorSource::Level;
-
-          auto constexpr initial_level_voltage = 2.349F;
-          module.end_level_[step] = initial_level_voltage;
-
           anchor.enter(step);
 
-          module.end_level_[step] = initial_level_voltage + 1.F;
-          t.assert_that("with new level voltage", anchor.voltage(),
-                        is_equal_to(initial_level_voltage));
+          set_all_voltages(module, level_entry_voltage + 1.F);
 
-          module.end_source_[step] = AnchorSource::In;
-          t.assert_that("with AnchorSource::In", anchor.voltage(),
-                        is_equal_to(initial_level_voltage));
-
-          module.end_source_[step] = AnchorSource::Out;
-          module.output_ = 83.F;
-          t.assert_that("with AnchorSource::Out", anchor.voltage(),
-                        is_equal_to(initial_level_voltage));
+          for (auto const source : anchor_sources) {
+            module.end_source_[step] = source;
+            t.assert_that(name_of(source), anchor.voltage(),
+                          is_equal_to(level_entry_voltage));
+          }
         }));
 
-    add("AnchorType::End snapped AnchorSource::Out: "
-        "voltage() if AnchorMode:Snap: "
-        "returns snapped OUT voltage regardless of voltage at current source",
+    add("AnchorType::End: "
+        "entered with AnchorSource::Out: "
+        "voltage() with AnchorMode::Snap: "
+        "is captured OUT voltage",
         test(AnchorType::End, [](Tester &t, Module &module, Anchor &anchor) {
           auto constexpr step = 4;
-          module.end_mode_[step] = AnchorMode::Snap;
+          auto constexpr default_entry_voltage = 4.343F;
+
+          set_all_voltages(module, default_entry_voltage);
+          auto constexpr output_entry_voltage = default_entry_voltage + 1.F;
+          module.output_ = output_entry_voltage;
           module.end_source_[step] = AnchorSource::Out;
-
-          auto constexpr initial_level_voltage = 2.349F;
-          module.output_ = initial_level_voltage;
-
           anchor.enter(step);
 
-          module.output_ = initial_level_voltage + 1.F;
-          t.assert_that("with new OUT voltage", anchor.voltage(),
-                        is_equal_to(initial_level_voltage));
+          set_all_voltages(module, output_entry_voltage + 1.F);
 
-          module.end_source_[step] = AnchorSource::In;
-          t.assert_that("with AnchorSource::In", anchor.voltage(),
-                        is_equal_to(initial_level_voltage));
-
-          module.end_source_[step] = AnchorSource::Level;
-          module.output_ = 83.F;
-          t.assert_that("with AnchorSource::Level", anchor.voltage(),
-                        is_equal_to(initial_level_voltage));
+          for (auto const source : anchor_sources) {
+            module.end_source_[step] = source;
+            t.assert_that(name_of(source), anchor.voltage(),
+                          is_equal_to(output_entry_voltage));
+          }
         }));
 
     add("AnchorType::End: "
-        "AnchorMode::Track: "
-        "AnchorSource::In: "
-        "voltage() is IN voltage regardless of snapped voltage",
+        "voltage() with AnchorMode::Track and AnchorSource::In: "
+        "is current IN voltage",
         test(AnchorType::End, [](Tester &t, Module &module, Anchor &anchor) {
           auto constexpr step = 5;
-          auto constexpr snapped_voltage = 92.234F;
+          auto constexpr default_entry_voltage = 5.343F;
 
-          module.end_mode_[step] = AnchorMode::Track;
+          for (auto const source : anchor_sources) {
+            set_all_voltages(module, default_entry_voltage);
+            module.end_source_[step] = source;
+            anchor.enter(step); // Capture the voltage from this source
 
-          // Snap IN voltage
-          module.end_source_[step] = AnchorSource::In;
-          module.input_ = snapped_voltage;
-          anchor.enter(step);
-
-          // Update IN voltage
-          auto input_voltage = 2.349F;
-          module.input_ = input_voltage;
-
-          module.end_source_[step] = AnchorSource::In;
-          t.assert_that("after snapping IN", anchor.voltage(),
-                        is_equal_to(input_voltage));
-
-          // Snap Level voltage
-          module.end_source_[step] = AnchorSource::Level;
-          module.end_level_[step] = snapped_voltage;
-          anchor.enter(step);
-
-          // Update IN voltage
-          input_voltage += 1.F;
-          module.input_ = input_voltage;
-
-          module.end_source_[step] = AnchorSource::In;
-          t.assert_that("after snapping Level", anchor.voltage(),
-                        is_equal_to(input_voltage));
-
-          // Snap OUT voltage
-          module.end_source_[step] = AnchorSource::Out;
-          module.end_level_[step] = snapped_voltage;
-          anchor.enter(step);
-
-          // Updte IN voltage
-          input_voltage += 1.F;
-          module.input_ = input_voltage;
-
-          module.end_source_[step] = AnchorSource::In;
-          t.assert_that("after snapping OUT", anchor.voltage(),
-                        is_equal_to(input_voltage));
+            auto constexpr current_input_voltage = default_entry_voltage + 1.F;
+            module.input_ = current_input_voltage;
+            module.end_mode_[step] = AnchorMode::Track;
+            module.end_source_[step] = AnchorSource::In;
+            t.assert_that(name_of(source), anchor.voltage(),
+                          is_equal_to(current_input_voltage));
+          }
         }));
 
     add("AnchorType::End: "
-        "AnchorMode::Track: "
-        "AnchorSource::Level: "
-        "voltage() is step level regardless of snapped voltage",
+        "voltage() with AnchorMode::Track and AnchorSource::Level: "
+        "is current level voltage",
         test(AnchorType::End, [](Tester &t, Module &module, Anchor &anchor) {
-          auto constexpr step = 5;
-          auto constexpr snapped_voltage = 92.234F;
-          auto level_voltage = 2.341F;
+          auto constexpr step = 6;
+          auto constexpr default_entry_voltage = 6.343F;
 
-          module.end_mode_[step] = AnchorMode::Track;
+          for (auto const source : anchor_sources) {
+            set_all_voltages(module, default_entry_voltage);
+            module.end_source_[step] = source;
+            anchor.enter(step); // Capture the voltage from this source
 
-          // Snap IN voltage
-          module.end_source_[step] = AnchorSource::In;
-          module.input_ = snapped_voltage;
-          anchor.enter(step);
-
-          // Update Level Voltage
-          level_voltage += 1.F;
-          module.end_level_[step] = level_voltage;
-
-          module.end_source_[step] = AnchorSource::Level;
-          t.assert_that("after snapping IN", anchor.voltage(),
-                        is_equal_to(level_voltage));
-
-          // Snap Level voltage
-          module.end_source_[step] = AnchorSource::Level;
-          module.end_level_[step] = snapped_voltage;
-          anchor.enter(step);
-
-          // Update Level voltage
-          level_voltage += 1.F;
-          module.end_level_[step] = level_voltage;
-
-          module.end_source_[step] = AnchorSource::Level;
-          t.assert_that("after snapping Level", anchor.voltage(),
-                        is_equal_to(level_voltage));
-
-          // Snap OUT voltage
-          module.end_source_[step] = AnchorSource::Out;
-          module.end_level_[step] = snapped_voltage;
-          anchor.enter(step);
-
-          // Update Level voltage
-          level_voltage += 1.F;
-          module.end_level_[step] = level_voltage;
-
-          module.end_source_[step] = AnchorSource::Level;
-          t.assert_that("after snapping OUT", anchor.voltage(),
-                        is_equal_to(level_voltage));
+            auto constexpr current_level_voltage = default_entry_voltage + 1.F;
+            module.end_level_[step] = current_level_voltage;
+            module.end_mode_[step] = AnchorMode::Track;
+            module.end_source_[step] = AnchorSource::Level;
+            t.assert_that(name_of(source), anchor.voltage(),
+                          is_equal_to(current_level_voltage));
+          }
         }));
 
     add("AnchorType::End: "
-        "AnchorMode::Track: "
-        "AnchorSource::Out: "
-        "voltage() is OUT voltage regardless of snapped voltage",
+        "voltage() with AnchorMode::Track and AnchorSource::Out: "
+        "is current OUT voltage",
         test(AnchorType::End, [](Tester &t, Module &module, Anchor &anchor) {
-          auto constexpr step = 5;
-          auto constexpr snapped_voltage = 92.234F;
-          auto output_voltage = 2.341F;
+          auto constexpr step = 7;
+          auto constexpr default_entry_voltage = 7.343F;
 
-          module.end_mode_[step] = AnchorMode::Track;
+          for (auto const source : anchor_sources) {
+            set_all_voltages(module, default_entry_voltage);
+            module.end_source_[step] = source;
+            anchor.enter(step); // Capture the voltage from this source
 
-          // Snap IN voltage
-          module.end_source_[step] = AnchorSource::In;
-          module.input_ = snapped_voltage;
-          anchor.enter(step);
-
-          // Update OUT Voltage
-          output_voltage += 1.F;
-          module.output_ = output_voltage;
-
-          module.end_source_[step] = AnchorSource::Out;
-          t.assert_that("after snapping IN", anchor.voltage(),
-                        is_equal_to(output_voltage));
-
-          // Snap Level voltage
-          module.end_source_[step] = AnchorSource::Level;
-          module.end_level_[step] = snapped_voltage;
-          anchor.enter(step);
-
-          // Update OUT Voltage
-          output_voltage += 1.F;
-          module.output_ = output_voltage;
-
-          module.end_source_[step] = AnchorSource::Out;
-          t.assert_that("after snapping Level", anchor.voltage(),
-                        is_equal_to(output_voltage));
-
-          // Snap OUT voltage
-          module.end_source_[step] = AnchorSource::Out;
-          module.output_ = snapped_voltage;
-          anchor.enter(step);
-
-          // Update OUT Voltage
-          output_voltage += 1.F;
-          module.output_ = output_voltage;
-
-          module.end_source_[step] = AnchorSource::Out;
-          t.assert_that("after snapping OUT", anchor.voltage(),
-                        is_equal_to(output_voltage));
+            auto constexpr current_output_voltage = default_entry_voltage + 1.F;
+            module.output_ = current_output_voltage;
+            module.end_mode_[step] = AnchorMode::Track;
+            module.end_source_[step] = AnchorSource::Out;
+            t.assert_that(name_of(source), anchor.voltage(),
+                          is_equal_to(current_output_voltage));
+          }
         }));
   }
 };
