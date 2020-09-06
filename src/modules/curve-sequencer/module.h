@@ -133,13 +133,15 @@ public:
   auto anchor_mode(AnchorType type, int step) const -> AnchorMode {
     auto const base = type == AnchorType::Start ? Param::StepStartAnchorMode
                                                 : Param::StepEndAnchorMode;
-    return static_cast<AnchorMode>(position_of(params[base + step]));
+    auto const selection = position_of(params[base + step]);
+    return static_cast<AnchorMode>(selection);
   }
 
   auto anchor_source(AnchorType type, int step) const -> AnchorSource {
     auto const base = type == AnchorType::Start ? Param::StepStartAnchorSource
                                                 : Param::StepEndAnchorSource;
-    return static_cast<AnchorSource>(position_of(params[base + step]));
+    auto const selection = position_of(params[base + step]);
+    return static_cast<AnchorSource>(selection);
   }
 
   auto completion_mode(int step) const -> CompletionMode {
@@ -183,22 +185,24 @@ public:
   }
 
 private:
+  using AnchorT = Anchor<Module<N>>;
+  using GeneratorT = Generator<Module<N>, AnchorT>;
+  using InterrupterT = Interrupter<Module<N>>;
   using StepSelectorT = StepSelector<Module<N>>;
-  using StepControllerT =
-      StepController<Interrupter<Module<N>>,
-                     Generator<Module<N>, Anchor<Module<N>>>,
-                     Sustainer<Module<N>>>;
+  using SustainerT = Sustainer<Module<N>>;
+
+  AnchorT end_anchor_{*this, AnchorType::End};
+  AnchorT start_anchor_{*this, AnchorType::Start};
+  GeneratorT generator_{*this, start_anchor_, end_anchor_};
+  InterrupterT interrupter_{*this};
+  StepSelectorT step_selector_{*this, N};
+  SustainerT sustainer_{*this};
+
+  using StepControllerT = StepController<InterrupterT, GeneratorT, SustainerT>;
   using SequenceControllerT =
       SequenceController<Module<N>, StepSelectorT, StepControllerT>;
 
-  Anchor<Module<N>> end_anchor_{*this, AnchorType::End};
-  Anchor<Module<N>> start_anchor_{*this, AnchorType::Start};
-  Interrupter<Module<N>> interrupter_{*this};
-  Generator<Module<N>, Anchor<Module<N>>> generator_{*this, start_anchor_,
-                                                     end_anchor_};
-  Sustainer<Module<N>> sustainer_{*this};
   StepControllerT step_controller_{interrupter_, generator_, sustainer_};
-  StepSelectorT step_selector_{*this, N};
   SequenceControllerT sequence_controller_{*this, step_selector_,
                                            step_controller_};
 
