@@ -1,7 +1,5 @@
 #pragma once
 
-#include "anchor-mode.h"
-#include "anchor-source.h"
 #include "completion-mode.h"
 #include "components/sigmoid.h"
 #include "control-ids.h"

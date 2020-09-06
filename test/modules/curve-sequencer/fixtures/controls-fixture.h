@@ -1,7 +1,6 @@
 #pragma once
 
-#include "./anchor-modes.h"
-#include "./anchor-sources.h"
+#include "./anchor-enums.h"
 #include "./completion-modes.h"
 #include "./interrupt-modes.h"
 #include "helpers/rack-controls.h"

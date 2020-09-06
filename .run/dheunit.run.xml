@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="dheunit" type="CLionNativeAppRunConfigurationType" REDIRECT_INPUT="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="DHE-Modules" TARGET_NAME="Makefile" version="1" RUN_PATH="$PROJECT_DIR$/build/dheunit">
+  <configuration default="false" name="dheunit" type="CLionNativeAppRunConfigurationType" REDIRECT_INPUT="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="DHE-Modules" TARGET_NAME="Makefile" CONFIG_NAME="Makefile" version="1" RUN_PATH="$PROJECT_DIR$/build/dheunit">
     <method v="2">
       <option name="CLION.COMPOUND.BUILD" enabled="true" />
       <option name="RunConfigurationTask" enabled="true" run_configuration_name="build/dheunit" run_configuration_type="MAKEFILE_TARGET_RUN_CONFIGURATION" />

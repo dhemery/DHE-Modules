@@ -1,6 +1,5 @@
 #pragma once
 
-#include "anchor-controls.h"
 #include "anchor.h"
 #include "components/phase-timer.h"
 #include "config/common-config.h"
@@ -85,13 +84,33 @@ public:
     sequence_controller_.execute(args.sampleTime);
   }
 
+  auto anchor_level(AnchorType type, int step) const -> float {
+    auto const base =
+        type == AnchorType::Start ? Param::StepStartLevel : Param::StepEndLevel;
+    return dhe::selectable_level(params[base + step],
+                                 params[Param::LevelRange]);
+  }
+
+  auto anchor_mode(AnchorType type, int step) const -> AnchorMode {
+    auto const base = type == AnchorType::Start ? Param::StepStartAnchorMode
+                                                : Param::StepEndAnchorMode;
+    return static_cast<AnchorMode>(value_of(params[base + step]));
+  }
+
+  auto anchor_source(AnchorType type, int step) const -> AnchorSource {
+    auto const base = type == AnchorType::Start ? Param::StepStartAnchorSource
+                                                : Param::StepEndAnchorSource;
+    return static_cast<AnchorSource>(value_of(params[base + step]));
+  }
+
+  auto input() const -> float { return voltage_at(inputs[Input::In]); }
+
+  auto output() const -> float { return voltage_at(outputs[Output::Out]); }
+
 private:
   using ControlsT = Controls<rack::engine::Input, rack::engine::Output,
                              rack::engine::Param, rack::engine::Light, N>;
-  using AnchorControlsT =
-      AnchorControls<rack::engine::Input, rack::engine::Output,
-                     rack::engine::Param, N>;
-  using AnchorT = Anchor<AnchorControlsT>;
+  using AnchorT = Anchor<Module<N>>;
   using GeneratorT = Generator<ControlsT, AnchorT>;
   using SustainerT = Sustainer<ControlsT>;
   using StepSelectorT = StepSelector<ControlsT>;
@@ -100,20 +119,8 @@ private:
   using SequenceControllerT =
       SequenceController<ControlsT, StepSelectorT, StepControllerT>;
 
-  AnchorControlsT start_anchor_controls_{inputs,
-                                         outputs,
-                                         params,
-                                         Param::StepStartAnchorMode,
-                                         Param::StepStartAnchorSource,
-                                         Param::StepStartLevel};
-  AnchorT start_anchor_{start_anchor_controls_};
-  AnchorControlsT end_anchor_controls_{inputs,
-                                       outputs,
-                                       params,
-                                       Param::StepEndAnchorMode,
-                                       Param::StepEndAnchorSource,
-                                       Param::StepEndLevel};
-  AnchorT end_anchor_{end_anchor_controls_};
+  AnchorT end_anchor_{*this, AnchorType::End};
+  AnchorT start_anchor_{*this, AnchorType::Start};
   ControlsT controls_{inputs, outputs, params, lights};
   InterrupterT interrupter_{controls_};
   GeneratorT generator_{controls_, start_anchor_, end_anchor_};
