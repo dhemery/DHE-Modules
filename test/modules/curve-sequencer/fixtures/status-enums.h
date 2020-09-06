@@ -36,7 +36,8 @@ auto constexpr step_statuses = std::array<StepStatus, step_status_count>{
     StepStatus::Completed,
 };
 
-static inline auto name_of(dhe::curve_sequencer::StepStatus status) -> std::string {
+static inline auto name_of(dhe::curve_sequencer::StepStatus status)
+    -> std::string {
   switch (status) {
   case StepStatus::Completed:
     return "StepStatus::Completed";

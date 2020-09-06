@@ -1,4 +1,9 @@
 #include "modules/curve-sequencer/generator.h"
+
+#include "components/range.h"
+#include "components/sigmoid.h"
+
+#include <array>
 #include <dheunit/test.h>
 
 namespace test {
@@ -7,21 +12,31 @@ namespace curve_sequencer {
 using dhe::unit::Tester;
 using dhe::unit::TestFunc;
 
+auto constexpr step_count = 8;
 struct Anchor {
-  void enter(int step) { entered_step_ = step; }
+  void enter(int step) { entered_[step] = true; }
+  auto voltage() const -> float { return voltage_; }
 
-  int entered_step_{}; // NOLINT
+  std::array<bool, step_count> entered_{}; // NOLINT
+  float voltage_{};                        // NOLINT
 };
 
 struct Module {
-  void show_progress(int step, float progress) {
-    progress_step_ = step;
-    progress_ = progress;
+  auto curvature(int step) const -> float { return curvature_[step]; }
+  auto duration(int step) const -> float { return duration_[step]; }
+  void output(float v) { output_ = v; }
+  auto taper(int step) const -> dhe::sigmoid::Taper const & {
+    return *taper_[step];
   }
+  void show_progress(int step, float progress) { progress_[step] = progress; }
   void show_inactive(int step) { inactive_step_ = step; }
-  float progress_{};    // NOLINT
-  int progress_step_{}; // NOLINT
-  int inactive_step_{}; // NOLINT
+
+  std::array<float, step_count> curvature_{};                   // NOLINT
+  std::array<float, step_count> progress_{};                    // NOLINT
+  std::array<float, step_count> duration_{};                    // NOLINT
+  int inactive_step_{};                                         // NOLINT
+  float output_{};                                              // NOLINT
+  std::array<dhe::sigmoid::Taper const *, step_count> taper_{}; // NOLINT
 };
 
 using Generator = dhe::curve_sequencer::Generator<Module, Anchor>;

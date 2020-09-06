@@ -52,7 +52,8 @@ static auto constexpr trigger_modes =
         TriggerMode::GateIsLow,
     };
 
-static inline auto name_of(dhe::curve_sequencer::TriggerMode mode) -> std::string {
+static inline auto name_of(dhe::curve_sequencer::TriggerMode mode)
+    -> std::string {
   switch (mode) {
   case TriggerMode::GateRises:
     return "TriggerMode::GateRises";
