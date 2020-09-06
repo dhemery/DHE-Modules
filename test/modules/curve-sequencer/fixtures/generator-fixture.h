@@ -24,7 +24,7 @@ struct Controls {
   int inactive_step_{}; // NOLINT
 };
 
-using Generator = dhe::curve_sequencer::Generator<Controls, Anchor, Anchor>;
+using Generator = dhe::curve_sequencer::Generator<Controls, Anchor>;
 
 template <typename GeneratorTest>
 static inline auto test(GeneratorTest const &generator_test) -> TestFunc {

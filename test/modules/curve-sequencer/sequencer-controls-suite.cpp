@@ -15,7 +15,7 @@ public:
   SequenceControlsSuite() : Suite{"dhe::curve_sequencer::Controls/sequence"} {}
 
   void register_tests(dhe::unit::TestRegistrar add) override {
-    add("is_gated()", test([](Tester &t, Module &module, Controls &controls) {
+    add("gate()", test([](Tester &t, Module &module, Controls &controls) {
           module.set_param(Param::Gate, 1.F);
           module.set_input(Input::Gate, 0.F);
 
@@ -94,12 +94,6 @@ public:
           auto constexpr input = 7.777F;
           module.set_input(Input::In, input);
           t.assert_that(controls.input(), is_equal_to(input));
-        }));
-
-    add("output()", test([](Tester &t, Module &module, Controls &controls) {
-          auto constexpr output = 3.333F;
-          module.set_output(Output::Out, output);
-          t.assert_that(controls.output(), is_equal_to(output));
         }));
 
     add("output(v)", test([](Tester &t, Module &module, Controls &controls) {

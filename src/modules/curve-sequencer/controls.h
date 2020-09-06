@@ -69,8 +69,6 @@ public:
     return is_pressed(params_[Param::Run]) || is_high(inputs_[Input::Run]);
   }
 
-  auto output() const -> float { return outputs_[Output::Out].getVoltage(); }
-
   void output(float voltage) { outputs_[Output::Out].setVoltage(voltage); }
 
   auto selection_start() const -> int {
@@ -98,22 +96,6 @@ public:
                                     params_[Param::DurationRange]);
   }
 
-  auto end_level(int step) const -> float {
-    return dhe::selectable_level(params_[Param::StepEndLevel + step],
-                                 params_[Param::LevelRange]);
-  }
-
-  auto end_anchor_mode(int step) const -> AnchorMode {
-    auto const selection =
-        position_of(params_[Param::StepEndAnchorMode + step]);
-    return static_cast<AnchorMode>(selection);
-  }
-
-  auto end_anchor_source(int step) const -> AnchorSource {
-    return static_cast<AnchorSource>(
-        params_[Param::StepEndAnchorSource + step].getValue());
-  }
-
   auto interrupt_mode(int step) const -> InterruptMode {
     auto const selection =
         position_of(params_[Param::StepInterruptMode + step]);
@@ -126,22 +108,6 @@ public:
     auto const completed_brightness = brightness_range.scale(progress);
     auto const remaining_brightness = 1.F - completed_brightness;
     set_lights(step, completed_brightness, remaining_brightness);
-  }
-
-  auto start_anchor_mode(int step) const -> AnchorMode {
-    auto const selection =
-        position_of(params_[Param::StepStartAnchorMode + step]);
-    return static_cast<AnchorMode>(selection);
-  }
-
-  auto start_anchor_source(int step) const -> AnchorSource {
-    return static_cast<AnchorSource>(
-        params_[Param::StepStartAnchorSource + step].getValue());
-  }
-
-  auto start_level(int step) const -> float {
-    return dhe::selectable_level(params_[Param::StepStartLevel + step],
-                                 params_[Param::LevelRange]);
   }
 
   auto taper(int step) const -> sigmoid::Taper const & {

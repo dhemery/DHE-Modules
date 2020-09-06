@@ -1,20 +1,13 @@
 #include "./fixtures/controls-fixture.h"
 #include "./fixtures/trigger-modes.h"
 #include "components/sigmoid.h"
-#include "modules/curve-sequencer/completion-mode.h"
 #include "modules/curve-sequencer/controls.h"
-#include "modules/curve-sequencer/trigger-mode.h"
 #include <dheunit/assertions.h>
 #include <dheunit/test.h>
 #include <functional>
 
 namespace test {
 namespace curve_sequencer {
-using dhe::curve_sequencer::AnchorMode;
-using dhe::curve_sequencer::AnchorSource;
-using dhe::curve_sequencer::CompletionMode;
-using dhe::curve_sequencer::InterruptMode;
-using dhe::curve_sequencer::TriggerMode;
 using dhe::unit::is_between;
 using dhe::unit::is_equal_to;
 using dhe::unit::is_false;
@@ -53,54 +46,6 @@ public:
                }));
     }
 
-    for (auto const &mode : anchor_modes) {
-      add_test(std::string{"start_anchor_mode(s): "} + name_of(mode),
-               test([mode](Tester &t, Module &module, Controls &controls) {
-                 auto constexpr step = 1;
-
-                 module.set_param(Param::StepStartAnchorMode, step,
-                                  static_cast<float>(mode));
-
-                 t.assert_that(controls.start_anchor_mode(step),
-                               is_equal_to(mode));
-               }));
-
-      add_test(std::string{"end_anchor_mode(s): "} + name_of(mode),
-               test([mode](Tester &t, Module &module, Controls &controls) {
-                 auto constexpr step = 2;
-
-                 module.set_param(Param::StepEndAnchorMode, step,
-                                  static_cast<float>(mode));
-
-                 t.assert_that(controls.end_anchor_mode(step),
-                               is_equal_to(mode));
-               }));
-    }
-
-    for (auto const &source : anchor_sources) {
-      add_test(std::string{"start_anchor_source(s): "} + name_of(source),
-               test([source](Tester &t, Module &module, Controls &controls) {
-                 auto constexpr step = 3;
-
-                 module.set_param(Param::StepStartAnchorSource, step,
-                                  static_cast<float>(source));
-
-                 t.assert_that(controls.start_anchor_source(step),
-                               is_equal_to(source));
-               }));
-
-      add_test(std::string{"end_anchor_source(s): "} + name_of(source),
-               test([source](Tester &t, Module &module, Controls &controls) {
-                 auto constexpr step = 4;
-
-                 module.set_param(Param::StepEndAnchorSource, step,
-                                  static_cast<float>(source));
-
-                 t.assert_that(controls.end_anchor_source(step),
-                               is_equal_to(source));
-               }));
-    }
-
     for (auto mode : trigger_modes) {
       auto const name = std::string{"trigger_mode(s): "} + name_of(mode);
       add_test(name,
@@ -113,32 +58,6 @@ public:
                  t.assert_that(controls.trigger_mode(step), is_equal_to(mode));
                }));
     }
-
-    add_test("start_level(s)",
-             test([](Tester &t, Module &module, Controls &controls) {
-               auto constexpr step = 7;
-               auto constexpr rotation = 0.37F;
-               auto constexpr range = 1; // unipolar 0–10
-               module.set_param(Param::StepStartLevel, step, rotation);
-               module.set_param(Param::LevelRange, range);
-
-               t.assert_that(controls.start_level(step),
-                             is_equal_to(dhe::level(
-                                 rotation, dhe::signal_ranges[range])));
-             }));
-
-    add_test("end_level(s)",
-             test([](Tester &t, Module &module, Controls &controls) {
-               auto constexpr step = 2;
-               auto constexpr rotation = 0.22F;
-               auto constexpr range = 0;
-               module.set_param(Param::StepEndLevel, step, rotation);
-               module.set_param(Param::LevelRange, range);
-
-               auto want = dhe::level(rotation, dhe::signal_ranges[range]);
-
-               t.assert_that(controls.end_level(step), is_equal_to(want));
-             }));
 
     add_test("duration(s)",
              test([](Tester &t, Module &module, Controls &controls) {

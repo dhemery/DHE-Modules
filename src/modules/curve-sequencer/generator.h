@@ -5,9 +5,9 @@
 namespace dhe {
 namespace curve_sequencer {
 
-template <typename Controls, typename Start, typename End> class Generator {
+template <typename Controls, typename Anchor> class Generator {
 public:
-  Generator(Controls &controls, Start &start_anchor, End &end_anchor)
+  Generator(Controls &controls, Anchor &start_anchor, Anchor &end_anchor)
       : controls_{controls}, start_anchor_{start_anchor}, end_anchor_{
                                                               end_anchor} {}
 
@@ -26,8 +26,8 @@ public:
 
 private:
   Controls &controls_;
-  Start &start_anchor_;
-  End &end_anchor_;
+  Anchor &start_anchor_;
+  Anchor &end_anchor_;
   PhaseTimer timer_{};
   int step_{0};
 };

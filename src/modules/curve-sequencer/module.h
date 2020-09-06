@@ -1,5 +1,6 @@
 #pragma once
 
+#include "anchor-controls.h"
 #include "anchor.h"
 #include "components/phase-timer.h"
 #include "config/common-config.h"
@@ -87,9 +88,11 @@ public:
 private:
   using ControlsT = Controls<rack::engine::Input, rack::engine::Output,
                              rack::engine::Param, rack::engine::Light, N>;
-  using StartAnchorT = StartAnchor<ControlsT>;
-  using EndAnchorT = EndAnchor<ControlsT>;
-  using GeneratorT = Generator<ControlsT, StartAnchorT, EndAnchorT>;
+  using AnchorControlsT =
+      AnchorControls<rack::engine::Input, rack::engine::Output,
+                     rack::engine::Param, N>;
+  using AnchorT = Anchor<AnchorControlsT>;
+  using GeneratorT = Generator<ControlsT, AnchorT>;
   using SustainerT = Sustainer<ControlsT>;
   using StepSelectorT = StepSelector<ControlsT>;
   using InterrupterT = Interrupter<ControlsT>;
@@ -97,9 +100,21 @@ private:
   using SequenceControllerT =
       SequenceController<ControlsT, StepSelectorT, StepControllerT>;
 
+  AnchorControlsT start_anchor_controls_{inputs,
+                                         outputs,
+                                         params,
+                                         Param::StepStartAnchorMode,
+                                         Param::StepStartAnchorSource,
+                                         Param::StepStartLevel};
+  AnchorT start_anchor_{start_anchor_controls_};
+  AnchorControlsT end_anchor_controls_{inputs,
+                                       outputs,
+                                       params,
+                                       Param::StepEndAnchorMode,
+                                       Param::StepEndAnchorSource,
+                                       Param::StepEndLevel};
+  AnchorT end_anchor_{end_anchor_controls_};
   ControlsT controls_{inputs, outputs, params, lights};
-  StartAnchorT start_anchor_{controls_};
-  EndAnchorT end_anchor_{controls_};
   InterrupterT interrupter_{controls_};
   GeneratorT generator_{controls_, start_anchor_, end_anchor_};
   SustainerT sustainer_{controls_};
