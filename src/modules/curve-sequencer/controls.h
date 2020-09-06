@@ -1,14 +1,12 @@
 #pragma once
 
-#include "completion-mode.h"
+#include "advancement.h"
 #include "components/sigmoid.h"
 #include "control-ids.h"
 #include "controls/common-inputs.h"
 #include "controls/curvature-inputs.h"
 #include "controls/duration-inputs.h"
 #include "controls/level-inputs.h"
-#include "interrupt-mode.h"
-#include "trigger-mode.h"
 
 #include <vector>
 

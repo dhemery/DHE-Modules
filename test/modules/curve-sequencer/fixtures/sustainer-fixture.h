@@ -1,7 +1,6 @@
 #pragma once
 
-#include "modules/curve-sequencer/completion-mode.h"
-#include "modules/curve-sequencer/sustainer.h"
+#include "modules/curve-sequencer/advancement.h"
 #include <dheunit/test.h>
 
 namespace test {

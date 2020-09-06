@@ -1,8 +1,6 @@
 #pragma once
 
-#include "modules/curve-sequencer/completion-mode.h"
-#include "modules/curve-sequencer/interrupt-mode.h"
-#include "modules/curve-sequencer/trigger-mode.h"
+#include "modules/curve-sequencer/advancement.h"
 #include <array>
 #include <ostream>
 

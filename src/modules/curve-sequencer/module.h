@@ -1,7 +1,7 @@
 #pragma once
 
+#include "advancement.h"
 #include "anchor.h"
-#include "components/phase-timer.h"
 #include "config/common-config.h"
 #include "config/curvature-config.h"
 #include "config/duration-config.h"
@@ -9,12 +9,9 @@
 #include "control-ids.h"
 #include "controls.h"
 #include "generator.h"
-#include "interrupter.h"
 #include "sequence-controller.h"
 #include "step-controller.h"
 #include "step-selector.h"
-#include "sustainer.h"
-#include "trigger-mode.h"
 
 #include <engine/Module.hpp>
 

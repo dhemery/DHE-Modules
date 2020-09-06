@@ -1,7 +1,6 @@
 #pragma once
 
-#include "modules/curve-sequencer/interrupt-mode.h"
-#include "modules/curve-sequencer/interrupter.h"
+#include "modules/curve-sequencer/advancement.h"
 #include <dheunit/test.h>
 
 namespace test {

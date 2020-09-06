@@ -6,7 +6,6 @@
 #include "generator-status.h"
 #include "step-selector.h"
 #include "step-status.h"
-#include "trigger-mode.h"
 
 namespace dhe {
 namespace curve_sequencer {
