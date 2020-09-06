@@ -3,6 +3,7 @@
 #include "modules/curve-sequencer/advancement.h"
 #include <array>
 #include <ostream>
+#include <string>
 
 namespace test {
 namespace curve_sequencer {
@@ -15,12 +16,15 @@ static auto constexpr completion_modes = std::array<CompletionMode, 2>{
     CompletionMode::Sustain,
 };
 
-static inline auto name_of(CompletionMode mode) -> char const * {
+static inline auto name_of(CompletionMode mode) -> std::string {
   switch (mode) {
   case CompletionMode::Advance:
     return "CompletionMode::Advance";
   case CompletionMode::Sustain:
     return "CompletionMode::Sustain";
+  default:
+    return std::string{"Unknown CompletionMode "} +
+           std::to_string(static_cast<int>(mode));
   }
 }
 
@@ -29,12 +33,15 @@ static auto constexpr interrupt_modes = std::array<InterruptMode, 2>{
     InterruptMode::Advance,
 };
 
-static inline auto name_of(InterruptMode mode) -> char const * {
+static inline auto name_of(InterruptMode mode) -> std::string {
   switch (mode) {
   case InterruptMode::Advance:
     return "InterruptMode::Advance";
   case InterruptMode::Ignore:
     return "InterruptMode::Ignore";
+  default:
+    return std::string{"Unknown InterruptMode "} +
+           std::to_string(static_cast<int>(mode));
   }
 }
 
@@ -45,7 +52,7 @@ static auto constexpr trigger_modes =
         TriggerMode::GateIsLow,
     };
 
-static auto name_of(dhe::curve_sequencer::TriggerMode mode) -> char const * {
+static inline auto name_of(dhe::curve_sequencer::TriggerMode mode) -> std::string {
   switch (mode) {
   case TriggerMode::GateRises:
     return "TriggerMode::GateRises";
@@ -57,6 +64,9 @@ static auto name_of(dhe::curve_sequencer::TriggerMode mode) -> char const * {
     return "TriggerMode::GateIsHigh";
   case TriggerMode::GateIsLow:
     return "TriggerMode::GateIsLow";
+  default:
+    return std::string{"Unknown TriggerMode "} +
+           std::to_string(static_cast<int>(mode));
   }
 }
 } // namespace curve_sequencer

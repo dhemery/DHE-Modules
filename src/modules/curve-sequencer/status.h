@@ -2,7 +2,20 @@
 
 namespace dhe {
 namespace curve_sequencer {
-enum class GeneratorStatus { Generating, Completed };
-enum class StepStatus { InProgress, Completed };
+enum class GeneratorStatus {
+  Generating,
+  Completed,
+};
+
+auto constexpr generator_status_count =
+    static_cast<int>(GeneratorStatus::Completed) + 1;
+
+enum class StepStatus {
+  InProgress,
+  Completed,
+};
+
+auto constexpr step_status_count = static_cast<int>(StepStatus::Completed) + 1;
+
 } // namespace curve_sequencer
 } // namespace dhe

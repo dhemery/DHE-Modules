@@ -1,29 +1,49 @@
 #pragma once
 
 #include "modules/curve-sequencer/status.h"
+#include <array>
 #include <ostream>
+#include <string>
 
 namespace test {
 namespace curve_sequencer {
+using dhe::curve_sequencer::generator_status_count;
 using dhe::curve_sequencer::GeneratorStatus;
+using dhe::curve_sequencer::step_status_count;
 using dhe::curve_sequencer::StepStatus;
 
-static auto name_of(dhe::curve_sequencer::GeneratorStatus status)
-    -> char const * {
+auto constexpr generator_statuses =
+    std::array<GeneratorStatus, generator_status_count>{
+        GeneratorStatus::Generating,
+        GeneratorStatus::Completed,
+    };
+
+static inline auto name_of(dhe::curve_sequencer::GeneratorStatus status)
+    -> std::string {
   switch (status) {
   case GeneratorStatus::Completed:
     return "GeneratorStatus::Completed";
   case GeneratorStatus::Generating:
     return "GeneratorStatus::Generating";
+  default:
+    return "Unknown GeneratorStatus " +
+           std::to_string(static_cast<int>(status));
   }
 }
 
-static auto name_of(dhe::curve_sequencer::StepStatus status) -> char const * {
+auto constexpr step_statuses = std::array<StepStatus, step_status_count>{
+    StepStatus::InProgress,
+    StepStatus::Completed,
+};
+
+static inline auto name_of(dhe::curve_sequencer::StepStatus status) -> std::string {
   switch (status) {
   case StepStatus::Completed:
     return "StepStatus::Completed";
   case StepStatus::InProgress:
     return "StepStatus::InProgress";
+  default:
+    return "Unknown StepStatus " + std::to_string(static_cast<int>(status));
   }
 }
 
