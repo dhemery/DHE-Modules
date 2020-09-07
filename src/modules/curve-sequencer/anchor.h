@@ -5,7 +5,7 @@ namespace curve_sequencer {
 enum class AnchorType { Start, End };
 static auto constexpr anchor_type_count = static_cast<int>(AnchorType::End) + 1;
 
-enum class AnchorMode { Snap, Track };
+enum class AnchorMode { Sample, Track };
 static auto constexpr anchor_mode_count =
     static_cast<int>(AnchorMode::Track) + 1;
 
@@ -19,19 +19,19 @@ public:
 
   void enter(int step) {
     step_ = step;
-    snapshot_ = source_voltage();
+    sample_ = source_voltage();
   }
 
   auto voltage() const -> float {
     auto const mode = module_.anchor_mode(type_, step_);
-    return mode == AnchorMode::Track ? source_voltage() : snapshot_;
+    return mode == AnchorMode::Track ? source_voltage() : sample_;
   }
 
 private:
   Module &module_{};
   AnchorType type_{};
   int step_{};
-  float snapshot_{};
+  float sample_{};
 
   auto source_voltage() const -> float {
     switch (module_.anchor_source(type_, step_)) {

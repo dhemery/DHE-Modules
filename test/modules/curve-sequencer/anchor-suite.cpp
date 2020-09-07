@@ -40,7 +40,7 @@ public:
 
           set_all_voltages(module, level_entry_voltage + 1.F);
 
-          module.start_mode_[step] = AnchorMode::Snap;
+          module.start_mode_[step] = AnchorMode::Sample;
           for (auto const source : anchor_sources) {
             module.start_source_[step] = source;
             t.assert_that(name_of(source), anchor.voltage(),
@@ -64,7 +64,7 @@ public:
 
           set_all_voltages(module, input_entry_voltage + 1.F);
 
-          module.start_mode_[step] = AnchorMode::Snap;
+          module.start_mode_[step] = AnchorMode::Sample;
           for (auto const source : anchor_sources) {
             module.start_source_[step] = source;
             t.assert_that(name_of(source), anchor.voltage(),
@@ -88,7 +88,7 @@ public:
 
           set_all_voltages(module, output_entry_voltage + 1.F);
 
-          module.start_mode_[step] = AnchorMode::Snap;
+          module.start_mode_[step] = AnchorMode::Sample;
           for (auto const source : anchor_sources) {
             module.start_source_[step] = source;
             t.assert_that(name_of(source), anchor.voltage(),
@@ -112,7 +112,7 @@ public:
 
           set_all_voltages(module, aux_entry_voltage + 1.F);
 
-          module.start_mode_[step] = AnchorMode::Snap;
+          module.start_mode_[step] = AnchorMode::Sample;
           for (auto const source : anchor_sources) {
             module.start_source_[step] = source;
             t.assert_that(name_of(source), anchor.voltage(),
@@ -220,7 +220,7 @@ public:
 
           set_all_voltages(module, level_entry_voltage + 1.F);
 
-          module.start_mode_[step] = AnchorMode::Snap;
+          module.start_mode_[step] = AnchorMode::Sample;
           for (auto const source : anchor_sources) {
             module.end_source_[step] = source;
             t.assert_that(name_of(source), anchor.voltage(),
@@ -244,7 +244,7 @@ public:
 
           set_all_voltages(module, input_entry_voltage + 1.F);
 
-          module.start_mode_[step] = AnchorMode::Snap;
+          module.start_mode_[step] = AnchorMode::Sample;
           for (auto const source : anchor_sources) {
             module.end_source_[step] = source;
             t.assert_that(name_of(source), anchor.voltage(),
@@ -268,7 +268,7 @@ public:
 
           set_all_voltages(module, output_entry_voltage + 1.F);
 
-          module.start_mode_[step] = AnchorMode::Snap;
+          module.start_mode_[step] = AnchorMode::Sample;
           for (auto const source : anchor_sources) {
             module.end_source_[step] = source;
             t.assert_that(name_of(source), anchor.voltage(),
@@ -292,7 +292,7 @@ public:
 
           set_all_voltages(module, aux_entry_voltage + 1.F);
 
-          module.start_mode_[step] = AnchorMode::Snap;
+          module.start_mode_[step] = AnchorMode::Sample;
           for (auto const source : anchor_sources) {
             module.end_source_[step] = source;
             t.assert_that(name_of(source), anchor.voltage(),

@@ -31,14 +31,14 @@ static inline auto name_of(AnchorType type) -> std::string {
 }
 
 static auto constexpr anchor_modes = std::array<AnchorMode, anchor_mode_count>{
-    AnchorMode::Snap,
+    AnchorMode::Sample,
     AnchorMode::Track,
 };
 
 static inline auto name_of(AnchorMode mode) -> std::string {
   switch (mode) {
-  case AnchorMode::Snap:
-    return "AnchorMode::Snap";
+  case AnchorMode::Sample:
+    return "AnchorMode::Sample";
   case AnchorMode::Track:
     return "AnchorMode::Track";
   default:
