@@ -38,8 +38,9 @@ hue = 30
 foreground [hue, 100, 10]
 background [hue, 10, 93]
 
-left = hp2mm(2)
-right = hp2mm(width_hp - 2)
+margin = hp2mm(1.8)
+left = margin
+right = hp2mm(width_hp) - margin
 top = hp2mm(3.5)
 bottom = hp2mm(23)
 
@@ -79,7 +80,7 @@ input_button_port x: left, y: reset_y, label: 'RESET'
 #
 ###############################################################################
 
-step_x = hp2mm(9.25)
+step_x = hp2mm(8.5)
 step_dx = hp2mm(2.25)
 
 active_y = top + Light::RADIUS * 1.5
@@ -96,13 +97,13 @@ enabled_button_y = enabled_port_y - Port::DIAMETER / 2.0 - Button::DIAMETER / 2.
 knob_pick_list_distance = hp2mm(1.15)
 
 label_x = step_x - 0.6 * step_dx
-label x: label_x, y: trigger_y, text: 'TRIGGER', alignment: :left_of, size: :large
-label x: label_x, y: interrupt_y, text: 'INTERRUPT', alignment: :left_of, size: :large
+label x: label_x, y: trigger_y, text: 'TRIG', alignment: :left_of, size: :large
+label x: label_x, y: interrupt_y, text: 'INT', alignment: :left_of, size: :large
 label x: label_x, y: completion_y, text: 'AT END', alignment: :left_of, size: :large
 label x: label_x, y: start_anchor_y, text: 'START', alignment: :left_of, size: :large
 label x: label_x, y: end_anchor_y, text: 'END', alignment: :left_of, size: :large
-label x: label_x, y: shape_y-hp2mm(0.25), text: 'SHAPE', alignment: :left_of, size: :large
-label x: label_x, y: duration_y, text: 'DURATION', alignment: :left_of, size: :large
+label x: label_x, y: shape_y - hp2mm(0.25), text: 'SHAPE', alignment: :left_of, size: :large
+label x: label_x, y: duration_y, text: 'DUR', alignment: :left_of, size: :large
 label x: label_x, y: (enabled_button_y + enabled_port_y) / 2, text: 'ON', alignment: :left_of, size: :large
 
 channel_separator_top = top + hp2mm(1.25)
@@ -110,6 +111,8 @@ channel_separator_top = top + hp2mm(1.25)
 line_x = step_x - step_dx / 2.0
 line x1: line_x, x2: line_x, y1: channel_separator_top, y2: bottom
 
+anchor_sources = ["LEVEL", "IN 1", "IN 2", "OUT"]
+anchor_modes = %w[SNAP TRACK]
 step_label_y = top - hp2mm(0.25)
 (0...steps).each do |step|
   x = step_x + step * step_dx
@@ -120,13 +123,13 @@ step_label_y = top - hp2mm(0.25)
   stepper x: x, y: interrupt_y, name: 'interrupt-mode', options: %w[IGNR NEXT], selection: 1, width: 9
   stepper x: x, y: completion_y, name: 'completion-mode', options: %w[SUST NEXT], selection: 2, width: 9
 
-  stepper x: x, y: start_anchor_y - knob_pick_list_distance, name: 'anchor-source', options: %w[LEVEL IN OUT], selection: 3, width: 9
+  stepper x: x, y: start_anchor_y - knob_pick_list_distance, name: 'anchor-source', options: anchor_sources, selection: 4, width: 9
   tiny_knob x: x, y: start_anchor_y, label: ''
-  stepper x: x, y: start_anchor_y + knob_pick_list_distance, name: 'anchor-mode', options: %w[SNAP TRACK], selection: 1, width: 9
+  stepper x: x, y: start_anchor_y + knob_pick_list_distance, name: 'anchor-mode', options: anchor_modes, selection: 1, width: 9
 
-  stepper x: x, y: end_anchor_y - knob_pick_list_distance, name: 'anchor-source', options: %w[LEVEL IN OUT], selection: 1, width: 9
+  stepper x: x, y: end_anchor_y - knob_pick_list_distance, name: 'anchor-source', options: anchor_sources, selection: 0, width: 9
   tiny_knob x: x, y: end_anchor_y, label: ''
-  stepper x: x, y: end_anchor_y + knob_pick_list_distance, name: 'anchor-mode', options: %w[SNAP TRACK], selection: 2, width: 9
+  stepper x: x, y: end_anchor_y + knob_pick_list_distance, name: 'anchor-mode', options: anchor_modes, selection: 2, width: 9
 
   stepper x: x, y: shape_y - knob_pick_list_distance, name: 'shape', options: %w[J S], selection: 1, width: 9
   tiny_knob y: shape_y, x: x, label: ''
@@ -151,18 +154,23 @@ position_marker(x: step_x + step_dx * (steps - 1) + Light::DIAMETER, y: active_y
 #
 ###############################################################################
 
+near_right = right - hp2mm(2.2)
+
 out_y = bottom - Port::DIAMETER / 2.0 - 1.0
 in_y = sequence_controls_top
 
-input_port x: right, y: in_y, label: 'IN'
+input_port x: near_right, y: in_y, label: 'IN 1'
+input_port x: right, y: in_y, label: 'IN 2'
 
 polarity_y = (start_anchor_y + end_anchor_y) / 2.0
 polarity_foo = (end_anchor_y - start_anchor_y) / 2.4
-line x1: line_x, x2: right, y1: polarity_y - polarity_foo, y2: polarity_y
-line x1: line_x, x2: right, y1: polarity_y + polarity_foo, y2: polarity_y
-polarity_toggle x: right, y: polarity_y, selection: 2
+line x1: line_x, x2: near_right, y1: polarity_y - polarity_foo, y2: polarity_y
+line x1: line_x, x2: near_right, y1: polarity_y + polarity_foo, y2: polarity_y
+polarity_toggle x: near_right, y: polarity_y, selection: 2
+port x: right, y: polarity_y, label: 'CV'
 
-connector left: line_x, right: right, y: duration_y
-duration_toggle x: right, y: duration_y
+connector left: line_x, right: near_right, y: duration_y
+duration_toggle x: near_right, y: duration_y
+port x: right, y: duration_y, label: 'CV'
 
 output_port x: right, y: out_y, label: 'OUT'
