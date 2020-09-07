@@ -111,8 +111,8 @@ channel_separator_top = top + hp2mm(1.25)
 line_x = step_x - step_dx / 2.0
 line x1: line_x, x2: line_x, y1: channel_separator_top, y2: bottom
 
-anchor_sources = ["LEVEL", "IN 1", "IN 2", "OUT"]
-anchor_modes = %w[SNAP TRACK]
+anchor_sources = ["LEVEL", "IN", "OUT", "AUX"]
+anchor_modes = %w[SMPL TRACK]
 step_label_y = top - hp2mm(0.25)
 (0...steps).each do |step|
   x = step_x + step * step_dx
@@ -159,13 +159,13 @@ near_right = right - hp2mm(2.2)
 out_y = bottom - Port::DIAMETER / 2.0 - 1.0
 in_y = sequence_controls_top
 
-input_port x: near_right, y: in_y, label: 'IN 1'
-input_port x: right, y: in_y, label: 'IN 2'
+input_port x: near_right, y: in_y, label: 'IN'
+input_port x: right, y: in_y, label: 'AUX'
 
 polarity_y = (start_anchor_y + end_anchor_y) / 2.0
-polarity_foo = (end_anchor_y - start_anchor_y) / 2.4
-line x1: line_x, x2: near_right, y1: polarity_y - polarity_foo, y2: polarity_y
-line x1: line_x, x2: near_right, y1: polarity_y + polarity_foo, y2: polarity_y
+polarity_spread = (end_anchor_y - start_anchor_y) / 2.4
+line x1: line_x, x2: near_right, y1: polarity_y - polarity_spread, y2: polarity_y
+line x1: line_x, x2: near_right, y1: polarity_y + polarity_spread, y2: polarity_y
 polarity_toggle x: near_right, y: polarity_y, selection: 2
 port x: right, y: polarity_y, label: 'CV'
 

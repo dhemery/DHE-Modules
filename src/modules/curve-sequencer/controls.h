@@ -49,7 +49,10 @@ template <int N> struct InputIds {
     Reset,
     Run,
     EnableStep,
-    Count = EnableStep + N,
+    Aux = EnableStep + N,
+    LevelCV,
+    DurationCV,
+    Count,
   };
 };
 

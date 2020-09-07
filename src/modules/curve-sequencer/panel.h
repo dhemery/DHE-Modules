@@ -11,7 +11,7 @@
 namespace dhe {
 
 namespace curve_sequencer {
-auto constexpr step_x = hp2mm(9.25F);
+auto constexpr step_x = hp2mm(8.5F);
 auto constexpr step_dx = hp2mm(2.25F);
 
 using ProgressLight =
@@ -97,8 +97,9 @@ public:
     setPanel(background_svg(slug));
     install_screws(this, hp);
 
-    auto constexpr left = hp2mm(2.F);
-    auto constexpr right = hp2mm(hp - 2.F);
+    auto constexpr margin = hp2mm(1.8F);
+    auto constexpr left = margin;
+    auto constexpr right = hp2mm(hp) - margin;
     auto constexpr top = hp2mm(3.5F);
     auto constexpr bottom = hp2mm(23);
 
@@ -213,16 +214,22 @@ public:
                            Input::EnableStep + step));
     }
 
+    auto constexpr near_right = right - hp2mm(2.2F);
     auto constexpr out_y = bottom - port_radius - 1.F;
     auto constexpr in_y = sequence_controls_top;
 
-    addInput(Jack::input(slug, module, right, in_y, Input::In));
+    addInput(Jack::input(slug, module, near_right, in_y, Input::In));
+    addInput(Jack::input(slug, module, right, in_y, Input::Aux));
 
-    auto constexpr polarity_y = start_y + (end_y - start_y) / 2.F;
-    addParam(
-        Toggle::thumb(2, slug, module, right, polarity_y, Param::LevelRange));
-    addParam(Toggle::thumb(3, slug, module, right, duration_y,
+    auto constexpr polarity_y = (start_y + end_y) / 2.F;
+    addParam(Toggle::thumb(2, slug, module, near_right, polarity_y,
+                           Param::LevelRange));
+    addInput(Jack::input(slug, module, right, polarity_y, Input::LevelCV));
+
+    addParam(Toggle::thumb(3, slug, module, near_right, duration_y,
                            Param::DurationRange));
+    addInput(Jack::input(slug, module, right, duration_y, Input::DurationCV));
+
     addOutput(Jack::output(slug, module, right, out_y, Output::Out));
   }
 }; // namespace dhe

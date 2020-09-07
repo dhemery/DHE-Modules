@@ -58,17 +58,17 @@ public:
       config_toggle<2>(this, Param::StepCompletionMode + step, "At end",
                        {"Sustain until triggered", "Advance to next step"}, 1);
 
-      config_toggle<3>(this, Param::StepStartAnchorSource + step,
+      config_toggle<4>(this, Param::StepStartAnchorSource + step,
                        "Start anchor source",
-                       {"Level knob", "IN port", "OUT port"}, 2);
+                       {"Level knob", "In port", "Out port", "Aux port"}, 2);
       config_level_knob(this, Param::StepStartLevel + step, Param::LevelRange,
                         "Start level");
       config_toggle<2>(this, Param::StepStartAnchorMode + step,
                        "Start anchor mode", {"Snapshot", "Track changes"});
 
-      config_toggle<3>(this, Param::StepEndAnchorSource + step,
+      config_toggle<4>(this, Param::StepEndAnchorSource + step,
                        "End anchor source",
-                       {"Level knob", "IN port", "OUT port"});
+                       {"Level knob", "In port", "Out port, Aux port"});
       config_level_knob(this, Param::StepEndLevel + step, Param::LevelRange,
                         "End level");
       config_toggle<2>(this, Param::StepEndAnchorMode + step, "End anchor mode",
@@ -90,6 +90,8 @@ public:
   void process(ProcessArgs const &args) override {
     sequence_controller_.execute(args.sampleTime);
   }
+
+  auto aux() const -> float { return voltage_at(inputs[Input::Aux]); }
 
   auto gate() const -> bool {
     return is_high(inputs[Input::Gate]) || is_pressed(params[Param::Gate]);

@@ -22,14 +22,16 @@ struct Module {
   auto anchor_source(AnchorType type, int step) const -> AnchorSource {
     return type == AnchorType::Start ? start_source_[step] : end_source_[step];
   }
+  auto aux() const -> float { return aux_; }
   auto input() const -> float { return input_; }
   auto output() const -> float { return output_; }
 
+  float aux_{};                                         // NOLINT
+  float input_{};                                       // NOLINT
+  float output_{};                                      // NOLINT
   std::array<float, step_count> end_level_{};           // NOLINT
   std::array<AnchorMode, step_count> end_mode_{};       // NOLINT
   std::array<AnchorSource, step_count> end_source_{};   // NOLINT
-  float input_{};                                       // NOLINT
-  float output_{};                                      // NOLINT
   std::array<float, step_count> start_level_{};         // NOLINT
   std::array<AnchorMode, step_count> start_mode_{};     // NOLINT
   std::array<AnchorSource, step_count> start_source_{}; // NOLINT
