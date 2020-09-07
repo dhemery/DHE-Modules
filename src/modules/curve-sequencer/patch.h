@@ -9,7 +9,7 @@ namespace json_v0 {
 
 // Params whose meanings changed from json v0 to v1. We must translate the
 // values of these params whenever we load a v0 patch.
-template <int N> struct ParamIds {
+template <int N> struct V0Ids {
   enum {
     StepGenerateMode = ParamIds<N>::StepTriggerMode,  // Values: GenerateMode
     StepAdvanceMode = ParamIds<N>::StepInterruptMode, // Values: AdvanceMode
