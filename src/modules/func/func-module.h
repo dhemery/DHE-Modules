@@ -4,6 +4,7 @@
 #include "func-engine.h"
 #include "operand-param-quantity.h"
 
+#include "config/common-config.h"
 #include <engine/Module.hpp>
 #include <vector>
 
