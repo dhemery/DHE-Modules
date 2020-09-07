@@ -14,7 +14,8 @@ public:
 
   void start(int step) {
     step_ = step;
-    module_.show_progress(step_, 0.F);
+    timer_.reset();
+    module_.show_progress(step_, timer_.phase());
     start_anchor_.enter(step_);
     end_anchor_.enter(step_);
   }

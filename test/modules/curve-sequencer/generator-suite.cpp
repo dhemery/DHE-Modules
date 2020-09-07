@@ -8,7 +8,6 @@
 
 namespace test {
 namespace curve_sequencer {
-using dhe::Range;
 using dhe::curve_sequencer::GeneratorStatus;
 using dhe::unit::is_equal_to;
 using dhe::unit::is_true;
@@ -19,19 +18,34 @@ class GeneratorSuite : public Suite {
 public:
   GeneratorSuite() : Suite{"dhe::curve_sequencer::Generator"} {}
   void register_tests(TestRegistrar add) override {
-    add("start(s)", test([](Tester &t, Module &module, Anchor &start_anchor,
-                            Anchor &end_source, Generator &generator) {
-          auto constexpr started_step = 1;
+    add("start(s) enters anchors at step",
+        test([](Tester &t, Module & /*module*/, Anchor &start_anchor,
+                Anchor &end_source, Generator &generator) {
+          auto constexpr step = 1;
 
-          generator.start(started_step);
+          generator.start(step);
 
-          t.assert_that("shows progress", module.progress_[started_step],
+          t.assert_that("start anchor", start_anchor.entered_[step], is_true);
+          t.assert_that("end anchor", end_source.entered_[step], is_true);
+        }));
+
+    add("start(s) shows progress at 0",
+        test([](Tester &t, Module &module, Anchor & /*start_anchor*/,
+                Anchor & /*end_source*/, Generator &generator) {
+          auto constexpr step = 7;
+          module.taper_[step] = &dhe::sigmoid::j_taper;
+          module.duration_[step] = 10.F;
+
+          generator.start(step);
+
+          t.assert_that("first start", module.progress_[step],
                         is_equal_to(0.F));
-          t.assert_that("enters start anchor at step",
-                        start_anchor.entered_[started_step], is_true);
-          t.assert_that("enters end anchor at step",
-                        end_source.entered_[started_step],
-                        is_equal_to(started_step));
+
+          generator.generate(3.F); // Advance a bit
+
+          generator.start(step);
+          t.assert_that("start after progress", module.progress_[step],
+                        is_equal_to(0.F));
         }));
 
     add("stop()", test([](Tester &t, Module &module, Anchor & /*start_anchor*/,
