@@ -182,22 +182,22 @@ public:
       addParam(Toggle::stepper(slug, "completion-mode", 2, module, x, sustain_y,
                                Param::StepCompletionMode + step));
 
-      addParam(Toggle::stepper(slug, "anchor-source", anchor_source_count,
-                               module, x, start_y - knob_stepper_distance,
-                               Param::StepStartAnchorSource + step));
+      addParam(Toggle::stepper(slug, "anchor-mode", 2, module, x,
+                               start_y - knob_stepper_distance,
+                               Param::StepStartAnchorMode + step));
       addParam(
           Knob::tiny(slug, module, x, start_y, Param::StepStartLevel + step));
-      addParam(Toggle::stepper(slug, "anchor-mode", 2, module, x,
-                               start_y + knob_stepper_distance,
-                               Param::StepStartAnchorMode + step));
-
       addParam(Toggle::stepper(slug, "anchor-source", anchor_source_count,
-                               module, x, end_y - knob_stepper_distance,
-                               Param::StepEndAnchorSource + step));
-      addParam(Knob::tiny(slug, module, x, end_y, Param::StepEndLevel + step));
+                               module, x, start_y + knob_stepper_distance,
+                               Param::StepStartAnchorSource + step));
+
       addParam(Toggle::stepper(slug, "anchor-mode", 2, module, x,
-                               end_y + knob_stepper_distance,
+                               end_y - knob_stepper_distance,
                                Param::StepEndAnchorMode + step));
+      addParam(Knob::tiny(slug, module, x, end_y, Param::StepEndLevel + step));
+      addParam(Toggle::stepper(slug, "anchor-source", anchor_source_count,
+                               module, x, end_y + knob_stepper_distance,
+                               Param::StepEndAnchorSource + step));
 
       addParam(Toggle::stepper(slug, "shape", 2, module, x,
                                shape_y - knob_stepper_distance,

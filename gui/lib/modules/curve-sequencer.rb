@@ -123,13 +123,13 @@ step_label_y = top - hp2mm(0.25)
   stepper x: x, y: interrupt_y, name: 'interrupt-mode', options: %w[IGNR NEXT], selection: 1, width: 9
   stepper x: x, y: completion_y, name: 'completion-mode', options: %w[SUST NEXT], selection: 2, width: 9
 
-  stepper x: x, y: start_anchor_y - knob_pick_list_distance, name: 'anchor-source', options: anchor_sources, selection: 4, width: 9
+  stepper x: x, y: start_anchor_y - knob_pick_list_distance, name: 'anchor-mode', options: anchor_modes, selection: 1, width: 9
   tiny_knob x: x, y: start_anchor_y, label: ''
-  stepper x: x, y: start_anchor_y + knob_pick_list_distance, name: 'anchor-mode', options: anchor_modes, selection: 1, width: 9
+  stepper x: x, y: start_anchor_y + knob_pick_list_distance, name: 'anchor-source', options: anchor_sources, selection: 4, width: 9
 
-  stepper x: x, y: end_anchor_y - knob_pick_list_distance, name: 'anchor-source', options: anchor_sources, selection: 0, width: 9
+  stepper x: x, y: end_anchor_y - knob_pick_list_distance, name: 'anchor-mode', options: anchor_modes, selection: 2, width: 9
   tiny_knob x: x, y: end_anchor_y, label: ''
-  stepper x: x, y: end_anchor_y + knob_pick_list_distance, name: 'anchor-mode', options: anchor_modes, selection: 2, width: 9
+  stepper x: x, y: end_anchor_y + knob_pick_list_distance, name: 'anchor-source', options: anchor_sources, selection: 0, width: 9
 
   stepper x: x, y: shape_y - knob_pick_list_distance, name: 'shape', options: %w[J S], selection: 1, width: 9
   tiny_knob y: shape_y, x: x, label: ''
