@@ -91,40 +91,6 @@ public:
     sequence_controller_.execute(args.sampleTime);
   }
 
-  auto aux() const -> float { return voltage_at(inputs[Input::Aux]); }
-
-  auto gate() const -> bool {
-    return is_high(inputs[Input::Gate]) || is_pressed(params[Param::Gate]);
-  }
-
-  auto input() const -> float { return voltage_at(inputs[Input::In]); }
-
-  auto is_enabled(int step) const -> bool {
-    return is_pressed(params[Param::EnableStep + step]) ||
-           is_high(inputs[Input::EnableStep + step]);
-  }
-
-  auto is_looping() const -> bool {
-    return is_pressed(params[Param::Loop]) || is_high(inputs[Input::Loop]);
-  }
-
-  auto is_reset() const -> bool {
-    return is_high(inputs[Input::Reset]) || is_pressed(params[Param::Reset]);
-  }
-
-  auto is_running() const -> bool {
-    return is_pressed(params[Param::Run]) || is_high(inputs[Input::Run]);
-  }
-
-  void output(float voltage) { outputs[Output::Out].setVoltage(voltage); }
-
-  auto selection_start() const -> int {
-    return static_cast<int>(rotation_of(params[Param::SelectionStart]));
-  }
-
-  auto selection_length() const -> int {
-    return static_cast<int>(rotation_of(params[Param::SelectionLength]));
-  }
   auto anchor_level(AnchorType type, int step) const -> float {
     auto const base =
         type == AnchorType::Start ? Param::StepStartLevel : Param::StepEndLevel;
@@ -146,23 +112,13 @@ public:
     return static_cast<AnchorSource>(selection);
   }
 
+  auto aux() const -> float { return voltage_at(inputs[Input::Aux]); }
+
   auto completion_mode(int step) const -> CompletionMode {
     auto const selection =
         position_of(params[Param::StepCompletionMode + step]);
     return static_cast<CompletionMode>(selection);
   }
-
-  auto interrupt_mode(int step) const -> InterruptMode {
-    auto const selection = position_of(params[Param::StepInterruptMode + step]);
-    return static_cast<InterruptMode>(selection);
-  }
-
-  auto trigger_mode(int step) const -> TriggerMode {
-    auto const selection = position_of(params[Param::StepTriggerMode + step]);
-    return static_cast<TriggerMode>(selection);
-  }
-
-  auto output() const -> float { return voltage_at(outputs[Output::Out]); }
 
   auto curvature(int step) const -> float {
     return dhe::curvature(params[Param::StepCurvature + step]);
@@ -170,7 +126,53 @@ public:
 
   auto duration(int step) const -> float {
     return dhe::selectable_duration(params[Param::StepDuration + step],
+                                    inputs[Input::DurationCV],
                                     params[Param::DurationRange]);
+  }
+
+  auto gate() const -> bool {
+    return is_high(inputs[Input::Gate]) || is_pressed(params[Param::Gate]);
+  }
+
+  auto input() const -> float { return voltage_at(inputs[Input::In]); }
+
+  auto interrupt_mode(int step) const -> InterruptMode {
+    auto const selection = position_of(params[Param::StepInterruptMode + step]);
+    return static_cast<InterruptMode>(selection);
+  }
+
+  auto is_enabled(int step) const -> bool {
+    return is_pressed(params[Param::EnableStep + step]) ||
+           is_high(inputs[Input::EnableStep + step]);
+  }
+
+  auto is_looping() const -> bool {
+    return is_pressed(params[Param::Loop]) || is_high(inputs[Input::Loop]);
+  }
+
+  auto is_reset() const -> bool {
+    return is_high(inputs[Input::Reset]) || is_pressed(params[Param::Reset]);
+  }
+
+  auto is_running() const -> bool {
+    return is_pressed(params[Param::Run]) || is_high(inputs[Input::Run]);
+  }
+
+  auto output() const -> float { return voltage_at(outputs[Output::Out]); }
+
+  void output(float voltage) { outputs[Output::Out].setVoltage(voltage); }
+
+  auto selection_start() const -> int {
+    return static_cast<int>(rotation_of(params[Param::SelectionStart]));
+  }
+
+  auto selection_length() const -> int {
+    return static_cast<int>(rotation_of(params[Param::SelectionLength]));
+  }
+
+  auto trigger_mode(int step) const -> TriggerMode {
+    auto const selection = position_of(params[Param::StepTriggerMode + step]);
+    return static_cast<TriggerMode>(selection);
   }
 
   void show_inactive(int step) { set_lights(step, 0.F, 0.F); }

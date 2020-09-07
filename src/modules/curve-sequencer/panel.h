@@ -224,7 +224,6 @@ public:
     auto constexpr polarity_y = (start_y + end_y) / 2.F;
     addParam(Toggle::thumb(2, slug, module, near_right, polarity_y,
                            Param::LevelRange));
-    addInput(Jack::input(slug, module, right, polarity_y, Input::LevelCV));
 
     addParam(Toggle::thumb(3, slug, module, near_right, duration_y,
                            Param::DurationRange));

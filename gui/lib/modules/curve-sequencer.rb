@@ -167,7 +167,6 @@ polarity_spread = (end_anchor_y - start_anchor_y) / 2.4
 line x1: line_x, x2: near_right, y1: polarity_y - polarity_spread, y2: polarity_y
 line x1: line_x, x2: near_right, y1: polarity_y + polarity_spread, y2: polarity_y
 polarity_toggle x: near_right, y: polarity_y, selection: 2
-port x: right, y: polarity_y, label: 'CV'
 
 connector left: line_x, right: near_right, y: duration_y
 duration_toggle x: near_right, y: duration_y
