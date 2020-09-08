@@ -1,4 +1,10 @@
 
+branches:
+    only:
+        - master
+        - develop
+        - /^wip\/.*$/
+
 language: cpp
 compiler: gcc
 
