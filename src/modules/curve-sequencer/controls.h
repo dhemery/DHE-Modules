@@ -16,9 +16,9 @@ template <int N> struct ParamIds {
     StepDuration = StepCurvature + N,
     EnableStep = StepDuration + N,
     StepEndLevel = EnableStep + N,
-    StepTriggerMode = StepEndLevel + N,      // In v0: mode switches
-    StepInterruptMode = StepTriggerMode + N, // In v0: condition switches
-    StepShape = StepInterruptMode + N,
+    StepInterruptMode = StepEndLevel + N,    // In v0: generate mode
+    StepTriggerMode = StepInterruptMode + N, // In v0: advance mode
+    StepShape = StepTriggerMode + N,
     // The rest are new in json v1 (DHE-Modules 1.3.0):
     StepStartLevel = StepShape + N,
     StepCompletionMode = StepStartLevel + N,
