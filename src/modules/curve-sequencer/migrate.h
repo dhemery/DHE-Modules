@@ -170,28 +170,44 @@ private:
   static inline void configure_modes(Module *m, int step) {
     auto const v0_advance_mode = static_cast<V0AdvanceMode>(
         m->params[v0_advance_mode_base + step].getValue());
-    auto const v0_advance_mode_ordinal = static_cast<int>(v0_advance_mode);
-    auto const is_timer_expires =
-        v0_advance_mode == V0AdvanceMode::TimerExpires;
-
     auto const v0_generate_mode = static_cast<V0GenerateMode>(
         m->params[v0_generate_mode_base + step].getValue());
-    auto const is_sustain = v0_generate_mode == V0GenerateMode::Sustain;
 
-    auto const trigger_mode_ordinal = cx::max(v0_advance_mode_ordinal - 1, 0);
-    auto const trigger_mode = static_cast<TriggerMode>(trigger_mode_ordinal);
-
-    auto is_interruptible = is_sustain || !is_timer_expires;
-    auto const interrupt_mode =
-        is_interruptible ? InterruptMode::Advance : InterruptMode::Ignore;
-
-    auto completion_mode =
-        is_sustain ? CompletionMode::Sustain : CompletionMode::Advance;
-
+    auto trigger_mode = TriggerMode{};
+    switch (v0_advance_mode) {
+    case V0AdvanceMode::TimerExpires:
+    case V0AdvanceMode::GateRises:
+      trigger_mode = TriggerMode::GateRises;
+      break;
+    case V0AdvanceMode::GateFalls:
+      trigger_mode = TriggerMode::GateFalls;
+      break;
+    case V0AdvanceMode::GateChanges:
+      trigger_mode = TriggerMode::GateChanges;
+      break;
+    case V0AdvanceMode::GateIsHigh:
+      trigger_mode = TriggerMode::GateIsHigh;
+      break;
+    case V0AdvanceMode::GateIsLow:
+      trigger_mode = TriggerMode::GateIsLow;
+      break;
+    default:
+      break;
+    }
     m->params[trigger_mode_base + step].setValue(
         static_cast<float>(trigger_mode));
+
+    auto const is_sustain = v0_generate_mode == V0GenerateMode::Sustain;
+    auto const is_interruptible =
+        is_sustain || v0_advance_mode != V0AdvanceMode::TimerExpires;
+    auto const interrupt_mode =
+        is_interruptible ? InterruptMode::Advance : InterruptMode::Ignore;
     m->params[interrupt_mode_base + step].setValue(
         static_cast<float>(interrupt_mode));
+
+    // In v0, every GenerateMode except Sustain advances when complete
+    auto completion_mode =
+        is_sustain ? CompletionMode::Sustain : CompletionMode::Advance;
     m->params[completion_mode_base + step].setValue(
         static_cast<float>(completion_mode));
   }
