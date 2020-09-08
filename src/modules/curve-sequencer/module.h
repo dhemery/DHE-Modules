@@ -11,14 +11,18 @@
 #include "controls/duration-inputs.h"
 #include "controls/level-inputs.h"
 #include "generator.h"
+#include "patch.h"
 #include "sequence-controller.h"
 #include "step-controller.h"
 #include "step-selector.h"
 
 #include <engine/Module.hpp>
+#include <jansson.h>
 
 namespace dhe {
 namespace curve_sequencer {
+static auto constexpr module_json_version = 1;
+
 // Skew the progress::brightness ratio so that the "remaining" light stays
 // fully lit for a little while during early progress, and the "completed"
 // light reaches fully lit a little while before progress is complete.
@@ -35,7 +39,6 @@ template <int N> class Module : public rack::engine::Module {
 public:
   Module() {
     config(Param::Count, Input::Count, Output::Count, Light::Count);
-
     config_button(this, Param::Run, "Run", {"From input", "Yes"}, 1);
     config_button(this, Param::Gate, "Gate", {"From input", "High"}, 0);
     config_button(this, Param::Loop, "Loop", {"From input", "Yes"}, 0);
@@ -186,6 +189,20 @@ public:
   auto taper(int step) const -> sigmoid::Taper const & {
     auto const selection = position_of(params[Param::StepShape + step]);
     return sigmoid::tapers[selection];
+  }
+
+  auto dataToJson() -> json_t * override {
+    auto *data = json_object();
+    json_object_set_new(data, "version", json_integer(module_json_version));
+    return data;
+  }
+
+  void dataFromJson(json_t *data) override {
+    auto *patch_json_version = json_object_get(data, "version");
+    if (json_integer_value(patch_json_version) == module_json_version) {
+      return;
+    }
+    from_patch_v0::update<N>(this);
   }
 
 private:

@@ -1,15 +1,18 @@
 #pragma once
 
 #include "controls.h"
+#include "anchor.h"
+
+#include <engine/Module.hpp>
 
 namespace dhe {
 namespace curve_sequencer {
 
-namespace json_v0 {
+namespace from_patch_v0 {
 
 // Params whose meanings changed from json v0 to v1. We must translate the
 // values of these params whenever we load a v0 patch.
-template <int N> struct V0Ids {
+template <int N> struct PatchParamIds {
   enum {
     StepGenerateMode = ParamIds<N>::StepTriggerMode,  // Values: GenerateMode
     StepAdvanceMode = ParamIds<N>::StepInterruptMode, // Values: AdvanceMode
@@ -43,8 +46,21 @@ enum class AdvanceMode {
   GateChanges,
   GateIsHigh,
   GateIsLow
-}
+};
 
-} // namespace json_v0
+template <int N> void update(rack::engine::Module *m) {
+  INFO("from_patch_v0::update(m)");
+  using PatchParam = PatchParamIds<N>;
+  using ModuleParam = ParamIds<N>;
+
+  INFO("HEY HEY IN UPDATE!");
+  for (auto step = 0; step < N; step++) {
+    m->params[ModuleParam::StepStartAnchorSource + step].setValue(
+        static_cast<int>(AnchorSource::Aux));
+    m->params[ModuleParam::StepStartLevel + step].setValue(
+        m->params[ModuleParam::StepEndLevel + step].getValue());
+  }
+}
+} // namespace from_patch_v0
 } // namespace curve_sequencer
 } // namespace dhe

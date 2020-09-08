@@ -5,6 +5,7 @@
 #include <app/ModuleWidget.hpp>
 #include <componentlibrary.hpp>
 #include <functional>
+#include <jansson.h>
 #include <string>
 #include <utility>
 
@@ -230,6 +231,15 @@ public:
     addInput(Jack::input(slug, module, right, duration_y, Input::DurationCV));
 
     addOutput(Jack::output(slug, module, right, out_y, Output::Out));
+  }
+
+  void fromJson(json_t *root) override {
+    if (json_object_get(root, "data") == nullptr) {
+      auto *data = json_object();
+      json_object_set_new(data, "version", json_integer(0));
+      json_object_set(root, "data", data);
+    }
+    ModuleWidget::fromJson(root);
   }
 }; // namespace dhe
 } // namespace curve_sequencer
