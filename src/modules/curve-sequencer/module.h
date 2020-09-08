@@ -11,7 +11,7 @@
 #include "controls/duration-inputs.h"
 #include "controls/level-inputs.h"
 #include "generator.h"
-#include "patch.h"
+#include "migrate.h"
 #include "sequence-controller.h"
 #include "step-controller.h"
 #include "step-selector.h"
@@ -21,7 +21,6 @@
 
 namespace dhe {
 namespace curve_sequencer {
-static auto constexpr module_json_version = 1;
 
 // Skew the progress::brightness ratio so that the "remaining" light stays
 // fully lit for a little while during early progress, and the "completed"
@@ -202,7 +201,7 @@ public:
     if (json_integer_value(patch_json_version) == module_json_version) {
       return;
     }
-    from_patch_v0::update<N>(this);
+    PresetV0<N>::migrate(this);
   }
 
 private:
