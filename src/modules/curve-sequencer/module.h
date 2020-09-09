@@ -192,12 +192,12 @@ public:
 
   auto dataToJson() -> json_t * override {
     auto *data = json_object();
-    json_object_set_new(data, "version", json_integer(module_json_version));
+    json_object_set_new(data, preset_version_key, json_integer(0));
     return data;
   }
 
   void dataFromJson(json_t *data) override {
-    auto *patch_json_version = json_object_get(data, "version");
+    auto *patch_json_version = json_object_get(data, preset_version_key);
     if (json_integer_value(patch_json_version) == module_json_version) {
       return;
     }

@@ -53,6 +53,12 @@ public:
     send_main_out(output_voltage);
   }
 
+  auto dataToJson() -> json_t * override {
+    auto *data = json_object();
+    json_object_set_new(data, preset_version_key, json_integer(0));
+    return data;
+  }
+
 private:
   auto coefficient(int knob_param, int cv_param) const -> float {
     return coefficient_range.scale(

@@ -70,6 +70,12 @@ public:
     outputs[Controls::YOutput].setVoltage(5.F * y_gain() * (y + y_offset()));
   }
 
+  auto dataToJson() -> json_t * override {
+    auto *data = json_object();
+    json_object_set_new(data, preset_version_key, json_integer(0));
+    return data;
+  }
+
 private:
   auto x_gain() const -> float {
     return gain_range.scale(

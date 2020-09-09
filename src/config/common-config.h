@@ -7,6 +7,7 @@
 #include <string>
 
 namespace dhe {
+static auto constexpr preset_version_key = "preset_version";
 static auto constexpr centered_rotation = 0.5F;
 
 /**

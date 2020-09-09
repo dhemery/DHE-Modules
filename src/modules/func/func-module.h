@@ -53,6 +53,12 @@ public:
     operand_knob_param_quantity->configure(&controls_, channel, channel_name);
   }
 
+  auto dataToJson() -> json_t * override {
+    auto *data = json_object();
+    json_object_set_new(data, preset_version_key, json_integer(0));
+    return data;
+  }
+
 private:
   Controls controls_{inputs, params, outputs};
   FuncEngine<FuncControls, N> func_engine_{controls_};

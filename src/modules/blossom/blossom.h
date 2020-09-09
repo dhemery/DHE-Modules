@@ -71,6 +71,12 @@ public:
     outputs[Controls::YOutput].setVoltage(y_voltage);
   }
 
+  auto dataToJson() -> json_t * override {
+    auto *data = json_object();
+    json_object_set_new(data, preset_version_key, json_integer(0));
+    return data;
+  }
+
 private:
   inline auto ratio() const -> float {
     return ratio_range.scale(rotation(params[Controls::RatioKnob],

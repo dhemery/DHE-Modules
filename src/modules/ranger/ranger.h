@@ -40,6 +40,12 @@ public:
     outputs[Controls::RangerOutput].setVoltage(output_voltage);
   }
 
+  auto dataToJson() -> json_t * override {
+    auto *data = json_object();
+    json_object_set_new(data, preset_version_key, json_integer(0));
+    return data;
+  }
+
 private:
   auto level() const -> float {
     return rotation(params[Controls::LevelKnob], inputs[Controls::LevelCvInput],

@@ -28,6 +28,12 @@ public:
 
   void process(ProcessArgs const & /*args*/) override { machine_.process(); }
 
+  auto dataToJson() -> json_t * override {
+    auto *data = json_object();
+    json_object_set_new(data, preset_version_key, json_integer(0));
+    return data;
+  }
+
 private:
   Controls controls_{inputs, params, outputs};
   UpstageEngine<Controls> machine_{controls_};
