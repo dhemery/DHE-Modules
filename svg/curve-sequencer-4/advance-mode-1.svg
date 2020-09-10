@@ -31,13 +31,25 @@
        style="fill:#efedeb;stroke:#331a00;stroke-width:0.25"
        d="m -4,-1.79 h 8 c 0.277,0 0.5,0.223 0.5,0.5 v 2.58 c 0,0.277 -0.223,0.5 -0.5,0.5 h -8 c -0.277,0 -0.5,-0.223 -0.5,-0.5 v -2.58 c 0,-0.277 0.223,-0.5 0.5,-0.5 z" />
     <g
-       aria-label="J"
+       aria-label="TIME"
        id="text4"
        style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:middle;text-anchor:middle;fill:#331a00">
       <path
-         d="m -0.562316,0.7309335 c 0.113808,0.111437 0.263181,0.154115 0.424409,0.154115 0.32482701,0 0.55718502,-0.173083 0.55718502,-0.54770101 V -0.72486053 H 0.08259601 v 1.05746602 c 0,0.154115 -0.097211,0.253697 -0.24658401,0.253697 -0.109066,0 -0.18968,-0.054533 -0.251326,-0.113808 z"
+         d="m -2.1990099,0.8565965 h 0.339053 v -1.28508203 h 0.459974 v -0.296375 h -1.261372 v 0.296375 h 0.462345 z"
          style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:middle;text-anchor:middle;fill:#331a00"
          id="path17" />
+      <path
+         d="m -1.1841478,0.8565965 h 0.33668205 V -0.72486053 H -1.1841478 Z"
+         style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:middle;text-anchor:middle;fill:#331a00"
+         id="path19" />
+      <path
+         d="M 0.83935259,0.8565965 H 1.1784056 V -0.72486053 H 0.70420559 L 0.32010358,0.26147549 -0.06399843,-0.72486053 H -0.53582744 V 0.8565965 h 0.33668201 V -0.28148353 L 0.24660258,0.8565965 h 0.147002 l 0.44574801,-1.13808003 z"
+         style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:middle;text-anchor:middle;fill:#331a00"
+         id="path21" />
+      <path
+         d="m 1.4924891,0.8565965 h 1.119112 V 0.56496349 h -0.78243 v -0.367505 h 0.765833 v -0.28926201 h -0.765833 v -0.34379501 h 0.78243 v -0.289262 h -1.119112 z"
+         style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:middle;text-anchor:middle;fill:#331a00"
+         id="path23" />
     </g>
   </g>
 </svg>

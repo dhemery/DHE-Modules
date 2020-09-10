@@ -186,8 +186,8 @@ public:
       addParam(
           Knob::small(slug, module, x, level_y, Controls::LevelKnobs + step));
 
-      addParam(Toggle::stepper(slug, "shape", 2, module, x, shape_y,
-                               Controls::ShapeSwitches + step));
+      addParam(Toggle::thumb(2, slug, module, x, shape_y,
+                             Controls::ShapeSwitches + step));
       addParam(
           Knob::small(slug, module, x, curve_y, Controls::CurveKnobs + step));
 
