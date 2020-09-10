@@ -1,25 +1,12 @@
+require_relative 'cv-sequencer/style'
 require_relative 'cv-sequencer/step-block'
-
-margin = hp2mm(2.0)
-width_hp = margin + STEP_BLOCK_WIDTH + margin
 
 name "CV SEQUENCER X"
 
-hp width_hp
+WIDTH_HP = MARGIN_HP + STEP_BLOCK_WIDTH_HP + MARGIN_HP
+hp WIDTH_HP
 
-hue = 30
-foreground [hue, 100, 10]
-background [hue, 10, 93]
+foreground FOREGROUND_HSL
+background BACKGROUND_HSL
 
-left = margin
-top = hp2mm(3.5)
-bottom = hp2mm(23)
-
-
-###############################################################################
-#
-# Step Controls
-#
-###############################################################################
-
-step_block(top: top, bottom: bottom, left: left, foreground: @foreground, background: @background)
+step_block(LEFT_MM)

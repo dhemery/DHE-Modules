@@ -1,34 +1,27 @@
+require_relative 'style'
+
 STEPS = 4
-STEP_BLOCK_WIDTH = 9.0
-STEP_DX = STEP_BLOCK_WIDTH / STEPS
+STEP_BLOCK_WIDTH_HP = 9.0
+STEP_BLOCK_WIDTH_MM = hp2mm(STEP_BLOCK_WIDTH_HP)
+STEP_DX_MM = STEP_BLOCK_WIDTH_MM / (STEPS - 1)
 
-class PositionMarker < Shape
-  attr_reader :slug
-  TOP = -Light::DIAMETER
-  BOTTOM = Light::DIAMETER
-  RIGHT = Light::DIAMETER
-  LEFT = -Light::DIAMETER
-  NIB = Light::DIAMETER
-  THICKNESS = STROKE_WIDTH
+KNOB_BUTTON_DISTANCE_MM = hp2mm(1.3)
+BUTTON_BUTTON_DISTANCE_MM = hp2mm(0.8)
+ADVANCE_ANCHOR_DISTANCE_MM = hp2mm(2.75)
+ANCHOR_ANCHOR_DISTANCE_MM = hp2mm(4.25)
+ANCHOR_DURATION_DISTANCE = hp2mm(3.25)
+DURATION_SHAPE_DISTANCE = hp2mm(3.25)
 
-  def initialize(type:, color:)
-    @color = color
-    @slug = Pathname("marker-#{type}")
-    @outer = type == :start ? LEFT : RIGHT
-    @inner = type == :start ? LEFT + NIB : RIGHT - NIB
-    super(top: TOP, right: RIGHT, bottom: BOTTOM, left: LEFT)
-  end
-
-  def draw(canvas)
-    canvas.line(x1: @outer, y1: TOP, x2: @outer, y2: BOTTOM, 'stroke-width' => THICKNESS, 'stroke-linecap' => "square", stroke: @color)
-    canvas.line(x1: @outer, y1: TOP, x2: @inner, y2: TOP, 'stroke-width' => THICKNESS, 'stroke-linecap' => "square", stroke: @color)
-    canvas.line(x1: @outer, y1: BOTTOM, x2: @inner, y2: BOTTOM, 'stroke-width' => THICKNESS, 'stroke-linecap' => "square", stroke: @color)
-  end
-
-  def frames
-    [self]
-  end
-end
+STEP_TOP_MM = TOP_MM + hp2mm(1.25)
+PROGRESS_LIGHT_Y_MM = TOP_MM + Light::RADIUS * 1.5
+TRIGGER_Y_MM = TOP_MM + hp2mm(1.61)
+INTERRUPT_Y_MM = TRIGGER_Y_MM + BUTTON_BUTTON_DISTANCE_MM
+COMPLETION_Y_MM = INTERRUPT_Y_MM + BUTTON_BUTTON_DISTANCE_MM
+START_ANCHOR_Y_MM = COMPLETION_Y_MM + ADVANCE_ANCHOR_DISTANCE_MM
+END_ANCHOR_Y_MM = START_ANCHOR_Y_MM + ANCHOR_ANCHOR_DISTANCE_MM
+DURATION_Y_MM = END_ANCHOR_Y_MM + ANCHOR_DURATION_DISTANCE
+SHAPE_Y_MM = DURATION_Y_MM + DURATION_SHAPE_DISTANCE
+ENABLED_Y_MM = BOTTOM_MM - Button::DIAMETER / 2.0
 
 def position_marker(x:, y:, type:)
   marker = PositionMarker.new(type: type, color: @foreground)
@@ -36,84 +29,57 @@ def position_marker(x:, y:, type:)
   @image_shapes << marker.translated(x, y)
 end
 
-def active_y(top)
-  top + Light::RADIUS * 1.5
-end
+STEPPER_WIDTH_MM = STEP_DX_MM * 0.75
+ANCHOR_SOURCES = %w[LEVEL IN OUT AUX]
+ANCHOR_MODES = %w[SAMPLE TRACK]
+STEP_LABEL_Y_MM = TOP_MM - hp2mm(0.25)
 
-def trigger_y(top)
-  trigger_y = top + hp2mm(1.61)
-end
+LINE_X_OFFSET_MM = -STEP_DX_MM / 2.0
 
-def interrupt_y(top)
-  trigger_y(top) + hp2mm(0.8)
-end
+TRIGGER_MODES = %w[RISE FALL EDGE HIGH LOW]
+TRIGGER_MODE_SELECTION = 1
+INTERRUPT_MODES = %w[IGNORE NEXT]
+INTERRUPT_MODE_SELECTION = 1
+COMPLETION_MODES = %w[SUSTAIN NEXT]
+COMPLETION_MODE_SELECTION = 1
+SHAPE_OPTIONS = %w[J S]
+SHAPE_SELECTION = 1
 
-def completion_y(top)
-  interrupt_y(top) + hp2mm(0.8)
-end
-
-def start_anchor_y(top)
-  top + hp2mm(5.75)
-end
-
-def end_anchor_y(top)
-  top + hp2mm(9.5)
-end
-
-def duration_y(top)
-  top + hp2mm(12.35)
-end
-
-def shape_y(top)
-  top + hp2mm(15.25)
-end
-
-def enabled_button_y(bottom)
-  bottom - Port::DIAMETER / 2.0
-end
-
-def step_block(top:, left:, bottom:, foreground:, background:)
-  step_x = left
-
-  knob_pick_list_distance = hp2mm(1.15)
-
-  channel_separator_top = top + hp2mm(1.25)
-
-  line_x = step_x - STEP_DX / 2.0
-  line x1: line_x, x2: line_x, y1: channel_separator_top, y2: bottom
-
-  stepper_width = 9
-  anchor_sources = %w[LEVEL IN OUT AUX]
-  anchor_modes = %w[SAMPL TRACK]
-  step_label_y = top - hp2mm(0.25)
+def step_block(left)
   (0...STEPS).each do |step|
-    x = step_x + step * STEP_DX
-    light x: x, y: active_y(top)
-    label x: x, y: step_label_y, text: (step + 1).to_s, alignment: :above, size: :large
+    x = left + step * STEP_DX_MM
+    if step != 0
+      # Skip the line for the first step.
+      line_x = x + LINE_X_OFFSET_MM
+      line x1: line_x, x2: line_x, y1: STEP_TOP_MM, y2: BOTTOM_MM
+    end
 
-    stepper x: x, y: trigger_y(top), name: 'trigger-mode', options: %w[RISE FALL EDGE HIGH LOW], selection: 1, width: stepper_width
-    stepper x: x, y: interrupt_y(top), name: 'interrupt-mode', options: %w[IGNOR NEXT], selection: 1, width: stepper_width
-    stepper x: x, y: completion_y(top), name: 'completion-mode', options: %w[SUST NEXT], selection: 2, width: stepper_width
+    light x: x, y: PROGRESS_LIGHT_Y_MM
+    label x: x, y: STEP_LABEL_Y_MM, text: (step + 1).to_s, alignment: :above, size: :large
 
-    stepper x: x, y: start_anchor_y(top) - knob_pick_list_distance, name: 'anchor-mode', options: anchor_modes, selection: 1, width: stepper_width
-    tiny_knob x: x, y: start_anchor_y(top), label: ''
-    stepper x: x, y: start_anchor_y(top) + knob_pick_list_distance, name: 'anchor-source', options: anchor_sources, selection: 3, width: stepper_width
+    stepper x: x, y: TRIGGER_Y_MM, name: 'trigger-mode', options: TRIGGER_MODES, selection: TRIGGER_MODE_SELECTION, width: STEPPER_WIDTH_MM
+    stepper x: x, y: INTERRUPT_Y_MM, name: 'interrupt-mode', options: INTERRUPT_MODES, selection: INTERRUPT_MODE_SELECTION, width: STEPPER_WIDTH_MM
+    stepper x: x, y: COMPLETION_Y_MM, name: 'completion-mode', options: COMPLETION_MODES, selection: COMPLETION_MODE_SELECTION, width: STEPPER_WIDTH_MM
 
-    stepper x: x, y: end_anchor_y(top) - knob_pick_list_distance, name: 'anchor-mode', options: anchor_modes, selection: 2, width: stepper_width
-    tiny_knob x: x, y: end_anchor_y(top), label: ''
-    stepper x: x, y: end_anchor_y(top) + knob_pick_list_distance, name: 'anchor-source', options: anchor_sources, selection: 1, width: stepper_width
+    stepper x: x, y: START_ANCHOR_Y_MM - KNOB_BUTTON_DISTANCE_MM, name: 'anchor-mode', options: ANCHOR_MODES, selection: 1, width: STEPPER_WIDTH_MM
+    small_knob x: x, y: START_ANCHOR_Y_MM, label: ''
+    stepper x: x, y: START_ANCHOR_Y_MM + KNOB_BUTTON_DISTANCE_MM, name: 'anchor-source', options: ANCHOR_SOURCES, selection: 3, width: STEPPER_WIDTH_MM
 
-    stepper x: x, y: shape_y(top) - knob_pick_list_distance, name: 'shape', options: %w[J S], selection: 1, width: stepper_width
-    tiny_knob y: shape_y(top), x: x, label: ''
+    stepper x: x, y: END_ANCHOR_Y_MM - KNOB_BUTTON_DISTANCE_MM, name: 'anchor-mode', options: ANCHOR_MODES, selection: 2, width: STEPPER_WIDTH_MM
+    small_knob x: x, y: END_ANCHOR_Y_MM, label: ''
+    stepper x: x, y: END_ANCHOR_Y_MM + KNOB_BUTTON_DISTANCE_MM, name: 'anchor-source', options: ANCHOR_SOURCES, selection: 1, width: STEPPER_WIDTH_MM
 
-    tiny_knob y: duration_y(top), x: x, label: ''
+    stepper x: x, y: SHAPE_Y_MM - KNOB_BUTTON_DISTANCE_MM, name: 'shape', options: SHAPE_OPTIONS, selection: SHAPE_SELECTION, width: STEPPER_WIDTH_MM
+    small_knob x: x, y: SHAPE_Y_MM, label: ''
 
-    button y: enabled_button_y(bottom), x: x, label: ''
+    small_knob y: DURATION_Y_MM, x: x, label: ''
 
-    line_x = x + STEP_DX / 2.0
-    line x1: line_x, x2: line_x, y1: channel_separator_top, y2: bottom
+    button y: ENABLED_Y_MM, x: x, label: ''
   end
 
-  position_marker(x: step_x - Light::DIAMETER, y: active_y(top), type: :start)
-  position_marker(x: step_x + STEP_DX * (STEPS - 1) + Light::DIAMETER, y: active_y(top), type: :end)
+  start_position_marker_mm = left - Light::DIAMETER
+  end_position_marker_mm = left + STEP_DX_MM * (STEPS - 1) + Light::DIAMETER
+
+  position_marker(x: start_position_marker_mm, y: PROGRESS_LIGHT_Y_MM, type: :start)
+  position_marker(x: end_position_marker_mm, y: PROGRESS_LIGHT_Y_MM, type: :end)
 end

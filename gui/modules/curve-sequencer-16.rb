@@ -1,7 +1,3 @@
-name 'CURVE SEQUENCER 16'
+require_relative 'curve-sequencer/make-curve-sequencer'
 
-steps = 16
-width_hp = 49
-
-curve_sequencer_file = Pathname('lib/modules/curve-sequencer.rb')
-instance_eval(curve_sequencer_file.read, curve_sequencer_file.to_s)
+make_curve_sequencer 16

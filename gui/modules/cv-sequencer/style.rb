@@ -1,0 +1,15 @@
+require_relative '../../lib/dimensions'
+
+MARGIN_HP = 1.5
+TOP_HP = 3.5
+BOTTOM_HP = 23
+LEFT_HP = MARGIN_HP
+
+MARGIN_MM = hp2mm(MARGIN_HP)
+TOP_MM = hp2mm(TOP_HP)
+BOTTOM_MM = hp2mm(BOTTOM_HP)
+LEFT_MM = hp2mm(LEFT_HP)
+
+HUE = 30
+FOREGROUND_HSL = [HUE, 100, 10]
+BACKGROUND_HSL = [HUE, 10, 93]

@@ -111,5 +111,34 @@ task reinstall: [:clobber, :install]
 
 task default: [:build]
 
+curve_sequencer_files = %w[
+  _svg/curve-sequencer-4.svg
+  _svg/curve-sequencer-8.svg
+  _svg/curve-sequencer-16.svg
+  _images/curve-sequencer-4.svg
+  _images/curve-sequencer-8.svg
+  _images/curve-sequencer-16.svg
+]
+
+curve_sequencer_files.each do |f|
+  file f => 'modules/curve-sequencer/make-curve-sequencer.rb'
+end
+
+cv_sequencer_files = %w[
+  _svg/cv-sequencer-m.svg
+  _svg/cv-sequencer-x.svg
+  _images/cv-sequencer-m.svg
+  _images/cv-sequencer-x.svg
+]
+
+cv_sequencer_helpers = %w[
+  modules/cv-sequencer/step-block.rb
+  modules/cv-sequencer/style.rb
+]
+
+cv_sequencer_files.each do |f|
+  file f => cv_sequencer_helpers
+end
+
 CLEAN.include image_build_dir, svg_build_dir
 CLOBBER.include image_install_dir, svg_install_dir
