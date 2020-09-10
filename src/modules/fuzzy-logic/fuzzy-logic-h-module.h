@@ -72,7 +72,6 @@ public:
     json_object_set_new(data, preset_version_key, json_integer(0));
     return data;
   }
-
 };
 } // namespace fuzzy_logic
 } // namespace dhe

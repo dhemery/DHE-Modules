@@ -150,6 +150,15 @@
       ]
     },
     {
+      "slug": "SwissArmySequencer",
+      "name": "Swiss Army Sequencer",
+      "description": "Generates a customizable 4 step sequence (expandable)",
+      "manualUrl": "https://dhemery.github.io/DHE-Modules/modules/swiss-army-sequencer/",
+      "tags": [
+        "Sequencer", "Envelope Generator", "LFO"
+      ]
+    },
+    {
       "slug": "Tapers",
       "name": "Tapers",
       "description": "A pair of modulatable knobs with adjustable, modulatable tapers",

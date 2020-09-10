@@ -2,8 +2,8 @@
 #include "modules/blossom/blossom.h"
 #include "modules/cubic/cubic-panel.h"
 #include "modules/cubic/cubic.h"
-#include "modules/curve-sequencer/module.h"
-#include "modules/curve-sequencer/panel.h"
+#include "modules/curve-sequencer/curve-sequencer-module.h"
+#include "modules/curve-sequencer/curve-sequencer-panel.h"
 #include "modules/func/func-module.h"
 #include "modules/func/func1-panel.h"
 #include "modules/func/func6-panel.h"
@@ -25,6 +25,8 @@
 #include "modules/stage/upstage-panel.h"
 #include "modules/swave/swave-panel.h"
 #include "modules/swave/swave.h"
+#include "modules/swiss-army-sequencer/module.h"
+#include "modules/swiss-army-sequencer/panel.h"
 #include "modules/tapers/tapers-panel.h"
 #include "modules/tapers/tapers.h"
 #include "modules/xycloid/xycloid-panel.h"
@@ -75,15 +77,15 @@ extern "C" void init(rack::plugin::Plugin *p) {
   p->addModel(
       rack::createModel<BoosterStageModule, BoosterStagePanel>("BoosterStage"));
   p->addModel(rack::createModel<Cubic, CubicPanel>("Cubic"));
-  p->addModel(
-      rack::createModel<dhe::curve_sequencer::Module<4>,
-                        dhe::curve_sequencer::Panel<4>>("CurveSequencer4"));
-  p->addModel(
-      rack::createModel<dhe::curve_sequencer::Module<8>,
-                        dhe::curve_sequencer::Panel<8>>("CurveSequencer8"));
-  p->addModel(
-      rack::createModel<dhe::curve_sequencer::Module<16>,
-                        dhe::curve_sequencer::Panel<16>>("CurveSequencer16"));
+  p->addModel(rack::createModel<dhe::curve_sequencer::CurveSequencerModule<4>,
+                                dhe::curve_sequencer::CurveSequencerPanel<4>>(
+      "CurveSequencer4"));
+  p->addModel(rack::createModel<dhe::curve_sequencer::CurveSequencerModule<8>,
+                                dhe::curve_sequencer::CurveSequencerPanel<8>>(
+      "CurveSequencer8"));
+  p->addModel(rack::createModel<dhe::curve_sequencer::CurveSequencerModule<16>,
+                                dhe::curve_sequencer::CurveSequencerPanel<16>>(
+      "CurveSequencer16"));
   p->addModel(rack::createModel<FuncModule<1>, Func1Panel>("Func"));
   p->addModel(rack::createModel<FuncModule<6>, Func6Panel>("Func6")); // NOLINT
   p->addModel(
@@ -95,6 +97,9 @@ extern "C" void init(rack::plugin::Plugin *p) {
   p->addModel(rack::createModel<Ranger, RangerPanel>("Ranger"));
   p->addModel(rack::createModel<StageModule, StagePanel>("Stage"));
   p->addModel(rack::createModel<Swave, SwavePanel>("Swave"));
+  p->addModel(rack::createModel<dhe::swiss_army_sequencer::Module<4>,
+                                dhe::swiss_army_sequencer::Panel<4>>(
+      "SwissArmySequencer"));
   p->addModel(rack::createModel<Tapers, TapersPanel>("Tapers"));
   p->addModel(rack::createModel<UpstageModule, UpstagePanel>("Upstage"));
   p->addModel(rack::createModel<Xycloid, XycloidPanel>("Xycloid"));
