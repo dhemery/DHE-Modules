@@ -1,4 +1,4 @@
-#include "modules/swiss-army-sequencer/generator.h"
+#include "modules/cv-sequencer/generator.h"
 
 #include "components/range.h"
 #include "components/sigmoid.h"
@@ -7,7 +7,7 @@
 #include <dheunit/test.h>
 
 namespace test {
-namespace swiss_army_sequencer {
+namespace cv_sequencer {
 
 using dhe::unit::Tester;
 using dhe::unit::TestFunc;
@@ -39,7 +39,7 @@ struct Module {
   std::array<dhe::sigmoid::Taper const *, step_count> taper_{}; // NOLINT
 };
 
-using Generator = dhe::swiss_army_sequencer::Generator<Module, Anchor>;
+using Generator = dhe::cv_sequencer::Generator<Module, Anchor>;
 
 template <typename Run> static inline auto test(Run const &run) -> TestFunc {
   return [run](Tester &t) {
@@ -51,5 +51,5 @@ template <typename Run> static inline auto test(Run const &run) -> TestFunc {
   };
 }
 
-} // namespace swiss_army_sequencer
+} // namespace cv_sequencer
 } // namespace test

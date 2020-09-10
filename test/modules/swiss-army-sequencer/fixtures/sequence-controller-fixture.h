@@ -1,15 +1,15 @@
 #pragma once
 
-#include "modules/swiss-army-sequencer/sequence-controller.h"
-#include "modules/swiss-army-sequencer/status.h"
-#include "modules/swiss-army-sequencer/step-controller.h"
+#include "modules/cv-sequencer/sequence-controller.h"
+#include "modules/cv-sequencer/status.h"
+#include "modules/cv-sequencer/step-controller.h"
 #include <array>
 #include <dheunit/test.h>
 
 namespace test {
-namespace swiss_army_sequencer {
+namespace cv_sequencer {
 using dhe::Latch;
-using dhe::swiss_army_sequencer::StepStatus;
+using dhe::cv_sequencer::StepStatus;
 using dhe::unit::Tester;
 using dhe::unit::TestFunc;
 
@@ -73,7 +73,7 @@ struct StepSelector {
 };
 
 using SequenceController =
-    dhe::swiss_army_sequencer::SequenceController<Module, StepSelector,
+    dhe::cv_sequencer::SequenceController<Module, StepSelector,
                                                   StepController>;
 
 template <typename Prepare, typename Run>
@@ -88,5 +88,5 @@ static inline auto test(Prepare prepare, Run run) -> TestFunc {
     run(t, module, step_selector, step_controller, sequence_controller);
   };
 }
-} // namespace swiss_army_sequencer
+} // namespace cv_sequencer
 } // namespace test

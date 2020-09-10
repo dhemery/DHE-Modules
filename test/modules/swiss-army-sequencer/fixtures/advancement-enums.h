@@ -1,15 +1,15 @@
 #pragma once
 
-#include "modules/swiss-army-sequencer/advancement.h"
+#include "modules/cv-sequencer/advancement.h"
 #include <array>
 #include <ostream>
 #include <string>
 
 namespace test {
-namespace swiss_army_sequencer {
-using dhe::swiss_army_sequencer::CompletionMode;
-using dhe::swiss_army_sequencer::InterruptMode;
-using dhe::swiss_army_sequencer::TriggerMode;
+namespace cv_sequencer {
+using dhe::cv_sequencer::CompletionMode;
+using dhe::cv_sequencer::InterruptMode;
+using dhe::cv_sequencer::TriggerMode;
 
 static auto constexpr completion_modes = std::array<CompletionMode, 2>{
     CompletionMode::Advance,
@@ -46,13 +46,13 @@ static inline auto name_of(InterruptMode mode) -> std::string {
 }
 
 static auto constexpr trigger_modes =
-    std::array<TriggerMode, dhe::swiss_army_sequencer::trigger_mode_count>{
+    std::array<TriggerMode, dhe::cv_sequencer::trigger_mode_count>{
         TriggerMode::GateRises,   TriggerMode::GateFalls,
         TriggerMode::GateChanges, TriggerMode::GateIsHigh,
         TriggerMode::GateIsLow,
     };
 
-static inline auto name_of(dhe::swiss_army_sequencer::TriggerMode mode)
+static inline auto name_of(dhe::cv_sequencer::TriggerMode mode)
     -> std::string {
   switch (mode) {
   case TriggerMode::GateRises:
@@ -70,28 +70,28 @@ static inline auto name_of(dhe::swiss_army_sequencer::TriggerMode mode)
            std::to_string(static_cast<int>(mode));
   }
 }
-} // namespace swiss_army_sequencer
+} // namespace cv_sequencer
 } // namespace test
 namespace dhe {
-namespace swiss_army_sequencer {
+namespace cv_sequencer {
 
 static inline auto operator<<(std::ostream &os, CompletionMode mode)
     -> std::ostream & {
-  os << test::swiss_army_sequencer::name_of(mode);
+  os << test::cv_sequencer::name_of(mode);
   return os;
 }
 
 static inline auto operator<<(std::ostream &os, InterruptMode mode)
     -> std::ostream & {
-  os << test::swiss_army_sequencer::name_of(mode);
+  os << test::cv_sequencer::name_of(mode);
   return os;
 }
 
 static inline auto operator<<(std::ostream &os, TriggerMode mode)
     -> std::ostream & {
-  os << test::swiss_army_sequencer::name_of(mode);
+  os << test::cv_sequencer::name_of(mode);
   return os;
 }
 
-} // namespace swiss_army_sequencer
+} // namespace cv_sequencer
 } // namespace dhe

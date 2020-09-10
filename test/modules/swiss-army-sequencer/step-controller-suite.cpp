@@ -4,10 +4,10 @@
 #include <dheunit/test.h>
 
 namespace test {
-namespace swiss_army_sequencer {
+namespace cv_sequencer {
 
 using dhe::Latch;
-using dhe::swiss_army_sequencer::StepStatus;
+using dhe::cv_sequencer::StepStatus;
 using dhe::unit::is_equal_to;
 using dhe::unit::is_false;
 using dhe::unit::is_true;
@@ -16,7 +16,7 @@ using dhe::unit::TestRegistrar;
 
 class StepControllerSuite : public Suite {
 public:
-  StepControllerSuite() : Suite{"dhe::swiss_army_sequencer::StepController"} {}
+  StepControllerSuite() : Suite{"dhe::cv_sequencer::StepController"} {}
   void register_tests(TestRegistrar add) override {
     add("enter(s) starts the generator",
         test([](Tester &t, Interrupter & /**/, Generator &generator,
@@ -110,5 +110,5 @@ public:
 };
 
 __attribute__((unused)) static auto _ = StepControllerSuite{};
-} // namespace swiss_army_sequencer
+} // namespace cv_sequencer
 } // namespace test

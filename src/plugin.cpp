@@ -4,6 +4,8 @@
 #include "modules/cubic/cubic.h"
 #include "modules/curve-sequencer/curve-sequencer-module.h"
 #include "modules/curve-sequencer/curve-sequencer-panel.h"
+#include "modules/cv-sequencer/module.h"
+#include "modules/cv-sequencer/panel.h"
 #include "modules/func/func-module.h"
 #include "modules/func/func1-panel.h"
 #include "modules/func/func6-panel.h"
@@ -25,8 +27,6 @@
 #include "modules/stage/upstage-panel.h"
 #include "modules/swave/swave-panel.h"
 #include "modules/swave/swave.h"
-#include "modules/swiss-army-sequencer/module.h"
-#include "modules/swiss-army-sequencer/panel.h"
 #include "modules/tapers/tapers-panel.h"
 #include "modules/tapers/tapers.h"
 #include "modules/xycloid/xycloid-panel.h"
@@ -59,6 +59,8 @@ using dhe::stage::UpstageModule;
 using dhe::stage::UpstagePanel;
 using dhe::swave::Swave;
 using dhe::swave::SwavePanel;
+using CVSequencerModule = dhe::cv_sequencer::Module;
+using CVSequencerPanel = dhe::cv_sequencer::Panel;
 using dhe::tapers::Tapers;
 using dhe::tapers::TapersPanel;
 using dhe::xycloid::Xycloid;
@@ -97,9 +99,8 @@ extern "C" void init(rack::plugin::Plugin *p) {
   p->addModel(rack::createModel<Ranger, RangerPanel>("Ranger"));
   p->addModel(rack::createModel<StageModule, StagePanel>("Stage"));
   p->addModel(rack::createModel<Swave, SwavePanel>("Swave"));
-  p->addModel(rack::createModel<dhe::swiss_army_sequencer::Module<4>,
-                                dhe::swiss_army_sequencer::Panel<4>>(
-      "SwissArmySequencer"));
+  p->addModel(
+      rack::createModel<CVSequencerModule, CVSequencerPanel>("CVSequencer"));
   p->addModel(rack::createModel<Tapers, TapersPanel>("Tapers"));
   p->addModel(rack::createModel<UpstageModule, UpstagePanel>("Upstage"));
   p->addModel(rack::createModel<Xycloid, XycloidPanel>("Xycloid"));

@@ -1,15 +1,15 @@
 #pragma once
 
 #include "./status-enums.h"
-#include "modules/swiss-army-sequencer/status.h"
-#include "modules/swiss-army-sequencer/step-controller.h"
+#include "modules/cv-sequencer/status.h"
+#include "modules/cv-sequencer/step-controller.h"
 #include <array>
 #include <dheunit/test.h>
 
 namespace test {
-namespace swiss_army_sequencer {
+namespace cv_sequencer {
 using dhe::Latch;
-using dhe::swiss_army_sequencer::GeneratorStatus;
+using dhe::cv_sequencer::GeneratorStatus;
 using dhe::unit::Tester;
 using dhe::unit::TestFunc;
 
@@ -44,7 +44,7 @@ struct Sustainer {
 };
 
 using StepController =
-    dhe::swiss_army_sequencer::StepController<Interrupter, Generator,
+    dhe::cv_sequencer::StepController<Interrupter, Generator,
                                               Sustainer>;
 
 template <typename Run> static inline auto test(Run run) -> TestFunc {
@@ -56,5 +56,5 @@ template <typename Run> static inline auto test(Run run) -> TestFunc {
     run(t, interrupter, generator, sustainer, controller);
   };
 }
-} // namespace swiss_army_sequencer
+} // namespace cv_sequencer
 } // namespace test

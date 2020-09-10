@@ -6,7 +6,7 @@
 #include <dheunit/test.h>
 
 namespace test {
-namespace swiss_army_sequencer {
+namespace cv_sequencer {
 using dhe::unit::is_equal_to;
 using dhe::unit::Suite;
 using dhe::unit::TestRegistrar;
@@ -22,7 +22,7 @@ static inline void set_all_voltages(Module &module, float voltage) {
 
 class AnchorSuite : public Suite {
 public:
-  AnchorSuite() : Suite("dhe::swiss_army_sequencer::Anchor") {}
+  AnchorSuite() : Suite("dhe::cv_sequencer::Anchor") {}
   void register_tests(TestRegistrar add) override {
     add("AnchorType::Start: "
         "entered with AnchorSource::Level: "
@@ -388,5 +388,5 @@ public:
 
 __attribute__((unused)) static auto _ = AnchorSuite{};
 
-} // namespace swiss_army_sequencer
+} // namespace cv_sequencer
 } // namespace test

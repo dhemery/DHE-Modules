@@ -5,7 +5,7 @@
 #include <dheunit/test.h>
 
 namespace test {
-namespace swiss_army_sequencer {
+namespace cv_sequencer {
 using dhe::unit::is_equal_to;
 using dhe::unit::Suite;
 using dhe::unit::Tester;
@@ -40,7 +40,7 @@ struct SustainerTestCase {
 
 class SustainerSuite : public Suite {
 public:
-  SustainerSuite() : Suite{"dhe::swiss_army_sequencer::Sustainer is_done(s)"} {}
+  SustainerSuite() : Suite{"dhe::cv_sequencer::Sustainer is_done(s)"} {}
   void register_tests(dhe::unit::TestRegistrar add) override {
     auto test_cases = std::vector<SustainerTestCase>{
         {CompletionMode::Sustain, TriggerMode::GateRises, rising_latch, true},
@@ -94,5 +94,5 @@ public:
 };
 
 __attribute__((unused)) static auto _ = SustainerSuite{};
-} // namespace swiss_army_sequencer
+} // namespace cv_sequencer
 } // namespace test

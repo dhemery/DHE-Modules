@@ -1,14 +1,14 @@
 #include "./fixtures/generator-fixture.h"
 #include "./fixtures/status-enums.h"
 
-#include "modules/swiss-army-sequencer/status.h"
+#include "modules/cv-sequencer/status.h"
 
 #include <dheunit/assertions.h>
 #include <dheunit/test.h>
 
 namespace test {
-namespace swiss_army_sequencer {
-using dhe::swiss_army_sequencer::GeneratorStatus;
+namespace cv_sequencer {
+using dhe::cv_sequencer::GeneratorStatus;
 using dhe::unit::is_equal_to;
 using dhe::unit::is_true;
 using dhe::unit::Suite;
@@ -16,7 +16,7 @@ using dhe::unit::TestRegistrar;
 
 class GeneratorSuite : public Suite {
 public:
-  GeneratorSuite() : Suite{"dhe::swiss_army_sequencer::Generator"} {}
+  GeneratorSuite() : Suite{"dhe::cv_sequencer::Generator"} {}
   void register_tests(TestRegistrar add) override {
     add("start(s) enters anchors at step",
         test([](Tester &t, Module & /*module*/, Anchor &start_anchor,
@@ -148,5 +148,5 @@ public:
 };
 
 __attribute__((unused)) static auto _ = GeneratorSuite{};
-} // namespace swiss_army_sequencer
+} // namespace cv_sequencer
 } // namespace test

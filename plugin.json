@@ -67,6 +67,15 @@
       ]
     },
     {
+      "slug": "CVSequencer",
+      "name": "CV Sequencer",
+      "description": "Generates a customizable 4 step sequence (expandable)",
+      "manualUrl": "https://dhemery.github.io/DHE-Modules/modules/cv-sequencer/",
+      "tags": [
+        "Sequencer", "Envelope Generator", "LFO"
+      ]
+    },
+    {
       "slug": "FuzzyLogicH",
       "name": "Fuzzy Logic H",
       "description": "Combines signals by applying hyperbolic paraboloid fuzzy logic operators",
@@ -147,15 +156,6 @@
       "manualUrl": "https://dhemery.github.io/DHE-Modules/modules/swave/",
       "tags": [
         "Waveshaper"
-      ]
-    },
-    {
-      "slug": "SwissArmySequencer",
-      "name": "Swiss Army Sequencer",
-      "description": "Generates a customizable 4 step sequence (expandable)",
-      "manualUrl": "https://dhemery.github.io/DHE-Modules/modules/swiss-army-sequencer/",
-      "tags": [
-        "Sequencer", "Envelope Generator", "LFO"
       ]
     },
     {

@@ -6,7 +6,7 @@
 #include <vector>
 
 namespace test {
-namespace swiss_army_sequencer {
+namespace cv_sequencer {
 using dhe::unit::is_equal_to;
 using dhe::unit::Suite;
 
@@ -42,7 +42,7 @@ struct InterrupterTestCase {
 class InterrupterSuite : public Suite {
 public:
   InterrupterSuite()
-      : Suite{"dhe::swiss_army_sequencer::Interrupter is_interrupted(s)"} {}
+      : Suite{"dhe::cv_sequencer::Interrupter is_interrupted(s)"} {}
   void register_tests(dhe::unit::TestRegistrar add) override {
     auto test_cases = std::vector<InterrupterTestCase>{
         {InterruptMode::Advance, TriggerMode::GateRises, rising_latch, true},
@@ -94,5 +94,5 @@ public:
 };
 
 __attribute__((unused)) static auto _ = InterrupterSuite{};
-} // namespace swiss_army_sequencer
+} // namespace cv_sequencer
 } // namespace test

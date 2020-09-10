@@ -1,14 +1,14 @@
-#include "modules/swiss-army-sequencer/anchor.h"
+#include "modules/cv-sequencer/anchor.h"
 #include <array>
 #include <dheunit/test.h>
 
 namespace test {
-namespace swiss_army_sequencer {
+namespace cv_sequencer {
 
 static auto constexpr step_count = 8;
-using dhe::swiss_army_sequencer::AnchorMode;
-using dhe::swiss_army_sequencer::AnchorSource;
-using dhe::swiss_army_sequencer::AnchorType;
+using dhe::cv_sequencer::AnchorMode;
+using dhe::cv_sequencer::AnchorSource;
+using dhe::cv_sequencer::AnchorType;
 using dhe::unit::Tester;
 using dhe::unit::TestFunc;
 
@@ -37,7 +37,7 @@ struct Module {
   std::array<AnchorSource, step_count> start_source_{}; // NOLINT
 };
 
-using Anchor = dhe::swiss_army_sequencer::Anchor<Module>;
+using Anchor = dhe::cv_sequencer::Anchor<Module>;
 
 template <typename Run>
 static inline auto test(AnchorType type, Run const &run) -> TestFunc {
@@ -48,5 +48,5 @@ static inline auto test(AnchorType type, Run const &run) -> TestFunc {
   };
 }
 
-} // namespace swiss_army_sequencer
+} // namespace cv_sequencer
 } // namespace test

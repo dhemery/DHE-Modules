@@ -1,12 +1,12 @@
 #pragma once
 
-#include "modules/swiss-army-sequencer/advancement.h"
+#include "modules/cv-sequencer/advancement.h"
 #include <dheunit/test.h>
 
 namespace test {
-namespace swiss_army_sequencer {
-using dhe::swiss_army_sequencer::CompletionMode;
-using dhe::swiss_army_sequencer::TriggerMode;
+namespace cv_sequencer {
+using dhe::cv_sequencer::CompletionMode;
+using dhe::cv_sequencer::TriggerMode;
 using dhe::unit::Tester;
 using dhe::unit::TestFunc;
 
@@ -24,7 +24,7 @@ struct Module {
   std::array<TriggerMode, step_count> trigger_mode_{};       // NOLINT
 };
 
-using Sustainer = dhe::swiss_army_sequencer::Sustainer<Module>;
+using Sustainer = dhe::cv_sequencer::Sustainer<Module>;
 
 template <typename Run> static inline auto test(Run const &run) -> TestFunc {
   return [run](Tester &t) {
@@ -33,5 +33,5 @@ template <typename Run> static inline auto test(Run const &run) -> TestFunc {
     run(t, module, sustainer);
   };
 }
-} // namespace swiss_army_sequencer
+} // namespace cv_sequencer
 } // namespace test

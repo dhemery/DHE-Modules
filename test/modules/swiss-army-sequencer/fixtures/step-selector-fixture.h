@@ -1,11 +1,11 @@
 #pragma once
 
-#include "modules/swiss-army-sequencer/step-selector.h"
+#include "modules/cv-sequencer/step-selector.h"
 #include <array>
 #include <dheunit/test.h>
 
 namespace test {
-namespace swiss_army_sequencer {
+namespace cv_sequencer {
 using dhe::unit::Tester;
 using dhe::unit::TestFunc;
 
@@ -20,7 +20,7 @@ struct Module {
   std::array<bool, step_count> enabled_{}; // NOLINT
 };
 
-using StepSelector = dhe::swiss_army_sequencer::StepSelector<Module>;
+using StepSelector = dhe::cv_sequencer::StepSelector<Module>;
 
 template <typename Run> static inline auto test(Run run) -> TestFunc {
   return [run](Tester &t) {
@@ -29,5 +29,5 @@ template <typename Run> static inline auto test(Run run) -> TestFunc {
     run(t, module, selector);
   };
 }
-} // namespace swiss_army_sequencer
+} // namespace cv_sequencer
 } // namespace test

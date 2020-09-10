@@ -1,16 +1,16 @@
 #pragma once
 
-#include "modules/swiss-army-sequencer/status.h"
+#include "modules/cv-sequencer/status.h"
 #include <array>
 #include <ostream>
 #include <string>
 
 namespace test {
-namespace swiss_army_sequencer {
-using dhe::swiss_army_sequencer::generator_status_count;
-using dhe::swiss_army_sequencer::GeneratorStatus;
-using dhe::swiss_army_sequencer::step_status_count;
-using dhe::swiss_army_sequencer::StepStatus;
+namespace cv_sequencer {
+using dhe::cv_sequencer::generator_status_count;
+using dhe::cv_sequencer::GeneratorStatus;
+using dhe::cv_sequencer::step_status_count;
+using dhe::cv_sequencer::StepStatus;
 
 auto constexpr generator_statuses =
     std::array<GeneratorStatus, generator_status_count>{
@@ -18,7 +18,7 @@ auto constexpr generator_statuses =
         GeneratorStatus::Completed,
     };
 
-static inline auto name_of(dhe::swiss_army_sequencer::GeneratorStatus status)
+static inline auto name_of(dhe::cv_sequencer::GeneratorStatus status)
     -> std::string {
   switch (status) {
   case GeneratorStatus::Completed:
@@ -36,7 +36,7 @@ auto constexpr step_statuses = std::array<StepStatus, step_status_count>{
     StepStatus::Completed,
 };
 
-static inline auto name_of(dhe::swiss_army_sequencer::StepStatus status)
+static inline auto name_of(dhe::cv_sequencer::StepStatus status)
     -> std::string {
   switch (status) {
   case StepStatus::Completed:
@@ -48,24 +48,24 @@ static inline auto name_of(dhe::swiss_army_sequencer::StepStatus status)
   }
 }
 
-} // namespace swiss_army_sequencer
+} // namespace cv_sequencer
 } // namespace test
 
 namespace dhe {
-namespace swiss_army_sequencer {
+namespace cv_sequencer {
 static inline auto operator<<(std::ostream &os,
-                              dhe::swiss_army_sequencer::StepStatus status)
+                              dhe::cv_sequencer::StepStatus status)
     -> std::ostream & {
-  os << test::swiss_army_sequencer::name_of(status);
+  os << test::cv_sequencer::name_of(status);
   return os;
 }
 
 static inline auto operator<<(std::ostream &os,
-                              dhe::swiss_army_sequencer::GeneratorStatus status)
+                              dhe::cv_sequencer::GeneratorStatus status)
     -> std::ostream & {
-  os << test::swiss_army_sequencer::name_of(status);
+  os << test::cv_sequencer::name_of(status);
   return os;
 }
 
-} // namespace swiss_army_sequencer
+} // namespace cv_sequencer
 } // namespace dhe

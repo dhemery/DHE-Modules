@@ -1,18 +1,18 @@
 #pragma once
 
-#include "modules/swiss-army-sequencer/anchor.h"
+#include "modules/cv-sequencer/anchor.h"
 #include <array>
 #include <ostream>
 #include <string>
 
 namespace test {
-namespace swiss_army_sequencer {
-using dhe::swiss_army_sequencer::anchor_mode_count;
-using dhe::swiss_army_sequencer::anchor_source_count;
-using dhe::swiss_army_sequencer::anchor_type_count;
-using dhe::swiss_army_sequencer::AnchorMode;
-using dhe::swiss_army_sequencer::AnchorSource;
-using dhe::swiss_army_sequencer::AnchorType;
+namespace cv_sequencer {
+using dhe::cv_sequencer::anchor_mode_count;
+using dhe::cv_sequencer::anchor_source_count;
+using dhe::cv_sequencer::anchor_type_count;
+using dhe::cv_sequencer::AnchorMode;
+using dhe::cv_sequencer::AnchorSource;
+using dhe::cv_sequencer::AnchorType;
 
 static auto constexpr anchor_types = std::array<AnchorType, anchor_type_count>{
     AnchorType::Start,
@@ -65,24 +65,24 @@ static inline auto name_of(AnchorSource source) -> std::string {
     return "Unknown AnchorSource " + std::to_string(static_cast<int>(source));
   }
 }
-} // namespace swiss_army_sequencer
+} // namespace cv_sequencer
 } // namespace test
 
 namespace dhe {
-namespace swiss_army_sequencer {
+namespace cv_sequencer {
 
 static inline auto operator<<(std::ostream &os, AnchorMode mode)
     -> std::ostream & {
-  os << test::swiss_army_sequencer::name_of(mode);
+  os << test::cv_sequencer::name_of(mode);
   return os;
 }
 
 static inline auto operator<<(std::ostream &os,
-                              dhe::swiss_army_sequencer::AnchorSource source)
+                              dhe::cv_sequencer::AnchorSource source)
     -> std::ostream & {
-  os << test::swiss_army_sequencer::name_of(source);
+  os << test::cv_sequencer::name_of(source);
   return os;
 }
 
-} // namespace swiss_army_sequencer
+} // namespace cv_sequencer
 } // namespace dhe
