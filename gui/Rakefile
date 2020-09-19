@@ -126,7 +126,11 @@ end
 
 cv_sequencer_files = %w[
   _svg/cv-sequencer-4.svg
+  _svg/cv-sequencer-8.svg
+  _svg/cv-sequencer-16.svg
   _images/cv-sequencer-4.svg
+  _images/cv-sequencer-8.svg
+  _images/cv-sequencer-16.svg
 ]
 
 cv_sequencer_helpers = %w[

@@ -11,3 +11,7 @@ PADDING = 1.0
 def hp2mm(hp)
   hp * MM_PER_HP
 end
+
+def mm2hp(mm)
+  mm / MM_PER_HP
+end
