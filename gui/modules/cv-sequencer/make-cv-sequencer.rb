@@ -6,22 +6,33 @@ require_relative '../../lib/dimensions'
 MARGIN_HP = 1.5
 TOP_HP = 3.5
 BOTTOM_HP = 23
-LEFT_HP = MARGIN_HP
-STEP_WIDTH_HP = 2.25
-SEQUENCE_CONTROLS_WIDTH_HP = 9.0
-STEP_BLOCK_LEFT_HP = LEFT_HP + SEQUENCE_CONTROLS_WIDTH_HP
-GLOBAL_STEP_CONTROLS_WIDTH_HP = 4.0
+STEP_WIDTH_HP = 2.5
 
-MARGIN = hp2mm(MARGIN_HP)
+SEQUENCE_CONTROLS_LEFT_HP = MARGIN_HP
+SEQUENCE_CONTROLS_WIDTH_HP = 9.0
+SEQUENCE_CONTROLS_RIGHT_HP = SEQUENCE_CONTROLS_LEFT_HP + SEQUENCE_CONTROLS_WIDTH_HP
+
+GLOBAL_STEP_CONTROLS_LEFT_HP = SEQUENCE_CONTROLS_RIGHT_HP + MARGIN_HP
+GLOBAL_STEP_CONTROLS_WIDTH_HP = 4.0
+GLOBAL_STEP_CONTROLS_RIGHT_HP = GLOBAL_STEP_CONTROLS_LEFT_HP + GLOBAL_STEP_CONTROLS_WIDTH_HP
+
+LABELS_LEFT_HP = GLOBAL_STEP_CONTROLS_RIGHT_HP + MARGIN_HP
+LABELS_WIDTH_HP = 0.6 * STEP_WIDTH_HP
+LABELS_RIGHT_HP = LABELS_LEFT_HP + LABELS_WIDTH_HP
+
+STEP_BLOCK_LEFT_HP = LABELS_RIGHT_HP
+
 TOP = hp2mm(TOP_HP)
 BOTTOM = hp2mm(BOTTOM_HP)
-LEFT = hp2mm(LEFT_HP)
+STEP_WIDTH = hp2mm(STEP_WIDTH_HP)
+SEQUENCE_CONTROLS_LEFT = hp2mm(SEQUENCE_CONTROLS_LEFT_HP)
+GLOBAL_STEP_CONTROLS_LEFT = hp2mm(GLOBAL_STEP_CONTROLS_LEFT_HP)
+LABELS_RIGHT = hp2mm(LABELS_RIGHT_HP)
+STEP_BLOCK_LEFT = hp2mm(STEP_BLOCK_LEFT_HP)
 
 HUE = 30
 FOREGROUND_HSL = [HUE, 100, 10]
 BACKGROUND_HSL = [HUE, 10, 93]
-
-STEP_WIDTH = hp2mm(STEP_WIDTH_HP)
 
 def step_block_width_hp(steps)
   steps * STEP_WIDTH_HP
@@ -31,12 +42,8 @@ def step_block_width(steps)
   steps * STEP_WIDTH
 end
 
-def step_block_right_hp(steps)
-  STEP_BLOCK_LEFT_HP + step_block_width_hp(steps)
-end
-
 def right_hp(steps)
-  step_block_right_hp(steps) + GLOBAL_STEP_CONTROLS_WIDTH_HP
+  STEP_BLOCK_LEFT_HP + steps * STEP_WIDTH + MARGIN_HP
 end
 
 def right(steps)
@@ -108,15 +115,15 @@ def make_cv_sequencer(steps)
   reset_y = sequence_controls_top + 4 * sequence_controls_dy
 
   selection_length_x_offset = hp2mm(1.63)
-  selection_length_x = LEFT + selection_length_x_offset
+  selection_length_x = SEQUENCE_CONTROLS_LEFT + selection_length_x_offset
 
-  input_button_port x: LEFT, y: run_y, label: 'RUN'
-  input_button_port x: LEFT, y: gate_y, label: 'GATE'
-  connector left: LEFT, right: selection_length_x, y: selection_y
-  small_knob x: LEFT - hp2mm(0.2), y: selection_y, label: 'START'
+  input_button_port x: SEQUENCE_CONTROLS_LEFT, y: run_y, label: 'RUN'
+  input_button_port x: SEQUENCE_CONTROLS_LEFT, y: gate_y, label: 'GATE'
+  connector left: SEQUENCE_CONTROLS_LEFT, right: selection_length_x, y: selection_y
+  small_knob x: SEQUENCE_CONTROLS_LEFT - hp2mm(0.2), y: selection_y, label: 'START'
   small_knob x: selection_length_x, y: selection_y, label: 'LENGTH'
-  input_button_port x: LEFT, y: loop_y, label: 'LOOP'
-  input_button_port x: LEFT, y: reset_y, label: 'RESET'
+  input_button_port x: SEQUENCE_CONTROLS_LEFT, y: loop_y, label: 'LOOP'
+  input_button_port x: SEQUENCE_CONTROLS_LEFT, y: reset_y, label: 'RESET'
 
 
   ###############################################################################
@@ -125,9 +132,7 @@ def make_cv_sequencer(steps)
   #
   ###############################################################################
 
-  step_left = hp2mm(8.5)
-
-  label_x = step_left - 0.6 * STEP_WIDTH
+  label_x = hp2mm(LABELS_RIGHT_HP)
   label x: label_x, y: TRIGGER_Y, text: 'TRIG', alignment: :left_of, size: :large
   label x: label_x, y: INTERRUPT_Y, text: 'INT', alignment: :left_of, size: :large
   label x: label_x, y: COMPLETION_Y, text: 'AT END', alignment: :left_of, size: :large
@@ -137,7 +142,7 @@ def make_cv_sequencer(steps)
   label x: label_x, y: DURATION_Y, text: 'DUR', alignment: :left_of, size: :large
   label x: label_x, y: ENABLED_Y, text: 'ON', alignment: :left_of, size: :large
 
-  step_block(steps, step_left)
+  step_block(steps, hp2mm(STEP_BLOCK_LEFT_HP))
 
 
   ###############################################################################
@@ -146,8 +151,8 @@ def make_cv_sequencer(steps)
   #
   ###############################################################################
 
-  global_left_x = right(steps) - hp2mm(5)
-  global_right_x = right(steps) - hp2mm(2)
+  global_left_x = hp2mm(GLOBAL_STEP_CONTROLS_LEFT_HP) + 1.0
+  global_right_x = hp2mm(GLOBAL_STEP_CONTROLS_RIGHT_HP) - 1.0
   out_y = BOTTOM - Port::DIAMETER / 2.0 - 1.0
   in_y = sequence_controls_top
   polarity_y = (START_ANCHOR_Y + END_ANCHOR_Y) / 2.0
