@@ -125,15 +125,12 @@ curve_sequencer_files.each do |f|
 end
 
 cv_sequencer_files = %w[
-  _svg/cv-sequencer-m.svg
-  _svg/cv-sequencer-x.svg
-  _images/cv-sequencer-m.svg
-  _images/cv-sequencer-x.svg
+  _svg/cv-sequencer-4.svg
+  _images/cv-sequencer-4.svg
 ]
 
 cv_sequencer_helpers = %w[
-  modules/cv-sequencer/step-block.rb
-  modules/cv-sequencer/style.rb
+  modules/cv-sequencer/make-cv-sequencer.rb
 ]
 
 cv_sequencer_files.each do |f|
