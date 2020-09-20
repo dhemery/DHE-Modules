@@ -205,7 +205,7 @@ public:
     auto constexpr level_y = global_controls_y(0);
     auto constexpr global_duration_y = global_controls_y(1);
     auto constexpr in_y = global_controls_y(2);
-//    auto constexpr state_y = global_controls_y(3);
+    auto constexpr state_y = global_controls_y(3);
     auto constexpr out_y = global_controls_y(4);
 
     auto constexpr global_controls_left_x =
@@ -216,9 +216,15 @@ public:
     auto constexpr global_controls_right_x =
         global_controls_center_x + global_step_controls_column_width + padding;
 
+    addParam(Knob::small(slug, module, global_controls_left_x, level_y,
+                         Param::GlobalLevel));
+    addInput(Jack::input(slug, module, global_controls_center_x, level_y,
+                         Input::GlobalLevelCV));
     addParam(Toggle::thumb(2, slug, module, global_controls_right_x, level_y,
                            Param::GlobalLevelRange));
 
+    addParam(Knob::small(slug, module, global_controls_left_x,
+                         global_duration_y, Param::GlobalDuration));
     addInput(Jack::input(slug, module, global_controls_center_x,
                          global_duration_y, Input::GlobalDurationCV));
     addParam(Toggle::thumb(3, slug, module, global_controls_right_x,
@@ -228,7 +234,20 @@ public:
         Jack::input(slug, module, global_controls_left_x, in_y, Input::InA));
     addInput(
         Jack::input(slug, module, global_controls_center_x, in_y, Input::InB));
+    addInput(Jack::input(slug, module, global_controls_right_x, in_y,
+                         Input::Trigger));
 
+    addOutput(Jack::output(slug, module, global_controls_left_x, state_y,
+                           Output::StepNumber));
+    addOutput(Jack::output(slug, module, global_controls_center_x, state_y,
+                           Output::IsCurving));
+    addOutput(Jack::output(slug, module, global_controls_right_x, state_y,
+                           Output::IsSustaining));
+
+    addOutput(Jack::output(slug, module, global_controls_left_x, out_y,
+                           Output::StepEvent));
+    addOutput(Jack::output(slug, module, global_controls_center_x, out_y,
+                           Output::SequenceEvent));
     addOutput(Jack::output(slug, module, global_controls_right_x, out_y,
                            Output::Out));
 

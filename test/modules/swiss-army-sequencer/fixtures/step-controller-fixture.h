@@ -44,8 +44,7 @@ struct Sustainer {
 };
 
 using StepController =
-    dhe::cv_sequencer::StepController<Interrupter, Generator,
-                                              Sustainer>;
+    dhe::cv_sequencer::StepController<Interrupter, Generator, Sustainer>;
 
 template <typename Run> static inline auto test(Run run) -> TestFunc {
   return [run](Tester &t) {

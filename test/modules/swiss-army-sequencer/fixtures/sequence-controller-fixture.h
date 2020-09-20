@@ -73,8 +73,7 @@ struct StepSelector {
 };
 
 using SequenceController =
-    dhe::cv_sequencer::SequenceController<Module, StepSelector,
-                                                  StepController>;
+    dhe::cv_sequencer::SequenceController<Module, StepSelector, StepController>;
 
 template <typename Prepare, typename Run>
 static inline auto test(Prepare prepare, Run run) -> TestFunc {
