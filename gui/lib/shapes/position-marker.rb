@@ -4,6 +4,7 @@ class PositionMarker < Shape
   attr_reader :slug
   TOP = -Light::DIAMETER
   BOTTOM = Light::DIAMETER
+  HEIGHT = BOTTOM - TOP
   RIGHT = Light::DIAMETER
   LEFT = -Light::DIAMETER
   NIB = Light::DIAMETER
