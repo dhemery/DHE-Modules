@@ -14,11 +14,11 @@
 namespace dhe {
 
 namespace sequencizer {
-static auto constexpr step_width = hp2mm(2.5F);
+static auto constexpr step_width = hp2mm(2.25F);
 static auto constexpr margin = 6.F;
 static auto constexpr top = 23.F;
 static auto constexpr bottom = 117.F;
-static auto constexpr x_offset = 4.5847F;
+static auto constexpr x_offset = 2.0447F;
 static auto constexpr label_small_size = 7.0F / px_per_mm;
 static auto constexpr small_knob_diameter = 8.4F;
 
@@ -133,7 +133,7 @@ template <int N> class Panel : public rack::app::ModuleWidget {
 
 public:
   Panel(rack::engine::Module *module) {
-    auto const slug = std::string{"sequence-foundry-"} + std::to_string(N);
+    auto const slug = std::string{"sequencizer-"} + std::to_string(N);
 
     auto constexpr content_width = 14.195 + static_cast<float>(N) * step_width;
 

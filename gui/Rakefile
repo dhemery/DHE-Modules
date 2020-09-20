@@ -124,21 +124,21 @@ curve_sequencer_files.each do |f|
   file f => 'modules/curve-sequencer/make-curve-sequencer.rb'
 end
 
-sequence_foundry_files = %w[
-  _svg/sequence-foundry-4.svg
-  _svg/sequence-foundry-8.svg
-  _svg/sequence-foundry-16.svg
-  _images/sequence-foundry-4.svg
-  _images/sequence-foundry-8.svg
-  _images/sequence-foundry-16.svg
+sequencizer_files = %w[
+  _svg/sequencizer-4.svg
+  _svg/sequencizer-8.svg
+  _svg/sequencizer-16.svg
+  _images/sequencizer-4.svg
+  _images/sequencizer-8.svg
+  _images/sequencizer-16.svg
 ]
 
-sequence_foundry_helpers = %w[
-  modules/sequence-foundry/make-sequence-foundry.rb
+sequencizer_helpers = %w[
+  modules/sequencizer/make-sequencizer.rb
 ]
 
-sequence_foundry_files.each do |f|
-  file f => sequence_foundry_helpers
+sequencizer_files.each do |f|
+  file f => sequencizer_helpers
 end
 
 CLEAN.include image_build_dir, svg_build_dir

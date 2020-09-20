@@ -7,46 +7,47 @@ HUE = 30
 FOREGROUND_HSL = [HUE, 100, 10]
 BACKGROUND_HSL = [HUE, 10, 93]
 
-def make_sequencizer(steps)
+def make_sequencizer(steps, width_hp)
   name "SEQUENCIZER #{steps}"
-  content_width_hp = mm2hp(content_width(steps))
-  module_width_hp = (content_width_hp + 2.0).round
-  hp module_width_hp
-
+  hp width_hp
   foreground FOREGROUND_HSL
   background BACKGROUND_HSL
 
-  x_offset = hp2mm((module_width_hp - content_width_hp) / 2.0)
-  make_sequence_controls(x_offset)
-  make_global_step_controls(x_offset)
-  make_step_control_labels(x_offset)
-  make_step_block(steps, x_offset)
-  # horizontal(TOP)
-  # horizontal(BOTTOM)
+  width_mm = hp2mm(width_hp)
+  content_width_mm = content_width(steps)
+  excess_width = width_mm - PADDING - content_width_mm
+  margin = (excess_width) / 4.0
+
+  puts("#{steps}: width #{width_mm} content #{content_width_mm} execess #{excess_width} margin #{margin}")
+  left = margin
+  make_sequence_controls(left)
+
+  left += SEQUENCE_CONTROLS_WIDTH + margin
+  make_global_step_controls(left)
+
+  left += GLOBAL_STEP_CONTROLS_WIDTH + margin
+  make_step_control_labels(left)
+
+  left += LABELS_WIDTH + PADDING
+  make_step_block(steps, left)
 end
 
 TOP = 23
 BOTTOM = 117.0
-MARGIN = 6.0
 STEP_WIDTH = hp2mm(2.25)
 
-SEQUENCE_CONTROLS_LEFT = 0.0
 SEQUENCE_CONTROLS_WIDTH = PADDING + Port::DIAMETER + PADDING + Button::DIAMETER + PADDING
-SEQUENCE_CONTROLS_RIGHT = SEQUENCE_CONTROLS_LEFT + SEQUENCE_CONTROLS_WIDTH
+GLOBAL_STEP_CONTROL_WIDTH = PADDING + Port::DIAMETER + PADDING
+GLOBAL_STEP_CONTROL_COLUMNS = 3
+GLOBAL_STEP_CONTROLS_WIDTH = GLOBAL_STEP_CONTROL_WIDTH * GLOBAL_STEP_CONTROL_COLUMNS + PADDING * (GLOBAL_STEP_CONTROL_COLUMNS - 1)
+LABELS_WIDTH = 10.0
 
-GLOBAL_STEP_CONTROLS_COLUMN_WIDTH = PADDING + Port::DIAMETER + PADDING
-GLOBAL_STEP_CONTROLS_LEFT = SEQUENCE_CONTROLS_RIGHT + MARGIN
-GLOBAL_STEP_CONTROLS_WIDTH = GLOBAL_STEP_CONTROLS_COLUMN_WIDTH + PADDING + GLOBAL_STEP_CONTROLS_COLUMN_WIDTH + PADDING + GLOBAL_STEP_CONTROLS_COLUMN_WIDTH
-GLOBAL_STEP_CONTROLS_RIGHT = GLOBAL_STEP_CONTROLS_LEFT + GLOBAL_STEP_CONTROLS_WIDTH
-
-LABELS_LEFT = GLOBAL_STEP_CONTROLS_RIGHT + MARGIN
-LABELS_WIDTH = 0.67 * STEP_WIDTH
-LABELS_RIGHT = LABELS_LEFT + LABELS_WIDTH
-
-STEP_BLOCK_LEFT = LABELS_RIGHT + PADDING
+def step_block_width(steps)
+  steps * STEP_WIDTH
+end
 
 def content_width(steps)
-  STEP_BLOCK_LEFT + steps * STEP_WIDTH
+  SEQUENCE_CONTROLS_WIDTH + GLOBAL_STEP_CONTROLS_WIDTH + LABELS_WIDTH + step_block_width(steps)
 end
 
 # The distance from the top of the port box to the center of the port
@@ -61,8 +62,8 @@ def global_controls_y(row)
   GLOBAL_CONTROLS_TOP_Y + row * GLOBAL_CONTROLS_DY
 end
 
-def make_sequence_controls(x_offset)
-  x = SEQUENCE_CONTROLS_LEFT + Port::RADIUS + PADDING + x_offset
+def make_sequence_controls(left)
+  x = left + Port::RADIUS + PADDING
 
   run_y = global_controls_y(0)
   loop_y = global_controls_y(1)
@@ -90,10 +91,10 @@ def horizontal(y)
   line x1: 0, x2: width, y1: y, y2: y
 end
 
-def make_global_step_controls(x_offset)
-  left_x = GLOBAL_STEP_CONTROLS_LEFT + GLOBAL_STEP_CONTROLS_COLUMN_WIDTH / 2.0 + x_offset
-  center_x = left_x + GLOBAL_STEP_CONTROLS_COLUMN_WIDTH + PADDING
-  right_x = center_x + GLOBAL_STEP_CONTROLS_COLUMN_WIDTH + PADDING
+def make_global_step_controls(left)
+  left_x = left + GLOBAL_STEP_CONTROL_WIDTH / 2.0
+  center_x = left_x + GLOBAL_STEP_CONTROL_WIDTH + PADDING
+  right_x = center_x + GLOBAL_STEP_CONTROL_WIDTH + PADDING
 
   level_y = global_controls_y(0)
   small_knob x: left_x, y: level_y, label: 'LEVEL'
@@ -157,16 +158,16 @@ START_ANCHOR_LABEL_Y = (START_ANCHOR_SOURCE_Y + START_ANCHOR_MODE_Y) / 2.0
 END_ANCHOR_LABEL_Y = (END_ANCHOR_SOURCE_Y + END_ANCHOR_MODE_Y) / 2.0
 SHAPE_LABEL_Y = (SHAPE_Y + CURVATURE_Y) / 2.0
 
-def make_step_control_labels(x_offset)
-  label_x = LABELS_RIGHT + x_offset
-  label x: label_x, y: TRIGGER_Y, text: 'TRIG', alignment: :left_of, size: :large
-  label x: label_x, y: INTERRUPT_Y, text: 'INT', alignment: :left_of, size: :large
-  label x: label_x, y: SUSTAIN_Y, text: 'SUST', alignment: :left_of, size: :large
-  label x: label_x, y: START_ANCHOR_LABEL_Y, text: 'START', alignment: :left_of, size: :large
-  label x: label_x, y: END_ANCHOR_LABEL_Y, text: 'END', alignment: :left_of, size: :large
-  label x: label_x, y: DURATION_Y, text: 'DUR', alignment: :left_of, size: :large
-  label x: label_x, y: SHAPE_LABEL_Y - hp2mm(0.25), text: 'SHAPE', alignment: :left_of, size: :large
-  label x: label_x, y: ENABLED_Y, text: 'ON', alignment: :left_of, size: :large
+def make_step_control_labels(left)
+  x = left + LABELS_WIDTH
+  label x: x, y: TRIGGER_Y, text: 'TRIG', alignment: :left_of, size: :large
+  label x: x, y: INTERRUPT_Y, text: 'INT', alignment: :left_of, size: :large
+  label x: x, y: SUSTAIN_Y, text: 'SUST', alignment: :left_of, size: :large
+  label x: x, y: START_ANCHOR_LABEL_Y, text: 'START', alignment: :left_of, size: :large
+  label x: x, y: END_ANCHOR_LABEL_Y, text: 'END', alignment: :left_of, size: :large
+  label x: x, y: DURATION_Y, text: 'DUR', alignment: :left_of, size: :large
+  label x: x, y: SHAPE_LABEL_Y - hp2mm(0.25), text: 'SHAPE', alignment: :left_of, size: :large
+  label x: x, y: ENABLED_Y, text: 'ON', alignment: :left_of, size: :large
 end
 
 ANCHOR_SOURCES = %w[LEVEL A B C OUT]
@@ -184,42 +185,40 @@ SHAPE_SELECTION = 1
 TRIGGER_MODES = %w[RISE FALL EDGE HIGH LOW]
 TRIGGER_MODE_SELECTION = 1
 
-def make_step_block(steps, x_offset)
-  step_block_x = STEP_BLOCK_LEFT + x_offset
-
-  line x1: step_block_x, x2: step_block_x, y1: TOP, y2: BOTTOM
+def make_step_block(steps, left)
+  line x1: left, x2: left, y1: TOP, y2: BOTTOM
 
   (0...steps).each do |step|
-    step_left = step_block_x + step * STEP_WIDTH
-    step_x = step_left + STEP_WIDTH / 2.0
+    step_left = left + step * STEP_WIDTH
+    x = step_left + STEP_WIDTH / 2.0
     step_right = step_left + STEP_WIDTH
     line x1: step_right, x2: step_right, y1: TOP, y2: BOTTOM
 
-    light x: step_x, y: PROGRESS_LIGHT_Y
-    label x: step_x, y: STEP_NUMBER_LABEL_Y, text: (step + 1).to_s, alignment: :above, size: :large
+    light x: x, y: PROGRESS_LIGHT_Y
+    label x: x, y: STEP_NUMBER_LABEL_Y, text: (step + 1).to_s, alignment: :above, size: :large
 
-    stepper x: step_x, y: TRIGGER_Y, name: 'trigger-mode', options: TRIGGER_MODES, selection: TRIGGER_MODE_SELECTION, width: STEPPER_WIDTH
-    stepper x: step_x, y: INTERRUPT_Y, name: 'interrupt-mode', options: INTERRUPT_MODES, selection: INTERRUPT_MODE_SELECTION, width: STEPPER_WIDTH
-    stepper x: step_x, y: SUSTAIN_Y, name: 'completion-mode', options: COMPLETION_MODES, selection: COMPLETION_MODE_SELECTION, width: STEPPER_WIDTH
+    stepper x: x, y: TRIGGER_Y, name: 'trigger-mode', options: TRIGGER_MODES, selection: TRIGGER_MODE_SELECTION, width: STEPPER_WIDTH
+    stepper x: x, y: INTERRUPT_Y, name: 'interrupt-mode', options: INTERRUPT_MODES, selection: INTERRUPT_MODE_SELECTION, width: STEPPER_WIDTH
+    stepper x: x, y: SUSTAIN_Y, name: 'completion-mode', options: COMPLETION_MODES, selection: COMPLETION_MODE_SELECTION, width: STEPPER_WIDTH
 
-    stepper x: step_x, y: START_ANCHOR_MODE_Y, name: 'anchor-mode', options: ANCHOR_MODES, selection: START_ANCHOR_MODE_SELECTION, width: STEPPER_WIDTH
-    small_knob x: step_x, y: START_ANCHOR_LEVEL_Y, label: ''
-    stepper x: step_x, y: START_ANCHOR_SOURCE_Y, name: 'anchor-source', options: ANCHOR_SOURCES, selection: START_ANCHOR_SOURCE_SELECTION, width: STEPPER_WIDTH
+    stepper x: x, y: START_ANCHOR_MODE_Y, name: 'anchor-mode', options: ANCHOR_MODES, selection: START_ANCHOR_MODE_SELECTION, width: STEPPER_WIDTH
+    small_knob x: x, y: START_ANCHOR_LEVEL_Y, label: ''
+    stepper x: x, y: START_ANCHOR_SOURCE_Y, name: 'anchor-source', options: ANCHOR_SOURCES, selection: START_ANCHOR_SOURCE_SELECTION, width: STEPPER_WIDTH
 
-    stepper x: step_x, y: END_ANCHOR_MODE_Y, name: 'anchor-mode', options: ANCHOR_MODES, selection: END_ANCHOR_MODE_SELECTION, width: STEPPER_WIDTH
-    small_knob x: step_x, y: END_ANCHOR_LEVEL_Y, label: ''
-    stepper x: step_x, y: END_ANCHOR_SOURCE_Y, name: 'anchor-source', options: ANCHOR_SOURCES, selection: END_ANCHOR_SOURCE_SELECTION, width: STEPPER_WIDTH
+    stepper x: x, y: END_ANCHOR_MODE_Y, name: 'anchor-mode', options: ANCHOR_MODES, selection: END_ANCHOR_MODE_SELECTION, width: STEPPER_WIDTH
+    small_knob x: x, y: END_ANCHOR_LEVEL_Y, label: ''
+    stepper x: x, y: END_ANCHOR_SOURCE_Y, name: 'anchor-source', options: ANCHOR_SOURCES, selection: END_ANCHOR_SOURCE_SELECTION, width: STEPPER_WIDTH
 
-    stepper x: step_x, y: SHAPE_Y, name: 'shape', options: SHAPE_OPTIONS, selection: SHAPE_SELECTION, width: STEPPER_WIDTH
-    small_knob x: step_x, y: CURVATURE_Y, label: ''
+    stepper x: x, y: SHAPE_Y, name: 'shape', options: SHAPE_OPTIONS, selection: SHAPE_SELECTION, width: STEPPER_WIDTH
+    small_knob x: x, y: CURVATURE_Y, label: ''
 
-    small_knob y: DURATION_Y, x: step_x, label: ''
+    small_knob y: DURATION_Y, x: x, label: ''
 
-    button y: ENABLED_Y, x: step_x, label: ''
+    button y: ENABLED_Y, x: x, label: ''
   end
 
-  start_position_marker = step_block_x - Light::DIAMETER + STEP_WIDTH / 2.0
-  end_position_marker = step_block_x + STEP_WIDTH * (steps - 1) + STEP_WIDTH / 2.0 + Light::DIAMETER
+  start_position_marker = left - Light::DIAMETER + STEP_WIDTH / 2.0
+  end_position_marker = left + STEP_WIDTH * (steps - 1) + STEP_WIDTH / 2.0 + Light::DIAMETER
 
   position_marker(x: start_position_marker, y: PROGRESS_LIGHT_Y, type: :start)
   position_marker(x: end_position_marker, y: PROGRESS_LIGHT_Y, type: :end)
