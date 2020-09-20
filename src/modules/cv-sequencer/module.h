@@ -28,11 +28,11 @@ static auto constexpr brightness_skew = 0.7F;
 static auto constexpr brightness_range =
     Range{-brightness_skew, 1.F + brightness_skew};
 
-class Module : public rack::engine::Module {
-  using Input = InputIds;
-  using Light = LightIds;
+template <int N> class Module : public rack::engine::Module {
+  using Input = InputIds<N>;
+  using Light = LightIds<N>;
   using Output = OutputIds;
-  using Param = ParamIds;
+  using Param = ParamIds<N>;
 
 public:
   Module() {
@@ -42,14 +42,14 @@ public:
     config_button(this, Param::Loop, "Loop", {"From input", "Yes"}, 0);
     config_button(this, Param::Reset, "Reset", {"From input", "High"}, 0);
 
-    configParam(Param::SelectionStart, 0.F, step_count - 1, 0.F, "Start step", "", 0.F,
+    configParam(Param::SelectionStart, 0.F, N - 1, 0.F, "Start step", "", 0.F,
                 1.F, 1.F);
-    configParam(Param::SelectionLength, 1.F, step_count, step_count, "Sequence length", " steps");
+    configParam(Param::SelectionLength, 1.F, N, N, "Sequence length", " steps");
 
     config_level_range_switch(this, Param::LevelRange);
     config_duration_range_switch(this, Param::DurationRange);
 
-    for (auto step = 0; step < step_count; step++) {
+    for (auto step = 0; step < N; step++) {
       config_toggle<trigger_mode_count>(this, Param::StepTriggerMode + step,
                                         "Trigger mode",
                                         trigger_mode_descriptions, 0);
@@ -113,7 +113,7 @@ public:
     return static_cast<AnchorSource>(selection);
   }
 
-  auto aux() const -> float { return voltage_at(inputs[Input::Aux]); }
+  auto aux() const -> float { return voltage_at(inputs[Input::InB]); }
 
   auto completion_mode(int step) const -> CompletionMode {
     auto const selection =
@@ -135,7 +135,7 @@ public:
     return is_high(inputs[Input::Gate]) || is_pressed(params[Param::Gate]);
   }
 
-  auto input() const -> float { return voltage_at(inputs[Input::In]); }
+  auto input() const -> float { return voltage_at(inputs[Input::InA]); }
 
   auto interrupt_mode(int step) const -> InterruptMode {
     auto const selection = position_of(params[Param::StepInterruptMode + step]);
@@ -206,7 +206,7 @@ private:
   AnchorT start_anchor_{*this, AnchorType::Start};
   GeneratorT generator_{*this, start_anchor_, end_anchor_};
   InterrupterT interrupter_{*this};
-  StepSelectorT step_selector_{*this, step_count};
+  StepSelectorT step_selector_{*this, N};
   SustainerT sustainer_{*this};
 
   using StepControllerT = StepController<InterrupterT, GeneratorT, SustainerT>;

@@ -4,6 +4,7 @@
 #include "widgets/control-widgets.h"
 #include "widgets/screws.h"
 #include <app/ModuleWidget.hpp>
+#include <cmath>
 #include <componentlibrary.hpp>
 #include <functional>
 #include <jansson.h>
@@ -81,29 +82,54 @@ private:
   int const step_mask_ = N - 1;
 }; // namespace cv_sequencer
 
-class Panel : public rack::app::ModuleWidget {
-  using Param = ParamIds;
-  using Input = InputIds;
-  using Light = LightIds;
+template <int N> class Panel : public rack::app::ModuleWidget {
+  using Param = ParamIds<N>;
+  using Input = InputIds<N>;
+  using Light = LightIds<N>;
   using Output = OutputIds;
 
 public:
   Panel(rack::engine::Module *module) {
-    auto const slug = std::string{"cv-sequencer"};
-    auto constexpr step_width = 2.25F;
-    auto constexpr sequence_controls_width = 13.F;
-    auto constexpr hp =
-        static_cast<int>(sequence_controls_width + step_count * step_width);
+    auto const slug = std::string{"sequence-foundry-"} + std::to_string(N);
+    auto constexpr step_width = 13.F;
+    auto constexpr margin = 6.F;
+    auto constexpr sequence_controls_left = 0.F;
+    auto constexpr sequence_controls_width =
+        padding + port_diameter + button_diameter + padding;
+    auto constexpr sequence_controls_right =
+        sequence_controls_left + sequence_controls_width;
+
+    auto constexpr global_step_controls_column_width =
+        padding + port_diameter + padding;
+    auto constexpr global_step_controls_left = sequence_controls_right + margin;
+    auto constexpr global_step_controls_width =
+        global_step_controls_column_width + padding +
+        global_step_controls_column_width + padding +
+        global_step_controls_column_width;
+    auto constexpr global_step_controls_right =
+        global_step_controls_left + global_step_controls_width;
+
+    auto constexpr labels_left = global_step_controls_right + margin;
+    auto constexpr labels_width = 0.67F * step_width;
+    auto constexpr labels_right = labels_left + labels_width;
+
+    auto constexpr step_block_left = labels_right + padding;
+
+    auto constexpr content_width =
+        step_block_left + static_cast<float>(N) * step_width;
+
+    auto constexpr content_width_hp = mm2hp(content_width);
+    auto const module_width_hp = std::round(content_width_hp + 2.F);
+
+    auto const hp = static_cast<int>(module_width_hp);
 
     setModule(module);
     setPanel(background_svg(slug));
     install_screws(this, hp);
 
-    auto constexpr margin = hp2mm(1.8F);
+    auto constexpr top = 23.F;
+    auto constexpr bottom = 117.F;
     auto constexpr left = margin;
-    auto constexpr right = hp2mm(hp) - margin;
-    auto constexpr top = hp2mm(3.5F);
-    auto constexpr bottom = hp2mm(23);
 
     auto constexpr sequence_controls_top = top + hp2mm(2.78);
     auto constexpr sequence_controls_bottom = bottom - port_radius - 1.F;
@@ -130,7 +156,7 @@ public:
     auto *start_marker = new StartMarker(slug, 0.F, active_y);
     addChild(start_marker);
 
-    auto *end_marker = new EndMarker<step_count>(slug, 0.F, active_y);
+    auto *end_marker = new EndMarker<N>(slug, 0.F, active_y);
     addChild(end_marker);
 
     auto const on_selection_start_change = [start_marker,
@@ -172,7 +198,7 @@ public:
 
     auto constexpr knob_stepper_distance = hp2mm(1.15F);
 
-    for (auto step = 0; step < step_count; step++) {
+    for (auto step = 0; step < N; step++) {
       auto const x = step_x + step_dx * (float)step;
       addChild(rack::createLightCentered<ProgressLight>(
           mm2px(x, active_y), module, Light::StepProgress + step + step));
@@ -220,8 +246,8 @@ public:
     auto constexpr out_y = bottom - port_radius - 1.F;
     auto constexpr in_y = sequence_controls_top;
 
-    addInput(Jack::input(slug, module, near_right, in_y, Input::In));
-    addInput(Jack::input(slug, module, right, in_y, Input::Aux));
+    addInput(Jack::input(slug, module, near_right, in_y, Input::InA));
+    addInput(Jack::input(slug, module, right, in_y, Input::InB));
 
     auto constexpr polarity_y = (start_y + end_y) / 2.F;
     addParam(Toggle::thumb(2, slug, module, near_right, polarity_y,
@@ -232,15 +258,6 @@ public:
     addInput(Jack::input(slug, module, right, duration_y, Input::DurationCV));
 
     addOutput(Jack::output(slug, module, right, out_y, Output::Out));
-  }
-
-  void fromJson(json_t *root) override {
-    if (json_object_get(root, "data") == nullptr) {
-      auto *data = json_object();
-      json_object_set_new(data, "version", json_integer(0));
-      json_object_set(root, "data", data);
-    }
-    ModuleWidget::fromJson(root);
   }
 }; // namespace dhe
 } // namespace cv_sequencer

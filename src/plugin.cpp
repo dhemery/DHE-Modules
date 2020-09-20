@@ -59,8 +59,9 @@ using dhe::stage::UpstageModule;
 using dhe::stage::UpstagePanel;
 using dhe::swave::Swave;
 using dhe::swave::SwavePanel;
-using CVSequencerModule = dhe::cv_sequencer::Module;
-using CVSequencerPanel = dhe::cv_sequencer::Panel;
+
+template <int N> using CVSequencerModule = dhe::cv_sequencer::Module<N>;
+template <int N> using CVSequencerPanel = dhe::cv_sequencer::Panel<N>;
 using dhe::tapers::Tapers;
 using dhe::tapers::TapersPanel;
 using dhe::xycloid::Xycloid;
@@ -99,8 +100,12 @@ extern "C" void init(rack::plugin::Plugin *p) {
   p->addModel(rack::createModel<Ranger, RangerPanel>("Ranger"));
   p->addModel(rack::createModel<StageModule, StagePanel>("Stage"));
   p->addModel(rack::createModel<Swave, SwavePanel>("Swave"));
-  p->addModel(
-      rack::createModel<CVSequencerModule, CVSequencerPanel>("CVSequencer"));
+  p->addModel(rack::createModel<CVSequencerModule<4>, CVSequencerPanel<4>>(
+      "SequenceFoundry4"));
+  p->addModel(rack::createModel<CVSequencerModule<8>, CVSequencerPanel<8>>(
+      "SequenceFoundry8"));
+  p->addModel(rack::createModel<CVSequencerModule<16>, CVSequencerPanel<16>>(
+      "SequenceFoundry16"));
   p->addModel(rack::createModel<Tapers, TapersPanel>("Tapers"));
   p->addModel(rack::createModel<UpstageModule, UpstagePanel>("Upstage"));
   p->addModel(rack::createModel<Xycloid, XycloidPanel>("Xycloid"));

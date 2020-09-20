@@ -33,9 +33,12 @@ static inline void position_centered(rack::widget::Widget *widget, float xmm,
 
 auto constexpr module_height = 128.5F; // mm
 auto constexpr port_radius = 4.2F;
+auto constexpr port_diameter = port_radius * 2.F;
 auto constexpr button_radius = 3.F;
+auto constexpr button_diameter = button_radius * 2.F;
 auto constexpr light_radius = 1.088F;
 auto constexpr light_diameter = light_radius * 2.F;
 auto constexpr button_port_distance = 7.891F;
+auto constexpr padding = 1.F;
 
 } // namespace dhe

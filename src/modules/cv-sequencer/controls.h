@@ -2,9 +2,8 @@
 
 namespace dhe {
 namespace cv_sequencer {
-auto constexpr step_count = 4;
 
-struct ParamIds {
+template <int N> struct ParamIds {
   enum {
     Run,
     Gate,
@@ -15,33 +14,33 @@ struct ParamIds {
     DurationRange,
     LevelRange,
     StepCurvature,
-    StepDuration = StepCurvature + step_count,
-    EnableStep = StepDuration + step_count,
-    StepEndLevel = EnableStep + step_count,
-    StepInterruptMode = StepEndLevel + step_count,
-    StepTriggerMode = StepInterruptMode + step_count,
-    StepShape = StepTriggerMode + step_count,
-    StepStartLevel = StepShape + step_count,
-    StepCompletionMode = StepStartLevel + step_count,
-    StepStartAnchorSource = StepCompletionMode + step_count,
-    StepEndAnchorSource = StepStartAnchorSource + step_count,
-    StepStartAnchorMode = StepEndAnchorSource + step_count,
-    StepEndAnchorMode = StepStartAnchorMode + step_count,
-    Count = StepEndAnchorMode + step_count,
+    StepDuration = StepCurvature + N,
+    EnableStep = StepDuration + N,
+    StepEndLevel = EnableStep + N,
+    StepInterruptMode = StepEndLevel + N,
+    StepTriggerMode = StepInterruptMode + N,
+    StepShape = StepTriggerMode + N,
+    StepStartLevel = StepShape + N,
+    StepCompletionMode = StepStartLevel + N,
+    StepStartAnchorSource = StepCompletionMode + N,
+    StepEndAnchorSource = StepStartAnchorSource + N,
+    StepStartAnchorMode = StepEndAnchorSource + N,
+    StepEndAnchorMode = StepStartAnchorMode + N,
+    Count = StepEndAnchorMode + N,
   };
 };
 
-struct InputIds {
+template <int N> struct InputIds {
   enum {
-    In,
     Gate,
     Loop,
     Reset,
     Run,
-    EnableStep,
-    Aux = EnableStep + step_count,
     DurationCV,
-    Count,
+    InA,
+    InB,
+    EnableStep,
+    Count = EnableStep + N,
   };
 };
 
@@ -52,10 +51,10 @@ struct OutputIds {
   };
 };
 
-struct LightIds {
+template <int N> struct LightIds {
   enum {
     StepProgress,
-    Count = StepProgress + step_count + step_count,
+    Count = StepProgress + N + N,
   };
 };
 

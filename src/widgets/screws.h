@@ -39,7 +39,7 @@ static inline void install_screws(rack::app::ModuleWidget *panel, int hp) {
 
   screw_positions.pop_back();
 
-  for (auto const screw_position : screw_positions) {
+  for (auto const &screw_position : screw_positions) {
     panel->addChild(rack::createWidgetCentered<NormalScrew>(screw_position));
   }
 }
