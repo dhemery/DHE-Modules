@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   version="1.1"
+   width="10.400mm"
+   height="3.580mm"
+   viewBox="0 0 10.400 3.580"
+   id="svg8">
+  <metadata
+     id="metadata14">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs12" />
+  <g
+     transform="translate(5.2,1.79)"
+     id="g6">
+    <path
+       id="rect2"
+       style="fill:#efedeb;stroke:#331a00;stroke-width:0.25"
+       d="m -4.6999998,-1.79 h 9.3999996 c 0.277,0 0.5,0.223 0.5,0.5 v 2.58 c 0,0.277 -0.223,0.5 -0.5,0.5 h -9.3999996 c -0.277,0 -0.5,-0.223 -0.5,-0.5 v -2.58 c 0,-0.277 0.223,-0.5 0.5,-0.5 z" />
+    <g
+       aria-label="IN B"
+       id="text4"
+       style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:middle;text-anchor:middle;fill:#331a00">
+      <path
+         d="m -2.1195814,0.8565965 h 0.336682 v -1.58145703 h -0.336682 z"
+         style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:middle;text-anchor:middle;fill:#331a00"
+         id="path17" />
+      <path
+         d="m -0.38060109,0.8565965 h 0.32482701 V -0.72486053 H -0.39245609 V 0.29941149 L -1.1250951,-0.72486053 h -0.346166 V 0.8565965 h 0.336682 v -1.06220802 z"
+         style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:middle;text-anchor:middle;fill:#331a00"
+         id="path19" />
+      <path
+         d="M 0.86269215,0.8565965 H 1.7209942 c 0.301117,0 0.459974,-0.18968 0.459974,-0.42678001 0,-0.199164 -0.135147,-0.36276301 -0.303488,-0.38884401 0.149373,-0.030823 0.272665,-0.163599 0.272665,-0.36276301 0,-0.211019 -0.154115,-0.40307 -0.455232,-0.40307 H 0.86269215 Z M 1.1993742,-0.08943252 v -0.34853701 h 0.422038 c 0.113808,0 0.184938,0.075872 0.184938,0.17308301 0,0.101953 -0.07113,0.175454 -0.184938,0.175454 z m 0,0.65913801 v -0.372247 h 0.433893 c 0.132776,0 0.203906,0.085356 0.203906,0.184938 0,0.113808 -0.075872,0.187309 -0.203906,0.187309 z"
+         style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:middle;text-anchor:middle;fill:#331a00"
+         id="path21" />
+    </g>
+  </g>
+</svg>
