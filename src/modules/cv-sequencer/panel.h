@@ -205,7 +205,7 @@ public:
     auto constexpr level_y = global_controls_y(0);
     auto constexpr global_duration_y = global_controls_y(1);
     auto constexpr in_y = global_controls_y(2);
-    auto constexpr state_y = global_controls_y(3);
+//    auto constexpr state_y = global_controls_y(3);
     auto constexpr out_y = global_controls_y(4);
 
     auto constexpr global_controls_left_x =
@@ -217,12 +217,12 @@ public:
         global_controls_center_x + global_step_controls_column_width + padding;
 
     addParam(Toggle::thumb(2, slug, module, global_controls_right_x, level_y,
-                           Param::LevelRange));
+                           Param::GlobalLevelRange));
 
     addInput(Jack::input(slug, module, global_controls_center_x,
-                         global_duration_y, Input::DurationCV));
+                         global_duration_y, Input::GlobalDurationCV));
     addParam(Toggle::thumb(3, slug, module, global_controls_right_x,
-                           global_duration_y, Param::DurationRange));
+                           global_duration_y, Param::GlobalDurationRange));
 
     addInput(
         Jack::input(slug, module, global_controls_left_x, in_y, Input::InA));
@@ -294,7 +294,7 @@ public:
                                start_anchor_mode_y,
                                Param::StepStartAnchorMode + step));
       addParam(Knob::small(slug, module, step_x, start_anchor_level_y,
-                           Param::StepStartLevel + step));
+                           Param::StepStartAnchorLevel + step));
       addParam(Toggle::stepper(slug, "anchor-source", anchor_source_count,
                                module, step_x, start_anchor_source_y,
                                Param::StepStartAnchorSource + step));
@@ -303,7 +303,7 @@ public:
                                end_anchor_mode_y,
                                Param::StepEndAnchorMode + step));
       addParam(Knob::small(slug, module, step_x, end_anchor_level_y,
-                           Param::StepEndLevel + step));
+                           Param::StepEndAnchorLevel + step));
       addParam(Toggle::stepper(slug, "anchor-source", anchor_source_count,
                                module, step_x, end_anchor_source_y,
                                Param::StepEndAnchorSource + step));
@@ -317,7 +317,7 @@ public:
                            Param::StepCurvature + step));
 
       addParam(Button::toggle(slug, module, step_x, enabled_y,
-                              Param::EnableStep + step));
+                              Param::StepEnabled + step));
     }
   }
 
