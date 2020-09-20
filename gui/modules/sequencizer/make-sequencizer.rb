@@ -7,8 +7,8 @@ HUE = 30
 FOREGROUND_HSL = [HUE, 100, 10]
 BACKGROUND_HSL = [HUE, 10, 93]
 
-def make_sequence_foundry(steps)
-  name "SEQUENCE FOUNDRY #{steps}"
+def make_sequencizer(steps)
+  name "SEQUENCIZER #{steps}"
   content_width_hp = mm2hp(content_width(steps))
   module_width_hp = (content_width_hp + 2.0).round
   hp module_width_hp
@@ -28,7 +28,7 @@ end
 TOP = 23
 BOTTOM = 117.0
 MARGIN = 6.0
-STEP_WIDTH = hp2mm(2.5)
+STEP_WIDTH = hp2mm(2.25)
 
 SEQUENCE_CONTROLS_LEFT = 0.0
 SEQUENCE_CONTROLS_WIDTH = PADDING + Port::DIAMETER + PADDING + Button::DIAMETER + PADDING
@@ -77,7 +77,7 @@ def make_sequence_controls(x_offset)
   input_button_port x: x, y: gate_y, label: 'GATE'
   connector left: x, right: selection_length_x, y: selection_y
   small_knob x: x - hp2mm(0.2), y: selection_y, label: 'START'
-  small_knob x: selection_length_x, y: selection_y, label: 'LENGTH'
+  small_knob x: selection_length_x, y: selection_y, label: 'LEN'
   input_button_port x: x, y: loop_y, label: 'LOOP'
   input_button_port x: x, y: reset_y, label: 'RESET'
 end
@@ -110,12 +110,12 @@ def make_global_step_controls(x_offset)
   in_y = global_controls_y(2)
   input_port x: left_x, y: in_y, label: 'IN A'
   input_port x: center_x, y: in_y, label: 'IN B'
-  input_port x: right_x, y: in_y, label: 'TRIG'
+  input_port x: right_x, y: in_y, label: 'IN C'
 
-  trig_y = global_controls_y(3)
-  output_port x: left_x, y: trig_y, label: 'STEP'
-  output_port x: center_x, y: trig_y, label: 'CURVE'
-  output_port x: right_x, y: trig_y, label: 'SUST'
+  state_y = global_controls_y(3)
+  output_port x: left_x, y: state_y, label: 'STEP'
+  output_port x: center_x, y: state_y, label: 'CURVE'
+  output_port x: right_x, y: state_y, label: 'SUST'
 
   out_y = global_controls_y(4)
   output_port x: left_x, y: out_y, label: 'STEP Δ'
@@ -123,7 +123,7 @@ def make_global_step_controls(x_offset)
   output_port x: right_x, y: out_y, label: 'OUT'
 end
 
-STEPPER_WIDTH = STEP_WIDTH * 0.8
+STEPPER_WIDTH = Knob::DIAMETERS[:small]
 # The distance from the stepper baseline to the top of its box
 STEPPER_ASCENT = Label::SIZES[:small] / 2.0 + PADDING - 0.25
 STEPPER_HEIGHT = STEPPER_ASCENT * 2.0
@@ -169,15 +169,15 @@ def make_step_control_labels(x_offset)
   label x: label_x, y: ENABLED_Y, text: 'ON', alignment: :left_of, size: :large
 end
 
-ANCHOR_SOURCES = ["LEVEL", "IN A", "IN B", "OUT"]
-ANCHOR_MODES = %w[SAMPLE TRACK]
+ANCHOR_SOURCES = %w[LEVEL A B C OUT]
+ANCHOR_MODES = %w[SMPL TRACK]
 START_ANCHOR_MODE_SELECTION = 1
-START_ANCHOR_SOURCE_SELECTION = 4
+START_ANCHOR_SOURCE_SELECTION = 5
 END_ANCHOR_MODE_SELECTION = 2
 END_ANCHOR_SOURCE_SELECTION = 1
-COMPLETION_MODES = %w[SUSTAIN NEXT]
+COMPLETION_MODES = %w[SUST NEXT]
 COMPLETION_MODE_SELECTION = 1
-INTERRUPT_MODES = %w[IGNORE NEXT]
+INTERRUPT_MODES = %w[IGNR NEXT]
 INTERRUPT_MODE_SELECTION = 1
 SHAPE_OPTIONS = %w[J S]
 SHAPE_SELECTION = 1
