@@ -19,7 +19,7 @@
 #include <jansson.h>
 
 namespace dhe {
-namespace cv_sequencer {
+namespace sequencizer {
 
 // Skew the progress::brightness ratio so that the "remaining" light stays
 // fully lit for a little while during early progress, and the "completed"
@@ -56,7 +56,7 @@ public:
       config_toggle<2>(
           this, Param::StepInterruptMode + step, "Interrupt",
           {"Ignore triggers while generating", "Advance to next step"});
-      config_toggle<2>(this, Param::StepCompletionMode + step, "At end",
+      config_toggle<2>(this, Param::StepSustainMode + step, "At end",
                        {"Sustain until triggered", "Advance to next step"}, 1);
 
       config_toggle<4>(this, Param::StepStartAnchorSource + step,
@@ -115,10 +115,9 @@ public:
 
   auto aux() const -> float { return voltage_at(inputs[Input::InB]); }
 
-  auto completion_mode(int step) const -> CompletionMode {
-    auto const selection =
-        position_of(params[Param::StepCompletionMode + step]);
-    return static_cast<CompletionMode>(selection);
+  auto completion_mode(int step) const -> SustainMode {
+    auto const selection = position_of(params[Param::StepSustainMode + step]);
+    return static_cast<SustainMode>(selection);
   }
 
   auto curvature(int step) const -> float {
@@ -224,6 +223,6 @@ private:
     lights[remaining_light].setBrightness(remaining_brightness);
   }
 };
-} // namespace cv_sequencer
+} // namespace sequencizer
 
 } // namespace dhe

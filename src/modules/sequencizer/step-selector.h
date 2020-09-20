@@ -1,7 +1,7 @@
 #pragma once
 
 namespace dhe {
-namespace cv_sequencer {
+namespace sequencizer {
 template <typename Module> class StepSelector {
 public:
   StepSelector(Module &module, int step_count)
@@ -53,5 +53,5 @@ private:
   Module &module_;
   int const step_mask_;
 };
-} // namespace cv_sequencer
+} // namespace sequencizer
 } // namespace dhe

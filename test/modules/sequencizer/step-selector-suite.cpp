@@ -3,7 +3,7 @@
 #include <dheunit/test.h>
 
 namespace test {
-namespace cv_sequencer {
+namespace sequencizer {
 using dhe::unit::is_equal_to;
 using dhe::unit::is_less_than;
 using dhe::unit::Suite;
@@ -11,8 +11,7 @@ using dhe::unit::Tester;
 
 class StepSelectorFirstSuite : public Suite {
 public:
-  StepSelectorFirstSuite()
-      : Suite{"dhe::cv_sequencer::StepSelector: first()"} {}
+  StepSelectorFirstSuite() : Suite{"dhe::sequencizer::StepSelector: first()"} {}
   void register_tests(dhe::unit::TestRegistrar add) override {
     add("is selection start if enabled",
         test([](Tester &t, Module &module, StepSelector &selector) {
@@ -79,7 +78,7 @@ public:
 class StepSelectorSuccessorSuite : public Suite {
 public:
   StepSelectorSuccessorSuite()
-      : Suite{"dhe::cv_sequencer::StepSelector: successor(s)"} {}
+      : Suite{"dhe::sequencizer::StepSelector: successor(s)"} {}
   void register_tests(dhe::unit::TestRegistrar add) override {
     add("can be above s",
         test([](Tester &t, Module &module, StepSelector &selector) {
@@ -249,5 +248,5 @@ public:
 __attribute__((unused)) static auto first_suite = StepSelectorFirstSuite{};
 __attribute__((unused)) static auto successor_suite =
     StepSelectorSuccessorSuite{};
-} // namespace cv_sequencer
+} // namespace sequencizer
 } // namespace test

@@ -1,12 +1,12 @@
 #pragma once
 
-#include "modules/cv-sequencer/advancement.h"
+#include "modules/sequencizer/advancement.h"
 #include <dheunit/test.h>
 
 namespace test {
-namespace cv_sequencer {
-using dhe::cv_sequencer::InterruptMode;
-using dhe::cv_sequencer::TriggerMode;
+namespace sequencizer {
+using dhe::sequencizer::InterruptMode;
+using dhe::sequencizer::TriggerMode;
 using dhe::unit::Tester;
 using dhe::unit::TestFunc;
 
@@ -24,7 +24,7 @@ struct Module {
   std::array<TriggerMode, step_count> trigger_mode_{};     // NOLINT
 };
 
-using Interrupter = dhe::cv_sequencer::Interrupter<Module>;
+using Interrupter = dhe::sequencizer::Interrupter<Module>;
 
 template <typename Run> static inline auto test(Run const &run) -> TestFunc {
   return [run](Tester &t) {
@@ -33,5 +33,5 @@ template <typename Run> static inline auto test(Run const &run) -> TestFunc {
     run(t, module, interrupter);
   };
 }
-} // namespace cv_sequencer
+} // namespace sequencizer
 } // namespace test

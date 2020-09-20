@@ -1,15 +1,15 @@
 #pragma once
 
 #include "./status-enums.h"
-#include "modules/cv-sequencer/status.h"
-#include "modules/cv-sequencer/step-controller.h"
+#include "modules/sequencizer/status.h"
+#include "modules/sequencizer/step-controller.h"
 #include <array>
 #include <dheunit/test.h>
 
 namespace test {
-namespace cv_sequencer {
+namespace sequencizer {
 using dhe::Latch;
-using dhe::cv_sequencer::GeneratorStatus;
+using dhe::sequencizer::GeneratorStatus;
 using dhe::unit::Tester;
 using dhe::unit::TestFunc;
 
@@ -44,7 +44,7 @@ struct Sustainer {
 };
 
 using StepController =
-    dhe::cv_sequencer::StepController<Interrupter, Generator, Sustainer>;
+    dhe::sequencizer::StepController<Interrupter, Generator, Sustainer>;
 
 template <typename Run> static inline auto test(Run run) -> TestFunc {
   return [run](Tester &t) {
@@ -55,5 +55,5 @@ template <typename Run> static inline auto test(Run run) -> TestFunc {
     run(t, interrupter, generator, sustainer, controller);
   };
 }
-} // namespace cv_sequencer
+} // namespace sequencizer
 } // namespace test

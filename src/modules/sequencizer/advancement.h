@@ -4,11 +4,11 @@
 #include <array>
 
 namespace dhe {
-namespace cv_sequencer {
+namespace sequencizer {
 
-enum class CompletionMode { Sustain, Advance };
+enum class SustainMode { Sustain, Advance };
 static auto constexpr completion_mode_count =
-    static_cast<int>(CompletionMode::Advance) + 1;
+    static_cast<int>(SustainMode::Advance) + 1;
 
 enum class InterruptMode { Ignore, Advance };
 static auto constexpr interrupt_mode_count =
@@ -66,7 +66,7 @@ public:
 
   auto is_done(int step, Latch const &latch) -> bool {
 
-    return (module_.completion_mode(step) == CompletionMode::Advance) ||
+    return (module_.completion_mode(step) == SustainMode::Advance) ||
            is_triggered(module_.trigger_mode(step), latch);
   }
 
@@ -74,5 +74,5 @@ private:
   Module &module_;
 };
 
-} // namespace cv_sequencer
+} // namespace sequencizer
 } // namespace dhe

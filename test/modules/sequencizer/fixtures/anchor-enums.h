@@ -1,18 +1,18 @@
 #pragma once
 
-#include "modules/cv-sequencer/anchor.h"
+#include "modules/sequencizer/anchor.h"
 #include <array>
 #include <ostream>
 #include <string>
 
 namespace test {
-namespace cv_sequencer {
-using dhe::cv_sequencer::anchor_mode_count;
-using dhe::cv_sequencer::anchor_source_count;
-using dhe::cv_sequencer::anchor_type_count;
-using dhe::cv_sequencer::AnchorMode;
-using dhe::cv_sequencer::AnchorSource;
-using dhe::cv_sequencer::AnchorType;
+namespace sequencizer {
+using dhe::sequencizer::anchor_mode_count;
+using dhe::sequencizer::anchor_source_count;
+using dhe::sequencizer::anchor_type_count;
+using dhe::sequencizer::AnchorMode;
+using dhe::sequencizer::AnchorSource;
+using dhe::sequencizer::AnchorType;
 
 static auto constexpr anchor_types = std::array<AnchorType, anchor_type_count>{
     AnchorType::Start,
@@ -65,24 +65,24 @@ static inline auto name_of(AnchorSource source) -> std::string {
     return "Unknown AnchorSource " + std::to_string(static_cast<int>(source));
   }
 }
-} // namespace cv_sequencer
+} // namespace sequencizer
 } // namespace test
 
 namespace dhe {
-namespace cv_sequencer {
+namespace sequencizer {
 
 static inline auto operator<<(std::ostream &os, AnchorMode mode)
     -> std::ostream & {
-  os << test::cv_sequencer::name_of(mode);
+  os << test::sequencizer::name_of(mode);
   return os;
 }
 
 static inline auto operator<<(std::ostream &os,
-                              dhe::cv_sequencer::AnchorSource source)
+                              dhe::sequencizer::AnchorSource source)
     -> std::ostream & {
-  os << test::cv_sequencer::name_of(source);
+  os << test::sequencizer::name_of(source);
   return os;
 }
 
-} // namespace cv_sequencer
+} // namespace sequencizer
 } // namespace dhe

@@ -4,7 +4,7 @@
 #include "status.h"
 
 namespace dhe {
-namespace cv_sequencer {
+namespace sequencizer {
 using dhe::Range;
 
 template <typename Module, typename Anchor> class Generator {
@@ -46,5 +46,5 @@ private:
   PhaseTimer timer_{};
   int step_{0};
 };
-} // namespace cv_sequencer
+} // namespace sequencizer
 } // namespace dhe

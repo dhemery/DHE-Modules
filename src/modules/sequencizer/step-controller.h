@@ -3,7 +3,7 @@
 #include "components/latch.h"
 
 namespace dhe {
-namespace cv_sequencer {
+namespace sequencizer {
 
 using dhe::Latch;
 
@@ -43,6 +43,6 @@ private:
   Interrupter &interrupter_;
   Generator &generator_;
   Sustainer &sustainer_;
-}; // namespace cv_sequencer
-} // namespace cv_sequencer
+};
+} // namespace sequencizer
 } // namespace dhe

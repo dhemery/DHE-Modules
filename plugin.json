@@ -132,28 +132,28 @@
       ]
     },
     {
-      "slug": "SequenceFoundry4",
-      "name": "Sequence Foundry 4",
+      "slug": "Sequencizer4",
+      "name": "Sequencizer 4",
       "description": "Generates a highly customizable 4 step sequence",
-      "manualUrl": "https://dhemery.github.io/DHE-Modules/modules/sequence-foundry/",
+      "manualUrl": "https://dhemery.github.io/DHE-Modules/modules/sequencizer/",
       "tags": [
         "Sequencer", "Envelope Generator", "LFO"
       ]
     },
     {
-      "slug": "SequenceFoundry8",
-      "name": "Sequence Foundry 8",
+      "slug": "Sequencizer8",
+      "name": "Sequencizer 8",
       "description": "Generates a highly customizable 8 step sequence",
-      "manualUrl": "https://dhemery.github.io/DHE-Modules/modules/sequence-foundry/",
+      "manualUrl": "https://dhemery.github.io/DHE-Modules/modules/sequencizer/",
       "tags": [
         "Sequencer", "Envelope Generator", "LFO"
       ]
     },
     {
-      "slug": "SequenceFoundry16",
-      "name": "Sequence Foundry 16",
+      "slug": "Sequencizer16",
+      "name": "Sequencizer 16",
       "description": "Generates a highly customizable 16 step sequence",
-      "manualUrl": "https://dhemery.github.io/DHE-Modules/modules/sequence-foundry/",
+      "manualUrl": "https://dhemery.github.io/DHE-Modules/modules/sequencizer/",
       "tags": [
         "Sequencer", "Envelope Generator", "LFO"
       ]

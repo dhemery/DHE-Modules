@@ -13,7 +13,7 @@
 
 namespace dhe {
 
-namespace cv_sequencer {
+namespace sequencizer {
 static auto constexpr step_width = hp2mm(2.5F);
 static auto constexpr margin = 6.F;
 static auto constexpr top = 23.F;
@@ -123,7 +123,7 @@ private:
   int selection_start_{};
   int selection_length_{};
   int const step_mask_ = N - 1;
-}; // namespace cv_sequencer
+}; // namespace sequencizer
 
 template <int N> class Panel : public rack::app::ModuleWidget {
   using Param = ParamIds<N>;
@@ -307,7 +307,7 @@ public:
       addParam(Toggle::stepper(slug, "interrupt-mode", 2, module, step_x,
                                interrupt_y, Param::StepInterruptMode + step));
       addParam(Toggle::stepper(slug, "completion-mode", 2, module, step_x,
-                               sustain_y, Param::StepCompletionMode + step));
+                               sustain_y, Param::StepSustainMode + step));
 
       addParam(Toggle::stepper(slug, "anchor-mode", 2, module, step_x,
                                start_anchor_mode_y,
@@ -342,5 +342,5 @@ public:
 
 private:
 }; // namespace dhe
-} // namespace cv_sequencer
+} // namespace sequencizer
 } // namespace dhe

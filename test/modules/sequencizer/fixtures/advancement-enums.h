@@ -1,29 +1,29 @@
 #pragma once
 
-#include "modules/cv-sequencer/advancement.h"
+#include "modules/sequencizer/advancement.h"
 #include <array>
 #include <ostream>
 #include <string>
 
 namespace test {
-namespace cv_sequencer {
-using dhe::cv_sequencer::CompletionMode;
-using dhe::cv_sequencer::InterruptMode;
-using dhe::cv_sequencer::TriggerMode;
+namespace sequencizer {
+using dhe::sequencizer::InterruptMode;
+using dhe::sequencizer::SustainMode;
+using dhe::sequencizer::TriggerMode;
 
-static auto constexpr completion_modes = std::array<CompletionMode, 2>{
-    CompletionMode::Advance,
-    CompletionMode::Sustain,
+static auto constexpr sustain_modes = std::array<SustainMode, 2>{
+    SustainMode::Advance,
+    SustainMode::Sustain,
 };
 
-static inline auto name_of(CompletionMode mode) -> std::string {
+static inline auto name_of(SustainMode mode) -> std::string {
   switch (mode) {
-  case CompletionMode::Advance:
-    return "CompletionMode::Advance";
-  case CompletionMode::Sustain:
-    return "CompletionMode::Sustain";
+  case SustainMode::Advance:
+    return "SustainMode::Advance";
+  case SustainMode::Sustain:
+    return "SustainMode::Sustain";
   default:
-    return std::string{"Unknown CompletionMode "} +
+    return std::string{"Unknown SustainMode "} +
            std::to_string(static_cast<int>(mode));
   }
 }
@@ -46,13 +46,13 @@ static inline auto name_of(InterruptMode mode) -> std::string {
 }
 
 static auto constexpr trigger_modes =
-    std::array<TriggerMode, dhe::cv_sequencer::trigger_mode_count>{
+    std::array<TriggerMode, dhe::sequencizer::trigger_mode_count>{
         TriggerMode::GateRises,   TriggerMode::GateFalls,
         TriggerMode::GateChanges, TriggerMode::GateIsHigh,
         TriggerMode::GateIsLow,
     };
 
-static inline auto name_of(dhe::cv_sequencer::TriggerMode mode) -> std::string {
+static inline auto name_of(dhe::sequencizer::TriggerMode mode) -> std::string {
   switch (mode) {
   case TriggerMode::GateRises:
     return "TriggerMode::GateRises";
@@ -69,28 +69,28 @@ static inline auto name_of(dhe::cv_sequencer::TriggerMode mode) -> std::string {
            std::to_string(static_cast<int>(mode));
   }
 }
-} // namespace cv_sequencer
+} // namespace sequencizer
 } // namespace test
 namespace dhe {
-namespace cv_sequencer {
+namespace sequencizer {
 
-static inline auto operator<<(std::ostream &os, CompletionMode mode)
+static inline auto operator<<(std::ostream &os, SustainMode mode)
     -> std::ostream & {
-  os << test::cv_sequencer::name_of(mode);
+  os << test::sequencizer::name_of(mode);
   return os;
 }
 
 static inline auto operator<<(std::ostream &os, InterruptMode mode)
     -> std::ostream & {
-  os << test::cv_sequencer::name_of(mode);
+  os << test::sequencizer::name_of(mode);
   return os;
 }
 
 static inline auto operator<<(std::ostream &os, TriggerMode mode)
     -> std::ostream & {
-  os << test::cv_sequencer::name_of(mode);
+  os << test::sequencizer::name_of(mode);
   return os;
 }
 
-} // namespace cv_sequencer
+} // namespace sequencizer
 } // namespace dhe

@@ -1,15 +1,15 @@
 #pragma once
 
-#include "modules/cv-sequencer/sequence-controller.h"
-#include "modules/cv-sequencer/status.h"
-#include "modules/cv-sequencer/step-controller.h"
+#include "modules/sequencizer/sequence-controller.h"
+#include "modules/sequencizer/status.h"
+#include "modules/sequencizer/step-controller.h"
 #include <array>
 #include <dheunit/test.h>
 
 namespace test {
-namespace cv_sequencer {
+namespace sequencizer {
 using dhe::Latch;
-using dhe::cv_sequencer::StepStatus;
+using dhe::sequencizer::StepStatus;
 using dhe::unit::Tester;
 using dhe::unit::TestFunc;
 
@@ -73,7 +73,7 @@ struct StepSelector {
 };
 
 using SequenceController =
-    dhe::cv_sequencer::SequenceController<Module, StepSelector, StepController>;
+    dhe::sequencizer::SequenceController<Module, StepSelector, StepController>;
 
 template <typename Prepare, typename Run>
 static inline auto test(Prepare prepare, Run run) -> TestFunc {
@@ -87,5 +87,5 @@ static inline auto test(Prepare prepare, Run run) -> TestFunc {
     run(t, module, step_selector, step_controller, sequence_controller);
   };
 }
-} // namespace cv_sequencer
+} // namespace sequencizer
 } // namespace test

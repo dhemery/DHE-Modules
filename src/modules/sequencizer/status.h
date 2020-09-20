@@ -1,7 +1,7 @@
 #pragma once
 
 namespace dhe {
-namespace cv_sequencer {
+namespace sequencizer {
 enum class GeneratorStatus {
   Generating,
   Completed,
@@ -17,5 +17,5 @@ enum class StepStatus {
 
 auto constexpr step_status_count = static_cast<int>(StepStatus::Completed) + 1;
 
-} // namespace cv_sequencer
+} // namespace sequencizer
 } // namespace dhe

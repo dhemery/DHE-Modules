@@ -3,7 +3,7 @@
 #include <helpers/latches.h>
 
 namespace test {
-namespace cv_sequencer {
+namespace sequencizer {
 using dhe::unit::is_equal_to;
 using dhe::unit::is_false;
 using dhe::unit::is_true;
@@ -39,7 +39,7 @@ static inline void when_active(Module &module, StepSelector &step_selector,
 class SequenceControllerActiveSuite : Suite {
 public:
   SequenceControllerActiveSuite()
-      : Suite{"dhe::cv_sequencer::SequenceController: active"} {}
+      : Suite{"dhe::sequencizer::SequenceController: active"} {}
 
   void register_tests(dhe::unit::TestRegistrar add) override {
     add("with run high: "
@@ -253,5 +253,5 @@ public:
   }
 };
 __attribute__((unused)) static auto _ = SequenceControllerActiveSuite{};
-} // namespace cv_sequencer
+} // namespace sequencizer
 } // namespace test

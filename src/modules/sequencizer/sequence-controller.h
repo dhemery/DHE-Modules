@@ -4,7 +4,7 @@
 #include "status.h"
 
 namespace dhe {
-namespace cv_sequencer {
+namespace sequencizer {
 
 template <typename Module, typename StepSelector, typename StepController>
 class SequenceController {
@@ -85,6 +85,6 @@ private:
   Module &module_;
   StepSelector &step_selector_;
   StepController &step_controller_;
-}; // namespace cv_sequencer
-} // namespace cv_sequencer
+};
+} // namespace sequencizer
 } // namespace dhe

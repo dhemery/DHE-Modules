@@ -4,8 +4,6 @@
 #include "modules/cubic/cubic.h"
 #include "modules/curve-sequencer/curve-sequencer-module.h"
 #include "modules/curve-sequencer/curve-sequencer-panel.h"
-#include "modules/cv-sequencer/module.h"
-#include "modules/cv-sequencer/panel.h"
 #include "modules/func/func-module.h"
 #include "modules/func/func1-panel.h"
 #include "modules/func/func6-panel.h"
@@ -17,6 +15,8 @@
 #include "modules/gator/gator.h"
 #include "modules/ranger/ranger-panel.h"
 #include "modules/ranger/ranger.h"
+#include "modules/sequencizer/module.h"
+#include "modules/sequencizer/panel.h"
 #include "modules/stage/booster-stage-module.h"
 #include "modules/stage/booster-stage-panel.h"
 #include "modules/stage/hostage-module.h"
@@ -60,8 +60,8 @@ using dhe::stage::UpstagePanel;
 using dhe::swave::Swave;
 using dhe::swave::SwavePanel;
 
-template <int N> using CVSequencerModule = dhe::cv_sequencer::Module<N>;
-template <int N> using CVSequencerPanel = dhe::cv_sequencer::Panel<N>;
+template <int N> using SequencizerModule = dhe::sequencizer::Module<N>;
+template <int N> using SequencizerPanel = dhe::sequencizer::Panel<N>;
 using dhe::tapers::Tapers;
 using dhe::tapers::TapersPanel;
 using dhe::xycloid::Xycloid;
@@ -100,12 +100,12 @@ extern "C" void init(rack::plugin::Plugin *p) {
   p->addModel(rack::createModel<Ranger, RangerPanel>("Ranger"));
   p->addModel(rack::createModel<StageModule, StagePanel>("Stage"));
   p->addModel(rack::createModel<Swave, SwavePanel>("Swave"));
-  p->addModel(rack::createModel<CVSequencerModule<4>, CVSequencerPanel<4>>(
-      "SequenceFoundry4"));
-  p->addModel(rack::createModel<CVSequencerModule<8>, CVSequencerPanel<8>>(
-      "SequenceFoundry8"));
-  p->addModel(rack::createModel<CVSequencerModule<16>, CVSequencerPanel<16>>(
-      "SequenceFoundry16"));
+  p->addModel(rack::createModel<SequencizerModule<4>, SequencizerPanel<4>>(
+      "Sequencizer4"));
+  p->addModel(rack::createModel<SequencizerModule<8>, SequencizerPanel<8>>(
+      "Sequencizer8"));
+  p->addModel(rack::createModel<SequencizerModule<16>, SequencizerPanel<16>>(
+      "Sequencizer16"));
   p->addModel(rack::createModel<Tapers, TapersPanel>("Tapers"));
   p->addModel(rack::createModel<UpstageModule, UpstagePanel>("Upstage"));
   p->addModel(rack::createModel<Xycloid, XycloidPanel>("Xycloid"));

@@ -3,7 +3,7 @@
 #include <helpers/latches.h>
 
 namespace test {
-namespace cv_sequencer {
+namespace sequencizer {
 using dhe::unit::is_equal_to;
 using dhe::unit::is_false;
 using dhe::unit::Suite;
@@ -21,7 +21,7 @@ static inline void when_idle(Module &module, StepSelector & /*step_selector*/,
 class SequenceControllerIdleSuite : Suite {
 public:
   SequenceControllerIdleSuite()
-      : Suite{"dhe::cv_sequencer::SequenceController: idle"} {}
+      : Suite{"dhe::sequencizer::SequenceController: idle"} {}
 
   void register_tests(dhe::unit::TestRegistrar add) override {
     add("with run high: with reset high: copies input to output",
@@ -193,5 +193,5 @@ public:
   }
 };
 __attribute__((unused)) static auto _ = SequenceControllerIdleSuite{};
-} // namespace cv_sequencer
+} // namespace sequencizer
 } // namespace test
