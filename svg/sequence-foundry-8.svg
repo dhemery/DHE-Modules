@@ -6,7 +6,7 @@
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns="http://www.w3.org/2000/svg"
    version="1.1"
-   width="555.000"
+   width="540.000"
    height="379.429"
    id="svg416">
   <metadata
@@ -28,9 +28,9 @@
     <path
        id="rect2"
        style="fill:#efedeb;stroke:#331a00;stroke-width:1"
-       d="m 1,0 h 185.96001 c 0.554,0 1,0.446 1,1 v 126.5 c 0,0.554 -0.446,1 -1,1 H 1 c -0.554,0 -1,-0.446 -1,-1 V 1 C 0,0.446 0.446,0 1,0 Z" />
+       d="m 1,0 h 180.88 c 0.554,0 1,0.446 1,1 v 126.5 c 0,0.554 -0.446,1 -1,1 H 1 c -0.554,0 -1,-0.446 -1,-1 V 1 C 0,0.446 0.446,0 1,0 Z" />
     <g
-       transform="translate(93.98,9)"
+       transform="translate(91.44,9)"
        id="g6">
       <g
          aria-label="SEQUENCE FOUNDRY 8"
@@ -103,7 +103,7 @@
       </g>
     </g>
     <g
-       transform="translate(93.98,119.5)"
+       transform="translate(91.44,119.5)"
        id="g10">
       <g
          aria-label="DHE"
@@ -126,9 +126,9 @@
     <path
        id="rect12"
        style="fill:#efedeb;stroke:#331a00;stroke-width:0.35"
-       d="M 6.8249998,23.01 H 22.224999 c 0.554,0 1,0.446 1,1 v 10.98 c 0,0.554 -0.446,1 -1,1 H 6.8249998 c -0.554,0 -1,-0.446 -1,-1 V 24.01 c 0,-0.554 0.446,-1 1,-1 z" />
+       d="m 5.586,23.01 h 15.4 c 0.554,0 1,0.446 1,1 v 10.98 c 0,0.554 -0.446,1 -1,1 h -15.4 c -0.554,0 -1,-0.446 -1,-1 V 24.01 c 0,-0.554 0.446,-1 1,-1 z" />
     <g
-       transform="translate(11.025,25.591)"
+       transform="translate(9.786,25.591)"
        id="g16">
       <g
          aria-label="RUN"
@@ -151,9 +151,9 @@
     <path
        id="rect18"
        style="fill:#efedeb;stroke:#331a00;stroke-width:0.35"
-       d="M 6.8249998,83.766998 H 22.224999 c 0.554,0 1,0.446 1,1 v 10.98 c 0,0.554 -0.446,1 -1,1 H 6.8249998 c -0.554,0 -1,-0.446 -1,-1 v -10.98 c 0,-0.554 0.446,-1 1,-1 z" />
+       d="m 5.586,83.766998 h 15.4 c 0.554,0 1,0.446 1,1 v 10.98 c 0,0.554 -0.446,1 -1,1 h -15.4 c -0.554,0 -1,-0.446 -1,-1 v -10.98 c 0,-0.554 0.446,-1 1,-1 z" />
     <g
-       transform="translate(11.025,86.348)"
+       transform="translate(9.786,86.348)"
        id="g22">
       <g
          aria-label="GATE"
@@ -180,9 +180,9 @@
     <path
        id="line24"
        style="stroke:#331a00;stroke-width:0.35"
-       d="m 11.025,71.294998 h 8.28" />
+       d="M 9.7860003,71.294998 H 18.066" />
     <g
-       transform="translate(10.009,66.095)"
+       transform="translate(8.77,66.095)"
        id="g28">
       <g
          aria-label="START"
@@ -211,7 +211,7 @@
       </g>
     </g>
     <g
-       transform="translate(19.305,66.095)"
+       transform="translate(18.066,66.095)"
        id="g32">
       <g
          aria-label="LENGTH"
@@ -246,9 +246,9 @@
     <path
        id="rect34"
        style="fill:#efedeb;stroke:#331a00;stroke-width:0.35"
-       d="M 6.8249998,43.263 H 22.224999 c 0.554,0 1,0.446 1,1 v 10.98 c 0,0.554 -0.446,1 -1,1 H 6.8249998 c -0.554,0 -1,-0.446 -1,-1 v -10.98 c 0,-0.554 0.446,-1 1,-1 z" />
+       d="m 5.586,43.263 h 15.4 c 0.554,0 1,0.446 1,1 v 10.98 c 0,0.554 -0.446,1 -1,1 h -15.4 c -0.554,0 -1,-0.446 -1,-1 v -10.98 c 0,-0.554 0.446,-1 1,-1 z" />
     <g
-       transform="translate(11.025,45.843)"
+       transform="translate(9.786,45.843)"
        id="g38">
       <g
          aria-label="LOOP"
@@ -275,9 +275,9 @@
     <path
        id="rect40"
        style="fill:#efedeb;stroke:#331a00;stroke-width:0.35"
-       d="M 6.8249998,104.02 H 22.224999 c 0.554,0 1,0.446 1,1 V 116 c 0,0.554 -0.446,1 -1,1 H 6.8249998 c -0.554,0 -1,-0.446 -1,-1 v -10.98 c 0,-0.554 0.446,-1 1,-1 z" />
+       d="m 5.586,104.02 h 15.4 c 0.554,0 1,0.446 1,1 V 116 c 0,0.554 -0.446,1 -1,1 h -15.4 c -0.554,0 -1,-0.446 -1,-1 v -10.98 c 0,-0.554 0.446,-1 1,-1 z" />
     <g
-       transform="translate(11.025,106.6)"
+       transform="translate(9.786,106.6)"
        id="g44">
       <g
          aria-label="RESET"
@@ -306,7 +306,7 @@
       </g>
     </g>
     <g
-       transform="translate(34.425,25.591)"
+       transform="translate(33.186,25.591)"
        id="g48">
       <g
          aria-label="LEVEL"
@@ -335,14 +335,14 @@
       </g>
     </g>
     <g
-       transform="translate(45.825,25.591)"
+       transform="translate(44.586,25.591)"
        id="g52">
       <g
          id="text50"
          style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#331a00" />
     </g>
     <g
-       transform="translate(57.225,34.791)"
+       transform="translate(55.986,34.791)"
        id="g56">
       <g
          aria-label="BI"
@@ -359,7 +359,7 @@
       </g>
     </g>
     <g
-       transform="translate(57.225,26.791)"
+       transform="translate(55.986,26.791)"
        id="g60">
       <g
          aria-label="UNI"
@@ -382,9 +382,9 @@
     <path
        id="line62"
        style="stroke:#331a00;stroke-width:0.35"
-       d="M 34.424999,30.791 H 57.224998" />
+       d="M 33.186001,30.791 H 55.986" />
     <g
-       transform="translate(34.425,45.843)"
+       transform="translate(33.186,45.843)"
        id="g66">
       <g
          aria-label="DUR"
@@ -405,14 +405,14 @@
       </g>
     </g>
     <g
-       transform="translate(45.825,45.843)"
+       transform="translate(44.586,45.843)"
        id="g70">
       <g
          id="text68"
          style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#331a00" />
     </g>
     <g
-       transform="translate(57.225,56.543)"
+       transform="translate(55.986,56.543)"
        id="g74">
       <g
          aria-label="1"
@@ -425,7 +425,7 @@
       </g>
     </g>
     <g
-       transform="translate(57.225,45.543)"
+       transform="translate(55.986,45.543)"
        id="g78">
       <g
          aria-label="100"
@@ -446,7 +446,7 @@
       </g>
     </g>
     <g
-       transform="translate(59.725,51.043)"
+       transform="translate(58.486,51.043)"
        id="g82">
       <g
          aria-label="10"
@@ -465,13 +465,13 @@
     <path
        id="line84"
        style="stroke:#331a00;stroke-width:0.35"
-       d="M 34.424999,51.042999 H 57.224998" />
+       d="M 33.186001,51.042999 H 55.986" />
     <path
        id="rect86"
        style="fill:#efedeb;stroke:#331a00;stroke-width:0.35"
-       d="m 30.225,63.514999 h 8.4 c 0.554,0 1,0.446 1,1 v 10.98 c 0,0.554 -0.446,1 -1,1 h -8.4 c -0.554,0 -1,-0.446 -1,-1 v -10.98 c 0,-0.554 0.446,-1 1,-1 z" />
+       d="m 28.986,63.514999 h 8.4 c 0.554,0 1,0.446 1,1 v 10.98 c 0,0.554 -0.446,1 -1,1 h -8.4 c -0.554,0 -1,-0.446 -1,-1 v -10.98 c 0,-0.554 0.446,-1 1,-1 z" />
     <g
-       transform="translate(34.425,66.095)"
+       transform="translate(33.186,66.095)"
        id="g90">
       <g
          aria-label="IN A"
@@ -494,9 +494,9 @@
     <path
        id="rect92"
        style="fill:#efedeb;stroke:#331a00;stroke-width:0.35"
-       d="m 41.625,63.514999 h 8.4 c 0.554,0 1,0.446 1,1 v 10.98 c 0,0.554 -0.446,1 -1,1 h -8.4 c -0.554,0 -1,-0.446 -1,-1 v -10.98 c 0,-0.554 0.446,-1 1,-1 z" />
+       d="m 40.386002,63.514999 h 8.399999 c 0.554,0 1,0.446 1,1 v 10.98 c 0,0.554 -0.446,1 -1,1 h -8.399999 c -0.554,0 -1,-0.446 -1,-1 v -10.98 c 0,-0.554 0.446,-1 1,-1 z" />
     <g
-       transform="translate(45.825,66.095)"
+       transform="translate(44.586,66.095)"
        id="g96">
       <g
          aria-label="IN B"
@@ -519,9 +519,9 @@
     <path
        id="rect98"
        style="fill:#efedeb;stroke:#331a00;stroke-width:0.35"
-       d="m 53.025002,63.514999 h 8.399999 c 0.554,0 1,0.446 1,1 v 10.98 c 0,0.554 -0.446,1 -1,1 h -8.399999 c -0.554,0 -1,-0.446 -1,-1 v -10.98 c 0,-0.554 0.446,-1 1,-1 z" />
+       d="m 51.785999,63.514999 h 8.4 c 0.554,0 1,0.446 1,1 v 10.98 c 0,0.554 -0.446,1 -1,1 h -8.4 c -0.554,0 -1,-0.446 -1,-1 v -10.98 c 0,-0.554 0.446,-1 1,-1 z" />
     <g
-       transform="translate(57.225,66.095)"
+       transform="translate(55.986,66.095)"
        id="g102">
       <g
          aria-label="TRIG"
@@ -548,9 +548,9 @@
     <path
        id="rect104"
        style="fill:#331a00;stroke:#331a00;stroke-width:0.35"
-       d="m 30.225,83.766998 h 8.4 c 0.554,0 1,0.446 1,1 v 10.98 c 0,0.554 -0.446,1 -1,1 h -8.4 c -0.554,0 -1,-0.446 -1,-1 v -10.98 c 0,-0.554 0.446,-1 1,-1 z" />
+       d="m 28.986,83.766998 h 8.4 c 0.554,0 1,0.446 1,1 v 10.98 c 0,0.554 -0.446,1 -1,1 h -8.4 c -0.554,0 -1,-0.446 -1,-1 v -10.98 c 0,-0.554 0.446,-1 1,-1 z" />
     <g
-       transform="translate(34.425,86.348)"
+       transform="translate(33.186,86.348)"
        id="g108">
       <g
          aria-label="STEP"
@@ -577,9 +577,9 @@
     <path
        id="rect110"
        style="fill:#331a00;stroke:#331a00;stroke-width:0.35"
-       d="m 41.625,83.766998 h 8.4 c 0.554,0 1,0.446 1,1 v 10.98 c 0,0.554 -0.446,1 -1,1 h -8.4 c -0.554,0 -1,-0.446 -1,-1 v -10.98 c 0,-0.554 0.446,-1 1,-1 z" />
+       d="m 40.386002,83.766998 h 8.399999 c 0.554,0 1,0.446 1,1 v 10.98 c 0,0.554 -0.446,1 -1,1 h -8.399999 c -0.554,0 -1,-0.446 -1,-1 v -10.98 c 0,-0.554 0.446,-1 1,-1 z" />
     <g
-       transform="translate(45.825,86.348)"
+       transform="translate(44.586,86.348)"
        id="g114">
       <g
          aria-label="CURVE"
@@ -610,9 +610,9 @@
     <path
        id="rect116"
        style="fill:#331a00;stroke:#331a00;stroke-width:0.35"
-       d="m 53.025002,83.766998 h 8.399999 c 0.554,0 1,0.446 1,1 v 10.98 c 0,0.554 -0.446,1 -1,1 h -8.399999 c -0.554,0 -1,-0.446 -1,-1 v -10.98 c 0,-0.554 0.446,-1 1,-1 z" />
+       d="m 51.785999,83.766998 h 8.4 c 0.554,0 1,0.446 1,1 v 10.98 c 0,0.554 -0.446,1 -1,1 h -8.4 c -0.554,0 -1,-0.446 -1,-1 v -10.98 c 0,-0.554 0.446,-1 1,-1 z" />
     <g
-       transform="translate(57.225,86.348)"
+       transform="translate(55.986,86.348)"
        id="g120">
       <g
          aria-label="SUST"
@@ -639,9 +639,9 @@
     <path
        id="rect122"
        style="fill:#331a00;stroke:#331a00;stroke-width:0.35"
-       d="m 30.225,104.02 h 8.4 c 0.554,0 1,0.446 1,1 V 116 c 0,0.554 -0.446,1 -1,1 h -8.4 c -0.554,0 -1,-0.446 -1,-1 v -10.98 c 0,-0.554 0.446,-1 1,-1 z" />
+       d="m 28.986,104.02 h 8.4 c 0.554,0 1,0.446 1,1 V 116 c 0,0.554 -0.446,1 -1,1 h -8.4 c -0.554,0 -1,-0.446 -1,-1 v -10.98 c 0,-0.554 0.446,-1 1,-1 z" />
     <g
-       transform="translate(34.425,106.6)"
+       transform="translate(33.186,106.6)"
        id="g126">
       <g
          aria-label="STEP Δ"
@@ -672,9 +672,9 @@
     <path
        id="rect128"
        style="fill:#331a00;stroke:#331a00;stroke-width:0.35"
-       d="m 41.625,104.02 h 8.4 c 0.554,0 1,0.446 1,1 V 116 c 0,0.554 -0.446,1 -1,1 h -8.4 c -0.554,0 -1,-0.446 -1,-1 v -10.98 c 0,-0.554 0.446,-1 1,-1 z" />
+       d="m 40.386002,104.02 h 8.399999 c 0.554,0 1,0.446 1,1 V 116 c 0,0.554 -0.446,1 -1,1 h -8.399999 c -0.554,0 -1,-0.446 -1,-1 v -10.98 c 0,-0.554 0.446,-1 1,-1 z" />
     <g
-       transform="translate(45.825,106.6)"
+       transform="translate(44.586,106.6)"
        id="g132">
       <g
          aria-label="SEQ Δ"
@@ -701,9 +701,9 @@
     <path
        id="rect134"
        style="fill:#331a00;stroke:#331a00;stroke-width:0.35"
-       d="m 53.025002,104.02 h 8.399999 c 0.554,0 1,0.446 1,1 V 116 c 0,0.554 -0.446,1 -1,1 h -8.399999 c -0.554,0 -1,-0.446 -1,-1 v -10.98 c 0,-0.554 0.446,-1 1,-1 z" />
+       d="m 51.785999,104.02 h 8.4 c 0.554,0 1,0.446 1,1 V 116 c 0,0.554 -0.446,1 -1,1 h -8.4 c -0.554,0 -1,-0.446 -1,-1 v -10.98 c 0,-0.554 0.446,-1 1,-1 z" />
     <g
-       transform="translate(57.225,106.6)"
+       transform="translate(55.986,106.6)"
        id="g138">
       <g
          aria-label="OUT"
@@ -724,7 +724,7 @@
       </g>
     </g>
     <g
-       transform="translate(77.135,24.935)"
+       transform="translate(75.694,24.935)"
        id="g142">
       <g
          aria-label="TRIG"
@@ -749,7 +749,7 @@
       </g>
     </g>
     <g
-       transform="translate(77.135,29.306)"
+       transform="translate(75.694,29.306)"
        id="g146">
       <g
          aria-label="INT"
@@ -770,7 +770,7 @@
       </g>
     </g>
     <g
-       transform="translate(77.135,33.677)"
+       transform="translate(75.694,33.677)"
        id="g150">
       <g
          aria-label="SUST"
@@ -795,7 +795,7 @@
       </g>
     </g>
     <g
-       transform="translate(77.135,48.183)"
+       transform="translate(75.694,48.183)"
        id="g154">
       <g
          aria-label="START"
@@ -824,7 +824,7 @@
       </g>
     </g>
     <g
-       transform="translate(77.135,69.324)"
+       transform="translate(75.694,69.324)"
        id="g158">
       <g
          aria-label="END"
@@ -845,7 +845,7 @@
       </g>
     </g>
     <g
-       transform="translate(77.135,86.095)"
+       transform="translate(75.694,86.095)"
        id="g162">
       <g
          aria-label="DUR"
@@ -866,7 +866,7 @@
       </g>
     </g>
     <g
-       transform="translate(77.135,98.278)"
+       transform="translate(75.694,98.278)"
        id="g166">
       <g
          aria-label="SHAPE"
@@ -895,7 +895,7 @@
       </g>
     </g>
     <g
-       transform="translate(77.135,114)"
+       transform="translate(75.694,114)"
        id="g170">
       <g
          aria-label="ON"
@@ -914,13 +914,13 @@
     <path
        id="line172"
        style="stroke:#331a00;stroke-width:0.35"
-       d="m 78.135002,23 v 94" />
+       d="m 76.694,23 v 94" />
     <path
        id="line174"
        style="stroke:#331a00;stroke-width:0.35"
-       d="m 91.135002,23 v 94" />
+       d="m 89.393997,23 v 94" />
     <g
-       transform="translate(84.635,18.648)"
+       transform="translate(83.044,18.648)"
        id="g178">
       <path
          id="circle176"
@@ -928,7 +928,7 @@
          d="M 1.0880001,0 A 1.0880001,1.0880001 0 0 1 0,1.0880001 1.0880001,1.0880001 0 0 1 -1.0880001,0 1.0880001,1.0880001 0 0 1 0,-1.0880001 1.0880001,1.0880001 0 0 1 1.0880001,0 Z" />
     </g>
     <g
-       transform="translate(84.635,15.384)"
+       transform="translate(83.044,15.384)"
        id="g182">
       <g
          aria-label="1"
@@ -941,35 +941,35 @@
       </g>
     </g>
     <g
-       transform="translate(84.635,42.983)"
+       transform="translate(83.044,42.983)"
        id="g186">
       <g
          id="text184"
          style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#331a00" />
     </g>
     <g
-       transform="translate(84.635,64.124)"
+       transform="translate(83.044,64.124)"
        id="g190">
       <g
          id="text188"
          style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#331a00" />
     </g>
     <g
-       transform="translate(84.635,97.665)"
+       transform="translate(83.044,97.665)"
        id="g194">
       <g
          id="text192"
          style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#331a00" />
     </g>
     <g
-       transform="translate(84.635,80.895)"
+       transform="translate(83.044,80.895)"
        id="g198">
       <g
          id="text196"
          style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#331a00" />
     </g>
     <g
-       transform="translate(84.635,110)"
+       transform="translate(83.044,110)"
        id="g202">
       <g
          id="text200"
@@ -978,9 +978,9 @@
     <path
        id="line204"
        style="stroke:#331a00;stroke-width:0.35"
-       d="m 104.135,23 v 94" />
+       d="m 102.094,23 v 94" />
     <g
-       transform="translate(97.635,18.648)"
+       transform="translate(95.744,18.648)"
        id="g208">
       <path
          id="circle206"
@@ -988,7 +988,7 @@
          d="M 1.0880001,0 A 1.0880001,1.0880001 0 0 1 0,1.0880001 1.0880001,1.0880001 0 0 1 -1.0880001,0 1.0880001,1.0880001 0 0 1 0,-1.0880001 1.0880001,1.0880001 0 0 1 1.0880001,0 Z" />
     </g>
     <g
-       transform="translate(97.635,15.384)"
+       transform="translate(95.744,15.384)"
        id="g212">
       <g
          aria-label="2"
@@ -1001,35 +1001,35 @@
       </g>
     </g>
     <g
-       transform="translate(97.635,42.983)"
+       transform="translate(95.744,42.983)"
        id="g216">
       <g
          id="text214"
          style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#331a00" />
     </g>
     <g
-       transform="translate(97.635,64.124)"
+       transform="translate(95.744,64.124)"
        id="g220">
       <g
          id="text218"
          style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#331a00" />
     </g>
     <g
-       transform="translate(97.635,97.665)"
+       transform="translate(95.744,97.665)"
        id="g224">
       <g
          id="text222"
          style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#331a00" />
     </g>
     <g
-       transform="translate(97.635,80.895)"
+       transform="translate(95.744,80.895)"
        id="g228">
       <g
          id="text226"
          style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#331a00" />
     </g>
     <g
-       transform="translate(97.635,110)"
+       transform="translate(95.744,110)"
        id="g232">
       <g
          id="text230"
@@ -1038,9 +1038,9 @@
     <path
        id="line234"
        style="stroke:#331a00;stroke-width:0.35"
-       d="m 117.135,23 v 94" />
+       d="m 114.794,23 v 94" />
     <g
-       transform="translate(110.635,18.648)"
+       transform="translate(108.444,18.648)"
        id="g238">
       <path
          id="circle236"
@@ -1048,7 +1048,7 @@
          d="M 1.0880001,0 A 1.0880001,1.0880001 0 0 1 0,1.0880001 1.0880001,1.0880001 0 0 1 -1.0880001,0 1.0880001,1.0880001 0 0 1 0,-1.0880001 1.0880001,1.0880001 0 0 1 1.0880001,0 Z" />
     </g>
     <g
-       transform="translate(110.635,15.384)"
+       transform="translate(108.444,15.384)"
        id="g242">
       <g
          aria-label="3"
@@ -1061,35 +1061,35 @@
       </g>
     </g>
     <g
-       transform="translate(110.635,42.983)"
+       transform="translate(108.444,42.983)"
        id="g246">
       <g
          id="text244"
          style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#331a00" />
     </g>
     <g
-       transform="translate(110.635,64.124)"
+       transform="translate(108.444,64.124)"
        id="g250">
       <g
          id="text248"
          style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#331a00" />
     </g>
     <g
-       transform="translate(110.635,97.665)"
+       transform="translate(108.444,97.665)"
        id="g254">
       <g
          id="text252"
          style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#331a00" />
     </g>
     <g
-       transform="translate(110.635,80.895)"
+       transform="translate(108.444,80.895)"
        id="g258">
       <g
          id="text256"
          style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#331a00" />
     </g>
     <g
-       transform="translate(110.635,110)"
+       transform="translate(108.444,110)"
        id="g262">
       <g
          id="text260"
@@ -1098,9 +1098,9 @@
     <path
        id="line264"
        style="stroke:#331a00;stroke-width:0.35"
-       d="m 130.13499,23 v 94" />
+       d="m 127.494,23 v 94" />
     <g
-       transform="translate(123.635,18.648)"
+       transform="translate(121.144,18.648)"
        id="g268">
       <path
          id="circle266"
@@ -1108,7 +1108,7 @@
          d="M 1.0880001,0 A 1.0880001,1.0880001 0 0 1 0,1.0880001 1.0880001,1.0880001 0 0 1 -1.0880001,0 1.0880001,1.0880001 0 0 1 0,-1.0880001 1.0880001,1.0880001 0 0 1 1.0880001,0 Z" />
     </g>
     <g
-       transform="translate(123.635,15.384)"
+       transform="translate(121.144,15.384)"
        id="g272">
       <g
          aria-label="4"
@@ -1121,35 +1121,35 @@
       </g>
     </g>
     <g
-       transform="translate(123.635,42.983)"
+       transform="translate(121.144,42.983)"
        id="g276">
       <g
          id="text274"
          style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#331a00" />
     </g>
     <g
-       transform="translate(123.635,64.124)"
+       transform="translate(121.144,64.124)"
        id="g280">
       <g
          id="text278"
          style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#331a00" />
     </g>
     <g
-       transform="translate(123.635,97.665)"
+       transform="translate(121.144,97.665)"
        id="g284">
       <g
          id="text282"
          style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#331a00" />
     </g>
     <g
-       transform="translate(123.635,80.895)"
+       transform="translate(121.144,80.895)"
        id="g288">
       <g
          id="text286"
          style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#331a00" />
     </g>
     <g
-       transform="translate(123.635,110)"
+       transform="translate(121.144,110)"
        id="g292">
       <g
          id="text290"
@@ -1158,9 +1158,9 @@
     <path
        id="line294"
        style="stroke:#331a00;stroke-width:0.35"
-       d="m 143.13499,23 v 94" />
+       d="m 140.194,23 v 94" />
     <g
-       transform="translate(136.635,18.648)"
+       transform="translate(133.844,18.648)"
        id="g298">
       <path
          id="circle296"
@@ -1168,7 +1168,7 @@
          d="M 1.0880001,0 A 1.0880001,1.0880001 0 0 1 0,1.0880001 1.0880001,1.0880001 0 0 1 -1.0880001,0 1.0880001,1.0880001 0 0 1 0,-1.0880001 1.0880001,1.0880001 0 0 1 1.0880001,0 Z" />
     </g>
     <g
-       transform="translate(136.635,15.384)"
+       transform="translate(133.844,15.384)"
        id="g302">
       <g
          aria-label="5"
@@ -1181,35 +1181,35 @@
       </g>
     </g>
     <g
-       transform="translate(136.635,42.983)"
+       transform="translate(133.844,42.983)"
        id="g306">
       <g
          id="text304"
          style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#331a00" />
     </g>
     <g
-       transform="translate(136.635,64.124)"
+       transform="translate(133.844,64.124)"
        id="g310">
       <g
          id="text308"
          style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#331a00" />
     </g>
     <g
-       transform="translate(136.635,97.665)"
+       transform="translate(133.844,97.665)"
        id="g314">
       <g
          id="text312"
          style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#331a00" />
     </g>
     <g
-       transform="translate(136.635,80.895)"
+       transform="translate(133.844,80.895)"
        id="g318">
       <g
          id="text316"
          style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#331a00" />
     </g>
     <g
-       transform="translate(136.635,110)"
+       transform="translate(133.844,110)"
        id="g322">
       <g
          id="text320"
@@ -1218,9 +1218,9 @@
     <path
        id="line324"
        style="stroke:#331a00;stroke-width:0.35"
-       d="m 156.13499,23 v 94" />
+       d="m 152.894,23 v 94" />
     <g
-       transform="translate(149.635,18.648)"
+       transform="translate(146.544,18.648)"
        id="g328">
       <path
          id="circle326"
@@ -1228,7 +1228,7 @@
          d="M 1.0880001,0 A 1.0880001,1.0880001 0 0 1 0,1.0880001 1.0880001,1.0880001 0 0 1 -1.0880001,0 1.0880001,1.0880001 0 0 1 0,-1.0880001 1.0880001,1.0880001 0 0 1 1.0880001,0 Z" />
     </g>
     <g
-       transform="translate(149.635,15.384)"
+       transform="translate(146.544,15.384)"
        id="g332">
       <g
          aria-label="6"
@@ -1241,35 +1241,35 @@
       </g>
     </g>
     <g
-       transform="translate(149.635,42.983)"
+       transform="translate(146.544,42.983)"
        id="g336">
       <g
          id="text334"
          style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#331a00" />
     </g>
     <g
-       transform="translate(149.635,64.124)"
+       transform="translate(146.544,64.124)"
        id="g340">
       <g
          id="text338"
          style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#331a00" />
     </g>
     <g
-       transform="translate(149.635,97.665)"
+       transform="translate(146.544,97.665)"
        id="g344">
       <g
          id="text342"
          style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#331a00" />
     </g>
     <g
-       transform="translate(149.635,80.895)"
+       transform="translate(146.544,80.895)"
        id="g348">
       <g
          id="text346"
          style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#331a00" />
     </g>
     <g
-       transform="translate(149.635,110)"
+       transform="translate(146.544,110)"
        id="g352">
       <g
          id="text350"
@@ -1278,9 +1278,9 @@
     <path
        id="line354"
        style="stroke:#331a00;stroke-width:0.35"
-       d="m 169.13499,23 v 94" />
+       d="m 165.59399,23 v 94" />
     <g
-       transform="translate(162.635,18.648)"
+       transform="translate(159.244,18.648)"
        id="g358">
       <path
          id="circle356"
@@ -1288,7 +1288,7 @@
          d="M 1.0880001,0 A 1.0880001,1.0880001 0 0 1 0,1.0880001 1.0880001,1.0880001 0 0 1 -1.0880001,0 1.0880001,1.0880001 0 0 1 0,-1.0880001 1.0880001,1.0880001 0 0 1 1.0880001,0 Z" />
     </g>
     <g
-       transform="translate(162.635,15.384)"
+       transform="translate(159.244,15.384)"
        id="g362">
       <g
          aria-label="7"
@@ -1301,35 +1301,35 @@
       </g>
     </g>
     <g
-       transform="translate(162.635,42.983)"
+       transform="translate(159.244,42.983)"
        id="g366">
       <g
          id="text364"
          style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#331a00" />
     </g>
     <g
-       transform="translate(162.635,64.124)"
+       transform="translate(159.244,64.124)"
        id="g370">
       <g
          id="text368"
          style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#331a00" />
     </g>
     <g
-       transform="translate(162.635,97.665)"
+       transform="translate(159.244,97.665)"
        id="g374">
       <g
          id="text372"
          style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#331a00" />
     </g>
     <g
-       transform="translate(162.635,80.895)"
+       transform="translate(159.244,80.895)"
        id="g378">
       <g
          id="text376"
          style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#331a00" />
     </g>
     <g
-       transform="translate(162.635,110)"
+       transform="translate(159.244,110)"
        id="g382">
       <g
          id="text380"
@@ -1338,9 +1338,9 @@
     <path
        id="line384"
        style="stroke:#331a00;stroke-width:0.35"
-       d="m 182.13499,23 v 94" />
+       d="m 178.29401,23 v 94" />
     <g
-       transform="translate(175.635,18.648)"
+       transform="translate(171.944,18.648)"
        id="g388">
       <path
          id="circle386"
@@ -1348,7 +1348,7 @@
          d="M 1.0880001,0 A 1.0880001,1.0880001 0 0 1 0,1.0880001 1.0880001,1.0880001 0 0 1 -1.0880001,0 1.0880001,1.0880001 0 0 1 0,-1.0880001 1.0880001,1.0880001 0 0 1 1.0880001,0 Z" />
     </g>
     <g
-       transform="translate(175.635,15.384)"
+       transform="translate(171.944,15.384)"
        id="g392">
       <g
          aria-label="8"
@@ -1361,35 +1361,35 @@
       </g>
     </g>
     <g
-       transform="translate(175.635,42.983)"
+       transform="translate(171.944,42.983)"
        id="g396">
       <g
          id="text394"
          style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#331a00" />
     </g>
     <g
-       transform="translate(175.635,64.124)"
+       transform="translate(171.944,64.124)"
        id="g400">
       <g
          id="text398"
          style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#331a00" />
     </g>
     <g
-       transform="translate(175.635,97.665)"
+       transform="translate(171.944,97.665)"
        id="g404">
       <g
          id="text402"
          style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#331a00" />
     </g>
     <g
-       transform="translate(175.635,80.895)"
+       transform="translate(171.944,80.895)"
        id="g408">
       <g
          id="text406"
          style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#331a00" />
     </g>
     <g
-       transform="translate(175.635,110)"
+       transform="translate(171.944,110)"
        id="g412">
       <g
          id="text410"

@@ -6,9 +6,9 @@
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns="http://www.w3.org/2000/svg"
    version="1.1"
-   width="10.400mm"
+   width="10.160mm"
    height="3.580mm"
-   viewBox="0 0 10.400 3.580"
+   viewBox="0 0 10.160 3.580"
    id="svg8">
   <metadata
      id="metadata14">
@@ -24,12 +24,12 @@
   <defs
      id="defs12" />
   <g
-     transform="translate(5.2,1.79)"
+     transform="translate(5.08,1.79)"
      id="g6">
     <path
        id="rect2"
        style="fill:#efedeb;stroke:#331a00;stroke-width:0.25"
-       d="m -4.6999998,-1.79 h 9.3999996 c 0.277,0 0.5,0.223 0.5,0.5 v 2.58 c 0,0.277 -0.223,0.5 -0.5,0.5 h -9.3999996 c -0.277,0 -0.5,-0.223 -0.5,-0.5 v -2.58 c 0,-0.277 0.223,-0.5 0.5,-0.5 z" />
+       d="m -4.5799999,-1.79 h 9.1599998 c 0.277,0 0.5,0.223 0.5,0.5 v 2.58 c 0,0.277 -0.223,0.5 -0.5,0.5 h -9.1599998 c -0.277,0 -0.5,-0.223 -0.5,-0.5 v -2.58 c 0,-0.277 0.223,-0.5 0.5,-0.5 z" />
     <g
        aria-label="HIGH"
        id="text4"

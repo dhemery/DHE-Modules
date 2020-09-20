@@ -63,7 +63,7 @@ namespace curve_sequencer_controls {
         inputs[Controls::LoopInput].setVoltage(0.F);
 
         CHECK_FALSE(controls.isLooping());
-      }
+      }r
     }
 
     SUBCASE("isReset()") {

@@ -14,8 +14,49 @@
 namespace dhe {
 
 namespace cv_sequencer {
-auto constexpr step_x = hp2mm(8.5F);
-auto constexpr step_dx = hp2mm(2.25F);
+static auto constexpr step_width = hp2mm(2.5F);
+static auto constexpr margin = 6.F;
+static auto constexpr top = 23.F;
+static auto constexpr bottom = 117.F;
+static auto constexpr x_offset = 4.5847F;
+static auto constexpr label_small_size = 7.0F / px_per_mm;
+static auto constexpr small_knob_diameter = 8.4F;
+
+static auto constexpr sequence_controls_left = 0.F;
+static auto constexpr sequence_controls_width =
+    padding + port_diameter + padding + button_diameter + padding;
+static auto constexpr sequence_controls_right =
+    sequence_controls_left + sequence_controls_width;
+
+static auto constexpr global_step_controls_column_width =
+    padding + port_diameter + padding;
+static auto constexpr global_step_controls_left =
+    sequence_controls_right + margin;
+static auto constexpr global_step_controls_width =
+    global_step_controls_column_width + padding +
+    global_step_controls_column_width + padding +
+    global_step_controls_column_width;
+static auto constexpr global_step_controls_right =
+    global_step_controls_left + global_step_controls_width;
+
+static auto constexpr labels_left = global_step_controls_right + margin;
+static auto constexpr labels_width = 0.67F * step_width;
+static auto constexpr labels_right = labels_left + labels_width;
+
+static auto constexpr step_block_left = labels_right + padding;
+static auto constexpr port_box_ascent =
+    padding + label_small_size + port_radius + 0.22F;
+static auto constexpr port_box_descent = padding + port_radius;
+static auto constexpr global_controls_top_y = top + port_box_ascent;
+static auto constexpr global_controls_bottom_y = bottom - port_box_descent;
+static auto constexpr global_controls_dy =
+    (global_controls_bottom_y - global_controls_top_y) / 4.F;
+
+static auto constexpr step_block_x = step_block_left + x_offset;
+
+static inline auto constexpr global_controls_y(int row) -> float {
+  return global_controls_top_y + static_cast<float>(row) * global_controls_dy;
+}
 
 using ProgressLight =
     rack::componentlibrary::SmallLight<rack::componentlibrary::GreenRedLight>;
@@ -47,8 +88,8 @@ public:
   }
 
   void set_selection_start(int step) {
-    auto constexpr base_x = step_x - 2.F * light_diameter;
-    auto const x = base_x + step_dx * static_cast<float>(step);
+    auto const x = step_block_x + step_width * static_cast<float>(step) +
+                   step_width / 2.F - light_diameter * 2.F;
     this->box.pos.x = mm2px(x);
   }
 };
@@ -73,7 +114,9 @@ private:
   void move() {
     auto const selection_end =
         (selection_start_ + selection_length_ - 1) & step_mask_;
-    auto const x = step_x + step_dx * static_cast<float>(selection_end);
+    auto const x = step_block_x +
+                   step_width * static_cast<float>(selection_end) +
+                   step_width / 2.F;
     this->box.pos.x = mm2px(x);
   }
 
@@ -91,72 +134,37 @@ template <int N> class Panel : public rack::app::ModuleWidget {
 public:
   Panel(rack::engine::Module *module) {
     auto const slug = std::string{"sequence-foundry-"} + std::to_string(N);
-    auto constexpr step_width = 13.F;
-    auto constexpr margin = 6.F;
-    auto constexpr sequence_controls_left = 0.F;
-    auto constexpr sequence_controls_width =
-        padding + port_diameter + button_diameter + padding;
-    auto constexpr sequence_controls_right =
-        sequence_controls_left + sequence_controls_width;
 
-    auto constexpr global_step_controls_column_width =
-        padding + port_diameter + padding;
-    auto constexpr global_step_controls_left = sequence_controls_right + margin;
-    auto constexpr global_step_controls_width =
-        global_step_controls_column_width + padding +
-        global_step_controls_column_width + padding +
-        global_step_controls_column_width;
-    auto constexpr global_step_controls_right =
-        global_step_controls_left + global_step_controls_width;
-
-    auto constexpr labels_left = global_step_controls_right + margin;
-    auto constexpr labels_width = 0.67F * step_width;
-    auto constexpr labels_right = labels_left + labels_width;
-
-    auto constexpr step_block_left = labels_right + padding;
-
-    auto constexpr content_width =
-        step_block_left + static_cast<float>(N) * step_width;
+    auto constexpr content_width = 14.195 + static_cast<float>(N) * step_width;
 
     auto constexpr content_width_hp = mm2hp(content_width);
-    auto const module_width_hp = std::round(content_width_hp + 2.F);
-
-    auto const hp = static_cast<int>(module_width_hp);
+    auto constexpr hp = static_cast<int>(content_width_hp + 2.F);
 
     setModule(module);
     setPanel(background_svg(slug));
     install_screws(this, hp);
 
-    auto constexpr top = 23.F;
-    auto constexpr bottom = 117.F;
-    auto constexpr left = margin;
+    auto constexpr sequence_controls_x =
+        sequence_controls_left + port_radius + padding + x_offset;
 
-    auto constexpr sequence_controls_top = top + hp2mm(2.78);
-    auto constexpr sequence_controls_bottom = bottom - port_radius - 1.F;
-    auto constexpr sequence_controls_dy =
-        (sequence_controls_bottom - sequence_controls_top) / 4.F;
-
-    auto constexpr run_y = sequence_controls_top + 0.F * sequence_controls_dy;
-    auto constexpr loop_y = sequence_controls_top + 1.F * sequence_controls_dy;
-    auto constexpr selection_y =
-        sequence_controls_top + 2.F * sequence_controls_dy;
-    auto constexpr gate_y = sequence_controls_top + 3.F * sequence_controls_dy;
-    auto constexpr reset_y = sequence_controls_top + 4.F * sequence_controls_dy;
-
-    addInput(Jack::input(slug, module, left, run_y, Input::Run));
-    addParam(Button::toggle(slug, module, left + button_port_distance, run_y,
+    auto constexpr run_y = global_controls_y(0);
+    addInput(Jack::input(slug, module, sequence_controls_x, run_y, Input::Run));
+    addParam(Button::toggle(slug, module,
+                            sequence_controls_x + button_port_distance, run_y,
                             Param::Run));
 
-    addInput(Jack::input(slug, module, left, loop_y, Input::Loop));
-    addParam(Button::toggle(slug, module, left + button_port_distance, loop_y,
+    auto constexpr loop_y = global_controls_y(1);
+    addInput(
+        Jack::input(slug, module, sequence_controls_x, loop_y, Input::Loop));
+    addParam(Button::toggle(slug, module,
+                            sequence_controls_x + button_port_distance, loop_y,
                             Param::Loop));
 
-    auto constexpr active_y = top + light_radius * 1.5F;
-
-    auto *start_marker = new StartMarker(slug, 0.F, active_y);
+    auto constexpr progress_light_y = top - light_diameter * 2.F;
+    auto *start_marker = new StartMarker(slug, 0.F, progress_light_y);
     addChild(start_marker);
 
-    auto *end_marker = new EndMarker<N>(slug, 0.F, active_y);
+    auto *end_marker = new EndMarker<N>(slug, 0.F, progress_light_y);
     addChild(end_marker);
 
     auto const on_selection_start_change = [start_marker,
@@ -165,100 +173,155 @@ public:
       end_marker->set_selection_start(step);
     };
 
+    auto constexpr selection_y = global_controls_y(2);
     addParam(new SelectionKnob(on_selection_start_change, slug, module,
-                               left - hp2mm(0.2), selection_y,
+                               sequence_controls_x - hp2mm(0.2F), selection_y,
                                Param::SelectionStart));
 
     auto const on_selection_end_change = [end_marker](int length) {
       end_marker->set_selection_length(length);
     };
-    auto constexpr selection_length_x = left + hp2mm(1.63F);
+    auto constexpr selection_length_offset = 8.28F;
+    auto constexpr selection_length_x =
+        sequence_controls_x + selection_length_offset;
     addParam(new SelectionKnob(on_selection_end_change, slug, module,
                                selection_length_x, selection_y,
                                Param::SelectionLength));
 
-    addInput(Jack::input(slug, module, left, gate_y, Input::Gate));
-    addParam(Button::momentary(slug, module, left + button_port_distance,
+    auto constexpr gate_y = global_controls_y(3);
+    addInput(
+        Jack::input(slug, module, sequence_controls_x, gate_y, Input::Gate));
+    addParam(Button::momentary(slug, module,
+                               sequence_controls_x + button_port_distance,
                                gate_y, Param::Gate));
 
-    addInput(Jack::input(slug, module, left, reset_y, Input::Reset));
-    addParam(Button::momentary(slug, module, left + button_port_distance,
+    auto constexpr reset_y = global_controls_y(4);
+    addInput(
+        Jack::input(slug, module, sequence_controls_x, reset_y, Input::Reset));
+    addParam(Button::momentary(slug, module,
+                               sequence_controls_x + button_port_distance,
                                reset_y, Param::Reset));
 
-    auto constexpr trigger_y = top + hp2mm(1.61F);
-    auto constexpr interrupt_y = trigger_y + hp2mm(0.8F);
-    auto constexpr sustain_y = interrupt_y + hp2mm(0.8F);
-    auto constexpr start_y = top + hp2mm(5.75F);
-    auto constexpr end_y = top + hp2mm(9.5F);
-    auto constexpr duration_y = top + hp2mm(12.35F);
-    auto constexpr shape_y = top + hp2mm(15.25F);
-    auto constexpr enabled_port_y = bottom - port_radius;
-    auto constexpr enabled_button_y =
-        enabled_port_y - port_radius - button_radius - 0.5F;
+    auto constexpr level_y = global_controls_y(0);
+    auto constexpr global_duration_y = global_controls_y(1);
+    auto constexpr in_y = global_controls_y(2);
+    auto constexpr state_y = global_controls_y(3);
+    auto constexpr out_y = global_controls_y(4);
 
-    auto constexpr knob_stepper_distance = hp2mm(1.15F);
+    auto constexpr global_controls_left_x =
+        global_step_controls_left + global_step_controls_column_width / 2.F +
+        x_offset;
+    auto constexpr global_controls_center_x =
+        global_controls_left_x + global_step_controls_column_width + padding;
+    auto constexpr global_controls_right_x =
+        global_controls_center_x + global_step_controls_column_width + padding;
 
-    for (auto step = 0; step < N; step++) {
-      auto const x = step_x + step_dx * (float)step;
-      addChild(rack::createLightCentered<ProgressLight>(
-          mm2px(x, active_y), module, Light::StepProgress + step + step));
-
-      addParam(Toggle::stepper(slug, "trigger-mode", trigger_mode_count, module,
-                               x, trigger_y, Param::StepTriggerMode + step));
-      addParam(Toggle::stepper(slug, "interrupt-mode", 2, module, x,
-                               interrupt_y, Param::StepInterruptMode + step));
-      addParam(Toggle::stepper(slug, "completion-mode", 2, module, x, sustain_y,
-                               Param::StepCompletionMode + step));
-
-      addParam(Toggle::stepper(slug, "anchor-mode", 2, module, x,
-                               start_y - knob_stepper_distance,
-                               Param::StepStartAnchorMode + step));
-      addParam(
-          Knob::tiny(slug, module, x, start_y, Param::StepStartLevel + step));
-      addParam(Toggle::stepper(slug, "anchor-source", anchor_source_count,
-                               module, x, start_y + knob_stepper_distance,
-                               Param::StepStartAnchorSource + step));
-
-      addParam(Toggle::stepper(slug, "anchor-mode", 2, module, x,
-                               end_y - knob_stepper_distance,
-                               Param::StepEndAnchorMode + step));
-      addParam(Knob::tiny(slug, module, x, end_y, Param::StepEndLevel + step));
-      addParam(Toggle::stepper(slug, "anchor-source", anchor_source_count,
-                               module, x, end_y + knob_stepper_distance,
-                               Param::StepEndAnchorSource + step));
-
-      addParam(Toggle::stepper(slug, "shape", 2, module, x,
-                               shape_y - knob_stepper_distance,
-                               Param::StepShape + step));
-      addParam(
-          Knob::tiny(slug, module, x, shape_y, Param::StepCurvature + step));
-
-      addParam(
-          Knob::tiny(slug, module, x, duration_y, Param::StepDuration + step));
-
-      addParam(Button::toggle(slug, module, x, enabled_button_y,
-                              Param::EnableStep + step));
-      addInput(Jack::input(slug, module, x, enabled_port_y,
-                           Input::EnableStep + step));
-    }
-
-    auto constexpr near_right = right - hp2mm(2.2F);
-    auto constexpr out_y = bottom - port_radius - 1.F;
-    auto constexpr in_y = sequence_controls_top;
-
-    addInput(Jack::input(slug, module, near_right, in_y, Input::InA));
-    addInput(Jack::input(slug, module, right, in_y, Input::InB));
-
-    auto constexpr polarity_y = (start_y + end_y) / 2.F;
-    addParam(Toggle::thumb(2, slug, module, near_right, polarity_y,
+    addParam(Toggle::thumb(2, slug, module, global_controls_right_x, level_y,
                            Param::LevelRange));
 
-    addParam(Toggle::thumb(3, slug, module, near_right, duration_y,
-                           Param::DurationRange));
-    addInput(Jack::input(slug, module, right, duration_y, Input::DurationCV));
+    addInput(Jack::input(slug, module, global_controls_center_x,
+                         global_duration_y, Input::DurationCV));
+    addParam(Toggle::thumb(3, slug, module, global_controls_right_x,
+                           global_duration_y, Param::DurationRange));
 
-    addOutput(Jack::output(slug, module, right, out_y, Output::Out));
+    addInput(
+        Jack::input(slug, module, global_controls_left_x, in_y, Input::InA));
+    addInput(
+        Jack::input(slug, module, global_controls_center_x, in_y, Input::InB));
+
+    addOutput(Jack::output(slug, module, global_controls_right_x, out_y,
+                           Output::Out));
+
+    auto constexpr intra_section_glue = 0.5F;
+    auto constexpr inter_section_glue = 4.F;
+    auto constexpr stepper_ascent = label_small_size / 2.F + padding - 0.25F;
+    auto constexpr stepper_height = stepper_ascent * 2.F;
+
+    auto constexpr trigger_y = top + stepper_ascent;
+    auto constexpr interrupt_y =
+        trigger_y + stepper_height + intra_section_glue;
+    auto constexpr sustain_y =
+        interrupt_y + stepper_height + intra_section_glue;
+
+    auto constexpr start_anchor_mode_y =
+        sustain_y + stepper_height + inter_section_glue;
+    auto constexpr start_anchor_level_y =
+        start_anchor_mode_y + (stepper_height + small_knob_diameter) / 2.F +
+        intra_section_glue;
+    auto constexpr start_anchor_source_y =
+        start_anchor_level_y + (stepper_height + small_knob_diameter) / 2.F +
+        intra_section_glue;
+
+    auto constexpr end_anchor_mode_y =
+        start_anchor_source_y + stepper_height + inter_section_glue;
+    auto constexpr end_anchor_level_y =
+        end_anchor_mode_y + (stepper_height + small_knob_diameter) / 2.F +
+        intra_section_glue;
+    auto constexpr end_anchor_source_y =
+        end_anchor_level_y + (stepper_height + small_knob_diameter) / 2.F +
+        intra_section_glue;
+
+    auto constexpr duration_y = end_anchor_source_y +
+                                (stepper_height + small_knob_diameter) / 2.F +
+                                inter_section_glue;
+
+    auto constexpr shape_y = duration_y +
+                             (stepper_height + small_knob_diameter) / 2.F +
+                             inter_section_glue;
+    auto constexpr curvature_y = shape_y +
+                                 (stepper_height + small_knob_diameter) / 2.F +
+                                 intra_section_glue;
+
+    auto constexpr enabled_y = bottom - button_radius;
+
+    for (auto step = 0; step < N; step++) {
+      auto const step_left =
+          step_block_x + static_cast<float>(step) * step_width;
+      auto const step_x = step_left + step_width / 2.F;
+      addChild(rack::createLightCentered<ProgressLight>(
+          mm2px(step_x, progress_light_y), module,
+          Light::StepProgress + step + step));
+
+      addParam(Toggle::stepper(slug, "trigger-mode", trigger_mode_count, module,
+                               step_x, trigger_y,
+                               Param::StepTriggerMode + step));
+      addParam(Toggle::stepper(slug, "interrupt-mode", 2, module, step_x,
+                               interrupt_y, Param::StepInterruptMode + step));
+      addParam(Toggle::stepper(slug, "completion-mode", 2, module, step_x,
+                               sustain_y, Param::StepCompletionMode + step));
+
+      addParam(Toggle::stepper(slug, "anchor-mode", 2, module, step_x,
+                               start_anchor_mode_y,
+                               Param::StepStartAnchorMode + step));
+      addParam(Knob::small(slug, module, step_x, start_anchor_level_y,
+                           Param::StepStartLevel + step));
+      addParam(Toggle::stepper(slug, "anchor-source", anchor_source_count,
+                               module, step_x, start_anchor_source_y,
+                               Param::StepStartAnchorSource + step));
+
+      addParam(Toggle::stepper(slug, "anchor-mode", 2, module, step_x,
+                               end_anchor_mode_y,
+                               Param::StepEndAnchorMode + step));
+      addParam(Knob::small(slug, module, step_x, end_anchor_level_y,
+                           Param::StepEndLevel + step));
+      addParam(Toggle::stepper(slug, "anchor-source", anchor_source_count,
+                               module, step_x, end_anchor_source_y,
+                               Param::StepEndAnchorSource + step));
+
+      addParam(Knob::small(slug, module, step_x, duration_y,
+                           Param::StepDuration + step));
+
+      addParam(Toggle::stepper(slug, "shape", 2, module, step_x, shape_y,
+                               Param::StepShape + step));
+      addParam(Knob::small(slug, module, step_x, curvature_y,
+                           Param::StepCurvature + step));
+
+      addParam(Button::toggle(slug, module, step_x, enabled_y,
+                              Param::EnableStep + step));
+    }
   }
+
+private:
 }; // namespace dhe
 } // namespace cv_sequencer
 } // namespace dhe
