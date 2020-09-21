@@ -40,17 +40,18 @@ private:
   float sample_{};
 
   auto source_voltage() const -> float {
+    auto const multiplier = module_.anchor_multiplier(type_, step_);
     switch (module_.anchor_source(type_, step_)) {
     case AnchorSource::InA:
-      return module_.in_a();
+      return module_.in_a() * multiplier;
     case AnchorSource::InB:
-      return module_.in_b();
+      return module_.in_b() * multiplier;
     case AnchorSource::InC:
-      return module_.in_c();
+      return module_.in_c() * multiplier;
     case AnchorSource::Level:
-      return module_.anchor_level(type_, step_);
+      return module_.level() * multiplier;
     case AnchorSource::Out:
-      return module_.output();
+      return module_.output() * multiplier;
     default:
       return 0.F;
     }

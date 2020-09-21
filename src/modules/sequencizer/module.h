@@ -46,8 +46,7 @@ public:
                 1.F, 1.F);
     configParam(Param::SelectionLength, 1.F, N, N, "Sequence length", " steps");
 
-    config_level_knob(this, Param::Level, Param::LevelRange, "Level",
-                      centered_rotation);
+    config_level_knob(this, Param::Level, Param::LevelRange, "Level", 1.F);
     config_level_range_switch(this, Param::LevelRange);
 
     config_duration_knob(this, Param::Duration, Param::DurationRange,
@@ -62,12 +61,13 @@ public:
           this, Param::StepInterruptMode + step, "Interrupt",
           {"Ignore triggers while generating", "Interrupt if triggered"});
       config_toggle<2>(this, Param::StepSustainMode + step, "Sustain",
-                       {"No sustain", "Sustain until triggered"}, 1);
+                       {"No sustain", "Sustain until triggered"}, 0);
 
       config_toggle<anchor_source_count>(
           this, Param::StepStartAnchorSource + step, "Start anchor source",
           {"Level", "A", "B", "C", "Out"}, 4);
-      config_gain(this, Param::StepStartAnchorGain + step, "Start anchor gain");
+      config_attenuator(this, Param::StepStartAnchorGain + step,
+                        "Start anchor multiplier");
       config_toggle<2>(this, Param::StepStartAnchorMode + step,
                        "Start anchor mode",
                        {"Sample the source", "Track the source"});
@@ -75,7 +75,8 @@ public:
       config_toggle<anchor_source_count>(
           this, Param::StepEndAnchorSource + step, "End anchor source",
           {"Level", "A", "B", "C", "Out"});
-      config_gain(this, Param::StepEndAnchorGain + step, "End anchor gain");
+      config_attenuator(this, Param::StepEndAnchorGain + step,
+                        "End anchor multiplier");
       config_toggle<2>(this, Param::StepEndAnchorMode + step, "End anchor mode",
                        {"Sample the source", "Track the source"}, 1);
 
@@ -96,18 +97,17 @@ public:
     sequence_controller_.execute(args.sampleTime);
   }
 
-  auto anchor_level(AnchorType type, int step) const -> float {
-    auto const base = type == AnchorType::Start ? Param::StepStartAnchorGain
-                                                : Param::StepEndAnchorGain;
-    return dhe::selectable_level(params[base + step],
-                                 params[Param::LevelRange]);
-  }
-
   auto anchor_mode(AnchorType type, int step) const -> AnchorMode {
     auto const base = type == AnchorType::Start ? Param::StepStartAnchorMode
                                                 : Param::StepEndAnchorMode;
     auto const selection = position_of(params[base + step]);
     return static_cast<AnchorMode>(selection);
+  }
+
+  auto anchor_multiplier(AnchorType type, int step) const -> float {
+    auto const base = type == AnchorType::Start ? Param::StepStartAnchorGain
+                                                : Param::StepEndAnchorGain;
+    return rotation_of(params[base + step]);
   }
 
   auto anchor_source(AnchorType type, int step) const -> AnchorSource {
@@ -126,10 +126,15 @@ public:
     return dhe::curvature(params[Param::StepCurvature + step]);
   }
 
-  auto duration(int step) const -> float {
-    return dhe::selectable_duration(
-        params[Param::StepDurationMultiplier + step], inputs[Input::DurationCV],
-        params[Param::DurationRange]);
+  auto duration() const -> float {
+    return dhe::selectable_duration(params[Param::Duration],
+                                    inputs[Input::DurationCV],
+                                    params[Param::DurationRange]);
+  }
+
+  auto duration_multiplier(int step) const -> float {
+    return gain_range.scale(
+        rotation_of(params[Param::StepDurationMultiplier + step]));
   }
 
   auto gate() const -> bool {
@@ -161,6 +166,11 @@ public:
 
   auto is_running() const -> bool {
     return is_pressed(params[Param::Run]) || is_high(inputs[Input::Run]);
+  }
+
+  auto level() const -> float {
+    return dhe::selectable_level(params[Param::Level], inputs[Input::LevelCV],
+                                 params[Param::LevelRange]);
   }
 
   auto output() const -> float { return voltage_at(outputs[Output::Out]); }

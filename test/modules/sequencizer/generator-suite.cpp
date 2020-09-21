@@ -34,7 +34,7 @@ public:
                 Anchor & /*end_source*/, Generator &generator) {
           auto constexpr step = 7;
           module.taper_[step] = &dhe::sigmoid::j_taper;
-          module.duration_[step] = 10.F;
+          module.duration_ = 10.F;
 
           generator.start(step);
 
@@ -77,7 +77,7 @@ public:
           auto constexpr scaled_tapered_phase =
               (end_voltage - start_voltage) * taper.apply(phase, curvature);
 
-          module.duration_[step] = duration;
+          module.duration_ = duration;
           start_anchor.voltage_ = start_voltage;
           end_anchor.voltage_ = end_voltage;
 
@@ -100,7 +100,7 @@ public:
           auto constexpr duration = 10.F;   // 10 sec
           auto constexpr sample_time = 3.F; // 3 sec
           auto constexpr phase_delta = sample_time / duration;
-          module.duration_[step] = duration;
+          module.duration_ = duration;
           module.progress_[step] = -1.F;
 
           generator.generate(sample_time);
@@ -124,7 +124,7 @@ public:
           generator.start(step);
 
           auto constexpr duration = 10.F;
-          module.duration_[step] = duration;
+          module.duration_ = duration;
 
           // Big enough to complete the duration on the second generate
           auto constexpr sample_time = duration * 0.6F;
