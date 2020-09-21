@@ -6,13 +6,13 @@
 namespace dhe {
 namespace sequencizer {
 
-enum class SustainMode { Sustain, Advance };
+enum class SustainMode { No, Yes };
 static auto constexpr completion_mode_count =
-    static_cast<int>(SustainMode::Advance) + 1;
+    static_cast<int>(SustainMode::Yes) + 1;
 
-enum class InterruptMode { Ignore, Advance };
+enum class InterruptMode { No, Yes };
 static auto constexpr interrupt_mode_count =
-    static_cast<int>(InterruptMode::Advance) + 1;
+    static_cast<int>(InterruptMode::Yes) + 1;
 
 enum class TriggerMode {
   GateRises,
@@ -52,7 +52,7 @@ public:
   Interrupter(Module &module) : module_{module} {}
 
   auto is_interrupted(int step, Latch const &latch) -> bool {
-    return (module_.interrupt_mode(step) == InterruptMode::Advance) &&
+    return (module_.interrupt_mode(step) == InterruptMode::Yes) &&
            is_triggered(module_.trigger_mode(step), latch);
   }
 
@@ -66,7 +66,7 @@ public:
 
   auto is_done(int step, Latch const &latch) -> bool {
 
-    return (module_.completion_mode(step) == SustainMode::Advance) ||
+    return (module_.completion_mode(step) == SustainMode::No) ||
            is_triggered(module_.trigger_mode(step), latch);
   }
 

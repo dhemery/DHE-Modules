@@ -12,16 +12,16 @@ using dhe::sequencizer::SustainMode;
 using dhe::sequencizer::TriggerMode;
 
 static auto constexpr sustain_modes = std::array<SustainMode, 2>{
-    SustainMode::Advance,
-    SustainMode::Sustain,
+    SustainMode::No,
+    SustainMode::Yes,
 };
 
 static inline auto name_of(SustainMode mode) -> std::string {
   switch (mode) {
-  case SustainMode::Advance:
-    return "SustainMode::Advance";
-  case SustainMode::Sustain:
-    return "SustainMode::Sustain";
+  case SustainMode::No:
+    return "SustainMode::No";
+  case SustainMode::Yes:
+    return "SustainMode::Yes";
   default:
     return std::string{"Unknown SustainMode "} +
            std::to_string(static_cast<int>(mode));
@@ -29,16 +29,16 @@ static inline auto name_of(SustainMode mode) -> std::string {
 }
 
 static auto constexpr interrupt_modes = std::array<InterruptMode, 2>{
-    InterruptMode::Ignore,
-    InterruptMode::Advance,
+    InterruptMode::No,
+    InterruptMode::Yes,
 };
 
 static inline auto name_of(InterruptMode mode) -> std::string {
   switch (mode) {
-  case InterruptMode::Advance:
-    return "InterruptMode::Advance";
-  case InterruptMode::Ignore:
-    return "InterruptMode::Ignore";
+  case InterruptMode::No:
+    return "InterruptMode::No";
+  case InterruptMode::Yes:
+    return "InterruptMode::Yes";
   default:
     return std::string{"Unknown InterruptMode "} +
            std::to_string(static_cast<int>(mode));

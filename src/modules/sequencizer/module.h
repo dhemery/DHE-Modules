@@ -46,8 +46,13 @@ public:
                 1.F, 1.F);
     configParam(Param::SelectionLength, 1.F, N, N, "Sequence length", " steps");
 
-    config_level_range_switch(this, Param::GlobalLevelRange);
-    config_duration_range_switch(this, Param::GlobalDurationRange);
+    config_level_knob(this, Param::Level, Param::LevelRange, "Level",
+                      centered_rotation);
+    config_level_range_switch(this, Param::LevelRange);
+
+    config_duration_knob(this, Param::Duration, Param::DurationRange,
+                         "Duration", centered_rotation);
+    config_duration_range_switch(this, Param::DurationRange);
 
     for (auto step = 0; step < N; step++) {
       config_toggle<trigger_mode_count>(this, Param::StepTriggerMode + step,
@@ -55,32 +60,31 @@ public:
                                         trigger_mode_descriptions, 0);
       config_toggle<2>(
           this, Param::StepInterruptMode + step, "Interrupt",
-          {"Ignore triggers while generating", "Advance to next step"});
+          {"Ignore triggers while generating", "Interrupt if triggered"});
       config_toggle<2>(this, Param::StepSustainMode + step, "Sustain",
-                       {"Sustain until triggered", "Advance to next step"}, 1);
+                       {"No sustain", "Sustain until triggered"}, 1);
 
-      config_toggle<5>(
+      config_toggle<anchor_source_count>(
           this, Param::StepStartAnchorSource + step, "Start anchor source",
-          {"Level knob", "In A port", "In B port", "In C port", "Out port"}, 4);
-      config_level_knob(this, Param::StepStartAnchorLevel + step,
-                        Param::GlobalLevelRange, "Start level");
+          {"Level", "A", "B", "C", "Out"}, 4);
+      config_gain(this, Param::StepStartAnchorGain + step, "Start anchor gain");
       config_toggle<2>(this, Param::StepStartAnchorMode + step,
-                       "Start anchor mode", {"Snapshot", "Track changes"});
+                       "Start anchor mode",
+                       {"Sample the source", "Track the source"});
 
-      config_toggle<5>(
+      config_toggle<anchor_source_count>(
           this, Param::StepEndAnchorSource + step, "End anchor source",
-          {"Level knob", "In A port", "In B port", "In C port", "Out port"});
-      config_level_knob(this, Param::StepEndAnchorLevel + step,
-                        Param::GlobalLevelRange, "End level");
+          {"Level", "A", "B", "C", "Out"});
+      config_gain(this, Param::StepEndAnchorGain + step, "End anchor gain");
       config_toggle<2>(this, Param::StepEndAnchorMode + step, "End anchor mode",
-                       {"Snapshot", "Track changes"}, 1);
+                       {"Sample the source", "Track the source"}, 1);
 
       config_curve_shape_switch(this, Param::StepShape + step, "Shape");
       config_curvature_knob(this, Param::StepCurvature + step, "Curvature");
-      config_duration_knob(this, Param::StepDuration + step,
-                           Param::GlobalDurationRange, "Duration");
-      config_button(this, Param::StepEnabled + step, "Enabled",
-                    {"From input", "Yes"}, 1);
+      config_gain(this, Param::StepDurationMultiplier + step,
+                  "Duration multiplier");
+      config_button(this, Param::StepEnabled + step, "Enabled", {"No", "Yes"},
+                    1);
 
       show_inactive(step);
     }
@@ -93,10 +97,10 @@ public:
   }
 
   auto anchor_level(AnchorType type, int step) const -> float {
-    auto const base = type == AnchorType::Start ? Param::StepStartAnchorLevel
-                                                : Param::StepEndAnchorLevel;
+    auto const base = type == AnchorType::Start ? Param::StepStartAnchorGain
+                                                : Param::StepEndAnchorGain;
     return dhe::selectable_level(params[base + step],
-                                 params[Param::GlobalLevelRange]);
+                                 params[Param::LevelRange]);
   }
 
   auto anchor_mode(AnchorType type, int step) const -> AnchorMode {
@@ -123,9 +127,9 @@ public:
   }
 
   auto duration(int step) const -> float {
-    return dhe::selectable_duration(params[Param::StepDuration + step],
-                                    inputs[Input::GlobalDurationCV],
-                                    params[Param::GlobalDurationRange]);
+    return dhe::selectable_duration(
+        params[Param::StepDurationMultiplier + step], inputs[Input::DurationCV],
+        params[Param::DurationRange]);
   }
 
   auto gate() const -> bool {
