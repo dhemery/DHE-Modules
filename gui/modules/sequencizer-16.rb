@@ -1,3 +1,3 @@
 require_relative 'sequencizer/make-sequencizer'
 
-make_sequencizer 16, 53
+make_sequencizer 16

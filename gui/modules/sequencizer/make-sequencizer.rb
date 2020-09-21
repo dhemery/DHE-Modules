@@ -7,7 +7,11 @@ HUE = 30
 FOREGROUND_HSL = [HUE, 100, 10]
 BACKGROUND_HSL = [HUE, 10, 93]
 
-def make_sequencizer(steps, width_hp)
+STEP_WIDTH_HP = 2.25
+BASE_WIDTH_HP = 15
+
+def make_sequencizer(steps)
+  width_hp = BASE_WIDTH_HP + steps * STEP_WIDTH_HP
   name "SEQUENCIZER #{steps}"
   hp width_hp
   foreground FOREGROUND_HSL
@@ -16,25 +20,24 @@ def make_sequencizer(steps, width_hp)
   width_mm = hp2mm(width_hp)
   content_width_mm = content_width(steps)
   excess_width = width_mm - PADDING - content_width_mm
-  margin = (excess_width) / 4.0
+  margin = excess_width / 4.0
 
-  puts("#{steps}: width #{width_mm} content #{content_width_mm} execess #{excess_width} margin #{margin}")
-  left = margin
-  make_sequence_controls(left)
+  sequence_controls_left = margin
+  make_sequence_controls(sequence_controls_left)
 
-  left += SEQUENCE_CONTROLS_WIDTH + margin
-  make_global_step_controls(left)
+  global_controls_left = sequence_controls_left + SEQUENCE_CONTROLS_WIDTH + margin
+  make_global_step_controls(global_controls_left)
 
-  left += GLOBAL_STEP_CONTROLS_WIDTH + margin
-  make_step_control_labels(left)
+  labels_left = global_controls_left + GLOBAL_STEP_CONTROLS_WIDTH + margin
+  make_step_control_labels(labels_left)
 
-  left += LABELS_WIDTH + PADDING
-  make_step_block(steps, left)
+  step_block_left = labels_left + LABELS_WIDTH + PADDING
+  make_step_block(steps, step_block_left)
 end
 
 TOP = 23
 BOTTOM = 117.0
-STEP_WIDTH = hp2mm(2.25)
+STEP_WIDTH = hp2mm(STEP_WIDTH_HP)
 
 SEQUENCE_CONTROLS_WIDTH = PADDING + Port::DIAMETER + PADDING + Button::DIAMETER + PADDING
 GLOBAL_STEP_CONTROL_WIDTH = PADDING + Port::DIAMETER + PADDING
@@ -109,9 +112,9 @@ def make_global_step_controls(left)
   connector left: left_x, right: right_x, y: duration_y
 
   in_y = global_controls_y(2)
-  input_port x: left_x, y: in_y, label: 'IN A'
-  input_port x: center_x, y: in_y, label: 'IN B'
-  input_port x: right_x, y: in_y, label: 'IN C'
+  input_port x: left_x, y: in_y, label: 'A'
+  input_port x: center_x, y: in_y, label: 'B'
+  input_port x: right_x, y: in_y, label: 'C'
 
   state_y = global_controls_y(3)
   output_port x: left_x, y: state_y, label: 'STEP'
@@ -172,16 +175,16 @@ end
 
 ANCHOR_SOURCES = %w[LEVEL A B C OUT]
 ANCHOR_MODES = %w[SMPL TRACK]
-START_ANCHOR_MODE_SELECTION = 1
-START_ANCHOR_SOURCE_SELECTION = 5
 END_ANCHOR_MODE_SELECTION = 2
 END_ANCHOR_SOURCE_SELECTION = 1
-COMPLETION_MODES = %w[SUST NEXT]
-COMPLETION_MODE_SELECTION = 1
 INTERRUPT_MODES = %w[IGNR NEXT]
 INTERRUPT_MODE_SELECTION = 1
 SHAPE_OPTIONS = %w[J S]
 SHAPE_SELECTION = 1
+START_ANCHOR_MODE_SELECTION = 1
+START_ANCHOR_SOURCE_SELECTION = 5
+SUSTAIN_MODES = %w[SUST NEXT]
+SUSTAIN_MODE_SELECTION = 1
 TRIGGER_MODES = %w[RISE FALL EDGE HIGH LOW]
 TRIGGER_MODE_SELECTION = 1
 
@@ -199,7 +202,7 @@ def make_step_block(steps, left)
 
     stepper x: x, y: TRIGGER_Y, name: 'trigger-mode', options: TRIGGER_MODES, selection: TRIGGER_MODE_SELECTION, width: STEPPER_WIDTH
     stepper x: x, y: INTERRUPT_Y, name: 'interrupt-mode', options: INTERRUPT_MODES, selection: INTERRUPT_MODE_SELECTION, width: STEPPER_WIDTH
-    stepper x: x, y: SUSTAIN_Y, name: 'completion-mode', options: COMPLETION_MODES, selection: COMPLETION_MODE_SELECTION, width: STEPPER_WIDTH
+    stepper x: x, y: SUSTAIN_Y, name: 'sustain-mode', options: SUSTAIN_MODES, selection: SUSTAIN_MODE_SELECTION, width: STEPPER_WIDTH
 
     stepper x: x, y: START_ANCHOR_MODE_Y, name: 'anchor-mode', options: ANCHOR_MODES, selection: START_ANCHOR_MODE_SELECTION, width: STEPPER_WIDTH
     small_knob x: x, y: START_ANCHOR_LEVEL_Y, label: ''

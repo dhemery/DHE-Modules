@@ -48,15 +48,18 @@ static inline auto name_of(AnchorMode mode) -> std::string {
 
 static auto constexpr anchor_sources =
     std::array<AnchorSource, anchor_source_count>{
-        AnchorSource::In,
-        AnchorSource::Level,
-        AnchorSource::Out,
+        AnchorSource::InA,   AnchorSource::InB, AnchorSource::InC,
+        AnchorSource::Level, AnchorSource::Out,
     };
 
 static inline auto name_of(AnchorSource source) -> std::string {
   switch (source) {
-  case AnchorSource::In:
-    return "AnchorSource::In";
+  case AnchorSource::InA:
+    return "AnchorSource::InA";
+  case AnchorSource::InB:
+    return "AnchorSource::InB";
+  case AnchorSource::InC:
+    return "AnchorSource::InC";
   case AnchorSource::Level:
     return "AnchorSource::Level";
   case AnchorSource::Out:

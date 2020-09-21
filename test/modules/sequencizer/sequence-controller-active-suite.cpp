@@ -140,31 +140,6 @@ public:
                              step_controller.entered_, is_false);
              }));
 
-    add("with run high: "
-        "if reset rises: "
-        "copies input to output, "
-        "exits active step, "
-        "and does not select or enter another",
-        test(when_active,
-             [](Tester &t, Module &module, StepSelector &step_selector,
-                StepController &step_controller,
-                SequenceController &sequence_controller) {
-               module.running_ = true;
-               module.reset_ = true;
-
-               auto constexpr input = 3478.233F;
-               module.input_ = input;
-
-               sequence_controller.execute(0.F);
-               t.assert_that("output", module.output_, is_equal_to(input));
-               t.assert_that("step controller exited", step_controller.exited_,
-                             is_true);
-               t.assert_that("step selector called", step_selector.called_,
-                             is_false);
-               t.assert_that("step controller entered",
-                             step_controller.entered_, is_false);
-             }));
-
     add("with run low: "
         "with gate low: "
         "does nothing",

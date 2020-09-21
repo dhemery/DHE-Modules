@@ -46,10 +46,6 @@ private:
   }
 
   void idle() {
-    if (reset_latch_.is_high()) {
-      // If RESET is high while idle, copy the input voltage to the output port.
-      module_.output(module_.input());
-    }
     if (gate_latch_.is_rise()) {
       // Consume the edge, so that the first step doesn't immediately exit if it
       // is set to advance on gate change.

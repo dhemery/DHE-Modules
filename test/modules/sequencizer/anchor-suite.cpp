@@ -12,7 +12,9 @@ using dhe::unit::Suite;
 using dhe::unit::TestRegistrar;
 
 static inline void set_all_voltages(Module &module, float voltage) {
-  module.input_ = voltage;
+  module.in_a_ = voltage;
+  module.in_b_ = voltage;
+  module.in_c_ = voltage;
   module.output_ = voltage;
   for (int step = 0; step < step_count; step++) {
     module.start_level_[step] = voltage;
@@ -49,26 +51,73 @@ public:
         }));
 
     add("AnchorType::Start: "
-        "entered with AnchorSource::In: "
+        "entered with AnchorSource::InA: "
         "voltage() with AnchorMode::Sample: "
-        "is sampled IN voltage",
+        "is sampled A voltage",
         test(AnchorType::Start, [](Tester &t, Module &module, Anchor &anchor) {
           auto constexpr step = 1;
           auto constexpr default_entry_voltage = 1.343F;
 
           set_all_voltages(module, default_entry_voltage);
-          auto constexpr input_entry_voltage = default_entry_voltage + 1.F;
-          module.input_ = input_entry_voltage;
-          module.start_source_[step] = AnchorSource::In;
+          auto constexpr in_a_entry_voltage = default_entry_voltage + 1.F;
+          module.in_a_ = in_a_entry_voltage;
+          module.start_source_[step] = AnchorSource::InA;
           anchor.enter(step);
 
-          set_all_voltages(module, input_entry_voltage + 1.F);
+          set_all_voltages(module, in_a_entry_voltage + 1.F);
 
           module.start_mode_[step] = AnchorMode::Sample;
           for (auto const source : anchor_sources) {
             module.start_source_[step] = source;
             t.assert_that(name_of(source), anchor.voltage(),
-                          is_equal_to(input_entry_voltage));
+                          is_equal_to(in_a_entry_voltage));
+          }
+        }));
+
+    add("AnchorType::Start: "
+        "entered with AnchorSource::InB: "
+        "voltage() with AnchorMode::Sample: "
+        "is sampled B voltage",
+        test(AnchorType::Start, [](Tester &t, Module &module, Anchor &anchor) {
+          auto constexpr step = 1;
+          auto constexpr default_entry_voltage = 1.343F;
+
+          set_all_voltages(module, default_entry_voltage);
+          auto constexpr in_b_entry_voltage = default_entry_voltage + 1.F;
+          module.in_b_ = in_b_entry_voltage;
+          module.start_source_[step] = AnchorSource::InB;
+          anchor.enter(step);
+
+          set_all_voltages(module, in_b_entry_voltage + 1.F);
+
+          module.start_mode_[step] = AnchorMode::Sample;
+          for (auto const source : anchor_sources) {
+            module.start_source_[step] = source;
+            t.assert_that(name_of(source), anchor.voltage(),
+                          is_equal_to(in_b_entry_voltage));
+          }
+        }));
+    add("AnchorType::Start: "
+        "entered with AnchorSource::InC: "
+        "voltage() with AnchorMode::Sample: "
+        "is sampled C voltage",
+        test(AnchorType::Start, [](Tester &t, Module &module, Anchor &anchor) {
+          auto constexpr step = 1;
+          auto constexpr default_entry_voltage = 1.343F;
+
+          set_all_voltages(module, default_entry_voltage);
+          auto constexpr in_c_entry_voltage = default_entry_voltage + 1.F;
+          module.in_c_ = in_c_entry_voltage;
+          module.start_source_[step] = AnchorSource::InC;
+          anchor.enter(step);
+
+          set_all_voltages(module, in_c_entry_voltage + 1.F);
+
+          module.start_mode_[step] = AnchorMode::Sample;
+          for (auto const source : anchor_sources) {
+            module.start_source_[step] = source;
+            t.assert_that(name_of(source), anchor.voltage(),
+                          is_equal_to(in_c_entry_voltage));
           }
         }));
 
@@ -97,30 +146,6 @@ public:
         }));
 
     add("AnchorType::Start: "
-        "entered with AnchorSource::Aux: "
-        "voltage() with AnchorMode::Sample: "
-        "is sampled AUX voltage",
-        test(AnchorType::Start, [](Tester &t, Module &module, Anchor &anchor) {
-          auto constexpr step = 3;
-          auto constexpr default_entry_voltage = 1.343F;
-
-          set_all_voltages(module, default_entry_voltage);
-          auto constexpr aux_entry_voltage = default_entry_voltage + 1.F;
-          module.aux_ = aux_entry_voltage;
-          module.start_source_[step] = AnchorSource::Aux;
-          anchor.enter(step);
-
-          set_all_voltages(module, aux_entry_voltage + 1.F);
-
-          module.start_mode_[step] = AnchorMode::Sample;
-          for (auto const source : anchor_sources) {
-            module.start_source_[step] = source;
-            t.assert_that(name_of(source), anchor.voltage(),
-                          is_equal_to(aux_entry_voltage));
-          }
-        }));
-
-    add("AnchorType::Start: "
         "voltage() with AnchorMode::Track and AnchorSource::Level: "
         "is current level voltage",
         test(AnchorType::Start, [](Tester &t, Module &module, Anchor &anchor) {
@@ -142,8 +167,8 @@ public:
         }));
 
     add("AnchorType::Start: "
-        "voltage() with AnchorMode::Track and AnchorSource::In: "
-        "is current IN voltage",
+        "voltage() with AnchorMode::Track and AnchorSource::InA: "
+        "is current A voltage",
         test(AnchorType::Start, [](Tester &t, Module &module, Anchor &anchor) {
           auto constexpr step = 5;
           auto constexpr default_entry_voltage = 5.343F;
@@ -154,11 +179,53 @@ public:
             anchor.enter(step); // Capture the voltage from this source
 
             module.start_mode_[step] = AnchorMode::Track;
-            module.start_source_[step] = AnchorSource::In;
-            auto constexpr current_input_voltage = default_entry_voltage + 1.F;
-            module.input_ = current_input_voltage;
+            module.start_source_[step] = AnchorSource::InA;
+            auto constexpr current_in_a_voltage = default_entry_voltage + 1.F;
+            module.in_a_ = current_in_a_voltage;
             t.assert_that(name_of(source), anchor.voltage(),
-                          is_equal_to(current_input_voltage));
+                          is_equal_to(current_in_a_voltage));
+          }
+        }));
+
+    add("AnchorType::Start: "
+        "voltage() with AnchorMode::Track and AnchorSource::InB: "
+        "is current B voltage",
+        test(AnchorType::Start, [](Tester &t, Module &module, Anchor &anchor) {
+          auto constexpr step = 5;
+          auto constexpr default_entry_voltage = 5.343F;
+
+          for (auto const source : anchor_sources) {
+            set_all_voltages(module, default_entry_voltage);
+            module.start_source_[step] = source;
+            anchor.enter(step); // Capture the voltage from this source
+
+            module.start_mode_[step] = AnchorMode::Track;
+            module.start_source_[step] = AnchorSource::InB;
+            auto constexpr current_in_b_voltage = default_entry_voltage + 1.F;
+            module.in_b_ = current_in_b_voltage;
+            t.assert_that(name_of(source), anchor.voltage(),
+                          is_equal_to(current_in_b_voltage));
+          }
+        }));
+
+    add("AnchorType::Start: "
+        "voltage() with AnchorMode::Track and AnchorSource::InC: "
+        "is current C voltage",
+        test(AnchorType::Start, [](Tester &t, Module &module, Anchor &anchor) {
+          auto constexpr step = 5;
+          auto constexpr default_entry_voltage = 5.343F;
+
+          for (auto const source : anchor_sources) {
+            set_all_voltages(module, default_entry_voltage);
+            module.start_source_[step] = source;
+            anchor.enter(step); // Capture the voltage from this source
+
+            module.start_mode_[step] = AnchorMode::Track;
+            module.start_source_[step] = AnchorSource::InC;
+            auto constexpr current_in_c_voltage = default_entry_voltage + 1.F;
+            module.in_c_ = current_in_c_voltage;
+            t.assert_that(name_of(source), anchor.voltage(),
+                          is_equal_to(current_in_c_voltage));
           }
         }));
 
@@ -180,27 +247,6 @@ public:
             module.output_ = current_output_voltage;
             t.assert_that(name_of(source), anchor.voltage(),
                           is_equal_to(current_output_voltage));
-          }
-        }));
-
-    add("AnchorType::Start: "
-        "voltage() with AnchorMode::Track and AnchorSource::Aux: "
-        "is current AUX voltage",
-        test(AnchorType::Start, [](Tester &t, Module &module, Anchor &anchor) {
-          auto constexpr step = 7;
-          auto constexpr default_entry_voltage = 5.343F;
-
-          for (auto const source : anchor_sources) {
-            set_all_voltages(module, default_entry_voltage);
-            module.start_source_[step] = source;
-            anchor.enter(step); // Capture the voltage from this source
-
-            module.start_mode_[step] = AnchorMode::Track;
-            module.start_source_[step] = AnchorSource::Aux;
-            auto constexpr current_aux_voltage = default_entry_voltage + 1.F;
-            module.aux_ = current_aux_voltage;
-            t.assert_that(name_of(source), anchor.voltage(),
-                          is_equal_to(current_aux_voltage));
           }
         }));
 
@@ -229,26 +275,74 @@ public:
         }));
 
     add("AnchorType::End: "
-        "entered with AnchorSource::In: "
+        "entered with AnchorSource::InA: "
         "voltage() with AnchorMode::Sample: "
-        "is sampled IN voltage",
+        "is sampled A voltage",
         test(AnchorType::End, [](Tester &t, Module &module, Anchor &anchor) {
           auto constexpr step = 6;
           auto constexpr default_entry_voltage = 4.343F;
 
           set_all_voltages(module, default_entry_voltage);
-          auto constexpr input_entry_voltage = default_entry_voltage + 1.F;
-          module.input_ = input_entry_voltage;
-          module.end_source_[step] = AnchorSource::In;
+          auto constexpr in_a_entry_voltage = default_entry_voltage + 1.F;
+          module.in_a_ = in_a_entry_voltage;
+          module.end_source_[step] = AnchorSource::InA;
           anchor.enter(step);
 
-          set_all_voltages(module, input_entry_voltage + 1.F);
+          set_all_voltages(module, in_a_entry_voltage + 1.F);
 
           module.start_mode_[step] = AnchorMode::Sample;
           for (auto const source : anchor_sources) {
             module.end_source_[step] = source;
             t.assert_that(name_of(source), anchor.voltage(),
-                          is_equal_to(input_entry_voltage));
+                          is_equal_to(in_a_entry_voltage));
+          }
+        }));
+
+    add("AnchorType::End: "
+        "entered with AnchorSource::InB: "
+        "voltage() with AnchorMode::Sample: "
+        "is sampled A voltage",
+        test(AnchorType::End, [](Tester &t, Module &module, Anchor &anchor) {
+          auto constexpr step = 6;
+          auto constexpr default_entry_voltage = 4.343F;
+
+          set_all_voltages(module, default_entry_voltage);
+          auto constexpr in_b_entry_voltage = default_entry_voltage + 1.F;
+          module.in_b_ = in_b_entry_voltage;
+          module.end_source_[step] = AnchorSource::InB;
+          anchor.enter(step);
+
+          set_all_voltages(module, in_b_entry_voltage + 1.F);
+
+          module.start_mode_[step] = AnchorMode::Sample;
+          for (auto const source : anchor_sources) {
+            module.end_source_[step] = source;
+            t.assert_that(name_of(source), anchor.voltage(),
+                          is_equal_to(in_b_entry_voltage));
+          }
+        }));
+
+    add("AnchorType::End: "
+        "entered with AnchorSource::InC: "
+        "voltage() with AnchorMode::Sample: "
+        "is sampled C voltage",
+        test(AnchorType::End, [](Tester &t, Module &module, Anchor &anchor) {
+          auto constexpr step = 6;
+          auto constexpr default_entry_voltage = 4.343F;
+
+          set_all_voltages(module, default_entry_voltage);
+          auto constexpr in_c_entry_voltage = default_entry_voltage + 1.F;
+          module.in_c_ = in_c_entry_voltage;
+          module.end_source_[step] = AnchorSource::InC;
+          anchor.enter(step);
+
+          set_all_voltages(module, in_c_entry_voltage + 1.F);
+
+          module.start_mode_[step] = AnchorMode::Sample;
+          for (auto const source : anchor_sources) {
+            module.end_source_[step] = source;
+            t.assert_that(name_of(source), anchor.voltage(),
+                          is_equal_to(in_c_entry_voltage));
           }
         }));
 
@@ -277,30 +371,6 @@ public:
         }));
 
     add("AnchorType::End: "
-        "entered with AnchorSource::Aux: "
-        "voltage() with AnchorMode::Sample: "
-        "is sampled Aux voltage",
-        test(AnchorType::End, [](Tester &t, Module &module, Anchor &anchor) {
-          auto constexpr step = 4;
-          auto constexpr default_entry_voltage = 1.343F;
-
-          set_all_voltages(module, default_entry_voltage);
-          auto constexpr aux_entry_voltage = default_entry_voltage + 1.F;
-          module.aux_ = aux_entry_voltage;
-          module.end_source_[step] = AnchorSource::Aux;
-          anchor.enter(step);
-
-          set_all_voltages(module, aux_entry_voltage + 1.F);
-
-          module.start_mode_[step] = AnchorMode::Sample;
-          for (auto const source : anchor_sources) {
-            module.end_source_[step] = source;
-            t.assert_that(name_of(source), anchor.voltage(),
-                          is_equal_to(aux_entry_voltage));
-          }
-        }));
-
-    add("AnchorType::End: "
         "voltage() with AnchorMode::Track and AnchorSource::Level: "
         "is current level voltage",
         test(AnchorType::End, [](Tester &t, Module &module, Anchor &anchor) {
@@ -322,8 +392,8 @@ public:
         }));
 
     add("AnchorType::End: "
-        "voltage() with AnchorMode::Track and AnchorSource::In: "
-        "is current IN voltage",
+        "voltage() with AnchorMode::Track and AnchorSource::InA: "
+        "is current A voltage",
         test(AnchorType::End, [](Tester &t, Module &module, Anchor &anchor) {
           auto constexpr step = 2;
           auto constexpr default_entry_voltage = 5.343F;
@@ -334,11 +404,53 @@ public:
             anchor.enter(step); // Capture the voltage from this source
 
             module.end_mode_[step] = AnchorMode::Track;
-            module.end_source_[step] = AnchorSource::In;
-            auto constexpr current_input_voltage = default_entry_voltage + 1.F;
-            module.input_ = current_input_voltage;
+            module.end_source_[step] = AnchorSource::InA;
+            auto constexpr current_in_a_voltage = default_entry_voltage + 1.F;
+            module.in_a_ = current_in_a_voltage;
             t.assert_that(name_of(source), anchor.voltage(),
-                          is_equal_to(current_input_voltage));
+                          is_equal_to(current_in_a_voltage));
+          }
+        }));
+
+    add("AnchorType::End: "
+        "voltage() with AnchorMode::Track and AnchorSource::InB: "
+        "is current B voltage",
+        test(AnchorType::End, [](Tester &t, Module &module, Anchor &anchor) {
+          auto constexpr step = 2;
+          auto constexpr default_entry_voltage = 5.343F;
+
+          for (auto const source : anchor_sources) {
+            set_all_voltages(module, default_entry_voltage);
+            module.end_source_[step] = source;
+            anchor.enter(step); // Capture the voltage from this source
+
+            module.end_mode_[step] = AnchorMode::Track;
+            module.end_source_[step] = AnchorSource::InB;
+            auto constexpr current_in_b_voltage = default_entry_voltage + 1.F;
+            module.in_b_ = current_in_b_voltage;
+            t.assert_that(name_of(source), anchor.voltage(),
+                          is_equal_to(current_in_b_voltage));
+          }
+        }));
+
+    add("AnchorType::End: "
+        "voltage() with AnchorMode::Track and AnchorSource::InC: "
+        "is current C voltage",
+        test(AnchorType::End, [](Tester &t, Module &module, Anchor &anchor) {
+          auto constexpr step = 2;
+          auto constexpr default_entry_voltage = 5.343F;
+
+          for (auto const source : anchor_sources) {
+            set_all_voltages(module, default_entry_voltage);
+            module.end_source_[step] = source;
+            anchor.enter(step); // Capture the voltage from this source
+
+            module.end_mode_[step] = AnchorMode::Track;
+            module.end_source_[step] = AnchorSource::InC;
+            auto constexpr current_in_c_voltage = default_entry_voltage + 1.F;
+            module.in_c_ = current_in_c_voltage;
+            t.assert_that(name_of(source), anchor.voltage(),
+                          is_equal_to(current_in_c_voltage));
           }
         }));
 
@@ -360,27 +472,6 @@ public:
             module.output_ = current_output_voltage;
             t.assert_that(name_of(source), anchor.voltage(),
                           is_equal_to(current_output_voltage));
-          }
-        }));
-
-    add("AnchorType::End: "
-        "voltage() with AnchorMode::Track and AnchorSource::Aux: "
-        "is current AUX voltage",
-        test(AnchorType::End, [](Tester &t, Module &module, Anchor &anchor) {
-          auto constexpr step = 0;
-          auto constexpr default_entry_voltage = 7.343F;
-
-          for (auto const source : anchor_sources) {
-            set_all_voltages(module, default_entry_voltage);
-            module.end_source_[step] = source;
-            anchor.enter(step); // Capture the voltage from this source
-
-            module.end_mode_[step] = AnchorMode::Track;
-            module.end_source_[step] = AnchorSource::Aux;
-            auto constexpr current_aux_voltage = default_entry_voltage + 1.F;
-            module.aux_ = current_aux_voltage;
-            t.assert_that(name_of(source), anchor.voltage(),
-                          is_equal_to(current_aux_voltage));
           }
         }));
   }

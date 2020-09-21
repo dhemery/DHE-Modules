@@ -43,10 +43,10 @@ template <int N> struct InputIds {
     Gate,
     InA,
     InB,
+    InC,
     Loop,
     Reset,
     Run,
-    Trigger,
     Count,
   };
 };

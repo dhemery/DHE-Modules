@@ -1,7 +1,8 @@
 #pragma once
 
-#include "controls.h"
+#include "control-ids.h"
 #include "widgets/control-widgets.h"
+#include "widgets/dimensions.h"
 #include "widgets/screws.h"
 #include <app/ModuleWidget.hpp>
 #include <cmath>
@@ -14,45 +15,30 @@
 namespace dhe {
 
 namespace sequencizer {
-static auto constexpr step_width = hp2mm(2.25F);
-static auto constexpr margin = 6.F;
+auto constexpr base_width_hp = 15.F;
+static auto constexpr step_width_hp = 2.25F;
+static auto constexpr step_width = hp2mm(step_width_hp);
 static auto constexpr top = 23.F;
 static auto constexpr bottom = 117.F;
-static auto constexpr x_offset = 2.0447F;
-static auto constexpr label_small_size = 7.0F / px_per_mm;
-static auto constexpr small_knob_diameter = 8.4F;
 
-static auto constexpr sequence_controls_left = 0.F;
 static auto constexpr sequence_controls_width =
     padding + port_diameter + padding + button_diameter + padding;
-static auto constexpr sequence_controls_right =
-    sequence_controls_left + sequence_controls_width;
 
-static auto constexpr global_step_controls_column_width =
-    padding + port_diameter + padding;
-static auto constexpr global_step_controls_left =
-    sequence_controls_right + margin;
-static auto constexpr global_step_controls_width =
-    global_step_controls_column_width + padding +
-    global_step_controls_column_width + padding +
-    global_step_controls_column_width;
-static auto constexpr global_step_controls_right =
-    global_step_controls_left + global_step_controls_width;
+static auto constexpr global_control_width = padding + port_diameter + padding;
+static auto constexpr global_control_columns = 3.F;
+static auto constexpr global_controls_width =
+    global_control_width * global_control_columns +
+    padding * (global_control_columns - 1);
 
-static auto constexpr labels_left = global_step_controls_right + margin;
-static auto constexpr labels_width = 0.67F * step_width;
-static auto constexpr labels_right = labels_left + labels_width;
+static auto constexpr labels_width = 10.F;
 
-static auto constexpr step_block_left = labels_right + padding;
 static auto constexpr port_box_ascent =
-    padding + label_small_size + port_radius + 0.22F;
+    padding + small_label_size + port_radius + 0.22F;
 static auto constexpr port_box_descent = padding + port_radius;
 static auto constexpr global_controls_top_y = top + port_box_ascent;
 static auto constexpr global_controls_bottom_y = bottom - port_box_descent;
 static auto constexpr global_controls_dy =
     (global_controls_bottom_y - global_controls_top_y) / 4.F;
-
-static auto constexpr step_block_x = step_block_left + x_offset;
 
 static inline auto constexpr global_controls_y(int row) -> float {
   return global_controls_top_y + static_cast<float>(row) * global_controls_dy;
@@ -82,23 +68,28 @@ private:
 
 class StartMarker : public rack::widget::SvgWidget {
 public:
-  StartMarker(std::string const &module_svg_dir, float x, float y) {
+  StartMarker(std::string const &module_svg_dir, float step_block_x, float y)
+      : step_block_x_{step_block_x} {
     setSvg(control_svg(module_svg_dir, "marker-start"));
-    position_centered(this, x, y);
+    position_centered(this, 0.F, y);
   }
 
   void set_selection_start(int step) {
-    auto const x = step_block_x + step_width * static_cast<float>(step) +
+    auto const x = step_block_x_ + step_width * static_cast<float>(step) +
                    step_width / 2.F - light_diameter * 2.F;
     this->box.pos.x = mm2px(x);
   }
+
+private:
+  float step_block_x_;
 };
 
 template <int N> class EndMarker : public rack::widget::SvgWidget {
 public:
-  EndMarker(std::string const &module_svg_dir, float x, float y) {
+  EndMarker(std::string const &module_svg_dir, float step_block_x, float y)
+      : step_block_x_{step_block_x} {
     setSvg(control_svg(module_svg_dir, "marker-end"));
-    position_centered(this, x, y);
+    position_centered(this, 0.F, y);
   }
 
   void set_selection_start(int step) {
@@ -114,7 +105,7 @@ private:
   void move() {
     auto const selection_end =
         (selection_start_ + selection_length_ - 1) & step_mask_;
-    auto const x = step_block_x +
+    auto const x = step_block_x_ +
                    step_width * static_cast<float>(selection_end) +
                    step_width / 2.F;
     this->box.pos.x = mm2px(x);
@@ -123,6 +114,7 @@ private:
   int selection_start_{};
   int selection_length_{};
   int const step_mask_ = N - 1;
+  float step_block_x_;
 }; // namespace sequencizer
 
 template <int N> class Panel : public rack::app::ModuleWidget {
@@ -135,17 +127,28 @@ public:
   Panel(rack::engine::Module *module) {
     auto const slug = std::string{"sequencizer-"} + std::to_string(N);
 
-    auto constexpr content_width = 14.195 + static_cast<float>(N) * step_width;
-
-    auto constexpr content_width_hp = mm2hp(content_width);
-    auto constexpr hp = static_cast<int>(content_width_hp + 2.F);
+    auto constexpr step_block_width_hp = N * step_width_hp;
+    auto constexpr hp = base_width_hp + step_block_width_hp;
 
     setModule(module);
     setPanel(background_svg(slug));
-    install_screws(this, hp);
+    install_screws(this, static_cast<int>(hp));
+
+    auto constexpr content_width = sequence_controls_width +
+                                   global_controls_width + labels_width +
+                                   hp2mm(step_block_width_hp);
+    auto constexpr excess_width = hp2mm(hp) - padding - content_width;
+    auto constexpr margin = excess_width / 4.F;
+
+    auto constexpr sequence_controls_left = margin;
+    auto constexpr global_controls_left =
+        sequence_controls_left + sequence_controls_width + margin;
+    auto constexpr step_block_left = global_controls_left +
+                                     global_controls_width + margin +
+                                     labels_width + padding;
 
     auto constexpr sequence_controls_x =
-        sequence_controls_left + port_radius + padding + x_offset;
+        sequence_controls_left + padding + port_radius;
 
     auto constexpr run_y = global_controls_y(0);
     addInput(Jack::input(slug, module, sequence_controls_x, run_y, Input::Run));
@@ -161,10 +164,13 @@ public:
                             Param::Loop));
 
     auto constexpr progress_light_y = top - light_diameter * 2.F;
-    auto *start_marker = new StartMarker(slug, 0.F, progress_light_y);
+
+    auto *start_marker =
+        new StartMarker(slug, step_block_left, progress_light_y);
     addChild(start_marker);
 
-    auto *end_marker = new EndMarker<N>(slug, 0.F, progress_light_y);
+    auto *end_marker =
+        new EndMarker<N>(slug, step_block_left, progress_light_y);
     addChild(end_marker);
 
     auto const on_selection_start_change = [start_marker,
@@ -173,14 +179,15 @@ public:
       end_marker->set_selection_start(step);
     };
 
+    auto const on_selection_end_change = [end_marker](int length) {
+      end_marker->set_selection_length(length);
+    };
+
     auto constexpr selection_y = global_controls_y(2);
     addParam(new SelectionKnob(on_selection_start_change, slug, module,
                                sequence_controls_x - hp2mm(0.2F), selection_y,
                                Param::SelectionStart));
 
-    auto const on_selection_end_change = [end_marker](int length) {
-      end_marker->set_selection_length(length);
-    };
     auto constexpr selection_length_offset = 8.28F;
     auto constexpr selection_length_x =
         sequence_controls_x + selection_length_offset;
@@ -209,12 +216,11 @@ public:
     auto constexpr out_y = global_controls_y(4);
 
     auto constexpr global_controls_left_x =
-        global_step_controls_left + global_step_controls_column_width / 2.F +
-        x_offset;
+        global_controls_left + global_control_width / 2.F;
     auto constexpr global_controls_center_x =
-        global_controls_left_x + global_step_controls_column_width + padding;
+        global_controls_left_x + global_control_width + padding;
     auto constexpr global_controls_right_x =
-        global_controls_center_x + global_step_controls_column_width + padding;
+        global_controls_center_x + global_control_width + padding;
 
     addParam(Knob::small(slug, module, global_controls_left_x, level_y,
                          Param::GlobalLevel));
@@ -234,8 +240,8 @@ public:
         Jack::input(slug, module, global_controls_left_x, in_y, Input::InA));
     addInput(
         Jack::input(slug, module, global_controls_center_x, in_y, Input::InB));
-    addInput(Jack::input(slug, module, global_controls_right_x, in_y,
-                         Input::Trigger));
+    addInput(
+        Jack::input(slug, module, global_controls_right_x, in_y, Input::InC));
 
     addOutput(Jack::output(slug, module, global_controls_left_x, state_y,
                            Output::StepNumber));
@@ -253,7 +259,7 @@ public:
 
     auto constexpr intra_section_glue = 0.5F;
     auto constexpr inter_section_glue = 4.F;
-    auto constexpr stepper_ascent = label_small_size / 2.F + padding - 0.25F;
+    auto constexpr stepper_ascent = small_label_size / 2.F + padding - 0.25F;
     auto constexpr stepper_height = stepper_ascent * 2.F;
 
     auto constexpr trigger_y = top + stepper_ascent;
@@ -295,7 +301,7 @@ public:
 
     for (auto step = 0; step < N; step++) {
       auto const step_left =
-          step_block_x + static_cast<float>(step) * step_width;
+          step_block_left + static_cast<float>(step) * step_width;
       auto const step_x = step_left + step_width / 2.F;
       addChild(rack::createLightCentered<ProgressLight>(
           mm2px(step_x, progress_light_y), module,
@@ -306,7 +312,7 @@ public:
                                Param::StepTriggerMode + step));
       addParam(Toggle::stepper(slug, "interrupt-mode", 2, module, step_x,
                                interrupt_y, Param::StepInterruptMode + step));
-      addParam(Toggle::stepper(slug, "completion-mode", 2, module, step_x,
+      addParam(Toggle::stepper(slug, "sustain-mode", 2, module, step_x,
                                sustain_y, Param::StepSustainMode + step));
 
       addParam(Toggle::stepper(slug, "anchor-mode", 2, module, step_x,

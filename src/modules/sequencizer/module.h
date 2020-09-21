@@ -6,7 +6,7 @@
 #include "config/curvature-config.h"
 #include "config/duration-config.h"
 #include "config/level-config.h"
-#include "controls.h"
+#include "control-ids.h"
 #include "controls/curvature-inputs.h"
 #include "controls/duration-inputs.h"
 #include "controls/level-inputs.h"
@@ -56,20 +56,20 @@ public:
       config_toggle<2>(
           this, Param::StepInterruptMode + step, "Interrupt",
           {"Ignore triggers while generating", "Advance to next step"});
-      config_toggle<2>(this, Param::StepSustainMode + step, "At end",
+      config_toggle<2>(this, Param::StepSustainMode + step, "Sustain",
                        {"Sustain until triggered", "Advance to next step"}, 1);
 
-      config_toggle<4>(this, Param::StepStartAnchorSource + step,
-                       "Start anchor source",
-                       {"Level knob", "In A port", "In B port", "Out port"}, 2);
+      config_toggle<5>(
+          this, Param::StepStartAnchorSource + step, "Start anchor source",
+          {"Level knob", "In A port", "In B port", "In C port", "Out port"}, 4);
       config_level_knob(this, Param::StepStartAnchorLevel + step,
                         Param::GlobalLevelRange, "Start level");
       config_toggle<2>(this, Param::StepStartAnchorMode + step,
                        "Start anchor mode", {"Snapshot", "Track changes"});
 
-      config_toggle<4>(this, Param::StepEndAnchorSource + step,
-                       "End anchor source",
-                       {"Level knob", "In A port", "In B port", "Out port"});
+      config_toggle<5>(
+          this, Param::StepEndAnchorSource + step, "End anchor source",
+          {"Level knob", "In A port", "In B port", "In C port", "Out port"});
       config_level_knob(this, Param::StepEndAnchorLevel + step,
                         Param::GlobalLevelRange, "End level");
       config_toggle<2>(this, Param::StepEndAnchorMode + step, "End anchor mode",
@@ -113,8 +113,6 @@ public:
     return static_cast<AnchorSource>(selection);
   }
 
-  auto aux() const -> float { return voltage_at(inputs[Input::InB]); }
-
   auto completion_mode(int step) const -> SustainMode {
     auto const selection = position_of(params[Param::StepSustainMode + step]);
     return static_cast<SustainMode>(selection);
@@ -134,7 +132,11 @@ public:
     return is_high(inputs[Input::Gate]) || is_pressed(params[Param::Gate]);
   }
 
-  auto input() const -> float { return voltage_at(inputs[Input::InA]); }
+  auto in_a() const -> float { return voltage_at(inputs[Input::InA]); }
+
+  auto in_b() const -> float { return voltage_at(inputs[Input::InB]); }
+
+  auto in_c() const -> float { return voltage_at(inputs[Input::InC]); }
 
   auto interrupt_mode(int step) const -> InterruptMode {
     auto const selection = position_of(params[Param::StepInterruptMode + step]);

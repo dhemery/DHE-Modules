@@ -24,24 +24,6 @@ public:
       : Suite{"dhe::sequencizer::SequenceController: idle"} {}
 
   void register_tests(dhe::unit::TestRegistrar add) override {
-    add("with run high: with reset high: copies input to output",
-        test(when_idle,
-             [](Tester &t, Module &module, StepSelector &step_selector,
-                StepController &step_controller,
-                SequenceController &sequence_controller) {
-               module.running_ = true;
-               module.reset_ = true;
-
-               auto constexpr input = 0.12394F;
-               module.input_ = input;
-
-               sequence_controller.execute(0.1F);
-
-               t.assert_that(module.output_, is_equal_to(input));
-               t.assert_that(step_selector.called_, is_false);
-               t.assert_that(step_controller.called_, is_false);
-             }));
-
     add("with run high: with reset low: does nothing",
         test(when_idle,
              [](Tester &t, Module &module, StepSelector &step_selector,
@@ -141,7 +123,9 @@ public:
                t.assert_that(module.output_, is_equal_to(original_output));
              }));
 
-    add("with run low: if reset rises: does nothing",
+    add("with run low: "
+        "if reset rises: "
+        "does nothing",
         test(when_idle,
              [](Tester &t, Module &module, StepSelector &step_selector,
                 StepController &step_controller,

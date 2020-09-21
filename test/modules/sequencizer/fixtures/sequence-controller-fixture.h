@@ -20,9 +20,9 @@ struct Module {
   auto is_looping() const -> bool { return looping_; }
   auto is_reset() const -> bool { return reset_; }
   auto is_running() const -> bool { return running_; }
-  auto input() const -> float { return input_; }
+  auto input() const -> float { return in_a_; }
   void output(float v) { output_ = v; }
-  float input_{};  // NOLINT
+  float in_a_{};   // NOLINT
   bool gate_{};    // NOLINT
   bool looping_{}; // NOLINT
   float output_{}; // NOLINT
