@@ -9,7 +9,9 @@
 
 #include <vector>
 
-#define ENUMIDS(name, count) name, name##_LAST = (name) + (count)-1
+#define PER_STEP(name, n) name, name##_LAST = (name) + (n)-1
+#define ONE_PER_STEP(name, n) PER_STEP(name, n)
+#define TWO_PER_STEP(name, n) PER_STEP(name, (n)*2)
 
 namespace dhe {
 
@@ -19,20 +21,18 @@ static auto constexpr brightness_skew = 0.7F;
 static auto constexpr brightness_range =
     Range{-brightness_skew, 1.F + brightness_skew};
 
-template <typename InputT, typename OutputT, typename ParamT, typename LightT,
+template <typename Inputs, typename Outputs, typename Params, typename Lights,
           int N>
 class CurveSequencerControls {
 private:
-  std::vector<InputT> &inputs_;
-  std::vector<OutputT> &outputs_;
-  std::vector<ParamT> &params_;
-  std::vector<LightT> &lights_;
+  Inputs &inputs_;
+  Outputs &outputs_;
+  Params &params_;
+  Lights &lights_;
 
 public:
-  CurveSequencerControls(std::vector<InputT> &inputs,
-                         std::vector<OutputT> &outputs,
-                         std::vector<ParamT> &params,
-                         std::vector<LightT> &lights)
+  CurveSequencerControls(Inputs &inputs, Outputs &outputs, Params &params,
+                         Lights &lights)
       : inputs_{inputs}, outputs_{outputs}, params_{params}, lights_{lights} {}
 
   auto condition(int step) const -> AdvanceMode {
@@ -125,13 +125,13 @@ public:
     ResetButton,
     DurationRangeSwitch,
     LevelRangeSwitch,
-    ENUMIDS(CurveKnobs, N),
-    ENUMIDS(DurationKnobs, N),
-    ENUMIDS(EnabledButtons, N),
-    ENUMIDS(LevelKnobs, N),
-    ENUMIDS(ModeSwitches, N),
-    ENUMIDS(ConditionSwitches, N),
-    ENUMIDS(ShapeSwitches, N),
+    ONE_PER_STEP(CurveKnobs, N),
+    ONE_PER_STEP(DurationKnobs, N),
+    ONE_PER_STEP(EnabledButtons, N),
+    ONE_PER_STEP(LevelKnobs, N),
+    ONE_PER_STEP(ModeSwitches, N),
+    ONE_PER_STEP(ConditionSwitches, N),
+    ONE_PER_STEP(ShapeSwitches, N),
     GenerateModeMenu,
     ParameterCount
   };
@@ -142,13 +142,13 @@ public:
     LoopInput,
     ResetInput,
     RunInput,
-    ENUMIDS(EnabledInputs, N),
+    ONE_PER_STEP(EnabledInputs, N),
     InputCount
   };
 
   enum OutputIds { CurveSequencerOutput, OutputCount };
 
-  enum LightIds { ENUMIDS(ProgressLights, N * 2), LightCount };
+  enum LightIds { TWO_PER_STEP(ProgressLights, N), LightCount };
 
 private:
   void set_lights(int step, float completed_brightness,
@@ -162,3 +162,7 @@ private:
 } // namespace curve_sequencer
 
 } // namespace dhe
+
+#undef PER_STEP
+#undef ONE_PER_STEP
+#undef TWO_PER_STEP

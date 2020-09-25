@@ -72,3 +72,7 @@ template <int N> struct LightIds {
 
 } // namespace sequencizer
 } // namespace dhe
+
+#undef PER_STEP
+#undef ONE_PER_STEP
+#undef TWO_PER_STEP

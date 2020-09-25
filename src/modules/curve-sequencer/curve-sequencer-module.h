@@ -29,9 +29,9 @@ auto constexpr advance_mode_descriptions =
         "Gate changes",  "Gate is high", "Gate is low"};
 
 template <int N> class CurveSequencerModule : public rack::engine::Module {
-  using Controls =
-      CurveSequencerControls<rack::engine::Input, rack::engine::Output,
-                             rack::engine::Param, rack::engine::Light, N>;
+  using Controls = CurveSequencerControls<
+      std::vector<rack::engine::Input>, std::vector<rack::engine::Output>,
+      std::vector<rack::engine::Param>, std::vector<rack::engine::Light>, N>;
 
 public:
   CurveSequencerModule() {
@@ -85,7 +85,7 @@ private:
   StepController<Controls> step_controller_{controls_, timer_};
   StepSelector<Controls> selector_{controls_, N};
 
-  CurveSequencer<Controls, decltype(selector_), decltype(step_controller_)>
+  CurveSequencer<Controls, StepSelector<Controls>, StepController<Controls>>
       curve_sequencer_{controls_, selector_, step_controller_};
 };
 } // namespace curve_sequencer
