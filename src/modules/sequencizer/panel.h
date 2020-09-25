@@ -222,17 +222,17 @@ public:
     auto constexpr global_controls_right_x =
         global_controls_center_x + global_control_width + padding;
 
-    addParam(Knob::small(slug, module, global_controls_left_x, level_y,
-                         Param::Level));
-    addInput(Jack::input(slug, module, global_controls_center_x, level_y,
+    addInput(Jack::input(slug, module, global_controls_left_x, level_y,
                          Input::LevelCV));
+    addParam(Knob::small(slug, module, global_controls_center_x, level_y,
+                         Param::Level));
     addParam(Toggle::thumb(2, slug, module, global_controls_right_x, level_y,
                            Param::LevelRange));
 
-    addParam(Knob::small(slug, module, global_controls_left_x,
-                         global_duration_y, Param::Duration));
-    addInput(Jack::input(slug, module, global_controls_center_x,
+    addInput(Jack::input(slug, module, global_controls_left_x,
                          global_duration_y, Input::DurationCV));
+    addParam(Knob::small(slug, module, global_controls_center_x,
+                         global_duration_y, Param::Duration));
     addParam(Toggle::thumb(3, slug, module, global_controls_right_x,
                            global_duration_y, Param::DurationRange));
 

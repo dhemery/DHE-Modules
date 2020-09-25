@@ -100,14 +100,14 @@ def make_global_step_controls(left)
   right_x = center_x + GLOBAL_STEP_CONTROL_WIDTH + PADDING
 
   level_y = global_controls_y(0)
-  small_knob x: left_x, y: level_y, label: 'LEVEL'
-  port x: center_x, y: level_y
+  port x: left_x, y: level_y
+  small_knob x: center_x, y: level_y, label: 'LEVEL'
   polarity_toggle x: right_x, y: level_y, selection: 2
   connector left: left_x, right: right_x, y: level_y
 
   duration_y = global_controls_y(1)
-  small_knob x: left_x, y: duration_y, label: 'DUR'
-  port x: center_x, y: duration_y
+  port x: left_x, y: duration_y
+  small_knob x: center_x, y: duration_y, label: 'DUR'
   duration_toggle x: right_x, y: duration_y
   connector left: left_x, right: right_x, y: duration_y
 
@@ -177,13 +177,13 @@ ANCHOR_SOURCES = %w[LEVEL A B C OUT]
 ANCHOR_MODES = %w[SMPL TRACK]
 END_ANCHOR_MODE_SELECTION = 2
 END_ANCHOR_SOURCE_SELECTION = 1
-INTERRUPT_MODES = %w[NO YES]
+INTERRUPT_MODES = %w[OFF ON]
 INTERRUPT_MODE_SELECTION = 1
 SHAPE_OPTIONS = %w[J S]
 SHAPE_SELECTION = 1
 START_ANCHOR_MODE_SELECTION = 1
 START_ANCHOR_SOURCE_SELECTION = 5
-SUSTAIN_MODES = %w[NO YES]
+SUSTAIN_MODES = %w[OFF ON]
 SUSTAIN_MODE_SELECTION = 1
 TRIGGER_MODES = %w[RISE FALL EDGE HIGH LOW]
 TRIGGER_MODE_SELECTION = 1

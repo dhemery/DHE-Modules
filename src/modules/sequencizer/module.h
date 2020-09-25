@@ -67,7 +67,7 @@ public:
           this, Param::StepStartAnchorSource + step, "Start anchor source",
           {"Level", "A", "B", "C", "Out"}, 4);
       config_attenuator(this, Param::StepStartAnchorAttenuation + step,
-                        "Start anchor multiplier");
+                        "Start level attenuation");
       config_toggle<2>(this, Param::StepStartAnchorMode + step,
                        "Start anchor mode",
                        {"Sample the source", "Track the source"});
@@ -76,7 +76,7 @@ public:
           this, Param::StepEndAnchorSource + step, "End anchor source",
           {"Level", "A", "B", "C", "Out"});
       config_attenuator(this, Param::StepEndAnchorAttenuation + step,
-                        "End anchor multiplier");
+                        "End level attenuation");
       config_toggle<2>(this, Param::StepEndAnchorMode + step, "End anchor mode",
                        {"Sample the source", "Track the source"}, 1);
 
@@ -105,7 +105,8 @@ public:
   }
 
   auto anchor_level_attenuation(AnchorType type, int step) const -> float {
-    auto const base = type == AnchorType::Start ? Param::StepStartAnchorAttenuation
+    auto const base = type == AnchorType::Start
+                          ? Param::StepStartAnchorAttenuation
                           : Param::StepEndAnchorAttenuation;
     return rotation_of(params[base + step]);
   }
