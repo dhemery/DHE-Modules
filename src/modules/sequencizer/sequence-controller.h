@@ -32,18 +32,18 @@ public:
     if (step_ < 0) {
       idle();
     }
+
     if (step_ >= 0) {
       generate(sample_time);
     }
   }
 
 private:
-  void become_idle() {
-    if (step_ >= 0) {
-      step_controller_.exit();
-    }
-    step_ = -1;
-  }
+  void start_sequence() { change_to_step(first()); }
+
+  void advance_sequence() { change_to_step(successor()); }
+
+  void become_idle() { change_to_step(-1); }
 
   void idle() {
     if (gate_latch_.is_rise()) {
@@ -56,35 +56,32 @@ private:
 
   void generate(float sample_time) {
     auto const status = step_controller_.execute(gate_latch_, sample_time);
-    module_.show_step_status(step_, status);
     if (status == StepStatus::Completed) {
       advance_sequence();
-    }
-  }
-
-  void start_sequence() {
-    step_ = step_selector_.first();
-    if (step_ >= 0) {
-      enter_selected_step();
-    }
-  }
-
-  void enter_selected_step() const {
-    step_controller_.enter(step_);
-    module_.show_step_status(step_, StepStatus::Generating);
-  }
-
-  void advance_sequence() {
-    step_ = step_selector_.successor(step_, module_.is_looping());
-    if (step_ >= 0) {
-      enter_selected_step();
     } else {
-      show_inactive();
+      show_status(status);
     }
   }
 
-  void show_inactive() const {
-    module_.show_step_status(step_, StepStatus::Completed);
+  auto first() const -> int { return step_selector_.first(); }
+
+  auto successor() const -> int {
+    return step_selector_.successor(step_, module_.is_looping());
+  }
+
+  void change_to_step(int step) {
+    step_ = step;
+    if (step_ >= 0) {
+      step_controller_.enter(step_);
+      show_status(StepStatus::Generating);
+    } else {
+      step_controller_.exit();
+      show_status(StepStatus::Completed);
+    }
+  }
+
+  void show_status(StepStatus status) {
+    module_.show_step_status(step_, status);
   }
 
   int step_{-1};
