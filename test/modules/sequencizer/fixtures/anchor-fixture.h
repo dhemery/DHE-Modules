@@ -13,9 +13,9 @@ using dhe::unit::Tester;
 using dhe::unit::TestFunc;
 
 struct Module {
-  auto anchor_multiplier(AnchorType type, int step) const -> float {
-    return type == AnchorType::Start ? start_multiplier_[step]
-                                     : end_multiplier_[step];
+  auto anchor_level_attenuation(AnchorType type, int step) const -> float {
+    return type == AnchorType::Start ? start_level_attenuation_[step]
+                                     : end_level_attenuation_[step];
   }
   auto anchor_mode(AnchorType type, int step) const -> AnchorMode {
     return type == AnchorType::Start ? start_mode_[step] : end_mode_[step];
@@ -29,17 +29,17 @@ struct Module {
   auto level() const -> float { return level_; }
   auto output() const -> float { return output_; }
 
-  float in_a_{};                                        // NOLINT
-  float in_b_{};                                        // NOLINT
-  float in_c_{};                                        // NOLINT
-  float level_{};                                       // NOLINT
-  float output_{};                                      // NOLINT
-  std::array<AnchorMode, step_count> end_mode_{};       // NOLINT
-  std::array<float, step_count> end_multiplier_{};      // NOLINT
-  std::array<AnchorSource, step_count> end_source_{};   // NOLINT
-  std::array<AnchorMode, step_count> start_mode_{};     // NOLINT
-  std::array<float, step_count> start_multiplier_{};    // NOLINT
-  std::array<AnchorSource, step_count> start_source_{}; // NOLINT
+  float in_a_{};                                            // NOLINT
+  float in_b_{};                                            // NOLINT
+  float in_c_{};                                            // NOLINT
+  float level_{};                                           // NOLINT
+  float output_{};                                          // NOLINT
+  std::array<AnchorMode, step_count> end_mode_{};           // NOLINT
+  std::array<float, step_count> end_level_attenuation_{};   // NOLINT
+  std::array<AnchorSource, step_count> end_source_{};       // NOLINT
+  std::array<AnchorMode, step_count> start_mode_{};         // NOLINT
+  std::array<float, step_count> start_level_attenuation_{}; // NOLINT
+  std::array<AnchorSource, step_count> start_source_{};     // NOLINT
 };
 
 using Anchor = dhe::sequencizer::Anchor<Module>;

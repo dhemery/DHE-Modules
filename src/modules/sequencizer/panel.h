@@ -319,7 +319,7 @@ public:
                                start_anchor_mode_y,
                                Param::StepStartAnchorMode + step));
       addParam(Knob::small(slug, module, step_x, start_anchor_level_y,
-                           Param::StepStartAnchorGain + step));
+                           Param::StepStartAnchorAttenuation + step));
       addParam(Toggle::stepper(slug, "anchor-source", anchor_source_count,
                                module, step_x, start_anchor_source_y,
                                Param::StepStartAnchorSource + step));
@@ -328,7 +328,7 @@ public:
                                end_anchor_mode_y,
                                Param::StepEndAnchorMode + step));
       addParam(Knob::small(slug, module, step_x, end_anchor_level_y,
-                           Param::StepEndAnchorGain + step));
+                           Param::StepEndAnchorAttenuation + step));
       addParam(Toggle::stepper(slug, "anchor-source", anchor_source_count,
                                module, step_x, end_anchor_source_y,
                                Param::StepEndAnchorSource + step));

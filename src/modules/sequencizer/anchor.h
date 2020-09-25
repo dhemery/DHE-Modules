@@ -40,18 +40,17 @@ private:
   float sample_{};
 
   auto source_voltage() const -> float {
-    auto const multiplier = module_.anchor_multiplier(type_, step_);
     switch (module_.anchor_source(type_, step_)) {
     case AnchorSource::InA:
-      return module_.in_a() * multiplier;
+      return module_.in_a();
     case AnchorSource::InB:
-      return module_.in_b() * multiplier;
+      return module_.in_b();
     case AnchorSource::InC:
-      return module_.in_c() * multiplier;
+      return module_.in_c();
     case AnchorSource::Level:
-      return module_.level() * multiplier;
+      return module_.level() * module_.anchor_level_attenuation(type_, step_);
     case AnchorSource::Out:
-      return module_.output() * multiplier;
+      return module_.output();
     default:
       return 0.F;
     }

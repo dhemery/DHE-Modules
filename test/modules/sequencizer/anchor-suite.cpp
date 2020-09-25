@@ -18,8 +18,8 @@ static inline void set_all_voltages(Module &module, float voltage) {
   module.output_ = voltage;
   module.level_ = voltage;
   for (int step = 0; step < step_count; step++) {
-    module.start_multiplier_[step] = 1.F;
-    module.end_multiplier_[step] = 1.F;
+    module.start_level_attenuation_[step] = 1.F;
+    module.end_level_attenuation_[step] = 1.F;
   }
 }
 
