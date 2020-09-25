@@ -56,6 +56,7 @@ private:
 
   void generate(float sample_time) {
     auto const status = step_controller_.execute(gate_latch_, sample_time);
+    module_.show_step_status(step_, status);
     if (status == StepStatus::Completed) {
       advance_sequence();
     }
@@ -64,15 +65,26 @@ private:
   void start_sequence() {
     step_ = step_selector_.first();
     if (step_ >= 0) {
-      step_controller_.enter(step_);
+      enter_selected_step();
     }
+  }
+
+  void enter_selected_step() const {
+    step_controller_.enter(step_);
+    module_.show_step_status(step_, StepStatus::Generating);
   }
 
   void advance_sequence() {
     step_ = step_selector_.successor(step_, module_.is_looping());
     if (step_ >= 0) {
-      step_controller_.enter(step_);
+      enter_selected_step();
+    } else {
+      show_inactive();
     }
+  }
+
+  void show_inactive() const {
+    module_.show_step_status(step_, StepStatus::Completed);
   }
 
   int step_{-1};

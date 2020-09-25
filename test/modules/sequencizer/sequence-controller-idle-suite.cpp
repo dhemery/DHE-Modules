@@ -60,8 +60,8 @@ public:
                t.assert_that(module.output_, is_equal_to(original_output));
              }));
 
-    add("with run high: if gate rises: executes first step with gate edge "
-        "cleared",
+    add("with run high: "
+        "if gate rises: executes first step with gate edge cleared",
         test(when_idle,
              [](Tester &t, Module &module, StepSelector &step_selector,
                 StepController &step_controller,
@@ -72,7 +72,7 @@ public:
                auto constexpr first_enabled_step = 3;
                step_selector.first_ = first_enabled_step;
 
-               step_controller.status_ = StepStatus::InProgress;
+               step_controller.status_ = StepStatus::Generating;
 
                auto constexpr sample_time = 0.39947F;
                sequence_controller.execute(sample_time);
@@ -85,7 +85,8 @@ public:
                              is_equal_to(sample_time));
              }));
 
-    add("with run high: if gate rises: does nothing if no first step",
+    add("with run high: "
+        "if gate rises: does nothing if no first step",
         test(when_idle,
              [](Tester &t, Module &module, StepSelector &step_selector,
                 StepController &step_controller,
@@ -94,8 +95,6 @@ public:
                module.gate_ = true;
 
                step_selector.first_ = -1;
-
-               step_controller.status_ = StepStatus::InProgress;
 
                auto constexpr original_output = -2340.223F;
                module.output_ = original_output;

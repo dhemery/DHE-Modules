@@ -11,7 +11,8 @@ auto constexpr generator_status_count =
     static_cast<int>(GeneratorStatus::Completed) + 1;
 
 enum class StepStatus {
-  InProgress,
+  Generating,
+  Sustaining,
   Completed,
 };
 

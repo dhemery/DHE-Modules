@@ -191,12 +191,34 @@ public:
     return static_cast<TriggerMode>(selection);
   }
 
+  void show_curving(bool curving) {
+    outputs[Output::IsCurving].setVoltage(curving ? 10.F : 0.F);
+  }
+
   void show_inactive(int step) { set_lights(step, 0.F, 0.F); }
 
   void show_progress(int step, float progress) {
     auto const completed_brightness = brightness_range.scale(progress);
     auto const remaining_brightness = 1.F - completed_brightness;
     set_lights(step, completed_brightness, remaining_brightness);
+  }
+
+  void show_step_status(int step, StepStatus status) {
+    outputs[Output::StepNumber].setVoltage(static_cast<float>(step + 1) * 10.F /
+                                           static_cast<float>(N));
+    switch (status) {
+    case StepStatus::Generating:
+      outputs[Output::IsCurving].setVoltage(10.F);
+      outputs[Output::IsSustaining].setVoltage(0.F);
+      break;
+    case StepStatus::Sustaining:
+      outputs[Output::IsCurving].setVoltage(0.F);
+      outputs[Output::IsSustaining].setVoltage(10.F);
+      break;
+    default:
+      outputs[Output::IsCurving].setVoltage(0.F);
+      outputs[Output::IsSustaining].setVoltage(0.F);
+    }
   }
 
   auto taper(int step) const -> sigmoid::Taper const & {

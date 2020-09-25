@@ -23,9 +23,11 @@ public:
   auto execute(Latch const &gate, float sample_time) -> StepStatus {
     if (!interrupted(gate)) {
       auto const generator_status = generator_.generate(sample_time);
-      if ((generator_status == GeneratorStatus::Generating) ||
-          !sustainer_.is_done(current_step_, gate)) {
-        return StepStatus::InProgress;
+      if (generator_status == GeneratorStatus::Generating) {
+        return StepStatus::Generating;
+      }
+      if (!sustainer_.is_done(current_step_, gate)) {
+        return StepStatus::Sustaining;
       }
     }
     exit();

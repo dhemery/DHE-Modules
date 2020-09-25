@@ -60,7 +60,7 @@ public:
 
           auto const status = step_controller.execute(Latch{}, sample_time);
 
-          t.assert_that("status", status, is_equal_to(StepStatus::InProgress));
+          t.assert_that("status", status, is_equal_to(StepStatus::Generating));
           t.assert_that("generator.sample_time", generator.sample_time_,
                         is_equal_to(sample_time));
           t.assert_that("generator.stopped", generator.stopped_, is_false);
@@ -90,7 +90,7 @@ public:
 
           auto const status = step_controller.execute(Latch{}, 0.F);
 
-          t.assert_that("status", status, is_equal_to(StepStatus::InProgress));
+          t.assert_that("status", status, is_equal_to(StepStatus::Sustaining));
           t.assert_that("generator.stopped", generator.stopped_, is_false);
         }));
 
@@ -103,7 +103,7 @@ public:
 
           auto const status = step_controller.execute(Latch{}, 0.F);
 
-          t.assert_that("status", status, is_equal_to(StepStatus::InProgress));
+          t.assert_that("status", status, is_equal_to(StepStatus::Generating));
           t.assert_that("generator.stopped", generator.stopped_, is_false);
         }));
   }

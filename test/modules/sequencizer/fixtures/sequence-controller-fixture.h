@@ -22,12 +22,17 @@ struct Module {
   auto is_running() const -> bool { return running_; }
   auto input() const -> float { return in_a_; }
   void output(float v) { output_ = v; }
-  float in_a_{};   // NOLINT
-  bool gate_{};    // NOLINT
-  bool looping_{}; // NOLINT
-  float output_{}; // NOLINT
-  bool reset_{};   // NOLINT
-  bool running_{}; // NOLINT
+  void show_step_status(int step, StepStatus status) {
+    step_ = step, status_ = status;
+  }
+  bool gate_{};         // NOLINT
+  float in_a_{};        // NOLINT
+  bool looping_{};      // NOLINT
+  float output_{};      // NOLINT
+  bool reset_{};        // NOLINT
+  bool running_{};      // NOLINT
+  StepStatus status_{}; // NOLINT
+  int step_{};          // NOLINT
 };
 
 struct StepController {
