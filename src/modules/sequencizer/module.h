@@ -203,6 +203,14 @@ public:
     set_lights(step, completed_brightness, remaining_brightness);
   }
 
+  void show_sequence_event(bool event) {
+    outputs[Output::SequenceEventPulse].setVoltage(event ? 10.F : 0.F);
+  }
+
+  void show_step_event(bool event) {
+    outputs[Output::StepEventPulse].setVoltage(event ? 10.F : 0.F);
+  }
+
   void show_step_status(int step, StepStatus status) {
     outputs[Output::StepNumber].setVoltage(static_cast<float>(step + 1) * 10.F /
                                            static_cast<float>(N));

@@ -105,67 +105,60 @@ public:
              }));
 
     add("if active step completes: "
-        "seeks successor with active step and loop state",
-        test(when_active, [](Tester &t, Module &module,
-                             StepSelector &step_selector,
-                             StepController &step_controller,
-                             SequenceController &sequence_controller) {
-          auto constexpr looping = true;
-          module.running_ = true;
-          module.looping_ = looping;
-
-          step_controller.status_ = StepStatus::Completed;
-
-          sequence_controller.execute(0.F);
-
-          t.assert_that("step passed to step selector", step_selector.step_,
-                        is_equal_to(initially_active_step));
-          t.assert_that("looping", step_selector.looping_,
-                        is_equal_to(looping));
-        }));
-
-    add("if active step completes: "
-        "enters successor step",
-        test(when_active, [](Tester &t, Module &module,
-                             StepSelector &step_selector,
-                             StepController &step_controller,
-                             SequenceController &sequence_controller) {
-          module.running_ = true;
-
-          step_controller.status_ = StepStatus::Completed;
-          auto constexpr second_step = initially_active_step + 3;
-          step_selector.successor_ = second_step;
-
-          sequence_controller.execute(0.F);
-          t.assert_that("step entered when initial step completed",
-                        step_controller.entered_step_,
-                        is_equal_to(second_step));
-          t.assert_that("step status step when initial step completed",
-                        module.step_, is_equal_to(second_step));
-          t.assert_that("step status  initial step completed", module.status_,
-                        is_equal_to(StepStatus::Generating));
-
-          auto constexpr third_step = second_step + 3;
-          step_selector.successor_ = third_step;
-          step_controller.status_ = StepStatus::Completed;
-
-          sequence_controller.execute(0.F);
-          t.assert_that("step entered when second step completed",
-                        step_controller.entered_step_, is_equal_to(third_step));
-          t.assert_that("step status step when second step completed",
-                        module.step_, is_equal_to(third_step));
-          t.assert_that("step status when second step completed",
-                        module.status_, is_equal_to(StepStatus::Generating));
-        }));
-
-    add("if active step completes: "
-        "if no successor: "
-        "does not enter another step",
+        "enters successor of active step",
         test(when_active,
              [](Tester &t, Module &module, StepSelector &step_selector,
                 StepController &step_controller,
                 SequenceController &sequence_controller) {
                module.running_ = true;
+
+               step_controller.status_ = StepStatus::Completed;
+               auto constexpr successor = initially_active_step + 3;
+               step_selector.successor_ = successor;
+
+               sequence_controller.execute(0.F);
+               t.assert_that("step given to selector", step_selector.step_,
+                             is_equal_to(initially_active_step));
+               t.assert_that("entered step", step_controller.entered_step_,
+                             is_equal_to(successor));
+               t.assert_that("step status step", module.step_,
+                             is_equal_to(successor));
+               t.assert_that("step status", module.status_,
+                             is_equal_to(StepStatus::Generating));
+             }));
+
+    add("if active step completes: "
+        "if no successor: "
+        "if looping: "
+        "restarts sequence",
+        test(when_active, [](Tester &t, Module &module,
+                             StepSelector &step_selector,
+                             StepController &step_controller,
+                             SequenceController &sequence_controller) {
+          module.running_ = true;
+          module.looping_ = true;
+
+          auto constexpr first = initially_active_step + 2;
+          step_controller.status_ = StepStatus::Completed;
+          step_selector.successor_ = -1;
+          step_selector.first_ = first;
+
+          sequence_controller.execute(0.F);
+          t.assert_that("step status step", module.step_, is_equal_to(first));
+          t.assert_that("step status", module.status_,
+                        is_equal_to(StepStatus::Generating));
+        }));
+
+    add("if active step completes: "
+        "if no successor: "
+        "if not looping: "
+        "stops",
+        test(when_active,
+             [](Tester &t, Module &module, StepSelector &step_selector,
+                StepController &step_controller,
+                SequenceController &sequence_controller) {
+               module.running_ = true;
+               module.looping_ = false;
 
                step_controller.status_ = StepStatus::Completed;
                step_selector.successor_ = -1;
@@ -173,23 +166,8 @@ public:
                sequence_controller.execute(0.F);
                t.assert_that("step controller entered",
                              step_controller.entered_, is_false);
-             }));
-
-    add("if active step completes: "
-        "if no successor: "
-        "shows status completed with no step",
-        test(when_active,
-             [](Tester &t, Module &module, StepSelector &step_selector,
-                StepController &step_controller,
-                SequenceController &sequence_controller) {
-               module.running_ = true;
-
-               step_controller.status_ = StepStatus::Completed;
-               step_selector.successor_ = -1;
-
-               sequence_controller.execute(0.F);
-               t.assert_that("step", module.step_, is_equal_to(-1));
-               t.assert_that("status", module.status_,
+               t.assert_that("step status step", module.step_, is_equal_to(-1));
+               t.assert_that("step status", module.status_,
                              is_equal_to(StepStatus::Completed));
              }));
 

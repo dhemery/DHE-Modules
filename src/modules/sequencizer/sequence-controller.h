@@ -1,10 +1,13 @@
 #pragma once
 
 #include "components/latch.h"
+#include "components/phase-timer.h"
 #include "status.h"
 
 namespace dhe {
 namespace sequencizer {
+
+static auto constexpr pulse_duration = 1e-1F;
 
 template <typename Module, typename StepSelector, typename StepController>
 class SequenceController {
@@ -19,6 +22,7 @@ public:
     // react to edges that happen on the same sample when RUN rises.
     gate_latch_.clock(module_.gate());
     reset_latch_.clock(module_.is_reset());
+    show_events(sample_time);
 
     // Reset even if not running.
     if (reset_latch_.is_rise()) {
@@ -39,9 +43,20 @@ public:
   }
 
 private:
-  void start_sequence() { change_to_step(first()); }
+  void start_sequence() {
+    start_of_sequence_.reset();
+    change_to_step(first());
+  }
 
-  void advance_sequence() { change_to_step(successor()); }
+  void advance_sequence() {
+    end_of_step_.reset();
+    auto const next_step = successor();
+    if (next_step < 0 && module_.is_looping()) {
+      start_sequence();
+    } else {
+      change_to_step(next_step);
+    }
+  }
 
   void become_idle() { change_to_step(-1); }
 
@@ -65,12 +80,11 @@ private:
 
   auto first() const -> int { return step_selector_.first(); }
 
-  auto successor() const -> int {
-    return step_selector_.successor(step_, module_.is_looping());
-  }
+  auto successor() -> int { return step_selector_.successor(step_, false); }
 
   void change_to_step(int step) {
     step_ = step;
+    end_of_step_.reset();
     if (step_ >= 0) {
       step_controller_.enter(step_);
       show_status(StepStatus::Generating);
@@ -84,9 +98,19 @@ private:
     module_.show_step_status(step_, status);
   }
 
+  void show_events(float sample_time) {
+    auto const pulse_delta = sample_time / pulse_duration;
+    start_of_sequence_.advance(pulse_delta);
+    module_.show_sequence_event(start_of_sequence_.in_progress());
+    end_of_step_.advance(pulse_delta);
+    module_.show_step_event(end_of_step_.in_progress());
+  }
+
   int step_{-1};
   Latch gate_latch_{};
   Latch reset_latch_{};
+  PhaseTimer start_of_sequence_{1.F};
+  PhaseTimer end_of_step_{1.F};
   Module &module_;
   StepSelector &step_selector_;
   StepController &step_controller_;

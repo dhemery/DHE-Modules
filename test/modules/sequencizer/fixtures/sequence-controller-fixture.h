@@ -22,6 +22,8 @@ struct Module {
   auto is_running() const -> bool { return running_; }
   auto input() const -> float { return in_a_; }
   void output(float v) { output_ = v; }
+  void show_sequence_event(bool /**/) {}
+  void show_step_event(bool /**/) {}
   void show_step_status(int step, StepStatus status) {
     step_ = step, status_ = status;
   }
