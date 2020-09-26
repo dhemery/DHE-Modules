@@ -13,23 +13,24 @@ public:
       return selection_start;
     }
     return successor(selection_start, selection_start,
-                     module_.selection_length(), false);
+                     module_.selection_length());
   }
 
-  auto successor(int current, bool is_looping) const -> int {
+  auto successor(int current) const -> int {
     return successor(current, module_.selection_start(),
-                     module_.selection_length(), is_looping);
+                     module_.selection_length());
   }
 
 private:
   auto is_enabled(int step) const -> bool { return module_.is_enabled(step); }
 
-  auto successor(int current, int selection_start, int selection_length,
-                 bool is_looping) const -> int {
+  auto successor(int current, int selection_start, int selection_length) const
+      -> int {
     auto const selection_end =
         (selection_start + selection_length - 1) & step_mask_;
-    if (current == selection_end) {
-      return is_looping ? first() : -1;
+    if (current == selection_end ||
+        !is_selected(current, selection_start, selection_end)) {
+      return -1;
     }
     for (auto i = current + 1; i < selection_start + selection_length; i++) {
       auto const candidate = i & step_mask_;
@@ -38,7 +39,7 @@ private:
         return candidate;
       }
     }
-    return is_looping ? first() : -1;
+    return -1;
   };
 
   auto is_selected(int candidate, int selection_start, int selection_end) const

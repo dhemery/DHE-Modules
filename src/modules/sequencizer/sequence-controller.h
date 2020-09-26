@@ -7,7 +7,7 @@
 namespace dhe {
 namespace sequencizer {
 
-static auto constexpr pulse_duration = 1e-1F;
+static auto constexpr pulse_duration = 1e-3F;
 
 template <typename Module, typename StepSelector, typename StepController>
 class SequenceController {
@@ -80,11 +80,10 @@ private:
 
   auto first() const -> int { return step_selector_.first(); }
 
-  auto successor() -> int { return step_selector_.successor(step_, false); }
+  auto successor() -> int { return step_selector_.successor(step_); }
 
   void change_to_step(int step) {
     step_ = step;
-    end_of_step_.reset();
     if (step_ >= 0) {
       step_controller_.enter(step_);
       show_status(StepStatus::Generating);

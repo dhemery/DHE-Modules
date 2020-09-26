@@ -66,15 +66,13 @@ struct StepSelector {
     called_ = true;
     return first_;
   }
-  auto successor(int step, bool looping) -> int {
+  auto successor(int step) -> int {
     called_ = true;
     step_ = step;
-    looping_ = looping;
     return successor_;
   }
   bool called_{};   // NOLINT
   int first_{};     // NOLINT
-  bool looping_{};  // NOLINT
   int step_{};      // NOLINT
   int successor_{}; // NOLINT
 };
