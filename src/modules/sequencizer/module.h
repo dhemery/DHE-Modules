@@ -2,6 +2,7 @@
 
 #include "advancement.h"
 #include "anchor.h"
+#include "components/cxmath.h"
 #include "config/common-config.h"
 #include "config/curvature-config.h"
 #include "config/duration-config.h"
@@ -28,6 +29,31 @@ static auto constexpr brightness_skew = 0.7F;
 static auto constexpr brightness_range =
     Range{-brightness_skew, 1.F + brightness_skew};
 
+template <typename P, typename I>
+static inline auto duration(P const &duration_knob, P const &range_switch,
+                            P const &multipler_knob, I const &multiplier_cv)
+    -> float {
+  auto const nominal_duration =
+      dhe::selectable_duration(duration_knob, range_switch);
+  auto const multiplier_rotation = dhe::rotation(multipler_knob, multiplier_cv);
+  auto const nominal_multiplier = gain_range.scale(multiplier_rotation);
+  auto const clamped_multiplier = gain_range.clamp(nominal_multiplier);
+  auto const scaled_duration = nominal_duration * clamped_multiplier;
+  return cx::max(1e-3F, scaled_duration);
+}
+
+template <typename P, typename I>
+static inline auto level(P const &level_knob, P const &range_switch,
+                         P const &multipler_knob, I const &multiplier_cv)
+    -> float {
+  auto const range = level_range(range_switch);
+  auto const rotation = dhe::rotation_of(level_knob);
+  auto const nominal_level = range.scale(rotation);
+  auto const attenuation = dhe::rotation(multipler_knob, multiplier_cv);
+  auto const attenuated_level = nominal_level * attenuation;
+  return range.clamp(attenuated_level);
+}
+
 template <int N> class Module : public rack::engine::Module {
   using Input = InputIds<N>;
   using Light = LightIds<N>;
@@ -46,11 +72,10 @@ public:
                 1.F, 1.F);
     configParam(Param::SelectionLength, 1.F, N, N, "Sequence length", " steps");
 
-    config_level_knob(this, Param::Level, Param::LevelRange, "Level", 1.F);
+    config_attenuator(this, Param::LevelMultiplier, "Level multiplier");
     config_level_range_switch(this, Param::LevelRange);
 
-    config_duration_knob(this, Param::Duration, Param::DurationRange,
-                         "Duration", centered_rotation);
+    config_gain(this, Param::DurationMultiplier, "Duration multiplier");
     config_duration_range_switch(this, Param::DurationRange);
 
     for (auto step = 0; step < N; step++) {
@@ -66,8 +91,8 @@ public:
       config_toggle<anchor_source_count>(
           this, Param::StepStartAnchorSource + step, "Start anchor source",
           {"Level", "A", "B", "C", "Out"}, 4);
-      config_attenuator(this, Param::StepStartAnchorAttenuation + step,
-                        "Start level attenuation");
+      config_level_knob(this, Param::StepStartAnchorLevel + step,
+                        Param::LevelRange, "Start level");
       config_toggle<2>(this, Param::StepStartAnchorMode + step,
                        "Start anchor mode",
                        {"Sample the source", "Track the source"});
@@ -75,15 +100,15 @@ public:
       config_toggle<anchor_source_count>(
           this, Param::StepEndAnchorSource + step, "End anchor source",
           {"Level", "A", "B", "C", "Out"});
-      config_attenuator(this, Param::StepEndAnchorAttenuation + step,
-                        "End level attenuation");
+      config_level_knob(this, Param::StepEndAnchorLevel + step,
+                        Param::LevelRange, "End level");
       config_toggle<2>(this, Param::StepEndAnchorMode + step, "End anchor mode",
                        {"Sample the source", "Track the source"}, 1);
 
       config_curve_shape_switch(this, Param::StepShape + step, "Shape");
       config_curvature_knob(this, Param::StepCurvature + step, "Curvature");
-      config_gain(this, Param::StepDurationMultiplier + step,
-                  "Duration multiplier");
+      config_duration_knob(this, Param::StepDuration + step,
+                           Param::DurationRange, "Duration");
       config_button(this, Param::StepEnabled + step, "Enabled", {"No", "Yes"},
                     1);
 
@@ -104,11 +129,13 @@ public:
     return static_cast<AnchorMode>(selection);
   }
 
-  auto anchor_level_attenuation(AnchorType type, int step) const -> float {
-    auto const base = type == AnchorType::Start
-                          ? Param::StepStartAnchorAttenuation
-                          : Param::StepEndAnchorAttenuation;
-    return rotation_of(params[base + step]);
+  auto anchor_level(AnchorType type, int step) const -> float {
+    auto const base_knob_param = type == AnchorType::Start
+                                     ? Param::StepStartAnchorLevel
+                                     : Param::StepEndAnchorLevel;
+    return sequencizer::level(
+        params[base_knob_param + step], params[Param::LevelRange],
+        params[Param::LevelMultiplier], inputs[Input::LevelAttenuationCV]);
   }
 
   auto anchor_source(AnchorType type, int step) const -> AnchorSource {
@@ -127,15 +154,10 @@ public:
     return dhe::curvature(params[Param::StepCurvature + step]);
   }
 
-  auto duration() const -> float {
-    return dhe::selectable_duration(params[Param::Duration],
-                                    inputs[Input::DurationCV],
-                                    params[Param::DurationRange]);
-  }
-
-  auto duration_multiplier(int step) const -> float {
-    return gain_range.scale(
-        rotation_of(params[Param::StepDurationMultiplier + step]));
+  auto duration(int step) const -> float {
+    return sequencizer::duration(
+        params[Param::StepDuration + step], params[Param::DurationRange],
+        params[Param::DurationMultiplier], inputs[Input::DurationMultiplierCV]);
   }
 
   auto gate() const -> bool {
@@ -167,11 +189,6 @@ public:
 
   auto is_running() const -> bool {
     return is_pressed(params[Param::Run]) || is_high(inputs[Input::Run]);
-  }
-
-  auto level() const -> float {
-    return dhe::selectable_level(params[Param::Level], inputs[Input::LevelCV],
-                                 params[Param::LevelRange]);
   }
 
   auto output() const -> float { return voltage_at(outputs[Output::Out]); }

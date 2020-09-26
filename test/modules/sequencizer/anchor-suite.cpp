@@ -16,10 +16,9 @@ static inline void set_all_voltages(Module &module, float voltage) {
   module.in_b_ = voltage;
   module.in_c_ = voltage;
   module.output_ = voltage;
-  module.level_ = voltage;
   for (int step = 0; step < step_count; step++) {
-    module.start_level_attenuation_[step] = 1.F;
-    module.end_level_attenuation_[step] = 1.F;
+    module.start_level_[step] = voltage;
+    module.end_level_[step] = voltage;
   }
 }
 
@@ -30,15 +29,15 @@ public:
     add("AnchorType::Start: "
         "entered with AnchorSource::Level: "
         "voltage() with AnchorMode::Sample: "
-        "is sampled level voltage times start gain",
+        "is sampled level voltage",
         test(AnchorType::Start, [](Tester &t, Module &module, Anchor &anchor) {
           auto constexpr step = 0;
           auto constexpr default_entry_voltage = 3.343F;
 
           set_all_voltages(module, default_entry_voltage);
           auto constexpr level_entry_voltage = default_entry_voltage + 1.F;
-          module.level_ = level_entry_voltage;
           module.start_source_[step] = AnchorSource::Level;
+          module.start_level_[step] = level_entry_voltage;
           anchor.enter(step);
 
           set_all_voltages(module, level_entry_voltage + 1.F);
@@ -161,7 +160,7 @@ public:
             module.start_mode_[step] = AnchorMode::Track;
             module.start_source_[step] = AnchorSource::Level;
             auto constexpr current_level_voltage = default_entry_voltage + 1.F;
-            module.level_ = current_level_voltage;
+            module.start_level_[step] = current_level_voltage;
             t.assert_that(name_of(source), anchor.voltage(),
                           is_equal_to(current_level_voltage));
           }
@@ -261,8 +260,8 @@ public:
 
           set_all_voltages(module, default_entry_voltage);
           auto constexpr level_entry_voltage = default_entry_voltage + 1.F;
-          module.level_ = level_entry_voltage;
           module.end_source_[step] = AnchorSource::Level;
+          module.end_level_[step] = level_entry_voltage;
           anchor.enter(step);
 
           set_all_voltages(module, level_entry_voltage + 1.F);
@@ -386,7 +385,7 @@ public:
             module.end_mode_[step] = AnchorMode::Track;
             module.end_source_[step] = AnchorSource::Level;
             auto constexpr current_level_voltage = default_entry_voltage + 1.F;
-            module.level_ = current_level_voltage;
+            module.end_level_[step] = current_level_voltage;
             t.assert_that(name_of(source), anchor.voltage(),
                           is_equal_to(current_level_voltage));
           }

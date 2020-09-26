@@ -45,7 +45,7 @@ public:
 
           auto const status = step_controller.execute(Latch{}, 0.F);
 
-          t.assert_that("status", status, is_equal_to(StepStatus::Completed));
+          t.assert_that("status", status, is_equal_to(StepStatus::Idle));
           t.assert_that("generator.stopped", generator.stopped_, is_true);
         }));
 
@@ -76,7 +76,7 @@ public:
 
           auto const status = step_controller.execute(Latch{}, 0.F);
 
-          t.assert_that("status", status, is_equal_to(StepStatus::Completed));
+          t.assert_that("status", status, is_equal_to(StepStatus::Idle));
           t.assert_that("generator.stopped", generator.stopped_, is_true);
         }));
 

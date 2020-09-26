@@ -112,7 +112,7 @@ public:
                 SequenceController &sequence_controller) {
                module.running_ = true;
 
-               step_controller.status_ = StepStatus::Completed;
+               step_controller.status_ = StepStatus::Idle;
                auto constexpr successor = initially_active_step + 3;
                step_selector.successor_ = successor;
 
@@ -139,7 +139,7 @@ public:
           module.looping_ = true;
 
           auto constexpr first = initially_active_step + 2;
-          step_controller.status_ = StepStatus::Completed;
+          step_controller.status_ = StepStatus::Idle;
           step_selector.successor_ = -1;
           step_selector.first_ = first;
 
@@ -160,7 +160,7 @@ public:
                module.running_ = true;
                module.looping_ = false;
 
-               step_controller.status_ = StepStatus::Completed;
+               step_controller.status_ = StepStatus::Idle;
                step_selector.successor_ = -1;
 
                sequence_controller.execute(0.F);
@@ -168,7 +168,7 @@ public:
                              step_controller.entered_, is_false);
                t.assert_that("step status step", module.step_, is_equal_to(-1));
                t.assert_that("step status", module.status_,
-                             is_equal_to(StepStatus::Completed));
+                             is_equal_to(StepStatus::Idle));
              }));
 
     add("with run low: "

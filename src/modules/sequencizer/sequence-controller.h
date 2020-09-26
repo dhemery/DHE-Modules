@@ -7,7 +7,7 @@
 namespace dhe {
 namespace sequencizer {
 
-static auto constexpr pulse_duration = 1e-3F;
+static auto constexpr pulse_duration = 9e-4F;
 
 template <typename Module, typename StepSelector, typename StepController>
 class SequenceController {
@@ -71,7 +71,7 @@ private:
 
   void generate(float sample_time) {
     auto const status = step_controller_.execute(gate_latch_, sample_time);
-    if (status == StepStatus::Completed) {
+    if (status == StepStatus::Idle) {
       advance_sequence();
     } else {
       show_status(status);
@@ -89,7 +89,7 @@ private:
       show_status(StepStatus::Generating);
     } else {
       step_controller_.exit();
-      show_status(StepStatus::Completed);
+      show_status(StepStatus::Idle);
     }
   }
 

@@ -21,8 +21,7 @@ public:
   }
 
   auto generate(float sample_time) -> GeneratorStatus {
-    auto const duration =
-        module_.duration() * module_.duration_multiplier(step_);
+    auto const duration = module_.duration(step_);
     auto const curvature = module_.curvature(step_);
     auto const start_voltage = start_anchor_.voltage();
     auto const end_voltage = end_anchor_.voltage();

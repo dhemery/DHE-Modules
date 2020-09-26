@@ -28,8 +28,9 @@ static inline void config_knob(rack::engine::Module *module, int knob_id,
 static inline void config_percentage_knob(rack::engine::Module *module,
                                           int knob_id,
                                           std::string const &knob_name,
-                                          Range range = rotation_range) {
-  module->configParam(knob_id, 0.F, 1.F, 0.5F, knob_name, "%", 0.F,
+                                          Range range = rotation_range,
+                                          float initial_rotation = 1.F) {
+  module->configParam(knob_id, 0.F, 1.F, initial_rotation, knob_name, "%", 0.F,
                       range.size() * 100.F, range.lower_bound() * 100.F);
 }
 
@@ -37,8 +38,10 @@ static inline void config_percentage_knob(rack::engine::Module *module,
  * Configures the param and display for an attenuator knob.
  */
 static inline void config_attenuator(rack::engine::Module *module, int knob_id,
-                                     std::string const &knob_name) {
-  config_percentage_knob(module, knob_id, knob_name, attenuator_range);
+                                     std::string const &knob_name,
+                                     float initial_rotation = 1.F) {
+  config_percentage_knob(module, knob_id, knob_name, attenuator_range,
+                         initial_rotation);
 }
 
 /**
@@ -54,8 +57,10 @@ static inline void config_attenuverter(rack::engine::Module *module,
  * Configures the param and display for a momentary button.
  */
 static inline void config_gain(rack::engine::Module *module, int knob_id,
-                               std::string const &knob_name) {
-  config_percentage_knob(module, knob_id, knob_name, gain_range);
+                               std::string const &knob_name,
+                               float initial_rotation = centered_rotation) {
+  config_percentage_knob(module, knob_id, knob_name, gain_range,
+                         initial_rotation);
 }
 
 template <int N>

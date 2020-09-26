@@ -9,10 +9,10 @@ namespace sequencizer {
 
 template <int N> struct ParamIds {
   enum {
-    Duration,
+    DurationMultiplier,
     DurationRange,
     Gate,
-    Level,
+    LevelMultiplier,
     LevelRange,
     Loop,
     Reset,
@@ -20,14 +20,14 @@ template <int N> struct ParamIds {
     SelectionLength,
     SelectionStart,
     ONE_PER_STEP(StepCurvature, N),
-    ONE_PER_STEP(StepDurationMultiplier, N),
+    ONE_PER_STEP(StepDuration, N),
     ONE_PER_STEP(StepEnabled, N),
-    ONE_PER_STEP(StepEndAnchorAttenuation, N),
+    ONE_PER_STEP(StepEndAnchorLevel, N),
     ONE_PER_STEP(StepEndAnchorMode, N),
     ONE_PER_STEP(StepEndAnchorSource, N),
     ONE_PER_STEP(StepInterruptMode, N),
     ONE_PER_STEP(StepShape, N),
-    ONE_PER_STEP(StepStartAnchorAttenuation, N),
+    ONE_PER_STEP(StepStartAnchorLevel, N),
     ONE_PER_STEP(StepStartAnchorMode, N),
     ONE_PER_STEP(StepStartAnchorSource, N),
     ONE_PER_STEP(StepSustainMode, N),
@@ -38,12 +38,12 @@ template <int N> struct ParamIds {
 
 template <int N> struct InputIds {
   enum {
-    DurationCV,
+    DurationMultiplierCV,
     Gate,
     InA,
     InB,
     InC,
-    LevelCV,
+    LevelAttenuationCV,
     Loop,
     Reset,
     Run,

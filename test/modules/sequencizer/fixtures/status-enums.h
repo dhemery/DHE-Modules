@@ -34,7 +34,7 @@ static inline auto name_of(dhe::sequencizer::GeneratorStatus status)
 auto constexpr step_statuses = std::array<StepStatus, step_status_count>{
     StepStatus::Generating,
     StepStatus::Sustaining,
-    StepStatus::Completed,
+    StepStatus::Idle,
 };
 
 static inline auto name_of(dhe::sequencizer::StepStatus status) -> std::string {
@@ -43,8 +43,8 @@ static inline auto name_of(dhe::sequencizer::StepStatus status) -> std::string {
     return "StepStatus::Curving";
   case StepStatus::Sustaining:
     return "StepStatus::Sustaining";
-  case StepStatus::Completed:
-    return "StepStatus::Completed";
+  case StepStatus::Idle:
+    return "StepStatus::Idle";
   default:
     return "Unknown StepStatus " + std::to_string(static_cast<int>(status));
   }

@@ -31,7 +31,7 @@ public:
       }
     }
     exit();
-    return StepStatus::Completed;
+    return StepStatus::Idle;
   }
 
   void exit() { generator_.stop(); }

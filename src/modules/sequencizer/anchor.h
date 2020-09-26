@@ -48,7 +48,7 @@ private:
     case AnchorSource::InC:
       return module_.in_c();
     case AnchorSource::Level:
-      return module_.level() * module_.anchor_level_attenuation(type_, step_);
+      return module_.anchor_level(type_, step_);
     case AnchorSource::Out:
       return module_.output();
     default:

@@ -223,16 +223,16 @@ public:
         global_controls_center_x + global_control_width + padding;
 
     addInput(Jack::input(slug, module, global_controls_left_x, level_y,
-                         Input::LevelCV));
+                         Input::LevelAttenuationCV));
     addParam(Knob::small(slug, module, global_controls_center_x, level_y,
-                         Param::Level));
+                         Param::LevelMultiplier));
     addParam(Toggle::thumb(2, slug, module, global_controls_right_x, level_y,
                            Param::LevelRange));
 
     addInput(Jack::input(slug, module, global_controls_left_x,
-                         global_duration_y, Input::DurationCV));
+                         global_duration_y, Input::DurationMultiplierCV));
     addParam(Knob::small(slug, module, global_controls_center_x,
-                         global_duration_y, Param::Duration));
+                         global_duration_y, Param::DurationMultiplier));
     addParam(Toggle::thumb(3, slug, module, global_controls_right_x,
                            global_duration_y, Param::DurationRange));
 
@@ -319,7 +319,7 @@ public:
                                start_anchor_mode_y,
                                Param::StepStartAnchorMode + step));
       addParam(Knob::small(slug, module, step_x, start_anchor_level_y,
-                           Param::StepStartAnchorAttenuation + step));
+                           Param::StepStartAnchorLevel + step));
       addParam(Toggle::stepper(slug, "anchor-source", anchor_source_count,
                                module, step_x, start_anchor_source_y,
                                Param::StepStartAnchorSource + step));
@@ -328,13 +328,13 @@ public:
                                end_anchor_mode_y,
                                Param::StepEndAnchorMode + step));
       addParam(Knob::small(slug, module, step_x, end_anchor_level_y,
-                           Param::StepEndAnchorAttenuation + step));
+                           Param::StepEndAnchorLevel + step));
       addParam(Toggle::stepper(slug, "anchor-source", anchor_source_count,
                                module, step_x, end_anchor_source_y,
                                Param::StepEndAnchorSource + step));
 
       addParam(Knob::small(slug, module, step_x, duration_y,
-                           Param::StepDurationMultiplier + step));
+                           Param::StepDuration + step));
 
       addParam(Toggle::stepper(slug, "shape", 2, module, step_x, shape_y,
                                Param::StepShape + step));

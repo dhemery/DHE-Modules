@@ -13,10 +13,10 @@ auto constexpr generator_status_count =
 enum class StepStatus {
   Generating,
   Sustaining,
-  Completed,
+  Idle,
 };
 
-auto constexpr step_status_count = static_cast<int>(StepStatus::Completed) + 1;
+auto constexpr step_status_count = static_cast<int>(StepStatus::Idle) + 1;
 
 } // namespace sequencizer
 } // namespace dhe

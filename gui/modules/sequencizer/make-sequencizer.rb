@@ -100,13 +100,13 @@ def make_global_step_controls(left)
   right_x = center_x + GLOBAL_STEP_CONTROL_WIDTH + PADDING
 
   level_y = global_controls_y(0)
-  port x: left_x, y: level_y
+  cv_port x: left_x, y: level_y
   small_knob x: center_x, y: level_y, label: 'LEVEL'
   polarity_toggle x: right_x, y: level_y, selection: 2
   connector left: left_x, right: right_x, y: level_y
 
   duration_y = global_controls_y(1)
-  port x: left_x, y: duration_y
+  cv_port x: left_x, y: duration_y
   small_knob x: center_x, y: duration_y, label: 'DUR'
   duration_toggle x: right_x, y: duration_y
   connector left: left_x, right: right_x, y: duration_y
@@ -143,16 +143,16 @@ INTERRUPT_Y = TRIGGER_Y + STEPPER_HEIGHT + INTRA_SECTION_GLUE
 SUSTAIN_Y = INTERRUPT_Y + STEPPER_HEIGHT + INTRA_SECTION_GLUE
 
 START_ANCHOR_MODE_Y = SUSTAIN_Y + STEPPER_HEIGHT + INTER_SECTION_GLUE
-START_ANCHOR_GAIN_Y = START_ANCHOR_MODE_Y + (STEPPER_HEIGHT + Knob::DIAMETERS[:small]) / 2.0 + INTRA_SECTION_GLUE
-START_ANCHOR_SOURCE_Y = START_ANCHOR_GAIN_Y + (STEPPER_HEIGHT + Knob::DIAMETERS[:small]) / 2.0 + INTRA_SECTION_GLUE
+START_ANCHOR_LEVEL_Y = START_ANCHOR_MODE_Y + (STEPPER_HEIGHT + Knob::DIAMETERS[:small]) / 2.0 + INTRA_SECTION_GLUE
+START_ANCHOR_SOURCE_Y = START_ANCHOR_LEVEL_Y + (STEPPER_HEIGHT + Knob::DIAMETERS[:small]) / 2.0 + INTRA_SECTION_GLUE
 
 END_ANCHOR_MODE_Y = START_ANCHOR_SOURCE_Y + STEPPER_HEIGHT + INTER_SECTION_GLUE
-END_ANCHOR_GAIN_Y = END_ANCHOR_MODE_Y + (STEPPER_HEIGHT + Knob::DIAMETERS[:small]) / 2.0 + INTRA_SECTION_GLUE
-END_ANCHOR_SOURCE_Y = END_ANCHOR_GAIN_Y + (STEPPER_HEIGHT + Knob::DIAMETERS[:small]) / 2.0 + INTRA_SECTION_GLUE
+END_ANCHOR_LEVEL_Y = END_ANCHOR_MODE_Y + (STEPPER_HEIGHT + Knob::DIAMETERS[:small]) / 2.0 + INTRA_SECTION_GLUE
+END_ANCHOR_SOURCE_Y = END_ANCHOR_LEVEL_Y + (STEPPER_HEIGHT + Knob::DIAMETERS[:small]) / 2.0 + INTRA_SECTION_GLUE
 
-DURATION_MULTIPLIER_Y = END_ANCHOR_SOURCE_Y + (STEPPER_HEIGHT + Knob::DIAMETERS[:small]) / 2.0 + INTER_SECTION_GLUE
+DURATION_Y = END_ANCHOR_SOURCE_Y + (STEPPER_HEIGHT + Knob::DIAMETERS[:small]) / 2.0 + INTER_SECTION_GLUE
 
-SHAPE_Y = DURATION_MULTIPLIER_Y + (STEPPER_HEIGHT + Knob::DIAMETERS[:small]) / 2.0 + INTER_SECTION_GLUE
+SHAPE_Y = DURATION_Y + (STEPPER_HEIGHT + Knob::DIAMETERS[:small]) / 2.0 + INTER_SECTION_GLUE
 CURVATURE_Y = SHAPE_Y + (STEPPER_HEIGHT + Knob::DIAMETERS[:small]) / 2.0 + INTRA_SECTION_GLUE
 
 ENABLED_Y = BOTTOM - Button::DIAMETER / 2.0
@@ -168,7 +168,7 @@ def make_step_control_labels(left)
   label x: x, y: SUSTAIN_Y, text: 'SUST', alignment: :left_of, size: :large
   label x: x, y: START_ANCHOR_LABEL_Y, text: 'START', alignment: :left_of, size: :large
   label x: x, y: END_ANCHOR_LABEL_Y, text: 'END', alignment: :left_of, size: :large
-  label x: x, y: DURATION_MULTIPLIER_Y, text: 'DUR', alignment: :left_of, size: :large
+  label x: x, y: DURATION_Y, text: 'DUR', alignment: :left_of, size: :large
   label x: x, y: SHAPE_LABEL_Y - hp2mm(0.25), text: 'SHAPE', alignment: :left_of, size: :large
   label x: x, y: ENABLED_Y, text: 'ON', alignment: :left_of, size: :large
 end
@@ -205,17 +205,17 @@ def make_step_block(steps, left)
     stepper x: x, y: SUSTAIN_Y, name: 'sustain-mode', options: SUSTAIN_MODES, selection: SUSTAIN_MODE_SELECTION, width: STEPPER_WIDTH
 
     stepper x: x, y: START_ANCHOR_MODE_Y, name: 'anchor-mode', options: ANCHOR_MODES, selection: START_ANCHOR_MODE_SELECTION, width: STEPPER_WIDTH
-    small_knob x: x, y: START_ANCHOR_GAIN_Y, label: ''
+    small_knob x: x, y: START_ANCHOR_LEVEL_Y, label: ''
     stepper x: x, y: START_ANCHOR_SOURCE_Y, name: 'anchor-source', options: ANCHOR_SOURCES, selection: START_ANCHOR_SOURCE_SELECTION, width: STEPPER_WIDTH
 
     stepper x: x, y: END_ANCHOR_MODE_Y, name: 'anchor-mode', options: ANCHOR_MODES, selection: END_ANCHOR_MODE_SELECTION, width: STEPPER_WIDTH
-    small_knob x: x, y: END_ANCHOR_GAIN_Y, label: ''
+    small_knob x: x, y: END_ANCHOR_LEVEL_Y, label: ''
     stepper x: x, y: END_ANCHOR_SOURCE_Y, name: 'anchor-source', options: ANCHOR_SOURCES, selection: END_ANCHOR_SOURCE_SELECTION, width: STEPPER_WIDTH
 
     stepper x: x, y: SHAPE_Y, name: 'shape', options: SHAPE_OPTIONS, selection: SHAPE_SELECTION, width: STEPPER_WIDTH
     small_knob x: x, y: CURVATURE_Y, label: ''
 
-    small_knob y: DURATION_MULTIPLIER_Y, x: x, label: ''
+    small_knob y: DURATION_Y, x: x, label: ''
 
     button y: ENABLED_Y, x: x, label: ''
   end
