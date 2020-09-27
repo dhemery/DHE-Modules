@@ -19,6 +19,8 @@
 #include <engine/Module.hpp>
 #include <jansson.h>
 
+#include <iostream>
+
 namespace dhe {
 namespace sequencizer {
 
@@ -28,6 +30,7 @@ namespace sequencizer {
 static auto constexpr brightness_skew = 0.7F;
 static auto constexpr brightness_range =
     Range{-brightness_skew, 1.F + brightness_skew};
+static auto constexpr minimum_duration = short_duration_range.lower_bound();
 
 template <typename P, typename I>
 static inline auto duration(P const &duration_knob, P const &range_switch,
@@ -39,7 +42,8 @@ static inline auto duration(P const &duration_knob, P const &range_switch,
   auto const nominal_multiplier = gain_range.scale(multiplier_rotation);
   auto const clamped_multiplier = gain_range.clamp(nominal_multiplier);
   auto const scaled_duration = nominal_duration * clamped_multiplier;
-  return cx::max(1e-3F, scaled_duration);
+  auto const safe_duration = cx::max(minimum_duration, scaled_duration);
+  return safe_duration;
 }
 
 template <typename P, typename I>
