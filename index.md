@@ -47,17 +47,20 @@ and more.
 
 #### Multi-Stage Envelope Generators
 
-[![_Curve Sequencer 4_](modules/curve-sequencer/curve-sequencer.svg)](modules/curve-sequencer/)
+[![_Sequencizer 4_](modules/sequencizer/sequencizer.svg)](modules/sequencizer/)
 
-**[_Curve Sequencer 4_](modules/curve-sequencer/)**
+**[_Sequencizer 4_](modules/sequencizer/)**
 is a four-step envelope generator
-that offers control
+that offers flexible, precise control
 over the individual steps
 and the overall sequence.
-**_Curve Sequencer 8_**
+**_Sequencizer 8_**
 and
-**_Curve Sequencer 16_**
-expand the same functionality to even more steps.
+**_Sequencizer 16_**
+offer the same functionality with more steps.
+
+The **[_Curve Sequencer_](modules/curve-sequencer/)** modules
+are earlier versions of the Sequencizer modules.
 
 ### Logic
 

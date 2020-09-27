@@ -4,6 +4,13 @@ title: Release Notes
 
 # DHE Modules Release Notes
 
+## Version 1.3.0
+October 2020
+
+- Added [_Sequencizer 4_]({{ '/modules/sequencizer/' | relative_url }}).
+- Added _Sequencizer 8_.
+- Added _Sequencizer 16_.
+
 ## Version 1.2.0
 
 - Added three new modes to the Curve Sequencer modules:
