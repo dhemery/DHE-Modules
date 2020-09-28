@@ -23,15 +23,22 @@ See:
 
 ## Controls
 
-Each _Sequencizer_ has
+In addition to its [inputs](#inputs) and [outputs](#outputs),
+ each _Sequencizer_ module offers
 
-- Controls for [the overall sequence](#sequence-controls)
-- Controls for [each step in the sequence](#step-controls)
-- Controls that [apply to all steps](#global-step-controls)
+-   [Sequence controls](#sequence-controls)
+    that govern the overall execution of the sequencer. 
+-   [Step controls](#step-controls)
+    that determine the operation of each step.
+-   [Global step controls](#global-step-controls)
+    that affect the behavior of all steps.
 
 ### Sequence Controls
-- **RUN:**
-    Determines whether the sequencer is running.
+
+<span class="controls" style="width: 15mm; height: 77mm; ; background-position: -2.4mm 83mm"></span>
+
+- **RUN**
+    determines whether the sequencer is running.
 
     If _RUN_ falls
     while a sequence is in progress,
@@ -52,8 +59,8 @@ Each _Sequencizer_ has
     Bracket-shaped markers next to the _ACTIVITY_ lights
     indicate the currently selected steps.   
 
-- **GATE:**
-    Controls when a sequence starts,
+- **GATE**
+    controls when a sequence starts,
     and may influence when the sequence advances.
 
     If _GATE_ rises
@@ -61,44 +68,43 @@ Each _Sequencizer_ has
     the sequencer starts the sequence,
     activating the first selected, enabled step.
 
-    See the _ADVANCE_ step controls
+    See the [step advancement controls](#step-advancement-controls)
     for details of how an individual step
     may react to _GATE_ conditions.
     
 - **RESET:**
-    When _RESET_ rises, the sequencer becomes idle,
-    abandoning any paused or in-progress sequence.
-
-    See [details](#details)
-    for explanations of several likely non-intuitive aspects of the _RESET_ feature.
-
-- **IN:**
-    The input signal to the Sequencizer.
-
-- **OUT:**
-    The output signal from the Sequencizer.
+    When _RESET_ rises, the sequencer
+    abandons any paused or in-progress sequence,
+    and either starts a new sequence
+    or becomes idle,
+    depending on _RUN._
 
 ### Step Controls
 
-#### Activity Lights
+#### Step Activity Lights
+<span class="controls"  style="width: 36mm; height: 9mm; background-position: -56.4mm 91.5mm"></span>
 
-- **ACTIVITY** lights
-    indicate which step is active (if any),
-    and how far the active step has progressed
-    in generating its curve.
-    The light progresses from red to green
-    over the curve's duration.
-    Note that the light indicates *progress,*
-    not *voltage.*
+**ACTIVITY** lights
+indicate which step is active (if any),
+and how far the active step has progressed
+in generating its curve.
+The light progresses from red to green
+over the curve's duration.
+Note that the light indicates *progress,*
+not *voltage.*
 
-#### Advancement Controls
+#### Step Advancement Controls
+<span class="controls" style="width: 19mm; height: 11mm; background-position: -47mm 83mm"></span>
 
-The _TRIG,_ _INT,_ and _AT END_ controls
+Three step advancement controls
 determine when the sequencer advances
-from this step to the next.
+from this step to the next:
 
-- **TRIG:**
-    Determines when the step generates a trigger.
+- **TRIG**
+    determines when the step generates an internal trigger.
+    The _INT_ and _SUST_ settings (below)
+    determine how the step
+    reacts to these internal triggers.
 
     - _RISE:_
         Triggers when the _GATE_ rises.
@@ -115,92 +121,176 @@ from this step to the next.
     - _LOW:_
         Triggers when the _GATE_ is low.
 
-- **INT:**
-    Determines whether this step
-    is interrupted by triggers
-    that occur while it is generating a curve.
+- **INT**
+    determines whether
+    triggers the step
+    while it is generating a curve.
 
-    - _IGNOR:_
+    - _NO:_
         The step ignores all triggers
         while it is generating a curve.
 
-    - _NEXT:_
+    - _YES:_
         If a trigger occurs
         while the step is generating a curve,
         the sequence advances to the next step.
 
-- **AT END:**
-    Determines whether the sequence
-    automatically advances to the next step
-    when this step completes its curve.
+- **SUST**
+    determines whether
+    the step sustains when it completes its curve.
 
-    - _SUST:_
-        When the step completes a curve,
-        it remains at its _END_ anchor
-        until a trigger occurs.
-
-    - _NEXT:_
-        When the step completes a curve,
+    - _NO:_
+        When the step completes its curve,
         the sequence automatically advances to the next step.
 
-#### Anchor Controls
+    - _YES:_
+        When the step completes its curve,
+        it sustains until a trigger occurs.
+        While a step sustains,
+        it emits the voltage reported by its _END_ anchor.
+
+#### Step Anchor Controls
+<span class="controls" style="width: 19mm; height: 33mm; background-position: -47mm 71mm"></span>
 
 The step generates a curve
 that interpolates between the voltages
-emitted by the _START_ and _END_ anchors.
+reported by the _START_ and _END_ anchors.
 Each anchor has three controls:
 
-- **MODE** (the unlabeled button above the knob):
-    Determines whether the anchor emits
+- The **MODE** button (above the knob)
+    determines whether the anchor reports
     a sampled voltage or the current voltage.
 
     - _SAMPL:_
-        Emits the voltage sampled from the source
+        The anchor reports
+        the voltage that it sampled from its source
         when the step started.
 
     - _TRACK:_
-        Emits the current voltage of the source.
+        The anchor reports
+        the current voltage
+        of its source.
 
-- **LEVEL** (the unlabeled knob):
-    The voltage of the anchor
-    when its source is _LEVEL_.
-    The range of each _LEVEL_ knob
-    is set by the common **LEVEL RANGE** switch
-    (to the right of anchors).
+- The **LEVEL** knob
+    sets the voltage
+    of the anchor's _level_ source.
+    The [global level controls](#global-level-controls)
+    affect the value of this knob.
+    This knob is used
+    only when _LEVEL_
+    is selected as the anchor's _SOURCE._
 
-- **SOURCE** (the unlabled button below the knob):
-    Determines where the anchor gets its voltage.
+- The **SOURCE** button (below the knob)
+    determines where the anchor gets the voltage it reports.
     The possible sources are:
 
-    - The _LEVEL_ knob.
-    - The _IN_ port.
+    - The anchor's _LEVEL_ knob.
+    - The _A_, _B_, or _C_ input port.
     - The _OUT_ port.
-    - The _AUX_ port.     
 
-#### Curve Controls
+#### Step Curve Controls
+<span class="controls" style="margin-left: 10px; width: 19mm; height: 23mm; background-position: -47mm 38mm"></span>
 
-- **SHAPE:**
-    Selects the shape of the curve.
+- **DURATION**
+    sets the duration of the step's curve.
+    The [global duration controls](#global-duration-controls)
+    affect the value of this knob.
 
-- **CURVE:**
-    The curvature of the curve.
+- **SHAPE**
+    selects the shape of the curve.
+
+- **CURVE**
+    sets the curvature of the curve.
     
-- **DURATION:**
-    The duration of the curve.
-    The range of each _DURATION_ knob
-    is set by the common **DURATION RANGE** switch
-    (to the right of the _DURATION_ knobs),
-    modulated by
-    the voltage of the duration **CV** port.
+#### Step Enablement Controls
+<span class="controls" style="margin-left: 10px; width: 18mm; height: 7mm; background-position: -47mm 14.5mm"></span>
 
-#### Enablement Controls
-
-- **ENABLED:**
-    Determines whether the sequencer can enter this step.
-    When _ENABLED_ is off,
-    the sequencer bypasses this step when advancing.
+- **ON**
+    determines whether the step is enabled.
+    If a step is disabled,
+    the sequencer bypasses the step when advancing.
 
 ### Global Step Controls
+
+#### Global Level Controls
+
+- **LEVEL**
+    <span class="controls" style="margin-left: 10px; width: 27mm; height: 13mm; background-position: -19mm 83.5mm"></span>
+    sets a global attenuation factor (0–1)
+    applied to every anchor's _LEVEL_ source.
+    This knob is modulated
+    by the [control voltage](/technical/modulation/) at the _CV_ port.
+
+- **UNI / BI**
+    selects the voltage range
+    for every anchor _LEVEL_ source.
+
+#### Global Duration Controls
+
+- **DUR**
+    <span class="controls" style="margin-left: 10px; width: 27mm; height: 13mm; background-position: -19mm 67mm"></span>
+    sets a global multiplier (0–2)
+    applied to the duration of each step.
+    This knob is modulated
+    by the [control voltage](/technical/modulation/) at the _CV_ port.
+
+- **1 / 10 / 100** (the duration range switch)
+    selects the global duration range
+    for every step duration knob.
+    The switch labels indicate the maximum duration (seconds) for each range.
+    For each range:
+
+    - The minimum duration is 1/1000 of the maximum: 1ms, 10ms, or 100ms.
+    - Centering the step duration knob gives a duration of 1/10 of the maximum: 100ms, 1s, or 10s.
+
+#### Inputs
+
+- **A**, **B**, and **C:**
+<span class="controls" style="margin-left: 10px; width: 27mm; height: 13mm; background-position: -19mm 52mm"></span>
+    Three input signals
+    that each _START_ and _END_ anchor
+    can sample or track.
+
+#### Outputs
+
+- **STEP #**
+    <span class="controls" style="margin-left: 10px; width: 27mm; height: 13mm; background-position: -19mm 37mm"></span>
+    identifies the current step,
+    represented as \\(\frac{10s}{N}\\) volts,
+    where
+
+    - _s_ is the number of the current step
+    - _N_ is the module's largest step number
+
+    For example, if all steps of a _Sequencer 4_
+    are selected and enabled,
+    and the sequencer is looping,
+    the _STEP #_ port will cycle through the values
+    
+    > 2.5V → 5.0V → 7.5V → 10.0V → 2.5V → …
+
+    When the sequencer is idle,
+    the _STEP#_ port emits 0V.
+
+- **CURVE**
+    emits 10V if the current step is generating a curve,
+    and 0V otherwise.
+
+- **SUST**
+    emits 10V if the current step is sustaining,
+    and 0V otherwise.
+
+- **STEP ∆**
+    <span class="controls" style="margin-left: 10px; width: 27mm; height: 13mm; background-position: -19mm 21mm"></span>
+    emits a 10ms pulse
+    when a step completes.
+
+- **SEQ ∆**
+    emits a 10ms pulse
+    when the sequence starts or loops.
+
+- **OUT**
+    emits the voltage generated by the current step.
 
 ## Factory Presets
 
@@ -220,14 +310,20 @@ includes these factory presets:
 - **Batman:**
     Calls for help.
 
+### TO DO
+
+- Sample and Hold
+- Traditional Sequencer
+
 ## Usage Notes
 
 **To create a traditional sequencer step.**
 
 - Set _TRIG_ to _RISE._
-- Set _INT_ and _AT END_ to _NEXT._
+- Set _INT_ to _YES._
+- Set _SUST_ to _NO._
 - Set the _START_ and _END_ anchors
-    to _SAMPL_ the _LEVEL_ knob.
+    to _SAMPL_ the _LEVEL_.
 
 **To restart a sequence.**
 To interrupt a sequence
@@ -252,12 +348,45 @@ set the _ADVANCE_ condition
 of the Attack, Decay, and Sustain steps
 to _LOW._
 
-**Pausing and resuming a sequence.**
-Turning _RUN_ off
-while a sequence is in progress
-_pauses_ the sequence.
-When _RUN_ turns on,
-the sequence resumes from the point where it was paused.
+### Traditional Sequencer
+
+| Parameter | Value |
+| TRIG | RISE | Trigger when the GATE rises |
+| INT | YES | Advance when the trigger occurs |
+| SUST | YES | Sustain until the trigger occurs |
+| START anchor | SAMPL LEVEL | Sample and jump to the desired level |
+| END anchor | SAMPL LEVEL | Keep the output constant |
+
+### Envelope Generator
+
+| Parameter | Value |
+| START anchor | SAMPL OUT | Start where the previous step ended |
+| END anchor | SAMPL LEVEL | Progress to the desired level |
+
+### Sample and Hold
+
+| Parameter | Value |
+| INT | NO | Ignore triggers while holding |
+| SUST | NO | Automatically advance when the hold ends |
+| START anchor | SAMPL A | Sample and jump to the input voltage |
+| END anchor | SAMPL A | Keep the output constant |
+
+### Sustain Step
+
+| Parameter | Value |
+| TRIG | LOW | Trigger if the gate is down |
+| INT | YES | Interrupt the curve if triggered |
+| SUST | YES | Sustain until triggered | 
+| START anchor | SAMPL OUT | Start where the previous step ended | 
+| END anchor | SAMPL OUT | Remain where the previous step ended |
+
+### Hold Step
+
+| Parameter | Value |
+| INT | NO | Ignore interrupts |
+| SUST | NO | Advance when the hold ends |
+| START anchor | SAMPL OUT | Start where the previous step ended | 
+| END anchor | SAMPL OUT | Remain where the previous step ended |
 
 ## Details
 
@@ -271,27 +400,24 @@ may be unexpected:
     While the step is in progress,
     the sampled voltage
     is not affected in any way
-    by changes to the anchor's settings
-    or by changes in any source's voltage.
+    by changes in parameters or input signals.
 
-- **Once started, a step always completes.**
-    Once a step starts,
+-   Once a step starts,
     it always proceeds as if enabled,
-    even if _ENABLED_ is turned off while the step is in progress.    
+    even if it is disabled while the step is in progress.    
 
-- **_RESET_ and _RUN._**
-    A rising _RESET_
-    resets the sequencer to idle
-    even while _RUN_ is off.
-    If _RUN_ is on,
-    a rising _RESET_
-    abandons any sequence in progress.
-    If _RUN_ is off,
-    a rising _RESET_
-    abandons any paused sequence.
+-   Pausing and resuming a sequence.
+    Turning _RUN_ off
+    while a sequence is in progress
+    _pauses_ the sequence.
+    When _RUN_ turns on,
+    the sequence resumes from the point where it was paused.
 
-- **_RESET,_ idle mode, and the _IN_ port.**
-    While the sequencer is idle
-    and _RESET_ is high,
-    the sequencer copies the _IN_ port voltage
-    to the _OUT_ port.
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+
+<style type="text/css">
+.controls {
+  float: right;
+  background-image: url('sequencizer.svg');
+}
+</style>
