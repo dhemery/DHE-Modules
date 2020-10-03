@@ -1,5 +1,5 @@
 {
-  "id": 13,
+  "id": 9,
   "plugin": "DHE-Modules",
   "version": "1.3.0",
   "model": "Sequencizer16",
@@ -238,67 +238,67 @@
     },
     {
       "id": 58,
-      "value": 1.0
+      "value": 0.5
     },
     {
       "id": 59,
-      "value": 1.0
+      "value": 0.5
     },
     {
       "id": 60,
-      "value": 0.0
+      "value": 0.5
     },
     {
       "id": 61,
-      "value": 0.0
+      "value": 0.5
     },
     {
       "id": 62,
-      "value": 0.0
+      "value": 0.5
     },
     {
       "id": 63,
-      "value": 0.0
+      "value": 0.5
     },
     {
       "id": 64,
-      "value": 0.0
+      "value": 0.5
     },
     {
       "id": 65,
-      "value": 0.0
+      "value": 0.5
     },
     {
       "id": 66,
-      "value": 0.0
+      "value": 0.5
     },
     {
       "id": 67,
-      "value": 0.0
+      "value": 0.5
     },
     {
       "id": 68,
-      "value": 0.0
+      "value": 0.5
     },
     {
       "id": 69,
-      "value": 0.0
+      "value": 0.5
     },
     {
       "id": 70,
-      "value": 0.0
+      "value": 0.5
     },
     {
       "id": 71,
-      "value": 0.0
+      "value": 0.5
     },
     {
       "id": 72,
-      "value": 0.0
+      "value": 0.5
     },
     {
       "id": 73,
-      "value": 0.0
+      "value": 0.5
     },
     {
       "id": 74,
@@ -602,23 +602,23 @@
     },
     {
       "id": 149,
-      "value": 0.0
+      "value": 0.441000044
     },
     {
       "id": 150,
-      "value": 0.0
+      "value": 0.307500005
     },
     {
       "id": 151,
-      "value": 0.0
+      "value": 0.615000308
     },
     {
       "id": 152,
-      "value": 0.0
+      "value": 0.289500147
     },
     {
       "id": 153,
-      "value": 0.0
+      "value": 0.789000332
     },
     {
       "id": 154,
@@ -877,7 +877,7 @@
       "value": 0.0
     }
   ],
-  "leftModuleId": 14,
+  "leftModuleId": 19,
   "rightModuleId": 7,
   "data": {
     "preset_version": 0
