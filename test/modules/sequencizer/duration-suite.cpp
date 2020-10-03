@@ -36,8 +36,8 @@ public:
         "yields twice nominal duration",
         test(0.4623F, medium_duration_selection, maximum_multiplier_rotation,
              0.F,
-             is_equal_to(2.F *
-                         dhe::duration(0.4623F, dhe::medium_duration_range))));
+             is_near(2.F * dhe::duration(0.4623F, dhe::medium_duration_range),
+                     1e-5F)));
 
     add("5V CV adds 50% rotation to multiplier knob",
         // 25% multiplier knob + 50% CV = 75% rotation = 1.5 multiplier
