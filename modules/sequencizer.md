@@ -27,7 +27,7 @@ In addition to its [inputs](#inputs) and [outputs](#outputs),
  each _Sequencizer_ module offers
 
 -   [Sequence controls](#sequence-controls)
-    that govern the overall execution of the sequencer. 
+    that govern the overall execution of the sequencer.
 -   [Step controls](#step-controls)
     that determine the operation of each step.
 -   [Global step controls](#global-step-controls)
@@ -35,7 +35,7 @@ In addition to its [inputs](#inputs) and [outputs](#outputs),
 
 ### Sequence Controls
 
-<span class="controls" style="width: 15mm; height: 77mm; ; background-position: -2.4mm 83mm"></span>
+<img class="controls" style="width: 20mm;" src="sequence-controls.png" alt="Sequence Controls" />
 
 - **RUN**
     determines whether the sequencer is running.
@@ -49,15 +49,15 @@ In addition to its [inputs](#inputs) and [outputs](#outputs),
 - **LOOP:**
     If _LOOP_ is on when a sequence ends,
     the sequencer immediately begins a new sequence.
-   
+
     If _LOOP_ is off when a sequence ends,
     the sequencer becomes idle.
 
 - **START** and **LENGTH**
     select the steps of the sequence.
-    
-    Bracket-shaped markers next to the _ACTIVITY_ lights
-    indicate the currently selected steps.   
+
+    Bracket-shaped markers next to the _PROGRESS_ lights
+    indicate the currently selected steps.
 
 - **GATE**
     controls when a sequence starts,
@@ -71,7 +71,7 @@ In addition to its [inputs](#inputs) and [outputs](#outputs),
     See the [step advancement controls](#step-advancement-controls)
     for details of how an individual step
     may react to _GATE_ conditions.
-    
+
 - **RESET:**
     When _RESET_ rises, the sequencer
     abandons any paused or in-progress sequence,
@@ -81,10 +81,11 @@ In addition to its [inputs](#inputs) and [outputs](#outputs),
 
 ### Step Controls
 
-#### Step Activity Lights
-<span class="controls"  style="width: 36mm; height: 9mm; background-position: -56.4mm 91.5mm"></span>
+#### Step Progress Lights
 
-**ACTIVITY** lights
+<img class="controls" style="width: 36mm;" src="progress-lights.png" alt="Progress Lights" />
+
+**PROGRESS** lights
 indicate which step is active (if any),
 and how far the active step has progressed
 in generating its curve.
@@ -94,8 +95,8 @@ Note that the light indicates *progress,*
 not *voltage.*
 
 #### Step Advancement Controls
-<span class="controls" style="width: 19mm; height: 11mm; background-position: -47mm 83mm"></span>
 
+<img class="controls" style="width: 25mm;" src="advancement-controls.png" alt="Advancement Controls" />
 Three step advancement controls
 determine when the sequencer advances
 from this step to the next:
@@ -123,14 +124,15 @@ from this step to the next:
 
 - **INT**
     determines whether
-    triggers the step
+    triggers interrupt the step
     while it is generating a curve.
 
-    - _NO:_
+    - _OFF:_
         The step ignores all triggers
         while it is generating a curve.
 
-    - _YES:_
+    - _ON:_
+        Triggers interrupt the curve.
         If a trigger occurs
         while the step is generating a curve,
         the sequence advances to the next step.
@@ -139,19 +141,20 @@ from this step to the next:
     determines whether
     the step sustains when it completes its curve.
 
-    - _NO:_
+    - _OFF:_
+        The step does not sustain.
         When the step completes its curve,
         the sequence automatically advances to the next step.
 
-    - _YES:_
+    - _ON:_
         When the step completes its curve,
         it sustains until a trigger occurs.
         While a step sustains,
         it emits the voltage reported by its _END_ anchor.
 
 #### Step Anchor Controls
-<span class="controls" style="width: 19mm; height: 33mm; background-position: -47mm 71mm"></span>
 
+<img class="controls" style="width: 25mm;" src="anchor-controls.png" alt="Anchor Controls" />
 The step generates a curve
 that interpolates between the voltages
 reported by the _START_ and _END_ anchors.
@@ -189,7 +192,8 @@ Each anchor has three controls:
     - The _OUT_ port.
 
 #### Step Curve Controls
-<span class="controls" style="margin-left: 10px; width: 19mm; height: 23mm; background-position: -47mm 38mm"></span>
+
+<img class="controls" style="width: 25mm;" src="curve-controls.png" alt="Curve Controls" />
 
 - **DURATION**
     sets the duration of the step's curve.
@@ -197,13 +201,15 @@ Each anchor has three controls:
     affect the value of this knob.
 
 - **SHAPE**
-    selects the shape of the curve.
+    selects the shape of the curve
+    (J or S).
 
 - **CURVE**
     sets the curvature of the curve.
-    
+
 #### Step Enablement Controls
-<span class="controls" style="margin-left: 10px; width: 18mm; height: 7mm; background-position: -47mm 14.5mm"></span>
+
+<img class="controls" style="width: 25mm;" src="enablement-controls.png" alt="Enablement Controls" />
 
 - **ON**
     determines whether the step is enabled.
@@ -214,8 +220,9 @@ Each anchor has three controls:
 
 #### Global Level Controls
 
+<img class="controls" style="width: 35mm;" src="level-controls.png" alt="Global Level Controls" />
+
 - **LEVEL**
-    <span class="controls" style="margin-left: 10px; width: 27mm; height: 13mm; background-position: -19mm 83.5mm"></span>
     sets a global attenuation factor (0–1)
     applied to every anchor's _LEVEL_ source.
     This knob is modulated
@@ -227,8 +234,9 @@ Each anchor has three controls:
 
 #### Global Duration Controls
 
+<img class="controls" style="width: 35mm;" src="duration-controls.png" alt="Global Duration Controls" />
+
 - **DUR**
-    <span class="controls" style="margin-left: 10px; width: 27mm; height: 13mm; background-position: -19mm 67mm"></span>
     sets a global multiplier (0–2)
     applied to the duration of each step.
     This knob is modulated
@@ -245,6 +253,8 @@ Each anchor has three controls:
 
 #### Inputs
 
+<img class="controls" style="width: 35mm;" src="inputs.png" alt="Inputs" />
+
 - **A**, **B**, and **C:**
 <span class="controls" style="margin-left: 10px; width: 27mm; height: 13mm; background-position: -19mm 52mm"></span>
     Three input signals
@@ -252,6 +262,8 @@ Each anchor has three controls:
     can sample or track.
 
 #### Outputs
+
+<img class="controls" style="width: 35mm;" src="step-state-outputs.png" alt="Step State Outputs" />
 
 - **STEP #**
     <span class="controls" style="margin-left: 10px; width: 27mm; height: 13mm; background-position: -19mm 37mm"></span>
@@ -266,7 +278,7 @@ Each anchor has three controls:
     are selected and enabled,
     and the sequencer is looping,
     the _STEP #_ port will cycle through the values
-    
+
     > 2.5V → 5.0V → 7.5V → 10.0V → 2.5V → …
 
     When the sequencer is idle,
@@ -281,7 +293,7 @@ Each anchor has three controls:
     and 0V otherwise.
 
 - **STEP ∆**
-    <span class="controls" style="margin-left: 10px; width: 27mm; height: 13mm; background-position: -19mm 21mm"></span>
+    <img class="controls" style="width: 35mm;" src="step-event-outputs.png" alt="Step Event Outputs" />
     emits a 10ms pulse
     when a step completes.
 
@@ -376,8 +388,8 @@ to _LOW._
 | Parameter | Value |
 | TRIG | LOW | Trigger if the gate is down |
 | INT | YES | Interrupt the curve if triggered |
-| SUST | YES | Sustain until triggered | 
-| START anchor | SAMPL OUT | Start where the previous step ended | 
+| SUST | YES | Sustain until triggered |
+| START anchor | SAMPL OUT | Start where the previous step ended |
 | END anchor | SAMPL OUT | Remain where the previous step ended |
 
 ### Hold Step
@@ -385,7 +397,7 @@ to _LOW._
 | Parameter | Value |
 | INT | NO | Ignore interrupts |
 | SUST | NO | Advance when the hold ends |
-| START anchor | SAMPL OUT | Start where the previous step ended | 
+| START anchor | SAMPL OUT | Start where the previous step ended |
 | END anchor | SAMPL OUT | Remain where the previous step ended |
 
 ## Details
@@ -404,7 +416,7 @@ may be unexpected:
 
 -   Once a step starts,
     it always proceeds as if enabled,
-    even if it is disabled while the step is in progress.    
+    even if it is disabled while the step is in progress.
 
 -   Pausing and resuming a sequence.
     Turning _RUN_ off
@@ -414,10 +426,3 @@ may be unexpected:
     the sequence resumes from the point where it was paused.
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
-
-<style type="text/css">
-.controls {
-  float: right;
-  background-image: url('sequencizer.svg');
-}
-</style>
