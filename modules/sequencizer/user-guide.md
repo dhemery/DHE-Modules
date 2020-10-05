@@ -10,10 +10,11 @@ title: The Sequencizer User Guide
     - [Step Sequencers](#step-sequencers)
     - [Sample and Hold](#sample-and-hold)
 - [Generating Envelopes](#generating-envelopes)
-    - [Envelope Ramps and Curves](#envelope-ramps-and-curves)    
-    - [Envelope Ramps and Curves: Variations](#envelope-ramps-and-curves-variations)    
-    - [Envelope Delay, Hold, and Sustain Steps](#envelope-delay-hold-and-sustain-steps)    
+    - [Envelope Ramps and Curves](#envelope-ramps-and-curves)
+    - [Envelope Ramps and Curves: Variations](#envelope-ramps-and-curves-variations)
+    - [Envelope Delay, Hold, and Sustain Steps](#envelope-delay-hold-and-sustain-steps)
 - [Morphing Between Signals](#morphing-between-signals)
+
 - [Controlling Sequences](#controlling-sequences)
     - [Retriggering Envelopes](#retriggering-envelopes)
     - [Preventing Interrupts](#preventing-interrupts)
@@ -55,7 +56,7 @@ that is part-way between the voltages
 reported by these anchors.
 
 An anchor's voltage
-is determined by its _source_ and its _mode._ 
+is determined by its _source_ and its _mode._
 
 **Anchor Sources.**
 An anchor can acquire its voltage from several sources,
@@ -71,7 +72,7 @@ The _MODE_ control
 (the unnamed button below the anchor's knob)
 determines _when_ the anchor acquires its voltage.
 
-In _SAMPL_ mode,
+In _SMPL_ mode,
 the anchor _samples_ its source
 exactly once,
 at the start of the step,
@@ -103,7 +104,7 @@ specified by the _TRIG_ setting
 (rise, fall, change, low, or high).
 The next two settings specify
 how the step responds to triggers
-during each phase. 
+during each phase.
 
 **Interrupting the Generate Phase.**
 The _INT_ control
@@ -130,7 +131,7 @@ While it sustains,
 it emits its _end_ anchor voltage.
 If _SUST_ is _OFF_,
 the step skips its sustain phase,
-and the sequence immediately advances to the next step. 
+and the sequence immediately advances to the next step.
 
 
 ## Generating Constant Voltages
@@ -144,7 +145,7 @@ Many kinds of steps emit constant voltages:
 To emit a constant voltage throughout a step,
 the general technique is:
 
-- Set the *start* anchor to **SAMPL** the desired source.
+- Set the *start* anchor to **SMPL** the desired source.
     This starts the step at the desired voltage,
     and holds the start anchor at the sampled voltage
     until the step ends.
@@ -155,7 +156,7 @@ If my advice for the end anchor surprises you
 consider:
 - If you set the end anchor to track the _OUT_ port,
     then you can experiment with different start sources,
-    and the end anchor will automatically pick up the same constant voltage. 
+    and the end anchor will automatically pick up the same constant voltage.
 - If instead you set the end anchor to match the start anchor,
     then every time you change the start source,
     you would have to start the end source to match.
@@ -166,8 +167,8 @@ consider:
     **gate-controlled step sequencer**
     that holds each level until the gate rises,
     configure each step like this:
-    
-    - Set **start** anchor to **SAMPL** the **LEVEL**.
+
+    - Set **start** anchor to **SMPL** the **LEVEL**.
     - Set **start** level to the desired voltage for the step.
     - Set the **end** anchor to **TRACK** the **OUT** port.
     - Set **TRIG** to **RISE**.
@@ -184,13 +185,13 @@ consider:
     effectively cause the step
     to ignore the step's duration,
     putting advancement
-    entirely under the control of the gate. 
+    entirely under the control of the gate.
 
 - To create a **timer-controlled step sequencer**
     that holds each level for a specified duration,
     configure each step like this:
-    
-    - Set **start** anchor to **SAMPL** the **LEVEL**.
+
+    - Set **start** anchor to **SMPL** the **LEVEL**.
     - Set **start** level to the desired voltage for the step.
     - Set the **end** anchor to **TRACK** the **OUT** port.
     - Set the **DUR** controls to the desired duration.
@@ -205,15 +206,15 @@ consider:
     effectively cause the step
     to ignore the gate,
     putting advancement
-    entirely under the control of the step durations. 
+    entirely under the control of the step durations.
 
-### Sample and Hold 
+### Sample and Hold
 
 - To create a **gate-controlled sample-and-hold step**
     that samples its input
     and holds the sampled voltage until the gate rises:
-    
-    - Set **start** anchor to **SAMPL** the desired input
+
+    - Set **start** anchor to **SMPL** the desired input
         (**A**, **B**, or **C**).
         This configures the _sample_ part of _sample-and-hold._
     - Set the **end** anchor to **TRACK** the **OUT** port.
@@ -231,12 +232,12 @@ consider:
     effectively cause the step
     to ignore the step's duration,
     putting advancement
-    entirely under the control of the gate. 
+    entirely under the control of the gate.
 
 - To create a **timer-controlled sample-and-hold step**
     that holds each sample for a specified duration:
-    
-    - Set **start** anchor to **SAMPL** the **LEVEL**.
+
+    - Set **start** anchor to **SMPL** the **LEVEL**.
     - Set **start** level to the desired voltage for the step.
     - Set the **end** anchor to **TRACK** the **OUT** port.
     - Set the **DUR** controls to the desired duration.
@@ -251,7 +252,7 @@ consider:
     effectively cause the step
     to ignore the gate,
     putting advancement
-    entirely under the control of the step durations. 
+    entirely under the control of the step durations.
 
 ## Generating Envelopes
 
@@ -259,11 +260,11 @@ consider:
 
 For a typical envelope step (attack, decay, or release):
 
-- Set the **start** anchor to **SAMPL** the **OUT** port.
+- Set the **start** anchor to **SMPL** the **OUT** port.
     This configures the step
     to progress from the voltage
     where the previous step left off.
-- Set the **end** anchor to **SAMPL** the **LEVEL**.
+- Set the **end** anchor to **SMPL** the **LEVEL**.
     This configures the step
     to progress to the specified voltage.
 - Set the end **LEVEL** for the step
@@ -280,7 +281,7 @@ For a typical envelope step (attack, decay, or release):
 - To start an envelope at 0V
     instead of at the previous output voltage,
     set the attack step's start anchor
-    to **SAMPL** the **LEVEL**,
+    to **SMPL** the **LEVEL**,
     and set the start **level** to 0V.
 
 - To make a step **interruptible:**
@@ -308,8 +309,8 @@ For a typical envelope step (attack, decay, or release):
         the step will sustain until the _GATE_ falls.
 
 ### Envelope Delay, Hold, and Sustain Steps
- 
-- Set the *start* anchor to **SAMPL** the **OUT** port.
+
+- Set the *start* anchor to **SMPL** the **OUT** port.
     This configures the step to start
     at the voltage where the previous step finished.
 - Set the *end* anchor to **TRACK** the **OUT** port.

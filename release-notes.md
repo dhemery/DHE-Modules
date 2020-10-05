@@ -10,6 +10,7 @@ October 2020
 - Added [_Sequencizer 4_]({{ '/modules/sequencizer/' | relative_url }}).
 - Added _Sequencizer 8_.
 - Added _Sequencizer 16_.
+- Changed the presentation of "stepper" controls.
 
 ## Version 1.2.0
 
