@@ -60,12 +60,12 @@ def make_curve_sequencer(steps)
   step_dx = hp2mm(2.25)
 
   active_y = top + Light::RADIUS
-  generator_y = top + hp2mm(2.25)
-  gate_mode_y = top + hp2mm(4.5)
-  level_y = top + hp2mm(6.75)
-  shape_y = top + hp2mm(9.25)
-  curve_y = top + hp2mm(11.75)
-  duration_y = top + hp2mm(14.25)
+  generator_y = top + hp2mm(1.61)
+  gate_mode_y = top + hp2mm(3.25)
+  level_y = top + hp2mm(5.75)
+  shape_y = top + hp2mm(8.75)
+  curve_y = top + hp2mm(11.0)
+  duration_y = top + hp2mm(14.0)
   enabled_port_y = bottom - Port::DIAMETER / 2.0
   enabled_button_y = enabled_port_y - Port::DIAMETER / 2.0 - Button::DIAMETER / 2.0 - 1.0
 

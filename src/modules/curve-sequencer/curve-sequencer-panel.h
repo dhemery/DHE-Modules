@@ -153,12 +153,12 @@ public:
     addParam(Button::momentary(slug, module, left + button_port_distance,
                                reset_y, Controls::ResetButton));
 
-    auto constexpr generate_mode_y = top + hp2mm(2.25F);
-    auto constexpr advance_mode_y = top + hp2mm(4.5F);
-    auto constexpr level_y = top + hp2mm(6.75F);
-    auto constexpr shape_y = top + hp2mm(9.25F);
-    auto constexpr curve_y = top + hp2mm(11.75F);
-    auto constexpr duration_y = top + hp2mm(14.25F);
+    auto constexpr generate_mode_y = top + hp2mm(1.61F);
+    auto constexpr advance_mode_y = top + hp2mm(3.25F);
+    auto constexpr level_y = top + hp2mm(5.75F);
+    auto constexpr shape_y = top + hp2mm(8.75F);
+    auto constexpr curve_y = top + hp2mm(11.0F);
+    auto constexpr duration_y = top + hp2mm(14.0F);
     auto constexpr enabled_port_y = bottom - port_radius;
     auto constexpr enabled_button_y =
         enabled_port_y - port_radius - button_radius - 1.F;
