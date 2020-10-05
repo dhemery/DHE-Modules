@@ -49,15 +49,12 @@ and more.
 
 [![_Sequencizer 4_](modules/sequencizer/sequencizer.svg)](modules/sequencizer/)
 
-**[_Sequencizer 4_](modules/sequencizer/)**
-is a four-step envelope generator
+The **[_Sequencizer_](modules/sequencizer/)**
+modules (_Sequencizer 4_, _Sequencizer 8_, and _Sequencizer 16_, )
+are sequencers
 that offers flexible, precise control
 over the individual steps
 and the overall sequence.
-**_Sequencizer 8_**
-and
-**_Sequencizer 16_**
-offer the same functionality with more steps.
 
 The **[_Curve Sequencer_](modules/curve-sequencer/)** modules
 are earlier versions of the Sequencizer modules.

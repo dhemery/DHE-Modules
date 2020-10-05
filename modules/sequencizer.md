@@ -158,7 +158,7 @@ Each anchor has three controls:
 - The anchor **LEVEL** knob
     sets the voltage
     of the anchor's _level_ source.
-    The [global level controls](#global-level-controls)
+    The global _LEVEL_ knob and range switch (below)
     affect the value of this knob.
     This knob is used
     only when _LEVEL_
@@ -190,7 +190,7 @@ Each anchor has three controls:
 
 - The step **DUR** knob
     sets the duration of the step's curve.
-    The [global duration controls](#global-duration-controls)
+    The global duration multiplier knob and range switch (below)
     affect the value of this knob.
 
 - **SHAPE**
@@ -301,25 +301,33 @@ includes a suite of
 envelope generator presets:
 
 - **AD:**
-    Generates an Attack Decay envelope.
+    Attack Decay.
 - **ADBDSR:**
-    Generates an Attack Decay Break Decay Sustain Release envelope.
-    The first decay ends at the specified "break" voltage,
-    and the sequence immediately continues with the second decay.
+    Attack Decay Break Decay Sustain Release.
+    After the attack,
+    the sequence decays to a "break" voltage,
+    then decays to the sustain voltage.
 - **ADHR:**
-    Generates an Attack Decay Hold Release envelope.
-- **ADSR:**
-    Generates an Attack Decay Sustain Release envelope.
-- **ADSR:**
-    Generates an Attack Decay Sustain Release envelope.
+    Attack Decay Hold Release.
 - **ADSHR:**
-    Generates an Attack Decay Sustain Hold Release envelope.
+    Attack Decay Sustain Hold Release.
+- **ADSR:**
+    Attack Decay Sustain Release.
 - **AHDSR:**
-    Generates an Attack Hold Decay Sustain Release envelope.
+    Attack Hold Decay Sustain Release.
 - **AHR:**
-    Generates an Attack Hold Release envelope.
+    Attack Hold Release.
 - **ASR:**
-    Generates an Attack Sustain Release envelope.
+    Attack Sustain Release.
+- **DAR:**
+    Delay Attack Release.
+- **DADSR:**
+    Delay Attack Decay Sustain Release.
+- **DAHR:**
+    Delay Attack Hold Release.
+- **DASR:**
+    Delay Attack Sustain Release.
+
 
 Each _Sequencizer_ module
 includes these factory presets,
@@ -328,10 +336,10 @@ as starting points
 for your own variations:
 
 - **Sample and Hold 100ms:**
-    A timed sample and hold sequence.
+    A timed sample-and-hold sequence.
     Each step holds for 100ms.
 - **Sample and Hold Gated:**
-    A gate-controlled sample and hold sequence.
+    A gate-controlled sample-and-hold sequence.
     Each step holds until the gate rises.
 - **Steps 100ms:**
     A step sequencer with durations controlled by internal timers.
