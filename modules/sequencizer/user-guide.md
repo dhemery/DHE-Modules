@@ -402,6 +402,7 @@ interrupts even an "uninterruptible" step.
         <th>Parameter</th>
         <th>Value</th>
         <th>Notes</th>
+        <th>Image</th>
     </tr>
     <tr>
         <td>TRIG</td>
@@ -411,6 +412,7 @@ interrupts even an "uninterruptible" step.
             If INT and SUST are both off,
             this setting does not matter.
         </td>
+        <td rowspan="5"><img class="td-controls" width="40" src="envelope-attack.png" /></td>
     </tr>
     <tr>
         <td>INT</td>
@@ -449,6 +451,7 @@ interrupts even an "uninterruptible" step.
         <th>Parameter</th>
         <th>Value</th>
         <th>Notes</th>
+        <th>Image</th>
     </tr>
     <tr>
         <td>TRIG</td>
@@ -458,6 +461,7 @@ interrupts even an "uninterruptible" step.
             If INT and SUST are both off,
             this setting does not matter.
         </td>
+        <td rowspan="6"><img class="td-controls" width="40" src="envelope-hold.png" /></td>
     </tr>
     <tr>
         <td>INT</td>
@@ -494,6 +498,7 @@ interrupts even an "uninterruptible" step.
         <th>Parameter</th>
         <th>Value</th>
         <th>Notes</th>
+        <th>Image</th>
     </tr>
     <tr>
         <td>TRIG</td>
@@ -503,6 +508,7 @@ interrupts even an "uninterruptible" step.
             If INT and SUST are both off,
             this setting does not matter.
         </td>
+        <td rowspan="6"><img class="td-controls" width="40" src="envelope-decay.png" /></td>
     </tr>
     <tr>
         <td>INT</td>
@@ -538,11 +544,13 @@ interrupts even an "uninterruptible" step.
         <th>Parameter</th>
         <th>Value</th>
         <th>Notes</th>
+        <th>Image</th>
     </tr>
     <tr>
         <td>TRIG</td>
         <td>LOW</td>
         <td>The GATE condition that ends the sustain stage.</td>
+        <td rowspan="6"><img class="td-controls" width="40" src="envelope-sustain.png" /></td>
     </tr>
     <tr>
         <td>INT</td>
@@ -579,6 +587,7 @@ interrupts even an "uninterruptible" step.
         <th>Parameter</th>
         <th>Value</th>
         <th>Notes</th>
+        <th>Image</th>
     </tr>
     <tr>
         <td>TRIG</td>
@@ -588,6 +597,7 @@ interrupts even an "uninterruptible" step.
             If INT and SUST are both off,
             this setting does not matter.
         </td>
+        <td rowspan="6"><img class="td-controls" width="40" src="envelope-release.png" /></td>
     </tr>
     <tr>
         <td>INT</td>
@@ -634,6 +644,7 @@ configure each step liks this:
         <th>Parameter</th>
         <th>Value</th>
         <th>Notes</th>
+        <th>Image</th>
     </tr>
     <tr>
         <td>TRIG</td>
@@ -643,6 +654,7 @@ configure each step liks this:
             by specifying any condition.
             And you can use different conditions
             for different steps.</td>
+        <td rowspan="6"><img class="td-controls" width="40" src="step-sequencer-externally-clocked.png" /></td>
     </tr>
     <tr>
         <td>INT</td>
@@ -687,12 +699,14 @@ configure each step like this:
         <th>Parameter</th>
         <th>Value</th>
         <th>Notes</th>
+        <th>Image</th>
     </tr>
     <tr>
         <td>INT</td>
         <td>OFF</td>
         <td>Emit the sampled voltage until the timer expires,
             ignoring the GATE condition.</td>
+        <td rowspan="6"><img class="td-controls" width="40" src="step-sequencer-timer-controlled.png" /></td>
     </tr>
     <tr>
         <td>SUST</td>
@@ -737,11 +751,13 @@ configure each step liks this:
         <th>Parameter</th>
         <th>Value</th>
         <th>Notes</th>
+        <th>Image</th>
     </tr>
     <tr>
         <td>TRIG</td>
         <td>any</td>
         <td>Different steps can advance on different GATE conditions.</td>
+        <td rowspan="6"><img class="td-controls" width="40" src="sample-and-hold-externally-clocked.png" /></td>
     </tr>
     <tr>
         <td>INT</td>
@@ -786,12 +802,14 @@ configure each step liks this:
         <th>Parameter</th>
         <th>Value</th>
         <th>Notes</th>
+        <th>Image</th>
     </tr>
     <tr>
         <td>INT</td>
         <td>OFF</td>
         <td>Emit the sampled voltage until the timer expires,
             ignoring the GATE condition.</td>
+        <td rowspan="6"><img class="td-controls" width="40" src="sample-and-hold-timer-controlled.png" /></td>
     </tr>
     <tr>
         <td>SUST</td>
