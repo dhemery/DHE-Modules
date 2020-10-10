@@ -178,13 +178,15 @@ advances from one step to the next.
         <th>TRIG</th>
         <th>INT</th>
         <th>SUST</th>
+        <th>Image</th>
         <th>Notes</th>
     </tr>
     <tr>
         <td>Externally Clocked</td>
-        <td>any condition</td>
+        <td>any</td>
         <td>ON</td>
         <td>ON</td>
+        <td><img class="td-controls" width="40" src="advancement-externally-clocked.png" /></td>
         <td>Advance when the GATE condition is satisfied,
             regardless of what phase the step is executing.
             Useful for creating
@@ -197,15 +199,17 @@ advances from one step to the next.
         <td>N/A</td>
         <td>OFF</td>
         <td>OFF</td>
+        <td><img class="td-controls" width="40" src="advancement-uninterruptible.png" /></td>
         <td>Advance when the generate phase completes,
             regardless of the condition of the GATE.
             Useful for hold stages.</td>
     </tr>
     <tr>
         <td>Interruptible: Maximum Duration</td>
-        <td>any condition</td>
+        <td>any</td>
         <td>ON</td>
         <td>OFF</td>
+        <td><img class="td-controls" width="40" src="advancement-interruptible.png" /></td>
         <td>Advance when the generate phase completes
             or when the GATE condition is satisfied,
             which ever happens first.
@@ -213,9 +217,10 @@ advances from one step to the next.
     </tr>
     <tr>
         <td>Minimum Duration</td>
-        <td>any condition</td>
+        <td>any</td>
         <td>OFF</td>
         <td>ON</td>
+        <td><img class="td-controls" width="40" src="advancement-minimum-duration.png" /></td>
         <td>Complete the generate phase,
             then sustain until the GATE condition is satisfied.
         </td>
@@ -225,6 +230,7 @@ advances from one step to the next.
         <td>LOW</td>
         <td>ON</td>
         <td>OFF</td>
+        <td><img class="td-controls" width="40" src="advancement-skippable.png" /></td>
         <td>Advance if the GATE is low at the start of the step
             or becomes low while the step is active.
             Useful for configuring
@@ -238,6 +244,7 @@ advances from one step to the next.
         <td>LOW</td>
         <td>any</td>
         <td>ON</td>
+        <td><img class="td-controls" width="40" src="advancement-generate-and-sustain.png" /></td>
         <td>Useful to combine decay and sustain in a single step.</td>
     </tr>
 </table>
@@ -260,12 +267,14 @@ Here are some of the more common configurations.
         <th>Technique</th>
         <th>Start Anchor</th>
         <th>End Anchor</th>
+        <th>Image</th>
         <th>Notes</th>
     </tr>
     <tr>
         <td>Constant</td>
         <td>SMPL LEVEL</td>
         <td>TRACK OUT</td>
+        <td><img class="td-controls" width="40" src="anchors-constant.png" /></td>
         <td>Emit a specified constant voltage.
             Useful to create a step sequencer.</td>
     </tr>
@@ -273,6 +282,7 @@ Here are some of the more common configurations.
         <td>Hold</td>
         <td>SMPL OUT</td>
         <td>TRACK OUT</td>
+        <td><img class="td-controls" width="40" src="anchors-hold.png" /></td>
         <td>Hold at the the previous step's final voltage.
             Useful for envelope sustain and hold stages.</td>
     </tr>
@@ -280,19 +290,22 @@ Here are some of the more common configurations.
         <td>Sample and Hold</td>
         <td>SMPL any input</td>
         <td>TRACK OUT</td>
+        <td><img class="td-controls" width="40" src="anchors-sample-and-hold.png" /></td>
         <td>Hold at the voltage sampled from an input.</td>
     </tr>
     <tr>
         <td>Fixed Ramp or Curve</td>
         <td>SMPL LEVEL</td>
         <td>SMPL LEVEL</td>
+        <td><img class="td-controls" width="40" src="anchors-fixed-ramp.png" /></td>
         <td>Progress from one specified voltage to another.
-            Useful for en envelope attack stage (0V to 10V).</td>
+            Useful for an envelope attack stage (0V to 10V).</td>
     </tr>
     <tr>
         <td>Continuation Ramp or Curve</td>
         <td>SMPL OUT</td>
         <td>SMPL LEVEL</td>
+        <td><img class="td-controls" width="40" src="anchors-continuation-ramp.png" /></td>
         <td>Progress from the previous step's final voltage
             to a specified voltage.
             Useful for an envelope decay stage (set LEVEL to sustain voltage)
@@ -303,23 +316,27 @@ Here are some of the more common configurations.
         <td>Passthrough</td>
         <td>TRACK any input</td>
         <td>TRACK same input</td>
+        <td><img class="td-controls" width="40" src="anchors-passthrough.png" /></td>
         <td>Track and emit an input signal.</td>
     </tr><tr>
         <td>Fade In</td>
         <td>SMPL any source</td>
         <td>TRACK any input</td>
+        <td><img class="td-controls" width="40" src="anchors-fade-in.png" /></td>
         <td>Fade from the sampled voltage to the selected input signal.</td>
     </tr>
     <tr>
         <td>Fade Out</td>
         <td>TRACK any input</td>
         <td>SMPL any source</td>
+        <td><img class="td-controls" width="40" src="anchors-fade-out.png" /></td>
         <td>Fade from the selected input signal to the sampled voltage.</td>
     </tr>
     <tr>
         <td>Crossfade</td>
         <td>TRACK an input</td>
         <td>TRACK another input</td>
+        <td><img class="td-controls" width="40" src="anchors-crossfade.png" /></td>
         <td>Fade from one input signal to another.</td>
     </tr>
 </table>
@@ -387,17 +404,13 @@ interrupts even an "uninterruptible" step.
         <th>Notes</th>
     </tr>
     <tr>
-        <td>Start Anchor</td>
-        <td>SAMPL LEVEL</td>
-        <td>The most common start voltage is 0V.
-            Alternatively,
-            use SAMPL OUT to start the attack at the previous step's final voltage.
+        <td>TRIG</td>
+        <td>LOW</td>
+        <td>If INT or SUST are ON,
+            experiment with other GATE conditions here.
+            If INT and SUST are both off,
+            this setting does not matter.
         </td>
-    </tr>
-    <tr>
-        <td>End Anchor</td>
-        <td>SMPL LEVEL</td>
-        <td>The most common start voltage is 10V.</td>
     </tr>
     <tr>
         <td>INT</td>
@@ -415,13 +428,17 @@ interrupts even an "uninterruptible" step.
         </td>
     </tr>
     <tr>
-        <td>TRIG</td>
-        <td>LOW</td>
-        <td>If INT or SUST are ON,
-            experiment with other GATE conditions here.
-            If INT and SUST are both off,
-            this setting does not matter.
+        <td>Start Anchor</td>
+        <td>SAMPL LEVEL</td>
+        <td>The most common start voltage is 0V.
+            Alternatively,
+            use SAMPL OUT to start the attack at the previous step's final voltage.
         </td>
+    </tr>
+    <tr>
+        <td>End Anchor</td>
+        <td>SMPL LEVEL</td>
+        <td>The most common start voltage is 10V.</td>
     </tr>
 </table>
 
@@ -434,14 +451,13 @@ interrupts even an "uninterruptible" step.
         <th>Notes</th>
     </tr>
     <tr>
-        <td>Start Anchor</td>
-        <td>SAMPL OUT</td>
-        <td>To start the release at the previous step's final voltage.</td>
-    </tr>
-    <tr>
-        <td>End Anchor</td>
-        <td>TRACK OUT</td>
-        <td>To continue emitting the sampled voltage.</td>
+        <td>TRIG</td>
+        <td>LOW</td>
+        <td>If INT or SUST are ON,
+            experiment with other GATE conditions here.
+            If INT and SUST are both off,
+            this setting does not matter.
+        </td>
     </tr>
     <tr>
         <td>INT</td>
@@ -460,13 +476,14 @@ interrupts even an "uninterruptible" step.
         </td>
     </tr>
     <tr>
-        <td>TRIG</td>
-        <td>LOW</td>
-        <td>If INT or SUST are ON,
-            experiment with other GATE conditions here.
-            If INT and SUST are both off,
-            this setting does not matter.
-        </td>
+        <td>Start Anchor</td>
+        <td>SAMPL OUT</td>
+        <td>To start the release at the previous step's final voltage.</td>
+    </tr>
+    <tr>
+        <td>End Anchor</td>
+        <td>TRACK OUT</td>
+        <td>To continue emitting the sampled voltage.</td>
     </tr>
 </table>
 
@@ -479,14 +496,13 @@ interrupts even an "uninterruptible" step.
         <th>Notes</th>
     </tr>
     <tr>
-        <td>Start Anchor</td>
-        <td>SAMPL OUT</td>
-        <td>To start the decay at the previous step's final voltage.</td>
-    </tr>
-    <tr>
-        <td>End Anchor</td>
-        <td>SMPL LEVEL</td>
-        <td>Set the LEVEL to the desired sustain voltage.</td>
+        <td>TRIG</td>
+        <td>LOW</td>
+        <td>If INT or SUST are ON,
+            experiment with other GATE conditions here.
+            If INT and SUST are both off,
+            this setting does not matter.
+        </td>
     </tr>
     <tr>
         <td>INT</td>
@@ -504,13 +520,14 @@ interrupts even an "uninterruptible" step.
         </td>
     </tr>
     <tr>
-        <td>TRIG</td>
-        <td>LOW</td>
-        <td>If INT or SUST are ON,
-            experiment with other GATE conditions here.
-            If INT and SUST are both off,
-            this setting does not matter.
-        </td>
+        <td>Start Anchor</td>
+        <td>SAMPL OUT</td>
+        <td>To start the decay at the previous step's final voltage.</td>
+    </tr>
+    <tr>
+        <td>End Anchor</td>
+        <td>SMPL LEVEL</td>
+        <td>Set the LEVEL to the desired sustain voltage.</td>
     </tr>
 </table>
 
@@ -521,16 +538,6 @@ interrupts even an "uninterruptible" step.
         <th>Parameter</th>
         <th>Value</th>
         <th>Notes</th>
-    </tr>
-    <tr>
-        <td>Start Anchor</td>
-        <td>SAMPL OUT</td>
-        <td>Sample the previous step's final voltage.</td>
-    </tr>
-    <tr>
-        <td>End Anchor</td>
-        <td>TRACK OUT</td>
-        <td>To continue emitting the sampled voltage.</td>
     </tr>
     <tr>
         <td>TRIG</td>
@@ -552,6 +559,16 @@ interrupts even an "uninterruptible" step.
             until the GATE falls.
         </td>
     </tr>
+    <tr>
+        <td>Start Anchor</td>
+        <td>SAMPL OUT</td>
+        <td>Sample the previous step's final voltage.</td>
+    </tr>
+    <tr>
+        <td>End Anchor</td>
+        <td>TRACK OUT</td>
+        <td>To continue emitting the sampled voltage.</td>
+    </tr>
 </table>
 
 
@@ -564,14 +581,13 @@ interrupts even an "uninterruptible" step.
         <th>Notes</th>
     </tr>
     <tr>
-        <td>Start Anchor</td>
-        <td>SAMPL OUT</td>
-        <td>To start the release at the previous step's final voltage.</td>
-    </tr>
-    <tr>
-        <td>End Anchor</td>
-        <td>SMPL LEVEL</td>
-        <td>The most common end voltage is 0V.</td>
+        <td>TRIG</td>
+        <td>LOW</td>
+        <td>If INT or SUST are ON,
+            experiment with other GATE conditions here.
+            If INT and SUST are both off,
+            this setting does not matter.
+        </td>
     </tr>
     <tr>
         <td>INT</td>
@@ -589,13 +605,14 @@ interrupts even an "uninterruptible" step.
         </td>
     </tr>
     <tr>
-        <td>TRIG</td>
-        <td>LOW</td>
-        <td>If INT or SUST are ON,
-            experiment with other GATE conditions here.
-            If INT and SUST are both off,
-            this setting does not matter.
-        </td>
+        <td>Start Anchor</td>
+        <td>SAMPL OUT</td>
+        <td>To start the release at the previous step's final voltage.</td>
+    </tr>
+    <tr>
+        <td>End Anchor</td>
+        <td>SMPL LEVEL</td>
+        <td>The most common end voltage is 0V.</td>
     </tr>
 </table>
 
@@ -619,16 +636,6 @@ configure each step liks this:
         <th>Notes</th>
     </tr>
     <tr>
-        <td>Start Anchor</td>
-        <td>SMPL LEVEL</td>
-        <td>Set the LEVEL to the desired voltage.</td>
-    </tr>
-    <tr>
-        <td>End Anchor</td>
-        <td>TRACK OUT</td>
-        <td>To continue emitting the same voltage.</td>
-    </tr>
-    <tr>
         <td>TRIG</td>
         <td>RISE</td>
         <td>RISE is the traditional GATE condition to use here,
@@ -647,6 +654,16 @@ configure each step liks this:
         <td>ON</td>
         <td>If the generate phase completes without interruption,
             sustain until the GATE rises.</td>
+    </tr>
+    <tr>
+        <td>Start Anchor</td>
+        <td>SMPL LEVEL</td>
+        <td>Set the LEVEL to the desired voltage.</td>
+    </tr>
+    <tr>
+        <td>End Anchor</td>
+        <td>TRACK OUT</td>
+        <td>To continue emitting the same voltage.</td>
     </tr>
 </table>
 
@@ -672,6 +689,17 @@ configure each step like this:
         <th>Notes</th>
     </tr>
     <tr>
+        <td>INT</td>
+        <td>OFF</td>
+        <td>Emit the sampled voltage until the timer expires,
+            ignoring the GATE condition.</td>
+    </tr>
+    <tr>
+        <td>SUST</td>
+        <td>OFF</td>
+        <td>Advance automatically when the timer expires.</td>
+    </tr>
+    <tr>
         <td>Start Anchor</td>
         <td>SMPL LEVEL</td>
         <td>Set the LEVEL to the desired voltage.</td>
@@ -685,17 +713,6 @@ configure each step like this:
         <td>DUR</td>
         <td>desired duration</td>
         <td>The duration of the step's timer.</td>
-    </tr>
-    <tr>
-        <td>INT</td>
-        <td>OFF</td>
-        <td>Emit the sampled voltage until the timer expires,
-            ignoring the GATE condition.</td>
-    </tr>
-    <tr>
-        <td>SUST</td>
-        <td>OFF</td>
-        <td>Advance automatically when the timer expires.</td>
     </tr>
 </table>
 
@@ -722,18 +739,8 @@ configure each step liks this:
         <th>Notes</th>
     </tr>
     <tr>
-        <td>Start Anchor</td>
-        <td>SMPL any input</td>
-        <td>Different steps can sample different inputs.</td>
-    </tr>
-    <tr>
-        <td>End Anchor</td>
-        <td>TRACK OUT</td>
-        <td>To continue emitting the same voltage.</td>
-    </tr>
-    <tr>
         <td>TRIG</td>
-        <td>any condition</td>
+        <td>any</td>
         <td>Different steps can advance on different GATE conditions.</td>
     </tr>
     <tr>
@@ -746,6 +753,16 @@ configure each step liks this:
         <td>ON</td>
         <td>If the generate phase completes without interruption,
             sustain until the GATE condition is satisfied.</td>
+    </tr>
+    <tr>
+        <td>Start Anchor</td>
+        <td>SMPL any input</td>
+        <td>Different steps can sample different inputs.</td>
+    </tr>
+    <tr>
+        <td>End Anchor</td>
+        <td>TRACK OUT</td>
+        <td>To continue emitting the same voltage.</td>
     </tr>
 </table>
 
@@ -771,6 +788,17 @@ configure each step liks this:
         <th>Notes</th>
     </tr>
     <tr>
+        <td>INT</td>
+        <td>OFF</td>
+        <td>Emit the sampled voltage until the timer expires,
+            ignoring the GATE condition.</td>
+    </tr>
+    <tr>
+        <td>SUST</td>
+        <td>OFF</td>
+        <td>Advance automatically when the timer expires.</td>
+    </tr>
+    <tr>
         <td>Start Anchor</td>
         <td>SMPL any input</td>
         <td>Different steps can sample different inputs</td>
@@ -784,17 +812,6 @@ configure each step liks this:
         <td>DUR</td>
         <td>desired duration</td>
         <td>The duration of the step's timer.</td>
-    </tr>
-    <tr>
-        <td>INT</td>
-        <td>OFF</td>
-        <td>Emit the sampled voltage until the timer expires,
-            ignoring the GATE condition.</td>
-    </tr>
-    <tr>
-        <td>SUST</td>
-        <td>OFF</td>
-        <td>Advance automatically when the timer expires.</td>
     </tr>
 </table>
 
