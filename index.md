@@ -14,6 +14,21 @@ and
 
 ### Envelope Generators
 
+#### Multi-Stage Envelope Generators
+
+[![_Sequencizer 4_](modules/sequencizer/sequencizer.svg)](modules/sequencizer/)
+
+**Coming Soon:**
+The **[_Sequencizer_](modules/sequencizer/)**
+modules (_Sequencizer 4_, _Sequencizer 8_, and _Sequencizer 16_)
+are sequencers
+that offers flexible, precise control
+over the individual steps
+and the overall sequence.
+
+The **[_Curve Sequencer_](modules/curve-sequencer/)** modules
+are earlier versions of the Sequencizer modules.
+
 #### Composable Envelope Generators
 
 [![_Stage_](modules/stage/stage.svg)](modules/stage/)
@@ -44,20 +59,6 @@ inject triggers,
 suppress retriggers,
 set an envelope's starting voltage,
 and more.
-
-#### Multi-Stage Envelope Generators
-
-[![_Sequencizer 4_](modules/sequencizer/sequencizer.svg)](modules/sequencizer/)
-
-The **[_Sequencizer_](modules/sequencizer/)**
-modules (_Sequencizer 4_, _Sequencizer 8_, and _Sequencizer 16_, )
-are sequencers
-that offers flexible, precise control
-over the individual steps
-and the overall sequence.
-
-The **[_Curve Sequencer_](modules/curve-sequencer/)** modules
-are earlier versions of the Sequencizer modules.
 
 ### Logic
 
