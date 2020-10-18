@@ -73,44 +73,6 @@ private:
   std::function<void(int)> knob_changed_to_;
 };
 
-class StartMarker : public rack::widget::SvgWidget {
-public:
-  StartMarker(std::string const &module_svg_dir, float step_block_x, float y) {
-    setSvg(control_svg(module_svg_dir, "marker-start"));
-    position_centered(this, 0.F, y);
-    auto const x = step_block_x + step_width / 2.F - 2.F * light_diameter;
-    this->box.pos.x = mm2px(x);
-  }
-};
-
-template <int N> class EndMarker : public rack::widget::SvgWidget {
-public:
-  EndMarker(std::string const &module_svg_dir, float step_block_x, float y)
-      : step_block_x_{step_block_x} {
-    setSvg(control_svg(module_svg_dir, "marker-end"));
-    position_centered(this, 22.F, y);
-  }
-
-  void set_selection_length(int length) {
-    this->selection_length_ = length;
-    move();
-  }
-
-private:
-  void move() {
-    auto const selection_end =
-        (selection_start_ + selection_length_ - 1) & step_mask_;
-    auto const x =
-        step_block_x_ + selection_end * step_width + step_width / 2.F;
-    this->box.pos.x = mm2px(x);
-  }
-
-  int selection_start_{};
-  int selection_length_{};
-  int const step_mask_ = N - 1;
-  float step_block_x_;
-}; // namespace curve_sequencer
-
 template <int N> class Panel : public rack::app::ModuleWidget {
   using Param = ParamIds<N>;
   using Input = InputIds<N>;
@@ -131,20 +93,24 @@ public:
         excess_width / static_cast<float>(section_count + 1);
 
     auto constexpr global_inputs_left = margin;
+    add_global_inputs(global_inputs_left);
+
     auto constexpr step_block_left = global_inputs_left + global_inputs_width +
                                      margin + labels_width + padding;
+    add_step_block(step_block_left);
+
     auto constexpr global_outputs_left =
         step_block_left + step_block_width(N) + margin;
-
-    add_global_inputs(global_inputs_left, step_block_left);
-    add_step_block(step_block_left);
     add_global_outputs(global_outputs_left);
   }
 
 private:
   const std::string slug_ = std::string{"phase-sequencer-"} + std::to_string(N);
+  rack::widget::SvgWidget *start_marker_ = new rack::widget::SvgWidget;
+  rack::widget::SvgWidget *end_marker_ = new rack::widget::SvgWidget;
+  float end_marker_x_;
 
-  void add_global_inputs(float left, float step_block_left) {
+  void add_global_inputs(float left) {
     auto const x = left + port_radius + padding;
     auto constexpr length_y = global_controls_y(0);
     auto constexpr a_y = global_controls_y(1);
@@ -152,18 +118,8 @@ private:
     auto constexpr c_y = global_controls_y(3);
     auto constexpr phase_y = global_controls_y(4);
 
-    auto constexpr progress_light_y = top - light_diameter * 1.5F;
-
-    auto *start_marker =
-        new StartMarker(slug_, step_block_left, progress_light_y);
-    addChild(start_marker);
-
-    auto *end_marker =
-        new EndMarker<N>(slug_, step_block_left, progress_light_y);
-    addChild(end_marker);
-
-    auto const on_selection_length_change = [end_marker](int step) {
-      end_marker->set_selection_length(step);
+    auto const on_selection_length_change = [this](int step) {
+      set_selection_length(step);
     };
     addParam(new LengthKnob(on_selection_length_change, slug_, module, x,
                             length_y, Param::Length));
@@ -222,6 +178,17 @@ private:
         curvature_y + (small_knob_diameter + port_diameter) / 2.F +
         intra_section_glue;
 
+    auto const start_marker_x = left + step_width / 2.F - light_diameter;
+    start_marker_->setSvg(control_svg(slug_, "marker-start"));
+    position_centered(start_marker_, start_marker_x, progress_light_y);
+    addChild(start_marker_);
+
+    end_marker_x_ = left + step_width / 2.F;
+    end_marker_->setSvg(control_svg(slug_, "marker-end"));
+    position_centered(end_marker_, 0.F, progress_light_y);
+    addChild(end_marker_);
+    set_selection_length(N);
+
     for (auto step = 0; step < N; step++) {
       auto const step_left = left + static_cast<float>(step) * step_width;
       auto const step_x = step_left + step_width / 2.F;
@@ -279,6 +246,10 @@ private:
     addOutput(Jack::output(slug_, module, x, out_y, Output::Out));
   }
 
+  void set_selection_length(int length) {
+    auto const x = end_marker_x_ + step_width * static_cast<float>(length - 1);
+    end_marker_->box.pos.x = mm2px(x);
+  }
 }; // namespace dhe
 } // namespace phase_sequencer
 } // namespace dhe
