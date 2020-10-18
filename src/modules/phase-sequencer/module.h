@@ -67,25 +67,28 @@ public:
   Module() {
     config(Param::Count, Input::Count, Output::Count, Light::Count);
 
+    configParam(Param::Length, 1.F, N, N, "Steps", "");
     config_level_range_switch(this, Param::LevelRange);
 
     for (auto step = 0; step < N; step++) {
-      config_toggle<anchor_source_count>(
-          this, Param::StartAnchorSource + step, "Start anchor source",
-          {"Level", "A", "B", "C", "Out"}, 4);
-      config_level_knob(this, Param::StartAnchorLevel + step,
-                        Param::LevelRange, "Start level");
-      config_toggle<2>(this, Param::StartAnchorMode + step,
-                       "Start anchor mode",
+      config_toggle<anchor_source_count>(this, Param::StartAnchorSource + step,
+                                         "Start anchor source",
+                                         {"Level", "A", "B", "C", "Out"}, 4);
+      config_level_knob(this, Param::StartAnchorLevel + step, Param::LevelRange,
+                        "Start level");
+      config_toggle<2>(this, Param::StartAnchorMode + step, "Start anchor mode",
                        {"Sample the source", "Track the source"});
 
-      config_toggle<anchor_source_count>(
-          this, Param::EndAnchorSource + step, "End anchor source",
-          {"Level", "A", "B", "C", "Out"});
-      config_level_knob(this, Param::EndAnchorLevel + step,
-                        Param::LevelRange, "End level");
+      config_toggle<anchor_source_count>(this, Param::EndAnchorSource + step,
+                                         "End anchor source",
+                                         {"Level", "A", "B", "C", "Out"});
+      config_level_knob(this, Param::EndAnchorLevel + step, Param::LevelRange,
+                        "End level");
       config_toggle<2>(this, Param::EndAnchorMode + step, "End anchor mode",
                        {"Sample the source", "Track the source"}, 1);
+
+      config_knob(this, Param::Duration + step, "Duration", "", Range{0.F, 1.F},
+                  centered_rotation);
 
       config_curve_shape_switch(this, Param::Shape + step, "Shape");
       config_curvature_knob(this, Param::Curvature + step, "Curvature");

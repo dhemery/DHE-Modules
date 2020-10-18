@@ -14,8 +14,7 @@ public:
       : module_{module}, step_selector_{step_selector}, step_controller_{
                                                             step_controller} {}
 
-  void execute() {
-  }
+  void execute() {}
 
 private:
   void generate() {
@@ -28,5 +27,5 @@ private:
   StepSelector &step_selector_;
   StepController &step_controller_;
 };
-} // namespace sequencizer
+} // namespace phase_sequencer
 } // namespace dhe

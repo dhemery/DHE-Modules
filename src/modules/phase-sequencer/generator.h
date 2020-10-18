@@ -19,7 +19,7 @@ public:
     end_anchor_.enter(step_);
   }
 
-  void generate(float sample_time)  {
+  void generate(float sample_time) {
     auto const duration = module_.duration(step_);
     auto const curvature = module_.curvature(step_);
     auto const start_voltage = start_anchor_.voltage();
@@ -43,5 +43,5 @@ private:
   PhaseTimer timer_{};
   int step_{0};
 };
-} // namespace sequencizer
+} // namespace phase_sequencer
 } // namespace dhe

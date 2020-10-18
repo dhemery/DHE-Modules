@@ -75,13 +75,13 @@ module PhaseSequencer
   def make_global_inputs(left)
     x = left + Port::RADIUS + PADDING
 
-    length_y = global_controls_y(0)
+    steps_y = global_controls_y(0)
     a_y = global_controls_y(1)
     b_y = global_controls_y(2)
     c_y = global_controls_y(3)
     phase_in_y = global_controls_y(4)
 
-    small_knob x: x, y: length_y, label: 'LENGTH'
+    small_knob x: x, y: steps_y, label: 'STEPS'
     input_port x: x, y: a_y, label: 'A'
     input_port x: x, y: b_y, label: 'B'
     input_port x: x, y: c_y, label: 'C'
@@ -96,7 +96,7 @@ module PhaseSequencer
     step_phase_y = global_controls_y(3)
     out_y = global_controls_y(4)
 
-    polarity_toggle x: x, y: polarity_y
+    polarity_toggle x: x, y: polarity_y, selection: 2
     output_port x: x, y: step_number_y, label: 'STEP'
     output_port x: x, y: step_phase_y, label: 'STEP ϕ'
     output_port x: x, y: out_y, label: 'OUT'
@@ -107,7 +107,7 @@ module PhaseSequencer
   STEPPER_ASCENT = Label::SIZES[:small] / 2.0 + PADDING - 0.25
   STEPPER_HEIGHT = STEPPER_ASCENT * 2.0
 
-  INTRA_SECTION_GLUE = 0.2
+  INTRA_SECTION_GLUE = 0.15
   INTER_SECTION_GLUE = 2.0
 
   PROGRESS_LIGHT_Y = TOP - Light::DIAMETER * 1.5
@@ -181,5 +181,17 @@ module PhaseSequencer
       small_knob x: x, y: CURVATURE_Y, label: ''
       port x: x, y: CURVATURE_CV_Y, label: ''
     end
+
+    start_position_marker = left - Light::DIAMETER + STEP_WIDTH / 2.0
+    end_position_marker = left + STEP_WIDTH * (steps - 1) + STEP_WIDTH / 2.0 + Light::DIAMETER
+
+    position_marker(x: start_position_marker, y: PROGRESS_LIGHT_Y, type: :start)
+    position_marker(x: end_position_marker, y: PROGRESS_LIGHT_Y, type: :end)
+  end
+
+  def position_marker(x:, y:, type:)
+    marker = PositionMarker.new(type: type, color: @foreground)
+    @controls << marker
+    @image_shapes << marker.translated(x, y)
   end
 end

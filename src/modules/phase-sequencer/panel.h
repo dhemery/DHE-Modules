@@ -24,9 +24,6 @@ static auto constexpr step_width = hp2mm(step_width_hp);
 static auto constexpr top = 23.F;
 static auto constexpr bottom = 117.F;
 
-static auto constexpr sequence_controls_width =
-    padding + port_diameter + padding + button_diameter + padding;
-
 static auto constexpr global_control_width = padding + port_diameter + padding;
 static auto constexpr global_inputs_width = global_control_width;
 static auto constexpr global_outputs_width = global_control_width;
@@ -58,6 +55,62 @@ static inline auto constexpr content_width(int steps) -> float {
 using ProgressLight =
     rack::componentlibrary::SmallLight<rack::componentlibrary::GreenRedLight>;
 
+class LengthKnob : public Knob {
+public:
+  LengthKnob(std::function<void(int)> action, std::string const &module_svg_dir,
+             rack::engine::Module *module, float x, float y, int index)
+      : Knob{module_svg_dir, "knob-small", module, x, y, index},
+        knob_changed_to_{std::move(action)} {
+    snap = true;
+  }
+
+  void onChange(const rack::event::Change &e) override {
+    Knob::onChange(e);
+    knob_changed_to_(static_cast<int>(this->paramQuantity->getValue()));
+  }
+
+private:
+  std::function<void(int)> knob_changed_to_;
+};
+
+class StartMarker : public rack::widget::SvgWidget {
+public:
+  StartMarker(std::string const &module_svg_dir, float step_block_x, float y) {
+    setSvg(control_svg(module_svg_dir, "marker-start"));
+    position_centered(this, 0.F, y);
+    auto const x = step_block_x + step_width / 2.F - 2.F * light_diameter;
+    this->box.pos.x = mm2px(x);
+  }
+};
+
+template <int N> class EndMarker : public rack::widget::SvgWidget {
+public:
+  EndMarker(std::string const &module_svg_dir, float step_block_x, float y)
+      : step_block_x_{step_block_x} {
+    setSvg(control_svg(module_svg_dir, "marker-end"));
+    position_centered(this, 22.F, y);
+  }
+
+  void set_selection_length(int length) {
+    this->selection_length_ = length;
+    move();
+  }
+
+private:
+  void move() {
+    auto const selection_end =
+        (selection_start_ + selection_length_ - 1) & step_mask_;
+    auto const x =
+        step_block_x_ + selection_end * step_width + step_width / 2.F;
+    this->box.pos.x = mm2px(x);
+  }
+
+  int selection_start_{};
+  int selection_length_{};
+  int const step_mask_ = N - 1;
+  float step_block_x_;
+}; // namespace curve_sequencer
+
 template <int N> class Panel : public rack::app::ModuleWidget {
   using Param = ParamIds<N>;
   using Input = InputIds<N>;
@@ -78,21 +131,20 @@ public:
         excess_width / static_cast<float>(section_count + 1);
 
     auto constexpr global_inputs_left = margin;
-    add_global_inputs(global_inputs_left);
-
     auto constexpr step_block_left = global_inputs_left + global_inputs_width +
                                      margin + labels_width + padding;
-    add_step_block(step_block_left);
-
     auto constexpr global_outputs_left =
         step_block_left + step_block_width(N) + margin;
+
+    add_global_inputs(global_inputs_left, step_block_left);
+    add_step_block(step_block_left);
     add_global_outputs(global_outputs_left);
   }
 
 private:
   const std::string slug_ = std::string{"phase-sequencer-"} + std::to_string(N);
 
-  void add_global_inputs(float left) {
+  void add_global_inputs(float left, float step_block_left) {
     auto const x = left + port_radius + padding;
     auto constexpr length_y = global_controls_y(0);
     auto constexpr a_y = global_controls_y(1);
@@ -100,15 +152,31 @@ private:
     auto constexpr c_y = global_controls_y(3);
     auto constexpr phase_y = global_controls_y(4);
 
-    addParam(Knob::small(slug_, module, x, length_y, Param::Length));
+    auto constexpr progress_light_y = top - light_diameter * 1.5F;
+
+    auto *start_marker =
+        new StartMarker(slug_, step_block_left, progress_light_y);
+    addChild(start_marker);
+
+    auto *end_marker =
+        new EndMarker<N>(slug_, step_block_left, progress_light_y);
+    addChild(end_marker);
+
+    auto const on_selection_length_change = [end_marker](int step) {
+      end_marker->set_selection_length(step);
+    };
+    addParam(new LengthKnob(on_selection_length_change, slug_, module, x,
+                            length_y, Param::Length));
+
     addInput(Jack::input(slug_, module, x, a_y, Input::InA));
     addInput(Jack::input(slug_, module, x, b_y, Input::InB));
     addInput(Jack::input(slug_, module, x, c_y, Input::InC));
     addInput(Jack::input(slug_, module, x, phase_y, Input::Phase));
   }
+
   void add_step_block(float left) {
     auto constexpr progress_light_y = top - light_diameter * 1.5F;
-    auto constexpr intra_section_glue = 0.2F;
+    auto constexpr intra_section_glue = 0.15F;
     auto constexpr inter_section_glue = 2.F;
     auto constexpr stepper_ascent = small_label_size / 2.F + padding - 0.25F;
     auto constexpr stepper_height = stepper_ascent * 2.F;

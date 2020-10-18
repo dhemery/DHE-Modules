@@ -56,5 +56,5 @@ private:
     }
   }
 };
-} // namespace sequencizer
+} // namespace phase_sequencer
 } // namespace dhe

@@ -54,5 +54,5 @@ private:
   Module &module_;
   int const step_mask_;
 };
-} // namespace sequencizer
+} // namespace phase_sequencer
 } // namespace dhe
