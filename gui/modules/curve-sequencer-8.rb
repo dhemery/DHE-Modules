@@ -1,3 +1,5 @@
 require_relative 'curve-sequencer/make-curve-sequencer'
 
-make_curve_sequencer 8
+self.class::include CurveSequencer
+
+make 8

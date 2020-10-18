@@ -141,5 +141,22 @@ sequencizer_files.each do |f|
   file f => sequencizer_helpers
 end
 
+phase_sequencer_helpers = %w[
+  modules/phase-sequencer/make-phase-sequencer.rb
+]
+
+phase_sequencer_files = %w[
+  _svg/phase-sequencer-4.svg
+  _svg/phase-sequencer-8.svg
+  _svg/phase-sequencer-16.svg
+  _images/phase-sequencer-4.svg
+  _images/phase-sequencer-8.svg
+  _images/phase-sequencer-16.svg
+]
+
+phase_sequencer_files.each do |f|
+  file f => phase_sequencer_helpers
+end
+
 CLEAN.include image_build_dir, svg_build_dir
 CLOBBER.include image_install_dir, svg_install_dir
