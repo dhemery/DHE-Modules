@@ -75,13 +75,13 @@ module PhaseSequencer
   def make_global_inputs(left)
     x = left + Port::RADIUS + PADDING
 
-    polarity_y = global_controls_y(0)
+    length_y = global_controls_y(0)
     a_y = global_controls_y(1)
     b_y = global_controls_y(2)
     c_y = global_controls_y(3)
     phase_in_y = global_controls_y(4)
 
-    polarity_toggle x: x, y: polarity_y
+    small_knob x: x, y: length_y, label: 'LENGTH'
     input_port x: x, y: a_y, label: 'A'
     input_port x: x, y: b_y, label: 'B'
     input_port x: x, y: c_y, label: 'C'
@@ -91,10 +91,12 @@ module PhaseSequencer
   def make_global_outputs(left)
     x = left + Port::RADIUS + PADDING
 
-    step_number_y = global_controls_y(0)
-    step_phase_y = global_controls_y(1)
+    polarity_y = global_controls_y(0)
+    step_number_y = global_controls_y(2)
+    step_phase_y = global_controls_y(3)
     out_y = global_controls_y(4)
 
+    polarity_toggle x: x, y: polarity_y
     output_port x: x, y: step_number_y, label: 'STEP'
     output_port x: x, y: step_phase_y, label: 'STEP ϕ'
     output_port x: x, y: out_y, label: 'OUT'

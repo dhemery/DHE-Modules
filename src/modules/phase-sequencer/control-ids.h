@@ -9,6 +9,7 @@ namespace phase_sequencer {
 
 template <int N> struct ParamIds {
   enum {
+    Length,
     LevelRange,
     ONE_PER_STEP(Curvature, N),
     ONE_PER_STEP(Duration, N),

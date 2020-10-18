@@ -94,13 +94,13 @@ private:
 
   void add_global_inputs(float left) {
     auto const x = left + port_radius + padding;
-    auto const polarity_y = global_controls_y(0);
-    auto const a_y = global_controls_y(1);
-    auto const b_y = global_controls_y(2);
-    auto const c_y = global_controls_y(3);
-    auto const phase_y = global_controls_y(4);
+    auto constexpr length_y = global_controls_y(0);
+    auto constexpr a_y = global_controls_y(1);
+    auto constexpr b_y = global_controls_y(2);
+    auto constexpr c_y = global_controls_y(3);
+    auto constexpr phase_y = global_controls_y(4);
 
-    addParam(Toggle::thumb(2, slug_, module, x, polarity_y, Param::LevelRange));
+    addParam(Knob::small(slug_, module, x, length_y, Param::Length));
     addInput(Jack::input(slug_, module, x, a_y, Input::InA));
     addInput(Jack::input(slug_, module, x, b_y, Input::InB));
     addInput(Jack::input(slug_, module, x, c_y, Input::InC));
@@ -199,10 +199,12 @@ private:
   void add_global_outputs(float left) {
     auto const x = left + port_radius + padding;
 
-    auto constexpr step_number_y = global_controls_y(0);
-    auto constexpr step_phase_y = global_controls_y(1);
+    auto const polarity_y = global_controls_y(0);
+    auto constexpr step_number_y = global_controls_y(2);
+    auto constexpr step_phase_y = global_controls_y(3);
     auto constexpr out_y = global_controls_y(4);
 
+    addParam(Toggle::thumb(2, slug_, module, x, polarity_y, Param::LevelRange));
     addOutput(
         Jack::output(slug_, module, x, step_number_y, Output::StepNumber));
     addOutput(Jack::output(slug_, module, x, step_phase_y, Output::StepPhase));
