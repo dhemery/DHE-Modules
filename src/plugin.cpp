@@ -13,6 +13,8 @@
 #include "modules/fuzzy-logic/fuzzy-logic-z-panel.h"
 #include "modules/gator/gator-panel.h"
 #include "modules/gator/gator.h"
+#include "modules/phase-sequencer/module.h"
+#include "modules/phase-sequencer/panel.h"
 #include "modules/ranger/ranger-panel.h"
 #include "modules/ranger/ranger.h"
 #include "modules/sequencizer/module.h"
@@ -60,6 +62,8 @@ using dhe::stage::UpstagePanel;
 using dhe::swave::Swave;
 using dhe::swave::SwavePanel;
 
+template <int N> using PhaseSequencerModule = dhe::phase_sequencer::Module<N>;
+template <int N> using PhaseSequencerPanel = dhe::phase_sequencer::Panel<N>;
 template <int N> using SequencizerModule = dhe::sequencizer::Module<N>;
 template <int N> using SequencizerPanel = dhe::sequencizer::Panel<N>;
 using dhe::tapers::Tapers;
@@ -98,6 +102,15 @@ extern "C" void init(rack::plugin::Plugin *p) {
   p->addModel(rack::createModel<Gator, GatorPanel>("Gator"));
   p->addModel(rack::createModel<HostageModule, HostagePanel>("Hostage"));
   p->addModel(rack::createModel<Ranger, RangerPanel>("Ranger"));
+  p->addModel(
+      rack::createModel<PhaseSequencerModule<4>, PhaseSequencerPanel<4>>(
+          "PhaseSequencer4"));
+  p->addModel(
+      rack::createModel<PhaseSequencerModule<8>, PhaseSequencerPanel<8>>(
+          "PhaseSequencer8"));
+  p->addModel(
+      rack::createModel<PhaseSequencerModule<16>, PhaseSequencerPanel<16>>(
+          "PhaseSequencer16"));
   p->addModel(rack::createModel<StageModule, StagePanel>("Stage"));
   p->addModel(rack::createModel<Swave, SwavePanel>("Swave"));
   p->addModel(rack::createModel<SequencizerModule<4>, SequencizerPanel<4>>(
