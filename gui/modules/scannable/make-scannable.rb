@@ -2,7 +2,7 @@
 
 require_relative '../../lib/dimensions'
 
-module ShapeScanner
+module Scannable
   HUE = 30
   FOREGROUND_HSL = [HUE, 100, 10]
   BACKGROUND_HSL = [HUE, 10, 93]
@@ -14,7 +14,7 @@ module ShapeScanner
 
   def make(steps)
     width_hp = BASE_WIDTH_HP + steps * STEP_WIDTH_HP
-    name "SHAPE SCANNER #{steps}"
+    name "SCANNABLE #{steps}"
     hp width_hp
     foreground FOREGROUND_HSL
     background BACKGROUND_HSL

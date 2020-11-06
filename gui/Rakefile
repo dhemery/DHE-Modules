@@ -141,21 +141,21 @@ sequencizer_files.each do |f|
   file f => sequencizer_helpers
 end
 
-shape_scanner_helpers = %w[
-  modules/shape-scanner/make-shape-scanner.rb
+scannable_helpers = %w[
+  modules/scannable/make-scannable.rb
 ]
 
-shape_scanner_files = %w[
-  _svg/shape-scanner-4.svg
-  _svg/shape-scanner-8.svg
-  _svg/shape-scanner-16.svg
-  _images/shape-scanner-4.svg
-  _images/shape-scanner-8.svg
-  _images/shape-scanner-16.svg
+scannable_files = %w[
+  _svg/scannable-4.svg
+  _svg/scannable-8.svg
+  _svg/scannable-16.svg
+  _images/scannable-4.svg
+  _images/scannable-8.svg
+  _images/scannable-16.svg
 ]
 
-shape_scanner_files.each do |f|
-  file f => shape_scanner_helpers
+scannable_files.each do |f|
+  file f => scannable_helpers
 end
 
 CLEAN.include image_build_dir, svg_build_dir
