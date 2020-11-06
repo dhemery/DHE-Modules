@@ -141,21 +141,21 @@ sequencizer_files.each do |f|
   file f => sequencizer_helpers
 end
 
-phase_sequencer_helpers = %w[
-  modules/phase-sequencer/make-phase-sequencer.rb
+shape_scanner_helpers = %w[
+  modules/shape-scanner/make-shape-scanner.rb
 ]
 
-phase_sequencer_files = %w[
-  _svg/phase-sequencer-4.svg
-  _svg/phase-sequencer-8.svg
-  _svg/phase-sequencer-16.svg
-  _images/phase-sequencer-4.svg
-  _images/phase-sequencer-8.svg
-  _images/phase-sequencer-16.svg
+shape_scanner_files = %w[
+  _svg/shape-scanner-4.svg
+  _svg/shape-scanner-8.svg
+  _svg/shape-scanner-16.svg
+  _images/shape-scanner-4.svg
+  _images/shape-scanner-8.svg
+  _images/shape-scanner-16.svg
 ]
 
-phase_sequencer_files.each do |f|
-  file f => phase_sequencer_helpers
+shape_scanner_files.each do |f|
+  file f => shape_scanner_helpers
 end
 
 CLEAN.include image_build_dir, svg_build_dir

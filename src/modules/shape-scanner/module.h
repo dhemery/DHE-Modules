@@ -21,7 +21,7 @@
 #include <iostream>
 
 namespace dhe {
-namespace phase_sequencer {
+namespace shape_scanner {
 
 // Skew the progress::brightness ratio so that the "remaining" light stays
 // fully lit for a little while during early progress, and the "completed"
@@ -114,7 +114,7 @@ public:
     auto const base_knob_param = type == AnchorType::Start
                                      ? Param::StepStartAnchorLevel
                                      : Param::StepEndAnchorLevel;
-    return phase_sequencer::level(
+    return shape_scanner::level(
         params[base_knob_param + step], params[Param::LevelRange],
         params[Param::LevelMultiplier], inputs[Input::LevelAttenuationCV]);
   }
@@ -131,7 +131,7 @@ public:
   }
 
   auto duration(int step) const -> float {
-    return phase_sequencer::duration(
+    return shape_scanner::duration(
         params[Param::StepDuration + step], params[Param::DurationRange],
         params[Param::DurationMultiplier], inputs[Input::DurationMultiplierCV]);
   }
@@ -191,6 +191,6 @@ private:
     lights[remaining_light].setBrightness(remaining_brightness);
   }
 };
-} // namespace phase_sequencer
+} // namespace shape_scanner
 
 } // namespace dhe

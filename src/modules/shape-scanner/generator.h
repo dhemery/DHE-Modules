@@ -3,7 +3,7 @@
 #include "components/range.h"
 
 namespace dhe {
-namespace phase_sequencer {
+namespace shape_scanner {
 using dhe::Range;
 
 template <typename Module, typename Anchor> class Generator {
@@ -43,5 +43,5 @@ private:
   PhaseTimer timer_{};
   int step_{0};
 };
-} // namespace phase_sequencer
+} // namespace shape_scanner
 } // namespace dhe

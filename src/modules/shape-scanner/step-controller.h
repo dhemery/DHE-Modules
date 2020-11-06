@@ -3,7 +3,7 @@
 #include "components/latch.h"
 
 namespace dhe {
-namespace phase_sequencer {
+namespace shape_scanner {
 
 using dhe::Latch;
 
@@ -24,5 +24,5 @@ private:
   int current_step_{0};
   Generator &generator_;
 };
-} // namespace phase_sequencer
+} // namespace shape_scanner
 } // namespace dhe

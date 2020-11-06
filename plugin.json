@@ -123,28 +123,28 @@
       ]
     },
     {
-      "slug": "PhaseSequencer4",
-      "name": "Phase Sequencer 4",
+      "slug": "ShapeScanner4",
+      "name": "Shape Scanner 4",
       "description": "A phase-guided 4 step sequence",
-      "manualUrl": "https://dhemery.github.io/DHE-Modules/modules/phase-sequencer/",
+      "manualUrl": "https://dhemery.github.io/DHE-Modules/modules/shape-scanner/",
       "tags": [
         "Sequencer", "Envelope Generator", "LFO"
       ]
     },
     {
-      "slug": "PhaseSequencer8",
-      "name": "Phase Sequencer 8",
+      "slug": "ShapeScanner8",
+      "name": "Shape Scanner 8",
       "description": "A phase-guided 8 step sequence",
-      "manualUrl": "https://dhemery.github.io/DHE-Modules/modules/phase-sequencer/",
+      "manualUrl": "https://dhemery.github.io/DHE-Modules/modules/shape-scanner/",
       "tags": [
         "Sequencer", "Envelope Generator", "LFO"
       ]
     },
     {
-      "slug": "PhaseSequencer16",
-      "name": "Phase Sequencer 16",
+      "slug": "ShapeScanner16",
+      "name": "Shape Scanner 16",
       "description": "A phase-guided 16 step sequence",
-      "manualUrl": "https://dhemery.github.io/DHE-Modules/modules/phase-sequencer/",
+      "manualUrl": "https://dhemery.github.io/DHE-Modules/modules/shape-scanner/",
       "tags": [
         "Sequencer", "Envelope Generator", "LFO"
       ]

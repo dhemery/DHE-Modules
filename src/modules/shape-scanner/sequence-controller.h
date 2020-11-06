@@ -4,7 +4,7 @@
 #include "components/phase-timer.h"
 
 namespace dhe {
-namespace phase_sequencer {
+namespace shape_scanner {
 
 template <typename Module, typename StepSelector, typename StepController>
 class SequenceController {
@@ -27,5 +27,5 @@ private:
   StepSelector &step_selector_;
   StepController &step_controller_;
 };
-} // namespace phase_sequencer
+} // namespace shape_scanner
 } // namespace dhe

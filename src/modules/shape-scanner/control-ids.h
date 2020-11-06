@@ -5,7 +5,7 @@
 #define TWO_PER_STEP(name, n) PER_STEP(name, (n)*2)
 
 namespace dhe {
-namespace phase_sequencer {
+namespace shape_scanner {
 
 template <int N> struct ParamIds {
   enum {
@@ -54,7 +54,7 @@ template <int N> struct LightIds {
   };
 };
 
-} // namespace phase_sequencer
+} // namespace shape_scanner
 } // namespace dhe
 
 #undef PER_STEP

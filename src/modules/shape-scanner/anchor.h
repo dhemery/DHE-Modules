@@ -1,7 +1,7 @@
 #pragma once
 
 namespace dhe {
-namespace phase_sequencer {
+namespace shape_scanner {
 enum class AnchorType { Start, End };
 static auto constexpr anchor_type_count = static_cast<int>(AnchorType::End) + 1;
 
@@ -56,5 +56,5 @@ private:
     }
   }
 };
-} // namespace phase_sequencer
+} // namespace shape_scanner
 } // namespace dhe

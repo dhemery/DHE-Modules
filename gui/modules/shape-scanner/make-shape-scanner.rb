@@ -2,7 +2,7 @@
 
 require_relative '../../lib/dimensions'
 
-module PhaseSequencer
+module ShapeScanner
   HUE = 30
   FOREGROUND_HSL = [HUE, 100, 10]
   BACKGROUND_HSL = [HUE, 10, 93]
@@ -14,7 +14,7 @@ module PhaseSequencer
 
   def make(steps)
     width_hp = BASE_WIDTH_HP + steps * STEP_WIDTH_HP
-    name "PHASE SEQUENCER #{steps}"
+    name "SHAPE SCANNER #{steps}"
     hp width_hp
     foreground FOREGROUND_HSL
     background BACKGROUND_HSL

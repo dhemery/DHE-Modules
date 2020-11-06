@@ -1,7 +1,7 @@
 #pragma once
 
 namespace dhe {
-namespace phase_sequencer {
+namespace shape_scanner {
 template <typename Module> class StepSelector {
 public:
   StepSelector(Module &module, int step_count)
@@ -54,5 +54,5 @@ private:
   Module &module_;
   int const step_mask_;
 };
-} // namespace phase_sequencer
+} // namespace shape_scanner
 } // namespace dhe
