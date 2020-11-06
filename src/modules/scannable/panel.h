@@ -14,7 +14,7 @@
 
 namespace dhe {
 
-namespace shape_scanner {
+namespace scannable {
 static auto constexpr base_width_hp = 11.F;
 static auto constexpr step_width_hp = 2.25F;
 static auto constexpr section_count = 3;
@@ -105,7 +105,7 @@ public:
   }
 
 private:
-  const std::string slug_ = std::string{"shape-scanner-"} + std::to_string(N);
+  const std::string slug_ = std::string{"scannable-"} + std::to_string(N);
   rack::widget::SvgWidget *start_marker_ = new rack::widget::SvgWidget;
   rack::widget::SvgWidget *end_marker_ = new rack::widget::SvgWidget;
   float end_marker_x_;
@@ -251,5 +251,5 @@ private:
     end_marker_->box.pos.x = mm2px(x);
   }
 }; // namespace dhe
-} // namespace shape_scanner
+} // namespace scannable
 } // namespace dhe

@@ -15,10 +15,10 @@
 #include "modules/gator/gator.h"
 #include "modules/ranger/ranger-panel.h"
 #include "modules/ranger/ranger.h"
+#include "modules/scannable/module.h"
+#include "modules/scannable/panel.h"
 #include "modules/sequencizer/module.h"
 #include "modules/sequencizer/panel.h"
-#include "modules/shape-scanner/module.h"
-#include "modules/shape-scanner/panel.h"
 #include "modules/stage/booster-stage-module.h"
 #include "modules/stage/booster-stage-panel.h"
 #include "modules/stage/hostage-module.h"
@@ -64,8 +64,8 @@ using dhe::swave::SwavePanel;
 
 template <int N> using SequencizerModule = dhe::sequencizer::Module<N>;
 template <int N> using SequencizerPanel = dhe::sequencizer::Panel<N>;
-template <int N> using ShapeScannerModule = dhe::shape_scanner::Module<N>;
-template <int N> using ShapeScannerPanel = dhe::shape_scanner::Panel<N>;
+template <int N> using ScannableModule = dhe::scannable::Module<N>;
+template <int N> using ScannablePanel = dhe::scannable::Panel<N>;
 using dhe::tapers::Tapers;
 using dhe::tapers::TapersPanel;
 using dhe::xycloid::Xycloid;
@@ -102,12 +102,12 @@ extern "C" void init(rack::plugin::Plugin *p) {
   p->addModel(rack::createModel<Gator, GatorPanel>("Gator"));
   p->addModel(rack::createModel<HostageModule, HostagePanel>("Hostage"));
   p->addModel(rack::createModel<Ranger, RangerPanel>("Ranger"));
-  p->addModel(rack::createModel<ShapeScannerModule<4>, ShapeScannerPanel<4>>(
-      "ShapeScanner4"));
-  p->addModel(rack::createModel<ShapeScannerModule<8>, ShapeScannerPanel<8>>(
-      "ShapeScanner8"));
-  p->addModel(rack::createModel<ShapeScannerModule<16>, ShapeScannerPanel<16>>(
-      "ShapeScanner16"));
+  p->addModel(
+      rack::createModel<ScannableModule<4>, ScannablePanel<4>>("Scannable4"));
+  p->addModel(
+      rack::createModel<ScannableModule<8>, ScannablePanel<8>>("Scannable8"));
+  p->addModel(rack::createModel<ScannableModule<16>, ScannablePanel<16>>(
+      "Scannable16"));
   p->addModel(rack::createModel<StageModule, StagePanel>("Stage"));
   p->addModel(rack::createModel<Swave, SwavePanel>("Swave"));
   p->addModel(rack::createModel<SequencizerModule<4>, SequencizerPanel<4>>(

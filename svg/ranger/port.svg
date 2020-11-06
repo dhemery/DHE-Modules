@@ -1,7 +1,5 @@
-<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="8.400mm" height="8.400mm" viewBox="0 0 8.400 8.400">
-  <g transform="translate(4.200 4.200)">
-    <circle cx="0" cy="0" r="4.200" fill="#4d4d00" stroke="none" stroke-width="0"/>
-    <circle cx="0" cy="0" r="3.500" fill="none" stroke="#fffff0" stroke-width="0.950"/>
-    <circle cx="0" cy="0" r="2.325" fill="none" stroke="#fffff0" stroke-width="0.950"/>
-  </g>
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="8.400mm" height="8.400mm" viewBox="-4.200 -4.200 8.400 8.400">
+  <circle cx="0" cy="0" r="4.200" fill="#4d4d00" stroke="none" stroke-width="0"/>
+  <circle cx="0" cy="0" r="3.500" fill="none" stroke="#fffff0" stroke-width="0.950"/>
+  <circle cx="0" cy="0" r="2.325" fill="none" stroke="#fffff0" stroke-width="0.950"/>
 </svg>
