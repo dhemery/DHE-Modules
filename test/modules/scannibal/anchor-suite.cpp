@@ -6,7 +6,7 @@
 #include <dheunit/test.h>
 
 namespace test {
-namespace scannable {
+namespace scannibal {
 using dhe::unit::is_equal_to;
 using dhe::unit::Suite;
 using dhe::unit::TestRegistrar;
@@ -24,7 +24,7 @@ static inline void set_all_voltages(Module &module, float voltage) {
 
 class AnchorSuite : public Suite {
 public:
-  AnchorSuite() : Suite("dhe::scannable::Anchor") {}
+  AnchorSuite() : Suite("dhe::scannibal::Anchor") {}
   void register_tests(TestRegistrar add) override {
     add("AnchorType::Start: "
         "entered with AnchorSource::Level: "
@@ -479,5 +479,5 @@ public:
 
 __attribute__((unused)) static auto _ = AnchorSuite{};
 
-} // namespace scannable
+} // namespace scannibal
 } // namespace test

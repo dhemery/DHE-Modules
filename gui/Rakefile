@@ -115,18 +115,18 @@ curve_sequencer_faceplate_files.each do |f|
   file f => 'modules/curve-sequencer/make-curve-sequencer.rb'
 end
 
-scannable_helpers = %w[
-  modules/scannable/make-scannable.rb
+scannibal_helpers = %w[
+  modules/scannibal/make-scannibal.rb
 ]
 
-scannable_faceplate_files = %w[
-  _faceplates/scannable-4.svg
-  _faceplates/scannable-8.svg
-  _faceplates/scannable-16.svg
+scannibal_faceplate_files = %w[
+  _faceplates/scannibal-4.svg
+  _faceplates/scannibal-8.svg
+  _faceplates/scannibal-16.svg
 ]
 
-scannable_faceplate_files.each do |f|
-  file f => scannable_helpers
+scannibal_faceplate_files.each do |f|
+  file f => scannibal_helpers
 end
 
 sequencizer_faceplate_files = %w[

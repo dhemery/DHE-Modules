@@ -16,7 +16,7 @@
 #include <jansson.h>
 
 namespace dhe {
-namespace scannable {
+namespace scannibal {
 
 static auto constexpr brightness_range = Range{0.F, 1.F};
 static auto constexpr minimum_duration = short_duration_range.lower_bound();
@@ -102,7 +102,7 @@ public:
     auto const base_knob_param = type == AnchorType::Start
                                      ? Param::StepStartAnchorLevel
                                      : Param::StepEndAnchorLevel;
-    return scannable::level(
+    return scannibal::level(
         params[base_knob_param + step], params[Param::LevelRange],
         params[Param::LevelMultiplier], inputs[Input::LevelAttenuationCV]);
   }
@@ -119,7 +119,7 @@ public:
   }
 
   auto duration(int step) const -> float {
-    return scannable::duration(
+    return scannibal::duration(
         params[Param::StepDuration + step], params[Param::DurationRange],
         params[Param::DurationMultiplier], inputs[Input::DurationMultiplierCV]);
   }
@@ -169,6 +169,6 @@ private:
     lights[remaining_light].setBrightness(remaining_brightness);
   }
 };
-} // namespace scannable
+} // namespace scannibal
 
 } // namespace dhe

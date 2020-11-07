@@ -3,7 +3,7 @@
 #include "components/range.h"
 
 namespace dhe {
-namespace scannable {
+namespace scannibal {
 
 template <typename Module, typename Anchor> class Engine {
 public:
@@ -20,5 +20,5 @@ private:
   Anchor &end_anchor_;
   int step_{0};
 };
-} // namespace scannable
+} // namespace scannibal
 } // namespace dhe

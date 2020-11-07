@@ -2,7 +2,7 @@
 
 require_relative '../../lib/dimensions'
 
-module Scannable
+module Scannibal
   HUE = 30
   FOREGROUND_HSL = [HUE, 100, 10]
   BACKGROUND_HSL = [HUE, 10, 93]
@@ -14,7 +14,7 @@ module Scannable
 
   def make(steps)
     width_hp = BASE_WIDTH_HP + steps * STEP_WIDTH_HP
-    name "SCANNABLE #{steps}"
+    name "SCANNIBAL #{steps}"
     hp width_hp
     foreground FOREGROUND_HSL
     background BACKGROUND_HSL

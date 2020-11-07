@@ -138,10 +138,10 @@
       ]
     },
     {
-      "slug": "Scannable4",
-      "name": "Scannable 4",
+      "slug": "Scannibal4",
+      "name": "Scannibal 4",
       "description": "A 4 step scanned sequencer",
-      "manualUrl": "https://dhemery.github.io/DHE-Modules/modules/scannable/",
+      "manualUrl": "https://dhemery.github.io/DHE-Modules/modules/scannibal/",
       "tags": [
         "Sequencer",
         "Envelope Generator",
@@ -149,10 +149,10 @@
       ]
     },
     {
-      "slug": "Scannable8",
-      "name": "Scannable 8",
+      "slug": "Scannibal8",
+      "name": "Scannibal 8",
       "description": "An 8 step scanned sequencer",
-      "manualUrl": "https://dhemery.github.io/DHE-Modules/modules/scannable/",
+      "manualUrl": "https://dhemery.github.io/DHE-Modules/modules/scannibal/",
       "tags": [
         "Sequencer",
         "Envelope Generator",
@@ -160,10 +160,10 @@
       ]
     },
     {
-      "slug": "Scannable16",
-      "name": "Scannable 16",
+      "slug": "Scannibal16",
+      "name": "Scannibal 16",
       "description": "A 16 step scanned sequencer",
-      "manualUrl": "https://dhemery.github.io/DHE-Modules/modules/scannable/",
+      "manualUrl": "https://dhemery.github.io/DHE-Modules/modules/scannibal/",
       "tags": [
         "Sequencer",
         "Envelope Generator",

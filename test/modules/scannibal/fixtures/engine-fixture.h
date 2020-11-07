@@ -1,12 +1,12 @@
 #pragma once
 
-#include "modules/scannable/engine.h"
+#include "modules/scannibal/engine.h"
 
 #include <array>
 #include <dheunit/test.h>
 
 namespace test {
-namespace scannable {
+namespace scannibal {
 using dhe::unit::Tester;
 using dhe::unit::TestFunc;
 
@@ -34,7 +34,7 @@ struct Module {
   int step_{-39};           // NOLINT
 };
 
-using Engine = dhe::scannable::Engine<Module, Anchor>;
+using Engine = dhe::scannibal::Engine<Module, Anchor>;
 
 template <typename Run> static inline auto test(Run run) -> TestFunc {
   return [run](Tester &t) {
@@ -45,5 +45,5 @@ template <typename Run> static inline auto test(Run run) -> TestFunc {
     run(t, module, start_anchor, end_anchor, engine);
   };
 }
-} // namespace scannable
+} // namespace scannibal
 } // namespace test

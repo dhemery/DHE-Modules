@@ -1,14 +1,14 @@
-#include "modules/scannable/anchor.h"
+#include "modules/scannibal/anchor.h"
 #include <array>
 #include <dheunit/test.h>
 
 namespace test {
-namespace scannable {
+namespace scannibal {
 
 static auto constexpr step_count = 8;
-using dhe::scannable::AnchorMode;
-using dhe::scannable::AnchorSource;
-using dhe::scannable::AnchorType;
+using dhe::scannibal::AnchorMode;
+using dhe::scannibal::AnchorSource;
+using dhe::scannibal::AnchorType;
 using dhe::unit::Tester;
 using dhe::unit::TestFunc;
 
@@ -39,7 +39,7 @@ struct Module {
   std::array<AnchorSource, step_count> start_source_{}; // NOLINT
 };
 
-using Anchor = dhe::scannable::Anchor<Module>;
+using Anchor = dhe::scannibal::Anchor<Module>;
 
 template <typename Run>
 static inline auto test(AnchorType type, Run const &run) -> TestFunc {
@@ -50,5 +50,5 @@ static inline auto test(AnchorType type, Run const &run) -> TestFunc {
   };
 }
 
-} // namespace scannable
+} // namespace scannibal
 } // namespace test

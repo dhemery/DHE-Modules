@@ -1,18 +1,18 @@
 #pragma once
 
-#include "modules/scannable/anchor.h"
+#include "modules/scannibal/anchor.h"
 #include <array>
 #include <ostream>
 #include <string>
 
 namespace test {
-namespace scannable {
-using dhe::scannable::anchor_mode_count;
-using dhe::scannable::anchor_source_count;
-using dhe::scannable::anchor_type_count;
-using dhe::scannable::AnchorMode;
-using dhe::scannable::AnchorSource;
-using dhe::scannable::AnchorType;
+namespace scannibal {
+using dhe::scannibal::anchor_mode_count;
+using dhe::scannibal::anchor_source_count;
+using dhe::scannibal::anchor_type_count;
+using dhe::scannibal::AnchorMode;
+using dhe::scannibal::AnchorSource;
+using dhe::scannibal::AnchorType;
 
 static auto constexpr anchor_types = std::array<AnchorType, anchor_type_count>{
     AnchorType::Start,
@@ -68,24 +68,24 @@ static inline auto name_of(AnchorSource source) -> std::string {
     return "Unknown AnchorSource " + std::to_string(static_cast<int>(source));
   }
 }
-} // namespace scannable
+} // namespace scannibal
 } // namespace test
 
 namespace dhe {
-namespace scannable {
+namespace scannibal {
 
 static inline auto operator<<(std::ostream &os, AnchorMode mode)
     -> std::ostream & {
-  os << test::scannable::name_of(mode);
+  os << test::scannibal::name_of(mode);
   return os;
 }
 
 static inline auto operator<<(std::ostream &os,
-                              dhe::scannable::AnchorSource source)
+                              dhe::scannibal::AnchorSource source)
     -> std::ostream & {
-  os << test::scannable::name_of(source);
+  os << test::scannibal::name_of(source);
   return os;
 }
 
-} // namespace scannable
+} // namespace scannibal
 } // namespace dhe
