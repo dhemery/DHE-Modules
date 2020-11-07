@@ -1,0 +1,64 @@
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="15.240mm" height="128.500mm" viewBox="0 0 15.240 128.500">
+  <g id="faceplate">
+    <rect x="0.250" y="0.250" width="14.740" height="128.000" fill="#faf7f0" stroke="#0044cc" stroke-width="0.500" rx="0.000" ry="0.000"/>
+    <g transform="translate(7.620,9.000)">
+      <text style="font-family:Proxima Nova;font-weight:bold;font-size:4.064px" dominant-baseline="alphabetic" text-anchor="middle" fill="#0044cc" y="0.000">
+FUNC      </text>
+    </g>
+    <g transform="translate(7.620,119.500)">
+      <text style="font-family:Proxima Nova;font-weight:bold;font-size:4.064px" dominant-baseline="hanging" text-anchor="middle" fill="#0044cc" y="0.190">
+DHE      </text>
+    </g>
+    <rect x="2.420" y="16.470" width="10.400" height="12.980" fill="#faf7f0" stroke="#0044cc" stroke-width="0.350" rx="1.000" ry="1.000"/>
+    <g transform="translate(7.620,19.050)">
+      <text style="font-family:Proxima Nova;font-weight:bold;font-size:2.371px" dominant-baseline="alphabetic" text-anchor="middle" fill="#0044cc" y="0.000">
+IN      </text>
+    </g>
+    <g transform="translate(7.620,44.000)">
+      <text style="font-family:Proxima Nova;font-weight:bold;font-size:2.371px" dominant-baseline="hanging" text-anchor="middle" fill="#0044cc" y="0.111">
+ADD      </text>
+    </g>
+    <g transform="translate(7.620,36.000)">
+      <text style="font-family:Proxima Nova;font-weight:bold;font-size:2.371px" dominant-baseline="alphabetic" text-anchor="middle" fill="#0044cc" y="0.000">
+MULT      </text>
+    </g>
+    <g transform="translate(7.620,49.650)">
+      <text style="font-family:Proxima Nova;font-weight:bold;font-size:3.048px" dominant-baseline="alphabetic" text-anchor="middle" fill="#0044cc" y="0.000">
+       </text>
+    </g>
+    <rect x="2.420" y="101.470" width="10.400" height="12.980" fill="#0044cc" stroke="#0044cc" stroke-width="0.350" rx="1.000" ry="1.000"/>
+    <g transform="translate(7.620,104.050)">
+      <text style="font-family:Proxima Nova;font-weight:bold;font-size:2.371px" dominant-baseline="alphabetic" text-anchor="middle" fill="#faf7f0" y="0.000">
+OUT      </text>
+    </g>
+  </g>
+  <g id="overlay">
+    <g transform="translate(7.620,24.250)">
+      <circle cx="0" cy="0" r="4.200" fill="#0044cc" stroke="none" stroke-width="0"/>
+      <circle cx="0" cy="0" r="3.500" fill="none" stroke="#faf7f0" stroke-width="0.950"/>
+      <circle cx="0" cy="0" r="2.325" fill="none" stroke="#faf7f0" stroke-width="0.950"/>
+    </g>
+    <g transform="translate(7.620,40.000)">
+      <rect x="-1.312" y="-2.812" width="2.625" height="5.625" fill="#faf7f0" stroke="#0044cc" stroke-width="0.375" rx="0.188" ry="0.188"/>
+      <line x1="-0.812" y1="0.250" x2="0.812" y2="0.250" stroke="#0044cc" stroke-width="0.250" stroke-linecap="round"/>
+      <line x1="-0.812" y1="0.750" x2="0.812" y2="0.750" stroke="#0044cc" stroke-width="0.250" stroke-linecap="round"/>
+      <line x1="-0.812" y1="1.250" x2="0.812" y2="1.250" stroke="#0044cc" stroke-width="0.250" stroke-linecap="round"/>
+      <line x1="-0.812" y1="1.750" x2="0.812" y2="1.750" stroke="#0044cc" stroke-width="0.250" stroke-linecap="round"/>
+      <line x1="-0.812" y1="2.250" x2="0.812" y2="2.250" stroke="#0044cc" stroke-width="0.250" stroke-linecap="round"/>
+    </g>
+    <g transform="translate(7.620,57.000)">
+      <circle cx="0" cy="0" r="6.350" fill="#0044cc" stroke="none" stroke-width="0"/>
+      <line x1="0" y1="0" x2="0" y2="-5.556" stroke="#faf7f0" stroke-width="0.794" stroke-linecap="round"/>
+    </g>
+    <g transform="translate(7.620,74.000)">
+      <rect x="-4.000" y="-1.790" width="8.000" height="3.580" fill="#faf7f0" stroke="#0044cc" stroke-width="0.250" rx="0.500" ry="0.500"/>
+      <text style="font-family:Proxima Nova;font-weight:bold;font-size:2.371px" dominant-baseline="middle" text-anchor="middle" fill="#0044cc" y="0.284">
+±5      </text>
+    </g>
+    <g transform="translate(7.620,109.250)">
+      <circle cx="0" cy="0" r="4.200" fill="#0044cc" stroke="none" stroke-width="0"/>
+      <circle cx="0" cy="0" r="3.500" fill="none" stroke="#faf7f0" stroke-width="0.950"/>
+      <circle cx="0" cy="0" r="2.325" fill="none" stroke="#faf7f0" stroke-width="0.950"/>
+    </g>
+  </g>
+</svg>

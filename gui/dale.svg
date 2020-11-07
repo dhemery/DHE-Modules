@@ -6,12 +6,12 @@
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns="http://www.w3.org/2000/svg"
    version="1.1"
-   width="8.400mm"
-   height="8.400mm"
-   viewBox="0 0 8.400 8.400"
-   id="svg10">
+   width="26.4mm"
+   height="129.5mm"
+   viewBox="0 0 26.4 129.5"
+   id="svg81">
   <metadata
-     id="metadata16">
+     id="metadata87">
     <rdf:RDF>
       <cc:Work
          rdf:about="">
@@ -22,33 +22,226 @@
     </rdf:RDF>
   </metadata>
   <defs
-     id="defs14" />
+     id="defs85" />
   <g
-     transform="translate(4.200 4.200)"
-     id="g8">
-    <circle
-       cx="0"
-       cy="0"
-       r="4.200"
-       fill="#7f00ff"
-       stroke="none"
-       stroke-width="0"
-       id="circle2" />
-    <circle
-       cx="0"
-       cy="0"
-       r="3.500"
-       fill="none"
-       stroke="#f7f2fc"
-       stroke-width="0.950"
-       id="circle4" />
-    <circle
-       cx="0"
-       cy="0"
-       r="2.325"
-       fill="none"
-       stroke="#f7f2fc"
-       stroke-width="0.950"
-       id="circle6" />
+     id="faceplate"
+     transform="translate(0.5,0.5)">
+    <rect
+       x="0"
+       y="0"
+       width="25.4"
+       height="128.5"
+       fill="#f0ffff"
+       stroke="#009999"
+       stroke-width="1"
+       rx="1"
+       ry="1"
+       id="rect2" />
+    <g
+       transform="translate(12.7,9)"
+       id="g6">
+      <text
+         style="font-weight:bold;font-size:4.064px;font-family:'Proxima Nova'"
+         dominant-baseline="alphabetic"
+         text-anchor="middle"
+         fill="#009999"
+         y="0"
+         id="text4">CUBIC</text>
+    </g>
+    <g
+       transform="translate(12.7,119.5)"
+       id="g10">
+      <text
+         style="font-weight:bold;font-size:4.064px;font-family:'Proxima Nova'"
+         dominant-baseline="hanging"
+         text-anchor="middle"
+         fill="#009999"
+         y="0.19"
+         id="text8">DHE</text>
+    </g>
+    <g
+       transform="translate(6.683,14.8)"
+       id="g14">
+      <text
+         style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova'"
+         dominant-baseline="alphabetic"
+         text-anchor="middle"
+         fill="#009999"
+         y="0"
+         id="text12">CV</text>
+    </g>
+    <g
+       transform="translate(18.717,14.8)"
+       id="g20">
+      <text
+         style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova'"
+         dominant-baseline="alphabetic"
+         text-anchor="middle"
+         fill="#009999"
+         y="0"
+         id="text18">X<tspan
+   baseline-shift="super"
+   id="tspan16">3</tspan></text>
+    </g>
+    <g
+       transform="translate(6.683,29.8)"
+       id="g24">
+      <text
+         style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova'"
+         dominant-baseline="alphabetic"
+         text-anchor="middle"
+         fill="#009999"
+         y="0"
+         id="text22">CV</text>
+    </g>
+    <g
+       transform="translate(18.717,29.8)"
+       id="g30">
+      <text
+         style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova'"
+         dominant-baseline="alphabetic"
+         text-anchor="middle"
+         fill="#009999"
+         y="0"
+         id="text28">X<tspan
+   baseline-shift="super"
+   id="tspan26">2</tspan></text>
+    </g>
+    <g
+       transform="translate(6.683,44.8)"
+       id="g34">
+      <text
+         style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova'"
+         dominant-baseline="alphabetic"
+         text-anchor="middle"
+         fill="#009999"
+         y="0"
+         id="text32">CV</text>
+    </g>
+    <g
+       transform="translate(18.717,44.8)"
+       id="g40">
+      <text
+         style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova'"
+         dominant-baseline="alphabetic"
+         text-anchor="middle"
+         fill="#009999"
+         y="0"
+         id="text38">X<tspan
+   baseline-shift="super"
+   id="tspan36">1</tspan></text>
+    </g>
+    <g
+       transform="translate(6.683,59.8)"
+       id="g44">
+      <text
+         style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova'"
+         dominant-baseline="alphabetic"
+         text-anchor="middle"
+         fill="#009999"
+         y="0"
+         id="text42">CV</text>
+    </g>
+    <g
+       transform="translate(18.717,59.8)"
+       id="g50">
+      <text
+         style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova'"
+         dominant-baseline="alphabetic"
+         text-anchor="middle"
+         fill="#009999"
+         y="0"
+         id="text48">X<tspan
+   baseline-shift="super"
+   id="tspan46">0</tspan></text>
+    </g>
+    <g
+       transform="translate(6.683,76.8)"
+       id="g54">
+      <text
+         style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova'"
+         dominant-baseline="alphabetic"
+         text-anchor="middle"
+         fill="#009999"
+         y="0"
+         id="text52">IN</text>
+    </g>
+    <g
+       transform="translate(18.717,76.8)"
+       id="g58">
+      <text
+         style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova'"
+         dominant-baseline="alphabetic"
+         text-anchor="middle"
+         fill="#009999"
+         y="0"
+         id="text56">OUT</text>
+    </g>
+    <g
+       transform="translate(6.683,91.8)"
+       id="g62">
+      <text
+         style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova'"
+         dominant-baseline="alphabetic"
+         text-anchor="middle"
+         fill="#009999"
+         y="0"
+         id="text60">CV</text>
+    </g>
+    <g
+       transform="translate(18.717,91.8)"
+       id="g66">
+      <text
+         style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova'"
+         dominant-baseline="alphabetic"
+         text-anchor="middle"
+         fill="#009999"
+         y="0"
+         id="text64">CV</text>
+    </g>
+    <rect
+       x="1.483"
+       y="104.22"
+       width="10.4"
+       height="12.98"
+       fill="#f0ffff"
+       stroke="#009999"
+       stroke-width="0.35"
+       rx="1"
+       ry="1"
+       id="rect68" />
+    <g
+       transform="translate(6.683,106.8)"
+       id="g72">
+      <text
+         style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova'"
+         dominant-baseline="alphabetic"
+         text-anchor="middle"
+         fill="#009999"
+         y="0"
+         id="text70">IN</text>
+    </g>
+    <rect
+       x="13.517"
+       y="104.22"
+       width="10.4"
+       height="12.98"
+       fill="#009999"
+       stroke="#009999"
+       stroke-width="0.35"
+       rx="1"
+       ry="1"
+       id="rect74" />
+    <g
+       transform="translate(18.717,106.8)"
+       id="g78">
+      <text
+         style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova'"
+         dominant-baseline="alphabetic"
+         text-anchor="middle"
+         fill="#f0ffff"
+         y="0"
+         id="text76">OUT</text>
+    </g>
   </g>
 </svg>

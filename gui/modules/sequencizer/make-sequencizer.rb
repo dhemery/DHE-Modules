@@ -231,6 +231,6 @@ module Sequencizer
   def position_marker(x:, y:, type:)
     marker = PositionMarker.new(type: type, color: @foreground)
     @controls << marker
-    @image_shapes << marker.translated(x, y)
+    @overlay_shapes << marker.translated(x, y)
   end
 end

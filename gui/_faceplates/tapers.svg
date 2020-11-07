@@ -1,0 +1,204 @@
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="45.720mm" height="128.500mm" viewBox="0 0 45.720 128.500">
+  <g id="faceplate">
+    <rect x="0.250" y="0.250" width="45.220" height="128.000" fill="#fff7f0" stroke="#994d00" stroke-width="0.500" rx="0.000" ry="0.000"/>
+    <g transform="translate(22.860,9.000)">
+      <text style="font-family:Proxima Nova;font-weight:bold;font-size:4.064px" dominant-baseline="alphabetic" text-anchor="middle" fill="#994d00" y="0.000">
+TAPERS      </text>
+    </g>
+    <g transform="translate(22.860,119.500)">
+      <text style="font-family:Proxima Nova;font-weight:bold;font-size:4.064px" dominant-baseline="hanging" text-anchor="middle" fill="#994d00" y="0.190">
+DHE      </text>
+    </g>
+    <line x1="9.477" y1="24.000" x2="36.243" y2="24.000" stroke="#994d00" stroke-width="0.350"/>
+    <g transform="translate(9.477,18.800)">
+      <text style="font-family:Proxima Nova;font-weight:bold;font-size:2.371px" dominant-baseline="alphabetic" text-anchor="middle" fill="#994d00" y="0.000">
+CV      </text>
+    </g>
+    <g transform="translate(22.860,19.500)">
+      <text style="font-family:Proxima Nova;font-weight:bold;font-size:3.048px" dominant-baseline="alphabetic" text-anchor="middle" fill="#994d00" y="0.000">
+- +      </text>
+    </g>
+    <g transform="translate(36.243,18.000)">
+      <text style="font-family:Proxima Nova;font-weight:bold;font-size:2.371px" dominant-baseline="alphabetic" text-anchor="middle" fill="#994d00" y="0.000">
+LEVEL      </text>
+    </g>
+    <line x1="9.477" y1="40.000" x2="36.243" y2="40.000" stroke="#994d00" stroke-width="0.350"/>
+    <g transform="translate(9.477,34.800)">
+      <text style="font-family:Proxima Nova;font-weight:bold;font-size:2.371px" dominant-baseline="alphabetic" text-anchor="middle" fill="#994d00" y="0.000">
+CV      </text>
+    </g>
+    <g transform="translate(22.860,35.500)">
+      <text style="font-family:Proxima Nova;font-weight:bold;font-size:3.048px" dominant-baseline="alphabetic" text-anchor="middle" fill="#994d00" y="0.000">
+- +      </text>
+    </g>
+    <g transform="translate(36.243,34.000)">
+      <text style="font-family:Proxima Nova;font-weight:bold;font-size:2.371px" dominant-baseline="alphabetic" text-anchor="middle" fill="#994d00" y="0.000">
+CURVE      </text>
+    </g>
+    <g transform="translate(9.477,60.000)">
+      <text style="font-family:Proxima Nova;font-weight:bold;font-size:2.371px" dominant-baseline="hanging" text-anchor="middle" fill="#994d00" y="0.111">
+J      </text>
+    </g>
+    <g transform="translate(9.477,52.000)">
+      <text style="font-family:Proxima Nova;font-weight:bold;font-size:2.371px" dominant-baseline="alphabetic" text-anchor="middle" fill="#994d00" y="0.000">
+S      </text>
+    </g>
+    <g transform="translate(22.860,60.000)">
+      <text style="font-family:Proxima Nova;font-weight:bold;font-size:2.371px" dominant-baseline="hanging" text-anchor="middle" fill="#994d00" y="0.111">
+BI      </text>
+    </g>
+    <g transform="translate(22.860,52.000)">
+      <text style="font-family:Proxima Nova;font-weight:bold;font-size:2.371px" dominant-baseline="alphabetic" text-anchor="middle" fill="#994d00" y="0.000">
+UNI      </text>
+    </g>
+    <rect x="31.043" y="48.220" width="10.400" height="12.980" fill="#994d00" stroke="#994d00" stroke-width="0.350" rx="1.000" ry="1.000"/>
+    <g transform="translate(36.243,50.800)">
+      <text style="font-family:Proxima Nova;font-weight:bold;font-size:2.371px" dominant-baseline="alphabetic" text-anchor="middle" fill="#fff7f0" y="0.000">
+OUT      </text>
+    </g>
+    <line x1="0" y1="66.000" x2="45.720" y2="66.000" stroke="#994d00" stroke-width="0.350"/>
+    <line x1="9.477" y1="76.000" x2="36.243" y2="76.000" stroke="#994d00" stroke-width="0.350"/>
+    <g transform="translate(9.477,70.800)">
+      <text style="font-family:Proxima Nova;font-weight:bold;font-size:2.371px" dominant-baseline="alphabetic" text-anchor="middle" fill="#994d00" y="0.000">
+CV      </text>
+    </g>
+    <g transform="translate(22.860,71.500)">
+      <text style="font-family:Proxima Nova;font-weight:bold;font-size:3.048px" dominant-baseline="alphabetic" text-anchor="middle" fill="#994d00" y="0.000">
+- +      </text>
+    </g>
+    <g transform="translate(36.243,70.000)">
+      <text style="font-family:Proxima Nova;font-weight:bold;font-size:2.371px" dominant-baseline="alphabetic" text-anchor="middle" fill="#994d00" y="0.000">
+LEVEL      </text>
+    </g>
+    <line x1="9.477" y1="92.000" x2="36.243" y2="92.000" stroke="#994d00" stroke-width="0.350"/>
+    <g transform="translate(9.477,86.800)">
+      <text style="font-family:Proxima Nova;font-weight:bold;font-size:2.371px" dominant-baseline="alphabetic" text-anchor="middle" fill="#994d00" y="0.000">
+CV      </text>
+    </g>
+    <g transform="translate(22.860,87.500)">
+      <text style="font-family:Proxima Nova;font-weight:bold;font-size:3.048px" dominant-baseline="alphabetic" text-anchor="middle" fill="#994d00" y="0.000">
+- +      </text>
+    </g>
+    <g transform="translate(36.243,86.000)">
+      <text style="font-family:Proxima Nova;font-weight:bold;font-size:2.371px" dominant-baseline="alphabetic" text-anchor="middle" fill="#994d00" y="0.000">
+CURVE      </text>
+    </g>
+    <g transform="translate(9.477,112.000)">
+      <text style="font-family:Proxima Nova;font-weight:bold;font-size:2.371px" dominant-baseline="hanging" text-anchor="middle" fill="#994d00" y="0.111">
+J      </text>
+    </g>
+    <g transform="translate(9.477,104.000)">
+      <text style="font-family:Proxima Nova;font-weight:bold;font-size:2.371px" dominant-baseline="alphabetic" text-anchor="middle" fill="#994d00" y="0.000">
+S      </text>
+    </g>
+    <g transform="translate(22.860,112.000)">
+      <text style="font-family:Proxima Nova;font-weight:bold;font-size:2.371px" dominant-baseline="hanging" text-anchor="middle" fill="#994d00" y="0.111">
+BI      </text>
+    </g>
+    <g transform="translate(22.860,104.000)">
+      <text style="font-family:Proxima Nova;font-weight:bold;font-size:2.371px" dominant-baseline="alphabetic" text-anchor="middle" fill="#994d00" y="0.000">
+UNI      </text>
+    </g>
+    <rect x="31.043" y="100.220" width="10.400" height="12.980" fill="#994d00" stroke="#994d00" stroke-width="0.350" rx="1.000" ry="1.000"/>
+    <g transform="translate(36.243,102.800)">
+      <text style="font-family:Proxima Nova;font-weight:bold;font-size:2.371px" dominant-baseline="alphabetic" text-anchor="middle" fill="#fff7f0" y="0.000">
+OUT      </text>
+    </g>
+  </g>
+  <g id="overlay">
+    <g transform="translate(9.477,24.000)">
+      <circle cx="0" cy="0" r="4.200" fill="#994d00" stroke="none" stroke-width="0"/>
+      <circle cx="0" cy="0" r="3.500" fill="none" stroke="#fff7f0" stroke-width="0.950"/>
+      <circle cx="0" cy="0" r="2.325" fill="none" stroke="#fff7f0" stroke-width="0.950"/>
+    </g>
+    <g transform="translate(22.860,24.000)">
+      <circle cx="0" cy="0" r="3.500" fill="#994d00" stroke="none" stroke-width="0"/>
+      <line x1="0" y1="0" x2="0" y2="-3.062" stroke="#fff7f0" stroke-width="0.438" stroke-linecap="round"/>
+    </g>
+    <g transform="translate(36.243,24.000)">
+      <circle cx="0" cy="0" r="5.000" fill="#994d00" stroke="none" stroke-width="0"/>
+      <line x1="0" y1="0" x2="0" y2="-4.375" stroke="#fff7f0" stroke-width="0.625" stroke-linecap="round"/>
+    </g>
+    <g transform="translate(9.477,40.000)">
+      <circle cx="0" cy="0" r="4.200" fill="#994d00" stroke="none" stroke-width="0"/>
+      <circle cx="0" cy="0" r="3.500" fill="none" stroke="#fff7f0" stroke-width="0.950"/>
+      <circle cx="0" cy="0" r="2.325" fill="none" stroke="#fff7f0" stroke-width="0.950"/>
+    </g>
+    <g transform="translate(22.860,40.000)">
+      <circle cx="0" cy="0" r="3.500" fill="#994d00" stroke="none" stroke-width="0"/>
+      <line x1="0" y1="0" x2="0" y2="-3.062" stroke="#fff7f0" stroke-width="0.438" stroke-linecap="round"/>
+    </g>
+    <g transform="translate(36.243,40.000)">
+      <circle cx="0" cy="0" r="5.000" fill="#994d00" stroke="none" stroke-width="0"/>
+      <line x1="0" y1="0" x2="0" y2="-4.375" stroke="#fff7f0" stroke-width="0.625" stroke-linecap="round"/>
+    </g>
+    <g transform="translate(9.477,56.000)">
+      <rect x="-1.312" y="-2.812" width="2.625" height="5.625" fill="#fff7f0" stroke="#994d00" stroke-width="0.375" rx="0.188" ry="0.188"/>
+      <line x1="-0.812" y1="0.250" x2="0.812" y2="0.250" stroke="#994d00" stroke-width="0.250" stroke-linecap="round"/>
+      <line x1="-0.812" y1="0.750" x2="0.812" y2="0.750" stroke="#994d00" stroke-width="0.250" stroke-linecap="round"/>
+      <line x1="-0.812" y1="1.250" x2="0.812" y2="1.250" stroke="#994d00" stroke-width="0.250" stroke-linecap="round"/>
+      <line x1="-0.812" y1="1.750" x2="0.812" y2="1.750" stroke="#994d00" stroke-width="0.250" stroke-linecap="round"/>
+      <line x1="-0.812" y1="2.250" x2="0.812" y2="2.250" stroke="#994d00" stroke-width="0.250" stroke-linecap="round"/>
+    </g>
+    <g transform="translate(22.860,56.000)">
+      <rect x="-1.312" y="-2.812" width="2.625" height="5.625" fill="#fff7f0" stroke="#994d00" stroke-width="0.375" rx="0.188" ry="0.188"/>
+      <line x1="-0.812" y1="0.250" x2="0.812" y2="0.250" stroke="#994d00" stroke-width="0.250" stroke-linecap="round"/>
+      <line x1="-0.812" y1="0.750" x2="0.812" y2="0.750" stroke="#994d00" stroke-width="0.250" stroke-linecap="round"/>
+      <line x1="-0.812" y1="1.250" x2="0.812" y2="1.250" stroke="#994d00" stroke-width="0.250" stroke-linecap="round"/>
+      <line x1="-0.812" y1="1.750" x2="0.812" y2="1.750" stroke="#994d00" stroke-width="0.250" stroke-linecap="round"/>
+      <line x1="-0.812" y1="2.250" x2="0.812" y2="2.250" stroke="#994d00" stroke-width="0.250" stroke-linecap="round"/>
+    </g>
+    <g transform="translate(36.243,56.000)">
+      <circle cx="0" cy="0" r="4.200" fill="#994d00" stroke="none" stroke-width="0"/>
+      <circle cx="0" cy="0" r="3.500" fill="none" stroke="#fff7f0" stroke-width="0.950"/>
+      <circle cx="0" cy="0" r="2.325" fill="none" stroke="#fff7f0" stroke-width="0.950"/>
+    </g>
+    <g transform="translate(9.477,76.000)">
+      <circle cx="0" cy="0" r="4.200" fill="#994d00" stroke="none" stroke-width="0"/>
+      <circle cx="0" cy="0" r="3.500" fill="none" stroke="#fff7f0" stroke-width="0.950"/>
+      <circle cx="0" cy="0" r="2.325" fill="none" stroke="#fff7f0" stroke-width="0.950"/>
+    </g>
+    <g transform="translate(22.860,76.000)">
+      <circle cx="0" cy="0" r="3.500" fill="#994d00" stroke="none" stroke-width="0"/>
+      <line x1="0" y1="0" x2="0" y2="-3.062" stroke="#fff7f0" stroke-width="0.438" stroke-linecap="round"/>
+    </g>
+    <g transform="translate(36.243,76.000)">
+      <circle cx="0" cy="0" r="5.000" fill="#994d00" stroke="none" stroke-width="0"/>
+      <line x1="0" y1="0" x2="0" y2="-4.375" stroke="#fff7f0" stroke-width="0.625" stroke-linecap="round"/>
+    </g>
+    <g transform="translate(9.477,92.000)">
+      <circle cx="0" cy="0" r="4.200" fill="#994d00" stroke="none" stroke-width="0"/>
+      <circle cx="0" cy="0" r="3.500" fill="none" stroke="#fff7f0" stroke-width="0.950"/>
+      <circle cx="0" cy="0" r="2.325" fill="none" stroke="#fff7f0" stroke-width="0.950"/>
+    </g>
+    <g transform="translate(22.860,92.000)">
+      <circle cx="0" cy="0" r="3.500" fill="#994d00" stroke="none" stroke-width="0"/>
+      <line x1="0" y1="0" x2="0" y2="-3.062" stroke="#fff7f0" stroke-width="0.438" stroke-linecap="round"/>
+    </g>
+    <g transform="translate(36.243,92.000)">
+      <circle cx="0" cy="0" r="5.000" fill="#994d00" stroke="none" stroke-width="0"/>
+      <line x1="0" y1="0" x2="0" y2="-4.375" stroke="#fff7f0" stroke-width="0.625" stroke-linecap="round"/>
+    </g>
+    <g transform="translate(9.477,108.000)">
+      <rect x="-1.312" y="-2.812" width="2.625" height="5.625" fill="#fff7f0" stroke="#994d00" stroke-width="0.375" rx="0.188" ry="0.188"/>
+      <line x1="-0.812" y1="0.250" x2="0.812" y2="0.250" stroke="#994d00" stroke-width="0.250" stroke-linecap="round"/>
+      <line x1="-0.812" y1="0.750" x2="0.812" y2="0.750" stroke="#994d00" stroke-width="0.250" stroke-linecap="round"/>
+      <line x1="-0.812" y1="1.250" x2="0.812" y2="1.250" stroke="#994d00" stroke-width="0.250" stroke-linecap="round"/>
+      <line x1="-0.812" y1="1.750" x2="0.812" y2="1.750" stroke="#994d00" stroke-width="0.250" stroke-linecap="round"/>
+      <line x1="-0.812" y1="2.250" x2="0.812" y2="2.250" stroke="#994d00" stroke-width="0.250" stroke-linecap="round"/>
+    </g>
+    <g transform="translate(22.860,108.000)">
+      <rect x="-1.312" y="-2.812" width="2.625" height="5.625" fill="#fff7f0" stroke="#994d00" stroke-width="0.375" rx="0.188" ry="0.188"/>
+      <line x1="-0.812" y1="0.250" x2="0.812" y2="0.250" stroke="#994d00" stroke-width="0.250" stroke-linecap="round"/>
+      <line x1="-0.812" y1="0.750" x2="0.812" y2="0.750" stroke="#994d00" stroke-width="0.250" stroke-linecap="round"/>
+      <line x1="-0.812" y1="1.250" x2="0.812" y2="1.250" stroke="#994d00" stroke-width="0.250" stroke-linecap="round"/>
+      <line x1="-0.812" y1="1.750" x2="0.812" y2="1.750" stroke="#994d00" stroke-width="0.250" stroke-linecap="round"/>
+      <line x1="-0.812" y1="2.250" x2="0.812" y2="2.250" stroke="#994d00" stroke-width="0.250" stroke-linecap="round"/>
+    </g>
+    <g transform="translate(36.243,108.000)">
+      <circle cx="0" cy="0" r="4.200" fill="#994d00" stroke="none" stroke-width="0"/>
+      <circle cx="0" cy="0" r="3.500" fill="none" stroke="#fff7f0" stroke-width="0.950"/>
+      <circle cx="0" cy="0" r="2.325" fill="none" stroke="#fff7f0" stroke-width="0.950"/>
+    </g>
+  </g>
+</svg>

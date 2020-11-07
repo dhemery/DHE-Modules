@@ -1,46 +1,16 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<svg
-   xmlns:dc="http://purl.org/dc/elements/1.1/"
-   xmlns:cc="http://creativecommons.org/ns#"
-   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-   xmlns:svg="http://www.w3.org/2000/svg"
-   xmlns="http://www.w3.org/2000/svg"
-   version="1.1"
-   width="8.400mm"
-   height="3.580mm"
-   viewBox="-4.200 -1.790 8.400 3.580"
-   id="svg6">
-  <metadata
-     id="metadata12">
+<svg xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:svg="http://www.w3.org/2000/svg" xmlns="http://www.w3.org/2000/svg" version="1.1" width="8.650mm" height="3.830mm" viewBox="-4.325 -1.915 8.650 3.830" id="svg6">
+  <metadata id="metadata12">
     <rdf:RDF>
-      <cc:Work
-         rdf:about="">
+      <cc:Work rdf:about="">
         <dc:format>image/svg+xml</dc:format>
-        <dc:type
-           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
       </cc:Work>
     </rdf:RDF>
   </metadata>
-  <defs
-     id="defs10" />
-  <rect
-     x="-4.200"
-     y="-1.790"
-     width="8.400"
-     height="3.580"
-     fill="#efedeb"
-     stroke="#331a00"
-     stroke-width="0.250"
-     rx="0.500"
-     ry="0.500"
-     id="rect2" />
-  <g
-     aria-label="S"
-     id="text4"
-     style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:middle;text-anchor:middle;fill:#331a00">
-    <path
-       d="m -0.66341693,0.63372249 c 0.149373,0.14937301 0.36750501,0.25132601 0.67099302,0.25132601 0.42678001,0 0.63305701,-0.218132 0.63305701,-0.50739401 0,-0.35090801 -0.33194001,-0.42915101 -0.59275001,-0.48842601 -0.18256701,-0.042678 -0.31534301,-0.075872 -0.31534301,-0.18256701 0,-0.09484 0.080614,-0.161228 0.23235801,-0.161228 0.154115,0 0.324827,0.054533 0.45286101,0.173083 l 0.187309,-0.246584 c -0.156486,-0.144631 -0.36513401,-0.22050301 -0.61646001,-0.22050301 -0.37224701,0 -0.59986302,0.21339001 -0.59986302,0.47657102 0,0.353279 0.33194001,0.424409 0.59037902,0.48368401 0.182567,0.042678 0.320085,0.082985 0.320085,0.201535 0,0.090098 -0.090098,0.177825 -0.275036,0.177825 -0.21813201,0 -0.39121501,-0.097211 -0.50265201,-0.21339 z"
-       style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:middle;text-anchor:middle;fill:#331a00"
-       id="path14" />
+  <defs id="defs10"/>
+  <rect x="-4.200" y="-1.790" width="8.400" height="3.580" fill="#efedeb" stroke="#331a00" stroke-width="0.250" rx="0.500" ry="0.500" id="rect2"/>
+  <g aria-label="S" id="text4" style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:middle;text-anchor:middle;fill:#331a00">
+    <path d="m -0.66341693,0.63372249 c 0.149373,0.14937301 0.36750501,0.25132601 0.67099302,0.25132601 0.42678001,0 0.63305701,-0.218132 0.63305701,-0.50739401 0,-0.35090801 -0.33194001,-0.42915101 -0.59275001,-0.48842601 -0.18256701,-0.042678 -0.31534301,-0.075872 -0.31534301,-0.18256701 0,-0.09484 0.080614,-0.161228 0.23235801,-0.161228 0.154115,0 0.324827,0.054533 0.45286101,0.173083 l 0.187309,-0.246584 c -0.156486,-0.144631 -0.36513401,-0.22050301 -0.61646001,-0.22050301 -0.37224701,0 -0.59986302,0.21339001 -0.59986302,0.47657102 0,0.353279 0.33194001,0.424409 0.59037902,0.48368401 0.182567,0.042678 0.320085,0.082985 0.320085,0.201535 0,0.090098 -0.090098,0.177825 -0.275036,0.177825 -0.21813201,0 -0.39121501,-0.097211 -0.50265201,-0.21339 z" style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:middle;text-anchor:middle;fill:#331a00" id="path14"/>
   </g>
 </svg>

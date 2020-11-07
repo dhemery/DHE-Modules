@@ -9,21 +9,25 @@ require 'pathname'
 require_relative 'lib/module_factory'
 require_relative 'lib/svg_file'
 
-def inkscape(from:, to:)
+def install_svg(from, to, *options)
   from = from.expand_path.to_s
   to = to.expand_path.to_s
-  sh '/usr/local/bin/inkscape', '--export-text-to-path', "--export-plain-svg", "--export-filename=#{to}", from
+  sh './scripts/install-svg.sh', from, to, *options
+end
+
+def install_faceplate(from, to)
+  install_svg from, to, '--export-id=faceplate', '--export-id-only'
 end
 
 modules_dir = Pathname('modules')
-svg_build_dir = Pathname('_svg')
+control_build_dir = Pathname('_controls')
+faceplate_build_dir = Pathname('_faceplates')
 svg_install_dir = Pathname('../svg')
-image_build_dir = Pathname('_images')
 image_install_dir = Pathname('../images')
 
-directory svg_build_dir
+directory control_build_dir
+directory faceplate_build_dir
 directory svg_install_dir
-directory image_build_dir
 directory image_install_dir
 
 modules = FileList.new(modules_dir / '*.rb').map { |file| ModuleFactory.new(file).build }
@@ -34,27 +38,21 @@ modules.each do |mod|
 
   module_svg_path = mod.slug.sub_ext('.svg')
 
-  faceplate_build_file = svg_build_dir / module_svg_path
-  file faceplate_build_file => [svg_build_dir, module_source_file] do
-    SvgFile.new(path: faceplate_build_file, content: mod.faceplate_shape).write
+  faceplate_build_file = faceplate_build_dir / module_svg_path
+  file faceplate_build_file => [faceplate_build_dir, module_source_file] do
+    ModuleSvgFile.new(path: faceplate_build_file, mod: mod).write
   end
   task build: faceplate_build_file
 
   faceplate_install_file = svg_install_dir / module_svg_path
   file faceplate_install_file => [svg_install_dir, faceplate_build_file] do
-    inkscape(from: faceplate_build_file, to: faceplate_install_file)
+    install_faceplate(faceplate_build_file, faceplate_install_file)
   end
   task install: faceplate_install_file
 
-  image_build_file = image_build_dir / module_svg_path
-  file image_build_file => [image_build_dir, module_source_file] do
-    SvgFile.new(path: image_build_file, content: mod.image_shape).write
-  end
-  task build: image_build_file
-
   image_install_file = image_install_dir / module_svg_path
-  file image_install_file => [image_install_dir, image_build_file] do
-    inkscape(from: image_build_file, to: image_install_file)
+  file image_install_file => [image_install_dir, faceplate_build_file] do
+    install_svg(faceplate_build_file, image_install_file)
   end
   task install: image_install_file
 end
@@ -74,12 +72,12 @@ controls_by_control_svg_path.each do |control_svg_path, control|
   control_source_file = control[:source_file]
   control_content = control[:content]
 
-  control_build_file = svg_build_dir / control_svg_path
-  control_build_dir = control_build_file.parent
+  control_build_file = control_build_dir / control_svg_path
+  control_build_file_dir = control_build_file.parent
 
-  directory control_build_dir
-  file control_build_file => [control_build_dir, control_source_file] do
-    SvgFile.new(path: control_build_file, content: control_content).write
+  directory control_build_file_dir
+  file control_build_file => [control_build_file_dir, control_source_file] do
+    ControlSvgFile.new(path: control_build_file, content: control_content).write
   end
   task build: control_build_file
 
@@ -88,11 +86,7 @@ controls_by_control_svg_path.each do |control_svg_path, control|
 
   directory control_install_dir
   file control_install_file => [control_install_dir, control_build_file] do
-    if control_content.has_text?
-      inkscape(from: control_build_file, to: control_install_file)
-    else
-      cp(control_build_file, control_install_file)
-    end
+    install_svg(control_build_file, control_install_file)
   end
   task install: control_install_file
 end
@@ -111,52 +105,43 @@ task reinstall: [:clobber, :install]
 
 task default: [:build]
 
-curve_sequencer_files = %w[
-  _svg/curve-sequencer-4.svg
-  _svg/curve-sequencer-8.svg
-  _svg/curve-sequencer-16.svg
-  _images/curve-sequencer-4.svg
-  _images/curve-sequencer-8.svg
-  _images/curve-sequencer-16.svg
+curve_sequencer_faceplate_files = %w[
+  _faceplates/curve-sequencer-4.svg
+  _faceplates/curve-sequencer-8.svg
+  _faceplates/curve-sequencer-16.svg
 ]
 
-curve_sequencer_files.each do |f|
+curve_sequencer_faceplate_files.each do |f|
   file f => 'modules/curve-sequencer/make-curve-sequencer.rb'
-end
-
-sequencizer_files = %w[
-  _svg/sequencizer-4.svg
-  _svg/sequencizer-8.svg
-  _svg/sequencizer-16.svg
-  _images/sequencizer-4.svg
-  _images/sequencizer-8.svg
-  _images/sequencizer-16.svg
-]
-
-sequencizer_helpers = %w[
-  modules/sequencizer/make-sequencizer.rb
-]
-
-sequencizer_files.each do |f|
-  file f => sequencizer_helpers
 end
 
 scannable_helpers = %w[
   modules/scannable/make-scannable.rb
 ]
 
-scannable_files = %w[
-  _svg/scannable-4.svg
-  _svg/scannable-8.svg
-  _svg/scannable-16.svg
-  _images/scannable-4.svg
-  _images/scannable-8.svg
-  _images/scannable-16.svg
+scannable_faceplate_files = %w[
+  _faceplates/scannable-4.svg
+  _faceplates/scannable-8.svg
+  _faceplates/scannable-16.svg
 ]
 
-scannable_files.each do |f|
+scannable_faceplate_files.each do |f|
   file f => scannable_helpers
 end
 
-CLEAN.include image_build_dir, svg_build_dir
+sequencizer_faceplate_files = %w[
+  _faceplates/sequencizer-4.svg
+  _faceplates/sequencizer-8.svg
+  _faceplates/sequencizer-16.svg
+]
+
+sequencizer_helpers = %w[
+  modules/sequencizer/make-sequencizer.rb
+]
+
+sequencizer_faceplate_files.each do |f|
+  file f => sequencizer_helpers
+end
+
+CLEAN.include control_build_dir, faceplate_build_dir
 CLOBBER.include image_install_dir, svg_install_dir

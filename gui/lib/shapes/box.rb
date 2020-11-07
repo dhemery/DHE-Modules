@@ -5,12 +5,13 @@ class Box < Shape
   CORNER_RADIUS = 1.0
 
   def initialize(top:, right:, bottom:, left:, fill:, stroke:, stroke_width:, corner_radius: CORNER_RADIUS)
-    super(top: top, right: right, bottom: bottom, left: left)
+    inset = stroke_width / 2.0
+    super(top: top - inset, right: right + inset, bottom: bottom + inset, left: left - inset)
     @rect_attributes = {
       x: left,
       y: top,
-      width: width,
-      height: height,
+      width: right - left,
+      height: bottom - top,
       fill: fill,
       stroke: stroke,
       'stroke-width' => stroke_width,

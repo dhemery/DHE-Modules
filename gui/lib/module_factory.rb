@@ -17,28 +17,31 @@ require_relative 'controls/toggle'
 class ModuleFactory
   MODULE_LABEL_INSET = 9.0
 
-  attr_reader :source_file, :width, :slug, :faceplate_shape, :image_shape, :controls
+  attr_reader :source_file, :width, :slug, :faceplate_shape, :overlay_shape, :controls
 
   def initialize(source_file)
     @source_file = Pathname(source_file)
     @slug = Pathname(source_file.to_s.pathmap('%n'))
     @faceplate_shapes = []
-    @image_shapes = []
+    @overlay_shapes = []
     @controls = []
   end
 
   def build
     instance_eval(@source_file.read, @source_file.to_s)
-    faceplate_background = Box.new(top: 0, left: 0, right: @width, bottom: MODULE_HEIGHT,
-                                   fill: @background, stroke: @foreground, stroke_width: 1)
+    faceplate_stroke_width = 0.5
+    faceplate_inset = faceplate_stroke_width / 2.0
+    faceplate_background = Box.new(top: faceplate_inset, left: faceplate_inset,
+                                   right: @width - faceplate_inset, bottom: MODULE_HEIGHT - faceplate_inset,
+                                   fill: @background, stroke: @foreground,
+                                   corner_radius: 0.0, stroke_width: faceplate_stroke_width)
     module_label = Label.new(text: @name, size: :title, color: @foreground)
                         .translated(width / 2, MODULE_LABEL_INSET)
     author_label = Label.new(text: 'DHE', size: :title, color: @foreground, alignment: :below)
                         .translated(width / 2, MODULE_HEIGHT - MODULE_LABEL_INSET)
     @faceplate_shapes.prepend(faceplate_background, module_label, author_label)
     @faceplate_shape = CompositeShape.new(@faceplate_shapes)
-    @image_shapes.prepend(@faceplate_shape)
-    @image_shape = CompositeShape.new(@image_shapes)
+    @overlay_shape = CompositeShape.new(@overlay_shapes)
     self
   end
 
@@ -74,12 +77,12 @@ class ModuleFactory
     port = Port.new(metal_color: @background, shadow_color: @foreground)
     @controls << port
 
-    image_port = port.translated(x, y)
+    port_for_overlay = port.translated(x, y)
                      .padded(all: PADDING)
-    @image_shapes << image_port
+    @overlay_shapes << port_for_overlay
 
     faceplate_label = Label.new(text: label, color: @foreground, size: :small)
-                           .translated(image_port.x, image_port.top)
+                           .translated(port_for_overlay.x, port_for_overlay.top)
     @faceplate_shapes << faceplate_label
   end
 
@@ -91,15 +94,15 @@ class ModuleFactory
     port = Port.new(metal_color: @background, shadow_color: @foreground)
     @controls << port
 
-    image_port = port.translated(x, y)
+    port_for_overlay = port.translated(x, y)
                      .padded(all: PADDING)
-    @image_shapes << image_port
+    @overlay_shapes << port_for_overlay
 
     faceplate_label = Label.new(text: label, color: @foreground, size: :small)
-                           .translated(image_port.x, image_port.top)
+                           .translated(port_for_overlay.x, port_for_overlay.top)
                            .padded(top: PADDING, right: 0.0, bottom: 0.0)
 
-    faceplate_box = Box.around(shapes: [faceplate_label, image_port],
+    faceplate_box = Box.around(shapes: [faceplate_label, port_for_overlay],
                                stroke: @foreground, stroke_width: STROKE_WIDTH, fill: @background)
     @faceplate_shapes << faceplate_box
     @faceplate_shapes << faceplate_label
@@ -109,15 +112,15 @@ class ModuleFactory
     port = Port.new(metal_color: @background, shadow_color: @foreground)
     @controls << port
 
-    image_port = port.translated(x, y)
+    port_for_overlay = port.translated(x, y)
                      .padded(all: PADDING)
-    @image_shapes << image_port
+    @overlay_shapes << port_for_overlay
 
     faceplate_label = Label.new(text: label, color: @background, size: :small)
-                           .translated(image_port.x, image_port.top)
+                           .translated(port_for_overlay.x, port_for_overlay.top)
                            .padded(top: PADDING, right: 0.0, bottom: 0.0)
 
-    faceplate_box = Box.around(shapes: [faceplate_label, image_port],
+    faceplate_box = Box.around(shapes: [faceplate_label, port_for_overlay],
                                stroke: @foreground, stroke_width: STROKE_WIDTH, fill: @foreground)
 
     @faceplate_shapes << faceplate_box
@@ -128,14 +131,14 @@ class ModuleFactory
     knob = Knob.new(knob_color: @foreground, pointer_color: @background, size: size)
     @controls << knob
 
-    image_knob = knob.translated(x, y)
+    knob_for_overlay = knob.translated(x, y)
                      .padded(top: PADDING, right: 0.0, bottom: 0.0)
-    @image_shapes << image_knob
+    @overlay_shapes << knob_for_overlay
 
     return if label.nil?
 
     faceplate_label = Label.new(text: label, color: @foreground, size: label_size)
-                           .translated(image_knob.x, image_knob.top)
+                           .translated(knob_for_overlay.x, knob_for_overlay.top)
     @faceplate_shapes << faceplate_label
   end
 
@@ -163,20 +166,20 @@ class ModuleFactory
     toggle = Toggle::new(foreground: @foreground, background: @background, size: labels.size)
     @controls << toggle
 
-    image_switch = toggle.states[selection - 1]
+    switch_for_overlay = toggle.states[selection - 1]
                          .translated(x, y)
                          .padded(all: PADDING)
-    @image_shapes << image_switch
+    @overlay_shapes << switch_for_overlay
 
     @faceplate_shapes << Label.new(text: labels.first, color: @foreground, size: :small, alignment: :below)
-                              .translated(image_switch.x, image_switch.bottom)
+                              .translated(switch_for_overlay.x, switch_for_overlay.bottom)
 
     @faceplate_shapes << Label.new(text: labels.last, color: @foreground, size: :small, alignment: :above)
-                              .translated(image_switch.x, image_switch.top)
+                              .translated(switch_for_overlay.x, switch_for_overlay.top)
 
     if labels.size == 3
       @faceplate_shapes << Label.new(text: labels[1], color: @foreground, size: :small, alignment: :right_of)
-                                .translated(image_switch.right, image_switch.y)
+                                .translated(switch_for_overlay.right, switch_for_overlay.y)
     end
   end
 
@@ -197,11 +200,11 @@ class ModuleFactory
 
     @controls << picklist
 
-    image_item = picklist.options[selection - 1]
+    option_for_overlay = picklist.options[selection - 1]
                          .translated(x, y)
                          .padded(all: PADDING)
 
-    @image_shapes << image_item unless hidden
+    @overlay_shapes << option_for_overlay unless hidden
   end
 
   def stepper(x:, y:, name:, options:, selection: 0, width:, hidden: false)
@@ -209,26 +212,26 @@ class ModuleFactory
 
     @controls << stepper
 
-    image_item = stepper.options[selection - 1]
-                         .translated(x, y)
-                         .padded(all: PADDING)
+    option_for_overlay = stepper.options[selection - 1]
+                        .translated(x, y)
+                        .padded(all: PADDING)
 
-    @image_shapes << image_item unless hidden
+    @overlay_shapes << option_for_overlay unless hidden
   end
 
   def button(x:, y:, label: nil, name: 'button')
     button = Button.new(name: name, pressed_color: @background, released_color: @foreground)
     @controls << button
 
-    image_button = button.released
+    button_for_overlay = button.released
                          .translated(x, y)
                          .padded(all: PADDING)
-    @image_shapes << image_button
+    @overlay_shapes << button_for_overlay
 
     return if label.nil?
 
     faceplate_label = Label.new(text: label, color: @foreground, size: :small, alignment: :above)
-                           .translated(image_button.x, image_button.top)
+                           .translated(button_for_overlay.x, button_for_overlay.top)
     @faceplate_shapes << faceplate_label
   end
 
@@ -239,20 +242,20 @@ class ModuleFactory
     button = Button.new(pressed_color: @background, released_color: @foreground)
     @controls << button
 
-    image_port = port.translated(x, y)
+    port_for_overlay = port.translated(x, y)
                      .padded(all: PADDING)
-    @image_shapes << image_port
+    @overlay_shapes << port_for_overlay
 
-    image_button = button.released
-                         .translated(image_port.right + button.released.right, image_port.y)
+    button_for_overlay = button.released
+                         .translated(port_for_overlay.right + button.released.right, port_for_overlay.y)
                          .padded(all: PADDING, left: 0.0)
-    @image_shapes << image_button
+    @overlay_shapes << button_for_overlay
 
     faceplate_label = Label.new(text: label, color: @foreground, size: :small)
-                           .translated(image_port.x, image_port.top)
+                           .translated(port_for_overlay.x, port_for_overlay.top)
                            .padded(top: PADDING)
 
-    faceplate_box = Box.around(shapes: [image_port, image_button, faceplate_label],
+    faceplate_box = Box.around(shapes: [port_for_overlay, button_for_overlay, faceplate_label],
                                stroke: @foreground, stroke_width: STROKE_WIDTH, fill: @background)
     @faceplate_shapes << faceplate_box
     @faceplate_shapes << faceplate_label
@@ -265,19 +268,19 @@ class ModuleFactory
     button = Button.new(name: 'output-button', pressed_color: @foreground, released_color: @background)
     @controls << button
 
-    image_port = port.translated(x, y)
+    port_for_overlay = port.translated(x, y)
                      .padded(all: PADDING)
-    @image_shapes << image_port
+    @overlay_shapes << port_for_overlay
 
-    image_button = button.released.translated(image_port.left + button.released.left, image_port.y)
+    button_for_overlay = button.released.translated(port_for_overlay.left + button.released.left, port_for_overlay.y)
                          .padded(all: PADDING, right: 0.0)
-    @image_shapes << image_button
+    @overlay_shapes << button_for_overlay
 
     faceplate_label = Label.new(text: label, color: @background, size: :small)
-                           .translated(image_port.x, image_port.top)
+                           .translated(port_for_overlay.x, port_for_overlay.top)
                            .padded(top: PADDING)
 
-    faceplate_box = Box.around(shapes: [image_port, image_button, faceplate_label],
+    faceplate_box = Box.around(shapes: [port_for_overlay, button_for_overlay, faceplate_label],
                                stroke: @foreground, stroke_width: STROKE_WIDTH, fill: @foreground)
     @faceplate_shapes << faceplate_box
     @faceplate_shapes << faceplate_label
