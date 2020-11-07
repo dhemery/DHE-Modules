@@ -10,14 +10,10 @@
 #include "controls/curvature-inputs.h"
 #include "controls/duration-inputs.h"
 #include "controls/level-inputs.h"
-#include "generator.h"
-#include "sequence-controller.h"
-#include "step-controller.h"
+#include "engine.h"
 
 #include <engine/Module.hpp>
 #include <jansson.h>
-
-#include <iostream>
 
 namespace dhe {
 namespace scannable {
@@ -99,7 +95,7 @@ public:
   ~Module() override = default;
 
   void process(ProcessArgs const & /*args*/) override {
-    sequence_controller_.execute();
+    engine_.execute();
   }
 
   auto anchor_mode(AnchorType type, int step) const -> AnchorMode {
@@ -166,16 +162,11 @@ public:
 
 private:
   using AnchorT = Anchor<Module>;
-  using GeneratorT = Generator<Module, AnchorT>;
+  using EngineT = Engine<Module, AnchorT>;
 
   AnchorT end_anchor_{*this, AnchorType::End};
   AnchorT start_anchor_{*this, AnchorType::Start};
-  GeneratorT generator_{*this, start_anchor_, end_anchor_};
-
-  using SequenceControllerT =
-      SequenceController<Module, GeneratorT>;
-
-  SequenceControllerT sequence_controller_{*this, generator_};
+  EngineT engine_{*this, start_anchor_, end_anchor_};
 
   void set_lights(int step, float completed_brightness,
                   float remaining_brightness) {
