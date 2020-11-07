@@ -85,7 +85,7 @@ module Scannibal
     input_port x: x, y: a_y, label: 'A'
     input_port x: x, y: b_y, label: 'B'
     input_port x: x, y: c_y, label: 'C'
-    input_port x: x, y: phase_in_y, label: 'PHASE'
+    input_port x: x, y: phase_in_y, label: 'ϕ'
   end
 
   def make_global_outputs(left)
@@ -97,7 +97,7 @@ module Scannibal
     out_y = global_controls_y(4)
 
     polarity_toggle x: x, y: polarity_y, selection: 2
-    output_port x: x, y: step_number_y, label: 'STEP'
+    output_port x: x, y: step_number_y, label: 'STEP #'
     output_port x: x, y: step_phase_y, label: 'STEP ϕ'
     output_port x: x, y: out_y, label: 'OUT'
   end
@@ -139,7 +139,7 @@ module Scannibal
     x = left + LABELS_WIDTH
     label x: x, y: START_ANCHOR_LABEL_Y, text: 'START', alignment: :left_of, size: :large
     label x: x, y: END_ANCHOR_LABEL_Y, text: 'END', alignment: :left_of, size: :large
-    label x: x, y: DURATION_LABEL_Y, text: 'ϕ DUR', alignment: :left_of, size: :large
+    label x: x, y: DURATION_LABEL_Y, text: '[ ϕ ]', alignment: :left_of, size: :large
     label x: x, y: SHAPE_LABEL_Y - hp2mm(0.25), text: 'SHAPE', alignment: :left_of, size: :large
   end
 
