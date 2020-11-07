@@ -45,7 +45,9 @@
       "description": "Generates a 4 step sequence of curves",
       "manualUrl": "https://dhemery.github.io/DHE-Modules/modules/curve-sequencer/",
       "tags": [
-        "Sequencer", "Envelope Generator", "LFO"
+        "Sequencer",
+        "Envelope Generator",
+        "LFO"
       ]
     },
     {
@@ -54,7 +56,9 @@
       "description": "Generates an 8 step sequence of curves",
       "manualUrl": "https://dhemery.github.io/DHE-Modules/modules/curve-sequencer/",
       "tags": [
-        "Sequencer", "Envelope Generator", "LFO"
+        "Sequencer",
+        "Envelope Generator",
+        "LFO"
       ]
     },
     {
@@ -63,7 +67,9 @@
       "description": "Generates a 16 step sequence of curves",
       "manualUrl": "https://dhemery.github.io/DHE-Modules/modules/curve-sequencer/",
       "tags": [
-        "Sequencer", "Envelope Generator", "LFO"
+        "Sequencer",
+        "Envelope Generator",
+        "LFO"
       ]
     },
     {
@@ -123,33 +129,6 @@
       ]
     },
     {
-      "slug": "Scannable4",
-      "name": "Scannable 4",
-      "description": "A 4 step scanned sequencer",
-      "manualUrl": "https://dhemery.github.io/DHE-Modules/modules/scannable/",
-      "tags": [
-        "Sequencer", "Envelope Generator", "LFO"
-      ]
-    },
-    {
-      "slug": "Scannable8",
-      "name": "Scannable 8",
-      "description": "An 8 step scanned sequencer",
-      "manualUrl": "https://dhemery.github.io/DHE-Modules/modules/scannable/",
-      "tags": [
-        "Sequencer", "Envelope Generator", "LFO"
-      ]
-    },
-    {
-      "slug": "Scannable16",
-      "name": "Scannable 16",
-      "description": "A 16 step scanned sequencer",
-      "manualUrl": "https://dhemery.github.io/DHE-Modules/modules/scannable/",
-      "tags": [
-        "Sequencer", "Envelope Generator", "LFO"
-      ]
-    },
-    {
       "slug": "Ranger",
       "name": "Ranger",
       "description": "A modulatable knob with an adjustable, modulatable range",
@@ -159,12 +138,48 @@
       ]
     },
     {
+      "slug": "Scannable4",
+      "name": "Scannable 4",
+      "description": "A 4 step scanned sequencer",
+      "manualUrl": "https://dhemery.github.io/DHE-Modules/modules/scannable/",
+      "tags": [
+        "Sequencer",
+        "Envelope Generator",
+        "LFO"
+      ]
+    },
+    {
+      "slug": "Scannable8",
+      "name": "Scannable 8",
+      "description": "An 8 step scanned sequencer",
+      "manualUrl": "https://dhemery.github.io/DHE-Modules/modules/scannable/",
+      "tags": [
+        "Sequencer",
+        "Envelope Generator",
+        "LFO"
+      ]
+    },
+    {
+      "slug": "Scannable16",
+      "name": "Scannable 16",
+      "description": "A 16 step scanned sequencer",
+      "manualUrl": "https://dhemery.github.io/DHE-Modules/modules/scannable/",
+      "tags": [
+        "Sequencer",
+        "Envelope Generator",
+        "LFO"
+      ]
+    },
+    {
       "slug": "Sequencizer4",
       "name": "Sequencizer 4",
       "description": "Generates a highly customizable 4 step sequence",
       "manualUrl": "https://dhemery.github.io/DHE-Modules/modules/sequencizer/",
       "tags": [
-        "Sequencer", "Envelope Generator", "LFO", "Sample and Hold"
+        "Sequencer",
+        "Envelope Generator",
+        "LFO",
+        "Sample and Hold"
       ]
     },
     {
@@ -173,7 +188,10 @@
       "description": "Generates a highly customizable 8 step sequence",
       "manualUrl": "https://dhemery.github.io/DHE-Modules/modules/sequencizer/",
       "tags": [
-        "Sequencer", "Envelope Generator", "LFO", "Sample and Hold"
+        "Sequencer",
+        "Envelope Generator",
+        "LFO",
+        "Sample and Hold"
       ]
     },
     {
@@ -182,7 +200,10 @@
       "description": "Generates a highly customizable 16 step sequence",
       "manualUrl": "https://dhemery.github.io/DHE-Modules/modules/sequencizer/",
       "tags": [
-        "Sequencer", "Envelope Generator", "LFO", "Sample and Hold"
+        "Sequencer",
+        "Envelope Generator",
+        "LFO",
+        "Sample and Hold"
       ]
     },
     {
