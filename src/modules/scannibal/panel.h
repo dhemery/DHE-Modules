@@ -161,14 +161,7 @@ private:
         end_anchor_level_y + (small_knob_diameter + port_diameter) / 2.F +
         intra_section_glue;
 
-    auto constexpr duration_y = end_anchor_level_cv_y +
-                                (port_diameter + small_knob_diameter) / 2.F +
-                                inter_section_glue;
-    auto constexpr duration_cv_y = duration_y +
-                                   (small_knob_diameter + port_diameter) / 2.F +
-                                   intra_section_glue;
-
-    auto constexpr shape_y = duration_cv_y +
+    auto constexpr shape_y = end_anchor_level_cv_y +
                              (port_diameter + stepper_height) / 2.F +
                              inter_section_glue;
     auto constexpr curvature_y = shape_y +
@@ -177,6 +170,14 @@ private:
     auto constexpr curvature_cv_y =
         curvature_y + (small_knob_diameter + port_diameter) / 2.F +
         intra_section_glue;
+
+    auto constexpr duration_y = curvature_cv_y +
+                                (port_diameter + small_knob_diameter) / 2.F +
+                                inter_section_glue;
+    auto constexpr duration_cv_y = duration_y +
+                                   (small_knob_diameter + port_diameter) / 2.F +
+                                   intra_section_glue;
+
 
     auto const start_marker_x = left + step_width / 2.F - light_diameter;
     start_marker_->setSvg(control_svg(slug_, "marker-start"));

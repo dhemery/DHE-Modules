@@ -123,12 +123,12 @@ module Scannibal
   END_ANCHOR_LEVEL_Y = END_ANCHOR_SOURCE_Y + (STEPPER_HEIGHT + Knob::DIAMETERS[:small]) / 2.0 + INTRA_SECTION_GLUE
   END_ANCHOR_LEVEL_CV_Y = END_ANCHOR_LEVEL_Y + (Knob::DIAMETERS[:small] + Port::DIAMETER) / 2.0 + INTRA_SECTION_GLUE
 
-  DURATION_Y = END_ANCHOR_LEVEL_CV_Y + (Port::DIAMETER + Knob::DIAMETERS[:small]) / 2.0 + INTER_SECTION_GLUE
-  DURATION_CV_Y = DURATION_Y + (Knob::DIAMETERS[:small] + Port::DIAMETER) / 2.0 + INTRA_SECTION_GLUE
-
-  SHAPE_Y = DURATION_CV_Y + (Port::DIAMETER + STEPPER_HEIGHT) / 2.0 + INTER_SECTION_GLUE
+  SHAPE_Y = END_ANCHOR_LEVEL_CV_Y + (Port::DIAMETER + STEPPER_HEIGHT) / 2.0 + INTER_SECTION_GLUE
   CURVATURE_Y = SHAPE_Y + (STEPPER_HEIGHT + Knob::DIAMETERS[:small]) / 2.0 + INTRA_SECTION_GLUE
   CURVATURE_CV_Y = CURVATURE_Y + (Knob::DIAMETERS[:small] + Port::DIAMETER) / 2.0 + INTRA_SECTION_GLUE
+
+  DURATION_Y = CURVATURE_CV_Y + (Port::DIAMETER + Knob::DIAMETERS[:small]) / 2.0 + INTER_SECTION_GLUE
+  DURATION_CV_Y = DURATION_Y + (Knob::DIAMETERS[:small] + Port::DIAMETER) / 2.0 + INTRA_SECTION_GLUE
 
   START_ANCHOR_LABEL_Y = (START_ANCHOR_SOURCE_Y + START_ANCHOR_LEVEL_CV_Y) / 2.0
   END_ANCHOR_LABEL_Y = (END_ANCHOR_SOURCE_Y + END_ANCHOR_LEVEL_CV_Y) / 2.0
@@ -139,8 +139,8 @@ module Scannibal
     x = left + LABELS_WIDTH
     label x: x, y: START_ANCHOR_LABEL_Y, text: 'START', alignment: :left_of, size: :large
     label x: x, y: END_ANCHOR_LABEL_Y, text: 'END', alignment: :left_of, size: :large
-    label x: x, y: DURATION_LABEL_Y, text: '[ ϕ ]', alignment: :left_of, size: :large
     label x: x, y: SHAPE_LABEL_Y - hp2mm(0.25), text: 'SHAPE', alignment: :left_of, size: :large
+    label x: x, y: DURATION_LABEL_Y, text: '[ ϕ ]', alignment: :left_of, size: :large
   end
 
   ANCHOR_SOURCES = %w[LEVEL A B C OUT]
@@ -174,12 +174,12 @@ module Scannibal
       small_knob x: x, y: END_ANCHOR_LEVEL_Y, label: ''
       port x: x, y: END_ANCHOR_LEVEL_CV_Y, label: ''
 
-      small_knob x: x, y: DURATION_Y, label: ''
-      port x: x, y: DURATION_CV_Y, label: ''
-
       stepper x: x, y: SHAPE_Y, name: 'shape', options: SHAPE_OPTIONS, selection: SHAPE_SELECTION, width: STEPPER_WIDTH
       small_knob x: x, y: CURVATURE_Y, label: ''
       port x: x, y: CURVATURE_CV_Y, label: ''
+
+      small_knob x: x, y: DURATION_Y, label: ''
+      port x: x, y: DURATION_CV_Y, label: ''
     end
 
     start_position_marker = left - Light::DIAMETER + STEP_WIDTH / 2.0

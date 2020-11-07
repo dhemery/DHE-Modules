@@ -82,21 +82,21 @@
         <path d="m -1.989582,1.102092 h 0.801624 c 0.63703206,0 1.07899207,-0.40233599 1.07899207,-1.014984 0,-0.61264802 -0.44196001,-1.01803204 -1.07899207,-1.01803204 h -0.801624 z m 0.432816,-0.38099998 v -1.27101605 h 0.368808 c 0.41757605,0 0.63703206,0.27736801 0.63703206,0.63703203 0,0.34442401 -0.23469601,0.63398402 -0.63703206,0.63398402 z" style="font-weight:bold;font-size:3.048px;font-family:'Proxima Nova';dominant-baseline:middle;text-anchor:end;fill:#331a00" id="path2302"/>
       </g>
     </g>
-    <g transform="translate(32.44,85.458)" id="g50">
-      <g aria-label="[ ϕ ]" id="text48" style="font-weight:bold;font-size:3.048px;font-family:'Proxima Nova';dominant-baseline:middle;text-anchor:end;fill:#331a00">
-        <path d="m -4.8633223,1.681212 h 0.658368 v -0.25908 h -0.381 v -2.12750403 h 0.381 v -0.25908001 h -0.658368 z" style="font-weight:bold;font-size:3.048px;font-family:'Proxima Nova';dominant-baseline:middle;text-anchor:end;fill:#331a00" id="path2305"/>
-        <path d="m -1.4808398,0.34367577 q 0,0.55066408 -0.401836,0.75009373 -0.1964531,0.098227 -0.4092773,0.098227 V 1.757543 H -2.7101602 V 1.1919961 q -0.2098476,0 -0.407789,-0.098227 -0.4033243,-0.20091793 -0.4033243,-0.75009373 0,-0.21580079 0.1026914,-0.40481251 0.1071563,-0.19496485 0.2931915,-0.29616798 0.1860351,-0.10269141 0.4152304,-0.10269141 V -1.025543 h 0.4182071 v 0.56554687 q 0.4970859,0 0.7084219,0.40034767 0.1026914,0.19496485 0.1026914,0.40332423 z m -0.428625,0.0223242 q 0,-0.19942969 -0.089297,-0.33188673 -0.1041797,-0.15329297 -0.2931914,-0.15329297 v 0.9703594 q 0.1890117,0 0.2931914,-0.15329297 0.089297,-0.13245704 0.089297,-0.33188673 z m -0.8006954,0.4851797 v -0.9703594 q -0.1890117,0 -0.2931914,0.15329297 -0.089297,0.13245704 -0.089297,0.33188673 0,0.19942969 0.089297,0.33188673 0.1041797,0.15329297 0.2931914,0.15329297 z" style="font-weight:bold;font-size:3.048px;font-family:'Proxima Nova';dominant-baseline:middle;text-anchor:end;fill:#331a00" id="path2307"/>
-        <path d="M -1.3573125,1.1562774 Z" style="font-weight:bold;font-size:3.048px;font-family:'Proxima Nova';dominant-baseline:middle;text-anchor:end;fill:#331a00" id="path2309"/>
-        <path d="m -0.79948074,1.681212 h 0.65836802 v -2.64566404 h -0.65836802 v 0.25908001 h 0.38100001 V 1.422132 h -0.38100001 z" style="font-weight:bold;font-size:3.048px;font-family:'Proxima Nova';dominant-baseline:middle;text-anchor:end;fill:#331a00" id="path2311"/>
+    <g transform="translate(32.44,85.066)" id="g50">
+      <g aria-label="SHAPE" id="text48" style="font-weight:bold;font-size:3.048px;font-family:'Proxima Nova';dominant-baseline:middle;text-anchor:end;fill:#331a00">
+        <path d="m -9.7557434,0.81558002 c 0.192024,0.19202398 0.47244,0.32308798 0.862584,0.32308798 0.54864,0 0.813816,-0.28041598 0.813816,-0.65227199 0,-0.45110402 -0.42672,-0.55168802 -0.762,-0.62788802 -0.234696,-0.054864 -0.405384,-0.097536 -0.405384,-0.23469601 0,-0.12192 0.103632,-0.20726401 0.298704,-0.20726401 0.19812,0 0.417576,0.070104 0.582168,0.22250401 l 0.240792,-0.31699201 c -0.201168,-0.18592801 -0.469392,-0.28346401 -0.79248,-0.28346401 -0.478536,0 -0.771144,0.27432001 -0.771144,0.61264802 0,0.45415202 0.42672,0.54559202 0.758952,0.62179202 0.234696,0.054864 0.41148,0.10668 0.41148,0.25908001 0,0.115824 -0.115824,0.22860001 -0.353568,0.22860001 -0.280416,0 -0.50292,-0.12496801 -0.646176,-0.27432001 z" style="font-weight:bold;font-size:3.048px;font-family:'Proxima Nova';dominant-baseline:middle;text-anchor:end;fill:#331a00" id="path2305"/>
+        <path d="m -6.39499,1.102092 h 0.435864 V -0.93092404 H -6.39499 v 0.79857603 H -7.35511 V -0.93092404 H -7.787926 V 1.102092 h 0.432816 v -0.85344 h 0.96012 z" style="font-weight:bold;font-size:3.048px;font-family:'Proxima Nova';dominant-baseline:middle;text-anchor:end;fill:#331a00" id="path2307"/>
+        <path d="m -4.1380413,1.102092 h 0.47244 l -0.783336,-2.03301604 h -0.542544 L -5.7778653,1.102092 h 0.475488 l 0.128016,-0.35051998 h 0.908304 z m -0.582168,-1.65811203 0.33528,0.93268803 h -0.673608 z" style="font-weight:bold;font-size:3.048px;font-family:'Proxima Nova';dominant-baseline:middle;text-anchor:end;fill:#331a00" id="path2309"/>
+        <path d="m -3.4778635,1.102092 h 0.432816 V 0.37362 h 0.51816 c 0.4389121,0 0.6827521,-0.29565601 0.6827521,-0.64922402 0,-0.35661601 -0.240792,-0.65532002 -0.6827521,-0.65532002 h -0.950976 z m 1.1917681,-1.38074402 c 0,0.17068801 -0.1280161,0.28041601 -0.2987041,0.28041601 h -0.460248 v -0.56083202 h 0.460248 c 0.170688,0 0.2987041,0.11277601 0.2987041,0.28041601 z" style="font-weight:bold;font-size:3.048px;font-family:'Proxima Nova';dominant-baseline:middle;text-anchor:end;fill:#331a00" id="path2311"/>
+        <path d="m -1.5788161,1.102092 h 1.43865604 V 0.72718802 H -1.1460001 V 0.254748 h 0.98450404 V -0.11710801 H -1.1460001 v -0.44196002 h 1.00584004 V -0.93092404 H -1.5788161 Z" style="font-weight:bold;font-size:3.048px;font-family:'Proxima Nova';dominant-baseline:middle;text-anchor:end;fill:#331a00" id="path2313"/>
       </g>
     </g>
-    <g transform="translate(32.44,104.016)" id="g54">
-      <g aria-label="SHAPE" id="text52" style="font-weight:bold;font-size:3.048px;font-family:'Proxima Nova';dominant-baseline:middle;text-anchor:end;fill:#331a00">
-        <path d="m -9.7557434,0.81558002 c 0.192024,0.19202398 0.47244,0.32308798 0.862584,0.32308798 0.54864,0 0.813816,-0.28041598 0.813816,-0.65227199 0,-0.45110402 -0.42672,-0.55168802 -0.762,-0.62788802 -0.234696,-0.054864 -0.405384,-0.097536 -0.405384,-0.23469601 0,-0.12192 0.103632,-0.20726401 0.298704,-0.20726401 0.19812,0 0.417576,0.070104 0.582168,0.22250401 l 0.240792,-0.31699201 c -0.201168,-0.18592801 -0.469392,-0.28346401 -0.79248,-0.28346401 -0.478536,0 -0.771144,0.27432001 -0.771144,0.61264802 0,0.45415202 0.42672,0.54559202 0.758952,0.62179202 0.234696,0.054864 0.41148,0.10668 0.41148,0.25908001 0,0.115824 -0.115824,0.22860001 -0.353568,0.22860001 -0.280416,0 -0.50292,-0.12496801 -0.646176,-0.27432001 z" style="font-weight:bold;font-size:3.048px;font-family:'Proxima Nova';dominant-baseline:middle;text-anchor:end;fill:#331a00" id="path2314"/>
-        <path d="m -6.39499,1.102092 h 0.435864 V -0.93092404 H -6.39499 v 0.79857603 H -7.35511 V -0.93092404 H -7.787926 V 1.102092 h 0.432816 v -0.85344 h 0.96012 z" style="font-weight:bold;font-size:3.048px;font-family:'Proxima Nova';dominant-baseline:middle;text-anchor:end;fill:#331a00" id="path2316"/>
-        <path d="m -4.1380413,1.102092 h 0.47244 l -0.783336,-2.03301604 h -0.542544 L -5.7778653,1.102092 h 0.475488 l 0.128016,-0.35051998 h 0.908304 z m -0.582168,-1.65811203 0.33528,0.93268803 h -0.673608 z" style="font-weight:bold;font-size:3.048px;font-family:'Proxima Nova';dominant-baseline:middle;text-anchor:end;fill:#331a00" id="path2318"/>
-        <path d="m -3.4778635,1.102092 h 0.432816 V 0.37362 h 0.51816 c 0.4389121,0 0.6827521,-0.29565601 0.6827521,-0.64922402 0,-0.35661601 -0.240792,-0.65532002 -0.6827521,-0.65532002 h -0.950976 z m 1.1917681,-1.38074402 c 0,0.17068801 -0.1280161,0.28041601 -0.2987041,0.28041601 h -0.460248 v -0.56083202 h 0.460248 c 0.170688,0 0.2987041,0.11277601 0.2987041,0.28041601 z" style="font-weight:bold;font-size:3.048px;font-family:'Proxima Nova';dominant-baseline:middle;text-anchor:end;fill:#331a00" id="path2320"/>
-        <path d="m -1.5788161,1.102092 h 1.43865604 V 0.72718802 H -1.1460001 V 0.254748 h 0.98450404 V -0.11710801 H -1.1460001 v -0.44196002 h 1.00584004 V -0.93092404 H -1.5788161 Z" style="font-weight:bold;font-size:3.048px;font-family:'Proxima Nova';dominant-baseline:middle;text-anchor:end;fill:#331a00" id="path2322"/>
+    <g transform="translate(32.44,108.428)" id="g54">
+      <g aria-label="[ ϕ ]" id="text52" style="font-weight:bold;font-size:3.048px;font-family:'Proxima Nova';dominant-baseline:middle;text-anchor:end;fill:#331a00">
+        <path d="m -4.8633223,1.681212 h 0.658368 v -0.25908 h -0.381 v -2.12750403 h 0.381 v -0.25908001 h -0.658368 z" style="font-weight:bold;font-size:3.048px;font-family:'Proxima Nova';dominant-baseline:middle;text-anchor:end;fill:#331a00" id="path2316"/>
+        <path d="m -1.4808398,0.34367577 q 0,0.55066408 -0.401836,0.75009373 -0.1964531,0.098227 -0.4092773,0.098227 V 1.757543 H -2.7101602 V 1.1919961 q -0.2098476,0 -0.407789,-0.098227 -0.4033243,-0.20091793 -0.4033243,-0.75009373 0,-0.21580079 0.1026914,-0.40481251 0.1071563,-0.19496485 0.2931915,-0.29616798 0.1860351,-0.10269141 0.4152304,-0.10269141 V -1.025543 h 0.4182071 v 0.56554687 q 0.4970859,0 0.7084219,0.40034767 0.1026914,0.19496485 0.1026914,0.40332423 z m -0.428625,0.0223242 q 0,-0.19942969 -0.089297,-0.33188673 -0.1041797,-0.15329297 -0.2931914,-0.15329297 v 0.9703594 q 0.1890117,0 0.2931914,-0.15329297 0.089297,-0.13245704 0.089297,-0.33188673 z m -0.8006954,0.4851797 v -0.9703594 q -0.1890117,0 -0.2931914,0.15329297 -0.089297,0.13245704 -0.089297,0.33188673 0,0.19942969 0.089297,0.33188673 0.1041797,0.15329297 0.2931914,0.15329297 z" style="font-weight:bold;font-size:3.048px;font-family:'Proxima Nova';dominant-baseline:middle;text-anchor:end;fill:#331a00" id="path2318"/>
+        <path d="M -1.3573125,1.1562774 Z" style="font-weight:bold;font-size:3.048px;font-family:'Proxima Nova';dominant-baseline:middle;text-anchor:end;fill:#331a00" id="path2320"/>
+        <path d="m -0.79948074,1.681212 h 0.65836802 v -2.64566404 h -0.65836802 v 0.25908001 h 0.38100001 V 1.422132 h -0.38100001 z" style="font-weight:bold;font-size:3.048px;font-family:'Proxima Nova';dominant-baseline:middle;text-anchor:end;fill:#331a00" id="path2322"/>
       </g>
     </g>
     <line x1="33.439999" y1="23" x2="33.439999" y2="117" stroke="#331a00" stroke-width="0.35" id="line56"/>
@@ -121,10 +121,10 @@
     <g transform="translate(39.155,65.583)" id="g82">
       <g id="text80" style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#331a00"/>
     </g>
-    <g transform="translate(39.155,75.983)" id="g86">
+    <g transform="translate(39.155,80.003)" id="g86">
       <g id="text84" style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#331a00"/>
     </g>
-    <g transform="translate(39.155,84.533)" id="g90">
+    <g transform="translate(39.155,88.553)" id="g90">
       <g id="text88" style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#331a00"/>
     </g>
     <g transform="translate(39.155,98.953)" id="g94">
@@ -154,10 +154,10 @@
     <g transform="translate(50.585,65.583)" id="g124">
       <g id="text122" style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#331a00"/>
     </g>
-    <g transform="translate(50.585,75.983)" id="g128">
+    <g transform="translate(50.585,80.003)" id="g128">
       <g id="text126" style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#331a00"/>
     </g>
-    <g transform="translate(50.585,84.533)" id="g132">
+    <g transform="translate(50.585,88.553)" id="g132">
       <g id="text130" style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#331a00"/>
     </g>
     <g transform="translate(50.585,98.953)" id="g136">
@@ -187,10 +187,10 @@
     <g transform="translate(62.015,65.583)" id="g166">
       <g id="text164" style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#331a00"/>
     </g>
-    <g transform="translate(62.015,75.983)" id="g170">
+    <g transform="translate(62.015,80.003)" id="g170">
       <g id="text168" style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#331a00"/>
     </g>
-    <g transform="translate(62.015,84.533)" id="g174">
+    <g transform="translate(62.015,88.553)" id="g174">
       <g id="text172" style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#331a00"/>
     </g>
     <g transform="translate(62.015,98.953)" id="g178">
@@ -220,10 +220,10 @@
     <g transform="translate(73.445,65.583)" id="g208">
       <g id="text206" style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#331a00"/>
     </g>
-    <g transform="translate(73.445,75.983)" id="g212">
+    <g transform="translate(73.445,80.003)" id="g212">
       <g id="text210" style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#331a00"/>
     </g>
-    <g transform="translate(73.445,84.533)" id="g216">
+    <g transform="translate(73.445,88.553)" id="g216">
       <g id="text214" style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#331a00"/>
     </g>
     <g transform="translate(73.445,98.953)" id="g220">
@@ -253,10 +253,10 @@
     <g transform="translate(84.875,65.583)" id="g250">
       <g id="text248" style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#331a00"/>
     </g>
-    <g transform="translate(84.875,75.983)" id="g254">
+    <g transform="translate(84.875,80.003)" id="g254">
       <g id="text252" style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#331a00"/>
     </g>
-    <g transform="translate(84.875,84.533)" id="g258">
+    <g transform="translate(84.875,88.553)" id="g258">
       <g id="text256" style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#331a00"/>
     </g>
     <g transform="translate(84.875,98.953)" id="g262">
@@ -286,10 +286,10 @@
     <g transform="translate(96.305,65.583)" id="g292">
       <g id="text290" style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#331a00"/>
     </g>
-    <g transform="translate(96.305,75.983)" id="g296">
+    <g transform="translate(96.305,80.003)" id="g296">
       <g id="text294" style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#331a00"/>
     </g>
-    <g transform="translate(96.305,84.533)" id="g300">
+    <g transform="translate(96.305,88.553)" id="g300">
       <g id="text298" style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#331a00"/>
     </g>
     <g transform="translate(96.305,98.953)" id="g304">
@@ -319,10 +319,10 @@
     <g transform="translate(107.735,65.583)" id="g334">
       <g id="text332" style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#331a00"/>
     </g>
-    <g transform="translate(107.735,75.983)" id="g338">
+    <g transform="translate(107.735,80.003)" id="g338">
       <g id="text336" style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#331a00"/>
     </g>
-    <g transform="translate(107.735,84.533)" id="g342">
+    <g transform="translate(107.735,88.553)" id="g342">
       <g id="text340" style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#331a00"/>
     </g>
     <g transform="translate(107.735,98.953)" id="g346">
@@ -352,10 +352,10 @@
     <g transform="translate(119.165,65.583)" id="g376">
       <g id="text374" style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#331a00"/>
     </g>
-    <g transform="translate(119.165,75.983)" id="g380">
+    <g transform="translate(119.165,80.003)" id="g380">
       <g id="text378" style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#331a00"/>
     </g>
-    <g transform="translate(119.165,84.533)" id="g384">
+    <g transform="translate(119.165,88.553)" id="g384">
       <g id="text382" style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#331a00"/>
     </g>
     <g transform="translate(119.165,98.953)" id="g388">
@@ -385,10 +385,10 @@
     <g transform="translate(130.595,65.583)" id="g418">
       <g id="text416" style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#331a00"/>
     </g>
-    <g transform="translate(130.595,75.983)" id="g422">
+    <g transform="translate(130.595,80.003)" id="g422">
       <g id="text420" style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#331a00"/>
     </g>
-    <g transform="translate(130.595,84.533)" id="g426">
+    <g transform="translate(130.595,88.553)" id="g426">
       <g id="text424" style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#331a00"/>
     </g>
     <g transform="translate(130.595,98.953)" id="g430">
@@ -419,10 +419,10 @@
     <g transform="translate(142.025,65.583)" id="g460">
       <g id="text458" style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#331a00"/>
     </g>
-    <g transform="translate(142.025,75.983)" id="g464">
+    <g transform="translate(142.025,80.003)" id="g464">
       <g id="text462" style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#331a00"/>
     </g>
-    <g transform="translate(142.025,84.533)" id="g468">
+    <g transform="translate(142.025,88.553)" id="g468">
       <g id="text466" style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#331a00"/>
     </g>
     <g transform="translate(142.025,98.953)" id="g472">
@@ -453,10 +453,10 @@
     <g transform="translate(153.455,65.583)" id="g502">
       <g id="text500" style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#331a00"/>
     </g>
-    <g transform="translate(153.455,75.983)" id="g506">
+    <g transform="translate(153.455,80.003)" id="g506">
       <g id="text504" style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#331a00"/>
     </g>
-    <g transform="translate(153.455,84.533)" id="g510">
+    <g transform="translate(153.455,88.553)" id="g510">
       <g id="text508" style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#331a00"/>
     </g>
     <g transform="translate(153.455,98.953)" id="g514">
@@ -487,10 +487,10 @@
     <g transform="translate(164.885,65.583)" id="g544">
       <g id="text542" style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#331a00"/>
     </g>
-    <g transform="translate(164.885,75.983)" id="g548">
+    <g transform="translate(164.885,80.003)" id="g548">
       <g id="text546" style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#331a00"/>
     </g>
-    <g transform="translate(164.885,84.533)" id="g552">
+    <g transform="translate(164.885,88.553)" id="g552">
       <g id="text550" style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#331a00"/>
     </g>
     <g transform="translate(164.885,98.953)" id="g556">
@@ -521,10 +521,10 @@
     <g transform="translate(176.315,65.583)" id="g586">
       <g id="text584" style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#331a00"/>
     </g>
-    <g transform="translate(176.315,75.983)" id="g590">
+    <g transform="translate(176.315,80.003)" id="g590">
       <g id="text588" style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#331a00"/>
     </g>
-    <g transform="translate(176.315,84.533)" id="g594">
+    <g transform="translate(176.315,88.553)" id="g594">
       <g id="text592" style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#331a00"/>
     </g>
     <g transform="translate(176.315,98.953)" id="g598">
@@ -555,10 +555,10 @@
     <g transform="translate(187.745,65.583)" id="g628">
       <g id="text626" style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#331a00"/>
     </g>
-    <g transform="translate(187.745,75.983)" id="g632">
+    <g transform="translate(187.745,80.003)" id="g632">
       <g id="text630" style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#331a00"/>
     </g>
-    <g transform="translate(187.745,84.533)" id="g636">
+    <g transform="translate(187.745,88.553)" id="g636">
       <g id="text634" style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#331a00"/>
     </g>
     <g transform="translate(187.745,98.953)" id="g640">
@@ -589,10 +589,10 @@
     <g transform="translate(199.175,65.583)" id="g670">
       <g id="text668" style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#331a00"/>
     </g>
-    <g transform="translate(199.175,75.983)" id="g674">
+    <g transform="translate(199.175,80.003)" id="g674">
       <g id="text672" style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#331a00"/>
     </g>
-    <g transform="translate(199.175,84.533)" id="g678">
+    <g transform="translate(199.175,88.553)" id="g678">
       <g id="text676" style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#331a00"/>
     </g>
     <g transform="translate(199.175,98.953)" id="g682">
@@ -623,10 +623,10 @@
     <g transform="translate(210.605,65.583)" id="g712">
       <g id="text710" style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#331a00"/>
     </g>
-    <g transform="translate(210.605,75.983)" id="g716">
+    <g transform="translate(210.605,80.003)" id="g716">
       <g id="text714" style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#331a00"/>
     </g>
-    <g transform="translate(210.605,84.533)" id="g720">
+    <g transform="translate(210.605,88.553)" id="g720">
       <g id="text718" style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#331a00"/>
     </g>
     <g transform="translate(210.605,98.953)" id="g724">
