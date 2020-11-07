@@ -13,7 +13,6 @@
 #include "generator.h"
 #include "sequence-controller.h"
 #include "step-controller.h"
-#include "step-selector.h"
 
 #include <engine/Module.hpp>
 #include <jansson.h>
@@ -168,20 +167,15 @@ public:
 private:
   using AnchorT = Anchor<Module>;
   using GeneratorT = Generator<Module, AnchorT>;
-  using StepSelectorT = StepSelector<Module>;
 
   AnchorT end_anchor_{*this, AnchorType::End};
   AnchorT start_anchor_{*this, AnchorType::Start};
   GeneratorT generator_{*this, start_anchor_, end_anchor_};
-  StepSelectorT step_selector_{*this, N};
 
-  using StepControllerT = StepController<GeneratorT>;
   using SequenceControllerT =
-      SequenceController<Module, StepSelectorT, StepControllerT>;
+      SequenceController<Module, GeneratorT>;
 
-  StepControllerT step_controller_{generator_};
-  SequenceControllerT sequence_controller_{*this, step_selector_,
-                                           step_controller_};
+  SequenceControllerT sequence_controller_{*this, generator_};
 
   void set_lights(int step, float completed_brightness,
                   float remaining_brightness) {

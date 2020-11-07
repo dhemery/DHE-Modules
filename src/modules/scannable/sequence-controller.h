@@ -6,26 +6,16 @@
 namespace dhe {
 namespace scannable {
 
-template <typename Module, typename StepSelector, typename StepController>
-class SequenceController {
+template <typename Module, typename Generator> class SequenceController {
 public:
-  SequenceController(Module &module, StepSelector &step_selector,
-                     StepController &step_controller)
-      : module_{module}, step_selector_{step_selector}, step_controller_{
-                                                            step_controller} {}
+  SequenceController(Module &module, Generator &generator)
+      : module_{module}, generator_{generator} {}
 
-  void execute() {}
-
-private:
-  void generate() {
-    auto phase = 0.F;
-    step_controller_.execute(phase);
-  }
+  void execute(float phase) {}
 
   int step_{-1};
   Module &module_;
-  StepSelector &step_selector_;
-  StepController &step_controller_;
+  Generator &generator_;
 };
 } // namespace scannable
 } // namespace dhe
