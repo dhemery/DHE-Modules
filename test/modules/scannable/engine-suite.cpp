@@ -10,16 +10,21 @@ using dhe::unit::Suite;
 using dhe::unit::Tester;
 using dhe::unit::TestFunc;
 
-class EngineSuite : Suite {
+class EngineStartSuite : Suite {
 public:
-  EngineSuite() : Suite{"dhe::scannable::Engine"} {}
+  EngineStartSuite() : Suite{"dhe::scannable::Engine::start()"} {}
 
   void register_tests(dhe::unit::TestRegistrar add) override {
-    add("blah", test([](Tester &t, Module &module, Anchor &start_anchor,
-                        Anchor &end_anchor, Engine &engine) {}));
+    add("shows step 0 phase 0.0",
+        test([](Tester &t, Module &module, Anchor &start_anchor,
+                Anchor &end_anchor, Engine &engine) {
+          engine.start();
+          t.assert_that(module.step_, is_equal_to(0));
+          t.assert_that(module.step_phase_, is_equal_to(0.F));
+        }));
   }
 };
 
-__attribute__((unused)) static auto _ = EngineSuite{};
+__attribute__((unused)) static auto start_suite = EngineStartSuite{};
 } // namespace scannable
 } // namespace test

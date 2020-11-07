@@ -23,18 +23,18 @@ struct Anchor {
 struct Module {
   auto input() const -> float { return in_a_; }
   void output(float v) { output_ = v; }
-  void show_step_phase(int step, float step_phase) {
+  void show_status(int step, float step_phase) {
     step_ = step;
     step_phase_ = step_phase;
   }
-  bool gate_{};        // NOLINT
-  float in_a_{};       // NOLINT
-  float output_{};     // NOLINT
-  float step_phase_{}; // NOLINT
-  int step_{};         // NOLINT
+  bool gate_{};             // NOLINT
+  float in_a_{};            // NOLINT
+  float output_{};          // NOLINT
+  float step_phase_{999.F}; // NOLINT
+  int step_{-39};           // NOLINT
 };
 
-using Engine = dhe::scannable::Engine<Module,Anchor>;
+using Engine = dhe::scannable::Engine<Module, Anchor>;
 
 template <typename Run> static inline auto test(Run run) -> TestFunc {
   return [run](Tester &t) {

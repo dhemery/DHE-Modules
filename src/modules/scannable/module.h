@@ -18,12 +18,7 @@
 namespace dhe {
 namespace scannable {
 
-// Skew the progress::brightness ratio so that the "remaining" light stays
-// fully lit for a little while during early progress, and the "completed"
-// light reaches fully lit a little while before progress is complete.
-static auto constexpr brightness_skew = 0.7F;
-static auto constexpr brightness_range =
-    Range{-brightness_skew, 1.F + brightness_skew};
+static auto constexpr brightness_range = Range{0.F, 1.F};
 static auto constexpr minimum_duration = short_duration_range.lower_bound();
 
 template <typename P, typename I>
@@ -88,15 +83,13 @@ public:
       config_curve_shape_switch(this, Param::Shape + step, "Shape");
       config_curvature_knob(this, Param::Curvature + step, "Curvature");
 
-      show_inactive(step);
+      engine_.start();
     }
   }
 
   ~Module() override = default;
 
-  void process(ProcessArgs const & /*args*/) override {
-    engine_.execute();
-  }
+  void process(ProcessArgs const & /*args*/) override { engine_.execute(); }
 
   auto anchor_mode(AnchorType type, int step) const -> AnchorMode {
     auto const base = type == AnchorType::Start ? Param::StepStartAnchorMode
@@ -143,7 +136,7 @@ public:
 
   void show_inactive(int step) { set_lights(step, 0.F, 0.F); }
 
-  void show_progress(int step, float progress) {
+  void show_status(int step, float progress) {
     auto const completed_brightness = brightness_range.scale(progress);
     auto const remaining_brightness = 1.F - completed_brightness;
     set_lights(step, completed_brightness, remaining_brightness);
