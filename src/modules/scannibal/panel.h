@@ -178,7 +178,6 @@ private:
                                    (small_knob_diameter + port_diameter) / 2.F +
                                    intra_section_glue;
 
-
     auto const start_marker_x = left + step_width / 2.F - light_diameter;
     start_marker_->setSvg(control_svg(slug_, "marker-start"));
     position_centered(start_marker_, start_marker_x, progress_light_y);

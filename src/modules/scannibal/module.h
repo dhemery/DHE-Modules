@@ -11,6 +11,7 @@
 #include "controls/curvature-inputs.h"
 #include "controls/duration-inputs.h"
 #include "controls/level-inputs.h"
+#include "generator.h"
 
 #include <engine/Module.hpp>
 #include <jansson.h>
@@ -35,16 +36,11 @@ static inline auto duration(P const &duration_knob, P const &range_switch,
   return safe_duration;
 }
 
-template <typename P, typename I>
-static inline auto level(P const &level_knob, P const &range_switch,
-                         P const &multipler_knob, I const &multiplier_cv)
-    -> float {
+template <typename P>
+static inline auto level(P const &level_knob, P const &range_switch) -> float {
   auto const range = level_range(range_switch);
   auto const rotation = dhe::rotation_of(level_knob);
-  auto const nominal_level = range.scale(rotation);
-  auto const attenuation = dhe::rotation(multipler_knob, multiplier_cv);
-  auto const attenuated_level = nominal_level * attenuation;
-  return range.clamp(attenuated_level);
+  return range.scale(rotation);
 }
 
 template <int N> class Module : public rack::engine::Module {
@@ -90,36 +86,33 @@ public:
   void process(ProcessArgs const & /*args*/) override { controller_.execute(); }
 
   auto anchor_mode(AnchorType type, int step) const -> AnchorMode {
-    auto const base = type == AnchorType::Start ? Param::StepStartAnchorMode
-                                                : Param::StepEndAnchorMode;
+    auto const base = type == AnchorType::Start ? Param::StartAnchorMode
+                                                : Param::EndAnchorMode;
     auto const selection = position_of(params[base + step]);
     return static_cast<AnchorMode>(selection);
   }
 
   auto anchor_level(AnchorType type, int step) const -> float {
     auto const base_knob_param = type == AnchorType::Start
-                                     ? Param::StepStartAnchorLevel
-                                     : Param::StepEndAnchorLevel;
-    return scannibal::level(
-        params[base_knob_param + step], params[Param::LevelRange],
-        params[Param::LevelMultiplier], inputs[Input::LevelAttenuationCV]);
+                                     ? Param::StartAnchorLevel
+                                     : Param::EndAnchorLevel;
+    return scannibal::level(params[base_knob_param + step],
+                            params[Param::LevelRange]);
   }
 
   auto anchor_source(AnchorType type, int step) const -> AnchorSource {
-    auto const base = type == AnchorType::Start ? Param::StepStartAnchorSource
-                                                : Param::StepEndAnchorSource;
+    auto const base = type == AnchorType::Start ? Param::StartAnchorSource
+                                                : Param::EndAnchorSource;
     auto const selection = position_of(params[base + step]);
     return static_cast<AnchorSource>(selection);
   }
 
   auto curvature(int step) const -> float {
-    return dhe::curvature(params[Param::StepCurvature + step]);
+    return dhe::curvature(params[Param::Curvature + step]);
   }
 
   auto duration(int step) const -> float {
-    return scannibal::duration(
-        params[Param::StepDuration + step], params[Param::DurationRange],
-        params[Param::DurationMultiplier], inputs[Input::DurationMultiplierCV]);
+    return value_of(params[Param::Duration + step]);
   }
 
   auto in_a() const -> float { return voltage_at(inputs[Input::InA]); }
@@ -128,20 +121,24 @@ public:
 
   auto in_c() const -> float { return voltage_at(inputs[Input::InC]); }
 
+  auto length() const -> float { return value_of(params[Param::Length]); }
+
+  auto phase() const -> float { return voltage_at(inputs[Input::Phase]); }
+
   auto output() const -> float { return voltage_at(outputs[Output::Out]); }
 
   void output(float voltage) { outputs[Output::Out].setVoltage(voltage); }
 
   void show_inactive(int step) { set_lights(step, 0.F, 0.F); }
 
-  void show_status(int step, float progress) {
+  void show_position(int step, float progress) {
     auto const completed_brightness = brightness_range.scale(progress);
     auto const remaining_brightness = 1.F - completed_brightness;
     set_lights(step, completed_brightness, remaining_brightness);
   }
 
   auto taper(int step) const -> sigmoid::Taper const & {
-    auto const selection = position_of(params[Param::StepShape + step]);
+    auto const selection = position_of(params[Param::Shape + step]);
     return sigmoid::tapers[selection];
   }
 
@@ -153,12 +150,12 @@ public:
 
 private:
   using AnchorT = Anchor<Module>;
-  using GeneratorT = float;
+  using GeneratorT = Generator<Module, AnchorT>;
   using ControllerT = Controller<Module, GeneratorT>;
 
   AnchorT end_anchor_{*this, AnchorType::End};
   AnchorT start_anchor_{*this, AnchorType::Start};
-  GeneratorT generator_{};
+  GeneratorT generator_{*this, start_anchor_, end_anchor_};
   ControllerT controller_{*this, generator_};
 
   void set_lights(int step, float completed_brightness,
