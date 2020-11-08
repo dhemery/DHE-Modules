@@ -7,10 +7,10 @@
 #include "config/duration-config.h"
 #include "config/level-config.h"
 #include "control-ids.h"
+#include "controller.h"
 #include "controls/curvature-inputs.h"
 #include "controls/duration-inputs.h"
 #include "controls/level-inputs.h"
-#include "engine.h"
 
 #include <engine/Module.hpp>
 #include <jansson.h>
@@ -82,14 +82,12 @@ public:
 
       config_curve_shape_switch(this, Param::Shape + step, "Shape");
       config_curvature_knob(this, Param::Curvature + step, "Curvature");
-
-      engine_.start();
     }
   }
 
   ~Module() override = default;
 
-  void process(ProcessArgs const & /*args*/) override { engine_.execute(); }
+  void process(ProcessArgs const & /*args*/) override { controller_.execute(); }
 
   auto anchor_mode(AnchorType type, int step) const -> AnchorMode {
     auto const base = type == AnchorType::Start ? Param::StepStartAnchorMode
@@ -155,11 +153,13 @@ public:
 
 private:
   using AnchorT = Anchor<Module>;
-  using EngineT = Engine<Module, AnchorT>;
+  using GeneratorT = float;
+  using ControllerT = Controller<Module, GeneratorT>;
 
   AnchorT end_anchor_{*this, AnchorType::End};
   AnchorT start_anchor_{*this, AnchorType::Start};
-  EngineT engine_{*this, start_anchor_, end_anchor_};
+  GeneratorT generator_{};
+  ControllerT controller_{*this, generator_};
 
   void set_lights(int step, float completed_brightness,
                   float remaining_brightness) {
