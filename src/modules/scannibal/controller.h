@@ -1,6 +1,8 @@
 #pragma once
 
 #include <algorithm>
+#include <cmath>
+#include <iostream>
 #include <vector>
 
 namespace dhe {
@@ -23,15 +25,13 @@ public:
       : module_{module}, generator_{generator} {}
 
   void execute() {
-    auto position = scanner_position();
+    auto const position = scanner_position();
     module_.show_position(position.step(), position.phase());
     generator_.generate(position.step(), position.phase());
   }
 
 private:
   auto scanner_position() const -> Position {
-    auto const scanner_phase = module_.phase() * 0.1F;
-
     auto const length = module_.length();
     auto step_end_weight = std::vector<float>{};
     auto step_weight = std::vector<float>{};
@@ -44,7 +44,7 @@ private:
       step_end_weight.push_back(sequence_weight);
     }
 
-    auto const scanner_weight = sequence_weight * scanner_phase;
+    auto const scanner_weight = sequence_weight * scanner_phase();
 
     auto selected_step = 0;
     for (; selected_step < length; selected_step++) {
@@ -64,6 +64,20 @@ private:
         weight_within_step / step_weight[selected_step];
     return Position{selected_step, phase_within_step};
   };
+
+  auto scanner_phase() const -> float {
+    auto const phase_voltage = module_.phase();
+    auto const raw_phase = phase_voltage * 0.1F;
+    auto const phase = raw_phase - std::trunc(raw_phase);
+    if (phase_voltage >= 10.F && phase == 0.F) {
+      // From 10V upward, multiples of 10V map to phase == 1, not phase == 0
+      return 1.F;
+    }
+    if (phase < 0.F) {
+      return phase + 1.F;
+    }
+    return phase;
+  }
 
   Module &module_;
   Generator &generator_;
