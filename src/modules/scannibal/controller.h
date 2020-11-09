@@ -2,8 +2,7 @@
 
 #include <algorithm>
 #include <cmath>
-#include <iostream>
-#include <vector>
+#include <array>
 
 namespace dhe {
 namespace scannibal {
