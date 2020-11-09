@@ -24,7 +24,7 @@ struct Generator {
   float phase_{-1.F}; // NOLINT
 };
 
-struct Module {
+template <int N> struct M {
   void exit_step(int step) {
     exited_ = true;
     exited_step_ = step;
@@ -50,7 +50,8 @@ struct Module {
   float step_phase_{-1.F};                   // NOLINT
 };
 
-using Controller = dhe::scannibal::Controller<Module, Generator>;
+using Controller = dhe::scannibal::Controller<M, Generator, step_count>;
+using Module = M<step_count>;
 
 template <typename Run> static inline auto test(Run run) -> TestFunc {
   return [run](Tester &t) {

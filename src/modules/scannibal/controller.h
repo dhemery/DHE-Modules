@@ -8,7 +8,8 @@
 namespace dhe {
 namespace scannibal {
 
-template <typename Module, typename Generator> class Controller {
+template <template <int> class Module, typename Generator, int N>
+class Controller {
   class Position {
   public:
     Position(int step, float phase) : step_{step}, phase_{phase} {}
@@ -21,7 +22,7 @@ template <typename Module, typename Generator> class Controller {
   };
 
 public:
-  Controller(Module &module, Generator &generator)
+  Controller(Module<N> &module, Generator &generator)
       : module_{module}, generator_{generator} {}
 
   void execute() {
@@ -41,16 +42,16 @@ public:
 
 private:
   auto scanner_position() const -> Position {
+    auto step_end_weight = std::array<float, N>{};
+    auto step_weight = std::array<float, N>{};
     auto const length = module_.length();
-    auto step_end_weight = std::vector<float>{};
-    auto step_weight = std::vector<float>{};
     auto sequence_weight = 0.F;
 
     for (int i = 0; i < length; i++) {
       auto const weight = module_.duration(i);
-      step_weight.push_back(weight);
+      step_weight[i] = weight;
       sequence_weight += weight;
-      step_end_weight.push_back(sequence_weight);
+      step_end_weight[i] = sequence_weight;
     }
 
     if (sequence_weight == 0.F) {
@@ -92,7 +93,7 @@ private:
     return phase;
   }
 
-  Module &module_;
+  Module<N> &module_;
   Generator &generator_;
   int previous_step_{-1};
 };

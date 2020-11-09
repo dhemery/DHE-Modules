@@ -156,7 +156,7 @@ public:
 private:
   using AnchorT = Anchor<Module>;
   using GeneratorT = Generator<Module, AnchorT>;
-  using ControllerT = Controller<Module, GeneratorT>;
+  using ControllerT = Controller<Module, GeneratorT, N>;
 
   AnchorT end_anchor_{*this, AnchorType::End};
   AnchorT start_anchor_{*this, AnchorType::Start};
