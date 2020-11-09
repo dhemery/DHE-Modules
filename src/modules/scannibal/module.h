@@ -115,6 +115,8 @@ public:
     return value_of(params[Param::Duration + step]);
   }
 
+  void exit_step(int step) { set_lights(step, 0.F, 0.F); }
+
   auto in_a() const -> float { return voltage_at(inputs[Input::InA]); }
 
   auto in_b() const -> float { return voltage_at(inputs[Input::InB]); }
@@ -128,8 +130,6 @@ public:
   auto output() const -> float { return voltage_at(outputs[Output::Out]); }
 
   void output(float voltage) { outputs[Output::Out].setVoltage(voltage); }
-
-  void show_inactive(int step) { set_lights(step, 0.F, 0.F); }
 
   void show_position(int step, float progress) {
     auto const completed_brightness = brightness_range.scale(progress);

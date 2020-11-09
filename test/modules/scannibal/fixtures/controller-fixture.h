@@ -14,16 +14,24 @@ auto constexpr step_count = 8;
 
 struct Generator {
   void generate(int step, float phase) {
+    generated_ = true;
     step_ = step;
     phase_ = phase;
   }
 
+  bool generated_{};  // NOLINT
   int step_{-1};      // NOLINT
   float phase_{-1.F}; // NOLINT
 };
 
 struct Module {
+  void exit_step(int step) {
+    exited_ = true;
+    exited_step_ = step;
+  }
+
   void show_position(int step, float phase) {
+    showed_position_ = true;
     step_number_ = step;
     step_phase_ = phase;
   }
@@ -33,8 +41,11 @@ struct Module {
   auto phase() const -> float { return phase_; }
 
   std::array<float, step_count> duration_{}; // NOLINT
+  bool exited_{};                            // NOLINT
+  int exited_step_{-1};                      // NOLINT
   int length_{step_count};                   // NOLINT
   float phase_{0.F};                         // NOLINT
+  bool showed_position_{};                   // NOLINT
   int step_number_{-1};                      // NOLINT
   float step_phase_{-1.F};                   // NOLINT
 };

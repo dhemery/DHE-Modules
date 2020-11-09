@@ -26,8 +26,17 @@ public:
 
   void execute() {
     auto const position = scanner_position();
-    module_.show_position(position.step(), position.phase());
-    generator_.generate(position.step(), position.phase());
+    auto const step = position.step();
+    if (step != previous_step_) {
+      if (previous_step_ >= 0) {
+        module_.exit_step(previous_step_);
+      }
+      previous_step_ = step;
+    }
+    if (step >= 0) {
+      module_.show_position(step, position.phase());
+      generator_.generate(step, position.phase());
+    }
   }
 
 private:
@@ -44,6 +53,10 @@ private:
       step_end_weight.push_back(sequence_weight);
     }
 
+    if (sequence_weight == 0.F) {
+      // Do not execute if all weights are 0
+      return Position{-1, 0.F};
+    }
     auto const scanner_weight = sequence_weight * scanner_phase();
 
     auto selected_step = 0;
@@ -81,7 +94,7 @@ private:
 
   Module &module_;
   Generator &generator_;
-  int step_{0};
+  int previous_step_{-1};
 };
 } // namespace scannibal
 } // namespace dhe
