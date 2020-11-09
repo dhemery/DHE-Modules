@@ -108,11 +108,13 @@ public:
   }
 
   auto curvature(int step) const -> float {
-    return dhe::curvature(params[Param::Curvature + step]);
+    return dhe::curvature(params[Param::Curvature + step],
+                          inputs[Input::CurvatureCV + step]);
   }
 
   auto duration(int step) const -> float {
-    return value_of(params[Param::Duration + step]);
+    return dhe::rotation(params[Param::Duration + step],
+                         inputs[Input::DurationCV + step]);
   }
 
   void exit_step(int step) { set_lights(step, 0.F, 0.F); }
@@ -131,10 +133,13 @@ public:
 
   void output(float voltage) { outputs[Output::Out].setVoltage(voltage); }
 
-  void show_position(int step, float progress) {
-    auto const completed_brightness = brightness_range.scale(progress);
+  void show_position(int step, float phase) {
+    auto const completed_brightness = brightness_range.scale(phase);
     auto const remaining_brightness = 1.F - completed_brightness;
     set_lights(step, completed_brightness, remaining_brightness);
+    outputs[Output::StepNumber].setVoltage(static_cast<float>(step + 1) * 10.F /
+                                           static_cast<float>(N));
+    outputs[Output::StepPhase].setVoltage(phase * 10.F);
   }
 
   auto taper(int step) const -> sigmoid::Taper const & {
