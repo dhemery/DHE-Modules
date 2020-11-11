@@ -19,8 +19,6 @@
 #include <engine/Module.hpp>
 #include <jansson.h>
 
-#include <iostream>
-
 namespace dhe {
 namespace sequencizer {
 

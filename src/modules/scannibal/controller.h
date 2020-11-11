@@ -1,8 +1,8 @@
 #pragma once
 
 #include <algorithm>
-#include <cmath>
 #include <array>
+#include <cmath>
 
 namespace dhe {
 namespace scannibal {
