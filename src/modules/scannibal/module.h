@@ -22,20 +22,6 @@ namespace scannibal {
 static auto constexpr brightness_range = Range{0.F, 1.F};
 static auto constexpr minimum_duration = short_duration_range.lower_bound();
 
-template <typename P, typename I>
-static inline auto duration(P const &duration_knob, P const &range_switch,
-                            P const &multipler_knob, I const &multiplier_cv)
-    -> float {
-  auto const nominal_duration =
-      dhe::selectable_duration(duration_knob, range_switch);
-  auto const multiplier_rotation = dhe::rotation(multipler_knob, multiplier_cv);
-  auto const nominal_multiplier = gain_range.scale(multiplier_rotation);
-  auto const clamped_multiplier = gain_range.clamp(nominal_multiplier);
-  auto const scaled_duration = nominal_duration * clamped_multiplier;
-  auto const safe_duration = cx::max(minimum_duration, scaled_duration);
-  return safe_duration;
-}
-
 template <typename P>
 static inline auto level(P const &level_knob, P const &range_switch) -> float {
   auto const range = level_range(range_switch);
@@ -57,27 +43,29 @@ public:
     config_level_range_switch(this, Param::LevelRange);
 
     for (auto step = 0; step < N; step++) {
-      config_toggle<anchor_source_count>(this, Param::StartAnchorSource + step,
-                                         "Start anchor source",
+      config_toggle<anchor_source_count>(this, Param::Phase0AnchorSource + step,
+                                         "Phase 0 anchor source",
                                          {"Level", "A", "B", "C", "Out"}, 4);
-      config_level_knob(this, Param::StartAnchorLevel + step, Param::LevelRange,
-                        "Start level");
-      config_toggle<2>(this, Param::StartAnchorMode + step, "Start anchor mode",
+      config_level_knob(this, Param::Phase0AnchorLevel + step,
+                        Param::LevelRange, "Phase 0 level");
+      config_toggle<2>(this, Param::Phase0AnchorMode + step,
+                       "Phase 0 anchor mode",
                        {"Sample the source", "Track the source"});
 
-      config_toggle<anchor_source_count>(this, Param::EndAnchorSource + step,
-                                         "End anchor source",
+      config_toggle<anchor_source_count>(this, Param::Phase1AnchorSource + step,
+                                         "Phase 1 anchor source",
                                          {"Level", "A", "B", "C", "Out"});
-      config_level_knob(this, Param::EndAnchorLevel + step, Param::LevelRange,
-                        "End level");
-      config_toggle<2>(this, Param::EndAnchorMode + step, "End anchor mode",
+      config_level_knob(this, Param::Phase1AnchorLevel + step,
+                        Param::LevelRange, "Phase 1 level");
+      config_toggle<2>(this, Param::Phase1AnchorMode + step,
+                       "Phase 1 anchor mode",
                        {"Sample the source", "Track the source"}, 1);
-
-      config_knob(this, Param::Duration + step, "Duration", "", Range{0.F, 1.F},
-                  centered_rotation);
 
       config_curve_shape_switch(this, Param::Shape + step, "Shape");
       config_curvature_knob(this, Param::Curvature + step, "Curvature");
+
+      config_knob(this, Param::Duration + step, "Relative duration", "",
+                  Range{0.F, 2.F}, centered_rotation);
     }
   }
 
@@ -86,23 +74,23 @@ public:
   void process(ProcessArgs const & /*args*/) override { controller_.execute(); }
 
   auto anchor_mode(AnchorType type, int step) const -> AnchorMode {
-    auto const base = type == AnchorType::Start ? Param::StartAnchorMode
-                                                : Param::EndAnchorMode;
+    auto const base = type == AnchorType::Phase0 ? Param::Phase0AnchorMode
+                                                 : Param::Phase1AnchorMode;
     auto const selection = position_of(params[base + step]);
     return static_cast<AnchorMode>(selection);
   }
 
   auto anchor_level(AnchorType type, int step) const -> float {
-    auto const base_knob_param = type == AnchorType::Start
-                                     ? Param::StartAnchorLevel
-                                     : Param::EndAnchorLevel;
+    auto const base_knob_param = type == AnchorType::Phase0
+                                     ? Param::Phase0AnchorLevel
+                                     : Param::Phase1AnchorLevel;
     return scannibal::level(params[base_knob_param + step],
                             params[Param::LevelRange]);
   }
 
   auto anchor_source(AnchorType type, int step) const -> AnchorSource {
-    auto const base = type == AnchorType::Start ? Param::StartAnchorSource
-                                                : Param::EndAnchorSource;
+    auto const base = type == AnchorType::Phase0 ? Param::Phase0AnchorSource
+                                                 : Param::Phase1AnchorSource;
     auto const selection = position_of(params[base + step]);
     return static_cast<AnchorSource>(selection);
   }
@@ -113,8 +101,9 @@ public:
   }
 
   auto duration(int step) const -> float {
-    return dhe::rotation(params[Param::Duration + step],
-                         inputs[Input::DurationCV + step]);
+    return cx::clamp(dhe::rotation(params[Param::Duration + step],
+                                   inputs[Input::DurationCV + step]),
+                     0.F, 1.F);
   }
 
   void exit_step(int step) { set_lights(step, 0.F, 0.F); }
@@ -158,9 +147,9 @@ private:
   using GeneratorT = Generator<Module, AnchorT>;
   using ControllerT = Controller<Module, GeneratorT, N>;
 
-  AnchorT end_anchor_{*this, AnchorType::End};
-  AnchorT start_anchor_{*this, AnchorType::Start};
-  GeneratorT generator_{*this, start_anchor_, end_anchor_};
+  AnchorT phase_0_anchor_{*this, AnchorType::Phase0};
+  AnchorT phase_1_anchor_{*this, AnchorType::Phase1};
+  GeneratorT generator_{*this, phase_0_anchor_, phase_1_anchor_};
   ControllerT controller_{*this, generator_};
 
   void set_lights(int step, float completed_brightness,

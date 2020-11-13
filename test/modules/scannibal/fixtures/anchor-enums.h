@@ -15,16 +15,16 @@ using dhe::scannibal::AnchorSource;
 using dhe::scannibal::AnchorType;
 
 static auto constexpr anchor_types = std::array<AnchorType, anchor_type_count>{
-    AnchorType::Start,
-    AnchorType::End,
+    AnchorType::Phase0,
+    AnchorType::Phase1,
 };
 
 static inline auto name_of(AnchorType type) -> std::string {
   switch (type) {
-  case AnchorType::Start:
-    return "AnchorType::Start";
-  case AnchorType::End:
-    return "AnchorType::End";
+  case AnchorType::Phase0:
+    return "AnchorType::Phase0";
+  case AnchorType::Phase1:
+    return "AnchorType::Phase1";
   default:
     return "Unknown AnchorType " + std::to_string(static_cast<int>(type));
   }

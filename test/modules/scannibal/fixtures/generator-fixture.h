@@ -38,10 +38,10 @@ using Generator = dhe::scannibal::Generator<Module, Anchor>;
 template <typename Run> static inline auto test(Run const &run) -> TestFunc {
   return [run](Tester &t) {
     Module module{};
-    Anchor start_anchor{};
-    Anchor end_anchor{};
-    Generator generator{module, start_anchor, end_anchor};
-    run(t, module, start_anchor, end_anchor, generator);
+    Anchor phase_0_anchor{};
+    Anchor phase_1_anchor{};
+    Generator generator{module, phase_0_anchor, phase_1_anchor};
+    run(t, module, phase_0_anchor, phase_1_anchor, generator);
   };
 }
 

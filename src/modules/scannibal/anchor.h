@@ -2,8 +2,9 @@
 
 namespace dhe {
 namespace scannibal {
-enum class AnchorType { Start, End };
-static auto constexpr anchor_type_count = static_cast<int>(AnchorType::End) + 1;
+enum class AnchorType { Phase0, Phase1 };
+static auto constexpr anchor_type_count =
+    static_cast<int>(AnchorType::Phase1) + 1;
 
 enum class AnchorMode { Sample, Track };
 static auto constexpr anchor_mode_count =

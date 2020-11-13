@@ -137,31 +137,31 @@ private:
     auto constexpr stepper_ascent = small_label_size / 2.F + padding - 0.25F;
     auto constexpr stepper_height = stepper_ascent * 2.F;
 
-    auto constexpr start_anchor_mode_y = top + stepper_ascent;
-    auto constexpr start_anchor_source_y =
-        start_anchor_mode_y + (stepper_height + stepper_height) / 2.F +
+    auto constexpr phase_0_anchor_mode_y = top + stepper_ascent;
+    auto constexpr phase_0_anchor_source_y =
+        phase_0_anchor_mode_y + (stepper_height + stepper_height) / 2.F +
         intra_section_glue;
-    auto constexpr start_anchor_level_y =
-        start_anchor_source_y + (stepper_height + small_knob_diameter) / 2.F +
+    auto constexpr phase_0_anchor_level_y =
+        phase_0_anchor_source_y + (stepper_height + small_knob_diameter) / 2.F +
         intra_section_glue;
-    auto constexpr start_anchor_level_cv_y =
-        start_anchor_level_y + (small_knob_diameter + port_diameter) / 2.F +
-        intra_section_glue;
-
-    auto constexpr end_anchor_mode_y = start_anchor_level_cv_y +
-                                       (port_diameter + stepper_height) / 2.F +
-                                       inter_section_glue;
-    auto constexpr end_anchor_source_y =
-        end_anchor_mode_y + (stepper_height + stepper_height) / 2.F +
-        intra_section_glue;
-    auto constexpr end_anchor_level_y =
-        end_anchor_source_y + (stepper_height + small_knob_diameter) / 2.F +
-        intra_section_glue;
-    auto constexpr end_anchor_level_cv_y =
-        end_anchor_level_y + (small_knob_diameter + port_diameter) / 2.F +
+    auto constexpr phase_0_anchor_level_cv_y =
+        phase_0_anchor_level_y + (small_knob_diameter + port_diameter) / 2.F +
         intra_section_glue;
 
-    auto constexpr shape_y = end_anchor_level_cv_y +
+    auto constexpr phase_1_anchor_mode_y =
+        phase_0_anchor_level_cv_y + (port_diameter + stepper_height) / 2.F +
+        inter_section_glue;
+    auto constexpr phase_1_anchor_source_y =
+        phase_1_anchor_mode_y + (stepper_height + stepper_height) / 2.F +
+        intra_section_glue;
+    auto constexpr phase_1_anchor_level_y =
+        phase_1_anchor_source_y + (stepper_height + small_knob_diameter) / 2.F +
+        intra_section_glue;
+    auto constexpr phase_1_anchor_level_cv_y =
+        phase_1_anchor_level_y + (small_knob_diameter + port_diameter) / 2.F +
+        intra_section_glue;
+
+    auto constexpr shape_y = phase_1_anchor_level_cv_y +
                              (port_diameter + stepper_height) / 2.F +
                              inter_section_glue;
     auto constexpr curvature_y = shape_y +
@@ -197,25 +197,26 @@ private:
           Light::Progress + step + step));
 
       addParam(Toggle::stepper(slug_, "anchor-mode", 2, module, step_x,
-                               start_anchor_mode_y,
-                               Param::StartAnchorMode + step));
+                               phase_0_anchor_mode_y,
+                               Param::Phase0AnchorMode + step));
       addParam(Toggle::stepper(slug_, "anchor-source", anchor_source_count,
-                               module, step_x, start_anchor_source_y,
-                               Param::StartAnchorSource + step));
-      addParam(Knob::small(slug_, module, step_x, start_anchor_level_y,
-                           Param::StartAnchorLevel + step));
-      addInput(Jack::input(slug_, module, step_x, start_anchor_level_cv_y,
-                           Input::StartAnchorLevelCV + step));
+                               module, step_x, phase_0_anchor_source_y,
+                               Param::Phase0AnchorSource + step));
+      addParam(Knob::small(slug_, module, step_x, phase_0_anchor_level_y,
+                           Param::Phase0AnchorLevel + step));
+      addInput(Jack::input(slug_, module, step_x, phase_0_anchor_level_cv_y,
+                           Input::Phase0AnchorLevelCV + step));
 
       addParam(Toggle::stepper(slug_, "anchor-mode", 2, module, step_x,
-                               end_anchor_mode_y, Param::EndAnchorMode + step));
+                               phase_1_anchor_mode_y,
+                               Param::Phase1AnchorMode + step));
       addParam(Toggle::stepper(slug_, "anchor-source", anchor_source_count,
-                               module, step_x, end_anchor_source_y,
-                               Param::EndAnchorSource + step));
-      addParam(Knob::small(slug_, module, step_x, end_anchor_level_y,
-                           Param::EndAnchorLevel + step));
-      addInput(Jack::input(slug_, module, step_x, end_anchor_level_cv_y,
-                           Input::EndAnchorLevelCV + step));
+                               module, step_x, phase_1_anchor_source_y,
+                               Param::Phase1AnchorSource + step));
+      addParam(Knob::small(slug_, module, step_x, phase_1_anchor_level_y,
+                           Param::Phase1AnchorLevel + step));
+      addInput(Jack::input(slug_, module, step_x, phase_1_anchor_level_cv_y,
+                           Input::Phase1AnchorLevelCV + step));
 
       addParam(Knob::small(slug_, module, step_x, duration_y,
                            Param::Duration + step));
