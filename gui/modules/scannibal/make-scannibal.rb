@@ -137,10 +137,10 @@ module Scannibal
 
   def make_step_control_labels(left)
     x = left + LABELS_WIDTH
-    label x: x, y: START_ANCHOR_LABEL_Y, text: 'ϕ 0', alignment: :left_of, size: :large
-    label x: x, y: END_ANCHOR_LABEL_Y, text: 'ϕ 1', alignment: :left_of, size: :large
+    label x: x, y: START_ANCHOR_LABEL_Y, text: 'ϕ＝0', alignment: :left_of, size: :large
+    label x: x, y: END_ANCHOR_LABEL_Y, text: 'ϕ＝1', alignment: :left_of, size: :large
     label x: x, y: SHAPE_LABEL_Y - hp2mm(0.25), text: 'SHAPE', alignment: :left_of, size: :large
-    label x: x, y: DURATION_LABEL_Y, text: '[ ϕ ]', alignment: :left_of, size: :large
+    label x: x, y: DURATION_LABEL_Y, text: 'DUR', alignment: :left_of, size: :large
   end
 
   ANCHOR_SOURCES = %w[LEVEL A B C OUT]
