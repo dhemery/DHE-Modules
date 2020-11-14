@@ -24,7 +24,6 @@ that offers flexible, precise control
 over the individual steps
 and the overall sequence.
 
-**Coming Soon:**
 **[_Scannibal_](modules/scannibal/)**
 is a scanned sequencer
 that offers flexible, precise control
