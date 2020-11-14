@@ -3,7 +3,10 @@ title: The Sequencizer Modules
 ---
 <img class="faceplate" src="sequencizer.svg" alt="The Sequencizer 4 Faceplate" />
 
-Generates a sequence of curves.
+A sequencer
+that offers flexible, precise control
+over the individual steps
+and the overall sequence.
 
 DHE Modules includes three _Sequencizer_ modules:
 - _Sequencizer 4_ (shown).

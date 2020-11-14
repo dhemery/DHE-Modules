@@ -4,6 +4,13 @@ title: Release Notes
 
 # DHE Modules Release Notes
 
+## Version 1.4.0
+November 2020
+
+- Added [_Scannibal 4_]({{ '/modules/scannibal/' | relative_url }}).
+- Added _Scannibal 8_.
+- Added _Scannibal 16_.
+
 ## Version 1.3.0
 October 2020
 
