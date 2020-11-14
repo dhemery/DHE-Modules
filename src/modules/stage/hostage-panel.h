@@ -11,11 +11,11 @@ class HostagePanel : public rack::app::ModuleWidget {
 
 public:
   HostagePanel(rack::engine::Module *module) {
-    auto constexpr slug = "hostage";
+    auto constexpr svg_dir = "hostage";
     auto constexpr hp = 5;
 
     setModule(module);
-    setPanel(background_svg(slug));
+    setPanel(load_svg(svg_dir, "hostage"));
     install_screws(this, hp);
 
     auto constexpr width = hp2mm(hp);
@@ -27,29 +27,33 @@ public:
     auto y = 25.F;
     auto dy = 18.5F;
 
-    addParam(Toggle::thumb(2, slug, module, column2, y, Controls::ModeSwitch));
+    addParam(
+        Toggle::thumb(2, svg_dir, module, column2, y, Controls::ModeSwitch));
 
     y += dy;
-    addInput(Jack::input(slug, module, column1, y, Controls::DurationCvInput));
-    addParam(Toggle::thumb(3, slug, module, column3, y,
+    addInput(
+        Jack::input(svg_dir, module, column1, y, Controls::DurationCvInput));
+    addParam(Toggle::thumb(3, svg_dir, module, column3, y,
                            Controls::DurationRangeSwitch));
 
     y += dy;
-    addParam(Knob::large(slug, module, column2, y, Controls::DurationKnob));
+    addParam(Knob::large(svg_dir, module, column2, y, Controls::DurationKnob));
 
     y = 82.F;
     dy = 15.F;
 
-    addInput(Jack::input(slug, module, column1, y, Controls::DeferInput));
-    addOutput(Jack::output(slug, module, column3, y, Controls::ActiveOutput));
+    addInput(Jack::input(svg_dir, module, column1, y, Controls::DeferInput));
+    addOutput(
+        Jack::output(svg_dir, module, column3, y, Controls::ActiveOutput));
 
     y += dy;
-    addInput(Jack::input(slug, module, column1, y, Controls::TriggerInput));
-    addOutput(Jack::output(slug, module, column3, y, Controls::EocOutput));
+    addInput(Jack::input(svg_dir, module, column1, y, Controls::TriggerInput));
+    addOutput(Jack::output(svg_dir, module, column3, y, Controls::EocOutput));
 
     y += dy;
-    addInput(Jack::input(slug, module, column1, y, Controls::EnvelopeInput));
-    addOutput(Jack::output(slug, module, column3, y, Controls::EnvelopeOutput));
+    addInput(Jack::input(svg_dir, module, column1, y, Controls::EnvelopeInput));
+    addOutput(
+        Jack::output(svg_dir, module, column3, y, Controls::EnvelopeOutput));
   }
 };
 } // namespace stage

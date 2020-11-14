@@ -15,6 +15,8 @@
 namespace dhe {
 
 namespace scannibal {
+auto constexpr svg_dir = "scannibal";
+
 static auto constexpr base_width_hp = 11.F;
 static auto constexpr step_width_hp = 2.25F;
 static auto constexpr section_count = 3;
@@ -81,11 +83,12 @@ template <int N> class Panel : public rack::app::ModuleWidget {
 
 public:
   Panel(rack::engine::Module *module) {
-
     auto constexpr hp = base_width_hp + mm2hp(step_block_width(N));
 
     setModule(module);
-    setPanel(background_svg(slug_));
+    auto const faceplate_filename =
+        std::string{"scannibal-"} + std::to_string(N);
+    setPanel(load_svg(svg_dir, faceplate_filename));
     install_screws(this, static_cast<int>(hp));
 
     auto constexpr excess_width = hp2mm(hp) - padding - content_width(N);
@@ -105,7 +108,6 @@ public:
   }
 
 private:
-  const std::string slug_ = std::string{"scannibal-"} + std::to_string(N);
   rack::widget::SvgWidget *start_marker_ = new rack::widget::SvgWidget;
   rack::widget::SvgWidget *end_marker_ = new rack::widget::SvgWidget;
   float end_marker_x_;
@@ -121,13 +123,13 @@ private:
     auto const on_selection_length_change = [this](int step) {
       set_selection_length(step);
     };
-    addParam(new LengthKnob(on_selection_length_change, slug_, module, x,
+    addParam(new LengthKnob(on_selection_length_change, svg_dir, module, x,
                             length_y, Param::Length));
 
-    addInput(Jack::input(slug_, module, x, a_y, Input::InA));
-    addInput(Jack::input(slug_, module, x, b_y, Input::InB));
-    addInput(Jack::input(slug_, module, x, c_y, Input::InC));
-    addInput(Jack::input(slug_, module, x, phase_y, Input::Phase));
+    addInput(Jack::input(svg_dir, module, x, a_y, Input::InA));
+    addInput(Jack::input(svg_dir, module, x, b_y, Input::InB));
+    addInput(Jack::input(svg_dir, module, x, c_y, Input::InC));
+    addInput(Jack::input(svg_dir, module, x, phase_y, Input::Phase));
   }
 
   void add_step_block(float left) {
@@ -179,12 +181,12 @@ private:
                                    intra_section_glue;
 
     auto const start_marker_x = left + step_width / 2.F - light_diameter;
-    start_marker_->setSvg(control_svg(slug_, "marker-start"));
+    start_marker_->setSvg(load_svg(svg_dir, "marker-start"));
     position_centered(start_marker_, start_marker_x, progress_light_y);
     addChild(start_marker_);
 
     end_marker_x_ = left + step_width / 2.F;
-    end_marker_->setSvg(control_svg(slug_, "marker-end"));
+    end_marker_->setSvg(load_svg(svg_dir, "marker-end"));
     position_centered(end_marker_, 0.F, progress_light_y);
     addChild(end_marker_);
     set_selection_length(N);
@@ -196,38 +198,38 @@ private:
           mm2px(step_x, progress_light_y), module,
           Light::Progress + step + step));
 
-      addParam(Toggle::stepper(slug_, "anchor-mode", 2, module, step_x,
+      addParam(Toggle::stepper(svg_dir, "anchor-mode", 2, module, step_x,
                                phase_0_anchor_mode_y,
                                Param::Phase0AnchorMode + step));
-      addParam(Toggle::stepper(slug_, "anchor-source", anchor_source_count,
+      addParam(Toggle::stepper(svg_dir, "anchor-source", anchor_source_count,
                                module, step_x, phase_0_anchor_source_y,
                                Param::Phase0AnchorSource + step));
-      addParam(Knob::small(slug_, module, step_x, phase_0_anchor_level_y,
+      addParam(Knob::small(svg_dir, module, step_x, phase_0_anchor_level_y,
                            Param::Phase0AnchorLevel + step));
-      addInput(Jack::input(slug_, module, step_x, phase_0_anchor_level_cv_y,
+      addInput(Jack::input(svg_dir, module, step_x, phase_0_anchor_level_cv_y,
                            Input::Phase0AnchorLevelCV + step));
 
-      addParam(Toggle::stepper(slug_, "anchor-mode", 2, module, step_x,
+      addParam(Toggle::stepper(svg_dir, "anchor-mode", 2, module, step_x,
                                phase_1_anchor_mode_y,
                                Param::Phase1AnchorMode + step));
-      addParam(Toggle::stepper(slug_, "anchor-source", anchor_source_count,
+      addParam(Toggle::stepper(svg_dir, "anchor-source", anchor_source_count,
                                module, step_x, phase_1_anchor_source_y,
                                Param::Phase1AnchorSource + step));
-      addParam(Knob::small(slug_, module, step_x, phase_1_anchor_level_y,
+      addParam(Knob::small(svg_dir, module, step_x, phase_1_anchor_level_y,
                            Param::Phase1AnchorLevel + step));
-      addInput(Jack::input(slug_, module, step_x, phase_1_anchor_level_cv_y,
+      addInput(Jack::input(svg_dir, module, step_x, phase_1_anchor_level_cv_y,
                            Input::Phase1AnchorLevelCV + step));
 
-      addParam(Knob::small(slug_, module, step_x, duration_y,
+      addParam(Knob::small(svg_dir, module, step_x, duration_y,
                            Param::Duration + step));
-      addInput(Jack::input(slug_, module, step_x, duration_cv_y,
+      addInput(Jack::input(svg_dir, module, step_x, duration_cv_y,
                            Input::DurationCV + step));
 
-      addParam(Toggle::stepper(slug_, "shape", 2, module, step_x, shape_y,
+      addParam(Toggle::stepper(svg_dir, "shape", 2, module, step_x, shape_y,
                                Param::Shape + step));
-      addParam(Knob::small(slug_, module, step_x, curvature_y,
+      addParam(Knob::small(svg_dir, module, step_x, curvature_y,
                            Param::Curvature + step));
-      addInput(Jack::input(slug_, module, step_x, curvature_cv_y,
+      addInput(Jack::input(svg_dir, module, step_x, curvature_cv_y,
                            Input::CurvatureCV + step));
     }
   }
@@ -240,11 +242,11 @@ private:
     auto constexpr step_phase_y = global_controls_y(3);
     auto constexpr out_y = global_controls_y(4);
 
-    addParam(Toggle::thumb(2, slug_, module, x, polarity_y, Param::LevelRange));
+    addParam(Toggle::thumb(2, svg_dir, module, x, polarity_y, Param::LevelRange));
     addOutput(
-        Jack::output(slug_, module, x, step_number_y, Output::StepNumber));
-    addOutput(Jack::output(slug_, module, x, step_phase_y, Output::StepPhase));
-    addOutput(Jack::output(slug_, module, x, out_y, Output::Out));
+        Jack::output(svg_dir, module, x, step_number_y, Output::StepNumber));
+    addOutput(Jack::output(svg_dir, module, x, step_phase_y, Output::StepPhase));
+    addOutput(Jack::output(svg_dir, module, x, out_y, Output::Out));
   }
 
   void set_selection_length(int length) {

@@ -2,7 +2,6 @@
 
 #include "func-controls.h"
 #include "operator-switch.h"
-#include "widgets/pick-list.h"
 
 #include <app/ModuleWidget.hpp>
 
@@ -15,11 +14,11 @@ class Func1Panel : public rack::app::ModuleWidget {
 
 public:
   explicit Func1Panel(rack::engine::Module *module) {
-    auto constexpr slug = "func";
+    auto constexpr svg_dir = "func";
     auto constexpr hp = 3;
 
     setModule(module);
-    setPanel(background_svg(slug));
+    setPanel(load_svg(svg_dir, "func"));
     install_screws(this, hp);
 
     auto constexpr width = hp2mm(hp);
@@ -38,17 +37,17 @@ public:
     auto constexpr row4 = top + row_spacing * 3;
     auto constexpr row6 = top + row_spacing * 5 + port_offset;
 
-    addInput(Jack::input(slug, module, x, row1, Controls::FuncInput));
-    addParam(Knob::large(slug, module, x, row3, Controls::AmountKnob));
-    addOutput(Jack::output(slug, module, x, row6, Controls::FuncOutput));
+    addInput(Jack::input(svg_dir, module, x, row1, Controls::FuncInput));
+    addParam(Knob::large(svg_dir, module, x, row3, Controls::AmountKnob));
+    addOutput(Jack::output(svg_dir, module, x, row6, Controls::FuncOutput));
 
     auto *offset_range_pick_list =
-        Toggle::stepper(slug, "offset-range", offset_ranges.size(), module, x,
-                        row4, Controls::OffsetRangeSwitch);
+        Toggle::stepper(svg_dir, "offset-range", offset_ranges.size(), module,
+                        x, row4, Controls::OffsetRangeSwitch);
     addParam(offset_range_pick_list);
 
     auto *multiplier_range_pick_list =
-        Toggle::stepper(slug, "multiplier-range", multiplier_ranges.size(),
+        Toggle::stepper(svg_dir, "multiplier-range", multiplier_ranges.size(),
                         module, x, row4, Controls::MultiplierRangeSwitch);
     addParam(multiplier_range_pick_list);
 
@@ -62,8 +61,8 @@ public:
             multiplier_range_pick_list->hide();
           }
         };
-    addParam(new OperatorSwitch{update_range_stepper_visibility, slug, module,
-                                x, row2, Controls::OperationSwitch});
+    addParam(new OperatorSwitch{update_range_stepper_visibility, svg_dir,
+                                module, x, row2, Controls::OperationSwitch});
   }
 };
 } // namespace func

@@ -46,7 +46,7 @@ protected:
          float xmm, float ymm, int index) {
     auto const toggle_name_prefix = toggle_name + "-";
     for (size_t position = 1; position <= size; position++) {
-      addFrame(control_svg(module_svg_dir,
+      addFrame(load_svg(module_svg_dir,
                            toggle_name_prefix + std::to_string(position)));
     }
     shadow->opacity = 0.F;
@@ -83,8 +83,8 @@ private:
   Button(std::string const &button_name, bool momentary,
          std::string const &module_svg_dir, rack::engine::Module *module,
          float xmm, float ymm, int index) {
-    addFrame((control_svg(module_svg_dir, button_name + "-released")));
-    addFrame((control_svg(module_svg_dir, button_name + "-pressed")));
+    addFrame((load_svg(module_svg_dir, button_name + "-released")));
+    addFrame((load_svg(module_svg_dir, button_name + "-pressed")));
     shadow->opacity = 0.F;
     position_centered(this, xmm, ymm);
     rack::app::SvgSwitch::momentary = momentary;
@@ -123,7 +123,7 @@ public:
 protected:
   Knob(std::string const &module_svg_dir, std::string const &knob_name,
        rack::engine::Module *module, float xmm, float ymm, int index) {
-    setSvg(control_svg(module_svg_dir, knob_name));
+    setSvg(load_svg(module_svg_dir, knob_name));
     shadow->opacity = 0.F;
     position_centered(this, xmm, ymm);
     if (module != nullptr) {
@@ -159,7 +159,7 @@ public:
 private:
   Jack(rack::app::PortWidget::Type type, std::string const &module_svg_dir,
        rack::engine::Module *module, float xmm, float ymm, int index) {
-    setSvg(control_svg(module_svg_dir, "port"));
+    setSvg(load_svg(module_svg_dir, "port"));
     shadow->opacity = 0.F;
     position_centered(this, xmm, ymm);
     this->module = module;

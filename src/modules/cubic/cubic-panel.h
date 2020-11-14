@@ -15,11 +15,11 @@ class CubicPanel : public rack::app::ModuleWidget {
 
 public:
   CubicPanel(rack::engine::Module *module) {
-    auto constexpr slug = "cubic";
+    auto constexpr svg_dir = "cubic";
     auto constexpr hp = 5;
 
     setModule(module);
-    setPanel(background_svg(slug));
+    setPanel(load_svg(svg_dir, "cubic"));
     install_screws(this, hp);
 
     auto constexpr width = hp2mm(hp);
@@ -30,37 +30,43 @@ public:
     auto y = 20.F;
     auto constexpr dy = 15.F;
 
-    addInput(
-        Jack::input(slug, module, column1, y, Controls::ACoefficientCvInput));
-    addParam(Knob::small(slug, module, column2, y, Controls::ACoefficientKnob));
+    addInput(Jack::input(svg_dir, module, column1, y,
+                         Controls::ACoefficientCvInput));
+    addParam(
+        Knob::small(svg_dir, module, column2, y, Controls::ACoefficientKnob));
 
     y += dy;
-    addInput(
-        Jack::input(slug, module, column1, y, Controls::BCoefficientCvInput));
-    addParam(Knob::small(slug, module, column2, y, Controls::BCoefficientKnob));
+    addInput(Jack::input(svg_dir, module, column1, y,
+                         Controls::BCoefficientCvInput));
+    addParam(
+        Knob::small(svg_dir, module, column2, y, Controls::BCoefficientKnob));
 
     y += dy;
-    addInput(
-        Jack::input(slug, module, column1, y, Controls::CCoefficientCvInput));
-    addParam(Knob::small(slug, module, column2, y, Controls::CCoefficientKnob));
+    addInput(Jack::input(svg_dir, module, column1, y,
+                         Controls::CCoefficientCvInput));
+    addParam(
+        Knob::small(svg_dir, module, column2, y, Controls::CCoefficientKnob));
 
     y += dy;
-    addInput(
-        Jack::input(slug, module, column1, y, Controls::DCoefficientCvInput));
-    addParam(Knob::small(slug, module, column2, y, Controls::DCoefficientKnob));
+    addInput(Jack::input(svg_dir, module, column1, y,
+                         Controls::DCoefficientCvInput));
+    addParam(
+        Knob::small(svg_dir, module, column2, y, Controls::DCoefficientKnob));
 
     y = 82.F;
-    addParam(Knob::small(slug, module, column1, y, Controls::InputGainKnob));
-    addParam(Knob::small(slug, module, column2, y, Controls::OutputGainKnob));
+    addParam(Knob::small(svg_dir, module, column1, y, Controls::InputGainKnob));
+    addParam(
+        Knob::small(svg_dir, module, column2, y, Controls::OutputGainKnob));
 
     y += dy;
-    addInput(Jack::input(slug, module, column1, y, Controls::InputGainCvInput));
     addInput(
-        Jack::input(slug, module, column2, y, Controls::OutputGainCvInput));
+        Jack::input(svg_dir, module, column1, y, Controls::InputGainCvInput));
+    addInput(
+        Jack::input(svg_dir, module, column2, y, Controls::OutputGainCvInput));
 
     y += dy;
-    addInput(Jack::input(slug, module, column1, y, Controls::CubicInput));
-    addOutput(Jack::output(slug, module, column2, y, Controls::CubicOutput));
+    addInput(Jack::input(svg_dir, module, column1, y, Controls::CubicInput));
+    addOutput(Jack::output(svg_dir, module, column2, y, Controls::CubicOutput));
   }
 };
 } // namespace cubic

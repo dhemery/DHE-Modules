@@ -12,11 +12,11 @@ class StagePanel : public rack::app::ModuleWidget {
 
 public:
   explicit StagePanel(rack::engine::Module *module) {
-    auto constexpr slug = "stage";
+    auto constexpr svg_dir = "stage";
     auto constexpr hp = 5;
 
     setModule(module);
-    setPanel(background_svg(slug));
+    setPanel(load_svg(svg_dir, "stage"));
     install_screws(this, hp);
 
     auto constexpr width = hp2mm(hp);
@@ -28,27 +28,27 @@ public:
     auto y = 25.F;
     auto dy = 18.5F;
 
-    addParam(Knob::large(slug, module, column2, y, Controls::LevelKnob));
+    addParam(Knob::large(svg_dir, module, column2, y, Controls::LevelKnob));
 
     y += dy;
-    addParam(Knob::large(slug, module, column2, y, Controls::CurveKnob));
+    addParam(Knob::large(svg_dir, module, column2, y, Controls::CurveKnob));
 
     y += dy;
-    addParam(Knob::large(slug, module, column2, y, Controls::DurationKnob));
+    addParam(Knob::large(svg_dir, module, column2, y, Controls::DurationKnob));
 
     y = 82.F;
     dy = 15.F;
 
-    addInput(Jack::input(slug, module, column1, y, Controls::DeferInput));
-    addOutput(Jack::output(slug, module, column3, y, Controls::ActiveOutput));
+    addInput(Jack::input(svg_dir, module, column1, y, Controls::DeferInput));
+    addOutput(Jack::output(svg_dir, module, column3, y, Controls::ActiveOutput));
 
     y += dy;
-    addInput(Jack::input(slug, module, column1, y, Controls::TriggerInput));
-    addOutput(Jack::output(slug, module, column3, y, Controls::EocOutput));
+    addInput(Jack::input(svg_dir, module, column1, y, Controls::TriggerInput));
+    addOutput(Jack::output(svg_dir, module, column3, y, Controls::EocOutput));
 
     y += dy;
-    addInput(Jack::input(slug, module, column1, y, Controls::EnvelopeInput));
-    addOutput(Jack::output(slug, module, column3, y, Controls::EnvelopeOutput));
+    addInput(Jack::input(svg_dir, module, column1, y, Controls::EnvelopeInput));
+    addOutput(Jack::output(svg_dir, module, column3, y, Controls::EnvelopeOutput));
   }
 };
 } // namespace stage

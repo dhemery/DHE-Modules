@@ -114,43 +114,5 @@ task reinstall: [:clobber, :install]
 
 task default: [:build]
 
-curve_sequencer_faceplate_files = %w[
-  _faceplates/curve-sequencer-4.svg
-  _faceplates/curve-sequencer-8.svg
-  _faceplates/curve-sequencer-16.svg
-]
-
-curve_sequencer_faceplate_files.each do |f|
-  file f => modules_dir / 'curve-sequencer/make-curve-sequencer.rb'
-end
-
-scannibal_helpers = [
-  modules_dir / 'scannibal/make-scannibal.rb'
-]
-
-scannibal_faceplate_files = %w[
-  _faceplates/scannibal-4.svg
-  _faceplates/scannibal-8.svg
-  _faceplates/scannibal-16.svg
-]
-
-scannibal_faceplate_files.each do |f|
-  file f => scannibal_helpers
-end
-
-sequencizer_faceplate_files = %w[
-  _faceplates/sequencizer-4.svg
-  _faceplates/sequencizer-8.svg
-  _faceplates/sequencizer-16.svg
-]
-
-sequencizer_helpers = [
-  modules_dir / 'sequencizer/make-sequencizer.rb'
-]
-
-sequencizer_faceplate_files.each do |f|
-  file f => sequencizer_helpers
-end
-
 CLEAN.include controls_build_dir, faceplates_build_dir
 CLOBBER.include image_install_dir, svg_install_dir

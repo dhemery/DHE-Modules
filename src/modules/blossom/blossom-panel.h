@@ -15,11 +15,11 @@ class BlossomPanel : public rack::app::ModuleWidget {
 
 public:
   explicit BlossomPanel(rack::engine::Module *module) {
-    auto constexpr slug = "blossom";
+    auto constexpr svg_dir = "blossom";
     auto constexpr hp = 11;
 
     setModule(module);
-    setPanel(background_svg(slug));
+    setPanel(load_svg(svg_dir, "blossom"));
     install_screws(this, hp);
 
     auto constexpr width = hp2mm(hp);
@@ -32,44 +32,44 @@ public:
     auto y = 25.F;
     auto dy = 18.5F;
 
-    addInput(Jack::input(slug, module, column1, y, Controls::SpeedCvInput));
-    addParam(Knob::tiny(slug, module, column2, y, Controls::SpeedAvKNob));
-    addParam(Knob::large(slug, module, column3, y, Controls::SpeedKnob));
+    addInput(Jack::input(svg_dir, module, column1, y, Controls::SpeedCvInput));
+    addParam(Knob::tiny(svg_dir, module, column2, y, Controls::SpeedAvKNob));
+    addParam(Knob::large(svg_dir, module, column3, y, Controls::SpeedKnob));
 
     y += dy;
-    addInput(Jack::input(slug, module, column1, y, Controls::RatioCvInput));
-    addParam(Knob::tiny(slug, module, column2, y, Controls::RatioAvKnob));
-    addParam(Knob::large(slug, module, column3, y, Controls::RatioKnob));
+    addInput(Jack::input(svg_dir, module, column1, y, Controls::RatioCvInput));
+    addParam(Knob::tiny(svg_dir, module, column2, y, Controls::RatioAvKnob));
+    addParam(Knob::large(svg_dir, module, column3, y, Controls::RatioKnob));
     addParam(
-        Toggle::thumb(2, slug, module, column4, y, Controls::FreeRatioSwitch));
+        Toggle::thumb(2, svg_dir, module, column4, y, Controls::FreeRatioSwitch));
 
     y += dy;
-    addInput(Jack::input(slug, module, column1, y, Controls::DepthCvInput));
-    addParam(Knob::tiny(slug, module, column2, y, Controls::DepthAvKnob));
-    addParam(Knob::large(slug, module, column3, y, Controls::DepthKnob));
+    addInput(Jack::input(svg_dir, module, column1, y, Controls::DepthCvInput));
+    addParam(Knob::tiny(svg_dir, module, column2, y, Controls::DepthAvKnob));
+    addParam(Knob::large(svg_dir, module, column3, y, Controls::DepthKnob));
 
     y += dy;
-    addInput(Jack::input(slug, module, column1, y, Controls::PhaseCvInput));
-    addParam(Knob::tiny(slug, module, column2, y, Controls::PhaseOffsetAvKnob));
-    addParam(Knob::large(slug, module, column3, y, Controls::PhaseOffsetKnob));
+    addInput(Jack::input(svg_dir, module, column1, y, Controls::PhaseCvInput));
+    addParam(Knob::tiny(svg_dir, module, column2, y, Controls::PhaseOffsetAvKnob));
+    addParam(Knob::large(svg_dir, module, column3, y, Controls::PhaseOffsetKnob));
 
     y = 97.F;
     dy = 15.F;
     auto constexpr output_port_offset = 1.25F;
 
-    addInput(Jack::input(slug, module, column1, y, Controls::XGainCvInput));
-    addParam(Knob::small(slug, module, column2, y, Controls::XGainKnob));
+    addInput(Jack::input(svg_dir, module, column1, y, Controls::XGainCvInput));
+    addParam(Knob::small(svg_dir, module, column2, y, Controls::XGainKnob));
     addParam(
-        Toggle::thumb(2, slug, module, column3, y, Controls::XRangeSwitch));
-    addOutput(Jack::output(slug, module, column4, y + output_port_offset,
+        Toggle::thumb(2, svg_dir, module, column3, y, Controls::XRangeSwitch));
+    addOutput(Jack::output(svg_dir, module, column4, y + output_port_offset,
                            Controls::XOutput));
 
     y += dy;
-    addInput(Jack::input(slug, module, column1, y, Controls::YGainCvInput));
-    addParam(Knob::small(slug, module, column2, y, Controls::YGainKnob));
+    addInput(Jack::input(svg_dir, module, column1, y, Controls::YGainCvInput));
+    addParam(Knob::small(svg_dir, module, column2, y, Controls::YGainKnob));
     addParam(
-        Toggle::thumb(2, slug, module, column3, y, Controls::YRangeSwitch));
-    addOutput(Jack::output(slug, module, column4, y + output_port_offset,
+        Toggle::thumb(2, svg_dir, module, column3, y, Controls::YRangeSwitch));
+    addOutput(Jack::output(svg_dir, module, column4, y + output_port_offset,
                            Controls::YOutput));
   }
 };

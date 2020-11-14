@@ -12,11 +12,11 @@ class BoosterStagePanel : public rack::app::ModuleWidget {
 
 public:
   explicit BoosterStagePanel(rack::engine::Module *module) {
-    auto constexpr slug = "booster-stage";
+    auto constexpr svg_dir = "booster-stage";
     auto constexpr hp = 8;
 
     setModule(module);
-    setPanel(background_svg(slug));
+    setPanel(load_svg(svg_dir, "booster-stage"));
     install_screws(this, hp);
 
     auto constexpr width = hp2mm(hp);
@@ -31,44 +31,44 @@ public:
     auto dy = 18.5F;
     auto y = 25.F;
 
-    addInput(Jack::input(slug, module, column1, y, Controls::LevelCvInput));
-    addParam(Knob::large(slug, module, column3, y, Controls::LevelKnob));
+    addInput(Jack::input(svg_dir, module, column1, y, Controls::LevelCvInput));
+    addParam(Knob::large(svg_dir, module, column3, y, Controls::LevelKnob));
 
     addParam(
-        Toggle::thumb(2, slug, module, column5, y, Controls::LevelRangeSwitch));
+        Toggle::thumb(2, svg_dir, module, column5, y, Controls::LevelRangeSwitch));
 
     y += dy;
-    addInput(Jack::input(slug, module, column1, y, Controls::CurveCvInput));
-    addParam(Knob::large(slug, module, column3, y, Controls::CurveKnob));
-    addParam(Toggle::thumb(2, slug, module, column5, y, Controls::ShapeSwitch));
+    addInput(Jack::input(svg_dir, module, column1, y, Controls::CurveCvInput));
+    addParam(Knob::large(svg_dir, module, column3, y, Controls::CurveKnob));
+    addParam(Toggle::thumb(2, svg_dir, module, column5, y, Controls::ShapeSwitch));
 
     y += dy;
-    addInput(Jack::input(slug, module, column1, y, Controls::DurationCvInput));
-    addParam(Knob::large(slug, module, column3, y, Controls::DurationKnob));
+    addInput(Jack::input(svg_dir, module, column1, y, Controls::DurationCvInput));
+    addParam(Knob::large(svg_dir, module, column3, y, Controls::DurationKnob));
 
-    addParam(Toggle::thumb(3, slug, module, column5, y,
+    addParam(Toggle::thumb(3, svg_dir, module, column5, y,
                            Controls::DurationRangeSwitch));
 
     y = 82.F;
     dy = 15.F;
 
-    addInput(Jack::input(slug, module, column1, y, Controls::DeferInput));
+    addInput(Jack::input(svg_dir, module, column1, y, Controls::DeferInput));
     addParam(
-        Button::momentary(slug, module, column2, y, Controls::DeferButton));
+        Button::momentary(svg_dir, module, column2, y, Controls::DeferButton));
 
-    addParam(Button::output(slug, module, column4, y, Controls::ActiveButton));
-    addOutput(Jack::output(slug, module, column5, y, Controls::ActiveOutput));
+    addParam(Button::output(svg_dir, module, column4, y, Controls::ActiveButton));
+    addOutput(Jack::output(svg_dir, module, column5, y, Controls::ActiveOutput));
 
     y += dy;
-    addInput(Jack::input(slug, module, column1, y, Controls::TriggerInput));
+    addInput(Jack::input(svg_dir, module, column1, y, Controls::TriggerInput));
     addParam(
-        Button::momentary(slug, module, column2, y, Controls::TriggerButton));
-    addParam(Button::output(slug, module, column4, y, Controls::EocButton));
-    addOutput(Jack::output(slug, module, column5, y, Controls::EocOutput));
+        Button::momentary(svg_dir, module, column2, y, Controls::TriggerButton));
+    addParam(Button::output(svg_dir, module, column4, y, Controls::EocButton));
+    addOutput(Jack::output(svg_dir, module, column5, y, Controls::EocOutput));
 
     y += dy;
-    addInput(Jack::input(slug, module, column1, y, Controls::EnvelopeInput));
-    addOutput(Jack::output(slug, module, column5, y, Controls::EnvelopeOutput));
+    addInput(Jack::input(svg_dir, module, column1, y, Controls::EnvelopeInput));
+    addOutput(Jack::output(svg_dir, module, column5, y, Controls::EnvelopeOutput));
   }
 };
 

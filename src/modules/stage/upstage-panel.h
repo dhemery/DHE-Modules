@@ -11,11 +11,11 @@ class UpstagePanel : public rack::app::ModuleWidget {
 
 public:
   UpstagePanel(rack::engine::Module *module) {
-    auto constexpr slug = "upstage";
+    auto constexpr svg_dir = "upstage";
     auto constexpr hp = 5;
 
     setModule(module);
-    setPanel(background_svg(slug));
+    setPanel(load_svg(svg_dir, "upstage"));
     install_screws(this, hp);
 
     auto constexpr width = hp2mm(hp);
@@ -27,29 +27,29 @@ public:
     auto y = 25.F;
     auto dy = 18.5F;
 
-    addParam(Knob::large(slug, module, column2, y, Controls::LevelKnob));
+    addParam(Knob::large(svg_dir, module, column2, y, Controls::LevelKnob));
 
     y += dy;
-    addInput(Jack::input(slug, module, column1, y, Controls::LevelCvInput));
+    addInput(Jack::input(svg_dir, module, column1, y, Controls::LevelCvInput));
     addParam(
-        Toggle::thumb(2, slug, module, column3, y, Controls::LevelRangeSwitch));
+        Toggle::thumb(2, svg_dir, module, column3, y, Controls::LevelRangeSwitch));
 
     y += dy;
-    addParam(Button::momentary(slug, module, column1, y, Controls::WaitButton));
+    addParam(Button::momentary(svg_dir, module, column1, y, Controls::WaitButton));
     addParam(
-        Button::momentary(slug, module, column3, y, Controls::TriggerButton));
+        Button::momentary(svg_dir, module, column3, y, Controls::TriggerButton));
 
     y = 82.F;
     dy = 15.F;
 
-    addInput(Jack::input(slug, module, column1, y, Controls::WaitInput));
+    addInput(Jack::input(svg_dir, module, column1, y, Controls::WaitInput));
 
     y += dy;
-    addInput(Jack::input(slug, module, column1, y, Controls::TriggerInput));
-    addOutput(Jack::output(slug, module, column3, y, Controls::TriggerOutput));
+    addInput(Jack::input(svg_dir, module, column1, y, Controls::TriggerInput));
+    addOutput(Jack::output(svg_dir, module, column3, y, Controls::TriggerOutput));
 
     y += dy;
-    addOutput(Jack::output(slug, module, column3, y, Controls::EnvelopeOutput));
+    addOutput(Jack::output(svg_dir, module, column3, y, Controls::EnvelopeOutput));
   }
 };
 } // namespace stage

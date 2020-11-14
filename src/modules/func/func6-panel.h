@@ -2,7 +2,6 @@
 
 #include "func-controls.h"
 #include "operator-switch.h"
-#include "widgets/pick-list.h"
 
 #include <app/ModuleWidget.hpp>
 
@@ -15,11 +14,11 @@ class Func6Panel : public rack::app::ModuleWidget {
 
 public:
   explicit Func6Panel(rack::engine::Module *module) {
-    auto constexpr slug = "func-6";
+    auto constexpr svg_dir = "func";
     auto constexpr hp = 12;
 
     setModule(module);
-    setPanel(background_svg(slug));
+    setPanel(load_svg(svg_dir, "func-6"));
     install_screws(this, hp);
 
     auto constexpr width = hp2mm(hp);
@@ -39,20 +38,20 @@ public:
       auto const y = top + row * row_spacing;
       auto const port_y = y + port_offset;
 
-      addInput(Jack::input(slug, module, column1, port_y,
+      addInput(Jack::input(svg_dir, module, column1, port_y,
                            Controls::FuncInput + row));
       addParam(
-          Knob::large(slug, module, column3, y, Controls::AmountKnob + row));
-      addOutput(Jack::output(slug, module, column5, port_y,
+          Knob::large(svg_dir, module, column3, y, Controls::AmountKnob + row));
+      addOutput(Jack::output(svg_dir, module, column5, port_y,
                              Controls::FuncOutput + row));
 
       auto *offset_range_pick_list =
-          Toggle::stepper(slug, "offset-range", offset_ranges.size(), module,
+          Toggle::stepper(svg_dir, "offset-range", offset_ranges.size(), module,
                           column4, y, Controls::OffsetRangeSwitch + row);
       addParam(offset_range_pick_list);
 
       auto *multiplier_range_pick_list = Toggle::stepper(
-          slug, "multiplier-range", multiplier_ranges.size(), module, column4,
+          svg_dir, "multiplier-range", multiplier_ranges.size(), module, column4,
           y, Controls::MultiplierRangeSwitch + row);
       addParam(multiplier_range_pick_list);
 
@@ -68,7 +67,7 @@ public:
             }
           };
 
-      addParam(new OperatorSwitch{update_range_pick_list, slug, module, column2,
+      addParam(new OperatorSwitch{update_range_pick_list, svg_dir, module, column2,
                                   y, Controls::OperationSwitch + row});
     }
   }

@@ -70,7 +70,7 @@ class StartMarker : public rack::widget::SvgWidget {
 public:
   StartMarker(std::string const &module_svg_dir, float step_block_x, float y)
       : step_block_x_{step_block_x} {
-    setSvg(control_svg(module_svg_dir, "marker-start"));
+    setSvg(load_svg(module_svg_dir, "marker-start"));
     position_centered(this, 0.F, y);
   }
 
@@ -88,7 +88,7 @@ template <int N> class EndMarker : public rack::widget::SvgWidget {
 public:
   EndMarker(std::string const &module_svg_dir, float step_block_x, float y)
       : step_block_x_{step_block_x} {
-    setSvg(control_svg(module_svg_dir, "marker-end"));
+    setSvg(load_svg(module_svg_dir, "marker-end"));
     position_centered(this, 0.F, y);
   }
 
@@ -125,13 +125,15 @@ template <int N> class Panel : public rack::app::ModuleWidget {
 
 public:
   Panel(rack::engine::Module *module) {
-    auto const slug = std::string{"sequencizer-"} + std::to_string(N);
+    auto constexpr svg_dir = "sequencizer";
+    auto const faceplate_filename =
+        std::string{"sequencizer-"} + std::to_string(N);
 
     auto constexpr step_block_width_hp = N * step_width_hp;
     auto constexpr hp = base_width_hp + step_block_width_hp;
 
     setModule(module);
-    setPanel(background_svg(slug));
+    setPanel(load_svg(svg_dir, faceplate_filename));
     install_screws(this, static_cast<int>(hp));
 
     auto constexpr content_width = sequence_controls_width +
@@ -151,26 +153,27 @@ public:
         sequence_controls_left + padding + port_radius;
 
     auto constexpr run_y = global_controls_y(0);
-    addInput(Jack::input(slug, module, sequence_controls_x, run_y, Input::Run));
-    addParam(Button::toggle(slug, module,
+    addInput(
+        Jack::input(svg_dir, module, sequence_controls_x, run_y, Input::Run));
+    addParam(Button::toggle(svg_dir, module,
                             sequence_controls_x + button_port_distance, run_y,
                             Param::Run));
 
     auto constexpr loop_y = global_controls_y(1);
     addInput(
-        Jack::input(slug, module, sequence_controls_x, loop_y, Input::Loop));
-    addParam(Button::toggle(slug, module,
+        Jack::input(svg_dir, module, sequence_controls_x, loop_y, Input::Loop));
+    addParam(Button::toggle(svg_dir, module,
                             sequence_controls_x + button_port_distance, loop_y,
                             Param::Loop));
 
     auto constexpr progress_light_y = top - light_diameter * 2.F;
 
     auto *start_marker =
-        new StartMarker(slug, step_block_left, progress_light_y);
+        new StartMarker(svg_dir, step_block_left, progress_light_y);
     addChild(start_marker);
 
     auto *end_marker =
-        new EndMarker<N>(slug, step_block_left, progress_light_y);
+        new EndMarker<N>(svg_dir, step_block_left, progress_light_y);
     addChild(end_marker);
 
     auto const on_selection_start_change = [start_marker,
@@ -184,28 +187,28 @@ public:
     };
 
     auto constexpr selection_y = global_controls_y(2);
-    addParam(new SelectionKnob(on_selection_start_change, slug, module,
+    addParam(new SelectionKnob(on_selection_start_change, svg_dir, module,
                                sequence_controls_x - hp2mm(0.2F), selection_y,
                                Param::SelectionStart));
 
     auto constexpr selection_length_offset = 8.28F;
     auto constexpr selection_length_x =
         sequence_controls_x + selection_length_offset;
-    addParam(new SelectionKnob(on_selection_end_change, slug, module,
+    addParam(new SelectionKnob(on_selection_end_change, svg_dir, module,
                                selection_length_x, selection_y,
                                Param::SelectionLength));
 
     auto constexpr gate_y = global_controls_y(3);
     addInput(
-        Jack::input(slug, module, sequence_controls_x, gate_y, Input::Gate));
-    addParam(Button::momentary(slug, module,
+        Jack::input(svg_dir, module, sequence_controls_x, gate_y, Input::Gate));
+    addParam(Button::momentary(svg_dir, module,
                                sequence_controls_x + button_port_distance,
                                gate_y, Param::Gate));
 
     auto constexpr reset_y = global_controls_y(4);
-    addInput(
-        Jack::input(slug, module, sequence_controls_x, reset_y, Input::Reset));
-    addParam(Button::momentary(slug, module,
+    addInput(Jack::input(svg_dir, module, sequence_controls_x, reset_y,
+                         Input::Reset));
+    addParam(Button::momentary(svg_dir, module,
                                sequence_controls_x + button_port_distance,
                                reset_y, Param::Reset));
 
@@ -222,39 +225,39 @@ public:
     auto constexpr global_controls_right_x =
         global_controls_center_x + global_control_width + padding;
 
-    addInput(Jack::input(slug, module, global_controls_left_x, level_y,
+    addInput(Jack::input(svg_dir, module, global_controls_left_x, level_y,
                          Input::LevelAttenuationCV));
-    addParam(Knob::small(slug, module, global_controls_center_x, level_y,
+    addParam(Knob::small(svg_dir, module, global_controls_center_x, level_y,
                          Param::LevelMultiplier));
-    addParam(Toggle::thumb(2, slug, module, global_controls_right_x, level_y,
+    addParam(Toggle::thumb(2, svg_dir, module, global_controls_right_x, level_y,
                            Param::LevelRange));
 
-    addInput(Jack::input(slug, module, global_controls_left_x,
+    addInput(Jack::input(svg_dir, module, global_controls_left_x,
                          global_duration_y, Input::DurationMultiplierCV));
-    addParam(Knob::small(slug, module, global_controls_center_x,
+    addParam(Knob::small(svg_dir, module, global_controls_center_x,
                          global_duration_y, Param::DurationMultiplier));
-    addParam(Toggle::thumb(3, slug, module, global_controls_right_x,
+    addParam(Toggle::thumb(3, svg_dir, module, global_controls_right_x,
                            global_duration_y, Param::DurationRange));
 
     addInput(
-        Jack::input(slug, module, global_controls_left_x, in_y, Input::InA));
-    addInput(
-        Jack::input(slug, module, global_controls_center_x, in_y, Input::InB));
-    addInput(
-        Jack::input(slug, module, global_controls_right_x, in_y, Input::InC));
+        Jack::input(svg_dir, module, global_controls_left_x, in_y, Input::InA));
+    addInput(Jack::input(svg_dir, module, global_controls_center_x, in_y,
+                         Input::InB));
+    addInput(Jack::input(svg_dir, module, global_controls_right_x, in_y,
+                         Input::InC));
 
-    addOutput(Jack::output(slug, module, global_controls_left_x, state_y,
+    addOutput(Jack::output(svg_dir, module, global_controls_left_x, state_y,
                            Output::StepNumber));
-    addOutput(Jack::output(slug, module, global_controls_center_x, state_y,
+    addOutput(Jack::output(svg_dir, module, global_controls_center_x, state_y,
                            Output::IsCurving));
-    addOutput(Jack::output(slug, module, global_controls_right_x, state_y,
+    addOutput(Jack::output(svg_dir, module, global_controls_right_x, state_y,
                            Output::IsSustaining));
 
-    addOutput(Jack::output(slug, module, global_controls_left_x, out_y,
+    addOutput(Jack::output(svg_dir, module, global_controls_left_x, out_y,
                            Output::StepEventPulse));
-    addOutput(Jack::output(slug, module, global_controls_center_x, out_y,
+    addOutput(Jack::output(svg_dir, module, global_controls_center_x, out_y,
                            Output::SequenceEventPulse));
-    addOutput(Jack::output(slug, module, global_controls_right_x, out_y,
+    addOutput(Jack::output(svg_dir, module, global_controls_right_x, out_y,
                            Output::Out));
 
     auto constexpr intra_section_glue = 0.5F;
@@ -307,41 +310,41 @@ public:
           mm2px(step_x, progress_light_y), module,
           Light::StepProgress + step + step));
 
-      addParam(Toggle::stepper(slug, "trigger-mode", trigger_mode_count, module,
-                               step_x, trigger_y,
+      addParam(Toggle::stepper(svg_dir, "trigger-mode", trigger_mode_count,
+                               module, step_x, trigger_y,
                                Param::StepTriggerMode + step));
-      addParam(Toggle::stepper(slug, "interrupt-mode", 2, module, step_x,
+      addParam(Toggle::stepper(svg_dir, "interrupt-mode", 2, module, step_x,
                                interrupt_y, Param::StepInterruptMode + step));
-      addParam(Toggle::stepper(slug, "sustain-mode", 2, module, step_x,
+      addParam(Toggle::stepper(svg_dir, "sustain-mode", 2, module, step_x,
                                sustain_y, Param::StepSustainMode + step));
 
-      addParam(Toggle::stepper(slug, "anchor-mode", 2, module, step_x,
+      addParam(Toggle::stepper(svg_dir, "anchor-mode", 2, module, step_x,
                                start_anchor_mode_y,
                                Param::StepStartAnchorMode + step));
-      addParam(Knob::small(slug, module, step_x, start_anchor_level_y,
+      addParam(Knob::small(svg_dir, module, step_x, start_anchor_level_y,
                            Param::StepStartAnchorLevel + step));
-      addParam(Toggle::stepper(slug, "anchor-source", anchor_source_count,
+      addParam(Toggle::stepper(svg_dir, "anchor-source", anchor_source_count,
                                module, step_x, start_anchor_source_y,
                                Param::StepStartAnchorSource + step));
 
-      addParam(Toggle::stepper(slug, "anchor-mode", 2, module, step_x,
+      addParam(Toggle::stepper(svg_dir, "anchor-mode", 2, module, step_x,
                                end_anchor_mode_y,
                                Param::StepEndAnchorMode + step));
-      addParam(Knob::small(slug, module, step_x, end_anchor_level_y,
+      addParam(Knob::small(svg_dir, module, step_x, end_anchor_level_y,
                            Param::StepEndAnchorLevel + step));
-      addParam(Toggle::stepper(slug, "anchor-source", anchor_source_count,
+      addParam(Toggle::stepper(svg_dir, "anchor-source", anchor_source_count,
                                module, step_x, end_anchor_source_y,
                                Param::StepEndAnchorSource + step));
 
-      addParam(Knob::small(slug, module, step_x, duration_y,
+      addParam(Knob::small(svg_dir, module, step_x, duration_y,
                            Param::StepDuration + step));
 
-      addParam(Toggle::stepper(slug, "shape", 2, module, step_x, shape_y,
+      addParam(Toggle::stepper(svg_dir, "shape", 2, module, step_x, shape_y,
                                Param::StepShape + step));
-      addParam(Knob::small(slug, module, step_x, curvature_y,
+      addParam(Knob::small(svg_dir, module, step_x, curvature_y,
                            Param::StepCurvature + step));
 
-      addParam(Button::toggle(slug, module, step_x, enabled_y,
+      addParam(Button::toggle(svg_dir, module, step_x, enabled_y,
                               Param::StepEnabled + step));
     }
   }

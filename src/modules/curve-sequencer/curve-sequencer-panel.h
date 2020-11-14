@@ -41,7 +41,7 @@ private:
 class StartMarker : public rack::widget::SvgWidget {
 public:
   StartMarker(std::string const &module_svg_dir, float x, float y) {
-    setSvg(control_svg(module_svg_dir, "marker-start"));
+    setSvg(load_svg(module_svg_dir, "marker-start"));
     position_centered(this, x, y);
   }
 
@@ -55,7 +55,7 @@ public:
 template <int N> class EndMarker : public rack::widget::SvgWidget {
 public:
   EndMarker(std::string const &module_svg_dir, float x, float y) {
-    setSvg(control_svg(module_svg_dir, "marker-end"));
+    setSvg(load_svg(module_svg_dir, "marker-end"));
     position_centered(this, x, y);
   }
 
@@ -88,14 +88,15 @@ template <int N> class CurveSequencerPanel : public rack::app::ModuleWidget {
 
 public:
   CurveSequencerPanel(rack::engine::Module *module) {
-    auto const slug = std::string{"curve-sequencer-"} + std::to_string(N);
+    auto const svg_dir = "curve-sequencer";
     auto constexpr step_width = 2.25F;
     auto constexpr sequence_controls_width = 13.F;
     auto constexpr hp =
         static_cast<int>(sequence_controls_width + N * step_width);
 
     setModule(module);
-    setPanel(background_svg(slug));
+    setPanel(
+        load_svg(svg_dir, std::string{"curve-sequencer-"} + std::to_string(N)));
     install_screws(this, hp);
 
     auto constexpr left = hp2mm(2.F);
@@ -115,18 +116,18 @@ public:
 
     auto constexpr active_y = top + light_radius;
 
-    addInput(Jack::input(slug, module, left, run_y, Controls::RunInput));
-    addParam(Button::toggle(slug, module, left + button_port_distance, run_y,
+    addInput(Jack::input(svg_dir, module, left, run_y, Controls::RunInput));
+    addParam(Button::toggle(svg_dir, module, left + button_port_distance, run_y,
                             Controls::RunButton));
 
-    addInput(Jack::input(slug, module, left, loop_y, Controls::LoopInput));
-    addParam(Button::toggle(slug, module, left + button_port_distance, loop_y,
-                            Controls::LoopButton));
+    addInput(Jack::input(svg_dir, module, left, loop_y, Controls::LoopInput));
+    addParam(Button::toggle(svg_dir, module, left + button_port_distance,
+                            loop_y, Controls::LoopButton));
 
-    auto *start_marker = new StartMarker(slug, 0.F, active_y);
+    auto *start_marker = new StartMarker(svg_dir, 0.F, active_y);
     addChild(start_marker);
 
-    auto *end_marker = new EndMarker<N>(slug, 0.F, active_y);
+    auto *end_marker = new EndMarker<N>(svg_dir, 0.F, active_y);
     addChild(end_marker);
 
     auto const on_selection_start_change = [start_marker,
@@ -134,23 +135,23 @@ public:
       start_marker->set_selection_start(step);
       end_marker->set_selection_start(step);
     };
-    addParam(new SelectionKnob(on_selection_start_change, slug, module, left,
+    addParam(new SelectionKnob(on_selection_start_change, svg_dir, module, left,
                                selection_y, Controls::SelectionStartKnob));
 
     auto const on_selection_end_change = [end_marker](int length) {
       end_marker->set_selection_length(length);
     };
     auto constexpr selection_length_x = left + hp2mm(2.F);
-    addParam(new SelectionKnob(on_selection_end_change, slug, module,
+    addParam(new SelectionKnob(on_selection_end_change, svg_dir, module,
                                selection_length_x, selection_y,
                                Controls::SelectionLengthKnob));
 
-    addInput(Jack::input(slug, module, left, gate_y, Controls::GateInput));
-    addParam(Button::momentary(slug, module, left + button_port_distance,
+    addInput(Jack::input(svg_dir, module, left, gate_y, Controls::GateInput));
+    addParam(Button::momentary(svg_dir, module, left + button_port_distance,
                                gate_y, Controls::GateButton));
 
-    addInput(Jack::input(slug, module, left, reset_y, Controls::ResetInput));
-    addParam(Button::momentary(slug, module, left + button_port_distance,
+    addInput(Jack::input(svg_dir, module, left, reset_y, Controls::ResetInput));
+    addParam(Button::momentary(svg_dir, module, left + button_port_distance,
                                reset_y, Controls::ResetButton));
 
     auto constexpr generate_mode_y = top + hp2mm(1.61F);
@@ -174,43 +175,43 @@ public:
           mm2px(x, active_y), module, Controls::ProgressLights + step + step));
 
       auto *generate_mode_button = Toggle::stepper(
-          slug, "generate-mode", generate_mode_labels.size(), module, x,
+          svg_dir, "generate-mode", generate_mode_labels.size(), module, x,
           generate_mode_y, Controls::ModeSwitches + step);
       addParam(generate_mode_button);
 
       auto *advance_mode_button = Toggle::stepper(
-          slug, "advance-mode", advance_mode_labels.size(), module, x,
+          svg_dir, "advance-mode", advance_mode_labels.size(), module, x,
           advance_mode_y, Controls::ConditionSwitches + step);
       addParam(advance_mode_button);
 
-      addParam(
-          Knob::small(slug, module, x, level_y, Controls::LevelKnobs + step));
+      addParam(Knob::small(svg_dir, module, x, level_y,
+                           Controls::LevelKnobs + step));
 
-      addParam(Toggle::thumb(2, slug, module, x, shape_y,
+      addParam(Toggle::thumb(2, svg_dir, module, x, shape_y,
                              Controls::ShapeSwitches + step));
-      addParam(
-          Knob::small(slug, module, x, curve_y, Controls::CurveKnobs + step));
+      addParam(Knob::small(svg_dir, module, x, curve_y,
+                           Controls::CurveKnobs + step));
 
-      addParam(Knob::small(slug, module, x, duration_y,
+      addParam(Knob::small(svg_dir, module, x, duration_y,
                            Controls::DurationKnobs + step));
 
-      addParam(Button::toggle(slug, module, x, enabled_button_y,
+      addParam(Button::toggle(svg_dir, module, x, enabled_button_y,
                               Controls::EnabledButtons + step));
-      addInput(Jack::input(slug, module, x, enabled_port_y,
+      addInput(Jack::input(svg_dir, module, x, enabled_port_y,
                            Controls::EnabledInputs + step));
     }
 
     auto constexpr out_y = bottom - port_radius - 1.F;
     auto constexpr eos_y = top + hp2mm(2.75);
 
-    addInput(
-        Jack::input(slug, module, right, eos_y, Controls::CurveSequencerInput));
+    addInput(Jack::input(svg_dir, module, right, eos_y,
+                         Controls::CurveSequencerInput));
 
-    addParam(Toggle::thumb(2, slug, module, right, level_y,
+    addParam(Toggle::thumb(2, svg_dir, module, right, level_y,
                            Controls::LevelRangeSwitch));
-    addParam(Toggle::thumb(3, slug, module, right, duration_y,
+    addParam(Toggle::thumb(3, svg_dir, module, right, duration_y,
                            Controls::DurationRangeSwitch));
-    addOutput(Jack::output(slug, module, right, out_y,
+    addOutput(Jack::output(svg_dir, module, right, out_y,
                            Controls::CurveSequencerOutput));
   }
 }; // namespace dhe
