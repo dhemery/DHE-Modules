@@ -20,7 +20,6 @@ namespace dhe {
 namespace scannibal {
 
 static auto constexpr brightness_range = Range{0.F, 1.F};
-static auto constexpr minimum_duration = short_duration_range.lower_bound();
 
 template <typename P>
 static inline auto level(P const &level_knob, P const &range_switch) -> float {
