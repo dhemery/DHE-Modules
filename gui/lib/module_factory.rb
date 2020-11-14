@@ -78,7 +78,7 @@ class ModuleFactory
     @controls << port
 
     port_for_overlay = port.translated(x, y)
-                     .padded(all: PADDING)
+                           .padded(all: PADDING)
     @overlay_shapes << port_for_overlay
 
     faceplate_label = Label.new(text: label, color: @foreground, size: :small)
@@ -90,12 +90,19 @@ class ModuleFactory
     port(x: x, y: y, label: 'CV')
   end
 
+  def box(top:, right:, bottom:, left:, fill: @background, stroke: @foreground,
+          stroke_width: STROKE_WIDTH, corner_radius: Box::CORNER_RADIUS)
+    @faceplate_shapes << Box.new(top: top, right: right, bottom: bottom, left: left,
+                                 stroke: stroke, fill: fill,
+                                 stroke_width: stroke_width, corner_radius: corner_radius)
+  end
+
   def input_port(x:, y:, label: 'IN')
     port = Port.new(metal_color: @background, shadow_color: @foreground)
     @controls << port
 
     port_for_overlay = port.translated(x, y)
-                     .padded(all: PADDING)
+                           .padded(all: PADDING)
     @overlay_shapes << port_for_overlay
 
     faceplate_label = Label.new(text: label, color: @foreground, size: :small)
@@ -113,7 +120,7 @@ class ModuleFactory
     @controls << port
 
     port_for_overlay = port.translated(x, y)
-                     .padded(all: PADDING)
+                           .padded(all: PADDING)
     @overlay_shapes << port_for_overlay
 
     faceplate_label = Label.new(text: label, color: @background, size: :small)
@@ -132,7 +139,7 @@ class ModuleFactory
     @controls << knob
 
     knob_for_overlay = knob.translated(x, y)
-                     .padded(top: PADDING, right: 0.0, bottom: 0.0)
+                           .padded(top: PADDING, right: 0.0, bottom: 0.0)
     @overlay_shapes << knob_for_overlay
 
     return if label.nil?
@@ -167,8 +174,8 @@ class ModuleFactory
     @controls << toggle
 
     switch_for_overlay = toggle.states[selection - 1]
-                         .translated(x, y)
-                         .padded(all: PADDING)
+                               .translated(x, y)
+                               .padded(all: PADDING)
     @overlay_shapes << switch_for_overlay
 
     @faceplate_shapes << Label.new(text: labels.first, color: @foreground, size: :small, alignment: :below)
@@ -195,14 +202,14 @@ class ModuleFactory
     toggle(x: x, y: y, labels: %w[J S], selection: 1)
   end
 
-  def pick_list(x:, y:, name:, options:, selection: 1, width:, hidden: false)
-    picklist = PickList.new(name: name, options: options, text_color: @foreground, fill: @background, width: width)
+  def pick_list(x:, y:, name:, options:, selection: 1, size: :small, width:, hidden: false)
+    picklist = PickList.new(name: name, options: options, size: size, text_color: @foreground, fill: @background, width: width)
 
     @controls << picklist
 
     option_for_overlay = picklist.options[selection - 1]
-                         .translated(x, y)
-                         .padded(all: PADDING)
+                                 .translated(x, y)
+                                 .padded(all: PADDING)
 
     @overlay_shapes << option_for_overlay unless hidden
   end
@@ -213,8 +220,8 @@ class ModuleFactory
     @controls << stepper
 
     option_for_overlay = stepper.options[selection - 1]
-                        .translated(x, y)
-                        .padded(all: PADDING)
+                                .translated(x, y)
+                                .padded(all: PADDING)
 
     @overlay_shapes << option_for_overlay unless hidden
   end
@@ -224,8 +231,8 @@ class ModuleFactory
     @controls << button
 
     button_for_overlay = button.released
-                         .translated(x, y)
-                         .padded(all: PADDING)
+                               .translated(x, y)
+                               .padded(all: PADDING)
     @overlay_shapes << button_for_overlay
 
     return if label.nil?
@@ -243,12 +250,12 @@ class ModuleFactory
     @controls << button
 
     port_for_overlay = port.translated(x, y)
-                     .padded(all: PADDING)
+                           .padded(all: PADDING)
     @overlay_shapes << port_for_overlay
 
     button_for_overlay = button.released
-                         .translated(port_for_overlay.right + button.released.right, port_for_overlay.y)
-                         .padded(all: PADDING, left: 0.0)
+                               .translated(port_for_overlay.right + button.released.right, port_for_overlay.y)
+                               .padded(all: PADDING, left: 0.0)
     @overlay_shapes << button_for_overlay
 
     faceplate_label = Label.new(text: label, color: @foreground, size: :small)
@@ -259,6 +266,7 @@ class ModuleFactory
                                stroke: @foreground, stroke_width: STROKE_WIDTH, fill: @background)
     @faceplate_shapes << faceplate_box
     @faceplate_shapes << faceplate_label
+    faceplate_box
   end
 
   def output_button_port(x:, y:, label:)
@@ -269,11 +277,11 @@ class ModuleFactory
     @controls << button
 
     port_for_overlay = port.translated(x, y)
-                     .padded(all: PADDING)
+                           .padded(all: PADDING)
     @overlay_shapes << port_for_overlay
 
     button_for_overlay = button.released.translated(port_for_overlay.left + button.released.left, port_for_overlay.y)
-                         .padded(all: PADDING, right: 0.0)
+                               .padded(all: PADDING, right: 0.0)
     @overlay_shapes << button_for_overlay
 
     faceplate_label = Label.new(text: label, color: @background, size: :small)

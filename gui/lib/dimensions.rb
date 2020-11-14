@@ -15,3 +15,7 @@ end
 def mm2hp(mm)
   mm / MM_PER_HP
 end
+
+def i2mm(mm)
+  mm * MM_PER_INCH
+end

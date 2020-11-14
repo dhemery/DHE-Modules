@@ -5,9 +5,9 @@ require_relative '../shapes/box'
 class PickList
   attr_reader :options, :menu
 
-  def initialize(name:, text_color:, fill:, options:, width:)
+  def initialize(name:, text_color:, size:, fill:, options:, width:)
     @options = options.each_with_index.map do |option, index|
-      Option.new(name: name, position: index + 1, text: option, text_color: text_color, fill: fill, width: width)
+      Option.new(name: name, position: index + 1, text: option, size: size, text_color: text_color, fill: fill, width: width)
     end
     @menu = Menu.new(name: name, color: text_color, example: @options[0], size: options.size)
   end
@@ -21,10 +21,10 @@ class PickList
     CORNER_RADIUS = STROKE_WIDTH * 2
     attr_reader :slug
 
-    def initialize(name:, position:, text:, text_color:, fill:, width:)
+    def initialize(name:, position:, text:, text_color:, fill:, size:, width:)
       @slug = Pathname("#{name}-#{position}")
 
-      label = Label.new(color: text_color, alignment: :center, size: :small, text: text, width: width)
+      label = Label.new(color: text_color, alignment: :center, size: size, text: text, width: width)
                    .padded(vertical: PADDING)
 
       box = Box.around(shapes: [label],
