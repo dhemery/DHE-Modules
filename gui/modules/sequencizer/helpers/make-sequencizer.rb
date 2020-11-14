@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-require_relative '../../lib/shapes/position-marker'
-require_relative '../../lib/dimensions'
+require_relative '../../../lib/shapes/position-marker'
+require_relative '../../../lib/dimensions'
 
 module Sequencizer
   HUE = 30

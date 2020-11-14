@@ -1,4 +1,4 @@
-require_relative '../../lib/shapes/position-marker'
+require_relative '../../../lib/shapes/position-marker'
 
 module CurveSequencer
 

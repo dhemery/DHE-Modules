@@ -11,6 +11,8 @@ to="$1"
 shift
 inkscape_options="$*"
 
+mkdir -p "$(dirname ${to})"
+
 if grep --silent '<text' "${from}"; then
   inkscape '--actions=select-by-element:text;object-to-path' --export-filename=- --export-plain-svg "${@}" "${from}" | xmllint --format - > "${to}"
 else

@@ -17,11 +17,12 @@ require_relative 'controls/toggle'
 class ModuleFactory
   MODULE_LABEL_INSET = 9.0
 
-  attr_reader :source_file, :width, :slug, :faceplate_shape, :overlay_shape, :controls
+  attr_reader :source_file, :width, :slug, :dir, :faceplate_shape, :overlay_shape, :controls
 
   def initialize(source_file)
     @source_file = Pathname(source_file)
-    @slug = Pathname(source_file.to_s.pathmap('%n'))
+    @dir = @source_file.dirname.basename
+    @slug = @dir / source_file.pathmap('%n')
     @faceplate_shapes = []
     @overlay_shapes = []
     @controls = []

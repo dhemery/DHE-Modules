@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative '../../lib/dimensions'
+require_relative '../../../lib/dimensions'
 
 module Scannibal
   HUE = 30
