@@ -215,8 +215,8 @@ class ModuleFactory
     @overlay_shapes << option_for_overlay unless hidden
   end
 
-  def stepper(x:, y:, name:, options:, selection: 0, width:, hidden: false)
-    stepper = Stepper.new(name: name, options: options, text_color: @foreground, fill: @background, width: width)
+  def stepper(x:, y:, name:, size: :small, options:, selection: 0, width:, hidden: false)
+    stepper = Stepper.new(name: name, options: options, size: size, text_color: @foreground, fill: @background, width: width)
 
     @controls << stepper
 

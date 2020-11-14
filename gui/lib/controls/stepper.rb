@@ -5,9 +5,9 @@ require_relative '../shapes/box'
 class Stepper
   attr_reader :options
 
-  def initialize(name:, options:, text_color:, fill:, width:)
+  def initialize(name:, options:, text_color:, size:, fill:, width:)
     @options = options.each_with_index.map do |option, index|
-      Option.new(name: name, index: index, text_color: text_color, fill: fill, label: option, width: width)
+      Option.new(name: name, index: index, size: size, text_color: text_color, fill: fill, label: option, width: width)
     end
   end
 
@@ -20,10 +20,10 @@ class Stepper
     CORNER_RADIUS = STROKE_WIDTH * 2
     attr_reader :slug
 
-    def initialize(name:, index:, text_color:, fill:, label:, width:)
+    def initialize(name:, index:, text_color:, size:, fill:, label:, width:)
       @slug =  Pathname("#{name}-#{index + 1}")
       @label = label
-      label = Label.new(color: text_color, alignment: :center, size: :small, text: label, width: width)
+      label = Label.new(color: text_color, alignment: :center, size: size, text: label, width: width)
                    .padded(vertical: PADDING)
 
       box = Box.around(shapes: [label],
