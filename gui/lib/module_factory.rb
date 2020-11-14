@@ -132,6 +132,7 @@ class ModuleFactory
 
     @faceplate_shapes << faceplate_box
     @faceplate_shapes << faceplate_label
+    faceplate_box
   end
 
   def knob(x:, y:, size:, label: nil, label_size:)
@@ -292,6 +293,7 @@ class ModuleFactory
                                stroke: @foreground, stroke_width: STROKE_WIDTH, fill: @foreground)
     @faceplate_shapes << faceplate_box
     @faceplate_shapes << faceplate_label
+    faceplate_box
   end
 
   def label(x:, y:, text:, color: @foreground, size: :small, alignment: :right_of)
