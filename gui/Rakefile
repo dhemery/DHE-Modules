@@ -19,7 +19,8 @@ def install_faceplate(from, to)
   install_svg from, to, '--export-id=faceplate', '--export-id-only'
 end
 
-modules_dir = Pathname('modules')
+old_modules_dir = Pathname('old-modules')
+new_modules_dir = Pathname('modules')
 control_build_dir = Pathname('_controls')
 faceplate_build_dir = Pathname('_faceplates')
 svg_install_dir = Pathname('../svg')
@@ -30,9 +31,9 @@ directory faceplate_build_dir
 directory svg_install_dir
 directory image_install_dir
 
-modules = FileList.new(modules_dir / '*.rb').map { |file| ModuleFactory.new(file).build }
+old_modules = FileList.new(old_modules_dir / '*.rb').map { |file| ModuleFactory.new(file).build }
 
-modules.each do |mod|
+old_modules.each do |mod|
   module_source_file = mod.source_file
   file module_source_file
 
@@ -59,7 +60,7 @@ end
 
 controls_by_control_svg_path = {}
 
-modules.each do |mod|
+old_modules.each do |mod|
   mod.controls.each do |control|
     control.frames.map do |frame|
       control_svg_path = mod.slug / frame.slug.sub_ext('.svg')
@@ -112,11 +113,11 @@ curve_sequencer_faceplate_files = %w[
 ]
 
 curve_sequencer_faceplate_files.each do |f|
-  file f => 'modules/curve-sequencer/make-curve-sequencer.rb'
+  file f => old_modules_dir / 'curve-sequencer/make-curve-sequencer.rb'
 end
 
-scannibal_helpers = %w[
-  modules/scannibal/make-scannibal.rb
+scannibal_helpers = [
+  old_modules_dir / 'scannibal/make-scannibal.rb'
 ]
 
 scannibal_faceplate_files = %w[
@@ -135,8 +136,8 @@ sequencizer_faceplate_files = %w[
   _faceplates/sequencizer-16.svg
 ]
 
-sequencizer_helpers = %w[
-  modules/sequencizer/make-sequencizer.rb
+sequencizer_helpers = [
+  old_modules_dir / 'sequencizer/make-sequencizer.rb'
 ]
 
 sequencizer_faceplate_files.each do |f|
