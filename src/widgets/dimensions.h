@@ -16,6 +16,7 @@ static inline auto constexpr hp2px(float hp) -> float { return hp * px_per_hp; }
 static inline auto constexpr hp2mm(float hp) -> float { return hp * mm_per_hp; }
 static inline auto constexpr mm2px(float mm) -> float { return mm * px_per_mm; }
 static inline auto constexpr mm2hp(float mm) -> float { return mm / mm_per_hp; }
+static inline auto constexpr i2mm(float mm) -> float { return mm / mm_per_in; }
 
 static inline auto mm2px(float xmm, float ymm) -> rack::math::Vec {
   return {mm2px(xmm), mm2px(ymm)};

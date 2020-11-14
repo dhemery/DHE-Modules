@@ -235,6 +235,24 @@
       ]
     },
     {
+      "slug": "Truth3",
+      "name": "Truth 3",
+      "description": "Applies a customizable truth table to 3 inputs",
+      "manualUrl": "https://dhemery.github.io/DHE-Modules/modules/truth/",
+      "tags": [
+        "Logic"
+      ]
+    },
+    {
+      "slug": "Truth4",
+      "name": "Truth 4",
+      "description": "Applies a customizable truth table to 4 inputs",
+      "manualUrl": "https://dhemery.github.io/DHE-Modules/modules/truth/",
+      "tags": [
+        "Logic"
+      ]
+    },
+    {
       "slug": "Upstage",
       "name": "Upstage",
       "description": "Special-purpose envelope controls",
