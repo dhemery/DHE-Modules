@@ -23,8 +23,8 @@ y += delta_y
 large_knob(x: center, y: y, label: ' ')
 
 y += delta_y
-pick_list x: center, y: y, name: 'offset-range', options: %w[0–5 ±5 0–10 ±10], selection: 2, width: 8
-pick_list x: center, y: y, name: 'multiplier-range', options: %w[0–1 ±1 0–2 ±2], selection: 2, width: 8, hidden: true
+stepper x: center, y: y, name: 'offset-range', options: %w[0–5 ±5 0–10 ±10], selection: 2, width: 8
+stepper x: center, y: y, name: 'multiplier-range', options: %w[0–1 ±1 0–2 ±2], selection: 2, width: 8, hidden: true
 
 y += 2.0 * delta_y
 output_port(x: center, y: y + port_offset)

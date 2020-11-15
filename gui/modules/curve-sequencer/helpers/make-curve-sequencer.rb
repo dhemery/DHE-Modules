@@ -88,8 +88,8 @@ module CurveSequencer
     (0...steps).each do |step|
       x = step_x + step * step_dx
       light x: x, y: active_y
-      pick_list x: x, y: generator_y, name: 'generate-mode', options: %w[CURVE HOLD SUST INPUT CHASE LEVEL], selection: 1, width: 9
-      pick_list x: x, y: gate_mode_y, name: 'advance-mode', options: %w[TIME RISE FALL EDGE HIGH LOW], selection: 1, width: 9
+      stepper x: x, y: generator_y, name: 'generate-mode', options: %w[CURVE HOLD SUST INPUT CHASE LEVEL], selection: 1, width: 9
+      stepper x: x, y: gate_mode_y, name: 'advance-mode', options: %w[TIME RISE FALL EDGE HIGH LOW], selection: 1, width: 9
       label x: x, y: step_label_y, text: (step + 1).to_s, alignment: :above, size: :large
       shape_toggle x: x, y: shape_y
       small_knob y: curve_y, x: x, label: ''

@@ -9,7 +9,6 @@ require_relative 'shapes/light'
 
 require_relative 'controls/button'
 require_relative 'controls/knob'
-require_relative 'controls/pick_list'
 require_relative 'controls/port'
 require_relative 'controls/stepper'
 require_relative 'controls/toggle'
@@ -202,18 +201,6 @@ class ModuleFactory
 
   def shape_toggle(x:, y:)
     toggle(x: x, y: y, labels: %w[J S], selection: 1)
-  end
-
-  def pick_list(x:, y:, name:, options:, selection: 1, size: :small, width:, hidden: false)
-    picklist = PickList.new(name: name, options: options, size: size, text_color: @foreground, fill: @background, width: width)
-
-    @controls << picklist
-
-    option_for_overlay = picklist.options[selection - 1]
-                                 .translated(x, y)
-                                 .padded(all: PADDING)
-
-    @overlay_shapes << option_for_overlay unless hidden
   end
 
   def stepper(x:, y:, name:, size: :small, options:, selection: 0, width:, hidden: false)
