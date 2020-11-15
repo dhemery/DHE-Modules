@@ -32,8 +32,7 @@
 #include "modules/tapers/tapers-panel.h"
 #include "modules/tapers/tapers.h"
 #include "modules/truth/module.h"
-#include "modules/truth/truth-3-panel.h"
-#include "modules/truth/truth-4-panel.h"
+#include "modules/truth/panel.h"
 #include "modules/xycloid/xycloid-panel.h"
 #include "modules/xycloid/xycloid.h"
 
@@ -64,8 +63,6 @@ using dhe::stage::UpstageModule;
 using dhe::stage::UpstagePanel;
 using dhe::swave::Swave;
 using dhe::swave::SwavePanel;
-using dhe::truth::Truth3Panel;
-using dhe::truth::Truth4Panel;
 
 template <int N> using SequencizerModule = dhe::sequencizer::Module<N>;
 template <int N> using SequencizerPanel = dhe::sequencizer::Panel<N>;
@@ -74,6 +71,7 @@ template <int N> using ScannibalPanel = dhe::scannibal::Panel<N>;
 using dhe::tapers::Tapers;
 using dhe::tapers::TapersPanel;
 template <int N> using Truth = dhe::truth::Truth<N>;
+template <int N> using TruthPanel = dhe::truth::Panel<N>;
 using dhe::xycloid::Xycloid;
 using dhe::xycloid::XycloidPanel;
 
@@ -123,8 +121,8 @@ extern "C" void init(rack::plugin::Plugin *p) {
   p->addModel(rack::createModel<SequencizerModule<16>, SequencizerPanel<16>>(
       "Sequencizer16"));
   p->addModel(rack::createModel<Tapers, TapersPanel>("Tapers"));
-  p->addModel(rack::createModel<Truth<3>, Truth3Panel>("Truth3"));
-  p->addModel(rack::createModel<Truth<4>, Truth4Panel>("Truth4"));
+  p->addModel(rack::createModel<Truth<3>, TruthPanel<3>>("Truth3"));
+  p->addModel(rack::createModel<Truth<4>, TruthPanel<4>>("Truth4"));
   p->addModel(rack::createModel<UpstageModule, UpstagePanel>("Upstage"));
   p->addModel(rack::createModel<Xycloid, XycloidPanel>("Xycloid"));
 }
