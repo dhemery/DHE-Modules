@@ -71,6 +71,7 @@ and more.
 <a href="modules/fuzzy-logic-h/"><img height="350" src="modules/fuzzy-logic-h/fuzzy-logic-h.svg" /></a>
 <a href="modules/fuzzy-logic-z/"><img height="350" src="modules/fuzzy-logic-z/fuzzy-logic-z.svg" /></a>
 <a href="modules/gator/"><img height="350" src="modules/gator/gator.svg" /></a>
+<a href="modules/truth/"><img height="350" src="modules/truth/truth.svg" /></a>
 
 **[_Fuzzy Logic H_](modules/fuzzy-logic-h/)**
 combines signals by applying fuzzy logic operators
@@ -83,6 +84,12 @@ defined by Lofti Zadeh.
 **[_Gator_](modules/gator/)**
 computes eight common logic functions
 for up to 16 inputs.
+
+**Coming Soon:**
+**[_Truth 3_](modules/truth/)** (shown)
+and _Truth 4_
+apply custom-designed truth tables
+to three or four inputs.
 
 ### Low Frequency Oscillators
 

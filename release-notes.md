@@ -4,6 +4,12 @@ title: Release Notes
 
 # DHE Modules Release Notes
 
+## Version 1.5.0
+November 2020
+
+- Added [_Truth 3_]({{ '/modules/truth/' | relative_url }}).
+- Added _Truth 4_.
+
 ## Version 1.4.0
 November 2020
 
@@ -92,7 +98,7 @@ October 2020
 
 - Added [_Func_]({{ '/modules/func' | relative_url }}).
 - Added [_Func 6_]({{ '/modules/func-6' | relative_url }}).
-- Significantly improved performance of the envelope generator modules. 
+- Significantly improved performance of the envelope generator modules.
 
 ## Release 0.6.3
 - Added [_Ranger_]({{ '/modules/ranger' | relative_url }}).
