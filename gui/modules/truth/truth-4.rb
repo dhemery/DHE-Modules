@@ -60,12 +60,12 @@ end
 (2...table_rows).each do |row|
   option_x = table_right - table_dx / 2
   option_y = table_top + row * table_dy + table_dy / 2
-  stepper x: option_x, y: option_y, name: 'truth-value', size: :large, options: %w[F T], selection: 2, width: 8
+  stepper x: option_x, y: option_y, name: 'outcome', size: :large, options: %w[F T], selection: 2, width: 8
 end
 
 (0...table_cols - 1).each do |col|
   option_x = table_left + col * table_dx + table_dx / 2
   option_y = table_top + table_dy * 1.4
-  stepper x: option_x, y: option_y, name: 'truth-mode', options: %w[RISE FALL EDGE HIGH LOW], selection: 4, width: 8
+  stepper x: option_x, y: option_y, name: 'condition', options: %w[RISE FALL EDGE HIGH LOW], selection: 4, width: 8
 end
 
