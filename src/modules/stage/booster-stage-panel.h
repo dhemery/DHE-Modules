@@ -34,16 +34,18 @@ public:
     addInput(Jack::input(svg_dir, module, column1, y, Controls::LevelCvInput));
     addParam(Knob::large(svg_dir, module, column3, y, Controls::LevelKnob));
 
-    addParam(
-        Toggle::thumb(2, svg_dir, module, column5, y, Controls::LevelRangeSwitch));
+    addParam(Toggle::thumb(2, svg_dir, module, column5, y,
+                           Controls::LevelRangeSwitch));
 
     y += dy;
     addInput(Jack::input(svg_dir, module, column1, y, Controls::CurveCvInput));
     addParam(Knob::large(svg_dir, module, column3, y, Controls::CurveKnob));
-    addParam(Toggle::thumb(2, svg_dir, module, column5, y, Controls::ShapeSwitch));
+    addParam(
+        Toggle::thumb(2, svg_dir, module, column5, y, Controls::ShapeSwitch));
 
     y += dy;
-    addInput(Jack::input(svg_dir, module, column1, y, Controls::DurationCvInput));
+    addInput(
+        Jack::input(svg_dir, module, column1, y, Controls::DurationCvInput));
     addParam(Knob::large(svg_dir, module, column3, y, Controls::DurationKnob));
 
     addParam(Toggle::thumb(3, svg_dir, module, column5, y,
@@ -56,19 +58,22 @@ public:
     addParam(
         Button::momentary(svg_dir, module, column2, y, Controls::DeferButton));
 
-    addParam(Button::output(svg_dir, module, column4, y, Controls::ActiveButton));
-    addOutput(Jack::output(svg_dir, module, column5, y, Controls::ActiveOutput));
+    addParam(
+        Button::output(svg_dir, module, column4, y, Controls::ActiveButton));
+    addOutput(
+        Jack::output(svg_dir, module, column5, y, Controls::ActiveOutput));
 
     y += dy;
     addInput(Jack::input(svg_dir, module, column1, y, Controls::TriggerInput));
-    addParam(
-        Button::momentary(svg_dir, module, column2, y, Controls::TriggerButton));
+    addParam(Button::momentary(svg_dir, module, column2, y,
+                               Controls::TriggerButton));
     addParam(Button::output(svg_dir, module, column4, y, Controls::EocButton));
     addOutput(Jack::output(svg_dir, module, column5, y, Controls::EocOutput));
 
     y += dy;
     addInput(Jack::input(svg_dir, module, column1, y, Controls::EnvelopeInput));
-    addOutput(Jack::output(svg_dir, module, column5, y, Controls::EnvelopeOutput));
+    addOutput(
+        Jack::output(svg_dir, module, column5, y, Controls::EnvelopeOutput));
   }
 };
 

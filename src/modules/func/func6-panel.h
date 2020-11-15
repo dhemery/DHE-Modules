@@ -51,8 +51,8 @@ public:
       addParam(offset_range_pick_list);
 
       auto *multiplier_range_pick_list = Toggle::stepper(
-          svg_dir, "multiplier-range", multiplier_ranges.size(), module, column4,
-          y, Controls::MultiplierRangeSwitch + row);
+          svg_dir, "multiplier-range", multiplier_ranges.size(), module,
+          column4, y, Controls::MultiplierRangeSwitch + row);
       addParam(multiplier_range_pick_list);
 
       auto const update_range_pick_list =
@@ -67,8 +67,8 @@ public:
             }
           };
 
-      addParam(new OperatorSwitch{update_range_pick_list, svg_dir, module, column2,
-                                  y, Controls::OperationSwitch + row});
+      addParam(new OperatorSwitch{update_range_pick_list, svg_dir, module,
+                                  column2, y, Controls::OperationSwitch + row});
     }
   }
 }; // namespace func

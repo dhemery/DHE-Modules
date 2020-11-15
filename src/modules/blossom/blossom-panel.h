@@ -40,8 +40,8 @@ public:
     addInput(Jack::input(svg_dir, module, column1, y, Controls::RatioCvInput));
     addParam(Knob::tiny(svg_dir, module, column2, y, Controls::RatioAvKnob));
     addParam(Knob::large(svg_dir, module, column3, y, Controls::RatioKnob));
-    addParam(
-        Toggle::thumb(2, svg_dir, module, column4, y, Controls::FreeRatioSwitch));
+    addParam(Toggle::thumb(2, svg_dir, module, column4, y,
+                           Controls::FreeRatioSwitch));
 
     y += dy;
     addInput(Jack::input(svg_dir, module, column1, y, Controls::DepthCvInput));
@@ -50,8 +50,10 @@ public:
 
     y += dy;
     addInput(Jack::input(svg_dir, module, column1, y, Controls::PhaseCvInput));
-    addParam(Knob::tiny(svg_dir, module, column2, y, Controls::PhaseOffsetAvKnob));
-    addParam(Knob::large(svg_dir, module, column3, y, Controls::PhaseOffsetKnob));
+    addParam(
+        Knob::tiny(svg_dir, module, column2, y, Controls::PhaseOffsetAvKnob));
+    addParam(
+        Knob::large(svg_dir, module, column3, y, Controls::PhaseOffsetKnob));
 
     y = 97.F;
     dy = 15.F;

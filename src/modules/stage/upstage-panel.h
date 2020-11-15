@@ -31,13 +31,14 @@ public:
 
     y += dy;
     addInput(Jack::input(svg_dir, module, column1, y, Controls::LevelCvInput));
-    addParam(
-        Toggle::thumb(2, svg_dir, module, column3, y, Controls::LevelRangeSwitch));
+    addParam(Toggle::thumb(2, svg_dir, module, column3, y,
+                           Controls::LevelRangeSwitch));
 
     y += dy;
-    addParam(Button::momentary(svg_dir, module, column1, y, Controls::WaitButton));
     addParam(
-        Button::momentary(svg_dir, module, column3, y, Controls::TriggerButton));
+        Button::momentary(svg_dir, module, column1, y, Controls::WaitButton));
+    addParam(Button::momentary(svg_dir, module, column3, y,
+                               Controls::TriggerButton));
 
     y = 82.F;
     dy = 15.F;
@@ -46,10 +47,12 @@ public:
 
     y += dy;
     addInput(Jack::input(svg_dir, module, column1, y, Controls::TriggerInput));
-    addOutput(Jack::output(svg_dir, module, column3, y, Controls::TriggerOutput));
+    addOutput(
+        Jack::output(svg_dir, module, column3, y, Controls::TriggerOutput));
 
     y += dy;
-    addOutput(Jack::output(svg_dir, module, column3, y, Controls::EnvelopeOutput));
+    addOutput(
+        Jack::output(svg_dir, module, column3, y, Controls::EnvelopeOutput));
   }
 };
 } // namespace stage

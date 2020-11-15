@@ -242,10 +242,12 @@ private:
     auto constexpr step_phase_y = global_controls_y(3);
     auto constexpr out_y = global_controls_y(4);
 
-    addParam(Toggle::thumb(2, svg_dir, module, x, polarity_y, Param::LevelRange));
+    addParam(
+        Toggle::thumb(2, svg_dir, module, x, polarity_y, Param::LevelRange));
     addOutput(
         Jack::output(svg_dir, module, x, step_number_y, Output::StepNumber));
-    addOutput(Jack::output(svg_dir, module, x, step_phase_y, Output::StepPhase));
+    addOutput(
+        Jack::output(svg_dir, module, x, step_phase_y, Output::StepPhase));
     addOutput(Jack::output(svg_dir, module, x, out_y, Output::Out));
   }
 

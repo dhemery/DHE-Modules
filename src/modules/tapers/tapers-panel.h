@@ -43,7 +43,8 @@ public:
         Toggle::thumb(2, svg_dir, module, column1, y, Controls::ShapeSwitch1));
     addParam(Toggle::thumb(2, svg_dir, module, column2, y,
                            Controls::LevelRangeSwitch1));
-    addOutput(Jack::output(svg_dir, module, column3, y, Controls::TaperOutput1));
+    addOutput(
+        Jack::output(svg_dir, module, column3, y, Controls::TaperOutput1));
 
     y += dy + panel_buffer;
 
@@ -59,7 +60,8 @@ public:
         Toggle::thumb(2, svg_dir, module, column1, y, Controls::ShapeSwitch2));
     addParam(Toggle::thumb(2, svg_dir, module, column2, y,
                            Controls::LevelRangeSwitch2));
-    addOutput(Jack::output(svg_dir, module, column3, y, Controls::TaperOutput2));
+    addOutput(
+        Jack::output(svg_dir, module, column3, y, Controls::TaperOutput2));
   }
 };
 } // namespace tapers

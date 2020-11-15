@@ -23,7 +23,7 @@ struct Layout {
   float const outcome_x_;
 };
 
-static std::array<Layout, 2> layouts = {
+static constexpr std::array<Layout, 2> layouts = {
     // 3 inputs
     Layout{
         10,      // NOLINT hp

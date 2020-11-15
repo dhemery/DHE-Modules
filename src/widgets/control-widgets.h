@@ -47,7 +47,7 @@ protected:
     auto const toggle_name_prefix = toggle_name + "-";
     for (size_t position = 1; position <= size; position++) {
       addFrame(load_svg(module_svg_dir,
-                           toggle_name_prefix + std::to_string(position)));
+                        toggle_name_prefix + std::to_string(position)));
     }
     shadow->opacity = 0.F;
     position_centered(this, xmm, ymm);

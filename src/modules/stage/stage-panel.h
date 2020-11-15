@@ -40,7 +40,8 @@ public:
     dy = 15.F;
 
     addInput(Jack::input(svg_dir, module, column1, y, Controls::DeferInput));
-    addOutput(Jack::output(svg_dir, module, column3, y, Controls::ActiveOutput));
+    addOutput(
+        Jack::output(svg_dir, module, column3, y, Controls::ActiveOutput));
 
     y += dy;
     addInput(Jack::input(svg_dir, module, column1, y, Controls::TriggerInput));
@@ -48,7 +49,8 @@ public:
 
     y += dy;
     addInput(Jack::input(svg_dir, module, column1, y, Controls::EnvelopeInput));
-    addOutput(Jack::output(svg_dir, module, column3, y, Controls::EnvelopeOutput));
+    addOutput(
+        Jack::output(svg_dir, module, column3, y, Controls::EnvelopeOutput));
   }
 };
 } // namespace stage
