@@ -21,7 +21,7 @@ class Stepper
     attr_reader :slug
 
     def initialize(name:, index:, text_color:, size:, fill:, label:, width:)
-      @slug =  Pathname("#{name}-#{index + 1}")
+      @slug = Pathname("#{name}-#{index + 1}")
       @label = label
       label = Label.new(color: text_color, alignment: :center, size: size, text: label, width: width)
                    .padded(vertical: PADDING)
@@ -34,10 +34,6 @@ class Stepper
 
     def draw(canvas)
       @shapes.each { |shape| shape.draw(canvas) }
-    end
-
-    def has_text?
-      true
     end
   end
 end

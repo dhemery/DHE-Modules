@@ -36,11 +36,11 @@ public:
       config_button(this, Param::InputOverride + i, "Input",
                     {"From port", "High"}, 0);
       config_toggle<condition_count>(this, Param::Condition + i, "True when",
-                                     condition_descriptions, 3);
+                                     condition_descriptions, 0);
     }
     for (int i = 0; i < pattern_count; i++) {
       config_toggle<outcome_count>(this, Param::Outcome + i, "Q",
-                                   outcome_descriptions, 0);
+                                   outcome_descriptions, 1);
     }
   }
 

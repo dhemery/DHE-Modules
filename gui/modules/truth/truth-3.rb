@@ -2,20 +2,33 @@ require_relative 'helpers/make-truth'
 
 self.class::include Truth
 
-INPUTS = 3
-make_background INPUTS
+HP = 10
+CONDITION_Y = 23
+OUTCOME_X = 40.64
+PORT_DY = 14.5
+INPUT_TOP = 80
+OUTPUT_TOP = INPUT_TOP + PORT_DY
+OUTPUT_X = 40.64
 
-input_top = i2mm(3)
-port_dy = i2mm(0.55)
-input_x = i2mm(0.38)
-output_x = @width - input_x
-output_top = input_top + port_dy
+LAYOUT = {
+  hp: HP,
+  input_names: %w[A B C],
+  input_state_combinations: [
+    %w[F F F],
+    %w[F F T],
+    %w[F T F],
+    %w[F T T],
+    %w[T F F],
+    %w[T F T],
+    %w[T T F],
+    %w[T T T],
+  ],
+  condition_y: CONDITION_Y,
+  outcome_x: OUTCOME_X,
+  input_top: INPUT_TOP,
+  output_top: OUTPUT_TOP,
+  output_x: OUTPUT_X,
+  port_dy: PORT_DY,
+}
 
-make_inputs n: INPUTS, top: input_top, x: input_x, dy: port_dy
-make_outputs top: output_top, x: output_x, dy: port_dy
-
-table_x = @width / 2
-table_top = i2mm(0.8)
-table_bottom = table_top + i2mm(1.8)
-
-make_table n: INPUTS, top: table_top, bottom: table_bottom, x: table_x
+make_truth LAYOUT

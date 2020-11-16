@@ -2,19 +2,41 @@ require_relative 'helpers/make-truth'
 
 self.class::include Truth
 
-make_background 4
+HP = 16
+WIDTH = hp2mm(HP)
+CONDITION_Y = 25.74
+OUTCOME_X = 71.11
+PORT_DY = 15.6
+INPUT_TOP = 26.36
+OUTPUT_TOP = INPUT_TOP + 4 * PORT_DY
 
-input_top = i2mm(1.1)
-port_dy = i2mm(0.6)
-input_x = i2mm(0.38)
-output_x = input_x
-output_top = input_top + 4.0 * port_dy
+LAYOUT = {
+  hp: HP,
+  input_names: %w[A B C D],
+  input_state_combinations: [
+    %w[F F F F],
+    %w[F F F T],
+    %w[F F T F],
+    %w[F F T T],
+    %w[F T F F],
+    %w[F T F T],
+    %w[F T T F],
+    %w[F T T T],
+    %w[T F F F],
+    %w[T F F T],
+    %w[T F T F],
+    %w[T F T T],
+    %w[T T F F],
+    %w[T T F T],
+    %w[T T T F],
+    %w[T T T T],
+  ],
+  condition_y: CONDITION_Y,
+  outcome_x: OUTCOME_X,
+  input_top: INPUT_TOP,
+  output_top: OUTPUT_TOP,
+  output_x: INPUT_X,
+  port_dy: PORT_DY,
+}
 
-input_bounds = make_inputs n: 4, top: input_top, x: input_x, dy: port_dy
-output_bounds = make_outputs top: output_top, x: output_x, dy: port_dy
-
-table_x = input_bounds[:right] + (@width - input_bounds[:right]) / 2
-table_top = input_bounds[:top]
-table_bottom = output_bounds[:bottom]
-
-make_table n: 4, top: table_top, bottom: table_bottom, x: table_x
+make_truth LAYOUT

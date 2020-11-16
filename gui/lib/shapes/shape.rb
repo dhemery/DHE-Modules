@@ -20,10 +20,6 @@ class Shape
              top: vertical, bottom: vertical, right: horizontal, left: horizontal)
     Padded.new(shape: self, top: top, right: right, bottom: bottom, left: left)
   end
-
-  def has_text?
-    false
-  end
 end
 
 class CompositeShape < Shape

@@ -40,7 +40,7 @@ class Label < Shape
       baseline_shift: 0.07,
     }
   }
-  ASCENT_RATIO = 2.0 / 3.0 # Approximately correct for Proxima Nova font
+  ASCENT_RATIO = 2.0 / 3.0 # Correct for Proxima Nova font
   SIZES = { title: 12.0 / PX_PER_MM, large: 9.0 / PX_PER_MM, small: 7.0 / PX_PER_MM }
 
   def initialize(text:, size:, color:, alignment: :above, width: 0.1)
@@ -68,9 +68,5 @@ class Label < Shape
     canvas.text(@text_attributes) do |text|
       text << @text
     end
-  end
-
-  def has_text?
-    true
   end
 end
