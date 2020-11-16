@@ -7,7 +7,8 @@ namespace truth {
 
 template <int N> struct ParamIds {
   enum {
-    MULTIPLE(Condition, N),
+    Input0Selector,
+    GateMode,
     MULTIPLE(InputOverride, N),
     MULTIPLE(Outcome, 1 << N),
     Count,

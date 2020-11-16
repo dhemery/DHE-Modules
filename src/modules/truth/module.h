@@ -1,7 +1,8 @@
 #pragma once
 
-#include "conditions.h"
 #include "controls/common-inputs.h"
+#include "gate-modes.h"
+#include "input-selector.h"
 #include "outcomes.h"
 #include "truth-control-ids.h"
 
@@ -19,9 +20,12 @@ public:
     for (int i = 0; i < N; i++) {
       config_button(this, Param::InputOverride + i, "Input",
                     {"From port", "High"}, 0);
-      config_toggle<condition_count>(this, Param::Condition + i, "True when",
-                                     condition_descriptions, 0);
     }
+    config_toggle<input_0_selection_count>(this, Param::Input0Selector,
+                                           "Column Input",
+                                           input_0_selection_descriptions, 0);
+    config_toggle<gate_mode_count>(this, Param::GateMode, "True when",
+                                   gate_mode_descriptions, 3);
     for (int i = 0; i < pattern_count; i++) {
       config_toggle<outcome_count>(this, Param::Outcome + i, "Q",
                                    outcome_descriptions, 0);
@@ -29,7 +33,7 @@ public:
   }
 
   void process(ProcessArgs const & /*ignored*/) override {
-    update_latches();
+    gate_.clock(is_true(N - 1));
     auto const q = outcome() ? 10.F : 0.F;
     outputs[Output::Q].setVoltage(q);
     outputs[Output::NotQ].setVoltage(10.F - q);
@@ -42,13 +46,6 @@ public:
   }
 
 private:
-  void update_latches() {
-    for (int i = 0; i < N; i++) {
-      auto &latch = input_latches_[i];
-      latch.clock(input_signal(i));
-    }
-  }
-
   auto outcome() -> bool { return outcome_for(selection()); }
 
   auto outcome_for(int i) const -> bool {
@@ -57,27 +54,36 @@ private:
 
   auto selection() const -> int {
     auto pattern = 0;
-    for (int i = 0; i < N; i++) {
-      auto const satisfied = is_satisfied(condition(i), input_latches_[i]);
-      pattern += pattern + (satisfied ? 1 : 0);
+    if (input_0() == Input0Selection::Q) {
+      pattern = is_high(outputs[Output::Q]);
+    } else { // First input is A
+      pattern = is_true(0) ? 1 : 0;
     }
+    for (int i = 1; i < N - 1; i++) {
+      pattern += pattern + (is_true(i) ? 1 : 0);
+    }
+    pattern += pattern + (is_satisfied(gate_mode(), gate_) ? 1 : 0);
     return pattern;
   }
 
-  auto input_signal(int i) const -> bool {
+  auto is_true(int i) const -> bool {
     return is_high(inputs[Input::Input + i]) ||
            is_pressed(params[Param::InputOverride + i]);
   }
 
-  auto condition(int i) const -> Condition {
-    return static_cast<Condition>(value_of(params[Param::Condition + i]));
+  auto input_0() const -> Input0Selection {
+    return static_cast<Input0Selection>(
+        value_of(params[Param::Input0Selector]));
+  }
+  auto gate_mode() const -> GateMode {
+    return static_cast<GateMode>(value_of(params[Param::GateMode]));
   }
 
   static auto constexpr pattern_count = 1 << N;
   using Param = ParamIds<N>;
   using Input = InputIds<N>;
   using Output = OutputIds;
-  std::array<dhe::Latch, N> input_latches_{};
+  dhe::Latch gate_{};
 };
 } // namespace truth
 } // namespace dhe

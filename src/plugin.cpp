@@ -121,6 +121,7 @@ extern "C" void init(rack::plugin::Plugin *p) {
   p->addModel(rack::createModel<SequencizerModule<16>, SequencizerPanel<16>>(
       "Sequencizer16"));
   p->addModel(rack::createModel<Tapers, TapersPanel>("Tapers"));
+  p->addModel(rack::createModel<Truth<2>, TruthPanel<2>>("Truth2"));
   p->addModel(rack::createModel<Truth<3>, TruthPanel<3>>("Truth3"));
   p->addModel(rack::createModel<Truth<4>, TruthPanel<4>>("Truth4"));
   p->addModel(rack::createModel<UpstageModule, UpstagePanel>("Upstage"));

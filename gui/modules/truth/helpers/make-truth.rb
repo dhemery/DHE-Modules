@@ -6,13 +6,14 @@ module Truth
   FOREGROUND_HSL = [HUE, 100, 30]
   BACKGROUND_HSL = [HUE, 100, 97]
 
-  HEADER_ROWS = 2
+  HEADER_ROWS = 1
   OUTCOME_COLS = 1
 
   OUTCOME_NAMES = %w[F T]
   SELECTED_OUTCOME = 2
-  CONDITION_NAMES = %w[HIGH RISE FALL EDGE]
-  SELECTED_CONDITION = 1
+  CONDITION_NAMES = %w[RISE FALL EDGE HIGH LOW]
+  SELECTED_CONDITION = 4
+  COLUMN_1_SELECTION = 1
 
   CONDITION_DX = 10.16
   OUTCOME_DY = 5.08
@@ -52,27 +53,30 @@ module Truth
     truth_rows = input_state_combinations.length
     table_rows = HEADER_ROWS + truth_rows
     table_cols = input_cols + OUTCOME_COLS
-    table_top = condition_y - 1.5 * dy
+    table_top = condition_y - 0.5 * dy
     table_left = condition_left - 0.5 * dx
     table_right = table_left + table_cols * dx
     table_bottom = table_top + table_rows * dy
 
     box left: table_left, right: table_right, top: table_top, bottom: table_bottom, corner_radius: 0
+    box left: table_left, right: table_right, top: table_top, bottom: table_top + dy, corner_radius: 0, fill: @foreground
     box left: table_right - dx, right: table_right, top: table_top, bottom: table_bottom, corner_radius: 0, fill: @foreground
     (1...table_cols).each do |col|
       line_x = table_left + col * dx
       line x1: line_x, x2: line_x, y1: table_top, y2: table_bottom
     end
-    (2...table_rows).each do |row|
+    (1...table_rows).each do |row|
       line_y = table_top + row * dy
       line x1: table_left, x2: table_right, y1: line_y, y2: line_y
     end
 
-    label_y = condition_y - dy
-    input_names.each_with_index do |name, col|
-      label x: condition_left + col * dx, y: label_y, size: :large, text: name, alignment: :center
+    label_y = condition_y
+    (1...input_cols - 1).each do |input|
+      label x: condition_left + input * dx, y: label_y, size: :large, text: input_names[input], alignment: :center, color: @background
     end
-    label x: outcome_x, y: table_top + dy, size: :title, text: 'Q', alignment: :center, color: @background
+    stepper x: condition_left, y: condition_y, size: :large, name: "input-selector", options: [input_names[0], 'Q'], selection: 1, width: 9
+    stepper x: outcome_x - dx, y: condition_y, size: :large, name: 'gate-mode', options: CONDITION_NAMES, selection: SELECTED_CONDITION, width: 9
+    label x: outcome_x, y: condition_y, size: :large, text: 'Q', alignment: :center, color: @background
 
     input_state_combinations.each_with_index do |input_state_combination, row|
       input_state_combination.each_with_index do |input_state, col|
@@ -82,14 +86,9 @@ module Truth
       end
     end
 
-    (0...input_cols).each do |col|
-      x = condition_left + col * dx
-      stepper x: x, y: condition_y, name: 'condition', options: CONDITION_NAMES, selection: SELECTED_CONDITION, width: 8
-    end
-
     (0...truth_rows).each do |row|
       y = outcome_top + row * dy
-      stepper x: outcome_x, y: y, name: 'outcome', size: :large, options: OUTCOME_NAMES, selection: SELECTED_OUTCOME, width: 8
+      stepper x: outcome_x, y: y, name: 'outcome', size: :large, options: OUTCOME_NAMES, selection: SELECTED_OUTCOME, width: 9
     end
 
   end

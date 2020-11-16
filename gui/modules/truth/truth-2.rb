@@ -2,26 +2,22 @@ require_relative 'helpers/make-truth'
 
 self.class::include Truth
 
-HP = 10
-CONDITION_Y = 20
-OUTCOME_X = 40.64
+HP = 8
+CONDITION_Y = 25
+OUTCOME_X = 30.48
 PORT_DY = 15.5
-INPUT_TOP = 76
-OUTPUT_TOP = INPUT_TOP + PORT_DY
-OUTPUT_X = 40.64
+INPUT_TOP = 85
+OUTPUT_TOP = INPUT_TOP
+OUTPUT_X = 30.48
 
 LAYOUT = {
   hp: HP,
-  input_names: %w[A B C],
+  input_names: %w[A B],
   input_state_combinations: [
-    %w[F F F],
-    %w[F F T],
-    %w[F T F],
-    %w[F T T],
-    %w[T F F],
-    %w[T F T],
-    %w[T T F],
-    %w[T T T],
+    %w[F F],
+    %w[F T],
+    %w[T F],
+    %w[T T],
   ],
   condition_y: CONDITION_Y,
   outcome_x: OUTCOME_X,

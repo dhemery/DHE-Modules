@@ -24,12 +24,23 @@ struct Layout {
 
 static auto layout(int input_count) -> Layout {
   auto l = Layout{};
-  if (input_count == 3) {
-    auto constexpr input_top = 80.F;
-    auto constexpr port_dy = 14.5F;
+  if (input_count == 2) {
+    auto constexpr input_top = 85.F;
+    auto constexpr port_dy = 15.5F;
+    auto constexpr hp = 8;
+    l.hp_ = hp;
+    l.condition_y_ = 25.F;
+    l.outcome_x_ = 30.48F;
+    l.port_dy_ = port_dy;
+    l.input_top_ = input_top;
+    l.output_top_ = input_top;
+    l.output_x_ = 30.48F;
+  } else if (input_count == 3) {
+    auto constexpr input_top = 76.F;
+    auto constexpr port_dy = 15.5F;
     auto constexpr hp = 10;
     l.hp_ = hp;
-    l.condition_y_ = 23.F;
+    l.condition_y_ = 20.F;
     l.outcome_x_ = 40.64F;
     l.port_dy_ = port_dy;
     l.input_top_ = input_top;
@@ -37,10 +48,10 @@ static auto layout(int input_count) -> Layout {
     l.output_x_ = 40.64F;
   } else {
     auto constexpr hp = 16;
-    auto constexpr input_top = 26.36F;
-    auto constexpr port_dy = 15.6F;
+    auto constexpr input_top = 29.36F;
+    auto constexpr port_dy = 14.585F;
     l.hp_ = hp;
-    l.condition_y_ = 25.74F;
+    l.condition_y_ = 23.66F;
     l.outcome_x_ = 71.11F;
     l.port_dy_ = port_dy;
     l.input_top_ = input_top;
@@ -68,14 +79,15 @@ public:
                                  Param::InputOverride + i));
     }
 
-    auto const condition_left =
+    auto const input_selector_x =
         layout_.outcome_x_ - static_cast<float>(N) * condition_dx;
     auto const condition_y = layout_.condition_y_;
-    for (int i = 0; i < N; i++) {
-      auto const x = condition_left + static_cast<float>(i) * condition_dx;
-      addParam(Toggle::stepper(svg_dir, "condition", condition_count, module, x,
-                               condition_y, Param::Condition + i));
-    }
+    addParam(Toggle::stepper(svg_dir, "input-selector", input_0_selection_count,
+                             module, input_selector_x, condition_y,
+                             Param::Input0Selector));
+    auto const gate_mode_x = layout_.outcome_x_ - condition_dx;
+    addParam(Toggle::stepper(svg_dir, "gate-mode", gate_mode_count, module,
+                             gate_mode_x, condition_y, Param::GateMode));
 
     auto constexpr pattern_count = 1 << N;
     auto const outcome_top = layout_.condition_y_ + outcome_dy;
