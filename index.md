@@ -86,10 +86,9 @@ computes eight common logic functions
 for up to 16 inputs.
 
 **Coming Soon:**
-**[_Truth 3_](modules/truth/)** (shown)
-and _Truth 4_
-apply custom-designed truth tables
-to three or four inputs.
+**[_Truth_](modules/truth/)**
+is a customizable truth table
+with 2, 3, or 4 inputs.
 
 ### Low Frequency Oscillators
 

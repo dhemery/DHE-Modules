@@ -3,14 +3,15 @@ title: The Truth Modules
 ---
 <img class="faceplate" src="truth.svg" alt="The Truth 3 Faceplate" />
 
-Applies a custom-designed truth table
-to a set of inputs.
+Customizable truth tables with 2, 3, or 4 inputs.
 
-_Truth 3_ is shown.
-_Truth 4_ offers similar functionality,
-but for 4 inputs.
+_Truth 3_ is shown, and described below.
+_Truth 2_ and _Truth 4_ offer similar functionality,
+with 2 and 4 inputs, respectively.
 
-## Inputs
+## Controls
+
+### Inputs
 - **A**, **B**, and **C:**
     The input signals for the truth table.
     A voltage above 0.5V (half a volt)
@@ -18,68 +19,97 @@ but for 4 inputs.
     A voltage of 0.5V or below
     is considered _low_.
 
-    Each input signal is evaluated by a _condition_
-    (see below)
-    to derive its true/false value for the truth table.
-
     Beside each input is an "override" button
     that sets the input signal high while pressed.
 
-## The Truth Table
+### The Truth Table
 
--   **Condition Button**
-    (below each input column label):
-    The selected condition
-    determines the truth value
-    of the input signal.
-    An input is _true_
-    if its input signal satisfies the selected condition.
+#### Columns
+
+The first three columns
+represent the three inputs.
+
+1.  Column 1 represents either the **A** input
+    or the truth table's current state (**Q**).
+    Use the button at the top of the column
+    to switch between the two.
+
+    See [using **Q** as an input](#using-q-as-an-input)
+    for more details.
+
+1.  Column 2 represents the **B** input.
+
+1.  Column 3 represents the _condition_ of the **C** input.
+    The button at the top of the column
+    selects a condition to apply.
+    When the **C** input satisfies the condition,
+    the column is true.
+
     The conditions are:
 
     - _HIGH:_
-        The input signal is high.
+        The gate is high.
 
     - _LOW:_
-        The input signal is low.
+        The gate is low.
 
     - _RISE:_
-        The input signal rises.
+        The gate rises.
 
     - _FALL:_
-        The input signal falls.
+        The gate falls.
 
     - _EDGE:_
-        The input signal changes (rises or falls).
+        The gate changes (rises or falls).
 
-    Note that the _RISE_, _FALL_, and _EDGE_ conditions
-    are satisfied by _events_;
-    that is, _changes_ in the input signal.
-    Each event lasts for a single sample.
+    See [using input **C** as gate or clock](#using-input-c-as-a-gate-or-clock)
+    for more details.
 
-    In contrast, _HIGH_ and _LOW_ evaluate the _state_ of the input.
 
--   **Outcome Button**
-    (in each row of the Q column):
-    Determines the value of the truth table
-    when the input conditions match the row.
-    The outcomes are:
+1.  Column 4 (the **Q**) column
+    specifies the output of the truth table
+    for each possible state of the inputs.
 
-    - _T:_
-        The **Q** output port emits 10V (true)
-        and **¬Q** emits 0V.
+#### Rows
 
-    - _F:_
-        The **Q** output port emits 0V (false)
-        and **¬Q** emits 10V.
+-   Below the dark header row,
+    the truth table has eight more rows,
+    one for each possible state of the inputs.
+-   In each row,
+    the first three columns
+    represent a possible state of the three inputs.
+-   The button in the **Q** column
+    selects the value (true or false)
+    to output when the inputs
+    match the row's state.
 
-## Outputs
+### Outputs
 
 - **Q:**
     The value of the truth table
-    for the given inputs
-    and conditions.
+    for the given inputs.
     10V represents true,
     and 0V represents false.
 
 - **¬Q:**
     The negation of Q.
+
+## Usage Notes
+
+### Using **Q** as an input
+
+When **Q** is selected as an input,
+the **A** input port and button are ignored.
+
+Additional details… TBD
+
+### Using input **C** as a gate or clock
+
+Note that the _RISE_, _FALL_, and _EDGE_ conditions
+are satisfied by _transitions_.
+Each transition lasts for a single sample.
+
+In contrast, _HIGH_ and _LOW_ evaluate the _state_ of the input.
+The input may remain in that state indefinitely.
+
+Additional details… TBD
