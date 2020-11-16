@@ -1,7 +1,8 @@
 #pragma once
 
+#include "conditions.h"
 #include "controls/common-inputs.h"
-#include "steppers.h"
+#include "outcomes.h"
 #include "truth-control-ids.h"
 
 #include <engine/Module.hpp>
@@ -10,23 +11,6 @@
 namespace dhe {
 
 namespace truth {
-
-static inline auto is_satisfied(Condition condition, dhe::Latch const &input)
-    -> bool {
-  switch (condition) {
-  case Condition::InputIsHigh:
-  default:
-    return input.is_high();
-  case Condition::InputIsLow:
-    return input.is_low();
-  case Condition::InputRises:
-    return input.is_rise();
-  case Condition::InputFalls:
-    return input.is_fall();
-  case Condition::InputChanges:
-    return input.is_edge();
-  }
-}
 
 template <int N> class Truth : public rack::engine::Module {
 public:
@@ -40,11 +24,12 @@ public:
     }
     for (int i = 0; i < pattern_count; i++) {
       config_toggle<outcome_count>(this, Param::Outcome + i, "Q",
-                                   outcome_descriptions, 1);
+                                   outcome_descriptions, 0);
     }
   }
 
   void process(ProcessArgs const & /*ignored*/) override {
+    update_latches();
     auto const q = outcome() ? 10.F : 0.F;
     outputs[Output::Q].setVoltage(q);
     outputs[Output::NotQ].setVoltage(10.F - q);
@@ -57,18 +42,23 @@ public:
   }
 
 private:
+  void update_latches() {
+    for (int i = 0; i < N; i++) {
+      auto &latch = input_latches_[i];
+      latch.clock(input_signal(i));
+    }
+  }
+
   auto outcome() -> bool { return outcome_for(selection()); }
 
   auto outcome_for(int i) const -> bool {
     return value_of(params[Param::Outcome + i]) > 0.5F;
   }
 
-  auto selection() -> int {
+  auto selection() const -> int {
     auto pattern = 0;
     for (int i = 0; i < N; i++) {
-      auto &latch = input_latches_[i];
-      latch.clock(input_signal(i));
-      auto const satisfied = is_satisfied(condition(i), latch);
+      auto const satisfied = is_satisfied(condition(i), input_latches_[i]);
       pattern += pattern + (satisfied ? 1 : 0);
     }
     return pattern;
