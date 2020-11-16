@@ -7,6 +7,7 @@ title: Release Notes
 ## Version 1.5.0
 November 2020
 
+- Added _Truth 2_.
 - Added [_Truth 3_]({{ '/modules/truth/' | relative_url }}).
 - Added _Truth 4_.
 
