@@ -12,7 +12,7 @@ with 2 and 4 inputs, respectively.
 ## Controls
 
 ### Inputs
-- **A**, **B**, and **C:**
+- **A**, **B**, and **C/GATE:**
     The input signals for the truth table.
     A voltage above 0.5V (half a volt)
     is considered _high_.
@@ -39,10 +39,10 @@ represent the three inputs.
 
 1.  Column 2 represents the **B** input.
 
-1.  Column 3 represents the _condition_ of the **C** input.
+1.  Column 3 represents the _condition_ of the **C/GATE** input.
     The button at the top of the column
     selects a condition to apply.
-    When the **C** input satisfies the condition,
+    When the **C/GATE** input satisfies the condition,
     the column is true.
 
     The conditions are:
@@ -103,7 +103,7 @@ the **A** input port and button are ignored.
 
 Additional details… TBD
 
-### Using input **C** as a gate or clock
+### Using input **C/GATE** as a gate or clock
 
 Note that the _RISE_, _FALL_, and _EDGE_ conditions
 are satisfied by _transitions_.

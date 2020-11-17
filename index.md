@@ -111,11 +111,15 @@ generating a pair of complex, evolving, pulsing LFO signals.
 
 ### Utilities
 
+<a href="modules/buttons/"><img height="350" src="modules/buttons/buttons.svg" /></a>
 <a href="modules/cubic/"><img height="350" src="modules/cubic/cubic.svg" /></a>
 <a href="modules/func/"><img height="350" src="modules/func/func.svg" /></a>
 <a href="modules/func-6/"><img height="350" src="modules/func-6/func-6.svg" /></a>
 <a href="modules/ranger/"><img height="350" src="modules/ranger/ranger.svg" /></a>
 <a href="modules/tapers/"><img height="350" src="modules/tapers/tapers.svg" /></a>
+
+**[_Buttons_](modules/buttons/):**
+8 toggle buttons with momentary negation.
 
 **[_Cubic_](modules/cubic/)**
 offsets, scales, squares, and cubes its input signal.

@@ -10,6 +10,7 @@ November 2020
 - Added _Truth 2_.
 - Added [_Truth 3_]({{ '/modules/truth/' | relative_url }}).
 - Added _Truth 4_.
+- Added [_Buttons_]({{ '/modules/buttons/' | relative_url }}).
 
 ## Version 1.4.0
 November 2020
