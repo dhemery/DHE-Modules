@@ -35,6 +35,7 @@ module Truth
     top = layout[:input_top]
     dy = layout[:port_dy]
     input_names.each_with_index do |input_name, i|
+      input_name = '    ' + input_name + '/GATE' if i == input_names.length - 1
       input_button_port x: x, y: top + i * dy, label: input_name, label_size: :large
     end
   end
