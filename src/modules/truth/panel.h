@@ -1,4 +1,4 @@
-#include "truth-control-ids.h"
+#include "control-ids.h"
 
 #include <array>
 #include <engine/Module.hpp>
@@ -7,10 +7,10 @@
 namespace dhe {
 namespace truth {
 
-auto constexpr condition_dx = 10.16F;
-auto constexpr outcome_dy = 5.08F;
-auto constexpr input_x = 10.28;
-auto constexpr input_button_x = input_x + button_port_distance;
+static auto constexpr condition_dx = 10.16F;
+static auto constexpr outcome_dy = 5.08F;
+static auto constexpr input_x = 10.28;
+static auto constexpr input_button_x = input_x + button_port_distance;
 
 struct Layout {
   int hp_;

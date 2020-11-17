@@ -1,5 +1,7 @@
 #include "modules/blossom/blossom-panel.h"
 #include "modules/blossom/blossom.h"
+#include "modules/buttons/module.h"
+#include "modules/buttons/panel.h"
 #include "modules/cubic/cubic-panel.h"
 #include "modules/cubic/cubic.h"
 #include "modules/curve-sequencer/curve-sequencer-module.h"
@@ -64,6 +66,8 @@ using dhe::stage::UpstagePanel;
 using dhe::swave::Swave;
 using dhe::swave::SwavePanel;
 
+using Buttons = dhe::buttons::Module;
+using ButtonsPanel = dhe::buttons::Panel;
 template <int N> using SequencizerModule = dhe::sequencizer::Module<N>;
 template <int N> using SequencizerPanel = dhe::sequencizer::Panel<N>;
 template <int N> using ScannibalModule = dhe::scannibal::Module<N>;
@@ -87,6 +91,7 @@ extern "C" void init(rack::plugin::Plugin *p) {
   p->addModel(rack::createModel<Blossom, BlossomPanel>("Blossom"));
   p->addModel(
       rack::createModel<BoosterStageModule, BoosterStagePanel>("BoosterStage"));
+  p->addModel(rack::createModel<Buttons, ButtonsPanel>("Buttons"));
   p->addModel(rack::createModel<Cubic, CubicPanel>("Cubic"));
   p->addModel(rack::createModel<dhe::curve_sequencer::CurveSequencerModule<4>,
                                 dhe::curve_sequencer::CurveSequencerPanel<4>>(

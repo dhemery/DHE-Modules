@@ -31,6 +31,15 @@
       ]
     },
     {
+      "slug": "Buttons",
+      "name": "Buttons",
+      "description": "8 buttons with overrides",
+      "manualUrl": "https://dhemery.github.io/DHE-Modules/modules/buttons/",
+      "tags": [
+        "Utility"
+      ]
+    },
+    {
       "slug": "Cubic",
       "name": "Cubic",
       "description": "Offsets, scales, squares, and cubes its input signal",

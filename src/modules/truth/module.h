@@ -1,10 +1,10 @@
 #pragma once
 
+#include "control-ids.h"
 #include "controls/common-inputs.h"
 #include "gate-modes.h"
 #include "input-selector.h"
 #include "outcomes.h"
-#include "truth-control-ids.h"
 
 #include <engine/Module.hpp>
 #include <string>

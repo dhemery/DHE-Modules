@@ -215,7 +215,7 @@ class ModuleFactory
     @overlay_shapes << option_for_overlay unless hidden
   end
 
-  def button(x:, y:, label: nil, name: 'button')
+  def button(x:, y:, label: nil, label_size: :small, name: 'button')
     button = Button.new(name: name, pressed_color: @background, released_color: @foreground)
     @controls << button
 
@@ -226,7 +226,7 @@ class ModuleFactory
 
     return if label.nil?
 
-    faceplate_label = Label.new(text: label, color: @foreground, size: :small, alignment: :above)
+    faceplate_label = Label.new(text: label, color: @foreground, size: label_size, alignment: :above)
                            .translated(button_for_overlay.x, button_for_overlay.top)
     @faceplate_shapes << faceplate_label
   end
