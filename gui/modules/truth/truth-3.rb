@@ -7,6 +7,7 @@ CONDITION_Y = 20
 OUTCOME_X = 40.64
 PORT_DY = 15.5
 INPUT_TOP = 76
+INPUT_X = 10.28
 OUTPUT_TOP = INPUT_TOP + PORT_DY
 OUTPUT_X = 40.64
 
@@ -26,6 +27,7 @@ LAYOUT = {
   condition_y: CONDITION_Y,
   outcome_x: OUTCOME_X,
   input_top: INPUT_TOP,
+  input_x: INPUT_X,
   output_top: OUTPUT_TOP,
   output_x: OUTPUT_X,
   port_dy: PORT_DY,

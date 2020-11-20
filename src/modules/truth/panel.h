@@ -79,12 +79,7 @@ public:
                                  Param::InputOverride + i));
     }
 
-    auto const input_selector_x =
-        layout_.outcome_x_ - static_cast<float>(N) * condition_dx;
     auto const condition_y = layout_.condition_y_;
-    addParam(Toggle::stepper(svg_dir, "input-selector", input_0_selection_count,
-                             module, input_selector_x, condition_y,
-                             Param::Input0Selector));
     auto const gate_mode_x = layout_.outcome_x_ - condition_dx;
     addParam(Toggle::stepper(svg_dir, "gate-mode", gate_mode_count, module,
                              gate_mode_x, condition_y, Param::GateMode));
@@ -97,11 +92,17 @@ public:
                                layout_.outcome_x_, y, Param::Outcome + i));
     }
 
+    addParam(Button::output(svg_dir, module,
+                            layout_.output_x_ + button_port_distance,
+                            layout_.output_top_, Param::QOverride));
     addOutput(Jack::output(svg_dir, module, layout_.output_x_,
                            layout_.output_top_, Output::Q));
+    addParam(Button::output(
+        svg_dir, module, layout_.output_x_ + button_port_distance,
+        layout_.output_top_ + layout_.port_dy_, Param::QNotOverride));
     addOutput(Jack::output(svg_dir, module, layout_.output_x_,
                            layout_.output_top_ + layout_.port_dy_,
-                           Output::NotQ));
+                           Output::QNot));
   }
 
 private:

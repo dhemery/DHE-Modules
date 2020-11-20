@@ -5,13 +5,15 @@
 namespace dhe {
 namespace truth {
 enum class Outcome {
-  False,
   True,
+  False,
+  Q,
+  QNot,
 };
 
-static auto constexpr outcome_count = static_cast<int>(Outcome::True) + 1;
+static auto constexpr outcome_count = static_cast<int>(Outcome::QNot) + 1;
 
 static auto constexpr outcome_descriptions =
-    std::array<char const *, outcome_count>{"False", "True"};
+    std::array<char const *, outcome_count>{"True", "False", "Q", "¬Q"};
 } // namespace truth
 } // namespace dhe

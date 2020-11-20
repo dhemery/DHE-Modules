@@ -8,6 +8,7 @@ CONDITION_Y = 23.66
 OUTCOME_X = 71.11
 PORT_DY = 14.585
 INPUT_TOP = 29.36
+INPUT_X = 10.28
 OUTPUT_TOP = INPUT_TOP + 4 * PORT_DY
 
 LAYOUT = {
@@ -34,8 +35,9 @@ LAYOUT = {
   condition_y: CONDITION_Y,
   outcome_x: OUTCOME_X,
   input_top: INPUT_TOP,
+  input_x: INPUT_X,
   output_top: OUTPUT_TOP,
-  output_x: INPUT_X,
+  output_x: INPUT_X + 7,
   port_dy: PORT_DY,
 }
 

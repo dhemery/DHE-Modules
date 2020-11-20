@@ -1,4 +1,3 @@
-require_relative '../../../lib/shapes/position-marker'
 require_relative '../../../lib/dimensions'
 
 module Truth
@@ -9,7 +8,7 @@ module Truth
   HEADER_ROWS = 1
   OUTCOME_COLS = 1
 
-  OUTCOME_NAMES = %w[F T]
+  OUTCOME_NAMES = %w[T F Q ¬Q]
   SELECTED_OUTCOME = 2
   CONDITION_NAMES = %w[RISE FALL EDGE HIGH LOW]
   SELECTED_CONDITION = 4
@@ -17,7 +16,6 @@ module Truth
 
   CONDITION_DX = 10.16
   OUTCOME_DY = 5.08
-  INPUT_X = 10.28
 
   def make_truth(layout)
     name "TRUTH #{layout[:input_names].length}"
@@ -31,7 +29,7 @@ module Truth
 
   def make_inputs(layout)
     input_names = layout[:input_names]
-    x = INPUT_X
+    x = layout[:input_x]
     top = layout[:input_top]
     dy = layout[:port_dy]
     input_names.each_with_index do |input_name, i|
@@ -72,10 +70,9 @@ module Truth
     end
 
     label_y = condition_y
-    (1...input_cols - 1).each do |input|
+    (0...input_cols - 1).each do |input|
       label x: condition_left + input * dx, y: label_y, size: :large, text: input_names[input], alignment: :center, color: @background
     end
-    stepper x: condition_left, y: condition_y, size: :large, name: "input-selector", options: [input_names[0], 'Q'], selection: 1, width: 9
     stepper x: outcome_x - dx, y: condition_y, size: :large, name: 'gate-mode', options: CONDITION_NAMES, selection: SELECTED_CONDITION, width: 9
     label x: outcome_x, y: condition_y, size: :large, text: 'Q', alignment: :center, color: @background
 
@@ -98,7 +95,7 @@ module Truth
     x = layout[:output_x]
     top = layout[:output_top]
     dy = layout[:port_dy]
-    output_port(x: x, y: top, label: 'Q', label_size: :large)
-    output_port(x: x, y: top + dy, label: '¬ Q', label_size: :large)
+    output_button_port(x: x, y: top, label: 'Q', label_size: :large)
+    output_button_port(x: x, y: top + dy, label: '¬ Q', label_size: :large)
   end
 end

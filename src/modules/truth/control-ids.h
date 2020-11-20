@@ -7,10 +7,12 @@ namespace truth {
 
 template <int N> struct ParamIds {
   enum {
-    Input0Selector,
+    Input0Selector,             // In v0: Input0Selection
+    QOverride = Input0Selector, // In v1: QOverride
     GateMode,
     MULTIPLE(InputOverride, N),
     MULTIPLE(Outcome, 1 << N),
+    QNotOverride,
     Count,
   };
 };
@@ -25,7 +27,7 @@ template <int N> struct InputIds {
 struct OutputIds {
   enum {
     Q,
-    NotQ,
+    QNot,
     Count,
   };
 };
