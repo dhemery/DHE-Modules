@@ -12,6 +12,7 @@
 namespace dhe {
 
 namespace truth {
+auto constexpr version = 1;
 
 template <int N> class Truth : public rack::engine::Module {
 public:
@@ -37,6 +38,14 @@ public:
     auto const q = outcome() ? 10.F : 0.F;
     outputs[Output::Q].setVoltage(q);
     outputs[Output::NotQ].setVoltage(10.F - q);
+  }
+
+  void dataFromJson(json_t *data) override {
+    auto *const preset_version_json = json_object_get(data, preset_version_key);
+    auto const preset_version = json_integer_value(preset_version_json);
+    if (preset_version < version) {
+      upgrade_0_to_1();
+    }
   }
 
   auto dataToJson() -> json_t * override {
@@ -75,8 +84,16 @@ private:
     return static_cast<Input0Selection>(
         value_of(params[Param::Input0Selector]));
   }
+
   auto gate_mode() const -> GateMode {
     return static_cast<GateMode>(value_of(params[Param::GateMode]));
+  }
+
+  void upgrade_0_to_1() {
+    for (int i = 0; i < pattern_count; i++) {
+      auto const v = params[Param::Input0Selector].getValue();
+      params[Param::Outcome + i].setValue(v);
+    }
   }
 
   static auto constexpr pattern_count = 1 << N;
