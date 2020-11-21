@@ -1,8 +1,8 @@
 {
-  "id": 10,
+  "id": 12,
   "plugin": "DHE-Modules",
   "version": "1.5.0",
-  "model": "Truth3",
+  "model": "Truth4",
   "params": [
     {
       "id": 0,
@@ -26,7 +26,7 @@
     },
     {
       "id": 5,
-      "value": 2.0
+      "value": 0.0
     },
     {
       "id": 6,
@@ -34,7 +34,7 @@
     },
     {
       "id": 7,
-      "value": 2.0
+      "value": 1.0
     },
     {
       "id": 8,
@@ -42,7 +42,7 @@
     },
     {
       "id": 9,
-      "value": 2.0
+      "value": 1.0
     },
     {
       "id": 10,
@@ -50,17 +50,55 @@
     },
     {
       "id": 11,
-      "value": 2.0
+      "value": 0.0
     },
     {
       "id": 12,
-      "value": 1.0
+      "value": 2.0
     },
     {
       "id": 13,
+      "value": 2.0
+    },
+    {
+      "id": 14,
+      "value": 2.0
+    },
+    {
+      "id": 15,
+      "value": 0.0
+    },
+    {
+      "id": 16,
+      "value": 1.0
+    },
+    {
+      "id": 17,
+      "value": 1.0
+    },
+    {
+      "id": 18,
+      "value": 0.0
+    },
+    {
+      "id": 19,
+      "value": 0.0
+    },
+    {
+      "id": 20,
+      "value": 2.0
+    },
+    {
+      "id": 21,
+      "value": 2.0
+    },
+    {
+      "id": 22,
       "value": 0.0
     }
   ],
+  "leftModuleId": 11,
+  "rightModuleId": 10,
   "data": {
     "preset_version": 1
   }

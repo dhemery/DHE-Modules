@@ -1,5 +1,5 @@
 {
-  "id": 12,
+  "id": 11,
   "plugin": "DHE-Modules",
   "version": "1.5.0",
   "model": "Truth2",
@@ -41,7 +41,8 @@
       "value": 0.0
     }
   ],
-  "rightModuleId": 10,
+  "leftModuleId": 12,
+  "rightModuleId": 13,
   "data": {
     "preset_version": 1
   }
