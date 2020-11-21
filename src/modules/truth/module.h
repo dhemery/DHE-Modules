@@ -25,8 +25,9 @@ public:
     }
     config_toggle<gate_mode_count>(this, Param::GateMode, "True when",
                                    gate_mode_descriptions, 3);
-    for (int i = 0; i < pattern_count; i++) {
-      config_toggle<outcome_count>(this, Param::Outcome + i, "Q",
+    static auto constexpr rows = 1 << N;
+    for (int row = 0; row < rows; row++) {
+      config_toggle<outcome_count>(this, Param::Outcome + row, "Q",
                                    outcome_descriptions, 0);
     }
     config_button(this, Param::QOverride, "Q", {"From table", "Set"}, 0);
@@ -55,30 +56,38 @@ public:
   }
 
 private:
-  auto outcome() -> bool { return outcome_for(selection()); }
+  auto outcome() -> bool {
+    if (is_pressed(params[Param::QOverride])) {
+      return true;
+    }
+    if (is_pressed(params[Param::QNotOverride])) {
+      return false;
+    }
+    return outcome_for(selection());
+  }
 
-  auto outcome_for(int i) const -> bool {
-    auto const selection =
-        static_cast<Outcome>(value_of(params[Param::Outcome + i]));
-    switch (selection) {
+  auto outcome_for(int row) const -> bool {
+    auto const outcome =
+        static_cast<Outcome>(value_of(params[Param::Outcome + row]));
+    switch (outcome) {
     default:
       return false;
     case Outcome::True:
       return true;
     case Outcome::Q:
-      return voltage_at(outputs[Output::Q]) > 0.5F;
+      return is_high(outputs[Output::Q]);
     case Outcome::QNot:
-      return voltage_at(outputs[Output::QNot]) > 0.5F;
+      return is_high(outputs[Output::QNot]);
     }
   }
 
   auto selection() const -> int {
-    auto pattern = 0;
+    auto input_state = 0;
     for (int i = 0; i < N - 1; i++) {
-      pattern += pattern + (is_true(i) ? 1 : 0);
+      input_state += input_state + (is_true(i) ? 1 : 0);
     }
-    pattern += pattern + (is_satisfied(gate_mode(), gate_) ? 1 : 0);
-    return pattern;
+    input_state += input_state + (is_satisfied(gate_mode(), gate_) ? 1 : 0);
+    return input_state;
   }
 
   auto is_true(int i) const -> bool {
@@ -90,7 +99,6 @@ private:
     return static_cast<GateMode>(value_of(params[Param::GateMode]));
   }
 
-  static auto constexpr pattern_count = 1 << N;
   using Param = ParamIds<N>;
   using Input = InputIds<N>;
   using Output = OutputIds;
