@@ -5,6 +5,7 @@
 #include "gate-modes.h"
 #include "input-selector.h"
 #include "outcomes.h"
+#include "upgrader.h"
 
 #include <engine/Module.hpp>
 #include <string>
@@ -42,14 +43,14 @@ public:
   void dataFromJson(json_t *data) override {
     auto *const preset_version_json = json_object_get(data, preset_version_key);
     auto const preset_version = json_integer_value(preset_version_json);
-    if (preset_version < version) {
-      upgrade_0_to_1();
+    if (preset_version != version) {
+      upgrade::from_v0<N>(params);
     }
   }
 
   auto dataToJson() -> json_t * override {
     auto *data = json_object();
-    json_object_set_new(data, preset_version_key, json_integer(0));
+    json_object_set_new(data, preset_version_key, json_integer(1));
     return data;
   }
 
@@ -85,44 +86,8 @@ private:
            is_pressed(params[Param::InputOverride + i]);
   }
 
-  auto input_0() const -> Input0Selection {
-    return static_cast<Input0Selection>(
-        value_of(params[Param::Input0Selector]));
-  }
-
   auto gate_mode() const -> GateMode {
     return static_cast<GateMode>(value_of(params[Param::GateMode]));
-  }
-
-  void upgrade_0_to_1() {
-    auto const column_0_is_q = value_of(params[Param::Input0Selector]) > 0.5F;
-    // Old Input0Selection param is now the QOverride momentary button. Make
-    // sure the button starts released.
-    params[Param::QOverride].setValue(0.F);
-
-    if (column_0_is_q) {
-      // In the first half of the table, Qprev is false. Set the new outcome
-      // to Q if the old outcome was false, and ¬Q if the old outcome was true.
-      for (int i = 0; i < pattern_count / 2; i++) {
-        auto const was_true = params[Param::Outcome + i].getValue() == 1.F;
-        auto const new_outcome = was_true ? Outcome::QNot : Outcome::Q;
-        params[Param::Outcome + i].setValue(static_cast<float>(new_outcome));
-      }
-      // In the second half of the table, Qprev is true. Set the new outcome
-      // to Q if the old outcome was true, and ¬Q if the old outcome was false.
-      for (int i = pattern_count / 2; i < pattern_count; i++) {
-        auto const was_true = params[Param::Outcome + i].getValue() == 1.F;
-        auto const new_outcome = was_true ? Outcome::Q : Outcome::QNot;
-        params[Param::Outcome + i].setValue(static_cast<float>(new_outcome));
-      }
-    } else {
-      // Column 0 is A. Version 1 reverses the positions of the T and F outcomes
-      // in order to make T come first in the toggle sequence: T F Q ¬Q.
-      for (int i = 0; i < pattern_count; i++) {
-        auto const old_value = params[Param::Outcome + i].getValue();
-        params[Param::Outcome + 1].setValue(1.F - old_value);
-      }
-    }
   }
 
   static auto constexpr pattern_count = 1 << N;

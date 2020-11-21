@@ -7,8 +7,7 @@ namespace truth {
 
 template <int N> struct ParamIds {
   enum {
-    Input0Selector,             // In v0: Input0Selection
-    QOverride = Input0Selector, // In v1: QOverride
+    QOverride,
     GateMode,
     MULTIPLE(InputOverride, N),
     MULTIPLE(Outcome, 1 << N),
