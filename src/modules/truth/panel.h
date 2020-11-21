@@ -9,14 +9,13 @@ namespace truth {
 
 static auto constexpr condition_dx = 10.16F;
 static auto constexpr outcome_dy = 5.08F;
-static auto constexpr input_x = 10.28;
-static auto constexpr input_button_x = input_x + button_port_distance;
 
 struct Layout {
   int hp_;
   float condition_y_;
   float outcome_x_;
   float input_top_;
+  float input_x_;
   float output_top_;
   float output_x_;
   float port_dy_;
@@ -25,16 +24,19 @@ struct Layout {
 static auto layout(int input_count) -> Layout {
   auto l = Layout{};
   if (input_count == 2) {
-    auto constexpr input_top = 85.F;
+    auto constexpr input_top = 58.F;
     auto constexpr port_dy = 15.5F;
     auto constexpr hp = 8;
+    auto constexpr port_offset = 3.5F;
+    auto constexpr center_x = 20.48F;
     l.hp_ = hp;
-    l.condition_y_ = 25.F;
+    l.condition_y_ = 21.F;
     l.outcome_x_ = 30.48F;
     l.port_dy_ = port_dy;
     l.input_top_ = input_top;
-    l.output_top_ = input_top;
-    l.output_x_ = 30.48F;
+    l.input_x_ = center_x - port_offset;
+    l.output_top_ = input_top + 2.F * port_dy;
+    l.output_x_ = center_x + port_offset;
   } else if (input_count == 3) {
     auto constexpr input_top = 76.F;
     auto constexpr port_dy = 15.5F;
@@ -44,19 +46,22 @@ static auto layout(int input_count) -> Layout {
     l.outcome_x_ = 40.64F;
     l.port_dy_ = port_dy;
     l.input_top_ = input_top;
+    l.input_x_ = 10.28F;
     l.output_top_ = input_top + port_dy;
     l.output_x_ = 40.64F;
   } else {
     auto constexpr hp = 16;
     auto constexpr input_top = 29.36F;
+    auto constexpr input_x = 10.28F;
     auto constexpr port_dy = 14.585F;
     l.hp_ = hp;
     l.condition_y_ = 23.66F;
     l.outcome_x_ = 71.11F;
     l.port_dy_ = port_dy;
     l.input_top_ = input_top;
+    l.input_x_ = 10.28F;
     l.output_top_ = input_top + 4.F * port_dy;
-    l.output_x_ = input_x;
+    l.output_x_ = input_x + 7.F;
   }
   return l;
 }
@@ -74,8 +79,10 @@ public:
     for (int i = 0; i < N; i++) {
       auto const y =
           layout_.input_top_ + static_cast<float>(i) * layout_.port_dy_;
-      addInput(Jack::input(svg_dir, module, input_x, y, Input::Input + i));
-      addParam(Button::momentary(svg_dir, module, input_button_x, y,
+      addInput(
+          Jack::input(svg_dir, module, layout_.input_x_, y, Input::Input + i));
+      addParam(Button::momentary(svg_dir, module,
+                                 layout_.input_x_ + button_port_distance, y,
                                  Param::InputOverride + i));
     }
 
@@ -93,12 +100,12 @@ public:
     }
 
     addParam(Button::output(svg_dir, module,
-                            layout_.output_x_ + button_port_distance,
+                            layout_.output_x_ - button_port_distance,
                             layout_.output_top_, Param::QOverride));
     addOutput(Jack::output(svg_dir, module, layout_.output_x_,
                            layout_.output_top_, Output::Q));
     addParam(Button::output(
-        svg_dir, module, layout_.output_x_ + button_port_distance,
+        svg_dir, module, layout_.output_x_ - button_port_distance,
         layout_.output_top_ + layout_.port_dy_, Param::QNotOverride));
     addOutput(Jack::output(svg_dir, module, layout_.output_x_,
                            layout_.output_top_ + layout_.port_dy_,
