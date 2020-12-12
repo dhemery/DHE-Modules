@@ -9,7 +9,6 @@ namespace stage {
 using dhe::unit::is_true;
 using dhe::unit::Suite;
 using dhe::unit::Tester;
-using dhe::unit::TestRegistrar;
 
 // Nothing to do, because the state is already freshly constructed
 static inline void freshly_constructed(Controls & /**/, SimpleMode & /**/,
@@ -19,15 +18,15 @@ static inline void freshly_constructed(Controls & /**/, SimpleMode & /**/,
 class StageEngineSuite : public Suite {
 public:
   StageEngineSuite() : Suite{"dhe::stage::StageEngine"} {}
-  void register_tests(TestRegistrar add) override {
-    add("starts in input mode",
-        test(freshly_constructed,
-             [](Tester &t, Controls & /**/, SimpleMode & /**/,
-                SimpleMode &input_mode, TimedMode & /**/, SimpleMode & /**/,
-                StageEngine &engine) {
-               engine.process(0.F);
-               t.assert_that(input_mode.executed_, is_true);
-             }));
+  void run(Tester &t) {
+    t.run("starts in input mode",
+          test(freshly_constructed,
+               [](Tester &t, Controls & /**/, SimpleMode & /**/,
+                  SimpleMode &input_mode, TimedMode & /**/, SimpleMode & /**/,
+                  StageEngine &engine) {
+                 engine.process(0.F);
+                 t.assert_that(input_mode.executed_, is_true);
+               }));
   }
 };
 

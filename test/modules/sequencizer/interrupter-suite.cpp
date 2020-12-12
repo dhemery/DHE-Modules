@@ -43,7 +43,7 @@ class InterrupterSuite : public Suite {
 public:
   InterrupterSuite()
       : Suite{"dhe::sequencizer::Interrupter is_interrupted(s)"} {}
-  void register_tests(dhe::unit::TestRegistrar add) override {
+  void run(Tester &t) override {
     auto test_cases = std::vector<InterrupterTestCase>{
         {InterruptMode::No, TriggerMode::GateRises, rising_latch, false},
         {InterruptMode::No, TriggerMode::GateRises, falling_latch, false},
@@ -88,7 +88,7 @@ public:
     };
 
     for (auto const &test_case : test_cases) {
-      add(test_case.name(), test_case);
+      t.run(test_case.name(), test_case);
     }
   }
 };

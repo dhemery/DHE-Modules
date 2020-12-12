@@ -2,7 +2,9 @@
 
 #include "components/latch.h"
 #include "modules/stage/stage-engine.h"
+
 #include <dheunit/test.h>
+#include <functional>
 
 namespace test {
 namespace stage {
@@ -10,7 +12,7 @@ namespace stage {
 using dhe::Latch;
 using dhe::stage::Event;
 using dhe::unit::Tester;
-using dhe::unit::TestFunc;
+using TestFunc = std::function<void(Tester &)>;
 
 struct Controls {
   auto defer() const -> bool { return defer_; }

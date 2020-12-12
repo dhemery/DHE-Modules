@@ -3,15 +3,19 @@
 #include "./status-enums.h"
 #include "modules/sequencizer/status.h"
 #include "modules/sequencizer/step-controller.h"
-#include <array>
+
 #include <dheunit/test.h>
+
+#include <array>
+#include <functional>
 
 namespace test {
 namespace sequencizer {
 using dhe::Latch;
 using dhe::sequencizer::GeneratorStatus;
 using dhe::unit::Tester;
-using dhe::unit::TestFunc;
+
+using TestFunc = std::function<void(Tester &)>;
 
 auto constexpr step_count = 8;
 

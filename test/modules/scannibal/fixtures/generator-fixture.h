@@ -5,12 +5,13 @@
 
 #include <array>
 #include <dheunit/test.h>
+#include <functional>
 
 namespace test {
 namespace scannibal {
 
 using dhe::unit::Tester;
-using dhe::unit::TestFunc;
+using TestFunc = std::function<void(Tester &)>;
 
 auto constexpr step_count = 8;
 struct Anchor {

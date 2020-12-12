@@ -1,7 +1,10 @@
 #include "helpers/rack-controls.h"
 #include "modules/sequencizer/module.h"
+
 #include <dheunit/assertions.h>
 #include <dheunit/test.h>
+
+#include <functional>
 
 namespace test {
 namespace sequencizer {
@@ -9,9 +12,10 @@ namespace sequencizer {
 static auto constexpr step_count = 8;
 
 using dhe::unit::Tester;
-using dhe::unit::TestFunc;
 using test::fake::Param;
 using test::fake::Port;
+
+using TestFunc = std::function<void(Tester &)>;
 
 template <typename Matcher>
 static inline auto test(float duration_rotation, int range_selection,

@@ -9,7 +9,6 @@ namespace test {
 namespace scannibal {
 using dhe::unit::is_equal_to;
 using dhe::unit::Suite;
-using dhe::unit::TestRegistrar;
 
 static inline void set_all_voltages(Module &module, float voltage) {
   module.in_a_ = voltage;
@@ -25,8 +24,9 @@ static inline void set_all_voltages(Module &module, float voltage) {
 class AnchorSuite : public Suite {
 public:
   AnchorSuite() : Suite("dhe::scannibal::Anchor") {}
-  void register_tests(TestRegistrar add) override {
-    add("AnchorType::Phase0: "
+  void run(Tester &t) override {
+    t.run(
+        "AnchorType::Phase0: "
         "entered with AnchorSource::Level: "
         "voltage() with AnchorMode::Sample: "
         "is sampled level voltage",
@@ -50,7 +50,8 @@ public:
           }
         }));
 
-    add("AnchorType::Phase0: "
+    t.run(
+        "AnchorType::Phase0: "
         "entered with AnchorSource::InA: "
         "voltage() with AnchorMode::Sample: "
         "is sampled A voltage",
@@ -74,7 +75,8 @@ public:
           }
         }));
 
-    add("AnchorType::Phase0: "
+    t.run(
+        "AnchorType::Phase0: "
         "entered with AnchorSource::InB: "
         "voltage() with AnchorMode::Sample: "
         "is sampled B voltage",
@@ -97,7 +99,8 @@ public:
                           is_equal_to(in_b_entry_voltage));
           }
         }));
-    add("AnchorType::Phase0: "
+    t.run(
+        "AnchorType::Phase0: "
         "entered with AnchorSource::InC: "
         "voltage() with AnchorMode::Sample: "
         "is sampled C voltage",
@@ -121,7 +124,8 @@ public:
           }
         }));
 
-    add("AnchorType::Phase0: "
+    t.run(
+        "AnchorType::Phase0: "
         "entered with AnchorSource::Out: "
         "voltage() with AnchorMode::Sample: "
         "is sampled OUT voltage",
@@ -145,7 +149,8 @@ public:
           }
         }));
 
-    add("AnchorType::Phase0: "
+    t.run(
+        "AnchorType::Phase0: "
         "voltage() with AnchorMode::Track and AnchorSource::Level: "
         "is current level voltage",
         test(AnchorType::Phase0, [](Tester &t, Module &module, Anchor &anchor) {
@@ -166,7 +171,8 @@ public:
           }
         }));
 
-    add("AnchorType::Phase0: "
+    t.run(
+        "AnchorType::Phase0: "
         "voltage() with AnchorMode::Track and AnchorSource::InA: "
         "is current A voltage",
         test(AnchorType::Phase0, [](Tester &t, Module &module, Anchor &anchor) {
@@ -187,7 +193,8 @@ public:
           }
         }));
 
-    add("AnchorType::Phase0: "
+    t.run(
+        "AnchorType::Phase0: "
         "voltage() with AnchorMode::Track and AnchorSource::InB: "
         "is current B voltage",
         test(AnchorType::Phase0, [](Tester &t, Module &module, Anchor &anchor) {
@@ -208,7 +215,8 @@ public:
           }
         }));
 
-    add("AnchorType::Phase0: "
+    t.run(
+        "AnchorType::Phase0: "
         "voltage() with AnchorMode::Track and AnchorSource::InC: "
         "is current C voltage",
         test(AnchorType::Phase0, [](Tester &t, Module &module, Anchor &anchor) {
@@ -229,7 +237,8 @@ public:
           }
         }));
 
-    add("AnchorType::Phase0: "
+    t.run(
+        "AnchorType::Phase0: "
         "voltage() with AnchorMode::Track and AnchorSource::Out: "
         "is current OUT voltage",
         test(AnchorType::Phase0, [](Tester &t, Module &module, Anchor &anchor) {
@@ -250,7 +259,8 @@ public:
           }
         }));
 
-    add("AnchorType::Phase1: "
+    t.run(
+        "AnchorType::Phase1: "
         "entered with AnchorSource::Level: "
         "voltage() with AnchorMode::Sample: "
         "is sampled level voltage",
@@ -274,7 +284,8 @@ public:
           }
         }));
 
-    add("AnchorType::Phase1: "
+    t.run(
+        "AnchorType::Phase1: "
         "entered with AnchorSource::InA: "
         "voltage() with AnchorMode::Sample: "
         "is sampled A voltage",
@@ -298,7 +309,8 @@ public:
           }
         }));
 
-    add("AnchorType::Phase1: "
+    t.run(
+        "AnchorType::Phase1: "
         "entered with AnchorSource::InB: "
         "voltage() with AnchorMode::Sample: "
         "is sampled A voltage",
@@ -322,7 +334,8 @@ public:
           }
         }));
 
-    add("AnchorType::Phase1: "
+    t.run(
+        "AnchorType::Phase1: "
         "entered with AnchorSource::InC: "
         "voltage() with AnchorMode::Sample: "
         "is sampled C voltage",
@@ -346,7 +359,8 @@ public:
           }
         }));
 
-    add("AnchorType::Phase1: "
+    t.run(
+        "AnchorType::Phase1: "
         "entered with AnchorSource::Out: "
         "voltage() with AnchorMode::Sample: "
         "is sampled OUT voltage",
@@ -370,7 +384,8 @@ public:
           }
         }));
 
-    add("AnchorType::Phase1: "
+    t.run(
+        "AnchorType::Phase1: "
         "voltage() with AnchorMode::Track and AnchorSource::Level: "
         "is current level voltage",
         test(AnchorType::Phase1, [](Tester &t, Module &module, Anchor &anchor) {
@@ -391,7 +406,8 @@ public:
           }
         }));
 
-    add("AnchorType::Phase1: "
+    t.run(
+        "AnchorType::Phase1: "
         "voltage() with AnchorMode::Track and AnchorSource::InA: "
         "is current A voltage",
         test(AnchorType::Phase1, [](Tester &t, Module &module, Anchor &anchor) {
@@ -412,7 +428,8 @@ public:
           }
         }));
 
-    add("AnchorType::Phase1: "
+    t.run(
+        "AnchorType::Phase1: "
         "voltage() with AnchorMode::Track and AnchorSource::InB: "
         "is current B voltage",
         test(AnchorType::Phase1, [](Tester &t, Module &module, Anchor &anchor) {
@@ -433,7 +450,8 @@ public:
           }
         }));
 
-    add("AnchorType::Phase1: "
+    t.run(
+        "AnchorType::Phase1: "
         "voltage() with AnchorMode::Track and AnchorSource::InC: "
         "is current C voltage",
         test(AnchorType::Phase1, [](Tester &t, Module &module, Anchor &anchor) {
@@ -454,7 +472,8 @@ public:
           }
         }));
 
-    add("AnchorType::Phase1: "
+    t.run(
+        "AnchorType::Phase1: "
         "voltage() with AnchorMode::Track and AnchorSource::Out: "
         "is current OUT voltage",
         test(AnchorType::Phase1, [](Tester &t, Module &module, Anchor &anchor) {

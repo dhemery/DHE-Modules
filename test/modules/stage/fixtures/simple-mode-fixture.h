@@ -7,7 +7,7 @@ namespace test {
 namespace stage {
 
 using dhe::unit::Tester;
-using dhe::unit::TestFunc;
+using TestFunc = std::function<void(Tester &)>;
 
 struct Controls {
   auto level() const -> float { return level_; }

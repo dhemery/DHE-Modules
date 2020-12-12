@@ -8,7 +8,6 @@ using dhe::unit::is_false;
 using dhe::unit::is_true;
 using dhe::unit::Suite;
 using dhe::unit::Tester;
-using dhe::unit::TestRegistrar;
 
 static inline void in_idle_mode(Controls &controls, SimpleMode &input_mode,
                                 SimpleMode & /*input_mode*/,
@@ -38,36 +37,37 @@ class HostageEngineLevelModeSuite : Suite {
 public:
   HostageEngineLevelModeSuite()
       : Suite{"dhe::stage::HostageEngine in idle mode"} {}
-  void register_tests(TestRegistrar add) override {
-    add("if defer rises: begins deferring",
-        test(in_idle_mode,
-             [](Tester &t, Controls &controls, SimpleMode & /*input_mode*/,
-                SimpleMode &defer_mode, TimedMode & /*hold_mode*/,
-                LatchedMode & /*sustain_mode*/, SimpleMode &idle_mode,
-                HostageEngine &engine) {
-               controls.defer_ = true;
+  void run(Tester &t) {
+    t.run("if defer rises: begins deferring",
+          test(in_idle_mode,
+               [](Tester &t, Controls &controls, SimpleMode & /*input_mode*/,
+                  SimpleMode &defer_mode, TimedMode & /*hold_mode*/,
+                  LatchedMode & /*sustain_mode*/, SimpleMode &idle_mode,
+                  HostageEngine &engine) {
+                 controls.defer_ = true;
 
-               engine.process(0.F);
+                 engine.process(0.F);
 
-               t.assert_that("exit idle", idle_mode.exited_, is_true);
-               t.assert_that("execute idle", idle_mode.executed_, is_false);
-               t.assert_that("enter defer", defer_mode.entered_, is_true);
-               t.assert_that("execute defer", defer_mode.executed_, is_true);
-             }));
+                 t.assert_that("exit idle", idle_mode.exited_, is_true);
+                 t.assert_that("execute idle", idle_mode.executed_, is_false);
+                 t.assert_that("enter defer", defer_mode.entered_, is_true);
+                 t.assert_that("execute defer", defer_mode.executed_, is_true);
+               }));
 
-    add("with defer low: executes if gate does not rise",
-        test(in_idle_mode,
-             [](Tester &t, Controls &controls, SimpleMode & /*input_mode*/,
-                SimpleMode & /*defer_mode*/, TimedMode & /*hold_mode*/,
-                LatchedMode & /*sustain_mode*/, SimpleMode &idle_mode,
-                HostageEngine &engine) {
-               controls.defer_ = false;
-               controls.gate_ = false;
-               engine.process(0.F);
-               t.assert_that(idle_mode.executed_, is_true);
-             }));
+    t.run("with defer low: executes if gate does not rise",
+          test(in_idle_mode,
+               [](Tester &t, Controls &controls, SimpleMode & /*input_mode*/,
+                  SimpleMode & /*defer_mode*/, TimedMode & /*hold_mode*/,
+                  LatchedMode & /*sustain_mode*/, SimpleMode &idle_mode,
+                  HostageEngine &engine) {
+                 controls.defer_ = false;
+                 controls.gate_ = false;
+                 engine.process(0.F);
+                 t.assert_that(idle_mode.executed_, is_true);
+               }));
 
-    add("with hold mode selected: if gate rises with defer low: begins holding",
+    t.run(
+        "with hold mode selected: if gate rises with defer low: begins holding",
         test(in_idle_mode,
              [](Tester &t, Controls &controls, SimpleMode & /*input_mode*/,
                 SimpleMode & /*defer_mode*/, TimedMode &hold_mode,
@@ -85,7 +85,8 @@ public:
                t.assert_that("execute hold", hold_mode.executed_, is_true);
              }));
 
-    add("with hold mode selected: if gate rises with defer low: begins holding",
+    t.run(
+        "with hold mode selected: if gate rises with defer low: begins holding",
         test(in_idle_mode,
              [](Tester &t, Controls &controls, SimpleMode & /*input_mode*/,
                 SimpleMode & /*defer_mode*/, TimedMode & /*hold_mode*/,

@@ -2,13 +2,13 @@
 
 #include "modules/sequencizer/advancement.h"
 #include <dheunit/test.h>
-
+#include <functional>
 namespace test {
 namespace sequencizer {
 using dhe::sequencizer::SustainMode;
 using dhe::sequencizer::TriggerMode;
 using dhe::unit::Tester;
-using dhe::unit::TestFunc;
+using TestFunc = std::function<void(Tester &)>;
 
 auto constexpr step_count = 8;
 

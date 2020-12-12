@@ -1,13 +1,17 @@
 #pragma once
 
 #include "modules/sequencizer/step-selector.h"
-#include <array>
+
 #include <dheunit/test.h>
+
+#include <array>
+#include <functional>
 
 namespace test {
 namespace sequencizer {
 using dhe::unit::Tester;
-using dhe::unit::TestFunc;
+
+using TestFunc = std::function<void(Tester &)>;
 
 auto constexpr step_count = 8;
 

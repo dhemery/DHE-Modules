@@ -1,8 +1,10 @@
 #include "./fixtures/advancement-enums.h"
 #include "./fixtures/sustainer-fixture.h"
 #include "helpers/latches.h"
+
 #include <dheunit/assertions.h>
 #include <dheunit/test.h>
+#include <vector>
 
 namespace test {
 namespace sequencizer {
@@ -41,7 +43,7 @@ struct SustainerTestCase {
 class SustainerSuite : public Suite {
 public:
   SustainerSuite() : Suite{"dhe::sequencizer::Sustainer is_done(s)"} {}
-  void register_tests(dhe::unit::TestRegistrar add) override {
+  void run(Tester &t) override {
     auto test_cases = std::vector<SustainerTestCase>{
         {SustainMode::No, TriggerMode::GateRises, rising_latch, true},
         {SustainMode::No, TriggerMode::GateRises, falling_latch, true},
@@ -85,7 +87,7 @@ public:
         {SustainMode::Yes, TriggerMode::GateIsLow, low_latch, true},
     };
     for (auto const &test_case : test_cases) {
-      add(test_case.name(), test_case);
+      t.run(test_case.name(), test_case);
     }
   }
 };

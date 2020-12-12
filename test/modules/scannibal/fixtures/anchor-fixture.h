@@ -1,7 +1,7 @@
 #include "modules/scannibal/anchor.h"
 #include <array>
 #include <dheunit/test.h>
-
+#include <functional>
 namespace test {
 namespace scannibal {
 
@@ -10,7 +10,7 @@ using dhe::scannibal::AnchorMode;
 using dhe::scannibal::AnchorSource;
 using dhe::scannibal::AnchorType;
 using dhe::unit::Tester;
-using dhe::unit::TestFunc;
+using TestFunc = std::function<void(Tester &)>;
 
 struct Module {
   auto anchor_level(AnchorType type, int step) const -> float {

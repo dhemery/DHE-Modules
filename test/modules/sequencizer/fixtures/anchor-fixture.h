@@ -1,6 +1,9 @@
 #include "modules/sequencizer/anchor.h"
-#include <array>
+
 #include <dheunit/test.h>
+
+#include <array>
+#include <functional>
 
 namespace test {
 namespace sequencizer {
@@ -10,7 +13,8 @@ using dhe::sequencizer::AnchorMode;
 using dhe::sequencizer::AnchorSource;
 using dhe::sequencizer::AnchorType;
 using dhe::unit::Tester;
-using dhe::unit::TestFunc;
+
+using TestFunc = std::function<void(Tester &)>;
 
 struct Module {
   auto anchor_level(AnchorType type, int step) const -> float {

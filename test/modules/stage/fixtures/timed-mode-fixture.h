@@ -14,7 +14,7 @@ using dhe::PhaseTimer;
 using dhe::sigmoid::Taper;
 using dhe::stage::Event;
 using dhe::unit::Tester;
-using dhe::unit::TestFunc;
+using TestFunc = std::function<void(Tester &)>;
 
 struct Controls {
   auto curvature() const -> float { return curvature_; }

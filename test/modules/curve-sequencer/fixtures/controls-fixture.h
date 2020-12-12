@@ -2,12 +2,13 @@
 
 #include "helpers/rack-controls.h"
 #include <dheunit/test.h>
+#include <functional>
 #include <vector>
 
 namespace test {
 namespace curve_sequencer {
 using dhe::unit::Tester;
-using dhe::unit::TestFunc;
+using TestFunc = std::function<void(Tester &)>;
 
 static auto constexpr step_count = 8;
 
