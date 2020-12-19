@@ -1,0 +1,49 @@
+name: Build and Test
+
+on:
+  push:
+    branches:
+      - main
+      - wip/**
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  build:
+    runs-on: ${{ matrix.config.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        config:
+          - os: ubuntu-16.04
+            compiler: cc
+            install-dependencies: |
+              sudo apt-get install -y libglu-dev
+          - os: macos-latest
+            compiler: cc
+            install-dependencies: |
+              brew install mesa
+          - os: windows-latest
+            compiler: gcc
+            install-dependencies: |
+              choco install --no-progress -y zip
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: true
+      - name: Install Rack SDK
+        run: |
+          curl -o sdk.zip https://vcvrack.com/downloads/Rack-SDK-1.1.6.zip
+          unzip sdk.zip
+      - name: Install Dependencies
+        run: |
+          ${{ matrix.config.install-dependencies }}
+      - name: Build
+        env:
+          RACK_DIR: Rack-SDK
+          CC: ${{ matrix.config.compiler }}
+        run: |
+          make dist
+          make test
