@@ -35,7 +35,7 @@ TEST_OBJECTS := $(patsubst %, build/%.o, $(TEST_SOURCES))
 
 TEST_RUNNER = build/dheunit
 
-TEST_CXX_FLAGS = -Itest/ -Idep/dheunit
+TEST_CXX_FLAGS = -Itest -Idep/dheunit
 
 $(TEST_OBJECTS): dep/dheunit/dheunit
 
@@ -108,14 +108,18 @@ format:
 
 COMPILATION_DB = compile_commands.json
 
-COMPILATION_DB_ENTRIES := $(patsubst %, build/%.json, $(SOURCES))
+COMPILATION_DB_ENTRIES := $(patsubst %, build/%.json, $(SOURCES) $(TEST_SOURCES))
 
 $(COMPILATION_DB): $(COMPILATION_DB_ENTRIES)
 	sed -e '1s/^/[/' -e '$$s/,$$/]/' $^ | json_pp > $@
 
-build/%.json: %
+build/src/%.json: src/%
 	@mkdir -p $(@D)
 	$(CXX) $(CXXFLAGS) -MJ $@ -c -o build/$^.o $^
+
+build/test/%.json: test/%
+	@mkdir -p $(@D)
+	$(CXX) $(CXXFLAGS) $(TEST_CXX_FLAGS) -MJ $@ -c -o build/$^.o $^
 
 .PHONY: tidy
 tidy: $(COMPILATION_DB)
