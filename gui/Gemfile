@@ -1,5 +1,5 @@
 source 'https://rubygems.org'
 
-gem 'builder', '~> 3.2'
-gem 'color', '~> 1.8'
-gem 'rake', '~> 12.3'
+gem 'builder'
+gem 'color'
+gem 'rake'
