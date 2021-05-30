@@ -77,21 +77,21 @@ auto check_clock(Latch l, bool signal, Latch want_latch) -> TestFunc {
 
 auto check_equality(const Latch &a, const Latch &b, bool want_eq) -> TestFunc {
   return [a, b, want_eq](Tester &t) {
-    auto const aeqb = (a == b);
-    if (aeqb != want_eq) {
-      t.errorf("{}=={} got {}, want {}", a, b, aeqb, !aeqb);
+    auto const a_equals_b = (a == b);
+    if (a_equals_b != want_eq) {
+      t.errorf("{}=={} got {}, want {}", a, b, a_equals_b, !a_equals_b);
     }
-    auto const beqa = (b == a);
-    if (beqa != want_eq) {
-      t.errorf("{}=={} got {}, want {}", b, a, beqa, !beqa);
+    auto const b_equals_a = (b == a);
+    if (b_equals_a != want_eq) {
+      t.errorf("{}=={} got {}, want {}", b, a, b_equals_a, !b_equals_a);
     }
-    auto const aneb = (a != b);
-    if (aneb == want_eq) {
-      t.errorf("{}!={} got {}, want {}", a, b, aneb, !aneb);
+    auto const a_not_equals_b = (a != b);
+    if (a_not_equals_b == want_eq) {
+      t.errorf("{}!={} got {}, want {}", a, b, a_not_equals_b, !a_not_equals_b);
     }
-    auto const bnea = (b != a);
-    if (bnea == want_eq) {
-      t.errorf("{}!={} got {}, want {}", b, a, bnea, !bnea);
+    auto const b_not_equals_a = (b != a);
+    if (b_not_equals_a == want_eq) {
+      t.errorf("{}!={} got {}, want {}", b, a, b_not_equals_a, !b_not_equals_a);
     }
   };
 }

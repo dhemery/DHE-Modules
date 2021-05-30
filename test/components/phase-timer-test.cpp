@@ -1,74 +1,94 @@
 #include "components/phase-timer.h"
 
-#include "dheunit/assertions.h"
 #include "dheunit/test.h"
+#include <vector>
 
 namespace dhe {
 namespace components {
 namespace test {
 using dhe::PhaseTimer;
-using dhe::unit::is_equal_to;
-using dhe::unit::is_false;
-using dhe::unit::is_true;
 using dhe::unit::Suite;
 using dhe::unit::Tester;
+
+struct PhaseTimerTest {
+  std::string name_;
+  std::function<PhaseTimer()> init_;
+  std::function<void(PhaseTimer &t)> op_;
+  float want_phase_;
+  bool want_in_progress_;
+};
+
+static std::vector<PhaseTimerTest> phase_timer_tests = {
+    {
+        "defaults in progress at phase 0",           //
+        []() -> PhaseTimer { return PhaseTimer{}; }, //
+        [](PhaseTimer &p) {},                        //
+        0.F,                                         //
+        true,                                        //
+    },
+    {
+        "remembers starting phase",                        //
+        []() -> PhaseTimer { return PhaseTimer{0.934F}; }, //
+        [](PhaseTimer &p) {},                              //
+        0.934F,                                            //
+        true,                                              //
+    },
+    {
+        "constructor stops progress at phase 1",         //
+        []() -> PhaseTimer { return PhaseTimer{22.F}; }, //
+        [](PhaseTimer &p) {},                            //
+        1.F,                                             //
+        false,                                           //
+    },
+    {
+        "advance() advances phase",                  //
+        []() -> PhaseTimer { return PhaseTimer{}; }, //
+        [](PhaseTimer &p) {
+          p.advance(0.124F);
+          p.advance(0.381F);
+        },
+        0.124F + 0.381F, //
+        true,
+    },
+    {
+        "advance() stops progress at phase 1",       //
+        []() -> PhaseTimer { return PhaseTimer{}; }, //
+        [](PhaseTimer &p) { p.advance(3.F); },       //
+        1.F,                                         //
+        false,                                       //
+    },
+    {
+        "reset() resumes progress at phase 0",       //
+        []() -> PhaseTimer { return PhaseTimer{}; }, //
+        [](PhaseTimer &p) {
+          p.advance(9.F);
+          p.reset();
+        },
+        0.F,
+        true,
+    },
+};
 
 class PhaseTimerSuite : public Suite {
 public:
   PhaseTimerSuite() : Suite{"dhe::PhaseTimer"} {}
 
   void run(Tester &t) override {
-
-    t.run("default is in progress at phase 0", [](Tester &t) {
-      auto timer = PhaseTimer{};
-      t.assert_that("phase", timer.phase(), is_equal_to(0.F));
-      t.assert_that("in progress", timer.in_progress(), is_true);
-    });
-
-    t.run("remembers starting phase", [](Tester &t) {
-      auto starting_phase = 0.215F;
-      auto timer = PhaseTimer{starting_phase};
-      t.assert_that(timer.phase(), is_equal_to(starting_phase));
-    });
-
-    t.run("advance adds delta to phase", [](Tester &t) mutable {
-      auto timer = PhaseTimer{};
-      auto constexpr delta = 0.38F;
-
-      timer.advance(delta);
-      t.assert_that("after first advance", timer.phase(), is_equal_to(delta));
-
-      timer.advance(delta);
-      t.assert_that("after second advance", timer.phase(),
-                    is_equal_to(delta + delta));
-    });
-
-    t.run("reset sets to in progress at phase 0", [](Tester &t) {
-      auto timer = PhaseTimer{0.999F};
-      timer.reset();
-      t.assert_that("phase", timer.phase(), is_equal_to(0.F));
-      t.assert_that("in progress", timer.in_progress(), is_true);
-    });
-
-    t.run("maximum phase is 1", [](Tester &t) {
-      auto timer = PhaseTimer{1234.56789F};
-      t.assert_that("constructed with excessive phase", timer.phase(),
-                    is_equal_to(1.F));
-
-      timer.advance(9999.234F);
-      t.assert_that("advanced with excessive delta", timer.phase(),
-                    is_equal_to(1.F));
-    });
-
-    t.run("in progress iff phase less than 1", [](Tester &t) {
-      auto timer = PhaseTimer{};
-
-      timer.advance(0.99999F);
-      t.assert_that("phase just below 1", timer.in_progress(), is_true);
-
-      timer.advance(3.F);
-      t.assert_that("phase advanced to 1", timer.in_progress(), is_false);
-    });
+    for (auto &test : phase_timer_tests) {
+      t.run(test.name_, [test](Tester &t) {
+        auto timer = test.init_();
+        test.op_(timer);
+        auto const phase = timer.phase();
+        if (phase != test.want_phase_) {
+          t.errorf("phase() returned {}, want {}", phase, test.want_phase_);
+        }
+        auto const in_progress = timer.in_progress();
+        if (in_progress != test.want_in_progress_) {
+          t.errorf("in_progress() returned {}, want {}", in_progress,
+                   test.want_in_progress_);
+        }
+      });
+    }
   }
 };
 
