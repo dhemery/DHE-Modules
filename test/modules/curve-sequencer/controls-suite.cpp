@@ -1,144 +1,152 @@
 #include "./fixtures/controls-fixture.h"
-#include <dheunit/assertions.h>
 #include <dheunit/test.h>
+#include <functional>
 
 namespace test {
 namespace curve_sequencer {
 
-using dhe::unit::is_equal_to;
-using dhe::unit::is_false;
-using dhe::unit::is_true;
 using dhe::unit::Suite;
 using dhe::unit::Tester;
+
+struct InputButtonComboTest {
+  std::string name_; // NOLINT
+  float button_;     // NOLINT
+  float input_;      // NOLINT
+  bool want_;        // NOLINT
+
+  void run(Tester &t, std::string const &func_name, int button_id, int input,
+           std::function<bool(Controls &)> const &func) const {
+    t.run(func_name + ": " + name_, [this, button_id, input, func](Tester &t) {
+      auto module = Module{};
+      auto controls = Controls{module.inputs_, module.outputs_, module.params_,
+                               module.lights_};
+      module.params_[button_id].setValue(button_);
+      module.inputs_[input].setVoltage(input_);
+
+      auto const got = func(controls);
+      if (got != want_) {
+        t.errorf("got {}, want {}", got, want_);
+      }
+    });
+  }
+};
+
+std::vector<InputButtonComboTest> input_button_combo_tests = {
+    {
+        .name_ = "button up, input low",
+        .button_ = 0.F,
+        .input_ = 0.F,
+        .want_ = false,
+    },
+    {
+        .name_ = "button down, input low",
+        .button_ = 1.F,
+        .input_ = 0.F,
+        .want_ = true,
+    },
+    {
+        .name_ = "button up, input high",
+        .button_ = 0.F,
+        .input_ = 10.F,
+        .want_ = true,
+    },
+    {
+        .name_ = "button down, input high",
+        .button_ = 1.F,
+        .input_ = 10.F,
+        .want_ = true,
+    },
+};
 
 class ControlsSuite : public Suite {
 public:
   ControlsSuite() : Suite("dhe::curve_sequencer::Controls") {}
   void run(Tester &t) override {
-    t.run("is_gated() is true if gate button is pressed",
-          test([](Tester &t, Module &module, Controls &controls) {
-            module.params_[Param::GateButton].setValue(1.F);
+    for (auto &test : input_button_combo_tests) {
+      test.run(t, "is_gated()", Param::GateButton, Input::GateInput,
+               [](Controls &controls) -> bool { return controls.is_gated(); });
+    }
 
-            t.assert_that(controls.is_gated(), is_true);
-          }));
+    for (auto &test : input_button_combo_tests) {
+      test.run(
+          t, "is_looping()", Param::LoopButton, Input::LoopInput,
+          [](Controls &controls) -> bool { return controls.is_looping(); });
+    }
 
-    t.run("is_gated() is true if gate input is high",
-          test([](Tester &t, Module &module, Controls &controls) {
-            module.inputs_[Input::GateInput].setVoltage(10.F);
+    for (auto &test : input_button_combo_tests) {
+      test.run(t, "is_reset()", Param::ResetButton, Input::ResetInput,
+               [](Controls &controls) -> bool { return controls.is_reset(); });
+    }
 
-            t.assert_that(controls.is_gated(), is_true);
-          }));
+    for (auto &test : input_button_combo_tests) {
+      test.run(
+          t, "is_running()", Param::RunButton, Input::RunInput,
+          [](Controls &controls) -> bool { return controls.is_running(); });
+    }
 
-    t.run("is_gated() is false :"
-          "if gate input is low and gate button is not pressed",
-          test([](Tester &t, Module &module, Controls &controls) {
-            module.params_[Param ::GateButton].setValue(0.F);
-            module.inputs_[Input::GateInput].setVoltage(0.F);
-
-            t.assert_that(controls.is_gated(), is_false);
-          }));
-
-    t.run("is_looping() is true if loop button is pressed",
-          test([](Tester &t, Module &module, Controls &controls) {
-            module.params_[Param::LoopButton].setValue(1.F);
-
-            t.assert_that(controls.is_looping(), is_true);
-          }));
-
-    t.run("is_looping() is true if loop input is high",
-          test([](Tester &t, Module &module, Controls &controls) {
-            module.inputs_[Input::LoopInput].setVoltage(10.F);
-
-            t.assert_that(controls.is_looping(), is_true);
-          }));
-
-    t.run("is_looping() is false: "
-          "if loop input is low and loop button is not pressed",
-          test([](Tester &t, Module &module, Controls &controls) {
-            module.params_[Param ::LoopButton].setValue(0.F);
-            module.inputs_[Input::LoopInput].setVoltage(0.F);
-
-            t.assert_that(controls.is_looping(), is_false);
-          }));
-
-    t.run("is_reset() is true if reset button is pressed",
-          test([](Tester &t, Module &module, Controls &controls) {
-            module.params_[Param::ResetButton].setValue(1.F);
-
-            t.assert_that(controls.is_reset(), is_true);
-          }));
-
-    t.run("is_reset() is true if reset input is high",
-          test([](Tester &t, Module &module, Controls &controls) {
-            module.inputs_[Input::ResetInput].setVoltage(10.F);
-
-            t.assert_that(controls.is_reset(), is_true);
-          }));
-
-    t.run("is_reset() is false: "
-          "if reset input is low and reset button is not pressed",
-          test([](Tester &t, Module &module, Controls &controls) {
-            module.params_[Param ::ResetButton].setValue(0.F);
-            module.inputs_[Input::ResetInput].setVoltage(0.F);
-
-            t.assert_that(controls.is_reset(), is_false);
-          }));
-
-    t.run("is_running() is true if run button is pressed",
-          test([](Tester &t, Module &module, Controls &controls) {
-            module.params_[Param::RunButton].setValue(1.F);
-
-            t.assert_that(controls.is_running(), is_true);
-          }));
-
-    t.run("is_running() is true if run input is high",
-          test([](Tester &t, Module &module, Controls &controls) {
-            module.inputs_[Input::RunInput].setVoltage(10.F);
-
-            t.assert_that(controls.is_running(), is_true);
-          }));
-
-    t.run("is_running() is false: "
-          "if run input is low and run button is not pressed",
-          test([](Tester &t, Module &module, Controls &controls) {
-            module.params_[Param ::RunButton].setValue(0.F);
-            module.inputs_[Input::RunInput].setVoltage(0.F);
-
-            t.assert_that(controls.is_running(), is_false);
-          }));
+    for (auto &test : input_button_combo_tests) {
+      auto const step = std::rand() % step_count;
+      test.run(t, "is_enabled()", Param::EnabledButtons + step,
+               Input::EnabledInputs + step, [step](Controls &controls) -> bool {
+                 return controls.is_enabled(step);
+               });
+    }
 
     t.run("selection_start()",
           test([](Tester &t, Module &module, Controls &controls) {
-            module.params_[Param::SelectionStartKnob].setValue(3.F);
-            t.assert_that(controls.selection_start(), is_equal_to(3));
+            auto const want = std::rand() % step_count;
+            auto const knob_value = static_cast<float>(want);
+            module.params_[Param::SelectionStartKnob].setValue(knob_value);
+
+            auto const got = controls.selection_start();
+            if (got != want) {
+              t.errorf("Got {}, want {}");
+            }
           }));
 
     t.run("selection_length()",
           test([](Tester &t, Module &module, Controls &controls) {
-            module.params_[Param::SelectionLengthKnob].setValue(6.F);
-            t.assert_that(controls.selection_length(), is_equal_to(6));
+            auto const want = std::rand() % step_count;
+            auto const knob_value = static_cast<float>(want);
+            module.params_[Param::SelectionLengthKnob].setValue(knob_value);
+            auto const got = controls.selection_length();
+            if (got != want) {
+              t.errorf("Got {}, want {}", got, want);
+            }
           }));
 
     t.run("input()", test([](Tester &t, Module &module, Controls &controls) {
             auto constexpr input_voltage = 3.1234F;
             module.inputs_[Input::CurveSequencerInput].setVoltage(
                 input_voltage);
-            t.assert_that(controls.input(), is_equal_to(input_voltage));
+
+            auto const got = controls.input();
+            if (got != input_voltage) {
+              t.errorf("Got {}, want {}", got, input_voltage);
+            }
           }));
 
     t.run("output()", test([](Tester &t, Module &module, Controls &controls) {
             auto constexpr output_voltage = 9.13894F;
             module.outputs_[Output::CurveSequencerOutput].setVoltage(
                 output_voltage);
-            t.assert_that(controls.output(), is_equal_to(output_voltage));
+
+            auto const got = controls.output();
+            if (got != output_voltage) {
+              t.errorf("Got {}, want {}", got, output_voltage);
+            }
           }));
 
     t.run("output(v)", test([](Tester &t, Module &module, Controls &controls) {
             auto constexpr output_voltage = 4.390984F;
             controls.output(output_voltage);
-            t.assert_that(
-                module.outputs_[Output::CurveSequencerOutput].getVoltage(),
-                is_equal_to(output_voltage));
+
+            auto const got =
+                module.outputs_[Output::CurveSequencerOutput].getVoltage();
+
+            if (got != output_voltage) {
+              t.errorf("Got {}, want {}", got, output_voltage);
+            }
           }));
   }
 };
