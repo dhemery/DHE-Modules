@@ -20,7 +20,7 @@ struct PhaseTimerTest {
 
 static std::vector<PhaseTimerTest> phase_timer_tests = {
     {
-        "defaults in progress at phase 0",           //
+        "defaults to in progress at phase 0",        //
         []() -> PhaseTimer { return PhaseTimer{}; }, //
         [](PhaseTimer &p) {},                        //
         0.F,                                         //
@@ -34,7 +34,7 @@ static std::vector<PhaseTimerTest> phase_timer_tests = {
         true,                                              //
     },
     {
-        "constructor stops progress at phase 1",         //
+        "constructor stops progress if phase >= 1",      //
         []() -> PhaseTimer { return PhaseTimer{22.F}; }, //
         [](PhaseTimer &p) {},                            //
         1.F,                                             //
@@ -51,7 +51,7 @@ static std::vector<PhaseTimerTest> phase_timer_tests = {
         true,
     },
     {
-        "advance() stops progress at phase 1",       //
+        "advance() stops progress if phase >= 1",    //
         []() -> PhaseTimer { return PhaseTimer{}; }, //
         [](PhaseTimer &p) { p.advance(3.F); },       //
         1.F,                                         //
