@@ -1,15 +1,15 @@
 #include "./fixtures/hostage-engine-fixture.h"
+#include "helpers/assertions.h"
 #include "helpers/latches.h"
-#include <dheunit/assertions.h>
 #include <dheunit/test.h>
 
 namespace test {
 namespace stage {
-using dhe::unit::is_equal_to;
-using dhe::unit::is_false;
-using dhe::unit::is_true;
 using dhe::unit::Suite;
 using dhe::unit::Tester;
+using test::is_equal_to;
+using test::is_false;
+using test::is_true;
 
 static inline void in_sustain_mode(Controls &controls, SimpleMode &input_mode,
                                    SimpleMode & /*defer_mode*/,
@@ -45,11 +45,11 @@ public:
 
                  engine.process(0.F);
 
-                 t.assert_that("exit sustain", sustain_mode.exited_, is_true);
-                 t.assert_that("execute sustain", sustain_mode.executed_,
-                               is_false);
-                 t.assert_that("enter defer", defer_mode.entered_, is_true);
-                 t.assert_that("execute defer", defer_mode.executed_, is_true);
+                 assert_that(t, "exit sustain", sustain_mode.exited_, is_true);
+                 assert_that(t, "execute sustain", sustain_mode.executed_,
+                             is_false);
+                 assert_that(t, "enter defer", defer_mode.entered_, is_true);
+                 assert_that(t, "execute defer", defer_mode.executed_, is_true);
                }));
 
     t.run("with defer low: executes regardless of gate",
@@ -63,17 +63,17 @@ public:
                  controls.gate_ = true;
                  engine.process(0.F);
 
-                 t.assert_that("execute sustain", sustain_mode.executed_,
-                               is_true);
-                 t.assert_that("exit sustain", sustain_mode.exited_, is_false);
+                 assert_that(t, "execute sustain", sustain_mode.executed_,
+                             is_true);
+                 assert_that(t, "exit sustain", sustain_mode.exited_, is_false);
                  sustain_mode.executed_ = false;
 
                  controls.gate_ = true;
                  engine.process(0.F);
 
-                 t.assert_that("execute sustain", sustain_mode.executed_,
-                               is_true);
-                 t.assert_that("exit sustain", sustain_mode.exited_, is_false);
+                 assert_that(t, "execute sustain", sustain_mode.executed_,
+                             is_true);
+                 assert_that(t, "exit sustain", sustain_mode.exited_, is_false);
                }));
 
     t.run("passes gate state to sustain.execute()",
@@ -89,23 +89,23 @@ public:
 
                  controls.gate_ = false; // low + low = low latch
                  engine.process(0.F);
-                 t.assert_that("low", sustain_mode.latch_,
-                               is_equal_to(low_latch));
+                 assert_that(t, "low", sustain_mode.latch_,
+                             is_equal_to(low_latch));
 
                  controls.gate_ = true; // low + high = rising latch
                  engine.process(0.F);
-                 t.assert_that("rise", sustain_mode.latch_,
-                               is_equal_to(rising_latch));
+                 assert_that(t, "rise", sustain_mode.latch_,
+                             is_equal_to(rising_latch));
 
                  controls.gate_ = true; // high + high = high latch
                  engine.process(0.F);
-                 t.assert_that("high", sustain_mode.latch_,
-                               is_equal_to(high_latch));
+                 assert_that(t, "high", sustain_mode.latch_,
+                             is_equal_to(high_latch));
 
                  controls.gate_ = false; // high + low = falling latch
                  engine.process(0.F);
-                 t.assert_that("fall", sustain_mode.latch_,
-                               is_equal_to(falling_latch));
+                 assert_that(t, "fall", sustain_mode.latch_,
+                             is_equal_to(falling_latch));
                }));
 
     t.run("if sustain completes: raises eoc and enters idle mode",
@@ -119,12 +119,12 @@ public:
 
                  engine.process(0.F);
 
-                 t.assert_that("raised eoc", controls.eoc_, is_true);
-                 t.assert_that("execute sustain", sustain_mode.executed_,
-                               is_true);
-                 t.assert_that("exit sustain", sustain_mode.exited_, is_true);
-                 t.assert_that("enter level", idle_mode.entered_, is_true);
-                 t.assert_that("execute level", idle_mode.executed_, is_false);
+                 assert_that(t, "raised eoc", controls.eoc_, is_true);
+                 assert_that(t, "execute sustain", sustain_mode.executed_,
+                             is_true);
+                 assert_that(t, "exit sustain", sustain_mode.exited_, is_true);
+                 assert_that(t, "enter level", idle_mode.entered_, is_true);
+                 assert_that(t, "execute level", idle_mode.executed_, is_false);
                }));
   }
 };

@@ -1,7 +1,6 @@
 #include "helpers/rack-controls.h"
 #include "modules/sequencizer/module.h"
 
-#include <dheunit/assertions.h>
 #include <dheunit/test.h>
 
 #include <functional>
@@ -31,7 +30,7 @@ static inline auto test(float duration_rotation, int range_selection,
     auto const actual = dhe::sequencizer::duration(
         duration_knob, range_switch, multiplier_knob, multiplier_cv_input);
 
-    t.assert_that(actual, matcher);
+    matcher(t, actual);
   };
 }
 

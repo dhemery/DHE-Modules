@@ -1,16 +1,16 @@
 #include "./fixtures/advancement-enums.h"
 #include "./fixtures/sustainer-fixture.h"
+#include "helpers/assertions.h"
 #include "helpers/latches.h"
 
-#include <dheunit/assertions.h>
 #include <dheunit/test.h>
 #include <vector>
 
 namespace test {
 namespace sequencizer {
-using dhe::unit::is_equal_to;
 using dhe::unit::Suite;
 using dhe::unit::Tester;
+using test::is_equal_to;
 
 struct SustainerTestCase {
   SustainerTestCase(SustainMode completion_mode, TriggerMode trigger_mode,
@@ -29,7 +29,7 @@ struct SustainerTestCase {
     module.trigger_mode_[step] = trigger_mode_;
     module.completion_mode_[step] = completion_mode_;
 
-    t.assert_that(sustainer.is_done(step, latch_), is_equal_to(is_done_));
+    assert_that(t, sustainer.is_done(step, latch_), is_equal_to(is_done_));
   }
 
   auto name() const -> std::string {

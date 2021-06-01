@@ -1,14 +1,13 @@
-#include "./fixtures/anchor-fixture.h"
-
 #include "./fixtures/anchor-enums.h"
+#include "./fixtures/anchor-fixture.h"
+#include "helpers/assertions.h"
 
-#include <dheunit/assertions.h>
 #include <dheunit/test.h>
 
 namespace test {
 namespace scannibal {
-using dhe::unit::is_equal_to;
 using dhe::unit::Suite;
+using test::is_equal_to;
 
 static inline void set_all_voltages(Module &module, float voltage) {
   module.in_a_ = voltage;
@@ -45,8 +44,8 @@ public:
           module.phase_0_mode_[step] = AnchorMode::Sample;
           for (auto const source : anchor_sources) {
             module.phase_0_source_[step] = source;
-            t.assert_that(name_of(source), anchor.voltage(),
-                          is_equal_to(level_entry_voltage));
+            assert_that(t, name_of(source), anchor.voltage(),
+                        is_equal_to(level_entry_voltage));
           }
         }));
 
@@ -70,8 +69,8 @@ public:
           module.phase_0_mode_[step] = AnchorMode::Sample;
           for (auto const source : anchor_sources) {
             module.phase_0_source_[step] = source;
-            t.assert_that(name_of(source), anchor.voltage(),
-                          is_equal_to(in_a_entry_voltage));
+            assert_that(t, name_of(source), anchor.voltage(),
+                        is_equal_to(in_a_entry_voltage));
           }
         }));
 
@@ -95,8 +94,8 @@ public:
           module.phase_0_mode_[step] = AnchorMode::Sample;
           for (auto const source : anchor_sources) {
             module.phase_0_source_[step] = source;
-            t.assert_that(name_of(source), anchor.voltage(),
-                          is_equal_to(in_b_entry_voltage));
+            assert_that(t, name_of(source), anchor.voltage(),
+                        is_equal_to(in_b_entry_voltage));
           }
         }));
     t.run(
@@ -119,8 +118,8 @@ public:
           module.phase_0_mode_[step] = AnchorMode::Sample;
           for (auto const source : anchor_sources) {
             module.phase_0_source_[step] = source;
-            t.assert_that(name_of(source), anchor.voltage(),
-                          is_equal_to(in_c_entry_voltage));
+            assert_that(t, name_of(source), anchor.voltage(),
+                        is_equal_to(in_c_entry_voltage));
           }
         }));
 
@@ -144,8 +143,8 @@ public:
           module.phase_0_mode_[step] = AnchorMode::Sample;
           for (auto const source : anchor_sources) {
             module.phase_0_source_[step] = source;
-            t.assert_that(name_of(source), anchor.voltage(),
-                          is_equal_to(output_entry_voltage));
+            assert_that(t, name_of(source), anchor.voltage(),
+                        is_equal_to(output_entry_voltage));
           }
         }));
 
@@ -166,8 +165,8 @@ public:
             module.phase_0_source_[step] = AnchorSource::Level;
             auto constexpr current_level_voltage = default_entry_voltage + 1.F;
             module.phase_0_level_[step] = current_level_voltage;
-            t.assert_that(name_of(source), anchor.voltage(),
-                          is_equal_to(current_level_voltage));
+            assert_that(t, name_of(source), anchor.voltage(),
+                        is_equal_to(current_level_voltage));
           }
         }));
 
@@ -188,8 +187,8 @@ public:
             module.phase_0_source_[step] = AnchorSource::InA;
             auto constexpr current_in_a_voltage = default_entry_voltage + 1.F;
             module.in_a_ = current_in_a_voltage;
-            t.assert_that(name_of(source), anchor.voltage(),
-                          is_equal_to(current_in_a_voltage));
+            assert_that(t, name_of(source), anchor.voltage(),
+                        is_equal_to(current_in_a_voltage));
           }
         }));
 
@@ -210,8 +209,8 @@ public:
             module.phase_0_source_[step] = AnchorSource::InB;
             auto constexpr current_in_b_voltage = default_entry_voltage + 1.F;
             module.in_b_ = current_in_b_voltage;
-            t.assert_that(name_of(source), anchor.voltage(),
-                          is_equal_to(current_in_b_voltage));
+            assert_that(t, name_of(source), anchor.voltage(),
+                        is_equal_to(current_in_b_voltage));
           }
         }));
 
@@ -232,8 +231,8 @@ public:
             module.phase_0_source_[step] = AnchorSource::InC;
             auto constexpr current_in_c_voltage = default_entry_voltage + 1.F;
             module.in_c_ = current_in_c_voltage;
-            t.assert_that(name_of(source), anchor.voltage(),
-                          is_equal_to(current_in_c_voltage));
+            assert_that(t, name_of(source), anchor.voltage(),
+                        is_equal_to(current_in_c_voltage));
           }
         }));
 
@@ -254,8 +253,8 @@ public:
             module.phase_0_source_[step] = AnchorSource::Out;
             auto constexpr current_output_voltage = default_entry_voltage + 1.F;
             module.output_ = current_output_voltage;
-            t.assert_that(name_of(source), anchor.voltage(),
-                          is_equal_to(current_output_voltage));
+            assert_that(t, name_of(source), anchor.voltage(),
+                        is_equal_to(current_output_voltage));
           }
         }));
 
@@ -279,8 +278,8 @@ public:
           module.phase_0_mode_[step] = AnchorMode::Sample;
           for (auto const source : anchor_sources) {
             module.phase_1_source_[step] = source;
-            t.assert_that(name_of(source), anchor.voltage(),
-                          is_equal_to(level_entry_voltage));
+            assert_that(t, name_of(source), anchor.voltage(),
+                        is_equal_to(level_entry_voltage));
           }
         }));
 
@@ -304,8 +303,8 @@ public:
           module.phase_0_mode_[step] = AnchorMode::Sample;
           for (auto const source : anchor_sources) {
             module.phase_1_source_[step] = source;
-            t.assert_that(name_of(source), anchor.voltage(),
-                          is_equal_to(in_a_entry_voltage));
+            assert_that(t, name_of(source), anchor.voltage(),
+                        is_equal_to(in_a_entry_voltage));
           }
         }));
 
@@ -329,8 +328,8 @@ public:
           module.phase_0_mode_[step] = AnchorMode::Sample;
           for (auto const source : anchor_sources) {
             module.phase_1_source_[step] = source;
-            t.assert_that(name_of(source), anchor.voltage(),
-                          is_equal_to(in_b_entry_voltage));
+            assert_that(t, name_of(source), anchor.voltage(),
+                        is_equal_to(in_b_entry_voltage));
           }
         }));
 
@@ -354,8 +353,8 @@ public:
           module.phase_0_mode_[step] = AnchorMode::Sample;
           for (auto const source : anchor_sources) {
             module.phase_1_source_[step] = source;
-            t.assert_that(name_of(source), anchor.voltage(),
-                          is_equal_to(in_c_entry_voltage));
+            assert_that(t, name_of(source), anchor.voltage(),
+                        is_equal_to(in_c_entry_voltage));
           }
         }));
 
@@ -379,8 +378,8 @@ public:
           module.phase_0_mode_[step] = AnchorMode::Sample;
           for (auto const source : anchor_sources) {
             module.phase_1_source_[step] = source;
-            t.assert_that(name_of(source), anchor.voltage(),
-                          is_equal_to(output_entry_voltage));
+            assert_that(t, name_of(source), anchor.voltage(),
+                        is_equal_to(output_entry_voltage));
           }
         }));
 
@@ -401,8 +400,8 @@ public:
             module.phase_1_source_[step] = AnchorSource::Level;
             auto constexpr current_level_voltage = default_entry_voltage + 1.F;
             module.phase_1_level_[step] = current_level_voltage;
-            t.assert_that(name_of(source), anchor.voltage(),
-                          is_equal_to(current_level_voltage));
+            assert_that(t, name_of(source), anchor.voltage(),
+                        is_equal_to(current_level_voltage));
           }
         }));
 
@@ -423,8 +422,8 @@ public:
             module.phase_1_source_[step] = AnchorSource::InA;
             auto constexpr current_in_a_voltage = default_entry_voltage + 1.F;
             module.in_a_ = current_in_a_voltage;
-            t.assert_that(name_of(source), anchor.voltage(),
-                          is_equal_to(current_in_a_voltage));
+            assert_that(t, name_of(source), anchor.voltage(),
+                        is_equal_to(current_in_a_voltage));
           }
         }));
 
@@ -445,8 +444,8 @@ public:
             module.phase_1_source_[step] = AnchorSource::InB;
             auto constexpr current_in_b_voltage = default_entry_voltage + 1.F;
             module.in_b_ = current_in_b_voltage;
-            t.assert_that(name_of(source), anchor.voltage(),
-                          is_equal_to(current_in_b_voltage));
+            assert_that(t, name_of(source), anchor.voltage(),
+                        is_equal_to(current_in_b_voltage));
           }
         }));
 
@@ -467,8 +466,8 @@ public:
             module.phase_1_source_[step] = AnchorSource::InC;
             auto constexpr current_in_c_voltage = default_entry_voltage + 1.F;
             module.in_c_ = current_in_c_voltage;
-            t.assert_that(name_of(source), anchor.voltage(),
-                          is_equal_to(current_in_c_voltage));
+            assert_that(t, name_of(source), anchor.voltage(),
+                        is_equal_to(current_in_c_voltage));
           }
         }));
 
@@ -489,8 +488,8 @@ public:
             module.phase_1_source_[step] = AnchorSource::Out;
             auto constexpr current_output_voltage = default_entry_voltage + 1.F;
             module.output_ = current_output_voltage;
-            t.assert_that(name_of(source), anchor.voltage(),
-                          is_equal_to(current_output_voltage));
+            assert_that(t, name_of(source), anchor.voltage(),
+                        is_equal_to(current_output_voltage));
           }
         }));
   }

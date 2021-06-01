@@ -1,15 +1,15 @@
 #include "./fixtures/sequence-controller-fixture.h"
 #include "./fixtures/status-enums.h"
-#include "dheunit/assertions.h"
+#include "helpers/assertions.h"
 #include <functional>
 #include <helpers/latches.h>
 namespace test {
 namespace sequencizer {
-using dhe::unit::is_equal_to;
-using dhe::unit::is_false;
-using dhe::unit::is_true;
 using dhe::unit::Suite;
 using dhe::unit::Tester;
+using test::is_equal_to;
+using test::is_false;
+using test::is_true;
 using TestFunc = std::function<void(Tester &)>;
 
 static auto constexpr initially_active_step = 1;
@@ -57,24 +57,24 @@ public:
             sequence_controller.execute(sample_time);
             // Assume that the gate was high on the previous sample,
             // so on this sample it will be high with no edge.
-            t.assert_that("high latch", step_controller.executed_latch_,
-                          is_equal_to(high_latch));
-            t.assert_that("sample time", step_controller.executed_sample_time_,
-                          is_equal_to(sample_time));
+            assert_that(t, "high latch", step_controller.executed_latch_,
+                        is_equal_to(high_latch));
+            assert_that(t, "sample time", step_controller.executed_sample_time_,
+                        is_equal_to(sample_time));
 
             module.gate_ = false;
             sequence_controller.execute(0.1F);
-            t.assert_that("falling latch", step_controller.executed_latch_,
-                          is_equal_to(falling_latch));
+            assert_that(t, "falling latch", step_controller.executed_latch_,
+                        is_equal_to(falling_latch));
 
             sequence_controller.execute(0.1F);
-            t.assert_that("low latch", step_controller.executed_latch_,
-                          is_equal_to(low_latch));
+            assert_that(t, "low latch", step_controller.executed_latch_,
+                        is_equal_to(low_latch));
 
             module.gate_ = true;
             sequence_controller.execute(0.1F);
-            t.assert_that("rising latch", step_controller.executed_latch_,
-                          is_equal_to(rising_latch));
+            assert_that(t, "rising latch", step_controller.executed_latch_,
+                        is_equal_to(rising_latch));
           }));
 
     t.run("with run high: "
@@ -89,19 +89,19 @@ public:
 
                  step_controller.status_ = step_status;
                  sequence_controller.execute(0.F);
-                 t.assert_that("displayed step after generating", module.step_,
-                               is_equal_to(initially_active_step));
-                 t.assert_that("status after generating", module.status_,
-                               is_equal_to(step_status));
+                 assert_that(t, "displayed step after generating", module.step_,
+                             is_equal_to(initially_active_step));
+                 assert_that(t, "status after generating", module.status_,
+                             is_equal_to(step_status));
 
                  step_status = StepStatus::Sustaining;
 
                  step_controller.status_ = step_status;
                  sequence_controller.execute(0.F);
-                 t.assert_that("displayed step after sustaining", module.step_,
-                               is_equal_to(initially_active_step));
-                 t.assert_that("status after sustaining", module.status_,
-                               is_equal_to(step_status));
+                 assert_that(t, "displayed step after sustaining", module.step_,
+                             is_equal_to(initially_active_step));
+                 assert_that(t, "status after sustaining", module.status_,
+                             is_equal_to(step_status));
                }));
 
     t.run("if active step completes: "
@@ -117,37 +117,38 @@ public:
                  step_selector.successor_ = successor;
 
                  sequence_controller.execute(0.F);
-                 t.assert_that("step given to selector", step_selector.step_,
-                               is_equal_to(initially_active_step));
-                 t.assert_that("entered step", step_controller.entered_step_,
-                               is_equal_to(successor));
-                 t.assert_that("step status step", module.step_,
-                               is_equal_to(successor));
-                 t.assert_that("step status", module.status_,
-                               is_equal_to(StepStatus::Generating));
+                 assert_that(t, "step given to selector", step_selector.step_,
+                             is_equal_to(initially_active_step));
+                 assert_that(t, "entered step", step_controller.entered_step_,
+                             is_equal_to(successor));
+                 assert_that(t, "step status step", module.step_,
+                             is_equal_to(successor));
+                 assert_that(t, "step status", module.status_,
+                             is_equal_to(StepStatus::Generating));
                }));
 
     t.run("if active step completes: "
           "if no successor: "
           "if looping: "
           "restarts sequence",
-          test(when_active, [](Tester &t, Module &module,
-                               StepSelector &step_selector,
-                               StepController &step_controller,
-                               SequenceController &sequence_controller) {
-            module.running_ = true;
-            module.looping_ = true;
+          test(when_active,
+               [](Tester &t, Module &module, StepSelector &step_selector,
+                  StepController &step_controller,
+                  SequenceController &sequence_controller) {
+                 module.running_ = true;
+                 module.looping_ = true;
 
-            auto constexpr first = initially_active_step + 2;
-            step_controller.status_ = StepStatus::Idle;
-            step_selector.successor_ = -1;
-            step_selector.first_ = first;
+                 auto constexpr first = initially_active_step + 2;
+                 step_controller.status_ = StepStatus::Idle;
+                 step_selector.successor_ = -1;
+                 step_selector.first_ = first;
 
-            sequence_controller.execute(0.F);
-            t.assert_that("step status step", module.step_, is_equal_to(first));
-            t.assert_that("step status", module.status_,
-                          is_equal_to(StepStatus::Generating));
-          }));
+                 sequence_controller.execute(0.F);
+                 assert_that(t, "step status step", module.step_,
+                             is_equal_to(first));
+                 assert_that(t, "step status", module.status_,
+                             is_equal_to(StepStatus::Generating));
+               }));
 
     t.run("if active step completes: "
           "if no successor: "
@@ -164,11 +165,11 @@ public:
             step_selector.successor_ = -1;
 
             sequence_controller.execute(0.F);
-            t.assert_that("step controller entered", step_controller.entered_,
-                          is_false);
-            t.assert_that("step status step", module.step_, is_equal_to(-1));
-            t.assert_that("step status", module.status_,
-                          is_equal_to(StepStatus::Idle));
+            assert_that(t, "step controller entered", step_controller.entered_,
+                        is_false);
+            assert_that(t, "step status step", module.step_, is_equal_to(-1));
+            assert_that(t, "step status", module.status_,
+                        is_equal_to(StepStatus::Idle));
           }));
 
     t.run("with run low: "
@@ -185,12 +186,12 @@ public:
                  module.output_ = original_output;
 
                  sequence_controller.execute(0.F);
-                 t.assert_that("step selector called", step_selector.called_,
-                               is_false);
-                 t.assert_that("step controller called",
-                               step_controller.called_, is_false);
-                 t.assert_that("output", module.output_,
-                               is_equal_to(original_output));
+                 assert_that(t, "step selector called", step_selector.called_,
+                             is_false);
+                 assert_that(t, "step controller called",
+                             step_controller.called_, is_false);
+                 assert_that(t, "output", module.output_,
+                             is_equal_to(original_output));
                }));
 
     t.run("with run low: "
@@ -207,12 +208,12 @@ public:
                  module.output_ = original_output;
 
                  sequence_controller.execute(0.F);
-                 t.assert_that("step selector called", step_selector.called_,
-                               is_false);
-                 t.assert_that("step controller called",
-                               step_controller.called_, is_false);
-                 t.assert_that("output", module.output_,
-                               is_equal_to(original_output));
+                 assert_that(t, "step selector called", step_selector.called_,
+                             is_false);
+                 assert_that(t, "step controller called",
+                             step_controller.called_, is_false);
+                 assert_that(t, "output", module.output_,
+                             is_equal_to(original_output));
                }));
 
     t.run("with run low: "
@@ -229,12 +230,12 @@ public:
                  module.output_ = original_output;
 
                  sequence_controller.execute(0.F);
-                 t.assert_that("step selector called", step_selector.called_,
-                               is_false);
-                 t.assert_that("step controller called",
-                               step_controller.called_, is_false);
-                 t.assert_that("output", module.output_,
-                               is_equal_to(original_output));
+                 assert_that(t, "step selector called", step_selector.called_,
+                             is_false);
+                 assert_that(t, "step controller called",
+                             step_controller.called_, is_false);
+                 assert_that(t, "output", module.output_,
+                             is_equal_to(original_output));
                }));
 
     t.run("with run low: "
@@ -251,14 +252,14 @@ public:
                  module.output_ = original_output;
 
                  sequence_controller.execute(0.F);
-                 t.assert_that("step selector called", step_selector.called_,
-                               is_false);
-                 t.assert_that("step controller exited",
-                               step_controller.exited_, is_true);
-                 t.assert_that("step controller entered",
-                               step_controller.entered_, is_false);
-                 t.assert_that("output", module.output_,
-                               is_equal_to(original_output));
+                 assert_that(t, "step selector called", step_selector.called_,
+                             is_false);
+                 assert_that(t, "step controller exited",
+                             step_controller.exited_, is_true);
+                 assert_that(t, "step controller entered",
+                             step_controller.entered_, is_false);
+                 assert_that(t, "output", module.output_,
+                             is_equal_to(original_output));
                }));
   }
 };

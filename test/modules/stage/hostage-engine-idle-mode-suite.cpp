@@ -1,13 +1,13 @@
 #include "./fixtures/hostage-engine-fixture.h"
-#include <dheunit/assertions.h>
+#include "helpers/assertions.h"
 #include <dheunit/test.h>
 
 namespace test {
 namespace stage {
-using dhe::unit::is_false;
-using dhe::unit::is_true;
 using dhe::unit::Suite;
 using dhe::unit::Tester;
+using test::is_false;
+using test::is_true;
 
 static inline void in_idle_mode(Controls &controls, SimpleMode &input_mode,
                                 SimpleMode & /*input_mode*/,
@@ -48,10 +48,10 @@ public:
 
                  engine.process(0.F);
 
-                 t.assert_that("exit idle", idle_mode.exited_, is_true);
-                 t.assert_that("execute idle", idle_mode.executed_, is_false);
-                 t.assert_that("enter defer", defer_mode.entered_, is_true);
-                 t.assert_that("execute defer", defer_mode.executed_, is_true);
+                 assert_that(t, "exit idle", idle_mode.exited_, is_true);
+                 assert_that(t, "execute idle", idle_mode.executed_, is_false);
+                 assert_that(t, "enter defer", defer_mode.entered_, is_true);
+                 assert_that(t, "execute defer", defer_mode.executed_, is_true);
                }));
 
     t.run("with defer low: executes if gate does not rise",
@@ -63,7 +63,7 @@ public:
                  controls.defer_ = false;
                  controls.gate_ = false;
                  engine.process(0.F);
-                 t.assert_that(idle_mode.executed_, is_true);
+                 assert_that(t, idle_mode.executed_, is_true);
                }));
 
     t.run(
@@ -79,10 +79,10 @@ public:
 
                engine.process(0.F);
 
-               t.assert_that("exit idle", idle_mode.exited_, is_true);
-               t.assert_that("execute idle", idle_mode.executed_, is_false);
-               t.assert_that("enter hold", hold_mode.entered_, is_true);
-               t.assert_that("execute hold", hold_mode.executed_, is_true);
+               assert_that(t, "exit idle", idle_mode.exited_, is_true);
+               assert_that(t, "execute idle", idle_mode.executed_, is_false);
+               assert_that(t, "enter hold", hold_mode.entered_, is_true);
+               assert_that(t, "execute hold", hold_mode.executed_, is_true);
              }));
 
     t.run(
@@ -98,11 +98,11 @@ public:
 
                engine.process(0.F);
 
-               t.assert_that("exit idle", idle_mode.exited_, is_true);
-               t.assert_that("execute idle", idle_mode.executed_, is_false);
-               t.assert_that("enter sustain", sustain_mode.entered_, is_true);
-               t.assert_that("execute sustain", sustain_mode.executed_,
-                             is_true);
+               assert_that(t, "exit idle", idle_mode.exited_, is_true);
+               assert_that(t, "execute idle", idle_mode.executed_, is_false);
+               assert_that(t, "enter sustain", sustain_mode.entered_, is_true);
+               assert_that(t, "execute sustain", sustain_mode.executed_,
+                           is_true);
              }));
   }
 };

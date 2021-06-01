@@ -1,11 +1,9 @@
 #include "./fixtures/sequence-controller-fixture.h"
-#include "dheunit/assertions.h"
 #include <functional>
 #include <helpers/latches.h>
+
 namespace test {
 namespace sequencizer {
-using dhe::unit::is_equal_to;
-using dhe::unit::is_false;
 using dhe::unit::Suite;
 using dhe::unit::Tester;
 using TestFunc = std::function<void(Tester &)>;
@@ -25,40 +23,52 @@ public:
 
   void run(Tester &t) override {
     t.run("with run high: with reset low: does nothing",
-          test(when_idle,
-               [](Tester &t, Module &module, StepSelector &step_selector,
-                  StepController &step_controller,
-                  SequenceController &sequence_controller) {
-                 module.running_ = true;
-                 module.reset_ = false;
+          test(when_idle, [](Tester &t, Module &module,
+                             StepSelector &step_selector,
+                             StepController &step_controller,
+                             SequenceController &sequence_controller) {
+            module.running_ = true;
+            module.reset_ = false;
 
-                 auto constexpr original_output = -99342.2F;
-                 module.output_ = original_output;
+            auto constexpr original_output = -99342.2F;
+            module.output_ = original_output;
 
-                 sequence_controller.execute(0.1F);
+            sequence_controller.execute(0.1F);
 
-                 t.assert_that(step_selector.called_, is_false);
-                 t.assert_that(step_controller.called_, is_false);
-                 t.assert_that(module.output_, is_equal_to(original_output));
-               }));
+            if (step_selector.called_) {
+              t.error("step selector was called");
+            }
+            if (step_controller.called_) {
+              t.error("step controller was called");
+            }
+            if (module.output_ != original_output) {
+              t.errorf("module output was changed (to {})", module.output_);
+            }
+          }));
 
     t.run("with run high: with gate low: does nothing",
-          test(when_idle,
-               [](Tester &t, Module &module, StepSelector &step_selector,
-                  StepController &step_controller,
-                  SequenceController &sequence_controller) {
-                 module.running_ = true;
-                 module.gate_ = false;
+          test(when_idle, [](Tester &t, Module &module,
+                             StepSelector &step_selector,
+                             StepController &step_controller,
+                             SequenceController &sequence_controller) {
+            module.running_ = true;
+            module.gate_ = false;
 
-                 auto constexpr original_output = -992.223F;
-                 module.output_ = original_output;
+            auto constexpr original_output = -992.223F;
+            module.output_ = original_output;
 
-                 sequence_controller.execute(0.1F);
+            sequence_controller.execute(0.1F);
 
-                 t.assert_that(step_selector.called_, is_false);
-                 t.assert_that(step_controller.called_, is_false);
-                 t.assert_that(module.output_, is_equal_to(original_output));
-               }));
+            if (step_selector.called_) {
+              t.error("step selector was called");
+            }
+            if (step_controller.called_) {
+              t.error("step controller was called");
+            }
+            if (module.output_ != original_output) {
+              t.errorf("module output was changed (to {})", module.output_);
+            }
+          }));
 
     t.run("with run high: "
           "if gate rises: executes first step with gate edge cleared",
@@ -77,102 +87,136 @@ public:
                  auto constexpr sample_time = 0.39947F;
                  sequence_controller.execute(sample_time);
 
-                 t.assert_that(step_controller.entered_step_,
-                               is_equal_to(first_enabled_step));
-                 t.assert_that(step_controller.executed_latch_,
-                               is_equal_to(high_latch));
-                 t.assert_that(step_controller.executed_sample_time_,
-                               is_equal_to(sample_time));
+                 if (step_controller.entered_step_ != first_enabled_step) {
+                   t.errorf("Entered step {}, want step {}",
+                            step_controller.entered_step_, first_enabled_step);
+                 }
+                 if (step_controller.executed_latch_ != high_latch) {
+                   t.errorf("Executed latch was {}, want {}",
+                            step_controller.executed_latch_, high_latch);
+                 }
+                 if (step_controller.executed_sample_time_ != sample_time) {
+                   t.errorf("Executed sample time was {}, want {}",
+                            step_controller.executed_sample_time_, sample_time);
+                 }
                }));
 
     t.run("with run high: "
           "if gate rises: does nothing if no first step",
-          test(when_idle,
-               [](Tester &t, Module &module, StepSelector &step_selector,
-                  StepController &step_controller,
-                  SequenceController &sequence_controller) {
-                 module.running_ = true;
-                 module.gate_ = true;
+          test(when_idle, [](Tester &t, Module &module,
+                             StepSelector &step_selector,
+                             StepController &step_controller,
+                             SequenceController &sequence_controller) {
+            module.running_ = true;
+            module.gate_ = true;
 
-                 step_selector.first_ = -1;
+            step_selector.first_ = -1;
 
-                 auto constexpr original_output = -2340.223F;
-                 module.output_ = original_output;
+            auto constexpr original_output = -2340.223F;
+            module.output_ = original_output;
 
-                 sequence_controller.execute(0.F);
+            sequence_controller.execute(0.F);
 
-                 t.assert_that(step_controller.called_, is_false);
-                 t.assert_that(module.output_, is_equal_to(original_output));
-               }));
+            if (step_controller.called_) {
+              t.error("step controller was called");
+            }
+            if (module.output_ != original_output) {
+              t.errorf("module output was changed (to {})", module.output_);
+            }
+          }));
 
     t.run("with run low: with reset low: does nothing",
-          test(when_idle,
-               [](Tester &t, Module &module, StepSelector &step_selector,
-                  StepController &step_controller,
-                  SequenceController &sequence_controller) {
-                 module.running_ = false;
-                 module.reset_ = false;
+          test(when_idle, [](Tester &t, Module &module,
+                             StepSelector &step_selector,
+                             StepController &step_controller,
+                             SequenceController &sequence_controller) {
+            module.running_ = false;
+            module.reset_ = false;
 
-                 auto constexpr original_output = 349.319F;
-                 module.output_ = original_output;
-                 sequence_controller.execute(0.1F);
+            auto constexpr original_output = 349.319F;
+            module.output_ = original_output;
+            sequence_controller.execute(0.1F);
 
-                 t.assert_that(step_selector.called_, is_false);
-                 t.assert_that(step_controller.called_, is_false);
-                 t.assert_that(module.output_, is_equal_to(original_output));
-               }));
+            if (step_selector.called_) {
+              t.error("step selector was called");
+            }
+            if (step_controller.called_) {
+              t.error("step controller was called");
+            }
+            if (module.output_ != original_output) {
+              t.errorf("module output was changed (to {})", module.output_);
+            }
+          }));
 
     t.run("with run low: "
           "if reset rises: "
           "does nothing",
-          test(when_idle,
-               [](Tester &t, Module &module, StepSelector &step_selector,
-                  StepController &step_controller,
-                  SequenceController &sequence_controller) {
-                 module.running_ = false;
-                 module.reset_ = true;
+          test(when_idle, [](Tester &t, Module &module,
+                             StepSelector &step_selector,
+                             StepController &step_controller,
+                             SequenceController &sequence_controller) {
+            module.running_ = false;
+            module.reset_ = true;
 
-                 auto constexpr original_output = 349.319F;
-                 module.output_ = original_output;
-                 sequence_controller.execute(0.1F);
+            auto constexpr original_output = 349.319F;
+            module.output_ = original_output;
+            sequence_controller.execute(0.1F);
 
-                 t.assert_that(step_selector.called_, is_false);
-                 t.assert_that(step_controller.called_, is_false);
-                 t.assert_that(module.output_, is_equal_to(original_output));
-               }));
+            if (step_selector.called_) {
+              t.error("step selector was called");
+            }
+            if (step_controller.called_) {
+              t.error("step controller was called");
+            }
+            if (module.output_ != original_output) {
+              t.errorf("module output was changed (to {})", module.output_);
+            }
+          }));
 
     t.run("with run low: with gate low: does nothing",
-          test(when_idle,
-               [](Tester &t, Module &module, StepSelector &step_selector,
-                  StepController &step_controller,
-                  SequenceController &sequence_controller) {
-                 module.running_ = false;
-                 module.gate_ = false;
+          test(when_idle, [](Tester &t, Module &module,
+                             StepSelector &step_selector,
+                             StepController &step_controller,
+                             SequenceController &sequence_controller) {
+            module.running_ = false;
+            module.gate_ = false;
 
-                 auto constexpr original_output = 349.319F;
-                 module.output_ = original_output;
-                 sequence_controller.execute(0.1F);
+            auto constexpr original_output = 349.319F;
+            module.output_ = original_output;
+            sequence_controller.execute(0.1F);
 
-                 t.assert_that(step_selector.called_, is_false);
-                 t.assert_that(step_controller.called_, is_false);
-                 t.assert_that(module.output_, is_equal_to(original_output));
-               }));
+            if (step_selector.called_) {
+              t.error("step selector was called");
+            }
+            if (step_controller.called_) {
+              t.error("step controller was called");
+            }
+            if (module.output_ != original_output) {
+              t.errorf("module output was changed (to {})", module.output_);
+            }
+          }));
 
     t.run("with run low: if gate rises: does nothing",
-          test(when_idle,
-               [](Tester &t, Module &module, StepSelector &step_selector,
-                  StepController &step_controller,
-                  SequenceController &sequence_controller) {
-                 module.gate_ = true;
+          test(when_idle, [](Tester &t, Module &module,
+                             StepSelector &step_selector,
+                             StepController &step_controller,
+                             SequenceController &sequence_controller) {
+            module.gate_ = true;
 
-                 auto constexpr original_output = 349.319F;
-                 module.output_ = original_output;
-                 sequence_controller.execute(0.1F);
+            auto constexpr original_output = 349.319F;
+            module.output_ = original_output;
+            sequence_controller.execute(0.1F);
 
-                 t.assert_that(step_selector.called_, is_false);
-                 t.assert_that(step_controller.called_, is_false);
-                 t.assert_that(module.output_, is_equal_to(original_output));
-               }));
+            if (step_selector.called_) {
+              t.error("step selector was called");
+            }
+            if (step_controller.called_) {
+              t.error("step controller was called");
+            }
+            if (module.output_ != original_output) {
+              t.errorf("module output was changed (to {})", module.output_);
+            }
+          }));
   }
 };
 __attribute__((unused)) static auto _ = SequenceControllerIdleSuite{};

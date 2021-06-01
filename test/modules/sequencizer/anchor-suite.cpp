@@ -2,12 +2,10 @@
 
 #include "./fixtures/anchor-enums.h"
 
-#include <dheunit/assertions.h>
 #include <dheunit/test.h>
 
 namespace test {
 namespace sequencizer {
-using dhe::unit::is_equal_to;
 using dhe::unit::Suite;
 
 static inline void set_all_voltages(Module &module, float voltage) {
@@ -45,8 +43,12 @@ public:
           module.start_mode_[step] = AnchorMode::Sample;
           for (auto const source : anchor_sources) {
             module.start_source_[step] = source;
-            t.assert_that(name_of(source), anchor.voltage(),
-                          is_equal_to(level_entry_voltage));
+            auto const got = anchor.voltage();
+            auto constexpr want = level_entry_voltage;
+            if (got != want) {
+              t.errorf("With source {} got anchor voltage {}, want {} ",
+                       name_of(source), got, want);
+            }
           }
         }));
 
@@ -70,8 +72,12 @@ public:
           module.start_mode_[step] = AnchorMode::Sample;
           for (auto const source : anchor_sources) {
             module.start_source_[step] = source;
-            t.assert_that(name_of(source), anchor.voltage(),
-                          is_equal_to(in_a_entry_voltage));
+            auto const got = anchor.voltage();
+            auto constexpr want = in_a_entry_voltage;
+            if (got != want) {
+              t.errorf("With source {} got anchor voltage {}, want {} ",
+                       name_of(source), got, want);
+            }
           }
         }));
 
@@ -95,8 +101,12 @@ public:
           module.start_mode_[step] = AnchorMode::Sample;
           for (auto const source : anchor_sources) {
             module.start_source_[step] = source;
-            t.assert_that(name_of(source), anchor.voltage(),
-                          is_equal_to(in_b_entry_voltage));
+            auto const got = anchor.voltage();
+            auto constexpr want = in_b_entry_voltage;
+            if (got != want) {
+              t.errorf("With source {} got anchor voltage {}, want {} ",
+                       name_of(source), got, want);
+            }
           }
         }));
     t.run(
@@ -119,8 +129,12 @@ public:
           module.start_mode_[step] = AnchorMode::Sample;
           for (auto const source : anchor_sources) {
             module.start_source_[step] = source;
-            t.assert_that(name_of(source), anchor.voltage(),
-                          is_equal_to(in_c_entry_voltage));
+            auto const got = anchor.voltage();
+            auto constexpr want = in_c_entry_voltage;
+            if (got != want) {
+              t.errorf("With source {} got anchor voltage {}, want {} ",
+                       name_of(source), got, want);
+            }
           }
         }));
 
@@ -144,8 +158,12 @@ public:
           module.start_mode_[step] = AnchorMode::Sample;
           for (auto const source : anchor_sources) {
             module.start_source_[step] = source;
-            t.assert_that(name_of(source), anchor.voltage(),
-                          is_equal_to(output_entry_voltage));
+            auto const got = anchor.voltage();
+            auto constexpr want = output_entry_voltage;
+            if (got != want) {
+              t.errorf("With source {} got anchor voltage {}, want {} ",
+                       name_of(source), got, want);
+            }
           }
         }));
 
@@ -166,8 +184,12 @@ public:
             module.start_source_[step] = AnchorSource::Level;
             auto constexpr current_level_voltage = default_entry_voltage + 1.F;
             module.start_level_[step] = current_level_voltage;
-            t.assert_that(name_of(source), anchor.voltage(),
-                          is_equal_to(current_level_voltage));
+            auto const got = anchor.voltage();
+            auto constexpr want = current_level_voltage;
+            if (got != want) {
+              t.errorf("With source {} got anchor voltage {}, want {} ",
+                       name_of(source), got, want);
+            }
           }
         }));
 
@@ -188,8 +210,12 @@ public:
             module.start_source_[step] = AnchorSource::InA;
             auto constexpr current_in_a_voltage = default_entry_voltage + 1.F;
             module.in_a_ = current_in_a_voltage;
-            t.assert_that(name_of(source), anchor.voltage(),
-                          is_equal_to(current_in_a_voltage));
+            auto const got = anchor.voltage();
+            auto constexpr want = current_in_a_voltage;
+            if (got != want) {
+              t.errorf("With source {} got anchor voltage {}, want {} ",
+                       name_of(source), got, want);
+            }
           }
         }));
 
@@ -210,8 +236,12 @@ public:
             module.start_source_[step] = AnchorSource::InB;
             auto constexpr current_in_b_voltage = default_entry_voltage + 1.F;
             module.in_b_ = current_in_b_voltage;
-            t.assert_that(name_of(source), anchor.voltage(),
-                          is_equal_to(current_in_b_voltage));
+            auto const got = anchor.voltage();
+            auto constexpr want = current_in_b_voltage;
+            if (got != want) {
+              t.errorf("With source {} got anchor voltage {}, want {} ",
+                       name_of(source), got, want);
+            }
           }
         }));
 
@@ -232,8 +262,12 @@ public:
             module.start_source_[step] = AnchorSource::InC;
             auto constexpr current_in_c_voltage = default_entry_voltage + 1.F;
             module.in_c_ = current_in_c_voltage;
-            t.assert_that(name_of(source), anchor.voltage(),
-                          is_equal_to(current_in_c_voltage));
+            auto const got = anchor.voltage();
+            auto constexpr want = current_in_c_voltage;
+            if (got != want) {
+              t.errorf("With source {} got anchor voltage {}, want {} ",
+                       name_of(source), got, want);
+            }
           }
         }));
 
@@ -254,8 +288,12 @@ public:
             module.start_source_[step] = AnchorSource::Out;
             auto constexpr current_output_voltage = default_entry_voltage + 1.F;
             module.output_ = current_output_voltage;
-            t.assert_that(name_of(source), anchor.voltage(),
-                          is_equal_to(current_output_voltage));
+            auto const got = anchor.voltage();
+            auto constexpr want = current_output_voltage;
+            if (got != want) {
+              t.errorf("With source {} got anchor voltage {}, want {} ",
+                       name_of(source), got, want);
+            }
           }
         }));
 
@@ -278,8 +316,12 @@ public:
             module.start_mode_[step] = AnchorMode::Sample;
             for (auto const source : anchor_sources) {
               module.end_source_[step] = source;
-              t.assert_that(name_of(source), anchor.voltage(),
-                            is_equal_to(level_entry_voltage));
+              auto const got = anchor.voltage();
+              auto constexpr want = level_entry_voltage;
+              if (got != want) {
+                t.errorf("With source {} got anchor voltage {}, want {} ",
+                         name_of(source), got, want);
+              }
             }
           }));
 
@@ -302,8 +344,12 @@ public:
             module.start_mode_[step] = AnchorMode::Sample;
             for (auto const source : anchor_sources) {
               module.end_source_[step] = source;
-              t.assert_that(name_of(source), anchor.voltage(),
-                            is_equal_to(in_a_entry_voltage));
+              auto const got = anchor.voltage();
+              auto constexpr want = in_a_entry_voltage;
+              if (got != want) {
+                t.errorf("With source {} got anchor voltage {}, want {} ",
+                         name_of(source), got, want);
+              }
             }
           }));
 
@@ -326,8 +372,12 @@ public:
             module.start_mode_[step] = AnchorMode::Sample;
             for (auto const source : anchor_sources) {
               module.end_source_[step] = source;
-              t.assert_that(name_of(source), anchor.voltage(),
-                            is_equal_to(in_b_entry_voltage));
+              auto const got = anchor.voltage();
+              auto constexpr want = in_b_entry_voltage;
+              if (got != want) {
+                t.errorf("With source {} got anchor voltage {}, want {} ",
+                         name_of(source), got, want);
+              }
             }
           }));
 
@@ -350,8 +400,12 @@ public:
             module.start_mode_[step] = AnchorMode::Sample;
             for (auto const source : anchor_sources) {
               module.end_source_[step] = source;
-              t.assert_that(name_of(source), anchor.voltage(),
-                            is_equal_to(in_c_entry_voltage));
+              auto const got = anchor.voltage();
+              auto constexpr want = in_c_entry_voltage;
+              if (got != want) {
+                t.errorf("With source {} got anchor voltage {}, want {} ",
+                         name_of(source), got, want);
+              }
             }
           }));
 
@@ -374,8 +428,12 @@ public:
             module.start_mode_[step] = AnchorMode::Sample;
             for (auto const source : anchor_sources) {
               module.end_source_[step] = source;
-              t.assert_that(name_of(source), anchor.voltage(),
-                            is_equal_to(output_entry_voltage));
+              auto const got = anchor.voltage();
+              auto constexpr want = output_entry_voltage;
+              if (got != want) {
+                t.errorf("With source {} got anchor voltage {}, want {} ",
+                         name_of(source), got, want);
+              }
             }
           }));
 
@@ -396,8 +454,12 @@ public:
               auto constexpr current_level_voltage =
                   default_entry_voltage + 1.F;
               module.end_level_[step] = current_level_voltage;
-              t.assert_that(name_of(source), anchor.voltage(),
-                            is_equal_to(current_level_voltage));
+              auto const got = anchor.voltage();
+              auto constexpr want = current_level_voltage;
+              if (got != want) {
+                t.errorf("With source {} got anchor voltage {}, want {} ",
+                         name_of(source), got, want);
+              }
             }
           }));
 
@@ -417,8 +479,12 @@ public:
               module.end_source_[step] = AnchorSource::InA;
               auto constexpr current_in_a_voltage = default_entry_voltage + 1.F;
               module.in_a_ = current_in_a_voltage;
-              t.assert_that(name_of(source), anchor.voltage(),
-                            is_equal_to(current_in_a_voltage));
+              auto const got = anchor.voltage();
+              auto constexpr want = current_in_a_voltage;
+              if (got != want) {
+                t.errorf("With source {} got anchor voltage {}, want {} ",
+                         name_of(source), got, want);
+              }
             }
           }));
 
@@ -438,8 +504,12 @@ public:
               module.end_source_[step] = AnchorSource::InB;
               auto constexpr current_in_b_voltage = default_entry_voltage + 1.F;
               module.in_b_ = current_in_b_voltage;
-              t.assert_that(name_of(source), anchor.voltage(),
-                            is_equal_to(current_in_b_voltage));
+              auto const got = anchor.voltage();
+              auto constexpr want = current_in_b_voltage;
+              if (got != want) {
+                t.errorf("With source {} got anchor voltage {}, want {} ",
+                         name_of(source), got, want);
+              }
             }
           }));
 
@@ -459,8 +529,12 @@ public:
               module.end_source_[step] = AnchorSource::InC;
               auto constexpr current_in_c_voltage = default_entry_voltage + 1.F;
               module.in_c_ = current_in_c_voltage;
-              t.assert_that(name_of(source), anchor.voltage(),
-                            is_equal_to(current_in_c_voltage));
+              auto const got = anchor.voltage();
+              auto constexpr want = current_in_c_voltage;
+              if (got != want) {
+                t.errorf("With source {} got anchor voltage {}, want {} ",
+                         name_of(source), got, want);
+              }
             }
           }));
 
@@ -481,8 +555,12 @@ public:
               auto constexpr current_output_voltage =
                   default_entry_voltage + 1.F;
               module.output_ = current_output_voltage;
-              t.assert_that(name_of(source), anchor.voltage(),
-                            is_equal_to(current_output_voltage));
+              auto const got = anchor.voltage();
+              auto constexpr want = current_output_voltage;
+              if (got != want) {
+                t.errorf("With source {} got anchor voltage {}, want {} ",
+                         name_of(source), got, want);
+              }
             }
           }));
   }

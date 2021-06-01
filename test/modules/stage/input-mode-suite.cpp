@@ -1,15 +1,15 @@
 #include "./fixtures/simple-mode-fixture.h"
+#include "helpers/assertions.h"
 #include "modules/stage/input-mode.h"
-#include <dheunit/assertions.h>
 #include <dheunit/test.h>
 
 namespace test {
 namespace stage {
 
-using dhe::unit::is_equal_to;
-using dhe::unit::is_false;
 using dhe::unit::Suite;
 using dhe::unit::Tester;
+using test::is_equal_to;
+using test::is_false;
 
 using InputMode = dhe::stage::InputMode<Controls>;
 
@@ -21,7 +21,7 @@ public:
           test<InputMode>([](Tester &t, Controls &controls, InputMode &mode) {
             controls.active_ = true;
             mode.enter();
-            t.assert_that(controls.active_, is_false);
+            assert_that(t, controls.active_, is_false);
           }));
 
     t.run("execute() copies input to output",
@@ -29,14 +29,14 @@ public:
             auto constexpr input = 0.984F;
             controls.input_ = input;
             mode.execute();
-            t.assert_that(controls.output_, is_equal_to(input));
+            assert_that(t, controls.output_, is_equal_to(input));
           }));
 
     t.run("exit() deactivates stage",
           test<InputMode>([](Tester &t, Controls &controls, InputMode &mode) {
             controls.active_ = true;
             mode.exit();
-            t.assert_that(controls.active_, is_false);
+            assert_that(t, controls.active_, is_false);
           }));
   }
 };

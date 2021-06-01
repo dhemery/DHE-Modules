@@ -1,15 +1,15 @@
 #include "./fixtures/simple-mode-fixture.h"
+#include "helpers/assertions.h"
 #include "modules/stage/level-mode.h"
-#include <dheunit/assertions.h>
 #include <dheunit/test.h>
 
 namespace test {
 namespace stage {
 
-using dhe::unit::is_equal_to;
-using dhe::unit::is_false;
 using dhe::unit::Suite;
 using dhe::unit::Tester;
+using test::is_equal_to;
+using test::is_false;
 
 using LevelMode = dhe::stage::LevelMode<Controls>;
 
@@ -21,7 +21,7 @@ public:
           test<LevelMode>([](Tester &t, Controls &controls, LevelMode &mode) {
             controls.active_ = true;
             mode.enter();
-            t.assert_that(controls.active_, is_false);
+            assert_that(t, controls.active_, is_false);
           }));
 
     t.run("execute() copies level to output",
@@ -29,14 +29,14 @@ public:
             auto constexpr level = 8.348F;
             controls.level_ = level;
             mode.execute();
-            t.assert_that(controls.output_, is_equal_to(level));
+            assert_that(t, controls.output_, is_equal_to(level));
           }));
 
     t.run("exit() deactivates stage",
           test<LevelMode>([](Tester &t, Controls &controls, LevelMode &mode) {
             controls.active_ = true;
             mode.exit();
-            t.assert_that(controls.active_, is_false);
+            assert_that(t, controls.active_, is_false);
           }));
   }
 };

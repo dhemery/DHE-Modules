@@ -3,15 +3,15 @@
 
 #include "modules/sequencizer/status.h"
 
-#include <dheunit/assertions.h>
+#include "helpers/assertions.h"
 #include <dheunit/test.h>
 
 namespace test {
 namespace sequencizer {
 using dhe::sequencizer::GeneratorStatus;
-using dhe::unit::is_equal_to;
-using dhe::unit::is_true;
 using dhe::unit::Suite;
+using test::is_equal_to;
+using test::is_true;
 
 class GeneratorSuite : public Suite {
 public:
@@ -24,8 +24,9 @@ public:
 
             generator.start(step);
 
-            t.assert_that("start anchor", start_anchor.entered_[step], is_true);
-            t.assert_that("end anchor", end_source.entered_[step], is_true);
+            assert_that(t, "start anchor", start_anchor.entered_[step],
+                        is_true);
+            assert_that(t, "end anchor", end_source.entered_[step], is_true);
           }));
 
     t.run("start(s) shows progress at 0",
@@ -37,14 +38,14 @@ public:
 
             generator.start(step);
 
-            t.assert_that("first start", module.progress_[step],
-                          is_equal_to(0.F));
+            assert_that(t, "first start", module.progress_[step],
+                        is_equal_to(0.F));
 
             generator.generate(3.F); // Advance a bit
 
             generator.start(step);
-            t.assert_that("start after progress", module.progress_[step],
-                          is_equal_to(0.F));
+            assert_that(t, "start after progress", module.progress_[step],
+                        is_equal_to(0.F));
           }));
 
     t.run("stop()",
@@ -55,8 +56,8 @@ public:
             generator.start(step);
             generator.stop();
 
-            t.assert_that("shows step inactive", module.inactive_step_,
-                          is_equal_to(step));
+            assert_that(t, "shows step inactive", module.inactive_step_,
+                        is_equal_to(step));
           }));
 
     t.run("generate(t) outputs scaled tapered phase",
@@ -86,7 +87,7 @@ public:
 
             generator.generate(sample_time);
 
-            t.assert_that(module.output_, is_equal_to(scaled_tapered_phase));
+            assert_that(t, module.output_, is_equal_to(scaled_tapered_phase));
           }));
 
     t.run("generate(t) reports progress",
@@ -105,14 +106,14 @@ public:
 
             generator.generate(sample_time);
 
-            t.assert_that("after 1st generate", module.progress_[step],
-                          is_equal_to(phase_delta));
+            assert_that(t, "after 1st generate", module.progress_[step],
+                        is_equal_to(phase_delta));
             module.progress_[step] = -1.F;
 
             generator.generate(sample_time);
 
-            t.assert_that("after 2nd generate", module.progress_[step],
-                          is_equal_to(phase_delta + phase_delta));
+            assert_that(t, "after 2nd generate", module.progress_[step],
+                        is_equal_to(phase_delta + phase_delta));
           }));
 
     t.run("generate(t) reports whether duration has expired",
@@ -131,18 +132,18 @@ public:
 
             auto status = generator.generate(sample_time);
 
-            t.assert_that("not expired", status,
-                          is_equal_to(GeneratorStatus::Generating));
+            assert_that(t, "not expired", status,
+                        is_equal_to(GeneratorStatus::Generating));
 
             status = generator.generate(sample_time);
 
-            t.assert_that("expires", status,
-                          is_equal_to(GeneratorStatus::Completed));
+            assert_that(t, "expires", status,
+                        is_equal_to(GeneratorStatus::Completed));
 
             status = generator.generate(sample_time);
 
-            t.assert_that("previously expired", status,
-                          is_equal_to(GeneratorStatus::Completed));
+            assert_that(t, "previously expired", status,
+                        is_equal_to(GeneratorStatus::Completed));
           }));
   }
 };

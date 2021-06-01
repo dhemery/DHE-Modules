@@ -1,9 +1,9 @@
 #include "./fixtures/timed-mode-fixture.h"
+#include "helpers/assertions.h"
 #include "helpers/latches.h"
 #include "modules/stage/event.h"
 #include "modules/stage/hold-mode.h"
 
-#include <dheunit/assertions.h>
 #include <dheunit/test.h>
 
 namespace test {
@@ -12,11 +12,11 @@ namespace stage {
 using dhe::PhaseTimer;
 using dhe::stage::Event;
 
-using dhe::unit::is_equal_to;
-using dhe::unit::is_false;
-using dhe::unit::is_true;
 using dhe::unit::Suite;
 using dhe::unit::Tester;
+using test::is_equal_to;
+using test::is_false;
+using test::is_true;
 
 using HoldMode = dhe::stage::HoldMode<Controls, PhaseTimer>;
 
@@ -29,7 +29,7 @@ public:
                             HoldMode &mode) {
             controls.active_ = false;
             mode.enter();
-            t.assert_that(controls.active_, is_true);
+            assert_that(t, controls.active_, is_true);
           }));
 
     t.run("enter() copies input to output",
@@ -38,7 +38,7 @@ public:
             auto constexpr input = 0.234F;
             controls.input_ = input;
             mode.enter();
-            t.assert_that(controls.output_, is_equal_to(input));
+            assert_that(t, controls.output_, is_equal_to(input));
           }));
 
     t.run("enter() resets timer",
@@ -46,7 +46,7 @@ public:
                             HoldMode &mode) {
             timer.advance(1.F);
             mode.enter();
-            t.assert_that(timer.phase(), is_equal_to(0.F));
+            assert_that(t, timer.phase(), is_equal_to(0.F));
           }));
 
     t.run("execute(l,s) resets timer if latch rises",
@@ -57,7 +57,7 @@ public:
             controls.duration_ = 1.F;
             auto constexpr sample_time = 0.F; // Cheat: Advance by 0 after reset
             mode.execute(rising_latch, sample_time);
-            t.assert_that(timer.phase(), is_equal_to(0.F));
+            assert_that(t, timer.phase(), is_equal_to(0.F));
           }));
 
     t.run("execute(l,s) reports generated if timer not expired",
@@ -67,7 +67,7 @@ public:
             controls.duration_ = 1.F;
             auto constexpr sample_time = 0.1F;
             auto const result = mode.execute(low_latch, sample_time);
-            t.assert_that(result, is_equal_to(Event::Generated));
+            assert_that(t, result, is_equal_to(Event::Generated));
           }));
 
     t.run("execute(l,s) reports completed if timer expires",
@@ -77,7 +77,7 @@ public:
             controls.duration_ = 1.F;
             auto constexpr sample_time = 0.1F; // Enough to advance to 1
             auto const result = mode.execute(low_latch, sample_time);
-            t.assert_that(result, is_equal_to(Event::Completed));
+            assert_that(t, result, is_equal_to(Event::Completed));
           }));
 
     t.run("execute(l,s) outputs nothing",
@@ -86,7 +86,7 @@ public:
             float original_output = 99.F;
             controls.output_ = original_output;
             mode.execute(low_latch, 0.1F);
-            t.assert_that(controls.output_, is_equal_to(original_output));
+            assert_that(t, controls.output_, is_equal_to(original_output));
           }));
 
     t.run("exit() deactivates stage",
@@ -94,7 +94,7 @@ public:
                             HoldMode &mode) {
             controls.active_ = true;
             mode.exit();
-            t.assert_that(controls.active_, is_false);
+            assert_that(t, controls.active_, is_false);
           }));
   }
 };

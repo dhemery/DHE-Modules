@@ -1,14 +1,14 @@
 #include "./fixtures/generator-fixture.h"
 
-#include <dheunit/assertions.h>
+#include "helpers/assertions.h"
 #include <dheunit/test.h>
 
 namespace test {
 namespace scannibal {
-using dhe::unit::is_equal_to;
-using dhe::unit::is_false;
-using dhe::unit::is_true;
 using dhe::unit::Suite;
+using test::is_equal_to;
+using test::is_false;
+using test::is_true;
 
 class GeneratorSuite : public Suite {
 public:
@@ -37,7 +37,7 @@ public:
 
             generator.generate(step, phase);
 
-            t.assert_that(module.output_, is_equal_to(scaled_tapered_phase));
+            assert_that(t, module.output_, is_equal_to(scaled_tapered_phase));
           }));
 
     t.run("first call: "
@@ -50,8 +50,8 @@ public:
 
             generator.generate(step, 0.F);
 
-            t.assert_that(phase_0_anchor.entered_[step], is_true);
-            t.assert_that(phase_1_anchor.entered_[step], is_true);
+            assert_that(t, phase_0_anchor.entered_[step], is_true);
+            assert_that(t, phase_1_anchor.entered_[step], is_true);
           }));
 
     t.run("if called with same step: "
@@ -69,8 +69,8 @@ public:
             generator.generate(step, 0.11F);
             generator.generate(step, 0.62F);
 
-            t.assert_that(phase_0_anchor.entered_[step], is_false);
-            t.assert_that(phase_1_anchor.entered_[step], is_false);
+            assert_that(t, phase_0_anchor.entered_[step], is_false);
+            assert_that(t, phase_1_anchor.entered_[step], is_false);
           }));
 
     t.run("if called with changed step: "
@@ -86,8 +86,8 @@ public:
 
             generator.generate(second_step, 0.11F);
 
-            t.assert_that(phase_0_anchor.entered_[second_step], is_true);
-            t.assert_that(phase_1_anchor.entered_[second_step], is_true);
+            assert_that(t, phase_0_anchor.entered_[second_step], is_true);
+            assert_that(t, phase_1_anchor.entered_[second_step], is_true);
           }));
   }
 };

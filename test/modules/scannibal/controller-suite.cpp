@@ -1,14 +1,14 @@
 #include "./fixtures/controller-fixture.h"
-#include "dheunit/assertions.h"
+#include "helpers/assertions.h"
 #include <functional>
 namespace test {
 namespace scannibal {
-using dhe::unit::is_equal_to;
-using dhe::unit::is_false;
-using dhe::unit::is_near;
-using dhe::unit::is_true;
 using dhe::unit::Suite;
 using dhe::unit::Tester;
+using test::is_equal_to;
+using test::is_false;
+using test::is_near;
+using test::is_true;
 using TestFunc = std::function<void(Tester &)>;
 
 class SequenceControllerSuite : Suite {
@@ -35,14 +35,14 @@ public:
 
             controller.execute();
 
-            t.assert_that("module step", module.step_number_,
-                          is_equal_to(expected_step));
-            t.assert_that("module phase", module.step_phase_,
-                          is_equal_to(expected_phase));
-            t.assert_that("generator step", generator.step_,
-                          is_equal_to(expected_phase));
-            t.assert_that("generator phase", generator.phase_,
-                          is_equal_to(expected_phase));
+            assert_that(t, "module step", module.step_number_,
+                        is_equal_to(expected_step));
+            assert_that(t, "module phase", module.step_phase_,
+                        is_equal_to(expected_phase));
+            assert_that(t, "generator step", generator.step_,
+                        is_equal_to(expected_phase));
+            assert_that(t, "generator phase", generator.phase_,
+                        is_equal_to(expected_phase));
           }));
 
     t.run("maps phase 10V to end step phase 1",
@@ -64,14 +64,14 @@ public:
 
             controller.execute();
 
-            t.assert_that("module step", module.step_number_,
-                          is_equal_to(expected_step));
-            t.assert_that("module phase", module.step_phase_,
-                          is_equal_to(expected_phase));
-            t.assert_that("generator step", generator.step_,
-                          is_equal_to(expected_step));
-            t.assert_that("generator phase", generator.phase_,
-                          is_equal_to(expected_phase));
+            assert_that(t, "module step", module.step_number_,
+                        is_equal_to(expected_step));
+            assert_that(t, "module phase", module.step_phase_,
+                        is_equal_to(expected_phase));
+            assert_that(t, "generator step", generator.step_,
+                        is_equal_to(expected_step));
+            assert_that(t, "generator phase", generator.phase_,
+                        is_equal_to(expected_phase));
           }));
 
     t.run("if equal durations: "
@@ -98,14 +98,14 @@ public:
 
             controller.execute();
 
-            t.assert_that("module step", module.step_number_,
-                          is_equal_to(middle_step));
-            t.assert_that("module phase", module.step_phase_,
-                          is_near(middle_step_phase, 1e-4F));
-            t.assert_that("generator step", generator.step_,
-                          is_equal_to(middle_step));
-            t.assert_that("generator phase", generator.phase_,
-                          is_near(middle_step_phase, 1e-4F));
+            assert_that(t, "module step", module.step_number_,
+                        is_equal_to(middle_step));
+            assert_that(t, "module phase", module.step_phase_,
+                        is_near(middle_step_phase, 1e-4F));
+            assert_that(t, "generator step", generator.step_,
+                        is_equal_to(middle_step));
+            assert_that(t, "generator phase", generator.phase_,
+                        is_near(middle_step_phase, 1e-4F));
           }));
 
     t.run("wraps phase < 0V into range [0V, 10V)",
@@ -133,14 +133,14 @@ public:
             module.phase_ = out_of_range_phase;
             controller.execute();
 
-            t.assert_that("module step", module.step_number_,
-                          is_equal_to(expected_module_step));
-            t.assert_that("module phase", module.step_phase_,
-                          is_near(expected_module_phase, 1e-4F));
-            t.assert_that("generator step", generator.step_,
-                          is_equal_to(expected_generator_step));
-            t.assert_that("generator phase", generator.phase_,
-                          is_near(expected_generator_phase, 1e-4F));
+            assert_that(t, "module step", module.step_number_,
+                        is_equal_to(expected_module_step));
+            assert_that(t, "module phase", module.step_phase_,
+                        is_near(expected_module_phase, 1e-4F));
+            assert_that(t, "generator step", generator.step_,
+                        is_equal_to(expected_generator_step));
+            assert_that(t, "generator phase", generator.phase_,
+                        is_near(expected_generator_phase, 1e-4F));
           }));
 
     t.run("wraps phase > 10V into range (0V, 10V]",
@@ -168,14 +168,14 @@ public:
             module.phase_ = out_of_range_phase;
             controller.execute();
 
-            t.assert_that("module step", module.step_number_,
-                          is_equal_to(expected_module_step));
-            t.assert_that("module phase", module.step_phase_,
-                          is_near(expected_module_phase, 1e-4F));
-            t.assert_that("generator step", generator.step_,
-                          is_equal_to(expected_generator_step));
-            t.assert_that("generator phase", generator.phase_,
-                          is_near(expected_generator_phase, 1e-4F));
+            assert_that(t, "module step", module.step_number_,
+                        is_equal_to(expected_module_step));
+            assert_that(t, "module phase", module.step_phase_,
+                        is_near(expected_module_phase, 1e-4F));
+            assert_that(t, "generator step", generator.step_,
+                        is_equal_to(expected_generator_step));
+            assert_that(t, "generator phase", generator.phase_,
+                        is_near(expected_generator_phase, 1e-4F));
           }));
 
     t.run("dims light when exiting step",
@@ -194,17 +194,17 @@ public:
             module.phase_ = 0.F;
             controller.execute();
 
-            t.assert_that("exited after initial step", module.exited_,
-                          is_false);
+            assert_that(t, "exited after initial step", module.exited_,
+                        is_false);
 
             module.exited_step_ = -1;
             // Exit step 0 and enter selection end step
             module.phase_ = module.phase_ = 10.F;
             controller.execute();
 
-            t.assert_that("exited when entering new step", module.exited_,
-                          is_true);
-            t.assert_that("exited step", module.exited_step_, is_equal_to(0));
+            assert_that(t, "exited when entering new step", module.exited_,
+                        is_true);
+            assert_that(t, "exited step", module.exited_step_, is_equal_to(0));
           }));
 
     t.run("idles if all durations are 0",
@@ -234,10 +234,11 @@ public:
             // Execute again with all 0 weights
             controller.execute();
 
-            t.assert_that("exited", module.exited_, is_true);
-            t.assert_that("exited step", module.exited_step_, is_equal_to(0));
-            t.assert_that("showed position", module.showed_position_, is_false);
-            t.assert_that("generated", generator.generated_, is_false);
+            assert_that(t, "exited", module.exited_, is_true);
+            assert_that(t, "exited step", module.exited_step_, is_equal_to(0));
+            assert_that(t, "showed position", module.showed_position_,
+                        is_false);
+            assert_that(t, "generated", generator.generated_, is_false);
           }));
   }
 };

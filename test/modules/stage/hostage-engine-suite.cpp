@@ -1,14 +1,14 @@
 #include "./fixtures/hostage-engine-fixture.h"
 
-#include <dheunit/assertions.h>
+#include "helpers/assertions.h"
 #include <dheunit/test.h>
 
 namespace test {
 namespace stage {
 
-using dhe::unit::is_true;
 using dhe::unit::Suite;
 using dhe::unit::Tester;
+using test::is_true;
 
 // Nothing to do, because the state is already freshly constructed
 static inline void
@@ -28,7 +28,7 @@ public:
                   LatchedMode & /*sustain_mode*/, SimpleMode & /*idle_mode*/,
                   HostageEngine &engine) {
                  engine.process(0.F);
-                 t.assert_that(input_mode.executed_, is_true);
+                 assert_that(t, input_mode.executed_, is_true);
                }));
   }
 };

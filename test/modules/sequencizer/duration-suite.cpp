@@ -4,8 +4,6 @@
 
 namespace test {
 namespace sequencizer {
-using dhe::unit::is_equal_to;
-using dhe::unit::is_near;
 using dhe::unit::Suite;
 
 auto constexpr short_duration_selection = 0;
@@ -19,6 +17,24 @@ auto constexpr maximum_duration_rotation = 1.F;
 auto constexpr minimum_multiplier_rotation = 0.F;
 auto constexpr center_multiplier_rotation = 0.5F;
 auto constexpr maximum_multiplier_rotation = 1.F;
+
+static inline auto is_equal_to(float want)
+    -> std::function<void(Tester &, float)> {
+  return [want](Tester &t, float got) {
+    if (got != want) {
+      t.errorf("Got {}, want {}", got, want);
+    }
+  };
+}
+
+static inline auto is_near(float want, float tolerance)
+    -> std::function<void(Tester &, float)> {
+  return [want, tolerance](Tester &t, float got) {
+    if (got < want - tolerance || got > want + tolerance) {
+      t.errorf("Got {}, want a value within {} of {}", got, tolerance, want);
+    }
+  };
+}
 
 class DurationSuite : public Suite {
 public:

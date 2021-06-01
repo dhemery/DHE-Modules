@@ -1,13 +1,13 @@
 #include "./fixtures/step-selector-fixture.h"
-#include <dheunit/assertions.h>
+#include "helpers/assertions.h"
 #include <dheunit/test.h>
 
 namespace test {
 namespace sequencizer {
-using dhe::unit::is_equal_to;
-using dhe::unit::is_less_than;
 using dhe::unit::Suite;
 using dhe::unit::Tester;
+using test::is_equal_to;
+using test::is_less_than;
 
 static inline void enable_all(Module &module) {
   for (auto &enabled : module.enabled_) {
@@ -28,7 +28,7 @@ public:
 
             auto const first = selector.first();
 
-            t.assert_that(first, is_equal_to(selection_start));
+            assert_that(t, first, is_equal_to(selection_start));
           }));
 
     t.run("is successor of selection start if selection start is disabled",
@@ -43,7 +43,7 @@ public:
             auto const first = selector.first();
             auto const successor = selector.successor(start);
 
-            t.assert_that(first, is_equal_to(successor));
+            assert_that(t, first, is_equal_to(successor));
           }));
 
     t.run("is no step if no selected step is enabled",
@@ -59,7 +59,7 @@ public:
 
             auto const first = selector.first();
 
-            t.assert_that(first, is_less_than(0));
+            assert_that(t, first, is_less_than(0));
           }));
   }
 };
@@ -84,7 +84,7 @@ public:
 
             auto const successor = selector.successor(given_step);
 
-            t.assert_that(successor, is_equal_to(expected_successor));
+            assert_that(t, successor, is_equal_to(expected_successor));
           }));
 
     t.run("can be below s if selection wraps",
@@ -99,7 +99,7 @@ public:
 
             auto const successor = selector.successor(start);
 
-            t.assert_that(successor, is_equal_to(expected_successor));
+            assert_that(t, successor, is_equal_to(expected_successor));
           }));
 
     t.run("can be selection end",
@@ -115,7 +115,7 @@ public:
 
             auto const successor = selector.successor(start);
 
-            t.assert_that(successor, is_equal_to(end));
+            assert_that(t, successor, is_equal_to(end));
           }));
 
     t.run("if no selected step is enabled: is no step",
@@ -132,7 +132,7 @@ public:
 
             auto const successor = selector.successor(start);
 
-            t.assert_that(successor, is_less_than(0));
+            assert_that(t, successor, is_less_than(0));
           }));
 
     t.run("if selection wraps and no selected step is enabled: is no step",
@@ -149,7 +149,7 @@ public:
 
             auto const successor = selector.successor(start);
 
-            t.assert_that(successor, is_less_than(0));
+            assert_that(t, successor, is_less_than(0));
           }));
 
     t.run("if s is below selection: is no step",
@@ -166,7 +166,7 @@ public:
 
             auto const successor = selector.successor(given_step);
 
-            t.assert_that(successor, is_less_than(0));
+            assert_that(t, successor, is_less_than(0));
           }));
 
     t.run("if s is above selection: is no step",
@@ -183,7 +183,7 @@ public:
 
             auto const successor = selector.successor(given_step);
 
-            t.assert_that(successor, is_less_than(0));
+            assert_that(t, successor, is_less_than(0));
           }));
 
     t.run("if s is not in wrapped selection: is no step",
@@ -200,7 +200,7 @@ public:
 
             auto const successor = selector.successor(given_step);
 
-            t.assert_that(successor, is_less_than(0));
+            assert_that(t, successor, is_less_than(0));
           }));
 
     t.run("if s is selection end: is no step",
@@ -217,7 +217,7 @@ public:
 
             auto const successor = selector.successor(end);
 
-            t.assert_that(successor, is_less_than(0));
+            assert_that(t, successor, is_less_than(0));
           }));
   }
 };
