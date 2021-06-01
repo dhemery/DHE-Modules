@@ -28,7 +28,7 @@ struct PhaseTimerTest {
         t.errorf("Got {}, want {}", phase, want_phase_);
       }
 
-      auto const in_progress = timer_.in_progress();
+      auto const in_progress = timer.in_progress();
       if (in_progress != want_in_progress_) {
         t.errorf("in_progress() returned {}, want {}", in_progress,
                  want_in_progress_);

@@ -86,7 +86,7 @@ public:
 
     for (auto &test : input_button_combo_tests) {
       auto const step = std::rand() % step_count;
-      test.run(t, "is_enabled()", Param::EnabledButtons + step,
+      test.run(t, "is_enabled(step)", Param::EnabledButtons + step,
                Input::EnabledInputs + step, [step](Controls &controls) -> bool {
                  return controls.is_enabled(step);
                });
@@ -146,6 +146,61 @@ public:
 
             if (got != output_voltage) {
               t.errorf("Got {}, want {}", got, output_voltage);
+            }
+          }));
+
+    t.run("curvature(step) reports curvature for step curvature param",
+          test([](Tester &t, Module &module, Controls &controls) {
+            auto const step = std::rand() % step_count;
+            auto constexpr curve_knob_rotation = 0.3F;
+
+            module.params_[Controls::CurveKnobs + step].setValue(
+                curve_knob_rotation);
+
+            auto const got = controls.curvature(step);
+            auto constexpr want = dhe::curvature(curve_knob_rotation);
+            if (got != want) {
+              t.errorf("Got {}, want {}", got, want);
+            }
+          }));
+
+    t.run("duration(step) reports duration for duration range and step "
+          "duration param",
+          test([](Tester &t, Module &module, Controls &controls) {
+            auto const step = std::rand() % step_count;
+            auto constexpr duration_knob_rotation = 0.75F;
+            auto constexpr duration_range_selection = 2; // Long duration
+
+            module.params_[Controls::DurationKnobs + step].setValue(
+                duration_knob_rotation);
+            module.params_[Controls::DurationRangeSwitch].setValue(
+                duration_range_selection);
+
+            auto const got = controls.duration(step);
+            auto const want =
+                dhe::duration(duration_knob_rotation,
+                              dhe::duration_ranges[duration_range_selection]);
+            if (got != want) {
+              t.errorf("Got {}, want {}", got, want);
+            }
+          }));
+
+    t.run("level(step) reports level for level range and step level param",
+          test([](Tester &t, Module &module, Controls &controls) {
+            auto const step = std::rand() % step_count;
+            auto constexpr level_knob_rotation = 0.35F;
+            auto constexpr level_range_selection = 1; // unipolar
+
+            module.params_[Controls::LevelKnobs + step].setValue(
+                level_knob_rotation);
+            module.params_[Controls::LevelRangeSwitch].setValue(
+                level_range_selection);
+
+            auto const got = controls.level(step);
+            auto const want = dhe::level(
+                level_knob_rotation, dhe::signal_ranges[level_range_selection]);
+            if (got != want) {
+              t.errorf("Got {}, want {}", got, want);
             }
           }));
   }
