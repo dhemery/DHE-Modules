@@ -1,8 +1,9 @@
 #pragma once
 
 #include "dheunit/test.h"
+
 #include <functional>
-#include <vector>
+#include <string>
 
 namespace test {
 
@@ -14,8 +15,8 @@ void assert_that(Tester &t, std::string const &context, Subject &&subject,
   t.run(context, [subject, assertion](Tester &t) { assertion(t, subject); });
 }
 
-template <typename T, typename A>
-void assert_that(Tester &t, T actual, A assertion) {
+template <typename Subject, typename Assertion>
+void assert_that(Tester &t, Subject &&actual, Assertion &&assertion) {
   assertion(t, actual);
 }
 
@@ -42,51 +43,11 @@ auto is_near(Actual const &want, Actual const &tolerance)
 }
 
 template <typename Actual>
-auto is_greater_than(Actual const &max)
-    -> std::function<void(Tester &, Actual const &)> {
-  return [max](Tester &t, Actual const &actual) {
-    if (!(actual > max)) {
-      t.errorf("was {}, want greater than {}", actual, max);
-    }
-  };
-}
-
-template <typename Actual>
-auto is_no_greater_than(Actual const &max)
-    -> std::function<void(Tester &, Actual const &)> {
-  return [max](Tester &t, Actual const &actual) {
-    if (actual > max) {
-      t.errorf("was {}, want no greater than {}", actual, max);
-    }
-  };
-}
-
-template <typename Actual>
-auto is_between(Actual const &min, Actual const &max)
-    -> std::function<void(Tester &, Actual const &)> {
-  return [min, max](Tester &t, Actual const &actual) {
-    if (actual < min || actual > max) {
-      t.errorf("was {}, want between {} and {}", actual, min, max);
-    }
-  };
-}
-
-template <typename Actual>
 auto is_less_than(Actual const &min)
     -> std::function<void(Tester &, Actual const &)> {
   return [min](Tester &t, Actual const &actual) {
     if (!(actual < min)) {
       t.errorf("was {}, want less than {}", actual, min);
-    }
-  };
-}
-
-template <typename Actual>
-auto is_no_less_than(Actual const &min)
-    -> std::function<void(Tester &, Actual const &)> {
-  return [min](Tester &t, Actual const &actual) {
-    if (actual < min) {
-      t.errorf("was {}, want no less than {}", actual, min);
     }
   };
 }
