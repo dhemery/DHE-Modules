@@ -10,13 +10,13 @@ namespace test {
 using dhe::unit::Tester;
 
 template <typename Subject, typename Assertion>
-void assert_that(Tester &t, std::string const &context, Subject &&subject,
-                 Assertion &&assertion) {
-  t.run(context, [subject, assertion](Tester &t) { assertion(t, subject); });
+void assert_that(Tester &t, std::string const &context, Subject const &subject,
+                 Assertion const &assertion) {
+  t.run(context, [&subject, &assertion](Tester &t) { assertion(t, subject); });
 }
 
 template <typename Subject, typename Assertion>
-void assert_that(Tester &t, Subject &&actual, Assertion &&assertion) {
+void assert_that(Tester &t, Subject const &actual, Assertion const &assertion) {
   assertion(t, actual);
 }
 
