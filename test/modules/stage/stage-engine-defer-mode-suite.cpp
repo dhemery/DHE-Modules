@@ -29,7 +29,7 @@ class StageEngineDeferModeSuite : Suite {
 public:
   StageEngineDeferModeSuite()
       : Suite{"dhe::stage::StageEngine in defer mode"} {}
-  void run(Tester &t) {
+  void run(Tester &t) override {
     t.run("with defer high: executes regardless of gate",
           test(in_defer_mode, [](Tester &t, Controls &controls,
                                  SimpleMode &defer_mode, SimpleMode & /**/,
@@ -83,6 +83,7 @@ public:
           }));
   }
 };
-__attribute__((unused)) static auto _ = StageEngineDeferModeSuite{};
+
+static auto _ = StageEngineDeferModeSuite{};
 } // namespace stage
 } // namespace test

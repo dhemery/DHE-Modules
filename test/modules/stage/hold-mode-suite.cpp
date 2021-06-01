@@ -99,7 +99,7 @@ public:
   }
 };
 
-__attribute__((unused)) static auto _ = HoldModeSuite{};
+static auto _ = HoldModeSuite{};
 
 } // namespace stage
-}; // namespace test
+} // namespace test

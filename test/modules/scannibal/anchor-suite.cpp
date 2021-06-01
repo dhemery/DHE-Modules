@@ -495,7 +495,6 @@ public:
   }
 };
 
-__attribute__((unused)) static auto _ = AnchorSuite{};
-
+static auto _ = AnchorSuite{};
 } // namespace scannibal
 } // namespace test

@@ -107,6 +107,6 @@ public:
   }
 };
 
-__attribute__((unused)) static auto _ = HostageEngineLevelModeSuite{};
+static auto _ = HostageEngineLevelModeSuite{};
 } // namespace stage
 } // namespace test

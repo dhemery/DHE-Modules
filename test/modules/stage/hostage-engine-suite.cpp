@@ -20,7 +20,7 @@ freshly_constructed(Controls & /*controls*/, SimpleMode & /*input_mode*/,
 class HostageEngineSuite : public Suite {
 public:
   HostageEngineSuite() : Suite{"dhe::stage::HostageEngine"} {}
-  void run(Tester &t) {
+  void run(Tester &t) override {
     t.run("starts in input mode",
           test(freshly_constructed,
                [](Tester &t, Controls & /*controls*/, SimpleMode &input_mode,
@@ -33,7 +33,6 @@ public:
   }
 };
 
-__attribute__((unused)) static auto _ = HostageEngineSuite{};
-
+static auto _ = HostageEngineSuite{};
 } // namespace stage
-}; // namespace test
+} // namespace test

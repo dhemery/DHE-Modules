@@ -18,7 +18,7 @@ static inline void freshly_constructed(Controls & /**/, SimpleMode & /**/,
 class StageEngineSuite : public Suite {
 public:
   StageEngineSuite() : Suite{"dhe::stage::StageEngine"} {}
-  void run(Tester &t) {
+  void run(Tester &t) override {
     t.run("starts in input mode",
           test(freshly_constructed,
                [](Tester &t, Controls & /**/, SimpleMode & /**/,
@@ -30,7 +30,6 @@ public:
   }
 };
 
-__attribute__((unused)) static auto _ = StageEngineSuite{};
-
+static auto _ = StageEngineSuite{};
 } // namespace stage
-}; // namespace test
+} // namespace test

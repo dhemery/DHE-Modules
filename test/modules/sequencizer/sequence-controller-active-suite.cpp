@@ -263,6 +263,7 @@ public:
                }));
   }
 };
-__attribute__((unused)) static auto _ = SequenceControllerActiveSuite{};
+
+static auto _ = SequenceControllerActiveSuite{};
 } // namespace sequencizer
 } // namespace test

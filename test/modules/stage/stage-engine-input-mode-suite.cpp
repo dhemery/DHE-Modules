@@ -21,7 +21,7 @@ class StageEngineInputModeSuite : Suite {
 public:
   StageEngineInputModeSuite()
       : Suite{"dhe::stage::StageEngine in input mode"} {}
-  void run(Tester &t) {
+  void run(Tester &t) override {
     t.run("if defer rises: begins deferring",
           test(in_input_mode, [](Tester &t, Controls &controls,
                                  SimpleMode &defer_mode, SimpleMode &input_mode,
@@ -65,7 +65,7 @@ public:
         }));
   }
 };
-__attribute__((unused)) static auto _ = StageEngineInputModeSuite{};
 
+static auto _ = StageEngineInputModeSuite{};
 } // namespace stage
 } // namespace test

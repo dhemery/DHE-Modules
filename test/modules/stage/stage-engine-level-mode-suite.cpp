@@ -79,6 +79,6 @@ public:
   }
 };
 
-__attribute__((unused)) static auto _ = StageEngineLevelModeSuite{};
+static auto _ = StageEngineLevelModeSuite{};
 } // namespace stage
 } // namespace test

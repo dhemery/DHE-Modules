@@ -163,7 +163,7 @@ public:
   }
 };
 
-__attribute__((unused)) static auto _ = GenerateModeSuite{};
+static auto _ = GenerateModeSuite{};
 
 } // namespace stage
-}; // namespace test
+} // namespace test

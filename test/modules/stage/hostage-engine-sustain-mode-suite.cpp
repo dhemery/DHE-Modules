@@ -128,6 +128,7 @@ public:
                }));
   }
 };
-__attribute__((unused)) static auto _ = HostageEngineSustainModeSuite{};
+
+static auto _ = HostageEngineSustainModeSuite{};
 } // namespace stage
 } // namespace test

@@ -98,6 +98,5 @@ public:
 };
 
 static auto _ = DurationSuite{};
-
 } // namespace sequencizer
 } // namespace test

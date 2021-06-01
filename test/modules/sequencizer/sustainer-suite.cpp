@@ -92,6 +92,6 @@ public:
   }
 };
 
-__attribute__((unused)) static auto _ = SustainerSuite{};
+static auto _ = SustainerSuite{};
 } // namespace sequencizer
 } // namespace test

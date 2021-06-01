@@ -109,6 +109,6 @@ public:
   }
 };
 
-__attribute__((unused)) static auto _ = StepControllerSuite{};
+static auto _ = StepControllerSuite{};
 } // namespace sequencizer
 } // namespace test

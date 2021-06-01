@@ -30,11 +30,11 @@ static inline void in_hold_mode(Controls &controls, SimpleMode &input_mode,
   hold_mode = TimedMode{};
 }
 
-class HostageEngineGenerateModeSuite : Suite {
+class HostageEngineHoldModeSuite : Suite {
 public:
-  HostageEngineGenerateModeSuite()
+  HostageEngineHoldModeSuite()
       : Suite{"dhe::stage::HostageEngine in hold mode"} {}
-  void run(Tester &t) {
+  void run(Tester &t) override {
     t.run("if defer rises: begins deferring",
           test(in_hold_mode,
                [](Tester &t, Controls &controls, SimpleMode & /*input_mode*/,
@@ -124,6 +124,7 @@ public:
                }));
   }
 };
-__attribute__((unused)) static auto _ = HostageEngineGenerateModeSuite{};
+
+static auto _ = HostageEngineHoldModeSuite{};
 } // namespace stage
 } // namespace test

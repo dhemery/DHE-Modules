@@ -219,6 +219,7 @@ public:
           }));
   }
 };
-__attribute__((unused)) static auto _ = SequenceControllerIdleSuite{};
+
+static auto _ = SequenceControllerIdleSuite{};
 } // namespace sequencizer
 } // namespace test

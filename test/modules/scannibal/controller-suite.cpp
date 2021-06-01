@@ -179,7 +179,7 @@ public:
           }));
 
     t.run("dims light when exiting step",
-          test([](Tester &t, Module &module, Generator &generator,
+          test([](Tester &t, Module &module, Generator & /*generator*/,
                   Controller &controller) {
             auto constexpr length = 5;
 
@@ -199,7 +199,7 @@ public:
 
             module.exited_step_ = -1;
             // Exit step 0 and enter selection end step
-            module.phase_ = module.phase_ = 10.F;
+            module.phase_ = 10.F;
             controller.execute();
 
             assert_that(t, "exited when entering new step", module.exited_,
@@ -243,6 +243,6 @@ public:
   }
 };
 
-__attribute__((unused)) static auto start_suite = SequenceControllerSuite{};
+static auto _ = SequenceControllerSuite{};
 } // namespace scannibal
 } // namespace test

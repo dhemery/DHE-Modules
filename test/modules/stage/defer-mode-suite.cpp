@@ -42,7 +42,7 @@ public:
   }
 };
 
-__attribute__((unused)) static auto _ = DeferModeSuite{};
+static auto _ = DeferModeSuite{};
 
 } // namespace stage
-}; // namespace test
+} // namespace test

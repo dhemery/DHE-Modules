@@ -42,7 +42,6 @@ public:
   }
 };
 
-__attribute__((unused)) static auto _ = IdleModeSuite{};
-
+static auto _ = IdleModeSuite{};
 } // namespace stage
-}; // namespace test
+} // namespace test

@@ -1,6 +1,6 @@
 #include "./fixtures/generator-fixture.h"
-
 #include "helpers/assertions.h"
+
 #include <dheunit/test.h>
 
 namespace test {
@@ -92,6 +92,6 @@ public:
   }
 };
 
-__attribute__((unused)) static auto _ = GeneratorSuite{};
+static auto _ = GeneratorSuite{};
 } // namespace scannibal
 } // namespace test

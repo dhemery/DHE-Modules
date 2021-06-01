@@ -121,6 +121,7 @@ public:
         }));
   }
 };
-__attribute__((unused)) static auto _ = StageEngineGenerateModeSuite{};
+
+static auto _ = StageEngineGenerateModeSuite{};
 } // namespace stage
 } // namespace test

@@ -88,7 +88,7 @@ template <int N> class CurveSequencerPanel : public rack::app::ModuleWidget {
 
 public:
   CurveSequencerPanel(rack::engine::Module *module) {
-    auto const svg_dir = "curve-sequencer";
+    auto const svg_dir = std::string{"curve-sequencer"};
     auto constexpr step_width = 2.25F;
     auto constexpr sequence_controls_width = 13.F;
     auto constexpr hp =

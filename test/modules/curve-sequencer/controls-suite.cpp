@@ -152,6 +152,5 @@ public:
 };
 
 static auto _ = ControlsSuite{};
-
 } // namespace curve_sequencer
 } // namespace test

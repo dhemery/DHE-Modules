@@ -148,6 +148,6 @@ public:
   }
 };
 
-__attribute__((unused)) static auto _ = GeneratorSuite{};
+static auto _ = GeneratorSuite{};
 } // namespace sequencizer
 } // namespace test

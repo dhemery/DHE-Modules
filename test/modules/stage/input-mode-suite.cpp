@@ -41,7 +41,6 @@ public:
   }
 };
 
-__attribute__((unused)) static auto _ = InputModeSuite{};
-
+static auto _ = InputModeSuite{};
 } // namespace stage
-}; // namespace test
+} // namespace test

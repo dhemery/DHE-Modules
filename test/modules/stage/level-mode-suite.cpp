@@ -16,7 +16,7 @@ using LevelMode = dhe::stage::LevelMode<Controls>;
 class LevelModeSuite : public Suite {
 public:
   LevelModeSuite() : Suite{"dhe::stage::LevelMode"} {}
-  void run(Tester &t) {
+  void run(Tester &t) override {
     t.run("enter() deactivates stage",
           test<LevelMode>([](Tester &t, Controls &controls, LevelMode &mode) {
             controls.active_ = true;
@@ -41,7 +41,6 @@ public:
   }
 };
 
-__attribute__((unused)) static auto _ = LevelModeSuite{};
-
+static auto _ = LevelModeSuite{};
 } // namespace stage
-}; // namespace test
+} // namespace test
