@@ -16,7 +16,7 @@ using InputMode = dhe::stage::InputMode<Controls>;
 class InputModeSuite : public Suite {
 public:
   InputModeSuite() : Suite{"dhe::stage::InputMode"} {}
-  void run(Tester &t) {
+  void run(Tester &t) override {
     t.run("enter() deactivates stage",
           test<InputMode>([](Tester &t, Controls &controls, InputMode &mode) {
             controls.active_ = true;

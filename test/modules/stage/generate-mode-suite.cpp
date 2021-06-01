@@ -10,7 +10,6 @@
 namespace test {
 namespace stage {
 
-using dhe::Latch;
 using dhe::PhaseTimer;
 using dhe::stage::Event;
 
@@ -25,7 +24,7 @@ using GenerateMode = dhe::stage::GenerateMode<Controls, PhaseTimer>;
 class GenerateModeSuite : public Suite {
 public:
   GenerateModeSuite() : Suite{"dhe::stage::GenerateMode"} {}
-  void run(Tester &t) {
+  void run(Tester &t) override {
     t.run("enter() activates stage",
           test<GenerateMode>([](Tester &t, Controls &controls,
                                 PhaseTimer & /**/, GenerateMode &mode) {

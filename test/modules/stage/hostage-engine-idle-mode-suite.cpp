@@ -33,11 +33,11 @@ static inline void in_idle_mode(Controls &controls, SimpleMode &input_mode,
   idle_mode = SimpleMode{};
 }
 
-class HostageEngineLevelModeSuite : Suite {
+class HostageEngineIdleModeSuite : Suite {
 public:
-  HostageEngineLevelModeSuite()
+  HostageEngineIdleModeSuite()
       : Suite{"dhe::stage::HostageEngine in idle mode"} {}
-  void run(Tester &t) {
+  void run(Tester &t) override {
     t.run("if defer rises: begins deferring",
           test(in_idle_mode,
                [](Tester &t, Controls &controls, SimpleMode & /*input_mode*/,
@@ -107,6 +107,6 @@ public:
   }
 };
 
-static auto _ = HostageEngineLevelModeSuite{};
+static auto _ = HostageEngineIdleModeSuite{};
 } // namespace stage
 } // namespace test

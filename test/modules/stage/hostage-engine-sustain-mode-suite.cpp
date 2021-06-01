@@ -34,7 +34,7 @@ class HostageEngineSustainModeSuite : Suite {
 public:
   HostageEngineSustainModeSuite()
       : Suite{"dhe::stage::HostageEngine in sustain mode"} {}
-  void run(Tester &t) {
+  void run(Tester &t) override {
     t.run("if defer rises: begins deferring",
           test(in_sustain_mode,
                [](Tester &t, Controls &controls, SimpleMode & /*input_mode*/,
@@ -55,7 +55,7 @@ public:
     t.run("with defer low: executes regardless of gate",
           test(in_sustain_mode,
                [](Tester &t, Controls &controls, SimpleMode & /*input_mode*/,
-                  SimpleMode &defer_mode, TimedMode & /*hold_mode*/,
+                  SimpleMode & /*defer_mode*/, TimedMode & /*hold_mode*/,
                   LatchedMode &sustain_mode, SimpleMode & /*idle_mode*/,
                   HostageEngine &engine) {
                  controls.defer_ = false;
@@ -79,7 +79,7 @@ public:
     t.run("passes gate state to sustain.execute()",
           test(in_sustain_mode,
                [](Tester &t, Controls &controls, SimpleMode & /*input_mode*/,
-                  SimpleMode &defer_mode, TimedMode & /*hold_mode*/,
+                  SimpleMode & /*defer_mode*/, TimedMode & /*hold_mode*/,
                   LatchedMode &sustain_mode, SimpleMode & /*idle_mode*/,
                   HostageEngine &engine) {
                  controls.defer_ = false;
