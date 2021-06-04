@@ -45,12 +45,14 @@ $(TEST_RUNNER): $(TEST_OBJECTS)
 	@mkdir -p $(@D)
 	$(CXX) -o $@ $^
 
-.PHONY: dhetest
-dhetest: $(TEST_RUNNER)
+.PHONY: test vtest
+
+test: $(TEST_RUNNER)
 	$<
 
-.PHONY: test
-test: dhetest
+vtest: $(TEST_RUNNER)
+	$< --verbose
+
 
 
 ########################################################################
@@ -113,17 +115,30 @@ COMPILATION_DB_ENTRIES := $(patsubst %, build/%.json, $(SOURCES) $(TEST_SOURCES)
 $(COMPILATION_DB): $(COMPILATION_DB_ENTRIES)
 	sed -e '1s/^/[/' -e '$$s/,$$/]/' $^ | json_pp > $@
 
+setup: $(COMPILATION_DB)
+
 build/src/%.json: src/%
 	@mkdir -p $(@D)
-	$(CXX) $(CXXFLAGS) -MJ $@ -c -o build/$^.o $^
+	clang $(CXXFLAGS) -MJ $@ -c -o build/$^.o $^
 
 build/test/%.json: test/%
 	@mkdir -p $(@D)
-	$(CXX) $(CXXFLAGS) $(TEST_CXX_FLAGS) -MJ $@ -c -o build/$^.o $^
+	clang $(CXXFLAGS) $(TEST_CXX_FLAGS) -MJ $@ -c -o build/$^.o $^
 
 .PHONY: tidy
 tidy: $(COMPILATION_DB)
-	clang-tidy -header-filter="^src/".* -p=build $(SOURCES)
+	clang-tidy -p=build $(SOURCES) $(TEST_SOURCES)
+
+
+IWYU := include-what-you-use
+IWYU += -Xiwyu --quoted_includes_first
+IWYU += -Xiwyu --mapping_file=.iwyu.libcxx.yaml
+IWYU += -Xiwyu --transitive_includes_only
+
+iwyu:
+	$(MAKE) -Bi CXX='$(IWYU)' $(OBJECTS) $(TEST_OBJECTS)
+
+check: tidy iwyu
 
 .PHONY: cleancdb
 cleancdb:

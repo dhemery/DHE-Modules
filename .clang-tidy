@@ -1,49 +1,49 @@
-Checks:          '-*,bugprone-*,misc-*,modernize-*,performance-*,portability-*,readability-*'
+Checks: '-*,bugprone-*,misc-*,modernize-*,performance-*,portability-*,readability-*'
 WarningsAsErrors: ''
-HeaderFilterRegex: '\./include/.*'
+HeaderFilterRegex: '^src/.*'
 AnalyzeTemporaryDtors: false
-FormatStyle:     file
-User:            Dale
+FormatStyle: file
+User: Dale
 CheckOptions:
-  - key:             readability-identifier-naming.ClassCase
-    value:           CamelCase
-  - key:             readability-identifier-naming.EnumCase
-    value:           CamelCase
-  - key:             readability-identifier-naming.EnumConstantCase
-    value:           CamelCase
-  - key:             readability-identifier-naming.FunctionCase
-    value:           lower_case
-  - key:             readability-identifier-naming.GlobalConstantCase
-    value:           lower_case
-  - key:             readability-identifier-naming.GlobalVariableCase
-    value:           lower_case
-  - key:             readability-identifier-naming.MemberCase
-    value:           lower_case
-  - key:             readability-identifier-naming.MemberSuffix
-    value:           _
-  - key:             readability-identifier-naming.MethodCase
-    value:           lower_case
-  - key:             readability-identifier-naming.NamespaceCase
-    value:           lower_case
-  - key:             readability-identifier-naming.ParameterCase
-    value:           lower_case
-  - key:             readability-identifier-naming.StaticVariableCase
-    value:           lower_case
-  - key:             readability-identifier-naming.StructCase
-    value:           CamelCase
-  - key:             readability-identifier-naming.TemplateParameterCase
-    value:           CamelCase
-  - key:             readability-identifier-naming.TypeAliasCase
-    value:           CamelCase
-  - key:             readability-identifier-naming.TypedefCase
-    value:           CamelCase
-  - key:             readability-identifier-naming.UnionCase
-    value:           CamelCase
-  - key:             readability-identifier-naming.VariableCase
-    value:           lower_case
-  - key:             readability-inconsistent-declaration-parameter-name.Strict
-    value:           '0'
-  - key:             readability-magic-numbers.IgnoreAllFloatingPointValues
-    value:           '1'
-  - key:             readability-magic-numbers.IgnorePowersOf2IntegerValues
-    value:           '1'
+  - key: readability-identifier-naming.ClassCase
+    value: CamelCase
+  - key: readability-identifier-naming.EnumCase
+    value: CamelCase
+  - key: readability-identifier-naming.EnumConstantCase
+    value: CamelCase
+  - key: readability-identifier-naming.FunctionCase
+    value: lower_case
+  - key: readability-identifier-naming.GlobalConstantCase
+    value: lower_case
+  - key: readability-identifier-naming.GlobalVariableCase
+    value: lower_case
+  - key: readability-identifier-naming.MemberCase
+    value: lower_case
+  - key: readability-identifier-naming.MemberSuffix
+    value: _
+  - key: readability-identifier-naming.MethodCase
+    value: lower_case
+  - key: readability-identifier-naming.NamespaceCase
+    value: lower_case
+  - key: readability-identifier-naming.ParameterCase
+    value: lower_case
+  - key: readability-identifier-naming.StaticVariableCase
+    value: lower_case
+  - key: readability-identifier-naming.StructCase
+    value: CamelCase
+  - key: readability-identifier-naming.TemplateParameterCase
+    value: CamelCase
+  - key: readability-identifier-naming.TypeAliasCase
+    value: CamelCase
+  - key: readability-identifier-naming.TypedefCase
+    value: CamelCase
+  - key: readability-identifier-naming.UnionCase
+    value: CamelCase
+  - key: readability-identifier-naming.VariableCase
+    value: lower_case
+  - key: readability-inconsistent-declaration-parameter-name.Strict
+    value: '0'
+  - key: readability-magic-numbers.IgnoreAllFloatingPointValues
+    value: '1'
+  - key: readability-magic-numbers.IgnorePowersOf2IntegerValues
+    value: '1'

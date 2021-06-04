@@ -46,4 +46,4 @@ jobs:
           CC: ${{ matrix.config.compiler }}
         run: |
           make dist
-          make test
+          make vtest
