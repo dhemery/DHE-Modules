@@ -1,7 +1,8 @@
 #include "./fixtures/controls-fixture.h"
-#include <array>
+
 #include <dheunit/test.h>
 #include <functional>
+#include <modules/curve-sequencer/generate-mode.h>
 
 namespace test {
 namespace curve_sequencer {
@@ -219,6 +220,25 @@ public:
 
                 if (got != want) {
                   t.errorf("Got {}, want {}", got, want);
+                }
+              }));
+      }
+    });
+
+    t.run("mode(step)", [](Tester &t) {
+      using dhe::curve_sequencer::GenerateMode;
+      using dhe::curve_sequencer::generate_mode_count;
+      for (auto const mode : generate_modes) {
+        t.run(name_of(mode),
+              test([mode](Tester &t, Module &module, Controls &controls) {
+                auto const step = std::rand() & step_count;
+                module.params_[Controls::ModeSwitches + step].setValue(
+                    static_cast<float>(mode));
+
+                auto const got = controls.mode(step);
+
+                if (got != mode) {
+                  t.errorf("Got {}, want {}", got, mode);
                 }
               }));
       }

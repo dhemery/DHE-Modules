@@ -24,20 +24,6 @@ TEST_CASE("curve_sequencer::CurveSequencerControls") {
 
   Controls controls{inputs, outputs, params, lights};
 
-  SUBCASE("taper(step) is taper selected by step shape switch") {
-    auto constexpr step = 3;
-
-    auto shapeSelection = 0; // J
-    params[Controls::ShapeSwitches + step].setValue(
-        static_cast<float>(shapeSelection));
-    CHECK_EQ(controls.taper(step), dhe::taper::variableTapers[shapeSelection]);
-
-    shapeSelection = 1; // S
-    params[Controls::ShapeSwitches + step].setValue(
-        static_cast<float>(shapeSelection));
-    CHECK_EQ(controls.taper(step), dhe::taper::variableTapers[shapeSelection]);
-  }
-
   SUBCASE("mode(step) is mode selected by step mode switch") {
     auto constexpr step = 6;
 
