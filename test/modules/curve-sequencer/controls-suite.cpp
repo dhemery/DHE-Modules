@@ -263,6 +263,29 @@ public:
               }));
       }
     });
+
+    t.run("show_inactive(step) dims progress lights",
+          test([](Tester &t, Module &module, Controls &controls) {
+            auto const step = std::rand() % step_count;
+            auto const completed_light_index =
+                Controls::ProgressLights + step + step;
+            auto const remaining_light_index = completed_light_index + 1;
+
+            controls.show_inactive(step);
+
+            auto const completed_brightness =
+                module.lights_[completed_light_index].getBrightness();
+            if (completed_brightness != 0.F) {
+              t.errorf("Got completed brightness {}, want 0",
+                       completed_brightness);
+            }
+            auto const remaining_brightness =
+                module.lights_[remaining_light_index].getBrightness();
+            if (remaining_brightness != 0.F) {
+              t.errorf("Got completed brightness {}, want 0",
+                       remaining_brightness);
+            }
+          }));
   }
 };
 
