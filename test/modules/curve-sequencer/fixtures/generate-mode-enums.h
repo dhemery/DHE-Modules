@@ -3,6 +3,7 @@
 #include "modules/curve-sequencer/generate-mode.h"
 
 #include <array>
+#include <ostream>
 #include <string>
 
 namespace test {
@@ -37,9 +38,13 @@ static inline auto name_of(GenerateMode mode) -> std::string {
 } // namespace curve_sequencer
 } // namespace test
 
-static inline auto operator<<(std::ostream &os,
-                              dhe::curve_sequencer::GenerateMode mode)
+namespace dhe {
+namespace curve_sequencer {
+
+static inline auto operator<<(std::ostream &os, GenerateMode mode)
     -> std::ostream & {
   os << test::curve_sequencer::name_of(mode);
   return os;
 }
+} // namespace curve_sequencer
+} // namespace dhe

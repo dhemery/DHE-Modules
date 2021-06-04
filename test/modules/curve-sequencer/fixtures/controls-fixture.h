@@ -1,4 +1,3 @@
-#include "./generate-mode-enums.h"
 #include "helpers/rack-controls.h"
 #include "modules/curve-sequencer/curve-sequencer-controls.h"
 

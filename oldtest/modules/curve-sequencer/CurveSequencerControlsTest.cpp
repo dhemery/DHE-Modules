@@ -24,54 +24,6 @@ TEST_CASE("curve_sequencer::CurveSequencerControls") {
 
   Controls controls{inputs, outputs, params, lights};
 
-  SUBCASE("mode(step) is mode selected by step mode switch") {
-    auto constexpr step = 6;
-
-    auto modeSelectedBySwitch = GenerateMode::Curve;
-    params[Controls::ModeSwitches + step].setValue(
-        static_cast<float>(modeSelectedBySwitch));
-    CHECK_EQ(controls.mode(step), modeSelectedBySwitch);
-
-    modeSelectedBySwitch = GenerateMode::Hold;
-    params[Controls::ModeSwitches + step].setValue(
-        static_cast<float>(modeSelectedBySwitch));
-    CHECK_EQ(controls.mode(step), modeSelectedBySwitch);
-  }
-
-  SUBCASE("condition(step) is condition selected by step condition switch") {
-    auto constexpr step = 0;
-
-    auto conditionSelectedBySwitch = AdvanceMode::TimerExpires;
-    params[Controls::ConditionSwitches + step].setValue(
-        static_cast<float>(conditionSelectedBySwitch));
-    CHECK_EQ(controls.condition(step), conditionSelectedBySwitch);
-
-    conditionSelectedBySwitch = AdvanceMode::GateIsHigh;
-    params[Controls::ConditionSwitches + step].setValue(
-        static_cast<float>(conditionSelectedBySwitch));
-    CHECK_EQ(controls.condition(step), conditionSelectedBySwitch);
-
-    conditionSelectedBySwitch = AdvanceMode::GateIsLow;
-    params[Controls::ConditionSwitches + step].setValue(
-        static_cast<float>(conditionSelectedBySwitch));
-    CHECK_EQ(controls.condition(step), conditionSelectedBySwitch);
-
-    conditionSelectedBySwitch = AdvanceMode::GateRises;
-    params[Controls::ConditionSwitches + step].setValue(
-        static_cast<float>(conditionSelectedBySwitch));
-    CHECK_EQ(controls.condition(step), conditionSelectedBySwitch);
-
-    conditionSelectedBySwitch = AdvanceMode::GateFalls;
-    params[Controls::ConditionSwitches + step].setValue(
-        static_cast<float>(conditionSelectedBySwitch));
-    CHECK_EQ(controls.condition(step), conditionSelectedBySwitch);
-
-    conditionSelectedBySwitch = AdvanceMode::GateChanges;
-    params[Controls::ConditionSwitches + step].setValue(
-        static_cast<float>(conditionSelectedBySwitch));
-    CHECK_EQ(controls.condition(step), conditionSelectedBySwitch);
-  }
-
   SUBCASE("showInactive(step) dims step progress lights") {
     auto constexpr step = 3;
     auto constexpr completedProgressLightIndex = step + step;
