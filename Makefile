@@ -117,6 +117,12 @@ $(COMPILATION_DB): $(COMPILATION_DB_ENTRIES)
 
 setup: $(COMPILATION_DB)
 
+.PHONY: cleancdb
+cleancdb:
+	rm -rf $(COMPILATION_DATABASE)
+
+clean: cleancdb
+
 build/src/%.json: src/%
 	@mkdir -p $(@D)
 	clang $(CXXFLAGS) -MJ $@ -c -o build/$^.o $^
@@ -140,11 +146,4 @@ iwyu:
 
 check: tidy iwyu
 
-.PHONY: cleancdb
-cleancdb:
-	rm -rf $(COMPILATION_DATABASE)
-
-clean: cleancdb
-
 clion: $(OBJECTS) build/dheunit
-
