@@ -1,4 +1,5 @@
 #include "./fixtures/controls-fixture.h"
+#include <array>
 #include <dheunit/test.h>
 #include <functional>
 
@@ -203,6 +204,25 @@ public:
               t.errorf("Got {}, want {}", got, want);
             }
           }));
+
+    t.run("taper(step)", [](Tester &t) {
+      for (unsigned long selection = 0; selection < dhe::sigmoid::tapers.size();
+           selection++) {
+        t.run("with switch in position " + std::to_string(selection),
+              test([selection](Tester &t, Module &module, Controls &controls) {
+                auto const step = std::rand() % step_count;
+                module.params_[Controls::ShapeSwitches + step].setValue(
+                    static_cast<float>(selection));
+
+                auto const got = controls.taper(step);
+                auto const want = dhe::sigmoid::tapers[selection];
+
+                if (got != want) {
+                  t.errorf("Got {}, want {}", got, want);
+                }
+              }));
+      }
+    });
   }
 };
 

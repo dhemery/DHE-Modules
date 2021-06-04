@@ -24,44 +24,6 @@ TEST_CASE("curve_sequencer::CurveSequencerControls") {
 
   Controls controls{inputs, outputs, params, lights};
 
-  SUBCASE("curvature(step)  reports curvature for step curvature param") {
-    auto constexpr step = 5;
-    auto constexpr curveKnobRotation = 0.3F;
-    params[Controls::CurveKnobs + step].setValue(curveKnobRotation);
-
-    CHECK_EQ(controls.curvature(step), dhe::curvature(curveKnobRotation));
-  }
-
-  SUBCASE("duration(step) reports duration for duration range switch and step "
-          "duration param") {
-    auto constexpr step = 7;
-    auto constexpr durationKnobRotation = 0.75F;
-    auto constexpr durationRangeSelection = 2; // Long duration
-
-    params[Controls::DurationKnobs + step].setValue(durationKnobRotation);
-    params[Controls::DurationRangeSwitch].setValue(
-        static_cast<float>(durationRangeSelection));
-
-    CHECK_EQ(controls.duration(step),
-             dhe::duration(durationKnobRotation,
-                           *dhe::durationRanges[durationRangeSelection]));
-  }
-
-  SUBCASE(
-      "level(step) reports level for level range switch and step level param") {
-    auto constexpr step = 3;
-    auto constexpr levelKnobRotation = 0.35F;
-    auto constexpr levelRangeSelection = 1; // unipolar
-
-    params[Controls::LevelKnobs + step].setValue(levelKnobRotation);
-    params[Controls::LevelRangeSwitch].setValue(
-        static_cast<float>(levelRangeSelection));
-
-    CHECK_EQ(
-        controls.level(step),
-        dhe::level(levelKnobRotation, *dhe::signalRanges[levelRangeSelection]));
-  }
-
   SUBCASE("taper(step) is taper selected by step shape switch") {
     auto constexpr step = 3;
 
