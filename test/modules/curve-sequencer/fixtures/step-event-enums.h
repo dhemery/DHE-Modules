@@ -1,6 +1,5 @@
 #pragma once
 
-#include "modules/curve-sequencer/step-event.h"
 #include <ostream>
 #include <string>
 
