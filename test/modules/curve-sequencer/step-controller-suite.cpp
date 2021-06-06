@@ -1,3 +1,4 @@
+#include "components/sigmoid.h"
 #include "fixtures/advance-mode-enums.h"
 #include "fixtures/controls-fixture.h"
 #include "fixtures/step-event-enums.h"
@@ -6,6 +7,7 @@
 #include "modules/curve-sequencer/step-controller.h"
 #include "modules/curve-sequencer/step-event.h"
 
+#include <array>
 #include <dheunit/test.h>
 #include <map>
 #include <vector>
@@ -17,6 +19,7 @@ using dhe::PhaseTimer;
 using dhe::curve_sequencer::AdvanceMode;
 using dhe::curve_sequencer::GenerateMode;
 using dhe::curve_sequencer::StepEvent;
+using dhe::sigmoid::Taper;
 using dhe::unit::Suite;
 using dhe::unit::Tester;
 using test::falling_latch;
@@ -26,19 +29,32 @@ using test::rising_latch;
 using test::curve_sequencer::Controls;
 
 struct FakeControls {
-  AdvanceMode advance_mode_;
-  void show_progress(int, float) {}
-  void show_inactive(int) {}
-  void output(float) {}
-  auto input() -> float { return 5.F; }
-  auto mode(int) -> GenerateMode { return GenerateMode::Curve; }
-  auto condition(int) -> AdvanceMode { return advance_mode_; }
-  auto duration(int) -> float { return 10.F; }
-  auto curvature(int) -> float { return 05.F; }
-  auto taper(int) -> dhe::sigmoid::Taper const & {
-    return dhe::sigmoid::j_taper;
+  FakeControls() {
+    for (int i = 0; i < step_count; i++) {
+      taper_[i] = &dhe::sigmoid::s_taper;
+    }
   }
-  auto level(int) -> float { return 0.F; }
+  float input_;                                        // NOLINT
+  float output_;                                       // NOLINT
+  std::array<AdvanceMode, step_count> advance_mode_;   // NOLINT
+  std::array<float, step_count> curvature_;            // NOLINT
+  std::array<float, step_count> duration_;             // NOLINT
+  std::array<GenerateMode, step_count> generate_mode_; // NOLINT
+  std::array<float, step_count> level_;                // NOLINT
+  std::array<float, step_count> progress_;             // NOLINT
+  std::array<Taper const *, step_count> taper_;        // NOLINT
+
+  auto condition(int s) -> AdvanceMode { return advance_mode_[s]; }
+  auto curvature(int s) -> float { return curvature_[s]; }
+  auto duration(int s) -> float { return duration_[s]; }
+  auto input() -> float { return input_; }
+  auto level(int s) -> float { return level_[s]; }
+  auto mode(int s) -> GenerateMode { return generate_mode_[s]; }
+  void output(float v) { output_ = v; }
+  auto output() -> float { return output_; }
+  void show_inactive(int s) { progress_[s] = 0.F; }
+  void show_progress(int s, float p) { progress_[s] = p; }
+  auto taper(int s) -> Taper const & { return *taper_[s]; }
 };
 using StepController = dhe::curve_sequencer::StepController<FakeControls>;
 
@@ -87,15 +103,36 @@ auto advance_mode_tests = std::map<AdvanceMode, std::vector<AdvanceModeTest>>{
 
 void run_advance_mode_tests(Tester &t);
 
+// TODO: advance on time returns generated if timer does not expire
+// TODO: advance on time returns completed if timer expires
+// TODO: test generate
+
 struct StepControllerSuite : public Suite {
   StepControllerSuite() : Suite{"dhe::curve_sequencer::StepController"} {}
 
-  void run(Tester &t) override { run_advance_mode_tests(t); }
+  void run(Tester &t) override {
+    run_advance_mode_tests(t);
+
+    t.run("enter(step) activates step at 0 progress", [](Tester &t) {
+      auto const step = std::rand() % step_count;
+      auto controls = FakeControls{};
+      auto timer = PhaseTimer{};
+      auto step_controller = StepController{controls, timer};
+
+      step_controller.enter(step);
+
+      auto const got = controls.progress_[step];
+      auto constexpr want = 0.F;
+
+      if (got != want) {
+        t.errorf("Got step {} progress {}, want {}", step, got, want);
+      }
+    });
+  }
 };
 
 // TODO: Pick a step, set Controls to initialize only that step, and enter the
 //  step before executing.
-// TODO: Test for advance on timer expiration.
 void run_advance_mode_tests(Tester &t) {
   t.run("AdvanceMode", [](Tester &t) {
     for (auto &mode_tests : advance_mode_tests) {
@@ -104,11 +141,17 @@ void run_advance_mode_tests(Tester &t) {
       t.run(name_of(mode), [&mode, &tests](Tester &t) {
         for (auto test : tests) {
           t.run(test::name_of(test.gate_), [&mode, &test](Tester &t) {
-            auto controls = FakeControls{};
-            controls.advance_mode_ = mode;
+            auto const step = std::rand() % step_count;
             auto timer = PhaseTimer{};
+            auto controls = FakeControls{};
+            controls.advance_mode_[step] = mode;
+            controls.duration_[step] = 10.F;
+
             auto step_controller = StepController{controls, timer};
+            step_controller.enter(step);
+
             auto const got = step_controller.execute(test.gate_, 0.1F);
+
             if (got != test.want_) {
               t.errorf("Got {}, want {}", got, test.want_);
             }

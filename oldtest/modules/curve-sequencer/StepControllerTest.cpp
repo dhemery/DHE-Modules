@@ -40,10 +40,6 @@ namespace curve_sequencer_step_controller {
     controls.taper = [](int s) -> VariableTaper const * { return dhe::taper::variableTapers[0]; };
   }
 
-  // TODO: advance on time returns generated if timer does not expire
-  // TODO: advance on time returns completed if timer expires
-  // TODO: test generate
-
   TEST_CASE("curve_sequencer::StepController") {
     FakeControls controls{};
     PhaseTimer timer{};
