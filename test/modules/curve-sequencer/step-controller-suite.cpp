@@ -5,7 +5,7 @@
 #include "components/sigmoid.h"
 
 #include "fixtures/advance-mode-enums.h"
-#include "fixtures/step-controller-fixture.h"
+#include "fixtures/step-controller-controls.h"
 #include "fixtures/step-event-enums.h"
 
 #include "helpers/latches.h"
@@ -17,9 +17,13 @@
 
 namespace test {
 namespace curve_sequencer {
+static auto constexpr step_count = 8;
+
 using dhe::curve_sequencer::AdvanceMode;
 using dhe::curve_sequencer::GenerateMode;
 using dhe::curve_sequencer::StepEvent;
+using Controls = StepControllerControls<step_count>;
+using StepController = dhe::curve_sequencer::StepController<Controls>;
 
 using dhe::Latch;
 using dhe::PhaseTimer;

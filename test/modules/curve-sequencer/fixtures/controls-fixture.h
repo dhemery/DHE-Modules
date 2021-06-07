@@ -1,3 +1,5 @@
+#pragma once
+
 #include "helpers/rack-controls.h"
 #include "modules/curve-sequencer/curve-sequencer-controls.h"
 
