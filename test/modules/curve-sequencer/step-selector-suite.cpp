@@ -17,6 +17,42 @@ using StepSelector = dhe::curve_sequencer::StepSelector<Controls>;
 using dhe::unit::Suite;
 using dhe::unit::Tester;
 
+struct FirstTest {
+  std::string name_;               // NOLINT
+  std::pair<int, int> selection_;  // NOLINT
+  std::vector<int> enabled_steps_; // NOLINT
+  int want_;                       // NOLINT
+
+  void run(Tester &t) const;
+};
+
+static auto const first_tests = std::vector<FirstTest>{
+    {
+        .name_ = "is selection start if enabled",
+        .selection_ = {3, step_count},
+        .enabled_steps_ = {3},
+        .want_ = 3,
+    },
+    {
+        .name_ = "skips disabled steps",
+        .selection_ = {0, step_count}, // 0 1 2 3 4 5 6 7
+        .enabled_steps_ = {6, 7},      // x x x x x x 6 7
+        .want_ = 6,
+    },
+    {
+        .name_ = "wraps search if selection wraps",
+        .selection_ = {7, 7},           // 0 1 2 3 4 5 x 7 (wraps)
+        .enabled_steps_ = {3, 4, 5, 6}, // x x x 3 4 5 6 7
+        .want_ = 3, // below selectionn start, so can be found only by wrapping
+    },
+    {
+        .name_ = "is no step if no selected step is enabled",
+        .selection_ = {4, 3},              // x x x x 4 5 6 x
+        .enabled_steps_ = {0, 1, 2, 3, 7}, // 0 1 2 3 x x x 7
+        .want_ = -1,                       // no step
+    },
+};
+
 struct SuccessorTest {
   std::string name_;               // NOLINT
   std::pair<int, int> selection_;  // NOLINT
@@ -127,11 +163,38 @@ struct StepSelectorSuite : public Suite {
   StepSelectorSuite() : Suite{"curve_sequencer::StepSelector"} {}
 
   void run(Tester &t) override {
-    for (auto const &test : successor_tests) {
-      test.run(t);
-    }
+    t.run("first()", [](Tester &t) {
+      for (auto const &test : first_tests) {
+        test.run(t);
+      }
+    });
+
+    t.run("successor()", [](Tester &t) {
+      for (auto const &test : successor_tests) {
+        test.run(t);
+      }
+    });
   }
 };
+
+void FirstTest::run(Tester &t) const {
+  t.run(name_, [this](Tester &t) {
+    auto controls = Controls{};
+    controls.selection_ = selection_;
+    controls.selection_ = selection_;
+    for (auto const s : enabled_steps_) {
+      controls.is_enabled_[s] = true;
+    }
+
+    auto selector = StepSelector{controls, step_count};
+
+    auto const got = selector.first();
+
+    if (got != want_) {
+      t.errorf("Got {}, want {}", got, want_);
+    }
+  });
+}
 
 void SuccessorTest::run(Tester &t) const {
   t.run(name_, [this](Tester &t) {
