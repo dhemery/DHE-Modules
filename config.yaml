@@ -1,0 +1,15 @@
+baseURL: "https://dhemery.github.io/DHE-Modules"
+languageCode: "en-us"
+title: DHE Modules
+copyright: © 2017–2021 Dale H. Emery
+disableKinds:
+    - posts
+    - taxonomy
+    - term
+    - sitemap
+    - rss
+pygmentsUseClasses: true
+markup:
+    goldmark:
+        renderer:
+            unsafe: true
