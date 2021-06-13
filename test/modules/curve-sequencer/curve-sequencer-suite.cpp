@@ -185,13 +185,11 @@ auto active_tests = StateSuite{
                       auto constexpr successor_step = 4;
                       context.controls_.is_running_ = true;
                       context.controls_.is_gated_ = true;
-                      context.controls_.is_looping_ = true;
 
                       context.step_controller_.want_execute(
                           StepEvent::Completed, high_latch, 0.1F);
-                      context.step_selector_.want_successor(
-                          successor_step, current_step,
-                          context.controls_.is_looping_);
+                      context.step_selector_.want_successor(successor_step,
+                                                            current_step);
                       context.step_controller_.want_enter(successor_step);
                     },
             },
@@ -206,8 +204,7 @@ auto active_tests = StateSuite{
 
                       context.step_controller_.want_execute(
                           StepEvent::Completed, high_latch, 0.1F);
-                      context.step_selector_.want_successor(
-                          -1, current_step, context.controls_.is_looping_);
+                      context.step_selector_.want_successor(-1, current_step);
                     },
             },
             {

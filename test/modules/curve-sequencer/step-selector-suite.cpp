@@ -201,13 +201,14 @@ void SuccessorTest::run(Tester &t) const {
     auto controls = Controls{};
     controls.selection_ = selection_;
     controls.selection_ = selection_;
+    controls.is_looping_ = looping_;
     for (auto const s : enabled_steps_) {
       controls.is_enabled_[s] = true;
     }
 
     auto selector = StepSelector{controls, step_count};
 
-    auto const got = selector.successor(current_step_, looping_);
+    auto const got = selector.successor(current_step_);
 
     if (got != want_) {
       t.errorf("Got {}, want {}", got, want_);

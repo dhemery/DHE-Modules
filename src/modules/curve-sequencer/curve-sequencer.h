@@ -73,7 +73,7 @@ private:
   }
 
   void advance_sequence() {
-    step_ = step_selector_.successor(step_, controls_.is_looping());
+    step_ = step_selector_.successor(step_);
     if (step_ >= 0) {
       step_controller_.enter(step_);
     }

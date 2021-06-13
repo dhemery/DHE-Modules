@@ -19,14 +19,12 @@ struct Controls {
   Controls(Tester &t) : t_{t} {}
 
   auto is_gated() const -> bool { return is_gated_; }
-  auto is_looping() const -> bool { return is_looping_; }
   auto is_reset() const -> bool { return is_reset_; }
   auto is_running() const -> bool { return is_running_; }
   auto input() const -> float { return input_; }
   auto output() const -> float { return output_; }
 
   bool is_gated_{};   // NOLINT
-  bool is_looping_{}; // NOLINT
   bool is_reset_{};   // NOLINT
   bool is_running_{}; // NOLINT
   float input_{};     // NOLINT
@@ -56,7 +54,6 @@ struct Controls {
 
   void reset() {
     is_gated_ = false;
-    is_looping_ = false;
     is_reset_ = false;
     is_running_ = false;
     input_ = 0.F;
@@ -184,25 +181,20 @@ struct StepSelector {
     return first_;
   }
 
-  void want_successor(int successor, int want_current, bool want_is_looping) {
+  void want_successor(int successor, int want_current) {
     want_successor_ = true;
     want_current_ = want_current;
-    want_is_looping_ = want_is_looping;
     successor_ = successor;
   }
 
-  auto successor(int current, bool is_looping) -> int {
+  auto successor(int current) -> int {
     called_successor_ = true;
     if (!want_successor_) {
-      t_.errorf("Called step_selector.successor({}, {})", current, is_looping);
+      t_.errorf("Called step_selector.successor({})", current);
     }
     if (current != want_current_) {
       t_.errorf("step_selector.successor() got current {}, want {}", current,
                 want_current_);
-    }
-    if (is_looping != want_is_looping_) {
-      t_.errorf("step_selector.successor() got is_looping {}, want {}",
-                is_looping, want_is_looping_);
     }
     return successor_;
   }
@@ -235,7 +227,6 @@ private:
   bool want_successor_{};   // NOLINT
   bool called_successor_{}; // NOLINT
   int want_current_{};      // NOLINT
-  bool want_is_looping_{};  // NOLINT
   int successor_{};         // NOLINT
 };
 
@@ -266,6 +257,5 @@ using CurveSequencer =
 
 using SetState = std::function<void(Context &, CurveSequencer &)>;
 using SetConditions = std::function<void(Context &)>;
-using Check = std::function<void(Context &)>;
 } // namespace curve_sequencer
 } // namespace test

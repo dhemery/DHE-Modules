@@ -16,9 +16,9 @@ public:
                      controls_.selection_length(), false);
   }
 
-  auto successor(int current, bool is_looping) const -> int {
+  auto successor(int current) const -> int {
     return successor(current, controls_.selection_start(),
-                     controls_.selection_length(), is_looping);
+                     controls_.selection_length(), controls_.is_looping());
   }
 
 private:
