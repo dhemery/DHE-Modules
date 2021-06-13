@@ -17,27 +17,27 @@ using test::high_latch;
 // TODO: Test that cs starts idle
 
 struct StateTest {
-  std::string name_;
+  std::string name_;    // NOLINT
   SetConditions setup_; // NOLINT
-  Check check_;         // NOLINT
   void run(Tester &t, Context &context, CurveSequencer &curve_sequencer) const;
 };
 
 struct StateSuite {
-  std::string name_;
-  SetState enter_state_; // NOLINT
-  std::vector<StateTest> tests_;
+  std::string name_;             // NOLINT
+  SetState enter_state_;         // NOLINT
+  std::vector<StateTest> tests_; // NOLINT
   void run(Tester &t) const;
 };
 
 // CurveSequencer starts idle, so this is a no-op.
-static inline void enter_idle_mode(Context &context,
-                                   CurveSequencer &curve_sequencer) {}
+static inline void become_idle(Context &, CurveSequencer &) {} // NOLINT
+
+static void activate_step(Context &context, CurveSequencer &cs); // NOLINT
 
 // Note: Context throws if a command is called without being explicitly allowed
 auto idle_tests = StateSuite{
     .name_ = "Idle",
-    .enter_state_ = enter_idle_mode,
+    .enter_state_ = become_idle,
     .tests_ =
         {
             {
@@ -123,9 +123,116 @@ auto idle_tests = StateSuite{
         },
 };
 
+auto active_tests = StateSuite{
+    .name_ = "Active",
+    .enter_state_ = activate_step,
+    .tests_ =
+        {
+            {
+                .name_ = "paused: gate low does nothing",
+                .setup_ =
+                    [](Context &context) {
+                      context.controls_.is_running_ = false;
+                      context.controls_.is_gated_ = false;
+                    },
+            },
+            {
+                .name_ = "paused: gate rise does nothing",
+                .setup_ =
+                    [](Context &context) {
+                      context.controls_.is_running_ = false;
+                      context.controls_.is_gated_ = true;
+                    },
+            },
+            {
+                .name_ = "paused: reset low does nothing",
+                .setup_ =
+                    [](Context &context) {
+                      context.controls_.is_running_ = false;
+                      context.controls_.is_reset_ = false;
+                    },
+            },
+            {
+                .name_ = "paused: "
+                         "reset rise exits active step and does nothing else",
+                .setup_ =
+                    [](Context &context) {
+                      context.controls_.is_running_ = false;
+                      context.controls_.is_reset_ = true;
+                      context.step_controller_.want_exit();
+                    },
+            },
+            {
+                .name_ = "running: "
+                         "executes active step with gate state",
+                .setup_ =
+                    [](Context &context) {
+                      context.controls_.is_running_ = true;
+                      context.controls_.is_gated_ = true;
+                      // Resets gate edge on first call to execute()
+                      context.step_controller_.want_execute(
+                          StepEvent::Generated, high_latch, 0.1F);
+                      // TODO: Other gate states: rising, falling, low
+                      // TODO: Fix magic constant 0.1F
+                    },
+            },
+            {
+                .name_ = "running: "
+                         "enters successor state if step completes",
+                .setup_ =
+                    [](Context &context) {
+                      auto constexpr current_step = 2;
+                      auto constexpr successor_step = 4;
+                      context.controls_.is_running_ = true;
+                      context.controls_.is_gated_ = true;
+                      context.controls_.is_looping_ = true;
+
+                      context.step_controller_.want_execute(
+                          StepEvent::Completed, high_latch, 0.1F);
+                      context.step_selector_.want_successor(
+                          successor_step, current_step,
+                          context.controls_.is_looping_);
+                      context.step_controller_.want_enter(successor_step);
+                    },
+            },
+            {
+                .name_ = "running: step completes: no successor: "
+                         "exit current step and does nothing else",
+                .setup_ =
+                    [](Context &context) {
+                      auto constexpr current_step = 2;
+                      context.controls_.is_running_ = true;
+                      context.controls_.is_gated_ = true;
+
+                      context.step_controller_.want_execute(
+                          StepEvent::Completed, high_latch, 0.1F);
+                      context.step_selector_.want_successor(
+                          -1, current_step, context.controls_.is_looping_);
+                    },
+            },
+            {
+                .name_ = "running: reset rises: "
+                         "copies input to output, exits current step, "
+                         "and does nothing else",
+                .setup_ =
+                    [](Context &context) {
+                      context.controls_.is_running_ = true;
+                      context.controls_.is_reset_ = true;
+                      context.controls_.input_ = 5.8340F;
+
+                      context.step_controller_.want_exit();
+                      context.controls_.want_output(5.8340F);
+                    },
+            },
+        },
+};
+
 struct CurveSequencerSuite : public Suite {
   CurveSequencerSuite() : Suite{"dhe::curve_suquencer::CurveSequencer"} {}
-  void run(Tester &t) override { idle_tests.run(t); }
+  void run(Tester &t) override {
+    idle_tests.run(t);
+    active_tests.run(t);
+  }
 };
 
 void StateTest::run(Tester &t, Context &context,
@@ -152,6 +259,22 @@ void StateSuite::run(Tester &t) const {
       test.run(t, context, curve_sequencer);
     }
   });
+}
+
+// TODO: Randomize the active step, and arrange for the test to know which step
+//  is active
+void activate_step(Context &context, CurveSequencer &cs) {
+  context.controls_.is_running_ = true;
+  // Gate rise will trigger CS to enter first step and execute it.
+  context.controls_.is_gated_ = true;
+  auto constexpr first_step = 2;
+  context.step_selector_.want_first(first_step);
+  context.step_controller_.want_enter(first_step);
+  context.step_controller_.want_execute(StepEvent::Generated, high_latch, 0.F);
+
+  cs.execute(0.F);
+
+  context.reset();
 }
 
 static auto _ = CurveSequencerSuite{};

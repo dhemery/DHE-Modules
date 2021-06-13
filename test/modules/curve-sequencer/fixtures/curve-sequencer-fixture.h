@@ -54,6 +54,17 @@ struct Controls {
     }
   }
 
+  void reset() {
+    is_gated_ = false;
+    is_looping_ = false;
+    is_reset_ = false;
+    is_running_ = false;
+    input_ = 0.F;
+    output_ = 0.F;
+    want_output_ = false;
+    called_output_ = false;
+  }
+
 private:
   Tester &t_;      // NOLINT
   float output_{}; // NOLINT
@@ -67,7 +78,7 @@ struct StepController {
   StepController(Tester &t) : t_{t} {}
 
   void enter(int step) {
-    got_enter_ = true;
+    called_enter_ = true;
     if (!want_enter_) {
       t_.errorf("Called enter({})", step);
       return;
@@ -79,7 +90,7 @@ struct StepController {
   }
 
   auto execute(Latch const &gate, float sample_time) -> StepEvent {
-    got_execute_ = true;
+    called_execute_ = true;
     if (want_execute_) {
       if (gate != want_gate_) {
         t_.errorf("step_controller.execute() got gate {}, want {}", gate,
@@ -96,7 +107,7 @@ struct StepController {
   }
 
   void exit() {
-    got_exit_ = true;
+    called_exit_ = true;
     if (!want_exit_) {
       t_.errorf("Called exit()");
     }
@@ -117,35 +128,44 @@ struct StepController {
   void want_exit() { want_exit_ = true; }
 
   void check_required_calls() {
-    if (want_enter_ && !got_enter_) {
+    if (want_enter_ && !called_enter_) {
       t_.error("Did not call step_controller.enter()");
       return;
     }
-    if (want_execute_ && !got_execute_) {
+    if (want_execute_ && !called_execute_) {
       t_.error("Did not call step_controller.execute()");
       return;
     }
-    if (want_exit_ && !got_exit_) {
+    if (want_exit_ && !called_exit_) {
       t_.error("Did not call step_controller.exit()");
       return;
     }
   }
 
+  void reset() {
+    want_enter_ = false;
+    called_enter_ = false;
+    want_execute_ = false;
+    called_execute_ = false;
+    want_exit_ = false;
+    called_exit_ = false;
+  }
+
 private:
   Tester &t_; // NOLINT
 
-  bool want_enter_{}; // NOLINT
-  bool got_enter_{};  // NOLINT
-  int want_step_{};   // NOLINT
+  bool want_enter_{};   // NOLINT
+  bool called_enter_{}; // NOLINT
+  int want_step_{};     // NOLINT
 
   bool want_execute_{};      // NOLINT
   StepEvent step_event_{};   // NOLINT
-  bool got_execute_{};       // NOLINT
+  bool called_execute_{};    // NOLINT
   Latch want_gate_{};        // NOLINT
   float want_sample_time_{}; // NOLINT
 
-  bool want_exit_{}; // NOLINT
-  bool got_exit_{};  // NOLINT
+  bool want_exit_{};   // NOLINT
+  bool called_exit_{}; // NOLINT
 };
 
 struct StepSelector {
@@ -157,15 +177,22 @@ struct StepSelector {
   }
 
   auto first() -> int {
-    got_first_ = true;
+    called_first_ = true;
     if (!want_first_) {
       t_.error("Called step_selector.first()");
     }
     return first_;
   }
 
+  void want_successor(int successor, int want_current, bool want_is_looping) {
+    want_successor_ = true;
+    want_current_ = want_current;
+    want_is_looping_ = want_is_looping;
+    successor_ = successor;
+  }
+
   auto successor(int current, bool is_looping) -> int {
-    got_successor_ = true;
+    called_successor_ = true;
     if (!want_successor_) {
       t_.errorf("Called step_selector.successor({}, {})", current, is_looping);
     }
@@ -181,28 +208,35 @@ struct StepSelector {
   }
 
   void check_required_calls() {
-    if (want_first_ && !got_first_) {
+    if (want_first_ && !called_first_) {
       t_.error("Did not call step_selector.first()");
       return;
     }
-    if (want_successor_ && !got_successor_) {
+    if (want_successor_ && !called_successor_) {
       t_.error("Did not call step_selector.successor()");
       return;
     }
   }
 
+  void reset() {
+    want_first_ = false;
+    called_first_ = false;
+    want_successor_ = false;
+    called_successor_ = false;
+  }
+
 private:
   Tester &t_; // NOLINT
 
-  bool want_first_{}; // NOLINT
-  bool got_first_{};  // NOLINT
-  int first_;         // NOLINT
+  bool want_first_{};   // NOLINT
+  bool called_first_{}; // NOLINT
+  int first_{-1};       // NOLINT
 
-  bool want_successor_{};  // NOLINT
-  bool got_successor_{};   // NOLINT
-  int want_current_{};     // NOLINT
-  bool want_is_looping_{}; // NOLINT
-  int successor_{};        // NOLINT
+  bool want_successor_{};   // NOLINT
+  bool called_successor_{}; // NOLINT
+  int want_current_{};      // NOLINT
+  bool want_is_looping_{};  // NOLINT
+  int successor_{};         // NOLINT
 };
 
 struct Context {
@@ -218,6 +252,11 @@ struct Context {
     controls_.check_required_calls();
     step_selector_.check_required_calls();
     step_controller_.check_required_calls();
+  }
+  void reset() {
+    controls_.reset();
+    step_selector_.reset();
+    step_controller_.reset();
   }
 };
 
