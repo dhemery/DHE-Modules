@@ -10,16 +10,16 @@
 
 namespace test {
 namespace curve_sequencer {
+using dhe::curve_sequencer::StepEvent;
 using dhe::unit::Suite;
 using dhe::unit::Tester;
 using test::high_latch;
-
 // TODO: Test that cs starts idle
 
 struct StateTest {
   std::string name_;
-  SetConditions set_conditions_; // NOLINT
-  Check check_;                  // NOLINT
+  SetConditions setup_; // NOLINT
+  Check check_;         // NOLINT
   void run(Tester &t, Context &context, CurveSequencer &curve_sequencer) const;
 };
 
@@ -34,23 +34,90 @@ struct StateSuite {
 static inline void enter_idle_mode(Context &context,
                                    CurveSequencer &curve_sequencer) {}
 
+// Note: Context throws if a command is called without being explicitly allowed
 auto idle_tests = StateSuite{
     .name_ = "Idle",
     .enter_state_ = enter_idle_mode,
     .tests_ =
         {
             {
-                .name_ = "running and reset: copy input to output",
-                .set_conditions_ =
+                .name_ = "running: reset high: copy input to output",
+                .setup_ =
                     [](Context &context) {
                       context.controls_.is_running_ = true;
                       context.controls_.is_reset_ = true;
                       context.controls_.input_ = 3.9434F;
-                      context.controls_.allow_output_ = true;
+                      context.controls_.want_output(3.9434F);
                     },
-                .check_ =
+            },
+            {
+                .name_ = "running: reset low: does nothing",
+                .setup_ =
                     [](Context &context) {
-                      context.controls_.check_output(3.9434F);
+                      context.controls_.is_running_ = true;
+                      context.controls_.is_reset_ = false;
+                    },
+            },
+            {
+                .name_ = "running: gate low: does nothing",
+                .setup_ =
+                    [](Context &context) {
+                      context.controls_.is_running_ = true;
+                      context.controls_.is_gated_ = false;
+                    },
+            },
+            {
+                .name_ = "running: gate rises: "
+                         "executes first step with gate edge cleared",
+                .setup_ =
+                    [](Context &context) {
+                      context.controls_.is_running_ = true;
+                      context.controls_.is_gated_ = true; // Causes rise
+                      context.step_selector_.want_first(3);
+                      context.step_controller_.want_enter(3);
+                      context.step_controller_.want_execute(
+                          StepEvent::Generated, high_latch, 0.1F);
+                    },
+            },
+            {
+                .name_ = "running: gate rises: does nothing if no first step",
+                .setup_ =
+                    [](Context &context) {
+                      context.controls_.is_running_ = true;
+                      context.controls_.is_gated_ = true;    // Causes rise
+                      context.step_selector_.want_first(-1); // No first step
+                    },
+            },
+            {
+                .name_ = "paused: reset low: does nothing",
+                .setup_ =
+                    [](Context &context) {
+                      context.controls_.is_running_ = false;
+                      context.controls_.is_reset_ = false;
+                    },
+            },
+            {
+                .name_ = "paused: reset rise: does nothing",
+                .setup_ =
+                    [](Context &context) {
+                      context.controls_.is_running_ = false;
+                      context.controls_.is_reset_ = true;
+                    },
+            },
+            {
+                .name_ = "paused: gate low: does nothing",
+                .setup_ =
+                    [](Context &context) {
+                      context.controls_.is_running_ = false;
+                      context.controls_.is_gated_ = false;
+                    },
+            },
+            {
+                .name_ = "paused: gate rise: does nothing",
+                .setup_ =
+                    [](Context &context) {
+                      context.controls_.is_running_ = false;
+                      context.controls_.is_gated_ = true;
                     },
             },
         },
@@ -64,9 +131,9 @@ struct CurveSequencerSuite : public Suite {
 void StateTest::run(Tester &t, Context &context,
                     CurveSequencer &curve_sequencer) const {
   t.run(name_, [this, &context, &curve_sequencer](Tester &t) {
-    set_conditions_(context);
+    setup_(context);
     curve_sequencer.execute(0.1F);
-    check_(context);
+    context.check_required_calls();
   });
 }
 
@@ -79,6 +146,9 @@ void StateSuite::run(Tester &t) const {
       auto context = Context{controls, step_selector, step_controller};
       auto curve_sequencer =
           CurveSequencer{controls, step_selector, step_controller};
+
+      enter_state_(context, curve_sequencer);
+
       test.run(t, context, curve_sequencer);
     }
   });
