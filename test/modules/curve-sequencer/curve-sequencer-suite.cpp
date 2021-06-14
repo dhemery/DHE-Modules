@@ -48,19 +48,27 @@ auto idle_tests = StateSuite{
                       context.controls_.is_running_ = true;
                       context.controls_.is_reset_ = true;
                       context.controls_.input_ = 3.9434F;
+                      context.step_controller_.step_ = -2451;
                     },
                 .check_ =
                     [](Context &context) {
                       context.controls_.assert_output(3.9434F);
+                      context.step_controller_.assert_step(-2451); // NOLINT
                     },
-            } // namespace curve_sequencer
-            ,
+            },
             {
                 .name_ = "running: reset low: does nothing",
                 .setup_ =
                     [](Context &context) {
                       context.controls_.is_running_ = true;
                       context.controls_.is_reset_ = false;
+                      context.controls_.output_ = -221.F;
+                      context.step_controller_.step_ = 7124; // NOLINT
+                    },
+                .check_ =
+                    [](Context &context) {
+                      context.controls_.assert_output(-221.F);
+                      context.step_controller_.assert_step(7124); // NOLINT
                     },
             },
             {
@@ -69,6 +77,11 @@ auto idle_tests = StateSuite{
                     [](Context &context) {
                       context.controls_.is_running_ = true;
                       context.controls_.is_gated_ = false;
+                    },
+                .check_ =
+                    [](Context &context) {
+                      context.controls_.assert_output(-221.F);
+                      context.step_controller_.assert_step(7124); // NOLINT
                     },
             },
             {
@@ -79,10 +92,13 @@ auto idle_tests = StateSuite{
                       context.controls_.is_running_ = true;
                       context.controls_.is_gated_ = true; // Causes rise
                       context.step_selector_.first_ = 3;
-                      context.step_selector_.want_first(3);
-                      context.step_controller_.want_enter(3);
-                      context.step_controller_.want_execute(
-                          StepEvent::Generated, high_latch, 0.1F);
+                      context.step_controller_.step_event_ =
+                          StepEvent::Generated;
+                    },
+                .check_ =
+                    [](Context &context) {
+                      context.step_controller_.assert_step(3);
+                      context.step_controller_.assert_gate(high_latch);
                     },
             },
             {
@@ -90,8 +106,13 @@ auto idle_tests = StateSuite{
                 .setup_ =
                     [](Context &context) {
                       context.controls_.is_running_ = true;
-                      context.controls_.is_gated_ = true;    // Causes rise
-                      context.step_selector_.want_first(-1); // No first step
+                      context.controls_.is_gated_ = true; // Causes rise
+                      context.step_selector_.first_ = no_step;
+                      context.step_controller_.step_ = -2471;
+                    },
+                .check_ =
+                    [](Context &context) {
+                      context.step_controller_.assert_step(-2471); // unchanged
                     },
             },
             {
@@ -272,13 +293,10 @@ void activate_step(Context &context, CurveSequencer &cs) {
   // Gate rise will trigger CS to enter first step and execute it.
   context.controls_.is_gated_ = true;
   auto constexpr first_step = 2;
-  context.step_selector_.want_first(first_step);
-  context.step_controller_.want_enter(first_step);
-  context.step_controller_.want_execute(StepEvent::Generated, high_latch, 0.F);
+  context.step_selector_.first_ = first_step;
+  context.step_controller_.step_event_ = StepEvent::Generated;
 
   cs.execute(0.F);
-
-  context.reset();
 }
 
 static auto _ = CurveSequencerSuite{};

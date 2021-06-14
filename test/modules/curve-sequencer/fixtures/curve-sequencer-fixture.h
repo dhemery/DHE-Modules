@@ -16,15 +16,15 @@ using dhe::Latch;
 using dhe::curve_sequencer::StepEvent;
 using dhe::unit::Tester;
 static auto constexpr step_count = 8;
-static auto constexpr invalid_step = 999;
+static auto constexpr initial_step = 999;
 static auto constexpr no_step = -1;
 
 struct Controls {
-  bool is_gated_{};           // NOLINT
-  bool is_reset_{};           // NOLINT
-  bool is_running_{};         // NOLINT
-  float input_ = -199.F;      // NOLINT
-  float got_output_ = -299.F; // NOLINT
+  bool is_gated_{};       // NOLINT
+  bool is_reset_{};       // NOLINT
+  bool is_running_{};     // NOLINT
+  float input_ = -199.F;  // NOLINT
+  float output_ = -299.F; // NOLINT
 
   Controls(Tester &t) : t_{t} {}
 
@@ -33,11 +33,11 @@ struct Controls {
   auto is_running() const -> bool { return is_running_; }
   auto input() const -> float { return input_; }
 
-  void output(float voltage) { got_output_ = voltage; }
+  void output(float voltage) { output_ = voltage; }
 
   void assert_output(float want) {
-    if (got_output_ != want) {
-      t_.errorf("Got output {}, want {}", got_output_, want);
+    if (output_ != want) {
+      t_.errorf("Controls output is {}, want {}", output_, want);
     }
   }
 
@@ -46,40 +46,52 @@ private:
 };
 
 struct StepController {
-  int first_ = invalid_step;                    // NOLINT
+  int first_ = initial_step;                    // NOLINT
   StepEvent step_event_ = StepEvent::Completed; // NOLINT
 
-  int got_step_ = invalid_step; // NOLINT
-  Latch got_gate_{};            // NOLINT
-  float got_sample_time_{};     // NOLINT
+  int step_{};          // NOLINT
+  Latch gate_{};        // NOLINT
+  float sample_time_{}; // NOLINT
 
   StepController(Tester &t) : t_{t} {}
 
-  void enter(int step) { got_step_ = step; }
+  void enter(int step) { step_ = step; }
 
   auto execute(Latch const &gate, float sample_time) -> StepEvent {
-    if (got_step_ < 0 || got_step_ >= step_count) {
+    if (step_ < 0 || step_ >= step_count) {
       t_.fatalf("Called step_controller.execute() with invalid step {} active",
-                got_step_);
+                step_);
     }
-    got_gate_ = gate;
-    got_sample_time_ = sample_time;
+    gate_ = gate;
+    sample_time_ = sample_time;
     return step_event_;
   }
 
-  void exit() { got_step_ = no_step; }
+  void exit() { step_ = no_step; }
+
+  void assert_step(int want) {
+    if (step_ != want) {
+      t_.errorf("StepController step is {}, want {}", step_, want);
+    }
+  }
+
+  void assert_gate(Latch const &want) {
+    if (gate_ != want) {
+      t_.errorf("StepController gate is {}, want {}", gate_, want);
+    }
+  }
 
 private:
   Tester &t_; // NOLINT
 };
 
 struct StepSelector {
-  int first_ = invalid_step;               // NOLINT
+  int first_ = initial_step;               // NOLINT
   std::array<int, step_count> successors_; // NOLINT
 
   StepSelector(Tester &t) : t_{t} {
     for (auto &successor : successors_) {
-      successor = invalid_step;
+      successor = initial_step;
     }
   }
 
