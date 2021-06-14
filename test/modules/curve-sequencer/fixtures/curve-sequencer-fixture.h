@@ -7,6 +7,7 @@
 
 #include <dheunit/test.h>
 
+#include <array>
 #include <functional>
 
 namespace test {
@@ -14,220 +15,86 @@ namespace curve_sequencer {
 using dhe::Latch;
 using dhe::curve_sequencer::StepEvent;
 using dhe::unit::Tester;
+static auto constexpr step_count = 8;
+static auto constexpr invalid_step = 999;
+static auto constexpr no_step = -1;
 
 struct Controls {
+  bool is_gated_{};           // NOLINT
+  bool is_reset_{};           // NOLINT
+  bool is_running_{};         // NOLINT
+  float input_ = -199.F;      // NOLINT
+  float got_output_ = -299.F; // NOLINT
+
   Controls(Tester &t) : t_{t} {}
 
   auto is_gated() const -> bool { return is_gated_; }
   auto is_reset() const -> bool { return is_reset_; }
   auto is_running() const -> bool { return is_running_; }
   auto input() const -> float { return input_; }
-  auto output() const -> float { return output_; }
 
-  bool is_gated_{};   // NOLINT
-  bool is_reset_{};   // NOLINT
-  bool is_running_{}; // NOLINT
-  float input_{};     // NOLINT
+  void output(float voltage) { got_output_ = voltage; }
 
-  void output(float voltage) {
-    called_output_ = true;
-    if (!want_output_) {
-      t_.errorf("Called output({})", voltage);
-      return;
+  void assert_output(float want) {
+    if (got_output_ != want) {
+      t_.errorf("Got output {}, want {}", got_output_, want);
     }
-    if (voltage != want_output_voltage_) {
-      t_.errorf("controls.output() got voltage {}, want {}", voltage,
-                want_output_voltage_);
-    }
-  }
-
-  void want_output(float voltage) {
-    want_output_ = true;
-    want_output_voltage_ = voltage;
-  }
-
-  void check_required_calls() {
-    if (want_output_ && !called_output_) {
-      t_.error("Did not call controls.output(v)");
-    }
-  }
-
-  void reset() {
-    is_gated_ = false;
-    is_reset_ = false;
-    is_running_ = false;
-    input_ = 0.F;
-    output_ = 0.F;
-    want_output_ = false;
-    called_output_ = false;
   }
 
 private:
-  Tester &t_;      // NOLINT
-  float output_{}; // NOLINT
-
-  bool want_output_{};          // NOLINT
-  bool called_output_{};        // NOLINT
-  float want_output_voltage_{}; // NOLINT
+  Tester &t_; // NOLINT
 };
 
 struct StepController {
+  int first_ = invalid_step;                    // NOLINT
+  StepEvent step_event_ = StepEvent::Completed; // NOLINT
+
+  int got_step_ = invalid_step; // NOLINT
+  Latch got_gate_{};            // NOLINT
+  float got_sample_time_{};     // NOLINT
+
   StepController(Tester &t) : t_{t} {}
 
-  void enter(int step) {
-    called_enter_ = true;
-    if (!want_enter_) {
-      t_.errorf("Called enter({})", step);
-      return;
-    }
-    if (step != want_step_) {
-      t_.errorf("step_controller.enter() got step {}, want {}", step,
-                want_step_);
-    }
-  }
+  void enter(int step) { got_step_ = step; }
 
   auto execute(Latch const &gate, float sample_time) -> StepEvent {
-    called_execute_ = true;
-    if (want_execute_) {
-      if (gate != want_gate_) {
-        t_.errorf("step_controller.execute() got gate {}, want {}", gate,
-                  want_gate_);
-      }
-      if (sample_time != want_sample_time_) {
-        t_.errorf("step_controller.execute() got sample time {}, want {}",
-                  sample_time, want_sample_time_);
-      }
-    } else {
-      t_.errorf("Called execute({}, {})", gate, sample_time);
+    if (got_step_ < 0 || got_step_ >= step_count) {
+      t_.fatalf("Called step_controller.execute() with invalid step {} active",
+                got_step_);
     }
+    got_gate_ = gate;
+    got_sample_time_ = sample_time;
     return step_event_;
   }
 
-  void exit() {
-    called_exit_ = true;
-    if (!want_exit_) {
-      t_.errorf("Called exit()");
-    }
-  }
-
-  void want_enter(int step) {
-    want_enter_ = true;
-    want_step_ = step;
-  }
-
-  void want_execute(StepEvent step_event, Latch gate, float sample_time) {
-    want_execute_ = true;
-    want_gate_ = gate;
-    want_sample_time_ = sample_time;
-    step_event_ = step_event;
-  }
-
-  void want_exit() { want_exit_ = true; }
-
-  void check_required_calls() {
-    if (want_enter_ && !called_enter_) {
-      t_.error("Did not call step_controller.enter()");
-      return;
-    }
-    if (want_execute_ && !called_execute_) {
-      t_.error("Did not call step_controller.execute()");
-      return;
-    }
-    if (want_exit_ && !called_exit_) {
-      t_.error("Did not call step_controller.exit()");
-      return;
-    }
-  }
-
-  void reset() {
-    want_enter_ = false;
-    called_enter_ = false;
-    want_execute_ = false;
-    called_execute_ = false;
-    want_exit_ = false;
-    called_exit_ = false;
-  }
+  void exit() { got_step_ = no_step; }
 
 private:
   Tester &t_; // NOLINT
-
-  bool want_enter_{};   // NOLINT
-  bool called_enter_{}; // NOLINT
-  int want_step_{};     // NOLINT
-
-  bool want_execute_{};      // NOLINT
-  StepEvent step_event_{};   // NOLINT
-  bool called_execute_{};    // NOLINT
-  Latch want_gate_{};        // NOLINT
-  float want_sample_time_{}; // NOLINT
-
-  bool want_exit_{};   // NOLINT
-  bool called_exit_{}; // NOLINT
 };
 
 struct StepSelector {
-  StepSelector(Tester &t) : t_{t} {}
+  int first_ = invalid_step;               // NOLINT
+  std::array<int, step_count> successors_; // NOLINT
 
-  void want_first(int first) {
-    want_first_ = true;
-    first_ = first;
-  }
-
-  auto first() -> int {
-    called_first_ = true;
-    if (!want_first_) {
-      t_.error("Called step_selector.first()");
-    }
-    return first_;
-  }
-
-  void want_successor(int successor, int want_current) {
-    want_successor_ = true;
-    want_current_ = want_current;
-    successor_ = successor;
-  }
-
-  auto successor(int current) -> int {
-    called_successor_ = true;
-    if (!want_successor_) {
-      t_.errorf("Called step_selector.successor({})", current);
-    }
-    if (current != want_current_) {
-      t_.errorf("step_selector.successor() got current {}, want {}", current,
-                want_current_);
-    }
-    return successor_;
-  }
-
-  void check_required_calls() {
-    if (want_first_ && !called_first_) {
-      t_.error("Did not call step_selector.first()");
-      return;
-    }
-    if (want_successor_ && !called_successor_) {
-      t_.error("Did not call step_selector.successor()");
-      return;
+  StepSelector(Tester &t) : t_{t} {
+    for (auto &successor : successors_) {
+      successor = invalid_step;
     }
   }
 
-  void reset() {
-    want_first_ = false;
-    called_first_ = false;
-    want_successor_ = false;
-    called_successor_ = false;
+  auto first() const -> int { return first_; }
+
+  auto successor(int current) const -> int {
+    if (current < 0 || current >= step_count) {
+      t_.errorf("step_selector.successor() called with invalid current step {}",
+                current);
+    }
+    return successors_[current];
   }
 
 private:
   Tester &t_; // NOLINT
-
-  bool want_first_{};   // NOLINT
-  bool called_first_{}; // NOLINT
-  int first_{-1};       // NOLINT
-
-  bool want_successor_{};   // NOLINT
-  bool called_successor_{}; // NOLINT
-  int want_current_{};      // NOLINT
-  int successor_{};         // NOLINT
 };
 
 struct Context {
@@ -238,17 +105,6 @@ struct Context {
   Controls &controls_;              // NOLINT
   StepSelector &step_selector_;     // NOLINT
   StepController &step_controller_; // NOLINT
-
-  void check_required_calls() {
-    controls_.check_required_calls();
-    step_selector_.check_required_calls();
-    step_controller_.check_required_calls();
-  }
-  void reset() {
-    controls_.reset();
-    step_selector_.reset();
-    step_controller_.reset();
-  }
 };
 
 using CurveSequencer =
@@ -257,5 +113,6 @@ using CurveSequencer =
 
 using SetState = std::function<void(Context &, CurveSequencer &)>;
 using SetConditions = std::function<void(Context &)>;
+using Check = std::function<void(Context &)>;
 } // namespace curve_sequencer
 } // namespace test

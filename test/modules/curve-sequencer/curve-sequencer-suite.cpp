@@ -19,6 +19,7 @@ using test::high_latch;
 struct StateTest {
   std::string name_;    // NOLINT
   SetConditions setup_; // NOLINT
+  Check check_;
   void run(Tester &t, Context &context, CurveSequencer &curve_sequencer) const;
 };
 
@@ -47,9 +48,13 @@ auto idle_tests = StateSuite{
                       context.controls_.is_running_ = true;
                       context.controls_.is_reset_ = true;
                       context.controls_.input_ = 3.9434F;
-                      context.controls_.want_output(3.9434F);
                     },
-            },
+                .check_ =
+                    [](Context &context) {
+                      context.controls_.assert_output(3.9434F);
+                    },
+            } // namespace curve_sequencer
+            ,
             {
                 .name_ = "running: reset low: does nothing",
                 .setup_ =
@@ -73,6 +78,7 @@ auto idle_tests = StateSuite{
                     [](Context &context) {
                       context.controls_.is_running_ = true;
                       context.controls_.is_gated_ = true; // Causes rise
+                      context.step_selector_.first_ = 3;
                       context.step_selector_.want_first(3);
                       context.step_controller_.want_enter(3);
                       context.step_controller_.want_execute(
@@ -120,7 +126,8 @@ auto idle_tests = StateSuite{
                       context.controls_.is_gated_ = true;
                     },
             },
-        },
+        } // namespace test
+    ,
 };
 
 auto active_tests = StateSuite{
