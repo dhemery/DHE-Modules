@@ -14,201 +14,285 @@ using dhe::curve_sequencer::StepEvent;
 using dhe::unit::Suite;
 using dhe::unit::Tester;
 using test::high_latch;
-// TODO: Test that cs starts idle
 
 struct StateTest {
-  std::string name_;    // NOLINT
-  SetConditions setup_; // NOLINT
-  Check check_;
-  void run(Tester &t, Context &context, CurveSequencer &curve_sequencer) const;
+  std::string name_;          // NOLINT
+  std::vector<Event> events_; // NOLINT
+  std::vector<Check> checks_; // NOLINT
+  void run(Tester &t, Module &m, CurveSequencer &cs) const;
 };
 
 struct StateSuite {
   std::string name_;             // NOLINT
-  SetState enter_state_;         // NOLINT
+  std::vector<Event> events_;    // NOLINT
   std::vector<StateTest> tests_; // NOLINT
   void run(Tester &t) const;
 };
 
-// CurveSequencer starts idle, so this is a no-op.
-static inline void become_idle(Context &, CurveSequencer &) {} // NOLINT
-
-// Note: Context throws if a command is called without being explicitly allowed
-auto idle_tests = StateSuite{
-    .name_ = "Idle",
-    .enter_state_ = become_idle,
+auto newly_constructed_tests = StateSuite{
+    .name_ = "Newly constructed",
+    .events_ = {},
     .tests_ =
         {
             {
-                .name_ = "running: reset high: copy input to output",
-                .setup_ =
-                    [](Context &context) {
-                      context.controls_.is_running_ = true;
-                      context.controls_.is_reset_ = true;
-                    },
-                .check_ =
-                    [](Context &context) {
-                      context.controls_.assert_output(original_input);
-                      context.step_controller_.assert_step(original_step);
+                .name_ = "did nothing",
+                .checks_ =
+                    {
+                        assert_step(original_step),
+                        assert_gate(original_gate),
+                        assert_output(original_output),
                     },
             },
+        },
+};
+
+// IDLE: No step in progress
+auto idle_tests = StateSuite{
+    .name_ = "Idle",
+    .events_ = {}, // Constructor leaves it idle
+    .tests_ =
+        {
             {
-                .name_ = "running: reset low: does nothing",
-                .setup_ =
-                    [](Context &context) {
-                      context.controls_.is_running_ = true;
-                      context.controls_.is_reset_ = false;
-                    },
-                .check_ =
-                    [](Context &context) {
-                      context.controls_.assert_output(original_output);
-                      context.step_controller_.assert_step(original_step);
-                    },
-            },
-            {
-                .name_ = "running: gate low: does nothing",
-                .setup_ =
-                    [](Context &context) {
-                      context.controls_.is_running_ = true;
-                      context.controls_.is_gated_ = false;
-                    },
-                .check_ =
-                    [](Context &context) {
-                      context.controls_.assert_output(original_output);
-                      context.step_controller_.assert_step(original_step);
-                    },
-            },
-            {
-                .name_ = "running: gate rises: "
+                .name_ = "on GATE rise: "
                          "executes first step with gate edge cleared",
-                .setup_ =
-                    [](Context &context) {
-                      context.controls_.is_running_ = true;
-                      context.controls_.is_gated_ = true; // Causes rise
-                      context.step_selector_.first_ = 3;
-                      context.step_controller_.step_event_ =
-                          StepEvent::Generated;
+                .events_ =
+                    {
+                        {
+                            set_running(true),
+                            set_gate(true), // was low
+                            set_first(3, StepEvent::Generated),
+                        },
                     },
-                .check_ =
-                    [](Context &context) {
-                      context.step_controller_.assert_step(3);
-                      context.step_controller_.assert_gate(high_latch);
-                    },
-            },
-            {
-                .name_ = "running: gate rises: does nothing if no first step",
-                .setup_ =
-                    [](Context &context) {
-                      context.controls_.is_running_ = true;
-                      context.controls_.is_gated_ = true; // Causes rise
-                      context.step_selector_.first_ = no_step;
-                    },
-                .check_ =
-                    [](Context &context) {
-                      context.step_controller_.assert_step(original_step);
+                .checks_ =
+                    {
+                        assert_output(original_output),
+                        assert_step(3),          //
+                        assert_gate(high_latch), // edge was cleared
                     },
             },
             {
-                .name_ = "paused: reset low: does nothing",
-                .setup_ =
-                    [](Context &context) {
-                      context.controls_.is_running_ = false;
-                      context.controls_.is_reset_ = false;
+                .name_ = "on GATE rise: executes nothing if no first step",
+                .events_ =
+                    {
+                        {
+                            set_running(true),
+                            set_gate(true), // rise
+                            set_first(no_step, original_step_event),
+                        },
+                    },
+                .checks_ =
+                    {
+                        assert_output(original_output),
+                        assert_step(original_step),
+                        assert_gate(original_gate),
                     },
             },
             {
-                .name_ = "paused: reset rise: does nothing",
-                .setup_ =
-                    [](Context &context) {
-                      context.controls_.is_running_ = false;
-                      context.controls_.is_reset_ = true;
+                .name_ = "on GATE rise: executes nothing if RUN low",
+                .events_ =
+                    {
+                        {
+                            set_running(false),
+                            set_gate(true),
+                        },
+                    },
+                .checks_ =
+                    {
+                        assert_output(original_output),
+                        assert_step(original_step),
+                        assert_gate(original_gate),
                     },
             },
             {
-                .name_ = "paused: gate low: does nothing",
-                .setup_ =
-                    [](Context &context) {
-                      context.controls_.is_running_ = false;
-                      context.controls_.is_gated_ = false;
+                .name_ = "if GATE low: executes nothing if RUN low",
+                .events_ =
+                    {
+                        {
+                            set_running(false),
+                            set_gate(false),
+                        },
+                    },
+                .checks_ =
+                    {
+                        assert_output(original_output),
+                        assert_step(original_step),
+                        assert_gate(original_gate),
                     },
             },
             {
-                .name_ = "paused: gate rise: does nothing",
-                .setup_ =
-                    [](Context &context) {
-                      context.controls_.is_running_ = false;
-                      context.controls_.is_gated_ = true;
+                .name_ = "if GATE low: executes nothing, even with RUN high",
+                .events_ =
+                    {
+                        {
+                            set_gate(false),
+                            set_running(true),
+                        },
+                    },
+                .checks_ =
+                    {
+                        assert_output(original_output),
+                        assert_step(original_step),
+                        assert_gate(original_gate),
                     },
             },
-        } // namespace test
-    ,
+            {
+                .name_ = "on RESET rise: "
+                         "copies input to output and does not execute a step",
+                .events_ =
+                    {
+                        {
+                            set_running(true),
+                            set_reset(true), // was low
+                            set_input(4.567F),
+                        },
+                    },
+                .checks_ =
+                    {
+                        assert_output(4.567F),
+                        assert_step(original_step),
+                        assert_gate(original_gate),
+                    },
+            },
+            {
+                .name_ = "if RESET low: does not send output",
+                .events_ =
+                    {
+                        {
+                            set_running(false),
+                            set_reset(false),
+                        },
+                    },
+                .checks_ =
+                    {
+                        assert_output(original_output),
+                        assert_step(original_step),
+                        assert_gate(original_gate),
+                    },
+            },
+            {
+                .name_ = "on RESET rise: does nothing if RUN low",
+                .events_ =
+                    {
+                        {
+                            set_running(false),
+                            set_reset(true), // was low
+                            set_input(1.234F),
+                        },
+                    },
+                .checks_ =
+                    {
+                        assert_output(original_output),
+                        assert_step(original_step),
+                        assert_gate(original_gate),
+                    },
+            },
+            {
+                .name_ = "RUN high RESET low: does nothing",
+                .events_ =
+                    {
+                        {
+                            set_running(true),
+                            set_reset(false),
+                        },
+                    },
+                .checks_ =
+                    {
+                        assert_output(original_output),
+                        assert_step(original_step),
+                        assert_gate(original_gate),
+                    },
+            },
+        },
 };
 
-struct StateTest2 {
-  std::string name_;               // NOLINT
-  std::vector<Context2> contexts_; // NOLINT
-  std::vector<Check2> checks_;     // NOLINT
-  void run(Tester &, Module2 &, CurveSequencer &) const;
+// PAUSED: Step in progress, but did not execute on previous process()
+auto paused_tests = StateSuite{
+    .name_ = "Paused",
+    .events_ =
+        {
+            activate_step(2),     //
+            {set_running(false)}, // Pause
+        },
+    .tests_ =
+        {
+            {
+                .name_ = "run LOW gate LOW: does nothing",
+                .events_ =
+                    {
+                        {set_running(false), set_gate(false)},
+                    },
+                .checks_ =
+                    {
+                        {assert_step(2)},
+                        {assert_output(original_output)},
+                    },
+            },
+            {
+                .name_ = "run LOW gate RISE: does nothing",
+                .events_ =
+                    {
+                        {set_running(false), set_gate(true)},
+                    },
+                .checks_ =
+                    {
+                        {assert_step(2)},
+                        {assert_output(original_output)},
+                    },
+            },
+            {
+                .name_ = "run LOW reset LOW: does nothing",
+                .events_ =
+                    {
+                        {set_running(false), set_reset(false)},
+                    },
+                .checks_ =
+                    {
+                        {assert_step(2)},
+                        {assert_output(original_output)},
+                    },
+            },
+            {
+                .name_ = "run LOW reset RISE: becomes idle",
+                .events_ =
+                    {
+                        {set_running(false), set_reset(true)},
+                    },
+                .checks_ = {assert_exited()},
+            },
+        },
 };
 
-struct StateSuite2 {
-  std::string name_;               // NOLINT
-  std::vector<Context2> contexts_; // NOLINT
-  std::vector<StateTest2> tests_;  // NOLINT
-  void run(Tester &t) const;
-};
-
-auto active_tests = StateSuite2{
-    .name_ = "NewActive",
-    .contexts_ =
+// ACTIVE: Step in progress, previous execute() executed a step
+auto active_tests = StateSuite{
+    .name_ = "Active",
+    .events_ =
         {
             activate_step(2),
         },
     .tests_ =
         {
+            {.name_ = "when first activated",
+             .events_ = {},
+             .checks_ =
+                 {
+                     assert_step(2),
+                     assert_gate(high_latch),
+                 }},
             {
-                .name_ = "does nothing if not running and gate is low",
-                .contexts_ =
+                .name_ = "executes active step with gate state",
+                .events_ =
                     {
-                        {is_running(false)},
-                        {is_gated(false)},
+                        {
+                            set_running(true),
+                            set_gate(true),
+                        },
                     },
-                .checks_ =
-                    {
-                        {assert_output(original_output)},
-                        {assert_step(original_step)},
-                    },
+                .checks_ = {assert_step(2), assert_gate(high_latch)},
             },
         },
 };
 
 /**
-        {
-            .name_ = "paused: gate rise does nothing",
-            .setup_ =
-                [](Context &context) {
-                  context.controls_.is_running_ = false;
-                  context.controls_.is_gated_ = true;
-                },
-        },
-        {
-            .name_ = "paused: reset low does nothing",
-            .setup_ =
-                [](Context &context) {
-                  context.controls_.is_running_ = false;
-                  context.controls_.is_reset_ = false;
-                },
-        },
-        {
-            .name_ = "paused: "
-                     "reset rise exits active step and does nothing else",
-            .setup_ =
-                [](Context &context) {
-                  context.controls_.is_running_ = false;
-                  context.controls_.is_reset_ = true;
-                  context.step_controller_.want_exit();
-                },
-        },
         {
             .name_ = "running: "
                      "executes active step with gate state",
@@ -273,72 +357,42 @@ auto active_tests = StateSuite2{
 */
 
 struct CurveSequencerSuite : public Suite {
-  CurveSequencerSuite() : Suite{"dhe::curve_suquencer::CurveSequencer"} {}
+  CurveSequencerSuite() : Suite{"dhe::curve_sequencer::CurveSequencer"} {}
   void run(Tester &t) override {
+    newly_constructed_tests.run(t);
     idle_tests.run(t);
     active_tests.run(t);
+    paused_tests.run(t);
   }
 };
 
-void StateTest::run(Tester &t, Context &context,
-                    CurveSequencer &curve_sequencer) const {
-  t.run(name_, [this, &context, &curve_sequencer](Tester &t) {
-    setup_(context);
-    curve_sequencer.execute(0.1F);
-  });
-}
-
-void StateSuite::run(Tester &t) const {
-  t.run(name_, [this](Tester &t) {
-    for (auto const &test : tests_) {
-      auto controls = Controls{t};
-      auto step_selector = StepSelector{t};
-      auto step_controller = StepController{t};
-      auto context = Context{controls, step_selector, step_controller};
-      auto curve_sequencer =
-          CurveSequencer{controls, step_selector, step_controller};
-
-      enter_state_(context, curve_sequencer);
-
-      test.run(t, context, curve_sequencer);
-    }
-  });
-}
-
-void StateTest2::run(Tester &t, Module2 &m, CurveSequencer &cs) const {
+void StateTest::run(Tester &t, Module &m, CurveSequencer &cs) const {
   t.run(name_, [this, &m, &cs](Tester &t) {
-    // Execute cs in each of the test's contexts.
-    for (auto const &context : contexts_) {
-      for (auto const &condition : context) {
-        condition(m);
-      }
+    for (auto const &event : events_) {
+      event.apply(m);
       cs.execute(0.F);
     }
-    // Apply each check to the final state.
     for (auto const &check : checks_) {
       check(t, m);
     }
   });
 }
 
-void StateSuite2::run(Tester &t) const {
+void StateSuite::run(Tester &t) const {
   t.run(name_, [this](Tester &t) {
     for (auto const &test : tests_) {
-      auto controls = Controls{t};
-      auto step_selector = StepSelector{t};
-      auto step_controller = StepController{t};
+      auto controls = Controls{};
+      auto step_selector = StepSelector{};
+      auto step_controller = StepController{};
 
-      auto module = Module2{controls, step_selector, step_controller};
+      auto module = Module{controls, step_selector, step_controller};
 
       auto curve_sequencer =
           CurveSequencer{controls, step_selector, step_controller};
 
-      // To set up the suite's initial state, execute cs in each of the suite's
-      // contexts.
-      for (auto const &context : contexts_) {
-        for (auto const &condition : context) {
-          condition(module);
-        }
+      // To set cs's initial state, apply each of the suite's events.
+      for (auto const &event : events_) {
+        event.apply(module);
         curve_sequencer.execute(0.F);
       }
       test.run(t, module, curve_sequencer);
