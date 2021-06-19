@@ -36,6 +36,7 @@ auto newly_constructed_tests = StateSuite{
         {
             {
                 .name_ = "did nothing",
+                .events_ = {},
                 .checks_ =
                     {
                         assert_step(original_step),
