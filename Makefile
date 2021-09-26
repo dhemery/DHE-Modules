@@ -61,7 +61,7 @@ vtest: $(TEST_RUNNER)
 #
 ########################################################################
 
-PLUGIN_ZIP_NAME = $(SLUG)-$(VERSION)-$(ARCH).zip
+PLUGIN_ZIP_NAME = $(SLUG)-$(VERSION)-mac.vcvplugin
 DIST_PLUGIN_ZIP = dist/$(PLUGIN_ZIP_NAME)
 
 STAGING_DIRNAME = .stage
@@ -69,11 +69,11 @@ STAGING_DIR = $(realpath .)/$(STAGING_DIRNAME)
 STAGING_USER_DIRNAME = rack-user-dir
 
 STAGING_USER_DIR = $(STAGING_DIR)/$(STAGING_USER_DIRNAME)
-STAGING_PLUGIN_DIR = $(STAGING_USER_DIR)/plugins-v1
+STAGING_PLUGIN_DIR = $(STAGING_USER_DIR)/plugins
 STAGING_PLUGIN_ZIP = $(STAGING_PLUGIN_DIR)/$(PLUGIN_ZIP_NAME)
 
 APP_DIR ?= /Applications
-RACK_APP_DIR = $(APP_DIR)/Rack.app
+RACK_APP_DIR = $(APP_DIR)/VCV\ Rack\ 2.app
 RACK_EXECUTABLE_PATH = $(RACK_APP_DIR)/Contents/MacOS/Rack
 RACK_SYSTEM_DIR = $(RACK_APP_DIR)/Contents/Resources
 
