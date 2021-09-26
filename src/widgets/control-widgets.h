@@ -136,27 +136,27 @@ protected:
   }
 };
 
-template <typename PanelT> struct PortWidget : rack::app::SvgPort {
-  PortWidget() {
-    setSvg(load_svg(PanelT::svg_dir, "port"));
-    shadow->opacity = 0.F;
-  }
-};
-
 class Jack : public rack::app::SvgPort {
+  template <typename PanelT> struct JackWidget : rack::app::SvgPort {
+    JackWidget() {
+      setSvg(load_svg(PanelT::svg_dir, "port"));
+      shadow->opacity = 0.F;
+    }
+  };
+
 public:
   template <typename PanelT>
   static inline auto input(rack::engine::Module *module, float xmm, float ymm,
-                           int index) -> dhe::PortWidget<PanelT> * {
-    return rack::createInputCentered<dhe::PortWidget<PanelT>>(mm2px(xmm, ymm),
-                                                              module, index);
+                           int index) -> JackWidget<PanelT> * {
+    return rack::createInputCentered<JackWidget<PanelT>>(mm2px(xmm, ymm),
+                                                         module, index);
   }
 
   template <typename PanelT>
   static inline auto output(rack::engine::Module *module, float xmm, float ymm,
-                            int index) -> dhe::PortWidget<PanelT> * {
-    return rack::createOutputCentered<dhe::PortWidget<PanelT>>(mm2px(xmm, ymm),
-                                                               module, index);
+                            int index) -> JackWidget<PanelT> * {
+    return rack::createOutputCentered<JackWidget<PanelT>>(mm2px(xmm, ymm),
+                                                          module, index);
   }
 };
 } // namespace dhe
