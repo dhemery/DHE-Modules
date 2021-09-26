@@ -6,6 +6,7 @@
 #include <app/SvgKnob.hpp>
 #include <app/SvgPort.hpp>
 #include <app/SvgSwitch.hpp>
+#include <componentlibrary.hpp>
 #include <helpers.hpp>
 #include <string>
 
@@ -69,7 +70,8 @@ private:
   }
 };
 
-template <typename PanelT> class Knob : public rack::app::SvgKnob {
+template <typename PanelT>
+class Knob : public rack::componentlibrary::RoundKnob {
 public:
   static inline auto large(rack::engine::Module *module, float xmm, float ymm,
                            int index) -> Knob * {
@@ -92,7 +94,9 @@ public:
   }
 
   Knob(std::string const &knob_name) {
-    setSvg(load_svg(PanelT::svg_dir, knob_name));
+    auto knob_svg = load_svg(PanelT::svg_dir, knob_name);
+    setSvg(knob_svg);
+    bg->setSvg(knob_svg);
     shadow->opacity = 0.F;
   }
 
