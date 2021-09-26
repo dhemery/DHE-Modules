@@ -13,8 +13,9 @@ class SwavePanel : public rack::app::ModuleWidget {
   using Controls = SwaveControls;
 
 public:
+  static auto constexpr svg_dir = "swave";
+
   explicit SwavePanel(rack::engine::Module *module) {
-    auto constexpr svg_dir = "swave";
     auto constexpr hp = 4;
 
     setModule(module);
@@ -37,16 +38,16 @@ public:
     addParam(Knob::tiny(svg_dir, module, x, y, Controls::CurveAvKnob));
 
     y += dy;
-    addInput(Jack::input(svg_dir, module, x, y, Controls::CurveCvInput));
+    addInput(Jack::input<SwavePanel>(module, x, y, Controls::CurveCvInput));
 
     y = 82.F;
     dy = 15.F;
 
     y += dy;
-    addInput(Jack::input(svg_dir, module, x, y, Controls::SwaveInput));
+    addInput(Jack::input<SwavePanel>(module, x, y, Controls::SwaveInput));
 
     y += dy;
-    addOutput(Jack::output(svg_dir, module, x, y, Controls::SwaveOutput));
+    addOutput(Jack::output<SwavePanel>(module, x, y, Controls::SwaveOutput));
   }
 };
 } // namespace swave

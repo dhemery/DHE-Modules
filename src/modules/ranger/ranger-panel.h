@@ -13,8 +13,9 @@ class RangerPanel : public rack::app::ModuleWidget {
   using Controls = RangerControls;
 
 public:
+  static auto constexpr svg_dir = "ranger";
+
   explicit RangerPanel(rack::engine::Module *module) {
-    auto constexpr svg_dir = "ranger";
     auto constexpr hp = 6;
 
     setModule(module);
@@ -29,10 +30,11 @@ public:
 
     y += dy * 0.75F;
     addParam(Knob::medium(svg_dir, module, left, y, Controls::LevelKnob));
-    addOutput(Jack::output(svg_dir, module, right, y, Controls::RangerOutput));
+    addOutput(
+        Jack::output<RangerPanel>(module, right, y, Controls::RangerOutput));
 
     y += dy;
-    addInput(Jack::input(svg_dir, module, left, y, Controls::LevelCvInput));
+    addInput(Jack::input<RangerPanel>(module, left, y, Controls::LevelCvInput));
     addParam(Knob::tiny(svg_dir, module, right, y, Controls::LevelAvKnob));
 
     y += dy / 2.F;
@@ -45,8 +47,10 @@ public:
     addParam(Knob::tiny(svg_dir, module, right, y, Controls::CwLimitAvKnob));
 
     y += dy;
-    addInput(Jack::input(svg_dir, module, left, y, Controls::CcwLimitCvInput));
-    addInput(Jack::input(svg_dir, module, right, y, Controls::CwLimitCvInput));
+    addInput(
+        Jack::input<RangerPanel>(module, left, y, Controls::CcwLimitCvInput));
+    addInput(
+        Jack::input<RangerPanel>(module, right, y, Controls::CwLimitCvInput));
 
     y += dy;
     addParam(Toggle::thumb(2, svg_dir, module, left, y,

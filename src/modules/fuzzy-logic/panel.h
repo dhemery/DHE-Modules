@@ -13,8 +13,9 @@ class Panel : public rack::app::ModuleWidget {
   using Controls = FuzzyLogicControls;
 
 public:
+  static auto constexpr svg_dir = "fuzzy-logic";
+
   explicit Panel(std::string const &module_name, rack::engine::Module *module) {
-    auto constexpr svg_dir = "fuzzy-logic";
     auto constexpr hp = 9;
 
     setModule(module);
@@ -33,78 +34,78 @@ public:
     auto constexpr dy = hp2mm(3.F);
 
     auto y = top + 0.F * dy;
-    addInput(Jack::input(svg_dir, module, ab_outer_column, y,
-                         Controls::AInputs + 0));
+    addInput(
+        Jack::input<Panel>(module, ab_outer_column, y, Controls::AInputs + 0));
     addParam(Button::toggle(svg_dir, module, ab_button_column, y,
                             Controls::NotAButtons + 0));
     addParam(Button::toggle(svg_dir, module, cd_button_column, y,
                             Controls::NotAButtons + 1));
-    addInput(Jack::input(svg_dir, module, cd_outer_column, y,
-                         Controls::AInputs + 1));
+    addInput(
+        Jack::input<Panel>(module, cd_outer_column, y, Controls::AInputs + 1));
 
     y = top + 0.5F * dy;
     addParam(Toggle::thumb(2, svg_dir, module, switch_column, y,
                            Controls::LevelRangeSwitch));
 
     y = top + 1.F * dy;
-    addInput(Jack::input(svg_dir, module, ab_outer_column, y,
-                         Controls::BInputs + 0));
+    addInput(
+        Jack::input<Panel>(module, ab_outer_column, y, Controls::BInputs + 0));
     addParam(Button::toggle(svg_dir, module, ab_button_column, y,
                             Controls::NotBButtons + 0));
     addParam(Button::toggle(svg_dir, module, cd_button_column, y,
                             Controls::NotBButtons + 1));
-    addInput(Jack::input(svg_dir, module, cd_outer_column, y,
-                         Controls::BInputs + 1));
+    addInput(
+        Jack::input<Panel>(module, cd_outer_column, y, Controls::BInputs + 1));
 
     y = top + 2.F * dy;
-    addOutput(Jack::output(svg_dir, module, ab_outer_column, y,
-                           Controls::AndOutputs + 0));
-    addOutput(Jack::output(svg_dir, module, ab_inner_column, y,
-                           Controls::NandOutputs + 0));
-    addOutput(Jack::output(svg_dir, module, cd_inner_column, y,
-                           Controls::NandOutputs + 1));
-    addOutput(Jack::output(svg_dir, module, cd_outer_column, y,
-                           Controls::AndOutputs + 1));
+    addOutput(Jack::output<Panel>(module, ab_outer_column, y,
+                                  Controls::AndOutputs + 0));
+    addOutput(Jack::output<Panel>(module, ab_inner_column, y,
+                                  Controls::NandOutputs + 0));
+    addOutput(Jack::output<Panel>(module, cd_inner_column, y,
+                                  Controls::NandOutputs + 1));
+    addOutput(Jack::output<Panel>(module, cd_outer_column, y,
+                                  Controls::AndOutputs + 1));
 
     y = top + 3.F * dy;
-    addOutput(Jack::output(svg_dir, module, ab_outer_column, y,
-                           Controls::OrOutputs + 0));
-    addOutput(Jack::output(svg_dir, module, ab_inner_column, y,
-                           Controls::NorOutputs + 0));
-    addOutput(Jack::output(svg_dir, module, cd_inner_column, y,
-                           Controls::NorOutputs + 1));
-    addOutput(Jack::output(svg_dir, module, cd_outer_column, y,
-                           Controls::OrOutputs + 1));
+    addOutput(Jack::output<Panel>(module, ab_outer_column, y,
+                                  Controls::OrOutputs + 0));
+    addOutput(Jack::output<Panel>(module, ab_inner_column, y,
+                                  Controls::NorOutputs + 0));
+    addOutput(Jack::output<Panel>(module, cd_inner_column, y,
+                                  Controls::NorOutputs + 1));
+    addOutput(Jack::output<Panel>(module, cd_outer_column, y,
+                                  Controls::OrOutputs + 1));
 
     y = top + 4.F * dy;
-    addOutput(Jack::output(svg_dir, module, ab_outer_column, y,
-                           Controls::XorOutputs + 0));
-    addOutput(Jack::output(svg_dir, module, ab_inner_column, y,
-                           Controls::XnorOutputs + 0));
-    addOutput(Jack::output(svg_dir, module, cd_inner_column, y,
-                           Controls::XnorOutputs + 1));
-    addOutput(Jack::output(svg_dir, module, cd_outer_column, y,
-                           Controls::XorOutputs + 1));
+    addOutput(Jack::output<Panel>(module, ab_outer_column, y,
+                                  Controls::XorOutputs + 0));
+    addOutput(Jack::output<Panel>(module, ab_inner_column, y,
+                                  Controls::XnorOutputs + 0));
+    addOutput(Jack::output<Panel>(module, cd_inner_column, y,
+                                  Controls::XnorOutputs + 1));
+    addOutput(Jack::output<Panel>(module, cd_outer_column, y,
+                                  Controls::XorOutputs + 1));
 
     y = top + 5.F * dy;
-    addOutput(Jack::output(svg_dir, module, ab_outer_column, y,
-                           Controls::ImplicationOutputs + 0));
-    addOutput(Jack::output(svg_dir, module, ab_inner_column, y,
-                           Controls::NonimplicationOutputs + 0));
-    addOutput(Jack::output(svg_dir, module, cd_inner_column, y,
-                           Controls::NonimplicationOutputs + 1));
-    addOutput(Jack::output(svg_dir, module, cd_outer_column, y,
-                           Controls::ImplicationOutputs + 1));
+    addOutput(Jack::output<Panel>(module, ab_outer_column, y,
+                                  Controls::ImplicationOutputs + 0));
+    addOutput(Jack::output<Panel>(module, ab_inner_column, y,
+                                  Controls::NonimplicationOutputs + 0));
+    addOutput(Jack::output<Panel>(module, cd_inner_column, y,
+                                  Controls::NonimplicationOutputs + 1));
+    addOutput(Jack::output<Panel>(module, cd_outer_column, y,
+                                  Controls::ImplicationOutputs + 1));
 
     y = top + 6.F * dy;
-    addOutput(Jack::output(svg_dir, module, ab_outer_column, y,
-                           Controls::ConverseImplicationOutputs + 0));
-    addOutput(Jack::output(svg_dir, module, ab_inner_column, y,
-                           Controls::ConverseNonimplicationOutputs + 0));
-    addOutput(Jack::output(svg_dir, module, cd_inner_column, y,
-                           Controls::ConverseNonimplicationOutputs + 1));
-    addOutput(Jack::output(svg_dir, module, cd_outer_column, y,
-                           Controls::ConverseImplicationOutputs + 1));
+    addOutput(Jack::output<Panel>(module, ab_outer_column, y,
+                                  Controls::ConverseImplicationOutputs + 0));
+    addOutput(Jack::output<Panel>(module, ab_inner_column, y,
+                                  Controls::ConverseNonimplicationOutputs + 0));
+    addOutput(Jack::output<Panel>(module, cd_inner_column, y,
+                                  Controls::ConverseNonimplicationOutputs + 1));
+    addOutput(Jack::output<Panel>(module, cd_outer_column, y,
+                                  Controls::ConverseImplicationOutputs + 1));
   }
 };
 } // namespace fuzzy_logic

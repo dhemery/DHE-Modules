@@ -10,8 +10,9 @@ class HostagePanel : public rack::app::ModuleWidget {
   using Controls = HostageControls;
 
 public:
+  static auto constexpr svg_dir = "hostage";
+
   HostagePanel(rack::engine::Module *module) {
-    auto constexpr svg_dir = "hostage";
     auto constexpr hp = 5;
 
     setModule(module);
@@ -31,8 +32,8 @@ public:
         Toggle::thumb(2, svg_dir, module, column2, y, Controls::ModeSwitch));
 
     y += dy;
-    addInput(
-        Jack::input(svg_dir, module, column1, y, Controls::DurationCvInput));
+    addInput(Jack::input<HostagePanel>(module, column1, y,
+                                       Controls::DurationCvInput));
     addParam(Toggle::thumb(3, svg_dir, module, column3, y,
                            Controls::DurationRangeSwitch));
 
@@ -42,18 +43,22 @@ public:
     y = 82.F;
     dy = 15.F;
 
-    addInput(Jack::input(svg_dir, module, column1, y, Controls::DeferInput));
+    addInput(
+        Jack::input<HostagePanel>(module, column1, y, Controls::DeferInput));
     addOutput(
-        Jack::output(svg_dir, module, column3, y, Controls::ActiveOutput));
+        Jack::output<HostagePanel>(module, column3, y, Controls::ActiveOutput));
 
     y += dy;
-    addInput(Jack::input(svg_dir, module, column1, y, Controls::TriggerInput));
-    addOutput(Jack::output(svg_dir, module, column3, y, Controls::EocOutput));
+    addInput(
+        Jack::input<HostagePanel>(module, column1, y, Controls::TriggerInput));
+    addOutput(
+        Jack::output<HostagePanel>(module, column3, y, Controls::EocOutput));
 
     y += dy;
-    addInput(Jack::input(svg_dir, module, column1, y, Controls::EnvelopeInput));
-    addOutput(
-        Jack::output(svg_dir, module, column3, y, Controls::EnvelopeOutput));
+    addInput(
+        Jack::input<HostagePanel>(module, column1, y, Controls::EnvelopeInput));
+    addOutput(Jack::output<HostagePanel>(module, column3, y,
+                                         Controls::EnvelopeOutput));
   }
 };
 } // namespace stage

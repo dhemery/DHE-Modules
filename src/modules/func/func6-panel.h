@@ -13,8 +13,9 @@ class Func6Panel : public rack::app::ModuleWidget {
   using Controls = FuncControls<channel_count>;
 
 public:
+  static auto constexpr svg_dir = "func";
+
   explicit Func6Panel(rack::engine::Module *module) {
-    auto constexpr svg_dir = "func";
     auto constexpr hp = 12;
 
     setModule(module);
@@ -38,12 +39,12 @@ public:
       auto const y = top + row * row_spacing;
       auto const port_y = y + port_offset;
 
-      addInput(Jack::input(svg_dir, module, column1, port_y,
-                           Controls::FuncInput + row));
+      addInput(Jack::input<Func6Panel>(module, column1, port_y,
+                                       Controls::FuncInput + row));
       addParam(
           Knob::large(svg_dir, module, column3, y, Controls::AmountKnob + row));
-      addOutput(Jack::output(svg_dir, module, column5, port_y,
-                             Controls::FuncOutput + row));
+      addOutput(Jack::output<Func6Panel>(module, column5, port_y,
+                                         Controls::FuncOutput + row));
 
       auto *offset_range_pick_list =
           Toggle::stepper(svg_dir, "offset-range", offset_ranges.size(), module,

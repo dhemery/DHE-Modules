@@ -15,8 +15,9 @@ class Panel : public rack::app::ModuleWidget {
   using Output = OutputIds;
 
 public:
+  static auto constexpr svg_dir = "buttons";
+
   Panel(rack::engine::Module *module) {
-    auto constexpr svg_dir = "buttons";
     auto constexpr hp = 5;
 
     setModule(module);
@@ -35,7 +36,7 @@ public:
       addParam(Button::toggle(svg_dir, module, button_x, y, Param::Button + i));
       addParam(
           Button::momentary(svg_dir, module, negate_x, y, Param::Negate + i));
-      addOutput(Jack::output(svg_dir, module, port_x, y, Output::Out + i));
+      addOutput(Jack::output<Panel>(module, port_x, y, Output::Out + i));
     }
   }
 };

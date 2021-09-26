@@ -5,6 +5,7 @@
 
 #include <app/SvgSwitch.hpp>
 #include <componentlibrary.hpp>
+#include <helpers.hpp>
 #include <string>
 
 namespace dhe {
@@ -135,39 +136,27 @@ protected:
   }
 };
 
+template <typename PanelT> struct PortWidget : rack::app::SvgPort {
+  PortWidget() {
+    setSvg(load_svg(PanelT::svg_dir, "port"));
+    shadow->opacity = 0.F;
+  }
+};
+
 class Jack : public rack::app::SvgPort {
 public:
-  static inline auto input(std::string const &module_svg_dir,
-                           rack::engine::Module *module, float xmm, float ymm,
-                           int index) -> Jack * {
-    return new Jack{rack::engine::Port::Type::INPUT,
-                    module_svg_dir,
-                    module,
-                    xmm,
-                    ymm,
-                    index};
+  template <typename PanelT>
+  static inline auto input(rack::engine::Module *module, float xmm, float ymm,
+                           int index) -> dhe::PortWidget<PanelT> * {
+    return rack::createInputCentered<dhe::PortWidget<PanelT>>(mm2px(xmm, ymm),
+                                                              module, index);
   }
 
-  static inline auto output(std::string const &module_svg_dir,
-                            rack::engine::Module *module, float xmm, float ymm,
-                            int index) -> Jack * {
-    return new Jack{rack::engine::Port::Type::OUTPUT,
-                    module_svg_dir,
-                    module,
-                    xmm,
-                    ymm,
-                    index};
-  }
-
-private:
-  Jack(rack::engine::Port::Type type, std::string const &module_svg_dir,
-       rack::engine::Module *module, float xmm, float ymm, int index) {
-    setSvg(load_svg(module_svg_dir, "port"));
-    shadow->opacity = 0.F;
-    position_centered(this, xmm, ymm);
-    this->module = module;
-    this->type = type;
-    portId = index;
+  template <typename PanelT>
+  static inline auto output(rack::engine::Module *module, float xmm, float ymm,
+                            int index) -> dhe::PortWidget<PanelT> * {
+    return rack::createOutputCentered<dhe::PortWidget<PanelT>>(mm2px(xmm, ymm),
+                                                               module, index);
   }
 };
 } // namespace dhe

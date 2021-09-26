@@ -13,8 +13,9 @@ class GatorPanel : public rack::app::ModuleWidget {
   using Controls = GatorControls;
 
 public:
+  static auto constexpr svg_dir = "gator";
+
   explicit GatorPanel(rack::engine::Module *module) {
-    auto constexpr svg_dir = "gator";
     auto constexpr hp = 9;
 
     setModule(module);
@@ -31,28 +32,31 @@ public:
 
     auto y = top;
     for (auto i = 0; i < Controls::InputCount / 2; i++) {
-      addInput(Jack::input(svg_dir, module, left, y, Controls::Inputs + i));
+      addInput(Jack::input<GatorPanel>(module, left, y, Controls::Inputs + i));
       addParam(
           Button::toggle(svg_dir, module, lc, y, Controls::NegateButtons + i));
       addParam(Button::toggle(svg_dir, module, rc, y,
                               Controls::NegateButtons + i +
                                   Controls::InputCount / 2));
-      addInput(Jack::input(svg_dir, module, right, y,
-                           Controls::Inputs + i + Controls::InputCount / 2));
+      addInput(Jack::input<GatorPanel>(
+          module, right, y, Controls::Inputs + i + Controls::InputCount / 2));
       y += dy;
     }
 
     auto row = top + 8.75 * dy;
-    addOutput(Jack::output(svg_dir, module, left, row, Controls::AndOutput));
-    addOutput(Jack::output(svg_dir, module, lc, row, Controls::NandOutput));
-    addOutput(Jack::output(svg_dir, module, rc, row, Controls::OrOutput));
-    addOutput(Jack::output(svg_dir, module, right, row, Controls::NorOutput));
+    addOutput(Jack::output<GatorPanel>(module, left, row, Controls::AndOutput));
+    addOutput(Jack::output<GatorPanel>(module, lc, row, Controls::NandOutput));
+    addOutput(Jack::output<GatorPanel>(module, rc, row, Controls::OrOutput));
+    addOutput(
+        Jack::output<GatorPanel>(module, right, row, Controls::NorOutput));
 
     row += hp2mm(2.75);
-    addOutput(Jack::output(svg_dir, module, left, row, Controls::EvenOutput));
-    addOutput(Jack::output(svg_dir, module, lc, row, Controls::OddOutput));
-    addOutput(Jack::output(svg_dir, module, rc, row, Controls::XorOutput));
-    addOutput(Jack::output(svg_dir, module, right, row, Controls::XnorOutput));
+    addOutput(
+        Jack::output<GatorPanel>(module, left, row, Controls::EvenOutput));
+    addOutput(Jack::output<GatorPanel>(module, lc, row, Controls::OddOutput));
+    addOutput(Jack::output<GatorPanel>(module, rc, row, Controls::XorOutput));
+    addOutput(
+        Jack::output<GatorPanel>(module, right, row, Controls::XnorOutput));
   }
 };
 } // namespace gator

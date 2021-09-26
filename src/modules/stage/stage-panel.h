@@ -11,8 +11,9 @@ class StagePanel : public rack::app::ModuleWidget {
   using Controls = StageControls;
 
 public:
+  static auto constexpr svg_dir = "stage";
+
   explicit StagePanel(rack::engine::Module *module) {
-    auto constexpr svg_dir = "stage";
     auto constexpr hp = 5;
 
     setModule(module);
@@ -39,18 +40,21 @@ public:
     y = 82.F;
     dy = 15.F;
 
-    addInput(Jack::input(svg_dir, module, column1, y, Controls::DeferInput));
+    addInput(Jack::input<StagePanel>(module, column1, y, Controls::DeferInput));
     addOutput(
-        Jack::output(svg_dir, module, column3, y, Controls::ActiveOutput));
+        Jack::output<StagePanel>(module, column3, y, Controls::ActiveOutput));
 
     y += dy;
-    addInput(Jack::input(svg_dir, module, column1, y, Controls::TriggerInput));
-    addOutput(Jack::output(svg_dir, module, column3, y, Controls::EocOutput));
+    addInput(
+        Jack::input<StagePanel>(module, column1, y, Controls::TriggerInput));
+    addOutput(
+        Jack::output<StagePanel>(module, column3, y, Controls::EocOutput));
 
     y += dy;
-    addInput(Jack::input(svg_dir, module, column1, y, Controls::EnvelopeInput));
+    addInput(
+        Jack::input<StagePanel>(module, column1, y, Controls::EnvelopeInput));
     addOutput(
-        Jack::output(svg_dir, module, column3, y, Controls::EnvelopeOutput));
+        Jack::output<StagePanel>(module, column3, y, Controls::EnvelopeOutput));
   }
 };
 } // namespace stage
