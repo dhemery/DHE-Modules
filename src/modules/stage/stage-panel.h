@@ -9,6 +9,7 @@ namespace stage {
 
 class StagePanel : public rack::app::ModuleWidget {
   using Controls = StageControls;
+  using Jack = Jack<StagePanel>;
 
 public:
   static auto constexpr svg_dir = "stage";
@@ -40,21 +41,16 @@ public:
     y = 82.F;
     dy = 15.F;
 
-    addInput(Jack::input<StagePanel>(module, column1, y, Controls::DeferInput));
-    addOutput(
-        Jack::output<StagePanel>(module, column3, y, Controls::ActiveOutput));
+    addInput(Jack::input(module, column1, y, Controls::DeferInput));
+    addOutput(Jack::output(module, column3, y, Controls::ActiveOutput));
 
     y += dy;
-    addInput(
-        Jack::input<StagePanel>(module, column1, y, Controls::TriggerInput));
-    addOutput(
-        Jack::output<StagePanel>(module, column3, y, Controls::EocOutput));
+    addInput(Jack::input(module, column1, y, Controls::TriggerInput));
+    addOutput(Jack::output(module, column3, y, Controls::EocOutput));
 
     y += dy;
-    addInput(
-        Jack::input<StagePanel>(module, column1, y, Controls::EnvelopeInput));
-    addOutput(
-        Jack::output<StagePanel>(module, column3, y, Controls::EnvelopeOutput));
+    addInput(Jack::input(module, column1, y, Controls::EnvelopeInput));
+    addOutput(Jack::output(module, column3, y, Controls::EnvelopeOutput));
   }
 };
 } // namespace stage

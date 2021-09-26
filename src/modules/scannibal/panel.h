@@ -78,6 +78,7 @@ template <int N> class Panel : public rack::app::ModuleWidget {
   using Input = InputIds<N>;
   using Light = LightIds<N>;
   using Output = OutputIds;
+  using Jack = dhe::Jack<Panel<N>>;
 
 public:
   static auto constexpr svg_dir = "scannibal";
@@ -126,10 +127,10 @@ private:
     addParam(new LengthKnob(on_selection_length_change, svg_dir, module, x,
                             length_y, Param::Length));
 
-    addInput(Jack::input<Panel<N>>(module, x, a_y, Input::InA));
-    addInput(Jack::input<Panel<N>>(module, x, b_y, Input::InB));
-    addInput(Jack::input<Panel<N>>(module, x, c_y, Input::InC));
-    addInput(Jack::input<Panel<N>>(module, x, phase_y, Input::Phase));
+    addInput(Jack::input(module, x, a_y, Input::InA));
+    addInput(Jack::input(module, x, b_y, Input::InB));
+    addInput(Jack::input(module, x, c_y, Input::InC));
+    addInput(Jack::input(module, x, phase_y, Input::Phase));
   }
 
   void add_step_block(float left) {
@@ -206,8 +207,8 @@ private:
                                Param::Phase0AnchorSource + step));
       addParam(Knob::small(svg_dir, module, step_x, phase_0_anchor_level_y,
                            Param::Phase0AnchorLevel + step));
-      addInput(Jack::input<Panel<N>>(module, step_x, phase_0_anchor_level_cv_y,
-                                     Input::Phase0AnchorLevelCV + step));
+      addInput(Jack::input(module, step_x, phase_0_anchor_level_cv_y,
+                           Input::Phase0AnchorLevelCV + step));
 
       addParam(Toggle::stepper(svg_dir, "anchor-mode", 2, module, step_x,
                                phase_1_anchor_mode_y,
@@ -217,20 +218,20 @@ private:
                                Param::Phase1AnchorSource + step));
       addParam(Knob::small(svg_dir, module, step_x, phase_1_anchor_level_y,
                            Param::Phase1AnchorLevel + step));
-      addInput(Jack::input<Panel<N>>(module, step_x, phase_1_anchor_level_cv_y,
-                                     Input::Phase1AnchorLevelCV + step));
+      addInput(Jack::input(module, step_x, phase_1_anchor_level_cv_y,
+                           Input::Phase1AnchorLevelCV + step));
 
       addParam(Knob::small(svg_dir, module, step_x, duration_y,
                            Param::Duration + step));
-      addInput(Jack::input<Panel<N>>(module, step_x, duration_cv_y,
-                                     Input::DurationCV + step));
+      addInput(
+          Jack::input(module, step_x, duration_cv_y, Input::DurationCV + step));
 
       addParam(Toggle::stepper(svg_dir, "shape", 2, module, step_x, shape_y,
                                Param::Shape + step));
       addParam(Knob::small(svg_dir, module, step_x, curvature_y,
                            Param::Curvature + step));
-      addInput(Jack::input<Panel<N>>(module, step_x, curvature_cv_y,
-                                     Input::CurvatureCV + step));
+      addInput(Jack::input(module, step_x, curvature_cv_y,
+                           Input::CurvatureCV + step));
     }
   }
 
@@ -244,11 +245,9 @@ private:
 
     addParam(
         Toggle::thumb(2, svg_dir, module, x, polarity_y, Param::LevelRange));
-    addOutput(
-        Jack::output<Panel<N>>(module, x, step_number_y, Output::StepNumber));
-    addOutput(
-        Jack::output<Panel<N>>(module, x, step_phase_y, Output::StepPhase));
-    addOutput(Jack::output<Panel<N>>(module, x, out_y, Output::Out));
+    addOutput(Jack::output(module, x, step_number_y, Output::StepNumber));
+    addOutput(Jack::output(module, x, step_phase_y, Output::StepPhase));
+    addOutput(Jack::output(module, x, out_y, Output::Out));
   }
 
   void set_selection_length(int length) {

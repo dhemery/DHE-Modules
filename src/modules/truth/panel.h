@@ -80,8 +80,7 @@ public:
     for (int i = 0; i < N; i++) {
       auto const y =
           layout_.input_top_ + static_cast<float>(i) * layout_.port_dy_;
-      addInput(
-          Jack::input<Panel<N>>(module, layout_.input_x_, y, Input::Input + i));
+      addInput(Jack::input(module, layout_.input_x_, y, Input::Input + i));
       addParam(Button::momentary(svg_dir, module,
                                  layout_.input_x_ + button_port_distance, y,
                                  Param::InputOverride + i));
@@ -103,14 +102,14 @@ public:
     addParam(Button::output(svg_dir, module,
                             layout_.output_x_ - button_port_distance,
                             layout_.output_top_, Param::QOverride));
-    addOutput(Jack::output<Panel<N>>(module, layout_.output_x_,
-                                     layout_.output_top_, Output::Q));
+    addOutput(Jack::output(module, layout_.output_x_, layout_.output_top_,
+                           Output::Q));
     addParam(Button::output(
         svg_dir, module, layout_.output_x_ - button_port_distance,
         layout_.output_top_ + layout_.port_dy_, Param::QNotOverride));
-    addOutput(Jack::output<Panel<N>>(module, layout_.output_x_,
-                                     layout_.output_top_ + layout_.port_dy_,
-                                     Output::QNot));
+    addOutput(Jack::output(module, layout_.output_x_,
+                           layout_.output_top_ + layout_.port_dy_,
+                           Output::QNot));
   }
 
 private:
@@ -118,6 +117,7 @@ private:
   using Param = ParamIds<N>;
   using Input = InputIds<N>;
   using Output = OutputIds;
+  using Jack = Jack<Panel<N>>;
 };
 } // namespace truth
 } // namespace dhe

@@ -11,6 +11,7 @@ namespace dhe {
 namespace buttons {
 
 class Panel : public rack::app::ModuleWidget {
+  using Jack = dhe::Jack<Panel>;
   using Param = ParamIds;
   using Output = OutputIds;
 
@@ -36,7 +37,7 @@ public:
       addParam(Button::toggle(svg_dir, module, button_x, y, Param::Button + i));
       addParam(
           Button::momentary(svg_dir, module, negate_x, y, Param::Negate + i));
-      addOutput(Jack::output<Panel>(module, port_x, y, Output::Out + i));
+      addOutput(Jack::output(module, port_x, y, Output::Out + i));
     }
   }
 };

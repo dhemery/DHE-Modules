@@ -12,6 +12,7 @@ namespace blossom {
 
 class BlossomPanel : public rack::app::ModuleWidget {
   using Controls = BlossomControls;
+  using Jack = dhe::Jack<BlossomPanel>;
 
 public:
   static auto constexpr svg_dir = "blossom";
@@ -33,28 +34,24 @@ public:
     auto y = 25.F;
     auto dy = 18.5F;
 
-    addInput(
-        Jack::input<BlossomPanel>(module, column1, y, Controls::SpeedCvInput));
+    addInput(Jack::input(module, column1, y, Controls::SpeedCvInput));
     addParam(Knob::tiny(svg_dir, module, column2, y, Controls::SpeedAvKNob));
     addParam(Knob::large(svg_dir, module, column3, y, Controls::SpeedKnob));
 
     y += dy;
-    addInput(
-        Jack::input<BlossomPanel>(module, column1, y, Controls::RatioCvInput));
+    addInput(Jack::input(module, column1, y, Controls::RatioCvInput));
     addParam(Knob::tiny(svg_dir, module, column2, y, Controls::RatioAvKnob));
     addParam(Knob::large(svg_dir, module, column3, y, Controls::RatioKnob));
     addParam(Toggle::thumb(2, svg_dir, module, column4, y,
                            Controls::FreeRatioSwitch));
 
     y += dy;
-    addInput(
-        Jack::input<BlossomPanel>(module, column1, y, Controls::DepthCvInput));
+    addInput(Jack::input(module, column1, y, Controls::DepthCvInput));
     addParam(Knob::tiny(svg_dir, module, column2, y, Controls::DepthAvKnob));
     addParam(Knob::large(svg_dir, module, column3, y, Controls::DepthKnob));
 
     y += dy;
-    addInput(
-        Jack::input<BlossomPanel>(module, column1, y, Controls::PhaseCvInput));
+    addInput(Jack::input(module, column1, y, Controls::PhaseCvInput));
     addParam(
         Knob::tiny(svg_dir, module, column2, y, Controls::PhaseOffsetAvKnob));
     addParam(
@@ -64,22 +61,20 @@ public:
     dy = 15.F;
     auto constexpr output_port_offset = 1.25F;
 
-    addInput(
-        Jack::input<BlossomPanel>(module, column1, y, Controls::XGainCvInput));
+    addInput(Jack::input(module, column1, y, Controls::XGainCvInput));
     addParam(Knob::small(svg_dir, module, column2, y, Controls::XGainKnob));
     addParam(
         Toggle::thumb(2, svg_dir, module, column3, y, Controls::XRangeSwitch));
-    addOutput(Jack::output<BlossomPanel>(
-        module, column4, y + output_port_offset, Controls::XOutput));
+    addOutput(Jack::output(module, column4, y + output_port_offset,
+                           Controls::XOutput));
 
     y += dy;
-    addInput(
-        Jack::input<BlossomPanel>(module, column1, y, Controls::YGainCvInput));
+    addInput(Jack::input(module, column1, y, Controls::YGainCvInput));
     addParam(Knob::small(svg_dir, module, column2, y, Controls::YGainKnob));
     addParam(
         Toggle::thumb(2, svg_dir, module, column3, y, Controls::YRangeSwitch));
-    addOutput(Jack::output<BlossomPanel>(
-        module, column4, y + output_port_offset, Controls::YOutput));
+    addOutput(Jack::output(module, column4, y + output_port_offset,
+                           Controls::YOutput));
   }
 };
 } // namespace blossom

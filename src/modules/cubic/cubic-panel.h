@@ -12,6 +12,7 @@ namespace cubic {
 
 class CubicPanel : public rack::app::ModuleWidget {
   using Controls = CubicControls;
+  using Jack = dhe::Jack<CubicPanel>;
 
 public:
   static auto constexpr svg_dir = "cubic";
@@ -31,26 +32,22 @@ public:
     auto y = 20.F;
     auto constexpr dy = 15.F;
 
-    addInput(Jack::input<CubicPanel>(module, column1, y,
-                                     Controls::ACoefficientCvInput));
+    addInput(Jack::input(module, column1, y, Controls::ACoefficientCvInput));
     addParam(
         Knob::small(svg_dir, module, column2, y, Controls::ACoefficientKnob));
 
     y += dy;
-    addInput(Jack::input<CubicPanel>(module, column1, y,
-                                     Controls::BCoefficientCvInput));
+    addInput(Jack::input(module, column1, y, Controls::BCoefficientCvInput));
     addParam(
         Knob::small(svg_dir, module, column2, y, Controls::BCoefficientKnob));
 
     y += dy;
-    addInput(Jack::input<CubicPanel>(module, column1, y,
-                                     Controls::CCoefficientCvInput));
+    addInput(Jack::input(module, column1, y, Controls::CCoefficientCvInput));
     addParam(
         Knob::small(svg_dir, module, column2, y, Controls::CCoefficientKnob));
 
     y += dy;
-    addInput(Jack::input<CubicPanel>(module, column1, y,
-                                     Controls::DCoefficientCvInput));
+    addInput(Jack::input(module, column1, y, Controls::DCoefficientCvInput));
     addParam(
         Knob::small(svg_dir, module, column2, y, Controls::DCoefficientKnob));
 
@@ -60,15 +57,12 @@ public:
         Knob::small(svg_dir, module, column2, y, Controls::OutputGainKnob));
 
     y += dy;
-    addInput(Jack::input<CubicPanel>(module, column1, y,
-                                     Controls::InputGainCvInput));
-    addInput(Jack::input<CubicPanel>(module, column2, y,
-                                     Controls::OutputGainCvInput));
+    addInput(Jack::input(module, column1, y, Controls::InputGainCvInput));
+    addInput(Jack::input(module, column2, y, Controls::OutputGainCvInput));
 
     y += dy;
-    addInput(Jack::input<CubicPanel>(module, column1, y, Controls::CubicInput));
-    addOutput(
-        Jack::output<CubicPanel>(module, column2, y, Controls::CubicOutput));
+    addInput(Jack::input(module, column1, y, Controls::CubicInput));
+    addOutput(Jack::output(module, column2, y, Controls::CubicOutput));
   }
 };
 } // namespace cubic

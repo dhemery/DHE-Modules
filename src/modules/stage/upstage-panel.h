@@ -8,6 +8,7 @@ namespace dhe {
 namespace stage {
 class UpstagePanel : public rack::app::ModuleWidget {
   using Controls = UpstageControls;
+  using Jack = Jack<UpstagePanel>;
 
 public:
   static auto constexpr svg_dir = "upstage";
@@ -31,8 +32,7 @@ public:
     addParam(Knob::large(svg_dir, module, column2, y, Controls::LevelKnob));
 
     y += dy;
-    addInput(
-        Jack::input<UpstagePanel>(module, column1, y, Controls::LevelCvInput));
+    addInput(Jack::input(module, column1, y, Controls::LevelCvInput));
     addParam(Toggle::thumb(2, svg_dir, module, column3, y,
                            Controls::LevelRangeSwitch));
 
@@ -45,18 +45,14 @@ public:
     y = 82.F;
     dy = 15.F;
 
-    addInput(
-        Jack::input<UpstagePanel>(module, column1, y, Controls::WaitInput));
+    addInput(Jack::input(module, column1, y, Controls::WaitInput));
 
     y += dy;
-    addInput(
-        Jack::input<UpstagePanel>(module, column1, y, Controls::TriggerInput));
-    addOutput(Jack::output<UpstagePanel>(module, column3, y,
-                                         Controls::TriggerOutput));
+    addInput(Jack::input(module, column1, y, Controls::TriggerInput));
+    addOutput(Jack::output(module, column3, y, Controls::TriggerOutput));
 
     y += dy;
-    addOutput(Jack::output<UpstagePanel>(module, column3, y,
-                                         Controls::EnvelopeOutput));
+    addOutput(Jack::output(module, column3, y, Controls::EnvelopeOutput));
   }
 };
 } // namespace stage

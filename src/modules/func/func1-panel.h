@@ -11,6 +11,7 @@ namespace func {
 class Func1Panel : public rack::app::ModuleWidget {
   static auto constexpr channel_count = 1;
   using Controls = FuncControls<channel_count>;
+  using Jack = dhe::Jack<Func1Panel>;
 
 public:
   static auto constexpr svg_dir = "func";
@@ -38,9 +39,9 @@ public:
     auto constexpr row4 = top + row_spacing * 3;
     auto constexpr row6 = top + row_spacing * 5 + port_offset;
 
-    addInput(Jack::input<Func1Panel>(module, x, row1, Controls::FuncInput));
+    addInput(Jack::input(module, x, row1, Controls::FuncInput));
     addParam(Knob::large(svg_dir, module, x, row3, Controls::AmountKnob));
-    addOutput(Jack::output<Func1Panel>(module, x, row6, Controls::FuncOutput));
+    addOutput(Jack::output(module, x, row6, Controls::FuncOutput));
 
     auto *offset_range_pick_list =
         Toggle::stepper(svg_dir, "offset-range", offset_ranges.size(), module,

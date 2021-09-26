@@ -85,6 +85,7 @@ template <int N> class CurveSequencerPanel : public rack::app::ModuleWidget {
   using Controls =
       CurveSequencerControls<rack::engine::Input, rack::engine::Output,
                              rack::engine::Param, rack::engine::Light, N>;
+  using Jack = Jack<CurveSequencerPanel<N>>;
 
 public:
   static auto constexpr svg_dir = "curve-sequencer";
@@ -117,13 +118,11 @@ public:
 
     auto constexpr active_y = top + light_radius;
 
-    addInput(Jack::input<CurveSequencerPanel>(module, left, run_y,
-                                              Controls::RunInput));
+    addInput(Jack::input(module, left, run_y, Controls::RunInput));
     addParam(Button::toggle(svg_dir, module, left + button_port_distance, run_y,
                             Controls::RunButton));
 
-    addInput(Jack::input<CurveSequencerPanel>(module, left, loop_y,
-                                              Controls::LoopInput));
+    addInput(Jack::input(module, left, loop_y, Controls::LoopInput));
     addParam(Button::toggle(svg_dir, module, left + button_port_distance,
                             loop_y, Controls::LoopButton));
 
@@ -149,13 +148,11 @@ public:
                                selection_length_x, selection_y,
                                Controls::SelectionLengthKnob));
 
-    addInput(Jack::input<CurveSequencerPanel>(module, left, gate_y,
-                                              Controls::GateInput));
+    addInput(Jack::input(module, left, gate_y, Controls::GateInput));
     addParam(Button::momentary(svg_dir, module, left + button_port_distance,
                                gate_y, Controls::GateButton));
 
-    addInput(Jack::input<CurveSequencerPanel>(module, left, reset_y,
-                                              Controls::ResetInput));
+    addInput(Jack::input(module, left, reset_y, Controls::ResetInput));
     addParam(Button::momentary(svg_dir, module, left + button_port_distance,
                                reset_y, Controls::ResetButton));
 
@@ -202,22 +199,21 @@ public:
 
       addParam(Button::toggle(svg_dir, module, x, enabled_button_y,
                               Controls::EnabledButtons + step));
-      addInput(Jack::input<CurveSequencerPanel<N>>(
-          module, x, enabled_port_y, Controls::EnabledInputs + step));
+      addInput(Jack::input(module, x, enabled_port_y,
+                           Controls::EnabledInputs + step));
     }
 
     auto constexpr out_y = bottom - port_radius - 1.F;
     auto constexpr eos_y = top + hp2mm(2.75);
 
-    addInput(Jack::input<CurveSequencerPanel<N>>(
-        module, right, eos_y, Controls::CurveSequencerInput));
+    addInput(Jack::input(module, right, eos_y, Controls::CurveSequencerInput));
 
     addParam(Toggle::thumb(2, svg_dir, module, right, level_y,
                            Controls::LevelRangeSwitch));
     addParam(Toggle::thumb(3, svg_dir, module, right, duration_y,
                            Controls::DurationRangeSwitch));
-    addOutput(Jack::output<CurveSequencerPanel<N>>(
-        module, right, out_y, Controls::CurveSequencerOutput));
+    addOutput(
+        Jack::output(module, right, out_y, Controls::CurveSequencerOutput));
   }
 }; // namespace dhe
 } // namespace curve_sequencer

@@ -11,6 +11,7 @@ namespace ranger {
 
 class RangerPanel : public rack::app::ModuleWidget {
   using Controls = RangerControls;
+  using Jack = Jack<RangerPanel>;
 
 public:
   static auto constexpr svg_dir = "ranger";
@@ -30,11 +31,10 @@ public:
 
     y += dy * 0.75F;
     addParam(Knob::medium(svg_dir, module, left, y, Controls::LevelKnob));
-    addOutput(
-        Jack::output<RangerPanel>(module, right, y, Controls::RangerOutput));
+    addOutput(Jack::output(module, right, y, Controls::RangerOutput));
 
     y += dy;
-    addInput(Jack::input<RangerPanel>(module, left, y, Controls::LevelCvInput));
+    addInput(Jack::input(module, left, y, Controls::LevelCvInput));
     addParam(Knob::tiny(svg_dir, module, right, y, Controls::LevelAvKnob));
 
     y += dy / 2.F;
@@ -47,10 +47,8 @@ public:
     addParam(Knob::tiny(svg_dir, module, right, y, Controls::CwLimitAvKnob));
 
     y += dy;
-    addInput(
-        Jack::input<RangerPanel>(module, left, y, Controls::CcwLimitCvInput));
-    addInput(
-        Jack::input<RangerPanel>(module, right, y, Controls::CwLimitCvInput));
+    addInput(Jack::input(module, left, y, Controls::CcwLimitCvInput));
+    addInput(Jack::input(module, right, y, Controls::CwLimitCvInput));
 
     y += dy;
     addParam(Toggle::thumb(2, svg_dir, module, left, y,
