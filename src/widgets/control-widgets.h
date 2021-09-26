@@ -3,8 +3,9 @@
 #include "dimensions.h"
 #include "panel-assets.h"
 
+#include <app/SvgKnob.hpp>
+#include <app/SvgPort.hpp>
 #include <app/SvgSwitch.hpp>
-#include <componentlibrary.hpp>
 #include <helpers.hpp>
 #include <string>
 
@@ -68,8 +69,7 @@ private:
   }
 };
 
-template <typename PanelT>
-class Knob : public rack::componentlibrary::RoundKnob {
+template <typename PanelT> class Knob : public rack::app::SvgKnob {
 public:
   static inline auto large(rack::engine::Module *module, float xmm, float ymm,
                            int index) -> Knob * {
