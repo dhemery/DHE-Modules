@@ -9,7 +9,8 @@ namespace stage {
 
 class BoosterStagePanel : public rack::app::ModuleWidget {
   using Controls = BoosterStageControls;
-  using Jack = dhe::Jack<BoosterStagePanel>;
+  using Jack = Jack<BoosterStagePanel>;
+  using Knob = Knob<BoosterStagePanel>;
 
 public:
   static auto constexpr svg_dir = "booster-stage";
@@ -34,20 +35,20 @@ public:
     auto y = 25.F;
 
     addInput(Jack::input(module, column1, y, Controls::LevelCvInput));
-    addParam(Knob::large(svg_dir, module, column3, y, Controls::LevelKnob));
+    addParam(Knob::large(module, column3, y, Controls::LevelKnob));
 
     addParam(Toggle::thumb(2, svg_dir, module, column5, y,
                            Controls::LevelRangeSwitch));
 
     y += dy;
     addInput(Jack::input(module, column1, y, Controls::CurveCvInput));
-    addParam(Knob::large(svg_dir, module, column3, y, Controls::CurveKnob));
+    addParam(Knob::large(module, column3, y, Controls::CurveKnob));
     addParam(
         Toggle::thumb(2, svg_dir, module, column5, y, Controls::ShapeSwitch));
 
     y += dy;
     addInput(Jack::input(module, column1, y, Controls::DurationCvInput));
-    addParam(Knob::large(svg_dir, module, column3, y, Controls::DurationKnob));
+    addParam(Knob::large(module, column3, y, Controls::DurationKnob));
 
     addParam(Toggle::thumb(3, svg_dir, module, column5, y,
                            Controls::DurationRangeSwitch));

@@ -12,6 +12,7 @@ namespace swave {
 class SwavePanel : public rack::app::ModuleWidget {
   using Controls = SwaveControls;
   using Jack = Jack<SwavePanel>;
+  using Knob = Knob<SwavePanel>;
 
 public:
   static auto constexpr svg_dir = "swave";
@@ -33,10 +34,10 @@ public:
     addParam(Toggle::thumb(2, svg_dir, module, x, y, Controls::ShapeSwitch));
 
     y += dy;
-    addParam(Knob::large(svg_dir, module, x, y, Controls::CurveKnob));
+    addParam(Knob::large(module, x, y, Controls::CurveKnob));
 
     y += dy;
-    addParam(Knob::tiny(svg_dir, module, x, y, Controls::CurveAvKnob));
+    addParam(Knob::tiny(module, x, y, Controls::CurveAvKnob));
 
     y += dy;
     addInput(Jack::input(module, x, y, Controls::CurveCvInput));

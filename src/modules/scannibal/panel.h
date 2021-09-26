@@ -55,17 +55,23 @@ static inline auto constexpr content_width(int steps) -> float {
 using ProgressLight =
     rack::componentlibrary::SmallLight<rack::componentlibrary::GreenRedLight>;
 
-class LengthKnob : public Knob {
+template <typename PanelT> class LengthKnob : public Knob<PanelT>::Small {
 public:
-  LengthKnob(std::function<void(int)> action, std::string const &module_svg_dir,
-             rack::engine::Module *module, float x, float y, int index)
-      : Knob{module_svg_dir, "knob-small", module, x, y, index},
-        knob_changed_to_{std::move(action)} {
-    snap = true;
+  static inline auto create(rack::engine::Module *module, float xmm, float ymm,
+                            int index, std::function<void(int)> const &action)
+      -> LengthKnob * {
+    auto knob =
+        rack::createParamCentered<LengthKnob>(mm2px(xmm, ymm), module, index);
+    knob->knob_changed_to_ = action;
+    return knob;
+  }
+
+  LengthKnob() : Knob<PanelT>::Small{} {
+    // TODO: Set snap = true
   }
 
   void onChange(const rack::event::Change &e) override {
-    Knob::onChange(e);
+    Knob<PanelT>::onChange(e);
     knob_changed_to_(static_cast<int>(this->getParamQuantity()->getValue()));
   }
 
@@ -78,7 +84,9 @@ template <int N> class Panel : public rack::app::ModuleWidget {
   using Input = InputIds<N>;
   using Light = LightIds<N>;
   using Output = OutputIds;
-  using Jack = dhe::Jack<Panel<N>>;
+  using Jack = Jack<Panel<N>>;
+  using Knob = Knob<Panel<N>>;
+  using LengthKnob = LengthKnob<Panel<N>>;
 
 public:
   static auto constexpr svg_dir = "scannibal";
@@ -124,8 +132,8 @@ private:
     auto const on_selection_length_change = [this](int step) {
       set_selection_length(step);
     };
-    addParam(new LengthKnob(on_selection_length_change, svg_dir, module, x,
-                            length_y, Param::Length));
+    addParam(LengthKnob::create(module, x, length_y, Param::Length,
+                                on_selection_length_change));
 
     addInput(Jack::input(module, x, a_y, Input::InA));
     addInput(Jack::input(module, x, b_y, Input::InB));
@@ -205,7 +213,7 @@ private:
       addParam(Toggle::stepper(svg_dir, "anchor-source", anchor_source_count,
                                module, step_x, phase_0_anchor_source_y,
                                Param::Phase0AnchorSource + step));
-      addParam(Knob::small(svg_dir, module, step_x, phase_0_anchor_level_y,
+      addParam(Knob::small(module, step_x, phase_0_anchor_level_y,
                            Param::Phase0AnchorLevel + step));
       addInput(Jack::input(module, step_x, phase_0_anchor_level_cv_y,
                            Input::Phase0AnchorLevelCV + step));
@@ -216,20 +224,19 @@ private:
       addParam(Toggle::stepper(svg_dir, "anchor-source", anchor_source_count,
                                module, step_x, phase_1_anchor_source_y,
                                Param::Phase1AnchorSource + step));
-      addParam(Knob::small(svg_dir, module, step_x, phase_1_anchor_level_y,
+      addParam(Knob::small(module, step_x, phase_1_anchor_level_y,
                            Param::Phase1AnchorLevel + step));
       addInput(Jack::input(module, step_x, phase_1_anchor_level_cv_y,
                            Input::Phase1AnchorLevelCV + step));
 
-      addParam(Knob::small(svg_dir, module, step_x, duration_y,
-                           Param::Duration + step));
+      addParam(Knob::small(module, step_x, duration_y, Param::Duration + step));
       addInput(
           Jack::input(module, step_x, duration_cv_y, Input::DurationCV + step));
 
       addParam(Toggle::stepper(svg_dir, "shape", 2, module, step_x, shape_y,
                                Param::Shape + step));
-      addParam(Knob::small(svg_dir, module, step_x, curvature_y,
-                           Param::Curvature + step));
+      addParam(
+          Knob::small(module, step_x, curvature_y, Param::Curvature + step));
       addInput(Jack::input(module, step_x, curvature_cv_y,
                            Input::CurvatureCV + step));
     }

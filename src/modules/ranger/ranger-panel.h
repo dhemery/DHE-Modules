@@ -12,6 +12,7 @@ namespace ranger {
 class RangerPanel : public rack::app::ModuleWidget {
   using Controls = RangerControls;
   using Jack = Jack<RangerPanel>;
+  using Knob = Knob<RangerPanel>;
 
 public:
   static auto constexpr svg_dir = "ranger";
@@ -30,21 +31,21 @@ public:
     auto y = 14.5F;
 
     y += dy * 0.75F;
-    addParam(Knob::medium(svg_dir, module, left, y, Controls::LevelKnob));
+    addParam(Knob::medium(module, left, y, Controls::LevelKnob));
     addOutput(Jack::output(module, right, y, Controls::RangerOutput));
 
     y += dy;
     addInput(Jack::input(module, left, y, Controls::LevelCvInput));
-    addParam(Knob::tiny(svg_dir, module, right, y, Controls::LevelAvKnob));
+    addParam(Knob::tiny(module, right, y, Controls::LevelAvKnob));
 
     y += dy / 2.F;
     y += dy * 0.75F;
-    addParam(Knob::medium(svg_dir, module, left, y, Controls::CcwLimitKnob));
-    addParam(Knob::medium(svg_dir, module, right, y, Controls::CwLimitKnob));
+    addParam(Knob::medium(module, left, y, Controls::CcwLimitKnob));
+    addParam(Knob::medium(module, right, y, Controls::CwLimitKnob));
 
     y += dy;
-    addParam(Knob::tiny(svg_dir, module, left, y, Controls::CcwLimitAvKnob));
-    addParam(Knob::tiny(svg_dir, module, right, y, Controls::CwLimitAvKnob));
+    addParam(Knob::tiny(module, left, y, Controls::CcwLimitAvKnob));
+    addParam(Knob::tiny(module, right, y, Controls::CwLimitAvKnob));
 
     y += dy;
     addInput(Jack::input(module, left, y, Controls::CcwLimitCvInput));

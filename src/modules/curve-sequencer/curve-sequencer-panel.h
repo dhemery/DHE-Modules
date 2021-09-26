@@ -19,22 +19,26 @@ auto constexpr step_dx = hp2mm(2.25F);
 using ProgressLight =
     rack::componentlibrary::SmallLight<rack::componentlibrary::GreenRedLight>;
 
-class SelectionKnob : public Knob {
+template <typename PanelT> class SelectionKnob : public Knob<PanelT>::Small {
 public:
-  SelectionKnob(std::function<void(int)> action,
-                std::string const &module_svg_dir, rack::engine::Module *module,
-                float x, float y, int index)
-      : Knob{module_svg_dir, "knob-small", module, x, y, index},
-        knob_changed_to_{std::move(action)} {
-    snap = true;
+  static inline auto create(rack::engine::Module *module, float xmm, float ymm,
+                            int index, std::function<void(int)> const &action)
+      -> SelectionKnob<PanelT> * {
+    auto knob = rack::createParamCentered<SelectionKnob<PanelT>>(
+        mm2px(xmm, ymm), module, index);
+    knob->knob_changed_to_ = action;
+    return knob;
+  }
+
+  SelectionKnob() : Knob<PanelT>::Small{} {
+    // TODO: Set snap = true
   }
 
   void onChange(const rack::event::Change &e) override {
-    Knob::onChange(e);
+    Knob<PanelT>::onChange(e);
     knob_changed_to_(static_cast<int>(this->getParamQuantity()->getValue()));
   }
 
-private:
   std::function<void(int)> knob_changed_to_;
 };
 
@@ -86,6 +90,8 @@ template <int N> class CurveSequencerPanel : public rack::app::ModuleWidget {
       CurveSequencerControls<rack::engine::Input, rack::engine::Output,
                              rack::engine::Param, rack::engine::Light, N>;
   using Jack = Jack<CurveSequencerPanel<N>>;
+  using Knob = Knob<CurveSequencerPanel<N>>;
+  using SelectionKnob = SelectionKnob<CurveSequencerPanel<N>>;
 
 public:
   static auto constexpr svg_dir = "curve-sequencer";
@@ -137,16 +143,17 @@ public:
       start_marker->set_selection_start(step);
       end_marker->set_selection_start(step);
     };
-    addParam(new SelectionKnob(on_selection_start_change, svg_dir, module, left,
-                               selection_y, Controls::SelectionStartKnob));
+    addParam(SelectionKnob::create(module, left, selection_y,
+                                   Controls::SelectionStartKnob,
+                                   on_selection_start_change));
 
     auto const on_selection_end_change = [end_marker](int length) {
       end_marker->set_selection_length(length);
     };
     auto constexpr selection_length_x = left + hp2mm(2.F);
-    addParam(new SelectionKnob(on_selection_end_change, svg_dir, module,
-                               selection_length_x, selection_y,
-                               Controls::SelectionLengthKnob));
+    addParam(SelectionKnob::create(module, selection_length_x, selection_y,
+                                   Controls::SelectionLengthKnob,
+                                   on_selection_end_change));
 
     addInput(Jack::input(module, left, gate_y, Controls::GateInput));
     addParam(Button::momentary(svg_dir, module, left + button_port_distance,
@@ -186,16 +193,14 @@ public:
           advance_mode_y, Controls::ConditionSwitches + step);
       addParam(advance_mode_button);
 
-      addParam(Knob::small(svg_dir, module, x, level_y,
-                           Controls::LevelKnobs + step));
+      addParam(Knob::small(module, x, level_y, Controls::LevelKnobs + step));
 
       addParam(Toggle::thumb(2, svg_dir, module, x, shape_y,
                              Controls::ShapeSwitches + step));
-      addParam(Knob::small(svg_dir, module, x, curve_y,
-                           Controls::CurveKnobs + step));
+      addParam(Knob::small(module, x, curve_y, Controls::CurveKnobs + step));
 
-      addParam(Knob::small(svg_dir, module, x, duration_y,
-                           Controls::DurationKnobs + step));
+      addParam(
+          Knob::small(module, x, duration_y, Controls::DurationKnobs + step));
 
       addParam(Button::toggle(svg_dir, module, x, enabled_button_y,
                               Controls::EnabledButtons + step));

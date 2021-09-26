@@ -10,6 +10,7 @@ namespace stage {
 class StagePanel : public rack::app::ModuleWidget {
   using Controls = StageControls;
   using Jack = Jack<StagePanel>;
+  using Knob = Knob<StagePanel>;
 
 public:
   static auto constexpr svg_dir = "stage";
@@ -30,13 +31,13 @@ public:
     auto y = 25.F;
     auto dy = 18.5F;
 
-    addParam(Knob::large(svg_dir, module, column2, y, Controls::LevelKnob));
+    addParam(Knob::large(module, column2, y, Controls::LevelKnob));
 
     y += dy;
-    addParam(Knob::large(svg_dir, module, column2, y, Controls::CurveKnob));
+    addParam(Knob::large(module, column2, y, Controls::CurveKnob));
 
     y += dy;
-    addParam(Knob::large(svg_dir, module, column2, y, Controls::DurationKnob));
+    addParam(Knob::large(module, column2, y, Controls::DurationKnob));
 
     y = 82.F;
     dy = 15.F;

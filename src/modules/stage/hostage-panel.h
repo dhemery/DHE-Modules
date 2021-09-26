@@ -8,7 +8,8 @@ namespace dhe {
 namespace stage {
 class HostagePanel : public rack::app::ModuleWidget {
   using Controls = HostageControls;
-  using Jack = dhe::Jack<HostagePanel>;
+  using Jack = Jack<HostagePanel>;
+  using Knob = Knob<HostagePanel>;
 
 public:
   static auto constexpr svg_dir = "hostage";
@@ -38,7 +39,7 @@ public:
                            Controls::DurationRangeSwitch));
 
     y += dy;
-    addParam(Knob::large(svg_dir, module, column2, y, Controls::DurationKnob));
+    addParam(Knob::large(module, column2, y, Controls::DurationKnob));
 
     y = 82.F;
     dy = 15.F;

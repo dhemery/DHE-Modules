@@ -11,7 +11,8 @@ namespace func {
 class Func6Panel : public rack::app::ModuleWidget {
   static auto constexpr channel_count = 6;
   using Controls = FuncControls<channel_count>;
-  using Jack = dhe::Jack<Func6Panel>;
+  using Jack = Jack<Func6Panel>;
+  using Knob = Knob<Func6Panel>;
 
 public:
   static auto constexpr svg_dir = "func";
@@ -41,8 +42,7 @@ public:
       auto const port_y = y + port_offset;
 
       addInput(Jack::input(module, column1, port_y, Controls::FuncInput + row));
-      addParam(
-          Knob::large(svg_dir, module, column3, y, Controls::AmountKnob + row));
+      addParam(Knob::large(module, column3, y, Controls::AmountKnob + row));
       addOutput(
           Jack::output(module, column5, port_y, Controls::FuncOutput + row));
 

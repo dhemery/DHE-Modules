@@ -9,6 +9,7 @@ namespace stage {
 class UpstagePanel : public rack::app::ModuleWidget {
   using Controls = UpstageControls;
   using Jack = Jack<UpstagePanel>;
+  using Knob = Knob<UpstagePanel>;
 
 public:
   static auto constexpr svg_dir = "upstage";
@@ -29,7 +30,7 @@ public:
     auto y = 25.F;
     auto dy = 18.5F;
 
-    addParam(Knob::large(svg_dir, module, column2, y, Controls::LevelKnob));
+    addParam(Knob::large(module, column2, y, Controls::LevelKnob));
 
     y += dy;
     addInput(Jack::input(module, column1, y, Controls::LevelCvInput));

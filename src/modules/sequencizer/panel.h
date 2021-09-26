@@ -47,18 +47,23 @@ static inline auto constexpr global_controls_y(int row) -> float {
 using ProgressLight =
     rack::componentlibrary::SmallLight<rack::componentlibrary::GreenRedLight>;
 
-class SelectionKnob : public Knob {
+template <typename PanelT> class SelectionKnob : public Knob<PanelT>::Small {
 public:
-  SelectionKnob(std::function<void(int)> action,
-                std::string const &module_svg_dir, rack::engine::Module *module,
-                float x, float y, int index)
-      : Knob{module_svg_dir, "knob-small", module, x, y, index},
-        knob_changed_to_{std::move(action)} {
-    snap = true;
+  static inline auto create(rack::engine::Module *module, float xmm, float ymm,
+                            int index, std::function<void(int)> const &action)
+      -> SelectionKnob<PanelT> * {
+    auto knob = rack::createParamCentered<SelectionKnob<PanelT>>(
+        mm2px(xmm, ymm), module, index);
+    knob->knob_changed_to_ = action;
+    return knob;
+  }
+
+  SelectionKnob() : Knob<PanelT>::Small{} {
+    // TODO: Set snap = true
   }
 
   void onChange(const rack::event::Change &e) override {
-    Knob::onChange(e);
+    Knob<PanelT>::onChange(e);
     knob_changed_to_(static_cast<int>(this->getParamQuantity()->getValue()));
   }
 
@@ -122,7 +127,9 @@ template <int N> class Panel : public rack::app::ModuleWidget {
   using Input = InputIds<N>;
   using Light = LightIds<N>;
   using Output = OutputIds;
-  using Jack = dhe::Jack<Panel<N>>;
+  using Jack = Jack<Panel<N>>;
+  using Knob = Knob<Panel<N>>;
+  using SelectionKnob = SelectionKnob<Panel<N>>;
 
 public:
   static auto constexpr svg_dir = "sequencizer";
@@ -187,16 +194,16 @@ public:
     };
 
     auto constexpr selection_y = global_controls_y(2);
-    addParam(new SelectionKnob(on_selection_start_change, svg_dir, module,
-                               sequence_controls_x - hp2mm(0.2F), selection_y,
-                               Param::SelectionStart));
+    addParam(SelectionKnob::create(module, sequence_controls_x - hp2mm(0.2F),
+                                   selection_y, Param::SelectionStart,
+                                   on_selection_start_change));
 
     auto constexpr selection_length_offset = 8.28F;
     auto constexpr selection_length_x =
         sequence_controls_x + selection_length_offset;
-    addParam(new SelectionKnob(on_selection_end_change, svg_dir, module,
-                               selection_length_x, selection_y,
-                               Param::SelectionLength));
+    addParam(SelectionKnob::create(module, selection_length_x, selection_y,
+                                   Param::SelectionLength,
+                                   on_selection_end_change));
 
     auto constexpr gate_y = global_controls_y(3);
     addInput(Jack::input(module, sequence_controls_x, gate_y, Input::Gate));
@@ -225,15 +232,15 @@ public:
 
     addInput(Jack::input(module, global_controls_left_x, level_y,
                          Input::LevelAttenuationCV));
-    addParam(Knob::small(svg_dir, module, global_controls_center_x, level_y,
+    addParam(Knob::small(module, global_controls_center_x, level_y,
                          Param::LevelMultiplier));
     addParam(Toggle::thumb(2, svg_dir, module, global_controls_right_x, level_y,
                            Param::LevelRange));
 
     addInput(Jack::input(module, global_controls_left_x, global_duration_y,
                          Input::DurationMultiplierCV));
-    addParam(Knob::small(svg_dir, module, global_controls_center_x,
-                         global_duration_y, Param::DurationMultiplier));
+    addParam(Knob::small(module, global_controls_center_x, global_duration_y,
+                         Param::DurationMultiplier));
     addParam(Toggle::thumb(3, svg_dir, module, global_controls_right_x,
                            global_duration_y, Param::DurationRange));
 
@@ -316,7 +323,7 @@ public:
       addParam(Toggle::stepper(svg_dir, "anchor-mode", 2, module, step_x,
                                start_anchor_mode_y,
                                Param::StepStartAnchorMode + step));
-      addParam(Knob::small(svg_dir, module, step_x, start_anchor_level_y,
+      addParam(Knob::small(module, step_x, start_anchor_level_y,
                            Param::StepStartAnchorLevel + step));
       addParam(Toggle::stepper(svg_dir, "anchor-source", anchor_source_count,
                                module, step_x, start_anchor_source_y,
@@ -325,18 +332,18 @@ public:
       addParam(Toggle::stepper(svg_dir, "anchor-mode", 2, module, step_x,
                                end_anchor_mode_y,
                                Param::StepEndAnchorMode + step));
-      addParam(Knob::small(svg_dir, module, step_x, end_anchor_level_y,
+      addParam(Knob::small(module, step_x, end_anchor_level_y,
                            Param::StepEndAnchorLevel + step));
       addParam(Toggle::stepper(svg_dir, "anchor-source", anchor_source_count,
                                module, step_x, end_anchor_source_y,
                                Param::StepEndAnchorSource + step));
 
-      addParam(Knob::small(svg_dir, module, step_x, duration_y,
-                           Param::StepDuration + step));
+      addParam(
+          Knob::small(module, step_x, duration_y, Param::StepDuration + step));
 
       addParam(Toggle::stepper(svg_dir, "shape", 2, module, step_x, shape_y,
                                Param::StepShape + step));
-      addParam(Knob::small(svg_dir, module, step_x, curvature_y,
+      addParam(Knob::small(module, step_x, curvature_y,
                            Param::StepCurvature + step));
 
       addParam(Button::toggle(svg_dir, module, step_x, enabled_y,

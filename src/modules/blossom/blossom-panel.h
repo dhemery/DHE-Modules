@@ -12,7 +12,8 @@ namespace blossom {
 
 class BlossomPanel : public rack::app::ModuleWidget {
   using Controls = BlossomControls;
-  using Jack = dhe::Jack<BlossomPanel>;
+  using Jack = Jack<BlossomPanel>;
+  using Knob = Knob<BlossomPanel>;
 
 public:
   static auto constexpr svg_dir = "blossom";
@@ -35,34 +36,32 @@ public:
     auto dy = 18.5F;
 
     addInput(Jack::input(module, column1, y, Controls::SpeedCvInput));
-    addParam(Knob::tiny(svg_dir, module, column2, y, Controls::SpeedAvKNob));
-    addParam(Knob::large(svg_dir, module, column3, y, Controls::SpeedKnob));
+    addParam(Knob::tiny(module, column2, y, Controls::SpeedAvKNob));
+    addParam(Knob::large(module, column3, y, Controls::SpeedKnob));
 
     y += dy;
     addInput(Jack::input(module, column1, y, Controls::RatioCvInput));
-    addParam(Knob::tiny(svg_dir, module, column2, y, Controls::RatioAvKnob));
-    addParam(Knob::large(svg_dir, module, column3, y, Controls::RatioKnob));
+    addParam(Knob::tiny(module, column2, y, Controls::RatioAvKnob));
+    addParam(Knob::large(module, column3, y, Controls::RatioKnob));
     addParam(Toggle::thumb(2, svg_dir, module, column4, y,
                            Controls::FreeRatioSwitch));
 
     y += dy;
     addInput(Jack::input(module, column1, y, Controls::DepthCvInput));
-    addParam(Knob::tiny(svg_dir, module, column2, y, Controls::DepthAvKnob));
-    addParam(Knob::large(svg_dir, module, column3, y, Controls::DepthKnob));
+    addParam(Knob::tiny(module, column2, y, Controls::DepthAvKnob));
+    addParam(Knob::large(module, column3, y, Controls::DepthKnob));
 
     y += dy;
     addInput(Jack::input(module, column1, y, Controls::PhaseCvInput));
-    addParam(
-        Knob::tiny(svg_dir, module, column2, y, Controls::PhaseOffsetAvKnob));
-    addParam(
-        Knob::large(svg_dir, module, column3, y, Controls::PhaseOffsetKnob));
+    addParam(Knob::tiny(module, column2, y, Controls::PhaseOffsetAvKnob));
+    addParam(Knob::large(module, column3, y, Controls::PhaseOffsetKnob));
 
     y = 97.F;
     dy = 15.F;
     auto constexpr output_port_offset = 1.25F;
 
     addInput(Jack::input(module, column1, y, Controls::XGainCvInput));
-    addParam(Knob::small(svg_dir, module, column2, y, Controls::XGainKnob));
+    addParam(Knob::small(module, column2, y, Controls::XGainKnob));
     addParam(
         Toggle::thumb(2, svg_dir, module, column3, y, Controls::XRangeSwitch));
     addOutput(Jack::output(module, column4, y + output_port_offset,
@@ -70,7 +69,7 @@ public:
 
     y += dy;
     addInput(Jack::input(module, column1, y, Controls::YGainCvInput));
-    addParam(Knob::small(svg_dir, module, column2, y, Controls::YGainKnob));
+    addParam(Knob::small(module, column2, y, Controls::YGainKnob));
     addParam(
         Toggle::thumb(2, svg_dir, module, column3, y, Controls::YRangeSwitch));
     addOutput(Jack::output(module, column4, y + output_port_offset,

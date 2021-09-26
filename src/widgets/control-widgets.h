@@ -97,43 +97,53 @@ private:
   }
 };
 
+template <typename PanelT>
 class Knob : public rack::componentlibrary::RoundKnob {
 public:
-  static inline auto large(std::string const &module_svg_dir,
-                           rack::engine::Module *module, float xmm, float ymm,
+  static inline auto large(rack::engine::Module *module, float xmm, float ymm,
                            int index) -> Knob * {
-    return new Knob{module_svg_dir, "knob-large", module, xmm, ymm, index};
+    return rack::createParamCentered<Large>(mm2px(xmm, ymm), module, index);
   }
 
-  static inline auto medium(std::string const &module_svg_dir,
-                            rack::engine::Module *module, float xmm, float ymm,
+  static inline auto medium(rack::engine::Module *module, float xmm, float ymm,
                             int index) -> Knob * {
-    return new Knob{module_svg_dir, "knob-medium", module, xmm, ymm, index};
+    return rack::createParamCentered<Medium>(mm2px(xmm, ymm), module, index);
   }
 
-  static inline auto small(std::string const &module_svg_dir,
-                           rack::engine::Module *module, float xmm, float ymm,
+  static inline auto small(rack::engine::Module *module, float xmm, float ymm,
                            int index) -> Knob * {
-    return new Knob{module_svg_dir, "knob-small", module, xmm, ymm, index};
+    return rack::createParamCentered<Small>(mm2px(xmm, ymm), module, index);
   }
 
-  static inline auto tiny(std::string const &module_svg_dir,
-                          rack::engine::Module *module, float xmm, float ymm,
+  static inline auto tiny(rack::engine::Module *module, float xmm, float ymm,
                           int index) -> Knob * {
-    return new Knob{module_svg_dir, "knob-tiny", module, xmm, ymm, index};
+    return rack::createParamCentered<Tiny>(mm2px(xmm, ymm), module, index);
   }
 
-protected:
-  Knob(std::string const &module_svg_dir, std::string const &knob_name,
-       rack::engine::Module *module, float xmm, float ymm, int index) {
-    setSvg(load_svg(module_svg_dir, knob_name));
+  Knob(std::string const &knob_name) {
+    setSvg(load_svg(PanelT::svg_dir, knob_name));
     shadow->opacity = 0.F;
-    position_centered(this, xmm, ymm);
-    if (module != nullptr) {
-      // TODO: Fix
-      // paramQuantity = module->paramQuantities[index];
-    }
   }
+
+  class Large : public Knob {
+  public:
+    Large() : Knob{"knob-large"} {}
+  };
+
+  class Medium : public Knob {
+  public:
+    Medium() : Knob{"knob-medium"} {}
+  };
+
+  class Small : public Knob {
+  public:
+    Small() : Knob{"knob-small"} {}
+  };
+
+  class Tiny : public Knob {
+  public:
+    Tiny() : Knob{"knob-tiny"} {}
+  };
 };
 
 template <typename PanelT> class Jack : public rack::app::SvgPort {
