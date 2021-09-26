@@ -31,7 +31,7 @@ public:
 
   void onChange(const rack::event::Change &e) override {
     Knob::onChange(e);
-    knob_changed_to_(static_cast<int>(this->paramQuantity->getValue()));
+    knob_changed_to_(static_cast<int>(this->getParamQuantity()->getValue()));
   }
 
 private:

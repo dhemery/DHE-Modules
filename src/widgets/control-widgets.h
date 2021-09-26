@@ -53,7 +53,8 @@ protected:
     position_centered(this, xmm, ymm);
     momentary = false;
     if (module != nullptr) {
-      paramQuantity = module->paramQuantities[index];
+      // TODO: Fix
+      // paramQuantity = module->paramQuantities[index];
     }
   }
 };
@@ -89,7 +90,8 @@ private:
     position_centered(this, xmm, ymm);
     rack::app::SvgSwitch::momentary = momentary;
     if (module != nullptr) {
-      paramQuantity = module->paramQuantities[index];
+      // TODO: fix
+      // paramQuantity = module->paramQuantities[index];
     }
   }
 };
@@ -127,7 +129,8 @@ protected:
     shadow->opacity = 0.F;
     position_centered(this, xmm, ymm);
     if (module != nullptr) {
-      paramQuantity = module->paramQuantities[index];
+      // TODO: Fix
+      // paramQuantity = module->paramQuantities[index];
     }
   }
 };
@@ -137,7 +140,7 @@ public:
   static inline auto input(std::string const &module_svg_dir,
                            rack::engine::Module *module, float xmm, float ymm,
                            int index) -> Jack * {
-    return new Jack{rack::app::PortWidget::Type::INPUT,
+    return new Jack{rack::engine::Port::Type::INPUT,
                     module_svg_dir,
                     module,
                     xmm,
@@ -148,7 +151,7 @@ public:
   static inline auto output(std::string const &module_svg_dir,
                             rack::engine::Module *module, float xmm, float ymm,
                             int index) -> Jack * {
-    return new Jack{rack::app::PortWidget::Type::OUTPUT,
+    return new Jack{rack::engine::Port::Type::OUTPUT,
                     module_svg_dir,
                     module,
                     xmm,
@@ -157,7 +160,7 @@ public:
   }
 
 private:
-  Jack(rack::app::PortWidget::Type type, std::string const &module_svg_dir,
+  Jack(rack::engine::Port::Type type, std::string const &module_svg_dir,
        rack::engine::Module *module, float xmm, float ymm, int index) {
     setSvg(load_svg(module_svg_dir, "port"));
     shadow->opacity = 0.F;

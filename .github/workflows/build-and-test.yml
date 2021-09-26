@@ -35,7 +35,7 @@ jobs:
           submodules: true
       - name: Install Rack SDK
         run: |
-          curl -o sdk.zip https://vcvrack.com/downloads/Rack-SDK-1.1.6.zip
+          curl -o sdk.zip https://vcvrack.com/downloads/Rack-SDK-2.git.b04e4117.zip
           unzip sdk.zip
       - name: Install Dependencies
         run: |

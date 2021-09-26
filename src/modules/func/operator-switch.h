@@ -2,9 +2,9 @@
 
 #include "widgets/control-widgets.h"
 
-#include <event.hpp>
 #include <functional>
 #include <utility>
+#include <widget/event.hpp>
 
 namespace dhe {
 namespace func {
@@ -18,7 +18,7 @@ public:
 
   void onChange(const rack::event::Change &e) override {
     Toggle::onChange(e);
-    auto const is_multiply = this->paramQuantity->getValue() > 0.5;
+    auto const is_multiply = this->getParamQuantity()->getValue() > 0.5;
     operator_changed_to_(is_multiply);
   }
 
