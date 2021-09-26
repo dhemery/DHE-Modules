@@ -13,6 +13,7 @@ class RangerPanel : public rack::app::ModuleWidget {
   using Controls = RangerControls;
   using Jack = Jack<RangerPanel>;
   using Knob = Knob<RangerPanel>;
+  using Toggle2 = Toggle<RangerPanel, 2>;
 
 public:
   static auto constexpr svg_dir = "ranger";
@@ -52,10 +53,8 @@ public:
     addInput(Jack::input(module, right, y, Controls::CwLimitCvInput));
 
     y += dy;
-    addParam(Toggle::thumb(2, svg_dir, module, left, y,
-                           Controls::CcwLimitRangeSwitch));
-    addParam(Toggle::thumb(2, svg_dir, module, right, y,
-                           Controls::CwLimitRangeSwitch));
+    addParam(Toggle2::create(module, left, y, Controls::CcwLimitRangeSwitch));
+    addParam(Toggle2::create(module, right, y, Controls::CwLimitRangeSwitch));
   }
 };
 } // namespace ranger

@@ -8,8 +8,10 @@ namespace dhe {
 namespace stage {
 class UpstagePanel : public rack::app::ModuleWidget {
   using Controls = UpstageControls;
+  using Button = Button<UpstagePanel>;
   using Jack = Jack<UpstagePanel>;
   using Knob = Knob<UpstagePanel>;
+  using Toggle2 = Toggle<UpstagePanel, 2>;
 
 public:
   static auto constexpr svg_dir = "upstage";
@@ -34,14 +36,11 @@ public:
 
     y += dy;
     addInput(Jack::input(module, column1, y, Controls::LevelCvInput));
-    addParam(Toggle::thumb(2, svg_dir, module, column3, y,
-                           Controls::LevelRangeSwitch));
+    addParam(Toggle2::create(module, column3, y, Controls::LevelRangeSwitch));
 
     y += dy;
-    addParam(
-        Button::momentary(svg_dir, module, column1, y, Controls::WaitButton));
-    addParam(Button::momentary(svg_dir, module, column3, y,
-                               Controls::TriggerButton));
+    addParam(Button::momentary(module, column1, y, Controls::WaitButton));
+    addParam(Button::momentary(module, column3, y, Controls::TriggerButton));
 
     y = 82.F;
     dy = 15.F;

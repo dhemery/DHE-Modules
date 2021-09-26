@@ -39,6 +39,7 @@ public:
     knob_changed_to_(static_cast<int>(this->getParamQuantity()->getValue()));
   }
 
+private:
   std::function<void(int)> knob_changed_to_;
 };
 
@@ -85,13 +86,43 @@ private:
   int const step_mask_ = N - 1;
 }; // namespace curve_sequencer
 
+template <typename PanelT>
+class AdvanceModeStepper : public Toggle<PanelT, advance_mode_count> {
+public:
+  static inline auto create(rack::engine::Module *module, float xmm, float ymm,
+                            int index) -> AdvanceModeStepper * {
+    return rack::createParamCentered<AdvanceModeStepper>(mm2px(xmm, ymm),
+                                                         module, index);
+  }
+
+  AdvanceModeStepper() : Toggle<PanelT, advance_mode_count>{"advance-mode"} {}
+};
+
+template <typename PanelT>
+class GenerateModeStepper : public Toggle<PanelT, generate_mode_count> {
+public:
+  static inline auto create(rack::engine::Module *module, float xmm, float ymm,
+                            int index) -> GenerateModeStepper<PanelT> * {
+    return rack::createParamCentered<GenerateModeStepper<PanelT>>(
+        mm2px(xmm, ymm), module, index);
+  }
+
+  GenerateModeStepper()
+      : Toggle<PanelT, generate_mode_count>{"generate-mode"} {}
+};
+
 template <int N> class CurveSequencerPanel : public rack::app::ModuleWidget {
   using Controls =
       CurveSequencerControls<rack::engine::Input, rack::engine::Output,
                              rack::engine::Param, rack::engine::Light, N>;
+  using AdvanceModeStepper = AdvanceModeStepper<CurveSequencerPanel<N>>;
+  using Button = Button<CurveSequencerPanel<N>>;
+  using GenerateModeStepper = GenerateModeStepper<CurveSequencerPanel<N>>;
   using Jack = Jack<CurveSequencerPanel<N>>;
   using Knob = Knob<CurveSequencerPanel<N>>;
   using SelectionKnob = SelectionKnob<CurveSequencerPanel<N>>;
+  using Toggle2 = Toggle<CurveSequencerPanel<N>, 2>;
+  using Toggle3 = Toggle<CurveSequencerPanel<N>, 3>;
 
 public:
   static auto constexpr svg_dir = "curve-sequencer";
@@ -125,12 +156,12 @@ public:
     auto constexpr active_y = top + light_radius;
 
     addInput(Jack::input(module, left, run_y, Controls::RunInput));
-    addParam(Button::toggle(svg_dir, module, left + button_port_distance, run_y,
+    addParam(Button::toggle(module, left + button_port_distance, run_y,
                             Controls::RunButton));
 
     addInput(Jack::input(module, left, loop_y, Controls::LoopInput));
-    addParam(Button::toggle(svg_dir, module, left + button_port_distance,
-                            loop_y, Controls::LoopButton));
+    addParam(Button::toggle(module, left + button_port_distance, loop_y,
+                            Controls::LoopButton));
 
     auto *start_marker = new StartMarker(svg_dir, 0.F, active_y);
     addChild(start_marker);
@@ -156,12 +187,12 @@ public:
                                    on_selection_end_change));
 
     addInput(Jack::input(module, left, gate_y, Controls::GateInput));
-    addParam(Button::momentary(svg_dir, module, left + button_port_distance,
-                               gate_y, Controls::GateButton));
+    addParam(Button::momentary(module, left + button_port_distance, gate_y,
+                               Controls::GateButton));
 
     addInput(Jack::input(module, left, reset_y, Controls::ResetInput));
-    addParam(Button::momentary(svg_dir, module, left + button_port_distance,
-                               reset_y, Controls::ResetButton));
+    addParam(Button::momentary(module, left + button_port_distance, reset_y,
+                               Controls::ResetButton));
 
     auto constexpr generate_mode_y = top + hp2mm(1.61F);
     auto constexpr advance_mode_y = top + hp2mm(3.25F);
@@ -183,26 +214,24 @@ public:
       addChild(rack::createLightCentered<ProgressLight>(
           mm2px(x, active_y), module, Controls::ProgressLights + step + step));
 
-      auto *generate_mode_button = Toggle::stepper(
-          svg_dir, "generate-mode", generate_mode_labels.size(), module, x,
-          generate_mode_y, Controls::ModeSwitches + step);
+      auto *generate_mode_button = GenerateModeStepper::create(
+          module, x, generate_mode_y, Controls::ModeSwitches + step);
       addParam(generate_mode_button);
 
-      auto *advance_mode_button = Toggle::stepper(
-          svg_dir, "advance-mode", advance_mode_labels.size(), module, x,
-          advance_mode_y, Controls::ConditionSwitches + step);
+      auto *advance_mode_button = AdvanceModeStepper::create(
+          module, x, advance_mode_y, Controls::ConditionSwitches + step);
       addParam(advance_mode_button);
 
       addParam(Knob::small(module, x, level_y, Controls::LevelKnobs + step));
 
-      addParam(Toggle::thumb(2, svg_dir, module, x, shape_y,
-                             Controls::ShapeSwitches + step));
+      addParam(
+          Toggle2::create(module, x, shape_y, Controls::ShapeSwitches + step));
       addParam(Knob::small(module, x, curve_y, Controls::CurveKnobs + step));
 
       addParam(
           Knob::small(module, x, duration_y, Controls::DurationKnobs + step));
 
-      addParam(Button::toggle(svg_dir, module, x, enabled_button_y,
+      addParam(Button::toggle(module, x, enabled_button_y,
                               Controls::EnabledButtons + step));
       addInput(Jack::input(module, x, enabled_port_y,
                            Controls::EnabledInputs + step));
@@ -213,10 +242,10 @@ public:
 
     addInput(Jack::input(module, right, eos_y, Controls::CurveSequencerInput));
 
-    addParam(Toggle::thumb(2, svg_dir, module, right, level_y,
-                           Controls::LevelRangeSwitch));
-    addParam(Toggle::thumb(3, svg_dir, module, right, duration_y,
-                           Controls::DurationRangeSwitch));
+    addParam(
+        Toggle2::create(module, right, level_y, Controls::LevelRangeSwitch));
+    addParam(Toggle3::create(module, right, duration_y,
+                             Controls::DurationRangeSwitch));
     addOutput(
         Jack::output(module, right, out_y, Controls::CurveSequencerOutput));
   }

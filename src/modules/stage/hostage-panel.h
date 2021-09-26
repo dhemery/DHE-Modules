@@ -10,6 +10,8 @@ class HostagePanel : public rack::app::ModuleWidget {
   using Controls = HostageControls;
   using Jack = Jack<HostagePanel>;
   using Knob = Knob<HostagePanel>;
+  using Toggle2 = Toggle<HostagePanel, 2>;
+  using Toggle3 = Toggle<HostagePanel, 3>;
 
 public:
   static auto constexpr svg_dir = "hostage";
@@ -30,13 +32,12 @@ public:
     auto y = 25.F;
     auto dy = 18.5F;
 
-    addParam(
-        Toggle::thumb(2, svg_dir, module, column2, y, Controls::ModeSwitch));
+    addParam(Toggle2::create(module, column2, y, Controls::ModeSwitch));
 
     y += dy;
     addInput(Jack::input(module, column1, y, Controls::DurationCvInput));
-    addParam(Toggle::thumb(3, svg_dir, module, column3, y,
-                           Controls::DurationRangeSwitch));
+    addParam(
+        Toggle3::create(module, column3, y, Controls::DurationRangeSwitch));
 
     y += dy;
     addParam(Knob::large(module, column2, y, Controls::DurationKnob));

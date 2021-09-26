@@ -11,7 +11,8 @@ namespace gator {
 
 class GatorPanel : public rack::app::ModuleWidget {
   using Controls = GatorControls;
-  using Jack = dhe::Jack<GatorPanel>;
+  using Button = Button<GatorPanel>;
+  using Jack = Jack<GatorPanel>;
 
 public:
   static auto constexpr svg_dir = "gator";
@@ -34,9 +35,8 @@ public:
     auto y = top;
     for (auto i = 0; i < Controls::InputCount / 2; i++) {
       addInput(Jack::input(module, left, y, Controls::Inputs + i));
-      addParam(
-          Button::toggle(svg_dir, module, lc, y, Controls::NegateButtons + i));
-      addParam(Button::toggle(svg_dir, module, rc, y,
+      addParam(Button::toggle(module, lc, y, Controls::NegateButtons + i));
+      addParam(Button::toggle(module, rc, y,
                               Controls::NegateButtons + i +
                                   Controls::InputCount / 2));
       addInput(Jack::input(module, right, y,
@@ -44,7 +44,7 @@ public:
       y += dy;
     }
 
-    auto row = top + 8.75 * dy;
+    auto row = top + 8.75F * dy;
     addOutput(Jack::output(module, left, row, Controls::AndOutput));
     addOutput(Jack::output(module, lc, row, Controls::NandOutput));
     addOutput(Jack::output(module, rc, row, Controls::OrOutput));

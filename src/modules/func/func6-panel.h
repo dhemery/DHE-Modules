@@ -1,7 +1,7 @@
 #pragma once
 
 #include "func-controls.h"
-#include "operator-switch.h"
+#include "switches.h"
 
 #include <app/ModuleWidget.hpp>
 
@@ -13,6 +13,9 @@ class Func6Panel : public rack::app::ModuleWidget {
   using Controls = FuncControls<channel_count>;
   using Jack = Jack<Func6Panel>;
   using Knob = Knob<Func6Panel>;
+  using MultiplierRangeStepper = MultiplierRangeStepper<Func6Panel>;
+  using OffsetRangeStepper = OffsetRangeStepper<Func6Panel>;
+  using OperatorSwitch = OperatorSwitch<Func6Panel>;
 
 public:
   static auto constexpr svg_dir = "func";
@@ -46,30 +49,28 @@ public:
       addOutput(
           Jack::output(module, column5, port_y, Controls::FuncOutput + row));
 
-      auto *offset_range_pick_list =
-          Toggle::stepper(svg_dir, "offset-range", offset_ranges.size(), module,
-                          column4, y, Controls::OffsetRangeSwitch + row);
-      addParam(offset_range_pick_list);
+      auto *offset_range_stepper = OffsetRangeStepper::create(
+          module, column4, y, Controls::OffsetRangeSwitch + row);
+      addParam(offset_range_stepper);
 
-      auto *multiplier_range_pick_list = Toggle::stepper(
-          svg_dir, "multiplier-range", multiplier_ranges.size(), module,
-          column4, y, Controls::MultiplierRangeSwitch + row);
-      addParam(multiplier_range_pick_list);
+      auto *multiplier_range_stepper = MultiplierRangeStepper::create(
+          module, column4, y, Controls::MultiplierRangeSwitch + row);
+      addParam(multiplier_range_stepper);
 
-      auto const update_range_pick_list =
-          [offset_range_pick_list,
-           multiplier_range_pick_list](bool is_multiply) {
+      auto const update_range_stepper =
+          [offset_range_stepper, multiplier_range_stepper](bool is_multiply) {
             if (is_multiply) {
-              offset_range_pick_list->hide();
-              multiplier_range_pick_list->show();
+              offset_range_stepper->hide();
+              multiplier_range_stepper->show();
             } else {
-              offset_range_pick_list->show();
-              multiplier_range_pick_list->hide();
+              offset_range_stepper->show();
+              multiplier_range_stepper->hide();
             }
           };
 
-      addParam(new OperatorSwitch{update_range_pick_list, svg_dir, module,
-                                  column2, y, Controls::OperationSwitch + row});
+      addParam(OperatorSwitch::create(module, column2, y,
+                                      Controls::OperationSwitch + row,
+                                      update_range_stepper));
     }
   }
 }; // namespace func

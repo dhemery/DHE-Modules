@@ -7,7 +7,7 @@ namespace dhe {
 namespace sequencizer {
 
 enum class SustainMode { No, Yes };
-static auto constexpr completion_mode_count =
+static auto constexpr sustain_mode_count =
     static_cast<int>(SustainMode::Yes) + 1;
 
 enum class InterruptMode { No, Yes };

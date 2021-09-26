@@ -10,6 +10,30 @@ namespace truth {
 static auto constexpr condition_dx = 10.16F;
 static auto constexpr outcome_dy = 5.08F;
 
+template <typename PanelT>
+class GateModeStepper : public Toggle<PanelT, gate_mode_count> {
+public:
+  static inline auto create(rack::engine::Module *module, float xmm, float ymm,
+                            int index) -> GateModeStepper * {
+    return rack::createParamCentered<GateModeStepper>(mm2px(xmm, ymm), module,
+                                                      index);
+  }
+
+  GateModeStepper() : Toggle<PanelT, gate_mode_count>{"gate-mode"} {}
+};
+
+template <typename PanelT>
+class OutcomeStepper : public Toggle<PanelT, outcome_count> {
+public:
+  static inline auto create(rack::engine::Module *module, float xmm, float ymm,
+                            int index) -> OutcomeStepper * {
+    return rack::createParamCentered<OutcomeStepper>(mm2px(xmm, ymm), module,
+                                                     index);
+  }
+
+  OutcomeStepper() : Toggle<PanelT, outcome_count>{"outcome"} {}
+};
+
 struct Layout {
   int hp_;
   float condition_y_;
@@ -67,6 +91,10 @@ static auto layout(int input_count) -> Layout {
 }
 
 template <int N> class Panel : public rack::app::ModuleWidget {
+  using Button = Button<Panel<N>>;
+  using GateModeStepper = GateModeStepper<Panel<N>>;
+  using OutcomeStepper = OutcomeStepper<Panel<N>>;
+
 public:
   static auto constexpr svg_dir = "truth";
 
@@ -81,32 +109,31 @@ public:
       auto const y =
           layout_.input_top_ + static_cast<float>(i) * layout_.port_dy_;
       addInput(Jack::input(module, layout_.input_x_, y, Input::Input + i));
-      addParam(Button::momentary(svg_dir, module,
+      addParam(Button::momentary(module,
                                  layout_.input_x_ + button_port_distance, y,
                                  Param::InputOverride + i));
     }
 
     auto const condition_y = layout_.condition_y_;
     auto const gate_mode_x = layout_.outcome_x_ - condition_dx;
-    addParam(Toggle::stepper(svg_dir, "gate-mode", gate_mode_count, module,
-                             gate_mode_x, condition_y, Param::GateMode));
+    addParam(GateModeStepper::create(module, gate_mode_x, condition_y,
+                                     Param::GateMode));
 
     auto constexpr pattern_count = 1 << N;
     auto const outcome_top = layout_.condition_y_ + outcome_dy;
     for (int i = 0; i < pattern_count; i++) {
       auto const y = outcome_top + static_cast<float>(i) * outcome_dy;
-      addParam(Toggle::stepper(svg_dir, "outcome", outcome_count, module,
-                               layout_.outcome_x_, y, Param::Outcome + i));
+      addParam(OutcomeStepper::create(module, layout_.outcome_x_, y,
+                                      Param::Outcome + i));
     }
 
-    addParam(Button::output(svg_dir, module,
-                            layout_.output_x_ - button_port_distance,
+    addParam(Button::output(module, layout_.output_x_ - button_port_distance,
                             layout_.output_top_, Param::QOverride));
     addOutput(Jack::output(module, layout_.output_x_, layout_.output_top_,
                            Output::Q));
-    addParam(Button::output(
-        svg_dir, module, layout_.output_x_ - button_port_distance,
-        layout_.output_top_ + layout_.port_dy_, Param::QNotOverride));
+    addParam(Button::output(module, layout_.output_x_ - button_port_distance,
+                            layout_.output_top_ + layout_.port_dy_,
+                            Param::QNotOverride));
     addOutput(Jack::output(module, layout_.output_x_,
                            layout_.output_top_ + layout_.port_dy_,
                            Output::QNot));

@@ -13,6 +13,7 @@ class TapersPanel : public rack::app::ModuleWidget {
   using Controls = TapersControls;
   using Jack = Jack<TapersPanel>;
   using Knob = Knob<TapersPanel>;
+  using Toggle2 = Toggle<TapersPanel, 2>;
 
 public:
   static auto constexpr svg_dir = "tapers";
@@ -42,10 +43,8 @@ public:
     addParam(Knob::tiny(module, column2, y, Controls::CurveAvKnob1));
     addParam(Knob::medium(module, column3, y, Controls::CurveKnob1));
     y += dy;
-    addParam(
-        Toggle::thumb(2, svg_dir, module, column1, y, Controls::ShapeSwitch1));
-    addParam(Toggle::thumb(2, svg_dir, module, column2, y,
-                           Controls::LevelRangeSwitch1));
+    addParam(Toggle2::create(module, column1, y, Controls::ShapeSwitch1));
+    addParam(Toggle2::create(module, column2, y, Controls::LevelRangeSwitch1));
     addOutput(Jack::output(module, column3, y, Controls::TaperOutput1));
 
     y += dy + panel_buffer;
@@ -58,10 +57,8 @@ public:
     addParam(Knob::tiny(module, column2, y, Controls::CurveAvKnob2));
     addParam(Knob::medium(module, column3, y, Controls::CurveKnob2));
     y += dy;
-    addParam(
-        Toggle::thumb(2, svg_dir, module, column1, y, Controls::ShapeSwitch2));
-    addParam(Toggle::thumb(2, svg_dir, module, column2, y,
-                           Controls::LevelRangeSwitch2));
+    addParam(Toggle2::create(module, column1, y, Controls::ShapeSwitch2));
+    addParam(Toggle2::create(module, column2, y, Controls::LevelRangeSwitch2));
     addOutput(Jack::output(module, column3, y, Controls::TaperOutput2));
   }
 };
