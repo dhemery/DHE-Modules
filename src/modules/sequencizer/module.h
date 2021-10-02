@@ -65,10 +65,10 @@ template <int N> class Module : public rack::engine::Module {
 public:
   Module() {
     config(Param::Count, Input::Count, Output::Count, Light::Count);
-    config_button(this, Param::Run, "Run", {"From input", "Yes"}, 1);
-    config_button(this, Param::Gate, "Gate", {"From input", "High"}, 0);
-    config_button(this, Param::Loop, "Loop", {"From input", "Yes"}, 0);
-    config_button(this, Param::Reset, "Reset", {"From input", "High"}, 0);
+    configSwitch(Param::Run, 0.F, 1.F, 1.F, "Run");
+    configButton(Param::Gate, "Gate");
+    configButton(Param::Loop, "Loop");
+    configButton(Param::Reset, "Reset");
 
     configParam(Param::SelectionStart, 0.F, N - 1, 0.F, "Start step", "", 0.F,
                 1.F, 1.F);
@@ -111,8 +111,7 @@ public:
       config_curvature_knob(this, Param::StepCurvature + step, "Curvature");
       config_duration_knob(this, Param::StepDuration + step,
                            Param::DurationRange, "Duration");
-      config_button(this, Param::StepEnabled + step, "Enabled", {"No", "Yes"},
-                    1);
+      configSwitch(Param::StepEnabled + step, 0.F, 1.F, 1.F, "Enabled");
 
       show_inactive(step);
     }
