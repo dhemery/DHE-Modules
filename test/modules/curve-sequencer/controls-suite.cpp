@@ -264,7 +264,7 @@ public:
       }
     });
 
-    t.run("show_inactive(step) dims progress lights",
+    t.run("show_inactive(step) dims progress lights_",
           test([](Tester &t, Module &module, Controls &controls) {
             auto const step = std::rand() % step_count;
             auto const completed_light_index =

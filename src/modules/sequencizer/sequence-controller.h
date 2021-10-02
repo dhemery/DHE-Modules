@@ -9,19 +9,19 @@ namespace sequencizer {
 
 static auto constexpr pulse_duration = 9e-4F;
 
-template <typename Module, typename StepSelector, typename StepController>
+template <typename Controls, typename StepSelector, typename StepController>
 class SequenceController {
 public:
-  SequenceController(Module &module, StepSelector &step_selector,
+  SequenceController(Controls &controls, StepSelector &step_selector,
                      StepController &step_controller)
-      : module_{module}, step_selector_{step_selector}, step_controller_{
-                                                            step_controller} {}
+      : controls_{controls}, step_selector_{step_selector},
+        step_controller_{step_controller} {}
 
   void execute(float sample_time) {
     // Process the latches even if not running. This ensures that we detect and
     // react to edges that happen on the same sample when RUN rises.
-    gate_latch_.clock(module_.gate());
-    reset_latch_.clock(module_.is_reset());
+    gate_latch_.clock(controls_.gate());
+    reset_latch_.clock(controls_.is_reset());
     show_events(sample_time);
 
     // Reset even if not running.
@@ -29,7 +29,7 @@ public:
       become_idle();
     }
 
-    if (!module_.is_running()) {
+    if (!controls_.is_running()) {
       return;
     }
 
@@ -51,7 +51,7 @@ private:
   void advance_sequence() {
     end_of_step_.reset();
     auto const next_step = successor();
-    if (next_step < 0 && module_.is_looping()) {
+    if (next_step < 0 && controls_.is_looping()) {
       start_sequence();
     } else {
       change_to_step(next_step);
@@ -94,15 +94,15 @@ private:
   }
 
   void show_status(StepStatus status) {
-    module_.show_step_status(step_, status);
+    controls_.show_step_status(step_, status);
   }
 
   void show_events(float sample_time) {
     auto const pulse_delta = sample_time / pulse_duration;
     start_of_sequence_.advance(pulse_delta);
-    module_.show_sequence_event(start_of_sequence_.in_progress());
+    controls_.show_sequence_event(start_of_sequence_.in_progress());
     end_of_step_.advance(pulse_delta);
-    module_.show_step_event(end_of_step_.in_progress());
+    controls_.show_step_event(end_of_step_.in_progress());
   }
 
   int step_{-1};
@@ -110,7 +110,7 @@ private:
   Latch reset_latch_{};
   PhaseTimer start_of_sequence_{1.F};
   PhaseTimer end_of_step_{1.F};
-  Module &module_;
+  Controls &controls_;
   StepSelector &step_selector_;
   StepController &step_controller_;
 };

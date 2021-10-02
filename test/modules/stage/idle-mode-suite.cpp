@@ -25,7 +25,7 @@ public:
             assert_that(t, controls.active_, is_false);
           }));
 
-    t.run("execute() outputs nothing",
+    t.run("execute() outputs_ nothing",
           test<IdleMode>([](Tester &t, Controls &controls, IdleMode &mode) {
             auto constexpr original_output = 931.F;
             controls.output_ = original_output;

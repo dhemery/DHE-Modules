@@ -80,7 +80,7 @@ public:
             assert_that(t, result, is_equal_to(Event::Completed));
           }));
 
-    t.run("execute(l,s) outputs nothing",
+    t.run("execute(l,s) outputs_ nothing",
           test<HoldMode>([](Tester &t, Controls &controls, PhaseTimer & /**/,
                             HoldMode &mode) {
             float original_output = 99.F;

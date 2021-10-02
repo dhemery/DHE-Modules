@@ -60,7 +60,7 @@ public:
                         is_equal_to(step));
           }));
 
-    t.run("generate(t) outputs scaled tapered phase",
+    t.run("generate(t) outputs_ scaled tapered phase",
           test([](Tester &t, Module &module, Anchor &start_anchor,
                   Anchor &end_anchor, Generator &generator) {
             auto constexpr step = 4;

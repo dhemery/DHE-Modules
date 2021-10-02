@@ -1,5 +1,5 @@
 #include "helpers/rack-controls.h"
-#include "modules/sequencizer/module.h"
+#include "modules/sequencizer/controls.h"
 
 #include <dheunit/test.h>
 

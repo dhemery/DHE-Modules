@@ -14,7 +14,7 @@ class GeneratorSuite : public Suite {
 public:
   GeneratorSuite() : Suite{"dhe::scannibal::Generator::generate()"} {}
   void run(Tester &t) override {
-    t.run("outputs scaled tapered phase",
+    t.run("outputs_ scaled tapered phase",
           test([](Tester &t, Module &module, Anchor &phase_0_anchor,
                   Anchor &phase_1_anchor, Generator &generator) {
             auto constexpr step = 4;

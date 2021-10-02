@@ -41,7 +41,7 @@ public:
             assert_that(t, timer.phase(), is_equal_to(0.F));
           }));
 
-    t.run("enter() outputs nothing",
+    t.run("enter() outputs_ nothing",
           test<GenerateMode>([](Tester &t, Controls &controls,
                                 PhaseTimer & /**/, GenerateMode &mode) {
             auto constexpr original_output = 7341.F;
@@ -64,7 +64,7 @@ public:
             assert_that(t, timer.phase(), is_equal_to(phase_delta));
           }));
 
-    t.run("execute(l,s) outputs curve voltage",
+    t.run("execute(l,s) outputs_ curve voltage",
           test<GenerateMode>([](Tester &t, Controls &controls,
                                 PhaseTimer &timer, GenerateMode &mode) {
             auto constexpr input = 5.F;
