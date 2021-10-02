@@ -1,11 +1,11 @@
 #pragma once
-#include "advancement.h"
-#include "anchor.h"
+#include "./advancement.h"
+#include "./anchor.h"
+#include "./control-ids.h"
+#include "./status.h"
 #include "components/range.h"
-#include "control-ids.h"
 #include "controls/curvature-inputs.h"
 #include "controls/duration-inputs.h"
-#include "status.h"
 
 namespace dhe {
 namespace sequencizer {

@@ -1,7 +1,7 @@
 #pragma once
+#include "./status.h"
 #include "components/phase-timer.h"
 #include "components/range.h"
-#include "status.h"
 
 namespace dhe {
 namespace sequencizer {

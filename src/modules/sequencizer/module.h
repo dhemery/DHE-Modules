@@ -1,20 +1,20 @@
 #pragma once
-#include "advancement.h"
-#include "anchor.h"
+#include "./advancement.h"
+#include "./anchor.h"
+#include "./control-ids.h"
+#include "./controls.h"
+#include "./generator.h"
+#include "./sequence-controller.h"
+#include "./step-controller.h"
+#include "./step-selector.h"
 #include "components/cxmath.h"
 #include "config/common-config.h"
 #include "config/curvature-config.h"
 #include "config/duration-config.h"
 #include "config/level-config.h"
-#include "control-ids.h"
-#include "controls.h"
 #include "controls/curvature-inputs.h"
 #include "controls/duration-inputs.h"
 #include "controls/level-inputs.h"
-#include "generator.h"
-#include "sequence-controller.h"
-#include "step-controller.h"
-#include "step-selector.h"
 
 #include <engine/Module.hpp>
 #include <jansson.h>
@@ -36,9 +36,12 @@ public:
     config_button(this, Param::Loop, "Loop");
     config_button(this, Param::Reset, "Reset");
 
-    configParam(Param::SelectionStart, 0.F, N - 1, 0.F, "Start step", "", 0.F,
-                1.F, 1.F);
-    configParam(Param::SelectionLength, 1.F, N, N, "Sequence length", " steps");
+    auto selectionStartKnob = configParam(Param::SelectionStart, 0.F, N - 1,
+                                          0.F, "Start step", "", 0.F, 1.F, 1.F);
+    selectionStartKnob->snapEnabled = true;
+    auto selectionLengthKnob = configParam(Param::SelectionLength, 1.F, N, N,
+                                           "Sequence length", " steps");
+    selectionLengthKnob->snapEnabled = true;
 
     config_attenuator(this, Param::LevelMultiplier, "Level multiplier");
     config_level_range_switch(this, Param::LevelRange);
