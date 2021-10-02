@@ -1,12 +1,12 @@
 #pragma once
 
+#include "components/cxmath.h"
 #include "dimensions.h"
 #include "panel-assets.h"
 
 #include <app/SvgKnob.hpp>
 #include <app/SvgPort.hpp>
 #include <app/SvgSwitch.hpp>
-#include <componentlibrary.hpp>
 #include <helpers.hpp>
 #include <string>
 
@@ -70,8 +70,7 @@ private:
   }
 };
 
-template <typename PanelT>
-class Knob : public rack::componentlibrary::RoundKnob {
+template <typename PanelT> class Knob : public rack::app::SvgKnob {
 public:
   static inline auto large(rack::engine::Module *module, float xmm, float ymm,
                            int index) -> Knob * {
@@ -96,7 +95,8 @@ public:
   Knob(std::string const &knob_name) {
     auto knob_svg = load_svg(PanelT::svg_dir, knob_name);
     setSvg(knob_svg);
-    bg->setSvg(knob_svg);
+    minAngle = -0.83F * pi;
+    maxAngle = 0.83F * M_PI;
     shadow->opacity = 0.F;
   }
 
