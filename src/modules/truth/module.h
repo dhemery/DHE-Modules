@@ -20,8 +20,7 @@ public:
   Truth() {
     config(Param::Count, Input::Count, Output::Count);
     for (int i = 0; i < N; i++) {
-      config_button(this, Param::InputOverride + i, "Input",
-                    {"From port", "High"}, 0);
+      config_button(this, Param::InputOverride + i, "Input");
     }
     config_toggle<gate_mode_count>(this, Param::GateMode, "True when",
                                    gate_mode_descriptions, 3);
@@ -30,8 +29,8 @@ public:
       config_toggle<outcome_count>(this, Param::Outcome + row, "Q",
                                    outcome_descriptions, 0);
     }
-    config_button(this, Param::QOverride, "Q", {"From table", "Set"}, 0);
-    config_button(this, Param::QNotOverride, "¬Q", {"From table", "Set"}, 0);
+    config_button(this, Param::QOverride, "Q");
+    config_button(this, Param::QNotOverride, "¬Q");
   }
 
   void process(ProcessArgs const & /*ignored*/) override {

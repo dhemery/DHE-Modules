@@ -38,12 +38,10 @@ public:
     config(Controls::ParameterCount, Controls::InputCount,
            Controls::OutputCount, Controls::LightCount);
 
-    config_button(this, Controls::RunButton, "Run", {"from input", "Yes"}, 1);
-    config_button(this, Controls::GateButton, "Gate", {"from input", "High"},
-                  0);
-    config_button(this, Controls::LoopButton, "Loop", {"from input", "Yes"}, 0);
-    config_button(this, Controls::ResetButton, "Reset", {"from input", "High"},
-                  0);
+    config_button(this, Controls::RunButton, "Run", 1);
+    config_button(this, Controls::GateButton, "Gate");
+    config_button(this, Controls::LoopButton, "Loop");
+    config_button(this, Controls::ResetButton, "Reset");
 
     configParam(Controls::SelectionStartKnob, 0.F, N - 1, 0.F, "Start step", "",
                 0.F, 1.F, 1.F);
@@ -66,8 +64,7 @@ public:
       config_curvature_knob(this, Controls::CurveKnobs + step, "Curvature");
       config_duration_knob(this, Controls::DurationKnobs + step,
                            Controls::DurationRangeSwitch, "Duration");
-      config_button(this, Controls::EnabledButtons + step, "Enabled",
-                    {"from input", "Yes"}, 1);
+      config_button(this, Controls::EnabledButtons + step, "Enabled", 1);
 
       controls_.show_inactive(step);
     }

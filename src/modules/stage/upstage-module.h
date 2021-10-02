@@ -20,10 +20,8 @@ public:
     config_level_knob(this, Controls::LevelKnob, Controls::LevelRangeSwitch);
     config_level_range_switch(this, Controls::LevelRangeSwitch);
 
-    config_button(this, Controls::TriggerButton, "TRIG", {"From input", "High"},
-                  0);
-    config_button(this, Controls::WaitButton, "WAIT", {"From input", "High"},
-                  0);
+    config_button(this, Controls::TriggerButton, "TRIG");
+    config_button(this, Controls::WaitButton, "WAIT");
   }
 
   void process(ProcessArgs const & /*args*/) override { machine_.process(); }

@@ -63,55 +63,30 @@ static inline void config_gain(rack::engine::Module *module, int knob_id,
                          initial_rotation);
 }
 
-template <int N>
-class FrameWidgetParamQuantity : public rack::engine::ParamQuantity {
-public:
-  void set_frame_names(std::array<char const *, N> const &names) {
-    frame_names_ = names;
-  }
-  auto getDisplayValueString() -> std::string override {
-    auto const frame = static_cast<int>(getValue());
-    return frame_names_[frame];
-  }
-
-private:
-  std::array<char const *, N> frame_names_;
-};
-
-template <int N>
-void config_frame_widget_states(rack::engine::Module *module, int param_id,
-                                std::string const &param_name,
-                                std::array<char const *, N> const &state_names,
-                                int initial_state) {
-  module->configParam<FrameWidgetParamQuantity<N>>(
-      param_id, 0.F, (float)(N - 1), (float)initial_state, param_name);
-  auto const control_display = dynamic_cast<FrameWidgetParamQuantity<N> *>(
-      module->paramQuantities[param_id]);
-  control_display->set_frame_names(state_names);
+void config_switch(rack::engine::Module *module, int id,
+                   std::string const &name,
+                   std::vector<std::string> const &labels,
+                   int initial_state = 0) {
+  auto const max_value = static_cast<float>(labels.size() - 1);
+  auto const default_value = static_cast<float>(initial_state);
+  module->configSwitch(id, 0.F, max_value, default_value, name, labels);
 }
 
-/**
- * Configures the param and display for a momentary button.
- */
-static inline void config_button(rack::engine::Module *module, int button_id,
-                                 std::string const &button_name,
-                                 std::array<char const *, 2> const &state_names,
-                                 int initial_state) {
-  config_frame_widget_states<2>(module, button_id, button_name, state_names,
-                                initial_state);
+static inline void config_button(rack::engine::Module *module, int id,
+                                 std::string const &name,
+                                 int initial_state = 0) {
+  auto const default_value = static_cast<float>(initial_state);
+  module->configSwitch(id, 0.F, 1.F, default_value, name);
 }
 
-/**
- * Configures the param and display for a toggle that represents a sequence of
- * states.
- */
 template <int N>
 void config_toggle(rack::engine::Module *module, int toggle_id,
                    std::string const &toggle_name,
                    std::array<char const *, N> const &state_names,
                    int initial_state = 0) {
-  config_frame_widget_states<N>(module, toggle_id, toggle_name, state_names,
-                                initial_state);
+  auto labels =
+      std::vector<std::string>{state_names.cbegin(), state_names.cend()};
+  config_switch(module, toggle_id, toggle_name, labels, initial_state);
 }
 
 } // namespace dhe

@@ -32,13 +32,10 @@ public:
     config_curvature_knob(this, Controls::CurveKnob);
     config_curve_shape_switch(this, Controls::ShapeSwitch);
 
-    config_button(this, Controls::DeferButton, "DEFER", {"From input", "High"},
-                  0);
-    config_button(this, Controls::TriggerButton, "TRIG", {"From input", "High"},
-                  0);
-    config_button(this, Controls::ActiveButton, "ACTIVE", {"Generated", "High"},
-                  0);
-    config_button(this, Controls::EocButton, "EOC", {"Generated", "High"}, 0);
+    config_button(this, Controls::DeferButton, "DEFER");
+    config_button(this, Controls::TriggerButton, "TRIG");
+    config_button(this, Controls::ActiveButton, "ACTIVE");
+    config_button(this, Controls::EocButton, "EOC");
   }
 
   void process(ProcessArgs const &args) override {

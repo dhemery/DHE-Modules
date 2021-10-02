@@ -25,11 +25,6 @@ enum class TriggerMode {
 static auto constexpr trigger_mode_count =
     static_cast<int>(TriggerMode::GateIsLow) + 1;
 
-static auto constexpr trigger_mode_descriptions =
-    std::array<char const *, trigger_mode_count>{"Gate rises", "Gate falls",
-                                                 "Gate rises or falls",
-                                                 "Gate is high", "Gate is low"};
-
 static inline auto is_triggered(TriggerMode mode, dhe::Latch const &gate)
     -> bool {
   switch (mode) {

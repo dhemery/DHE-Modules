@@ -65,10 +65,10 @@ template <int N> class Module : public rack::engine::Module {
 public:
   Module() {
     config(Param::Count, Input::Count, Output::Count, Light::Count);
-    configSwitch(Param::Run, 0.F, 1.F, 1.F, "Run");
-    configButton(Param::Gate, "Gate");
-    configButton(Param::Loop, "Loop");
-    configButton(Param::Reset, "Reset");
+    config_button(this, Param::Run, "Run", 1);
+    config_button(this, Param::Gate, "Gate");
+    config_button(this, Param::Loop, "Loop");
+    config_button(this, Param::Reset, "Reset");
 
     configParam(Param::SelectionStart, 0.F, N - 1, 0.F, "Start step", "", 0.F,
                 1.F, 1.F);
@@ -81,27 +81,26 @@ public:
     config_duration_range_switch(this, Param::DurationRange);
 
     for (auto step = 0; step < N; step++) {
-      config_toggle<trigger_mode_count>(this, Param::StepTriggerMode + step,
-                                        "Trigger mode",
-                                        trigger_mode_descriptions, 0);
-      config_toggle<2>(
+      config_switch(this, Param::StepTriggerMode + step, "Trigger mode",
+                    {"Gate rises", "Gate falls", "Gate rises or falls",
+                     "Gate is high", "Gate is low"},
+                    0);
+      config_switch(
           this, Param::StepInterruptMode + step, "Interrupt",
           {"Ignore triggers while generating", "Interrupt if triggered"});
-      config_toggle<2>(this, Param::StepSustainMode + step, "Sustain",
-                       {"No sustain", "Sustain until triggered"}, 0);
+      config_switch(this, Param::StepSustainMode + step, "Sustain",
+                    {"No sustain", "Sustain until triggered"}, 0);
 
-      config_toggle<anchor_source_count>(
-          this, Param::StepStartAnchorSource + step, "Start anchor source",
-          {"Level", "A", "B", "C", "Out"}, 4);
+      config_switch(this, Param::StepStartAnchorSource + step,
+                    "Start anchor source", {"Level", "A", "B", "C", "Out"}, 4);
       config_level_knob(this, Param::StepStartAnchorLevel + step,
                         Param::LevelRange, "Start level");
       config_toggle<2>(this, Param::StepStartAnchorMode + step,
                        "Start anchor mode",
                        {"Sample the source", "Track the source"});
 
-      config_toggle<anchor_source_count>(
-          this, Param::StepEndAnchorSource + step, "End anchor source",
-          {"Level", "A", "B", "C", "Out"});
+      config_switch(this, Param::StepEndAnchorSource + step,
+                    "End anchor source", {"Level", "A", "B", "C", "Out"});
       config_level_knob(this, Param::StepEndAnchorLevel + step,
                         Param::LevelRange, "End level");
       config_toggle<2>(this, Param::StepEndAnchorMode + step, "End anchor mode",
@@ -111,7 +110,7 @@ public:
       config_curvature_knob(this, Param::StepCurvature + step, "Curvature");
       config_duration_knob(this, Param::StepDuration + step,
                            Param::DurationRange, "Duration");
-      configSwitch(Param::StepEnabled + step, 0.F, 1.F, 1.F, "Enabled");
+      config_button(this, Param::StepEnabled + step, "Enabled", 1);
 
       show_inactive(step);
     }
