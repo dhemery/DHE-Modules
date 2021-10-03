@@ -22,7 +22,7 @@ public:
 
   void onChange(const rack::event::Change &e) override {
     Knob<PanelT>::onChange(e);
-    auto const value = this->getParamQuantity()->getDisplayValue();
+    auto const value = this->getParamQuantity()->getValue();
     auto const selection = static_cast<int>(value);
     knob_changed_to_(selection);
   }
