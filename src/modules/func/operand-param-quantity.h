@@ -6,13 +6,14 @@
 
 namespace dhe {
 namespace func {
-template <typename Controls>
+template <template <int> class Controls, int N>
 class OperandParamQuantity : public rack::engine::ParamQuantity {
 public:
   auto getLabel() -> std::string override {
     static auto operand_labels =
-        std::array<std::string, 2>{"Offset", "Multiplier"};
-    return operand_labels[static_cast<int>(operation())] + channel_name_;
+        N == 1 ? std::array<std::string, 2>{"Offset", "Multiplier"}
+               : std::array<std::string, 2>{" offset", " multiplier"};
+    return channel_name_ + operand_labels[static_cast<int>(operation())];
   }
 
   auto getDisplayValue() -> float override {
@@ -28,7 +29,7 @@ public:
     setValue(rotation);
   }
 
-  void configure(Controls const *controls, int channel,
+  void configure(Controls<N> const *controls, int channel,
                  const std::string &channel_name) {
     controls_ = controls;
     channel_ = channel;
@@ -53,7 +54,7 @@ private:
 
   int channel_{0};
   std::string channel_name_;
-  Controls const *controls_{};
+  Controls<N> const *controls_{};
 };
 } // namespace func
 } // namespace dhe

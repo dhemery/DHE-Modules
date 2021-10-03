@@ -13,6 +13,7 @@ namespace func {
 
 template <int N> class FuncModule : public rack::engine::Module {
   using Controls = FuncControls<N>;
+  using OperandParamQuantity = OperandParamQuantity<FuncControls, N>;
 
 public:
   FuncModule() {
@@ -31,28 +32,6 @@ public:
     }
   };
 
-  void config_channel(int channel) {
-    auto const channel_name =
-        N == 1 ? "" : std::string{" "} + std::to_string(channel + 1);
-    configParam<OperandParamQuantity<Controls>>(Controls::AmountKnob + channel,
-                                                0.F, 1.F, centered_rotation);
-    config_toggle<2>(this, Controls::OperationSwitch + channel,
-                     "Operator" + channel_name,
-                     {"Add (offset)", "Multiply (scale)"}, 0);
-    config_toggle<4>(this, Controls::OffsetRangeSwitch + channel,
-                     "Offset" + channel_name + " range",
-                     {"0–5 V", "±5 V", "0–10 V", "±10 V"}, 1);
-    config_toggle<4>(this, Controls::MultiplierRangeSwitch + channel,
-                     "Multiplier" + channel_name + " range",
-                     {"0–1", "±1", "0–2", "±2"}, 2);
-
-    auto const operand_knob_param_quantity =
-        dynamic_cast<OperandParamQuantity<Controls> *>(
-            paramQuantities[Controls::AmountKnob + channel]);
-
-    operand_knob_param_quantity->configure(&controls_, channel, channel_name);
-  }
-
   auto dataToJson() -> json_t * override {
     auto *data = json_object();
     json_object_set_new(data, preset_version_key, json_integer(0));
@@ -60,6 +39,41 @@ public:
   }
 
 private:
+  void config_channel(int channel) {
+    configParam<OperandParamQuantity>(Controls::AmountKnob + channel, 0.F, 1.F,
+                                      centered_rotation);
+    auto const channel_name =
+        N == 1 ? std::string{""}
+               : std::string{"Channel "} + std::to_string(channel + 1);
+
+    auto const operator_switch_name =
+        channel_name + (N == 1 ? "Operator" : " operator");
+    config_switch(this, Controls::OperationSwitch + channel,
+                  operator_switch_name, {"Add (offset)", "Multiply (scale)"},
+                  0);
+
+    auto const offset_range_switch_name =
+        channel_name + (N == 1 ? "Offset range" : " offset range");
+    config_switch(this, Controls::OffsetRangeSwitch + channel,
+                  offset_range_switch_name,
+                  {"0–5 V", "±5 V", "0–10 V", "±10 V"}, 1);
+
+    auto const multiplier_range_switch_name =
+        channel_name + (N == 1 ? "Multiplier range" : " multiplier range");
+    config_switch(this, Controls::MultiplierRangeSwitch + channel,
+                  multiplier_range_switch_name, {"0–1", "±1", "0–2", "±2"}, 2);
+
+    auto const operand_knob_param_quantity =
+        dynamic_cast<OperandParamQuantity *>(
+            paramQuantities[Controls::AmountKnob + channel]);
+
+    operand_knob_param_quantity->configure(&controls_, channel, channel_name);
+
+    auto const port_name = N == 1 ? "Func" : channel_name;
+    configInput(Controls::FuncInput + channel, port_name);
+    configOutput(Controls::FuncOutput + channel, port_name);
+  }
+
   Controls controls_{inputs, params, outputs};
   FuncEngine<FuncControls, N> func_engine_{controls_};
 };
