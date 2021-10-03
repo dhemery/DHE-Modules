@@ -18,8 +18,18 @@ public:
     config(Controls::ParameterCount, Controls::InputCount,
            Controls::OutputCount);
     for (auto i = 0; i < Controls::InputCount; i++) {
-      configParam(Controls::NegateButtons + i, 0.F, 1.F, 0.F,
-                  "Negate input " + std::to_string(i + 1));
+      auto const signal_name = std::to_string(i + 1);
+      configInput(Controls::Inputs + i, "Signal " + signal_name);
+      configButton(Controls::NegateButtons + i, "Negate signal " + signal_name);
+
+      configOutput(Controls::AndOutput, "AND");
+      configOutput(Controls::NandOutput, "NAND");
+      configOutput(Controls::OrOutput, "OR");
+      configOutput(Controls::NorOutput, "NOR");
+      configOutput(Controls::EvenOutput, "Even");
+      configOutput(Controls::OddOutput, "Odd");
+      configOutput(Controls::XorOutput, "XOR");
+      configOutput(Controls::XnorOutput, "XNOR");
     }
   }
 
