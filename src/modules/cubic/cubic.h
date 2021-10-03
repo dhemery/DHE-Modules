@@ -20,16 +20,31 @@ public:
   explicit Cubic() {
     config(Controls::ParameterCount, Controls::InputCount,
            Controls::OutputCount);
-    config_knob(this, Controls::ACoefficientKnob, "x³ coefficient", "",
+
+    config_knob(this, Controls::ACoefficientKnob, "X cubed coefficient", "",
                 coefficient_range);
-    config_knob(this, Controls::BCoefficientKnob, "x² coefficient", "",
+    configInput(Controls::ACoefficientCvInput, "X cubed coefficient CV");
+
+    config_knob(this, Controls::BCoefficientKnob, "X squared coefficient", "",
                 coefficient_range);
-    config_knob(this, Controls::CCoefficientKnob, "x¹ coefficient", "",
+    configInput(Controls::BCoefficientCvInput, "X squared coefficient CV");
+
+    config_knob(this, Controls::CCoefficientKnob, "X coefficient", "",
                 coefficient_range);
-    config_knob(this, Controls::DCoefficientKnob, "x⁰ coefficient", "",
+    configInput(Controls::CCoefficientCvInput, "X coefficient CV");
+
+    config_knob(this, Controls::DCoefficientKnob, "Constant coefficient", "",
                 coefficient_range);
+    configInput(Controls::DCoefficientCvInput, "Constant coefficient CV");
+
     config_gain(this, Controls::InputGainKnob, "Input gain");
+    configInput(Controls::InputGainCvInput, "Input gain CV");
+
     config_gain(this, Controls::OutputGainKnob, "Output gain");
+    configInput(Controls::OutputGainCvInput, "Output gain CV");
+
+    configInput(Controls::CubicInput, "Main");
+    configOutput(Controls::CubicOutput, "Main");
   }
 
   void process(ProcessArgs const & /*args*/) override {
