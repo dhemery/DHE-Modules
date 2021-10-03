@@ -281,8 +281,6 @@ public:
           Button::toggle(module, step_x, enabled_y, Param::StepEnabled + step));
     }
   }
-
-private:
 }; // namespace dhe
 } // namespace sequencizer
 } // namespace dhe

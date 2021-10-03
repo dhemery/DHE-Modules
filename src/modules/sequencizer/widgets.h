@@ -3,12 +3,8 @@
 #include "./control-ids.h"
 #include "widgets/control-widgets.h"
 #include "widgets/dimensions.h"
-#include <cmath>
-#include <componentlibrary.hpp>
 #include <functional>
-#include <jansson.h>
-#include <string>
-#include <utility>
+#include <widget/SvgWidget.hpp>
 
 namespace dhe {
 
@@ -173,6 +169,5 @@ public:
   SustainModeStepper() : Toggle<PanelT, sustain_mode_count>{"sustain-mode"} {}
 };
 
-// namespace dhe
 } // namespace sequencizer
 } // namespace dhe

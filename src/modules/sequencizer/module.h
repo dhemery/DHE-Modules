@@ -36,12 +36,13 @@ public:
     config_button(this, Param::Loop, "Loop");
     config_button(this, Param::Reset, "Reset");
 
-    auto selectionStartKnob = configParam(Param::SelectionStart, 0.F, N - 1,
-                                          0.F, "Start step", "", 0.F, 1.F, 1.F);
-    selectionStartKnob->snapEnabled = true;
-    auto selectionLengthKnob = configParam(Param::SelectionLength, 1.F, N, N,
-                                           "Sequence length", " steps");
-    selectionLengthKnob->snapEnabled = true;
+    auto selection_start_knob =
+        configParam(Param::SelectionStart, 0.F, N - 1, 0.F, "Start step", "",
+                    0.F, 1.F, 1.F);
+    selection_start_knob->snapEnabled = true;
+    auto selection_length_knob = configParam(Param::SelectionLength, 1.F, N, N,
+                                             "Sequence length", " steps");
+    selection_length_knob->snapEnabled = true;
 
     config_attenuator(this, Param::LevelMultiplier, "Level multiplier");
     config_level_range_switch(this, Param::LevelRange);
