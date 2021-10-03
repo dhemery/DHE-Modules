@@ -47,34 +47,40 @@ public:
     config_button(this, Controls::ResetButton, "Reset");
     configInput(Controls::ResetInput, "Reset");
 
-    configParam(Controls::SelectionStartKnob, 0.F, N - 1, 0.F, "Start step", "",
-                0.F, 1.F, 1.F);
-    configParam(Controls::SelectionLengthKnob, 1.F, N, N, "Sequence length",
-                " steps");
+    auto const selection_start_knob =
+        configParam(Controls::SelectionStartKnob, 0.F, N - 1, 0.F, "Start step",
+                    "", 0.F, 1.F, 1.F);
+    selection_start_knob->snapEnabled = true;
+    auto const selection_length_knob = configParam(
+        Controls::SelectionLengthKnob, 1.F, N, N, "Sequence length", " steps");
+    selection_length_knob->snapEnabled = true;
 
     config_level_range_switch(this, Controls::LevelRangeSwitch);
     config_duration_range_switch(this, Controls::DurationRangeSwitch);
 
     for (auto step = 0; step < N; step++) {
-      auto const prefix = std::string{"Step "} + std::to_string(step + 1) + " ";
-      configLight(Controls::ProgressLights + step + step, prefix + "progress");
+      auto const step_name =
+          std::string{"Step "} + std::to_string(step + 1) + " ";
+      configLight(Controls::ProgressLights + step + step,
+                  step_name + "progress");
       config_toggle<generate_mode_count>(
-          this, Controls::ModeSwitches + step, prefix + "generate mode",
+          this, Controls::ModeSwitches + step, step_name + "generate mode",
           generate_mode_descriptions, default_generate_mode);
       config_toggle<advance_mode_count>(
-          this, Controls::ConditionSwitches + step, prefix + "advance mode",
+          this, Controls::ConditionSwitches + step, step_name + "advance mode",
           advance_mode_descriptions, default_advance_mode);
       config_level_knob(this, Controls::LevelKnobs + step,
-                        Controls::LevelRangeSwitch, prefix + "level");
+                        Controls::LevelRangeSwitch, step_name + "level");
       config_curve_shape_switch(this, Controls::ShapeSwitches + step,
-                                prefix + "shape");
+                                step_name + "shape");
       config_curvature_knob(this, Controls::CurveKnobs + step,
-                            prefix + "curvature");
+                            step_name + "curvature");
       config_duration_knob(this, Controls::DurationKnobs + step,
-                           Controls::DurationRangeSwitch, prefix + "duration");
-      config_button(this, Controls::EnabledButtons + step, prefix + "enabled",
-                    1);
-      configInput(Controls::EnabledInputs + step, prefix + "enabled");
+                           Controls::DurationRangeSwitch,
+                           step_name + "duration");
+      config_button(this, Controls::EnabledButtons + step,
+                    step_name + "enabled", 1);
+      configInput(Controls::EnabledInputs + step, step_name + "enabled");
 
       controls_.show_inactive(step);
     }

@@ -31,10 +31,15 @@ template <int N> class Module : public rack::engine::Module {
 public:
   Module() {
     config(Param::Count, Input::Count, Output::Count, Light::Count);
+
     config_button(this, Param::Run, "Run", 1);
+    configInput(Input::Run, "Run");
     config_button(this, Param::Gate, "Gate");
+    configInput(Input::Gate, "Gate");
     config_button(this, Param::Loop, "Loop");
+    configInput(Input::Loop, "Loop");
     config_button(this, Param::Reset, "Reset");
+    configInput(Input::Reset, "Reset");
 
     auto selection_start_knob =
         configParam(Param::SelectionStart, 0.F, static_cast<float>(N - 1), 0.F,
@@ -46,9 +51,22 @@ public:
 
     config_attenuator(this, Param::LevelMultiplier, "Level multiplier");
     config_level_range_switch(this, Param::LevelRange);
+    configInput(Input::LevelAttenuationCV, "Level multiplier CV");
 
     config_gain(this, Param::DurationMultiplier, "Duration multiplier");
     config_duration_range_switch(this, Param::DurationRange);
+    configInput(Input::DurationMultiplierCV, "Duration multipler CV");
+
+    configInput(Input::InA, "A");
+    configInput(Input::InB, "B");
+    configInput(Input::InC, "C");
+
+    configOutput(Output::StepNumber, "Step number");
+    configOutput(Output::IsCurving, "Is curving");
+    configOutput(Output::IsSustaining, "Is sustaining");
+    configOutput(Output::StepEventPulse, "End of step");
+    configOutput(Output::SequenceEventPulse, "Start of sequence");
+    configOutput(Output::Out, "Sequencer");
 
     for (auto step = 0; step < N; step++) {
       config_switch(this, Param::StepTriggerMode + step, "Trigger mode",
