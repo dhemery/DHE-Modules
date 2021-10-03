@@ -17,9 +17,12 @@ class Module : public rack::engine::Module {
 public:
   Module() {
     config(Param::Count, 0, Output::Count);
+    auto const row_names =
+        std::vector<std::string>{"A", "B", "C", "D", "E", "F", "G", "H"};
     for (int i = 0; i < button_count; i++) {
-      configParam(Param::Button + i, 0.F, 1.F, 0.F, "Button");
-      configParam(Param::Negate + i, 0.F, 1.F, 0.F, "Negate");
+      configButton(Param::Button + i, "Button " + row_names[i]);
+      configButton(Param::Negate + i, "Negate " + row_names[i]);
+      configOutput(Output::Out + i, row_names[i]);
     }
   }
 
