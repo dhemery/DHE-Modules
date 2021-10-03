@@ -29,25 +29,34 @@ public:
 
     config_speed_knob(this, Controls::SpeedKnob);
     config_attenuverter(this, Controls::SpeedAvKNob, "Speed CV gain");
+    configInput(Controls::SpeedCvInput, "Speed CV");
 
     config_toggle<2>(this, Controls::FreeRatioSwitch, "Ratio mode",
                      {"Quantized", "Free"}, 1);
 
     config_ratio_knob(this, Controls::RatioKnob);
     config_attenuverter(this, Controls::RatioAvKnob, "Ratio CV gain");
+    configInput(Controls::RatioCvInput, "Ratio CV");
 
     config_percentage_knob(this, Controls::DepthKnob, "Depth");
     config_attenuverter(this, Controls::DepthAvKnob, "Depth CV gain");
+    configInput(Controls::DepthCvInput, "Depth CV");
 
     config_knob(this, Controls::PhaseOffsetKnob, "Phase", "°",
                 phase_display_range);
     config_attenuverter(this, Controls::PhaseOffsetAvKnob, "Phase CV gain");
+    configInput(Controls::PhaseCvInput, "Phase CV");
 
     config_gain(this, Controls::XGainKnob, "X gain");
     config_level_range_switch(this, Controls::XRangeSwitch, "X range", 0);
+    configInput(Controls::XGainCvInput, "X gain CV");
 
     config_gain(this, Controls::YGainKnob, "Y gain");
     config_level_range_switch(this, Controls::YRangeSwitch, "Y range", 0);
+    configInput(Controls::YGainCvInput, "Y gain CV");
+
+    configOutput(Controls::XOutput, "X");
+    configOutput(Controls::YOutput, "Y");
   }
 
   void process(ProcessArgs const &args) override {
