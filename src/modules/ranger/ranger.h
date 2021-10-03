@@ -20,19 +20,24 @@ public:
            Controls::OutputCount);
 
     config_attenuator(this, Controls::LevelKnob, "Level");
+    configInput(Controls::LevelCvInput, "Level CV");
     config_attenuverter(this, Controls::LevelAvKnob, "Level CV gain");
 
     config_level_knob(this, Controls::CcwLimitKnob,
                       Controls::CcwLimitRangeSwitch, "CCW limit");
     config_level_range_switch(this, Controls::CcwLimitRangeSwitch,
                               "CCW limit range", 0);
+    configInput(Controls::CcwLimitCvInput, "CCW limit CV");
     config_attenuverter(this, Controls::CcwLimitAvKnob, "CCW limit CV gain");
 
     config_level_knob(this, Controls::CwLimitKnob, Controls::CwLimitRangeSwitch,
                       "CW limit");
     config_level_range_switch(this, Controls::CwLimitRangeSwitch,
                               "CW limit range", 0);
+    configInput(Controls::CwLimitCvInput, "CW limit CV");
     config_attenuverter(this, Controls::CwLimitAvKnob, "CW limit CV gain");
+
+    configOutput(Controls::RangerOutput, "Ranger");
   }
 
   void process(ProcessArgs const & /*args*/) override {
