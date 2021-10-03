@@ -37,8 +37,8 @@ public:
     config_button(this, Param::Reset, "Reset");
 
     auto selection_start_knob =
-        configParam(Param::SelectionStart, 0.F, N - 1, 0.F, "Start step", "",
-                    0.F, 1.F, 1.F);
+        configParam(Param::SelectionStart, 0.F, static_cast<float>(N - 1), 0.F,
+                    "Start step");
     selection_start_knob->snapEnabled = true;
     auto selection_length_knob = configParam(Param::SelectionLength, 1.F, N, N,
                                              "Sequence length", " steps");
