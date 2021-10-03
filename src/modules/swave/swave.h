@@ -16,8 +16,13 @@ public:
   Swave() {
     config(Controls::ParameterCount, Controls::InputCount,
            Controls::OutputCount);
+
+    configInput(Controls::SwaveInput, "Swave");
+    configOutput(Controls::SwaveOutput, "Swave");
+
     config_curvature_knob(this, Controls::CurveKnob);
     config_attenuverter(this, Controls::CurveAvKnob, "Curvature CV gain");
+    configInput(Controls::CurveCvInput, "Curvature CV");
     config_curve_shape_switch(this, Controls::ShapeSwitch);
   }
 
