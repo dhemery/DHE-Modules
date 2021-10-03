@@ -30,6 +30,13 @@ public:
                          medium_duration_range);
     config_level_knob(this, StageControls::LevelKnob, unipolar_signal_range);
     config_curvature_knob(this, StageControls::CurveKnob);
+
+    configInput(Controls::EnvelopeInput, "Stage");
+    configInput(Controls::DeferInput, "Defer");
+    configInput(Controls::TriggerInput, "Trigger");
+    configOutput(Controls::ActiveOutput, "Is active");
+    configOutput(Controls::EocOutput, "End of stage");
+    configOutput(Controls::EnvelopeOutput, "Stage");
   }
 
   void process(ProcessArgs const &args) override {

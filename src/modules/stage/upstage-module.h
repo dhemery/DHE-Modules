@@ -19,9 +19,16 @@ public:
 
     config_level_knob(this, Controls::LevelKnob, Controls::LevelRangeSwitch);
     config_level_range_switch(this, Controls::LevelRangeSwitch);
+    configInput(Controls::LevelCvInput, "Level CV");
 
-    config_button(this, Controls::TriggerButton, "TRIG");
-    config_button(this, Controls::WaitButton, "WAIT");
+    configInput(Controls::TriggerInput, "Trigger");
+    config_button(this, Controls::TriggerButton, "Trigger");
+
+    configInput(Controls::WaitInput, "Wait");
+    config_button(this, Controls::WaitButton, "Wait");
+
+    configOutput(Controls::TriggerOutput, "Trigger");
+    configOutput(Controls::EnvelopeOutput, "Stage");
   }
 
   void process(ProcessArgs const & /*args*/) override { machine_.process(); }

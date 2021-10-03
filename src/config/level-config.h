@@ -76,7 +76,7 @@ static auto constexpr level_state_names =
  */
 static inline void
 config_level_range_switch(rack::engine::Module *module, int switch_id,
-                          std::string const &name = "Level Range",
+                          std::string const &name = "Level range",
                           int initial_state = 1) {
   config_toggle<2>(module, switch_id, name, level_state_names, initial_state);
 }

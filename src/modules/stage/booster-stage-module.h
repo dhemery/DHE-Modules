@@ -22,20 +22,31 @@ public:
     config(Controls::ParameterCount, Controls::InputCount,
            Controls::OutputCount);
 
-    config_duration_knob(this, Controls::DurationKnob,
-                         Controls::DurationRangeSwitch);
-    config_duration_range_switch(this, Controls::DurationRangeSwitch);
+    configInput(Controls::EnvelopeInput, "Stage");
+    configOutput(Controls::EnvelopeOutput, "Stage");
 
     config_level_knob(this, Controls::LevelKnob, Controls::LevelRangeSwitch);
     config_level_range_switch(this, Controls::LevelRangeSwitch);
+    configInput(Controls::LevelCvInput, "Level CV");
 
     config_curvature_knob(this, Controls::CurveKnob);
     config_curve_shape_switch(this, Controls::ShapeSwitch);
+    configInput(Controls::CurveCvInput, "Curvature CV");
 
-    config_button(this, Controls::DeferButton, "DEFER");
-    config_button(this, Controls::TriggerButton, "TRIG");
-    config_button(this, Controls::ActiveButton, "ACTIVE");
-    config_button(this, Controls::EocButton, "EOC");
+    config_duration_knob(this, Controls::DurationKnob,
+                         Controls::DurationRangeSwitch);
+    config_duration_range_switch(this, Controls::DurationRangeSwitch);
+    configInput(Controls::DurationCvInput, "Duration CV");
+
+    configInput(Controls::DeferInput, "Defer");
+    config_button(this, Controls::DeferButton, "Defer");
+    configInput(Controls::TriggerInput, "Trigger");
+    config_button(this, Controls::TriggerButton, "Trigger");
+
+    configOutput(Controls::ActiveOutput, "Is active");
+    config_button(this, Controls::ActiveButton, "Is active");
+    configOutput(Controls::EocOutput, "End of stage");
+    config_button(this, Controls::EocButton, "End of stage");
   }
 
   void process(ProcessArgs const &args) override {

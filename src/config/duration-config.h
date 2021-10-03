@@ -77,7 +77,7 @@ static auto constexpr position_names =
  */
 static inline void
 config_duration_range_switch(rack::engine::Module *module, int switch_id,
-                             std::string const &name = "Duration Range",
+                             std::string const &name = "Duration range",
                              int initial_position = 1) {
   config_toggle<3>(module, switch_id, name, position_names, initial_position);
 }

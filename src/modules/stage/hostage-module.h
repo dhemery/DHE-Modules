@@ -27,9 +27,17 @@ public:
     config(Controls::ParameterCount, Controls::InputCount,
            Controls::OutputCount);
 
+    configInput(Controls::EnvelopeInput, "Stage");
+    configInput(Controls::DeferInput, "Defer");
+    configInput(Controls::TriggerInput, "Gate/Trigger");
+    configOutput(Controls::ActiveOutput, "Is active");
+    configOutput(Controls::EocOutput, "End of stage");
+    configOutput(Controls::EnvelopeOutput, "Stage");
+
     config_duration_knob(this, Controls::DurationKnob,
                          Controls::DurationRangeSwitch);
     config_duration_range_switch(this, Controls::DurationRangeSwitch);
+    configInput(Controls::DurationCvInput, "Duration CV");
 
     config_toggle<2>(this, Controls::ModeSwitch, "Mode", {"Hold", "Sustain"},
                      0);
