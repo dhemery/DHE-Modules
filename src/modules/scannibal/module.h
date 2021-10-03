@@ -38,33 +38,53 @@ public:
   Module() {
     config(Param::Count, Input::Count, Output::Count, Light::Count);
 
-    configParam(Param::Length, 1.F, N, N, "Steps", "");
+    auto step_knob = configParam(Param::Length, 1.F, N, N, "Steps", "");
+    step_knob->snapEnabled = true;
+
     config_level_range_switch(this, Param::LevelRange);
 
+    configInput(Input::InA, "A");
+    configInput(Input::InB, "B");
+    configInput(Input::InC, "C");
+    configInput(Input::Phase, "Phase");
+
+    configOutput(Output::StepNumber, "Step number");
+    configOutput(Output::StepPhase, "Step phase");
+    configOutput(Output::Out, "Scanner");
+
     for (auto step = 0; step < N; step++) {
+      auto const step_name = "Step " + std::to_string(step + 1) + " ";
+      configLight(Light::Progress + step + step, step_name + "phase");
       config_toggle<anchor_source_count>(this, Param::Phase0AnchorSource + step,
-                                         "Phase 0 anchor source",
+                                         step_name + "phase 0 anchor source",
                                          {"Level", "A", "B", "C", "Out"}, 4);
       config_level_knob(this, Param::Phase0AnchorLevel + step,
-                        Param::LevelRange, "Phase 0 level");
+                        Param::LevelRange, step_name + "phase 0 level");
+      configInput(Input::Phase0AnchorLevelCV + step,
+                  step_name + "phase 0 level CV");
       config_toggle<2>(this, Param::Phase0AnchorMode + step,
-                       "Phase 0 anchor mode",
+                       step_name + "phase 0 anchor mode",
                        {"Sample the source", "Track the source"});
 
       config_toggle<anchor_source_count>(this, Param::Phase1AnchorSource + step,
-                                         "Phase 1 anchor source",
+                                         step_name + "phase 1 anchor source",
                                          {"Level", "A", "B", "C", "Out"});
       config_level_knob(this, Param::Phase1AnchorLevel + step,
-                        Param::LevelRange, "Phase 1 level");
+                        Param::LevelRange, step_name + "phase 1 level");
+      configInput(Input::Phase1AnchorLevelCV + step,
+                  step_name + "phase 1 level CV");
       config_toggle<2>(this, Param::Phase1AnchorMode + step,
-                       "Phase 1 anchor mode",
+                       step_name + "phase 1 anchor mode",
                        {"Sample the source", "Track the source"}, 1);
 
-      config_curve_shape_switch(this, Param::Shape + step, "Shape");
-      config_curvature_knob(this, Param::Curvature + step, "Curvature");
+      config_curve_shape_switch(this, Param::Shape + step, step_name + "shape");
+      config_curvature_knob(this, Param::Curvature + step,
+                            step_name + "curvature");
+      configInput(Input::CurvatureCV + step, step_name + "curvature CV");
 
-      config_knob(this, Param::Duration + step, "Relative duration", "",
-                  Range{0.F, 2.F}, centered_rotation);
+      config_knob(this, Param::Duration + step, step_name + "relative duration",
+                  "", Range{0.F, 2.F}, centered_rotation);
+      configInput(Input::DurationCV + step, step_name + "relative duration CV");
     }
   }
 
