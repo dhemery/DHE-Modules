@@ -80,7 +80,7 @@ public:
     }
 
     configInput(Controls::CurveSequencerInput, "AUX");
-    configOutput(Controls::CurveSequencerOutput, "Main");
+    configOutput(Controls::CurveSequencerOutput, "Sequencer");
   }
 
   ~CurveSequencerModule() override = default;

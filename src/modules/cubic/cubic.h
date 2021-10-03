@@ -43,8 +43,8 @@ public:
     config_gain(this, Controls::OutputGainKnob, "Output gain");
     configInput(Controls::OutputGainCvInput, "Output gain CV");
 
-    configInput(Controls::CubicInput, "Main");
-    configOutput(Controls::CubicOutput, "Main");
+    configInput(Controls::CubicInput, "Cubic");
+    configOutput(Controls::CubicOutput, "Cubic");
   }
 
   void process(ProcessArgs const & /*args*/) override {
