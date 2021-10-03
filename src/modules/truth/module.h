@@ -7,6 +7,7 @@
 #include "outcomes.h"
 #include "upgrader.h"
 
+#include <array>
 #include <engine/Module.hpp>
 #include <string>
 
@@ -18,10 +19,20 @@ auto constexpr version = 1;
 template <int N> class Truth : public rack::engine::Module {
 public:
   Truth() {
+    static auto const input_names =
+        std::vector<std::string>{"A", "B", "C", "D"};
+
     config(Param::Count, Input::Count, Output::Count);
+
     for (int i = 0; i < N; i++) {
-      config_button(this, Param::InputOverride + i, "Input");
+      auto input_name = input_names[i];
+      if (i == N - 1) {
+        input_name += "/Gate";
+      }
+      config_button(this, Param::InputOverride + i, input_name);
+      configInput(Input::Input + i, input_name);
     }
+
     config_toggle<gate_mode_count>(this, Param::GateMode, "True when",
                                    gate_mode_descriptions, 3);
     static auto constexpr rows = 1 << N;
@@ -30,7 +41,9 @@ public:
                                    outcome_descriptions, 0);
     }
     config_button(this, Param::QOverride, "Q");
+    configOutput(Output::Q, "Q");
     config_button(this, Param::QNotOverride, "¬Q");
+    configOutput(Output::QNot, "¬Q");
   }
 
   void process(ProcessArgs const & /*ignored*/) override {
