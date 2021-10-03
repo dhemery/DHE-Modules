@@ -16,11 +16,40 @@ public:
   FuzzyLogicHModule() {
     config(Controls::ParameterCount, Controls::InputCount,
            Controls::OutputCount);
+    configInput(Controls::AInputs + 0, "A");
     configParam(Controls::NotAButtons + 0, 0.F, 1.F, 0.F, "Negate A");
+    configInput(Controls::BInputs + 0, "B");
     configParam(Controls::NotBButtons + 0, 0.F, 1.F, 0.F, "Negate B");
+    configInput(Controls::AInputs + 1, "C");
     configParam(Controls::NotAButtons + 1, 0.F, 1.F, 0.F, "Negate C");
+    configInput(Controls::BInputs + 1, "D");
     configParam(Controls::NotBButtons + 1, 0.F, 1.F, 0.F, "Negate D");
+
     config_level_range_switch(this, Controls::LevelRangeSwitch, "Level Range");
+
+    configOutput(Controls::AndOutputs + 0, "A AND B");
+    configOutput(Controls::NandOutputs + 0, "A NAND B");
+    configOutput(Controls::OrOutputs + 0, "A OR B");
+    configOutput(Controls::NorOutputs + 0, "A NOR B");
+    configOutput(Controls::XorOutputs + 0, "A XOR B");
+    configOutput(Controls::XnorOutputs + 0, "A XNOR B");
+    configOutput(Controls::ImplicationOutputs + 0, "A implies B");
+    configOutput(Controls::NonimplicationOutputs + 0, "A does not imply B");
+    configOutput(Controls::ConverseImplicationOutputs + 0, "B implies A");
+    configOutput(Controls::ConverseNonimplicationOutputs + 0,
+                 "B does not imply A");
+
+    configOutput(Controls::AndOutputs + 1, "C AND D");
+    configOutput(Controls::NandOutputs + 1, "C NAND D");
+    configOutput(Controls::OrOutputs + 1, "C OR D");
+    configOutput(Controls::NorOutputs + 1, "C NOR D");
+    configOutput(Controls::XorOutputs + 1, "C XOR D");
+    configOutput(Controls::XnorOutputs + 1, "C XNOR D");
+    configOutput(Controls::ImplicationOutputs + 1, "C implies D");
+    configOutput(Controls::NonimplicationOutputs + 1, "C does not imply D");
+    configOutput(Controls::ConverseImplicationOutputs + 1, "D implies C");
+    configOutput(Controls::ConverseNonimplicationOutputs + 1,
+                 "D does not imply C");
   }
 
   void process(ProcessArgs const & /*ignored*/) override {
