@@ -23,24 +23,34 @@ public:
            Controls::OutputCount);
 
     config_level_knob(this, Controls::LevelKnob1, Controls::LevelRangeSwitch1,
-                      "Level 1");
+                      "Taper 1 level");
     config_level_range_switch(this, Controls::LevelRangeSwitch1,
-                              "Level 1 range", 0);
-    config_attenuverter(this, Controls::LevelAvKnob1, "Level 1 CV gain");
+                              "Taper 1 level range", 0);
+    config_attenuverter(this, Controls::LevelAvKnob1, "Taper 1 level CV gain");
+    configInput(Controls::LevelCvInput1, "Taper 1 level CV");
 
-    config_curvature_knob(this, Controls::CurveKnob1, "Curvature 1");
-    config_attenuverter(this, Controls::CurveAvKnob1, "Curvature 1 CV gain");
-    config_level_range_switch(this, Controls::ShapeSwitch1, "Shape 1");
+    config_curvature_knob(this, Controls::CurveKnob1, "Taper 1 curvature");
+    config_attenuverter(this, Controls::CurveAvKnob1,
+                        "Taper 1 curvature CV gain");
+    config_level_range_switch(this, Controls::ShapeSwitch1, "Taper 1 shape");
+    configInput(Controls::CurveCvInput1, "Taper 1 curvature CV");
+
+    configOutput(Controls::TaperOutput1, "Taper 1");
 
     config_level_knob(this, Controls::LevelKnob2, Controls::LevelRangeSwitch2,
-                      "Level 2");
+                      "Taper 2 level");
     config_level_range_switch(this, Controls::LevelRangeSwitch2,
-                              "Level 2 range", 0);
-    config_attenuverter(this, Controls::LevelAvKnob2, "Level 2 CV gain");
+                              "Taper 2 level range", 0);
+    config_attenuverter(this, Controls::LevelAvKnob2, "Taper 2 level CV gain");
+    configInput(Controls::LevelCvInput2, "Taper 2 level CV");
 
-    config_curvature_knob(this, Controls::CurveKnob2, "Curvature 2");
-    config_attenuverter(this, Controls::CurveAvKnob2, "Curvature 2 CV gain");
-    config_level_range_switch(this, Controls::ShapeSwitch2, "Shape 2");
+    config_curvature_knob(this, Controls::CurveKnob2, "Taper 2 curvature");
+    config_attenuverter(this, Controls::CurveAvKnob2,
+                        "Taper 2 curvature CV gain");
+    config_level_range_switch(this, Controls::ShapeSwitch2, "Taper 2 shape");
+    configInput(Controls::CurveCvInput2, "Taper 2 curvature CV");
+
+    configOutput(Controls::TaperOutput2, "Taper 2");
   }
 
   void process(ProcessArgs const & /*args*/) override {
