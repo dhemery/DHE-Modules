@@ -13,7 +13,6 @@ namespace func {
 
 template <int N> class FuncModule : public rack::engine::Module {
   using Controls = FuncControls<N>;
-  using OperandParamQuantity = OperandParamQuantity<FuncControls, N>;
 
 public:
   FuncModule() {
@@ -40,8 +39,8 @@ public:
 
 private:
   void config_channel(int channel) {
-    configParam<OperandParamQuantity>(Controls::AmountKnob + channel, 0.F, 1.F,
-                                      centered_rotation);
+    configParam<OperandParamQuantity<FuncControls, N>>(
+        Controls::AmountKnob + channel, 0.F, 1.F, centered_rotation);
     auto const channel_name =
         N == 1 ? std::string{""}
                : std::string{"Channel "} + std::to_string(channel + 1);
@@ -64,7 +63,7 @@ private:
                   multiplier_range_switch_name, {"0–1", "±1", "0–2", "±2"}, 2);
 
     auto const operand_knob_param_quantity =
-        dynamic_cast<OperandParamQuantity *>(
+        dynamic_cast<OperandParamQuantity<FuncControls, N> *>(
             paramQuantities[Controls::AmountKnob + channel]);
 
     operand_knob_param_quantity->configure(&controls_, channel, channel_name);
