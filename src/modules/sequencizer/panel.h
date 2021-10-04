@@ -53,11 +53,8 @@ template <int N> class Panel : public rack::app::ModuleWidget {
   using Input = InputIds<N>;
   using Light = LightIds<N>;
   using Output = OutputIds;
-  using EndMarker = EndMarker<Panel, N>;
   using Jack = Jacks<Panel<N>>;
   using Knob = Knobs<Panel<N>>;
-  using SelectionKnob = SelectionKnob<Panel<N>>;
-  using StartMarker = StartMarker<Panel<N>>;
   using Switch = Switches<Panel<N>>;
 
 public:
@@ -102,12 +99,12 @@ public:
 
     auto constexpr progress_light_y = top - light_diameter * 2.F;
 
-    auto *start_marker =
-        StartMarker::create(step_width, step_block_left, progress_light_y);
+    auto *start_marker = StartMarker<Panel<N>>::create(
+        step_width, step_block_left, progress_light_y);
     addChild(start_marker);
 
-    auto *end_marker =
-        EndMarker::create(step_width, step_block_left, progress_light_y);
+    auto *end_marker = EndMarker<Panel, N>::create(step_width, step_block_left,
+                                                   progress_light_y);
     addChild(end_marker);
 
     auto const on_selection_start_change = [start_marker,
@@ -121,16 +118,16 @@ public:
     };
 
     auto constexpr selection_y = global_controls_y(2);
-    addParam(SelectionKnob::create(module, sequence_controls_x - hp2mm(0.2F),
-                                   selection_y, Param::SelectionStart,
-                                   on_selection_start_change));
+    addParam(SelectionKnob<Panel<N>>::create(
+        module, sequence_controls_x - hp2mm(0.2F), selection_y,
+        Param::SelectionStart, on_selection_start_change));
 
     auto constexpr selection_length_offset = 8.28F;
     auto constexpr selection_length_x =
         sequence_controls_x + selection_length_offset;
-    addParam(SelectionKnob::create(module, selection_length_x, selection_y,
-                                   Param::SelectionLength,
-                                   on_selection_end_change));
+    addParam(SelectionKnob<Panel<N>>::create(
+        module, selection_length_x, selection_y, Param::SelectionLength,
+        on_selection_end_change));
 
     auto constexpr gate_y = global_controls_y(3);
     addInput(Jack::input(module, sequence_controls_x, gate_y, Input::Gate));

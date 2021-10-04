@@ -111,7 +111,6 @@ template <int N> class CurveSequencerPanel : public rack::app::ModuleWidget {
                              rack::engine::Param, rack::engine::Light, N>;
   using Jack = Jacks<CurveSequencerPanel<N>>;
   using Knob = Knobs<CurveSequencerPanel<N>>;
-  using SelectionKnob = SelectionKnob<CurveSequencerPanel<N>>;
   using Switch = Switches<CurveSequencerPanel<N>>;
 
 public:
@@ -164,17 +163,17 @@ public:
       start_marker->set_selection_start(step);
       end_marker->set_selection_start(step);
     };
-    addParam(SelectionKnob::create(module, left, selection_y,
-                                   Controls::SelectionStartKnob,
-                                   on_selection_start_change));
+    addParam(SelectionKnob<CurveSequencerPanel<N>>::create(
+        module, left, selection_y, Controls::SelectionStartKnob,
+        on_selection_start_change));
 
     auto const on_selection_end_change = [end_marker](int length) {
       end_marker->set_selection_length(length);
     };
     auto constexpr selection_length_x = left + hp2mm(2.F);
-    addParam(SelectionKnob::create(module, selection_length_x, selection_y,
-                                   Controls::SelectionLengthKnob,
-                                   on_selection_end_change));
+    addParam(SelectionKnob<CurveSequencerPanel<N>>::create(
+        module, selection_length_x, selection_y, Controls::SelectionLengthKnob,
+        on_selection_end_change));
 
     addInput(Jack::input(module, left, gate_y, Controls::GateInput));
     addParam(Switch::momentary(module, left + button_port_distance, gate_y,

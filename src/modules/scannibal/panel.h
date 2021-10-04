@@ -115,7 +115,6 @@ template <int N> class Panel : public rack::app::ModuleWidget {
   using Output = OutputIds;
   using Jack = Jacks<Panel<N>>;
   using Knob = Knobs<Panel<N>>;
-  using LengthKnob = LengthKnob<Panel<N>>;
   using Switch = Switches<Panel<N>>;
 
 public:
@@ -162,8 +161,8 @@ private:
     auto const on_selection_length_change = [this](int step) {
       set_selection_length(step);
     };
-    addParam(LengthKnob::create(module, x, length_y, Param::Length,
-                                on_selection_length_change));
+    addParam(LengthKnob<Panel<N>>::create(module, x, length_y, Param::Length,
+                                          on_selection_length_change));
 
     addInput(Jack::input(module, x, a_y, Input::InA));
     addInput(Jack::input(module, x, b_y, Input::InB));
