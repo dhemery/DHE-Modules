@@ -32,7 +32,7 @@ public:
     config_curvature_knob(this, Controls::CurveKnob1, "Taper 1 curvature");
     config_attenuverter(this, Controls::CurveAvKnob1,
                         "Taper 1 curvature CV gain");
-    config_level_range_switch(this, Controls::ShapeSwitch1, "Taper 1 shape");
+    config_curve_shape_switch(this, Controls::ShapeSwitch1, "Taper 1 shape");
     configInput(Controls::CurveCvInput1, "Taper 1 curvature CV");
 
     configOutput(Controls::TaperOutput1, "Taper 1");
@@ -47,7 +47,7 @@ public:
     config_curvature_knob(this, Controls::CurveKnob2, "Taper 2 curvature");
     config_attenuverter(this, Controls::CurveAvKnob2,
                         "Taper 2 curvature CV gain");
-    config_level_range_switch(this, Controls::ShapeSwitch2, "Taper 2 shape");
+    config_curve_shape_switch(this, Controls::ShapeSwitch2, "Taper 2 shape");
     configInput(Controls::CurveCvInput2, "Taper 2 curvature CV");
 
     configOutput(Controls::TaperOutput2, "Taper 2");

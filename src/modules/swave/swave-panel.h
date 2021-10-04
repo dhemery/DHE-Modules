@@ -13,7 +13,7 @@ class SwavePanel : public rack::app::ModuleWidget {
   using Controls = SwaveControls;
   using Jack = Jack<SwavePanel>;
   using Knob = Knob<SwavePanel>;
-  using Toggle2 = Toggle<SwavePanel, 2>;
+  using Switch = Switch<SwavePanel>;
 
 public:
   static auto constexpr svg_dir = "swave";
@@ -32,7 +32,7 @@ public:
     auto y = 25.F;
     auto dy = 18.5F;
 
-    addParam(Toggle2::create(module, x, y, Controls::ShapeSwitch));
+    addParam(Switch::thumb<2>(module, x, y, Controls::ShapeSwitch));
 
     y += dy;
     addParam(Knob::large(module, x, y, Controls::CurveKnob));

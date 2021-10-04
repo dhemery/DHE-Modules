@@ -9,11 +9,9 @@ namespace stage {
 
 class BoosterStagePanel : public rack::app::ModuleWidget {
   using Controls = BoosterStageControls;
-  using Button = Button<BoosterStagePanel>;
   using Jack = Jack<BoosterStagePanel>;
   using Knob = Knob<BoosterStagePanel>;
-  using Toggle2 = Toggle<BoosterStagePanel, 2>;
-  using Toggle3 = Toggle<BoosterStagePanel, 3>;
+  using Switch = Switch<BoosterStagePanel>;
 
 public:
   static auto constexpr svg_dir = "booster-stage";
@@ -40,33 +38,35 @@ public:
     addInput(Jack::input(module, column1, y, Controls::LevelCvInput));
     addParam(Knob::large(module, column3, y, Controls::LevelKnob));
 
-    addParam(Toggle2::create(module, column5, y, Controls::LevelRangeSwitch));
+    addParam(Switch::thumb<2>(module, column5, y, Controls::LevelRangeSwitch));
 
     y += dy;
     addInput(Jack::input(module, column1, y, Controls::CurveCvInput));
     addParam(Knob::large(module, column3, y, Controls::CurveKnob));
-    addParam(Toggle2::create(module, column5, y, Controls::ShapeSwitch));
+    addParam(Switch::thumb<2>(module, column5, y, Controls::ShapeSwitch));
 
     y += dy;
     addInput(Jack::input(module, column1, y, Controls::DurationCvInput));
     addParam(Knob::large(module, column3, y, Controls::DurationKnob));
 
     addParam(
-        Toggle3::create(module, column5, y, Controls::DurationRangeSwitch));
+        Switch::thumb<3>(module, column5, y, Controls::DurationRangeSwitch));
 
     y = 82.F;
     dy = 15.F;
 
     addInput(Jack::input(module, column1, y, Controls::DeferInput));
-    addParam(Button::momentary(module, column2, y, Controls::DeferButton));
+    addParam(Switch::momentary(module, column2, y, Controls::DeferButton));
 
-    addParam(Button::output(module, column4, y, Controls::ActiveButton));
+    addParam(Switch::momentary<OutputButton>(module, column4, y,
+                                             Controls::ActiveButton));
     addOutput(Jack::output(module, column5, y, Controls::ActiveOutput));
 
     y += dy;
     addInput(Jack::input(module, column1, y, Controls::TriggerInput));
-    addParam(Button::momentary(module, column2, y, Controls::TriggerButton));
-    addParam(Button::output(module, column4, y, Controls::EocButton));
+    addParam(Switch::momentary(module, column2, y, Controls::TriggerButton));
+    addParam(Switch::momentary<OutputButton>(module, column4, y,
+                                             Controls::EocButton));
     addOutput(Jack::output(module, column5, y, Controls::EocOutput));
 
     y += dy;

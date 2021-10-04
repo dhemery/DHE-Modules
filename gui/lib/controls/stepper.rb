@@ -2,7 +2,7 @@ require_relative '../dimensions'
 require_relative '../shapes/label'
 require_relative '../shapes/box'
 
-class Stepper
+class ThumbSwitch
   attr_reader :options
 
   def initialize(name:, options:, text_color:, size:, fill:, width:)

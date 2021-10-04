@@ -11,9 +11,8 @@ namespace dhe {
 namespace fuzzy_logic {
 class Panel : public rack::app::ModuleWidget {
   using Controls = FuzzyLogicControls;
-  using Button = Button<Panel>;
   using Jack = Jack<Panel>;
-  using Toggle2 = Toggle<Panel, 2>;
+  using Switch = Switch<Panel>;
 
 public:
   static auto constexpr svg_dir = "fuzzy-logic";
@@ -39,21 +38,21 @@ public:
     auto y = top + 0.F * dy;
     addInput(Jack::input(module, ab_outer_column, y, Controls::AInputs + 0));
     addParam(
-        Button::toggle(module, ab_button_column, y, Controls::NotAButtons + 0));
+        Switch::toggle(module, ab_button_column, y, Controls::NotAButtons + 0));
     addParam(
-        Button::toggle(module, cd_button_column, y, Controls::NotAButtons + 1));
+        Switch::toggle(module, cd_button_column, y, Controls::NotAButtons + 1));
     addInput(Jack::input(module, cd_outer_column, y, Controls::AInputs + 1));
 
     y = top + 0.5F * dy;
     addParam(
-        Toggle2::create(module, switch_column, y, Controls::LevelRangeSwitch));
+        Switch::thumb<2>(module, switch_column, y, Controls::LevelRangeSwitch));
 
     y = top + 1.F * dy;
     addInput(Jack::input(module, ab_outer_column, y, Controls::BInputs + 0));
     addParam(
-        Button::toggle(module, ab_button_column, y, Controls::NotBButtons + 0));
+        Switch::toggle(module, ab_button_column, y, Controls::NotBButtons + 0));
     addParam(
-        Button::toggle(module, cd_button_column, y, Controls::NotBButtons + 1));
+        Switch::toggle(module, cd_button_column, y, Controls::NotBButtons + 1));
     addInput(Jack::input(module, cd_outer_column, y, Controls::BInputs + 1));
 
     y = top + 2.F * dy;

@@ -53,20 +53,12 @@ template <int N> class Panel : public rack::app::ModuleWidget {
   using Input = InputIds<N>;
   using Light = LightIds<N>;
   using Output = OutputIds;
-  using AnchorModeStepper = AnchorModeStepper<Panel<N>>;
-  using AnchorSourceStepper = AnchorSourceStepper<Panel<N>>;
-  using Button = Button<Panel<N>>;
   using EndMarker = EndMarker<Panel, N>;
-  using InterruptModeStepper = InterruptModeStepper<Panel<N>>;
   using Jack = Jack<Panel<N>>;
   using Knob = Knob<Panel<N>>;
   using SelectionKnob = SelectionKnob<Panel<N>>;
-  using ShapeStepper = ShapeStepper<Panel<N>>;
   using StartMarker = StartMarker<Panel<N>>;
-  using SustainModeStepper = SustainModeStepper<Panel<N>>;
-  using Toggle2 = Toggle<Panel<N>, 2>;
-  using Toggle3 = Toggle<Panel<N>, 3>;
-  using TriggerModeStepper = TriggerModeStepper<Panel<N>>;
+  using Switch = Switch<Panel<N>>;
 
 public:
   static auto constexpr svg_dir = "sequencizer";
@@ -100,12 +92,12 @@ public:
 
     auto constexpr run_y = global_controls_y(0);
     addInput(Jack::input(module, sequence_controls_x, run_y, Input::Run));
-    addParam(Button::toggle(module, sequence_controls_x + button_port_distance,
+    addParam(Switch::toggle(module, sequence_controls_x + button_port_distance,
                             run_y, Param::Run));
 
     auto constexpr loop_y = global_controls_y(1);
     addInput(Jack::input(module, sequence_controls_x, loop_y, Input::Loop));
-    addParam(Button::toggle(module, sequence_controls_x + button_port_distance,
+    addParam(Switch::toggle(module, sequence_controls_x + button_port_distance,
                             loop_y, Param::Loop));
 
     auto constexpr progress_light_y = top - light_diameter * 2.F;
@@ -142,13 +134,13 @@ public:
 
     auto constexpr gate_y = global_controls_y(3);
     addInput(Jack::input(module, sequence_controls_x, gate_y, Input::Gate));
-    addParam(Button::momentary(module,
+    addParam(Switch::momentary(module,
                                sequence_controls_x + button_port_distance,
                                gate_y, Param::Gate));
 
     auto constexpr reset_y = global_controls_y(4);
     addInput(Jack::input(module, sequence_controls_x, reset_y, Input::Reset));
-    addParam(Button::momentary(module,
+    addParam(Switch::momentary(module,
                                sequence_controls_x + button_port_distance,
                                reset_y, Param::Reset));
 
@@ -169,15 +161,16 @@ public:
                          Input::LevelAttenuationCV));
     addParam(Knob::small(module, global_controls_center_x, level_y,
                          Param::LevelMultiplier));
-    addParam(Toggle2::create(module, global_controls_right_x, level_y,
-                             Param::LevelRange));
+    addParam(Switch::template thumb<2>(module, global_controls_right_x, level_y,
+                                       Param::LevelRange));
 
     addInput(Jack::input(module, global_controls_left_x, global_duration_y,
                          Input::DurationMultiplierCV));
     addParam(Knob::small(module, global_controls_center_x, global_duration_y,
                          Param::DurationMultiplier));
-    addParam(Toggle3::create(module, global_controls_right_x, global_duration_y,
-                             Param::DurationRange));
+    addParam(Switch::template thumb<3>(module, global_controls_right_x,
+                                       global_duration_y,
+                                       Param::DurationRange));
 
     addInput(Jack::input(module, global_controls_left_x, in_y, Input::InA));
     addInput(Jack::input(module, global_controls_center_x, in_y, Input::InB));
@@ -247,38 +240,40 @@ public:
           mm2px(step_x, progress_light_y), module,
           Light::StepProgress + step + step));
 
-      addParam(TriggerModeStepper::create(module, step_x, trigger_y,
-                                          Param::StepTriggerMode + step));
-      addParam(InterruptModeStepper::create(module, step_x, interrupt_y,
-                                            Param::StepInterruptMode + step));
-      addParam(SustainModeStepper::create(module, step_x, sustain_y,
-                                          Param::StepSustainMode + step));
+      addParam(Switch::template create<TriggerModeStepper>(
+          module, step_x, trigger_y, Param::StepTriggerMode + step));
+      addParam(Switch::template create<InterruptModeStepper>(
+          module, step_x, interrupt_y, Param::StepInterruptMode + step));
+      addParam(Switch::template create<SustainModeStepper>(
+          module, step_x, sustain_y, Param::StepSustainMode + step));
 
-      addParam(AnchorModeStepper::create(module, step_x, start_anchor_mode_y,
-                                         Param::StepStartAnchorMode + step));
+      addParam(Switch::template create<AnchorModeStepper>(
+          module, step_x, start_anchor_mode_y,
+          Param::StepStartAnchorMode + step));
       addParam(Knob::small(module, step_x, start_anchor_level_y,
                            Param::StepStartAnchorLevel + step));
-      addParam(
-          AnchorSourceStepper::create(module, step_x, start_anchor_source_y,
-                                      Param::StepStartAnchorSource + step));
+      addParam(Switch::template create<AnchorSourceStepper>(
+          module, step_x, start_anchor_source_y,
+          Param::StepStartAnchorSource + step));
 
-      addParam(AnchorModeStepper::create(module, step_x, end_anchor_mode_y,
-                                         Param::StepEndAnchorMode + step));
+      addParam(Switch::template create<AnchorModeStepper>(
+          module, step_x, end_anchor_mode_y, Param::StepEndAnchorMode + step));
       addParam(Knob::small(module, step_x, end_anchor_level_y,
                            Param::StepEndAnchorLevel + step));
-      addParam(AnchorSourceStepper::create(module, step_x, end_anchor_source_y,
-                                           Param::StepEndAnchorSource + step));
+      addParam(Switch::template create<AnchorSourceStepper>(
+          module, step_x, end_anchor_source_y,
+          Param::StepEndAnchorSource + step));
 
       addParam(
           Knob::small(module, step_x, duration_y, Param::StepDuration + step));
 
-      addParam(ShapeStepper::create(module, step_x, shape_y,
-                                    Param::StepShape + step));
+      addParam(Switch::template create<ShapeStepper>(module, step_x, shape_y,
+                                                     Param::StepShape + step));
       addParam(Knob::small(module, step_x, curvature_y,
                            Param::StepCurvature + step));
 
       addParam(
-          Button::toggle(module, step_x, enabled_y, Param::StepEnabled + step));
+          Switch::toggle(module, step_x, enabled_y, Param::StepEnabled + step));
     }
   }
 }; // namespace dhe

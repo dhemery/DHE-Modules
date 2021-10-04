@@ -55,44 +55,41 @@ static inline auto constexpr content_width(int steps) -> float {
 using ProgressLight =
     rack::componentlibrary::SmallLight<rack::componentlibrary::GreenRedLight>;
 
-template <typename PanelT>
-class AnchorModeStepper : public Toggle<PanelT, anchor_mode_count> {
-public:
-  static inline auto create(rack::engine::Module *module, float xmm, float ymm,
-                            int index) -> AnchorModeStepper * {
-    return rack::createParamCentered<AnchorModeStepper>(mm2px(xmm, ymm), module,
-                                                        index);
+struct AnchorModeStepper {
+  static inline auto frame_names() -> std::vector<std::string> {
+    auto names = std::vector<std::string>{};
+    auto constexpr prefix = "anchor-mode-";
+    for (size_t position = 1; position <= anchor_mode_count; position++) {
+      names.push_back(prefix + std::to_string(position));
+    }
+    return names;
   }
+};
 
-  AnchorModeStepper() : Toggle<PanelT, anchor_mode_count>{"anchor-mode"} {}
+struct AnchorSourceStepper {
+  static inline auto frame_names() -> std::vector<std::string> {
+    auto names = std::vector<std::string>{};
+    auto constexpr prefix = "anchor-source-";
+    for (size_t position = 1; position <= anchor_source_count; position++) {
+      names.push_back(prefix + std::to_string(position));
+    }
+    return names;
+  }
+};
+
+struct ShapeStepper {
+  static inline auto frame_names() -> std::vector<std::string> {
+    auto names = std::vector<std::string>{};
+    auto constexpr prefix = "shape-";
+    for (size_t position = 1; position <= 2; position++) {
+      names.push_back(prefix + std::to_string(position));
+    }
+    return names;
+  }
 };
 
 template <typename PanelT>
-class AnchorSourceStepper : public Toggle<PanelT, anchor_source_count> {
-public:
-  static inline auto create(rack::engine::Module *module, float xmm, float ymm,
-                            int index) -> AnchorSourceStepper * {
-    return rack::createParamCentered<AnchorSourceStepper>(mm2px(xmm, ymm),
-                                                          module, index);
-  }
-
-  AnchorSourceStepper()
-      : Toggle<PanelT, anchor_source_count>{"anchor-source"} {}
-};
-
-template <typename PanelT> class ShapeStepper : public Toggle<PanelT, 2> {
-public:
-  static inline auto create(rack::engine::Module *module, float xmm, float ymm,
-                            int index) -> ShapeStepper * {
-    return rack::createParamCentered<ShapeStepper>(mm2px(xmm, ymm), module,
-                                                   index);
-  }
-
-  ShapeStepper() : Toggle<PanelT, 2>{"shape"} {}
-};
-
-template <typename PanelT> class LengthKnob : public Knob<PanelT>::Small {
-public:
+struct LengthKnob : public KnobWidget<PanelT, SmallKnob> {
   static inline auto create(rack::engine::Module *module, float xmm, float ymm,
                             int index, std::function<void(int)> const &action)
       -> LengthKnob * {
@@ -102,12 +99,8 @@ public:
     return knob;
   }
 
-  LengthKnob() : Knob<PanelT>::Small{} {
-    // TODO: Set snap = true
-  }
-
   void onChange(const rack::event::Change &e) override {
-    Knob<PanelT>::onChange(e);
+    KnobWidget<PanelT, SmallKnob>::onChange(e);
     knob_changed_to_(static_cast<int>(this->getParamQuantity()->getValue()));
   }
 
@@ -120,13 +113,10 @@ template <int N> class Panel : public rack::app::ModuleWidget {
   using Input = InputIds<N>;
   using Light = LightIds<N>;
   using Output = OutputIds;
-  using AnchorModeStepper = AnchorModeStepper<Panel<N>>;
-  using AnchorSourceStepper = AnchorSourceStepper<Panel<N>>;
   using Jack = Jack<Panel<N>>;
   using Knob = Knob<Panel<N>>;
   using LengthKnob = LengthKnob<Panel<N>>;
-  using ShapeStepper = ShapeStepper<Panel<N>>;
-  using Toggle2 = Toggle<Panel<N>, 2>;
+  using Switch = Switch<Panel<N>>;
 
 public:
   static auto constexpr svg_dir = "scannibal";
@@ -247,21 +237,23 @@ private:
           mm2px(step_x, progress_light_y), module,
           Light::Progress + step + step));
 
-      addParam(AnchorModeStepper::create(module, step_x, phase_0_anchor_mode_y,
-                                         Param::Phase0AnchorMode + step));
-      addParam(AnchorSourceStepper::create(module, step_x,
-                                           phase_0_anchor_source_y,
-                                           Param::Phase0AnchorSource + step));
+      addParam(Switch::template create<AnchorModeStepper>(
+          module, step_x, phase_0_anchor_mode_y,
+          Param::Phase0AnchorMode + step));
+      addParam(Switch::template create<AnchorSourceStepper>(
+          module, step_x, phase_0_anchor_source_y,
+          Param::Phase0AnchorSource + step));
       addParam(Knob::small(module, step_x, phase_0_anchor_level_y,
                            Param::Phase0AnchorLevel + step));
       addInput(Jack::input(module, step_x, phase_0_anchor_level_cv_y,
                            Input::Phase0AnchorLevelCV + step));
 
-      addParam(AnchorModeStepper::create(module, step_x, phase_1_anchor_mode_y,
-                                         Param::Phase1AnchorMode + step));
-      addParam(AnchorSourceStepper::create(module, step_x,
-                                           phase_1_anchor_source_y,
-                                           Param::Phase1AnchorSource + step));
+      addParam(Switch::template create<AnchorModeStepper>(
+          module, step_x, phase_1_anchor_mode_y,
+          Param::Phase1AnchorMode + step));
+      addParam(Switch ::template create<AnchorSourceStepper>(
+          module, step_x, phase_1_anchor_source_y,
+          Param::Phase1AnchorSource + step));
       addParam(Knob::small(module, step_x, phase_1_anchor_level_y,
                            Param::Phase1AnchorLevel + step));
       addInput(Jack::input(module, step_x, phase_1_anchor_level_cv_y,
@@ -271,8 +263,8 @@ private:
       addInput(
           Jack::input(module, step_x, duration_cv_y, Input::DurationCV + step));
 
-      addParam(
-          ShapeStepper::create(module, step_x, shape_y, Param::Shape + step));
+      addParam(Switch::template create<ShapeStepper>(module, step_x, shape_y,
+                                                     Param::Shape + step));
       addParam(
           Knob::small(module, step_x, curvature_y, Param::Curvature + step));
       addInput(Jack::input(module, step_x, curvature_cv_y,
@@ -288,7 +280,8 @@ private:
     auto constexpr step_phase_y = global_controls_y(3);
     auto constexpr out_y = global_controls_y(4);
 
-    addParam(Toggle2::create(module, x, polarity_y, Param::LevelRange));
+    addParam(
+        Switch::template thumb<2>(module, x, polarity_y, Param::LevelRange));
     addOutput(Jack::output(module, x, step_number_y, Output::StepNumber));
     addOutput(Jack::output(module, x, step_phase_y, Output::StepPhase));
     addOutput(Jack::output(module, x, out_y, Output::Out));

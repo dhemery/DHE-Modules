@@ -10,28 +10,26 @@ namespace truth {
 static auto constexpr condition_dx = 10.16F;
 static auto constexpr outcome_dy = 5.08F;
 
-template <typename PanelT>
-class GateModeStepper : public Toggle<PanelT, gate_mode_count> {
-public:
-  static inline auto create(rack::engine::Module *module, float xmm, float ymm,
-                            int index) -> GateModeStepper * {
-    return rack::createParamCentered<GateModeStepper>(mm2px(xmm, ymm), module,
-                                                      index);
+struct GateModeStepper {
+  static inline auto frame_names() -> std::vector<std::string> {
+    auto names = std::vector<std::string>{};
+    auto constexpr prefix = "gate-mode-";
+    for (size_t position = 1; position <= gate_mode_count; position++) {
+      names.push_back(prefix + std::to_string(position));
+    }
+    return names;
   }
-
-  GateModeStepper() : Toggle<PanelT, gate_mode_count>{"gate-mode"} {}
 };
 
-template <typename PanelT>
-class OutcomeStepper : public Toggle<PanelT, outcome_count> {
-public:
-  static inline auto create(rack::engine::Module *module, float xmm, float ymm,
-                            int index) -> OutcomeStepper * {
-    return rack::createParamCentered<OutcomeStepper>(mm2px(xmm, ymm), module,
-                                                     index);
+struct OutcomeStepper {
+  static inline auto frame_names() -> std::vector<std::string> {
+    auto names = std::vector<std::string>{};
+    auto constexpr prefix = "outcome-";
+    for (size_t position = 1; position <= outcome_count; position++) {
+      names.push_back(prefix + std::to_string(position));
+    }
+    return names;
   }
-
-  OutcomeStepper() : Toggle<PanelT, outcome_count>{"outcome"} {}
 };
 
 struct Layout {
@@ -91,9 +89,7 @@ static auto layout(int input_count) -> Layout {
 }
 
 template <int N> class Panel : public rack::app::ModuleWidget {
-  using Button = Button<Panel<N>>;
-  using GateModeStepper = GateModeStepper<Panel<N>>;
-  using OutcomeStepper = OutcomeStepper<Panel<N>>;
+  using Switch = Switch<Panel<N>>;
 
 public:
   static auto constexpr svg_dir = "truth";
@@ -109,31 +105,32 @@ public:
       auto const y =
           layout_.input_top_ + static_cast<float>(i) * layout_.port_dy_;
       addInput(Jack::input(module, layout_.input_x_, y, Input::Input + i));
-      addParam(Button::momentary(module,
+      addParam(Switch::momentary(module,
                                  layout_.input_x_ + button_port_distance, y,
                                  Param::InputOverride + i));
     }
 
     auto const condition_y = layout_.condition_y_;
     auto const gate_mode_x = layout_.outcome_x_ - condition_dx;
-    addParam(GateModeStepper::create(module, gate_mode_x, condition_y,
-                                     Param::GateMode));
+    addParam(Switch::template create<GateModeStepper>(
+        module, gate_mode_x, condition_y, Param::GateMode));
 
     auto constexpr pattern_count = 1 << N;
     auto const outcome_top = layout_.condition_y_ + outcome_dy;
     for (int i = 0; i < pattern_count; i++) {
       auto const y = outcome_top + static_cast<float>(i) * outcome_dy;
-      addParam(OutcomeStepper::create(module, layout_.outcome_x_, y,
-                                      Param::Outcome + i));
+      addParam(Switch::template create<OutcomeStepper>(
+          module, layout_.outcome_x_, y, Param::Outcome + i));
     }
 
-    addParam(Button::output(module, layout_.output_x_ - button_port_distance,
-                            layout_.output_top_, Param::QOverride));
+    addParam(Switch::template momentary<OutputButton>(
+        module, layout_.output_x_ - button_port_distance, layout_.output_top_,
+        Param::QOverride));
     addOutput(Jack::output(module, layout_.output_x_, layout_.output_top_,
                            Output::Q));
-    addParam(Button::output(module, layout_.output_x_ - button_port_distance,
-                            layout_.output_top_ + layout_.port_dy_,
-                            Param::QNotOverride));
+    addParam(Switch::template momentary<OutputButton>(
+        module, layout_.output_x_ - button_port_distance,
+        layout_.output_top_ + layout_.port_dy_, Param::QNotOverride));
     addOutput(Jack::output(module, layout_.output_x_,
                            layout_.output_top_ + layout_.port_dy_,
                            Output::QNot));

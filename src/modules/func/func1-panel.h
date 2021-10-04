@@ -13,9 +13,8 @@ class Func1Panel : public rack::app::ModuleWidget {
   using Controls = FuncControls<channel_count>;
   using Jack = Jack<Func1Panel>;
   using Knob = Knob<Func1Panel>;
-  using MultiplierRangeStepper = MultiplierRangeStepper<Func1Panel>;
-  using OffsetRangeStepper = OffsetRangeStepper<Func1Panel>;
   using OperatorSwitch = OperatorSwitch<Func1Panel>;
+  using Switch = Switch<Func1Panel>;
 
 public:
   static auto constexpr svg_dir = "func";
@@ -47,12 +46,13 @@ public:
     addParam(Knob::large(module, x, row3, Controls::AmountKnob));
     addOutput(Jack::output(module, x, row6, Controls::FuncOutput));
 
-    auto *offset_range_stepper = OffsetRangeStepper::create(
+    auto *offset_range_stepper = Switch::template create<OffsetRangeStepper>(
         module, x, row4, Controls::OffsetRangeSwitch);
     addParam(offset_range_stepper);
 
-    auto *multiplier_range_stepper = MultiplierRangeStepper::create(
-        module, x, row4, Controls::MultiplierRangeSwitch);
+    auto *multiplier_range_stepper =
+        Switch::template create<MultiplierRangeStepper>(
+            module, x, row4, Controls::MultiplierRangeSwitch);
     addParam(multiplier_range_stepper);
 
     auto const update_range_stepper_visibility =

@@ -14,7 +14,7 @@ class BlossomPanel : public rack::app::ModuleWidget {
   using Controls = BlossomControls;
   using Jack = Jack<BlossomPanel>;
   using Knob = Knob<BlossomPanel>;
-  using Toggle2 = Toggle<BlossomPanel, 2>;
+  using Switch = Switch<BlossomPanel>;
 
 public:
   static auto constexpr svg_dir = "blossom";
@@ -44,7 +44,7 @@ public:
     addInput(Jack::input(module, column1, y, Controls::RatioCvInput));
     addParam(Knob::tiny(module, column2, y, Controls::RatioAvKnob));
     addParam(Knob::large(module, column3, y, Controls::RatioKnob));
-    addParam(Toggle2::create(module, column4, y, Controls::FreeRatioSwitch));
+    addParam(Switch::thumb<2>(module, column4, y, Controls::FreeRatioSwitch));
 
     y += dy;
     addInput(Jack::input(module, column1, y, Controls::DepthCvInput));
@@ -62,14 +62,14 @@ public:
 
     addInput(Jack::input(module, column1, y, Controls::XGainCvInput));
     addParam(Knob::small(module, column2, y, Controls::XGainKnob));
-    addParam(Toggle2::create(module, column3, y, Controls::XRangeSwitch));
+    addParam(Switch::thumb<2>(module, column3, y, Controls::XRangeSwitch));
     addOutput(Jack::output(module, column4, y + output_port_offset,
                            Controls::XOutput));
 
     y += dy;
     addInput(Jack::input(module, column1, y, Controls::YGainCvInput));
     addParam(Knob::small(module, column2, y, Controls::YGainKnob));
-    addParam(Toggle2::create(module, column3, y, Controls::YRangeSwitch));
+    addParam(Switch::thumb<2>(module, column3, y, Controls::YRangeSwitch));
     addOutput(Jack::output(module, column4, y + output_port_offset,
                            Controls::YOutput));
   }

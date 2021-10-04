@@ -10,32 +10,30 @@
 namespace dhe {
 namespace func {
 
-template <typename PanelT>
-class OffsetRangeStepper : public Toggle<PanelT, offset_ranges.size()> {
-public:
-  static inline auto create(rack::engine::Module *module, float xmm, float ymm,
-                            int index) -> OffsetRangeStepper<PanelT> * {
-    return rack::createParamCentered<OffsetRangeStepper>(mm2px(xmm, ymm),
-                                                         module, index);
+struct OffsetRangeStepper {
+  static inline auto frame_names() -> std::vector<std::string> {
+    auto names = std::vector<std::string>{};
+    auto constexpr prefix = "offset-range-";
+    for (size_t position = 1; position <= offset_ranges.size(); position++) {
+      names.push_back(prefix + std::to_string(position));
+    }
+    return names;
   }
+};
 
-  OffsetRangeStepper() : Toggle<PanelT, offset_ranges.size()>{"offset-range"} {}
+struct MultiplierRangeStepper {
+  static inline auto frame_names() -> std::vector<std::string> {
+    auto names = std::vector<std::string>{};
+    auto constexpr prefix = "multiplier-range-";
+    for (size_t position = 1; position <= offset_ranges.size(); position++) {
+      names.push_back(prefix + std::to_string(position));
+    }
+    return names;
+  }
 };
 
 template <typename PanelT>
-class MultiplierRangeStepper : public Toggle<PanelT, multiplier_ranges.size()> {
-public:
-  static inline auto create(rack::engine::Module *module, float xmm, float ymm,
-                            int index) -> MultiplierRangeStepper * {
-    return rack::createParamCentered<MultiplierRangeStepper>(mm2px(xmm, ymm),
-                                                             module, index);
-  }
-
-  MultiplierRangeStepper()
-      : Toggle<PanelT, multiplier_ranges.size()>{"multiplier-range"} {}
-};
-
-template <typename PanelT> class OperatorSwitch : public Toggle<PanelT, 2> {
+class OperatorSwitch : public SwitchWidget<PanelT, ThumbSwitch<2>> {
 public:
   static inline auto create(rack::engine::Module *module, float xmm, float ymm,
                             int index, std::function<void(bool)> const &action)
@@ -49,7 +47,7 @@ public:
   OperatorSwitch() = default;
 
   void onChange(const rack::event::Change &e) override {
-    Toggle<PanelT, 2>::onChange(e);
+    SwitchWidget<PanelT, ThumbSwitch<2>>::onChange(e);
     auto const is_multiply = this->getParamQuantity()->getValue() > 0.5;
     operator_changed_to_(is_multiply);
   }

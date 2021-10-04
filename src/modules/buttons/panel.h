@@ -13,8 +13,8 @@ namespace buttons {
 class Panel : public rack::app::ModuleWidget {
   using Param = ParamIds;
   using Output = OutputIds;
-  using Button = Button<Panel>;
   using Jack = Jack<Panel>;
+  using Switch = Switch<Panel>;
 
 public:
   static auto constexpr svg_dir = "buttons";
@@ -35,8 +35,8 @@ public:
 
     for (int i = 0; i < button_count; i++) {
       auto const y = top + static_cast<float>(i) * dy;
-      addParam(Button::toggle(module, button_x, y, Param::Button + i));
-      addParam(Button::momentary(module, negate_x, y, Param::Negate + i));
+      addParam(Switch::toggle(module, button_x, y, Param::Button + i));
+      addParam(Switch::momentary(module, negate_x, y, Param::Negate + i));
       addOutput(Jack::output(module, port_x, y, Output::Out + i));
     }
   }

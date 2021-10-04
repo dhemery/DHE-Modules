@@ -9,19 +9,20 @@
 namespace dhe {
 
 namespace sequencizer {
-template <typename PanelT> class SelectionKnob : public Knob<PanelT>::Small {
+template <typename PanelT>
+class SelectionKnob : public KnobWidget<PanelT, SmallKnob> {
 public:
   static inline auto create(rack::engine::Module *module, float xmm, float ymm,
                             int index, std::function<void(int)> const &action)
-      -> SelectionKnob<PanelT> * {
-    auto knob = rack::createParamCentered<SelectionKnob<PanelT>>(
-        mm2px(xmm, ymm), module, index);
+      -> SelectionKnob * {
+    auto knob = rack::createParamCentered<SelectionKnob>(mm2px(xmm, ymm),
+                                                         module, index);
     knob->knob_changed_to_ = action;
     return knob;
   }
 
   void onChange(const rack::event::Change &e) override {
-    Knob<PanelT>::onChange(e);
+    KnobWidget<PanelT, SmallKnob>::onChange(e);
     auto const value = this->getParamQuantity()->getValue();
     auto const selection = static_cast<int>(value);
     knob_changed_to_(selection);
@@ -98,77 +99,70 @@ private:
   float step_width_;
 };
 
-template <typename PanelT>
-class AnchorModeStepper : public Toggle<PanelT, anchor_mode_count> {
-public:
-  static inline auto create(rack::engine::Module *module, float xmm, float ymm,
-                            int index) -> AnchorModeStepper * {
-    return rack::createParamCentered<AnchorModeStepper>(mm2px(xmm, ymm), module,
-                                                        index);
+struct AnchorModeStepper {
+  static inline auto frame_names() -> std::vector<std::string> {
+    auto names = std::vector<std::string>{};
+    auto constexpr prefix = "anchor-mode-";
+    for (size_t position = 1; position <= anchor_mode_count; position++) {
+      names.push_back(prefix + std::to_string(position));
+    }
+    return names;
   }
-
-  AnchorModeStepper() : Toggle<PanelT, anchor_mode_count>{"anchor-mode"} {}
 };
 
-template <typename PanelT>
-class AnchorSourceStepper : public Toggle<PanelT, anchor_source_count> {
-public:
-  static inline auto create(rack::engine::Module *module, float xmm, float ymm,
-                            int index) -> AnchorSourceStepper * {
-    return rack::createParamCentered<AnchorSourceStepper>(mm2px(xmm, ymm),
-                                                          module, index);
+struct AnchorSourceStepper {
+  static inline auto frame_names() -> std::vector<std::string> {
+    auto names = std::vector<std::string>{};
+    auto constexpr prefix = "anchor-source-";
+    for (size_t position = 1; position <= anchor_source_count; position++) {
+      names.push_back(prefix + std::to_string(position));
+    }
+    return names;
   }
-
-  AnchorSourceStepper()
-      : Toggle<PanelT, anchor_source_count>{"anchor-source"} {}
 };
 
-template <typename PanelT>
-class InterruptModeStepper : public Toggle<PanelT, interrupt_mode_count> {
-public:
-  static inline auto create(rack::engine::Module *module, float xmm, float ymm,
-                            int index) -> InterruptModeStepper * {
-    return rack::createParamCentered<InterruptModeStepper>(mm2px(xmm, ymm),
-                                                           module, index);
+struct InterruptModeStepper {
+  static inline auto frame_names() -> std::vector<std::string> {
+    auto names = std::vector<std::string>{};
+    auto constexpr prefix = "interrupt-mode-";
+    for (size_t position = 1; position <= interrupt_mode_count; position++) {
+      names.push_back(prefix + std::to_string(position));
+    }
+    return names;
   }
-
-  InterruptModeStepper()
-      : Toggle<PanelT, interrupt_mode_count>{"interrupt-mode"} {}
 };
 
-template <typename PanelT> class ShapeStepper : public Toggle<PanelT, 2> {
-public:
-  static inline auto create(rack::engine::Module *module, float xmm, float ymm,
-                            int index) -> ShapeStepper * {
-    return rack::createParamCentered<ShapeStepper>(mm2px(xmm, ymm), module,
-                                                   index);
+struct ShapeStepper {
+  static inline auto frame_names() -> std::vector<std::string> {
+    auto names = std::vector<std::string>{};
+    auto constexpr prefix = "shape-";
+    for (size_t position = 1; position <= 2; position++) {
+      names.push_back(prefix + std::to_string(position));
+    }
+    return names;
   }
-
-  ShapeStepper() : Toggle<PanelT, 2>{"shape"} {}
 };
 
-template <typename PanelT>
-class TriggerModeStepper : public Toggle<PanelT, trigger_mode_count> {
-public:
-  static inline auto create(rack::engine::Module *module, float xmm, float ymm,
-                            int index) -> TriggerModeStepper * {
-    return rack::createParamCentered<TriggerModeStepper>(mm2px(xmm, ymm),
-                                                         module, index);
+struct TriggerModeStepper {
+  static inline auto frame_names() -> std::vector<std::string> {
+    auto names = std::vector<std::string>{};
+    auto constexpr prefix = "trigger-mode-";
+    for (size_t position = 1; position <= trigger_mode_count; position++) {
+      names.push_back(prefix + std::to_string(position));
+    }
+    return names;
   }
-
-  TriggerModeStepper() : Toggle<PanelT, trigger_mode_count>{"trigger-mode"} {}
 };
 
-template <typename PanelT>
-class SustainModeStepper : public Toggle<PanelT, sustain_mode_count> {
-public:
-  static inline auto create(rack::engine::Module *module, float xmm, float ymm,
-                            int index) -> SustainModeStepper * {
-    return rack::createParamCentered<SustainModeStepper>(mm2px(xmm, ymm),
-                                                         module, index);
+struct SustainModeStepper {
+  static inline auto frame_names() -> std::vector<std::string> {
+    auto names = std::vector<std::string>{};
+    auto constexpr prefix = "sustain-mode-";
+    for (size_t position = 1; position <= sustain_mode_count; position++) {
+      names.push_back(prefix + std::to_string(position));
+    }
+    return names;
   }
-
-  SustainModeStepper() : Toggle<PanelT, sustain_mode_count>{"sustain-mode"} {}
 };
 
 } // namespace sequencizer
