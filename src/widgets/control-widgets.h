@@ -9,119 +9,138 @@
 #include <app/SvgSwitch.hpp>
 #include <helpers.hpp>
 #include <string>
+#include <vector>
 
 namespace dhe {
 
-template <typename PanelT, int N> class Toggle : public rack::app::SvgSwitch {
-public:
-  static inline auto create(rack::engine::Module *module, float xmm, float ymm,
-                            int index) -> Toggle * {
-    return rack::createParamCentered<Toggle>(mm2px(xmm, ymm), module, index);
-  }
-
-  Toggle() : Toggle{"toggle-" + std::to_string(N)} {}
-
-protected:
-  Toggle(std::string const &name) {
-    auto const toggle_name_prefix = name + "-";
-    for (size_t position = 1; position <= N; position++) {
-      addFrame(load_svg(PanelT::svg_dir,
-                        toggle_name_prefix + std::to_string(position)));
+template <typename PanelT> struct Switch {
+  template <typename SwitchT> struct Widget : public rack::app::SvgSwitch {
+    Widget() {
+      auto const panel_prefix = PanelT::svg_dir + "/";
+      for (auto const &frame_name : SwitchT::frame_names()) {
+        addFrame(load_svg(panel_prefix + frame_name + ".svg"));
+      }
+      shadow->opacity = 0.F;
     }
-    shadow->opacity = 0.F;
-  }
-};
-
-template <typename PanelT> class Button : public rack::app::SvgSwitch {
-public:
-  static inline auto toggle(rack::engine::Module *module, float xmm, float ymm,
-                            int index) -> Button * {
-    return rack::createParamCentered<Button>(mm2px(xmm, ymm), module, index);
-  }
-
-  static inline auto momentary(rack::engine::Module *module, float xmm,
-                               float ymm, int index) -> Button * {
-    auto button =
-        rack::createParamCentered<Button>(mm2px(xmm, ymm), module, index);
-    button->rack::app::SvgSwitch::momentary = true;
-    return button;
-  }
-
-  static inline auto output(rack::engine::Module *module, float xmm, float ymm,
-                            int index) -> Button * {
-    auto button =
-        rack::createParamCentered<OutputButton>(mm2px(xmm, ymm), module, index);
-    button->rack::app::SvgSwitch::momentary = true;
-    return button;
-  }
-
-  Button() : Button{"button"} {}
-
-  class OutputButton : public Button {
-  public:
-    OutputButton() : Button{"output-button"} {}
   };
 
-private:
-  Button(std::string const &button_name) {
-    addFrame(load_svg(PanelT::svg_dir, button_name + "-released"));
-    addFrame(load_svg(PanelT::svg_dir, button_name + "-pressed"));
-    shadow->opacity = 0.F;
+  template <typename SwitchT>
+  static inline auto create(rack::engine::Module *module, float xmm, float ymm,
+                            int index) -> Widget<SwitchT> * {
+    return rack::createParamCentered<Widget<SwitchT>>(mm2px(xmm, ymm), module,
+                                                      index);
+  }
+
+  template <int N> struct Thumb {
+    static inline auto frame_names() -> std::vector<std::string> {
+      auto names = std::vector<std::string>{};
+      auto const prefix = "toggle-" + std::to_string(N) + "-";
+      for (size_t position = 1; position <= N; position++) {
+        names.push_back(prefix + std::to_string(position));
+      }
+      return names;
+    }
+  };
+
+  struct Button {
+    static inline auto frame_names() -> std::vector<std::string> {
+      static auto const names =
+          std::vector<std::string>{"button-released", "button-pressed"};
+      return names;
+    }
+  };
+
+  struct OutputButton {
+    static inline auto frame_names() -> std::vector<std::string> {
+      static auto const names = std::vector<std::string>{
+          "output-button-released", "output-button-pressed"};
+      return names;
+    }
+  };
+
+  template <typename StepperT>
+  static inline auto stepper(rack::engine::Module *module, float xmm, float ymm,
+                             int index) -> Widget<StepperT> * {
+    return Widget<StepperT>::create(mm2px(xmm, ymm), module, index);
+  }
+
+  template <int N>
+  static inline auto thumb(rack::engine::Module *module, float xmm, float ymm,
+                           int index) -> Widget<Thumb<N>> * {
+    return create<Thumb<N>>(module, xmm, ymm, index);
+  }
+
+  template <typename ButtonT = Button>
+  static inline auto toggle(rack::engine::Module *module, float xmm, float ymm,
+                            int index) -> Widget<ButtonT> * {
+    return create<ButtonT>(module, xmm, ymm, index);
+  }
+
+  template <typename ButtonT = Button>
+  static inline auto momentary(rack::engine::Module *module, float xmm,
+                               float ymm, int index) -> Widget<ButtonT> * {
+    auto button = create<ButtonT>(module, xmm, ymm, index);
+    button->momentary = true;
+    return button;
   }
 };
 
-template <typename PanelT> class Knob : public rack::app::SvgKnob {
-public:
+template <typename PanelT> struct Knob {
+  template <typename KnobT> struct Widget : public rack::app::SvgKnob {
+    Widget() {
+      auto knob_svg = load_svg(PanelT::svg_dir, KnobT::svg_file);
+      setSvg(knob_svg);
+      minAngle = -0.83F * pi;
+      maxAngle = 0.83F * M_PI;
+      shadow->opacity = 0.F;
+    }
+  };
+
+  template <typename KnobT>
+  static inline auto create(rack::engine::Module *module, float xmm, float ymm,
+                            int index) -> Widget<KnobT> * {
+    return rack::createParamCentered<Widget<KnobT>>(mm2px(xmm, ymm), module,
+                                                    index);
+  }
+
+  struct Large {
+    static auto constexpr svg_file = "knob-large";
+  };
+
+  struct Medium {
+    static auto constexpr svg_file = "knob-medium";
+  };
+
+  struct Small {
+    static auto constexpr svg_file = "knob-small";
+  };
+
+  struct Tiny {
+    static auto constexpr svg_file = "knob-tiny";
+  };
+
   static inline auto large(rack::engine::Module *module, float xmm, float ymm,
-                           int index) -> Knob * {
-    return rack::createParamCentered<Large>(mm2px(xmm, ymm), module, index);
+                           int index) -> Widget<Large> * {
+    return create<Large>(mm2px(xmm, ymm), module, index);
   }
 
   static inline auto medium(rack::engine::Module *module, float xmm, float ymm,
                             int index) -> Knob * {
-    return rack::createParamCentered<Medium>(mm2px(xmm, ymm), module, index);
+    return create<Medium>(mm2px(xmm, ymm), module, index);
   }
 
   static inline auto small(rack::engine::Module *module, float xmm, float ymm,
                            int index) -> Knob * {
-    return rack::createParamCentered<Small>(mm2px(xmm, ymm), module, index);
+    return create<Small>(mm2px(xmm, ymm), module, index);
   }
 
   static inline auto tiny(rack::engine::Module *module, float xmm, float ymm,
                           int index) -> Knob * {
-    return rack::createParamCentered<Tiny>(mm2px(xmm, ymm), module, index);
+    return create<Tiny>(mm2px(xmm, ymm), module, index);
   }
-
-  Knob(std::string const &knob_name) {
-    auto knob_svg = load_svg(PanelT::svg_dir, knob_name);
-    setSvg(knob_svg);
-    minAngle = -0.83F * pi;
-    maxAngle = 0.83F * M_PI;
-    shadow->opacity = 0.F;
-  }
-
-  class Large : public Knob {
-  public:
-    Large() : Knob{"knob-large"} {}
-  };
-
-  class Medium : public Knob {
-  public:
-    Medium() : Knob{"knob-medium"} {}
-  };
-
-  class Small : public Knob {
-  public:
-    Small() : Knob{"knob-small"} {}
-  };
-
-  class Tiny : public Knob {
-  public:
-    Tiny() : Knob{"knob-tiny"} {}
-  };
 };
 
-template <typename PanelT> class Jack : public rack::app::SvgPort {
+template <typename PanelT> struct Jack : public rack::app::SvgPort {
   struct Widget : rack::app::SvgPort {
     Widget() {
       setSvg(load_svg(PanelT::svg_dir, "port"));
@@ -129,7 +148,6 @@ template <typename PanelT> class Jack : public rack::app::SvgPort {
     }
   };
 
-public:
   static inline auto input(rack::engine::Module *module, float xmm, float ymm,
                            int index) -> Widget * {
     return rack::createInputCentered<Widget>(mm2px(xmm, ymm), module, index);
