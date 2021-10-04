@@ -13,7 +13,6 @@ class Func1Panel : public rack::app::ModuleWidget {
   using Controls = FuncControls<channel_count>;
   using Jack = Jacks<Func1Panel>;
   using Knob = Knobs<Func1Panel>;
-  using OperatorSwitch = OperatorSwitch<Func1Panel>;
   using Switch = Switches<Func1Panel>;
 
 public:
@@ -65,8 +64,9 @@ public:
             multiplier_range_stepper->hide();
           }
         };
-    addParam(OperatorSwitch::create(module, x, row2, Controls::OperationSwitch,
-                                    update_range_stepper_visibility));
+    addParam(OperatorSwitch<Func1Panel>::create(
+        module, x, row2, Controls::OperationSwitch,
+        update_range_stepper_visibility));
   }
 };
 } // namespace func

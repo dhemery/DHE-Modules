@@ -13,7 +13,6 @@ class Func6Panel : public rack::app::ModuleWidget {
   using Controls = FuncControls<channel_count>;
   using Jack = Jacks<Func6Panel>;
   using Knob = Knobs<Func6Panel>;
-  using OperatorSwitch = OperatorSwitch<Func6Panel>;
   using Switch = Switches<Func6Panel>;
 
 public:
@@ -68,9 +67,9 @@ public:
             }
           };
 
-      addParam(OperatorSwitch::create(module, column2, y,
-                                      Controls::OperationSwitch + row,
-                                      update_range_stepper));
+      addParam(OperatorSwitch<Func6Panel>::create(
+          module, column2, y, Controls::OperationSwitch + row,
+          update_range_stepper));
     }
   }
 }; // namespace func
