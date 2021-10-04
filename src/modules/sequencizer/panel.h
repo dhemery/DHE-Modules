@@ -54,11 +54,11 @@ template <int N> class Panel : public rack::app::ModuleWidget {
   using Light = LightIds<N>;
   using Output = OutputIds;
   using EndMarker = EndMarker<Panel, N>;
-  using Jack = Jack<Panel<N>>;
-  using Knob = Knob<Panel<N>>;
+  using Jack = Jacks<Panel<N>>;
+  using Knob = Knobs<Panel<N>>;
   using SelectionKnob = SelectionKnob<Panel<N>>;
   using StartMarker = StartMarker<Panel<N>>;
-  using Switch = Switch<Panel<N>>;
+  using Switch = Switches<Panel<N>>;
 
 public:
   static auto constexpr svg_dir = "sequencizer";

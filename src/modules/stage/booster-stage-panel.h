@@ -9,9 +9,9 @@ namespace stage {
 
 class BoosterStagePanel : public rack::app::ModuleWidget {
   using Controls = BoosterStageControls;
-  using Jack = Jack<BoosterStagePanel>;
-  using Knob = Knob<BoosterStagePanel>;
-  using Switch = Switch<BoosterStagePanel>;
+  using Jack = Jacks<BoosterStagePanel>;
+  using Knob = Knobs<BoosterStagePanel>;
+  using Switch = Switches<BoosterStagePanel>;
 
 public:
   static auto constexpr svg_dir = "booster-stage";

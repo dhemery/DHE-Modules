@@ -89,7 +89,7 @@ static auto layout(int input_count) -> Layout {
 }
 
 template <int N> class Panel : public rack::app::ModuleWidget {
-  using Switch = Switch<Panel<N>>;
+  using Switch = Switches<Panel<N>>;
 
 public:
   static auto constexpr svg_dir = "truth";
@@ -141,7 +141,7 @@ private:
   using Param = ParamIds<N>;
   using Input = InputIds<N>;
   using Output = OutputIds;
-  using Jack = Jack<Panel<N>>;
+  using Jack = Jacks<Panel<N>>;
 };
 } // namespace truth
 } // namespace dhe

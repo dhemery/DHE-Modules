@@ -11,9 +11,9 @@ namespace swave {
 
 class SwavePanel : public rack::app::ModuleWidget {
   using Controls = SwaveControls;
-  using Jack = Jack<SwavePanel>;
-  using Knob = Knob<SwavePanel>;
-  using Switch = Switch<SwavePanel>;
+  using Jack = Jacks<SwavePanel>;
+  using Knob = Knobs<SwavePanel>;
+  using Switch = Switches<SwavePanel>;
 
 public:
   static auto constexpr svg_dir = "swave";

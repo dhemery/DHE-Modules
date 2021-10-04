@@ -109,10 +109,10 @@ template <int N> class CurveSequencerPanel : public rack::app::ModuleWidget {
   using Controls =
       CurveSequencerControls<rack::engine::Input, rack::engine::Output,
                              rack::engine::Param, rack::engine::Light, N>;
-  using Jack = Jack<CurveSequencerPanel<N>>;
-  using Knob = Knob<CurveSequencerPanel<N>>;
-  using Switch = Switch<CurveSequencerPanel<N>>;
+  using Jack = Jacks<CurveSequencerPanel<N>>;
+  using Knob = Knobs<CurveSequencerPanel<N>>;
   using SelectionKnob = SelectionKnob<CurveSequencerPanel<N>>;
+  using Switch = Switches<CurveSequencerPanel<N>>;
 
 public:
   static auto constexpr svg_dir = "curve-sequencer";

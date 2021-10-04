@@ -12,8 +12,8 @@ namespace cubic {
 
 class CubicPanel : public rack::app::ModuleWidget {
   using Controls = CubicControls;
-  using Jack = Jack<CubicPanel>;
-  using Knob = Knob<CubicPanel>;
+  using Jack = Jacks<CubicPanel>;
+  using Knob = Knobs<CubicPanel>;
 
 public:
   static auto constexpr svg_dir = "cubic";

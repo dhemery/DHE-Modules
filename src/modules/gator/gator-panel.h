@@ -11,8 +11,8 @@ namespace gator {
 
 class GatorPanel : public rack::app::ModuleWidget {
   using Controls = GatorControls;
-  using Jack = Jack<GatorPanel>;
-  using Switch = Switch<GatorPanel>;
+  using Jack = Jacks<GatorPanel>;
+  using Switch = Switches<GatorPanel>;
 
 public:
   static auto constexpr svg_dir = "gator";

@@ -11,9 +11,9 @@ namespace ranger {
 
 class RangerPanel : public rack::app::ModuleWidget {
   using Controls = RangerControls;
-  using Jack = Jack<RangerPanel>;
-  using Knob = Knob<RangerPanel>;
-  using Switch = Switch<RangerPanel>;
+  using Jack = Jacks<RangerPanel>;
+  using Knob = Knobs<RangerPanel>;
+  using Switch = Switches<RangerPanel>;
 
 public:
   static auto constexpr svg_dir = "ranger";

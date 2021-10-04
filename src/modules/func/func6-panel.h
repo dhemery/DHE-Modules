@@ -11,10 +11,10 @@ namespace func {
 class Func6Panel : public rack::app::ModuleWidget {
   static auto constexpr channel_count = 6;
   using Controls = FuncControls<channel_count>;
-  using Jack = Jack<Func6Panel>;
-  using Knob = Knob<Func6Panel>;
+  using Jack = Jacks<Func6Panel>;
+  using Knob = Knobs<Func6Panel>;
   using OperatorSwitch = OperatorSwitch<Func6Panel>;
-  using Switch = Switch<Func6Panel>;
+  using Switch = Switches<Func6Panel>;
 
 public:
   static auto constexpr svg_dir = "func";

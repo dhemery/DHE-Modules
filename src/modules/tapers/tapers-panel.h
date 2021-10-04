@@ -11,9 +11,9 @@ namespace tapers {
 
 class TapersPanel : public rack::app::ModuleWidget {
   using Controls = TapersControls;
-  using Jack = Jack<TapersPanel>;
-  using Knob = Knob<TapersPanel>;
-  using Switch = Switch<TapersPanel>;
+  using Jack = Jacks<TapersPanel>;
+  using Knob = Knobs<TapersPanel>;
+  using Switch = Switches<TapersPanel>;
 
 public:
   static auto constexpr svg_dir = "tapers";

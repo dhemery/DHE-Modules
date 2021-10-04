@@ -11,8 +11,8 @@ namespace dhe {
 namespace fuzzy_logic {
 class Panel : public rack::app::ModuleWidget {
   using Controls = FuzzyLogicControls;
-  using Jack = Jack<Panel>;
-  using Switch = Switch<Panel>;
+  using Jack = Jacks<Panel>;
+  using Switch = Switches<Panel>;
 
 public:
   static auto constexpr svg_dir = "fuzzy-logic";

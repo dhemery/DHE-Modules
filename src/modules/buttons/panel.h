@@ -13,8 +13,8 @@ namespace buttons {
 class Panel : public rack::app::ModuleWidget {
   using Param = ParamIds;
   using Output = OutputIds;
-  using Jack = Jack<Panel>;
-  using Switch = Switch<Panel>;
+  using Jack = Jacks<Panel>;
+  using Switch = Switches<Panel>;
 
 public:
   static auto constexpr svg_dir = "buttons";

@@ -9,8 +9,8 @@ namespace stage {
 
 class StagePanel : public rack::app::ModuleWidget {
   using Controls = StageControls;
-  using Jack = Jack<StagePanel>;
-  using Knob = Knob<StagePanel>;
+  using Jack = Jacks<StagePanel>;
+  using Knob = Knobs<StagePanel>;
 
 public:
   static auto constexpr svg_dir = "stage";

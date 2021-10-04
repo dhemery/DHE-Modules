@@ -8,9 +8,9 @@ namespace dhe {
 namespace stage {
 class HostagePanel : public rack::app::ModuleWidget {
   using Controls = HostageControls;
-  using Jack = Jack<HostagePanel>;
-  using Knob = Knob<HostagePanel>;
-  using Switch = Switch<HostagePanel>;
+  using Jack = Jacks<HostagePanel>;
+  using Knob = Knobs<HostagePanel>;
+  using Switch = Switches<HostagePanel>;
 
 public:
   static auto constexpr svg_dir = "hostage";

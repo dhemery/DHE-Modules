@@ -12,9 +12,9 @@ namespace xycloid {
 
 class XycloidPanel : public rack::app::ModuleWidget {
   using Controls = XycloidControls;
-  using Jack = Jack<XycloidPanel>;
-  using Knob = Knob<XycloidPanel>;
-  using Switch = Switch<XycloidPanel>;
+  using Jack = Jacks<XycloidPanel>;
+  using Knob = Knobs<XycloidPanel>;
+  using Switch = Switches<XycloidPanel>;
 
 public:
   static auto constexpr svg_dir = "xycloid";

@@ -51,7 +51,7 @@ struct OutputButton {
   }
 };
 
-template <typename PanelT> struct Switch {
+template <typename PanelT> struct Switches {
   template <typename SwitchT> using Widget = SwitchWidget<PanelT, SwitchT>;
 
   template <typename SwitchT>
@@ -109,7 +109,7 @@ struct TinyKnob {
   static auto constexpr svg_file = "knob-tiny";
 };
 
-template <typename PanelT> struct Knob {
+template <typename PanelT> struct Knobs {
   template <typename KnobT> using Widget = KnobWidget<PanelT, KnobT>;
 
   template <typename KnobT>
@@ -140,22 +140,25 @@ template <typename PanelT> struct Knob {
   }
 };
 
-template <typename PanelT> struct Jack : public rack::app::SvgPort {
-  struct Widget : rack::app::SvgPort {
-    Widget() {
-      setSvg(load_svg(PanelT::svg_dir, "port"));
-      shadow->opacity = 0.F;
-    }
-  };
+template <typename PanelT> struct JackWidget : rack::app::SvgPort {
+  JackWidget() {
+    setSvg(load_svg(PanelT::svg_dir, "port"));
+    shadow->opacity = 0.F;
+  }
+};
+
+template <typename PanelT> struct Jacks : public rack::app::SvgPort {
 
   static inline auto input(rack::engine::Module *module, float xmm, float ymm,
-                           int index) -> Widget * {
-    return rack::createInputCentered<Widget>(mm2px(xmm, ymm), module, index);
+                           int index) -> JackWidget<PanelT> * {
+    return rack::createInputCentered<JackWidget<PanelT>>(mm2px(xmm, ymm),
+                                                         module, index);
   }
 
   static inline auto output(rack::engine::Module *module, float xmm, float ymm,
-                            int index) -> Jack<PanelT>::Widget * {
-    return rack::createOutputCentered<Widget>(mm2px(xmm, ymm), module, index);
+                            int index) -> JackWidget<PanelT> * {
+    return rack::createOutputCentered<JackWidget<PanelT>>(mm2px(xmm, ymm),
+                                                          module, index);
   }
 };
 } // namespace dhe

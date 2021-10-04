@@ -12,9 +12,9 @@ namespace blossom {
 
 class BlossomPanel : public rack::app::ModuleWidget {
   using Controls = BlossomControls;
-  using Jack = Jack<BlossomPanel>;
-  using Knob = Knob<BlossomPanel>;
-  using Switch = Switch<BlossomPanel>;
+  using Jack = Jacks<BlossomPanel>;
+  using Knob = Knobs<BlossomPanel>;
+  using Switch = Switches<BlossomPanel>;
 
 public:
   static auto constexpr svg_dir = "blossom";

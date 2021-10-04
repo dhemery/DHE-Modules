@@ -8,9 +8,9 @@ namespace dhe {
 namespace stage {
 class UpstagePanel : public rack::app::ModuleWidget {
   using Controls = UpstageControls;
-  using Jack = Jack<UpstagePanel>;
-  using Knob = Knob<UpstagePanel>;
-  using Switch = Switch<UpstagePanel>;
+  using Jack = Jacks<UpstagePanel>;
+  using Knob = Knobs<UpstagePanel>;
+  using Switch = Switches<UpstagePanel>;
 
 public:
   static auto constexpr svg_dir = "upstage";
