@@ -249,17 +249,15 @@ public:
           Param::StepStartAnchorMode + step));
       addParam(Knob::small(module, step_x, start_anchor_level_y,
                            Param::StepStartAnchorLevel + step));
-      addParam(Switch::template create<AnchorSourceStepper>(
-          module, step_x, start_anchor_source_y,
-          Param::StepStartAnchorSource + step));
 
+      AnchorSources::config_panel(this, module, step_x, start_anchor_source_y,
+                                  Param::StepStartAnchorSource + step);
       addParam(Switch::template create<AnchorModeStepper>(
           module, step_x, end_anchor_mode_y, Param::StepEndAnchorMode + step));
       addParam(Knob::small(module, step_x, end_anchor_level_y,
                            Param::StepEndAnchorLevel + step));
-      addParam(Switch::template create<AnchorSourceStepper>(
-          module, step_x, end_anchor_source_y,
-          Param::StepEndAnchorSource + step));
+      AnchorSources::config_panel(this, module, step_x, end_anchor_source_y,
+                                  Param::StepEndAnchorSource + step);
 
       addParam(
           Knob::small(module, step_x, duration_y, Param::StepDuration + step));

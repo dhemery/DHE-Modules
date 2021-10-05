@@ -109,6 +109,29 @@ struct AnchorModeStepper {
   }
 };
 
+struct AnchorSources {
+  static inline auto frame_names() -> std::vector<std::string> {
+    static auto const frame_names =
+        stepper_frame_names("anchor-source", anchor_source_count);
+    return frame_names;
+  }
+
+  template <typename M>
+  static inline void config_module(M *module, std::string const &name,
+                                   int index) {
+    static auto const labels =
+        std::vector<std::string>{"No sustain", "Sustain until triggered"};
+    module->configParam(module, index, name, labels, 0);
+  }
+
+  template <typename P, typename M>
+  static inline void config_panel(P *panel, M *module, float xmm, float ymm,
+                                  int index) {
+    panel->addParam(
+        Switches<P>::template create<AnchorSources>(module, xmm, ymm, index));
+  }
+};
+
 struct AnchorSourceStepper {
   static inline auto frame_names() -> std::vector<std::string> {
     static auto const frame_names =
