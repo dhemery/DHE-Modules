@@ -69,32 +69,12 @@ public:
     configOutput(Output::Out, "Sequencer");
 
     for (auto step = 0; step < N; step++) {
-      config_switch(this, Param::StepTriggerMode + step, "Trigger mode",
-                    {"Gate rises", "Gate falls", "Gate rises or falls",
-                     "Gate is high", "Gate is low"},
-                    0);
-      config_switch(
-          this, Param::StepInterruptMode + step, "Interrupt",
-          {"Ignore triggers while generating", "Interrupt if triggered"});
-      config_switch(this, Param::StepSustainMode + step, "Sustain",
-                    {"No sustain", "Sustain until triggered"}, 0);
-
-      config_switch(this, Param::StepStartAnchorSource + step,
-                    "Start anchor source", {"Level", "A", "B", "C", "Out"}, 4);
       config_level_knob(this, Param::StepStartAnchorLevel + step,
                         Param::LevelRange, "Start level");
-      config_toggle<2>(this, Param::StepStartAnchorMode + step,
-                       "Start anchor mode",
-                       {"Sample the source", "Track the source"});
 
-      config_switch(this, Param::StepEndAnchorSource + step,
-                    "End anchor source", {"Level", "A", "B", "C", "Out"});
       config_level_knob(this, Param::StepEndAnchorLevel + step,
                         Param::LevelRange, "End level");
-      config_toggle<2>(this, Param::StepEndAnchorMode + step, "End anchor mode",
-                       {"Sample the source", "Track the source"}, 1);
 
-      config_curve_shape_switch(this, Param::StepShape + step, "Shape");
       config_curvature_knob(this, Param::StepCurvature + step, "Curvature");
       config_duration_knob(this, Param::StepDuration + step,
                            Param::DurationRange, "Duration");

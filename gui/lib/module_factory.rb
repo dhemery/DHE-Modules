@@ -200,7 +200,7 @@ class ModuleFactory
   end
 
   def shape_toggle(x:, y:)
-    toggle(x: x, y: y, labels: %w[J S], selection: 1)
+    toggle(x: x, y: y, labels: %w[J StepperT], selection: 1)
   end
 
   def stepper(x:, y:, name:, size: :small, options:, selection: 0, width:, hidden: false)

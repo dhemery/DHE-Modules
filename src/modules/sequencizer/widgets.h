@@ -101,73 +101,63 @@ private:
   float step_width_;
 };
 
-struct AnchorModeStepper {
-  static inline auto frame_names() -> std::vector<std::string> {
-    static auto const frame_names =
-        stepper_frame_names("anchor-mode", anchor_mode_count);
-    return frame_names;
+struct AnchorModes {
+  static auto constexpr frame_prefix = "anchor-mode";
+
+  static inline auto labels() -> std::vector<std::string> const & {
+    static auto const labels =
+        std::vector<std::string>{"Sample the source", "Track the source"};
+    return labels;
   }
 };
 
 struct AnchorSources {
-  static inline auto frame_names() -> std::vector<std::string> {
-    static auto const frame_names =
-        stepper_frame_names("anchor-source", anchor_source_count);
-    return frame_names;
-  }
+  static auto constexpr frame_prefix = "anchor-source";
 
-  template <typename M>
-  static inline void config_module(M *module, std::string const &name,
-                                   int index) {
+  static inline auto labels() -> std::vector<std::string> const & {
+    static auto const labels =
+        std::vector<std::string>{"Level", "A", "B", "C", "Out"};
+    return labels;
+  }
+};
+
+struct InterruptModes {
+  static auto constexpr frame_prefix = "interrupt-mode";
+
+  static inline auto labels() -> std::vector<std::string> const & {
+    static auto const labels = std::vector<std::string>{
+        "Ignore triggers while generating", "Interrupt if triggered"};
+    return labels;
+  }
+};
+
+struct Shapes {
+  static auto constexpr frame_prefix = "shape";
+
+  static inline auto labels() -> std::vector<std::string> const & {
+    static auto const labels = std::vector<std::string>{"J", "S"};
+    return labels;
+  }
+};
+
+struct SustainModes {
+  static auto constexpr frame_prefix = "sustain-mode";
+
+  static inline auto labels() -> std::vector<std::string> {
     static auto const labels =
         std::vector<std::string>{"No sustain", "Sustain until triggered"};
-    module->configParam(module, index, name, labels, 0);
-  }
-
-  template <typename P, typename M>
-  static inline void config_panel(P *panel, M *module, float xmm, float ymm,
-                                  int index) {
-    panel->addParam(
-        Switches<P>::template create<AnchorSources>(module, xmm, ymm, index));
+    return labels;
   }
 };
 
-struct AnchorSourceStepper {
-  static inline auto frame_names() -> std::vector<std::string> {
-    static auto const frame_names =
-        stepper_frame_names("anchor-source", anchor_source_count);
-    return frame_names;
-  }
-};
+struct TriggerModes {
+  static auto constexpr frame_prefix = "trigger-mode";
 
-struct InterruptModeStepper {
-  static inline auto frame_names() -> std::vector<std::string> {
-    static auto const frame_names =
-        stepper_frame_names("interrupt-mode", interrupt_mode_count);
-    return frame_names;
-  }
-};
-
-struct ShapeStepper {
-  static inline auto frame_names() -> std::vector<std::string> {
-    static auto const frame_names = stepper_frame_names("shape", 2);
-    return frame_names;
-  }
-};
-
-struct TriggerModeStepper {
-  static inline auto frame_names() -> std::vector<std::string> {
-    static auto const frame_names =
-        stepper_frame_names("trigger-mode", trigger_mode_count);
-    return frame_names;
-  }
-};
-
-struct SustainModeStepper {
-  static inline auto frame_names() -> std::vector<std::string> {
-    static auto const frame_names =
-        stepper_frame_names("sustain-mode", sustain_mode_count);
-    return frame_names;
+  static inline auto labels() -> std::vector<std::string> {
+    static auto const labels = std::vector<std::string>{
+        "Gate rises", "Gate falls", "Gate rises or falls", "Gate is high",
+        "Gate is low"};
+    return labels;
   }
 };
 

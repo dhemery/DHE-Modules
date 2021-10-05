@@ -1,6 +1,7 @@
 #pragma once
 
 #include "components/cxmath.h"
+#include "config/common-config.h"
 #include "dimensions.h"
 #include "panel-assets.h"
 
@@ -24,10 +25,10 @@ struct SwitchWidget : public rack::app::SvgSwitch {
   }
 };
 
-static inline auto stepper_frame_names(std::string const &stepper_name,
+static inline auto stepper_frame_names(std::string const &frame_prefix,
                                        size_t n) -> std::vector<std::string> {
   auto frame_names = std::vector<std::string>{};
-  auto const prefix = stepper_name + "-";
+  auto const prefix = frame_prefix + "-";
   for (size_t position = 1; position <= n; position++) {
     frame_names.push_back(prefix + std::to_string(position));
   }
@@ -86,6 +87,25 @@ template <typename PanelT> struct Switches {
     auto button = create<ButtonT>(module, xmm, ymm, index);
     button->momentary = true;
     return button;
+  }
+};
+
+template <typename StepperT> struct Stepper {
+  static inline auto frame_names() -> std::vector<std::string> const & {
+    static auto const frame_names =
+        stepper_frame_names(StepperT::frame_prefix, StepperT::labels().size());
+    return frame_names;
+  }
+
+  template <typename PanelT>
+  static inline void install(PanelT *panel, int id, std::string const &name,
+                             float xmm, float ymm, int initial_state = 0) {
+    auto module = panel->getModule();
+    panel->addParam(Switches<PanelT>::template create<Stepper<StepperT>>(
+        module, xmm, ymm, id));
+    if (module != nullptr) {
+      config_switch(module, id, name, StepperT::labels(), initial_state);
+    }
   }
 };
 
