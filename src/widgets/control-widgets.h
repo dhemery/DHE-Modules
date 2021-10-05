@@ -24,14 +24,21 @@ struct SwitchWidget : public rack::app::SvgSwitch {
   }
 };
 
+static inline auto stepper_frame_names(std::string const &stepper_name,
+                                       size_t n) -> std::vector<std::string> {
+  auto frame_names = std::vector<std::string>{};
+  auto const prefix = stepper_name + "-";
+  for (size_t position = 1; position <= n; position++) {
+    frame_names.push_back(prefix + std::to_string(position));
+  }
+  return frame_names;
+}
+
 template <int N> struct ThumbSwitch {
   static inline auto frame_names() -> std::vector<std::string> {
-    auto names = std::vector<std::string>{};
-    auto const prefix = "toggle-" + std::to_string(N) + "-";
-    for (size_t position = 1; position <= N; position++) {
-      names.push_back(prefix + std::to_string(position));
-    }
-    return names;
+    static auto const frame_names =
+        stepper_frame_names("toggle-" + std::to_string(N), N);
+    return frame_names;
   }
 };
 

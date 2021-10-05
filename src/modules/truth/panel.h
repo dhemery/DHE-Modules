@@ -3,6 +3,7 @@
 #include <array>
 #include <engine/Module.hpp>
 #include <string>
+#include <vector>
 
 namespace dhe {
 namespace truth {
@@ -12,23 +13,17 @@ static auto constexpr outcome_dy = 5.08F;
 
 struct GateModeStepper {
   static inline auto frame_names() -> std::vector<std::string> {
-    auto names = std::vector<std::string>{};
-    auto constexpr prefix = "gate-mode-";
-    for (size_t position = 1; position <= gate_mode_count; position++) {
-      names.push_back(prefix + std::to_string(position));
-    }
-    return names;
+    static auto const frame_names =
+        stepper_frame_names("gate-mode", gate_mode_count);
+    return frame_names;
   }
 };
 
 struct OutcomeStepper {
   static inline auto frame_names() -> std::vector<std::string> {
-    auto names = std::vector<std::string>{};
-    auto constexpr prefix = "outcome-";
-    for (size_t position = 1; position <= outcome_count; position++) {
-      names.push_back(prefix + std::to_string(position));
-    }
-    return names;
+    static auto const frame_names =
+        stepper_frame_names("outcome", outcome_count);
+    return frame_names;
   }
 };
 

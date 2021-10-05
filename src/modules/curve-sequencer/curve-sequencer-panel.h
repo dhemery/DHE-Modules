@@ -9,6 +9,7 @@
 #include <functional>
 #include <string>
 #include <utility>
+#include <vector>
 
 namespace dhe {
 
@@ -85,23 +86,17 @@ private:
 
 struct AdvanceModeStepper {
   static inline auto frame_names() -> std::vector<std::string> {
-    auto names = std::vector<std::string>{};
-    auto constexpr prefix = "advance-mode-";
-    for (size_t position = 1; position <= advance_mode_count; position++) {
-      names.push_back(prefix + std::to_string(position));
-    }
-    return names;
+    static auto const frame_names =
+        stepper_frame_names("advance-mode", advance_mode_count);
+    return frame_names;
   }
 };
 
 struct GenerateModeStepper {
   static inline auto frame_names() -> std::vector<std::string> {
-    auto names = std::vector<std::string>{};
-    auto constexpr prefix = "generate-mode-";
-    for (size_t position = 1; position <= generate_mode_count; position++) {
-      names.push_back(prefix + std::to_string(position));
-    }
-    return names;
+    static auto const frame_names =
+        stepper_frame_names("generate-mode", generate_mode_count);
+    return frame_names;
   }
 };
 

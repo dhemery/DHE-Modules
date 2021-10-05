@@ -4,7 +4,9 @@
 #include "widgets/control-widgets.h"
 
 #include <functional>
+#include <string>
 #include <utility>
+#include <vector>
 #include <widget/event.hpp>
 
 namespace dhe {
@@ -12,23 +14,17 @@ namespace func {
 
 struct OffsetRangeStepper {
   static inline auto frame_names() -> std::vector<std::string> {
-    auto names = std::vector<std::string>{};
-    auto constexpr prefix = "offset-range-";
-    for (size_t position = 1; position <= offset_ranges.size(); position++) {
-      names.push_back(prefix + std::to_string(position));
-    }
-    return names;
+    static auto const frame_names =
+        stepper_frame_names("offset-range", offset_ranges.size());
+    return frame_names;
   }
 };
 
 struct MultiplierRangeStepper {
   static inline auto frame_names() -> std::vector<std::string> {
-    auto names = std::vector<std::string>{};
-    auto constexpr prefix = "multiplier-range-";
-    for (size_t position = 1; position <= offset_ranges.size(); position++) {
-      names.push_back(prefix + std::to_string(position));
-    }
-    return names;
+    static auto const frame_names =
+        stepper_frame_names("multiplier-range", multiplier_ranges.size());
+    return frame_names;
   }
 };
 

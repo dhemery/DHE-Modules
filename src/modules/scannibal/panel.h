@@ -11,6 +11,7 @@
 #include <jansson.h>
 #include <string>
 #include <utility>
+#include <vector>
 
 namespace dhe {
 
@@ -57,34 +58,24 @@ using ProgressLight =
 
 struct AnchorModeStepper {
   static inline auto frame_names() -> std::vector<std::string> {
-    auto names = std::vector<std::string>{};
-    auto constexpr prefix = "anchor-mode-";
-    for (size_t position = 1; position <= anchor_mode_count; position++) {
-      names.push_back(prefix + std::to_string(position));
-    }
-    return names;
+    static auto const frame_names =
+        stepper_frame_names("anchor-mode", anchor_mode_count);
+    return frame_names;
   }
 };
 
 struct AnchorSourceStepper {
   static inline auto frame_names() -> std::vector<std::string> {
-    auto names = std::vector<std::string>{};
-    auto constexpr prefix = "anchor-source-";
-    for (size_t position = 1; position <= anchor_source_count; position++) {
-      names.push_back(prefix + std::to_string(position));
-    }
-    return names;
+    static auto const frame_names =
+        stepper_frame_names("anchor-source", anchor_source_count);
+    return frame_names;
   }
 };
 
 struct ShapeStepper {
   static inline auto frame_names() -> std::vector<std::string> {
-    auto names = std::vector<std::string>{};
-    auto constexpr prefix = "shape-";
-    for (size_t position = 1; position <= 2; position++) {
-      names.push_back(prefix + std::to_string(position));
-    }
-    return names;
+    static auto const frame_names = stepper_frame_names("shape", 2);
+    return frame_names;
   }
 };
 
