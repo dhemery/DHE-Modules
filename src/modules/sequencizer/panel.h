@@ -230,7 +230,6 @@ public:
     auto constexpr enabled_y = bottom - button_radius;
 
     for (auto step = 0; step < N; step++) {
-      auto const step_name = "Step " + std::to_string(step + 1) + " ";
       auto const step_left =
           step_block_left + static_cast<float>(step) * step_width;
       auto const step_x = step_left + step_width / 2.F;
@@ -239,37 +238,29 @@ public:
           Light::StepProgress + step + step));
 
       Stepper<TriggerModes>::install(this, Param::StepTriggerMode + step,
-                                     step_name + "trigger mode", step_x,
-                                     trigger_y, 0);
+                                     step_x, trigger_y);
       Stepper<InterruptModes>::install(this, Param::StepInterruptMode + step,
-                                       step_name + "interrupt mode", step_x,
-                                       interrupt_y, 0);
+                                       step_x, interrupt_y);
       Stepper<SustainModes>::install(this, Param::StepSustainMode + step,
-                                     step_name + "sustain mode", step_x,
-                                     sustain_y, 0);
+                                     step_x, sustain_y);
       Stepper<AnchorModes>::install(this, Param::StepStartAnchorMode + step,
-                                    step_name + "start anchor mode", step_x,
-                                    start_anchor_mode_y, 0);
+                                    step_x, start_anchor_mode_y);
       addParam(Knob::small(module, step_x, start_anchor_level_y,
                            Param::StepStartAnchorLevel + step));
 
       Stepper<AnchorSources>::install(this, Param::StepStartAnchorSource + step,
-                                      step_name + "start anchor source", step_x,
-                                      start_anchor_source_y, 4);
+                                      step_x, start_anchor_source_y);
       Stepper<AnchorModes>::install(this, Param::StepEndAnchorMode + step,
-                                    step_name + "end anchor mode", step_x,
-                                    end_anchor_mode_y, 1);
+                                    step_x, end_anchor_mode_y);
       addParam(Knob::small(module, step_x, end_anchor_level_y,
                            Param::StepEndAnchorLevel + step));
       Stepper<AnchorSources>::install(this, Param::StepEndAnchorSource + step,
-                                      step_name + "end anchor source", step_x,
-                                      end_anchor_source_y, 0);
+                                      step_x, end_anchor_source_y);
 
       addParam(
           Knob::small(module, step_x, duration_y, Param::StepDuration + step));
 
-      Stepper<Shapes>::install(this, Param::StepShape + step,
-                               step_name + "shape", step_x, shape_y, 0);
+      Stepper<Shapes>::install(this, Param::StepShape + step, step_x, shape_y);
       addParam(Knob::small(module, step_x, curvature_y,
                            Param::StepCurvature + step));
 

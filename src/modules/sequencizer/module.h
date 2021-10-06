@@ -15,6 +15,7 @@
 #include "controls/curvature-inputs.h"
 #include "controls/duration-inputs.h"
 #include "controls/level-inputs.h"
+#include "widgets.h"
 
 #include <engine/Module.hpp>
 #include <jansson.h>
@@ -69,15 +70,33 @@ public:
     configOutput(Output::Out, "Sequencer");
 
     for (auto step = 0; step < N; step++) {
+      auto const step_name = "Step " + std::to_string(step + 1) + " ";
+      Stepper<TriggerModes>::config(this, Param::StepTriggerMode + step,
+                                    step_name + "trigger mode", 0);
+      Stepper<InterruptModes>::config(this, Param::StepInterruptMode + step,
+                                      step_name + "interrupt mode", 0);
+      Stepper<SustainModes>::config(this, Param::StepSustainMode + step,
+                                    step_name + "sustain mode", 0);
+
+      Stepper<AnchorModes>::config(this, Param::StepStartAnchorMode + step,
+                                   step_name + "start anchor mode", 0);
       config_level_knob(this, Param::StepStartAnchorLevel + step,
                         Param::LevelRange, "Start level");
+      Stepper<AnchorSources>::config(this, Param::StepStartAnchorSource + step,
+                                     step_name + "start anchor source", 4);
 
+      Stepper<AnchorModes>::config(this, Param::StepEndAnchorMode + step,
+                                   step_name + "end anchor mode", 1);
       config_level_knob(this, Param::StepEndAnchorLevel + step,
                         Param::LevelRange, "End level");
+      Stepper<AnchorSources>::config(this, Param::StepEndAnchorSource + step,
+                                     step_name + "end anchor source", 0);
 
       config_curvature_knob(this, Param::StepCurvature + step, "Curvature");
       config_duration_knob(this, Param::StepDuration + step,
                            Param::DurationRange, "Duration");
+      Stepper<Shapes>::config(this, Param::StepShape + step,
+                              step_name + "shape", 0);
       config_button(this, Param::StepEnabled + step, "Enabled", 1);
 
       controls_.show_inactive(step);

@@ -97,15 +97,16 @@ template <typename StepperT> struct Stepper {
     return frame_names;
   }
 
+  template <typename ModuleT>
+  static inline void config(ModuleT *module, int id, std::string const &name,
+                            int initial_state = 0) {
+    config_switch(module, id, name, StepperT::labels(), initial_state);
+  }
+
   template <typename PanelT>
-  static inline void install(PanelT *panel, int id, std::string const &name,
-                             float xmm, float ymm, int initial_state = 0) {
-    auto module = panel->getModule();
+  static inline void install(PanelT *panel, int id, float xmm, float ymm) {
     panel->addParam(Switches<PanelT>::template create<Stepper<StepperT>>(
-        module, xmm, ymm, id));
-    if (module != nullptr) {
-      config_switch(module, id, name, StepperT::labels(), initial_state);
-    }
+        panel->getModule(), xmm, ymm, id));
   }
 };
 
