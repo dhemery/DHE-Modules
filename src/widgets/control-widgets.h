@@ -99,8 +99,11 @@ template <typename StepperT> struct Stepper {
 
   template <typename ModuleT>
   static inline void config(ModuleT *module, int id, std::string const &name,
-                            int initial_state = 0) {
-    config_switch(module, id, name, StepperT::labels(), initial_state);
+                            typename StepperT::ValueT value) {
+    auto const labels = StepperT::labels();
+    auto const max_value = static_cast<float>(labels.size() - 1);
+    auto const default_value = static_cast<float>(value);
+    module->configSwitch(id, 0.F, max_value, default_value, name, labels);
   }
 
   template <typename PanelT>

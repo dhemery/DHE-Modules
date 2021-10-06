@@ -72,25 +72,32 @@ public:
     for (auto step = 0; step < N; step++) {
       auto const step_name = "Step " + std::to_string(step + 1) + " ";
       Stepper<TriggerModes>::config(this, Param::StepTriggerMode + step,
-                                    step_name + "trigger mode", 0);
+                                    step_name + "trigger mode",
+                                    TriggerMode::GateRises);
       Stepper<InterruptModes>::config(this, Param::StepInterruptMode + step,
-                                      step_name + "interrupt mode", 0);
+                                      step_name + "interrupt mode",
+                                      InterruptMode::No);
       Stepper<SustainModes>::config(this, Param::StepSustainMode + step,
-                                    step_name + "sustain mode", 0);
+                                    step_name + "sustain mode",
+                                    SustainMode::No);
 
       Stepper<AnchorModes>::config(this, Param::StepStartAnchorMode + step,
-                                   step_name + "start anchor mode", 0);
+                                   step_name + "start anchor mode",
+                                   AnchorMode::Sample);
       config_level_knob(this, Param::StepStartAnchorLevel + step,
                         Param::LevelRange, "Start level");
       Stepper<AnchorSources>::config(this, Param::StepStartAnchorSource + step,
-                                     step_name + "start anchor source", 4);
+                                     step_name + "start anchor source",
+                                     AnchorSource::Out);
 
       Stepper<AnchorModes>::config(this, Param::StepEndAnchorMode + step,
-                                   step_name + "end anchor mode", 1);
+                                   step_name + "end anchor mode",
+                                   AnchorMode::Track);
       config_level_knob(this, Param::StepEndAnchorLevel + step,
                         Param::LevelRange, "End level");
       Stepper<AnchorSources>::config(this, Param::StepEndAnchorSource + step,
-                                     step_name + "end anchor source", 0);
+                                     step_name + "end anchor source",
+                                     AnchorSource::Level);
 
       config_curvature_knob(this, Param::StepCurvature + step, "Curvature");
       config_duration_knob(this, Param::StepDuration + step,
