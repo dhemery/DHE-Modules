@@ -12,7 +12,7 @@ using TestFunc = std::function<void(Tester &)>;
 
 auto constexpr step_count = 8;
 
-struct Module {
+struct Signals {
   auto completion_mode(int step) const -> SustainMode {
     return completion_mode_[step];
   }
@@ -24,13 +24,13 @@ struct Module {
   std::array<TriggerMode, step_count> trigger_mode_{};    // NOLINT
 };
 
-using Sustainer = dhe::sequencizer::Sustainer<Module>;
+using Sustainer = dhe::sequencizer::Sustainer<Signals>;
 
 template <typename Run> static inline auto test(Run const &run) -> TestFunc {
   return [run](Tester &t) {
-    Module module{};
-    Sustainer sustainer{module};
-    run(t, module, sustainer);
+    Signals signals{};
+    Sustainer sustainer{signals};
+    run(t, signals, sustainer);
   };
 }
 } // namespace sequencizer

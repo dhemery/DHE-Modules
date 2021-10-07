@@ -24,10 +24,10 @@ struct SustainerTestCase {
 
   void operator()(Tester &t) const {
     auto constexpr step = 3;
-    Module module{};
-    Sustainer sustainer{module};
-    module.trigger_mode_[step] = trigger_mode_;
-    module.completion_mode_[step] = completion_mode_;
+    Signals signals{};
+    Sustainer sustainer{signals};
+    signals.trigger_mode_[step] = trigger_mode_;
+    signals.completion_mode_[step] = completion_mode_;
 
     assert_that(t, sustainer.is_done(step, latch_), is_equal_to(is_done_));
   }

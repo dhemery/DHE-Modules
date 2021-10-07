@@ -42,31 +42,31 @@ static inline auto is_triggered(TriggerMode mode, dhe::Latch const &gate)
   }
 }
 
-template <typename Module> class Interrupter {
+template <typename Signals> class Interrupter {
 public:
-  Interrupter(Module &module) : module_{module} {}
+  Interrupter(Signals &signals) : signals_{signals} {}
 
   auto is_interrupted(int step, Latch const &latch) -> bool {
-    return (module_.interrupt_mode(step) == InterruptMode::Yes) &&
-           is_triggered(module_.trigger_mode(step), latch);
+    return (signals_.interrupt_mode(step) == InterruptMode::Yes) &&
+           is_triggered(signals_.trigger_mode(step), latch);
   }
 
 private:
-  Module &module_;
+  Signals &signals_;
 };
 
-template <typename Module> class Sustainer {
+template <typename Signals> class Sustainer {
 public:
-  Sustainer(Module &module) : module_{module} {}
+  Sustainer(Signals &signals) : signals_{signals} {}
 
   auto is_done(int step, Latch const &latch) -> bool {
 
-    return (module_.completion_mode(step) == SustainMode::No) ||
-           is_triggered(module_.trigger_mode(step), latch);
+    return (signals_.completion_mode(step) == SustainMode::No) ||
+           is_triggered(signals_.trigger_mode(step), latch);
   }
 
 private:
-  Module &module_;
+  Signals &signals_;
 };
 
 } // namespace sequencizer

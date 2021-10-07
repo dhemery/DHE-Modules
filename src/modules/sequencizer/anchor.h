@@ -19,9 +19,9 @@ enum class AnchorSource {
 static auto constexpr anchor_source_count =
     static_cast<int>(AnchorSource::Out) + 1;
 
-template <typename Module> class Anchor {
+template <typename Signals> class Anchor {
 public:
-  Anchor(Module &module, AnchorType type) : module_{module}, type_{type} {}
+  Anchor(Signals &signals, AnchorType type) : signals_{signals}, type_{type} {}
 
   void enter(int step) {
     step_ = step;
@@ -29,28 +29,28 @@ public:
   }
 
   auto voltage() const -> float {
-    auto const mode = module_.anchor_mode(type_, step_);
+    auto const mode = signals_.anchor_mode(type_, step_);
     return mode == AnchorMode::Track ? source_voltage() : sample_;
   }
 
 private:
-  Module &module_{};
+  Signals &signals_{};
   AnchorType type_{};
   int step_{};
   float sample_{};
 
   auto source_voltage() const -> float {
-    switch (module_.anchor_source(type_, step_)) {
+    switch (signals_.anchor_source(type_, step_)) {
     case AnchorSource::InA:
-      return module_.in_a();
+      return signals_.in_a();
     case AnchorSource::InB:
-      return module_.in_b();
+      return signals_.in_b();
     case AnchorSource::InC:
-      return module_.in_c();
+      return signals_.in_c();
     case AnchorSource::Level:
-      return module_.anchor_level(type_, step_);
+      return signals_.anchor_level(type_, step_);
     case AnchorSource::Out:
-      return module_.output();
+      return signals_.output();
     default:
       return 0.F;
     }

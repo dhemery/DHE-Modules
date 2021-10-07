@@ -18,7 +18,7 @@ public:
   GeneratorSuite() : Suite{"dhe::sequencizer::Generator"} {}
   void run(Tester &t) override {
     t.run("start(s) enters anchors at step",
-          test([](Tester &t, Module & /*module*/, Anchor &start_anchor,
+          test([](Tester &t, Signals & /*module*/, Anchor &start_anchor,
                   Anchor &end_source, Generator &generator) {
             auto constexpr step = 1;
 
@@ -30,7 +30,7 @@ public:
           }));
 
     t.run("start(s) shows progress at 0",
-          test([](Tester &t, Module &module, Anchor & /*start_anchor*/,
+          test([](Tester &t, Signals &module, Anchor & /*start_anchor*/,
                   Anchor & /*end_source*/, Generator &generator) {
             auto constexpr step = 7;
             module.taper_[step] = &dhe::sigmoid::j_taper;
@@ -49,7 +49,7 @@ public:
           }));
 
     t.run("stop()",
-          test([](Tester &t, Module &module, Anchor & /*start_anchor*/,
+          test([](Tester &t, Signals &module, Anchor & /*start_anchor*/,
                   Anchor & /*end_anchor*/, Generator &generator) {
             auto constexpr step = 2;
 
@@ -61,7 +61,7 @@ public:
           }));
 
     t.run("generate(t) outputs_ scaled tapered phase",
-          test([](Tester &t, Module &module, Anchor &start_anchor,
+          test([](Tester &t, Signals &module, Anchor &start_anchor,
                   Anchor &end_anchor, Generator &generator) {
             auto constexpr step = 4;
             generator.start(step);
@@ -91,7 +91,7 @@ public:
           }));
 
     t.run("generate(t) reports progress",
-          test([](Tester &t, Module &module, Anchor & /*start_anchor*/,
+          test([](Tester &t, Signals &module, Anchor & /*start_anchor*/,
                   Anchor & /*end_anchor*/, Generator &generator) {
             auto constexpr step = 3;
 
@@ -117,15 +117,15 @@ public:
           }));
 
     t.run("generate(t) reports whether duration has expired",
-          test([](Tester &t, Module &module, Anchor & /*start_anchor*/,
+          test([](Tester &t, Signals &signals, Anchor & /*start_anchor*/,
                   Anchor & /*end_anchor*/, Generator &generator) {
             auto constexpr step = 3;
-            module.taper_[step] = &dhe::sigmoid::j_taper;
+            signals.taper_[step] = &dhe::sigmoid::j_taper;
 
             generator.start(step);
 
             auto constexpr duration = 10.F;
-            module.duration_[step] = duration;
+            signals.duration_[step] = duration;
 
             // Big enough to complete the duration on the second generate
             auto constexpr sample_time = duration * 0.6F;

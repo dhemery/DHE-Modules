@@ -21,7 +21,7 @@ struct Anchor {
   float voltage_{};                        // NOLINT
 };
 
-struct Module {
+struct Signals {
   auto curvature(int step) const -> float { return curvature_[step]; }
   auto duration(int step) const -> float { return duration_[step]; }
   void output(float v) { output_ = v; }
@@ -40,18 +40,18 @@ struct Module {
   std::array<dhe::sigmoid::Taper const *, step_count> taper_{}; // NOLINT
 };
 
-using Generator = dhe::sequencizer::Generator<Module, Anchor>;
+using Generator = dhe::sequencizer::Generator<Signals, Anchor>;
 
 template <typename Run> static inline auto test(Run const &run) -> TestFunc {
   return [run](Tester &t) {
-    Module module{};
+    Signals signals{};
     for (int i = 0; i < step_count; i++) {
-      module.duration_multiplier_[i] = 1.F;
+      signals.duration_multiplier_[i] = 1.F;
     }
     Anchor start_anchor{};
     Anchor end_anchor{};
-    Generator generator{module, start_anchor, end_anchor};
-    run(t, module, start_anchor, end_anchor, generator);
+    Generator generator{signals, start_anchor, end_anchor};
+    run(t, signals, start_anchor, end_anchor, generator);
   };
 }
 

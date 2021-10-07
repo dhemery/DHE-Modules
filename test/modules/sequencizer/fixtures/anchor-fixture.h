@@ -16,7 +16,7 @@ using dhe::unit::Tester;
 
 using TestFunc = std::function<void(Tester &)>;
 
-struct Module {
+struct Signals {
   auto anchor_level(AnchorType type, int step) const -> float {
     return type == AnchorType::Start ? start_level_[step] : end_level_[step];
   }
@@ -43,14 +43,14 @@ struct Module {
   std::array<AnchorSource, step_count> start_source_{}; // NOLINT
 };
 
-using Anchor = dhe::sequencizer::Anchor<Module>;
+using Anchor = dhe::sequencizer::Anchor<Signals>;
 
 template <typename Run>
 static inline auto test(AnchorType type, Run const &run) -> TestFunc {
   return [type, run](Tester &t) {
-    Module module{};
-    Anchor anchor{module, type};
-    run(t, module, anchor);
+    Signals signals{};
+    Anchor anchor{signals, type};
+    run(t, signals, anchor);
   };
 }
 

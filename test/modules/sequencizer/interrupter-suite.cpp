@@ -17,10 +17,10 @@ struct InterrupterTestCase {
   void run(Tester &t) const {
     t.run(name(), [this](Tester &t) {
       auto constexpr step = 3;
-      Module module{};
-      Interrupter interrupter{module};
-      module.trigger_mode_[step] = trigger_mode_;
-      module.interrupt_mode_[step] = interrupt_mode_;
+      Signals signals{};
+      Interrupter interrupter{signals};
+      signals.trigger_mode_[step] = trigger_mode_;
+      signals.interrupt_mode_[step] = interrupt_mode_;
 
       bool got = interrupter.is_interrupted(step, latch_);
       if (got != is_interrupted_) {

@@ -16,7 +16,7 @@ using TestFunc = std::function<void(Tester &)>;
 
 auto constexpr step_count = 8;
 
-struct Module {
+struct Signals {
   auto interrupt_mode(int step) const -> InterruptMode {
     return interrupt_mode_[step];
   }
@@ -28,11 +28,11 @@ struct Module {
   std::array<TriggerMode, step_count> trigger_mode_{};     // NOLINT
 };
 
-using Interrupter = dhe::sequencizer::Interrupter<Module>;
+using Interrupter = dhe::sequencizer::Interrupter<Signals>;
 
 template <typename Run> static inline auto test(Run const &run) -> TestFunc {
   return [run](Tester &t) {
-    Module module{};
+    Signals module{};
     Interrupter interrupter{module};
     run(t, module, interrupter);
   };

@@ -2,9 +2,9 @@
 #include "./advancement.h"
 #include "./anchor.h"
 #include "./control-ids.h"
-#include "./controls.h"
 #include "./generator.h"
 #include "./sequence-controller.h"
+#include "./signals.h"
 #include "./step-controller.h"
 #include "./step-selector.h"
 #include "components/cxmath.h"
@@ -12,10 +12,10 @@
 #include "config/curvature-config.h"
 #include "config/duration-config.h"
 #include "config/level-config.h"
+#include "controls.h"
 #include "controls/curvature-inputs.h"
 #include "controls/duration-inputs.h"
 #include "controls/level-inputs.h"
-#include "widgets.h"
 
 #include <engine/Module.hpp>
 #include <jansson.h>
@@ -106,7 +106,7 @@ public:
                               step_name + "shape", 0);
       config_button(this, Param::StepEnabled + step, "Enabled", 1);
 
-      controls_.show_inactive(step);
+      signals_.show_inactive(step);
     }
   }
 
@@ -123,28 +123,28 @@ public:
   }
 
 private:
-  using ControlsT = Controls<N, rack::engine::Input, rack::engine::Param,
-                             rack::engine::Output, rack::engine::Light>;
-  using AnchorT = Anchor<ControlsT>;
-  using GeneratorT = Generator<ControlsT, AnchorT>;
-  using InterrupterT = Interrupter<ControlsT>;
-  using StepSelectorT = StepSelector<ControlsT>;
-  using SustainerT = Sustainer<ControlsT>;
+  using SignalsT = Signals<N, rack::engine::Input, rack::engine::Param,
+                           rack::engine::Output, rack::engine::Light>;
+  using AnchorT = Anchor<SignalsT>;
+  using GeneratorT = Generator<SignalsT, AnchorT>;
+  using InterrupterT = Interrupter<SignalsT>;
+  using StepSelectorT = StepSelector<SignalsT>;
+  using SustainerT = Sustainer<SignalsT>;
 
-  ControlsT controls_{inputs, params, outputs, lights};
-  AnchorT end_anchor_{controls_, AnchorType::End};
-  AnchorT start_anchor_{controls_, AnchorType::Start};
-  GeneratorT generator_{controls_, start_anchor_, end_anchor_};
-  InterrupterT interrupter_{controls_};
-  StepSelectorT step_selector_{controls_, N};
-  SustainerT sustainer_{controls_};
+  SignalsT signals_{inputs, params, outputs, lights};
+  AnchorT end_anchor_{signals_, AnchorType::End};
+  AnchorT start_anchor_{signals_, AnchorType::Start};
+  GeneratorT generator_{signals_, start_anchor_, end_anchor_};
+  InterrupterT interrupter_{signals_};
+  StepSelectorT step_selector_{signals_, N};
+  SustainerT sustainer_{signals_};
 
   using StepControllerT = StepController<InterrupterT, GeneratorT, SustainerT>;
   using SequenceControllerT =
-      SequenceController<ControlsT, StepSelectorT, StepControllerT>;
+      SequenceController<SignalsT, StepSelectorT, StepControllerT>;
 
   StepControllerT step_controller_{interrupter_, generator_, sustainer_};
-  SequenceControllerT sequence_controller_{controls_, step_selector_,
+  SequenceControllerT sequence_controller_{signals_, step_selector_,
                                            step_controller_};
 };
 } // namespace sequencizer

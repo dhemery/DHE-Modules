@@ -1,213 +1,171 @@
 #pragma once
-#include "./advancement.h"
-#include "./anchor.h"
+
 #include "./control-ids.h"
-#include "./status.h"
-#include "components/range.h"
-#include "controls/curvature-inputs.h"
-#include "controls/duration-inputs.h"
+#include "widgets/control-widgets.h"
+#include "widgets/dimensions.h"
+#include <functional>
+#include <string>
 #include <vector>
+#include <widget/SvgWidget.hpp>
 
 namespace dhe {
+
 namespace sequencizer {
-
-// Skew the progress::brightness ratio so that the "remaining" light stays
-// fully lit for a little while during early progress, and the "completed"
-// light reaches fully lit a little while before progress is complete.
-static auto constexpr brightness_skew = 0.7F;
-static auto constexpr brightness_range =
-    Range{-brightness_skew, 1.F + brightness_skew};
-static auto constexpr minimum_duration = short_duration_range.lower_bound();
-
-template <typename P, typename I>
-static inline auto duration(P const &duration_knob, P const &range_switch,
-                            P const &multipler_knob, I const &multiplier_cv)
-    -> float {
-  auto const nominal_duration =
-      dhe::selectable_duration(duration_knob, range_switch);
-  auto const multiplier_rotation = dhe::rotation(multipler_knob, multiplier_cv);
-  auto const nominal_multiplier = gain_range.scale(multiplier_rotation);
-  auto const clamped_multiplier = gain_range.clamp(nominal_multiplier);
-  auto const scaled_duration = nominal_duration * clamped_multiplier;
-  auto const safe_duration = cx::max(minimum_duration, scaled_duration);
-  return safe_duration;
-}
-
-template <typename P, typename I>
-static inline auto level(P const &level_knob, P const &range_switch,
-                         P const &multipler_knob, I const &multiplier_cv)
-    -> float {
-  auto const range = level_range(range_switch);
-  auto const rotation = dhe::rotation_of(level_knob);
-  auto const nominal_level = range.scale(rotation);
-  auto const attenuation = dhe::rotation(multipler_knob, multiplier_cv);
-  auto const attenuated_level = nominal_level * attenuation;
-  return range.clamp(attenuated_level);
-}
-
-template <int N, typename InputT, typename ParamT, typename OutputT,
-          typename LightT>
-class Controls {
-  using InputId = InputIds<N>;
-  using LightId = LightIds<N>;
-  using OutputId = OutputIds;
-  using ParamId = ParamIds<N>;
-
+template <typename PanelT>
+class SelectionKnob : public KnobWidget<PanelT, SmallKnob> {
 public:
-  Controls(std::vector<InputT> &inputs, std::vector<ParamT> &params,
-           std::vector<OutputT> &outputs, std::vector<LightT> &lights)
-      : inputs_{inputs}, params_{params}, outputs_{outputs}, lights_{lights} {}
-
-  auto anchor_mode(AnchorType type, int step) const -> AnchorMode {
-    auto const base = type == AnchorType::Start ? ParamId::StepStartAnchorMode
-                                                : ParamId::StepEndAnchorMode;
-    auto const selection = position_of(params_[base + step]);
-    return static_cast<AnchorMode>(selection);
+  static inline auto create(rack::engine::Module *module, float xmm, float ymm,
+                            int index, std::function<void(int)> const &action)
+      -> SelectionKnob * {
+    auto knob = rack::createParamCentered<SelectionKnob>(mm2px(xmm, ymm),
+                                                         module, index);
+    knob->knob_changed_to_ = action;
+    return knob;
   }
 
-  auto anchor_level(AnchorType type, int step) const -> float {
-    auto const base_knob_param = type == AnchorType::Start
-                                     ? ParamId::StepStartAnchorLevel
-                                     : ParamId::StepEndAnchorLevel;
-    return sequencizer::level(params_[base_knob_param + step],
-                              params_[ParamId::LevelRange],
-                              params_[ParamId::LevelMultiplier],
-                              inputs_[InputId::LevelAttenuationCV]);
-  }
-
-  auto anchor_source(AnchorType type, int step) const -> AnchorSource {
-    auto const base = type == AnchorType::Start ? ParamId::StepStartAnchorSource
-                                                : ParamId::StepEndAnchorSource;
-    auto const selection = position_of(params_[base + step]);
-    return static_cast<AnchorSource>(selection);
-  }
-
-  auto completion_mode(int step) const -> SustainMode {
-    auto const selection =
-        position_of(params_[ParamId::StepSustainMode + step]);
-    return static_cast<SustainMode>(selection);
-  }
-
-  auto curvature(int step) const -> float {
-    return dhe::curvature(params_[ParamId::StepCurvature + step]);
-  }
-
-  auto duration(int step) const -> float {
-    return sequencizer::duration(params_[ParamId::StepDuration + step],
-                                 params_[ParamId::DurationRange],
-                                 params_[ParamId::DurationMultiplier],
-                                 inputs_[InputId::DurationMultiplierCV]);
-  }
-
-  auto gate() const -> bool {
-    return is_high(inputs_[InputId::Gate]) ||
-           is_pressed(params_[ParamId::Gate]);
-  }
-
-  auto in_a() const -> float { return voltage_at(inputs_[InputId::InA]); }
-
-  auto in_b() const -> float { return voltage_at(inputs_[InputId::InB]); }
-
-  auto in_c() const -> float { return voltage_at(inputs_[InputId::InC]); }
-
-  auto interrupt_mode(int step) const -> InterruptMode {
-    auto const selection =
-        position_of(params_[ParamId::StepInterruptMode + step]);
-    return static_cast<InterruptMode>(selection);
-  }
-
-  auto is_enabled(int step) const -> bool {
-    return is_pressed(params_[ParamId::StepEnabled + step]);
-  }
-
-  auto is_looping() const -> bool {
-    return is_pressed(params_[ParamId::Loop]) ||
-           is_high(inputs_[InputId::Loop]);
-  }
-
-  auto is_reset() const -> bool {
-    return is_high(inputs_[InputId::Reset]) ||
-           is_pressed(params_[ParamId::Reset]);
-  }
-
-  auto is_running() const -> bool {
-    return is_pressed(params_[ParamId::Run]) || is_high(inputs_[InputId::Run]);
-  }
-
-  auto output() const -> float { return voltage_at(outputs_[OutputId::Out]); }
-
-  void output(float voltage) { outputs_[OutputId::Out].setVoltage(voltage); }
-
-  auto selection_start() const -> int {
-    return static_cast<int>(rotation_of(params_[ParamId::SelectionStart]));
-  }
-
-  auto selection_length() const -> int {
-    return static_cast<int>(rotation_of(params_[ParamId::SelectionLength]));
-  }
-
-  auto trigger_mode(int step) const -> TriggerMode {
-    auto const selection =
-        position_of(params_[ParamId::StepTriggerMode + step]);
-    return static_cast<TriggerMode>(selection);
-  }
-
-  void show_curving(bool curving) {
-    outputs_[OutputId::IsCurving].setVoltage(curving ? 10.F : 0.F);
-  }
-
-  void show_inactive(int step) { set_lights(step, 0.F, 0.F); }
-
-  void show_progress(int step, float progress) {
-    auto const completed_brightness = brightness_range.scale(progress);
-    auto const remaining_brightness = 1.F - completed_brightness;
-    set_lights(step, completed_brightness, remaining_brightness);
-  }
-
-  void show_sequence_event(bool event) {
-    outputs_[OutputId::SequenceEventPulse].setVoltage(event ? 10.F : 0.F);
-  }
-
-  void show_step_event(bool event) {
-    outputs_[OutputId::StepEventPulse].setVoltage(event ? 10.F : 0.F);
-  }
-
-  void show_step_status(int step, StepStatus status) {
-    outputs_[OutputId::StepNumber].setVoltage(static_cast<float>(step + 1) *
-                                              10.F / static_cast<float>(N));
-    switch (status) {
-    case StepStatus::Generating:
-      outputs_[OutputId::IsCurving].setVoltage(10.F);
-      outputs_[OutputId::IsSustaining].setVoltage(0.F);
-      break;
-    case StepStatus::Sustaining:
-      outputs_[OutputId::IsCurving].setVoltage(0.F);
-      outputs_[OutputId::IsSustaining].setVoltage(10.F);
-      break;
-    default:
-      outputs_[OutputId::IsCurving].setVoltage(0.F);
-      outputs_[OutputId::IsSustaining].setVoltage(0.F);
-    }
-  }
-
-  auto taper(int step) const -> sigmoid::Taper const & {
-    auto const selection = position_of(params_[ParamId::StepShape + step]);
-    return sigmoid::tapers[selection];
+  void onChange(const rack::event::Change &e) override {
+    KnobWidget<PanelT, SmallKnob>::onChange(e);
+    auto const value = this->getParamQuantity()->getValue();
+    auto const selection = static_cast<int>(value);
+    knob_changed_to_(selection);
   }
 
 private:
-  void set_lights(int step, float completed_brightness,
-                  float remaining_brightness) {
-    auto const completed_light = LightId::StepProgress + step + step;
-    auto const remaining_light = completed_light + 1;
-    lights_[completed_light].setBrightness(completed_brightness);
-    lights_[remaining_light].setBrightness(remaining_brightness);
-  }
-  std::vector<InputT> &inputs_;
-  std::vector<ParamT> &params_;
-  std::vector<OutputT> &outputs_;
-  std::vector<LightT> &lights_;
+  std::function<void(int)> knob_changed_to_;
 };
-} // namespace sequencizer
 
+template <typename PanelT> class StartMarker : public rack::widget::SvgWidget {
+public:
+  static inline auto create(float step_width, float step_block_x, float ymm)
+      -> StartMarker * {
+    auto const xmm =
+        step_block_x + step_width + step_width / 2.F - light_diameter * 2.F;
+    auto marker = rack::createWidgetCentered<StartMarker>(mm2px(xmm, ymm));
+    marker->step_block_x_ = step_block_x;
+    marker->step_width_ = step_width;
+    return marker;
+  }
+
+  StartMarker() { setSvg(load_svg(PanelT::svg_dir, "marker-start")); }
+
+  void set_selection_start(int step) {
+    auto const x = step_block_x_ + step_width_ * static_cast<float>(step) +
+                   step_width_ / 2.F - light_diameter * 2.F;
+    this->box.pos.x = mm2px(x);
+  }
+
+private:
+  float step_block_x_;
+  float step_width_;
+};
+
+template <template <int> class PanelT, int N>
+class EndMarker : public rack::widget::SvgWidget {
+public:
+  static inline auto create(float step_width, float step_block_x, float ymm)
+      -> EndMarker * {
+    auto const xmm =
+        step_block_x + step_width + step_width / 2.F - light_diameter * 2.F;
+    auto marker = rack::createWidgetCentered<EndMarker>(mm2px(xmm, ymm));
+    marker->step_block_x_ = step_block_x;
+    marker->step_width_ = step_width;
+    return marker;
+  }
+
+  EndMarker() { setSvg(load_svg(PanelT<N>::svg_dir, "marker-end")); }
+
+  void set_selection_start(int step) {
+    this->selection_start_ = step;
+    move();
+  }
+
+  void set_selection_length(int length) {
+    this->selection_length_ = length;
+    move();
+  }
+
+private:
+  void move() {
+    auto const selection_end =
+        (selection_start_ + selection_length_ - 1) & step_mask_;
+    auto const x = step_block_x_ +
+                   step_width_ * static_cast<float>(selection_end) +
+                   step_width_ / 2.F;
+    this->box.pos.x = mm2px(x);
+  }
+
+  int selection_start_{};
+  int selection_length_{};
+  int const step_mask_ = N - 1;
+  float step_block_x_;
+  float step_width_;
+};
+
+struct AnchorModes {
+  using ValueT = AnchorMode;
+  static auto constexpr frame_prefix = "anchor-mode";
+
+  static inline auto labels() -> std::vector<std::string> const & {
+    static auto const labels =
+        std::vector<std::string>{"Sample the source", "Track the source"};
+    return labels;
+  }
+};
+
+struct AnchorSources {
+  using ValueT = AnchorSource;
+  static auto constexpr frame_prefix = "anchor-source";
+
+  static inline auto labels() -> std::vector<std::string> const & {
+    static auto const labels =
+        std::vector<std::string>{"Level", "A", "B", "C", "Out"};
+    return labels;
+  }
+};
+
+struct InterruptModes {
+  using ValueT = InterruptMode;
+  static auto constexpr frame_prefix = "interrupt-mode";
+
+  static inline auto labels() -> std::vector<std::string> const & {
+    static auto const labels = std::vector<std::string>{
+        "Ignore triggers while generating", "Interrupt if triggered"};
+    return labels;
+  }
+};
+
+struct Shapes {
+  using ValueT = int;
+  static auto constexpr frame_prefix = "shape";
+
+  static inline auto labels() -> std::vector<std::string> const & {
+    static auto const labels = std::vector<std::string>{"J", "S"};
+    return labels;
+  }
+};
+
+struct SustainModes {
+  using ValueT = SustainMode;
+  static auto constexpr frame_prefix = "sustain-mode";
+
+  static inline auto labels() -> std::vector<std::string> {
+    static auto const labels =
+        std::vector<std::string>{"No sustain", "Sustain until triggered"};
+    return labels;
+  }
+};
+
+struct TriggerModes {
+  using ValueT = TriggerMode;
+  static auto constexpr frame_prefix = "trigger-mode";
+
+  static inline auto labels() -> std::vector<std::string> {
+    static auto const labels = std::vector<std::string>{
+        "Gate rises", "Gate falls", "Gate rises or falls", "Gate is high",
+        "Gate is low"};
+    return labels;
+  }
+};
+
+} // namespace sequencizer
 } // namespace dhe

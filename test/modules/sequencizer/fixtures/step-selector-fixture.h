@@ -15,7 +15,7 @@ using TestFunc = std::function<void(Tester &)>;
 
 auto constexpr step_count = 8;
 
-struct Module {
+struct Signals {
   auto selection_start() const -> int { return start_; }
   auto selection_length() const -> int { return length_; }
   auto is_enabled(int step) const -> bool { return enabled_[step]; }
@@ -24,13 +24,13 @@ struct Module {
   std::array<bool, step_count> enabled_{}; // NOLINT
 };
 
-using StepSelector = dhe::sequencizer::StepSelector<Module>;
+using StepSelector = dhe::sequencizer::StepSelector<Signals>;
 
 template <typename Run> static inline auto test(Run run) -> TestFunc {
   return [run](Tester &t) {
-    Module module{};
-    StepSelector selector{module, step_count};
-    run(t, module, selector);
+    Signals signals{};
+    StepSelector selector{signals, step_count};
+    run(t, signals, selector);
   };
 }
 } // namespace sequencizer

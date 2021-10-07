@@ -1,7 +1,7 @@
 #pragma once
 
 #include "./control-ids.h"
-#include "./widgets.h"
+#include "./controls.h"
 #include "widgets/control-widgets.h"
 #include "widgets/dimensions.h"
 #include "widgets/screws.h"

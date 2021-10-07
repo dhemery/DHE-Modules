@@ -19,7 +19,7 @@ using TestFunc = std::function<void(Tester &)>;
 
 auto constexpr step_count = 8;
 
-struct Module {
+struct Signals {
   auto gate() const -> bool { return gate_; }
   auto is_looping() const -> bool { return looping_; }
   auto is_reset() const -> bool { return reset_; }
@@ -82,18 +82,18 @@ struct StepSelector {
 };
 
 using SequenceController =
-    dhe::sequencizer::SequenceController<Module, StepSelector, StepController>;
+    dhe::sequencizer::SequenceController<Signals, StepSelector, StepController>;
 
 template <typename Prepare, typename Run>
 static inline auto test(Prepare prepare, Run run) -> TestFunc {
   return [prepare, run](Tester &t) {
-    Module module{};
+    Signals signals{};
     StepController step_controller{};
     StepSelector step_selector{};
-    SequenceController sequence_controller{module, step_selector,
+    SequenceController sequence_controller{signals, step_selector,
                                            step_controller};
-    prepare(module, step_selector, step_controller, sequence_controller);
-    run(t, module, step_selector, step_controller, sequence_controller);
+    prepare(signals, step_selector, step_controller, sequence_controller);
+    run(t, signals, step_selector, step_controller, sequence_controller);
   };
 }
 } // namespace sequencizer

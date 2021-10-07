@@ -8,11 +8,11 @@ using dhe::unit::Suite;
 using dhe::unit::Tester;
 using TestFunc = std::function<void(Tester &)>;
 
-static inline void when_idle(Module &module, StepSelector & /*step_selector*/,
+static inline void when_idle(Signals &signals, StepSelector & /*step_selector*/,
                              StepController & /*step_controller*/,
                              SequenceController &sequence_controller) {
-  module.running_ = false;
-  module.reset_ = false;
+  signals.running_ = false;
+  signals.reset_ = false;
   sequence_controller.execute(0.F);
 }
 
@@ -23,15 +23,15 @@ public:
 
   void run(Tester &t) override {
     t.run("with run high: with reset low: does nothing",
-          test(when_idle, [](Tester &t, Module &module,
+          test(when_idle, [](Tester &t, Signals &signals,
                              StepSelector &step_selector,
                              StepController &step_controller,
                              SequenceController &sequence_controller) {
-            module.running_ = true;
-            module.reset_ = false;
+            signals.running_ = true;
+            signals.reset_ = false;
 
             auto constexpr original_output = -99342.2F;
-            module.output_ = original_output;
+            signals.output_ = original_output;
 
             sequence_controller.execute(0.1F);
 
@@ -41,21 +41,21 @@ public:
             if (step_controller.called_) {
               t.error("step controller was called");
             }
-            if (module.output_ != original_output) {
-              t.errorf("module output was changed (to {})", module.output_);
+            if (signals.output_ != original_output) {
+              t.errorf("signals output was changed (to {})", signals.output_);
             }
           }));
 
     t.run("with run high: with gate low: does nothing",
-          test(when_idle, [](Tester &t, Module &module,
+          test(when_idle, [](Tester &t, Signals &signals,
                              StepSelector &step_selector,
                              StepController &step_controller,
                              SequenceController &sequence_controller) {
-            module.running_ = true;
-            module.gate_ = false;
+            signals.running_ = true;
+            signals.gate_ = false;
 
             auto constexpr original_output = -992.223F;
-            module.output_ = original_output;
+            signals.output_ = original_output;
 
             sequence_controller.execute(0.1F);
 
@@ -65,19 +65,19 @@ public:
             if (step_controller.called_) {
               t.error("step controller was called");
             }
-            if (module.output_ != original_output) {
-              t.errorf("module output was changed (to {})", module.output_);
+            if (signals.output_ != original_output) {
+              t.errorf("signals output was changed (to {})", signals.output_);
             }
           }));
 
     t.run("with run high: "
           "if gate rises: executes first step with gate edge cleared",
           test(when_idle,
-               [](Tester &t, Module &module, StepSelector &step_selector,
+               [](Tester &t, Signals &signals, StepSelector &step_selector,
                   StepController &step_controller,
                   SequenceController &sequence_controller) {
-                 module.running_ = true;
-                 module.gate_ = true;
+                 signals.running_ = true;
+                 signals.gate_ = true;
 
                  auto constexpr first_enabled_step = 3;
                  step_selector.first_ = first_enabled_step;
@@ -103,38 +103,38 @@ public:
 
     t.run("with run high: "
           "if gate rises: does nothing if no first step",
-          test(when_idle, [](Tester &t, Module &module,
+          test(when_idle, [](Tester &t, Signals &signals,
                              StepSelector &step_selector,
                              StepController &step_controller,
                              SequenceController &sequence_controller) {
-            module.running_ = true;
-            module.gate_ = true;
+            signals.running_ = true;
+            signals.gate_ = true;
 
             step_selector.first_ = -1;
 
             auto constexpr original_output = -2340.223F;
-            module.output_ = original_output;
+            signals.output_ = original_output;
 
             sequence_controller.execute(0.F);
 
             if (step_controller.called_) {
               t.error("step controller was called");
             }
-            if (module.output_ != original_output) {
-              t.errorf("module output was changed (to {})", module.output_);
+            if (signals.output_ != original_output) {
+              t.errorf("signals output was changed (to {})", signals.output_);
             }
           }));
 
     t.run("with run low: with reset low: does nothing",
-          test(when_idle, [](Tester &t, Module &module,
+          test(when_idle, [](Tester &t, Signals &signals,
                              StepSelector &step_selector,
                              StepController &step_controller,
                              SequenceController &sequence_controller) {
-            module.running_ = false;
-            module.reset_ = false;
+            signals.running_ = false;
+            signals.reset_ = false;
 
             auto constexpr original_output = 349.319F;
-            module.output_ = original_output;
+            signals.output_ = original_output;
             sequence_controller.execute(0.1F);
 
             if (step_selector.called_) {
@@ -143,23 +143,23 @@ public:
             if (step_controller.called_) {
               t.error("step controller was called");
             }
-            if (module.output_ != original_output) {
-              t.errorf("module output was changed (to {})", module.output_);
+            if (signals.output_ != original_output) {
+              t.errorf("signals output was changed (to {})", signals.output_);
             }
           }));
 
     t.run("with run low: "
           "if reset rises: "
           "does nothing",
-          test(when_idle, [](Tester &t, Module &module,
+          test(when_idle, [](Tester &t, Signals &signals,
                              StepSelector &step_selector,
                              StepController &step_controller,
                              SequenceController &sequence_controller) {
-            module.running_ = false;
-            module.reset_ = true;
+            signals.running_ = false;
+            signals.reset_ = true;
 
             auto constexpr original_output = 349.319F;
-            module.output_ = original_output;
+            signals.output_ = original_output;
             sequence_controller.execute(0.1F);
 
             if (step_selector.called_) {
@@ -168,21 +168,21 @@ public:
             if (step_controller.called_) {
               t.error("step controller was called");
             }
-            if (module.output_ != original_output) {
-              t.errorf("module output was changed (to {})", module.output_);
+            if (signals.output_ != original_output) {
+              t.errorf("signals output was changed (to {})", signals.output_);
             }
           }));
 
     t.run("with run low: with gate low: does nothing",
-          test(when_idle, [](Tester &t, Module &module,
+          test(when_idle, [](Tester &t, Signals &signals,
                              StepSelector &step_selector,
                              StepController &step_controller,
                              SequenceController &sequence_controller) {
-            module.running_ = false;
-            module.gate_ = false;
+            signals.running_ = false;
+            signals.gate_ = false;
 
             auto constexpr original_output = 349.319F;
-            module.output_ = original_output;
+            signals.output_ = original_output;
             sequence_controller.execute(0.1F);
 
             if (step_selector.called_) {
@@ -191,20 +191,20 @@ public:
             if (step_controller.called_) {
               t.error("step controller was called");
             }
-            if (module.output_ != original_output) {
-              t.errorf("module output was changed (to {})", module.output_);
+            if (signals.output_ != original_output) {
+              t.errorf("signals output was changed (to {})", signals.output_);
             }
           }));
 
     t.run("with run low: if gate rises: does nothing",
-          test(when_idle, [](Tester &t, Module &module,
+          test(when_idle, [](Tester &t, Signals &signals,
                              StepSelector &step_selector,
                              StepController &step_controller,
                              SequenceController &sequence_controller) {
-            module.gate_ = true;
+            signals.gate_ = true;
 
             auto constexpr original_output = 349.319F;
-            module.output_ = original_output;
+            signals.output_ = original_output;
             sequence_controller.execute(0.1F);
 
             if (step_selector.called_) {
@@ -213,8 +213,8 @@ public:
             if (step_controller.called_) {
               t.error("step controller was called");
             }
-            if (module.output_ != original_output) {
-              t.errorf("module output was changed (to {})", module.output_);
+            if (signals.output_ != original_output) {
+              t.errorf("signals output was changed (to {})", signals.output_);
             }
           }));
   }

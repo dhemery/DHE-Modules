@@ -2,27 +2,27 @@
 
 namespace dhe {
 namespace sequencizer {
-template <typename Module> class StepSelector {
+template <typename Signals> class StepSelector {
 public:
-  StepSelector(Module &module, int step_count)
-      : module_{module}, step_mask_{step_count - 1} {}
+  StepSelector(Signals &signals, int step_count)
+      : signals_{signals}, step_mask_{step_count - 1} {}
 
   auto first() const -> int {
-    auto const selection_start = module_.selection_start();
+    auto const selection_start = signals_.selection_start();
     if (is_enabled(selection_start)) {
       return selection_start;
     }
     return successor(selection_start, selection_start,
-                     module_.selection_length());
+                     signals_.selection_length());
   }
 
   auto successor(int current) const -> int {
-    return successor(current, module_.selection_start(),
-                     module_.selection_length());
+    return successor(current, signals_.selection_start(),
+                     signals_.selection_length());
   }
 
 private:
-  auto is_enabled(int step) const -> bool { return module_.is_enabled(step); }
+  auto is_enabled(int step) const -> bool { return signals_.is_enabled(step); }
 
   auto successor(int current, int selection_start, int selection_length) const
       -> int {
@@ -51,7 +51,7 @@ private:
     return candidate >= selection_start || candidate <= selection_end;
   }
 
-  Module &module_;
+  Signals &signals_;
   int const step_mask_;
 };
 } // namespace sequencizer
