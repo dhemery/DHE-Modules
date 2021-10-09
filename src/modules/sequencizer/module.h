@@ -50,7 +50,7 @@ public:
                                              "Sequence length", " steps");
     selection_length_knob->snapEnabled = true;
 
-    config_attenuator(this, Param::LevelMultiplier, "Level multiplier");
+    Attenuator::config(this, Param::LevelMultiplier, "Level multiplier");
     config_level_range_switch(this, Param::LevelRange);
     configInput(Input::LevelAttenuationCV, "Level multiplier CV");
 

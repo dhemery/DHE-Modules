@@ -156,8 +156,8 @@ public:
 
     addInput(Jack::input(module, global_controls_left_x, level_y,
                          Input::LevelAttenuationCV));
-    addParam(Knob::small(module, global_controls_center_x, level_y,
-                         Param::LevelMultiplier));
+    Attenuator::install<SmallKnob>(this, Param::LevelMultiplier,
+                                   global_controls_center_x, level_y);
     addParam(Switch::template thumb<2>(module, global_controls_right_x, level_y,
                                        Param::LevelRange));
 
