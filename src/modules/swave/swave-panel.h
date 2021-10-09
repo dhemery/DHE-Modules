@@ -1,8 +1,10 @@
 #pragma once
 
 #include "swave-controls.h"
-#include "widgets/control-widgets.h"
+#include "widgets/knobs.h"
+#include "widgets/ports.h"
 #include "widgets/screws.h"
+#include "widgets/switches.h"
 
 #include <app/ModuleWidget.hpp>
 
@@ -11,7 +13,7 @@ namespace swave {
 
 class SwavePanel : public rack::app::ModuleWidget {
   using Controls = SwaveControls;
-  using Jack = Jacks<SwavePanel>;
+  using Jack = Ports<SwavePanel>;
   using Knob = Knobs<SwavePanel>;
   using Switch = Switches<SwavePanel>;
 

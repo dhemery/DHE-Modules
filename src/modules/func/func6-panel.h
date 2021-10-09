@@ -1,7 +1,10 @@
 #pragma once
 
-#include "func-controls.h"
-#include "switches.h"
+#include "./func-controls.h"
+#include "./switches.h"
+#include "widgets/knobs.h"
+#include "widgets/ports.h"
+#include "widgets/switches.h"
 
 #include <app/ModuleWidget.hpp>
 
@@ -11,7 +14,7 @@ namespace func {
 class Func6Panel : public rack::app::ModuleWidget {
   static auto constexpr channel_count = 6;
   using Controls = FuncControls<channel_count>;
-  using Jack = Jacks<Func6Panel>;
+  using Jack = Ports<Func6Panel>;
   using Knob = Knobs<Func6Panel>;
   using Switch = Switches<Func6Panel>;
 

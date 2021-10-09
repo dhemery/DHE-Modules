@@ -1,6 +1,10 @@
 #pragma once
 
-#include "hostage-controls.h"
+#include "./hostage-controls.h"
+#include "widgets/knobs.h"
+#include "widgets/ports.h"
+#include "widgets/screws.h"
+#include "widgets/switches.h"
 
 #include <app/ModuleWidget.hpp>
 
@@ -8,7 +12,7 @@ namespace dhe {
 namespace stage {
 class HostagePanel : public rack::app::ModuleWidget {
   using Controls = HostageControls;
-  using Jack = Jacks<HostagePanel>;
+  using Jack = Ports<HostagePanel>;
   using Knob = Knobs<HostagePanel>;
   using Switch = Switches<HostagePanel>;
 

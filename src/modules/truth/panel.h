@@ -1,7 +1,9 @@
-#include "control-ids.h"
+#include "./control-ids.h"
+#include "widgets/ports.h"
+#include "widgets/switches.h"
 
-#include <array>
 #include <engine/Module.hpp>
+
 #include <string>
 #include <vector>
 
@@ -84,8 +86,6 @@ static auto layout(int input_count) -> Layout {
 }
 
 template <int N> class Panel : public rack::app::ModuleWidget {
-  using Switch = Switches<Panel<N>>;
-
 public:
   static auto constexpr svg_dir = "truth";
 
@@ -136,7 +136,8 @@ private:
   using Param = ParamIds<N>;
   using Input = InputIds<N>;
   using Output = OutputIds;
-  using Jack = Jacks<Panel<N>>;
+  using Jack = Ports<Panel<N>>;
+  using Switch = Switches<Panel<N>>;
 };
 } // namespace truth
 } // namespace dhe

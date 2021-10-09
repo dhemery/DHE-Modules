@@ -1,8 +1,10 @@
 #pragma once
 
-#include "ranger-controls.h"
-#include "widgets/control-widgets.h"
+#include "./ranger-controls.h"
+#include "widgets/knobs.h"
+#include "widgets/ports.h"
 #include "widgets/screws.h"
+#include "widgets/switches.h"
 
 #include <app/ModuleWidget.hpp>
 
@@ -11,7 +13,7 @@ namespace ranger {
 
 class RangerPanel : public rack::app::ModuleWidget {
   using Controls = RangerControls;
-  using Jack = Jacks<RangerPanel>;
+  using Jack = Ports<RangerPanel>;
   using Knob = Knobs<RangerPanel>;
   using Switch = Switches<RangerPanel>;
 

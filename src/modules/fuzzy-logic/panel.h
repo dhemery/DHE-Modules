@@ -1,8 +1,9 @@
 #pragma once
 
 #include "fuzzy-logic-controls.h"
-#include "widgets/control-widgets.h"
+#include "widgets/ports.h"
 #include "widgets/screws.h"
+#include "widgets/switches.h"
 
 #include <app/ModuleWidget.hpp>
 
@@ -11,7 +12,7 @@ namespace dhe {
 namespace fuzzy_logic {
 class Panel : public rack::app::ModuleWidget {
   using Controls = FuzzyLogicControls;
-  using Jack = Jacks<Panel>;
+  using Jack = Ports<Panel>;
   using Switch = Switches<Panel>;
 
 public:

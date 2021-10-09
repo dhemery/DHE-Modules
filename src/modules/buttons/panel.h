@@ -1,7 +1,7 @@
 #pragma once
 
 #include "control-ids.h"
-#include "widgets/control-widgets.h"
+#include "widgets/ports.h"
 #include "widgets/screws.h"
 
 #include <app/ModuleWidget.hpp>
@@ -13,7 +13,7 @@ namespace buttons {
 class Panel : public rack::app::ModuleWidget {
   using Param = ParamIds;
   using Output = OutputIds;
-  using Jack = Jacks<Panel>;
+  using Jack = Ports<Panel>;
   using Switch = Switches<Panel>;
 
 public:

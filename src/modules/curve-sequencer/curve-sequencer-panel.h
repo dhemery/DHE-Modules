@@ -1,11 +1,13 @@
 #pragma once
 
-#include "curve-sequencer-controls.h"
-#include "widgets/control-widgets.h"
+#include "./curve-sequencer-controls.h"
+#include "widgets/knobs.h"
+#include "widgets/ports.h"
 #include "widgets/screws.h"
 
 #include <app/ModuleWidget.hpp>
 #include <componentlibrary.hpp>
+
 #include <functional>
 #include <string>
 #include <utility>
@@ -104,7 +106,7 @@ template <int N> class CurveSequencerPanel : public rack::app::ModuleWidget {
   using Controls =
       CurveSequencerControls<rack::engine::Input, rack::engine::Output,
                              rack::engine::Param, rack::engine::Light, N>;
-  using Jack = Jacks<CurveSequencerPanel<N>>;
+  using Jack = Ports<CurveSequencerPanel<N>>;
   using Knob = Knobs<CurveSequencerPanel<N>>;
   using Switch = Switches<CurveSequencerPanel<N>>;
 

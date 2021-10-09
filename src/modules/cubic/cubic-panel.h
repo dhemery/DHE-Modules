@@ -1,7 +1,8 @@
 #pragma once
 
 #include "cubic-controls.h"
-#include "widgets/control-widgets.h"
+#include "widgets/knobs.h"
+#include "widgets/ports.h"
 #include "widgets/screws.h"
 
 #include <app/ModuleWidget.hpp>
@@ -12,7 +13,7 @@ namespace cubic {
 
 class CubicPanel : public rack::app::ModuleWidget {
   using Controls = CubicControls;
-  using Jack = Jacks<CubicPanel>;
+  using Jack = Ports<CubicPanel>;
   using Knob = Knobs<CubicPanel>;
 
 public:

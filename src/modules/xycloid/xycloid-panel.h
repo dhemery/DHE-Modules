@@ -1,8 +1,10 @@
 #pragma once
 
-#include "widgets/control-widgets.h"
+#include "./xycloid-controls.h"
+#include "widgets/knobs.h"
+#include "widgets/ports.h"
 #include "widgets/screws.h"
-#include "xycloid-controls.h"
+#include "widgets/switches.h"
 
 #include <app/ModuleWidget.hpp>
 
@@ -12,7 +14,7 @@ namespace xycloid {
 
 class XycloidPanel : public rack::app::ModuleWidget {
   using Controls = XycloidControls;
-  using Jack = Jacks<XycloidPanel>;
+  using Jack = Ports<XycloidPanel>;
   using Knob = Knobs<XycloidPanel>;
   using Switch = Switches<XycloidPanel>;
 

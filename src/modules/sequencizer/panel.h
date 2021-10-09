@@ -2,14 +2,18 @@
 
 #include "./control-ids.h"
 #include "./controls.h"
-#include "widgets/control-widgets.h"
 #include "widgets/dimensions.h"
+#include "widgets/knobs.h"
+#include "widgets/ports.h"
 #include "widgets/screws.h"
+#include "widgets/switches.h"
+
 #include <app/ModuleWidget.hpp>
-#include <cmath>
 #include <componentlibrary.hpp>
-#include <functional>
 #include <jansson.h>
+
+#include <cmath>
+#include <functional>
 #include <string>
 #include <utility>
 
@@ -53,7 +57,7 @@ template <int N> class Panel : public rack::app::ModuleWidget {
   using Input = InputIds<N>;
   using Light = LightIds<N>;
   using Output = OutputIds;
-  using Jack = Jacks<Panel<N>>;
+  using Jack = Ports<Panel<N>>;
   using Knob = Knobs<Panel<N>>;
   using Switch = Switches<Panel<N>>;
 

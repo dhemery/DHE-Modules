@@ -1,6 +1,10 @@
 #pragma once
 
-#include "booster-stage-controls.h"
+#include "./booster-stage-controls.h"
+#include "widgets/knobs.h"
+#include "widgets/ports.h"
+#include "widgets/screws.h"
+#include "widgets/switches.h"
 
 #include <app/ModuleWidget.hpp>
 
@@ -9,7 +13,7 @@ namespace stage {
 
 class BoosterStagePanel : public rack::app::ModuleWidget {
   using Controls = BoosterStageControls;
-  using Jack = Jacks<BoosterStagePanel>;
+  using Jack = Ports<BoosterStagePanel>;
   using Knob = Knobs<BoosterStagePanel>;
   using Switch = Switches<BoosterStagePanel>;
 

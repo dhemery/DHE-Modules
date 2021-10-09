@@ -1,8 +1,10 @@
 #pragma once
 
 #include "blossom-controls.h"
-#include "widgets/control-widgets.h"
+#include "widgets/knobs.h"
+#include "widgets/ports.h"
 #include "widgets/screws.h"
+#include "widgets/switches.h"
 
 #include <app/ModuleWidget.hpp>
 
@@ -12,7 +14,7 @@ namespace blossom {
 
 class BlossomPanel : public rack::app::ModuleWidget {
   using Controls = BlossomControls;
-  using Jack = Jacks<BlossomPanel>;
+  using Jack = Ports<BlossomPanel>;
   using Knob = Knobs<BlossomPanel>;
   using Switch = Switches<BlossomPanel>;
 

@@ -1,8 +1,9 @@
 #pragma once
 
-#include "gator-controls.h"
-#include "widgets/control-widgets.h"
+#include "./gator-controls.h"
+#include "widgets/ports.h"
 #include "widgets/screws.h"
+#include "widgets/switches.h"
 
 #include <app/ModuleWidget.hpp>
 
@@ -11,7 +12,7 @@ namespace gator {
 
 class GatorPanel : public rack::app::ModuleWidget {
   using Controls = GatorControls;
-  using Jack = Jacks<GatorPanel>;
+  using Jack = Ports<GatorPanel>;
   using Switch = Switches<GatorPanel>;
 
 public:

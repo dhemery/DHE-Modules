@@ -1,8 +1,10 @@
 #pragma once
 
 #include "tapers-controls.h"
-#include "widgets/control-widgets.h"
+#include "widgets/knobs.h"
+#include "widgets/ports.h"
 #include "widgets/screws.h"
+#include "widgets/switches.h"
 
 #include <app/ModuleWidget.hpp>
 
@@ -11,8 +13,8 @@ namespace tapers {
 
 class TapersPanel : public rack::app::ModuleWidget {
   using Controls = TapersControls;
-  using Jack = Jacks<TapersPanel>;
   using Knob = Knobs<TapersPanel>;
+  using Jack = Ports<TapersPanel>;
   using Switch = Switches<TapersPanel>;
 
 public:

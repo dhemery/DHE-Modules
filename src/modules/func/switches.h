@@ -1,7 +1,7 @@
 #pragma once
 
 #include "func-controls.h"
-#include "widgets/control-widgets.h"
+#include "widgets/ports.h"
 
 #include <functional>
 #include <string>

@@ -1,6 +1,10 @@
 #pragma once
 
-#include "upstage-controls.h"
+#include "./upstage-controls.h"
+#include "widgets/knobs.h"
+#include "widgets/ports.h"
+#include "widgets/screws.h"
+#include "widgets/switches.h"
 
 #include <app/ModuleWidget.hpp>
 
@@ -8,8 +12,8 @@ namespace dhe {
 namespace stage {
 class UpstagePanel : public rack::app::ModuleWidget {
   using Controls = UpstageControls;
-  using Jack = Jacks<UpstagePanel>;
   using Knob = Knobs<UpstagePanel>;
+  using Jack = Ports<UpstagePanel>;
   using Switch = Switches<UpstagePanel>;
 
 public:

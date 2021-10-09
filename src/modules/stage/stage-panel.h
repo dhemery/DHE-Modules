@@ -1,6 +1,9 @@
 #pragma once
 
-#include "stage-controls.h"
+#include "./stage-controls.h"
+#include "widgets/knobs.h"
+#include "widgets/ports.h"
+#include "widgets/screws.h"
 
 #include <app/ModuleWidget.hpp>
 
@@ -9,7 +12,7 @@ namespace stage {
 
 class StagePanel : public rack::app::ModuleWidget {
   using Controls = StageControls;
-  using Jack = Jacks<StagePanel>;
+  using Jack = Ports<StagePanel>;
   using Knob = Knobs<StagePanel>;
 
 public:
