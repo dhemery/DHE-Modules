@@ -13,7 +13,8 @@ public:
     static auto operand_labels =
         N == 1 ? std::array<std::string, 2>{"Offset", "Multiplier"}
                : std::array<std::string, 2>{" offset", " multiplier"};
-    return channel_name_ + operand_labels[static_cast<int>(operation())];
+    const auto op = static_cast<int>(operation());
+    return channel_name_ + operand_labels[op];
   }
 
   auto getDisplayValue() -> float override {

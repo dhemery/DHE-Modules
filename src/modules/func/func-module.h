@@ -46,9 +46,8 @@ private:
 
     auto const operator_switch_name =
         channel_name + (N == 1 ? "Operator" : " operator");
-    config_switch(this, Controls::OperationSwitch + channel,
-                  operator_switch_name, {"Add (offset)", "Multiply (scale)"},
-                  0);
+    Stepper<Operators>::config(this, Controls::OperationSwitch + channel,
+                               operator_switch_name, Operation::Add);
 
     auto const offset_range_switch_name =
         channel_name + (N == 1 ? "Offset range" : " offset range");
@@ -63,7 +62,7 @@ private:
 
     auto const operand_knob_param_quantity =
         dynamic_cast<OperandParamQuantity<FuncControls, N> *>(
-            paramQuantities[Controls::AmountKnob + channel]);
+            getParamQuantity(Controls::AmountKnob + channel));
 
     operand_knob_param_quantity->configure(&controls_, channel, channel_name);
 

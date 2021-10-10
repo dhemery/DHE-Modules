@@ -1,4 +1,6 @@
 #pragma once
+#include "./operation.h"
+
 #include <string>
 #include <vector>
 
@@ -25,28 +27,14 @@ struct MultiplierRanges {
   }
 };
 
-template <typename PanelT>
-class OperatorSwitch : public SwitchWidget<PanelT, ThumbSwitch<2>> {
-public:
-  static inline auto create(rack::engine::Module *module, float xmm, float ymm,
-                            int index, std::function<void(bool)> const &action)
-      -> OperatorSwitch * {
-    auto toggle = rack::createParamCentered<OperatorSwitch>(mm2px(xmm, ymm),
-                                                            module, index);
-    toggle->operator_changed_to_ = action;
-    return toggle;
+struct Operators {
+  using ValueT = Operation;
+  static constexpr auto frame_prefix = "toggle-2";
+  static inline auto labels() -> std::vector<std::string> const & {
+    static const auto labels =
+        std::vector<std::string>{"Add (offset)", "Multiply (scale)"};
+    return labels;
   }
-
-  OperatorSwitch() = default;
-
-  void onChange(const rack::event::Change &e) override {
-    SwitchWidget<PanelT, ThumbSwitch<2>>::onChange(e);
-    auto const is_multiply = this->getParamQuantity()->getValue() > 0.5;
-    operator_changed_to_(is_multiply);
-  }
-
-private:
-  std::function<void(bool)> operator_changed_to_ = [](bool /*unused*/) {};
 };
 } // namespace func
 

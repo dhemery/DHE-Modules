@@ -52,8 +52,8 @@ public:
         this, Controls::MultiplierRangeSwitch, x, row4);
 
     auto const update_range_stepper_visibility =
-        [offset_range_stepper, multiplier_range_stepper](bool is_multiply) {
-          if (is_multiply) {
+        [offset_range_stepper, multiplier_range_stepper](Operation op) {
+          if (op == Operation::Multiply) {
             offset_range_stepper->hide();
             multiplier_range_stepper->show();
           } else {
@@ -61,9 +61,8 @@ public:
             multiplier_range_stepper->hide();
           }
         };
-    addParam(OperatorSwitch<Func1Panel>::create(
-        module, x, row2, Controls::OperationSwitch,
-        update_range_stepper_visibility));
+    Stepper<Operators>::install(this, Controls::OperationSwitch, x, row2,
+                                update_range_stepper_visibility);
   }
 };
 } // namespace func
