@@ -13,7 +13,6 @@ namespace tapers {
 
 class TapersPanel : public rack::app::ModuleWidget {
   using Controls = TapersControls;
-  using Knob = Knobs<TapersPanel>;
   using Switch = Switches<TapersPanel>;
 
 public:
@@ -37,12 +36,12 @@ public:
     auto y = 24.F;
 
     Input::install(this, Controls::LevelCvInput1, column1, y);
-    addParam(Knob::tiny(module, column2, y, Controls::LevelAvKnob1));
-    addParam(Knob::medium(module, column3, y, Controls::LevelKnob1));
+    Knob::install<Tiny>(this, Controls::LevelAvKnob1, column2, y);
+    Knob::install<Medium>(this, Controls::LevelKnob1, column3, y);
     y += dy;
     Input::install(this, Controls::CurveCvInput1, column1, y);
-    addParam(Knob::tiny(module, column2, y, Controls::CurveAvKnob1));
-    addParam(Knob::medium(module, column3, y, Controls::CurveKnob1));
+    Knob::install<Tiny>(this, Controls::CurveAvKnob1, column2, y);
+    Knob::install<Medium>(this, Controls::CurveKnob1, column3, y);
     y += dy;
     addParam(Switch::thumb<2>(module, column1, y, Controls::ShapeSwitch1));
     addParam(Switch::thumb<2>(module, column2, y, Controls::LevelRangeSwitch1));
@@ -51,12 +50,12 @@ public:
     y += dy + panel_buffer;
 
     Input::install(this, Controls::LevelCvInput2, column1, y);
-    addParam(Knob::tiny(module, column2, y, Controls::LevelAvKnob2));
-    addParam(Knob::medium(module, column3, y, Controls::LevelKnob2));
+    Knob::install<Tiny>(this, Controls::LevelAvKnob2, column2, y);
+    Knob::install<Medium>(this, Controls::LevelKnob2, column3, y);
     y += dy;
     Input::install(this, Controls::CurveCvInput2, column1, y);
-    addParam(Knob::tiny(module, column2, y, Controls::CurveAvKnob2));
-    addParam(Knob::medium(module, column3, y, Controls::CurveKnob2));
+    Knob::install<Tiny>(this, Controls::CurveAvKnob2, column2, y);
+    Knob::install<Medium>(this, Controls::CurveKnob2, column3, y);
     y += dy;
     addParam(Switch::thumb<2>(module, column1, y, Controls::ShapeSwitch2));
     addParam(Switch::thumb<2>(module, column2, y, Controls::LevelRangeSwitch2));

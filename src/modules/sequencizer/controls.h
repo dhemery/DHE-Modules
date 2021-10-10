@@ -14,7 +14,7 @@ namespace dhe {
 
 namespace sequencizer {
 template <typename PanelT>
-class SelectionKnob : public KnobWidget<PanelT, SmallKnob> {
+class SelectionKnob : public KnobWidget<PanelT, Small> {
 public:
   static inline auto create(rack::engine::Module *module, float xmm, float ymm,
                             int index, std::function<void(int)> const &action)
@@ -26,7 +26,7 @@ public:
   }
 
   void onChange(const rack::event::Change &e) override {
-    KnobWidget<PanelT, SmallKnob>::onChange(e);
+    KnobWidget<PanelT, Small>::onChange(e);
     auto const value = this->getParamQuantity()->getValue();
     auto const selection = static_cast<int>(value);
     knob_changed_to_(selection);

@@ -13,7 +13,6 @@ namespace cubic {
 
 class CubicPanel : public rack::app::ModuleWidget {
   using Controls = CubicControls;
-  using Knob = Knobs<CubicPanel>;
 
 public:
   static auto constexpr svg_dir = "cubic";
@@ -34,23 +33,23 @@ public:
     auto constexpr dy = 15.F;
 
     Input::install(this, Controls::ACoefficientCvInput, column1, y);
-    addParam(Knob::small(module, column2, y, Controls::ACoefficientKnob));
+    Knob::install<Small>(this, Controls::ACoefficientKnob, column2, y);
 
     y += dy;
     Input::install(this, Controls::BCoefficientCvInput, column1, y);
-    addParam(Knob::small(module, column2, y, Controls::BCoefficientKnob));
+    Knob::install<Small>(this, Controls::BCoefficientKnob, column2, y);
 
     y += dy;
     Input::install(this, Controls::CCoefficientCvInput, column1, y);
-    addParam(Knob::small(module, column2, y, Controls::CCoefficientKnob));
+    Knob::install<Small>(this, Controls::CCoefficientKnob, column2, y);
 
     y += dy;
     Input::install(this, Controls::DCoefficientCvInput, column1, y);
-    addParam(Knob::small(module, column2, y, Controls::DCoefficientKnob));
+    Knob::install<Small>(this, Controls::DCoefficientKnob, column2, y);
 
     y = 82.F;
-    addParam(Knob::small(module, column1, y, Controls::InputGainKnob));
-    addParam(Knob::small(module, column2, y, Controls::OutputGainKnob));
+    Knob::install<Small>(this, Controls::InputGainKnob, column1, y);
+    Knob::install<Small>(this, Controls::OutputGainKnob, column2, y);
 
     y += dy;
     Input::install(this, Controls::InputGainCvInput, column1, y);

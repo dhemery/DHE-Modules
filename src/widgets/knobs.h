@@ -21,50 +21,27 @@ struct KnobWidget : public rack::app::SvgKnob {
   }
 };
 
-struct LargeKnob {
+struct Large {
   static auto constexpr svg_file = "knob-large";
 };
 
-struct MediumKnob {
+struct Medium {
   static auto constexpr svg_file = "knob-medium";
 };
 
-struct SmallKnob {
+struct Small {
   static auto constexpr svg_file = "knob-small";
 };
 
-struct TinyKnob {
+struct Tiny {
   static auto constexpr svg_file = "knob-tiny";
 };
 
-template <typename PanelT> struct Knobs {
-  template <typename KnobT> using Widget = KnobWidget<PanelT, KnobT>;
-
-  template <typename KnobT>
-  static inline auto create(rack::engine::Module *module, float xmm, float ymm,
-                            int index) -> Widget<KnobT> * {
-    return rack::createParamCentered<KnobWidget<PanelT, KnobT>>(mm2px(xmm, ymm),
-                                                                module, index);
-  }
-
-  static inline auto large(rack::engine::Module *module, float xmm, float ymm,
-                           int index) -> Widget<LargeKnob> * {
-    return create<LargeKnob>(module, xmm, ymm, index);
-  }
-
-  static inline auto medium(rack::engine::Module *module, float xmm, float ymm,
-                            int index) -> Widget<MediumKnob> * {
-    return create<MediumKnob>(module, xmm, ymm, index);
-  }
-
-  static inline auto small(rack::engine::Module *module, float xmm, float ymm,
-                           int index) -> Widget<SmallKnob> * {
-    return create<SmallKnob>(module, xmm, ymm, index);
-  }
-
-  static inline auto tiny(rack::engine::Module *module, float xmm, float ymm,
-                          int index) -> Widget<TinyKnob> * {
-    return create<TinyKnob>(module, xmm, ymm, index);
+struct Knob {
+  template <typename SizeT, typename PanelT>
+  static inline void install(PanelT *panel, int id, float xmm, float ymm) {
+    panel->addParam(rack::createParamCentered<KnobWidget<PanelT, SizeT>>(
+        mm2px(xmm, ymm), panel->getModule(), id));
   }
 };
 

@@ -14,7 +14,6 @@ namespace func {
 class Func1Panel : public rack::app::ModuleWidget {
   static auto constexpr channel_count = 1;
   using Controls = FuncControls<channel_count>;
-  using Knob = Knobs<Func1Panel>;
   using Switch = Switches<Func1Panel>;
 
 public:
@@ -44,7 +43,7 @@ public:
     auto constexpr row6 = top + row_spacing * 5 + port_offset;
 
     Input::install(this, Controls::FuncInput, x, row1);
-    addParam(Knob::large(module, x, row3, Controls::AmountKnob));
+    Knob::install<Large>(this, Controls::AmountKnob, x, row3);
     Output::install(this, Controls::FuncOutput, x, row6);
 
     auto *offset_range_stepper = Switch::template create<OffsetRangeStepper>(

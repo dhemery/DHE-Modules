@@ -14,7 +14,6 @@ namespace func {
 class Func6Panel : public rack::app::ModuleWidget {
   static auto constexpr channel_count = 6;
   using Controls = FuncControls<channel_count>;
-  using Knob = Knobs<Func6Panel>;
   using Switch = Switches<Func6Panel>;
 
 public:
@@ -45,7 +44,7 @@ public:
       auto const port_y = y + port_offset;
 
       Input::install(this, Controls::FuncInput + row, column1, port_y);
-      addParam(Knob::large(module, column3, y, Controls::AmountKnob + row));
+      Knob::install<Large>(this, Controls::AmountKnob + row, column3, y);
 
       Output::install(this, Controls::FuncOutput + row, column5, port_y);
 

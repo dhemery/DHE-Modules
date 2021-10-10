@@ -12,7 +12,6 @@ namespace stage {
 
 class StagePanel : public rack::app::ModuleWidget {
   using Controls = StageControls;
-  using Knob = Knobs<StagePanel>;
 
 public:
   static auto constexpr svg_dir = "stage";
@@ -33,27 +32,27 @@ public:
     auto y = 25.F;
     auto dy = 18.5F;
 
-    addParam(Knob::large(module, column2, y, Controls::LevelKnob));
+    Knob::install<Large>(this, Controls::LevelKnob, column2, y);
 
     y += dy;
-    addParam(Knob::large(module, column2, y, Controls::CurveKnob));
+    Knob::install<Large>(this, Controls::CurveKnob, column2, y);
 
     y += dy;
-    addParam(Knob::large(module, column2, y, Controls::DurationKnob));
+    Knob::install<Large>(this, Controls::DurationKnob, column2, y);
 
     y = 82.F;
     dy = 15.F;
 
-    Input::install(this, y, Controls::DeferInput, column1);
-    Output::install(this, y, Controls::ActiveOutput, column3);
+    Input::install(this, Controls::DeferInput, column1, y);
+    Output::install(this, Controls::ActiveOutput, column3, y);
 
     y += dy;
-    Input::install(this, y, Controls::TriggerInput, column1);
-    Output::install(this, y, Controls::EocOutput, column3);
+    Input::install(this, Controls::TriggerInput, column1, y);
+    Output::install(this, Controls::EocOutput, column3, y);
 
     y += dy;
-    Input::install(this, y, Controls::EnvelopeInput, column1);
-    Output::install(this, y, Controls::EnvelopeOutput, column3);
+    Input::install(this, Controls::EnvelopeInput, column1, y);
+    Output::install(this, Controls::EnvelopeOutput, column3, y);
   }
 };
 } // namespace stage

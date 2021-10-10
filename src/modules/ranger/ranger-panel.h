@@ -13,7 +13,6 @@ namespace ranger {
 
 class RangerPanel : public rack::app::ModuleWidget {
   using Controls = RangerControls;
-  using Knob = Knobs<RangerPanel>;
   using Switch = Switches<RangerPanel>;
 
 public:
@@ -33,21 +32,21 @@ public:
     auto y = 14.5F;
 
     y += dy * 0.75F;
-    addParam(Knob::medium(module, left, y, Controls::LevelKnob));
+    Knob::install<Medium>(this, Controls::LevelKnob, left, y);
     Output::install(this, Controls::RangerOutput, right, y);
 
     y += dy;
     Input::install(this, Controls::LevelCvInput, left, y);
-    addParam(Knob::tiny(module, right, y, Controls::LevelAvKnob));
+    Knob::install<Tiny>(this, Controls::LevelAvKnob, right, y);
 
     y += dy / 2.F;
     y += dy * 0.75F;
-    addParam(Knob::medium(module, left, y, Controls::CcwLimitKnob));
-    addParam(Knob::medium(module, right, y, Controls::CwLimitKnob));
+    Knob::install<Medium>(this, Controls::CcwLimitKnob, left, y);
+    Knob::install<Medium>(this, Controls::CwLimitKnob, right, y);
 
     y += dy;
-    addParam(Knob::tiny(module, left, y, Controls::CcwLimitAvKnob));
-    addParam(Knob::tiny(module, right, y, Controls::CwLimitAvKnob));
+    Knob::install<Tiny>(this, Controls::CcwLimitAvKnob, left, y);
+    Knob::install<Tiny>(this, Controls::CwLimitAvKnob, right, y);
 
     y += dy;
     Input::install(this, Controls::CcwLimitCvInput, left, y);

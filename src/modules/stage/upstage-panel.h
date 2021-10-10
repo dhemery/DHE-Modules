@@ -12,7 +12,6 @@ namespace dhe {
 namespace stage {
 class UpstagePanel : public rack::app::ModuleWidget {
   using Controls = UpstageControls;
-  using Knob = Knobs<UpstagePanel>;
   using Switch = Switches<UpstagePanel>;
 
 public:
@@ -34,10 +33,10 @@ public:
     auto y = 25.F;
     auto dy = 18.5F;
 
-    addParam(Knob::large(module, column2, y, Controls::LevelKnob));
+    Knob::install<Large>(this, Controls::LevelKnob, column2, y);
 
     y += dy;
-    Input::install(this, y, Controls::LevelCvInput, column1);
+    Input::install(this, Controls::LevelCvInput, column1, y);
     addParam(Switch::thumb<2>(module, column3, y, Controls::LevelRangeSwitch));
 
     y += dy;

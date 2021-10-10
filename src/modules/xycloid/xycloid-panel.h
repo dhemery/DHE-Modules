@@ -14,7 +14,6 @@ namespace xycloid {
 
 class XycloidPanel : public rack::app::ModuleWidget {
   using Controls = XycloidControls;
-  using Knob = Knobs<XycloidPanel>;
   using Switch = Switches<XycloidPanel>;
 
 public:
@@ -38,25 +37,25 @@ public:
     auto dy = 18.5F;
 
     Input::install(this, Controls::SpeedCvInput, column1, y);
-    addParam(Knob::tiny(module, column2, y, Controls::SpeedAvKnob));
-    addParam(Knob::large(module, column3, y, Controls::SpeedKnob));
+    Knob::install<Tiny>(this, Controls::SpeedAvKnob, column2, y);
+    Knob::install<Large>(this, Controls::SpeedKnob, column3, y);
 
     y += dy;
     Input::install(this, Controls::RatioCvInput, column1, y);
-    addParam(Knob::tiny(module, column2, y, Controls::RatioAvKnob));
-    addParam(Knob::large(module, column3, y, Controls::RatioKnob));
+    Knob::install<Tiny>(this, Controls::RatioAvKnob, column2, y);
+    Knob::install<Large>(this, Controls::RatioKnob, column3, y);
     addParam(Switch::thumb<2>(module, column4, y, Controls::FreeRatioSwitch));
 
     y += dy;
     Input::install(this, Controls::DepthCvInput, column1, y);
-    addParam(Knob::tiny(module, column2, y, Controls::DepthAvKnob));
-    addParam(Knob::large(module, column3, y, Controls::DepthKnob));
+    Knob::install<Tiny>(this, Controls::DepthAvKnob, column2, y);
+    Knob::install<Large>(this, Controls::DepthKnob, column3, y);
     addParam(Switch::thumb<3>(module, column4, y, Controls::DirectionSwitch));
 
     y += dy;
     Input::install(this, Controls::PhaseCvInput, column1, y);
-    addParam(Knob::tiny(module, column2, y, Controls::PhaseOffsetAvKnob));
-    addParam(Knob::large(module, column3, y, Controls::PhaseOffsetKnob));
+    Knob::install<Tiny>(this, Controls::PhaseOffsetAvKnob, column2, y);
+    Knob::install<Large>(this, Controls::PhaseOffsetKnob, column3, y);
 
     y = 82.F;
     dy = 15.F;
@@ -64,13 +63,13 @@ public:
 
     y += dy;
     Input::install(this, Controls::XGainCvInput, column1, y);
-    addParam(Knob::small(module, column2, y, Controls::XGainKnob));
+    Knob::install<Small>(this, Controls::XGainKnob, column2, y);
     addParam(Switch::thumb<2>(module, column3, y, Controls::XRangeSwitch));
     Output::install(this, Controls::XOutput, column4, y + output_port_offset);
 
     y += dy;
     Input::install(this, Controls::YGainCvInput, column1, y);
-    addParam(Knob::small(module, column2, y, Controls::YGainKnob));
+    Knob::install<Small>(this, Controls::YGainKnob, column2, y);
     addParam(Switch::thumb<2>(module, column3, y, Controls::YRangeSwitch));
     Output::install(this, Controls::YOutput, column4, y + output_port_offset);
   }

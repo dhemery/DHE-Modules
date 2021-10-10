@@ -13,7 +13,6 @@ namespace swave {
 
 class SwavePanel : public rack::app::ModuleWidget {
   using Controls = SwaveControls;
-  using Knob = Knobs<SwavePanel>;
   using Switch = Switches<SwavePanel>;
 
 public:
@@ -36,10 +35,10 @@ public:
     addParam(Switch::thumb<2>(module, x, y, Controls::ShapeSwitch));
 
     y += dy;
-    addParam(Knob::large(module, x, y, Controls::CurveKnob));
+    Knob::install<Large>(this, Controls::CurveKnob, x, y);
 
     y += dy;
-    addParam(Knob::tiny(module, x, y, Controls::CurveAvKnob));
+    Knob::install<Tiny>(this, Controls::CurveAvKnob, x, y);
 
     y += dy;
     Input::install(this, Controls::CurveCvInput, x, y);

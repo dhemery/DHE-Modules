@@ -84,7 +84,7 @@ struct ShapeStepper {
 };
 
 template <typename PanelT>
-struct LengthKnob : public KnobWidget<PanelT, SmallKnob> {
+struct LengthKnob : public KnobWidget<PanelT, Small> {
   static inline auto create(rack::engine::Module *module, float xmm, float ymm,
                             int index, std::function<void(int)> const &action)
       -> LengthKnob * {
@@ -95,7 +95,7 @@ struct LengthKnob : public KnobWidget<PanelT, SmallKnob> {
   }
 
   void onChange(const rack::event::Change &e) override {
-    KnobWidget<PanelT, SmallKnob>::onChange(e);
+    KnobWidget<PanelT, Small>::onChange(e);
     knob_changed_to_(static_cast<int>(this->getParamQuantity()->getValue()));
   }
 
@@ -106,7 +106,6 @@ private:
 template <int N> class Panel : public rack::app::ModuleWidget {
   using Param = ParamIds<N>;
   using Light = LightIds<N>;
-  using Knob = Knobs<Panel<N>>;
   using Switch = Switches<Panel<N>>;
 
 public:
@@ -234,8 +233,8 @@ private:
       addParam(Switch::template create<AnchorSourceStepper>(
           module, step_x, phase_0_anchor_source_y,
           Param::Phase0AnchorSource + step));
-      addParam(Knob::small(module, step_x, phase_0_anchor_level_y,
-                           Param::Phase0AnchorLevel + step));
+      Knob::install<Small>(this, Param::Phase0AnchorLevel + step, step_x,
+                           phase_0_anchor_level_y);
       Input::install(this, InputIds<N>::Phase0AnchorLevelCV + step, step_x,
                      phase_0_anchor_level_cv_y);
 
@@ -245,19 +244,18 @@ private:
       addParam(Switch ::template create<AnchorSourceStepper>(
           module, step_x, phase_1_anchor_source_y,
           Param::Phase1AnchorSource + step));
-      addParam(Knob::small(module, step_x, phase_1_anchor_level_y,
-                           Param::Phase1AnchorLevel + step));
+      Knob::install<Small>(this, Param::Phase1AnchorLevel + step, step_x,
+                           phase_1_anchor_level_y);
       Input::install(this, InputIds<N>::Phase1AnchorLevelCV + step, step_x,
                      phase_1_anchor_level_cv_y);
 
-      addParam(Knob::small(module, step_x, duration_y, Param::Duration + step));
+      Knob::install<Small>(this, Param::Duration + step, step_x, duration_y);
       Input::install(this, InputIds<N>::DurationCV + step, step_x,
                      duration_cv_y);
 
       addParam(Switch::template create<ShapeStepper>(module, step_x, shape_y,
                                                      Param::Shape + step));
-      addParam(
-          Knob::small(module, step_x, curvature_y, Param::Curvature + step));
+      Knob::install<Small>(this, Param::Curvature + step, step_x, curvature_y);
       Input::install(this, InputIds<N>::CurvatureCV + step, step_x,
                      curvature_cv_y);
     }

@@ -23,7 +23,7 @@ using ProgressLight =
     rack::componentlibrary::SmallLight<rack::componentlibrary::GreenRedLight>;
 
 template <typename PanelT>
-class SelectionKnob : public KnobWidget<PanelT, SmallKnob> {
+class SelectionKnob : public KnobWidget<PanelT, Small> {
 public:
   static inline auto create(rack::engine::Module *module, float xmm, float ymm,
                             int index, std::function<void(int)> const &action)
@@ -35,7 +35,7 @@ public:
   }
 
   void onChange(const rack::event::Change &e) override {
-    KnobWidget<PanelT, SmallKnob>::onChange(e);
+    KnobWidget<PanelT, Small>::onChange(e);
     knob_changed_to_(static_cast<int>(this->getParamQuantity()->getValue()));
   }
 
@@ -106,7 +106,6 @@ template <int N> class CurveSequencerPanel : public rack::app::ModuleWidget {
   using Controls =
       CurveSequencerControls<rack::engine::Input, rack::engine::Output,
                              rack::engine::Param, rack::engine::Light, N>;
-  using Knob = Knobs<CurveSequencerPanel<N>>;
   using Switch = Switches<CurveSequencerPanel<N>>;
 
 public:
@@ -207,14 +206,13 @@ public:
           module, x, advance_mode_y, Controls::ConditionSwitches + step);
       addParam(advance_mode_button);
 
-      addParam(Knob::small(module, x, level_y, Controls::LevelKnobs + step));
+      Knob::install<Small>(this, Controls::LevelKnobs + step, x, level_y);
 
       addParam(Switch::template thumb<2>(module, x, shape_y,
                                          Controls::ShapeSwitches + step));
-      addParam(Knob::small(module, x, curve_y, Controls::CurveKnobs + step));
+      Knob::install<Small>(this, Controls::CurveKnobs + step, x, curve_y);
 
-      addParam(
-          Knob::small(module, x, duration_y, Controls::DurationKnobs + step));
+      Knob::install<Small>(this, Controls::DurationKnobs + step, x, duration_y);
 
       addParam(Switch::toggle(module, x, enabled_button_y,
                               Controls::EnabledButtons + step));

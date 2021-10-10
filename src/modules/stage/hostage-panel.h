@@ -12,7 +12,6 @@ namespace dhe {
 namespace stage {
 class HostagePanel : public rack::app::ModuleWidget {
   using Controls = HostageControls;
-  using Knob = Knobs<HostagePanel>;
   using Switch = Switches<HostagePanel>;
 
 public:
@@ -37,26 +36,26 @@ public:
     addParam(Switch::thumb<2>(module, column2, y, Controls::ModeSwitch));
 
     y += dy;
-    Input::install(this, y, Controls::DurationCvInput, column1);
+    Input::install(this, Controls::DurationCvInput, column1, y);
     addParam(
         Switch::thumb<3>(module, column3, y, Controls::DurationRangeSwitch));
 
     y += dy;
-    addParam(Knob::large(module, column2, y, Controls::DurationKnob));
+    Knob::install<Large>(this, Controls::DurationKnob, column2, y);
 
     y = 82.F;
     dy = 15.F;
 
-    Input::install(this, y, Controls::DeferInput, column1);
-    Output::install(this, y, Controls::ActiveOutput, column3);
+    Input::install(this, Controls::DeferInput, column1, y);
+    Output::install(this, Controls::ActiveOutput, column3, y);
 
     y += dy;
-    Input::install(this, y, column1, Controls::TriggerInput);
-    Output::install(this, y, Controls::EocOutput, column3);
+    Input::install(this, Controls::TriggerInput, column1, y);
+    Output::install(this, Controls::EocOutput, column3, y);
 
     y += dy;
-    Input::install(this, y, Controls::EnvelopeInput, column1);
-    Output::install(this, y, Controls::EnvelopeOutput, column3);
+    Input::install(this, Controls::EnvelopeInput, column1, y);
+    Output::install(this, Controls::EnvelopeOutput, column3, y);
   }
 };
 } // namespace stage

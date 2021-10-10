@@ -55,7 +55,6 @@ using ProgressLight =
 template <int N> class Panel : public rack::app::ModuleWidget {
   using Param = ParamIds<N>;
   using Light = LightIds<N>;
-  using Knob = Knobs<Panel<N>>;
   using Switch = Switches<Panel<N>>;
 
 public:
@@ -157,15 +156,15 @@ public:
 
     Input::install(this, InputIds<N>::LevelAttenuationCV,
                    global_controls_left_x, level_y);
-    Attenuator::install<SmallKnob>(this, global_controls_center_x, level_y,
-                                   Param::LevelMultiplier);
+    Knob::install<Small>(this, Param::LevelMultiplier, global_controls_center_x,
+                         level_y);
     addParam(Switch::template thumb<2>(module, global_controls_right_x, level_y,
                                        Param::LevelRange));
 
     Input::install(this, InputIds<N>::DurationMultiplierCV,
                    global_controls_left_x, global_duration_y);
-    addParam(Knob::small(module, global_controls_center_x, global_duration_y,
-                         Param::DurationMultiplier));
+    Knob::install<Small>(this, Param::DurationMultiplier,
+                         global_controls_center_x, global_duration_y);
     addParam(Switch::template thumb<3>(module, global_controls_right_x,
                                        global_duration_y,
                                        Param::DurationRange));
@@ -245,24 +244,24 @@ public:
                                      step_x, sustain_y);
       Stepper<AnchorModes>::install(this, Param::StepStartAnchorMode + step,
                                     step_x, start_anchor_mode_y);
-      addParam(Knob::small(module, step_x, start_anchor_level_y,
-                           Param::StepStartAnchorLevel + step));
+      Knob::install<Small>(this, Param::StepStartAnchorLevel + step, step_x,
+                           start_anchor_level_y);
 
       Stepper<AnchorSources>::install(this, Param::StepStartAnchorSource + step,
                                       step_x, start_anchor_source_y);
       Stepper<AnchorModes>::install(this, Param::StepEndAnchorMode + step,
                                     step_x, end_anchor_mode_y);
-      addParam(Knob::small(module, step_x, end_anchor_level_y,
-                           Param::StepEndAnchorLevel + step));
+      Knob::install<Small>(this, Param::StepEndAnchorLevel + step, step_x,
+                           end_anchor_level_y);
       Stepper<AnchorSources>::install(this, Param::StepEndAnchorSource + step,
                                       step_x, end_anchor_source_y);
 
-      addParam(
-          Knob::small(module, step_x, duration_y, Param::StepDuration + step));
+      Knob::install<Small>(this, Param::StepDuration + step, step_x,
+                           duration_y);
 
       Stepper<Shapes>::install(this, Param::StepShape + step, step_x, shape_y);
-      addParam(Knob::small(module, step_x, curvature_y,
-                           Param::StepCurvature + step));
+      Knob::install<Small>(this, Param::StepCurvature + step, step_x,
+                           curvature_y);
 
       addParam(
           Switch::toggle(module, step_x, enabled_y, Param::StepEnabled + step));
