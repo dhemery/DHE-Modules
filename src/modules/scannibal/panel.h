@@ -156,10 +156,10 @@ private:
     addParam(LengthKnob<Panel<N>>::create(module, x, length_y, Param::Length,
                                           on_selection_length_change));
 
-    Input::install(this, x, a_y, InputIds<N>::InA);
-    Input::install(this, x, b_y, InputIds<N>::InB);
-    Input::install(this, x, c_y, InputIds<N>::InC);
-    Input::install(this, x, phase_y, InputIds<N>::Phase);
+    Input::install(this, InputIds<N>::InA, x, a_y);
+    Input::install(this, InputIds<N>::InB, x, b_y);
+    Input::install(this, InputIds<N>::InC, x, c_y);
+    Input::install(this, InputIds<N>::Phase, x, phase_y);
   }
 
   void add_step_block(float left) {
@@ -236,8 +236,8 @@ private:
           Param::Phase0AnchorSource + step));
       addParam(Knob::small(module, step_x, phase_0_anchor_level_y,
                            Param::Phase0AnchorLevel + step));
-      Input::install(this, step_x, phase_0_anchor_level_cv_y,
-                     InputIds<N>::Phase0AnchorLevelCV + step);
+      Input::install(this, InputIds<N>::Phase0AnchorLevelCV + step, step_x,
+                     phase_0_anchor_level_cv_y);
 
       addParam(Switch::template create<AnchorModeStepper>(
           module, step_x, phase_1_anchor_mode_y,
@@ -247,19 +247,19 @@ private:
           Param::Phase1AnchorSource + step));
       addParam(Knob::small(module, step_x, phase_1_anchor_level_y,
                            Param::Phase1AnchorLevel + step));
-      Input::install(this, step_x, phase_1_anchor_level_cv_y,
-                     InputIds<N>::Phase1AnchorLevelCV + step);
+      Input::install(this, InputIds<N>::Phase1AnchorLevelCV + step, step_x,
+                     phase_1_anchor_level_cv_y);
 
       addParam(Knob::small(module, step_x, duration_y, Param::Duration + step));
-      Input::install(this, step_x, duration_cv_y,
-                     InputIds<N>::DurationCV + step);
+      Input::install(this, InputIds<N>::DurationCV + step, step_x,
+                     duration_cv_y);
 
       addParam(Switch::template create<ShapeStepper>(module, step_x, shape_y,
                                                      Param::Shape + step));
       addParam(
           Knob::small(module, step_x, curvature_y, Param::Curvature + step));
-      Input::install(this, step_x, curvature_cv_y,
-                     InputIds<N>::CurvatureCV + step);
+      Input::install(this, InputIds<N>::CurvatureCV + step, step_x,
+                     curvature_cv_y);
     }
   }
 
@@ -273,9 +273,9 @@ private:
 
     addParam(
         Switch::template thumb<2>(module, x, polarity_y, Param::LevelRange));
-    Output::install(this, x, step_number_y, OutputIds::StepNumber);
-    Output::install(this, x, step_phase_y, OutputIds::StepPhase);
-    Output::install(this, x, out_y, OutputIds::Out);
+    Output::install(this, OutputIds::StepNumber, x, step_number_y);
+    Output::install(this, OutputIds::StepPhase, x, step_phase_y);
+    Output::install(this, OutputIds::Out, x, out_y);
   }
 
   void set_selection_length(int length) {

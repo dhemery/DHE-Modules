@@ -34,27 +34,27 @@ public:
 
     auto y = top;
     for (auto i = 0; i < Controls::InputCount / 2; i++) {
-      Input::install(this, left, y, Controls::Inputs + i);
+      Input::install(this, Controls::Inputs + i, left, y);
       addParam(Switch::toggle(module, lc, y, Controls::NegateButtons + i));
       addParam(Switch::toggle(module, rc, y,
                               Controls::NegateButtons + i +
                                   Controls::InputCount / 2));
-      Input::install(this, right, y,
-                     Controls::Inputs + i + Controls::InputCount / 2);
+      Input::install(this, Controls::Inputs + i + Controls::InputCount / 2,
+                     right, y);
       y += dy;
     }
 
     auto row = top + 8.75F * dy;
-    Output::install(this, left, row, Controls::AndOutput);
-    Output::install(this, lc, row, Controls::NandOutput);
-    Output::install(this, rc, row, Controls::OrOutput);
-    Output::install(this, right, row, Controls::NorOutput);
+    Output::install(this, Controls::AndOutput, left, row);
+    Output::install(this, Controls::NandOutput, lc, row);
+    Output::install(this, Controls::OrOutput, rc, row);
+    Output::install(this, Controls::NorOutput, right, row);
 
     row += hp2mm(2.75);
-    Output::install(this, left, row, Controls::EvenOutput);
-    Output::install(this, lc, row, Controls::OddOutput);
-    Output::install(this, rc, row, Controls::XorOutput);
-    Output::install(this, right, row, Controls::XnorOutput);
+    Output::install(this, Controls::EvenOutput, left, row);
+    Output::install(this, Controls::OddOutput, lc, row);
+    Output::install(this, Controls::XorOutput, rc, row);
+    Output::install(this, Controls::XnorOutput, right, row);
   }
 };
 } // namespace gator

@@ -33,19 +33,19 @@ public:
     auto y = 20.F;
     auto constexpr dy = 15.F;
 
-    Input::install(this, column1, y, Controls::ACoefficientCvInput);
+    Input::install(this, Controls::ACoefficientCvInput, column1, y);
     addParam(Knob::small(module, column2, y, Controls::ACoefficientKnob));
 
     y += dy;
-    Input::install(this, column1, y, Controls::BCoefficientCvInput);
+    Input::install(this, Controls::BCoefficientCvInput, column1, y);
     addParam(Knob::small(module, column2, y, Controls::BCoefficientKnob));
 
     y += dy;
-    Input::install(this, column1, y, Controls::CCoefficientCvInput);
+    Input::install(this, Controls::CCoefficientCvInput, column1, y);
     addParam(Knob::small(module, column2, y, Controls::CCoefficientKnob));
 
     y += dy;
-    Input::install(this, column1, y, Controls::DCoefficientCvInput);
+    Input::install(this, Controls::DCoefficientCvInput, column1, y);
     addParam(Knob::small(module, column2, y, Controls::DCoefficientKnob));
 
     y = 82.F;
@@ -53,12 +53,12 @@ public:
     addParam(Knob::small(module, column2, y, Controls::OutputGainKnob));
 
     y += dy;
-    Input::install(this, column1, y, Controls::InputGainCvInput);
-    Input::install(this, column2, y, Controls::OutputGainCvInput);
+    Input::install(this, Controls::InputGainCvInput, column1, y);
+    Input::install(this, Controls::OutputGainCvInput, column2, y);
 
     y += dy;
-    Input::install(this, column1, y, Controls::CubicInput);
-    Output::install(this, column2, y, Controls::CubicOutput);
+    Input::install(this, Controls::CubicInput, column1, y);
+    Output::install(this, Controls::CubicOutput, column2, y);
   }
 };
 } // namespace cubic

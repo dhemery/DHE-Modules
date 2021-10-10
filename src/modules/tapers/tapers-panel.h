@@ -36,31 +36,31 @@ public:
     auto constexpr panel_buffer = 4.F;
     auto y = 24.F;
 
-    Input::install(this, column1, y, Controls::LevelCvInput1);
+    Input::install(this, Controls::LevelCvInput1, column1, y);
     addParam(Knob::tiny(module, column2, y, Controls::LevelAvKnob1));
     addParam(Knob::medium(module, column3, y, Controls::LevelKnob1));
     y += dy;
-    Input::install(this, column1, y, Controls::CurveCvInput1);
+    Input::install(this, Controls::CurveCvInput1, column1, y);
     addParam(Knob::tiny(module, column2, y, Controls::CurveAvKnob1));
     addParam(Knob::medium(module, column3, y, Controls::CurveKnob1));
     y += dy;
     addParam(Switch::thumb<2>(module, column1, y, Controls::ShapeSwitch1));
     addParam(Switch::thumb<2>(module, column2, y, Controls::LevelRangeSwitch1));
-    Output::install(this, column3, y, Controls::TaperOutput1);
+    Output::install(this, Controls::TaperOutput1, column3, y);
 
     y += dy + panel_buffer;
 
-    Input::install(this, column1, y, Controls::LevelCvInput2);
+    Input::install(this, Controls::LevelCvInput2, column1, y);
     addParam(Knob::tiny(module, column2, y, Controls::LevelAvKnob2));
     addParam(Knob::medium(module, column3, y, Controls::LevelKnob2));
     y += dy;
-    Input::install(this, column1, y, Controls::CurveCvInput2);
+    Input::install(this, Controls::CurveCvInput2, column1, y);
     addParam(Knob::tiny(module, column2, y, Controls::CurveAvKnob2));
     addParam(Knob::medium(module, column3, y, Controls::CurveKnob2));
     y += dy;
     addParam(Switch::thumb<2>(module, column1, y, Controls::ShapeSwitch2));
     addParam(Switch::thumb<2>(module, column2, y, Controls::LevelRangeSwitch2));
-    Output::install(this, column3, y, Controls::TaperOutput2);
+    Output::install(this, Controls::TaperOutput2, column3, y);
   }
 };
 } // namespace tapers

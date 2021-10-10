@@ -37,7 +37,7 @@ public:
     addParam(Knob::large(module, column2, y, Controls::LevelKnob));
 
     y += dy;
-    Input::install(this, Controls::LevelCvInput, column1, y);
+    Input::install(this, y, Controls::LevelCvInput, column1);
     addParam(Switch::thumb<2>(module, column3, y, Controls::LevelRangeSwitch));
 
     y += dy;
@@ -47,14 +47,14 @@ public:
     y = 82.F;
     dy = 15.F;
 
-    Input::install(this, column1, y, Controls::WaitInput);
+    Input::install(this, Controls::WaitInput, column1, y);
 
     y += dy;
-    Input::install(this, column1, y, Controls::TriggerInput);
-    Output::install(this, column3, y, Controls::TriggerOutput);
+    Input::install(this, Controls::TriggerInput, column1, y);
+    Output::install(this, Controls::TriggerOutput, column3, y);
 
     y += dy;
-    Output::install(this, column3, y, Controls::EnvelopeOutput);
+    Output::install(this, Controls::EnvelopeOutput, column3, y);
   }
 };
 } // namespace stage

@@ -34,10 +34,10 @@ public:
 
     y += dy * 0.75F;
     addParam(Knob::medium(module, left, y, Controls::LevelKnob));
-    Output::install(this, right, y, Controls::RangerOutput);
+    Output::install(this, Controls::RangerOutput, right, y);
 
     y += dy;
-    Input::install(this, left, y, Controls::LevelCvInput);
+    Input::install(this, Controls::LevelCvInput, left, y);
     addParam(Knob::tiny(module, right, y, Controls::LevelAvKnob));
 
     y += dy / 2.F;
@@ -50,8 +50,8 @@ public:
     addParam(Knob::tiny(module, right, y, Controls::CwLimitAvKnob));
 
     y += dy;
-    Input::install(this, left, y, Controls::CcwLimitCvInput);
-    Input::install(this, right, y, Controls::CwLimitCvInput);
+    Input::install(this, Controls::CcwLimitCvInput, left, y);
+    Input::install(this, Controls::CwLimitCvInput, right, y);
 
     y += dy;
     addParam(Switch::thumb<2>(module, left, y, Controls::CcwLimitRangeSwitch));

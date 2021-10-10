@@ -99,7 +99,7 @@ public:
     for (int i = 0; i < N; i++) {
       auto const y =
           layout_.input_top_ + static_cast<float>(i) * layout_.port_dy_;
-      Input::install(this, layout_.input_x_, y, InputIds<N>::Input + i);
+      Input::install(this, InputIds<N>::Input + i, layout_.input_x_, y);
       addParam(Switch::momentary(module,
                                  layout_.input_x_ + button_port_distance, y,
                                  Param::InputOverride + i));
@@ -121,7 +121,7 @@ public:
     addParam(Switch::template momentary<OutputButton>(
         module, layout_.output_x_ - button_port_distance, layout_.output_top_,
         Param::QOverride));
-    Output::install(this, layout_.output_x_, layout_.output_top_, OutputIds::Q);
+    Output::install(this, OutputIds::Q, layout_.output_x_, layout_.output_top_);
     addParam(Switch::template momentary<OutputButton>(
         module, layout_.output_x_ - button_port_distance,
         layout_.output_top_ + layout_.port_dy_, Param::QNotOverride));

@@ -36,60 +36,60 @@ public:
     auto constexpr dy = hp2mm(3.F);
 
     auto y = top + 0.F * dy;
-    Input::install(this, ab_outer_column, y, Controls::AInputs + 0);
+    Input::install(this, Controls::AInputs + 0, ab_outer_column, y);
     addParam(
         Switch::toggle(module, ab_button_column, y, Controls::NotAButtons + 0));
     addParam(
         Switch::toggle(module, cd_button_column, y, Controls::NotAButtons + 1));
-    Input::install(this, cd_outer_column, y, Controls::AInputs + 1);
+    Input::install(this, Controls::AInputs + 1, cd_outer_column, y);
 
     y = top + 0.5F * dy;
     addParam(
         Switch::thumb<2>(module, switch_column, y, Controls::LevelRangeSwitch));
 
     y = top + 1.F * dy;
-    Input::install(this, ab_outer_column, y, Controls::BInputs + 0);
+    Input::install(this, Controls::BInputs + 0, ab_outer_column, y);
     addParam(
         Switch::toggle(module, ab_button_column, y, Controls::NotBButtons + 0));
     addParam(
         Switch::toggle(module, cd_button_column, y, Controls::NotBButtons + 1));
-    Input::install(this, cd_outer_column, y, Controls::BInputs + 1);
+    Input::install(this, Controls::BInputs + 1, cd_outer_column, y);
 
     y = top + 2.F * dy;
-    Output::install(this, ab_outer_column, y, Controls::AndOutputs + 0);
-    Output::install(this, ab_inner_column, y, Controls::NandOutputs + 0);
-    Output::install(this, cd_inner_column, y, Controls::NandOutputs + 1);
-    Output::install(this, cd_outer_column, y, Controls::AndOutputs + 1);
+    Output::install(this, Controls::AndOutputs + 0, ab_outer_column, y);
+    Output::install(this, Controls::NandOutputs + 0, ab_inner_column, y);
+    Output::install(this, Controls::NandOutputs + 1, cd_inner_column, y);
+    Output::install(this, Controls::AndOutputs + 1, cd_outer_column, y);
 
     y = top + 3.F * dy;
-    Output::install(this, ab_outer_column, y, Controls::OrOutputs + 0);
-    Output::install(this, ab_inner_column, y, Controls::NorOutputs + 0);
-    Output::install(this, cd_inner_column, y, Controls::NorOutputs + 1);
-    Output::install(this, cd_outer_column, y, Controls::OrOutputs + 1);
+    Output::install(this, Controls::OrOutputs + 0, ab_outer_column, y);
+    Output::install(this, Controls::NorOutputs + 0, ab_inner_column, y);
+    Output::install(this, Controls::NorOutputs + 1, cd_inner_column, y);
+    Output::install(this, Controls::OrOutputs + 1, cd_outer_column, y);
 
     y = top + 4.F * dy;
-    Output::install(this, ab_outer_column, y, Controls::XorOutputs + 0);
-    Output::install(this, ab_inner_column, y, Controls::XnorOutputs + 0);
-    Output::install(this, cd_inner_column, y, Controls::XnorOutputs + 1);
-    Output::install(this, cd_outer_column, y, Controls::XorOutputs + 1);
+    Output::install(this, Controls::XorOutputs + 0, ab_outer_column, y);
+    Output::install(this, Controls::XnorOutputs + 0, ab_inner_column, y);
+    Output::install(this, Controls::XnorOutputs + 1, cd_inner_column, y);
+    Output::install(this, Controls::XorOutputs + 1, cd_outer_column, y);
 
     y = top + 5.F * dy;
-    Output::install(this, ab_outer_column, y, Controls::ImplicationOutputs + 0);
-    Output::install(this, ab_inner_column, y,
-                    Controls::NonimplicationOutputs + 0);
-    Output::install(this, cd_inner_column, y,
-                    Controls::NonimplicationOutputs + 1);
-    Output::install(this, cd_outer_column, y, Controls::ImplicationOutputs + 1);
+    Output::install(this, Controls::ImplicationOutputs + 0, ab_outer_column, y);
+    Output::install(this, Controls::NonimplicationOutputs + 0, ab_inner_column,
+                    y);
+    Output::install(this, Controls::NonimplicationOutputs + 1, cd_inner_column,
+                    y);
+    Output::install(this, Controls::ImplicationOutputs + 1, cd_outer_column, y);
 
     y = top + 6.F * dy;
-    Output::install(this, ab_outer_column, y,
-                    Controls::ConverseImplicationOutputs + 0);
-    Output::install(this, ab_inner_column, y,
-                    Controls::ConverseNonimplicationOutputs + 0);
-    Output::install(this, cd_inner_column, y,
-                    Controls::ConverseNonimplicationOutputs + 1);
-    Output::install(this, cd_outer_column, y,
-                    Controls::ConverseImplicationOutputs + 1);
+    Output::install(this, Controls::ConverseImplicationOutputs + 0,
+                    ab_outer_column, y);
+    Output::install(this, Controls::ConverseNonimplicationOutputs + 0,
+                    ab_inner_column, y);
+    Output::install(this, Controls::ConverseNonimplicationOutputs + 1,
+                    cd_inner_column, y);
+    Output::install(this, Controls::ConverseImplicationOutputs + 1,
+                    cd_outer_column, y);
   }
 };
 } // namespace fuzzy_logic

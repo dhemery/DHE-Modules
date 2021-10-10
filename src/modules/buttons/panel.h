@@ -35,7 +35,7 @@ public:
       auto const y = top + static_cast<float>(i) * dy;
       addParam(Switch::toggle(module, button_x, y, ParamIds::Button + i));
       addParam(Switch::momentary(module, negate_x, y, ParamIds::Negate + i));
-      Output::install(this, port_x, y, OutputIds::Out + i);
+      Output::install(this, OutputIds::Out + i, port_x, y);
     }
   }
 };

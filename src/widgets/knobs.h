@@ -70,7 +70,7 @@ template <typename PanelT> struct Knobs {
 
 struct Attenuator {
   template <typename SizeT, typename PanelT>
-  static inline void install(PanelT *panel, int id, float xmm, float ymm) {
+  static inline void install(PanelT *panel, float xmm, float ymm, int id) {
     panel->addParam(rack::createParamCentered<KnobWidget<PanelT, SizeT>>(
         mm2px(xmm, ymm), panel->getModule(), id));
   }

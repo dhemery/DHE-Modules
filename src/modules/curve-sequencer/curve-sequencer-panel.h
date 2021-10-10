@@ -140,11 +140,11 @@ public:
 
     auto constexpr active_y = top + light_radius;
 
-    Input::install(this, left, run_y, Controls::RunInput);
+    Input::install(this, Controls::RunInput, left, run_y);
     addParam(Switch::toggle(module, left + button_port_distance, run_y,
                             Controls::RunButton));
 
-    Input::install(this, left, loop_y, Controls::LoopInput);
+    Input::install(this, Controls::LoopInput, left, loop_y);
     addParam(Switch::toggle(module, left + button_port_distance, loop_y,
                             Controls::LoopButton));
 
@@ -171,11 +171,11 @@ public:
         module, selection_length_x, selection_y, Controls::SelectionLengthKnob,
         on_selection_end_change));
 
-    Input::install(this, left, gate_y, Controls::GateInput);
+    Input::install(this, Controls::GateInput, left, gate_y);
     addParam(Switch::momentary(module, left + button_port_distance, gate_y,
                                Controls::GateButton));
 
-    Input::install(this, left, reset_y, Controls::ResetInput);
+    Input::install(this, Controls::ResetInput, left, reset_y);
     addParam(Switch::momentary(module, left + button_port_distance, reset_y,
                                Controls::ResetButton));
 
@@ -218,19 +218,19 @@ public:
 
       addParam(Switch::toggle(module, x, enabled_button_y,
                               Controls::EnabledButtons + step));
-      Input::install(this, x, enabled_port_y, Controls::EnabledInputs + step);
+      Input::install(this, Controls::EnabledInputs + step, x, enabled_port_y);
     }
 
     auto constexpr out_y = bottom - port_radius - 1.F;
     auto constexpr eos_y = top + hp2mm(2.75);
 
-    Input::install(this, right, eos_y, Controls::CurveSequencerInput);
+    Input::install(this, Controls::CurveSequencerInput, right, eos_y);
 
     addParam(Switch::template thumb<2>(module, right, level_y,
                                        Controls::LevelRangeSwitch));
     addParam(Switch::template thumb<3>(module, right, duration_y,
                                        Controls::DurationRangeSwitch));
-    Output::install(this, right, out_y, Controls::CurveSequencerOutput);
+    Output::install(this, Controls::CurveSequencerOutput, right, out_y);
   }
 }; // namespace dhe
 } // namespace curve_sequencer

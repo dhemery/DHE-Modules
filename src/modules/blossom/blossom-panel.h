@@ -37,23 +37,23 @@ public:
     auto y = 25.F;
     auto dy = 18.5F;
 
-    Input::install(this, column1, y, Controls::SpeedCvInput);
+    Input::install(this, Controls::SpeedCvInput, column1, y);
     addParam(Knob::tiny(module, column2, y, Controls::SpeedAvKNob));
     addParam(Knob::large(module, column3, y, Controls::SpeedKnob));
 
     y += dy;
-    Input::install(this, column1, y, Controls::RatioCvInput);
+    Input::install(this, Controls::RatioCvInput, column1, y);
     addParam(Knob::tiny(module, column2, y, Controls::RatioAvKnob));
     addParam(Knob::large(module, column3, y, Controls::RatioKnob));
     addParam(Switch::thumb<2>(module, column4, y, Controls::FreeRatioSwitch));
 
     y += dy;
-    Input::install(this, column1, y, Controls::DepthCvInput);
+    Input::install(this, Controls::DepthCvInput, column1, y);
     addParam(Knob::tiny(module, column2, y, Controls::DepthAvKnob));
     addParam(Knob::large(module, column3, y, Controls::DepthKnob));
 
     y += dy;
-    Input::install(this, column1, y, Controls::PhaseCvInput);
+    Input::install(this, Controls::PhaseCvInput, column1, y);
     addParam(Knob::tiny(module, column2, y, Controls::PhaseOffsetAvKnob));
     addParam(Knob::large(module, column3, y, Controls::PhaseOffsetKnob));
 
@@ -61,16 +61,16 @@ public:
     dy = 15.F;
     auto constexpr output_port_offset = 1.25F;
 
-    Input::install(this, column1, y, Controls::XGainCvInput);
+    Input::install(this, Controls::XGainCvInput, column1, y);
     addParam(Knob::small(module, column2, y, Controls::XGainKnob));
     addParam(Switch::thumb<2>(module, column3, y, Controls::XRangeSwitch));
-    Output::install(this, column4, y + output_port_offset, Controls::XOutput);
+    Output::install(this, Controls::XOutput, column4, y + output_port_offset);
 
     y += dy;
-    Output::install(this, column1, y, Controls::YGainCvInput);
+    Output::install(this, Controls::YGainCvInput, column1, y);
     addParam(Knob::small(module, column2, y, Controls::YGainKnob));
     addParam(Switch::thumb<2>(module, column3, y, Controls::YRangeSwitch));
-    Output::install(this, column4, y + output_port_offset, Controls::YOutput);
+    Output::install(this, Controls::YOutput, column4, y + output_port_offset);
   }
 };
 } // namespace blossom

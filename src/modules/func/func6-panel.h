@@ -44,10 +44,10 @@ public:
       auto const y = top + static_cast<float>(row) * row_spacing;
       auto const port_y = y + port_offset;
 
-      Input::install(this, column1, port_y, Controls::FuncInput + row);
+      Input::install(this, Controls::FuncInput + row, column1, port_y);
       addParam(Knob::large(module, column3, y, Controls::AmountKnob + row));
 
-      Output::install(this, column5, port_y, Controls::FuncOutput + row);
+      Output::install(this, Controls::FuncOutput + row, column5, port_y);
 
       auto *offset_range_stepper = Switch::template create<OffsetRangeStepper>(
           module, column4, y, Controls::OffsetRangeSwitch + row);
