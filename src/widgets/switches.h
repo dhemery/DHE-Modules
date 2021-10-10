@@ -38,6 +38,13 @@ template <int N> struct ThumbSwitch {
         stepper_frame_names("toggle-" + std::to_string(N), N);
     return frame_names;
   }
+
+  template <typename PanelT>
+  static inline void install(PanelT *panel, int id, float xmm, float ymm) {
+    panel->addParam(
+        rack::createParamCentered<SwitchWidget<PanelT, ThumbSwitch>>(
+            mm2px(xmm, ymm), panel->getModule(), id));
+  }
 };
 
 struct Button {
@@ -64,12 +71,6 @@ template <typename PanelT> struct Switches {
                             int index) -> Widget<SwitchT> * {
     return rack::createParamCentered<Widget<SwitchT>>(mm2px(xmm, ymm), module,
                                                       index);
-  }
-
-  template <int N>
-  static inline auto thumb(rack::engine::Module *module, float xmm, float ymm,
-                           int index) -> Widget<ThumbSwitch<N>> * {
-    return create<ThumbSwitch<N>>(module, xmm, ymm, index);
   }
 
   template <typename ButtonT = Button>

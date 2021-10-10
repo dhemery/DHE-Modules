@@ -40,19 +40,18 @@ public:
     Input::install(this, Controls::LevelCvInput, column1, y);
     Knob::install<Large>(this, Controls::LevelKnob, column3, y);
 
-    addParam(Switch::thumb<2>(module, column5, y, Controls::LevelRangeSwitch));
+    ThumbSwitch<2>::install(this, Controls::LevelRangeSwitch, column5, y);
 
     y += dy;
     Input::install(this, Controls::CurveCvInput, column1, y);
     Knob::install<Large>(this, Controls::CurveKnob, column3, y);
-    addParam(Switch::thumb<2>(module, column5, y, Controls::ShapeSwitch));
+    ThumbSwitch<2>::install(this, Controls::ShapeSwitch, column5, y);
 
     y += dy;
     Input::install(this, Controls::DurationCvInput, column1, y);
     Knob::install<Large>(this, Controls::DurationKnob, column3, y);
 
-    addParam(
-        Switch::thumb<3>(module, column5, y, Controls::DurationRangeSwitch));
+    ThumbSwitch<3>::install(this, Controls::DurationRangeSwitch, column5, y);
 
     y = 82.F;
     dy = 15.F;

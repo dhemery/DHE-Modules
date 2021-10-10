@@ -44,7 +44,7 @@ public:
     Input::install(this, Controls::RatioCvInput, column1, y);
     Knob::install<Tiny>(this, Controls::RatioAvKnob, column2, y);
     Knob::install<Large>(this, Controls::RatioKnob, column3, y);
-    addParam(Switch::thumb<2>(module, column4, y, Controls::FreeRatioSwitch));
+    ThumbSwitch<2>::install(this, Controls::FreeRatioSwitch, column4, y);
 
     y += dy;
     Input::install(this, Controls::DepthCvInput, column1, y);
@@ -62,13 +62,13 @@ public:
 
     Input::install(this, Controls::XGainCvInput, column1, y);
     Knob::install<Small>(this, Controls::XGainKnob, column2, y);
-    addParam(Switch::thumb<2>(module, column3, y, Controls::XRangeSwitch));
+    ThumbSwitch<2>::install(this, Controls::XRangeSwitch, column3, y);
     Output::install(this, Controls::XOutput, column4, y + output_port_offset);
 
     y += dy;
     Output::install(this, Controls::YGainCvInput, column1, y);
     Knob::install<Small>(this, Controls::YGainKnob, column2, y);
-    addParam(Switch::thumb<2>(module, column3, y, Controls::YRangeSwitch));
+    ThumbSwitch<2>::install(this, Controls::YRangeSwitch, column3, y);
     Output::install(this, Controls::YOutput, column4, y + output_port_offset);
   }
 };

@@ -269,8 +269,7 @@ private:
     auto constexpr step_phase_y = global_controls_y(3);
     auto constexpr out_y = global_controls_y(4);
 
-    addParam(
-        Switch::template thumb<2>(module, x, polarity_y, Param::LevelRange));
+    ThumbSwitch<2>::install(this, Param::LevelRange, x, polarity_y);
     Output::install(this, OutputIds::StepNumber, x, step_number_y);
     Output::install(this, OutputIds::StepPhase, x, step_phase_y);
     Output::install(this, OutputIds::Out, x, out_y);

@@ -33,12 +33,11 @@ public:
     auto y = 25.F;
     auto dy = 18.5F;
 
-    addParam(Switch::thumb<2>(module, column2, y, Controls::ModeSwitch));
+    ThumbSwitch<2>::install(this, Controls::ModeSwitch, column2, y);
 
     y += dy;
     Input::install(this, Controls::DurationCvInput, column1, y);
-    addParam(
-        Switch::thumb<3>(module, column3, y, Controls::DurationRangeSwitch));
+    ThumbSwitch<3>::install(this, Controls::DurationRangeSwitch, column3, y);
 
     y += dy;
     Knob::install<Large>(this, Controls::DurationKnob, column2, y);

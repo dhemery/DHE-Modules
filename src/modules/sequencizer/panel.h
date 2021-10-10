@@ -158,16 +158,15 @@ public:
                    global_controls_left_x, level_y);
     Knob::install<Small>(this, Param::LevelMultiplier, global_controls_center_x,
                          level_y);
-    addParam(Switch::template thumb<2>(module, global_controls_right_x, level_y,
-                                       Param::LevelRange));
+    ThumbSwitch<2>::install(this, Param::LevelRange, global_controls_right_x,
+                            level_y);
 
     Input::install(this, InputIds<N>::DurationMultiplierCV,
                    global_controls_left_x, global_duration_y);
     Knob::install<Small>(this, Param::DurationMultiplier,
                          global_controls_center_x, global_duration_y);
-    addParam(Switch::template thumb<3>(module, global_controls_right_x,
-                                       global_duration_y,
-                                       Param::DurationRange));
+    ThumbSwitch<3>::install(this, Param::DurationRange, global_controls_right_x,
+                            global_duration_y);
 
     Input::install(this, InputIds<N>::InA, global_controls_left_x, in_y);
     Input::install(this, InputIds<N>::InB, global_controls_center_x, in_y);

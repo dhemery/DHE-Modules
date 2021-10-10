@@ -44,8 +44,7 @@ public:
     Input::install(this, Controls::AInputs + 1, cd_outer_column, y);
 
     y = top + 0.5F * dy;
-    addParam(
-        Switch::thumb<2>(module, switch_column, y, Controls::LevelRangeSwitch));
+    ThumbSwitch<2>::install(this, Controls::LevelRangeSwitch, switch_column, y);
 
     y = top + 1.F * dy;
     Input::install(this, Controls::BInputs + 0, ab_outer_column, y);

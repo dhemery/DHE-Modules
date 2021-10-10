@@ -208,8 +208,7 @@ public:
 
       Knob::install<Small>(this, Controls::LevelKnobs + step, x, level_y);
 
-      addParam(Switch::template thumb<2>(module, x, shape_y,
-                                         Controls::ShapeSwitches + step));
+      ThumbSwitch<2>::install(this, Controls::ShapeSwitches + step, x, shape_y);
       Knob::install<Small>(this, Controls::CurveKnobs + step, x, curve_y);
 
       Knob::install<Small>(this, Controls::DurationKnobs + step, x, duration_y);
@@ -224,10 +223,9 @@ public:
 
     Input::install(this, Controls::CurveSequencerInput, right, eos_y);
 
-    addParam(Switch::template thumb<2>(module, right, level_y,
-                                       Controls::LevelRangeSwitch));
-    addParam(Switch::template thumb<3>(module, right, duration_y,
-                                       Controls::DurationRangeSwitch));
+    ThumbSwitch<2>::install(this, Controls::LevelRangeSwitch, right, level_y);
+    ThumbSwitch<3>::install(this, Controls::DurationRangeSwitch, right,
+                            duration_y);
     Output::install(this, Controls::CurveSequencerOutput, right, out_y);
   }
 }; // namespace dhe

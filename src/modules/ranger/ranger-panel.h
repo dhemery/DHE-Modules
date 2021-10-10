@@ -13,7 +13,6 @@ namespace ranger {
 
 class RangerPanel : public rack::app::ModuleWidget {
   using Controls = RangerControls;
-  using Switch = Switches<RangerPanel>;
 
 public:
   static auto constexpr svg_dir = "ranger";
@@ -53,8 +52,8 @@ public:
     Input::install(this, Controls::CwLimitCvInput, right, y);
 
     y += dy;
-    addParam(Switch::thumb<2>(module, left, y, Controls::CcwLimitRangeSwitch));
-    addParam(Switch::thumb<2>(module, right, y, Controls::CwLimitRangeSwitch));
+    ThumbSwitch<2>::install(this, Controls::CcwLimitRangeSwitch, left, y);
+    ThumbSwitch<2>::install(this, Controls::CwLimitRangeSwitch, right, y);
   }
 };
 } // namespace ranger

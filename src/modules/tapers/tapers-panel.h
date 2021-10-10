@@ -43,8 +43,8 @@ public:
     Knob::install<Tiny>(this, Controls::CurveAvKnob1, column2, y);
     Knob::install<Medium>(this, Controls::CurveKnob1, column3, y);
     y += dy;
-    addParam(Switch::thumb<2>(module, column1, y, Controls::ShapeSwitch1));
-    addParam(Switch::thumb<2>(module, column2, y, Controls::LevelRangeSwitch1));
+    ThumbSwitch<2>::install(this, Controls::ShapeSwitch1, column1, y);
+    ThumbSwitch<2>::install(this, Controls::LevelRangeSwitch1, column2, y);
     Output::install(this, Controls::TaperOutput1, column3, y);
 
     y += dy + panel_buffer;
@@ -57,8 +57,8 @@ public:
     Knob::install<Tiny>(this, Controls::CurveAvKnob2, column2, y);
     Knob::install<Medium>(this, Controls::CurveKnob2, column3, y);
     y += dy;
-    addParam(Switch::thumb<2>(module, column1, y, Controls::ShapeSwitch2));
-    addParam(Switch::thumb<2>(module, column2, y, Controls::LevelRangeSwitch2));
+    ThumbSwitch<2>::install(this, Controls::ShapeSwitch2, column1, y);
+    ThumbSwitch<2>::install(this, Controls::LevelRangeSwitch2, column2, y);
     Output::install(this, Controls::TaperOutput2, column3, y);
   }
 };

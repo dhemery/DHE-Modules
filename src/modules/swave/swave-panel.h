@@ -13,7 +13,6 @@ namespace swave {
 
 class SwavePanel : public rack::app::ModuleWidget {
   using Controls = SwaveControls;
-  using Switch = Switches<SwavePanel>;
 
 public:
   static auto constexpr svg_dir = "swave";
@@ -31,8 +30,7 @@ public:
 
     auto y = 25.F;
     auto dy = 18.5F;
-
-    addParam(Switch::thumb<2>(module, x, y, Controls::ShapeSwitch));
+    ThumbSwitch<2>::install(this, Controls::ShapeSwitch, x, y);
 
     y += dy;
     Knob::install<Large>(this, Controls::CurveKnob, x, y);

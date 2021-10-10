@@ -37,7 +37,7 @@ public:
 
     y += dy;
     Input::install(this, Controls::LevelCvInput, column1, y);
-    addParam(Switch::thumb<2>(module, column3, y, Controls::LevelRangeSwitch));
+    ThumbSwitch<2>::install(this, Controls::LevelRangeSwitch, column3, y);
 
     y += dy;
     addParam(Switch::momentary(module, column1, y, Controls::WaitButton));
