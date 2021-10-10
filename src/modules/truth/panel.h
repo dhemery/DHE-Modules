@@ -118,11 +118,11 @@ public:
           module, layout_.outcome_x_, y, Param::Outcome + i));
     }
 
-    addParam(Switch::template momentary<OutputButton>(
+    addParam(Switch::template momentary<Reversed>(
         module, layout_.output_x_ - button_port_distance, layout_.output_top_,
         Param::QOverride));
     Output::install(this, OutputIds::Q, layout_.output_x_, layout_.output_top_);
-    addParam(Switch::template momentary<OutputButton>(
+    addParam(Switch::template momentary<Reversed>(
         module, layout_.output_x_ - button_port_distance,
         layout_.output_top_ + layout_.port_dy_, Param::QNotOverride));
     Output::install(this, layout_.output_x_,

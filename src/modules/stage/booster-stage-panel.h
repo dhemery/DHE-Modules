@@ -59,15 +59,15 @@ public:
     Input::install(this, Controls::DeferInput, column1, y);
     addParam(Switch::momentary(module, column2, y, Controls::DeferButton));
 
-    addParam(Switch::momentary<OutputButton>(module, column4, y,
-                                             Controls::ActiveButton));
+    addParam(Switch::momentary<Reversed>(module, column4, y,
+                                         Controls::ActiveButton));
     Output::install(this, Controls::ActiveOutput, column5, y);
 
     y += dy;
     Input::install(this, Controls::TriggerInput, column1, y);
     addParam(Switch::momentary(module, column2, y, Controls::TriggerButton));
-    addParam(Switch::momentary<OutputButton>(module, column4, y,
-                                             Controls::EocButton));
+    addParam(
+        Switch::momentary<Reversed>(module, column4, y, Controls::EocButton));
     Output::install(this, Controls::EocOutput, column5, y);
 
     y += dy;

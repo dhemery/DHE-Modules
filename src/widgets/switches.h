@@ -47,7 +47,7 @@ template <int N> struct ThumbSwitch {
   }
 };
 
-struct Button {
+struct Normal {
   static inline auto frame_names() -> std::vector<std::string> {
     static auto const names =
         std::vector<std::string>{"button-released", "button-pressed"};
@@ -55,7 +55,7 @@ struct Button {
   }
 };
 
-struct OutputButton {
+struct Reversed {
   static inline auto frame_names() -> std::vector<std::string> {
     static auto const names = std::vector<std::string>{"output-button-released",
                                                        "output-button-pressed"};
@@ -63,28 +63,28 @@ struct OutputButton {
   }
 };
 
-template <typename PanelT> struct Switches {
-  template <typename SwitchT> using Widget = SwitchWidget<PanelT, SwitchT>;
-
-  template <typename SwitchT>
-  static inline auto create(rack::engine::Module *module, float xmm, float ymm,
-                            int index) -> Widget<SwitchT> * {
-    return rack::createParamCentered<Widget<SwitchT>>(mm2px(xmm, ymm), module,
-                                                      index);
+struct Momentary {
+  template <typename WidgetT>
+  static inline void init_behavior(WidgetT *widget) {
+    widget->momentary = true;
   }
+};
 
-  template <typename ButtonT = Button>
-  static inline auto toggle(rack::engine::Module *module, float xmm, float ymm,
-                            int index) -> Widget<ButtonT> * {
-    return create<ButtonT>(module, xmm, ymm, index);
+struct Toggle {
+  template <typename WidgetT>
+  static inline void init_behavior(WidgetT *widget) {
+    widget->momentary = false;
   }
+};
 
-  template <typename ButtonT = Button>
-  static inline auto momentary(rack::engine::Module *module, float xmm,
-                               float ymm, int index) -> Widget<ButtonT> * {
-    auto button = create<ButtonT>(module, xmm, ymm, index);
-    button->momentary = true;
-    return button;
+struct Button {
+  template <typename BehaviorT, typename StyleT = Normal, typename PanelT>
+  static inline void install(PanelT *panel, int id, float xmm, float ymm) {
+    using WidgetT = SwitchWidget<PanelT, StyleT>;
+    auto w = rack::createParamCentered<WidgetT>(mm2px(xmm, ymm),
+                                                panel->getModule(), id);
+    BehaviorT::init_behavior(w);
+    panel->addParam(w);
   }
 };
 
@@ -106,8 +106,35 @@ template <typename StepperT> struct Stepper {
 
   template <typename PanelT>
   static inline void install(PanelT *panel, int id, float xmm, float ymm) {
-    panel->addParam(Switches<PanelT>::template create<Stepper<StepperT>>(
-        panel->getModule(), xmm, ymm, id));
+    auto *w = rack::createParamCentered<SwitchWidget<PanelT, Stepper>>(
+        mm2px(xmm, ymm), panel->getModule(), id);
+    panel->addParam(w);
   }
 };
+
+template <typename PanelT> struct Switches {
+  template <typename SwitchT> using Widget = SwitchWidget<PanelT, SwitchT>;
+
+  template <typename StyleT>
+  static inline auto create(rack::engine::Module *module, float xmm, float ymm,
+                            int index) -> Widget<StyleT> * {
+    return rack::createParamCentered<Widget<StyleT>>(mm2px(xmm, ymm), module,
+                                                     index);
+  }
+
+  template <typename StyleT = Normal>
+  static inline auto toggle(rack::engine::Module *module, float xmm, float ymm,
+                            int index) -> Widget<StyleT> * {
+    return create<StyleT>(module, xmm, ymm, index);
+  }
+
+  template <typename StyleT = Normal>
+  static inline auto momentary(rack::engine::Module *module, float xmm,
+                               float ymm, int index) -> Widget<StyleT> * {
+    auto button = create<StyleT>(module, xmm, ymm, index);
+    button->momentary = true;
+    return button;
+  }
+};
+
 } // namespace dhe
