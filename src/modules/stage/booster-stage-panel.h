@@ -36,18 +36,18 @@ public:
     auto dy = 18.5F;
     auto y = 25.F;
 
-    Input::install(this, Controls::LevelCvInput, column1, y);
+    InPort::install(this, Controls::LevelCvInput, column1, y);
     Knob::install<Large>(this, Controls::LevelKnob, column3, y);
 
     ThumbSwitch<2>::install(this, Controls::LevelRangeSwitch, column5, y);
 
     y += dy;
-    Input::install(this, Controls::CurveCvInput, column1, y);
+    InPort::install(this, Controls::CurveCvInput, column1, y);
     Knob::install<Large>(this, Controls::CurveKnob, column3, y);
     ThumbSwitch<2>::install(this, Controls::ShapeSwitch, column5, y);
 
     y += dy;
-    Input::install(this, Controls::DurationCvInput, column1, y);
+    InPort::install(this, Controls::DurationCvInput, column1, y);
     Knob::install<Large>(this, Controls::DurationKnob, column3, y);
 
     ThumbSwitch<3>::install(this, Controls::DurationRangeSwitch, column5, y);
@@ -55,22 +55,22 @@ public:
     y = 82.F;
     dy = 15.F;
 
-    Input::install(this, Controls::DeferInput, column1, y);
+    InPort::install(this, Controls::DeferInput, column1, y);
     Button::install<Momentary>(this, Controls::DeferButton, column2, y);
 
     Button::install<Momentary, Reversed>(this, Controls::ActiveButton, column4,
                                          y);
-    Output::install(this, Controls::ActiveOutput, column5, y);
+    OutPort::install(this, Controls::ActiveOutput, column5, y);
 
     y += dy;
-    Input::install(this, Controls::TriggerInput, column1, y);
+    InPort::install(this, Controls::TriggerInput, column1, y);
     Button::install<Momentary>(this, Controls::TriggerButton, column2, y);
     Button::install<Momentary, Reversed>(this, Controls::EocButton, column4, y);
-    Output::install(this, Controls::EocOutput, column5, y);
+    OutPort::install(this, Controls::EocOutput, column5, y);
 
     y += dy;
-    Input::install(this, Controls::EnvelopeInput, column1, y);
-    Output::install(this, Controls::EnvelopeOutput, column5, y);
+    InPort::install(this, Controls::EnvelopeInput, column1, y);
+    OutPort::install(this, Controls::EnvelopeOutput, column5, y);
   }
 };
 

@@ -71,6 +71,8 @@ static auto layout(int input_count) -> Layout {
 }
 
 template <int N> class Panel : public rack::app::ModuleWidget {
+  using Input = InputIds<N>;
+  using Output = OutputIds;
   using Param = ParamIds<N>;
 
 public:
@@ -86,7 +88,7 @@ public:
     for (int i = 0; i < N; i++) {
       auto const y =
           layout_.input_top_ + static_cast<float>(i) * layout_.port_dy_;
-      Input::install(this, InputIds<N>::Input + i, layout_.input_x_, y);
+      InPort::install(this, Input::Input + i, layout_.input_x_, y);
       Button::install<Momentary>(this, Param::InputOverride + i,
                                  layout_.input_x_ + button_port_distance, y);
     }
@@ -107,12 +109,12 @@ public:
     Button::install<Momentary, Reversed>(
         this, Param::QOverride, layout_.output_x_ - button_port_distance,
         layout_.output_top_);
-    Output::install(this, OutputIds::Q, layout_.output_x_, layout_.output_top_);
+    OutPort::install(this, Output::Q, layout_.output_x_, layout_.output_top_);
     Button::install<Momentary, Reversed>(
         this, Param::QNotOverride, layout_.output_x_ - button_port_distance,
         layout_.output_top_ + layout_.port_dy_);
-    Output::install(this, OutputIds::QNot, layout_.output_x_,
-                    layout_.output_top_ + layout_.port_dy_);
+    OutPort::install(this, Output::QNot, layout_.output_x_,
+                     layout_.output_top_ + layout_.port_dy_);
   }
 
 private:

@@ -20,7 +20,7 @@ struct GenerateModes {
   static constexpr auto frame_prefix = "generate-mode";
   static inline auto labels() -> std::vector<std::string> const & {
     static auto const labels = std::vector<std::string>{
-        "Curve", "Hold", "Sustain", "Input", "Chase", "Level"};
+        "Curve", "Hold", "Sustain", "InPort", "Chase", "Level"};
     return labels;
   }
 };

@@ -37,11 +37,11 @@ public:
                 coefficient_range);
     configInput(Controls::DCoefficientCvInput, "Constant coefficient CV");
 
-    config_gain(this, Controls::InputGainKnob, "Input gain");
-    configInput(Controls::InputGainCvInput, "Input gain CV");
+    config_gain(this, Controls::InputGainKnob, "InPort gain");
+    configInput(Controls::InputGainCvInput, "InPort gain CV");
 
-    config_gain(this, Controls::OutputGainKnob, "Output gain");
-    configInput(Controls::OutputGainCvInput, "Output gain CV");
+    config_gain(this, Controls::OutputGainKnob, "OutPort gain");
+    configInput(Controls::OutputGainCvInput, "OutPort gain CV");
 
     configInput(Controls::CubicInput, "Cubic");
     configOutput(Controls::CubicOutput, "Cubic");

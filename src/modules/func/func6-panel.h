@@ -42,10 +42,10 @@ public:
       auto const y = top + static_cast<float>(row) * row_spacing;
       auto const port_y = y + port_offset;
 
-      Input::install(this, Controls::FuncInput + row, column1, port_y);
+      InPort::install(this, Controls::FuncInput + row, column1, port_y);
       Knob::install<Large>(this, Controls::AmountKnob + row, column3, y);
 
-      Output::install(this, Controls::FuncOutput + row, column5, port_y);
+      OutPort::install(this, Controls::FuncOutput + row, column5, port_y);
 
       auto *offset_range_stepper = Stepper<OffsetRanges>::install(
           this, Controls::OffsetRangeSwitch + row, column4, y);

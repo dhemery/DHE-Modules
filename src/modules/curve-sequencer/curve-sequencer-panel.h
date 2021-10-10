@@ -123,11 +123,11 @@ public:
 
     auto constexpr active_y = top + light_radius;
 
-    Input::install(this, Controls::RunInput, left, run_y);
+    InPort::install(this, Controls::RunInput, left, run_y);
     Button::install<Toggle>(this, Controls::RunButton,
                             left + button_port_distance, run_y);
 
-    Input::install(this, Controls::LoopInput, left, loop_y);
+    InPort::install(this, Controls::LoopInput, left, loop_y);
     Button::install<Toggle>(this, Controls::LoopButton,
                             left + button_port_distance, loop_y);
 
@@ -154,11 +154,11 @@ public:
         module, selection_length_x, selection_y, Controls::SelectionLengthKnob,
         on_selection_end_change));
 
-    Input::install(this, Controls::GateInput, left, gate_y);
+    InPort::install(this, Controls::GateInput, left, gate_y);
     Button::install<Momentary>(this, Controls::GateButton,
                                left + button_port_distance, gate_y);
 
-    Input::install(this, Controls::ResetInput, left, reset_y);
+    InPort::install(this, Controls::ResetInput, left, reset_y);
     Button::install<Momentary>(this, Controls::ResetButton,
                                left + button_port_distance, reset_y);
 
@@ -196,18 +196,18 @@ public:
 
       Button::install<Toggle>(this, Controls::EnabledButtons + step, x,
                               enabled_button_y);
-      Input::install(this, Controls::EnabledInputs + step, x, enabled_port_y);
+      InPort::install(this, Controls::EnabledInputs + step, x, enabled_port_y);
     }
 
     auto constexpr out_y = bottom - port_radius - 1.F;
     auto constexpr eos_y = top + hp2mm(2.75);
 
-    Input::install(this, Controls::CurveSequencerInput, right, eos_y);
+    InPort::install(this, Controls::CurveSequencerInput, right, eos_y);
 
     ThumbSwitch<2>::install(this, Controls::LevelRangeSwitch, right, level_y);
     ThumbSwitch<3>::install(this, Controls::DurationRangeSwitch, right,
                             duration_y);
-    Output::install(this, Controls::CurveSequencerOutput, right, out_y);
+    OutPort::install(this, Controls::CurveSequencerOutput, right, out_y);
   }
 }; // namespace dhe
 } // namespace curve_sequencer

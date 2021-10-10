@@ -40,7 +40,7 @@ struct Controls {
 
   void output(float f) { output_ = f; }
 
-  // Inputs
+  // Input
   bool is_gated_{};              // NOLINT
   bool is_reset_{};              // NOLINT
   bool is_running_{};            // NOLINT
@@ -70,7 +70,7 @@ struct StepController {
 
   void exit() { step_ = exited_step; }
 
-  // Inputs
+  // Input
   std::array<StepEvent, step_count> step_events_{}; // NOLINT
 
   // Captures
@@ -95,7 +95,7 @@ struct StepSelector {
     return successors_[current];
   }
 
-  // Inputs
+  // Input
   int first_ = original_first;             // NOLINT
   std::array<int, step_count> successors_; // NOLINT
 };

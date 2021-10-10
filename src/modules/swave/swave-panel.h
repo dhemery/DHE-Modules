@@ -39,16 +39,16 @@ public:
     Knob::install<Tiny>(this, Controls::CurveAvKnob, x, y);
 
     y += dy;
-    Input::install(this, Controls::CurveCvInput, x, y);
+    InPort::install(this, Controls::CurveCvInput, x, y);
 
     y = 82.F;
     dy = 15.F;
 
     y += dy;
-    Input::install(this, Controls::SwaveInput, x, y);
+    InPort::install(this, Controls::SwaveInput, x, y);
 
     y += dy;
-    Output::install(this, Controls::SwaveOutput, x, y);
+    OutPort::install(this, Controls::SwaveOutput, x, y);
   }
 };
 } // namespace swave

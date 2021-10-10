@@ -26,7 +26,7 @@ static inline auto name_of(GenerateMode mode) -> std::string {
   case GenerateMode::Sustain:
     return "GenerateMode::Sustain";
   case GenerateMode::Input:
-    return "GenerateMode::Input";
+    return "GenerateMode::InPort";
   case GenerateMode::Chase:
     return "GenerateMode::Chase";
   case GenerateMode::Level:

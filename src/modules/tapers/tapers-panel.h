@@ -34,31 +34,31 @@ public:
     auto constexpr panel_buffer = 4.F;
     auto y = 24.F;
 
-    Input::install(this, Controls::LevelCvInput1, column1, y);
+    InPort::install(this, Controls::LevelCvInput1, column1, y);
     Knob::install<Tiny>(this, Controls::LevelAvKnob1, column2, y);
     Knob::install<Medium>(this, Controls::LevelKnob1, column3, y);
     y += dy;
-    Input::install(this, Controls::CurveCvInput1, column1, y);
+    InPort::install(this, Controls::CurveCvInput1, column1, y);
     Knob::install<Tiny>(this, Controls::CurveAvKnob1, column2, y);
     Knob::install<Medium>(this, Controls::CurveKnob1, column3, y);
     y += dy;
     ThumbSwitch<2>::install(this, Controls::ShapeSwitch1, column1, y);
     ThumbSwitch<2>::install(this, Controls::LevelRangeSwitch1, column2, y);
-    Output::install(this, Controls::TaperOutput1, column3, y);
+    OutPort::install(this, Controls::TaperOutput1, column3, y);
 
     y += dy + panel_buffer;
 
-    Input::install(this, Controls::LevelCvInput2, column1, y);
+    InPort::install(this, Controls::LevelCvInput2, column1, y);
     Knob::install<Tiny>(this, Controls::LevelAvKnob2, column2, y);
     Knob::install<Medium>(this, Controls::LevelKnob2, column3, y);
     y += dy;
-    Input::install(this, Controls::CurveCvInput2, column1, y);
+    InPort::install(this, Controls::CurveCvInput2, column1, y);
     Knob::install<Tiny>(this, Controls::CurveAvKnob2, column2, y);
     Knob::install<Medium>(this, Controls::CurveKnob2, column3, y);
     y += dy;
     ThumbSwitch<2>::install(this, Controls::ShapeSwitch2, column1, y);
     ThumbSwitch<2>::install(this, Controls::LevelRangeSwitch2, column2, y);
-    Output::install(this, Controls::TaperOutput2, column3, y);
+    OutPort::install(this, Controls::TaperOutput2, column3, y);
   }
 };
 } // namespace tapers

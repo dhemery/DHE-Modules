@@ -33,26 +33,26 @@ public:
 
     auto y = top;
     for (auto i = 0; i < Controls::InputCount / 2; i++) {
-      Input::install(this, Controls::Inputs + i, left, y);
+      InPort::install(this, Controls::Inputs + i, left, y);
       Button::install<Toggle>(this, Controls::NegateButtons + i, lc, y);
       Button::install<Toggle>(
           this, Controls::NegateButtons + i + Controls::InputCount / 2, rc, y);
-      Input::install(this, Controls::Inputs + i + Controls::InputCount / 2,
+      InPort::install(this, Controls::Inputs + i + Controls::InputCount / 2,
                      right, y);
       y += dy;
     }
 
     auto row = top + 8.75F * dy;
-    Output::install(this, Controls::AndOutput, left, row);
-    Output::install(this, Controls::NandOutput, lc, row);
-    Output::install(this, Controls::OrOutput, rc, row);
-    Output::install(this, Controls::NorOutput, right, row);
+    OutPort::install(this, Controls::AndOutput, left, row);
+    OutPort::install(this, Controls::NandOutput, lc, row);
+    OutPort::install(this, Controls::OrOutput, rc, row);
+    OutPort::install(this, Controls::NorOutput, right, row);
 
     row += hp2mm(2.75);
-    Output::install(this, Controls::EvenOutput, left, row);
-    Output::install(this, Controls::OddOutput, lc, row);
-    Output::install(this, Controls::XorOutput, rc, row);
-    Output::install(this, Controls::XnorOutput, right, row);
+    OutPort::install(this, Controls::EvenOutput, left, row);
+    OutPort::install(this, Controls::OddOutput, lc, row);
+    OutPort::install(this, Controls::XorOutput, rc, row);
+    OutPort::install(this, Controls::XnorOutput, right, row);
   }
 };
 } // namespace gator

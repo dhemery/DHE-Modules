@@ -34,7 +34,7 @@ public:
       auto const y = top + static_cast<float>(i) * dy;
       Button::install<Toggle>(this, ParamIds::Button + i, button_x, y);
       Button::install<Momentary>(this, ParamIds::Negate + i, negate_x, y);
-      Output::install(this, OutputIds::Out + i, port_x, y);
+      OutPort::install(this, OutputIds::Out + i, port_x, y);
     }
   }
 };

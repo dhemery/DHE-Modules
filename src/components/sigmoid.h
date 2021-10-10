@@ -26,7 +26,7 @@ static constexpr auto curve(float input, float curvature) -> float {
 
 /**
  * The range over which the curve() function's input and curvature are defined.
- * Input and curvature values within this range will always produce outputs_ in
+ * InPort and curvature values within this range will always produce outputs_ in
  * this range. The curve() function's behavior for values outside this range is
  * undefined.
  */

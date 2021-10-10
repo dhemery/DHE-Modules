@@ -35,7 +35,7 @@ public:
     Knob::install<Large>(this, Controls::LevelKnob, column2, y);
 
     y += dy;
-    Input::install(this, Controls::LevelCvInput, column1, y);
+    InPort::install(this, Controls::LevelCvInput, column1, y);
     ThumbSwitch<2>::install(this, Controls::LevelRangeSwitch, column3, y);
 
     y += dy;
@@ -45,14 +45,14 @@ public:
     y = 82.F;
     dy = 15.F;
 
-    Input::install(this, Controls::WaitInput, column1, y);
+    InPort::install(this, Controls::WaitInput, column1, y);
 
     y += dy;
-    Input::install(this, Controls::TriggerInput, column1, y);
-    Output::install(this, Controls::TriggerOutput, column3, y);
+    InPort::install(this, Controls::TriggerInput, column1, y);
+    OutPort::install(this, Controls::TriggerOutput, column3, y);
 
     y += dy;
-    Output::install(this, Controls::EnvelopeOutput, column3, y);
+    OutPort::install(this, Controls::EnvelopeOutput, column3, y);
   }
 };
 } // namespace stage

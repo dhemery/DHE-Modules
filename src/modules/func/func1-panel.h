@@ -41,9 +41,9 @@ public:
     auto constexpr row4 = top + row_spacing * 3;
     auto constexpr row6 = top + row_spacing * 5 + port_offset;
 
-    Input::install(this, Controls::FuncInput, x, row1);
+    InPort::install(this, Controls::FuncInput, x, row1);
     Knob::install<Large>(this, Controls::AmountKnob, x, row3);
-    Output::install(this, Controls::FuncOutput, x, row6);
+    OutPort::install(this, Controls::FuncOutput, x, row6);
 
     auto *offset_range_stepper = Stepper<OffsetRanges>::install(
         this, Controls::OffsetRangeSwitch, x, row4);

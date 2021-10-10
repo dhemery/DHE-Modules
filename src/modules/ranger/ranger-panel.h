@@ -32,10 +32,10 @@ public:
 
     y += dy * 0.75F;
     Knob::install<Medium>(this, Controls::LevelKnob, left, y);
-    Output::install(this, Controls::RangerOutput, right, y);
+    OutPort::install(this, Controls::RangerOutput, right, y);
 
     y += dy;
-    Input::install(this, Controls::LevelCvInput, left, y);
+    InPort::install(this, Controls::LevelCvInput, left, y);
     Knob::install<Tiny>(this, Controls::LevelAvKnob, right, y);
 
     y += dy / 2.F;
@@ -48,8 +48,8 @@ public:
     Knob::install<Tiny>(this, Controls::CwLimitAvKnob, right, y);
 
     y += dy;
-    Input::install(this, Controls::CcwLimitCvInput, left, y);
-    Input::install(this, Controls::CwLimitCvInput, right, y);
+    InPort::install(this, Controls::CcwLimitCvInput, left, y);
+    InPort::install(this, Controls::CwLimitCvInput, right, y);
 
     y += dy;
     ThumbSwitch<2>::install(this, Controls::CcwLimitRangeSwitch, left, y);

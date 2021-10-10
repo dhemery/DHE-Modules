@@ -35,24 +35,24 @@ public:
     auto y = 25.F;
     auto dy = 18.5F;
 
-    Input::install(this, Controls::SpeedCvInput, column1, y);
+    InPort::install(this, Controls::SpeedCvInput, column1, y);
     Knob::install<Tiny>(this, Controls::SpeedAvKnob, column2, y);
     Knob::install<Large>(this, Controls::SpeedKnob, column3, y);
 
     y += dy;
-    Input::install(this, Controls::RatioCvInput, column1, y);
+    InPort::install(this, Controls::RatioCvInput, column1, y);
     Knob::install<Tiny>(this, Controls::RatioAvKnob, column2, y);
     Knob::install<Large>(this, Controls::RatioKnob, column3, y);
     ThumbSwitch<2>::install(this, Controls::FreeRatioSwitch, column4, y);
 
     y += dy;
-    Input::install(this, Controls::DepthCvInput, column1, y);
+    InPort::install(this, Controls::DepthCvInput, column1, y);
     Knob::install<Tiny>(this, Controls::DepthAvKnob, column2, y);
     Knob::install<Large>(this, Controls::DepthKnob, column3, y);
     ThumbSwitch<3>::install(this, Controls::DirectionSwitch, column4, y);
 
     y += dy;
-    Input::install(this, Controls::PhaseCvInput, column1, y);
+    InPort::install(this, Controls::PhaseCvInput, column1, y);
     Knob::install<Tiny>(this, Controls::PhaseOffsetAvKnob, column2, y);
     Knob::install<Large>(this, Controls::PhaseOffsetKnob, column3, y);
 
@@ -61,17 +61,17 @@ public:
     auto constexpr output_port_offset = 1.25F;
 
     y += dy;
-    Input::install(this, Controls::XGainCvInput, column1, y);
+    InPort::install(this, Controls::XGainCvInput, column1, y);
     Knob::install<Small>(this, Controls::XGainKnob, column2, y);
     ThumbSwitch<2>::install(this, Controls::XRangeSwitch, column3, y);
     ThumbSwitch<2>::install(this, Controls::XRangeSwitch, column3, y);
-    Output::install(this, Controls::XOutput, column4, y + output_port_offset);
+    OutPort::install(this, Controls::XOutput, column4, y + output_port_offset);
 
     y += dy;
-    Input::install(this, Controls::YGainCvInput, column1, y);
+    InPort::install(this, Controls::YGainCvInput, column1, y);
     Knob::install<Small>(this, Controls::YGainKnob, column2, y);
     ThumbSwitch<2>::install(this, Controls::YRangeSwitch, column3, y);
-    Output::install(this, Controls::YOutput, column4, y + output_port_offset);
+    OutPort::install(this, Controls::YOutput, column4, y + output_port_offset);
   }
 };
 } // namespace xycloid

@@ -53,8 +53,9 @@ using ProgressLight =
     rack::componentlibrary::SmallLight<rack::componentlibrary::GreenRedLight>;
 
 template <int N> class Panel : public rack::app::ModuleWidget {
-  using Param = ParamIds<N>;
+  using Input = InputIds<N>;
   using Light = LightIds<N>;
+  using Param = ParamIds<N>;
 
 public:
   static auto constexpr svg_dir = "sequencizer";
@@ -87,12 +88,12 @@ public:
         sequence_controls_left + padding + port_radius;
 
     auto constexpr run_y = global_controls_y(0);
-    Input::install(this, InputIds<N>::Run, sequence_controls_x, run_y);
+    InPort::install(this, Input::Run, sequence_controls_x, run_y);
     Button::install<Toggle>(this, Param::Run,
                             sequence_controls_x + button_port_distance, run_y);
 
     auto constexpr loop_y = global_controls_y(1);
-    Input::install(this, InputIds<N>::Loop, sequence_controls_x, loop_y);
+    InPort::install(this, Input::Loop, sequence_controls_x, loop_y);
     Button::install<Toggle>(this, Param::Loop,
                             sequence_controls_x + button_port_distance, loop_y);
 
@@ -129,12 +130,12 @@ public:
         on_selection_end_change));
 
     auto constexpr gate_y = global_controls_y(3);
-    Input::install(this, InputIds<N>::Gate, sequence_controls_x, gate_y);
+    InPort::install(this, Input::Gate, sequence_controls_x, gate_y);
     Button::install<Momentary>(
         this, Param::Gate, sequence_controls_x + button_port_distance, gate_y);
 
     auto constexpr reset_y = global_controls_y(4);
-    Input::install(this, InputIds<N>::Reset, sequence_controls_x, reset_y);
+    InPort::install(this, Input::Reset, sequence_controls_x, reset_y);
     Button::install<Momentary>(this, Param::Reset,
                                sequence_controls_x + button_port_distance,
                                reset_y);
@@ -152,36 +153,36 @@ public:
     auto constexpr global_controls_right_x =
         global_controls_center_x + global_control_width + padding;
 
-    Input::install(this, InputIds<N>::LevelAttenuationCV,
-                   global_controls_left_x, level_y);
+    InPort::install(this, Input::LevelAttenuationCV, global_controls_left_x,
+                    level_y);
     Knob::install<Small>(this, Param::LevelMultiplier, global_controls_center_x,
                          level_y);
     ThumbSwitch<2>::install(this, Param::LevelRange, global_controls_right_x,
                             level_y);
 
-    Input::install(this, InputIds<N>::DurationMultiplierCV,
-                   global_controls_left_x, global_duration_y);
+    InPort::install(this, Input::DurationMultiplierCV, global_controls_left_x,
+                    global_duration_y);
     Knob::install<Small>(this, Param::DurationMultiplier,
                          global_controls_center_x, global_duration_y);
     ThumbSwitch<3>::install(this, Param::DurationRange, global_controls_right_x,
                             global_duration_y);
 
-    Input::install(this, InputIds<N>::InA, global_controls_left_x, in_y);
-    Input::install(this, InputIds<N>::InB, global_controls_center_x, in_y);
-    Input::install(this, InputIds<N>::InC, global_controls_right_x, in_y);
+    InPort::install(this, Input::InA, global_controls_left_x, in_y);
+    InPort::install(this, Input::InB, global_controls_center_x, in_y);
+    InPort::install(this, Input::InC, global_controls_right_x, in_y);
 
-    Output::install(this, OutputIds::StepNumber, global_controls_left_x,
-                    state_y);
-    Output::install(this, OutputIds::IsCurving, global_controls_center_x,
-                    state_y);
-    Output::install(this, OutputIds::IsSustaining, global_controls_right_x,
-                    state_y);
+    OutPort::install(this, OutputIds::StepNumber, global_controls_left_x,
+                     state_y);
+    OutPort::install(this, OutputIds::IsCurving, global_controls_center_x,
+                     state_y);
+    OutPort::install(this, OutputIds::IsSustaining, global_controls_right_x,
+                     state_y);
 
-    Output::install(this, OutputIds::StepEventPulse, global_controls_left_x,
-                    out_y);
-    Output::install(this, OutputIds::SequenceEventPulse,
-                    global_controls_center_x, out_y);
-    Output::install(this, OutputIds::Out, global_controls_right_x, out_y);
+    OutPort::install(this, OutputIds::StepEventPulse, global_controls_left_x,
+                     out_y);
+    OutPort::install(this, OutputIds::SequenceEventPulse,
+                     global_controls_center_x, out_y);
+    OutPort::install(this, OutputIds::Out, global_controls_right_x, out_y);
 
     auto constexpr intra_section_glue = 0.5F;
     auto constexpr inter_section_glue = 4.F;

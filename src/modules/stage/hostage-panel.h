@@ -35,7 +35,7 @@ public:
     ThumbSwitch<2>::install(this, Controls::ModeSwitch, column2, y);
 
     y += dy;
-    Input::install(this, Controls::DurationCvInput, column1, y);
+    InPort::install(this, Controls::DurationCvInput, column1, y);
     ThumbSwitch<3>::install(this, Controls::DurationRangeSwitch, column3, y);
 
     y += dy;
@@ -44,16 +44,16 @@ public:
     y = 82.F;
     dy = 15.F;
 
-    Input::install(this, Controls::DeferInput, column1, y);
-    Output::install(this, Controls::ActiveOutput, column3, y);
+    InPort::install(this, Controls::DeferInput, column1, y);
+    OutPort::install(this, Controls::ActiveOutput, column3, y);
 
     y += dy;
-    Input::install(this, Controls::TriggerInput, column1, y);
-    Output::install(this, Controls::EocOutput, column3, y);
+    InPort::install(this, Controls::TriggerInput, column1, y);
+    OutPort::install(this, Controls::EocOutput, column3, y);
 
     y += dy;
-    Input::install(this, Controls::EnvelopeInput, column1, y);
-    Output::install(this, Controls::EnvelopeOutput, column3, y);
+    InPort::install(this, Controls::EnvelopeInput, column1, y);
+    OutPort::install(this, Controls::EnvelopeOutput, column3, y);
   }
 };
 } // namespace stage

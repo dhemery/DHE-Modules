@@ -16,7 +16,7 @@ template <typename PanelT> struct PortWidget : rack::app::SvgPort {
   }
 };
 
-struct Input {
+struct InPort {
   template <typename PanelT>
   static inline void install(PanelT *panel, int id, float xmm, float ymm) {
     panel->addInput(rack::createInputCentered<PortWidget<PanelT>>(
@@ -29,7 +29,7 @@ struct Input {
   }
 };
 
-struct Output {
+struct OutPort {
   template <typename PanelT>
   static inline void install(PanelT *panel, int id, float xmm, float ymm) {
     panel->addOutput(rack::createOutputCentered<PortWidget<PanelT>>(
