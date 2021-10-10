@@ -1,5 +1,6 @@
 #pragma once
 
+#include "./controls.h"
 #include "./curve-sequencer-controls.h"
 #include "controls/port.h"
 #include "widgets/knobs.h"
@@ -86,27 +87,10 @@ private:
   int const step_mask_ = N - 1;
 }; // namespace curve_sequencer
 
-struct AdvanceModeStepper {
-  static inline auto frame_names() -> std::vector<std::string> {
-    static auto const frame_names =
-        stepper_frame_names("advance-mode", advance_mode_count);
-    return frame_names;
-  }
-};
-
-struct GenerateModeStepper {
-  static inline auto frame_names() -> std::vector<std::string> {
-    static auto const frame_names =
-        stepper_frame_names("generate-mode", generate_mode_count);
-    return frame_names;
-  }
-};
-
 template <int N> class CurveSequencerPanel : public rack::app::ModuleWidget {
   using Controls =
       CurveSequencerControls<rack::engine::Input, rack::engine::Output,
                              rack::engine::Param, rack::engine::Light, N>;
-  using Switch = Switches<CurveSequencerPanel<N>>;
 
 public:
   static auto constexpr svg_dir = "curve-sequencer";
@@ -140,12 +124,12 @@ public:
     auto constexpr active_y = top + light_radius;
 
     Input::install(this, Controls::RunInput, left, run_y);
-    addParam(Switch::toggle(module, left + button_port_distance, run_y,
-                            Controls::RunButton));
+    Button::install<Toggle>(this, Controls::RunButton,
+                            left + button_port_distance, run_y);
 
     Input::install(this, Controls::LoopInput, left, loop_y);
-    addParam(Switch::toggle(module, left + button_port_distance, loop_y,
-                            Controls::LoopButton));
+    Button::install<Toggle>(this, Controls::LoopButton,
+                            left + button_port_distance, loop_y);
 
     auto *start_marker = new StartMarker(svg_dir, 0.F, active_y);
     addChild(start_marker);
@@ -171,12 +155,12 @@ public:
         on_selection_end_change));
 
     Input::install(this, Controls::GateInput, left, gate_y);
-    addParam(Switch::momentary(module, left + button_port_distance, gate_y,
-                               Controls::GateButton));
+    Button::install<Momentary>(this, Controls::GateButton,
+                               left + button_port_distance, gate_y);
 
     Input::install(this, Controls::ResetInput, left, reset_y);
-    addParam(Switch::momentary(module, left + button_port_distance, reset_y,
-                               Controls::ResetButton));
+    Button::install<Momentary>(this, Controls::ResetButton,
+                               left + button_port_distance, reset_y);
 
     auto constexpr generate_mode_y = top + hp2mm(1.61F);
     auto constexpr advance_mode_y = top + hp2mm(3.25F);
@@ -198,13 +182,10 @@ public:
       addChild(rack::createLightCentered<ProgressLight>(
           mm2px(x, active_y), module, Controls::ProgressLights + step + step));
 
-      auto *generate_mode_button = Switch::template create<GenerateModeStepper>(
-          module, x, generate_mode_y, Controls::ModeSwitches + step);
-      addParam(generate_mode_button);
-
-      auto *advance_mode_button = Switch::template create<AdvanceModeStepper>(
-          module, x, advance_mode_y, Controls::ConditionSwitches + step);
-      addParam(advance_mode_button);
+      Stepper<GenerateModes>::install(this, Controls::ModeSwitches + step, x,
+                                      generate_mode_y);
+      Stepper<AdvanceModes>::install(this, Controls::ConditionSwitches + step,
+                                     x, advance_mode_y);
 
       Knob::install<Small>(this, Controls::LevelKnobs + step, x, level_y);
 
@@ -213,8 +194,8 @@ public:
 
       Knob::install<Small>(this, Controls::DurationKnobs + step, x, duration_y);
 
-      addParam(Switch::toggle(module, x, enabled_button_y,
-                              Controls::EnabledButtons + step));
+      Button::install<Toggle>(this, Controls::EnabledButtons + step, x,
+                              enabled_button_y);
       Input::install(this, Controls::EnabledInputs + step, x, enabled_port_y);
     }
 

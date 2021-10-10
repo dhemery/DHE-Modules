@@ -1,33 +1,22 @@
 #pragma once
 
+#include "./controls.h"
+#include "./curve-sequencer-controls.h"
+#include "./curve-sequencer.h"
+#include "./generate-mode.h"
+#include "./step-controller.h"
+#include "./step-selector.h"
 #include "components/phase-timer.h"
 #include "config/common-config.h"
 #include "config/curvature-config.h"
 #include "config/duration-config.h"
 #include "config/level-config.h"
-#include "curve-sequencer-controls.h"
-#include "curve-sequencer.h"
-#include "generate-mode.h"
-#include "step-controller.h"
-#include "step-selector.h"
 
 #include <engine/Module.hpp>
 
 namespace dhe {
 
 namespace curve_sequencer {
-auto constexpr default_generate_mode = static_cast<int>(GenerateMode::Curve);
-auto constexpr generate_mode_descriptions =
-    std::array<char const *, generate_mode_count>{"Curve", "Hold",  "Sustain",
-                                                  "Input", "Chase", "Level"};
-
-auto constexpr default_advance_mode =
-    static_cast<int>(AdvanceMode::TimerExpires);
-auto constexpr advance_mode_descriptions =
-    std::array<char const *, advance_mode_count>{
-        "Timer expires", "Gate rises",   "Gate falls",
-        "Gate changes",  "Gate is high", "Gate is low"};
-
 template <int N> class CurveSequencerModule : public rack::engine::Module {
   using Controls = CurveSequencerControls<
       std::vector<rack::engine::Input>, std::vector<rack::engine::Output>,
@@ -63,12 +52,12 @@ public:
           std::string{"Step "} + std::to_string(step + 1) + " ";
       configLight(Controls::ProgressLights + step + step,
                   step_name + "progress");
-      config_toggle<generate_mode_count>(
-          this, Controls::ModeSwitches + step, step_name + "generate mode",
-          generate_mode_descriptions, default_generate_mode);
-      config_toggle<advance_mode_count>(
-          this, Controls::ConditionSwitches + step, step_name + "advance mode",
-          advance_mode_descriptions, default_advance_mode);
+      Stepper<GenerateModes>::config(this, Controls::ModeSwitches + step,
+                                     step_name + "generate mode",
+                                     GenerateMode::Curve);
+      Stepper<AdvanceModes>::config(this, Controls::ConditionSwitches + step,
+                                    step_name + "advance mode",
+                                    AdvanceMode::TimerExpires);
       config_level_knob(this, Controls::LevelKnobs + step,
                         Controls::LevelRangeSwitch, step_name + "level");
       config_curve_shape_switch(this, Controls::ShapeSwitches + step,
