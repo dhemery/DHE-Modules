@@ -11,6 +11,7 @@
 #include "config/curvature-config.h"
 #include "config/duration-config.h"
 #include "config/level-config.h"
+#include "controls/steppers.h"
 
 #include <engine/Module.hpp>
 

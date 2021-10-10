@@ -1,7 +1,7 @@
 #include "./control-ids.h"
 #include "./controls.h"
-#include "controls/port.h"
-#include "widgets/switches.h"
+#include "controls/ports.h"
+#include "controls/switches.h"
 
 #include <engine/Module.hpp>
 

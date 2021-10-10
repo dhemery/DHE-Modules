@@ -2,7 +2,7 @@
 
 #include "./controls.h"
 #include "./curve-sequencer-controls.h"
-#include "controls/port.h"
+#include "controls/ports.h"
 #include "widgets/knobs.h"
 #include "widgets/screws.h"
 

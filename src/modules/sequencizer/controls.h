@@ -1,7 +1,7 @@
 #pragma once
 
 #include "./control-ids.h"
-#include "controls/port.h"
+#include "controls/ports.h"
 #include "widgets/dimensions.h"
 
 #include <widget/SvgWidget.hpp>

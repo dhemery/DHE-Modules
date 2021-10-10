@@ -2,9 +2,9 @@
 
 #include "./func-controls.h"
 #include "./switches.h"
-#include "controls/port.h"
+#include "controls/ports.h"
+#include "controls/switches.h"
 #include "widgets/knobs.h"
-#include "widgets/switches.h"
 
 #include <app/ModuleWidget.hpp>
 

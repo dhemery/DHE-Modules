@@ -2,11 +2,11 @@
 
 #include "./control-ids.h"
 #include "./controls.h"
-#include "controls/port.h"
+#include "controls/ports.h"
+#include "controls/switches.h"
 #include "widgets/dimensions.h"
 #include "widgets/knobs.h"
 #include "widgets/screws.h"
-#include "widgets/switches.h"
 
 #include <app/ModuleWidget.hpp>
 #include <componentlibrary.hpp>

@@ -1,9 +1,9 @@
 #pragma once
 
 #include "./fuzzy-logic-controls.h"
-#include "controls/port.h"
+#include "controls/ports.h"
+#include "controls/switches.h"
 #include "widgets/screws.h"
-#include "widgets/switches.h"
 
 #include <app/ModuleWidget.hpp>
 
