@@ -1,6 +1,7 @@
 #pragma once
 
 #include "./control-ids.h"
+#include "./controls.h"
 #include "controls/port.h"
 #include "widgets/dimensions.h"
 #include "widgets/knobs.h"
@@ -60,29 +61,6 @@ static inline auto constexpr content_width(int steps) -> float {
 using ProgressLight =
     rack::componentlibrary::SmallLight<rack::componentlibrary::GreenRedLight>;
 
-struct AnchorModeStepper {
-  static inline auto frame_names() -> std::vector<std::string> {
-    static auto const frame_names =
-        stepper_frame_names("anchor-mode", anchor_mode_count);
-    return frame_names;
-  }
-};
-
-struct AnchorSourceStepper {
-  static inline auto frame_names() -> std::vector<std::string> {
-    static auto const frame_names =
-        stepper_frame_names("anchor-source", anchor_source_count);
-    return frame_names;
-  }
-};
-
-struct ShapeStepper {
-  static inline auto frame_names() -> std::vector<std::string> {
-    static auto const frame_names = stepper_frame_names("shape", 2);
-    return frame_names;
-  }
-};
-
 template <typename PanelT>
 struct LengthKnob : public KnobWidget<PanelT, Small> {
   static inline auto create(rack::engine::Module *module, float xmm, float ymm,
@@ -106,7 +84,6 @@ private:
 template <int N> class Panel : public rack::app::ModuleWidget {
   using Param = ParamIds<N>;
   using Light = LightIds<N>;
-  using Switch = Switches<Panel<N>>;
 
 public:
   static auto constexpr svg_dir = "scannibal";
@@ -227,23 +204,19 @@ private:
           mm2px(step_x, progress_light_y), module,
           Light::Progress + step + step));
 
-      addParam(Switch::template create<AnchorModeStepper>(
-          module, step_x, phase_0_anchor_mode_y,
-          Param::Phase0AnchorMode + step));
-      addParam(Switch::template create<AnchorSourceStepper>(
-          module, step_x, phase_0_anchor_source_y,
-          Param::Phase0AnchorSource + step));
+      Stepper<AnchorModes>::install(this, Param::Phase0AnchorMode + step,
+                                    step_x, phase_0_anchor_mode_y);
+      Stepper<AnchorSources>::install(this, Param::Phase0AnchorSource + step,
+                                      step_x, phase_0_anchor_source_y);
       Knob::install<Small>(this, Param::Phase0AnchorLevel + step, step_x,
                            phase_0_anchor_level_y);
       Input::install(this, InputIds<N>::Phase0AnchorLevelCV + step, step_x,
                      phase_0_anchor_level_cv_y);
 
-      addParam(Switch::template create<AnchorModeStepper>(
-          module, step_x, phase_1_anchor_mode_y,
-          Param::Phase1AnchorMode + step));
-      addParam(Switch ::template create<AnchorSourceStepper>(
-          module, step_x, phase_1_anchor_source_y,
-          Param::Phase1AnchorSource + step));
+      Stepper<AnchorModes>::install(this, Param::Phase1AnchorMode + step,
+                                    step_x, phase_1_anchor_mode_y);
+      Stepper<AnchorSources>::install(this, Param::Phase1AnchorSource + step,
+                                      step_x, phase_1_anchor_source_y);
       Knob::install<Small>(this, Param::Phase1AnchorLevel + step, step_x,
                            phase_1_anchor_level_y);
       Input::install(this, InputIds<N>::Phase1AnchorLevelCV + step, step_x,
@@ -253,8 +226,7 @@ private:
       Input::install(this, InputIds<N>::DurationCV + step, step_x,
                      duration_cv_y);
 
-      addParam(Switch::template create<ShapeStepper>(module, step_x, shape_y,
-                                                     Param::Shape + step));
+      Stepper<Shapes>::install(this, Param::Shape + step, step_x, shape_y);
       Knob::install<Small>(this, Param::Curvature + step, step_x, curvature_y);
       Input::install(this, InputIds<N>::CurvatureCV + step, step_x,
                      curvature_cv_y);

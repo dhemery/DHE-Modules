@@ -1,17 +1,18 @@
 #pragma once
 
-#include "anchor.h"
+#include "./anchor.h"
+#include "./control-ids.h"
+#include "./controller.h"
+#include "./controls.h"
+#include "./generator.h"
 #include "components/cxmath.h"
 #include "config/common-config.h"
 #include "config/curvature-config.h"
 #include "config/duration-config.h"
 #include "config/level-config.h"
-#include "control-ids.h"
-#include "controller.h"
 #include "controls/curvature-inputs.h"
 #include "controls/duration-inputs.h"
 #include "controls/level-inputs.h"
-#include "generator.h"
 
 #include <engine/Module.hpp>
 #include <jansson.h>
@@ -55,27 +56,27 @@ public:
     for (auto step = 0; step < N; step++) {
       auto const step_name = "Step " + std::to_string(step + 1) + " ";
       configLight(Light::Progress + step + step, step_name + "phase");
-      config_toggle<anchor_source_count>(this, Param::Phase0AnchorSource + step,
-                                         step_name + "phase 0 anchor source",
-                                         {"Level", "A", "B", "C", "Out"}, 4);
+      Stepper<AnchorSources>::config(this, Param::Phase0AnchorSource + step,
+                                     step_name + "phase 0 anchor source",
+                                     AnchorSource::Out);
       config_level_knob(this, Param::Phase0AnchorLevel + step,
                         Param::LevelRange, step_name + "phase 0 level");
       configInput(Input::Phase0AnchorLevelCV + step,
                   step_name + "phase 0 level CV");
-      config_toggle<2>(this, Param::Phase0AnchorMode + step,
-                       step_name + "phase 0 anchor mode",
-                       {"Sample the source", "Track the source"});
+      Stepper<AnchorModes>::config(this, Param::Phase0AnchorMode + step,
+                                   step_name + "phase 0 anchor mode",
+                                   AnchorMode::Sample);
 
-      config_toggle<anchor_source_count>(this, Param::Phase1AnchorSource + step,
-                                         step_name + "phase 1 anchor source",
-                                         {"Level", "A", "B", "C", "Out"});
+      Stepper<AnchorSources>::config(this, Param::Phase1AnchorSource + step,
+                                     step_name + "phase 1 anchor source",
+                                     AnchorSource::Level);
       config_level_knob(this, Param::Phase1AnchorLevel + step,
                         Param::LevelRange, step_name + "phase 1 level");
       configInput(Input::Phase1AnchorLevelCV + step,
                   step_name + "phase 1 level CV");
-      config_toggle<2>(this, Param::Phase1AnchorMode + step,
-                       step_name + "phase 1 anchor mode",
-                       {"Sample the source", "Track the source"}, 1);
+      Stepper<AnchorModes>::config(this, Param::Phase1AnchorMode + step,
+                                   step_name + "phase 1 anchor mode",
+                                   AnchorMode::Track);
 
       config_curve_shape_switch(this, Param::Shape + step, step_name + "shape");
       config_curvature_knob(this, Param::Curvature + step,
