@@ -55,7 +55,6 @@ using ProgressLight =
 template <int N> class Panel : public rack::app::ModuleWidget {
   using Param = ParamIds<N>;
   using Light = LightIds<N>;
-  using Switch = Switches<Panel<N>>;
 
 public:
   static auto constexpr svg_dir = "sequencizer";
@@ -89,13 +88,13 @@ public:
 
     auto constexpr run_y = global_controls_y(0);
     Input::install(this, InputIds<N>::Run, sequence_controls_x, run_y);
-    addParam(Switch::toggle(module, sequence_controls_x + button_port_distance,
-                            run_y, Param::Run));
+    Button::install<Toggle>(this, Param::Run,
+                            sequence_controls_x + button_port_distance, run_y);
 
     auto constexpr loop_y = global_controls_y(1);
     Input::install(this, InputIds<N>::Loop, sequence_controls_x, loop_y);
-    addParam(Switch::toggle(module, sequence_controls_x + button_port_distance,
-                            loop_y, Param::Loop));
+    Button::install<Toggle>(this, Param::Loop,
+                            sequence_controls_x + button_port_distance, loop_y);
 
     auto constexpr progress_light_y = top - light_diameter * 2.F;
 
@@ -131,15 +130,14 @@ public:
 
     auto constexpr gate_y = global_controls_y(3);
     Input::install(this, InputIds<N>::Gate, sequence_controls_x, gate_y);
-    addParam(Switch::momentary(module,
-                               sequence_controls_x + button_port_distance,
-                               gate_y, Param::Gate));
+    Button::install<Momentary>(
+        this, Param::Gate, sequence_controls_x + button_port_distance, gate_y);
 
     auto constexpr reset_y = global_controls_y(4);
     Input::install(this, InputIds<N>::Reset, sequence_controls_x, reset_y);
-    addParam(Switch::momentary(module,
+    Button::install<Momentary>(this, Param::Reset,
                                sequence_controls_x + button_port_distance,
-                               reset_y, Param::Reset));
+                               reset_y);
 
     auto constexpr level_y = global_controls_y(0);
     auto constexpr global_duration_y = global_controls_y(1);
@@ -262,8 +260,8 @@ public:
       Knob::install<Small>(this, Param::StepCurvature + step, step_x,
                            curvature_y);
 
-      addParam(
-          Switch::toggle(module, step_x, enabled_y, Param::StepEnabled + step));
+      Button::install<Toggle>(this, Param::StepEnabled + step, step_x,
+                              enabled_y);
     }
   }
 }; // namespace dhe

@@ -13,7 +13,6 @@ namespace tapers {
 
 class TapersPanel : public rack::app::ModuleWidget {
   using Controls = TapersControls;
-  using Switch = Switches<TapersPanel>;
 
 public:
   static auto constexpr svg_dir = "tapers";

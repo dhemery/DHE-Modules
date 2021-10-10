@@ -14,7 +14,6 @@ namespace blossom {
 
 class BlossomPanel : public rack::app::ModuleWidget {
   using Controls = BlossomControls;
-  using Switch = Switches<BlossomPanel>;
 
 public:
   static auto constexpr svg_dir = "blossom";

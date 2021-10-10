@@ -12,7 +12,6 @@ namespace dhe {
 namespace fuzzy_logic {
 class Panel : public rack::app::ModuleWidget {
   using Controls = FuzzyLogicControls;
-  using Switch = Switches<Panel>;
 
 public:
   static auto constexpr svg_dir = "fuzzy-logic";
@@ -37,10 +36,10 @@ public:
 
     auto y = top + 0.F * dy;
     Input::install(this, Controls::AInputs + 0, ab_outer_column, y);
-    addParam(
-        Switch::toggle(module, ab_button_column, y, Controls::NotAButtons + 0));
-    addParam(
-        Switch::toggle(module, cd_button_column, y, Controls::NotAButtons + 1));
+    Button::install<Toggle>(this, Controls::NotAButtons + 0, ab_button_column,
+                            y);
+    Button::install<Toggle>(this, Controls::NotAButtons + 1, cd_button_column,
+                            y);
     Input::install(this, Controls::AInputs + 1, cd_outer_column, y);
 
     y = top + 0.5F * dy;
@@ -48,10 +47,10 @@ public:
 
     y = top + 1.F * dy;
     Input::install(this, Controls::BInputs + 0, ab_outer_column, y);
-    addParam(
-        Switch::toggle(module, ab_button_column, y, Controls::NotBButtons + 0));
-    addParam(
-        Switch::toggle(module, cd_button_column, y, Controls::NotBButtons + 1));
+    Button::install<Toggle>(this, Controls::NotBButtons + 0, ab_button_column,
+                            y);
+    Button::install<Toggle>(this, Controls::NotBButtons + 1, cd_button_column,
+                            y);
     Input::install(this, Controls::BInputs + 1, cd_outer_column, y);
 
     y = top + 2.F * dy;

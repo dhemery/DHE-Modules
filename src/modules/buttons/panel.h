@@ -12,8 +12,6 @@ namespace dhe {
 namespace buttons {
 
 class Panel : public rack::app::ModuleWidget {
-  using Switch = Switches<Panel>;
-
 public:
   static auto constexpr svg_dir = "buttons";
 
@@ -33,8 +31,8 @@ public:
 
     for (int i = 0; i < button_count; i++) {
       auto const y = top + static_cast<float>(i) * dy;
-      addParam(Switch::toggle(module, button_x, y, ParamIds::Button + i));
-      addParam(Switch::momentary(module, negate_x, y, ParamIds::Negate + i));
+      Button::install<Toggle>(this, ParamIds::Button + i, button_x, y);
+      Button::install<Momentary>(this, ParamIds::Negate + i, negate_x, y);
       Output::install(this, OutputIds::Out + i, port_x, y);
     }
   }

@@ -13,7 +13,6 @@ namespace stage {
 
 class BoosterStagePanel : public rack::app::ModuleWidget {
   using Controls = BoosterStageControls;
-  using Switch = Switches<BoosterStagePanel>;
 
 public:
   static auto constexpr svg_dir = "booster-stage";
@@ -57,17 +56,16 @@ public:
     dy = 15.F;
 
     Input::install(this, Controls::DeferInput, column1, y);
-    addParam(Switch::momentary(module, column2, y, Controls::DeferButton));
+    Button::install<Momentary>(this, Controls::DeferButton, column2, y);
 
-    addParam(Switch::momentary<Reversed>(module, column4, y,
-                                         Controls::ActiveButton));
+    Button::install<Momentary, Reversed>(this, Controls::ActiveButton, column4,
+                                         y);
     Output::install(this, Controls::ActiveOutput, column5, y);
 
     y += dy;
     Input::install(this, Controls::TriggerInput, column1, y);
-    addParam(Switch::momentary(module, column2, y, Controls::TriggerButton));
-    addParam(
-        Switch::momentary<Reversed>(module, column4, y, Controls::EocButton));
+    Button::install<Momentary>(this, Controls::TriggerButton, column2, y);
+    Button::install<Momentary, Reversed>(this, Controls::EocButton, column4, y);
     Output::install(this, Controls::EocOutput, column5, y);
 
     y += dy;

@@ -14,7 +14,6 @@ namespace xycloid {
 
 class XycloidPanel : public rack::app::ModuleWidget {
   using Controls = XycloidControls;
-  using Switch = Switches<XycloidPanel>;
 
 public:
   static auto constexpr svg_dir = "xycloid";

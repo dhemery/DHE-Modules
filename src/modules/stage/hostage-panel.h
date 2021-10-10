@@ -12,7 +12,6 @@ namespace dhe {
 namespace stage {
 class HostagePanel : public rack::app::ModuleWidget {
   using Controls = HostageControls;
-  using Switch = Switches<HostagePanel>;
 
 public:
   static auto constexpr svg_dir = "hostage";

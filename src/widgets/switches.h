@@ -132,30 +132,4 @@ template <typename StepperT> struct Stepper {
     return w;
   }
 };
-
-template <typename PanelT> struct Switches {
-  template <typename FrameT> using Widget = SwitchWidget<PanelT, FrameT, int>;
-
-  template <typename FrameT>
-  static inline auto create(rack::engine::Module *module, float xmm, float ymm,
-                            int index) -> Widget<FrameT> * {
-    return rack::createParamCentered<Widget<FrameT>>(mm2px(xmm, ymm), module,
-                                                     index);
-  }
-
-  template <typename FrameT = Normal>
-  static inline auto toggle(rack::engine::Module *module, float xmm, float ymm,
-                            int index) -> Widget<FrameT> * {
-    return create<FrameT>(module, xmm, ymm, index);
-  }
-
-  template <typename FrameT = Normal>
-  static inline auto momentary(rack::engine::Module *module, float xmm,
-                               float ymm, int index) -> Widget<FrameT> * {
-    auto button = create<FrameT>(module, xmm, ymm, index);
-    button->momentary = true;
-    return button;
-  }
-};
-
 } // namespace dhe

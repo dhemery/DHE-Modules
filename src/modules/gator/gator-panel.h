@@ -12,7 +12,6 @@ namespace gator {
 
 class GatorPanel : public rack::app::ModuleWidget {
   using Controls = GatorControls;
-  using Switch = Switches<GatorPanel>;
 
 public:
   static auto constexpr svg_dir = "gator";
@@ -35,10 +34,9 @@ public:
     auto y = top;
     for (auto i = 0; i < Controls::InputCount / 2; i++) {
       Input::install(this, Controls::Inputs + i, left, y);
-      addParam(Switch::toggle(module, lc, y, Controls::NegateButtons + i));
-      addParam(Switch::toggle(module, rc, y,
-                              Controls::NegateButtons + i +
-                                  Controls::InputCount / 2));
+      Button::install<Toggle>(this, Controls::NegateButtons + i, lc, y);
+      Button::install<Toggle>(
+          this, Controls::NegateButtons + i + Controls::InputCount / 2, rc, y);
       Input::install(this, Controls::Inputs + i + Controls::InputCount / 2,
                      right, y);
       y += dy;

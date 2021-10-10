@@ -12,7 +12,6 @@ namespace dhe {
 namespace stage {
 class UpstagePanel : public rack::app::ModuleWidget {
   using Controls = UpstageControls;
-  using Switch = Switches<UpstagePanel>;
 
 public:
   static auto constexpr svg_dir = "upstage";
@@ -40,8 +39,8 @@ public:
     ThumbSwitch<2>::install(this, Controls::LevelRangeSwitch, column3, y);
 
     y += dy;
-    addParam(Switch::momentary(module, column1, y, Controls::WaitButton));
-    addParam(Switch::momentary(module, column3, y, Controls::TriggerButton));
+    Button::install<Momentary>(this, Controls::WaitButton, column1, y);
+    Button::install<Momentary>(this, Controls::TriggerButton, column3, y);
 
     y = 82.F;
     dy = 15.F;
