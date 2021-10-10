@@ -1,4 +1,5 @@
 #include "./control-ids.h"
+#include "./controls.h"
 #include "controls/port.h"
 #include "widgets/switches.h"
 
@@ -12,22 +13,6 @@ namespace truth {
 
 static auto constexpr condition_dx = 10.16F;
 static auto constexpr outcome_dy = 5.08F;
-
-struct GateModeStepper {
-  static inline auto frame_names() -> std::vector<std::string> {
-    static auto const frame_names =
-        stepper_frame_names("gate-mode", gate_mode_count);
-    return frame_names;
-  }
-};
-
-struct OutcomeStepper {
-  static inline auto frame_names() -> std::vector<std::string> {
-    static auto const frame_names =
-        stepper_frame_names("outcome", outcome_count);
-    return frame_names;
-  }
-};
 
 struct Layout {
   int hp_;
@@ -86,6 +71,8 @@ static auto layout(int input_count) -> Layout {
 }
 
 template <int N> class Panel : public rack::app::ModuleWidget {
+  using Param = ParamIds<N>;
+
 public:
   static auto constexpr svg_dir = "truth";
 
@@ -100,39 +87,36 @@ public:
       auto const y =
           layout_.input_top_ + static_cast<float>(i) * layout_.port_dy_;
       Input::install(this, InputIds<N>::Input + i, layout_.input_x_, y);
-      addParam(Switch::momentary(module,
-                                 layout_.input_x_ + button_port_distance, y,
-                                 Param::InputOverride + i));
+      Button::install<Momentary>(this, Param::InputOverride + i,
+                                 layout_.input_x_ + button_port_distance, y);
     }
 
     auto const condition_y = layout_.condition_y_;
     auto const gate_mode_x = layout_.outcome_x_ - condition_dx;
-    addParam(Switch::template create<GateModeStepper>(
-        module, gate_mode_x, condition_y, Param::GateMode));
+    Stepper<GateModes>::install(this, Param::GateMode, gate_mode_x,
+                                condition_y);
 
     auto constexpr pattern_count = 1 << N;
     auto const outcome_top = layout_.condition_y_ + outcome_dy;
     for (int i = 0; i < pattern_count; i++) {
       auto const y = outcome_top + static_cast<float>(i) * outcome_dy;
-      addParam(Switch::template create<OutcomeStepper>(
-          module, layout_.outcome_x_, y, Param::Outcome + i));
+      Stepper<Outcomes>::install(this, Param::Outcome + i, layout_.outcome_x_,
+                                 y);
     }
 
-    addParam(Switch::template momentary<Reversed>(
-        module, layout_.output_x_ - button_port_distance, layout_.output_top_,
-        Param::QOverride));
+    Button::install<Momentary, Reversed>(
+        this, Param::QOverride, layout_.output_x_ - button_port_distance,
+        layout_.output_top_);
     Output::install(this, OutputIds::Q, layout_.output_x_, layout_.output_top_);
-    addParam(Switch::template momentary<Reversed>(
-        module, layout_.output_x_ - button_port_distance,
-        layout_.output_top_ + layout_.port_dy_, Param::QNotOverride));
-    Output::install(this, layout_.output_x_,
-                    layout_.output_top_ + layout_.port_dy_, OutputIds::QNot);
+    Button::install<Momentary, Reversed>(
+        this, Param::QNotOverride, layout_.output_x_ - button_port_distance,
+        layout_.output_top_ + layout_.port_dy_);
+    Output::install(this, OutputIds::QNot, layout_.output_x_,
+                    layout_.output_top_ + layout_.port_dy_);
   }
 
 private:
   const Layout layout_{layout(N)};
-  using Param = ParamIds<N>;
-  using Switch = Switches<Panel<N>>;
 };
 } // namespace truth
 } // namespace dhe

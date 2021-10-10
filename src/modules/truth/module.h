@@ -1,14 +1,16 @@
 #pragma once
 
-#include "control-ids.h"
+#include "./control-ids.h"
+#include "./controls.h"
+#include "./gate-modes.h"
+#include "./input-selector.h"
+#include "./outcomes.h"
+#include "./upgrader.h"
 #include "controls/common-inputs.h"
-#include "gate-modes.h"
-#include "input-selector.h"
-#include "outcomes.h"
-#include "upgrader.h"
+
+#include <engine/Module.hpp>
 
 #include <array>
-#include <engine/Module.hpp>
 #include <string>
 
 namespace dhe {
@@ -33,12 +35,11 @@ public:
       configInput(Input::Input + i, input_name);
     }
 
-    config_toggle<gate_mode_count>(this, Param::GateMode, "True when",
-                                   gate_mode_descriptions, 3);
+    Stepper<GateModes>::config(this, Param::GateMode, "True when",
+                               GateMode::High);
     static auto constexpr rows = 1 << N;
     for (int row = 0; row < rows; row++) {
-      config_toggle<outcome_count>(this, Param::Outcome + row, "Q",
-                                   outcome_descriptions, 0);
+      Stepper<Outcomes>::config(this, Param::Outcome + row, "Q", Outcome::True);
     }
     config_button(this, Param::QOverride, "Q");
     configOutput(Output::Q, "Q");

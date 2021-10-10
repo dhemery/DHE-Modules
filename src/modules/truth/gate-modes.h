@@ -1,7 +1,6 @@
 #pragma once
 
 #include "components/latch.h"
-#include <array>
 
 namespace dhe {
 namespace truth {
@@ -12,14 +11,6 @@ enum class GateMode {
   High,
   Low,
 };
-
-static auto constexpr gate_mode_count = static_cast<int>(GateMode::Low) + 1;
-
-static auto constexpr gate_mode_descriptions =
-    std::array<char const *, gate_mode_count>{
-        "Gate rises",   "Gate falls",  "Gate rises or falls",
-        "Gate is high", "Gate is low",
-    };
 
 static inline auto is_satisfied(GateMode condition, dhe::Latch const &gate)
     -> bool {
