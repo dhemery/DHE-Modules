@@ -1,8 +1,8 @@
 #pragma once
 
 #include "./ranger-controls.h"
+#include "controls/port.h"
 #include "widgets/knobs.h"
-#include "widgets/ports.h"
 #include "widgets/screws.h"
 #include "widgets/switches.h"
 
@@ -13,7 +13,6 @@ namespace ranger {
 
 class RangerPanel : public rack::app::ModuleWidget {
   using Controls = RangerControls;
-  using Jack = Ports<RangerPanel>;
   using Knob = Knobs<RangerPanel>;
   using Switch = Switches<RangerPanel>;
 
@@ -35,10 +34,10 @@ public:
 
     y += dy * 0.75F;
     addParam(Knob::medium(module, left, y, Controls::LevelKnob));
-    addOutput(Jack::output(module, right, y, Controls::RangerOutput));
+    Output::install(this, right, y, Controls::RangerOutput);
 
     y += dy;
-    addInput(Jack::input(module, left, y, Controls::LevelCvInput));
+    Input::install(this, left, y, Controls::LevelCvInput);
     addParam(Knob::tiny(module, right, y, Controls::LevelAvKnob));
 
     y += dy / 2.F;
@@ -51,8 +50,8 @@ public:
     addParam(Knob::tiny(module, right, y, Controls::CwLimitAvKnob));
 
     y += dy;
-    addInput(Jack::input(module, left, y, Controls::CcwLimitCvInput));
-    addInput(Jack::input(module, right, y, Controls::CwLimitCvInput));
+    Input::install(this, left, y, Controls::CcwLimitCvInput);
+    Input::install(this, right, y, Controls::CwLimitCvInput);
 
     y += dy;
     addParam(Switch::thumb<2>(module, left, y, Controls::CcwLimitRangeSwitch));

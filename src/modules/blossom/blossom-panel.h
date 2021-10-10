@@ -1,8 +1,8 @@
 #pragma once
 
 #include "blossom-controls.h"
+#include "controls/port.h"
 #include "widgets/knobs.h"
-#include "widgets/ports.h"
 #include "widgets/screws.h"
 #include "widgets/switches.h"
 
@@ -14,7 +14,6 @@ namespace blossom {
 
 class BlossomPanel : public rack::app::ModuleWidget {
   using Controls = BlossomControls;
-  using Jack = Ports<BlossomPanel>;
   using Knob = Knobs<BlossomPanel>;
   using Switch = Switches<BlossomPanel>;
 
@@ -38,23 +37,23 @@ public:
     auto y = 25.F;
     auto dy = 18.5F;
 
-    addInput(Jack::input(module, column1, y, Controls::SpeedCvInput));
+    Input::install(this, column1, y, Controls::SpeedCvInput);
     addParam(Knob::tiny(module, column2, y, Controls::SpeedAvKNob));
     addParam(Knob::large(module, column3, y, Controls::SpeedKnob));
 
     y += dy;
-    addInput(Jack::input(module, column1, y, Controls::RatioCvInput));
+    Input::install(this, column1, y, Controls::RatioCvInput);
     addParam(Knob::tiny(module, column2, y, Controls::RatioAvKnob));
     addParam(Knob::large(module, column3, y, Controls::RatioKnob));
     addParam(Switch::thumb<2>(module, column4, y, Controls::FreeRatioSwitch));
 
     y += dy;
-    addInput(Jack::input(module, column1, y, Controls::DepthCvInput));
+    Input::install(this, column1, y, Controls::DepthCvInput);
     addParam(Knob::tiny(module, column2, y, Controls::DepthAvKnob));
     addParam(Knob::large(module, column3, y, Controls::DepthKnob));
 
     y += dy;
-    addInput(Jack::input(module, column1, y, Controls::PhaseCvInput));
+    Input::install(this, column1, y, Controls::PhaseCvInput);
     addParam(Knob::tiny(module, column2, y, Controls::PhaseOffsetAvKnob));
     addParam(Knob::large(module, column3, y, Controls::PhaseOffsetKnob));
 
@@ -62,18 +61,16 @@ public:
     dy = 15.F;
     auto constexpr output_port_offset = 1.25F;
 
-    addInput(Jack::input(module, column1, y, Controls::XGainCvInput));
+    Input::install(this, column1, y, Controls::XGainCvInput);
     addParam(Knob::small(module, column2, y, Controls::XGainKnob));
     addParam(Switch::thumb<2>(module, column3, y, Controls::XRangeSwitch));
-    addOutput(Jack::output(module, column4, y + output_port_offset,
-                           Controls::XOutput));
+    Output::install(this, column4, y + output_port_offset, Controls::XOutput);
 
     y += dy;
-    addInput(Jack::input(module, column1, y, Controls::YGainCvInput));
+    Output::install(this, column1, y, Controls::YGainCvInput);
     addParam(Knob::small(module, column2, y, Controls::YGainKnob));
     addParam(Switch::thumb<2>(module, column3, y, Controls::YRangeSwitch));
-    addOutput(Jack::output(module, column4, y + output_port_offset,
-                           Controls::YOutput));
+    Output::install(this, column4, y + output_port_offset, Controls::YOutput);
   }
 };
 } // namespace blossom

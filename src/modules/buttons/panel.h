@@ -1,8 +1,9 @@
 #pragma once
 
-#include "control-ids.h"
-#include "widgets/ports.h"
+#include "./control-ids.h"
+#include "controls/port.h"
 #include "widgets/screws.h"
+#include "widgets/switches.h"
 
 #include <app/ModuleWidget.hpp>
 
@@ -11,9 +12,6 @@ namespace dhe {
 namespace buttons {
 
 class Panel : public rack::app::ModuleWidget {
-  using Param = ParamIds;
-  using Output = OutputIds;
-  using Jack = Ports<Panel>;
   using Switch = Switches<Panel>;
 
 public:
@@ -35,9 +33,9 @@ public:
 
     for (int i = 0; i < button_count; i++) {
       auto const y = top + static_cast<float>(i) * dy;
-      addParam(Switch::toggle(module, button_x, y, Param::Button + i));
-      addParam(Switch::momentary(module, negate_x, y, Param::Negate + i));
-      addOutput(Jack::output(module, port_x, y, Output::Out + i));
+      addParam(Switch::toggle(module, button_x, y, ParamIds::Button + i));
+      addParam(Switch::momentary(module, negate_x, y, ParamIds::Negate + i));
+      Output::install(this, port_x, y, OutputIds::Out + i);
     }
   }
 };

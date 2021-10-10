@@ -1,8 +1,8 @@
 #pragma once
 
 #include "./curve-sequencer-controls.h"
+#include "controls/port.h"
 #include "widgets/knobs.h"
-#include "widgets/ports.h"
 #include "widgets/screws.h"
 
 #include <app/ModuleWidget.hpp>
@@ -106,7 +106,6 @@ template <int N> class CurveSequencerPanel : public rack::app::ModuleWidget {
   using Controls =
       CurveSequencerControls<rack::engine::Input, rack::engine::Output,
                              rack::engine::Param, rack::engine::Light, N>;
-  using Jack = Ports<CurveSequencerPanel<N>>;
   using Knob = Knobs<CurveSequencerPanel<N>>;
   using Switch = Switches<CurveSequencerPanel<N>>;
 
@@ -141,11 +140,11 @@ public:
 
     auto constexpr active_y = top + light_radius;
 
-    addInput(Jack::input(module, left, run_y, Controls::RunInput));
+    Input::install(this, left, run_y, Controls::RunInput);
     addParam(Switch::toggle(module, left + button_port_distance, run_y,
                             Controls::RunButton));
 
-    addInput(Jack::input(module, left, loop_y, Controls::LoopInput));
+    Input::install(this, left, loop_y, Controls::LoopInput);
     addParam(Switch::toggle(module, left + button_port_distance, loop_y,
                             Controls::LoopButton));
 
@@ -172,11 +171,11 @@ public:
         module, selection_length_x, selection_y, Controls::SelectionLengthKnob,
         on_selection_end_change));
 
-    addInput(Jack::input(module, left, gate_y, Controls::GateInput));
+    Input::install(this, left, gate_y, Controls::GateInput);
     addParam(Switch::momentary(module, left + button_port_distance, gate_y,
                                Controls::GateButton));
 
-    addInput(Jack::input(module, left, reset_y, Controls::ResetInput));
+    Input::install(this, left, reset_y, Controls::ResetInput);
     addParam(Switch::momentary(module, left + button_port_distance, reset_y,
                                Controls::ResetButton));
 
@@ -219,21 +218,19 @@ public:
 
       addParam(Switch::toggle(module, x, enabled_button_y,
                               Controls::EnabledButtons + step));
-      addInput(Jack::input(module, x, enabled_port_y,
-                           Controls::EnabledInputs + step));
+      Input::install(this, x, enabled_port_y, Controls::EnabledInputs + step);
     }
 
     auto constexpr out_y = bottom - port_radius - 1.F;
     auto constexpr eos_y = top + hp2mm(2.75);
 
-    addInput(Jack::input(module, right, eos_y, Controls::CurveSequencerInput));
+    Input::install(this, right, eos_y, Controls::CurveSequencerInput);
 
     addParam(Switch::template thumb<2>(module, right, level_y,
                                        Controls::LevelRangeSwitch));
     addParam(Switch::template thumb<3>(module, right, duration_y,
                                        Controls::DurationRangeSwitch));
-    addOutput(
-        Jack::output(module, right, out_y, Controls::CurveSequencerOutput));
+    Output::install(this, right, out_y, Controls::CurveSequencerOutput);
   }
 }; // namespace dhe
 } // namespace curve_sequencer

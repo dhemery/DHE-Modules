@@ -1,8 +1,8 @@
 #pragma once
 
 #include "./booster-stage-controls.h"
+#include "controls/port.h"
 #include "widgets/knobs.h"
-#include "widgets/ports.h"
 #include "widgets/screws.h"
 #include "widgets/switches.h"
 
@@ -13,7 +13,6 @@ namespace stage {
 
 class BoosterStagePanel : public rack::app::ModuleWidget {
   using Controls = BoosterStageControls;
-  using Jack = Ports<BoosterStagePanel>;
   using Knob = Knobs<BoosterStagePanel>;
   using Switch = Switches<BoosterStagePanel>;
 
@@ -39,18 +38,18 @@ public:
     auto dy = 18.5F;
     auto y = 25.F;
 
-    addInput(Jack::input(module, column1, y, Controls::LevelCvInput));
+    Input::install(this, Controls::LevelCvInput, column1, y);
     addParam(Knob::large(module, column3, y, Controls::LevelKnob));
 
     addParam(Switch::thumb<2>(module, column5, y, Controls::LevelRangeSwitch));
 
     y += dy;
-    addInput(Jack::input(module, column1, y, Controls::CurveCvInput));
+    Input::install(this, Controls::CurveCvInput, column1, y);
     addParam(Knob::large(module, column3, y, Controls::CurveKnob));
     addParam(Switch::thumb<2>(module, column5, y, Controls::ShapeSwitch));
 
     y += dy;
-    addInput(Jack::input(module, column1, y, Controls::DurationCvInput));
+    Input::install(this, Controls::DurationCvInput, column1, y);
     addParam(Knob::large(module, column3, y, Controls::DurationKnob));
 
     addParam(
@@ -59,23 +58,23 @@ public:
     y = 82.F;
     dy = 15.F;
 
-    addInput(Jack::input(module, column1, y, Controls::DeferInput));
+    Input::install(this, Controls::DeferInput, column1, y);
     addParam(Switch::momentary(module, column2, y, Controls::DeferButton));
 
     addParam(Switch::momentary<OutputButton>(module, column4, y,
                                              Controls::ActiveButton));
-    addOutput(Jack::output(module, column5, y, Controls::ActiveOutput));
+    Output::install(this, Controls::ActiveOutput, column5, y);
 
     y += dy;
-    addInput(Jack::input(module, column1, y, Controls::TriggerInput));
+    Input::install(this, Controls::TriggerInput, column1, y);
     addParam(Switch::momentary(module, column2, y, Controls::TriggerButton));
     addParam(Switch::momentary<OutputButton>(module, column4, y,
                                              Controls::EocButton));
-    addOutput(Jack::output(module, column5, y, Controls::EocOutput));
+    Output::install(this, Controls::EocOutput, column5, y);
 
     y += dy;
-    addInput(Jack::input(module, column1, y, Controls::EnvelopeInput));
-    addOutput(Jack::output(module, column5, y, Controls::EnvelopeOutput));
+    Input::install(this, Controls::EnvelopeInput, column1, y);
+    Output::install(this, Controls::EnvelopeOutput, column5, y);
   }
 };
 

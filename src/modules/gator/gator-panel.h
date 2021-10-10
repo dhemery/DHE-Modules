@@ -1,7 +1,7 @@
 #pragma once
 
 #include "./gator-controls.h"
-#include "widgets/ports.h"
+#include "controls/port.h"
 #include "widgets/screws.h"
 #include "widgets/switches.h"
 
@@ -12,7 +12,6 @@ namespace gator {
 
 class GatorPanel : public rack::app::ModuleWidget {
   using Controls = GatorControls;
-  using Jack = Ports<GatorPanel>;
   using Switch = Switches<GatorPanel>;
 
 public:
@@ -35,27 +34,27 @@ public:
 
     auto y = top;
     for (auto i = 0; i < Controls::InputCount / 2; i++) {
-      addInput(Jack::input(module, left, y, Controls::Inputs + i));
+      Input::install(this, left, y, Controls::Inputs + i);
       addParam(Switch::toggle(module, lc, y, Controls::NegateButtons + i));
       addParam(Switch::toggle(module, rc, y,
                               Controls::NegateButtons + i +
                                   Controls::InputCount / 2));
-      addInput(Jack::input(module, right, y,
-                           Controls::Inputs + i + Controls::InputCount / 2));
+      Input::install(this, right, y,
+                     Controls::Inputs + i + Controls::InputCount / 2);
       y += dy;
     }
 
     auto row = top + 8.75F * dy;
-    addOutput(Jack::output(module, left, row, Controls::AndOutput));
-    addOutput(Jack::output(module, lc, row, Controls::NandOutput));
-    addOutput(Jack::output(module, rc, row, Controls::OrOutput));
-    addOutput(Jack::output(module, right, row, Controls::NorOutput));
+    Output::install(this, left, row, Controls::AndOutput);
+    Output::install(this, lc, row, Controls::NandOutput);
+    Output::install(this, rc, row, Controls::OrOutput);
+    Output::install(this, right, row, Controls::NorOutput);
 
     row += hp2mm(2.75);
-    addOutput(Jack::output(module, left, row, Controls::EvenOutput));
-    addOutput(Jack::output(module, lc, row, Controls::OddOutput));
-    addOutput(Jack::output(module, rc, row, Controls::XorOutput));
-    addOutput(Jack::output(module, right, row, Controls::XnorOutput));
+    Output::install(this, left, row, Controls::EvenOutput);
+    Output::install(this, lc, row, Controls::OddOutput);
+    Output::install(this, rc, row, Controls::XorOutput);
+    Output::install(this, right, row, Controls::XnorOutput);
   }
 };
 } // namespace gator

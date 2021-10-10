@@ -1,5 +1,5 @@
 #include "./control-ids.h"
-#include "widgets/ports.h"
+#include "controls/port.h"
 #include "widgets/switches.h"
 
 #include <engine/Module.hpp>
@@ -99,7 +99,7 @@ public:
     for (int i = 0; i < N; i++) {
       auto const y =
           layout_.input_top_ + static_cast<float>(i) * layout_.port_dy_;
-      addInput(Jack::input(module, layout_.input_x_, y, Input::Input + i));
+      Input::install(this, layout_.input_x_, y, InputIds<N>::Input + i);
       addParam(Switch::momentary(module,
                                  layout_.input_x_ + button_port_distance, y,
                                  Param::InputOverride + i));
@@ -121,22 +121,17 @@ public:
     addParam(Switch::template momentary<OutputButton>(
         module, layout_.output_x_ - button_port_distance, layout_.output_top_,
         Param::QOverride));
-    addOutput(Jack::output(module, layout_.output_x_, layout_.output_top_,
-                           Output::Q));
+    Output::install(this, layout_.output_x_, layout_.output_top_, OutputIds::Q);
     addParam(Switch::template momentary<OutputButton>(
         module, layout_.output_x_ - button_port_distance,
         layout_.output_top_ + layout_.port_dy_, Param::QNotOverride));
-    addOutput(Jack::output(module, layout_.output_x_,
-                           layout_.output_top_ + layout_.port_dy_,
-                           Output::QNot));
+    Output::install(this, layout_.output_x_,
+                    layout_.output_top_ + layout_.port_dy_, OutputIds::QNot);
   }
 
 private:
   const Layout layout_{layout(N)};
   using Param = ParamIds<N>;
-  using Input = InputIds<N>;
-  using Output = OutputIds;
-  using Jack = Ports<Panel<N>>;
   using Switch = Switches<Panel<N>>;
 };
 } // namespace truth

@@ -1,12 +1,14 @@
 #pragma once
 
 #include "./control-ids.h"
+#include "controls/port.h"
 #include "widgets/dimensions.h"
-#include "widgets/ports.h"
+
+#include <widget/SvgWidget.hpp>
+
 #include <functional>
 #include <string>
 #include <vector>
-#include <widget/SvgWidget.hpp>
 
 namespace dhe {
 

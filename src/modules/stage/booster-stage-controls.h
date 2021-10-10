@@ -12,11 +12,11 @@
 
 namespace dhe {
 namespace stage {
-using rack::engine::Input;
-using rack::engine::Output;
-using rack::engine::Param;
-
 class BoosterStageControls {
+  using Input = rack::engine::Input;
+  using Output = rack::engine::Output;
+  using Param = rack::engine::Param;
+
 public:
   BoosterStageControls(std::vector<Input> const &inputs,
                        std::vector<Param> const &params,

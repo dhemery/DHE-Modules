@@ -1,8 +1,8 @@
 #pragma once
 
-#include "cubic-controls.h"
+#include "./cubic-controls.h"
+#include "controls/port.h"
 #include "widgets/knobs.h"
-#include "widgets/ports.h"
 #include "widgets/screws.h"
 
 #include <app/ModuleWidget.hpp>
@@ -13,7 +13,6 @@ namespace cubic {
 
 class CubicPanel : public rack::app::ModuleWidget {
   using Controls = CubicControls;
-  using Jack = Ports<CubicPanel>;
   using Knob = Knobs<CubicPanel>;
 
 public:
@@ -34,19 +33,19 @@ public:
     auto y = 20.F;
     auto constexpr dy = 15.F;
 
-    addInput(Jack::input(module, column1, y, Controls::ACoefficientCvInput));
+    Input::install(this, column1, y, Controls::ACoefficientCvInput);
     addParam(Knob::small(module, column2, y, Controls::ACoefficientKnob));
 
     y += dy;
-    addInput(Jack::input(module, column1, y, Controls::BCoefficientCvInput));
+    Input::install(this, column1, y, Controls::BCoefficientCvInput);
     addParam(Knob::small(module, column2, y, Controls::BCoefficientKnob));
 
     y += dy;
-    addInput(Jack::input(module, column1, y, Controls::CCoefficientCvInput));
+    Input::install(this, column1, y, Controls::CCoefficientCvInput);
     addParam(Knob::small(module, column2, y, Controls::CCoefficientKnob));
 
     y += dy;
-    addInput(Jack::input(module, column1, y, Controls::DCoefficientCvInput));
+    Input::install(this, column1, y, Controls::DCoefficientCvInput);
     addParam(Knob::small(module, column2, y, Controls::DCoefficientKnob));
 
     y = 82.F;
@@ -54,12 +53,12 @@ public:
     addParam(Knob::small(module, column2, y, Controls::OutputGainKnob));
 
     y += dy;
-    addInput(Jack::input(module, column1, y, Controls::InputGainCvInput));
-    addInput(Jack::input(module, column2, y, Controls::OutputGainCvInput));
+    Input::install(this, column1, y, Controls::InputGainCvInput);
+    Input::install(this, column2, y, Controls::OutputGainCvInput);
 
     y += dy;
-    addInput(Jack::input(module, column1, y, Controls::CubicInput));
-    addOutput(Jack::output(module, column2, y, Controls::CubicOutput));
+    Input::install(this, column1, y, Controls::CubicInput);
+    Output::install(this, column2, y, Controls::CubicOutput);
   }
 };
 } // namespace cubic

@@ -1,8 +1,8 @@
 #pragma once
 
 #include "./stage-controls.h"
+#include "controls/port.h"
 #include "widgets/knobs.h"
-#include "widgets/ports.h"
 #include "widgets/screws.h"
 
 #include <app/ModuleWidget.hpp>
@@ -12,7 +12,6 @@ namespace stage {
 
 class StagePanel : public rack::app::ModuleWidget {
   using Controls = StageControls;
-  using Jack = Ports<StagePanel>;
   using Knob = Knobs<StagePanel>;
 
 public:
@@ -45,16 +44,16 @@ public:
     y = 82.F;
     dy = 15.F;
 
-    addInput(Jack::input(module, column1, y, Controls::DeferInput));
-    addOutput(Jack::output(module, column3, y, Controls::ActiveOutput));
+    Input::install(this, Controls::DeferInput, column1, y);
+    Output::install(this, Controls::ActiveOutput, column3, y);
 
     y += dy;
-    addInput(Jack::input(module, column1, y, Controls::TriggerInput));
-    addOutput(Jack::output(module, column3, y, Controls::EocOutput));
+    Input::install(this, Controls::TriggerInput, column1, y);
+    Output::install(this, Controls::EocOutput, column3, y);
 
     y += dy;
-    addInput(Jack::input(module, column1, y, Controls::EnvelopeInput));
-    addOutput(Jack::output(module, column3, y, Controls::EnvelopeOutput));
+    Input::install(this, Controls::EnvelopeInput, column1, y);
+    Output::install(this, Controls::EnvelopeOutput, column3, y);
   }
 };
 } // namespace stage

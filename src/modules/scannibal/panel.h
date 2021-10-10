@@ -1,9 +1,9 @@
 #pragma once
 
 #include "./control-ids.h"
+#include "controls/port.h"
 #include "widgets/dimensions.h"
 #include "widgets/knobs.h"
-#include "widgets/ports.h"
 #include "widgets/screws.h"
 #include "widgets/switches.h"
 
@@ -105,10 +105,7 @@ private:
 
 template <int N> class Panel : public rack::app::ModuleWidget {
   using Param = ParamIds<N>;
-  using Input = InputIds<N>;
   using Light = LightIds<N>;
-  using Output = OutputIds;
-  using Jack = Ports<Panel<N>>;
   using Knob = Knobs<Panel<N>>;
   using Switch = Switches<Panel<N>>;
 
@@ -159,10 +156,10 @@ private:
     addParam(LengthKnob<Panel<N>>::create(module, x, length_y, Param::Length,
                                           on_selection_length_change));
 
-    addInput(Jack::input(module, x, a_y, Input::InA));
-    addInput(Jack::input(module, x, b_y, Input::InB));
-    addInput(Jack::input(module, x, c_y, Input::InC));
-    addInput(Jack::input(module, x, phase_y, Input::Phase));
+    Input::install(this, x, a_y, InputIds<N>::InA);
+    Input::install(this, x, b_y, InputIds<N>::InB);
+    Input::install(this, x, c_y, InputIds<N>::InC);
+    Input::install(this, x, phase_y, InputIds<N>::Phase);
   }
 
   void add_step_block(float left) {
@@ -239,8 +236,8 @@ private:
           Param::Phase0AnchorSource + step));
       addParam(Knob::small(module, step_x, phase_0_anchor_level_y,
                            Param::Phase0AnchorLevel + step));
-      addInput(Jack::input(module, step_x, phase_0_anchor_level_cv_y,
-                           Input::Phase0AnchorLevelCV + step));
+      Input::install(this, step_x, phase_0_anchor_level_cv_y,
+                     InputIds<N>::Phase0AnchorLevelCV + step);
 
       addParam(Switch::template create<AnchorModeStepper>(
           module, step_x, phase_1_anchor_mode_y,
@@ -250,19 +247,19 @@ private:
           Param::Phase1AnchorSource + step));
       addParam(Knob::small(module, step_x, phase_1_anchor_level_y,
                            Param::Phase1AnchorLevel + step));
-      addInput(Jack::input(module, step_x, phase_1_anchor_level_cv_y,
-                           Input::Phase1AnchorLevelCV + step));
+      Input::install(this, step_x, phase_1_anchor_level_cv_y,
+                     InputIds<N>::Phase1AnchorLevelCV + step);
 
       addParam(Knob::small(module, step_x, duration_y, Param::Duration + step));
-      addInput(
-          Jack::input(module, step_x, duration_cv_y, Input::DurationCV + step));
+      Input::install(this, step_x, duration_cv_y,
+                     InputIds<N>::DurationCV + step);
 
       addParam(Switch::template create<ShapeStepper>(module, step_x, shape_y,
                                                      Param::Shape + step));
       addParam(
           Knob::small(module, step_x, curvature_y, Param::Curvature + step));
-      addInput(Jack::input(module, step_x, curvature_cv_y,
-                           Input::CurvatureCV + step));
+      Input::install(this, step_x, curvature_cv_y,
+                     InputIds<N>::CurvatureCV + step);
     }
   }
 
@@ -276,9 +273,9 @@ private:
 
     addParam(
         Switch::template thumb<2>(module, x, polarity_y, Param::LevelRange));
-    addOutput(Jack::output(module, x, step_number_y, Output::StepNumber));
-    addOutput(Jack::output(module, x, step_phase_y, Output::StepPhase));
-    addOutput(Jack::output(module, x, out_y, Output::Out));
+    Output::install(this, x, step_number_y, OutputIds::StepNumber);
+    Output::install(this, x, step_phase_y, OutputIds::StepPhase);
+    Output::install(this, x, out_y, OutputIds::Out);
   }
 
   void set_selection_length(int length) {

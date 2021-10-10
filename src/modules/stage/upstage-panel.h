@@ -1,8 +1,8 @@
 #pragma once
 
 #include "./upstage-controls.h"
+#include "controls/port.h"
 #include "widgets/knobs.h"
-#include "widgets/ports.h"
 #include "widgets/screws.h"
 #include "widgets/switches.h"
 
@@ -13,7 +13,6 @@ namespace stage {
 class UpstagePanel : public rack::app::ModuleWidget {
   using Controls = UpstageControls;
   using Knob = Knobs<UpstagePanel>;
-  using Jack = Ports<UpstagePanel>;
   using Switch = Switches<UpstagePanel>;
 
 public:
@@ -38,7 +37,7 @@ public:
     addParam(Knob::large(module, column2, y, Controls::LevelKnob));
 
     y += dy;
-    addInput(Jack::input(module, column1, y, Controls::LevelCvInput));
+    Input::install(this, Controls::LevelCvInput, column1, y);
     addParam(Switch::thumb<2>(module, column3, y, Controls::LevelRangeSwitch));
 
     y += dy;
@@ -48,14 +47,14 @@ public:
     y = 82.F;
     dy = 15.F;
 
-    addInput(Jack::input(module, column1, y, Controls::WaitInput));
+    Input::install(this, column1, y, Controls::WaitInput);
 
     y += dy;
-    addInput(Jack::input(module, column1, y, Controls::TriggerInput));
-    addOutput(Jack::output(module, column3, y, Controls::TriggerOutput));
+    Input::install(this, column1, y, Controls::TriggerInput);
+    Output::install(this, column3, y, Controls::TriggerOutput);
 
     y += dy;
-    addOutput(Jack::output(module, column3, y, Controls::EnvelopeOutput));
+    Output::install(this, column3, y, Controls::EnvelopeOutput);
   }
 };
 } // namespace stage

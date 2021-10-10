@@ -2,8 +2,8 @@
 
 #include "./func-controls.h"
 #include "./switches.h"
+#include "controls/port.h"
 #include "widgets/knobs.h"
-#include "widgets/ports.h"
 #include "widgets/switches.h"
 
 #include <app/ModuleWidget.hpp>
@@ -14,7 +14,6 @@ namespace func {
 class Func6Panel : public rack::app::ModuleWidget {
   static auto constexpr channel_count = 6;
   using Controls = FuncControls<channel_count>;
-  using Jack = Ports<Func6Panel>;
   using Knob = Knobs<Func6Panel>;
   using Switch = Switches<Func6Panel>;
 
@@ -42,13 +41,13 @@ public:
     auto constexpr port_offset = 1.25F;
 
     for (auto row = 0; row < channel_count; row++) {
-      auto const y = top + row * row_spacing;
+      auto const y = top + static_cast<float>(row) * row_spacing;
       auto const port_y = y + port_offset;
 
-      addInput(Jack::input(module, column1, port_y, Controls::FuncInput + row));
+      Input::install(this, column1, port_y, Controls::FuncInput + row);
       addParam(Knob::large(module, column3, y, Controls::AmountKnob + row));
-      addOutput(
-          Jack::output(module, column5, port_y, Controls::FuncOutput + row));
+
+      Output::install(this, column5, port_y, Controls::FuncOutput + row);
 
       auto *offset_range_stepper = Switch::template create<OffsetRangeStepper>(
           module, column4, y, Controls::OffsetRangeSwitch + row);

@@ -2,9 +2,9 @@
 
 #include "./control-ids.h"
 #include "./controls.h"
+#include "controls/port.h"
 #include "widgets/dimensions.h"
 #include "widgets/knobs.h"
-#include "widgets/ports.h"
 #include "widgets/screws.h"
 #include "widgets/switches.h"
 
@@ -54,10 +54,7 @@ using ProgressLight =
 
 template <int N> class Panel : public rack::app::ModuleWidget {
   using Param = ParamIds<N>;
-  using Input = InputIds<N>;
   using Light = LightIds<N>;
-  using Output = OutputIds;
-  using Jack = Ports<Panel<N>>;
   using Knob = Knobs<Panel<N>>;
   using Switch = Switches<Panel<N>>;
 
@@ -92,12 +89,12 @@ public:
         sequence_controls_left + padding + port_radius;
 
     auto constexpr run_y = global_controls_y(0);
-    addInput(Jack::input(module, sequence_controls_x, run_y, Input::Run));
+    Input::install(this, sequence_controls_x, run_y, InputIds<N>::Run);
     addParam(Switch::toggle(module, sequence_controls_x + button_port_distance,
                             run_y, Param::Run));
 
     auto constexpr loop_y = global_controls_y(1);
-    addInput(Jack::input(module, sequence_controls_x, loop_y, Input::Loop));
+    Input::install(this, sequence_controls_x, loop_y, InputIds<N>::Loop);
     addParam(Switch::toggle(module, sequence_controls_x + button_port_distance,
                             loop_y, Param::Loop));
 
@@ -134,13 +131,13 @@ public:
         on_selection_end_change));
 
     auto constexpr gate_y = global_controls_y(3);
-    addInput(Jack::input(module, sequence_controls_x, gate_y, Input::Gate));
+    Input::install(this, sequence_controls_x, gate_y, InputIds<N>::Gate);
     addParam(Switch::momentary(module,
                                sequence_controls_x + button_port_distance,
                                gate_y, Param::Gate));
 
     auto constexpr reset_y = global_controls_y(4);
-    addInput(Jack::input(module, sequence_controls_x, reset_y, Input::Reset));
+    Input::install(this, sequence_controls_x, reset_y, InputIds<N>::Reset);
     addParam(Switch::momentary(module,
                                sequence_controls_x + button_port_distance,
                                reset_y, Param::Reset));
@@ -158,38 +155,37 @@ public:
     auto constexpr global_controls_right_x =
         global_controls_center_x + global_control_width + padding;
 
-    addInput(Jack::input(module, global_controls_left_x, level_y,
-                         Input::LevelAttenuationCV));
+    Input::install(this, global_controls_left_x, level_y,
+                   InputIds<N>::LevelAttenuationCV);
     Attenuator::install<SmallKnob>(this, Param::LevelMultiplier,
                                    global_controls_center_x, level_y);
     addParam(Switch::template thumb<2>(module, global_controls_right_x, level_y,
                                        Param::LevelRange));
 
-    addInput(Jack::input(module, global_controls_left_x, global_duration_y,
-                         Input::DurationMultiplierCV));
+    Input::install(this, global_controls_left_x, global_duration_y,
+                   InputIds<N>::DurationMultiplierCV);
     addParam(Knob::small(module, global_controls_center_x, global_duration_y,
                          Param::DurationMultiplier));
     addParam(Switch::template thumb<3>(module, global_controls_right_x,
                                        global_duration_y,
                                        Param::DurationRange));
 
-    addInput(Jack::input(module, global_controls_left_x, in_y, Input::InA));
-    addInput(Jack::input(module, global_controls_center_x, in_y, Input::InB));
-    addInput(Jack::input(module, global_controls_right_x, in_y, Input::InC));
+    Input::install(this, global_controls_left_x, in_y, InputIds<N>::InA);
+    Input::install(this, global_controls_center_x, in_y, InputIds<N>::InB);
+    Input::install(this, global_controls_right_x, in_y, InputIds<N>::InC);
 
-    addOutput(Jack::output(module, global_controls_left_x, state_y,
-                           Output::StepNumber));
-    addOutput(Jack::output(module, global_controls_center_x, state_y,
-                           Output::IsCurving));
-    addOutput(Jack::output(module, global_controls_right_x, state_y,
-                           Output::IsSustaining));
+    Output::install(this, global_controls_left_x, state_y,
+                    OutputIds::StepNumber);
+    Output::install(this, global_controls_center_x, state_y,
+                    OutputIds::IsCurving);
+    Output::install(this, global_controls_right_x, state_y,
+                    OutputIds::IsSustaining);
 
-    addOutput(Jack::output(module, global_controls_left_x, out_y,
-                           Output::StepEventPulse));
-    addOutput(Jack::output(module, global_controls_center_x, out_y,
-                           Output::SequenceEventPulse));
-    addOutput(
-        Jack::output(module, global_controls_right_x, out_y, Output::Out));
+    Output::install(this, global_controls_left_x, out_y,
+                    OutputIds::StepEventPulse);
+    Output::install(this, global_controls_center_x, out_y,
+                    OutputIds::SequenceEventPulse);
+    Output::install(this, global_controls_right_x, out_y, OutputIds::Out);
 
     auto constexpr intra_section_glue = 0.5F;
     auto constexpr inter_section_glue = 4.F;

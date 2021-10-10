@@ -1,8 +1,8 @@
 #pragma once
 
-#include "swave-controls.h"
+#include "./swave-controls.h"
+#include "controls/port.h"
 #include "widgets/knobs.h"
-#include "widgets/ports.h"
 #include "widgets/screws.h"
 #include "widgets/switches.h"
 
@@ -13,7 +13,6 @@ namespace swave {
 
 class SwavePanel : public rack::app::ModuleWidget {
   using Controls = SwaveControls;
-  using Jack = Ports<SwavePanel>;
   using Knob = Knobs<SwavePanel>;
   using Switch = Switches<SwavePanel>;
 
@@ -43,16 +42,16 @@ public:
     addParam(Knob::tiny(module, x, y, Controls::CurveAvKnob));
 
     y += dy;
-    addInput(Jack::input(module, x, y, Controls::CurveCvInput));
+    Input::install(this, x, y, Controls::CurveCvInput);
 
     y = 82.F;
     dy = 15.F;
 
     y += dy;
-    addInput(Jack::input(module, x, y, Controls::SwaveInput));
+    Input::install(this, x, y, Controls::SwaveInput);
 
     y += dy;
-    addOutput(Jack::output(module, x, y, Controls::SwaveOutput));
+    Output::install(this, x, y, Controls::SwaveOutput);
   }
 };
 } // namespace swave
