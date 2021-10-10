@@ -14,7 +14,6 @@ namespace func {
 class Func1Panel : public rack::app::ModuleWidget {
   static auto constexpr channel_count = 1;
   using Controls = FuncControls<channel_count>;
-  using Switch = Switches<Func1Panel>;
 
 public:
   static auto constexpr svg_dir = "func";
@@ -46,14 +45,11 @@ public:
     Knob::install<Large>(this, Controls::AmountKnob, x, row3);
     Output::install(this, Controls::FuncOutput, x, row6);
 
-    auto *offset_range_stepper = Switch::template create<OffsetRangeStepper>(
-        module, x, row4, Controls::OffsetRangeSwitch);
-    addParam(offset_range_stepper);
+    auto *offset_range_stepper = Stepper<OffsetRanges>::install(
+        this, Controls::OffsetRangeSwitch, x, row4);
 
-    auto *multiplier_range_stepper =
-        Switch::template create<MultiplierRangeStepper>(
-            module, x, row4, Controls::MultiplierRangeSwitch);
-    addParam(multiplier_range_stepper);
+    auto *multiplier_range_stepper = Stepper<MultiplierRanges>::install(
+        this, Controls::MultiplierRangeSwitch, x, row4);
 
     auto const update_range_stepper_visibility =
         [offset_range_stepper, multiplier_range_stepper](bool is_multiply) {

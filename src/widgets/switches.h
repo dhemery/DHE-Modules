@@ -105,10 +105,12 @@ template <typename StepperT> struct Stepper {
   }
 
   template <typename PanelT>
-  static inline void install(PanelT *panel, int id, float xmm, float ymm) {
+  static inline auto install(PanelT *panel, int id, float xmm, float ymm)
+      -> SwitchWidget<PanelT, Stepper> * {
     auto *w = rack::createParamCentered<SwitchWidget<PanelT, Stepper>>(
         mm2px(xmm, ymm), panel->getModule(), id);
     panel->addParam(w);
+    return w;
   }
 };
 

@@ -1,12 +1,11 @@
 #pragma once
-
-#include "func-controls.h"
-#include "func-engine.h"
-#include "operand-param-quantity.h"
-
+#include "./func-controls.h"
+#include "./func-engine.h"
+#include "./operand-param-quantity.h"
+#include "./switches.h"
 #include "config/common-config.h"
+
 #include <engine/Module.hpp>
-#include <vector>
 
 namespace dhe {
 namespace func {
@@ -53,14 +52,14 @@ private:
 
     auto const offset_range_switch_name =
         channel_name + (N == 1 ? "Offset range" : " offset range");
-    config_switch(this, Controls::OffsetRangeSwitch + channel,
-                  offset_range_switch_name,
-                  {"0–5 V", "±5 V", "0–10 V", "±10 V"}, 1);
+    Stepper<OffsetRanges>::config(this, Controls::OffsetRangeSwitch + channel,
+                                  offset_range_switch_name, 1);
 
     auto const multiplier_range_switch_name =
         channel_name + (N == 1 ? "Multiplier range" : " multiplier range");
-    config_switch(this, Controls::MultiplierRangeSwitch + channel,
-                  multiplier_range_switch_name, {"0–1", "±1", "0–2", "±2"}, 2);
+    Stepper<MultiplierRanges>::config(this,
+                                      Controls::MultiplierRangeSwitch + channel,
+                                      multiplier_range_switch_name, 2);
 
     auto const operand_knob_param_quantity =
         dynamic_cast<OperandParamQuantity<FuncControls, N> *>(

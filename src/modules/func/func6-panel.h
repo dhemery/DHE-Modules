@@ -14,7 +14,6 @@ namespace func {
 class Func6Panel : public rack::app::ModuleWidget {
   static auto constexpr channel_count = 6;
   using Controls = FuncControls<channel_count>;
-  using Switch = Switches<Func6Panel>;
 
 public:
   static auto constexpr svg_dir = "func";
@@ -48,14 +47,11 @@ public:
 
       Output::install(this, Controls::FuncOutput + row, column5, port_y);
 
-      auto *offset_range_stepper = Switch::template create<OffsetRangeStepper>(
-          module, column4, y, Controls::OffsetRangeSwitch + row);
-      addParam(offset_range_stepper);
+      auto *offset_range_stepper = Stepper<OffsetRanges>::install(
+          this, Controls::OffsetRangeSwitch + row, column4, y);
 
-      auto *multiplier_range_stepper =
-          Switch::template create<MultiplierRangeStepper>(
-              module, column4, y, Controls::MultiplierRangeSwitch + row);
-      addParam(multiplier_range_stepper);
+      auto *multiplier_range_stepper = Stepper<MultiplierRanges>::install(
+          this, Controls::MultiplierRangeSwitch + row, column4, y);
 
       auto const update_range_stepper =
           [offset_range_stepper, multiplier_range_stepper](bool is_multiply) {

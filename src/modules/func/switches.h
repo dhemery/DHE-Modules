@@ -1,30 +1,27 @@
 #pragma once
-
-#include "controls/port.h"
-#include "func-controls.h"
-
-#include <functional>
 #include <string>
-#include <utility>
 #include <vector>
-#include <widget/event.hpp>
 
 namespace dhe {
 namespace func {
 
-struct OffsetRangeStepper {
-  static inline auto frame_names() -> std::vector<std::string> {
-    static auto const frame_names =
-        stepper_frame_names("offset-range", offset_ranges.size());
-    return frame_names;
+struct OffsetRanges {
+  using ValueT = int;
+  static constexpr auto frame_prefix = "offset-range";
+  static inline auto labels() -> std::vector<std::string> const & {
+    static auto const labels =
+        std::vector<std::string>{"0–5 V", "±5 V", "0–10 V", "±10 V"};
+    return labels;
   }
 };
 
-struct MultiplierRangeStepper {
-  static inline auto frame_names() -> std::vector<std::string> {
-    static auto const frame_names =
-        stepper_frame_names("multiplier-range", multiplier_ranges.size());
-    return frame_names;
+struct MultiplierRanges {
+  using ValueT = int;
+  static constexpr auto frame_prefix = "multiplier-range";
+  static inline auto labels() -> std::vector<std::string> const & {
+    static auto const labels =
+        std::vector<std::string>{"0–1", "±1", "0–2", "±2"};
+    return labels;
   }
 };
 
