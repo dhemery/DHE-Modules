@@ -1,10 +1,12 @@
-#include "./fixtures/timed-mode-fixture.h"
-#include "components/phase-timer.h"
-#include "helpers/latches.h"
-#include "modules/stage/event.h"
 #include "modules/stage/generate-mode.h"
 
+#include "components/phase-timer.h"
+#include "modules/stage/event.h"
+
+#include "./fixtures/timed-mode-fixture.h"
 #include "helpers/assertions.h"
+#include "helpers/latches.h"
+
 #include <dheunit/test.h>
 
 namespace test {

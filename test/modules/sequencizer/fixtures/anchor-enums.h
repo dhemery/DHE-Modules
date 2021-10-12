@@ -1,6 +1,7 @@
 #pragma once
 
 #include "modules/sequencizer/anchor.h"
+
 #include <array>
 #include <ostream>
 #include <string>

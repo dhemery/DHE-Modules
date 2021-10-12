@@ -1,6 +1,9 @@
 #include "./fixtures/controller-fixture.h"
+
 #include "helpers/assertions.h"
+
 #include <functional>
+
 namespace test {
 namespace scannibal {
 using dhe::unit::Suite;

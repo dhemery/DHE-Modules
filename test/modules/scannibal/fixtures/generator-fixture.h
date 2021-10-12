@@ -3,8 +3,9 @@
 #include "components/range.h"
 #include "components/sigmoid.h"
 
-#include <array>
 #include <dheunit/test.h>
+
+#include <array>
 #include <functional>
 
 namespace test {

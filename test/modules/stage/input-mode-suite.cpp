@@ -1,6 +1,8 @@
+#include "modules/stage/input-mode.h"
+
 #include "./fixtures/simple-mode-fixture.h"
 #include "helpers/assertions.h"
-#include "modules/stage/input-mode.h"
+
 #include <dheunit/test.h>
 
 namespace test {

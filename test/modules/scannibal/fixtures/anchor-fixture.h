@@ -1,7 +1,12 @@
+#pragma once
+
 #include "modules/scannibal/anchor.h"
-#include <array>
+
 #include <dheunit/test.h>
+
+#include <array>
 #include <functional>
+
 namespace test {
 namespace scannibal {
 

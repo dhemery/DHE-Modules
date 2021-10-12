@@ -4,9 +4,9 @@
 
 #include "components/sigmoid.h"
 
-#include "fixtures/advance-mode-enums.h"
-#include "fixtures/step-controller-controls.h"
-#include "fixtures/step-event-enums.h"
+#include "./fixtures/advance-mode-enums.h"
+#include "./fixtures/step-controller-controls.h"
+#include "./fixtures/step-event-enums.h"
 
 #include "helpers/latches.h"
 

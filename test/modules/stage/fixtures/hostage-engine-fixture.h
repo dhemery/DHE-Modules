@@ -1,8 +1,11 @@
 #pragma once
 
-#include "components/latch.h"
 #include "modules/stage/hostage-engine.h"
+
+#include "components/latch.h"
+
 #include <dheunit/test.h>
+
 #include <functional>
 
 namespace test {

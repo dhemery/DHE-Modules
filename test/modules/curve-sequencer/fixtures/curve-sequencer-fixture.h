@@ -2,8 +2,8 @@
 #include "components/latch.h"
 #include "modules/curve-sequencer/curve-sequencer.h"
 
+#include "./step-event-enums.h"
 #include "helpers/latches.h"
-#include "step-event-enums.h"
 
 #include <dheunit/test.h>
 

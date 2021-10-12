@@ -1,3 +1,5 @@
+#pragma once
+
 #include "helpers/rack-controls.h"
 #include "modules/sequencizer/signals.h"
 

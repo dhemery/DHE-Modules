@@ -1,6 +1,6 @@
 #include "modules/curve-sequencer/curve-sequencer.h"
 
-#include "fixtures/curve-sequencer-fixture.h"
+#include "./fixtures/curve-sequencer-fixture.h"
 
 #include <dheunit/test.h>
 

@@ -1,5 +1,6 @@
 #include "./fixtures/stage-engine-fixture.h"
 #include "helpers/assertions.h"
+
 #include <dheunit/test.h>
 
 namespace test {

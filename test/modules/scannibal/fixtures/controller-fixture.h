@@ -2,8 +2,9 @@
 
 #include "modules/scannibal/controller.h"
 
-#include <array>
 #include <dheunit/test.h>
+
+#include <array>
 #include <functional>
 
 namespace test {

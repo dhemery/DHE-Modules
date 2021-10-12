@@ -1,3 +1,5 @@
+#pragma once
+
 #include "modules/sequencizer/anchor.h"
 
 #include <dheunit/test.h>

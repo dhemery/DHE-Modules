@@ -1,6 +1,8 @@
 #include "./fixtures/sequence-controller-fixture.h"
+
+#include "helpers/latches.h"
+
 #include <functional>
-#include <helpers/latches.h>
 
 namespace test {
 namespace sequencizer {

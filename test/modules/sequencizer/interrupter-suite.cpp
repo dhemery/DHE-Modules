@@ -1,6 +1,8 @@
 #include "./fixtures/advancement-enums.h"
 #include "./fixtures/interrupter-fixture.h"
+
 #include <helpers/latches.h>
+
 #include <sstream>
 #include <vector>
 

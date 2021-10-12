@@ -1,6 +1,5 @@
-#include "./fixtures/anchor-fixture.h"
-
 #include "./fixtures/anchor-enums.h"
+#include "./fixtures/anchor-fixture.h"
 
 #include <dheunit/test.h>
 

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "modules/sequencizer/advancement.h"
+
 #include <array>
 #include <ostream>
 #include <string>

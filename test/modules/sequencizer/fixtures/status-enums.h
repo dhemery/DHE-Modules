@@ -1,6 +1,7 @@
 #pragma once
 
 #include "modules/sequencizer/status.h"
+
 #include <array>
 #include <ostream>
 #include <string>

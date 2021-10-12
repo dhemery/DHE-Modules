@@ -1,7 +1,8 @@
-#include "./fixtures/simple-mode-fixture.h"
 #include "modules/stage/idle-mode.h"
 
+#include "./fixtures/simple-mode-fixture.h"
 #include "helpers/assertions.h"
+
 #include <dheunit/test.h>
 
 namespace test {

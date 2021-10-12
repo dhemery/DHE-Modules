@@ -1,8 +1,8 @@
 #include "modules/curve-sequencer/step-selector.h"
 
-#include <dheunit/test.h>
+#include "./fixtures/step-selector-controls.h"
 
-#include "fixtures/step-selector-controls.h"
+#include <dheunit/test.h>
 
 #include <string>
 #include <utility>

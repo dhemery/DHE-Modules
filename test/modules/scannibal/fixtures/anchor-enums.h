@@ -1,6 +1,7 @@
 #pragma once
 
 #include "modules/scannibal/anchor.h"
+
 #include <array>
 #include <ostream>
 #include <string>

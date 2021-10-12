@@ -1,8 +1,10 @@
 #include "./fixtures/sequence-controller-fixture.h"
 #include "./fixtures/status-enums.h"
+
 #include "helpers/assertions.h"
+#include "helpers/latches.h"
+
 #include <functional>
-#include <helpers/latches.h>
 namespace test {
 namespace sequencizer {
 using dhe::unit::Suite;

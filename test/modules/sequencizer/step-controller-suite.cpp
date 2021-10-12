@@ -1,6 +1,8 @@
-#include "fixtures/status-enums.h"
-#include "fixtures/step-controller-fixture.h"
+#include "./fixtures/status-enums.h"
+#include "./fixtures/step-controller-fixture.h"
+
 #include "helpers/assertions.h"
+
 #include <dheunit/test.h>
 
 namespace test {

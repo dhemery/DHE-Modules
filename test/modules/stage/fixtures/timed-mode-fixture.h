@@ -1,10 +1,12 @@
 #pragma once
 
-#include "components/phase-timer.h"
-#include "components/sigmoid.h"
 #include "modules/stage/event.h"
 
+#include "components/phase-timer.h"
+#include "components/sigmoid.h"
+
 #include <dheunit/test.h>
+
 #include <functional>
 
 namespace test {

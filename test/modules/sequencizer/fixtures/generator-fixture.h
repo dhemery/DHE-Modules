@@ -1,3 +1,5 @@
+#pragma once
+
 #include "modules/sequencizer/generator.h"
 
 #include "components/range.h"

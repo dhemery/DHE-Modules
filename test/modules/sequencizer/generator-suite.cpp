@@ -4,6 +4,7 @@
 #include "modules/sequencizer/status.h"
 
 #include "helpers/assertions.h"
+
 #include <dheunit/test.h>
 
 namespace test {

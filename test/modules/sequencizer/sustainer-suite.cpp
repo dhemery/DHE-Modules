@@ -1,9 +1,11 @@
 #include "./fixtures/advancement-enums.h"
 #include "./fixtures/sustainer-fixture.h"
+
 #include "helpers/assertions.h"
 #include "helpers/latches.h"
 
 #include <dheunit/test.h>
+
 #include <vector>
 
 namespace test {

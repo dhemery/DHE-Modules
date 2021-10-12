@@ -1,8 +1,11 @@
 #pragma once
 
 #include "modules/sequencizer/advancement.h"
+
 #include <dheunit/test.h>
+
 #include <functional>
+
 namespace test {
 namespace sequencizer {
 using dhe::sequencizer::SustainMode;
