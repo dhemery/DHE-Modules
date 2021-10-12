@@ -1,9 +1,9 @@
 #pragma once
 
+#include "./event.h"
 #include "components/cxmath.h"
 #include "components/latch.h"
 #include "components/range.h"
-#include "event.h"
 
 namespace dhe {
 namespace stage {

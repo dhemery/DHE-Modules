@@ -1,9 +1,11 @@
+#pragma once
+
 #include "./control-ids.h"
 #include "./controls.h"
 #include "controls/ports.h"
 #include "controls/switches.h"
 
-#include <engine/Module.hpp>
+#include <rack.hpp>
 
 #include <string>
 #include <vector>

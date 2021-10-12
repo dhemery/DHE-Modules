@@ -1,12 +1,12 @@
 #pragma once
 
-#include "advance-mode.h"
+#include "./advance-mode.h"
+#include "./generate-mode.h"
+#include "./step-event.h"
 #include "components/cxmath.h"
 #include "components/latch.h"
 #include "components/phase-timer.h"
 #include "components/range.h"
-#include "generate-mode.h"
-#include "step-event.h"
 
 namespace dhe {
 namespace curve_sequencer {

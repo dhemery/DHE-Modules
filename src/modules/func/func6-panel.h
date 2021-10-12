@@ -6,7 +6,7 @@
 #include "controls/switches.h"
 #include "widgets/knobs.h"
 
-#include <app/ModuleWidget.hpp>
+#include <rack.hpp>
 
 namespace dhe {
 namespace func {

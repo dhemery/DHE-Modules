@@ -5,7 +5,7 @@
 #include "./switches.h"
 #include "config/common-config.h"
 
-#include <engine/Module.hpp>
+#include <rack.hpp>
 
 namespace dhe {
 namespace func {

@@ -1,11 +1,11 @@
 #pragma once
 
+#include "./control-ids.h"
 #include "components/range.h"
 #include "config/common-config.h"
-#include "control-ids.h"
 #include "controls/common-inputs.h"
 
-#include <engine/Module.hpp>
+#include <rack.hpp>
 
 namespace dhe {
 namespace buttons {

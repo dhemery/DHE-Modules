@@ -1,11 +1,11 @@
 #pragma once
 
+#include "./cubic-controls.h"
 #include "components/range.h"
 #include "config/common-config.h"
 #include "controls/common-inputs.h"
-#include "cubic-controls.h"
 
-#include <engine/Module.hpp>
+#include <rack.hpp>
 
 namespace dhe {
 

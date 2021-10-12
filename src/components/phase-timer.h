@@ -1,6 +1,6 @@
 #pragma once
 
-#include "components/cxmath.h"
+#include "./cxmath.h"
 
 namespace dhe {
 class PhaseTimer {

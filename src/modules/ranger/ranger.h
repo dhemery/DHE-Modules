@@ -1,12 +1,13 @@
 #pragma once
 
+#include "./ranger-controls.h"
 #include "components/cxmath.h"
 #include "config/common-config.h"
 #include "config/level-config.h"
 #include "controls/common-inputs.h"
 #include "controls/level-inputs.h"
-#include "ranger-controls.h"
-#include <engine/Module.hpp>
+
+#include <rack.hpp>
 
 namespace dhe {
 namespace ranger {

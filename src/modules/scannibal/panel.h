@@ -8,9 +8,7 @@
 #include "widgets/knobs.h"
 #include "widgets/screws.h"
 
-#include <app/ModuleWidget.hpp>
-#include <componentlibrary.hpp>
-#include <jansson.h>
+#include <rack.hpp>
 
 #include <cmath>
 #include <functional>

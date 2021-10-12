@@ -1,5 +1,6 @@
 #pragma once
 
+#include "./tapers-controls.h"
 #include "components/range.h"
 #include "config/common-config.h"
 #include "config/curvature-config.h"
@@ -7,9 +8,8 @@
 #include "controls/common-inputs.h"
 #include "controls/curvature-inputs.h"
 #include "controls/level-inputs.h"
-#include "tapers-controls.h"
 
-#include <engine/Module.hpp>
+#include <rack.hpp>
 
 namespace dhe {
 namespace tapers {

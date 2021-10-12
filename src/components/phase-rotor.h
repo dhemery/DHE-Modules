@@ -1,5 +1,6 @@
 #pragma once
-#include "components/cxmath.h"
+#include "./cxmath.h"
+
 #include <cmath>
 
 namespace dhe {

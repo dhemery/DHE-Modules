@@ -3,7 +3,7 @@
 #include "./switches.h"
 #include "widgets/dimensions.h"
 
-#include <helpers.hpp>
+#include <rack.hpp>
 
 #include <string>
 #include <vector>

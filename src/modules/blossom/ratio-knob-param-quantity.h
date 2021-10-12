@@ -1,9 +1,9 @@
 #pragma once
 
-#include "blossom-controls.h"
+#include "./blossom-controls.h"
 #include "config/common-config.h"
 
-#include <engine/ParamQuantity.hpp>
+#include <rack.hpp>
 
 namespace dhe {
 namespace blossom {

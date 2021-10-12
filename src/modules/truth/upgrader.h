@@ -1,7 +1,7 @@
 #pragma once
 
-#include "control-ids.h"
-#include "outcomes.h"
+#include "./control-ids.h"
+#include "./outcomes.h"
 
 namespace dhe {
 namespace truth {

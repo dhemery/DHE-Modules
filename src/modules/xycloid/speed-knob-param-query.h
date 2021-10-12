@@ -3,8 +3,7 @@
 #include "components/range.h"
 #include "components/sigmoid.h"
 
-#include <engine/Module.hpp>
-#include <engine/ParamQuantity.hpp>
+#include <rack.hpp>
 
 namespace dhe {
 namespace xycloid {

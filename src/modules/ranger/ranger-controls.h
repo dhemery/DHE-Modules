@@ -1,7 +1,5 @@
 #pragma once
 
-#include <common.hpp>
-
 namespace dhe {
 namespace ranger {
 class RangerControls {

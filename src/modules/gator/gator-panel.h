@@ -5,7 +5,7 @@
 #include "controls/switches.h"
 #include "widgets/screws.h"
 
-#include <app/ModuleWidget.hpp>
+#include <rack.hpp>
 
 namespace dhe {
 namespace gator {
@@ -38,7 +38,7 @@ public:
       Button::install<Toggle>(
           this, Controls::NegateButtons + i + Controls::InputCount / 2, rc, y);
       InPort::install(this, Controls::Inputs + i + Controls::InputCount / 2,
-                     right, y);
+                      right, y);
       y += dy;
     }
 

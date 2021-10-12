@@ -2,8 +2,7 @@
 
 #include "components/range.h"
 
-#include <engine/Module.hpp>
-#include <engine/ParamQuantity.hpp>
+#include <rack.hpp>
 
 namespace dhe {
 namespace blossom {

@@ -1,15 +1,15 @@
 #pragma once
 
+#include "./ratio-knob-param-quantity.h"
+#include "./speed-knob-param-query.h"
+#include "./xycloid-controls.h"
 #include "components/phase-rotor.h"
 #include "components/range.h"
 #include "config/common-config.h"
 #include "config/level-config.h"
 #include "controls/common-inputs.h"
-#include "ratio-knob-param-quantity.h"
-#include "speed-knob-param-query.h"
-#include "xycloid-controls.h"
 
-#include <engine/Module.hpp>
+#include <rack.hpp>
 
 namespace dhe {
 

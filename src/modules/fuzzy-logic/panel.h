@@ -5,7 +5,7 @@
 #include "controls/switches.h"
 #include "widgets/screws.h"
 
-#include <app/ModuleWidget.hpp>
+#include <rack.hpp>
 
 namespace dhe {
 
@@ -72,22 +72,24 @@ public:
     OutPort::install(this, Controls::XorOutputs + 1, cd_outer_column, y);
 
     y = top + 5.F * dy;
-    OutPort::install(this, Controls::ImplicationOutputs + 0, ab_outer_column, y);
+    OutPort::install(this, Controls::ImplicationOutputs + 0, ab_outer_column,
+                     y);
     OutPort::install(this, Controls::NonimplicationOutputs + 0, ab_inner_column,
-                    y);
+                     y);
     OutPort::install(this, Controls::NonimplicationOutputs + 1, cd_inner_column,
-                    y);
-    OutPort::install(this, Controls::ImplicationOutputs + 1, cd_outer_column, y);
+                     y);
+    OutPort::install(this, Controls::ImplicationOutputs + 1, cd_outer_column,
+                     y);
 
     y = top + 6.F * dy;
     OutPort::install(this, Controls::ConverseImplicationOutputs + 0,
-                    ab_outer_column, y);
+                     ab_outer_column, y);
     OutPort::install(this, Controls::ConverseNonimplicationOutputs + 0,
-                    ab_inner_column, y);
+                     ab_inner_column, y);
     OutPort::install(this, Controls::ConverseNonimplicationOutputs + 1,
-                    cd_inner_column, y);
+                     cd_inner_column, y);
     OutPort::install(this, Controls::ConverseImplicationOutputs + 1,
-                    cd_outer_column, y);
+                     cd_outer_column, y);
   }
 };
 } // namespace fuzzy_logic

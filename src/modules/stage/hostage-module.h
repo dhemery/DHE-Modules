@@ -1,15 +1,15 @@
 #pragma once
 
+#include "./defer-mode.h"
+#include "./hold-mode.h"
+#include "./hostage-controls.h"
+#include "./hostage-engine.h"
+#include "./idle-mode.h"
+#include "./input-mode.h"
+#include "./sustain-mode.h"
 #include "config/duration-config.h"
-#include "defer-mode.h"
-#include "hold-mode.h"
-#include "hostage-controls.h"
-#include "hostage-engine.h"
-#include "idle-mode.h"
-#include "input-mode.h"
-#include "sustain-mode.h"
 
-#include <engine/Module.hpp>
+#include <rack.hpp>
 
 namespace dhe {
 namespace stage {

@@ -1,11 +1,11 @@
 #pragma once
 
-#include "advance-mode.h"
+#include "./advance-mode.h"
+#include "./generate-mode.h"
 #include "controls/common-inputs.h"
 #include "controls/curvature-inputs.h"
 #include "controls/duration-inputs.h"
 #include "controls/level-inputs.h"
-#include "generate-mode.h"
 
 #include <vector>
 

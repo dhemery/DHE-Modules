@@ -5,8 +5,8 @@
 #include "controls/common-inputs.h"
 #include "controls/level-inputs.h"
 
-#include <engine/Param.hpp>
-#include <engine/Port.hpp>
+#include <rack.hpp>
+
 #include <vector>
 
 namespace dhe {

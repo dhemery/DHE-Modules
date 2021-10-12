@@ -1,12 +1,11 @@
 #pragma once
 
-#include "common-config.h"
+#include "./common-config.h"
 #include "components/sigmoid.h"
-#include "config/common-config.h"
 #include "controls/curvature-inputs.h"
 
-#include <engine/Module.hpp>
-#include <engine/ParamQuantity.hpp>
+#include <rack.hpp>
+
 #include <string>
 
 namespace dhe {

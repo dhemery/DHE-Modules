@@ -1,8 +1,10 @@
 #pragma once
 
+#include "./xycloid-controls.h"
 #include "components/sigmoid.h"
 #include "config/common-config.h"
-#include "xycloid-controls.h"
+
+#include <rack.hpp>
 
 #include <array>
 

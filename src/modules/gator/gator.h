@@ -1,9 +1,10 @@
 #pragma once
 
+#include "./gator-controls.h"
 #include "controls/common-inputs.h"
-#include "gator-controls.h"
 
-#include <engine/Module.hpp>
+#include <rack.hpp>
+
 #include <string>
 
 namespace dhe {

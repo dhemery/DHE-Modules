@@ -1,10 +1,9 @@
 #pragma once
 
+#include "./mode.h"
 #include "controls/duration-inputs.h"
-#include "mode.h"
 
-#include <engine/Param.hpp>
-#include <engine/Port.hpp>
+#include <rack.hpp>
 
 namespace dhe {
 namespace stage {

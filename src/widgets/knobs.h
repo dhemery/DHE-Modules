@@ -1,11 +1,10 @@
 #pragma once
 
+#include "./dimensions.h"
+#include "./panel-assets.h"
 #include "components/cxmath.h"
-#include "dimensions.h"
-#include "panel-assets.h"
 
-#include <app/SvgKnob.hpp>
-#include <helpers.hpp>
+#include <rack.hpp>
 
 #include <string>
 

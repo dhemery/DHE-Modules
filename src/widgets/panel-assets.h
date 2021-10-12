@@ -1,11 +1,8 @@
 #pragma once
 
-#include <string>
+#include <rack.hpp>
 
-#include <asset.hpp>
-#include <context.hpp>
-#include <window/Svg.hpp>
-#include <window/Window.hpp>
+#include <string>
 
 extern rack::plugin::Plugin *pluginInstance; // NOLINT
 

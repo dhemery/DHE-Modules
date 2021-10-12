@@ -6,7 +6,7 @@
 #include "widgets/knobs.h"
 #include "widgets/screws.h"
 
-#include <app/ModuleWidget.hpp>
+#include <rack.hpp>
 
 namespace dhe {
 namespace stage {

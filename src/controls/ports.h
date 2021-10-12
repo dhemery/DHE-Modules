@@ -3,8 +3,7 @@
 #include "widgets/dimensions.h"
 #include "widgets/panel-assets.h"
 
-#include <app/SvgPort.hpp>
-#include <helpers.hpp>
+#include <rack.hpp>
 
 #include <string>
 

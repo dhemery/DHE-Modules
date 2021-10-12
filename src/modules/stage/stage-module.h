@@ -1,16 +1,16 @@
 #pragma once
 
+#include "./defer-mode.h"
+#include "./generate-mode.h"
+#include "./input-mode.h"
+#include "./level-mode.h"
+#include "./stage-controls.h"
+#include "./stage-engine.h"
 #include "config/curvature-config.h"
 #include "config/duration-config.h"
 #include "config/level-config.h"
-#include "defer-mode.h"
-#include "generate-mode.h"
-#include "input-mode.h"
-#include "level-mode.h"
-#include "stage-controls.h"
-#include "stage-engine.h"
 
-#include <engine/Module.hpp>
+#include <rack.hpp>
 
 namespace dhe {
 namespace stage {

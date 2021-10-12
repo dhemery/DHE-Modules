@@ -1,6 +1,6 @@
 #pragma once
 
-#include "common-inputs.h"
+#include "./common-inputs.h"
 
 namespace dhe {
 /**

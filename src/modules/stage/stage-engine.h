@@ -1,10 +1,10 @@
 #pragma once
 
+#include "./event.h"
+#include "./mode.h"
 #include "components/latch.h"
 #include "components/phase-timer.h"
 #include "components/range.h"
-#include "event.h"
-#include "mode.h"
 
 #include <algorithm>
 

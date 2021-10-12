@@ -38,7 +38,7 @@
 #include "modules/xycloid/xycloid-panel.h"
 #include "modules/xycloid/xycloid.h"
 
-#include <plugin/Plugin.hpp>
+#include <rack.hpp>
 
 using dhe::blossom::Blossom;
 using dhe::blossom::BlossomPanel;

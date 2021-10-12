@@ -1,10 +1,10 @@
 #pragma once
 
+#include "./swave-controls.h"
 #include "config/curvature-config.h"
 #include "controls/curvature-inputs.h"
-#include "swave-controls.h"
 
-#include <engine/Module.hpp>
+#include <rack.hpp>
 
 namespace dhe {
 namespace swave {

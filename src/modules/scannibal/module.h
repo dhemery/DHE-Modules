@@ -14,8 +14,7 @@
 #include "controls/duration-inputs.h"
 #include "controls/level-inputs.h"
 
-#include <engine/Module.hpp>
-#include <jansson.h>
+#include <rack.hpp>
 
 namespace dhe {
 namespace scannibal {

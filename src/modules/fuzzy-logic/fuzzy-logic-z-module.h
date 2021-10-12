@@ -1,9 +1,9 @@
 #pragma once
+#include "./fuzzy-logic-controls.h"
 #include "config/level-config.h"
 #include "controls/common-inputs.h"
-#include "fuzzy-logic-controls.h"
 
-#include <engine/Module.hpp>
+#include <rack.hpp>
 
 namespace dhe {
 

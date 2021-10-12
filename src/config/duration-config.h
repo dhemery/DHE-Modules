@@ -1,12 +1,12 @@
 #pragma once
 
-#include "common-config.h"
+#include "./common-config.h"
 #include "controls/common-inputs.h"
 #include "controls/duration-inputs.h"
 
+#include <rack.hpp>
+
 #include <array>
-#include <engine/Module.hpp>
-#include <engine/ParamQuantity.hpp>
 #include <functional>
 
 namespace dhe {

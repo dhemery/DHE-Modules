@@ -1,8 +1,8 @@
 #pragma once
 
-#include "operation.h"
+#include "./operation.h"
 
-#include <engine/ParamQuantity.hpp>
+#include <rack.hpp>
 
 namespace dhe {
 namespace func {

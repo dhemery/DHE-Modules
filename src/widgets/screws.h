@@ -1,10 +1,9 @@
 #pragma once
 
-#include "dimensions.h"
+#include "./dimensions.h"
 
-#include <app/ModuleWidget.hpp>
-#include <componentlibrary.hpp>
-#include <helpers.hpp>
+#include <rack.hpp>
+
 #include <random>
 
 namespace dhe {

@@ -4,7 +4,7 @@
 #include "controls/ports.h"
 #include "widgets/dimensions.h"
 
-#include <widget/SvgWidget.hpp>
+#include <rack.hpp>
 
 #include <functional>
 #include <string>

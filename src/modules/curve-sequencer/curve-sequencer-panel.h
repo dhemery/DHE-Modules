@@ -6,8 +6,7 @@
 #include "widgets/knobs.h"
 #include "widgets/screws.h"
 
-#include <app/ModuleWidget.hpp>
-#include <componentlibrary.hpp>
+#include <rack.hpp>
 
 #include <functional>
 #include <string>

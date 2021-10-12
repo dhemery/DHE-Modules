@@ -1,11 +1,11 @@
 #pragma once
 
+#include "./upstage-controls.h"
+#include "./upstage-engine.h"
 #include "config/common-config.h"
 #include "config/level-config.h"
-#include "upstage-controls.h"
-#include "upstage-engine.h"
 
-#include <engine/Module.hpp>
+#include <rack.hpp>
 
 namespace dhe {
 namespace stage {

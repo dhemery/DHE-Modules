@@ -1,16 +1,17 @@
 #pragma once
 
-#include "blossom-controls.h"
+#include "./blossom-controls.h"
+#include "./ratio-knob-param-quantity.h"
+#include "./speed-knob-param-quantity.h"
 #include "components/phase-rotor.h"
 #include "components/range.h"
 #include "components/sigmoid.h"
 #include "config/level-config.h"
 #include "controls/common-inputs.h"
-#include "ratio-knob-param-quantity.h"
-#include "speed-knob-param-quantity.h"
+
+#include <rack.hpp>
 
 #include <cmath>
-#include <engine/Module.hpp>
 
 namespace dhe {
 

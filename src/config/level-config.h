@@ -1,11 +1,11 @@
 #pragma once
 
-#include "common-config.h"
+#include "./common-config.h"
 #include "components/range.h"
 #include "controls/common-inputs.h"
 
-#include <engine/Module.hpp>
-#include <engine/ParamQuantity.hpp>
+#include <rack.hpp>
+
 #include <functional>
 #include <string>
 
