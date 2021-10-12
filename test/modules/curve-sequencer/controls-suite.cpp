@@ -2,7 +2,7 @@
 #include "./fixtures/controls-fixture.h"
 #include "./fixtures/generate-mode-enums.h"
 
-#include <dheunit/test.h>
+#include "dheunit/test.h"
 
 #include <functional>
 

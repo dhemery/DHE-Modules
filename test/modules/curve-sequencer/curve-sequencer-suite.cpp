@@ -2,7 +2,7 @@
 
 #include "./fixtures/curve-sequencer-fixture.h"
 
-#include <dheunit/test.h>
+#include "dheunit/test.h"
 
 #include <functional>
 #include <string>

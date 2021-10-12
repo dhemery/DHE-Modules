@@ -4,7 +4,7 @@
 #include "controls/common-inputs.h"
 #include "controls/duration-inputs.h"
 
-#include <rack.hpp>
+#include "rack.hpp"
 
 #include <array>
 #include <functional>

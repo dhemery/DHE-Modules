@@ -1,13 +1,14 @@
 #pragma once
-
 #include "modules/sequencizer/generator.h"
 
 #include "components/range.h"
 #include "components/sigmoid.h"
 
+#include "dheunit/test.h"
+
 #include <array>
-#include <dheunit/test.h>
 #include <functional>
+
 namespace test {
 namespace sequencizer {
 

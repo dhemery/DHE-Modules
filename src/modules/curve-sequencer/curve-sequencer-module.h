@@ -13,7 +13,7 @@
 #include "config/level-config.h"
 #include "controls/steppers.h"
 
-#include <rack.hpp>
+#include "rack.hpp"
 
 namespace dhe {
 

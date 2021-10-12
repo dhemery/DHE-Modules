@@ -2,7 +2,7 @@
 
 #include "modules/scannibal/controller.h"
 
-#include <dheunit/test.h>
+#include "dheunit/test.h"
 
 #include <array>
 #include <functional>

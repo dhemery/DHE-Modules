@@ -4,7 +4,7 @@
 
 #include "components/latch.h"
 
-#include <dheunit/test.h>
+#include "dheunit/test.h"
 
 #include <functional>
 

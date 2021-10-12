@@ -3,7 +3,7 @@
 #include "helpers/rack-controls.h"
 #include "modules/curve-sequencer/curve-sequencer-controls.h"
 
-#include <dheunit/test.h>
+#include "dheunit/test.h"
 #include <functional>
 #include <vector>
 

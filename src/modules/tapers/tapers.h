@@ -9,7 +9,7 @@
 #include "controls/curvature-inputs.h"
 #include "controls/level-inputs.h"
 
-#include <rack.hpp>
+#include "rack.hpp"
 
 namespace dhe {
 namespace tapers {

@@ -4,7 +4,7 @@
 #include "components/sigmoid.h"
 #include "controls/curvature-inputs.h"
 
-#include <rack.hpp>
+#include "rack.hpp"
 
 #include <string>
 

@@ -5,7 +5,7 @@
 #include "components/phase-timer.h"
 #include "components/sigmoid.h"
 
-#include <dheunit/test.h>
+#include "dheunit/test.h"
 
 #include <functional>
 

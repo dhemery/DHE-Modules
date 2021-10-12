@@ -3,7 +3,7 @@
 #include "./mode.h"
 #include "controls/duration-inputs.h"
 
-#include <rack.hpp>
+#include "rack.hpp"
 
 namespace dhe {
 namespace stage {

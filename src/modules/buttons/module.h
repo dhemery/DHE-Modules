@@ -5,7 +5,7 @@
 #include "config/common-config.h"
 #include "controls/common-inputs.h"
 
-#include <rack.hpp>
+#include "rack.hpp"
 
 namespace dhe {
 namespace buttons {

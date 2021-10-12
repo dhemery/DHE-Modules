@@ -4,7 +4,7 @@
 #include "./panel-assets.h"
 #include "components/cxmath.h"
 
-#include <rack.hpp>
+#include "rack.hpp"
 
 #include <string>
 

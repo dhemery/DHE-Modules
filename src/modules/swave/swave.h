@@ -4,7 +4,7 @@
 #include "config/curvature-config.h"
 #include "controls/curvature-inputs.h"
 
-#include <rack.hpp>
+#include "rack.hpp"
 
 namespace dhe {
 namespace swave {

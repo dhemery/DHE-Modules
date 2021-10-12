@@ -3,7 +3,7 @@
 #include "./blossom-controls.h"
 #include "config/common-config.h"
 
-#include <rack.hpp>
+#include "rack.hpp"
 
 namespace dhe {
 namespace blossom {

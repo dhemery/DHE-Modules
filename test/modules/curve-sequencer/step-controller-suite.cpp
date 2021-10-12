@@ -10,7 +10,7 @@
 
 #include "helpers/latches.h"
 
-#include <dheunit/test.h>
+#include "dheunit/test.h"
 
 #include <array>
 #include <vector>

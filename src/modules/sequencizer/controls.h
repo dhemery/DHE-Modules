@@ -4,7 +4,7 @@
 #include "controls/ports.h"
 #include "widgets/dimensions.h"
 
-#include <rack.hpp>
+#include "rack.hpp"
 
 #include <functional>
 #include <string>

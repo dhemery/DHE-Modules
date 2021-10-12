@@ -2,7 +2,7 @@
 
 #include "./panel-assets.h"
 
-#include <rack.hpp>
+#include "rack.hpp"
 
 #include <string>
 

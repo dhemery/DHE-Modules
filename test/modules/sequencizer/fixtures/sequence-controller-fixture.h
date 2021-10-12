@@ -4,7 +4,7 @@
 #include "modules/sequencizer/status.h"
 #include "modules/sequencizer/step-controller.h"
 
-#include <dheunit/test.h>
+#include "dheunit/test.h"
 
 #include <array>
 #include <functional>

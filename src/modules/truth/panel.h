@@ -5,7 +5,7 @@
 #include "controls/ports.h"
 #include "controls/switches.h"
 
-#include <rack.hpp>
+#include "rack.hpp"
 
 #include <string>
 #include <vector>

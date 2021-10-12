@@ -2,7 +2,7 @@
 
 #include "./fixtures/step-selector-controls.h"
 
-#include <dheunit/test.h>
+#include "dheunit/test.h"
 
 #include <string>
 #include <utility>

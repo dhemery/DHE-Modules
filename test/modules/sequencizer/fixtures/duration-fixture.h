@@ -3,7 +3,7 @@
 #include "helpers/rack-controls.h"
 #include "modules/sequencizer/signals.h"
 
-#include <dheunit/test.h>
+#include "dheunit/test.h"
 
 #include <functional>
 

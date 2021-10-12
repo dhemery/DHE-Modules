@@ -3,7 +3,7 @@
 #include "components/range.h"
 #include "components/sigmoid.h"
 
-#include <rack.hpp>
+#include "rack.hpp"
 
 namespace dhe {
 namespace xycloid {

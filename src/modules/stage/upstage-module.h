@@ -5,7 +5,7 @@
 #include "config/common-config.h"
 #include "config/level-config.h"
 
-#include <rack.hpp>
+#include "rack.hpp"
 
 namespace dhe {
 namespace stage {

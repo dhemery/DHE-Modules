@@ -1,7 +1,7 @@
 #include "./fixtures/anchor-enums.h"
 #include "./fixtures/anchor-fixture.h"
 
-#include <dheunit/test.h>
+#include "dheunit/test.h"
 
 namespace test {
 namespace sequencizer {

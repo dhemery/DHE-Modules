@@ -5,7 +5,7 @@
 #include "controls/duration-inputs.h"
 #include "controls/level-inputs.h"
 
-#include <rack.hpp>
+#include "rack.hpp"
 
 #include <vector>
 

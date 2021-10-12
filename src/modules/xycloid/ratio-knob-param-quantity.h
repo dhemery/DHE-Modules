@@ -4,7 +4,7 @@
 #include "components/sigmoid.h"
 #include "config/common-config.h"
 
-#include <rack.hpp>
+#include "rack.hpp"
 
 #include <array>
 

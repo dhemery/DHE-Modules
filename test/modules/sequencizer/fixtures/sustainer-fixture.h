@@ -2,7 +2,7 @@
 
 #include "modules/sequencizer/advancement.h"
 
-#include <dheunit/test.h>
+#include "dheunit/test.h"
 
 #include <functional>
 

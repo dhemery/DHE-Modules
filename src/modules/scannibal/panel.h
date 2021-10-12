@@ -8,7 +8,7 @@
 #include "widgets/knobs.h"
 #include "widgets/screws.h"
 
-#include <rack.hpp>
+#include "rack.hpp"
 
 #include <cmath>
 #include <functional>

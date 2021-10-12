@@ -5,7 +5,7 @@
 
 #include "helpers/assertions.h"
 
-#include <dheunit/test.h>
+#include "dheunit/test.h"
 
 namespace test {
 namespace sequencizer {

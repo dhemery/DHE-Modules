@@ -1,7 +1,7 @@
 #include "./fixtures/stage-engine-fixture.h"
 #include "helpers/assertions.h"
 
-#include <dheunit/test.h>
+#include "dheunit/test.h"
 
 namespace test {
 namespace stage {
