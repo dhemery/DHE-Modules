@@ -7,7 +7,7 @@
 #include "./idle-mode.h"
 #include "./input-mode.h"
 #include "./sustain-mode.h"
-#include "config/duration-config.h"
+#include "params/duration-config.h"
 
 #include "rack.hpp"
 

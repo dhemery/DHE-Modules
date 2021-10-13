@@ -6,7 +6,7 @@
 #include "components/phase-rotor.h"
 #include "components/range.h"
 #include "components/sigmoid.h"
-#include "config/level-config.h"
+#include "params/level-config.h"
 #include "signals/common-inputs.h"
 
 #include "rack.hpp"

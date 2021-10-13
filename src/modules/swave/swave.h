@@ -1,7 +1,7 @@
 #pragma once
 
 #include "./swave-controls.h"
-#include "config/curvature-config.h"
+#include "params/curvature-config.h"
 #include "signals/curvature-inputs.h"
 
 #include "rack.hpp"

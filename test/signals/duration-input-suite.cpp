@@ -1,5 +1,6 @@
+#include "signals/duration-inputs.h"
+
 #include "components/range.h"
-#include "controls/duration-inputs.h"
 #include "helpers/rack-controls.h"
 
 #include "dheunit/test.h"

@@ -6,9 +6,9 @@
 #include "./level-mode.h"
 #include "./stage-controls.h"
 #include "./stage-engine.h"
-#include "config/curvature-config.h"
-#include "config/duration-config.h"
-#include "config/level-config.h"
+#include "params/curvature-config.h"
+#include "params/duration-config.h"
+#include "params/level-config.h"
 
 #include "rack.hpp"
 

@@ -7,11 +7,11 @@
 #include "./step-controller.h"
 #include "./step-selector.h"
 #include "components/phase-timer.h"
-#include "config/common-config.h"
-#include "config/curvature-config.h"
-#include "config/duration-config.h"
-#include "config/level-config.h"
 #include "controls/steppers.h"
+#include "params/common-config.h"
+#include "params/curvature-config.h"
+#include "params/duration-config.h"
+#include "params/level-config.h"
 
 #include "rack.hpp"
 

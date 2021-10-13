@@ -3,7 +3,7 @@
 #include "./func-engine.h"
 #include "./operand-param-quantity.h"
 #include "./switches.h"
-#include "config/common-config.h"
+#include "params/common-config.h"
 
 #include "rack.hpp"
 

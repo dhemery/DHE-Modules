@@ -5,8 +5,8 @@
 #include "./xycloid-controls.h"
 #include "components/phase-rotor.h"
 #include "components/range.h"
-#include "config/common-config.h"
-#include "config/level-config.h"
+#include "params/common-config.h"
+#include "params/level-config.h"
 #include "signals/common-inputs.h"
 
 #include "rack.hpp"

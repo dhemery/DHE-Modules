@@ -2,7 +2,7 @@
 
 #include "./xycloid-controls.h"
 #include "components/sigmoid.h"
-#include "config/common-config.h"
+#include "params/common-config.h"
 
 #include "rack.hpp"
 

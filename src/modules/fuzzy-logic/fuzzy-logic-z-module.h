@@ -1,6 +1,6 @@
 #pragma once
 #include "./fuzzy-logic-controls.h"
-#include "config/level-config.h"
+#include "params/level-config.h"
 #include "signals/common-inputs.h"
 
 #include "rack.hpp"

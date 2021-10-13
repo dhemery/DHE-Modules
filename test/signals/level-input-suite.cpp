@@ -1,5 +1,6 @@
+#include "signals/level-inputs.h"
+
 #include "components/range.h"
-#include "controls/level-inputs.h"
 #include "helpers/rack-controls.h"
 
 #include "dheunit/test.h"

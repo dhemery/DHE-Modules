@@ -2,8 +2,8 @@
 
 #include "./upstage-controls.h"
 #include "./upstage-engine.h"
-#include "config/common-config.h"
-#include "config/level-config.h"
+#include "params/common-config.h"
+#include "params/level-config.h"
 
 #include "rack.hpp"
 

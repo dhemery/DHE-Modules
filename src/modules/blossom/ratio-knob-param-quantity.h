@@ -1,7 +1,7 @@
 #pragma once
 
 #include "./blossom-controls.h"
-#include "config/common-config.h"
+#include "params/common-config.h"
 
 #include "rack.hpp"
 
