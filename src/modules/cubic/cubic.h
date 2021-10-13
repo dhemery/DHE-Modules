@@ -3,7 +3,7 @@
 #include "./cubic-controls.h"
 #include "components/range.h"
 #include "config/common-config.h"
-#include "controls/common-inputs.h"
+#include "signals/common-inputs.h"
 
 #include "rack.hpp"
 

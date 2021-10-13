@@ -1,8 +1,8 @@
 #pragma once
 
 #include "./common-config.h"
-#include "controls/common-inputs.h"
-#include "controls/duration-inputs.h"
+#include "signals/common-inputs.h"
+#include "signals/duration-inputs.h"
 
 #include "rack.hpp"
 

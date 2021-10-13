@@ -6,7 +6,7 @@
 #include "./input-selector.h"
 #include "./outcomes.h"
 #include "./upgrader.h"
-#include "controls/common-inputs.h"
+#include "signals/common-inputs.h"
 
 #include "rack.hpp"
 

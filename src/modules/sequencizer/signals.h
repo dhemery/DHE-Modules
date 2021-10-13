@@ -4,8 +4,8 @@
 #include "./control-ids.h"
 #include "./status.h"
 #include "components/range.h"
-#include "controls/curvature-inputs.h"
-#include "controls/duration-inputs.h"
+#include "signals/curvature-inputs.h"
+#include "signals/duration-inputs.h"
 
 #include <vector>
 

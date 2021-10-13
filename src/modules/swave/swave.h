@@ -2,7 +2,7 @@
 
 #include "./swave-controls.h"
 #include "config/curvature-config.h"
-#include "controls/curvature-inputs.h"
+#include "signals/curvature-inputs.h"
 
 #include "rack.hpp"
 

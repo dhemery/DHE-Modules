@@ -1,9 +1,9 @@
 #pragma once
 
 #include "components/sigmoid.h"
-#include "controls/curvature-inputs.h"
-#include "controls/duration-inputs.h"
-#include "controls/level-inputs.h"
+#include "signals/curvature-inputs.h"
+#include "signals/duration-inputs.h"
+#include "signals/level-inputs.h"
 
 #include "rack.hpp"
 

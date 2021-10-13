@@ -1,7 +1,7 @@
 #pragma once
 
 #include "./mode.h"
-#include "controls/duration-inputs.h"
+#include "signals/duration-inputs.h"
 
 #include "rack.hpp"
 

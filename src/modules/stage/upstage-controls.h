@@ -2,8 +2,8 @@
 
 #include "config/common-config.h"
 #include "config/level-config.h"
-#include "controls/common-inputs.h"
-#include "controls/level-inputs.h"
+#include "signals/common-inputs.h"
+#include "signals/level-inputs.h"
 
 #include "rack.hpp"
 

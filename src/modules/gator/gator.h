@@ -1,7 +1,7 @@
 #pragma once
 
 #include "./gator-controls.h"
-#include "controls/common-inputs.h"
+#include "signals/common-inputs.h"
 
 #include "rack.hpp"
 

@@ -7,7 +7,7 @@
 #include "components/range.h"
 #include "config/common-config.h"
 #include "config/level-config.h"
-#include "controls/common-inputs.h"
+#include "signals/common-inputs.h"
 
 #include "rack.hpp"
 

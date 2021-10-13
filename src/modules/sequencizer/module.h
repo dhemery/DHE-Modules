@@ -13,9 +13,9 @@
 #include "config/duration-config.h"
 #include "config/level-config.h"
 #include "controls.h"
-#include "controls/curvature-inputs.h"
-#include "controls/duration-inputs.h"
-#include "controls/level-inputs.h"
+#include "signals/curvature-inputs.h"
+#include "signals/duration-inputs.h"
+#include "signals/level-inputs.h"
 
 #include "rack.hpp"
 
