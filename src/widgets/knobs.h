@@ -43,18 +43,4 @@ struct Knob {
         mm2px(xmm, ymm), panel->getModule(), id));
   }
 };
-
-struct Attenuator {
-  template <typename SizeT, typename PanelT>
-  static inline void install(PanelT *panel, float xmm, float ymm, int id) {
-    panel->addParam(rack::createParamCentered<KnobWidget<PanelT, SizeT>>(
-        mm2px(xmm, ymm), panel->getModule(), id));
-  }
-
-  template <typename ModuleT>
-  static inline void config(ModuleT *module, int id, std::string const &name,
-                            float rotation = 1.F) {
-    module->configParam(id, 0.F, 1.F, rotation, name, "%", 0.F, 100.F, 0.F);
-  }
-};
 } // namespace dhe

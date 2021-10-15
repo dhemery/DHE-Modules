@@ -1,8 +1,9 @@
 #pragma once
 
-#include "./blossom-controls.h"
-#include "./ratio-knob-param-quantity.h"
-#include "./speed-knob-param-quantity.h"
+#include "blossom-controls.h"
+#include "ratio-knob.h"
+#include "speed-knob.h"
+
 #include "components/phase-rotor.h"
 #include "components/range.h"
 #include "components/sigmoid.h"
@@ -28,14 +29,14 @@ public:
     config(Controls::ParameterCount, Controls::InputCount,
            Controls::OutputCount);
 
-    config_speed_knob(this, Controls::SpeedKnob);
+    SpeedKnob::config(this, Controls::SpeedKnob);
     config_attenuverter(this, Controls::SpeedAvKNob, "Speed CV gain");
     configInput(Controls::SpeedCvInput, "Speed CV");
 
     config_toggle<2>(this, Controls::FreeRatioSwitch, "Ratio mode",
                      {"Quantized", "Free"}, 1);
 
-    config_ratio_knob(this, Controls::RatioKnob);
+    RatioKnob::config(this, Controls::RatioKnob);
     config_attenuverter(this, Controls::RatioAvKnob, "Ratio CV gain");
     configInput(Controls::RatioCvInput, "Ratio CV");
 

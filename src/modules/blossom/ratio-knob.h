@@ -1,6 +1,7 @@
 #pragma once
 
-#include "./blossom-controls.h"
+#include "blossom-controls.h"
+
 #include "params/common-config.h"
 
 #include "rack.hpp"
@@ -9,7 +10,7 @@ namespace dhe {
 namespace blossom {
 static auto constexpr ratio_range = Range{1.F, 17.F};
 
-class RatioKnobParamQuantity : public rack::engine::ParamQuantity {
+class RatioKnob : public rack::engine::ParamQuantity {
 public:
   auto getDisplayValue() -> float override {
     auto const rotation = getValue();
@@ -23,13 +24,12 @@ public:
     auto const rotation = ratio_range.normalize(bounce_ratio);
     setValue(rotation);
   }
-};
 
-static inline void config_ratio_knob(rack::engine::Module *module,
-                                     int knob_id) {
-  module->configParam<RatioKnobParamQuantity>(knob_id, 0.F, 1.F,
-                                              centered_rotation, "Ratio", "x");
-}
+  static inline void config(rack::engine::Module *module, int id) {
+    module->configParam<RatioKnob>(id, 0.F, 1.F, centered_rotation, "Ratio",
+                                   "x");
+  }
+};
 
 } // namespace blossom
 } // namespace dhe

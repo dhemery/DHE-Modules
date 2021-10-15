@@ -22,7 +22,7 @@ static auto constexpr spin_to_rotation(float spin) -> float {
 static auto constexpr initial_spin_hz{1.F};
 static auto constexpr initial_rotation = spin_to_rotation(initial_spin_hz);
 
-class SpeedKnobParamQuantity : public rack::engine::ParamQuantity {
+struct SpeedKnob : public rack::engine::ParamQuantity {
   auto getDisplayValue() -> float override {
     return rotation_to_spin(getValue());
   }
@@ -30,13 +30,12 @@ class SpeedKnobParamQuantity : public rack::engine::ParamQuantity {
   void setDisplayValue(float spin) override {
     setValue(spin_to_rotation(spin));
   }
-};
 
-static inline void config_speed_knob(rack::engine::Module *module,
-                                     int knob_id) {
-  module->configParam<SpeedKnobParamQuantity>(knob_id, 0.F, 1.F,
-                                              initial_rotation, "Speed", " Hz");
-}
+  static inline void config(rack::engine::Module *module, int knob_id) {
+    module->configParam<SpeedKnob>(knob_id, 0.F, 1.F, initial_rotation, "Speed",
+                                   " Hz");
+  }
+};
 
 } // namespace blossom
 } // namespace dhe

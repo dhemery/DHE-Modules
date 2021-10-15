@@ -1,17 +1,19 @@
 #pragma once
-#include "./advancement.h"
-#include "./anchor.h"
-#include "./control-ids.h"
-#include "./controls.h"
-#include "./generator.h"
-#include "./sequence-controller.h"
-#include "./signals.h"
-#include "./step-controller.h"
-#include "./step-selector.h"
+#include "advancement.h"
+#include "anchor.h"
+#include "control-ids.h"
+#include "controls.h"
+#include "generator.h"
+#include "sequence-controller.h"
+#include "signals.h"
+#include "step-controller.h"
+#include "step-selector.h"
+
 #include "components/cxmath.h"
 #include "params/common-config.h"
 #include "params/curvature-config.h"
 #include "params/duration-config.h"
+#include "params/knob-params.h"
 #include "params/level-config.h"
 #include "signals/curvature-inputs.h"
 #include "signals/duration-inputs.h"
@@ -23,11 +25,6 @@ namespace dhe {
 namespace sequencizer {
 
 template <int N> class Module : public rack::engine::Module {
-  using Input = InputIds<N>;
-  using Light = LightIds<N>;
-  using Output = OutputIds;
-  using Param = ParamIds<N>;
-
 public:
   Module() {
     config(Param::Count, Input::Count, Output::Count, Light::Count);
@@ -145,6 +142,11 @@ private:
   StepControllerT step_controller_{interrupter_, generator_, sustainer_};
   SequenceControllerT sequence_controller_{signals_, step_selector_,
                                            step_controller_};
+
+  using Input = InputIds<N>;
+  using Light = LightIds<N>;
+  using Output = OutputIds;
+  using Param = ParamIds<N>;
 };
 } // namespace sequencizer
 
