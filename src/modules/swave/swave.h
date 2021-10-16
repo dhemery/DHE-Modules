@@ -1,7 +1,9 @@
 #pragma once
 
-#include "./swave-controls.h"
+#include "swave-controls.h"
+
 #include "params/curvature-config.h"
+#include "params/float-params.h"
 #include "signals/curvature-inputs.h"
 
 #include "rack.hpp"
@@ -21,7 +23,7 @@ public:
     configOutput(Controls::SwaveOutput, "Swave");
 
     config_curvature_knob(this, Controls::CurveKnob);
-    config_attenuverter(this, Controls::CurveAvKnob, "Curvature CV gain");
+    Attenuverter::config(this, Controls::CurveAvKnob, "Curvature CV gain");
     configInput(Controls::CurveCvInput, "Curvature CV");
     config_curve_shape_switch(this, Controls::ShapeSwitch);
   }

@@ -36,25 +36,6 @@ static inline void config_percentage_knob(rack::engine::Module *module,
 }
 
 /**
- * Configures the param and display for an attenuator knob.
- */
-static inline void config_attenuator(rack::engine::Module *module, int knob_id,
-                                     std::string const &knob_name,
-                                     float initial_rotation = 1.F) {
-  config_percentage_knob(module, knob_id, knob_name, attenuator_range,
-                         initial_rotation);
-}
-
-/**
- * Configures the param and display for an attenuverter knob.
- */
-static inline void config_attenuverter(rack::engine::Module *module,
-                                       int knob_id,
-                                       std::string const &knob_name) {
-  config_percentage_knob(module, knob_id, knob_name, attenuverter_range);
-}
-
-/**
  * Configures the param and display for a momentary button.
  */
 static inline void config_gain(rack::engine::Module *module, int knob_id,

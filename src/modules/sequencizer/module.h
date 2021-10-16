@@ -13,7 +13,7 @@
 #include "params/common-config.h"
 #include "params/curvature-config.h"
 #include "params/duration-config.h"
-#include "params/knob-params.h"
+#include "params/float-params.h"
 #include "params/level-config.h"
 #include "signals/curvature-inputs.h"
 #include "signals/duration-inputs.h"

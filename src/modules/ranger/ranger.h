@@ -1,8 +1,10 @@
 #pragma once
 
-#include "./ranger-controls.h"
+#include "ranger-controls.h"
+
 #include "components/cxmath.h"
 #include "params/common-config.h"
+#include "params/float-params.h"
 #include "params/level-config.h"
 #include "signals/common-inputs.h"
 #include "signals/level-inputs.h"
@@ -20,23 +22,23 @@ public:
     config(Controls::ParameterCount, Controls::InputCount,
            Controls::OutputCount);
 
-    config_attenuator(this, Controls::LevelKnob, "Level");
+    Attenuator::config(this, Controls::LevelKnob, "Level");
     configInput(Controls::LevelCvInput, "Level CV");
-    config_attenuverter(this, Controls::LevelAvKnob, "Level CV gain");
+    Attenuverter::config(this, Controls::LevelAvKnob, "Level CV gain");
 
     config_level_knob(this, Controls::CcwLimitKnob,
                       Controls::CcwLimitRangeSwitch, "CCW limit");
     config_level_range_switch(this, Controls::CcwLimitRangeSwitch,
                               "CCW limit range", 0);
     configInput(Controls::CcwLimitCvInput, "CCW limit CV");
-    config_attenuverter(this, Controls::CcwLimitAvKnob, "CCW limit CV gain");
+    Attenuverter::config(this, Controls::CcwLimitAvKnob, "CCW limit CV gain");
 
     config_level_knob(this, Controls::CwLimitKnob, Controls::CwLimitRangeSwitch,
                       "CW limit");
     config_level_range_switch(this, Controls::CwLimitRangeSwitch,
                               "CW limit range", 0);
     configInput(Controls::CwLimitCvInput, "CW limit CV");
-    config_attenuverter(this, Controls::CwLimitAvKnob, "CW limit CV gain");
+    Attenuverter::config(this, Controls::CwLimitAvKnob, "CW limit CV gain");
 
     configOutput(Controls::RangerOutput, "Ranger");
   }

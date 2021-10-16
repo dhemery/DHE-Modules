@@ -1,11 +1,13 @@
 #pragma once
 
-#include "./ratio-knob-param-quantity.h"
-#include "./speed-knob-param-query.h"
-#include "./xycloid-controls.h"
+#include "ratio-knob-param-quantity.h"
+#include "speed-knob-param-query.h"
+#include "xycloid-controls.h"
+
 #include "components/phase-rotor.h"
 #include "components/range.h"
 #include "params/common-config.h"
+#include "params/float-params.h"
 #include "params/level-config.h"
 #include "signals/common-inputs.h"
 
@@ -28,11 +30,11 @@ public:
 
     config_speed_knob(this, Controls::SpeedKnob);
     configInput(Controls::SpeedCvInput, "Speed CV");
-    config_attenuverter(this, Controls::SpeedAvKnob, "Speed CV gain");
+    Attenuverter::config(this, Controls::SpeedAvKnob, "Speed CV gain");
 
     config_ratio_knob(this, Controls::RatioKnob);
     configInput(Controls::RatioCvInput, "Ratio CV");
-    config_attenuverter(this, Controls::RatioAvKnob, "Ratio CV gain");
+    Attenuverter::config(this, Controls::RatioAvKnob, "Ratio CV gain");
     config_toggle<3>(this, Controls::DirectionSwitch, "Direction",
                      {"In", "-In +Out", "Out"}, 2);
     config_toggle<2>(this, Controls::FreeRatioSwitch, "Ratio mode",
@@ -40,12 +42,12 @@ public:
 
     config_percentage_knob(this, Controls::DepthKnob, "Depth", {0.F, 1.F});
     configInput(Controls::DepthCvInput, "Depth CV");
-    config_attenuverter(this, Controls::DepthAvKnob, "Depth CV gain");
+    Attenuverter::config(this, Controls::DepthAvKnob, "Depth CV gain");
 
     config_knob(this, Controls::PhaseOffsetKnob, "Phase", "°",
                 phase_offset_range);
     configInput(Controls::PhaseCvInput, "Phase CV");
-    config_attenuverter(this, Controls::PhaseOffsetAvKnob, "Phase CV gain");
+    Attenuverter::config(this, Controls::PhaseOffsetAvKnob, "Phase CV gain");
 
     config_gain(this, Controls::XGainKnob, "X gain");
     configInput(Controls::XGainCvInput, "X gain CV");

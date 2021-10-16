@@ -13,8 +13,6 @@ struct Param;
 
 namespace dhe {
 
-static auto constexpr attenuator_range = Range{0.F, 1.F};
-static auto constexpr attenuverter_range = Range{-1.F, 1.F};
 static auto constexpr gain_range = Range{0.F, 2.F};
 
 static auto constexpr rotation_range = Range{0.F, 1.F};
@@ -101,19 +99,6 @@ static constexpr auto tapered_and_scaled_rotation(float rotation,
                                                   sigmoid::Taper const &taper,
                                                   Range range) -> float {
   return range.scale(taper.apply(rotation));
-}
-
-template <typename KnobType>
-auto tapered_and_scaled_rotation(KnobType &knob, sigmoid::Taper const &taper,
-                                 Range range) -> float {
-  return taperedAndScaledRotation(rotation_of(knob), taper, range);
-}
-
-template <typename KnobType, typename InputType>
-auto tapered_and_scaled_rotation(KnobType &knob, InputType &cv_input,
-                                 sigmoid::Taper const &taper, Range &range)
-    -> float {
-  return taperedAndScaledRotation(rotation(knob, cv_input), taper, range);
 }
 
 template <typename KnobType, typename InputType>

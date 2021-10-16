@@ -1,9 +1,11 @@
 #pragma once
 
-#include "./tapers-controls.h"
+#include "tapers-controls.h"
+
 #include "components/range.h"
 #include "params/common-config.h"
 #include "params/curvature-config.h"
+#include "params/float-params.h"
 #include "params/level-config.h"
 #include "signals/common-inputs.h"
 #include "signals/curvature-inputs.h"
@@ -26,12 +28,12 @@ public:
                       "Taper 1 level");
     config_level_range_switch(this, Controls::LevelRangeSwitch1,
                               "Taper 1 level range", 0);
-    config_attenuverter(this, Controls::LevelAvKnob1, "Taper 1 level CV gain");
+    Attenuverter::config(this, Controls::LevelAvKnob1, "Taper 1 level CV gain");
     configInput(Controls::LevelCvInput1, "Taper 1 level CV");
 
     config_curvature_knob(this, Controls::CurveKnob1, "Taper 1 curvature");
-    config_attenuverter(this, Controls::CurveAvKnob1,
-                        "Taper 1 curvature CV gain");
+    Attenuverter::config(this, Controls::CurveAvKnob1,
+                         "Taper 1 curvature CV gain");
     config_curve_shape_switch(this, Controls::ShapeSwitch1, "Taper 1 shape");
     configInput(Controls::CurveCvInput1, "Taper 1 curvature CV");
 
@@ -41,12 +43,12 @@ public:
                       "Taper 2 level");
     config_level_range_switch(this, Controls::LevelRangeSwitch2,
                               "Taper 2 level range", 0);
-    config_attenuverter(this, Controls::LevelAvKnob2, "Taper 2 level CV gain");
+    Attenuverter::config(this, Controls::LevelAvKnob2, "Taper 2 level CV gain");
     configInput(Controls::LevelCvInput2, "Taper 2 level CV");
 
     config_curvature_knob(this, Controls::CurveKnob2, "Taper 2 curvature");
-    config_attenuverter(this, Controls::CurveAvKnob2,
-                        "Taper 2 curvature CV gain");
+    Attenuverter::config(this, Controls::CurveAvKnob2,
+                         "Taper 2 curvature CV gain");
     config_curve_shape_switch(this, Controls::ShapeSwitch2, "Taper 2 shape");
     configInput(Controls::CurveCvInput2, "Taper 2 curvature CV");
 

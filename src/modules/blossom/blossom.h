@@ -7,6 +7,7 @@
 #include "components/phase-rotor.h"
 #include "components/range.h"
 #include "components/sigmoid.h"
+#include "params/float-params.h"
 #include "params/level-config.h"
 #include "signals/common-inputs.h"
 
@@ -30,23 +31,23 @@ public:
            Controls::OutputCount);
 
     SpeedKnob::config(this, Controls::SpeedKnob);
-    config_attenuverter(this, Controls::SpeedAvKNob, "Speed CV gain");
+    Attenuverter::config(this, Controls::SpeedAvKNob, "Speed CV gain");
     configInput(Controls::SpeedCvInput, "Speed CV");
 
     config_toggle<2>(this, Controls::FreeRatioSwitch, "Ratio mode",
                      {"Quantized", "Free"}, 1);
 
     RatioKnob::config(this, Controls::RatioKnob);
-    config_attenuverter(this, Controls::RatioAvKnob, "Ratio CV gain");
+    Attenuverter::config(this, Controls::RatioAvKnob, "Ratio CV gain");
     configInput(Controls::RatioCvInput, "Ratio CV");
 
     config_percentage_knob(this, Controls::DepthKnob, "Depth");
-    config_attenuverter(this, Controls::DepthAvKnob, "Depth CV gain");
+    Attenuverter::config(this, Controls::DepthAvKnob, "Depth CV gain");
     configInput(Controls::DepthCvInput, "Depth CV");
 
     config_knob(this, Controls::PhaseOffsetKnob, "Phase", "°",
                 phase_display_range);
-    config_attenuverter(this, Controls::PhaseOffsetAvKnob, "Phase CV gain");
+    Attenuverter::config(this, Controls::PhaseOffsetAvKnob, "Phase CV gain");
     configInput(Controls::PhaseCvInput, "Phase CV");
 
     config_gain(this, Controls::XGainKnob, "X gain");
