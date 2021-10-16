@@ -1,7 +1,6 @@
 #pragma once
 
-#include "ratio-knob-param-quantity.h"
-#include "speed-knob-param-query.h"
+#include "params.h"
 #include "xycloid-controls.h"
 
 #include "components/phase-rotor.h"
@@ -28,11 +27,11 @@ public:
     config(Controls::ParameterCount, Controls::InputCount,
            Controls::OutputCount);
 
-    config_speed_knob(this, Controls::SpeedKnob);
+    ThrobSpeed::config(this, Controls::SpeedKnob);
     configInput(Controls::SpeedCvInput, "Speed CV");
     Attenuverter::config(this, Controls::SpeedAvKnob, "Speed CV gain");
 
-    config_ratio_knob(this, Controls::RatioKnob);
+    WobbleRatio::config(this, Controls::RatioKnob);
     configInput(Controls::RatioCvInput, "Ratio CV");
     Attenuverter::config(this, Controls::RatioAvKnob, "Ratio CV gain");
     config_toggle<3>(this, Controls::DirectionSwitch, "Direction",
@@ -120,15 +119,15 @@ private:
   }
 
   auto ratio() const -> float {
-    return xycloid::ratio(this, rotation(params[Controls::RatioKnob],
-                                         inputs[Controls::RatioCvInput],
-                                         params[Controls::RatioAvKnob]));
+    return WobbleRatio::ratio(this, rotation(params[Controls::RatioKnob],
+                                             inputs[Controls::RatioCvInput],
+                                             params[Controls::RatioAvKnob]));
   }
 
   auto speed() const -> float {
     return tapered_and_scaled_rotation(
         params[Controls::SpeedKnob], inputs[Controls::SpeedCvInput],
-        params[Controls::SpeedAvKnob], speed_knob_taper, speed_range);
+        params[Controls::SpeedAvKnob], ThrobSpeed::taper, ThrobSpeed::range);
   }
   PhaseRotor wobbler_{};
   PhaseRotor throbber_{};

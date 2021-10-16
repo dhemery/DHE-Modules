@@ -1,8 +1,7 @@
 #pragma once
 
 #include "blossom-controls.h"
-#include "ratio-knob.h"
-#include "speed-knob.h"
+#include "params.h"
 
 #include "components/phase-rotor.h"
 #include "components/range.h"
@@ -30,14 +29,14 @@ public:
     config(Controls::ParameterCount, Controls::InputCount,
            Controls::OutputCount);
 
-    SpeedKnob::config(this, Controls::SpeedKnob);
+    SpinSpeed::config(this, Controls::SpeedKnob);
     Attenuverter::config(this, Controls::SpeedAvKNob, "Speed CV gain");
     configInput(Controls::SpeedCvInput, "Speed CV");
 
     config_toggle<2>(this, Controls::FreeRatioSwitch, "Ratio mode",
                      {"Quantized", "Free"}, 1);
 
-    RatioKnob::config(this, Controls::RatioKnob);
+    BounceRatio::config(this, Controls::RatioKnob);
     Attenuverter::config(this, Controls::RatioAvKnob, "Ratio CV gain");
     configInput(Controls::RatioCvInput, "Ratio CV");
 
@@ -91,9 +90,9 @@ public:
 
 private:
   inline auto ratio() const -> float {
-    return ratio_range.scale(rotation(params[Controls::RatioKnob],
-                                      inputs[Controls::RatioCvInput],
-                                      params[Controls::RatioAvKnob]));
+    return BounceRatio::value(rotation(params[Controls::RatioKnob],
+                                       inputs[Controls::RatioCvInput],
+                                       params[Controls::RatioAvKnob]));
   }
 
   inline auto ratio_is_free() const -> bool {
@@ -114,7 +113,7 @@ private:
   inline auto speed() const -> float {
     return tapered_and_scaled_rotation(
         params[Controls::SpeedKnob], inputs[Controls::SpeedCvInput],
-        params[Controls::SpeedAvKNob], speed_knob_taper, speed_range);
+        params[Controls::SpeedAvKNob], SpinSpeed::taper, SpinSpeed::range);
   }
 
   inline auto x_gain() const -> float {
