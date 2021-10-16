@@ -40,7 +40,7 @@ public:
     config_toggle<2>(this, Controls::FreeRatioSwitch, "Ratio mode",
                      {"Quantized", "Free"}, 1);
 
-    config_percentage_knob(this, Controls::DepthKnob, "Depth", {0.F, 1.F});
+    Percentage::config(this, Controls::DepthKnob, "Depth");
     configInput(Controls::DepthCvInput, "Depth CV");
     Attenuverter::config(this, Controls::DepthAvKnob, "Depth CV gain");
 
@@ -49,11 +49,11 @@ public:
     configInput(Controls::PhaseCvInput, "Phase CV");
     Attenuverter::config(this, Controls::PhaseOffsetAvKnob, "Phase CV gain");
 
-    config_gain(this, Controls::XGainKnob, "X gain");
+    Gain::config(this, Controls::XGainKnob, "X gain");
     configInput(Controls::XGainCvInput, "X gain CV");
     config_level_range_switch(this, Controls::XRangeSwitch, "X range", 0);
 
-    config_gain(this, Controls::YGainKnob, "Y gain");
+    Gain::config(this, Controls::YGainKnob, "Y gain");
     configInput(Controls::YGainCvInput, "Y gain CV");
     config_level_range_switch(this, Controls::YRangeSwitch, "Y range", 0);
 

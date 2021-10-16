@@ -50,7 +50,7 @@ public:
     config_level_range_switch(this, Param::LevelRange);
     configInput(Input::LevelAttenuationCV, "Level multiplier CV");
 
-    config_gain(this, Param::DurationMultiplier, "Duration multiplier");
+    Gain::config(this, Param::DurationMultiplier, "Duration multiplier");
     config_duration_range_switch(this, Param::DurationRange);
     configInput(Input::DurationMultiplierCV, "Duration multipler CV");
 

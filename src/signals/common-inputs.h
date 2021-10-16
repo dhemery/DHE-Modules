@@ -13,6 +13,8 @@ struct Param;
 
 namespace dhe {
 
+static auto constexpr attenuator_range = Range{0.F, 1.F};
+static auto constexpr attenuverter_range = Range{-1.F, 1.F};
 static auto constexpr gain_range = Range{0.F, 2.F};
 
 static auto constexpr rotation_range = Range{0.F, 1.F};

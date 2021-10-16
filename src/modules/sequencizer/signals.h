@@ -1,8 +1,9 @@
 #pragma once
-#include "./advancement.h"
-#include "./anchor.h"
-#include "./control-ids.h"
-#include "./status.h"
+#include "advancement.h"
+#include "anchor.h"
+#include "control-ids.h"
+#include "status.h"
+
 #include "components/range.h"
 #include "signals/curvature-inputs.h"
 #include "signals/duration-inputs.h"

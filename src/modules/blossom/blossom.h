@@ -41,7 +41,7 @@ public:
     Attenuverter::config(this, Controls::RatioAvKnob, "Ratio CV gain");
     configInput(Controls::RatioCvInput, "Ratio CV");
 
-    config_percentage_knob(this, Controls::DepthKnob, "Depth");
+    Percentage::config(this, Controls::DepthKnob, "Depth");
     Attenuverter::config(this, Controls::DepthAvKnob, "Depth CV gain");
     configInput(Controls::DepthCvInput, "Depth CV");
 
@@ -50,11 +50,11 @@ public:
     Attenuverter::config(this, Controls::PhaseOffsetAvKnob, "Phase CV gain");
     configInput(Controls::PhaseCvInput, "Phase CV");
 
-    config_gain(this, Controls::XGainKnob, "X gain");
+    Gain::config(this, Controls::XGainKnob, "X gain");
     config_level_range_switch(this, Controls::XRangeSwitch, "X range", 0);
     configInput(Controls::XGainCvInput, "X gain CV");
 
-    config_gain(this, Controls::YGainKnob, "Y gain");
+    Gain::config(this, Controls::YGainKnob, "Y gain");
     config_level_range_switch(this, Controls::YRangeSwitch, "Y range", 0);
     configInput(Controls::YGainCvInput, "Y gain CV");
 

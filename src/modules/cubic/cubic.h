@@ -1,8 +1,10 @@
 #pragma once
 
-#include "./cubic-controls.h"
+#include "cubic-controls.h"
+
 #include "components/range.h"
 #include "params/common-config.h"
+#include "params/float-params.h"
 #include "signals/common-inputs.h"
 
 #include "rack.hpp"
@@ -37,10 +39,10 @@ public:
                 coefficient_range);
     configInput(Controls::DCoefficientCvInput, "Constant coefficient CV");
 
-    config_gain(this, Controls::InputGainKnob, "InPort gain");
+    Gain::config(this, Controls::InputGainKnob, "InPort gain");
     configInput(Controls::InputGainCvInput, "InPort gain CV");
 
-    config_gain(this, Controls::OutputGainKnob, "OutPort gain");
+    Gain::config(this, Controls::OutputGainKnob, "OutPort gain");
     configInput(Controls::OutputGainCvInput, "OutPort gain CV");
 
     configInput(Controls::CubicInput, "Cubic");

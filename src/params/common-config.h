@@ -11,38 +11,12 @@ namespace dhe {
 static auto constexpr preset_version_key = "preset_version";
 static auto constexpr centered_rotation = 0.5F;
 
-/**
- * Configures the param and display for a gain knob.
- */
 static inline void config_knob(rack::engine::Module *module, int knob_id,
                                std::string const &knob_name,
                                std::string const &units, Range range,
                                float initial_rotation = centered_rotation) {
   module->configParam(knob_id, 0.F, 1.F, initial_rotation, knob_name, units,
                       0.F, range.size(), range.lower_bound());
-}
-
-/**
- * Configures the param and display for a knob with a fixed, linear range,
- * displayed as a percentage.
- */
-static inline void config_percentage_knob(rack::engine::Module *module,
-                                          int knob_id,
-                                          std::string const &knob_name,
-                                          Range range = rotation_range,
-                                          float initial_rotation = 1.F) {
-  module->configParam(knob_id, 0.F, 1.F, initial_rotation, knob_name, "%", 0.F,
-                      range.size() * 100.F, range.lower_bound() * 100.F);
-}
-
-/**
- * Configures the param and display for a momentary button.
- */
-static inline void config_gain(rack::engine::Module *module, int knob_id,
-                               std::string const &knob_name,
-                               float initial_rotation = centered_rotation) {
-  config_percentage_knob(module, knob_id, knob_name, gain_range,
-                         initial_rotation);
 }
 
 static inline void config_switch(rack::engine::Module *module, int id,
@@ -54,6 +28,9 @@ static inline void config_switch(rack::engine::Module *module, int id,
   module->configSwitch(id, 0.F, max_value, default_value, name, labels);
 }
 
+/**
+ * Configures the param and display for a momentary button.
+ */
 static inline void config_button(rack::engine::Module *module, int id,
                                  std::string const &name,
                                  int initial_state = 0) {
