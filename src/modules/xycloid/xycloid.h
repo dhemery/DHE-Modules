@@ -16,9 +16,6 @@ namespace dhe {
 
 namespace xycloid {
 
-static auto constexpr phase_offset_range = Range{-180.F, 180.F};
-static auto constexpr wobble_depth_range = Range{0.F, 1.F};
-
 class Xycloid : public rack::engine::Module {
   using Controls = XycloidControls;
 
@@ -43,8 +40,7 @@ public:
     configInput(Controls::DepthCvInput, "Depth CV");
     Attenuverter::config(this, Controls::DepthAvKnob, "Depth CV gain");
 
-    config_knob(this, Controls::PhaseOffsetKnob, "Phase", "°",
-                phase_offset_range);
+    Phase::config(this, Controls::PhaseOffsetKnob, "Phase");
     configInput(Controls::PhaseCvInput, "Phase CV");
     Attenuverter::config(this, Controls::PhaseOffsetAvKnob, "Phase CV gain");
 
@@ -106,16 +102,16 @@ private:
   }
 
   auto depth() const -> float {
+    static auto constexpr wobble_depth_range = Range{0.F, 1.F};
     return wobble_depth_range.clamp(rotation(params[Controls::DepthKnob],
                                              inputs[Controls::DepthCvInput],
                                              params[Controls::DepthAvKnob]));
   }
 
   auto phase() const -> float {
-    return rotation(params[Controls::PhaseOffsetKnob],
-                    inputs[Controls::PhaseCvInput],
-                    params[Controls::PhaseOffsetAvKnob]) -
-           0.5F;
+    return Phase::value(rotation(params[Controls::PhaseOffsetKnob],
+                                 inputs[Controls::PhaseCvInput],
+                                 params[Controls::PhaseOffsetAvKnob]));
   }
 
   auto ratio() const -> float {

@@ -18,9 +18,6 @@ namespace dhe {
 
 namespace blossom {
 
-static auto constexpr phase_display_range = Range{-180.F, 180.F};
-static auto constexpr phase_range = Range{-0.5F, 0.5F};
-
 class Blossom : public rack::engine::Module {
   using Controls = BlossomControls;
 
@@ -44,8 +41,7 @@ public:
     Attenuverter::config(this, Controls::DepthAvKnob, "Depth CV gain");
     configInput(Controls::DepthCvInput, "Depth CV");
 
-    config_knob(this, Controls::PhaseOffsetKnob, "Phase", "°",
-                phase_display_range);
+    Phase::config(this, Controls::PhaseOffsetKnob, "Phase");
     Attenuverter::config(this, Controls::PhaseOffsetAvKnob, "Phase CV gain");
     configInput(Controls::PhaseCvInput, "Phase CV");
 
@@ -105,9 +101,9 @@ private:
   }
 
   inline auto phase_offset() const -> float {
-    return phase_range.scale(rotation(params[Controls::PhaseOffsetKnob],
-                                      inputs[Controls::PhaseCvInput],
-                                      params[Controls::PhaseOffsetAvKnob]));
+    return Phase::value(rotation(params[Controls::PhaseOffsetKnob],
+                                 inputs[Controls::PhaseCvInput],
+                                 params[Controls::PhaseOffsetAvKnob]));
   }
 
   inline auto speed() const -> float {

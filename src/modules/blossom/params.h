@@ -5,6 +5,7 @@
 #include "components/range.h"
 #include "components/sigmoid.h"
 #include "params/common-config.h"
+#include "params/float-params.h"
 
 #include "rack.hpp"
 
@@ -39,6 +40,14 @@ struct BounceRatio {
   static inline auto value(float rotation) -> float {
     return range.scale(rotation);
   }
+};
+
+struct Phase : LinearFloat<Phase> {
+  static auto constexpr display_range = Range{-180.F, 180.F};
+  static auto constexpr default_display_value = 0.F;
+  static auto constexpr unit = "˚";
+
+  static inline auto value(float rotation) -> float { return rotation - 0.5F; }
 };
 
 struct SpinSpeed {
