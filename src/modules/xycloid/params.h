@@ -13,8 +13,8 @@ namespace dhe {
 namespace xycloid {
 
 struct Phase : LinearFloat<Phase> {
-  static auto constexpr display_range = Range{-180.F, 180.F};
-  static auto constexpr default_display_value = 0.F;
+  static auto constexpr range = Range{-180.F, 180.F};
+  static auto constexpr initial = 0.F;
   static auto constexpr unit = "˚";
 
   static inline auto value(float rotation) -> float { return rotation - 0.5F; }

@@ -7,7 +7,7 @@
 namespace dhe {
 namespace scannibal {
 struct AnchorModes {
-  using ValueT = AnchorMode;
+  using TValue = AnchorMode;
   static constexpr auto frame_prefix = "anchor-mode";
   static inline auto labels() -> std::vector<std::string> {
     static const auto labels =
@@ -17,7 +17,7 @@ struct AnchorModes {
 };
 
 struct AnchorSources {
-  using ValueT = AnchorSource;
+  using TValue = AnchorSource;
   static constexpr auto frame_prefix = "anchor-source";
   static inline auto labels() -> std::vector<std::string> {
     static const auto labels =
@@ -27,7 +27,7 @@ struct AnchorSources {
 };
 
 struct Shapes {
-  using ValueT = enum { J, S };
+  using TValue = enum { J, S };
   static constexpr auto frame_prefix = "shape";
   static inline auto labels() -> std::vector<std::string> {
     static const auto labels = std::vector<std::string>{"J", "S"};

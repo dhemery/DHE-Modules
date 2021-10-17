@@ -30,7 +30,7 @@ public:
     config_toggle<2>(this, Params::BounceRatioMode, "Ratio mode",
                      {"Quantized", "Free"}, 1);
 
-    BounceRatio::config(this, Params::BounceRatio);
+    BounceRatio::config(this, Params::BounceRatio, "Ratio");
     Attenuverter::config(this, Params::BounceRatioAv, "Ratio CV gain");
     configInput(Inputs::BounceRatioCv, "Ratio CV");
 

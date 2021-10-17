@@ -105,7 +105,7 @@ private:
 };
 
 struct AnchorModes {
-  using ValueT = AnchorMode;
+  using TValue = AnchorMode;
   static auto constexpr frame_prefix = "anchor-mode";
 
   static inline auto labels() -> std::vector<std::string> const & {
@@ -116,7 +116,7 @@ struct AnchorModes {
 };
 
 struct AnchorSources {
-  using ValueT = AnchorSource;
+  using TValue = AnchorSource;
   static auto constexpr frame_prefix = "anchor-source";
 
   static inline auto labels() -> std::vector<std::string> const & {
@@ -127,7 +127,7 @@ struct AnchorSources {
 };
 
 struct InterruptModes {
-  using ValueT = InterruptMode;
+  using TValue = InterruptMode;
   static auto constexpr frame_prefix = "interrupt-mode";
 
   static inline auto labels() -> std::vector<std::string> const & {
@@ -138,7 +138,7 @@ struct InterruptModes {
 };
 
 struct Shapes {
-  using ValueT = int;
+  using TValue = int;
   static auto constexpr frame_prefix = "shape";
 
   static inline auto labels() -> std::vector<std::string> const & {
@@ -148,7 +148,7 @@ struct Shapes {
 };
 
 struct SustainModes {
-  using ValueT = SustainMode;
+  using TValue = SustainMode;
   static auto constexpr frame_prefix = "sustain-mode";
 
   static inline auto labels() -> std::vector<std::string> {
@@ -159,7 +159,7 @@ struct SustainModes {
 };
 
 struct TriggerModes {
-  using ValueT = TriggerMode;
+  using TValue = TriggerMode;
   static auto constexpr frame_prefix = "trigger-mode";
 
   static inline auto labels() -> std::vector<std::string> {

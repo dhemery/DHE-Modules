@@ -31,8 +31,8 @@ static inline auto level(P const &level_knob, P const &range_switch) -> float {
 }
 
 struct RelativeDuration : public LinearFloat<RelativeDuration> {
-  static auto constexpr display_range = Range{0.F, 2.F};
-  static auto constexpr default_display_value = 1.F;
+  static auto constexpr range = Range{0.F, 2.F};
+  static auto constexpr initial = 1.F;
   static auto constexpr unit = "";
 };
 

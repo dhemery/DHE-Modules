@@ -14,12 +14,12 @@ namespace dhe {
 namespace cubic {
 
 struct Coefficient : public LinearFloat<Coefficient> {
-  static auto constexpr display_range = Range{-2.F, 2.F};
-  static auto constexpr default_display_value = 0.F;
+  static auto constexpr range = Range{-2.F, 2.F};
+  static auto constexpr initial = 0.F;
   static auto constexpr unit = "";
 
   static inline auto value(float rotation) -> float {
-    return display_range.scale(rotation);
+    return range.scale(rotation);
   }
 };
 

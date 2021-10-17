@@ -3,6 +3,7 @@
 #include "control-ids.h"
 
 #include "controls/ports.h"
+#include "controls/steppers.h"
 #include "controls/switches.h"
 #include "widgets/knobs.h"
 #include "widgets/screws.h"
@@ -41,7 +42,15 @@ struct Panel : public rack::app::ModuleWidget {
     InPort::install(this, Inputs::BounceRatioCv, column1, y);
     Knob::install<Tiny>(this, Params::BounceRatioAv, column2, y);
     Knob::install<Large>(this, Params::BounceRatio, column3, y);
-    ThumbSwitch<2>::install(this, Params::BounceRatioMode, column4, y);
+
+    auto quantize_bounce_ratio = [this](int pos) {
+      auto *q = reinterpret_cast<BounceRatio::Quantity *>(
+          getModule()->getParamQuantity(Params::BounceRatio));
+      q->quantize(pos == 0);
+    };
+
+    ThumbSwitch<2>::install(this, Params::BounceRatioMode, column4, y,
+                            quantize_bounce_ratio);
 
     y += dy;
     InPort::install(this, Inputs::DepthCv, column1, y);

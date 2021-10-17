@@ -10,33 +10,35 @@
 
 namespace dhe {
 
-template <typename PanelT, typename FrameT, typename ValueT>
+template <typename TValue> using SwitchAction = std::function<void(TValue)>;
+
+template <typename TPanel, typename TFrame, typename TValue>
 struct SwitchWidget : public rack::app::SvgSwitch {
-  using ActionT = std::function<void(ValueT)>;
+  using TAction = std::function<void(TValue)>;
 
   SwitchWidget() {
-    auto const panel_prefix = std::string{PanelT::svg_dir} + "/";
-    for (auto const &frame_name : FrameT::frame_names()) {
+    auto const panel_prefix = std::string{TPanel::svg_dir} + "/";
+    for (auto const &frame_name : TFrame::frame_names()) {
       addFrame(load_svg(panel_prefix + frame_name));
     }
     shadow->opacity = 0.F;
   }
 
-  void set_action(ActionT const &action) { action_ = action; }
+  void set_action(TAction const &action) { action_ = action; }
 
   void onChange(const rack::event::Change &e) override {
     rack::app::SvgSwitch::onChange(e);
     auto const value =
-        static_cast<ValueT>(this->getParamQuantity()->getValue());
+        static_cast<TValue>(this->getParamQuantity()->getValue());
     action_(value);
   }
 
 private:
-  ActionT action_ = [](ValueT /*selection*/) {};
+  TAction action_ = [](TValue) {};
 };
 
-static inline auto stepper_frame_names(std::string const &frame_prefix,
-                                       size_t n) -> std::vector<std::string> {
+static inline auto numbered_frame_names(std::string const &frame_prefix,
+                                        size_t n) -> std::vector<std::string> {
   auto frame_names = std::vector<std::string>{};
   auto const prefix = frame_prefix + "-";
   for (size_t position = 1; position <= n; position++) {
@@ -46,17 +48,25 @@ static inline auto stepper_frame_names(std::string const &frame_prefix,
 }
 
 template <int N> struct ThumbSwitch {
+  using TAction = std::function<void(int)>;
+  template <typename TPanel>
+  using TWidget = SwitchWidget<TPanel, ThumbSwitch, int>;
+
   static inline auto frame_names() -> std::vector<std::string> {
     static auto const frame_names =
-        stepper_frame_names("toggle-" + std::to_string(N), N);
+        numbered_frame_names("toggle-" + std::to_string(N), N);
     return frame_names;
   }
 
-  template <typename PanelT>
-  static inline void install(PanelT *panel, int id, float xmm, float ymm) {
-    panel->addParam(
-        rack::createParamCentered<SwitchWidget<PanelT, ThumbSwitch, int>>(
-            mm2px(xmm, ymm), panel->getModule(), id));
+  template <typename TPanel>
+  static inline auto install(
+      TPanel *panel, int id, float xmm, float ymm,
+      TAction const &action = [](int) {}) -> TWidget<TPanel> * {
+    auto *widget = rack::createParamCentered<TWidget<TPanel>>(
+        mm2px(xmm, ymm), panel->getModule(), id);
+    widget->set_action(action);
+    panel->addParam(widget);
+    return widget;
   }
 };
 } // namespace dhe

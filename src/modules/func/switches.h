@@ -8,7 +8,7 @@ namespace dhe {
 namespace func {
 
 struct OffsetRanges {
-  using ValueT = int;
+  using TValue = int;
   static constexpr auto frame_prefix = "offset-range";
   static inline auto labels() -> std::vector<std::string> const & {
     static auto const labels =
@@ -18,7 +18,7 @@ struct OffsetRanges {
 };
 
 struct MultiplierRanges {
-  using ValueT = int;
+  using TValue = int;
   static constexpr auto frame_prefix = "multiplier-range";
   static inline auto labels() -> std::vector<std::string> const & {
     static auto const labels =
@@ -28,7 +28,7 @@ struct MultiplierRanges {
 };
 
 struct Operators {
-  using ValueT = Operation;
+  using TValue = Operation;
   static constexpr auto frame_prefix = "toggle-2";
   static inline auto labels() -> std::vector<std::string> const & {
     static const auto labels =
