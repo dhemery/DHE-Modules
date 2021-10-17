@@ -13,7 +13,15 @@ namespace dhe {
 
 namespace cubic {
 
-static auto constexpr coefficient_range = Range{-2.F, 2.F};
+struct Coefficient : public LinearFloat<Coefficient> {
+  static auto constexpr display_range = Range{-2.F, 2.F};
+  static auto constexpr default_display_value = 0.F;
+  static auto constexpr unit = "";
+
+  static inline auto value(float rotation) -> float {
+    return display_range.scale(rotation);
+  }
+};
 
 class Cubic : public rack::engine::Module {
   using Controls = CubicControls;
@@ -23,20 +31,19 @@ public:
     config(Controls::ParameterCount, Controls::InputCount,
            Controls::OutputCount);
 
-    config_knob(this, Controls::ACoefficientKnob, "X cubed coefficient", "",
-                coefficient_range);
+    Coefficient::config(this, Controls::ACoefficientKnob,
+                        "X cubed coefficient");
     configInput(Controls::ACoefficientCvInput, "X cubed coefficient CV");
 
-    config_knob(this, Controls::BCoefficientKnob, "X squared coefficient", "",
-                coefficient_range);
+    Coefficient::config(this, Controls::BCoefficientKnob,
+                        "X squared coefficient");
     configInput(Controls::BCoefficientCvInput, "X squared coefficient CV");
 
-    config_knob(this, Controls::CCoefficientKnob, "X coefficient", "",
-                coefficient_range);
+    Coefficient::config(this, Controls::CCoefficientKnob, "X coefficient", 1.F);
     configInput(Controls::CCoefficientCvInput, "X coefficient CV");
 
-    config_knob(this, Controls::DCoefficientKnob, "Constant coefficient", "",
-                coefficient_range);
+    Coefficient::config(this, Controls::DCoefficientKnob,
+                        "Constant coefficient");
     configInput(Controls::DCoefficientCvInput, "Constant coefficient CV");
 
     Gain::config(this, Controls::InputGainKnob, "InPort gain");
@@ -78,8 +85,7 @@ public:
 
 private:
   auto coefficient(int knob_param, int cv_param) const -> float {
-    return coefficient_range.scale(
-        rotation(params[knob_param], inputs[cv_param]));
+    return Coefficient::value(rotation(params[knob_param], inputs[cv_param]));
   }
 
   auto gain(int knob_param, int cv_input) const -> float {

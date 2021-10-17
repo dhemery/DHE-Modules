@@ -1,14 +1,16 @@
 #pragma once
 
-#include "./anchor.h"
-#include "./control-ids.h"
-#include "./controller.h"
-#include "./controls.h"
-#include "./generator.h"
+#include "anchor.h"
+#include "control-ids.h"
+#include "controller.h"
+#include "controls.h"
+#include "generator.h"
+
 #include "components/cxmath.h"
 #include "params/common-config.h"
 #include "params/curvature-config.h"
 #include "params/duration-config.h"
+#include "params/float-params.h"
 #include "params/level-config.h"
 #include "signals/curvature-inputs.h"
 #include "signals/duration-inputs.h"
@@ -27,6 +29,12 @@ static inline auto level(P const &level_knob, P const &range_switch) -> float {
   auto const rotation = dhe::rotation_of(level_knob);
   return range.scale(rotation);
 }
+
+struct RelativeDuration : public LinearFloat<RelativeDuration> {
+  static auto constexpr display_range = Range{0.F, 2.F};
+  static auto constexpr default_display_value = 1.F;
+  static auto constexpr unit = "";
+};
 
 template <int N> class Module : public rack::engine::Module {
   using Input = InputIds<N>;
@@ -82,8 +90,8 @@ public:
                             step_name + "curvature");
       configInput(Input::CurvatureCV + step, step_name + "curvature CV");
 
-      config_knob(this, Param::Duration + step, step_name + "relative duration",
-                  "", Range{0.F, 2.F}, centered_rotation);
+      RelativeDuration::config(this, Param::Duration + step,
+                               step_name + "relative duration");
       configInput(Input::DurationCV + step, step_name + "relative duration CV");
     }
   }

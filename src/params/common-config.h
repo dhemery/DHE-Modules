@@ -11,14 +11,6 @@ namespace dhe {
 static auto constexpr preset_version_key = "preset_version";
 static auto constexpr centered_rotation = 0.5F;
 
-static inline void config_knob(rack::engine::Module *module, int knob_id,
-                               std::string const &knob_name,
-                               std::string const &units, Range range,
-                               float initial_rotation = centered_rotation) {
-  module->configParam(knob_id, 0.F, 1.F, initial_rotation, knob_name, units,
-                      0.F, range.size(), range.lower_bound());
-}
-
 static inline void config_switch(rack::engine::Module *module, int id,
                                  std::string const &name,
                                  std::vector<std::string> const &labels,

@@ -4,10 +4,11 @@
 namespace dhe {
 
 template <typename T> struct LinearFloat {
-  static inline void config(rack::engine::Module *module, int id,
-                            std::string const &name) {
-    static auto constexpr default_value =
-        T::display_range.normalize(T::default_display_value);
+  static inline void
+  config(rack::engine::Module *module, int id, std::string const &name,
+         float default_display_value = T::default_display_value) {
+    auto const default_value =
+        T::display_range.normalize(default_display_value);
     module->configParam(id, 0.F, 1.F, default_value, name, T::unit, 0.F,
                         T::display_range.size(),
                         T::display_range.lower_bound());
