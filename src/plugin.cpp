@@ -1,5 +1,4 @@
-#include "modules/blossom/blossom-panel.h"
-#include "modules/blossom/blossom.h"
+#include "modules/blossom/model.h"
 #include "modules/buttons/module.h"
 #include "modules/buttons/panel.h"
 #include "modules/cubic/cubic-panel.h"
@@ -40,8 +39,6 @@
 
 #include "rack.hpp"
 
-using dhe::blossom::Blossom;
-using dhe::blossom::BlossomPanel;
 using dhe::cubic::Cubic;
 using dhe::cubic::CubicPanel;
 using dhe::func::Func1Panel;
@@ -88,7 +85,7 @@ rack::plugin::Plugin *pluginInstance; // NOLINT
 extern "C" void init(rack::plugin::Plugin *p) {
   pluginInstance = p;
 
-  p->addModel(rack::createModel<Blossom, BlossomPanel>("Blossom"));
+  p->addModel(dhe::blossom::model);
   p->addModel(
       rack::createModel<BoosterStageModule, BoosterStagePanel>("BoosterStage"));
   p->addModel(rack::createModel<Buttons, ButtonsPanel>("Buttons"));

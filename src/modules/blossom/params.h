@@ -1,6 +1,6 @@
 #pragma once
 
-#include "blossom-controls.h"
+#include "control-ids.h"
 
 #include "components/range.h"
 #include "components/sigmoid.h"
@@ -22,7 +22,7 @@ struct BounceRatio {
       auto const rotation = getValue();
       auto const unquantized_ratio = range.scale(rotation);
       auto const is_quantized =
-          position_of(module->params[BlossomControls::FreeRatioSwitch]) == 0;
+          position_of(module->params[Params::BounceRatioMode]) == 0;
       return is_quantized ? std::round(unquantized_ratio) : unquantized_ratio;
     }
 
@@ -36,7 +36,6 @@ struct BounceRatio {
     module->configParam<Quantity>(id, 0.F, 1.F, 0.5, "Ratio", "x");
   }
 
-  // TODO: Make this take knob, cv, and av IDs.
   static inline auto value(float rotation) -> float {
     return range.scale(rotation);
   }
