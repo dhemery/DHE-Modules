@@ -1,7 +1,7 @@
 #pragma once
 
+#include "./control-ids.h"
 #include "./controls.h"
-#include "./curve-sequencer-controls.h"
 #include "controls/ports.h"
 #include "widgets/knobs.h"
 #include "widgets/screws.h"
@@ -86,15 +86,14 @@ private:
   int const step_mask_ = N - 1;
 }; // namespace curve_sequencer
 
-template <int N> class CurveSequencerPanel : public rack::app::ModuleWidget {
-  using Controls =
-      CurveSequencerControls<rack::engine::Input, rack::engine::Output,
-                             rack::engine::Param, rack::engine::Light, N>;
+template <int N> class Panel : public rack::app::ModuleWidget {
+  using Signals = Signals<rack::engine::Input, rack::engine::Output,
+                          rack::engine::Param, rack::engine::Light, N>;
 
 public:
   static auto constexpr svg_dir = "curve-sequencer";
 
-  CurveSequencerPanel(rack::engine::Module *module) {
+  Panel(rack::engine::Module *module) {
     auto constexpr step_width = 2.25F;
     auto constexpr sequence_controls_width = 13.F;
     auto constexpr hp =
@@ -122,12 +121,12 @@ public:
 
     auto constexpr active_y = top + light_radius;
 
-    InPort::install(this, Controls::RunInput, left, run_y);
-    Button::install<Toggle>(this, Controls::RunButton,
-                            left + button_port_distance, run_y);
+    InPort::install(this, Input::RunInput, left, run_y);
+    Button::install<Toggle>(this, Param::RunButton, left + button_port_distance,
+                            run_y);
 
-    InPort::install(this, Controls::LoopInput, left, loop_y);
-    Button::install<Toggle>(this, Controls::LoopButton,
+    InPort::install(this, Input::LoopInput, left, loop_y);
+    Button::install<Toggle>(this, Param::LoopButton,
                             left + button_port_distance, loop_y);
 
     auto *start_marker = new StartMarker(svg_dir, 0.F, active_y);
@@ -141,24 +140,24 @@ public:
       start_marker->set_selection_start(step);
       end_marker->set_selection_start(step);
     };
-    addParam(SelectionKnob<CurveSequencerPanel<N>>::create(
-        module, left, selection_y, Controls::SelectionStartKnob,
-        on_selection_start_change));
+    addParam(SelectionKnob<Panel<N>>::create(module, left, selection_y,
+                                             Param::SelectionStartKnob,
+                                             on_selection_start_change));
 
     auto const on_selection_end_change = [end_marker](int length) {
       end_marker->set_selection_length(length);
     };
     auto constexpr selection_length_x = left + hp2mm(2.F);
-    addParam(SelectionKnob<CurveSequencerPanel<N>>::create(
-        module, selection_length_x, selection_y, Controls::SelectionLengthKnob,
+    addParam(SelectionKnob<Panel<N>>::create(
+        module, selection_length_x, selection_y, Param::SelectionLengthKnob,
         on_selection_end_change));
 
-    InPort::install(this, Controls::GateInput, left, gate_y);
-    Button::install<Momentary>(this, Controls::GateButton,
+    InPort::install(this, Input::GateInput, left, gate_y);
+    Button::install<Momentary>(this, Param::GateButton,
                                left + button_port_distance, gate_y);
 
-    InPort::install(this, Controls::ResetInput, left, reset_y);
-    Button::install<Momentary>(this, Controls::ResetButton,
+    InPort::install(this, Input::ResetInput, left, reset_y);
+    Button::install<Momentary>(this, Param::ResetButton,
                                left + button_port_distance, reset_y);
 
     auto constexpr generate_mode_y = top + hp2mm(1.61F);
@@ -179,35 +178,41 @@ public:
     for (auto step = 0; step < N; step++) {
       auto const x = step_x + step_dx * (float)step;
       addChild(rack::createLightCentered<ProgressLight>(
-          mm2px(x, active_y), module, Controls::ProgressLights + step + step));
+          mm2px(x, active_y), module, Light::ProgressLights + step + step));
 
-      Stepper<GenerateModes>::install(this, Controls::ModeSwitches + step, x,
+      Stepper<GenerateModes>::install(this, Param::ModeSwitches + step, x,
                                       generate_mode_y);
-      Stepper<AdvanceModes>::install(this, Controls::ConditionSwitches + step,
-                                     x, advance_mode_y);
+      Stepper<AdvanceModes>::install(this, Param::ConditionSwitches + step, x,
+                                     advance_mode_y);
 
-      Knob::install<Small>(this, Controls::LevelKnobs + step, x, level_y);
+      Knob::install<Small>(this, Param::LevelKnobs + step, x, level_y);
 
-      ThumbSwitch<2>::install(this, Controls::ShapeSwitches + step, x, shape_y);
-      Knob::install<Small>(this, Controls::CurveKnobs + step, x, curve_y);
+      ThumbSwitch<2>::install(this, Param::ShapeSwitches + step, x, shape_y);
+      Knob::install<Small>(this, Param::CurveKnobs + step, x, curve_y);
 
-      Knob::install<Small>(this, Controls::DurationKnobs + step, x, duration_y);
+      Knob::install<Small>(this, Param::DurationKnobs + step, x, duration_y);
 
-      Button::install<Toggle>(this, Controls::EnabledButtons + step, x,
+      Button::install<Toggle>(this, Param::EnabledButtons + step, x,
                               enabled_button_y);
-      InPort::install(this, Controls::EnabledInputs + step, x, enabled_port_y);
+      InPort::install(this, Input::EnabledInputs + step, x, enabled_port_y);
     }
 
     auto constexpr out_y = bottom - port_radius - 1.F;
     auto constexpr eos_y = top + hp2mm(2.75);
 
-    InPort::install(this, Controls::CurveSequencerInput, right, eos_y);
+    InPort::install(this, Input::CurveSequencerInput, right, eos_y);
 
-    ThumbSwitch<2>::install(this, Controls::LevelRangeSwitch, right, level_y);
-    ThumbSwitch<3>::install(this, Controls::DurationRangeSwitch, right,
+    ThumbSwitch<2>::install(this, Param::LevelRangeSwitch, right, level_y);
+    ThumbSwitch<3>::install(this, Param::DurationRangeSwitch, right,
                             duration_y);
-    OutPort::install(this, Controls::CurveSequencerOutput, right, out_y);
+    OutPort::install(this, Output::CurveSequencerOutput, right, out_y);
   }
+
+private:
+  using Param = ParamIds<N>;
+  using Input = InputIds<N>;
+  using Light = LightIds<N>;
+  using Output = OutputIds;
 }; // namespace dhe
 } // namespace curve_sequencer
 } // namespace dhe

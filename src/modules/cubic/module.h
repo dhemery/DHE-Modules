@@ -1,6 +1,6 @@
 #pragma once
 
-#include "cubic-controls.h"
+#include "control-ids.h"
 
 #include "components/range.h"
 #include "params/common-config.h"
@@ -23,11 +23,11 @@ struct Coefficient : public LinearFloat<Coefficient> {
   }
 };
 
-class Cubic : public rack::engine::Module {
+class Module : public rack::engine::Module {
   using Controls = CubicControls;
 
 public:
-  explicit Cubic() {
+  explicit Module() {
     config(Controls::ParameterCount, Controls::InputCount,
            Controls::OutputCount);
 
@@ -52,8 +52,8 @@ public:
     Gain::config(this, Controls::OutputGainKnob, "OutPort gain");
     configInput(Controls::OutputGainCvInput, "OutPort gain CV");
 
-    configInput(Controls::CubicInput, "Cubic");
-    configOutput(Controls::CubicOutput, "Cubic");
+    configInput(Controls::CubicInput, "Module");
+    configOutput(Controls::CubicOutput, "Module");
   }
 
   void process(ProcessArgs const & /*args*/) override {

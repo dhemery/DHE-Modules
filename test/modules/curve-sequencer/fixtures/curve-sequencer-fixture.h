@@ -1,6 +1,6 @@
 #pragma once
 #include "components/latch.h"
-#include "modules/curve-sequencer/curve-sequencer.h"
+#include "modules/curve-sequencer/engine.h"
 
 #include "./step-event-enums.h"
 #include "helpers/latches.h"
@@ -100,9 +100,8 @@ struct StepSelector {
   std::array<int, step_count> successors_; // NOLINT
 };
 
-using CurveSequencer =
-    dhe::curve_sequencer::CurveSequencer<Controls, StepSelector,
-                                         StepController>;
+using Engine =
+    dhe::curve_sequencer::Engine<Controls, StepSelector, StepController>;
 
 struct Module {
   Controls &controls_;

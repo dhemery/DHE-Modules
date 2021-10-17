@@ -1,4 +1,4 @@
-#include "modules/curve-sequencer/curve-sequencer.h"
+#include "modules/curve-sequencer/engine.h"
 
 #include "./fixtures/curve-sequencer-fixture.h"
 
@@ -19,7 +19,7 @@ struct StateTest {
   std::string name_;          // NOLINT
   std::vector<Event> events_; // NOLINT
   std::vector<Check> checks_; // NOLINT
-  void run(Tester &t, Module &m, CurveSequencer &cs) const;
+  void run(Tester &t, Module &m, Engine &engine) const;
 };
 
 struct StateSuite {
@@ -358,7 +358,7 @@ auto active_tests = StateSuite{
 */
 
 struct CurveSequencerSuite : public Suite {
-  CurveSequencerSuite() : Suite{"dhe::curve_sequencer::CurveSequencer"} {}
+  CurveSequencerSuite() : Suite{"dhe::curve_sequencer::Engine"} {}
   void run(Tester &t) override {
     newly_constructed_tests.run(t);
     idle_tests.run(t);
@@ -367,11 +367,11 @@ struct CurveSequencerSuite : public Suite {
   }
 };
 
-void StateTest::run(Tester &t, Module &m, CurveSequencer &cs) const {
-  t.run(name_, [this, &m, &cs](Tester &t) {
+void StateTest::run(Tester &t, Module &m, Engine &engine) const {
+  t.run(name_, [this, &m, &engine](Tester &t) {
     for (auto const &event : events_) {
       event.apply(m);
-      cs.execute(0.F);
+      engine.execute(0.F);
     }
     for (auto const &check : checks_) {
       check(t, m);
@@ -388,15 +388,14 @@ void StateSuite::run(Tester &t) const {
 
       auto module = Module{controls, step_selector, step_controller};
 
-      auto curve_sequencer =
-          CurveSequencer{controls, step_selector, step_controller};
+      auto engine = Engine{controls, step_selector, step_controller};
 
       // To set cs's initial state, apply each of the suite's events.
       for (auto const &event : events_) {
         event.apply(module);
-        curve_sequencer.execute(0.F);
+        engine.execute(0.F);
       }
-      test.run(t, module, curve_sequencer);
+      test.run(t, module, engine);
     }
   });
 }

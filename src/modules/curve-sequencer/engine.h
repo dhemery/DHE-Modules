@@ -7,10 +7,10 @@ namespace dhe {
 namespace curve_sequencer {
 
 template <typename Controls, typename StepSelector, typename StepController>
-class CurveSequencer {
+class Engine {
 public:
-  CurveSequencer(Controls &controls, StepSelector &step_selector,
-                 StepController &step_controller)
+  Engine(Controls &controls, StepSelector &step_selector,
+         StepController &step_controller)
       : controls_{controls}, step_selector_{step_selector},
         step_controller_{step_controller} {}
 

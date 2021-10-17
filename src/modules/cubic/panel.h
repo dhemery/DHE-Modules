@@ -1,6 +1,7 @@
 #pragma once
 
-#include "./cubic-controls.h"
+#include "control-ids.h"
+
 #include "controls/ports.h"
 #include "widgets/knobs.h"
 #include "widgets/screws.h"
@@ -11,13 +12,13 @@ namespace dhe {
 
 namespace cubic {
 
-class CubicPanel : public rack::app::ModuleWidget {
+class Panel : public rack::app::ModuleWidget {
   using Controls = CubicControls;
 
 public:
   static auto constexpr svg_dir = "cubic";
 
-  CubicPanel(rack::engine::Module *module) {
+  Panel(rack::engine::Module *module) {
     auto constexpr hp = 5;
 
     setModule(module);
