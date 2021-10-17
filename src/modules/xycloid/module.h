@@ -25,7 +25,7 @@ public:
     configInput(Input::SpeedCvInput, "Speed CV");
     Attenuverter::config(this, Param::SpeedAvKnob, "Speed CV gain");
 
-    WobbleRatio::config(this, Param::RatioKnob);
+    WobbleRatio::config(this, Param::RatioKnob, "Ratio");
     configInput(Input::RatioCvInput, "Ratio CV");
     Attenuverter::config(this, Param::RatioAvKnob, "Ratio CV gain");
     config_toggle<3>(this, Param::DirectionSwitch, "Direction",
@@ -33,7 +33,7 @@ public:
     config_toggle<2>(this, Param::FreeRatioSwitch, "Ratio mode",
                      {"Quantized", "Free"}, 1);
 
-    Percentage::config(this, Param::DepthKnob, "Depth");
+    Percentage::config(this, Param::DepthKnob, "Depth", 50.F);
     configInput(Input::DepthCvInput, "Depth CV");
     Attenuverter::config(this, Param::DepthAvKnob, "Depth CV gain");
 
@@ -111,10 +111,13 @@ private:
                                  params[Param::PhaseOffsetAvKnob]));
   }
 
-  auto ratio() const -> float {
-    return WobbleRatio::ratio(this, rotation(params[Param::RatioKnob],
-                                             inputs[Input::RatioCvInput],
-                                             params[Param::RatioAvKnob]));
+  auto ratio() -> float {
+    auto *q = reinterpret_cast<WobbleRatio::Quantity *>(
+        getParamQuantity(Param::RatioKnob));
+    float rotation =
+        dhe::rotation(params[Param::RatioKnob], inputs[Input::RatioCvInput],
+                      params[Param::RatioAvKnob]);
+    return q->ratio(rotation);
   }
 
   auto speed() const -> float {

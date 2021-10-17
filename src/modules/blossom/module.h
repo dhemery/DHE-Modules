@@ -34,7 +34,7 @@ public:
     Attenuverter::config(this, Params::BounceRatioAv, "Ratio CV gain");
     configInput(Inputs::BounceRatioCv, "Ratio CV");
 
-    Percentage::config(this, Params::Depth, "Depth");
+    Percentage::config(this, Params::Depth, "Depth", 50.F);
     Attenuverter::config(this, Params::DepthAv, "Depth CV gain");
     configInput(Inputs::DepthCv, "Depth CV");
 

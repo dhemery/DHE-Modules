@@ -1,6 +1,8 @@
 #pragma once
 
-#include "./control-ids.h"
+#include "control-ids.h"
+#include "params.h"
+
 #include "controls/ports.h"
 #include "controls/switches.h"
 #include "widgets/knobs.h"
@@ -41,13 +43,27 @@ public:
     InPort::install(this, Input::RatioCvInput, column1, y);
     Knob::install<Tiny>(this, Param::RatioAvKnob, column2, y);
     Knob::install<Large>(this, Param::RatioKnob, column3, y);
-    ThumbSwitch<2>::install(this, Param::FreeRatioSwitch, column4, y);
+
+    auto quantize_wobble_ratio = [this](int pos) {
+      auto *q = reinterpret_cast<WobbleRatio::Quantity *>(
+          getModule()->getParamQuantity(Param::RatioKnob));
+      q->quantize(pos == 0);
+    };
+    ThumbSwitch<2>::install(this, Param::FreeRatioSwitch, column4, y,
+                            quantize_wobble_ratio);
+
+    auto select_wobble_ratio_range = [this](int pos) {
+      auto *q = reinterpret_cast<WobbleRatio::Quantity *>(
+          getModule()->getParamQuantity(Param::RatioKnob));
+      q->select_range(pos);
+    };
 
     y += dy;
     InPort::install(this, Input::DepthCvInput, column1, y);
     Knob::install<Tiny>(this, Param::DepthAvKnob, column2, y);
     Knob::install<Large>(this, Param::DepthKnob, column3, y);
-    ThumbSwitch<3>::install(this, Param::DirectionSwitch, column4, y);
+    ThumbSwitch<3>::install(this, Param::DirectionSwitch, column4, y,
+                            select_wobble_ratio_range);
 
     y += dy;
     InPort::install(this, Input::PhaseCvInput, column1, y);
