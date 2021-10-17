@@ -31,8 +31,7 @@
 #include "modules/tapers/tapers.h"
 #include "modules/truth/module.h"
 #include "modules/truth/panel.h"
-#include "modules/xycloid/xycloid-panel.h"
-#include "modules/xycloid/xycloid.h"
+#include "modules/xycloid/init.h"
 
 #include "rack.hpp"
 
@@ -66,8 +65,6 @@ using dhe::tapers::Tapers;
 using dhe::tapers::TapersPanel;
 template <int N> using Truth = dhe::truth::Truth<N>;
 template <int N> using TruthPanel = dhe::truth::Panel<N>;
-using dhe::xycloid::Xycloid;
-using dhe::xycloid::XycloidPanel;
 
 rack::plugin::Plugin *pluginInstance; // NOLINT
 
@@ -111,5 +108,5 @@ extern "C" void init(rack::plugin::Plugin *p) {
   p->addModel(rack::createModel<Truth<3>, TruthPanel<3>>("Truth3"));
   p->addModel(rack::createModel<Truth<4>, TruthPanel<4>>("Truth4"));
   p->addModel(rack::createModel<UpstageModule, UpstagePanel>("Upstage"));
-  p->addModel(rack::createModel<Xycloid, XycloidPanel>("Xycloid"));
+  dhe::xycloid::init(p);
 }

@@ -2,9 +2,9 @@
 
 namespace dhe {
 namespace xycloid {
-class XycloidControls {
-public:
-  enum ParameterIds {
+
+struct ParamIds {
+  enum {
     RatioKnob,
     RatioAvKnob,
     DirectionSwitch,
@@ -21,7 +21,10 @@ public:
     PhaseOffsetAvKnob,
     ParameterCount
   };
-  enum InputIds {
+};
+
+struct InputIds {
+  enum {
     RatioCvInput,
     DepthCvInput,
     SpeedCvInput,
@@ -30,7 +33,10 @@ public:
     PhaseCvInput,
     InputCount
   };
-  enum OutputIds { XOutput, YOutput, OutputCount };
+};
+
+struct OutputIds {
+  enum { XOutput, YOutput, OutputCount };
 };
 } // namespace xycloid
 } // namespace dhe

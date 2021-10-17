@@ -1,6 +1,6 @@
 #pragma once
 
-#include "xycloid-controls.h"
+#include "control-ids.h"
 
 #include "components/range.h"
 #include "components/sigmoid.h"
@@ -55,8 +55,6 @@ struct ThrobSpeed {
 };
 
 struct WobbleRatio {
-  using Controls = XycloidControls;
-
   static inline auto ratio_range(rack::engine::Module const *module) -> Range {
     static auto constexpr max_ratio = 16.F;
     static auto constexpr inward_ratio_range = Range{0.F, -max_ratio};
@@ -65,14 +63,14 @@ struct WobbleRatio {
         Range{-max_ratio, max_ratio};
     static auto constexpr ratio_ranges = std::array<Range const, 3>{
         inward_ratio_range, bidirectional_ratio_range, outward_ratio_range};
-    return selected_range<3>(module->params[Controls::DirectionSwitch],
+    return selected_range<3>(module->params[ParamIds::DirectionSwitch],
                              ratio_ranges);
   }
 
   static inline auto ratio(rack::engine::Module const *module, float rotation)
       -> float {
     auto const is_quantized =
-        position_of(module->params[Controls::FreeRatioSwitch]) == 0;
+        position_of(module->params[ParamIds::FreeRatioSwitch]) == 0;
     auto const unquantized_ratio = ratio_range(module).scale(rotation);
     return is_quantized ? std::round(unquantized_ratio) : unquantized_ratio;
   }
