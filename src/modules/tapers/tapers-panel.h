@@ -5,26 +5,21 @@
 #include "controls/knobs.h"
 #include "controls/ports.h"
 #include "controls/switches.h"
-#include "panels/screws.h"
+#include "panels/panel-widget.h"
 
 #include "rack.hpp"
 
 namespace dhe {
 namespace tapers {
 
-class TapersPanel : public rack::app::ModuleWidget {
-  using Controls = TapersControls;
-
-public:
+struct TapersPanel : public PanelWidget<TapersPanel> {
+  static auto constexpr hp = 9;
+  static auto constexpr panel_file = "tapers";
   static auto constexpr svg_dir = "tapers";
 
-  explicit TapersPanel(rack::engine::Module *module) {
-    auto constexpr hp = 9;
-
-    setModule(module);
-    setPanel(load_svg(svg_dir, "tapers"));
-    install_screws(this, hp);
-
+  explicit TapersPanel(rack::engine::Module *module)
+      : PanelWidget<TapersPanel>{module} {
+    using Controls = TapersControls;
     auto constexpr width = hp2mm(hp);
 
     auto constexpr column1 = width / 5.F + 0.333333333F;

@@ -5,26 +5,21 @@
 #include "controls/knobs.h"
 #include "controls/ports.h"
 #include "controls/switches.h"
-#include "panels/screws.h"
+#include "panels/panel-widget.h"
 
 #include "rack.hpp"
 
 namespace dhe {
 namespace swave {
 
-class SwavePanel : public rack::app::ModuleWidget {
-  using Controls = SwaveControls;
-
-public:
+struct SwavePanel : public PanelWidget<SwavePanel> {
+  static auto constexpr hp = 4;
+  static auto constexpr panel_file = "swave";
   static auto constexpr svg_dir = "swave";
 
-  explicit SwavePanel(rack::engine::Module *module) {
-    auto constexpr hp = 4;
-
-    setModule(module);
-    setPanel(load_svg(svg_dir, "swave"));
-    install_screws(this, hp);
-
+  explicit SwavePanel(rack::engine::Module *module)
+      : PanelWidget<SwavePanel>{module} {
+    using Controls = SwaveControls;
     auto constexpr width = hp2mm(hp);
 
     auto constexpr x = width / 2.F;

@@ -5,25 +5,21 @@
 #include "controls/knobs.h"
 #include "controls/ports.h"
 #include "controls/switches.h"
-#include "panels/screws.h"
+#include "panels/panel-widget.h"
 
 #include "rack.hpp"
 
 namespace dhe {
 namespace ranger {
 
-class RangerPanel : public rack::app::ModuleWidget {
-  using Controls = RangerControls;
-
-public:
+struct RangerPanel : public PanelWidget<RangerPanel> {
+  static auto constexpr hp = 6;
+  static auto constexpr panel_file = "ranger";
   static auto constexpr svg_dir = "ranger";
 
-  explicit RangerPanel(rack::engine::Module *module) {
-    auto constexpr hp = 6;
-
-    setModule(module);
-    setPanel(load_svg(svg_dir, "ranger"));
-    install_screws(this, hp);
+  explicit RangerPanel(rack::engine::Module *module)
+      : PanelWidget<RangerPanel>{module} {
+    using Controls = RangerControls;
 
     auto constexpr left = hp2mm(1.5F);
     auto constexpr right = hp2mm(hp) - left;

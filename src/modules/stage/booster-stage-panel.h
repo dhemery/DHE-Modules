@@ -5,26 +5,22 @@
 #include "controls/knobs.h"
 #include "controls/ports.h"
 #include "controls/switches.h"
-#include "panels/screws.h"
+#include "panels/panel-widget.h"
 
 #include "rack.hpp"
 
 namespace dhe {
 namespace stage {
 
-class BoosterStagePanel : public rack::app::ModuleWidget {
-  using Controls = BoosterStageControls;
+struct BoosterStagePanel : public PanelWidget<BoosterStagePanel> {
 
-public:
+  static auto constexpr hp = 8;
+  static auto constexpr panel_file = "booster-stage";
   static auto constexpr svg_dir = "booster-stage";
 
-  explicit BoosterStagePanel(rack::engine::Module *module) {
-    auto constexpr hp = 8;
-
-    setModule(module);
-    setPanel(load_svg(svg_dir, "booster-stage"));
-    install_screws(this, hp);
-
+  explicit BoosterStagePanel(rack::engine::Module *module)
+      : PanelWidget<BoosterStagePanel>{module} {
+    using Controls = BoosterStageControls;
     auto constexpr width = hp2mm(hp);
 
     auto constexpr column1 = width / 6.F + 0.3333333F;

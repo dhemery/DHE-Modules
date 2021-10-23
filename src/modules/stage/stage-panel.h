@@ -4,26 +4,21 @@
 
 #include "controls/knobs.h"
 #include "controls/ports.h"
-#include "panels/screws.h"
+#include "panels/panel-widget.h"
 
 #include "rack.hpp"
 
 namespace dhe {
 namespace stage {
 
-class StagePanel : public rack::app::ModuleWidget {
-  using Controls = StageControls;
-
-public:
+struct StagePanel : public PanelWidget<StagePanel> {
+  static auto constexpr hp = 5;
+  static auto constexpr panel_file = "stage";
   static auto constexpr svg_dir = "stage";
 
-  explicit StagePanel(rack::engine::Module *module) {
-    auto constexpr hp = 5;
-
-    setModule(module);
-    setPanel(load_svg(svg_dir, "stage"));
-    install_screws(this, hp);
-
+  explicit StagePanel(rack::engine::Module *module)
+      : PanelWidget<StagePanel>{module} {
+    using Controls = StageControls;
     auto constexpr width = hp2mm(hp);
 
     auto constexpr column1 = width / 4.F + 0.333333F;

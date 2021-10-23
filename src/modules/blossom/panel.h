@@ -7,7 +7,7 @@
 #include "controls/steppers.h"
 #include "controls/switches.h"
 #include "panels/dimensions.h"
-#include "panels/screws.h"
+#include "panels/panel-widget.h"
 
 #include "rack.hpp"
 
@@ -15,18 +15,13 @@ namespace dhe {
 
 namespace blossom {
 
-struct Panel : public rack::app::ModuleWidget {
+struct Panel : public PanelWidget<Panel> {
+  static auto constexpr hp = 11;
+  static auto constexpr panel_file = "blossom";
   static auto constexpr svg_dir = "blossom";
 
-  explicit Panel(rack::engine::Module *module) {
-    auto constexpr hp = 11;
-
-    setModule(module);
-    setPanel(load_svg(svg_dir, "blossom"));
-    install_screws(this, hp);
-
+  explicit Panel(rack::engine::Module *module) : PanelWidget<Panel>{module} {
     auto constexpr width = hp2mm(hp);
-
     auto constexpr column1 = width / 7.F;
     auto constexpr column4 = width - column1;
     auto constexpr column2 = (column4 - column1) / 3.F + column1;

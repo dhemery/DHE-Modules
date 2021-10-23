@@ -62,8 +62,7 @@ private:
   float step_width_;
 };
 
-template <template <int> class PanelT, int N>
-class EndMarker : public rack::widget::SvgWidget {
+template <typename PanelT> class EndMarker : public rack::widget::SvgWidget {
 public:
   static inline auto create(float step_width, float step_block_x, float ymm)
       -> EndMarker * {
@@ -75,7 +74,7 @@ public:
     return marker;
   }
 
-  EndMarker() { setSvg(load_svg(PanelT<N>::svg_dir, "marker-end")); }
+  EndMarker() { setSvg(load_svg(PanelT::svg_dir, "marker-end")); }
 
   void set_selection_start(int step) {
     this->selection_start_ = step;
@@ -99,7 +98,7 @@ private:
 
   int selection_start_{};
   int selection_length_{};
-  int const step_mask_ = N - 1;
+  int const step_mask_ = PanelT::N - 1;
   float step_block_x_;
   float step_width_;
 };

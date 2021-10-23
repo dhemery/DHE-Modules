@@ -13,11 +13,11 @@ namespace dhe {
 namespace buttons {
 
 struct Panel : public PanelWidget<Panel> {
-  static auto constexpr svg_dir = "buttons";
-  static auto constexpr svg_name = "buttons";
   static auto constexpr hp = 5;
+  static auto constexpr panel_file = "buttons";
+  static auto constexpr svg_dir = "buttons";
 
-  Panel(rack::engine::Module *module) : PanelWidget{module} {
+  explicit Panel(rack::engine::Module *module) : PanelWidget{module} {
     auto constexpr button_x = 5.F;
     auto constexpr negate_x = button_x + 6.5F;
     auto constexpr port_x = negate_x + 7.7F;

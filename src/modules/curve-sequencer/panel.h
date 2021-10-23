@@ -5,7 +5,7 @@
 
 #include "controls/knobs.h"
 #include "controls/ports.h"
-#include "panels/screws.h"
+#include "panels/panel-widget.h"
 
 #include "rack.hpp"
 
@@ -85,26 +85,21 @@ private:
   int selection_start_{};
   int selection_length_{};
   int const step_mask_ = N - 1;
-}; // namespace curve_sequencer
+};
 
-template <int N> class Panel : public rack::app::ModuleWidget {
+template <typename TSize> struct Panel : public PanelWidget<Panel<TSize>> {
+  static auto constexpr N = TSize::step_count;
+  static auto constexpr panel_file = TSize::panel_file;
+  static auto constexpr svg_dir = "curve-sequencer";
+  static auto constexpr step_width = 2.25F;
+  static auto constexpr sequence_controls_width = 13.F;
   using Signals = Signals<rack::engine::Input, rack::engine::Output,
                           rack::engine::Param, rack::engine::Light, N>;
 
-public:
-  static auto constexpr svg_dir = "curve-sequencer";
+  static auto constexpr hp =
+      static_cast<int>(sequence_controls_width + N * step_width);
 
-  Panel(rack::engine::Module *module) {
-    auto constexpr step_width = 2.25F;
-    auto constexpr sequence_controls_width = 13.F;
-    auto constexpr hp =
-        static_cast<int>(sequence_controls_width + N * step_width);
-
-    setModule(module);
-    setPanel(
-        load_svg(svg_dir, std::string{"curve-sequencer-"} + std::to_string(N)));
-    install_screws(this, hp);
-
+  Panel(rack::engine::Module *module) : PanelWidget<Panel<TSize>>{module} {
     auto constexpr left = hp2mm(2.F);
     auto constexpr right = hp2mm(hp - 2.F);
     auto constexpr top = hp2mm(4.F);
@@ -131,25 +126,25 @@ public:
                             left + button_port_distance, loop_y);
 
     auto *start_marker = new StartMarker(svg_dir, 0.F, active_y);
-    addChild(start_marker);
+    this->addChild(start_marker);
 
     auto *end_marker = new EndMarker<N>(svg_dir, 0.F, active_y);
-    addChild(end_marker);
+    this->addChild(end_marker);
 
     auto const on_selection_start_change = [start_marker,
                                             end_marker](int step) {
       start_marker->set_selection_start(step);
       end_marker->set_selection_start(step);
     };
-    addParam(SelectionKnob<Panel<N>>::create(module, left, selection_y,
-                                             Param::SelectionStartKnob,
-                                             on_selection_start_change));
+    this->addParam(SelectionKnob<Panel<TSize>>::create(
+        module, left, selection_y, Param::SelectionStartKnob,
+        on_selection_start_change));
 
     auto const on_selection_end_change = [end_marker](int length) {
       end_marker->set_selection_length(length);
     };
     auto constexpr selection_length_x = left + hp2mm(2.F);
-    addParam(SelectionKnob<Panel<N>>::create(
+    this->addParam(SelectionKnob<Panel<TSize>>::create(
         module, selection_length_x, selection_y, Param::SelectionLengthKnob,
         on_selection_end_change));
 
@@ -178,7 +173,7 @@ public:
 
     for (auto step = 0; step < N; step++) {
       auto const x = step_x + step_dx * (float)step;
-      addChild(rack::createLightCentered<ProgressLight>(
+      this->addChild(rack::createLightCentered<ProgressLight>(
           mm2px(x, active_y), module, Light::ProgressLights + step + step));
 
       Stepper<GenerateModes>::install(this, Param::ModeSwitches + step, x,

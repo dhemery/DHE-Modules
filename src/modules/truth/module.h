@@ -18,9 +18,9 @@ namespace dhe {
 namespace truth {
 auto constexpr version = 1;
 
-template <int N> class Truth : public rack::engine::Module {
+template <int N> class Module : public rack::engine::Module {
 public:
-  Truth() {
+  Module() {
     static auto const input_names =
         std::vector<std::string>{"A", "B", "C", "D"};
 

@@ -4,7 +4,7 @@
 
 #include "controls/knobs.h"
 #include "controls/ports.h"
-#include "panels/screws.h"
+#include "panels/panel-widget.h"
 
 #include "rack.hpp"
 
@@ -12,18 +12,13 @@ namespace dhe {
 
 namespace cubic {
 
-class Panel : public rack::app::ModuleWidget {
-  using Controls = CubicControls;
-
-public:
+struct Panel : public PanelWidget<Panel> {
+  static auto constexpr hp = 5;
+  static auto constexpr panel_file = "cubic";
   static auto constexpr svg_dir = "cubic";
 
-  Panel(rack::engine::Module *module) {
-    auto constexpr hp = 5;
-
-    setModule(module);
-    setPanel(load_svg(svg_dir, "cubic"));
-    install_screws(this, hp);
+  Panel(rack::engine::Module *module) : PanelWidget<Panel>{module} {
+    using Controls = CubicControls;
 
     auto constexpr width = hp2mm(hp);
 

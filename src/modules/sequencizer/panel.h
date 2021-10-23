@@ -7,7 +7,7 @@
 #include "controls/ports.h"
 #include "controls/switches.h"
 #include "panels/dimensions.h"
-#include "panels/screws.h"
+#include "panels/panel-widget.h"
 
 #include "rack.hpp"
 
@@ -51,25 +51,19 @@ static inline auto constexpr global_controls_y(int row) -> float {
 using ProgressLight =
     rack::componentlibrary::SmallLight<rack::componentlibrary::GreenRedLight>;
 
-template <int N> class Panel : public rack::app::ModuleWidget {
+template <typename TSize> struct Panel : public PanelWidget<Panel<TSize>> {
+  static auto constexpr N = TSize::step_count;
+  static auto constexpr step_block_width_hp = N * step_width_hp;
+  static auto constexpr hp = base_width_hp + step_block_width_hp;
+  static auto constexpr panel_file = TSize::panel_file;
+  static auto constexpr svg_dir = "sequencizer";
+
   using Input = InputIds<N>;
   using Light = LightIds<N>;
   using Param = ParamIds<N>;
 
-public:
-  static auto constexpr svg_dir = "sequencizer";
-
-  Panel(rack::engine::Module *module) {
-    auto const faceplate_filename =
-        std::string{"sequencizer-"} + std::to_string(N);
-
-    auto constexpr step_block_width_hp = N * step_width_hp;
-    auto constexpr hp = base_width_hp + step_block_width_hp;
-
-    setModule(module);
-    setPanel(load_svg(svg_dir, faceplate_filename));
-    install_screws(this, static_cast<int>(hp));
-
+  explicit Panel(rack::engine::Module *module)
+      : PanelWidget<Panel<TSize>>{module} {
     auto constexpr content_width = sequence_controls_width +
                                    global_controls_width + labels_width +
                                    hp2mm(step_block_width_hp);
@@ -98,13 +92,13 @@ public:
 
     auto constexpr progress_light_y = top - light_diameter * 2.F;
 
-    auto *start_marker = StartMarker<Panel<N>>::create(
+    auto *start_marker = StartMarker<Panel<TSize>>::create(
         step_width, step_block_left, progress_light_y);
-    addChild(start_marker);
+    this->addChild(start_marker);
 
-    auto *end_marker = EndMarker<Panel, N>::create(step_width, step_block_left,
-                                                   progress_light_y);
-    addChild(end_marker);
+    auto *end_marker = EndMarker<Panel<TSize>>::create(
+        step_width, step_block_left, progress_light_y);
+    this->addChild(end_marker);
 
     auto const on_selection_start_change = [start_marker,
                                             end_marker](int step) {
@@ -117,14 +111,14 @@ public:
     };
 
     auto constexpr selection_y = global_controls_y(2);
-    addParam(SelectionKnob<Panel<N>>::create(
+    this->addParam(SelectionKnob<Panel<TSize>>::create(
         module, sequence_controls_x - hp2mm(0.2F), selection_y,
         Param::SelectionStart, on_selection_start_change));
 
     auto constexpr selection_length_offset = 8.28F;
     auto constexpr selection_length_x =
         sequence_controls_x + selection_length_offset;
-    addParam(SelectionKnob<Panel<N>>::create(
+    this->addParam(SelectionKnob<Panel<TSize>>::create(
         module, selection_length_x, selection_y, Param::SelectionLength,
         on_selection_end_change));
 
@@ -229,7 +223,7 @@ public:
       auto const step_left =
           step_block_left + static_cast<float>(step) * step_width;
       auto const step_x = step_left + step_width / 2.F;
-      addChild(rack::createLightCentered<ProgressLight>(
+      this->addChild(rack::createLightCentered<ProgressLight>(
           mm2px(step_x, progress_light_y), module,
           Light::StepProgress + step + step));
 

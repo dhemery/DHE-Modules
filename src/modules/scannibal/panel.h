@@ -7,7 +7,7 @@
 #include "controls/ports.h"
 #include "controls/switches.h"
 #include "panels/dimensions.h"
-#include "panels/screws.h"
+#include "panels/panel-widget.h"
 
 #include "rack.hpp"
 
@@ -80,22 +80,18 @@ private:
   std::function<void(int)> knob_changed_to_;
 };
 
-template <int N> class Panel : public rack::app::ModuleWidget {
+template <typename TSize> struct Panel : public PanelWidget<Panel<TSize>> {
+  static auto constexpr N = TSize::step_count;
+  static auto constexpr hp = base_width_hp + mm2hp(step_block_width(N));
+  static auto constexpr panel_file = TSize::panel_file;
+  static auto constexpr svg_dir = "scannibal";
+
   using Input = InputIds<N>;
   using Param = ParamIds<N>;
   using Light = LightIds<N>;
 
-public:
-  static auto constexpr svg_dir = "scannibal";
-
-  Panel(rack::engine::Module *module) {
-    auto constexpr hp = base_width_hp + mm2hp(step_block_width(N));
-
-    setModule(module);
-    auto const faceplate_filename =
-        std::string{"scannibal-"} + std::to_string(N);
-    setPanel(load_svg(svg_dir, faceplate_filename));
-    install_screws(this, static_cast<int>(hp));
+  explicit Panel(rack::engine::Module *module)
+      : PanelWidget<Panel<TSize>>{module} {
 
     auto constexpr excess_width = hp2mm(hp) - padding - content_width(N);
     auto constexpr margin =
@@ -129,8 +125,8 @@ private:
     auto const on_selection_length_change = [this](int step) {
       set_selection_length(step);
     };
-    addParam(LengthKnob<Panel<N>>::create(module, x, length_y, Param::Length,
-                                          on_selection_length_change));
+    this->addParam(LengthKnob<Panel<TSize>>::create(
+        this->module, x, length_y, Param::Length, on_selection_length_change));
 
     InPort::install(this, Input::InA, x, a_y);
     InPort::install(this, Input::InB, x, b_y);
@@ -189,19 +185,19 @@ private:
     auto const start_marker_x = left + step_width / 2.F - light_diameter;
     start_marker_->setSvg(load_svg(svg_dir, "marker-start"));
     position_centered(start_marker_, start_marker_x, progress_light_y);
-    addChild(start_marker_);
+    this->addChild(start_marker_);
 
     end_marker_x_ = left + step_width / 2.F;
     end_marker_->setSvg(load_svg(svg_dir, "marker-end"));
     position_centered(end_marker_, 0.F, progress_light_y);
-    addChild(end_marker_);
+    this->addChild(end_marker_);
     set_selection_length(N);
 
     for (auto step = 0; step < N; step++) {
       auto const step_left = left + static_cast<float>(step) * step_width;
       auto const step_x = step_left + step_width / 2.F;
-      addChild(rack::createLightCentered<ProgressLight>(
-          mm2px(step_x, progress_light_y), module,
+      this->addChild(rack::createLightCentered<ProgressLight>(
+          mm2px(step_x, progress_light_y), this->module,
           Light::Progress + step + step));
 
       Stepper<AnchorModes>::install(this, Param::Phase0AnchorMode + step,

@@ -12,20 +12,21 @@ namespace dhe {
 
 namespace fuzzy_logic {
 struct HPanel {
-  static auto constexpr svg_name = "fuzzy-logic-h";
+  static auto constexpr panel_file = "fuzzy-logic-h";
 };
 
 struct ZPanel {
-  static auto constexpr svg_name = "fuzzy-logic-h";
+  static auto constexpr panel_file = "fuzzy-logic-z";
 };
 
 template <typename TStyle> struct Panel : public PanelWidget<Panel<TStyle>> {
-  using Controls = FuzzyLogicControls;
-  static auto constexpr svg_dir = "fuzzy-logic";
-  static auto constexpr svg_name = TStyle::svg_name;
   static auto constexpr hp = 9;
+  static auto constexpr panel_file = TStyle::panel_file;
+  static auto constexpr svg_dir = "fuzzy-logic";
 
   Panel(rack::engine::Module *module) : PanelWidget<Panel<TStyle>>{module} {
+    using Controls = FuzzyLogicControls;
+
     auto constexpr ab_outer_column = hp2mm(1.5F);
     auto constexpr ab_button_column = hp2mm(3.F);
     auto constexpr ab_inner_column = hp2mm(3.25F);

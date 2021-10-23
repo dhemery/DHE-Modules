@@ -1,9 +1,11 @@
 #pragma once
 
-#include "./control-ids.h"
-#include "./controls.h"
+#include "control-ids.h"
+#include "controls.h"
+
 #include "controls/ports.h"
 #include "controls/switches.h"
+#include "panels/panel-widget.h"
 
 #include "rack.hpp"
 
@@ -13,114 +15,99 @@
 namespace dhe {
 namespace truth {
 
-static auto constexpr condition_dx = 10.16F;
-static auto constexpr outcome_dy = 5.08F;
+struct Truth2 {
+  static auto constexpr hp = 8;
+  static auto constexpr input_count = 2;
+  static auto constexpr panel_file = "truth-2";
 
-struct Layout {
-  int hp_;
-  float condition_y_;
-  float outcome_x_;
-  float input_top_;
-  float input_x_;
-  float output_top_;
-  float output_x_;
-  float port_dy_;
+  static auto constexpr condition_y = 21.F;
+  static auto constexpr center_x = 20.48F;
+  static auto constexpr input_top = 58.F;
+  static auto constexpr outcome_x = 30.48F;
+  static auto constexpr port_dy = 15.5F;
+  static auto constexpr port_offset = 3.5F;
+
+  static auto constexpr input_x = center_x - port_offset;
+  static auto constexpr output_top = input_top + 2.F * port_dy;
+  static auto constexpr output_x = center_x + port_offset;
 };
 
-static auto layout(int input_count) -> Layout {
-  auto l = Layout{};
-  if (input_count == 2) {
-    auto constexpr input_top = 58.F;
-    auto constexpr port_dy = 15.5F;
-    auto constexpr hp = 8;
-    auto constexpr port_offset = 3.5F;
-    auto constexpr center_x = 20.48F;
-    l.hp_ = hp;
-    l.condition_y_ = 21.F;
-    l.outcome_x_ = 30.48F;
-    l.port_dy_ = port_dy;
-    l.input_top_ = input_top;
-    l.input_x_ = center_x - port_offset;
-    l.output_top_ = input_top + 2.F * port_dy;
-    l.output_x_ = center_x + port_offset;
-  } else if (input_count == 3) {
-    auto constexpr input_top = 76.F;
-    auto constexpr port_dy = 15.5F;
-    auto constexpr hp = 10;
-    l.hp_ = hp;
-    l.condition_y_ = 20.F;
-    l.outcome_x_ = 40.64F;
-    l.port_dy_ = port_dy;
-    l.input_top_ = input_top;
-    l.input_x_ = 10.28F;
-    l.output_top_ = input_top + port_dy;
-    l.output_x_ = 40.64F;
-  } else {
-    auto constexpr hp = 16;
-    auto constexpr input_top = 29.36F;
-    auto constexpr input_x = 10.28F;
-    auto constexpr port_dy = 14.585F;
-    l.hp_ = hp;
-    l.condition_y_ = 23.66F;
-    l.outcome_x_ = 71.11F;
-    l.port_dy_ = port_dy;
-    l.input_top_ = input_top;
-    l.input_x_ = 10.28F;
-    l.output_top_ = input_top + 4.F * port_dy;
-    l.output_x_ = input_x + 7.F;
-  }
-  return l;
-}
+struct Truth3 {
+  static auto constexpr hp = 10;
+  static auto constexpr input_count = 3;
+  static auto constexpr panel_file = "truth-3";
 
-template <int N> class Panel : public rack::app::ModuleWidget {
-  using Input = InputIds<N>;
-  using Output = OutputIds;
-  using Param = ParamIds<N>;
+  static auto constexpr condition_y = 20.F;
+  static auto constexpr input_x = 10.28F;
+  static auto constexpr input_top = 76.F;
+  static auto constexpr outcome_x = 40.64F;
+  static auto constexpr output_x = 40.64F;
+  static auto constexpr port_dy = 15.5F;
 
-public:
+  static auto constexpr output_top = input_top + port_dy;
+};
+
+struct Truth4 {
+  static auto constexpr hp = 16;
+  static auto constexpr input_count = 4;
+  static auto constexpr panel_file = "truth-4";
+
+  static auto constexpr condition_y = 23.66F;
+  static auto constexpr input_top = 29.36F;
+  static auto constexpr input_x = 10.28F;
+  static auto constexpr outcome_x = 71.11F;
+  static auto constexpr port_dy = 14.585F;
+
+  static auto constexpr output_top = input_top + 4.F * port_dy;
+  static auto constexpr output_x = input_x + 7.F;
+};
+
+template <typename TLayout> struct Panel : public PanelWidget<Panel<TLayout>> {
+  static auto constexpr hp = TLayout::hp;
+  static auto constexpr panel_file = TLayout::panel_file;
   static auto constexpr svg_dir = "truth";
 
-  explicit Panel(rack::engine::Module *module) {
-    auto const faceplate_filename = std::string{"truth-"} + std::to_string(N);
+  explicit Panel(rack::engine::Module *module)
+      : PanelWidget<Panel<TLayout>>{module} {
+    static auto constexpr input_count = TLayout::input_count;
+    using Input = InputIds<input_count>;
+    using Output = OutputIds;
+    using Param = ParamIds<input_count>;
 
-    setModule(module);
-    setPanel(load_svg(svg_dir, faceplate_filename));
-    install_screws(this, layout_.hp_);
+    static auto constexpr condition_dx = 10.16F;
+    static auto constexpr outcome_dy = 5.08F;
 
-    for (int i = 0; i < N; i++) {
+    for (int i = 0; i < input_count; i++) {
       auto const y =
-          layout_.input_top_ + static_cast<float>(i) * layout_.port_dy_;
-      InPort::install(this, Input::Input + i, layout_.input_x_, y);
+          TLayout::input_top + static_cast<float>(i) * TLayout::port_dy;
+      InPort::install(this, Input::Input + i, TLayout::input_x, y);
       Button::install<Momentary>(this, Param::InputOverride + i,
-                                 layout_.input_x_ + button_port_distance, y);
+                                 TLayout::input_x + button_port_distance, y);
     }
 
-    auto const condition_y = layout_.condition_y_;
-    auto const gate_mode_x = layout_.outcome_x_ - condition_dx;
+    auto const condition_y = TLayout::condition_y;
+    auto const gate_mode_x = TLayout::outcome_x - condition_dx;
     Stepper<GateModes>::install(this, Param::GateMode, gate_mode_x,
                                 condition_y);
 
-    auto constexpr pattern_count = 1 << N;
-    auto const outcome_top = layout_.condition_y_ + outcome_dy;
+    auto constexpr pattern_count = 1 << input_count;
+    auto const outcome_top = TLayout::condition_y + outcome_dy;
     for (int i = 0; i < pattern_count; i++) {
       auto const y = outcome_top + static_cast<float>(i) * outcome_dy;
-      Stepper<Outcomes>::install(this, Param::Outcome + i, layout_.outcome_x_,
+      Stepper<Outcomes>::install(this, Param::Outcome + i, TLayout::outcome_x,
                                  y);
     }
 
     Button::install<Momentary, Reversed>(
-        this, Param::QOverride, layout_.output_x_ - button_port_distance,
-        layout_.output_top_);
-    OutPort::install(this, Output::Q, layout_.output_x_, layout_.output_top_);
+        this, Param::QOverride, TLayout::output_x - button_port_distance,
+        TLayout::output_top);
+    OutPort::install(this, Output::Q, TLayout::output_x, TLayout::output_top);
     Button::install<Momentary, Reversed>(
-        this, Param::QNotOverride, layout_.output_x_ - button_port_distance,
-        layout_.output_top_ + layout_.port_dy_);
-    OutPort::install(this, Output::QNot, layout_.output_x_,
-                     layout_.output_top_ + layout_.port_dy_);
+        this, Param::QNotOverride, TLayout::output_x - button_port_distance,
+        TLayout::output_top + TLayout::port_dy);
+    OutPort::install(this, Output::QNot, TLayout::output_x,
+                     TLayout::output_top + TLayout::port_dy);
   }
-
-private:
-  const Layout layout_{layout(N)};
 };
 } // namespace truth
 } // namespace dhe

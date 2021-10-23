@@ -6,26 +6,23 @@
 #include "controls/knobs.h"
 #include "controls/ports.h"
 #include "controls/switches.h"
+#include "panels/panel-widget.h"
 
 #include "rack.hpp"
 
 namespace dhe {
 namespace func {
 
-class Func1Panel : public rack::app::ModuleWidget {
+struct Func1Panel : public PanelWidget<Func1Panel> {
   static auto constexpr channel_count = 1;
   using Controls = FuncControls<channel_count>;
 
 public:
+  static auto constexpr hp = 3;
+  static auto constexpr panel_file = "func";
   static auto constexpr svg_dir = "func";
 
-  explicit Func1Panel(rack::engine::Module *module) {
-    auto constexpr hp = 3;
-
-    setModule(module);
-    setPanel(load_svg(svg_dir, "func"));
-    install_screws(this, hp);
-
+  Func1Panel(rack::engine::Module *module) : PanelWidget<Func1Panel>{module} {
     auto constexpr width = hp2mm(hp);
 
     auto constexpr x = width / 2.F;

@@ -5,26 +5,23 @@
 #include "controls/buttons.h"
 #include "controls/ports.h"
 #include "controls/switches.h"
-#include "panels/screws.h"
+#include "panels/panel-widget.h"
 
 #include "rack.hpp"
 
 namespace dhe {
 namespace gator {
 
-class GatorPanel : public rack::app::ModuleWidget {
-  using Controls = GatorControls;
+struct GatorPanel : public PanelWidget<GatorPanel> {
 
-public:
+  static auto constexpr hp = 9;
+  static auto constexpr panel_file = "gator";
   static auto constexpr svg_dir = "gator";
 
-  explicit GatorPanel(rack::engine::Module *module) {
-    auto constexpr hp = 9;
-
-    setModule(module);
-    setPanel(load_svg(svg_dir, "gator"));
-    install_screws(this, hp);
-
+public:
+  explicit GatorPanel(rack::engine::Module *module)
+      : PanelWidget<GatorPanel>{module} {
+    using Controls = GatorControls;
     auto constexpr top = hp2mm(3.5F);
     auto constexpr dy = hp2mm(1.75F);
 

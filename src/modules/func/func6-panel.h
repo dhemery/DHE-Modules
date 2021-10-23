@@ -12,20 +12,15 @@
 namespace dhe {
 namespace func {
 
-class Func6Panel : public rack::app::ModuleWidget {
+struct Func6Panel : public PanelWidget<Func6Panel> {
+  static auto constexpr hp = 12;
   static auto constexpr channel_count = 6;
-  using Controls = FuncControls<channel_count>;
-
-public:
+  static auto constexpr panel_file = "func-6";
   static auto constexpr svg_dir = "func";
 
-  explicit Func6Panel(rack::engine::Module *module) {
-    auto constexpr hp = 12;
-
-    setModule(module);
-    setPanel(load_svg(svg_dir, "func-6"));
-    install_screws(this, hp);
-
+public:
+  Func6Panel(rack::engine::Module *module) : PanelWidget<Func6Panel>{module} {
+    using Controls = FuncControls<channel_count>;
     auto constexpr width = hp2mm(hp);
 
     auto constexpr column3 = width / 2.F;

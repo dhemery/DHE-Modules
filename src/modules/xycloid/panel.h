@@ -6,7 +6,7 @@
 #include "controls/knobs.h"
 #include "controls/ports.h"
 #include "controls/switches.h"
-#include "panels/screws.h"
+#include "panels/panel-widget.h"
 
 #include "rack.hpp"
 
@@ -14,17 +14,12 @@ namespace dhe {
 
 namespace xycloid {
 
-class Panel : public rack::app::ModuleWidget {
-public:
+struct Panel : public PanelWidget<Panel> {
+  static auto constexpr hp = 11;
+  static auto constexpr panel_file = "xycloid";
   static auto constexpr svg_dir = "xycloid";
 
-  explicit Panel(rack::engine::Module *module) {
-    auto constexpr hp = 11;
-
-    setModule(module);
-    setPanel(load_svg(svg_dir, "xycloid"));
-    install_screws(this, hp);
-
+  explicit Panel(rack::engine::Module *module) : PanelWidget<Panel>{module} {
     auto constexpr width = hp2mm(hp);
 
     auto constexpr column1 = width / 7.F;

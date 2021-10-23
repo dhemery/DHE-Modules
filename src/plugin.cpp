@@ -10,10 +10,8 @@
 #include "modules/gator/gator.h"
 #include "modules/ranger/ranger-panel.h"
 #include "modules/ranger/ranger.h"
-#include "modules/scannibal/module.h"
-#include "modules/scannibal/panel.h"
-#include "modules/sequencizer/module.h"
-#include "modules/sequencizer/panel.h"
+#include "modules/scannibal/init.h"
+#include "modules/sequencizer/init.h"
 #include "modules/stage/booster-stage-module.h"
 #include "modules/stage/booster-stage-panel.h"
 #include "modules/stage/hostage-module.h"
@@ -26,8 +24,7 @@
 #include "modules/swave/swave.h"
 #include "modules/tapers/tapers-panel.h"
 #include "modules/tapers/tapers.h"
-#include "modules/truth/module.h"
-#include "modules/truth/panel.h"
+#include "modules/truth/init.h"
 #include "modules/xycloid/init.h"
 
 #include "rack.hpp"
@@ -50,14 +47,8 @@ using dhe::stage::UpstagePanel;
 using dhe::swave::Swave;
 using dhe::swave::SwavePanel;
 
-template <int N> using SequencizerModule = dhe::sequencizer::Module<N>;
-template <int N> using SequencizerPanel = dhe::sequencizer::Panel<N>;
-template <int N> using ScannibalModule = dhe::scannibal::Module<N>;
-template <int N> using ScannibalPanel = dhe::scannibal::Panel<N>;
 using dhe::tapers::Tapers;
 using dhe::tapers::TapersPanel;
-template <int N> using Truth = dhe::truth::Truth<N>;
-template <int N> using TruthPanel = dhe::truth::Panel<N>;
 
 rack::plugin::Plugin *pluginInstance; // NOLINT
 
@@ -79,24 +70,12 @@ extern "C" void init(rack::plugin::Plugin *p) {
   p->addModel(rack::createModel<Gator, GatorPanel>("Gator"));
   p->addModel(rack::createModel<HostageModule, HostagePanel>("Hostage"));
   p->addModel(rack::createModel<Ranger, RangerPanel>("Ranger"));
-  p->addModel(
-      rack::createModel<ScannibalModule<4>, ScannibalPanel<4>>("Scannibal4"));
-  p->addModel(
-      rack::createModel<ScannibalModule<8>, ScannibalPanel<8>>("Scannibal8"));
-  p->addModel(rack::createModel<ScannibalModule<16>, ScannibalPanel<16>>(
-      "Scannibal16"));
+  dhe::scannibal::init(p);
   p->addModel(rack::createModel<StageModule, StagePanel>("Stage"));
   p->addModel(rack::createModel<Swave, SwavePanel>("Swave"));
-  p->addModel(rack::createModel<SequencizerModule<4>, SequencizerPanel<4>>(
-      "Sequencizer4"));
-  p->addModel(rack::createModel<SequencizerModule<8>, SequencizerPanel<8>>(
-      "Sequencizer8"));
-  p->addModel(rack::createModel<SequencizerModule<16>, SequencizerPanel<16>>(
-      "Sequencizer16"));
+  dhe::sequencizer::init(p);
   p->addModel(rack::createModel<Tapers, TapersPanel>("Tapers"));
-  p->addModel(rack::createModel<Truth<2>, TruthPanel<2>>("Truth2"));
-  p->addModel(rack::createModel<Truth<3>, TruthPanel<3>>("Truth3"));
-  p->addModel(rack::createModel<Truth<4>, TruthPanel<4>>("Truth4"));
+  dhe::truth::init(p);
   p->addModel(rack::createModel<UpstageModule, UpstagePanel>("Upstage"));
   dhe::xycloid::init(p);
 }
