@@ -34,10 +34,10 @@ public:
     ThumbSwitch<2>::install(this, Controls::ShapeSwitch, x, y);
 
     y += dy;
-    Knob::install<Large>(this, Controls::CurveKnob, x, y);
+    Knob::install<Large>(this, Controls::CurveKnob, mm2px(x, y));
 
     y += dy;
-    Knob::install<Tiny>(this, Controls::CurveAvKnob, x, y);
+    Knob::install<Tiny>(this, Controls::CurveAvKnob, mm2px(x, y));
 
     y += dy;
     InPort::install(this, Controls::CurveCvInput, x, y);

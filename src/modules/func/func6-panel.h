@@ -44,7 +44,7 @@ public:
       auto const port_y = y + port_offset;
 
       InPort::install(this, Controls::FuncInput + row, column1, port_y);
-      Knob::install<Large>(this, Controls::AmountKnob + row, column3, y);
+      Knob::install<Large>(this, Controls::AmountKnob + row, mm2px(column3, y));
 
       OutPort::install(this, Controls::FuncOutput + row, column5, port_y);
 

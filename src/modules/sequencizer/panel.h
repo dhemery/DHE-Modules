@@ -157,15 +157,15 @@ public:
 
     InPort::install(this, Input::LevelAttenuationCV, global_controls_left_x,
                     level_y);
-    Knob::install<Small>(this, Param::LevelMultiplier, global_controls_center_x,
-                         level_y);
+    Knob::install<Small>(this, Param::LevelMultiplier,
+                         mm2px(global_controls_center_x, level_y));
     ThumbSwitch<2>::install(this, Param::LevelRange, global_controls_right_x,
                             level_y);
 
     InPort::install(this, Input::DurationMultiplierCV, global_controls_left_x,
                     global_duration_y);
     Knob::install<Small>(this, Param::DurationMultiplier,
-                         global_controls_center_x, global_duration_y);
+                         mm2px(global_controls_center_x, global_duration_y));
     ThumbSwitch<3>::install(this, Param::DurationRange, global_controls_right_x,
                             global_duration_y);
 
@@ -244,24 +244,24 @@ public:
                                      step_x, sustain_y);
       Stepper<AnchorModes>::install(this, Param::StepStartAnchorMode + step,
                                     step_x, start_anchor_mode_y);
-      Knob::install<Small>(this, Param::StepStartAnchorLevel + step, step_x,
-                           start_anchor_level_y);
+      Knob::install<Small>(this, Param::StepStartAnchorLevel + step,
+                           mm2px(step_x, start_anchor_level_y));
 
       Stepper<AnchorSources>::install(this, Param::StepStartAnchorSource + step,
                                       step_x, start_anchor_source_y);
       Stepper<AnchorModes>::install(this, Param::StepEndAnchorMode + step,
                                     step_x, end_anchor_mode_y);
-      Knob::install<Small>(this, Param::StepEndAnchorLevel + step, step_x,
-                           end_anchor_level_y);
+      Knob::install<Small>(this, Param::StepEndAnchorLevel + step,
+                           mm2px(step_x, end_anchor_level_y));
       Stepper<AnchorSources>::install(this, Param::StepEndAnchorSource + step,
                                       step_x, end_anchor_source_y);
 
-      Knob::install<Small>(this, Param::StepDuration + step, step_x,
-                           duration_y);
+      Knob::install<Small>(this, Param::StepDuration + step,
+                           mm2px(step_x, duration_y));
 
       Stepper<Shapes>::install(this, Param::StepShape + step, step_x, shape_y);
-      Knob::install<Small>(this, Param::StepCurvature + step, step_x,
-                           curvature_y);
+      Knob::install<Small>(this, Param::StepCurvature + step,
+                           mm2px(step_x, curvature_y));
 
       Button::install<Toggle>(this, Param::StepEnabled + step,
                               mm2px(step_x, enabled_y));

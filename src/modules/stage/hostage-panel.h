@@ -40,7 +40,7 @@ public:
     ThumbSwitch<3>::install(this, Controls::DurationRangeSwitch, column3, y);
 
     y += dy;
-    Knob::install<Large>(this, Controls::DurationKnob, column2, y);
+    Knob::install<Large>(this, Controls::DurationKnob, mm2px(column2, y));
 
     y = 82.F;
     dy = 15.F;

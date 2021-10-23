@@ -185,12 +185,13 @@ public:
       Stepper<AdvanceModes>::install(this, Param::ConditionSwitches + step, x,
                                      advance_mode_y);
 
-      Knob::install<Small>(this, Param::LevelKnobs + step, x, level_y);
+      Knob::install<Small>(this, Param::LevelKnobs + step, mm2px(x, level_y));
 
       ThumbSwitch<2>::install(this, Param::ShapeSwitches + step, x, shape_y);
-      Knob::install<Small>(this, Param::CurveKnobs + step, x, curve_y);
+      Knob::install<Small>(this, Param::CurveKnobs + step, mm2px(x, curve_y));
 
-      Knob::install<Small>(this, Param::DurationKnobs + step, x, duration_y);
+      Knob::install<Small>(this, Param::DurationKnobs + step,
+                           mm2px(x, duration_y));
 
       Button::install<Toggle>(this, Param::EnabledButtons + step,
                               mm2px(x, enabled_button_y));

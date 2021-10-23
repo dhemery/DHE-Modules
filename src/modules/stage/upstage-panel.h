@@ -33,7 +33,7 @@ public:
     auto y = 25.F;
     auto dy = 18.5F;
 
-    Knob::install<Large>(this, Controls::LevelKnob, column2, y);
+    Knob::install<Large>(this, Controls::LevelKnob, mm2px(column2, y));
 
     y += dy;
     InPort::install(this, Controls::LevelCvInput, column1, y);
