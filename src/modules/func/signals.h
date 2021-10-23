@@ -1,5 +1,6 @@
 #pragma once
 
+#include "control-ids.h"
 #include "operation.h"
 
 #include "components/range.h"
@@ -23,52 +24,45 @@ static auto constexpr multiplier_ranges =
     std::array<Range const, 4>{attenuator_range, attenuverter_range, gain_range,
                                minus_two_to_plus_two_range};
 
-template <int N> class FuncControls {
-public:
-  FuncControls(std::vector<rack::engine::Input> const &inputs,
-               std::vector<rack::engine::Param> const &params,
-               std::vector<rack::engine::Output> &outputs)
+template <int N> struct Signals {
+  static auto constexpr channel_count = N;
+  using Input = InputIds<N>;
+  using Param = ParamIds<N>;
+  using Output = OutputIds<N>;
+
+  Signals(std::vector<rack::engine::Input> const &inputs,
+          std::vector<rack::engine::Param> const &params,
+          std::vector<rack::engine::Output> &outputs)
       : inputs_{inputs}, params_{params}, outputs_{outputs} {}
 
   auto input(int channel, float voltage_if_disconnected) const -> float {
-    return const_cast<rack::engine::Input &>(inputs_[FuncInput + channel])
+    return const_cast<rack::engine::Input &>(
+               inputs_[Input::FuncInput + channel])
         .getNormalVoltage(voltage_if_disconnected);
   }
 
   auto multiplier_range(int channel) const -> Range {
-    return selected_range<4>(params_[MultiplierRangeSwitch + channel],
+    return selected_range<4>(params_[Param::MultiplierRangeSwitch + channel],
                              multiplier_ranges);
   }
 
   auto offset_range(int channel) const -> Range {
-    return selected_range<4>(params_[OffsetRangeSwitch + channel],
+    return selected_range<4>(params_[Param::OffsetRangeSwitch + channel],
                              offset_ranges);
   }
 
   auto operand(int channel) const -> float {
-    return rotation_of(params_[AmountKnob + channel]);
+    return rotation_of(params_[Param::AmountKnob + channel]);
   }
 
   auto operation(int channel) const -> Operation {
     return static_cast<Operation>(
-        position_of(params_[OperationSwitch + channel]));
+        position_of(params_[Param::OperationSwitch + channel]));
   }
 
   void output(int channel, float voltage) {
-    outputs_[FuncOutput + channel].setVoltage(voltage);
+    outputs_[Output::FuncOutput + channel].setVoltage(voltage);
   }
-
-  enum ParameterIds {
-    ENUMS(AmountKnob, N),
-    ENUMS(OperationSwitch, N),
-    ENUMS(OffsetRangeSwitch, N),
-    ENUMS(MultiplierRangeSwitch, N),
-    ParameterCount
-  };
-
-  enum InputIds { FuncInput, InputCount = FuncInput + N };
-
-  enum OutputIds { FuncOutput, OutputCount = FuncOutput + N };
 
 private:
   std::vector<rack::engine::Input> const &inputs_;

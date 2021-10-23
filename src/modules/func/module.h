@@ -1,8 +1,9 @@
 #pragma once
-#include "./func-controls.h"
-#include "./func-engine.h"
-#include "./operand-param-quantity.h"
-#include "./switches.h"
+#include "control-ids.h"
+#include "engine.h"
+#include "params.h"
+#include "signals.h"
+
 #include "params/presets.h"
 
 #include "rack.hpp"
@@ -10,13 +11,13 @@
 namespace dhe {
 namespace func {
 
-template <int N> class FuncModule : public rack::engine::Module {
-  using Controls = FuncControls<N>;
+template <int N> struct Module : public rack::engine::Module {
+  using Input = InputIds<N>;
+  using Param = ParamIds<N>;
+  using Output = OutputIds<N>;
 
-public:
-  FuncModule() {
-    config(Controls::ParameterCount, Controls::InputCount,
-           Controls::OutputCount);
+  Module() {
+    config(Param::ParameterCount, Input::InputCount, Output::OutputCount);
 
     for (auto i = 0; i < N; i++) {
       config_channel(i);
@@ -38,41 +39,41 @@ public:
 
 private:
   void config_channel(int channel) {
-    configParam<OperandParamQuantity<FuncControls, N>>(
-        Controls::AmountKnob + channel, 0.F, 1.F, 0.5F);
+    configParam<OperandParamQuantity<Signals<N>>>(Param::AmountKnob + channel,
+                                                  0.F, 1.F, 0.5F);
     auto const channel_name =
         N == 1 ? std::string{""}
                : std::string{"Channel "} + std::to_string(channel + 1);
 
     auto const operator_switch_name =
         channel_name + (N == 1 ? "Operator" : " operator");
-    Stepper<Operators>::config(this, Controls::OperationSwitch + channel,
+    Stepper<Operators>::config(this, Param::OperationSwitch + channel,
                                operator_switch_name, Operation::Add);
 
     auto const offset_range_switch_name =
         channel_name + (N == 1 ? "Offset range" : " offset range");
-    Stepper<OffsetRanges>::config(this, Controls::OffsetRangeSwitch + channel,
+    Stepper<OffsetRanges>::config(this, Param::OffsetRangeSwitch + channel,
                                   offset_range_switch_name, 1);
 
     auto const multiplier_range_switch_name =
         channel_name + (N == 1 ? "Multiplier range" : " multiplier range");
     Stepper<MultiplierRanges>::config(this,
-                                      Controls::MultiplierRangeSwitch + channel,
+                                      Param::MultiplierRangeSwitch + channel,
                                       multiplier_range_switch_name, 2);
 
     auto const operand_knob_param_quantity =
-        dynamic_cast<OperandParamQuantity<FuncControls, N> *>(
-            getParamQuantity(Controls::AmountKnob + channel));
+        dynamic_cast<OperandParamQuantity<Signals<N>> *>(
+            getParamQuantity(Param::AmountKnob + channel));
 
-    operand_knob_param_quantity->configure(&controls_, channel, channel_name);
+    operand_knob_param_quantity->configure(&signals_, channel, channel_name);
 
     auto const port_name = N == 1 ? "Func" : channel_name;
-    configInput(Controls::FuncInput + channel, port_name);
-    configOutput(Controls::FuncOutput + channel, port_name);
+    configInput(Input::FuncInput + channel, port_name);
+    configOutput(Output::FuncOutput + channel, port_name);
   }
 
-  Controls controls_{inputs, params, outputs};
-  FuncEngine<FuncControls, N> func_engine_{controls_};
+  Signals<N> signals_{inputs, params, outputs};
+  FuncEngine<Signals<N>> func_engine_{signals_};
 };
 } // namespace func
 } // namespace dhe

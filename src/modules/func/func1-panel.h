@@ -1,7 +1,7 @@
 #pragma once
 
-#include "func-controls.h"
-#include "switches.h"
+#include "control-ids.h"
+#include "params.h"
 
 #include "controls/knobs.h"
 #include "controls/ports.h"
@@ -15,7 +15,6 @@ namespace func {
 
 struct Func1Panel : public PanelWidget<Func1Panel> {
   static auto constexpr channel_count = 1;
-  using Controls = FuncControls<channel_count>;
 
 public:
   static auto constexpr hp = 3;
@@ -23,8 +22,11 @@ public:
   static auto constexpr svg_dir = "func";
 
   Func1Panel(rack::engine::Module *module) : PanelWidget<Func1Panel>{module} {
-    auto constexpr width = hp2mm(hp);
+    using Input = InputIds<channel_count>;
+    using Param = ParamIds<channel_count>;
+    using Output = OutputIds<channel_count>;
 
+    auto constexpr width = hp2mm(hp);
     auto constexpr x = width / 2.F;
 
     auto constexpr top = 23.F;
@@ -39,15 +41,15 @@ public:
     auto constexpr row4 = top + row_spacing * 3;
     auto constexpr row6 = top + row_spacing * 5 + port_offset;
 
-    InPort::install(this, Controls::FuncInput, x, row1);
-    Knob::install<Large>(this, Controls::AmountKnob, x, row3);
-    OutPort::install(this, Controls::FuncOutput, x, row6);
+    InPort::install(this, Input::FuncInput, x, row1);
+    Knob::install<Large>(this, Param::AmountKnob, x, row3);
+    OutPort::install(this, Output::FuncOutput, x, row6);
 
-    auto *offset_range_stepper = Stepper<OffsetRanges>::install(
-        this, Controls::OffsetRangeSwitch, x, row4);
+    auto *offset_range_stepper =
+        Stepper<OffsetRanges>::install(this, Param::OffsetRangeSwitch, x, row4);
 
     auto *multiplier_range_stepper = Stepper<MultiplierRanges>::install(
-        this, Controls::MultiplierRangeSwitch, x, row4);
+        this, Param::MultiplierRangeSwitch, x, row4);
 
     auto const update_range_stepper_visibility =
         [offset_range_stepper, multiplier_range_stepper](Operation op) {
@@ -59,7 +61,7 @@ public:
             multiplier_range_stepper->hide();
           }
         };
-    Stepper<Operators>::install(this, Controls::OperationSwitch, x, row2,
+    Stepper<Operators>::install(this, Param::OperationSwitch, x, row2,
                                 update_range_stepper_visibility);
   }
 };

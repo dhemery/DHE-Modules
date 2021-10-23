@@ -1,7 +1,7 @@
 #pragma once
 
-#include "func-controls.h"
-#include "switches.h"
+#include "control-ids.h"
+#include "params.h"
 
 #include "controls/knobs.h"
 #include "controls/ports.h"
@@ -20,7 +20,9 @@ struct Func6Panel : public PanelWidget<Func6Panel> {
 
 public:
   Func6Panel(rack::engine::Module *module) : PanelWidget<Func6Panel>{module} {
-    using Controls = FuncControls<channel_count>;
+    using Input = InputIds<channel_count>;
+    using Param = ParamIds<channel_count>;
+    using Output = OutputIds<channel_count>;
     auto constexpr width = hp2mm(hp);
 
     auto constexpr column3 = width / 2.F;
@@ -38,16 +40,16 @@ public:
       auto const y = top + static_cast<float>(row) * row_spacing;
       auto const port_y = y + port_offset;
 
-      InPort::install(this, Controls::FuncInput + row, column1, port_y);
-      Knob::install<Large>(this, Controls::AmountKnob + row, column3, y);
+      InPort::install(this, Input::FuncInput + row, column1, port_y);
+      Knob::install<Large>(this, Param::AmountKnob + row, column3, y);
 
-      OutPort::install(this, Controls::FuncOutput + row, column5, port_y);
+      OutPort::install(this, Output::FuncOutput + row, column5, port_y);
 
       auto *offset_range_stepper = Stepper<OffsetRanges>::install(
-          this, Controls::OffsetRangeSwitch + row, column4, y);
+          this, Param::OffsetRangeSwitch + row, column4, y);
 
       auto *multiplier_range_stepper = Stepper<MultiplierRanges>::install(
-          this, Controls::MultiplierRangeSwitch + row, column4, y);
+          this, Param::MultiplierRangeSwitch + row, column4, y);
 
       auto const update_range_stepper =
           [offset_range_stepper, multiplier_range_stepper](Operation op) {
@@ -59,8 +61,8 @@ public:
               multiplier_range_stepper->hide();
             }
           };
-      Stepper<Operators>::install(this, Controls::OperationSwitch + row,
-                                  column2, y, update_range_stepper);
+      Stepper<Operators>::install(this, Param::OperationSwitch + row, column2,
+                                  y, update_range_stepper);
     }
   }
 }; // namespace func
