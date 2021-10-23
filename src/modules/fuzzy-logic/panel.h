@@ -39,10 +39,10 @@ template <typename TStyle> struct Panel : public PanelWidget<Panel<TStyle>> {
 
     auto y = top + 0.F * dy;
     InPort::install(this, Controls::AInputs + 0, ab_outer_column, y);
-    Button::install<Toggle>(this, Controls::NotAButtons + 0,
-                            mm2px(ab_button_column, y));
-    Button::install<Toggle>(this, Controls::NotAButtons + 1,
-                            mm2px(cd_button_column, y));
+    Button::install<Toggle>(this, Controls::NotAButtons + 0, ab_button_column,
+                            y);
+    Button::install<Toggle>(this, Controls::NotAButtons + 1, cd_button_column,
+                            y);
     InPort::install(this, Controls::AInputs + 1, cd_outer_column, y);
 
     y = top + 0.5F * dy;
@@ -50,10 +50,10 @@ template <typename TStyle> struct Panel : public PanelWidget<Panel<TStyle>> {
 
     y = top + 1.F * dy;
     InPort::install(this, Controls::BInputs + 0, ab_outer_column, y);
-    Button::install<Toggle>(this, Controls::NotBButtons + 0,
-                            mm2px(ab_button_column, y));
-    Button::install<Toggle>(this, Controls::NotBButtons + 1,
-                            mm2px(cd_button_column, y));
+    Button::install<Toggle>(this, Controls::NotBButtons + 0, ab_button_column,
+                            y);
+    Button::install<Toggle>(this, Controls::NotBButtons + 1, cd_button_column,
+                            y);
     InPort::install(this, Controls::BInputs + 1, cd_outer_column, y);
 
     y = top + 2.F * dy;

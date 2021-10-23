@@ -32,21 +32,21 @@ public:
     auto y = 14.5F;
 
     y += dy * 0.75F;
-    Knob::install<Medium>(this, Controls::LevelKnob, mm2px(left, y));
+    Knob::install<Medium>(this, Controls::LevelKnob, left, y);
     OutPort::install(this, Controls::RangerOutput, right, y);
 
     y += dy;
     InPort::install(this, Controls::LevelCvInput, left, y);
-    Knob::install<Tiny>(this, Controls::LevelAvKnob, mm2px(right, y));
+    Knob::install<Tiny>(this, Controls::LevelAvKnob, right, y);
 
     y += dy / 2.F;
     y += dy * 0.75F;
-    Knob::install<Medium>(this, Controls::CcwLimitKnob, mm2px(left, y));
-    Knob::install<Medium>(this, Controls::CwLimitKnob, mm2px(right, y));
+    Knob::install<Medium>(this, Controls::CcwLimitKnob, left, y);
+    Knob::install<Medium>(this, Controls::CwLimitKnob, right, y);
 
     y += dy;
-    Knob::install<Tiny>(this, Controls::CcwLimitAvKnob, mm2px(left, y));
-    Knob::install<Tiny>(this, Controls::CwLimitAvKnob, mm2px(right, y));
+    Knob::install<Tiny>(this, Controls::CcwLimitAvKnob, left, y);
+    Knob::install<Tiny>(this, Controls::CwLimitAvKnob, right, y);
 
     y += dy;
     InPort::install(this, Controls::CcwLimitCvInput, left, y);

@@ -88,15 +88,13 @@ public:
 
     auto constexpr run_y = global_controls_y(0);
     InPort::install(this, Input::Run, sequence_controls_x, run_y);
-    Button::install<Toggle>(
-        this, Param::Run,
-        mm2px(sequence_controls_x + button_port_distance, run_y));
+    Button::install<Toggle>(this, Param::Run,
+                            sequence_controls_x + button_port_distance, run_y);
 
     auto constexpr loop_y = global_controls_y(1);
     InPort::install(this, Input::Loop, sequence_controls_x, loop_y);
-    Button::install<Toggle>(
-        this, Param::Loop,
-        mm2px(sequence_controls_x + button_port_distance, loop_y));
+    Button::install<Toggle>(this, Param::Loop,
+                            sequence_controls_x + button_port_distance, loop_y);
 
     auto constexpr progress_light_y = top - light_diameter * 2.F;
 
@@ -133,14 +131,13 @@ public:
     auto constexpr gate_y = global_controls_y(3);
     InPort::install(this, Input::Gate, sequence_controls_x, gate_y);
     Button::install<Momentary>(
-        this, Param::Gate,
-        mm2px(sequence_controls_x + button_port_distance, gate_y));
+        this, Param::Gate, sequence_controls_x + button_port_distance, gate_y);
 
     auto constexpr reset_y = global_controls_y(4);
     InPort::install(this, Input::Reset, sequence_controls_x, reset_y);
-    Button::install<Momentary>(
-        this, Param::Reset,
-        mm2px(sequence_controls_x + button_port_distance, reset_y));
+    Button::install<Momentary>(this, Param::Reset,
+                               sequence_controls_x + button_port_distance,
+                               reset_y);
 
     auto constexpr level_y = global_controls_y(0);
     auto constexpr global_duration_y = global_controls_y(1);
@@ -157,15 +154,15 @@ public:
 
     InPort::install(this, Input::LevelAttenuationCV, global_controls_left_x,
                     level_y);
-    Knob::install<Small>(this, Param::LevelMultiplier,
-                         mm2px(global_controls_center_x, level_y));
+    Knob::install<Small>(this, Param::LevelMultiplier, global_controls_center_x,
+                         level_y);
     ThumbSwitch<2>::install(this, Param::LevelRange, global_controls_right_x,
                             level_y);
 
     InPort::install(this, Input::DurationMultiplierCV, global_controls_left_x,
                     global_duration_y);
     Knob::install<Small>(this, Param::DurationMultiplier,
-                         mm2px(global_controls_center_x, global_duration_y));
+                         global_controls_center_x, global_duration_y);
     ThumbSwitch<3>::install(this, Param::DurationRange, global_controls_right_x,
                             global_duration_y);
 
@@ -244,27 +241,27 @@ public:
                                      step_x, sustain_y);
       Stepper<AnchorModes>::install(this, Param::StepStartAnchorMode + step,
                                     step_x, start_anchor_mode_y);
-      Knob::install<Small>(this, Param::StepStartAnchorLevel + step,
-                           mm2px(step_x, start_anchor_level_y));
+      Knob::install<Small>(this, Param::StepStartAnchorLevel + step, step_x,
+                           start_anchor_level_y);
 
       Stepper<AnchorSources>::install(this, Param::StepStartAnchorSource + step,
                                       step_x, start_anchor_source_y);
       Stepper<AnchorModes>::install(this, Param::StepEndAnchorMode + step,
                                     step_x, end_anchor_mode_y);
-      Knob::install<Small>(this, Param::StepEndAnchorLevel + step,
-                           mm2px(step_x, end_anchor_level_y));
+      Knob::install<Small>(this, Param::StepEndAnchorLevel + step, step_x,
+                           end_anchor_level_y);
       Stepper<AnchorSources>::install(this, Param::StepEndAnchorSource + step,
                                       step_x, end_anchor_source_y);
 
-      Knob::install<Small>(this, Param::StepDuration + step,
-                           mm2px(step_x, duration_y));
+      Knob::install<Small>(this, Param::StepDuration + step, step_x,
+                           duration_y);
 
       Stepper<Shapes>::install(this, Param::StepShape + step, step_x, shape_y);
-      Knob::install<Small>(this, Param::StepCurvature + step,
-                           mm2px(step_x, curvature_y));
+      Knob::install<Small>(this, Param::StepCurvature + step, step_x,
+                           curvature_y);
 
-      Button::install<Toggle>(this, Param::StepEnabled + step,
-                              mm2px(step_x, enabled_y));
+      Button::install<Toggle>(this, Param::StepEnabled + step, step_x,
+                              enabled_y);
     }
   }
 }; // namespace dhe

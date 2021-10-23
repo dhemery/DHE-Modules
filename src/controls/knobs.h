@@ -1,6 +1,7 @@
 #pragma once
 
 #include "components/range.h"
+#include "widgets/dimensions.h"
 #include "widgets/panel-assets.h"
 
 #include "rack.hpp"
@@ -23,9 +24,9 @@ struct Knob {
   };
 
   template <typename TStyle, typename TPanel>
-  static inline void install(TPanel *panel, int id, rack::math::Vec pos) {
+  static inline void install(TPanel *panel, int id, float xmm, float ymm) {
     panel->addParam(rack::createParamCentered<Widget<TPanel, TStyle>>(
-        pos, panel->getModule(), id));
+        mm2px(xmm, ymm), panel->getModule(), id));
   }
 };
 

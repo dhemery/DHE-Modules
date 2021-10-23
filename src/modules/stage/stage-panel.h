@@ -33,13 +33,13 @@ public:
     auto y = 25.F;
     auto dy = 18.5F;
 
-    Knob::install<Large>(this, Controls::LevelKnob, mm2px(column2, y));
+    Knob::install<Large>(this, Controls::LevelKnob, column2, y);
 
     y += dy;
-    Knob::install<Large>(this, Controls::CurveKnob, mm2px(column2, y));
+    Knob::install<Large>(this, Controls::CurveKnob, column2, y);
 
     y += dy;
-    Knob::install<Large>(this, Controls::DurationKnob, mm2px(column2, y));
+    Knob::install<Large>(this, Controls::DurationKnob, column2, y);
 
     y = 82.F;
     dy = 15.F;

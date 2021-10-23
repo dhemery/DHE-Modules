@@ -38,18 +38,18 @@ public:
     auto y = 25.F;
 
     InPort::install(this, Controls::LevelCvInput, column1, y);
-    Knob::install<Large>(this, Controls::LevelKnob, mm2px(column3, y));
+    Knob::install<Large>(this, Controls::LevelKnob, column3, y);
 
     ThumbSwitch<2>::install(this, Controls::LevelRangeSwitch, column5, y);
 
     y += dy;
     InPort::install(this, Controls::CurveCvInput, column1, y);
-    Knob::install<Large>(this, Controls::CurveKnob, mm2px(column3, y));
+    Knob::install<Large>(this, Controls::CurveKnob, column3, y);
     ThumbSwitch<2>::install(this, Controls::ShapeSwitch, column5, y);
 
     y += dy;
     InPort::install(this, Controls::DurationCvInput, column1, y);
-    Knob::install<Large>(this, Controls::DurationKnob, mm2px(column3, y));
+    Knob::install<Large>(this, Controls::DurationKnob, column3, y);
 
     ThumbSwitch<3>::install(this, Controls::DurationRangeSwitch, column5, y);
 
@@ -57,18 +57,16 @@ public:
     dy = 15.F;
 
     InPort::install(this, Controls::DeferInput, column1, y);
-    Button::install<Momentary>(this, Controls::DeferButton, mm2px(column2, y));
+    Button::install<Momentary>(this, Controls::DeferButton, column2, y);
 
-    Button::install<Momentary, Reversed>(this, Controls::ActiveButton,
-                                         mm2px(column4, y));
+    Button::install<Momentary, Reversed>(this, Controls::ActiveButton, column4,
+                                         y);
     OutPort::install(this, Controls::ActiveOutput, column5, y);
 
     y += dy;
     InPort::install(this, Controls::TriggerInput, column1, y);
-    Button::install<Momentary>(this, Controls::TriggerButton,
-                               mm2px(column2, y));
-    Button::install<Momentary, Reversed>(this, Controls::EocButton,
-                                         mm2px(column4, y));
+    Button::install<Momentary>(this, Controls::TriggerButton, column2, y);
+    Button::install<Momentary, Reversed>(this, Controls::EocButton, column4, y);
     OutPort::install(this, Controls::EocOutput, column5, y);
 
     y += dy;

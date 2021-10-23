@@ -208,8 +208,8 @@ private:
                                     step_x, phase_0_anchor_mode_y);
       Stepper<AnchorSources>::install(this, Param::Phase0AnchorSource + step,
                                       step_x, phase_0_anchor_source_y);
-      Knob::install<Small>(this, Param::Phase0AnchorLevel + step,
-                           mm2px(step_x, phase_0_anchor_level_y));
+      Knob::install<Small>(this, Param::Phase0AnchorLevel + step, step_x,
+                           phase_0_anchor_level_y);
       InPort::install(this, Input::Phase0AnchorLevelCV + step, step_x,
                       phase_0_anchor_level_cv_y);
 
@@ -217,18 +217,16 @@ private:
                                     step_x, phase_1_anchor_mode_y);
       Stepper<AnchorSources>::install(this, Param::Phase1AnchorSource + step,
                                       step_x, phase_1_anchor_source_y);
-      Knob::install<Small>(this, Param::Phase1AnchorLevel + step,
-                           mm2px(step_x, phase_1_anchor_level_y));
+      Knob::install<Small>(this, Param::Phase1AnchorLevel + step, step_x,
+                           phase_1_anchor_level_y);
       InPort::install(this, Input::Phase1AnchorLevelCV + step, step_x,
                       phase_1_anchor_level_cv_y);
 
-      Knob::install<Small>(this, Param::Duration + step,
-                           mm2px(step_x, duration_y));
+      Knob::install<Small>(this, Param::Duration + step, step_x, duration_y);
       InPort::install(this, Input::DurationCV + step, step_x, duration_cv_y);
 
       Stepper<Shapes>::install(this, Param::Shape + step, step_x, shape_y);
-      Knob::install<Small>(this, Param::Curvature + step,
-                           mm2px(step_x, curvature_y));
+      Knob::install<Small>(this, Param::Curvature + step, step_x, curvature_y);
       InPort::install(this, Input::CurvatureCV + step, step_x, curvature_cv_y);
     }
   }

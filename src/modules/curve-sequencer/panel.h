@@ -122,12 +122,12 @@ public:
     auto constexpr active_y = top + light_radius;
 
     InPort::install(this, Input::RunInput, left, run_y);
-    Button::install<Toggle>(this, Param::RunButton,
-                            mm2px(left + button_port_distance, run_y));
+    Button::install<Toggle>(this, Param::RunButton, left + button_port_distance,
+                            run_y);
 
     InPort::install(this, Input::LoopInput, left, loop_y);
     Button::install<Toggle>(this, Param::LoopButton,
-                            mm2px(left + button_port_distance, loop_y));
+                            left + button_port_distance, loop_y);
 
     auto *start_marker = new StartMarker(svg_dir, 0.F, active_y);
     addChild(start_marker);
@@ -154,11 +154,11 @@ public:
 
     InPort::install(this, Input::GateInput, left, gate_y);
     Button::install<Momentary>(this, Param::GateButton,
-                               mm2px(left + button_port_distance, gate_y));
+                               left + button_port_distance, gate_y);
 
     InPort::install(this, Input::ResetInput, left, reset_y);
     Button::install<Momentary>(this, Param::ResetButton,
-                               mm2px(left + button_port_distance, reset_y));
+                               left + button_port_distance, reset_y);
 
     auto constexpr generate_mode_y = top + hp2mm(1.61F);
     auto constexpr advance_mode_y = top + hp2mm(3.25F);
@@ -185,16 +185,15 @@ public:
       Stepper<AdvanceModes>::install(this, Param::ConditionSwitches + step, x,
                                      advance_mode_y);
 
-      Knob::install<Small>(this, Param::LevelKnobs + step, mm2px(x, level_y));
+      Knob::install<Small>(this, Param::LevelKnobs + step, x, level_y);
 
       ThumbSwitch<2>::install(this, Param::ShapeSwitches + step, x, shape_y);
-      Knob::install<Small>(this, Param::CurveKnobs + step, mm2px(x, curve_y));
+      Knob::install<Small>(this, Param::CurveKnobs + step, x, curve_y);
 
-      Knob::install<Small>(this, Param::DurationKnobs + step,
-                           mm2px(x, duration_y));
+      Knob::install<Small>(this, Param::DurationKnobs + step, x, duration_y);
 
-      Button::install<Toggle>(this, Param::EnabledButtons + step,
-                              mm2px(x, enabled_button_y));
+      Button::install<Toggle>(this, Param::EnabledButtons + step, x,
+                              enabled_button_y);
       InPort::install(this, Input::EnabledInputs + step, x, enabled_port_y);
     }
 

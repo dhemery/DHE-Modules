@@ -36,13 +36,13 @@ struct Panel : public rack::app::ModuleWidget {
     auto dy = 18.5F;
 
     InPort::install(this, Inputs::SpinSpeedCv, column1, y);
-    Knob::install<Tiny>(this, Params::SpinSpeedAv, mm2px(column2, y));
-    Knob::install<Large>(this, Params::SpinSpeed, mm2px(column3, y));
+    Knob::install<Tiny>(this, Params::SpinSpeedAv, column2, y);
+    Knob::install<Large>(this, Params::SpinSpeed, column3, y);
 
     y += dy;
     InPort::install(this, Inputs::BounceRatioCv, column1, y);
-    Knob::install<Tiny>(this, Params::BounceRatioAv, mm2px(column2, y));
-    Knob::install<Large>(this, Params::BounceRatio, mm2px(column3, y));
+    Knob::install<Tiny>(this, Params::BounceRatioAv, column2, y);
+    Knob::install<Large>(this, Params::BounceRatio, column3, y);
 
     auto quantize_bounce_ratio = [this](int pos) {
       auto *q = reinterpret_cast<BounceRatio::Quantity *>(
@@ -55,26 +55,26 @@ struct Panel : public rack::app::ModuleWidget {
 
     y += dy;
     InPort::install(this, Inputs::DepthCv, column1, y);
-    Knob::install<Tiny>(this, Params::DepthAv, mm2px(column2, y));
-    Knob::install<Large>(this, Params::Depth, mm2px(column3, y));
+    Knob::install<Tiny>(this, Params::DepthAv, column2, y);
+    Knob::install<Large>(this, Params::Depth, column3, y);
 
     y += dy;
     InPort::install(this, Inputs::PhaseCv, column1, y);
-    Knob::install<Tiny>(this, Params::PhaseAv, mm2px(column2, y));
-    Knob::install<Large>(this, Params::Phase, mm2px(column3, y));
+    Knob::install<Tiny>(this, Params::PhaseAv, column2, y);
+    Knob::install<Large>(this, Params::Phase, column3, y);
 
     y = 97.F;
     dy = 15.F;
     auto constexpr output_port_offset = 1.25F;
 
     InPort::install(this, Inputs::XGainCv, column1, y);
-    Knob::install<Small>(this, Params::XGain, mm2px(column2, y));
+    Knob::install<Small>(this, Params::XGain, column2, y);
     ThumbSwitch<2>::install(this, Params::XRange, column3, y);
     OutPort::install(this, Outputs::XOutput, column4, y + output_port_offset);
 
     y += dy;
     OutPort::install(this, Inputs::YGainCv, column1, y);
-    Knob::install<Small>(this, Params::YGain, mm2px(column2, y));
+    Knob::install<Small>(this, Params::YGain, column2, y);
     ThumbSwitch<2>::install(this, Params::YRange, column3, y);
     OutPort::install(this, Outputs::YOutput, column4, y + output_port_offset);
   }

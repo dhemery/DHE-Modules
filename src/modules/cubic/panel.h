@@ -34,23 +34,23 @@ public:
     auto constexpr dy = 15.F;
 
     InPort::install(this, Controls::ACoefficientCvInput, column1, y);
-    Knob::install<Small>(this, Controls::ACoefficientKnob, mm2px(column2, y));
+    Knob::install<Small>(this, Controls::ACoefficientKnob, column2, y);
 
     y += dy;
     InPort::install(this, Controls::BCoefficientCvInput, column1, y);
-    Knob::install<Small>(this, Controls::BCoefficientKnob, mm2px(column2, y));
+    Knob::install<Small>(this, Controls::BCoefficientKnob, column2, y);
 
     y += dy;
     InPort::install(this, Controls::CCoefficientCvInput, column1, y);
-    Knob::install<Small>(this, Controls::CCoefficientKnob, mm2px(column2, y));
+    Knob::install<Small>(this, Controls::CCoefficientKnob, column2, y);
 
     y += dy;
     InPort::install(this, Controls::DCoefficientCvInput, column1, y);
-    Knob::install<Small>(this, Controls::DCoefficientKnob, mm2px(column2, y));
+    Knob::install<Small>(this, Controls::DCoefficientKnob, column2, y);
 
     y = 82.F;
-    Knob::install<Small>(this, Controls::InputGainKnob, mm2px(column1, y));
-    Knob::install<Small>(this, Controls::OutputGainKnob, mm2px(column2, y));
+    Knob::install<Small>(this, Controls::InputGainKnob, column1, y);
+    Knob::install<Small>(this, Controls::OutputGainKnob, column2, y);
 
     y += dy;
     InPort::install(this, Controls::InputGainCvInput, column1, y);
