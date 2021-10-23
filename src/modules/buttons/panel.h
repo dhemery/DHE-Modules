@@ -4,8 +4,7 @@
 
 #include "controls/buttons.h"
 #include "controls/ports.h"
-
-#include "widgets/panel-widget.h"
+#include "panels/panel-widget.h"
 
 #include "rack.hpp"
 

@@ -1,7 +1,7 @@
 #pragma once
 
-#include "widgets/dimensions.h"
-#include "widgets/panel-assets.h"
+#include "panels/dimensions.h"
+#include "panels/panel-assets.h"
 
 #include "rack.hpp"
 

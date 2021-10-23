@@ -6,8 +6,8 @@
 #include "controls/ports.h"
 #include "controls/steppers.h"
 #include "controls/switches.h"
-#include "widgets/dimensions.h"
-#include "widgets/screws.h"
+#include "panels/dimensions.h"
+#include "panels/screws.h"
 
 #include "rack.hpp"
 

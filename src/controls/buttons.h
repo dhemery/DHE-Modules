@@ -1,7 +1,8 @@
 #pragma once
 
-#include "./switches.h"
+#include "switches.h"
 
+#include "panels/dimensions.h"
 #include "rack.hpp"
 
 #include <string>

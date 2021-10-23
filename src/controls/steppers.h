@@ -2,7 +2,7 @@
 
 #include "switches.h"
 
-#include "widgets/dimensions.h"
+#include "panels/dimensions.h"
 
 #include "rack.hpp"
 

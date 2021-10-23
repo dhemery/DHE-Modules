@@ -3,7 +3,7 @@
 #include "control-ids.h"
 
 #include "controls/ports.h"
-#include "widgets/dimensions.h"
+#include "panels/dimensions.h"
 
 #include "rack.hpp"
 

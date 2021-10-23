@@ -1,10 +1,11 @@
 #pragma once
 
-#include "./gator-controls.h"
+#include "gator-controls.h"
+
 #include "controls/buttons.h"
 #include "controls/ports.h"
 #include "controls/switches.h"
-#include "widgets/screws.h"
+#include "panels/screws.h"
 
 #include "rack.hpp"
 
