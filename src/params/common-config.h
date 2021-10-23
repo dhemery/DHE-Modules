@@ -30,14 +30,4 @@ static inline void config_button(rack::engine::Module *module, int id,
   module->configSwitch(id, 0.F, 1.F, default_value, name);
 }
 
-template <int N>
-void config_toggle(rack::engine::Module *module, int toggle_id,
-                   std::string const &toggle_name,
-                   std::array<char const *, N> const &state_names,
-                   int initial_state = 0) {
-  auto labels =
-      std::vector<std::string>{state_names.cbegin(), state_names.cend()};
-  config_switch(module, toggle_id, toggle_name, labels, initial_state);
-}
-
 } // namespace dhe

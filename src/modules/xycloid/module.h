@@ -7,6 +7,7 @@
 #include "components/range.h"
 #include "params/common-config.h"
 #include "params/float-params.h"
+#include "params/int-params.h"
 #include "params/level-config.h"
 #include "signals/common-inputs.h"
 
@@ -28,10 +29,10 @@ public:
     WobbleRatio::config(this, Param::RatioKnob, "Ratio");
     configInput(Input::RatioCvInput, "Ratio CV");
     Attenuverter::config(this, Param::RatioAvKnob, "Ratio CV gain");
-    config_toggle<3>(this, Param::DirectionSwitch, "Direction",
-                     {"In", "-In +Out", "Out"}, 2);
-    config_toggle<2>(this, Param::FreeRatioSwitch, "Ratio mode",
-                     {"Quantized", "Free"}, 1);
+    LabeledInts::config(this, Param::DirectionSwitch, "Direction",
+                        {"In", "-In +Out", "Out"}, 2);
+    LabeledInts::config(this, Param::FreeRatioSwitch, "Ratio mode",
+                        {"Quantized", "Free"}, 1);
 
     Percentage::config(this, Param::DepthKnob, "Depth", 50.F);
     configInput(Input::DepthCvInput, "Depth CV");

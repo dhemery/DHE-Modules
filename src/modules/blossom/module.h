@@ -7,6 +7,7 @@
 #include "components/range.h"
 #include "components/sigmoid.h"
 #include "params/float-params.h"
+#include "params/int-params.h"
 #include "params/level-config.h"
 #include "signals/common-inputs.h"
 
@@ -15,7 +16,6 @@
 #include <cmath>
 
 namespace dhe {
-
 namespace blossom {
 
 class Module : public rack::engine::Module {
@@ -27,8 +27,8 @@ public:
     Attenuverter::config(this, Params::SpinSpeedAv, "Speed CV gain");
     configInput(Inputs::SpinSpeedCv, "Speed CV");
 
-    config_toggle<2>(this, Params::BounceRatioMode, "Ratio mode",
-                     {"Quantized", "Free"}, 1);
+    LabeledInts::config(this, Params::BounceRatioMode, "Ratio mode",
+                        {"Quantized", "Free"}, 1);
 
     BounceRatio::config(this, Params::BounceRatio, "Ratio");
     Attenuverter::config(this, Params::BounceRatioAv, "Ratio CV gain");

@@ -1,6 +1,8 @@
 #pragma once
 
-#include "./common-config.h"
+#include "common-config.h"
+#include "int-params.h"
+
 #include "components/range.h"
 #include "signals/common-inputs.h"
 
@@ -68,9 +70,6 @@ config_level_knob(rack::engine::Module *module, int knob_id, Range range,
   config_level_knob(module, knob_id, range_supplier, name, initial_rotation);
 }
 
-static auto constexpr level_state_names =
-    std::array<char const *, 2>{"±5 V", "0–10 V"};
-
 /**
  * Configures the param and display for a level range switch.
  */
@@ -78,6 +77,9 @@ static inline void
 config_level_range_switch(rack::engine::Module *module, int switch_id,
                           std::string const &name = "Level range",
                           int initial_state = 1) {
-  config_toggle<2>(module, switch_id, name, level_state_names, initial_state);
+  static auto const level_state_names =
+      std::vector<std::string>{"±5 V", "0–10 V"};
+  LabeledInts::config(module, switch_id, name, level_state_names,
+                      initial_state);
 }
 } // namespace dhe

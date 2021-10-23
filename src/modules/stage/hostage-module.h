@@ -1,13 +1,15 @@
 #pragma once
 
-#include "./defer-mode.h"
-#include "./hold-mode.h"
-#include "./hostage-controls.h"
-#include "./hostage-engine.h"
-#include "./idle-mode.h"
-#include "./input-mode.h"
-#include "./sustain-mode.h"
+#include "defer-mode.h"
+#include "hold-mode.h"
+#include "hostage-controls.h"
+#include "hostage-engine.h"
+#include "idle-mode.h"
+#include "input-mode.h"
+#include "sustain-mode.h"
+
 #include "params/duration-config.h"
+#include "params/int-params.h"
 
 #include "rack.hpp"
 
@@ -39,8 +41,8 @@ public:
     config_duration_range_switch(this, Controls::DurationRangeSwitch);
     configInput(Controls::DurationCvInput, "Duration CV");
 
-    config_toggle<2>(this, Controls::ModeSwitch, "Mode", {"Hold", "Sustain"},
-                     0);
+    LabeledInts::config(this, Controls::ModeSwitch, "Mode", {"Hold", "Sustain"},
+                        0);
   };
 
   void process(ProcessArgs const &args) override {

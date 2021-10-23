@@ -69,9 +69,6 @@ config_duration_knob(rack::engine::Module *module, int knob_id, int switch_id,
   config_duration_knob(module, knob_id, range_supplier, name, initial_rotation);
 }
 
-static auto constexpr position_names =
-    std::array<char const *, 3>{"0.001–1.0 s", "0.01–10.0 s", "0.1–100.0 s"};
-
 /**
  * Configures the param and display for a duration range switch.
  */
@@ -79,6 +76,9 @@ static inline void
 config_duration_range_switch(rack::engine::Module *module, int switch_id,
                              std::string const &name = "Duration range",
                              int initial_position = 1) {
-  config_toggle<3>(module, switch_id, name, position_names, initial_position);
+  static auto const position_names =
+      std::vector<std::string>{"0.001–1.0 s", "0.01–10.0 s", "0.1–100.0 s"};
+  LabeledInts::config(module, switch_id, name, position_names,
+                      initial_position);
 }
 } // namespace dhe
