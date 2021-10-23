@@ -1,6 +1,7 @@
 #pragma once
 
 #include "./gator-controls.h"
+#include "controls/buttons.h"
 #include "controls/ports.h"
 #include "controls/switches.h"
 #include "widgets/screws.h"
@@ -34,9 +35,10 @@ public:
     auto y = top;
     for (auto i = 0; i < Controls::InputCount / 2; i++) {
       InPort::install(this, Controls::Inputs + i, left, y);
-      Button::install<Toggle>(this, Controls::NegateButtons + i, lc, y);
+      Button::install<Toggle>(this, Controls::NegateButtons + i, mm2px(lc, y));
       Button::install<Toggle>(
-          this, Controls::NegateButtons + i + Controls::InputCount / 2, rc, y);
+          this, Controls::NegateButtons + i + Controls::InputCount / 2,
+          mm2px(rc, y));
       InPort::install(this, Controls::Inputs + i + Controls::InputCount / 2,
                       right, y);
       y += dy;

@@ -88,13 +88,15 @@ public:
 
     auto constexpr run_y = global_controls_y(0);
     InPort::install(this, Input::Run, sequence_controls_x, run_y);
-    Button::install<Toggle>(this, Param::Run,
-                            sequence_controls_x + button_port_distance, run_y);
+    Button::install<Toggle>(
+        this, Param::Run,
+        mm2px(sequence_controls_x + button_port_distance, run_y));
 
     auto constexpr loop_y = global_controls_y(1);
     InPort::install(this, Input::Loop, sequence_controls_x, loop_y);
-    Button::install<Toggle>(this, Param::Loop,
-                            sequence_controls_x + button_port_distance, loop_y);
+    Button::install<Toggle>(
+        this, Param::Loop,
+        mm2px(sequence_controls_x + button_port_distance, loop_y));
 
     auto constexpr progress_light_y = top - light_diameter * 2.F;
 
@@ -131,13 +133,14 @@ public:
     auto constexpr gate_y = global_controls_y(3);
     InPort::install(this, Input::Gate, sequence_controls_x, gate_y);
     Button::install<Momentary>(
-        this, Param::Gate, sequence_controls_x + button_port_distance, gate_y);
+        this, Param::Gate,
+        mm2px(sequence_controls_x + button_port_distance, gate_y));
 
     auto constexpr reset_y = global_controls_y(4);
     InPort::install(this, Input::Reset, sequence_controls_x, reset_y);
-    Button::install<Momentary>(this, Param::Reset,
-                               sequence_controls_x + button_port_distance,
-                               reset_y);
+    Button::install<Momentary>(
+        this, Param::Reset,
+        mm2px(sequence_controls_x + button_port_distance, reset_y));
 
     auto constexpr level_y = global_controls_y(0);
     auto constexpr global_duration_y = global_controls_y(1);
@@ -260,8 +263,8 @@ public:
       Knob::install<Small>(this, Param::StepCurvature + step, step_x,
                            curvature_y);
 
-      Button::install<Toggle>(this, Param::StepEnabled + step, step_x,
-                              enabled_y);
+      Button::install<Toggle>(this, Param::StepEnabled + step,
+                              mm2px(step_x, enabled_y));
     }
   }
 }; // namespace dhe

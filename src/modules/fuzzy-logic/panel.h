@@ -1,28 +1,31 @@
 #pragma once
 
-#include "./fuzzy-logic-controls.h"
+#include "fuzzy-logic-controls.h"
+
 #include "controls/ports.h"
 #include "controls/switches.h"
-#include "widgets/screws.h"
+#include "widgets/panel-widget"
 
 #include "rack.hpp"
 
 namespace dhe {
 
 namespace fuzzy_logic {
-class Panel : public rack::app::ModuleWidget {
+struct HPanel {
+  static auto constexpr svg_name = "fuzzy-logic-h";
+};
+
+struct ZPanel {
+  static auto constexpr svg_name = "fuzzy-logic-h";
+};
+
+template <typename TStyle> struct Panel : public PanelWidget<Panel<TStyle>> {
   using Controls = FuzzyLogicControls;
-
-public:
   static auto constexpr svg_dir = "fuzzy-logic";
+  static auto constexpr svg_name = TStyle::svg_name;
+  static auto constexpr hp = 9;
 
-  explicit Panel(std::string const &module_name, rack::engine::Module *module) {
-    auto constexpr hp = 9;
-
-    setModule(module);
-    setPanel(load_svg(svg_dir, module_name));
-    install_screws(this, hp);
-
+  Panel(rack::engine::Module *module) : PanelWidget<Panel<TStyle>>{module} {
     auto constexpr ab_outer_column = hp2mm(1.5F);
     auto constexpr ab_button_column = hp2mm(3.F);
     auto constexpr ab_inner_column = hp2mm(3.25F);
@@ -36,10 +39,10 @@ public:
 
     auto y = top + 0.F * dy;
     InPort::install(this, Controls::AInputs + 0, ab_outer_column, y);
-    Button::install<Toggle>(this, Controls::NotAButtons + 0, ab_button_column,
-                            y);
-    Button::install<Toggle>(this, Controls::NotAButtons + 1, cd_button_column,
-                            y);
+    Button::install<Toggle>(this, Controls::NotAButtons + 0,
+                            mm2px(ab_button_column, y));
+    Button::install<Toggle>(this, Controls::NotAButtons + 1,
+                            mm2px(cd_button_column, y));
     InPort::install(this, Controls::AInputs + 1, cd_outer_column, y);
 
     y = top + 0.5F * dy;
@@ -47,10 +50,10 @@ public:
 
     y = top + 1.F * dy;
     InPort::install(this, Controls::BInputs + 0, ab_outer_column, y);
-    Button::install<Toggle>(this, Controls::NotBButtons + 0, ab_button_column,
-                            y);
-    Button::install<Toggle>(this, Controls::NotBButtons + 1, cd_button_column,
-                            y);
+    Button::install<Toggle>(this, Controls::NotBButtons + 0,
+                            mm2px(ab_button_column, y));
+    Button::install<Toggle>(this, Controls::NotBButtons + 1,
+                            mm2px(cd_button_column, y));
     InPort::install(this, Controls::BInputs + 1, cd_outer_column, y);
 
     y = top + 2.F * dy;

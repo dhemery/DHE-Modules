@@ -1,7 +1,6 @@
 #pragma once
 
 #include "./switches.h"
-#include "widgets/dimensions.h"
 
 #include "rack.hpp"
 
@@ -41,10 +40,9 @@ struct Toggle {
 
 struct Button {
   template <typename BehaviorT, typename TFrame = Normal, typename TPanel>
-  static inline void install(TPanel *panel, int id, float xmm, float ymm) {
+  static inline void install(TPanel *panel, int id, rack::math::Vec pos) {
     using TWidget = SwitchWidget<TPanel, TFrame, bool>;
-    auto w = rack::createParamCentered<TWidget>(mm2px(xmm, ymm),
-                                                panel->getModule(), id);
+    auto w = rack::createParamCentered<TWidget>(pos, panel->getModule(), id);
     BehaviorT::init_behavior(w);
     panel->addParam(w);
   }

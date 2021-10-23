@@ -57,16 +57,18 @@ public:
     dy = 15.F;
 
     InPort::install(this, Controls::DeferInput, column1, y);
-    Button::install<Momentary>(this, Controls::DeferButton, column2, y);
+    Button::install<Momentary>(this, Controls::DeferButton, mm2px(column2, y));
 
-    Button::install<Momentary, Reversed>(this, Controls::ActiveButton, column4,
-                                         y);
+    Button::install<Momentary, Reversed>(this, Controls::ActiveButton,
+                                         mm2px(column4, y));
     OutPort::install(this, Controls::ActiveOutput, column5, y);
 
     y += dy;
     InPort::install(this, Controls::TriggerInput, column1, y);
-    Button::install<Momentary>(this, Controls::TriggerButton, column2, y);
-    Button::install<Momentary, Reversed>(this, Controls::EocButton, column4, y);
+    Button::install<Momentary>(this, Controls::TriggerButton,
+                               mm2px(column2, y));
+    Button::install<Momentary, Reversed>(this, Controls::EocButton,
+                                         mm2px(column4, y));
     OutPort::install(this, Controls::EocOutput, column5, y);
 
     y += dy;

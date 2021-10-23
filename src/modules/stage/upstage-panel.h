@@ -40,8 +40,9 @@ public:
     ThumbSwitch<2>::install(this, Controls::LevelRangeSwitch, column3, y);
 
     y += dy;
-    Button::install<Momentary>(this, Controls::WaitButton, column1, y);
-    Button::install<Momentary>(this, Controls::TriggerButton, column3, y);
+    Button::install<Momentary>(this, Controls::WaitButton, mm2px(column1, y));
+    Button::install<Momentary>(this, Controls::TriggerButton,
+                               mm2px(column3, y));
 
     y = 82.F;
     dy = 15.F;
