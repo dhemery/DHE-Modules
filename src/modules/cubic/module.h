@@ -3,8 +3,8 @@
 #include "control-ids.h"
 
 #include "components/range.h"
-#include "params/common-config.h"
-#include "params/float-params.h"
+#include "controls/knobs.h"
+#include "params/presets.h"
 #include "signals/common-inputs.h"
 
 #include "rack.hpp"
@@ -13,7 +13,7 @@ namespace dhe {
 
 namespace cubic {
 
-struct Coefficient : public LinearFloat<Coefficient> {
+struct Coefficient : public LinearKnob<Coefficient> {
   static auto constexpr range = Range{-2.F, 2.F};
   static auto constexpr initial = 0.F;
   static auto constexpr unit = "";

@@ -5,10 +5,10 @@
 
 #include "components/phase-rotor.h"
 #include "components/range.h"
-#include "params/common-config.h"
-#include "params/float-params.h"
-#include "params/int-params.h"
+#include "controls/knobs.h"
+#include "controls/switches.h"
 #include "params/level-config.h"
+#include "params/presets.h"
 #include "signals/common-inputs.h"
 
 #include "rack.hpp"
@@ -29,10 +29,10 @@ public:
     WobbleRatio::config(this, Param::RatioKnob, "Ratio");
     configInput(Input::RatioCvInput, "Ratio CV");
     Attenuverter::config(this, Param::RatioAvKnob, "Ratio CV gain");
-    LabeledInts::config(this, Param::DirectionSwitch, "Direction",
-                        {"In", "-In +Out", "Out"}, 2);
-    LabeledInts::config(this, Param::FreeRatioSwitch, "Ratio mode",
-                        {"Quantized", "Free"}, 1);
+    Switch::config(this, Param::DirectionSwitch, "Direction",
+                   {"In", "-In +Out", "Out"}, 2);
+    Switch::config(this, Param::FreeRatioSwitch, "Ratio mode",
+                   {"Quantized", "Free"}, 1);
 
     Percentage::config(this, Param::DepthKnob, "Depth", 50.F);
     configInput(Input::DepthCvInput, "Depth CV");

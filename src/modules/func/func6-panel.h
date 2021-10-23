@@ -1,10 +1,11 @@
 #pragma once
 
-#include "./func-controls.h"
-#include "./switches.h"
+#include "func-controls.h"
+#include "switches.h"
+
+#include "controls/knobs.h"
 #include "controls/ports.h"
 #include "controls/switches.h"
-#include "widgets/knobs.h"
 
 #include "rack.hpp"
 

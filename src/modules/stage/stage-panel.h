@@ -1,8 +1,9 @@
 #pragma once
 
-#include "./stage-controls.h"
+#include "stage-controls.h"
+
+#include "controls/knobs.h"
 #include "controls/ports.h"
-#include "widgets/knobs.h"
 #include "widgets/screws.h"
 
 #include "rack.hpp"

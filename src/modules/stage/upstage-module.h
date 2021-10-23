@@ -2,8 +2,8 @@
 
 #include "./upstage-controls.h"
 #include "./upstage-engine.h"
-#include "params/common-config.h"
 #include "params/level-config.h"
+#include "params/presets.h"
 
 #include "rack.hpp"
 
@@ -22,10 +22,10 @@ public:
     configInput(Controls::LevelCvInput, "Level CV");
 
     configInput(Controls::TriggerInput, "Trigger");
-    config_button(this, Controls::TriggerButton, "Trigger");
+    Button::config(this, Controls::TriggerButton, "Trigger");
 
     configInput(Controls::WaitInput, "Wait");
-    config_button(this, Controls::WaitButton, "Wait");
+    Button::config(this, Controls::WaitButton, "Wait");
 
     configOutput(Controls::TriggerOutput, "Trigger");
     configOutput(Controls::EnvelopeOutput, "Stage");

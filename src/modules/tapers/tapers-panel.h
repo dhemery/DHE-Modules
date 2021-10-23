@@ -1,9 +1,10 @@
 #pragma once
 
-#include "./tapers-controls.h"
+#include "tapers-controls.h"
+
+#include "controls/knobs.h"
 #include "controls/ports.h"
 #include "controls/switches.h"
-#include "widgets/knobs.h"
 #include "widgets/screws.h"
 
 #include "rack.hpp"

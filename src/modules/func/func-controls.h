@@ -2,9 +2,12 @@
 
 #include "operation.h"
 
-#include "params/float-params.h"
+#include "components/range.h"
 
 #include "rack.hpp"
+
+#include <array>
+#include <vector>
 
 namespace dhe {
 namespace func {

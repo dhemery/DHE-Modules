@@ -18,9 +18,9 @@ LAYOUT = {
   input_names: %w[A B],
   input_state_combinations: [
     %w[F F],
-    %w[F T],
-    %w[T F],
-    %w[T T],
+    %w[F TStyle],
+    %w[TStyle F],
+    %w[TStyle TStyle],
   ],
   condition_y: CONDITION_Y,
   outcome_x: OUTCOME_X,

@@ -1,7 +1,7 @@
 #pragma once
 
-#include "./common-config.h"
 #include "components/sigmoid.h"
+#include "controls/switches.h"
 #include "signals/curvature-inputs.h"
 
 #include "rack.hpp"
@@ -26,10 +26,10 @@ class CurvatureKnobParamQuantity : public rack::engine::ParamQuantity {
 /**
  * Configures the param and display for a curvature knob.
  */
-static inline void
-config_curvature_knob(rack::engine::Module *module, int knob_id,
-                      std::string const &name = "Curvature",
-                      float initial_rotation = centered_rotation) {
+static inline void config_curvature_knob(rack::engine::Module *module,
+                                         int knob_id,
+                                         std::string const &name = "Curvature",
+                                         float initial_rotation = 0.5F) {
   module->configParam<CurvatureKnobParamQuantity>(knob_id, 0.F, 1.F,
                                                   initial_rotation, name);
 }
@@ -41,7 +41,7 @@ static inline void config_curve_shape_switch(rack::engine::Module *module,
                                              int switch_id,
                                              std::string const &name = "Shape",
                                              int initial_state = 0) {
-  config_switch(module, switch_id, name, {"J", "S"}, initial_state);
+  Switch::config(module, switch_id, name, {"J", "S"}, initial_state);
 }
 
 } // namespace dhe

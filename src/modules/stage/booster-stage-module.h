@@ -39,14 +39,14 @@ public:
     configInput(Controls::DurationCvInput, "Duration CV");
 
     configInput(Controls::DeferInput, "Defer");
-    config_button(this, Controls::DeferButton, "Defer");
+    Button::config(this, Controls::DeferButton, "Defer");
     configInput(Controls::TriggerInput, "Trigger");
-    config_button(this, Controls::TriggerButton, "Trigger");
+    Button::config(this, Controls::TriggerButton, "Trigger");
 
     configOutput(Controls::ActiveOutput, "Is active");
-    config_button(this, Controls::ActiveButton, "Is active");
+    Button::config(this, Controls::ActiveButton, "Is active");
     configOutput(Controls::EocOutput, "End of stage");
-    config_button(this, Controls::EocButton, "End of stage");
+    Button::config(this, Controls::EocButton, "End of stage");
   }
 
   void process(ProcessArgs const &args) override {

@@ -7,11 +7,10 @@
 #include "generator.h"
 
 #include "components/cxmath.h"
-#include "params/common-config.h"
 #include "params/curvature-config.h"
 #include "params/duration-config.h"
-#include "params/float-params.h"
 #include "params/level-config.h"
+#include "params/presets.h"
 #include "signals/curvature-inputs.h"
 #include "signals/duration-inputs.h"
 #include "signals/level-inputs.h"
@@ -30,7 +29,7 @@ static inline auto level(P const &level_knob, P const &range_switch) -> float {
   return range.scale(rotation);
 }
 
-struct RelativeDuration : public LinearFloat<RelativeDuration> {
+struct RelativeDuration : public LinearKnob<RelativeDuration> {
   static auto constexpr range = Range{0.F, 2.F};
   static auto constexpr initial = 1.F;
   static auto constexpr unit = "";

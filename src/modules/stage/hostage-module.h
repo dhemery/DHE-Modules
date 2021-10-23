@@ -8,8 +8,8 @@
 #include "input-mode.h"
 #include "sustain-mode.h"
 
+#include "controls/knobs.h"
 #include "params/duration-config.h"
-#include "params/int-params.h"
 
 #include "rack.hpp"
 
@@ -41,8 +41,7 @@ public:
     config_duration_range_switch(this, Controls::DurationRangeSwitch);
     configInput(Controls::DurationCvInput, "Duration CV");
 
-    LabeledInts::config(this, Controls::ModeSwitch, "Mode", {"Hold", "Sustain"},
-                        0);
+    Switch::config(this, Controls::ModeSwitch, "Mode", {"Hold", "Sustain"}, 0);
   };
 
   void process(ProcessArgs const &args) override {

@@ -3,10 +3,10 @@
 #include "tapers-controls.h"
 
 #include "components/range.h"
-#include "params/common-config.h"
+#include "controls/knobs.h"
 #include "params/curvature-config.h"
-#include "params/float-params.h"
 #include "params/level-config.h"
+#include "params/presets.h"
 #include "signals/common-inputs.h"
 #include "signals/curvature-inputs.h"
 #include "signals/level-inputs.h"

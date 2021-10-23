@@ -31,7 +31,7 @@ public:
       if (i == N - 1) {
         input_name += "/Gate";
       }
-      config_button(this, Param::InputOverride + i, input_name);
+      Button::config(this, Param::InputOverride + i, input_name);
       configInput(Input::Input + i, input_name);
     }
 
@@ -41,9 +41,9 @@ public:
     for (int row = 0; row < rows; row++) {
       Stepper<Outcomes>::config(this, Param::Outcome + row, "Q", Outcome::True);
     }
-    config_button(this, Param::QOverride, "Q");
+    Button::config(this, Param::QOverride, "Q");
     configOutput(Output::Q, "Q");
-    config_button(this, Param::QNotOverride, "¬Q");
+    Button::config(this, Param::QNotOverride, "¬Q");
     configOutput(Output::QNot, "¬Q");
   }
 

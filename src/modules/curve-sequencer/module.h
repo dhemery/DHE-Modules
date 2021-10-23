@@ -10,10 +10,10 @@
 
 #include "components/phase-timer.h"
 #include "controls/steppers.h"
-#include "params/common-config.h"
 #include "params/curvature-config.h"
 #include "params/duration-config.h"
 #include "params/level-config.h"
+#include "params/presets.h"
 
 #include "rack.hpp"
 
@@ -30,13 +30,13 @@ public:
     config(Param::ParameterCount, Input::InputCount, Output::OutputCount,
            Light::LightCount);
 
-    config_button(this, Param::RunButton, "Run", 1);
+    Button::config(this, Param::RunButton, "Run", 1);
     configInput(Input::RunInput, "Run");
-    config_button(this, Param::GateButton, "Gate");
+    Button::config(this, Param::GateButton, "Gate");
     configInput(Input::GateInput, "Gate");
-    config_button(this, Param::LoopButton, "Loop");
+    Button::config(this, Param::LoopButton, "Loop");
     configInput(Input::LoopInput, "Loop");
-    config_button(this, Param::ResetButton, "Reset");
+    Button::config(this, Param::ResetButton, "Reset");
     configInput(Input::ResetInput, "Reset");
 
     auto const selection_start_knob =
@@ -68,8 +68,8 @@ public:
                             step_name + "curvature");
       config_duration_knob(this, Param::DurationKnobs + step,
                            Param::DurationRangeSwitch, step_name + "duration");
-      config_button(this, Param::EnabledButtons + step, step_name + "enabled",
-                    1);
+      Button::config(this, Param::EnabledButtons + step, step_name + "enabled",
+                     1);
       configInput(Input::EnabledInputs + step, step_name + "enabled");
 
       signals_.show_inactive(step);

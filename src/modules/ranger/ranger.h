@@ -3,9 +3,8 @@
 #include "ranger-controls.h"
 
 #include "components/cxmath.h"
-#include "params/common-config.h"
-#include "params/float-params.h"
 #include "params/level-config.h"
+#include "params/presets.h"
 #include "signals/common-inputs.h"
 #include "signals/level-inputs.h"
 

@@ -3,7 +3,7 @@
 #include "./func-engine.h"
 #include "./operand-param-quantity.h"
 #include "./switches.h"
-#include "params/common-config.h"
+#include "params/presets.h"
 
 #include "rack.hpp"
 
@@ -39,7 +39,7 @@ public:
 private:
   void config_channel(int channel) {
     configParam<OperandParamQuantity<FuncControls, N>>(
-        Controls::AmountKnob + channel, 0.F, 1.F, centered_rotation);
+        Controls::AmountKnob + channel, 0.F, 1.F, 0.5F);
     auto const channel_name =
         N == 1 ? std::string{""}
                : std::string{"Channel "} + std::to_string(channel + 1);

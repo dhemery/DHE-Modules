@@ -1,9 +1,10 @@
 #pragma once
 
-#include "./hostage-controls.h"
+#include "hostage-controls.h"
+
+#include "controls/knobs.h"
 #include "controls/ports.h"
 #include "controls/switches.h"
-#include "widgets/knobs.h"
 #include "widgets/screws.h"
 
 #include "rack.hpp"

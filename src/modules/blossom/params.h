@@ -2,8 +2,8 @@
 
 #include "components/range.h"
 #include "components/sigmoid.h"
-#include "params/common-config.h"
-#include "params/float-params.h"
+#include "controls/knobs.h"
+#include "params/presets.h"
 
 #include "rack.hpp"
 
@@ -41,7 +41,7 @@ struct BounceRatio {
   }
 };
 
-struct Phase : LinearFloat<Phase> {
+struct Phase : LinearKnob<Phase> {
   static auto constexpr range = Range{-180.F, 180.F};
   static auto constexpr initial = 0.F;
   static auto constexpr unit = "˚";

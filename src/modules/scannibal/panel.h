@@ -1,11 +1,12 @@
 #pragma once
 
-#include "./control-ids.h"
-#include "./controls.h"
+#include "control-ids.h"
+#include "controls.h"
+
+#include "controls/knobs.h"
 #include "controls/ports.h"
 #include "controls/switches.h"
 #include "widgets/dimensions.h"
-#include "widgets/knobs.h"
 #include "widgets/screws.h"
 
 #include "rack.hpp"
@@ -60,7 +61,7 @@ using ProgressLight =
     rack::componentlibrary::SmallLight<rack::componentlibrary::GreenRedLight>;
 
 template <typename PanelT>
-struct LengthKnob : public KnobWidget<PanelT, Small> {
+struct LengthKnob : public Knob::Widget<PanelT, Small> {
   static inline auto create(rack::engine::Module *module, float xmm, float ymm,
                             int index, std::function<void(int)> const &action)
       -> LengthKnob * {
@@ -71,7 +72,7 @@ struct LengthKnob : public KnobWidget<PanelT, Small> {
   }
 
   void onChange(const rack::event::Change &e) override {
-    KnobWidget<PanelT, Small>::onChange(e);
+    Knob::Widget<PanelT, Small>::onChange(e);
     knob_changed_to_(static_cast<int>(this->getParamQuantity()->getValue()));
   }
 

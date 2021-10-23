@@ -2,8 +2,8 @@
 
 #include "swave-controls.h"
 
+#include "controls/knobs.h"
 #include "params/curvature-config.h"
-#include "params/float-params.h"
 #include "signals/curvature-inputs.h"
 
 #include "rack.hpp"

@@ -1,11 +1,12 @@
 #pragma once
 
-#include "./control-ids.h"
-#include "./controls.h"
+#include "control-ids.h"
+#include "controls.h"
+
+#include "controls/knobs.h"
 #include "controls/ports.h"
 #include "controls/switches.h"
 #include "widgets/dimensions.h"
-#include "widgets/knobs.h"
 #include "widgets/screws.h"
 
 #include "rack.hpp"

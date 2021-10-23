@@ -10,11 +10,11 @@
 #include "step-selector.h"
 
 #include "components/cxmath.h"
-#include "params/common-config.h"
+#include "controls/buttons.h"
 #include "params/curvature-config.h"
 #include "params/duration-config.h"
-#include "params/float-params.h"
 #include "params/level-config.h"
+#include "params/presets.h"
 #include "signals/curvature-inputs.h"
 #include "signals/duration-inputs.h"
 #include "signals/level-inputs.h"
@@ -29,13 +29,13 @@ public:
   Module() {
     config(Param::Count, Input::Count, Output::Count, Light::Count);
 
-    config_button(this, Param::Run, "Run", 1);
+    Button::config(this, Param::Run, "Run", 1);
     configInput(Input::Run, "Run");
-    config_button(this, Param::Gate, "Gate");
+    Button::config(this, Param::Gate, "Gate");
     configInput(Input::Gate, "Gate");
-    config_button(this, Param::Loop, "Loop");
+    Button::config(this, Param::Loop, "Loop");
     configInput(Input::Loop, "Loop");
-    config_button(this, Param::Reset, "Reset");
+    Button::config(this, Param::Reset, "Reset");
     configInput(Input::Reset, "Reset");
 
     auto selection_start_knob =
@@ -100,7 +100,7 @@ public:
                            Param::DurationRange, "Duration");
       Stepper<Shapes>::config(this, Param::StepShape + step,
                               step_name + "shape", 0);
-      config_button(this, Param::StepEnabled + step, "Enabled", 1);
+      Button::config(this, Param::StepEnabled + step, "Enabled", 1);
 
       signals_.show_inactive(step);
     }
