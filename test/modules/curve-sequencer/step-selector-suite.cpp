@@ -1,6 +1,6 @@
 #include "modules/curve-sequencer/step-selector.h"
 
-#include "./fixtures/step-selector-controls.h"
+#include "fixtures/step-selector-signals.h"
 
 #include "dheunit/test.h"
 
@@ -11,8 +11,8 @@
 namespace test {
 namespace curve_sequencer {
 static auto constexpr step_count = 8;
-using Controls = StepSelectorControls<step_count>;
-using StepSelector = dhe::curve_sequencer::StepSelector<Controls>;
+using Signals = StepSelectorSignals<step_count>;
+using StepSelector = dhe::curve_sequencer::StepSelector<Signals>;
 
 using dhe::unit::Suite;
 using dhe::unit::Tester;
@@ -179,14 +179,14 @@ struct StepSelectorSuite : public Suite {
 
 void FirstTest::run(Tester &t) const {
   t.run(name_, [this](Tester &t) {
-    auto controls = Controls{};
-    controls.selection_ = selection_;
-    controls.selection_ = selection_;
+    auto signals = Signals{};
+    signals.selection_ = selection_;
+    signals.selection_ = selection_;
     for (auto const s : enabled_steps_) {
-      controls.is_enabled_[s] = true;
+      signals.is_enabled_[s] = true;
     }
 
-    auto selector = StepSelector{controls, step_count};
+    auto selector = StepSelector{signals, step_count};
 
     auto const got = selector.first();
 
@@ -198,15 +198,15 @@ void FirstTest::run(Tester &t) const {
 
 void SuccessorTest::run(Tester &t) const {
   t.run(name_, [this](Tester &t) {
-    auto controls = Controls{};
-    controls.selection_ = selection_;
-    controls.selection_ = selection_;
-    controls.is_looping_ = looping_;
+    auto signals = Signals{};
+    signals.selection_ = selection_;
+    signals.selection_ = selection_;
+    signals.is_looping_ = looping_;
     for (auto const s : enabled_steps_) {
-      controls.is_enabled_[s] = true;
+      signals.is_enabled_[s] = true;
     }
 
-    auto selector = StepSelector{controls, step_count};
+    auto selector = StepSelector{signals, step_count};
 
     auto const got = selector.successor(current_step_);
 

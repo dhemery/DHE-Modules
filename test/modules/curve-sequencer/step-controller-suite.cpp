@@ -5,7 +5,7 @@
 #include "components/sigmoid.h"
 
 #include "./fixtures/advance-mode-enums.h"
-#include "./fixtures/step-controller-controls.h"
+#include "./fixtures/step-controller-signals.h"
 #include "./fixtures/step-event-enums.h"
 
 #include "helpers/latches.h"
@@ -22,8 +22,8 @@ static auto constexpr step_count = 8;
 using dhe::curve_sequencer::AdvanceMode;
 using dhe::curve_sequencer::GenerateMode;
 using dhe::curve_sequencer::StepEvent;
-using Controls = StepControllerControls<step_count>;
-using StepController = dhe::curve_sequencer::StepController<Controls>;
+using Signals = StepControllerSignals<step_count>;
+using StepController = dhe::curve_sequencer::StepController<Signals>;
 
 using dhe::Latch;
 using dhe::PhaseTimer;
@@ -99,13 +99,13 @@ struct StepControllerSuite : public Suite {
   void run(Tester &t) override {
     t.run("enter(step) activates step at 0 progress", [](Tester &t) {
       auto const step = std::rand() % step_count;
-      auto controls = Controls{};
+      auto signals = Signals{};
       auto timer = PhaseTimer{};
-      auto step_controller = StepController{controls, timer};
+      auto step_controller = StepController{signals, timer};
 
       step_controller.enter(step);
 
-      auto const got = controls.progress_[step];
+      auto const got = signals.progress_[step];
       auto constexpr want = 0.F;
 
       if (got != want) {
@@ -115,15 +115,15 @@ struct StepControllerSuite : public Suite {
 
     t.run("exit() deactivates current step", [](Tester &t) {
       auto const step = std::rand() % step_count;
-      auto controls = Controls{};
+      auto signals = Signals{};
       auto timer = PhaseTimer{};
-      auto step_controller = StepController{controls, timer};
+      auto step_controller = StepController{signals, timer};
 
       step_controller.enter(step);
       step_controller.exit();
 
-      if (controls.deactivated_step_ != step) {
-        t.errorf("Got deactivated step {}, want {}", controls.deactivated_step_,
+      if (signals.deactivated_step_ != step) {
+        t.errorf("Got deactivated step {}, want {}", signals.deactivated_step_,
                  step);
       }
     });
@@ -138,13 +138,13 @@ struct StepControllerSuite : public Suite {
 
 void AdvanceModeTest::run(Tester &t, AdvanceMode mode) const {
   t.run(test::name_of(gate_), [this, mode](Tester &t) {
-    auto controls = Controls{};
+    auto signals = Signals{};
     auto timer = PhaseTimer{};
-    auto controller = StepController{controls, timer};
+    auto controller = StepController{signals, timer};
 
     auto const step = std::rand() % step_count;
-    controls.advance_mode_[step] = mode;
-    controls.duration_[step] = 10.F;
+    signals.advance_mode_[step] = mode;
+    signals.duration_[step] = 10.F;
 
     controller.enter(step);
 

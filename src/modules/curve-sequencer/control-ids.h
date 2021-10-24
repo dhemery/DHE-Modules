@@ -19,23 +19,23 @@ namespace curve_sequencer {
 
 template <int N> struct ParamIds {
   enum {
-    RunButton,
-    GateButton,
-    SelectionStartKnob,
-    SelectionLengthKnob,
-    LoopButton,
-    ResetButton,
-    DurationRangeSwitch,
-    LevelRangeSwitch,
-    ONE_PER_STEP(CurveKnobs, N),
-    ONE_PER_STEP(DurationKnobs, N),
-    ONE_PER_STEP(EnabledButtons, N),
-    ONE_PER_STEP(LevelKnobs, N),
-    ONE_PER_STEP(ModeSwitches, N),
-    ONE_PER_STEP(ConditionSwitches, N),
-    ONE_PER_STEP(ShapeSwitches, N),
+    Run,
+    Gate,
+    SelectionStart,
+    SelectionLength,
+    Loop,
+    Reset,
+    DurationRange,
+    LevelRange,
+    ONE_PER_STEP(Curvature, N),
+    ONE_PER_STEP(Duration, N),
+    ONE_PER_STEP(Enabled, N),
+    ONE_PER_STEP(Level, N),
+    ONE_PER_STEP(GenerateMode, N),
+    ONE_PER_STEP(AdvanceMode, N),
+    ONE_PER_STEP(Shape, N),
     GenerateModeMenu,
-    ParameterCount
+    Count
   };
 };
 

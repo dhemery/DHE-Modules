@@ -6,7 +6,7 @@
 namespace test {
 namespace curve_sequencer {
 
-template <int N> struct StepSelectorControls {
+template <int N> struct StepSelectorSignals {
   std::pair<int, int> selection_{-1, -1}; // NOLINT
   std::array<bool, N> is_enabled_{};      // NOLINT
   bool is_looping_;                       // NOLINT

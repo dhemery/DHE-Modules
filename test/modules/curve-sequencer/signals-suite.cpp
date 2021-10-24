@@ -62,32 +62,32 @@ std::vector<InputButtonComboTest> input_button_combo_tests = {
     },
 };
 
-class ControlsSuite : public Suite {
+class SignalsSuite : public Suite {
 public:
-  ControlsSuite() : Suite("dhe::curve_sequencer::Signals") {}
+  SignalsSuite() : Suite("dhe::curve_sequencer::Signals") {}
   void run(Tester &t) override {
     for (auto &test : input_button_combo_tests) {
-      test.run(t, "is_gated()", Param::GateButton, Input::GateInput,
+      test.run(t, "is_gated()", Param::Gate, Input::GateInput,
                [](Signals &signals) -> bool { return signals.is_gated(); });
     }
 
     for (auto &test : input_button_combo_tests) {
-      test.run(t, "is_looping()", Param::LoopButton, Input::LoopInput,
+      test.run(t, "is_looping()", Param::Loop, Input::LoopInput,
                [](Signals &signals) -> bool { return signals.is_looping(); });
     }
     for (auto &test : input_button_combo_tests) {
-      test.run(t, "is_reset()", Param::ResetButton, Input::ResetInput,
+      test.run(t, "is_reset()", Param::Reset, Input::ResetInput,
                [](Signals &signals) -> bool { return signals.is_reset(); });
     }
 
     for (auto &test : input_button_combo_tests) {
-      test.run(t, "is_running()", Param::RunButton, Input::RunInput,
+      test.run(t, "is_running()", Param::Run, Input::RunInput,
                [](Signals &signals) -> bool { return signals.is_running(); });
     }
 
     for (auto &test : input_button_combo_tests) {
       auto const step = std::rand() % step_count;
-      test.run(t, "is_enabled(step)", Param::EnabledButtons + step,
+      test.run(t, "is_enabled(step)", Param::Enabled + step,
                Input::EnabledInputs + step, [step](Signals &signals) -> bool {
                  return signals.is_enabled(step);
                });
@@ -97,7 +97,7 @@ public:
           test([](Tester &t, Module &module, Signals &signals) {
             auto const want = std::rand() % step_count;
             auto const knob_value = static_cast<float>(want);
-            module.params_[Param::SelectionStartKnob].setValue(knob_value);
+            module.params_[Param::SelectionStart].setValue(knob_value);
 
             auto const got = signals.selection_start();
             if (got != want) {
@@ -109,7 +109,7 @@ public:
           test([](Tester &t, Module &module, Signals &signals) {
             auto const want = std::rand() % step_count;
             auto const knob_value = static_cast<float>(want);
-            module.params_[Param::SelectionLengthKnob].setValue(knob_value);
+            module.params_[Param::SelectionLength].setValue(knob_value);
             auto const got = signals.selection_length();
             if (got != want) {
               t.errorf("Got {}, want {}", got, want);
@@ -155,7 +155,7 @@ public:
             auto const step = std::rand() % step_count;
             auto constexpr curve_knob_rotation = 0.3F;
 
-            module.params_[Param::CurveKnobs + step].setValue(
+            module.params_[Param::Curvature + step].setValue(
                 curve_knob_rotation);
 
             auto const got = signals.curvature(step);
@@ -172,9 +172,9 @@ public:
             auto constexpr duration_knob_rotation = 0.75F;
             auto constexpr duration_range_selection = 2; // Long duration
 
-            module.params_[Param::DurationKnobs + step].setValue(
+            module.params_[Param::Duration + step].setValue(
                 duration_knob_rotation);
-            module.params_[Param::DurationRangeSwitch].setValue(
+            module.params_[Param::DurationRange].setValue(
                 duration_range_selection);
 
             auto const got = signals.duration(step);
@@ -192,10 +192,8 @@ public:
             auto constexpr level_knob_rotation = 0.35F;
             auto constexpr level_range_selection = 1; // unipolar
 
-            module.params_[Param::LevelKnobs + step].setValue(
-                level_knob_rotation);
-            module.params_[Param::LevelRangeSwitch].setValue(
-                level_range_selection);
+            module.params_[Param::Level + step].setValue(level_knob_rotation);
+            module.params_[Param::LevelRange].setValue(level_range_selection);
 
             auto const got = signals.level(step);
             auto const want = dhe::level(
@@ -211,7 +209,7 @@ public:
         t.run("with switch in position " + std::to_string(selection),
               test([selection](Tester &t, Module &module, Signals &signals) {
                 auto const step = std::rand() % step_count;
-                module.params_[Param::ShapeSwitches + step].setValue(
+                module.params_[Param::Shape + step].setValue(
                     static_cast<float>(selection));
 
                 auto const got = signals.taper(step);
@@ -224,7 +222,7 @@ public:
       }
     });
 
-    t.run("mode(step)", [](Tester &t) {
+    t.run("generate_mode(step)", [](Tester &t) {
       using dhe::curve_sequencer::GenerateMode;
       using dhe::curve_sequencer::generate_mode_count;
 
@@ -232,10 +230,10 @@ public:
         t.run(name_of(mode),
               test([mode](Tester &t, Module &module, Signals &signals) {
                 auto const step = std::rand() & step_count;
-                module.params_[Param::ModeSwitches + step].setValue(
+                module.params_[Param::GenerateMode + step].setValue(
                     static_cast<float>(mode));
 
-                auto const got = signals.mode(step);
+                auto const got = signals.generate_mode(step);
 
                 if (got != mode) {
                   t.errorf("Got {}, want {}", got, mode);
@@ -244,17 +242,17 @@ public:
       }
     });
 
-    t.run("condition(step)", [](Tester &t) {
+    t.run("advance_mode(step)", [](Tester &t) {
       using dhe::curve_sequencer::AdvanceMode;
       using dhe::curve_sequencer::advance_mode_count;
       for (auto const mode : advance_modes) {
         t.run(name_of(mode),
               test([mode](Tester &t, Module &module, Signals &signals) {
                 auto const step = std::rand() & step_count;
-                module.params_[Param::ConditionSwitches + step].setValue(
+                module.params_[Param::AdvanceMode + step].setValue(
                     static_cast<float>(mode));
 
-                auto const got = signals.condition(step);
+                auto const got = signals.advance_mode(step);
 
                 if (got != mode) {
                   t.errorf("Got {}, want {}", got, mode);
@@ -288,6 +286,6 @@ public:
   }
 };
 
-static auto _ = ControlsSuite{};
+static auto _ = SignalsSuite{};
 } // namespace curve_sequencer
 } // namespace test

@@ -32,7 +32,7 @@ static auto constexpr original_step_event = static_cast<StepEvent>(8888);
 static auto constexpr out_of_range_step_event = static_cast<StepEvent>(9999);
 static auto constexpr original_gate = falling_latch;
 
-struct Controls {
+struct Signals {
   auto is_gated() const -> bool { return is_gated_; }
   auto is_reset() const -> bool { return is_reset_; }
   auto is_running() const -> bool { return is_running_; }
@@ -101,10 +101,10 @@ struct StepSelector {
 };
 
 using Engine =
-    dhe::curve_sequencer::Engine<Controls, StepSelector, StepController>;
+    dhe::curve_sequencer::Engine<Signals, StepSelector, StepController>;
 
 struct Module {
-  Controls &controls_;
+  Signals &signals_;
   StepSelector &step_selector_;
   StepController &step_controller_;
 };
@@ -134,24 +134,24 @@ static inline auto set_first(int s, StepEvent e) -> Change {
 }
 
 static inline auto set_gate(bool b) -> Change {
-  return [b](Module &module) { module.controls_.is_gated_ = b; };
+  return [b](Module &module) { module.signals_.is_gated_ = b; };
 }
 
 static inline auto set_input(float f) -> Change {
-  return [f](Module &module) { module.controls_.input_ = f; };
+  return [f](Module &module) { module.signals_.input_ = f; };
 }
 
 static inline auto set_reset(bool b) -> Change {
-  return [b](Module &module) { module.controls_.is_reset_ = b; };
+  return [b](Module &module) { module.signals_.is_reset_ = b; };
 }
 
 static inline auto set_running(bool b) -> Change {
-  return [b](Module &module) { module.controls_.is_running_ = b; };
+  return [b](Module &module) { module.signals_.is_running_ = b; };
 }
 
 static inline auto assert_output(float want) -> Check {
   return [want](Tester &t, Module const &module) {
-    auto const got = module.controls_.output_;
+    auto const got = module.signals_.output_;
     if (got != want) {
       t.errorf("Got output {}, want {}", got, want);
     }

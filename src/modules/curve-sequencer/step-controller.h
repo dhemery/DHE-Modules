@@ -33,38 +33,38 @@ static inline auto is_satisfied(GenerateMode mode, AdvanceMode condition,
   }
 }
 
-template <typename Controls> class StepController {
+template <typename Signals> class StepController {
 public:
-  StepController(Controls &controls, PhaseTimer &timer)
-      : controls_{controls}, timer_{timer} {}
+  StepController(Signals &signals, PhaseTimer &timer)
+      : signals_{signals}, timer_{timer} {}
 
   void enter(int step) {
     step_ = step;
     reset();
-    controls_.show_progress(step_, 0.F);
+    signals_.show_progress(step_, 0.F);
   }
 
   auto execute(Latch const &gate, float sample_time) -> StepEvent {
-    GenerateMode step_mode = mode();
-    if (!is_satisfied(step_mode, condition(), gate)) {
+    GenerateMode step_mode = generate_mode();
+    if (!is_satisfied(step_mode, advance_mode(), gate)) {
       if (step_mode != GenerateMode::Sustain) { // Sustain has no duration
         timer_.advance(sample_time / duration());
       }
-      controls_.show_progress(step_, timer_.phase());
+      signals_.show_progress(step_, timer_.phase());
       switch (step_mode) {
       case GenerateMode::Curve:
-        controls_.output(
+        signals_.output(
             cx::scale(taper(timer_.phase()), start_voltage_, level()));
         break;
       case GenerateMode::Input:
-        controls_.output(controls_.input());
+        signals_.output(signals_.input());
         break;
       case GenerateMode::Chase:
-        controls_.output(cx::scale(taper(timer_.phase()), start_voltage_,
-                                   controls_.input()));
+        signals_.output(
+            cx::scale(taper(timer_.phase()), start_voltage_, signals_.input()));
         break;
       case GenerateMode::Level:
-        controls_.output(level());
+        signals_.output(level());
         break;
       default: // Hold and sustain
         break;
@@ -79,31 +79,35 @@ public:
     return StepEvent::Completed;
   };
 
-  void exit() { controls_.show_inactive(step_); }
+  void exit() { signals_.show_inactive(step_); }
 
 private:
-  auto condition() const -> AdvanceMode { return controls_.condition(step_); }
+  auto advance_mode() const -> AdvanceMode {
+    return signals_.advance_mode(step_);
+  }
 
-  auto duration() const -> float { return controls_.duration(step_); }
+  auto duration() const -> float { return signals_.duration(step_); }
 
-  auto level() const -> float { return controls_.level(step_); }
+  auto generate_mode() const -> GenerateMode {
+    return signals_.generate_mode(step_);
+  }
 
-  auto mode() const -> GenerateMode { return controls_.mode(step_); }
+  auto level() const -> float { return signals_.level(step_); }
 
   void reset() {
     timer_.reset();
-    start_voltage_ = controls_.output();
+    start_voltage_ = signals_.output();
   }
 
   auto taper(float input) const -> float {
-    auto const curvature = controls_.curvature(step_);
-    auto const &taper = controls_.taper(step_);
+    auto const curvature = signals_.curvature(step_);
+    auto const &taper = signals_.taper(step_);
     return taper.apply(input, curvature);
   }
 
   int step_{0};
   float start_voltage_{0.F};
-  Controls &controls_;
+  Signals &signals_;
   PhaseTimer &timer_;
 }; // namespace curve_sequencer
 } // namespace curve_sequencer

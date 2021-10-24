@@ -118,12 +118,12 @@ template <typename TSize> struct Panel : public PanelWidget<Panel<TSize>> {
     auto constexpr active_y = top + light_radius;
 
     InPort::install(this, Input::RunInput, left, run_y);
-    Button::install<Toggle>(this, Param::RunButton, left + button_port_distance,
+    Button::install<Toggle>(this, Param::Run, left + button_port_distance,
                             run_y);
 
     InPort::install(this, Input::LoopInput, left, loop_y);
-    Button::install<Toggle>(this, Param::LoopButton,
-                            left + button_port_distance, loop_y);
+    Button::install<Toggle>(this, Param::Loop, left + button_port_distance,
+                            loop_y);
 
     auto *start_marker = new StartMarker(svg_dir, 0.F, active_y);
     this->addChild(start_marker);
@@ -137,7 +137,7 @@ template <typename TSize> struct Panel : public PanelWidget<Panel<TSize>> {
       end_marker->set_selection_start(step);
     };
     this->addParam(SelectionKnob<Panel<TSize>>::create(
-        module, left, selection_y, Param::SelectionStartKnob,
+        module, left, selection_y, Param::SelectionStart,
         on_selection_start_change));
 
     auto const on_selection_end_change = [end_marker](int length) {
@@ -145,16 +145,16 @@ template <typename TSize> struct Panel : public PanelWidget<Panel<TSize>> {
     };
     auto constexpr selection_length_x = left + hp2mm(2.F);
     this->addParam(SelectionKnob<Panel<TSize>>::create(
-        module, selection_length_x, selection_y, Param::SelectionLengthKnob,
+        module, selection_length_x, selection_y, Param::SelectionLength,
         on_selection_end_change));
 
     InPort::install(this, Input::GateInput, left, gate_y);
-    Button::install<Momentary>(this, Param::GateButton,
-                               left + button_port_distance, gate_y);
+    Button::install<Momentary>(this, Param::Gate, left + button_port_distance,
+                               gate_y);
 
     InPort::install(this, Input::ResetInput, left, reset_y);
-    Button::install<Momentary>(this, Param::ResetButton,
-                               left + button_port_distance, reset_y);
+    Button::install<Momentary>(this, Param::Reset, left + button_port_distance,
+                               reset_y);
 
     auto constexpr generate_mode_y = top + hp2mm(1.61F);
     auto constexpr advance_mode_y = top + hp2mm(3.25F);
@@ -176,20 +176,19 @@ template <typename TSize> struct Panel : public PanelWidget<Panel<TSize>> {
       this->addChild(rack::createLightCentered<ProgressLight>(
           mm2px(x, active_y), module, Light::ProgressLights + step + step));
 
-      Stepper<GenerateModes>::install(this, Param::ModeSwitches + step, x,
+      Stepper<GenerateModes>::install(this, Param::GenerateMode + step, x,
                                       generate_mode_y);
-      Stepper<AdvanceModes>::install(this, Param::ConditionSwitches + step, x,
+      Stepper<AdvanceModes>::install(this, Param::AdvanceMode + step, x,
                                      advance_mode_y);
 
-      Knob::install<Small>(this, Param::LevelKnobs + step, x, level_y);
+      Knob::install<Small>(this, Param::Level + step, x, level_y);
 
-      ThumbSwitch<2>::install(this, Param::ShapeSwitches + step, x, shape_y);
-      Knob::install<Small>(this, Param::CurveKnobs + step, x, curve_y);
+      ThumbSwitch<2>::install(this, Param::Shape + step, x, shape_y);
+      Knob::install<Small>(this, Param::Curvature + step, x, curve_y);
 
-      Knob::install<Small>(this, Param::DurationKnobs + step, x, duration_y);
+      Knob::install<Small>(this, Param::Duration + step, x, duration_y);
 
-      Button::install<Toggle>(this, Param::EnabledButtons + step, x,
-                              enabled_button_y);
+      Button::install<Toggle>(this, Param::Enabled + step, x, enabled_button_y);
       InPort::install(this, Input::EnabledInputs + step, x, enabled_port_y);
     }
 
@@ -198,9 +197,8 @@ template <typename TSize> struct Panel : public PanelWidget<Panel<TSize>> {
 
     InPort::install(this, Input::CurveSequencerInput, right, eos_y);
 
-    ThumbSwitch<2>::install(this, Param::LevelRangeSwitch, right, level_y);
-    ThumbSwitch<3>::install(this, Param::DurationRangeSwitch, right,
-                            duration_y);
+    ThumbSwitch<2>::install(this, Param::LevelRange, right, level_y);
+    ThumbSwitch<3>::install(this, Param::DurationRange, right, duration_y);
     OutPort::install(this, Output::CurveSequencerOutput, right, out_y);
   }
 

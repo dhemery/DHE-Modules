@@ -31,18 +31,23 @@ struct Signals {
           std::vector<TOutput> &outputs, std::vector<TLight> &lights)
       : params_{params}, inputs_{inputs}, outputs_{outputs}, lights_{lights} {}
 
-  auto condition(int step) const -> AdvanceMode {
+  auto advance_mode(int step) const -> AdvanceMode {
     return static_cast<AdvanceMode>(
-        params_[Param::ConditionSwitches + step].getValue());
+        params_[Param::AdvanceMode + step].getValue());
   }
 
   auto curvature(int step) const -> float {
-    return dhe::curvature(params_[Param::CurveKnobs + step]);
+    return dhe::curvature(params_[Param::Curvature + step]);
   }
 
   auto duration(int step) const -> float {
-    return dhe::selectable_duration(params_[Param::DurationKnobs + step],
-                                    params_[Param::DurationRangeSwitch]);
+    return dhe::selectable_duration(params_[Param::Duration + step],
+                                    params_[Param::DurationRange]);
+  }
+
+  auto generate_mode(int step) const -> GenerateMode {
+    return static_cast<GenerateMode>(
+        params_[Param::GenerateMode + step].getValue());
   }
 
   auto input() const -> float {
@@ -50,38 +55,32 @@ struct Signals {
   }
 
   auto is_enabled(int step) const -> bool {
-    return is_pressed(params_[Param::EnabledButtons + step]) ||
+    return is_pressed(params_[Param::Enabled + step]) ||
            is_high(inputs_[Input::EnabledInputs + step]);
   }
 
   auto is_gated() const -> bool {
     return is_high(inputs_[Input::GateInput]) ||
-           is_pressed(params_[Param::GateButton]);
+           is_pressed(params_[Param::Gate]);
   }
 
   auto is_looping() const -> bool {
-    return is_pressed(params_[Param::LoopButton]) ||
+    return is_pressed(params_[Param::Loop]) ||
            is_high(inputs_[Input::LoopInput]);
   }
 
   auto is_reset() const -> bool {
     return is_high(inputs_[Input::ResetInput]) ||
-           is_pressed(params_[Param::ResetButton]);
+           is_pressed(params_[Param::Reset]);
   }
 
   auto is_running() const -> bool {
-    return is_pressed(params_[Param::RunButton]) ||
-           is_high(inputs_[Input::RunInput]);
+    return is_pressed(params_[Param::Run]) || is_high(inputs_[Input::RunInput]);
   }
 
   auto level(int step) const -> float {
-    return dhe::selectable_level(params_[Param::LevelKnobs + step],
-                                 params_[Param::LevelRangeSwitch]);
-  }
-
-  auto mode(int step) const -> GenerateMode {
-    return static_cast<GenerateMode>(
-        params_[Param::ModeSwitches + step].getValue());
+    return dhe::selectable_level(params_[Param::Level + step],
+                                 params_[Param::LevelRange]);
   }
 
   auto output() const -> float {
@@ -93,11 +92,11 @@ struct Signals {
   }
 
   auto selection_start() const -> int {
-    return static_cast<int>(params_[Param::SelectionStartKnob].getValue());
+    return static_cast<int>(params_[Param::SelectionStart].getValue());
   }
 
   auto selection_length() const -> int {
-    return static_cast<int>(params_[Param::SelectionLengthKnob].getValue());
+    return static_cast<int>(params_[Param::SelectionLength].getValue());
   }
 
   void show_inactive(int step) { set_lights(step, 0.F, 0.F); }
@@ -113,7 +112,7 @@ struct Signals {
 
   auto taper(int step) const -> sigmoid::Taper const & {
     auto const selection =
-        static_cast<int>(params_[Param::ShapeSwitches + step].getValue());
+        static_cast<int>(params_[Param::Shape + step].getValue());
     return sigmoid::tapers[selection];
   }
 

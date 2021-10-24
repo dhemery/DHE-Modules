@@ -299,8 +299,8 @@ auto active_tests = StateSuite{
                      "executes active step with gate state",
             .setup_ =
                 [](Context &context) {
-                  context.controls_.is_running_ = true;
-                  context.controls_.is_gated_ = true;
+                  context.signals_.is_running_ = true;
+                  context.signals_.is_gated_ = true;
                   // Resets gate edge on first call to execute()
                   context.step_controller_.want_execute(StepEvent::Generated,
                                                         high_latch, 0.1F);
@@ -315,8 +315,8 @@ auto active_tests = StateSuite{
                 [](Context &context) {
                   auto constexpr current_step = 2;
                   auto constexpr successor_step = 4;
-                  context.controls_.is_running_ = true;
-                  context.controls_.is_gated_ = true;
+                  context.signals_.is_running_ = true;
+                  context.signals_.is_gated_ = true;
 
                   context.step_controller_.want_execute(StepEvent::Completed,
                                                         high_latch, 0.1F);
@@ -331,8 +331,8 @@ auto active_tests = StateSuite{
             .setup_ =
                 [](Context &context) {
                   auto constexpr current_step = 2;
-                  context.controls_.is_running_ = true;
-                  context.controls_.is_gated_ = true;
+                  context.signals_.is_running_ = true;
+                  context.signals_.is_gated_ = true;
 
                   context.step_controller_.want_execute(StepEvent::Completed,
                                                         high_latch, 0.1F);
@@ -345,12 +345,12 @@ auto active_tests = StateSuite{
                      "and does nothing else",
             .setup_ =
                 [](Context &context) {
-                  context.controls_.is_running_ = true;
-                  context.controls_.is_reset_ = true;
-                  context.controls_.input_ = 5.8340F;
+                  context.signals_.is_running_ = true;
+                  context.signals_.is_reset_ = true;
+                  context.signals_.input_ = 5.8340F;
 
                   context.step_controller_.want_exit();
-                  context.controls_.want_output(5.8340F);
+                  context.signals_.want_output(5.8340F);
                 },
         },
 },
@@ -382,13 +382,13 @@ void StateTest::run(Tester &t, Module &m, Engine &engine) const {
 void StateSuite::run(Tester &t) const {
   t.run(name_, [this](Tester &t) {
     for (auto const &test : tests_) {
-      auto controls = Controls{};
+      auto signals = Signals{};
       auto step_selector = StepSelector{};
       auto step_controller = StepController{};
 
-      auto module = Module{controls, step_selector, step_controller};
+      auto module = Module{signals, step_selector, step_controller};
 
-      auto engine = Engine{controls, step_selector, step_controller};
+      auto engine = Engine{signals, step_selector, step_controller};
 
       // To set cs's initial state, apply each of the suite's events.
       for (auto const &event : events_) {

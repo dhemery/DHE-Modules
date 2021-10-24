@@ -26,7 +26,7 @@ using Output = dhe::curve_sequencer::OutputIds;
 using Light = dhe::curve_sequencer::LightIds<step_count>;
 
 struct Module {
-  std::vector<test::fake::Param> params_{Param::ParameterCount};
+  std::vector<test::fake::Param> params_{Param::Count};
   std::vector<test::fake::Port> inputs_{Input::InputCount};
   std::vector<test::fake::Port> outputs_{Output::OutputCount};
   std::vector<test::fake::Light> lights_{Light::LightCount};

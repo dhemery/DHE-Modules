@@ -15,8 +15,8 @@ using dhe::curve_sequencer::AdvanceMode;
 using dhe::curve_sequencer::GenerateMode;
 using dhe::sigmoid::Taper;
 
-template <int N> struct StepControllerControls {
-  StepControllerControls() {
+template <int N> struct StepControllerSignals {
+  StepControllerSignals() {
     for (int i = 0; i < N; i++) {
       taper_[i] = &dhe::sigmoid::s_taper;
     }
@@ -32,12 +32,12 @@ template <int N> struct StepControllerControls {
   float output_;                              // NOLINT
   int deactivated_step_{-1};                  // NOLINT
 
-  auto condition(int s) -> AdvanceMode { return advance_mode_[s]; }
+  auto advance_mode(int s) -> AdvanceMode { return advance_mode_[s]; }
   auto curvature(int s) -> float { return curvature_[s]; }
   auto duration(int s) -> float { return duration_[s]; }
+  auto generate_mode(int s) -> GenerateMode { return generate_mode_[s]; }
   auto input() -> float { return input_; }
   auto level(int s) -> float { return level_[s]; }
-  auto mode(int s) -> GenerateMode { return generate_mode_[s]; }
   void output(float v) { output_ = v; }
   auto output() -> float { return output_; }
   void show_inactive(int s) { deactivated_step_ = s; }
