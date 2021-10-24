@@ -1,9 +1,9 @@
 #pragma once
 
 #include "control-ids.h"
-#include "controls.h"
 #include "engine.h"
 #include "generate-mode.h"
+#include "params.h"
 #include "signals.h"
 #include "step-controller.h"
 #include "step-selector.h"
