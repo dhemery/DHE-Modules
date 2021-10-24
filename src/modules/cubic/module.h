@@ -23,51 +23,39 @@ struct Coefficient : public LinearKnob<Coefficient> {
   }
 };
 
-class Module : public rack::engine::Module {
-  using Controls = CubicControls;
+struct Module : public rack::engine::Module {
+  Module() {
+    config(Param::Count, Input::Count, Output::Count);
 
-public:
-  explicit Module() {
-    config(Controls::ParameterCount, Controls::InputCount,
-           Controls::OutputCount);
+    Coefficient::config(this, Param::ACoefficient, "X cubed coefficient");
+    configInput(Input::ACoefficientCv, "X cubed coefficient CV");
 
-    Coefficient::config(this, Controls::ACoefficientKnob,
-                        "X cubed coefficient");
-    configInput(Controls::ACoefficientCvInput, "X cubed coefficient CV");
+    Coefficient::config(this, Param::BCoefficient, "X squared coefficient");
+    configInput(Input::BCoefficientCv, "X squared coefficient CV");
 
-    Coefficient::config(this, Controls::BCoefficientKnob,
-                        "X squared coefficient");
-    configInput(Controls::BCoefficientCvInput, "X squared coefficient CV");
+    Coefficient::config(this, Param::CCoefficient, "X coefficient", 1.F);
+    configInput(Input::CCoefficientCv, "X coefficient CV");
 
-    Coefficient::config(this, Controls::CCoefficientKnob, "X coefficient", 1.F);
-    configInput(Controls::CCoefficientCvInput, "X coefficient CV");
+    Coefficient::config(this, Param::DCoefficient, "Constant coefficient");
+    configInput(Input::DCoefficientCv, "Constant coefficient CV");
 
-    Coefficient::config(this, Controls::DCoefficientKnob,
-                        "Constant coefficient");
-    configInput(Controls::DCoefficientCvInput, "Constant coefficient CV");
+    Gain::config(this, Param::InputGain, "InPort gain");
+    configInput(Input::InputGainCv, "InPort gain CV");
 
-    Gain::config(this, Controls::InputGainKnob, "InPort gain");
-    configInput(Controls::InputGainCvInput, "InPort gain CV");
+    Gain::config(this, Param::OutputGain, "OutPort gain");
+    configInput(Input::OutputGainCv, "OutPort gain CV");
 
-    Gain::config(this, Controls::OutputGainKnob, "OutPort gain");
-    configInput(Controls::OutputGainCvInput, "OutPort gain CV");
-
-    configInput(Controls::CubicInput, "Module");
-    configOutput(Controls::CubicOutput, "Module");
+    configInput(Input::Cubic, "Module");
+    configOutput(Output::Cubic, "Module");
   }
 
   void process(ProcessArgs const & /*args*/) override {
-    auto a =
-        coefficient(Controls::ACoefficientKnob, Controls::ACoefficientCvInput);
-    auto b =
-        coefficient(Controls::BCoefficientKnob, Controls::BCoefficientCvInput);
-    auto c =
-        coefficient(Controls::CCoefficientKnob, Controls::CCoefficientCvInput);
-    auto d =
-        coefficient(Controls::DCoefficientKnob, Controls::DCoefficientCvInput);
-    auto input_gain = gain(Controls::InputGainKnob, Controls::InputGainCvInput);
-    auto output_gain =
-        gain(Controls::OutputGainKnob, Controls::OutputGainCvInput);
+    auto a = coefficient(Param::ACoefficient, Input::ACoefficientCv);
+    auto b = coefficient(Param::BCoefficient, Input::BCoefficientCv);
+    auto c = coefficient(Param::CCoefficient, Input::CCoefficientCv);
+    auto d = coefficient(Param::DCoefficient, Input::DCoefficientCv);
+    auto input_gain = gain(Param::InputGain, Input::InputGainCv);
+    auto output_gain = gain(Param::OutputGain, Input::OutputGainCv);
 
     auto x = input_gain * main_in() * 0.2F;
     auto x2 = x * x;
@@ -92,12 +80,10 @@ private:
     return gain_range.scale(rotation(params[knob_param], inputs[cv_input]));
   }
 
-  auto main_in() const -> float {
-    return voltage_at(inputs[Controls::CubicInput]);
-  }
+  auto main_in() const -> float { return voltage_at(inputs[Input::Cubic]); }
 
   void send_main_out(float voltage) {
-    outputs[Controls::CubicOutput].setVoltage(voltage);
+    outputs[Output::Cubic].setVoltage(voltage);
   }
 };
 } // namespace cubic

@@ -1,30 +1,33 @@
 #pragma once
 namespace dhe {
 namespace cubic {
-class CubicControls {
-public:
-  enum ParameterIds {
-    ACoefficientKnob,
-    BCoefficientKnob,
-    CCoefficientKnob,
-    DCoefficientKnob,
-    InputGainKnob,
-    OutputGainKnob,
-    ParameterCount
+struct Param {
+  enum {
+    ACoefficient,
+    BCoefficient,
+    CCoefficient,
+    DCoefficient,
+    InputGain,
+    OutputGain,
+    Count
   };
+};
 
-  enum InputIds {
-    CubicInput,
-    ACoefficientCvInput,
-    BCoefficientCvInput,
-    CCoefficientCvInput,
-    DCoefficientCvInput,
-    InputGainCvInput,
-    OutputGainCvInput,
-    InputCount
+struct Input {
+  enum {
+    Cubic,
+    ACoefficientCv,
+    BCoefficientCv,
+    CCoefficientCv,
+    DCoefficientCv,
+    InputGainCv,
+    OutputGainCv,
+    Count
   };
+};
 
-  enum OutputIds { CubicOutput, OutputCount };
+struct Output {
+  enum { Cubic, Count };
 };
 
 } // namespace cubic
