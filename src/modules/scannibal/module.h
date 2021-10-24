@@ -3,8 +3,8 @@
 #include "anchor.h"
 #include "control-ids.h"
 #include "controller.h"
-#include "controls.h"
 #include "generator.h"
+#include "params.h"
 
 #include "components/cxmath.h"
 #include "params/curvature-config.h"
