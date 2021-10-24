@@ -5,31 +5,26 @@
 namespace dhe {
 namespace fuzzy_logic {
 struct Param {
-  enum {
-    TWO_OF(NotAButtons),
-    TWO_OF(NotBButtons),
-    LevelRangeSwitch,
-    ParameterCount
-  };
+  enum { TWO_OF(NegateA), TWO_OF(NegateB), LevelRange, Count };
 };
 
 struct Input {
-  enum { TWO_OF(AInputs), TWO_OF(BInputs), InputCount };
+  enum { TWO_OF(A), TWO_OF(B), Count };
 };
 
 struct Output {
   enum {
-    TWO_OF(AndOutputs),
-    TWO_OF(NandOutputs),
-    TWO_OF(OrOutputs),
-    TWO_OF(NorOutputs),
-    TWO_OF(XorOutputs),
-    TWO_OF(XnorOutputs),
-    TWO_OF(ImplicationOutputs),
-    TWO_OF(NonimplicationOutputs),
-    TWO_OF(ConverseImplicationOutputs),
-    TWO_OF(ConverseNonimplicationOutputs),
-    OutputCount
+    TWO_OF(And),
+    TWO_OF(Nand),
+    TWO_OF(Or),
+    TWO_OF(Nor),
+    TWO_OF(Xor),
+    TWO_OF(Xnor),
+    TWO_OF(Implication),
+    TWO_OF(Nonimplication),
+    TWO_OF(ConverseImplication),
+    TWO_OF(ConverseNonimplication),
+    Count
   };
 };
 } // namespace fuzzy_logic
