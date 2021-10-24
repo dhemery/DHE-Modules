@@ -4,17 +4,15 @@
   <component name="MakefileSettings">
     <option name="linkedExternalProjectsSettings">
       <MakefileProjectSettings>
-        <option name="analyzerType" value="OUTPUT_PARSING" />
-        <option name="buildOptions" value="RACK_DIR=&quot;~/.rack/sdk/1.1.6&quot; " />
+        <option name="buildOptions" value="RACK_DIR=&quot;${RACK_SDK}&quot; " />
         <option name="buildTarget" value="clion" />
-        <option name="cleanTarget" value="clean" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
           </set>
         </option>
-        <option name="switches" value="--just-print --print-directory --keep-going" />
+        <option name="version" value="2" />
       </MakefileProjectSettings>
     </option>
   </component>
