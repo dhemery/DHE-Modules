@@ -3,16 +3,16 @@
 namespace dhe {
 namespace envelope {
 namespace mode {
-template <typename Controls> class LevelMode {
+template <typename Signals> class LevelMode {
 public:
-  LevelMode(Controls &controls) : controls_{controls} {}
+  LevelMode(Signals &signals) : signals_{signals} {}
 
-  void enter() { controls_.show_active(false); }
-  void execute() { controls_.output(controls_.level()); }
-  void exit() { controls_.show_active(false); }
+  void enter() { signals_.show_active(false); }
+  void execute() { signals_.output(signals_.level()); }
+  void exit() { signals_.show_active(false); }
 
 private:
-  Controls &controls_;
+  Signals &signals_;
 };
 } // namespace mode
 } // namespace envelope

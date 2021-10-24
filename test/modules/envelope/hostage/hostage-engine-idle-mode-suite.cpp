@@ -3,7 +3,7 @@
 #include "hostage-engine-fixture.h"
 
 namespace test {
-namespace envelope {
+namespace hostage {
 using dhe::unit::Suite;
 using dhe::unit::Tester;
 using test::is_false;
@@ -108,5 +108,5 @@ public:
 };
 
 static auto _ = HostageEngineIdleModeSuite{};
-} // namespace envelope
+} // namespace hostage
 } // namespace test

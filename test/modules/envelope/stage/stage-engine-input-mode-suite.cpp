@@ -3,7 +3,7 @@
 #include "stage-engine-fixture.h"
 
 namespace test {
-namespace envelope {
+namespace stage {
 using dhe::unit::Suite;
 using dhe::unit::Tester;
 using test::is_false;
@@ -66,5 +66,5 @@ public:
 };
 
 static auto _ = StageEngineInputModeSuite{};
-} // namespace envelope
+} // namespace stage
 } // namespace test

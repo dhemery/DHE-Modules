@@ -1,6 +1,6 @@
 #pragma once
 
-#include "controls.h"
+#include "control-ids.h"
 
 #include "controls/knobs.h"
 #include "controls/ports.h"
@@ -18,7 +18,6 @@ struct Panel : public PanelWidget<Panel> {
   static auto constexpr svg_dir = "upstage";
 
   explicit Panel(rack::engine::Module *module) : PanelWidget<Panel>{module} {
-    using Controls = UpstageControls;
     auto constexpr width = hp2mm(hp);
 
     auto constexpr column1 = width / 4.F + 0.333333333F;
@@ -28,27 +27,27 @@ struct Panel : public PanelWidget<Panel> {
     auto y = 25.F;
     auto dy = 18.5F;
 
-    Knob::install<Large>(this, Controls::LevelKnob, column2, y);
+    Knob::install<Large>(this, Param::LevelKnob, column2, y);
 
     y += dy;
-    InPort::install(this, Controls::LevelCvInput, column1, y);
-    ThumbSwitch<2>::install(this, Controls::LevelRangeSwitch, column3, y);
+    InPort::install(this, Input::LevelCvInput, column1, y);
+    ThumbSwitch<2>::install(this, Param::LevelRangeSwitch, column3, y);
 
     y += dy;
-    Button::install<Momentary>(this, Controls::WaitButton, column1, y);
-    Button::install<Momentary>(this, Controls::TriggerButton, column3, y);
+    Button::install<Momentary>(this, Param::WaitButton, column1, y);
+    Button::install<Momentary>(this, Param::TriggerButton, column3, y);
 
     y = 82.F;
     dy = 15.F;
 
-    InPort::install(this, Controls::WaitInput, column1, y);
+    InPort::install(this, Input::WaitInput, column1, y);
 
     y += dy;
-    InPort::install(this, Controls::TriggerInput, column1, y);
-    OutPort::install(this, Controls::TriggerOutput, column3, y);
+    InPort::install(this, Input::TriggerInput, column1, y);
+    OutPort::install(this, Output::TriggerOutput, column3, y);
 
     y += dy;
-    OutPort::install(this, Controls::EnvelopeOutput, column3, y);
+    OutPort::install(this, Output::EnvelopeOutput, column3, y);
   }
 };
 } // namespace upstage

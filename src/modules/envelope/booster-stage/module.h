@@ -47,7 +47,7 @@ struct Module : public rack::engine::Module {
   }
 
   void process(ProcessArgs const &args) override {
-    machine_.process(args.sampleTime);
+    engine_.process(args.sampleTime);
   }
 
   auto dataToJson() -> json_t * override {
@@ -57,18 +57,23 @@ struct Module : public rack::engine::Module {
   }
 
 private:
-  Signals signals_{inputs, params, outputs};
-  using DeferMode = envelope::mode::DeferMode<Signals>;
-  using InputMode = envelope::mode::InputMode<Signals>;
-  using GenerateMode = envelope::mode::GenerateMode<Signals, PhaseTimer>;
-  using LevelMode = envelope::mode::LevelMode<Signals>;
+  using RackSignals =
+      Signals<rack::engine::Param, rack::engine::Input, rack::engine::Output>;
+  using DeferMode = envelope::mode::DeferMode<RackSignals>;
+  using InputMode = envelope::mode::InputMode<RackSignals>;
+  using GenerateMode = envelope::mode::GenerateMode<RackSignals, PhaseTimer>;
+  using LevelMode = envelope::mode::LevelMode<RackSignals>;
+  using RackEngine =
+      stage::Engine<RackSignals, DeferMode, InputMode, GenerateMode, LevelMode>;
+
+  RackSignals signals_{params, inputs, outputs};
   PhaseTimer timer_{};
   DeferMode defer_mode_{signals_};
   InputMode input_mode_{signals_};
   GenerateMode generate_mode_{signals_, timer_};
   LevelMode level_mode_{signals_};
-  stage::StageEngine<Signals, DeferMode, InputMode, GenerateMode, LevelMode>
-      machine_{signals_, defer_mode_, input_mode_, generate_mode_, level_mode_};
+  RackEngine engine_{signals_, defer_mode_, input_mode_, generate_mode_,
+                     level_mode_};
 };
 } // namespace booster_stage
 } // namespace envelope

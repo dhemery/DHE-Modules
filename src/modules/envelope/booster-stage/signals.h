@@ -8,22 +8,18 @@
 #include "signals/duration-inputs.h"
 #include "signals/level-inputs.h"
 
-#include "rack.hpp"
-
 #include <vector>
 
 namespace dhe {
 namespace envelope {
 namespace booster_stage {
-class Signals {
-  using TInput = rack::engine::Input;
-  using TOutput = rack::engine::Output;
-  using TParam = rack::engine::Param;
+
+template <typename TParam, typename TInput, typename TOutput> struct Signals {
 
 public:
-  Signals(std::vector<TInput> const &inputs, std::vector<TParam> const &params,
+  Signals(std::vector<TParam> const &params, std::vector<TInput> const &inputs,
           std::vector<TOutput> &outputs)
-      : inputs_{inputs}, params_{params}, outputs_{outputs} {}
+      : params_{params}, inputs_{inputs}, outputs_{outputs} {}
 
   auto curvature() const -> float {
     return dhe::curvature(params_[Param::CurveKnob],
@@ -84,8 +80,8 @@ private:
     return is_pressed(params_[Param::EocButton]);
   }
 
-  std::vector<TInput> const &inputs_;
   std::vector<TParam> const &params_;
+  std::vector<TInput> const &inputs_;
   std::vector<TOutput> &outputs_;
 };
 } // namespace booster_stage

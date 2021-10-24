@@ -3,16 +3,16 @@
 namespace dhe {
 namespace envelope {
 namespace mode {
-template <typename Controls> class IdleMode {
+template <typename Signals> class IdleMode {
 public:
-  IdleMode(Controls &controls) : controls_{controls} {}
+  IdleMode(Signals &signals) : signals_{signals} {}
 
-  void enter() { controls_.show_active(false); }
+  void enter() { signals_.show_active(false); }
   void execute() {}
-  void exit() { controls_.show_active(false); }
+  void exit() { signals_.show_active(false); }
 
 private:
-  Controls &controls_;
+  Signals &signals_;
 };
 } // namespace mode
 } // namespace envelope

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "controls.h"
+#include "control-ids.h"
 
 #include "controls/knobs.h"
 #include "controls/ports.h"
@@ -20,7 +20,6 @@ public:
   static auto constexpr svg_dir = "hostage";
 
   Panel(rack::engine::Module *module) : PanelWidget<Panel>{module} {
-    using Controls = HostageControls;
     auto constexpr width = hp2mm(hp);
 
     auto constexpr column1 = width / 4.F + 0.333333F;
@@ -30,28 +29,28 @@ public:
     auto y = 25.F;
     auto dy = 18.5F;
 
-    ThumbSwitch<2>::install(this, Controls::ModeSwitch, column2, y);
+    ThumbSwitch<2>::install(this, Param::ModeSwitch, column2, y);
 
     y += dy;
-    InPort::install(this, Controls::DurationCvInput, column1, y);
-    ThumbSwitch<3>::install(this, Controls::DurationRangeSwitch, column3, y);
+    InPort::install(this, Input::DurationCvInput, column1, y);
+    ThumbSwitch<3>::install(this, Param::DurationRangeSwitch, column3, y);
 
     y += dy;
-    Knob::install<Large>(this, Controls::DurationKnob, column2, y);
+    Knob::install<Large>(this, Param::DurationKnob, column2, y);
 
     y = 82.F;
     dy = 15.F;
 
-    InPort::install(this, Controls::DeferInput, column1, y);
-    OutPort::install(this, Controls::ActiveOutput, column3, y);
+    InPort::install(this, Input::DeferInput, column1, y);
+    OutPort::install(this, Output::ActiveOutput, column3, y);
 
     y += dy;
-    InPort::install(this, Controls::TriggerInput, column1, y);
-    OutPort::install(this, Controls::EocOutput, column3, y);
+    InPort::install(this, Input::TriggerInput, column1, y);
+    OutPort::install(this, Output::EocOutput, column3, y);
 
     y += dy;
-    InPort::install(this, Controls::EnvelopeInput, column1, y);
-    OutPort::install(this, Controls::EnvelopeOutput, column3, y);
+    InPort::install(this, Input::EnvelopeInput, column1, y);
+    OutPort::install(this, Output::EnvelopeOutput, column3, y);
   }
 };
 } // namespace hostage

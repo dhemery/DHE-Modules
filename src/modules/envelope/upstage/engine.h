@@ -1,6 +1,6 @@
 #pragma once
 
-#include "controls.h"
+#include "control-ids.h"
 
 #include "params/level-config.h"
 #include "params/presets.h"
@@ -13,18 +13,18 @@ namespace dhe {
 namespace envelope {
 namespace upstage {
 
-template <typename Controls> class UpstageEngine {
+template <typename Signals> class Engine {
 public:
-  UpstageEngine(Controls &controls) : controls_{controls} {}
+  Engine(Signals &signals) : signals_{signals} {}
 
   void process() {
-    auto is_triggered = controls_.is_triggered() && !controls_.is_waiting();
-    controls_.send_trigger(is_triggered);
-    controls_.send_envelope(controls_.level());
+    auto is_triggered = signals_.is_triggered() && !signals_.is_waiting();
+    signals_.send_trigger(is_triggered);
+    signals_.send_envelope(signals_.level());
   }
 
 private:
-  Controls &controls_;
+  Signals &signals_;
 };
 } // namespace upstage
 } // namespace envelope

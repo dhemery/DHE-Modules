@@ -1,7 +1,8 @@
 #pragma once
 
-#include "controls.h"
+#include "control-ids.h"
 #include "engine.h"
+#include "signals.h"
 
 #include "controls/knobs.h"
 #include "modules/envelope/mode/defer.h"
@@ -17,36 +18,26 @@ namespace dhe {
 namespace envelope {
 namespace hostage {
 
-class Module : public rack::engine::Module {
-  using Controls = HostageControls;
-  using DeferM = mode::DeferMode<Controls>;
-  using HoldM = mode::HoldMode<Controls, PhaseTimer>;
-  using IdleM = mode::IdleMode<Controls>;
-  using InputM = mode::InputMode<Controls>;
-  using SustainM = mode::SustainMode<Controls>;
-
-public:
+struct Module : public rack::engine::Module {
   Module() {
-    config(Controls::ParameterCount, Controls::InputCount,
-           Controls::OutputCount);
+    config(Param::ParameterCount, Input::InputCount, Output::OutputCount);
 
-    configInput(Controls::EnvelopeInput, "Stage");
-    configInput(Controls::DeferInput, "Defer");
-    configInput(Controls::TriggerInput, "Gate/Trigger");
-    configOutput(Controls::ActiveOutput, "Is active");
-    configOutput(Controls::EocOutput, "End of stage");
-    configOutput(Controls::EnvelopeOutput, "Stage");
+    configInput(Input::EnvelopeInput, "Stage");
+    configInput(Input::DeferInput, "Defer");
+    configInput(Input::TriggerInput, "Gate/Trigger");
+    configOutput(Output::ActiveOutput, "Is active");
+    configOutput(Output::EocOutput, "End of stage");
+    configOutput(Output::EnvelopeOutput, "Stage");
 
-    config_duration_knob(this, Controls::DurationKnob,
-                         Controls::DurationRangeSwitch);
-    config_duration_range_switch(this, Controls::DurationRangeSwitch);
-    configInput(Controls::DurationCvInput, "Duration CV");
+    config_duration_knob(this, Param::DurationKnob, Param::DurationRangeSwitch);
+    config_duration_range_switch(this, Param::DurationRangeSwitch);
+    configInput(Input::DurationCvInput, "Duration CV");
 
-    Switch::config(this, Controls::ModeSwitch, "Mode", {"Hold", "Sustain"}, 0);
+    Switch::config(this, Param::ModeSwitch, "Mode", {"Hold", "Sustain"}, 0);
   };
 
   void process(ProcessArgs const &args) override {
-    machine_.process(args.sampleTime);
+    engine_.process(args.sampleTime);
   }
 
   auto dataToJson() -> json_t * override {
@@ -56,16 +47,25 @@ public:
   }
 
 private:
-  Controls controls_{inputs, params, outputs};
+  using RackSignals =
+      Signals<rack::engine::Param, rack::engine::Input, rack::engine::Output>;
+  using DeferM = mode::DeferMode<RackSignals>;
+  using HoldM = mode::HoldMode<RackSignals, PhaseTimer>;
+  using IdleM = mode::IdleMode<RackSignals>;
+  using InputM = mode::InputMode<RackSignals>;
+  using SustainM = mode::SustainMode<RackSignals>;
+  using RackEngine =
+      Engine<RackSignals, InputM, DeferM, HoldM, SustainM, IdleM>;
+
+  RackSignals controls_{params, inputs, outputs};
   DeferM defer_mode_{controls_};
   PhaseTimer hold_timer_{};
   HoldM hold_mode_{controls_, hold_timer_};
   IdleM idle_mode_{controls_};
   SustainM sustain_mode_{controls_};
   InputM input_mode_{controls_};
-  HostageEngine<Controls, InputM, DeferM, HoldM, SustainM, IdleM> machine_{
-      controls_,  input_mode_,   defer_mode_,
-      hold_mode_, sustain_mode_, idle_mode_};
+  RackEngine engine_{controls_,  input_mode_,   defer_mode_,
+                     hold_mode_, sustain_mode_, idle_mode_};
 };
 } // namespace hostage
 } // namespace envelope

@@ -20,12 +20,12 @@
 namespace dhe {
 
 namespace curve_sequencer {
-template <int N> class Module : public rack::engine::Module {
-  using Signals = Signals<
-      std::vector<rack::engine::Input>, std::vector<rack::engine::Output>,
-      std::vector<rack::engine::Param>, std::vector<rack::engine::Light>, N>;
+template <int N> struct Module : public rack::engine::Module {
+  using Input = InputIds<N>;
+  using Light = LightIds<N>;
+  using Param = ParamIds<N>;
+  using Output = OutputIds;
 
-public:
   Module() {
     config(Param::ParameterCount, Input::InputCount, Output::OutputCount,
            Light::LightCount);
@@ -86,17 +86,15 @@ public:
   }
 
 private:
+  using RackSignals = Signals<rack::engine::Param, rack::engine::Input,
+                              rack::engine::Output, rack::engine::Light, N>;
   PhaseTimer timer_{};
-  Signals signals_{inputs, outputs, params, lights};
-  StepController<Signals> step_controller_{signals_, timer_};
-  StepSelector<Signals> selector_{signals_, N};
+  RackSignals signals_{params, inputs, outputs, lights};
+  StepController<RackSignals> step_controller_{signals_, timer_};
+  StepSelector<RackSignals> selector_{signals_, N};
 
-  Engine<Signals, StepSelector<Signals>, StepController<Signals>> engine_{
-      signals_, selector_, step_controller_};
-  using Input = InputIds<N>;
-  using Light = LightIds<N>;
-  using Param = ParamIds<N>;
-  using Output = OutputIds;
+  Engine<RackSignals, StepSelector<RackSignals>, StepController<RackSignals>>
+      engine_{signals_, selector_, step_controller_};
 };
 } // namespace curve_sequencer
 

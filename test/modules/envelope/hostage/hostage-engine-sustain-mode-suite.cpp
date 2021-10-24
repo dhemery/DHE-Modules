@@ -5,7 +5,7 @@
 #include "dheunit/test.h"
 
 namespace test {
-namespace envelope {
+namespace hostage {
 using dhe::unit::Suite;
 using dhe::unit::Tester;
 using test::is_equal_to;
@@ -131,5 +131,5 @@ public:
 };
 
 static auto _ = HostageEngineSustainModeSuite{};
-} // namespace envelope
+} // namespace hostage
 } // namespace test

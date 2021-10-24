@@ -22,7 +22,7 @@ struct InputButtonComboTest {
            std::function<bool(Signals &)> const &func) const {
     t.run(func_name + ": " + name_, [this, button_id, input, func](Tester &t) {
       auto module = Module{};
-      auto signals = Signals{module.inputs_, module.outputs_, module.params_,
+      auto signals = Signals{module.params_, module.inputs_, module.outputs_,
                              module.lights_};
       module.params_[button_id].setValue(button_);
       module.inputs_[input].setVoltage(input_);

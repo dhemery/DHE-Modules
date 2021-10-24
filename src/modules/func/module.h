@@ -39,8 +39,8 @@ template <int N> struct Module : public rack::engine::Module {
 
 private:
   void config_channel(int channel) {
-    configParam<OperandParamQuantity<Signals<N>>>(Param::AmountKnob + channel,
-                                                  0.F, 1.F, 0.5F);
+    configParam<OperandParamQuantity<RackSignals>>(Param::AmountKnob + channel,
+                                                   0.F, 1.F, 0.5F);
     auto const channel_name =
         N == 1 ? std::string{""}
                : std::string{"Channel "} + std::to_string(channel + 1);
@@ -62,7 +62,7 @@ private:
                                       multiplier_range_switch_name, 2);
 
     auto const operand_knob_param_quantity =
-        dynamic_cast<OperandParamQuantity<Signals<N>> *>(
+        reinterpret_cast<OperandParamQuantity<RackSignals> *>(
             getParamQuantity(Param::AmountKnob + channel));
 
     operand_knob_param_quantity->configure(&signals_, channel, channel_name);
@@ -72,8 +72,10 @@ private:
     configOutput(Output::FuncOutput + channel, port_name);
   }
 
-  Signals<N> signals_{inputs, params, outputs};
-  FuncEngine<Signals<N>> func_engine_{signals_};
+  using RackSignals = Signals<rack::engine::Param, rack::engine::Input,
+                              rack::engine::Output, N>;
+  RackSignals signals_{params, inputs, outputs};
+  FuncEngine<RackSignals> func_engine_{signals_};
 };
 } // namespace func
 } // namespace dhe

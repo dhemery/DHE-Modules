@@ -3,16 +3,16 @@
 namespace dhe {
 namespace envelope {
 namespace mode {
-template <typename Controls> class DeferMode {
+template <typename Signals> class DeferMode {
 public:
-  DeferMode(Controls &controls) : controls_{controls} {}
+  DeferMode(Signals &signals) : signals_{signals} {}
 
-  void enter() { controls_.show_active(true); }
-  void execute() { controls_.output(controls_.input()); }
-  void exit() { controls_.show_active(false); }
+  void enter() { signals_.show_active(true); }
+  void execute() { signals_.output(signals_.input()); }
+  void exit() { signals_.show_active(false); }
 
 private:
-  Controls &controls_;
+  Signals &signals_;
 };
 } // namespace mode
 } // namespace envelope

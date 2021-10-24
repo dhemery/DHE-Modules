@@ -19,18 +19,17 @@ static auto constexpr brightness_skew = 0.7F;
 static auto constexpr brightness_range =
     Range{-brightness_skew, 1.F + brightness_skew};
 
-template <typename TInput, typename TOutput, typename TParam, typename TLight,
+template <typename TParam, typename TInput, typename TOutput, typename TLight,
           int N>
-class Signals {
-private:
-  TInput &inputs_;
-  TOutput &outputs_;
-  TParam &params_;
-  TLight &lights_;
+struct Signals {
+  using Param = ParamIds<N>;
+  using Input = InputIds<N>;
+  using Output = OutputIds;
+  using Light = LightIds<N>;
 
-public:
-  Signals(TInput &inputs, TOutput &outputs, TParam &params, TLight &lights)
-      : inputs_{inputs}, outputs_{outputs}, params_{params}, lights_{lights} {}
+  Signals(std::vector<TParam> &params, std::vector<TInput> &inputs,
+          std::vector<TOutput> &outputs, std::vector<TLight> &lights)
+      : params_{params}, inputs_{inputs}, outputs_{outputs}, lights_{lights} {}
 
   auto condition(int step) const -> AdvanceMode {
     return static_cast<AdvanceMode>(
@@ -127,10 +126,10 @@ private:
     lights_[remaining_light].setBrightness(remaining_brightness);
   }
 
-  using Input = InputIds<N>;
-  using Light = LightIds<N>;
-  using Param = ParamIds<N>;
-  using Output = OutputIds;
+  std::vector<TParam> &params_;
+  std::vector<TInput> &inputs_;
+  std::vector<TOutput> &outputs_;
+  std::vector<TLight> &lights_;
 };
 } // namespace curve_sequencer
 

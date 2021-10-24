@@ -7,7 +7,7 @@
 #include <functional>
 
 namespace test {
-namespace envelope {
+namespace hostage {
 
 using dhe::Latch;
 using dhe::envelope::mode::Event;
@@ -72,8 +72,8 @@ struct TimedMode {
 };
 
 using HostageEngine =
-    dhe::envelope::hostage::HostageEngine<Signals, SimpleMode, SimpleMode,
-                                          TimedMode, LatchedMode, SimpleMode>;
+    dhe::envelope::hostage::Engine<Signals, SimpleMode, SimpleMode, TimedMode,
+                                   LatchedMode, SimpleMode>;
 
 template <typename Prepare, typename Run>
 auto test(Prepare prepare, Run run) -> TestFunc {
@@ -92,5 +92,5 @@ auto test(Prepare prepare, Run run) -> TestFunc {
         engine);
   };
 }
-} // namespace envelope
+} // namespace hostage
 } // namespace test

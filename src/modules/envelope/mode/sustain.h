@@ -7,20 +7,20 @@
 namespace dhe {
 namespace envelope {
 namespace mode {
-template <typename Controls> class SustainMode {
+template <typename Signals> class SustainMode {
 public:
-  SustainMode(Controls &controls) : controls_{controls} {}
+  SustainMode(Signals &signals) : signals_{signals} {}
 
   auto execute(Latch const &gate) -> Event {
     return gate.is_high() ? Event::Generated : Event::Completed;
   }
 
-  void enter() { controls_.show_active(true); }
+  void enter() { signals_.show_active(true); }
 
-  void exit() { controls_.show_active(false); }
+  void exit() { signals_.show_active(false); }
 
 private:
-  Controls &controls_;
+  Signals &signals_;
 };
 } // namespace mode
 } // namespace envelope

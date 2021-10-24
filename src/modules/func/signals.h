@@ -5,8 +5,6 @@
 
 #include "components/range.h"
 
-#include "rack.hpp"
-
 #include <array>
 #include <vector>
 
@@ -24,21 +22,20 @@ static auto constexpr multiplier_ranges =
     std::array<Range const, 4>{attenuator_range, attenuverter_range, gain_range,
                                minus_two_to_plus_two_range};
 
-template <int N> struct Signals {
+template <typename TParam, typename TInput, typename TOutput, int N>
+struct Signals {
   static auto constexpr channel_count = N;
   using Input = InputIds<N>;
   using Param = ParamIds<N>;
   using Output = OutputIds<N>;
 
-  Signals(std::vector<rack::engine::Input> const &inputs,
-          std::vector<rack::engine::Param> const &params,
-          std::vector<rack::engine::Output> &outputs)
-      : inputs_{inputs}, params_{params}, outputs_{outputs} {}
+  Signals(std::vector<TParam> &params, std::vector<TInput> &inputs,
+          std::vector<TOutput> &outputs)
+      : params_{params}, inputs_{inputs}, outputs_{outputs} {}
 
   auto input(int channel, float voltage_if_disconnected) const -> float {
-    return const_cast<rack::engine::Input &>(
-               inputs_[Input::FuncInput + channel])
-        .getNormalVoltage(voltage_if_disconnected);
+    return inputs_[Input::FuncInput + channel].getNormalVoltage(
+        voltage_if_disconnected);
   }
 
   auto multiplier_range(int channel) const -> Range {
@@ -65,9 +62,9 @@ template <int N> struct Signals {
   }
 
 private:
-  std::vector<rack::engine::Input> const &inputs_;
-  std::vector<rack::engine::Param> const &params_;
-  std::vector<rack::engine::Output> &outputs_;
+  std::vector<TParam> &params_;
+  std::vector<TInput> &inputs_;
+  std::vector<TOutput> &outputs_;
 };
 } // namespace func
 } // namespace dhe

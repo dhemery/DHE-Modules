@@ -12,14 +12,13 @@ namespace envelope {
 namespace hostage {
 template <typename Controls, typename InputMode, typename DeferMode,
           typename HoldMode, typename SustainMode, typename IdleMode>
-class HostageEngine {
+class Engine {
   using Mode = mode::Mode;
   using Event = mode::Event;
 
 public:
-  HostageEngine(Controls &controls, InputMode &input_mode,
-                DeferMode &defer_mode, HoldMode &hold_mode,
-                SustainMode &sustain_mode, IdleMode &idle_mode)
+  Engine(Controls &controls, InputMode &input_mode, DeferMode &defer_mode,
+         HoldMode &hold_mode, SustainMode &sustain_mode, IdleMode &idle_mode)
       : controls_{controls}, input_mode_{input_mode}, defer_mode_{defer_mode},
         hold_mode_{hold_mode}, sustain_mode_{sustain_mode}, idle_mode_{
                                                                 idle_mode} {}

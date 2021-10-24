@@ -1,7 +1,8 @@
 #pragma once
 
-#include "controls.h"
+#include "control-ids.h"
 #include "engine.h"
+#include "signals.h"
 
 #include "params/level-config.h"
 #include "params/presets.h"
@@ -11,29 +12,26 @@
 namespace dhe {
 namespace envelope {
 namespace upstage {
-class Module : public rack::engine::Module {
-  using Controls = UpstageControls;
 
-public:
+struct Module : public rack::engine::Module {
   Module() {
-    config(Controls::ParameterCount, Controls::InputCount,
-           Controls::OutputCount);
+    config(Param::ParameterCount, Input::InputCount, Output::OutputCount);
 
-    config_level_knob(this, Controls::LevelKnob, Controls::LevelRangeSwitch);
-    config_level_range_switch(this, Controls::LevelRangeSwitch);
-    configInput(Controls::LevelCvInput, "Level CV");
+    config_level_knob(this, Param::LevelKnob, Param::LevelRangeSwitch);
+    config_level_range_switch(this, Param::LevelRangeSwitch);
+    configInput(Input::LevelCvInput, "Level CV");
 
-    configInput(Controls::TriggerInput, "Trigger");
-    Button::config(this, Controls::TriggerButton, "Trigger");
+    configInput(Input::TriggerInput, "Trigger");
+    Button::config(this, Param::TriggerButton, "Trigger");
 
-    configInput(Controls::WaitInput, "Wait");
-    Button::config(this, Controls::WaitButton, "Wait");
+    configInput(Input::WaitInput, "Wait");
+    Button::config(this, Param::WaitButton, "Wait");
 
-    configOutput(Controls::TriggerOutput, "Trigger");
-    configOutput(Controls::EnvelopeOutput, "Stage");
+    configOutput(Output::TriggerOutput, "Trigger");
+    configOutput(Output::EnvelopeOutput, "Stage");
   }
 
-  void process(ProcessArgs const & /*args*/) override { machine_.process(); }
+  void process(ProcessArgs const & /*args*/) override { engine_.process(); }
 
   auto dataToJson() -> json_t * override {
     auto *data = json_object();
@@ -42,8 +40,12 @@ public:
   }
 
 private:
-  Controls controls_{inputs, params, outputs};
-  UpstageEngine<Controls> machine_{controls_};
+  using RackSignals =
+      Signals<rack::engine::Param, rack::engine::Input, rack::engine::Output>;
+  using RackEngine = Engine<RackSignals>;
+
+  RackSignals signals_{params, inputs, outputs};
+  RackEngine engine_{signals_};
 };
 } // namespace upstage
 } // namespace envelope

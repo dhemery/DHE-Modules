@@ -8,7 +8,7 @@
 #include <functional>
 
 namespace test {
-namespace envelope {
+namespace stage {
 
 using dhe::Latch;
 using dhe::envelope::mode::Event;
@@ -55,8 +55,8 @@ struct TimedMode {
 };
 
 using StageEngine =
-    dhe::envelope::stage::StageEngine<Signals, SimpleMode, SimpleMode,
-                                      TimedMode, SimpleMode>;
+    dhe::envelope::stage::Engine<Signals, SimpleMode, SimpleMode, TimedMode,
+                                 SimpleMode>;
 
 template <typename Prepare, typename Run>
 auto test(Prepare prepare, Run run) -> TestFunc {
@@ -72,5 +72,5 @@ auto test(Prepare prepare, Run run) -> TestFunc {
     run(t, signals, defer_mode, input_mode, generate_mode, level_mode, engine);
   };
 }
-} // namespace envelope
+} // namespace stage
 } // namespace test
