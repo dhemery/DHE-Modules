@@ -40,16 +40,16 @@ public:
       auto const y = top + static_cast<float>(row) * row_spacing;
       auto const port_y = y + port_offset;
 
-      InPort::install(this, Input::FuncInput + row, column1, port_y);
-      Knob::install<Large>(this, Param::AmountKnob + row, column3, y);
+      InPort::install(this, Input::Channel + row, column1, port_y);
+      Knob::install<Large>(this, Param::Operand + row, column3, y);
 
-      OutPort::install(this, Output::FuncOutput + row, column5, port_y);
+      OutPort::install(this, Output::Channel + row, column5, port_y);
 
       auto *offset_range_stepper = Stepper<OffsetRanges>::install(
-          this, Param::OffsetRangeSwitch + row, column4, y);
+          this, Param::OffsetRange + row, column4, y);
 
       auto *multiplier_range_stepper = Stepper<MultiplierRanges>::install(
-          this, Param::MultiplierRangeSwitch + row, column4, y);
+          this, Param::MultiplierRange + row, column4, y);
 
       auto const update_range_stepper =
           [offset_range_stepper, multiplier_range_stepper](Operation op) {
@@ -61,8 +61,8 @@ public:
               multiplier_range_stepper->hide();
             }
           };
-      Stepper<Operators>::install(this, Param::OperationSwitch + row, column2,
-                                  y, update_range_stepper);
+      Stepper<Operators>::install(this, Param::Operation + row, column2, y,
+                                  update_range_stepper);
     }
   }
 }; // namespace func

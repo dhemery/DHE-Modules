@@ -34,31 +34,31 @@ struct Signals {
       : params_{params}, inputs_{inputs}, outputs_{outputs} {}
 
   auto input(int channel, float voltage_if_disconnected) const -> float {
-    return inputs_[Input::FuncInput + channel].getNormalVoltage(
+    return inputs_[Input::Channel + channel].getNormalVoltage(
         voltage_if_disconnected);
   }
 
   auto multiplier_range(int channel) const -> Range {
-    return selected_range<4>(params_[Param::MultiplierRangeSwitch + channel],
+    return selected_range<4>(params_[Param::MultiplierRange + channel],
                              multiplier_ranges);
   }
 
   auto offset_range(int channel) const -> Range {
-    return selected_range<4>(params_[Param::OffsetRangeSwitch + channel],
+    return selected_range<4>(params_[Param::OffsetRange + channel],
                              offset_ranges);
   }
 
   auto operand(int channel) const -> float {
-    return rotation_of(params_[Param::AmountKnob + channel]);
+    return rotation_of(params_[Param::Operand + channel]);
   }
 
   auto operation(int channel) const -> Operation {
     return static_cast<Operation>(
-        position_of(params_[Param::OperationSwitch + channel]));
+        position_of(params_[Param::Operation + channel]));
   }
 
   void output(int channel, float voltage) {
-    outputs_[Output::FuncOutput + channel].setVoltage(voltage);
+    outputs_[Output::Channel + channel].setVoltage(voltage);
   }
 
 private:

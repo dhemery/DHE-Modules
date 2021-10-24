@@ -17,7 +17,7 @@ template <int N> struct Module : public rack::engine::Module {
   using Output = OutputIds<N>;
 
   Module() {
-    config(Param::ParameterCount, Input::InputCount, Output::OutputCount);
+    config(Param::Count, Input::Count, Output::Count);
 
     for (auto i = 0; i < N; i++) {
       config_channel(i);
@@ -39,7 +39,7 @@ template <int N> struct Module : public rack::engine::Module {
 
 private:
   void config_channel(int channel) {
-    configParam<OperandParamQuantity<RackSignals>>(Param::AmountKnob + channel,
+    configParam<OperandParamQuantity<RackSignals>>(Param::Operand + channel,
                                                    0.F, 1.F, 0.5F);
     auto const channel_name =
         N == 1 ? std::string{""}
@@ -47,29 +47,28 @@ private:
 
     auto const operator_switch_name =
         channel_name + (N == 1 ? "Operator" : " operator");
-    Stepper<Operators>::config(this, Param::OperationSwitch + channel,
+    Stepper<Operators>::config(this, Param::Operation + channel,
                                operator_switch_name, Operation::Add);
 
     auto const offset_range_switch_name =
         channel_name + (N == 1 ? "Offset range" : " offset range");
-    Stepper<OffsetRanges>::config(this, Param::OffsetRangeSwitch + channel,
+    Stepper<OffsetRanges>::config(this, Param::OffsetRange + channel,
                                   offset_range_switch_name, 1);
 
     auto const multiplier_range_switch_name =
         channel_name + (N == 1 ? "Multiplier range" : " multiplier range");
-    Stepper<MultiplierRanges>::config(this,
-                                      Param::MultiplierRangeSwitch + channel,
+    Stepper<MultiplierRanges>::config(this, Param::MultiplierRange + channel,
                                       multiplier_range_switch_name, 2);
 
     auto const operand_knob_param_quantity =
         reinterpret_cast<OperandParamQuantity<RackSignals> *>(
-            getParamQuantity(Param::AmountKnob + channel));
+            getParamQuantity(Param::Operand + channel));
 
     operand_knob_param_quantity->configure(&signals_, channel, channel_name);
 
     auto const port_name = N == 1 ? "Func" : channel_name;
-    configInput(Input::FuncInput + channel, port_name);
-    configOutput(Output::FuncOutput + channel, port_name);
+    configInput(Input::Channel + channel, port_name);
+    configOutput(Output::Channel + channel, port_name);
   }
 
   using RackSignals = Signals<rack::engine::Param, rack::engine::Input,

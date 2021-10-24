@@ -6,20 +6,20 @@ namespace dhe {
 namespace func {
 template <int N> struct ParamIds {
   enum {
-    PER_CHANNEL(AmountKnob, N),
-    PER_CHANNEL(OperationSwitch, N),
-    PER_CHANNEL(OffsetRangeSwitch, N),
-    PER_CHANNEL(MultiplierRangeSwitch, N),
-    ParameterCount
+    PER_CHANNEL(Operand, N),
+    PER_CHANNEL(Operation, N),
+    PER_CHANNEL(OffsetRange, N),
+    PER_CHANNEL(MultiplierRange, N),
+    Count
   };
 };
 
 template <int N> struct InputIds {
-  enum { PER_CHANNEL(FuncInput, N), InputCount };
+  enum { PER_CHANNEL(Channel, N), Count };
 };
 
 template <int N> struct OutputIds {
-  enum { PER_CHANNEL(FuncOutput, N), OutputCount };
+  enum { PER_CHANNEL(Channel, N), Count };
 };
 
 } // namespace func

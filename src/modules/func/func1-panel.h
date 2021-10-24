@@ -41,15 +41,15 @@ public:
     auto constexpr row4 = top + row_spacing * 3;
     auto constexpr row6 = top + row_spacing * 5 + port_offset;
 
-    InPort::install(this, Input::FuncInput, x, row1);
-    Knob::install<Large>(this, Param::AmountKnob, x, row3);
-    OutPort::install(this, Output::FuncOutput, x, row6);
+    InPort::install(this, Input::Channel, x, row1);
+    Knob::install<Large>(this, Param::Operand, x, row3);
+    OutPort::install(this, Output::Channel, x, row6);
 
     auto *offset_range_stepper =
-        Stepper<OffsetRanges>::install(this, Param::OffsetRangeSwitch, x, row4);
+        Stepper<OffsetRanges>::install(this, Param::OffsetRange, x, row4);
 
     auto *multiplier_range_stepper = Stepper<MultiplierRanges>::install(
-        this, Param::MultiplierRangeSwitch, x, row4);
+        this, Param::MultiplierRange, x, row4);
 
     auto const update_range_stepper_visibility =
         [offset_range_stepper, multiplier_range_stepper](Operation op) {
@@ -61,7 +61,7 @@ public:
             multiplier_range_stepper->hide();
           }
         };
-    Stepper<Operators>::install(this, Param::OperationSwitch, x, row2,
+    Stepper<Operators>::install(this, Param::Operation, x, row2,
                                 update_range_stepper_visibility);
   }
 };
