@@ -15,20 +15,20 @@ namespace upstage {
 
 struct Module : public rack::engine::Module {
   Module() {
-    config(Param::ParameterCount, Input::InputCount, Output::OutputCount);
+    config(Param::Count, Input::Count, Output::Count);
 
-    config_level_knob(this, Param::LevelKnob, Param::LevelRangeSwitch);
-    config_level_range_switch(this, Param::LevelRangeSwitch);
-    configInput(Input::LevelCvInput, "Level CV");
+    config_level_knob(this, Param::Level, Param::LevelRange);
+    config_level_range_switch(this, Param::LevelRange);
+    configInput(Input::LevelCv, "Level CV");
 
-    configInput(Input::TriggerInput, "Trigger");
-    Button::config(this, Param::TriggerButton, "Trigger");
+    configInput(Input::Trigger, "Trigger");
+    Button::config(this, Param::Trigger, "Trigger");
 
-    configInput(Input::WaitInput, "Wait");
-    Button::config(this, Param::WaitButton, "Wait");
+    configInput(Input::Wait, "Wait");
+    Button::config(this, Param::Wait, "Wait");
 
-    configOutput(Output::TriggerOutput, "Trigger");
-    configOutput(Output::EnvelopeOutput, "Stage");
+    configOutput(Output::Trigger, "Trigger");
+    configOutput(Output::Envelope, "Stage");
   }
 
   void process(ProcessArgs const & /*args*/) override { engine_.process(); }

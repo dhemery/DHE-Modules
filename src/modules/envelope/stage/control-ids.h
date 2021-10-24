@@ -4,15 +4,15 @@ namespace dhe {
 namespace envelope {
 namespace stage {
 struct Param {
-  enum { DurationKnob, LevelKnob, CurveKnob, ParameterCount };
+  enum { Duration, Level, Curvature, Count };
 };
 
 struct Input {
-  enum { EnvelopeInput, TriggerInput, DeferInput, InputCount };
+  enum { Envelope, Trigger, Defer, Count };
 };
 
 struct Output {
-  enum { EnvelopeOutput, EocOutput, ActiveOutput, OutputCount };
+  enum { Envelope, Eoc, Active, Count };
 };
 } // namespace stage
 } // namespace envelope

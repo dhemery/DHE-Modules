@@ -27,27 +27,27 @@ struct Panel : public PanelWidget<Panel> {
     auto y = 25.F;
     auto dy = 18.5F;
 
-    Knob::install<Large>(this, Param::LevelKnob, column2, y);
+    Knob::install<Large>(this, Param::Level, column2, y);
 
     y += dy;
-    InPort::install(this, Input::LevelCvInput, column1, y);
-    ThumbSwitch<2>::install(this, Param::LevelRangeSwitch, column3, y);
+    InPort::install(this, Input::LevelCv, column1, y);
+    ThumbSwitch<2>::install(this, Param::LevelRange, column3, y);
 
     y += dy;
-    Button::install<Momentary>(this, Param::WaitButton, column1, y);
-    Button::install<Momentary>(this, Param::TriggerButton, column3, y);
+    Button::install<Momentary>(this, Param::Wait, column1, y);
+    Button::install<Momentary>(this, Param::Trigger, column3, y);
 
     y = 82.F;
     dy = 15.F;
 
-    InPort::install(this, Input::WaitInput, column1, y);
+    InPort::install(this, Input::Wait, column1, y);
 
     y += dy;
-    InPort::install(this, Input::TriggerInput, column1, y);
-    OutPort::install(this, Output::TriggerOutput, column3, y);
+    InPort::install(this, Input::Trigger, column1, y);
+    OutPort::install(this, Output::Trigger, column3, y);
 
     y += dy;
-    OutPort::install(this, Output::EnvelopeOutput, column3, y);
+    OutPort::install(this, Output::Envelope, column3, y);
   }
 };
 } // namespace upstage

@@ -4,15 +4,15 @@ namespace dhe {
 namespace envelope {
 namespace hostage {
 struct Param {
-  enum { DurationKnob, DurationRangeSwitch, ModeSwitch, ParameterCount };
+  enum { Duration, DurationRange, Mode, Count };
 };
 
 struct Input {
-  enum { DeferInput, DurationCvInput, EnvelopeInput, TriggerInput, InputCount };
+  enum { Defer, DurationCv, Envelope, Trigger, Count };
 };
 
 struct Output {
-  enum { ActiveOutput, EnvelopeOutput, EocOutput, OutputCount };
+  enum { Active, Envelope, Eoc, Count };
 };
 
 } // namespace hostage

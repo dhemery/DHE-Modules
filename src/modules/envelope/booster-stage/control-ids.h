@@ -6,34 +6,26 @@ namespace booster_stage {
 
 struct Param {
   enum {
-    ActiveButton,
-    CurveKnob,
-    DeferButton,
-    DurationKnob,
-    DurationRangeSwitch,
-    EocButton,
-    LevelKnob,
-    LevelRangeSwitch,
-    ShapeSwitch,
-    TriggerButton,
-    ParameterCount
+    Active,
+    Curvature,
+    Defer,
+    Duration,
+    DurationRange,
+    Eoc,
+    Level,
+    LevelRange,
+    Shape,
+    Trigger,
+    Count
   };
 };
 
 struct Input {
-  enum {
-    CurveCvInput,
-    DeferInput,
-    DurationCvInput,
-    LevelCvInput,
-    EnvelopeInput,
-    TriggerInput,
-    InputCount
-  };
+  enum { CurvatureCv, Defer, DurationCv, LevelCv, Envelope, Trigger, Count };
 };
 
 struct Output {
-  enum { ActiveOutput, EocOutput, EnvelopeOutput, OutputCount };
+  enum { Active, Eoc, Envelope, Count };
 };
 } // namespace booster_stage
 } // namespace envelope

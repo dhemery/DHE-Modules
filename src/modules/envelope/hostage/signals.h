@@ -18,37 +18,32 @@ template <typename TParam, typename TInput, typename TOutput> struct Signals {
           std::vector<TOutput> &outputs)
       : params_{params}, inputs_{inputs}, outputs_{outputs} {};
 
-  auto defer() const -> bool { return is_high(inputs_[Input::DeferInput]); }
+  auto defer() const -> bool { return is_high(inputs_[Input::Defer]); }
 
   auto duration() const -> float {
-    return selectable_duration(params_[Param::DurationKnob],
-                               inputs_[Input::DurationCvInput],
-                               params_[Param::DurationRangeSwitch]);
+    return selectable_duration(params_[Param::Duration],
+                               inputs_[Input::DurationCv],
+                               params_[Param::DurationRange]);
   }
 
-  auto gate() const -> bool { return is_high(inputs_[Input::TriggerInput]); }
+  auto gate() const -> bool { return is_high(inputs_[Input::Trigger]); }
 
-  auto input() const -> float {
-    return voltage_at(inputs_[Input::EnvelopeInput]);
-  }
+  auto input() const -> float { return voltage_at(inputs_[Input::Envelope]); }
 
   auto mode() const -> Mode {
-    return position_of(params_[Param::ModeSwitch]) == 1 ? Mode::Sustain
-                                                        : Mode::Hold;
+    return position_of(params_[Param::Mode]) == 1 ? Mode::Sustain : Mode::Hold;
   }
 
-  void output(float voltage) {
-    outputs_[Output::EnvelopeOutput].setVoltage(voltage);
-  }
+  void output(float voltage) { outputs_[Output::Envelope].setVoltage(voltage); }
 
   void show_active(bool active) {
     auto const voltage = unipolar_signal_range.scale(active);
-    outputs_[Output::ActiveOutput].setVoltage(voltage);
+    outputs_[Output::Active].setVoltage(voltage);
   }
 
   void show_eoc(bool eoc) {
     auto const voltage = unipolar_signal_range.scale(eoc);
-    outputs_[Output::EocOutput].setVoltage(voltage);
+    outputs_[Output::Eoc].setVoltage(voltage);
   }
 
 private:

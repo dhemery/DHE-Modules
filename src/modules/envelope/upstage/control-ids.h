@@ -5,21 +5,15 @@ namespace envelope {
 namespace upstage {
 
 struct Param {
-  enum {
-    LevelKnob,
-    TriggerButton,
-    WaitButton,
-    LevelRangeSwitch,
-    ParameterCount
-  };
+  enum { Level, Trigger, Wait, LevelRange, Count };
 };
 
 struct Input {
-  enum { TriggerInput, WaitInput, LevelCvInput, InputCount };
+  enum { Trigger, Wait, LevelCv, Count };
 };
 
 struct Output {
-  enum { TriggerOutput, EnvelopeOutput, OutputCount };
+  enum { Trigger, Envelope, Count };
 };
 } // namespace upstage
 } // namespace envelope

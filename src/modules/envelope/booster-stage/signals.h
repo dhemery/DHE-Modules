@@ -22,63 +22,55 @@ public:
       : params_{params}, inputs_{inputs}, outputs_{outputs} {}
 
   auto curvature() const -> float {
-    return dhe::curvature(params_[Param::CurveKnob],
-                          inputs_[Input::CurveCvInput]);
+    return dhe::curvature(params_[Param::Curvature],
+                          inputs_[Input::CurvatureCv]);
   }
 
   auto defer() const -> bool {
-    return is_high(inputs_[Input::DeferInput]) ||
-           is_pressed(params_[Param::DeferButton]);
+    return is_high(inputs_[Input::Defer]) || is_pressed(params_[Param::Defer]);
   }
 
   auto duration() const -> float {
-    return selectable_duration(params_[Param::DurationKnob],
-                               inputs_[Input::DurationCvInput],
-                               params_[Param::DurationRangeSwitch]);
+    return selectable_duration(params_[Param::Duration],
+                               inputs_[Input::DurationCv],
+                               params_[Param::DurationRange]);
   }
 
   auto gate() const -> bool {
-    return is_high(inputs_[Input::TriggerInput]) ||
-           is_pressed(params_[Param::TriggerButton]);
+    return is_high(inputs_[Input::Trigger]) ||
+           is_pressed(params_[Param::Trigger]);
   }
 
-  auto input() const -> float {
-    return voltage_at(inputs_[Input::EnvelopeInput]);
-  }
+  auto input() const -> float { return voltage_at(inputs_[Input::Envelope]); }
 
   auto level() const -> float {
-    return selectable_level(params_[Param::LevelKnob],
-                            inputs_[Input::LevelCvInput],
-                            params_[Param::LevelRangeSwitch]);
+    return selectable_level(params_[Param::Level], inputs_[Input::LevelCv],
+                            params_[Param::LevelRange]);
   }
 
-  void output(float voltage) {
-    outputs_[Output::EnvelopeOutput].setVoltage(voltage);
-  }
+  void output(float voltage) { outputs_[Output::Envelope].setVoltage(voltage); }
 
   void show_active(bool is_active) {
     auto const voltage =
         unipolar_signal_range.scale(is_active || active_button());
-    outputs_[Output::ActiveOutput].setVoltage(voltage);
+    outputs_[Output::Active].setVoltage(voltage);
   }
 
   void show_eoc(bool is_eoc) {
     auto const voltage = unipolar_signal_range.scale(is_eoc || eoc_button());
-    outputs_[Output::EocOutput].setVoltage(voltage);
+    outputs_[Output::Eoc].setVoltage(voltage);
   }
 
   auto taper() const -> sigmoid::Taper const & {
-    return selected_taper(params_[Param::ShapeSwitch]);
+    return selected_taper(params_[Param::Shape]);
   }
 
 private:
   auto active_button() const -> bool {
-    return is_pressed(params_[Param::ActiveButton]);
+    return is_pressed(params_[Param::Active]);
   }
 
-  auto eoc_button() const -> bool {
-    return is_pressed(params_[Param::EocButton]);
-  }
+  auto eoc_button() const -> bool { return is_pressed(params_[Param::Eoc]); }
 
   std::vector<TParam> const &params_;
   std::vector<TInput> const &inputs_;

@@ -18,32 +18,32 @@ namespace envelope {
 namespace booster_stage {
 struct Module : public rack::engine::Module {
   Module() {
-    config(Param::ParameterCount, Input::InputCount, Output::OutputCount);
+    config(Param::Count, Input::Count, Output::Count);
 
-    configInput(Input::EnvelopeInput, "Stage");
-    configOutput(Output::EnvelopeOutput, "Stage");
+    configInput(Input::Envelope, "Stage");
+    configOutput(Output::Envelope, "Stage");
 
-    config_level_knob(this, Param::LevelKnob, Param::LevelRangeSwitch);
-    config_level_range_switch(this, Param::LevelRangeSwitch);
-    configInput(Input::LevelCvInput, "Level CV");
+    config_level_knob(this, Param::Level, Param::LevelRange);
+    config_level_range_switch(this, Param::LevelRange);
+    configInput(Input::LevelCv, "Level CV");
 
-    config_curvature_knob(this, Param::CurveKnob);
-    config_curve_shape_switch(this, Param::ShapeSwitch);
-    configInput(Input::CurveCvInput, "Curvature CV");
+    config_curvature_knob(this, Param::Curvature);
+    config_curve_shape_switch(this, Param::Shape);
+    configInput(Input::CurvatureCv, "Curvature CV");
 
-    config_duration_knob(this, Param::DurationKnob, Param::DurationRangeSwitch);
-    config_duration_range_switch(this, Param::DurationRangeSwitch);
-    configInput(Input::DurationCvInput, "Duration CV");
+    config_duration_knob(this, Param::Duration, Param::DurationRange);
+    config_duration_range_switch(this, Param::DurationRange);
+    configInput(Input::DurationCv, "Duration CV");
 
-    configInput(Input::DeferInput, "Defer");
-    Button::config(this, Param::DeferButton, "Defer");
-    configInput(Input::TriggerInput, "Trigger");
-    Button::config(this, Param::TriggerButton, "Trigger");
+    configInput(Input::Defer, "Defer");
+    Button::config(this, Param::Defer, "Defer");
+    configInput(Input::Trigger, "Trigger");
+    Button::config(this, Param::Trigger, "Trigger");
 
-    configOutput(Output::ActiveOutput, "Is active");
-    Button::config(this, Param::ActiveButton, "Is active");
-    configOutput(Output::EocOutput, "End of stage");
-    Button::config(this, Param::EocButton, "End of stage");
+    configOutput(Output::Active, "Is active");
+    Button::config(this, Param::Active, "Is active");
+    configOutput(Output::Eoc, "End of stage");
+    Button::config(this, Param::Eoc, "End of stage");
   }
 
   void process(ProcessArgs const &args) override {

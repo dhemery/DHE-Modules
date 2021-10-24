@@ -31,40 +31,40 @@ struct Panel : public PanelWidget<Panel> {
     auto dy = 18.5F;
     auto y = 25.F;
 
-    InPort::install(this, Input::LevelCvInput, column1, y);
-    Knob::install<Large>(this, Param::LevelKnob, column3, y);
+    InPort::install(this, Input::LevelCv, column1, y);
+    Knob::install<Large>(this, Param::Level, column3, y);
 
-    ThumbSwitch<2>::install(this, Param::LevelRangeSwitch, column5, y);
-
-    y += dy;
-    InPort::install(this, Input::CurveCvInput, column1, y);
-    Knob::install<Large>(this, Param::CurveKnob, column3, y);
-    ThumbSwitch<2>::install(this, Param::ShapeSwitch, column5, y);
+    ThumbSwitch<2>::install(this, Param::LevelRange, column5, y);
 
     y += dy;
-    InPort::install(this, Input::DurationCvInput, column1, y);
-    Knob::install<Large>(this, Param::DurationKnob, column3, y);
+    InPort::install(this, Input::CurvatureCv, column1, y);
+    Knob::install<Large>(this, Param::Curvature, column3, y);
+    ThumbSwitch<2>::install(this, Param::Shape, column5, y);
 
-    ThumbSwitch<3>::install(this, Param::DurationRangeSwitch, column5, y);
+    y += dy;
+    InPort::install(this, Input::DurationCv, column1, y);
+    Knob::install<Large>(this, Param::Duration, column3, y);
+
+    ThumbSwitch<3>::install(this, Param::DurationRange, column5, y);
 
     y = 82.F;
     dy = 15.F;
 
-    InPort::install(this, Input::DeferInput, column1, y);
-    Button::install<Momentary>(this, Param::DeferButton, column2, y);
+    InPort::install(this, Input::Defer, column1, y);
+    Button::install<Momentary>(this, Param::Defer, column2, y);
 
-    Button::install<Momentary, Reversed>(this, Param::ActiveButton, column4, y);
-    OutPort::install(this, Output::ActiveOutput, column5, y);
-
-    y += dy;
-    InPort::install(this, Input::TriggerInput, column1, y);
-    Button::install<Momentary>(this, Param::TriggerButton, column2, y);
-    Button::install<Momentary, Reversed>(this, Param::EocButton, column4, y);
-    OutPort::install(this, Output::EocOutput, column5, y);
+    Button::install<Momentary, Reversed>(this, Param::Active, column4, y);
+    OutPort::install(this, Output::Active, column5, y);
 
     y += dy;
-    InPort::install(this, Input::EnvelopeInput, column1, y);
-    OutPort::install(this, Output::EnvelopeOutput, column5, y);
+    InPort::install(this, Input::Trigger, column1, y);
+    Button::install<Momentary>(this, Param::Trigger, column2, y);
+    Button::install<Momentary, Reversed>(this, Param::Eoc, column4, y);
+    OutPort::install(this, Output::Eoc, column5, y);
+
+    y += dy;
+    InPort::install(this, Input::Envelope, column1, y);
+    OutPort::install(this, Output::Envelope, column5, y);
   }
 };
 

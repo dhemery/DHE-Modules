@@ -19,18 +19,18 @@ namespace envelope {
 namespace stage {
 struct Module : public rack::engine::Module {
   Module() {
-    config(Param::ParameterCount, Input::InputCount, Output::OutputCount);
+    config(Param::Count, Input::Count, Output::Count);
 
-    config_duration_knob(this, Param::DurationKnob, medium_duration_range);
-    config_level_knob(this, Param::LevelKnob, unipolar_signal_range);
-    config_curvature_knob(this, Param::CurveKnob);
+    config_duration_knob(this, Param::Duration, medium_duration_range);
+    config_level_knob(this, Param::Level, unipolar_signal_range);
+    config_curvature_knob(this, Param::Curvature);
 
-    configInput(Input::EnvelopeInput, "Stage");
-    configInput(Input::DeferInput, "Defer");
-    configInput(Input::TriggerInput, "Trigger");
-    configOutput(Output::ActiveOutput, "Is active");
-    configOutput(Output::EocOutput, "End of stage");
-    configOutput(Output::EnvelopeOutput, "Stage");
+    configInput(Input::Envelope, "Stage");
+    configInput(Input::Defer, "Defer");
+    configInput(Input::Trigger, "Trigger");
+    configOutput(Output::Active, "Is active");
+    configOutput(Output::Eoc, "End of stage");
+    configOutput(Output::Envelope, "Stage");
   }
 
   void process(ProcessArgs const &args) override {

@@ -20,20 +20,20 @@ namespace hostage {
 
 struct Module : public rack::engine::Module {
   Module() {
-    config(Param::ParameterCount, Input::InputCount, Output::OutputCount);
+    config(Param::Count, Input::Count, Output::Count);
 
-    configInput(Input::EnvelopeInput, "Stage");
-    configInput(Input::DeferInput, "Defer");
-    configInput(Input::TriggerInput, "Gate/Trigger");
-    configOutput(Output::ActiveOutput, "Is active");
-    configOutput(Output::EocOutput, "End of stage");
-    configOutput(Output::EnvelopeOutput, "Stage");
+    configInput(Input::Envelope, "Stage");
+    configInput(Input::Defer, "Defer");
+    configInput(Input::Trigger, "Gate/Trigger");
+    configOutput(Output::Active, "Is active");
+    configOutput(Output::Eoc, "End of stage");
+    configOutput(Output::Envelope, "Stage");
 
-    config_duration_knob(this, Param::DurationKnob, Param::DurationRangeSwitch);
-    config_duration_range_switch(this, Param::DurationRangeSwitch);
-    configInput(Input::DurationCvInput, "Duration CV");
+    config_duration_knob(this, Param::Duration, Param::DurationRange);
+    config_duration_range_switch(this, Param::DurationRange);
+    configInput(Input::DurationCv, "Duration CV");
 
-    Switch::config(this, Param::ModeSwitch, "Mode", {"Hold", "Sustain"}, 0);
+    Switch::config(this, Param::Mode, "Mode", {"Hold", "Sustain"}, 0);
   };
 
   void process(ProcessArgs const &args) override {

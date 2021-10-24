@@ -18,28 +18,26 @@ template <typename TParam, typename TInput, typename TOutput> struct Signals {
       : params_{params}, inputs_{inputs}, outputs_{outputs} {}
 
   auto is_triggered() const -> bool {
-    return is_high(inputs_[Input::TriggerInput]) ||
-           is_pressed(params_[Param::TriggerButton]);
+    return is_high(inputs_[Input::Trigger]) ||
+           is_pressed(params_[Param::Trigger]);
   }
 
   auto is_waiting() const -> bool {
-    return is_high(inputs_[Input::WaitInput]) ||
-           is_pressed(params_[Param::WaitButton]);
+    return is_high(inputs_[Input::Wait]) || is_pressed(params_[Param::Wait]);
   }
 
   auto level() const -> float {
-    return selectable_level(params_[Param::LevelKnob],
-                            inputs_[Input::LevelCvInput],
-                            params_[Param::LevelRangeSwitch]);
+    return selectable_level(params_[Param::Level], inputs_[Input::LevelCv],
+                            params_[Param::LevelRange]);
   }
 
   void send_envelope(float voltage) {
-    outputs_[Output::EnvelopeOutput].setVoltage(voltage);
+    outputs_[Output::Envelope].setVoltage(voltage);
   }
 
   void send_trigger(bool is_triggered) {
     auto const voltage = unipolar_signal_range.scale(is_triggered);
-    outputs_[Output::TriggerOutput].setVoltage(voltage);
+    outputs_[Output::Trigger].setVoltage(voltage);
   }
 
 private:
