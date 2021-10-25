@@ -7,11 +7,11 @@ namespace truth {
 
 template <int N> struct ParamIds {
   enum {
-    QOverride,
+    ForcQHigh,
     GateMode,
-    MULTIPLE(InputOverride, N),
+    MULTIPLE(ForceInputHigh, N),
     MULTIPLE(Outcome, 1 << N),
-    QNotOverride,
+    ForceQNotHigh,
     Count,
   };
 };

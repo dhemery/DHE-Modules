@@ -43,7 +43,7 @@ template <int N, typename P> void upgrade_a(P &params) {
 template <int N, typename P> void upgrade_q(P &params) {
   // Version 0's A/Q switch param is now used for the QOverride momentary
   // button. Make sure the button starts released.
-  params[ParamIds<N>::QOverride].setValue(0.F);
+  params[ParamIds<N>::ForcQHigh].setValue(0.F);
 
   static auto constexpr q_false_rows = 1 << (N - 1);
 
@@ -59,7 +59,7 @@ template <int N, typename P> void upgrade_q(P &params) {
 }
 
 template <int N, typename P> void from_v0(P &params) {
-  static auto constexpr aq_switch = ParamIds<N>::QOverride;
+  static auto constexpr aq_switch = ParamIds<N>::ForcQHigh;
   auto const outcome_depends_on_q = value_of(params[aq_switch]) != 0.F;
   if (outcome_depends_on_q) {
     upgrade_q<N>(params);

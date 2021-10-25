@@ -31,7 +31,7 @@ public:
       if (i == N - 1) {
         input_name += "/Gate";
       }
-      Button::config(this, Param::InputOverride + i, input_name);
+      Button::config(this, Param::ForceInputHigh + i, input_name);
       configInput(Input::Input + i, input_name);
     }
 
@@ -41,9 +41,9 @@ public:
     for (int row = 0; row < rows; row++) {
       Stepper<Outcomes>::config(this, Param::Outcome + row, "Q", Outcome::True);
     }
-    Button::config(this, Param::QOverride, "Q");
+    Button::config(this, Param::ForcQHigh, "Q");
     configOutput(Output::Q, "Q");
-    Button::config(this, Param::QNotOverride, "¬Q");
+    Button::config(this, Param::ForceQNotHigh, "¬Q");
     configOutput(Output::QNot, "¬Q");
   }
 
@@ -70,10 +70,10 @@ public:
 
 private:
   auto outcome() -> bool {
-    if (is_pressed(params[Param::QOverride])) {
+    if (is_pressed(params[Param::ForcQHigh])) {
       return true;
     }
-    if (is_pressed(params[Param::QNotOverride])) {
+    if (is_pressed(params[Param::ForceQNotHigh])) {
       return false;
     }
     return outcome_for(selection());
@@ -105,7 +105,7 @@ private:
 
   auto is_true(int i) const -> bool {
     return is_high(inputs[Input::Input + i]) ||
-           is_pressed(params[Param::InputOverride + i]);
+           is_pressed(params[Param::ForceInputHigh + i]);
   }
 
   auto gate_mode() const -> GateMode {

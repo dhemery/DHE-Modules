@@ -81,7 +81,7 @@ template <typename TLayout> struct Panel : public PanelWidget<Panel<TLayout>> {
       auto const y =
           TLayout::input_top + static_cast<float>(i) * TLayout::port_dy;
       InPort::install(this, Input::Input + i, TLayout::input_x, y);
-      Button::install<Momentary>(this, Param::InputOverride + i,
+      Button::install<Momentary>(this, Param::ForceInputHigh + i,
                                  TLayout::input_x + button_port_distance, y);
     }
 
@@ -99,11 +99,11 @@ template <typename TLayout> struct Panel : public PanelWidget<Panel<TLayout>> {
     }
 
     Button::install<Momentary, Reversed>(
-        this, Param::QOverride, TLayout::output_x - button_port_distance,
+        this, Param::ForcQHigh, TLayout::output_x - button_port_distance,
         TLayout::output_top);
     OutPort::install(this, Output::Q, TLayout::output_x, TLayout::output_top);
     Button::install<Momentary, Reversed>(
-        this, Param::QNotOverride, TLayout::output_x - button_port_distance,
+        this, Param::ForceQNotHigh, TLayout::output_x - button_port_distance,
         TLayout::output_top + TLayout::port_dy);
     OutPort::install(this, Output::QNot, TLayout::output_x,
                      TLayout::output_top + TLayout::port_dy);
