@@ -5,38 +5,38 @@ namespace xycloid {
 
 struct ParamIds {
   enum {
-    RatioKnob,
-    RatioAvKnob,
-    DirectionSwitch,
-    DepthKnob,
-    DepthAvKnob,
-    SpeedKnob,
-    SpeedAvKnob,
-    XGainKnob,
-    YGainKnob,
-    XRangeSwitch,
-    YRangeSwitch,
-    FreeRatioSwitch,
-    PhaseOffsetKnob,
-    PhaseOffsetAvKnob,
-    ParameterCount
+    WobbleRatio,
+    WobbleRatioAv,
+    WobbleRatioRange,
+    WobbleDepth,
+    WobbleDepthAv,
+    ThrobSpeed,
+    ThrobSpeedAv,
+    XGain,
+    YGain,
+    XRange,
+    YRange,
+    WobbleRatioMode,
+    WobblePhaseOffset,
+    WobblePhaseOffsetAv,
+    Count
   };
 };
 
 struct InputIds {
   enum {
-    RatioCvInput,
-    DepthCvInput,
-    SpeedCvInput,
-    XGainCvInput,
-    YGainCvInput,
-    PhaseCvInput,
-    InputCount
+    WobbleRatioCv,
+    WobbleDepthCv,
+    ThrobSpeedCv,
+    XGainCv,
+    YGainCv,
+    WobblePhaseOffsetCv,
+    Count
   };
 };
 
 struct OutputIds {
-  enum { XOutput, YOutput, OutputCount };
+  enum { X, Y, Count };
 };
 } // namespace xycloid
 } // namespace dhe

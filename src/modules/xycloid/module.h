@@ -20,47 +20,49 @@ namespace xycloid {
 class Module : public rack::engine::Module {
 public:
   Module() {
-    config(Param::ParameterCount, Input::InputCount, Output::OutputCount);
+    config(Param::Count, Input::Count, Output::Count);
 
-    ThrobSpeed::config(this, Param::SpeedKnob);
-    configInput(Input::SpeedCvInput, "Speed CV");
-    Attenuverter::config(this, Param::SpeedAvKnob, "Speed CV gain");
+    ThrobSpeed::config(this, Param::ThrobSpeed);
+    configInput(Input::ThrobSpeedCv, "Speed CV");
+    Attenuverter::config(this, Param::ThrobSpeedAv, "Speed CV gain");
 
-    WobbleRatio::config(this, Param::RatioKnob, "Ratio");
-    configInput(Input::RatioCvInput, "Ratio CV");
-    Attenuverter::config(this, Param::RatioAvKnob, "Ratio CV gain");
-    Switch::config(this, Param::DirectionSwitch, "Direction",
+    WobbleRatio::config(this, Param::WobbleRatio, "Ratio");
+    configInput(Input::WobbleRatioCv, "Ratio CV");
+    Attenuverter::config(this, Param::WobbleRatioAv, "Ratio CV gain");
+    Switch::config(this, Param::WobbleRatioRange, "Direction",
                    {"In", "-In +Out", "Out"}, 2);
-    Switch::config(this, Param::FreeRatioSwitch, "Ratio mode",
+    Switch::config(this, Param::WobbleRatioMode, "Ratio mode",
                    {"Quantized", "Free"}, 1);
 
-    Percentage::config(this, Param::DepthKnob, "Depth", 50.F);
-    configInput(Input::DepthCvInput, "Depth CV");
-    Attenuverter::config(this, Param::DepthAvKnob, "Depth CV gain");
+    Percentage::config(this, Param::WobbleDepth, "Depth", 50.F);
+    configInput(Input::WobbleDepthCv, "Depth CV");
+    Attenuverter::config(this, Param::WobbleDepthAv, "Depth CV gain");
 
-    Phase::config(this, Param::PhaseOffsetKnob, "Phase");
-    configInput(Input::PhaseCvInput, "Phase CV");
-    Attenuverter::config(this, Param::PhaseOffsetAvKnob, "Phase CV gain");
+    Phase::config(this, Param::WobblePhaseOffset, "Phase");
+    configInput(Input::WobblePhaseOffsetCv, "Phase CV");
+    Attenuverter::config(this, Param::WobblePhaseOffsetAv, "Phase CV gain");
 
-    Gain::config(this, Param::XGainKnob, "X gain");
-    configInput(Input::XGainCvInput, "X gain CV");
-    config_level_range_switch(this, Param::XRangeSwitch, "X range", 0);
+    Gain::config(this, Param::XGain, "X gain");
+    configInput(Input::XGainCv, "X gain CV");
+    config_level_range_switch(this, Param::XRange, "X range", 0);
 
-    Gain::config(this, Param::YGainKnob, "Y gain");
-    configInput(Input::YGainCvInput, "Y gain CV");
-    config_level_range_switch(this, Param::YRangeSwitch, "Y range", 0);
+    Gain::config(this, Param::YGain, "Y gain");
+    configInput(Input::YGainCv, "Y gain CV");
+    config_level_range_switch(this, Param::YRange, "Y range", 0);
 
-    configOutput(Output::XOutput, "X");
-    configOutput(Output::YOutput, "Y");
+    configOutput(Output::X, "X");
+    configOutput(Output::Y, "Y");
   }
 
   void process(ProcessArgs const &args) override {
-    auto const wobble_ratio = ratio();
-    auto const wobble_phase_offset = wobble_ratio < 0.F ? -phase() : phase();
+    auto const wobble_ratio = this->wobble_ratio();
+    auto const wobble_phase_offset = wobble_ratio < 0.F
+                                         ? -this->wobble_phase_offset()
+                                         : this->wobble_phase_offset();
 
-    auto const throb_speed = -speed() * args.sampleTime;
+    auto const throb_speed = -this->throb_speed() * args.sampleTime;
     auto const wobble_speed = -wobble_ratio * throb_speed;
-    auto const wobble_depth = depth();
+    auto const wobble_depth = this->wobble_depth();
     auto const throb_depth = 1.F - wobble_depth;
 
     throbber_.advance(throb_speed);
@@ -70,8 +72,8 @@ public:
     auto const y = throb_depth * throbber_.sin() +
                    wobble_depth * wobbler_.sin(-wobble_phase_offset);
 
-    outputs[Output::XOutput].setVoltage(5.F * x_gain() * (x + x_offset()));
-    outputs[Output::YOutput].setVoltage(5.F * y_gain() * (y + y_offset()));
+    outputs[Output::X].setVoltage(5.F * x_gain() * (x + x_offset()));
+    outputs[Output::Y].setVoltage(5.F * y_gain() * (y + y_offset()));
   }
 
   auto dataToJson() -> json_t * override {
@@ -83,49 +85,50 @@ public:
 private:
   auto x_gain() const -> float {
     return gain_range.scale(
-        rotation(params[Param::XGainKnob], inputs[Input::XGainCvInput]));
+        rotation(params[Param::XGain], inputs[Input::XGainCv]));
   }
 
   auto x_offset() const -> float {
-    return is_pressed(params[Param::XRangeSwitch]) ? 1.F : 0.F;
+    return is_pressed(params[Param::XRange]) ? 1.F : 0.F;
   }
 
   auto y_gain() const -> float {
     return gain_range.scale(
-        rotation(params[Param::YGainKnob], inputs[Input::YGainCvInput]));
+        rotation(params[Param::YGain], inputs[Input::YGainCv]));
   }
 
   auto y_offset() const -> float {
-    return is_pressed(params[Param::YRangeSwitch]) ? 1.F : 0.F;
+    return is_pressed(params[Param::YRange]) ? 1.F : 0.F;
   }
 
-  auto depth() const -> float {
+  auto throb_speed() const -> float {
+    return tapered_and_scaled_rotation(
+        params[Param::ThrobSpeed], inputs[Input::ThrobSpeedCv],
+        params[Param::ThrobSpeedAv], ThrobSpeed::taper, ThrobSpeed::range);
+  }
+
+  auto wobble_depth() const -> float {
     static auto constexpr wobble_depth_range = Range{0.F, 1.F};
-    return wobble_depth_range.clamp(rotation(params[Param::DepthKnob],
-                                             inputs[Input::DepthCvInput],
-                                             params[Param::DepthAvKnob]));
+    return wobble_depth_range.clamp(rotation(params[Param::WobbleDepth],
+                                             inputs[Input::WobbleDepthCv],
+                                             params[Param::WobbleDepthAv]));
   }
 
-  auto phase() const -> float {
-    return Phase::value(rotation(params[Param::PhaseOffsetKnob],
-                                 inputs[Input::PhaseCvInput],
-                                 params[Param::PhaseOffsetAvKnob]));
+  auto wobble_phase_offset() const -> float {
+    return Phase::value(rotation(params[Param::WobblePhaseOffset],
+                                 inputs[Input::WobblePhaseOffsetCv],
+                                 params[Param::WobblePhaseOffsetAv]));
   }
 
-  auto ratio() -> float {
+  auto wobble_ratio() -> float {
     auto *q = reinterpret_cast<WobbleRatio::Quantity *>(
-        getParamQuantity(Param::RatioKnob));
+        getParamQuantity(Param::WobbleRatio));
     float rotation =
-        dhe::rotation(params[Param::RatioKnob], inputs[Input::RatioCvInput],
-                      params[Param::RatioAvKnob]);
+        dhe::rotation(params[Param::WobbleRatio], inputs[Input::WobbleRatioCv],
+                      params[Param::WobbleRatioAv]);
     return q->ratio(rotation);
   }
 
-  auto speed() const -> float {
-    return tapered_and_scaled_rotation(
-        params[Param::SpeedKnob], inputs[Input::SpeedCvInput],
-        params[Param::SpeedAvKnob], ThrobSpeed::taper, ThrobSpeed::range);
-  }
   PhaseRotor wobbler_{};
   PhaseRotor throbber_{};
 

@@ -2,31 +2,39 @@
 
 namespace dhe {
 namespace blossom {
-struct Params {
+struct Param {
   enum {
     SpinSpeed,
     SpinSpeedAv,
     BounceRatio,
     BounceRatioAv,
     BounceRatioMode,
-    Depth,
-    DepthAv,
-    Phase,
-    PhaseAv,
+    BounceDepth,
+    BounceDepthAv,
+    BouncePhaseOffset,
+    BouncePhaseOffsetAv,
     XGain,
     YGain,
     XRange,
     YRange,
-    N
+    Count
   };
 };
 
-struct Inputs {
-  enum { SpinSpeedCv, BounceRatioCv, DepthCv, PhaseCv, XGainCv, YGainCv, N };
+struct Input {
+  enum {
+    SpinSpeedCv,
+    BounceRatioCv,
+    BounceDepthCv,
+    BouncePhaseOffsetCv,
+    XGainCv,
+    YGainCv,
+    Count
+  };
 };
 
-struct Outputs {
-  enum { XOutput, YOutput, N };
+struct Output {
+  enum { X, Y, Count };
 };
 
 } // namespace blossom

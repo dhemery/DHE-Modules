@@ -30,56 +30,56 @@ struct Panel : public PanelWidget<Panel> {
     auto y = 25.F;
     auto dy = 18.5F;
 
-    InPort::install(this, Input::SpeedCvInput, column1, y);
-    Knob::install<Tiny>(this, Param::SpeedAvKnob, column2, y);
-    Knob::install<Large>(this, Param::SpeedKnob, column3, y);
+    InPort::install(this, Input::ThrobSpeedCv, column1, y);
+    Knob::install<Tiny>(this, Param::ThrobSpeedAv, column2, y);
+    Knob::install<Large>(this, Param::ThrobSpeed, column3, y);
 
     y += dy;
-    InPort::install(this, Input::RatioCvInput, column1, y);
-    Knob::install<Tiny>(this, Param::RatioAvKnob, column2, y);
-    Knob::install<Large>(this, Param::RatioKnob, column3, y);
+    InPort::install(this, Input::WobbleRatioCv, column1, y);
+    Knob::install<Tiny>(this, Param::WobbleRatioAv, column2, y);
+    Knob::install<Large>(this, Param::WobbleRatio, column3, y);
 
     auto quantize_wobble_ratio = [this](int pos) {
       auto *q = reinterpret_cast<WobbleRatio::Quantity *>(
-          getModule()->getParamQuantity(Param::RatioKnob));
+          getModule()->getParamQuantity(Param::WobbleRatio));
       q->quantize(pos == 0);
     };
-    ThumbSwitch<2>::install(this, Param::FreeRatioSwitch, column4, y,
+    ThumbSwitch<2>::install(this, Param::WobbleRatioMode, column4, y,
                             quantize_wobble_ratio);
 
     auto select_wobble_ratio_range = [this](int pos) {
       auto *q = reinterpret_cast<WobbleRatio::Quantity *>(
-          getModule()->getParamQuantity(Param::RatioKnob));
+          getModule()->getParamQuantity(Param::WobbleRatio));
       q->select_range(pos);
     };
 
     y += dy;
-    InPort::install(this, Input::DepthCvInput, column1, y);
-    Knob::install<Tiny>(this, Param::DepthAvKnob, column2, y);
-    Knob::install<Large>(this, Param::DepthKnob, column3, y);
-    ThumbSwitch<3>::install(this, Param::DirectionSwitch, column4, y,
+    InPort::install(this, Input::WobbleDepthCv, column1, y);
+    Knob::install<Tiny>(this, Param::WobbleDepthAv, column2, y);
+    Knob::install<Large>(this, Param::WobbleDepth, column3, y);
+    ThumbSwitch<3>::install(this, Param::WobbleRatioRange, column4, y,
                             select_wobble_ratio_range);
 
     y += dy;
-    InPort::install(this, Input::PhaseCvInput, column1, y);
-    Knob::install<Tiny>(this, Param::PhaseOffsetAvKnob, column2, y);
-    Knob::install<Large>(this, Param::PhaseOffsetKnob, column3, y);
+    InPort::install(this, Input::WobblePhaseOffsetCv, column1, y);
+    Knob::install<Tiny>(this, Param::WobblePhaseOffsetAv, column2, y);
+    Knob::install<Large>(this, Param::WobblePhaseOffset, column3, y);
 
     y = 82.F;
     dy = 15.F;
     auto constexpr output_port_offset = 1.25F;
 
     y += dy;
-    InPort::install(this, Input::XGainCvInput, column1, y);
-    Knob::install<Small>(this, Param::XGainKnob, column2, y);
-    ThumbSwitch<2>::install(this, Param::XRangeSwitch, column3, y);
-    OutPort::install(this, Output::XOutput, column4, y + output_port_offset);
+    InPort::install(this, Input::XGainCv, column1, y);
+    Knob::install<Small>(this, Param::XGain, column2, y);
+    ThumbSwitch<2>::install(this, Param::XRange, column3, y);
+    OutPort::install(this, Output::X, column4, y + output_port_offset);
 
     y += dy;
-    InPort::install(this, Input::YGainCvInput, column1, y);
-    Knob::install<Small>(this, Param::YGainKnob, column2, y);
-    ThumbSwitch<2>::install(this, Param::YRangeSwitch, column3, y);
-    OutPort::install(this, Output::YOutput, column4, y + output_port_offset);
+    InPort::install(this, Input::YGainCv, column1, y);
+    Knob::install<Small>(this, Param::YGain, column2, y);
+    ThumbSwitch<2>::install(this, Param::YRange, column3, y);
+    OutPort::install(this, Output::Y, column4, y + output_port_offset);
   }
   using Input = InputIds;
   using Output = OutputIds;

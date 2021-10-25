@@ -30,48 +30,48 @@ struct Panel : public PanelWidget<Panel> {
     auto y = 25.F;
     auto dy = 18.5F;
 
-    InPort::install(this, Inputs::SpinSpeedCv, column1, y);
-    Knob::install<Tiny>(this, Params::SpinSpeedAv, column2, y);
-    Knob::install<Large>(this, Params::SpinSpeed, column3, y);
+    InPort::install(this, Input::SpinSpeedCv, column1, y);
+    Knob::install<Tiny>(this, Param::SpinSpeedAv, column2, y);
+    Knob::install<Large>(this, Param::SpinSpeed, column3, y);
 
     y += dy;
-    InPort::install(this, Inputs::BounceRatioCv, column1, y);
-    Knob::install<Tiny>(this, Params::BounceRatioAv, column2, y);
-    Knob::install<Large>(this, Params::BounceRatio, column3, y);
+    InPort::install(this, Input::BounceRatioCv, column1, y);
+    Knob::install<Tiny>(this, Param::BounceRatioAv, column2, y);
+    Knob::install<Large>(this, Param::BounceRatio, column3, y);
 
     auto quantize_bounce_ratio = [this](int pos) {
       auto *q = reinterpret_cast<BounceRatio::Quantity *>(
-          getModule()->getParamQuantity(Params::BounceRatio));
+          getModule()->getParamQuantity(Param::BounceRatio));
       q->quantize(pos == 0);
     };
 
-    ThumbSwitch<2>::install(this, Params::BounceRatioMode, column4, y,
+    ThumbSwitch<2>::install(this, Param::BounceRatioMode, column4, y,
                             quantize_bounce_ratio);
 
     y += dy;
-    InPort::install(this, Inputs::DepthCv, column1, y);
-    Knob::install<Tiny>(this, Params::DepthAv, column2, y);
-    Knob::install<Large>(this, Params::Depth, column3, y);
+    InPort::install(this, Input::BounceDepthCv, column1, y);
+    Knob::install<Tiny>(this, Param::BounceDepthAv, column2, y);
+    Knob::install<Large>(this, Param::BounceDepth, column3, y);
 
     y += dy;
-    InPort::install(this, Inputs::PhaseCv, column1, y);
-    Knob::install<Tiny>(this, Params::PhaseAv, column2, y);
-    Knob::install<Large>(this, Params::Phase, column3, y);
+    InPort::install(this, Input::BouncePhaseOffsetCv, column1, y);
+    Knob::install<Tiny>(this, Param::BouncePhaseOffsetAv, column2, y);
+    Knob::install<Large>(this, Param::BouncePhaseOffset, column3, y);
 
     y = 97.F;
     dy = 15.F;
     auto constexpr output_port_offset = 1.25F;
 
-    InPort::install(this, Inputs::XGainCv, column1, y);
-    Knob::install<Small>(this, Params::XGain, column2, y);
-    ThumbSwitch<2>::install(this, Params::XRange, column3, y);
-    OutPort::install(this, Outputs::XOutput, column4, y + output_port_offset);
+    InPort::install(this, Input::XGainCv, column1, y);
+    Knob::install<Small>(this, Param::XGain, column2, y);
+    ThumbSwitch<2>::install(this, Param::XRange, column3, y);
+    OutPort::install(this, Output::X, column4, y + output_port_offset);
 
     y += dy;
-    OutPort::install(this, Inputs::YGainCv, column1, y);
-    Knob::install<Small>(this, Params::YGain, column2, y);
-    ThumbSwitch<2>::install(this, Params::YRange, column3, y);
-    OutPort::install(this, Outputs::YOutput, column4, y + output_port_offset);
+    OutPort::install(this, Input::YGainCv, column1, y);
+    Knob::install<Small>(this, Param::YGain, column2, y);
+    ThumbSwitch<2>::install(this, Param::YRange, column3, y);
+    OutPort::install(this, Output::Y, column4, y + output_port_offset);
   }
 };
 } // namespace blossom
