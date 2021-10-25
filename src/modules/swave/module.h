@@ -11,9 +11,8 @@
 namespace dhe {
 namespace swave {
 
-class Swave : public rack::engine::Module {
-public:
-  Swave() {
+struct Module : public rack::engine::Module {
+  Module() {
     config(Param::Count, Input::Count, Output::Count);
 
     configInput(Input::Swave, "Swave");

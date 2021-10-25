@@ -12,13 +12,12 @@
 namespace dhe {
 namespace swave {
 
-struct SwavePanel : public PanelWidget<SwavePanel> {
+struct Panel : public PanelWidget<Panel> {
   static auto constexpr hp = 4;
   static auto constexpr panel_file = "swave";
   static auto constexpr svg_dir = "swave";
 
-  explicit SwavePanel(rack::engine::Module *module)
-      : PanelWidget<SwavePanel>{module} {
+  explicit Panel(rack::engine::Module *module) : PanelWidget<Panel>{module} {
     auto constexpr width = hp2mm(hp);
 
     auto constexpr x = width / 2.F;

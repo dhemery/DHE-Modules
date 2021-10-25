@@ -7,7 +7,7 @@
 namespace dhe {
 namespace swave {
 static inline void init(rack::plugin::Plugin *plugin) {
-  plugin->addModel(rack::createModel<Swave, SwavePanel>("Swave"));
+  plugin->addModel(rack::createModel<Module, Panel>("Swave"));
 }
 } // namespace swave
 } // namespace dhe
