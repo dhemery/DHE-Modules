@@ -62,36 +62,38 @@ public:
     for (auto step = 0; step < N; step++) {
       auto const step_name = "Step " + std::to_string(step + 1) + " ";
       configLight(Light::Progress + step + step, step_name + "phase");
-      Stepper<AnchorSources>::config(this, Param::Phase0AnchorSource + step,
+      Stepper<AnchorSources>::config(this, Param::StepPhase0AnchorSource + step,
                                      step_name + "phase 0 anchor source",
                                      AnchorSource::Out);
-      config_level_knob(this, Param::Phase0AnchorLevel + step,
+      config_level_knob(this, Param::StepPhase0AnchorLevel + step,
                         Param::LevelRange, step_name + "phase 0 level");
-      configInput(Input::Phase0AnchorLevelCV + step,
+      configInput(Input::StepPhase0AnchorLevelCv + step,
                   step_name + "phase 0 level CV");
-      Stepper<AnchorModes>::config(this, Param::Phase0AnchorMode + step,
+      Stepper<AnchorModes>::config(this, Param::StepPhase0AnchorMode + step,
                                    step_name + "phase 0 anchor mode",
                                    AnchorMode::Sample);
 
-      Stepper<AnchorSources>::config(this, Param::Phase1AnchorSource + step,
+      Stepper<AnchorSources>::config(this, Param::StepPhase1AnchorSource + step,
                                      step_name + "phase 1 anchor source",
                                      AnchorSource::Level);
-      config_level_knob(this, Param::Phase1AnchorLevel + step,
+      config_level_knob(this, Param::StepPhase1AnchorLevel + step,
                         Param::LevelRange, step_name + "phase 1 level");
-      configInput(Input::Phase1AnchorLevelCV + step,
+      configInput(Input::StepPhase1AnchorLevelCv + step,
                   step_name + "phase 1 level CV");
-      Stepper<AnchorModes>::config(this, Param::Phase1AnchorMode + step,
+      Stepper<AnchorModes>::config(this, Param::StepPhase1AnchorMode + step,
                                    step_name + "phase 1 anchor mode",
                                    AnchorMode::Track);
 
-      config_curve_shape_switch(this, Param::Shape + step, step_name + "shape");
-      config_curvature_knob(this, Param::Curvature + step,
+      config_curve_shape_switch(this, Param::StepShape + step,
+                                step_name + "shape");
+      config_curvature_knob(this, Param::StepCurvature + step,
                             step_name + "curvature");
-      configInput(Input::CurvatureCV + step, step_name + "curvature CV");
+      configInput(Input::StepCurvatureCv + step, step_name + "curvature CV");
 
-      RelativeDuration::config(this, Param::Duration + step,
+      RelativeDuration::config(this, Param::StepDuration + step,
                                step_name + "relative duration");
-      configInput(Input::DurationCV + step, step_name + "relative duration CV");
+      configInput(Input::StepDurationCv + step,
+                  step_name + "relative duration CV");
     }
   }
 
@@ -100,35 +102,36 @@ public:
   void process(ProcessArgs const & /*args*/) override { controller_.execute(); }
 
   auto anchor_mode(AnchorType type, int step) const -> AnchorMode {
-    auto const base = type == AnchorType::Phase0 ? Param::Phase0AnchorMode
-                                                 : Param::Phase1AnchorMode;
+    auto const base = type == AnchorType::Phase0 ? Param::StepPhase0AnchorMode
+                                                 : Param::StepPhase1AnchorMode;
     auto const selection = position_of(params[base + step]);
     return static_cast<AnchorMode>(selection);
   }
 
   auto anchor_level(AnchorType type, int step) const -> float {
     auto const base_knob_param = type == AnchorType::Phase0
-                                     ? Param::Phase0AnchorLevel
-                                     : Param::Phase1AnchorLevel;
+                                     ? Param::StepPhase0AnchorLevel
+                                     : Param::StepPhase1AnchorLevel;
     return scannibal::level(params[base_knob_param + step],
                             params[Param::LevelRange]);
   }
 
   auto anchor_source(AnchorType type, int step) const -> AnchorSource {
-    auto const base = type == AnchorType::Phase0 ? Param::Phase0AnchorSource
-                                                 : Param::Phase1AnchorSource;
+    auto const base = type == AnchorType::Phase0
+                          ? Param::StepPhase0AnchorSource
+                          : Param::StepPhase1AnchorSource;
     auto const selection = position_of(params[base + step]);
     return static_cast<AnchorSource>(selection);
   }
 
   auto curvature(int step) const -> float {
-    return dhe::curvature(params[Param::Curvature + step],
-                          inputs[Input::CurvatureCV + step]);
+    return dhe::curvature(params[Param::StepCurvature + step],
+                          inputs[Input::StepCurvatureCv + step]);
   }
 
   auto duration(int step) const -> float {
-    return cx::clamp(dhe::rotation(params[Param::Duration + step],
-                                   inputs[Input::DurationCV + step]),
+    return cx::clamp(dhe::rotation(params[Param::StepDuration + step],
+                                   inputs[Input::StepDurationCv + step]),
                      0.F, 1.F);
   }
 
@@ -158,7 +161,7 @@ public:
   }
 
   auto taper(int step) const -> sigmoid::Taper const & {
-    auto const selection = position_of(params[Param::Shape + step]);
+    auto const selection = position_of(params[Param::StepShape + step]);
     return sigmoid::tapers[selection];
   }
 

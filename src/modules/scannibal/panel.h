@@ -200,30 +200,36 @@ private:
           mm2px(step_x, progress_light_y), this->module,
           Light::Progress + step + step));
 
-      Stepper<AnchorModes>::install(this, Param::Phase0AnchorMode + step,
+      Stepper<AnchorModes>::install(this, Param::StepPhase0AnchorMode + step,
                                     step_x, phase_0_anchor_mode_y);
-      Stepper<AnchorSources>::install(this, Param::Phase0AnchorSource + step,
+      Stepper<AnchorSources>::install(this,
+                                      Param::StepPhase0AnchorSource + step,
                                       step_x, phase_0_anchor_source_y);
-      Knob::install<Small>(this, Param::Phase0AnchorLevel + step, step_x,
+      Knob::install<Small>(this, Param::StepPhase0AnchorLevel + step, step_x,
                            phase_0_anchor_level_y);
-      InPort::install(this, Input::Phase0AnchorLevelCV + step, step_x,
+      InPort::install(this, Input::StepPhase0AnchorLevelCv + step, step_x,
                       phase_0_anchor_level_cv_y);
 
-      Stepper<AnchorModes>::install(this, Param::Phase1AnchorMode + step,
+      Stepper<AnchorModes>::install(this, Param::StepPhase1AnchorMode + step,
                                     step_x, phase_1_anchor_mode_y);
-      Stepper<AnchorSources>::install(this, Param::Phase1AnchorSource + step,
+      Stepper<AnchorSources>::install(this,
+                                      Param::StepPhase1AnchorSource + step,
                                       step_x, phase_1_anchor_source_y);
-      Knob::install<Small>(this, Param::Phase1AnchorLevel + step, step_x,
+      Knob::install<Small>(this, Param::StepPhase1AnchorLevel + step, step_x,
                            phase_1_anchor_level_y);
-      InPort::install(this, Input::Phase1AnchorLevelCV + step, step_x,
+      InPort::install(this, Input::StepPhase1AnchorLevelCv + step, step_x,
                       phase_1_anchor_level_cv_y);
 
-      Knob::install<Small>(this, Param::Duration + step, step_x, duration_y);
-      InPort::install(this, Input::DurationCV + step, step_x, duration_cv_y);
+      Knob::install<Small>(this, Param::StepDuration + step, step_x,
+                           duration_y);
+      InPort::install(this, Input::StepDurationCv + step, step_x,
+                      duration_cv_y);
 
-      Stepper<Shapes>::install(this, Param::Shape + step, step_x, shape_y);
-      Knob::install<Small>(this, Param::Curvature + step, step_x, curvature_y);
-      InPort::install(this, Input::CurvatureCV + step, step_x, curvature_cv_y);
+      Stepper<Shapes>::install(this, Param::StepShape + step, step_x, shape_y);
+      Knob::install<Small>(this, Param::StepCurvature + step, step_x,
+                           curvature_y);
+      InPort::install(this, Input::StepCurvatureCv + step, step_x,
+                      curvature_cv_y);
     }
   }
 

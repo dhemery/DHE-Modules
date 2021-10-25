@@ -33,63 +33,54 @@ struct Signals {
 
   auto advance_mode(int step) const -> AdvanceMode {
     return static_cast<AdvanceMode>(
-        params_[Param::AdvanceMode + step].getValue());
+        params_[Param::StepAdvanceMode + step].getValue());
   }
 
   auto curvature(int step) const -> float {
-    return dhe::curvature(params_[Param::Curvature + step]);
+    return dhe::curvature(params_[Param::StepCurvature + step]);
   }
 
   auto duration(int step) const -> float {
-    return dhe::selectable_duration(params_[Param::Duration + step],
+    return dhe::selectable_duration(params_[Param::StepDuration + step],
                                     params_[Param::DurationRange]);
   }
 
   auto generate_mode(int step) const -> GenerateMode {
     return static_cast<GenerateMode>(
-        params_[Param::GenerateMode + step].getValue());
+        params_[Param::StepGenerateMode + step].getValue());
   }
 
-  auto input() const -> float {
-    return inputs_[Input::CurveSequencerInput].getVoltage();
-  }
+  auto input() const -> float { return inputs_[Input::Main].getVoltage(); }
 
   auto is_enabled(int step) const -> bool {
-    return is_pressed(params_[Param::Enabled + step]) ||
-           is_high(inputs_[Input::EnabledInputs + step]);
+    return is_pressed(params_[Param::StepEnabled + step]) ||
+           is_high(inputs_[Input::StepEnabled + step]);
   }
 
   auto is_gated() const -> bool {
-    return is_high(inputs_[Input::GateInput]) ||
-           is_pressed(params_[Param::Gate]);
+    return is_high(inputs_[Input::Gate]) || is_pressed(params_[Param::Gate]);
   }
 
   auto is_looping() const -> bool {
-    return is_pressed(params_[Param::Loop]) ||
-           is_high(inputs_[Input::LoopInput]);
+    return is_pressed(params_[Param::Loop]) || is_high(inputs_[Input::Loop]);
   }
 
   auto is_reset() const -> bool {
-    return is_high(inputs_[Input::ResetInput]) ||
-           is_pressed(params_[Param::Reset]);
+    return is_high(inputs_[Input::Reset]) || is_pressed(params_[Param::Reset]);
   }
 
   auto is_running() const -> bool {
-    return is_pressed(params_[Param::Run]) || is_high(inputs_[Input::RunInput]);
+    return is_pressed(params_[Param::Run]) || is_high(inputs_[Input::Run]);
   }
 
   auto level(int step) const -> float {
-    return dhe::selectable_level(params_[Param::Level + step],
+    return dhe::selectable_level(params_[Param::StepLevel + step],
                                  params_[Param::LevelRange]);
   }
 
-  auto output() const -> float {
-    return outputs_[Output::CurveSequencerOutput].getVoltage();
-  }
+  auto output() const -> float { return outputs_[Output::Main].getVoltage(); }
 
-  void output(float voltage) {
-    outputs_[Output::CurveSequencerOutput].setVoltage(voltage);
-  }
+  void output(float voltage) { outputs_[Output::Main].setVoltage(voltage); }
 
   auto selection_start() const -> int {
     return static_cast<int>(params_[Param::SelectionStart].getValue());
@@ -112,14 +103,14 @@ struct Signals {
 
   auto taper(int step) const -> sigmoid::Taper const & {
     auto const selection =
-        static_cast<int>(params_[Param::Shape + step].getValue());
+        static_cast<int>(params_[Param::StepShape + step].getValue());
     return sigmoid::tapers[selection];
   }
 
 private:
   void set_lights(int step, float completed_brightness,
                   float remaining_brightness) {
-    auto const completed_light = Light::ProgressLights + step + step;
+    auto const completed_light = Light::StepProgress + step + step;
     auto const remaining_light = completed_light + 1;
     lights_[completed_light].setBrightness(completed_brightness);
     lights_[remaining_light].setBrightness(remaining_brightness);

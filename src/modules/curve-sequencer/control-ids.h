@@ -27,36 +27,28 @@ template <int N> struct ParamIds {
     Reset,
     DurationRange,
     LevelRange,
-    ONE_PER_STEP(Curvature, N),
-    ONE_PER_STEP(Duration, N),
-    ONE_PER_STEP(Enabled, N),
-    ONE_PER_STEP(Level, N),
-    ONE_PER_STEP(GenerateMode, N),
-    ONE_PER_STEP(AdvanceMode, N),
-    ONE_PER_STEP(Shape, N),
+    ONE_PER_STEP(StepCurvature, N),
+    ONE_PER_STEP(StepDuration, N),
+    ONE_PER_STEP(StepEnabled, N),
+    ONE_PER_STEP(StepLevel, N),
+    ONE_PER_STEP(StepGenerateMode, N),
+    ONE_PER_STEP(StepAdvanceMode, N),
+    ONE_PER_STEP(StepShape, N),
     GenerateModeMenu,
     Count
   };
 };
 
 template <int N> struct InputIds {
-  enum {
-    CurveSequencerInput,
-    GateInput,
-    LoopInput,
-    ResetInput,
-    RunInput,
-    ONE_PER_STEP(EnabledInputs, N),
-    InputCount
-  };
+  enum { Main, Gate, Loop, Reset, Run, ONE_PER_STEP(StepEnabled, N), Count };
 };
 
 struct OutputIds {
-  enum { CurveSequencerOutput, OutputCount };
+  enum { Main, Count };
 };
 
 template <int N> struct LightIds {
-  enum { TWO_PER_STEP(ProgressLights, N), LightCount };
+  enum { TWO_PER_STEP(StepProgress, N), Count };
 };
 
 } // namespace curve_sequencer

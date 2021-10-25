@@ -21,23 +21,22 @@ namespace dhe {
 
 namespace curve_sequencer {
 template <int N> struct Module : public rack::engine::Module {
-  using Input = InputIds<N>;
-  using Light = LightIds<N>;
   using Param = ParamIds<N>;
+  using Input = InputIds<N>;
   using Output = OutputIds;
+  using Light = LightIds<N>;
 
   Module() {
-    config(Param::Count, Input::InputCount, Output::OutputCount,
-           Light::LightCount);
+    config(Param::Count, Input::Count, Output::Count, Light::Count);
 
     Button::config(this, Param::Run, "Run", 1);
-    configInput(Input::RunInput, "Run");
+    configInput(Input::Run, "Run");
     Button::config(this, Param::Gate, "Gate");
-    configInput(Input::GateInput, "Gate");
+    configInput(Input::Gate, "Gate");
     Button::config(this, Param::Loop, "Loop");
-    configInput(Input::LoopInput, "Loop");
+    configInput(Input::Loop, "Loop");
     Button::config(this, Param::Reset, "Reset");
-    configInput(Input::ResetInput, "Reset");
+    configInput(Input::Reset, "Reset");
 
     auto const selection_start_knob =
         configParam(Param::SelectionStart, 0.F, N - 1, 0.F, "Start step", "",
@@ -53,28 +52,29 @@ template <int N> struct Module : public rack::engine::Module {
     for (auto step = 0; step < N; step++) {
       auto const step_name =
           std::string{"Step "} + std::to_string(step + 1) + " ";
-      configLight(Light::ProgressLights + step + step, step_name + "progress");
-      Stepper<GenerateModes>::config(this, Param::GenerateMode + step,
+      configLight(Light::StepProgress + step + step, step_name + "progress");
+      Stepper<GenerateModes>::config(this, Param::StepGenerateMode + step,
                                      step_name + "generate mode",
                                      GenerateMode::Curve);
-      Stepper<AdvanceModes>::config(this, Param::AdvanceMode + step,
+      Stepper<AdvanceModes>::config(this, Param::StepAdvanceMode + step,
                                     step_name + "advance mode",
                                     AdvanceMode::TimerExpires);
-      config_level_knob(this, Param::Level + step, Param::LevelRange,
+      config_level_knob(this, Param::StepLevel + step, Param::LevelRange,
                         step_name + "level");
-      config_curve_shape_switch(this, Param::Shape + step, step_name + "shape");
-      config_curvature_knob(this, Param::Curvature + step,
+      config_curve_shape_switch(this, Param::StepShape + step,
+                                step_name + "shape");
+      config_curvature_knob(this, Param::StepCurvature + step,
                             step_name + "curvature");
-      config_duration_knob(this, Param::Duration + step, Param::DurationRange,
-                           step_name + "duration");
-      Button::config(this, Param::Enabled + step, step_name + "enabled", 1);
-      configInput(Input::EnabledInputs + step, step_name + "enabled");
+      config_duration_knob(this, Param::StepDuration + step,
+                           Param::DurationRange, step_name + "duration");
+      Button::config(this, Param::StepEnabled + step, step_name + "enabled", 1);
+      configInput(Input::StepEnabled + step, step_name + "enabled");
 
       signals_.show_inactive(step);
     }
 
-    configInput(Input::CurveSequencerInput, "AUX");
-    configOutput(Output::CurveSequencerOutput, "Sequencer");
+    configInput(Input::Main, "AUX");
+    configOutput(Output::Main, "Sequencer");
   }
 
   ~Module() override = default;
