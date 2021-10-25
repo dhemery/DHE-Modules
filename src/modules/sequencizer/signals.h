@@ -47,8 +47,8 @@ static inline auto level(P const &level_knob, P const &range_switch,
   return range.clamp(attenuated_level);
 }
 
-template <int N, typename InputT, typename ParamT, typename OutputT,
-          typename LightT>
+template <typename TParam, typename TInput, typename TOutput, typename TLight,
+          int N>
 class Signals {
   using InputId = InputIds<N>;
   using LightId = LightIds<N>;
@@ -56,9 +56,9 @@ class Signals {
   using ParamId = ParamIds<N>;
 
 public:
-  Signals(std::vector<InputT> &inputs, std::vector<ParamT> &params,
-          std::vector<OutputT> &outputs, std::vector<LightT> &lights)
-      : inputs_{inputs}, params_{params}, outputs_{outputs}, lights_{lights} {}
+  Signals(std::vector<TInput> &inputs, std::vector<TParam> &params,
+          std::vector<TOutput> &outputs, std::vector<TLight> &lights)
+      : params_{params}, inputs_{inputs}, outputs_{outputs}, lights_{lights} {}
 
   auto anchor_mode(AnchorType type, int step) const -> AnchorMode {
     auto const base = type == AnchorType::Start ? ParamId::StepStartAnchorMode
@@ -205,10 +205,10 @@ private:
     lights_[completed_light].setBrightness(completed_brightness);
     lights_[remaining_light].setBrightness(remaining_brightness);
   }
-  std::vector<InputT> &inputs_;
-  std::vector<ParamT> &params_;
-  std::vector<OutputT> &outputs_;
-  std::vector<LightT> &lights_;
+  std::vector<TParam> &params_;
+  std::vector<TInput> &inputs_;
+  std::vector<TOutput> &outputs_;
+  std::vector<TLight> &lights_;
 };
 } // namespace sequencizer
 

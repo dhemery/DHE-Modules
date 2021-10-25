@@ -93,9 +93,6 @@ template <typename TSize> struct Panel : public PanelWidget<Panel<TSize>> {
   static auto constexpr svg_dir = "curve-sequencer";
   static auto constexpr step_width = 2.25F;
   static auto constexpr sequence_controls_width = 13.F;
-  using Signals = Signals<rack::engine::Input, rack::engine::Output,
-                          rack::engine::Param, rack::engine::Light, N>;
-
   static auto constexpr hp =
       static_cast<int>(sequence_controls_width + N * step_width);
 

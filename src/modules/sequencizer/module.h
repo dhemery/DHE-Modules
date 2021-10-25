@@ -119,29 +119,28 @@ public:
   }
 
 private:
-  using SignalsT = Signals<N, rack::engine::Input, rack::engine::Param,
-                           rack::engine::Output, rack::engine::Light>;
-  using AnchorT = Anchor<SignalsT>;
-  using GeneratorT = Generator<SignalsT, AnchorT>;
-  using InterrupterT = Interrupter<SignalsT>;
-  using StepSelectorT = StepSelector<SignalsT>;
-  using SustainerT = Sustainer<SignalsT>;
+  using RackSignals = Signals<rack::engine::Param, rack::engine::Input,
+                              rack::engine::Output, rack::engine::Light, N>;
+  using RackAnchor = Anchor<RackSignals>;
+  using RackGenerator = Generator<RackSignals, RackAnchor>;
+  using RackInterrupter = Interrupter<RackSignals>;
+  using RackStepSelector = StepSelector<RackSignals>;
+  using RackSustainer = Sustainer<RackSignals>;
+  using RackStepController =
+      StepController<RackInterrupter, RackGenerator, RackSustainer>;
+  using RackSequenceController =
+      SequenceController<RackSignals, RackStepSelector, RackStepController>;
 
-  SignalsT signals_{inputs, params, outputs, lights};
-  AnchorT end_anchor_{signals_, AnchorType::End};
-  AnchorT start_anchor_{signals_, AnchorType::Start};
-  GeneratorT generator_{signals_, start_anchor_, end_anchor_};
-  InterrupterT interrupter_{signals_};
-  StepSelectorT step_selector_{signals_, N};
-  SustainerT sustainer_{signals_};
-
-  using StepControllerT = StepController<InterrupterT, GeneratorT, SustainerT>;
-  using SequenceControllerT =
-      SequenceController<SignalsT, StepSelectorT, StepControllerT>;
-
-  StepControllerT step_controller_{interrupter_, generator_, sustainer_};
-  SequenceControllerT sequence_controller_{signals_, step_selector_,
-                                           step_controller_};
+  RackSignals signals_{inputs, params, outputs, lights};
+  RackAnchor end_anchor_{signals_, AnchorType::End};
+  RackAnchor start_anchor_{signals_, AnchorType::Start};
+  RackGenerator generator_{signals_, start_anchor_, end_anchor_};
+  RackInterrupter interrupter_{signals_};
+  RackStepSelector step_selector_{signals_, N};
+  RackSustainer sustainer_{signals_};
+  RackStepController step_controller_{interrupter_, generator_, sustainer_};
+  RackSequenceController sequence_controller_{signals_, step_selector_,
+                                              step_controller_};
 
   using Input = InputIds<N>;
   using Light = LightIds<N>;
