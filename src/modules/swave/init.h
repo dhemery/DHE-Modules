@@ -1,6 +1,6 @@
 #pragma once
-#include "swave-panel.h"
-#include "swave.h"
+#include "module.h"
+#include "panel.h"
 
 #include "rack.hpp"
 

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "swave-controls.h"
+#include "control-ids.h"
 
 #include "controls/knobs.h"
 #include "controls/ports.h"
@@ -19,32 +19,31 @@ struct SwavePanel : public PanelWidget<SwavePanel> {
 
   explicit SwavePanel(rack::engine::Module *module)
       : PanelWidget<SwavePanel>{module} {
-    using Controls = SwaveControls;
     auto constexpr width = hp2mm(hp);
 
     auto constexpr x = width / 2.F;
 
     auto y = 25.F;
     auto dy = 18.5F;
-    ThumbSwitch<2>::install(this, Controls::ShapeSwitch, x, y);
+    ThumbSwitch<2>::install(this, Param::Shape, x, y);
 
     y += dy;
-    Knob::install<Large>(this, Controls::CurveKnob, x, y);
+    Knob::install<Large>(this, Param::Curvature, x, y);
 
     y += dy;
-    Knob::install<Tiny>(this, Controls::CurveAvKnob, x, y);
+    Knob::install<Tiny>(this, Param::CurvatureAv, x, y);
 
     y += dy;
-    InPort::install(this, Controls::CurveCvInput, x, y);
+    InPort::install(this, Input::CurvatureCv, x, y);
 
     y = 82.F;
     dy = 15.F;
 
     y += dy;
-    InPort::install(this, Controls::SwaveInput, x, y);
+    InPort::install(this, Input::Swave, x, y);
 
     y += dy;
-    OutPort::install(this, Controls::SwaveOutput, x, y);
+    OutPort::install(this, Output::Swave, x, y);
   }
 };
 } // namespace swave
