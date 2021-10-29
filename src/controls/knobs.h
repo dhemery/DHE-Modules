@@ -50,26 +50,27 @@ template <typename TStyle> struct LinearKnob {
   static inline void config(rack::engine::Module *module, int id,
                             std::string const &name,
                             float initial = TStyle::initial) {
-    auto const default_value = TStyle::range.normalize(initial);
+    static auto constexpr range = TStyle::range();
+    auto const default_value = range.normalize(initial);
     module->configParam(id, 0.F, 1.F, default_value, name, TStyle::unit, 0.F,
-                        TStyle::range.size(), TStyle::range.lower_bound());
+                        range.size(), range.lower_bound());
   }
 };
 
 struct Attenuverter : public LinearKnob<Attenuverter> {
-  static auto constexpr range = Range{-100.F, 100.F};
+  static auto constexpr range() -> Range { return Range{-100.F, 100.F}; }
   static auto constexpr initial = 100.F;
   static auto constexpr unit = "%";
 };
 
 struct Gain : public LinearKnob<Gain> {
-  static auto constexpr range = Range{0.F, 200.F};
+  static auto constexpr range() -> Range { return Range{0.F, 200.F}; }
   static auto constexpr initial = 100.F;
   static auto constexpr unit = "%";
 };
 
 struct Percentage : public LinearKnob<Percentage> {
-  static auto constexpr range = Range{0.F, 100.F};
+  static auto constexpr range() -> Range { return Range{0.F, 100.F}; }
   static auto constexpr initial = 100.F;
   static auto constexpr unit = "%";
 };

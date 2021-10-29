@@ -104,7 +104,7 @@ private:
   auto throb_speed() const -> float {
     return tapered_and_scaled_rotation(
         params[Param::ThrobSpeed], inputs[Input::ThrobSpeedCv],
-        params[Param::ThrobSpeedAv], ThrobSpeed::taper, ThrobSpeed::range);
+        params[Param::ThrobSpeedAv], ThrobSpeed::taper(), ThrobSpeed::range());
   }
 
   auto wobble_depth() const -> float {

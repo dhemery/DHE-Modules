@@ -32,15 +32,15 @@ public:
     return cx::clamp(scaled, lower_, upper_);
   }
 
-  constexpr auto operator==(const Range &rhs) const -> bool {
+  constexpr auto operator==(Range rhs) const -> bool {
     return lower_ == rhs.lower_ && upper_ == rhs.upper_;
   }
 
-  constexpr auto operator!=(const Range &rhs) const -> bool {
+  constexpr auto operator!=(Range rhs) const -> bool {
     return !(rhs == *this);
   }
 
-  friend auto operator<<(std::ostream &os, const Range &range)
+  friend auto operator<<(std::ostream &os, Range range)
       -> std::ostream & {
     os << "Range{" << range.lower_ << "," << range.upper_ << '}';
     return os;

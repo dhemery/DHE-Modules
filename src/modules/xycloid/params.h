@@ -12,7 +12,7 @@ namespace dhe {
 namespace xycloid {
 
 struct Phase : LinearKnob<Phase> {
-  static auto constexpr range = Range{-180.F, 180.F};
+  static auto constexpr range() -> Range { return Range{-180.F, 180.F}; }
   static auto constexpr initial = 0.F;
   static auto constexpr unit = "˚";
 
@@ -20,18 +20,17 @@ struct Phase : LinearKnob<Phase> {
 };
 
 struct ThrobSpeed {
-  static auto constexpr range = Range{-10.F, 10.F};
-  static auto constexpr initial_speed_hz{1.F};
-  static auto constexpr taper_curvature = -0.8F;
-  static auto constexpr taper =
-      sigmoid::s_taper_with_curvature(taper_curvature);
+  static auto constexpr range() -> Range { return Range{-10.F, 10.F}; }
+  static auto constexpr taper() -> sigmoid::Taper {
+    return sigmoid::s_taper_with_curvature(-0.8F);
+  }
 
-  static auto constexpr rotation_to_speed(float rotation) -> float {
-    return range.scale(taper.apply(rotation));
+  static auto rotation_to_speed(float rotation) -> float {
+    return range().scale(taper().apply(rotation));
   }
 
   static auto constexpr speed_to_rotation(float speed) -> float {
-    return taper.invert(range.normalize(speed));
+    return taper().invert(range().normalize(speed));
   }
 
   class Quantity : public rack::engine::ParamQuantity {
@@ -45,6 +44,7 @@ struct ThrobSpeed {
   };
 
   static void config(rack::engine::Module *module, int knob_id) {
+    static auto constexpr initial_speed_hz{1.F};
     static auto constexpr initial_rotation =
         speed_to_rotation(initial_speed_hz);
 

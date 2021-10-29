@@ -57,16 +57,16 @@ public:
     return apply(tapered, -default_curvature_);
   };
 
-  constexpr auto operator==(const Taper &rhs) const -> bool {
+  constexpr auto operator==(Taper rhs) const -> bool {
     return domain_ == rhs.domain_ && quadrant_factor_ == rhs.quadrant_factor_ &&
            default_curvature_ == rhs.default_curvature_;
   }
 
-  constexpr auto operator!=(const Taper &rhs) const -> bool {
+  constexpr auto operator!=(Taper rhs) const -> bool {
     return !(rhs == *this);
   }
 
-  friend auto operator<<(std::ostream &os, const Taper &taper)
+  friend auto operator<<(std::ostream &os, Taper taper)
       -> std::ostream & {
     os << "Taper{" << taper.domain_ << "," << taper.quadrant_factor_ << ","
        << taper.default_curvature_ << '}';

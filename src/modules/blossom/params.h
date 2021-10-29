@@ -11,17 +11,17 @@ namespace dhe {
 namespace blossom {
 
 struct BounceRatio {
-  static auto constexpr range = Range{1.F, 17.F};
+  static auto constexpr range() -> Range { return Range{1.F, 17.F}; }
 
   struct Quantity : public rack::engine::ParamQuantity {
     auto getDisplayValue() -> float override {
       auto const rotation = getValue();
-      auto const unquantized_ratio = range.scale(rotation);
+      auto const unquantized_ratio = range().scale(rotation);
       return quantize_ ? std::round(unquantized_ratio) : unquantized_ratio;
     }
 
     void setDisplayValue(float bounce_ratio) override {
-      auto const rotation = range.normalize(bounce_ratio);
+      auto const rotation = range().normalize(bounce_ratio);
       setValue(rotation);
     }
 
@@ -37,12 +37,12 @@ struct BounceRatio {
   }
 
   static inline auto value(float rotation) -> float {
-    return range.scale(rotation);
+    return range().scale(rotation);
   }
 };
 
 struct Phase : LinearKnob<Phase> {
-  static auto constexpr range = Range{-180.F, 180.F};
+  static auto constexpr range() -> Range { return Range{-180.F, 180.F}; }
   static auto constexpr initial = 0.F;
   static auto constexpr unit = "˚";
 
@@ -50,16 +50,15 @@ struct Phase : LinearKnob<Phase> {
 };
 
 struct SpinSpeed {
-  static auto constexpr range = Range{-10.F, 10.F};
-  static auto constexpr initial_spin_hz{1.F};
-  static auto constexpr taper_curvature = -0.8F;
-  static auto constexpr taper =
-      sigmoid::s_taper_with_curvature(taper_curvature);
-  static auto constexpr spin_to_rotation(float spin) -> float {
-    return taper.invert(range.normalize(spin));
+  static auto constexpr range() -> Range { return Range{-10.F, 10.F}; }
+  static auto constexpr taper() -> sigmoid::Taper {
+    return sigmoid::s_taper_with_curvature(-0.8F);
   }
-  static auto constexpr rotation_to_spin(float rotation) -> float {
-    return range.scale(taper.apply(rotation));
+  static auto spin_to_rotation(float spin) -> float {
+    return taper().invert(range().normalize(spin));
+  }
+  static auto rotation_to_spin(float rotation) -> float {
+    return range().scale(taper().apply(rotation));
   }
 
   struct Quantity : public rack::engine::ParamQuantity {
@@ -73,7 +72,8 @@ struct SpinSpeed {
   };
 
   static inline void config(rack::engine::Module *module, int knob_id) {
-    static auto constexpr initial_rotation = spin_to_rotation(initial_spin_hz);
+    static auto constexpr initial_spin_hz{1.F};
+    static auto const initial_rotation = spin_to_rotation(initial_spin_hz);
 
     module->configParam<Quantity>(knob_id, 0.F, 1.F, initial_rotation, "Speed",
                                   " Hz");

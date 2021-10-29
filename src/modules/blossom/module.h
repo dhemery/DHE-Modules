@@ -107,7 +107,7 @@ private:
   inline auto spin_speed() const -> float {
     return tapered_and_scaled_rotation(
         params[Param::SpinSpeed], inputs[Input::SpinSpeedCv],
-        params[Param::SpinSpeedAv], SpinSpeed::taper, SpinSpeed::range);
+        params[Param::SpinSpeedAv], SpinSpeed::taper(), SpinSpeed::range());
   }
 
   inline auto x_gain() const -> float {
