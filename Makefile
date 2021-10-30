@@ -25,8 +25,10 @@ include $(RACK_DIR)/plugin.mk
 #
 ########################################################################
 
-DHEUNIT_DIR=dheunit
-$(DHEUNIT_DIR)/dheunit:
+DHEUNIT_SRC = dheunit
+DHEUNIT_INCLUDE_DIR = $(DHEUNIT_SRC)/dheunit
+
+$(DHEUNIT_INCLUDE_DIR):
 	git submodule update --init --recursive
 
 TEST_SOURCES = $(shell find test -name "*.cpp")
@@ -37,10 +39,9 @@ TEST_OBJECTS := $(patsubst %, build/%.o, $(TEST_SOURCES))
 TEST_RUNNER = build/dheunit
 
 RACK_INCLUDES = -I$(RACK_DIR)/include -I$(RACK_DIR)/dep/include
-TEST_CXX_FLAGS := $(filter-out $(RACK_INCLUDES),$(FLAGS)) -Itest -I$(DHEUNIT_DIR)
+TEST_CXX_FLAGS := $(filter-out $(RACK_INCLUDES),$(FLAGS)) -Itest -I$(DHEUNIT_SRC)
 
-$(TEST_OBJECTS): $(DHEUNIT_DIR)/dheunit
-
+$(TEST_OBJECTS): $(DHEUNIT_INCLUDE_DIR)
 $(TEST_OBJECTS): FLAGS := $(TEST_CXX_FLAGS)
 
 $(TEST_RUNNER): $(TEST_OBJECTS)
