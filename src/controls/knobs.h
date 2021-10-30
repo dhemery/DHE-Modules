@@ -46,14 +46,24 @@ struct Tiny {
   static auto constexpr svg_file = "knob-tiny";
 };
 
-template <typename TStyle> struct LinearKnob {
+template <typename TQuantity> struct LinearKnob {
   static inline void config(rack::engine::Module *module, int id,
                             std::string const &name,
-                            float initial = TStyle::initial) {
-    static auto constexpr range = TStyle::range();
-    auto const default_value = range.normalize(initial);
-    module->configParam(id, 0.F, 1.F, default_value, name, TStyle::unit, 0.F,
+                            float initial_value = TQuantity::initial) {
+    static auto const range = TQuantity::range();
+    auto const default_value = range.normalize(initial_value);
+    module->configParam(id, 0.F, 1.F, default_value, name, TQuantity::unit, 0.F,
                         range.size(), range.lower_bound());
+  }
+};
+
+template <typename TQuantity> struct ScaledKnob {
+  static inline void config(rack::engine::Module *module, int id,
+                            std::string const &name,
+                            float initial_value = TQuantity::initial) {
+    static auto const range = TQuantity::range();
+    module->configParam(id, range.lower_bound(), range.upper_bound(),
+                        initial_value, name, TQuantity::unit);
   }
 };
 

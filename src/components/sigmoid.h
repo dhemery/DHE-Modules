@@ -62,12 +62,9 @@ public:
            default_curvature_ == rhs.default_curvature_;
   }
 
-  constexpr auto operator!=(Taper rhs) const -> bool {
-    return !(rhs == *this);
-  }
+  constexpr auto operator!=(Taper rhs) const -> bool { return !(rhs == *this); }
 
-  friend auto operator<<(std::ostream &os, Taper taper)
-      -> std::ostream & {
+  friend auto operator<<(std::ostream &os, Taper taper) -> std::ostream & {
     os << "Taper{" << taper.domain_ << "," << taper.quadrant_factor_ << ","
        << taper.default_curvature_ << '}';
     return os;

@@ -36,12 +36,9 @@ public:
     return lower_ == rhs.lower_ && upper_ == rhs.upper_;
   }
 
-  constexpr auto operator!=(Range rhs) const -> bool {
-    return !(rhs == *this);
-  }
+  constexpr auto operator!=(Range rhs) const -> bool { return !(rhs == *this); }
 
-  friend auto operator<<(std::ostream &os, Range range)
-      -> std::ostream & {
+  friend auto operator<<(std::ostream &os, Range range) -> std::ostream & {
     os << "Range{" << range.lower_ << "," << range.upper_ << '}';
     return os;
   }

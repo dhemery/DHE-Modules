@@ -1,7 +1,9 @@
 #pragma once
 
+#include "params.h"
 #include "signals.h"
 
+#include "controls/knobs.h"
 #include "modules/envelope/mode/defer.h"
 #include "modules/envelope/mode/generate.h"
 #include "modules/envelope/mode/input.h"
@@ -23,8 +25,8 @@ struct Module : public rack::engine::Module {
     configInput(Input::Envelope, "Stage");
     configOutput(Output::Envelope, "Stage");
 
-    config_level_knob(this, Param::Level, Param::LevelRange);
-    config_level_range_switch(this, Param::LevelRange);
+    ScaledKnob<Levels>::config(this, Param::Level, "Level", 5.F);
+    Selector::config<Levels>(this, Param::LevelRange, "Level Range");
     configInput(Input::LevelCv, "Level CV");
 
     config_curvature_knob(this, Param::Curvature);

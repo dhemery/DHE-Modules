@@ -42,7 +42,7 @@ struct Toggle {
 struct Button {
   template <typename BehaviorT, typename TFrame = Normal, typename TPanel>
   static inline void install(TPanel *panel, int id, float xmm, float ymm) {
-    using TWidget = SwitchWidget<TPanel, TFrame, bool>;
+    using TWidget = Switch::Widget<TPanel, TFrame, bool>;
     auto w = rack::createParamCentered<TWidget>(mm2px(xmm, ymm),
                                                 panel->getModule(), id);
     BehaviorT::init_behavior(w);

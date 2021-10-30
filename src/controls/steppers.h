@@ -14,7 +14,7 @@ template <typename TStepper> struct Stepper {
   using TValue = typename TStepper::TValue;
   using TAction = std::function<void(TValue)>;
   template <typename TPanel>
-  using TWidget = SwitchWidget<TPanel, Stepper, TValue>;
+  using TWidget = Switch::Widget<TPanel, Stepper, TValue>;
 
   static inline auto frame_names() -> std::vector<std::string> const & {
     static auto const frame_names =
