@@ -11,6 +11,7 @@
 #include "params/curvature-config.h"
 #include "params/duration-config.h"
 #include "params/level-config.h"
+#include "signals/levels.h"
 
 #include "rack.hpp"
 
@@ -22,7 +23,7 @@ struct Module : public rack::engine::Module {
     config(Param::Count, Input::Count, Output::Count);
 
     config_duration_knob(this, Param::Duration, medium_duration_range);
-    config_level_knob(this, Param::Level, unipolar_signal_range);
+    ScaledKnob<Levels>::config(this, Param::Level, "Level", 5.F);
     config_curvature_knob(this, Param::Curvature);
 
     configInput(Input::Envelope, "Stage");

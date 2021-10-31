@@ -32,9 +32,7 @@ template <typename TParam, typename TInput, typename TOutput> struct Signals {
 
   auto input() const -> float { return voltage_at(inputs_[Input::Envelope]); }
 
-  auto level() const -> float {
-    return dhe::level(params_[Param::Level], unipolar_signal_range);
-  }
+  auto level() const -> float { return value_of(params_[Param::Level]); }
 
   void output(float voltage) { outputs_[Output::Envelope].setVoltage(voltage); }
 
