@@ -1,13 +1,12 @@
 #pragma once
 
 #include "components/range.h"
+#include "controls/switches.h"
 
 #include <string>
 #include <vector>
 
 namespace dhe {
-namespace envelope {
-namespace booster_stage {
 struct Levels {
   using ValueType = Range;
   enum { Bipolar, Unipolar };
@@ -28,10 +27,7 @@ struct Levels {
   }
 
   static inline auto frame_names() -> std::vector<std::string> const & {
-    static auto const names = numbered_frame_names("toggle-2", 2);
-    return names;
+    return ThumbSwitch<2>::frame_names();
   }
 };
-} // namespace booster_stage
-} // namespace envelope
 } // namespace dhe

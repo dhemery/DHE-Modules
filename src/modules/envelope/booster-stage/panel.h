@@ -1,13 +1,13 @@
 #pragma once
 
 #include "control-ids.h"
-#include "params.h"
 
 #include "components/range.h"
 #include "controls/knobs.h"
 #include "controls/ports.h"
 #include "controls/switches.h"
 #include "panels/panel-widget.h"
+#include "signals/levels.h"
 
 #include "rack.hpp"
 
@@ -38,14 +38,9 @@ struct Panel : public PanelWidget<Panel> {
 
     auto const on_level_range_change = [this](Range new_range) {
       auto *knob = getParam(Param::Level);
-      auto *pq = knob->getParamQuantity();
-      auto const old_range = Range{pq->minValue, pq->maxValue};
-      auto const rotation = old_range.normalize(pq->getValue());
-      auto const default_rotation = old_range.normalize(pq->defaultValue);
-      pq->minValue = new_range.lower_bound();
-      pq->maxValue = new_range.upper_bound();
-      pq->defaultValue = new_range.scale(default_rotation);
-      pq->setValue(new_range.scale(rotation));
+      auto *pq = reinterpret_cast<ScaledKnob<Levels>::Quantity *>(
+          knob->getParamQuantity());
+      pq->set_range(new_range);
     };
 
     Selector::install<Levels>(this, Param::LevelRange, column5, y,

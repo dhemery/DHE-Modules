@@ -58,12 +58,26 @@ template <typename TQuantity> struct LinearKnob {
 };
 
 template <typename TQuantity> struct ScaledKnob {
-  static inline void config(rack::engine::Module *module, int id,
+  struct Quantity : public rack::engine::ParamQuantity {
+    inline void set_range(Range new_range) {
+      auto const old_range = Range{minValue, maxValue};
+      auto const rotation = old_range.normalize(getValue());
+      auto const default_rotation = old_range.normalize(defaultValue);
+      minValue = new_range.lower_bound();
+      maxValue = new_range.upper_bound();
+      defaultValue = new_range.scale(default_rotation);
+      setValue(new_range.scale(rotation));
+    };
+  };
+
+  static inline auto config(rack::engine::Module *module, int id,
                             std::string const &name,
-                            float initial_value = TQuantity::initial) {
+                            float initial_value = TQuantity::initial)
+      -> Quantity * {
     static auto const range = TQuantity::range();
-    module->configParam(id, range.lower_bound(), range.upper_bound(),
-                        initial_value, name, TQuantity::unit);
+    return module->configParam<Quantity>(id, range.lower_bound(),
+                                         range.upper_bound(), initial_value,
+                                         name, TQuantity::unit);
   }
 };
 

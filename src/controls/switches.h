@@ -62,7 +62,7 @@ template <int N> struct ThumbSwitch {
   template <typename TPanel>
   using TWidget = Switch::Widget<TPanel, ThumbSwitch, int>;
 
-  static inline auto frame_names() -> std::vector<std::string> {
+  static inline auto frame_names() -> std::vector<std::string> const & {
     static auto const frame_names =
         numbered_frame_names("toggle-" + std::to_string(N), N);
     return frame_names;
