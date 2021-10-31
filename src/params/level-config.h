@@ -73,11 +73,10 @@ static inline void config_level_knob(rack::engine::Module *module, int knob_id,
  * Configures the param and display for a level range switch.
  */
 static inline void
-config_level_range_switch(rack::engine::Module *module, int switch_id,
+config_level_range_switch(rack::engine::Module *module, int id,
                           std::string const &name = "Level range",
-                          int initial_state = 1) {
-  static auto const level_state_names =
-      std::vector<std::string>{"±5 V", "0–10 V"};
-  Switch::config(module, switch_id, name, level_state_names, initial_state);
+                          int initial = 1) {
+  static auto const range_names = std::vector<std::string>{"±5 V", "0–10 V"};
+  Switch::config(module, id, name, range_names, initial);
 }
 } // namespace dhe

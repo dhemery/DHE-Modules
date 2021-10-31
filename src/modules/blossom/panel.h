@@ -4,7 +4,6 @@
 
 #include "controls/knobs.h"
 #include "controls/ports.h"
-#include "controls/steppers.h"
 #include "controls/switches.h"
 #include "panels/dimensions.h"
 #include "panels/panel-widget.h"
@@ -45,8 +44,8 @@ struct Panel : public PanelWidget<Panel> {
       q->quantize(pos == 0);
     };
 
-    ThumbSwitch<2>::install(this, Param::BounceRatioMode, column4, y,
-                            quantize_bounce_ratio);
+    ThumbSwitch<2>::install(this, Param::BounceRatioMode, column4, y)
+        ->on_change(quantize_bounce_ratio);
 
     y += dy;
     InPort::install(this, Input::BounceDepthCv, column1, y);

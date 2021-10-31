@@ -9,7 +9,7 @@
 #include "step-selector.h"
 
 #include "components/phase-timer.h"
-#include "controls/steppers.h"
+#include "controls/switches.h"
 #include "params/curvature-config.h"
 #include "params/duration-config.h"
 #include "params/level-config.h"

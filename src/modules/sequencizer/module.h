@@ -10,7 +10,7 @@
 #include "step-selector.h"
 
 #include "components/cxmath.h"
-#include "controls/buttons.h"
+#include "controls/switches.h"
 #include "params/curvature-config.h"
 #include "params/duration-config.h"
 #include "params/level-config.h"

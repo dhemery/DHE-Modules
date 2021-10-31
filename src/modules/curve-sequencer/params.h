@@ -1,6 +1,7 @@
 #pragma once
-#include "./advance-mode.h"
-#include "./generate-mode.h"
+
+#include "advance-mode.h"
+#include "generate-mode.h"
 
 namespace dhe {
 namespace curve_sequencer {

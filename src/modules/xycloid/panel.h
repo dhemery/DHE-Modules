@@ -44,8 +44,8 @@ struct Panel : public PanelWidget<Panel> {
           getModule()->getParamQuantity(Param::WobbleRatio));
       q->quantize(pos == 0);
     };
-    ThumbSwitch<2>::install(this, Param::WobbleRatioMode, column4, y,
-                            quantize_wobble_ratio);
+    ThumbSwitch<2>::install(this, Param::WobbleRatioMode, column4, y)
+        ->on_change(quantize_wobble_ratio);
 
     auto select_wobble_ratio_range = [this](int pos) {
       auto *q = reinterpret_cast<WobbleRatio::Quantity *>(
@@ -57,8 +57,8 @@ struct Panel : public PanelWidget<Panel> {
     InPort::install(this, Input::WobbleDepthCv, column1, y);
     Knob::install<Tiny>(this, Param::WobbleDepthAv, column2, y);
     Knob::install<Large>(this, Param::WobbleDepth, column3, y);
-    ThumbSwitch<3>::install(this, Param::WobbleRatioRange, column4, y,
-                            select_wobble_ratio_range);
+    ThumbSwitch<3>::install(this, Param::WobbleRatioRange, column4, y)
+        ->on_change(select_wobble_ratio_range);
 
     y += dy;
     InPort::install(this, Input::WobblePhaseOffsetCv, column1, y);

@@ -61,8 +61,8 @@ public:
               multiplier_range_stepper->hide();
             }
           };
-      Stepper<Operators>::install(this, Param::Operation + row, column2, y,
-                                  update_range_stepper);
+      Stepper<Operators>::install(this, Param::Operation + row, column2, y)
+          ->on_change(update_range_stepper);
     }
   }
 }; // namespace func

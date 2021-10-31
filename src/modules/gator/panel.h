@@ -2,7 +2,6 @@
 
 #include "control-ids.h"
 
-#include "controls/buttons.h"
 #include "controls/ports.h"
 #include "controls/switches.h"
 #include "panels/panel-widget.h"
