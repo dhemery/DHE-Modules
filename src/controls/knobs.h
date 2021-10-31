@@ -57,30 +57,6 @@ template <typename TQuantity> struct LinearKnob {
   }
 };
 
-template <typename TQuantity> struct ScaledKnob {
-  struct Quantity : public rack::engine::ParamQuantity {
-    inline void set_range(Range new_range) {
-      auto const old_range = Range{minValue, maxValue};
-      auto const rotation = old_range.normalize(getValue());
-      auto const default_rotation = old_range.normalize(defaultValue);
-      minValue = new_range.lower_bound();
-      maxValue = new_range.upper_bound();
-      defaultValue = new_range.scale(default_rotation);
-      setValue(new_range.scale(rotation));
-    };
-  };
-
-  static inline auto config(rack::engine::Module *module, int id,
-                            std::string const &name,
-                            float initial_value = TQuantity::initial)
-      -> Quantity * {
-    static auto const range = TQuantity::range();
-    return module->configParam<Quantity>(id, range.lower_bound(),
-                                         range.upper_bound(), initial_value,
-                                         name, TQuantity::unit);
-  }
-};
-
 struct Attenuverter : public LinearKnob<Attenuverter> {
   static auto constexpr range() -> Range { return Range{-100.F, 100.F}; }
   static auto constexpr initial = 100.F;

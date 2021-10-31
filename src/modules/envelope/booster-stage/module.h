@@ -25,8 +25,13 @@ struct Module : public rack::engine::Module {
     configInput(Input::Envelope, "Stage");
     configOutput(Output::Envelope, "Stage");
 
-    ScaledKnob<Levels>::config(this, Param::Level, "Level", 5.F);
-    Selector::config<Levels>(this, Param::LevelRange, "Level Range");
+    auto *level_quantity = LevelKnob::config(this, Param::Level, "Level", 5.F);
+    auto const set_level_range = [level_quantity](Range r) {
+      level_quantity->set_range(r);
+    };
+    LevelSwitch::config(this, Param::LevelRange, "Level Range")
+        ->set_action(set_level_range);
+
     configInput(Input::LevelCv, "Level CV");
 
     config_curvature_knob(this, Param::Curvature);

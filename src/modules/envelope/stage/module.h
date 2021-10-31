@@ -23,7 +23,7 @@ struct Module : public rack::engine::Module {
     config(Param::Count, Input::Count, Output::Count);
 
     config_duration_knob(this, Param::Duration, medium_duration_range);
-    ScaledKnob<Levels>::config(this, Param::Level, "Level", 5.F);
+    LevelKnob::config(this, Param::Level, "Level", 5.F);
     config_curvature_knob(this, Param::Curvature);
 
     configInput(Input::Envelope, "Stage");

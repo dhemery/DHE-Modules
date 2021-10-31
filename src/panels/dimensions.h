@@ -1,6 +1,6 @@
 #pragma once
 
-#include "./panel-assets.h"
+#include "panel-assets.h"
 
 #include "rack.hpp"
 

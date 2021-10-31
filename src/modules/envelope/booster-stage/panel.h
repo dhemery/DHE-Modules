@@ -35,16 +35,7 @@ struct Panel : public PanelWidget<Panel> {
 
     InPort::install(this, Input::LevelCv, column1, y);
     Knob::install<Large>(this, Param::Level, column3, y);
-
-    auto const on_level_range_change = [this](Range new_range) {
-      auto *knob = getParam(Param::Level);
-      auto *pq = reinterpret_cast<ScaledKnob<Levels>::Quantity *>(
-          knob->getParamQuantity());
-      pq->set_range(new_range);
-    };
-
-    Selector::install<Levels>(this, Param::LevelRange, column5, y,
-                              on_level_range_change);
+    ThumbSwitch<2>::install(this, Param::LevelRange, column5, y);
 
     y += dy;
     InPort::install(this, Input::CurvatureCv, column1, y);
