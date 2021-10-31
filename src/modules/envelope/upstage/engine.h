@@ -1,14 +1,5 @@
 #pragma once
 
-#include "control-ids.h"
-
-#include "params/level-config.h"
-#include "params/presets.h"
-#include "signals/common-inputs.h"
-#include "signals/level-inputs.h"
-
-#include "rack.hpp"
-
 namespace dhe {
 namespace envelope {
 namespace upstage {

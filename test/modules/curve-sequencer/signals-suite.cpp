@@ -1,8 +1,7 @@
-#include "./fixtures/advance-mode-enums.h"
-#include "./fixtures/generate-mode-enums.h"
-#include "./fixtures/signals-fixture.h"
-
 #include "dheunit/test.h"
+#include "fixtures/advance-mode-enums.h"
+#include "fixtures/generate-mode-enums.h"
+#include "fixtures/signals-fixture.h"
 
 #include <functional>
 
@@ -178,24 +177,6 @@ public:
             auto const want =
                 dhe::duration(duration_knob_rotation,
                               dhe::duration_ranges[duration_range_selection]);
-            if (got != want) {
-              t.errorf("Got {}, want {}", got, want);
-            }
-          }));
-
-    t.run("level(step) reports level for level range and step level param",
-          test([](Tester &t, Module &module, Signals &signals) {
-            auto const step = std::rand() % step_count;
-            auto constexpr level_knob_rotation = 0.35F;
-            auto constexpr level_range_selection = 1; // unipolar
-
-            module.params_[Param::StepLevel + step].setValue(
-                level_knob_rotation);
-            module.params_[Param::LevelRange].setValue(level_range_selection);
-
-            auto const got = signals.level(step);
-            auto const want = dhe::level(
-                level_knob_rotation, dhe::signal_ranges[level_range_selection]);
             if (got != want) {
               t.errorf("Got {}, want {}", got, want);
             }

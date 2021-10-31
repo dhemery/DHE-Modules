@@ -1,11 +1,10 @@
 #pragma once
 
+#include "dheunit/test.h"
+#include "helpers/rack-controls.h"
 #include "modules/curve-sequencer/control-ids.h"
 #include "modules/curve-sequencer/signals.h"
 
-#include "helpers/rack-controls.h"
-
-#include "dheunit/test.h"
 #include <functional>
 #include <vector>
 

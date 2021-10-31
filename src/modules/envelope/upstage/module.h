@@ -4,8 +4,8 @@
 #include "engine.h"
 #include "signals.h"
 
-#include "params/level-config.h"
 #include "params/presets.h"
+#include "signals/levels.h"
 
 #include "rack.hpp"
 
@@ -17,8 +17,9 @@ struct Module : public rack::engine::Module {
   Module() {
     config(Param::Count, Input::Count, Output::Count);
 
-    config_level_knob(this, Param::Level, Param::LevelRange);
-    config_level_range_switch(this, Param::LevelRange);
+    auto *level_knob = LevelKnob::config(this, Param::Level, "Level");
+    LevelSwitch::config(this, Param::LevelRange, "Level range")
+        ->set_action([level_knob](Range r) { level_knob->set_range(r); });
     configInput(Input::LevelCv, "Level CV");
 
     configInput(Input::Trigger, "Trigger");

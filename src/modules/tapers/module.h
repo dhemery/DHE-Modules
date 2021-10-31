@@ -9,7 +9,7 @@
 #include "params/presets.h"
 #include "signals/common-inputs.h"
 #include "signals/curvature-inputs.h"
-#include "signals/level-inputs.h"
+#include "signals/levels.h"
 
 #include "rack.hpp"
 
@@ -64,12 +64,17 @@ public:
   }
 
 private:
+  auto level_range(int id) const -> Range {
+    auto const selection = position_of(params[id]);
+    return Levels::ranges()[selection];
+  }
+
   auto level_rotation_1() const -> float {
     return rotation(params[Param::Level1], inputs[Input::LevelCv1],
                     params[Param::LevelAv1]);
   };
   auto level_range_1() const -> Range {
-    return level_range(params[Param::LevelRange1]);
+    return level_range(Param::LevelRange1);
   }
 
   auto taper_1(float input) const -> float {
@@ -85,7 +90,7 @@ private:
                     params[Param::LevelAv2]);
   };
   auto level_range_2() const -> Range {
-    return level_range(params[Param::LevelRange2]);
+    return level_range(Param::LevelRange2);
   }
 
   auto taper_2(float input) const -> float {

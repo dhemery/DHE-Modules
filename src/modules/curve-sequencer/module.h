@@ -14,8 +14,12 @@
 #include "params/duration-config.h"
 #include "params/level-config.h"
 #include "params/presets.h"
+#include "signals/levels.h"
 
 #include "rack.hpp"
+
+#include <string>
+#include <vector>
 
 namespace dhe {
 
@@ -46,8 +50,7 @@ template <int N> struct Module : public rack::engine::Module {
         Param::SelectionLength, 1.F, N, N, "Sequence length", " steps");
     selection_length_knob->snapEnabled = true;
 
-    config_level_range_switch(this, Param::LevelRange);
-    config_duration_range_switch(this, Param::DurationRange);
+    auto level_knobs = std::vector<RangedParamQuantity *>{};
 
     for (auto step = 0; step < N; step++) {
       auto const step_name =
@@ -59,8 +62,10 @@ template <int N> struct Module : public rack::engine::Module {
       Stepper<AdvanceModes>::config(this, Param::StepAdvanceMode + step,
                                     step_name + "advance mode",
                                     AdvanceMode::TimerExpires);
-      config_level_knob(this, Param::StepLevel + step, Param::LevelRange,
-                        step_name + "level");
+      auto *level_knob =
+          LevelKnob::config(this, Param::StepLevel + step, step_name + "level");
+      level_knobs.push_back(level_knob);
+
       config_curve_shape_switch(this, Param::StepShape + step,
                                 step_name + "shape");
       config_curvature_knob(this, Param::StepCurvature + step,
@@ -72,6 +77,17 @@ template <int N> struct Module : public rack::engine::Module {
 
       signals_.show_inactive(step);
     }
+
+    auto set_level_ranges = [level_knobs](Range r) {
+      for (auto *level_knob : level_knobs) {
+        level_knob->set_range(r);
+      }
+    };
+
+    LevelSwitch::config(this, Param::LevelRange, "Level range")
+        ->set_action(set_level_ranges);
+
+    config_duration_range_switch(this, Param::DurationRange);
 
     configInput(Input::Main, "AUX");
     configOutput(Output::Main, "Sequencer");

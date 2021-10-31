@@ -1,6 +1,5 @@
-#include "./fixtures/duration-fixture.h"
-
 #include "dheunit/test.h"
+#include "fixtures/duration-fixture.h"
 
 namespace test {
 namespace sequencizer {

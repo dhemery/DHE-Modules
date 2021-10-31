@@ -1,15 +1,5 @@
 #pragma once
 
-#include "advance-mode.h"
-#include "generate-mode.h"
-
-#include "signals/common-inputs.h"
-#include "signals/curvature-inputs.h"
-#include "signals/duration-inputs.h"
-#include "signals/level-inputs.h"
-
-#include <vector>
-
 #define PER_STEP(name, n) name, name##_LAST = (name) + (n)-1
 #define ONE_PER_STEP(name, n) PER_STEP(name, n)
 #define TWO_PER_STEP(name, n) PER_STEP(name, (n)*2)

@@ -3,6 +3,9 @@
 #include "components/range.h"
 #include "controls/switches.h"
 
+#include "rack.hpp"
+
+#include <functional>
 #include <string>
 #include <vector>
 
@@ -73,7 +76,8 @@ struct LevelKnob {
       -> RangedParamQuantity * {
     auto const range = Levels::ranges()[initial_range];
     auto *pq = module->configParam<RangedParamQuantity>(
-        id, range.lower_bound(), range.upper_bound(), initial_value, name);
+        id, range.lower_bound(), range.upper_bound(), initial_value, name,
+        Levels::unit);
     return pq;
   }
 };

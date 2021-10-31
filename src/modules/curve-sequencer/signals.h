@@ -7,7 +7,6 @@
 #include "signals/common-inputs.h"
 #include "signals/curvature-inputs.h"
 #include "signals/duration-inputs.h"
-#include "signals/level-inputs.h"
 
 #include <vector>
 
@@ -74,8 +73,7 @@ struct Signals {
   }
 
   auto level(int step) const -> float {
-    return dhe::selectable_level(params_[Param::StepLevel + step],
-                                 params_[Param::LevelRange]);
+    return value_of(params_[Param::StepLevel + step]);
   }
 
   auto output() const -> float { return outputs_[Output::Main].getVoltage(); }

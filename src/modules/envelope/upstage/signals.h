@@ -1,9 +1,6 @@
 #pragma once
 
-#include "params/level-config.h"
-#include "params/presets.h"
 #include "signals/common-inputs.h"
-#include "signals/level-inputs.h"
 
 #include <vector>
 
@@ -27,8 +24,8 @@ template <typename TParam, typename TInput, typename TOutput> struct Signals {
   }
 
   auto level() const -> float {
-    return selectable_level(params_[Param::Level], inputs_[Input::LevelCv],
-                            params_[Param::LevelRange]);
+    return value_of(params_[Param::Level]) +
+           voltage_at(inputs_[Input::LevelCv]);
   }
 
   void send_envelope(float voltage) {

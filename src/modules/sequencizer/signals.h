@@ -39,7 +39,10 @@ template <typename P, typename I>
 static inline auto level(P const &level_knob, P const &range_switch,
                          P const &multipler_knob, I const &multiplier_cv)
     -> float {
-  auto const range = level_range(range_switch);
+  static auto const level_ranges =
+      std::vector<Range>{bipolar_signal_range, unipolar_signal_range};
+  auto const range_selection = position_of(range_switch);
+  auto const range = level_ranges[range_selection];
   auto const rotation = dhe::rotation_of(level_knob);
   auto const nominal_level = range.scale(rotation);
   auto const attenuation = dhe::rotation(multipler_knob, multiplier_cv);

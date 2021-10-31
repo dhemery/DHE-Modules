@@ -13,7 +13,7 @@
 #include "params/presets.h"
 #include "signals/curvature-inputs.h"
 #include "signals/duration-inputs.h"
-#include "signals/level-inputs.h"
+#include "signals/levels.h"
 
 #include "rack.hpp"
 
@@ -24,7 +24,8 @@ static auto constexpr brightness_range = Range{0.F, 1.F};
 
 template <typename P>
 static inline auto level(P const &level_knob, P const &range_switch) -> float {
-  auto const range = level_range(range_switch);
+  auto const range_selection = position_of(range_switch);
+  auto const range = Levels::ranges()[range_selection];
   auto const rotation = dhe::rotation_of(level_knob);
   return range.scale(rotation);
 }

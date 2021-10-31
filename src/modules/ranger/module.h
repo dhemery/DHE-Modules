@@ -6,7 +6,7 @@
 #include "params/level-config.h"
 #include "params/presets.h"
 #include "signals/common-inputs.h"
-#include "signals/level-inputs.h"
+#include "signals/levels.h"
 
 #include "rack.hpp"
 
@@ -21,13 +21,23 @@ struct Module : public rack::engine::Module {
     configInput(Input::LevelCv, "Level CV");
     Attenuverter::config(this, Param::LevelAv, "Level CV gain");
 
-    config_level_knob(this, Param::CcwLimit, Param::CcwLimitRange, "CCW limit");
-    config_level_range_switch(this, Param::CcwLimitRange, "CCW limit range", 0);
+    auto *ccw_limit_knob =
+        LevelKnob::config(this, Param::CcwLimit, "CCW limit");
+    auto set_ccw_limit_range = [ccw_limit_knob](Range r) {
+      ccw_limit_knob->set_range(r);
+    };
+    LevelSwitch::config(this, Param::CcwLimitRange, "CCW limit range",
+                        Levels::Bipolar)
+        ->set_action(set_ccw_limit_range);
     configInput(Input::CcwLimitCv, "CCW limit CV");
     Attenuverter::config(this, Param::CcwLimitAv, "CCW limit CV gain");
 
-    config_level_knob(this, Param::CwLimit, Param::CwLimitRange, "CW limit");
-    config_level_range_switch(this, Param::CwLimitRange, "CW limit range", 0);
+    auto *cw_limit_knob = LevelKnob::config(this, Param::CwLimit, "CW limit");
+    auto set_cw_limit_range = [cw_limit_knob](Range r) {
+      cw_limit_knob->set_range(r);
+    };
+    LevelSwitch::config(this, Param::CwLimitRange, "CW limit range", 0)
+        ->set_action(set_cw_limit_range);
     configInput(Input::CwLimitCv, "CW limit CV");
     Attenuverter::config(this, Param::CwLimitAv, "CW limit CV gain");
 
@@ -51,18 +61,18 @@ private:
                     params[Param::LevelAv]);
   }
 
+  auto limit(int knob, int cv, int av) const -> float {
+    return value_of(params[knob]) +
+           voltage_at(inputs[cv]) * value_of(params[av]);
+  }
+
   auto ccw_limit() const -> float {
-    return selectable_level(params[Param::CcwLimit], inputs[Input::CcwLimitCv],
-                            params[Param::CcwLimitAv],
-                            params[Param::CcwLimitRange]);
+    return limit(Param::CcwLimit, Input::CcwLimitCv, Param::CcwLimitAv);
   }
 
   auto cw_limit() const -> float {
-    return selectable_level(params[Param::CwLimit], inputs[Input::CwLimitCv],
-                            params[Param::CwLimitAv],
-                            params[Param::CwLimitRange]);
+    return limit(Param::CwLimit, Input::CwLimitCv, Param::CwLimitAv);
   }
 };
-
 } // namespace ranger
 } // namespace dhe

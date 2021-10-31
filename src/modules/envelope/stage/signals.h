@@ -5,7 +5,6 @@
 #include "components/sigmoid.h"
 #include "signals/curvature-inputs.h"
 #include "signals/duration-inputs.h"
-#include "signals/level-inputs.h"
 
 #include <vector>
 
