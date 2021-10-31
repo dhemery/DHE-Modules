@@ -30,12 +30,6 @@ static inline auto level(P const &level_knob, P const &range_switch) -> float {
   return range.scale(rotation);
 }
 
-struct RelativeDuration : public LinearKnob<RelativeDuration> {
-  static auto constexpr range() -> Range { return Range{0.F, 2.F}; }
-  static auto constexpr initial = 1.F;
-  static auto constexpr unit = "";
-};
-
 template <int N> class Module : public rack::engine::Module {
   using Input = InputIds<N>;
   using Light = LightIds<N>;
@@ -91,8 +85,8 @@ public:
                             step_name + "curvature");
       configInput(Input::StepCurvatureCv + step, step_name + "curvature CV");
 
-      RelativeDuration::config(this, Param::StepDuration + step,
-                               step_name + "relative duration");
+      Knob::config<Gain>(this, Param::StepDuration + step,
+                         step_name + "relative duration", 1.F);
       configInput(Input::StepDurationCv + step,
                   step_name + "relative duration CV");
     }

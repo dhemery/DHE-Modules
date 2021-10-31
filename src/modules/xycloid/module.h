@@ -24,29 +24,32 @@ public:
 
     ThrobSpeed::config(this, Param::ThrobSpeed);
     configInput(Input::ThrobSpeedCv, "Speed CV");
-    Attenuverter::config(this, Param::ThrobSpeedAv, "Speed CV gain");
+    Knob::config<Attenuverter>(this, Param::ThrobSpeedAv, "Speed CV gain", 0.F);
 
     WobbleRatio::config(this, Param::WobbleRatio, "Ratio");
     configInput(Input::WobbleRatioCv, "Ratio CV");
-    Attenuverter::config(this, Param::WobbleRatioAv, "Ratio CV gain");
+    Knob::config<Attenuverter>(this, Param::WobbleRatioAv, "Ratio CV gain",
+                               0.F);
     Switch::config(this, Param::WobbleRatioRange, "Direction",
                    {"In", "-In +Out", "Out"}, 2);
     Switch::config(this, Param::WobbleRatioMode, "Ratio mode",
                    {"Quantized", "Free"}, 1);
 
-    Percentage::config(this, Param::WobbleDepth, "Depth", 50.F);
+    Knob::config<Percentage>(this, Param::WobbleDepth, "Depth", 0.5F);
     configInput(Input::WobbleDepthCv, "Depth CV");
-    Attenuverter::config(this, Param::WobbleDepthAv, "Depth CV gain");
+    Knob::config<Attenuverter>(this, Param::WobbleDepthAv, "Depth CV gain",
+                               0.F);
 
-    Phase::config(this, Param::WobblePhaseOffset, "Phase");
+    Knob::config<Angle>(this, Param::WobblePhaseOffset, "Phase", 0.F);
     configInput(Input::WobblePhaseOffsetCv, "Phase CV");
-    Attenuverter::config(this, Param::WobblePhaseOffsetAv, "Phase CV gain");
+    Knob::config<Attenuverter>(this, Param::WobblePhaseOffsetAv,
+                               "Phase CV gain", 0.F);
 
-    Gain::config(this, Param::XGain, "X gain");
+    Knob::config<Gain>(this, Param::XGain, "X gain", 1.F);
     configInput(Input::XGainCv, "X gain CV");
     config_level_range_switch(this, Param::XRange, "X range", 0);
 
-    Gain::config(this, Param::YGain, "Y gain");
+    Knob::config<Gain>(this, Param::YGain, "Y gain", 1.F);
     configInput(Input::YGainCv, "Y gain CV");
     config_level_range_switch(this, Param::YRange, "Y range", 0);
 
@@ -114,10 +117,13 @@ private:
                                              params[Param::WobbleDepthAv]));
   }
 
+  // radians
   auto wobble_phase_offset() const -> float {
-    return Phase::value(rotation(params[Param::WobblePhaseOffset],
-                                 inputs[Input::WobblePhaseOffsetCv],
-                                 params[Param::WobblePhaseOffsetAv]));
+    auto const base = value_of(params[Param::WobblePhaseOffset]);
+    auto const modifier =
+        voltage_at(inputs[Input::WobblePhaseOffsetCv]) * 0.1F * 180.F;
+    auto const attenuation = value_of(params[Param::WobblePhaseOffsetAv]);
+    return base + modifier * attenuation;
   }
 
   auto wobble_ratio() -> float {

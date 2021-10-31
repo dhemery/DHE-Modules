@@ -18,8 +18,11 @@ struct Module : public rack::engine::Module {
     config(Param::Count, Input::Count, Output::Count);
 
     auto *level_knob = LevelKnob::config(this, Param::Level, "Level");
+    auto update_level_knob_range = [level_knob](Range r) {
+      level_knob->set_range(r);
+    };
     LevelSwitch::config(this, Param::LevelRange, "Level range")
-        ->set_action([level_knob](Range r) { level_knob->set_range(r); });
+        ->on_change(update_level_knob_range);
     configInput(Input::LevelCv, "Level CV");
 
     configInput(Input::Trigger, "Trigger");

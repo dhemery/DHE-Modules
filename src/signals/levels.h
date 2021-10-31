@@ -20,7 +20,7 @@ struct RangeSwitchQuantity : public rack::engine::SwitchQuantity {
     action_(TRanges::ranges()[selection]);
   }
 
-  void set_action(TAction const &action) { action_ = action; }
+  void on_change(TAction const &action) { action_ = action; }
 
 private:
   std::function<void(Range)> action_ = [](Range) {};

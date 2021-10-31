@@ -23,29 +23,32 @@ public:
     config(Param::Count, Input::Count, Output::Count);
 
     SpinSpeed::config(this, Param::SpinSpeed);
-    Attenuverter::config(this, Param::SpinSpeedAv, "Speed CV gain");
+    Knob::config<Attenuverter>(this, Param::SpinSpeedAv, "Speed CV gain", 0.F);
     configInput(Input::SpinSpeedCv, "Speed CV");
 
     Switch::config(this, Param::BounceRatioMode, "Ratio mode",
                    {"Quantized", "Free"}, 1);
 
     BounceRatio::config(this, Param::BounceRatio, "Ratio");
-    Attenuverter::config(this, Param::BounceRatioAv, "Ratio CV gain");
+    Knob::config<Attenuverter>(this, Param::BounceRatioAv, "Ratio CV gain",
+                               0.F);
     configInput(Input::BounceRatioCv, "Ratio CV");
 
-    Percentage::config(this, Param::BounceDepth, "Depth", 50.F);
-    Attenuverter::config(this, Param::BounceDepthAv, "Depth CV gain");
+    Knob::config<Percentage>(this, Param::BounceDepth, "Depth", 0.5F);
+    Knob::config<Attenuverter>(this, Param::BounceDepthAv, "Depth CV gain",
+                               0.F);
     configInput(Input::BounceDepthCv, "Depth CV");
 
-    Phase::config(this, Param::BouncePhaseOffset, "Phase");
-    Attenuverter::config(this, Param::BouncePhaseOffsetAv, "Phase CV gain");
+    Knob::config<Angle>(this, Param::BouncePhaseOffset, "Phase", 0.F);
+    Knob::config<Attenuverter>(this, Param::BouncePhaseOffsetAv,
+                               "Phase CV gain", 0.F);
     configInput(Input::BouncePhaseOffsetCv, "Phase CV");
 
-    Gain::config(this, Param::XGain, "X gain");
+    Knob::config<Gain>(this, Param::XGain, "X gain", 1.F);
     config_level_range_switch(this, Param::XRange, "X range", 0);
     configInput(Input::XGainCv, "X gain CV");
 
-    Gain::config(this, Param::YGain, "Y gain");
+    Knob::config<Gain>(this, Param::YGain, "Y gain", 1.F);
     config_level_range_switch(this, Param::YRange, "Y range", 0);
     configInput(Input::YGainCv, "Y gain CV");
 
@@ -63,15 +66,13 @@ public:
     spinner_.advance(spin_delta);
     bouncer_.advance(spin_delta * bounce_ratio);
 
-    auto const angle = spinner_.angle();
-
     auto const radius = (1.F - bounce_depth) +
                         bounce_depth * bouncer_.sin(bounce_phase_offset());
-    auto const x = radius * std::cos(angle);
+    auto const x = radius * spinner_.cos();
     auto const x_voltage = 5.F * x_gain() * (x + x_offset());
     outputs[Output::X].setVoltage(x_voltage);
 
-    auto const y = radius * std::sin(angle);
+    auto const y = radius * spinner_.sin();
     auto const y_voltage = 5.F * y_gain() * (y + y_offset());
     outputs[Output::Y].setVoltage(y_voltage);
   }
@@ -98,10 +99,13 @@ private:
                     params[Param::BounceDepthAv]);
   }
 
+  // radians
   inline auto bounce_phase_offset() const -> float {
-    return Phase::value(rotation(params[Param::BouncePhaseOffset],
-                                 inputs[Input::BouncePhaseOffsetCv],
-                                 params[Param::BouncePhaseOffsetAv]));
+    auto const base = value_of(params[Param::BouncePhaseOffset]);
+    auto const modifier =
+        voltage_at(inputs[Input::BouncePhaseOffsetCv]) * 0.1F * 180.F;
+    auto const attenuation = value_of(params[Param::BouncePhaseOffsetAv]);
+    return base + modifier * attenuation;
   }
 
   inline auto spin_speed() const -> float {

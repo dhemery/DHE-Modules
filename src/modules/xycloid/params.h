@@ -11,9 +11,8 @@
 namespace dhe {
 namespace xycloid {
 
-struct Phase : LinearKnob<Phase> {
+struct Phase {
   static auto constexpr range() -> Range { return Range{-180.F, 180.F}; }
-  static auto constexpr initial = 0.F;
   static auto constexpr unit = "˚";
 
   static inline auto value(float rotation) -> float { return rotation - 0.5F; }

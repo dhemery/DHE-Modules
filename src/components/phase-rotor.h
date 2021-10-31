@@ -1,5 +1,6 @@
 #pragma once
-#include "./cxmath.h"
+
+#include "cxmath.h"
 
 #include <cmath>
 
@@ -11,15 +12,12 @@ public:
     phase_ -= std::trunc(phase_);
   }
 
-  constexpr auto angle(float offset = 0.F) const -> float {
-    return tau * (phase_ + offset);
+  auto sin(float offset = 0.F) const -> float {
+    return std::sin(phase_ * tau + offset);
   }
 
-  auto sin(float offset = 0.F) const -> float {
-    return std::sin(angle(offset));
-  }
   auto cos(float offset = 0.F) const -> float {
-    return std::cos(angle(offset));
+    return std::cos(phase_ * tau + offset);
   }
 
 private:

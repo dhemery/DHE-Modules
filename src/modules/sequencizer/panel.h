@@ -100,27 +100,26 @@ template <typename TSize> struct Panel : public PanelWidget<Panel<TSize>> {
         step_width, step_block_left, progress_light_y);
     this->addChild(end_marker);
 
-    auto const on_selection_start_change = [start_marker,
-                                            end_marker](int step) {
+    auto const update_selection_start = [start_marker, end_marker](int step) {
       start_marker->set_selection_start(step);
       end_marker->set_selection_start(step);
     };
 
-    auto const on_selection_end_change = [end_marker](int length) {
+    auto const update_selection_end = [end_marker](int length) {
       end_marker->set_selection_length(length);
     };
 
     auto constexpr selection_y = global_controls_y(2);
-    this->addParam(SelectionKnob<Panel<TSize>>::create(
-        module, sequence_controls_x - hp2mm(0.2F), selection_y,
-        Param::SelectionStart, on_selection_start_change));
+    Knob::install<Small, int>(this, Param::SelectionStart,
+                              sequence_controls_x - hp2mm(0.2F), selection_y)
+        ->on_change(update_selection_start);
 
     auto constexpr selection_length_offset = 8.28F;
     auto constexpr selection_length_x =
         sequence_controls_x + selection_length_offset;
-    this->addParam(SelectionKnob<Panel<TSize>>::create(
-        module, selection_length_x, selection_y, Param::SelectionLength,
-        on_selection_end_change));
+    Knob::install<Small, int>(this, Param::SelectionLength, selection_length_x,
+                              selection_y)
+        ->on_change(update_selection_end);
 
     auto constexpr gate_y = global_controls_y(3);
     InPort::install(this, Input::Gate, sequence_controls_x, gate_y);

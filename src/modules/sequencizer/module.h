@@ -46,11 +46,13 @@ public:
                                              "Sequence length", " steps");
     selection_length_knob->snapEnabled = true;
 
-    Attenuator::config(this, Param::LevelMultiplier, "Level multiplier");
+    Knob::config<Attenuator>(this, Param::LevelMultiplier, "Level multiplier",
+                             100.F);
     config_level_range_switch(this, Param::LevelRange);
     configInput(Input::LevelAttenuationCV, "Level multiplier CV");
 
-    Gain::config(this, Param::DurationMultiplier, "Duration multiplier");
+    Knob::config<Gain>(this, Param::DurationMultiplier, "Duration multiplier",
+                       1.F);
     config_duration_range_switch(this, Param::DurationRange);
     configInput(Input::DurationMultiplierCV, "Duration multipler CV");
 

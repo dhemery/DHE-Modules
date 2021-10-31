@@ -78,14 +78,14 @@ template <int N> struct Module : public rack::engine::Module {
       signals_.show_inactive(step);
     }
 
-    auto set_level_ranges = [level_knobs](Range r) {
+    auto update_level_knob_ranges = [level_knobs](Range r) {
       for (auto *level_knob : level_knobs) {
         level_knob->set_range(r);
       }
     };
 
     LevelSwitch::config(this, Param::LevelRange, "Level range")
-        ->set_action(set_level_ranges);
+        ->on_change(update_level_knob_ranges);
 
     config_duration_range_switch(this, Param::DurationRange);
 

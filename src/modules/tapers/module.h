@@ -24,12 +24,13 @@ public:
     config_level_knob(this, Param::Level1, Param::LevelRange1, "Taper 1 level");
     config_level_range_switch(this, Param::LevelRange1, "Taper 1 level range",
                               0);
-    Attenuverter::config(this, Param::LevelAv1, "Taper 1 level CV gain");
+    Knob::config<Attenuverter>(this, Param::LevelAv1, "Taper 1 level CV gain",
+                               0.F);
     configInput(Input::LevelCv1, "Taper 1 level CV");
 
     config_curvature_knob(this, Param::Curvature1, "Taper 1 curvature");
-    Attenuverter::config(this, Param::CurvatureAv1,
-                         "Taper 1 curvature CV gain");
+    Knob::config<Attenuverter>(this, Param::CurvatureAv1,
+                               "Taper 1 curvature CV gain", 0.F);
     config_curve_shape_switch(this, Param::Shape1, "Taper 1 shape");
     configInput(Input::CurvatureCv1, "Taper 1 curvature CV");
 
@@ -38,12 +39,13 @@ public:
     config_level_knob(this, Param::Level2, Param::LevelRange2, "Taper 2 level");
     config_level_range_switch(this, Param::LevelRange2, "Taper 2 level range",
                               0);
-    Attenuverter::config(this, Param::LevelAv2, "Taper 2 level CV gain");
+    Knob::config<Attenuverter>(this, Param::LevelAv2, "Taper 2 level CV gain",
+                               0.F);
     configInput(Input::LevelCv2, "Taper 2 level CV");
 
     config_curvature_knob(this, Param::Curvature2, "Taper 2 curvature");
-    Attenuverter::config(this, Param::CurvatureAv2,
-                         "Taper 2 curvature CV gain");
+    Knob::config<Attenuverter>(this, Param::CurvatureAv2,
+                               "Taper 2 curvature CV gain", 0.F);
     config_curve_shape_switch(this, Param::Shape2, "Taper 2 shape");
     configInput(Input::CurvatureCv2, "Taper 2 curvature CV");
 

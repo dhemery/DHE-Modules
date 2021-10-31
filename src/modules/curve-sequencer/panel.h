@@ -23,27 +23,6 @@ auto constexpr step_dx = hp2mm(2.25F);
 using ProgressLight =
     rack::componentlibrary::SmallLight<rack::componentlibrary::GreenRedLight>;
 
-template <typename PanelT>
-class SelectionKnob : public Knob::Widget<PanelT, Small> {
-public:
-  static inline auto create(rack::engine::Module *module, float xmm, float ymm,
-                            int index, std::function<void(int)> const &action)
-      -> SelectionKnob * {
-    auto knob = rack::createParamCentered<SelectionKnob>(mm2px(xmm, ymm),
-                                                         module, index);
-    knob->knob_changed_to_ = action;
-    return knob;
-  }
-
-  void onChange(const rack::event::Change &e) override {
-    Knob::Widget<PanelT, Small>::onChange(e);
-    knob_changed_to_(static_cast<int>(this->getParamQuantity()->getValue()));
-  }
-
-private:
-  std::function<void(int)> knob_changed_to_;
-};
-
 class StartMarker : public rack::widget::SvgWidget {
 public:
   StartMarker(std::string const &module_svg_dir, float x, float y) {
@@ -128,22 +107,20 @@ template <typename TSize> struct Panel : public PanelWidget<Panel<TSize>> {
     auto *end_marker = new EndMarker<N>(svg_dir, 0.F, active_y);
     this->addChild(end_marker);
 
-    auto const on_selection_start_change = [start_marker,
-                                            end_marker](int step) {
+    auto const update_selection_start = [start_marker, end_marker](int step) {
       start_marker->set_selection_start(step);
       end_marker->set_selection_start(step);
     };
-    this->addParam(SelectionKnob<Panel<TSize>>::create(
-        module, left, selection_y, Param::SelectionStart,
-        on_selection_start_change));
+    Knob::install<Small, int>(this, Param::SelectionStart, left, selection_y)
+        ->on_change(update_selection_start);
 
-    auto const on_selection_end_change = [end_marker](int length) {
+    auto const update_selection_end = [end_marker](int length) {
       end_marker->set_selection_length(length);
     };
     auto constexpr selection_length_x = left + hp2mm(2.F);
-    this->addParam(SelectionKnob<Panel<TSize>>::create(
-        module, selection_length_x, selection_y, Param::SelectionLength,
-        on_selection_end_change));
+    Knob::install<Small, int>(this, Param::SelectionLength, selection_length_x,
+                              selection_y)
+        ->on_change(update_selection_end);
 
     InPort::install(this, Input::Gate, left, gate_y);
     Button::install<Momentary>(this, Param::Gate, left + button_port_distance,

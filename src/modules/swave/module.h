@@ -19,7 +19,8 @@ struct Module : public rack::engine::Module {
     configOutput(Output::Swave, "Swave");
 
     config_curvature_knob(this, Param::Curvature);
-    Attenuverter::config(this, Param::CurvatureAv, "Curvature CV gain");
+    Knob::config<Attenuverter>(this, Param::CurvatureAv, "Curvature CV gain",
+                               0.F);
     configInput(Input::CurvatureCv, "Curvature CV");
     config_curve_shape_switch(this, Param::Shape);
   }

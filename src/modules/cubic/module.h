@@ -13,9 +13,10 @@ namespace dhe {
 
 namespace cubic {
 
-struct Coefficient : public LinearKnob<Coefficient> {
+struct Coefficient {
   static auto constexpr range() -> Range { return Range{-2.F, 2.F}; }
-  static auto constexpr initial = 0.F;
+  static auto constexpr display_multiplier = 1.F;
+  static auto constexpr display_offset = 0.F;
   static auto constexpr unit = "";
 
   static inline auto value(float rotation) -> float {
@@ -27,22 +28,25 @@ struct Module : public rack::engine::Module {
   Module() {
     config(Param::Count, Input::Count, Output::Count);
 
-    Coefficient::config(this, Param::ACoefficient, "X cubed coefficient");
+    Knob::config<Coefficient>(this, Param::ACoefficient, "X cubed coefficient",
+                              0.F);
     configInput(Input::ACoefficientCv, "X cubed coefficient CV");
 
-    Coefficient::config(this, Param::BCoefficient, "X squared coefficient");
+    Knob::config<Coefficient>(this, Param::BCoefficient,
+                              "X squared coefficient", 0.F);
     configInput(Input::BCoefficientCv, "X squared coefficient CV");
 
-    Coefficient::config(this, Param::CCoefficient, "X coefficient", 1.F);
+    Knob::config<Coefficient>(this, Param::CCoefficient, "X coefficient", 1.F);
     configInput(Input::CCoefficientCv, "X coefficient CV");
 
-    Coefficient::config(this, Param::DCoefficient, "Constant coefficient");
+    Knob::config<Coefficient>(this, Param::DCoefficient, "Constant coefficient",
+                              0.F);
     configInput(Input::DCoefficientCv, "Constant coefficient CV");
 
-    Gain::config(this, Param::InputGain, "InPort gain");
+    Knob::config<Gain>(this, Param::InputGain, "InPort gain", 0.F);
     configInput(Input::InputGainCv, "InPort gain CV");
 
-    Gain::config(this, Param::OutputGain, "OutPort gain");
+    Knob::config<Gain>(this, Param::OutputGain, "OutPort gain", 0.F);
     configInput(Input::OutputGainCv, "OutPort gain CV");
 
     configInput(Input::Cubic, "Module");

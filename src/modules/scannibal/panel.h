@@ -60,26 +60,6 @@ static inline auto constexpr content_width(int steps) -> float {
 using ProgressLight =
     rack::componentlibrary::SmallLight<rack::componentlibrary::GreenRedLight>;
 
-template <typename PanelT>
-struct LengthKnob : public Knob::Widget<PanelT, Small> {
-  static inline auto create(rack::engine::Module *module, float xmm, float ymm,
-                            int index, std::function<void(int)> const &action)
-      -> LengthKnob * {
-    auto knob =
-        rack::createParamCentered<LengthKnob>(mm2px(xmm, ymm), module, index);
-    knob->knob_changed_to_ = action;
-    return knob;
-  }
-
-  void onChange(const rack::event::Change &e) override {
-    Knob::Widget<PanelT, Small>::onChange(e);
-    knob_changed_to_(static_cast<int>(this->getParamQuantity()->getValue()));
-  }
-
-private:
-  std::function<void(int)> knob_changed_to_;
-};
-
 template <typename TSize> struct Panel : public PanelWidget<Panel<TSize>> {
   static auto constexpr N = TSize::step_count;
   static auto constexpr hp = base_width_hp + mm2hp(step_block_width(N));
@@ -122,11 +102,11 @@ private:
     auto constexpr c_y = global_controls_y(3);
     auto constexpr phase_y = global_controls_y(4);
 
-    auto const on_selection_length_change = [this](int step) {
+    auto const update_selection_length = [this](int step) {
       set_selection_length(step);
     };
-    this->addParam(LengthKnob<Panel<TSize>>::create(
-        this->module, x, length_y, Param::Length, on_selection_length_change));
+    Knob::install<Small, int>(this, Param::Length, x, length_y)
+        ->on_change(update_selection_length);
 
     InPort::install(this, Input::InA, x, a_y);
     InPort::install(this, Input::InB, x, b_y);

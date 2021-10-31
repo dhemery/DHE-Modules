@@ -21,13 +21,13 @@ static inline auto numbered_frame_names(std::string const &frame_prefix,
   return frame_names;
 }
 
-template <typename TPanel, typename TFrame, typename TValue = int>
+template <typename TPanel, typename TStyle, typename TValue = int>
 struct SwitchWidget : public rack::app::SvgSwitch {
   using TAction = std::function<void(TValue)>;
 
   SwitchWidget() {
     auto const panel_prefix = std::string{TPanel::svg_dir} + "/";
-    for (auto const &frame_name : TFrame::frame_names()) {
+    for (auto const &frame_name : TStyle::frame_names()) {
       addFrame(load_svg(panel_prefix + frame_name));
     }
     shadow->opacity = 0.F;
@@ -55,6 +55,8 @@ struct SwitchQuantity : public rack::engine::SwitchQuantity {
     auto const v = static_cast<TValue>(value);
     action_(v);
   }
+
+  void on_change(TAction const &action) { action_ = action; }
 
 private:
   TAction action_ = [](TValue) {};

@@ -25,12 +25,12 @@ struct Module : public rack::engine::Module {
     configInput(Input::Envelope, "Stage");
     configOutput(Output::Envelope, "Stage");
 
-    auto *level_quantity = LevelKnob::config(this, Param::Level, "Level", 5.F);
-    auto const set_level_range = [level_quantity](Range r) {
-      level_quantity->set_range(r);
+    auto *level_knob = LevelKnob::config(this, Param::Level, "Level", 5.F);
+    auto const update_level_knob_range = [level_knob](Range r) {
+      level_knob->set_range(r);
     };
     LevelSwitch::config(this, Param::LevelRange, "Level Range")
-        ->set_action(set_level_range);
+        ->on_change(update_level_knob_range);
 
     configInput(Input::LevelCv, "Level CV");
 

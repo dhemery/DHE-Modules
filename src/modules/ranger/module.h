@@ -17,29 +17,30 @@ struct Module : public rack::engine::Module {
   Module() {
     config(Param::Count, Input::Count, Output::Count);
 
-    Attenuator::config(this, Param::Level, "Level");
+    Knob::config<Attenuator>(this, Param::Level, "Level", 100.F);
     configInput(Input::LevelCv, "Level CV");
-    Attenuverter::config(this, Param::LevelAv, "Level CV gain");
+    Knob::config<Attenuverter>(this, Param::LevelAv, "Level CV gain", 0.F);
 
     auto *ccw_limit_knob =
         LevelKnob::config(this, Param::CcwLimit, "CCW limit");
-    auto set_ccw_limit_range = [ccw_limit_knob](Range r) {
+    auto update_ccw_limit_knob_range = [ccw_limit_knob](Range r) {
       ccw_limit_knob->set_range(r);
     };
     LevelSwitch::config(this, Param::CcwLimitRange, "CCW limit range",
                         Levels::Bipolar)
-        ->set_action(set_ccw_limit_range);
+        ->on_change(update_ccw_limit_knob_range);
     configInput(Input::CcwLimitCv, "CCW limit CV");
-    Attenuverter::config(this, Param::CcwLimitAv, "CCW limit CV gain");
+    Knob::config<Attenuverter>(this, Param::CcwLimitAv, "CCW limit CV gain",
+                               0.F);
 
     auto *cw_limit_knob = LevelKnob::config(this, Param::CwLimit, "CW limit");
-    auto set_cw_limit_range = [cw_limit_knob](Range r) {
+    auto update_cw_limit_knob_range = [cw_limit_knob](Range r) {
       cw_limit_knob->set_range(r);
     };
     LevelSwitch::config(this, Param::CwLimitRange, "CW limit range", 0)
-        ->set_action(set_cw_limit_range);
+        ->on_change(update_cw_limit_knob_range);
     configInput(Input::CwLimitCv, "CW limit CV");
-    Attenuverter::config(this, Param::CwLimitAv, "CW limit CV gain");
+    Knob::config<Attenuverter>(this, Param::CwLimitAv, "CW limit CV gain", 0.F);
 
     configOutput(Output::Main, "Ranger");
   }

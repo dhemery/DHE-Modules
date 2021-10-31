@@ -79,22 +79,19 @@ auto selected_taper(ToggleType &toggle) -> sigmoid::Taper const & {
 
 template <typename KnobType, typename InputType>
 auto rotation(KnobType &knob, InputType &cv_input) -> float {
-  static constexpr auto cv_modulation_ratio = 0.1F;
+  static constexpr auto rotation_per_volt = 0.1F;
   auto const rotation = rotation_of(knob);
   auto const cv = voltage_at(cv_input);
-  auto const modulation = cv * cv_modulation_ratio;
-  return rotation + modulation;
+  return rotation + cv * rotation_per_volt;
 }
 
 template <typename KnobType, typename InputType>
 auto rotation(KnobType &knob, InputType &cv_input, KnobType &av_knob) -> float {
-  static auto constexpr av_modulation_range = Range{-0.1F, 0.1F};
+  auto constexpr rotation_per_volt = 0.1F;
   auto const rotation = rotation_of(knob);
   auto const cv = voltage_at(cv_input);
-  auto const av = rotation_of(av_knob);
-  auto const cv_modulation_ratio = av_modulation_range.scale(av);
-  auto const modulation = cv * cv_modulation_ratio;
-  return rotation + modulation;
+  auto const av = value_of(av_knob);
+  return rotation + cv * rotation_per_volt * av;
 }
 
 static constexpr auto tapered_and_scaled_rotation(float rotation,
