@@ -1,5 +1,5 @@
 #pragma once
-
+#include "button-styles.h"
 #include "panels/dimensions.h"
 #include "panels/panel-assets.h"
 
@@ -123,30 +123,6 @@ template <typename TStepper> struct Stepper {
       -> TWidget<TPanel> * {
     return Switch::install<TFrame, TValue>(panel, id, xmm, ymm);
   }
-};
-
-struct Normal {
-  static inline auto frame_names() -> std::vector<std::string> const & {
-    static auto const names =
-        std::vector<std::string>{"button-released", "button-pressed"};
-    return names;
-  }
-};
-
-struct Reversed {
-  static inline auto frame_names() -> std::vector<std::string> const & {
-    static auto const names = std::vector<std::string>{"output-button-released",
-                                                       "output-button-pressed"};
-    return names;
-  }
-};
-
-struct Momentary {
-  static auto constexpr momentary = true;
-};
-
-struct Toggle {
-  static auto constexpr momentary = false;
 };
 
 struct Button {

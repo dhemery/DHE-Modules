@@ -31,7 +31,7 @@ static auto constexpr duration_ranges = std::array<Range const, 3>{
     short_duration_range, medium_duration_range, long_duration_range};
 
 static auto constexpr duration(float rotation, Range range) -> float {
-  return tapered_and_scaled_rotation(rotation, duration_knob_taper, range);
+  return range.scale(duration_knob_taper.apply(rotation));
 }
 
 template <typename KnobType>

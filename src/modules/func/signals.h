@@ -19,8 +19,8 @@ static auto constexpr offset_ranges = std::array<Range const, 4>{
     minus_ten_to_plus_ten_range};
 
 static auto constexpr multiplier_ranges =
-    std::array<Range const, 4>{attenuator_range, attenuverter_range, gain_range,
-                               minus_two_to_plus_two_range};
+    std::array<Range const, 4>{Attenuator::range(), Attenuverter::range(),
+                               Gain::range(), minus_two_to_plus_two_range};
 
 template <typename TParam, typename TInput, typename TOutput, int N>
 struct Signals {

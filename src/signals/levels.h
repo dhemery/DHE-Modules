@@ -41,11 +41,14 @@ struct RangedParamQuantity : public rack::engine::ParamQuantity {
 struct Levels {
   enum { Bipolar, Unipolar };
 
+  static auto constexpr bipolar_range = Range{-5.F, 5.F};
+  static auto constexpr unipolar_range = Range{0.F, 10.F};
+
   static auto constexpr unit = " V";
 
   static inline auto ranges() -> std::vector<Range> const & {
     static auto const ranges =
-        std::vector<Range>{bipolar_signal_range, unipolar_signal_range};
+        std::vector<Range>{bipolar_range, unipolar_range};
     return ranges;
   }
 

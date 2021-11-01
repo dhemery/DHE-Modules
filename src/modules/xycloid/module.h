@@ -86,28 +86,29 @@ public:
   }
 
 private:
-  auto x_gain() const -> float {
-    return gain_range.scale(
-        rotation(params[Param::XGain], inputs[Input::XGainCv]));
+  inline auto gain(int knob_id, int cv_id) const -> float {
+    return Gain::value(value_of(params[knob_id]), voltage_at(inputs[cv_id]));
   }
+
+  auto x_gain() const -> float { return gain(Param::XGain, Input::XGainCv); }
 
   auto x_offset() const -> float {
     return is_pressed(params[Param::XRange]) ? 1.F : 0.F;
   }
 
-  auto y_gain() const -> float {
-    return gain_range.scale(
-        rotation(params[Param::YGain], inputs[Input::YGainCv]));
-  }
+  auto y_gain() const -> float { return gain(Param::YGain, Input::YGainCv); }
 
   auto y_offset() const -> float {
     return is_pressed(params[Param::YRange]) ? 1.F : 0.F;
   }
 
   auto throb_speed() const -> float {
-    return tapered_and_scaled_rotation(
-        params[Param::ThrobSpeed], inputs[Input::ThrobSpeedCv],
-        params[Param::ThrobSpeedAv], ThrobSpeed::taper(), ThrobSpeed::range());
+    static auto constexpr rotation_per_volt = 0.1F;
+    auto const knob = value_of(params[Param::ThrobSpeed]);
+    auto const cv = voltage_at(inputs[Input::ThrobSpeedCv]);
+    auto const attenuation = value_of(params[Param::ThrobSpeedAv]);
+    auto const rotation = knob + cv * rotation_per_volt * attenuation;
+    return ThrobSpeed::rotation_to_speed(rotation);
   }
 
   auto wobble_depth() const -> float {

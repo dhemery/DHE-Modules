@@ -109,23 +109,30 @@ private:
   }
 
   inline auto spin_speed() const -> float {
-    return tapered_and_scaled_rotation(
-        params[Param::SpinSpeed], inputs[Input::SpinSpeedCv],
-        params[Param::SpinSpeedAv], SpinSpeed::taper(), SpinSpeed::range());
+    auto const rotation =
+        dhe::rotation(params[Param::SpinSpeed], inputs[Input::SpinSpeedCv],
+                      params[Param::SpinSpeedAv]);
+    return SpinSpeed::range().scale(SpinSpeed::taper().apply(rotation));
+  }
+
+  inline auto gain(int knob_id, int cv_id) const -> float {
+    static auto constexpr gain_per_volt = Gain::range().size() * 0.1F;
+    return value_of(params[knob_id]) +
+           voltage_at(inputs[cv_id]) * gain_per_volt;
   }
 
   inline auto x_gain() const -> float {
-    return gain_range.scale(
-        rotation(params[Param::XGain], inputs[Input::XGainCv]));
+    return gain(Param::XGain, Input::XGainCv);
   }
+
   inline auto x_offset() const -> float {
     return selected<float, 2>(params[Param::XRange], {0.F, 1.F});
   };
 
   inline auto y_gain() const -> float {
-    return gain_range.scale(
-        rotation(params[Param::YGain], inputs[Input::YGainCv]));
+    return gain(Param::YGain, Input::YGainCv);
   }
+
   inline auto y_offset() const -> float {
     return selected<float, 2>(params[Param::YRange], {0.F, 1.F});
   };

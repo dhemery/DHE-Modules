@@ -67,7 +67,7 @@ struct Panel : public PanelWidget<Panel> {
     OutPort::install(this, Output::X, column4, y + output_port_offset);
 
     y += dy;
-    OutPort::install(this, Input::YGainCv, column1, y);
+    InPort::install(this, Input::YGainCv, column1, y);
     Knob::install<Small>(this, Param::YGain, column2, y);
     ThumbSwitch<2>::install(this, Param::YRange, column3, y);
     OutPort::install(this, Output::Y, column4, y + output_port_offset);

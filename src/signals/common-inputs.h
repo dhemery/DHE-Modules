@@ -12,11 +12,7 @@ struct Param;
 } // namespace rack
 
 namespace dhe {
-
-static auto constexpr attenuator_range = Range{0.F, 1.F};
-static auto constexpr attenuverter_range = Range{-1.F, 1.F};
-static auto constexpr gain_range = Range{0.F, 2.F};
-
+static auto constexpr rotation_per_volt = 0.1F;
 static auto constexpr rotation_range = Range{0.F, 1.F};
 
 static auto constexpr bipolar_signal_range = Range{-5.F, 5.F};
@@ -79,7 +75,6 @@ auto selected_taper(ToggleType &toggle) -> sigmoid::Taper const & {
 
 template <typename KnobType, typename InputType>
 auto rotation(KnobType &knob, InputType &cv_input) -> float {
-  static constexpr auto rotation_per_volt = 0.1F;
   auto const rotation = rotation_of(knob);
   auto const cv = voltage_at(cv_input);
   return rotation + cv * rotation_per_volt;
@@ -87,17 +82,10 @@ auto rotation(KnobType &knob, InputType &cv_input) -> float {
 
 template <typename KnobType, typename InputType>
 auto rotation(KnobType &knob, InputType &cv_input, KnobType &av_knob) -> float {
-  auto constexpr rotation_per_volt = 0.1F;
   auto const rotation = rotation_of(knob);
   auto const cv = voltage_at(cv_input);
   auto const av = value_of(av_knob);
   return rotation + cv * rotation_per_volt * av;
-}
-
-static constexpr auto tapered_and_scaled_rotation(float rotation,
-                                                  sigmoid::Taper const &taper,
-                                                  Range range) -> float {
-  return range.scale(taper.apply(rotation));
 }
 
 template <typename KnobType, typename InputType>

@@ -80,8 +80,8 @@ private:
     return Coefficient::value(rotation(params[knob_param], inputs[cv_param]));
   }
 
-  auto gain(int knob_param, int cv_input) const -> float {
-    return gain_range.scale(rotation(params[knob_param], inputs[cv_input]));
+  auto gain(int knob_id, int cv_id) const -> float {
+    return Gain::value(value_of(params[knob_id]), voltage_at(inputs[cv_id]));
   }
 
   auto main_in() const -> float { return voltage_at(inputs[Input::Cubic]); }

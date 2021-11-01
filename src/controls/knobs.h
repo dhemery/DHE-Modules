@@ -2,6 +2,7 @@
 
 #include "components/cxmath.h"
 #include "components/range.h"
+#include "knob-styles.h"
 #include "panels/dimensions.h"
 #include "panels/panel-assets.h"
 
@@ -52,54 +53,6 @@ struct KnobQuantity : public rack::engine::ParamQuantity {
 private:
   TAction action_ = [](TValue) {};
 };
-
-struct Large {
-  static auto constexpr svg_file = "knob-large";
-};
-
-struct Medium {
-  static auto constexpr svg_file = "knob-medium";
-};
-
-struct Small {
-  static auto constexpr svg_file = "knob-small";
-};
-
-struct Tiny {
-  static auto constexpr svg_file = "knob-tiny";
-};
-
-struct Attenuator {
-  static auto constexpr range() -> Range { return Range{0.F, 1.F}; }
-  static auto constexpr display_multiplier = 100.F;
-  static auto constexpr display_offset = 0.F;
-  static auto constexpr unit = "%";
-};
-
-struct Attenuverter {
-  static auto constexpr range() -> Range { return Range{-1.F, 1.F}; }
-  static auto constexpr display_multiplier = 100.F;
-  static auto constexpr display_offset = 0.F;
-  static auto constexpr unit = "%";
-};
-
-struct Gain {
-  static auto constexpr range() -> Range { return Range{0.F, 2.F}; }
-  static auto constexpr display_multiplier = 100.F;
-  static auto constexpr display_offset = 0.F;
-  static auto constexpr unit = "%";
-};
-
-struct Angle {
-  // value is radians
-  static auto constexpr range() -> Range { return Range{-tau, tau}; }
-  // display degrees
-  static auto constexpr display_multiplier = 180.F / tau;
-  static auto constexpr display_offset = 0.F;
-  static auto constexpr unit = "˚";
-};
-
-using Percentage = Attenuator;
 
 struct Knob {
   template <typename TStyle, typename TValue = float, typename TPanel>

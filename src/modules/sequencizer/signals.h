@@ -5,6 +5,7 @@
 #include "status.h"
 
 #include "components/range.h"
+#include "controls/knobs.h"
 #include "signals/curvature-inputs.h"
 #include "signals/duration-inputs.h"
 
@@ -28,8 +29,8 @@ static inline auto duration(P const &duration_knob, P const &range_switch,
   auto const nominal_duration =
       dhe::selectable_duration(duration_knob, range_switch);
   auto const multiplier_rotation = dhe::rotation(multipler_knob, multiplier_cv);
-  auto const nominal_multiplier = gain_range.scale(multiplier_rotation);
-  auto const clamped_multiplier = gain_range.clamp(nominal_multiplier);
+  auto const nominal_multiplier = Gain::range().scale(multiplier_rotation);
+  auto const clamped_multiplier = Gain::range().clamp(nominal_multiplier);
   auto const scaled_duration = nominal_duration * clamped_multiplier;
   auto const safe_duration = cx::max(minimum_duration, scaled_duration);
   return safe_duration;
