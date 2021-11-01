@@ -5,7 +5,7 @@
 #include "status.h"
 
 #include "components/range.h"
-#include "controls/knobs.h"
+#include "controls/knob-styles.h"
 #include "signals/curvature-inputs.h"
 #include "signals/duration-inputs.h"
 
