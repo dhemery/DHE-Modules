@@ -1,7 +1,7 @@
 #pragma once
 
-#include "discrete-quantity.h"
-#include "panels/dimensions.h"
+#include "params/discrete-quantity.h"
+#include "widgets/dimensions.h"
 
 #include "rack.hpp"
 

@@ -6,8 +6,8 @@
 #include "controls/knobs.h"
 #include "controls/ports.h"
 #include "controls/switches.h"
-#include "panels/panel-widget.h"
 #include "signals/levels.h"
+#include "widgets/panel-widget.h"
 
 #include "rack.hpp"
 

@@ -1,9 +1,9 @@
 #pragma once
 
-#include "discrete-quantity.h"
-#include "panels/dimensions.h"
-#include "picked-quantity.h"
-#include "switch-widget.h"
+#include "params/discrete-quantity.h"
+#include "params/picked-quantity.h"
+#include "widgets/dimensions.h"
+#include "widgets/switch-widget.h"
 
 #include "rack.hpp"
 

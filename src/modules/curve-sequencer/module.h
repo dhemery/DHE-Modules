@@ -10,11 +10,11 @@
 
 #include "components/phase-timer.h"
 #include "controls/buttons.h"
-#include "controls/scaled-quantity.h"
 #include "controls/switches.h"
 #include "params/curvature-config.h"
 #include "params/duration-config.h"
 #include "params/presets.h"
+#include "params/scaled-quantity.h"
 #include "signals/levels.h"
 
 #include "rack.hpp"

@@ -1,10 +1,6 @@
 #pragma once
 
-#include "panel-assets.h"
-
 #include "rack.hpp"
-
-#include <string>
 
 namespace dhe {
 static auto constexpr px_per_hp = 15.F;

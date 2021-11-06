@@ -5,7 +5,7 @@
 
 #include "controls/ports.h"
 #include "controls/switches.h"
-#include "panels/panel-widget.h"
+#include "widgets/panel-widget.h"
 
 #include "rack.hpp"
 

@@ -1,8 +1,8 @@
 #pragma once
 
-#include "knob-widget.h"
-#include "panels/dimensions.h"
-#include "scaled-quantity.h"
+#include "params/scaled-quantity.h"
+#include "widgets/dimensions.h"
+#include "widgets/knob-widget.h"
 
 #include "rack.hpp"
 

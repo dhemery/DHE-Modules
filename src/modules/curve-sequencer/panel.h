@@ -5,7 +5,8 @@
 
 #include "controls/knobs.h"
 #include "controls/ports.h"
-#include "panels/panel-widget.h"
+#include "widgets/panel-widget.h"
+#include "widgets/step-selection-markers.h"
 
 #include "rack.hpp"
 
@@ -17,54 +18,9 @@
 namespace dhe {
 
 namespace curve_sequencer {
-auto constexpr step_x = hp2mm(10.F);
-auto constexpr step_dx = hp2mm(2.25F);
 
 using ProgressLight =
     rack::componentlibrary::SmallLight<rack::componentlibrary::GreenRedLight>;
-
-class StartMarker : public rack::widget::SvgWidget {
-public:
-  StartMarker(std::string const &module_svg_dir, float x, float y) {
-    setSvg(load_svg(module_svg_dir, "marker-start"));
-    position_centered(this, x, y);
-  }
-
-  void set_selection_start(int step) {
-    auto constexpr base_x = step_x - 2.F * light_diameter;
-    auto const x = base_x + step_dx * static_cast<float>(step);
-    this->box.pos.x = mm2px(x);
-  }
-};
-
-template <int N> class EndMarker : public rack::widget::SvgWidget {
-public:
-  EndMarker(std::string const &module_svg_dir, float x, float y) {
-    setSvg(load_svg(module_svg_dir, "marker-end"));
-    position_centered(this, x, y);
-  }
-
-  void set_selection_start(int step) {
-    this->selection_start_ = step;
-    move();
-  }
-  void set_selection_length(int length) {
-    this->selection_length_ = length;
-    move();
-  }
-
-private:
-  void move() {
-    auto const selection_end =
-        (selection_start_ + selection_length_ - 1) & step_mask_;
-    auto const x = step_x + step_dx * static_cast<float>(selection_end);
-    this->box.pos.x = mm2px(x);
-  }
-
-  int selection_start_{};
-  int selection_length_{};
-  int const step_mask_ = N - 1;
-};
 
 template <typename TSize> struct Panel : public PanelWidget<Panel<TSize>> {
   static auto constexpr N = TSize::step_count;
@@ -74,6 +30,8 @@ template <typename TSize> struct Panel : public PanelWidget<Panel<TSize>> {
   static auto constexpr sequence_controls_width = 13.F;
   static auto constexpr hp =
       static_cast<int>(sequence_controls_width + N * step_width);
+  static auto constexpr step_x = hp2mm(10.F);
+  static auto constexpr step_dx = hp2mm(2.25F);
 
   Panel(rack::engine::Module *module) : PanelWidget<Panel<TSize>>{module} {
     auto constexpr left = hp2mm(2.F);
@@ -101,11 +59,8 @@ template <typename TSize> struct Panel : public PanelWidget<Panel<TSize>> {
     Button::install<Toggle>(this, Param::Loop, left + button_port_distance,
                             loop_y);
 
-    auto *start_marker = new StartMarker(svg_dir, 0.F, active_y);
-    this->addChild(start_marker);
-
-    auto *end_marker = new EndMarker<N>(svg_dir, 0.F, active_y);
-    this->addChild(end_marker);
+    auto *start_marker = StartMarker::install(this, 0.F, active_y);
+    auto *end_marker = EndMarker::install(this, 0.F, active_y);
 
     auto const update_selection_start = [start_marker, end_marker](int step) {
       start_marker->set_selection_start(step);
