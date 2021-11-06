@@ -8,7 +8,16 @@
 
 namespace dhe {
 
-struct ScaledParamQuantity : public rack::engine::ParamQuantity {
+struct ScaledQuantity : public rack::engine::ParamQuantity {
+  using Action = std::function<void(float)>;
+
+  void setValue(float value) override {
+    rack::engine::ParamQuantity::setValue(value);
+    action_(value);
+  }
+
+  void on_change(Action const &action) { action_ = action; }
+
   void set_range(Range r) {
     auto const old_range = Range{minValue, maxValue};
     auto const rotation = old_range.normalize(getValue());
@@ -18,6 +27,9 @@ struct ScaledParamQuantity : public rack::engine::ParamQuantity {
     defaultValue = r.scale(default_rotation);
     setValue(r.scale(rotation));
   }
+
+private:
+  Action action_ = [](float) {};
 };
 
 } // namespace dhe

@@ -57,5 +57,4 @@ struct Angle {
 };
 
 using Percentage = Attenuator;
-
 } // namespace dhe

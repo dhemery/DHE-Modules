@@ -13,7 +13,6 @@
 #include "params/presets.h"
 #include "signals/curvature-inputs.h"
 #include "signals/duration-inputs.h"
-#include "signals/levels.h"
 
 #include "rack.hpp"
 
@@ -25,7 +24,7 @@ static auto constexpr brightness_range = Range{0.F, 1.F};
 template <typename P>
 static inline auto level(P const &level_knob, P const &range_switch) -> float {
   auto const range_selection = position_of(range_switch);
-  auto const range = Levels::ranges()[range_selection];
+  auto const range = Levels::items()[range_selection];
   auto const rotation = dhe::rotation_of(level_knob);
   return range.scale(rotation);
 }
@@ -43,7 +42,8 @@ public:
     auto step_knob = configParam(Param::Length, 1.F, N, N, "Steps", "");
     step_knob->snapEnabled = true;
 
-    config_level_range_switch(this, Param::LevelRange);
+    ItemSwitch::config<Levels>(this, Param::LevelRange, "Level range",
+                               Levels::Unipolar);
 
     configInput(Input::InA, "A");
     configInput(Input::InB, "B");

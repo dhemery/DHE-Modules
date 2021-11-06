@@ -17,7 +17,6 @@
 #include "params/presets.h"
 #include "signals/curvature-inputs.h"
 #include "signals/duration-inputs.h"
-#include "signals/levels.h"
 
 #include "rack.hpp"
 
@@ -48,7 +47,8 @@ public:
 
     Knob::config<Attenuator>(this, Param::LevelMultiplier, "Level multiplier",
                              100.F);
-    config_level_range_switch(this, Param::LevelRange);
+    ItemSwitch::config<Levels>(this, Param::LevelRange, "Level range",
+                               Levels::Unipolar);
     configInput(Input::LevelAttenuationCV, "Level multiplier CV");
 
     Knob::config<Gain>(this, Param::DurationMultiplier, "Duration multiplier",

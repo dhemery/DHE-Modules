@@ -57,26 +57,4 @@ static inline void config_level_knob(rack::engine::Module *module, int knob_id,
   };
   config_level_knob(module, knob_id, range_supplier, name, initial_rotation);
 }
-
-/**
- * Configures the param and display for a level knob with a fixed range.
- */
-static inline void config_level_knob(rack::engine::Module *module, int knob_id,
-                                     Range range,
-                                     std::string const &name = "Level",
-                                     float initial_rotation = 0.5F) {
-  auto const range_supplier = [range]() -> Range { return range; };
-  config_level_knob(module, knob_id, range_supplier, name, initial_rotation);
-}
-
-/**
- * Configures the param and display for a level range switch.
- */
-static inline void
-config_level_range_switch(rack::engine::Module *module, int id,
-                          std::string const &name = "Level range",
-                          int initial = 1) {
-  static auto const range_names = std::vector<std::string>{"±5 V", "0–10 V"};
-  Switch::config(module, id, name, range_names, initial);
-}
 } // namespace dhe

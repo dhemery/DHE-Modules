@@ -1,14 +1,12 @@
 #pragma once
 
-#include "components/range.h"
-#include "knob-quantity.h"
 #include "knob-widget.h"
 #include "panels/dimensions.h"
+#include "scaled-quantity.h"
 
 #include "rack.hpp"
 
 #include <string>
-#include <vector>
 
 namespace dhe {
 
@@ -23,12 +21,12 @@ struct Knob {
     return widget;
   }
 
-  template <typename TQuantity, typename TValue>
+  template <typename TQuantity>
   static inline auto config(rack::engine::Module *module, int id,
-                            std::string const &name, TValue value)
-      -> KnobQuantity<TValue> * {
+                            std::string const &name, float value)
+      -> ScaledQuantity * {
     static auto const range = TQuantity::range();
-    return module->configParam<KnobQuantity<TValue>>(
+    return module->configParam<ScaledQuantity>(
         id, range.lower_bound(), range.upper_bound(), value, name,
         TQuantity::unit, 0.F, TQuantity::display_multiplier,
         TQuantity::display_offset);

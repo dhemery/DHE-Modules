@@ -4,10 +4,10 @@
 
 #include "components/range.h"
 #include "controls/knobs.h"
+#include "controls/levels.h"
 #include "controls/ports.h"
 #include "controls/switches.h"
 #include "panels/panel-widget.h"
-#include "signals/levels.h"
 
 #include "rack.hpp"
 

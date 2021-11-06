@@ -22,7 +22,8 @@ template <typename TEngine> struct Module : public rack::engine::Module {
     configInput(Input::B + 1, "D");
     configParam(Param::NegateB + 1, 0.F, 1.F, 0.F, "Negate D");
 
-    config_level_range_switch(this, Param::LevelRange, "Level Range");
+    ItemSwitch::config<Levels>(this, Param::LevelRange, "Level Range",
+                               Levels::Unipolar);
 
     configOutput(Output::And + 0, "A AND B");
     configOutput(Output::Nand + 0, "A NAND B");

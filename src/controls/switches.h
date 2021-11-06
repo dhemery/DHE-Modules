@@ -2,6 +2,7 @@
 
 #include "button-styles.h"
 #include "panels/dimensions.h"
+#include "picked-quantity.h"
 #include "switch-quantity.h"
 #include "switch-widget.h"
 
@@ -103,6 +104,19 @@ struct Button {
     auto const default_value = static_cast<float>(pressed);
     auto *pq = module->configSwitch<SwitchQuantity<bool>>(id, 0.F, 1.F,
                                                           default_value, name);
+    return pq;
+  }
+};
+
+struct ItemSwitch {
+  template <typename TItems>
+  static inline auto config(rack::engine::Module *module, int id,
+                            std::string const &name, int selection)
+      -> PickedQuantity<TItems> * {
+    auto const max_value = static_cast<float>(TItems::items().size() - 1);
+    auto const default_value = static_cast<float>(selection);
+    auto *pq = module->configSwitch<PickedQuantity<TItems>>(
+        id, 0.F, max_value, default_value, name, TItems::labels());
     return pq;
   }
 };

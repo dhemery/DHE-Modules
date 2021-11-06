@@ -9,7 +9,6 @@
 #include "params/presets.h"
 #include "signals/common-inputs.h"
 #include "signals/curvature-inputs.h"
-#include "signals/levels.h"
 
 #include "rack.hpp"
 
@@ -22,8 +21,8 @@ public:
     config(Param::Count, Input::Count, Output::Count);
 
     config_level_knob(this, Param::Level1, Param::LevelRange1, "Taper 1 level");
-    config_level_range_switch(this, Param::LevelRange1, "Taper 1 level range",
-                              0);
+    ItemSwitch::config<Levels>(this, Param::LevelRange1, "Taper 1 level range",
+                               Levels::Bipolar);
     Knob::config<Attenuverter>(this, Param::LevelAv1, "Taper 1 level CV gain",
                                0.F);
     configInput(Input::LevelCv1, "Taper 1 level CV");
@@ -37,8 +36,8 @@ public:
     configOutput(Output::Taper1, "Taper 1");
 
     config_level_knob(this, Param::Level2, Param::LevelRange2, "Taper 2 level");
-    config_level_range_switch(this, Param::LevelRange2, "Taper 2 level range",
-                              0);
+    ItemSwitch::config<Levels>(this, Param::LevelRange2, "Taper 2 level range",
+                               Levels::Bipolar);
     Knob::config<Attenuverter>(this, Param::LevelAv2, "Taper 2 level CV gain",
                                0.F);
     configInput(Input::LevelCv2, "Taper 2 level CV");
@@ -68,7 +67,7 @@ public:
 private:
   auto level_range(int id) const -> Range {
     auto const selection = position_of(params[id]);
-    return Levels::ranges()[selection];
+    return Levels::items()[selection];
   }
 
   auto level_rotation_1() const -> float {

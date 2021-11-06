@@ -4,14 +4,14 @@
 #include "engine.h"
 #include "signals.h"
 
+#include "controls/knob-styles.h"
+#include "controls/knobs.h"
 #include "modules/envelope/mode/defer.h"
 #include "modules/envelope/mode/generate.h"
 #include "modules/envelope/mode/input.h"
 #include "modules/envelope/mode/level.h"
 #include "params/curvature-config.h"
 #include "params/duration-config.h"
-#include "params/level-config.h"
-#include "signals/levels.h"
 
 #include "rack.hpp"
 
@@ -23,7 +23,7 @@ struct Module : public rack::engine::Module {
     config(Param::Count, Input::Count, Output::Count);
 
     config_duration_knob(this, Param::Duration, medium_duration_range);
-    LevelKnob::config(this, Param::Level, "Level", 5.F);
+    Knob::config<Unipolar>(this, Param::Level, "Level", 5.F);
     config_curvature_knob(this, Param::Curvature);
 
     configInput(Input::Envelope, "Stage");

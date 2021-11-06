@@ -3,6 +3,8 @@
 #include "signals.h"
 
 #include "controls/knobs.h"
+#include "controls/levels.h"
+#include "controls/switches.h"
 #include "modules/envelope/mode/defer.h"
 #include "modules/envelope/mode/generate.h"
 #include "modules/envelope/mode/input.h"
@@ -11,7 +13,6 @@
 #include "params/curvature-config.h"
 #include "params/duration-config.h"
 #include "params/level-config.h"
-#include "signals/levels.h"
 
 #include "rack.hpp"
 
@@ -25,11 +26,12 @@ struct Module : public rack::engine::Module {
     configInput(Input::Envelope, "Stage");
     configOutput(Output::Envelope, "Stage");
 
-    auto *level_knob = LevelKnob::config(this, Param::Level, "Level", 5.F);
+    auto *level_knob = Knob::config<Unipolar>(this, Param::Level, "Level", 5.F);
     auto const update_level_knob_range = [level_knob](Range r) {
       level_knob->set_range(r);
     };
-    LevelSwitch::config(this, Param::LevelRange, "Level Range")
+    ItemSwitch::config<Levels>(this, Param::LevelRange, "Level Range",
+                               Levels::Unipolar)
         ->on_change(update_level_knob_range);
 
     configInput(Input::LevelCv, "Level CV");

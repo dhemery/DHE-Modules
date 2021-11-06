@@ -8,6 +8,7 @@
 #include "components/sigmoid.h"
 #include "controls/knob-styles.h"
 #include "controls/knobs.h"
+#include "controls/levels.h"
 #include "controls/switches.h"
 #include "params/level-config.h"
 #include "signals/common-inputs.h"
@@ -47,11 +48,12 @@ public:
     configInput(Input::BouncePhaseOffsetCv, "Phase CV");
 
     Knob::config<Gain>(this, Param::XGain, "X gain", 1.F);
-    config_level_range_switch(this, Param::XRange, "X range", 0);
+    ItemSwitch::config<Levels>(this, Param::XRange, "X range",
+                               Levels::Unipolar);
     configInput(Input::XGainCv, "X gain CV");
 
     Knob::config<Gain>(this, Param::YGain, "Y gain", 1.F);
-    config_level_range_switch(this, Param::YRange, "Y range", 0);
+    ItemSwitch::config<Levels>(this, Param::YRange, "Y range", Levels::Bipolar);
     configInput(Input::YGainCv, "Y gain CV");
 
     configOutput(Output::X, "X");

@@ -9,13 +9,13 @@
 #include "step-selector.h"
 
 #include "components/phase-timer.h"
-#include "controls/scaled-param-quantity.h"
+#include "controls/levels.h"
+#include "controls/scaled-quantity.h"
 #include "controls/switches.h"
 #include "params/curvature-config.h"
 #include "params/duration-config.h"
 #include "params/level-config.h"
 #include "params/presets.h"
-#include "signals/levels.h"
 
 #include "rack.hpp"
 
@@ -51,7 +51,7 @@ template <int N> struct Module : public rack::engine::Module {
         Param::SelectionLength, 1.F, N, N, "Sequence length", " steps");
     selection_length_knob->snapEnabled = true;
 
-    auto level_knobs = std::vector<ScaledParamQuantity *>{};
+    auto level_knobs = std::vector<ScaledQuantity *>{};
 
     for (auto step = 0; step < N; step++) {
       auto const step_name =
@@ -63,8 +63,8 @@ template <int N> struct Module : public rack::engine::Module {
       Stepper<AdvanceModes>::config(this, Param::StepAdvanceMode + step,
                                     step_name + "advance mode",
                                     AdvanceMode::TimerExpires);
-      auto *level_knob =
-          LevelKnob::config(this, Param::StepLevel + step, step_name + "level");
+      auto *level_knob = Knob::config<Unipolar>(this, Param::StepLevel + step,
+                                                step_name + "level", 5.F);
       level_knobs.push_back(level_knob);
 
       config_curve_shape_switch(this, Param::StepShape + step,
@@ -85,7 +85,8 @@ template <int N> struct Module : public rack::engine::Module {
       }
     };
 
-    LevelSwitch::config(this, Param::LevelRange, "Level range")
+    ItemSwitch::config<Levels>(this, Param::LevelRange, "Level range",
+                               Levels::Unipolar)
         ->on_change(update_level_knob_ranges);
 
     config_duration_range_switch(this, Param::DurationRange);
