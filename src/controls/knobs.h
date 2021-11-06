@@ -9,6 +9,7 @@
 #include <string>
 
 namespace dhe {
+
 struct Large {
   static auto constexpr svg_file = "knob-large";
 };

@@ -1,8 +1,17 @@
 #pragma once
 
+#include "dimensions.h"
+
 #include "rack.hpp"
 
 namespace dhe {
+static auto constexpr button_port_distance = 7.891F;
+static auto constexpr padding = 1.F;
+
+static auto constexpr mm_per_hp = 5.08F;
+static inline auto constexpr hp2mm(float hp) -> float { return hp * mm_per_hp; }
+static inline auto constexpr mm2hp(float mm) -> float { return mm / mm_per_hp; }
+
 template <typename TPanel> struct PanelWidget : public rack::app::ModuleWidget {
   PanelWidget(rack::engine::Module *module) {
     setModule(module);
@@ -14,6 +23,7 @@ template <typename TPanel> struct PanelWidget : public rack::app::ModuleWidget {
   using SpecialScrew = rack::componentlibrary::ScrewBlack;
 
   void install_screws() {
+    auto constexpr module_height = 128.5F; // mm
     auto constexpr screw_diameter = hp2mm(1.F);
     auto constexpr screw_radius = screw_diameter / 2.F;
     auto const panel_width = hp2mm((float)TPanel::hp);

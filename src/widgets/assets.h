@@ -19,4 +19,9 @@ static inline auto load_svg(std::string const &module_dir,
     -> std::shared_ptr<rack::window::Svg> {
   return load_svg(module_dir + "/" + file_name);
 }
+
+static inline auto mm2px(float xmm, float ymm) -> rack::math::Vec {
+  return {mm2px(xmm), mm2px(ymm)};
+}
+
 } // namespace dhe

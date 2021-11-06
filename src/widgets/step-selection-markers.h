@@ -1,8 +1,11 @@
 #pragma once
 
-#include "dimensions.h"
+#include "widgets/dimensions.h"
+
+#include "rack.hpp"
 
 namespace dhe {
+
 struct StartMarker {
   template <typename TPanel> struct Widget : public rack::widget::SvgWidget {
     Widget() { setSvg(load_svg(TPanel::svg_dir, "marker-start")); }

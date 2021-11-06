@@ -2,6 +2,7 @@
 
 #include "params/discrete-quantity.h"
 #include "widgets/dimensions.h"
+#include "widgets/switch-widget.h"
 
 #include "rack.hpp"
 
