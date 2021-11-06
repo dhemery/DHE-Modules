@@ -9,6 +9,7 @@
 #include "step-selector.h"
 
 #include "components/phase-timer.h"
+#include "controls/scaled-param-quantity.h"
 #include "controls/switches.h"
 #include "params/curvature-config.h"
 #include "params/duration-config.h"
@@ -50,7 +51,7 @@ template <int N> struct Module : public rack::engine::Module {
         Param::SelectionLength, 1.F, N, N, "Sequence length", " steps");
     selection_length_knob->snapEnabled = true;
 
-    auto level_knobs = std::vector<RangedParamQuantity *>{};
+    auto level_knobs = std::vector<ScaledParamQuantity *>{};
 
     for (auto step = 0; step < N; step++) {
       auto const step_name =
