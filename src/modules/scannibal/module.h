@@ -7,12 +7,14 @@
 #include "params.h"
 
 #include "components/cxmath.h"
+#include "controls/knobs.h"
+#include "controls/switches.h"
 #include "params/curvature-config.h"
 #include "params/duration-config.h"
-#include "params/level-config.h"
 #include "params/presets.h"
 #include "signals/curvature-inputs.h"
 #include "signals/duration-inputs.h"
+#include "signals/levels.h"
 
 #include "rack.hpp"
 
@@ -42,9 +44,6 @@ public:
     auto step_knob = configParam(Param::Length, 1.F, N, N, "Steps", "");
     step_knob->snapEnabled = true;
 
-    ItemSwitch::config<Levels>(this, Param::LevelRange, "Level range",
-                               Levels::Unipolar);
-
     configInput(Input::InA, "A");
     configInput(Input::InB, "B");
     configInput(Input::InC, "C");
@@ -54,14 +53,18 @@ public:
     configOutput(Output::StepPhase, "Step phase");
     configOutput(Output::Out, "Scanner");
 
+    auto level_knobs = std::vector<ScaledQuantity *>{};
+
     for (auto step = 0; step < N; step++) {
       auto const step_name = "Step " + std::to_string(step + 1) + " ";
       configLight(Light::Progress + step + step, step_name + "phase");
       Stepper<AnchorSources>::config(this, Param::StepPhase0AnchorSource + step,
                                      step_name + "phase 0 anchor source",
                                      AnchorSource::Out);
-      config_level_knob(this, Param::StepPhase0AnchorLevel + step,
-                        Param::LevelRange, step_name + "phase 0 level");
+      auto *phase_0_level_knob =
+          Knob::config<Unipolar>(this, Param::StepPhase0AnchorLevel + step,
+                                 step_name + "phase 0 level", 5.F);
+      level_knobs.push_back(phase_0_level_knob);
       configInput(Input::StepPhase0AnchorLevelCv + step,
                   step_name + "phase 0 level CV");
       Stepper<AnchorModes>::config(this, Param::StepPhase0AnchorMode + step,
@@ -71,8 +74,10 @@ public:
       Stepper<AnchorSources>::config(this, Param::StepPhase1AnchorSource + step,
                                      step_name + "phase 1 anchor source",
                                      AnchorSource::Level);
-      config_level_knob(this, Param::StepPhase1AnchorLevel + step,
-                        Param::LevelRange, step_name + "phase 1 level");
+      auto *phase_1_level_knob =
+          Knob::config<Unipolar>(this, Param::StepPhase1AnchorLevel + step,
+                                 step_name + "phase 1 level", 5.F);
+      level_knobs.push_back(phase_1_level_knob);
       configInput(Input::StepPhase1AnchorLevelCv + step,
                   step_name + "phase 1 level CV");
       Stepper<AnchorModes>::config(this, Param::StepPhase1AnchorMode + step,
@@ -90,6 +95,15 @@ public:
       configInput(Input::StepDurationCv + step,
                   step_name + "relative duration CV");
     }
+
+    auto update_level_knob_ranges = [level_knobs](Range r) {
+      for (auto *knob : level_knobs) {
+        knob->set_range(r);
+      }
+    };
+    ItemSwitch::config<Levels>(this, Param::LevelRange, "Level range",
+                               Levels::Unipolar)
+        ->on_change(update_level_knob_ranges);
   }
 
   ~Module() override = default;

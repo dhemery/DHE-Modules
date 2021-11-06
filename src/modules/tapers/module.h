@@ -4,11 +4,12 @@
 
 #include "components/range.h"
 #include "controls/knobs.h"
+#include "controls/switches.h"
 #include "params/curvature-config.h"
-#include "params/level-config.h"
 #include "params/presets.h"
 #include "signals/common-inputs.h"
 #include "signals/curvature-inputs.h"
+#include "signals/levels.h"
 
 #include "rack.hpp"
 
@@ -20,9 +21,11 @@ public:
   Module() {
     config(Param::Count, Input::Count, Output::Count);
 
-    config_level_knob(this, Param::Level1, Param::LevelRange1, "Taper 1 level");
+    auto *level_knob_1 =
+        Knob::config<Bipolar>(this, Param::Level1, "Taper 1 level", 0.F);
     ItemSwitch::config<Levels>(this, Param::LevelRange1, "Taper 1 level range",
-                               Levels::Bipolar);
+                               Levels::Bipolar)
+        ->on_change([level_knob_1](Range r) { level_knob_1->set_range(r); });
     Knob::config<Attenuverter>(this, Param::LevelAv1, "Taper 1 level CV gain",
                                0.F);
     configInput(Input::LevelCv1, "Taper 1 level CV");
@@ -35,9 +38,11 @@ public:
 
     configOutput(Output::Taper1, "Taper 1");
 
-    config_level_knob(this, Param::Level2, Param::LevelRange2, "Taper 2 level");
+    auto *level_knob_2 =
+        Knob::config<Bipolar>(this, Param::Level2, "Taper 2 level", 0.F);
     ItemSwitch::config<Levels>(this, Param::LevelRange2, "Taper 2 level range",
-                               Levels::Bipolar);
+                               Levels::Bipolar)
+        ->on_change([level_knob_2](Range r) { level_knob_2->set_range(r); });
     Knob::config<Attenuverter>(this, Param::LevelAv2, "Taper 2 level CV gain",
                                0.F);
     configInput(Input::LevelCv2, "Taper 2 level CV");

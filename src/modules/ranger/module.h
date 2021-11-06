@@ -3,10 +3,11 @@
 #include "control-ids.h"
 
 #include "components/cxmath.h"
+#include "controls/knobs.h"
 #include "controls/switches.h"
-#include "params/level-config.h"
 #include "params/presets.h"
 #include "signals/common-inputs.h"
+#include "signals/gain.h"
 #include "signals/levels.h"
 
 #include "rack.hpp"

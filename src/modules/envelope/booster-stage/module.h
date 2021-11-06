@@ -11,7 +11,6 @@
 #include "modules/envelope/stage/engine.h"
 #include "params/curvature-config.h"
 #include "params/duration-config.h"
-#include "params/level-config.h"
 #include "signals/levels.h"
 
 #include "rack.hpp"

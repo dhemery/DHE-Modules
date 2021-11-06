@@ -10,13 +10,15 @@
 #include "step-selector.h"
 
 #include "components/cxmath.h"
+#include "controls/buttons.h"
+#include "controls/knobs.h"
 #include "controls/switches.h"
 #include "params/curvature-config.h"
 #include "params/duration-config.h"
-#include "params/level-config.h"
 #include "params/presets.h"
 #include "signals/curvature-inputs.h"
 #include "signals/duration-inputs.h"
+#include "signals/levels.h"
 
 #include "rack.hpp"
 
@@ -45,12 +47,6 @@ public:
                                              "Sequence length", " steps");
     selection_length_knob->snapEnabled = true;
 
-    Knob::config<Attenuator>(this, Param::LevelMultiplier, "Level multiplier",
-                             100.F);
-    ItemSwitch::config<Levels>(this, Param::LevelRange, "Level range",
-                               Levels::Unipolar);
-    configInput(Input::LevelAttenuationCV, "Level multiplier CV");
-
     Knob::config<Gain>(this, Param::DurationMultiplier, "Duration multiplier",
                        1.F);
     config_duration_range_switch(this, Param::DurationRange);
@@ -67,6 +63,8 @@ public:
     configOutput(Output::SequenceEventPulse, "Start of sequence");
     configOutput(Output::Out, "Sequencer");
 
+    auto level_knobs = std::vector<ScaledQuantity *>{};
+
     for (auto step = 0; step < N; step++) {
       auto const step_name = "Step " + std::to_string(step + 1) + " ";
       Stepper<TriggerModes>::config(this, Param::StepTriggerMode + step,
@@ -82,8 +80,9 @@ public:
       Stepper<AnchorModes>::config(this, Param::StepStartAnchorMode + step,
                                    step_name + "start anchor mode",
                                    AnchorMode::Sample);
-      config_level_knob(this, Param::StepStartAnchorLevel + step,
-                        Param::LevelRange, "Start level");
+      auto *start_level_knob = Knob::config<Unipolar>(
+          this, Param::StepStartAnchorLevel + step, "Start level", 5.F);
+      level_knobs.push_back(start_level_knob);
       Stepper<AnchorSources>::config(this, Param::StepStartAnchorSource + step,
                                      step_name + "start anchor source",
                                      AnchorSource::Out);
@@ -91,8 +90,9 @@ public:
       Stepper<AnchorModes>::config(this, Param::StepEndAnchorMode + step,
                                    step_name + "end anchor mode",
                                    AnchorMode::Track);
-      config_level_knob(this, Param::StepEndAnchorLevel + step,
-                        Param::LevelRange, "End level");
+      auto *end_level_knob = Knob::config<Unipolar>(
+          this, Param::StepEndAnchorLevel + step, "End level", 5.F);
+      level_knobs.push_back(end_level_knob);
       Stepper<AnchorSources>::config(this, Param::StepEndAnchorSource + step,
                                      step_name + "end anchor source",
                                      AnchorSource::Level);
@@ -106,6 +106,17 @@ public:
 
       signals_.show_inactive(step);
     }
+
+    Knob::config<Attenuator>(this, Param::LevelMultiplier, "Level multiplier",
+                             100.F);
+    ItemSwitch::config<Levels>(this, Param::LevelRange, "Level range",
+                               Levels::Unipolar)
+        ->on_change([level_knobs](Range r) {
+          for (auto *knob : level_knobs) {
+            knob->set_range(r);
+          }
+        });
+    configInput(Input::LevelAttenuationCV, "Level multiplier CV");
   }
 
   ~Module() override = default;

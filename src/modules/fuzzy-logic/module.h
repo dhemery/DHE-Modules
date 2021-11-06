@@ -1,8 +1,10 @@
 #pragma once
+
 #include "control-ids.h"
 
-#include "params/level-config.h"
+#include "controls/switches.h"
 #include "signals/common-inputs.h"
+#include "signals/levels.h"
 
 #include "rack.hpp"
 
