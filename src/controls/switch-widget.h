@@ -1,13 +1,10 @@
 #pragma once
 
-#include "panels/panel-assets.h"
-
 #include "rack.hpp"
 
 #include <functional>
 
 namespace dhe {
-
 template <typename TPanel, typename TStyle, typename TValue = int>
 struct SwitchWidget : public rack::app::SvgSwitch {
   using TAction = std::function<void(TValue)>;
@@ -33,4 +30,4 @@ private:
   TAction action_ = [](TValue) {};
 };
 
-}; // namespace dhe
+} // namespace dhe

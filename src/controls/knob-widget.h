@@ -4,10 +4,7 @@
 
 #include "rack.hpp"
 
-#include <functional>
-
 namespace dhe {
-
 template <typename TPanel, typename TStyle, typename TValue = float>
 struct KnobWidget : public rack::app::SvgKnob {
   using TAction = std::function<void(TValue)>;
@@ -33,4 +30,4 @@ private:
   TAction action_ = [](TValue) {};
 };
 
-}; // namespace dhe
+} // namespace dhe

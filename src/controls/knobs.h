@@ -9,6 +9,21 @@
 #include <string>
 
 namespace dhe {
+struct Large {
+  static auto constexpr svg_file = "knob-large";
+};
+
+struct Medium {
+  static auto constexpr svg_file = "knob-medium";
+};
+
+struct Small {
+  static auto constexpr svg_file = "knob-small";
+};
+
+struct Tiny {
+  static auto constexpr svg_file = "knob-tiny";
+};
 
 struct Knob {
   template <typename TStyle, typename TValue = float, typename TPanel>

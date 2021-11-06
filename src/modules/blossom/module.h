@@ -6,12 +6,12 @@
 #include "components/phase-rotor.h"
 #include "components/range.h"
 #include "components/sigmoid.h"
-#include "controls/knob-styles.h"
 #include "controls/knobs.h"
-#include "controls/levels.h"
 #include "controls/switches.h"
-#include "params/level-config.h"
+#include "signals/angular.h"
 #include "signals/common-inputs.h"
+#include "signals/gain.h"
+#include "signals/levels.h"
 
 #include "rack.hpp"
 

@@ -3,7 +3,6 @@
 #include "signals.h"
 
 #include "controls/knobs.h"
-#include "controls/levels.h"
 #include "controls/switches.h"
 #include "modules/envelope/mode/defer.h"
 #include "modules/envelope/mode/generate.h"
@@ -13,6 +12,7 @@
 #include "params/curvature-config.h"
 #include "params/duration-config.h"
 #include "params/level-config.h"
+#include "signals/levels.h"
 
 #include "rack.hpp"
 

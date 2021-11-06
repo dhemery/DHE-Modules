@@ -7,8 +7,8 @@
 namespace dhe {
 
 template <typename TValue = int>
-struct SwitchQuantity : public rack::engine::SwitchQuantity {
-  using TAction = std::function<void(TValue)>;
+struct DiscreteQuantity : public rack::engine::SwitchQuantity {
+  using Action = std::function<void(TValue)>;
 
   void setValue(float value) override {
     rack::engine::ParamQuantity::setValue(value);
@@ -16,10 +16,10 @@ struct SwitchQuantity : public rack::engine::SwitchQuantity {
     action_(v);
   }
 
-  void on_change(TAction const &action) { action_ = action; }
+  void on_change(Action const &action) { action_ = action; }
 
 private:
-  TAction action_ = [](TValue) {};
+  Action action_ = [](TValue) {};
 };
 
 } // namespace dhe

@@ -4,7 +4,6 @@
 #include "engine.h"
 #include "signals.h"
 
-#include "controls/knob-styles.h"
 #include "controls/knobs.h"
 #include "modules/envelope/mode/defer.h"
 #include "modules/envelope/mode/generate.h"

@@ -1,9 +1,8 @@
 #pragma once
 
-#include "button-styles.h"
+#include "discrete-quantity.h"
 #include "panels/dimensions.h"
 #include "picked-quantity.h"
-#include "switch-quantity.h"
 #include "switch-widget.h"
 
 #include "rack.hpp"
@@ -39,10 +38,10 @@ struct Switch {
   static inline auto config(rack::engine::Module *module, int id,
                             std::string const &name,
                             std::vector<std::string> const &labels,
-                            TValue initial) -> SwitchQuantity<TValue> * {
+                            TValue initial) -> DiscreteQuantity<TValue> * {
     auto const max = static_cast<float>(labels.size() - 1);
     auto const default_value = static_cast<float>(initial);
-    return module->configSwitch<SwitchQuantity<TValue>>(
+    return module->configSwitch<DiscreteQuantity<TValue>>(
         id, 0.F, max, default_value, name, labels);
   }
 };
@@ -62,11 +61,10 @@ template <int N> struct ThumbSwitch {
 };
 
 template <typename TStepper> struct Stepper {
-  using TValue = typename TStepper::TValue;
-  using TQuantity = SwitchQuantity<TValue>;
-  using TFrame = Stepper<TStepper>;
-  template <typename TPanel>
-  using TWidget = SwitchWidget<TPanel, TFrame, TValue>;
+  using Value = typename TStepper::TValue;
+  using Quantity = DiscreteQuantity<Value>;
+  using Frame = Stepper<TStepper>;
+  template <typename TPanel> using TWidget = SwitchWidget<TPanel, Frame, Value>;
 
   static inline auto frame_names() -> std::vector<std::string> const & {
     static auto const frame_names =
@@ -76,35 +74,14 @@ template <typename TStepper> struct Stepper {
 
   template <typename TModule>
   static inline auto config(TModule *module, int id, std::string const &name,
-                            TValue value) -> TQuantity * {
+                            Value value) -> Quantity * {
     return Switch::config(module, id, name, TStepper::labels(), value);
   }
 
   template <typename TPanel>
   static inline auto install(TPanel *panel, int id, float xmm, float ymm)
       -> TWidget<TPanel> * {
-    return Switch::install<TFrame, TValue>(panel, id, xmm, ymm);
-  }
-};
-
-struct Button {
-  template <typename TBehavior, typename TStyle = Normal, typename TPanel>
-  static inline auto install(TPanel *panel, int id, float xmm, float ymm)
-      -> SwitchWidget<TPanel, TStyle, bool> * {
-    auto widget = rack::createParamCentered<SwitchWidget<TPanel, TStyle, bool>>(
-        mm2px(xmm, ymm), panel->getModule(), id);
-    widget->momentary = TBehavior::momentary;
-    panel->addParam(widget);
-    return widget;
-  }
-
-  static inline auto config(rack::engine::Module *module, int id,
-                            std::string const &name, bool pressed = false)
-      -> SwitchQuantity<bool> * {
-    auto const default_value = static_cast<float>(pressed);
-    auto *pq = module->configSwitch<SwitchQuantity<bool>>(id, 0.F, 1.F,
-                                                          default_value, name);
-    return pq;
+    return Switch::install<Frame, Value>(panel, id, xmm, ymm);
   }
 };
 
