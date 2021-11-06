@@ -8,6 +8,7 @@
 #include <string>
 
 namespace dhe {
+
 template <typename PanelT> struct PortWidget : rack::app::SvgPort {
   PortWidget() {
     setSvg(load_svg(PanelT::svg_dir, "port"));
@@ -40,4 +41,5 @@ struct OutPort {
     module->configOutput(id, name);
   }
 };
+
 } // namespace dhe

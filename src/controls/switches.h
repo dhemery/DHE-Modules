@@ -1,7 +1,9 @@
 #pragma once
+
 #include "button-styles.h"
 #include "panels/dimensions.h"
-#include "panels/panel-assets.h"
+#include "switch-quantity.h"
+#include "switch-widget.h"
 
 #include "rack.hpp"
 
@@ -20,47 +22,6 @@ static inline auto numbered_frame_names(std::string const &frame_prefix,
   }
   return frame_names;
 }
-
-template <typename TPanel, typename TStyle, typename TValue = int>
-struct SwitchWidget : public rack::app::SvgSwitch {
-  using TAction = std::function<void(TValue)>;
-
-  SwitchWidget() {
-    auto const panel_prefix = std::string{TPanel::svg_dir} + "/";
-    for (auto const &frame_name : TStyle::frame_names()) {
-      addFrame(load_svg(panel_prefix + frame_name));
-    }
-    shadow->opacity = 0.F;
-  }
-
-  void onChange(const rack::event::Change &e) override {
-    rack::app::SvgSwitch::onChange(e);
-    auto const value =
-        static_cast<TValue>(this->getParamQuantity()->getValue());
-    action_(value);
-  }
-
-  void on_change(TAction const &action) { action_ = action; }
-
-private:
-  TAction action_ = [](TValue) {};
-};
-
-template <typename TValue = int>
-struct SwitchQuantity : public rack::engine::SwitchQuantity {
-  using TAction = std::function<void(TValue)>;
-
-  void setValue(float value) override {
-    rack::engine::ParamQuantity::setValue(value);
-    auto const v = static_cast<TValue>(value);
-    action_(v);
-  }
-
-  void on_change(TAction const &action) { action_ = action; }
-
-private:
-  TAction action_ = [](TValue) {};
-};
 
 struct Switch {
   template <typename TStyle, typename TValue = int, typename TPanel>
@@ -145,4 +106,5 @@ struct Button {
     return pq;
   }
 };
+
 } // namespace dhe

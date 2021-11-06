@@ -4,6 +4,7 @@
 #include <vector>
 
 namespace dhe {
+
 struct Normal {
   static inline auto frame_names() -> std::vector<std::string> const & {
     static auto const names =
@@ -27,4 +28,5 @@ struct Momentary {
 struct Toggle {
   static auto constexpr momentary = false;
 };
+
 } // namespace dhe
