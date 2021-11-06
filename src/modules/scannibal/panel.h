@@ -8,6 +8,7 @@
 #include "controls/switches.h"
 #include "widgets/dimensions.h"
 #include "widgets/panel-widget.h"
+#include "widgets/step-selection-markers.h"
 
 #include "rack.hpp"
 
@@ -65,6 +66,20 @@ template <typename TSize> struct Panel : public PanelWidget<Panel<TSize>> {
   static auto constexpr hp = base_width_hp + mm2hp(step_block_width(N));
   static auto constexpr panel_file = TSize::panel_file;
   static auto constexpr svg_dir = "scannibal";
+  static auto constexpr excess_width = hp2mm(hp) - padding - content_width(N);
+  static auto constexpr progress_light_y = top - light_diameter * 1.5F;
+
+  static auto constexpr margin =
+      excess_width / static_cast<float>(section_count + 1);
+  static auto constexpr global_inputs_left = margin;
+  static auto constexpr step_block_left = global_inputs_left +
+                                          global_inputs_width + margin +
+                                          labels_width + padding;
+  static auto constexpr global_outputs_left =
+      step_block_left + step_block_width(N) + margin;
+
+  static auto constexpr selection_marker_x = step_block_left + step_width / 2.F;
+  static auto constexpr selection_marker_dx = step_width;
 
   using Input = InputIds<N>;
   using Param = ParamIds<N>;
@@ -72,41 +87,19 @@ template <typename TSize> struct Panel : public PanelWidget<Panel<TSize>> {
 
   explicit Panel(rack::engine::Module *module)
       : PanelWidget<Panel<TSize>>{module} {
-
-    auto constexpr excess_width = hp2mm(hp) - padding - content_width(N);
-    auto constexpr margin =
-        excess_width / static_cast<float>(section_count + 1);
-
-    auto constexpr global_inputs_left = margin;
-    add_global_inputs(global_inputs_left);
-
-    auto constexpr step_block_left = global_inputs_left + global_inputs_width +
-                                     margin + labels_width + padding;
-    add_step_block(step_block_left);
-
-    auto constexpr global_outputs_left =
-        step_block_left + step_block_width(N) + margin;
-    add_global_outputs(global_outputs_left);
+    add_global_inputs();
+    add_step_block();
+    add_step_selection();
+    add_global_outputs();
   }
 
 private:
-  rack::widget::SvgWidget *start_marker_ = new rack::widget::SvgWidget;
-  rack::widget::SvgWidget *end_marker_ = new rack::widget::SvgWidget;
-  float end_marker_x_;
-
-  void add_global_inputs(float left) {
-    auto const x = left + port_radius + padding;
-    auto constexpr length_y = global_controls_y(0);
+  void add_global_inputs() {
+    auto const x = global_inputs_left + port_radius + padding;
     auto constexpr a_y = global_controls_y(1);
     auto constexpr b_y = global_controls_y(2);
     auto constexpr c_y = global_controls_y(3);
     auto constexpr phase_y = global_controls_y(4);
-
-    auto const update_selection_length = [this](int step) {
-      set_selection_length(step);
-    };
-    Knob::install<Small, int>(this, Param::Length, x, length_y)
-        ->on_change(update_selection_length);
 
     InPort::install(this, Input::InA, x, a_y);
     InPort::install(this, Input::InB, x, b_y);
@@ -114,8 +107,7 @@ private:
     InPort::install(this, Input::Phase, x, phase_y);
   }
 
-  void add_step_block(float left) {
-    auto constexpr progress_light_y = top - light_diameter * 1.5F;
+  void add_step_block() {
     auto constexpr intra_section_glue = 0.15F;
     auto constexpr inter_section_glue = 2.F;
     auto constexpr stepper_ascent = small_label_size / 2.F + padding - 0.25F;
@@ -162,19 +154,9 @@ private:
                                    (small_knob_diameter + port_diameter) / 2.F +
                                    intra_section_glue;
 
-    auto const start_marker_x = left + step_width / 2.F - light_diameter;
-    start_marker_->setSvg(load_svg(svg_dir, "marker-start"));
-    position_centered(start_marker_, start_marker_x, progress_light_y);
-    this->addChild(start_marker_);
-
-    end_marker_x_ = left + step_width / 2.F;
-    end_marker_->setSvg(load_svg(svg_dir, "marker-end"));
-    position_centered(end_marker_, 0.F, progress_light_y);
-    this->addChild(end_marker_);
-    set_selection_length(N);
-
     for (auto step = 0; step < N; step++) {
-      auto const step_left = left + static_cast<float>(step) * step_width;
+      auto const step_left =
+          step_block_left + static_cast<float>(step) * step_width;
       auto const step_x = step_left + step_width / 2.F;
       this->addChild(rack::createLightCentered<ProgressLight>(
           mm2px(step_x, progress_light_y), this->module,
@@ -213,8 +195,22 @@ private:
     }
   }
 
-  void add_global_outputs(float left) {
-    auto const x = left + port_radius + padding;
+  void add_step_selection() {
+    StartMarker::install(this, selection_marker_x, progress_light_y)
+        ->set_selection_start(0);
+    auto end_marker =
+        EndMarker::install(this, selection_marker_x, progress_light_y);
+    end_marker->set_selection_length(N);
+
+    auto constexpr length_x = global_inputs_left + port_radius + padding;
+    auto constexpr length_y = global_controls_y(0);
+    Knob::install<Small, int>(this, Param::Length, length_x, length_y)
+        ->on_change(
+            [end_marker](int step) { end_marker->set_selection_length(step); });
+  }
+
+  void add_global_outputs() {
+    auto const x = global_outputs_left + port_radius + padding;
 
     auto const polarity_y = global_controls_y(0);
     auto constexpr step_number_y = global_controls_y(2);
@@ -225,11 +221,6 @@ private:
     OutPort::install(this, OutputIds::StepNumber, x, step_number_y);
     OutPort::install(this, OutputIds::StepPhase, x, step_phase_y);
     OutPort::install(this, OutputIds::Out, x, out_y);
-  }
-
-  void set_selection_length(int length) {
-    auto const x = end_marker_x_ + step_width * static_cast<float>(length - 1);
-    end_marker_->box.pos.x = mm2px(x);
   }
 }; // namespace dhe
 } // namespace scannibal

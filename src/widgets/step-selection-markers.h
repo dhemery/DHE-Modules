@@ -8,8 +8,9 @@ struct StartMarker {
     Widget() { setSvg(load_svg(TPanel::svg_dir, "marker-start")); }
 
     void set_selection_start(int step) {
-      auto constexpr base_x = TPanel::step_x - 2.F * light_diameter;
-      auto const x = base_x + TPanel::step_dx * static_cast<float>(step);
+      auto constexpr base_x = TPanel::selection_marker_x - 2.F * light_diameter;
+      auto const x =
+          base_x + TPanel::selection_marker_dx * static_cast<float>(step);
       this->box.pos.x = mm2px(x);
     }
   };
@@ -18,6 +19,7 @@ struct StartMarker {
   static inline auto install(TPanel *panel, float xmm, float ymm)
       -> Widget<TPanel> * {
     auto w = rack::createWidgetCentered<Widget<TPanel>>(mm2px(xmm, ymm));
+    w->set_selection_start(0);
     panel->addChild(w);
     return w;
   }
@@ -41,7 +43,8 @@ struct EndMarker {
       auto const selection_end =
           (selection_start_ + selection_length_ - 1) & step_mask_;
       auto const x =
-          TPanel::step_x + TPanel::step_dx * static_cast<float>(selection_end);
+          TPanel::selection_marker_x +
+          TPanel::selection_marker_dx * static_cast<float>(selection_end);
       this->box.pos.x = mm2px(x);
     }
 
@@ -54,6 +57,8 @@ struct EndMarker {
   static inline auto install(TPanel *panel, float xmm, float ymm)
       -> Widget<TPanel> * {
     auto w = rack::createWidgetCentered<Widget<TPanel>>(mm2px(xmm, ymm));
+    w->set_selection_start(0);
+    w->set_selection_length(TPanel::N);
     panel->addChild(w);
     return w;
   }

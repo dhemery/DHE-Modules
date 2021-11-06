@@ -32,6 +32,8 @@ template <typename TSize> struct Panel : public PanelWidget<Panel<TSize>> {
       static_cast<int>(sequence_controls_width + N * step_width);
   static auto constexpr step_x = hp2mm(10.F);
   static auto constexpr step_dx = hp2mm(2.25F);
+  static auto constexpr selection_marker_x = step_x;
+  static auto constexpr selection_marker_dx = step_dx;
 
   Panel(rack::engine::Module *module) : PanelWidget<Panel<TSize>>{module} {
     auto constexpr left = hp2mm(2.F);
