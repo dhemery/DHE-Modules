@@ -8,6 +8,7 @@
 #include "controls/switches.h"
 #include "widgets/dimensions.h"
 #include "widgets/panel-widget.h"
+#include "widgets/step-selection-markers.h"
 
 #include "rack.hpp"
 
@@ -57,6 +58,21 @@ template <typename TSize> struct Panel : public PanelWidget<Panel<TSize>> {
   static auto constexpr hp = base_width_hp + step_block_width_hp;
   static auto constexpr panel_file = TSize::panel_file;
   static auto constexpr svg_dir = "sequencizer";
+  static auto constexpr content_width = sequence_controls_width +
+                                        global_controls_width + labels_width +
+                                        hp2mm(step_block_width_hp);
+  static auto constexpr excess_width = hp2mm(hp) - padding - content_width;
+  static auto constexpr margin = excess_width / 4.F;
+  static auto constexpr sequence_controls_left = margin;
+  static auto constexpr global_controls_left =
+      sequence_controls_left + sequence_controls_width + margin;
+  static auto constexpr step_block_left = global_controls_left +
+                                          global_controls_width + margin +
+                                          labels_width + padding;
+  static auto constexpr sequence_controls_x =
+      sequence_controls_left + padding + port_radius;
+  static auto constexpr selection_marker_x = step_block_left + step_width / 2.F;
+  static auto constexpr selection_marker_dx = step_width;
 
   using Input = InputIds<N>;
   using Light = LightIds<N>;
@@ -64,21 +80,6 @@ template <typename TSize> struct Panel : public PanelWidget<Panel<TSize>> {
 
   explicit Panel(rack::engine::Module *module)
       : PanelWidget<Panel<TSize>>{module} {
-    auto constexpr content_width = sequence_controls_width +
-                                   global_controls_width + labels_width +
-                                   hp2mm(step_block_width_hp);
-    auto constexpr excess_width = hp2mm(hp) - padding - content_width;
-    auto constexpr margin = excess_width / 4.F;
-
-    auto constexpr sequence_controls_left = margin;
-    auto constexpr global_controls_left =
-        sequence_controls_left + sequence_controls_width + margin;
-    auto constexpr step_block_left = global_controls_left +
-                                     global_controls_width + margin +
-                                     labels_width + padding;
-
-    auto constexpr sequence_controls_x =
-        sequence_controls_left + padding + port_radius;
 
     auto constexpr run_y = global_controls_y(0);
     InPort::install(this, Input::Run, sequence_controls_x, run_y);
@@ -92,13 +93,11 @@ template <typename TSize> struct Panel : public PanelWidget<Panel<TSize>> {
 
     auto constexpr progress_light_y = top - light_diameter * 2.F;
 
-    auto *start_marker = StartMarker<Panel<TSize>>::create(
-        step_width, step_block_left, progress_light_y);
-    this->addChild(start_marker);
+    auto *start_marker =
+        StartMarker::install(this, step_block_left, progress_light_y);
 
-    auto *end_marker = EndMarker<Panel<TSize>>::create(
-        step_width, step_block_left, progress_light_y);
-    this->addChild(end_marker);
+    auto *end_marker =
+        EndMarker::install(this, step_block_left, progress_light_y);
 
     auto const update_selection_start = [start_marker, end_marker](int step) {
       start_marker->set_selection_start(step);
