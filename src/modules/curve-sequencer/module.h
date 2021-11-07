@@ -61,7 +61,7 @@ template <int N> struct Module : public rack::engine::Module {
                                     step_name + "advance mode",
                                     AdvanceMode::TimerExpires);
       auto *level_knob = Knob::config<Unipolar>(this, Param::StepLevel + step,
-                                                step_name + "level", 5.F);
+                                                step_name + "level", 0.5F);
       level_knobs.push_back(level_knob);
 
       config_curve_shape_switch(this, Param::StepShape + step,
