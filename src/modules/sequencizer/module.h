@@ -39,13 +39,10 @@ public:
     Button::config(this, Param::Reset, "Reset");
     configInput(Input::Reset, "Reset");
 
-    auto selection_start_knob =
-        configParam(Param::SelectionStart, 0.F, static_cast<float>(N - 1), 0.F,
-                    "Start step", "", 0.F, 1.F, 1.F);
-    selection_start_knob->snapEnabled = true;
-    auto selection_length_knob = configParam(Param::SelectionLength, 1.F, N, N,
-                                             "Sequence length", " steps");
-    selection_length_knob->snapEnabled = true;
+    IntKnob::config<SelectionStart<N>>(this, Param::SelectionStart,
+                                       "Start step", 1);
+    IntKnob::config<SelectionLength<N>>(this, Param::SelectionLength,
+                                        "Sequence length", N);
 
     Knob::config<Gain>(this, Param::DurationMultiplier, "Duration multiplier",
                        1.F);
@@ -63,7 +60,7 @@ public:
     configOutput(Output::SequenceEventPulse, "Start of sequence");
     configOutput(Output::Out, "Sequencer");
 
-    auto level_knobs = std::vector<ScaledQuantity *>{};
+    auto level_knobs = std::vector<ScaledKnobQuantity *>{};
 
     for (auto step = 0; step < N; step++) {
       auto const step_name = "Step " + std::to_string(step + 1) + " ";
@@ -109,8 +106,8 @@ public:
 
     Knob::config<Attenuator>(this, Param::LevelMultiplier, "Level multiplier",
                              100.F);
-    ItemSwitch::config<Levels>(this, Param::LevelRange, "Level range",
-                               Levels::Unipolar)
+    Picker::config<Levels>(this, Param::LevelRange, "Level range",
+                           Levels::Unipolar)
         ->on_change([level_knobs](Range r) {
           for (auto *knob : level_knobs) {
             knob->set_range(r);

@@ -197,14 +197,14 @@ private:
 
   void add_step_selection() {
     StartMarker::install(this, selection_marker_x, progress_light_y)
-        ->set_selection_start(0);
+        ->set_selection_start(1);
     auto end_marker =
         EndMarker::install(this, selection_marker_x, progress_light_y);
     end_marker->set_selection_length(N);
 
     auto constexpr length_x = global_inputs_left + port_radius + padding;
     auto constexpr length_y = global_controls_y(0);
-    Knob::install<Small, int>(this, Param::Length, length_x, length_y)
+    IntKnob::install<Small>(this, Param::Length, length_x, length_y)
         ->on_change(
             [end_marker](int step) { end_marker->set_selection_length(step); });
   }

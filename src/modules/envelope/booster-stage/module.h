@@ -29,8 +29,8 @@ struct Module : public rack::engine::Module {
     auto const update_level_knob_range = [level_knob](Range r) {
       level_knob->set_range(r);
     };
-    ItemSwitch::config<Levels>(this, Param::LevelRange, "Level Range",
-                               Levels::Unipolar)
+    Picker::config<Levels>(this, Param::LevelRange, "Level Range",
+                           Levels::Unipolar)
         ->on_change(update_level_knob_range);
 
     configInput(Input::LevelCv, "Level CV");

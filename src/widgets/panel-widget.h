@@ -1,5 +1,6 @@
 #pragma once
 
+#include "assets.h"
 #include "dimensions.h"
 
 #include "rack.hpp"

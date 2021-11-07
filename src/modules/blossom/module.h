@@ -48,12 +48,11 @@ public:
     configInput(Input::BouncePhaseOffsetCv, "Phase CV");
 
     Knob::config<Gain>(this, Param::XGain, "X gain", 1.F);
-    ItemSwitch::config<Levels>(this, Param::XRange, "X range",
-                               Levels::Unipolar);
+    Picker::config<Levels>(this, Param::XRange, "X range", Levels::Unipolar);
     configInput(Input::XGainCv, "X gain CV");
 
     Knob::config<Gain>(this, Param::YGain, "Y gain", 1.F);
-    ItemSwitch::config<Levels>(this, Param::YRange, "Y range", Levels::Bipolar);
+    Picker::config<Levels>(this, Param::YRange, "Y range", Levels::Bipolar);
     configInput(Input::YGainCv, "Y gain CV");
 
     configOutput(Output::X, "X");

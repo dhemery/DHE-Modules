@@ -1,6 +1,7 @@
 #pragma once
 
-#include "widgets/dimensions.h"
+#include "assets.h"
+#include "dimensions.h"
 
 #include "rack.hpp"
 
@@ -13,7 +14,7 @@ struct StartMarker {
     void set_selection_start(int step) {
       auto constexpr base_x = TPanel::selection_marker_x - 2.F * light_diameter;
       auto const x =
-          base_x + TPanel::selection_marker_dx * static_cast<float>(step);
+          base_x + TPanel::selection_marker_dx * static_cast<float>(step - 1);
       this->box.pos.x = mm2px(x);
     }
   };
@@ -22,7 +23,7 @@ struct StartMarker {
   static inline auto install(TPanel *panel, float xmm, float ymm)
       -> Widget<TPanel> * {
     auto w = rack::createWidgetCentered<Widget<TPanel>>(mm2px(xmm, ymm));
-    w->set_selection_start(0);
+    w->set_selection_start(1);
     panel->addChild(w);
     return w;
   }
@@ -33,7 +34,7 @@ struct EndMarker {
     Widget() { setSvg(load_svg(TPanel::svg_dir, "marker-end")); }
 
     void set_selection_start(int step) {
-      this->selection_start_ = step;
+      this->selection_start_ = step - 1;
       move();
     }
     void set_selection_length(int length) {
@@ -60,7 +61,7 @@ struct EndMarker {
   static inline auto install(TPanel *panel, float xmm, float ymm)
       -> Widget<TPanel> * {
     auto w = rack::createWidgetCentered<Widget<TPanel>>(mm2px(xmm, ymm));
-    w->set_selection_start(0);
+    w->set_selection_start(1);
     w->set_selection_length(TPanel::N);
     panel->addChild(w);
     return w;

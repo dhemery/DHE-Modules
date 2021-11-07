@@ -48,11 +48,11 @@ public:
 
     Knob::config<Gain>(this, Param::XGain, "X gain", 1.F);
     configInput(Input::XGainCv, "X gain CV");
-    ItemSwitch::config<Levels>(this, Param::XRange, "X range", Levels::Bipolar);
+    Picker::config<Levels>(this, Param::XRange, "X range", Levels::Bipolar);
 
     Knob::config<Gain>(this, Param::YGain, "Y gain", 1.F);
     configInput(Input::YGainCv, "Y gain CV");
-    ItemSwitch::config<Levels>(this, Param::YRange, "Y range", Levels::Bipolar);
+    Picker::config<Levels>(this, Param::YRange, "Y range", Levels::Bipolar);
 
     configOutput(Output::X, "X");
     configOutput(Output::Y, "Y");

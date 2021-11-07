@@ -1,7 +1,7 @@
 #pragma once
 
-#include "params/discrete-quantity.h"
-#include "params/picked-quantity.h"
+#include "params/picker-switch-quantity.h"
+#include "params/switch-quantity.h"
 #include "widgets/dimensions.h"
 #include "widgets/switch-widget.h"
 
@@ -38,10 +38,10 @@ struct Switch {
   static inline auto config(rack::engine::Module *module, int id,
                             std::string const &name,
                             std::vector<std::string> const &labels,
-                            TValue initial) -> DiscreteQuantity<TValue> * {
+                            TValue initial) -> SwitchQuantity<TValue> * {
     auto const max = static_cast<float>(labels.size() - 1);
     auto const default_value = static_cast<float>(initial);
-    return module->configSwitch<DiscreteQuantity<TValue>>(
+    return module->configSwitch<SwitchQuantity<TValue>>(
         id, 0.F, max, default_value, name, labels);
   }
 };
@@ -62,7 +62,7 @@ template <int N> struct ThumbSwitch {
 
 template <typename TStepper> struct Stepper {
   using Value = typename TStepper::TValue;
-  using Quantity = DiscreteQuantity<Value>;
+  using Quantity = SwitchQuantity<Value>;
   using Frame = Stepper<TStepper>;
   template <typename TPanel> using TWidget = SwitchWidget<TPanel, Frame, Value>;
 
@@ -85,14 +85,14 @@ template <typename TStepper> struct Stepper {
   }
 };
 
-struct ItemSwitch {
+struct Picker {
   template <typename TItems>
   static inline auto config(rack::engine::Module *module, int id,
                             std::string const &name, int selection)
-      -> PickedQuantity<TItems> * {
+      -> PickerSwitchQuantity<TItems> * {
     auto const max_value = static_cast<float>(TItems::items().size() - 1);
     auto const default_value = static_cast<float>(selection);
-    auto *pq = module->configSwitch<PickedQuantity<TItems>>(
+    auto *pq = module->configSwitch<PickerSwitchQuantity<TItems>>(
         id, 0.F, max_value, default_value, name, TItems::labels());
     return pq;
   }

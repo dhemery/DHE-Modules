@@ -145,11 +145,11 @@ public:
   void output(float voltage) { outputs_[OutputId::Out].setVoltage(voltage); }
 
   auto selection_start() const -> int {
-    return static_cast<int>(rotation_of(params_[ParamId::SelectionStart]));
+    return static_cast<int>(value_of(params_[ParamId::SelectionStart]) - 1);
   }
 
   auto selection_length() const -> int {
-    return static_cast<int>(rotation_of(params_[ParamId::SelectionLength]));
+    return static_cast<int>(value_of(params_[ParamId::SelectionLength]));
   }
 
   auto trigger_mode(int step) const -> TriggerMode {

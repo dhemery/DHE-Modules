@@ -7,7 +7,7 @@
 namespace dhe {
 
 template <typename TItems>
-struct PickedQuantity : public rack::engine::SwitchQuantity {
+struct PickerSwitchQuantity : public rack::engine::SwitchQuantity {
   using Item = typename TItems::ItemType;
   using Action = std::function<void(Item)>;
 

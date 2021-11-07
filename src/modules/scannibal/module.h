@@ -15,6 +15,7 @@
 #include "signals/curvature-inputs.h"
 #include "signals/duration-inputs.h"
 #include "signals/levels.h"
+#include "signals/step-selection.h"
 
 #include "rack.hpp"
 
@@ -40,9 +41,7 @@ template <int N> class Module : public rack::engine::Module {
 public:
   Module() {
     config(Param::Count, Input::Count, Output::Count, Light::Count);
-
-    auto step_knob = configParam(Param::Length, 1.F, N, N, "Steps", "");
-    step_knob->snapEnabled = true;
+    IntKnob::config<SelectionLength<N>>(this, Param::Length, "Steps", N);
 
     configInput(Input::InA, "A");
     configInput(Input::InB, "B");
@@ -53,7 +52,7 @@ public:
     configOutput(Output::StepPhase, "Step phase");
     configOutput(Output::Out, "Scanner");
 
-    auto level_knobs = std::vector<ScaledQuantity *>{};
+    auto level_knobs = std::vector<ScaledKnobQuantity *>{};
 
     for (auto step = 0; step < N; step++) {
       auto const step_name = "Step " + std::to_string(step + 1) + " ";
@@ -101,8 +100,8 @@ public:
         knob->set_range(r);
       }
     };
-    ItemSwitch::config<Levels>(this, Param::LevelRange, "Level range",
-                               Levels::Unipolar)
+    Picker::config<Levels>(this, Param::LevelRange, "Level range",
+                           Levels::Unipolar)
         ->on_change(update_level_knob_ranges);
   }
 

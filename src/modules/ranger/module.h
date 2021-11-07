@@ -28,8 +28,8 @@ struct Module : public rack::engine::Module {
     auto update_ccw_limit_knob_range = [ccw_limit_knob](Range r) {
       ccw_limit_knob->set_range(r);
     };
-    ItemSwitch::config<Levels>(this, Param::CcwLimitRange, "CCW limit range",
-                               Levels::Unipolar)
+    Picker::config<Levels>(this, Param::CcwLimitRange, "CCW limit range",
+                           Levels::Unipolar)
         ->on_change(update_ccw_limit_knob_range);
     configInput(Input::CcwLimitCv, "CCW limit CV");
     Knob::config<Attenuverter>(this, Param::CcwLimitAv, "CCW limit CV gain",
@@ -40,8 +40,8 @@ struct Module : public rack::engine::Module {
     auto update_cw_limit_knob_range = [cw_limit_knob](Range r) {
       cw_limit_knob->set_range(r);
     };
-    ItemSwitch::config<Levels>(this, Param::CwLimitRange, "CW limit range",
-                               Levels::Unipolar)
+    Picker::config<Levels>(this, Param::CwLimitRange, "CW limit range",
+                           Levels::Unipolar)
         ->on_change(update_cw_limit_knob_range);
     configInput(Input::CwLimitCv, "CW limit CV");
     Knob::config<Attenuverter>(this, Param::CwLimitAv, "CW limit CV gain", 0.F);

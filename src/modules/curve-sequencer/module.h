@@ -14,8 +14,9 @@
 #include "params/curvature-config.h"
 #include "params/duration-config.h"
 #include "params/presets.h"
-#include "params/scaled-quantity.h"
+#include "params/scaled-knob-quantity.h"
 #include "signals/levels.h"
+#include "signals/step-selection.h"
 
 #include "rack.hpp"
 
@@ -43,15 +44,12 @@ template <int N> struct Module : public rack::engine::Module {
     Button::config(this, Param::Reset, "Reset");
     configInput(Input::Reset, "Reset");
 
-    auto const selection_start_knob =
-        configParam(Param::SelectionStart, 0.F, N - 1, 0.F, "Start step", "",
-                    0.F, 1.F, 1.F);
-    selection_start_knob->snapEnabled = true;
-    auto const selection_length_knob = configParam(
-        Param::SelectionLength, 1.F, N, N, "Sequence length", " steps");
-    selection_length_knob->snapEnabled = true;
+    IntKnob::config<SelectionStart<N>>(this, Param::SelectionStart,
+                                       "Start step", 1);
+    IntKnob::config<SelectionLength<N>>(this, Param::SelectionLength,
+                                        "Sequence length", N);
 
-    auto level_knobs = std::vector<ScaledQuantity *>{};
+    auto level_knobs = std::vector<ScaledKnobQuantity *>{};
 
     for (auto step = 0; step < N; step++) {
       auto const step_name =
@@ -85,8 +83,8 @@ template <int N> struct Module : public rack::engine::Module {
       }
     };
 
-    ItemSwitch::config<Levels>(this, Param::LevelRange, "Level range",
-                               Levels::Unipolar)
+    Picker::config<Levels>(this, Param::LevelRange, "Level range",
+                           Levels::Unipolar)
         ->on_change(update_level_knob_ranges);
 
     config_duration_range_switch(this, Param::DurationRange);

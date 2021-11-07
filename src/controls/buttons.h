@@ -1,6 +1,6 @@
 #pragma once
 
-#include "params/discrete-quantity.h"
+#include "params/switch-quantity.h"
 #include "widgets/dimensions.h"
 #include "widgets/switch-widget.h"
 
@@ -48,11 +48,10 @@ struct Button {
 
   static inline auto config(rack::engine::Module *module, int id,
                             std::string const &name, bool pressed = false)
-      -> DiscreteQuantity<bool> * {
+      -> SwitchQuantity<bool> * {
     auto const default_value = static_cast<float>(pressed);
-    auto *pq = module->configSwitch<DiscreteQuantity<bool>>(
-        id, 0.F, 1.F, default_value, name);
-    return pq;
+    return module->configSwitch<SwitchQuantity<bool>>(id, 0.F, 1.F,
+                                                      default_value, name);
   }
 };
 

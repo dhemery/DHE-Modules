@@ -81,11 +81,11 @@ struct Signals {
   void output(float voltage) { outputs_[Output::Main].setVoltage(voltage); }
 
   auto selection_start() const -> int {
-    return static_cast<int>(params_[Param::SelectionStart].getValue());
+    return static_cast<int>(value_of(params_[Param::SelectionStart]) - 1);
   }
 
   auto selection_length() const -> int {
-    return static_cast<int>(params_[Param::SelectionLength].getValue());
+    return static_cast<int>(value_of(params_[Param::SelectionLength]));
   }
 
   void show_inactive(int step) { set_lights(step, 0.F, 0.F); }
