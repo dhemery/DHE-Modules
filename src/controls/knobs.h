@@ -40,8 +40,8 @@ struct Knob {
   static inline auto config(rack::engine::Module *module, int id,
                             std::string const &name, float rotation)
       -> KnobQuantity<float> * {
-    auto const multiplier = TQuantity::display_range.size();
-    auto const offset = TQuantity::display_range.lower_bound();
+    auto const multiplier = TQuantity::display_range().size();
+    auto const offset = TQuantity::display_range().lower_bound();
     return module->configParam<KnobQuantity<float>>(
         id, 0.F, 1.F, rotation, name, TQuantity::unit, 0.F, multiplier, offset);
   }

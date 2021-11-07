@@ -8,15 +8,15 @@
 namespace dhe {
 
 struct Unipolar {
-  static auto constexpr range = Range{0.F, 10.F};
-  static auto constexpr display_range = range;
+  static auto constexpr range() -> Range { return Range{0.F, 10.F}; }
+  static auto constexpr display_range() -> Range { return range(); }
   static auto constexpr label = "0–10 V";
   static auto constexpr unit = " V";
 };
 
 struct Bipolar {
-  static auto constexpr range = Range{-5.F, 5.F};
-  static auto constexpr display_range = range;
+  static auto constexpr range() -> Range { return Range{-5.F, 5.F}; }
+  static auto constexpr display_range() -> Range { return range(); }
   static auto constexpr label = "±5 V";
   static auto constexpr unit = " V";
 };
@@ -30,7 +30,7 @@ struct Levels {
 
   static inline auto items() -> std::vector<Range> const & {
     static auto const items =
-        std::vector<Range>{Bipolar::range, Unipolar::range};
+        std::vector<Range>{Bipolar::range(), Unipolar::range()};
     return items;
   }
 

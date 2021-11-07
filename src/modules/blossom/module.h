@@ -26,7 +26,7 @@ public:
     config(Param::Count, Input::Count, Output::Count);
 
     SpinSpeed::config(this, Param::SpinSpeed);
-    Knob::config<Attenuverter>(this, Param::SpinSpeedAv, "Speed CV gain", 0.F);
+    Knob::config<Attenuverter>(this, Param::SpinSpeedAv, "Speed CV gain", 0.5F);
     configInput(Input::SpinSpeedCv, "Speed CV");
 
     Switch::config(this, Param::BounceRatioMode, "Ratio mode",
@@ -34,24 +34,24 @@ public:
 
     BounceRatio::config(this, Param::BounceRatio, "Ratio");
     Knob::config<Attenuverter>(this, Param::BounceRatioAv, "Ratio CV gain",
-                               0.F);
+                               0.5F);
     configInput(Input::BounceRatioCv, "Ratio CV");
 
     Knob::config<Percentage>(this, Param::BounceDepth, "Depth", 0.5F);
     Knob::config<Attenuverter>(this, Param::BounceDepthAv, "Depth CV gain",
-                               0.F);
+                               0.5F);
     configInput(Input::BounceDepthCv, "Depth CV");
 
-    Knob::config<Angle>(this, Param::BouncePhaseOffset, "Phase", 0.F);
+    Knob::config<Angle>(this, Param::BouncePhaseOffset, "Phase", 0.5F);
     Knob::config<Attenuverter>(this, Param::BouncePhaseOffsetAv,
-                               "Phase CV gain", 0.F);
+                               "Phase CV gain", 0.5F);
     configInput(Input::BouncePhaseOffsetCv, "Phase CV");
 
-    Knob::config<Gain>(this, Param::XGain, "X gain", 1.F);
+    Knob::config<Gain>(this, Param::XGain, "X gain", 0.5F);
     Picker::config<Levels>(this, Param::XRange, "X range", Levels::Unipolar);
     configInput(Input::XGainCv, "X gain CV");
 
-    Knob::config<Gain>(this, Param::YGain, "Y gain", 1.F);
+    Knob::config<Gain>(this, Param::YGain, "Y gain", 0.5F);
     Picker::config<Levels>(this, Param::YRange, "Y range", Levels::Bipolar);
     configInput(Input::YGainCv, "Y gain CV");
 

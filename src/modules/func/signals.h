@@ -23,8 +23,8 @@ static inline auto offset_ranges() -> std::vector<Range> const & {
 static inline auto multiplier_ranges() -> std::vector<Range> const & {
   static auto constexpr minus_two_to_plus_two_range = Range{-2.F, 2.F};
   static auto const ranges =
-      std::vector<Range>{Attenuator::range, Attenuverter::range, Gain::range,
-                         minus_two_to_plus_two_range};
+      std::vector<Range>{Attenuator::range(), Attenuverter::range(),
+                         Gain::range(), minus_two_to_plus_two_range};
   return ranges;
 }
 template <typename TParam, typename TInput, typename TOutput, int N>
