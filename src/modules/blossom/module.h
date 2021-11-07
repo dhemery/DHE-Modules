@@ -11,7 +11,7 @@
 #include "signals/angular.h"
 #include "signals/common-inputs.h"
 #include "signals/gain.h"
-#include "signals/levels.h"
+#include "signals/voltage-ranges.h"
 
 #include "rack.hpp"
 
@@ -48,11 +48,13 @@ public:
     configInput(Input::BouncePhaseOffsetCv, "Phase CV");
 
     Knob::config<Gain>(this, Param::XGain, "X gain", 0.5F);
-    Picker::config<Levels>(this, Param::XRange, "X range", Levels::Unipolar);
+    Picker::config<VoltageRanges>(this, Param::XRange, "X range",
+                                  VoltageRanges::Unipolar);
     configInput(Input::XGainCv, "X gain CV");
 
     Knob::config<Gain>(this, Param::YGain, "Y gain", 0.5F);
-    Picker::config<Levels>(this, Param::YRange, "Y range", Levels::Bipolar);
+    Picker::config<VoltageRanges>(this, Param::YRange, "Y range",
+                                  VoltageRanges::Bipolar);
     configInput(Input::YGainCv, "Y gain CV");
 
     configOutput(Output::X, "X");

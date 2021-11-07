@@ -3,6 +3,7 @@
 #include "control-ids.h"
 
 #include "components/sigmoid.h"
+#include "signals/common-inputs.h"
 #include "signals/curvature-inputs.h"
 #include "signals/duration-inputs.h"
 
@@ -31,7 +32,9 @@ template <typename TParam, typename TInput, typename TOutput> struct Signals {
 
   auto input() const -> float { return voltage_at(inputs_[Input::Envelope]); }
 
-  auto level() const -> float { return value_of(params_[Param::Level]); }
+  auto level() const -> float {
+    return UnipolarVoltage::value(rotation_of(params_[Param::Level]));
+  }
 
   void output(float voltage) { outputs_[Output::Envelope].setVoltage(voltage); }
 

@@ -14,8 +14,8 @@
 #include "params/curvature-config.h"
 #include "params/duration-config.h"
 #include "params/presets.h"
-#include "signals/levels.h"
 #include "signals/step-selection.h"
+#include "signals/voltage-ranges.h"
 
 #include "rack.hpp"
 
@@ -60,8 +60,8 @@ template <int N> struct Module : public rack::engine::Module {
       Stepper<AdvanceModes>::config(this, Param::StepAdvanceMode + step,
                                     step_name + "advance mode",
                                     AdvanceMode::TimerExpires);
-      auto *level_knob = Knob::config<Unipolar>(this, Param::StepLevel + step,
-                                                step_name + "level", 0.5F);
+      auto *level_knob = Knob::config<UnipolarVoltage>(
+          this, Param::StepLevel + step, step_name + "level", 0.5F);
       level_knobs.push_back(level_knob);
 
       config_curve_shape_switch(this, Param::StepShape + step,
@@ -82,8 +82,8 @@ template <int N> struct Module : public rack::engine::Module {
       }
     };
 
-    Picker::config<Levels>(this, Param::LevelRange, "Level range",
-                           Levels::Unipolar)
+    Picker::config<VoltageRanges>(this, Param::LevelRange, "Level range",
+                                  VoltageRanges::Unipolar)
         ->on_change(update_level_knob_ranges);
 
     config_duration_range_switch(this, Param::DurationRange);

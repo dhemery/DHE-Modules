@@ -14,8 +14,8 @@
 #include "params/presets.h"
 #include "signals/curvature-inputs.h"
 #include "signals/duration-inputs.h"
-#include "signals/levels.h"
 #include "signals/step-selection.h"
+#include "signals/voltage-ranges.h"
 
 #include "rack.hpp"
 
@@ -27,7 +27,7 @@ static auto constexpr brightness_range = Range{0.F, 1.F};
 template <typename P>
 static inline auto level(P const &level_knob, P const &range_switch) -> float {
   auto const range_selection = position_of(range_switch);
-  auto const range = Levels::items()[range_selection];
+  auto const range = VoltageRanges::items()[range_selection];
   auto const rotation = dhe::rotation_of(level_knob);
   return range.scale(rotation);
 }
@@ -61,9 +61,9 @@ public:
       Stepper<AnchorSources>::config(this, Param::StepPhase0AnchorSource + step,
                                      step_name + "phase 0 anchor source",
                                      AnchorSource::Out);
-      auto *phase_0_level_knob =
-          Knob::config<Unipolar>(this, Param::StepPhase0AnchorLevel + step,
-                                 step_name + "phase 0 level", 5.F);
+      auto *phase_0_level_knob = Knob::config<UnipolarVoltage>(
+          this, Param::StepPhase0AnchorLevel + step,
+          step_name + "phase 0 level", 0.5F);
       level_knobs.push_back(phase_0_level_knob);
       configInput(Input::StepPhase0AnchorLevelCv + step,
                   step_name + "phase 0 level CV");
@@ -74,9 +74,9 @@ public:
       Stepper<AnchorSources>::config(this, Param::StepPhase1AnchorSource + step,
                                      step_name + "phase 1 anchor source",
                                      AnchorSource::Level);
-      auto *phase_1_level_knob =
-          Knob::config<Unipolar>(this, Param::StepPhase1AnchorLevel + step,
-                                 step_name + "phase 1 level", 5.F);
+      auto *phase_1_level_knob = Knob::config<UnipolarVoltage>(
+          this, Param::StepPhase1AnchorLevel + step,
+          step_name + "phase 1 level", 0.5F);
       level_knobs.push_back(phase_1_level_knob);
       configInput(Input::StepPhase1AnchorLevelCv + step,
                   step_name + "phase 1 level CV");
@@ -101,8 +101,8 @@ public:
         knob->set_display_range(r);
       }
     };
-    Picker::config<Levels>(this, Param::LevelRange, "Level range",
-                           Levels::Unipolar)
+    Picker::config<VoltageRanges>(this, Param::LevelRange, "Level range",
+                                  VoltageRanges::Unipolar)
         ->on_change(update_level_knob_ranges);
   }
 

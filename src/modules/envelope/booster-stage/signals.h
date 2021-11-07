@@ -43,8 +43,9 @@ public:
   auto input() const -> float { return voltage_at(inputs_[Input::Envelope]); }
 
   auto level() const -> float {
-    return voltage_at(inputs_[Input::LevelCv]) +
-           value_of(params_[Param::Level]);
+    return VoltageRanges::value(
+        rotation(params_[Param::Level], inputs_[Input::LevelCv]),
+        position_of(params_[Param::LevelRange]));
   }
 
   void output(float voltage) { outputs_[Output::Envelope].setVoltage(voltage); }

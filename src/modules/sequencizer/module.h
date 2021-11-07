@@ -18,7 +18,7 @@
 #include "params/presets.h"
 #include "signals/curvature-inputs.h"
 #include "signals/duration-inputs.h"
-#include "signals/levels.h"
+#include "signals/voltage-ranges.h"
 
 #include "rack.hpp"
 
@@ -77,7 +77,7 @@ public:
       Stepper<AnchorModes>::config(this, Param::StepStartAnchorMode + step,
                                    step_name + "start anchor mode",
                                    AnchorMode::Sample);
-      auto *start_level_knob = Knob::config<Unipolar>(
+      auto *start_level_knob = Knob::config<UnipolarVoltage>(
           this, Param::StepStartAnchorLevel + step, "Start level", 5.F);
       level_knobs.push_back(start_level_knob);
       Stepper<AnchorSources>::config(this, Param::StepStartAnchorSource + step,
@@ -87,7 +87,7 @@ public:
       Stepper<AnchorModes>::config(this, Param::StepEndAnchorMode + step,
                                    step_name + "end anchor mode",
                                    AnchorMode::Track);
-      auto *end_level_knob = Knob::config<Unipolar>(
+      auto *end_level_knob = Knob::config<UnipolarVoltage>(
           this, Param::StepEndAnchorLevel + step, "End level", 5.F);
       level_knobs.push_back(end_level_knob);
       Stepper<AnchorSources>::config(this, Param::StepEndAnchorSource + step,
@@ -106,8 +106,8 @@ public:
 
     Knob::config<Attenuator>(this, Param::LevelMultiplier, "Level multiplier",
                              1.F);
-    Picker::config<Levels>(this, Param::LevelRange, "Level range",
-                           Levels::Unipolar)
+    Picker::config<VoltageRanges>(this, Param::LevelRange, "Level range",
+                                  VoltageRanges::Unipolar)
         ->on_change([level_knobs](Range r) {
           for (auto *knob : level_knobs) {
             knob->set_display_range(r);

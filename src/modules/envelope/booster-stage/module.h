@@ -11,7 +11,7 @@
 #include "modules/envelope/stage/engine.h"
 #include "params/curvature-config.h"
 #include "params/duration-config.h"
-#include "signals/levels.h"
+#include "signals/voltage-ranges.h"
 
 #include "rack.hpp"
 
@@ -25,12 +25,13 @@ struct Module : public rack::engine::Module {
     configInput(Input::Envelope, "Stage");
     configOutput(Output::Envelope, "Stage");
 
-    auto *level_knob = Knob::config<Unipolar>(this, Param::Level, "Level", 5.F);
+    auto *level_knob =
+        Knob::config<UnipolarVoltage>(this, Param::Level, "Level", 0.5F);
     auto const update_level_knob_range = [level_knob](Range r) {
       level_knob->set_display_range(r);
     };
-    Picker::config<Levels>(this, Param::LevelRange, "Level Range",
-                           Levels::Unipolar)
+    Picker::config<VoltageRanges>(this, Param::LevelRange, "Level Range",
+                                  VoltageRanges::Unipolar)
         ->on_change(update_level_knob_range);
 
     configInput(Input::LevelCv, "Level CV");

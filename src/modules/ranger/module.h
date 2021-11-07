@@ -8,7 +8,7 @@
 #include "params/presets.h"
 #include "signals/common-inputs.h"
 #include "signals/gain.h"
-#include "signals/levels.h"
+#include "signals/voltage-ranges.h"
 
 #include "rack.hpp"
 
@@ -24,24 +24,24 @@ struct Module : public rack::engine::Module {
     Knob::config<Attenuverter>(this, Param::LevelAv, "Level CV gain", 0.F);
 
     auto *ccw_limit_knob =
-        Knob::config<Unipolar>(this, Param::CcwLimit, "CCW limit", 5.F);
+        Knob::config<UnipolarVoltage>(this, Param::CcwLimit, "CCW limit", 5.F);
     auto update_ccw_limit_knob_range = [ccw_limit_knob](Range r) {
       ccw_limit_knob->set_display_range(r);
     };
-    Picker::config<Levels>(this, Param::CcwLimitRange, "CCW limit range",
-                           Levels::Unipolar)
+    Picker::config<VoltageRanges>(this, Param::CcwLimitRange, "CCW limit range",
+                                  VoltageRanges::Unipolar)
         ->on_change(update_ccw_limit_knob_range);
     configInput(Input::CcwLimitCv, "CCW limit CV");
     Knob::config<Attenuverter>(this, Param::CcwLimitAv, "CCW limit CV gain",
                                0.F);
 
     auto *cw_limit_knob =
-        Knob::config<Unipolar>(this, Param::CwLimit, "CW limit", 5.F);
+        Knob::config<UnipolarVoltage>(this, Param::CwLimit, "CW limit", 5.F);
     auto update_cw_limit_knob_range = [cw_limit_knob](Range r) {
       cw_limit_knob->set_display_range(r);
     };
-    Picker::config<Levels>(this, Param::CwLimitRange, "CW limit range",
-                           Levels::Unipolar)
+    Picker::config<VoltageRanges>(this, Param::CwLimitRange, "CW limit range",
+                                  VoltageRanges::Unipolar)
         ->on_change(update_cw_limit_knob_range);
     configInput(Input::CwLimitCv, "CW limit CV");
     Knob::config<Attenuverter>(this, Param::CwLimitAv, "CW limit CV gain", 0.F);

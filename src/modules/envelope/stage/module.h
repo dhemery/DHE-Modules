@@ -22,7 +22,7 @@ struct Module : public rack::engine::Module {
     config(Param::Count, Input::Count, Output::Count);
 
     config_duration_knob(this, Param::Duration, medium_duration_range);
-    Knob::config<Unipolar>(this, Param::Level, "Level", 5.F);
+    Knob::config<UnipolarVoltage>(this, Param::Level, "Level", 0.5F);
     config_curvature_knob(this, Param::Curvature);
 
     configInput(Input::Envelope, "Stage");

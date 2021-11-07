@@ -9,7 +9,7 @@
 #include "params/presets.h"
 #include "signals/common-inputs.h"
 #include "signals/curvature-inputs.h"
-#include "signals/levels.h"
+#include "signals/voltage-ranges.h"
 
 #include "rack.hpp"
 
@@ -21,28 +21,28 @@ public:
   Module() {
     config(Param::Count, Input::Count, Output::Count);
 
-    auto *level_knob_1 =
-        Knob::config<Bipolar>(this, Param::Level1, "Taper 1 level", 0.F);
-    Picker::config<Levels>(this, Param::LevelRange1, "Taper 1 level range",
-                           Levels::Bipolar)
+    auto *level_knob_1 = Knob::config<BipolarVoltage>(this, Param::Level1,
+                                                      "Taper 1 level", 0.5F);
+    Picker::config<VoltageRanges>(this, Param::LevelRange1,
+                                  "Taper 1 level range", VoltageRanges::Bipolar)
         ->on_change(
             [level_knob_1](Range r) { level_knob_1->set_display_range(r); });
     Knob::config<Attenuverter>(this, Param::LevelAv1, "Taper 1 level CV gain",
-                               0.F);
+                               0.5F);
     configInput(Input::LevelCv1, "Taper 1 level CV");
 
     config_curvature_knob(this, Param::Curvature1, "Taper 1 curvature");
     Knob::config<Attenuverter>(this, Param::CurvatureAv1,
-                               "Taper 1 curvature CV gain", 0.F);
+                               "Taper 1 curvature CV gain", 0.5F);
     config_curve_shape_switch(this, Param::Shape1, "Taper 1 shape");
     configInput(Input::CurvatureCv1, "Taper 1 curvature CV");
 
     configOutput(Output::Taper1, "Taper 1");
 
-    auto *level_knob_2 =
-        Knob::config<Bipolar>(this, Param::Level2, "Taper 2 level", 0.F);
-    Picker::config<Levels>(this, Param::LevelRange2, "Taper 2 level range",
-                           Levels::Bipolar)
+    auto *level_knob_2 = Knob::config<BipolarVoltage>(this, Param::Level2,
+                                                      "Taper 2 level", 0.5F);
+    Picker::config<VoltageRanges>(this, Param::LevelRange2,
+                                  "Taper 2 level range", VoltageRanges::Bipolar)
         ->on_change(
             [level_knob_2](Range r) { level_knob_2->set_display_range(r); });
     Knob::config<Attenuverter>(this, Param::LevelAv2, "Taper 2 level CV gain",
@@ -74,7 +74,7 @@ public:
 private:
   auto level_range(int id) const -> Range {
     auto const selection = position_of(params[id]);
-    return Levels::items()[selection];
+    return VoltageRanges::items()[selection];
   }
 
   auto level_rotation_1() const -> float {
