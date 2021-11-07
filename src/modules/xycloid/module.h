@@ -88,7 +88,7 @@ public:
 
 private:
   inline auto gain(int knob_id, int cv_id) const -> float {
-    return Gain::value(params[knob_id], inputs[cv_id]);
+    return Gain::value(rotation(params[knob_id], inputs[cv_id]));
   }
 
   auto x_gain() const -> float { return gain(Param::XGain, Input::XGainCv); }
@@ -104,12 +104,9 @@ private:
   }
 
   auto throb_speed() const -> float {
-    static auto constexpr rotation_per_volt = 0.1F;
-    auto const knob = value_of(params[Param::ThrobSpeed]);
-    auto const cv = voltage_at(inputs[Input::ThrobSpeedCv]);
-    auto const attenuation = value_of(params[Param::ThrobSpeedAv]);
-    auto const rotation = knob + cv * rotation_per_volt * attenuation;
-    return ThrobSpeed::rotation_to_speed(rotation);
+    return ThrobSpeed::rotation_to_speed(rotation(params[Param::ThrobSpeed],
+                                                  inputs[Input::ThrobSpeedCv],
+                                                  params[Param::ThrobSpeedAv]));
   }
 
   auto wobble_depth() const -> float {
@@ -121,20 +118,17 @@ private:
 
   // radians
   auto wobble_phase_offset() const -> float {
-    auto const base = value_of(params[Param::WobblePhaseOffset]);
-    auto const modifier =
-        voltage_at(inputs[Input::WobblePhaseOffsetCv]) * 0.1F * 180.F;
-    auto const attenuation = value_of(params[Param::WobblePhaseOffsetAv]);
-    return base + modifier * attenuation;
+    return Angle::radians(rotation(params[Param::ThrobSpeedAv],
+                                   inputs[Input::WobblePhaseOffsetCv],
+                                   params[Param::WobblePhaseOffsetAv]));
   }
 
   auto wobble_ratio() -> float {
     auto *q = reinterpret_cast<WobbleRatio::Quantity *>(
         getParamQuantity(Param::WobbleRatio));
-    float rotation =
-        dhe::rotation(params[Param::WobbleRatio], inputs[Input::WobbleRatioCv],
-                      params[Param::WobbleRatioAv]);
-    return q->ratio(rotation);
+    return q->ratio(rotation(params[Param::WobbleRatio],
+                             inputs[Input::WobbleRatioCv],
+                             params[Param::WobbleRatioAv]));
   }
 
   PhaseRotor wobbler_{};

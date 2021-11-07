@@ -80,7 +80,7 @@ private:
   }
 
   auto gain(int knob_id, int cv_id) const -> float {
-    return Gain::value(params[knob_id], inputs[cv_id]);
+    return Gain::value(rotation(params[knob_id], inputs[cv_id]));
   }
 
   auto main_in() const -> float { return voltage_at(inputs[Input::Cubic]); }

@@ -104,11 +104,9 @@ private:
 
   // radians
   inline auto bounce_phase_offset() const -> float {
-    auto const base = value_of(params[Param::BouncePhaseOffset]);
-    auto const modifier =
-        voltage_at(inputs[Input::BouncePhaseOffsetCv]) * 0.1F * 180.F;
-    auto const attenuation = value_of(params[Param::BouncePhaseOffsetAv]);
-    return base + modifier * attenuation;
+    return Angle::radians(rotation(params[Param::BouncePhaseOffset],
+                                   inputs[Input::BouncePhaseOffsetCv],
+                                   params[Param::BouncePhaseOffsetAv]));
   }
 
   inline auto spin_speed() const -> float {
@@ -119,7 +117,7 @@ private:
   }
 
   inline auto gain(int knob_id, int cv_id) const -> float {
-    return Gain::value(params[knob_id], inputs[cv_id]);
+    return Gain::value(rotation(params[knob_id], inputs[cv_id]));
   }
 
   inline auto x_gain() const -> float {
