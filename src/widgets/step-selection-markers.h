@@ -11,19 +11,27 @@ struct StartMarker {
   template <typename TPanel> struct Widget : public rack::widget::SvgWidget {
     Widget() { setSvg(load_svg(TPanel::svg_dir, "marker-start")); }
 
-    void set_selection_start(int step) {
-      auto constexpr base_x = TPanel::selection_marker_x - 2.F * light_diameter;
-      auto const x =
-          base_x + TPanel::selection_marker_dx * static_cast<float>(step - 1);
-      this->box.pos.x = mm2px(x);
+    void set_start(int index) {
+      auto const xmm = x_ + step_width_ * static_cast<float>(index);
+      this->box.pos.x = mm2px(xmm);
     }
+
+    void initialize(float x, float step_width) {
+      x_ = x;
+      step_width_ = step_width;
+      set_start(0);
+    }
+
+  private:
+    float x_{};
+    float step_width_{};
   };
 
   template <typename TPanel>
-  static inline auto install(TPanel *panel, float xmm, float ymm)
-      -> Widget<TPanel> * {
+  static inline auto install(TPanel *panel, float xmm, float ymm,
+                             float step_width) -> Widget<TPanel> * {
     auto w = rack::createWidgetCentered<Widget<TPanel>>(mm2px(xmm, ymm));
-    w->set_selection_start(1);
+    w->initialize(xmm, step_width);
     panel->addChild(w);
     return w;
   }
@@ -32,37 +40,42 @@ struct StartMarker {
 struct EndMarker {
   template <typename TPanel> struct Widget : public rack::widget::SvgWidget {
     Widget() { setSvg(load_svg(TPanel::svg_dir, "marker-end")); }
+    static int constexpr index_mask_{TPanel::N - 1};
 
-    void set_selection_start(int step) {
-      this->selection_start_ = step - 1;
+    void set_start(int index) {
+      this->start_index_ = index;
       move();
     }
-    void set_selection_length(int length) {
-      this->selection_length_ = length;
+
+    void set_length(int length) {
+      this->end_offset_ = length - 1;
+      move();
+    }
+
+    void initialize(float x, float step_width) {
+      x_ = x;
+      step_width_ = step_width;
       move();
     }
 
   private:
     void move() {
-      auto const selection_end =
-          (selection_start_ + selection_length_ - 1) & step_mask_;
-      auto const x =
-          TPanel::selection_marker_x +
-          TPanel::selection_marker_dx * static_cast<float>(selection_end);
-      this->box.pos.x = mm2px(x);
+      auto const index = (start_index_ + end_offset_) & index_mask_;
+      auto const xmm = x_ + step_width_ * static_cast<float>(index);
+      this->box.pos.x = mm2px(xmm);
     }
 
-    int selection_start_{};
-    int selection_length_{};
-    int const step_mask_ = TPanel::N - 1;
+    float x_{};
+    float step_width_{};
+    int start_index_{0};
+    int end_offset_{TPanel::N - 1};
   };
 
   template <typename TPanel>
-  static inline auto install(TPanel *panel, float xmm, float ymm)
-      -> Widget<TPanel> * {
+  static inline auto install(TPanel *panel, float xmm, float ymm,
+                             float step_width) -> Widget<TPanel> * {
     auto w = rack::createWidgetCentered<Widget<TPanel>>(mm2px(xmm, ymm));
-    w->set_selection_start(1);
-    w->set_selection_length(TPanel::N);
+    w->initialize(xmm, step_width);
     panel->addChild(w);
     return w;
   }

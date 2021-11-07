@@ -64,11 +64,9 @@ struct IntKnob {
   static inline auto config(rack::engine::Module *module, int id,
                             std::string const &name, int value)
       -> KnobQuantity<int> * {
-    auto const min_value = static_cast<float>(TQuantity::min);
-    auto const max_value = static_cast<float>(TQuantity::max);
-    auto const default_value = static_cast<float>(value);
     auto *pq = module->configParam<KnobQuantity<int>>(
-        id, min_value, max_value, default_value, name, TQuantity::unit);
+        id, TQuantity::min_value, TQuantity::max_value, value, name,
+        TQuantity::unit, 0.F, 1.F, TQuantity::display_value_offset);
     pq->snapEnabled = true;
     return pq;
   }

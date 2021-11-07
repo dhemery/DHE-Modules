@@ -9,7 +9,7 @@ namespace scannibal {
 
 template <int N> struct ParamIds {
   enum {
-    Length,
+    SelectionLength,
     LevelRange,
     ONE_PER_STEP(StepCurvature, N),
     ONE_PER_STEP(StepDuration, N),

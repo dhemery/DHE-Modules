@@ -45,7 +45,7 @@ template <int N> struct Module : public rack::engine::Module {
     configInput(Input::Reset, "Reset");
 
     IntKnob::config<SelectionStart<N>>(this, Param::SelectionStart,
-                                       "Start step", 1);
+                                       "Start step", 0);
     IntKnob::config<SelectionLength<N>>(this, Param::SelectionLength,
                                         "Sequence length", N);
 

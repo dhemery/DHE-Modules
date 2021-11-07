@@ -93,19 +93,19 @@ template <typename TSize> struct Panel : public PanelWidget<Panel<TSize>> {
 
     auto constexpr progress_light_y = top - light_diameter * 2.F;
 
-    auto *start_marker =
-        StartMarker::install(this, step_block_left, progress_light_y);
+    auto *start_marker = StartMarker::install(this, step_block_left,
+                                              progress_light_y, step_width);
 
     auto *end_marker =
-        EndMarker::install(this, step_block_left, progress_light_y);
+        EndMarker::install(this, step_block_left, progress_light_y, step_width);
 
-    auto const update_selection_start = [start_marker, end_marker](int step) {
-      start_marker->set_selection_start(step);
-      end_marker->set_selection_start(step);
+    auto const update_selection_start = [start_marker, end_marker](int index) {
+      start_marker->set_start(index);
+      end_marker->set_start(index);
     };
 
-    auto const update_selection_end = [end_marker](int length) {
-      end_marker->set_selection_length(length);
+    auto const update_selection_length = [end_marker](int length) {
+      end_marker->set_length(length);
     };
 
     auto constexpr selection_y = global_controls_y(2);
@@ -118,7 +118,7 @@ template <typename TSize> struct Panel : public PanelWidget<Panel<TSize>> {
         sequence_controls_x + selection_length_offset;
     IntKnob::install<Small>(this, Param::SelectionLength, selection_length_x,
                             selection_y)
-        ->on_change(update_selection_end);
+        ->on_change(update_selection_length);
 
     auto constexpr gate_y = global_controls_y(3);
     InPort::install(this, Input::Gate, sequence_controls_x, gate_y);

@@ -23,10 +23,10 @@ namespace dhe {
 namespace scannibal {
 static auto constexpr base_width_hp = 11.F;
 static auto constexpr step_width_hp = 2.25F;
+static auto constexpr step_width = hp2mm(step_width_hp);
 static auto constexpr section_count = 3;
 static auto constexpr global_control_rows = 5;
 
-static auto constexpr step_width = hp2mm(step_width_hp);
 static auto constexpr top = 23.F;
 static auto constexpr bottom = 117.F;
 
@@ -77,9 +77,6 @@ template <typename TSize> struct Panel : public PanelWidget<Panel<TSize>> {
                                           labels_width + padding;
   static auto constexpr global_outputs_left =
       step_block_left + step_block_width(N) + margin;
-
-  static auto constexpr selection_marker_x = step_block_left + step_width / 2.F;
-  static auto constexpr selection_marker_dx = step_width;
 
   using Input = InputIds<N>;
   using Param = ParamIds<N>;
@@ -196,17 +193,16 @@ private:
   }
 
   void add_step_selection() {
-    StartMarker::install(this, selection_marker_x, progress_light_y)
-        ->set_selection_start(1);
-    auto end_marker =
-        EndMarker::install(this, selection_marker_x, progress_light_y);
-    end_marker->set_selection_length(N);
+    auto const marker_x = step_block_left + step_width / 2.F;
+    StartMarker::install(this, marker_x, progress_light_y, step_width);
+    auto *end_marker =
+        EndMarker::install(this, marker_x, progress_light_y, step_width);
 
     auto constexpr length_x = global_inputs_left + port_radius + padding;
     auto constexpr length_y = global_controls_y(0);
-    IntKnob::install<Small>(this, Param::Length, length_x, length_y)
+    IntKnob::install<Small>(this, Param::SelectionLength, length_x, length_y)
         ->on_change(
-            [end_marker](int step) { end_marker->set_selection_length(step); });
+            [end_marker](int length) { end_marker->set_length(length); });
   }
 
   void add_global_outputs() {

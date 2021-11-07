@@ -145,7 +145,7 @@ public:
   void output(float voltage) { outputs_[OutputId::Out].setVoltage(voltage); }
 
   auto selection_start() const -> int {
-    return static_cast<int>(value_of(params_[ParamId::SelectionStart]) - 1);
+    return static_cast<int>(value_of(params_[ParamId::SelectionStart]));
   }
 
   auto selection_length() const -> int {

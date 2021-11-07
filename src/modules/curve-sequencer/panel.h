@@ -23,17 +23,15 @@ using ProgressLight =
     rack::componentlibrary::SmallLight<rack::componentlibrary::GreenRedLight>;
 
 template <typename TSize> struct Panel : public PanelWidget<Panel<TSize>> {
-  static auto constexpr N = TSize::step_count;
+  static auto constexpr N = TSize::step_count; // NOLINT
   static auto constexpr panel_file = TSize::panel_file;
   static auto constexpr svg_dir = "curve-sequencer";
-  static auto constexpr step_width = 2.25F;
-  static auto constexpr sequence_controls_width = 13.F;
+  static auto constexpr step_width_hp = 2.25F;
+  static auto constexpr sequence_controls_width_hp = 13.F;
   static auto constexpr hp =
-      static_cast<int>(sequence_controls_width + N * step_width);
+      static_cast<int>(sequence_controls_width_hp + N * step_width_hp);
   static auto constexpr step_x = hp2mm(10.F);
-  static auto constexpr step_dx = hp2mm(2.25F);
-  static auto constexpr selection_marker_x = step_x;
-  static auto constexpr selection_marker_dx = step_dx;
+  static auto constexpr step_dx = hp2mm(step_width_hp);
 
   Panel(rack::engine::Module *module) : PanelWidget<Panel<TSize>>{module} {
     auto constexpr left = hp2mm(2.F);
@@ -61,23 +59,25 @@ template <typename TSize> struct Panel : public PanelWidget<Panel<TSize>> {
     Button::install<Toggle>(this, Param::Loop, left + button_port_distance,
                             loop_y);
 
-    auto *start_marker = StartMarker::install(this, 0.F, active_y);
-    auto *end_marker = EndMarker::install(this, 0.F, active_y);
+    auto constexpr marker_x = step_x;
+    auto *start_marker =
+        StartMarker::install(this, marker_x, active_y, step_dx);
+    auto *end_marker = EndMarker::install(this, marker_x, active_y, step_dx);
 
-    auto const update_selection_start = [start_marker, end_marker](int step) {
-      start_marker->set_selection_start(step);
-      end_marker->set_selection_start(step);
+    auto const update_selection_start = [start_marker, end_marker](int index) {
+      start_marker->set_start(index);
+      end_marker->set_start(index);
     };
     IntKnob::install<Small>(this, Param::SelectionStart, left, selection_y)
         ->on_change(update_selection_start);
 
-    auto const update_selection_end = [end_marker](int length) {
-      end_marker->set_selection_length(length);
+    auto const update_selection_length = [end_marker](int offset) {
+      end_marker->set_length(offset);
     };
     auto constexpr selection_length_x = left + hp2mm(2.F);
     IntKnob::install<Small>(this, Param::SelectionLength, selection_length_x,
                             selection_y)
-        ->on_change(update_selection_end);
+        ->on_change(update_selection_length);
 
     InPort::install(this, Input::Gate, left, gate_y);
     Button::install<Momentary>(this, Param::Gate, left + button_port_distance,

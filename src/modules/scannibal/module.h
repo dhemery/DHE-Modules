@@ -41,7 +41,8 @@ template <int N> class Module : public rack::engine::Module {
 public:
   Module() {
     config(Param::Count, Input::Count, Output::Count, Light::Count);
-    IntKnob::config<SelectionLength<N>>(this, Param::Length, "Steps", N);
+    IntKnob::config<SelectionLength<N>>(this, Param::SelectionLength, "Steps",
+                                        N);
 
     configInput(Input::InA, "A");
     configInput(Input::InB, "B");
@@ -151,7 +152,9 @@ public:
 
   auto in_c() const -> float { return voltage_at(inputs[Input::InC]); }
 
-  auto length() const -> float { return value_of(params[Param::Length]); }
+  auto length() const -> float {
+    return value_of(params[Param::SelectionLength]);
+  }
 
   auto phase() const -> float { return voltage_at(inputs[Input::Phase]); }
 
