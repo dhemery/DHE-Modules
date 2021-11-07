@@ -95,7 +95,7 @@ public:
     t.run("selection_start()",
           test([](Tester &t, Module &module, Signals &signals) {
             auto const want = std::rand() % step_count;
-            auto const knob_value = static_cast<float>(want);
+            auto const knob_value = static_cast<float>(want + 1);
             module.params_[Param::SelectionStart].setValue(knob_value);
 
             auto const got = signals.selection_start();
