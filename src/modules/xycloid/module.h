@@ -88,7 +88,7 @@ public:
 
 private:
   inline auto gain(int knob_id, int cv_id) const -> float {
-    return Gain::value(value_of(params[knob_id]), voltage_at(inputs[cv_id]));
+    return Gain::value(params[knob_id], inputs[cv_id]);
   }
 
   auto x_gain() const -> float { return gain(Param::XGain, Input::XGainCv); }

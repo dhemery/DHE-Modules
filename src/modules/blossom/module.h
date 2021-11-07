@@ -119,7 +119,7 @@ private:
   }
 
   inline auto gain(int knob_id, int cv_id) const -> float {
-    return Gain::value(rotation_of(params[knob_id]), voltage_at(inputs[cv_id]));
+    return Gain::value(params[knob_id], inputs[cv_id]);
   }
 
   inline auto x_gain() const -> float {
