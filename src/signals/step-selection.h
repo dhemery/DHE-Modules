@@ -7,9 +7,9 @@ namespace dhe {
  * number, which is index+1.
  */
 template <int N> struct SelectionStart {
-  static auto constexpr min_value = 0;
-  static auto constexpr max_value = N - 1;
-  static auto constexpr display_value_offset = 1;
+  static auto constexpr min = 0;
+  static auto constexpr max = N - 1;
+  static auto constexpr display_offset = 1;
   static auto constexpr unit = "";
 };
 
@@ -17,9 +17,9 @@ template <int N> struct SelectionStart {
  * The number of selected steps.
  */
 template <int N> struct SelectionLength {
-  static auto constexpr min_value = 1;
-  static auto constexpr max_value = N;
-  static auto constexpr display_value_offset = 0;
+  static auto constexpr min = 1;
+  static auto constexpr max = N;
+  static auto constexpr display_offset = 0;
   static auto constexpr unit = " steps";
 };
 

@@ -10,18 +10,23 @@
 
 namespace dhe {
 namespace func {
-static auto constexpr minus_two_to_plus_two_range = Range{-2.F, 2.F};
-static auto constexpr minus_ten_to_plus_ten_range = Range{-10.F, 10.F};
-static auto constexpr zero_to_five_range = Range{0.F, 5.F};
 
-static auto constexpr offset_ranges = std::array<Range const, 4>{
-    zero_to_five_range, bipolar_signal_range, unipolar_signal_range,
-    minus_ten_to_plus_ten_range};
+static inline auto offset_ranges() -> std::vector<Range> const & {
+  static auto constexpr minus_ten_to_plus_ten_range = Range{-10.F, 10.F};
+  static auto constexpr zero_to_five_range = Range{0.F, 5.F};
+  static auto const ranges =
+      std::vector<Range>{zero_to_five_range, bipolar_signal_range,
+                         unipolar_signal_range, minus_ten_to_plus_ten_range};
+  return ranges;
+}
 
-static auto constexpr multiplier_ranges =
-    std::array<Range const, 4>{Attenuator::range(), Attenuverter::range(),
-                               Gain::range(), minus_two_to_plus_two_range};
-
+static inline auto multiplier_ranges() -> std::vector<Range> const & {
+  static auto constexpr minus_two_to_plus_two_range = Range{-2.F, 2.F};
+  static auto const ranges =
+      std::vector<Range>{Attenuator::range, Attenuverter::range, Gain::range,
+                         minus_two_to_plus_two_range};
+  return ranges;
+}
 template <typename TParam, typename TInput, typename TOutput, int N>
 struct Signals {
   static auto constexpr channel_count = N;
@@ -39,13 +44,14 @@ struct Signals {
   }
 
   auto multiplier_range(int channel) const -> Range {
-    return selected_range<4>(params_[Param::MultiplierRange + channel],
-                             multiplier_ranges);
+    auto const selection =
+        position_of(params_[Param::MultiplierRange + channel]);
+    return multiplier_ranges()[selection];
   }
 
   auto offset_range(int channel) const -> Range {
-    return selected_range<4>(params_[Param::OffsetRange + channel],
-                             offset_ranges);
+    auto const selection = position_of(params_[Param::OffsetRange + channel]);
+    return offset_ranges()[selection];
   }
 
   auto operand(int channel) const -> float {

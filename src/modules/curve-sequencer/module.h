@@ -14,7 +14,6 @@
 #include "params/curvature-config.h"
 #include "params/duration-config.h"
 #include "params/presets.h"
-#include "params/scaled-knob-quantity.h"
 #include "signals/levels.h"
 #include "signals/step-selection.h"
 
@@ -49,7 +48,7 @@ template <int N> struct Module : public rack::engine::Module {
     IntKnob::config<SelectionLength<N>>(this, Param::SelectionLength,
                                         "Sequence length", N);
 
-    auto level_knobs = std::vector<ScaledKnobQuantity *>{};
+    auto level_knobs = std::vector<KnobQuantity<float> *>{};
 
     for (auto step = 0; step < N; step++) {
       auto const step_name =
@@ -79,7 +78,7 @@ template <int N> struct Module : public rack::engine::Module {
 
     auto update_level_knob_ranges = [level_knobs](Range r) {
       for (auto *level_knob : level_knobs) {
-        level_knob->set_range(r);
+        level_knob->set_display_range(r);
       }
     };
 

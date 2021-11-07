@@ -14,13 +14,12 @@ namespace dhe {
 namespace cubic {
 
 struct Coefficient {
-  static auto constexpr range() -> Range { return Range{-2.F, 2.F}; }
-  static auto constexpr display_multiplier = 1.F;
-  static auto constexpr display_offset = 0.F;
+  static auto constexpr range = Range{-2.F, 2.F};
+  static auto constexpr display_range = range;
   static auto constexpr unit = "";
 
   static inline auto value(float rotation) -> float {
-    return range().scale(rotation);
+    return range.scale(rotation);
   }
 };
 

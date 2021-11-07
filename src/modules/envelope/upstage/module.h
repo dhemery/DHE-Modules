@@ -21,7 +21,7 @@ struct Module : public rack::engine::Module {
 
     auto *level_knob = Knob::config<Unipolar>(this, Param::Level, "Level", 5.F);
     auto update_level_knob_range = [level_knob](Range r) {
-      level_knob->set_range(r);
+      level_knob->set_display_range(r);
     };
     Picker::config<Levels>(this, Param::LevelRange, "Level range",
                            Levels::Unipolar)

@@ -53,7 +53,7 @@ public:
     configOutput(Output::StepPhase, "Step phase");
     configOutput(Output::Out, "Scanner");
 
-    auto level_knobs = std::vector<ScaledKnobQuantity *>{};
+    auto level_knobs = std::vector<KnobQuantity<float> *>{};
 
     for (auto step = 0; step < N; step++) {
       auto const step_name = "Step " + std::to_string(step + 1) + " ";
@@ -98,7 +98,7 @@ public:
 
     auto update_level_knob_ranges = [level_knobs](Range r) {
       for (auto *knob : level_knobs) {
-        knob->set_range(r);
+        knob->set_display_range(r);
       }
     };
     Picker::config<Levels>(this, Param::LevelRange, "Level range",

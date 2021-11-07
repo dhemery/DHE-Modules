@@ -6,11 +6,11 @@
 namespace dhe {
 
 struct Angle {
-  // value is radians
-  static auto constexpr range() -> Range { return Range{-tau, tau}; }
-  // display degrees
-  static auto constexpr display_multiplier = 180.F / tau;
-  static auto constexpr display_offset = 0.F;
+  static auto constexpr display_range = Range{-180.F, 180.F};
   static auto constexpr unit = "˚";
+
+  static inline auto radians(float rotation) -> float {
+    return rotation * tau - pi;
+  }
 };
 } // namespace dhe

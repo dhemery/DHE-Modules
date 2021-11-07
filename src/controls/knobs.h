@@ -1,7 +1,6 @@
 #pragma once
 
 #include "params/knob-quantity.h"
-#include "params/scaled-knob-quantity.h"
 #include "widgets/dimensions.h"
 #include "widgets/knob-widget.h"
 
@@ -39,13 +38,12 @@ struct Knob {
 
   template <typename TQuantity>
   static inline auto config(rack::engine::Module *module, int id,
-                            std::string const &name, float value)
-      -> ScaledKnobQuantity * {
-    static auto const range = TQuantity::range();
-    return module->configParam<ScaledKnobQuantity>(
-        id, range.lower_bound(), range.upper_bound(), value, name,
-        TQuantity::unit, 0.F, TQuantity::display_multiplier,
-        TQuantity::display_offset);
+                            std::string const &name, float rotation)
+      -> KnobQuantity<float> * {
+    auto const multiplier = TQuantity::display_range.size();
+    auto const offset = TQuantity::display_range.lower_bound();
+    return module->configParam<KnobQuantity<float>>(
+        id, 0.F, 1.F, rotation, name, TQuantity::unit, 0.F, multiplier, offset);
   }
 };
 
@@ -64,9 +62,12 @@ struct IntKnob {
   static inline auto config(rack::engine::Module *module, int id,
                             std::string const &name, int value)
       -> KnobQuantity<int> * {
+    auto const min = static_cast<float>(TQuantity::min);
+    auto const max = static_cast<float>(TQuantity::max);
+    auto const offset = static_cast<float>(TQuantity::display_offset);
+    auto const default_value = static_cast<float>(value);
     auto *pq = module->configParam<KnobQuantity<int>>(
-        id, TQuantity::min_value, TQuantity::max_value, value, name,
-        TQuantity::unit, 0.F, 1.F, TQuantity::display_value_offset);
+        id, min, max, default_value, name, TQuantity::unit, 0.F, 1.F, offset);
     pq->snapEnabled = true;
     return pq;
   }

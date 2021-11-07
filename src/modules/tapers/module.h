@@ -25,7 +25,8 @@ public:
         Knob::config<Bipolar>(this, Param::Level1, "Taper 1 level", 0.F);
     Picker::config<Levels>(this, Param::LevelRange1, "Taper 1 level range",
                            Levels::Bipolar)
-        ->on_change([level_knob_1](Range r) { level_knob_1->set_range(r); });
+        ->on_change(
+            [level_knob_1](Range r) { level_knob_1->set_display_range(r); });
     Knob::config<Attenuverter>(this, Param::LevelAv1, "Taper 1 level CV gain",
                                0.F);
     configInput(Input::LevelCv1, "Taper 1 level CV");
@@ -42,7 +43,8 @@ public:
         Knob::config<Bipolar>(this, Param::Level2, "Taper 2 level", 0.F);
     Picker::config<Levels>(this, Param::LevelRange2, "Taper 2 level range",
                            Levels::Bipolar)
-        ->on_change([level_knob_2](Range r) { level_knob_2->set_range(r); });
+        ->on_change(
+            [level_knob_2](Range r) { level_knob_2->set_display_range(r); });
     Knob::config<Attenuverter>(this, Param::LevelAv2, "Taper 2 level CV gain",
                                0.F);
     configInput(Input::LevelCv2, "Taper 2 level CV");

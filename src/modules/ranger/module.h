@@ -26,7 +26,7 @@ struct Module : public rack::engine::Module {
     auto *ccw_limit_knob =
         Knob::config<Unipolar>(this, Param::CcwLimit, "CCW limit", 5.F);
     auto update_ccw_limit_knob_range = [ccw_limit_knob](Range r) {
-      ccw_limit_knob->set_range(r);
+      ccw_limit_knob->set_display_range(r);
     };
     Picker::config<Levels>(this, Param::CcwLimitRange, "CCW limit range",
                            Levels::Unipolar)
@@ -38,7 +38,7 @@ struct Module : public rack::engine::Module {
     auto *cw_limit_knob =
         Knob::config<Unipolar>(this, Param::CwLimit, "CW limit", 5.F);
     auto update_cw_limit_knob_range = [cw_limit_knob](Range r) {
-      cw_limit_knob->set_range(r);
+      cw_limit_knob->set_display_range(r);
     };
     Picker::config<Levels>(this, Param::CwLimitRange, "CW limit range",
                            Levels::Unipolar)

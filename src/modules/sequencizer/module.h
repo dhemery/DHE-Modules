@@ -60,7 +60,7 @@ public:
     configOutput(Output::SequenceEventPulse, "Start of sequence");
     configOutput(Output::Out, "Sequencer");
 
-    auto level_knobs = std::vector<ScaledKnobQuantity *>{};
+    auto level_knobs = std::vector<KnobQuantity<float> *>{};
 
     for (auto step = 0; step < N; step++) {
       auto const step_name = "Step " + std::to_string(step + 1) + " ";
@@ -105,12 +105,12 @@ public:
     }
 
     Knob::config<Attenuator>(this, Param::LevelMultiplier, "Level multiplier",
-                             100.F);
+                             1.F);
     Picker::config<Levels>(this, Param::LevelRange, "Level range",
                            Levels::Unipolar)
         ->on_change([level_knobs](Range r) {
           for (auto *knob : level_knobs) {
-            knob->set_range(r);
+            knob->set_display_range(r);
           }
         });
     configInput(Input::LevelAttenuationCV, "Level multiplier CV");

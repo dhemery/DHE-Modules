@@ -119,9 +119,7 @@ private:
   }
 
   inline auto gain(int knob_id, int cv_id) const -> float {
-    static auto constexpr gain_per_volt = Gain::range().size() * 0.1F;
-    return value_of(params[knob_id]) +
-           voltage_at(inputs[cv_id]) * gain_per_volt;
+    return Gain::value(rotation_of(params[knob_id]), voltage_at(inputs[cv_id]));
   }
 
   inline auto x_gain() const -> float {
