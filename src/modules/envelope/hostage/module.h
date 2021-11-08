@@ -10,7 +10,7 @@
 #include "modules/envelope/mode/idle.h"
 #include "modules/envelope/mode/input.h"
 #include "modules/envelope/mode/sustain.h"
-#include "params/duration-config.h"
+#include "params/duration-knob-quantity.h"
 
 #include "rack.hpp"
 
@@ -29,8 +29,9 @@ struct Module : public rack::engine::Module {
     configOutput(Output::Eoc, "End of stage");
     configOutput(Output::Envelope, "Stage");
 
-    config_duration_knob(this, Param::Duration, Param::DurationRange);
-    config_duration_range_switch(this, Param::DurationRange);
+    DurationKnob::config(this, Param::Duration, "Duration", 0.5F);
+    Picker::config<DurationRanges>(this, Param::DurationRange, "Duration range",
+                                   DurationRanges::Medium);
     configInput(Input::DurationCv, "Duration CV");
 
     Switch::config(this, Param::Mode, "Mode", {"Hold", "Sustain"}, 0);

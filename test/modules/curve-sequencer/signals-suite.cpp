@@ -174,9 +174,8 @@ public:
                 duration_range_selection);
 
             auto const got = signals.duration(step);
-            auto const want =
-                dhe::duration(duration_knob_rotation,
-                              dhe::duration_ranges[duration_range_selection]);
+            auto const want = dhe::DurationRanges::value(
+                duration_knob_rotation, duration_range_selection);
             if (got != want) {
               t.errorf("Got {}, want {}", got, want);
             }

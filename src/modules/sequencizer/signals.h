@@ -6,7 +6,7 @@
 
 #include "components/range.h"
 #include "signals/curvature-inputs.h"
-#include "signals/duration-inputs.h"
+#include "signals/duration-ranges.h"
 #include "signals/gain.h"
 #include "signals/voltage-ranges.h"
 
@@ -21,14 +21,14 @@ namespace sequencizer {
 static auto constexpr brightness_skew = 0.7F;
 static auto constexpr brightness_range =
     Range{-brightness_skew, 1.F + brightness_skew};
-static auto constexpr minimum_duration = short_duration_range.lower_bound();
 
 template <typename P, typename I>
 static inline auto duration(P const &duration_knob, P const &range_switch,
                             P const &multipler_knob, I const &multiplier_cv)
     -> float {
-  auto const nominal_duration =
-      dhe::selectable_duration(duration_knob, range_switch);
+  static auto constexpr minimum_duration = ShortDuration::range().lower_bound();
+  auto const nominal_duration = DurationRanges::value(
+      rotation_of(duration_knob), position_of(range_switch));
   auto const multiplier_rotation = dhe::rotation(multipler_knob, multiplier_cv);
   auto const nominal_multiplier = Gain::range().scale(multiplier_rotation);
   auto const clamped_multiplier = Gain::range().clamp(nominal_multiplier);

@@ -10,10 +10,10 @@
 #include "controls/knobs.h"
 #include "controls/switches.h"
 #include "params/curvature-config.h"
-#include "params/duration-config.h"
+#include "params/duration-knob-quantity.h"
 #include "params/presets.h"
 #include "signals/curvature-inputs.h"
-#include "signals/duration-inputs.h"
+#include "signals/duration-ranges.h"
 #include "signals/step-selection.h"
 #include "signals/voltage-ranges.h"
 

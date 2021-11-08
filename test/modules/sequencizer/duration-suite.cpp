@@ -43,29 +43,26 @@ public:
           "center multiplier rotation: "
           "yields nominal duration",
           test(0.731F, short_duration_selection, center_multiplier_rotation,
-               0.F,
-               is_equal_to(dhe::duration(0.731F, dhe::short_duration_range))));
+               0.F, is_equal_to(dhe::ShortDuration::value(0.731F))));
 
     t.run("with 0V multiplier cv: "
           "maximum multiplier rotation: "
           "yields twice nominal duration",
           test(0.4623F, medium_duration_selection, maximum_multiplier_rotation,
-               0.F,
-               is_near(2.F * dhe::duration(0.4623F, dhe::medium_duration_range),
-                       1e-5F)));
+               0.F, is_near(2.F * dhe::MediumDuration::value(0.4623F), 1e-5F)));
 
     t.run("5V CV adds 50% rotation to multiplier knob",
           // 25% multiplier knob + 50% CV = 75% rotation = 1.5 multiplier
           test(center_duration_rotation, long_duration_selection, 0.25F, 5.F,
-               is_equal_to(1.5F * dhe::duration(center_duration_rotation,
-                                                dhe::long_duration_range))));
+               is_equal_to(
+                   1.5F * dhe::LongDuration::value(center_duration_rotation))));
 
-    t.run("-5V CV subtracts 50% rotation from multiplier knob",
-          // 90% multiplier knob - 50% CV = 40% rotation = 0.8 multiplier
-          test(center_duration_rotation, short_duration_selection, 0.90F, -5.F,
-               is_near(0.8F * dhe::duration(center_duration_rotation,
-                                            dhe::short_duration_range),
-                       1e-5F)));
+    t.run(
+        "-5V CV subtracts 50% rotation from multiplier knob",
+        // 90% multiplier knob - 50% CV = 40% rotation = 0.8 multiplier
+        test(center_duration_rotation, short_duration_selection, 0.90F, -5.F,
+             is_near(0.8F * dhe::ShortDuration::value(center_duration_rotation),
+                     1e-5F)));
 
     t.run("minimum short duration is 1ms",
           test(minimum_duration_rotation, short_duration_selection,
@@ -82,17 +79,17 @@ public:
     t.run("maximum short duration is twice short duration upper bound",
           test(maximum_duration_rotation, short_duration_selection,
                maximum_multiplier_rotation, 10.F,
-               is_equal_to(2.F * dhe::short_duration_range.upper_bound())));
+               is_equal_to(2.F * dhe::ShortDuration::range().upper_bound())));
 
     t.run("maximum medium duration is twice medium duration upper bound",
           test(maximum_duration_rotation, medium_duration_selection,
                maximum_multiplier_rotation, 10.F,
-               is_equal_to(2.F * dhe::medium_duration_range.upper_bound())));
+               is_equal_to(2.F * dhe::MediumDuration::range().upper_bound())));
 
     t.run("maximum long duration is twice long duration upper bound",
           test(maximum_duration_rotation, long_duration_selection,
                maximum_multiplier_rotation, 10.F,
-               is_equal_to(2.F * dhe::long_duration_range.upper_bound())));
+               is_equal_to(2.F * dhe::LongDuration::range().upper_bound())));
   }
 };
 

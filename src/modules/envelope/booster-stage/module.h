@@ -10,7 +10,7 @@
 #include "modules/envelope/mode/level.h"
 #include "modules/envelope/stage/engine.h"
 #include "params/curvature-config.h"
-#include "params/duration-config.h"
+#include "signals/duration-ranges.h"
 #include "signals/voltage-ranges.h"
 
 #include "rack.hpp"
@@ -40,8 +40,9 @@ struct Module : public rack::engine::Module {
     config_curve_shape_switch(this, Param::Shape);
     configInput(Input::CurvatureCv, "Curvature CV");
 
-    config_duration_knob(this, Param::Duration, Param::DurationRange);
-    config_duration_range_switch(this, Param::DurationRange);
+    DurationKnob::config(this, Param::Duration, "Duration", 0.5F);
+    Picker::config<DurationRanges>(this, Param::DurationRange, "Duration range",
+                                   DurationRanges::Medium);
     configInput(Input::DurationCv, "Duration CV");
 
     configInput(Input::Defer, "Defer");

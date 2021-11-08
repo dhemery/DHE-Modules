@@ -3,7 +3,7 @@
 #include "control-ids.h"
 
 #include "modules/envelope/mode/mode.h"
-#include "signals/duration-inputs.h"
+#include "signals/duration-ranges.h"
 
 #include <vector>
 
@@ -21,9 +21,9 @@ template <typename TParam, typename TInput, typename TOutput> struct Signals {
   auto defer() const -> bool { return is_high(inputs_[Input::Defer]); }
 
   auto duration() const -> float {
-    return selectable_duration(params_[Param::Duration],
-                               inputs_[Input::DurationCv],
-                               params_[Param::DurationRange]);
+    return DurationRanges::value(
+        rotation(params_[Param::Duration], inputs_[Input::DurationCv]),
+        position_of(params_[Param::DurationRange]));
   }
 
   auto gate() const -> bool { return is_high(inputs_[Input::Trigger]); }

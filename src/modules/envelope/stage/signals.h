@@ -5,7 +5,8 @@
 #include "components/sigmoid.h"
 #include "signals/common-inputs.h"
 #include "signals/curvature-inputs.h"
-#include "signals/duration-inputs.h"
+#include "signals/duration-ranges.h"
+#include "signals/voltage-ranges.h"
 
 #include <vector>
 
@@ -25,7 +26,7 @@ template <typename TParam, typename TInput, typename TOutput> struct Signals {
   auto defer() const -> bool { return is_high(inputs_[Input::Defer]); }
 
   auto duration() const -> float {
-    return dhe::duration(params_[Param::Duration], medium_duration_range);
+    return MediumDuration::value(rotation_of(params_[Param::Duration]));
   }
 
   auto gate() const -> bool { return is_high(inputs_[Input::Trigger]); }

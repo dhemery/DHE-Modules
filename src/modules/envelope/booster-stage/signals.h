@@ -5,7 +5,8 @@
 #include "components/sigmoid.h"
 #include "signals/common-inputs.h"
 #include "signals/curvature-inputs.h"
-#include "signals/duration-inputs.h"
+#include "signals/duration-ranges.h"
+#include "signals/voltage-ranges.h"
 
 #include <vector>
 
@@ -30,9 +31,9 @@ public:
   }
 
   auto duration() const -> float {
-    return selectable_duration(params_[Param::Duration],
-                               inputs_[Input::DurationCv],
-                               params_[Param::DurationRange]);
+    return DurationRanges::value(
+        rotation(params_[Param::Duration], inputs_[Input::DurationCv]),
+        position_of(params_[Param::DurationRange]));
   }
 
   auto gate() const -> bool {

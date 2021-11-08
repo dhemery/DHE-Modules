@@ -1,5 +1,6 @@
 #pragma once
 
+#include "params/duration-knob-quantity.h"
 #include "params/knob-quantity.h"
 #include "widgets/dimensions.h"
 #include "widgets/knob-widget.h"
@@ -38,7 +39,7 @@ struct Knob {
 
   template <typename TQuantity>
   static inline auto config(rack::engine::Module *module, int id,
-                            std::string const &name, float rotation)
+                            std::string const &name, float rotation = 0.5F)
       -> KnobQuantity<float> * {
     auto const multiplier = TQuantity::display_range().size();
     auto const offset = TQuantity::display_range().lower_bound();
@@ -70,6 +71,24 @@ struct IntKnob {
         id, min, max, default_value, name, TQuantity::unit, 0.F, 1.F, offset);
     pq->snapEnabled = true;
     return pq;
+  }
+};
+
+struct DurationKnob {
+  template <typename TStyle, typename TPanel>
+  static inline auto install(TPanel *panel, int id, float xmm, float ymm)
+      -> KnobWidget<TPanel, TStyle> * {
+    auto *widget = rack::createParamCentered<KnobWidget<TPanel, TStyle>>(
+        mm2px(xmm, ymm), panel->getModule(), id);
+    panel->addParam(widget);
+    return widget;
+  }
+
+  static inline auto config(rack::engine::Module *module, int id,
+                            std::string const &name, float rotation = 0.5F)
+      -> DurationKnobQuantity * {
+    return module->configParam<DurationKnobQuantity>(
+        id, 0.F, 1.F, rotation, name, DurationRanges::unit);
   }
 };
 

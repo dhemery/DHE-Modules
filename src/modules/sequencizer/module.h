@@ -14,10 +14,10 @@
 #include "controls/knobs.h"
 #include "controls/switches.h"
 #include "params/curvature-config.h"
-#include "params/duration-config.h"
+#include "params/duration-knob-quantity.h"
 #include "params/presets.h"
 #include "signals/curvature-inputs.h"
-#include "signals/duration-inputs.h"
+#include "signals/duration-ranges.h"
 #include "signals/voltage-ranges.h"
 
 #include "rack.hpp"
@@ -44,11 +44,6 @@ public:
     IntKnob::config<SelectionLength<N>>(this, Param::SelectionLength,
                                         "Sequence length", N);
 
-    Knob::config<Gain>(this, Param::DurationMultiplier, "Duration multiplier",
-                       0.5F);
-    config_duration_range_switch(this, Param::DurationRange);
-    configInput(Input::DurationMultiplierCV, "Duration multipler CV");
-
     configInput(Input::InA, "A");
     configInput(Input::InB, "B");
     configInput(Input::InC, "C");
@@ -61,6 +56,7 @@ public:
     configOutput(Output::Out, "Sequencer");
 
     auto level_knobs = std::vector<KnobQuantity<float> *>{};
+    auto duration_knobs = std::vector<DurationKnobQuantity *>{};
 
     for (auto step = 0; step < N; step++) {
       auto const step_name = "Step " + std::to_string(step + 1) + " ";
@@ -78,7 +74,7 @@ public:
                                    step_name + "start anchor mode",
                                    AnchorMode::Sample);
       auto *start_level_knob = Knob::config<UnipolarVoltage>(
-          this, Param::StepStartAnchorLevel + step, "Start level", 0.5F);
+          this, Param::StepStartAnchorLevel + step, step_name + "start level");
       level_knobs.push_back(start_level_knob);
       Stepper<AnchorSources>::config(this, Param::StepStartAnchorSource + step,
                                      step_name + "start anchor source",
@@ -88,18 +84,21 @@ public:
                                    step_name + "end anchor mode",
                                    AnchorMode::Track);
       auto *end_level_knob = Knob::config<UnipolarVoltage>(
-          this, Param::StepEndAnchorLevel + step, "End level", 0.5F);
+          this, Param::StepEndAnchorLevel + step, step_name + "end level");
       level_knobs.push_back(end_level_knob);
       Stepper<AnchorSources>::config(this, Param::StepEndAnchorSource + step,
                                      step_name + "end anchor source",
                                      AnchorSource::Level);
 
-      config_curvature_knob(this, Param::StepCurvature + step, "Curvature");
-      config_duration_knob(this, Param::StepDuration + step,
-                           Param::DurationRange, "Duration");
+      config_curvature_knob(this, Param::StepCurvature + step,
+                            step_name + "curvature");
+      auto *duration_knob = DurationKnob::config(
+          this, Param::StepDuration + step, step_name + "duration");
+      duration_knobs.push_back(duration_knob);
+
       Stepper<Shapes>::config(this, Param::StepShape + step,
                               step_name + "shape", 0);
-      Button::config(this, Param::StepEnabled + step, "Enabled", 1);
+      Button::config(this, Param::StepEnabled + step, step_name + "enabled", 1);
 
       signals_.show_inactive(step);
     }
@@ -114,6 +113,17 @@ public:
           }
         });
     configInput(Input::LevelAttenuationCV, "Level multiplier CV");
+
+    Knob::config<Gain>(this, Param::DurationMultiplier, "Duration multiplier",
+                       0.5F);
+    Picker::config<DurationRanges>(this, Param::DurationRange, "Duration range",
+                                   DurationRanges::Medium)
+        ->on_change([duration_knobs](Range r) {
+          for (auto *knob : duration_knobs) {
+            knob->set_display_range(r);
+          }
+        });
+    configInput(Input::DurationMultiplierCV, "Duration multipler CV");
   }
 
   ~Module() override = default;

@@ -6,7 +6,7 @@
 
 #include "signals/common-inputs.h"
 #include "signals/curvature-inputs.h"
-#include "signals/duration-inputs.h"
+#include "signals/duration-ranges.h"
 #include "signals/voltage-ranges.h"
 
 #include <vector>
@@ -41,8 +41,9 @@ struct Signals {
   }
 
   auto duration(int step) const -> float {
-    return dhe::selectable_duration(params_[Param::StepDuration + step],
-                                    params_[Param::DurationRange]);
+    return DurationRanges::value(
+        rotation_of(params_[Param::StepDuration + step]),
+        position_of(params_[Param::DurationRange]));
   }
 
   auto generate_mode(int step) const -> GenerateMode {

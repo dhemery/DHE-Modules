@@ -10,7 +10,7 @@
 #include "modules/envelope/mode/input.h"
 #include "modules/envelope/mode/level.h"
 #include "params/curvature-config.h"
-#include "params/duration-config.h"
+#include "params/duration-knob-quantity.h"
 
 #include "rack.hpp"
 
@@ -21,7 +21,7 @@ struct Module : public rack::engine::Module {
   Module() {
     config(Param::Count, Input::Count, Output::Count);
 
-    config_duration_knob(this, Param::Duration, medium_duration_range);
+    DurationKnob::config(this, Param::Duration, "Duration", 0.5F);
     Knob::config<UnipolarVoltage>(this, Param::Level, "Level", 0.5F);
     config_curvature_knob(this, Param::Curvature);
 

@@ -12,7 +12,7 @@
 #include "controls/buttons.h"
 #include "controls/switches.h"
 #include "params/curvature-config.h"
-#include "params/duration-config.h"
+#include "params/duration-knob-quantity.h"
 #include "params/presets.h"
 #include "signals/step-selection.h"
 #include "signals/voltage-ranges.h"
@@ -49,6 +49,7 @@ template <int N> struct Module : public rack::engine::Module {
                                         "Sequence length", N);
 
     auto level_knobs = std::vector<KnobQuantity<float> *>{};
+    auto duration_knobs = std::vector<DurationKnobQuantity *>{};
 
     for (auto step = 0; step < N; step++) {
       auto const step_name =
@@ -61,15 +62,17 @@ template <int N> struct Module : public rack::engine::Module {
                                     step_name + "advance mode",
                                     AdvanceMode::TimerExpires);
       auto *level_knob = Knob::config<UnipolarVoltage>(
-          this, Param::StepLevel + step, step_name + "level", 0.5F);
+          this, Param::StepLevel + step, step_name + "level");
       level_knobs.push_back(level_knob);
 
       config_curve_shape_switch(this, Param::StepShape + step,
                                 step_name + "shape");
       config_curvature_knob(this, Param::StepCurvature + step,
                             step_name + "curvature");
-      config_duration_knob(this, Param::StepDuration + step,
-                           Param::DurationRange, step_name + "duration");
+      auto *duration_knob = DurationKnob::config(
+          this, Param::StepDuration + step, step_name + "duration");
+      duration_knobs.push_back(duration_knob);
+
       Button::config(this, Param::StepEnabled + step, step_name + "enabled", 1);
       configInput(Input::StepEnabled + step, step_name + "enabled");
 
@@ -81,12 +84,18 @@ template <int N> struct Module : public rack::engine::Module {
         level_knob->set_display_range(r);
       }
     };
-
     Picker::config<VoltageRanges>(this, Param::LevelRange, "Level range",
                                   VoltageRanges::Unipolar)
         ->on_change(update_level_knob_ranges);
 
-    config_duration_range_switch(this, Param::DurationRange);
+    auto update_duration_knob_ranges = [duration_knobs](Range r) {
+      for (auto *duration_knob : duration_knobs) {
+        duration_knob->set_display_range(r);
+      }
+    };
+    Picker::config<DurationRanges>(this, Param::DurationRange, "Duration range",
+                                   DurationRanges::Medium)
+        ->on_change(update_duration_knob_ranges);
 
     configInput(Input::Main, "AUX");
     configOutput(Output::Main, "Sequencer");
