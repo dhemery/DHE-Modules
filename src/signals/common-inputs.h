@@ -7,68 +7,68 @@
 #include <array>
 
 namespace dhe {
-template <typename ParamType> auto value_of(ParamType &param) -> float {
+template <typename TParam> auto value_of(TParam &param) -> float {
   return param.getValue();
 }
 
-template <typename ParamType> auto value_of(ParamType const &param) -> float {
-  return value_of(const_cast<ParamType &>(param));
+template <typename TParam> auto value_of(TParam const &param) -> float {
+  return value_of(const_cast<TParam &>(param));
 }
 
-template <typename KnobType> auto rotation_of(KnobType &knob) -> float {
-  return value_of(knob);
-}
-
-template <typename InputType> auto voltage_at(InputType &input) -> float {
+template <typename TInput> auto voltage_at(TInput &input) -> float {
   return input.getVoltage();
 }
 
-template <typename InputType> auto voltage_at(InputType const &input) -> float {
-  return voltage_at(const_cast<InputType &>(input));
+template <typename TInput> auto voltage_at(TInput const &input) -> float {
+  return voltage_at(const_cast<TInput &>(input));
 }
 
-template <typename ToggleType> auto position_of(ToggleType &toggle) -> int {
-  return static_cast<int>(value_of(toggle));
+template <typename TParam> auto position_of(TParam &param) -> int {
+  return static_cast<int>(value_of(param));
 }
 
-template <typename ButtonType> auto is_pressed(ButtonType &button) -> bool {
-  return value_of(button) > 0.5F;
+template <typename TParam> auto is_pressed(TParam &param) -> bool {
+  return value_of(param) > 0.5F;
 }
 
-template <typename T> auto is_high(T &input) -> bool {
+template <typename TInput> auto is_high(TInput &input) -> bool {
   return voltage_at(input) > 1.F;
 }
 
-template <typename ItemType, int N, typename ToggleType>
-auto selected(ToggleType &toggle, std::array<ItemType, N> const &items)
-    -> ItemType const & {
-  return items[position_of(toggle)];
+template <typename TItem, int N, typename TParam>
+auto selected(TParam &param, std::array<TItem, N> const &items)
+    -> TItem const & {
+  return items[position_of(param)];
 }
 
-template <int N, typename ToggleType>
-auto selected_range(ToggleType &toggle,
-                    std::array<Range const, N> const &ranges) -> Range {
-  return selected<Range const, N>(toggle, ranges);
+template <int N, typename TParam>
+auto selected_range(TParam &param, std::array<Range const, N> const &ranges)
+    -> Range {
+  return selected<Range const, N>(param, ranges);
 }
 
 /**
  * Returns the taper selected by the given switch.
  */
-template <typename ToggleType>
-auto selected_taper(ToggleType &toggle) -> sigmoid::Taper const & {
-  return selected<sigmoid::Taper const, 2>(toggle, sigmoid::tapers);
+template <typename TParam>
+auto selected_taper(TParam &param) -> sigmoid::Taper const & {
+  return selected<sigmoid::Taper const, 2>(param, sigmoid::tapers);
 }
 
-template <typename KnobType, typename InputType>
-auto rotation(KnobType &knob, InputType &cv_input) -> float {
+template <typename TParam> auto rotation_of(TParam &param) -> float {
+  return value_of(param);
+}
+
+template <typename TPparam, typename TInput>
+auto rotation(TPparam &knob, TInput &cv_input) -> float {
   static auto constexpr rotation_per_volt = 0.1F;
   auto const rotation = rotation_of(knob);
   auto const cv = voltage_at(cv_input);
   return rotation + cv * rotation_per_volt;
 }
 
-template <typename KnobType, typename InputType>
-auto rotation(KnobType &knob, InputType &cv_input, KnobType &av_knob) -> float {
+template <typename TParam, typename TInput>
+auto rotation(TParam &knob, TInput &cv_input, TParam &av_knob) -> float {
   static auto constexpr rotation_per_volt = 0.1F;
   auto const rotation = rotation_of(knob);
   auto const cv = voltage_at(cv_input);
@@ -76,9 +76,9 @@ auto rotation(KnobType &knob, InputType &cv_input, KnobType &av_knob) -> float {
   return rotation + cv * rotation_per_volt * av;
 }
 
-template <typename KnobType, typename InputType>
-auto tapered_and_scaled_rotation(KnobType &knob, InputType &cv_input,
-                                 KnobType &av_knob, sigmoid::Taper const &taper,
+template <typename TParam, typename TInput>
+auto tapered_and_scaled_rotation(TParam &knob, TInput &cv_input,
+                                 TParam &av_knob, sigmoid::Taper const &taper,
                                  Range range) -> float {
   return tapered_and_scaled_rotation(rotation(knob, cv_input, av_knob), taper,
                                      range);

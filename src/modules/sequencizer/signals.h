@@ -37,20 +37,6 @@ static inline auto duration(P const &duration_knob, P const &range_switch,
   return safe_duration;
 }
 
-template <typename P, typename I>
-static inline auto level(P const &level_knob, P const &range_switch,
-                         P const &multipler_knob, I const &multiplier_cv)
-    -> float {
-  static auto const level_ranges = VoltageRanges::items();
-  auto const range_selection = position_of(range_switch);
-  auto const range = level_ranges[range_selection];
-  auto const rotation = dhe::rotation_of(level_knob);
-  auto const nominal_level = range.scale(rotation);
-  auto const attenuation = dhe::rotation(multipler_knob, multiplier_cv);
-  auto const attenuated_level = nominal_level * attenuation;
-  return range.clamp(attenuated_level);
-}
-
 template <typename TParam, typename TInput, typename TOutput, typename TLight,
           int N>
 class Signals {
@@ -75,10 +61,10 @@ public:
     auto const base_knob_param = type == AnchorType::Start
                                      ? ParamId::StepStartAnchorLevel
                                      : ParamId::StepEndAnchorLevel;
-    return sequencizer::level(params_[base_knob_param + step],
-                              params_[ParamId::LevelRange],
-                              params_[ParamId::LevelMultiplier],
-                              inputs_[InputId::LevelAttenuationCV]);
+    return VoltageRanges::value(rotation(params_[base_knob_param + step],
+                                         inputs_[InputId::LevelAttenuationCV],
+                                         params_[ParamId::LevelMultiplier]),
+                                position_of(params_[ParamId::LevelRange]));
   }
 
   auto anchor_source(AnchorType type, int step) const -> AnchorSource {

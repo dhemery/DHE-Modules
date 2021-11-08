@@ -7,6 +7,7 @@
 #include "signals/common-inputs.h"
 #include "signals/curvature-inputs.h"
 #include "signals/duration-inputs.h"
+#include "signals/voltage-ranges.h"
 
 #include <vector>
 
@@ -73,7 +74,8 @@ struct Signals {
   }
 
   auto level(int step) const -> float {
-    return value_of(params_[Param::StepLevel + step]);
+    return VoltageRanges::value(rotation_of(params_[Param::StepLevel + step]),
+                                position_of(params_[Param::LevelRange]));
   }
 
   auto output() const -> float { return outputs_[Output::Main].getVoltage(); }
@@ -81,7 +83,7 @@ struct Signals {
   void output(float voltage) { outputs_[Output::Main].setVoltage(voltage); }
 
   auto selection_start() const -> int {
-    return static_cast<int>(value_of(params_[Param::SelectionStart]) - 1);
+    return static_cast<int>(value_of(params_[Param::SelectionStart]));
   }
 
   auto selection_length() const -> int {

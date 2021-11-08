@@ -34,20 +34,19 @@ static auto constexpr duration(float rotation, Range range) -> float {
   return range.scale(duration_knob_taper.apply(rotation));
 }
 
-template <typename KnobType>
-auto duration(KnobType &knob, Range range) -> float {
+template <typename TParam> auto duration(TParam &knob, Range range) -> float {
   return duration(rotation_of(knob), range);
 }
 
-template <typename KnobType, typename ToggleType>
-auto selectable_duration(KnobType &knob, ToggleType &toggle) -> float {
+template <typename TParam>
+auto selectable_duration(TParam &knob, TParam &toggle) -> float {
   auto const range = selected_range<3>(toggle, duration_ranges);
   return duration(rotation_of(knob), range);
 }
 
-template <typename KnobType, typename InputType, typename ToggleType>
-auto selectable_duration(KnobType &knob, InputType &cv_input,
-                         ToggleType &toggle) -> float {
+template <typename TParam, typename TInput>
+auto selectable_duration(TParam &knob, TInput &cv_input, TParam &toggle)
+    -> float {
   auto const range = selected_range<3>(toggle, duration_ranges);
   return duration(rotation(knob, cv_input), range);
 }
