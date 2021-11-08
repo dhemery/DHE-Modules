@@ -24,14 +24,6 @@ namespace scannibal {
 
 static auto constexpr brightness_range = Range{0.F, 1.F};
 
-template <typename P>
-static inline auto level(P const &level_knob, P const &range_switch) -> float {
-  auto const range_selection = position_of(range_switch);
-  auto const range = VoltageRanges::items()[range_selection];
-  auto const rotation = dhe::rotation_of(level_knob);
-  return range.scale(rotation);
-}
-
 template <int N> class Module : public rack::engine::Module {
   using Input = InputIds<N>;
   using Light = LightIds<N>;
@@ -121,8 +113,12 @@ public:
     auto const base_knob_param = type == AnchorType::Phase0
                                      ? Param::StepPhase0AnchorLevel
                                      : Param::StepPhase1AnchorLevel;
-    return scannibal::level(params[base_knob_param + step],
-                            params[Param::LevelRange]);
+    auto const base_cv_input = type == AnchorType::Phase0
+                                   ? Input::StepPhase0AnchorLevelCv
+                                   : Input::StepPhase1AnchorLevelCv;
+    return VoltageRanges::value(
+        rotation(params[base_knob_param + step], inputs[base_cv_input + step]),
+        position_of(params[Param::LevelRange]));
   }
 
   auto anchor_source(AnchorType type, int step) const -> AnchorSource {
