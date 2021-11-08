@@ -45,7 +45,7 @@ public:
                                         "Sequence length", N);
 
     Knob::config<Gain>(this, Param::DurationMultiplier, "Duration multiplier",
-                       1.F);
+                       0.5F);
     config_duration_range_switch(this, Param::DurationRange);
     configInput(Input::DurationMultiplierCV, "Duration multipler CV");
 
@@ -78,7 +78,7 @@ public:
                                    step_name + "start anchor mode",
                                    AnchorMode::Sample);
       auto *start_level_knob = Knob::config<UnipolarVoltage>(
-          this, Param::StepStartAnchorLevel + step, "Start level", 5.F);
+          this, Param::StepStartAnchorLevel + step, "Start level", 0.5F);
       level_knobs.push_back(start_level_knob);
       Stepper<AnchorSources>::config(this, Param::StepStartAnchorSource + step,
                                      step_name + "start anchor source",
@@ -88,7 +88,7 @@ public:
                                    step_name + "end anchor mode",
                                    AnchorMode::Track);
       auto *end_level_knob = Knob::config<UnipolarVoltage>(
-          this, Param::StepEndAnchorLevel + step, "End level", 5.F);
+          this, Param::StepEndAnchorLevel + step, "End level", 0.5F);
       level_knobs.push_back(end_level_knob);
       Stepper<AnchorSources>::config(this, Param::StepEndAnchorSource + step,
                                      step_name + "end anchor source",
