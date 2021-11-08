@@ -8,6 +8,7 @@
 #include "signals/curvature-inputs.h"
 #include "signals/duration-inputs.h"
 #include "signals/gain.h"
+#include "signals/voltage-ranges.h"
 
 #include <vector>
 
@@ -40,8 +41,7 @@ template <typename P, typename I>
 static inline auto level(P const &level_knob, P const &range_switch,
                          P const &multipler_knob, I const &multiplier_cv)
     -> float {
-  static auto const level_ranges =
-      std::vector<Range>{bipolar_signal_range, unipolar_signal_range};
+  static auto const level_ranges = VoltageRanges::items();
   auto const range_selection = position_of(range_switch);
   auto const range = level_ranges[range_selection];
   auto const rotation = dhe::rotation_of(level_knob);

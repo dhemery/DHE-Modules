@@ -52,12 +52,12 @@ public:
 
   void show_active(bool is_active) {
     auto const voltage =
-        unipolar_signal_range.scale(is_active || active_button());
+        UnipolarVoltage::range().scale(is_active || active_button());
     outputs_[Output::Active].setVoltage(voltage);
   }
 
   void show_eoc(bool is_eoc) {
-    auto const voltage = unipolar_signal_range.scale(is_eoc || eoc_button());
+    auto const voltage = UnipolarVoltage::range().scale(is_eoc || eoc_button());
     outputs_[Output::Eoc].setVoltage(voltage);
   }
 

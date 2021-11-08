@@ -66,7 +66,7 @@ public:
     auto const bounce_ratio = bounce_ratio_is_free()
                                   ? this->bounce_ratio()
                                   : std::round(this->bounce_ratio());
-    auto const bounce_depth = rotation_range.clamp(this->bounce_depth());
+    auto const bounce_depth = Percentage::range().clamp(this->bounce_depth());
 
     spinner_.advance(spin_delta);
     bouncer_.advance(spin_delta * bounce_ratio);

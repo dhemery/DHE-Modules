@@ -6,22 +6,7 @@
 
 #include <array>
 
-namespace rack {
-namespace engine {
-struct Param;
-}
-} // namespace rack
-
 namespace dhe {
-static auto constexpr rotation_per_volt = 0.1F;
-static auto constexpr rotation_range = Range{0.F, 1.F};
-
-static auto constexpr bipolar_signal_range = Range{-5.F, 5.F};
-static auto constexpr unipolar_signal_range = Range{0.F, 10.F};
-
-static auto constexpr signal_ranges =
-    std::array<Range const, 2>{bipolar_signal_range, unipolar_signal_range};
-
 template <typename ParamType> auto value_of(ParamType &param) -> float {
   return param.getValue();
 }
@@ -54,13 +39,13 @@ template <typename T> auto is_high(T &input) -> bool {
   return voltage_at(input) > 1.F;
 }
 
-template <typename ItemType, int N, typename ToggleType = rack::engine::Param>
+template <typename ItemType, int N, typename ToggleType>
 auto selected(ToggleType &toggle, std::array<ItemType, N> const &items)
     -> ItemType const & {
   return items[position_of(toggle)];
 }
 
-template <int N, typename ToggleType = rack::engine::Param>
+template <int N, typename ToggleType>
 auto selected_range(ToggleType &toggle,
                     std::array<Range const, N> const &ranges) -> Range {
   return selected<Range const, N>(toggle, ranges);
@@ -76,6 +61,7 @@ auto selected_taper(ToggleType &toggle) -> sigmoid::Taper const & {
 
 template <typename KnobType, typename InputType>
 auto rotation(KnobType &knob, InputType &cv_input) -> float {
+  static auto constexpr rotation_per_volt = 0.1F;
   auto const rotation = rotation_of(knob);
   auto const cv = voltage_at(cv_input);
   return rotation + cv * rotation_per_volt;
@@ -83,6 +69,7 @@ auto rotation(KnobType &knob, InputType &cv_input) -> float {
 
 template <typename KnobType, typename InputType>
 auto rotation(KnobType &knob, InputType &cv_input, KnobType &av_knob) -> float {
+  static auto constexpr rotation_per_volt = 0.1F;
   auto const rotation = rotation_of(knob);
   auto const cv = voltage_at(cv_input);
   auto const av = Attenuverter::value(rotation_of(av_knob));
