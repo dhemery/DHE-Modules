@@ -25,12 +25,13 @@ public:
 
     ThrobSpeed::config(this, Param::ThrobSpeed);
     configInput(Input::ThrobSpeedCv, "Speed CV");
-    Knob::config<Attenuverter>(this, Param::ThrobSpeedAv, "Speed CV gain", 0.F);
+    Knob::config<Attenuverter>(this, Param::ThrobSpeedAv, "Speed CV gain",
+                               0.5F);
 
     WobbleRatio::config(this, Param::WobbleRatio, "Ratio");
     configInput(Input::WobbleRatioCv, "Ratio CV");
     Knob::config<Attenuverter>(this, Param::WobbleRatioAv, "Ratio CV gain",
-                               0.F);
+                               0.5F);
     Switch::config(this, Param::WobbleRatioRange, "Direction",
                    {"In", "-In +Out", "Out"}, 2);
     Switch::config(this, Param::WobbleRatioMode, "Ratio mode",
@@ -39,19 +40,19 @@ public:
     Knob::config<Percentage>(this, Param::WobbleDepth, "Depth", 0.5F);
     configInput(Input::WobbleDepthCv, "Depth CV");
     Knob::config<Attenuverter>(this, Param::WobbleDepthAv, "Depth CV gain",
-                               0.F);
+                               0.5F);
 
-    Knob::config<Angle>(this, Param::WobblePhaseOffset, "Phase", 0.F);
+    Knob::config<Angle>(this, Param::WobblePhaseOffset, "Phase", 0.5F);
     configInput(Input::WobblePhaseOffsetCv, "Phase CV");
     Knob::config<Attenuverter>(this, Param::WobblePhaseOffsetAv,
-                               "Phase CV gain", 0.F);
+                               "Phase CV gain", 0.5F);
 
-    Knob::config<Gain>(this, Param::XGain, "X gain", 1.F);
+    Knob::config<Gain>(this, Param::XGain, "X gain", 0.5F);
     configInput(Input::XGainCv, "X gain CV");
     Picker::config<VoltageRanges>(this, Param::XRange, "X range",
                                   VoltageRanges::Bipolar);
 
-    Knob::config<Gain>(this, Param::YGain, "Y gain", 1.F);
+    Knob::config<Gain>(this, Param::YGain, "Y gain", 0.5F);
     configInput(Input::YGainCv, "Y gain CV");
     Picker::config<VoltageRanges>(this, Param::YRange, "Y range",
                                   VoltageRanges::Bipolar);
