@@ -19,39 +19,39 @@ struct Module : public rack::engine::Module {
   Module() {
     config(Param::Count, Input::Count, Output::Count);
 
-    Knob::config<Attenuator>(this, Param::Level, "Level", 100.F);
+    Knob::config<Percentage>(this, Param::Level, "Level", 0.5F);
     configInput(Input::LevelCv, "Level CV");
-    Knob::config<Attenuverter>(this, Param::LevelAv, "Level CV gain", 0.F);
+    Knob::config<Attenuverter>(this, Param::LevelAv, "Level CV gain", 0.5F);
 
     auto *ccw_limit_knob =
-        Knob::config<UnipolarVoltage>(this, Param::CcwLimit, "CCW limit", 5.F);
+        Knob::config<UnipolarVoltage>(this, Param::CcwLimit, "CCW limit", 0.F);
     auto update_ccw_limit_knob_range = [ccw_limit_knob](Range r) {
       ccw_limit_knob->set_display_range(r);
     };
     Picker::config<VoltageRanges>(this, Param::CcwLimitRange, "CCW limit range",
-                                  VoltageRanges::Unipolar)
+                                  VoltageRanges::Bipolar)
         ->on_change(update_ccw_limit_knob_range);
     configInput(Input::CcwLimitCv, "CCW limit CV");
     Knob::config<Attenuverter>(this, Param::CcwLimitAv, "CCW limit CV gain",
-                               0.F);
+                               0.5F);
 
     auto *cw_limit_knob =
-        Knob::config<UnipolarVoltage>(this, Param::CwLimit, "CW limit", 5.F);
+        Knob::config<UnipolarVoltage>(this, Param::CwLimit, "CW limit", 1.F);
     auto update_cw_limit_knob_range = [cw_limit_knob](Range r) {
       cw_limit_knob->set_display_range(r);
     };
     Picker::config<VoltageRanges>(this, Param::CwLimitRange, "CW limit range",
-                                  VoltageRanges::Unipolar)
+                                  VoltageRanges::Bipolar)
         ->on_change(update_cw_limit_knob_range);
     configInput(Input::CwLimitCv, "CW limit CV");
-    Knob::config<Attenuverter>(this, Param::CwLimitAv, "CW limit CV gain", 0.F);
+    Knob::config<Attenuverter>(this, Param::CwLimitAv, "CW limit CV gain",
+                               0.5F);
 
     configOutput(Output::Main, "Ranger");
   }
 
   void process(ProcessArgs const & /*args*/) override {
-    auto const output_voltage = cx::scale(level(), ccw_limit(), cw_limit());
-    outputs[Output::Main].setVoltage(output_voltage);
+    outputs[Output::Main].setVoltage(level());
   }
 
   auto dataToJson() -> json_t * override {
@@ -62,21 +62,25 @@ struct Module : public rack::engine::Module {
 
 private:
   auto level() const -> float {
-    return rotation(params[Param::Level], inputs[Input::LevelCv],
-                    params[Param::LevelAv]);
+    return cx::scale(rotation(params[Param::Level], inputs[Input::LevelCv],
+                              params[Param::LevelAv]),
+                     ccw_limit(), cw_limit());
   }
 
-  auto limit(int knob, int cv, int av) const -> float {
-    return value_of(params[knob]) +
-           voltage_at(inputs[cv]) * value_of(params[av]);
+  inline auto limit(int knob, int cv, int av, int range_selection) const
+      -> float {
+    return VoltageRanges::value(rotation(params[knob], inputs[cv], params[av]),
+                                position_of(params[range_selection]));
   }
 
   auto ccw_limit() const -> float {
-    return limit(Param::CcwLimit, Input::CcwLimitCv, Param::CcwLimitAv);
+    return limit(Param::CcwLimit, Input::CcwLimitCv, Param::CcwLimitAv,
+                 Param::CcwLimitRange);
   }
 
   auto cw_limit() const -> float {
-    return limit(Param::CwLimit, Input::CwLimitCv, Param::CwLimitAv);
+    return limit(Param::CwLimit, Input::CwLimitCv, Param::CwLimitAv,
+                 Param::CwLimitRange);
   }
 };
 } // namespace ranger

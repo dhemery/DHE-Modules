@@ -46,12 +46,12 @@ public:
         ->on_change(
             [level_knob_2](Range r) { level_knob_2->set_display_range(r); });
     Knob::config<Attenuverter>(this, Param::LevelAv2, "Taper 2 level CV gain",
-                               0.F);
+                               0.5F);
     configInput(Input::LevelCv2, "Taper 2 level CV");
 
     config_curvature_knob(this, Param::Curvature2, "Taper 2 curvature");
     Knob::config<Attenuverter>(this, Param::CurvatureAv2,
-                               "Taper 2 curvature CV gain", 0.F);
+                               "Taper 2 curvature CV gain", 0.5F);
     config_curve_shape_switch(this, Param::Shape2, "Taper 2 shape");
     configInput(Input::CurvatureCv2, "Taper 2 curvature CV");
 
@@ -81,6 +81,7 @@ private:
     return rotation(params[Param::Level1], inputs[Input::LevelCv1],
                     params[Param::LevelAv1]);
   };
+
   auto level_range_1() const -> Range {
     return level_range(Param::LevelRange1);
   }

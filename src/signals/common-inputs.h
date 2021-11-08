@@ -1,4 +1,5 @@
 #pragma once
+#include "gain.h"
 
 #include "components/range.h"
 #include "components/sigmoid.h"
@@ -84,7 +85,7 @@ template <typename KnobType, typename InputType>
 auto rotation(KnobType &knob, InputType &cv_input, KnobType &av_knob) -> float {
   auto const rotation = rotation_of(knob);
   auto const cv = voltage_at(cv_input);
-  auto const av = value_of(av_knob);
+  auto const av = Attenuverter::value(rotation_of(av_knob));
   return rotation + cv * rotation_per_volt * av;
 }
 
