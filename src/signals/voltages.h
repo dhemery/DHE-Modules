@@ -31,16 +31,16 @@ struct BipolarVoltage : public VoltageRange<BipolarVoltage> {
 };
 
 struct Voltages {
-  using ValueType = int;
-  using ItemType = Range;
+  using PositionType = int;
+  using ItemType = Range const;
 
   enum { Bipolar, Unipolar };
 
   static auto constexpr unit = Voltage::unit;
 
-  static inline auto items() -> std::vector<Range> const & {
-    static auto const items =
-        std::vector<Range>{BipolarVoltage::range(), UnipolarVoltage::range()};
+  static inline auto items() -> std::vector<ItemType> const & {
+    static auto const items = std::vector<ItemType>{BipolarVoltage::range(),
+                                                    UnipolarVoltage::range()};
     return items;
   }
 
@@ -50,8 +50,12 @@ struct Voltages {
     return labels;
   }
 
-  static inline auto value(float rotation, int index) -> float {
-    return items()[index].scale(rotation);
+  static inline auto select(int selection) -> ItemType const & {
+    return items()[selection];
+  }
+
+  static inline auto value(float rotation, int selection) -> float {
+    return select(selection).scale(rotation);
   }
 };
 

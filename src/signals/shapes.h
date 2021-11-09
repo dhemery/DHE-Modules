@@ -30,17 +30,16 @@ struct Curvature {
 };
 
 struct Shapes {
-  using Taper = sigmoid::Taper;
-  using ItemType = Taper;
-  using ValueType = int;
+  using ItemType = sigmoid::Taper const;
+  using PositionType = int;
 
   enum { J, S };
   static auto constexpr unit = "";
   static auto constexpr stepper_slug = "shape";
 
-  static inline auto items() -> std::vector<Taper> const & {
+  static inline auto items() -> std::vector<ItemType> const & {
     static auto const items =
-        std::vector<sigmoid::Taper>{sigmoid::j_taper, sigmoid::s_taper};
+        std::vector<ItemType>{sigmoid::j_taper, sigmoid::s_taper};
     return items;
   }
 
@@ -53,8 +52,8 @@ struct Shapes {
     return items()[selection];
   }
 
-  static inline auto value(float rotation, int index) -> float {
-    return select(index).apply(rotation);
+  static inline auto value(float rotation, int selection) -> float {
+    return select(selection).apply(rotation);
   }
 };
 } // namespace dhe

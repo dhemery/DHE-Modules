@@ -27,12 +27,12 @@ struct Switch {
   template <typename TItems>
   static inline auto config(rack::engine::Module *module, int id,
                             std::string const &name,
-                            typename TItems::ValueType initial)
-      -> SwitchQuantity<typename TItems::ValueType> * {
+                            typename TItems::PositionType position)
+      -> SwitchQuantity<typename TItems::PositionType> * {
     auto const labels = TItems::labels();
     auto const max = static_cast<float>(labels.size() - 1);
-    auto const default_value = static_cast<float>(initial);
-    return module->configSwitch<SwitchQuantity<typename TItems::ValueType>>(
+    auto const default_value = static_cast<float>(position);
+    return module->configSwitch<SwitchQuantity<typename TItems::PositionType>>(
         id, 0.F, max, default_value, name, labels);
   }
 };

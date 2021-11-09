@@ -88,7 +88,7 @@ struct WobbleRatio {
 };
 
 struct WobbleRatioRanges {
-  using ValueType = int;
+  using PositionType = int;
 
   static inline auto labels() -> std::vector<std::string> const & {
     static auto const labels =
@@ -98,7 +98,7 @@ struct WobbleRatioRanges {
 };
 
 struct WobbleRatioModes {
-  using ValueType = int;
+  using PositionType = int;
 
   static inline auto labels() -> std::vector<std::string> const & {
     static auto const labels = std::vector<std::string>{"Quantized", "Free"};

@@ -76,15 +76,6 @@ struct IntKnob {
 };
 
 struct DurationKnob {
-  template <typename TStyle, typename TPanel>
-  static inline auto install(TPanel *panel, int id, float xmm, float ymm)
-      -> KnobWidget<TPanel, TStyle> * {
-    auto *widget = rack::createParamCentered<KnobWidget<TPanel, TStyle>>(
-        mm2px(xmm, ymm), panel->getModule(), id);
-    panel->addParam(widget);
-    return widget;
-  }
-
   static inline auto config(rack::engine::Module *module, int id,
                             std::string const &name, float rotation = 0.5F)
       -> DurationKnobQuantity * {
@@ -94,15 +85,6 @@ struct DurationKnob {
 };
 
 struct CurvatureKnob {
-  template <typename TStyle, typename TPanel>
-  static inline auto install(TPanel *panel, int id, float xmm, float ymm)
-      -> KnobWidget<TPanel, TStyle> * {
-    auto *widget = rack::createParamCentered<KnobWidget<TPanel, TStyle>>(
-        mm2px(xmm, ymm), panel->getModule(), id);
-    panel->addParam(widget);
-    return widget;
-  }
-
   static inline auto config(rack::engine::Module *module, int id,
                             std::string const &name, float rotation = 0.5F)
       -> CurvatureKnobQuantity * {

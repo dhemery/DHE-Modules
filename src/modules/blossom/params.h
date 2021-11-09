@@ -45,7 +45,7 @@ struct BounceRatio {
 };
 
 struct BounceRatioModes {
-  using ValueType = int;
+  using PositionType = int;
   static inline auto labels() -> std::vector<std::string> const & {
     static auto const labels = std::vector<std::string>{"Quantized", "Free"};
     return labels;

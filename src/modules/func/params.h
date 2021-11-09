@@ -8,7 +8,7 @@ namespace dhe {
 namespace func {
 
 struct OffsetRanges {
-  using ValueType = int;
+  using PositionType = int;
   static constexpr auto stepper_slug = "offset-range";
   static inline auto labels() -> std::vector<std::string> const & {
     static auto const labels =
@@ -18,7 +18,7 @@ struct OffsetRanges {
 };
 
 struct MultiplierRanges {
-  using ValueType = int;
+  using PositionType = int;
   static constexpr auto stepper_slug = "multiplier-range";
   static inline auto labels() -> std::vector<std::string> const & {
     static auto const labels =
@@ -28,7 +28,7 @@ struct MultiplierRanges {
 };
 
 struct Operators {
-  using ValueType = Operation;
+  using PositionType = Operation;
   static constexpr auto stepper_slug = "toggle-2";
   static inline auto labels() -> std::vector<std::string> const & {
     static const auto labels =

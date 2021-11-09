@@ -27,6 +27,14 @@ struct Duration {
     return taper;
   }
 
+  static inline auto tapered(float rotation) -> float {
+    return taper().apply(rotation);
+  }
+
+  static inline auto rotation(float tapered) -> float {
+    return taper().invert(tapered);
+  }
+
   static auto constexpr unit = " s";
 };
 
@@ -35,7 +43,7 @@ template <typename TDuration> struct DurationRange {
   static auto constexpr unit = Duration::unit;
 
   static inline auto value(float rotation) -> float {
-    return display_range().scale(Duration::taper().apply(rotation));
+    return display_range().scale(Duration::tapered(rotation));
   }
 };
 
@@ -55,14 +63,14 @@ struct LongDuration : public DurationRange<LongDuration> {
 };
 
 struct Durations {
-  using ValueType = int;
-  using ItemType = Range;
+  using PositionType = int;
+  using ItemType = Range const;
   enum { Short, Medium, Long };
 
   static auto constexpr unit = Duration::unit;
 
-  static inline auto items() -> std::vector<Range> const & {
-    static auto const items = std::vector<Range>{
+  static inline auto items() -> std::vector<ItemType> const & {
+    static auto const items = std::vector<ItemType>{
         ShortDuration::range(), MediumDuration::range(), LongDuration::range()};
     return items;
   }
@@ -73,8 +81,12 @@ struct Durations {
     return labels;
   }
 
-  static inline auto value(float rotation, int index) -> float {
-    return items()[index].scale(Duration::taper().apply(rotation));
+  static inline auto select(int selection) -> ItemType const & {
+    return items()[selection];
+  }
+
+  static inline auto value(float rotation, int selection) -> float {
+    return select(selection).scale(Duration::tapered(rotation));
   }
 };
 
