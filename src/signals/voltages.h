@@ -12,11 +12,12 @@ struct Voltage {
 };
 
 template <typename TVoltage> struct VoltageRange {
+  static auto constexpr range() -> Range { return TVoltage::range; };
   static auto constexpr display_range() -> Range { return TVoltage::range; };
   static auto constexpr unit = Voltage::unit;
 
   static inline auto value(float rotation) -> float {
-    return TVoltage::range.scale(rotation);
+    return range().scale(rotation);
   }
 };
 

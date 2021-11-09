@@ -22,20 +22,24 @@ struct Duration {
    * yields a duration equal to 1/10 of the range's upper bound (to within 7
    * decimal places).
    */
-  static auto constexpr taper =
-      sigmoid::j_taper_with_curvature(taper_curvature);
+  static inline auto taper() -> sigmoid::Taper const & {
+    static auto const taper = sigmoid::j_taper_with_curvature(taper_curvature);
+    return taper;
+  }
 
   static auto constexpr unit = " s";
 };
 
 template <typename TDuration> struct DurationRange {
+  static auto constexpr range() -> Range { return TDuration::range; }
   static auto constexpr display_range() -> Range { return TDuration::range; }
   static auto constexpr unit = Duration::unit;
 
   static inline auto value(float rotation) -> float {
-    return TDuration::range.scale(Duration::taper.apply(rotation));
+    return range().scale(Duration::taper().apply(rotation));
   }
 };
+
 struct ShortDuration : public DurationRange<ShortDuration> {
   static auto constexpr range = Range{0.001F, 1.F};
   static auto constexpr label = "0.001–1.0 s";
@@ -70,7 +74,7 @@ struct Durations {
   }
 
   static inline auto value(float rotation, int selection) -> float {
-    return items()[selection].scale(Duration::taper.apply(rotation));
+    return items()[selection].scale(Duration::taper().apply(rotation));
   }
 };
 

@@ -10,13 +10,13 @@ class DurationKnobQuantity : public rack::engine::ParamQuantity {
 public:
   auto getDisplayValue() -> float override {
     auto const rotation = getValue();
-    auto const tapered = Duration::taper.apply(rotation);
+    auto const tapered = Duration::taper().apply(rotation);
     return range_.scale(tapered);
   }
 
   void setDisplayValue(float duration_seconds) override {
     auto const tapered = range_.normalize(duration_seconds);
-    auto const rotation = Duration::taper.invert(tapered);
+    auto const rotation = Duration::taper().invert(tapered);
     setValue(rotation);
   }
 
