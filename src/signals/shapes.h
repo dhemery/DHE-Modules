@@ -36,7 +36,7 @@ struct Shapes {
 
   enum { J, S };
   static auto constexpr unit = "";
-  static auto constexpr frame_prefix = "shape";
+  static auto constexpr stepper_slug = "shape";
 
   static inline auto items() -> std::vector<Taper> const & {
     static auto const items =

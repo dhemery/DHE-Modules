@@ -87,14 +87,14 @@ template <typename TLayout> struct Panel : public PanelWidget<Panel<TLayout>> {
 
     auto const condition_y = TLayout::condition_y;
     auto const gate_mode_x = TLayout::outcome_x - condition_dx;
-    Stepper<GateModes>::install(this, Param::GateMode, gate_mode_x,
+    Stepper::install<GateModes>(this, Param::GateMode, gate_mode_x,
                                 condition_y);
 
     auto constexpr pattern_count = 1 << input_count;
     auto const outcome_top = TLayout::condition_y + outcome_dy;
     for (int i = 0; i < pattern_count; i++) {
       auto const y = outcome_top + static_cast<float>(i) * outcome_dy;
-      Stepper<Outcomes>::install(this, Param::Outcome + i, TLayout::outcome_x,
+      Stepper::install<Outcomes>(this, Param::Outcome + i, TLayout::outcome_x,
                                  y);
     }
 

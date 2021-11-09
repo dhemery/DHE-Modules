@@ -29,8 +29,8 @@ public:
     Knob::config<Attenuverter>(this, Param::SpinSpeedAv, "Speed CV gain", 0.5F);
     configInput(Input::SpinSpeedCv, "Speed CV");
 
-    Switch::config(this, Param::BounceRatioMode, "Ratio mode",
-                   {"Quantized", "Free"}, 1);
+    Switch::config<BounceRatioModes>(this, Param::BounceRatioMode, "Ratio mode",
+                                     1);
 
     BounceRatio::config(this, Param::BounceRatio, "Ratio");
     Knob::config<Attenuverter>(this, Param::BounceRatioAv, "Ratio CV gain",

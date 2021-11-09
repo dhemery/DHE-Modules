@@ -32,10 +32,10 @@ public:
     configInput(Input::WobbleRatioCv, "Ratio CV");
     Knob::config<Attenuverter>(this, Param::WobbleRatioAv, "Ratio CV gain",
                                0.5F);
-    Switch::config(this, Param::WobbleRatioRange, "Direction",
-                   {"In", "-In +Out", "Out"}, 2);
-    Switch::config(this, Param::WobbleRatioMode, "Ratio mode",
-                   {"Quantized", "Free"}, 1);
+    Switch::config<WobbleRatioRanges>(this, Param::WobbleRatioRange,
+                                      "Direction", 2);
+    Switch::config<WobbleRatioModes>(this, Param::WobbleRatioMode, "Ratio mode",
+                                     1);
 
     Knob::config<Percentage>(this, Param::WobbleDepth, "Depth", 0.5F);
     configInput(Input::WobbleDepthCv, "Depth CV");

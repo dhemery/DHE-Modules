@@ -159,9 +159,9 @@ private:
           mm2px(step_x, progress_light_y), this->module,
           Light::Progress + step + step));
 
-      Stepper<AnchorModes>::install(this, Param::StepPhase0AnchorMode + step,
+      Stepper::install<AnchorModes>(this, Param::StepPhase0AnchorMode + step,
                                     step_x, phase_0_anchor_mode_y);
-      Stepper<AnchorSources>::install(this,
+      Stepper::install<AnchorSources>(this,
                                       Param::StepPhase0AnchorSource + step,
                                       step_x, phase_0_anchor_source_y);
       Knob::install<Small>(this, Param::StepPhase0AnchorLevel + step, step_x,
@@ -169,9 +169,9 @@ private:
       InPort::install(this, Input::StepPhase0AnchorLevelCv + step, step_x,
                       phase_0_anchor_level_cv_y);
 
-      Stepper<AnchorModes>::install(this, Param::StepPhase1AnchorMode + step,
+      Stepper::install<AnchorModes>(this, Param::StepPhase1AnchorMode + step,
                                     step_x, phase_1_anchor_mode_y);
-      Stepper<AnchorSources>::install(this,
+      Stepper::install<AnchorSources>(this,
                                       Param::StepPhase1AnchorSource + step,
                                       step_x, phase_1_anchor_source_y);
       Knob::install<Small>(this, Param::StepPhase1AnchorLevel + step, step_x,
@@ -184,7 +184,7 @@ private:
       InPort::install(this, Input::StepDurationCv + step, step_x,
                       duration_cv_y);
 
-      Stepper<Shapes>::install(this, Param::StepShape + step, step_x, shape_y);
+      Stepper::install<Shapes>(this, Param::StepShape + step, step_x, shape_y);
       Knob::install<Small>(this, Param::StepCurvature + step, step_x,
                            curvature_y);
       InPort::install(this, Input::StepCurvatureCv + step, step_x,
@@ -213,7 +213,7 @@ private:
     auto constexpr step_phase_y = global_controls_y(3);
     auto constexpr out_y = global_controls_y(4);
 
-    ThumbSwitch<2>::install(this, Param::LevelRange, x, polarity_y);
+    ThumbSwitch::install<Voltages>(this, Param::LevelRange, x, polarity_y);
     OutPort::install(this, OutputIds::StepNumber, x, step_number_y);
     OutPort::install(this, OutputIds::StepPhase, x, step_phase_y);
     OutPort::install(this, OutputIds::Out, x, out_y);

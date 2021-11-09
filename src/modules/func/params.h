@@ -9,7 +9,7 @@ namespace func {
 
 struct OffsetRanges {
   using ValueType = int;
-  static constexpr auto frame_prefix = "offset-range";
+  static constexpr auto stepper_slug = "offset-range";
   static inline auto labels() -> std::vector<std::string> const & {
     static auto const labels =
         std::vector<std::string>{"0–5 V", "±5 V", "0–10 V", "±10 V"};
@@ -19,7 +19,7 @@ struct OffsetRanges {
 
 struct MultiplierRanges {
   using ValueType = int;
-  static constexpr auto frame_prefix = "multiplier-range";
+  static constexpr auto stepper_slug = "multiplier-range";
   static inline auto labels() -> std::vector<std::string> const & {
     static auto const labels =
         std::vector<std::string>{"0–1", "±1", "0–2", "±2"};
@@ -29,7 +29,7 @@ struct MultiplierRanges {
 
 struct Operators {
   using ValueType = Operation;
-  static constexpr auto frame_prefix = "toggle-2";
+  static constexpr auto stepper_slug = "toggle-2";
   static inline auto labels() -> std::vector<std::string> const & {
     static const auto labels =
         std::vector<std::string>{"Add (offset)", "Multiply (scale)"};

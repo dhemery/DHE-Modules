@@ -9,7 +9,7 @@ namespace sequencizer {
 
 struct AnchorModes {
   using ValueType = AnchorMode;
-  static auto constexpr frame_prefix = "anchor-mode";
+  static auto constexpr stepper_slug = "anchor-mode";
 
   static inline auto labels() -> std::vector<std::string> const & {
     static auto const labels =
@@ -20,7 +20,7 @@ struct AnchorModes {
 
 struct AnchorSources {
   using ValueType = AnchorSource;
-  static auto constexpr frame_prefix = "anchor-source";
+  static auto constexpr stepper_slug = "anchor-source";
 
   static inline auto labels() -> std::vector<std::string> const & {
     static auto const labels =
@@ -31,7 +31,7 @@ struct AnchorSources {
 
 struct InterruptModes {
   using ValueType = InterruptMode;
-  static auto constexpr frame_prefix = "interrupt-mode";
+  static auto constexpr stepper_slug = "interrupt-mode";
 
   static inline auto labels() -> std::vector<std::string> const & {
     static auto const labels = std::vector<std::string>{
@@ -40,19 +40,9 @@ struct InterruptModes {
   }
 };
 
-struct Shapes {
-  using ValueType = int;
-  static auto constexpr frame_prefix = "shape";
-
-  static inline auto labels() -> std::vector<std::string> const & {
-    static auto const labels = std::vector<std::string>{"J", "S"};
-    return labels;
-  }
-};
-
 struct SustainModes {
   using ValueType = SustainMode;
-  static auto constexpr frame_prefix = "sustain-mode";
+  static auto constexpr stepper_slug = "sustain-mode";
 
   static inline auto labels() -> std::vector<std::string> {
     static auto const labels =
@@ -63,7 +53,7 @@ struct SustainModes {
 
 struct TriggerModes {
   using ValueType = TriggerMode;
-  static auto constexpr frame_prefix = "trigger-mode";
+  static auto constexpr stepper_slug = "trigger-mode";
 
   static inline auto labels() -> std::vector<std::string> {
     static auto const labels = std::vector<std::string>{

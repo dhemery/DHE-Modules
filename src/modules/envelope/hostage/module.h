@@ -2,6 +2,7 @@
 
 #include "control-ids.h"
 #include "engine.h"
+#include "modes.h"
 #include "signals.h"
 
 #include "controls/knobs.h"
@@ -34,7 +35,7 @@ struct Module : public rack::engine::Module {
                               Durations::Medium);
     configInput(Input::DurationCv, "Duration CV");
 
-    Switch::config(this, Param::Mode, "Mode", {"Hold", "Sustain"}, 0);
+    Switch::config<Modes>(this, Param::Mode, "Mode", 0);
   };
 
   void process(ProcessArgs const &args) override {

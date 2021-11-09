@@ -60,33 +60,33 @@ public:
 
     for (auto step = 0; step < N; step++) {
       auto const step_name = "Step " + std::to_string(step + 1) + " ";
-      Stepper<TriggerModes>::config(this, Param::StepTriggerMode + step,
+      Stepper::config<TriggerModes>(this, Param::StepTriggerMode + step,
                                     step_name + "trigger mode",
                                     TriggerMode::GateRises);
-      Stepper<InterruptModes>::config(this, Param::StepInterruptMode + step,
+      Stepper::config<InterruptModes>(this, Param::StepInterruptMode + step,
                                       step_name + "interrupt mode",
                                       InterruptMode::No);
-      Stepper<SustainModes>::config(this, Param::StepSustainMode + step,
+      Stepper::config<SustainModes>(this, Param::StepSustainMode + step,
                                     step_name + "sustain mode",
                                     SustainMode::No);
 
-      Stepper<AnchorModes>::config(this, Param::StepStartAnchorMode + step,
+      Stepper::config<AnchorModes>(this, Param::StepStartAnchorMode + step,
                                    step_name + "start anchor mode",
                                    AnchorMode::Sample);
       auto *start_level_knob = Knob::config<UnipolarVoltage>(
           this, Param::StepStartAnchorLevel + step, step_name + "start level");
       level_knobs.push_back(start_level_knob);
-      Stepper<AnchorSources>::config(this, Param::StepStartAnchorSource + step,
+      Stepper::config<AnchorSources>(this, Param::StepStartAnchorSource + step,
                                      step_name + "start anchor source",
                                      AnchorSource::Out);
 
-      Stepper<AnchorModes>::config(this, Param::StepEndAnchorMode + step,
+      Stepper::config<AnchorModes>(this, Param::StepEndAnchorMode + step,
                                    step_name + "end anchor mode",
                                    AnchorMode::Track);
       auto *end_level_knob = Knob::config<UnipolarVoltage>(
           this, Param::StepEndAnchorLevel + step, step_name + "end level");
       level_knobs.push_back(end_level_knob);
-      Stepper<AnchorSources>::config(this, Param::StepEndAnchorSource + step,
+      Stepper::config<AnchorSources>(this, Param::StepEndAnchorSource + step,
                                      step_name + "end anchor source",
                                      AnchorSource::Level);
 
@@ -96,7 +96,7 @@ public:
           this, Param::StepDuration + step, step_name + "duration");
       duration_knobs.push_back(duration_knob);
 
-      Stepper<Shapes>::config(this, Param::StepShape + step,
+      Stepper::config<Shapes>(this, Param::StepShape + step,
                               step_name + "shape", 0);
       Button::config(this, Param::StepEnabled + step, step_name + "enabled", 1);
 

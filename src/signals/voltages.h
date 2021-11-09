@@ -31,7 +31,9 @@ struct BipolarVoltage : public VoltageRange<BipolarVoltage> {
 };
 
 struct Voltages {
+  using ValueType = int;
   using ItemType = Range;
+
   enum { Bipolar, Unipolar };
 
   static auto constexpr unit = Voltage::unit;

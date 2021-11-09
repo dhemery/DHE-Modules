@@ -55,17 +55,17 @@ template <int N> struct Module : public rack::engine::Module {
       auto const step_name =
           std::string{"Step "} + std::to_string(step + 1) + " ";
       configLight(Light::StepProgress + step + step, step_name + "progress");
-      Stepper<GenerateModes>::config(this, Param::StepGenerateMode + step,
+      Stepper::config<GenerateModes>(this, Param::StepGenerateMode + step,
                                      step_name + "generate mode",
                                      GenerateMode::Curve);
-      Stepper<AdvanceModes>::config(this, Param::StepAdvanceMode + step,
+      Stepper::config<AdvanceModes>(this, Param::StepAdvanceMode + step,
                                     step_name + "advance mode",
                                     AdvanceMode::TimerExpires);
       auto *level_knob = Knob::config<UnipolarVoltage>(
           this, Param::StepLevel + step, step_name + "level");
       level_knobs.push_back(level_knob);
 
-      Picker::config<Shapes>(this, Param::StepShape + step, step_name + "shape",
+      Switch::config<Shapes>(this, Param::StepShape + step, step_name + "shape",
                              Shapes::J);
       CurvatureKnob::config(this, Param::StepCurvature + step,
                             step_name + "curvature");

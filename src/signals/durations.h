@@ -55,6 +55,7 @@ struct LongDuration : public DurationRange<LongDuration> {
 };
 
 struct Durations {
+  using ValueType = int;
   using ItemType = Range;
   enum { Short, Medium, Long };
 

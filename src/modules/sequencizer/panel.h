@@ -148,15 +148,15 @@ template <typename TSize> struct Panel : public PanelWidget<Panel<TSize>> {
                     level_y);
     Knob::install<Small>(this, Param::LevelMultiplier, global_controls_center_x,
                          level_y);
-    ThumbSwitch<2>::install(this, Param::LevelRange, global_controls_right_x,
-                            level_y);
+    ThumbSwitch::install<Voltages>(this, Param::LevelRange,
+                                   global_controls_right_x, level_y);
 
     InPort::install(this, Input::DurationMultiplierCV, global_controls_left_x,
                     global_duration_y);
     Knob::install<Small>(this, Param::DurationMultiplier,
                          global_controls_center_x, global_duration_y);
-    ThumbSwitch<3>::install(this, Param::DurationRange, global_controls_right_x,
-                            global_duration_y);
+    ThumbSwitch::install<Durations>(this, Param::DurationRange,
+                                    global_controls_right_x, global_duration_y);
 
     InPort::install(this, Input::InA, global_controls_left_x, in_y);
     InPort::install(this, Input::InB, global_controls_center_x, in_y);
@@ -225,30 +225,30 @@ template <typename TSize> struct Panel : public PanelWidget<Panel<TSize>> {
           mm2px(step_x, progress_light_y), module,
           Light::StepProgress + step + step));
 
-      Stepper<TriggerModes>::install(this, Param::StepTriggerMode + step,
+      Stepper::install<TriggerModes>(this, Param::StepTriggerMode + step,
                                      step_x, trigger_y);
-      Stepper<InterruptModes>::install(this, Param::StepInterruptMode + step,
+      Stepper::install<InterruptModes>(this, Param::StepInterruptMode + step,
                                        step_x, interrupt_y);
-      Stepper<SustainModes>::install(this, Param::StepSustainMode + step,
+      Stepper::install<SustainModes>(this, Param::StepSustainMode + step,
                                      step_x, sustain_y);
-      Stepper<AnchorModes>::install(this, Param::StepStartAnchorMode + step,
+      Stepper::install<AnchorModes>(this, Param::StepStartAnchorMode + step,
                                     step_x, start_anchor_mode_y);
       Knob::install<Small>(this, Param::StepStartAnchorLevel + step, step_x,
                            start_anchor_level_y);
 
-      Stepper<AnchorSources>::install(this, Param::StepStartAnchorSource + step,
+      Stepper::install<AnchorSources>(this, Param::StepStartAnchorSource + step,
                                       step_x, start_anchor_source_y);
-      Stepper<AnchorModes>::install(this, Param::StepEndAnchorMode + step,
+      Stepper::install<AnchorModes>(this, Param::StepEndAnchorMode + step,
                                     step_x, end_anchor_mode_y);
       Knob::install<Small>(this, Param::StepEndAnchorLevel + step, step_x,
                            end_anchor_level_y);
-      Stepper<AnchorSources>::install(this, Param::StepEndAnchorSource + step,
+      Stepper::install<AnchorSources>(this, Param::StepEndAnchorSource + step,
                                       step_x, end_anchor_source_y);
 
       Knob::install<Small>(this, Param::StepDuration + step, step_x,
                            duration_y);
 
-      Stepper<Shapes>::install(this, Param::StepShape + step, step_x, shape_y);
+      Stepper::install<Shapes>(this, Param::StepShape + step, step_x, shape_y);
       Knob::install<Small>(this, Param::StepCurvature + step, step_x,
                            curvature_y);
 

@@ -46,8 +46,8 @@ struct Panel : public PanelWidget<Panel> {
     InPort::install(this, Input::CwLimitCv, right, y);
 
     y += dy;
-    ThumbSwitch<2>::install(this, Param::CcwLimitRange, left, y);
-    ThumbSwitch<2>::install(this, Param::CwLimitRange, right, y);
+    ThumbSwitch::install<Voltages>(this, Param::CcwLimitRange, left, y);
+    ThumbSwitch::install<Voltages>(this, Param::CwLimitRange, right, y);
   }
 };
 } // namespace ranger

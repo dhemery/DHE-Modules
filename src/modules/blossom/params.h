@@ -7,6 +7,9 @@
 
 #include "rack.hpp"
 
+#include <string>
+#include <vector>
+
 namespace dhe {
 namespace blossom {
 
@@ -38,6 +41,14 @@ struct BounceRatio {
 
   static inline auto value(float rotation) -> float {
     return range().scale(rotation);
+  }
+};
+
+struct BounceRatioModes {
+  using ValueType = int;
+  static inline auto labels() -> std::vector<std::string> const & {
+    static auto const labels = std::vector<std::string>{"Quantized", "Free"};
+    return labels;
   }
 };
 

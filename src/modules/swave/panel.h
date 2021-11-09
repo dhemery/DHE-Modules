@@ -24,7 +24,7 @@ struct Panel : public PanelWidget<Panel> {
 
     auto y = 25.F;
     auto dy = 18.5F;
-    ThumbSwitch<2>::install(this, Param::Shape, x, y);
+    ThumbSwitch::install<Shapes>(this, Param::Shape, x, y);
 
     y += dy;
     Knob::install<Large>(this, Param::Curvature, x, y);

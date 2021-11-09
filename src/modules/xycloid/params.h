@@ -86,5 +86,25 @@ struct WobbleRatio {
     module->configParam<Quantity>(knob_id, 0.F, 1.F, 0.5F, name, "x");
   }
 };
+
+struct WobbleRatioRanges {
+  using ValueType = int;
+
+  static inline auto labels() -> std::vector<std::string> const & {
+    static auto const labels =
+        std::vector<std::string>{"In", "-In +Out", "Out"};
+    return labels;
+  }
+};
+
+struct WobbleRatioModes {
+  using ValueType = int;
+
+  static inline auto labels() -> std::vector<std::string> const & {
+    static auto const labels = std::vector<std::string>{"Quantized", "Free"};
+    return labels;
+  }
+};
+
 } // namespace xycloid
 } // namespace dhe

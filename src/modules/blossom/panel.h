@@ -5,6 +5,7 @@
 #include "controls/knobs.h"
 #include "controls/ports.h"
 #include "controls/switches.h"
+#include "signals/voltages.h"
 #include "widgets/panel-widget.h"
 
 #include "rack.hpp"
@@ -43,7 +44,8 @@ struct Panel : public PanelWidget<Panel> {
       q->quantize(pos == 0);
     };
 
-    ThumbSwitch<2>::install(this, Param::BounceRatioMode, column4, y)
+    ThumbSwitch::install<BounceRatioModes>(this, Param::BounceRatioMode,
+                                           column4, y)
         ->on_change(quantize_bounce_ratio);
 
     y += dy;
@@ -62,13 +64,13 @@ struct Panel : public PanelWidget<Panel> {
 
     InPort::install(this, Input::XGainCv, column1, y);
     Knob::install<Small>(this, Param::XGain, column2, y);
-    ThumbSwitch<2>::install(this, Param::XRange, column3, y);
+    ThumbSwitch::install<Voltages>(this, Param::XRange, column3, y);
     OutPort::install(this, Output::X, column4, y + output_port_offset);
 
     y += dy;
     InPort::install(this, Input::YGainCv, column1, y);
     Knob::install<Small>(this, Param::YGain, column2, y);
-    ThumbSwitch<2>::install(this, Param::YRange, column3, y);
+    ThumbSwitch::install<Voltages>(this, Param::YRange, column3, y);
     OutPort::install(this, Output::Y, column4, y + output_port_offset);
   }
 };

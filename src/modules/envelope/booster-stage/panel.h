@@ -35,18 +35,18 @@ struct Panel : public PanelWidget<Panel> {
 
     InPort::install(this, Input::LevelCv, column1, y);
     Knob::install<Large>(this, Param::Level, column3, y);
-    ThumbSwitch<2>::install(this, Param::LevelRange, column5, y);
+    ThumbSwitch::install<Voltages>(this, Param::LevelRange, column5, y);
 
     y += dy;
     InPort::install(this, Input::CurvatureCv, column1, y);
     Knob::install<Large>(this, Param::Curvature, column3, y);
-    ThumbSwitch<2>::install(this, Param::Shape, column5, y);
+    ThumbSwitch::install<Shapes>(this, Param::Shape, column5, y);
 
     y += dy;
     InPort::install(this, Input::DurationCv, column1, y);
     Knob::install<Large>(this, Param::Duration, column3, y);
 
-    ThumbSwitch<3>::install(this, Param::DurationRange, column5, y);
+    ThumbSwitch::install<Durations>(this, Param::DurationRange, column5, y);
 
     y = 82.F;
     dy = 15.F;

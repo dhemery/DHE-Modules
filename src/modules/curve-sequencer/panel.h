@@ -107,14 +107,14 @@ template <typename TSize> struct Panel : public PanelWidget<Panel<TSize>> {
       this->addChild(rack::createLightCentered<ProgressLight>(
           mm2px(x, active_y), module, Light::StepProgress + step + step));
 
-      Stepper<GenerateModes>::install(this, Param::StepGenerateMode + step, x,
+      Stepper::install<GenerateModes>(this, Param::StepGenerateMode + step, x,
                                       generate_mode_y);
-      Stepper<AdvanceModes>::install(this, Param::StepAdvanceMode + step, x,
+      Stepper::install<AdvanceModes>(this, Param::StepAdvanceMode + step, x,
                                      advance_mode_y);
 
       Knob::install<Small>(this, Param::StepLevel + step, x, level_y);
 
-      ThumbSwitch<2>::install(this, Param::StepShape + step, x, shape_y);
+      ThumbSwitch::install<Shapes>(this, Param::StepShape + step, x, shape_y);
       Knob::install<Small>(this, Param::StepCurvature + step, x, curve_y);
 
       Knob::install<Small>(this, Param::StepDuration + step, x, duration_y);
@@ -129,8 +129,9 @@ template <typename TSize> struct Panel : public PanelWidget<Panel<TSize>> {
 
     InPort::install(this, Input::Main, right, eos_y);
 
-    ThumbSwitch<2>::install(this, Param::LevelRange, right, level_y);
-    ThumbSwitch<3>::install(this, Param::DurationRange, right, duration_y);
+    ThumbSwitch::install<Voltages>(this, Param::LevelRange, right, level_y);
+    ThumbSwitch::install<Durations>(this, Param::DurationRange, right,
+                                    duration_y);
     OutPort::install(this, Output::Main, right, out_y);
   }
 

@@ -10,7 +10,7 @@ namespace dhe {
 namespace truth {
 struct GateModes {
   using ValueType = GateMode;
-  static constexpr auto frame_prefix = "gate-mode";
+  static constexpr auto stepper_slug = "gate-mode";
   static inline auto labels() -> std::vector<std::string> const & {
     static const auto labels = std::vector<std::string>{
         "Gate rises", "Gate falls", "Gate rises or falls", "Gate is high",
@@ -21,7 +21,7 @@ struct GateModes {
 
 struct Outcomes {
   using ValueType = Outcome;
-  static constexpr auto frame_prefix = "outcome";
+  static constexpr auto stepper_slug = "outcome";
   static inline auto labels() -> std::vector<std::string> const & {
     static const auto labels =
         std::vector<std::string>{"True", "False", "Q", "¬Q"};

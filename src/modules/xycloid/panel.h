@@ -44,7 +44,8 @@ struct Panel : public PanelWidget<Panel> {
           getModule()->getParamQuantity(Param::WobbleRatio));
       q->quantize(pos == 0);
     };
-    ThumbSwitch<2>::install(this, Param::WobbleRatioMode, column4, y)
+    ThumbSwitch::install<WobbleRatioModes>(this, Param::WobbleRatioMode,
+                                           column4, y)
         ->on_change(quantize_wobble_ratio);
 
     auto select_wobble_ratio_range = [this](int pos) {
@@ -57,7 +58,8 @@ struct Panel : public PanelWidget<Panel> {
     InPort::install(this, Input::WobbleDepthCv, column1, y);
     Knob::install<Tiny>(this, Param::WobbleDepthAv, column2, y);
     Knob::install<Large>(this, Param::WobbleDepth, column3, y);
-    ThumbSwitch<3>::install(this, Param::WobbleRatioRange, column4, y)
+    ThumbSwitch::install<WobbleRatioRanges>(this, Param::WobbleRatioRange,
+                                            column4, y)
         ->on_change(select_wobble_ratio_range);
 
     y += dy;
@@ -72,13 +74,13 @@ struct Panel : public PanelWidget<Panel> {
     y += dy;
     InPort::install(this, Input::XGainCv, column1, y);
     Knob::install<Small>(this, Param::XGain, column2, y);
-    ThumbSwitch<2>::install(this, Param::XRange, column3, y);
+    ThumbSwitch::install<Voltages>(this, Param::XRange, column3, y);
     OutPort::install(this, Output::X, column4, y + output_port_offset);
 
     y += dy;
     InPort::install(this, Input::YGainCv, column1, y);
     Knob::install<Small>(this, Param::YGain, column2, y);
-    ThumbSwitch<2>::install(this, Param::YRange, column3, y);
+    ThumbSwitch::install<Voltages>(this, Param::YRange, column3, y);
     OutPort::install(this, Output::Y, column4, y + output_port_offset);
   }
   using Input = InputIds;

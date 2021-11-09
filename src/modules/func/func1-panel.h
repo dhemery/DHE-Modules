@@ -46,9 +46,9 @@ public:
     OutPort::install(this, Output::Channel, x, row6);
 
     auto *offset_range_stepper =
-        Stepper<OffsetRanges>::install(this, Param::OffsetRange, x, row4);
+        Stepper::install<OffsetRanges>(this, Param::OffsetRange, x, row4);
 
-    auto *multiplier_range_stepper = Stepper<MultiplierRanges>::install(
+    auto *multiplier_range_stepper = Stepper::install<MultiplierRanges>(
         this, Param::MultiplierRange, x, row4);
 
     auto const update_range_stepper_visibility =
@@ -61,7 +61,7 @@ public:
             multiplier_range_stepper->hide();
           }
         };
-    Stepper<Operators>::install(this, Param::Operation, x, row2)
+    Stepper::install<Operators>(this, Param::Operation, x, row2)
         ->on_change(update_range_stepper_visibility);
   }
 };

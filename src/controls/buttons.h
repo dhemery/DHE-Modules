@@ -1,8 +1,8 @@
 #pragma once
 
 #include "params/switch-quantity.h"
+#include "widgets/button-widget.h"
 #include "widgets/dimensions.h"
-#include "widgets/switch-widget.h"
 
 #include "rack.hpp"
 
@@ -12,19 +12,11 @@
 namespace dhe {
 
 struct Normal {
-  static inline auto frame_names() -> std::vector<std::string> const & {
-    static auto const names =
-        std::vector<std::string>{"button-released", "button-pressed"};
-    return names;
-  }
+  static auto constexpr slug = "button";
 };
 
 struct Reversed {
-  static inline auto frame_names() -> std::vector<std::string> const & {
-    static auto const names = std::vector<std::string>{"output-button-released",
-                                                       "output-button-pressed"};
-    return names;
-  }
+  static auto constexpr slug = "output-button";
 };
 
 struct Momentary {
@@ -38,8 +30,8 @@ struct Toggle {
 struct Button {
   template <typename TBehavior, typename TStyle = Normal, typename TPanel>
   static inline auto install(TPanel *panel, int id, float xmm, float ymm)
-      -> SwitchWidget<TPanel, TStyle, bool> * {
-    auto widget = rack::createParamCentered<SwitchWidget<TPanel, TStyle, bool>>(
+      -> ButtonWidget<TPanel, TStyle> * {
+    auto widget = rack::createParamCentered<ButtonWidget<TPanel, TStyle>>(
         mm2px(xmm, ymm), panel->getModule(), id);
     widget->momentary = TBehavior::momentary;
     panel->addParam(widget);
