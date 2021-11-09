@@ -30,8 +30,8 @@ struct Module : public rack::engine::Module {
     configOutput(Output::Envelope, "Stage");
 
     DurationKnob::config(this, Param::Duration, "Duration", 0.5F);
-    Picker::config<DurationRanges>(this, Param::DurationRange, "Duration range",
-                                   DurationRanges::Medium);
+    Picker::config<Durations>(this, Param::DurationRange, "Duration range",
+                              Durations::Medium);
     configInput(Input::DurationCv, "Duration CV");
 
     Switch::config(this, Param::Mode, "Mode", {"Hold", "Sustain"}, 0);

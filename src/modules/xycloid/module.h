@@ -10,7 +10,7 @@
 #include "params/presets.h"
 #include "signals/common-inputs.h"
 #include "signals/gain.h"
-#include "signals/voltage-ranges.h"
+#include "signals/voltages.h"
 
 #include "rack.hpp"
 
@@ -49,13 +49,11 @@ public:
 
     Knob::config<Gain>(this, Param::XGain, "X gain", 0.5F);
     configInput(Input::XGainCv, "X gain CV");
-    Picker::config<VoltageRanges>(this, Param::XRange, "X range",
-                                  VoltageRanges::Bipolar);
+    Picker::config<Voltages>(this, Param::XRange, "X range", Voltages::Bipolar);
 
     Knob::config<Gain>(this, Param::YGain, "Y gain", 0.5F);
     configInput(Input::YGainCv, "Y gain CV");
-    Picker::config<VoltageRanges>(this, Param::YRange, "Y range",
-                                  VoltageRanges::Bipolar);
+    Picker::config<Voltages>(this, Param::YRange, "Y range", Voltages::Bipolar);
 
     configOutput(Output::X, "X");
     configOutput(Output::Y, "Y");

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "components/range.h"
-#include "signals/duration-ranges.h"
+#include "signals/durations.h"
 
 #include "rack.hpp"
 
@@ -23,6 +23,6 @@ public:
   void set_display_range(Range r) { range_ = r; }
 
 private:
-  Range range_{MediumDuration::range()};
+  Range range_{MediumDuration::range};
 };
 } // namespace dhe

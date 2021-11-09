@@ -4,7 +4,7 @@
 
 #include "controls/switches.h"
 #include "signals/common-inputs.h"
-#include "signals/voltage-ranges.h"
+#include "signals/voltages.h"
 
 #include "rack.hpp"
 
@@ -24,8 +24,8 @@ template <typename TEngine> struct Module : public rack::engine::Module {
     configInput(Input::B + 1, "D");
     configParam(Param::NegateB + 1, 0.F, 1.F, 0.F, "Negate D");
 
-    Picker::config<VoltageRanges>(this, Param::LevelRange, "Level Range",
-                                  VoltageRanges::Unipolar);
+    Picker::config<Voltages>(this, Param::LevelRange, "Level Range",
+                             Voltages::Unipolar);
 
     configOutput(Output::And + 0, "A AND B");
     configOutput(Output::Nand + 0, "A NAND B");

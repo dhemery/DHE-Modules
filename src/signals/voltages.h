@@ -7,38 +7,38 @@
 
 namespace dhe {
 
-struct UnipolarVoltage {
-  static auto constexpr range() -> Range { return Range{0.F, 10.F}; }
-  static auto constexpr display_range() -> Range { return range(); }
+struct Voltage {
+  static auto constexpr unit = " V";
+};
+
+template <typename TVoltage> struct VoltageRange {
+  static auto constexpr display_range() -> Range { return TVoltage::range; };
+  static auto constexpr unit = Voltage::unit;
+
+  static inline auto value(float rotation) -> float {
+    return TVoltage::range.scale(rotation);
+  }
+};
+
+struct UnipolarVoltage : public VoltageRange<UnipolarVoltage> {
+  static auto constexpr range = Range{0.F, 10.F};
   static auto constexpr label = "0–10 V";
-  static auto constexpr unit = " V";
-
-  static inline auto value(float rotation) -> float {
-    return range().scale(rotation);
-  }
 };
 
-struct BipolarVoltage {
-  static auto constexpr range() -> Range { return Range{-5.F, 5.F}; }
-  static auto constexpr display_range() -> Range { return range(); }
+struct BipolarVoltage : public VoltageRange<BipolarVoltage> {
+  static auto constexpr range = Range{-5.F, 5.F};
   static auto constexpr label = "±5 V";
-  static auto constexpr unit = " V";
-
-  static inline auto value(float rotation) -> float {
-    return range().scale(rotation);
-  }
 };
 
-struct VoltageRanges {
+struct Voltages {
   using ItemType = Range;
-
   enum { Bipolar, Unipolar };
 
-  static auto constexpr unit = " V";
+  static auto constexpr unit = Voltage::unit;
 
   static inline auto items() -> std::vector<Range> const & {
     static auto const items =
-        std::vector<Range>{BipolarVoltage::range(), UnipolarVoltage::range()};
+        std::vector<Range>{BipolarVoltage::range, UnipolarVoltage::range};
     return items;
   }
 

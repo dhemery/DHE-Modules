@@ -15,7 +15,7 @@
 #include "params/duration-knob-quantity.h"
 #include "params/presets.h"
 #include "signals/step-selection.h"
-#include "signals/voltage-ranges.h"
+#include "signals/voltages.h"
 
 #include "rack.hpp"
 
@@ -84,8 +84,8 @@ template <int N> struct Module : public rack::engine::Module {
         level_knob->set_display_range(r);
       }
     };
-    Picker::config<VoltageRanges>(this, Param::LevelRange, "Level range",
-                                  VoltageRanges::Unipolar)
+    Picker::config<Voltages>(this, Param::LevelRange, "Level range",
+                             Voltages::Unipolar)
         ->on_change(update_level_knob_ranges);
 
     auto update_duration_knob_ranges = [duration_knobs](Range r) {
@@ -93,8 +93,8 @@ template <int N> struct Module : public rack::engine::Module {
         duration_knob->set_display_range(r);
       }
     };
-    Picker::config<DurationRanges>(this, Param::DurationRange, "Duration range",
-                                   DurationRanges::Medium)
+    Picker::config<Durations>(this, Param::DurationRange, "Duration range",
+                              Durations::Medium)
         ->on_change(update_duration_knob_ranges);
 
     configInput(Input::Main, "AUX");

@@ -3,7 +3,7 @@
 #include "control-ids.h"
 
 #include "modules/envelope/mode/mode.h"
-#include "signals/duration-ranges.h"
+#include "signals/durations.h"
 
 #include <vector>
 
@@ -21,7 +21,7 @@ template <typename TParam, typename TInput, typename TOutput> struct Signals {
   auto defer() const -> bool { return is_high(inputs_[Input::Defer]); }
 
   auto duration() const -> float {
-    return DurationRanges::value(
+    return Durations::value(
         rotation(params_[Param::Duration], inputs_[Input::DurationCv]),
         position_of(params_[Param::DurationRange]));
   }
@@ -37,12 +37,12 @@ template <typename TParam, typename TInput, typename TOutput> struct Signals {
   void output(float voltage) { outputs_[Output::Envelope].setVoltage(voltage); }
 
   void show_active(bool active) {
-    auto const voltage = UnipolarVoltage::range().scale(active);
+    auto const voltage = UnipolarVoltage::range.scale(active);
     outputs_[Output::Active].setVoltage(voltage);
   }
 
   void show_eoc(bool eoc) {
-    auto const voltage = UnipolarVoltage::range().scale(eoc);
+    auto const voltage = UnipolarVoltage::range.scale(eoc);
     outputs_[Output::Eoc].setVoltage(voltage);
   }
 

@@ -8,7 +8,7 @@
 #include "params/presets.h"
 #include "signals/common-inputs.h"
 #include "signals/gain.h"
-#include "signals/voltage-ranges.h"
+#include "signals/voltages.h"
 
 #include "rack.hpp"
 
@@ -28,8 +28,8 @@ struct Module : public rack::engine::Module {
     auto update_ccw_limit_knob_range = [ccw_limit_knob](Range r) {
       ccw_limit_knob->set_display_range(r);
     };
-    Picker::config<VoltageRanges>(this, Param::CcwLimitRange, "CCW limit range",
-                                  VoltageRanges::Bipolar)
+    Picker::config<Voltages>(this, Param::CcwLimitRange, "CCW limit range",
+                             Voltages::Bipolar)
         ->on_change(update_ccw_limit_knob_range);
     configInput(Input::CcwLimitCv, "CCW limit CV");
     Knob::config<Attenuverter>(this, Param::CcwLimitAv, "CCW limit CV gain",
@@ -40,8 +40,8 @@ struct Module : public rack::engine::Module {
     auto update_cw_limit_knob_range = [cw_limit_knob](Range r) {
       cw_limit_knob->set_display_range(r);
     };
-    Picker::config<VoltageRanges>(this, Param::CwLimitRange, "CW limit range",
-                                  VoltageRanges::Bipolar)
+    Picker::config<Voltages>(this, Param::CwLimitRange, "CW limit range",
+                             Voltages::Bipolar)
         ->on_change(update_cw_limit_knob_range);
     configInput(Input::CwLimitCv, "CW limit CV");
     Knob::config<Attenuverter>(this, Param::CwLimitAv, "CW limit CV gain",
@@ -69,8 +69,8 @@ private:
 
   inline auto limit(int knob, int cv, int av, int range_selection) const
       -> float {
-    return VoltageRanges::value(rotation(params[knob], inputs[cv], params[av]),
-                                position_of(params[range_selection]));
+    return Voltages::value(rotation(params[knob], inputs[cv], params[av]),
+                           position_of(params[range_selection]));
   }
 
   auto ccw_limit() const -> float {

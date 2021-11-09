@@ -13,9 +13,9 @@
 #include "params/duration-knob-quantity.h"
 #include "params/presets.h"
 #include "signals/curvature-inputs.h"
-#include "signals/duration-ranges.h"
+#include "signals/durations.h"
 #include "signals/step-selection.h"
-#include "signals/voltage-ranges.h"
+#include "signals/voltages.h"
 
 #include "rack.hpp"
 
@@ -93,8 +93,8 @@ public:
         knob->set_display_range(r);
       }
     };
-    Picker::config<VoltageRanges>(this, Param::LevelRange, "Level range",
-                                  VoltageRanges::Unipolar)
+    Picker::config<Voltages>(this, Param::LevelRange, "Level range",
+                             Voltages::Unipolar)
         ->on_change(update_level_knob_ranges);
   }
 
@@ -116,7 +116,7 @@ public:
     auto const base_cv_input = type == AnchorType::Phase0
                                    ? Input::StepPhase0AnchorLevelCv
                                    : Input::StepPhase1AnchorLevelCv;
-    return VoltageRanges::value(
+    return Voltages::value(
         rotation(params[base_knob_param + step], inputs[base_cv_input + step]),
         position_of(params[Param::LevelRange]));
   }

@@ -6,9 +6,9 @@
 
 #include "components/range.h"
 #include "signals/curvature-inputs.h"
-#include "signals/duration-ranges.h"
+#include "signals/durations.h"
 #include "signals/gain.h"
-#include "signals/voltage-ranges.h"
+#include "signals/voltages.h"
 
 #include <vector>
 
@@ -26,9 +26,9 @@ template <typename P, typename I>
 static inline auto duration(P const &duration_knob, P const &range_switch,
                             P const &multipler_knob, I const &multiplier_cv)
     -> float {
-  static auto constexpr minimum_duration = ShortDuration::range().lower_bound();
-  auto const nominal_duration = DurationRanges::value(
-      rotation_of(duration_knob), position_of(range_switch));
+  static auto constexpr minimum_duration = ShortDuration::range.lower_bound();
+  auto const nominal_duration =
+      Durations::value(rotation_of(duration_knob), position_of(range_switch));
   auto const multiplier_rotation = dhe::rotation(multipler_knob, multiplier_cv);
   auto const nominal_multiplier = Gain::range().scale(multiplier_rotation);
   auto const clamped_multiplier = Gain::range().clamp(nominal_multiplier);
@@ -61,10 +61,10 @@ public:
     auto const base_knob_param = type == AnchorType::Start
                                      ? ParamId::StepStartAnchorLevel
                                      : ParamId::StepEndAnchorLevel;
-    return VoltageRanges::value(rotation(params_[base_knob_param + step],
-                                         inputs_[InputId::LevelAttenuationCV],
-                                         params_[ParamId::LevelMultiplier]),
-                                position_of(params_[ParamId::LevelRange]));
+    return Voltages::value(rotation(params_[base_knob_param + step],
+                                    inputs_[InputId::LevelAttenuationCV],
+                                    params_[ParamId::LevelMultiplier]),
+                           position_of(params_[ParamId::LevelRange]));
   }
 
   auto anchor_source(AnchorType type, int step) const -> AnchorSource {

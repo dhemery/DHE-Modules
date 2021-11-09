@@ -10,8 +10,8 @@
 #include "modules/envelope/mode/level.h"
 #include "modules/envelope/stage/engine.h"
 #include "params/curvature-config.h"
-#include "signals/duration-ranges.h"
-#include "signals/voltage-ranges.h"
+#include "signals/durations.h"
+#include "signals/voltages.h"
 
 #include "rack.hpp"
 
@@ -30,8 +30,8 @@ struct Module : public rack::engine::Module {
     auto const update_level_knob_range = [level_knob](Range r) {
       level_knob->set_display_range(r);
     };
-    Picker::config<VoltageRanges>(this, Param::LevelRange, "Level Range",
-                                  VoltageRanges::Unipolar)
+    Picker::config<Voltages>(this, Param::LevelRange, "Level Range",
+                             Voltages::Unipolar)
         ->on_change(update_level_knob_range);
 
     configInput(Input::LevelCv, "Level CV");
@@ -41,8 +41,8 @@ struct Module : public rack::engine::Module {
     configInput(Input::CurvatureCv, "Curvature CV");
 
     DurationKnob::config(this, Param::Duration, "Duration", 0.5F);
-    Picker::config<DurationRanges>(this, Param::DurationRange, "Duration range",
-                                   DurationRanges::Medium);
+    Picker::config<Durations>(this, Param::DurationRange, "Duration range",
+                              Durations::Medium);
     configInput(Input::DurationCv, "Duration CV");
 
     configInput(Input::Defer, "Defer");

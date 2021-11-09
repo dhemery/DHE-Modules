@@ -87,8 +87,8 @@ struct DurationKnob {
   static inline auto config(rack::engine::Module *module, int id,
                             std::string const &name, float rotation = 0.5F)
       -> DurationKnobQuantity * {
-    return module->configParam<DurationKnobQuantity>(
-        id, 0.F, 1.F, rotation, name, DurationRanges::unit);
+    return module->configParam<DurationKnobQuantity>(id, 0.F, 1.F, rotation,
+                                                     name, Durations::unit);
   }
 };
 

@@ -17,8 +17,8 @@
 #include "params/duration-knob-quantity.h"
 #include "params/presets.h"
 #include "signals/curvature-inputs.h"
-#include "signals/duration-ranges.h"
-#include "signals/voltage-ranges.h"
+#include "signals/durations.h"
+#include "signals/voltages.h"
 
 #include "rack.hpp"
 
@@ -105,8 +105,8 @@ public:
 
     Knob::config<Attenuator>(this, Param::LevelMultiplier, "Level multiplier",
                              1.F);
-    Picker::config<VoltageRanges>(this, Param::LevelRange, "Level range",
-                                  VoltageRanges::Unipolar)
+    Picker::config<Voltages>(this, Param::LevelRange, "Level range",
+                             Voltages::Unipolar)
         ->on_change([level_knobs](Range r) {
           for (auto *knob : level_knobs) {
             knob->set_display_range(r);
@@ -116,8 +116,8 @@ public:
 
     Knob::config<Gain>(this, Param::DurationMultiplier, "Duration multiplier",
                        0.5F);
-    Picker::config<DurationRanges>(this, Param::DurationRange, "Duration range",
-                                   DurationRanges::Medium)
+    Picker::config<Durations>(this, Param::DurationRange, "Duration range",
+                              Durations::Medium)
         ->on_change([duration_knobs](Range r) {
           for (auto *knob : duration_knobs) {
             knob->set_display_range(r);

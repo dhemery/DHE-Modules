@@ -1,7 +1,7 @@
 #pragma once
 
 #include "signals/common-inputs.h"
-#include "signals/voltage-ranges.h"
+#include "signals/voltages.h"
 
 #include <vector>
 
@@ -25,7 +25,7 @@ template <typename TParam, typename TInput, typename TOutput> struct Signals {
   }
 
   auto level() const -> float {
-    return VoltageRanges::value(
+    return Voltages::value(
         rotation(params_[Param::Level], inputs_[Input::LevelCv]),
         position_of(params_[Param::LevelRange]));
   }
@@ -35,7 +35,7 @@ template <typename TParam, typename TInput, typename TOutput> struct Signals {
   }
 
   void send_trigger(bool is_triggered) {
-    auto const voltage = UnipolarVoltage::range().scale(is_triggered);
+    auto const voltage = UnipolarVoltage::range.scale(is_triggered);
     outputs_[Output::Trigger].setVoltage(voltage);
   }
 

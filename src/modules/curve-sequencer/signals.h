@@ -6,8 +6,8 @@
 
 #include "signals/common-inputs.h"
 #include "signals/curvature-inputs.h"
-#include "signals/duration-ranges.h"
-#include "signals/voltage-ranges.h"
+#include "signals/durations.h"
+#include "signals/voltages.h"
 
 #include <vector>
 
@@ -41,9 +41,8 @@ struct Signals {
   }
 
   auto duration(int step) const -> float {
-    return DurationRanges::value(
-        rotation_of(params_[Param::StepDuration + step]),
-        position_of(params_[Param::DurationRange]));
+    return Durations::value(rotation_of(params_[Param::StepDuration + step]),
+                            position_of(params_[Param::DurationRange]));
   }
 
   auto generate_mode(int step) const -> GenerateMode {
@@ -75,8 +74,8 @@ struct Signals {
   }
 
   auto level(int step) const -> float {
-    return VoltageRanges::value(rotation_of(params_[Param::StepLevel + step]),
-                                position_of(params_[Param::LevelRange]));
+    return Voltages::value(rotation_of(params_[Param::StepLevel + step]),
+                           position_of(params_[Param::LevelRange]));
   }
 
   auto output() const -> float { return outputs_[Output::Main].getVoltage(); }

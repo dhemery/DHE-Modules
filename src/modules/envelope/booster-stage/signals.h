@@ -5,8 +5,8 @@
 #include "components/sigmoid.h"
 #include "signals/common-inputs.h"
 #include "signals/curvature-inputs.h"
-#include "signals/duration-ranges.h"
-#include "signals/voltage-ranges.h"
+#include "signals/durations.h"
+#include "signals/voltages.h"
 
 #include <vector>
 
@@ -31,7 +31,7 @@ public:
   }
 
   auto duration() const -> float {
-    return DurationRanges::value(
+    return Durations::value(
         rotation(params_[Param::Duration], inputs_[Input::DurationCv]),
         position_of(params_[Param::DurationRange]));
   }
@@ -44,7 +44,7 @@ public:
   auto input() const -> float { return voltage_at(inputs_[Input::Envelope]); }
 
   auto level() const -> float {
-    return VoltageRanges::value(
+    return Voltages::value(
         rotation(params_[Param::Level], inputs_[Input::LevelCv]),
         position_of(params_[Param::LevelRange]));
   }
@@ -53,12 +53,12 @@ public:
 
   void show_active(bool is_active) {
     auto const voltage =
-        UnipolarVoltage::range().scale(is_active || active_button());
+        UnipolarVoltage::range.scale(is_active || active_button());
     outputs_[Output::Active].setVoltage(voltage);
   }
 
   void show_eoc(bool is_eoc) {
-    auto const voltage = UnipolarVoltage::range().scale(is_eoc || eoc_button());
+    auto const voltage = UnipolarVoltage::range.scale(is_eoc || eoc_button());
     outputs_[Output::Eoc].setVoltage(voltage);
   }
 

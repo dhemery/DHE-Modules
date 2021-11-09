@@ -7,7 +7,7 @@
 #include "controls/knobs.h"
 #include "controls/switches.h"
 #include "params/presets.h"
-#include "signals/voltage-ranges.h"
+#include "signals/voltages.h"
 
 #include "rack.hpp"
 
@@ -24,8 +24,8 @@ struct Module : public rack::engine::Module {
     auto update_level_knob_range = [level_knob](Range r) {
       level_knob->set_display_range(r);
     };
-    Picker::config<VoltageRanges>(this, Param::LevelRange, "Level range",
-                                  VoltageRanges::Unipolar)
+    Picker::config<Voltages>(this, Param::LevelRange, "Level range",
+                             Voltages::Unipolar)
         ->on_change(update_level_knob_range);
     configInput(Input::LevelCv, "Level CV");
 

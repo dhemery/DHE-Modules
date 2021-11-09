@@ -15,8 +15,8 @@ static inline auto offset_ranges() -> std::vector<Range> const & {
   static auto constexpr minus_ten_to_plus_ten_range = Range{-10.F, 10.F};
   static auto constexpr zero_to_five_range = Range{0.F, 5.F};
   static auto const ranges =
-      std::vector<Range>{zero_to_five_range, BipolarVoltage::range(),
-                         UnipolarVoltage::range(), minus_ten_to_plus_ten_range};
+      std::vector<Range>{zero_to_five_range, BipolarVoltage::range,
+                         UnipolarVoltage::range, minus_ten_to_plus_ten_range};
   return ranges;
 }
 

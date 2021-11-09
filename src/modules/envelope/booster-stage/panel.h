@@ -6,7 +6,7 @@
 #include "controls/knobs.h"
 #include "controls/ports.h"
 #include "controls/switches.h"
-#include "signals/voltage-ranges.h"
+#include "signals/voltages.h"
 #include "widgets/panel-widget.h"
 
 #include "rack.hpp"

@@ -24,51 +24,42 @@ struct Duration {
    */
   static auto constexpr taper =
       sigmoid::j_taper_with_curvature(taper_curvature);
+
+  static auto constexpr unit = " s";
 };
 
-struct ShortDuration {
-  static auto constexpr range() -> Range { return Range{0.001F, 1.F}; }
-  static auto constexpr display_range() -> Range { return range(); }
+template <typename TDuration> struct DurationRange {
+  static auto constexpr display_range() -> Range { return TDuration::range; }
+  static auto constexpr unit = Duration::unit;
+
+  static inline auto value(float rotation) -> float {
+    return TDuration::range.scale(Duration::taper.apply(rotation));
+  }
+};
+struct ShortDuration : public DurationRange<ShortDuration> {
+  static auto constexpr range = Range{0.001F, 1.F};
   static auto constexpr label = "0.001–1.0 s";
-  static auto constexpr unit = " s";
-
-  static inline auto value(float rotation) -> float {
-    return range().scale(Duration::taper.apply(rotation));
-  }
 };
 
-struct MediumDuration {
-  static auto constexpr range() -> Range { return Range{0.01F, 10.F}; }
-  static auto constexpr display_range() -> Range { return range(); }
+struct MediumDuration : public DurationRange<MediumDuration> {
+  static auto constexpr range = dhe::Range{0.01F, 10.F};
   static auto constexpr label = "0.01–10.0 s";
-  static auto constexpr unit = " s";
-
-  static inline auto value(float rotation) -> float {
-    return range().scale(Duration::taper.apply(rotation));
-  }
 };
 
-struct LongDuration {
-  static auto constexpr range() -> Range { return Range{0.1F, 100.F}; }
-  static auto constexpr display_range() -> Range { return range(); }
+struct LongDuration : public DurationRange<LongDuration> {
+  static auto constexpr range = dhe::Range{0.1F, 100.F};
   static auto constexpr label = "0.1–100.0 s";
-  static auto constexpr unit = " s";
-
-  static inline auto value(float rotation) -> float {
-    return range().scale(Duration::taper.apply(rotation));
-  }
 };
 
-struct DurationRanges {
+struct Durations {
   using ItemType = Range;
-
   enum { Short, Medium, Long };
 
-  static auto constexpr unit = " s";
+  static auto constexpr unit = Duration::unit;
 
   static inline auto items() -> std::vector<Range> const & {
     static auto const items = std::vector<Range>{
-        ShortDuration::range(), MediumDuration::range(), LongDuration::range()};
+        ShortDuration::range, MediumDuration::range, LongDuration::range};
     return items;
   }
 
@@ -78,8 +69,8 @@ struct DurationRanges {
     return labels;
   }
 
-  static inline auto value(float rotation, int range_selection) -> float {
-    return items()[range_selection].scale(Duration::taper.apply(rotation));
+  static inline auto value(float rotation, int selection) -> float {
+    return items()[selection].scale(Duration::taper.apply(rotation));
   }
 };
 
