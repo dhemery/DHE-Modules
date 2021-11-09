@@ -25,33 +25,30 @@ public:
 
     ThrobSpeed::config(this, Param::ThrobSpeed);
     configInput(Input::ThrobSpeedCv, "Speed CV");
-    Knob::config<Attenuverter>(this, Param::ThrobSpeedAv, "Speed CV gain",
-                               0.5F);
+    Knob::config<Attenuverter>(this, Param::ThrobSpeedAv, "Speed CV gain");
 
     WobbleRatio::config(this, Param::WobbleRatio, "Ratio");
     configInput(Input::WobbleRatioCv, "Ratio CV");
-    Knob::config<Attenuverter>(this, Param::WobbleRatioAv, "Ratio CV gain",
-                               0.5F);
+    Knob::config<Attenuverter>(this, Param::WobbleRatioAv, "Ratio CV gain");
     Switch::config<WobbleRatioRanges>(this, Param::WobbleRatioRange,
                                       "Direction", 2);
     Switch::config<WobbleRatioModes>(this, Param::WobbleRatioMode, "Ratio mode",
                                      1);
 
-    Knob::config<Percentage>(this, Param::WobbleDepth, "Depth", 0.5F);
+    Knob::config<Percentage>(this, Param::WobbleDepth, "Depth");
     configInput(Input::WobbleDepthCv, "Depth CV");
-    Knob::config<Attenuverter>(this, Param::WobbleDepthAv, "Depth CV gain",
-                               0.5F);
+    Knob::config<Attenuverter>(this, Param::WobbleDepthAv, "Depth CV gain");
 
-    Knob::config<Angle>(this, Param::WobblePhaseOffset, "Phase", 0.5F);
+    Knob::config<Angle>(this, Param::WobblePhaseOffset, "Phase");
     configInput(Input::WobblePhaseOffsetCv, "Phase CV");
     Knob::config<Attenuverter>(this, Param::WobblePhaseOffsetAv,
-                               "Phase CV gain", 0.5F);
+                               "Phase CV gain");
 
-    Knob::config<Gain>(this, Param::XGain, "X gain", 0.5F);
+    Knob::config<Gain>(this, Param::XGain, "X gain");
     configInput(Input::XGainCv, "X gain CV");
     Switch::config<Voltages>(this, Param::XRange, "X range", Voltages::Bipolar);
 
-    Knob::config<Gain>(this, Param::YGain, "Y gain", 0.5F);
+    Knob::config<Gain>(this, Param::YGain, "Y gain");
     configInput(Input::YGainCv, "Y gain CV");
     Switch::config<Voltages>(this, Param::YRange, "Y range", Voltages::Bipolar);
 

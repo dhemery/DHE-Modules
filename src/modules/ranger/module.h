@@ -19,9 +19,9 @@ struct Module : public rack::engine::Module {
   Module() {
     config(Param::Count, Input::Count, Output::Count);
 
-    Knob::config<Percentage>(this, Param::Level, "Level", 0.5F);
+    Knob::config<Percentage>(this, Param::Level, "Level");
     configInput(Input::LevelCv, "Level CV");
-    Knob::config<Attenuverter>(this, Param::LevelAv, "Level CV gain", 0.5F);
+    Knob::config<Attenuverter>(this, Param::LevelAv, "Level CV gain");
 
     auto *ccw_limit_knob =
         Knob::config<UnipolarVoltage>(this, Param::CcwLimit, "CCW limit", 0.F);
@@ -32,8 +32,7 @@ struct Module : public rack::engine::Module {
                              Voltages::Bipolar)
         ->on_change(update_ccw_limit_knob_range);
     configInput(Input::CcwLimitCv, "CCW limit CV");
-    Knob::config<Attenuverter>(this, Param::CcwLimitAv, "CCW limit CV gain",
-                               0.5F);
+    Knob::config<Attenuverter>(this, Param::CcwLimitAv, "CCW limit CV gain");
 
     auto *cw_limit_knob =
         Knob::config<UnipolarVoltage>(this, Param::CwLimit, "CW limit", 1.F);
@@ -44,8 +43,7 @@ struct Module : public rack::engine::Module {
                              Voltages::Bipolar)
         ->on_change(update_cw_limit_knob_range);
     configInput(Input::CwLimitCv, "CW limit CV");
-    Knob::config<Attenuverter>(this, Param::CwLimitAv, "CW limit CV gain",
-                               0.5F);
+    Knob::config<Attenuverter>(this, Param::CwLimitAv, "CW limit CV gain");
 
     configOutput(Output::Main, "Ranger");
   }

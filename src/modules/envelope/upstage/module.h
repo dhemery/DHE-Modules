@@ -20,7 +20,7 @@ struct Module : public rack::engine::Module {
     config(Param::Count, Input::Count, Output::Count);
 
     auto *level_knob =
-        Knob::config<UnipolarVoltage>(this, Param::Level, "Level", 0.5F);
+        Knob::config<UnipolarVoltage>(this, Param::Level, "Level");
     auto update_level_knob_range = [level_knob](Range r) {
       level_knob->set_display_range(r);
     };

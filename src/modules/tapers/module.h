@@ -21,37 +21,35 @@ public:
   Module() {
     config(Param::Count, Input::Count, Output::Count);
 
-    auto *level_knob_1 = Knob::config<BipolarVoltage>(this, Param::Level1,
-                                                      "Taper 1 level", 0.5F);
+    auto *level_knob_1 =
+        Knob::config<BipolarVoltage>(this, Param::Level1, "Taper 1 level");
     Picker::config<Voltages>(this, Param::LevelRange1, "Taper 1 level range",
                              Voltages::Bipolar)
         ->on_change(
             [level_knob_1](Range r) { level_knob_1->set_display_range(r); });
-    Knob::config<Attenuverter>(this, Param::LevelAv1, "Taper 1 level CV gain",
-                               0.5F);
+    Knob::config<Attenuverter>(this, Param::LevelAv1, "Taper 1 level CV gain");
     configInput(Input::LevelCv1, "Taper 1 level CV");
 
     CurvatureKnob::config(this, Param::Curvature1, "Taper 1 curvature");
     Knob::config<Attenuverter>(this, Param::CurvatureAv1,
-                               "Taper 1 curvature CV gain", 0.5F);
+                               "Taper 1 curvature CV gain");
     Switch::config<Shapes>(this, Param::Shape1, "Taper 1 shape", Shapes::J);
     configInput(Input::CurvatureCv1, "Taper 1 curvature CV");
 
     configOutput(Output::Taper1, "Taper 1");
 
-    auto *level_knob_2 = Knob::config<BipolarVoltage>(this, Param::Level2,
-                                                      "Taper 2 level", 0.5F);
+    auto *level_knob_2 =
+        Knob::config<BipolarVoltage>(this, Param::Level2, "Taper 2 level");
     Picker::config<Voltages>(this, Param::LevelRange2, "Taper 2 level range",
                              Voltages::Bipolar)
         ->on_change(
             [level_knob_2](Range r) { level_knob_2->set_display_range(r); });
-    Knob::config<Attenuverter>(this, Param::LevelAv2, "Taper 2 level CV gain",
-                               0.5F);
+    Knob::config<Attenuverter>(this, Param::LevelAv2, "Taper 2 level CV gain");
     configInput(Input::LevelCv2, "Taper 2 level CV");
 
     CurvatureKnob::config(this, Param::Curvature2, "Taper 2 curvature");
     Knob::config<Attenuverter>(this, Param::CurvatureAv2,
-                               "Taper 2 curvature CV gain", 0.5F);
+                               "Taper 2 curvature CV gain");
     Switch::config<Shapes>(this, Param::Shape2, "Taper 2 shape", Shapes::J);
     configInput(Input::CurvatureCv2, "Taper 2 curvature CV");
 

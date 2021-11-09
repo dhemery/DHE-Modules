@@ -55,7 +55,7 @@ public:
                                     AnchorSource::Out);
       auto *phase_0_level_knob = Knob::config<UnipolarVoltage>(
           this, Param::StepPhase0AnchorLevel + step,
-          step_name + "phase 0 level", 0.5F);
+          step_name + "phase 0 level");
       level_knobs.push_back(phase_0_level_knob);
       configInput(Input::StepPhase0AnchorLevelCv + step,
                   step_name + "phase 0 level CV");
@@ -68,7 +68,7 @@ public:
                                     AnchorSource::Level);
       auto *phase_1_level_knob = Knob::config<UnipolarVoltage>(
           this, Param::StepPhase1AnchorLevel + step,
-          step_name + "phase 1 level", 0.5F);
+          step_name + "phase 1 level");
       level_knobs.push_back(phase_1_level_knob);
       configInput(Input::StepPhase1AnchorLevelCv + step,
                   step_name + "phase 1 level CV");

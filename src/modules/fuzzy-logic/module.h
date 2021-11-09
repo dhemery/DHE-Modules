@@ -2,7 +2,7 @@
 
 #include "control-ids.h"
 
-#include "controls/switches.h"
+#include "controls/buttons.h"
 #include "signals/basic.h"
 #include "signals/voltages.h"
 
@@ -16,13 +16,13 @@ template <typename TEngine> struct Module : public rack::engine::Module {
   Module() {
     config(Param::Count, Input::Count, Output::Count);
     configInput(Input::A + 0, "A");
-    configParam(Param::NegateA + 0, 0.F, 1.F, 0.F, "Negate A");
+    Button::config(this, Param::NegateA + 0, "Negate A");
     configInput(Input::B + 0, "B");
-    configParam(Param::NegateB + 0, 0.F, 1.F, 0.F, "Negate B");
+    Button::config(this, Param::NegateB + 0, "Negate B");
     configInput(Input::A + 1, "C");
-    configParam(Param::NegateA + 1, 0.F, 1.F, 0.F, "Negate C");
+    Button::config(this, Param::NegateA + 1, "Negate C");
     configInput(Input::B + 1, "D");
-    configParam(Param::NegateB + 1, 0.F, 1.F, 0.F, "Negate D");
+    Button::config(this, Param::NegateB + 1, "Negate D");
 
     Switch::config<Voltages>(this, Param::LevelRange, "Level Range",
                              Voltages::Unipolar);

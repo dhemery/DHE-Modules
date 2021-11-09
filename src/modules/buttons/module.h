@@ -1,7 +1,8 @@
 #pragma once
 
-#include "./control-ids.h"
 #include "components/range.h"
+#include "control-ids.h"
+#include "controls/buttons.h"
 #include "params/presets.h"
 #include "signals/basic.h"
 
@@ -20,8 +21,8 @@ public:
     auto const row_names =
         std::vector<std::string>{"A", "B", "C", "D", "E", "F", "G", "H"};
     for (int i = 0; i < button_count; i++) {
-      configButton(Param::Button + i, "Switch " + row_names[i]);
-      configButton(Param::Negate + i, "Negate " + row_names[i]);
+      Button::config(this, Param::Button + i, "Button " + row_names[i]);
+      Button::config(this, Param::Negate + i, "Negate " + row_names[i]);
       configOutput(Output::Out + i, row_names[i]);
     }
   }

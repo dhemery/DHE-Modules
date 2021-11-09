@@ -113,8 +113,7 @@ public:
         });
     configInput(Input::LevelAttenuationCV, "Level multiplier CV");
 
-    Knob::config<Gain>(this, Param::DurationMultiplier, "Duration multiplier",
-                       0.5F);
+    Knob::config<Gain>(this, Param::DurationMultiplier, "Duration multiplier");
     Picker::config<Durations>(this, Param::DurationRange, "Duration range",
                               Durations::Medium)
         ->on_change([duration_knobs](Range r) {

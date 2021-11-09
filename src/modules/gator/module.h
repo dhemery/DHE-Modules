@@ -19,7 +19,8 @@ public:
     for (auto i = 0; i < Input::Count; i++) {
       auto const signal_name = std::to_string(i + 1);
       configInput(Input::Signal + i, "Signal " + signal_name);
-      configButton(Param::NegateSignal + i, "Negate signal " + signal_name);
+      Button::config(this, Param::NegateSignal + i,
+                     "Negate signal " + signal_name);
 
       configOutput(Output::And, "AND");
       configOutput(Output::Nand, "NAND");
