@@ -49,11 +49,11 @@ public:
 
     Knob::config<Gain>(this, Param::XGain, "X gain", 0.5F);
     configInput(Input::XGainCv, "X gain CV");
-    Picker::config<Voltages>(this, Param::XRange, "X range", Voltages::Bipolar);
+    Switch::config<Voltages>(this, Param::XRange, "X range", Voltages::Bipolar);
 
     Knob::config<Gain>(this, Param::YGain, "Y gain", 0.5F);
     configInput(Input::YGainCv, "Y gain CV");
-    Picker::config<Voltages>(this, Param::YRange, "Y range", Voltages::Bipolar);
+    Switch::config<Voltages>(this, Param::YRange, "Y range", Voltages::Bipolar);
 
     configOutput(Output::X, "X");
     configOutput(Output::Y, "Y");

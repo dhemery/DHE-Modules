@@ -35,11 +35,11 @@ public:
       configInput(Input::Input + i, input_name);
     }
 
-    Stepper::config<GateModes>(this, Param::GateMode, "True when",
-                               GateMode::High);
+    Switch::config<GateModes>(this, Param::GateMode, "True when",
+                              GateMode::High);
     static auto constexpr rows = 1 << N;
     for (int row = 0; row < rows; row++) {
-      Stepper::config<Outcomes>(this, Param::Outcome + row, "Q", Outcome::True);
+      Switch::config<Outcomes>(this, Param::Outcome + row, "Q", Outcome::True);
     }
     Button::config(this, Param::ForcQHigh, "Q");
     configOutput(Output::Q, "Q");

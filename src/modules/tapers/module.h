@@ -34,7 +34,7 @@ public:
     CurvatureKnob::config(this, Param::Curvature1, "Taper 1 curvature");
     Knob::config<Attenuverter>(this, Param::CurvatureAv1,
                                "Taper 1 curvature CV gain", 0.5F);
-    Picker::config<Shapes>(this, Param::Shape1, "Taper 1 shape", Shapes::J);
+    Switch::config<Shapes>(this, Param::Shape1, "Taper 1 shape", Shapes::J);
     configInput(Input::CurvatureCv1, "Taper 1 curvature CV");
 
     configOutput(Output::Taper1, "Taper 1");
@@ -52,7 +52,7 @@ public:
     CurvatureKnob::config(this, Param::Curvature2, "Taper 2 curvature");
     Knob::config<Attenuverter>(this, Param::CurvatureAv2,
                                "Taper 2 curvature CV gain", 0.5F);
-    Picker::config<Shapes>(this, Param::Shape2, "Taper 2 shape", Shapes::J);
+    Switch::config<Shapes>(this, Param::Shape2, "Taper 2 shape", Shapes::J);
     configInput(Input::CurvatureCv2, "Taper 2 curvature CV");
 
     configOutput(Output::Taper2, "Taper 2");

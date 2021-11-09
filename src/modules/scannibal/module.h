@@ -50,40 +50,40 @@ public:
     for (auto step = 0; step < N; step++) {
       auto const step_name = "Step " + std::to_string(step + 1) + " ";
       configLight(Light::Progress + step + step, step_name + "phase");
-      Stepper::config<AnchorSources>(this, Param::StepPhase0AnchorSource + step,
-                                     step_name + "phase 0 anchor source",
-                                     AnchorSource::Out);
+      Switch::config<AnchorSources>(this, Param::StepPhase0AnchorSource + step,
+                                    step_name + "phase 0 anchor source",
+                                    AnchorSource::Out);
       auto *phase_0_level_knob = Knob::config<UnipolarVoltage>(
           this, Param::StepPhase0AnchorLevel + step,
           step_name + "phase 0 level", 0.5F);
       level_knobs.push_back(phase_0_level_knob);
       configInput(Input::StepPhase0AnchorLevelCv + step,
                   step_name + "phase 0 level CV");
-      Stepper::config<AnchorModes>(this, Param::StepPhase0AnchorMode + step,
-                                   step_name + "phase 0 anchor mode",
-                                   AnchorMode::Sample);
+      Switch::config<AnchorModes>(this, Param::StepPhase0AnchorMode + step,
+                                  step_name + "phase 0 anchor mode",
+                                  AnchorMode::Sample);
 
-      Stepper::config<AnchorSources>(this, Param::StepPhase1AnchorSource + step,
-                                     step_name + "phase 1 anchor source",
-                                     AnchorSource::Level);
+      Switch::config<AnchorSources>(this, Param::StepPhase1AnchorSource + step,
+                                    step_name + "phase 1 anchor source",
+                                    AnchorSource::Level);
       auto *phase_1_level_knob = Knob::config<UnipolarVoltage>(
           this, Param::StepPhase1AnchorLevel + step,
           step_name + "phase 1 level", 0.5F);
       level_knobs.push_back(phase_1_level_knob);
       configInput(Input::StepPhase1AnchorLevelCv + step,
                   step_name + "phase 1 level CV");
-      Stepper::config<AnchorModes>(this, Param::StepPhase1AnchorMode + step,
-                                   step_name + "phase 1 anchor mode",
-                                   AnchorMode::Track);
+      Switch::config<AnchorModes>(this, Param::StepPhase1AnchorMode + step,
+                                  step_name + "phase 1 anchor mode",
+                                  AnchorMode::Track);
 
-      Picker::config<Shapes>(this, Param::StepShape + step, step_name + "shape",
+      Switch::config<Shapes>(this, Param::StepShape + step, step_name + "shape",
                              Shapes::J);
       CurvatureKnob::config(this, Param::StepCurvature + step,
                             step_name + "curvature");
       configInput(Input::StepCurvatureCv + step, step_name + "curvature CV");
 
       Knob::config<Gain>(this, Param::StepDuration + step,
-                         step_name + "relative duration", 1.F);
+                         step_name + "relative duration");
       configInput(Input::StepDurationCv + step,
                   step_name + "relative duration CV");
     }

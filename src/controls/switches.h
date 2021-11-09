@@ -61,13 +61,6 @@ struct Stepper {
     }
   };
 
-  template <typename TItems, typename TModule>
-  static inline auto config(TModule *module, int id, std::string const &name,
-                            typename TItems::ValueType value)
-      -> SwitchQuantity<typename TItems::ValueType> * {
-    return Switch::config<TItems>(module, id, name, value);
-  }
-
   template <typename TItems, typename TPanel>
   static inline auto install(TPanel *panel, int id, float xmm, float ymm)
       -> SwitchWidget<TPanel, Style<TItems>, TItems> * {

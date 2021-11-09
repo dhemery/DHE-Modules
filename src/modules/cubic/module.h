@@ -27,25 +27,24 @@ struct Module : public rack::engine::Module {
   Module() {
     config(Param::Count, Input::Count, Output::Count);
 
-    Knob::config<Coefficient>(this, Param::ACoefficient, "X cubed coefficient",
-                              0.5F);
+    Knob::config<Coefficient>(this, Param::ACoefficient, "X cubed coefficient");
     configInput(Input::ACoefficientCv, "X cubed coefficient CV");
 
     Knob::config<Coefficient>(this, Param::BCoefficient,
-                              "X squared coefficient", 0.5F);
+                              "X squared coefficient");
     configInput(Input::BCoefficientCv, "X squared coefficient CV");
 
-    Knob::config<Coefficient>(this, Param::CCoefficient, "X coefficient", 0.5F);
+    Knob::config<Coefficient>(this, Param::CCoefficient, "X coefficient");
     configInput(Input::CCoefficientCv, "X coefficient CV");
 
-    Knob::config<Coefficient>(this, Param::DCoefficient, "Constant coefficient",
-                              0.5F);
+    Knob::config<Coefficient>(this, Param::DCoefficient,
+                              "Constant coefficient");
     configInput(Input::DCoefficientCv, "Constant coefficient CV");
 
-    Knob::config<Gain>(this, Param::InputGain, "InPort gain", 0.5F);
+    Knob::config<Gain>(this, Param::InputGain, "InPort gain");
     configInput(Input::InputGainCv, "InPort gain CV");
 
-    Knob::config<Gain>(this, Param::OutputGain, "OutPort gain", 0.5F);
+    Knob::config<Gain>(this, Param::OutputGain, "OutPort gain");
     configInput(Input::OutputGainCv, "OutPort gain CV");
 
     configInput(Input::Cubic, "Module");

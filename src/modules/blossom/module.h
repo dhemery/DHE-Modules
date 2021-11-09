@@ -26,34 +26,32 @@ public:
     config(Param::Count, Input::Count, Output::Count);
 
     SpinSpeed::config(this, Param::SpinSpeed);
-    Knob::config<Attenuverter>(this, Param::SpinSpeedAv, "Speed CV gain", 0.5F);
+    Knob::config<Attenuverter>(this, Param::SpinSpeedAv, "Speed CV gain");
     configInput(Input::SpinSpeedCv, "Speed CV");
 
     Switch::config<BounceRatioModes>(this, Param::BounceRatioMode, "Ratio mode",
                                      1);
 
     BounceRatio::config(this, Param::BounceRatio, "Ratio");
-    Knob::config<Attenuverter>(this, Param::BounceRatioAv, "Ratio CV gain",
-                               0.5F);
+    Knob::config<Attenuverter>(this, Param::BounceRatioAv, "Ratio CV gain");
     configInput(Input::BounceRatioCv, "Ratio CV");
 
-    Knob::config<Percentage>(this, Param::BounceDepth, "Depth", 0.5F);
-    Knob::config<Attenuverter>(this, Param::BounceDepthAv, "Depth CV gain",
-                               0.5F);
+    Knob::config<Percentage>(this, Param::BounceDepth, "Depth");
+    Knob::config<Attenuverter>(this, Param::BounceDepthAv, "Depth CV gain");
     configInput(Input::BounceDepthCv, "Depth CV");
 
-    Knob::config<Angle>(this, Param::BouncePhaseOffset, "Phase", 0.5F);
+    Knob::config<Angle>(this, Param::BouncePhaseOffset, "Phase");
     Knob::config<Attenuverter>(this, Param::BouncePhaseOffsetAv,
-                               "Phase CV gain", 0.5F);
+                               "Phase CV gain");
     configInput(Input::BouncePhaseOffsetCv, "Phase CV");
 
-    Knob::config<Gain>(this, Param::XGain, "X gain", 0.5F);
-    Picker::config<Voltages>(this, Param::XRange, "X range",
+    Knob::config<Gain>(this, Param::XGain, "X gain");
+    Switch::config<Voltages>(this, Param::XRange, "X range",
                              Voltages::Unipolar);
     configInput(Input::XGainCv, "X gain CV");
 
-    Knob::config<Gain>(this, Param::YGain, "Y gain", 0.5F);
-    Picker::config<Voltages>(this, Param::YRange, "Y range", Voltages::Bipolar);
+    Knob::config<Gain>(this, Param::YGain, "Y gain");
+    Switch::config<Voltages>(this, Param::YRange, "Y range", Voltages::Bipolar);
     configInput(Input::YGainCv, "Y gain CV");
 
     configOutput(Output::X, "X");

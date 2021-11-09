@@ -47,18 +47,18 @@ private:
 
     auto const operator_switch_name =
         channel_name + (N == 1 ? "Operator" : " operator");
-    Stepper::config<Operators>(this, Param::Operation + channel,
-                               operator_switch_name, Operation::Add);
+    Switch::config<Operators>(this, Param::Operation + channel,
+                              operator_switch_name, Operation::Add);
 
     auto const offset_range_switch_name =
         channel_name + (N == 1 ? "Offset range" : " offset range");
-    Stepper::config<OffsetRanges>(this, Param::OffsetRange + channel,
-                                  offset_range_switch_name, 1);
+    Switch::config<OffsetRanges>(this, Param::OffsetRange + channel,
+                                 offset_range_switch_name, 1);
 
     auto const multiplier_range_switch_name =
         channel_name + (N == 1 ? "Multiplier range" : " multiplier range");
-    Stepper::config<MultiplierRanges>(this, Param::MultiplierRange + channel,
-                                      multiplier_range_switch_name, 2);
+    Switch::config<MultiplierRanges>(this, Param::MultiplierRange + channel,
+                                     multiplier_range_switch_name, 2);
 
     auto const operand_knob_param_quantity =
         reinterpret_cast<OperandParamQuantity<RackSignals> *>(
