@@ -64,7 +64,7 @@ struct LongDuration : public DurationRange<LongDuration> {
 
 struct Durations {
   using PositionType = int;
-  using ItemType = Range const;
+  using ItemType = Range;
   enum { Short, Medium, Long };
 
   static auto constexpr unit = Duration::unit;

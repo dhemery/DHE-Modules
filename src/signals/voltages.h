@@ -32,7 +32,7 @@ struct BipolarVoltage : public VoltageRange<BipolarVoltage> {
 
 struct Voltages {
   using PositionType = int;
-  using ItemType = Range const;
+  using ItemType = Range;
 
   enum { Bipolar, Unipolar };
 

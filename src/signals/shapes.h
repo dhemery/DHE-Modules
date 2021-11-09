@@ -30,7 +30,7 @@ struct Curvature {
 };
 
 struct Shapes {
-  using ItemType = sigmoid::Taper const;
+  using ItemType = sigmoid::Taper;
   using PositionType = int;
 
   enum { J, S };
