@@ -11,7 +11,7 @@
 #include "components/phase-timer.h"
 #include "controls/buttons.h"
 #include "controls/switches.h"
-#include "params/curvature-config.h"
+#include "params/curvature-knob-quantity.h"
 #include "params/duration-knob-quantity.h"
 #include "params/presets.h"
 #include "signals/step-selection.h"
@@ -65,9 +65,9 @@ template <int N> struct Module : public rack::engine::Module {
           this, Param::StepLevel + step, step_name + "level");
       level_knobs.push_back(level_knob);
 
-      config_curve_shape_switch(this, Param::StepShape + step,
-                                step_name + "shape");
-      config_curvature_knob(this, Param::StepCurvature + step,
+      Picker::config<Shapes>(this, Param::StepShape + step, step_name + "shape",
+                             Shapes::J);
+      CurvatureKnob::config(this, Param::StepCurvature + step,
                             step_name + "curvature");
       auto *duration_knob = DurationKnob::config(
           this, Param::StepDuration + step, step_name + "duration");

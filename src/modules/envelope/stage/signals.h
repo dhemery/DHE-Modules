@@ -4,8 +4,8 @@
 
 #include "components/sigmoid.h"
 #include "signals/common-inputs.h"
-#include "signals/curvature-inputs.h"
 #include "signals/durations.h"
+#include "signals/shapes.h"
 #include "signals/voltages.h"
 
 #include <vector>
@@ -20,7 +20,7 @@ template <typename TParam, typename TInput, typename TOutput> struct Signals {
       : params_{params}, inputs_{inputs}, outputs_{outputs} {}
 
   auto curvature() const -> float {
-    return dhe::curvature(params_[Param::Curvature]);
+    return Curvature::value(rotation_of(params_[Param::Curvature]));
   }
 
   auto defer() const -> bool { return is_high(inputs_[Input::Defer]); }

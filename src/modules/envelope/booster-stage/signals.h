@@ -4,8 +4,8 @@
 
 #include "components/sigmoid.h"
 #include "signals/common-inputs.h"
-#include "signals/curvature-inputs.h"
 #include "signals/durations.h"
+#include "signals/shapes.h"
 #include "signals/voltages.h"
 
 #include <vector>
@@ -22,8 +22,8 @@ public:
       : params_{params}, inputs_{inputs}, outputs_{outputs} {}
 
   auto curvature() const -> float {
-    return dhe::curvature(params_[Param::Curvature],
-                          inputs_[Input::CurvatureCv]);
+    return Curvature::value(
+        rotation(params_[Param::Curvature], inputs_[Input::CurvatureCv]));
   }
 
   auto defer() const -> bool {

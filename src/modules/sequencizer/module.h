@@ -13,11 +13,11 @@
 #include "controls/buttons.h"
 #include "controls/knobs.h"
 #include "controls/switches.h"
-#include "params/curvature-config.h"
+#include "params/curvature-knob-quantity.h"
 #include "params/duration-knob-quantity.h"
 #include "params/presets.h"
-#include "signals/curvature-inputs.h"
 #include "signals/durations.h"
+#include "signals/shapes.h"
 #include "signals/voltages.h"
 
 #include "rack.hpp"
@@ -90,7 +90,7 @@ public:
                                      step_name + "end anchor source",
                                      AnchorSource::Level);
 
-      config_curvature_knob(this, Param::StepCurvature + step,
+      CurvatureKnob::config(this, Param::StepCurvature + step,
                             step_name + "curvature");
       auto *duration_knob = DurationKnob::config(
           this, Param::StepDuration + step, step_name + "duration");

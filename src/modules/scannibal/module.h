@@ -9,11 +9,11 @@
 #include "components/cxmath.h"
 #include "controls/knobs.h"
 #include "controls/switches.h"
-#include "params/curvature-config.h"
+#include "params/curvature-knob-quantity.h"
 #include "params/duration-knob-quantity.h"
 #include "params/presets.h"
-#include "signals/curvature-inputs.h"
 #include "signals/durations.h"
+#include "signals/shapes.h"
 #include "signals/step-selection.h"
 #include "signals/voltages.h"
 
@@ -76,9 +76,9 @@ public:
                                    step_name + "phase 1 anchor mode",
                                    AnchorMode::Track);
 
-      config_curve_shape_switch(this, Param::StepShape + step,
-                                step_name + "shape");
-      config_curvature_knob(this, Param::StepCurvature + step,
+      Picker::config<Shapes>(this, Param::StepShape + step, step_name + "shape",
+                             Shapes::J);
+      CurvatureKnob::config(this, Param::StepCurvature + step,
                             step_name + "curvature");
       configInput(Input::StepCurvatureCv + step, step_name + "curvature CV");
 
@@ -130,8 +130,8 @@ public:
   }
 
   auto curvature(int step) const -> float {
-    return dhe::curvature(params[Param::StepCurvature + step],
-                          inputs[Input::StepCurvatureCv + step]);
+    return Curvature::value(rotation(params[Param::StepCurvature + step],
+                                     inputs[Input::StepCurvatureCv + step]));
   }
 
   auto duration(int step) const -> float {

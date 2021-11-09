@@ -5,10 +5,10 @@
 #include "components/range.h"
 #include "controls/knobs.h"
 #include "controls/switches.h"
-#include "params/curvature-config.h"
+#include "params/curvature-knob-quantity.h"
 #include "params/presets.h"
 #include "signals/common-inputs.h"
-#include "signals/curvature-inputs.h"
+#include "signals/shapes.h"
 #include "signals/voltages.h"
 
 #include "rack.hpp"
@@ -31,10 +31,10 @@ public:
                                0.5F);
     configInput(Input::LevelCv1, "Taper 1 level CV");
 
-    config_curvature_knob(this, Param::Curvature1, "Taper 1 curvature");
+    CurvatureKnob::config(this, Param::Curvature1, "Taper 1 curvature");
     Knob::config<Attenuverter>(this, Param::CurvatureAv1,
                                "Taper 1 curvature CV gain", 0.5F);
-    config_curve_shape_switch(this, Param::Shape1, "Taper 1 shape");
+    Picker::config<Shapes>(this, Param::Shape1, "Taper 1 shape", Shapes::J);
     configInput(Input::CurvatureCv1, "Taper 1 curvature CV");
 
     configOutput(Output::Taper1, "Taper 1");
@@ -49,10 +49,10 @@ public:
                                0.5F);
     configInput(Input::LevelCv2, "Taper 2 level CV");
 
-    config_curvature_knob(this, Param::Curvature2, "Taper 2 curvature");
+    CurvatureKnob::config(this, Param::Curvature2, "Taper 2 curvature");
     Knob::config<Attenuverter>(this, Param::CurvatureAv2,
                                "Taper 2 curvature CV gain", 0.5F);
-    config_curve_shape_switch(this, Param::Shape2, "Taper 2 shape");
+    Picker::config<Shapes>(this, Param::Shape2, "Taper 2 shape", Shapes::J);
     configInput(Input::CurvatureCv2, "Taper 2 curvature CV");
 
     configOutput(Output::Taper2, "Taper 2");
@@ -72,6 +72,14 @@ public:
   }
 
 private:
+  inline auto taper(float input, int knob_id, int cv_id, int av_id,
+                    int switch_id) const -> float {
+    const auto &taper = Shapes::select(position_of(params[switch_id]));
+    auto const curvature = Curvature::value(
+        rotation(params[knob_id], inputs[cv_id], params[av_id]));
+    return taper.apply(input, curvature);
+  }
+
   auto level_range(int id) const -> Range {
     auto const selection = position_of(params[id]);
     return Voltages::items()[selection];
@@ -87,11 +95,8 @@ private:
   }
 
   auto taper_1(float input) const -> float {
-    auto const &taper = selected_taper(params[Param::Shape1]);
-    auto const taper_curvature =
-        curvature(params[Param::Curvature1], inputs[Input::CurvatureCv1],
-                  params[Param::CurvatureAv1]);
-    return taper.apply(input, taper_curvature);
+    return taper(input, Param::Curvature1, Input::CurvatureCv1,
+                 Param::CurvatureAv1, Param::Shape1);
   }
 
   auto level_rotation_2() const -> float {
@@ -103,11 +108,8 @@ private:
   }
 
   auto taper_2(float input) const -> float {
-    const auto &taper = selected_taper(params[Param::Shape2]);
-    auto const taper_curvature =
-        curvature(params[Param::Curvature2], inputs[Input::CurvatureCv2],
-                  params[Param::CurvatureAv2]);
-    return taper.apply(input, taper_curvature);
+    return taper(input, Param::Curvature2, Input::CurvatureCv2,
+                 Param::CurvatureAv2, Param::Shape2);
   }
 };
 

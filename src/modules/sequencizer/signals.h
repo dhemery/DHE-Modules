@@ -5,9 +5,10 @@
 #include "status.h"
 
 #include "components/range.h"
-#include "signals/curvature-inputs.h"
+#include "signals/common-inputs.h"
 #include "signals/durations.h"
 #include "signals/gain.h"
+#include "signals/shapes.h"
 #include "signals/voltages.h"
 
 #include <vector>
@@ -81,7 +82,8 @@ public:
   }
 
   auto curvature(int step) const -> float {
-    return dhe::curvature(params_[ParamId::StepCurvature + step]);
+    return Curvature::value(
+        rotation_of(params_[ParamId::StepCurvature + step]));
   }
 
   auto duration(int step) const -> float {

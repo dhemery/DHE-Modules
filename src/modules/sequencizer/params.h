@@ -8,7 +8,7 @@ namespace dhe {
 namespace sequencizer {
 
 struct AnchorModes {
-  using TValue = AnchorMode;
+  using ValueType = AnchorMode;
   static auto constexpr frame_prefix = "anchor-mode";
 
   static inline auto labels() -> std::vector<std::string> const & {
@@ -19,7 +19,7 @@ struct AnchorModes {
 };
 
 struct AnchorSources {
-  using TValue = AnchorSource;
+  using ValueType = AnchorSource;
   static auto constexpr frame_prefix = "anchor-source";
 
   static inline auto labels() -> std::vector<std::string> const & {
@@ -30,7 +30,7 @@ struct AnchorSources {
 };
 
 struct InterruptModes {
-  using TValue = InterruptMode;
+  using ValueType = InterruptMode;
   static auto constexpr frame_prefix = "interrupt-mode";
 
   static inline auto labels() -> std::vector<std::string> const & {
@@ -41,7 +41,7 @@ struct InterruptModes {
 };
 
 struct Shapes {
-  using TValue = int;
+  using ValueType = int;
   static auto constexpr frame_prefix = "shape";
 
   static inline auto labels() -> std::vector<std::string> const & {
@@ -51,7 +51,7 @@ struct Shapes {
 };
 
 struct SustainModes {
-  using TValue = SustainMode;
+  using ValueType = SustainMode;
   static auto constexpr frame_prefix = "sustain-mode";
 
   static inline auto labels() -> std::vector<std::string> {
@@ -62,7 +62,7 @@ struct SustainModes {
 };
 
 struct TriggerModes {
-  using TValue = TriggerMode;
+  using ValueType = TriggerMode;
   static auto constexpr frame_prefix = "trigger-mode";
 
   static inline auto labels() -> std::vector<std::string> {

@@ -61,7 +61,7 @@ template <int N> struct ThumbSwitch {
 };
 
 template <typename TStepper> struct Stepper {
-  using Value = typename TStepper::TValue;
+  using Value = typename TStepper::ValueType;
   using Quantity = SwitchQuantity<Value>;
   using Frame = Stepper<TStepper>;
   template <typename TPanel> using TWidget = SwitchWidget<TPanel, Frame, Value>;

@@ -1,5 +1,6 @@
 #pragma once
 
+#include "params/curvature-knob-quantity.h"
 #include "params/duration-knob-quantity.h"
 #include "params/knob-quantity.h"
 #include "widgets/dimensions.h"
@@ -89,6 +90,24 @@ struct DurationKnob {
       -> DurationKnobQuantity * {
     return module->configParam<DurationKnobQuantity>(id, 0.F, 1.F, rotation,
                                                      name, Durations::unit);
+  }
+};
+
+struct CurvatureKnob {
+  template <typename TStyle, typename TPanel>
+  static inline auto install(TPanel *panel, int id, float xmm, float ymm)
+      -> KnobWidget<TPanel, TStyle> * {
+    auto *widget = rack::createParamCentered<KnobWidget<TPanel, TStyle>>(
+        mm2px(xmm, ymm), panel->getModule(), id);
+    panel->addParam(widget);
+    return widget;
+  }
+
+  static inline auto config(rack::engine::Module *module, int id,
+                            std::string const &name, float rotation = 0.5F)
+      -> CurvatureKnobQuantity * {
+    return module->configParam<CurvatureKnobQuantity>(id, 0.F, 1.F, rotation,
+                                                      name, Durations::unit);
   }
 };
 
