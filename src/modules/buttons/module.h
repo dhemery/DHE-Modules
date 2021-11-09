@@ -3,7 +3,7 @@
 #include "./control-ids.h"
 #include "components/range.h"
 #include "params/presets.h"
-#include "signals/common-inputs.h"
+#include "signals/basic.h"
 
 #include "rack.hpp"
 

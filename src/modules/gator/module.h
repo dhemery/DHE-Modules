@@ -2,7 +2,7 @@
 
 #include "control-ids.h"
 
-#include "signals/common-inputs.h"
+#include "signals/basic.h"
 
 #include "rack.hpp"
 

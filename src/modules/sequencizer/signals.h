@@ -5,7 +5,7 @@
 #include "status.h"
 
 #include "components/range.h"
-#include "signals/common-inputs.h"
+#include "signals/basic.h"
 #include "signals/durations.h"
 #include "signals/gain.h"
 #include "signals/shapes.h"
@@ -29,8 +29,8 @@ static inline auto duration(P const &duration_knob, P const &range_switch,
     -> float {
   static auto constexpr minimum_duration = ShortDuration::range().lower_bound();
   auto const nominal_duration =
-      Durations::value(rotation_of(duration_knob), position_of(range_switch));
-  auto const multiplier_rotation = dhe::rotation(multipler_knob, multiplier_cv);
+      Durations::value(value_of(duration_knob), position_of(range_switch));
+  auto const multiplier_rotation = rotation(multipler_knob, multiplier_cv);
   auto const nominal_multiplier = Gain::range().scale(multiplier_rotation);
   auto const clamped_multiplier = Gain::range().clamp(nominal_multiplier);
   auto const scaled_duration = nominal_duration * clamped_multiplier;
@@ -82,8 +82,7 @@ public:
   }
 
   auto curvature(int step) const -> float {
-    return Curvature::value(
-        rotation_of(params_[ParamId::StepCurvature + step]));
+    return Curvature::value(value_of(params_[ParamId::StepCurvature + step]));
   }
 
   auto duration(int step) const -> float {

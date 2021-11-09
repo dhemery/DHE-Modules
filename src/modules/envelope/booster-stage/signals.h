@@ -3,7 +3,7 @@
 #include "control-ids.h"
 
 #include "components/sigmoid.h"
-#include "signals/common-inputs.h"
+#include "signals/basic.h"
 #include "signals/durations.h"
 #include "signals/shapes.h"
 #include "signals/voltages.h"
@@ -63,7 +63,7 @@ public:
   }
 
   auto taper() const -> sigmoid::Taper const & {
-    return selected_taper(params_[Param::Shape]);
+    return Shapes::select(position_of(params_[Param::Shape]));
   }
 
 private:

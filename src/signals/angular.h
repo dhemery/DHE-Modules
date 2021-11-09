@@ -1,6 +1,6 @@
 #pragma once
 
-#include "common-inputs.h"
+#include "basic.h"
 #include "components/cxmath.h"
 #include "components/range.h"
 

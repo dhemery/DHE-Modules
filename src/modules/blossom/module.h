@@ -9,7 +9,7 @@
 #include "controls/knobs.h"
 #include "controls/switches.h"
 #include "signals/angular.h"
-#include "signals/common-inputs.h"
+#include "signals/basic.h"
 #include "signals/gain.h"
 #include "signals/voltages.h"
 
@@ -46,8 +46,7 @@ public:
     configInput(Input::BouncePhaseOffsetCv, "Phase CV");
 
     Knob::config<Gain>(this, Param::XGain, "X gain");
-    Switch::config<Voltages>(this, Param::XRange, "X range",
-                             Voltages::Unipolar);
+    Switch::config<Voltages>(this, Param::XRange, "X range", Voltages::Bipolar);
     configInput(Input::XGainCv, "X gain CV");
 
     Knob::config<Gain>(this, Param::YGain, "Y gain");
@@ -124,7 +123,7 @@ private:
   }
 
   inline auto x_offset() const -> float {
-    return selected<float, 2>(params[Param::XRange], {0.F, 1.F});
+    return value_of(params[Param::XRange]);
   };
 
   inline auto y_gain() const -> float {
@@ -132,7 +131,7 @@ private:
   }
 
   inline auto y_offset() const -> float {
-    return selected<float, 2>(params[Param::YRange], {0.F, 1.F});
+    return value_of(params[Param::YRange]);
   };
 
   PhaseRotor spinner_{};

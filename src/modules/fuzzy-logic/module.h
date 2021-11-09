@@ -3,7 +3,7 @@
 #include "control-ids.h"
 
 #include "controls/switches.h"
-#include "signals/common-inputs.h"
+#include "signals/basic.h"
 #include "signals/voltages.h"
 
 #include "rack.hpp"

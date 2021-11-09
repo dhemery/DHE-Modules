@@ -5,7 +5,7 @@
 #include "components/range.h"
 #include "controls/knobs.h"
 #include "params/presets.h"
-#include "signals/common-inputs.h"
+#include "signals/basic.h"
 
 #include "rack.hpp"
 

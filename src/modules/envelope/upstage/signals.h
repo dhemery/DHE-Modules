@@ -1,6 +1,6 @@
 #pragma once
 
-#include "signals/common-inputs.h"
+#include "signals/basic.h"
 #include "signals/voltages.h"
 
 #include <vector>

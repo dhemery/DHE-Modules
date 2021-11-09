@@ -7,7 +7,7 @@
 #include "controls/switches.h"
 #include "params/curvature-knob-quantity.h"
 #include "params/presets.h"
-#include "signals/common-inputs.h"
+#include "signals/basic.h"
 #include "signals/shapes.h"
 #include "signals/voltages.h"
 

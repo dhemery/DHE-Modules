@@ -55,7 +55,7 @@ struct Signals {
   }
 
   auto operand(int channel) const -> float {
-    return rotation_of(params_[Param::Operand + channel]);
+    return value_of(params_[Param::Operand + channel]);
   }
 
   auto operation(int channel) const -> Operation {
