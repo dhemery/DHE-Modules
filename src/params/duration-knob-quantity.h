@@ -14,8 +14,8 @@ public:
     return range_.scale(tapered);
   }
 
-  void setDisplayValue(float duration_seconds) override {
-    auto const tapered = range_.normalize(duration_seconds);
+  void setDisplayValue(float seconds) override {
+    auto const tapered = range_.normalize(seconds);
     auto const rotation = Duration::taper().invert(tapered);
     setValue(rotation);
   }
@@ -23,6 +23,6 @@ public:
   void set_display_range(Range r) { range_ = r; }
 
 private:
-  Range range_{MediumDuration::range};
+  Range range_{MediumDuration::range()};
 };
 } // namespace dhe

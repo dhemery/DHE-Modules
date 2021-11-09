@@ -35,7 +35,7 @@ template <typename TParam, typename TInput, typename TOutput> struct Signals {
   }
 
   void send_trigger(bool is_triggered) {
-    auto const voltage = UnipolarVoltage::range.scale(is_triggered);
+    auto const voltage = UnipolarVoltage::range().scale(is_triggered);
     outputs_[Output::Trigger].setVoltage(voltage);
   }
 

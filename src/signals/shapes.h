@@ -53,8 +53,8 @@ struct Shapes {
     return items()[selection];
   }
 
-  static inline auto value(float rotation, int shape_selection) -> float {
-    return select(shape_selection).apply(rotation);
+  static inline auto value(float rotation, int index) -> float {
+    return select(index).apply(rotation);
   }
 };
 } // namespace dhe

@@ -27,7 +27,7 @@ template <typename P, typename I>
 static inline auto duration(P const &duration_knob, P const &range_switch,
                             P const &multipler_knob, I const &multiplier_cv)
     -> float {
-  static auto constexpr minimum_duration = ShortDuration::range.lower_bound();
+  static auto constexpr minimum_duration = ShortDuration::range().lower_bound();
   auto const nominal_duration =
       Durations::value(rotation_of(duration_knob), position_of(range_switch));
   auto const multiplier_rotation = dhe::rotation(multipler_knob, multiplier_cv);

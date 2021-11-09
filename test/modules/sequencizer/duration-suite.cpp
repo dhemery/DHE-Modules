@@ -79,17 +79,17 @@ public:
     t.run("maximum short duration is twice short duration upper bound",
           test(maximum_duration_rotation, short_duration_selection,
                maximum_multiplier_rotation, 10.F,
-               is_equal_to(2.F * dhe::ShortDuration::range.upper_bound())));
+               is_equal_to(2.F * dhe::ShortDuration::range().upper_bound())));
 
     t.run("maximum medium duration is twice medium duration upper bound",
           test(maximum_duration_rotation, medium_duration_selection,
                maximum_multiplier_rotation, 10.F,
-               is_equal_to(2.F * dhe::MediumDuration::range.upper_bound())));
+               is_equal_to(2.F * dhe::MediumDuration::range().upper_bound())));
 
     t.run("maximum long duration is twice long duration upper bound",
           test(maximum_duration_rotation, long_duration_selection,
                maximum_multiplier_rotation, 10.F,
-               is_equal_to(2.F * dhe::LongDuration::range.upper_bound())));
+               is_equal_to(2.F * dhe::LongDuration::range().upper_bound())));
   }
 };
 

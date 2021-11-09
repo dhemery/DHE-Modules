@@ -25,9 +25,9 @@ struct Module : public rack::engine::Module {
   }
 
   void process(ProcessArgs const & /*args*/) override {
-    auto const normalized = BipolarVoltage::range.normalize(signal_in());
+    auto const normalized = BipolarVoltage::range().normalize(signal_in());
     auto const tapered = taper(normalized);
-    auto const output_voltage = BipolarVoltage::range.scale(tapered);
+    auto const output_voltage = BipolarVoltage::range().scale(tapered);
     send_signal(output_voltage);
   }
 

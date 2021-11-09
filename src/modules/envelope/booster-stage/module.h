@@ -27,7 +27,7 @@ struct Module : public rack::engine::Module {
     configOutput(Output::Envelope, "Stage");
 
     auto *level_knob =
-        Knob::config<UnipolarVoltage>(this, Param::Level, "Level", 0.5F);
+        Knob::config<UnipolarVoltage>(this, Param::Level, "Level");
     auto const update_level_knob_range = [level_knob](Range r) {
       level_knob->set_display_range(r);
     };
@@ -41,7 +41,7 @@ struct Module : public rack::engine::Module {
     Picker::config<Shapes>(this, Param::Shape, "Shape", Shapes::J);
     configInput(Input::CurvatureCv, "Curvature CV");
 
-    DurationKnob::config(this, Param::Duration, "Duration", 0.5F);
+    DurationKnob::config(this, Param::Duration, "Duration");
     Picker::config<Durations>(this, Param::DurationRange, "Duration range",
                               Durations::Medium);
     configInput(Input::DurationCv, "Duration CV");

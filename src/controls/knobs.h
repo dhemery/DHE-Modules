@@ -107,7 +107,7 @@ struct CurvatureKnob {
                             std::string const &name, float rotation = 0.5F)
       -> CurvatureKnobQuantity * {
     return module->configParam<CurvatureKnobQuantity>(id, 0.F, 1.F, rotation,
-                                                      name, Durations::unit);
+                                                      name);
   }
 };
 
