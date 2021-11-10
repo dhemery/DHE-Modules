@@ -14,41 +14,32 @@ namespace dhe {
 namespace blossom {
 
 struct BounceRatio {
-  static auto constexpr range() -> Range { return Range{1.F, 17.F}; }
+  static auto constexpr unit = "x";
 
-  static inline auto value(float rotation, bool quantize) -> float {
-    auto const ratio = range().scale(rotation);
+  static inline auto ratio(float rotation, bool quantize) -> float {
+    auto const ratio = range.scale(rotation);
     return quantize ? std::round(ratio) : ratio;
   }
 
-  static inline auto rotation(float ratio) -> float {
-    return range().normalize(ratio);
-  }
-};
-
-struct BounceRatioQuantity : public rack::engine::ParamQuantity {
-  auto getDisplayValue() -> float override {
-    return BounceRatio::value(getValue(), quantize_);
+  static auto constexpr rotation(float ratio) -> float {
+    return range.normalize(ratio);
   }
 
-  void setDisplayValue(float ratio) override {
-    auto const rotation = BounceRatio::rotation(ratio);
-    setValue(rotation);
-  }
+  struct KnobMapper {
+    auto to_value(float ratio) const -> float { return rotation(ratio); }
 
-  void set_quantize(bool quantize) { quantize_ = quantize; }
+    auto to_display_value(float rotation) const -> float {
+      return ratio(rotation, quantize_);
+    }
+
+    void quantize(bool q) { quantize_ = q; }
+
+  private:
+    bool quantize_{false};
+  };
 
 private:
-  bool quantize_{false};
-};
-
-struct BounceRatioKnob {
-  static inline auto config(rack::engine::Module *module, int id,
-                            std::string const &name, float rotation = 0.5)
-      -> BounceRatioQuantity * {
-    return module->configParam<BounceRatioQuantity>(id, 0.F, 1.F, rotation,
-                                                    name, "x");
-  }
+  static constexpr auto range = Range{1.F, 17.F};
 };
 
 struct BounceRatioModes {
@@ -61,40 +52,28 @@ struct BounceRatioModes {
   }
 };
 
-struct SpinSpeed {
-  static auto constexpr range() -> Range { return Range{-10.F, 10.F}; }
-  static auto constexpr taper() -> sigmoid::Taper {
-    return sigmoid::s_taper_with_curvature(-0.8F);
-  }
-  static auto constexpr rotation(float spin) -> float {
-    return taper().invert(range().normalize(spin));
-  }
-  static auto constexpr value(float rotation) -> float {
-    return range().scale(taper().apply(rotation));
-  }
-};
+class SpinSpeed {
+  static auto constexpr range = Range{-10.F, 10.F};
+  static auto constexpr taper = sigmoid::s_taper_with_curvature(-0.8F);
 
-struct SpinSpeedQuantity : public rack::engine::ParamQuantity {
-  auto getDisplayValue() -> float override {
-    return SpinSpeed::value(getValue());
+public:
+  static auto constexpr unit = " Hz";
+
+  static auto constexpr rotation(float hertz) -> float {
+    return taper.invert(range.normalize(hertz));
   }
 
-  void setDisplayValue(float spin) override {
-    setValue(SpinSpeed::rotation(spin));
+  static auto constexpr hertz(float rotation) -> float {
+    return range.scale(taper.apply(rotation));
   }
-};
 
-struct SpinSpeedKnob {
-  static auto constexpr initial_spin_hz{1.F};
-  static auto constexpr initial_rotation = SpinSpeed::rotation(initial_spin_hz);
+  struct KnobMapper {
+    auto to_display_value(float rotation) const -> float {
+      return hertz(rotation);
+    }
 
-  static inline auto config(rack::engine::Module *module, int knob_id,
-                            std::string const &name,
-                            float rotation = initial_rotation)
-      -> SpinSpeedQuantity * {
-    return module->configParam<SpinSpeedQuantity>(knob_id, 0.F, 1.F, rotation,
-                                                  name, " Hz");
-  }
+    auto to_value(float hertz) const -> float { return rotation(hertz); }
+  };
 };
 
 } // namespace blossom

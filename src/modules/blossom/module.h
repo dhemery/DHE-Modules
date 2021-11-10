@@ -25,16 +25,17 @@ public:
   Module() {
     config(Param::Count, Input::Count, Output::Count);
 
-    SpinSpeedKnob::config(this, Param::SpinSpeed, "Speed");
+    Knob::config<SpinSpeed>(this, Param::SpinSpeed, "Speed",
+                            SpinSpeed::rotation(1.F));
     Knob::config<Attenuverter>(this, Param::SpinSpeedAv, "Speed CV gain");
     configInput(Input::SpinSpeedCv, "Speed CV");
 
     auto *ratio_knob =
-        BounceRatioKnob::config(this, Param::BounceRatio, "Ratio");
+        Knob::config<BounceRatio>(this, Param::BounceRatio, "Ratio");
     Switch::config<BounceRatioModes>(this, Param::BounceRatioMode, "Ratio mode",
                                      BounceRatioModes::Free)
         ->on_change(
-            [ratio_knob](int pos) { ratio_knob->set_quantize(pos == 0); });
+            [ratio_knob](int pos) { ratio_knob->mapper().quantize(pos == 0); });
 
     Knob::config<Attenuverter>(this, Param::BounceRatioAv, "Ratio CV gain");
     configInput(Input::BounceRatioCv, "Ratio CV");
@@ -89,7 +90,7 @@ public:
 
 private:
   inline auto bounce_ratio() const -> float {
-    return BounceRatio::value(rotation(params[Param::BounceRatio],
+    return BounceRatio::ratio(rotation(params[Param::BounceRatio],
                                        inputs[Input::BounceRatioCv],
                                        params[Param::BounceRatioAv]),
                               position_of(params[Param::BounceRatioMode]) == 0);
@@ -112,10 +113,9 @@ private:
   }
 
   inline auto spin_speed() const -> float {
-    auto const rotation =
-        dhe::rotation(params[Param::SpinSpeed], inputs[Input::SpinSpeedCv],
-                      params[Param::SpinSpeedAv]);
-    return SpinSpeed::range().scale(SpinSpeed::taper().apply(rotation));
+    return SpinSpeed::hertz(rotation(params[Param::SpinSpeed],
+                                     inputs[Input::SpinSpeedCv],
+                                     params[Param::SpinSpeedAv]));
   }
 
   inline auto gain(int knob_id, int cv_id) const -> float {
