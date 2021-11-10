@@ -94,7 +94,7 @@ public:
       duration_knobs.push_back(duration_knob);
 
       Switch::config<Shapes>(this, Param::StepShape + step, step_name + "shape",
-                             0);
+                             Shapes::J);
       Button::config(this, Param::StepEnabled + step, step_name + "enabled", 1);
 
       signals_.show_inactive(step);

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "control-ids.h"
-#include "controls.h"
+#include "params.h"
 
 #include "controls/ports.h"
 #include "controls/switches.h"

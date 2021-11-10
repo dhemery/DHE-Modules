@@ -8,8 +8,10 @@ namespace dhe {
 namespace func {
 
 struct OffsetRanges {
-  using PositionType = int;
+  enum Index { Unipolar5, Bipolar, Unipolar, Bipolar10 };
+  using ValueType = Index;
   static constexpr auto stepper_slug = "offset-range";
+
   static inline auto labels() -> std::vector<std::string> const & {
     static auto const labels =
         std::vector<std::string>{"0–5 V", "±5 V", "0–10 V", "±10 V"};
@@ -18,8 +20,10 @@ struct OffsetRanges {
 };
 
 struct MultiplierRanges {
-  using PositionType = int;
+  enum Index { Attenuator, Attenuverter, Gain, Gainuverter };
+  using ValueType = Index;
   static constexpr auto stepper_slug = "multiplier-range";
+
   static inline auto labels() -> std::vector<std::string> const & {
     static auto const labels =
         std::vector<std::string>{"0–1", "±1", "0–2", "±2"};
@@ -28,8 +32,9 @@ struct MultiplierRanges {
 };
 
 struct Operators {
-  using PositionType = Operation;
+  using ValueType = Operation;
   static constexpr auto stepper_slug = "toggle-2";
+
   static inline auto labels() -> std::vector<std::string> const & {
     static const auto labels =
         std::vector<std::string>{"Add (offset)", "Multiply (scale)"};

@@ -53,12 +53,14 @@ private:
     auto const offset_range_switch_name =
         channel_name + (N == 1 ? "Offset range" : " offset range");
     Switch::config<OffsetRanges>(this, Param::OffsetRange + channel,
-                                 offset_range_switch_name, 1);
+                                 offset_range_switch_name,
+                                 OffsetRanges::Bipolar);
 
     auto const multiplier_range_switch_name =
         channel_name + (N == 1 ? "Multiplier range" : " multiplier range");
     Switch::config<MultiplierRanges>(this, Param::MultiplierRange + channel,
-                                     multiplier_range_switch_name, 2);
+                                     multiplier_range_switch_name,
+                                     MultiplierRanges::Gain);
 
     auto const operand_knob_param_quantity =
         reinterpret_cast<OperandParamQuantity<RackSignals> *>(

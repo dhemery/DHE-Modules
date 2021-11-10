@@ -1,10 +1,10 @@
 #pragma once
 
 #include "./control-ids.h"
-#include "./controls.h"
 #include "./gate-modes.h"
 #include "./input-selector.h"
 #include "./outcomes.h"
+#include "./params.h"
 #include "./upgrader.h"
 #include "signals/basic.h"
 

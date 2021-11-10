@@ -62,18 +62,11 @@ private:
 };
 
 struct Voltages {
-  using KnobMapper = SelectableVoltageRangeMapper<Voltages>;
-  using PositionType = int;
-
   enum Index { Bipolar, Unipolar };
+  using KnobMapper = SelectableVoltageRangeMapper<Voltages>;
+  using ValueType = Index;
 
   static auto constexpr unit = Voltage::unit;
-
-  static inline auto items() -> std::vector<Range> const & {
-    static auto const items =
-        std::vector<Range>{BipolarVoltage::range(), UnipolarVoltage::range()};
-    return items;
-  }
 
   static inline auto labels() -> std::vector<std::string> const & {
     static auto const labels =
@@ -82,7 +75,9 @@ struct Voltages {
   }
 
   static inline auto select(int selection) -> Range const & {
-    return items()[selection];
+    static auto const ranges =
+        std::vector<Range>{BipolarVoltage::range(), UnipolarVoltage::range()};
+    return ranges[selection];
   }
 
   static inline auto value(float rotation, int selection) -> float {

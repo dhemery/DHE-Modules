@@ -9,7 +9,7 @@
 namespace dhe {
 namespace truth {
 struct GateModes {
-  using PositionType = GateMode;
+  using ValueType = GateMode;
   static constexpr auto stepper_slug = "gate-mode";
   static inline auto labels() -> std::vector<std::string> const & {
     static const auto labels = std::vector<std::string>{
@@ -20,7 +20,7 @@ struct GateModes {
 };
 
 struct Outcomes {
-  using PositionType = Outcome;
+  using ValueType = Outcome;
   static constexpr auto stepper_slug = "outcome";
   static inline auto labels() -> std::vector<std::string> const & {
     static const auto labels =

@@ -6,7 +6,7 @@
 namespace dhe {
 namespace curve_sequencer {
 struct AdvanceModes {
-  using PositionType = AdvanceMode;
+  using ValueType = AdvanceMode;
   static constexpr auto stepper_slug = "advance-mode";
   static inline auto labels() -> std::vector<std::string> const & {
     static auto const labels = std::vector<std::string>{
@@ -17,7 +17,7 @@ struct AdvanceModes {
 };
 
 struct GenerateModes {
-  using PositionType = GenerateMode;
+  using ValueType = GenerateMode;
   static constexpr auto stepper_slug = "generate-mode";
   static inline auto labels() -> std::vector<std::string> const & {
     static auto const labels = std::vector<std::string>{

@@ -83,7 +83,7 @@ private:
 
   auto level_range(int id) const -> Range {
     auto const selection = position_of(params[id]);
-    return Voltages::items()[selection];
+    return Voltages::select(selection);
   }
 
   auto level_rotation_1() const -> float {

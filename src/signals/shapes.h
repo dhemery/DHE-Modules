@@ -66,18 +66,12 @@ struct Curvature {
 };
 
 struct Shapes {
-  using Taper = sigmoid::Taper;
-  using PositionType = int;
-
   enum Index { J, S };
+  using Taper = sigmoid::Taper;
+  using ValueType = Index;
+
   static auto constexpr unit = "";
   static auto constexpr stepper_slug = "shape";
-
-  static inline auto items() -> std::vector<Taper> const & {
-    static auto const items =
-        std::vector<Taper>{sigmoid::j_taper, sigmoid::s_taper};
-    return items;
-  }
 
   static inline auto labels() -> std::vector<std::string> const & {
     static auto const labels = std::vector<std::string>{"J", "S"};
@@ -85,7 +79,9 @@ struct Shapes {
   }
 
   static inline auto select(int selection) -> Taper const & {
-    return items()[selection];
+    static auto const tapers =
+        std::vector<Taper>{sigmoid::j_taper, sigmoid::s_taper};
+    return tapers[selection];
   }
 
   static inline auto value(float rotation, int selection) -> float {

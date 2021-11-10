@@ -14,7 +14,6 @@ namespace dhe {
 namespace blossom {
 
 struct BounceRatio {
-
   static auto constexpr range() -> Range { return Range{1.F, 17.F}; }
 
   static inline auto value(float rotation, bool quantize) -> float {
@@ -53,8 +52,9 @@ struct BounceRatioKnob {
 };
 
 struct BounceRatioModes {
-  using PositionType = int;
-  enum { Quantized, Free };
+  enum Index { Quantized, Free };
+  using ValueType = Index;
+
   static inline auto labels() -> std::vector<std::string> const & {
     static auto const labels = std::vector<std::string>{"Quantized", "Free"};
     return labels;

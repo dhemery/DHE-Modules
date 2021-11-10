@@ -7,7 +7,7 @@
 namespace dhe {
 namespace scannibal {
 struct AnchorModes {
-  using PositionType = AnchorMode;
+  using ValueType = AnchorMode;
   static constexpr auto stepper_slug = "anchor-mode";
   static inline auto labels() -> std::vector<std::string> {
     static const auto labels =
@@ -17,7 +17,7 @@ struct AnchorModes {
 };
 
 struct AnchorSources {
-  using PositionType = AnchorSource;
+  using ValueType = AnchorSource;
   static constexpr auto stepper_slug = "anchor-source";
   static inline auto labels() -> std::vector<std::string> {
     static const auto labels =

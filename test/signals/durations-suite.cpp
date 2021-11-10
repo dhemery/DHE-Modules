@@ -17,7 +17,7 @@ public:
   void run(Tester &t) override {
     for (int selection = Durations::Short; selection <= Durations::Long;
          selection++) {
-      auto const range = Durations::items()[selection];
+      auto const range = Durations::select(selection);
       t.run(Durations::labels()[selection], [selection, range](Tester &t) {
         t.run("minimum rotation yields range lower bound",
               [selection, range](Tester &t) {
