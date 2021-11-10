@@ -25,14 +25,17 @@ public:
   Module() {
     config(Param::Count, Input::Count, Output::Count);
 
-    SpinSpeed::config(this, Param::SpinSpeed);
+    SpinSpeedKnob::config(this, Param::SpinSpeed, "Speed");
     Knob::config<Attenuverter>(this, Param::SpinSpeedAv, "Speed CV gain");
     configInput(Input::SpinSpeedCv, "Speed CV");
 
+    auto *ratio_knob =
+        BounceRatioKnob::config(this, Param::BounceRatio, "Ratio");
     Switch::config<BounceRatioModes>(this, Param::BounceRatioMode, "Ratio mode",
-                                     1);
+                                     BounceRatioModes::Free)
+        ->on_change(
+            [ratio_knob](int pos) { ratio_knob->set_quantize(pos == 0); });
 
-    BounceRatio::config(this, Param::BounceRatio, "Ratio");
     Knob::config<Attenuverter>(this, Param::BounceRatioAv, "Ratio CV gain");
     configInput(Input::BounceRatioCv, "Ratio CV");
 
@@ -88,7 +91,8 @@ private:
   inline auto bounce_ratio() const -> float {
     return BounceRatio::value(rotation(params[Param::BounceRatio],
                                        inputs[Input::BounceRatioCv],
-                                       params[Param::BounceRatioAv]));
+                                       params[Param::BounceRatioAv]),
+                              position_of(params[Param::BounceRatioMode]) == 0);
   }
 
   inline auto bounce_ratio_is_free() const -> bool {

@@ -38,15 +38,8 @@ struct Panel : public PanelWidget<Panel> {
     Knob::install<Tiny>(this, Param::BounceRatioAv, column2, y);
     Knob::install<Large>(this, Param::BounceRatio, column3, y);
 
-    auto quantize_bounce_ratio = [this](int pos) {
-      auto *q = reinterpret_cast<BounceRatio::Quantity *>(
-          getModule()->getParamQuantity(Param::BounceRatio));
-      q->quantize(pos == 0);
-    };
-
     ThumbSwitch::install<BounceRatioModes>(this, Param::BounceRatioMode,
-                                           column4, y)
-        ->on_change(quantize_bounce_ratio);
+                                           column4, y);
 
     y += dy;
     InPort::install(this, Input::BounceDepthCv, column1, y);

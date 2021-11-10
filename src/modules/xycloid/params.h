@@ -58,9 +58,9 @@ public:
     return WobbleRatios::value(getValue(), range_selection_, quantize_);
   }
 
-  void setDisplayValue(float value) override {
+  void setDisplayValue(float ratio) override {
     auto const rotation =
-        WobbleRatios::select(range_selection_).normalize(value);
+        WobbleRatios::select(range_selection_).normalize(ratio);
     setValue(rotation);
   }
 
@@ -89,7 +89,7 @@ struct ThrobSpeed {
     return sigmoid::s_taper_with_curvature(-0.8F);
   }
 
-  static auto value(float rotation) -> float {
+  static auto constexpr value(float rotation) -> float {
     return range().scale(taper().apply(rotation));
   }
 
