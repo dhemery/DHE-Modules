@@ -20,13 +20,13 @@ struct Module : public rack::engine::Module {
     config(Param::Count, Input::Count, Output::Count);
 
     auto *level_knob =
-        Knob::config<UnipolarVoltage>(this, Param::Level, "Level");
-    auto update_level_knob_range = [level_knob](Range r) {
-      level_knob->set_display_range(r);
+        MappedKnob::config<Voltages>(this, Param::Level, "Level");
+    auto select_level_range = [level_knob](int range_index) {
+      level_knob->mapper().select_range(range_index);
     };
-    Picker::config<Voltages>(this, Param::LevelRange, "Level range",
+    Switch::config<Voltages>(this, Param::LevelRange, "Level range",
                              Voltages::Unipolar)
-        ->on_change(update_level_knob_range);
+        ->on_change(select_level_range);
     configInput(Input::LevelCv, "Level CV");
 
     configInput(Input::Trigger, "Trigger");

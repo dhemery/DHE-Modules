@@ -43,7 +43,7 @@ public:
     configOutput(Output::StepPhase, "Step phase");
     configOutput(Output::Out, "Scanner");
 
-    auto level_knobs = std::vector<KnobQuantity<float> *>{};
+    auto level_knobs = std::vector<MappedKnobQuantity<Voltages> *>{};
 
     for (auto step = 0; step < N; step++) {
       auto const step_name = "Step " + std::to_string(step + 1) + " ";
@@ -51,7 +51,7 @@ public:
       Switch::config<AnchorSources>(this, Param::StepPhase0AnchorSource + step,
                                     step_name + "phase 0 anchor source",
                                     AnchorSource::Out);
-      auto *phase_0_level_knob = Knob::config<UnipolarVoltage>(
+      auto *phase_0_level_knob = MappedKnob::config<Voltages>(
           this, Param::StepPhase0AnchorLevel + step,
           step_name + "phase 0 level");
       level_knobs.push_back(phase_0_level_knob);
@@ -64,7 +64,7 @@ public:
       Switch::config<AnchorSources>(this, Param::StepPhase1AnchorSource + step,
                                     step_name + "phase 1 anchor source",
                                     AnchorSource::Level);
-      auto *phase_1_level_knob = Knob::config<UnipolarVoltage>(
+      auto *phase_1_level_knob = MappedKnob::config<Voltages>(
           this, Param::StepPhase1AnchorLevel + step,
           step_name + "phase 1 level");
       level_knobs.push_back(phase_1_level_knob);
@@ -86,14 +86,14 @@ public:
                   step_name + "relative duration CV");
     }
 
-    auto update_level_knob_ranges = [level_knobs](Range r) {
+    auto select_level_range = [level_knobs](int range_index) {
       for (auto *knob : level_knobs) {
-        knob->set_display_range(r);
+        knob->mapper().select_range(range_index);
       }
     };
-    Picker::config<Voltages>(this, Param::LevelRange, "Level range",
+    Switch::config<Voltages>(this, Param::LevelRange, "Level range",
                              Voltages::Unipolar)
-        ->on_change(update_level_knob_ranges);
+        ->on_change(select_level_range);
   }
 
   ~Module() override = default;

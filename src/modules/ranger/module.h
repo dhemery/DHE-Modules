@@ -24,24 +24,24 @@ struct Module : public rack::engine::Module {
     Knob::config<Attenuverter>(this, Param::LevelAv, "Level CV gain");
 
     auto *ccw_limit_knob =
-        Knob::config<UnipolarVoltage>(this, Param::CcwLimit, "CCW limit", 0.F);
-    auto update_ccw_limit_knob_range = [ccw_limit_knob](Range r) {
-      ccw_limit_knob->set_display_range(r);
+        MappedKnob::config<Voltages>(this, Param::CcwLimit, "CCW limit", 0.F);
+    auto select_ccw_limit_level_range = [ccw_limit_knob](int range_index) {
+      ccw_limit_knob->mapper().select_range(range_index);
     };
-    Picker::config<Voltages>(this, Param::CcwLimitRange, "CCW limit range",
+    Switch::config<Voltages>(this, Param::CcwLimitRange, "CCW limit range",
                              Voltages::Bipolar)
-        ->on_change(update_ccw_limit_knob_range);
+        ->on_change(select_ccw_limit_level_range);
     configInput(Input::CcwLimitCv, "CCW limit CV");
     Knob::config<Attenuverter>(this, Param::CcwLimitAv, "CCW limit CV gain");
 
     auto *cw_limit_knob =
-        Knob::config<UnipolarVoltage>(this, Param::CwLimit, "CW limit", 1.F);
-    auto update_cw_limit_knob_range = [cw_limit_knob](Range r) {
-      cw_limit_knob->set_display_range(r);
+        MappedKnob::config<Voltages>(this, Param::CwLimit, "CW limit", 1.F);
+    auto select_cw_limit_level_range = [cw_limit_knob](int range_index) {
+      cw_limit_knob->mapper().select_range(range_index);
     };
-    Picker::config<Voltages>(this, Param::CwLimitRange, "CW limit range",
+    Switch::config<Voltages>(this, Param::CwLimitRange, "CW limit range",
                              Voltages::Bipolar)
-        ->on_change(update_cw_limit_knob_range);
+        ->on_change(select_cw_limit_level_range);
     configInput(Input::CwLimitCv, "CW limit CV");
     Knob::config<Attenuverter>(this, Param::CwLimitAv, "CW limit CV gain");
 

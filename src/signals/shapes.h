@@ -29,7 +29,7 @@ struct CurvatureTaper {
   }
 };
 
-struct CurvatureDisplayMapper {
+struct CurvatureKnobMapper {
   auto to_display_value(float rotation) const -> float {
     return CurvatureTaper::value(rotation);
   }
@@ -62,7 +62,7 @@ struct Curvature {
   }
 
   static auto constexpr unit = "";
-  using DisplayMapper = CurvatureDisplayMapper;
+  using DisplayMapper = CurvatureKnobMapper;
 };
 
 struct Shapes {

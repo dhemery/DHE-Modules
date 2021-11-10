@@ -1,6 +1,5 @@
 #pragma once
 
-#include "params/picker-switch-quantity.h"
 #include "params/switch-quantity.h"
 #include "widgets/dimensions.h"
 #include "widgets/switch-widget.h"
@@ -65,19 +64,6 @@ struct Stepper {
   static inline auto install(TPanel *panel, int id, float xmm, float ymm)
       -> SwitchWidget<TPanel, Style<TItems>, TItems> * {
     return Switch::install<TItems, Style<TItems>>(panel, id, xmm, ymm);
-  }
-};
-
-struct Picker {
-  template <typename TItems>
-  static inline auto config(rack::engine::Module *module, int id,
-                            std::string const &name, int selection)
-      -> PickerSwitchQuantity<TItems> * {
-    auto const max_value = static_cast<float>(TItems::items().size() - 1);
-    auto const default_value = static_cast<float>(selection);
-    auto *pq = module->configSwitch<PickerSwitchQuantity<TItems>>(
-        id, 0.F, max_value, default_value, name, TItems::labels());
-    return pq;
   }
 };
 

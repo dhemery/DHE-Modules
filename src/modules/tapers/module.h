@@ -21,11 +21,13 @@ public:
     config(Param::Count, Input::Count, Output::Count);
 
     auto *level_knob_1 =
-        Knob::config<BipolarVoltage>(this, Param::Level1, "Taper 1 level");
-    Picker::config<Voltages>(this, Param::LevelRange1, "Taper 1 level range",
+        MappedKnob::config<Voltages>(this, Param::Level1, "Taper 1 level");
+    auto select_level_1_range = [level_knob_1](int range_index) {
+      level_knob_1->mapper().select_range(range_index);
+    };
+    Switch::config<Voltages>(this, Param::LevelRange1, "Taper 1 level range",
                              Voltages::Bipolar)
-        ->on_change(
-            [level_knob_1](Range r) { level_knob_1->set_display_range(r); });
+        ->on_change(select_level_1_range);
     Knob::config<Attenuverter>(this, Param::LevelAv1, "Taper 1 level CV gain");
     configInput(Input::LevelCv1, "Taper 1 level CV");
 
@@ -38,11 +40,13 @@ public:
     configOutput(Output::Taper1, "Taper 1");
 
     auto *level_knob_2 =
-        Knob::config<BipolarVoltage>(this, Param::Level2, "Taper 2 level");
-    Picker::config<Voltages>(this, Param::LevelRange2, "Taper 2 level range",
+        MappedKnob::config<Voltages>(this, Param::Level2, "Taper 2 level");
+    auto select_level_2_range = [level_knob_2](int range_index) {
+      level_knob_2->mapper().select_range(range_index);
+    };
+    Switch::config<Voltages>(this, Param::LevelRange2, "Taper 2 level range",
                              Voltages::Bipolar)
-        ->on_change(
-            [level_knob_2](Range r) { level_knob_2->set_display_range(r); });
+        ->on_change(select_level_2_range);
     Knob::config<Attenuverter>(this, Param::LevelAv2, "Taper 2 level CV gain");
     configInput(Input::LevelCv2, "Taper 2 level CV");
 

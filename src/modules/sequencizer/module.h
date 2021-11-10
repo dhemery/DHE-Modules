@@ -53,7 +53,7 @@ public:
     configOutput(Output::SequenceEventPulse, "Start of sequence");
     configOutput(Output::Out, "Sequencer");
 
-    auto level_knobs = std::vector<KnobQuantity<float> *>{};
+    auto level_knobs = std::vector<MappedKnobQuantity<Voltages> *>{};
     auto duration_knobs = std::vector<MappedKnobQuantity<Durations> *>{};
 
     for (auto step = 0; step < N; step++) {
@@ -70,7 +70,7 @@ public:
       Switch::config<AnchorModes>(this, Param::StepStartAnchorMode + step,
                                   step_name + "start anchor mode",
                                   AnchorMode::Sample);
-      auto *start_level_knob = Knob::config<UnipolarVoltage>(
+      auto *start_level_knob = MappedKnob::config<Voltages>(
           this, Param::StepStartAnchorLevel + step, step_name + "start level");
       level_knobs.push_back(start_level_knob);
       Switch::config<AnchorSources>(this, Param::StepStartAnchorSource + step,
@@ -80,7 +80,7 @@ public:
       Switch::config<AnchorModes>(this, Param::StepEndAnchorMode + step,
                                   step_name + "end anchor mode",
                                   AnchorMode::Track);
-      auto *end_level_knob = Knob::config<UnipolarVoltage>(
+      auto *end_level_knob = MappedKnob::config<Voltages>(
           this, Param::StepEndAnchorLevel + step, step_name + "end level");
       level_knobs.push_back(end_level_knob);
       Switch::config<AnchorSources>(this, Param::StepEndAnchorSource + step,
@@ -102,11 +102,11 @@ public:
 
     Knob::config<Attenuator>(this, Param::LevelMultiplier, "Level multiplier",
                              1.F);
-    Picker::config<Voltages>(this, Param::LevelRange, "Level range",
+    Switch::config<Voltages>(this, Param::LevelRange, "Level range",
                              Voltages::Unipolar)
-        ->on_change([level_knobs](Range r) {
+        ->on_change([level_knobs](int range_index) {
           for (auto *knob : level_knobs) {
-            knob->set_display_range(r);
+            knob->mapper().select_range(range_index);
           }
         });
     configInput(Input::LevelAttenuationCV, "Level multiplier CV");

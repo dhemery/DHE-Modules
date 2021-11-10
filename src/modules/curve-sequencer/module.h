@@ -48,7 +48,7 @@ template <int N> struct Module : public rack::engine::Module {
     IntKnob::config<SelectionLength<N>>(this, Param::SelectionLength,
                                         "Sequence length", N);
 
-    auto level_knobs = std::vector<KnobQuantity<float> *>{};
+    auto level_knobs = std::vector<MappedKnobQuantity<Voltages> *>{};
     auto duration_knobs = std::vector<MappedKnobQuantity<Durations> *>{};
 
     for (auto step = 0; step < N; step++) {
@@ -61,7 +61,7 @@ template <int N> struct Module : public rack::engine::Module {
       Switch::config<AdvanceModes>(this, Param::StepAdvanceMode + step,
                                    step_name + "advance mode",
                                    AdvanceMode::TimerExpires);
-      auto *level_knob = Knob::config<UnipolarVoltage>(
+      auto *level_knob = MappedKnob::config<Voltages>(
           this, Param::StepLevel + step, step_name + "level");
       level_knobs.push_back(level_knob);
 
@@ -79,14 +79,14 @@ template <int N> struct Module : public rack::engine::Module {
       signals_.show_inactive(step);
     }
 
-    auto update_level_knob_ranges = [level_knobs](Range r) {
+    auto select_level_range = [level_knobs](int range_index) {
       for (auto *level_knob : level_knobs) {
-        level_knob->set_display_range(r);
+        level_knob->mapper().select_range(range_index);
       }
     };
-    Picker::config<Voltages>(this, Param::LevelRange, "Level range",
+    Switch::config<Voltages>(this, Param::LevelRange, "Level range",
                              Voltages::Unipolar)
-        ->on_change(update_level_knob_ranges);
+        ->on_change(select_level_range);
 
     auto select_duration_range = [duration_knobs](int range_index) {
       for (auto *duration_knob : duration_knobs) {
