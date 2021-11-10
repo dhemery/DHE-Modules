@@ -31,11 +31,10 @@ struct Tiny {
 
 struct Knob {
   template <typename, typename = void>
-  struct is_mapped : std::false_type {}; // NOLINT
+  struct has_knob_mapper : std::false_type {}; // NOLINT
 
-  // Determines whether T has a DisplayMapper member type.
   template <typename T>
-  struct is_mapped<T, void_t<typename T::DisplayMapper>> // NOLINT
+  struct has_knob_mapper<T, void_t<typename T::KnobMapper>> // NOLINT
       : std::true_type {};
 
   template <typename TStyle, typename TPanel>
@@ -47,24 +46,25 @@ struct Knob {
     return widget;
   }
 
-  // Enabled if TRange has no DisplayMapper member type.
-  template <typename TRange>
+  // Use KnobQuantity if TConfig does not have a KnobMapper member type.
+  template <typename TConfig, typename TValue = float>
   static inline auto config(rack::engine::Module *module, int id,
-                            std::string const &name, float rotation = 0.5F)
-      -> enable_if_t<!is_mapped<TRange>::value, KnobQuantity<float> *> {
-    auto const multiplier = TRange::display_range().size();
-    auto const offset = TRange::display_range().lower_bound();
+                            std::string const &name, TValue rotation = 0.5F)
+      -> enable_if_t<!has_knob_mapper<TConfig>::value, KnobQuantity<float> *> {
+    auto const multiplier = TConfig::display_range().size();
+    auto const offset = TConfig::display_range().lower_bound();
     return module->configParam<KnobQuantity<float>>(
-        id, 0.F, 1.F, rotation, name, TRange::unit, 0.F, multiplier, offset);
+        id, 0.F, 1.F, rotation, name, TConfig::unit, 0.F, multiplier, offset);
   }
 
-  // Enabled if TMapped has a DisplayMapper member type.
-  template <typename TMapped>
+  // Use MappedKnobQuantity if TConfig has a KnobMapper member type.
+  template <typename TConfig>
   static inline auto config(rack::engine::Module *module, int id,
                             std::string const &name, float rotation = 0.5F)
-      -> enable_if_t<is_mapped<TMapped>::value, MappedKnobQuantity<TMapped> *> {
-    return module->configParam<MappedKnobQuantity<TMapped>>(
-        id, 0.F, 1.F, rotation, name, TMapped::unit);
+      -> enable_if_t<has_knob_mapper<TConfig>::value,
+                     MappedKnobQuantity<TConfig> *> {
+    return module->configParam<MappedKnobQuantity<TConfig>>(
+        id, 0.F, 1.F, rotation, name, TConfig::unit);
   }
 };
 
@@ -79,16 +79,16 @@ struct IntKnob {
     return widget;
   }
 
-  template <typename TInts>
+  template <typename TConfig>
   static inline auto config(rack::engine::Module *module, int id,
                             std::string const &name, int value)
       -> KnobQuantity<int> * {
-    auto const min = static_cast<float>(TInts::min);
-    auto const max = static_cast<float>(TInts::max);
-    auto const offset = static_cast<float>(TInts::display_offset);
+    auto const min = static_cast<float>(TConfig::min);
+    auto const max = static_cast<float>(TConfig::max);
+    auto const offset = static_cast<float>(TConfig::display_offset);
     auto const default_value = static_cast<float>(value);
     auto *pq = module->configParam<KnobQuantity<int>>(
-        id, min, max, default_value, name, TInts::unit, 0.F, 1.F, offset);
+        id, min, max, default_value, name, TConfig::unit, 0.F, 1.F, offset);
     pq->snapEnabled = true;
     return pq;
   }

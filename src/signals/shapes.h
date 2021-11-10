@@ -62,14 +62,14 @@ struct Curvature {
   }
 
   static auto constexpr unit = "";
-  using DisplayMapper = CurvatureKnobMapper;
+  using KnobMapper = CurvatureKnobMapper;
 };
 
 struct Shapes {
   using ItemType = sigmoid::Taper;
   using PositionType = int;
 
-  enum { J, S };
+  enum Index { J, S };
   static auto constexpr unit = "";
   static auto constexpr stepper_slug = "shape";
 

@@ -23,15 +23,15 @@ struct Switch {
     return widget;
   }
 
-  template <typename TItems>
+  template <typename TConfig>
   static inline auto config(rack::engine::Module *module, int id,
                             std::string const &name,
-                            typename TItems::PositionType position)
-      -> SwitchQuantity<typename TItems::PositionType> * {
-    auto const labels = TItems::labels();
+                            typename TConfig::PositionType position)
+      -> SwitchQuantity<typename TConfig::PositionType> * {
+    auto const labels = TConfig::labels();
     auto const max = static_cast<float>(labels.size() - 1);
     auto const default_value = static_cast<float>(position);
-    return module->configSwitch<SwitchQuantity<typename TItems::PositionType>>(
+    return module->configSwitch<SwitchQuantity<typename TConfig::PositionType>>(
         id, 0.F, max, default_value, name, labels);
   }
 };

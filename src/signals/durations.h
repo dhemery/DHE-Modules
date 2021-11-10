@@ -39,7 +39,7 @@ struct DurationTaper {
 
 // Maps a knob param value (rotation) to and from a display value (seconds) for
 // a given duration range.
-template <typename TDurationRange> struct DurationRangeKnobMapper {
+template <typename TDurationRange> struct DurationRangeMapper {
   auto to_value(float seconds) const -> float {
     auto const tapered = TDurationRange::display_range().normalize(seconds);
     return DurationTaper::rotation(tapered);
@@ -52,7 +52,7 @@ template <typename TDurationRange> struct DurationRangeKnobMapper {
 
 // Maps a knob param value (rotation) to and from a display value (seconds) for
 // the selected voltage range.
-template <typename TDurationRanges> struct SelectableDurationRangeKnobMapper {
+template <typename TDurationRanges> struct SelectableDurationRangeMapper {
   auto to_value(float seconds) const -> float {
     auto const tapered =
         TDurationRanges::select(range_index_).normalize(seconds);
@@ -77,7 +77,7 @@ template <typename TDuration> struct DurationRange {
     return display_range().scale(DurationTaper::tapered(rotation));
   }
 
-  using DisplayMapper = DurationRangeKnobMapper<TDuration>;
+  using KnobMapper = DurationRangeMapper<TDuration>;
 };
 
 struct ShortDuration : public DurationRange<ShortDuration> {
@@ -98,8 +98,8 @@ struct LongDuration : public DurationRange<LongDuration> {
 struct Durations {
   using PositionType = int;
   using ItemType = Range;
-  using DisplayMapper = SelectableDurationRangeKnobMapper<Durations>;
-  enum { Short, Medium, Long };
+  using KnobMapper = SelectableDurationRangeMapper<Durations>;
+  enum Index { Short, Medium, Long };
 
   static auto constexpr unit = " s";
 

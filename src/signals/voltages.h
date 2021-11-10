@@ -13,7 +13,7 @@ struct Voltage {
 
 // Maps a knob value (rotation) to and from a display value (volts) for a
 // given voltage range.
-template <typename TVoltageRange> struct VoltageRangeKnobMapper {
+template <typename TVoltageRange> struct VoltageRangeMapper {
   auto to_value(float volts) const -> float {
     return TVoltageRange::display_range().normalize(volts);
   }
@@ -31,7 +31,7 @@ template <typename TVoltage> struct VoltageRange {
     return display_range().scale(rotation);
   }
 
-  using DisplayMapper = VoltageRangeKnobMapper<TVoltage>;
+  using KnobMapper = VoltageRangeMapper<TVoltage>;
 };
 
 struct UnipolarVoltage : public VoltageRange<UnipolarVoltage> {
@@ -46,7 +46,7 @@ struct BipolarVoltage : public VoltageRange<BipolarVoltage> {
 
 // Maps a knob param value (rotation) to and from a display value (volts) for
 // the selected voltage range.
-template <typename TVoltages> struct SelectableVoltageRangeKnobMapper {
+template <typename TVoltages> struct SelectableVoltageRangeMapper {
   auto to_value(float volts) const -> float {
     return TVoltages::select(range_index_).normalize(volts);
   }
@@ -62,10 +62,10 @@ private:
 };
 
 struct Voltages {
-  using DisplayMapper = SelectableVoltageRangeKnobMapper<Voltages>;
+  using KnobMapper = SelectableVoltageRangeMapper<Voltages>;
   using PositionType = int;
 
-  enum { Bipolar, Unipolar };
+  enum Index { Bipolar, Unipolar };
 
   static auto constexpr unit = Voltage::unit;
 
