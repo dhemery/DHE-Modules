@@ -10,7 +10,6 @@
 #include "controls/knobs.h"
 #include "controls/switches.h"
 #include "params/curvature-knob-quantity.h"
-#include "params/duration-knob-quantity.h"
 #include "params/presets.h"
 #include "signals/durations.h"
 #include "signals/shapes.h"

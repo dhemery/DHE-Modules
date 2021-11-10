@@ -41,7 +41,7 @@ struct Module : public rack::engine::Module {
     Switch::config<Shapes>(this, Param::Shape, "Shape", Shapes::J);
     configInput(Input::CurvatureCv, "Curvature CV");
 
-    DurationKnob::config(this, Param::Duration, "Duration");
+    CustomKnob::config<Durations>(this, Param::Duration, "Duration");
     Switch::config<Durations>(this, Param::DurationRange, "Duration range",
                               Durations::Medium);
     configInput(Input::DurationCv, "Duration CV");

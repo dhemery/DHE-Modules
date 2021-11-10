@@ -8,8 +8,7 @@
 
 namespace dhe {
 
-struct Duration {
-
+struct DurationTaper {
   static inline auto taper() -> sigmoid::Taper const & {
     /**
      * This curvature creates a gentle inverted S taper, increasing sensitivity
@@ -36,17 +35,28 @@ struct Duration {
   static inline auto rotation(float tapered) -> float {
     return taper().invert(tapered);
   }
-
-  static auto constexpr unit = " s";
 };
 
 template <typename TDuration> struct DurationRange {
   static auto constexpr display_range() -> Range { return TDuration::range(); }
-  static auto constexpr unit = Duration::unit;
+  static auto constexpr unit = " s";
 
   static inline auto value(float rotation) -> float {
-    return display_range().scale(Duration::tapered(rotation));
+    return display_range().scale(DurationTaper::tapered(rotation));
   }
+
+  struct Converter {
+    auto value(float seconds) const -> float {
+      auto const tapered = display_range().normalize(seconds);
+      return DurationTaper::rotation(tapered);
+    }
+
+    auto display_value(float rotation) const -> float {
+      return DurationRange::value(rotation);
+    }
+  };
+
+  using ConverterType = Converter;
 };
 
 struct ShortDuration : public DurationRange<ShortDuration> {
@@ -65,11 +75,28 @@ struct LongDuration : public DurationRange<LongDuration> {
 };
 
 struct Durations {
+  struct Converter {
+    auto value(float seconds) const -> float {
+      auto const tapered = Durations::select(selection_).normalize(seconds);
+      return DurationTaper::rotation(tapered);
+    }
+
+    auto display_value(float rotation) const -> float {
+      return Durations::value(rotation, selection_);
+    }
+
+    void select(int pos) { selection_ = pos; }
+
+  private:
+    int selection_{Durations::Medium};
+  };
+
   using PositionType = int;
   using ItemType = Range;
+  using ConverterType = Converter;
   enum { Short, Medium, Long };
 
-  static auto constexpr unit = Duration::unit;
+  static auto constexpr unit = " s";
 
   static inline auto items() -> std::vector<ItemType> const & {
     static auto const items = std::vector<ItemType>{
@@ -88,7 +115,8 @@ struct Durations {
   }
 
   static inline auto value(float rotation, int selection) -> float {
-    return select(selection).scale(Duration::tapered(rotation));
+    auto const tapered = DurationTaper::tapered(rotation);
+    return select(selection).scale(tapered);
   }
 };
 

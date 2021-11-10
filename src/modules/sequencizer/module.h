@@ -14,7 +14,6 @@
 #include "controls/knobs.h"
 #include "controls/switches.h"
 #include "params/curvature-knob-quantity.h"
-#include "params/duration-knob-quantity.h"
 #include "params/presets.h"
 #include "signals/durations.h"
 #include "signals/shapes.h"
@@ -56,7 +55,7 @@ public:
     configOutput(Output::Out, "Sequencer");
 
     auto level_knobs = std::vector<KnobQuantity<float> *>{};
-    auto duration_knobs = std::vector<DurationKnobQuantity *>{};
+    auto duration_knobs = std::vector<CustomKnobQuantity<Durations> *>{};
 
     for (auto step = 0; step < N; step++) {
       auto const step_name = "Step " + std::to_string(step + 1) + " ";
@@ -91,7 +90,7 @@ public:
 
       CurvatureKnob::config(this, Param::StepCurvature + step,
                             step_name + "curvature");
-      auto *duration_knob = DurationKnob::config(
+      auto *duration_knob = CustomKnob::config<Durations>(
           this, Param::StepDuration + step, step_name + "duration");
       duration_knobs.push_back(duration_knob);
 
@@ -114,11 +113,11 @@ public:
     configInput(Input::LevelAttenuationCV, "Level multiplier CV");
 
     Knob::config<Gain>(this, Param::DurationMultiplier, "Duration multiplier");
-    Picker::config<Durations>(this, Param::DurationRange, "Duration range",
+    Switch::config<Durations>(this, Param::DurationRange, "Duration range",
                               Durations::Medium)
-        ->on_change([duration_knobs](Range r) {
+        ->on_change([duration_knobs](int pos) {
           for (auto *knob : duration_knobs) {
-            knob->set_display_range(r);
+            knob->converter().select(pos);
           }
         });
     configInput(Input::DurationMultiplierCV, "Duration multipler CV");

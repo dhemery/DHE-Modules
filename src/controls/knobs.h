@@ -1,8 +1,9 @@
 #pragma once
 
 #include "params/curvature-knob-quantity.h"
-#include "params/duration-knob-quantity.h"
+#include "params/custom-knob-quantity.h"
 #include "params/knob-quantity.h"
+#include "signals/durations.h"
 #include "widgets/dimensions.h"
 #include "widgets/knob-widget.h"
 
@@ -38,14 +39,14 @@ struct Knob {
     return widget;
   }
 
-  template <typename TQuantity>
+  template <typename TRange>
   static inline auto config(rack::engine::Module *module, int id,
                             std::string const &name, float rotation = 0.5F)
       -> KnobQuantity<float> * {
-    auto const multiplier = TQuantity::display_range().size();
-    auto const offset = TQuantity::display_range().lower_bound();
+    auto const multiplier = TRange::display_range().size();
+    auto const offset = TRange::display_range().lower_bound();
     return module->configParam<KnobQuantity<float>>(
-        id, 0.F, 1.F, rotation, name, TQuantity::unit, 0.F, multiplier, offset);
+        id, 0.F, 1.F, rotation, name, TRange::unit, 0.F, multiplier, offset);
   }
 };
 
@@ -60,27 +61,28 @@ struct IntKnob {
     return widget;
   }
 
-  template <typename TQuantity>
+  template <typename TInts>
   static inline auto config(rack::engine::Module *module, int id,
                             std::string const &name, int value)
       -> KnobQuantity<int> * {
-    auto const min = static_cast<float>(TQuantity::min);
-    auto const max = static_cast<float>(TQuantity::max);
-    auto const offset = static_cast<float>(TQuantity::display_offset);
+    auto const min = static_cast<float>(TInts::min);
+    auto const max = static_cast<float>(TInts::max);
+    auto const offset = static_cast<float>(TInts::display_offset);
     auto const default_value = static_cast<float>(value);
     auto *pq = module->configParam<KnobQuantity<int>>(
-        id, min, max, default_value, name, TQuantity::unit, 0.F, 1.F, offset);
+        id, min, max, default_value, name, TInts::unit, 0.F, 1.F, offset);
     pq->snapEnabled = true;
     return pq;
   }
 };
 
-struct DurationKnob {
+struct CustomKnob {
+  template <typename TCustom>
   static inline auto config(rack::engine::Module *module, int id,
                             std::string const &name, float rotation = 0.5F)
-      -> DurationKnobQuantity * {
-    return module->configParam<DurationKnobQuantity>(id, 0.F, 1.F, rotation,
-                                                     name, Durations::unit);
+      -> CustomKnobQuantity<TCustom> * {
+    return module->configParam<CustomKnobQuantity<TCustom>>(
+        id, 0.F, 1.F, rotation, name, TCustom::unit);
   }
 };
 

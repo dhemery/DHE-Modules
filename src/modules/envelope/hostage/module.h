@@ -11,7 +11,7 @@
 #include "modules/envelope/mode/idle.h"
 #include "modules/envelope/mode/input.h"
 #include "modules/envelope/mode/sustain.h"
-#include "params/duration-knob-quantity.h"
+#include "signals/durations.h"
 
 #include "rack.hpp"
 
@@ -30,9 +30,13 @@ struct Module : public rack::engine::Module {
     configOutput(Output::Eoc, "End of stage");
     configOutput(Output::Envelope, "Stage");
 
-    DurationKnob::config(this, Param::Duration, "Duration");
+    auto *duration_knob =
+        CustomKnob::config<Durations>(this, Param::Duration, "Duration");
     Switch::config<Durations>(this, Param::DurationRange, "Duration range",
-                              Durations::Medium);
+                              Durations::Medium)
+        ->on_change([duration_knob](int pos) {
+          duration_knob->converter().select(pos);
+        });
     configInput(Input::DurationCv, "Duration CV");
 
     Switch::config<Modes>(this, Param::Mode, "Mode", 0);
