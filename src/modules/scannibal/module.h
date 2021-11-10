@@ -51,9 +51,9 @@ public:
       Switch::config<AnchorSources>(this, Param::StepPhase0AnchorSource + step,
                                     step_name + "phase 0 anchor source",
                                     AnchorSource::Out);
-      auto *phase_0_level_knob = MappedKnob::config<Voltages>(
-          this, Param::StepPhase0AnchorLevel + step,
-          step_name + "phase 0 level");
+      auto *phase_0_level_knob =
+          Knob::config<Voltages>(this, Param::StepPhase0AnchorLevel + step,
+                                 step_name + "phase 0 level");
       level_knobs.push_back(phase_0_level_knob);
       configInput(Input::StepPhase0AnchorLevelCv + step,
                   step_name + "phase 0 level CV");
@@ -64,9 +64,9 @@ public:
       Switch::config<AnchorSources>(this, Param::StepPhase1AnchorSource + step,
                                     step_name + "phase 1 anchor source",
                                     AnchorSource::Level);
-      auto *phase_1_level_knob = MappedKnob::config<Voltages>(
-          this, Param::StepPhase1AnchorLevel + step,
-          step_name + "phase 1 level");
+      auto *phase_1_level_knob =
+          Knob::config<Voltages>(this, Param::StepPhase1AnchorLevel + step,
+                                 step_name + "phase 1 level");
       level_knobs.push_back(phase_1_level_knob);
       configInput(Input::StepPhase1AnchorLevelCv + step,
                   step_name + "phase 1 level CV");
@@ -76,8 +76,8 @@ public:
 
       Switch::config<Shapes>(this, Param::StepShape + step, step_name + "shape",
                              Shapes::J);
-      MappedKnob::config<Curvature>(this, Param::StepCurvature + step,
-                                    step_name + "curvature");
+      Knob::config<Curvature>(this, Param::StepCurvature + step,
+                              step_name + "curvature");
       configInput(Input::StepCurvatureCv + step, step_name + "curvature CV");
 
       Knob::config<Gain>(this, Param::StepDuration + step,

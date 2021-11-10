@@ -1,5 +1,6 @@
 #pragma once
 
+#include "components/meta.h"
 #include "params/knob-quantity.h"
 #include "params/mapped-knob-quantity.h"
 #include "widgets/dimensions.h"
@@ -8,6 +9,7 @@
 #include "rack.hpp"
 
 #include <string>
+#include <type_traits>
 
 namespace dhe {
 
@@ -28,6 +30,14 @@ struct Tiny {
 };
 
 struct Knob {
+  template <typename, typename = void>
+  struct is_mapped : std::false_type {}; // NOLINT
+
+  // Determines whether T has a DisplayMapper member type.
+  template <typename T>
+  struct is_mapped<T, void_t<typename T::DisplayMapper>> // NOLINT
+      : std::true_type {};
+
   template <typename TStyle, typename TPanel>
   static inline auto install(TPanel *panel, int id, float xmm, float ymm)
       -> KnobWidget<TPanel, TStyle, float> * {
@@ -37,20 +47,30 @@ struct Knob {
     return widget;
   }
 
+  // Enabled if TRange has no DisplayMapper member type.
   template <typename TRange>
   static inline auto config(rack::engine::Module *module, int id,
                             std::string const &name, float rotation = 0.5F)
-      -> KnobQuantity<float> * {
+      -> enable_if_t<!is_mapped<TRange>::value, KnobQuantity<float> *> {
     auto const multiplier = TRange::display_range().size();
     auto const offset = TRange::display_range().lower_bound();
     return module->configParam<KnobQuantity<float>>(
         id, 0.F, 1.F, rotation, name, TRange::unit, 0.F, multiplier, offset);
   }
+
+  // Enabled if TMapped has a DisplayMapper member type.
+  template <typename TMapped>
+  static inline auto config(rack::engine::Module *module, int id,
+                            std::string const &name, float rotation = 0.5F)
+      -> enable_if_t<is_mapped<TMapped>::value, MappedKnobQuantity<TMapped> *> {
+    return module->configParam<MappedKnobQuantity<TMapped>>(
+        id, 0.F, 1.F, rotation, name, TMapped::unit);
+  }
 };
 
 struct IntKnob {
   template <typename TStyle, typename TPanel>
-  static inline auto install(TPanel *panel, int id, float xmm, float ymm)
+  static auto install(TPanel *panel, int id, float xmm, float ymm)
       -> KnobWidget<TPanel, TStyle, int> * {
     auto *widget = rack::createParamCentered<KnobWidget<TPanel, TStyle, int>>(
         mm2px(xmm, ymm), panel->getModule(), id);
@@ -73,15 +93,4 @@ struct IntKnob {
     return pq;
   }
 };
-
-struct MappedKnob {
-  template <typename TMapped>
-  static inline auto config(rack::engine::Module *module, int id,
-                            std::string const &name, float rotation = 0.5F)
-      -> MappedKnobQuantity<TMapped> * {
-    return module->configParam<MappedKnobQuantity<TMapped>>(
-        id, 0.F, 1.F, rotation, name, TMapped::unit);
-  }
-};
-
 } // namespace dhe

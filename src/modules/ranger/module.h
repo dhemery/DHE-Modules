@@ -24,7 +24,7 @@ struct Module : public rack::engine::Module {
     Knob::config<Attenuverter>(this, Param::LevelAv, "Level CV gain");
 
     auto *ccw_limit_knob =
-        MappedKnob::config<Voltages>(this, Param::CcwLimit, "CCW limit", 0.F);
+        Knob::config<Voltages>(this, Param::CcwLimit, "CCW limit", 0.F);
     auto select_ccw_limit_level_range = [ccw_limit_knob](int range_index) {
       ccw_limit_knob->mapper().select_range(range_index);
     };
@@ -35,7 +35,7 @@ struct Module : public rack::engine::Module {
     Knob::config<Attenuverter>(this, Param::CcwLimitAv, "CCW limit CV gain");
 
     auto *cw_limit_knob =
-        MappedKnob::config<Voltages>(this, Param::CwLimit, "CW limit", 1.F);
+        Knob::config<Voltages>(this, Param::CwLimit, "CW limit", 1.F);
     auto select_cw_limit_level_range = [cw_limit_knob](int range_index) {
       cw_limit_knob->mapper().select_range(range_index);
     };

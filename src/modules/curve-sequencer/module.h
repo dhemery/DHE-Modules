@@ -61,15 +61,15 @@ template <int N> struct Module : public rack::engine::Module {
       Switch::config<AdvanceModes>(this, Param::StepAdvanceMode + step,
                                    step_name + "advance mode",
                                    AdvanceMode::TimerExpires);
-      auto *level_knob = MappedKnob::config<Voltages>(
-          this, Param::StepLevel + step, step_name + "level");
+      auto *level_knob = Knob::config<Voltages>(this, Param::StepLevel + step,
+                                                step_name + "level");
       level_knobs.push_back(level_knob);
 
       Switch::config<Shapes>(this, Param::StepShape + step, step_name + "shape",
                              Shapes::J);
-      MappedKnob::config<Curvature>(this, Param::StepCurvature + step,
-                                    step_name + "curvature");
-      auto *duration_knob = MappedKnob::config<Durations>(
+      Knob::config<Curvature>(this, Param::StepCurvature + step,
+                              step_name + "curvature");
+      auto *duration_knob = Knob::config<Durations>(
           this, Param::StepDuration + step, step_name + "duration");
       duration_knobs.push_back(duration_knob);
 

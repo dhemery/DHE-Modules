@@ -21,7 +21,7 @@ public:
     config(Param::Count, Input::Count, Output::Count);
 
     auto *level_knob_1 =
-        MappedKnob::config<Voltages>(this, Param::Level1, "Taper 1 level");
+        Knob::config<Voltages>(this, Param::Level1, "Taper 1 level");
     auto select_level_1_range = [level_knob_1](int range_index) {
       level_knob_1->mapper().select_range(range_index);
     };
@@ -31,7 +31,7 @@ public:
     Knob::config<Attenuverter>(this, Param::LevelAv1, "Taper 1 level CV gain");
     configInput(Input::LevelCv1, "Taper 1 level CV");
 
-    MappedKnob::config<Curvature>(this, Param::Curvature1, "Taper 1 curvature");
+    Knob::config<Curvature>(this, Param::Curvature1, "Taper 1 curvature");
     Knob::config<Attenuverter>(this, Param::CurvatureAv1,
                                "Taper 1 curvature CV gain");
     Switch::config<Shapes>(this, Param::Shape1, "Taper 1 shape", Shapes::J);
@@ -40,7 +40,7 @@ public:
     configOutput(Output::Taper1, "Taper 1");
 
     auto *level_knob_2 =
-        MappedKnob::config<Voltages>(this, Param::Level2, "Taper 2 level");
+        Knob::config<Voltages>(this, Param::Level2, "Taper 2 level");
     auto select_level_2_range = [level_knob_2](int range_index) {
       level_knob_2->mapper().select_range(range_index);
     };
@@ -50,7 +50,7 @@ public:
     Knob::config<Attenuverter>(this, Param::LevelAv2, "Taper 2 level CV gain");
     configInput(Input::LevelCv2, "Taper 2 level CV");
 
-    MappedKnob::config<Curvature>(this, Param::Curvature2, "Taper 2 curvature");
+    Knob::config<Curvature>(this, Param::Curvature2, "Taper 2 curvature");
     Knob::config<Attenuverter>(this, Param::CurvatureAv2,
                                "Taper 2 curvature CV gain");
     Switch::config<Shapes>(this, Param::Shape2, "Taper 2 shape", Shapes::J);

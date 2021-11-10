@@ -17,7 +17,7 @@ struct Module : public rack::engine::Module {
     configInput(Input::Swave, "Swave");
     configOutput(Output::Swave, "Swave");
 
-    MappedKnob::config<Curvature>(this, Param::Curvature, "Curvature");
+    Knob::config<Curvature>(this, Param::Curvature, "Curvature");
     Knob::config<Attenuverter>(this, Param::CurvatureAv, "Curvature CV gain",
                                0.F);
     configInput(Input::CurvatureCv, "Curvature CV");

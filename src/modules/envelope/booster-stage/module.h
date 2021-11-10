@@ -25,8 +25,7 @@ struct Module : public rack::engine::Module {
     configInput(Input::Envelope, "Stage");
     configOutput(Output::Envelope, "Stage");
 
-    auto *level_knob =
-        MappedKnob::config<Voltages>(this, Param::Level, "Level");
+    auto *level_knob = Knob::config<Voltages>(this, Param::Level, "Level");
     auto const select_level_range = [level_knob](int range_index) {
       level_knob->mapper().select_range(range_index);
     };
@@ -36,13 +35,18 @@ struct Module : public rack::engine::Module {
 
     configInput(Input::LevelCv, "Level CV");
 
-    MappedKnob::config<Curvature>(this, Param::Curvature, "Curvature");
+    Knob::config<Curvature>(this, Param::Curvature, "Curvature");
     Switch::config<Shapes>(this, Param::Shape, "Shape", Shapes::J);
     configInput(Input::CurvatureCv, "Curvature CV");
 
-    MappedKnob::config<Durations>(this, Param::Duration, "Duration");
+    auto *duration_knob =
+        Knob::config<Durations>(this, Param::Duration, "Duration");
+    auto select_duration_range = [duration_knob](int range_index) {
+      duration_knob->mapper().select_range(range_index);
+    };
     Switch::config<Durations>(this, Param::DurationRange, "Duration range",
-                              Durations::Medium);
+                              Durations::Medium)
+        ->on_change(select_duration_range);
     configInput(Input::DurationCv, "Duration CV");
 
     configInput(Input::Defer, "Defer");

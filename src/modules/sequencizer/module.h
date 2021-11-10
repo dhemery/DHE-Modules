@@ -70,7 +70,7 @@ public:
       Switch::config<AnchorModes>(this, Param::StepStartAnchorMode + step,
                                   step_name + "start anchor mode",
                                   AnchorMode::Sample);
-      auto *start_level_knob = MappedKnob::config<Voltages>(
+      auto *start_level_knob = Knob::config<Voltages>(
           this, Param::StepStartAnchorLevel + step, step_name + "start level");
       level_knobs.push_back(start_level_knob);
       Switch::config<AnchorSources>(this, Param::StepStartAnchorSource + step,
@@ -80,16 +80,16 @@ public:
       Switch::config<AnchorModes>(this, Param::StepEndAnchorMode + step,
                                   step_name + "end anchor mode",
                                   AnchorMode::Track);
-      auto *end_level_knob = MappedKnob::config<Voltages>(
+      auto *end_level_knob = Knob::config<Voltages>(
           this, Param::StepEndAnchorLevel + step, step_name + "end level");
       level_knobs.push_back(end_level_knob);
       Switch::config<AnchorSources>(this, Param::StepEndAnchorSource + step,
                                     step_name + "end anchor source",
                                     AnchorSource::Level);
 
-      MappedKnob::config<Curvature>(this, Param::StepCurvature + step,
-                                    step_name + "curvature");
-      auto *duration_knob = MappedKnob::config<Durations>(
+      Knob::config<Curvature>(this, Param::StepCurvature + step,
+                              step_name + "curvature");
+      auto *duration_knob = Knob::config<Durations>(
           this, Param::StepDuration + step, step_name + "duration");
       duration_knobs.push_back(duration_knob);
 
