@@ -97,14 +97,13 @@ struct LongDuration : public DurationRange<LongDuration> {
 
 struct Durations {
   using PositionType = int;
-  using ItemType = Range;
   using KnobMapper = SelectableDurationRangeMapper<Durations>;
   enum Index { Short, Medium, Long };
 
   static auto constexpr unit = " s";
 
-  static inline auto items() -> std::vector<ItemType> const & {
-    static auto const items = std::vector<ItemType>{
+  static inline auto items() -> std::vector<Range> const & {
+    static auto const items = std::vector<Range>{
         ShortDuration::range(), MediumDuration::range(), LongDuration::range()};
     return items;
   }
@@ -115,7 +114,7 @@ struct Durations {
     return labels;
   }
 
-  static inline auto select(int selection) -> ItemType const & {
+  static inline auto select(int selection) -> Range const & {
     return items()[selection];
   }
 

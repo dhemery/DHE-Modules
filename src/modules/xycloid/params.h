@@ -13,15 +13,14 @@ namespace xycloid {
 
 struct WobbleRatios {
   using PositionType = int;
-  using ItemType = Range;
 
   enum { Inward, InwardOutward, Outward };
 
-  static inline auto items() -> std::vector<ItemType> const & {
+  static inline auto items() -> std::vector<Range> const & {
     static auto constexpr max_ratio = 16.F;
-    static auto const ranges = std::vector<ItemType>{
-        Range{0.F, -max_ratio}, Range{-max_ratio, max_ratio},
-        Range{0.F, max_ratio}};
+    static auto const ranges =
+        std::vector<Range>{Range{0.F, -max_ratio}, Range{-max_ratio, max_ratio},
+                           Range{0.F, max_ratio}};
     return ranges;
   }
 
@@ -31,7 +30,7 @@ struct WobbleRatios {
     return labels;
   }
 
-  static inline auto select(int selection) -> ItemType const & {
+  static inline auto select(int selection) -> Range const & {
     return items()[selection];
   }
 
