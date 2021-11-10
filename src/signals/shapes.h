@@ -27,6 +27,19 @@ struct Curvature {
         sigmoid::curve(sigmoid_clamped_curvature, -knob_taper_curvature);
     return sigmoid::domain.normalize(sigmoid_scaled_rotation);
   }
+
+  struct Converter {
+    auto display_value(float rotation) const -> float {
+      return Curvature::value(rotation);
+    }
+
+    auto value(float curvature) const -> float {
+      return Curvature::rotation(curvature);
+    }
+  };
+
+  static auto constexpr unit = "";
+  using ConverterType = Converter;
 };
 
 struct Shapes {

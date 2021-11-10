@@ -9,7 +9,6 @@
 #include "modules/envelope/mode/input.h"
 #include "modules/envelope/mode/level.h"
 #include "modules/envelope/stage/engine.h"
-#include "params/curvature-knob-quantity.h"
 #include "signals/durations.h"
 #include "signals/shapes.h"
 #include "signals/voltages.h"
@@ -37,7 +36,7 @@ struct Module : public rack::engine::Module {
 
     configInput(Input::LevelCv, "Level CV");
 
-    CurvatureKnob::config(this, Param::Curvature, "Curvature");
+    CustomKnob::config<Curvature>(this, Param::Curvature, "Curvature");
     Switch::config<Shapes>(this, Param::Shape, "Shape", Shapes::J);
     configInput(Input::CurvatureCv, "Curvature CV");
 

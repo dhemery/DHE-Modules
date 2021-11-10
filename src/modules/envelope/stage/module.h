@@ -9,7 +9,6 @@
 #include "modules/envelope/mode/generate.h"
 #include "modules/envelope/mode/input.h"
 #include "modules/envelope/mode/level.h"
-#include "params/curvature-knob-quantity.h"
 #include "signals/durations.h"
 
 #include "rack.hpp"
@@ -23,7 +22,7 @@ struct Module : public rack::engine::Module {
 
     CustomKnob::config<MediumDuration>(this, Param::Duration, "Duration");
     Knob::config<UnipolarVoltage>(this, Param::Level, "Level");
-    CurvatureKnob::config(this, Param::Curvature, "Curvature");
+    CustomKnob::config<Curvature>(this, Param::Curvature, "Curvature");
 
     configInput(Input::Envelope, "Stage");
     configInput(Input::Defer, "Defer");

@@ -1,9 +1,7 @@
 #pragma once
 
-#include "params/curvature-knob-quantity.h"
 #include "params/custom-knob-quantity.h"
 #include "params/knob-quantity.h"
-#include "signals/durations.h"
 #include "widgets/dimensions.h"
 #include "widgets/knob-widget.h"
 
@@ -83,15 +81,6 @@ struct CustomKnob {
       -> CustomKnobQuantity<TCustom> * {
     return module->configParam<CustomKnobQuantity<TCustom>>(
         id, 0.F, 1.F, rotation, name, TCustom::unit);
-  }
-};
-
-struct CurvatureKnob {
-  static inline auto config(rack::engine::Module *module, int id,
-                            std::string const &name, float rotation = 0.5F)
-      -> CurvatureKnobQuantity * {
-    return module->configParam<CurvatureKnobQuantity>(id, 0.F, 1.F, rotation,
-                                                      name);
   }
 };
 

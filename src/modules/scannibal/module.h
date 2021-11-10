@@ -9,7 +9,6 @@
 #include "components/cxmath.h"
 #include "controls/knobs.h"
 #include "controls/switches.h"
-#include "params/curvature-knob-quantity.h"
 #include "params/presets.h"
 #include "signals/durations.h"
 #include "signals/shapes.h"
@@ -77,8 +76,8 @@ public:
 
       Switch::config<Shapes>(this, Param::StepShape + step, step_name + "shape",
                              Shapes::J);
-      CurvatureKnob::config(this, Param::StepCurvature + step,
-                            step_name + "curvature");
+      CustomKnob::config<Curvature>(this, Param::StepCurvature + step,
+                                    step_name + "curvature");
       configInput(Input::StepCurvatureCv + step, step_name + "curvature CV");
 
       Knob::config<Gain>(this, Param::StepDuration + step,
