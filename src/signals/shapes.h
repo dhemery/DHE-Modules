@@ -6,6 +6,39 @@
 
 namespace dhe {
 
+struct CurvatureTaper {
+  /**
+   * This curvature creates a gentle inverted S taper, increasing sensitivity in
+   * the middle of the knob rotation and decreasing sensitivity toward the
+   * extremes.
+   */
+  static auto constexpr knob_taper_curvature = -0.65F;
+
+  static constexpr auto value(float rotation) -> float {
+    return sigmoid::safe_curvature_range.clamp(
+        sigmoid::curve(sigmoid::domain.scale(rotation), knob_taper_curvature));
+  }
+
+  static inline auto rotation(float curvature) -> float {
+    auto const sigmoid_clamped_curvature =
+        sigmoid::safe_curvature_range.clamp(curvature);
+    // Unexpected, but true: Negating the taper curvature inverts the taper.
+    auto const sigmoid_scaled_rotation =
+        sigmoid::curve(sigmoid_clamped_curvature, -knob_taper_curvature);
+    return sigmoid::domain.normalize(sigmoid_scaled_rotation);
+  }
+};
+
+struct CurvatureDisplayMapper {
+  auto to_display_value(float rotation) const -> float {
+    return CurvatureTaper::value(rotation);
+  }
+
+  auto to_value(float curvature) const -> float {
+    return CurvatureTaper::rotation(curvature);
+  }
+};
+
 struct Curvature {
   /**
    * This curvature creates a gentle inverted S taper, increasing sensitivity in
@@ -28,18 +61,8 @@ struct Curvature {
     return sigmoid::domain.normalize(sigmoid_scaled_rotation);
   }
 
-  struct Converter {
-    auto display_value(float rotation) const -> float {
-      return Curvature::value(rotation);
-    }
-
-    auto value(float curvature) const -> float {
-      return Curvature::rotation(curvature);
-    }
-  };
-
   static auto constexpr unit = "";
-  using ConverterType = Converter;
+  using DisplayMapper = CurvatureDisplayMapper;
 };
 
 struct Shapes {

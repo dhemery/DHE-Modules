@@ -76,7 +76,7 @@ public:
 
       Switch::config<Shapes>(this, Param::StepShape + step, step_name + "shape",
                              Shapes::J);
-      CustomKnob::config<Curvature>(this, Param::StepCurvature + step,
+      MappedKnob::config<Curvature>(this, Param::StepCurvature + step,
                                     step_name + "curvature");
       configInput(Input::StepCurvatureCv + step, step_name + "curvature CV");
 

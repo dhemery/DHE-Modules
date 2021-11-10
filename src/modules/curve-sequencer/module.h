@@ -49,7 +49,7 @@ template <int N> struct Module : public rack::engine::Module {
                                         "Sequence length", N);
 
     auto level_knobs = std::vector<KnobQuantity<float> *>{};
-    auto duration_knobs = std::vector<CustomKnobQuantity<Durations> *>{};
+    auto duration_knobs = std::vector<MappedKnobQuantity<Durations> *>{};
 
     for (auto step = 0; step < N; step++) {
       auto const step_name =
@@ -67,9 +67,9 @@ template <int N> struct Module : public rack::engine::Module {
 
       Switch::config<Shapes>(this, Param::StepShape + step, step_name + "shape",
                              Shapes::J);
-      CustomKnob::config<Curvature>(this, Param::StepCurvature + step,
+      MappedKnob::config<Curvature>(this, Param::StepCurvature + step,
                                     step_name + "curvature");
-      auto *duration_knob = CustomKnob::config<Durations>(
+      auto *duration_knob = MappedKnob::config<Durations>(
           this, Param::StepDuration + step, step_name + "duration");
       duration_knobs.push_back(duration_knob);
 
@@ -88,14 +88,14 @@ template <int N> struct Module : public rack::engine::Module {
                              Voltages::Unipolar)
         ->on_change(update_level_knob_ranges);
 
-    auto update_duration_knob_ranges = [duration_knobs](int pos) {
+    auto select_duration_range = [duration_knobs](int range_index) {
       for (auto *duration_knob : duration_knobs) {
-        duration_knob->converter().select(pos);
+        duration_knob->mapper().select_range(range_index);
       }
     };
     Switch::config<Durations>(this, Param::DurationRange, "Duration range",
                               Durations::Medium)
-        ->on_change(update_duration_knob_ranges);
+        ->on_change(select_duration_range);
 
     configInput(Input::Main, "AUX");
     configOutput(Output::Main, "Sequencer");

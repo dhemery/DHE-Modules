@@ -36,11 +36,11 @@ struct Module : public rack::engine::Module {
 
     configInput(Input::LevelCv, "Level CV");
 
-    CustomKnob::config<Curvature>(this, Param::Curvature, "Curvature");
+    MappedKnob::config<Curvature>(this, Param::Curvature, "Curvature");
     Switch::config<Shapes>(this, Param::Shape, "Shape", Shapes::J);
     configInput(Input::CurvatureCv, "Curvature CV");
 
-    CustomKnob::config<Durations>(this, Param::Duration, "Duration");
+    MappedKnob::config<Durations>(this, Param::Duration, "Duration");
     Switch::config<Durations>(this, Param::DurationRange, "Duration range",
                               Durations::Medium);
     configInput(Input::DurationCv, "Duration CV");

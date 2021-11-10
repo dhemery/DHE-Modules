@@ -20,9 +20,9 @@ struct Module : public rack::engine::Module {
   Module() {
     config(Param::Count, Input::Count, Output::Count);
 
-    CustomKnob::config<MediumDuration>(this, Param::Duration, "Duration");
+    MappedKnob::config<MediumDuration>(this, Param::Duration, "Duration");
     Knob::config<UnipolarVoltage>(this, Param::Level, "Level");
-    CustomKnob::config<Curvature>(this, Param::Curvature, "Curvature");
+    MappedKnob::config<Curvature>(this, Param::Curvature, "Curvature");
 
     configInput(Input::Envelope, "Stage");
     configInput(Input::Defer, "Defer");

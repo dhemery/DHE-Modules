@@ -37,6 +37,39 @@ struct DurationTaper {
   }
 };
 
+// Maps a param value (rotation) to and from a display value (seconds) for a
+// given duration range.
+template <typename TDurationRange> struct DurationRangeDisplayMapper {
+  auto to_value(float seconds) const -> float {
+    auto const tapered = TDurationRange::display_range().normalize(seconds);
+    return DurationTaper::rotation(tapered);
+  }
+
+  auto to_display_value(float rotation) const -> float {
+    return TDurationRange::value(rotation);
+  }
+};
+
+// Maps a param value (rotation) to and from a display value (seconds),
+// depending on the selected duration range.
+template <typename TDurationRanges>
+struct SelectableDurationRangeDisplayMapper {
+  auto to_value(float seconds) const -> float {
+    auto const tapered =
+        TDurationRanges::select(range_index_).normalize(seconds);
+    return DurationTaper::rotation(tapered);
+  }
+
+  auto to_display_value(float rotation) const -> float {
+    return TDurationRanges::value(rotation, range_index_);
+  }
+
+  void select_range(int range_index) { range_index_ = range_index; }
+
+private:
+  int range_index_{TDurationRanges::Medium};
+};
+
 template <typename TDuration> struct DurationRange {
   static auto constexpr display_range() -> Range { return TDuration::range(); }
   static auto constexpr unit = " s";
@@ -45,18 +78,7 @@ template <typename TDuration> struct DurationRange {
     return display_range().scale(DurationTaper::tapered(rotation));
   }
 
-  struct Converter {
-    auto value(float seconds) const -> float {
-      auto const tapered = display_range().normalize(seconds);
-      return DurationTaper::rotation(tapered);
-    }
-
-    auto display_value(float rotation) const -> float {
-      return DurationRange::value(rotation);
-    }
-  };
-
-  using ConverterType = Converter;
+  using DisplayMapper = DurationRangeDisplayMapper<TDuration>;
 };
 
 struct ShortDuration : public DurationRange<ShortDuration> {
@@ -75,25 +97,9 @@ struct LongDuration : public DurationRange<LongDuration> {
 };
 
 struct Durations {
-  struct Converter {
-    auto value(float seconds) const -> float {
-      auto const tapered = Durations::select(selection_).normalize(seconds);
-      return DurationTaper::rotation(tapered);
-    }
-
-    auto display_value(float rotation) const -> float {
-      return Durations::value(rotation, selection_);
-    }
-
-    void select(int pos) { selection_ = pos; }
-
-  private:
-    int selection_{Durations::Medium};
-  };
-
   using PositionType = int;
   using ItemType = Range;
-  using ConverterType = Converter;
+  using DisplayMapper = SelectableDurationRangeDisplayMapper<Durations>;
   enum { Short, Medium, Long };
 
   static auto constexpr unit = " s";

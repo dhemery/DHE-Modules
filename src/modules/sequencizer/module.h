@@ -54,7 +54,7 @@ public:
     configOutput(Output::Out, "Sequencer");
 
     auto level_knobs = std::vector<KnobQuantity<float> *>{};
-    auto duration_knobs = std::vector<CustomKnobQuantity<Durations> *>{};
+    auto duration_knobs = std::vector<MappedKnobQuantity<Durations> *>{};
 
     for (auto step = 0; step < N; step++) {
       auto const step_name = "Step " + std::to_string(step + 1) + " ";
@@ -87,9 +87,9 @@ public:
                                     step_name + "end anchor source",
                                     AnchorSource::Level);
 
-      CustomKnob::config<Curvature>(this, Param::StepCurvature + step,
+      MappedKnob::config<Curvature>(this, Param::StepCurvature + step,
                                     step_name + "curvature");
-      auto *duration_knob = CustomKnob::config<Durations>(
+      auto *duration_knob = MappedKnob::config<Durations>(
           this, Param::StepDuration + step, step_name + "duration");
       duration_knobs.push_back(duration_knob);
 
@@ -114,9 +114,9 @@ public:
     Knob::config<Gain>(this, Param::DurationMultiplier, "Duration multiplier");
     Switch::config<Durations>(this, Param::DurationRange, "Duration range",
                               Durations::Medium)
-        ->on_change([duration_knobs](int pos) {
+        ->on_change([duration_knobs](int range_index) {
           for (auto *knob : duration_knobs) {
-            knob->converter().select(pos);
+            knob->mapper().select_range(range_index);
           }
         });
     configInput(Input::DurationMultiplierCV, "Duration multipler CV");

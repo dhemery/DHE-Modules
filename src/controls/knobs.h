@@ -1,7 +1,7 @@
 #pragma once
 
-#include "params/custom-knob-quantity.h"
 #include "params/knob-quantity.h"
+#include "params/mapped-knob-quantity.h"
 #include "widgets/dimensions.h"
 #include "widgets/knob-widget.h"
 
@@ -74,13 +74,13 @@ struct IntKnob {
   }
 };
 
-struct CustomKnob {
-  template <typename TCustom>
+struct MappedKnob {
+  template <typename TMapped>
   static inline auto config(rack::engine::Module *module, int id,
                             std::string const &name, float rotation = 0.5F)
-      -> CustomKnobQuantity<TCustom> * {
-    return module->configParam<CustomKnobQuantity<TCustom>>(
-        id, 0.F, 1.F, rotation, name, TCustom::unit);
+      -> MappedKnobQuantity<TMapped> * {
+    return module->configParam<MappedKnobQuantity<TMapped>>(
+        id, 0.F, 1.F, rotation, name, TMapped::unit);
   }
 };
 
