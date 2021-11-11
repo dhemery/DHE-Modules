@@ -193,10 +193,10 @@ private:
   }
 
   void add_step_selection() {
-    auto const marker_x = step_block_left + step_width / 2.F;
-    StartMarker::install(this, marker_x, progress_light_y, step_width);
-    auto *end_marker =
-        EndMarker::install(this, marker_x, progress_light_y, step_width);
+    auto const positions = SelectionMarkerPositions{
+        step_block_left + step_width / 2.F, progress_light_y, step_width};
+    StartMarker::install(this, positions);
+    auto *end_marker = EndMarker::install(this, positions);
 
     auto constexpr length_x = global_inputs_left + port_radius + padding;
     auto constexpr length_y = global_controls_y(0);

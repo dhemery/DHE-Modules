@@ -59,10 +59,9 @@ template <typename TSize> struct Panel : public PanelWidget<Panel<TSize>> {
     Button::install<Toggle>(this, Param::Loop, left + button_port_distance,
                             loop_y);
 
-    auto constexpr marker_x = step_x;
-    auto *start_marker =
-        StartMarker::install(this, marker_x, active_y, step_dx);
-    auto *end_marker = EndMarker::install(this, marker_x, active_y, step_dx);
+    auto const positions = SelectionMarkerPositions{step_x, active_y, step_dx};
+    auto *start_marker = StartMarker::install(this, positions);
+    auto *end_marker = EndMarker::install(this, positions);
 
     auto const update_selection_start = [start_marker, end_marker](int index) {
       start_marker->set_start(index);
