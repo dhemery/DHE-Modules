@@ -8,7 +8,7 @@ template <int N> struct ParamIds {
   enum {
     PER_CHANNEL(Operand, N),
     PER_CHANNEL(Operation, N),
-    PER_CHANNEL(AddendRange, N),
+    PER_CHANNEL(OffsetRange, N),
     PER_CHANNEL(MultiplierRange, N),
     Count
   };

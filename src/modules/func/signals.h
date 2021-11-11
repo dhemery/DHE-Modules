@@ -22,11 +22,6 @@ struct Signals {
           std::vector<TOutput> &outputs)
       : params_{params}, inputs_{inputs}, outputs_{outputs} {}
 
-  auto addend_range(int channel) const -> Addends::Selection {
-    return selection_of<Addends::Selection>(
-        params_[Param::AddendRange + channel]);
-  }
-
   auto input(int channel, float voltage_if_disconnected) const -> float {
     return inputs_[Input::Channel + channel].getNormalVoltage(
         voltage_if_disconnected);
@@ -35,6 +30,11 @@ struct Signals {
   auto multiplier_range(int channel) const -> Multipliers::Selection {
     return selection_of<Multipliers::Selection>(
         params_[Param::MultiplierRange + channel]);
+  }
+
+  auto offset_range(int channel) const -> Offsets::Selection {
+    return selection_of<Offsets::Selection>(
+        params_[Param::OffsetRange + channel]);
   }
 
   auto operand(int channel) const -> float {

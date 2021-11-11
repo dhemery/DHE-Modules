@@ -24,8 +24,8 @@ public:
 private:
   auto add(int channel, float augend) const -> float {
     auto const rotation = signals_.operand(channel);
-    auto const range = signals_.addend_range(channel);
-    auto const addend = Addends::addend(rotation, range);
+    auto const range = signals_.offset_range(channel);
+    auto const addend = Offsets::offset(rotation, range);
     return augend + addend;
   }
 

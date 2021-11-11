@@ -46,7 +46,7 @@ public:
       OutPort::install(this, Output::Channel + row, column5, port_y);
 
       auto *offset_range_stepper =
-          Stepper::install<Addends>(this, Param::AddendRange + row, column4, y);
+          Stepper::install<Offsets>(this, Param::OffsetRange + row, column4, y);
 
       auto *multiplier_range_stepper = Stepper::install<Multipliers>(
           this, Param::MultiplierRange + row, column4, y);

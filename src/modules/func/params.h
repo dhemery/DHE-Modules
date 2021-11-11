@@ -1,14 +1,17 @@
 #pragma once
 
+#include "signals/voltages.h"
+
 #include <string>
 #include <vector>
 
 namespace dhe {
 namespace func {
 
-struct Addends {
+struct Offsets {
   enum Selection { Unipolar5, Bipolar, Unipolar, Bipolar10 };
   static constexpr auto stepper_slug = "offset-range";
+  static constexpr auto unit = " V";
 
   static inline auto labels() -> std::vector<std::string> const & {
     static auto const labels =
@@ -16,7 +19,7 @@ struct Addends {
     return labels;
   }
 
-  static inline auto addend(float rotation, Selection selection) -> float {
+  static inline auto offset(float rotation, Selection selection) -> float {
     return range(selection).scale(rotation);
   }
 
@@ -38,6 +41,7 @@ private:
 struct Multipliers {
   enum Selection { Attenuator, Attenuverter, Gain, Gainuverter };
   static constexpr auto stepper_slug = "multiplier-range";
+  static constexpr auto unit = "";
 
   static inline auto labels() -> std::vector<std::string> const & {
     static auto const labels =
@@ -68,7 +72,8 @@ struct Operations {
   static auto constexpr unit = "";
 
   static inline auto labels() -> std::vector<std::string> const & {
-    static const auto labels = std::vector<std::string>{"Add", "Multiply"};
+    static const auto labels =
+        std::vector<std::string>{"Add (offset)", "Multiply (scale)"};
     return labels;
   }
 
@@ -76,13 +81,13 @@ struct Operations {
     auto to_display_value(float rotation) const -> float {
       return operation_ == Operations::Multiply
                  ? Multipliers::multiplier(rotation, multipler_range_)
-                 : Addends::addend(rotation, offset_range_);
+                 : Offsets::offset(rotation, offset_range_);
     }
 
     auto to_rotation(float operand) const -> float {
       return operation_ == Operations::Multiply
                  ? Multipliers::rotation(operand, multipler_range_)
-                 : Addends::rotation(operand, offset_range_);
+                 : Offsets::rotation(operand, offset_range_);
     }
 
     void select_operation(Operations::Selection operation) {
@@ -93,12 +98,12 @@ struct Operations {
       multipler_range_ = selection;
     }
 
-    void select_offset_range(Addends::Selection selection) {
+    void select_offset_range(Offsets::Selection selection) {
       offset_range_ = selection;
     }
 
   private:
-    Addends::Selection offset_range_{Addends::Bipolar};
+    Offsets::Selection offset_range_{Offsets::Bipolar};
     Multipliers::Selection multipler_range_{Multipliers::Gain};
     Operations::Selection operation_{Operations::Multiply};
   };

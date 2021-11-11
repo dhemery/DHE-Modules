@@ -24,7 +24,7 @@ template <int N> struct Module : public rack::engine::Module {
     }
   }
 
-  void process(ProcessArgs const & /*ignored*/) override {
+  void process(ProcessArgs const & /*args*/) override {
     auto upstream = 0.F;
     for (auto i = 0; i < N; i++) {
       upstream = func_engine_.apply(i, upstream);
@@ -42,31 +42,33 @@ private:
     auto const channel_name =
         N == 1 ? std::string{""}
                : std::string{"Channel "} + std::to_string(channel + 1);
-    static auto const offset_knob_name =
+    auto const offset_knob_name =
         channel_name + (N == 1 ? "Offset" : " offset");
-    static auto const multiplier_knob_name =
+    auto const multiplier_knob_name =
         channel_name + (N == 1 ? "Multiplier" : " multiplier");
-    static auto const operand_knob_names =
+    auto const operand_knob_names =
         std::vector<std::string>{offset_knob_name, multiplier_knob_name};
 
     auto *operand_knob = Knob::config<Operations>(
         this, Param::Operand + channel, offset_knob_name);
 
-    auto select_operation = [operand_knob](Operations::Selection selection) {
-      operand_knob->mapper().select_operation(selection);
-      if (selection == Operations::Multiply) {
-        operand_knob->unit = "";
-        operand_knob->name = multiplier_knob_name;
-      } else {
-        operand_knob->unit = " V";
-        operand_knob->name = offset_knob_name;
-      }
-    };
+    auto select_operation =
+        [operand_knob, multiplier_knob_name,
+         offset_knob_name](Operations::Selection selection) {
+          operand_knob->mapper().select_operation(selection);
+          if (selection == Operations::Multiply) {
+            operand_knob->unit = Multipliers::unit;
+            operand_knob->name = multiplier_knob_name;
+          } else {
+            operand_knob->unit = Offsets::unit;
+            operand_knob->name = offset_knob_name;
+          }
+        };
     auto select_multiplier_range =
         [operand_knob](Multipliers::Selection selection) {
           operand_knob->mapper().select_multiplier_range(selection);
         };
-    auto select_offset_range = [operand_knob](Addends::Selection selection) {
+    auto select_offset_range = [operand_knob](Offsets::Selection selection) {
       operand_knob->mapper().select_offset_range(selection);
     };
 
@@ -77,9 +79,9 @@ private:
         ->on_change(select_operation);
 
     auto const offset_range_switch_name =
-        channel_name + (N == 1 ? "Offset range" : " addend range");
-    Switch::config<Addends>(this, Param::AddendRange + channel,
-                            offset_range_switch_name, Addends::Bipolar)
+        channel_name + (N == 1 ? "Offset range" : " offset range");
+    Switch::config<Offsets>(this, Param::OffsetRange + channel,
+                            offset_range_switch_name, Offsets::Bipolar)
         ->on_change(select_offset_range);
 
     auto const multiplier_range_switch_name =
