@@ -39,34 +39,54 @@ template <int N> struct Module : public rack::engine::Module {
 
 private:
   void config_channel(int channel) {
-    configParam<OperandParamQuantity<RackSignals>>(Param::Operand + channel,
-                                                   0.F, 1.F, 0.5F);
     auto const channel_name =
         N == 1 ? std::string{""}
                : std::string{"Channel "} + std::to_string(channel + 1);
+    static auto const offset_knob_name =
+        channel_name + (N == 1 ? "Offset" : " offset");
+    static auto const multiplier_knob_name =
+        channel_name + (N == 1 ? "Multiplier" : " multiplier");
+    static auto const operand_knob_names =
+        std::vector<std::string>{offset_knob_name, multiplier_knob_name};
+
+    auto *operand_knob = Knob::config<Operations>(
+        this, Param::Operand + channel, offset_knob_name);
+
+    auto select_operation = [operand_knob](Operations::Selection selection) {
+      operand_knob->mapper().select_operation(selection);
+      if (selection == Operations::Multiply) {
+        operand_knob->unit = "";
+        operand_knob->name = multiplier_knob_name;
+      } else {
+        operand_knob->unit = " V";
+        operand_knob->name = offset_knob_name;
+      }
+    };
+    auto select_multiplier_range =
+        [operand_knob](Multipliers::Selection selection) {
+          operand_knob->mapper().select_multiplier_range(selection);
+        };
+    auto select_offset_range = [operand_knob](Addends::Selection selection) {
+      operand_knob->mapper().select_offset_range(selection);
+    };
 
     auto const operator_switch_name =
         channel_name + (N == 1 ? "Operator" : " operator");
-    Switch::config<Operators>(this, Param::Operation + channel,
-                              operator_switch_name, Operation::Add);
+    Switch::config<Operations>(this, Param::Operation + channel,
+                               operator_switch_name, Operations::Add)
+        ->on_change(select_operation);
 
     auto const offset_range_switch_name =
-        channel_name + (N == 1 ? "Offset range" : " offset range");
-    Switch::config<OffsetRanges>(this, Param::OffsetRange + channel,
-                                 offset_range_switch_name,
-                                 OffsetRanges::Bipolar);
+        channel_name + (N == 1 ? "Offset range" : " addend range");
+    Switch::config<Addends>(this, Param::AddendRange + channel,
+                            offset_range_switch_name, Addends::Bipolar)
+        ->on_change(select_offset_range);
 
     auto const multiplier_range_switch_name =
         channel_name + (N == 1 ? "Multiplier range" : " multiplier range");
-    Switch::config<MultiplierRanges>(this, Param::MultiplierRange + channel,
-                                     multiplier_range_switch_name,
-                                     MultiplierRanges::Gain);
-
-    auto const operand_knob_param_quantity =
-        reinterpret_cast<OperandParamQuantity<RackSignals> *>(
-            getParamQuantity(Param::Operand + channel));
-
-    operand_knob_param_quantity->configure(&signals_, channel, channel_name);
+    Switch::config<Multipliers>(this, Param::MultiplierRange + channel,
+                                multiplier_range_switch_name, Multipliers::Gain)
+        ->on_change(select_multiplier_range);
 
     auto const port_name = N == 1 ? "Func" : channel_name;
     configInput(Input::Channel + channel, port_name);

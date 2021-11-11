@@ -46,23 +46,20 @@ public:
     OutPort::install(this, Output::Channel, x, row6);
 
     auto *offset_range_stepper =
-        Stepper::install<OffsetRanges>(this, Param::OffsetRange, x, row4);
+        Stepper::install<Addends>(this, Param::AddendRange, x, row4);
 
-    auto *multiplier_range_stepper = Stepper::install<MultiplierRanges>(
-        this, Param::MultiplierRange, x, row4);
+    auto *multiplier_range_stepper =
+        Stepper::install<Multipliers>(this, Param::MultiplierRange, x, row4);
 
-    auto const update_range_stepper_visibility =
-        [offset_range_stepper, multiplier_range_stepper](Operation op) {
-          if (op == Operation::Multiply) {
-            offset_range_stepper->hide();
-            multiplier_range_stepper->show();
-          } else {
-            offset_range_stepper->show();
-            multiplier_range_stepper->hide();
-          }
+    auto const select_operation =
+        [offset_range_stepper,
+         multiplier_range_stepper](Operations::Selection selection) {
+          auto const is_multiply = selection == Operations::Multiply;
+          multiplier_range_stepper->setVisible(is_multiply);
+          offset_range_stepper->setVisible(!is_multiply);
         };
-    Stepper::install<Operators>(this, Param::Operation, x, row2)
-        ->on_change(update_range_stepper_visibility);
+    ThumbSwitch::install<Operations>(this, Param::Operation, x, row2)
+        ->on_change(select_operation);
   }
 };
 } // namespace func

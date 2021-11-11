@@ -2,8 +2,9 @@
 #include "gain.h"
 
 namespace dhe {
-template <typename TParam> auto value_of(TParam const &param) -> float {
-  return const_cast<TParam &>(param).getValue();
+template <typename TValue = float, typename TParam>
+auto value_of(TParam const &param) -> float {
+  return static_cast<TValue>(const_cast<TParam &>(param).getValue());
 }
 
 template <typename TInput> auto voltage_at(TInput const &input) -> float {
@@ -11,11 +12,16 @@ template <typename TInput> auto voltage_at(TInput const &input) -> float {
 }
 
 template <typename TParam> auto position_of(TParam const &param) -> int {
-  return static_cast<int>(value_of(param));
+  return value_of<int>(param);
+}
+
+template <typename TSelection, typename TParam>
+auto selection_of(TParam const &param) -> TSelection {
+  return static_cast<TSelection>(value_of<int>(param));
 }
 
 template <typename TParam> auto is_pressed(TParam const &param) -> bool {
-  return value_of(param) > 0.5F;
+  return value_of<bool>(param);
 }
 
 template <typename TInput> auto is_high(TInput const &input) -> bool {

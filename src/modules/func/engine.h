@@ -1,6 +1,6 @@
 #pragma once
 
-#include "./operation.h"
+#include "params.h"
 
 namespace dhe {
 
@@ -13,7 +13,8 @@ public:
 
   auto apply(int channel, float upstream) const -> float {
     auto const input = signals_.input(channel, upstream);
-    auto const is_multiply = signals_.operation(channel) == Operation::Multiply;
+    auto const is_multiply =
+        signals_.operation(channel) == Operations::Multiply;
     auto const result =
         is_multiply ? multiply(channel, input) : add(channel, input);
     signals_.output(channel, result);
@@ -22,16 +23,16 @@ public:
 
 private:
   auto add(int channel, float augend) const -> float {
-    auto const &addend_range = signals_.offset_range(channel);
-    auto const addend_rotation = signals_.operand(channel);
-    auto const addend = addend_range.scale(addend_rotation);
+    auto const rotation = signals_.operand(channel);
+    auto const range = signals_.addend_range(channel);
+    auto const addend = Addends::addend(rotation, range);
     return augend + addend;
   }
 
   auto multiply(int channel, float multiplicand) const -> float {
-    auto const &multiplier_range = signals_.multiplier_range(channel);
-    auto const multiplier_rotation = signals_.operand(channel);
-    auto const multiplier = multiplier_range.scale(multiplier_rotation);
+    auto const rotation = signals_.operand(channel);
+    auto const range = signals_.multiplier_range(channel);
+    auto const multiplier = Multipliers::multiplier(rotation, range);
     return multiplicand * multiplier;
   }
 

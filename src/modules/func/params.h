@@ -1,5 +1,4 @@
 #pragma once
-#include "./operation.h"
 
 #include <string>
 #include <vector>
@@ -7,7 +6,7 @@
 namespace dhe {
 namespace func {
 
-struct OffsetRanges {
+struct Addends {
   enum Selection { Unipolar5, Bipolar, Unipolar, Bipolar10 };
   static constexpr auto stepper_slug = "offset-range";
 
@@ -16,9 +15,27 @@ struct OffsetRanges {
         std::vector<std::string>{"0–5 V", "±5 V", "0–10 V", "±10 V"};
     return labels;
   }
+
+  static inline auto addend(float rotation, Selection selection) -> float {
+    return range(selection).scale(rotation);
+  }
+
+  static inline auto rotation(float multiplier, Selection selection) -> float {
+    return range(selection).normalize(multiplier);
+  }
+
+private:
+  static inline auto range(Selection selection) -> Range const & {
+    static auto constexpr minus_ten_to_plus_ten_range = Range{-10.F, 10.F};
+    static auto constexpr zero_to_five_range = Range{0.F, 5.F};
+    static auto const ranges = std::vector<Range>{
+        zero_to_five_range, BipolarVoltage::range(), UnipolarVoltage::range(),
+        minus_ten_to_plus_ten_range};
+    return ranges[selection];
+  }
 };
 
-struct MultiplierRanges {
+struct Multipliers {
   enum Selection { Attenuator, Attenuverter, Gain, Gainuverter };
   static constexpr auto stepper_slug = "multiplier-range";
 
@@ -27,70 +44,64 @@ struct MultiplierRanges {
         std::vector<std::string>{"0–1", "±1", "0–2", "±2"};
     return labels;
   }
-};
 
-struct Operators {
-  using Selection = Operation;
-  static constexpr auto stepper_slug = "toggle-2";
-
-  static inline auto labels() -> std::vector<std::string> const & {
-    static const auto labels =
-        std::vector<std::string>{"Add (offset)", "Multiply (scale)"};
-    return labels;
-  }
-};
-
-template <typename Signals>
-struct OperandParamQuantity : public rack::engine::ParamQuantity {
-  auto getLabel() -> std::string override {
-    static auto operand_labels =
-        Signals::channel_count == 1
-            ? std::array<std::string, 2>{"Offset", "Multiplier"}
-            : std::array<std::string, 2>{" offset", " multiplier"};
-    const auto op = static_cast<int>(operation());
-    return channel_name_ + operand_labels[op];
+  static inline auto multiplier(float rotation, Selection selection) -> float {
+    return range(selection).scale(rotation);
   }
 
-  auto getDisplayValue() -> float override {
-    auto const rotation = getValue();
-    auto const &operand_range = current_operand_range();
-    auto const operand = operand_range.scale(rotation);
-    return operand;
-  }
-
-  void setDisplayValue(float operand) override {
-    auto const &operand_range = current_operand_range();
-    auto const rotation = operand_range.normalize(operand);
-    setValue(rotation);
-  }
-
-  void configure(Signals const *signals, int channel,
-                 const std::string &channel_name) {
-    signals_ = signals;
-    channel_ = channel;
-    channel_name_ = channel_name;
+  static inline auto rotation(float multiplier, Selection selection) -> float {
+    return range(selection).normalize(multiplier);
   }
 
 private:
-  auto current_operand_range() -> Range {
-    return operation() == Operation::Multiply ? multiplier_range()
-                                              : offset_range();
+  static inline auto range(Selection selection) -> Range const & {
+    static auto constexpr minus_two_to_plus_two_range = Range{-2.F, 2.F};
+    static auto const ranges =
+        std::vector<Range>{Attenuator::range(), Attenuverter::range(),
+                           Gain::range(), minus_two_to_plus_two_range};
+    return ranges[selection];
+  }
+};
+
+struct Operations {
+  using Selection = enum { Add, Multiply };
+  static auto constexpr unit = "";
+
+  static inline auto labels() -> std::vector<std::string> const & {
+    static const auto labels = std::vector<std::string>{"Add", "Multiply"};
+    return labels;
   }
 
-  auto operation() const -> Operation { return signals_->operation(channel_); }
+  struct KnobMapper {
+    auto to_display_value(float rotation) const -> float {
+      return operation_ == Operations::Multiply
+                 ? Multipliers::multiplier(rotation, multipler_range_)
+                 : Addends::addend(rotation, offset_range_);
+    }
 
-  auto multiplier_range() const -> Range {
-    return signals_->multiplier_range(channel_);
-  }
+    auto to_rotation(float operand) const -> float {
+      return operation_ == Operations::Multiply
+                 ? Multipliers::rotation(operand, multipler_range_)
+                 : Addends::rotation(operand, offset_range_);
+    }
 
-  auto offset_range() const -> Range {
-    return signals_->offset_range(channel_);
-  }
+    void select_operation(Operations::Selection operation) {
+      operation_ = operation;
+    }
 
-  int channel_{0};
-  std::string channel_name_;
-  Signals const *signals_{};
+    void select_multiplier_range(Multipliers::Selection selection) {
+      multipler_range_ = selection;
+    }
+
+    void select_offset_range(Addends::Selection selection) {
+      offset_range_ = selection;
+    }
+
+  private:
+    Addends::Selection offset_range_{Addends::Bipolar};
+    Multipliers::Selection multipler_range_{Multipliers::Gain};
+    Operations::Selection operation_{Operations::Multiply};
+  };
 };
 } // namespace func
-
 } // namespace dhe
