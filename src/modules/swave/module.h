@@ -3,7 +3,7 @@
 #include "control-ids.h"
 
 #include "controls/knobs.h"
-#include "signals/shapes.h"
+#include "signals/curvature.h"
 
 #include "rack.hpp"
 
@@ -45,10 +45,10 @@ private:
   auto signal_in() const -> float { return voltage_at(inputs[Input::Swave]); }
 
   auto taper(float input) const -> float {
-    return Shapes::value(rotation(params[Param::Curvature],
-                                  inputs[Input::CurvatureCv],
-                                  params[Param::CurvatureAv]),
-                         position_of(params[Param::Shape]));
+    return Shapes::curvature(rotation(params[Param::Curvature],
+                                      inputs[Input::CurvatureCv],
+                                      params[Param::CurvatureAv]),
+                             position_of(params[Param::Shape]));
   }
 };
 

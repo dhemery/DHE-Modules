@@ -10,8 +10,8 @@
 #include "controls/knobs.h"
 #include "controls/switches.h"
 #include "params/presets.h"
+#include "signals/curvature.h"
 #include "signals/durations.h"
-#include "signals/shapes.h"
 #include "signals/step-selection.h"
 #include "signals/voltages.h"
 
@@ -114,7 +114,7 @@ public:
     auto const base_cv_input = type == AnchorType::Phase0
                                    ? Input::StepPhase0AnchorLevelCv
                                    : Input::StepPhase1AnchorLevelCv;
-    return Voltages::value(
+    return Voltages::volts(
         rotation(params[base_knob_param + step], inputs[base_cv_input + step]),
         position_of(params[Param::LevelRange]));
   }
@@ -128,8 +128,9 @@ public:
   }
 
   auto curvature(int step) const -> float {
-    return Curvature::value(rotation(params[Param::StepCurvature + step],
-                                     inputs[Input::StepCurvatureCv + step]));
+    return Curvature::curvature(
+        rotation(params[Param::StepCurvature + step],
+                 inputs[Input::StepCurvatureCv + step]));
   }
 
   auto duration(int step) const -> float {

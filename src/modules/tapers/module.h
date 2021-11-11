@@ -7,7 +7,7 @@
 #include "controls/switches.h"
 #include "params/presets.h"
 #include "signals/basic.h"
-#include "signals/shapes.h"
+#include "signals/curvature.h"
 #include "signals/voltages.h"
 
 #include "rack.hpp"
@@ -76,7 +76,7 @@ private:
   inline auto taper(float input, int knob_id, int cv_id, int av_id,
                     int switch_id) const -> float {
     const auto &taper = Shapes::select(position_of(params[switch_id]));
-    auto const curvature = Curvature::value(
+    auto const curvature = Curvature::curvature(
         rotation(params[knob_id], inputs[cv_id], params[av_id]));
     return taper.apply(input, curvature);
   }

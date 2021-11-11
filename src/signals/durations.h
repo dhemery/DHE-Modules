@@ -8,76 +8,54 @@
 
 namespace dhe {
 
-struct DurationTaper {
-  static inline auto taper() -> sigmoid::Taper const & {
-    /**
-     * This curvature creates a gentle inverted S taper, increasing sensitivity
-     * in the middle of the knob rotation and decreasing sensitivity toward the
-     * extremes.
-     */
-    static auto constexpr taper_curvature = 0.8018017F;
-
-    /**
-     * Each duration range is of the form [n, 1000n]. Given ranges of that form,
-     * this curvature tapers the rotation so a knob positioned dead center
-     * yields a duration equal to 1/10 of the range's upper bound (to within 7
-     * decimal places).
-     */
-    static auto constexpr taper =
-        sigmoid::j_taper_with_curvature(taper_curvature);
-    return taper;
-  }
-
+struct DurationKnobTaper {
   static inline auto tapered(float rotation) -> float {
-    return taper().apply(rotation);
+    return taper.apply(rotation);
   }
 
   static inline auto rotation(float tapered) -> float {
-    return taper().invert(tapered);
+    return taper.invert(tapered);
   }
-};
-
-// Maps a knob param value (rotation) to and from a display value (seconds) for
-// a given duration range.
-template <typename TDurationRange> struct DurationRangeMapper {
-  auto to_value(float seconds) const -> float {
-    auto const tapered = TDurationRange::display_range().normalize(seconds);
-    return DurationTaper::rotation(tapered);
-  }
-
-  auto to_display_value(float rotation) const -> float {
-    return TDurationRange::value(rotation);
-  }
-};
-
-// Maps a knob param value (rotation) to and from a display value (seconds) for
-// the selected voltage range.
-template <typename TDurationRanges> struct SelectableDurationRangeMapper {
-  auto to_value(float seconds) const -> float {
-    auto const tapered =
-        TDurationRanges::select(range_index_).normalize(seconds);
-    return DurationTaper::rotation(tapered);
-  }
-
-  auto to_display_value(float rotation) const -> float {
-    return TDurationRanges::value(rotation, range_index_);
-  }
-
-  void select_range(int range_index) { range_index_ = range_index; }
 
 private:
-  int range_index_{TDurationRanges::Medium};
+  /**
+   * This curvature gives a duration knob a gentle inverted S taper, increasing
+   * sensitivity in the middle of the knob rotation and decreasing sensitivity
+   * toward the extremes.
+   */
+  static auto constexpr taper_curvature = 0.8018017F;
+
+  /**
+   * Each duration range is of the form [n, 1000n]. Given ranges of that form,
+   * this curvature tapers the rotation so a knob positioned dead center
+   * yields a duration equal to 1/10 of the range's upper bound (to within 7
+   * decimal places).
+   */
+  static auto constexpr taper =
+      sigmoid::j_taper_with_curvature(taper_curvature);
 };
 
 template <typename TDuration> struct DurationRange {
   static auto constexpr display_range() -> Range { return TDuration::range(); }
   static auto constexpr unit = " s";
 
-  static inline auto value(float rotation) -> float {
-    return display_range().scale(DurationTaper::tapered(rotation));
+  static inline auto seconds(float rotation) -> float {
+    auto tapered = DurationKnobTaper::tapered(rotation);
+    return display_range().scale(tapered);
   }
 
-  using KnobMapper = DurationRangeMapper<TDuration>;
+  static inline auto rotation(float seconds) -> float {
+    auto const tapered = display_range().normalize(seconds);
+    return DurationKnobTaper::rotation(tapered);
+  }
+
+  struct KnobMapper {
+    auto to_value(float seconds) const -> float { return rotation(seconds); }
+
+    auto to_display_value(float rotation) const -> float {
+      return seconds(rotation);
+    }
+  };
 };
 
 struct ShortDuration : public DurationRange<ShortDuration> {
@@ -98,7 +76,6 @@ struct LongDuration : public DurationRange<LongDuration> {
 struct Durations {
   enum Index { Short, Medium, Long };
   using ValueType = Index;
-  using KnobMapper = SelectableDurationRangeMapper<Durations>;
 
   static auto constexpr unit = " s";
 
@@ -114,10 +91,30 @@ struct Durations {
     return ranges[selection];
   }
 
-  static inline auto value(float rotation, int selection) -> float {
-    auto const tapered = DurationTaper::tapered(rotation);
+  static inline auto seconds(float rotation, int selection) -> float {
+    auto const tapered = DurationKnobTaper::tapered(rotation);
     return select(selection).scale(tapered);
   }
+
+  static inline auto rotation(float seconds, int selection) -> float {
+    auto const tapered = select(selection).normalize(seconds);
+    return DurationKnobTaper::rotation(tapered);
+  }
+
+  struct KnobMapper {
+    auto to_value(float seconds) const -> float {
+      return rotation(seconds, selection_);
+    }
+
+    auto to_display_value(float rotation) const -> float {
+      return seconds(rotation, selection_);
+    }
+
+    void select_range(int selection) { selection_ = selection; }
+
+  private:
+    int selection_{Medium};
+  };
 };
 
 } // namespace dhe

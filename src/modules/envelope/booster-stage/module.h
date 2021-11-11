@@ -9,8 +9,8 @@
 #include "modules/envelope/mode/input.h"
 #include "modules/envelope/mode/level.h"
 #include "modules/envelope/stage/engine.h"
+#include "signals/curvature.h"
 #include "signals/durations.h"
-#include "signals/shapes.h"
 #include "signals/voltages.h"
 
 #include "rack.hpp"

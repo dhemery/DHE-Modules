@@ -21,7 +21,7 @@ template <typename TParam, typename TInput, typename TOutput> struct Signals {
   auto defer() const -> bool { return is_high(inputs_[Input::Defer]); }
 
   auto duration() const -> float {
-    return Durations::value(
+    return Durations::seconds(
         rotation(params_[Param::Duration], inputs_[Input::DurationCv]),
         position_of(params_[Param::DurationRange]));
   }

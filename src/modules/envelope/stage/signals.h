@@ -4,8 +4,8 @@
 
 #include "components/sigmoid.h"
 #include "signals/basic.h"
+#include "signals/curvature.h"
 #include "signals/durations.h"
-#include "signals/shapes.h"
 #include "signals/voltages.h"
 
 #include <vector>
@@ -20,13 +20,13 @@ template <typename TParam, typename TInput, typename TOutput> struct Signals {
       : params_{params}, inputs_{inputs}, outputs_{outputs} {}
 
   auto curvature() const -> float {
-    return Curvature::value(value_of(params_[Param::Curvature]));
+    return Curvature::curvature(value_of(params_[Param::Curvature]));
   }
 
   auto defer() const -> bool { return is_high(inputs_[Input::Defer]); }
 
   auto duration() const -> float {
-    return MediumDuration::value(value_of(params_[Param::Duration]));
+    return MediumDuration::seconds(value_of(params_[Param::Duration]));
   }
 
   auto gate() const -> bool { return is_high(inputs_[Input::Trigger]); }
@@ -34,7 +34,7 @@ template <typename TParam, typename TInput, typename TOutput> struct Signals {
   auto input() const -> float { return voltage_at(inputs_[Input::Envelope]); }
 
   auto level() const -> float {
-    return UnipolarVoltage::value(value_of(params_[Param::Level]));
+    return UnipolarVoltage::volts(value_of(params_[Param::Level]));
   }
 
   void output(float voltage) { outputs_[Output::Envelope].setVoltage(voltage); }

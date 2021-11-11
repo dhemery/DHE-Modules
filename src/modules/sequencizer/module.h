@@ -14,8 +14,8 @@
 #include "controls/knobs.h"
 #include "controls/switches.h"
 #include "params/presets.h"
+#include "signals/curvature.h"
 #include "signals/durations.h"
-#include "signals/shapes.h"
 #include "signals/voltages.h"
 
 #include "rack.hpp"

@@ -4,8 +4,8 @@
 
 #include "components/sigmoid.h"
 #include "signals/basic.h"
+#include "signals/curvature.h"
 #include "signals/durations.h"
-#include "signals/shapes.h"
 #include "signals/voltages.h"
 
 #include <vector>
@@ -22,7 +22,7 @@ public:
       : params_{params}, inputs_{inputs}, outputs_{outputs} {}
 
   auto curvature() const -> float {
-    return Curvature::value(
+    return Curvature::curvature(
         rotation(params_[Param::Curvature], inputs_[Input::CurvatureCv]));
   }
 
@@ -31,7 +31,7 @@ public:
   }
 
   auto duration() const -> float {
-    return Durations::value(
+    return Durations::seconds(
         rotation(params_[Param::Duration], inputs_[Input::DurationCv]),
         position_of(params_[Param::DurationRange]));
   }
@@ -44,7 +44,7 @@ public:
   auto input() const -> float { return voltage_at(inputs_[Input::Envelope]); }
 
   auto level() const -> float {
-    return Voltages::value(
+    return Voltages::volts(
         rotation(params_[Param::Level], inputs_[Input::LevelCv]),
         position_of(params_[Param::LevelRange]));
   }

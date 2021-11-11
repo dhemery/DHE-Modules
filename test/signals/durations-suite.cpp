@@ -24,7 +24,7 @@ public:
                 auto constexpr rotation = 0.F;
                 auto const want = range.lower_bound();
 
-                auto const got = Durations::value(rotation, selection);
+                auto const got = Durations::seconds(rotation, selection);
                 if (got != want) {
                   t.errorf("Got {}, want {}", got, want);
                 }
@@ -36,7 +36,7 @@ public:
                 auto const want = range.upper_bound() * 0.1F;
                 auto constexpr tolerance = 0.00005F;
 
-                auto const got = Durations::value(rotation, selection);
+                auto const got = Durations::seconds(rotation, selection);
                 if (got < want - tolerance || got > want + tolerance) {
                   t.errorf("Got {}, want a value within {} of {}", got,
                            tolerance, want);
@@ -48,7 +48,7 @@ public:
                 auto const rotation = 1.F;
                 auto const want = range.upper_bound();
 
-                auto const got = Durations::value(rotation, selection);
+                auto const got = Durations::seconds(rotation, selection);
                 if (got != want) {
                   t.errorf("Got {}, want {}", got, want);
                 }

@@ -25,7 +25,7 @@ template <typename TParam, typename TInput, typename TOutput> struct Signals {
   }
 
   auto level() const -> float {
-    return Voltages::value(
+    return Voltages::volts(
         rotation(params_[Param::Level], inputs_[Input::LevelCv]),
         position_of(params_[Param::LevelRange]));
   }

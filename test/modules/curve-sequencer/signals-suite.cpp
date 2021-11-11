@@ -8,6 +8,7 @@
 namespace test {
 namespace curve_sequencer {
 
+using dhe::Durations;
 using dhe::unit::Suite;
 using dhe::unit::Tester;
 
@@ -155,7 +156,8 @@ public:
                 curve_knob_rotation);
 
             auto const got = signals.curvature(step);
-            auto constexpr want = dhe::Curvature::value(curve_knob_rotation);
+            auto constexpr want =
+                dhe::Curvature::curvature(curve_knob_rotation);
             if (got != want) {
               t.errorf("Got {}, want {}", got, want);
             }
@@ -174,8 +176,8 @@ public:
                 duration_range_selection);
 
             auto const got = signals.duration(step);
-            auto const want = dhe::Durations::value(duration_knob_rotation,
-                                                    duration_range_selection);
+            auto const want = Durations::seconds(duration_knob_rotation,
+                                                 duration_range_selection);
             if (got != want) {
               t.errorf("Got {}, want {}", got, want);
             }

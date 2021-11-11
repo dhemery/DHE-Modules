@@ -5,8 +5,8 @@
 #include "generate-mode.h"
 
 #include "signals/basic.h"
+#include "signals/curvature.h"
 #include "signals/durations.h"
-#include "signals/shapes.h"
 #include "signals/voltages.h"
 
 #include <vector>
@@ -37,12 +37,12 @@ struct Signals {
   }
 
   auto curvature(int step) const -> float {
-    return Curvature::value(value_of(params_[Param::StepCurvature + step]));
+    return Curvature::curvature(value_of(params_[Param::StepCurvature + step]));
   }
 
   auto duration(int step) const -> float {
-    return Durations::value(value_of(params_[Param::StepDuration + step]),
-                            position_of(params_[Param::DurationRange]));
+    return Durations::seconds(value_of(params_[Param::StepDuration + step]),
+                              position_of(params_[Param::DurationRange]));
   }
 
   auto generate_mode(int step) const -> GenerateMode {
@@ -74,7 +74,7 @@ struct Signals {
   }
 
   auto level(int step) const -> float {
-    return Voltages::value(value_of(params_[Param::StepLevel + step]),
+    return Voltages::volts(value_of(params_[Param::StepLevel + step]),
                            position_of(params_[Param::LevelRange]));
   }
 

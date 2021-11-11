@@ -67,7 +67,7 @@ private:
 
   inline auto limit(int knob, int cv, int av, int range_selection) const
       -> float {
-    return Voltages::value(rotation(params[knob], inputs[cv], params[av]),
+    return Voltages::volts(rotation(params[knob], inputs[cv], params[av]),
                            position_of(params[range_selection]));
   }
 
