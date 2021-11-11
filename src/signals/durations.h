@@ -9,30 +9,32 @@
 namespace dhe {
 
 struct DurationKnobTaper {
-  static inline auto tapered(float rotation) -> float {
-    return taper.apply(rotation);
+  static auto tapered(float rotation) -> float {
+    return taper().apply(rotation);
   }
 
-  static inline auto rotation(float tapered) -> float {
-    return taper.invert(tapered);
+  static auto rotation(float tapered) -> float {
+    return taper().invert(tapered);
   }
 
 private:
-  /**
-   * This curvature gives a duration knob a gentle inverted S taper, increasing
-   * sensitivity in the middle of the knob rotation and decreasing sensitivity
-   * toward the extremes.
-   */
-  static auto constexpr taper_curvature = 0.8018017F;
+  static auto taper() -> sigmoid::Taper const & {
+    /**
+     * This curvature gives a duration knob a gentle inverted S taper,
+     * increasing sensitivity in the middle of the knob rotation and decreasing
+     * sensitivity toward the extremes.
+     */
+    static auto constexpr taper_curvature = 0.8018017F;
 
-  /**
-   * Each duration range is of the form [n, 1000n]. Given ranges of that form,
-   * this curvature tapers the rotation so a knob positioned dead center
-   * yields a duration equal to 1/10 of the range's upper bound (to within 7
-   * decimal places).
-   */
-  static auto constexpr taper =
-      sigmoid::j_taper_with_curvature(taper_curvature);
+    /**
+     * Each duration range is of the form [n, 1000n]. Given ranges of that form,
+     * this curvature tapers the rotation so a knob positioned dead center
+     * yields a duration equal to 1/10 of the range's upper bound (to within 7
+     * decimal places).
+     */
+    static auto const taper = sigmoid::j_taper_with_curvature(taper_curvature);
+    return taper;
+  }
 };
 
 template <typename TDuration> struct DurationRange {

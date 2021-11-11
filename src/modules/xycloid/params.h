@@ -71,12 +71,12 @@ struct WobbleRatios {
 struct ThrobSpeed {
   static auto constexpr unit = " Hz";
 
-  static auto constexpr hertz(float rotation) -> float {
-    return range.scale(taper.apply(rotation));
+  static auto hertz(float rotation) -> float {
+    return range().scale(taper().apply(rotation));
   }
 
-  static auto constexpr rotation(float speed) -> float {
-    return taper.invert(range.normalize(speed));
+  static auto rotation(float speed) -> float {
+    return taper().invert(range().normalize(speed));
   }
 
   struct KnobMapper {
@@ -88,8 +88,11 @@ struct ThrobSpeed {
   };
 
 private:
-  static auto constexpr range = Range{-10.F, 10.F};
-  static auto constexpr taper = sigmoid::s_taper_with_curvature(-0.8F);
+  static auto constexpr range() -> Range { return Range{-10.F, 10.F}; }
+  static auto taper() -> sigmoid::Taper const & {
+    static auto const taper = sigmoid::s_taper_with_curvature(-0.8F);
+    return taper;
+  }
 };
 } // namespace xycloid
 } // namespace dhe

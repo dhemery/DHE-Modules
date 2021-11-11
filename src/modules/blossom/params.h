@@ -16,7 +16,7 @@ namespace blossom {
 struct BounceRatioModes {
   enum Selection { Quantized, Free };
 
-  static inline auto labels() -> std::vector<std::string> const & {
+  static auto labels() -> std::vector<std::string> const & {
     static auto const labels = std::vector<std::string>{"Quantized", "Free"};
     return labels;
   }
@@ -40,7 +40,7 @@ struct BounceRatio {
 
   static auto constexpr unit = "x";
 
-  static inline auto ratio(float rotation, bool quantize) -> float {
+  static auto ratio(float rotation, bool quantize) -> float {
     auto const ratio = range.scale(rotation);
     return quantize ? std::round(ratio) : ratio;
   }
@@ -56,12 +56,12 @@ private:
 struct SpinSpeed {
   static auto constexpr unit = " Hz";
 
-  static auto constexpr rotation(float hertz) -> float {
-    return taper.invert(range.normalize(hertz));
+  static auto rotation(float hertz) -> float {
+    return taper().invert(range().normalize(hertz));
   }
 
-  static auto constexpr hertz(float rotation) -> float {
-    return range.scale(taper.apply(rotation));
+  static auto hertz(float rotation) -> float {
+    return range().scale(taper().apply(rotation));
   }
 
   struct KnobMapper {
@@ -73,8 +73,11 @@ struct SpinSpeed {
   };
 
 private:
-  static auto constexpr range = Range{-10.F, 10.F};
-  static auto constexpr taper = sigmoid::s_taper_with_curvature(-0.8F);
+  static auto constexpr range() -> Range { return Range{-10.F, 10.F}; }
+  static auto taper() -> sigmoid::Taper const & {
+    static auto const taper = sigmoid::s_taper_with_curvature(-0.8F);
+    return taper;
+  }
 };
 
 } // namespace blossom
