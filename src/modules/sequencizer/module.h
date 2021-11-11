@@ -102,7 +102,7 @@ public:
 
     Knob::config<Attenuator>(this, Param::LevelMultiplier, "Level multiplier",
                              1.F);
-    auto select_level_range = [level_knobs](Voltages::ValueType selection) {
+    auto select_level_range = [level_knobs](Voltages::Selection selection) {
       for (auto *knob : level_knobs) {
         knob->mapper().select_range(selection);
       }
@@ -114,7 +114,7 @@ public:
 
     Knob::config<Gain>(this, Param::DurationMultiplier, "Duration multiplier");
     auto select_duration_range =
-        [duration_knobs](Voltages::ValueType selection) {
+        [duration_knobs](Durations::Selection selection) {
           for (auto *knob : duration_knobs) {
             knob->mapper().select_range(selection);
           }

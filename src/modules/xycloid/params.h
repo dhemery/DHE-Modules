@@ -12,8 +12,7 @@ namespace dhe {
 namespace xycloid {
 
 struct WobbleRatioModes {
-  enum Index { Quantized, Free };
-  using ValueType = Index;
+  enum Selection { Quantized, Free };
 
   static inline auto labels() -> std::vector<std::string> const & {
     static auto const labels = std::vector<std::string>{"Quantized", "Free"};
@@ -22,8 +21,7 @@ struct WobbleRatioModes {
 };
 
 struct WobbleRatios {
-  enum Index { Inward, InwardOutward, Outward };
-  using ValueType = Index;
+  enum Selection { Inward, InwardOutward, Outward };
   static auto constexpr unit = "x";
 
   static inline auto labels() -> std::vector<std::string> const & {
@@ -58,11 +56,11 @@ struct WobbleRatios {
       return rotation(ratio, range_);
     }
 
-    void select_mode(int mode) {
-      quantize_ = mode == WobbleRatioModes::Quantized;
+    void select_mode(WobbleRatioModes::Selection selection) {
+      quantize_ = selection == WobbleRatioModes::Quantized;
     }
 
-    void select_range(int selection) { range_ = selection; }
+    void select_range(Selection selection) { range_ = selection; }
 
   private:
     bool quantize_{false};

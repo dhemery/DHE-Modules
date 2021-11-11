@@ -3,8 +3,7 @@ namespace dhe {
 namespace envelope {
 namespace hostage {
 struct Modes {
-  enum Index { Hold, Sustain };
-  using ValueType = Index;
+  enum Selection { Hold, Sustain };
 
   static inline auto labels() -> std::vector<std::string> const & {
     static auto const labels = std::vector<std::string>{"Hold", "Sustain"};

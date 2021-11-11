@@ -86,7 +86,7 @@ public:
                   step_name + "relative duration CV");
     }
 
-    auto select_level_range = [level_knobs](Voltages::ValueType selection) {
+    auto select_level_range = [level_knobs](Voltages::Selection selection) {
       for (auto *knob : level_knobs) {
         knob->mapper().select_range(selection);
       }

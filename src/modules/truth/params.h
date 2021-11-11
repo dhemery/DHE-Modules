@@ -1,7 +1,7 @@
 #pragma once
 
-#include "./gate-modes.h"
-#include "./outcomes.h"
+#include "gate-modes.h"
+#include "outcomes.h"
 
 #include <string>
 #include <vector>
@@ -9,7 +9,7 @@
 namespace dhe {
 namespace truth {
 struct GateModes {
-  using ValueType = GateMode;
+  using Selection = GateMode;
   static constexpr auto stepper_slug = "gate-mode";
   static inline auto labels() -> std::vector<std::string> const & {
     static const auto labels = std::vector<std::string>{
@@ -20,7 +20,7 @@ struct GateModes {
 };
 
 struct Outcomes {
-  using ValueType = Outcome;
+  using Selection = Outcome;
   static constexpr auto stepper_slug = "outcome";
   static inline auto labels() -> std::vector<std::string> const & {
     static const auto labels =

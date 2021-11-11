@@ -43,8 +43,7 @@ private:
 };
 
 struct Shapes {
-  enum Index { J, S };
-  using ValueType = Index;
+  enum Selection { J, S };
 
   static auto constexpr unit = "";
   static auto constexpr stepper_slug = "shape";

@@ -74,8 +74,7 @@ struct LongDuration : public DurationRange<LongDuration> {
 };
 
 struct Durations {
-  enum Index { Short, Medium, Long };
-  using ValueType = Index;
+  enum Selection { Short, Medium, Long };
 
   static auto constexpr unit = " s";
 
@@ -103,17 +102,17 @@ struct Durations {
 
   struct KnobMapper {
     auto to_display_value(float rotation) const -> float {
-      return seconds(rotation, selection_);
+      return seconds(rotation, range_);
     }
 
     auto to_rotation(float seconds) const -> float {
-      return rotation(seconds, selection_);
+      return rotation(seconds, range_);
     }
 
-    void select_range(int selection) { selection_ = selection; }
+    void select_range(Selection selection) { range_ = selection; }
 
   private:
-    int selection_{Medium};
+    Selection range_{Medium};
   };
 };
 

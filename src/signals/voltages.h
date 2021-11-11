@@ -39,8 +39,7 @@ struct BipolarVoltage : public VoltageRange<BipolarVoltage> {
 };
 
 struct Voltages {
-  enum Index { Bipolar, Unipolar };
-  using ValueType = Index;
+  enum Selection { Bipolar, Unipolar };
   static auto constexpr unit = " V";
 
   static inline auto labels() -> std::vector<std::string> const & {
@@ -65,17 +64,17 @@ struct Voltages {
 
   struct KnobMapper {
     auto to_display_value(float rotation) const -> float {
-      return volts(rotation, selection_);
+      return volts(rotation, range_);
     }
 
     auto to_rotation(float volts) const -> float {
-      return rotation(volts, selection_);
+      return rotation(volts, range_);
     }
 
-    void select_range(int selection) { selection_ = selection; }
+    void select_range(Selection selection) { range_ = selection; }
 
   private:
-    int selection_{Unipolar};
+    Selection range_{Unipolar};
   };
 };
 

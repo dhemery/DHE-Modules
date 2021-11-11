@@ -29,12 +29,13 @@ public:
 
     auto *ratio_knob =
         Knob::config<WobbleRatios>(this, Param::WobbleRatio, "Ratio");
-    auto select_ratio_range = [ratio_knob](WobbleRatios::ValueType selection) {
+    auto select_ratio_range = [ratio_knob](WobbleRatios::Selection selection) {
       ratio_knob->mapper().select_range(selection);
     };
-    auto select_ratio_mode = [ratio_knob](WobbleRatioModes::ValueType mode) {
-      ratio_knob->mapper().select_mode(mode);
-    };
+    auto select_ratio_mode =
+        [ratio_knob](WobbleRatioModes::Selection selection) {
+          ratio_knob->mapper().select_mode(selection);
+        };
 
     configInput(Input::WobbleRatioCv, "Ratio CV");
     Knob::config<Attenuverter>(this, Param::WobbleRatioAv, "Ratio CV gain");

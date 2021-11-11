@@ -26,7 +26,7 @@ struct Module : public rack::engine::Module {
     auto *ccw_limit_knob =
         Knob::config<Voltages>(this, Param::CcwLimit, "CCW limit", 0.F);
     auto select_ccw_limit_range =
-        [ccw_limit_knob](Voltages::ValueType selection) {
+        [ccw_limit_knob](Voltages::Selection selection) {
           ccw_limit_knob->mapper().select_range(selection);
         };
     Switch::config<Voltages>(this, Param::CcwLimitRange, "CCW limit range",
@@ -38,7 +38,7 @@ struct Module : public rack::engine::Module {
     auto *cw_limit_knob =
         Knob::config<Voltages>(this, Param::CwLimit, "CW limit", 1.F);
     auto select_cw_limit_range =
-        [cw_limit_knob](Voltages::ValueType selection) {
+        [cw_limit_knob](Voltages::Selection selection) {
           cw_limit_knob->mapper().select_range(selection);
         };
     Switch::config<Voltages>(this, Param::CwLimitRange, "CW limit range",

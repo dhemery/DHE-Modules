@@ -8,8 +8,7 @@ namespace dhe {
 namespace func {
 
 struct OffsetRanges {
-  enum Index { Unipolar5, Bipolar, Unipolar, Bipolar10 };
-  using ValueType = Index;
+  enum Selection { Unipolar5, Bipolar, Unipolar, Bipolar10 };
   static constexpr auto stepper_slug = "offset-range";
 
   static inline auto labels() -> std::vector<std::string> const & {
@@ -20,8 +19,7 @@ struct OffsetRanges {
 };
 
 struct MultiplierRanges {
-  enum Index { Attenuator, Attenuverter, Gain, Gainuverter };
-  using ValueType = Index;
+  enum Selection { Attenuator, Attenuverter, Gain, Gainuverter };
   static constexpr auto stepper_slug = "multiplier-range";
 
   static inline auto labels() -> std::vector<std::string> const & {
@@ -32,7 +30,7 @@ struct MultiplierRanges {
 };
 
 struct Operators {
-  using ValueType = Operation;
+  using Selection = Operation;
   static constexpr auto stepper_slug = "toggle-2";
 
   static inline auto labels() -> std::vector<std::string> const & {

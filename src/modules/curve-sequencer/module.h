@@ -79,7 +79,7 @@ template <int N> struct Module : public rack::engine::Module {
       signals_.show_inactive(step);
     }
 
-    auto select_level_range = [level_knobs](Voltages::ValueType selection) {
+    auto select_level_range = [level_knobs](Voltages::Selection selection) {
       for (auto *knob : level_knobs) {
         knob->mapper().select_range(selection);
       }
@@ -89,7 +89,7 @@ template <int N> struct Module : public rack::engine::Module {
         ->on_change(select_level_range);
 
     auto select_duration_range =
-        [duration_knobs](Durations::ValueType selection) {
+        [duration_knobs](Durations::Selection selection) {
           for (auto *knob : duration_knobs) {
             knob->mapper().select_range(selection);
           }

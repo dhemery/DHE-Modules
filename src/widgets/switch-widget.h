@@ -10,8 +10,8 @@
 namespace dhe {
 template <typename TPanel, typename TStyle, typename TItems>
 struct SwitchWidget : public rack::app::SvgSwitch {
-  using ValueType = typename TItems::ValueType;
-  using Action = std::function<void(ValueType)>;
+  using Selection = typename TItems::Selection;
+  using Action = std::function<void(Selection)>;
 
   SwitchWidget() {
     auto const panel_prefix = std::string{TPanel::svg_dir} + "/";
@@ -23,9 +23,9 @@ struct SwitchWidget : public rack::app::SvgSwitch {
 
   void onChange(const rack::event::Change &e) override {
     rack::app::SvgSwitch::onChange(e);
-    auto const position =
-        static_cast<ValueType>(this->getParamQuantity()->getValue());
-    action_(position);
+    auto const selection =
+        static_cast<Selection>(this->getParamQuantity()->getValue());
+    action_(selection);
   }
 
   void on_change(Action const &action) { action_ = action; }
@@ -41,7 +41,7 @@ private:
     return frame_names;
   }
 
-  Action action_ = [](ValueType) {};
+  Action action_ = [](Selection) {};
 };
 
 } // namespace dhe

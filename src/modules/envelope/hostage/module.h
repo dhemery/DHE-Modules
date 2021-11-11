@@ -33,7 +33,7 @@ struct Module : public rack::engine::Module {
     auto *duration_knob =
         Knob::config<Durations>(this, Param::Duration, "Duration");
     auto select_duration_range =
-        [duration_knob](Durations::ValueType selection) {
+        [duration_knob](Durations::Selection selection) {
           duration_knob->mapper().select_range(selection);
         };
     Switch::config<Durations>(this, Param::DurationRange, "Duration range",

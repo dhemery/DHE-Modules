@@ -14,8 +14,7 @@ namespace dhe {
 namespace blossom {
 
 struct BounceRatioModes {
-  enum Index { Quantized, Free };
-  using ValueType = Index;
+  enum Selection { Quantized, Free };
 
   static inline auto labels() -> std::vector<std::string> const & {
     static auto const labels = std::vector<std::string>{"Quantized", "Free"};
@@ -31,8 +30,8 @@ struct BounceRatio {
 
     auto to_rotation(float ratio) const -> float { return rotation(ratio); }
 
-    void select_mode(int mode) {
-      quantize_ = mode == BounceRatioModes::Quantized;
+    void select_mode(BounceRatioModes::Selection selection) {
+      quantize_ = selection == BounceRatioModes::Quantized;
     }
 
   private:
@@ -55,14 +54,6 @@ private:
 };
 
 struct SpinSpeed {
-  struct KnobMapper {
-    auto to_display_value(float rotation) const -> float {
-      return hertz(rotation);
-    }
-
-    auto to_rotation(float hertz) const -> float { return rotation(hertz); }
-  };
-
   static auto constexpr unit = " Hz";
 
   static auto constexpr rotation(float hertz) -> float {
@@ -73,6 +64,15 @@ struct SpinSpeed {
     return range.scale(taper.apply(rotation));
   }
 
+  struct KnobMapper {
+    auto to_display_value(float rotation) const -> float {
+      return hertz(rotation);
+    }
+
+    auto to_rotation(float hertz) const -> float { return rotation(hertz); }
+  };
+
+private:
   static auto constexpr range = Range{-10.F, 10.F};
   static auto constexpr taper = sigmoid::s_taper_with_curvature(-0.8F);
 };

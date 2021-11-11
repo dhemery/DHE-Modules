@@ -8,7 +8,7 @@ namespace dhe {
 namespace sequencizer {
 
 struct AnchorModes {
-  using ValueType = AnchorMode;
+  using Selection = AnchorMode;
   static auto constexpr stepper_slug = "anchor-mode";
 
   static inline auto labels() -> std::vector<std::string> const & {
@@ -19,7 +19,7 @@ struct AnchorModes {
 };
 
 struct AnchorSources {
-  using ValueType = AnchorSource;
+  using Selection = AnchorSource;
   static auto constexpr stepper_slug = "anchor-source";
 
   static inline auto labels() -> std::vector<std::string> const & {
@@ -30,7 +30,7 @@ struct AnchorSources {
 };
 
 struct InterruptModes {
-  using ValueType = InterruptMode;
+  using Selection = InterruptMode;
   static auto constexpr stepper_slug = "interrupt-mode";
 
   static inline auto labels() -> std::vector<std::string> const & {
@@ -41,7 +41,7 @@ struct InterruptModes {
 };
 
 struct SustainModes {
-  using ValueType = SustainMode;
+  using Selection = SustainMode;
   static auto constexpr stepper_slug = "sustain-mode";
 
   static inline auto labels() -> std::vector<std::string> {
@@ -52,7 +52,7 @@ struct SustainModes {
 };
 
 struct TriggerModes {
-  using ValueType = TriggerMode;
+  using Selection = TriggerMode;
   static auto constexpr stepper_slug = "trigger-mode";
 
   static inline auto labels() -> std::vector<std::string> {
