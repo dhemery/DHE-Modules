@@ -20,8 +20,8 @@ struct Module : public rack::engine::Module {
     config(Param::Count, Input::Count, Output::Count);
 
     auto *level_knob = Knob::config<Voltages>(this, Param::Level, "Level");
-    auto select_level_range = [level_knob](int range_index) {
-      level_knob->mapper().select_range(range_index);
+    auto select_level_range = [level_knob](Voltages::ValueType selection) {
+      level_knob->mapper().select_range(selection);
     };
     Switch::config<Voltages>(this, Param::LevelRange, "Level range",
                              Voltages::Unipolar)

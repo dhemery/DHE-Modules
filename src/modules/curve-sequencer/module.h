@@ -79,20 +79,21 @@ template <int N> struct Module : public rack::engine::Module {
       signals_.show_inactive(step);
     }
 
-    auto select_level_range = [level_knobs](int range_index) {
-      for (auto *level_knob : level_knobs) {
-        level_knob->mapper().select_range(range_index);
+    auto select_level_range = [level_knobs](Voltages::ValueType selection) {
+      for (auto *knob : level_knobs) {
+        knob->mapper().select_range(selection);
       }
     };
     Switch::config<Voltages>(this, Param::LevelRange, "Level range",
                              Voltages::Unipolar)
         ->on_change(select_level_range);
 
-    auto select_duration_range = [duration_knobs](int range_index) {
-      for (auto *duration_knob : duration_knobs) {
-        duration_knob->mapper().select_range(range_index);
-      }
-    };
+    auto select_duration_range =
+        [duration_knobs](Durations::ValueType selection) {
+          for (auto *knob : duration_knobs) {
+            knob->mapper().select_range(selection);
+          }
+        };
     Switch::config<Durations>(this, Param::DurationRange, "Duration range",
                               Durations::Medium)
         ->on_change(select_duration_range);

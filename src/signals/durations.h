@@ -50,11 +50,11 @@ template <typename TDuration> struct DurationRange {
   }
 
   struct KnobMapper {
-    auto to_value(float seconds) const -> float { return rotation(seconds); }
-
     auto to_display_value(float rotation) const -> float {
       return seconds(rotation);
     }
+
+    auto to_rotation(float seconds) const -> float { return rotation(seconds); }
   };
 };
 
@@ -102,12 +102,12 @@ struct Durations {
   }
 
   struct KnobMapper {
-    auto to_value(float seconds) const -> float {
-      return rotation(seconds, selection_);
-    }
-
     auto to_display_value(float rotation) const -> float {
       return seconds(rotation, selection_);
+    }
+
+    auto to_rotation(float seconds) const -> float {
+      return rotation(seconds, selection_);
     }
 
     void select_range(int selection) { selection_ = selection; }

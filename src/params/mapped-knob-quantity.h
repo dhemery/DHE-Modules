@@ -12,7 +12,7 @@ struct MappedKnobQuantity : public rack::engine::ParamQuantity {
   }
 
   void setDisplayValue(float display_value) override {
-    setValue(map_.to_value(display_value));
+    setValue(map_.to_rotation(display_value));
   }
 
   auto mapper() -> Mapper & { return map_; }

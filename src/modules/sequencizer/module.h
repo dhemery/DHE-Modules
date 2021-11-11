@@ -102,23 +102,26 @@ public:
 
     Knob::config<Attenuator>(this, Param::LevelMultiplier, "Level multiplier",
                              1.F);
+    auto select_level_range = [level_knobs](Voltages::ValueType selection) {
+      for (auto *knob : level_knobs) {
+        knob->mapper().select_range(selection);
+      }
+    };
     Switch::config<Voltages>(this, Param::LevelRange, "Level range",
                              Voltages::Unipolar)
-        ->on_change([level_knobs](int range_index) {
-          for (auto *knob : level_knobs) {
-            knob->mapper().select_range(range_index);
-          }
-        });
+        ->on_change(select_level_range);
     configInput(Input::LevelAttenuationCV, "Level multiplier CV");
 
     Knob::config<Gain>(this, Param::DurationMultiplier, "Duration multiplier");
+    auto select_duration_range =
+        [duration_knobs](Voltages::ValueType selection) {
+          for (auto *knob : duration_knobs) {
+            knob->mapper().select_range(selection);
+          }
+        };
     Switch::config<Durations>(this, Param::DurationRange, "Duration range",
                               Durations::Medium)
-        ->on_change([duration_knobs](int range_index) {
-          for (auto *knob : duration_knobs) {
-            knob->mapper().select_range(range_index);
-          }
-        });
+        ->on_change(select_duration_range);
     configInput(Input::DurationMultiplierCV, "Duration multipler CV");
   }
 

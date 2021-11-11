@@ -32,9 +32,10 @@ struct Module : public rack::engine::Module {
 
     auto *duration_knob =
         Knob::config<Durations>(this, Param::Duration, "Duration");
-    auto select_duration_range = [duration_knob](int range_index) {
-      duration_knob->mapper().select_range(range_index);
-    };
+    auto select_duration_range =
+        [duration_knob](Durations::ValueType selection) {
+          duration_knob->mapper().select_range(selection);
+        };
     Switch::config<Durations>(this, Param::DurationRange, "Duration range",
                               Durations::Medium)
         ->on_change(select_duration_range);

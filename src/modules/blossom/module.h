@@ -32,10 +32,12 @@ public:
 
     auto *ratio_knob =
         Knob::config<BounceRatio>(this, Param::BounceRatio, "Ratio");
+    auto select_ratio_mode = [ratio_knob](BounceRatioModes::ValueType mode) {
+      ratio_knob->mapper().select_mode(mode);
+    };
     Switch::config<BounceRatioModes>(this, Param::BounceRatioMode, "Ratio mode",
                                      BounceRatioModes::Free)
-        ->on_change(
-            [ratio_knob](int pos) { ratio_knob->mapper().quantize(pos == 0); });
+        ->on_change(select_ratio_mode);
 
     Knob::config<Attenuverter>(this, Param::BounceRatioAv, "Ratio CV gain");
     configInput(Input::BounceRatioCv, "Ratio CV");

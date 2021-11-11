@@ -28,7 +28,7 @@ struct Curvature {
       return curvature(rotation);
     }
 
-    auto to_value(float curvature) const -> float {
+    auto to_rotation(float curvature) const -> float {
       return rotation(curvature);
     }
   };

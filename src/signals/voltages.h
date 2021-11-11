@@ -20,11 +20,11 @@ template <typename TVoltage> struct VoltageRange {
   }
 
   struct KnobMapper {
-    auto to_value(float volts) const -> float { return rotation(volts); }
-
     auto to_display_value(float rotation) const -> float {
       return volts(rotation);
     }
+
+    auto to_rotation(float volts) const -> float { return rotation(volts); }
   };
 };
 
@@ -64,12 +64,12 @@ struct Voltages {
   }
 
   struct KnobMapper {
-    auto to_value(float volts) const -> float {
-      return rotation(volts, selection_);
-    }
-
     auto to_display_value(float rotation) const -> float {
       return volts(rotation, selection_);
+    }
+
+    auto to_rotation(float volts) const -> float {
+      return rotation(volts, selection_);
     }
 
     void select_range(int selection) { selection_ = selection; }

@@ -23,22 +23,27 @@ public:
   Module() {
     config(Param::Count, Input::Count, Output::Count);
 
-    ThrobSpeedKnob::config(this, Param::ThrobSpeed, "Speed");
+    Knob::config<ThrobSpeed>(this, Param::ThrobSpeed, "Speed");
     configInput(Input::ThrobSpeedCv, "Speed CV");
     Knob::config<Attenuverter>(this, Param::ThrobSpeedAv, "Speed CV gain");
 
     auto *ratio_knob =
-        WobbleRatioKnob::config(this, Param::WobbleRatio, "Ratio");
+        Knob::config<WobbleRatios>(this, Param::WobbleRatio, "Ratio");
+    auto select_ratio_range = [ratio_knob](WobbleRatios::ValueType selection) {
+      ratio_knob->mapper().select_range(selection);
+    };
+    auto select_ratio_mode = [ratio_knob](WobbleRatioModes::ValueType mode) {
+      ratio_knob->mapper().select_mode(mode);
+    };
+
     configInput(Input::WobbleRatioCv, "Ratio CV");
     Knob::config<Attenuverter>(this, Param::WobbleRatioAv, "Ratio CV gain");
     Switch::config<WobbleRatios>(this, Param::WobbleRatioRange, "Direction",
                                  WobbleRatios::Outward)
-        ->on_change(
-            [ratio_knob](int pos) { ratio_knob->set_range_selection(pos); });
+        ->on_change(select_ratio_range);
     Switch::config<WobbleRatioModes>(this, Param::WobbleRatioMode, "Ratio mode",
                                      WobbleRatioModes::Free)
-        ->on_change(
-            [ratio_knob](int pos) { ratio_knob->set_quantize(pos == 0); });
+        ->on_change(select_ratio_mode);
 
     Knob::config<Percentage>(this, Param::WobbleDepth, "Depth");
     configInput(Input::WobbleDepthCv, "Depth CV");
@@ -107,7 +112,7 @@ private:
   }
 
   auto throb_speed() const -> float {
-    return ThrobSpeed::value(rotation(params[Param::ThrobSpeed],
+    return ThrobSpeed::hertz(rotation(params[Param::ThrobSpeed],
                                       inputs[Input::ThrobSpeedCv],
                                       params[Param::ThrobSpeedAv]));
   }
@@ -127,7 +132,7 @@ private:
   }
 
   auto wobble_ratio() -> float {
-    return WobbleRatios::value(
+    return WobbleRatios::ratio(
         rotation(params[Param::WobbleRatio], inputs[Input::WobbleRatioCv],
                  params[Param::WobbleRatioAv]),
         position_of(params[Param::WobbleRatioRange]),

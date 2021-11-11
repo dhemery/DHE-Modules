@@ -22,8 +22,8 @@ public:
 
     auto *level_knob_1 =
         Knob::config<Voltages>(this, Param::Level1, "Taper 1 level");
-    auto select_level_1_range = [level_knob_1](int range_index) {
-      level_knob_1->mapper().select_range(range_index);
+    auto select_level_1_range = [level_knob_1](Voltages::ValueType election) {
+      level_knob_1->mapper().select_range(election);
     };
     Switch::config<Voltages>(this, Param::LevelRange1, "Taper 1 level range",
                              Voltages::Bipolar)
@@ -41,8 +41,8 @@ public:
 
     auto *level_knob_2 =
         Knob::config<Voltages>(this, Param::Level2, "Taper 2 level");
-    auto select_level_2_range = [level_knob_2](int range_index) {
-      level_knob_2->mapper().select_range(range_index);
+    auto select_level_2_range = [level_knob_2](Voltages::ValueType selection) {
+      level_knob_2->mapper().select_range(selection);
     };
     Switch::config<Voltages>(this, Param::LevelRange2, "Taper 2 level range",
                              Voltages::Bipolar)

@@ -86,9 +86,9 @@ public:
                   step_name + "relative duration CV");
     }
 
-    auto select_level_range = [level_knobs](int range_index) {
+    auto select_level_range = [level_knobs](Voltages::ValueType selection) {
       for (auto *knob : level_knobs) {
-        knob->mapper().select_range(range_index);
+        knob->mapper().select_range(selection);
       }
     };
     Switch::config<Voltages>(this, Param::LevelRange, "Level range",
