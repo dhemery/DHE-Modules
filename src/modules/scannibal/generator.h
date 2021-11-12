@@ -1,5 +1,7 @@
 #pragma once
+
 #include "components/range.h"
+#include "signals/curvature.h"
 
 namespace dhe {
 namespace scannibal {
@@ -21,9 +23,10 @@ public:
     auto const phase_0_voltage = phase_0_anchor_.voltage();
     auto const phase_1_voltage = phase_1_anchor_.voltage();
     auto const range = Range{phase_0_voltage, phase_1_voltage};
-    auto const taper = module_.taper(step);
+    auto const shape = module_.shape(step);
 
-    auto const out_voltage = range.scale(taper.apply(phase, curvature));
+    auto const out_voltage =
+        range.scale(Shapes::taper(phase, shape, curvature));
 
     module_.output(out_voltage);
   }

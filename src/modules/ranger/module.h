@@ -68,7 +68,7 @@ private:
   inline auto limit(int knob, int cv, int av, int range) const -> float {
     auto const rotation = rotation_of(params[knob], inputs[cv], params[av]);
     auto const range_id = value_of<VoltageRangeId>(params[range]);
-    return VoltageRanges::volts(rotation, range_id);
+    return VoltageRanges::scale(rotation, range_id);
   }
 
   auto ccw_limit() const -> float {

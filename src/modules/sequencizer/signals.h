@@ -30,7 +30,7 @@ static inline auto duration(P const &duration_knob, P const &range_switch,
   static auto constexpr minimum_duration = ShortDuration::range().lower_bound();
   DurationRangeId range_id = value_of<DurationRangeId>(range_switch);
   auto const nominal_duration =
-      DurationRanges::seconds(value_of(duration_knob), range_id);
+      DurationRanges::scale(value_of(duration_knob), range_id);
   auto const multiplier_rotation = rotation_of(multipler_knob, multiplier_cv);
   auto const nominal_multiplier = Gain::range().scale(multiplier_rotation);
   auto const clamped_multiplier = Gain::range().clamp(nominal_multiplier);
@@ -66,7 +66,7 @@ public:
                     params_[ParamId::LevelMultiplier]);
     auto const range_id =
         value_of<VoltageRangeId>(params_[ParamId::LevelRange]);
-    return VoltageRanges::volts(rotation, range_id);
+    return VoltageRanges::scale(rotation, range_id);
   }
 
   auto anchor_source(AnchorType type, int step) const -> AnchorSource {
@@ -178,9 +178,8 @@ public:
     }
   }
 
-  auto taper(int step) const -> sigmoid::Taper const & {
-    auto const shape = value_of<Shape>(params_[ParamId::StepShape + step]);
-    return Shapes::taper(shape);
+  auto shape(int step) const -> Shape {
+    return value_of<Shape>(params_[ParamId::StepShape + step]);
   }
 
 private:

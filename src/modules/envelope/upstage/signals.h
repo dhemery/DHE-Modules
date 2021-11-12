@@ -28,7 +28,7 @@ template <typename TParam, typename TInput, typename TOutput> struct Signals {
     auto const rotation =
         rotation_of(params_[Param::Level], inputs_[Input::LevelCv]);
     auto const range_id = value_of<VoltageRangeId>(params_[Param::LevelRange]);
-    return VoltageRanges::volts(rotation, range_id);
+    return VoltageRanges::scale(rotation, range_id);
   }
 
   void send_envelope(float voltage) {

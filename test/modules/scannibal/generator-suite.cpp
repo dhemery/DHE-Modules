@@ -1,4 +1,4 @@
-#include "./fixtures/generator-fixture.h"
+#include "fixtures/generator-fixture.h"
 
 #include "helpers/assertions.h"
 
@@ -6,6 +6,7 @@
 
 namespace test {
 namespace scannibal {
+using dhe::Shapes;
 using dhe::unit::Suite;
 using test::is_equal_to;
 using test::is_false;
@@ -21,19 +22,19 @@ public:
             auto constexpr step = 4;
 
             auto constexpr phase = 0.5F; // halfway
-            auto constexpr taper = dhe::sigmoid::j_taper;
+            auto constexpr shape = Shape::J;
             auto constexpr curvature = 0.5F; // linear
 
             auto constexpr phase_0_voltage = 0.F;
             auto constexpr phase_1_voltage = 7.F;
-            auto constexpr scaled_tapered_phase =
+            auto const scaled_tapered_phase =
                 (phase_1_voltage - phase_0_voltage) *
-                taper.apply(phase, curvature);
+                Shapes::taper(phase, shape, curvature);
 
             phase_0_anchor.voltage_ = phase_0_voltage;
             phase_1_anchor.voltage_ = phase_1_voltage;
 
-            module.taper_[step] = &taper;
+            module.shape_[step] = shape;
             module.curvature_[step] = curvature;
 
             generator.generate(step, phase);
@@ -46,7 +47,7 @@ public:
           test([](Tester &t, Module &module, Anchor &phase_0_anchor,
                   Anchor &phase_1_anchor, Generator &generator) {
             auto constexpr step = 3;
-            module.taper_[step] = &dhe::sigmoid::j_taper;
+            module.shape_[step] = Shape::J;
             ;
 
             generator.generate(step, 0.F);
@@ -60,7 +61,7 @@ public:
           test([](Tester &t, Module &module, Anchor &phase_0_anchor,
                   Anchor &phase_1_anchor, Generator &generator) {
             auto constexpr step = 6;
-            module.taper_[step] = &dhe::sigmoid::j_taper;
+            module.shape_[step] = Shape::J;
 
             generator.generate(step, 0.F);
 
@@ -80,8 +81,8 @@ public:
                   Anchor &phase_1_anchor, Generator &generator) {
             auto constexpr first_step = 6;
             auto constexpr second_step = 2;
-            module.taper_[first_step] = &dhe::sigmoid::j_taper;
-            module.taper_[second_step] = &dhe::sigmoid::j_taper;
+            module.shape_[first_step] = Shape::J;
+            module.shape_[second_step] = Shape::J;
 
             generator.generate(first_step, 0.11F);
 

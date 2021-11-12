@@ -96,9 +96,8 @@ private:
 
   static inline auto tapered(float rotation, Shape shape, float curvature,
                              VoltageRangeId range_id) -> float {
-    auto const taper = Shapes::taper(shape);
-    auto const tapered = taper.apply(rotation, curvature);
-    return VoltageRanges::volts(tapered, range_id);
+    auto const tapered = Shapes::taper(rotation, shape, curvature);
+    return VoltageRanges::scale(tapered, range_id);
   }
 
   auto voltage_range(int id) const -> VoltageRangeId {

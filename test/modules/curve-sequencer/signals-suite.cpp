@@ -177,8 +177,8 @@ public:
                 (float)duration_range_selection);
 
             auto const got = signals.duration(step);
-            auto const want = DurationRanges::seconds(duration_knob_rotation,
-                                                      duration_range_selection);
+            auto const want = DurationRanges::scale(duration_knob_rotation,
+                                                    duration_range_selection);
             if (got != want) {
               t.errorf("Got {}, want {}", got, want);
             }

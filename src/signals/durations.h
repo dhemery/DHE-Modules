@@ -13,14 +13,14 @@ static auto constexpr unit = " s";
 static inline auto taper() -> sigmoid::Taper const & {
   /**
    * This curvature gives a duration knob a gentle inverted S taper,
-   * increasing sensitivity in the middle of the knob rotation and decreasing
+   * increasing sensitivity in the middle of the knob normalize and decreasing
    * sensitivity toward the extremes.
    */
   static auto constexpr taper_curvature = 0.8018017F;
 
   /**
    * Each duration select is of the form [n, 1000n]. Given ranges of that
-   * form, this curvature tapers the rotation so a knob positioned dead center
+   * form, this curvature tapers the normalize so a knob positioned dead center
    * yields a duration equal to 1/10 of the select's upper bound (to within 7
    * decimal places).
    */
@@ -28,12 +28,12 @@ static inline auto taper() -> sigmoid::Taper const & {
   return taper;
 }
 
-static inline auto seconds(float rotation, Range range) -> float {
+static inline auto scale(float rotation, Range range) -> float {
   auto tapered = taper().apply(rotation);
   return range.scale(tapered);
 }
 
-static inline auto rotation(float seconds, Range range) -> float {
+static inline auto normalize(float seconds, Range range) -> float {
   auto const tapered = range.normalize(seconds);
   return taper().invert(tapered);
 }
@@ -44,11 +44,11 @@ template <typename T> struct MappedDurationRange {
   static auto constexpr unit = duration::unit;
 
   static inline auto seconds(float rotation) -> float {
-    return duration::seconds(rotation, T::range());
+    return duration::scale(rotation, T::range());
   }
 
   static inline auto rotation(float seconds) -> float {
-    return duration::rotation(seconds, T::range());
+    return duration::normalize(seconds, T::range());
   }
 };
 
@@ -88,30 +88,30 @@ struct DurationRanges {
     return labels;
   }
 
+  static inline auto scale(float normalized, DurationRangeId range_id)
+      -> float {
+    return duration::scale(normalized, range(range_id));
+  }
+
+  static inline auto normalize(float scaled, DurationRangeId range_id)
+      -> float {
+    return duration::normalize(scaled, range(range_id));
+  }
+
   static inline auto range(DurationRangeId range_id) -> Range const & {
     static auto const ranges = std::vector<Range>{
         ShortDuration::range(), MediumDuration::range(), LongDuration::range()};
     return ranges[(int)range_id];
   }
-
-  static inline auto seconds(float rotation, DurationRangeId range_id)
-      -> float {
-    return duration::seconds(rotation, range(range_id));
-  }
-
-  static inline auto rotation(float seconds, DurationRangeId range_id)
-      -> float {
-    return duration::rotation(seconds, range(range_id));
-  }
 };
 
 struct DurationRanges::KnobMapper {
-  auto to_display_value(float rotation) const -> float {
-    return seconds(rotation, range_id_);
+  auto to_display_value(float normalized) const -> float {
+    return scale(normalized, range_id_);
   }
 
-  auto to_rotation(float seconds) const -> float {
-    return rotation(seconds, range_id_);
+  auto to_rotation(float scaled) const -> float {
+    return normalize(scaled, range_id_);
   }
 
   void select_range(DurationRangeId id) { range_id_ = id; }

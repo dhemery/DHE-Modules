@@ -25,12 +25,11 @@ struct Module : public rack::engine::Module {
   }
 
   void process(ProcessArgs const & /*args*/) override {
-    auto const normalized = BipolarVoltage::range().normalize(signal_in());
-    auto const tapered = taper(normalized);
+    auto const normalized = BipolarVoltage::normalize(signal_in());
+    auto const tapered = Shapes::taper(normalized, shape(), curvature());
     auto const output_voltage = BipolarVoltage::range().scale(tapered);
     send_signal(output_voltage);
   }
-
   auto dataToJson() -> json_t * override {
     auto *data = json_object();
     json_object_set_new(data, preset_version_key, json_integer(0));
@@ -38,19 +37,19 @@ struct Module : public rack::engine::Module {
   }
 
 private:
+  auto curvature() const -> float {
+    return rotation_of(params[Param::Curvature], inputs[Input::CurvatureCv],
+                       params[Param::CurvatureAv]);
+  }
   void send_signal(float voltage) {
     outputs[Output::Swave].setVoltage(voltage);
   }
 
-  auto signal_in() const -> float { return voltage_at(inputs[Input::Swave]); }
-
-  auto taper(float input) const -> float {
-    auto const rotation =
-        rotation_of(params[Param::Curvature], inputs[Input::CurvatureCv],
-                    params[Param::CurvatureAv]);
-    auto const shape = value_of<Shapes::Selection>(params[Param::Shape]);
-    return Shapes::curvature(rotation, shape);
+  auto shape() const -> Shape {
+    return value_of<Shapes::Selection>(params[Param::Shape]);
   }
+
+  auto signal_in() const -> float { return voltage_at(inputs[Input::Swave]); }
 };
 
 } // namespace swave

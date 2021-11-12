@@ -43,7 +43,7 @@ struct Signals {
   auto duration(int step) const -> float {
     auto const rotation = value_of(params_[Param::StepDuration + step]);
     auto const range = value_of<DurationRangeId>(params_[Param::DurationRange]);
-    return DurationRanges::seconds(rotation, range);
+    return DurationRanges::scale(rotation, range);
   }
 
   auto generate_mode(int step) const -> GenerateMode {
@@ -77,7 +77,7 @@ struct Signals {
   auto level(int step) const -> float {
     auto const rotation = value_of(params_[Param::StepLevel + step]);
     auto const range_id = value_of<VoltageRangeId>(params_[Param::LevelRange]);
-    return VoltageRanges::volts(rotation, range_id);
+    return VoltageRanges::scale(rotation, range_id);
   }
 
   auto output() const -> float { return outputs_[Output::Main].getVoltage(); }

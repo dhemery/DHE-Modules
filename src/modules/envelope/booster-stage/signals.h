@@ -35,7 +35,7 @@ public:
     auto const rotation =
         rotation_of(params_[Param::Duration], inputs_[Input::DurationCv]);
     auto const range = value_of<DurationRangeId>(params_[Param::DurationRange]);
-    return DurationRanges::seconds(rotation, range);
+    return DurationRanges::scale(rotation, range);
   }
 
   auto gate() const -> bool {
@@ -49,27 +49,24 @@ public:
     auto const rotation =
         rotation_of(params_[Param::Level], inputs_[Input::LevelCv]);
     auto const range_id = value_of<VoltageRangeId>(params_[Param::LevelRange]);
-    return VoltageRanges::volts(rotation, range_id);
+    return VoltageRanges::scale(rotation, range_id);
   }
 
   void output(float voltage) { outputs_[Output::Envelope].setVoltage(voltage); }
 
   void show_active(bool is_active) {
-    auto const voltage = VoltageRanges::volts(is_active || active_button(),
+    auto const voltage = VoltageRanges::scale(is_active || active_button(),
                                               VoltageRangeId::Unipolar);
     outputs_[Output::Active].setVoltage(voltage);
   }
 
   void show_eoc(bool is_eoc) {
-    auto const voltage = VoltageRanges::volts(is_eoc || active_button(),
+    auto const voltage = VoltageRanges::scale(is_eoc || active_button(),
                                               VoltageRangeId::Unipolar);
     outputs_[Output::Eoc].setVoltage(voltage);
   }
 
-  auto taper() const -> sigmoid::Taper const & {
-    auto const shape = value_of<Shapes::Selection>(params_[Param::Shape]);
-    return Shapes::taper(shape);
-  }
+  auto shape() const -> Shape { return value_of<Shape>(params_[Param::Shape]); }
 
 private:
   auto active_button() const -> bool {

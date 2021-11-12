@@ -1,8 +1,10 @@
 #pragma once
+
 #include "modules/sequencizer/generator.h"
 
 #include "components/range.h"
 #include "components/sigmoid.h"
+#include "signals/curvature.h"
 
 #include "dheunit/test.h"
 
@@ -12,6 +14,7 @@
 namespace test {
 namespace sequencizer {
 
+using dhe::Shape;
 using dhe::unit::Tester;
 using TestFunc = std::function<void(Tester &)>;
 
@@ -28,19 +31,17 @@ struct Signals {
   auto curvature(int step) const -> float { return curvature_[step]; }
   auto duration(int step) const -> float { return duration_[step]; }
   void output(float v) { output_ = v; }
-  auto taper(int step) const -> dhe::sigmoid::Taper const & {
-    return *taper_[step];
-  }
+  auto shape(int step) const -> Shape { return shape_[step]; }
   void show_progress(int step, float progress) { progress_[step] = progress; }
   void show_inactive(int step) { inactive_step_ = step; }
 
-  std::array<float, step_count> curvature_{};                   // NOLINT
-  std::array<float, step_count> duration_{};                    // NOLINT
-  std::array<float, step_count> progress_{};                    // NOLINT
-  std::array<float, step_count> duration_multiplier_{};         // NOLINT
-  int inactive_step_{};                                         // NOLINT
-  float output_{};                                              // NOLINT
-  std::array<dhe::sigmoid::Taper const *, step_count> taper_{}; // NOLINT
+  std::array<float, step_count> curvature_{};           // NOLINT
+  std::array<float, step_count> duration_{};            // NOLINT
+  std::array<float, step_count> progress_{};            // NOLINT
+  std::array<float, step_count> duration_multiplier_{}; // NOLINT
+  int inactive_step_{};                                 // NOLINT
+  float output_{};                                      // NOLINT
+  std::array<Shape, step_count> shape_{};               // NOLINT
 };
 
 using Generator = dhe::sequencizer::Generator<Signals, Anchor>;

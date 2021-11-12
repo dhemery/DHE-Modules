@@ -9,6 +9,7 @@
 
 namespace test {
 namespace sequencizer {
+using dhe::Shapes;
 using dhe::sequencizer::GeneratorStatus;
 using dhe::unit::Suite;
 using test::is_equal_to;
@@ -34,7 +35,7 @@ public:
           test([](Tester &t, Signals &module, Anchor & /*start_anchor*/,
                   Anchor & /*end_source*/, Generator &generator) {
             auto constexpr step = 7;
-            module.taper_[step] = &dhe::sigmoid::j_taper;
+            module.shape_[step] = Shape::J;
             module.duration_[step] = 10.F;
 
             generator.start(step);
@@ -71,19 +72,20 @@ public:
 
             auto constexpr phase = 0.5F;
             auto constexpr sample_time = duration * phase;
-            auto constexpr taper = dhe::sigmoid::j_taper;
+            auto constexpr shape = Shape::J;
             auto constexpr curvature = 0.5F;
 
             auto constexpr start_voltage = 0.F;
             auto constexpr end_voltage = 7.F;
-            auto constexpr scaled_tapered_phase =
-                (end_voltage - start_voltage) * taper.apply(phase, curvature);
+            auto const scaled_tapered_phase =
+                (end_voltage - start_voltage) *
+                Shapes::taper(phase, shape, curvature);
 
             module.duration_[step] = duration;
             start_anchor.voltage_ = start_voltage;
             end_anchor.voltage_ = end_voltage;
 
-            module.taper_[step] = &taper;
+            module.shape_[step] = shape;
             module.curvature_[step] = curvature;
 
             generator.generate(sample_time);
@@ -96,7 +98,7 @@ public:
                   Anchor & /*end_anchor*/, Generator &generator) {
             auto constexpr step = 3;
 
-            module.taper_[step] = &dhe::sigmoid::j_taper;
+            module.shape_[step] = Shape::J;
             generator.start(step);
 
             auto constexpr duration = 10.F;   // 10 sec
@@ -121,7 +123,7 @@ public:
           test([](Tester &t, Signals &signals, Anchor & /*start_anchor*/,
                   Anchor & /*end_anchor*/, Generator &generator) {
             auto constexpr step = 3;
-            signals.taper_[step] = &dhe::sigmoid::j_taper;
+            signals.shape_[step] = Shape::J;
 
             generator.start(step);
 

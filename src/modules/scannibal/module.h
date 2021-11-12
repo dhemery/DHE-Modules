@@ -116,7 +116,7 @@ public:
     auto const rotation = rotation_of(params[base_knob_param + step],
                                       inputs[base_cv_input + step]);
     auto const range_id = value_of<VoltageRangeId>(params[Param::LevelRange]);
-    return VoltageRanges::volts(rotation, range_id);
+    return VoltageRanges::scale(rotation, range_id);
   }
 
   auto anchor_source(AnchorType type, int step) const -> AnchorSource {
@@ -165,10 +165,8 @@ public:
     outputs[Output::StepPhase].setVoltage(phase * 10.F);
   }
 
-  auto taper(int step) const -> sigmoid::Taper const & {
-    auto const shape =
-        value_of<Shapes::Selection>(params[Param::StepShape + step]);
-    return Shapes::taper(shape);
+  auto shape(int step) const -> Shape {
+    return value_of<Shapes::Selection>(params[Param::StepShape + step]);
   }
 
   auto dataToJson() -> json_t * override {

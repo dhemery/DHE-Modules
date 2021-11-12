@@ -1,7 +1,9 @@
 #pragma once
-#include "./status.h"
+
 #include "components/phase-timer.h"
 #include "components/range.h"
+#include "signals/curvature.h"
+#include "status.h"
 
 namespace dhe {
 namespace sequencizer {
@@ -27,13 +29,14 @@ public:
     auto const start_voltage = start_anchor_.voltage();
     auto const end_voltage = end_anchor_.voltage();
     auto const range = Range{start_voltage, end_voltage};
-    auto const taper = signals_.taper(step_);
+    auto const shape = signals_.shape(step_);
 
     timer_.advance(sample_time / duration);
     auto const phase = timer_.phase();
-    auto const out_voltage = range.scale(taper.apply(phase, curvature));
+    auto const out_voltage =
+        range.scale(Shapes::taper(phase, shape, curvature));
     signals_.output(out_voltage);
-    signals_.show_progress(step_, timer_.phase());
+    signals_.show_progress(step_, phase);
     return timer_.in_progress() ? GeneratorStatus::Generating
                                 : GeneratorStatus::Completed;
   }

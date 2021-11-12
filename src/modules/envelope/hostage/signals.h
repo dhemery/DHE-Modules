@@ -24,7 +24,7 @@ template <typename TParam, typename TInput, typename TOutput> struct Signals {
     auto const rotation =
         rotation_of(params_[Param::Duration], inputs_[Input::DurationCv]);
     auto const range = value_of<DurationRangeId>(params_[Param::DurationRange]);
-    return DurationRanges::seconds(rotation, range);
+    return DurationRanges::scale(rotation, range);
   }
 
   auto gate() const -> bool { return is_high(inputs_[Input::Trigger]); }
@@ -38,12 +38,12 @@ template <typename TParam, typename TInput, typename TOutput> struct Signals {
   void output(float voltage) { outputs_[Output::Envelope].setVoltage(voltage); }
 
   void show_active(bool active) {
-    auto const voltage = UnipolarVoltage::volts((float)active);
+    auto const voltage = UnipolarVoltage::scale((float)active);
     outputs_[Output::Active].setVoltage(voltage);
   }
 
   void show_eoc(bool eoc) {
-    auto const voltage = UnipolarVoltage::volts((float)eoc);
+    auto const voltage = UnipolarVoltage::scale((float)eoc);
     outputs_[Output::Eoc].setVoltage(voltage);
   }
 

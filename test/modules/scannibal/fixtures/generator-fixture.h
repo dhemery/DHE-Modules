@@ -1,7 +1,7 @@
 #include "modules/scannibal/generator.h"
 
 #include "components/range.h"
-#include "components/sigmoid.h"
+#include "signals/curvature.h"
 
 #include "dheunit/test.h"
 
@@ -11,6 +11,7 @@
 namespace test {
 namespace scannibal {
 
+using dhe::Shape;
 using dhe::unit::Tester;
 using TestFunc = std::function<void(Tester &)>;
 
@@ -26,13 +27,11 @@ struct Anchor {
 struct Module {
   auto curvature(int step) const -> float { return curvature_[step]; }
   void output(float v) { output_ = v; }
-  auto taper(int step) const -> dhe::sigmoid::Taper const & {
-    return *taper_[step];
-  }
+  auto shape(int step) const -> Shape { return shape_[step]; }
 
-  std::array<float, step_count> curvature_{};                   // NOLINT
-  float output_{};                                              // NOLINT
-  std::array<dhe::sigmoid::Taper const *, step_count> taper_{}; // NOLINT
+  std::array<float, step_count> curvature_{}; // NOLINT
+  float output_{};                            // NOLINT
+  std::array<Shape, step_count> shape_{};     // NOLINT
 };
 
 using Generator = dhe::scannibal::Generator<Module, Anchor>;

@@ -75,9 +75,9 @@ public:
             signals.level_ = level;
             mode.enter(); // Initializes the curve to 5V at phase 0
 
-            // Simplify calculations by using a linear taper (default j_taper
+            // Simplify calculations by using a linear taper (default J
             // curvature is 0, making it linear)
-            signals.taper_ = dhe::sigmoid::j_taper;
+            signals.shape_ = Shape::J;
 
             auto constexpr full_duration = 10.F;
             auto constexpr phase_delta =
@@ -104,9 +104,9 @@ public:
             signals.level_ = level;
             mode.enter(); // Initializes the curve at 5V at phase 0
 
-            // Simplify calculations by using a linear taper (default j_taper
+            // Simplify calculations by using a linear taper (default J
             // curvature is 0, making it linear)
-            signals.taper_ = dhe::sigmoid::j_taper;
+            signals.shape_ = Shape::J;
 
             auto constexpr full_duration = 10.F;
             auto constexpr phase_delta =

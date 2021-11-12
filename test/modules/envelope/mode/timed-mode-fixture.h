@@ -1,8 +1,8 @@
 #pragma once
 
 #include "components/phase-timer.h"
-#include "components/sigmoid.h"
 #include "modules/envelope/mode/event.h"
+#include "signals/curvature.h"
 
 #include "dheunit/test.h"
 
@@ -12,8 +12,8 @@ namespace test {
 namespace envelope {
 
 using dhe::PhaseTimer;
+using dhe::Shape;
 using dhe::envelope::mode::Event;
-using dhe::sigmoid::Taper;
 using dhe::unit::Tester;
 using TestFunc = std::function<void(Tester &)>;
 
@@ -24,14 +24,14 @@ struct Signals {
   auto input() const -> float { return input_; }
   void output(float f) { output_ = f; }
   void show_active(bool active) { active_ = active; }
-  auto taper() const -> Taper { return taper_; }
-  bool active_{};                       // NOLINT
-  float duration_{};                    // NOLINT
-  float curvature_{};                   // NOLINT
-  float input_{};                       // NOLINT
-  float level_{};                       // NOLINT
-  float output_{};                      // NOLINT
-  Taper taper_ = dhe::sigmoid::j_taper; // NOLINT
+  auto shape() const -> Shape { return shape_; }
+  bool active_{};          // NOLINT
+  float duration_{};       // NOLINT
+  float curvature_{};      // NOLINT
+  float input_{};          // NOLINT
+  float level_{};          // NOLINT
+  float output_{};         // NOLINT
+  Shape shape_ = Shape::J; // NOLINT
 };
 
 template <typename M>
