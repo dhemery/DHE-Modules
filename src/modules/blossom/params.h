@@ -28,13 +28,13 @@ struct BounceRatio {
   struct KnobMapper;
   static auto constexpr unit = "x";
 
-  static inline auto ratio(float rotation, BounceRatioMode mode) -> float {
-    auto const ratio = range().scale(rotation);
+  static inline auto scale(float normalized, BounceRatioMode mode) -> float {
+    auto const ratio = range().scale(normalized);
     return mode == BounceRatioMode::Quantized ? std::round(ratio) : ratio;
   }
 
-  static inline auto rotation(float ratio) -> float {
-    return range().normalize(ratio);
+  static inline auto normalize(float scaled) -> float {
+    return range().normalize(scaled);
   }
 
 private:
@@ -42,11 +42,13 @@ private:
 };
 
 struct BounceRatio::KnobMapper {
-  auto to_display_value(float rotation) const -> float {
-    return ratio(rotation, mode_);
+  auto scale(float normalized) const -> float {
+    return BounceRatio::scale(normalized, mode_);
   }
 
-  auto to_rotation(float ratio) const -> float { return rotation(ratio); }
+  auto normalize(float scaled) const -> float {
+    return BounceRatio::normalize(scaled);
+  }
 
   void select_mode(BounceRatioMode mode) { mode_ = mode; }
 
@@ -58,12 +60,12 @@ struct SpinSpeed {
   struct KnobMapper;
   static auto constexpr unit = " Hz";
 
-  static auto rotation(float hertz) -> float {
-    return taper().invert(range().normalize(hertz));
+  static auto scale(float normalized) -> float {
+    return range().scale(taper().apply(normalized));
   }
 
-  static auto hertz(float rotation) -> float {
-    return range().scale(taper().apply(rotation));
+  static auto normalize(float scaled) -> float {
+    return taper().invert(range().normalize(scaled));
   }
 
 private:
@@ -75,11 +77,13 @@ private:
 };
 
 struct SpinSpeed::KnobMapper {
-  auto to_display_value(float rotation) const -> float {
-    return hertz(rotation);
+  auto scale(float normalized) const -> float {
+    return SpinSpeed::scale(normalized);
   }
 
-  auto to_rotation(float hertz) const -> float { return rotation(hertz); }
+  auto normalize(float scaled) const -> float {
+    return SpinSpeed::normalize(scaled);
+  }
 };
 
 } // namespace blossom

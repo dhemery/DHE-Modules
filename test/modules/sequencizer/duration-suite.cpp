@@ -43,27 +43,26 @@ public:
           "center multiplier normalize: "
           "yields nominal duration",
           test(0.731F, short_duration_selection, center_multiplier_rotation,
-               0.F, is_equal_to(dhe::ShortDuration::seconds(0.731F))));
+               0.F, is_equal_to(dhe::ShortDuration::scale(0.731F))));
 
     t.run("with 0V multiplier cv: "
           "maximum multiplier normalize: "
           "yields twice nominal duration",
           test(0.4623F, medium_duration_selection, maximum_multiplier_rotation,
-               0.F,
-               is_near(2.F * dhe::MediumDuration::seconds(0.4623F), 1e-5F)));
+               0.F, is_near(2.F * dhe::MediumDuration::scale(0.4623F), 1e-5F)));
 
     t.run("5V CV adds 50% normalize to multiplier knob",
           // 25% multiplier knob + 50% CV = 75% rotation = 1.5 multiplier
           test(center_duration_rotation, long_duration_selection, 0.25F, 5.F,
-               is_equal_to(1.5F * dhe::LongDuration::seconds(
-                                      center_duration_rotation))));
+               is_equal_to(
+                   1.5F * dhe::LongDuration::scale(center_duration_rotation))));
 
-    t.run("-5V CV subtracts 50% normalize from multiplier knob",
-          // 90% multiplier knob - 50% CV = 40% rotation = 0.8 multiplier
-          test(center_duration_rotation, short_duration_selection, 0.90F, -5.F,
-               is_near(
-                   0.8F * dhe::ShortDuration::seconds(center_duration_rotation),
-                   1e-5F)));
+    t.run(
+        "-5V CV subtracts 50% normalize from multiplier knob",
+        // 90% multiplier knob - 50% CV = 40% rotation = 0.8 multiplier
+        test(center_duration_rotation, short_duration_selection, 0.90F, -5.F,
+             is_near(0.8F * dhe::ShortDuration::scale(center_duration_rotation),
+                     1e-5F)));
 
     t.run("minimum short duration is 1ms",
           test(minimum_duration_rotation, short_duration_selection,

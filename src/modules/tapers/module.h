@@ -26,7 +26,7 @@ public:
       level_knob_1->mapper().select_range(id);
     };
     Switch::config<VoltageRanges>(this, Param::LevelRange1,
-                                  "Taper 1 level select",
+                                  "Taper 1 level range",
                                   VoltageRangeId::Bipolar)
         ->on_change(select_level_1_range);
     Knob::config<Attenuverter>(this, Param::LevelAv1, "Taper 1 level CV gain");
@@ -46,7 +46,7 @@ public:
       level_knob_2->mapper().select_range(id);
     };
     Switch::config<VoltageRanges>(this, Param::LevelRange2,
-                                  "Taper 2 level select",
+                                  "Taper 2 level range",
                                   VoltageRangeId::Bipolar)
         ->on_change(select_level_2_range);
     Knob::config<Attenuverter>(this, Param::LevelAv2, "Taper 2 level CV gain");

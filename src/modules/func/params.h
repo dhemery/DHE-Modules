@@ -8,10 +8,10 @@
 namespace dhe {
 namespace func {
 
-enum class OffsetRange { Unipolar5, Bipolar, Unipolar, Bipolar10 };
+enum class OffsetRangeId { Unipolar5, Bipolar, Unipolar, Bipolar10 };
 
 struct OffsetRanges {
-  using Selection = OffsetRange;
+  using Selection = OffsetRangeId;
   static constexpr auto stepper_slug = "offset-range";
   static constexpr auto unit = " V";
 
@@ -21,30 +21,30 @@ struct OffsetRanges {
     return labels;
   }
 
-  static inline auto offset(float rotation, OffsetRange offset) -> float {
-    return select(offset).scale(rotation);
+  static inline auto scale(float normalized, OffsetRangeId range_id) -> float {
+    return range(range_id).scale(normalized);
   }
 
-  static inline auto rotation(float multiplier, OffsetRange offset) -> float {
-    return select(offset).normalize(multiplier);
+  static inline auto normalize(float scaled, OffsetRangeId range_id) -> float {
+    return range(range_id).normalize(scaled);
   }
 
 private:
-  static inline auto select(OffsetRange offset) -> Range const & {
+  static inline auto range(OffsetRangeId id) -> Range const & {
     static auto constexpr minus_ten_to_plus_ten_range = Range{-10.F, 10.F};
     static auto constexpr zero_to_five_range = Range{0.F, 5.F};
     static auto const ranges = std::vector<Range>{
         zero_to_five_range, BipolarVoltage::range(), UnipolarVoltage::range(),
         minus_ten_to_plus_ten_range};
-    return ranges[(int)offset];
+    return ranges[(int)id];
   }
 };
 
-enum class MultiplierRange { Attenuator, Attenuverter, Gain, Gainuverter };
+enum class MultiplierRangeId { Attenuator, Attenuverter, Gain, Gainuverter };
 
 struct MultiplierRanges {
-  using Selection = MultiplierRange;
-  static constexpr auto stepper_slug = "multiplier-select";
+  using Selection = MultiplierRangeId;
+  static constexpr auto stepper_slug = "multiplier-range";
   static constexpr auto unit = "";
 
   static inline auto labels() -> std::vector<std::string> const & {
@@ -53,23 +53,23 @@ struct MultiplierRanges {
     return labels;
   }
 
-  static inline auto multiplier(float rotation, MultiplierRange range)
+  static inline auto scale(float normalized, MultiplierRangeId range_id)
       -> float {
-    return select_range(range).scale(rotation);
+    return range(range_id).scale(normalized);
   }
 
-  static inline auto rotation(float multiplier, MultiplierRange range)
+  static inline auto normalize(float scaled, MultiplierRangeId range_id)
       -> float {
-    return select_range(range).normalize(multiplier);
+    return range(range_id).normalize(scaled);
   }
 
 private:
-  static inline auto select_range(Selection selection) -> Range const & {
+  static inline auto range(MultiplierRangeId range_id) -> Range const & {
     static auto constexpr minus_two_to_plus_two_range = Range{-2.F, 2.F};
     static auto const ranges =
         std::vector<Range>{Attenuator::range(), Attenuverter::range(),
                            Gain::range(), minus_two_to_plus_two_range};
-    return ranges[(int)selection];
+    return ranges[(int)range_id];
   }
 };
 
@@ -88,30 +88,30 @@ struct Operations {
 };
 
 struct Operations::KnobMapper {
-  auto to_display_value(float rotation) const -> float {
+  auto scale(float normalized) const -> float {
     return operation_ == Operation::Multiply
-               ? MultiplierRanges::multiplier(rotation, multipler_range_)
-               : OffsetRanges::offset(rotation, offset_range_);
+               ? MultiplierRanges::scale(normalized, multipler_range_id_)
+               : OffsetRanges::scale(normalized, offset_range_id_);
   }
 
-  auto to_rotation(float operand) const -> float {
+  auto normalize(float scaled) const -> float {
     return operation_ == Operation::Multiply
-               ? MultiplierRanges::rotation(operand, multipler_range_)
-               : OffsetRanges::rotation(operand, offset_range_);
+               ? MultiplierRanges::normalize(scaled, multipler_range_id_)
+               : OffsetRanges::normalize(scaled, offset_range_id_);
   }
 
   void select_operation(Operation operation) { operation_ = operation; }
 
-  void select_multiplier_range(MultiplierRange range) {
-    multipler_range_ = range;
+  void select_multiplier_range(MultiplierRangeId id) {
+    multipler_range_id_ = id;
   }
 
-  void select_offset_range(OffsetRange range) { offset_range_ = range; }
+  void select_offset_range(OffsetRangeId id) { offset_range_id_ = id; }
 
 private:
-  OffsetRange offset_range_{OffsetRange::Bipolar};
-  MultiplierRange multipler_range_{MultiplierRange::Gain};
-  Operation operation_{Operation::Multiply};
+  OffsetRangeId offset_range_id_{};
+  MultiplierRangeId multipler_range_id_{};
+  Operation operation_{};
 };
 } // namespace func
 } // namespace dhe

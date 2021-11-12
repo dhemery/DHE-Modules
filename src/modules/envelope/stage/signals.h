@@ -26,7 +26,7 @@ template <typename TParam, typename TInput, typename TOutput> struct Signals {
   auto defer() const -> bool { return is_high(inputs_[Input::Defer]); }
 
   auto duration() const -> float {
-    return MediumDuration::seconds(value_of(params_[Param::Duration]));
+    return MediumDuration::scale(value_of(params_[Param::Duration]));
   }
 
   auto gate() const -> bool { return is_high(inputs_[Input::Trigger]); }

@@ -63,12 +63,12 @@ struct VoltageRanges {
 };
 
 struct VoltageRanges::KnobMapper {
-  auto to_display_value(float rotation) const -> float {
-    return scale(rotation, range_id_);
+  auto scale(float normalized) const -> float {
+    return VoltageRanges::scale(normalized, range_id_);
   }
 
-  auto to_rotation(float volts) const -> float {
-    return normalize(volts, range_id_);
+  auto normalize(float scaled) const -> float {
+    return VoltageRanges::normalize(scaled, range_id_);
   }
 
   void select_range(VoltageRangeId id) { range_id_ = id; }

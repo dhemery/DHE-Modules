@@ -107,7 +107,7 @@ public:
         knob->mapper().select_range(id);
       }
     };
-    Switch::config<VoltageRanges>(this, Param::LevelRange, "Level select",
+    Switch::config<VoltageRanges>(this, Param::LevelRange, "Level range",
                                   VoltageRangeId::Unipolar)
         ->on_change(select_level_range);
     configInput(Input::LevelAttenuationCV, "Level multiplier CV");
@@ -118,8 +118,8 @@ public:
         knob->mapper().select_range(range_id);
       }
     };
-    Switch::config<DurationRanges>(this, Param::DurationRange,
-                                   "Duration select", DurationRangeId::Medium)
+    Switch::config<DurationRanges>(this, Param::DurationRange, "Duration range",
+                                   DurationRangeId::Medium)
         ->on_change(select_duration_range);
     configInput(Input::DurationMultiplierCV, "Duration multipler CV");
   }

@@ -26,7 +26,7 @@ public:
     config(Param::Count, Input::Count, Output::Count);
 
     Knob::config<SpinSpeed>(this, Param::SpinSpeed, "Speed",
-                            SpinSpeed::rotation(1.F));
+                            SpinSpeed::normalize(1.F));
     Knob::config<Attenuverter>(this, Param::SpinSpeedAv, "Speed CV gain");
     configInput(Input::SpinSpeedCv, "Speed CV");
 
@@ -53,12 +53,12 @@ public:
     configInput(Input::BouncePhaseOffsetCv, "Phase CV");
 
     Knob::config<Gain>(this, Param::XGain, "X gain");
-    Switch::config<VoltageRanges>(this, Param::XRange, "X select",
+    Switch::config<VoltageRanges>(this, Param::XRange, "X range",
                                   VoltageRangeId::Bipolar);
     configInput(Input::XGainCv, "X gain CV");
 
     Knob::config<Gain>(this, Param::YGain, "Y gain");
-    Switch::config<VoltageRanges>(this, Param::YRange, "Y select",
+    Switch::config<VoltageRanges>(this, Param::YRange, "Y range",
                                   VoltageRangeId::Bipolar);
     configInput(Input::YGainCv, "Y gain CV");
 
@@ -90,7 +90,7 @@ public:
                     params[Param::BounceRatioAv]);
     auto const mode =
         value_of<BounceRatioModes::Selection>(params[Param::BounceRatioMode]);
-    return BounceRatio::ratio(rotation, mode);
+    return BounceRatio::scale(rotation, mode);
   }
 
   auto dataToJson() -> json_t * override {
@@ -119,7 +119,7 @@ private:
     auto const rotation =
         rotation_of(params[Param::SpinSpeed], inputs[Input::SpinSpeedCv],
                     params[Param::SpinSpeedAv]);
-    return SpinSpeed::hertz(rotation);
+    return SpinSpeed::scale(rotation);
   }
 
   inline auto gain(int knob_id, int cv_id) const -> float {

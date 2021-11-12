@@ -22,11 +22,11 @@ struct WobbleRatioModes {
   }
 };
 
-enum class WobbleRatioRange { Inward, InwardOutward, Outward };
+enum class WobbleRatioRangeId { Inward, InwardOutward, Outward };
 
 struct WobbleRatioRanges {
   struct KnobMapper;
-  using Selection = WobbleRatioRange;
+  using Selection = WobbleRatioRangeId;
   static auto constexpr unit = "x";
 
   static inline auto labels() -> std::vector<std::string> const & {
@@ -35,58 +35,60 @@ struct WobbleRatioRanges {
     return labels;
   }
 
-  static inline auto ratio(float rotation, WobbleRatioRange range,
+  static inline auto scale(float normalized, WobbleRatioRangeId range_id,
                            WobbleRatioMode mode) -> float {
-    auto const ratio = select_range(range).scale(rotation);
+    auto const ratio = range(range_id).scale(normalized);
     return mode == WobbleRatioMode::Quantized ? std::round(ratio) : ratio;
   }
 
-  static inline auto rotation(float ratio, WobbleRatioRange range) -> float {
-    return select_range(range).normalize(ratio);
+  static inline auto normalize(float scaled, WobbleRatioRangeId range_id)
+      -> float {
+    return range(range_id).normalize(scaled);
   }
 
 private:
-  static inline auto select_range(WobbleRatioRange range) -> Range const & {
+  static inline auto range(WobbleRatioRangeId id) -> Range const & {
     static auto constexpr max_ratio = 16.F;
     static auto const ranges =
         std::vector<Range>{Range{0.F, -max_ratio}, Range{-max_ratio, max_ratio},
                            Range{0.F, max_ratio}};
-    return ranges[(int)range];
+    return ranges[(int)id];
   }
 };
 
 struct WobbleRatioRanges::KnobMapper {
-  auto to_display_value(float rotation) const -> float {
-    return ratio(rotation, range_, mode_);
+  auto scale(float normalized) const -> float {
+    return WobbleRatioRanges::scale(normalized, range_id_, mode_);
   }
 
-  auto to_rotation(float ratio) const -> float {
-    return rotation(ratio, range_);
+  auto normalize(float scaled) const -> float {
+    return WobbleRatioRanges::normalize(scaled, range_id_);
   }
 
   void select_mode(WobbleRatioMode mode) { mode_ = mode; }
 
-  void select_range(Selection selection) { range_ = selection; }
+  void select_range(WobbleRatioRangeId id) { range_id_ = id; }
 
 private:
   WobbleRatioMode mode_{WobbleRatioMode::Free};
-  WobbleRatioRange range_{WobbleRatioRange::Outward};
+  WobbleRatioRangeId range_id_{WobbleRatioRangeId::Outward};
 };
 
 struct ThrobSpeed {
   struct KnobMapper;
   static auto constexpr unit = " Hz";
 
-  static auto hertz(float rotation) -> float {
-    return range().scale(taper().apply(rotation));
+  static auto scale(float normalized) -> float {
+    return range().scale(taper().apply(normalized));
   }
 
-  static auto rotation(float speed) -> float {
-    return taper().invert(range().normalize(speed));
+  static auto normalize(float scaled) -> float {
+    return taper().invert(range().normalize(scaled));
   }
 
 private:
   static auto constexpr range() -> Range { return Range{-10.F, 10.F}; }
+
   static auto taper() -> sigmoid::Taper const & {
     static auto const taper = sigmoid::s_taper_with_curvature(-0.8F);
     return taper;
@@ -94,11 +96,13 @@ private:
 };
 
 struct ThrobSpeed::KnobMapper {
-  auto to_display_value(float rotation) const -> float {
-    return hertz(rotation);
+  auto scale(float normalized) const -> float {
+    return ThrobSpeed::scale(normalized);
   }
 
-  auto to_rotation(float ratio) const -> float { return rotation(ratio); }
+  auto normalize(float scaled) const -> float {
+    return ThrobSpeed::normalize(scaled);
+  }
 };
 
 } // namespace xycloid

@@ -34,12 +34,12 @@ private:
 };
 
 struct Curvature::KnobMapper {
-  auto to_display_value(float rotation) const -> float {
-    return curvature(rotation);
+  auto scale(float normalized) const -> float {
+    return Curvature::curvature(normalized);
   }
 
-  auto to_rotation(float curvature) const -> float {
-    return normalize(curvature);
+  auto normalize(float curvature) const -> float {
+    return Curvature::normalize(curvature);
   }
 };
 

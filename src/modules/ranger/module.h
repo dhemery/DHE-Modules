@@ -28,8 +28,8 @@ struct Module : public rack::engine::Module {
     auto select_ccw_limit_range = [ccw_limit_knob](VoltageRangeId id) {
       ccw_limit_knob->mapper().select_range(id);
     };
-    Switch::config<VoltageRanges>(this, Param::CcwLimitRange,
-                                  "CCW limit select", VoltageRangeId::Bipolar)
+    Switch::config<VoltageRanges>(this, Param::CcwLimitRange, "CCW limit range",
+                                  VoltageRangeId::Bipolar)
         ->on_change(select_ccw_limit_range);
     configInput(Input::CcwLimitCv, "CCW limit CV");
     Knob::config<Attenuverter>(this, Param::CcwLimitAv, "CCW limit CV gain");
@@ -39,7 +39,7 @@ struct Module : public rack::engine::Module {
     auto select_cw_limit_range = [cw_limit_knob](VoltageRangeId id) {
       cw_limit_knob->mapper().select_range(id);
     };
-    Switch::config<VoltageRanges>(this, Param::CwLimitRange, "CW limit select",
+    Switch::config<VoltageRanges>(this, Param::CwLimitRange, "CW limit range",
                                   VoltageRangeId::Bipolar)
         ->on_change(select_cw_limit_range);
     configInput(Input::CwLimitCv, "CW limit CV");

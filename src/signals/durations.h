@@ -43,21 +43,23 @@ template <typename T> struct MappedDurationRange {
   struct KnobMapper;
   static auto constexpr unit = duration::unit;
 
-  static inline auto seconds(float rotation) -> float {
-    return duration::scale(rotation, T::range());
+  static inline auto scale(float normalized) -> float {
+    return duration::scale(normalized, T::range());
   }
 
-  static inline auto rotation(float seconds) -> float {
-    return duration::normalize(seconds, T::range());
+  static inline auto normalize(float scaled) -> float {
+    return duration::normalize(scaled, T::range());
   }
 };
 
 template <typename T> struct MappedDurationRange<T>::KnobMapper {
-  auto to_display_value(float rotation) const -> float {
-    return seconds(rotation);
+  auto scale(float normalized) const -> float {
+    return MappedDurationRange<T>::scale(normalized);
   }
 
-  auto to_rotation(float seconds) const -> float { return rotation(seconds); }
+  auto normalize(float scaled) const -> float {
+    return MappedDurationRange<T>::normalize(scaled);
+  }
 };
 
 struct ShortDuration : MappedDurationRange<ShortDuration> {
@@ -106,12 +108,12 @@ struct DurationRanges {
 };
 
 struct DurationRanges::KnobMapper {
-  auto to_display_value(float normalized) const -> float {
-    return scale(normalized, range_id_);
+  auto scale(float normalized) const -> float {
+    return DurationRanges::scale(normalized, range_id_);
   }
 
-  auto to_rotation(float scaled) const -> float {
-    return normalize(scaled, range_id_);
+  auto normalize(float scaled) const -> float {
+    return DurationRanges::normalize(scaled, range_id_);
   }
 
   void select_range(DurationRangeId id) { range_id_ = id; }

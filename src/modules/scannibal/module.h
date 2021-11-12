@@ -91,7 +91,7 @@ public:
         knob->mapper().select_range(id);
       }
     };
-    Switch::config<VoltageRanges>(this, Param::LevelRange, "Level select",
+    Switch::config<VoltageRanges>(this, Param::LevelRange, "Level range",
                                   VoltageRangeId::Unipolar)
         ->on_change(select_level_range);
   }
