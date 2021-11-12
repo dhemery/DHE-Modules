@@ -9,31 +9,32 @@ namespace dhe {
 
 namespace voltage {
 static auto constexpr unit = " V";
-
-template <typename TVoltage> struct Internal {
-  static auto constexpr unit = voltage::unit;
-  static inline auto display_range() -> Range { return TVoltage::range(); }
-  static inline auto volts(float rotation) -> float {
-    return TVoltage::range().scale(rotation);
-  }
-};
 } // namespace voltage
 
-struct BipolarVoltage : voltage::Internal<BipolarVoltage> {
+template <typename T> struct DisplayableVoltageRange {
+  static auto constexpr unit = voltage::unit;
+  static inline auto display_range() -> Range { return T::range(); }
+
+  static inline auto volts(float rotation) -> float {
+    return T::range().scale(rotation);
+  }
+};
+
+struct BipolarVoltage : DisplayableVoltageRange<BipolarVoltage> {
   static auto constexpr label = "±5 V";
   static inline auto range() -> Range { return {-5.F, 5.F}; }
 };
 
-struct UnipolarVoltage : voltage::Internal<UnipolarVoltage> {
+struct UnipolarVoltage : DisplayableVoltageRange<UnipolarVoltage> {
   static auto constexpr label = "0–10 V";
   static inline auto range() -> Range { return {0.F, 10.F}; }
 };
 
-enum class VoltageRange { Bipolar, Unipolar };
+enum class VoltageRangeId { Bipolar, Unipolar };
 
 struct VoltageRanges {
   struct KnobMapper;
-  using Selection = VoltageRange;
+  using Selection = VoltageRangeId;
   static auto constexpr unit = voltage::unit;
 
   static inline auto labels() -> std::vector<std::string> const & {
@@ -42,35 +43,35 @@ struct VoltageRanges {
     return labels;
   }
 
-  static inline auto volts(float rotation, VoltageRange range) -> float {
-    return display_range(range).scale(rotation);
+  static inline auto volts(float rotation, VoltageRangeId range_id) -> float {
+    return range(range_id).scale(rotation);
   }
 
-  static inline auto rotation(float volts, VoltageRange range) -> float {
-    return display_range(range).normalize(volts);
+  static inline auto rotation(float volts, VoltageRangeId range_id) -> float {
+    return range(range_id).normalize(volts);
   }
 
 private:
-  static inline auto display_range(VoltageRange range) -> Range const & {
+  static inline auto range(VoltageRangeId range_id) -> Range const & {
     static auto const ranges =
         std::vector<Range>{BipolarVoltage::range(), UnipolarVoltage::range()};
-    return ranges[(int)range];
+    return ranges[(int)range_id];
   }
 };
 
 struct VoltageRanges::KnobMapper {
   auto to_display_value(float rotation) const -> float {
-    return volts(rotation, range_);
+    return volts(rotation, range_id_);
   }
 
   auto to_rotation(float volts) const -> float {
-    return rotation(volts, range_);
+    return rotation(volts, range_id_);
   }
 
-  void select_range(VoltageRange range) { range_ = range; }
+  void select_range(VoltageRangeId id) { range_id_ = id; }
 
 private:
-  VoltageRange range_{VoltageRange::Unipolar};
+  VoltageRangeId range_id_{};
 };
 
 } // namespace dhe

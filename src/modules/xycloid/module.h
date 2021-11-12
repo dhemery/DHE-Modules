@@ -58,12 +58,12 @@ public:
     Knob::config<Gain>(this, Param::XGain, "X gain");
     configInput(Input::XGainCv, "X gain CV");
     Switch::config<VoltageRanges>(this, Param::XRange, "X select",
-                                  VoltageRange::Bipolar);
+                                  VoltageRangeId::Bipolar);
 
     Knob::config<Gain>(this, Param::YGain, "Y gain");
     configInput(Input::YGainCv, "Y gain CV");
     Switch::config<VoltageRanges>(this, Param::YRange, "Y select",
-                                  VoltageRange::Bipolar);
+                                  VoltageRangeId::Bipolar);
 
     configOutput(Output::X, "X");
     configOutput(Output::Y, "Y");

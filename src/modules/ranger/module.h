@@ -25,22 +25,22 @@ struct Module : public rack::engine::Module {
 
     auto *ccw_limit_knob =
         Knob::config<VoltageRanges>(this, Param::CcwLimit, "CCW limit", 0.F);
-    auto select_ccw_limit_range = [ccw_limit_knob](VoltageRange range) {
-      ccw_limit_knob->mapper().select_range(range);
+    auto select_ccw_limit_range = [ccw_limit_knob](VoltageRangeId id) {
+      ccw_limit_knob->mapper().select_range(id);
     };
     Switch::config<VoltageRanges>(this, Param::CcwLimitRange,
-                                  "CCW limit select", VoltageRange::Bipolar)
+                                  "CCW limit select", VoltageRangeId::Bipolar)
         ->on_change(select_ccw_limit_range);
     configInput(Input::CcwLimitCv, "CCW limit CV");
     Knob::config<Attenuverter>(this, Param::CcwLimitAv, "CCW limit CV gain");
 
     auto *cw_limit_knob =
         Knob::config<VoltageRanges>(this, Param::CwLimit, "CW limit", 1.F);
-    auto select_cw_limit_range = [cw_limit_knob](VoltageRange range) {
-      cw_limit_knob->mapper().select_range(range);
+    auto select_cw_limit_range = [cw_limit_knob](VoltageRangeId id) {
+      cw_limit_knob->mapper().select_range(id);
     };
     Switch::config<VoltageRanges>(this, Param::CwLimitRange, "CW limit select",
-                                  VoltageRange::Bipolar)
+                                  VoltageRangeId::Bipolar)
         ->on_change(select_cw_limit_range);
     configInput(Input::CwLimitCv, "CW limit CV");
     Knob::config<Attenuverter>(this, Param::CwLimitAv, "CW limit CV gain");
@@ -65,11 +65,10 @@ private:
     return cx::scale(rotation, ccw_limit(), cw_limit());
   }
 
-  inline auto limit(int knob, int cv, int av, int range_selection) const
-      -> float {
+  inline auto limit(int knob, int cv, int av, int range) const -> float {
     auto const rotation = rotation_of(params[knob], inputs[cv], params[av]);
-    auto const range = value_of<VoltageRange>(params[range_selection]);
-    return VoltageRanges::volts(rotation, range);
+    auto const range_id = value_of<VoltageRangeId>(params[range]);
+    return VoltageRanges::volts(rotation, range_id);
   }
 
   auto ccw_limit() const -> float {

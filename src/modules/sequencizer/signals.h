@@ -64,8 +64,9 @@ public:
     auto const rotation =
         rotation_of(params_[base + step], inputs_[InputId::LevelAttenuationCV],
                     params_[ParamId::LevelMultiplier]);
-    auto const range = value_of<VoltageRange>(params_[ParamId::LevelRange]);
-    return VoltageRanges::volts(rotation, range);
+    auto const range_id =
+        value_of<VoltageRangeId>(params_[ParamId::LevelRange]);
+    return VoltageRanges::volts(rotation, range_id);
   }
 
   auto anchor_source(AnchorType type, int step) const -> AnchorSource {

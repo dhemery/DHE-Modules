@@ -22,11 +22,12 @@ public:
 
     auto *level_knob_1 =
         Knob::config<VoltageRanges>(this, Param::Level1, "Taper 1 level");
-    auto select_level_1_range = [level_knob_1](VoltageRange range) {
-      level_knob_1->mapper().select_range(range);
+    auto select_level_1_range = [level_knob_1](VoltageRangeId id) {
+      level_knob_1->mapper().select_range(id);
     };
     Switch::config<VoltageRanges>(this, Param::LevelRange1,
-                                  "Taper 1 level select", VoltageRange::Bipolar)
+                                  "Taper 1 level select",
+                                  VoltageRangeId::Bipolar)
         ->on_change(select_level_1_range);
     Knob::config<Attenuverter>(this, Param::LevelAv1, "Taper 1 level CV gain");
     configInput(Input::LevelCv1, "Taper 1 level CV");
@@ -41,11 +42,12 @@ public:
 
     auto *level_knob_2 =
         Knob::config<VoltageRanges>(this, Param::Level2, "Taper 2 level");
-    auto select_level_2_range = [level_knob_2](VoltageRange range) {
-      level_knob_2->mapper().select_range(range);
+    auto select_level_2_range = [level_knob_2](VoltageRangeId id) {
+      level_knob_2->mapper().select_range(id);
     };
     Switch::config<VoltageRanges>(this, Param::LevelRange2,
-                                  "Taper 2 level select", VoltageRange::Bipolar)
+                                  "Taper 2 level select",
+                                  VoltageRangeId::Bipolar)
         ->on_change(select_level_2_range);
     Knob::config<Attenuverter>(this, Param::LevelAv2, "Taper 2 level CV gain");
     configInput(Input::LevelCv2, "Taper 2 level CV");
@@ -93,14 +95,14 @@ private:
   }
 
   static inline auto tapered(float rotation, Shape shape, float curvature,
-                             VoltageRange range) -> float {
+                             VoltageRangeId range_id) -> float {
     auto const taper = Shapes::taper(shape);
     auto const tapered = taper.apply(rotation, curvature);
-    return VoltageRanges::volts(tapered, range);
+    return VoltageRanges::volts(tapered, range_id);
   }
 
-  auto voltage_range(int id) const -> VoltageRange {
-    return value_of<VoltageRange>(params[id]);
+  auto voltage_range(int id) const -> VoltageRangeId {
+    return value_of<VoltageRangeId>(params[id]);
   }
 };
 

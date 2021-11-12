@@ -86,13 +86,13 @@ public:
                   step_name + "relative duration CV");
     }
 
-    auto select_level_range = [level_knobs](VoltageRange range) {
+    auto select_level_range = [level_knobs](VoltageRangeId id) {
       for (auto *knob : level_knobs) {
-        knob->mapper().select_range(range);
+        knob->mapper().select_range(id);
       }
     };
     Switch::config<VoltageRanges>(this, Param::LevelRange, "Level select",
-                                  VoltageRange::Unipolar)
+                                  VoltageRangeId::Unipolar)
         ->on_change(select_level_range);
   }
 
@@ -115,8 +115,8 @@ public:
                                    : Input::StepPhase1AnchorLevelCv;
     auto const rotation = rotation_of(params[base_knob_param + step],
                                       inputs[base_cv_input + step]);
-    auto const range = value_of<VoltageRange>(params[Param::LevelRange]);
-    return VoltageRanges::volts(rotation, range);
+    auto const range_id = value_of<VoltageRangeId>(params[Param::LevelRange]);
+    return VoltageRanges::volts(rotation, range_id);
   }
 
   auto anchor_source(AnchorType type, int step) const -> AnchorSource {

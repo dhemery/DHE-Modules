@@ -102,13 +102,13 @@ public:
 
     Knob::config<Attenuator>(this, Param::LevelMultiplier, "Level multiplier",
                              1.F);
-    auto select_level_range = [level_knobs](VoltageRange range) {
+    auto select_level_range = [level_knobs](VoltageRangeId id) {
       for (auto *knob : level_knobs) {
-        knob->mapper().select_range(range);
+        knob->mapper().select_range(id);
       }
     };
     Switch::config<VoltageRanges>(this, Param::LevelRange, "Level select",
-                                  VoltageRange::Unipolar)
+                                  VoltageRangeId::Unipolar)
         ->on_change(select_level_range);
     configInput(Input::LevelAttenuationCV, "Level multiplier CV");
 

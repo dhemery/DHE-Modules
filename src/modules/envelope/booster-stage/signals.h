@@ -48,21 +48,21 @@ public:
   auto level() const -> float {
     auto const rotation =
         rotation_of(params_[Param::Level], inputs_[Input::LevelCv]);
-    auto const range = value_of<VoltageRange>(params_[Param::LevelRange]);
-    return VoltageRanges::volts(rotation, range);
+    auto const range_id = value_of<VoltageRangeId>(params_[Param::LevelRange]);
+    return VoltageRanges::volts(rotation, range_id);
   }
 
   void output(float voltage) { outputs_[Output::Envelope].setVoltage(voltage); }
 
   void show_active(bool is_active) {
     auto const voltage = VoltageRanges::volts(is_active || active_button(),
-                                              VoltageRange::Unipolar);
+                                              VoltageRangeId::Unipolar);
     outputs_[Output::Active].setVoltage(voltage);
   }
 
   void show_eoc(bool is_eoc) {
-    auto const voltage =
-        VoltageRanges::volts(is_eoc || active_button(), VoltageRange::Unipolar);
+    auto const voltage = VoltageRanges::volts(is_eoc || active_button(),
+                                              VoltageRangeId::Unipolar);
     outputs_[Output::Eoc].setVoltage(voltage);
   }
 

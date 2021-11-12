@@ -38,12 +38,12 @@ template <typename TParam, typename TInput, typename TOutput> struct Signals {
   void output(float voltage) { outputs_[Output::Envelope].setVoltage(voltage); }
 
   void show_active(bool active) {
-    auto const voltage = VoltageRanges::volts(active, VoltageRange::Unipolar);
+    auto const voltage = UnipolarVoltage::volts((float)active);
     outputs_[Output::Active].setVoltage(voltage);
   }
 
   void show_eoc(bool eoc) {
-    auto const voltage = VoltageRanges::volts(eoc, VoltageRange::Unipolar);
+    auto const voltage = UnipolarVoltage::volts((float)eoc);
     outputs_[Output::Eoc].setVoltage(voltage);
   }
 

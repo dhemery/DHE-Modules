@@ -39,7 +39,7 @@ static inline auto rotation(float seconds, Range range) -> float {
 }
 } // namespace duration
 
-template <typename T> struct MappedDuration {
+template <typename T> struct MappedDurationRange {
   struct KnobMapper;
   static auto constexpr unit = duration::unit;
 
@@ -52,7 +52,7 @@ template <typename T> struct MappedDuration {
   }
 };
 
-template <typename T> struct MappedDuration<T>::KnobMapper {
+template <typename T> struct MappedDurationRange<T>::KnobMapper {
   auto to_display_value(float rotation) const -> float {
     return seconds(rotation);
   }
@@ -60,17 +60,17 @@ template <typename T> struct MappedDuration<T>::KnobMapper {
   auto to_rotation(float seconds) const -> float { return rotation(seconds); }
 };
 
-struct ShortDuration : MappedDuration<ShortDuration> {
+struct ShortDuration : MappedDurationRange<ShortDuration> {
   static auto constexpr range() -> Range { return Range{0.001F, 1.F}; }
   static auto constexpr label = "0.001–1.0 s";
 };
 
-struct MediumDuration : MappedDuration<MediumDuration> {
+struct MediumDuration : MappedDurationRange<MediumDuration> {
   static auto constexpr range() -> Range { return Range{0.01F, 10.F}; }
   static auto constexpr label = "0.01–10.0 s";
 };
 
-struct LongDuration : MappedDuration<LongDuration> {
+struct LongDuration : MappedDurationRange<LongDuration> {
   static auto constexpr range() -> Range { return Range{0.1F, 100.F}; }
   static auto constexpr label = "0.1–100.0 s";
 };
