@@ -45,10 +45,11 @@ private:
   auto signal_in() const -> float { return voltage_at(inputs[Input::Swave]); }
 
   auto taper(float input) const -> float {
-    return Shapes::curvature(rotation(params[Param::Curvature],
-                                      inputs[Input::CurvatureCv],
-                                      params[Param::CurvatureAv]),
-                             position_of(params[Param::Shape]));
+    auto const rotation =
+        rotation_of(params[Param::Curvature], inputs[Input::CurvatureCv],
+                    params[Param::CurvatureAv]);
+    auto const shape = value_of<Shapes::Selection>(params[Param::Shape]);
+    return Shapes::curvature(rotation, shape);
   }
 };
 

@@ -11,8 +11,11 @@
 namespace dhe {
 namespace xycloid {
 
+enum class WobbleRatioMode { Quantized, Free };
+enum class WobbleRatioRange { Inward, InwardOutward, Outward };
+
 struct WobbleRatioModes {
-  enum Selection { Quantized, Free };
+  using Selection = WobbleRatioMode;
 
   static inline auto labels() -> std::vector<std::string> const & {
     static auto const labels = std::vector<std::string>{"Quantized", "Free"};
@@ -20,8 +23,8 @@ struct WobbleRatioModes {
   }
 };
 
-struct WobbleRatios {
-  enum Selection { Inward, InwardOutward, Outward };
+struct WobbleRatioRanges {
+  using Selection = WobbleRatioRange;
   static auto constexpr unit = "x";
 
   static inline auto labels() -> std::vector<std::string> const & {
@@ -30,42 +33,42 @@ struct WobbleRatios {
     return labels;
   }
 
-  static inline auto select(int selection) -> Range const & {
-    static auto constexpr max_ratio = 16.F;
-    static auto const ranges =
-        std::vector<Range>{Range{0.F, -max_ratio}, Range{-max_ratio, max_ratio},
-                           Range{0.F, max_ratio}};
-    return ranges[selection];
-  }
-
-  static inline auto ratio(float rotation, int range, bool quantize) -> float {
+  static inline auto ratio(float rotation, WobbleRatioRange range,
+                           WobbleRatioMode mode) -> float {
     auto const ratio = select(range).scale(rotation);
-    return quantize ? std::round(ratio) : ratio;
+    return mode == WobbleRatioMode::Quantized ? std::round(ratio) : ratio;
   }
 
-  static inline auto rotation(float ratio, int range) -> float {
+  static inline auto rotation(float ratio, WobbleRatioRange range) -> float {
     return select(range).normalize(ratio);
   }
 
   struct KnobMapper {
     auto to_display_value(float rotation) const -> float {
-      return ratio(rotation, range_, quantize_);
+      return ratio(rotation, range_, mode_);
     }
 
     auto to_rotation(float ratio) const -> float {
       return rotation(ratio, range_);
     }
 
-    void select_mode(WobbleRatioModes::Selection selection) {
-      quantize_ = selection == WobbleRatioModes::Quantized;
-    }
+    void select_mode(WobbleRatioMode mode) { mode_ = mode; }
 
     void select_range(Selection selection) { range_ = selection; }
 
   private:
-    bool quantize_{false};
-    int range_{Outward};
+    WobbleRatioMode mode_{WobbleRatioMode::Free};
+    WobbleRatioRange range_{WobbleRatioRange::Outward};
   };
+
+private:
+  static inline auto select(WobbleRatioRange range) -> Range const & {
+    static auto constexpr max_ratio = 16.F;
+    static auto const ranges =
+        std::vector<Range>{Range{0.F, -max_ratio}, Range{-max_ratio, max_ratio},
+                           Range{0.F, max_ratio}};
+    return ranges[(int)range];
+  }
 };
 
 struct ThrobSpeed {

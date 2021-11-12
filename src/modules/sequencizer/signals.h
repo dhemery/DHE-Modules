@@ -29,8 +29,8 @@ static inline auto duration(P const &duration_knob, P const &range_switch,
     -> float {
   static auto constexpr minimum_duration = ShortDuration::range().lower_bound();
   auto const nominal_duration =
-      Durations::seconds(value_of(duration_knob), position_of(range_switch));
-  auto const multiplier_rotation = rotation(multipler_knob, multiplier_cv);
+      Durations::seconds(value_of(duration_knob), value_of(range_switch));
+  auto const multiplier_rotation = rotation_of(multipler_knob, multiplier_cv);
   auto const nominal_multiplier = Gain::range().scale(multiplier_rotation);
   auto const clamped_multiplier = Gain::range().clamp(nominal_multiplier);
   auto const scaled_duration = nominal_duration * clamped_multiplier;
@@ -54,36 +54,33 @@ public:
   auto anchor_mode(AnchorType type, int step) const -> AnchorMode {
     auto const base = type == AnchorType::Start ? ParamId::StepStartAnchorMode
                                                 : ParamId::StepEndAnchorMode;
-    auto const selection = position_of(params_[base + step]);
-    return static_cast<AnchorMode>(selection);
+    return value_of<AnchorMode>(params_[base + step]);
   }
 
   auto anchor_level(AnchorType type, int step) const -> float {
-    auto const base_knob_param = type == AnchorType::Start
-                                     ? ParamId::StepStartAnchorLevel
-                                     : ParamId::StepEndAnchorLevel;
-    return Voltages::volts(rotation(params_[base_knob_param + step],
-                                    inputs_[InputId::LevelAttenuationCV],
-                                    params_[ParamId::LevelMultiplier]),
-                           position_of(params_[ParamId::LevelRange]));
+    auto const base = type == AnchorType::Start ? ParamId::StepStartAnchorLevel
+                                                : ParamId::StepEndAnchorLevel;
+    auto const rotation =
+        rotation_of(params_[base + step], inputs_[InputId::LevelAttenuationCV],
+                    params_[ParamId::LevelMultiplier]);
+    auto const range =
+        value_of<Voltages::Selection>(params_[ParamId::LevelRange]);
+    return Voltages::volts(rotation, range);
   }
 
   auto anchor_source(AnchorType type, int step) const -> AnchorSource {
     auto const base = type == AnchorType::Start ? ParamId::StepStartAnchorSource
                                                 : ParamId::StepEndAnchorSource;
-    auto const selection = position_of(params_[base + step]);
-    return static_cast<AnchorSource>(selection);
+    return value_of<AnchorSource>(params_[base + step]);
   }
 
   auto completion_mode(int step) const -> SustainMode {
-    auto const selection =
-        position_of(params_[ParamId::StepSustainMode + step]);
-    return static_cast<SustainMode>(selection);
+    return value_of<SustainMode>(params_[ParamId::StepSustainMode + step]);
   }
 
   auto curvature(int step) const -> float {
-    return Curvature::curvature(
-        value_of(params_[ParamId::StepCurvature + step]));
+    auto const rotation = rotation_of(params_[ParamId::StepCurvature + step]);
+    return Curvature::curvature(rotation);
   }
 
   auto duration(int step) const -> float {
@@ -105,9 +102,7 @@ public:
   auto in_c() const -> float { return voltage_at(inputs_[InputId::InC]); }
 
   auto interrupt_mode(int step) const -> InterruptMode {
-    auto const selection =
-        position_of(params_[ParamId::StepInterruptMode + step]);
-    return static_cast<InterruptMode>(selection);
+    return value_of<InterruptMode>(params_[ParamId::StepInterruptMode + step]);
   }
 
   auto is_enabled(int step) const -> bool {
@@ -133,17 +128,15 @@ public:
   void output(float voltage) { outputs_[OutputId::Out].setVoltage(voltage); }
 
   auto selection_start() const -> int {
-    return static_cast<int>(value_of(params_[ParamId::SelectionStart]));
+    return value_of<int>(params_[ParamId::SelectionStart]);
   }
 
   auto selection_length() const -> int {
-    return static_cast<int>(value_of(params_[ParamId::SelectionLength]));
+    return value_of<int>(params_[ParamId::SelectionLength]);
   }
 
   auto trigger_mode(int step) const -> TriggerMode {
-    auto const selection =
-        position_of(params_[ParamId::StepTriggerMode + step]);
-    return static_cast<TriggerMode>(selection);
+    return value_of<TriggerMode>(params_[ParamId::StepTriggerMode + step]);
   }
 
   void show_curving(bool curving) {
@@ -185,8 +178,9 @@ public:
   }
 
   auto taper(int step) const -> sigmoid::Taper const & {
-    auto const selection = position_of(params_[ParamId::StepShape + step]);
-    return sigmoid::tapers[selection];
+    auto const shape =
+        value_of<Shapes::Selection>(params_[ParamId::StepShape + step]);
+    return Shapes::select(shape);
   }
 
 private:

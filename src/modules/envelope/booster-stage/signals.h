@@ -22,8 +22,9 @@ public:
       : params_{params}, inputs_{inputs}, outputs_{outputs} {}
 
   auto curvature() const -> float {
-    return Curvature::curvature(
-        rotation(params_[Param::Curvature], inputs_[Input::CurvatureCv]));
+    auto const rotation =
+        rotation_of(params_[Param::Curvature], inputs_[Input::CurvatureCv]);
+    return Curvature::curvature(rotation);
   }
 
   auto defer() const -> bool {
@@ -31,9 +32,11 @@ public:
   }
 
   auto duration() const -> float {
-    return Durations::seconds(
-        rotation(params_[Param::Duration], inputs_[Input::DurationCv]),
-        position_of(params_[Param::DurationRange]));
+    auto const rotation =
+        rotation_of(params_[Param::Duration], inputs_[Input::DurationCv]);
+    auto const range =
+        value_of<Durations::Selection>(params_[Param::DurationRange]);
+    return Durations::seconds(rotation, range);
   }
 
   auto gate() const -> bool {
@@ -44,9 +47,11 @@ public:
   auto input() const -> float { return voltage_at(inputs_[Input::Envelope]); }
 
   auto level() const -> float {
-    return Voltages::volts(
-        rotation(params_[Param::Level], inputs_[Input::LevelCv]),
-        position_of(params_[Param::LevelRange]));
+    auto const rotation =
+        rotation_of(params_[Param::Level], inputs_[Input::LevelCv]);
+    auto const range =
+        value_of<Voltages::Selection>(params_[Param::LevelRange]);
+    return Voltages::volts(rotation, range);
   }
 
   void output(float voltage) { outputs_[Output::Envelope].setVoltage(voltage); }
@@ -63,7 +68,8 @@ public:
   }
 
   auto taper() const -> sigmoid::Taper const & {
-    return Shapes::select(position_of(params_[Param::Shape]));
+    auto const shape = value_of<Shapes::Selection>(params_[Param::Shape]);
+    return Shapes::select(shape);
   }
 
 private:

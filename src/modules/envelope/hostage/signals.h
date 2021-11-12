@@ -21,9 +21,11 @@ template <typename TParam, typename TInput, typename TOutput> struct Signals {
   auto defer() const -> bool { return is_high(inputs_[Input::Defer]); }
 
   auto duration() const -> float {
-    return Durations::seconds(
-        rotation(params_[Param::Duration], inputs_[Input::DurationCv]),
-        position_of(params_[Param::DurationRange]));
+    auto const rotation =
+        rotation_of(params_[Param::Duration], inputs_[Input::DurationCv]);
+    auto const range =
+        value_of<Durations::Selection>(params_[Param::DurationRange]);
+    return Durations::seconds(rotation, range);
   }
 
   auto gate() const -> bool { return is_high(inputs_[Input::Trigger]); }
@@ -31,7 +33,7 @@ template <typename TParam, typename TInput, typename TOutput> struct Signals {
   auto input() const -> float { return voltage_at(inputs_[Input::Envelope]); }
 
   auto mode() const -> Mode {
-    return position_of(params_[Param::Mode]) == 1 ? Mode::Sustain : Mode::Hold;
+    return is_pressed(params_[Param::Mode]) ? Mode::Sustain : Mode::Hold;
   }
 
   void output(float voltage) { outputs_[Output::Envelope].setVoltage(voltage); }

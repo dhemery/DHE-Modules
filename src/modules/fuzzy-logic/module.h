@@ -51,8 +51,7 @@ template <typename TEngine> struct Module : public rack::engine::Module {
   }
 
   void process(ProcessArgs const & /*ignored*/) override {
-    auto const voltage_offset =
-        position_of(params[Param::LevelRange]) == 1 ? 0.F : 5.F;
+    auto const voltage_offset = value_of(params[Param::LevelRange]) * 5.F;
     for (auto i = 0; i < 2; i++) {
       auto const a_input = inputs[Input::A + i].getVoltage() + voltage_offset;
       auto const b_input = inputs[Input::B + i].getVoltage() + voltage_offset;

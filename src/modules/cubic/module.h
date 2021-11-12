@@ -75,11 +75,13 @@ struct Module : public rack::engine::Module {
 
 private:
   auto coefficient(int knob_id, int cv_id) const -> float {
-    return Coefficient::value(rotation(params[knob_id], inputs[cv_id]));
+    auto const rotation = rotation_of(params[knob_id], inputs[cv_id]);
+    return Coefficient::value(rotation);
   }
 
   auto gain(int knob_id, int cv_id) const -> float {
-    return Gain::value(rotation(params[knob_id], inputs[cv_id]));
+    auto const rotation = rotation_of(params[knob_id], inputs[cv_id]);
+    return Gain::value(rotation);
   }
 
   auto main_in() const -> float { return voltage_at(inputs[Input::Cubic]); }

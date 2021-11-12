@@ -23,27 +23,27 @@ public:
   Module() {
     config(Param::Count, Input::Count, Output::Count);
 
-    Knob::config<ThrobSpeed>(this, Param::ThrobSpeed, "Speed");
+    Knob::config<ThrobSpeed>(this, Param::ThrobSpeed, "Speed",
+                             ThrobSpeed::rotation(1.F));
     configInput(Input::ThrobSpeedCv, "Speed CV");
     Knob::config<Attenuverter>(this, Param::ThrobSpeedAv, "Speed CV gain");
 
     auto *ratio_knob =
-        Knob::config<WobbleRatios>(this, Param::WobbleRatio, "Ratio");
-    auto select_ratio_range = [ratio_knob](WobbleRatios::Selection selection) {
-      ratio_knob->mapper().select_range(selection);
+        Knob::config<WobbleRatioRanges>(this, Param::WobbleRatio, "Ratio");
+    auto select_ratio_range = [ratio_knob](WobbleRatioRange range) {
+      ratio_knob->mapper().select_range(range);
     };
-    auto select_ratio_mode =
-        [ratio_knob](WobbleRatioModes::Selection selection) {
-          ratio_knob->mapper().select_mode(selection);
-        };
+    auto select_ratio_mode = [ratio_knob](WobbleRatioMode mode) {
+      ratio_knob->mapper().select_mode(mode);
+    };
 
     configInput(Input::WobbleRatioCv, "Ratio CV");
     Knob::config<Attenuverter>(this, Param::WobbleRatioAv, "Ratio CV gain");
-    Switch::config<WobbleRatios>(this, Param::WobbleRatioRange, "Direction",
-                                 WobbleRatios::Outward)
+    Switch::config<WobbleRatioRanges>(this, Param::WobbleRatioRange,
+                                      "Direction", WobbleRatioRange::Outward)
         ->on_change(select_ratio_range);
     Switch::config<WobbleRatioModes>(this, Param::WobbleRatioMode, "Ratio mode",
-                                     WobbleRatioModes::Free)
+                                     WobbleRatioMode::Free)
         ->on_change(select_ratio_mode);
 
     Knob::config<Percentage>(this, Param::WobbleDepth, "Depth");
@@ -97,7 +97,8 @@ public:
 
 private:
   inline auto gain(int knob_id, int cv_id) const -> float {
-    return Gain::value(rotation(params[knob_id], inputs[cv_id]));
+    auto const rotation = rotation_of(params[knob_id], inputs[cv_id]);
+    return Gain::value(rotation);
   }
 
   auto x_gain() const -> float { return gain(Param::XGain, Input::XGainCv); }
@@ -113,31 +114,36 @@ private:
   }
 
   auto throb_speed() const -> float {
-    return ThrobSpeed::hertz(rotation(params[Param::ThrobSpeed],
-                                      inputs[Input::ThrobSpeedCv],
-                                      params[Param::ThrobSpeedAv]));
+    auto const rotation =
+        rotation_of(params[Param::ThrobSpeed], inputs[Input::ThrobSpeedCv],
+                    params[Param::ThrobSpeedAv]);
+    return ThrobSpeed::hertz(rotation);
   }
 
   auto wobble_depth() const -> float {
-    static auto constexpr wobble_depth_range = Range{0.F, 1.F};
-    return wobble_depth_range.clamp(rotation(params[Param::WobbleDepth],
-                                             inputs[Input::WobbleDepthCv],
-                                             params[Param::WobbleDepthAv]));
+    static auto constexpr range = Range{0.F, 1.F};
+    auto const rotation =
+        rotation_of(params[Param::WobbleDepth], inputs[Input::WobbleDepthCv],
+                    params[Param::WobbleDepthAv]);
+    return range.clamp(rotation);
   }
 
   // radians
   auto wobble_phase_offset() const -> float {
-    return Angle::radians(rotation(params[Param::WobblePhaseOffset],
-                                   inputs[Input::WobblePhaseOffsetCv],
-                                   params[Param::WobblePhaseOffsetAv]));
+    auto const rotation = rotation_of(params[Param::WobblePhaseOffset],
+                                      inputs[Input::WobblePhaseOffsetCv],
+                                      params[Param::WobblePhaseOffsetAv]);
+    return Angle::radians(rotation);
   }
 
   auto wobble_ratio() -> float {
-    return WobbleRatios::ratio(
-        rotation(params[Param::WobbleRatio], inputs[Input::WobbleRatioCv],
-                 params[Param::WobbleRatioAv]),
-        position_of(params[Param::WobbleRatioRange]),
-        position_of(params[Param::WobbleRatioMode]) == 0);
+    auto const rotation =
+        rotation_of(params[Param::WobbleRatio], inputs[Input::WobbleRatioCv],
+                    params[Param::WobbleRatioAv]);
+    auto const range =
+        value_of<WobbleRatioRange>(params[Param::WobbleRatioRange]);
+    auto const mode = value_of<WobbleRatioMode>(params[Param::WobbleRatioMode]);
+    return WobbleRatioRanges::ratio(rotation, range, mode);
   }
 
   PhaseRotor wobbler_{};

@@ -37,7 +37,7 @@ public:
           ratio_knob->mapper().select_mode(selection);
         };
     Switch::config<BounceRatioModes>(this, Param::BounceRatioMode, "Ratio mode",
-                                     BounceRatioModes::Free)
+                                     BounceRatioMode::Free)
         ->on_change(select_ratio_mode);
 
     Knob::config<Attenuverter>(this, Param::BounceRatioAv, "Ratio CV gain");
@@ -66,13 +66,10 @@ public:
 
   void process(ProcessArgs const &args) override {
     auto const spin_delta = -spin_speed() * args.sampleTime;
-    auto const bounce_ratio = bounce_ratio_is_free()
-                                  ? this->bounce_ratio()
-                                  : std::round(this->bounce_ratio());
-    auto const bounce_depth = Percentage::range().clamp(this->bounce_depth());
+    auto const bounce_depth = this->bounce_depth();
 
     spinner_.advance(spin_delta);
-    bouncer_.advance(spin_delta * bounce_ratio);
+    bouncer_.advance(spin_delta * bounce_ratio());
 
     auto const radius = (1.F - bounce_depth) +
                         bounce_depth * bouncer_.sin(bounce_phase_offset());
@@ -85,6 +82,15 @@ public:
     outputs[Output::Y].setVoltage(y_voltage);
   }
 
+  auto bounce_ratio() const -> float {
+    auto const rotation =
+        rotation_of(params[Param::BounceRatio], inputs[Input::BounceRatioCv],
+                    params[Param::BounceRatioAv]);
+    auto const mode =
+        value_of<BounceRatioModes::Selection>(params[Param::BounceRatioMode]);
+    return BounceRatio::ratio(rotation, mode);
+  }
+
   auto dataToJson() -> json_t * override {
     auto *data = json_object();
     json_object_set_new(data, preset_version_key, json_integer(0));
@@ -92,37 +98,31 @@ public:
   }
 
 private:
-  inline auto bounce_ratio() const -> float {
-    return BounceRatio::ratio(rotation(params[Param::BounceRatio],
-                                       inputs[Input::BounceRatioCv],
-                                       params[Param::BounceRatioAv]),
-                              position_of(params[Param::BounceRatioMode]) == 0);
-  }
-
-  inline auto bounce_ratio_is_free() const -> bool {
-    return position_of(params[Param::BounceRatioMode]) == 1;
-  }
-
   inline auto bounce_depth() const -> float {
-    return rotation(params[Param::BounceDepth], inputs[Input::BounceDepthCv],
+    auto const rotation =
+        rotation_of(params[Param::BounceDepth], inputs[Input::BounceDepthCv],
                     params[Param::BounceDepthAv]);
+    return Percentage::range().clamp(rotation);
   }
 
   // radians
   inline auto bounce_phase_offset() const -> float {
-    return Angle::radians(rotation(params[Param::BouncePhaseOffset],
-                                   inputs[Input::BouncePhaseOffsetCv],
-                                   params[Param::BouncePhaseOffsetAv]));
+    auto const rotation = rotation_of(params[Param::BouncePhaseOffset],
+                                      inputs[Input::BouncePhaseOffsetCv],
+                                      params[Param::BouncePhaseOffsetAv]);
+    return Angle::radians(rotation);
   }
 
   inline auto spin_speed() const -> float {
-    return SpinSpeed::hertz(rotation(params[Param::SpinSpeed],
-                                     inputs[Input::SpinSpeedCv],
-                                     params[Param::SpinSpeedAv]));
+    auto const rotation =
+        rotation_of(params[Param::SpinSpeed], inputs[Input::SpinSpeedCv],
+                    params[Param::SpinSpeedAv]);
+    return SpinSpeed::hertz(rotation);
   }
 
   inline auto gain(int knob_id, int cv_id) const -> float {
-    return Gain::value(rotation(params[knob_id], inputs[cv_id]));
+    auto const rotation = rotation_of(params[knob_id], inputs[cv_id]);
+    return Gain::value(rotation);
   }
 
   inline auto x_gain() const -> float {

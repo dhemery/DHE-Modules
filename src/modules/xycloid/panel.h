@@ -47,8 +47,8 @@ struct Panel : public PanelWidget<Panel> {
     InPort::install(this, Input::WobbleDepthCv, column1, y);
     Knob::install<Tiny>(this, Param::WobbleDepthAv, column2, y);
     Knob::install<Large>(this, Param::WobbleDepth, column3, y);
-    ThumbSwitch::install<WobbleRatios>(this, Param::WobbleRatioRange, column4,
-                                       y);
+    ThumbSwitch::install<WobbleRatioRanges>(this, Param::WobbleRatioRange,
+                                            column4, y);
 
     y += dy;
     InPort::install(this, Input::WobblePhaseOffsetCv, column1, y);

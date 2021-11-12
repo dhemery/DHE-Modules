@@ -41,8 +41,10 @@ struct Signals {
   }
 
   auto duration(int step) const -> float {
-    return Durations::seconds(value_of(params_[Param::StepDuration + step]),
-                              position_of(params_[Param::DurationRange]));
+    auto const rotation = value_of(params_[Param::StepDuration + step]);
+    auto const range =
+        value_of<Durations::Selection>(params_[Param::DurationRange]);
+    return Durations::seconds(rotation, range);
   }
 
   auto generate_mode(int step) const -> GenerateMode {
@@ -74,8 +76,10 @@ struct Signals {
   }
 
   auto level(int step) const -> float {
-    return Voltages::volts(value_of(params_[Param::StepLevel + step]),
-                           position_of(params_[Param::LevelRange]));
+    auto const rotation = value_of(params_[Param::StepLevel + step]);
+    auto const range =
+        value_of<Voltages::Selection>(params_[Param::LevelRange]);
+    return Voltages::volts(rotation, range);
   }
 
   auto output() const -> float { return outputs_[Output::Main].getVoltage(); }
@@ -83,7 +87,7 @@ struct Signals {
   void output(float voltage) { outputs_[Output::Main].setVoltage(voltage); }
 
   auto selection_start() const -> int {
-    return static_cast<int>(value_of(params_[Param::SelectionStart]));
+    return value_of<int>(params_[Param::SelectionStart]);
   }
 
   auto selection_length() const -> int {

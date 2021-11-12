@@ -75,20 +75,22 @@ public:
 private:
   inline auto taper(float input, int knob_id, int cv_id, int av_id,
                     int switch_id) const -> float {
-    const auto &taper = Shapes::select(position_of(params[switch_id]));
-    auto const curvature = Curvature::curvature(
-        rotation(params[knob_id], inputs[cv_id], params[av_id]));
+    auto const shape = value_of<Shapes::Selection>(params[switch_id]);
+    auto const &taper = Shapes::select(shape);
+    auto const rotation =
+        rotation_of(params[knob_id], inputs[cv_id], params[av_id]);
+    auto const curvature = Curvature::curvature(rotation);
     return taper.apply(input, curvature);
   }
 
   auto level_range(int id) const -> Range {
-    auto const selection = position_of(params[id]);
+    auto const selection = value_of<Voltages::Selection>(params[id]);
     return Voltages::select(selection);
   }
 
   auto level_rotation_1() const -> float {
-    return rotation(params[Param::Level1], inputs[Input::LevelCv1],
-                    params[Param::LevelAv1]);
+    return rotation_of(params[Param::Level1], inputs[Input::LevelCv1],
+                       params[Param::LevelAv1]);
   };
 
   auto level_range_1() const -> Range {
@@ -101,8 +103,8 @@ private:
   }
 
   auto level_rotation_2() const -> float {
-    return rotation(params[Param::Level2], inputs[Input::LevelCv2],
-                    params[Param::LevelAv2]);
+    return rotation_of(params[Param::Level2], inputs[Input::LevelCv2],
+                       params[Param::LevelAv2]);
   };
   auto level_range_2() const -> Range {
     return level_range(Param::LevelRange2);

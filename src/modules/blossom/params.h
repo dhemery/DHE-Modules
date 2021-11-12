@@ -13,8 +13,10 @@
 namespace dhe {
 namespace blossom {
 
+enum class BounceRatioMode { Quantized, Free };
+
 struct BounceRatioModes {
-  enum Selection { Quantized, Free };
+  using Selection = BounceRatioMode;
 
   static auto labels() -> std::vector<std::string> const & {
     static auto const labels = std::vector<std::string>{"Quantized", "Free"};
@@ -23,34 +25,33 @@ struct BounceRatioModes {
 };
 
 struct BounceRatio {
-  struct KnobMapper {
-    auto to_display_value(float rotation) const -> float {
-      return ratio(rotation, quantize_);
-    }
-
-    auto to_rotation(float ratio) const -> float { return rotation(ratio); }
-
-    void select_mode(BounceRatioModes::Selection selection) {
-      quantize_ = selection == BounceRatioModes::Quantized;
-    }
-
-  private:
-    bool quantize_{false};
-  };
-
+  struct KnobMapper;
   static auto constexpr unit = "x";
 
-  static auto ratio(float rotation, bool quantize) -> float {
-    auto const ratio = range.scale(rotation);
-    return quantize ? std::round(ratio) : ratio;
+  static inline auto ratio(float rotation, BounceRatioMode mode) -> float {
+    auto const ratio = range().scale(rotation);
+    return mode == BounceRatioMode::Quantized ? std::round(ratio) : ratio;
   }
 
-  static auto constexpr rotation(float ratio) -> float {
-    return range.normalize(ratio);
+  static inline auto rotation(float ratio) -> float {
+    return range().normalize(ratio);
   }
 
 private:
-  static constexpr auto range = Range{1.F, 17.F};
+  static inline auto range() -> Range { return Range{1.F, 17.F}; }
+};
+
+struct BounceRatio::KnobMapper {
+  auto to_display_value(float rotation) const -> float {
+    return ratio(rotation, mode_);
+  }
+
+  auto to_rotation(float ratio) const -> float { return rotation(ratio); }
+
+  void select_mode(BounceRatioMode mode) { mode_ = mode; }
+
+private:
+  BounceRatioMode mode_{BounceRatioMode::Free};
 };
 
 struct SpinSpeed {

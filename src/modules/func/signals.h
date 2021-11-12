@@ -28,13 +28,12 @@ struct Signals {
   }
 
   auto multiplier_range(int channel) const -> Multipliers::Selection {
-    return selection_of<Multipliers::Selection>(
+    return value_of<Multipliers::Selection>(
         params_[Param::MultiplierRange + channel]);
   }
 
   auto offset_range(int channel) const -> Offsets::Selection {
-    return selection_of<Offsets::Selection>(
-        params_[Param::OffsetRange + channel]);
+    return value_of<Offsets::Selection>(params_[Param::OffsetRange + channel]);
   }
 
   auto operand(int channel) const -> float {
@@ -42,8 +41,7 @@ struct Signals {
   }
 
   auto operation(int channel) const -> Operations::Selection {
-    return selection_of<Operations::Selection>(
-        params_[Param::Operation + channel]);
+    return value_of<Operations::Selection>(params_[Param::Operation + channel]);
   }
 
   void output(int channel, float voltage) {

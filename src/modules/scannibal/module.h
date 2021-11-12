@@ -103,8 +103,7 @@ public:
   auto anchor_mode(AnchorType type, int step) const -> AnchorMode {
     auto const base = type == AnchorType::Phase0 ? Param::StepPhase0AnchorMode
                                                  : Param::StepPhase1AnchorMode;
-    auto const selection = position_of(params[base + step]);
-    return static_cast<AnchorMode>(selection);
+    return value_of<AnchorMode>(params[base + step]);
   }
 
   auto anchor_level(AnchorType type, int step) const -> float {
@@ -114,29 +113,29 @@ public:
     auto const base_cv_input = type == AnchorType::Phase0
                                    ? Input::StepPhase0AnchorLevelCv
                                    : Input::StepPhase1AnchorLevelCv;
-    return Voltages::volts(
-        rotation(params[base_knob_param + step], inputs[base_cv_input + step]),
-        position_of(params[Param::LevelRange]));
+    auto const rotation = rotation_of(params[base_knob_param + step],
+                                      inputs[base_cv_input + step]);
+    auto const range = value_of<Voltages::Selection>(params[Param::LevelRange]);
+    return Voltages::volts(rotation, range);
   }
 
   auto anchor_source(AnchorType type, int step) const -> AnchorSource {
     auto const base = type == AnchorType::Phase0
                           ? Param::StepPhase0AnchorSource
                           : Param::StepPhase1AnchorSource;
-    auto const selection = position_of(params[base + step]);
-    return static_cast<AnchorSource>(selection);
+    return value_of<AnchorSource>(params[base + step]);
   }
 
   auto curvature(int step) const -> float {
-    return Curvature::curvature(
-        rotation(params[Param::StepCurvature + step],
-                 inputs[Input::StepCurvatureCv + step]));
+    auto const rotation = rotation_of(params[Param::StepCurvature + step],
+                                      inputs[Input::StepCurvatureCv + step]);
+    return Curvature::curvature(rotation);
   }
 
   auto duration(int step) const -> float {
-    return cx::clamp(dhe::rotation(params[Param::StepDuration + step],
-                                   inputs[Input::StepDurationCv + step]),
-                     0.F, 1.F);
+    auto const rotation = rotation_of(params[Param::StepDuration + step],
+                                      inputs[Input::StepDurationCv + step]);
+    return cx::clamp(rotation, 0.F, 1.F);
   }
 
   void exit_step(int step) { set_lights(step, 0.F, 0.F); }
@@ -167,8 +166,9 @@ public:
   }
 
   auto taper(int step) const -> sigmoid::Taper const & {
-    auto const selection = position_of(params[Param::StepShape + step]);
-    return sigmoid::tapers[selection];
+    auto const shape =
+        value_of<Shapes::Selection>(params[Param::StepShape + step]);
+    return Shapes::select(shape);
   }
 
   auto dataToJson() -> json_t * override {

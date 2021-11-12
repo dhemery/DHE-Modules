@@ -62,15 +62,17 @@ struct Module : public rack::engine::Module {
 
 private:
   auto level() const -> float {
-    return cx::scale(rotation(params[Param::Level], inputs[Input::LevelCv],
-                              params[Param::LevelAv]),
-                     ccw_limit(), cw_limit());
+    auto const rotation = rotation_of(
+        params[Param::Level], inputs[Input::LevelCv], params[Param::LevelAv]);
+    return cx::scale(rotation, ccw_limit(), cw_limit());
   }
 
   inline auto limit(int knob, int cv, int av, int range_selection) const
       -> float {
-    return Voltages::volts(rotation(params[knob], inputs[cv], params[av]),
-                           position_of(params[range_selection]));
+    auto const rotation = rotation_of(params[knob], inputs[cv], params[av]);
+    auto const voltage_range =
+        value_of<Voltages::Selection>(params[range_selection]);
+    return Voltages::volts(rotation, voltage_range);
   }
 
   auto ccw_limit() const -> float {
