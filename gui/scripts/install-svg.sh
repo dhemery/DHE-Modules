@@ -1,20 +1,28 @@
 #!/usr/bin/env zsh
 
 if [[ "$#" -lt 2 ]]; then
-  echo "usage: $(basename "${0}") from-file to-file [inkscape-option ...]"
-  exit 1
+    echo "usage: $(basename "${0}") from-file to-file [inkscape-option ...]"
+    exit 1
 fi
 
 from="$1"
 shift
 to="$1"
 shift
-inkscape_options="$*"
+
+declare -a convert_texts_to_paths=(
+    '--actions=select-by-element:text;object-to-path'
+    '--export-filename=-'
+    '--export-plain-svg'
+)
 
 mkdir -p "$(dirname ${to})"
 
 if grep --silent '<text' "${from}"; then
-  inkscape '--actions=select-by-element:text;object-to-path' --export-filename=- --export-plain-svg "${@}" "${from}" | xmllint --format - > "${to}"
+    inkscape "${convert_texts_to_paths[@]}" "${@}" "${from}" \
+    | sed -E 's/ id="[^"]*"//g' \
+    | sed -E 's/ aria-label="[^"]*"//g' \
+    | xmllint --format - > "${to}"
 else
-  xmllint --format "${from}" --output "${to}"
+    xmllint --format "${from}" --output "${to}"
 fi

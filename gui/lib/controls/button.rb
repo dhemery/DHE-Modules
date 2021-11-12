@@ -1,6 +1,6 @@
 require_relative '../shapes/circle'
 
-class Switch
+class Button
   DIAMETER = 6.0
 
   attr_reader :pressed, :released

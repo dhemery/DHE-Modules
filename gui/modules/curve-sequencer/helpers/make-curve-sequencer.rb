@@ -68,7 +68,7 @@ module CurveSequencer
     curve_y = top + hp2mm(11.0)
     duration_y = top + hp2mm(14.0)
     enabled_port_y = bottom - Port::DIAMETER / 2.0
-    enabled_button_y = enabled_port_y - Port::DIAMETER / 2.0 - Switch::DIAMETER / 2.0 - 1.0
+    enabled_button_y = enabled_port_y - Port::DIAMETER / 2.0 - Button::DIAMETER / 2.0 - 1.0
 
     label_x = step_x - 0.6 * step_dx
     label x: label_x, y: generator_y, text: 'GENERATE', alignment: :left_of, size: :large

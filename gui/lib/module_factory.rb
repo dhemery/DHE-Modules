@@ -200,7 +200,7 @@ class ModuleFactory
   end
 
   def shape_toggle(x:, y:)
-    toggle(x: x, y: y, labels: %w[J StepperT], selection: 1)
+    toggle(x: x, y: y, labels: %w[J S], selection: 1)
   end
 
   def stepper(x:, y:, name:, size: :small, options:, selection: 0, width:, hidden: false)
@@ -216,7 +216,7 @@ class ModuleFactory
   end
 
   def button(x:, y:, label: nil, label_size: :small, name: 'button')
-    button = Switch.new(name: name, pressed_color: @background, released_color: @foreground)
+    button = Button.new(name: name, pressed_color: @background, released_color: @foreground)
     @controls << button
 
     button_for_overlay = button.released
@@ -235,7 +235,7 @@ class ModuleFactory
     port = Port.new(metal_color: @background, shadow_color: @foreground)
     @controls << port
 
-    button = Switch.new(pressed_color: @background, released_color: @foreground)
+    button = Button.new(pressed_color: @background, released_color: @foreground)
     @controls << button
 
     port_for_overlay = port.translated(x, y)
@@ -262,7 +262,7 @@ class ModuleFactory
     port = Port.new(metal_color: @background, shadow_color: @foreground)
     @controls << port
 
-    button = Switch.new(name: 'output-button', pressed_color: @foreground, released_color: @background)
+    button = Button.new(name: 'output-button', pressed_color: @foreground, released_color: @background)
     @controls << button
 
     port_for_overlay = port.translated(x, y)
