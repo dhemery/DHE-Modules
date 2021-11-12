@@ -31,13 +31,12 @@ struct Module : public rack::engine::Module {
     configOutput(Output::Envelope, "Stage");
 
     auto *duration_knob =
-        Knob::config<Durations>(this, Param::Duration, "Duration");
-    auto select_duration_range =
-        [duration_knob](Durations::Selection selection) {
-          duration_knob->mapper().select_range(selection);
-        };
-    Switch::config<Durations>(this, Param::DurationRange, "Duration select",
-                              Durations::Medium)
+        Knob::config<DurationRanges>(this, Param::Duration, "Duration");
+    auto select_duration_range = [duration_knob](DurationRangeId range_id) {
+      duration_knob->mapper().select_range(range_id);
+    };
+    Switch::config<DurationRanges>(this, Param::DurationRange,
+                                   "Duration select", DurationRangeId::Medium)
         ->on_change(select_duration_range);
     configInput(Input::DurationCv, "Duration CV");
 

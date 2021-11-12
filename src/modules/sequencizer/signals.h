@@ -28,8 +28,9 @@ static inline auto duration(P const &duration_knob, P const &range_switch,
                             P const &multipler_knob, I const &multiplier_cv)
     -> float {
   static auto constexpr minimum_duration = ShortDuration::range().lower_bound();
+  DurationRangeId range_id = value_of<DurationRangeId>(range_switch);
   auto const nominal_duration =
-      Durations::seconds(value_of(duration_knob), value_of(range_switch));
+      DurationRanges::seconds(value_of(duration_knob), range_id);
   auto const multiplier_rotation = rotation_of(multipler_knob, multiplier_cv);
   auto const nominal_multiplier = Gain::range().scale(multiplier_rotation);
   auto const clamped_multiplier = Gain::range().clamp(nominal_multiplier);

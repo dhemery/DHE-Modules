@@ -34,7 +34,8 @@ public:
 
     y += dy;
     InPort::install(this, Input::DurationCv, column1, y);
-    ThumbSwitch::install<Durations>(this, Param::DurationRange, column3, y);
+    ThumbSwitch::install<DurationRanges>(this, Param::DurationRange, column3,
+                                         y);
 
     y += dy;
     Knob::install<Large>(this, Param::Duration, column2, y);

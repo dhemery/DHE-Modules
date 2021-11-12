@@ -71,8 +71,6 @@ template <typename TSize> struct Panel : public PanelWidget<Panel<TSize>> {
                                           labels_width + padding;
   static auto constexpr sequence_controls_x =
       sequence_controls_left + padding + port_radius;
-  static auto constexpr selection_marker_x = step_block_left + step_width / 2.F;
-  static auto constexpr selection_marker_dx = step_width;
 
   using Input = InputIds<N>;
   using Light = LightIds<N>;
@@ -154,8 +152,8 @@ template <typename TSize> struct Panel : public PanelWidget<Panel<TSize>> {
                     global_duration_y);
     Knob::install<Small>(this, Param::DurationMultiplier,
                          global_controls_center_x, global_duration_y);
-    ThumbSwitch::install<Durations>(this, Param::DurationRange,
-                                    global_controls_right_x, global_duration_y);
+    ThumbSwitch::install<DurationRanges>(
+        this, Param::DurationRange, global_controls_right_x, global_duration_y);
 
     InPort::install(this, Input::InA, global_controls_left_x, in_y);
     InPort::install(this, Input::InB, global_controls_center_x, in_y);

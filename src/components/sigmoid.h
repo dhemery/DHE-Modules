@@ -25,10 +25,10 @@ static constexpr auto curve(float input, float curvature) -> float {
 }
 
 /**
- * The select over which the curve() function's input and curvature are defined.
- * InPort and curvature values within this select will always produce outputs_ in
- * this range. The curve() function's behavior for values outside this select is
- * undefined.
+ * The range over which the curve() function's input and curvature are defined.
+ * InPort and curvature values within this select will always produce outputs_
+ * in this range. The curve() function's behavior for values outside this select
+ * is undefined.
  */
 static auto constexpr domain = Range{-1.F, 1.F};
 

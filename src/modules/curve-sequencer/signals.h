@@ -42,9 +42,8 @@ struct Signals {
 
   auto duration(int step) const -> float {
     auto const rotation = value_of(params_[Param::StepDuration + step]);
-    auto const range =
-        value_of<Durations::Selection>(params_[Param::DurationRange]);
-    return Durations::seconds(rotation, range);
+    auto const range = value_of<DurationRangeId>(params_[Param::DurationRange]);
+    return DurationRanges::seconds(rotation, range);
   }
 
   auto generate_mode(int step) const -> GenerateMode {

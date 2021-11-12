@@ -54,7 +54,7 @@ public:
     configOutput(Output::Out, "Sequencer");
 
     auto level_knobs = std::vector<MappedKnobQuantity<VoltageRanges> *>{};
-    auto duration_knobs = std::vector<MappedKnobQuantity<Durations> *>{};
+    auto duration_knobs = std::vector<MappedKnobQuantity<DurationRanges> *>{};
 
     for (auto step = 0; step < N; step++) {
       auto const step_name = "Step " + std::to_string(step + 1) + " ";
@@ -89,7 +89,7 @@ public:
 
       Knob::config<Curvature>(this, Param::StepCurvature + step,
                               step_name + "curvature");
-      auto *duration_knob = Knob::config<Durations>(
+      auto *duration_knob = Knob::config<DurationRanges>(
           this, Param::StepDuration + step, step_name + "duration");
       duration_knobs.push_back(duration_knob);
 
@@ -113,14 +113,13 @@ public:
     configInput(Input::LevelAttenuationCV, "Level multiplier CV");
 
     Knob::config<Gain>(this, Param::DurationMultiplier, "Duration multiplier");
-    auto select_duration_range =
-        [duration_knobs](Durations::Selection selection) {
-          for (auto *knob : duration_knobs) {
-            knob->mapper().select_range(selection);
-          }
-        };
-    Switch::config<Durations>(this, Param::DurationRange, "Duration select",
-                              Durations::Medium)
+    auto select_duration_range = [duration_knobs](DurationRangeId range_id) {
+      for (auto *knob : duration_knobs) {
+        knob->mapper().select_range(range_id);
+      }
+    };
+    Switch::config<DurationRanges>(this, Param::DurationRange,
+                                   "Duration select", DurationRangeId::Medium)
         ->on_change(select_duration_range);
     configInput(Input::DurationMultiplierCV, "Duration multipler CV");
   }

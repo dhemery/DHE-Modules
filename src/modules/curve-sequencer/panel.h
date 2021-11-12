@@ -130,8 +130,8 @@ template <typename TSize> struct Panel : public PanelWidget<Panel<TSize>> {
 
     ThumbSwitch::install<VoltageRanges>(this, Param::LevelRange, right,
                                         level_y);
-    ThumbSwitch::install<Durations>(this, Param::DurationRange, right,
-                                    duration_y);
+    ThumbSwitch::install<DurationRanges>(this, Param::DurationRange, right,
+                                         duration_y);
     OutPort::install(this, Output::Main, right, out_y);
   }
 
