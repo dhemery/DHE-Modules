@@ -6,15 +6,15 @@ namespace dhe {
 namespace gator {
 static auto constexpr input_count = 16;
 
-struct Param {
+struct ParamId {
   enum { PER_INPUT(NegateSignal), Count };
 };
 
-struct Input {
+struct InputId {
   enum { PER_INPUT(Signal), Count };
 };
 
-struct Output {
+struct OutputId {
   enum { And, Nand, Or, Nor, Even, Odd, Xor, Xnor, Count };
 };
 } // namespace gator

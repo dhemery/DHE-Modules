@@ -2,15 +2,15 @@
 
 namespace dhe {
 namespace swave {
-struct Param {
+struct ParamId {
   enum { Curvature, Shape, CurvatureAv, Count };
 };
 
-struct Input {
+struct InputId {
   enum { CurvatureCv, Swave, Count };
 };
 
-struct Output {
+struct OutputId {
   enum { Swave, Count };
 };
 } // namespace swave

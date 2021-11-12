@@ -27,9 +27,9 @@ struct Panel : public PanelWidget<Panel> {
 
     for (int i = 0; i < button_count; i++) {
       auto const y = top + static_cast<float>(i) * dy;
-      Button::install<Toggle>(this, ParamIds::Button + i, button_x, y);
-      Button::install<Momentary>(this, ParamIds::Negate + i, negate_x, y);
-      OutPort::install(this, OutputIds::Out + i, port_x, y);
+      Button::install<Toggle>(this, ParamId::Button + i, button_x, y);
+      Button::install<Momentary>(this, ParamId::Negate + i, negate_x, y);
+      OutPort::install(this, OutputId::Out + i, port_x, y);
     }
   }
 };

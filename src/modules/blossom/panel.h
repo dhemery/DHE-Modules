@@ -29,42 +29,42 @@ struct Panel : public PanelWidget<Panel> {
     auto y = 25.F;
     auto dy = 18.5F;
 
-    InPort::install(this, Input::SpinSpeedCv, column1, y);
-    Knob::install<Tiny>(this, Param::SpinSpeedAv, column2, y);
-    Knob::install<Large>(this, Param::SpinSpeed, column3, y);
+    InPort::install(this, InputId::SpinSpeedCv, column1, y);
+    Knob::install<Tiny>(this, ParamId::SpinSpeedAv, column2, y);
+    Knob::install<Large>(this, ParamId::SpinSpeed, column3, y);
 
     y += dy;
-    InPort::install(this, Input::BounceRatioCv, column1, y);
-    Knob::install<Tiny>(this, Param::BounceRatioAv, column2, y);
-    Knob::install<Large>(this, Param::BounceRatio, column3, y);
+    InPort::install(this, InputId::BounceRatioCv, column1, y);
+    Knob::install<Tiny>(this, ParamId::BounceRatioAv, column2, y);
+    Knob::install<Large>(this, ParamId::BounceRatio, column3, y);
 
-    ThumbSwitch::install<BounceRatioModes>(this, Param::BounceRatioMode,
+    ThumbSwitch::install<BounceRatioModes>(this, ParamId::BounceRatioMode,
                                            column4, y);
 
     y += dy;
-    InPort::install(this, Input::BounceDepthCv, column1, y);
-    Knob::install<Tiny>(this, Param::BounceDepthAv, column2, y);
-    Knob::install<Large>(this, Param::BounceDepth, column3, y);
+    InPort::install(this, InputId::BounceDepthCv, column1, y);
+    Knob::install<Tiny>(this, ParamId::BounceDepthAv, column2, y);
+    Knob::install<Large>(this, ParamId::BounceDepth, column3, y);
 
     y += dy;
-    InPort::install(this, Input::BouncePhaseOffsetCv, column1, y);
-    Knob::install<Tiny>(this, Param::BouncePhaseOffsetAv, column2, y);
-    Knob::install<Large>(this, Param::BouncePhaseOffset, column3, y);
+    InPort::install(this, InputId::BouncePhaseOffsetCv, column1, y);
+    Knob::install<Tiny>(this, ParamId::BouncePhaseOffsetAv, column2, y);
+    Knob::install<Large>(this, ParamId::BouncePhaseOffset, column3, y);
 
     y = 97.F;
     dy = 15.F;
     auto constexpr output_port_offset = 1.25F;
 
-    InPort::install(this, Input::XGainCv, column1, y);
-    Knob::install<Small>(this, Param::XGain, column2, y);
-    ThumbSwitch::install<VoltageRanges>(this, Param::XRange, column3, y);
-    OutPort::install(this, Output::X, column4, y + output_port_offset);
+    InPort::install(this, InputId::XGainCv, column1, y);
+    Knob::install<Small>(this, ParamId::XGain, column2, y);
+    ThumbSwitch::install<VoltageRanges>(this, ParamId::XRange, column3, y);
+    OutPort::install(this, OutputId::X, column4, y + output_port_offset);
 
     y += dy;
-    InPort::install(this, Input::YGainCv, column1, y);
-    Knob::install<Small>(this, Param::YGain, column2, y);
-    ThumbSwitch::install<VoltageRanges>(this, Param::YRange, column3, y);
-    OutPort::install(this, Output::Y, column4, y + output_port_offset);
+    InPort::install(this, InputId::YGainCv, column1, y);
+    Knob::install<Small>(this, ParamId::YGain, column2, y);
+    ThumbSwitch::install<VoltageRanges>(this, ParamId::YRange, column3, y);
+    OutPort::install(this, OutputId::Y, column4, y + output_port_offset);
   }
 };
 } // namespace blossom

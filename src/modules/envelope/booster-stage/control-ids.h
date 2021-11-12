@@ -4,7 +4,7 @@ namespace dhe {
 namespace envelope {
 namespace booster_stage {
 
-struct Param {
+struct ParamId {
   enum {
     Active,
     Curvature,
@@ -20,11 +20,11 @@ struct Param {
   };
 };
 
-struct Input {
+struct InputId {
   enum { CurvatureCv, Defer, DurationCv, LevelCv, Envelope, Trigger, Count };
 };
 
-struct Output {
+struct OutputId {
   enum { Active, Eoc, Envelope, Count };
 };
 } // namespace booster_stage

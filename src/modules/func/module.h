@@ -12,12 +12,12 @@ namespace dhe {
 namespace func {
 
 template <int N> struct Module : public rack::engine::Module {
-  using Input = InputIds<N>;
-  using Param = ParamIds<N>;
-  using Output = OutputIds<N>;
+  using InputId = InputIds<N>;
+  using ParamId = ParamIds<N>;
+  using OutputId = OutputIds<N>;
 
   Module() {
-    config(Param::Count, Input::Count, Output::Count);
+    config(ParamId::Count, InputId::Count, OutputId::Count);
 
     for (auto i = 0; i < N; i++) {
       config_channel(i);
@@ -50,7 +50,7 @@ private:
         std::vector<std::string>{offset_knob_name, multiplier_knob_name};
 
     auto *operand_knob = Knob::config<Operations>(
-        this, Param::Operand + channel, offset_knob_name);
+        this, ParamId::Operand + channel, offset_knob_name);
 
     auto select_operation =
         [operand_knob, multiplier_knob_name,
@@ -74,27 +74,27 @@ private:
 
     auto const operator_switch_name =
         channel_name + (N == 1 ? "Operator" : " operator");
-    Switch::config<Operations>(this, Param::Operation + channel,
+    Switch::config<Operations>(this, ParamId::Operation + channel,
                                operator_switch_name, Operation::Add)
         ->on_change(select_operation);
 
     auto const offset_range_switch_name =
         channel_name + (N == 1 ? "Offset range" : " offset range");
-    Switch::config<OffsetRanges>(this, Param::OffsetRange + channel,
+    Switch::config<OffsetRanges>(this, ParamId::OffsetRange + channel,
                                  offset_range_switch_name,
                                  OffsetRangeId::Bipolar)
         ->on_change(select_offset_range);
 
     auto const multiplier_range_switch_name =
         channel_name + (N == 1 ? "Multiplier range" : " multiplier range");
-    Switch::config<MultiplierRanges>(this, Param::MultiplierRange + channel,
+    Switch::config<MultiplierRanges>(this, ParamId::MultiplierRange + channel,
                                      multiplier_range_switch_name,
                                      MultiplierRangeId::Gain)
         ->on_change(select_multiplier_range);
 
     auto const port_name = N == 1 ? "Func" : channel_name;
-    configInput(Input::Channel + channel, port_name);
-    configOutput(Output::Channel + channel, port_name);
+    configInput(InputId::Channel + channel, port_name);
+    configOutput(OutputId::Channel + channel, port_name);
   }
 
   using RackSignals = Signals<rack::engine::Param, rack::engine::Input,

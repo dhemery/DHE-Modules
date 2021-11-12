@@ -70,9 +70,8 @@ template <typename TLayout> struct Panel : public PanelWidget<Panel<TLayout>> {
   explicit Panel(rack::engine::Module *module)
       : PanelWidget<Panel<TLayout>>{module} {
     static auto constexpr input_count = TLayout::input_count;
-    using Input = InputIds<input_count>;
-    using Output = OutputIds;
-    using Param = ParamIds<input_count>;
+    using ParamId = ParamIds<input_count>;
+    using InputId = InputIds<input_count>;
 
     static auto constexpr condition_dx = 10.16F;
     static auto constexpr outcome_dy = 5.08F;
@@ -80,32 +79,32 @@ template <typename TLayout> struct Panel : public PanelWidget<Panel<TLayout>> {
     for (int i = 0; i < input_count; i++) {
       auto const y =
           TLayout::input_top + static_cast<float>(i) * TLayout::port_dy;
-      InPort::install(this, Input::Input + i, TLayout::input_x, y);
-      Button::install<Momentary>(this, Param::ForceInputHigh + i,
+      InPort::install(this, InputId::Input + i, TLayout::input_x, y);
+      Button::install<Momentary>(this, ParamId::ForceInputHigh + i,
                                  TLayout::input_x + button_port_distance, y);
     }
 
     auto const condition_y = TLayout::condition_y;
     auto const gate_mode_x = TLayout::outcome_x - condition_dx;
-    Stepper::install<GateModes>(this, Param::GateMode, gate_mode_x,
+    Stepper::install<GateModes>(this, ParamId::GateMode, gate_mode_x,
                                 condition_y);
 
     auto constexpr pattern_count = 1 << input_count;
     auto const outcome_top = TLayout::condition_y + outcome_dy;
     for (int i = 0; i < pattern_count; i++) {
       auto const y = outcome_top + static_cast<float>(i) * outcome_dy;
-      Stepper::install<Outcomes>(this, Param::Outcome + i, TLayout::outcome_x,
+      Stepper::install<Outcomes>(this, ParamId::Outcome + i, TLayout::outcome_x,
                                  y);
     }
 
     Button::install<Momentary, Reversed>(
-        this, Param::ForcQHigh, TLayout::output_x - button_port_distance,
+        this, ParamId::ForcQHigh, TLayout::output_x - button_port_distance,
         TLayout::output_top);
-    OutPort::install(this, Output::Q, TLayout::output_x, TLayout::output_top);
+    OutPort::install(this, OutputId::Q, TLayout::output_x, TLayout::output_top);
     Button::install<Momentary, Reversed>(
-        this, Param::ForceQNotHigh, TLayout::output_x - button_port_distance,
+        this, ParamId::ForceQNotHigh, TLayout::output_x - button_port_distance,
         TLayout::output_top + TLayout::port_dy);
-    OutPort::install(this, Output::QNot, TLayout::output_x,
+    OutPort::install(this, OutputId::QNot, TLayout::output_x,
                      TLayout::output_top + TLayout::port_dy);
   }
 };

@@ -7,7 +7,7 @@ namespace buttons {
 
 static auto constexpr button_count = 8;
 
-struct ParamIds {
+struct ParamId {
   enum {
     MULTIPLE(Button, button_count),
     MULTIPLE(Negate, button_count),
@@ -15,7 +15,7 @@ struct ParamIds {
   };
 };
 
-struct OutputIds {
+struct OutputId {
   enum {
     MULTIPLE(Out, button_count),
     Count,

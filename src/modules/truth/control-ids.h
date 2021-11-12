@@ -23,7 +23,7 @@ template <int N> struct InputIds {
   };
 };
 
-struct OutputIds {
+struct OutputId {
   enum {
     Q,
     QNot,

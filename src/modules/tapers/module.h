@@ -18,61 +18,65 @@ namespace tapers {
 class Module : public rack::engine::Module {
 public:
   Module() {
-    config(Param::Count, Input::Count, Output::Count);
+    config(ParamId::Count, InputId::Count, OutputId::Count);
 
     auto *level_knob_1 =
-        Knob::config<VoltageRanges>(this, Param::Level1, "Taper 1 level");
+        Knob::config<VoltageRanges>(this, ParamId::Level1, "Taper 1 level");
     auto select_level_1_range = [level_knob_1](VoltageRangeId id) {
       level_knob_1->mapper().select_range(id);
     };
-    Switch::config<VoltageRanges>(this, Param::LevelRange1,
+    Switch::config<VoltageRanges>(this, ParamId::LevelRange1,
                                   "Taper 1 level range",
                                   VoltageRangeId::Bipolar)
         ->on_change(select_level_1_range);
-    Knob::config<Attenuverter>(this, Param::LevelAv1, "Taper 1 level CV gain");
-    configInput(Input::LevelCv1, "Taper 1 level CV");
+    Knob::config<Attenuverter>(this, ParamId::LevelAv1,
+                               "Taper 1 level CV gain");
+    configInput(InputId::LevelCv1, "Taper 1 level CV");
 
-    Knob::config<Curvature>(this, Param::Curvature1, "Taper 1 curvature");
-    Knob::config<Attenuverter>(this, Param::CurvatureAv1,
+    Knob::config<Curvature>(this, ParamId::Curvature1, "Taper 1 curvature");
+    Knob::config<Attenuverter>(this, ParamId::CurvatureAv1,
                                "Taper 1 curvature CV gain");
-    Switch::config<Shapes>(this, Param::Shape1, "Taper 1 shape", Shape::J);
-    configInput(Input::CurvatureCv1, "Taper 1 curvature CV");
+    Switch::config<Shapes>(this, ParamId::Shape1, "Taper 1 shape", Shape::J);
+    configInput(InputId::CurvatureCv1, "Taper 1 curvature CV");
 
-    configOutput(Output::Taper1, "Taper 1");
+    configOutput(OutputId::Taper1, "Taper 1");
 
     auto *level_knob_2 =
-        Knob::config<VoltageRanges>(this, Param::Level2, "Taper 2 level");
+        Knob::config<VoltageRanges>(this, ParamId::Level2, "Taper 2 level");
     auto select_level_2_range = [level_knob_2](VoltageRangeId id) {
       level_knob_2->mapper().select_range(id);
     };
-    Switch::config<VoltageRanges>(this, Param::LevelRange2,
+    Switch::config<VoltageRanges>(this, ParamId::LevelRange2,
                                   "Taper 2 level range",
                                   VoltageRangeId::Bipolar)
         ->on_change(select_level_2_range);
-    Knob::config<Attenuverter>(this, Param::LevelAv2, "Taper 2 level CV gain");
-    configInput(Input::LevelCv2, "Taper 2 level CV");
+    Knob::config<Attenuverter>(this, ParamId::LevelAv2,
+                               "Taper 2 level CV gain");
+    configInput(InputId::LevelCv2, "Taper 2 level CV");
 
-    Knob::config<Curvature>(this, Param::Curvature2, "Taper 2 curvature");
-    Knob::config<Attenuverter>(this, Param::CurvatureAv2,
+    Knob::config<Curvature>(this, ParamId::Curvature2, "Taper 2 curvature");
+    Knob::config<Attenuverter>(this, ParamId::CurvatureAv2,
                                "Taper 2 curvature CV gain");
-    Switch::config<Shapes>(this, Param::Shape2, "Taper 2 shape", Shape::J);
-    configInput(Input::CurvatureCv2, "Taper 2 curvature CV");
+    Switch::config<Shapes>(this, ParamId::Shape2, "Taper 2 shape", Shape::J);
+    configInput(InputId::CurvatureCv2, "Taper 2 curvature CV");
 
-    configOutput(Output::Taper2, "Taper 2");
+    configOutput(OutputId::Taper2, "Taper 2");
   }
 
   void process(ProcessArgs const & /*args*/) override {
-    outputs[Output::Taper1].setVoltage(tapered(
-        rotation(Param::Level1, Input::LevelCv1, Param::LevelAv1),
-        shape(Param::Shape1),
-        curvature(Param::Curvature1, Input::CurvatureCv1, Param::CurvatureAv1),
-        voltage_range(Param::LevelRange1)));
+    outputs[OutputId::Taper1].setVoltage(
+        tapered(rotation(ParamId::Level1, InputId::LevelCv1, ParamId::LevelAv1),
+                shape(ParamId::Shape1),
+                curvature(ParamId::Curvature1, InputId::CurvatureCv1,
+                          ParamId::CurvatureAv1),
+                voltage_range(ParamId::LevelRange1)));
 
-    outputs[Output::Taper2].setVoltage(tapered(
-        rotation(Param::Level2, Input::LevelCv2, Param::LevelAv2),
-        shape(Param::Shape2),
-        curvature(Param::Curvature2, Input::CurvatureCv2, Param::CurvatureAv2),
-        voltage_range(Param::LevelRange2)));
+    outputs[OutputId::Taper2].setVoltage(
+        tapered(rotation(ParamId::Level2, InputId::LevelCv2, ParamId::LevelAv2),
+                shape(ParamId::Shape2),
+                curvature(ParamId::Curvature2, InputId::CurvatureCv2,
+                          ParamId::CurvatureAv2),
+                voltage_range(ParamId::LevelRange2)));
   }
 
   auto dataToJson() -> json_t * override {

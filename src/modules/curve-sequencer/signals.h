@@ -22,10 +22,9 @@ static auto constexpr brightness_range =
 template <typename TParam, typename TInput, typename TOutput, typename TLight,
           int N>
 struct Signals {
-  using Param = ParamIds<N>;
-  using Input = InputIds<N>;
-  using Output = OutputIds;
-  using Light = LightIds<N>;
+  using ParamId = ParamIds<N>;
+  using InputId = InputIds<N>;
+  using LightId = LightIds<N>;
 
   Signals(std::vector<TParam> &params, std::vector<TInput> &inputs,
           std::vector<TOutput> &outputs, std::vector<TLight> &lights)
@@ -33,63 +32,69 @@ struct Signals {
 
   auto advance_mode(int step) const -> AdvanceMode {
     return static_cast<AdvanceMode>(
-        params_[Param::StepAdvanceMode + step].getValue());
+        params_[ParamId::StepAdvanceMode + step].getValue());
   }
 
   auto curvature(int step) const -> float {
-    return Curvature::curvature(value_of(params_[Param::StepCurvature + step]));
+    return Curvature::curvature(
+        value_of(params_[ParamId::StepCurvature + step]));
   }
 
   auto duration(int step) const -> float {
-    auto const rotation = value_of(params_[Param::StepDuration + step]);
-    auto const range = value_of<DurationRangeId>(params_[Param::DurationRange]);
+    auto const rotation = value_of(params_[ParamId::StepDuration + step]);
+    auto const range =
+        value_of<DurationRangeId>(params_[ParamId::DurationRange]);
     return DurationRanges::scale(rotation, range);
   }
 
   auto generate_mode(int step) const -> GenerateMode {
     return static_cast<GenerateMode>(
-        params_[Param::StepGenerateMode + step].getValue());
+        params_[ParamId::StepGenerateMode + step].getValue());
   }
 
-  auto input() const -> float { return inputs_[Input::Main].getVoltage(); }
+  auto input() const -> float { return inputs_[InputId::Main].getVoltage(); }
 
   auto is_enabled(int step) const -> bool {
-    return is_pressed(params_[Param::StepEnabled + step]) ||
-           is_high(inputs_[Input::StepEnabled + step]);
+    return is_pressed(params_[ParamId::StepEnabled + step]) ||
+           is_high(inputs_[InputId::StepEnabled + step]);
   }
 
   auto is_gated() const -> bool {
-    return is_high(inputs_[Input::Gate]) || is_pressed(params_[Param::Gate]);
+    return is_high(inputs_[InputId::Gate]) ||
+           is_pressed(params_[ParamId::Gate]);
   }
 
   auto is_looping() const -> bool {
-    return is_pressed(params_[Param::Loop]) || is_high(inputs_[Input::Loop]);
+    return is_pressed(params_[ParamId::Loop]) ||
+           is_high(inputs_[InputId::Loop]);
   }
 
   auto is_reset() const -> bool {
-    return is_high(inputs_[Input::Reset]) || is_pressed(params_[Param::Reset]);
+    return is_high(inputs_[InputId::Reset]) ||
+           is_pressed(params_[ParamId::Reset]);
   }
 
   auto is_running() const -> bool {
-    return is_pressed(params_[Param::Run]) || is_high(inputs_[Input::Run]);
+    return is_pressed(params_[ParamId::Run]) || is_high(inputs_[InputId::Run]);
   }
 
   auto level(int step) const -> float {
-    auto const rotation = value_of(params_[Param::StepLevel + step]);
-    auto const range_id = value_of<VoltageRangeId>(params_[Param::LevelRange]);
+    auto const rotation = value_of(params_[ParamId::StepLevel + step]);
+    auto const range_id =
+        value_of<VoltageRangeId>(params_[ParamId::LevelRange]);
     return VoltageRanges::scale(rotation, range_id);
   }
 
-  auto output() const -> float { return outputs_[Output::Main].getVoltage(); }
+  auto output() const -> float { return outputs_[OutputId::Main].getVoltage(); }
 
-  void output(float voltage) { outputs_[Output::Main].setVoltage(voltage); }
+  void output(float voltage) { outputs_[OutputId::Main].setVoltage(voltage); }
 
   auto selection_start() const -> int {
-    return value_of<int>(params_[Param::SelectionStart]);
+    return value_of<int>(params_[ParamId::SelectionStart]);
   }
 
   auto selection_length() const -> int {
-    return static_cast<int>(value_of(params_[Param::SelectionLength]));
+    return static_cast<int>(value_of(params_[ParamId::SelectionLength]));
   }
 
   void show_inactive(int step) { set_lights(step, 0.F, 0.F); }
@@ -105,14 +110,14 @@ struct Signals {
 
   auto taper(int step) const -> sigmoid::Taper const & {
     auto const selection =
-        static_cast<int>(params_[Param::StepShape + step].getValue());
+        static_cast<int>(params_[ParamId::StepShape + step].getValue());
     return sigmoid::tapers[selection];
   }
 
 private:
   void set_lights(int step, float completed_brightness,
                   float remaining_brightness) {
-    auto const completed_light = Light::StepProgress + step + step;
+    auto const completed_light = LightId::StepProgress + step + step;
     auto const remaining_light = completed_light + 1;
     lights_[completed_light].setBrightness(completed_brightness);
     lights_[remaining_light].setBrightness(remaining_brightness);

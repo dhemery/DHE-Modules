@@ -18,40 +18,40 @@ namespace dhe {
 namespace truth {
 auto constexpr version = 1;
 
-template <int N> class Module : public rack::engine::Module {
-public:
+template <int N> struct Module : rack::engine::Module {
   Module() {
     static auto const input_names =
         std::vector<std::string>{"A", "B", "C", "D"};
 
-    config(Param::Count, Input::Count, Output::Count);
+    config(ParamId::Count, InputId::Count, OutputId::Count);
 
     for (int i = 0; i < N; i++) {
       auto input_name = input_names[i];
       if (i == N - 1) {
         input_name += "/Gate";
       }
-      Button::config(this, Param::ForceInputHigh + i, input_name);
-      configInput(Input::Input + i, input_name);
+      Button::config(this, ParamId::ForceInputHigh + i, input_name);
+      configInput(InputId::Input + i, input_name);
     }
 
-    Switch::config<GateModes>(this, Param::GateMode, "True when",
+    Switch::config<GateModes>(this, ParamId::GateMode, "True when",
                               GateMode::High);
     static auto constexpr rows = 1 << N;
     for (int row = 0; row < rows; row++) {
-      Switch::config<Outcomes>(this, Param::Outcome + row, "Q", Outcome::True);
+      Switch::config<Outcomes>(this, ParamId::Outcome + row, "Q",
+                               Outcome::True);
     }
-    Button::config(this, Param::ForcQHigh, "Q");
-    configOutput(Output::Q, "Q");
-    Button::config(this, Param::ForceQNotHigh, "¬Q");
-    configOutput(Output::QNot, "¬Q");
+    Button::config(this, ParamId::ForcQHigh, "Q");
+    configOutput(OutputId::Q, "Q");
+    Button::config(this, ParamId::ForceQNotHigh, "¬Q");
+    configOutput(OutputId::QNot, "¬Q");
   }
 
   void process(ProcessArgs const & /*ignored*/) override {
     gate_.clock(is_true(N - 1));
     auto const q = outcome() ? 10.F : 0.F;
-    outputs[Output::Q].setVoltage(q);
-    outputs[Output::QNot].setVoltage(10.F - q);
+    outputs[OutputId::Q].setVoltage(q);
+    outputs[OutputId::QNot].setVoltage(10.F - q);
   }
 
   void dataFromJson(json_t *data) override {
@@ -70,10 +70,10 @@ public:
 
 private:
   auto outcome() -> bool {
-    if (is_pressed(params[Param::ForcQHigh])) {
+    if (is_pressed(params[ParamId::ForcQHigh])) {
       return true;
     }
-    if (is_pressed(params[Param::ForceQNotHigh])) {
+    if (is_pressed(params[ParamId::ForceQNotHigh])) {
       return false;
     }
     return outcome_for(selection());
@@ -81,16 +81,16 @@ private:
 
   auto outcome_for(int row) const -> bool {
     auto const outcome =
-        static_cast<Outcome>(value_of(params[Param::Outcome + row]));
+        static_cast<Outcome>(value_of(params[ParamId::Outcome + row]));
     switch (outcome) {
     default:
       return false;
     case Outcome::True:
       return true;
     case Outcome::Q:
-      return is_high(outputs[Output::Q]);
+      return is_high(outputs[OutputId::Q]);
     case Outcome::QNot:
-      return is_high(outputs[Output::QNot]);
+      return is_high(outputs[OutputId::QNot]);
     }
   }
 
@@ -104,17 +104,16 @@ private:
   }
 
   auto is_true(int i) const -> bool {
-    return is_high(inputs[Input::Input + i]) ||
-           is_pressed(params[Param::ForceInputHigh + i]);
+    return is_high(inputs[InputId::Input + i]) ||
+           is_pressed(params[ParamId::ForceInputHigh + i]);
   }
 
   auto gate_mode() const -> GateMode {
-    return static_cast<GateMode>(value_of(params[Param::GateMode]));
+    return static_cast<GateMode>(value_of(params[ParamId::GateMode]));
   }
 
-  using Param = ParamIds<N>;
-  using Input = InputIds<N>;
-  using Output = OutputIds;
+  using ParamId = ParamIds<N>;
+  using InputId = InputIds<N>;
   dhe::Latch gate_{};
 };
 } // namespace truth

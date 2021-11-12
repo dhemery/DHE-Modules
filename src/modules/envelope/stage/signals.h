@@ -20,34 +20,36 @@ template <typename TParam, typename TInput, typename TOutput> struct Signals {
       : params_{params}, inputs_{inputs}, outputs_{outputs} {}
 
   auto curvature() const -> float {
-    return Curvature::curvature(value_of(params_[Param::Curvature]));
+    return Curvature::curvature(value_of(params_[ParamId::Curvature]));
   }
 
-  auto defer() const -> bool { return is_high(inputs_[Input::Defer]); }
+  auto defer() const -> bool { return is_high(inputs_[InputId::Defer]); }
 
   auto duration() const -> float {
-    return MediumDuration::scale(value_of(params_[Param::Duration]));
+    return MediumDuration::scale(value_of(params_[ParamId::Duration]));
   }
 
-  auto gate() const -> bool { return is_high(inputs_[Input::Trigger]); }
+  auto gate() const -> bool { return is_high(inputs_[InputId::Trigger]); }
 
-  auto input() const -> float { return voltage_at(inputs_[Input::Envelope]); }
+  auto input() const -> float { return voltage_at(inputs_[InputId::Envelope]); }
 
   auto level() const -> float {
-    auto const rotation = rotation_of(params_[Param::Level]);
+    auto const rotation = rotation_of(params_[ParamId::Level]);
     return UnipolarVoltage::scale(rotation);
   }
 
-  void output(float voltage) { outputs_[Output::Envelope].setVoltage(voltage); }
+  void output(float voltage) {
+    outputs_[OutputId::Envelope].setVoltage(voltage);
+  }
 
   void show_active(bool active) {
     auto const voltage = UnipolarVoltage::scale(active);
-    outputs_[Output::Active].setVoltage(voltage);
+    outputs_[OutputId::Active].setVoltage(voltage);
   }
 
   void show_eoc(bool eoc) {
     auto const voltage = UnipolarVoltage::scale(eoc);
-    outputs_[Output::Eoc].setVoltage(voltage);
+    outputs_[OutputId::Eoc].setVoltage(voltage);
   }
 
   static auto shape() -> Shape { return Shape::J; };

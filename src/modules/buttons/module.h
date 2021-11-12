@@ -11,28 +11,24 @@
 namespace dhe {
 namespace buttons {
 
-class Module : public rack::engine::Module {
-  using Param = ParamIds;
-  using Output = OutputIds;
-
-public:
+struct Module : rack::engine::Module {
   Module() {
-    config(Param::Count, 0, Output::Count);
+    config(ParamId::Count, 0, OutputId::Count);
     auto const row_names =
         std::vector<std::string>{"A", "B", "C", "D", "E", "F", "G", "H"};
     for (int i = 0; i < button_count; i++) {
-      Button::config(this, Param::Button + i, "Button " + row_names[i]);
-      Button::config(this, Param::Negate + i, "Negate " + row_names[i]);
-      configOutput(Output::Out + i, row_names[i]);
+      Button::config(this, ParamId::Button + i, "Button " + row_names[i]);
+      Button::config(this, ParamId::Negate + i, "Negate " + row_names[i]);
+      configOutput(OutputId::Out + i, row_names[i]);
     }
   }
 
   void process(ProcessArgs const & /*args*/) override {
     for (int i = 0; i < button_count; i++) {
-      auto const button_is_pressed = is_pressed(params[Param::Button + i]);
-      auto const negate_is_pressed = is_pressed(params[Param::Negate + i]);
+      auto const button_is_pressed = is_pressed(params[ParamId::Button + i]);
+      auto const negate_is_pressed = is_pressed(params[ParamId::Negate + i]);
       auto const out = button_is_pressed == negate_is_pressed ? 0.F : 10.F;
-      outputs[Output::Out + i].setVoltage(out);
+      outputs[OutputId::Out + i].setVoltage(out);
     }
   }
 

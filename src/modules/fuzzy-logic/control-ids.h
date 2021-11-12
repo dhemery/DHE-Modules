@@ -4,15 +4,15 @@
 
 namespace dhe {
 namespace fuzzy_logic {
-struct Param {
+struct ParamId {
   enum { TWO_OF(NegateA), TWO_OF(NegateB), LevelRange, Count };
 };
 
-struct Input {
+struct InputId {
   enum { TWO_OF(A), TWO_OF(B), Count };
 };
 
-struct Output {
+struct OutputId {
   enum {
     TWO_OF(And),
     TWO_OF(Nand),

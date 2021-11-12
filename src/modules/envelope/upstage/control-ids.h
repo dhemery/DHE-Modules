@@ -4,15 +4,15 @@ namespace dhe {
 namespace envelope {
 namespace upstage {
 
-struct Param {
+struct ParamId {
   enum { Level, Trigger, Wait, LevelRange, Count };
 };
 
-struct Input {
+struct InputId {
   enum { Trigger, Wait, LevelCv, Count };
 };
 
-struct Output {
+struct OutputId {
   enum { Trigger, Envelope, Count };
 };
 } // namespace upstage

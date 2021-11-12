@@ -26,32 +26,32 @@ struct Panel : public PanelWidget<Panel> {
     auto y = 20.F;
     auto constexpr dy = 15.F;
 
-    InPort::install(this, Input::ACoefficientCv, column1, y);
-    Knob::install<Small>(this, Param::ACoefficient, column2, y);
+    InPort::install(this, InputId::ACoefficientCv, column1, y);
+    Knob::install<Small>(this, ParamId::ACoefficient, column2, y);
 
     y += dy;
-    InPort::install(this, Input::BCoefficientCv, column1, y);
-    Knob::install<Small>(this, Param::BCoefficient, column2, y);
+    InPort::install(this, InputId::BCoefficientCv, column1, y);
+    Knob::install<Small>(this, ParamId::BCoefficient, column2, y);
 
     y += dy;
-    InPort::install(this, Input::CCoefficientCv, column1, y);
-    Knob::install<Small>(this, Param::CCoefficient, column2, y);
+    InPort::install(this, InputId::CCoefficientCv, column1, y);
+    Knob::install<Small>(this, ParamId::CCoefficient, column2, y);
 
     y += dy;
-    InPort::install(this, Input::DCoefficientCv, column1, y);
-    Knob::install<Small>(this, Param::DCoefficient, column2, y);
+    InPort::install(this, InputId::DCoefficientCv, column1, y);
+    Knob::install<Small>(this, ParamId::DCoefficient, column2, y);
 
     y = 82.F;
-    Knob::install<Small>(this, Param::InputGain, column1, y);
-    Knob::install<Small>(this, Param::OutputGain, column2, y);
+    Knob::install<Small>(this, ParamId::InputGain, column1, y);
+    Knob::install<Small>(this, ParamId::OutputGain, column2, y);
 
     y += dy;
-    InPort::install(this, Input::InputGainCv, column1, y);
-    InPort::install(this, Input::OutputGainCv, column2, y);
+    InPort::install(this, InputId::InputGainCv, column1, y);
+    InPort::install(this, InputId::OutputGainCv, column2, y);
 
     y += dy;
-    InPort::install(this, Input::Cubic, column1, y);
-    OutPort::install(this, Output::Cubic, column2, y);
+    InPort::install(this, InputId::Cubic, column1, y);
+    OutPort::install(this, OutputId::Cubic, column2, y);
   }
 };
 } // namespace cubic

@@ -72,21 +72,20 @@ template <typename TSize> struct Panel : public PanelWidget<Panel<TSize>> {
   static auto constexpr sequence_controls_x =
       sequence_controls_left + padding + port_radius;
 
-  using Input = InputIds<N>;
-  using Light = LightIds<N>;
-  using Param = ParamIds<N>;
+  using ParamId = ParamIds<N>;
+  using LightId = LightIds<N>;
 
   explicit Panel(rack::engine::Module *module)
       : PanelWidget<Panel<TSize>>{module} {
 
     auto constexpr run_y = global_controls_y(0);
-    InPort::install(this, Input::Run, sequence_controls_x, run_y);
-    Button::install<Toggle>(this, Param::Run,
+    InPort::install(this, InputId::Run, sequence_controls_x, run_y);
+    Button::install<Toggle>(this, ParamId::Run,
                             sequence_controls_x + button_port_distance, run_y);
 
     auto constexpr loop_y = global_controls_y(1);
-    InPort::install(this, Input::Loop, sequence_controls_x, loop_y);
-    Button::install<Toggle>(this, Param::Loop,
+    InPort::install(this, InputId::Loop, sequence_controls_x, loop_y);
+    Button::install<Toggle>(this, ParamId::Loop,
                             sequence_controls_x + button_port_distance, loop_y);
 
     auto constexpr progress_light_y = top - light_diameter * 2.F;
@@ -106,25 +105,26 @@ template <typename TSize> struct Panel : public PanelWidget<Panel<TSize>> {
     };
 
     auto constexpr selection_y = global_controls_y(2);
-    IntKnob::install<Small>(this, Param::SelectionStart,
+    IntKnob::install<Small>(this, ParamId::SelectionStart,
                             sequence_controls_x - hp2mm(0.2F), selection_y)
         ->on_change(update_selection_start);
 
     auto constexpr selection_length_offset = 8.28F;
     auto constexpr selection_length_x =
         sequence_controls_x + selection_length_offset;
-    IntKnob::install<Small>(this, Param::SelectionLength, selection_length_x,
+    IntKnob::install<Small>(this, ParamId::SelectionLength, selection_length_x,
                             selection_y)
         ->on_change(update_selection_length);
 
     auto constexpr gate_y = global_controls_y(3);
-    InPort::install(this, Input::Gate, sequence_controls_x, gate_y);
-    Button::install<Momentary>(
-        this, Param::Gate, sequence_controls_x + button_port_distance, gate_y);
+    InPort::install(this, InputId::Gate, sequence_controls_x, gate_y);
+    Button::install<Momentary>(this, ParamId::Gate,
+                               sequence_controls_x + button_port_distance,
+                               gate_y);
 
     auto constexpr reset_y = global_controls_y(4);
-    InPort::install(this, Input::Reset, sequence_controls_x, reset_y);
-    Button::install<Momentary>(this, Param::Reset,
+    InPort::install(this, InputId::Reset, sequence_controls_x, reset_y);
+    Button::install<Momentary>(this, ParamId::Reset,
                                sequence_controls_x + button_port_distance,
                                reset_y);
 
@@ -141,36 +141,37 @@ template <typename TSize> struct Panel : public PanelWidget<Panel<TSize>> {
     auto constexpr global_controls_right_x =
         global_controls_center_x + global_control_width + padding;
 
-    InPort::install(this, Input::LevelAttenuationCV, global_controls_left_x,
+    InPort::install(this, InputId::LevelAttenuationCV, global_controls_left_x,
                     level_y);
-    Knob::install<Small>(this, Param::LevelMultiplier, global_controls_center_x,
-                         level_y);
-    ThumbSwitch::install<VoltageRanges>(this, Param::LevelRange,
+    Knob::install<Small>(this, ParamId::LevelMultiplier,
+                         global_controls_center_x, level_y);
+    ThumbSwitch::install<VoltageRanges>(this, ParamId::LevelRange,
                                         global_controls_right_x, level_y);
 
-    InPort::install(this, Input::DurationMultiplierCV, global_controls_left_x,
+    InPort::install(this, InputId::DurationMultiplierCV, global_controls_left_x,
                     global_duration_y);
-    Knob::install<Small>(this, Param::DurationMultiplier,
+    Knob::install<Small>(this, ParamId::DurationMultiplier,
                          global_controls_center_x, global_duration_y);
-    ThumbSwitch::install<DurationRanges>(
-        this, Param::DurationRange, global_controls_right_x, global_duration_y);
+    ThumbSwitch::install<DurationRanges>(this, ParamId::DurationRange,
+                                         global_controls_right_x,
+                                         global_duration_y);
 
-    InPort::install(this, Input::InA, global_controls_left_x, in_y);
-    InPort::install(this, Input::InB, global_controls_center_x, in_y);
-    InPort::install(this, Input::InC, global_controls_right_x, in_y);
+    InPort::install(this, InputId::InA, global_controls_left_x, in_y);
+    InPort::install(this, InputId::InB, global_controls_center_x, in_y);
+    InPort::install(this, InputId::InC, global_controls_right_x, in_y);
 
-    OutPort::install(this, OutputIds::StepNumber, global_controls_left_x,
+    OutPort::install(this, OutputId::StepNumber, global_controls_left_x,
                      state_y);
-    OutPort::install(this, OutputIds::IsCurving, global_controls_center_x,
+    OutPort::install(this, OutputId::IsCurving, global_controls_center_x,
                      state_y);
-    OutPort::install(this, OutputIds::IsSustaining, global_controls_right_x,
+    OutPort::install(this, OutputId::IsSustaining, global_controls_right_x,
                      state_y);
 
-    OutPort::install(this, OutputIds::StepEventPulse, global_controls_left_x,
+    OutPort::install(this, OutputId::StepEventPulse, global_controls_left_x,
                      out_y);
-    OutPort::install(this, OutputIds::SequenceEventPulse,
+    OutPort::install(this, OutputId::SequenceEventPulse,
                      global_controls_center_x, out_y);
-    OutPort::install(this, OutputIds::Out, global_controls_right_x, out_y);
+    OutPort::install(this, OutputId::Out, global_controls_right_x, out_y);
 
     auto constexpr intra_section_glue = 0.5F;
     auto constexpr inter_section_glue = 4.F;
@@ -220,36 +221,38 @@ template <typename TSize> struct Panel : public PanelWidget<Panel<TSize>> {
       auto const step_x = step_left + step_width / 2.F;
       this->addChild(rack::createLightCentered<ProgressLight>(
           mm2px(step_x, progress_light_y), module,
-          Light::StepProgress + step + step));
+          LightId::StepProgress + step + step));
 
-      Stepper::install<TriggerModes>(this, Param::StepTriggerMode + step,
+      Stepper::install<TriggerModes>(this, ParamId::StepTriggerMode + step,
                                      step_x, trigger_y);
-      Stepper::install<InterruptModes>(this, Param::StepInterruptMode + step,
+      Stepper::install<InterruptModes>(this, ParamId::StepInterruptMode + step,
                                        step_x, interrupt_y);
-      Stepper::install<SustainModes>(this, Param::StepSustainMode + step,
+      Stepper::install<SustainModes>(this, ParamId::StepSustainMode + step,
                                      step_x, sustain_y);
-      Stepper::install<AnchorModes>(this, Param::StepStartAnchorMode + step,
+      Stepper::install<AnchorModes>(this, ParamId::StepStartAnchorMode + step,
                                     step_x, start_anchor_mode_y);
-      Knob::install<Small>(this, Param::StepStartAnchorLevel + step, step_x,
+      Knob::install<Small>(this, ParamId::StepStartAnchorLevel + step, step_x,
                            start_anchor_level_y);
 
-      Stepper::install<AnchorSources>(this, Param::StepStartAnchorSource + step,
+      Stepper::install<AnchorSources>(this,
+                                      ParamId::StepStartAnchorSource + step,
                                       step_x, start_anchor_source_y);
-      Stepper::install<AnchorModes>(this, Param::StepEndAnchorMode + step,
+      Stepper::install<AnchorModes>(this, ParamId::StepEndAnchorMode + step,
                                     step_x, end_anchor_mode_y);
-      Knob::install<Small>(this, Param::StepEndAnchorLevel + step, step_x,
+      Knob::install<Small>(this, ParamId::StepEndAnchorLevel + step, step_x,
                            end_anchor_level_y);
-      Stepper::install<AnchorSources>(this, Param::StepEndAnchorSource + step,
+      Stepper::install<AnchorSources>(this, ParamId::StepEndAnchorSource + step,
                                       step_x, end_anchor_source_y);
 
-      Knob::install<Small>(this, Param::StepDuration + step, step_x,
+      Knob::install<Small>(this, ParamId::StepDuration + step, step_x,
                            duration_y);
 
-      Stepper::install<Shapes>(this, Param::StepShape + step, step_x, shape_y);
-      Knob::install<Small>(this, Param::StepCurvature + step, step_x,
+      Stepper::install<Shapes>(this, ParamId::StepShape + step, step_x,
+                               shape_y);
+      Knob::install<Small>(this, ParamId::StepCurvature + step, step_x,
                            curvature_y);
 
-      Button::install<Toggle>(this, Param::StepEnabled + step, step_x,
+      Button::install<Toggle>(this, ParamId::StepEnabled + step, step_x,
                               enabled_y);
     }
   }

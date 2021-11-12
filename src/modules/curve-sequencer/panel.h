@@ -24,6 +24,10 @@ using ProgressLight =
 
 template <typename TSize> struct Panel : public PanelWidget<Panel<TSize>> {
   static auto constexpr N = TSize::step_count; // NOLINT
+  using ParamId = ParamIds<N>;
+  using InputId = InputIds<N>;
+  using LightId = LightIds<N>;
+
   static auto constexpr panel_file = TSize::panel_file;
   static auto constexpr svg_dir = "curve-sequencer";
   static auto constexpr step_width_hp = 2.25F;
@@ -51,12 +55,12 @@ template <typename TSize> struct Panel : public PanelWidget<Panel<TSize>> {
 
     auto constexpr active_y = top + light_radius;
 
-    InPort::install(this, Input::Run, left, run_y);
-    Button::install<Toggle>(this, Param::Run, left + button_port_distance,
+    InPort::install(this, InputId::Run, left, run_y);
+    Button::install<Toggle>(this, ParamId::Run, left + button_port_distance,
                             run_y);
 
-    InPort::install(this, Input::Loop, left, loop_y);
-    Button::install<Toggle>(this, Param::Loop, left + button_port_distance,
+    InPort::install(this, InputId::Loop, left, loop_y);
+    Button::install<Toggle>(this, ParamId::Loop, left + button_port_distance,
                             loop_y);
 
     auto const positions = SelectionMarkerPositions{step_x, active_y, step_dx};
@@ -67,24 +71,24 @@ template <typename TSize> struct Panel : public PanelWidget<Panel<TSize>> {
       start_marker->set_start(index);
       end_marker->set_start(index);
     };
-    IntKnob::install<Small>(this, Param::SelectionStart, left, selection_y)
+    IntKnob::install<Small>(this, ParamId::SelectionStart, left, selection_y)
         ->on_change(update_selection_start);
 
     auto const update_selection_length = [end_marker](int offset) {
       end_marker->set_length(offset);
     };
     auto constexpr selection_length_x = left + hp2mm(2.F);
-    IntKnob::install<Small>(this, Param::SelectionLength, selection_length_x,
+    IntKnob::install<Small>(this, ParamId::SelectionLength, selection_length_x,
                             selection_y)
         ->on_change(update_selection_length);
 
-    InPort::install(this, Input::Gate, left, gate_y);
-    Button::install<Momentary>(this, Param::Gate, left + button_port_distance,
+    InPort::install(this, InputId::Gate, left, gate_y);
+    Button::install<Momentary>(this, ParamId::Gate, left + button_port_distance,
                                gate_y);
 
-    InPort::install(this, Input::Reset, left, reset_y);
-    Button::install<Momentary>(this, Param::Reset, left + button_port_distance,
-                               reset_y);
+    InPort::install(this, InputId::Reset, left, reset_y);
+    Button::install<Momentary>(this, ParamId::Reset,
+                               left + button_port_distance, reset_y);
 
     auto constexpr generate_mode_y = top + hp2mm(1.61F);
     auto constexpr advance_mode_y = top + hp2mm(3.25F);
@@ -104,42 +108,36 @@ template <typename TSize> struct Panel : public PanelWidget<Panel<TSize>> {
     for (auto step = 0; step < N; step++) {
       auto const x = step_x + step_dx * static_cast<float>(step);
       this->addChild(rack::createLightCentered<ProgressLight>(
-          mm2px(x, active_y), module, Light::StepProgress + step + step));
+          mm2px(x, active_y), module, LightId::StepProgress + step + step));
 
-      Stepper::install<GenerateModes>(this, Param::StepGenerateMode + step, x,
+      Stepper::install<GenerateModes>(this, ParamId::StepGenerateMode + step, x,
                                       generate_mode_y);
-      Stepper::install<AdvanceModes>(this, Param::StepAdvanceMode + step, x,
+      Stepper::install<AdvanceModes>(this, ParamId::StepAdvanceMode + step, x,
                                      advance_mode_y);
 
-      Knob::install<Small>(this, Param::StepLevel + step, x, level_y);
+      Knob::install<Small>(this, ParamId::StepLevel + step, x, level_y);
 
-      ThumbSwitch::install<Shapes>(this, Param::StepShape + step, x, shape_y);
-      Knob::install<Small>(this, Param::StepCurvature + step, x, curve_y);
+      ThumbSwitch::install<Shapes>(this, ParamId::StepShape + step, x, shape_y);
+      Knob::install<Small>(this, ParamId::StepCurvature + step, x, curve_y);
 
-      Knob::install<Small>(this, Param::StepDuration + step, x, duration_y);
+      Knob::install<Small>(this, ParamId::StepDuration + step, x, duration_y);
 
-      Button::install<Toggle>(this, Param::StepEnabled + step, x,
+      Button::install<Toggle>(this, ParamId::StepEnabled + step, x,
                               enabled_button_y);
-      InPort::install(this, Input::StepEnabled + step, x, enabled_port_y);
+      InPort::install(this, InputId::StepEnabled + step, x, enabled_port_y);
     }
 
     auto constexpr out_y = bottom - port_radius - 1.F;
     auto constexpr eos_y = top + hp2mm(2.75);
 
-    InPort::install(this, Input::Main, right, eos_y);
+    InPort::install(this, InputId::Main, right, eos_y);
 
-    ThumbSwitch::install<VoltageRanges>(this, Param::LevelRange, right,
+    ThumbSwitch::install<VoltageRanges>(this, ParamId::LevelRange, right,
                                         level_y);
-    ThumbSwitch::install<DurationRanges>(this, Param::DurationRange, right,
+    ThumbSwitch::install<DurationRanges>(this, ParamId::DurationRange, right,
                                          duration_y);
-    OutPort::install(this, Output::Main, right, out_y);
+    OutPort::install(this, OutputId::Main, right, out_y);
   }
-
-private:
-  using Param = ParamIds<N>;
-  using Input = InputIds<N>;
-  using Light = LightIds<N>;
-  using Output = OutputIds;
 }; // namespace dhe
 } // namespace curve_sequencer
 } // namespace dhe

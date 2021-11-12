@@ -25,27 +25,26 @@
 namespace dhe {
 
 namespace curve_sequencer {
-template <int N> struct Module : public rack::engine::Module {
-  using Param = ParamIds<N>;
-  using Input = InputIds<N>;
-  using Output = OutputIds;
-  using Light = LightIds<N>;
+template <int N> struct Module : rack::engine::Module {
+  using ParamId = ParamIds<N>;
+  using InputId = InputIds<N>;
+  using LightId = LightIds<N>;
 
   Module() {
-    config(Param::Count, Input::Count, Output::Count, Light::Count);
+    config(ParamId::Count, InputId::Count, OutputId::Count, LightId::Count);
 
-    Button::config(this, Param::Run, "Run", 1);
-    configInput(Input::Run, "Run");
-    Button::config(this, Param::Gate, "Gate");
-    configInput(Input::Gate, "Gate");
-    Button::config(this, Param::Loop, "Loop");
-    configInput(Input::Loop, "Loop");
-    Button::config(this, Param::Reset, "Reset");
-    configInput(Input::Reset, "Reset");
+    Button::config(this, ParamId::Run, "Run", 1);
+    configInput(InputId::Run, "Run");
+    Button::config(this, ParamId::Gate, "Gate");
+    configInput(InputId::Gate, "Gate");
+    Button::config(this, ParamId::Loop, "Loop");
+    configInput(InputId::Loop, "Loop");
+    Button::config(this, ParamId::Reset, "Reset");
+    configInput(InputId::Reset, "Reset");
 
-    IntKnob::config<SelectionStart<N>>(this, Param::SelectionStart,
+    IntKnob::config<SelectionStart<N>>(this, ParamId::SelectionStart,
                                        "Start step", 0);
-    IntKnob::config<SelectionLength<N>>(this, Param::SelectionLength,
+    IntKnob::config<SelectionLength<N>>(this, ParamId::SelectionLength,
                                         "Sequence length", N);
 
     auto level_knobs = std::vector<MappedKnobQuantity<VoltageRanges> *>{};
@@ -54,27 +53,28 @@ template <int N> struct Module : public rack::engine::Module {
     for (auto step = 0; step < N; step++) {
       auto const step_name =
           std::string{"Step "} + std::to_string(step + 1) + " ";
-      configLight(Light::StepProgress + step + step, step_name + "progress");
-      Switch::config<GenerateModes>(this, Param::StepGenerateMode + step,
+      configLight(LightId::StepProgress + step + step, step_name + "progress");
+      Switch::config<GenerateModes>(this, ParamId::StepGenerateMode + step,
                                     step_name + "generate mode",
                                     GenerateMode::Curve);
-      Switch::config<AdvanceModes>(this, Param::StepAdvanceMode + step,
+      Switch::config<AdvanceModes>(this, ParamId::StepAdvanceMode + step,
                                    step_name + "advance mode",
                                    AdvanceMode::TimerExpires);
       auto *level_knob = Knob::config<VoltageRanges>(
-          this, Param::StepLevel + step, step_name + "level");
+          this, ParamId::StepLevel + step, step_name + "level");
       level_knobs.push_back(level_knob);
 
-      Switch::config<Shapes>(this, Param::StepShape + step, step_name + "shape",
-                             Shape::J);
-      Knob::config<Curvature>(this, Param::StepCurvature + step,
+      Switch::config<Shapes>(this, ParamId::StepShape + step,
+                             step_name + "shape", Shape::J);
+      Knob::config<Curvature>(this, ParamId::StepCurvature + step,
                               step_name + "curvature");
       auto *duration_knob = Knob::config<DurationRanges>(
-          this, Param::StepDuration + step, step_name + "duration");
+          this, ParamId::StepDuration + step, step_name + "duration");
       duration_knobs.push_back(duration_knob);
 
-      Button::config(this, Param::StepEnabled + step, step_name + "enabled", 1);
-      configInput(Input::StepEnabled + step, step_name + "enabled");
+      Button::config(this, ParamId::StepEnabled + step, step_name + "enabled",
+                     1);
+      configInput(InputId::StepEnabled + step, step_name + "enabled");
 
       signals_.show_inactive(step);
     }
@@ -84,7 +84,7 @@ template <int N> struct Module : public rack::engine::Module {
         knob->mapper().select_range(id);
       }
     };
-    Switch::config<VoltageRanges>(this, Param::LevelRange, "Level range",
+    Switch::config<VoltageRanges>(this, ParamId::LevelRange, "Level range",
                                   VoltageRangeId::Unipolar)
         ->on_change(select_level_range);
 
@@ -93,12 +93,12 @@ template <int N> struct Module : public rack::engine::Module {
         knob->mapper().select_range(id);
       }
     };
-    Switch::config<DurationRanges>(this, Param::DurationRange, "Duration range",
-                                   DurationRangeId::Medium)
+    Switch::config<DurationRanges>(this, ParamId::DurationRange,
+                                   "Duration range", DurationRangeId::Medium)
         ->on_change(select_duration_range);
 
-    configInput(Input::Main, "AUX");
-    configOutput(Output::Main, "Sequencer");
+    configInput(InputId::Main, "AUX");
+    configOutput(OutputId::Main, "Sequencer");
   }
 
   ~Module() override = default;
@@ -108,14 +108,14 @@ template <int N> struct Module : public rack::engine::Module {
   }
 
 private:
-  using RackSignals = Signals<rack::engine::Param, rack::engine::Input,
+  using SignalsType = Signals<rack::engine::Param, rack::engine::Input,
                               rack::engine::Output, rack::engine::Light, N>;
   PhaseTimer timer_{};
-  RackSignals signals_{params, inputs, outputs, lights};
-  StepController<RackSignals> step_controller_{signals_, timer_};
-  StepSelector<RackSignals> selector_{signals_, N};
+  SignalsType signals_{params, inputs, outputs, lights};
+  StepController<SignalsType> step_controller_{signals_, timer_};
+  StepSelector<SignalsType> selector_{signals_, N};
 
-  Engine<RackSignals, StepSelector<RackSignals>, StepController<RackSignals>>
+  Engine<SignalsType, StepSelector<SignalsType>, StepController<SignalsType>>
       engine_{signals_, selector_, step_controller_};
 };
 } // namespace curve_sequencer

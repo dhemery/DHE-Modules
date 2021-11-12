@@ -15,21 +15,21 @@ namespace gator {
 class Module : public rack::engine::Module {
 public:
   Module() {
-    config(Param::Count, Input::Count, Output::Count);
-    for (auto i = 0; i < Input::Count; i++) {
+    config(ParamId::Count, InputId::Count, OutputId::Count);
+    for (auto i = 0; i < InputId::Count; i++) {
       auto const signal_name = std::to_string(i + 1);
-      configInput(Input::Signal + i, "Signal " + signal_name);
-      Button::config(this, Param::NegateSignal + i,
+      configInput(InputId::Signal + i, "Signal " + signal_name);
+      Button::config(this, ParamId::NegateSignal + i,
                      "Negate signal " + signal_name);
 
-      configOutput(Output::And, "AND");
-      configOutput(Output::Nand, "NAND");
-      configOutput(Output::Or, "OR");
-      configOutput(Output::Nor, "NOR");
-      configOutput(Output::Even, "Even");
-      configOutput(Output::Odd, "Odd");
-      configOutput(Output::Xor, "XOR");
-      configOutput(Output::Xnor, "XNOR");
+      configOutput(OutputId::And, "AND");
+      configOutput(OutputId::Nand, "NAND");
+      configOutput(OutputId::Or, "OR");
+      configOutput(OutputId::Nor, "NOR");
+      configOutput(OutputId::Even, "Even");
+      configOutput(OutputId::Odd, "Odd");
+      configOutput(OutputId::Xor, "XOR");
+      configOutput(OutputId::Xnor, "XNOR");
     }
   }
 
@@ -37,11 +37,11 @@ public:
     auto connected_count = 0;
     auto high_count = 0;
 
-    for (auto i = 0; i < Input::Count; i++) {
+    for (auto i = 0; i < InputId::Count; i++) {
       if (inputs[i].isConnected()) {
         connected_count++;
-        if (is_high(inputs[(Input::Signal + i)]) !=
-            is_pressed(params[Param::NegateSignal + i])) {
+        if (is_high(inputs[(InputId::Signal + i)]) !=
+            is_pressed(params[ParamId::NegateSignal + i])) {
           high_count++;
         }
       }
@@ -50,10 +50,10 @@ public:
     if (connected_count == 0) {
       set_all_outputs_false();
     } else {
-      set_outputs(Output::And, Output::Nand, high_count == connected_count);
-      set_outputs(Output::Or, Output::Nor, high_count > 0);
-      set_outputs(Output::Odd, Output::Even, (high_count & 1) > 0);
-      set_outputs(Output::Xor, Output::Xnor, high_count == 1);
+      set_outputs(OutputId::And, OutputId::Nand, high_count == connected_count);
+      set_outputs(OutputId::Or, OutputId::Nor, high_count > 0);
+      set_outputs(OutputId::Odd, OutputId::Even, (high_count & 1) > 0);
+      set_outputs(OutputId::Xor, OutputId::Xnor, high_count == 1);
     }
   }
 
@@ -65,7 +65,7 @@ public:
 
 private:
   void set_all_outputs_false() {
-    for (auto i = 0; i < Output::Count; i++) {
+    for (auto i = 0; i < OutputId::Count; i++) {
       outputs[i].setVoltage(0.F);
     }
   }

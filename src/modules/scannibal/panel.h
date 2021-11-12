@@ -63,6 +63,10 @@ using ProgressLight =
 
 template <typename TSize> struct Panel : public PanelWidget<Panel<TSize>> {
   static auto constexpr N = TSize::step_count;
+  using InputId = InputIds<N>;
+  using ParamId = ParamIds<N>;
+  using LightId = LightIds<N>;
+
   static auto constexpr hp = base_width_hp + mm2hp(step_block_width(N));
   static auto constexpr panel_file = TSize::panel_file;
   static auto constexpr svg_dir = "scannibal";
@@ -77,10 +81,6 @@ template <typename TSize> struct Panel : public PanelWidget<Panel<TSize>> {
                                           labels_width + padding;
   static auto constexpr global_outputs_left =
       step_block_left + step_block_width(N) + margin;
-
-  using Input = InputIds<N>;
-  using Param = ParamIds<N>;
-  using Light = LightIds<N>;
 
   explicit Panel(rack::engine::Module *module)
       : PanelWidget<Panel<TSize>>{module} {
@@ -98,10 +98,10 @@ private:
     auto constexpr c_y = global_controls_y(3);
     auto constexpr phase_y = global_controls_y(4);
 
-    InPort::install(this, Input::InA, x, a_y);
-    InPort::install(this, Input::InB, x, b_y);
-    InPort::install(this, Input::InC, x, c_y);
-    InPort::install(this, Input::Phase, x, phase_y);
+    InPort::install(this, InputId::InA, x, a_y);
+    InPort::install(this, InputId::InB, x, b_y);
+    InPort::install(this, InputId::InC, x, c_y);
+    InPort::install(this, InputId::Phase, x, phase_y);
   }
 
   void add_step_block() {
@@ -157,37 +157,38 @@ private:
       auto const step_x = step_left + step_width / 2.F;
       this->addChild(rack::createLightCentered<ProgressLight>(
           mm2px(step_x, progress_light_y), this->module,
-          Light::Progress + step + step));
+          LightId::Progress + step + step));
 
-      Stepper::install<AnchorModes>(this, Param::StepPhase0AnchorMode + step,
+      Stepper::install<AnchorModes>(this, ParamId::StepPhase0AnchorMode + step,
                                     step_x, phase_0_anchor_mode_y);
       Stepper::install<AnchorSources>(this,
-                                      Param::StepPhase0AnchorSource + step,
+                                      ParamId::StepPhase0AnchorSource + step,
                                       step_x, phase_0_anchor_source_y);
-      Knob::install<Small>(this, Param::StepPhase0AnchorLevel + step, step_x,
+      Knob::install<Small>(this, ParamId::StepPhase0AnchorLevel + step, step_x,
                            phase_0_anchor_level_y);
-      InPort::install(this, Input::StepPhase0AnchorLevelCv + step, step_x,
+      InPort::install(this, InputId::StepPhase0AnchorLevelCv + step, step_x,
                       phase_0_anchor_level_cv_y);
 
-      Stepper::install<AnchorModes>(this, Param::StepPhase1AnchorMode + step,
+      Stepper::install<AnchorModes>(this, ParamId::StepPhase1AnchorMode + step,
                                     step_x, phase_1_anchor_mode_y);
       Stepper::install<AnchorSources>(this,
-                                      Param::StepPhase1AnchorSource + step,
+                                      ParamId::StepPhase1AnchorSource + step,
                                       step_x, phase_1_anchor_source_y);
-      Knob::install<Small>(this, Param::StepPhase1AnchorLevel + step, step_x,
+      Knob::install<Small>(this, ParamId::StepPhase1AnchorLevel + step, step_x,
                            phase_1_anchor_level_y);
-      InPort::install(this, Input::StepPhase1AnchorLevelCv + step, step_x,
+      InPort::install(this, InputId::StepPhase1AnchorLevelCv + step, step_x,
                       phase_1_anchor_level_cv_y);
 
-      Knob::install<Small>(this, Param::StepDuration + step, step_x,
+      Knob::install<Small>(this, ParamId::StepDuration + step, step_x,
                            duration_y);
-      InPort::install(this, Input::StepDurationCv + step, step_x,
+      InPort::install(this, InputId::StepDurationCv + step, step_x,
                       duration_cv_y);
 
-      Stepper::install<Shapes>(this, Param::StepShape + step, step_x, shape_y);
-      Knob::install<Small>(this, Param::StepCurvature + step, step_x,
+      Stepper::install<Shapes>(this, ParamId::StepShape + step, step_x,
+                               shape_y);
+      Knob::install<Small>(this, ParamId::StepCurvature + step, step_x,
                            curvature_y);
-      InPort::install(this, Input::StepCurvatureCv + step, step_x,
+      InPort::install(this, InputId::StepCurvatureCv + step, step_x,
                       curvature_cv_y);
     }
   }
@@ -200,7 +201,7 @@ private:
 
     auto constexpr length_x = global_inputs_left + port_radius + padding;
     auto constexpr length_y = global_controls_y(0);
-    IntKnob::install<Small>(this, Param::SelectionLength, length_x, length_y)
+    IntKnob::install<Small>(this, ParamId::SelectionLength, length_x, length_y)
         ->on_change(
             [end_marker](int length) { end_marker->set_length(length); });
   }
@@ -213,7 +214,8 @@ private:
     auto constexpr step_phase_y = global_controls_y(3);
     auto constexpr out_y = global_controls_y(4);
 
-    ThumbSwitch::install<VoltageRanges>(this, Param::LevelRange, x, polarity_y);
+    ThumbSwitch::install<VoltageRanges>(this, ParamId::LevelRange, x,
+                                        polarity_y);
     OutPort::install(this, OutputIds::StepNumber, x, step_number_y);
     OutPort::install(this, OutputIds::StepPhase, x, step_phase_y);
     OutPort::install(this, OutputIds::Out, x, out_y);

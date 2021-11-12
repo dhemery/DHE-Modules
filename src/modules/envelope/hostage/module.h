@@ -21,26 +21,26 @@ namespace hostage {
 
 struct Module : public rack::engine::Module {
   Module() {
-    config(Param::Count, Input::Count, Output::Count);
+    config(ParamId::Count, InputId::Count, OutputId::Count);
 
-    configInput(Input::Envelope, "Stage");
-    configInput(Input::Defer, "Defer");
-    configInput(Input::Trigger, "Gate/Trigger");
-    configOutput(Output::Active, "Is active");
-    configOutput(Output::Eoc, "End of stage");
-    configOutput(Output::Envelope, "Stage");
+    configInput(InputId::Envelope, "Stage");
+    configInput(InputId::Defer, "Defer");
+    configInput(InputId::Trigger, "Gate/Trigger");
+    configOutput(OutputId::Active, "Is active");
+    configOutput(OutputId::Eoc, "End of stage");
+    configOutput(OutputId::Envelope, "Stage");
 
     auto *duration_knob =
-        Knob::config<DurationRanges>(this, Param::Duration, "Duration");
+        Knob::config<DurationRanges>(this, ParamId::Duration, "Duration");
     auto select_duration_range = [duration_knob](DurationRangeId range_id) {
       duration_knob->mapper().select_range(range_id);
     };
-    Switch::config<DurationRanges>(this, Param::DurationRange, "Duration range",
-                                   DurationRangeId::Medium)
+    Switch::config<DurationRanges>(this, ParamId::DurationRange,
+                                   "Duration range", DurationRangeId::Medium)
         ->on_change(select_duration_range);
-    configInput(Input::DurationCv, "Duration CV");
+    configInput(InputId::DurationCv, "Duration CV");
 
-    Switch::config<Modes>(this, Param::Mode, "Mode", Modes::Hold);
+    Switch::config<Modes>(this, ParamId::Mode, "Mode", Modes::Hold);
   };
 
   void process(ProcessArgs const &args) override {

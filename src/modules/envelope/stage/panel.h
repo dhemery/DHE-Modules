@@ -27,27 +27,27 @@ struct Panel : public PanelWidget<Panel> {
     auto y = 25.F;
     auto dy = 18.5F;
 
-    Knob::install<Large>(this, Param::Level, column2, y);
+    Knob::install<Large>(this, ParamId::Level, column2, y);
 
     y += dy;
-    Knob::install<Large>(this, Param::Curvature, column2, y);
+    Knob::install<Large>(this, ParamId::Curvature, column2, y);
 
     y += dy;
-    Knob::install<Large>(this, Param::Duration, column2, y);
+    Knob::install<Large>(this, ParamId::Duration, column2, y);
 
     y = 82.F;
     dy = 15.F;
 
-    InPort::install(this, Input::Defer, column1, y);
-    OutPort::install(this, Output::Active, column3, y);
+    InPort::install(this, InputId::Defer, column1, y);
+    OutPort::install(this, OutputId::Active, column3, y);
 
     y += dy;
-    InPort::install(this, Input::Trigger, column1, y);
-    OutPort::install(this, Output::Eoc, column3, y);
+    InPort::install(this, InputId::Trigger, column1, y);
+    OutPort::install(this, OutputId::Eoc, column3, y);
 
     y += dy;
-    InPort::install(this, Input::Envelope, column1, y);
-    OutPort::install(this, Output::Envelope, column3, y);
+    InPort::install(this, InputId::Envelope, column1, y);
+    OutPort::install(this, OutputId::Envelope, column3, y);
   }
 };
 } // namespace stage

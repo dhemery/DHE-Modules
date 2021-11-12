@@ -1,7 +1,7 @@
 #pragma once
 namespace dhe {
 namespace cubic {
-struct Param {
+struct ParamId {
   enum {
     ACoefficient,
     BCoefficient,
@@ -13,7 +13,7 @@ struct Param {
   };
 };
 
-struct Input {
+struct InputId {
   enum {
     Cubic,
     ACoefficientCv,
@@ -26,7 +26,7 @@ struct Input {
   };
 };
 
-struct Output {
+struct OutputId {
   enum { Cubic, Count };
 };
 

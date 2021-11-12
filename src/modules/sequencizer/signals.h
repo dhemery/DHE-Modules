@@ -42,9 +42,7 @@ static inline auto duration(P const &duration_knob, P const &range_switch,
 template <typename TParam, typename TInput, typename TOutput, typename TLight,
           int N>
 class Signals {
-  using InputId = InputIds<N>;
   using LightId = LightIds<N>;
-  using OutputId = OutputIds;
   using ParamId = ParamIds<N>;
 
 public:

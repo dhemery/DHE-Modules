@@ -3,15 +3,15 @@
 namespace dhe {
 namespace envelope {
 namespace stage {
-struct Param {
+struct ParamId {
   enum { Duration, Level, Curvature, Count };
 };
 
-struct Input {
+struct InputId {
   enum { Envelope, Trigger, Defer, Count };
 };
 
-struct Output {
+struct OutputId {
   enum { Envelope, Eoc, Active, Count };
 };
 } // namespace stage

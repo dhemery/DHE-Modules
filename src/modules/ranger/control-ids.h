@@ -2,7 +2,7 @@
 
 namespace dhe {
 namespace ranger {
-struct Param {
+struct ParamId {
   enum {
     Level,
     LevelAv,
@@ -16,11 +16,11 @@ struct Param {
   };
 };
 
-struct Input {
+struct InputId {
   enum { LevelCv, CcwLimitCv, CwLimitCv, Count };
 };
 
-struct Output {
+struct OutputId {
   enum { Main, Count };
 };
 } // namespace ranger

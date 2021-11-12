@@ -28,31 +28,31 @@ struct Panel : public PanelWidget<Panel> {
     auto constexpr panel_buffer = 4.F;
     auto y = 24.F;
 
-    InPort::install(this, Input::LevelCv1, column1, y);
-    Knob::install<Tiny>(this, Param::LevelAv1, column2, y);
-    Knob::install<Medium>(this, Param::Level1, column3, y);
+    InPort::install(this, InputId::LevelCv1, column1, y);
+    Knob::install<Tiny>(this, ParamId::LevelAv1, column2, y);
+    Knob::install<Medium>(this, ParamId::Level1, column3, y);
     y += dy;
-    InPort::install(this, Input::CurvatureCv1, column1, y);
-    Knob::install<Tiny>(this, Param::CurvatureAv1, column2, y);
-    Knob::install<Medium>(this, Param::Curvature1, column3, y);
+    InPort::install(this, InputId::CurvatureCv1, column1, y);
+    Knob::install<Tiny>(this, ParamId::CurvatureAv1, column2, y);
+    Knob::install<Medium>(this, ParamId::Curvature1, column3, y);
     y += dy;
-    ThumbSwitch::install<Shapes>(this, Param::Shape1, column1, y);
-    ThumbSwitch::install<VoltageRanges>(this, Param::LevelRange1, column2, y);
-    OutPort::install(this, Output::Taper1, column3, y);
+    ThumbSwitch::install<Shapes>(this, ParamId::Shape1, column1, y);
+    ThumbSwitch::install<VoltageRanges>(this, ParamId::LevelRange1, column2, y);
+    OutPort::install(this, OutputId::Taper1, column3, y);
 
     y += dy + panel_buffer;
 
-    InPort::install(this, Input::LevelCv2, column1, y);
-    Knob::install<Tiny>(this, Param::LevelAv2, column2, y);
-    Knob::install<Medium>(this, Param::Level2, column3, y);
+    InPort::install(this, InputId::LevelCv2, column1, y);
+    Knob::install<Tiny>(this, ParamId::LevelAv2, column2, y);
+    Knob::install<Medium>(this, ParamId::Level2, column3, y);
     y += dy;
-    InPort::install(this, Input::CurvatureCv2, column1, y);
-    Knob::install<Tiny>(this, Param::CurvatureAv2, column2, y);
-    Knob::install<Medium>(this, Param::Curvature2, column3, y);
+    InPort::install(this, InputId::CurvatureCv2, column1, y);
+    Knob::install<Tiny>(this, ParamId::CurvatureAv2, column2, y);
+    Knob::install<Medium>(this, ParamId::Curvature2, column3, y);
     y += dy;
-    ThumbSwitch::install<Shapes>(this, Param::Shape2, column1, y);
-    ThumbSwitch::install<VoltageRanges>(this, Param::LevelRange2, column2, y);
-    OutPort::install(this, Output::Taper2, column3, y);
+    ThumbSwitch::install<Shapes>(this, ParamId::Shape2, column1, y);
+    ThumbSwitch::install<VoltageRanges>(this, ParamId::LevelRange2, column2, y);
+    OutPort::install(this, OutputId::Taper2, column3, y);
   }
 };
 } // namespace tapers

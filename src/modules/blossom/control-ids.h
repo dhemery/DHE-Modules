@@ -2,7 +2,7 @@
 
 namespace dhe {
 namespace blossom {
-struct Param {
+struct ParamId {
   enum {
     SpinSpeed,
     SpinSpeedAv,
@@ -21,7 +21,7 @@ struct Param {
   };
 };
 
-struct Input {
+struct InputId {
   enum {
     SpinSpeedCv,
     BounceRatioCv,
@@ -33,7 +33,7 @@ struct Input {
   };
 };
 
-struct Output {
+struct OutputId {
   enum { X, Y, Count };
 };
 

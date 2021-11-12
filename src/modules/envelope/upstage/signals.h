@@ -16,28 +16,30 @@ template <typename TParam, typename TInput, typename TOutput> struct Signals {
       : params_{params}, inputs_{inputs}, outputs_{outputs} {}
 
   auto is_triggered() const -> bool {
-    return is_high(inputs_[Input::Trigger]) ||
-           is_pressed(params_[Param::Trigger]);
+    return is_high(inputs_[InputId::Trigger]) ||
+           is_pressed(params_[ParamId::Trigger]);
   }
 
   auto is_waiting() const -> bool {
-    return is_high(inputs_[Input::Wait]) || is_pressed(params_[Param::Wait]);
+    return is_high(inputs_[InputId::Wait]) ||
+           is_pressed(params_[ParamId::Wait]);
   }
 
   auto level() const -> float {
     auto const rotation =
-        rotation_of(params_[Param::Level], inputs_[Input::LevelCv]);
-    auto const range_id = value_of<VoltageRangeId>(params_[Param::LevelRange]);
+        rotation_of(params_[ParamId::Level], inputs_[InputId::LevelCv]);
+    auto const range_id =
+        value_of<VoltageRangeId>(params_[ParamId::LevelRange]);
     return VoltageRanges::scale(rotation, range_id);
   }
 
   void send_envelope(float voltage) {
-    outputs_[Output::Envelope].setVoltage(voltage);
+    outputs_[OutputId::Envelope].setVoltage(voltage);
   }
 
   void send_trigger(bool is_triggered) {
     auto const voltage = UnipolarVoltage::range().scale(is_triggered);
-    outputs_[Output::Trigger].setVoltage(voltage);
+    outputs_[OutputId::Trigger].setVoltage(voltage);
   }
 
 private:

@@ -12,16 +12,16 @@ namespace swave {
 
 struct Module : public rack::engine::Module {
   Module() {
-    config(Param::Count, Input::Count, Output::Count);
+    config(ParamId::Count, InputId::Count, OutputId::Count);
 
-    configInput(Input::Swave, "Swave");
-    configOutput(Output::Swave, "Swave");
+    configInput(InputId::Swave, "Swave");
+    configOutput(OutputId::Swave, "Swave");
 
-    Knob::config<Curvature>(this, Param::Curvature, "Curvature");
-    Knob::config<Attenuverter>(this, Param::CurvatureAv, "Curvature CV gain",
+    Knob::config<Curvature>(this, ParamId::Curvature, "Curvature");
+    Knob::config<Attenuverter>(this, ParamId::CurvatureAv, "Curvature CV gain",
                                0.F);
-    configInput(Input::CurvatureCv, "Curvature CV");
-    Switch::config<Shapes>(this, Param::Shape, "Shape", Shape::J);
+    configInput(InputId::CurvatureCv, "Curvature CV");
+    Switch::config<Shapes>(this, ParamId::Shape, "Shape", Shape::J);
   }
 
   void process(ProcessArgs const & /*args*/) override {
@@ -38,18 +38,18 @@ struct Module : public rack::engine::Module {
 
 private:
   auto curvature() const -> float {
-    return rotation_of(params[Param::Curvature], inputs[Input::CurvatureCv],
-                       params[Param::CurvatureAv]);
+    return rotation_of(params[ParamId::Curvature], inputs[InputId::CurvatureCv],
+                       params[ParamId::CurvatureAv]);
   }
   void send_signal(float voltage) {
-    outputs[Output::Swave].setVoltage(voltage);
+    outputs[OutputId::Swave].setVoltage(voltage);
   }
 
   auto shape() const -> Shape {
-    return value_of<Shapes::Selection>(params[Param::Shape]);
+    return value_of<Shapes::Selection>(params[ParamId::Shape]);
   }
 
-  auto signal_in() const -> float { return voltage_at(inputs[Input::Swave]); }
+  auto signal_in() const -> float { return voltage_at(inputs[InputId::Swave]); }
 };
 
 } // namespace swave

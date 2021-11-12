@@ -26,102 +26,105 @@ namespace sequencizer {
 template <int N> class Module : public rack::engine::Module {
 public:
   Module() {
-    config(Param::Count, Input::Count, Output::Count, Light::Count);
+    config(ParamId::Count, InputId::Count, OutputId::Count, LightId::Count);
 
-    Button::config(this, Param::Run, "Run", 1);
-    configInput(Input::Run, "Run");
-    Button::config(this, Param::Gate, "Gate");
-    configInput(Input::Gate, "Gate");
-    Button::config(this, Param::Loop, "Loop");
-    configInput(Input::Loop, "Loop");
-    Button::config(this, Param::Reset, "Reset");
-    configInput(Input::Reset, "Reset");
+    Button::config(this, ParamId::Run, "Run", 1);
+    configInput(InputId::Run, "Run");
+    Button::config(this, ParamId::Gate, "Gate");
+    configInput(InputId::Gate, "Gate");
+    Button::config(this, ParamId::Loop, "Loop");
+    configInput(InputId::Loop, "Loop");
+    Button::config(this, ParamId::Reset, "Reset");
+    configInput(InputId::Reset, "Reset");
 
-    IntKnob::config<SelectionStart<N>>(this, Param::SelectionStart,
+    IntKnob::config<SelectionStart<N>>(this, ParamId::SelectionStart,
                                        "Start step", 0);
-    IntKnob::config<SelectionLength<N>>(this, Param::SelectionLength,
+    IntKnob::config<SelectionLength<N>>(this, ParamId::SelectionLength,
                                         "Sequence length", N);
 
-    configInput(Input::InA, "A");
-    configInput(Input::InB, "B");
-    configInput(Input::InC, "C");
+    configInput(InputId::InA, "A");
+    configInput(InputId::InB, "B");
+    configInput(InputId::InC, "C");
 
-    configOutput(Output::StepNumber, "Step number");
-    configOutput(Output::IsCurving, "Is curving");
-    configOutput(Output::IsSustaining, "Is sustaining");
-    configOutput(Output::StepEventPulse, "End of step");
-    configOutput(Output::SequenceEventPulse, "Start of sequence");
-    configOutput(Output::Out, "Sequencer");
+    configOutput(OutputId::StepNumber, "Step number");
+    configOutput(OutputId::IsCurving, "Is curving");
+    configOutput(OutputId::IsSustaining, "Is sustaining");
+    configOutput(OutputId::StepEventPulse, "End of step");
+    configOutput(OutputId::SequenceEventPulse, "Start of sequence");
+    configOutput(OutputId::Out, "Sequencer");
 
     auto level_knobs = std::vector<MappedKnobQuantity<VoltageRanges> *>{};
     auto duration_knobs = std::vector<MappedKnobQuantity<DurationRanges> *>{};
 
     for (auto step = 0; step < N; step++) {
       auto const step_name = "Step " + std::to_string(step + 1) + " ";
-      Switch::config<TriggerModes>(this, Param::StepTriggerMode + step,
+      Switch::config<TriggerModes>(this, ParamId::StepTriggerMode + step,
                                    step_name + "trigger mode",
                                    TriggerMode::GateRises);
-      Switch::config<InterruptModes>(this, Param::StepInterruptMode + step,
+      Switch::config<InterruptModes>(this, ParamId::StepInterruptMode + step,
                                      step_name + "interrupt mode",
                                      InterruptMode::No);
-      Switch::config<SustainModes>(this, Param::StepSustainMode + step,
+      Switch::config<SustainModes>(this, ParamId::StepSustainMode + step,
                                    step_name + "sustain mode", SustainMode::No);
 
-      Switch::config<AnchorModes>(this, Param::StepStartAnchorMode + step,
+      Switch::config<AnchorModes>(this, ParamId::StepStartAnchorMode + step,
                                   step_name + "start anchor mode",
                                   AnchorMode::Sample);
       auto *start_level_knob = Knob::config<VoltageRanges>(
-          this, Param::StepStartAnchorLevel + step, step_name + "start level");
+          this, ParamId::StepStartAnchorLevel + step,
+          step_name + "start level");
       level_knobs.push_back(start_level_knob);
-      Switch::config<AnchorSources>(this, Param::StepStartAnchorSource + step,
+      Switch::config<AnchorSources>(this, ParamId::StepStartAnchorSource + step,
                                     step_name + "start anchor source",
                                     AnchorSource::Out);
 
-      Switch::config<AnchorModes>(this, Param::StepEndAnchorMode + step,
+      Switch::config<AnchorModes>(this, ParamId::StepEndAnchorMode + step,
                                   step_name + "end anchor mode",
                                   AnchorMode::Track);
       auto *end_level_knob = Knob::config<VoltageRanges>(
-          this, Param::StepEndAnchorLevel + step, step_name + "end level");
+          this, ParamId::StepEndAnchorLevel + step, step_name + "end level");
       level_knobs.push_back(end_level_knob);
-      Switch::config<AnchorSources>(this, Param::StepEndAnchorSource + step,
+      Switch::config<AnchorSources>(this, ParamId::StepEndAnchorSource + step,
                                     step_name + "end anchor source",
                                     AnchorSource::Level);
 
-      Knob::config<Curvature>(this, Param::StepCurvature + step,
+      Knob::config<Curvature>(this, ParamId::StepCurvature + step,
                               step_name + "curvature");
       auto *duration_knob = Knob::config<DurationRanges>(
-          this, Param::StepDuration + step, step_name + "duration");
+          this, ParamId::StepDuration + step, step_name + "duration");
       duration_knobs.push_back(duration_knob);
 
-      Switch::config<Shapes>(this, Param::StepShape + step, step_name + "shape",
-                             Shape::J);
-      Button::config(this, Param::StepEnabled + step, step_name + "enabled", 1);
+      Switch::config<Shapes>(this, ParamId::StepShape + step,
+                             step_name + "shape", Shape::J);
+      Button::config(this, ParamId::StepEnabled + step, step_name + "enabled",
+                     1);
 
       signals_.show_inactive(step);
     }
 
-    Knob::config<Attenuator>(this, Param::LevelMultiplier, "Level multiplier",
+    Knob::config<Attenuator>(this, ParamId::LevelMultiplier, "Level multiplier",
                              1.F);
     auto select_level_range = [level_knobs](VoltageRangeId id) {
       for (auto *knob : level_knobs) {
         knob->mapper().select_range(id);
       }
     };
-    Switch::config<VoltageRanges>(this, Param::LevelRange, "Level range",
+    Switch::config<VoltageRanges>(this, ParamId::LevelRange, "Level range",
                                   VoltageRangeId::Unipolar)
         ->on_change(select_level_range);
-    configInput(Input::LevelAttenuationCV, "Level multiplier CV");
+    configInput(InputId::LevelAttenuationCV, "Level multiplier CV");
 
-    Knob::config<Gain>(this, Param::DurationMultiplier, "Duration multiplier");
+    Knob::config<Gain>(this, ParamId::DurationMultiplier,
+                       "Duration multiplier");
     auto select_duration_range = [duration_knobs](DurationRangeId range_id) {
       for (auto *knob : duration_knobs) {
         knob->mapper().select_range(range_id);
       }
     };
-    Switch::config<DurationRanges>(this, Param::DurationRange, "Duration range",
-                                   DurationRangeId::Medium)
+    Switch::config<DurationRanges>(this, ParamId::DurationRange,
+                                   "Duration range", DurationRangeId::Medium)
         ->on_change(select_duration_range);
-    configInput(Input::DurationMultiplierCV, "Duration multipler CV");
+    configInput(InputId::DurationMultiplierCV, "Duration multipler CV");
   }
 
   ~Module() override = default;
@@ -160,10 +163,8 @@ private:
   RackSequenceController sequence_controller_{signals_, step_selector_,
                                               step_controller_};
 
-  using Input = InputIds<N>;
-  using Light = LightIds<N>;
-  using Output = OutputIds;
-  using Param = ParamIds<N>;
+  using ParamId = ParamIds<N>;
+  using LightId = LightIds<N>;
 };
 } // namespace sequencizer
 

@@ -15,21 +15,25 @@ using TestFunc = std::function<void(Tester &)>;
 
 static auto constexpr step_count = 8;
 
-using Signals =
-    dhe::curve_sequencer::Signals<test::fake::Param, test::fake::Port,
-                                  test::fake::Port, test::fake::Light,
-                                  step_count>;
-using Param = dhe::curve_sequencer::ParamIds<step_count>;
-using Input = dhe::curve_sequencer::InputIds<step_count>;
-using Output = dhe::curve_sequencer::OutputIds;
-using Light = dhe::curve_sequencer::LightIds<step_count>;
+using Param = test::fake::Param;
+using Input = test::fake::Port;
+using Output = test::fake::Port;
+using Light = test::fake::Light;
+
+using ParamId = dhe::curve_sequencer::ParamIds<step_count>;
+using InputId = dhe::curve_sequencer::InputIds<step_count>;
+using OutputId = dhe::curve_sequencer::OutputId;
+using LightId = dhe::curve_sequencer::LightIds<step_count>;
 
 struct Module {
-  std::vector<test::fake::Param> params_{Param::Count};
-  std::vector<test::fake::Port> inputs_{Input::Count};
-  std::vector<test::fake::Port> outputs_{Output::Count};
-  std::vector<test::fake::Light> lights_{Light::Count};
+  std::vector<Param> params_{ParamId::Count};
+  std::vector<Input> inputs_{InputId::Count};
+  std::vector<Output> outputs_{OutputId::Count};
+  std::vector<Light> lights_{LightId::Count};
 };
+
+using Signals =
+    dhe::curve_sequencer::Signals<Param, Input, Output, Light, step_count>;
 
 template <typename Run> static inline auto test(Run run) -> TestFunc {
   return [run](Tester &t) {

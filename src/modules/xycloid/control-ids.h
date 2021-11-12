@@ -3,7 +3,7 @@
 namespace dhe {
 namespace xycloid {
 
-struct ParamIds {
+struct ParamId {
   enum {
     WobbleRatio,
     WobbleRatioAv,
@@ -23,7 +23,7 @@ struct ParamIds {
   };
 };
 
-struct InputIds {
+struct InputId {
   enum {
     WobbleRatioCv,
     WobbleDepthCv,
@@ -35,7 +35,7 @@ struct InputIds {
   };
 };
 
-struct OutputIds {
+struct OutputId {
   enum { X, Y, Count };
 };
 } // namespace xycloid

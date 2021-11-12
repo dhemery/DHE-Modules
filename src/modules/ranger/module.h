@@ -17,39 +17,39 @@ namespace ranger {
 
 struct Module : public rack::engine::Module {
   Module() {
-    config(Param::Count, Input::Count, Output::Count);
+    config(ParamId::Count, InputId::Count, OutputId::Count);
 
-    Knob::config<Percentage>(this, Param::Level, "Level");
-    configInput(Input::LevelCv, "Level CV");
-    Knob::config<Attenuverter>(this, Param::LevelAv, "Level CV gain");
+    Knob::config<Percentage>(this, ParamId::Level, "Level");
+    configInput(InputId::LevelCv, "Level CV");
+    Knob::config<Attenuverter>(this, ParamId::LevelAv, "Level CV gain");
 
     auto *ccw_limit_knob =
-        Knob::config<VoltageRanges>(this, Param::CcwLimit, "CCW limit", 0.F);
+        Knob::config<VoltageRanges>(this, ParamId::CcwLimit, "CCW limit", 0.F);
     auto select_ccw_limit_range = [ccw_limit_knob](VoltageRangeId id) {
       ccw_limit_knob->mapper().select_range(id);
     };
-    Switch::config<VoltageRanges>(this, Param::CcwLimitRange, "CCW limit range",
-                                  VoltageRangeId::Bipolar)
+    Switch::config<VoltageRanges>(this, ParamId::CcwLimitRange,
+                                  "CCW limit range", VoltageRangeId::Bipolar)
         ->on_change(select_ccw_limit_range);
-    configInput(Input::CcwLimitCv, "CCW limit CV");
-    Knob::config<Attenuverter>(this, Param::CcwLimitAv, "CCW limit CV gain");
+    configInput(InputId::CcwLimitCv, "CCW limit CV");
+    Knob::config<Attenuverter>(this, ParamId::CcwLimitAv, "CCW limit CV gain");
 
     auto *cw_limit_knob =
-        Knob::config<VoltageRanges>(this, Param::CwLimit, "CW limit", 1.F);
+        Knob::config<VoltageRanges>(this, ParamId::CwLimit, "CW limit", 1.F);
     auto select_cw_limit_range = [cw_limit_knob](VoltageRangeId id) {
       cw_limit_knob->mapper().select_range(id);
     };
-    Switch::config<VoltageRanges>(this, Param::CwLimitRange, "CW limit range",
+    Switch::config<VoltageRanges>(this, ParamId::CwLimitRange, "CW limit range",
                                   VoltageRangeId::Bipolar)
         ->on_change(select_cw_limit_range);
-    configInput(Input::CwLimitCv, "CW limit CV");
-    Knob::config<Attenuverter>(this, Param::CwLimitAv, "CW limit CV gain");
+    configInput(InputId::CwLimitCv, "CW limit CV");
+    Knob::config<Attenuverter>(this, ParamId::CwLimitAv, "CW limit CV gain");
 
-    configOutput(Output::Main, "Ranger");
+    configOutput(OutputId::Main, "Ranger");
   }
 
   void process(ProcessArgs const & /*args*/) override {
-    outputs[Output::Main].setVoltage(level());
+    outputs[OutputId::Main].setVoltage(level());
   }
 
   auto dataToJson() -> json_t * override {
@@ -60,8 +60,9 @@ struct Module : public rack::engine::Module {
 
 private:
   auto level() const -> float {
-    auto const rotation = rotation_of(
-        params[Param::Level], inputs[Input::LevelCv], params[Param::LevelAv]);
+    auto const rotation =
+        rotation_of(params[ParamId::Level], inputs[InputId::LevelCv],
+                    params[ParamId::LevelAv]);
     return cx::scale(rotation, ccw_limit(), cw_limit());
   }
 
@@ -72,13 +73,13 @@ private:
   }
 
   auto ccw_limit() const -> float {
-    return limit(Param::CcwLimit, Input::CcwLimitCv, Param::CcwLimitAv,
-                 Param::CcwLimitRange);
+    return limit(ParamId::CcwLimit, InputId::CcwLimitCv, ParamId::CcwLimitAv,
+                 ParamId::CcwLimitRange);
   }
 
   auto cw_limit() const -> float {
-    return limit(Param::CwLimit, Input::CwLimitCv, Param::CwLimitAv,
-                 Param::CwLimitRange);
+    return limit(ParamId::CwLimit, InputId::CwLimitCv, ParamId::CwLimitAv,
+                 ParamId::CwLimitRange);
   }
 };
 } // namespace ranger

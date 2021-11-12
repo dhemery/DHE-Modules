@@ -17,25 +17,26 @@ namespace upstage {
 
 struct Module : public rack::engine::Module {
   Module() {
-    config(Param::Count, Input::Count, Output::Count);
+    config(ParamId::Count, InputId::Count, OutputId::Count);
 
-    auto *level_knob = Knob::config<VoltageRanges>(this, Param::Level, "Level");
+    auto *level_knob =
+        Knob::config<VoltageRanges>(this, ParamId::Level, "Level");
     auto select_level_range = [level_knob](VoltageRangeId id) {
       level_knob->mapper().select_range(id);
     };
-    Switch::config<VoltageRanges>(this, Param::LevelRange, "Level range",
+    Switch::config<VoltageRanges>(this, ParamId::LevelRange, "Level range",
                                   VoltageRangeId::Unipolar)
         ->on_change(select_level_range);
-    configInput(Input::LevelCv, "Level CV");
+    configInput(InputId::LevelCv, "Level CV");
 
-    configInput(Input::Trigger, "Trigger");
-    Button::config(this, Param::Trigger, "Trigger");
+    configInput(InputId::Trigger, "Trigger");
+    Button::config(this, ParamId::Trigger, "Trigger");
 
-    configInput(Input::Wait, "Wait");
-    Button::config(this, Param::Wait, "Wait");
+    configInput(InputId::Wait, "Wait");
+    Button::config(this, ParamId::Wait, "Wait");
 
-    configOutput(Output::Trigger, "Trigger");
-    configOutput(Output::Envelope, "Stage");
+    configOutput(OutputId::Trigger, "Trigger");
+    configOutput(OutputId::Envelope, "Stage");
   }
 
   void process(ProcessArgs const & /*args*/) override { engine_.process(); }

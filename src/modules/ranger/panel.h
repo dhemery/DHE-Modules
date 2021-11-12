@@ -25,29 +25,29 @@ struct Panel : public PanelWidget<Panel> {
     auto y = 14.5F;
 
     y += dy * 0.75F;
-    Knob::install<Medium>(this, Param::Level, left, y);
-    OutPort::install(this, Output::Main, right, y);
+    Knob::install<Medium>(this, ParamId::Level, left, y);
+    OutPort::install(this, OutputId::Main, right, y);
 
     y += dy;
-    InPort::install(this, Input::LevelCv, left, y);
-    Knob::install<Tiny>(this, Param::LevelAv, right, y);
+    InPort::install(this, InputId::LevelCv, left, y);
+    Knob::install<Tiny>(this, ParamId::LevelAv, right, y);
 
     y += dy / 2.F;
     y += dy * 0.75F;
-    Knob::install<Medium>(this, Param::CcwLimit, left, y);
-    Knob::install<Medium>(this, Param::CwLimit, right, y);
+    Knob::install<Medium>(this, ParamId::CcwLimit, left, y);
+    Knob::install<Medium>(this, ParamId::CwLimit, right, y);
 
     y += dy;
-    Knob::install<Tiny>(this, Param::CcwLimitAv, left, y);
-    Knob::install<Tiny>(this, Param::CwLimitAv, right, y);
+    Knob::install<Tiny>(this, ParamId::CcwLimitAv, left, y);
+    Knob::install<Tiny>(this, ParamId::CwLimitAv, right, y);
 
     y += dy;
-    InPort::install(this, Input::CcwLimitCv, left, y);
-    InPort::install(this, Input::CwLimitCv, right, y);
+    InPort::install(this, InputId::CcwLimitCv, left, y);
+    InPort::install(this, InputId::CwLimitCv, right, y);
 
     y += dy;
-    ThumbSwitch::install<VoltageRanges>(this, Param::CcwLimitRange, left, y);
-    ThumbSwitch::install<VoltageRanges>(this, Param::CwLimitRange, right, y);
+    ThumbSwitch::install<VoltageRanges>(this, ParamId::CcwLimitRange, left, y);
+    ThumbSwitch::install<VoltageRanges>(this, ParamId::CwLimitRange, right, y);
   }
 };
 } // namespace ranger

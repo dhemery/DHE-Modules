@@ -2,7 +2,7 @@
 namespace dhe {
 namespace tapers {
 
-struct Param {
+struct ParamId {
   enum {
     Level1,
     LevelAv1,
@@ -20,11 +20,11 @@ struct Param {
   };
 };
 
-struct Input {
+struct InputId {
   enum { LevelCv1, CurvatureCv1, LevelCv2, CurvatureCv2, Count };
 };
 
-struct Output {
+struct OutputId {
   enum { Taper1, Taper2, Count };
 };
 

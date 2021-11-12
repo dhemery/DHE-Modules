@@ -22,9 +22,9 @@ public:
   static auto constexpr svg_dir = "func";
 
   Func1Panel(rack::engine::Module *module) : PanelWidget<Func1Panel>{module} {
-    using Input = InputIds<channel_count>;
-    using Param = ParamIds<channel_count>;
-    using Output = OutputIds<channel_count>;
+    using InputId = InputIds<channel_count>;
+    using ParamId = ParamIds<channel_count>;
+    using OutputId = OutputIds<channel_count>;
 
     auto constexpr width = hp2mm(hp);
     auto constexpr x = width / 2.F;
@@ -41,15 +41,15 @@ public:
     auto constexpr row4 = top + row_spacing * 3;
     auto constexpr row6 = top + row_spacing * 5 + port_offset;
 
-    InPort::install(this, Input::Channel, x, row1);
-    Knob::install<Large>(this, Param::Operand, x, row3);
-    OutPort::install(this, Output::Channel, x, row6);
+    InPort::install(this, InputId::Channel, x, row1);
+    Knob::install<Large>(this, ParamId::Operand, x, row3);
+    OutPort::install(this, OutputId::Channel, x, row6);
 
     auto *offset_range_stepper =
-        Stepper::install<OffsetRanges>(this, Param::OffsetRange, x, row4);
+        Stepper::install<OffsetRanges>(this, ParamId::OffsetRange, x, row4);
 
     auto *multiplier_range_stepper = Stepper::install<MultiplierRanges>(
-        this, Param::MultiplierRange, x, row4);
+        this, ParamId::MultiplierRange, x, row4);
 
     auto const select_operation =
         [offset_range_stepper,
@@ -58,7 +58,7 @@ public:
           multiplier_range_stepper->setVisible(is_multiply);
           offset_range_stepper->setVisible(!is_multiply);
         };
-    ThumbSwitch::install<Operations>(this, Param::Operation, x, row2)
+    ThumbSwitch::install<Operations>(this, ParamId::Operation, x, row2)
         ->on_change(select_operation);
   }
 };

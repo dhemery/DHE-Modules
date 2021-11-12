@@ -30,29 +30,29 @@ public:
     auto y = 25.F;
     auto dy = 18.5F;
 
-    ThumbSwitch::install<Modes>(this, Param::Mode, column2, y);
+    ThumbSwitch::install<Modes>(this, ParamId::Mode, column2, y);
 
     y += dy;
-    InPort::install(this, Input::DurationCv, column1, y);
-    ThumbSwitch::install<DurationRanges>(this, Param::DurationRange, column3,
+    InPort::install(this, InputId::DurationCv, column1, y);
+    ThumbSwitch::install<DurationRanges>(this, ParamId::DurationRange, column3,
                                          y);
 
     y += dy;
-    Knob::install<Large>(this, Param::Duration, column2, y);
+    Knob::install<Large>(this, ParamId::Duration, column2, y);
 
     y = 82.F;
     dy = 15.F;
 
-    InPort::install(this, Input::Defer, column1, y);
-    OutPort::install(this, Output::Active, column3, y);
+    InPort::install(this, InputId::Defer, column1, y);
+    OutPort::install(this, OutputId::Active, column3, y);
 
     y += dy;
-    InPort::install(this, Input::Trigger, column1, y);
-    OutPort::install(this, Output::Eoc, column3, y);
+    InPort::install(this, InputId::Trigger, column1, y);
+    OutPort::install(this, OutputId::Eoc, column3, y);
 
     y += dy;
-    InPort::install(this, Input::Envelope, column1, y);
-    OutPort::install(this, Output::Envelope, column3, y);
+    InPort::install(this, InputId::Envelope, column1, y);
+    OutPort::install(this, OutputId::Envelope, column3, y);
   }
 };
 } // namespace hostage

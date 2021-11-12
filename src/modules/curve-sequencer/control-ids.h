@@ -33,7 +33,7 @@ template <int N> struct InputIds {
   enum { Main, Gate, Loop, Reset, Run, ONE_PER_STEP(StepEnabled, N), Count };
 };
 
-struct OutputIds {
+struct OutputId {
   enum { Main, Count };
 };
 

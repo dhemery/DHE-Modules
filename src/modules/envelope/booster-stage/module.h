@@ -20,44 +20,45 @@ namespace envelope {
 namespace booster_stage {
 struct Module : public rack::engine::Module {
   Module() {
-    config(Param::Count, Input::Count, Output::Count);
+    config(ParamId::Count, InputId::Count, OutputId::Count);
 
-    configInput(Input::Envelope, "Stage");
-    configOutput(Output::Envelope, "Stage");
+    configInput(InputId::Envelope, "Stage");
+    configOutput(OutputId::Envelope, "Stage");
 
-    auto *level_knob = Knob::config<VoltageRanges>(this, Param::Level, "Level");
+    auto *level_knob =
+        Knob::config<VoltageRanges>(this, ParamId::Level, "Level");
     auto const select_level_range = [level_knob](VoltageRangeId id) {
       level_knob->mapper().select_range(id);
     };
-    Switch::config<VoltageRanges>(this, Param::LevelRange, "Level Range",
+    Switch::config<VoltageRanges>(this, ParamId::LevelRange, "Level Range",
                                   VoltageRangeId::Unipolar)
         ->on_change(select_level_range);
 
-    configInput(Input::LevelCv, "Level CV");
+    configInput(InputId::LevelCv, "Level CV");
 
-    Knob::config<Curvature>(this, Param::Curvature, "Curvature");
-    Switch::config<Shapes>(this, Param::Shape, "Shape", Shape::J);
-    configInput(Input::CurvatureCv, "Curvature CV");
+    Knob::config<Curvature>(this, ParamId::Curvature, "Curvature");
+    Switch::config<Shapes>(this, ParamId::Shape, "Shape", Shape::J);
+    configInput(InputId::CurvatureCv, "Curvature CV");
 
     auto *duration_knob =
-        Knob::config<DurationRanges>(this, Param::Duration, "Duration");
+        Knob::config<DurationRanges>(this, ParamId::Duration, "Duration");
     auto select_duration_range = [duration_knob](DurationRangeId range) {
       duration_knob->mapper().select_range(range);
     };
-    Switch::config<DurationRanges>(this, Param::DurationRange, "Duration range",
-                                   DurationRangeId::Medium)
+    Switch::config<DurationRanges>(this, ParamId::DurationRange,
+                                   "Duration range", DurationRangeId::Medium)
         ->on_change(select_duration_range);
-    configInput(Input::DurationCv, "Duration CV");
+    configInput(InputId::DurationCv, "Duration CV");
 
-    configInput(Input::Defer, "Defer");
-    Button::config(this, Param::Defer, "Defer");
-    configInput(Input::Trigger, "Trigger");
-    Button::config(this, Param::Trigger, "Trigger");
+    configInput(InputId::Defer, "Defer");
+    Button::config(this, ParamId::Defer, "Defer");
+    configInput(InputId::Trigger, "Trigger");
+    Button::config(this, ParamId::Trigger, "Trigger");
 
-    configOutput(Output::Active, "Is active");
-    Button::config(this, Param::Active, "Is active");
-    configOutput(Output::Eoc, "End of stage");
-    Button::config(this, Param::Eoc, "End of stage");
+    configOutput(OutputId::Active, "Is active");
+    Button::config(this, ParamId::Active, "Is active");
+    configOutput(OutputId::Eoc, "End of stage");
+    Button::config(this, ParamId::Eoc, "End of stage");
   }
 
   void process(ProcessArgs const &args) override {

@@ -23,47 +23,47 @@ namespace blossom {
 class Module : public rack::engine::Module {
 public:
   Module() {
-    config(Param::Count, Input::Count, Output::Count);
+    config(ParamId::Count, InputId::Count, OutputId::Count);
 
-    Knob::config<SpinSpeed>(this, Param::SpinSpeed, "Speed",
+    Knob::config<SpinSpeed>(this, ParamId::SpinSpeed, "Speed",
                             SpinSpeed::normalize(1.F));
-    Knob::config<Attenuverter>(this, Param::SpinSpeedAv, "Speed CV gain");
-    configInput(Input::SpinSpeedCv, "Speed CV");
+    Knob::config<Attenuverter>(this, ParamId::SpinSpeedAv, "Speed CV gain");
+    configInput(InputId::SpinSpeedCv, "Speed CV");
 
     auto *ratio_knob =
-        Knob::config<BounceRatio>(this, Param::BounceRatio, "Ratio");
+        Knob::config<BounceRatio>(this, ParamId::BounceRatio, "Ratio");
     auto select_ratio_mode =
         [ratio_knob](BounceRatioModes::Selection selection) {
           ratio_knob->mapper().select_mode(selection);
         };
-    Switch::config<BounceRatioModes>(this, Param::BounceRatioMode, "Ratio mode",
-                                     BounceRatioMode::Free)
+    Switch::config<BounceRatioModes>(this, ParamId::BounceRatioMode,
+                                     "Ratio mode", BounceRatioMode::Free)
         ->on_change(select_ratio_mode);
 
-    Knob::config<Attenuverter>(this, Param::BounceRatioAv, "Ratio CV gain");
-    configInput(Input::BounceRatioCv, "Ratio CV");
+    Knob::config<Attenuverter>(this, ParamId::BounceRatioAv, "Ratio CV gain");
+    configInput(InputId::BounceRatioCv, "Ratio CV");
 
-    Knob::config<Percentage>(this, Param::BounceDepth, "Depth");
-    Knob::config<Attenuverter>(this, Param::BounceDepthAv, "Depth CV gain");
-    configInput(Input::BounceDepthCv, "Depth CV");
+    Knob::config<Percentage>(this, ParamId::BounceDepth, "Depth");
+    Knob::config<Attenuverter>(this, ParamId::BounceDepthAv, "Depth CV gain");
+    configInput(InputId::BounceDepthCv, "Depth CV");
 
-    Knob::config<Angle>(this, Param::BouncePhaseOffset, "Phase");
-    Knob::config<Attenuverter>(this, Param::BouncePhaseOffsetAv,
+    Knob::config<Angle>(this, ParamId::BouncePhaseOffset, "Phase");
+    Knob::config<Attenuverter>(this, ParamId::BouncePhaseOffsetAv,
                                "Phase CV gain");
-    configInput(Input::BouncePhaseOffsetCv, "Phase CV");
+    configInput(InputId::BouncePhaseOffsetCv, "Phase CV");
 
-    Knob::config<Gain>(this, Param::XGain, "X gain");
-    Switch::config<VoltageRanges>(this, Param::XRange, "X range",
+    Knob::config<Gain>(this, ParamId::XGain, "X gain");
+    Switch::config<VoltageRanges>(this, ParamId::XRange, "X range",
                                   VoltageRangeId::Bipolar);
-    configInput(Input::XGainCv, "X gain CV");
+    configInput(InputId::XGainCv, "X gain CV");
 
-    Knob::config<Gain>(this, Param::YGain, "Y gain");
-    Switch::config<VoltageRanges>(this, Param::YRange, "Y range",
+    Knob::config<Gain>(this, ParamId::YGain, "Y gain");
+    Switch::config<VoltageRanges>(this, ParamId::YRange, "Y range",
                                   VoltageRangeId::Bipolar);
-    configInput(Input::YGainCv, "Y gain CV");
+    configInput(InputId::YGainCv, "Y gain CV");
 
-    configOutput(Output::X, "X");
-    configOutput(Output::Y, "Y");
+    configOutput(OutputId::X, "X");
+    configOutput(OutputId::Y, "Y");
   }
 
   void process(ProcessArgs const &args) override {
@@ -77,19 +77,19 @@ public:
                         bounce_depth * bouncer_.sin(bounce_phase_offset());
     auto const x = radius * spinner_.cos();
     auto const x_voltage = 5.F * x_gain() * (x + x_offset());
-    outputs[Output::X].setVoltage(x_voltage);
+    outputs[OutputId::X].setVoltage(x_voltage);
 
     auto const y = radius * spinner_.sin();
     auto const y_voltage = 5.F * y_gain() * (y + y_offset());
-    outputs[Output::Y].setVoltage(y_voltage);
+    outputs[OutputId::Y].setVoltage(y_voltage);
   }
 
   auto bounce_ratio() const -> float {
-    auto const rotation =
-        rotation_of(params[Param::BounceRatio], inputs[Input::BounceRatioCv],
-                    params[Param::BounceRatioAv]);
+    auto const rotation = rotation_of(params[ParamId::BounceRatio],
+                                      inputs[InputId::BounceRatioCv],
+                                      params[ParamId::BounceRatioAv]);
     auto const mode =
-        value_of<BounceRatioModes::Selection>(params[Param::BounceRatioMode]);
+        value_of<BounceRatioModes::Selection>(params[ParamId::BounceRatioMode]);
     return BounceRatio::scale(rotation, mode);
   }
 
@@ -101,24 +101,24 @@ public:
 
 private:
   inline auto bounce_depth() const -> float {
-    auto const rotation =
-        rotation_of(params[Param::BounceDepth], inputs[Input::BounceDepthCv],
-                    params[Param::BounceDepthAv]);
+    auto const rotation = rotation_of(params[ParamId::BounceDepth],
+                                      inputs[InputId::BounceDepthCv],
+                                      params[ParamId::BounceDepthAv]);
     return Percentage::range().clamp(rotation);
   }
 
   // radians
   inline auto bounce_phase_offset() const -> float {
-    auto const rotation = rotation_of(params[Param::BouncePhaseOffset],
-                                      inputs[Input::BouncePhaseOffsetCv],
-                                      params[Param::BouncePhaseOffsetAv]);
+    auto const rotation = rotation_of(params[ParamId::BouncePhaseOffset],
+                                      inputs[InputId::BouncePhaseOffsetCv],
+                                      params[ParamId::BouncePhaseOffsetAv]);
     return Angle::radians(rotation);
   }
 
   inline auto spin_speed() const -> float {
     auto const rotation =
-        rotation_of(params[Param::SpinSpeed], inputs[Input::SpinSpeedCv],
-                    params[Param::SpinSpeedAv]);
+        rotation_of(params[ParamId::SpinSpeed], inputs[InputId::SpinSpeedCv],
+                    params[ParamId::SpinSpeedAv]);
     return SpinSpeed::scale(rotation);
   }
 
@@ -128,19 +128,19 @@ private:
   }
 
   inline auto x_gain() const -> float {
-    return gain(Param::XGain, Input::XGainCv);
+    return gain(ParamId::XGain, InputId::XGainCv);
   }
 
   inline auto x_offset() const -> float {
-    return value_of(params[Param::XRange]);
+    return value_of(params[ParamId::XRange]);
   };
 
   inline auto y_gain() const -> float {
-    return gain(Param::YGain, Input::YGainCv);
+    return gain(ParamId::YGain, InputId::YGainCv);
   }
 
   inline auto y_offset() const -> float {
-    return value_of(params[Param::YRange]);
+    return value_of(params[ParamId::YRange]);
   };
 
   PhaseRotor spinner_{};

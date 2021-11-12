@@ -24,25 +24,25 @@ struct Panel : public PanelWidget<Panel> {
 
     auto y = 25.F;
     auto dy = 18.5F;
-    ThumbSwitch::install<Shapes>(this, Param::Shape, x, y);
+    ThumbSwitch::install<Shapes>(this, ParamId::Shape, x, y);
 
     y += dy;
-    Knob::install<Large>(this, Param::Curvature, x, y);
+    Knob::install<Large>(this, ParamId::Curvature, x, y);
 
     y += dy;
-    Knob::install<Tiny>(this, Param::CurvatureAv, x, y);
+    Knob::install<Tiny>(this, ParamId::CurvatureAv, x, y);
 
     y += dy;
-    InPort::install(this, Input::CurvatureCv, x, y);
+    InPort::install(this, InputId::CurvatureCv, x, y);
 
     y = 82.F;
     dy = 15.F;
 
     y += dy;
-    InPort::install(this, Input::Swave, x, y);
+    InPort::install(this, InputId::Swave, x, y);
 
     y += dy;
-    OutPort::install(this, Output::Swave, x, y);
+    OutPort::install(this, OutputId::Swave, x, y);
   }
 };
 } // namespace swave

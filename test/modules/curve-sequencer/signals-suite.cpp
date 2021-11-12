@@ -67,28 +67,28 @@ public:
   SignalsSuite() : Suite("dhe::curve_sequencer::Signals") {}
   void run(Tester &t) override {
     for (auto &test : input_button_combo_tests) {
-      test.run(t, "is_gated()", Param::Gate, Input::Gate,
+      test.run(t, "is_gated()", ParamId::Gate, InputId::Gate,
                [](Signals &signals) -> bool { return signals.is_gated(); });
     }
 
     for (auto &test : input_button_combo_tests) {
-      test.run(t, "is_looping()", Param::Loop, Input::Loop,
+      test.run(t, "is_looping()", ParamId::Loop, InputId::Loop,
                [](Signals &signals) -> bool { return signals.is_looping(); });
     }
     for (auto &test : input_button_combo_tests) {
-      test.run(t, "is_reset()", Param::Reset, Input::Reset,
+      test.run(t, "is_reset()", ParamId::Reset, InputId::Reset,
                [](Signals &signals) -> bool { return signals.is_reset(); });
     }
 
     for (auto &test : input_button_combo_tests) {
-      test.run(t, "is_running()", Param::Run, Input::Run,
+      test.run(t, "is_running()", ParamId::Run, InputId::Run,
                [](Signals &signals) -> bool { return signals.is_running(); });
     }
 
     for (auto &test : input_button_combo_tests) {
       auto const step = std::rand() % step_count;
-      test.run(t, "is_enabled(step)", Param::StepEnabled + step,
-               Input::StepEnabled + step, [step](Signals &signals) -> bool {
+      test.run(t, "is_enabled(step)", ParamId::StepEnabled + step,
+               InputId::StepEnabled + step, [step](Signals &signals) -> bool {
                  return signals.is_enabled(step);
                });
     }
@@ -97,7 +97,7 @@ public:
           test([](Tester &t, Module &module, Signals &signals) {
             auto const want = std::rand() % step_count;
             auto const knob_value = static_cast<float>(want);
-            module.params_[Param::SelectionStart].setValue(knob_value);
+            module.params_[ParamId::SelectionStart].setValue(knob_value);
 
             auto const got = signals.selection_start();
             if (got != want) {
@@ -109,7 +109,7 @@ public:
           test([](Tester &t, Module &module, Signals &signals) {
             auto const want = std::rand() % step_count;
             auto const knob_value = static_cast<float>(want);
-            module.params_[Param::SelectionLength].setValue(knob_value);
+            module.params_[ParamId::SelectionLength].setValue(knob_value);
             auto const got = signals.selection_length();
             if (got != want) {
               t.errorf("Got {}, want {}", got, want);
@@ -118,7 +118,7 @@ public:
 
     t.run("input()", test([](Tester &t, Module &module, Signals &signals) {
             auto constexpr input_voltage = 3.1234F;
-            module.inputs_[Input::Main].setVoltage(input_voltage);
+            module.inputs_[InputId::Main].setVoltage(input_voltage);
 
             auto const got = signals.input();
             if (got != input_voltage) {
@@ -128,7 +128,7 @@ public:
 
     t.run("output()", test([](Tester &t, Module &module, Signals &signals) {
             auto constexpr output_voltage = 9.13894F;
-            module.outputs_[Output::Main].setVoltage(output_voltage);
+            module.outputs_[OutputId::Main].setVoltage(output_voltage);
 
             auto const got = signals.output();
             if (got != output_voltage) {
@@ -140,7 +140,7 @@ public:
             auto constexpr output_voltage = 4.390984F;
             signals.output(output_voltage);
 
-            auto const got = module.outputs_[Output::Main].getVoltage();
+            auto const got = module.outputs_[OutputId::Main].getVoltage();
 
             if (got != output_voltage) {
               t.errorf("Got {}, want {}", got, output_voltage);
@@ -152,7 +152,7 @@ public:
             auto const step = std::rand() % step_count;
             auto constexpr curve_knob_rotation = 0.3F;
 
-            module.params_[Param::StepCurvature + step].setValue(
+            module.params_[ParamId::StepCurvature + step].setValue(
                 curve_knob_rotation);
 
             auto const got = signals.curvature(step);
@@ -171,9 +171,9 @@ public:
             auto constexpr duration_range_id =
                 DurationRangeId::Long; // Long duration
 
-            module.params_[Param::StepDuration + step].setValue(
+            module.params_[ParamId::StepDuration + step].setValue(
                 duration_knob_rotation);
-            module.params_[Param::DurationRange].setValue(
+            module.params_[ParamId::DurationRange].setValue(
                 static_cast<float>(duration_range_id));
 
             auto const got = signals.duration(step);
@@ -190,7 +190,7 @@ public:
         t.run("with switch in position " + std::to_string(selection),
               test([selection](Tester &t, Module &module, Signals &signals) {
                 auto const step = std::rand() % step_count;
-                module.params_[Param::StepShape + step].setValue(
+                module.params_[ParamId::StepShape + step].setValue(
                     static_cast<float>(selection));
 
                 auto const got = signals.taper(step);
@@ -211,7 +211,7 @@ public:
         t.run(name_of(mode),
               test([mode](Tester &t, Module &module, Signals &signals) {
                 auto const step = std::rand() & step_count;
-                module.params_[Param::StepGenerateMode + step].setValue(
+                module.params_[ParamId::StepGenerateMode + step].setValue(
                     static_cast<float>(mode));
 
                 auto const got = signals.generate_mode(step);
@@ -230,7 +230,7 @@ public:
         t.run(name_of(mode),
               test([mode](Tester &t, Module &module, Signals &signals) {
                 auto const step = std::rand() & step_count;
-                module.params_[Param::StepAdvanceMode + step].setValue(
+                module.params_[ParamId::StepAdvanceMode + step].setValue(
                     static_cast<float>(mode));
 
                 auto const got = signals.advance_mode(step);
@@ -246,7 +246,7 @@ public:
           test([](Tester &t, Module &module, Signals &signals) {
             auto const step = std::rand() % step_count;
             auto const completed_light_index =
-                Light::StepProgress + step + step;
+                LightId::StepProgress + step + step;
             auto const remaining_light_index = completed_light_index + 1;
 
             signals.show_inactive(step);

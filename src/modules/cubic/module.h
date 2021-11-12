@@ -25,39 +25,40 @@ struct Coefficient {
 
 struct Module : public rack::engine::Module {
   Module() {
-    config(Param::Count, Input::Count, Output::Count);
+    config(ParamId::Count, InputId::Count, OutputId::Count);
 
-    Knob::config<Coefficient>(this, Param::ACoefficient, "X cubed coefficient");
-    configInput(Input::ACoefficientCv, "X cubed coefficient CV");
+    Knob::config<Coefficient>(this, ParamId::ACoefficient,
+                              "X cubed coefficient");
+    configInput(InputId::ACoefficientCv, "X cubed coefficient CV");
 
-    Knob::config<Coefficient>(this, Param::BCoefficient,
+    Knob::config<Coefficient>(this, ParamId::BCoefficient,
                               "X squared coefficient");
-    configInput(Input::BCoefficientCv, "X squared coefficient CV");
+    configInput(InputId::BCoefficientCv, "X squared coefficient CV");
 
-    Knob::config<Coefficient>(this, Param::CCoefficient, "X coefficient");
-    configInput(Input::CCoefficientCv, "X coefficient CV");
+    Knob::config<Coefficient>(this, ParamId::CCoefficient, "X coefficient");
+    configInput(InputId::CCoefficientCv, "X coefficient CV");
 
-    Knob::config<Coefficient>(this, Param::DCoefficient,
+    Knob::config<Coefficient>(this, ParamId::DCoefficient,
                               "Constant coefficient");
-    configInput(Input::DCoefficientCv, "Constant coefficient CV");
+    configInput(InputId::DCoefficientCv, "Constant coefficient CV");
 
-    Knob::config<Gain>(this, Param::InputGain, "InPort gain");
-    configInput(Input::InputGainCv, "InPort gain CV");
+    Knob::config<Gain>(this, ParamId::InputGain, "InPort gain");
+    configInput(InputId::InputGainCv, "InPort gain CV");
 
-    Knob::config<Gain>(this, Param::OutputGain, "OutPort gain");
-    configInput(Input::OutputGainCv, "OutPort gain CV");
+    Knob::config<Gain>(this, ParamId::OutputGain, "OutPort gain");
+    configInput(InputId::OutputGainCv, "OutPort gain CV");
 
-    configInput(Input::Cubic, "Module");
-    configOutput(Output::Cubic, "Module");
+    configInput(InputId::Cubic, "Module");
+    configOutput(OutputId::Cubic, "Module");
   }
 
   void process(ProcessArgs const & /*args*/) override {
-    auto a = coefficient(Param::ACoefficient, Input::ACoefficientCv);
-    auto b = coefficient(Param::BCoefficient, Input::BCoefficientCv);
-    auto c = coefficient(Param::CCoefficient, Input::CCoefficientCv);
-    auto d = coefficient(Param::DCoefficient, Input::DCoefficientCv);
-    auto input_gain = gain(Param::InputGain, Input::InputGainCv);
-    auto output_gain = gain(Param::OutputGain, Input::OutputGainCv);
+    auto a = coefficient(ParamId::ACoefficient, InputId::ACoefficientCv);
+    auto b = coefficient(ParamId::BCoefficient, InputId::BCoefficientCv);
+    auto c = coefficient(ParamId::CCoefficient, InputId::CCoefficientCv);
+    auto d = coefficient(ParamId::DCoefficient, InputId::DCoefficientCv);
+    auto input_gain = gain(ParamId::InputGain, InputId::InputGainCv);
+    auto output_gain = gain(ParamId::OutputGain, InputId::OutputGainCv);
 
     auto x = input_gain * main_in() * 0.2F;
     auto x2 = x * x;
@@ -84,10 +85,10 @@ private:
     return Gain::scale(rotation);
   }
 
-  auto main_in() const -> float { return voltage_at(inputs[Input::Cubic]); }
+  auto main_in() const -> float { return voltage_at(inputs[InputId::Cubic]); }
 
   void send_main_out(float voltage) {
-    outputs[Output::Cubic].setVoltage(voltage);
+    outputs[OutputId::Cubic].setVoltage(voltage);
   }
 };
 } // namespace cubic

@@ -36,7 +36,7 @@ template <int N> struct ParamIds {
   };
 };
 
-template <int N> struct InputIds {
+struct InputId {
   enum {
     DurationMultiplierCV,
     Gate,
@@ -51,7 +51,7 @@ template <int N> struct InputIds {
   };
 };
 
-struct OutputIds {
+struct OutputId {
   enum {
     IsCurving,
     IsSustaining,

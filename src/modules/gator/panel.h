@@ -26,26 +26,26 @@ struct Panel : public PanelWidget<Panel> {
     auto constexpr right = hp2mm(7.5F);
 
     auto y = top;
-    for (auto i = 0; i < Input::Count / 2; i++) {
-      InPort::install(this, Input::Signal + i, left, y);
-      Button::install<Toggle>(this, Param::NegateSignal + i, lc, y);
-      Button::install<Toggle>(this, Param::NegateSignal + i + Input::Count / 2,
-                              rc, y);
-      InPort::install(this, Input::Signal + i + Input::Count / 2, right, y);
+    for (auto i = 0; i < InputId::Count / 2; i++) {
+      InPort::install(this, InputId::Signal + i, left, y);
+      Button::install<Toggle>(this, ParamId::NegateSignal + i, lc, y);
+      Button::install<Toggle>(
+          this, ParamId::NegateSignal + i + InputId::Count / 2, rc, y);
+      InPort::install(this, InputId::Signal + i + InputId::Count / 2, right, y);
       y += dy;
     }
 
     y = top + 8.75F * dy;
-    OutPort::install(this, Output::And, left, y);
-    OutPort::install(this, Output::Nand, lc, y);
-    OutPort::install(this, Output::Or, rc, y);
-    OutPort::install(this, Output::Nor, right, y);
+    OutPort::install(this, OutputId::And, left, y);
+    OutPort::install(this, OutputId::Nand, lc, y);
+    OutPort::install(this, OutputId::Or, rc, y);
+    OutPort::install(this, OutputId::Nor, right, y);
 
     y += hp2mm(2.75);
-    OutPort::install(this, Output::Even, left, y);
-    OutPort::install(this, Output::Odd, lc, y);
-    OutPort::install(this, Output::Xor, rc, y);
-    OutPort::install(this, Output::Xnor, right, y);
+    OutPort::install(this, OutputId::Even, left, y);
+    OutPort::install(this, OutputId::Odd, lc, y);
+    OutPort::install(this, OutputId::Xor, rc, y);
+    OutPort::install(this, OutputId::Xnor, right, y);
   }
 };
 } // namespace gator

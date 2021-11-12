@@ -20,9 +20,9 @@ struct Func6Panel : public PanelWidget<Func6Panel> {
 
 public:
   Func6Panel(rack::engine::Module *module) : PanelWidget<Func6Panel>{module} {
-    using Input = InputIds<channel_count>;
-    using Param = ParamIds<channel_count>;
-    using Output = OutputIds<channel_count>;
+    using InputId = InputIds<channel_count>;
+    using ParamId = ParamIds<channel_count>;
+    using OutputId = OutputIds<channel_count>;
     auto constexpr width = hp2mm(hp);
 
     auto constexpr column3 = width / 2.F;
@@ -40,16 +40,16 @@ public:
       auto const y = top + static_cast<float>(row) * row_spacing;
       auto const port_y = y + port_offset;
 
-      InPort::install(this, Input::Channel + row, column1, port_y);
-      Knob::install<Large>(this, Param::Operand + row, column3, y);
+      InPort::install(this, InputId::Channel + row, column1, port_y);
+      Knob::install<Large>(this, ParamId::Operand + row, column3, y);
 
-      OutPort::install(this, Output::Channel + row, column5, port_y);
+      OutPort::install(this, OutputId::Channel + row, column5, port_y);
 
       auto *offset_range_stepper = Stepper::install<OffsetRanges>(
-          this, Param::OffsetRange + row, column4, y);
+          this, ParamId::OffsetRange + row, column4, y);
 
       auto *multiplier_range_stepper = Stepper::install<MultiplierRanges>(
-          this, Param::MultiplierRange + row, column4, y);
+          this, ParamId::MultiplierRange + row, column4, y);
 
       auto const select_operation =
           [offset_range_stepper,
@@ -58,7 +58,8 @@ public:
             multiplier_range_stepper->setVisible(is_multiply);
             offset_range_stepper->setVisible(!is_multiply);
           };
-      ThumbSwitch::install<Operations>(this, Param::Operation + row, column2, y)
+      ThumbSwitch::install<Operations>(this, ParamId::Operation + row, column2,
+                                       y)
           ->on_change(select_operation);
     }
   }
