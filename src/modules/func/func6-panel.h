@@ -45,16 +45,16 @@ public:
 
       OutPort::install(this, Output::Channel + row, column5, port_y);
 
-      auto *offset_range_stepper =
-          Stepper::install<Offsets>(this, Param::OffsetRange + row, column4, y);
+      auto *offset_range_stepper = Stepper::install<OffsetRanges>(
+          this, Param::OffsetRange + row, column4, y);
 
-      auto *multiplier_range_stepper = Stepper::install<Multipliers>(
+      auto *multiplier_range_stepper = Stepper::install<MultiplierRanges>(
           this, Param::MultiplierRange + row, column4, y);
 
       auto const select_operation =
           [offset_range_stepper,
            multiplier_range_stepper](Operations::Selection selection) {
-            auto const is_multiply = selection == Operations::Multiply;
+            auto const is_multiply = selection == Operation::Multiply;
             multiplier_range_stepper->setVisible(is_multiply);
             offset_range_stepper->setVisible(!is_multiply);
           };

@@ -163,7 +163,7 @@ public:
             }
           }));
 
-    t.run("duration(step) reports duration for duration range and step "
+    t.run("duration(step) reports duration for duration select and step "
           "duration param",
           test([](Tester &t, Module &module, Signals &signals) {
             auto const step = std::rand() % step_count;

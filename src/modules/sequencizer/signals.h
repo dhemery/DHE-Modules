@@ -63,9 +63,8 @@ public:
     auto const rotation =
         rotation_of(params_[base + step], inputs_[InputId::LevelAttenuationCV],
                     params_[ParamId::LevelMultiplier]);
-    auto const range =
-        value_of<Voltages::Selection>(params_[ParamId::LevelRange]);
-    return Voltages::volts(rotation, range);
+    auto const range = value_of<VoltageRange>(params_[ParamId::LevelRange]);
+    return VoltageRanges::volts(rotation, range);
   }
 
   auto anchor_source(AnchorType type, int step) const -> AnchorSource {
@@ -178,9 +177,8 @@ public:
   }
 
   auto taper(int step) const -> sigmoid::Taper const & {
-    auto const shape =
-        value_of<Shapes::Selection>(params_[ParamId::StepShape + step]);
-    return Shapes::select(shape);
+    auto const shape = value_of<Shape>(params_[ParamId::StepShape + step]);
+    return Shapes::taper(shape);
   }
 
 private:

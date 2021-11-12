@@ -147,8 +147,8 @@ template <typename TSize> struct Panel : public PanelWidget<Panel<TSize>> {
                     level_y);
     Knob::install<Small>(this, Param::LevelMultiplier, global_controls_center_x,
                          level_y);
-    ThumbSwitch::install<Voltages>(this, Param::LevelRange,
-                                   global_controls_right_x, level_y);
+    ThumbSwitch::install<VoltageRanges>(this, Param::LevelRange,
+                                        global_controls_right_x, level_y);
 
     InPort::install(this, Input::DurationMultiplierCV, global_controls_left_x,
                     global_duration_y);

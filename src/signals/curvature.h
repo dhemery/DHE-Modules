@@ -7,6 +7,7 @@
 namespace dhe {
 
 struct Curvature {
+  struct KnobMapper;
   static auto constexpr unit = "";
 
   static constexpr auto curvature(float rotation) -> float {
@@ -23,16 +24,6 @@ struct Curvature {
     return sigmoid::domain.normalize(sigmoid_scaled_rotation);
   }
 
-  struct KnobMapper {
-    auto to_display_value(float rotation) const -> float {
-      return curvature(rotation);
-    }
-
-    auto to_rotation(float curvature) const -> float {
-      return rotation(curvature);
-    }
-  };
-
 private:
   /**
    * This curvature gives a curvature knob a gentle inverted S taper, increasing
@@ -42,9 +33,20 @@ private:
   static auto constexpr taper_curvature = -0.65F;
 };
 
-struct Shapes {
-  enum Selection { J, S };
+struct Curvature::KnobMapper {
+  auto to_display_value(float rotation) const -> float {
+    return curvature(rotation);
+  }
 
+  auto to_rotation(float curvature) const -> float {
+    return rotation(curvature);
+  }
+};
+
+enum class Shape { J, S };
+
+struct Shapes {
+  using Selection = Shape;
   static auto constexpr unit = "";
   static auto constexpr stepper_slug = "shape";
 
@@ -53,14 +55,14 @@ struct Shapes {
     return labels;
   }
 
-  static inline auto select(int selection) -> sigmoid::Taper const & {
+  static inline auto taper(Shape shape) -> sigmoid::Taper const & {
     static auto const tapers =
         std::vector<sigmoid::Taper>{sigmoid::j_taper, sigmoid::s_taper};
-    return tapers[selection];
+    return tapers[(int)shape];
   }
 
-  static inline auto curvature(float rotation, int selection) -> float {
-    return select(selection).apply(rotation);
+  static inline auto curvature(float rotation, Shape shape) -> float {
+    return taper(shape).apply(rotation);
   }
 };
 } // namespace dhe

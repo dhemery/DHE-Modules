@@ -56,38 +56,39 @@ private:
         [operand_knob, multiplier_knob_name,
          offset_knob_name](Operations::Selection selection) {
           operand_knob->mapper().select_operation(selection);
-          if (selection == Operations::Multiply) {
-            operand_knob->unit = Multipliers::unit;
+          if (selection == Operation::Multiply) {
+            operand_knob->unit = MultiplierRanges::unit;
             operand_knob->name = multiplier_knob_name;
           } else {
-            operand_knob->unit = Offsets::unit;
+            operand_knob->unit = OffsetRanges::unit;
             operand_knob->name = offset_knob_name;
           }
         };
-    auto select_multiplier_range =
-        [operand_knob](Multipliers::Selection selection) {
-          operand_knob->mapper().select_multiplier_range(selection);
-        };
-    auto select_offset_range = [operand_knob](Offsets::Selection selection) {
-      operand_knob->mapper().select_offset_range(selection);
+    auto select_multiplier_range = [operand_knob](MultiplierRange range) {
+      operand_knob->mapper().select_multiplier_range(range);
     };
+    auto select_offset_range =
+        [operand_knob](OffsetRanges::Selection selection) {
+          operand_knob->mapper().select_offset_range(selection);
+        };
 
     auto const operator_switch_name =
         channel_name + (N == 1 ? "Operator" : " operator");
     Switch::config<Operations>(this, Param::Operation + channel,
-                               operator_switch_name, Operations::Add)
+                               operator_switch_name, Operation::Add)
         ->on_change(select_operation);
 
     auto const offset_range_switch_name =
-        channel_name + (N == 1 ? "Offset range" : " offset range");
-    Switch::config<Offsets>(this, Param::OffsetRange + channel,
-                            offset_range_switch_name, Offsets::Bipolar)
+        channel_name + (N == 1 ? "Offset select" : " offset select");
+    Switch::config<OffsetRanges>(this, Param::OffsetRange + channel,
+                                 offset_range_switch_name, OffsetRange::Bipolar)
         ->on_change(select_offset_range);
 
     auto const multiplier_range_switch_name =
-        channel_name + (N == 1 ? "Multiplier range" : " multiplier range");
-    Switch::config<Multipliers>(this, Param::MultiplierRange + channel,
-                                multiplier_range_switch_name, Multipliers::Gain)
+        channel_name + (N == 1 ? "Multiplier select" : " multiplier select");
+    Switch::config<MultiplierRanges>(this, Param::MultiplierRange + channel,
+                                     multiplier_range_switch_name,
+                                     MultiplierRange::Gain)
         ->on_change(select_multiplier_range);
 
     auto const port_name = N == 1 ? "Func" : channel_name;

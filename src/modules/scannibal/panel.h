@@ -213,7 +213,7 @@ private:
     auto constexpr step_phase_y = global_controls_y(3);
     auto constexpr out_y = global_controls_y(4);
 
-    ThumbSwitch::install<Voltages>(this, Param::LevelRange, x, polarity_y);
+    ThumbSwitch::install<VoltageRanges>(this, Param::LevelRange, x, polarity_y);
     OutPort::install(this, OutputIds::StepNumber, x, step_number_y);
     OutPort::install(this, OutputIds::StepPhase, x, step_phase_y);
     OutPort::install(this, OutputIds::Out, x, out_y);

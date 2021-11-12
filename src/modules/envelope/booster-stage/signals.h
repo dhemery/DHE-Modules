@@ -49,27 +49,27 @@ public:
   auto level() const -> float {
     auto const rotation =
         rotation_of(params_[Param::Level], inputs_[Input::LevelCv]);
-    auto const range =
-        value_of<Voltages::Selection>(params_[Param::LevelRange]);
-    return Voltages::volts(rotation, range);
+    auto const range = value_of<VoltageRange>(params_[Param::LevelRange]);
+    return VoltageRanges::volts(rotation, range);
   }
 
   void output(float voltage) { outputs_[Output::Envelope].setVoltage(voltage); }
 
   void show_active(bool is_active) {
-    auto const voltage =
-        UnipolarVoltage::range().scale(is_active || active_button());
+    auto const voltage = VoltageRanges::volts(is_active || active_button(),
+                                              VoltageRange::Unipolar);
     outputs_[Output::Active].setVoltage(voltage);
   }
 
   void show_eoc(bool is_eoc) {
-    auto const voltage = UnipolarVoltage::range().scale(is_eoc || eoc_button());
+    auto const voltage =
+        VoltageRanges::volts(is_eoc || active_button(), VoltageRange::Unipolar);
     outputs_[Output::Eoc].setVoltage(voltage);
   }
 
   auto taper() const -> sigmoid::Taper const & {
     auto const shape = value_of<Shapes::Selection>(params_[Param::Shape]);
-    return Shapes::select(shape);
+    return Shapes::taper(shape);
   }
 
 private:

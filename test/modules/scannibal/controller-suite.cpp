@@ -111,7 +111,7 @@ public:
                         is_near(middle_step_phase, 1e-4F));
           }));
 
-    t.run("wraps phase < 0V into range [0V, 10V)",
+    t.run("wraps phase < 0V into select [0V, 10V)",
           test([](Tester &t, Module &module, Generator &generator,
                   Controller &controller) {
             auto constexpr in_range_phase = 0.F;
@@ -146,7 +146,7 @@ public:
                         is_near(expected_generator_phase, 1e-4F));
           }));
 
-    t.run("wraps phase > 10V into range (0V, 10V]",
+    t.run("wraps phase > 10V into select (0V, 10V]",
           test([](Tester &t, Module &module, Generator &generator,
                   Controller &controller) {
             auto constexpr in_range_phase = 10.F;

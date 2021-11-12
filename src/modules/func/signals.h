@@ -27,21 +27,20 @@ struct Signals {
         voltage_if_disconnected);
   }
 
-  auto multiplier_range(int channel) const -> Multipliers::Selection {
-    return value_of<Multipliers::Selection>(
-        params_[Param::MultiplierRange + channel]);
+  auto multiplier_range(int channel) const -> MultiplierRange {
+    return value_of<MultiplierRange>(params_[Param::MultiplierRange + channel]);
   }
 
-  auto offset_range(int channel) const -> Offsets::Selection {
-    return value_of<Offsets::Selection>(params_[Param::OffsetRange + channel]);
+  auto offset_range(int channel) const -> OffsetRange {
+    return value_of<OffsetRange>(params_[Param::OffsetRange + channel]);
   }
 
   auto operand(int channel) const -> float {
     return value_of(params_[Param::Operand + channel]);
   }
 
-  auto operation(int channel) const -> Operations::Selection {
-    return value_of<Operations::Selection>(params_[Param::Operation + channel]);
+  auto operation(int channel) const -> Operation {
+    return value_of<Operation>(params_[Param::Operation + channel]);
   }
 
   void output(int channel, float voltage) {

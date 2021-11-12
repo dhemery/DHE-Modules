@@ -35,7 +35,7 @@ struct Panel : public PanelWidget<Panel> {
 
     InPort::install(this, Input::LevelCv, column1, y);
     Knob::install<Large>(this, Param::Level, column3, y);
-    ThumbSwitch::install<Voltages>(this, Param::LevelRange, column5, y);
+    ThumbSwitch::install<VoltageRanges>(this, Param::LevelRange, column5, y);
 
     y += dy;
     InPort::install(this, Input::CurvatureCv, column1, y);

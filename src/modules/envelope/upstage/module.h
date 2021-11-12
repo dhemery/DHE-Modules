@@ -19,12 +19,12 @@ struct Module : public rack::engine::Module {
   Module() {
     config(Param::Count, Input::Count, Output::Count);
 
-    auto *level_knob = Knob::config<Voltages>(this, Param::Level, "Level");
-    auto select_level_range = [level_knob](Voltages::Selection selection) {
-      level_knob->mapper().select_range(selection);
+    auto *level_knob = Knob::config<VoltageRanges>(this, Param::Level, "Level");
+    auto select_level_range = [level_knob](VoltageRange range) {
+      level_knob->mapper().select_range(range);
     };
-    Switch::config<Voltages>(this, Param::LevelRange, "Level range",
-                             Voltages::Unipolar)
+    Switch::config<VoltageRanges>(this, Param::LevelRange, "Level select",
+                                  VoltageRange::Unipolar)
         ->on_change(select_level_range);
     configInput(Input::LevelCv, "Level CV");
 

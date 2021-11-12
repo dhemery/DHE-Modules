@@ -43,7 +43,7 @@ template <typename TStyle> struct Panel : public PanelWidget<Panel<TStyle>> {
     InPort::install(this, Input::A + 1, cd_outer_column, y);
 
     y = top + 0.5F * dy;
-    ThumbSwitch::install<Voltages>(this, Param::LevelRange, switch_column, y);
+    ThumbSwitch::install<VoltageRanges>(this, Param::LevelRange, switch_column, y);
 
     y = top + 1.F * dy;
     InPort::install(this, Input::B + 0, ab_outer_column, y);

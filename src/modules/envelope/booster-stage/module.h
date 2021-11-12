@@ -25,19 +25,18 @@ struct Module : public rack::engine::Module {
     configInput(Input::Envelope, "Stage");
     configOutput(Output::Envelope, "Stage");
 
-    auto *level_knob = Knob::config<Voltages>(this, Param::Level, "Level");
-    auto const select_level_range =
-        [level_knob](Voltages::Selection selection) {
-          level_knob->mapper().select_range(selection);
-        };
-    Switch::config<Voltages>(this, Param::LevelRange, "Level Range",
-                             Voltages::Unipolar)
+    auto *level_knob = Knob::config<VoltageRanges>(this, Param::Level, "Level");
+    auto const select_level_range = [level_knob](VoltageRange range) {
+      level_knob->mapper().select_range(range);
+    };
+    Switch::config<VoltageRanges>(this, Param::LevelRange, "Level Range",
+                                  VoltageRange::Unipolar)
         ->on_change(select_level_range);
 
     configInput(Input::LevelCv, "Level CV");
 
     Knob::config<Curvature>(this, Param::Curvature, "Curvature");
-    Switch::config<Shapes>(this, Param::Shape, "Shape", Shapes::J);
+    Switch::config<Shapes>(this, Param::Shape, "Shape", Shape::J);
     configInput(Input::CurvatureCv, "Curvature CV");
 
     auto *duration_knob =
@@ -46,7 +45,7 @@ struct Module : public rack::engine::Module {
         [duration_knob](Durations::Selection selection) {
           duration_knob->mapper().select_range(selection);
         };
-    Switch::config<Durations>(this, Param::DurationRange, "Duration range",
+    Switch::config<Durations>(this, Param::DurationRange, "Duration select",
                               Durations::Medium)
         ->on_change(select_duration_range);
     configInput(Input::DurationCv, "Duration CV");

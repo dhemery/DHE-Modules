@@ -48,7 +48,7 @@ template <int N> struct Module : public rack::engine::Module {
     IntKnob::config<SelectionLength<N>>(this, Param::SelectionLength,
                                         "Sequence length", N);
 
-    auto level_knobs = std::vector<MappedKnobQuantity<Voltages> *>{};
+    auto level_knobs = std::vector<MappedKnobQuantity<VoltageRanges> *>{};
     auto duration_knobs = std::vector<MappedKnobQuantity<Durations> *>{};
 
     for (auto step = 0; step < N; step++) {
@@ -61,12 +61,12 @@ template <int N> struct Module : public rack::engine::Module {
       Switch::config<AdvanceModes>(this, Param::StepAdvanceMode + step,
                                    step_name + "advance mode",
                                    AdvanceMode::TimerExpires);
-      auto *level_knob = Knob::config<Voltages>(this, Param::StepLevel + step,
-                                                step_name + "level");
+      auto *level_knob = Knob::config<VoltageRanges>(
+          this, Param::StepLevel + step, step_name + "level");
       level_knobs.push_back(level_knob);
 
       Switch::config<Shapes>(this, Param::StepShape + step, step_name + "shape",
-                             Shapes::J);
+                             Shape::J);
       Knob::config<Curvature>(this, Param::StepCurvature + step,
                               step_name + "curvature");
       auto *duration_knob = Knob::config<Durations>(
@@ -79,13 +79,13 @@ template <int N> struct Module : public rack::engine::Module {
       signals_.show_inactive(step);
     }
 
-    auto select_level_range = [level_knobs](Voltages::Selection selection) {
+    auto select_level_range = [level_knobs](VoltageRange range) {
       for (auto *knob : level_knobs) {
-        knob->mapper().select_range(selection);
+        knob->mapper().select_range(range);
       }
     };
-    Switch::config<Voltages>(this, Param::LevelRange, "Level range",
-                             Voltages::Unipolar)
+    Switch::config<VoltageRanges>(this, Param::LevelRange, "Level select",
+                                  VoltageRange::Unipolar)
         ->on_change(select_level_range);
 
     auto select_duration_range =
@@ -94,7 +94,7 @@ template <int N> struct Module : public rack::engine::Module {
             knob->mapper().select_range(selection);
           }
         };
-    Switch::config<Durations>(this, Param::DurationRange, "Duration range",
+    Switch::config<Durations>(this, Param::DurationRange, "Duration select",
                               Durations::Medium)
         ->on_change(select_duration_range);
 

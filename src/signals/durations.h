@@ -27,9 +27,9 @@ private:
     static auto constexpr taper_curvature = 0.8018017F;
 
     /**
-     * Each duration range is of the form [n, 1000n]. Given ranges of that form,
-     * this curvature tapers the rotation so a knob positioned dead center
-     * yields a duration equal to 1/10 of the range's upper bound (to within 7
+     * Each duration select is of the form [n, 1000n]. Given ranges of that
+     * form, this curvature tapers the rotation so a knob positioned dead center
+     * yields a duration equal to 1/10 of the select's upper bound (to within 7
      * decimal places).
      */
     static auto const taper = sigmoid::j_taper_with_curvature(taper_curvature);
@@ -38,7 +38,9 @@ private:
 };
 
 template <typename TDuration> struct DurationRange {
-  static auto constexpr display_range() -> Range { return TDuration::range(); }
+  static auto constexpr display_range() -> Range {
+    return TDuration::range();
+  }
   static auto constexpr unit = " s";
 
   static inline auto seconds(float rotation) -> float {

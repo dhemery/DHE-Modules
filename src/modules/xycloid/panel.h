@@ -62,13 +62,13 @@ struct Panel : public PanelWidget<Panel> {
     y += dy;
     InPort::install(this, Input::XGainCv, column1, y);
     Knob::install<Small>(this, Param::XGain, column2, y);
-    ThumbSwitch::install<Voltages>(this, Param::XRange, column3, y);
+    ThumbSwitch::install<VoltageRanges>(this, Param::XRange, column3, y);
     OutPort::install(this, Output::X, column4, y + output_port_offset);
 
     y += dy;
     InPort::install(this, Input::YGainCv, column1, y);
     Knob::install<Small>(this, Param::YGain, column2, y);
-    ThumbSwitch::install<Voltages>(this, Param::YRange, column3, y);
+    ThumbSwitch::install<VoltageRanges>(this, Param::YRange, column3, y);
     OutPort::install(this, Output::Y, column4, y + output_port_offset);
   }
   using Input = InputIds;

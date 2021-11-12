@@ -37,7 +37,7 @@ struct Panel : public PanelWidget<Panel> {
     Knob::install<Medium>(this, Param::Curvature1, column3, y);
     y += dy;
     ThumbSwitch::install<Shapes>(this, Param::Shape1, column1, y);
-    ThumbSwitch::install<Voltages>(this, Param::LevelRange1, column2, y);
+    ThumbSwitch::install<VoltageRanges>(this, Param::LevelRange1, column2, y);
     OutPort::install(this, Output::Taper1, column3, y);
 
     y += dy + panel_buffer;
@@ -51,7 +51,7 @@ struct Panel : public PanelWidget<Panel> {
     Knob::install<Medium>(this, Param::Curvature2, column3, y);
     y += dy;
     ThumbSwitch::install<Shapes>(this, Param::Shape2, column1, y);
-    ThumbSwitch::install<Voltages>(this, Param::LevelRange2, column2, y);
+    ThumbSwitch::install<VoltageRanges>(this, Param::LevelRange2, column2, y);
     OutPort::install(this, Output::Taper2, column3, y);
   }
 };

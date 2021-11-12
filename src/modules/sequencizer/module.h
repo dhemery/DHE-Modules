@@ -53,7 +53,7 @@ public:
     configOutput(Output::SequenceEventPulse, "Start of sequence");
     configOutput(Output::Out, "Sequencer");
 
-    auto level_knobs = std::vector<MappedKnobQuantity<Voltages> *>{};
+    auto level_knobs = std::vector<MappedKnobQuantity<VoltageRanges> *>{};
     auto duration_knobs = std::vector<MappedKnobQuantity<Durations> *>{};
 
     for (auto step = 0; step < N; step++) {
@@ -70,7 +70,7 @@ public:
       Switch::config<AnchorModes>(this, Param::StepStartAnchorMode + step,
                                   step_name + "start anchor mode",
                                   AnchorMode::Sample);
-      auto *start_level_knob = Knob::config<Voltages>(
+      auto *start_level_knob = Knob::config<VoltageRanges>(
           this, Param::StepStartAnchorLevel + step, step_name + "start level");
       level_knobs.push_back(start_level_knob);
       Switch::config<AnchorSources>(this, Param::StepStartAnchorSource + step,
@@ -80,7 +80,7 @@ public:
       Switch::config<AnchorModes>(this, Param::StepEndAnchorMode + step,
                                   step_name + "end anchor mode",
                                   AnchorMode::Track);
-      auto *end_level_knob = Knob::config<Voltages>(
+      auto *end_level_knob = Knob::config<VoltageRanges>(
           this, Param::StepEndAnchorLevel + step, step_name + "end level");
       level_knobs.push_back(end_level_knob);
       Switch::config<AnchorSources>(this, Param::StepEndAnchorSource + step,
@@ -94,7 +94,7 @@ public:
       duration_knobs.push_back(duration_knob);
 
       Switch::config<Shapes>(this, Param::StepShape + step, step_name + "shape",
-                             Shapes::J);
+                             Shape::J);
       Button::config(this, Param::StepEnabled + step, step_name + "enabled", 1);
 
       signals_.show_inactive(step);
@@ -102,13 +102,13 @@ public:
 
     Knob::config<Attenuator>(this, Param::LevelMultiplier, "Level multiplier",
                              1.F);
-    auto select_level_range = [level_knobs](Voltages::Selection selection) {
+    auto select_level_range = [level_knobs](VoltageRange range) {
       for (auto *knob : level_knobs) {
-        knob->mapper().select_range(selection);
+        knob->mapper().select_range(range);
       }
     };
-    Switch::config<Voltages>(this, Param::LevelRange, "Level range",
-                             Voltages::Unipolar)
+    Switch::config<VoltageRanges>(this, Param::LevelRange, "Level select",
+                                  VoltageRange::Unipolar)
         ->on_change(select_level_range);
     configInput(Input::LevelAttenuationCV, "Level multiplier CV");
 
@@ -119,7 +119,7 @@ public:
             knob->mapper().select_range(selection);
           }
         };
-    Switch::config<Durations>(this, Param::DurationRange, "Duration range",
+    Switch::config<Durations>(this, Param::DurationRange, "Duration select",
                               Durations::Medium)
         ->on_change(select_duration_range);
     configInput(Input::DurationMultiplierCV, "Duration multipler CV");

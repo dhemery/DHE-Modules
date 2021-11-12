@@ -31,7 +31,7 @@ struct Panel : public PanelWidget<Panel> {
 
     y += dy;
     InPort::install(this, Input::LevelCv, column1, y);
-    ThumbSwitch::install<Voltages>(this, Param::LevelRange, column3, y);
+    ThumbSwitch::install<VoltageRanges>(this, Param::LevelRange, column3, y);
 
     y += dy;
     Button::install<Momentary>(this, Param::Wait, column1, y);

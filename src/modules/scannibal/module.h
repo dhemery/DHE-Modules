@@ -43,7 +43,7 @@ public:
     configOutput(Output::StepPhase, "Step phase");
     configOutput(Output::Out, "Scanner");
 
-    auto level_knobs = std::vector<MappedKnobQuantity<Voltages> *>{};
+    auto level_knobs = std::vector<MappedKnobQuantity<VoltageRanges> *>{};
 
     for (auto step = 0; step < N; step++) {
       auto const step_name = "Step " + std::to_string(step + 1) + " ";
@@ -52,8 +52,8 @@ public:
                                     step_name + "phase 0 anchor source",
                                     AnchorSource::Out);
       auto *phase_0_level_knob =
-          Knob::config<Voltages>(this, Param::StepPhase0AnchorLevel + step,
-                                 step_name + "phase 0 level");
+          Knob::config<VoltageRanges>(this, Param::StepPhase0AnchorLevel + step,
+                                      step_name + "phase 0 level");
       level_knobs.push_back(phase_0_level_knob);
       configInput(Input::StepPhase0AnchorLevelCv + step,
                   step_name + "phase 0 level CV");
@@ -65,8 +65,8 @@ public:
                                     step_name + "phase 1 anchor source",
                                     AnchorSource::Level);
       auto *phase_1_level_knob =
-          Knob::config<Voltages>(this, Param::StepPhase1AnchorLevel + step,
-                                 step_name + "phase 1 level");
+          Knob::config<VoltageRanges>(this, Param::StepPhase1AnchorLevel + step,
+                                      step_name + "phase 1 level");
       level_knobs.push_back(phase_1_level_knob);
       configInput(Input::StepPhase1AnchorLevelCv + step,
                   step_name + "phase 1 level CV");
@@ -75,7 +75,7 @@ public:
                                   AnchorMode::Track);
 
       Switch::config<Shapes>(this, Param::StepShape + step, step_name + "shape",
-                             Shapes::J);
+                             Shape::J);
       Knob::config<Curvature>(this, Param::StepCurvature + step,
                               step_name + "curvature");
       configInput(Input::StepCurvatureCv + step, step_name + "curvature CV");
@@ -86,13 +86,13 @@ public:
                   step_name + "relative duration CV");
     }
 
-    auto select_level_range = [level_knobs](Voltages::Selection selection) {
+    auto select_level_range = [level_knobs](VoltageRange range) {
       for (auto *knob : level_knobs) {
-        knob->mapper().select_range(selection);
+        knob->mapper().select_range(range);
       }
     };
-    Switch::config<Voltages>(this, Param::LevelRange, "Level range",
-                             Voltages::Unipolar)
+    Switch::config<VoltageRanges>(this, Param::LevelRange, "Level select",
+                                  VoltageRange::Unipolar)
         ->on_change(select_level_range);
   }
 
@@ -115,8 +115,8 @@ public:
                                    : Input::StepPhase1AnchorLevelCv;
     auto const rotation = rotation_of(params[base_knob_param + step],
                                       inputs[base_cv_input + step]);
-    auto const range = value_of<Voltages::Selection>(params[Param::LevelRange]);
-    return Voltages::volts(rotation, range);
+    auto const range = value_of<VoltageRange>(params[Param::LevelRange]);
+    return VoltageRanges::volts(rotation, range);
   }
 
   auto anchor_source(AnchorType type, int step) const -> AnchorSource {
@@ -168,7 +168,7 @@ public:
   auto taper(int step) const -> sigmoid::Taper const & {
     auto const shape =
         value_of<Shapes::Selection>(params[Param::StepShape + step]);
-    return Shapes::select(shape);
+    return Shapes::taper(shape);
   }
 
   auto dataToJson() -> json_t * override {

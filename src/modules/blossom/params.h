@@ -55,6 +55,7 @@ private:
 };
 
 struct SpinSpeed {
+  struct KnobMapper;
   static auto constexpr unit = " Hz";
 
   static auto rotation(float hertz) -> float {
@@ -65,20 +66,20 @@ struct SpinSpeed {
     return range().scale(taper().apply(rotation));
   }
 
-  struct KnobMapper {
-    auto to_display_value(float rotation) const -> float {
-      return hertz(rotation);
-    }
-
-    auto to_rotation(float hertz) const -> float { return rotation(hertz); }
-  };
-
 private:
   static auto constexpr range() -> Range { return Range{-10.F, 10.F}; }
   static auto taper() -> sigmoid::Taper const & {
     static auto const taper = sigmoid::s_taper_with_curvature(-0.8F);
     return taper;
   }
+};
+
+struct SpinSpeed::KnobMapper {
+  auto to_display_value(float rotation) const -> float {
+    return hertz(rotation);
+  }
+
+  auto to_rotation(float hertz) const -> float { return rotation(hertz); }
 };
 
 } // namespace blossom

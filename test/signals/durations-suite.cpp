@@ -19,7 +19,7 @@ public:
          selection++) {
       auto const range = Durations::select(selection);
       t.run(Durations::labels()[selection], [selection, range](Tester &t) {
-        t.run("minimum rotation yields range lower bound",
+        t.run("minimum rotation yields select lower bound",
               [selection, range](Tester &t) {
                 auto constexpr rotation = 0.F;
                 auto const want = range.lower_bound();
@@ -43,7 +43,7 @@ public:
                 }
               });
 
-        t.run("maximum rotation yields range upper bound",
+        t.run("maximum rotation yields select upper bound",
               [selection, range](Tester &t) {
                 auto const rotation = 1.F;
                 auto const want = range.upper_bound();

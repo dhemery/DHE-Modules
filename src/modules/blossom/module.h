@@ -53,11 +53,13 @@ public:
     configInput(Input::BouncePhaseOffsetCv, "Phase CV");
 
     Knob::config<Gain>(this, Param::XGain, "X gain");
-    Switch::config<Voltages>(this, Param::XRange, "X range", Voltages::Bipolar);
+    Switch::config<VoltageRanges>(this, Param::XRange, "X select",
+                                  VoltageRange::Bipolar);
     configInput(Input::XGainCv, "X gain CV");
 
     Knob::config<Gain>(this, Param::YGain, "Y gain");
-    Switch::config<Voltages>(this, Param::YRange, "Y range", Voltages::Bipolar);
+    Switch::config<VoltageRanges>(this, Param::YRange, "Y select",
+                                  VoltageRange::Bipolar);
     configInput(Input::YGainCv, "Y gain CV");
 
     configOutput(Output::X, "X");

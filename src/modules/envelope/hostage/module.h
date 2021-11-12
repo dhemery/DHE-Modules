@@ -36,7 +36,7 @@ struct Module : public rack::engine::Module {
         [duration_knob](Durations::Selection selection) {
           duration_knob->mapper().select_range(selection);
         };
-    Switch::config<Durations>(this, Param::DurationRange, "Duration range",
+    Switch::config<Durations>(this, Param::DurationRange, "Duration select",
                               Durations::Medium)
         ->on_change(select_duration_range);
     configInput(Input::DurationCv, "Duration CV");

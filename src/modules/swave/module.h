@@ -21,7 +21,7 @@ struct Module : public rack::engine::Module {
     Knob::config<Attenuverter>(this, Param::CurvatureAv, "Curvature CV gain",
                                0.F);
     configInput(Input::CurvatureCv, "Curvature CV");
-    Switch::config<Shapes>(this, Param::Shape, "Shape", Shapes::J);
+    Switch::config<Shapes>(this, Param::Shape, "Shape", Shape::J);
   }
 
   void process(ProcessArgs const & /*args*/) override {
