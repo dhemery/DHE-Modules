@@ -100,7 +100,7 @@ public:
 private:
   inline auto gain(int knob_id, int cv_id) const -> float {
     auto const rotation = rotation_of(params[knob_id], inputs[cv_id]);
-    return Gain::value(rotation);
+    return Gain::scale(rotation);
   }
 
   auto x_gain() const -> float { return gain(Param::XGain, Input::XGainCv); }

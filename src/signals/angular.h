@@ -13,8 +13,8 @@ struct Angle {
   }
   static auto constexpr unit = "˚";
 
-  static inline auto radians(float rotation) -> float {
-    return range().scale(rotation);
+  static inline auto radians(float normalized) -> float {
+    return range().scale(normalized);
   }
 };
 } // namespace dhe

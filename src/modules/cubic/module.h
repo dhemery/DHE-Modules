@@ -18,8 +18,8 @@ struct Coefficient {
   static auto constexpr display_range() -> Range { return range(); }
   static auto constexpr unit = "";
 
-  static inline auto value(float rotation) -> float {
-    return range().scale(rotation);
+  static inline auto scale(float normalized) -> float {
+    return range().scale(normalized);
   }
 };
 
@@ -76,12 +76,12 @@ struct Module : public rack::engine::Module {
 private:
   auto coefficient(int knob_id, int cv_id) const -> float {
     auto const rotation = rotation_of(params[knob_id], inputs[cv_id]);
-    return Coefficient::value(rotation);
+    return Coefficient::scale(rotation);
   }
 
   auto gain(int knob_id, int cv_id) const -> float {
     auto const rotation = rotation_of(params[knob_id], inputs[cv_id]);
-    return Gain::value(rotation);
+    return Gain::scale(rotation);
   }
 
   auto main_in() const -> float { return voltage_at(inputs[Input::Cubic]); }

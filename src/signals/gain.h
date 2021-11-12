@@ -17,8 +17,8 @@ struct Attenuverter {
   }
   static auto constexpr unit = "%";
 
-  static inline auto value(float rotation) -> float {
-    return range().scale(rotation);
+  static inline auto scale(float normalized) -> float {
+    return range().scale(normalized);
   }
 };
 
@@ -27,8 +27,8 @@ struct Gain {
   static auto constexpr display_range() -> Range { return Range{0.F, 200.F}; }
   static auto constexpr unit = "%";
 
-  static inline auto value(float rotation) -> float {
-    return range().scale(rotation);
+  static inline auto scale(float normalized) -> float {
+    return range().scale(normalized);
   }
 };
 
