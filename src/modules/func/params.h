@@ -36,7 +36,7 @@ private:
     static auto const ranges = std::vector<Range>{
         zero_to_five_range, BipolarVoltage::range(), UnipolarVoltage::range(),
         minus_ten_to_plus_ten_range};
-    return ranges[(int)id];
+    return ranges[static_cast<int>(id)];
   }
 };
 
@@ -64,12 +64,12 @@ struct MultiplierRanges {
   }
 
 private:
-  static inline auto range(MultiplierRangeId range_id) -> Range const & {
+  static inline auto range(MultiplierRangeId id) -> Range const & {
     static auto constexpr minus_two_to_plus_two_range = Range{-2.F, 2.F};
     static auto const ranges =
         std::vector<Range>{Attenuator::range(), Attenuverter::range(),
                            Gain::range(), minus_two_to_plus_two_range};
-    return ranges[(int)range_id];
+    return ranges[static_cast<int>(id)];
   }
 };
 

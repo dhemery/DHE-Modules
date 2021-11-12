@@ -102,7 +102,7 @@ template <typename TSize> struct Panel : public PanelWidget<Panel<TSize>> {
         std::vector<std::string>{"time", "rise", "fall", "edge", "high", "low"};
 
     for (auto step = 0; step < N; step++) {
-      auto const x = step_x + step_dx * (float)step;
+      auto const x = step_x + step_dx * static_cast<float>(step);
       this->addChild(rack::createLightCentered<ProgressLight>(
           mm2px(x, active_y), module, Light::StepProgress + step + step));
 

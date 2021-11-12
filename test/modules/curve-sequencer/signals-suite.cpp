@@ -168,17 +168,17 @@ public:
           test([](Tester &t, Module &module, Signals &signals) {
             auto const step = std::rand() % step_count;
             auto constexpr duration_knob_rotation = 0.75F;
-            auto constexpr duration_range_selection =
+            auto constexpr duration_range_id =
                 DurationRangeId::Long; // Long duration
 
             module.params_[Param::StepDuration + step].setValue(
                 duration_knob_rotation);
             module.params_[Param::DurationRange].setValue(
-                (float)duration_range_selection);
+                static_cast<float>(duration_range_id));
 
             auto const got = signals.duration(step);
             auto const want = DurationRanges::scale(duration_knob_rotation,
-                                                    duration_range_selection);
+                                                    duration_range_id);
             if (got != want) {
               t.errorf("Got {}, want {}", got, want);
             }

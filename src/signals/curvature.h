@@ -64,7 +64,7 @@ private:
   static inline auto taper(Shape shape) -> sigmoid::Taper const & {
     static auto const tapers =
         std::vector<sigmoid::Taper>{sigmoid::j_taper, sigmoid::s_taper};
-    return tapers[(int)shape];
+    return tapers[static_cast<int>(shape)];
   }
 };
 } // namespace dhe

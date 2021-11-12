@@ -100,10 +100,10 @@ struct DurationRanges {
     return duration::normalize(scaled, range(range_id));
   }
 
-  static inline auto range(DurationRangeId range_id) -> Range const & {
+  static inline auto range(DurationRangeId id) -> Range const & {
     static auto const ranges = std::vector<Range>{
         ShortDuration::range(), MediumDuration::range(), LongDuration::range()};
-    return ranges[(int)range_id];
+    return ranges[static_cast<int>(id)];
   }
 };
 

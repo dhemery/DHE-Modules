@@ -17,7 +17,9 @@ struct DurationsSuite : Suite {
     static auto const range_ids = std::vector<DurationRangeId>{
         DurationRangeId::Short, DurationRangeId::Medium, DurationRangeId::Long};
     for (auto const range_id : range_ids) {
-      t.run(DurationRanges::labels()[(int)range_id], [range_id](Tester &t) {
+      auto const range_index = static_cast<int>(range_id);
+      auto const range_name = DurationRanges::labels()[range_index];
+      t.run(range_name, [range_id](Tester &t) {
         auto const range = DurationRanges::range(range_id);
         t.run("minimum normalize yields select lower bound",
               [range_id, range](Tester &t) {

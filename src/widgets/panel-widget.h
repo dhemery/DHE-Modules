@@ -27,7 +27,7 @@ template <typename TPanel> struct PanelWidget : public rack::app::ModuleWidget {
     auto constexpr module_height = 128.5F; // mm
     auto constexpr screw_diameter = hp2mm(1.F);
     auto constexpr screw_radius = screw_diameter / 2.F;
-    auto const panel_width = hp2mm((float)TPanel::hp);
+    auto const panel_width = hp2mm(static_cast<float>(TPanel::hp));
 
     auto constexpr top = screw_radius;
     auto constexpr bottom = module_height - screw_radius;

@@ -47,10 +47,10 @@ struct VoltageRanges {
     return labels;
   }
 
-  static inline auto range(VoltageRangeId range_id) -> Range const & {
+  static inline auto range(VoltageRangeId id) -> Range const & {
     static auto const ranges =
         std::vector<Range>{BipolarVoltage::range(), UnipolarVoltage::range()};
-    return ranges[(int)range_id];
+    return ranges[static_cast<int>(id)];
   }
 
   static inline auto scale(float normalized, VoltageRangeId range_id) -> float {
