@@ -5,7 +5,7 @@
 #include "rack.hpp"
 
 namespace dhe {
-template <typename TPanel, typename TStyle, typename TValue = float>
+template <typename TPanel, typename TStyle, typename TValue>
 struct KnobWidget : public rack::app::SvgKnob {
   using TAction = std::function<void(TValue)>;
 

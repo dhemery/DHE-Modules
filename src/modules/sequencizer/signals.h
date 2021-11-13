@@ -9,6 +9,7 @@
 #include "signals/curvature.h"
 #include "signals/durations.h"
 #include "signals/gain.h"
+#include "signals/shapes.h"
 #include "signals/voltages.h"
 
 #include <vector>

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "components/range.h"
-#include "signals/curvature.h"
+#include "signals/shapes.h"
 
 namespace dhe {
 namespace scannibal {

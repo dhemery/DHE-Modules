@@ -1,37 +1,33 @@
 #pragma once
 
 #include "components/range.h"
+#include "ranged.h"
 
 #include <string>
 #include <vector>
 
 namespace dhe {
 
-namespace voltage {
-static auto constexpr unit = " V";
-} // namespace voltage
+static auto constexpr voltage_unit = " V";
 
-template <typename T> struct DisplayableVoltageRange {
-  static auto constexpr unit = voltage::unit;
-  static inline auto display_range() -> Range { return T::range(); }
-
-  static inline auto scale(float normalized) -> float {
-    return T::range().scale(normalized);
-  }
-
-  static inline auto normalize(float scaled) -> float {
-    return T::range().normalize(scaled);
-  }
-};
-
-struct BipolarVoltage : DisplayableVoltageRange<BipolarVoltage> {
+struct BipolarVoltage : RangedFloat<BipolarVoltage> {
+  static auto constexpr unit = voltage_unit;
+  static auto constexpr min = -5.F;
+  static auto constexpr max = 5.F;
+  static auto constexpr display_min = min;
+  static auto constexpr display_max = max;
+  static auto constexpr display_default = 0.F;
   static auto constexpr label = "±5 V";
-  static inline auto range() -> Range { return {-5.F, 5.F}; }
 };
 
-struct UnipolarVoltage : DisplayableVoltageRange<UnipolarVoltage> {
+struct UnipolarVoltage : RangedFloat<UnipolarVoltage> {
+  static auto constexpr unit = voltage_unit;
+  static auto constexpr min = 0.F;
+  static auto constexpr max = 10.F;
+  static auto constexpr display_min = min;
+  static auto constexpr display_max = max;
+  static auto constexpr display_default = 5.F;
   static auto constexpr label = "0–10 V";
-  static inline auto range() -> Range { return {0.F, 10.F}; }
 };
 
 enum class VoltageRangeId { Bipolar, Unipolar };
@@ -39,7 +35,8 @@ enum class VoltageRangeId { Bipolar, Unipolar };
 struct VoltageRanges {
   struct KnobMapper;
   using Selection = VoltageRangeId;
-  static auto constexpr unit = voltage::unit;
+  static auto constexpr default_rotation = 0.5F;
+  static auto constexpr unit = voltage_unit;
 
   static inline auto labels() -> std::vector<std::string> const & {
     static auto const labels =

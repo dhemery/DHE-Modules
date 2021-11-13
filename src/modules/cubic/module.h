@@ -13,14 +13,13 @@ namespace dhe {
 
 namespace cubic {
 
-struct Coefficient {
-  static auto constexpr range() -> Range { return Range{-2.F, 2.F}; }
-  static auto constexpr display_range() -> Range { return range(); }
+struct Coefficient : RangedFloat<Coefficient> {
+  static auto constexpr min = -2.F;
+  static auto constexpr max = 2.F;
+  static auto constexpr display_min = min;
+  static auto constexpr display_max = max;
+  static auto constexpr display_default = 0.F;
   static auto constexpr unit = "";
-
-  static inline auto scale(float normalized) -> float {
-    return range().scale(normalized);
-  }
 };
 
 struct Module : public rack::engine::Module {

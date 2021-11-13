@@ -105,15 +105,15 @@ template <typename TSize> struct Panel : public PanelWidget<Panel<TSize>> {
     };
 
     auto constexpr selection_y = global_controls_y(2);
-    IntKnob::install<Small>(this, ParamId::SelectionStart,
-                            sequence_controls_x - hp2mm(0.2F), selection_y)
+    Knob::install<Small, int>(this, ParamId::SelectionStart,
+                              sequence_controls_x - hp2mm(0.2F), selection_y)
         ->on_change(update_selection_start);
 
     auto constexpr selection_length_offset = 8.28F;
     auto constexpr selection_length_x =
         sequence_controls_x + selection_length_offset;
-    IntKnob::install<Small>(this, ParamId::SelectionLength, selection_length_x,
-                            selection_y)
+    Knob::install<Small>(this, ParamId::SelectionLength, selection_length_x,
+                         selection_y)
         ->on_change(update_selection_length);
 
     auto constexpr gate_y = global_controls_y(3);

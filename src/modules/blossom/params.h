@@ -26,6 +26,7 @@ struct BounceRatioModes {
 
 struct BounceRatio {
   struct KnobMapper;
+  static auto constexpr default_rotation = 0.F;
   static auto constexpr unit = "x";
 
   static inline auto scale(float normalized, BounceRatioMode mode) -> float {

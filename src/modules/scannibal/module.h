@@ -31,8 +31,8 @@ template <int N> class Module : public rack::engine::Module {
 public:
   Module() {
     config(ParamId::Count, InputId::Count, OutputId::Count, LightId::Count);
-    IntKnob::config<SelectionLength<N>>(this, ParamId::SelectionLength, "Steps",
-                                        N);
+    Knob::config<SelectionLength<N>>(this, ParamId::SelectionLength, "Steps",
+                                     N);
 
     configInput(InputId::InA, "A");
     configInput(InputId::InB, "B");

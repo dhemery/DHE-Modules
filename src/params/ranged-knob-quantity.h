@@ -6,9 +6,9 @@
 
 namespace dhe {
 
-template <typename TValue>
-struct KnobQuantity : public rack::engine::ParamQuantity {
-  using Action = std::function<void(TValue)>;
+template <typename V>
+struct RangedKnobQuantity : public rack::engine::ParamQuantity {
+  using Action = std::function<void(V)>;
 
   void set_display_range(Range r) {
     displayMultiplier = r.size();
@@ -17,13 +17,13 @@ struct KnobQuantity : public rack::engine::ParamQuantity {
 
   void setValue(float value) override {
     rack::engine::ParamQuantity::setValue(value);
-    action_(static_cast<TValue>(value));
+    action_(static_cast<V>(value));
   }
 
   void on_change(Action const &action) { action_ = action; }
 
 private:
-  Action action_ = [](TValue) {};
+  Action action_ = [](V) {};
 };
 
 } // namespace dhe

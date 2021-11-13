@@ -25,7 +25,7 @@ public:
   }
 
   constexpr auto normalize(float scaled) const -> float {
-    return (scaled - lower_) / size();
+    return cx::normalize(scaled, lower_, upper_);
   }
 
   constexpr auto clamp(float scaled) const -> float {

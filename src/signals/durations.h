@@ -8,8 +8,6 @@
 
 namespace dhe {
 namespace duration {
-static auto constexpr unit = " s";
-
 static inline auto taper() -> sigmoid::Taper const & {
   /**
    * This curvature gives a duration knob a gentle inverted S taper,
@@ -39,16 +37,23 @@ static inline auto normalize(float seconds, Range range) -> float {
 }
 } // namespace duration
 
+static auto constexpr duration_unit = " s";
+
 template <typename T> struct MappedDurationRange {
   struct KnobMapper;
-  static auto constexpr unit = duration::unit;
+  static auto constexpr unit = duration_unit;
+  static auto constexpr default_rotation = 0.5F;
+
+  static constexpr auto range() -> Range {
+    return Range{T::max / 1000.F, T::max};
+  }
 
   static inline auto scale(float normalized) -> float {
-    return duration::scale(normalized, T::range());
+    return duration::scale(normalized, range());
   }
 
   static inline auto normalize(float scaled) -> float {
-    return duration::normalize(scaled, T::range());
+    return duration::normalize(scaled, range());
   }
 };
 
@@ -63,17 +68,17 @@ template <typename T> struct MappedDurationRange<T>::KnobMapper {
 };
 
 struct ShortDuration : MappedDurationRange<ShortDuration> {
-  static auto constexpr range() -> Range { return Range{0.001F, 1.F}; }
+  static auto constexpr max = 1.F;
   static auto constexpr label = "0.001–1.0 s";
 };
 
 struct MediumDuration : MappedDurationRange<MediumDuration> {
-  static auto constexpr range() -> Range { return Range{0.01F, 10.F}; }
+  static auto constexpr max = 10.F;
   static auto constexpr label = "0.01–10.0 s";
 };
 
 struct LongDuration : MappedDurationRange<LongDuration> {
-  static auto constexpr range() -> Range { return Range{0.1F, 100.F}; }
+  static auto constexpr max = 100.F;
   static auto constexpr label = "0.1–100.0 s";
 };
 
@@ -82,7 +87,8 @@ enum class DurationRangeId { Short, Medium, Long };
 struct DurationRanges {
   struct KnobMapper;
   using Selection = DurationRangeId;
-  static auto constexpr unit = ShortDuration::unit;
+  static auto constexpr default_rotation = 0.5F;
+  static auto constexpr unit = duration_unit;
 
   static inline auto labels() -> std::vector<std::string> const & {
     static auto const labels = std::vector<std::string>{

@@ -21,9 +21,14 @@ template <typename T> static constexpr auto abs(T t) -> T {
   return t < 0 ? -t : t;
 }
 
-static constexpr auto scale(float proportion, float lower_bound,
+static constexpr auto normalize(float scaled, float lower_bound,
+                                float upper_bound) -> float {
+  return (scaled - lower_bound) / (upper_bound - lower_bound);
+}
+
+static constexpr auto scale(float normalized, float lower_bound,
                             float upper_bound) -> float {
-  return proportion * (upper_bound - lower_bound) + lower_bound;
+  return normalized * (upper_bound - lower_bound) + lower_bound;
 }
 
 static constexpr auto clamp(float value, float lower_bound, float upper_bound)

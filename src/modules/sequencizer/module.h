@@ -37,10 +37,10 @@ public:
     Button::config(this, ParamId::Reset, "Reset");
     configInput(InputId::Reset, "Reset");
 
-    IntKnob::config<SelectionStart<N>>(this, ParamId::SelectionStart,
-                                       "Start step", 0);
-    IntKnob::config<SelectionLength<N>>(this, ParamId::SelectionLength,
-                                        "Sequence length", N);
+    Knob::config<SelectionStart<N>>(this, ParamId::SelectionStart, "Start step",
+                                    0);
+    Knob::config<SelectionLength<N>>(this, ParamId::SelectionLength,
+                                     "Sequence length", N);
 
     configInput(InputId::InA, "A");
     configInput(InputId::InB, "B");

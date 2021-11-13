@@ -2,7 +2,7 @@
 
 #include "components/phase-timer.h"
 #include "modules/envelope/mode/event.h"
-#include "signals/curvature.h"
+#include "signals/shapes.h"
 
 #include "dheunit/test.h"
 

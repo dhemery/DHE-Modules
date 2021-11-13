@@ -26,8 +26,9 @@ enum class WobbleRatioRangeId { Inward, InwardOutward, Outward };
 
 struct WobbleRatioRanges {
   struct KnobMapper;
-  using Selection = WobbleRatioRangeId;
+  static auto constexpr default_rotation = 0.5F;
   static auto constexpr unit = "x";
+  using Selection = WobbleRatioRangeId;
 
   static inline auto labels() -> std::vector<std::string> const & {
     static auto const labels =

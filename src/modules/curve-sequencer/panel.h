@@ -71,15 +71,15 @@ template <typename TSize> struct Panel : public PanelWidget<Panel<TSize>> {
       start_marker->set_start(index);
       end_marker->set_start(index);
     };
-    IntKnob::install<Small>(this, ParamId::SelectionStart, left, selection_y)
+    Knob::install<Small, int>(this, ParamId::SelectionStart, left, selection_y)
         ->on_change(update_selection_start);
 
     auto const update_selection_length = [end_marker](int offset) {
       end_marker->set_length(offset);
     };
     auto constexpr selection_length_x = left + hp2mm(2.F);
-    IntKnob::install<Small>(this, ParamId::SelectionLength, selection_length_x,
-                            selection_y)
+    Knob::install<Small, int>(this, ParamId::SelectionLength,
+                              selection_length_x, selection_y)
         ->on_change(update_selection_length);
 
     InPort::install(this, InputId::Gate, left, gate_y);

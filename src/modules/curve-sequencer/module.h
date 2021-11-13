@@ -14,6 +14,7 @@
 #include "params/presets.h"
 #include "signals/curvature.h"
 #include "signals/durations.h"
+#include "signals/shapes.h"
 #include "signals/step-selection.h"
 #include "signals/voltages.h"
 
@@ -42,10 +43,10 @@ template <int N> struct Module : rack::engine::Module {
     Button::config(this, ParamId::Reset, "Reset");
     configInput(InputId::Reset, "Reset");
 
-    IntKnob::config<SelectionStart<N>>(this, ParamId::SelectionStart,
-                                       "Start step", 0);
-    IntKnob::config<SelectionLength<N>>(this, ParamId::SelectionLength,
-                                        "Sequence length", N);
+    Knob::config<SelectionStart<N>>(this, ParamId::SelectionStart, "Start step",
+                                    0);
+    Knob::config<SelectionLength<N>>(this, ParamId::SelectionLength,
+                                     "Sequence length", N);
 
     auto level_knobs = std::vector<MappedKnobQuantity<VoltageRanges> *>{};
     auto duration_knobs = std::vector<MappedKnobQuantity<DurationRanges> *>{};

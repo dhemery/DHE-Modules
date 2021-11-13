@@ -78,6 +78,7 @@ enum class Operation { Add, Multiply };
 struct Operations {
   struct KnobMapper;
   using Selection = Operation;
+  static auto constexpr default_rotation = 0.5F;
   static auto constexpr unit = "";
 
   static inline auto labels() -> std::vector<std::string> const & {

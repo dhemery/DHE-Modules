@@ -5,7 +5,7 @@
 #include "components/cxmath.h"
 #include "components/latch.h"
 #include "components/range.h"
-#include "signals/curvature.h"
+#include "signals/shapes.h"
 
 namespace dhe {
 namespace envelope {

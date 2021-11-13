@@ -1,20 +1,19 @@
 #pragma once
 
-#include "basic.h"
-#include "components/cxmath.h"
-#include "components/range.h"
+#include "ranged.h"
 
 namespace dhe {
 
-struct Angle {
-  static auto constexpr range() -> Range { return Range{-pi, pi}; }
-  static auto constexpr display_range() -> Range {
-    return Range{-180.F, 180.F};
-  }
+struct Angle : RangedFloat<Angle> {
+  static auto constexpr min = -pi;
+  static auto constexpr max = pi;
+  static auto constexpr display_min = -180.F;
+  static auto constexpr display_max = 180.F;
+  static auto constexpr display_default = 0.F;
   static auto constexpr unit = "˚";
 
   static inline auto radians(float normalized) -> float {
-    return range().scale(normalized);
+    return scale(normalized);
   }
 };
 } // namespace dhe

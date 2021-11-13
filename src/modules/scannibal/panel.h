@@ -201,7 +201,8 @@ private:
 
     auto constexpr length_x = global_inputs_left + port_radius + padding;
     auto constexpr length_y = global_controls_y(0);
-    IntKnob::install<Small>(this, ParamId::SelectionLength, length_x, length_y)
+    Knob::install<Small, int>(this, ParamId::SelectionLength, length_x,
+                              length_y)
         ->on_change(
             [end_marker](int length) { end_marker->set_length(length); });
   }

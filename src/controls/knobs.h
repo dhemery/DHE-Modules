@@ -1,8 +1,8 @@
 #pragma once
 
 #include "components/meta.h"
-#include "params/knob-quantity.h"
 #include "params/mapped-knob-quantity.h"
+#include "params/ranged-knob-quantity.h"
 #include "widgets/dimensions.h"
 #include "widgets/knob-widget.h"
 
@@ -31,66 +31,73 @@ struct Tiny {
 
 struct Knob {
   template <typename, typename = void>
-  struct has_knob_mapper : std::false_type {}; // NOLINT
+  struct defines_display_range : std::false_type {};
 
-  template <typename T>
-  struct has_knob_mapper<T, void_t<typename T::KnobMapper>> // NOLINT
-      : std::true_type {};
+  template <typename R>
+  struct defines_display_range<
+      R, void_t<decltype(R::display_min), decltype(R::display_max)>>
+      : std::is_floating_point<decltype(R::display_min)> {};
 
-  template <typename TStyle, typename TPanel>
+  template <typename, typename = void>
+  struct defines_int_range : std::false_type {};
+
+  template <typename R>
+  struct defines_int_range<R, void_t<decltype(R::min), decltype(R::max)>>
+      : std::is_integral<decltype(R::min)> {};
+
+  template <typename, typename = void> struct is_mapped : std::false_type {};
+
+  template <typename M>
+  struct is_mapped<M, void_t<typename M::KnobMapper>> : std::true_type {};
+
+  template <typename TStyle, typename TValue = float, typename TPanel>
   static inline auto install(TPanel *panel, int id, float xmm, float ymm)
-      -> KnobWidget<TPanel, TStyle, float> * {
-    auto *widget = rack::createParamCentered<KnobWidget<TPanel, TStyle, float>>(
-        mm2px(xmm, ymm), panel->getModule(), id);
+      -> KnobWidget<TPanel, TStyle, TValue> * {
+    auto *widget =
+        rack::createParamCentered<KnobWidget<TPanel, TStyle, TValue>>(
+            mm2px(xmm, ymm), panel->getModule(), id);
+    widget->snap = std::is_integral<TValue>::value;
     panel->addParam(widget);
     return widget;
   }
 
-  // Use KnobQuantity if TConfig does not have a KnobMapper member type.
-  template <typename TConfig, typename TValue = float>
+  // Configure a knob with the display range specified by F
+  template <typename F>
   static inline auto config(rack::engine::Module *module, int id,
-                            std::string const &name, TValue rotation = 0.5F)
-      -> enable_if_t<!has_knob_mapper<TConfig>::value, KnobQuantity<float> *> {
-    auto const multiplier = TConfig::display_range().size();
-    auto const offset = TConfig::display_range().lower_bound();
-    return module->configParam<KnobQuantity<float>>(
-        id, 0.F, 1.F, rotation, name, TConfig::unit, 0.F, multiplier, offset);
+                            std::string const &name,
+                            float value = F::display_default)
+      -> enable_if_t<defines_display_range<F>::value,
+                     RangedKnobQuantity<float> *> {
+    auto const display_range = F::display_max - F::display_min;
+    auto const rotation = cx::normalize(value, F::display_min, F::display_max);
+    return module->configParam<RangedKnobQuantity<float>>(
+        id, 0.F, 1.F, rotation, name, F::unit, 0.F, display_range,
+        F::display_min);
   }
 
-  // Use MappedKnobQuantity if TConfig has a KnobMapper member type.
-  template <typename TConfig>
-  static inline auto config(rack::engine::Module *module, int id,
-                            std::string const &name, float rotation = 0.5F)
-      -> enable_if_t<has_knob_mapper<TConfig>::value,
-                     MappedKnobQuantity<TConfig> *> {
-    return module->configParam<MappedKnobQuantity<TConfig>>(
-        id, 0.F, 1.F, rotation, name, TConfig::unit);
-  }
-};
-
-struct IntKnob {
-  template <typename TStyle, typename TPanel>
-  static auto install(TPanel *panel, int id, float xmm, float ymm)
-      -> KnobWidget<TPanel, TStyle, int> * {
-    auto *widget = rack::createParamCentered<KnobWidget<TPanel, TStyle, int>>(
-        mm2px(xmm, ymm), panel->getModule(), id);
-    panel->addParam(widget);
-    widget->snap = true;
-    return widget;
-  }
-
-  template <typename TConfig>
+  // Configure a knob with the int range specified by I
+  template <typename I>
   static inline auto config(rack::engine::Module *module, int id,
                             std::string const &name, int value)
-      -> KnobQuantity<int> * {
-    auto const min = static_cast<float>(TConfig::min);
-    auto const max = static_cast<float>(TConfig::max);
-    auto const offset = static_cast<float>(TConfig::display_offset);
+      -> enable_if_t<defines_int_range<I>::value, RangedKnobQuantity<int> *> {
+    auto const min = static_cast<float>(I::min);
+    auto const max = static_cast<float>(I::max);
     auto const default_value = static_cast<float>(value);
-    auto *pq = module->configParam<KnobQuantity<int>>(
-        id, min, max, default_value, name, TConfig::unit, 0.F, 1.F, offset);
-    pq->snapEnabled = true;
-    return pq;
+    auto const rotation = cx::normalize(default_value, min, max);
+    auto *q = module->configParam<RangedKnobQuantity<int>>(
+        id, min, max, rotation, name, I::unit);
+    q->snapEnabled = true;
+    return q;
+  }
+
+  // Configure a knob with display values mapped by M
+  template <typename M>
+  static inline auto config(rack::engine::Module *module, int id,
+                            std::string const &name,
+                            float rotation = M::default_rotation)
+      -> enable_if_t<is_mapped<M>::value, MappedKnobQuantity<M> *> {
+    return module->configParam<MappedKnobQuantity<M>>(id, 0.F, 1.F, rotation,
+                                                      name, M::unit);
   }
 };
 } // namespace dhe
