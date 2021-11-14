@@ -8,13 +8,12 @@
 #include <vector>
 
 namespace dhe {
-template <typename P, typename S, typename V>
-struct SwitchWidget : public rack::app::SvgSwitch {
-  using Value = typename V::value_type;
+template <typename T> struct SwitchWidget : public rack::app::SvgSwitch {
+  using Value = typename T::value_type;
   using Action = std::function<void(Value)>;
 
   SwitchWidget() {
-    auto const panel_prefix = std::string{P::svg_dir} + "/";
+    auto const panel_prefix = std::string{T::svg_dir} + "/";
     for (auto const &file_name : file_names()) {
       addFrame(load_svg(panel_prefix + file_name));
     }
@@ -33,8 +32,8 @@ struct SwitchWidget : public rack::app::SvgSwitch {
 private:
   static inline auto file_names() -> std::vector<std::string> const & {
     static auto frame_names = std::vector<std::string>{};
-    auto const prefix = S::slug() + "-";
-    auto const size = V::labels().size();
+    auto const prefix = T::slug() + "-";
+    auto const size = T::size;
     for (size_t position = 1; position <= size; position++) {
       frame_names.push_back(prefix + std::to_string(position));
     }

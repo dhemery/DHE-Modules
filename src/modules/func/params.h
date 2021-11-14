@@ -1,5 +1,6 @@
 #pragma once
 
+#include "signals/enums.h"
 #include "signals/voltages.h"
 
 #include <string>
@@ -10,8 +11,7 @@ namespace func {
 
 enum class OffsetRangeId { Unipolar5, Bipolar, Unipolar, Bipolar10 };
 
-struct OffsetRanges {
-  using value_type = OffsetRangeId; // NOLINT
+struct OffsetRanges : Enums<OffsetRangeId, 4> {
   static constexpr auto stepper_slug = "offset-range";
   static constexpr auto unit = voltage_unit;
 
@@ -42,8 +42,7 @@ private:
 
 enum class MultiplierRangeId { Attenuator, Attenuverter, Gain, Gainuverter };
 
-struct MultiplierRanges {
-  using value_type = MultiplierRangeId; // NOLINT
+struct MultiplierRanges : Enums<MultiplierRangeId, 4> {
   static constexpr auto stepper_slug = "multiplier-range";
   static constexpr auto unit = "";
 
@@ -75,9 +74,8 @@ private:
 
 enum class Operation { Add, Multiply };
 
-struct Operations {
+struct Operations : Enums<Operation, 2> {
   struct KnobMapper;
-  using value_type = Operation; // NOLINT
   static auto constexpr default_rotation = 0.5F;
   static auto constexpr unit = "";
 

@@ -4,6 +4,7 @@
 #include "components/sigmoid.h"
 #include "controls/knobs.h"
 #include "params/presets.h"
+#include "signals/enums.h"
 
 #include "rack.hpp"
 
@@ -15,9 +16,7 @@ namespace blossom {
 
 enum class BounceRatioMode { Quantized, Free };
 
-struct BounceRatioModes {
-  using value_type = BounceRatioMode; // NOLINT
-
+struct BounceRatioModes : Enums<BounceRatioMode, 2> {
   static auto labels() -> std::vector<std::string> const & {
     static auto const labels = std::vector<std::string>{"Quantized", "Free"};
     return labels;

@@ -40,7 +40,7 @@ struct Module : public rack::engine::Module {
         ->on_change(select_duration_range);
     configInput(InputId::DurationCv, "Duration CV");
 
-    Switch::config<Modes>(this, ParamId::Mode, "Mode", Modes::Hold);
+    Switch::config<Modes>(this, ParamId::Mode, "Mode", Mode::Hold);
   };
 
   void process(ProcessArgs const &args) override {

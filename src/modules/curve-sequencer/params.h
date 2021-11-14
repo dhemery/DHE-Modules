@@ -2,11 +2,11 @@
 
 #include "advance-mode.h"
 #include "generate-mode.h"
+#include "signals/enums.h"
 
 namespace dhe {
 namespace curve_sequencer {
-struct AdvanceModes {
-  using value_type = AdvanceMode; // NOLINT
+struct AdvanceModes : Enums<AdvanceMode, 6> {
   static constexpr auto stepper_slug = "advance-mode";
   static inline auto labels() -> std::vector<std::string> const & {
     static auto const labels = std::vector<std::string>{
@@ -16,7 +16,7 @@ struct AdvanceModes {
   }
 };
 
-struct GenerateModes {
+struct GenerateModes : Enums<GenerateMode, 6> {
   using value_type = GenerateMode; // NOLINT
   static constexpr auto stepper_slug = "generate-mode";
   static inline auto labels() -> std::vector<std::string> const & {

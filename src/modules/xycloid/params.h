@@ -3,6 +3,7 @@
 #include "components/range.h"
 #include "components/sigmoid.h"
 #include "controls/knobs.h"
+#include "signals/enums.h"
 
 #include "rack.hpp"
 
@@ -13,9 +14,7 @@ namespace xycloid {
 
 enum class WobbleRatioMode { Quantized, Free };
 
-struct WobbleRatioModes {
-  using value_type = WobbleRatioMode; // NOLINT
-
+struct WobbleRatioModes : Enums<WobbleRatioMode, 2> {
   static inline auto labels() -> std::vector<std::string> const & {
     static auto const labels = std::vector<std::string>{"Quantized", "Free"};
     return labels;
@@ -24,8 +23,7 @@ struct WobbleRatioModes {
 
 enum class WobbleRatioRangeId { Inward, InwardOutward, Outward };
 
-struct WobbleRatioRanges {
-  using value_type = WobbleRatioRangeId; // NOLINT
+struct WobbleRatioRanges : Enums<WobbleRatioRangeId, 3> {
   struct KnobMapper;
   static auto constexpr default_rotation = 0.5F;
   static auto constexpr unit = "x";

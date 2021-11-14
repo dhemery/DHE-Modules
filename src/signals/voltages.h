@@ -1,6 +1,7 @@
 #pragma once
 
 #include "components/range.h"
+#include "enums.h"
 #include "ranged.h"
 
 #include <string>
@@ -32,8 +33,7 @@ struct UnipolarVoltage : RangedFloat<UnipolarVoltage> {
 
 enum class VoltageRangeId { Bipolar, Unipolar };
 
-struct VoltageRanges {
-  using value_type = VoltageRangeId; // NOLINT
+struct VoltageRanges : Enums<VoltageRangeId, 2> {
   struct KnobMapper;
   static auto constexpr default_rotation = 0.5F;
   static auto constexpr unit = voltage_unit;

@@ -2,6 +2,7 @@
 
 #include "components/range.h"
 #include "components/sigmoid.h"
+#include "enums.h"
 
 #include <string>
 #include <vector>
@@ -84,8 +85,7 @@ struct LongDuration : MappedDurationRange<LongDuration> {
 
 enum class DurationRangeId { Short, Medium, Long };
 
-struct DurationRanges {
-  using value_type = DurationRangeId; // NOLINT
+struct DurationRanges : Enums<DurationRangeId, 3> {
   struct KnobMapper;
   static auto constexpr default_rotation = 0.5F;
   static auto constexpr unit = duration_unit;

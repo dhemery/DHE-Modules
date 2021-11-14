@@ -2,14 +2,14 @@
 
 #include "gate-modes.h"
 #include "outcomes.h"
+#include "signals/enums.h"
 
 #include <string>
 #include <vector>
 
 namespace dhe {
 namespace truth {
-struct GateModes {
-  using value_type = GateMode; // NOLINT
+struct GateModes : Enums<GateMode, 5> {
   static constexpr auto stepper_slug = "gate-mode";
   static inline auto labels() -> std::vector<std::string> const & {
     static const auto labels = std::vector<std::string>{
@@ -19,8 +19,7 @@ struct GateModes {
   }
 };
 
-struct Outcomes {
-  using value_type = Outcome; // NOLINT
+struct Outcomes : Enums<Outcome, 4> {
   static constexpr auto stepper_slug = "outcome";
   static inline auto labels() -> std::vector<std::string> const & {
     static const auto labels =

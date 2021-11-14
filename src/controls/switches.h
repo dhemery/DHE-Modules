@@ -13,10 +13,18 @@
 namespace dhe {
 
 struct Switch {
+  template <typename P, typename S, typename V> struct Config {
+    using value_type = typename V::value_type; // NOLINT
+    static auto constexpr size = V::size;
+    static auto constexpr svg_dir = P::svg_dir;
+
+    static inline auto slug() -> std::string const & { return S::slug(); }
+  };
+
   template <typename V, typename S, typename P>
   static inline auto install(P *panel, int id, float xmm, float ymm)
-      -> SwitchWidget<P, S, V> * {
-    auto *widget = rack::createParamCentered<SwitchWidget<P, S, V>>(
+      -> SwitchWidget<Config<P, S, V>> * {
+    auto *widget = rack::createParamCentered<SwitchWidget<Config<P, S, V>>>(
         mm2px(xmm, ymm), panel->getModule(), id);
     panel->addParam(widget);
     return widget;
@@ -38,7 +46,7 @@ struct Switch {
 struct ThumbSwitch {
   template <typename V> struct Style {
     static auto slug() -> std::string const & {
-      static auto const size = V::labels().size();
+      static auto const size = V::size;
       static auto const slug = "toggle-" + std::to_string(size);
       return slug;
     }
@@ -46,7 +54,7 @@ struct ThumbSwitch {
 
   template <typename V, typename P>
   static inline auto install(P *panel, int id, float xmm, float ymm)
-      -> SwitchWidget<P, Style<V>, V> * {
+      -> SwitchWidget<Switch::Config<P, Style<V>, V>> * {
     return Switch::install<V, Style<V>>(panel, id, xmm, ymm);
   }
 };
@@ -61,7 +69,7 @@ struct Stepper {
 
   template <typename V, typename P>
   static inline auto install(P *panel, int id, float xmm, float ymm)
-      -> SwitchWidget<P, Style<V>, V> * {
+      -> SwitchWidget<Switch::Config<P, Style<V>, V>> * {
     return Switch::install<V, Style<V>>(panel, id, xmm, ymm);
   }
 };
