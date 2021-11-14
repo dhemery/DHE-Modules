@@ -16,7 +16,7 @@ namespace blossom {
 enum class BounceRatioMode { Quantized, Free };
 
 struct BounceRatioModes {
-  using Selection = BounceRatioMode;
+  using value_type = BounceRatioMode; // NOLINT
 
   static auto labels() -> std::vector<std::string> const & {
     static auto const labels = std::vector<std::string>{"Quantized", "Free"};

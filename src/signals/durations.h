@@ -85,8 +85,8 @@ struct LongDuration : MappedDurationRange<LongDuration> {
 enum class DurationRangeId { Short, Medium, Long };
 
 struct DurationRanges {
+  using value_type = DurationRangeId; // NOLINT
   struct KnobMapper;
-  using Selection = DurationRangeId;
   static auto constexpr default_rotation = 0.5F;
   static auto constexpr unit = duration_unit;
 

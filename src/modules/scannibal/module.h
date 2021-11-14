@@ -167,7 +167,7 @@ public:
   }
 
   auto shape(int step) const -> Shape {
-    return value_of<Shapes::Selection>(params[ParamId::StepShape + step]);
+    return value_of<Shape>(params[ParamId::StepShape + step]);
   }
 
   auto dataToJson() -> json_t * override {

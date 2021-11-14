@@ -33,8 +33,8 @@ struct UnipolarVoltage : RangedFloat<UnipolarVoltage> {
 enum class VoltageRangeId { Bipolar, Unipolar };
 
 struct VoltageRanges {
+  using value_type = VoltageRangeId; // NOLINT
   struct KnobMapper;
-  using Selection = VoltageRangeId;
   static auto constexpr default_rotation = 0.5F;
   static auto constexpr unit = voltage_unit;
 

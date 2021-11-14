@@ -51,13 +51,12 @@ public:
       auto *multiplier_range_stepper = Stepper::install<MultiplierRanges>(
           this, ParamId::MultiplierRange + row, column4, y);
 
-      auto const select_operation =
-          [offset_range_stepper,
-           multiplier_range_stepper](Operations::Selection selection) {
-            auto const is_multiply = selection == Operation::Multiply;
-            multiplier_range_stepper->setVisible(is_multiply);
-            offset_range_stepper->setVisible(!is_multiply);
-          };
+      auto const select_operation = [offset_range_stepper,
+                                     multiplier_range_stepper](Operation op) {
+        auto const is_multiply = op == Operation::Multiply;
+        multiplier_range_stepper->setVisible(is_multiply);
+        offset_range_stepper->setVisible(!is_multiply);
+      };
       ThumbSwitch::install<Operations>(this, ParamId::Operation + row, column2,
                                        y)
           ->on_change(select_operation);

@@ -94,9 +94,7 @@ private:
     return rotation_of(params[knob_id], inputs[cv_id], params[av_id]);
   }
 
-  auto shape(int id) const -> Shape {
-    return value_of<Shapes::Selection>(params[id]);
-  }
+  auto shape(int id) const -> Shape { return value_of<Shape>(params[id]); }
 
   static inline auto tapered(float rotation, Shape shape, float curvature,
                              VoltageRangeId range_id) -> float {

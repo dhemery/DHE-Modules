@@ -5,12 +5,12 @@
 #include "rack.hpp"
 
 namespace dhe {
-template <typename TPanel, typename TStyle, typename TValue>
+template <typename P, typename S, typename V>
 struct KnobWidget : public rack::app::SvgKnob {
-  using TAction = std::function<void(TValue)>;
+  using Action = std::function<void(V)>;
 
   KnobWidget() {
-    auto knob_svg = load_svg(TPanel::svg_dir, TStyle::svg_file);
+    auto knob_svg = load_svg(P::svg_dir, S::svg_file);
     setSvg(knob_svg);
     minAngle = -0.83F * pi;
     maxAngle = 0.83F * M_PI;
@@ -19,15 +19,14 @@ struct KnobWidget : public rack::app::SvgKnob {
 
   void onChange(const rack::event::Change &e) override {
     rack::app::SvgKnob::onChange(e);
-    auto const value =
-        static_cast<TValue>(this->getParamQuantity()->getValue());
+    auto const value = static_cast<V>(this->getParamQuantity()->getValue());
     action_(value);
   }
 
-  void on_change(TAction const &action) { action_ = action; }
+  void on_change(Action const &action) { action_ = action; }
 
 private:
-  TAction action_ = [](TValue) {};
+  Action action_ = [](V) {};
 };
 
 } // namespace dhe

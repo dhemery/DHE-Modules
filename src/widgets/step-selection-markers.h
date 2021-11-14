@@ -26,8 +26,8 @@ private:
 };
 
 struct StartMarker {
-  template <typename TPanel> struct Widget : public rack::widget::SvgWidget {
-    Widget() { setSvg(load_svg(TPanel::svg_dir, "marker-start")); }
+  template <typename P> struct Widget : public rack::widget::SvgWidget {
+    Widget() { setSvg(load_svg(P::svg_dir, "marker-start")); }
 
     void set_start(int index) {
       auto const xmm = x_ + step_width_ * static_cast<float>(index);
@@ -45,14 +45,14 @@ struct StartMarker {
     float step_width_{};
   };
 
-  template <typename TPanel>
-  static inline auto install(TPanel *panel,
+  template <typename P>
+  static inline auto install(P *panel,
                              SelectionMarkerPositions const &positions)
-      -> Widget<TPanel> * {
+      -> Widget<P> * {
     auto const x = positions.start_x();
     auto const y = positions.y();
     auto const dx = positions.dx();
-    auto w = rack::createWidgetCentered<Widget<TPanel>>(mm2px(x, y));
+    auto w = rack::createWidgetCentered<Widget<P>>(mm2px(x, y));
     w->initialize(x, dx);
     panel->addChild(w);
     return w;
@@ -60,9 +60,9 @@ struct StartMarker {
 };
 
 struct EndMarker {
-  template <typename TPanel> struct Widget : public rack::widget::SvgWidget {
-    Widget() { setSvg(load_svg(TPanel::svg_dir, "marker-end")); }
-    static int constexpr index_mask_{TPanel::N - 1};
+  template <typename P> struct Widget : public rack::widget::SvgWidget {
+    Widget() { setSvg(load_svg(P::svg_dir, "marker-end")); }
+    static int constexpr index_mask_{P::N - 1};
 
     void set_start(int index) {
       this->start_index_ = index;
@@ -90,17 +90,17 @@ struct EndMarker {
     float x_{};
     float step_width_{};
     int start_index_{0};
-    int end_offset_{TPanel::N - 1};
+    int end_offset_{P::N - 1};
   };
 
-  template <typename TPanel>
-  static inline auto install(TPanel *panel,
+  template <typename P>
+  static inline auto install(P *panel,
                              SelectionMarkerPositions const &positions)
-      -> Widget<TPanel> * {
+      -> Widget<P> * {
     auto const x = positions.end_x();
     auto const y = positions.y();
     auto const dx = positions.dx();
-    auto w = rack::createWidgetCentered<Widget<TPanel>>(mm2px(x, y));
+    auto w = rack::createWidgetCentered<Widget<P>>(mm2px(x, y));
     w->initialize(x, dx);
     panel->addChild(w);
     return w;

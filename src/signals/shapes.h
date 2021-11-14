@@ -9,7 +9,7 @@ namespace dhe {
 enum class Shape { J, S };
 
 struct Shapes {
-  using Selection = Shape;
+  using value_type = Shape; // NOLINT
   static auto constexpr unit = "";
   static auto constexpr stepper_slug = "shape";
 

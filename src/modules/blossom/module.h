@@ -32,10 +32,9 @@ public:
 
     auto *ratio_knob =
         Knob::config<BounceRatio>(this, ParamId::BounceRatio, "Ratio");
-    auto select_ratio_mode =
-        [ratio_knob](BounceRatioModes::Selection selection) {
-          ratio_knob->mapper().select_mode(selection);
-        };
+    auto select_ratio_mode = [ratio_knob](BounceRatioMode mode) {
+      ratio_knob->mapper().select_mode(mode);
+    };
     Switch::config<BounceRatioModes>(this, ParamId::BounceRatioMode,
                                      "Ratio mode", BounceRatioMode::Free)
         ->on_change(select_ratio_mode);
@@ -89,7 +88,7 @@ public:
                                       inputs[InputId::BounceRatioCv],
                                       params[ParamId::BounceRatioAv]);
     auto const mode =
-        value_of<BounceRatioModes::Selection>(params[ParamId::BounceRatioMode]);
+        value_of<BounceRatioMode>(params[ParamId::BounceRatioMode]);
     return BounceRatio::scale(rotation, mode);
   }
 

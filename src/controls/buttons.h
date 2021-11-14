@@ -28,12 +28,12 @@ struct Toggle {
 };
 
 struct Button {
-  template <typename TBehavior, typename TStyle = Normal, typename TPanel>
-  static inline auto install(TPanel *panel, int id, float xmm, float ymm)
-      -> ButtonWidget<TPanel, TStyle> * {
-    auto widget = rack::createParamCentered<ButtonWidget<TPanel, TStyle>>(
+  template <typename B, typename S = Normal, typename P>
+  static inline auto install(P *panel, int id, float xmm, float ymm)
+      -> ButtonWidget<P, S> * {
+    auto widget = rack::createParamCentered<ButtonWidget<P, S>>(
         mm2px(xmm, ymm), panel->getModule(), id);
-    widget->momentary = TBehavior::momentary;
+    widget->momentary = B::momentary;
     panel->addParam(widget);
     return widget;
   }

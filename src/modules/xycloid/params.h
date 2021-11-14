@@ -14,7 +14,7 @@ namespace xycloid {
 enum class WobbleRatioMode { Quantized, Free };
 
 struct WobbleRatioModes {
-  using Selection = WobbleRatioMode;
+  using value_type = WobbleRatioMode; // NOLINT
 
   static inline auto labels() -> std::vector<std::string> const & {
     static auto const labels = std::vector<std::string>{"Quantized", "Free"};
@@ -25,10 +25,10 @@ struct WobbleRatioModes {
 enum class WobbleRatioRangeId { Inward, InwardOutward, Outward };
 
 struct WobbleRatioRanges {
+  using value_type = WobbleRatioRangeId; // NOLINT
   struct KnobMapper;
   static auto constexpr default_rotation = 0.5F;
   static auto constexpr unit = "x";
-  using Selection = WobbleRatioRangeId;
 
   static inline auto labels() -> std::vector<std::string> const & {
     static auto const labels =

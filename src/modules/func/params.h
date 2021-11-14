@@ -11,13 +11,13 @@ namespace func {
 enum class OffsetRangeId { Unipolar5, Bipolar, Unipolar, Bipolar10 };
 
 struct OffsetRanges {
-  using Selection = OffsetRangeId;
+  using value_type = OffsetRangeId; // NOLINT
   static constexpr auto stepper_slug = "offset-range";
-  static constexpr auto unit = " V";
+  static constexpr auto unit = voltage_unit;
 
   static inline auto labels() -> std::vector<std::string> const & {
-    static auto const labels =
-        std::vector<std::string>{"0–5 V", "±5 V", "0–10 V", "±10 V"};
+    static auto const labels = std::vector<std::string>{
+        "0–5 V", BipolarVoltage::label, UnipolarVoltage::label, "±10 V"};
     return labels;
   }
 
@@ -43,7 +43,7 @@ private:
 enum class MultiplierRangeId { Attenuator, Attenuverter, Gain, Gainuverter };
 
 struct MultiplierRanges {
-  using Selection = MultiplierRangeId;
+  using value_type = MultiplierRangeId; // NOLINT
   static constexpr auto stepper_slug = "multiplier-range";
   static constexpr auto unit = "";
 
@@ -77,7 +77,7 @@ enum class Operation { Add, Multiply };
 
 struct Operations {
   struct KnobMapper;
-  using Selection = Operation;
+  using value_type = Operation; // NOLINT
   static auto constexpr default_rotation = 0.5F;
   static auto constexpr unit = "";
 

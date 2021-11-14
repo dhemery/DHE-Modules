@@ -2,20 +2,19 @@
 #include "gain.h"
 
 namespace dhe {
-template <typename TValue = float, typename TParam>
-auto value_of(TParam const &param) -> TValue {
-  return static_cast<TValue>(const_cast<TParam &>(param).getValue());
+template <typename V = float, typename P> auto value_of(P const &param) -> V {
+  return static_cast<V>(const_cast<P &>(param).getValue());
 }
 
-template <typename TInput> auto voltage_at(TInput const &input) -> float {
-  return const_cast<TInput &>(input).getVoltage();
+template <typename I> auto voltage_at(I const &input) -> float {
+  return const_cast<I &>(input).getVoltage();
 }
 
-template <typename TParam> auto is_pressed(TParam const &param) -> bool {
+template <typename P> auto is_pressed(P const &param) -> bool {
   return value_of<bool>(param);
 }
 
-template <typename TInput> auto is_high(TInput const &input) -> bool {
+template <typename I> auto is_high(I const &input) -> bool {
   return voltage_at(input) > 1.F;
 }
 
@@ -26,20 +25,19 @@ static inline auto rotation_of(float rotation, float cv,
   return rotation + modulation;
 }
 
-template <typename TParam> auto rotation_of(TParam const &knob) -> float {
+template <typename P> auto rotation_of(P const &knob) -> float {
   return value_of(knob);
 }
 
-template <typename TParam, typename TInput>
-auto rotation_of(TParam const &knob, TInput const &cv_input) -> float {
+template <typename P, typename I>
+auto rotation_of(P const &knob, I const &cv_input) -> float {
   auto const rotation = value_of(knob);
   auto const cv = voltage_at(cv_input);
   return rotation_of(rotation, cv);
 }
 
-template <typename TParam, typename TInput>
-auto rotation_of(TParam const &knob, TInput const &cv_input,
-                 TParam const &av_knob) -> float {
+template <typename P, typename I>
+auto rotation_of(P const &knob, I const &cv_input, P const &av_knob) -> float {
   auto const rotation = value_of(knob);
   auto const cv = voltage_at(cv_input);
   auto const av_rotation = value_of(av_knob);

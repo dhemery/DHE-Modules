@@ -33,11 +33,11 @@ private:
 };
 
 struct Curvature::KnobMapper {
-  auto scale(float normalized) const -> float {
+  static inline auto scale(float normalized) -> float {
     return Curvature::curvature(normalized);
   }
 
-  auto normalize(float curvature) const -> float {
+  static inline auto normalize(float curvature) -> float {
     return Curvature::normalize(curvature);
   }
 };

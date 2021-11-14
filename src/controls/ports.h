@@ -10,27 +10,27 @@
 namespace dhe {
 
 struct InPort {
-  template <typename PanelT>
-  static inline void install(PanelT *panel, int id, float xmm, float ymm) {
-    panel->addInput(rack::createInputCentered<PortWidget<PanelT>>(
+  template <typename P>
+  static inline void install(P *panel, int id, float xmm, float ymm) {
+    panel->addInput(rack::createInputCentered<PortWidget<P>>(
         mm2px(xmm, ymm), panel->getModule(), id));
   }
 
-  template <typename ModuleT>
-  static inline void config(ModuleT *module, int id, std::string const &name) {
+  template <typename M>
+  static inline void config(M *module, int id, std::string const &name) {
     module->configInput(id, name);
   }
 };
 
 struct OutPort {
-  template <typename PanelT>
-  static inline void install(PanelT *panel, int id, float xmm, float ymm) {
-    panel->addOutput(rack::createOutputCentered<PortWidget<PanelT>>(
+  template <typename P>
+  static inline void install(P *panel, int id, float xmm, float ymm) {
+    panel->addOutput(rack::createOutputCentered<PortWidget<P>>(
         mm2px(xmm, ymm), panel->getModule(), id));
   }
 
-  template <typename ModuleT>
-  static inline void config(ModuleT *module, int id, std::string const &name) {
+  template <typename M>
+  static inline void config(M *module, int id, std::string const &name) {
     module->configOutput(id, name);
   }
 };

@@ -52,25 +52,23 @@ private:
     auto *operand_knob = Knob::config<Operations>(
         this, ParamId::Operand + channel, offset_knob_name);
 
-    auto select_operation =
-        [operand_knob, multiplier_knob_name,
-         offset_knob_name](Operations::Selection selection) {
-          operand_knob->mapper().select_operation(selection);
-          if (selection == Operation::Multiply) {
-            operand_knob->unit = MultiplierRanges::unit;
-            operand_knob->name = multiplier_knob_name;
-          } else {
-            operand_knob->unit = OffsetRanges::unit;
-            operand_knob->name = offset_knob_name;
-          }
-        };
-    auto select_multiplier_range = [operand_knob](MultiplierRangeId range) {
-      operand_knob->mapper().select_multiplier_range(range);
+    auto select_operation = [operand_knob, multiplier_knob_name,
+                             offset_knob_name](Operation op) {
+      operand_knob->mapper().select_operation(op);
+      if (op == Operation::Multiply) {
+        operand_knob->unit = MultiplierRanges::unit;
+        operand_knob->name = multiplier_knob_name;
+      } else {
+        operand_knob->unit = OffsetRanges::unit;
+        operand_knob->name = offset_knob_name;
+      }
     };
-    auto select_offset_range =
-        [operand_knob](OffsetRanges::Selection selection) {
-          operand_knob->mapper().select_offset_range(selection);
-        };
+    auto select_multiplier_range = [operand_knob](MultiplierRangeId id) {
+      operand_knob->mapper().select_multiplier_range(id);
+    };
+    auto select_offset_range = [operand_knob](OffsetRangeId id) {
+      operand_knob->mapper().select_offset_range(id);
+    };
 
     auto const operator_switch_name =
         channel_name + (N == 1 ? "Operator" : " operator");

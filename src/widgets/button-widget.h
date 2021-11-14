@@ -9,12 +9,12 @@
 #include <vector>
 
 namespace dhe {
-template <typename TPanel, typename TStyle>
+template <typename P, typename S>
 struct ButtonWidget : public rack::app::SvgSwitch {
   using Action = std::function<void(bool)>;
 
   ButtonWidget() {
-    auto const prefix = std::string{TPanel::svg_dir} + "/" + TStyle::slug + "-";
+    auto const prefix = std::string{P::svg_dir} + "/" + S::slug + "-";
     addFrame(load_svg(prefix + "released"));
     addFrame(load_svg(prefix + "pressed"));
     shadow->opacity = 0.F;

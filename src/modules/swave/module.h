@@ -46,7 +46,7 @@ private:
   }
 
   auto shape() const -> Shape {
-    return value_of<Shapes::Selection>(params[ParamId::Shape]);
+    return value_of<Shape>(params[ParamId::Shape]);
   }
 
   auto signal_in() const -> float { return voltage_at(inputs[InputId::Swave]); }
