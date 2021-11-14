@@ -32,7 +32,7 @@ template <typename T> struct SwitchWidget : public rack::app::SvgSwitch {
 private:
   static inline auto file_names() -> std::vector<std::string> const & {
     static auto frame_names = std::vector<std::string>{};
-    auto const prefix = T::slug() + "-";
+    auto const prefix = T::slug + std::string{"-"};
     auto const size = T::size;
     for (size_t position = 1; position <= size; position++) {
       frame_names.push_back(prefix + std::to_string(position));

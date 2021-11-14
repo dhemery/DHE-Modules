@@ -17,8 +17,7 @@ struct Switch {
     using value_type = typename V::value_type; // NOLINT
     static auto constexpr size = V::size;
     static auto constexpr svg_dir = P::svg_dir;
-
-    static inline auto slug() -> std::string const & { return S::slug(); }
+    static auto constexpr slug = S::slug;
   };
 
   template <typename V, typename S, typename P>
@@ -44,12 +43,12 @@ struct Switch {
 };
 
 struct ThumbSwitch {
+  template <int N> struct Size {};
+  template <> struct Size<2> { static auto constexpr slug = "toggle-2"; };
+  template <> struct Size<3> { static auto constexpr slug = "toggle-3"; };
+
   template <typename V> struct Style {
-    static auto slug() -> std::string const & {
-      static auto const size = V::size;
-      static auto const slug = "toggle-" + std::to_string(size);
-      return slug;
-    }
+    static auto constexpr slug = Size<V::size>::slug;
   };
 
   template <typename V, typename P>
@@ -61,10 +60,7 @@ struct ThumbSwitch {
 
 struct Stepper {
   template <typename V> struct Style {
-    static inline auto slug() -> std::string const & {
-      static auto const slug = std::string{V::stepper_slug};
-      return slug;
-    }
+    static auto constexpr slug = V::stepper_slug;
   };
 
   template <typename V, typename P>
