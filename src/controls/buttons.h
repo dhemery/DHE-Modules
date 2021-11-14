@@ -28,10 +28,17 @@ struct Toggle {
 };
 
 struct Button {
+  template <typename P, typename S> struct Config {
+    static auto constexpr svg_dir = P::svg_dir;
+    static auto constexpr slug = S::slug;
+  };
+
+  template <typename P, typename S> using Widget = ButtonWidget<Config<P, S>>;
+
   template <typename B, typename S = Normal, typename P>
   static inline auto install(P *panel, int id, float xmm, float ymm)
-      -> ButtonWidget<P, S> * {
-    auto widget = rack::createParamCentered<ButtonWidget<P, S>>(
+      -> Widget<P, S> * {
+    auto widget = rack::createParamCentered<Widget<P, S>>(
         mm2px(xmm, ymm), panel->getModule(), id);
     widget->momentary = B::momentary;
     panel->addParam(widget);

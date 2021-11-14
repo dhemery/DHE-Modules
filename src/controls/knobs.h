@@ -30,6 +30,15 @@ struct Tiny {
 };
 
 struct Knob {
+  template <typename P, typename S, typename V> struct Config {
+    using value_type = V; // NOLINT
+    static auto constexpr svg_dir = P::svg_dir;
+    static auto constexpr svg_file = S::svg_file;
+  };
+
+  template <typename P, typename S, typename V>
+  using Widget = KnobWidget<Config<P, S, V>>;
+
   template <typename, typename = void>
   struct defines_display_range : std::false_type {};
 
@@ -52,8 +61,8 @@ struct Knob {
 
   template <typename S, typename V = float, typename P>
   static inline auto install(P *panel, int id, float xmm, float ymm)
-      -> KnobWidget<P, S, V> * {
-    auto *widget = rack::createParamCentered<KnobWidget<P, S, V>>(
+      -> KnobWidget<Config<P, S, V>> * {
+    auto *widget = rack::createParamCentered<Widget<P, S, V>>(
         mm2px(xmm, ymm), panel->getModule(), id);
     widget->snap = std::is_integral<V>::value;
     panel->addParam(widget);
