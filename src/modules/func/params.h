@@ -29,14 +29,17 @@ struct OffsetRanges : Enums<OffsetRangeId, 4> {
     return range(range_id).normalize(scaled);
   }
 
-private:
-  static inline auto range(OffsetRangeId id) -> Range const & {
+  static inline auto range(OffsetRangeId id) -> Range {
+    return ranges()[static_cast<int>(id)];
+  }
+
+  static inline auto ranges() -> std::vector<Range> const & {
     static auto constexpr minus_ten_to_plus_ten_range = Range{-10.F, 10.F};
     static auto constexpr zero_to_five_range = Range{0.F, 5.F};
     static auto const ranges = std::vector<Range>{
         zero_to_five_range, BipolarVoltage::range(), UnipolarVoltage::range(),
         minus_ten_to_plus_ten_range};
-    return ranges[static_cast<int>(id)];
+    return ranges;
   }
 };
 
@@ -62,22 +65,23 @@ struct MultiplierRanges : Enums<MultiplierRangeId, 4> {
     return range(range_id).normalize(scaled);
   }
 
-private:
-  static inline auto range(MultiplierRangeId id) -> Range const & {
+  static inline auto range(MultiplierRangeId id) -> Range {
+    return ranges()[static_cast<int>(id)];
+  }
+
+  static inline auto ranges() -> std::vector<Range> const & {
     static auto constexpr minus_two_to_plus_two_range = Range{-2.F, 2.F};
     static auto const ranges =
         std::vector<Range>{Attenuator::range(), Attenuverter::range(),
                            Gain::range(), minus_two_to_plus_two_range};
-    return ranges[static_cast<int>(id)];
+    return ranges;
   }
 };
 
 enum class Operation { Add, Multiply };
 
 struct Operations : Enums<Operation, 2> {
-  struct KnobMapper;
-  static auto constexpr default_rotation = 0.5F;
-  static auto constexpr unit = "";
+  struct KnobMap;
 
   static inline auto labels() -> std::vector<std::string> const & {
     static const auto labels =
@@ -86,7 +90,10 @@ struct Operations : Enums<Operation, 2> {
   }
 };
 
-struct Operations::KnobMapper {
+struct Operations::KnobMap {
+  static auto constexpr default_rotation = 0.5F;
+  static auto constexpr unit = "";
+
   auto to_display(float value) const -> float {
     return operation_ == Operation::Multiply
                ? MultiplierRanges::scale(value, multipler_range_id_)

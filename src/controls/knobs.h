@@ -54,10 +54,10 @@ struct Knob {
   struct defines_int_range<T, void_t<decltype(T::min), decltype(T::max)>>
       : std::is_integral<decltype(T::min)> {};
 
-  template <typename, typename = void> struct is_mapped : std::false_type {};
+  template <typename, typename = void> struct has_knob_map : std::false_type {};
 
   template <typename T>
-  struct is_mapped<T, void_t<typename T::KnobMapper>> : std::true_type {};
+  struct has_knob_map<T, void_t<typename T::KnobMap>> : std::true_type {};
 
   template <typename S, typename V = float, typename P>
   static inline auto install(P *panel, int id, float xmm, float ymm)
@@ -102,10 +102,10 @@ struct Knob {
   template <typename T>
   static inline auto config(rack::engine::Module *module, int id,
                             std::string const &name,
-                            float rotation = T::default_rotation)
-      -> enable_if_t<is_mapped<T>::value, MappedKnobQuantity<T> *> {
+                            float rotation = T::KnobMap::default_rotation)
+      -> enable_if_t<has_knob_map<T>::value, MappedKnobQuantity<T> *> {
     return module->configParam<MappedKnobQuantity<T>>(id, 0.F, 1.F, rotation,
-                                                      name, T::unit);
+                                                      name, T::KnobMap::unit);
   }
 };
 } // namespace dhe

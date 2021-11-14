@@ -24,9 +24,7 @@ struct BounceRatioModes : Enums<BounceRatioMode, 2> {
 };
 
 struct BounceRatio {
-  struct KnobMapper;
-  static auto constexpr default_rotation = 0.F;
-  static auto constexpr unit = "x";
+  struct KnobMap;
 
   static inline auto scale(float normalized, BounceRatioMode mode) -> float {
     auto const ratio = range().scale(normalized);
@@ -37,17 +35,20 @@ struct BounceRatio {
     return range().normalize(scaled);
   }
 
-private:
-  static inline auto range() -> Range { return Range{1.F, 17.F}; }
+  static inline auto range() -> Range {
+    static auto const range = Range{1.F, 17.F};
+    return range;
+  }
 };
 
-struct BounceRatio::KnobMapper {
-  auto to_display(float value) const -> float {
-    return BounceRatio::scale(value, mode_);
-  }
+struct BounceRatio::KnobMap {
+  static auto constexpr default_rotation = 0.F;
+  static auto constexpr unit = "x";
 
-  auto to_value(float display) const -> float {
-    return BounceRatio::normalize(display);
+  auto to_display(float value) const -> float { return scale(value, mode_); }
+
+  static inline auto to_value(float display) -> float {
+    return normalize(display);
   }
 
   void select_mode(BounceRatioMode mode) { mode_ = mode; }
@@ -57,32 +58,37 @@ private:
 };
 
 struct SpinSpeed {
-  struct KnobMapper;
-  static auto constexpr unit = " Hz";
+  struct KnobMap;
 
-  static auto scale(float normalized) -> float {
+  static inline auto scale(float normalized) -> float {
     return range().scale(taper().apply(normalized));
   }
 
-  static auto normalize(float scaled) -> float {
+  static inline auto normalize(float scaled) -> float {
     return taper().invert(range().normalize(scaled));
   }
 
+  static inline auto range() -> Range {
+    static auto const range = Range{-10.F, 10.F};
+    return range;
+  }
+
 private:
-  static auto constexpr range() -> Range { return Range{-10.F, 10.F}; }
-  static auto taper() -> sigmoid::Taper const & {
+  static inline auto taper() -> sigmoid::Taper const & {
     static auto const taper = sigmoid::s_taper_with_curvature(-0.8F);
     return taper;
   }
 };
 
-struct SpinSpeed::KnobMapper {
-  auto to_display(float value) const -> float {
-    return SpinSpeed::scale(value);
-  }
+struct SpinSpeed::KnobMap {
+  static auto constexpr default_rotation =
+      sigmoid::curve(cx::normalize(1.F, -10.F, 10.F), -0.8F);
+  static auto constexpr unit = " Hz";
 
-  auto to_value(float display) const -> float {
-    return SpinSpeed::normalize(display);
+  static inline auto to_display(float value) -> float { return scale(value); }
+
+  static inline auto to_value(float display) -> float {
+    return normalize(display);
   }
 };
 

@@ -5,7 +5,7 @@
 namespace dhe {
 template <typename T>
 struct MappedKnobQuantity : public rack::engine::ParamQuantity {
-  using Mapper = typename T::KnobMapper;
+  using MapType = typename T::KnobMap;
 
   auto getDisplayValue() -> float override {
     return map_.to_display(getValue());
@@ -15,10 +15,10 @@ struct MappedKnobQuantity : public rack::engine::ParamQuantity {
     setValue(map_.to_value(scaled));
   }
 
-  auto mapper() -> Mapper & { return map_; }
+  auto mapper() -> MapType & { return map_; }
 
 private:
-  Mapper map_{};
+  MapType map_{};
 };
 
 } // namespace dhe

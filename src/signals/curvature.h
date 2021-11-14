@@ -5,9 +5,7 @@
 namespace dhe {
 
 struct Curvature {
-  struct KnobMapper;
-  static auto constexpr default_rotation = 0.5F;
-  static auto constexpr unit = "";
+  struct KnobMap;
 
   static constexpr auto curvature(float normalized) -> float {
     return sigmoid::safe_curvature_range.clamp(
@@ -32,13 +30,16 @@ private:
   static auto constexpr taper_curvature = -0.65F;
 };
 
-struct Curvature::KnobMapper {
-  static inline auto to_display(float value) -> float {
-    return Curvature::curvature(value);
+struct Curvature::KnobMap {
+  static auto constexpr default_rotation = 0.5F;
+  static auto constexpr unit = "";
+
+  static constexpr auto to_display(float value) -> float {
+    return curvature(value);
   }
 
   static inline auto to_value(float display) -> float {
-    return Curvature::normalize(display);
+    return normalize(display);
   }
 };
 } // namespace dhe

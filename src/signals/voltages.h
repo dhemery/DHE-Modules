@@ -34,9 +34,7 @@ struct UnipolarVoltage : RangedFloat<UnipolarVoltage> {
 enum class VoltageRangeId { Bipolar, Unipolar };
 
 struct VoltageRanges : Enums<VoltageRangeId, 2> {
-  struct KnobMapper;
-  static auto constexpr default_rotation = 0.5F;
-  static auto constexpr unit = voltage_unit;
+  struct KnobMap;
 
   static inline auto labels() -> std::vector<std::string> const & {
     static auto const labels =
@@ -44,28 +42,34 @@ struct VoltageRanges : Enums<VoltageRangeId, 2> {
     return labels;
   }
 
-  static inline auto range(VoltageRangeId id) -> Range const & {
-    static auto const ranges =
-        std::vector<Range>{BipolarVoltage::range(), UnipolarVoltage::range()};
-    return ranges[static_cast<int>(id)];
-  }
-
   static inline auto scale(float normalized, VoltageRangeId range_id) -> float {
     return range(range_id).scale(normalized);
   }
-
   static inline auto normalize(float scaled, VoltageRangeId range_id) -> float {
     return range(range_id).normalize(scaled);
   }
+
+  static inline auto range(VoltageRangeId id) -> Range {
+    return ranges()[static_cast<int>(id)];
+  }
+
+  static inline auto ranges() -> std::vector<Range> const & {
+    static auto const ranges =
+        std::vector<Range>{BipolarVoltage::range(), UnipolarVoltage::range()};
+    return ranges;
+  }
 };
 
-struct VoltageRanges::KnobMapper {
+struct VoltageRanges::KnobMap {
+  static auto constexpr default_rotation = 0.5F;
+  static auto constexpr unit = voltage_unit;
+
   auto to_display(float value) const -> float {
-    return VoltageRanges::scale(value, range_id_);
+    return scale(value, range_id_);
   }
 
   auto to_value(float display) const -> float {
-    return VoltageRanges::normalize(display, range_id_);
+    return normalize(display, range_id_);
   }
 
   void select_range(VoltageRangeId id) { range_id_ = id; }

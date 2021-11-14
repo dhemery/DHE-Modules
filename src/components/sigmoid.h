@@ -24,6 +24,10 @@ static constexpr auto curve(float input, float curvature) -> float {
          (curvature - cx::abs(input) * 2.0F * curvature + 1.0F);
 }
 
+static constexpr auto invert(float input, float curvature) -> float {
+  return curve(input, -curvature);
+}
+
 /**
  * The range over which the curve() function's input and curvature are defined.
  * InPort and curvature values within this select will always produce outputs_
