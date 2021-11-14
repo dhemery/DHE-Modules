@@ -56,12 +56,12 @@ private:
 };
 
 struct WobbleRatioRanges::KnobMapper {
-  auto scale(float normalized) const -> float {
-    return WobbleRatioRanges::scale(normalized, range_id_, mode_);
+  auto to_display(float value) const -> float {
+    return WobbleRatioRanges::scale(value, range_id_, mode_);
   }
 
-  auto normalize(float scaled) const -> float {
-    return WobbleRatioRanges::normalize(scaled, range_id_);
+  auto to_value(float display) const -> float {
+    return WobbleRatioRanges::normalize(display, range_id_);
   }
 
   void select_mode(WobbleRatioMode mode) { mode_ = mode; }
@@ -95,12 +95,12 @@ private:
 };
 
 struct ThrobSpeed::KnobMapper {
-  auto scale(float normalized) const -> float {
-    return ThrobSpeed::scale(normalized);
+  auto to_display(float value) const -> float {
+    return ThrobSpeed::scale(value);
   }
 
-  auto normalize(float scaled) const -> float {
-    return ThrobSpeed::normalize(scaled);
+  auto to_value(float display) const -> float {
+    return ThrobSpeed::normalize(display);
   }
 };
 

@@ -3,14 +3,16 @@
 #include "rack.hpp"
 
 namespace dhe {
-template <typename TCustom>
+template <typename T>
 struct MappedKnobQuantity : public rack::engine::ParamQuantity {
-  using Mapper = typename TCustom::KnobMapper;
+  using Mapper = typename T::KnobMapper;
 
-  auto getDisplayValue() -> float override { return map_.scale(getValue()); }
+  auto getDisplayValue() -> float override {
+    return map_.to_display(getValue());
+  }
 
   void setDisplayValue(float scaled) override {
-    setValue(map_.normalize(scaled));
+    setValue(map_.to_value(scaled));
   }
 
   auto mapper() -> Mapper & { return map_; }

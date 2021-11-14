@@ -60,12 +60,12 @@ struct VoltageRanges : Enums<VoltageRangeId, 2> {
 };
 
 struct VoltageRanges::KnobMapper {
-  auto scale(float normalized) const -> float {
-    return VoltageRanges::scale(normalized, range_id_);
+  auto to_display(float value) const -> float {
+    return VoltageRanges::scale(value, range_id_);
   }
 
-  auto normalize(float scaled) const -> float {
-    return VoltageRanges::normalize(scaled, range_id_);
+  auto to_value(float display) const -> float {
+    return VoltageRanges::normalize(display, range_id_);
   }
 
   void select_range(VoltageRangeId id) { range_id_ = id; }

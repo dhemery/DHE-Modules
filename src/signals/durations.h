@@ -59,12 +59,12 @@ template <typename T> struct MappedDurationRange {
 };
 
 template <typename T> struct MappedDurationRange<T>::KnobMapper {
-  auto scale(float normalized) const -> float {
-    return MappedDurationRange<T>::scale(normalized);
+  auto to_display(float value) const -> float {
+    return MappedDurationRange<T>::scale(value);
   }
 
-  auto normalize(float scaled) const -> float {
-    return MappedDurationRange<T>::normalize(scaled);
+  auto to_value(float display) const -> float {
+    return MappedDurationRange<T>::normalize(display);
   }
 };
 
@@ -114,12 +114,12 @@ struct DurationRanges : Enums<DurationRangeId, 3> {
 };
 
 struct DurationRanges::KnobMapper {
-  auto scale(float normalized) const -> float {
-    return DurationRanges::scale(normalized, range_id_);
+  auto to_display(float rotation) const -> float {
+    return DurationRanges::scale(rotation, range_id_);
   }
 
-  auto normalize(float scaled) const -> float {
-    return DurationRanges::normalize(scaled, range_id_);
+  auto to_value(float display) const -> float {
+    return DurationRanges::normalize(display, range_id_);
   }
 
   void select_range(DurationRangeId id) { range_id_ = id; }

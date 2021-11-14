@@ -87,16 +87,16 @@ struct Operations : Enums<Operation, 2> {
 };
 
 struct Operations::KnobMapper {
-  auto scale(float normalized) const -> float {
+  auto to_display(float value) const -> float {
     return operation_ == Operation::Multiply
-               ? MultiplierRanges::scale(normalized, multipler_range_id_)
-               : OffsetRanges::scale(normalized, offset_range_id_);
+               ? MultiplierRanges::scale(value, multipler_range_id_)
+               : OffsetRanges::scale(value, offset_range_id_);
   }
 
-  auto normalize(float scaled) const -> float {
+  auto to_value(float display) const -> float {
     return operation_ == Operation::Multiply
-               ? MultiplierRanges::normalize(scaled, multipler_range_id_)
-               : OffsetRanges::normalize(scaled, offset_range_id_);
+               ? MultiplierRanges::normalize(display, multipler_range_id_)
+               : OffsetRanges::normalize(display, offset_range_id_);
   }
 
   void select_operation(Operation operation) { operation_ = operation; }

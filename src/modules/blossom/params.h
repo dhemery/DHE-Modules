@@ -42,12 +42,12 @@ private:
 };
 
 struct BounceRatio::KnobMapper {
-  auto scale(float normalized) const -> float {
-    return BounceRatio::scale(normalized, mode_);
+  auto to_display(float value) const -> float {
+    return BounceRatio::scale(value, mode_);
   }
 
-  auto normalize(float scaled) const -> float {
-    return BounceRatio::normalize(scaled);
+  auto to_value(float display) const -> float {
+    return BounceRatio::normalize(display);
   }
 
   void select_mode(BounceRatioMode mode) { mode_ = mode; }
@@ -77,12 +77,12 @@ private:
 };
 
 struct SpinSpeed::KnobMapper {
-  auto scale(float normalized) const -> float {
-    return SpinSpeed::scale(normalized);
+  auto to_display(float value) const -> float {
+    return SpinSpeed::scale(value);
   }
 
-  auto normalize(float scaled) const -> float {
-    return SpinSpeed::normalize(scaled);
+  auto to_value(float display) const -> float {
+    return SpinSpeed::normalize(display);
   }
 };
 

@@ -33,12 +33,12 @@ private:
 };
 
 struct Curvature::KnobMapper {
-  static inline auto scale(float normalized) -> float {
-    return Curvature::curvature(normalized);
+  static inline auto to_display(float value) -> float {
+    return Curvature::curvature(value);
   }
 
-  static inline auto normalize(float curvature) -> float {
-    return Curvature::normalize(curvature);
+  static inline auto to_value(float display) -> float {
+    return Curvature::normalize(display);
   }
 };
 } // namespace dhe
