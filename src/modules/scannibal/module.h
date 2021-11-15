@@ -130,7 +130,7 @@ public:
   auto curvature(int step) const -> float {
     auto const rotation = rotation_of(params[ParamId::StepCurvature + step],
                                       inputs[InputId::StepCurvatureCv + step]);
-    return Curvature::curvature(rotation);
+    return Curvature::scale(rotation);
   }
 
   auto duration(int step) const -> float {

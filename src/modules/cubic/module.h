@@ -39,8 +39,7 @@ struct Module : public rack::engine::Module {
                               "X squared coefficient");
     configInput(InputId::BCoefficientCv, "X squared coefficient CV");
 
-    Knob::config<Coefficient>(this, ParamId::CCoefficient, "X coefficient",
-                              1.F);
+    Knob::config<Coefficient>(this, ParamId::CCoefficient, "X coefficient");
     configInput(InputId::CCoefficientCv, "X coefficient CV");
 
     Knob::config<Coefficient>(this, ParamId::DCoefficient,

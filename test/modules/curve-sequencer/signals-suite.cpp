@@ -156,8 +156,7 @@ public:
                 curve_knob_rotation);
 
             auto const got = signals.curvature(step);
-            auto constexpr want =
-                dhe::Curvature::curvature(curve_knob_rotation);
+            auto constexpr want = dhe::Curvature::scale(curve_knob_rotation);
             if (got != want) {
               t.errorf("Got {}, want {}", got, want);
             }

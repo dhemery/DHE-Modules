@@ -20,7 +20,7 @@ template <typename TParam, typename TInput, typename TOutput> struct Signals {
       : params_{params}, inputs_{inputs}, outputs_{outputs} {}
 
   auto curvature() const -> float {
-    return Curvature::curvature(value_of(params_[ParamId::Curvature]));
+    return Curvature::scale(value_of(params_[ParamId::Curvature]));
   }
 
   auto defer() const -> bool { return is_high(inputs_[InputId::Defer]); }

@@ -36,8 +36,7 @@ struct Signals {
   }
 
   auto curvature(int step) const -> float {
-    return Curvature::curvature(
-        value_of(params_[ParamId::StepCurvature + step]));
+    return Curvature::scale(value_of(params_[ParamId::StepCurvature + step]));
   }
 
   auto duration(int step) const -> float {

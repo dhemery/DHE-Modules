@@ -38,9 +38,12 @@ struct Module : public rack::engine::Module {
 
 private:
   auto curvature() const -> float {
-    return rotation_of(params[ParamId::Curvature], inputs[InputId::CurvatureCv],
-                       params[ParamId::CurvatureAv]);
+    auto const rotation =
+        rotation_of(params[ParamId::Curvature], inputs[InputId::CurvatureCv],
+                    params[ParamId::CurvatureAv]);
+    return Curvature::scale(rotation);
   }
+
   void send_signal(float voltage) {
     outputs[OutputId::Swave].setVoltage(voltage);
   }

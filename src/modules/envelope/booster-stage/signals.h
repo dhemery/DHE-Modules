@@ -24,7 +24,7 @@ public:
   auto curvature() const -> float {
     auto const rotation =
         rotation_of(params_[ParamId::Curvature], inputs_[InputId::CurvatureCv]);
-    return Curvature::curvature(rotation);
+    return Curvature::scale(rotation);
   }
 
   auto defer() const -> bool {

@@ -87,7 +87,7 @@ public:
 
 private:
   inline auto curvature(int knob_id, int cv_id, int av_id) const -> float {
-    return Curvature::curvature(rotation(knob_id, cv_id, av_id));
+    return Curvature::scale(rotation(knob_id, cv_id, av_id));
   }
 
   inline auto rotation(int knob_id, int cv_id, int av_id) const -> float {

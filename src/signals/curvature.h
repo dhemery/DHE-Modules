@@ -4,41 +4,57 @@
 
 namespace dhe {
 
-struct Curvature {
-  struct KnobMap;
-
-  static constexpr auto curvature(float normalized) -> float {
-    return sigmoid::safe_curvature_range.clamp(
-        sigmoid::curve(sigmoid::domain.scale(normalized), taper_curvature));
+template <typename Shape, typename Curvature> struct TaperedShape {
+  static auto constexpr apply(float linear) -> float {
+    return Shape::apply(linear, Curvature::curvature);
   }
 
-  static inline auto normalize(float curvature) -> float {
-    auto const sigmoid_clamped_curvature =
-        sigmoid::safe_curvature_range.clamp(curvature);
-    // Unexpected, but true: Negating the taper curvature inverts the taper.
-    auto const sigmoid_scaled_rotation =
-        sigmoid::curve(sigmoid_clamped_curvature, -taper_curvature);
-    return sigmoid::domain.normalize(sigmoid_scaled_rotation);
+  static auto constexpr invert(float tapered) -> float {
+    return Shape::invert(tapered, Curvature::curvature);
+  }
+};
+
+template <typename Taper, typename Bounds> struct ScaledShape {
+  static auto constexpr scale(float normalized) -> float {
+    return cx::scale(Taper::apply(normalized), Bounds::min, Bounds::max);
   }
 
-private:
+  static auto constexpr normalize(float scaled) -> float {
+    return Taper::invert(cx::normalize(scaled, Bounds::min, Bounds::max));
+  }
+};
+
+struct CurvatureKnobCurvature {
   /**
    * This curvature gives a curvature knob a gentle inverted S taper, increasing
    * sensitivity in the middle of the knob normalize and decreasing sensitivity
    * toward the extremes.
    */
-  static auto constexpr taper_curvature = -0.65F;
+  static auto constexpr curvature = 0.65F;
 };
+
+struct CurvatureBounds {
+  static auto constexpr max = 0.9999F;
+  static auto constexpr min = -max;
+};
+
+struct CurvatureTaper : TaperedShape<sigmoid::SShape, CurvatureKnobCurvature> {
+};
+
+struct Curvature : ScaledShape<CurvatureTaper, CurvatureBounds> {
+  struct KnobMap;
+};
+;
 
 struct Curvature::KnobMap {
   static auto constexpr unit = "";
   static auto constexpr default_value = 0.F;
 
   static constexpr auto to_display(float value) -> float {
-    return curvature(value);
+    return scale(value);
   }
 
-  static inline auto to_value(float display) -> float {
+  static constexpr auto to_value(float display) -> float {
     return normalize(display);
   }
 };
