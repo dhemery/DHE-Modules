@@ -40,21 +40,16 @@ struct Knob {
   using Widget = KnobWidget<Config<P, S, V>>;
 
   template <typename, typename = void>
-  struct defines_display_range : std::false_type {};
-
-  template <typename T>
-  struct defines_display_range<
-      T, void_t<decltype(T::display_min), decltype(T::display_max)>>
-      : std::is_floating_point<decltype(T::display_min)> {};
-
-  template <typename, typename = void>
-  struct defines_int_range : std::false_type {};
+  struct defines_int_range // NOLINT
+      : std::false_type {};
 
   template <typename T>
   struct defines_int_range<T, void_t<decltype(T::min), decltype(T::max)>>
       : std::is_integral<decltype(T::min)> {};
 
-  template <typename, typename = void> struct has_knob_map : std::false_type {};
+  template <typename, typename = void>
+  struct has_knob_map // NOLINT
+      : std::false_type {};
 
   template <typename T>
   struct has_knob_map<T, void_t<typename T::KnobMap>> : std::true_type {};
@@ -67,20 +62,6 @@ struct Knob {
     widget->snap = std::is_integral<V>::value;
     panel->addParam(widget);
     return widget;
-  }
-
-  // Configure a knob with the display range specified by T
-  template <typename T>
-  static inline auto config(rack::engine::Module *module, int id,
-                            std::string const &name,
-                            float value = T::display_default)
-      -> enable_if_t<defines_display_range<T>::value,
-                     RangedKnobQuantity<float> *> {
-    auto const display_range = T::display_max - T::display_min;
-    auto const rotation = cx::normalize(value, T::display_min, T::display_max);
-    return module->configParam<RangedKnobQuantity<float>>(
-        id, 0.F, 1.F, rotation, name, T::unit, 0.F, display_range,
-        T::display_min);
   }
 
   // Configure a knob with the int range specified by T

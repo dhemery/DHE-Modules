@@ -4,13 +4,23 @@
 
 namespace dhe {
 
-struct Angle : RangedFloat<Angle> {
+struct RadiansBounds {
   static auto constexpr min = -pi;
   static auto constexpr max = pi;
-  static auto constexpr display_min = -180.F;
-  static auto constexpr display_max = 180.F;
-  static auto constexpr display_default = 0.F;
+};
+
+struct DegreesBounds {
+  static auto constexpr min = -180.F;
+  static auto constexpr max = 180.F;
+};
+
+struct AngleKnobMap : ScaledKnobMap<LinearRange<DegreesBounds>> {
+  static auto constexpr default_rotation = 0.F;
   static auto constexpr unit = "˚";
+};
+
+struct Angle : LinearRange<RadiansBounds> {
+  using KnobMap = AngleKnobMap;
 
   static inline auto radians(float normalized) -> float {
     return scale(normalized);

@@ -13,13 +13,18 @@ namespace dhe {
 
 namespace cubic {
 
-struct Coefficient : RangedFloat<Coefficient> {
+struct CoefficientBounds {
   static auto constexpr min = -2.F;
   static auto constexpr max = 2.F;
-  static auto constexpr display_min = min;
-  static auto constexpr display_max = max;
-  static auto constexpr display_default = 0.F;
+};
+
+struct CoefficientKnobMap : ScaledKnobMap<LinearRange<CoefficientBounds>> {
+  static auto constexpr default_rotation = 0.F;
   static auto constexpr unit = "";
+};
+
+struct Coefficient : LinearRange<CoefficientBounds> {
+  using KnobMap = CoefficientKnobMap;
 };
 
 struct Module : public rack::engine::Module {

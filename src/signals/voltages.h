@@ -11,23 +11,30 @@ namespace dhe {
 
 static auto constexpr voltage_unit = " V";
 
-struct BipolarVoltage : RangedFloat<BipolarVoltage> {
+template <typename Bounds>
+struct VoltageKnobMap : ScaledKnobMap<LinearRange<Bounds>> {
   static auto constexpr unit = voltage_unit;
+  static auto constexpr default_rotation = 0.F;
+};
+
+struct BipolarBounds {
   static auto constexpr min = -5.F;
   static auto constexpr max = 5.F;
-  static auto constexpr display_min = min;
-  static auto constexpr display_max = max;
-  static auto constexpr display_default = 0.F;
+};
+
+struct BipolarVoltage : LinearRange<BipolarBounds> {
+  using KnobMap = VoltageKnobMap<BipolarBounds>;
   static auto constexpr label = "±5 V";
 };
 
-struct UnipolarVoltage : RangedFloat<UnipolarVoltage> {
-  static auto constexpr unit = voltage_unit;
+struct UnipolarBounds {
   static auto constexpr min = 0.F;
   static auto constexpr max = 10.F;
-  static auto constexpr display_min = min;
-  static auto constexpr display_max = max;
-  static auto constexpr display_default = 5.F;
+};
+
+struct UnipolarVoltage : LinearRange<UnipolarBounds> {
+  using KnobMap = VoltageKnobMap<UnipolarBounds>;
+  static auto constexpr unit = voltage_unit;
   static auto constexpr label = "0–10 V";
 };
 
