@@ -15,8 +15,8 @@ struct DegreesBounds {
 };
 
 struct AngleKnobMap : ScaledKnobMap<LinearRange<DegreesBounds>> {
-  static auto constexpr default_rotation = 0.F;
   static auto constexpr unit = "˚";
+  static auto constexpr default_value = 0.F;
 };
 
 struct Angle : LinearRange<RadiansBounds> {

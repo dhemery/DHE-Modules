@@ -14,12 +14,13 @@ static auto constexpr voltage_unit = " V";
 template <typename Bounds>
 struct VoltageKnobMap : ScaledKnobMap<LinearRange<Bounds>> {
   static auto constexpr unit = voltage_unit;
-  static auto constexpr default_rotation = 0.F;
+  static auto constexpr default_value = Bounds::default_value;
 };
 
 struct BipolarBounds {
   static auto constexpr min = -5.F;
   static auto constexpr max = 5.F;
+  static auto constexpr default_value = 0.F;
 };
 
 struct BipolarVoltage : LinearRange<BipolarBounds> {
@@ -30,6 +31,7 @@ struct BipolarVoltage : LinearRange<BipolarBounds> {
 struct UnipolarBounds {
   static auto constexpr min = 0.F;
   static auto constexpr max = 10.F;
+  static auto constexpr default_value = 5.F;
 };
 
 struct UnipolarVoltage : LinearRange<UnipolarBounds> {
@@ -68,8 +70,8 @@ struct VoltageRanges : Enums<VoltageRangeId, 2> {
 };
 
 struct VoltageRanges::KnobMap {
-  static auto constexpr default_rotation = 0.5F;
   static auto constexpr unit = voltage_unit;
+  static auto constexpr default_value = BipolarBounds::default_value;
 
   auto to_display(float value) const -> float {
     return scale(value, range_id_);
@@ -82,7 +84,7 @@ struct VoltageRanges::KnobMap {
   void select_range(VoltageRangeId id) { range_id_ = id; }
 
 private:
-  VoltageRangeId range_id_{};
+  VoltageRangeId range_id_{VoltageRangeId::Bipolar};
 };
 
 } // namespace dhe

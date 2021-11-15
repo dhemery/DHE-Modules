@@ -42,11 +42,12 @@ static inline auto normalize(float seconds, Range range) -> float {
 static auto constexpr duration_unit = " s";
 
 template <typename T> struct MappedDurationRange {
+  static auto constexpr max = T::max;
+  static auto constexpr min = max / 1000.F;
+  static auto constexpr default_value = max / 10.F;
   struct KnobMap;
 
-  static constexpr auto range() -> Range {
-    return Range{T::max / 1000.F, T::max};
-  }
+  static constexpr auto range() -> Range { return Range{min, max}; }
 
   static inline auto scale(float normalized) -> float {
     return duration::scale(normalized, range());
@@ -58,8 +59,8 @@ template <typename T> struct MappedDurationRange {
 };
 
 template <typename T> struct MappedDurationRange<T>::KnobMap {
+  static auto constexpr default_value = T::max / 10.F;
   static auto constexpr unit = duration_unit;
-  static auto constexpr default_rotation = 0.5F;
 
   auto to_display(float value) const -> float {
     return MappedDurationRange<T>::scale(value);
@@ -70,18 +71,25 @@ template <typename T> struct MappedDurationRange<T>::KnobMap {
   }
 };
 
-struct ShortDuration : MappedDurationRange<ShortDuration> {
+struct ShortDurationBounds {
   static auto constexpr max = 1.F;
+};
+struct MediumDurationBounds {
+  static auto constexpr max = 10.F;
+};
+struct LongDurationBounds {
+  static auto constexpr max = 100.F;
+};
+
+struct ShortDuration : MappedDurationRange<ShortDurationBounds> {
   static auto constexpr label = "0.001–1.0 s";
 };
 
-struct MediumDuration : MappedDurationRange<MediumDuration> {
-  static auto constexpr max = 10.F;
+struct MediumDuration : MappedDurationRange<MediumDurationBounds> {
   static auto constexpr label = "0.01–10.0 s";
 };
 
-struct LongDuration : MappedDurationRange<LongDuration> {
-  static auto constexpr max = 100.F;
+struct LongDuration : MappedDurationRange<LongDurationBounds> {
   static auto constexpr label = "0.1–100.0 s";
 };
 
@@ -120,7 +128,8 @@ struct DurationRanges : Enums<DurationRangeId, 3> {
 
 struct DurationRanges::KnobMap {
   static auto constexpr unit = duration_unit;
-  static auto constexpr default_rotation = 0.5F;
+  static auto constexpr default_value =
+      MediumDuration::default_value; // Centere
 
   auto to_display(float rotation) const -> float {
     return scale(rotation, range_id_);
@@ -133,7 +142,7 @@ struct DurationRanges::KnobMap {
   void select_range(DurationRangeId id) { range_id_ = id; }
 
 private:
-  DurationRangeId range_id_{};
+  DurationRangeId range_id_{DurationRangeId::Medium};
 };
 
 } // namespace dhe

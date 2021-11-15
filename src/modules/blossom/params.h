@@ -42,7 +42,7 @@ struct BounceRatio {
 };
 
 struct BounceRatio::KnobMap {
-  static auto constexpr default_rotation = 0.F;
+  static auto constexpr default_value = 9.F;
   static auto constexpr unit = "x";
 
   auto to_display(float value) const -> float { return scale(value, mode_); }
@@ -81,8 +81,7 @@ private:
 };
 
 struct SpinSpeed::KnobMap {
-  static auto constexpr default_rotation =
-      sigmoid::curve(cx::normalize(1.F, -10.F, 10.F), -0.8F);
+  static auto constexpr default_value = 1.F;
   static auto constexpr unit = " Hz";
 
   static inline auto to_display(float value) -> float { return scale(value); }

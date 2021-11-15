@@ -19,7 +19,7 @@ struct CoefficientBounds {
 };
 
 struct CoefficientKnobMap : ScaledKnobMap<LinearRange<CoefficientBounds>> {
-  static auto constexpr default_rotation = 0.F;
+  static auto constexpr default_value = 0.F;
   static auto constexpr unit = "";
 };
 
@@ -39,7 +39,8 @@ struct Module : public rack::engine::Module {
                               "X squared coefficient");
     configInput(InputId::BCoefficientCv, "X squared coefficient CV");
 
-    Knob::config<Coefficient>(this, ParamId::CCoefficient, "X coefficient");
+    Knob::config<Coefficient>(this, ParamId::CCoefficient, "X coefficient",
+                              1.F);
     configInput(InputId::CCoefficientCv, "X coefficient CV");
 
     Knob::config<Coefficient>(this, ParamId::DCoefficient,

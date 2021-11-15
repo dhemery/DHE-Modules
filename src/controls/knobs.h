@@ -83,10 +83,12 @@ struct Knob {
   template <typename T>
   static inline auto config(rack::engine::Module *module, int id,
                             std::string const &name,
-                            float rotation = T::KnobMap::default_rotation)
+                            float value = T::KnobMap::default_value)
       -> enable_if_t<has_knob_map<T>::value, MappedKnobQuantity<T> *> {
-    return module->configParam<MappedKnobQuantity<T>>(id, 0.F, 1.F, rotation,
-                                                      name, T::KnobMap::unit);
+    auto const mapper = typename T::KnobMap{};
+    auto const default_rotation = mapper.to_value(value);
+    return module->configParam<MappedKnobQuantity<T>>(
+        id, 0.F, 1.F, default_rotation, name, T::KnobMap::unit);
   }
 };
 } // namespace dhe

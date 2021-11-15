@@ -91,7 +91,7 @@ struct Operations : Enums<Operation, 2> {
 };
 
 struct Operations::KnobMap {
-  static auto constexpr default_rotation = 0.5F;
+  static auto constexpr default_value = 2.5F;
   static auto constexpr unit = "";
 
   auto to_display(float value) const -> float {
@@ -117,7 +117,7 @@ struct Operations::KnobMap {
 private:
   OffsetRangeId offset_range_id_{};
   MultiplierRangeId multipler_range_id_{};
-  Operation operation_{};
+  Operation operation_{Operation::Add};
 };
 } // namespace func
 } // namespace dhe

@@ -16,7 +16,7 @@ struct AttenuatorDisplayBounds {
 
 struct AttenuatorKnobMap : ScaledKnobMap<LinearRange<AttenuatorDisplayBounds>> {
   static auto constexpr unit = "%";
-  static auto constexpr default_rotation = 1.F;
+  static auto constexpr default_value = 100.F;
 };
 
 struct Attenuator : LinearRange<AttenuatorBounds> {
@@ -36,7 +36,7 @@ struct AttenuverterDisplayBounds {
 struct AttenuverterKnobMap
     : ScaledKnobMap<LinearRange<AttenuverterDisplayBounds>> {
   static auto constexpr unit = "%";
-  static auto constexpr default_rotation = 0.F;
+  static auto constexpr default_value = 0.F;
 };
 
 struct Attenuverter : LinearRange<AttenuverterBounds> {
@@ -55,7 +55,7 @@ struct GainDisplayBounds {
 
 struct GainKnobMap : ScaledKnobMap<LinearRange<GainDisplayBounds>> {
   static auto constexpr unit = "%";
-  static auto constexpr default_rotation = 1.F;
+  static auto constexpr default_value = 100.F;
 };
 
 struct Gain : LinearRange<GainBounds> {

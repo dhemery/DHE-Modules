@@ -31,8 +31,8 @@ private:
 };
 
 struct Curvature::KnobMap {
-  static auto constexpr default_rotation = 0.5F;
   static auto constexpr unit = "";
+  static auto constexpr default_value = 0.F;
 
   static constexpr auto to_display(float value) -> float {
     return curvature(value);

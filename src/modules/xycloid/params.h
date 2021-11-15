@@ -57,7 +57,7 @@ struct WobbleRatioRanges : Enums<WobbleRatioRangeId, 3> {
 };
 
 struct WobbleRatioRanges::KnobMap {
-  static auto constexpr default_rotation = 0.5F;
+  static auto constexpr default_value = 9.F;
   static auto constexpr unit = "x";
 
   auto to_display(float value) const -> float {
