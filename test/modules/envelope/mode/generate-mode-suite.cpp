@@ -77,7 +77,7 @@ public:
 
             // Simplify calculations by using a linear taper (default J
             // curvature is 0, making it linear)
-            signals.shape_ = Shape::J;
+            signals.shape_ = ShapeId::J;
 
             auto constexpr full_duration = 10.F;
             auto constexpr phase_delta =
@@ -106,7 +106,7 @@ public:
 
             // Simplify calculations by using a linear taper (default J
             // curvature is 0, making it linear)
-            signals.shape_ = Shape::J;
+            signals.shape_ = ShapeId::J;
 
             auto constexpr full_duration = 10.F;
             auto constexpr phase_delta =

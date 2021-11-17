@@ -177,8 +177,8 @@ public:
     }
   }
 
-  auto shape(int step) const -> Shape {
-    return value_of<Shape>(params_[ParamId::StepShape + step]);
+  auto shape(int step) const -> sigmoid::ShapeId {
+    return value_of<sigmoid::ShapeId>(params_[ParamId::StepShape + step]);
   }
 
 private:

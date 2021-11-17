@@ -36,7 +36,50 @@ static constexpr auto invert(float input, float curvature) -> float {
  */
 static auto constexpr domain = Range{-1.F, 1.F};
 
-static auto constexpr safe_curvature_range = Range{-0.9999F, 0.9999F};
+enum class ShapeId { J, S };
+
+struct SShape {
+  static auto constexpr apply(float input, float curvature) -> float {
+    return scale_down(curve(scale_up(input), -curvature));
+  }
+
+  static auto constexpr invert(float input, float curvature) -> float {
+    return apply(input, curvature);
+  }
+
+private:
+  static auto constexpr scale_up(float input) -> float {
+    return cx::scale(input, -1.F, 1.F);
+  }
+
+  static auto constexpr scale_down(float curved) -> float {
+    return cx::normalize(curved, -1.F, 1.F);
+  }
+};
+
+struct JShape {
+  static auto constexpr apply(float input, float curvature) -> float {
+    return curve(input, curvature);
+  }
+
+  static auto constexpr invert(float input, float curvature) -> float {
+    return apply(input, -curvature);
+  }
+};
+
+struct Shape {
+  static auto constexpr apply(ShapeId id, float input, float curvature)
+      -> float {
+    return id == ShapeId::S ? SShape::apply(input, curvature)
+                            : JShape::apply(input, curvature);
+  }
+
+  static auto constexpr invert(ShapeId id, float input, float curvature)
+      -> float {
+    return id == ShapeId::S ? SShape::invert(input, curvature)
+                            : JShape::invert(input, curvature);
+  }
+};
 
 class Taper {
 public:
@@ -92,35 +135,6 @@ private:
   Range domain_;
   float quadrant_factor_;
   float default_curvature_;
-};
-
-struct SShape {
-  static auto constexpr apply(float input, float curvature) -> float {
-    return scale_down(curve(scale_up(input), -curvature));
-  }
-
-  static auto constexpr invert(float input, float curvature) -> float {
-    return apply(input, curvature);
-  }
-
-private:
-  static auto constexpr scale_up(float input) -> float {
-    return cx::scale(input, -1.F, 1.F);
-  }
-
-  static auto constexpr scale_down(float curved) -> float {
-    return cx::normalize(curved, -1.F, 1.F);
-  }
-};
-
-struct JShape {
-  static auto constexpr apply(float input, float curvature) -> float {
-    return curve(input, curvature);
-  }
-
-  static auto constexpr invert(float input, float curvature) -> float {
-    return apply(input, -curvature);
-  }
 };
 
 static auto constexpr j_domain = Range{0.F, 1.F};

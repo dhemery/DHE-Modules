@@ -26,7 +26,7 @@ public:
     auto const shape = module_.shape(step);
 
     auto const out_voltage =
-        range.scale(Shapes::taper(phase, shape, curvature));
+        range.scale(sigmoid::Shape::apply(shape, phase, curvature));
 
     module_.output(out_voltage);
   }

@@ -75,7 +75,7 @@ public:
                                   AnchorMode::Track);
 
       Switch::config<Shapes>(this, ParamId::StepShape + step,
-                             step_name + "shape", Shape::J);
+                             step_name + "shape", sigmoid::ShapeId::J);
       Knob::config<Curvature>(this, ParamId::StepCurvature + step,
                               step_name + "curvature");
       configInput(InputId::StepCurvatureCv + step, step_name + "curvature CV");
@@ -166,8 +166,8 @@ public:
     outputs[OutputId::StepPhase].setVoltage(phase * 10.F);
   }
 
-  auto shape(int step) const -> Shape {
-    return value_of<Shape>(params[ParamId::StepShape + step]);
+  auto shape(int step) const -> sigmoid::ShapeId {
+    return value_of<sigmoid::ShapeId>(params[ParamId::StepShape + step]);
   }
 
   auto dataToJson() -> json_t * override {

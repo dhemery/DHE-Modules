@@ -71,8 +71,8 @@ public:
     outputs_[OutputId::Eoc].setVoltage(voltage);
   }
 
-  auto shape() const -> Shape {
-    return value_of<Shape>(params_[ParamId::Shape]);
+  auto shape() const -> sigmoid::ShapeId {
+    return value_of<sigmoid::ShapeId>(params_[ParamId::Shape]);
   }
 
 private:

@@ -37,7 +37,7 @@ struct Module : public rack::engine::Module {
     configInput(InputId::LevelCv, "Level CV");
 
     Knob::config<Curvature>(this, ParamId::Curvature, "Curvature");
-    Switch::config<Shapes>(this, ParamId::Shape, "Shape", Shape::J);
+    Switch::config<Shapes>(this, ParamId::Shape, "Shape", sigmoid::ShapeId::J);
     configInput(InputId::CurvatureCv, "Curvature CV");
 
     auto *duration_knob =

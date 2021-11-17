@@ -36,7 +36,8 @@ public:
     Knob::config<Curvature>(this, ParamId::Curvature1, "Taper 1 curvature");
     Knob::config<Attenuverter>(this, ParamId::CurvatureAv1,
                                "Taper 1 curvature CV gain");
-    Switch::config<Shapes>(this, ParamId::Shape1, "Taper 1 shape", Shape::J);
+    Switch::config<Shapes>(this, ParamId::Shape1, "Taper 1 shape",
+                           sigmoid::ShapeId::J);
     configInput(InputId::CurvatureCv1, "Taper 1 curvature CV");
 
     configOutput(OutputId::Taper1, "Taper 1");
@@ -57,7 +58,8 @@ public:
     Knob::config<Curvature>(this, ParamId::Curvature2, "Taper 2 curvature");
     Knob::config<Attenuverter>(this, ParamId::CurvatureAv2,
                                "Taper 2 curvature CV gain");
-    Switch::config<Shapes>(this, ParamId::Shape2, "Taper 2 shape", Shape::J);
+    Switch::config<Shapes>(this, ParamId::Shape2, "Taper 2 shape",
+                           sigmoid::ShapeId::J);
     configInput(InputId::CurvatureCv2, "Taper 2 curvature CV");
 
     configOutput(OutputId::Taper2, "Taper 2");
@@ -94,11 +96,14 @@ private:
     return rotation_of(params[knob_id], inputs[cv_id], params[av_id]);
   }
 
-  auto shape(int id) const -> Shape { return value_of<Shape>(params[id]); }
+  auto shape(int id) const -> sigmoid::ShapeId {
+    return value_of<sigmoid::ShapeId>(params[id]);
+  }
 
-  static inline auto tapered(float rotation, Shape shape, float curvature,
-                             VoltageRangeId range_id) -> float {
-    auto const tapered = Shapes::taper(rotation, shape, curvature);
+  static inline auto tapered(float rotation, sigmoid::ShapeId shape,
+                             float curvature, VoltageRangeId range_id)
+      -> float {
+    auto const tapered = sigmoid::Shape::apply(shape, rotation, curvature);
     return VoltageRanges::scale(tapered, range_id);
   }
 

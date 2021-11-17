@@ -2,7 +2,7 @@
 
 #include "components/phase-timer.h"
 #include "components/range.h"
-#include "signals/shapes.h"
+#include "components/sigmoid.h"
 #include "status.h"
 
 namespace dhe {
@@ -34,7 +34,7 @@ public:
     timer_.advance(sample_time / duration);
     auto const phase = timer_.phase();
     auto const out_voltage =
-        range.scale(Shapes::taper(phase, shape, curvature));
+        range.scale(sigmoid::Shape::apply(shape, phase, curvature));
     signals_.output(out_voltage);
     signals_.show_progress(step_, phase);
     return timer_.in_progress() ? GeneratorStatus::Generating

@@ -9,8 +9,9 @@
 
 namespace test {
 namespace sequencizer {
-using dhe::Shapes;
 using dhe::sequencizer::GeneratorStatus;
+using dhe::sigmoid::Shape;
+using dhe::sigmoid::ShapeId;
 using dhe::unit::Suite;
 using test::is_equal_to;
 using test::is_true;
@@ -35,7 +36,7 @@ public:
           test([](Tester &t, Signals &module, Anchor & /*start_anchor*/,
                   Anchor & /*end_source*/, Generator &generator) {
             auto constexpr step = 7;
-            module.shape_[step] = Shape::J;
+            module.shape_[step] = ShapeId::J;
             module.duration_[step] = 10.F;
 
             generator.start(step);
@@ -72,14 +73,14 @@ public:
 
             auto constexpr phase = 0.5F;
             auto constexpr sample_time = duration * phase;
-            auto constexpr shape = Shape::J;
+            auto constexpr shape = ShapeId::J;
             auto constexpr curvature = 0.5F;
 
             auto constexpr start_voltage = 0.F;
             auto constexpr end_voltage = 7.F;
             auto const scaled_tapered_phase =
                 (end_voltage - start_voltage) *
-                Shapes::taper(phase, shape, curvature);
+                Shape::apply(shape, phase, curvature);
 
             module.duration_[step] = duration;
             start_anchor.voltage_ = start_voltage;
@@ -98,7 +99,7 @@ public:
                   Anchor & /*end_anchor*/, Generator &generator) {
             auto constexpr step = 3;
 
-            module.shape_[step] = Shape::J;
+            module.shape_[step] = ShapeId::J;
             generator.start(step);
 
             auto constexpr duration = 10.F;   // 10 sec
@@ -123,7 +124,7 @@ public:
           test([](Tester &t, Signals &signals, Anchor & /*start_anchor*/,
                   Anchor & /*end_anchor*/, Generator &generator) {
             auto constexpr step = 3;
-            signals.shape_[step] = Shape::J;
+            signals.shape_[step] = ShapeId::J;
 
             generator.start(step);
 
