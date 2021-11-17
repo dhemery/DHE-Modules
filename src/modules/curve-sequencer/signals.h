@@ -107,10 +107,8 @@ struct Signals {
     set_lights(step, completed_brightness, remaining_brightness);
   }
 
-  auto taper(int step) const -> sigmoid::Taper const & {
-    auto const selection =
-        static_cast<int>(params_[ParamId::StepShape + step].getValue());
-    return sigmoid::tapers[selection];
+  auto shape(int step) const -> sigmoid::ShapeId {
+    return value_of<sigmoid::ShapeId>(params_[ParamId::StepShape + step]);
   }
 
 private:

@@ -1,12 +1,14 @@
 #pragma once
 
-#include "./advance-mode.h"
-#include "./generate-mode.h"
-#include "./step-event.h"
+#include "advance-mode.h"
+#include "generate-mode.h"
+#include "step-event.h"
+
 #include "components/cxmath.h"
 #include "components/latch.h"
 #include "components/phase-timer.h"
 #include "components/range.h"
+#include "components/sigmoid.h"
 
 namespace dhe {
 namespace curve_sequencer {
@@ -101,8 +103,8 @@ private:
 
   auto taper(float input) const -> float {
     auto const curvature = signals_.curvature(step_);
-    auto const &taper = signals_.taper(step_);
-    return taper.apply(input, curvature);
+    auto const shape = signals_.shape(step_);
+    return sigmoid::Shape::apply(shape, input, curvature);
   }
 
   int step_{0};

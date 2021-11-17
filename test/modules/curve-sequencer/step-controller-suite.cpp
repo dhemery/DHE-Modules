@@ -27,7 +27,6 @@ using StepController = dhe::curve_sequencer::StepController<Signals>;
 
 using dhe::Latch;
 using dhe::PhaseTimer;
-using dhe::sigmoid::Taper;
 
 using test::falling_latch;
 using test::high_latch;

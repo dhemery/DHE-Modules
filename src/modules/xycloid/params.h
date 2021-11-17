@@ -81,20 +81,17 @@ struct ThrobSpeed {
   struct KnobMap;
 
   static inline auto scale(float normalized) -> float {
-    return cx::scale(taper().apply(normalized), min_hz, max_hz);
+    return cx::scale(sigmoid::SShape::apply(normalized, -0.8F), min_hz, max_hz);
   }
 
   static inline auto normalize(float scaled) -> float {
-    return taper().invert(cx::normalize(scaled, min_hz, max_hz));
+    return sigmoid::SShape::invert(cx::normalize(scaled, min_hz, max_hz),
+                                   -0.8F);
   }
 
 private:
   static auto constexpr min_hz = -10.F;
   static auto constexpr max_hz = 10.F;
-  static inline auto taper() -> sigmoid::Taper const & {
-    static auto constexpr taper = sigmoid::s_taper_with_curvature(-0.8F);
-    return taper;
-  }
 };
 
 struct ThrobSpeed::KnobMap {

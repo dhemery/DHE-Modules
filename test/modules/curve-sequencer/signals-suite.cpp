@@ -184,19 +184,19 @@ public:
           }));
 
     t.run("taper(step)", [](Tester &t) {
-      for (unsigned long selection = 0; selection < dhe::sigmoid::tapers.size();
-           selection++) {
+      for (unsigned long selection = 0; selection < 2; selection++) {
         t.run("with switch in position " + std::to_string(selection),
               test([selection](Tester &t, Module &module, Signals &signals) {
                 auto const step = std::rand() % step_count;
                 module.params_[ParamId::StepShape + step].setValue(
                     static_cast<float>(selection));
 
-                auto const got = signals.taper(step);
-                auto const want = dhe::sigmoid::tapers[selection];
+                auto const got = signals.shape(step);
+                auto const want = static_cast<dhe::sigmoid::ShapeId>(selection);
 
                 if (got != want) {
-                  t.errorf("Got {}, want {}", got, want);
+                  t.errorf("Got {}, want {}", static_cast<int>(got),
+                           static_cast<int>(want));
                 }
               }));
       }

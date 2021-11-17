@@ -9,37 +9,32 @@
 
 namespace dhe {
 namespace duration {
-static inline auto taper() -> sigmoid::Taper const & {
-  /**
-   * This curvature gives a duration knob a gentle inverted S taper,
-   * increasing sensitivity in the middle of the knob normalize and decreasing
-   * sensitivity toward the extremes.
-   */
-  static auto constexpr taper_curvature = 0.8018017F;
+/**
+ * This curvature gives a duration knob a gentle inverted S taper,
+ * increasing sensitivity in the middle of the knob normalize and decreasing
+ * sensitivity toward the extremes.
+ */
+static auto constexpr taper_curvature = 0.8018017F;
 
-  /**
-   * Each duration select is of the form [n, 1000n]. Given ranges of that
-   * form, this curvature tapers the normalize so a knob positioned dead center
-   * yields a duration equal to 1/10 of the select's upper bound (to within 7
-   * decimal places).
-   */
-  static auto constexpr taper =
-      sigmoid::j_taper_with_curvature(taper_curvature);
-  return taper;
-}
+static auto constexpr unit = " s";
+
+/**
+ * Each duration select is of the form [n, 1000n]. Given ranges of that
+ * form, this curvature tapers the normalize so a knob positioned dead center
+ * yields a duration equal to 1/10 of the select's upper bound (to within 7
+ * decimal places).
+ */
 
 static inline auto scale(float rotation, Range range) -> float {
-  auto tapered = taper().apply(rotation);
+  auto tapered = sigmoid::JShape::apply(rotation, taper_curvature);
   return range.scale(tapered);
 }
 
 static inline auto normalize(float seconds, Range range) -> float {
   auto const tapered = range.normalize(seconds);
-  return taper().invert(tapered);
+  return sigmoid::JShape::invert(tapered, taper_curvature);
 }
 } // namespace duration
-
-static auto constexpr duration_unit = " s";
 
 template <typename T> struct MappedDurationRange {
   static auto constexpr max = T::max;
@@ -60,7 +55,7 @@ template <typename T> struct MappedDurationRange {
 
 template <typename T> struct MappedDurationRange<T>::KnobMap {
   static auto constexpr default_value = T::max / 10.F;
-  static auto constexpr unit = duration_unit;
+  static auto constexpr unit = duration::unit;
 
   auto to_display(float value) const -> float {
     return MappedDurationRange<T>::scale(value);
@@ -127,7 +122,7 @@ struct DurationRanges : Enums<DurationRangeId, 3> {
 };
 
 struct DurationRanges::KnobMap {
-  static auto constexpr unit = duration_unit;
+  static auto constexpr unit = duration::unit;
   static auto constexpr default_value =
       MediumDuration::default_value; // Centere
 

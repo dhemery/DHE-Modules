@@ -61,22 +61,16 @@ struct SpinSpeed {
   struct KnobMap;
 
   static inline auto scale(float normalized) -> float {
-    return range().scale(taper().apply(normalized));
+    return range().scale(sigmoid::SShape::apply(normalized, -0.8F));
   }
 
   static inline auto normalize(float scaled) -> float {
-    return taper().invert(range().normalize(scaled));
+    return sigmoid::SShape::invert(range().normalize(scaled), -0.8F);
   }
 
   static inline auto range() -> Range {
     static auto const range = Range{-10.F, 10.F};
     return range;
-  }
-
-private:
-  static inline auto taper() -> sigmoid::Taper const & {
-    static auto const taper = sigmoid::s_taper_with_curvature(-0.8F);
-    return taper;
   }
 };
 
