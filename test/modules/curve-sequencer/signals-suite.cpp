@@ -9,6 +9,7 @@ namespace test {
 namespace curve_sequencer {
 using dhe::DurationRangeId;
 using dhe::DurationRanges;
+using dhe::Shape;
 using dhe::unit::Suite;
 using dhe::unit::Tester;
 
@@ -192,7 +193,7 @@ public:
                     static_cast<float>(selection));
 
                 auto const got = signals.shape(step);
-                auto const want = static_cast<dhe::sigmoid::ShapeId>(selection);
+                auto const want = static_cast<Shape::Id>(selection);
 
                 if (got != want) {
                   t.errorf("Got {}, want {}", static_cast<int>(got),

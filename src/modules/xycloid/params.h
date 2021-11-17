@@ -80,13 +80,12 @@ private:
 struct ThrobSpeed {
   struct KnobMap;
 
-  static inline auto scale(float normalized) -> float {
-    return cx::scale(sigmoid::SShape::apply(normalized, -0.8F), min_hz, max_hz);
+  static constexpr auto scale(float normalized) -> float {
+    return cx::scale(SShape::apply(normalized, -0.8F), min_hz, max_hz);
   }
 
-  static inline auto normalize(float scaled) -> float {
-    return sigmoid::SShape::invert(cx::normalize(scaled, min_hz, max_hz),
-                                   -0.8F);
+  static constexpr auto normalize(float scaled) -> float {
+    return SShape::invert(cx::normalize(scaled, min_hz, max_hz), -0.8F);
   }
 
 private:
@@ -96,14 +95,16 @@ private:
 
 struct ThrobSpeed::KnobMap {
   static auto constexpr unit = " Hz";
-  static auto constexpr default_rotation =
-      sigmoid::curve(cx::normalize(1.F, -10.F, 10.F), -0.8F);
+  static auto constexpr default_rotation = normalize(1.F);
 
-  static inline auto to_display(float value) -> float { return scale(value); }
+  static constexpr auto to_display(float value) -> float {
+    return scale(value);
+  }
 
-  static inline auto to_value(float display) -> float {
+  static constexpr auto to_value(float display) -> float {
     return normalize(display);
   }
+
 };
 
 } // namespace xycloid

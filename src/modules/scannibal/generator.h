@@ -25,8 +25,7 @@ public:
     auto const range = Range{phase_0_voltage, phase_1_voltage};
     auto const shape = module_.shape(step);
 
-    auto const out_voltage =
-        range.scale(sigmoid::Shape::apply(shape, phase, curvature));
+    auto const out_voltage = range.scale(Shape::apply(phase, shape, curvature));
 
     module_.output(out_voltage);
   }

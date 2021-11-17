@@ -33,8 +33,7 @@ public:
 
     timer_.advance(sample_time / duration);
     auto const phase = timer_.phase();
-    auto const out_voltage =
-        range.scale(sigmoid::Shape::apply(shape, phase, curvature));
+    auto const out_voltage = range.scale(Shape::apply(phase, shape, curvature));
     signals_.output(out_voltage);
     signals_.show_progress(step_, phase);
     return timer_.in_progress() ? GeneratorStatus::Generating

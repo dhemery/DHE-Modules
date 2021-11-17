@@ -6,41 +6,41 @@
 #include <ostream>
 
 namespace dhe {
-namespace sigmoid {
+struct Sigmoid {
+  /**
+   * Applies a sigmoid function to an input.
+   * <p>
+   * The curvature determines the shape and intensity of the transfer function.
+   * A positive curvature applies an S-shaped transfer function.
+   * A curvature of 0 applies a linear transfer function.
+   * A negative curvature applies an inverted S-shaped transfer function.
+   * <p>
+   * A valid input is in the closed interval [-1.F, 1.F].
+   * A valid curvature is in the open interval [-1.F, 1.F].
+   *
+   * @param curvature the intensity and direction of the curvature
+   * @param input the input to the sigmoid function
+   * @return the sigmoid function result
+   */
+  static constexpr auto curve(float input, float curvature) -> float {
+    return (input - input * curvature) /
+           (curvature - cx::abs(input) * 2.0F * curvature + 1.0F);
+  }
+};
 
-/**
- * Applies a sigmoid function to the input.
- * <p>
- * The curvature determines the shape and intensity of the transfer function.
- * A positive curvature applies an S-shaped transfer function.
- * A curvature of 0 applies a linear transfer function.
- * A negative curvature applies an inverted S-shaped transfer function.
- * @param input the input to the sigmoid function
- * @param curvature the intensity and direction of the curvature
- * @return the sigmoid function result
- */
-static constexpr auto curve(float input, float curvature) -> float {
-  return (input - input * curvature) /
-         (curvature - cx::abs(input) * 2.0F * curvature + 1.0F);
-}
+struct JShape {
+  static auto constexpr apply(float input, float curvature) -> float {
+    return Sigmoid::curve(input, curvature);
+  }
 
-static constexpr auto invert(float input, float curvature) -> float {
-  return curve(input, -curvature);
-}
-
-/**
- * The range over which the curve() function's input and curvature are defined.
- * InPort and curvature values within this select will always produce outputs_
- * in this range. The curve() function's behavior for values outside this select
- * is undefined.
- */
-static auto constexpr domain = Range{-1.F, 1.F};
-
-enum class ShapeId { J, S };
+  static auto constexpr invert(float input, float curvature) -> float {
+    return Sigmoid::curve(input, -curvature);
+  }
+};
 
 struct SShape {
   static auto constexpr apply(float input, float curvature) -> float {
-    return scale_down(curve(scale_up(input), -curvature));
+    return scale_down(Sigmoid::curve(scale_up(input), -curvature));
   }
 
   static auto constexpr invert(float input, float curvature) -> float {
@@ -57,28 +57,14 @@ private:
   }
 };
 
-struct JShape {
-  static auto constexpr apply(float input, float curvature) -> float {
-    return curve(input, curvature);
-  }
-
-  static auto constexpr invert(float input, float curvature) -> float {
-    return apply(input, -curvature);
-  }
-};
-
 struct Shape {
-  static auto constexpr apply(ShapeId id, float input, float curvature)
-      -> float {
-    return id == ShapeId::S ? SShape::apply(input, curvature)
-                            : JShape::apply(input, curvature);
-  }
+  enum class Id { J, S };
+  static constexpr auto j = Id::J;
+  static constexpr auto s = Id::S;
 
-  static auto constexpr invert(ShapeId id, float input, float curvature)
-      -> float {
-    return id == ShapeId::S ? SShape::invert(input, curvature)
-                            : JShape::invert(input, curvature);
+  static auto constexpr apply(float input, Id id, float curvature) -> float {
+    return id == s ? SShape::apply(input, curvature)
+                   : JShape::apply(input, curvature);
   }
 };
-} // namespace sigmoid
 } // namespace dhe

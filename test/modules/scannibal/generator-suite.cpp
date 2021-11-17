@@ -6,7 +6,7 @@
 
 namespace test {
 namespace scannibal {
-using dhe::sigmoid::Shape;
+using dhe::Shape;
 using dhe::unit::Suite;
 using test::is_equal_to;
 using test::is_false;
@@ -22,14 +22,14 @@ public:
             auto constexpr step = 4;
 
             auto constexpr phase = 0.5F; // halfway
-            auto constexpr shape = ShapeId::J;
+            auto constexpr shape = Shape::j;
             auto constexpr curvature = 0.5F; // linear
 
             auto constexpr phase_0_voltage = 0.F;
             auto constexpr phase_1_voltage = 7.F;
             auto const scaled_tapered_phase =
                 (phase_1_voltage - phase_0_voltage) *
-                Shape::apply(shape, phase, curvature);
+                Shape::apply(phase, shape, curvature);
 
             phase_0_anchor.voltage_ = phase_0_voltage;
             phase_1_anchor.voltage_ = phase_1_voltage;
@@ -47,7 +47,7 @@ public:
           test([](Tester &t, Module &module, Anchor &phase_0_anchor,
                   Anchor &phase_1_anchor, Generator &generator) {
             auto constexpr step = 3;
-            module.shape_[step] = ShapeId::J;
+            module.shape_[step] = Shape::j;
 
             generator.generate(step, 0.F);
 
@@ -60,7 +60,7 @@ public:
           test([](Tester &t, Module &module, Anchor &phase_0_anchor,
                   Anchor &phase_1_anchor, Generator &generator) {
             auto constexpr step = 6;
-            module.shape_[step] = ShapeId::J;
+            module.shape_[step] = Shape::j;
 
             generator.generate(step, 0.F);
 
@@ -80,8 +80,8 @@ public:
                   Anchor &phase_1_anchor, Generator &generator) {
             auto constexpr first_step = 6;
             auto constexpr second_step = 2;
-            module.shape_[first_step] = ShapeId::J;
-            module.shape_[second_step] = ShapeId::J;
+            module.shape_[first_step] = Shape::j;
+            module.shape_[second_step] = Shape::j;
 
             generator.generate(first_step, 0.11F);
 

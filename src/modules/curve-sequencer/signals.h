@@ -107,8 +107,8 @@ struct Signals {
     set_lights(step, completed_brightness, remaining_brightness);
   }
 
-  auto shape(int step) const -> sigmoid::ShapeId {
-    return value_of<sigmoid::ShapeId>(params_[ParamId::StepShape + step]);
+  auto shape(int step) const -> Shape::Id {
+    return value_of<Shape::Id>(params_[ParamId::StepShape + step]);
   }
 
 private:

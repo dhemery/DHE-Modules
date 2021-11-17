@@ -67,7 +67,7 @@ template <int N> struct Module : rack::engine::Module {
       level_knobs.push_back(level_knob);
 
       Switch::config<Shapes>(this, ParamId::StepShape + step,
-                             step_name + "shape", sigmoid::ShapeId::J);
+                             step_name + "shape", Shape::Id::J);
       Knob::config<Curvature>(this, ParamId::StepCurvature + step,
                               step_name + "curvature");
       auto *duration_knob = Knob::config<DurationRanges>(

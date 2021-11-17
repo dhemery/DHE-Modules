@@ -14,7 +14,7 @@
 namespace test {
 namespace sequencizer {
 
-using dhe::sigmoid::ShapeId;
+using dhe::Shape;
 using dhe::unit::Tester;
 using TestFunc = std::function<void(Tester &)>;
 
@@ -31,7 +31,7 @@ struct Signals {
   auto curvature(int step) const -> float { return curvature_[step]; }
   auto duration(int step) const -> float { return duration_[step]; }
   void output(float v) { output_ = v; }
-  auto shape(int step) const -> ShapeId { return shape_[step]; }
+  auto shape(int step) const -> Shape::Id { return shape_[step]; }
   void show_progress(int step, float progress) { progress_[step] = progress; }
   void show_inactive(int step) { inactive_step_ = step; }
 
@@ -41,7 +41,7 @@ struct Signals {
   std::array<float, step_count> duration_multiplier_{}; // NOLINT
   int inactive_step_{};                                 // NOLINT
   float output_{};                                      // NOLINT
-  std::array<ShapeId, step_count> shape_{};             // NOLINT
+  std::array<Shape::Id, step_count> shape_{};           // NOLINT
 };
 
 using Generator = dhe::sequencizer::Generator<Signals, Anchor>;

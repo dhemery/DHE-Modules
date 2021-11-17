@@ -21,13 +21,12 @@ struct Module : public rack::engine::Module {
     Knob::config<Attenuverter>(this, ParamId::CurvatureAv, "Curvature CV gain",
                                0.F);
     configInput(InputId::CurvatureCv, "Curvature CV");
-    Switch::config<Shapes>(this, ParamId::Shape, "Shape", sigmoid::ShapeId::J);
+    Switch::config<Shapes>(this, ParamId::Shape, "Shape", Shape::Id::J);
   }
 
   void process(ProcessArgs const & /*args*/) override {
     auto const normalized = BipolarVoltage::normalize(signal_in());
-    auto const tapered =
-        sigmoid::Shape::apply(shape(), normalized, curvature());
+    auto const tapered = Shape::apply(normalized, shape(), curvature());
     auto const output_voltage = BipolarVoltage::range().scale(tapered);
     send_signal(output_voltage);
   }
@@ -49,8 +48,8 @@ private:
     outputs[OutputId::Swave].setVoltage(voltage);
   }
 
-  auto shape() const -> sigmoid::ShapeId {
-    return value_of<sigmoid::ShapeId>(params[ParamId::Shape]);
+  auto shape() const -> Shape::Id {
+    return value_of<Shape::Id>(params[ParamId::Shape]);
   }
 
   auto signal_in() const -> float { return voltage_at(inputs[InputId::Swave]); }

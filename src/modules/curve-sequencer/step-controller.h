@@ -104,7 +104,7 @@ private:
   auto taper(float input) const -> float {
     auto const curvature = signals_.curvature(step_);
     auto const shape = signals_.shape(step_);
-    return sigmoid::Shape::apply(shape, input, curvature);
+    return Shape::apply(input, shape, curvature);
   }
 
   int step_{0};

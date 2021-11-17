@@ -24,8 +24,7 @@ public:
     auto const shape = signals_.shape();
 
     timer_.advance(sample_time / signals_.duration());
-    auto const tapered_phase =
-        sigmoid::Shape::apply(shape, timer_.phase(), curvature);
+    auto const tapered_phase = Shape::apply(timer_.phase(), shape, curvature);
 
     signals_.output(cx::scale(tapered_phase, start_voltage_, level));
 

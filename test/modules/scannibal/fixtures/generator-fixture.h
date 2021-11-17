@@ -11,7 +11,7 @@
 namespace test {
 namespace scannibal {
 
-using dhe::sigmoid::ShapeId;
+using dhe::Shape;
 using dhe::unit::Tester;
 using TestFunc = std::function<void(Tester &)>;
 
@@ -27,11 +27,11 @@ struct Anchor {
 struct Module {
   auto curvature(int step) const -> float { return curvature_[step]; }
   void output(float v) { output_ = v; }
-  auto shape(int step) const -> ShapeId { return shape_[step]; }
+  auto shape(int step) const -> Shape::Id { return shape_[step]; }
 
   std::array<float, step_count> curvature_{}; // NOLINT
   float output_{};                            // NOLINT
-  std::array<ShapeId, step_count> shape_{};   // NOLINT
+  std::array<Shape::Id, step_count> shape_{}; // NOLINT
 };
 
 using Generator = dhe::scannibal::Generator<Module, Anchor>;

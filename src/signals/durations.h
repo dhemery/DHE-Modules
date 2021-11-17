@@ -26,13 +26,13 @@ static auto constexpr unit = " s";
  */
 
 static inline auto scale(float rotation, Range range) -> float {
-  auto tapered = sigmoid::JShape::apply(rotation, taper_curvature);
+  auto tapered = JShape::apply(rotation, taper_curvature);
   return range.scale(tapered);
 }
 
 static inline auto normalize(float seconds, Range range) -> float {
   auto const tapered = range.normalize(seconds);
-  return sigmoid::JShape::invert(tapered, taper_curvature);
+  return JShape::invert(tapered, taper_curvature);
 }
 } // namespace duration
 

@@ -38,8 +38,7 @@ struct CurvatureBounds {
   static auto constexpr min = -max;
 };
 
-struct CurvatureTaper : TaperedShape<sigmoid::SShape, CurvatureKnobCurvature> {
-};
+struct CurvatureTaper : TaperedShape<SShape, CurvatureKnobCurvature> {};
 
 struct Curvature : ScaledShape<CurvatureTaper, CurvatureBounds> {
   struct KnobMap;

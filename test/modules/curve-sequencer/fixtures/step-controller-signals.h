@@ -12,9 +12,9 @@
 namespace test {
 namespace curve_sequencer {
 using dhe::PhaseTimer;
+using dhe::Shape;
 using dhe::curve_sequencer::AdvanceMode;
 using dhe::curve_sequencer::GenerateMode;
-using dhe::sigmoid::ShapeId;
 
 template <int N> struct StepControllerSignals {
   std::array<AdvanceMode, N> advance_mode_;   // NOLINT
@@ -23,7 +23,7 @@ template <int N> struct StepControllerSignals {
   std::array<GenerateMode, N> generate_mode_; // NOLINT
   std::array<float, N> level_;                // NOLINT
   std::array<float, N> progress_;             // NOLINT
-  std::array<ShapeId, N> shape_;              // NOLINT
+  std::array<Shape::Id, N> shape_;            // NOLINT
   float input_;                               // NOLINT
   float output_;                              // NOLINT
   int deactivated_step_{-1};                  // NOLINT
@@ -36,9 +36,9 @@ template <int N> struct StepControllerSignals {
   auto level(int s) -> float { return level_[s]; }
   void output(float v) { output_ = v; }
   auto output() -> float { return output_; }
+  auto shape(int s) -> Shape::Id const & { return shape_[s]; }
   void show_inactive(int s) { deactivated_step_ = s; }
   void show_progress(int s, float p) { progress_[s] = p; }
-  auto shape(int s) -> ShapeId const & { return shape_[s]; }
 };
 } // namespace curve_sequencer
 } // namespace test

@@ -61,11 +61,11 @@ struct SpinSpeed {
   struct KnobMap;
 
   static inline auto scale(float normalized) -> float {
-    return range().scale(sigmoid::SShape::apply(normalized, -0.8F));
+    return range().scale(SShape::apply(normalized, -0.8F));
   }
 
   static inline auto normalize(float scaled) -> float {
-    return sigmoid::SShape::invert(range().normalize(scaled), -0.8F);
+    return SShape::invert(range().normalize(scaled), -0.8F);
   }
 
   static inline auto range() -> Range {
