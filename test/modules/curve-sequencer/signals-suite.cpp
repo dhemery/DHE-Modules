@@ -2,6 +2,7 @@
 #include "fixtures/advance-mode-enums.h"
 #include "fixtures/generate-mode-enums.h"
 #include "fixtures/signals-fixture.h"
+#include "helpers/assertions.h"
 
 #include <functional>
 
@@ -158,9 +159,7 @@ public:
 
             auto const got = signals.curvature(step);
             auto constexpr want = dhe::Curvature::scale(curve_knob_rotation);
-            if (got != want) {
-              t.errorf("Got {}, want {}", got, want);
-            }
+            assert_that(t, got, is_near(want, 0.000001F));
           }));
 
     t.run("duration(step) reports duration for duration select and step "
