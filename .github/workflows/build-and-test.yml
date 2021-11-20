@@ -38,7 +38,7 @@ jobs:
           submodules: true
       - name: Install Rack SDK
         run: |
-          curl -o sdk.zip https://vcvrack.com/downloads/Rack-SDK-2.beta.-${{ matrix.config.arch }}.zip
+          curl -o sdk.zip https://vcvrack.com/downloads/Rack-SDK-2.beta.1-${{ matrix.config.arch }}.zip
           unzip sdk.zip
       - name: Install Dependencies
         run: |
