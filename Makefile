@@ -85,6 +85,7 @@ $(STAGING_DIR) $(STAGING_PLUGIN_DIR):
 
 stage: dist $(STAGING_PLUGIN_DIR)
 	cp $(DIST_PLUGIN_ZIP) $(STAGING_PLUGIN_DIR)
+	cp .testing/* $(STAGING_USER_DIR)
 
 clean-stage:
 	rm -rf $(STAGING_DIRNAME)

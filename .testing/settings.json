@@ -1,0 +1,40 @@
+{
+  "token": "",
+  "windowMaximized": false,
+  "windowSize": [
+    1024.0,
+    768.0
+  ],
+  "invertZoom": false,
+  "pixelRatio": 0.0,
+  "cableOpacity": 0.5,
+  "cableTension": 0.5,
+  "rackBrightness": 1.0,
+  "haloBrightness": 0.25,
+  "allowCursorLock": true,
+  "knobMode": 0,
+  "knobScroll": false,
+  "knobLinearSensitivity": 0.0010000000474974513,
+  "knobScrollSensitivity": 0.0010000000474974513,
+  "sampleRate": 0.0,
+  "threadCount": 1,
+  "tooltips": true,
+  "lockModules": false,
+  "frameSwapInterval": 2,
+  "autosaveInterval": 15.0,
+  "recentPatchPaths": [],
+  "cableColors": [
+    "#f3374b",
+    "#ffb437",
+    "#00b56e",
+    "#3695ef",
+    "#8b4ade"
+  ],
+  "autoCheckUpdates": true,
+  "showTipsOnLaunch": false,
+  "tipIndex": 0,
+  "browserSort": 0,
+  "browserZoom": -1.0,
+  "moduleInfos": {},
+  "moduleWhitelist": {}
+}
