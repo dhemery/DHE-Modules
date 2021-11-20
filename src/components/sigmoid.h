@@ -44,7 +44,7 @@ struct SShape {
   }
 
   static auto constexpr invert(float input, float curvature) -> float {
-    return apply(input, curvature);
+    return apply(input, -curvature);
   }
 
 private:

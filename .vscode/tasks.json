@@ -57,6 +57,21 @@
                 "kind": "build",
                 "isDefault": true
             }
+        },
+        {
+            "label": "Setup",
+            "type": "process",
+            "command": "make",
+            "args": [
+                "setup",
+            ],
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
         }
     ]
 }

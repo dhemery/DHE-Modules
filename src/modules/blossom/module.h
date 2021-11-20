@@ -25,8 +25,7 @@ public:
   Module() {
     config(ParamId::Count, InputId::Count, OutputId::Count);
 
-    Knob::config<SpinSpeed>(this, ParamId::SpinSpeed, "Speed",
-                            SpinSpeed::normalize(1.F));
+    Knob::config<SpinSpeed>(this, ParamId::SpinSpeed, "Speed", 1.F);
     Knob::config<Attenuverter>(this, ParamId::SpinSpeedAv, "Speed CV gain");
     configInput(InputId::SpinSpeedCv, "Speed CV");
 
@@ -42,7 +41,7 @@ public:
     Knob::config<Attenuverter>(this, ParamId::BounceRatioAv, "Ratio CV gain");
     configInput(InputId::BounceRatioCv, "Ratio CV");
 
-    Knob::config<Percentage>(this, ParamId::BounceDepth, "Depth");
+    Knob::config<Percentage>(this, ParamId::BounceDepth, "Depth", 50.F);
     Knob::config<Attenuverter>(this, ParamId::BounceDepthAv, "Depth CV gain");
     configInput(InputId::BounceDepthCv, "Depth CV");
 

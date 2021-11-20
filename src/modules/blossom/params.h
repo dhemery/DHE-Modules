@@ -81,6 +81,8 @@ struct SpinSpeed::KnobMap {
   static inline auto to_display(float value) -> float { return scale(value); }
 
   static inline auto to_value(float display) -> float {
+    std::printf("DHE: Mapped spin speed %f to rotation %f\n", display,
+                normalize(display));
     return normalize(display);
   }
 };
