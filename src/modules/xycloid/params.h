@@ -104,7 +104,6 @@ struct ThrobSpeed::KnobMap {
   static constexpr auto to_value(float display) -> float {
     return normalize(display);
   }
-
 };
 
 } // namespace xycloid

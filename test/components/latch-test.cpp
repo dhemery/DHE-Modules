@@ -20,8 +20,8 @@ static auto constexpr falling = Latch{false, true};
 static auto constexpr rising = Latch{true, true};
 static auto constexpr high = Latch{true, false};
 
-static auto check_equality(const Latch &a, const Latch &b, bool want_eq)
-    -> TestFunc;
+static auto require_equal(const Latch &a, const Latch &b) -> TestFunc;
+static auto require_unequal(const Latch &a, const Latch &b) -> TestFunc;
 static auto check_clock(Latch l, bool signal, Latch want_latch) -> TestFunc;
 
 class LatchSuite : public Suite {
@@ -29,24 +29,24 @@ public:
   LatchSuite() : Suite{"dhe::Latch"} {}
 
   void run(Tester &t) override {
-    t.run("is low by default", check_equality(Latch{}, low, true));
+    t.run("is low by default", require_equal(Latch{}, low));
 
-    t.run("high == high", check_equality(high, high, true));
-    t.run("high != low", check_equality(high, low, false));
-    t.run("high != rising", check_equality(high, rising, false));
-    t.run("high != falling", check_equality(high, falling, false));
-    t.run("low != high", check_equality(low, high, false));
-    t.run("low == low", check_equality(low, low, true));
-    t.run("low != rising", check_equality(low, rising, false));
-    t.run("low != falling", check_equality(low, falling, false));
-    t.run("rising != high", check_equality(rising, high, false));
-    t.run("rising != low", check_equality(rising, low, false));
-    t.run("rising == rising", check_equality(rising, rising, true));
-    t.run("rising != falling", check_equality(rising, falling, false));
-    t.run("falling != high", check_equality(falling, high, false));
-    t.run("falling != low", check_equality(falling, low, false));
-    t.run("falling != rising", check_equality(falling, rising, false));
-    t.run("falling == falling", check_equality(falling, falling, true));
+    t.run("high == high", require_equal(high, high));
+    t.run("high != low", require_unequal(high, low));
+    t.run("high != rising", require_unequal(high, rising));
+    t.run("high != falling", require_unequal(high, falling));
+    t.run("low != high", require_unequal(low, high));
+    t.run("low == low", require_equal(low, low));
+    t.run("low != rising", require_unequal(low, rising));
+    t.run("low != falling", require_unequal(low, falling));
+    t.run("rising != high", require_unequal(rising, high));
+    t.run("rising != low", require_unequal(rising, low));
+    t.run("rising == rising", require_equal(rising, rising));
+    t.run("rising != falling", require_unequal(rising, falling));
+    t.run("falling != high", require_unequal(falling, high));
+    t.run("falling != low", require_unequal(falling, low));
+    t.run("falling != rising", require_unequal(falling, rising));
+    t.run("falling == falling", require_equal(falling, falling));
 
     t.run("high + high signal → unchanged", check_clock(high, true, high));
     t.run("high + low signal → falls", check_clock(high, false, falling));
@@ -75,23 +75,36 @@ auto check_clock(Latch l, bool signal, Latch want_latch) -> TestFunc {
   };
 }
 
-auto check_equality(const Latch &a, const Latch &b, bool want_eq) -> TestFunc {
-  return [a, b, want_eq](Tester &t) {
-    auto const a_equals_b = (a == b);
-    if (a_equals_b != want_eq) {
-      t.errorf("{}=={} got {}, want {}", a, b, a_equals_b, !a_equals_b);
+auto require_unequal(const Latch &a, const Latch &b) -> TestFunc {
+  return [a, b](Tester &t) {
+    if (a == b) {
+      t.errorf("{} == {} want false, got true", a, b);
     }
-    auto const b_equals_a = (b == a);
-    if (b_equals_a != want_eq) {
-      t.errorf("{}=={} got {}, want {}", b, a, b_equals_a, !b_equals_a);
+    if (b == a) {
+      t.errorf("{} == {} want false, got true", b, a);
     }
-    auto const a_not_equals_b = (a != b);
-    if (a_not_equals_b == want_eq) {
-      t.errorf("{}!={} got {}, want {}", a, b, a_not_equals_b, !a_not_equals_b);
+    if (!(a != b)) {
+      t.errorf("{} != {} want true, got false", a, b);
     }
-    auto const b_not_equals_a = (b != a);
-    if (b_not_equals_a == want_eq) {
-      t.errorf("{}!={} got {}, want {}", b, a, b_not_equals_a, !b_not_equals_a);
+    if (!(b != a)) {
+      t.errorf("{} != {} want true, got false", b, a);
+    }
+  };
+}
+
+auto require_equal(const Latch &a, const Latch &b) -> TestFunc {
+  return [a, b](Tester &t) {
+    if (!(a == b)) {
+      t.errorf("{}=={} want true, got false", a, b);
+    }
+    if (!(b == a)) {
+      t.errorf("{}=={} want true, got false", b, a);
+    }
+    if (a != b) {
+      t.errorf("{}!={} want false, got true", a, b);
+    }
+    if (b != a) {
+      t.errorf("{}!={} want false, got true", b, a);
     }
   };
 }
