@@ -1,10 +1,11 @@
 /.cache
 .DS_Store
 /.idea/workspace.xml
-/.vscode/
 /null.d
 /.stage/
 /build/
 /dist/
 /*.dylib
 /compile_commands.json
+/.vscode/*
+!/.vscode/tasks.json
