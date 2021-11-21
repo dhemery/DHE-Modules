@@ -23,8 +23,7 @@ public:
   Module() {
     config(ParamId::Count, InputId::Count, OutputId::Count);
 
-    Knob::config<ThrobSpeed>(this, ParamId::ThrobSpeed, "Speed",
-                             ThrobSpeed::normalize(1.F));
+    Knob::config<ThrobSpeed>(this, ParamId::ThrobSpeed, "Speed", 1.F);
     configInput(InputId::ThrobSpeedCv, "Speed CV");
     Knob::config<Attenuverter>(this, ParamId::ThrobSpeedAv, "Speed CV gain");
 
@@ -46,7 +45,7 @@ public:
                                      "Ratio mode", WobbleRatioMode::Free)
         ->on_change(select_ratio_mode);
 
-    Knob::config<Percentage>(this, ParamId::WobbleDepth, "Depth");
+    Knob::config<Percentage>(this, ParamId::WobbleDepth, "Depth", 50.F);
     configInput(InputId::WobbleDepthCv, "Depth CV");
     Knob::config<Attenuverter>(this, ParamId::WobbleDepthAv, "Depth CV gain");
 

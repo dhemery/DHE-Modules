@@ -57,7 +57,7 @@ struct WobbleRatioRanges : Enums<WobbleRatioRangeId, 3> {
 };
 
 struct WobbleRatioRanges::KnobMap {
-  static auto constexpr default_value = 9.F;
+  static auto constexpr default_value = 8.F;
   static auto constexpr unit = "x";
 
   auto to_display(float value) const -> float {
@@ -73,8 +73,8 @@ struct WobbleRatioRanges::KnobMap {
   void select_range(WobbleRatioRangeId id) { range_id_ = id; }
 
 private:
-  WobbleRatioMode mode_{};
-  WobbleRatioRangeId range_id_{};
+  WobbleRatioMode mode_{WobbleRatioMode::Free};
+  WobbleRatioRangeId range_id_{WobbleRatioRangeId::Outward};
 };
 
 struct ThrobSpeed {
