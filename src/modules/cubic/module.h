@@ -1,31 +1,17 @@
 #pragma once
 
+#include "coefficient.h"
 #include "control-ids.h"
 
 #include "components/range.h"
 #include "controls/knobs.h"
 #include "params/presets.h"
-#include "signals/basic.h"
 
 #include "rack.hpp"
 
 namespace dhe {
 
 namespace cubic {
-
-struct CoefficientBounds {
-  static auto constexpr min = -2.F;
-  static auto constexpr max = 2.F;
-};
-
-struct CoefficientKnobMap : ScaledKnobMap<LinearRange<CoefficientBounds>> {
-  static auto constexpr default_value = 0.F;
-  static auto constexpr unit = "";
-};
-
-struct Coefficient : LinearRange<CoefficientBounds> {
-  using KnobMap = CoefficientKnobMap;
-};
 
 struct Module : public rack::engine::Module {
   Module() {
