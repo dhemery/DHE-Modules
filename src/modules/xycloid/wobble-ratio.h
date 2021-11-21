@@ -23,7 +23,9 @@ struct WobbleRatioModes : Enums<WobbleRatioMode, 2> {
 
 enum class WobbleRatioRangeId { Inward, InwardOutward, Outward };
 
-struct WobbleRatioRanges : Enums<WobbleRatioRangeId, 3> {
+struct WobbleRatioRanges {
+  static auto constexpr size = 3;
+  using value_type = WobbleRatioRangeId;
   struct KnobMap;
 
   static inline auto labels() -> std::vector<std::string> const & {
@@ -31,6 +33,10 @@ struct WobbleRatioRanges : Enums<WobbleRatioRangeId, 3> {
         std::vector<std::string>{"In", "-In +Out", "Out"};
     return labels;
   }
+};
+
+struct WobbleRatio {
+  struct KnobMap;
 
   static inline auto scale(float normalized, WobbleRatioRangeId range_id,
                            WobbleRatioMode mode) -> float {
@@ -56,7 +62,7 @@ struct WobbleRatioRanges : Enums<WobbleRatioRangeId, 3> {
   }
 };
 
-struct WobbleRatioRanges::KnobMap {
+struct WobbleRatio::KnobMap {
   static auto constexpr default_value = 8.F;
   static auto constexpr unit = "x";
 
@@ -75,35 +81,6 @@ struct WobbleRatioRanges::KnobMap {
 private:
   WobbleRatioMode mode_{WobbleRatioMode::Free};
   WobbleRatioRangeId range_id_{WobbleRatioRangeId::Outward};
-};
-
-struct ThrobSpeed {
-  struct KnobMap;
-
-  static constexpr auto scale(float normalized) -> float {
-    return cx::scale(SShape::apply(normalized, -0.8F), min_hz, max_hz);
-  }
-
-  static constexpr auto normalize(float scaled) -> float {
-    return SShape::invert(cx::normalize(scaled, min_hz, max_hz), -0.8F);
-  }
-
-private:
-  static auto constexpr min_hz = -10.F;
-  static auto constexpr max_hz = 10.F;
-};
-
-struct ThrobSpeed::KnobMap {
-  static auto constexpr unit = " Hz";
-  static auto constexpr default_rotation = normalize(1.F);
-
-  static constexpr auto to_display(float value) -> float {
-    return scale(value);
-  }
-
-  static constexpr auto to_value(float display) -> float {
-    return normalize(display);
-  }
 };
 
 } // namespace xycloid

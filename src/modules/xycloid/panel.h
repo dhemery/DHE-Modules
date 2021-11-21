@@ -1,7 +1,8 @@
 #pragma once
 
 #include "control-ids.h"
-#include "params.h"
+#include "throb-speed.h"
+#include "wobble-ratio.h"
 
 #include "controls/knobs.h"
 #include "controls/ports.h"

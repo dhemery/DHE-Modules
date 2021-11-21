@@ -1,7 +1,8 @@
 #pragma once
 
 #include "control-ids.h"
-#include "params.h"
+#include "throb-speed.h"
+#include "wobble-ratio.h"
 
 #include "components/phase-rotor.h"
 #include "components/range.h"
@@ -28,7 +29,7 @@ public:
     Knob::config<Attenuverter>(this, ParamId::ThrobSpeedAv, "Speed CV gain");
 
     auto *ratio_knob =
-        Knob::config<WobbleRatioRanges>(this, ParamId::WobbleRatio, "Ratio");
+        Knob::config<WobbleRatio>(this, ParamId::WobbleRatio, "Ratio");
     auto select_ratio_range = [ratio_knob](WobbleRatioRangeId range) {
       ratio_knob->mapper().select_range(range);
     };
@@ -149,7 +150,7 @@ private:
         value_of<WobbleRatioRangeId>(params[ParamId::WobbleRatioRange]);
     auto const mode =
         value_of<WobbleRatioMode>(params[ParamId::WobbleRatioMode]);
-    return WobbleRatioRanges::scale(rotation, range, mode);
+    return WobbleRatio::scale(rotation, range, mode);
   }
 
   PhaseRotor wobbler_{};
