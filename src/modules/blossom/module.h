@@ -1,13 +1,15 @@
 #pragma once
 
+#include "bounce-ratio.h"
 #include "control-ids.h"
-#include "params.h"
+#include "spin-speed.h"
 
 #include "components/phase-rotor.h"
 #include "components/range.h"
 #include "components/sigmoid.h"
 #include "controls/knobs.h"
 #include "controls/switches.h"
+#include "params/presets.h"
 #include "signals/angular.h"
 #include "signals/basic.h"
 #include "signals/gain.h"

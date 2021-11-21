@@ -1,5 +1,6 @@
 #pragma once
 
+#include "bounce-ratio.h"
 #include "control-ids.h"
 
 #include "controls/knobs.h"
