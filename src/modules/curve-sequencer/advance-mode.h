@@ -44,8 +44,7 @@ struct AdvanceModes {
   static auto constexpr stepper_slug = "advance-mode";
 
   static inline auto labels() -> std::vector<std::string> {
-    return std::vector<std::string>{advance_mode::labels.cbegin(),
-                                    advance_mode::labels.cend()};
+    return {advance_mode::labels.cbegin(), advance_mode::labels.cend()};
   }
 };
 

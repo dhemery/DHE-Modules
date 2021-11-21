@@ -31,8 +31,7 @@ struct GenerateModes {
   static auto constexpr stepper_slug = "generate-mode";
 
   static inline auto labels() -> std::vector<std::string> {
-    return std::vector<std::string>{generate_mode::names.cbegin(),
-                                    generate_mode::names.cend()};
+    return {generate_mode::names.cbegin(), generate_mode::names.cend()};
   }
 };
 

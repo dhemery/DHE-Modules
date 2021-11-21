@@ -33,12 +33,10 @@ struct KnobMap {
   static auto constexpr default_value = 9.F;
   static auto constexpr unit = "x";
 
-  auto to_display(float value) const -> float {
-    return bounce_ratio::scale(value, mode_);
-  }
+  auto to_display(float value) const -> float { return scale(value, mode_); }
 
-  static inline auto to_value(float display) -> float {
-    return bounce_ratio::normalize(display);
+  static constexpr auto to_value(float display) -> float {
+    return normalize(display);
   }
 
   void select_mode(BounceRatioMode mode) { mode_ = mode; }
@@ -54,8 +52,7 @@ struct BounceRatioModes {
   using value_type = BounceRatioMode;
 
   static auto labels() -> std::vector<std::string> {
-    return std::vector<std::string>{bounce_ratio::names.cbegin(),
-                                    bounce_ratio::names.cend()};
+    return {bounce_ratio::names.cbegin(), bounce_ratio::names.cend()};
   }
 };
 
