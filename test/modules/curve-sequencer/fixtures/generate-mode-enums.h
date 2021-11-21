@@ -8,11 +8,11 @@
 
 namespace test {
 namespace curve_sequencer {
-using dhe::curve_sequencer::generate_mode_count;
 using dhe::curve_sequencer::GenerateMode;
+using dhe::curve_sequencer::GenerateModes;
 
 static auto constexpr generate_modes =
-    std::array<GenerateMode, generate_mode_count>{
+    std::array<GenerateMode, GenerateModes::size>{
         GenerateMode::Curve, GenerateMode::Hold,  GenerateMode::Sustain,
         GenerateMode::Input, GenerateMode::Chase, GenerateMode::Level,
     };

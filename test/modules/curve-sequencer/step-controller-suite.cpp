@@ -4,7 +4,6 @@
 
 #include "components/sigmoid.h"
 
-#include "fixtures/advance-mode-enums.h"
 #include "fixtures/step-controller-signals.h"
 #include "fixtures/step-event-enums.h"
 
@@ -20,6 +19,7 @@ namespace curve_sequencer {
 static auto constexpr step_count = 8;
 
 using dhe::curve_sequencer::AdvanceMode;
+using dhe::curve_sequencer::AdvanceModes;
 using dhe::curve_sequencer::GenerateMode;
 using dhe::curve_sequencer::StepEvent;
 using Signals = StepControllerSignals<step_count>;
@@ -156,7 +156,7 @@ void AdvanceModeTest::run(Tester &t, AdvanceMode mode) const {
 }
 
 void AdvanceModeSuite::run(Tester &t) const {
-  t.run(name_of(mode_), [this](Tester &t) {
+  t.run(AdvanceModes::name(mode_), [this](Tester &t) {
     for (auto const &test : tests_) {
       test.run(t, mode_);
     }

@@ -1,7 +1,8 @@
 #pragma once
 
+#include "advance-mode.h"
 #include "control-ids.h"
-#include "params.h"
+#include "generate-mode.h"
 
 #include "controls/knobs.h"
 #include "controls/ports.h"
