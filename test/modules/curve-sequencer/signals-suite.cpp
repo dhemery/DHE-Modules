@@ -1,7 +1,8 @@
 #include "dheunit/test.h"
-#include "fixtures/generate-mode-enums.h"
 #include "fixtures/signals-fixture.h"
 #include "helpers/assertions.h"
+#include "modules/curve-sequencer/advance-mode.h"
+#include "modules/curve-sequencer/generate-mode.h"
 
 #include <functional>
 
@@ -11,9 +12,7 @@ using dhe::DurationRangeId;
 using dhe::DurationRanges;
 using dhe::Shape;
 using dhe::curve_sequencer::AdvanceMode;
-using dhe::curve_sequencer::AdvanceModes;
 using dhe::curve_sequencer::GenerateMode;
-using dhe::curve_sequencer::GenerateModes;
 using dhe::unit::Suite;
 using dhe::unit::Tester;
 
@@ -206,8 +205,8 @@ public:
     });
 
     t.run("generate_mode(step)", [](Tester &t) {
-      for (auto const mode : generate_modes) {
-        t.run(name_of(mode),
+      for (auto const mode : dhe::curve_sequencer::generate_mode::values) {
+        t.run(dhe::curve_sequencer::generate_mode::name(mode),
               test([mode](Tester &t, Module &module, Signals &signals) {
                 auto const step = std::rand() & step_count;
                 module.params_[ParamId::StepGenerateMode + step].setValue(
@@ -223,8 +222,8 @@ public:
     });
 
     t.run("advance_mode(step)", [](Tester &t) {
-      for (auto const mode : AdvanceModes::values()) {
-        t.run(AdvanceModes::name(mode),
+      for (auto const mode : dhe::curve_sequencer::advance_mode::values) {
+        t.run(dhe::curve_sequencer::advance_mode::name(mode),
               test([mode](Tester &t, Module &module, Signals &signals) {
                 auto const step = std::rand() & step_count;
                 module.params_[ParamId::StepAdvanceMode + step].setValue(

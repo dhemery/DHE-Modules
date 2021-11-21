@@ -13,7 +13,10 @@
             "problemMatcher": [
                 "$gcc"
             ],
-            "group": "build"
+            "group": "build",
+            "presentation": {
+                "clear": true
+            }
         },
         {
             "label": "Test",
@@ -25,7 +28,10 @@
             "problemMatcher": [
                 "$gcc"
             ],
-            "group": "build"
+            "group": "build",
+            "presentation": {
+                "clear": true
+            }
         },
         {
             "label": "Build and test",
@@ -41,6 +47,9 @@
             "group": {
                 "kind": "build",
                 "isDefault": true
+            },
+            "presentation": {
+                "clear": true
             }
         },
         {
@@ -56,6 +65,9 @@
             "group": {
                 "kind": "build",
                 "isDefault": true
+            },
+            "presentation": {
+                "clear": true
             }
         },
         {
@@ -71,6 +83,9 @@
             "group": {
                 "kind": "build",
                 "isDefault": true
+            },
+            "presentation": {
+                "clear": true
             }
         }
     ]

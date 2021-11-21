@@ -1,4 +1,5 @@
 #include "modules/curve-sequencer/advance-mode.h"
+#include "modules/curve-sequencer/generate-mode.h"
 #include "modules/curve-sequencer/step-controller.h"
 #include "modules/curve-sequencer/step-event.h"
 
@@ -19,7 +20,6 @@ namespace curve_sequencer {
 static auto constexpr step_count = 8;
 
 using dhe::curve_sequencer::AdvanceMode;
-using dhe::curve_sequencer::AdvanceModes;
 using dhe::curve_sequencer::GenerateMode;
 using dhe::curve_sequencer::StepEvent;
 using Signals = StepControllerSignals<step_count>;
@@ -156,7 +156,7 @@ void AdvanceModeTest::run(Tester &t, AdvanceMode mode) const {
 }
 
 void AdvanceModeSuite::run(Tester &t) const {
-  t.run(AdvanceModes::name(mode_), [this](Tester &t) {
+  t.run(dhe::curve_sequencer::advance_mode::name(mode_), [this](Tester &t) {
     for (auto const &test : tests_) {
       test.run(t, mode_);
     }
