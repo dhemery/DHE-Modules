@@ -72,9 +72,8 @@ struct Knob {
     auto const min = static_cast<float>(T::min);
     auto const max = static_cast<float>(T::max);
     auto const default_value = static_cast<float>(value);
-    auto const rotation = cx::normalize(default_value, min, max);
     auto *q = module->configParam<RangedKnobQuantity<int>>(
-        id, min, max, rotation, name, T::unit);
+        id, min, max, default_value, name, T::unit);
     q->snapEnabled = true;
     return q;
   }
