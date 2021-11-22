@@ -11,6 +11,7 @@
 #include "components/phase-timer.h"
 #include "components/sigmoid.h"
 #include "controls/buttons.h"
+#include "controls/knobs.h"
 #include "controls/switches.h"
 #include "params/presets.h"
 #include "signals/curvature.h"
