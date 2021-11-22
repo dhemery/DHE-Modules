@@ -1,8 +1,7 @@
 #pragma once
 #include "components/latch.h"
 #include "modules/curve-sequencer/engine.h"
-
-#include "step-event-enums.h"
+#include "modules/curve-sequencer/step-event.h"
 
 #include "dheunit/test.h"
 

@@ -6,7 +6,6 @@
 #include "modules/curve-sequencer/step-event.h"
 
 #include "fixtures/step-controller-signals.h"
-#include "fixtures/step-event-enums.h"
 
 #include "dheunit/test.h"
 

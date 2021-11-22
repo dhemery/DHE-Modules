@@ -21,7 +21,7 @@ static auto constexpr names = std::array<char const *, size>{
     "Curve", "Hold", "Sustain", "Input", "Chase", "Level"};
 
 static inline auto name(GenerateMode mode) -> std::string {
-  return generate_mode::names[static_cast<size_t>(mode)];
+  return names[static_cast<size_t>(mode)];
 }
 } // namespace generate_mode
 
