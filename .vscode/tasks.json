@@ -8,6 +8,7 @@
             "type": "process",
             "command": "make",
             "args": [
+                "--jobs",
                 "all"
             ],
             "problemMatcher": [
@@ -16,14 +17,13 @@
             "group": "build",
             "presentation": {
                 "clear": true
-            }
+            },
         },
         {
-            "label": "Test",
-            "type": "process",
-            "command": "make",
-            "args": [
-                "test"
+            "label": "Build and test",
+            "dependsOn": [
+                "Build",
+                "Test"
             ],
             "problemMatcher": [
                 "$gcc"
@@ -31,26 +31,23 @@
             "group": "build",
             "presentation": {
                 "clear": true
-            }
+            },
         },
         {
-            "label": "Build and test",
+            "label": "Clean",
             "type": "process",
             "command": "make",
             "args": [
-                "all",
-                "test"
+                "--jobs",
+                "clean",
             ],
             "problemMatcher": [
                 "$gcc"
             ],
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            },
+            "group": "build",
             "presentation": {
                 "clear": true
-            }
+            },
         },
         {
             "label": "Run",
@@ -59,34 +56,46 @@
             "args": [
                 "run",
             ],
+            "dependsOn": "Build",
             "problemMatcher": [
                 "$gcc"
             ],
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            },
+            "group": "build",
             "presentation": {
                 "clear": true
-            }
+            },
         },
         {
             "label": "Setup",
             "type": "process",
             "command": "make",
             "args": [
+                "--jobs",
                 "setup",
             ],
             "problemMatcher": [
                 "$gcc"
             ],
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            },
+            "group": "build",
             "presentation": {
                 "clear": true
-            }
-        }
+            },
+        },
+        {
+            "label": "Test",
+            "type": "process",
+            "command": "make",
+            "args": [
+                "--jobs",
+                "test"
+            ],
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "group": "build",
+            "presentation": {
+                "clear": true
+            },
+        },
     ]
 }

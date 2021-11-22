@@ -1,9 +1,12 @@
 #pragma once
 
 #include "control-ids.h"
+#include "controls/buttons.h"
+#include "controls/switches.h"
 #include "gate-mode.h"
 #include "input-selector.h"
 #include "outcome.h"
+#include "params/presets.h"
 #include "signals/basic.h"
 #include "upgrader.h"
 

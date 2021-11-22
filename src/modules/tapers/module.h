@@ -8,6 +8,7 @@
 #include "params/presets.h"
 #include "signals/basic.h"
 #include "signals/curvature.h"
+#include "signals/shapes.h"
 #include "signals/voltages.h"
 
 #include "rack.hpp"

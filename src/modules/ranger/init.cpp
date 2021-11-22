@@ -5,9 +5,9 @@
 #include "rack.hpp"
 
 namespace dhe {
-namespace blossom {
+namespace ranger {
 void init(rack::plugin::Plugin *plugin) {
-  plugin->addModel(rack::createModel<Module, Panel>("Blossom"));
+  plugin->addModel(rack::createModel<Module, Panel>("Ranger"));
 }
-} // namespace blossom
+} // namespace ranger
 } // namespace dhe

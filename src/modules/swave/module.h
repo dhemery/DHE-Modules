@@ -1,9 +1,14 @@
 #pragma once
 
 #include "control-ids.h"
-
 #include "controls/knobs.h"
+#include "controls/switches.h"
+#include "params/presets.h"
+#include "signals/basic.h"
 #include "signals/curvature.h"
+#include "signals/gain.h"
+#include "signals/shapes.h"
+#include "signals/voltages.h"
 
 #include "rack.hpp"
 

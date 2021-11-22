@@ -3,6 +3,8 @@
 #include "control-ids.h"
 
 #include "controls/buttons.h"
+#include "controls/switches.h"
+#include "params/presets.h"
 #include "signals/basic.h"
 #include "signals/voltages.h"
 

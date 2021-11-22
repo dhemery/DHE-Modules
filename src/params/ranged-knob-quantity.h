@@ -1,5 +1,7 @@
 #pragma once
 
+#include "components/range.h"
+
 #include "rack.hpp"
 
 #include <functional>

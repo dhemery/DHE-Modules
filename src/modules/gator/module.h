@@ -1,7 +1,8 @@
 #pragma once
 
 #include "control-ids.h"
-
+#include "controls/buttons.h"
+#include "params/presets.h"
 #include "signals/basic.h"
 
 #include "rack.hpp"

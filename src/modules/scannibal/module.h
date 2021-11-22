@@ -10,8 +10,10 @@
 #include "controls/knobs.h"
 #include "controls/switches.h"
 #include "params/presets.h"
+#include "signals/basic.h"
 #include "signals/curvature.h"
 #include "signals/durations.h"
+#include "signals/gain.h"
 #include "signals/step-selection.h"
 #include "signals/voltages.h"
 

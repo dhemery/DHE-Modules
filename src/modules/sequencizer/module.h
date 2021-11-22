@@ -1,22 +1,22 @@
 #pragma once
 
 #include "anchor.h"
-#include "control-ids.h"
-#include "generator.h"
-#include "sequence-controller.h"
-#include "signals.h"
-#include "step-controller.h"
-#include "step-selector.h"
-#include "trigger-mode.h"
-
 #include "components/cxmath.h"
+#include "control-ids.h"
 #include "controls/buttons.h"
 #include "controls/knobs.h"
 #include "controls/switches.h"
+#include "generator.h"
 #include "params/presets.h"
+#include "sequence-controller.h"
+#include "signals.h"
 #include "signals/curvature.h"
 #include "signals/durations.h"
+#include "signals/step-selection.h"
 #include "signals/voltages.h"
+#include "step-controller.h"
+#include "step-selector.h"
+#include "trigger-mode.h"
 
 #include "rack.hpp"
 
