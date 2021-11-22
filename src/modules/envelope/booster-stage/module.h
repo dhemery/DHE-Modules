@@ -2,6 +2,7 @@
 
 #include "signals.h"
 
+#include "controls/buttons.h"
 #include "controls/knobs.h"
 #include "controls/switches.h"
 #include "modules/envelope/mode/defer.h"
@@ -9,6 +10,7 @@
 #include "modules/envelope/mode/input.h"
 #include "modules/envelope/mode/level.h"
 #include "modules/envelope/stage/engine.h"
+#include "params/presets.h"
 #include "signals/curvature.h"
 #include "signals/durations.h"
 #include "signals/voltages.h"

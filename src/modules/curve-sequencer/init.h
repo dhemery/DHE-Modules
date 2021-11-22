@@ -1,10 +1,6 @@
 #pragma once
 
-namespace rack {
-namespace plugin {
-struct Plugin;
-}
-} // namespace rack
+#include "rack.hpp"
 
 namespace dhe {
 namespace curve_sequencer {

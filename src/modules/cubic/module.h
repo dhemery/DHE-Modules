@@ -6,6 +6,8 @@
 #include "components/range.h"
 #include "controls/knobs.h"
 #include "params/presets.h"
+#include "signals/basic.h"
+#include "signals/gain.h"
 
 #include "rack.hpp"
 

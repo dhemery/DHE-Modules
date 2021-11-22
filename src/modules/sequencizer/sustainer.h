@@ -1,8 +1,8 @@
 #pragma once
 
 #include <array>
-#include <string>
 #include <ostream>
+#include <string>
 #include <vector>
 
 namespace dhe {
@@ -27,7 +27,8 @@ static auto constexpr values = std::array<SustainMode, size>{
 };
 } // namespace sustain_mode
 
-static inline auto operator<<(std::ostream&os, SustainMode m) -> std::ostream& {
+static inline auto operator<<(std::ostream &os, SustainMode m)
+    -> std::ostream & {
   return os << sustain_mode::name(m);
 }
 

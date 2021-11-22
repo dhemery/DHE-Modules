@@ -1,9 +1,9 @@
 #pragma once
 
+#include "components/range.h"
 #include "control-ids.h"
 #include "params.h"
-
-#include "components/range.h"
+#include "signals/basic.h"
 
 #include <array>
 #include <vector>

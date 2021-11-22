@@ -488,8 +488,8 @@ public:
             auto const got = anchor.voltage();
             auto constexpr want = current_in_a_voltage;
             if (got != want) {
-              t.errorf("With source {} got anchor voltage {}, want {} ",
-                       source, got, want);
+              t.errorf("With source {} got anchor voltage {}, want {} ", source,
+                       got, want);
             }
           }
         }));
@@ -514,8 +514,8 @@ public:
             auto const got = anchor.voltage();
             auto constexpr want = current_in_b_voltage;
             if (got != want) {
-              t.errorf("With source {} got anchor voltage {}, want {} ",
-                       source, got, want);
+              t.errorf("With source {} got anchor voltage {}, want {} ", source,
+                       got, want);
             }
           }
         }));
@@ -540,8 +540,8 @@ public:
             auto const got = anchor.voltage();
             auto constexpr want = current_in_c_voltage;
             if (got != want) {
-              t.errorf("With source {} got anchor voltage {}, want {} ",
-                       source, got, want);
+              t.errorf("With source {} got anchor voltage {}, want {} ", source,
+                       got, want);
             }
           }
         }));
@@ -566,8 +566,8 @@ public:
             auto const got = anchor.voltage();
             auto constexpr want = current_output_voltage;
             if (got != want) {
-              t.errorf("With source {} got anchor voltage {}, want {} ",
-                       source, got, want);
+              t.errorf("With source {} got anchor voltage {}, want {} ", source,
+                       got, want);
             }
           }
         }));

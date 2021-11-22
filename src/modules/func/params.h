@@ -1,6 +1,7 @@
 #pragma once
 
 #include "signals/enums.h"
+#include "signals/gain.h"
 #include "signals/voltages.h"
 
 #include <string>
