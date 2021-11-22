@@ -47,14 +47,3 @@ auto test(std::function<void(Tester &, Signals &, PhaseTimer &, M &)> mode_test)
 
 } // namespace envelope
 } // namespace test
-
-namespace dhe {
-namespace envelope {
-namespace mode {
-static inline auto operator<<(std::ostream &os, Event event) -> std::ostream & {
-  os << static_cast<int>(event);
-  return os;
-}
-} // namespace mode
-} // namespace envelope
-} // namespace dhe
