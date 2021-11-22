@@ -13,7 +13,6 @@ namespace curve_sequencer {
 using dhe::curve_sequencer::StepEvent;
 using dhe::unit::Suite;
 using dhe::unit::Tester;
-using test::high_latch;
 
 struct StateTest {
   std::string name_;          // NOLINT
@@ -67,8 +66,8 @@ auto idle_tests = StateSuite{
                 .checks_ =
                     {
                         assert_output(original_output),
-                        assert_step(3),          //
-                        assert_gate(high_latch), // edge was cleared
+                        assert_step(3),                //
+                        assert_gate(dhe::latch::high), // edge was cleared
                     },
             },
             {
@@ -277,7 +276,7 @@ auto active_tests = StateSuite{
              .checks_ =
                  {
                      assert_step(2),
-                     assert_gate(high_latch),
+                     assert_gate(dhe::latch::high),
                  }},
             {
                 .name_ = "executes active step with gate state",
@@ -288,7 +287,7 @@ auto active_tests = StateSuite{
                             set_gate(true),
                         },
                     },
-                .checks_ = {assert_step(2), assert_gate(high_latch)},
+                .checks_ = {assert_step(2), assert_gate(dhe::latch::high)},
             },
         },
 };

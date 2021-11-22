@@ -1,10 +1,11 @@
-#include "./fixtures/sequence-controller-fixture.h"
-#include "./fixtures/status-enums.h"
+#include "fixtures/sequence-controller-fixture.h"
+#include "fixtures/status-enums.h"
 
+#include "components/latch.h"
 #include "helpers/assertions.h"
-#include "helpers/latches.h"
 
 #include <functional>
+
 namespace test {
 namespace sequencizer {
 using dhe::unit::Suite;
@@ -60,23 +61,23 @@ public:
             // Assume that the gate was high on the previous sample,
             // so on this sample it will be high with no edge.
             assert_that(t, "high latch", step_controller.executed_latch_,
-                        is_equal_to(high_latch));
+                        is_equal_to(dhe::latch::high));
             assert_that(t, "sample time", step_controller.executed_sample_time_,
                         is_equal_to(sample_time));
 
             signals.gate_ = false;
             sequence_controller.execute(0.1F);
             assert_that(t, "falling latch", step_controller.executed_latch_,
-                        is_equal_to(falling_latch));
+                        is_equal_to(dhe::latch::falling));
 
             sequence_controller.execute(0.1F);
             assert_that(t, "low latch", step_controller.executed_latch_,
-                        is_equal_to(low_latch));
+                        is_equal_to(dhe::latch::low));
 
             signals.gate_ = true;
             sequence_controller.execute(0.1F);
             assert_that(t, "rising latch", step_controller.executed_latch_,
-                        is_equal_to(rising_latch));
+                        is_equal_to(dhe::latch::rising));
           }));
 
     t.run("with run high: "

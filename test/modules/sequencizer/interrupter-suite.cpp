@@ -1,14 +1,17 @@
 #include "./fixtures/advancement-enums.h"
 #include "./fixtures/interrupter-fixture.h"
 
-#include <helpers/latches.h>
-
 #include <sstream>
 #include <vector>
 
 namespace test {
 namespace sequencizer {
+using dhe::Latch;
 using dhe::unit::Suite;
+static auto constexpr low_latch = dhe::latch::low;
+static auto constexpr high_latch = dhe::latch::high;
+static auto constexpr falling_latch = dhe::latch::falling;
+static auto constexpr rising_latch = dhe::latch::rising;
 
 struct InterrupterTestCase {
   InterruptMode interrupt_mode_; // NOLINT

@@ -1,14 +1,12 @@
+#include "components/latch.h"
+#include "components/sigmoid.h"
 #include "modules/curve-sequencer/advance-mode.h"
 #include "modules/curve-sequencer/generate-mode.h"
 #include "modules/curve-sequencer/step-controller.h"
 #include "modules/curve-sequencer/step-event.h"
 
-#include "components/sigmoid.h"
-
 #include "fixtures/step-controller-signals.h"
 #include "fixtures/step-event-enums.h"
-
-#include "helpers/latches.h"
 
 #include "dheunit/test.h"
 
@@ -28,13 +26,13 @@ using StepController = dhe::curve_sequencer::StepController<Signals>;
 using dhe::Latch;
 using dhe::PhaseTimer;
 
-using test::falling_latch;
-using test::high_latch;
-using test::low_latch;
-using test::rising_latch;
-
 using dhe::unit::Suite;
 using dhe::unit::Tester;
+
+static auto constexpr low_latch = dhe::latch::low;
+static auto constexpr high_latch = dhe::latch::high;
+static auto constexpr falling_latch = dhe::latch::falling;
+static auto constexpr rising_latch = dhe::latch::rising;
 
 struct AdvanceModeTest {
   Latch gate_;     // NOLINT
@@ -136,7 +134,7 @@ struct StepControllerSuite : public Suite {
 };
 
 void AdvanceModeTest::run(Tester &t, AdvanceMode mode) const {
-  t.run(test::name_of(gate_), [this, mode](Tester &t) {
+  t.run(dhe::latch::name(gate_), [this, mode](Tester &t) {
     auto signals = Signals{};
     auto timer = PhaseTimer{};
     auto controller = StepController{signals, timer};

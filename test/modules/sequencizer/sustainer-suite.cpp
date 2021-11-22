@@ -1,8 +1,8 @@
-#include "./fixtures/advancement-enums.h"
-#include "./fixtures/sustainer-fixture.h"
+#include "components/latch.h"
+#include "fixtures/advancement-enums.h"
+#include "fixtures/sustainer-fixture.h"
 
 #include "helpers/assertions.h"
-#include "helpers/latches.h"
 
 #include "dheunit/test.h"
 
@@ -10,9 +10,14 @@
 
 namespace test {
 namespace sequencizer {
+using dhe::Latch;
 using dhe::unit::Suite;
 using dhe::unit::Tester;
 using test::is_equal_to;
+static auto constexpr low_latch = dhe::latch::low;
+static auto constexpr high_latch = dhe::latch::high;
+static auto constexpr falling_latch = dhe::latch::falling;
+static auto constexpr rising_latch = dhe::latch::rising;
 
 struct SustainerTestCase {
   SustainerTestCase(SustainMode completion_mode, TriggerMode trigger_mode,

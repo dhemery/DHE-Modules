@@ -2,8 +2,7 @@
 #include "components/latch.h"
 #include "modules/curve-sequencer/engine.h"
 
-#include "./step-event-enums.h"
-#include "helpers/latches.h"
+#include "step-event-enums.h"
 
 #include "dheunit/test.h"
 
@@ -30,7 +29,7 @@ static auto constexpr original_output = 7777.F;
 
 static auto constexpr original_step_event = static_cast<StepEvent>(8888);
 static auto constexpr out_of_range_step_event = static_cast<StepEvent>(9999);
-static auto constexpr original_gate = falling_latch;
+static auto constexpr original_gate = dhe::latch::falling;
 
 struct Signals {
   auto is_gated() const -> bool { return is_gated_; }

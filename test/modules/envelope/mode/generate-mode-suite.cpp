@@ -1,11 +1,10 @@
-#include "modules/envelope/mode/generate.h"
-
+#include "components/latch.h"
 #include "components/phase-timer.h"
 #include "modules/envelope/mode/event.h"
+#include "modules/envelope/mode/generate.h"
 
 #include "dheunit/test.h"
 #include "helpers/assertions.h"
-#include "helpers/latches.h"
 #include "timed-mode-fixture.h"
 
 namespace test {
@@ -19,6 +18,8 @@ using dhe::unit::Tester;
 using test::is_equal_to;
 using test::is_false;
 using test::is_true;
+static auto constexpr low_latch = dhe::latch::low;
+static auto constexpr rising_latch = dhe::latch::rising;
 
 using GenerateMode = dhe::envelope::mode::GenerateMode<Signals, PhaseTimer>;
 

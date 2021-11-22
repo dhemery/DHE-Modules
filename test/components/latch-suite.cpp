@@ -1,5 +1,4 @@
 #include "components/latch.h"
-#include "helpers/latches.h"
 
 #include "dheunit/test.h"
 
@@ -13,12 +12,12 @@ namespace dhe {
 namespace components {
 namespace test {
 
-using TestFunc = std::function<void(Tester &)>;
+using latch::falling;
+using latch::high;
+using latch::low;
+using latch::rising;
 
-static auto constexpr low = Latch{false, false};
-static auto constexpr falling = Latch{false, true};
-static auto constexpr rising = Latch{true, true};
-static auto constexpr high = Latch{true, false};
+using TestFunc = std::function<void(Tester &)>;
 
 static auto require_equal(const Latch &a, const Latch &b) -> TestFunc;
 static auto require_unequal(const Latch &a, const Latch &b) -> TestFunc;
@@ -95,16 +94,16 @@ auto require_unequal(const Latch &a, const Latch &b) -> TestFunc {
 auto require_equal(const Latch &a, const Latch &b) -> TestFunc {
   return [a, b](Tester &t) {
     if (!(a == b)) {
-      t.errorf("{}=={} want true, got false", a, b);
+      t.errorf("{} == {} want true, got false", a, b);
     }
     if (!(b == a)) {
-      t.errorf("{}=={} want true, got false", b, a);
+      t.errorf("{} == {} want true, got false", b, a);
     }
     if (a != b) {
-      t.errorf("{}!={} want false, got true", a, b);
+      t.errorf("{} != {} want false, got true", a, b);
     }
     if (b != a) {
-      t.errorf("{}!={} want false, got true", b, a);
+      t.errorf("{} != {} want false, got true", b, a);
     }
   };
 }

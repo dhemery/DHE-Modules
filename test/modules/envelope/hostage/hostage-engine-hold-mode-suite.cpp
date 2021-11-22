@@ -1,7 +1,8 @@
+#include "components/latch.h"
+#include "hostage-engine-fixture.h"
+
 #include "dheunit/test.h"
 #include "helpers/assertions.h"
-#include "helpers/latches.h"
-#include "hostage-engine-fixture.h"
 
 namespace test {
 namespace hostage {
@@ -10,6 +11,10 @@ using dhe::unit::Tester;
 using test::is_equal_to;
 using test::is_false;
 using test::is_true;
+static auto constexpr low_latch = dhe::latch::low;
+static auto constexpr high_latch = dhe::latch::high;
+static auto constexpr falling_latch = dhe::latch::falling;
+static auto constexpr rising_latch = dhe::latch::rising;
 
 static inline void in_hold_mode(Signals &signals, SimpleMode &input_mode,
                                 SimpleMode & /*defer_mode*/,

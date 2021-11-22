@@ -1,6 +1,7 @@
+#include "components/latch.h"
+
 #include "dheunit/test.h"
 #include "helpers/assertions.h"
-#include "helpers/latches.h"
 #include "stage-engine-fixture.h"
 
 namespace test {
@@ -10,6 +11,10 @@ using dhe::unit::Tester;
 using test::is_equal_to;
 using test::is_false;
 using test::is_true;
+static auto constexpr low_latch = dhe::latch::low;
+static auto constexpr high_latch = dhe::latch::high;
+static auto constexpr falling_latch = dhe::latch::falling;
+static auto constexpr rising_latch = dhe::latch::rising;
 
 static inline void in_generate_mode(Signals &signals, SimpleMode & /**/,
                                     SimpleMode &input_mode,

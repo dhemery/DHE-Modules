@@ -1,6 +1,5 @@
-#include "./fixtures/sequence-controller-fixture.h"
-
-#include "helpers/latches.h"
+#include "components/latch.h"
+#include "fixtures/sequence-controller-fixture.h"
 
 #include <functional>
 
@@ -93,9 +92,9 @@ public:
                    t.errorf("Entered step {}, want step {}",
                             step_controller.entered_step_, first_enabled_step);
                  }
-                 if (step_controller.executed_latch_ != high_latch) {
+                 if (step_controller.executed_latch_ != dhe::latch::high) {
                    t.errorf("Executed latch was {}, want {}",
-                            step_controller.executed_latch_, high_latch);
+                            step_controller.executed_latch_, dhe::latch::high);
                  }
                  if (step_controller.executed_sample_time_ != sample_time) {
                    t.errorf("Executed sample time was {}, want {}",

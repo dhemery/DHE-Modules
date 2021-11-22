@@ -1,9 +1,9 @@
+#include "components/latch.h"
 #include "modules/envelope/mode/event.h"
 #include "modules/envelope/mode/hold.h"
 
 #include "dheunit/test.h"
 #include "helpers/assertions.h"
-#include "helpers/latches.h"
 #include "timed-mode-fixture.h"
 
 namespace test {
@@ -56,7 +56,7 @@ public:
             timer.advance(0.9F); // nearly complete before executing
             signals.duration_ = 1.F;
             auto constexpr sample_time = 0.F; // Cheat: Advance by 0 after reset
-            mode.execute(rising_latch, sample_time);
+            mode.execute(dhe::latch::rising, sample_time);
             assert_that(t, timer.phase(), is_equal_to(0.F));
           }));
 
@@ -66,7 +66,7 @@ public:
             timer.reset();
             signals.duration_ = 1.F;
             auto constexpr sample_time = 0.1F;
-            auto const result = mode.execute(low_latch, sample_time);
+            auto const result = mode.execute(dhe::latch::low, sample_time);
             assert_that(t, result, is_equal_to(Event::Generated));
           }));
 
@@ -76,7 +76,7 @@ public:
             timer.advance(0.99999F);
             signals.duration_ = 1.F;
             auto constexpr sample_time = 0.1F; // Enough to advance to 1
-            auto const result = mode.execute(low_latch, sample_time);
+            auto const result = mode.execute(dhe::latch::low, sample_time);
             assert_that(t, result, is_equal_to(Event::Completed));
           }));
 
@@ -85,7 +85,7 @@ public:
                             HoldMode &mode) {
             float original_output = 99.F;
             signals.output_ = original_output;
-            mode.execute(low_latch, 0.1F);
+            mode.execute(dhe::latch::low, 0.1F);
             assert_that(t, signals.output_, is_equal_to(original_output));
           }));
 

@@ -1,6 +1,11 @@
 #pragma once
 
+#include <array>
+#include <ostream>
+#include <string>
+
 namespace dhe {
+
 class Latch {
 public:
   constexpr Latch() = default;
@@ -29,5 +34,23 @@ private:
   bool state_{};
   bool edge_{};
 };
+
+namespace latch {
+static auto constexpr rising = Latch{true, true};
+static auto constexpr falling = Latch{false, true};
+static auto constexpr high = Latch{true, false};
+static auto constexpr low = Latch{false, false};
+
+static auto constexpr values = std::array<Latch, 4>{low, high, falling, rising};
+
+static auto constexpr name(Latch l) -> char const * {
+  return l.is_high() ? (l.is_edge() ? "Rising" : "High")
+                     : (l.is_edge() ? "Falling" : "Low");
+}
+} // namespace latch
+
+static inline auto operator<<(std::ostream &os, Latch latch) -> std::ostream & {
+  return os << latch::name(latch);
+}
 
 } // namespace dhe
