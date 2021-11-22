@@ -21,7 +21,7 @@ jobs:
             arch: lin
             compiler: cc
             install-dependencies: |
-              sudo apt-get install -y libglu-dev
+              sudo apt-get install -y libglu
           - os: macos-latest
             arch: mac
             compiler: cc
@@ -48,5 +48,5 @@ jobs:
           RACK_DIR: Rack-SDK
           CC: ${{ matrix.config.compiler }}
         run: |
-          make dist
-          make vtest
+          make --jobs dist
+          make --jobs vtest
