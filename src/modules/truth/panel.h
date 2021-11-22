@@ -1,10 +1,10 @@
 #pragma once
 
 #include "control-ids.h"
-#include "params.h"
-
 #include "controls/ports.h"
 #include "controls/switches.h"
+#include "gate-mode.h"
+#include "outcome.h"
 #include "widgets/panel-widget.h"
 
 #include "rack.hpp"

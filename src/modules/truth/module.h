@@ -1,17 +1,16 @@
 #pragma once
 
-#include "./control-ids.h"
-#include "./gate-modes.h"
-#include "./input-selector.h"
-#include "./outcomes.h"
-#include "./params.h"
-#include "./upgrader.h"
+#include "control-ids.h"
+#include "gate-mode.h"
+#include "input-selector.h"
+#include "outcome.h"
 #include "signals/basic.h"
+#include "upgrader.h"
 
 #include "rack.hpp"
 
-#include <array>
 #include <string>
+#include <vector>
 
 namespace dhe {
 
