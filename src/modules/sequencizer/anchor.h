@@ -1,13 +1,30 @@
 #pragma once
 
+#include <array>
+#include <ostream>
+#include <string>
+#include <vector>
+
 namespace dhe {
 namespace sequencizer {
-enum class AnchorType { Start, End };
-static auto constexpr anchor_type_count = static_cast<int>(AnchorType::End) + 1;
 
 enum class AnchorMode { Sample, Track };
-static auto constexpr anchor_mode_count =
-    static_cast<int>(AnchorMode::Track) + 1;
+
+namespace anchor_mode {
+static auto constexpr size = 2;
+static auto constexpr labels =
+    std::array<char const *, size>{"Sample the source", "Track the source"};
+} // namespace anchor_mode
+
+struct AnchorModes {
+  using value_type = AnchorMode;
+  static auto constexpr size = anchor_mode::size;
+  static auto constexpr stepper_slug = "anchor-mode";
+
+  static inline auto labels() -> std::vector<std::string> {
+    return {anchor_mode::labels.cbegin(), anchor_mode::labels.cend()};
+  }
+};
 
 enum class AnchorSource {
   Level,
@@ -16,11 +33,43 @@ enum class AnchorSource {
   InC,
   Out,
 };
-static auto constexpr anchor_source_count =
-    static_cast<int>(AnchorSource::Out) + 1;
 
-template <typename Signals> class Anchor {
-public:
+namespace anchor_source {
+static auto constexpr size = 5;
+static auto constexpr labels = std::array<char const *, size>{
+    "Level", "A", "B", "C", "Out",
+};
+static auto constexpr names = std::array<char const *, size>{
+    "AnchorSource::Level", "AnchorSource::InA", "AnchorSource::InB",
+    "AnchorSource::InC",   "AnchorSource::Out",
+};
+static inline auto name(AnchorSource s) -> char const * {
+  return names[static_cast<size_t>(s)];
+}
+static auto constexpr values = std::array<AnchorSource, size>{
+    AnchorSource::Level, AnchorSource::InA, AnchorSource::InB,
+    AnchorSource::InC,   AnchorSource::Out,
+};
+} // namespace anchor_source
+
+struct AnchorSources {
+  using value_type = AnchorSource;
+  static auto constexpr size = anchor_source::size;
+  static auto constexpr stepper_slug = "anchor-source";
+
+  static inline auto labels() -> std::vector<std::string> {
+    return {anchor_source::labels.cbegin(), anchor_source::labels.cend()};
+  }
+};
+
+static inline auto operator<<(std::ostream &os, AnchorSource s)
+    -> std::ostream & {
+  return os << anchor_source::name(s);
+}
+
+enum class AnchorType { Start, End };
+
+template <typename Signals> struct Anchor {
   Anchor(Signals &signals, AnchorType type) : signals_{signals}, type_{type} {}
 
   void enter(int step) {

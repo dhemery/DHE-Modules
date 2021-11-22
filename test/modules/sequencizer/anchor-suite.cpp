@@ -1,5 +1,4 @@
-#include "./fixtures/anchor-enums.h"
-#include "./fixtures/anchor-fixture.h"
+#include "fixtures/anchor-fixture.h"
 
 #include "dheunit/test.h"
 
@@ -40,13 +39,13 @@ public:
             set_all_voltages(signals, level_entry_voltage + 1.F);
 
             signals.start_mode_[step] = AnchorMode::Sample;
-            for (auto const source : anchor_sources) {
+            for (auto const source : dhe::sequencizer::anchor_source::values) {
               signals.start_source_[step] = source;
               auto const got = anchor.voltage();
               auto constexpr want = level_entry_voltage;
               if (got != want) {
                 t.errorf("With source {} got anchor voltage {}, want {} ",
-                         name_of(source), got, want);
+                         source, got, want);
               }
             }
           }));
@@ -69,13 +68,13 @@ public:
             set_all_voltages(signals, in_a_entry_voltage + 1.F);
 
             signals.start_mode_[step] = AnchorMode::Sample;
-            for (auto const source : anchor_sources) {
+            for (auto const source : dhe::sequencizer::anchor_source::values) {
               signals.start_source_[step] = source;
               auto const got = anchor.voltage();
               auto constexpr want = in_a_entry_voltage;
               if (got != want) {
                 t.errorf("With source {} got anchor voltage {}, want {} ",
-                         name_of(source), got, want);
+                         source, got, want);
               }
             }
           }));
@@ -98,13 +97,13 @@ public:
             set_all_voltages(signals, in_b_entry_voltage + 1.F);
 
             signals.start_mode_[step] = AnchorMode::Sample;
-            for (auto const source : anchor_sources) {
+            for (auto const source : dhe::sequencizer::anchor_source::values) {
               signals.start_source_[step] = source;
               auto const got = anchor.voltage();
               auto constexpr want = in_b_entry_voltage;
               if (got != want) {
                 t.errorf("With source {} got anchor voltage {}, want {} ",
-                         name_of(source), got, want);
+                         source, got, want);
               }
             }
           }));
@@ -126,13 +125,13 @@ public:
             set_all_voltages(signals, in_c_entry_voltage + 1.F);
 
             signals.start_mode_[step] = AnchorMode::Sample;
-            for (auto const source : anchor_sources) {
+            for (auto const source : dhe::sequencizer::anchor_source::values) {
               signals.start_source_[step] = source;
               auto const got = anchor.voltage();
               auto constexpr want = in_c_entry_voltage;
               if (got != want) {
                 t.errorf("With source {} got anchor voltage {}, want {} ",
-                         name_of(source), got, want);
+                         source, got, want);
               }
             }
           }));
@@ -155,13 +154,13 @@ public:
             set_all_voltages(signals, output_entry_voltage + 1.F);
 
             signals.start_mode_[step] = AnchorMode::Sample;
-            for (auto const source : anchor_sources) {
+            for (auto const source : dhe::sequencizer::anchor_source::values) {
               signals.start_source_[step] = source;
               auto const got = anchor.voltage();
               auto constexpr want = output_entry_voltage;
               if (got != want) {
                 t.errorf("With source {} got anchor voltage {}, want {} ",
-                         name_of(source), got, want);
+                         source, got, want);
               }
             }
           }));
@@ -169,29 +168,29 @@ public:
     t.run("AnchorType::Start: "
           "voltage() with AnchorMode::Track and AnchorSource::Level: "
           "is current level voltage",
-          test(AnchorType::Start,
-               [](Tester &t, Signals &signals, Anchor &anchor) {
-                 auto constexpr step = 4;
-                 auto constexpr default_entry_voltage = 6.343F;
+          test(AnchorType::Start, [](Tester &t, Signals &signals,
+                                     Anchor &anchor) {
+            auto constexpr step = 4;
+            auto constexpr default_entry_voltage = 6.343F;
 
-                 for (auto const source : anchor_sources) {
-                   set_all_voltages(signals, default_entry_voltage);
-                   signals.start_source_[step] = source;
-                   anchor.enter(step); // Capture the voltage from this source
+            for (auto const source : dhe::sequencizer::anchor_source::values) {
+              set_all_voltages(signals, default_entry_voltage);
+              signals.start_source_[step] = source;
+              anchor.enter(step); // Capture the voltage from this source
 
-                   signals.start_mode_[step] = AnchorMode::Track;
-                   signals.start_source_[step] = AnchorSource::Level;
-                   auto constexpr current_level_voltage =
-                       default_entry_voltage + 1.F;
-                   signals.start_level_[step] = current_level_voltage;
-                   auto const got = anchor.voltage();
-                   auto constexpr want = current_level_voltage;
-                   if (got != want) {
-                     t.errorf("With source {} got anchor voltage {}, want {} ",
-                              name_of(source), got, want);
-                   }
-                 }
-               }));
+              signals.start_mode_[step] = AnchorMode::Track;
+              signals.start_source_[step] = AnchorSource::Level;
+              auto constexpr current_level_voltage =
+                  default_entry_voltage + 1.F;
+              signals.start_level_[step] = current_level_voltage;
+              auto const got = anchor.voltage();
+              auto constexpr want = current_level_voltage;
+              if (got != want) {
+                t.errorf("With source {} got anchor voltage {}, want {} ",
+                         source, got, want);
+              }
+            }
+          }));
 
     t.run("AnchorType::Start: "
           "voltage() with AnchorMode::Track and AnchorSource::InA: "
@@ -201,7 +200,7 @@ public:
             auto constexpr step = 5;
             auto constexpr default_entry_voltage = 5.343F;
 
-            for (auto const source : anchor_sources) {
+            for (auto const source : dhe::sequencizer::anchor_source::values) {
               set_all_voltages(signals, default_entry_voltage);
               signals.start_source_[step] = source;
               anchor.enter(step); // Capture the voltage from this source
@@ -214,7 +213,7 @@ public:
               auto constexpr want = current_in_a_voltage;
               if (got != want) {
                 t.errorf("With source {} got anchor voltage {}, want {} ",
-                         name_of(source), got, want);
+                         source, got, want);
               }
             }
           }));
@@ -227,7 +226,7 @@ public:
             auto constexpr step = 5;
             auto constexpr default_entry_voltage = 5.343F;
 
-            for (auto const source : anchor_sources) {
+            for (auto const source : dhe::sequencizer::anchor_source::values) {
               set_all_voltages(signals, default_entry_voltage);
               signals.start_source_[step] = source;
               anchor.enter(step); // Capture the voltage from this source
@@ -240,7 +239,7 @@ public:
               auto constexpr want = current_in_b_voltage;
               if (got != want) {
                 t.errorf("With source {} got anchor voltage {}, want {} ",
-                         name_of(source), got, want);
+                         source, got, want);
               }
             }
           }));
@@ -253,7 +252,7 @@ public:
             auto constexpr step = 5;
             auto constexpr default_entry_voltage = 5.343F;
 
-            for (auto const source : anchor_sources) {
+            for (auto const source : dhe::sequencizer::anchor_source::values) {
               set_all_voltages(signals, default_entry_voltage);
               signals.start_source_[step] = source;
               anchor.enter(step); // Capture the voltage from this source
@@ -266,7 +265,7 @@ public:
               auto constexpr want = current_in_c_voltage;
               if (got != want) {
                 t.errorf("With source {} got anchor voltage {}, want {} ",
-                         name_of(source), got, want);
+                         source, got, want);
               }
             }
           }));
@@ -274,29 +273,29 @@ public:
     t.run("AnchorType::Start: "
           "voltage() with AnchorMode::Track and AnchorSource::Out: "
           "is current OUT voltage",
-          test(AnchorType::Start,
-               [](Tester &t, Signals &signals, Anchor &anchor) {
-                 auto constexpr step = 6;
-                 auto constexpr default_entry_voltage = 7.343F;
+          test(AnchorType::Start, [](Tester &t, Signals &signals,
+                                     Anchor &anchor) {
+            auto constexpr step = 6;
+            auto constexpr default_entry_voltage = 7.343F;
 
-                 for (auto const source : anchor_sources) {
-                   set_all_voltages(signals, default_entry_voltage);
-                   signals.start_source_[step] = source;
-                   anchor.enter(step); // Capture the voltage from this source
+            for (auto const source : dhe::sequencizer::anchor_source::values) {
+              set_all_voltages(signals, default_entry_voltage);
+              signals.start_source_[step] = source;
+              anchor.enter(step); // Capture the voltage from this source
 
-                   signals.start_mode_[step] = AnchorMode::Track;
-                   signals.start_source_[step] = AnchorSource::Out;
-                   auto constexpr current_output_voltage =
-                       default_entry_voltage + 1.F;
-                   signals.output_ = current_output_voltage;
-                   auto const got = anchor.voltage();
-                   auto constexpr want = current_output_voltage;
-                   if (got != want) {
-                     t.errorf("With source {} got anchor voltage {}, want {} ",
-                              name_of(source), got, want);
-                   }
-                 }
-               }));
+              signals.start_mode_[step] = AnchorMode::Track;
+              signals.start_source_[step] = AnchorSource::Out;
+              auto constexpr current_output_voltage =
+                  default_entry_voltage + 1.F;
+              signals.output_ = current_output_voltage;
+              auto const got = anchor.voltage();
+              auto constexpr want = current_output_voltage;
+              if (got != want) {
+                t.errorf("With source {} got anchor voltage {}, want {} ",
+                         source, got, want);
+              }
+            }
+          }));
 
     t.run(
         "AnchorType::End: "
@@ -316,13 +315,13 @@ public:
           set_all_voltages(signals, level_entry_voltage + 1.F);
 
           signals.start_mode_[step] = AnchorMode::Sample;
-          for (auto const source : anchor_sources) {
+          for (auto const source : dhe::sequencizer::anchor_source::values) {
             signals.end_source_[step] = source;
             auto const got = anchor.voltage();
             auto constexpr want = level_entry_voltage;
             if (got != want) {
-              t.errorf("With source {} got anchor voltage {}, want {} ",
-                       name_of(source), got, want);
+              t.errorf("With source {} got anchor voltage {}, want {} ", source,
+                       got, want);
             }
           }
         }));
@@ -345,13 +344,13 @@ public:
           set_all_voltages(signals, in_a_entry_voltage + 1.F);
 
           signals.start_mode_[step] = AnchorMode::Sample;
-          for (auto const source : anchor_sources) {
+          for (auto const source : dhe::sequencizer::anchor_source::values) {
             signals.end_source_[step] = source;
             auto const got = anchor.voltage();
             auto constexpr want = in_a_entry_voltage;
             if (got != want) {
-              t.errorf("With source {} got anchor voltage {}, want {} ",
-                       name_of(source), got, want);
+              t.errorf("With source {} got anchor voltage {}, want {} ", source,
+                       got, want);
             }
           }
         }));
@@ -374,13 +373,13 @@ public:
           set_all_voltages(signals, in_b_entry_voltage + 1.F);
 
           signals.start_mode_[step] = AnchorMode::Sample;
-          for (auto const source : anchor_sources) {
+          for (auto const source : dhe::sequencizer::anchor_source::values) {
             signals.end_source_[step] = source;
             auto const got = anchor.voltage();
             auto constexpr want = in_b_entry_voltage;
             if (got != want) {
-              t.errorf("With source {} got anchor voltage {}, want {} ",
-                       name_of(source), got, want);
+              t.errorf("With source {} got anchor voltage {}, want {} ", source,
+                       got, want);
             }
           }
         }));
@@ -403,13 +402,13 @@ public:
           set_all_voltages(signals, in_c_entry_voltage + 1.F);
 
           signals.start_mode_[step] = AnchorMode::Sample;
-          for (auto const source : anchor_sources) {
+          for (auto const source : dhe::sequencizer::anchor_source::values) {
             signals.end_source_[step] = source;
             auto const got = anchor.voltage();
             auto constexpr want = in_c_entry_voltage;
             if (got != want) {
-              t.errorf("With source {} got anchor voltage {}, want {} ",
-                       name_of(source), got, want);
+              t.errorf("With source {} got anchor voltage {}, want {} ", source,
+                       got, want);
             }
           }
         }));
@@ -432,13 +431,13 @@ public:
           set_all_voltages(signals, output_entry_voltage + 1.F);
 
           signals.start_mode_[step] = AnchorMode::Sample;
-          for (auto const source : anchor_sources) {
+          for (auto const source : dhe::sequencizer::anchor_source::values) {
             signals.end_source_[step] = source;
             auto const got = anchor.voltage();
             auto constexpr want = output_entry_voltage;
             if (got != want) {
-              t.errorf("With source {} got anchor voltage {}, want {} ",
-                       name_of(source), got, want);
+              t.errorf("With source {} got anchor voltage {}, want {} ", source,
+                       got, want);
             }
           }
         }));
@@ -451,7 +450,7 @@ public:
           auto constexpr step = 3;
           auto constexpr default_entry_voltage = 6.343F;
 
-          for (auto const source : anchor_sources) {
+          for (auto const source : dhe::sequencizer::anchor_source::values) {
             set_all_voltages(signals, default_entry_voltage);
             signals.end_source_[step] = source;
             anchor.enter(step); // Capture the voltage from this source
@@ -463,8 +462,8 @@ public:
             auto const got = anchor.voltage();
             auto constexpr want = current_level_voltage;
             if (got != want) {
-              t.errorf("With source {} got anchor voltage {}, want {} ",
-                       name_of(source), got, want);
+              t.errorf("With source {} got anchor voltage {}, want {} ", source,
+                       got, want);
             }
           }
         }));
@@ -477,7 +476,7 @@ public:
           auto constexpr step = 2;
           auto constexpr default_entry_voltage = 5.343F;
 
-          for (auto const source : anchor_sources) {
+          for (auto const source : dhe::sequencizer::anchor_source::values) {
             set_all_voltages(signals, default_entry_voltage);
             signals.end_source_[step] = source;
             anchor.enter(step); // Capture the voltage from this source
@@ -490,7 +489,7 @@ public:
             auto constexpr want = current_in_a_voltage;
             if (got != want) {
               t.errorf("With source {} got anchor voltage {}, want {} ",
-                       name_of(source), got, want);
+                       source, got, want);
             }
           }
         }));
@@ -503,7 +502,7 @@ public:
           auto constexpr step = 2;
           auto constexpr default_entry_voltage = 5.343F;
 
-          for (auto const source : anchor_sources) {
+          for (auto const source : dhe::sequencizer::anchor_source::values) {
             set_all_voltages(signals, default_entry_voltage);
             signals.end_source_[step] = source;
             anchor.enter(step); // Capture the voltage from this source
@@ -516,7 +515,7 @@ public:
             auto constexpr want = current_in_b_voltage;
             if (got != want) {
               t.errorf("With source {} got anchor voltage {}, want {} ",
-                       name_of(source), got, want);
+                       source, got, want);
             }
           }
         }));
@@ -529,7 +528,7 @@ public:
           auto constexpr step = 2;
           auto constexpr default_entry_voltage = 5.343F;
 
-          for (auto const source : anchor_sources) {
+          for (auto const source : dhe::sequencizer::anchor_source::values) {
             set_all_voltages(signals, default_entry_voltage);
             signals.end_source_[step] = source;
             anchor.enter(step); // Capture the voltage from this source
@@ -542,7 +541,7 @@ public:
             auto constexpr want = current_in_c_voltage;
             if (got != want) {
               t.errorf("With source {} got anchor voltage {}, want {} ",
-                       name_of(source), got, want);
+                       source, got, want);
             }
           }
         }));
@@ -555,7 +554,7 @@ public:
           auto constexpr step = 1;
           auto constexpr default_entry_voltage = 7.343F;
 
-          for (auto const source : anchor_sources) {
+          for (auto const source : dhe::sequencizer::anchor_source::values) {
             set_all_voltages(signals, default_entry_voltage);
             signals.end_source_[step] = source;
             anchor.enter(step); // Capture the voltage from this source
@@ -568,7 +567,7 @@ public:
             auto constexpr want = current_output_voltage;
             if (got != want) {
               t.errorf("With source {} got anchor voltage {}, want {} ",
-                       name_of(source), got, want);
+                       source, got, want);
             }
           }
         }));

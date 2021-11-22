@@ -1,5 +1,5 @@
 #include "components/latch.h"
-#include "fixtures/advancement-enums.h"
+
 #include "fixtures/sustainer-fixture.h"
 
 #include "helpers/assertions.h"

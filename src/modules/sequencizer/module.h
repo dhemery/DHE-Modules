@@ -1,13 +1,13 @@
 #pragma once
-#include "advancement.h"
+
 #include "anchor.h"
 #include "control-ids.h"
 #include "generator.h"
-#include "params.h"
 #include "sequence-controller.h"
 #include "signals.h"
 #include "step-controller.h"
 #include "step-selector.h"
+#include "trigger-mode.h"
 
 #include "components/cxmath.h"
 #include "controls/buttons.h"

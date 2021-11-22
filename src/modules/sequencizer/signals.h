@@ -1,8 +1,10 @@
 #pragma once
-#include "advancement.h"
 #include "anchor.h"
 #include "control-ids.h"
+#include "interrupter.h"
 #include "status.h"
+#include "sustainer.h"
+#include "trigger-mode.h"
 
 #include "components/range.h"
 #include "signals/basic.h"
@@ -42,11 +44,7 @@ static inline auto duration(P const &duration_knob, P const &range_switch,
 
 template <typename TParam, typename TInput, typename TOutput, typename TLight,
           int N>
-class Signals {
-  using LightId = LightIds<N>;
-  using ParamId = ParamIds<N>;
-
-public:
+struct Signals {
   Signals(std::vector<TInput> &inputs, std::vector<TParam> &params,
           std::vector<TOutput> &outputs, std::vector<TLight> &lights)
       : params_{params}, inputs_{inputs}, outputs_{outputs}, lights_{lights} {}
@@ -182,6 +180,9 @@ public:
   }
 
 private:
+  using LightId = LightIds<N>;
+  using ParamId = ParamIds<N>;
+
   void set_lights(int step, float completed_brightness,
                   float remaining_brightness) {
     auto const completed_light = LightId::StepProgress + step + step;
@@ -194,6 +195,7 @@ private:
   std::vector<TOutput> &outputs_;
   std::vector<TLight> &lights_;
 };
+
 } // namespace sequencizer
 
 } // namespace dhe

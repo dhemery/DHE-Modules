@@ -1,5 +1,8 @@
-#include "./fixtures/advancement-enums.h"
-#include "./fixtures/interrupter-fixture.h"
+#include "modules/sequencizer/interrupter.h"
+#include "modules/sequencizer/trigger-mode.h"
+
+#include "dheunit/test.h"
+#include "fixtures/interrupter-fixture.h"
 
 #include <sstream>
 #include <vector>
@@ -7,7 +10,11 @@
 namespace test {
 namespace sequencizer {
 using dhe::Latch;
+using dhe::sequencizer::InterruptMode;
+using dhe::sequencizer::TriggerMode;
 using dhe::unit::Suite;
+using dhe::unit::Tester;
+
 static auto constexpr low_latch = dhe::latch::low;
 static auto constexpr high_latch = dhe::latch::high;
 static auto constexpr falling_latch = dhe::latch::falling;

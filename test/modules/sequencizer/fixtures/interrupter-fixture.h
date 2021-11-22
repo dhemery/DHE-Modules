@@ -1,6 +1,7 @@
 #pragma once
 
-#include "modules/sequencizer/advancement.h"
+#include "modules/sequencizer/interrupter.h"
+#include "modules/sequencizer/trigger-mode.h"
 
 #include "dheunit/test.h"
 
