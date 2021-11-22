@@ -1,24 +1,66 @@
 #pragma once
 
+#include <array>
+#include <string>
+#include <vector>
+
 namespace dhe {
 namespace scannibal {
-enum class AnchorType { Phase0, Phase1 };
-static auto constexpr anchor_type_count =
-    static_cast<int>(AnchorType::Phase1) + 1;
-
 enum class AnchorMode { Sample, Track };
-static auto constexpr anchor_mode_count =
-    static_cast<int>(AnchorMode::Track) + 1;
 
-enum class AnchorSource {
-  Level,
-  InA,
-  InB,
-  InC,
-  Out,
+namespace anchor_mode {
+static auto constexpr size = 2;
+static auto constexpr labels =
+    std::array<char const *, size>{"Sample the source", "Track the source"};
+} // namespace anchor_mode
+
+struct AnchorModes {
+  using value_type = AnchorMode;
+  static auto constexpr size = anchor_mode::size;
+  static auto constexpr stepper_slug = "anchor-mode";
+
+  static inline auto labels() -> std::vector<std::string> {
+    return {anchor_mode::labels.cbegin(), anchor_mode::labels.cend()};
+  }
 };
-static auto constexpr anchor_source_count =
-    static_cast<int>(AnchorSource::Out) + 1;
+
+enum class AnchorSource { Level, InA, InB, InC, Out };
+
+namespace anchor_source {
+static auto constexpr size = 5;
+
+static auto constexpr labels =
+    std::array<char const *, size>{"Level", "A", "B", "C", "Out"};
+
+static auto constexpr names = std::array<char const *, size>{
+    "AnchorSource::Level", "AnchorSource::InA", "AnchorSource::InB",
+    "AnchorSource::InC",   "AnchorSource::Out",
+};
+
+static constexpr auto name(AnchorSource s) -> char const * {
+  return names[static_cast<size_t>(s)];
+}
+
+static auto constexpr values = std::array<AnchorSource, size>{
+    AnchorSource::Level, AnchorSource::InA, AnchorSource::InB,
+    AnchorSource::InC,   AnchorSource::Out,
+};
+} // namespace anchor_source
+
+struct AnchorSources {
+  using value_type = AnchorSource;
+  static auto constexpr size = anchor_source::size;
+  static constexpr auto stepper_slug = "anchor-source";
+  static inline auto labels() -> std::vector<std::string> {
+    return {anchor_source::labels.cbegin(), anchor_source::labels.cend()};
+  }
+};
+
+enum class AnchorType { Phase0, Phase1 };
+
+namespace anchor_type {
+static auto constexpr size = 2;
+}
 
 template <typename Module> class Anchor {
 public:

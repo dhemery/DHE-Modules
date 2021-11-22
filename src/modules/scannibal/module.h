@@ -4,7 +4,6 @@
 #include "control-ids.h"
 #include "controller.h"
 #include "generator.h"
-#include "params.h"
 
 #include "components/cxmath.h"
 #include "controls/knobs.h"

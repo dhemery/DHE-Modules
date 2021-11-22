@@ -1,5 +1,5 @@
-#include "./fixtures/anchor-enums.h"
-#include "./fixtures/anchor-fixture.h"
+#include "fixtures/anchor-fixture.h"
+#include "modules/scannibal/anchor.h"
 
 #include "helpers/assertions.h"
 
@@ -43,10 +43,10 @@ public:
           set_all_voltages(module, level_entry_voltage + 1.F);
 
           module.phase_0_mode_[step] = AnchorMode::Sample;
-          for (auto const source : anchor_sources) {
+          for (auto const source : dhe::scannibal::anchor_source::values) {
             module.phase_0_source_[step] = source;
-            assert_that(t, name_of(source), anchor.voltage(),
-                        is_equal_to(level_entry_voltage));
+            assert_that(t, dhe::scannibal::anchor_source::name(source),
+                        anchor.voltage(), is_equal_to(level_entry_voltage));
           }
         }));
 
@@ -68,10 +68,10 @@ public:
           set_all_voltages(module, in_a_entry_voltage + 1.F);
 
           module.phase_0_mode_[step] = AnchorMode::Sample;
-          for (auto const source : anchor_sources) {
+          for (auto const source : dhe::scannibal::anchor_source::values) {
             module.phase_0_source_[step] = source;
-            assert_that(t, name_of(source), anchor.voltage(),
-                        is_equal_to(in_a_entry_voltage));
+            assert_that(t, dhe::scannibal::anchor_source::name(source),
+                        anchor.voltage(), is_equal_to(in_a_entry_voltage));
           }
         }));
 
@@ -93,10 +93,10 @@ public:
           set_all_voltages(module, in_b_entry_voltage + 1.F);
 
           module.phase_0_mode_[step] = AnchorMode::Sample;
-          for (auto const source : anchor_sources) {
+          for (auto const source : dhe::scannibal::anchor_source::values) {
             module.phase_0_source_[step] = source;
-            assert_that(t, name_of(source), anchor.voltage(),
-                        is_equal_to(in_b_entry_voltage));
+            assert_that(t, dhe::scannibal::anchor_source::name(source),
+                        anchor.voltage(), is_equal_to(in_b_entry_voltage));
           }
         }));
     t.run(
@@ -117,10 +117,10 @@ public:
           set_all_voltages(module, in_c_entry_voltage + 1.F);
 
           module.phase_0_mode_[step] = AnchorMode::Sample;
-          for (auto const source : anchor_sources) {
+          for (auto const source : dhe::scannibal::anchor_source::values) {
             module.phase_0_source_[step] = source;
-            assert_that(t, name_of(source), anchor.voltage(),
-                        is_equal_to(in_c_entry_voltage));
+            assert_that(t, dhe::scannibal::anchor_source::name(source),
+                        anchor.voltage(), is_equal_to(in_c_entry_voltage));
           }
         }));
 
@@ -142,10 +142,10 @@ public:
           set_all_voltages(module, output_entry_voltage + 1.F);
 
           module.phase_0_mode_[step] = AnchorMode::Sample;
-          for (auto const source : anchor_sources) {
+          for (auto const source : dhe::scannibal::anchor_source::values) {
             module.phase_0_source_[step] = source;
-            assert_that(t, name_of(source), anchor.voltage(),
-                        is_equal_to(output_entry_voltage));
+            assert_that(t, dhe::scannibal::anchor_source::name(source),
+                        anchor.voltage(), is_equal_to(output_entry_voltage));
           }
         }));
 
@@ -157,7 +157,7 @@ public:
           auto constexpr step = 4;
           auto constexpr default_entry_voltage = 6.343F;
 
-          for (auto const source : anchor_sources) {
+          for (auto const source : dhe::scannibal::anchor_source::values) {
             set_all_voltages(module, default_entry_voltage);
             module.phase_0_source_[step] = source;
             anchor.enter(step); // Capture the voltage from this source
@@ -166,8 +166,8 @@ public:
             module.phase_0_source_[step] = AnchorSource::Level;
             auto constexpr current_level_voltage = default_entry_voltage + 1.F;
             module.phase_0_level_[step] = current_level_voltage;
-            assert_that(t, name_of(source), anchor.voltage(),
-                        is_equal_to(current_level_voltage));
+            assert_that(t, dhe::scannibal::anchor_source::name(source),
+                        anchor.voltage(), is_equal_to(current_level_voltage));
           }
         }));
 
@@ -179,7 +179,7 @@ public:
           auto constexpr step = 5;
           auto constexpr default_entry_voltage = 5.343F;
 
-          for (auto const source : anchor_sources) {
+          for (auto const source : dhe::scannibal::anchor_source::values) {
             set_all_voltages(module, default_entry_voltage);
             module.phase_0_source_[step] = source;
             anchor.enter(step); // Capture the voltage from this source
@@ -188,8 +188,8 @@ public:
             module.phase_0_source_[step] = AnchorSource::InA;
             auto constexpr current_in_a_voltage = default_entry_voltage + 1.F;
             module.in_a_ = current_in_a_voltage;
-            assert_that(t, name_of(source), anchor.voltage(),
-                        is_equal_to(current_in_a_voltage));
+            assert_that(t, dhe::scannibal::anchor_source::name(source),
+                        anchor.voltage(), is_equal_to(current_in_a_voltage));
           }
         }));
 
@@ -201,7 +201,7 @@ public:
           auto constexpr step = 5;
           auto constexpr default_entry_voltage = 5.343F;
 
-          for (auto const source : anchor_sources) {
+          for (auto const source : dhe::scannibal::anchor_source::values) {
             set_all_voltages(module, default_entry_voltage);
             module.phase_0_source_[step] = source;
             anchor.enter(step); // Capture the voltage from this source
@@ -210,8 +210,8 @@ public:
             module.phase_0_source_[step] = AnchorSource::InB;
             auto constexpr current_in_b_voltage = default_entry_voltage + 1.F;
             module.in_b_ = current_in_b_voltage;
-            assert_that(t, name_of(source), anchor.voltage(),
-                        is_equal_to(current_in_b_voltage));
+            assert_that(t, dhe::scannibal::anchor_source::name(source),
+                        anchor.voltage(), is_equal_to(current_in_b_voltage));
           }
         }));
 
@@ -223,7 +223,7 @@ public:
           auto constexpr step = 5;
           auto constexpr default_entry_voltage = 5.343F;
 
-          for (auto const source : anchor_sources) {
+          for (auto const source : dhe::scannibal::anchor_source::values) {
             set_all_voltages(module, default_entry_voltage);
             module.phase_0_source_[step] = source;
             anchor.enter(step); // Capture the voltage from this source
@@ -232,8 +232,8 @@ public:
             module.phase_0_source_[step] = AnchorSource::InC;
             auto constexpr current_in_c_voltage = default_entry_voltage + 1.F;
             module.in_c_ = current_in_c_voltage;
-            assert_that(t, name_of(source), anchor.voltage(),
-                        is_equal_to(current_in_c_voltage));
+            assert_that(t, dhe::scannibal::anchor_source::name(source),
+                        anchor.voltage(), is_equal_to(current_in_c_voltage));
           }
         }));
 
@@ -245,7 +245,7 @@ public:
           auto constexpr step = 6;
           auto constexpr default_entry_voltage = 7.343F;
 
-          for (auto const source : anchor_sources) {
+          for (auto const source : dhe::scannibal::anchor_source::values) {
             set_all_voltages(module, default_entry_voltage);
             module.phase_0_source_[step] = source;
             anchor.enter(step); // Capture the voltage from this source
@@ -254,8 +254,8 @@ public:
             module.phase_0_source_[step] = AnchorSource::Out;
             auto constexpr current_output_voltage = default_entry_voltage + 1.F;
             module.output_ = current_output_voltage;
-            assert_that(t, name_of(source), anchor.voltage(),
-                        is_equal_to(current_output_voltage));
+            assert_that(t, dhe::scannibal::anchor_source::name(source),
+                        anchor.voltage(), is_equal_to(current_output_voltage));
           }
         }));
 
@@ -277,10 +277,10 @@ public:
           set_all_voltages(module, level_entry_voltage + 1.F);
 
           module.phase_0_mode_[step] = AnchorMode::Sample;
-          for (auto const source : anchor_sources) {
+          for (auto const source : dhe::scannibal::anchor_source::values) {
             module.phase_1_source_[step] = source;
-            assert_that(t, name_of(source), anchor.voltage(),
-                        is_equal_to(level_entry_voltage));
+            assert_that(t, dhe::scannibal::anchor_source::name(source),
+                        anchor.voltage(), is_equal_to(level_entry_voltage));
           }
         }));
 
@@ -302,10 +302,10 @@ public:
           set_all_voltages(module, in_a_entry_voltage + 1.F);
 
           module.phase_0_mode_[step] = AnchorMode::Sample;
-          for (auto const source : anchor_sources) {
+          for (auto const source : dhe::scannibal::anchor_source::values) {
             module.phase_1_source_[step] = source;
-            assert_that(t, name_of(source), anchor.voltage(),
-                        is_equal_to(in_a_entry_voltage));
+            assert_that(t, dhe::scannibal::anchor_source::name(source),
+                        anchor.voltage(), is_equal_to(in_a_entry_voltage));
           }
         }));
 
@@ -327,10 +327,10 @@ public:
           set_all_voltages(module, in_b_entry_voltage + 1.F);
 
           module.phase_0_mode_[step] = AnchorMode::Sample;
-          for (auto const source : anchor_sources) {
+          for (auto const source : dhe::scannibal::anchor_source::values) {
             module.phase_1_source_[step] = source;
-            assert_that(t, name_of(source), anchor.voltage(),
-                        is_equal_to(in_b_entry_voltage));
+            assert_that(t, dhe::scannibal::anchor_source::name(source),
+                        anchor.voltage(), is_equal_to(in_b_entry_voltage));
           }
         }));
 
@@ -352,10 +352,10 @@ public:
           set_all_voltages(module, in_c_entry_voltage + 1.F);
 
           module.phase_0_mode_[step] = AnchorMode::Sample;
-          for (auto const source : anchor_sources) {
+          for (auto const source : dhe::scannibal::anchor_source::values) {
             module.phase_1_source_[step] = source;
-            assert_that(t, name_of(source), anchor.voltage(),
-                        is_equal_to(in_c_entry_voltage));
+            assert_that(t, dhe::scannibal::anchor_source::name(source),
+                        anchor.voltage(), is_equal_to(in_c_entry_voltage));
           }
         }));
 
@@ -377,10 +377,10 @@ public:
           set_all_voltages(module, output_entry_voltage + 1.F);
 
           module.phase_0_mode_[step] = AnchorMode::Sample;
-          for (auto const source : anchor_sources) {
+          for (auto const source : dhe::scannibal::anchor_source::values) {
             module.phase_1_source_[step] = source;
-            assert_that(t, name_of(source), anchor.voltage(),
-                        is_equal_to(output_entry_voltage));
+            assert_that(t, dhe::scannibal::anchor_source::name(source),
+                        anchor.voltage(), is_equal_to(output_entry_voltage));
           }
         }));
 
@@ -392,7 +392,7 @@ public:
           auto constexpr step = 3;
           auto constexpr default_entry_voltage = 6.343F;
 
-          for (auto const source : anchor_sources) {
+          for (auto const source : dhe::scannibal::anchor_source::values) {
             set_all_voltages(module, default_entry_voltage);
             module.phase_1_source_[step] = source;
             anchor.enter(step); // Capture the voltage from this source
@@ -401,8 +401,8 @@ public:
             module.phase_1_source_[step] = AnchorSource::Level;
             auto constexpr current_level_voltage = default_entry_voltage + 1.F;
             module.phase_1_level_[step] = current_level_voltage;
-            assert_that(t, name_of(source), anchor.voltage(),
-                        is_equal_to(current_level_voltage));
+            assert_that(t, dhe::scannibal::anchor_source::name(source),
+                        anchor.voltage(), is_equal_to(current_level_voltage));
           }
         }));
 
@@ -414,7 +414,7 @@ public:
           auto constexpr step = 2;
           auto constexpr default_entry_voltage = 5.343F;
 
-          for (auto const source : anchor_sources) {
+          for (auto const source : dhe::scannibal::anchor_source::values) {
             set_all_voltages(module, default_entry_voltage);
             module.phase_1_source_[step] = source;
             anchor.enter(step); // Capture the voltage from this source
@@ -423,8 +423,8 @@ public:
             module.phase_1_source_[step] = AnchorSource::InA;
             auto constexpr current_in_a_voltage = default_entry_voltage + 1.F;
             module.in_a_ = current_in_a_voltage;
-            assert_that(t, name_of(source), anchor.voltage(),
-                        is_equal_to(current_in_a_voltage));
+            assert_that(t, dhe::scannibal::anchor_source::name(source),
+                        anchor.voltage(), is_equal_to(current_in_a_voltage));
           }
         }));
 
@@ -436,7 +436,7 @@ public:
           auto constexpr step = 2;
           auto constexpr default_entry_voltage = 5.343F;
 
-          for (auto const source : anchor_sources) {
+          for (auto const source : dhe::scannibal::anchor_source::values) {
             set_all_voltages(module, default_entry_voltage);
             module.phase_1_source_[step] = source;
             anchor.enter(step); // Capture the voltage from this source
@@ -445,8 +445,8 @@ public:
             module.phase_1_source_[step] = AnchorSource::InB;
             auto constexpr current_in_b_voltage = default_entry_voltage + 1.F;
             module.in_b_ = current_in_b_voltage;
-            assert_that(t, name_of(source), anchor.voltage(),
-                        is_equal_to(current_in_b_voltage));
+            assert_that(t, dhe::scannibal::anchor_source::name(source),
+                        anchor.voltage(), is_equal_to(current_in_b_voltage));
           }
         }));
 
@@ -458,7 +458,7 @@ public:
           auto constexpr step = 2;
           auto constexpr default_entry_voltage = 5.343F;
 
-          for (auto const source : anchor_sources) {
+          for (auto const source : dhe::scannibal::anchor_source::values) {
             set_all_voltages(module, default_entry_voltage);
             module.phase_1_source_[step] = source;
             anchor.enter(step); // Capture the voltage from this source
@@ -467,8 +467,8 @@ public:
             module.phase_1_source_[step] = AnchorSource::InC;
             auto constexpr current_in_c_voltage = default_entry_voltage + 1.F;
             module.in_c_ = current_in_c_voltage;
-            assert_that(t, name_of(source), anchor.voltage(),
-                        is_equal_to(current_in_c_voltage));
+            assert_that(t, dhe::scannibal::anchor_source::name(source),
+                        anchor.voltage(), is_equal_to(current_in_c_voltage));
           }
         }));
 
@@ -480,7 +480,7 @@ public:
           auto constexpr step = 1;
           auto constexpr default_entry_voltage = 7.343F;
 
-          for (auto const source : anchor_sources) {
+          for (auto const source : dhe::scannibal::anchor_source::values) {
             set_all_voltages(module, default_entry_voltage);
             module.phase_1_source_[step] = source;
             anchor.enter(step); // Capture the voltage from this source
@@ -489,8 +489,8 @@ public:
             module.phase_1_source_[step] = AnchorSource::Out;
             auto constexpr current_output_voltage = default_entry_voltage + 1.F;
             module.output_ = current_output_voltage;
-            assert_that(t, name_of(source), anchor.voltage(),
-                        is_equal_to(current_output_voltage));
+            assert_that(t, dhe::scannibal::anchor_source::name(source),
+                        anchor.voltage(), is_equal_to(current_output_voltage));
           }
         }));
   }
