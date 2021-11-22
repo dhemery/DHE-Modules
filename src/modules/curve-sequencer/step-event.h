@@ -12,7 +12,7 @@ static auto constexpr size = 2;
 static auto constexpr names =
     std::array<char const *, size>{"Generated", "Completed"};
 
-static constexpr auto name(StepEvent event) -> char const * {
+static inline auto name(StepEvent event) -> char const * {
   return names[static_cast<size_t>(event)];
 }
 } // namespace step_event

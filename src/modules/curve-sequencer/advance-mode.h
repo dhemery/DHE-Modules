@@ -34,7 +34,7 @@ static auto constexpr names =
                                    "GateChanges",  "GateIsHigh", "GateIsHigh"};
 
 static inline auto name(AdvanceMode mode) -> std::string {
-  return advance_mode::names[static_cast<size_t>(mode)];
+  return names[static_cast<size_t>(mode)];
 }
 } // namespace advance_mode
 
