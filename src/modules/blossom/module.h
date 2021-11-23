@@ -10,9 +10,9 @@
 #include "controls/knobs.h"
 #include "controls/switches.h"
 #include "params/presets.h"
-#include "signals/angular.h"
 #include "signals/basic.h"
 #include "signals/gain.h"
+#include "signals/phase.h"
 #include "signals/voltages.h"
 
 #include "rack.hpp"
@@ -47,7 +47,7 @@ public:
     Knob::config<Attenuverter>(this, ParamId::BounceDepthAv, "Depth CV gain");
     configInput(InputId::BounceDepthCv, "Depth CV");
 
-    Knob::config<Angle>(this, ParamId::BouncePhaseOffset, "Phase");
+    Knob::config<Phase>(this, ParamId::BouncePhaseOffset, "Phase");
     Knob::config<Attenuverter>(this, ParamId::BouncePhaseOffsetAv,
                                "Phase CV gain");
     configInput(InputId::BouncePhaseOffsetCv, "Phase CV");
@@ -104,7 +104,7 @@ private:
     auto const rotation = rotation_of(params[ParamId::BounceDepth],
                                       inputs[InputId::BounceDepthCv],
                                       params[ParamId::BounceDepthAv]);
-    return Percentage::range().clamp(rotation);
+    return Percentage::range.clamp(rotation);
   }
 
   // radians
@@ -112,7 +112,7 @@ private:
     auto const rotation = rotation_of(params[ParamId::BouncePhaseOffset],
                                       inputs[InputId::BouncePhaseOffsetCv],
                                       params[ParamId::BouncePhaseOffsetAv]);
-    return Angle::radians(rotation);
+    return Phase::scale(rotation);
   }
 
   inline auto spin_speed() const -> float {

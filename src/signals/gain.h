@@ -1,66 +1,44 @@
 #pragma once
 
+#include "components/range.h"
 #include "ranged.h"
 
 namespace dhe {
+namespace internal {
+static auto constexpr attenuator_range = Range{0.F, 1.F};
+static auto constexpr attenuator_display_range = Range{0.F, 100.F};
+static auto constexpr attenuverter_range = Range{-1.F, 1.F};
+static auto constexpr attenuverter_display_range = Range{-100.F, 100.F};
+static auto constexpr gain_range = Range{0.F, 2.F};
+static auto constexpr gain_display_range = Range{0.F, 200.F};
 
-struct AttenuatorBounds {
-  static auto constexpr min = 0.F;
-  static auto constexpr max = 1.F;
-};
-
-struct AttenuatorDisplayBounds {
-  static auto constexpr min = 0.F;
-  static auto constexpr max = 100.F;
-};
-
-struct AttenuatorKnobMap : ScaledKnobMap<LinearRange<AttenuatorDisplayBounds>> {
-  static auto constexpr unit = "%";
+struct AttenuatorQuantity {
   static auto constexpr default_value = 100.F;
-};
-
-struct Attenuator : LinearRange<AttenuatorBounds> {
-  using KnobMap = AttenuatorKnobMap;
-};
-
-struct AttenuverterBounds {
-  static auto constexpr min = -1.F;
-  static auto constexpr max = 1.F;
-};
-
-struct AttenuverterDisplayBounds {
-  static auto constexpr min = -100.F;
-  static auto constexpr max = 100.F;
-};
-
-struct AttenuverterKnobMap
-    : ScaledKnobMap<LinearRange<AttenuverterDisplayBounds>> {
+  static auto constexpr &display_range = attenuator_display_range;
+  static auto constexpr &range = attenuator_range;
   static auto constexpr unit = "%";
+};
+
+struct AttenuverterQuantity {
   static auto constexpr default_value = 0.F;
-};
-
-struct Attenuverter : LinearRange<AttenuverterBounds> {
-  using KnobMap = AttenuverterKnobMap;
-};
-
-struct GainBounds {
-  static auto constexpr min = 0.F;
-  static auto constexpr max = 2.F;
-};
-
-struct GainDisplayBounds {
-  static auto constexpr min = 0.F;
-  static auto constexpr max = 200.F;
-};
-
-struct GainKnobMap : ScaledKnobMap<LinearRange<GainDisplayBounds>> {
+  static auto constexpr &display_range = attenuverter_display_range;
+  static auto constexpr &range = attenuverter_range;
   static auto constexpr unit = "%";
-  static auto constexpr default_value = 100.F;
 };
 
-struct Gain : LinearRange<GainBounds> {
-  using KnobMap = GainKnobMap;
+struct GainQuantity {
+  static auto constexpr default_value = 100.F;
+  static auto constexpr &display_range = gain_display_range;
+  static auto constexpr &range = gain_range;
+  static auto constexpr unit = "%";
 };
+} // namespace internal
+
+struct Attenuator : LinearKnob<internal::AttenuatorQuantity> {};
+
+struct Attenuverter : LinearKnob<internal::AttenuverterQuantity> {};
+
+struct Gain : LinearKnob<internal::GainQuantity> {};
 
 using Percentage = Attenuator;
 } // namespace dhe

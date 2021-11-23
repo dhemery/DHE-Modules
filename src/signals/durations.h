@@ -25,12 +25,14 @@ static auto constexpr unit = " s";
  * decimal places).
  */
 
-static constexpr auto scale(float rotation, Range range) -> float {
-  return range.scale(JShape::apply(rotation, knob_curvature));
+static inline auto scale(float rotation, Range range) -> float {
+  auto tapered = JShape::apply(rotation, knob_curvature);
+  return range.scale(tapered);
 }
 
-static constexpr auto normalize(float seconds, Range range) -> float {
-  return JShape::invert(range.normalize(seconds), knob_curvature);
+static inline auto normalize(float seconds, Range range) -> float {
+  auto const tapered = range.normalize(seconds);
+  return JShape::invert(tapered, knob_curvature);
 }
 
 static auto constexpr short_range = Range{0.001F, 1.F};
@@ -49,18 +51,18 @@ struct Long {
   static auto constexpr &range = long_range;
 };
 
-template <typename D> struct Mapped : D {
-  static constexpr auto scale(float normalized) -> float {
+template <typename D> struct Quantity : D {
+  static inline auto scale(float normalized) -> float {
     return duration::scale(normalized, D::range);
   }
 
-  static constexpr auto normalize(float scaled) -> float {
+  static inline auto normalize(float scaled) -> float {
     return duration::normalize(scaled, D::range);
   }
 
   struct KnobMap {
     static auto constexpr unit = duration::unit;
-    static auto constexpr default_value = scale(0.5F);
+    static auto constexpr default_value = 1.F;
     auto to_display(float rotation) const -> float { return scale(rotation); }
 
     auto to_value(float display) const -> float { return normalize(display); }
@@ -96,9 +98,9 @@ struct DurationRanges {
   }
 };
 
-struct ShortDuration : duration::Mapped<duration::Short> {};
-struct MediumDuration : duration::Mapped<duration::Medium> {};
-struct LongDuration : duration::Mapped<duration::Long> {};
+struct ShortDuration : duration::Quantity<duration::Short> {};
+struct MediumDuration : duration::Quantity<duration::Medium> {};
+struct LongDuration : duration::Quantity<duration::Long> {};
 
 struct Duration {
   static inline auto scale(float normalized, DurationRangeId range_id)

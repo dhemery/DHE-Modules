@@ -12,33 +12,18 @@ static auto constexpr unit = " V";
 static auto constexpr bipolar_range = Range{-5.F, 5.F};
 static auto constexpr unipolar_range = Range{0.F, 10.F};
 
-struct Bipolar {
+struct BipolarQuantity {
+  static auto constexpr default_value = 0.F;
+  static auto constexpr &display_range = bipolar_range;
   static auto constexpr &range = bipolar_range;
   static auto constexpr unit = voltage::unit;
 };
 
-struct Unipolar {
+struct UnipolarQuantity {
+  static auto constexpr default_value = 5.F;
+  static auto constexpr &display_range = unipolar_range;
   static auto constexpr &range = unipolar_range;
   static auto constexpr unit = voltage::unit;
-};
-
-template <typename V> struct Mapped : V {
-  static auto constexpr &range = V::range;
-  static constexpr auto scale(float normalized) -> float {
-    return range.scale(normalized);
-  }
-
-  static constexpr auto normalize(float scaled) -> float {
-    return range.normalize(scaled);
-  }
-
-  struct KnobMap {
-    static auto constexpr unit = voltage::unit;
-    static auto constexpr default_value = scale(0.5F);
-    auto to_display(float rotation) const -> float { return scale(rotation); }
-
-    auto to_value(float display) const -> float { return normalize(display); }
-  };
 };
 } // namespace voltage
 
@@ -63,8 +48,8 @@ struct VoltageRanges {
   }
 };
 
-struct BipolarVoltage : voltage::Mapped<voltage::Bipolar> {};
-struct UnipolarVoltage : voltage::Mapped<voltage::Unipolar> {};
+struct BipolarVoltage : LinearKnob<voltage::BipolarQuantity> {};
+struct UnipolarVoltage : LinearKnob<voltage::UnipolarQuantity> {};
 
 struct Voltage {
   static inline auto scale(float normalized, VoltageRangeId range_id) -> float {

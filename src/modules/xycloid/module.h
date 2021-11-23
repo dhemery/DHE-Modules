@@ -9,9 +9,9 @@
 #include "controls/knobs.h"
 #include "controls/switches.h"
 #include "params/presets.h"
-#include "signals/angular.h"
 #include "signals/basic.h"
 #include "signals/gain.h"
+#include "signals/phase.h"
 #include "signals/voltages.h"
 
 #include "rack.hpp"
@@ -51,7 +51,7 @@ public:
     configInput(InputId::WobbleDepthCv, "Depth CV");
     Knob::config<Attenuverter>(this, ParamId::WobbleDepthAv, "Depth CV gain");
 
-    Knob::config<Angle>(this, ParamId::WobblePhaseOffset, "Phase");
+    Knob::config<Phase>(this, ParamId::WobblePhaseOffset, "Phase");
     configInput(InputId::WobblePhaseOffsetCv, "Phase CV");
     Knob::config<Attenuverter>(this, ParamId::WobblePhaseOffsetAv,
                                "Phase CV gain");
@@ -140,7 +140,7 @@ private:
     auto const rotation = rotation_of(params[ParamId::WobblePhaseOffset],
                                       inputs[InputId::WobblePhaseOffsetCv],
                                       params[ParamId::WobblePhaseOffsetAv]);
-    return Angle::radians(rotation);
+    return Phase::scale(rotation);
   }
 
   auto wobble_ratio() -> float {

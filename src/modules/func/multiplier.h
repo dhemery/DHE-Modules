@@ -17,7 +17,7 @@ static auto constexpr labels =
     std::array<char const *, size>{"0–1", "±1", "0–2", "±2"};
 
 static auto constexpr ranges = std::array<Range, size>{
-    Attenuator::range(), Attenuverter::range(), Gain::range(), {-2.F, 2.F}};
+    Attenuator::range, Attenuverter::range, Gain::range, {-2.F, 2.F}};
 
 static inline auto range(MultiplierRangeId id) -> Range {
   return ranges[static_cast<size_t>(id)];

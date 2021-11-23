@@ -41,7 +41,7 @@ auto rotation_of(P const &knob, I const &cv_input, P const &av_knob) -> float {
   auto const rotation = value_of(knob);
   auto const cv = voltage_at(cv_input);
   auto const av_rotation = value_of(av_knob);
-  auto const multiplier = Attenuverter::scale(av_rotation);
+auto const multiplier = Attenuverter::scale(av_rotation);
   return rotation_of(rotation, cv, multiplier);
 }
 
