@@ -34,7 +34,7 @@ struct Switch {
                             std::string const &name,
                             typename T::ValueType value)
       -> SwitchQuantity<typename T::ValueType> * {
-    auto const labels = T::labels();
+    static auto const labels = T::labels();
     auto const max = static_cast<float>(labels.size() - 1);
     auto const default_value = static_cast<float>(value);
     return module->configSwitch<SwitchQuantity<typename T::ValueType>>(
