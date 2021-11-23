@@ -49,5 +49,5 @@ jobs:
           RACK_DIR: Rack-SDK
           CC: ${{ matrix.config.compiler }}
         run: |
-          make --jobs dist
-          make --jobs vtest
+          make dist
+          make vtest

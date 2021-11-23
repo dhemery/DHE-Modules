@@ -8,7 +8,6 @@
             "type": "process",
             "command": "make",
             "args": [
-                "--jobs",
                 "all"
             ],
             "problemMatcher": [
@@ -38,7 +37,6 @@
             "type": "process",
             "command": "make",
             "args": [
-                "--jobs",
                 "clean",
             ],
             "problemMatcher": [
@@ -70,7 +68,6 @@
             "type": "process",
             "command": "make",
             "args": [
-                "--jobs",
                 "setup",
             ],
             "problemMatcher": [
@@ -86,7 +83,6 @@
             "type": "process",
             "command": "make",
             "args": [
-                "--jobs",
                 "test"
             ],
             "problemMatcher": [
