@@ -46,7 +46,7 @@ $(TEST_OBJECTS): FLAGS := $(TEST_CXX_FLAGS)
 
 $(TEST_RUNNER): $(TEST_OBJECTS)
 	@mkdir -p $(@D)
-	$(CXX) $(TEST_CXX_FLAGS) -o $@ $^
+	$(CXX) -o $@ $^
 
 .PHONY: test vtest
 
