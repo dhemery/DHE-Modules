@@ -1,9 +1,9 @@
 #pragma once
 
+#include "dheunit/test.h"
 #include "helpers/rack-controls.h"
 #include "modules/sequencizer/signals.h"
-
-#include "dheunit/test.h"
+#include "signals/durations.h"
 
 #include <functional>
 
@@ -11,7 +11,7 @@ namespace test {
 namespace sequencizer {
 
 static auto constexpr step_count = 8;
-
+using dhe::DurationRangeId;
 using dhe::unit::Tester;
 using test::fake::Param;
 using test::fake::Port;
@@ -19,7 +19,8 @@ using test::fake::Port;
 using TestFunc = std::function<void(Tester &)>;
 
 template <typename Matcher>
-static inline auto test(float duration_rotation, int range_selection,
+static inline auto test(float duration_rotation,
+                        DurationRangeId range_selection,
                         float multiplier_rotation, float multiplier_cv_voltage,
                         Matcher matcher) -> TestFunc {
   return [duration_rotation, range_selection, multiplier_rotation,

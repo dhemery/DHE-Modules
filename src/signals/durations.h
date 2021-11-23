@@ -35,17 +35,49 @@ static inline auto normalize(float seconds, Range range) -> float {
   auto const tapered = range.normalize(seconds);
   return JShape::invert(tapered, knob_curvature);
 }
+
+static auto constexpr short_range = Range{0.001F, 1.F};
+static auto constexpr medium_range = Range{0.01F, 10.F};
+static auto constexpr long_range = Range{0.1F, 100.F};
+
+struct Short {
+  static auto constexpr &range = short_range;
+};
+
+struct Medium {
+  static auto constexpr &range = medium_range;
+};
+
+struct Long {
+  static auto constexpr &range = long_range;
+};
+
+template <typename D> struct Mapped : D {
+  static inline auto scale(float normalized) -> float {
+    return duration::scale(normalized, D::range);
+  }
+
+  static inline auto normalize(float scaled) -> float {
+    return duration::normalize(scaled, D::range);
+  }
+
+  struct KnobMap {
+    static auto constexpr unit = duration::unit;
+    static auto constexpr default_value = 1.F;
+    auto to_display(float rotation) const -> float { return scale(rotation); }
+
+    auto to_value(float display) const -> float { return normalize(display); }
+  };
+};
+
 } // namespace duration
 
 enum class DurationRangeId { Short, Medium, Long };
 
 namespace duration_ranges {
 static auto constexpr size = 3;
-static auto constexpr short_range = Range{0.001F, 1.F};
-static auto constexpr medium_range = Range{0.01F, 10.F};
-static auto constexpr long_range = Range{0.1F, 100.F};
-static auto constexpr ranges =
-    std::array<Range, size>{short_range, medium_range, long_range};
+static auto constexpr ranges = std::array<Range, size>{
+    duration::short_range, duration::medium_range, duration::long_range};
 
 static auto constexpr labels =
     std::array<char const *, size>{"0.001–1.0 s", "0.01–10.0 s", "0.1–100.0 s"};
@@ -66,6 +98,10 @@ struct DurationRanges {
     return {duration_ranges::labels.cbegin(), duration_ranges::labels.cend()};
   }
 };
+
+struct ShortDuration : duration::Mapped<duration::Short> {};
+struct MediumDuration : duration::Mapped<duration::Medium> {};
+struct LongDuration : duration::Mapped<duration::Long> {};
 
 struct Duration {
   static inline auto scale(float normalized, DurationRangeId range_id)
@@ -97,23 +133,4 @@ struct Duration {
   };
 };
 
-struct MediumDuration {
-  static auto constexpr &range = duration_ranges::medium_range;
-
-  static inline auto scale(float normalized) -> float {
-    return duration::scale(normalized, range);
-  }
-
-  static inline auto normalize(float scaled) -> float {
-    return duration::normalize(scaled, range);
-  }
-
-  struct KnobMap {
-    static auto constexpr default_value = 1.F;
-    static auto constexpr unit = duration::unit;
-    auto to_display(float rotation) const -> float { return scale(rotation); }
-
-    auto to_value(float display) const -> float { return normalize(display); }
-  };
-};
 } // namespace dhe
