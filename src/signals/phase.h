@@ -4,16 +4,19 @@
 
 namespace dhe {
 namespace internal {
-static auto constexpr phase_range_radians = Range{-pi, pi};
-static auto constexpr phase_range_degrees = Range{-180.F, 180.F};
+namespace phase {
 
-struct PhaseQuantity {
+static auto constexpr range_radians = Range{-pi, pi};
+static auto constexpr range_degrees = Range{-180.F, 180.F};
+
+struct Quantity {
   static auto constexpr default_value = 0.F;
-  static auto constexpr &display_range = phase_range_degrees;
-  static auto constexpr &range = phase_range_radians;
+  static auto constexpr &display_range = phase::range_degrees;
+  static auto constexpr &range = phase::range_radians;
   static auto constexpr unit = "˚";
 };
+} // namespace phase
 } // namespace internal
 
-struct Phase : LinearKnob<internal::PhaseQuantity> {};
+struct Phase : LinearKnob<internal::phase::Quantity> {};
 } // namespace dhe

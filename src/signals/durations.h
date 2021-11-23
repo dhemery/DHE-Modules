@@ -8,6 +8,9 @@
 #include <vector>
 
 namespace dhe {
+enum class DurationRangeId { Short, Medium, Long };
+
+namespace internal {
 namespace duration {
 /**
  * This curvature gives a duration knob a gentle inverted S taper,
@@ -51,6 +54,12 @@ struct Long {
   static auto constexpr &range = long_range;
 };
 
+static auto constexpr ranges =
+    std::array<Range, 3>{Short::range, Medium::range, Long::range};
+
+static auto constexpr labels = std::array<char const *, ranges.size()>{
+    "0.001–1.0 s", "0.01–10.0 s", "0.1–100.0 s"};
+
 template <typename D> struct Quantity : D {
   static inline auto scale(float normalized) -> float {
     return duration::scale(normalized, D::range);
@@ -69,52 +78,47 @@ template <typename D> struct Quantity : D {
   };
 };
 
-} // namespace duration
-
-enum class DurationRangeId { Short, Medium, Long };
-
-namespace duration_ranges {
-static auto constexpr size = 3;
-static auto constexpr ranges = std::array<Range, size>{
-    duration::short_range, duration::medium_range, duration::long_range};
-
-static auto constexpr labels =
-    std::array<char const *, size>{"0.001–1.0 s", "0.01–10.0 s", "0.1–100.0 s"};
-
 static inline auto label(DurationRangeId id) -> char const * {
   return labels[static_cast<size_t>(id)];
 }
 
 static inline auto range(DurationRangeId id) -> Range {
   return ranges[static_cast<size_t>(id)];
-}
+
 } // namespace duration_ranges
+} // namespace duration
+} // namespace internal
 
 struct DurationRanges {
   using value_type = DurationRangeId;
-  static auto constexpr size = duration_ranges::size;
+  static auto constexpr size = internal::duration::ranges.size();
   static inline auto labels() -> std::vector<std::string> {
-    return {duration_ranges::labels.cbegin(), duration_ranges::labels.cend()};
+    return {internal::duration::labels.cbegin(),
+            internal::duration::labels.cend()};
   }
 };
 
-struct ShortDuration : duration::Quantity<duration::Short> {};
-struct MediumDuration : duration::Quantity<duration::Medium> {};
-struct LongDuration : duration::Quantity<duration::Long> {};
+struct ShortDuration : internal::duration::Quantity<internal::duration::Short> {
+};
+struct MediumDuration
+    : internal::duration::Quantity<internal::duration::Medium> {};
+struct LongDuration : internal::duration::Quantity<internal::duration::Long> {};
 
 struct Duration {
   static inline auto scale(float normalized, DurationRangeId range_id)
       -> float {
-    return duration::scale(normalized, duration_ranges::range(range_id));
+    return internal::duration::scale(normalized,
+                                     internal::duration::range(range_id));
   }
 
   static inline auto normalize(float scaled, DurationRangeId range_id)
       -> float {
-    return duration::normalize(scaled, duration_ranges::range(range_id));
+    return internal::duration::normalize(scaled,
+                                         internal::duration::range(range_id));
   }
 
   struct KnobMap {
-    static auto constexpr unit = duration::unit;
+    static auto constexpr unit = internal::duration::unit;
     static auto constexpr default_value = 1.F;
 
     auto to_display(float rotation) const -> float {

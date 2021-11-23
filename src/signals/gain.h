@@ -5,40 +5,49 @@
 
 namespace dhe {
 namespace internal {
-static auto constexpr attenuator_range = Range{0.F, 1.F};
-static auto constexpr attenuator_display_range = Range{0.F, 100.F};
-static auto constexpr attenuverter_range = Range{-1.F, 1.F};
-static auto constexpr attenuverter_display_range = Range{-100.F, 100.F};
-static auto constexpr gain_range = Range{0.F, 2.F};
-static auto constexpr gain_display_range = Range{0.F, 200.F};
+namespace attenuator {
+static auto constexpr range = Range{0.F, 1.F};
+static auto constexpr display_range = Range{0.F, 100.F};
 
-struct AttenuatorQuantity {
+struct Quantity {
   static auto constexpr default_value = 100.F;
-  static auto constexpr &display_range = attenuator_display_range;
-  static auto constexpr &range = attenuator_range;
+  static auto constexpr &display_range = attenuator::display_range;
+  static auto constexpr &range = attenuator::range;
   static auto constexpr unit = "%";
 };
+} // namespace attenuator
 
-struct AttenuverterQuantity {
+namespace attenuverter {
+static auto constexpr range = Range{-1.F, 1.F};
+static auto constexpr display_range = Range{-100.F, 100.F};
+
+struct Quantity {
   static auto constexpr default_value = 0.F;
-  static auto constexpr &display_range = attenuverter_display_range;
-  static auto constexpr &range = attenuverter_range;
+  static auto constexpr &display_range = attenuverter::display_range;
+  static auto constexpr &range = attenuverter::range;
   static auto constexpr unit = "%";
 };
+} // namespace attenuverter
 
-struct GainQuantity {
+namespace gain {
+
+static auto constexpr range = Range{0.F, 2.F};
+static auto constexpr display_range = Range{0.F, 200.F};
+
+struct Quantity {
   static auto constexpr default_value = 100.F;
-  static auto constexpr &display_range = gain_display_range;
-  static auto constexpr &range = gain_range;
+  static auto constexpr &display_range = gain::display_range;
+  static auto constexpr &range = gain::range;
   static auto constexpr unit = "%";
 };
+} // namespace gain
 } // namespace internal
 
-struct Attenuator : LinearKnob<internal::AttenuatorQuantity> {};
+struct Attenuator : LinearKnob<internal::attenuator::Quantity> {};
 
-struct Attenuverter : LinearKnob<internal::AttenuverterQuantity> {};
+struct Attenuverter : LinearKnob<internal::attenuverter::Quantity> {};
 
-struct Gain : LinearKnob<internal::GainQuantity> {};
+struct Gain : LinearKnob<internal::gain::Quantity> {};
 
 using Percentage = Attenuator;
 } // namespace dhe

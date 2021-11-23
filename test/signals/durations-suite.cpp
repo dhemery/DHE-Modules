@@ -15,9 +15,9 @@ struct DurationsSuite : Suite {
     static auto const range_ids = std::vector<DurationRangeId>{
         DurationRangeId::Short, DurationRangeId::Medium, DurationRangeId::Long};
     for (auto const range_id : range_ids) {
-      auto const range_name = dhe::duration_ranges::label(range_id);
+      auto const range_name = dhe::internal::duration::label(range_id);
       t.run(range_name, [range_id](Tester &t) {
-        auto const range = dhe::duration_ranges::range(range_id);
+        auto const range = dhe::internal::duration::range(range_id);
         t.run("minimum normalize yields select lower bound",
               [range_id, range](Tester &t) {
                 auto constexpr rotation = 0.F;

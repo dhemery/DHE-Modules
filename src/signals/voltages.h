@@ -7,6 +7,9 @@
 #include <vector>
 
 namespace dhe {
+enum class VoltageRangeId { Bipolar, Unipolar };
+
+namespace internal {
 namespace voltage {
 static auto constexpr unit = " V";
 static auto constexpr bipolar_range = Range{-5.F, 5.F};
@@ -25,42 +28,41 @@ struct UnipolarQuantity {
   static auto constexpr &range = unipolar_range;
   static auto constexpr unit = voltage::unit;
 };
-} // namespace voltage
 
-enum class VoltageRangeId { Bipolar, Unipolar };
-
-namespace voltage_ranges {
-static auto constexpr size = 2;
-static auto constexpr labels = std::array<char const *, size>{"±5 V", "0–10 V"};
 static auto constexpr ranges =
-    std::array<Range, size>{voltage::bipolar_range, voltage::unipolar_range};
+    std::array<Range, 2>{voltage::bipolar_range, voltage::unipolar_range};
+static auto constexpr labels =
+    std::array<char const *, ranges.size()>{"±5 V", "0–10 V"};
 
 static inline auto range(VoltageRangeId id) -> Range {
   return ranges[static_cast<size_t>(id)];
 }
-} // namespace voltage_ranges
+} // namespace voltage
+} // namespace internal
 
 struct VoltageRanges {
   using value_type = VoltageRangeId;
-  static auto constexpr size = voltage_ranges::size;
+  static auto constexpr size = internal::voltage::ranges.size();
   static inline auto labels() -> std::vector<std::string> {
-    return {voltage_ranges::labels.cbegin(), voltage_ranges::labels.cend()};
+    return {internal::voltage::labels.cbegin(),
+            internal::voltage::labels.cend()};
   }
 };
 
-struct BipolarVoltage : LinearKnob<voltage::BipolarQuantity> {};
-struct UnipolarVoltage : LinearKnob<voltage::UnipolarQuantity> {};
+struct BipolarVoltage : LinearKnob<internal::voltage::BipolarQuantity> {};
+struct UnipolarVoltage : LinearKnob<internal::voltage::UnipolarQuantity> {};
 
 struct Voltage {
+  static auto constexpr unit = internal::voltage::unit;
   static inline auto scale(float normalized, VoltageRangeId range_id) -> float {
-    return voltage_ranges::range(range_id).scale(normalized);
+    return internal::voltage::range(range_id).scale(normalized);
   }
   static inline auto normalize(float scaled, VoltageRangeId range_id) -> float {
-    return voltage_ranges::range(range_id).normalize(scaled);
+    return internal::voltage::range(range_id).normalize(scaled);
   }
 
   struct KnobMap {
-    static auto constexpr unit = voltage::unit;
+    static auto constexpr unit = Voltage::unit;
     static auto constexpr default_value = 5.F;
 
     auto to_display(float value) const -> float {
