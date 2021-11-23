@@ -44,7 +44,7 @@ public:
     configOutput(OutputId::StepPhase, "Step phase");
     configOutput(OutputId::Out, "Scanner");
 
-    auto level_knobs = std::vector<MappedKnobQuantity<VoltageRanges> *>{};
+    auto level_knobs = std::vector<MappedKnobQuantity<Voltage> *>{};
 
     for (auto step = 0; step < N; step++) {
       auto const step_name = "Step " + std::to_string(step + 1) + " ";
@@ -52,9 +52,9 @@ public:
       Switch::config<AnchorSources>(
           this, ParamId::StepPhase0AnchorSource + step,
           step_name + "phase 0 anchor source", AnchorSource::Out);
-      auto *phase_0_level_knob = Knob::config<VoltageRanges>(
-          this, ParamId::StepPhase0AnchorLevel + step,
-          step_name + "phase 0 level");
+      auto *phase_0_level_knob =
+          Knob::config<Voltage>(this, ParamId::StepPhase0AnchorLevel + step,
+                                step_name + "phase 0 level");
       level_knobs.push_back(phase_0_level_knob);
       configInput(InputId::StepPhase0AnchorLevelCv + step,
                   step_name + "phase 0 level CV");
@@ -65,9 +65,9 @@ public:
       Switch::config<AnchorSources>(
           this, ParamId::StepPhase1AnchorSource + step,
           step_name + "phase 1 anchor source", AnchorSource::Level);
-      auto *phase_1_level_knob = Knob::config<VoltageRanges>(
-          this, ParamId::StepPhase1AnchorLevel + step,
-          step_name + "phase 1 level");
+      auto *phase_1_level_knob =
+          Knob::config<Voltage>(this, ParamId::StepPhase1AnchorLevel + step,
+                                step_name + "phase 1 level");
       level_knobs.push_back(phase_1_level_knob);
       configInput(InputId::StepPhase1AnchorLevelCv + step,
                   step_name + "phase 1 level CV");
@@ -118,7 +118,7 @@ public:
     auto const rotation = rotation_of(params[base_knob_param + step],
                                       inputs[base_cv_input + step]);
     auto const range_id = value_of<VoltageRangeId>(params[ParamId::LevelRange]);
-    return VoltageRanges::scale(rotation, range_id);
+    return Voltage::scale(rotation, range_id);
   }
 
   auto anchor_source(AnchorType type, int step) const -> AnchorSource {

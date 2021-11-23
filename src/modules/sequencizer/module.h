@@ -53,7 +53,7 @@ public:
     configOutput(OutputId::SequenceEventPulse, "Start of sequence");
     configOutput(OutputId::Out, "Sequencer");
 
-    auto level_knobs = std::vector<MappedKnobQuantity<VoltageRanges> *>{};
+    auto level_knobs = std::vector<MappedKnobQuantity<Voltage> *>{};
     auto duration_knobs = std::vector<MappedKnobQuantity<Duration> *>{};
 
     for (auto step = 0; step < N; step++) {
@@ -70,9 +70,9 @@ public:
       Switch::config<AnchorModes>(this, ParamId::StepStartAnchorMode + step,
                                   step_name + "start anchor mode",
                                   AnchorMode::Sample);
-      auto *start_level_knob = Knob::config<VoltageRanges>(
-          this, ParamId::StepStartAnchorLevel + step,
-          step_name + "start level");
+      auto *start_level_knob =
+          Knob::config<Voltage>(this, ParamId::StepStartAnchorLevel + step,
+                                step_name + "start level");
       level_knobs.push_back(start_level_knob);
       Switch::config<AnchorSources>(this, ParamId::StepStartAnchorSource + step,
                                     step_name + "start anchor source",
@@ -81,7 +81,7 @@ public:
       Switch::config<AnchorModes>(this, ParamId::StepEndAnchorMode + step,
                                   step_name + "end anchor mode",
                                   AnchorMode::Track);
-      auto *end_level_knob = Knob::config<VoltageRanges>(
+      auto *end_level_knob = Knob::config<Voltage>(
           this, ParamId::StepEndAnchorLevel + step, step_name + "end level");
       level_knobs.push_back(end_level_knob);
       Switch::config<AnchorSources>(this, ParamId::StepEndAnchorSource + step,

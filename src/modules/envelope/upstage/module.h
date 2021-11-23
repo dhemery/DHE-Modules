@@ -19,8 +19,7 @@ struct Module : public rack::engine::Module {
   Module() {
     config(ParamId::Count, InputId::Count, OutputId::Count);
 
-    auto *level_knob =
-        Knob::config<VoltageRanges>(this, ParamId::Level, "Level");
+    auto *level_knob = Knob::config<Voltage>(this, ParamId::Level, "Level");
     auto select_level_range = [level_knob](VoltageRangeId id) {
       level_knob->mapper().select_range(id);
     };

@@ -1,7 +1,6 @@
 #pragma once
 
 #include "components/sigmoid.h"
-#include "enums.h"
 
 #include <string>
 #include <vector>

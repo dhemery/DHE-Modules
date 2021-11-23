@@ -81,7 +81,7 @@ struct Signals {
     auto const rotation = value_of(params_[ParamId::StepLevel + step]);
     auto const range_id =
         value_of<VoltageRangeId>(params_[ParamId::LevelRange]);
-    return VoltageRanges::scale(rotation, range_id);
+    return Voltage::scale(rotation, range_id);
   }
 
   auto output() const -> float { return outputs_[OutputId::Main].getVoltage(); }

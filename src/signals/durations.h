@@ -2,7 +2,6 @@
 
 #include "components/range.h"
 #include "components/sigmoid.h"
-#include "enums.h"
 
 #include <array>
 #include <string>
@@ -26,14 +25,12 @@ static auto constexpr unit = " s";
  * decimal places).
  */
 
-static inline auto scale(float rotation, Range range) -> float {
-  auto tapered = JShape::apply(rotation, knob_curvature);
-  return range.scale(tapered);
+static constexpr auto scale(float rotation, Range range) -> float {
+  return range.scale(JShape::apply(rotation, knob_curvature));
 }
 
-static inline auto normalize(float seconds, Range range) -> float {
-  auto const tapered = range.normalize(seconds);
-  return JShape::invert(tapered, knob_curvature);
+static constexpr auto normalize(float seconds, Range range) -> float {
+  return JShape::invert(range.normalize(seconds), knob_curvature);
 }
 
 static auto constexpr short_range = Range{0.001F, 1.F};
@@ -53,17 +50,17 @@ struct Long {
 };
 
 template <typename D> struct Mapped : D {
-  static inline auto scale(float normalized) -> float {
+  static constexpr auto scale(float normalized) -> float {
     return duration::scale(normalized, D::range);
   }
 
-  static inline auto normalize(float scaled) -> float {
+  static constexpr auto normalize(float scaled) -> float {
     return duration::normalize(scaled, D::range);
   }
 
   struct KnobMap {
     static auto constexpr unit = duration::unit;
-    static auto constexpr default_value = 1.F;
+    static auto constexpr default_value = scale(0.5F);
     auto to_display(float rotation) const -> float { return scale(rotation); }
 
     auto to_value(float display) const -> float { return normalize(display); }

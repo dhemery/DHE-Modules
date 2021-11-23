@@ -63,7 +63,7 @@ struct Signals {
                     params_[ParamId::LevelMultiplier]);
     auto const range_id =
         value_of<VoltageRangeId>(params_[ParamId::LevelRange]);
-    return VoltageRanges::scale(rotation, range_id);
+    return Voltage::scale(rotation, range_id);
   }
 
   auto anchor_source(AnchorType type, int step) const -> AnchorSource {

@@ -50,7 +50,7 @@ template <int N> struct Module : rack::engine::Module {
     Knob::config<SelectionLength<N>>(this, ParamId::SelectionLength,
                                      "Sequence length", N);
 
-    auto level_knobs = std::vector<MappedKnobQuantity<VoltageRanges> *>{};
+    auto level_knobs = std::vector<MappedKnobQuantity<Voltage> *>{};
     auto duration_knobs = std::vector<MappedKnobQuantity<Duration> *>{};
 
     for (auto step = 0; step < N; step++) {
@@ -63,8 +63,8 @@ template <int N> struct Module : rack::engine::Module {
       Switch::config<AdvanceModes>(this, ParamId::StepAdvanceMode + step,
                                    step_name + "advance mode",
                                    AdvanceMode::TimerExpires);
-      auto *level_knob = Knob::config<VoltageRanges>(
-          this, ParamId::StepLevel + step, step_name + "level");
+      auto *level_knob = Knob::config<Voltage>(this, ParamId::StepLevel + step,
+                                               step_name + "level");
       level_knobs.push_back(level_knob);
 
       Switch::config<Shapes>(this, ParamId::StepShape + step,

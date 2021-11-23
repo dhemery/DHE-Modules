@@ -3,11 +3,8 @@
 #include "components/range.h"
 #include "components/sigmoid.h"
 #include "controls/knobs.h"
-#include "signals/enums.h"
 
 #include "rack.hpp"
-
-#include <vector>
 
 namespace dhe {
 namespace xycloid {

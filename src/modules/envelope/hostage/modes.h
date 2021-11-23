@@ -1,6 +1,7 @@
 #pragma once
 
-#include "signals/enums.h"
+#include <string>
+#include <vector>
 
 namespace dhe {
 namespace envelope {
@@ -8,10 +9,11 @@ namespace hostage {
 
 enum class Mode { Hold, Sustain };
 
-struct Modes : Enums<Mode, 2> {
-  static inline auto labels() -> std::vector<std::string> const & {
-    static auto const labels = std::vector<std::string>{"Hold", "Sustain"};
-    return labels;
+struct Modes {
+  using value_type = Mode;
+  static auto constexpr size = 2;
+  static inline auto labels() -> std::vector<std::string> {
+    return std::vector<std::string>{"Hold", "Sustain"};
   }
 };
 

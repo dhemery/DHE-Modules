@@ -52,7 +52,7 @@ public:
         rotation_of(params_[ParamId::Level], inputs_[InputId::LevelCv]);
     auto const range_id =
         value_of<VoltageRangeId>(params_[ParamId::LevelRange]);
-    return VoltageRanges::scale(rotation, range_id);
+    return Voltage::scale(rotation, range_id);
   }
 
   void output(float voltage) {
@@ -60,14 +60,14 @@ public:
   }
 
   void show_active(bool is_active) {
-    auto const voltage = VoltageRanges::scale(is_active || active_button(),
-                                              VoltageRangeId::Unipolar);
+    auto const voltage =
+        Voltage::scale(is_active || active_button(), VoltageRangeId::Unipolar);
     outputs_[OutputId::Active].setVoltage(voltage);
   }
 
   void show_eoc(bool is_eoc) {
-    auto const voltage = VoltageRanges::scale(is_eoc || active_button(),
-                                              VoltageRangeId::Unipolar);
+    auto const voltage =
+        Voltage::scale(is_eoc || active_button(), VoltageRangeId::Unipolar);
     outputs_[OutputId::Eoc].setVoltage(voltage);
   }
 

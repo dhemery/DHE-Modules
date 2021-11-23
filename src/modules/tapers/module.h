@@ -22,7 +22,7 @@ public:
     config(ParamId::Count, InputId::Count, OutputId::Count);
 
     auto *level_knob_1 =
-        Knob::config<VoltageRanges>(this, ParamId::Level1, "Taper 1 level");
+        Knob::config<Voltage>(this, ParamId::Level1, "Taper 1 level");
     auto select_level_1_range = [level_knob_1](VoltageRangeId id) {
       level_knob_1->mapper().select_range(id);
     };
@@ -44,7 +44,7 @@ public:
     configOutput(OutputId::Taper1, "Taper 1");
 
     auto *level_knob_2 =
-        Knob::config<VoltageRanges>(this, ParamId::Level2, "Taper 2 level");
+        Knob::config<Voltage>(this, ParamId::Level2, "Taper 2 level");
     auto select_level_2_range = [level_knob_2](VoltageRangeId id) {
       level_knob_2->mapper().select_range(id);
     };
@@ -104,7 +104,7 @@ private:
   static inline auto tapered(float rotation, Shape::Id shape, float curvature,
                              VoltageRangeId range_id) -> float {
     auto const tapered = Shape::apply(rotation, shape, curvature);
-    return VoltageRanges::scale(tapered, range_id);
+    return Voltage::scale(tapered, range_id);
   }
 
   auto voltage_range(int id) const -> VoltageRangeId {

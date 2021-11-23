@@ -32,7 +32,7 @@ struct Module : public rack::engine::Module {
   void process(ProcessArgs const & /*args*/) override {
     auto const normalized = BipolarVoltage::normalize(signal_in());
     auto const tapered = Shape::apply(normalized, shape(), curvature());
-    auto const output_voltage = BipolarVoltage::range().scale(tapered);
+    auto const output_voltage = BipolarVoltage::scale(tapered);
     send_signal(output_voltage);
   }
   auto dataToJson() -> json_t * override {

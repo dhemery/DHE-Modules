@@ -24,7 +24,7 @@ struct Module : public rack::engine::Module {
     Knob::config<Attenuverter>(this, ParamId::LevelAv, "Level CV gain");
 
     auto *ccw_limit_knob =
-        Knob::config<VoltageRanges>(this, ParamId::CcwLimit, "CCW limit", 0.F);
+        Knob::config<Voltage>(this, ParamId::CcwLimit, "CCW limit", 0.F);
     auto select_ccw_limit_range = [ccw_limit_knob](VoltageRangeId id) {
       ccw_limit_knob->mapper().select_range(id);
     };
@@ -35,7 +35,7 @@ struct Module : public rack::engine::Module {
     Knob::config<Attenuverter>(this, ParamId::CcwLimitAv, "CCW limit CV gain");
 
     auto *cw_limit_knob =
-        Knob::config<VoltageRanges>(this, ParamId::CwLimit, "CW limit", 1.F);
+        Knob::config<Voltage>(this, ParamId::CwLimit, "CW limit", 1.F);
     auto select_cw_limit_range = [cw_limit_knob](VoltageRangeId id) {
       cw_limit_knob->mapper().select_range(id);
     };
@@ -69,7 +69,7 @@ private:
   inline auto limit(int knob, int cv, int av, int range) const -> float {
     auto const rotation = rotation_of(params[knob], inputs[cv], params[av]);
     auto const range_id = value_of<VoltageRangeId>(params[range]);
-    return VoltageRanges::scale(rotation, range_id);
+    return Voltage::scale(rotation, range_id);
   }
 
   auto ccw_limit() const -> float {

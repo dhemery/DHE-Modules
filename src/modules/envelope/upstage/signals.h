@@ -30,7 +30,7 @@ template <typename TParam, typename TInput, typename TOutput> struct Signals {
         rotation_of(params_[ParamId::Level], inputs_[InputId::LevelCv]);
     auto const range_id =
         value_of<VoltageRangeId>(params_[ParamId::LevelRange]);
-    return VoltageRanges::scale(rotation, range_id);
+    return Voltage::scale(rotation, range_id);
   }
 
   void send_envelope(float voltage) {
@@ -38,7 +38,7 @@ template <typename TParam, typename TInput, typename TOutput> struct Signals {
   }
 
   void send_trigger(bool is_triggered) {
-    auto const voltage = UnipolarVoltage::range().scale(is_triggered);
+    auto const voltage = UnipolarVoltage::scale(is_triggered);
     outputs_[OutputId::Trigger].setVoltage(voltage);
   }
 
