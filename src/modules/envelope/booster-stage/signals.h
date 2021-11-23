@@ -37,7 +37,7 @@ public:
         rotation_of(params_[ParamId::Duration], inputs_[InputId::DurationCv]);
     auto const range =
         value_of<DurationRangeId>(params_[ParamId::DurationRange]);
-    return DurationRanges::scale(rotation, range);
+    return Duration::scale(rotation, range);
   }
 
   auto gate() const -> bool {

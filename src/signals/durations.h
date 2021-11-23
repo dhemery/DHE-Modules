@@ -4,6 +4,7 @@
 #include "components/sigmoid.h"
 #include "enums.h"
 
+#include <array>
 #include <string>
 #include <vector>
 
@@ -14,7 +15,7 @@ namespace duration {
  * increasing sensitivity in the middle of the knob normalize and decreasing
  * sensitivity toward the extremes.
  */
-static auto constexpr taper_curvature = 0.8018017F;
+static auto constexpr knob_curvature = 0.8018017F;
 
 static auto constexpr unit = " s";
 
@@ -26,118 +27,93 @@ static auto constexpr unit = " s";
  */
 
 static inline auto scale(float rotation, Range range) -> float {
-  auto tapered = JShape::apply(rotation, taper_curvature);
+  auto tapered = JShape::apply(rotation, knob_curvature);
   return range.scale(tapered);
 }
 
 static inline auto normalize(float seconds, Range range) -> float {
   auto const tapered = range.normalize(seconds);
-  return JShape::invert(tapered, taper_curvature);
+  return JShape::invert(tapered, knob_curvature);
 }
 } // namespace duration
 
-template <typename T> struct MappedDurationRange {
-  static auto constexpr max = T::max;
-  static auto constexpr min = max / 1000.F;
-  static auto constexpr default_value = max / 10.F;
-  struct KnobMap;
-
-  static constexpr auto range() -> Range { return Range{min, max}; }
-
-  static inline auto scale(float normalized) -> float {
-    return duration::scale(normalized, range());
-  }
-
-  static inline auto normalize(float scaled) -> float {
-    return duration::normalize(scaled, range());
-  }
-};
-
-template <typename T> struct MappedDurationRange<T>::KnobMap {
-  static auto constexpr default_value = T::max / 10.F;
-  static auto constexpr unit = duration::unit;
-
-  auto to_display(float value) const -> float {
-    return MappedDurationRange<T>::scale(value);
-  }
-
-  auto to_value(float display) const -> float {
-    return MappedDurationRange<T>::normalize(display);
-  }
-};
-
-struct ShortDurationBounds {
-  static auto constexpr max = 1.F;
-};
-struct MediumDurationBounds {
-  static auto constexpr max = 10.F;
-};
-struct LongDurationBounds {
-  static auto constexpr max = 100.F;
-};
-
-struct ShortDuration : MappedDurationRange<ShortDurationBounds> {
-  static auto constexpr label = "0.001–1.0 s";
-};
-
-struct MediumDuration : MappedDurationRange<MediumDurationBounds> {
-  static auto constexpr label = "0.01–10.0 s";
-};
-
-struct LongDuration : MappedDurationRange<LongDurationBounds> {
-  static auto constexpr label = "0.1–100.0 s";
-};
-
 enum class DurationRangeId { Short, Medium, Long };
 
-struct DurationRanges : Enums<DurationRangeId, 3> {
-  struct KnobMap;
+namespace duration_ranges {
+static auto constexpr size = 3;
+static auto constexpr short_range = Range{0.001F, 1.F};
+static auto constexpr medium_range = Range{0.01F, 10.F};
+static auto constexpr long_range = Range{0.1F, 100.F};
+static auto constexpr ranges =
+    std::array<Range, size>{short_range, medium_range, long_range};
 
-  // TODO: Move to SwitchMap
-  static inline auto labels() -> std::vector<std::string> const & {
-    static auto const labels = std::vector<std::string>{
-        ShortDuration::label, MediumDuration::label, LongDuration::label};
-    return labels;
+static auto constexpr labels =
+    std::array<char const *, size>{"0.001–1.0 s", "0.01–10.0 s", "0.1–100.0 s"};
+
+static inline auto label(DurationRangeId id) -> char const * {
+  return labels[static_cast<size_t>(id)];
+}
+
+static inline auto range(DurationRangeId id) -> Range {
+  return ranges[static_cast<size_t>(id)];
+}
+} // namespace duration_ranges
+
+struct DurationRanges {
+  using value_type = DurationRangeId;
+  static auto constexpr size = duration_ranges::size;
+  static inline auto labels() -> std::vector<std::string> {
+    return {duration_ranges::labels.cbegin(), duration_ranges::labels.cend()};
   }
+};
 
+struct Duration {
   static inline auto scale(float normalized, DurationRangeId range_id)
       -> float {
-    return duration::scale(normalized, range(range_id));
+    return duration::scale(normalized, duration_ranges::range(range_id));
   }
 
   static inline auto normalize(float scaled, DurationRangeId range_id)
       -> float {
-    return duration::normalize(scaled, range(range_id));
+    return duration::normalize(scaled, duration_ranges::range(range_id));
   }
 
-  static inline auto range(DurationRangeId id) -> Range {
-    return ranges()[static_cast<int>(id)];
-  }
+  struct KnobMap {
+    static auto constexpr unit = duration::unit;
+    static auto constexpr default_value = 1.F;
 
-  static inline auto ranges() -> std::vector<Range> const & {
-    static auto const ranges = std::vector<Range>{
-        ShortDuration::range(), MediumDuration::range(), LongDuration::range()};
-    return ranges;
-  }
+    auto to_display(float rotation) const -> float {
+      return scale(rotation, range_id_);
+    }
+
+    auto to_value(float display) const -> float {
+      return normalize(display, range_id_);
+    }
+
+    void select_range(DurationRangeId id) { range_id_ = id; }
+
+  private:
+    DurationRangeId range_id_{DurationRangeId::Medium};
+  };
 };
 
-struct DurationRanges::KnobMap {
-  static auto constexpr unit = duration::unit;
-  static auto constexpr default_value =
-      MediumDuration::default_value; // Centere
+struct MediumDuration {
+  static auto constexpr &range = duration_ranges::medium_range;
 
-  auto to_display(float rotation) const -> float {
-    return scale(rotation, range_id_);
+  static inline auto scale(float normalized) -> float {
+    return duration::scale(normalized, range);
   }
 
-  auto to_value(float display) const -> float {
-    return normalize(display, range_id_);
+  static inline auto normalize(float scaled) -> float {
+    return duration::normalize(scaled, range);
   }
 
-  void select_range(DurationRangeId id) { range_id_ = id; }
+  struct KnobMap {
+    static auto constexpr default_value = 1.F;
+    static auto constexpr unit = duration::unit;
+    auto to_display(float rotation) const -> float { return scale(rotation); }
 
-private:
-  DurationRangeId range_id_{DurationRangeId::Medium};
+    auto to_value(float display) const -> float { return normalize(display); }
+  };
 };
-
 } // namespace dhe

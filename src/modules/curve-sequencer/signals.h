@@ -43,7 +43,7 @@ struct Signals {
     auto const rotation = value_of(params_[ParamId::StepDuration + step]);
     auto const range =
         value_of<DurationRangeId>(params_[ParamId::DurationRange]);
-    return DurationRanges::scale(rotation, range);
+    return Duration::scale(rotation, range);
   }
 
   auto generate_mode(int step) const -> GenerateMode {

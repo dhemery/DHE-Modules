@@ -54,7 +54,7 @@ public:
     configOutput(OutputId::Out, "Sequencer");
 
     auto level_knobs = std::vector<MappedKnobQuantity<VoltageRanges> *>{};
-    auto duration_knobs = std::vector<MappedKnobQuantity<DurationRanges> *>{};
+    auto duration_knobs = std::vector<MappedKnobQuantity<Duration> *>{};
 
     for (auto step = 0; step < N; step++) {
       auto const step_name = "Step " + std::to_string(step + 1) + " ";
@@ -90,7 +90,7 @@ public:
 
       Knob::config<Curvature>(this, ParamId::StepCurvature + step,
                               step_name + "curvature");
-      auto *duration_knob = Knob::config<DurationRanges>(
+      auto *duration_knob = Knob::config<Duration>(
           this, ParamId::StepDuration + step, step_name + "duration");
       duration_knobs.push_back(duration_knob);
 

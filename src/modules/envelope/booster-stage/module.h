@@ -43,7 +43,7 @@ struct Module : public rack::engine::Module {
     configInput(InputId::CurvatureCv, "Curvature CV");
 
     auto *duration_knob =
-        Knob::config<DurationRanges>(this, ParamId::Duration, "Duration");
+        Knob::config<Duration>(this, ParamId::Duration, "Duration");
     auto select_duration_range = [duration_knob](DurationRangeId range) {
       duration_knob->mapper().select_range(range);
     };

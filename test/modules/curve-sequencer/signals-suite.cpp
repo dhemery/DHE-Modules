@@ -8,8 +8,8 @@
 
 namespace test {
 namespace curve_sequencer {
+using dhe::Duration;
 using dhe::DurationRangeId;
-using dhe::DurationRanges;
 using dhe::Shape;
 using dhe::curve_sequencer::AdvanceMode;
 using dhe::curve_sequencer::GenerateMode;
@@ -178,8 +178,8 @@ public:
                 static_cast<float>(duration_range_id));
 
             auto const got = signals.duration(step);
-            auto const want = DurationRanges::scale(duration_knob_rotation,
-                                                    duration_range_id);
+            auto const want =
+                Duration::scale(duration_knob_rotation, duration_range_id);
             if (got != want) {
               t.errorf("Got {}, want {}", got, want);
             }

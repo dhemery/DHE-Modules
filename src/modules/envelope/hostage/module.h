@@ -31,7 +31,7 @@ struct Module : public rack::engine::Module {
     configOutput(OutputId::Envelope, "Stage");
 
     auto *duration_knob =
-        Knob::config<DurationRanges>(this, ParamId::Duration, "Duration");
+        Knob::config<Duration>(this, ParamId::Duration, "Duration");
     auto select_duration_range = [duration_knob](DurationRangeId range_id) {
       duration_knob->mapper().select_range(range_id);
     };
