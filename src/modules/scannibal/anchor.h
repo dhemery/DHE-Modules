@@ -37,7 +37,7 @@ static auto constexpr names = std::array<char const *, size>{
     "AnchorSource::InC",   "AnchorSource::Out",
 };
 
-static constexpr auto name(AnchorSource s) -> char const * {
+static inline auto name(AnchorSource s) -> char const * {
   return names[static_cast<size_t>(s)];
 }
 
