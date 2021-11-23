@@ -1,11 +1,13 @@
 #pragma once
 
-#include "components/range.h"
 #include "control-ids.h"
-#include "params.h"
+#include "multiplier.h"
+#include "offset.h"
+#include "operation.h"
+
+#include "components/range.h"
 #include "signals/basic.h"
 
-#include <array>
 #include <vector>
 
 namespace dhe {

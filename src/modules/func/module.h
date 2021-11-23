@@ -1,9 +1,13 @@
 #pragma once
 #include "control-ids.h"
 #include "engine.h"
-#include "params.h"
+#include "multiplier.h"
+#include "offset.h"
+#include "operation.h"
 #include "signals.h"
 
+#include "controls/knobs.h"
+#include "controls/switches.h"
 #include "params/presets.h"
 
 #include "rack.hpp"
@@ -49,8 +53,8 @@ private:
     auto const operand_knob_names =
         std::vector<std::string>{offset_knob_name, multiplier_knob_name};
 
-    auto *operand_knob = Knob::config<Operations>(
-        this, ParamId::Operand + channel, offset_knob_name);
+    auto *operand_knob = Knob::config<Operand>(this, ParamId::Operand + channel,
+                                               offset_knob_name);
 
     auto select_operation = [operand_knob, multiplier_knob_name,
                              offset_knob_name](Operation op) {

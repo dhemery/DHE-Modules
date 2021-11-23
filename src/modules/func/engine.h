@@ -1,6 +1,8 @@
 #pragma once
 
-#include "params.h"
+#include "multiplier.h"
+#include "offset.h"
+#include "operation.h"
 
 namespace dhe {
 
@@ -24,14 +26,14 @@ private:
   auto add(int channel, float augend) const -> float {
     auto const rotation = signals_.operand(channel);
     auto const range_id = signals_.offset_range(channel);
-    auto const addend = OffsetRanges::scale(rotation, range_id);
+    auto const addend = offset_ranges::scale(rotation, range_id);
     return augend + addend;
   }
 
   auto multiply(int channel, float multiplicand) const -> float {
     auto const rotation = signals_.operand(channel);
     auto const range_id = signals_.multiplier_range(channel);
-    auto const multiplier = MultiplierRanges::scale(rotation, range_id);
+    auto const multiplier = multiplier_ranges::scale(rotation, range_id);
     return multiplicand * multiplier;
   }
 
