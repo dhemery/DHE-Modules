@@ -7,7 +7,7 @@
 
 namespace dhe {
 struct Shapes {
-  using value_type = Shape::Id; // NOLINT
+  using ValueType = Shape::Id;
   static auto constexpr size = 2;
   static auto constexpr unit = "";
   static auto constexpr stepper_slug = "shape";

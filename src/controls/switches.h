@@ -14,7 +14,7 @@ namespace dhe {
 
 struct Switch {
   template <typename P, typename S, typename V> struct Config {
-    using value_type = typename V::value_type; // NOLINT
+    using ValueType = typename V::ValueType;
     static auto constexpr size = V::size;
     static auto constexpr svg_dir = P::svg_dir;
     static auto constexpr slug = S::slug;
@@ -32,12 +32,12 @@ struct Switch {
   template <typename T>
   static inline auto config(rack::engine::Module *module, int id,
                             std::string const &name,
-                            typename T::value_type value)
-      -> SwitchQuantity<typename T::value_type> * {
+                            typename T::ValueType value)
+      -> SwitchQuantity<typename T::ValueType> * {
     auto const labels = T::labels();
     auto const max = static_cast<float>(labels.size() - 1);
     auto const default_value = static_cast<float>(value);
-    return module->configSwitch<SwitchQuantity<typename T::value_type>>(
+    return module->configSwitch<SwitchQuantity<typename T::ValueType>>(
         id, 0.F, max, default_value, name, labels);
   }
 };

@@ -33,7 +33,7 @@ static inline auto operator<<(std::ostream &os, SustainMode m)
 }
 
 struct SustainModes {
-  using value_type = SustainMode;
+  using ValueType = SustainMode;
   static auto constexpr size = sustain_mode::size;
   static auto constexpr stepper_slug = "sustain-mode";
 

@@ -35,7 +35,7 @@ static auto constexpr values = std::array<TriggerMode, size>{
 } // namespace trigger_mode
 
 struct TriggerModes {
-  using value_type = TriggerMode;
+  using ValueType = TriggerMode;
   static auto constexpr size = trigger_mode::size;
   static auto constexpr stepper_slug = "trigger-mode";
 

@@ -29,7 +29,7 @@ static auto constexpr values = std::array<InterruptMode, 2>{
 } // namespace interrupt_mode
 
 struct InterruptModes {
-  using value_type = InterruptMode;
+  using ValueType = InterruptMode;
   static auto constexpr size = interrupt_mode::size;
   static auto constexpr stepper_slug = "interrupt-mode";
 

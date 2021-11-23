@@ -12,25 +12,29 @@ enum class VoltageRangeId { Bipolar, Unipolar };
 namespace internal {
 namespace voltage {
 static auto constexpr unit = " V";
-static auto constexpr bipolar_range = Range{-5.F, 5.F};
-static auto constexpr unipolar_range = Range{0.F, 10.F};
 
-struct BipolarQuantity {
+namespace bipolar {
+static auto constexpr range = Range{-5.F, 5.F};
+struct Quantity {
   static auto constexpr default_value = 0.F;
-  static auto constexpr &display_range = bipolar_range;
-  static auto constexpr &range = bipolar_range;
+  static auto constexpr &display_range = bipolar::range;
+  static auto constexpr &range = bipolar::range;
   static auto constexpr unit = voltage::unit;
 };
+} // namespace bipolar
 
-struct UnipolarQuantity {
+namespace unipolar {
+static auto constexpr range = Range{0.F, 10.F};
+struct Quantity {
   static auto constexpr default_value = 5.F;
-  static auto constexpr &display_range = unipolar_range;
-  static auto constexpr &range = unipolar_range;
+  static auto constexpr &display_range = unipolar::range;
+  static auto constexpr &range = unipolar::range;
   static auto constexpr unit = voltage::unit;
 };
+} // namespace unipolar
 
 static auto constexpr ranges =
-    std::array<Range, 2>{voltage::bipolar_range, voltage::unipolar_range};
+    std::array<Range, 2>{bipolar::range, unipolar::range};
 static auto constexpr labels =
     std::array<char const *, ranges.size()>{"±5 V", "0–10 V"};
 
@@ -41,7 +45,7 @@ static inline auto range(VoltageRangeId id) -> Range {
 } // namespace internal
 
 struct VoltageRanges {
-  using value_type = VoltageRangeId;
+  using ValueType = VoltageRangeId;
   static auto constexpr size = internal::voltage::ranges.size();
   static inline auto labels() -> std::vector<std::string> {
     return {internal::voltage::labels.cbegin(),
@@ -49,8 +53,8 @@ struct VoltageRanges {
   }
 };
 
-struct BipolarVoltage : LinearKnob<internal::voltage::BipolarQuantity> {};
-struct UnipolarVoltage : LinearKnob<internal::voltage::UnipolarQuantity> {};
+struct BipolarVoltage : LinearKnob<internal::voltage::bipolar::Quantity> {};
+struct UnipolarVoltage : LinearKnob<internal::voltage::unipolar::Quantity> {};
 
 struct Voltage {
   static auto constexpr unit = internal::voltage::unit;

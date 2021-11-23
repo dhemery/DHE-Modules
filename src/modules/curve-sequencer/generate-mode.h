@@ -26,7 +26,7 @@ static inline auto name(GenerateMode mode) -> std::string {
 } // namespace generate_mode
 
 struct GenerateModes {
-  using value_type = GenerateMode;
+  using ValueType = GenerateMode;
   static auto constexpr size = generate_mode::size;
   static auto constexpr stepper_slug = "generate-mode";
 

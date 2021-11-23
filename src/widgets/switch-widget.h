@@ -9,7 +9,7 @@
 
 namespace dhe {
 template <typename T> struct SwitchWidget : public rack::app::SvgSwitch {
-  using Value = typename T::value_type;
+  using Value = typename T::ValueType;
   using Action = std::function<void(Value)>;
 
   SwitchWidget() {

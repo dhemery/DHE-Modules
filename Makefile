@@ -31,18 +31,19 @@ DHEUNIT_INCLUDE_DIR = $(DHEUNIT_SRC)/dheunit
 $(DHEUNIT_INCLUDE_DIR):
 	git submodule update --init --recursive
 
+RACK_INCLUDES = -I$(RACK_DIR)/include -I$(RACK_DIR)/dep/include
+TEST_INCLUDES =  -Itest -I$(DHEUNIT_SRC)
+TEST_CXXFLAGS = $(filter-out $(RACK_INCLUDES),$(CXXFLAGS)) $(TEST_INCLUDES) 
+
 TEST_SOURCES = $(shell find test -name "*.cpp")
 
 TEST_OBJECTS := $(patsubst %, build/%.o, $(TEST_SOURCES))
 -include $(TEST_OBJECTS:.o=.d)
 
-TEST_RUNNER = build/dheunit
-
-RACK_INCLUDES = -I$(RACK_DIR)/include -I$(RACK_DIR)/dep/include
-TEST_CXX_FLAGS := $(filter-out $(RACK_INCLUDES),$(CXXFLAGS)) -Itest -I$(DHEUNIT_SRC)
-
 $(TEST_OBJECTS): $(DHEUNIT_INCLUDE_DIR)
-$(TEST_OBJECTS): FLAGS := $(TEST_CXX_FLAGS)
+$(TEST_OBJECTS): CXXFLAGS := $(TEST_CXXFLAGS)
+
+TEST_RUNNER = build/dheunit
 
 $(TEST_RUNNER): $(TEST_OBJECTS)
 	@mkdir -p $(@D)
@@ -112,28 +113,29 @@ HEADERS = $(shell find src test -name "*.h")
 format:
 	clang-format -i -style=file $(HEADERS) $(SOURCES) $(TEST_SOURCES)
 
-COMPILATION_DB = compile_commands.json
+COMPILATION_DB_PLUGIN_ENTRIES := $(patsubst %, build/%.json, $(SOURCES))
 
-COMPILATION_DB_ENTRIES := $(patsubst %, build/%.json, $(SOURCES) $(TEST_SOURCES))
+COMPILATION_DB_TEST_ENTRIES := $(patsubst %, build/%.json, $(TEST_SOURCES))
+$(COMPILATION_DB_TEST_ENTRIES): CXXFLAGS := $(TEST_CXXFLAGS)
+
+COMPILATION_DB_ENTRIES := $(COMPILATION_DB_PLUGIN_ENTRIES) $(COMPILATION_DB_TEST_ENTRIES)
+
+COMPILATION_DB = compile_commands.json
 
 $(COMPILATION_DB): $(COMPILATION_DB_ENTRIES)
 	sed -e '1s/^/[/' -e '$$s/,$$/]/' $^ | json_pp > $@
 
 setup: $(COMPILATION_DB)
 
-.PHONY: cleancdb
-cleancdb:
-	rm -rf $(COMPILATION_DB)
+.PHONY: cleansetup
+cleansetup:
+	rm -rf $(COMPILATION_DB) $(COMPILATION_DB_ENTRIES)
 
-clean: cleancdb
+clean: cleansetup
 
-build/src/%.json: src/%
+build/%.json: %
 	@mkdir -p $(@D)
 	$(CXX) $(CXXFLAGS) -MJ $@ -c -o build/$^.o $^
-
-build/test/%.json: test/%
-	@mkdir -p $(@D)
-	$(CXX) $(TEST_CXX_FLAGS) -MJ $@ -c -o build/$^.o $^
 
 .PHONY: tidy
 tidy: $(COMPILATION_DB)
@@ -149,5 +151,3 @@ iwyu:
 	$(MAKE) -Bi CXX='$(IWYU)' $(OBJECTS) $(TEST_OBJECTS)
 
 check: tidy iwyu
-
-clion: $(OBJECTS) $(TEST_RUNNER)

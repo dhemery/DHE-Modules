@@ -35,7 +35,7 @@ static inline auto normalize(float scaled, OffsetRangeId range_id) -> float {
 } // namespace offset_ranges
 
 struct OffsetRanges {
-  using value_type = OffsetRangeId;
+  using ValueType = OffsetRangeId;
   static auto constexpr size = offset_ranges::size;
   static auto constexpr stepper_slug = "offset-range";
   static auto constexpr unit = Voltage::unit;

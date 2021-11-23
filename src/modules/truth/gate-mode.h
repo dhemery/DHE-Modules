@@ -24,7 +24,7 @@ static auto constexpr labels = std::array<char const *, size>{
 } // namespace gate_mode
 
 struct GateModes {
-  using value_type = GateMode;
+  using ValueType = GateMode;
   static auto constexpr size = gate_mode::size;
   static auto constexpr stepper_slug = "gate-mode";
 

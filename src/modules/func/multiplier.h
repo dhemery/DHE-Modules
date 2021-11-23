@@ -36,7 +36,7 @@ static inline auto normalize(float scaled, MultiplierRangeId range_id)
 } // namespace multiplier_ranges
 
 struct MultiplierRanges {
-  using value_type = MultiplierRangeId;
+  using ValueType = MultiplierRangeId;
   static auto constexpr size = multiplier_ranges::size;
   static auto constexpr stepper_slug = "multiplier-range";
   static auto constexpr unit = "";

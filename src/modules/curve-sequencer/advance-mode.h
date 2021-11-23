@@ -39,7 +39,7 @@ static inline auto name(AdvanceMode mode) -> std::string {
 } // namespace advance_mode
 
 struct AdvanceModes {
-  using value_type = AdvanceMode;
+  using ValueType = AdvanceMode;
   static auto constexpr size = advance_mode::size;
   static auto constexpr stepper_slug = "advance-mode";
 

@@ -10,7 +10,7 @@ namespace hostage {
 enum class Mode { Hold, Sustain };
 
 struct Modes {
-  using value_type = Mode;
+  using ValueType = Mode;
   static auto constexpr size = 2;
   static inline auto labels() -> std::vector<std::string> {
     return std::vector<std::string>{"Hold", "Sustain"};

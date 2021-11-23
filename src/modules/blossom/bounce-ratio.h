@@ -49,7 +49,7 @@ private:
 
 struct BounceRatioModes {
   static auto constexpr size = bounce_ratio::size;
-  using value_type = BounceRatioMode;
+  using ValueType = BounceRatioMode;
 
   static auto labels() -> std::vector<std::string> {
     return {bounce_ratio::names.cbegin(), bounce_ratio::names.cend()};

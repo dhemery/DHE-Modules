@@ -20,7 +20,7 @@ static auto constexpr names =
 } // namespace outcome
 
 struct Outcomes {
-  using value_type = Outcome;
+  using ValueType = Outcome;
   static auto constexpr size = outcome::size;
   static constexpr auto stepper_slug = "outcome";
   static inline auto labels() -> std::vector<std::string> {

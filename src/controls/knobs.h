@@ -31,7 +31,7 @@ struct Tiny {
 
 struct Knob {
   template <typename P, typename S, typename V> struct Config {
-    using value_type = V; // NOLINT
+    using ValueType = V;
     static auto constexpr svg_dir = P::svg_dir;
     static auto constexpr svg_file = S::svg_file;
   };
@@ -40,19 +40,16 @@ struct Knob {
   using Widget = KnobWidget<Config<P, S, V>>;
 
   template <typename, typename = void>
-  struct defines_int_range // NOLINT
-      : std::false_type {};
+  struct DefinesIntRange : std::false_type {};
 
   template <typename T>
-  struct defines_int_range<T, void_t<decltype(T::min), decltype(T::max)>>
+  struct DefinesIntRange<T, void_t<decltype(T::min), decltype(T::max)>>
       : std::is_integral<decltype(T::min)> {};
 
-  template <typename, typename = void>
-  struct has_knob_map // NOLINT
-      : std::false_type {};
+  template <typename, typename = void> struct HasKnobMap : std::false_type {};
 
   template <typename T>
-  struct has_knob_map<T, void_t<typename T::KnobMap>> : std::true_type {};
+  struct HasKnobMap<T, void_t<typename T::KnobMap>> : std::true_type {};
 
   template <typename S, typename V = float, typename P>
   static inline auto install(P *panel, int id, float xmm, float ymm)
@@ -68,7 +65,7 @@ struct Knob {
   template <typename T>
   static inline auto config(rack::engine::Module *module, int id,
                             std::string const &name, int value)
-      -> enable_if_t<defines_int_range<T>::value, RangedKnobQuantity<int> *> {
+      -> enable_if_t<DefinesIntRange<T>::value, RangedKnobQuantity<int> *> {
     auto const min = static_cast<float>(T::min);
     auto const max = static_cast<float>(T::max);
     auto const default_value = static_cast<float>(value);
@@ -83,7 +80,7 @@ struct Knob {
   static inline auto config(rack::engine::Module *module, int id,
                             std::string const &name,
                             float value = T::KnobMap::default_value)
-      -> enable_if_t<has_knob_map<T>::value, MappedKnobQuantity<T> *> {
+      -> enable_if_t<HasKnobMap<T>::value, MappedKnobQuantity<T> *> {
     auto const mapper = typename T::KnobMap{};
     auto const default_rotation = mapper.to_value(value);
     return module->configParam<MappedKnobQuantity<T>>(

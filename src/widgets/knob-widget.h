@@ -6,7 +6,7 @@
 
 namespace dhe {
 template <typename T> struct KnobWidget : public rack::app::SvgKnob {
-  using Value = typename T::value_type;
+  using Value = typename T::ValueType;
   using Action = std::function<void(Value)>;
 
   KnobWidget() {

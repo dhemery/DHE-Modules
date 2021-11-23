@@ -15,7 +15,7 @@ static auto constexpr labels =
 } // namespace anchor_mode
 
 struct AnchorModes {
-  using value_type = AnchorMode;
+  using ValueType = AnchorMode;
   static auto constexpr size = anchor_mode::size;
   static auto constexpr stepper_slug = "anchor-mode";
 
@@ -48,7 +48,7 @@ static auto constexpr values = std::array<AnchorSource, size>{
 } // namespace anchor_source
 
 struct AnchorSources {
-  using value_type = AnchorSource;
+  using ValueType = AnchorSource;
   static auto constexpr size = anchor_source::size;
   static constexpr auto stepper_slug = "anchor-source";
   static inline auto labels() -> std::vector<std::string> {

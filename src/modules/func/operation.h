@@ -18,7 +18,7 @@ static auto constexpr labels =
 } // namespace operations
 
 struct Operations {
-  using value_type = Operation;
+  using ValueType = Operation;
   static auto constexpr size = operations::size;
 
   static inline auto labels() -> std::vector<std::string> {

@@ -38,24 +38,29 @@ static inline auto normalize(float seconds, Range range) -> float {
   return JShape::invert(tapered, knob_curvature);
 }
 
-static auto constexpr short_range = Range{0.001F, 1.F};
-static auto constexpr medium_range = Range{0.01F, 10.F};
-static auto constexpr long_range = Range{0.1F, 100.F};
-
-struct Short {
-  static auto constexpr &range = short_range;
+namespace short_ {
+static auto constexpr range = Range{0.001F, 1.F};
+struct Quantity {
+  static auto constexpr &range = short_::range;
 };
+} // namespace short_
 
-struct Medium {
-  static auto constexpr &range = medium_range;
+namespace medium_ {
+static auto constexpr range = Range{0.01F, 10.F};
+struct Quantity {
+  static auto constexpr &range = medium_::range;
 };
+} // namespace medium_
 
-struct Long {
-  static auto constexpr &range = long_range;
+namespace long_ {
+static auto constexpr range = Range{0.1F, 100.F};
+struct Quantity {
+  static auto constexpr &range = long_::range;
 };
+} // namespace long_
 
 static auto constexpr ranges =
-    std::array<Range, 3>{Short::range, Medium::range, Long::range};
+    std::array<Range, 3>{short_::range, medium_::range, long_::range};
 
 static auto constexpr labels = std::array<char const *, ranges.size()>{
     "0.001–1.0 s", "0.01–10.0 s", "0.1–100.0 s"};
@@ -90,7 +95,7 @@ static inline auto range(DurationRangeId id) -> Range {
 } // namespace internal
 
 struct DurationRanges {
-  using value_type = DurationRangeId;
+  using ValueType = DurationRangeId;
   static auto constexpr size = internal::duration::ranges.size();
   static inline auto labels() -> std::vector<std::string> {
     return {internal::duration::labels.cbegin(),
@@ -98,11 +103,12 @@ struct DurationRanges {
   }
 };
 
-struct ShortDuration : internal::duration::Quantity<internal::duration::Short> {
-};
+struct ShortDuration
+    : internal::duration::Quantity<internal::duration::short_::Quantity> {};
 struct MediumDuration
-    : internal::duration::Quantity<internal::duration::Medium> {};
-struct LongDuration : internal::duration::Quantity<internal::duration::Long> {};
+    : internal::duration::Quantity<internal::duration::medium_::Quantity> {};
+struct LongDuration
+    : internal::duration::Quantity<internal::duration::long_::Quantity> {};
 
 struct Duration {
   static inline auto scale(float normalized, DurationRangeId range_id)
