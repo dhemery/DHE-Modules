@@ -39,14 +39,14 @@ TEST_OBJECTS := $(patsubst %, build/%.o, $(TEST_SOURCES))
 TEST_RUNNER = build/dheunit
 
 RACK_INCLUDES = -I$(RACK_DIR)/include -I$(RACK_DIR)/dep/include
-TEST_CXX_FLAGS := $(filter-out $(RACK_INCLUDES),$(FLAGS)) -Itest -I$(DHEUNIT_SRC)
+TEST_CXX_FLAGS := $(filter-out $(RACK_INCLUDES),$(CXXFLAGS)) -Itest -I$(DHEUNIT_SRC)
 
 $(TEST_OBJECTS): $(DHEUNIT_INCLUDE_DIR)
 $(TEST_OBJECTS): FLAGS := $(TEST_CXX_FLAGS)
 
 $(TEST_RUNNER): $(TEST_OBJECTS)
 	@mkdir -p $(@D)
-	$(CXX) -o $@ $^
+	$(CXX) $(TEST_CXX_FLAGS) -o $@ $^
 
 .PHONY: test vtest
 
@@ -129,11 +129,11 @@ clean: cleancdb
 
 build/src/%.json: src/%
 	@mkdir -p $(@D)
-	clang $(CXXFLAGS) -MJ $@ -c -o build/$^.o $^
+	$(CXX) $(CXXFLAGS) -MJ $@ -c -o build/$^.o $^
 
 build/test/%.json: test/%
 	@mkdir -p $(@D)
-	clang $(TEST_CXX_FLAGS) -MJ $@ -c -o build/$^.o $^
+	$(CXX) $(TEST_CXX_FLAGS) -MJ $@ -c -o build/$^.o $^
 
 .PHONY: tidy
 tidy: $(COMPILATION_DB)
