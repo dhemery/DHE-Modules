@@ -1,7 +1,7 @@
 #pragma once
 
 #include "components/range.h"
-#include "components/sigmoid.h"
+#include "shapes.h"
 
 #include <array>
 #include <string>

@@ -8,7 +8,7 @@
 #include "components/latch.h"
 #include "components/phase-timer.h"
 #include "components/range.h"
-#include "components/sigmoid.h"
+#include "signals/shapes.h"
 
 namespace dhe {
 namespace curve_sequencer {

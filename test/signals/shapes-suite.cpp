@@ -1,4 +1,4 @@
-#include "components/sigmoid.h"
+#include "signals/shapes.h"
 
 #include "dheunit/test.h"
 #include "helpers/assertions.h"
@@ -7,9 +7,7 @@
 #include <vector>
 
 namespace test {
-namespace components {
-namespace sigmoid {
-
+namespace shapes {
 using dhe::JShape;
 using dhe::SShape;
 using dhe::unit::Suite;
@@ -17,26 +15,25 @@ using dhe::unit::Tester;
 using test::is_near;
 
 struct ShapeTest {
-  float input;
-  float output;
+  float input;  // NOLINT
+  float output; // NOLINT
 
   template <typename S> void run(Tester &t, float curvature) {
-    auto const name = std::string{"{"} + std::to_string(input) + "," +
-                      std::to_string(output) + "}";
+    auto const name = std::to_string(input) + " → " + std::to_string(output);
     t.run(name, [this, curvature](Tester &t) {
       auto const applied = S::apply(input, curvature);
-      assert_that(t, applied, is_near(output, 0.000001F));
+      assert_that(t, "apply", applied, is_near(output, 0.000001F));
       auto const inverted = S::invert(applied, curvature);
-      assert_that(t, inverted, is_near(input, 0.001F));
+      assert_that(t, "invert", inverted, is_near(input, 0.001F));
     });
   }
 };
 
-// Think of a taper as shape+curvature
+// Think of a taper as a shape with a fixed curvature
 template <typename S> struct TaperSuite {
-  std::string name;
-  float curvature;
-  std::vector<ShapeTest> tests;
+  std::string name;             // NOLINT
+  float curvature;              // NOLINT
+  std::vector<ShapeTest> tests; // NOLINT
 
   void run(Tester &t) {
     t.run(name, [this](Tester &t) {
@@ -219,6 +216,5 @@ struct ShapeSuite : Suite {
 };
 
 static auto _ = ShapeSuite{};
-} // namespace sigmoid
-} // namespace components
+} // namespace shapes
 } // namespace test

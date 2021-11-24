@@ -1,6 +1,6 @@
 #pragma once
 
-#include "components/sigmoid.h"
+#include "shapes.h"
 
 namespace dhe {
 
