@@ -1,4 +1,4 @@
-#include "./fixtures/controller-fixture.h"
+#include "fixtures/controller-fixture.h"
 
 #include "helpers/assertions.h"
 

@@ -1,6 +1,7 @@
 #pragma once
 
-#include "./step-event.h"
+#include "step-event.h"
+
 #include "components/latch.h"
 
 namespace dhe {

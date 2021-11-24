@@ -1,8 +1,7 @@
 #include "modules/curve-sequencer/engine.h"
 
-#include "./fixtures/curve-sequencer-fixture.h"
-
 #include "dheunit/test.h"
+#include "fixtures/curve-sequencer-fixture.h"
 
 #include <functional>
 #include <string>

@@ -1,10 +1,9 @@
 #pragma once
 
-#include "./status-enums.h"
+#include "dheunit/test.h"
 #include "modules/sequencizer/status.h"
 #include "modules/sequencizer/step-controller.h"
-
-#include "dheunit/test.h"
+#include "status-enums.h"
 
 #include <array>
 #include <functional>

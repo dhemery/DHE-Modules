@@ -1,6 +1,7 @@
 #pragma once
 
-#include "./status.h"
+#include "status.h"
+
 #include "components/latch.h"
 #include "components/phase-timer.h"
 

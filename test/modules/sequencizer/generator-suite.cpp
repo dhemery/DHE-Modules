@@ -1,9 +1,7 @@
-#include "./fixtures/generator-fixture.h"
-#include "./fixtures/status-enums.h"
-
-#include "modules/sequencizer/status.h"
-
+#include "fixtures/generator-fixture.h"
+#include "fixtures/status-enums.h"
 #include "helpers/assertions.h"
+#include "modules/sequencizer/status.h"
 
 #include "dheunit/test.h"
 

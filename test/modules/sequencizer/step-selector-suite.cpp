@@ -1,8 +1,6 @@
-#include "./fixtures/step-selector-fixture.h"
-
-#include "helpers/assertions.h"
-
 #include "dheunit/test.h"
+#include "fixtures/step-selector-fixture.h"
+#include "helpers/assertions.h"
 
 namespace test {
 namespace sequencizer {
