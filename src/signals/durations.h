@@ -71,9 +71,8 @@ template <typename D> struct Quantity : D {
 
   struct KnobMap {
     static auto constexpr unit = duration::unit;
-    static auto constexpr default_value = 1.F;
+    static auto constexpr default_value = D::range.upper_bound() / 10.F;
     auto to_display(float rotation) const -> float { return scale(rotation); }
-
     auto to_value(float display) const -> float { return normalize(display); }
   };
 };
@@ -120,7 +119,8 @@ struct Duration {
 
   struct KnobMap {
     static auto constexpr unit = internal::duration::unit;
-    static auto constexpr default_value = 1.F;
+    static auto constexpr default_value =
+        MediumDuration::KnobMap::default_value;
 
     auto to_display(float rotation) const -> float {
       return scale(rotation, range_id_);

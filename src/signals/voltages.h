@@ -68,7 +68,8 @@ struct Voltage {
 
   struct KnobMap {
     static auto constexpr unit = Voltage::unit;
-    static auto constexpr default_value = 5.F;
+    static auto constexpr default_value =
+        BipolarVoltage::KnobMap::default_value;
 
     auto to_display(float value) const -> float {
       return scale(value, range_id_);
