@@ -2,9 +2,8 @@
 
 #include "components/range.h"
 
-#include "rack.hpp"
-
 #include <array>
+#include <cmath>
 #include <string>
 #include <vector>
 
@@ -21,7 +20,7 @@ static auto constexpr names =
 
 static constexpr auto scale(float normalized, BounceRatioMode mode) -> float {
   return mode == BounceRatioMode::Quantized
-             ? std::round(range.scale(normalized))
+             ? std::roundf(range.scale(normalized))
              : range.scale(normalized);
 }
 

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "assets.h"
-
+#include "components/cxmath.h"
 #include "rack.hpp"
 
 namespace dhe {

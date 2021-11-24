@@ -12,9 +12,8 @@ struct Shapes {
   static auto constexpr unit = "";
   static auto constexpr stepper_slug = "shape";
 
-  static inline auto labels() -> std::vector<std::string> const & {
-    static auto const labels = std::vector<std::string>{"J", "S"};
-    return labels;
+  static inline auto labels() -> std::vector<std::string> {
+    return std::vector<std::string>{"J", "S"};
   }
 };
 } // namespace dhe

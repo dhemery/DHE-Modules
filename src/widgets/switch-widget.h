@@ -13,8 +13,9 @@ template <typename T> struct SwitchWidget : public rack::app::SvgSwitch {
   using Action = std::function<void(Value)>;
 
   SwitchWidget() {
+    static auto const file_names = frame_file_names();
     auto const panel_prefix = std::string{T::svg_dir} + "/";
-    for (auto const &file_name : file_names()) {
+    for (auto const &file_name : file_names) {
       addFrame(load_svg(panel_prefix + file_name));
     }
     shadow->opacity = 0.F;
@@ -30,17 +31,17 @@ template <typename T> struct SwitchWidget : public rack::app::SvgSwitch {
   void on_change(Action const &action) { action_ = action; }
 
 private:
-  static inline auto file_names() -> std::vector<std::string> const & {
-    static auto frame_names = std::vector<std::string>{};
+  static inline auto frame_file_names() -> std::vector<std::string> {
+    auto names = std::vector<std::string>{};
     auto const prefix = T::slug + std::string{"-"};
     auto const size = T::size;
     for (size_t position = 1; position <= size; position++) {
-      frame_names.push_back(prefix + std::to_string(position));
+      names.push_back(prefix + std::to_string(position));
     }
-    return frame_names;
+    return names;
   }
 
-  Action action_ = [](Value) {};
+  Action action_ = [](Value /*unused*/) {};
 };
 
 } // namespace dhe

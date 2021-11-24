@@ -1,5 +1,6 @@
 #pragma once
 
+#include "components/range.h"
 #include "ranged.h"
 
 namespace dhe {

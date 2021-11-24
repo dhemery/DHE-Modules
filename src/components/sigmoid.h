@@ -1,6 +1,7 @@
 #pragma once
-#include "./cxmath.h"
-#include "./range.h"
+
+#include "cxmath.h"
+#include "range.h"
 
 #include <array>
 #include <ostream>

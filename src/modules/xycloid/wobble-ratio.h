@@ -1,12 +1,12 @@
 #pragma once
 
+#include <vector>
+
+#include <string>
+
 #include "components/range.h"
 #include "components/sigmoid.h"
 #include "controls/knobs.h"
-
-#include "rack.hpp"
-
-#include <vector>
 
 namespace dhe {
 namespace xycloid {
@@ -16,9 +16,8 @@ enum class WobbleRatioMode { Quantized, Free };
 struct WobbleRatioModes {
   using ValueType = WobbleRatioMode;
   static auto constexpr size = 2;
-  static inline auto labels() -> std::vector<std::string> const & {
-    static auto const labels = std::vector<std::string>{"Quantized", "Free"};
-    return labels;
+  static inline auto labels() -> std::vector<std::string> {
+    return {"Quantized", "Free"};
   }
 };
 
@@ -29,10 +28,8 @@ struct WobbleRatioRanges {
   using ValueType = WobbleRatioRangeId;
   struct KnobMap;
 
-  static inline auto labels() -> std::vector<std::string> const & {
-    static auto const labels =
-        std::vector<std::string>{"In", "-In +Out", "Out"};
-    return labels;
+  static inline auto labels() -> std::vector<std::string> {
+    return {"In", "-In +Out", "Out"};
   }
 };
 
@@ -42,7 +39,7 @@ struct WobbleRatio {
   static inline auto scale(float normalized, WobbleRatioRangeId range_id,
                            WobbleRatioMode mode) -> float {
     auto const ratio = range(range_id).scale(normalized);
-    return mode == WobbleRatioMode::Quantized ? std::round(ratio) : ratio;
+    return mode == WobbleRatioMode::Quantized ? std::roundf(ratio) : ratio;
   }
 
   static inline auto normalize(float scaled, WobbleRatioRangeId range_id)

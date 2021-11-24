@@ -1,6 +1,7 @@
 #pragma once
 
 #include "components/range.h"
+#include "ranged.h"
 
 #include <array>
 #include <string>

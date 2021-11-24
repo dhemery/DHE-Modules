@@ -3,8 +3,6 @@
 #include "components/range.h"
 #include "components/sigmoid.h"
 
-#include "rack.hpp"
-
 namespace dhe {
 namespace blossom {
 namespace spin_speed {
