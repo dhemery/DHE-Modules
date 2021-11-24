@@ -31,17 +31,16 @@ using test::fake::Light;
 using test::fake::Param;
 using test::fake::Port;
 
-struct DurationTestCase {
+struct DurationRangeTest {
   std::string name;          // NOLINT
   float rotation;            // NOLINT
-  DurationRangeId range;     // NOLINT
   float multiplier_rotation; // NOLINT
   float multiplier_cv;       // NOLINT
   float want;                // NOLINT
   float tolerance;           // NOLINT
 
-  void run(Tester &t) const {
-    t.run(name, [this](Tester &t) {
+  void run(Tester &t, DurationRangeId range_id) const {
+    t.run(name, [this, range_id](Tester &t) {
       std::vector<Param> params{ParamId::Count};
       std::vector<Port> inputs{InputId::Count};
       std::vector<Port> outputs{OutputId::Count};
@@ -52,7 +51,7 @@ struct DurationTestCase {
           dhe::sequencizer::Signals<Param, Port, Port, Light, N>{
               inputs, params, outputs, lights};
       params[ParamId::StepDuration + step].setValue(rotation);
-      params[ParamId::DurationRange].setValue(static_cast<float>(range));
+      params[ParamId::DurationRange].setValue(static_cast<float>(range_id));
       params[ParamId::DurationMultiplier].setValue(multiplier_rotation);
       inputs[InputId::DurationMultiplierCV].setVoltage(multiplier_cv);
 
@@ -62,90 +61,202 @@ struct DurationTestCase {
   }
 };
 
-static std::vector<DurationTestCase> test_cases = {
-    {
-        .name = "short range min rotation → 1ms",
-        .rotation = 0.F,
-        .range = DurationRangeId::Short,
-        .multiplier_rotation = 0.5F, // 1x
-        .multiplier_cv = 0.F,        /// No modulation from CV
-        .want = 1e-3F,
-    },
-    {
-        .name = "short range center rotation → 100ms",
-        .rotation = 0.5F,
-        .range = DurationRangeId::Short,
-        .multiplier_rotation = 0.5F, // 1x
-        .multiplier_cv = 0.F,        /// No modulation from CV
-        .want = 1e-1F,
-        .tolerance = 0.00001F,
-    },
-    {
-        .name = "short range max rotation → 1s",
-        .rotation = 1.F,
-        .range = DurationRangeId::Short,
-        .multiplier_rotation = 0.5F, // 1x
-        .multiplier_cv = 0.F,        /// No modulation from CV
-        .want = 1.F,
-    },
-    {
-        .name = "short range 2x → 2x duration",
-        .rotation = 0.781F,
-        .range = DurationRangeId::Short,
-        .multiplier_rotation = 1.F, // 2x
-        .multiplier_cv = 0.F,       // No modulation from CV
-        .want = ShortDuration::scale(0.781F) * 2.F,
-    },
-    {
-        .name = "short range +5V cv increases multiplier by 1x",
-        .rotation = 0.5F,
-        .range = DurationRangeId::Short,
-        .multiplier_rotation = 0.75F, // 1.5x
-        .multiplier_cv = 5.F,         // 5V adds 1x
-        .want = ShortDuration::scale(0.5F) * 2.5F,
-    },
-    {
-        .name = "short 2x -5V cv reduces multiplier by 1x",
-        .rotation = 0.5F,
-        .range = DurationRangeId::Short,
-        .multiplier_rotation = 0.75F, // 1.5x
-        .multiplier_cv = -5.F,        // -5V subtracts 1x
-        .want = ShortDuration::scale(0.5F) * 0.5F,
-    },
-    {
-        .name = "limits minimum duration even with extreme negative CV",
-        .rotation = 1.F, // Maximum nominal duration = 1s
-        .range = DurationRangeId::Short,
-        .multiplier_rotation = 0.F, // 0x
-        .multiplier_cv = -3000.F,   // -3000V subtracts 600x
-        .want = 1e-3F,              // Even with -600x
-    },
+struct DurationRangeSuite {
+  DurationRangeId range_id;             // NOLINT
+  std::vector<DurationRangeTest> tests; // NOLINT
+
+  void run(Tester &t) const {
+    auto const name =
+        std::string{"With range "} + dhe::internal::duration::label(range_id);
+    t.run(name, [this](Tester &t) {
+      for (auto const &test : tests) {
+        test.run(t, range_id);
+      }
+    });
+  }
 };
 
-/**
-t.run("minimum medium duration is 1ms",
-      test(0.F, DurationRangeId::Medium, 0.F, -30.F, is_equal_to(1e-3F)));
+static auto short_duration_tests = DurationRangeSuite{
+    .range_id = DurationRangeId::Short,
+    .tests =
+        {
+            {
+                .name = "min rotation → 1ms",
+                .rotation = 0.F,
+                .multiplier_rotation = 0.5F, // 1x
+                .multiplier_cv = 0.F,        /// No modulation from CV
+                .want = 1e-3F,
+            },
+            {
+                .name = "center rotation → 100ms",
+                .rotation = 0.5F,
+                .multiplier_rotation = 0.5F, // 1x
+                .multiplier_cv = 0.F,        /// No modulation from CV
+                .want = 1e-1F,
+                .tolerance = 0.00001F,
+            },
+            {
+                .name = "max rotation → 1s",
+                .rotation = 1.F,
+                .multiplier_rotation = 0.5F, // 1x
+                .multiplier_cv = 0.F,        /// No modulation from CV
+                .want = 1.F,
+            },
+            {
+                .name = "max multiplier rotation → 2x duration",
+                .rotation = 0.781F,
+                .multiplier_rotation = 1.F, // 2x
+                .multiplier_cv = 0.F,       // No modulation from CV
+                .want = ShortDuration::scale(0.781F) * 2.F,
+                .tolerance = 0.00001F,
+            },
+            {
+                .name = "+5V cv increases multiplier by 1x",
+                .rotation = 0.5F,
+                .multiplier_rotation = 0.75F, // 1.5x
+                .multiplier_cv = 5.F,         // 5V adds 1x
+                .want = ShortDuration::scale(0.5F) * 2.5F,
+            },
+            {
+                .name = "-5V cv reduces multiplier by 1x",
+                .rotation = 0.5F,
+                .multiplier_rotation = 0.75F, // 1.5x
+                .multiplier_cv = -5.F,        // -5V subtracts 1x
+                .want = ShortDuration::scale(0.5F) * 0.5F,
+            },
+            {
+                .name = "limits minimum duration even with extreme negative CV",
+                .rotation = 1.F,            // Maximum nominal duration = 1s
+                .multiplier_rotation = 0.F, // 0x
+                .multiplier_cv = -3000.F,   // -3000V subtracts 600x
+                .want = 1e-3F,              // Even with -600x
+            },
+        },
+};
 
-t.run("minimum long duration is 1ms",
-      test(0.F, DurationRangeId::Long, 0.F, -30.F, is_equal_to(1e-3F)));
+static auto medium_duration_tests = DurationRangeSuite{
+    .range_id = DurationRangeId::Medium,
+    .tests =
+        {
+            {
+                .name = "min rotation → 10ms",
+                .rotation = 0.F,
+                .multiplier_rotation = 0.5F, // 1x
+                .multiplier_cv = 0.F,        /// No modulation from CV
+                .want = 1e-2F,
+            },
+            {
+                .name = "center rotation → 1s",
+                .rotation = 0.5F,
+                .multiplier_rotation = 0.5F, // 1x
+                .multiplier_cv = 0.F,        /// No modulation from CV
+                .want = 1.F,
+                .tolerance = 0.0001F,
+            },
+            {
+                .name = "max rotation → 10s",
+                .rotation = 1.F,
+                .multiplier_rotation = 0.5F, // 1x
+                .multiplier_cv = 0.F,        /// No modulation from CV
+                .want = 10.F,
+            },
+            {
+                .name = "max multiplier rotation → 2x duration",
+                .rotation = 0.781F,
+                .multiplier_rotation = 1.F, // 2x
+                .multiplier_cv = 0.F,       // No modulation from CV
+                .want = MediumDuration::scale(0.781F) * 2.F,
+                .tolerance = 0.00001F,
+            },
+            {
+                .name = "+5V cv increases multiplier by 1x",
+                .rotation = 0.5F,
+                .multiplier_rotation = 0.75F, // 1.5x
+                .multiplier_cv = 5.F,         // 5V adds 1x
+                .want = MediumDuration::scale(0.5F) * 2.5F,
+            },
+            {
+                .name = "-5V cv reduces multiplier by 1x",
+                .rotation = 0.5F,
+                .multiplier_rotation = 0.75F, // 1.5x
+                .multiplier_cv = -5.F,        // -5V subtracts 1x
+                .want = MediumDuration::scale(0.5F) * 0.5F,
+            },
+            {
+                .name = "limits minimum duration even with extreme negative CV",
+                .rotation = 1.F,            // Maximum nominal duration = 1s
+                .multiplier_rotation = 0.F, // 0x
+                .multiplier_cv = -3000.F,   // -3000V subtracts 600x
+                .want = 1e-3F,              // Even with -600x
+            },
+        },
+};
 
-t.run("maximum short duration is 2s",
-      test(1.F, DurationRangeId::Short, 1.F, 30.F, is_equal_to(2.F)));
-
-t.run("maximum medium duration is 20s",
-      test(1.F, DurationRangeId::Medium, 1.F, 30.F, is_equal_to(20.F)));
-
-t.run("maximum long duration is 200s",
-      test(1.F, DurationRangeId::Long, 1.F, 30.F, is_equal_to(200.F)));
-*/
+static auto long_duration_tests = DurationRangeSuite{
+    .range_id = DurationRangeId::Long,
+    .tests =
+        {
+            {
+                .name = "min rotation → 10ms",
+                .rotation = 0.F,
+                .multiplier_rotation = 0.5F, // 1x
+                .multiplier_cv = 0.F,        /// No modulation from CV
+                .want = 1e-1F,
+            },
+            {
+                .name = "center rotation → 10s",
+                .rotation = 0.5F,
+                .multiplier_rotation = 0.5F, // 1x
+                .multiplier_cv = 0.F,        /// No modulation from CV
+                .want = 10.F,
+                .tolerance = 0.001F,
+            },
+            {
+                .name = "max rotation → 100s",
+                .rotation = 1.F,
+                .multiplier_rotation = 0.5F, // 1x
+                .multiplier_cv = 0.F,        /// No modulation from CV
+                .want = 100.F,
+            },
+            {
+                .name = "max multiplier rotation → 2x duration",
+                .rotation = 0.781F,
+                .multiplier_rotation = 1.F, // 2x
+                .multiplier_cv = 0.F,       // No modulation from CV
+                .want = LongDuration::scale(0.781F) * 2.F,
+                .tolerance = 0.00001F,
+            },
+            {
+                .name = "+5V cv increases multiplier by 1x",
+                .rotation = 0.5F,
+                .multiplier_rotation = 0.75F, // 1.5x
+                .multiplier_cv = 5.F,         // 5V adds 1x
+                .want = LongDuration::scale(0.5F) * 2.5F,
+            },
+            {
+                .name = "-5V cv reduces multiplier by 1x",
+                .rotation = 0.5F,
+                .multiplier_rotation = 0.75F, // 1.5x
+                .multiplier_cv = -5.F,        // -5V subtracts 1x
+                .want = LongDuration::scale(0.5F) * 0.5F,
+            },
+            {
+                .name = "limits minimum duration even with extreme negative CV",
+                .rotation = 1.F,            // Maximum nominal duration = 1s
+                .multiplier_rotation = 0.F, // 0x
+                .multiplier_cv = -3000.F,   // -3000V subtracts 600x
+                .want = 1e-3F,              // Even with -600x
+            },
+        },
+};
 
 struct DurationSuite : Suite {
   DurationSuite() : Suite("dhe::sequencizer::Signals::duration()") {}
 
   void run(Tester &t) override {
-    for (auto const &test : test_cases) {
-      test.run(t);
-    }
+    short_duration_tests.run(t);
+    medium_duration_tests.run(t);
+    long_duration_tests.run(t);
   }
 };
 
