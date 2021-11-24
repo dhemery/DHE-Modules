@@ -73,8 +73,8 @@ public:
   void process(ProcessArgs const &args) override {
     auto const wobble_ratio = this->wobble_ratio();
     auto const wobble_phase_offset = wobble_ratio < 0.F
-                                         ? -this->wobble_phase_offset()
-                                         : this->wobble_phase_offset();
+                                         ? this->wobble_phase_offset()
+                                         : -this->wobble_phase_offset();
 
     auto const throb_speed = -this->throb_speed() * args.sampleTime;
     auto const wobble_speed = -wobble_ratio * throb_speed;
@@ -84,9 +84,9 @@ public:
     throbber_.advance(throb_speed);
     wobbler_.advance(wobble_speed);
     auto const x = throb_depth * throbber_.cos() +
-                   wobble_depth * wobbler_.cos(-wobble_phase_offset);
+                   wobble_depth * wobbler_.cos(wobble_phase_offset);
     auto const y = throb_depth * throbber_.sin() +
-                   wobble_depth * wobbler_.sin(-wobble_phase_offset);
+                   wobble_depth * wobbler_.sin(wobble_phase_offset);
 
     outputs[OutputId::X].setVoltage(5.F * x_gain() * (x + x_offset()));
     outputs[OutputId::Y].setVoltage(5.F * y_gain() * (y + y_offset()));
