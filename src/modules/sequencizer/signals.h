@@ -26,22 +26,6 @@ static auto constexpr brightness_skew = 0.7F;
 static auto constexpr brightness_range =
     Range{-brightness_skew, 1.F + brightness_skew};
 
-template <typename P, typename I>
-static inline auto duration(P const &duration_knob, P const &range_switch,
-                            P const &multipler_knob, I const &multiplier_cv)
-    -> float {
-  static auto constexpr minimum_duration = ShortDuration::range.lower_bound();
-  DurationRangeId range_id = value_of<DurationRangeId>(range_switch);
-  auto const nominal_duration =
-      Duration::scale(value_of(duration_knob), range_id);
-  auto const multiplier_rotation = rotation_of(multipler_knob, multiplier_cv);
-  auto const nominal_multiplier = Gain::range.scale(multiplier_rotation);
-  auto const clamped_multiplier = Gain::range.clamp(nominal_multiplier);
-  auto const scaled_duration = nominal_duration * clamped_multiplier;
-  auto const safe_duration = cx::max(minimum_duration, scaled_duration);
-  return safe_duration;
-}
-
 template <typename TParam, typename TInput, typename TOutput, typename TLight,
           int N>
 struct Signals {
@@ -82,10 +66,15 @@ struct Signals {
   }
 
   auto duration(int step) const -> float {
-    return sequencizer::duration(params_[ParamId::StepDuration + step],
-                                 params_[ParamId::DurationRange],
-                                 params_[ParamId::DurationMultiplier],
-                                 inputs_[InputId::DurationMultiplierCV]);
+    DurationRangeId range_id =
+        value_of<DurationRangeId>(params_[ParamId::DurationRange]);
+    auto const rotation = value_of(params_[ParamId::StepDuration + step]);
+    auto const nominal_duration = Duration::scale(rotation, range_id);
+    auto const multiplier =
+        Gain::scale(rotation_of(params_[ParamId::DurationMultiplier],
+                                inputs_[InputId::DurationMultiplierCV]));
+    auto const scaled_duration = nominal_duration * multiplier;
+    return cx::max(scaled_duration, ShortDuration::range.lower_bound());
   }
 
   auto gate() const -> bool {

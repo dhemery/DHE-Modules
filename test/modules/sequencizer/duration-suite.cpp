@@ -1,77 +1,151 @@
-#include "fixtures/duration-fixture.h"
+#include "modules/sequencizer/control-ids.h"
+#include "modules/sequencizer/signals.h"
+
+#include "signals/durations.h"
+#include "signals/gain.h"
 
 #include "dheunit/test.h"
-#include "signals/durations.h"
+#include "helpers/assertions.h"
+#include "helpers/rack-controls.h"
+
+#include <functional>
+#include <vector>
 
 namespace test {
 namespace sequencizer {
+static auto constexpr N = 8; // NOLINT
+
 using dhe::Duration;
+using dhe::DurationRangeId;
+using dhe::Gain;
 using dhe::LongDuration;
 using dhe::MediumDuration;
 using dhe::ShortDuration;
+using dhe::sequencizer::InputId;
+using ParamId = dhe::sequencizer::ParamIds<N>;
+using dhe::sequencizer::OutputId;
+using LightId = dhe::sequencizer::LightIds<N>;
 using dhe::unit::Suite;
+using dhe::unit::Tester;
+using test::fake::Light;
+using test::fake::Param;
+using test::fake::Port;
 
-static inline auto is_equal_to(float want)
-    -> std::function<void(Tester &, float)> {
-  return [want](Tester &t, float got) {
-    if (got != want) {
-      t.errorf("Got {}, want {}", got, want);
-    }
-  };
-}
+struct DurationTestCase {
+  std::string name;          // NOLINT
+  float rotation;            // NOLINT
+  DurationRangeId range;     // NOLINT
+  float multiplier_rotation; // NOLINT
+  float multiplier_cv;       // NOLINT
+  float want;                // NOLINT
+  float tolerance;           // NOLINT
 
-static inline auto is_near(float want, float tolerance)
-    -> std::function<void(Tester &, float)> {
-  return [want, tolerance](Tester &t, float got) {
-    if (got < want - tolerance || got > want + tolerance) {
-      t.errorf("Got {}, want a value within {} of {}", got, tolerance, want);
-    }
-  };
-}
+  void run(Tester &t) const {
+    t.run(name, [this](Tester &t) {
+      std::vector<Param> params{ParamId::Count};
+      std::vector<Port> inputs{InputId::Count};
+      std::vector<Port> outputs{OutputId::Count};
+      std::vector<Light> lights{LightId::Count};
 
-class DurationSuite : public Suite {
-public:
-  DurationSuite() : Suite("dhe::sequencizer::duration()") {}
+      auto const step = std::rand() % N;
+      auto const signals =
+          dhe::sequencizer::Signals<Param, Port, Port, Light, N>{
+              inputs, params, outputs, lights};
+      params[ParamId::StepDuration + step].setValue(rotation);
+      params[ParamId::DurationRange].setValue(static_cast<float>(range));
+      params[ParamId::DurationMultiplier].setValue(multiplier_rotation);
+      inputs[InputId::DurationMultiplierCV].setVoltage(multiplier_cv);
+
+      auto const duration = signals.duration(step);
+      assert_that(t, duration, is_near(want, tolerance));
+    });
+  }
+};
+
+static std::vector<DurationTestCase> test_cases = {
+    {
+        .name = "short range min rotation → 1ms",
+        .rotation = 0.F,
+        .range = DurationRangeId::Short,
+        .multiplier_rotation = 0.5F, // 1x
+        .multiplier_cv = 0.F,        /// No modulation from CV
+        .want = 1e-3F,
+    },
+    {
+        .name = "short range center rotation → 100ms",
+        .rotation = 0.5F,
+        .range = DurationRangeId::Short,
+        .multiplier_rotation = 0.5F, // 1x
+        .multiplier_cv = 0.F,        /// No modulation from CV
+        .want = 1e-1F,
+        .tolerance = 0.00001F,
+    },
+    {
+        .name = "short range max rotation → 1s",
+        .rotation = 1.F,
+        .range = DurationRangeId::Short,
+        .multiplier_rotation = 0.5F, // 1x
+        .multiplier_cv = 0.F,        /// No modulation from CV
+        .want = 1.F,
+    },
+    {
+        .name = "short range 2x → 2x duration",
+        .rotation = 0.781F,
+        .range = DurationRangeId::Short,
+        .multiplier_rotation = 1.F, // 2x
+        .multiplier_cv = 0.F,       // No modulation from CV
+        .want = ShortDuration::scale(0.781F) * 2.F,
+    },
+    {
+        .name = "short range +5V cv increases multiplier by 1x",
+        .rotation = 0.5F,
+        .range = DurationRangeId::Short,
+        .multiplier_rotation = 0.75F, // 1.5x
+        .multiplier_cv = 5.F,         // 5V adds 1x
+        .want = ShortDuration::scale(0.5F) * 2.5F,
+    },
+    {
+        .name = "short 2x -5V cv reduces multiplier by 1x",
+        .rotation = 0.5F,
+        .range = DurationRangeId::Short,
+        .multiplier_rotation = 0.75F, // 1.5x
+        .multiplier_cv = -5.F,        // -5V subtracts 1x
+        .want = ShortDuration::scale(0.5F) * 0.5F,
+    },
+    {
+        .name = "limits minimum duration even with extreme negative CV",
+        .rotation = 1.F, // Maximum nominal duration = 1s
+        .range = DurationRangeId::Short,
+        .multiplier_rotation = 0.F, // 0x
+        .multiplier_cv = -3000.F,   // -3000V subtracts 600x
+        .want = 1e-3F,              // Even with -600x
+    },
+};
+
+/**
+t.run("minimum medium duration is 1ms",
+      test(0.F, DurationRangeId::Medium, 0.F, -30.F, is_equal_to(1e-3F)));
+
+t.run("minimum long duration is 1ms",
+      test(0.F, DurationRangeId::Long, 0.F, -30.F, is_equal_to(1e-3F)));
+
+t.run("maximum short duration is 2s",
+      test(1.F, DurationRangeId::Short, 1.F, 30.F, is_equal_to(2.F)));
+
+t.run("maximum medium duration is 20s",
+      test(1.F, DurationRangeId::Medium, 1.F, 30.F, is_equal_to(20.F)));
+
+t.run("maximum long duration is 200s",
+      test(1.F, DurationRangeId::Long, 1.F, 30.F, is_equal_to(200.F)));
+*/
+
+struct DurationSuite : Suite {
+  DurationSuite() : Suite("dhe::sequencizer::Signals::duration()") {}
+
   void run(Tester &t) override {
-    t.run("with 0V multiplier cv: "
-          "center multiplier rotation: "
-          "yields nominal duration",
-          test(0.731F, DurationRangeId::Short, 0.5F, 0.F,
-               is_equal_to(ShortDuration::scale(0.731F))));
-
-    t.run("with 0V multiplier cv: "
-          "maximum multiplier rotation: "
-          "yields twice nominal duration",
-          test(0.4623F, DurationRangeId::Medium, 1.F, 0.F,
-               is_near(2.F * MediumDuration::scale(0.4623F), 1e-5F)));
-
-    t.run("5V CV adds 50% rotation to multiplier knob",
-          // 25% multiplier knob + 50% CV = 75% rotation = 1.5 multiplier
-          test(0.5F, DurationRangeId::Long, 0.25F, 5.F,
-               is_equal_to(1.5F * LongDuration::scale(0.5F))));
-
-    t.run("-5V CV subtracts 50% rotation from multiplier knob",
-          // 90% multiplier knob - 50% CV = 40% rotation = 0.8 multiplier
-          test(0.5F, DurationRangeId::Short, 0.90F, -5.F,
-               is_near(0.8F * ShortDuration::scale(0.5F), 1e-5F)));
-
-    t.run("minimum short duration is 1ms",
-          test(0.F, DurationRangeId::Short, 0.F, -30.F, is_equal_to(1e-3F)));
-
-    t.run("minimum medium duration is 1ms",
-          test(0.F, DurationRangeId::Medium, 0.F, -30.F, is_equal_to(1e-3F)));
-
-    t.run("minimum long duration is 1ms",
-          test(0.F, DurationRangeId::Long, 0.F, -30.F, is_equal_to(1e-3F)));
-
-    t.run("maximum short duration is 2s",
-          test(1.F, DurationRangeId::Short, 1.F, 30.F, is_equal_to(2.F)));
-
-    t.run("maximum medium duration is 20s",
-          test(1.F, DurationRangeId::Medium, 1.F, 30.F, is_equal_to(20.F)));
-
-    t.run("maximum long duration is 200s",
-          test(1.F, DurationRangeId::Long, 1.F, 30.F, is_equal_to(200.F)));
+    for (auto const &test : test_cases) {
+      test.run(t);
+    }
   }
 };
 
