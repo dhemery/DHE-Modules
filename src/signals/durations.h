@@ -12,21 +12,16 @@ enum class DurationRangeId { Short, Medium, Long };
 
 namespace internal {
 namespace duration {
-/**
- * This curvature gives a duration knob a gentle inverted S taper,
- * increasing sensitivity in the middle of the knob normalize and decreasing
- * sensitivity toward the extremes.
+/*
+ * Each duration range is of the form [n, 1000n]. Given ranges of that form,
+ * this curvature tapers the rotation so a knob positioned dead center yields
+ * a duration equal to 1/10 of the range's upper bound (to within 7 decimal
+ * places).
  */
+
 static auto constexpr knob_curvature = 0.8018017F;
 
 static auto constexpr unit = " s";
-
-/**
- * Each duration select is of the form [n, 1000n]. Given ranges of that
- * form, this curvature tapers the normalize so a knob positioned dead center
- * yields a duration equal to 1/10 of the select's upper bound (to within 7
- * decimal places).
- */
 
 static inline auto scale(float rotation, Range range) -> float {
   auto tapered = JShape::apply(rotation, knob_curvature);
@@ -38,29 +33,29 @@ static inline auto normalize(float seconds, Range range) -> float {
   return JShape::invert(tapered, knob_curvature);
 }
 
-namespace short_ {
+namespace short_duration {
 static auto constexpr range = Range{0.001F, 1.F};
 struct Quantity {
-  static auto constexpr &range = short_::range;
+  static auto constexpr &range = short_duration::range;
 };
-} // namespace short_
+} // namespace short_duration
 
-namespace medium_ {
+namespace medium_duration {
 static auto constexpr range = Range{0.01F, 10.F};
 struct Quantity {
-  static auto constexpr &range = medium_::range;
+  static auto constexpr &range = medium_duration::range;
 };
-} // namespace medium_
+} // namespace medium_duration
 
-namespace long_ {
+namespace long_duration {
 static auto constexpr range = Range{0.1F, 100.F};
 struct Quantity {
-  static auto constexpr &range = long_::range;
+  static auto constexpr &range = long_duration::range;
 };
-} // namespace long_
+} // namespace long_duration
 
-static auto constexpr ranges =
-    std::array<Range, 3>{short_::range, medium_::range, long_::range};
+static auto constexpr ranges = std::array<Range, 3>{
+    short_duration::range, medium_duration::range, long_duration::range};
 
 static auto constexpr labels = std::array<char const *, ranges.size()>{
     "0.001–1.0 s", "0.01–10.0 s", "0.1–100.0 s"};
@@ -103,12 +98,12 @@ struct DurationRanges {
   }
 };
 
-struct ShortDuration
-    : internal::duration::Quantity<internal::duration::short_::Quantity> {};
-struct MediumDuration
-    : internal::duration::Quantity<internal::duration::medium_::Quantity> {};
-struct LongDuration
-    : internal::duration::Quantity<internal::duration::long_::Quantity> {};
+struct ShortDuration : internal::duration::Quantity<
+                           internal::duration::short_duration::Quantity> {};
+struct MediumDuration : internal::duration::Quantity<
+                            internal::duration::medium_duration::Quantity> {};
+struct LongDuration : internal::duration::Quantity<
+                          internal::duration::long_duration::Quantity> {};
 
 struct Duration {
   static inline auto scale(float normalized, DurationRangeId range_id)

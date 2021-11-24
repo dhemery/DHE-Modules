@@ -1,6 +1,4 @@
 {
-    // See https://go.microsoft.com/fwlink/?LinkId=733558
-    // for the documentation about the tasks.json format
     "version": "2.0.0",
     "tasks": [
         {
@@ -10,22 +8,30 @@
             "args": [
                 "all"
             ],
-            "problemMatcher": [
-                "$gcc"
-            ],
             "group": "build",
             "presentation": {
                 "clear": true
             },
+            "problemMatcher": {
+                "fileLocation": [
+                    "relative",
+                    "${workspaceFolder}"
+                ],
+                "pattern": {
+                    "regexp": "^(.*):(\\d+):(\\d+):\\s+(warning|error):\\s+(.*)$",
+                    "file": 1,
+                    "line": 2,
+                    "column": 3,
+                    "severity": 4,
+                    "message": 5
+                }
+            }
         },
         {
             "label": "Build and test",
             "dependsOn": [
                 "Build",
                 "Test"
-            ],
-            "problemMatcher": [
-                "$gcc"
             ],
             "group": "build",
             "presentation": {
@@ -38,9 +44,6 @@
             "command": "make",
             "args": [
                 "clean",
-            ],
-            "problemMatcher": [
-                "$gcc"
             ],
             "group": "build",
             "presentation": {
@@ -55,9 +58,6 @@
                 "run",
             ],
             "dependsOn": "Build",
-            "problemMatcher": [
-                "$gcc"
-            ],
             "group": "build",
             "presentation": {
                 "clear": true
@@ -69,9 +69,6 @@
             "command": "make",
             "args": [
                 "setup",
-            ],
-            "problemMatcher": [
-                "$gcc"
             ],
             "group": "build",
             "presentation": {
@@ -85,13 +82,24 @@
             "args": [
                 "test"
             ],
-            "problemMatcher": [
-                "$gcc"
-            ],
             "group": "build",
             "presentation": {
                 "clear": true
             },
+            "problemMatcher": {
+                "fileLocation": [
+                    "relative",
+                    "${workspaceFolder}"
+                ],
+                "pattern": {
+                    "regexp": "^(.*):(\\d+):(\\d+):\\s+(warning|error):\\s+(.*)$",
+                    "file": 1,
+                    "line": 2,
+                    "column": 3,
+                    "severity": 4,
+                    "message": 5
+                }
+            }
         },
     ]
 }
