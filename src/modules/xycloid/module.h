@@ -121,10 +121,9 @@ private:
   }
 
   auto throb_speed() const -> float {
-    auto const rotation =
-        rotation_of(params[ParamId::ThrobSpeed], inputs[InputId::ThrobSpeedCv],
-                    params[ParamId::ThrobSpeedAv]);
-    return ThrobSpeed::scale(rotation);
+    return ThrobSpeed::scale(rotation_of(params[ParamId::ThrobSpeed]),
+                             modulation_of(inputs[InputId::ThrobSpeedCv],
+                                           params[ParamId::ThrobSpeedAv]));
   }
 
   auto wobble_depth() const -> float {

@@ -115,11 +115,11 @@ private:
     return Phase::scale(rotation);
   }
 
-  inline auto spin_speed() const -> float {
-    auto const rotation =
-        rotation_of(params[ParamId::SpinSpeed], inputs[InputId::SpinSpeedCv],
-                    params[ParamId::SpinSpeedAv]);
-    return SpinSpeed::scale(rotation);
+  inline auto spin_speed() -> float {
+    auto const rotation = rotation_of(params[ParamId::SpinSpeed]);
+    auto const modulation = modulation_of(inputs[InputId::SpinSpeedCv],
+                                          params[ParamId::SpinSpeedAv]);
+    return SpinSpeed::scale(rotation, modulation);
   }
 
   inline auto gain(int knob_id, int cv_id) const -> float {
