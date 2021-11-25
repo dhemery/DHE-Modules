@@ -8,6 +8,7 @@
 #include "params/presets.h"
 #include "signals/basic.h"
 #include "signals/curvature.h"
+#include "signals/gain.h"
 #include "signals/shapes.h"
 #include "signals/voltages.h"
 
@@ -67,19 +68,19 @@ public:
   }
 
   void process(ProcessArgs const & /*args*/) override {
-    outputs[OutputId::Taper1].setVoltage(
-        tapered(rotation(ParamId::Level1, InputId::LevelCv1, ParamId::LevelAv1),
-                shape(ParamId::Shape1),
-                curvature(ParamId::Curvature1, InputId::CurvatureCv1,
-                          ParamId::CurvatureAv1),
-                voltage_range(ParamId::LevelRange1)));
+    outputs[OutputId::Taper1].setVoltage(tapered(
+        safe_rotation(ParamId::Level1, InputId::LevelCv1, ParamId::LevelAv1),
+        shape(ParamId::Shape1),
+        curvature(ParamId::Curvature1, InputId::CurvatureCv1,
+                  ParamId::CurvatureAv1),
+        voltage_range(ParamId::LevelRange1)));
 
-    outputs[OutputId::Taper2].setVoltage(
-        tapered(rotation(ParamId::Level2, InputId::LevelCv2, ParamId::LevelAv2),
-                shape(ParamId::Shape2),
-                curvature(ParamId::Curvature2, InputId::CurvatureCv2,
-                          ParamId::CurvatureAv2),
-                voltage_range(ParamId::LevelRange2)));
+    outputs[OutputId::Taper2].setVoltage(tapered(
+        safe_rotation(ParamId::Level2, InputId::LevelCv2, ParamId::LevelAv2),
+        shape(ParamId::Shape2),
+        curvature(ParamId::Curvature2, InputId::CurvatureCv2,
+                  ParamId::CurvatureAv2),
+        voltage_range(ParamId::LevelRange2)));
   }
 
   auto dataToJson() -> json_t * override {
@@ -89,12 +90,13 @@ public:
   }
 
 private:
-  inline auto curvature(int knob_id, int cv_id, int av_id) const -> float {
-    return Curvature::scale(rotation(knob_id, cv_id, av_id));
+  inline auto safe_rotation(int knob_id, int cv_id, int av_id) const -> float {
+    return Rotation::clamp(
+        rotation_of(params[knob_id], inputs[cv_id], params[av_id]));
   }
 
-  inline auto rotation(int knob_id, int cv_id, int av_id) const -> float {
-    return rotation_of(params[knob_id], inputs[cv_id], params[av_id]);
+  inline auto curvature(int knob_id, int cv_id, int av_id) -> float {
+    return Curvature::scale(safe_rotation(knob_id, cv_id, av_id));
   }
 
   auto shape(int id) const -> Shape::Id {
