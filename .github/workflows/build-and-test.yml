@@ -5,6 +5,7 @@ on:
     branches:
       - main
       - wip/**
+      - v2
 
 defaults:
   run:
