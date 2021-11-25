@@ -30,7 +30,7 @@ struct Module : public rack::engine::Module {
   }
 
   void process(ProcessArgs const & /*args*/) override {
-    auto const normalized = BipolarVoltage::normalize(signal_in());
+    auto const normalized = BipolarVoltage::normalize(input_voltage());
     auto const tapered = Shape::apply(normalized, shape(), curvature());
     auto const output_voltage = BipolarVoltage::scale(tapered);
     send_signal(output_voltage);
@@ -46,7 +46,7 @@ private:
     auto const rotation =
         rotation_of(params[ParamId::Curvature], inputs[InputId::CurvatureCv],
                     params[ParamId::CurvatureAv]);
-    return Curvature::scale(rotation);
+    return Curvature::scale(Rotation::clamp(rotation));
   }
 
   void send_signal(float voltage) {
@@ -57,7 +57,9 @@ private:
     return value_of<Shape::Id>(params[ParamId::Shape]);
   }
 
-  auto signal_in() const -> float { return voltage_at(inputs[InputId::Swave]); }
+  auto input_voltage() const -> float {
+    return BipolarVoltage::clamp(voltage_at(inputs[InputId::Swave]));
+  }
 };
 
 } // namespace swave
