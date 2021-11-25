@@ -3,6 +3,7 @@
 #include "control-ids.h"
 
 #include "components/sigmoid.h"
+#include "components/cxmath.h"
 #include "signals/basic.h"
 #include "signals/curvature.h"
 #include "signals/durations.h"
@@ -37,7 +38,7 @@ public:
         rotation_of(params_[ParamId::Duration], inputs_[InputId::DurationCv]);
     auto const range =
         value_of<DurationRangeId>(params_[ParamId::DurationRange]);
-    return Duration::scale(rotation, range);
+    return Duration::scale(cx::max(rotation, 0.F), range);
   }
 
   auto gate() const -> bool {
