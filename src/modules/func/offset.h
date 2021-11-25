@@ -41,7 +41,7 @@ struct OffsetRanges {
   static auto constexpr unit = Voltage::unit;
 
   static inline auto labels() -> std::vector<std::string> {
-    return {offset_ranges::labels.cbegin(), offset_ranges::labels.cbegin()};
+    return {offset_ranges::labels.cbegin(), offset_ranges::labels.cend()};
   }
 };
 

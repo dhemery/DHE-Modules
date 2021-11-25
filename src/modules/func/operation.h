@@ -2,6 +2,7 @@
 
 #include "multiplier.h"
 #include "offset.h"
+#include "signals/voltages.h"
 
 #include <array>
 #include <string>
@@ -28,7 +29,8 @@ struct Operations {
 
 struct Operand {
   struct KnobMap {
-    static auto constexpr default_value = 2.5F;
+    static auto constexpr default_value =
+        BipolarVoltage::KnobMap::default_value;
     static auto constexpr unit = "";
 
     auto to_display(float value) const -> float {
@@ -51,8 +53,8 @@ struct Operand {
     void select_offset_range(OffsetRangeId id) { offset_range_id_ = id; }
 
   private:
-    OffsetRangeId offset_range_id_{};
-    MultiplierRangeId multipler_range_id_{};
+    OffsetRangeId offset_range_id_{OffsetRangeId::Bipolar};
+    MultiplierRangeId multipler_range_id_{MultiplierRangeId::Gain};
     Operation operation_{Operation::Add};
   };
 };

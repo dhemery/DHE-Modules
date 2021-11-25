@@ -50,8 +50,6 @@ private:
         channel_name + (N == 1 ? "Offset" : " offset");
     auto const multiplier_knob_name =
         channel_name + (N == 1 ? "Multiplier" : " multiplier");
-    auto const operand_knob_names =
-        std::vector<std::string>{offset_knob_name, multiplier_knob_name};
 
     auto *operand_knob = Knob::config<Operand>(this, ParamId::Operand + channel,
                                                offset_knob_name);
