@@ -50,4 +50,5 @@ struct Attenuverter : LinearKnob<internal::attenuverter::Quantity> {};
 struct Gain : LinearKnob<internal::gain::Quantity> {};
 
 using Percentage = Attenuator;
+using Rotation = Attenuator;
 } // namespace dhe

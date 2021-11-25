@@ -131,13 +131,13 @@ public:
   auto curvature(int step) const -> float {
     auto const rotation = rotation_of(params[ParamId::StepCurvature + step],
                                       inputs[InputId::StepCurvatureCv + step]);
-    return Curvature::scale(rotation);
+    return Curvature::scale(Rotation::clamp(rotation));
   }
 
   auto duration(int step) const -> float {
     auto const rotation = rotation_of(params[ParamId::StepDuration + step],
                                       inputs[InputId::StepDurationCv + step]);
-    return cx::clamp(rotation, 0.F, 1.F);
+    return cx::max(rotation, 0.F);
   }
 
   void exit_step(int step) { set_lights(step, 0.F, 0.F); }

@@ -12,6 +12,10 @@ template <typename Quantity> struct LinearKnob {
     return range.normalize(scaled);
   }
 
+  static auto constexpr clamp(float unsafe) -> float {
+    return range.clamp(unsafe);
+  }
+
   struct KnobMap {
     static auto constexpr default_value = Quantity::default_value;
     static auto constexpr &display_range = Quantity::display_range;
