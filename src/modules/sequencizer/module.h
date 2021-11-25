@@ -102,8 +102,8 @@ public:
       signals_.show_inactive(step);
     }
 
-    Knob::config<Attenuator>(this, ParamId::LevelMultiplier, "Level multiplier",
-                             1.F);
+    Knob::config<Attenuator>(this, ParamId::LevelMultiplier,
+                             "Level multiplier");
     auto select_level_range = [level_knobs](VoltageRangeId id) {
       for (auto *knob : level_knobs) {
         knob->mapper().select_range(id);
