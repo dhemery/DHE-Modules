@@ -2,8 +2,8 @@
 
 #include "control-ids.h"
 
-#include "components/sigmoid.h"
 #include "components/cxmath.h"
+#include "components/sigmoid.h"
 #include "signals/basic.h"
 #include "signals/curvature.h"
 #include "signals/durations.h"
@@ -25,7 +25,7 @@ public:
   auto curvature() const -> float {
     auto const rotation =
         rotation_of(params_[ParamId::Curvature], inputs_[InputId::CurvatureCv]);
-    return Curvature::scale(rotation);
+    return Curvature::scale(Rotation::clamp(rotation));
   }
 
   auto defer() const -> bool {
