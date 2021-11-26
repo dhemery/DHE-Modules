@@ -1,9 +1,17 @@
 #pragma once
 
+#include "anchor.h"
+#include "interrupter.h"
+#include "sustainer.h"
+#include "trigger-mode.h"
+
 #include "control-ids.h"
+#include "controls/buttons.h"
 #include "controls/knobs.h"
 #include "controls/ports.h"
 #include "controls/switches.h"
+#include "signals/durations.h"
+#include "signals/voltages.h"
 #include "widgets/dimensions.h"
 #include "widgets/panel-widget.h"
 #include "widgets/step-selection-markers.h"
