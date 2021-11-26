@@ -3,6 +3,8 @@
 #include "components/range.h"
 #include "ranged.h"
 
+#include "rack.hpp"
+
 #include <array>
 #include <string>
 #include <vector>
@@ -59,6 +61,7 @@ struct UnipolarVoltage : LinearKnob<internal::voltage::unipolar::Quantity> {};
 
 struct Voltage {
   static auto constexpr unit = internal::voltage::unit;
+
   static inline auto scale(float normalized, VoltageRangeId range_id) -> float {
     return internal::voltage::range(range_id).scale(normalized);
   }
@@ -79,7 +82,11 @@ struct Voltage {
       return normalize(display, range_id_);
     }
 
-    void select_range(VoltageRangeId id) { range_id_ = id; }
+    void select_range(VoltageRangeId id) {
+      DEBUG("DHE: VoltageKnobMap >> select_range(%d)\n", id);
+      range_id_ = id;
+      DEBUG("DHE: VoltageKnobMap << select_range(%d)\n", id);
+    }
 
   private:
     VoltageRangeId range_id_{VoltageRangeId::Bipolar};

@@ -5,6 +5,7 @@
 
 #include <functional>
 #include <string>
+#include <typeinfo>
 #include <vector>
 
 namespace dhe {
@@ -22,15 +23,30 @@ template <typename T> struct SwitchWidget : public rack::app::SvgSwitch {
   }
 
   void onChange(const rack::event::Change &e) override {
+    DEBUG(">> Value %s", typeid(Value).name());
     rack::app::SvgSwitch::onChange(e);
-    auto const selection =
-        static_cast<Value>(this->getParamQuantity()->getValue());
-    action_(selection);
+    notify();
+    DEBUG("<< Value %s", typeid(Value).name());
   }
 
-  void on_change(Action const &action) { action_ = action; }
+  void on_change(Action const &action) {
+    DEBUG(">> Value %s", typeid(Value).name());
+    action_ = action;
+    if (module != nullptr) {
+      notify();
+    }
+    DEBUG("<< Value %s", typeid(Value).name());
+  }
 
 private:
+  inline void notify() {
+    DEBUG(">> Value %s", typeid(Value).name());
+    auto const value = this->getParamQuantity()->getValue();
+    auto const selection = static_cast<Value>(value);
+    action_(selection);
+    DEBUG("<< Value %s", typeid(Value).name());
+  }
+
   static inline auto frame_file_names() -> std::vector<std::string> {
     auto names = std::vector<std::string>{};
     auto const prefix = T::slug + std::string{"-"};
