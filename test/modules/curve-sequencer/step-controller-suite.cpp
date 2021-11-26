@@ -17,7 +17,6 @@ namespace curve_sequencer {
 static auto constexpr step_count = 8;
 
 using dhe::curve_sequencer::AdvanceMode;
-using dhe::curve_sequencer::GenerateMode;
 using dhe::curve_sequencer::StepEvent;
 using Signals = StepControllerSignals<step_count>;
 using StepController = dhe::curve_sequencer::StepController<Signals>;

@@ -11,8 +11,6 @@ namespace curve_sequencer {
 using dhe::Duration;
 using dhe::DurationRangeId;
 using dhe::Shape;
-using dhe::curve_sequencer::AdvanceMode;
-using dhe::curve_sequencer::GenerateMode;
 using dhe::unit::Suite;
 using dhe::unit::Tester;
 

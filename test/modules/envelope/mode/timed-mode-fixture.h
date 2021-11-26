@@ -1,7 +1,6 @@
 #pragma once
 
 #include "components/phase-timer.h"
-#include "modules/envelope/mode/event.h"
 #include "signals/shapes.h"
 
 #include "dheunit/test.h"
@@ -13,7 +12,6 @@ namespace envelope {
 
 using dhe::PhaseTimer;
 using dhe::Shape;
-using dhe::envelope::mode::Event;
 using dhe::unit::Tester;
 using TestFunc = std::function<void(Tester &)>;
 

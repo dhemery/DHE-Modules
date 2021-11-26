@@ -91,25 +91,26 @@ public:
                  assert_that(t, "raised eoc", signals.eoc_, is_false);
                }));
 
-    t.run("with sustain mode selected: if defer falls with gate high: begins "
-          "sustaining",
-          test(in_defer_mode, [](Tester &t, Signals &signals,
-                                 SimpleMode & /*input_mode*/,
-                                 SimpleMode &defer_mode, TimedMode &hold_mode,
-                                 LatchedMode &sustain_mode,
-                                 SimpleMode & /*idle_mode*/,
-                                 HostageEngine &engine) {
-            signals.mode_ = Mode::Sustain;
-            signals.defer_ = false;
-            signals.gate_ = true;
+    t.run(
+        "with sustain mode selected: if defer falls with gate high: begins "
+        "sustaining",
+        test(in_defer_mode,
+             [](Tester &t, Signals &signals, SimpleMode & /*input_mode*/,
+                SimpleMode &defer_mode, TimedMode & /*hold_mode*/,
+                LatchedMode &sustain_mode, SimpleMode & /*idle_mode*/,
+                HostageEngine &engine) {
+               signals.mode_ = Mode::Sustain;
+               signals.defer_ = false;
+               signals.gate_ = true;
 
-            engine.process(0.F);
+               engine.process(0.F);
 
-            assert_that(t, "exit defer", defer_mode.exited_, is_true);
-            assert_that(t, "execute defer", defer_mode.executed_, is_false);
-            assert_that(t, "enter sustain", sustain_mode.entered_, is_true);
-            assert_that(t, "execute sustain", sustain_mode.executed_, is_true);
-          }));
+               assert_that(t, "exit defer", defer_mode.exited_, is_true);
+               assert_that(t, "execute defer", defer_mode.executed_, is_false);
+               assert_that(t, "enter sustain", sustain_mode.entered_, is_true);
+               assert_that(t, "execute sustain", sustain_mode.executed_,
+                           is_true);
+             }));
 
     t.run(
         "with sustain mode selected: if defer falls with gate low: raises eoc "
