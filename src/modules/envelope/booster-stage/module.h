@@ -29,11 +29,7 @@ struct Module : public rack::engine::Module {
 
     auto *level_knob = Knob::config<Voltage>(this, ParamId::Level, "Level");
     auto const select_level_range = [level_knob](VoltageRangeId id) {
-      DEBUG(">> value %f and display value %f", level_knob->getValue(),
-            level_knob->getDisplayValue());
       level_knob->mapper().select_range(id);
-      DEBUG("<< value %f and display value %f", level_knob->getValue(),
-            level_knob->getDisplayValue());
     };
     Switch::config<VoltageRanges>(this, ParamId::LevelRange, "Level Range",
                                   VoltageRangeId::Unipolar)

@@ -12,14 +12,16 @@ struct SwitchQuantity : public rack::engine::SwitchQuantity {
 
   void setValue(float value) override {
     rack::engine::SwitchQuantity::setValue(value);
-    auto const v = static_cast<V>(value);
-    action_(v);
+    action_(static_cast<V>(value));
   }
 
-  void on_change(Action const &action) { action_ = action; }
+  void on_change(Action const &action) {
+    action_ = action;
+    action_(static_cast<V>(getValue()));
+  }
 
 private:
-  Action action_ = [](V) {};
+  Action action_ = [](V /*unused*/) {};
 };
 
 } // namespace dhe

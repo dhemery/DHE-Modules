@@ -22,10 +22,13 @@ struct RangedKnobQuantity : public rack::engine::ParamQuantity {
     action_(static_cast<V>(value));
   }
 
-  void on_change(Action const &action) { action_ = action; }
+  void on_change(Action const &action) {
+    action_ = action;
+    action_(static_cast<V>(getValue()));
+  }
 
 private:
-  Action action_ = [](V) {};
+  Action action_ = [](V /*unused*/) {};
 };
 
 } // namespace dhe

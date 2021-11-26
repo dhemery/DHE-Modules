@@ -21,13 +21,20 @@ template <typename T> struct ButtonWidget : public rack::app::SvgSwitch {
 
   void onChange(const rack::event::Change &e) override {
     rack::app::SvgSwitch::onChange(e);
-    auto const value = static_cast<bool>(this->getParamQuantity()->getValue());
-    action_(value);
+    notify();
   }
 
-  void on_change(Action const &action) { action_ = action; }
+  void on_change(Action const &action) {
+    action_ = action;
+    if (module != nullptr) {
+      notify();
+    }
+  }
 
 private:
+  void notify() {
+    action_(static_cast<bool>(this->getParamQuantity()->getValue()));
+  }
   Action action_ = [](bool) {};
 };
 

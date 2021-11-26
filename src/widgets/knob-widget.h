@@ -19,13 +19,20 @@ template <typename T> struct KnobWidget : public rack::app::SvgKnob {
 
   void onChange(const rack::event::Change &e) override {
     rack::app::SvgKnob::onChange(e);
-    auto const value = static_cast<Value>(this->getParamQuantity()->getValue());
-    action_(value);
+    notify();
   }
 
-  void on_change(Action const &action) { action_ = action; }
+  void on_change(Action const &action) {
+    action_ = action;
+    if (module != nullptr) {
+      notify();
+    }
+  }
 
 private:
+  void notify() {
+    action_(static_cast<Value>(this->getParamQuantity()->getValue()));
+  }
   Action action_ = [](Value) {};
 };
 
