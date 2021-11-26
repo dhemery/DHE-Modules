@@ -1,8 +1,6 @@
 #pragma once
 
 #include <array>
-#include <string>
-#include <vector>
 
 namespace dhe {
 namespace truth {
@@ -21,11 +19,9 @@ static auto constexpr names =
 
 struct Outcomes {
   using ValueType = Outcome;
+  static auto constexpr &labels = outcome::names;
   static auto constexpr size = outcome::size;
-  static constexpr auto stepper_slug = "outcome";
-  static inline auto labels() -> std::vector<std::string> {
-    return {outcome::names.cbegin(), outcome::names.cend()};
-  }
+  static auto constexpr stepper_slug = "outcome";
 };
 } // namespace truth
 } // namespace dhe

@@ -3,8 +3,6 @@
 #include "signals/gain.h"
 
 #include <array>
-#include <string>
-#include <vector>
 
 namespace dhe {
 namespace func {
@@ -38,13 +36,9 @@ static inline auto normalize(float scaled, MultiplierRangeId range_id)
 struct MultiplierRanges {
   using ValueType = MultiplierRangeId;
   static auto constexpr size = multiplier_ranges::size;
-  static auto constexpr stepper_slug = "multiplier-range";
+  static auto constexpr &labels = multiplier_ranges::labels;
   static auto constexpr unit = "";
-
-  static inline auto labels() -> std::vector<std::string> {
-    return {multiplier_ranges::labels.cbegin(),
-            multiplier_ranges::labels.cend()};
-  }
+  static auto constexpr stepper_slug = "multiplier-range";
 };
 
 } // namespace func

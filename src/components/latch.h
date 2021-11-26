@@ -2,7 +2,6 @@
 
 #include <array>
 #include <ostream>
-#include <string>
 
 namespace dhe {
 

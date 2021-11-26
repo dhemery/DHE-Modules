@@ -1,8 +1,6 @@
 #pragma once
 
 #include <array>
-#include <string>
-#include <vector>
 
 namespace dhe {
 namespace scannibal {
@@ -16,12 +14,9 @@ static auto constexpr labels =
 
 struct AnchorModes {
   using ValueType = AnchorMode;
+  static auto constexpr &labels = anchor_mode::labels;
   static auto constexpr size = anchor_mode::size;
   static auto constexpr stepper_slug = "anchor-mode";
-
-  static inline auto labels() -> std::vector<std::string> {
-    return {anchor_mode::labels.cbegin(), anchor_mode::labels.cend()};
-  }
 };
 
 enum class AnchorSource { Level, InA, InB, InC, Out };
@@ -49,11 +44,9 @@ static auto constexpr values = std::array<AnchorSource, size>{
 
 struct AnchorSources {
   using ValueType = AnchorSource;
+  static auto constexpr &labels = anchor_source::labels;
   static auto constexpr size = anchor_source::size;
-  static constexpr auto stepper_slug = "anchor-source";
-  static inline auto labels() -> std::vector<std::string> {
-    return {anchor_source::labels.cbegin(), anchor_source::labels.cend()};
-  }
+  static auto constexpr stepper_slug = "anchor-source";
 };
 
 enum class AnchorType { Phase0, Phase1 };

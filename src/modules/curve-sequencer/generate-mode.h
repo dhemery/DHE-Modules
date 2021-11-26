@@ -3,7 +3,6 @@
 #include <array>
 #include <ostream>
 #include <string>
-#include <vector>
 
 namespace dhe {
 namespace curve_sequencer {
@@ -17,11 +16,11 @@ static auto constexpr values = std::array<GenerateMode, size>{
     GenerateMode::Input, GenerateMode::Chase, GenerateMode::Level,
 };
 
-static auto constexpr names = std::array<char const *, size>{
+static auto constexpr labels = std::array<char const *, size>{
     "Curve", "Hold", "Sustain", "Input", "Chase", "Level"};
 
-static inline auto name(GenerateMode mode) -> std::string {
-  return names[static_cast<size_t>(mode)];
+static inline auto label(GenerateMode mode) -> std::string {
+  return labels[static_cast<size_t>(mode)];
 }
 } // namespace generate_mode
 
@@ -30,9 +29,7 @@ struct GenerateModes {
   static auto constexpr size = generate_mode::size;
   static auto constexpr stepper_slug = "generate-mode";
 
-  static inline auto labels() -> std::vector<std::string> {
-    return {generate_mode::names.cbegin(), generate_mode::names.cend()};
-  }
+  static auto constexpr &labels = generate_mode::labels;
 };
 
 static inline auto operator<<(std::ostream &os, GenerateMode mode)
@@ -41,7 +38,7 @@ static inline auto operator<<(std::ostream &os, GenerateMode mode)
   if (index >= generate_mode::size) {
     return os << "Unknown " << generate_mode::type_name << ' ' << index;
   }
-  return os << generate_mode::name(mode);
+  return os << generate_mode::label(mode);
 }
 
 } // namespace curve_sequencer

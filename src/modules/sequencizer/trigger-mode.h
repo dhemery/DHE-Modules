@@ -3,8 +3,6 @@
 #include "components/latch.h"
 
 #include <array>
-#include <string>
-#include <vector>
 
 namespace dhe {
 namespace sequencizer {
@@ -36,12 +34,9 @@ static auto constexpr values = std::array<TriggerMode, size>{
 
 struct TriggerModes {
   using ValueType = TriggerMode;
+  static auto constexpr &labels = trigger_mode::labels;
   static auto constexpr size = trigger_mode::size;
   static auto constexpr stepper_slug = "trigger-mode";
-
-  static inline auto labels() -> std::vector<std::string> {
-    return {trigger_mode::labels.cbegin(), trigger_mode::labels.cend()};
-  }
 };
 
 static inline auto is_triggered(TriggerMode mode, dhe::Latch const &gate)

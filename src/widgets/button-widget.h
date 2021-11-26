@@ -6,7 +6,6 @@
 
 #include <functional>
 #include <string>
-#include <vector>
 
 namespace dhe {
 template <typename T> struct ButtonWidget : public rack::app::SvgSwitch {

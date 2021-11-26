@@ -3,8 +3,6 @@
 #include "components/latch.h"
 
 #include <array>
-#include <string>
-#include <vector>
 
 namespace dhe {
 namespace truth {
@@ -25,12 +23,9 @@ static auto constexpr labels = std::array<char const *, size>{
 
 struct GateModes {
   using ValueType = GateMode;
+  static auto constexpr &labels = gate_mode::labels;
   static auto constexpr size = gate_mode::size;
   static auto constexpr stepper_slug = "gate-mode";
-
-  static inline auto labels() -> std::vector<std::string> {
-    return {gate_mode::labels.cbegin(), gate_mode::labels.cend()};
-  }
 };
 
 static inline auto is_satisfied(GateMode condition, dhe::Latch const &gate)

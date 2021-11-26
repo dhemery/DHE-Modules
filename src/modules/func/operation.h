@@ -5,8 +5,6 @@
 #include "signals/voltages.h"
 
 #include <array>
-#include <string>
-#include <vector>
 
 namespace dhe {
 namespace func {
@@ -20,11 +18,8 @@ static auto constexpr labels =
 
 struct Operations {
   using ValueType = Operation;
+  static auto constexpr &labels = operations::labels;
   static auto constexpr size = operations::size;
-
-  static inline auto labels() -> std::vector<std::string> {
-    return {operations::labels.cbegin(), operations::labels.cend()};
-  }
 };
 
 struct Operand {

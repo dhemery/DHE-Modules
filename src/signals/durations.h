@@ -4,8 +4,6 @@
 #include "shapes.h"
 
 #include <array>
-#include <string>
-#include <vector>
 
 namespace dhe {
 enum class DurationRangeId { Short, Medium, Long };
@@ -91,10 +89,7 @@ static inline auto range(DurationRangeId id) -> Range {
 struct DurationRanges {
   using ValueType = DurationRangeId;
   static auto constexpr size = internal::duration::ranges.size();
-  static inline auto labels() -> std::vector<std::string> {
-    return {internal::duration::labels.cbegin(),
-            internal::duration::labels.cend()};
-  }
+  static auto constexpr &labels = internal::duration::labels;
 };
 
 struct ShortDuration : internal::duration::Quantity<

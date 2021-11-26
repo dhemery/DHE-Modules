@@ -3,8 +3,6 @@
 #include "components/sigmoid.h"
 
 #include <array>
-#include <string>
-#include <vector>
 
 namespace dhe {
 namespace internal {
@@ -57,10 +55,7 @@ struct Shape {
 struct Shapes {
   using ValueType = Shape::Id;
   static auto constexpr size = internal::shape::labels.size();
+  static auto constexpr &labels = internal::shape::labels;
   static auto constexpr stepper_slug = "shape";
-
-  static inline auto labels() -> std::vector<std::string> {
-    return {internal::shape::labels.cbegin(), internal::shape::labels.cend()};
-  }
 };
 } // namespace dhe

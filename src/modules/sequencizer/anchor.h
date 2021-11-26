@@ -2,8 +2,6 @@
 
 #include <array>
 #include <ostream>
-#include <string>
-#include <vector>
 
 namespace dhe {
 namespace sequencizer {
@@ -18,12 +16,9 @@ static auto constexpr labels =
 
 struct AnchorModes {
   using ValueType = AnchorMode;
+  static auto constexpr &labels = anchor_mode::labels;
   static auto constexpr size = anchor_mode::size;
   static auto constexpr stepper_slug = "anchor-mode";
-
-  static inline auto labels() -> std::vector<std::string> {
-    return {anchor_mode::labels.cbegin(), anchor_mode::labels.cend()};
-  }
 };
 
 enum class AnchorSource {
@@ -54,12 +49,9 @@ static auto constexpr values = std::array<AnchorSource, size>{
 
 struct AnchorSources {
   using ValueType = AnchorSource;
+  static auto constexpr &labels = anchor_source::labels;
   static auto constexpr size = anchor_source::size;
   static auto constexpr stepper_slug = "anchor-source";
-
-  static inline auto labels() -> std::vector<std::string> {
-    return {anchor_source::labels.cbegin(), anchor_source::labels.cend()};
-  }
 };
 
 static inline auto operator<<(std::ostream &os, AnchorSource s)

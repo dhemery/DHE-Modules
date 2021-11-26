@@ -4,8 +4,6 @@
 
 #include <array>
 #include <ostream>
-#include <string>
-#include <vector>
 
 namespace dhe {
 namespace sequencizer {
@@ -30,12 +28,9 @@ static auto constexpr values = std::array<InterruptMode, 2>{
 
 struct InterruptModes {
   using ValueType = InterruptMode;
+  static auto constexpr &labels = interrupt_mode::labels;
   static auto constexpr size = interrupt_mode::size;
   static auto constexpr stepper_slug = "interrupt-mode";
-
-  static inline auto labels() -> std::vector<std::string> {
-    return {interrupt_mode::labels.cbegin(), interrupt_mode::labels.cend()};
-  }
 };
 
 template <typename Signals> struct Interrupter {

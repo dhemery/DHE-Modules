@@ -20,6 +20,8 @@
 
 #include "rack.hpp"
 
+#include <string>
+
 namespace dhe {
 namespace sequencizer {
 

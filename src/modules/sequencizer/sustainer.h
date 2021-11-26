@@ -1,9 +1,9 @@
 #pragma once
 
+#include "components/latch.h"
+
 #include <array>
 #include <ostream>
-#include <string>
-#include <vector>
 
 namespace dhe {
 namespace sequencizer {
@@ -34,12 +34,9 @@ static inline auto operator<<(std::ostream &os, SustainMode m)
 
 struct SustainModes {
   using ValueType = SustainMode;
+  static auto constexpr &labels = sustain_mode::labels;
   static auto constexpr size = sustain_mode::size;
   static auto constexpr stepper_slug = "sustain-mode";
-
-  static inline auto labels() -> std::vector<std::string> {
-    return {sustain_mode::labels.cbegin(), sustain_mode::labels.cend()};
-  }
 };
 
 template <typename Signals> class Sustainer {

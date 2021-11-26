@@ -4,8 +4,6 @@
 #include "signals/voltages.h"
 
 #include <array>
-#include <string>
-#include <vector>
 
 namespace dhe {
 namespace func {
@@ -36,13 +34,10 @@ static inline auto normalize(float scaled, OffsetRangeId range_id) -> float {
 
 struct OffsetRanges {
   using ValueType = OffsetRangeId;
+  static auto constexpr &labels = offset_ranges::labels;
   static auto constexpr size = offset_ranges::size;
   static auto constexpr stepper_slug = "offset-range";
   static auto constexpr unit = Voltage::unit;
-
-  static inline auto labels() -> std::vector<std::string> {
-    return {offset_ranges::labels.cbegin(), offset_ranges::labels.cend()};
-  }
 };
 
 } // namespace func

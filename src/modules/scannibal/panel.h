@@ -6,6 +6,8 @@
 #include "controls/knobs.h"
 #include "controls/ports.h"
 #include "controls/switches.h"
+#include "signals/shapes.h"
+#include "signals/voltages.h"
 #include "widgets/dimensions.h"
 #include "widgets/panel-widget.h"
 #include "widgets/step-selection-markers.h"
@@ -14,9 +16,7 @@
 
 #include <cmath>
 #include <functional>
-#include <string>
 #include <utility>
-#include <vector>
 
 namespace dhe {
 

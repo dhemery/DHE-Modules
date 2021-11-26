@@ -1,36 +1,42 @@
 #pragma once
 
-#include <vector>
-
-#include <string>
-
 #include "components/range.h"
 #include "components/sigmoid.h"
 #include "controls/knobs.h"
 
+#include <array>
+
 namespace dhe {
 namespace xycloid {
+namespace wobble_ratio {
+
+namespace mode {
+static auto constexpr size = 2;
+static auto constexpr labels =
+    std::array<char const *, size>{"Quantized", "Free"};
+} // namespace mode
+
+namespace range {
+static auto constexpr size = 3;
+static auto constexpr labels =
+    std::array<char const *, size>{"In", "-In +Out", "Out"};
+} // namespace range
+} // namespace wobble_ratio
 
 enum class WobbleRatioMode { Quantized, Free };
 
 struct WobbleRatioModes {
   using ValueType = WobbleRatioMode;
-  static auto constexpr size = 2;
-  static inline auto labels() -> std::vector<std::string> {
-    return {"Quantized", "Free"};
-  }
+  static auto constexpr &labels = wobble_ratio::mode::labels;
+  static auto constexpr size = wobble_ratio::mode::size;
 };
 
 enum class WobbleRatioRangeId { Inward, InwardOutward, Outward };
 
 struct WobbleRatioRanges {
-  static auto constexpr size = 3;
   using ValueType = WobbleRatioRangeId;
-  struct KnobMap;
-
-  static inline auto labels() -> std::vector<std::string> {
-    return {"In", "-In +Out", "Out"};
-  }
+  static auto constexpr size = wobble_ratio::range::size;
+  static auto constexpr &labels = wobble_ratio::range::labels;
 };
 
 struct WobbleRatio {

@@ -3,7 +3,6 @@
 #include <array>
 #include <ostream>
 #include <string>
-#include <vector>
 
 namespace dhe {
 namespace curve_sequencer {
@@ -42,10 +41,7 @@ struct AdvanceModes {
   using ValueType = AdvanceMode;
   static auto constexpr size = advance_mode::size;
   static auto constexpr stepper_slug = "advance-mode";
-
-  static inline auto labels() -> std::vector<std::string> {
-    return {advance_mode::labels.cbegin(), advance_mode::labels.cend()};
-  }
+  static auto constexpr &labels = advance_mode::labels;
 };
 
 static inline auto operator<<(std::ostream &os, AdvanceMode mode)

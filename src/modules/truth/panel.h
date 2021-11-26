@@ -1,6 +1,7 @@
 #pragma once
 
 #include "control-ids.h"
+#include "controls/buttons.h"
 #include "controls/ports.h"
 #include "controls/switches.h"
 #include "gate-mode.h"
@@ -8,9 +9,6 @@
 #include "widgets/panel-widget.h"
 
 #include "rack.hpp"
-
-#include <string>
-#include <vector>
 
 namespace dhe {
 namespace truth {

@@ -5,6 +5,8 @@
 
 #include "rack.hpp"
 
+#include <vector>
+
 namespace dhe {
 static auto constexpr button_port_distance = 7.891F;
 static auto constexpr padding = 1.F;

@@ -206,7 +206,7 @@ public:
 
     t.run("generate_mode(step)", [](Tester &t) {
       for (auto const mode : dhe::curve_sequencer::generate_mode::values) {
-        t.run(dhe::curve_sequencer::generate_mode::name(mode),
+        t.run(dhe::curve_sequencer::generate_mode::label(mode),
               test([mode](Tester &t, Module &module, Signals &signals) {
                 auto const step = std::rand() & step_count;
                 module.params_[ParamId::StepGenerateMode + step].setValue(

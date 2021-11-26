@@ -18,6 +18,9 @@
 
 #include "rack.hpp"
 
+#include <string>
+#include <vector>
+
 namespace dhe {
 namespace scannibal {
 

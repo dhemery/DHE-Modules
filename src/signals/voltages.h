@@ -4,8 +4,6 @@
 #include "ranged.h"
 
 #include <array>
-#include <string>
-#include <vector>
 
 namespace dhe {
 enum class VoltageRangeId { Bipolar, Unipolar };
@@ -47,11 +45,8 @@ static inline auto range(VoltageRangeId id) -> Range {
 
 struct VoltageRanges {
   using ValueType = VoltageRangeId;
+  static auto constexpr &labels = internal::voltage::labels;
   static auto constexpr size = internal::voltage::ranges.size();
-  static inline auto labels() -> std::vector<std::string> {
-    return {internal::voltage::labels.cbegin(),
-            internal::voltage::labels.cend()};
-  }
 };
 
 struct BipolarVoltage : LinearKnob<internal::voltage::bipolar::Quantity> {};

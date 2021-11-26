@@ -4,8 +4,6 @@
 
 #include <array>
 #include <cmath>
-#include <string>
-#include <vector>
 
 namespace dhe {
 namespace blossom {
@@ -15,7 +13,7 @@ enum class BounceRatioMode { Quantized, Free };
 namespace bounce_ratio {
 static auto constexpr size = 2;
 static auto constexpr range = Range{1.F, 17.F};
-static auto constexpr names =
+static auto constexpr labels =
     std::array<char const *, size>{"Quantized", "Free"};
 
 static constexpr auto scale(float normalized, BounceRatioMode mode) -> float {
@@ -47,12 +45,9 @@ private:
 } // namespace bounce_ratio
 
 struct BounceRatioModes {
-  static auto constexpr size = bounce_ratio::size;
   using ValueType = BounceRatioMode;
-
-  static inline auto labels() -> std::vector<std::string> {
-    return {bounce_ratio::names.cbegin(), bounce_ratio::names.cend()};
-  }
+  static auto constexpr size = bounce_ratio::size;
+  static auto constexpr &labels = bounce_ratio::labels;
 };
 
 struct BounceRatio {
