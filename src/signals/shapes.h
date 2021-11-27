@@ -43,12 +43,10 @@ private:
 
 struct Shape {
   enum class Id { J, S };
-  static constexpr auto j = Id::J;
-  static constexpr auto s = Id::S;
 
   static auto constexpr apply(float input, Id id, float curvature) -> float {
-    return id == s ? SShape::apply(input, curvature)
-                   : JShape::apply(input, curvature);
+    return id == Id::S ? SShape::apply(input, curvature)
+                       : JShape::apply(input, curvature);
   }
 };
 

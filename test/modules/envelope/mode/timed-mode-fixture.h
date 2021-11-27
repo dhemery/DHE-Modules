@@ -23,13 +23,13 @@ struct Signals {
   void output(float f) { output_ = f; }
   void show_active(bool active) { active_ = active; }
   auto shape() const -> Shape::Id { return shape_; }
-  bool active_{};              // NOLINT
-  float duration_{};           // NOLINT
-  float curvature_{};          // NOLINT
-  float input_{};              // NOLINT
-  float level_{};              // NOLINT
-  float output_{};             // NOLINT
-  Shape::Id shape_ = Shape::j; // NOLINT
+  bool active_{};                  // NOLINT
+  float duration_{};               // NOLINT
+  float curvature_{};              // NOLINT
+  float input_{};                  // NOLINT
+  float level_{};                  // NOLINT
+  float output_{};                 // NOLINT
+  Shape::Id shape_ = Shape::Id::J; // NOLINT
 };
 
 template <typename M>

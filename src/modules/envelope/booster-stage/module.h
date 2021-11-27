@@ -11,9 +11,10 @@
 #include "controls/buttons.h"
 #include "controls/duration-controls.h"
 #include "controls/knobs.h"
+#include "controls/shape-controls.h"
 #include "controls/switches.h"
 #include "params/presets.h"
-#include "signals/curvature.h"
+#include "signals/curvature-signals.h"
 #include "signals/duration-signals.h"
 #include "signals/voltages.h"
 
@@ -39,7 +40,7 @@ struct Module : public rack::engine::Module {
 
     configInput(InputId::LevelCv, "Level CV");
 
-    Knob::config<Curvature>(this, ParamId::Curvature, "Curvature");
+    CurvatureKnob::config(this, ParamId::Curvature, "Curvature");
     Switch::config<Shapes>(this, ParamId::Shape, "Shape", Shape::Id::J);
     configInput(InputId::CurvatureCv, "Curvature CV");
 

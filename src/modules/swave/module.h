@@ -2,10 +2,11 @@
 
 #include "control-ids.h"
 #include "controls/knobs.h"
+#include "controls/shape-controls.h"
 #include "controls/switches.h"
 #include "params/presets.h"
 #include "signals/basic.h"
-#include "signals/curvature.h"
+#include "signals/curvature-signals.h"
 #include "signals/gain.h"
 #include "signals/shapes.h"
 #include "signals/voltages.h"
@@ -22,7 +23,7 @@ struct Module : public rack::engine::Module {
     configInput(InputId::Swave, "Swave");
     configOutput(OutputId::Swave, "Swave");
 
-    Knob::config<Curvature>(this, ParamId::Curvature, "Curvature");
+    CurvatureKnob::config(this, ParamId::Curvature, "Curvature");
     Knob::config<Attenuverter>(this, ParamId::CurvatureAv, "Curvature CV gain",
                                0.F);
     configInput(InputId::CurvatureCv, "Curvature CV");

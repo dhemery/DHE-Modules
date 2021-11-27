@@ -33,7 +33,7 @@ public:
           test([](Tester &t, Signals &module, Anchor & /*start_anchor*/,
                   Anchor & /*end_source*/, Generator &generator) {
             auto constexpr step = 7;
-            module.shape_[step] = Shape::j;
+            module.shape_[step] = Shape::Id::J;
             module.duration_[step] = 10.F;
 
             generator.start(step);
@@ -70,7 +70,7 @@ public:
 
             auto constexpr phase = 0.5F;
             auto constexpr sample_time = duration * phase;
-            auto constexpr shape = Shape::j;
+            auto constexpr shape = Shape::Id::J;
             auto constexpr curvature = 0.5F;
 
             auto constexpr start_voltage = 0.F;
@@ -96,7 +96,7 @@ public:
                   Anchor & /*end_anchor*/, Generator &generator) {
             auto constexpr step = 3;
 
-            module.shape_[step] = Shape::j;
+            module.shape_[step] = Shape::Id::J;
             generator.start(step);
 
             auto constexpr duration = 10.F;   // 10 sec
@@ -121,7 +121,7 @@ public:
           test([](Tester &t, Signals &signals, Anchor & /*start_anchor*/,
                   Anchor & /*end_anchor*/, Generator &generator) {
             auto constexpr step = 3;
-            signals.shape_[step] = Shape::j;
+            signals.shape_[step] = Shape::Id::J;
 
             generator.start(step);
 

@@ -4,10 +4,11 @@
 
 #include "components/range.h"
 #include "controls/knobs.h"
+#include "controls/shape-controls.h"
 #include "controls/switches.h"
 #include "params/presets.h"
 #include "signals/basic.h"
-#include "signals/curvature.h"
+#include "signals/curvature-signals.h"
 #include "signals/gain.h"
 #include "signals/shapes.h"
 #include "signals/voltages.h"
@@ -35,7 +36,7 @@ public:
                                "Taper 1 level CV gain");
     configInput(InputId::LevelCv1, "Taper 1 level CV");
 
-    Knob::config<Curvature>(this, ParamId::Curvature1, "Taper 1 curvature");
+    CurvatureKnob::config(this, ParamId::Curvature1, "Taper 1 curvature");
     Knob::config<Attenuverter>(this, ParamId::CurvatureAv1,
                                "Taper 1 curvature CV gain");
     Switch::config<Shapes>(this, ParamId::Shape1, "Taper 1 shape",
@@ -57,7 +58,7 @@ public:
                                "Taper 2 level CV gain");
     configInput(InputId::LevelCv2, "Taper 2 level CV");
 
-    Knob::config<Curvature>(this, ParamId::Curvature2, "Taper 2 curvature");
+    CurvatureKnob::config(this, ParamId::Curvature2, "Taper 2 curvature");
     Knob::config<Attenuverter>(this, ParamId::CurvatureAv2,
                                "Taper 2 curvature CV gain");
     Switch::config<Shapes>(this, ParamId::Shape2, "Taper 2 shape",

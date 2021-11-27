@@ -4,7 +4,7 @@
 
 #include "components/range.h"
 #include "components/sigmoid.h"
-#include "signals/curvature.h"
+#include "signals/curvature-signals.h"
 
 #include "dheunit/test.h"
 

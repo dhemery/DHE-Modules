@@ -22,7 +22,7 @@ public:
             auto constexpr step = 4;
 
             auto constexpr phase = 0.5F; // halfway
-            auto constexpr shape = Shape::j;
+            auto constexpr shape = Shape::Id::J;
             auto constexpr curvature = 0.5F; // linear
 
             auto constexpr phase_0_voltage = 0.F;
@@ -47,7 +47,7 @@ public:
           test([](Tester &t, Module &module, Anchor &phase_0_anchor,
                   Anchor &phase_1_anchor, Generator &generator) {
             auto constexpr step = 3;
-            module.shape_[step] = Shape::j;
+            module.shape_[step] = Shape::Id::J;
 
             generator.generate(step, 0.F);
 
@@ -60,7 +60,7 @@ public:
           test([](Tester &t, Module &module, Anchor &phase_0_anchor,
                   Anchor &phase_1_anchor, Generator &generator) {
             auto constexpr step = 6;
-            module.shape_[step] = Shape::j;
+            module.shape_[step] = Shape::Id::J;
 
             generator.generate(step, 0.F);
 
@@ -80,8 +80,8 @@ public:
                   Anchor &phase_1_anchor, Generator &generator) {
             auto constexpr first_step = 6;
             auto constexpr second_step = 2;
-            module.shape_[first_step] = Shape::j;
-            module.shape_[second_step] = Shape::j;
+            module.shape_[first_step] = Shape::Id::J;
+            module.shape_[second_step] = Shape::Id::J;
 
             generator.generate(first_step, 0.11F);
 
