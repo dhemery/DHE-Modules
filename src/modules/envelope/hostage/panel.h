@@ -3,6 +3,7 @@
 #include "control-ids.h"
 #include "modes.h"
 
+#include "controls/duration-controls.h"
 #include "controls/knobs.h"
 #include "controls/ports.h"
 #include "controls/switches.h"
@@ -34,8 +35,7 @@ public:
 
     y += dy;
     InPort::install(this, InputId::DurationCv, column1, y);
-    ThumbSwitch::install<DurationRanges>(this, ParamId::DurationRange, column3,
-                                         y);
+    DurationRangeSwitch::install(this, ParamId::DurationRange, column3, y);
 
     y += dy;
     Knob::install<Large>(this, ParamId::Duration, column2, y);

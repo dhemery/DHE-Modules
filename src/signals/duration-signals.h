@@ -50,12 +50,6 @@ template <typename D> struct Quantity {
 
 } // namespace duration
 
-struct DurationRanges {
-  using ValueType = DurationRangeId;
-  static auto constexpr size = duration::ranges.size();
-  static auto constexpr &labels = duration::labels;
-};
-
 struct ShortDuration : duration::Quantity<ShortDuration> {
   static auto constexpr &range = duration::short_range;
 };

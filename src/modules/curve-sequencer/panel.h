@@ -4,6 +4,8 @@
 #include "control-ids.h"
 #include "generate-mode.h"
 
+#include "controls/buttons.h"
+#include "controls/duration-controls.h"
 #include "controls/knobs.h"
 #include "controls/ports.h"
 #include "widgets/panel-widget.h"
@@ -135,8 +137,8 @@ template <typename TSize> struct Panel : public PanelWidget<Panel<TSize>> {
 
     ThumbSwitch::install<VoltageRanges>(this, ParamId::LevelRange, right,
                                         level_y);
-    ThumbSwitch::install<DurationRanges>(this, ParamId::DurationRange, right,
-                                         duration_y);
+    DurationRangeSwitch::install(this, ParamId::DurationRange, right,
+                                 duration_y);
     OutPort::install(this, OutputId::Main, right, out_y);
   }
 }; // namespace dhe

@@ -3,6 +3,8 @@
 #include "control-ids.h"
 
 #include "components/range.h"
+#include "controls/buttons.h"
+#include "controls/duration-controls.h"
 #include "controls/knobs.h"
 #include "controls/ports.h"
 #include "controls/switches.h"
@@ -46,8 +48,7 @@ struct Panel : public PanelWidget<Panel> {
     InPort::install(this, InputId::DurationCv, column1, y);
     Knob::install<Large>(this, ParamId::Duration, column3, y);
 
-    ThumbSwitch::install<DurationRanges>(this, ParamId::DurationRange, column5,
-                                         y);
+    DurationRangeSwitch::install(this, ParamId::DurationRange, column5, y);
 
     y = 82.F;
     dy = 15.F;

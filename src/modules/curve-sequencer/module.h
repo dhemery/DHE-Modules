@@ -52,7 +52,9 @@ template <int N> struct Module : rack::engine::Module {
                                      "Sequence length", N);
 
     auto level_knobs = std::vector<MappedKnobQuantity<Voltage> *>{};
-    auto duration_knobs = std::vector<DurationKnob::Quantity *>{};
+    auto *duration_range_switch =
+        DurationRangeSwitch::config(this, ParamId::DurationRange,
+                                    "Duration range", DurationRangeId::Medium);
 
     for (auto step = 0; step < N; step++) {
       auto const step_name =
@@ -74,7 +76,7 @@ template <int N> struct Module : rack::engine::Module {
                               step_name + "curvature");
       auto *duration_knob = DurationKnob::config(
           this, ParamId::StepDuration + step, step_name + "duration");
-      duration_knobs.push_back(duration_knob);
+      duration_range_switch->add_knob(duration_knob);
 
       Button::config(this, ParamId::StepEnabled + step, step_name + "enabled",
                      1);
@@ -91,15 +93,6 @@ template <int N> struct Module : rack::engine::Module {
     Switch::config<VoltageRanges>(this, ParamId::LevelRange, "Level range",
                                   VoltageRangeId::Unipolar)
         ->on_change(select_level_range);
-
-    auto select_duration_range = [duration_knobs](DurationRangeId id) {
-      for (auto *knob : duration_knobs) {
-        knob->select_range(id);
-      }
-    };
-    Switch::config<DurationRanges>(this, ParamId::DurationRange,
-                                   "Duration range", DurationRangeId::Medium)
-        ->on_change(select_duration_range);
 
     configInput(InputId::Main, "AUX");
     configOutput(OutputId::Main, "Sequencer");

@@ -7,10 +7,10 @@
 
 #include "control-ids.h"
 #include "controls/buttons.h"
+#include "controls/duration-controls.h"
 #include "controls/knobs.h"
 #include "controls/ports.h"
 #include "controls/switches.h"
-#include "signals/duration-signals.h"
 #include "signals/voltages.h"
 #include "widgets/dimensions.h"
 #include "widgets/panel-widget.h"
@@ -157,9 +157,8 @@ template <typename TSize> struct Panel : public PanelWidget<Panel<TSize>> {
                     global_duration_y);
     Knob::install<Small>(this, ParamId::DurationMultiplier,
                          global_controls_center_x, global_duration_y);
-    ThumbSwitch::install<DurationRanges>(this, ParamId::DurationRange,
-                                         global_controls_right_x,
-                                         global_duration_y);
+    DurationRangeSwitch::install(this, ParamId::DurationRange,
+                                 global_controls_right_x, global_duration_y);
 
     InPort::install(this, InputId::InA, global_controls_left_x, in_y);
     InPort::install(this, InputId::InB, global_controls_center_x, in_y);

@@ -12,6 +12,7 @@
 #include "modules/envelope/mode/idle.h"
 #include "modules/envelope/mode/input.h"
 #include "modules/envelope/mode/sustain.h"
+#include "params/presets.h"
 #include "signals/duration-signals.h"
 
 #include "rack.hpp"
@@ -33,12 +34,9 @@ struct Module : public rack::engine::Module {
 
     auto *duration_knob =
         DurationKnob::config(this, ParamId::Duration, "Duration");
-    auto select_duration_range = [duration_knob](DurationRangeId range_id) {
-      duration_knob->select_range(range_id);
-    };
-    Switch::config<DurationRanges>(this, ParamId::DurationRange,
-                                   "Duration range", DurationRangeId::Medium)
-        ->on_change(select_duration_range);
+    auto *duration_range_switch = DurationRangeSwitch::config(
+        this, ParamId::DurationRange, "Duration range");
+    duration_range_switch->add_knob(duration_knob);
     configInput(InputId::DurationCv, "Duration CV");
 
     Switch::config<Modes>(this, ParamId::Mode, "Mode", Mode::Hold);

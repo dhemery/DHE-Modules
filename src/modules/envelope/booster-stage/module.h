@@ -43,14 +43,12 @@ struct Module : public rack::engine::Module {
     Switch::config<Shapes>(this, ParamId::Shape, "Shape", Shape::Id::J);
     configInput(InputId::CurvatureCv, "Curvature CV");
 
+    auto *duration_range_switch =
+        DurationRangeSwitch::config(this, ParamId::DurationRange,
+                                    "Duration range", DurationRangeId::Medium);
     auto *duration_knob =
         DurationKnob::config(this, ParamId::Duration, "Duration");
-    auto select_duration_range = [duration_knob](DurationRangeId range) {
-      duration_knob->select_range(range);
-    };
-    Switch::config<DurationRanges>(this, ParamId::DurationRange,
-                                   "Duration range", DurationRangeId::Medium)
-        ->on_change(select_duration_range);
+    duration_range_switch->add_knob(duration_knob);
     configInput(InputId::DurationCv, "Duration CV");
 
     configInput(InputId::Defer, "Defer");

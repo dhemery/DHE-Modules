@@ -44,6 +44,17 @@ struct Switch {
 };
 
 struct ThumbSwitch {
+  template <typename Panel, int Size> struct Widget : rack::app::SvgSwitch {
+    Widget() {
+      auto const prefix =
+          std::string{Panel::svg_dir} + "/toggle-" + std::to_string(Size) + '-';
+      for (auto position = 0; position < Size; position++) {
+        addFrame(load_svg(prefix + std::to_string(position)));
+      }
+      shadow->opacity = 0.F;
+    }
+  };
+
   template <int N> struct Size {};
 
   template <typename V> struct Style {

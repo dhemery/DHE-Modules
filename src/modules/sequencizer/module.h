@@ -60,6 +60,10 @@ public:
     auto level_knobs = std::vector<MappedKnobQuantity<Voltage> *>{};
     auto duration_knobs = std::vector<DurationKnob::Quantity *>{};
 
+    auto *duration_range_switch =
+        DurationRangeSwitch::config(this, ParamId::DurationRange,
+                                    "Duration range", DurationRangeId::Medium);
+
     for (auto step = 0; step < N; step++) {
       auto const step_name = "Step " + std::to_string(step + 1) + " ";
       Switch::config<TriggerModes>(this, ParamId::StepTriggerMode + step,
@@ -96,7 +100,7 @@ public:
                               step_name + "curvature");
       auto *duration_knob = DurationKnob::config(
           this, ParamId::StepDuration + step, step_name + "duration");
-      duration_knobs.push_back(duration_knob);
+      duration_range_switch->add_knob(duration_knob);
 
       Switch::config<Shapes>(this, ParamId::StepShape + step,
                              step_name + "shape", Shape::Id::J);
@@ -120,14 +124,6 @@ public:
 
     Knob::config<Gain>(this, ParamId::DurationMultiplier,
                        "Duration multiplier");
-    auto select_duration_range = [duration_knobs](DurationRangeId range_id) {
-      for (auto *knob : duration_knobs) {
-        knob->select_range(range_id);
-      }
-    };
-    Switch::config<DurationRanges>(this, ParamId::DurationRange,
-                                   "Duration range", DurationRangeId::Medium)
-        ->on_change(select_duration_range);
     configInput(InputId::DurationMultiplierCV, "Duration multipler CV");
   }
 

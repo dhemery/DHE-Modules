@@ -1,7 +1,12 @@
 #pragma once
+
 #include "signals/duration-signals.h"
+#include "switches.h"
+#include "widgets/assets.h"
 
 #include "rack.hpp"
+
+#include <string>
 
 namespace dhe {
 struct MediumDurationKnob {
@@ -48,11 +53,50 @@ struct DurationKnob {
          float default_duration = MediumDurationKnob::default_duration,
          DurationRangeId default_range_id = DurationRangeId::Medium)
       -> Quantity * {
-    auto const rotation =
+    auto const default_value =
         Duration::normalize(default_duration, default_range_id);
-    auto *q =
-        module->configParam<Quantity>(param_id, 0.F, 1.F, rotation, name, " s");
+    auto *q = module->configParam<Quantity>(param_id, 0.F, 1.F, default_value,
+                                            name, " s");
     q->select_range(default_range_id);
+    return q;
+  }
+};
+
+struct DurationRangeSwitch {
+  template <typename Panel>
+  using Widget = ThumbSwitch::Widget<Panel, duration::ranges.size()>;
+
+  struct Quantity : rack::engine::SwitchQuantity {
+    void setValue(float value) override {
+      rack::engine::SwitchQuantity::setValue(value);
+      for (auto *knob : knobs_) {
+        knob->select_range(static_cast<DurationRangeId>(value));
+      }
+    }
+
+    void add_knob(DurationKnob::Quantity *knob) {
+      knobs_.push_back(knob);
+      knob->select_range(static_cast<DurationRangeId>(getValue()));
+    }
+
+  private:
+    std::vector<DurationKnob::Quantity *> knobs_{};
+  };
+
+  template <typename Panel>
+  static inline auto install(Panel *panel, int param_id, float xmm, float ymm)
+      -> Widget<Panel> * {
+    return rack::createParamCentered<Widget<Panel>>(
+        mm2px(xmm, ymm), panel->getModule(), param_id);
+  }
+
+  static inline auto
+  config(rack::engine::Module *module, int param_id, std::string const &name,
+         DurationRangeId default_range_id = DurationRangeId::Medium)
+      -> Quantity * {
+    auto const default_value = static_cast<float>(default_range_id);
+    auto *q = module->configParam<Quantity>(param_id, 0.F, 1.F, default_value,
+                                            name, " s");
     return q;
   }
 };
