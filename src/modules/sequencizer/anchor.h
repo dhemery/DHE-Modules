@@ -64,7 +64,7 @@ static auto constexpr labels = std::array<char const *, 2>{
     "End",
 };
 
-static constexpr auto label(AnchorType type) -> char const * {
+static inline auto label(AnchorType type) -> char const * {
   return labels[static_cast<size_t>(type)];
 }
 } // namespace anchor_type
