@@ -251,8 +251,7 @@ template <typename TSize> struct Panel : public PanelWidget<Panel<TSize>> {
       Knob::install<Small>(this, ParamId::StepDuration + step, step_x,
                            duration_y);
 
-      Stepper::install<Shapes>(this, ParamId::StepShape + step, step_x,
-                               shape_y);
+      ShapeStepper::install(this, ParamId::StepShape + step, step_x, shape_y);
       Knob::install<Small>(this, ParamId::StepCurvature + step, step_x,
                            curvature_y);
 

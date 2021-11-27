@@ -4,6 +4,7 @@
 
 #include "controls/knobs.h"
 #include "controls/ports.h"
+#include "controls/shape-controls.h"
 #include "controls/switches.h"
 #include "widgets/panel-widget.h"
 
@@ -24,7 +25,7 @@ struct Panel : public PanelWidget<Panel> {
 
     auto y = 25.F;
     auto dy = 18.5F;
-    ThumbSwitch::install<Shapes>(this, ParamId::Shape, x, y);
+    ShapeSwitch::install(this, ParamId::Shape, x, y);
 
     y += dy;
     Knob::install<Large>(this, ParamId::Curvature, x, y);

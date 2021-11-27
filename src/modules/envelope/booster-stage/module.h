@@ -14,8 +14,8 @@
 #include "controls/shape-controls.h"
 #include "controls/switches.h"
 #include "params/presets.h"
-#include "signals/curvature-signals.h"
 #include "signals/duration-signals.h"
+#include "signals/shape-signals.h"
 #include "signals/voltages.h"
 
 #include "rack.hpp"
@@ -41,7 +41,7 @@ struct Module : public rack::engine::Module {
     configInput(InputId::LevelCv, "Level CV");
 
     CurvatureKnob::config(this, ParamId::Curvature, "Curvature");
-    Switch::config<Shapes>(this, ParamId::Shape, "Shape", Shape::Id::J);
+    ShapeSwitch::config(this, ParamId::Shape, "Shape", Shape::Id::J);
     configInput(InputId::CurvatureCv, "Curvature CV");
 
     auto *duration_range_switch =

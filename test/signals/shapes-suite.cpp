@@ -1,4 +1,4 @@
-#include "signals/shapes.h"
+#include "signals/shape-signals.h"
 
 #include "dheunit/test.h"
 #include "helpers/assertions.h"

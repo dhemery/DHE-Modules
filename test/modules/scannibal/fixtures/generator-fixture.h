@@ -1,7 +1,7 @@
 #include "modules/scannibal/generator.h"
 
 #include "components/range.h"
-#include "signals/curvature-signals.h"
+#include "signals/shape-signals.h"
 
 #include "dheunit/test.h"
 

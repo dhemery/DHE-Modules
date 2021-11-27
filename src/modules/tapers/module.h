@@ -8,9 +8,8 @@
 #include "controls/switches.h"
 #include "params/presets.h"
 #include "signals/basic.h"
-#include "signals/curvature-signals.h"
 #include "signals/gain.h"
-#include "signals/shapes.h"
+#include "signals/shape-signals.h"
 #include "signals/voltages.h"
 
 #include "rack.hpp"
@@ -39,8 +38,7 @@ public:
     CurvatureKnob::config(this, ParamId::Curvature1, "Taper 1 curvature");
     Knob::config<Attenuverter>(this, ParamId::CurvatureAv1,
                                "Taper 1 curvature CV gain");
-    Switch::config<Shapes>(this, ParamId::Shape1, "Taper 1 shape",
-                           Shape::Id::J);
+    ShapeSwitch::config(this, ParamId::Shape1, "Taper 1 shape", Shape::Id::J);
     configInput(InputId::CurvatureCv1, "Taper 1 curvature CV");
 
     configOutput(OutputId::Taper1, "Taper 1");
@@ -61,11 +59,10 @@ public:
     CurvatureKnob::config(this, ParamId::Curvature2, "Taper 2 curvature");
     Knob::config<Attenuverter>(this, ParamId::CurvatureAv2,
                                "Taper 2 curvature CV gain");
-    Switch::config<Shapes>(this, ParamId::Shape2, "Taper 2 shape",
-                           Shape::Id::J);
+    ShapeSwitch::config(this, ParamId::Shape2, "Taper 2 shape", Shape::Id::J);
     configInput(InputId::CurvatureCv2, "Taper 2 curvature CV");
 
-    configOutput(OutputId::Taper2, "Taper 2");
+    configOutput(OutputId::Taper2, "Taper 2Shape");
   }
 
   void process(ProcessArgs const & /*args*/) override {

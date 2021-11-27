@@ -1,7 +1,7 @@
 #pragma once
 
 #include "components/phase-timer.h"
-#include "signals/shapes.h"
+#include "signals/shape-signals.h"
 
 #include "dheunit/test.h"
 

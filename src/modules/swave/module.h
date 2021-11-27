@@ -6,9 +6,8 @@
 #include "controls/switches.h"
 #include "params/presets.h"
 #include "signals/basic.h"
-#include "signals/curvature-signals.h"
 #include "signals/gain.h"
-#include "signals/shapes.h"
+#include "signals/shape-signals.h"
 #include "signals/voltages.h"
 
 #include "rack.hpp"
@@ -27,7 +26,7 @@ struct Module : public rack::engine::Module {
     Knob::config<Attenuverter>(this, ParamId::CurvatureAv, "Curvature CV gain",
                                0.F);
     configInput(InputId::CurvatureCv, "Curvature CV");
-    Switch::config<Shapes>(this, ParamId::Shape, "Shape", Shape::Id::J);
+    ShapeSwitch::config(this, ParamId::Shape, "Shape", Shape::Id::J);
   }
 
   void process(ProcessArgs const & /*args*/) override {

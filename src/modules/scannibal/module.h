@@ -11,9 +11,9 @@
 #include "controls/switches.h"
 #include "params/presets.h"
 #include "signals/basic.h"
-#include "signals/curvature-signals.h"
 #include "signals/duration-signals.h"
 #include "signals/gain.h"
+#include "signals/shape-signals.h"
 #include "signals/step-selection.h"
 #include "signals/voltages.h"
 
@@ -79,8 +79,8 @@ public:
                                   step_name + "phase 1 anchor mode",
                                   AnchorMode::Track);
 
-      Switch::config<Shapes>(this, ParamId::StepShape + step,
-                             step_name + "shape", Shape::Id::J);
+      ShapeSwitch::config(this, ParamId::StepShape + step, step_name + "shape",
+                          Shape::Id::J);
       CurvatureKnob::config(this, ParamId::StepCurvature + step,
                             step_name + "curvature");
       configInput(InputId::StepCurvatureCv + step, step_name + "curvature CV");

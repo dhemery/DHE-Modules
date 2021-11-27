@@ -1,16 +1,19 @@
 #pragma once
 
+#include "components/range.h"
 #include "components/sigmoid.h"
 
 #include <array>
 
 namespace dhe {
-namespace internal {
+
+namespace curvature {
+static auto constexpr range = Range{-0.9999F, 0.9999F};
+} // namespace curvature
+
 namespace shape {
 static auto constexpr labels = std::array<char const *, 2>{"J", "S"};
-static auto constexpr unit = "";
 } // namespace shape
-} // namespace internal
 
 struct JShape {
   static auto constexpr apply(float input, float curvature) -> float {
@@ -50,10 +53,22 @@ struct Shape {
   }
 };
 
-struct Shapes {
-  using ValueType = Shape::Id;
-  static auto constexpr size = internal::shape::labels.size();
-  static auto constexpr &labels = internal::shape::labels;
-  static auto constexpr stepper_slug = "shape";
+struct Curvature {
+  static auto constexpr &range = curvature::range;
+  /**
+   * This curvature gives a curvature knob a gentle inverted S taper, increasing
+   * sensitivity in the middle of the knob normalize and decreasing sensitivity
+   * toward the extremes.
+   */
+  static auto constexpr taper_curvature = 0.65F;
+
+  static auto constexpr scale(float normalized) -> float {
+    return range.scale(SShape::apply(normalized, taper_curvature));
+  }
+
+  static auto constexpr normalize(float scaled) -> float {
+    return SShape::invert(range.normalize(scaled), taper_curvature);
+  }
 };
+
 } // namespace dhe

@@ -7,6 +7,7 @@
 #include "controls/duration-controls.h"
 #include "controls/knobs.h"
 #include "controls/ports.h"
+#include "controls/shape-controls.h"
 #include "controls/switches.h"
 #include "signals/voltages.h"
 #include "widgets/panel-widget.h"
@@ -42,7 +43,7 @@ struct Panel : public PanelWidget<Panel> {
     y += dy;
     InPort::install(this, InputId::CurvatureCv, column1, y);
     Knob::install<Large>(this, ParamId::Curvature, column3, y);
-    ThumbSwitch::install<Shapes>(this, ParamId::Shape, column5, y);
+    ShapeSwitch::install(this, ParamId::Shape, column5, y);
 
     y += dy;
     InPort::install(this, InputId::DurationCv, column1, y);

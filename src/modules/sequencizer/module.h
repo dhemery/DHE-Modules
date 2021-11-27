@@ -16,8 +16,8 @@
 #include "controls/shape-controls.h"
 #include "controls/switches.h"
 #include "params/presets.h"
-#include "signals/curvature-signals.h"
 #include "signals/duration-signals.h"
+#include "signals/shape-signals.h"
 #include "signals/step-selection.h"
 #include "signals/voltages.h"
 
@@ -103,8 +103,8 @@ public:
           this, ParamId::StepDuration + step, step_name + "duration");
       duration_range_switch->add_knob(duration_knob);
 
-      Switch::config<Shapes>(this, ParamId::StepShape + step,
-                             step_name + "shape", Shape::Id::J);
+      ShapeSwitch::config(this, ParamId::StepShape + step, step_name + "shape",
+                          Shape::Id::J);
       Button::config(this, ParamId::StepEnabled + step, step_name + "enabled",
                      1);
 

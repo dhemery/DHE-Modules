@@ -1,7 +1,7 @@
 #pragma once
 
 #include "components/range.h"
-#include "signals/shapes.h"
+#include "signals/shape-signals.h"
 
 namespace dhe {
 namespace blossom {

@@ -5,8 +5,8 @@
 #include "components/cxmath.h"
 #include "components/sigmoid.h"
 #include "signals/basic.h"
-#include "signals/curvature-signals.h"
 #include "signals/duration-signals.h"
+#include "signals/shape-signals.h"
 #include "signals/voltages.h"
 
 #include <vector>

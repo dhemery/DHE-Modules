@@ -8,6 +8,7 @@
 #include "controls/duration-controls.h"
 #include "controls/knobs.h"
 #include "controls/ports.h"
+#include "controls/shape-controls.h"
 #include "widgets/panel-widget.h"
 #include "widgets/step-selection-markers.h"
 
@@ -120,7 +121,7 @@ template <typename TSize> struct Panel : public PanelWidget<Panel<TSize>> {
 
       Knob::install<Small>(this, ParamId::StepLevel + step, x, level_y);
 
-      ThumbSwitch::install<Shapes>(this, ParamId::StepShape + step, x, shape_y);
+      ShapeSwitch::install(this, ParamId::StepShape + step, x, shape_y);
       Knob::install<Small>(this, ParamId::StepCurvature + step, x, curve_y);
 
       Knob::install<Small>(this, ParamId::StepDuration + step, x, duration_y);

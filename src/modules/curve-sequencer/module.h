@@ -16,9 +16,8 @@
 #include "controls/shape-controls.h"
 #include "controls/switches.h"
 #include "params/presets.h"
-#include "signals/curvature-signals.h"
 #include "signals/duration-signals.h"
-#include "signals/shapes.h"
+#include "signals/shape-signals.h"
 #include "signals/step-selection.h"
 #include "signals/voltages.h"
 
@@ -71,8 +70,8 @@ template <int N> struct Module : rack::engine::Module {
                                                step_name + "level");
       level_knobs.push_back(level_knob);
 
-      Switch::config<Shapes>(this, ParamId::StepShape + step,
-                             step_name + "shape", Shape::Id::J);
+      ShapeSwitch::config(this, ParamId::StepShape + step, step_name + "shape",
+                          Shape::Id::J);
       CurvatureKnob::config(this, ParamId::StepCurvature + step,
                             step_name + "curvature");
       auto *duration_knob = DurationKnob::config(

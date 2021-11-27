@@ -5,8 +5,9 @@
 
 #include "controls/knobs.h"
 #include "controls/ports.h"
+#include "controls/shape-controls.h"
 #include "controls/switches.h"
-#include "signals/shapes.h"
+#include "signals/shape-signals.h"
 #include "signals/voltages.h"
 #include "widgets/dimensions.h"
 #include "widgets/panel-widget.h"
@@ -184,8 +185,7 @@ private:
       InPort::install(this, InputId::StepDurationCv + step, step_x,
                       duration_cv_y);
 
-      Stepper::install<Shapes>(this, ParamId::StepShape + step, step_x,
-                               shape_y);
+      ShapeStepper::install(this, ParamId::StepShape + step, step_x, shape_y);
       Knob::install<Small>(this, ParamId::StepCurvature + step, step_x,
                            curvature_y);
       InPort::install(this, InputId::StepCurvatureCv + step, step_x,
