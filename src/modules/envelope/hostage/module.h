@@ -5,13 +5,13 @@
 #include "modes.h"
 #include "signals.h"
 
+#include "controls/duration-controls.h"
 #include "controls/knobs.h"
 #include "modules/envelope/mode/defer.h"
 #include "modules/envelope/mode/hold.h"
 #include "modules/envelope/mode/idle.h"
 #include "modules/envelope/mode/input.h"
 #include "modules/envelope/mode/sustain.h"
-#include "params/duration-params.h"
 #include "signals/duration-signals.h"
 
 #include "rack.hpp"

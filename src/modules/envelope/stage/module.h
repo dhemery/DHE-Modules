@@ -4,12 +4,13 @@
 #include "engine.h"
 #include "signals.h"
 
+#include "controls/duration-controls.h"
 #include "controls/knobs.h"
 #include "modules/envelope/mode/defer.h"
 #include "modules/envelope/mode/generate.h"
 #include "modules/envelope/mode/input.h"
 #include "modules/envelope/mode/level.h"
-#include "params/duration-params.h"
+#include "params/presets.h"
 
 #include "rack.hpp"
 

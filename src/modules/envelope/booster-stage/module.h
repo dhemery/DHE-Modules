@@ -9,9 +9,9 @@
 #include "modules/envelope/stage/engine.h"
 
 #include "controls/buttons.h"
+#include "controls/duration-controls.h"
 #include "controls/knobs.h"
 #include "controls/switches.h"
-#include "params/duration-params.h"
 #include "params/presets.h"
 #include "signals/curvature.h"
 #include "signals/duration-signals.h"

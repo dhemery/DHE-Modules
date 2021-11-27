@@ -11,9 +11,9 @@
 #include "components/phase-timer.h"
 #include "components/sigmoid.h"
 #include "controls/buttons.h"
+#include "controls/duration-controls.h"
 #include "controls/knobs.h"
 #include "controls/switches.h"
-#include "params/duration-params.h"
 #include "params/presets.h"
 #include "signals/curvature.h"
 #include "signals/duration-signals.h"
@@ -52,7 +52,7 @@ template <int N> struct Module : rack::engine::Module {
                                      "Sequence length", N);
 
     auto level_knobs = std::vector<MappedKnobQuantity<Voltage> *>{};
-    auto duration_knobs = std::vector<DurationKnob *>{};
+    auto duration_knobs = std::vector<DurationKnob::Quantity *>{};
 
     for (auto step = 0; step < N; step++) {
       auto const step_name =
