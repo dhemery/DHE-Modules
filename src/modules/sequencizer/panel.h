@@ -10,7 +10,7 @@
 #include "controls/knobs.h"
 #include "controls/ports.h"
 #include "controls/switches.h"
-#include "signals/durations.h"
+#include "signals/duration-signals.h"
 #include "signals/voltages.h"
 #include "widgets/dimensions.h"
 #include "widgets/panel-widget.h"

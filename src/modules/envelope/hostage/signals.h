@@ -3,7 +3,7 @@
 #include "control-ids.h"
 
 #include "modules/envelope/mode/mode.h"
-#include "signals/durations.h"
+#include "signals/duration-signals.h"
 
 #include <vector>
 

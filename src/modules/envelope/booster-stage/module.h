@@ -2,17 +2,19 @@
 
 #include "signals.h"
 
-#include "controls/buttons.h"
-#include "controls/knobs.h"
-#include "controls/switches.h"
 #include "modules/envelope/mode/defer.h"
 #include "modules/envelope/mode/generate.h"
 #include "modules/envelope/mode/input.h"
 #include "modules/envelope/mode/level.h"
 #include "modules/envelope/stage/engine.h"
+
+#include "controls/buttons.h"
+#include "controls/knobs.h"
+#include "controls/switches.h"
+#include "params/duration-params.h"
 #include "params/presets.h"
 #include "signals/curvature.h"
-#include "signals/durations.h"
+#include "signals/duration-signals.h"
 #include "signals/voltages.h"
 
 #include "rack.hpp"
@@ -42,9 +44,9 @@ struct Module : public rack::engine::Module {
     configInput(InputId::CurvatureCv, "Curvature CV");
 
     auto *duration_knob =
-        Knob::config<Duration>(this, ParamId::Duration, "Duration");
+        DurationKnob::config(this, ParamId::Duration, "Duration");
     auto select_duration_range = [duration_knob](DurationRangeId range) {
-      duration_knob->mapper().select_range(range);
+      duration_knob->select_range(range);
     };
     Switch::config<DurationRanges>(this, ParamId::DurationRange,
                                    "Duration range", DurationRangeId::Medium)

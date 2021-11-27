@@ -9,7 +9,7 @@
 #include "modules/envelope/mode/generate.h"
 #include "modules/envelope/mode/input.h"
 #include "modules/envelope/mode/level.h"
-#include "signals/durations.h"
+#include "params/duration-params.h"
 
 #include "rack.hpp"
 
@@ -20,7 +20,7 @@ struct Module : public rack::engine::Module {
   Module() {
     config(ParamId::Count, InputId::Count, OutputId::Count);
 
-    Knob::config<MediumDuration>(this, ParamId::Duration, "Duration");
+    MediumDurationKnob::config(this, ParamId::Duration, "Duration");
     Knob::config<UnipolarVoltage>(this, ParamId::Level, "Level");
     Knob::config<Curvature>(this, ParamId::Curvature, "Curvature");
 

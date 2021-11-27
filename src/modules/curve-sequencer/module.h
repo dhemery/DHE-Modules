@@ -13,9 +13,10 @@
 #include "controls/buttons.h"
 #include "controls/knobs.h"
 #include "controls/switches.h"
+#include "params/duration-params.h"
 #include "params/presets.h"
 #include "signals/curvature.h"
-#include "signals/durations.h"
+#include "signals/duration-signals.h"
 #include "signals/shapes.h"
 #include "signals/step-selection.h"
 #include "signals/voltages.h"
@@ -51,7 +52,7 @@ template <int N> struct Module : rack::engine::Module {
                                      "Sequence length", N);
 
     auto level_knobs = std::vector<MappedKnobQuantity<Voltage> *>{};
-    auto duration_knobs = std::vector<MappedKnobQuantity<Duration> *>{};
+    auto duration_knobs = std::vector<DurationKnob *>{};
 
     for (auto step = 0; step < N; step++) {
       auto const step_name =
@@ -71,7 +72,7 @@ template <int N> struct Module : rack::engine::Module {
                              step_name + "shape", Shape::Id::J);
       Knob::config<Curvature>(this, ParamId::StepCurvature + step,
                               step_name + "curvature");
-      auto *duration_knob = Knob::config<Duration>(
+      auto *duration_knob = DurationKnob::config(
           this, ParamId::StepDuration + step, step_name + "duration");
       duration_knobs.push_back(duration_knob);
 
@@ -93,7 +94,7 @@ template <int N> struct Module : rack::engine::Module {
 
     auto select_duration_range = [duration_knobs](DurationRangeId id) {
       for (auto *knob : duration_knobs) {
-        knob->mapper().select_range(id);
+        knob->select_range(id);
       }
     };
     Switch::config<DurationRanges>(this, ParamId::DurationRange,

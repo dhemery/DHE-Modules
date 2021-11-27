@@ -1,7 +1,7 @@
 #include "modules/sequencizer/control-ids.h"
 #include "modules/sequencizer/signals.h"
 
-#include "signals/durations.h"
+#include "signals/duration-signals.h"
 #include "signals/gain.h"
 
 #include "dheunit/test.h"
@@ -66,8 +66,7 @@ struct DurationRangeSuite {
   std::vector<DurationRangeTest> tests; // NOLINT
 
   void run(Tester &t) const {
-    auto const name =
-        std::string{"With range "} + dhe::internal::duration::label(range_id);
+    auto const name = std::string{"With range "} + Duration::label(range_id);
     t.run(name, [this](Tester &t) {
       for (auto const &test : tests) {
         test.run(t, range_id);
