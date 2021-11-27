@@ -34,12 +34,9 @@ static auto constexpr size = 5;
 static auto constexpr labels = std::array<char const *, size>{
     "Level", "A", "B", "C", "Out",
 };
-static auto constexpr names = std::array<char const *, size>{
-    "AnchorSource::Level", "AnchorSource::InA", "AnchorSource::InB",
-    "AnchorSource::InC",   "AnchorSource::Out",
-};
-static inline auto name(AnchorSource s) -> char const * {
-  return names[static_cast<size_t>(s)];
+
+static inline auto label(AnchorSource s) -> char const * {
+  return labels[static_cast<size_t>(s)];
 }
 static auto constexpr values = std::array<AnchorSource, size>{
     AnchorSource::Level, AnchorSource::InA, AnchorSource::InB,
@@ -56,10 +53,21 @@ struct AnchorSources {
 
 static inline auto operator<<(std::ostream &os, AnchorSource s)
     -> std::ostream & {
-  return os << anchor_source::name(s);
+  return os << "AnchorSource::" << anchor_source::label(s);
 }
 
 enum class AnchorType { Start, End };
+
+namespace anchor_type {
+static auto constexpr labels = std::array<char const *, 2>{
+    "Start",
+    "End",
+};
+
+static constexpr auto label(AnchorType type) -> char const * {
+  return labels[static_cast<size_t>(type)];
+}
+} // namespace anchor_type
 
 template <typename Signals> struct Anchor {
   Anchor(Signals &signals, AnchorType type) : signals_{signals}, type_{type} {}
