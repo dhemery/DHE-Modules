@@ -48,7 +48,7 @@ struct ThumbSwitch {
     Widget() {
       auto const prefix =
           std::string{Panel::svg_dir} + "/toggle-" + std::to_string(Size) + '-';
-      for (auto position = 0; position < Size; position++) {
+      for (auto position = 1; position <= Size; position++) {
         addFrame(load_svg(prefix + std::to_string(position)));
       }
       shadow->opacity = 0.F;

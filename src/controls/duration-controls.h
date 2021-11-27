@@ -86,17 +86,22 @@ struct DurationRangeSwitch {
   template <typename Panel>
   static inline auto install(Panel *panel, int param_id, float xmm, float ymm)
       -> Widget<Panel> * {
-    return rack::createParamCentered<Widget<Panel>>(
+    auto *w = rack::createParamCentered<Widget<Panel>>(
         mm2px(xmm, ymm), panel->getModule(), param_id);
+    panel->addParam(w);
+    return w;
   }
 
   static inline auto
   config(rack::engine::Module *module, int param_id, std::string const &name,
          DurationRangeId default_range_id = DurationRangeId::Medium)
       -> Quantity * {
+    static auto const labels = std::vector<std::string>{
+        duration::labels.cbegin(), duration::labels.cend()};
+    static auto const max_value = static_cast<float>(labels.size() - 1);
     auto const default_value = static_cast<float>(default_range_id);
-    auto *q = module->configParam<Quantity>(param_id, 0.F, 1.F, default_value,
-                                            name, " s");
+    auto *q = module->configSwitch<Quantity>(param_id, 0.F, max_value,
+                                             default_value, name, labels);
     return q;
   }
 };
