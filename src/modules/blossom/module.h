@@ -2,6 +2,7 @@
 
 #include "bounce-ratio.h"
 #include "control-ids.h"
+#include "controls.h"
 #include "spin-speed.h"
 
 #include "components/phase-rotor.h"
@@ -27,18 +28,14 @@ public:
   Module() {
     config(ParamId::Count, InputId::Count, OutputId::Count);
 
-    Knob::config<SpinSpeed>(this, ParamId::SpinSpeed, "Speed", 1.F);
+    SpinSpeedKnob::config(this, ParamId::SpinSpeed, "Speed");
     AttenuverterKnob::config(this, ParamId::SpinSpeedAv, "Speed CV gain");
     configInput(InputId::SpinSpeedCv, "Speed CV");
 
     auto *ratio_knob =
-        Knob::config<BounceRatio>(this, ParamId::BounceRatio, "Ratio");
-    auto select_ratio_mode = [ratio_knob](BounceRatioMode mode) {
-      ratio_knob->mapper().select_mode(mode);
-    };
-    Switch::config<BounceRatioModes>(this, ParamId::BounceRatioMode,
-                                     "Ratio mode", BounceRatioMode::Free)
-        ->on_change(select_ratio_mode);
+        BounceRatioKnob::config(this, ParamId::BounceRatio, "Ratio");
+    BounceRatioModeSwitch::config(this, ParamId::BounceRatioMode, "Ratio mode")
+        ->add_knob(ratio_knob);
 
     AttenuverterKnob::config(this, ParamId::BounceRatioAv, "Ratio CV gain");
     configInput(InputId::BounceRatioCv, "Ratio CV");

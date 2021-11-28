@@ -26,33 +26,9 @@ static constexpr auto normalize(float scaled) -> float {
   return range.normalize(scaled);
 }
 
-struct KnobMap {
-  static auto constexpr default_value = 9.F;
-  static auto constexpr unit = "x";
-
-  auto to_display(float value) const -> float { return scale(value, mode_); }
-
-  static constexpr auto to_value(float display) -> float {
-    return normalize(display);
-  }
-
-  void select_mode(BounceRatioMode mode) { mode_ = mode; }
-
-private:
-  BounceRatioMode mode_{BounceRatioMode::Free};
-};
-
 } // namespace bounce_ratio
 
-struct BounceRatioModes {
-  using ValueType = BounceRatioMode;
-  static auto constexpr size = bounce_ratio::size;
-  static auto constexpr &labels = bounce_ratio::labels;
-};
-
 struct BounceRatio {
-  using KnobMap = bounce_ratio::KnobMap;
-
   static constexpr auto scale(float normalized, BounceRatioMode mode) -> float {
     return bounce_ratio::scale(normalized, mode);
   }

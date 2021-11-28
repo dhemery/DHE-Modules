@@ -1,13 +1,11 @@
 #pragma once
 
-#include "bounce-ratio.h"
 #include "control-ids.h"
+#include "controls.h"
 
 #include "controls/knobs.h"
 #include "controls/ports.h"
-#include "controls/switches.h"
 #include "controls/voltage-controls.h"
-#include "signals/voltage-signals.h"
 #include "widgets/panel-widget.h"
 
 #include "rack.hpp"
@@ -40,8 +38,7 @@ struct Panel : public PanelWidget<Panel> {
     Knob::install<Tiny>(this, ParamId::BounceRatioAv, column2, y);
     Knob::install<Large>(this, ParamId::BounceRatio, column3, y);
 
-    ThumbSwitch::install<BounceRatioModes>(this, ParamId::BounceRatioMode,
-                                           column4, y);
+    BounceRatioModeSwitch::install(this, ParamId::BounceRatioMode, column4, y);
 
     y += dy;
     InPort::install(this, InputId::BounceDepthCv, column1, y);

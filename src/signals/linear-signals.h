@@ -5,15 +5,15 @@
 
 namespace dhe {
 template <typename T> struct LinearSignal {
-  static auto constexpr scale(float normalized) -> float {
+  static constexpr auto scale(float normalized) -> float {
     return T::range.scale(normalized);
   }
 
-  static auto constexpr normalize(float scaled) -> float {
+  static constexpr auto normalize(float scaled) -> float {
     return T::range.normalize(scaled);
   }
 
-  static auto constexpr clamp(float unsafe) -> float {
+  static constexpr auto clamp(float unsafe) -> float {
     return T::range.clamp(unsafe);
   }
 };
