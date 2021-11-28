@@ -52,26 +52,27 @@ private:
     auto const multiplier_knob_name =
         channel_name + (N == 1 ? "Multiplier" : " multiplier");
 
-    auto *operand_knob =
-        OperandKnob::config(this, ParamId::Operand + channel, offset_knob_name);
+    auto *operand_knob = OperandKnob::config(this, ParamId::Operand + channel)
+                             ->set_offset_knob_name(offset_knob_name)
+                             ->set_multiplier_knob_name(multiplier_knob_name);
 
     auto const offset_range_switch_name =
         channel_name + (N == 1 ? "Offset range" : " offset range");
-    auto *offset_range_stepper =
-        OffsetRangeStepper::config(this, ParamId::OffsetRange + channel,
-                                   offset_range_switch_name, operand_knob);
+    OffsetRangeStepper::config(this, ParamId::OffsetRange + channel,
+                               offset_range_switch_name)
+        ->set_operand_knob(operand_knob);
 
     auto const multiplier_range_switch_name =
         channel_name + (N == 1 ? "Multiplier range" : " multiplier range");
-    auto *multiplier_range_stepper = MultiplierRangeStepper::config(
-        this, ParamId::MultiplierRange + channel, multiplier_range_switch_name,
-        operand_knob);
+    MultiplierRangeStepper::config(this, ParamId::MultiplierRange + channel,
+                                   multiplier_range_switch_name)
+        ->set_operand_knob(operand_knob);
 
     auto const operator_switch_name =
         channel_name + (N == 1 ? "Operator" : " operator");
     OperationSwitch::config(this, ParamId::Operation + channel,
-                            operator_switch_name, offset_range_stepper,
-                            multiplier_range_stepper);
+                            operator_switch_name)
+        ->set_operand_knob(operand_knob);
 
     auto const port_name = N == 1 ? "Func" : channel_name;
     configInput(InputId::Channel + channel, port_name);

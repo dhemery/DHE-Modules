@@ -80,7 +80,7 @@ template <typename Panel, typename Style>
 struct StepperWidget : rack::app::SvgSwitch {
   StepperWidget() {
     auto const prefix = std::string{Panel::svg_dir} + "/" + Style::slug + '-';
-    for (auto position = 1; position <= Style::size; position++) {
+    for (auto position = 1UL; position <= Style::size; position++) {
       addFrame(load_svg(prefix + std::to_string(position)));
     }
     shadow->opacity = 0.F;

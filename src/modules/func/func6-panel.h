@@ -42,19 +42,20 @@ public:
       auto const port_y = y + port_offset;
 
       InPort::install(this, InputId::Channel + row, column1, port_y);
+      OutPort::install(this, OutputId::Channel + row, column5, port_y);
+
       auto *operand_knob =
           OperandKnob::install<Large>(this, ParamId::Operand + row, column3, y);
-
-      OutPort::install(this, OutputId::Channel + row, column5, port_y);
 
       auto *offset_range_stepper = OffsetRangeStepper::install(
           this, ParamId::OffsetRange + row, column4, y, operand_knob);
 
       auto *multiplier_range_stepper = MultiplierRangeStepper::install(
-          this, ParamId::MultiplierRange + row, column4, y, operand_knob);
+          this, ParamId::MultiplierRange + row, column4, y);
 
-      OperationSwitch::install(this, ParamId::Operation + row, column2, y,
-                               offset_range_stepper, multiplier_range_stepper);
+      OperationSwitch::install(this, ParamId::Operation + row, column2, y)
+          ->set_offset_range_stepper(offset_range_stepper)
+          ->set_multiplier_range_stepper(multiplier_range_stepper);
     }
   }
 }; // namespace func

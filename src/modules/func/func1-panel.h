@@ -42,18 +42,20 @@ public:
     auto constexpr row6 = top + row_spacing * 5 + port_offset;
 
     InPort::install(this, InputId::Channel, x, row1);
+    OutPort::install(this, OutputId::Channel, x, row6);
+
     auto *operand_knob =
         OperandKnob::install<Large>(this, ParamId::Operand, x, row3);
-    OutPort::install(this, OutputId::Channel, x, row6);
 
     auto *offset_range_stepper = OffsetRangeStepper::install(
         this, ParamId::OffsetRange, x, row4, operand_knob);
 
     auto *multiplier_range_stepper = MultiplierRangeStepper::install(
-        this, ParamId::MultiplierRange, x, row4, operand_knob);
+        this, ParamId::MultiplierRange, x, row4);
 
-    OperationSwitch::install(this, ParamId::Operation, x, row2,
-                             offset_range_stepper, multiplier_range_stepper);
+    OperationSwitch::install(this, ParamId::Operation, x, row2)
+        ->set_offset_range_stepper(offset_range_stepper)
+        ->set_multiplier_range_stepper(multiplier_range_stepper);
   }
 };
 } // namespace func
