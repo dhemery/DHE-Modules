@@ -59,9 +59,6 @@ public:
     configOutput(OutputId::SequenceEventPulse, "Start of sequence");
     configOutput(OutputId::Out, "Sequencer");
 
-    auto level_knobs = std::vector<MappedKnobQuantity<Voltage> *>{};
-    auto duration_knobs = std::vector<DurationKnob::Quantity *>{};
-
     auto *duration_range_switch =
         DurationRangeSwitch::config(this, ParamId::DurationRange,
                                     "Duration range", DurationRangeId::Medium);
