@@ -10,26 +10,14 @@ static auto constexpr range = Range{-10.F, 10.F};
 } // namespace throb_speed
 
 struct ThrobSpeed {
-  /**
-   * @param rotation the rotation of the throb speed knob
-   * @param modulation extra rotation to add after tapering
-   */
-  static constexpr auto scale(float rotation, float modulation) -> float {
-    return range.scale(apply_taper(rotation) + modulation);
+  static constexpr auto scale(float normalized, float modulation = 0.F)
+      -> float {
+    return range.scale(apply_taper(normalized) + modulation);
   }
 
-  struct KnobMap {
-    static auto constexpr default_value = 1.F;
-    static auto constexpr unit = " Hz";
-
-    static constexpr auto to_display(float value) -> float {
-      return scale(value, 0.F);
-    }
-
-    static constexpr auto to_value(float display) -> float {
-      return invert_taper(range.normalize(display));
-    }
-  };
+  static constexpr auto normalize(float scaled) -> float {
+    return invert_taper(range.normalize(scaled));
+  }
 
 private:
   static auto constexpr curvature = -0.8F;

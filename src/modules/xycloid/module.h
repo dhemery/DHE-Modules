@@ -1,6 +1,7 @@
 #pragma once
 
 #include "control-ids.h"
+#include "controls.h"
 #include "throb-speed.h"
 #include "wobble-ratio.h"
 
@@ -25,27 +26,19 @@ public:
   Module() {
     config(ParamId::Count, InputId::Count, OutputId::Count);
 
-    Knob::config<ThrobSpeed>(this, ParamId::ThrobSpeed, "Speed", 1.F);
+    ThrobSpeedKnob::config(this, ParamId::ThrobSpeed, "Speed");
     configInput(InputId::ThrobSpeedCv, "Speed CV");
     AttenuverterKnob::config(this, ParamId::ThrobSpeedAv, "Speed CV gain");
 
     auto *ratio_knob =
-        Knob::config<WobbleRatio>(this, ParamId::WobbleRatio, "Ratio");
-    auto select_ratio_range = [ratio_knob](WobbleRatioRangeId range) {
-      ratio_knob->mapper().select_range(range);
-    };
-    auto select_ratio_mode = [ratio_knob](WobbleRatioMode mode) {
-      ratio_knob->mapper().select_mode(mode);
-    };
+        WobbleRatioKnob::config(this, ParamId::WobbleRatio, "Ratio");
 
     configInput(InputId::WobbleRatioCv, "Ratio CV");
     AttenuverterKnob::config(this, ParamId::WobbleRatioAv, "Ratio CV gain");
-    Switch::config<WobbleRatioRanges>(this, ParamId::WobbleRatioRange,
-                                      "Direction", WobbleRatioRangeId::Outward)
-        ->on_change(select_ratio_range);
-    Switch::config<WobbleRatioModes>(this, ParamId::WobbleRatioMode,
-                                     "Ratio mode", WobbleRatioMode::Free)
-        ->on_change(select_ratio_mode);
+    WobbleRatioRangeSwitch::config(this, ParamId::WobbleRatioRange, "Direction")
+        ->add_knob(ratio_knob);
+    WobbleRatioModeSwitch::config(this, ParamId::WobbleRatioMode, "Ratio mode")
+        ->add_knob(ratio_knob);
 
     PercentageKnob::config(this, ParamId::WobbleDepth, "Depth", 50.F);
     configInput(InputId::WobbleDepthCv, "Depth CV");

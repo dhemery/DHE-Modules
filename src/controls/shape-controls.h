@@ -25,8 +25,8 @@ struct CurvatureKnob {
                      std::string const &name, float default_curvature = 0.F)
       -> Quantity * {
     auto const default_rotation = Curvature::normalize(default_curvature);
-    auto *q =
-        module->configParam<Quantity>(id, 0.F, 1.F, default_rotation, name, " Hz");
+    auto *q = module->configParam<Quantity>(id, 0.F, 1.F, default_rotation,
+                                            name, " Hz");
     return q;
   }
 };

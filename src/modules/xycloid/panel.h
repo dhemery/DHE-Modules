@@ -1,6 +1,7 @@
 #pragma once
 
 #include "control-ids.h"
+#include "controls.h"
 #include "throb-speed.h"
 #include "wobble-ratio.h"
 
@@ -42,15 +43,14 @@ struct Panel : public PanelWidget<Panel> {
 
     Knob::install<Large>(this, ParamId::WobbleRatio, column3, y);
 
-    ThumbSwitch::install<WobbleRatioModes>(this, ParamId::WobbleRatioMode,
-                                           column4, y);
+    WobbleRatioModeSwitch::install(this, ParamId::WobbleRatioMode, column4, y);
 
     y += dy;
     InPort::install(this, InputId::WobbleDepthCv, column1, y);
     Knob::install<Tiny>(this, ParamId::WobbleDepthAv, column2, y);
     Knob::install<Large>(this, ParamId::WobbleDepth, column3, y);
-    ThumbSwitch::install<WobbleRatioRanges>(this, ParamId::WobbleRatioRange,
-                                            column4, y);
+    WobbleRatioRangeSwitch::install(this, ParamId::WobbleRatioRange, column4,
+                                    y);
 
     y += dy;
     InPort::install(this, InputId::WobblePhaseOffsetCv, column1, y);
