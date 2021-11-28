@@ -117,6 +117,9 @@ struct SelectionStartKnob {
 
   template <typename Panel, typename Style>
   struct Widget : Knob::Widget<Panel, Style> {
+    using StartMarker = SelectionStartMarker::Widget<Panel>;
+    using EndMarker = SelectionEndMarker::Widget<Panel>;
+
     Widget() { this->snap = true; }
 
     void onChange(rack::widget::Widget::ChangeEvent const &e) override {
@@ -127,26 +130,21 @@ struct SelectionStartKnob {
       end_marker_->set_start(position);
     }
 
-    void set_start_marker(SelectionStartMarker::Widget<Panel> *marker) {
-      start_marker_ = marker;
-    }
+    void set_start_marker(StartMarker *marker) { start_marker_ = marker; }
 
-    void set_end_marker(SelectionEndMarker::Widget<Panel> *marker) {
-      end_marker_ = marker;
-    }
+    void set_end_marker(EndMarker *marker) { end_marker_ = marker; }
 
   private:
-    SelectionStartMarker::Widget<Panel> *start_marker_{};
-    SelectionEndMarker::Widget<Panel> *end_marker_{};
+    StartMarker *start_marker_{};
+    EndMarker *end_marker_{};
   };
 
   template <int N>
   static auto config(rack::engine::Module *module, int param_id,
-                     std::string const &name, int value = 1) -> Quantity * {
-    auto const max_value = static_cast<float>(N);
-    auto const default_value = static_cast<float>(value);
-    auto *q = module->configParam<Quantity>(param_id, 1.F, max_value,
-                                            default_value, name);
+                     std::string const &name) -> Quantity * {
+    auto const max_value = static_cast<float>(N - 1);
+    auto *q = module->configParam<Quantity>(param_id, 0.F, max_value, 0.F, name,
+                                            "", 0.F, 1.F, 1.F);
     q->snapEnabled = true;
     return q;
   }
@@ -170,6 +168,8 @@ struct SelectionLengthKnob {
 
   template <typename Panel, typename Style>
   struct Widget : Knob::Widget<Panel, Style> {
+    using EndMarker = SelectionEndMarker::Widget<Panel>;
+
     Widget() { this->snap = true; }
 
     void onChange(rack::widget::Widget::ChangeEvent const &e) override {
@@ -178,21 +178,18 @@ struct SelectionLengthKnob {
           static_cast<int>(this->getParamQuantity()->getValue()));
     }
 
-    void set_end_marker(SelectionEndMarker::Widget<Panel> *end_marker) {
-      end_marker_ = end_marker;
-    }
+    void set_end_marker(EndMarker *end_marker) { end_marker_ = end_marker; }
 
   private:
-    SelectionEndMarker::Widget<Panel> *end_marker_{};
+    EndMarker *end_marker_{};
   };
 
   template <int N>
   static auto config(rack::engine::Module *module, int param_id,
-                     std::string const &name, int value = 1) -> Quantity * {
-    auto const max_value = static_cast<float>(N - 1);
-    auto const default_value = static_cast<float>(value);
-    auto *q = module->configParam<Quantity>(param_id, 0.F, max_value,
-                                            default_value, name);
+                     std::string const &name) -> Quantity * {
+    auto const max_value = static_cast<float>(N);
+    auto *q = module->configParam<Quantity>(param_id, 1.F, max_value, max_value,
+                                            name, " steps");
     q->snapEnabled = true;
     return q;
   }
