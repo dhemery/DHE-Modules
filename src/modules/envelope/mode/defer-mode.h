@@ -2,7 +2,6 @@
 
 namespace dhe {
 namespace envelope {
-namespace mode {
 template <typename Signals> class DeferMode {
 public:
   DeferMode(Signals &signals) : signals_{signals} {}
@@ -14,6 +13,5 @@ public:
 private:
   Signals &signals_;
 };
-} // namespace mode
 } // namespace envelope
 } // namespace dhe

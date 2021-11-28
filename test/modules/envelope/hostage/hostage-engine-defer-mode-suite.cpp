@@ -57,7 +57,7 @@ public:
                   SimpleMode &defer_mode, TimedMode &hold_mode,
                   LatchedMode & /*sustain_mode*/, SimpleMode & /*idle_mode*/,
                   HostageEngine &engine) {
-                 signals.mode_ = Mode::Hold;
+                 signals.mode_ = ModeId::Hold;
                  signals.defer_ = false;
                  signals.gate_ = true;
 
@@ -77,7 +77,7 @@ public:
                   SimpleMode &defer_mode, TimedMode & /*hold_mode*/,
                   LatchedMode & /*sustain_mode*/, SimpleMode & /*idle_mode*/,
                   HostageEngine &engine) {
-                 signals.mode_ = Mode::Hold;
+                 signals.mode_ = ModeId::Hold;
                  signals.defer_ = false;
                  signals.gate_ = false;
 
@@ -99,7 +99,7 @@ public:
                 SimpleMode &defer_mode, TimedMode & /*hold_mode*/,
                 LatchedMode &sustain_mode, SimpleMode & /*idle_mode*/,
                 HostageEngine &engine) {
-               signals.mode_ = Mode::Sustain;
+               signals.mode_ = ModeId::Sustain;
                signals.defer_ = false;
                signals.gate_ = true;
 
@@ -120,7 +120,7 @@ public:
                 SimpleMode &defer_mode, TimedMode & /*hold_mode*/,
                 LatchedMode & /*sustain_mode*/, SimpleMode &idle_mode,
                 HostageEngine &engine) {
-               signals.mode_ = Mode::Sustain;
+               signals.mode_ = ModeId::Sustain;
                signals.defer_ = false;
                signals.gate_ = false;
 

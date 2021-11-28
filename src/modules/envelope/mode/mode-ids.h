@@ -2,8 +2,7 @@
 
 namespace dhe {
 namespace envelope {
-namespace mode {
-enum class Mode {
+enum class ModeId {
   Defer, // Defer to upstream module (or IN port) by sending the IN voltage to
          // the OUT port
   Generate, // Generate a curve over the duration
@@ -14,6 +13,5 @@ enum class Mode {
   Sustain,  // Sustain the current voltage until GATE falls
 };
 
-}
 } // namespace envelope
 } // namespace dhe

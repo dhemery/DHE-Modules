@@ -1,17 +1,18 @@
 #pragma once
 
 #include "control-ids.h"
+#include "controls.h"
 #include "engine.h"
-#include "modes.h"
+#include "mode-ids.h"
 #include "signals.h"
 
 #include "controls/duration-controls.h"
 #include "controls/knobs.h"
-#include "modules/envelope/mode/defer.h"
-#include "modules/envelope/mode/hold.h"
-#include "modules/envelope/mode/idle.h"
-#include "modules/envelope/mode/input.h"
-#include "modules/envelope/mode/sustain.h"
+#include "modules/envelope/mode/defer-mode.h"
+#include "modules/envelope/mode/hold-mode.h"
+#include "modules/envelope/mode/idle-mode.h"
+#include "modules/envelope/mode/input-mode.h"
+#include "modules/envelope/mode/sustain-mode.h"
 #include "params/presets.h"
 #include "signals/duration-signals.h"
 
@@ -39,7 +40,7 @@ struct Module : public rack::engine::Module {
     duration_range_switch->add_knob(duration_knob);
     configInput(InputId::DurationCv, "Duration CV");
 
-    Switch::config<Modes>(this, ParamId::Mode, "Mode", Mode::Hold);
+    ModeSwitch::config(this, ParamId::Mode, "Mode");
   };
 
   void process(ProcessArgs const &args) override {
@@ -55,11 +56,11 @@ struct Module : public rack::engine::Module {
 private:
   using RackSignals =
       Signals<rack::engine::Param, rack::engine::Input, rack::engine::Output>;
-  using DeferM = mode::DeferMode<RackSignals>;
-  using HoldM = mode::HoldMode<RackSignals, PhaseTimer>;
-  using IdleM = mode::IdleMode<RackSignals>;
-  using InputM = mode::InputMode<RackSignals>;
-  using SustainM = mode::SustainMode<RackSignals>;
+  using DeferM = envelope::DeferMode<RackSignals>;
+  using HoldM = envelope::HoldMode<RackSignals, PhaseTimer>;
+  using IdleM = envelope::IdleMode<RackSignals>;
+  using InputM = envelope::InputMode<RackSignals>;
+  using SustainM = envelope::SustainMode<RackSignals>;
   using RackEngine =
       Engine<RackSignals, InputM, DeferM, HoldM, SustainM, IdleM>;
 

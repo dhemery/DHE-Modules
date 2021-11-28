@@ -2,17 +2,15 @@
 
 #include "signals.h"
 
-#include "modules/envelope/mode/defer.h"
-#include "modules/envelope/mode/generate.h"
-#include "modules/envelope/mode/input.h"
-#include "modules/envelope/mode/level.h"
+#include "modules/envelope/mode/defer-mode.h"
+#include "modules/envelope/mode/generate-mode.h"
+#include "modules/envelope/mode/input-mode.h"
+#include "modules/envelope/mode/level-mode.h"
 #include "modules/envelope/stage/engine.h"
 
 #include "controls/buttons.h"
 #include "controls/duration-controls.h"
-#include "controls/knobs.h"
 #include "controls/shape-controls.h"
-#include "controls/switches.h"
 #include "controls/voltage-controls.h"
 #include "params/presets.h"
 #include "signals/duration-signals.h"
@@ -74,10 +72,10 @@ struct Module : public rack::engine::Module {
 private:
   using RackSignals =
       Signals<rack::engine::Param, rack::engine::Input, rack::engine::Output>;
-  using DeferMode = envelope::mode::DeferMode<RackSignals>;
-  using InputMode = envelope::mode::InputMode<RackSignals>;
-  using GenerateMode = envelope::mode::GenerateMode<RackSignals, PhaseTimer>;
-  using LevelMode = envelope::mode::LevelMode<RackSignals>;
+  using DeferMode = envelope::DeferMode<RackSignals>;
+  using InputMode = envelope::InputMode<RackSignals>;
+  using GenerateMode = envelope::GenerateMode<RackSignals, PhaseTimer>;
+  using LevelMode = envelope::LevelMode<RackSignals>;
   using RackEngine =
       stage::Engine<RackSignals, DeferMode, InputMode, GenerateMode, LevelMode>;
 

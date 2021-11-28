@@ -25,7 +25,7 @@ static inline void in_hold_mode(Signals &signals, SimpleMode &input_mode,
   // Starts in input mode
 
   // input mode + gate rise + hold selected -> hold mode
-  signals.mode_ = Mode::Hold;
+  signals.mode_ = ModeId::Hold;
   hold_mode.event_ = Event::Generated;
   signals.gate_ = true;
   engine.process(0.F);

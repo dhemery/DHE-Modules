@@ -8,10 +8,10 @@
 #include "controls/knobs.h"
 #include "controls/shape-controls.h"
 #include "controls/voltage-controls.h"
-#include "modules/envelope/mode/defer.h"
-#include "modules/envelope/mode/generate.h"
-#include "modules/envelope/mode/input.h"
-#include "modules/envelope/mode/level.h"
+#include "modules/envelope/mode/defer-mode.h"
+#include "modules/envelope/mode/generate-mode.h"
+#include "modules/envelope/mode/input-mode.h"
+#include "modules/envelope/mode/level-mode.h"
 #include "params/presets.h"
 
 #include "rack.hpp"
@@ -48,10 +48,10 @@ struct Module : public rack::engine::Module {
 private:
   using RackSignals =
       Signals<rack::engine::Param, rack::engine::Input, rack::engine::Output>;
-  using DeferM = mode::DeferMode<RackSignals>;
-  using GenerateM = mode::GenerateMode<RackSignals, PhaseTimer>;
-  using InputM = mode::InputMode<RackSignals>;
-  using LevelM = mode::LevelMode<RackSignals>;
+  using DeferM = DeferMode<RackSignals>;
+  using GenerateM = GenerateMode<RackSignals, PhaseTimer>;
+  using InputM = InputMode<RackSignals>;
+  using LevelM = LevelMode<RackSignals>;
   using RackEngine = Engine<RackSignals, DeferM, InputM, GenerateM, LevelM>;
 
   RackSignals signals_{params, inputs, outputs};

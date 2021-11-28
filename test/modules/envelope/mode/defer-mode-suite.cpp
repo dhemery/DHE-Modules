@@ -1,4 +1,4 @@
-#include "modules/envelope/mode/defer.h"
+#include "modules/envelope/mode/defer-mode.h"
 
 #include "dheunit/test.h"
 #include "helpers/assertions.h"
@@ -13,11 +13,11 @@ using test::is_equal_to;
 using test::is_false;
 using test::is_true;
 
-using DeferMode = dhe::envelope::mode::DeferMode<Signals>;
+using DeferMode = dhe::envelope::DeferMode<Signals>;
 
 class DeferModeSuite : public Suite {
 public:
-  DeferModeSuite() : Suite{"dhe::envelope::mode::Defer"} {}
+  DeferModeSuite() : Suite{"dhe::envelope::DeferMode"} {}
   void run(Tester &t) override {
     t.run("enter() activates stage",
           test<DeferMode>([](Tester &t, Signals &signals, DeferMode &mode) {

@@ -1,4 +1,4 @@
-#include "modules/envelope/mode/idle.h"
+#include "modules/envelope/mode/idle-mode.h"
 
 #include "dheunit/test.h"
 #include "helpers/assertions.h"
@@ -12,11 +12,11 @@ using dhe::unit::Tester;
 using test::is_equal_to;
 using test::is_false;
 
-using IdleMode = dhe::envelope::mode::IdleMode<Signals>;
+using IdleMode = dhe::envelope::IdleMode<Signals>;
 
 class IdleModeSuite : public Suite {
 public:
-  IdleModeSuite() : Suite{"dhe::envelope::mode::Idle"} {}
+  IdleModeSuite() : Suite{"dhe::envelope::IdleMode"} {}
   void run(Tester &t) override {
     t.run("enter() deactivates stage",
           test<IdleMode>([](Tester &t, Signals &signals, IdleMode &mode) {

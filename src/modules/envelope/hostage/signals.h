@@ -2,8 +2,10 @@
 
 #include "control-ids.h"
 
-#include "modules/envelope/mode/mode.h"
+#include "modules/envelope/mode/mode-ids.h"
+#include "signals/basic.h"
 #include "signals/duration-signals.h"
+#include "signals/voltage-signals.h"
 
 #include <vector>
 
@@ -12,8 +14,6 @@ namespace envelope {
 namespace hostage {
 
 template <typename TParam, typename TInput, typename TOutput> struct Signals {
-  using Mode = mode::Mode;
-
   Signals(std::vector<TParam> const &params, std::vector<TInput> const &inputs,
           std::vector<TOutput> &outputs)
       : params_{params}, inputs_{inputs}, outputs_{outputs} {};
@@ -32,8 +32,9 @@ template <typename TParam, typename TInput, typename TOutput> struct Signals {
 
   auto input() const -> float { return voltage_at(inputs_[InputId::Envelope]); }
 
-  auto mode() const -> Mode {
-    return is_pressed(params_[ParamId::Mode]) ? Mode::Sustain : Mode::Hold;
+  auto mode() const -> envelope::ModeId {
+    return is_pressed(params_[ParamId::Mode]) ? envelope::ModeId::Sustain
+                                              : envelope::ModeId::Hold;
   }
 
   void output(float voltage) {

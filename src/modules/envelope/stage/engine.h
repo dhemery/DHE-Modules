@@ -3,8 +3,8 @@
 #include "components/latch.h"
 #include "components/phase-timer.h"
 #include "components/range.h"
-#include "modules/envelope/mode/event.h"
-#include "modules/envelope/mode/mode.h"
+#include "modules/envelope/mode/events.h"
+#include "modules/envelope/mode/mode-ids.h"
 
 #include <algorithm>
 
@@ -15,9 +15,6 @@ namespace stage {
 template <typename Signals, typename DeferMode, typename InputMode,
           typename GenerateMode, typename LevelMode>
 struct Engine {
-  using Mode = mode::Mode;
-  using Event = mode::Event;
-
   Engine(Signals &signals, DeferMode &defer_mode, InputMode &input_mode,
          GenerateMode &generate_mode, LevelMode &level_mode)
       : signals_{signals}, defer_mode_{defer_mode}, input_mode_{input_mode},
@@ -27,25 +24,25 @@ struct Engine {
     defer_.clock(signals_.defer());
     gate_.clock(signals_.gate() && !defer_.is_high());
 
-    auto const new_mode = identify_mode();
-    if (mode_ != new_mode) {
-      enter(new_mode);
+    auto const new_mode_id = identify_mode();
+    if (mode_id_ != new_mode_id) {
+      enter(new_mode_id);
     }
 
-    switch (mode_) {
-    case Mode::Defer:
+    switch (mode_id_) {
+    case ModeId::Defer:
       defer_mode_.execute();
       break;
-    case Mode::Generate: {
+    case ModeId::Generate: {
       if (generate_mode_.execute(gate_, sample_time) == Event::Completed) {
         eoc_timer_.reset();
-        enter(Mode::Level);
+        enter(ModeId::Level);
       }
     } break;
-    case Mode::Input:
+    case ModeId::Input:
       input_mode_.execute();
       break;
-    case Mode::Level:
+    case ModeId::Level:
       level_mode_.execute();
       break;
     default:
@@ -57,47 +54,47 @@ struct Engine {
   }
 
 private:
-  auto identify_mode() -> Mode {
+  auto identify_mode() -> ModeId {
     if (defer_.is_high()) {
-      return Mode::Defer;
+      return ModeId::Defer;
     }
     if (gate_.is_rise()) {
-      return Mode::Generate;
+      return ModeId::Generate;
     }
-    return defer_.is_fall() ? Mode::Input : mode_;
+    return defer_.is_fall() ? ModeId::Input : mode_id_;
   }
 
-  void enter(Mode incoming_mode) {
-    switch (mode_) {
-    case Mode::Defer:
+  void enter(ModeId incoming_mode_id) {
+    switch (mode_id_) {
+    case ModeId::Defer:
       defer_mode_.exit();
       break;
-    case Mode::Generate:
+    case ModeId::Generate:
       generate_mode_.exit();
       break;
-    case Mode::Input:
+    case ModeId::Input:
       input_mode_.exit();
       break;
-    case Mode::Level:
+    case ModeId::Level:
       level_mode_.exit();
       break;
     default:
       break;
     }
 
-    mode_ = incoming_mode;
+    mode_id_ = incoming_mode_id;
 
-    switch (mode_) {
-    case Mode::Defer:
+    switch (mode_id_) {
+    case ModeId::Defer:
       defer_mode_.enter();
       break;
-    case Mode::Generate:
+    case ModeId::Generate:
       generate_mode_.enter();
       break;
-    case Mode::Input:
+    case ModeId::Input:
       input_mode_.enter();
       break;
-    case Mode::Level:
+    case ModeId::Level:
       level_mode_.enter();
       break;
     default:
@@ -106,7 +103,7 @@ private:
   }
 
   PhaseTimer eoc_timer_{1.F};
-  Mode mode_{Mode::Input};
+  ModeId mode_id_{ModeId::Input};
   Latch defer_{};
   Latch gate_{};
   Signals &signals_;

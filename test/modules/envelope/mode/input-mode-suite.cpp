@@ -1,4 +1,4 @@
-#include "modules/envelope/mode/input.h"
+#include "modules/envelope/mode/input-mode.h"
 
 #include "dheunit/test.h"
 #include "helpers/assertions.h"
@@ -12,11 +12,11 @@ using dhe::unit::Tester;
 using test::is_equal_to;
 using test::is_false;
 
-using InputMode = dhe::envelope::mode::InputMode<Signals>;
+using InputMode = dhe::envelope::InputMode<Signals>;
 
 class InputModeSuite : public Suite {
 public:
-  InputModeSuite() : Suite{"dhe::envelope::mode::Input"} {}
+  InputModeSuite() : Suite{"dhe::envelope::InputMode"} {}
   void run(Tester &t) override {
     t.run("enter() deactivates stage",
           test<InputMode>([](Tester &t, Signals &signals, InputMode &mode) {

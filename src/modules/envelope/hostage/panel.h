@@ -1,7 +1,8 @@
 #pragma once
 
 #include "control-ids.h"
-#include "modes.h"
+#include "controls.h"
+#include "mode-ids.h"
 
 #include "controls/duration-controls.h"
 #include "controls/knobs.h"
@@ -31,7 +32,7 @@ public:
     auto y = 25.F;
     auto dy = 18.5F;
 
-    ThumbSwitch::install<Modes>(this, ParamId::Mode, column2, y);
+    ModeSwitch::install(this, ParamId::Mode, column2, y);
 
     y += dy;
     InPort::install(this, InputId::DurationCv, column1, y);

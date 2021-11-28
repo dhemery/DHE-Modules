@@ -30,8 +30,7 @@ struct Tiny {
 };
 
 struct Knob {
-  template <typename Panel, typename Style>
-  struct Widget : public rack::app::SvgKnob {
+  template <typename Panel, typename Style> struct Widget : rack::app::SvgKnob {
     Widget() {
       auto knob_svg = load_svg(Panel::svg_dir, Style::svg_file);
       setSvg(knob_svg);
@@ -52,9 +51,9 @@ struct Knob {
 };
 
 template <typename Scale> struct LinearKnob {
-  static auto config(rack::engine::Module *module, int id,
-                     std::string const &name,
-                     float default_value = Scale::default_value)
+  static inline auto config(rack::engine::Module *module, int id,
+                            std::string const &name,
+                            float default_value = Scale::default_value)
       -> rack::engine::ParamQuantity * {
     auto const default_rotation = Scale::range.normalize(default_value);
     auto *q = module->configParam(id, 0.F, 1.F, default_rotation, name,

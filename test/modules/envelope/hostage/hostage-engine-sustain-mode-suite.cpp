@@ -26,7 +26,7 @@ static inline void in_sustain_mode(Signals &signals, SimpleMode &input_mode,
   // Starts in input mode
 
   // input mode + gate rise + sustain selected -> sustain mode
-  signals.mode_ = Mode::Sustain;
+  signals.mode_ = ModeId::Sustain;
   sustain_mode.event_ = Event::Generated;
   signals.gate_ = true;
   engine.process(0.F);

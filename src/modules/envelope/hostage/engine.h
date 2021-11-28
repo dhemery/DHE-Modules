@@ -1,9 +1,11 @@
 #pragma once
 
+#include "mode-ids.h"
+
 #include "components/latch.h"
 #include "components/phase-timer.h"
-#include "modules/envelope/mode/event.h"
-#include "modules/envelope/mode/mode.h"
+#include "modules/envelope/mode/events.h"
+#include "modules/envelope/mode/mode-ids.h"
 
 #include <algorithm>
 
@@ -12,11 +14,7 @@ namespace envelope {
 namespace hostage {
 template <typename Controls, typename InputMode, typename DeferMode,
           typename HoldMode, typename SustainMode, typename IdleMode>
-class Engine {
-  using Mode = mode::Mode;
-  using Event = mode::Event;
-
-public:
+struct Engine {
   Engine(Controls &controls, InputMode &input_mode, DeferMode &defer_mode,
          HoldMode &hold_mode, SustainMode &sustain_mode, IdleMode &idle_mode)
       : controls_{controls}, input_mode_{input_mode}, defer_mode_{defer_mode},
@@ -27,31 +25,31 @@ public:
     defer_.clock(controls_.defer());
     gate_.clock(controls_.gate() && !defer_.is_high());
 
-    auto const new_mode = identify_mode();
-    if (mode_ != new_mode) {
-      enter(new_mode);
+    auto const new_mode_id = identify_mode();
+    if (mode_id_ != new_mode_id) {
+      enter(new_mode_id);
     }
 
-    switch (mode_) {
-    case Mode::Defer:
+    switch (mode_id_) {
+    case envelope::ModeId::Defer:
       defer_mode_.execute();
       break;
-    case Mode::Hold:
+    case envelope::ModeId::Hold:
       if (hold_mode_.execute(gate_, sample_time) == Event::Completed) {
         eoc_timer_.reset();
-        enter(Mode::Idle);
+        enter(envelope::ModeId::Idle);
       }
       break;
-    case Mode::Idle:
+    case envelope::ModeId::Idle:
       idle_mode_.execute();
       break;
-    case Mode::Sustain:
+    case envelope::ModeId::Sustain:
       if (sustain_mode_.execute(gate_) == Event::Completed) {
         eoc_timer_.reset();
-        enter(Mode::Idle);
+        enter(envelope::ModeId::Idle);
       }
       break;
-    case Mode::Input:
+    case envelope::ModeId::Input:
       input_mode_.execute();
       break;
     default:
@@ -63,60 +61,60 @@ public:
   }
 
 private:
-  auto identify_mode() -> Mode {
+  auto identify_mode() -> envelope::ModeId {
     if (defer_.is_high()) {
-      return Mode::Defer;
+      return envelope::ModeId::Defer;
     }
     if (gate_.is_rise()) {
       return controls_.mode();
     }
     if (defer_.is_fall()) {
-      if (controls_.mode() == Mode::Sustain) {
+      if (controls_.mode() == envelope::ModeId::Sustain) {
         eoc_timer_.reset();
-        return Mode::Idle;
+        return envelope::ModeId::Idle;
       }
-      return Mode::Input;
+      return envelope::ModeId::Input;
     }
-    return mode_;
+    return mode_id_;
   }
 
-  void enter(Mode new_mode) {
-    switch (mode_) {
-    case Mode::Defer:
+  void enter(envelope::ModeId new_mode_id) {
+    switch (mode_id_) {
+    case envelope::ModeId::Defer:
       defer_mode_.exit();
       break;
-    case Mode::Hold:
+    case envelope::ModeId::Hold:
       hold_mode_.exit();
       break;
-    case Mode::Idle:
+    case envelope::ModeId::Idle:
       idle_mode_.exit();
       break;
-    case Mode::Input:
+    case envelope::ModeId::Input:
       input_mode_.exit();
       break;
-    case Mode::Sustain:
+    case envelope::ModeId::Sustain:
       sustain_mode_.exit();
       break;
     default:
       break;
     }
 
-    mode_ = new_mode;
+    mode_id_ = new_mode_id;
 
-    switch (mode_) {
-    case Mode::Defer:
+    switch (mode_id_) {
+    case envelope::ModeId::Defer:
       defer_mode_.enter();
       break;
-    case Mode::Hold:
+    case envelope::ModeId::Hold:
       hold_mode_.enter();
       break;
-    case Mode::Idle:
+    case envelope::ModeId::Idle:
       idle_mode_.enter();
       break;
-    case Mode::Sustain:
+    case envelope::ModeId::Sustain:
       sustain_mode_.enter();
       break;
-    case Mode::Input:
+    case envelope::ModeId::Input:
       input_mode_.enter();
       break;
     default:
@@ -124,7 +122,7 @@ private:
     }
   }
 
-  Mode mode_{Mode::Input};
+  envelope::ModeId mode_id_{envelope::ModeId::Input};
   PhaseTimer eoc_timer_{1.F};
   Latch defer_{};
   Latch gate_{};

@@ -1,4 +1,4 @@
-#include "modules/envelope/mode/level.h"
+#include "modules/envelope/mode/level-mode.h"
 
 #include "dheunit/test.h"
 #include "helpers/assertions.h"
@@ -12,11 +12,11 @@ using dhe::unit::Tester;
 using test::is_equal_to;
 using test::is_false;
 
-using LevelMode = dhe::envelope::mode::LevelMode<Signals>;
+using LevelMode = dhe::envelope::LevelMode<Signals>;
 
 class LevelModeSuite : public Suite {
 public:
-  LevelModeSuite() : Suite{"dhe::envelope::mode::Level"} {}
+  LevelModeSuite() : Suite{"dhe::envelope::LevelMode"} {}
   void run(Tester &t) override {
     t.run("enter() deactivates stage",
           test<LevelMode>([](Tester &t, Signals &signals, LevelMode &mode) {

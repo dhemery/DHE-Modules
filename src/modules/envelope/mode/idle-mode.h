@@ -2,7 +2,6 @@
 
 namespace dhe {
 namespace envelope {
-namespace mode {
 template <typename Signals> class IdleMode {
 public:
   IdleMode(Signals &signals) : signals_{signals} {}
@@ -14,6 +13,6 @@ public:
 private:
   Signals &signals_;
 };
-} // namespace mode
+
 } // namespace envelope
 } // namespace dhe

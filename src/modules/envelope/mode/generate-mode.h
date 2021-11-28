@@ -1,6 +1,6 @@
 #pragma once
 
-#include "event.h"
+#include "events.h"
 
 #include "components/cxmath.h"
 #include "components/latch.h"
@@ -9,7 +9,6 @@
 
 namespace dhe {
 namespace envelope {
-namespace mode {
 template <typename Signals, typename Timer> class GenerateMode {
 public:
   GenerateMode(Signals &signals, Timer &timer)
@@ -48,6 +47,5 @@ private:
   Signals &signals_;
   Timer &timer_;
 };
-} // namespace mode
 } // namespace envelope
 } // namespace dhe

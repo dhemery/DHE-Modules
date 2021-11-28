@@ -10,15 +10,15 @@ namespace test {
 namespace hostage {
 
 using dhe::Latch;
-using dhe::envelope::mode::Event;
-using dhe::envelope::mode::Mode;
+using dhe::envelope::Event;
+using dhe::envelope::ModeId;
 using dhe::unit::Tester;
 using TestFunc = std::function<void(Tester &)>;
 
 struct Signals {
   auto defer() const -> bool { return defer_; }
   auto gate() const -> bool { return gate_; }
-  auto mode() const -> Mode { return mode_; }
+  auto mode() const -> ModeId { return mode_; }
   void show_eoc(bool show) {
     eoc_ = show;
     showed_eoc_ = true;
@@ -26,7 +26,7 @@ struct Signals {
   bool defer_{};      // NOLINT
   bool gate_{};       // NOLINT
   bool showed_eoc_{}; // NOLINT
-  Mode mode_{};       // NOLINT
+  ModeId mode_{};     // NOLINT
   bool eoc_{};        // NOLINT
 };
 

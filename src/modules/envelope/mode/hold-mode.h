@@ -1,13 +1,11 @@
 #pragma once
 
-#include "event.h"
+#include "events.h"
 
 #include "components/latch.h"
-#include "components/phase-timer.h"
 
 namespace dhe {
 namespace envelope {
-namespace mode {
 template <typename Signals, typename Timer> class HoldMode {
 public:
   HoldMode(Signals &signals, Timer &timer) : signals_{signals}, timer_{timer} {}
@@ -35,6 +33,5 @@ private:
   Signals &signals_;
   Timer &timer_;
 };
-} // namespace mode
 } // namespace envelope
 } // namespace dhe

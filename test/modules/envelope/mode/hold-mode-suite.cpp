@@ -1,6 +1,6 @@
 #include "components/latch.h"
-#include "modules/envelope/mode/event.h"
-#include "modules/envelope/mode/hold.h"
+#include "modules/envelope/mode/events.h"
+#include "modules/envelope/mode/hold-mode.h"
 
 #include "dheunit/test.h"
 #include "helpers/assertions.h"
@@ -10,7 +10,7 @@ namespace test {
 namespace envelope {
 
 using dhe::PhaseTimer;
-using dhe::envelope::mode::Event;
+using dhe::envelope::Event;
 
 using dhe::unit::Suite;
 using dhe::unit::Tester;
@@ -18,7 +18,7 @@ using test::is_equal_to;
 using test::is_false;
 using test::is_true;
 
-using HoldMode = dhe::envelope::mode::HoldMode<Signals, PhaseTimer>;
+using HoldMode = dhe::envelope::HoldMode<Signals, PhaseTimer>;
 
 class HoldModeSuite : public Suite {
 public:

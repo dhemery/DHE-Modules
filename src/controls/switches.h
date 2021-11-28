@@ -54,26 +54,6 @@ struct ThumbSwitch {
       shadow->opacity = 0.F;
     }
   };
-
-  template <int N> struct Size {};
-
-  template <typename V> struct Style {
-    static auto constexpr slug = Size<V::size>::slug;
-  };
-
-  template <typename V, typename P>
-  static inline auto install(P *panel, int id, float xmm, float ymm)
-      -> SwitchWidget<Switch::Config<P, Style<V>, V>> * {
-    return Switch::install<V, Style<V>>(panel, id, xmm, ymm);
-  }
-};
-
-template <> struct ThumbSwitch::Size<2> {
-  static auto constexpr slug = "toggle-2";
-};
-
-template <> struct ThumbSwitch::Size<3> {
-  static auto constexpr slug = "toggle-3";
 };
 
 template <typename Panel, typename Style>

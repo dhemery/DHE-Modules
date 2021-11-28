@@ -1,7 +1,7 @@
 #include "components/latch.h"
 #include "components/phase-timer.h"
-#include "modules/envelope/mode/event.h"
-#include "modules/envelope/mode/generate.h"
+#include "modules/envelope/mode/events.h"
+#include "modules/envelope/mode/generate-mode.h"
 
 #include "dheunit/test.h"
 #include "helpers/assertions.h"
@@ -11,7 +11,7 @@ namespace test {
 namespace envelope {
 
 using dhe::PhaseTimer;
-using dhe::envelope::mode::Event;
+using dhe::envelope::Event;
 
 using dhe::unit::Suite;
 using dhe::unit::Tester;
@@ -21,11 +21,11 @@ using test::is_true;
 static auto constexpr low_latch = dhe::latch::low;
 static auto constexpr rising_latch = dhe::latch::rising;
 
-using GenerateMode = dhe::envelope::mode::GenerateMode<Signals, PhaseTimer>;
+using GenerateMode = dhe::envelope::GenerateMode<Signals, PhaseTimer>;
 
 class GenerateModeSuite : public Suite {
 public:
-  GenerateModeSuite() : Suite{"dhe::envelope::mode::Generate"} {}
+  GenerateModeSuite() : Suite{"dhe::envelope::GenerateMode"} {}
   void run(Tester &t) override {
     t.run("enter() activates stage",
           test<GenerateMode>([](Tester &t, Signals &signals, PhaseTimer & /**/,

@@ -17,7 +17,7 @@ static inline void in_idle_mode(Signals &signals, SimpleMode &input_mode,
   // Starts in input mode
 
   // input mode + gate rise + sustain selected -> sustain mode
-  signals.mode_ = Mode::Sustain;
+  signals.mode_ = ModeId::Sustain;
   sustain_mode.event_ = Event::Generated;
   signals.gate_ = true;
   engine.process(0.F);
@@ -73,7 +73,7 @@ public:
                 SimpleMode & /*defer_mode*/, TimedMode &hold_mode,
                 LatchedMode & /*sustain_mode*/, SimpleMode &idle_mode,
                 HostageEngine &engine) {
-               signals.mode_ = Mode::Hold;
+               signals.mode_ = ModeId::Hold;
                signals.defer_ = false;
                signals.gate_ = true;
 
@@ -92,7 +92,7 @@ public:
                 SimpleMode & /*defer_mode*/, TimedMode & /*hold_mode*/,
                 LatchedMode &sustain_mode, SimpleMode &idle_mode,
                 HostageEngine &engine) {
-               signals.mode_ = Mode::Sustain;
+               signals.mode_ = ModeId::Sustain;
                signals.defer_ = false;
                signals.gate_ = true;
 

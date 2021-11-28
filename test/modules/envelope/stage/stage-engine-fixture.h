@@ -11,7 +11,7 @@ namespace test {
 namespace stage {
 
 using dhe::Latch;
-using dhe::envelope::mode::Event;
+using dhe::envelope::Event;
 using dhe::unit::Tester;
 using TestFunc = std::function<void(Tester &)>;
 

@@ -5,7 +5,6 @@
 
 namespace dhe {
 namespace envelope {
-namespace mode {
 
 enum class Event { Generated, Completed };
 
@@ -22,6 +21,5 @@ inline auto operator<<(std::ostream &os, Event e) -> std::ostream & {
   }
   return os << event::names[index];
 }
-} // namespace mode
 } // namespace envelope
 } // namespace dhe
