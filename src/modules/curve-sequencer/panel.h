@@ -11,7 +11,7 @@
 #include "controls/shape-controls.h"
 #include "controls/step-selection-controls.h"
 #include "controls/voltage-controls.h"
-#include "widgets/panel-widget.h"
+#include "panels/panel-widget.h"
 
 #include "rack.hpp"
 

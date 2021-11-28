@@ -10,8 +10,8 @@
 #include "controls/shape-controls.h"
 #include "controls/switches.h"
 #include "controls/voltage-controls.h"
+#include "panels/panel-widget.h"
 #include "signals/voltage-signals.h"
-#include "widgets/panel-widget.h"
 
 #include "rack.hpp"
 

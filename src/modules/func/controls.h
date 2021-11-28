@@ -92,7 +92,7 @@ struct OffsetRangeStepper {
   static auto constexpr slug = "offset-range";
 
   template <typename Panel>
-  struct Widget : StepperWidget<Panel, OffsetRangeStepper> {};
+  struct Widget : Stepper::Widget<Panel, OffsetRangeStepper> {};
 
   struct Quantity : rack::engine::SwitchQuantity {
     void setValue(float value) override {
@@ -135,7 +135,7 @@ struct MultiplierRangeStepper {
   static auto constexpr slug = "multiplier-range";
 
   template <typename Panel>
-  struct Widget : StepperWidget<Panel, MultiplierRangeStepper> {};
+  struct Widget : Stepper::Widget<Panel, MultiplierRangeStepper> {};
   struct Quantity : rack::engine::SwitchQuantity {
     void setValue(float value) override {
       rack::engine::SwitchQuantity::setValue(value);

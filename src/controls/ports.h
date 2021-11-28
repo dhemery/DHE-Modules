@@ -1,13 +1,20 @@
 #pragma once
 
-#include "widgets/dimensions.h"
-#include "widgets/port-widget.h"
+#include "panels/assets.h"
+#include "panels/dimensions.h"
 
 #include "rack.hpp"
 
 #include <string>
 
 namespace dhe {
+
+template <typename PanelT> struct PortWidget : rack::app::SvgPort {
+  PortWidget() {
+    setSvg(load_svg(PanelT::svg_dir, "port"));
+    shadow->opacity = 0.F;
+  }
+};
 
 struct InPort {
   template <typename P>

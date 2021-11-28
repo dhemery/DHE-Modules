@@ -12,18 +12,18 @@
 namespace dhe {
 namespace envelope {
 namespace hostage {
-template <typename Controls, typename InputMode, typename DeferMode,
+template <typename Signals, typename InputMode, typename DeferMode,
           typename HoldMode, typename SustainMode, typename IdleMode>
 struct Engine {
-  Engine(Controls &controls, InputMode &input_mode, DeferMode &defer_mode,
+  Engine(Signals &signals, InputMode &input_mode, DeferMode &defer_mode,
          HoldMode &hold_mode, SustainMode &sustain_mode, IdleMode &idle_mode)
-      : controls_{controls}, input_mode_{input_mode}, defer_mode_{defer_mode},
+      : signals_{signals}, input_mode_{input_mode}, defer_mode_{defer_mode},
         hold_mode_{hold_mode}, sustain_mode_{sustain_mode}, idle_mode_{
                                                                 idle_mode} {}
 
   void process(float sample_time) {
-    defer_.clock(controls_.defer());
-    gate_.clock(controls_.gate() && !defer_.is_high());
+    defer_.clock(signals_.defer());
+    gate_.clock(signals_.gate() && !defer_.is_high());
 
     auto const new_mode_id = identify_mode();
     if (mode_id_ != new_mode_id) {
@@ -57,7 +57,7 @@ struct Engine {
     }
 
     eoc_timer_.advance(sample_time / 1e-3F);
-    controls_.show_eoc(eoc_timer_.in_progress());
+    signals_.show_eoc(eoc_timer_.in_progress());
   }
 
 private:
@@ -66,10 +66,10 @@ private:
       return envelope::ModeId::Defer;
     }
     if (gate_.is_rise()) {
-      return controls_.mode();
+      return signals_.mode();
     }
     if (defer_.is_fall()) {
-      if (controls_.mode() == envelope::ModeId::Sustain) {
+      if (signals_.mode() == envelope::ModeId::Sustain) {
         eoc_timer_.reset();
         return envelope::ModeId::Idle;
       }
@@ -126,7 +126,7 @@ private:
   PhaseTimer eoc_timer_{1.F};
   Latch defer_{};
   Latch gate_{};
-  Controls &controls_;
+  Signals &signals_;
   InputMode &input_mode_;
   DeferMode &defer_mode_;
   HoldMode &hold_mode_;

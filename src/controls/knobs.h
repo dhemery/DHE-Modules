@@ -1,11 +1,9 @@
 #pragma once
 
 #include "components/meta.h"
-#include "params/mapped-knob-quantity.h"
-#include "params/ranged-knob-quantity.h"
+#include "panels/assets.h"
+#include "panels/dimensions.h"
 #include "signals/linear-signals.h"
-#include "widgets/assets.h"
-#include "widgets/dimensions.h"
 
 #include "rack.hpp"
 

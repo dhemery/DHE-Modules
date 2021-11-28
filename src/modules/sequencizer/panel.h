@@ -12,9 +12,9 @@
 #include "controls/ports.h"
 #include "controls/step-selection-controls.h"
 #include "controls/switches.h"
+#include "panels/dimensions.h"
+#include "panels/panel-widget.h"
 #include "signals/voltage-signals.h"
-#include "widgets/dimensions.h"
-#include "widgets/panel-widget.h"
 
 #include "rack.hpp"
 

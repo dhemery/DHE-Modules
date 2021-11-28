@@ -9,8 +9,8 @@
 #include "controls/step-selection-controls.h"
 #include "controls/switches.h"
 #include "controls/voltage-controls.h"
-#include "widgets/dimensions.h"
-#include "widgets/panel-widget.h"
+#include "panels/dimensions.h"
+#include "panels/panel-widget.h"
 
 #include "rack.hpp"
 

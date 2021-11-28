@@ -4,7 +4,7 @@
 #include "wobble-ratio.h"
 
 #include "controls/switches.h"
-#include "widgets/assets.h"
+#include "panels/assets.h"
 
 #include "rack.hpp"
 

@@ -1,8 +1,9 @@
 #pragma once
 
-#include "signals/duration-signals.h"
 #include "switches.h"
-#include "widgets/assets.h"
+
+#include "panels/assets.h"
+#include "signals/duration-signals.h"
 
 #include "rack.hpp"
 

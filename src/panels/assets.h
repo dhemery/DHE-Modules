@@ -1,6 +1,6 @@
 #pragma once
 
-#include "widgets/dimensions.h"
+#include "dimensions.h"
 
 #include "rack.hpp"
 

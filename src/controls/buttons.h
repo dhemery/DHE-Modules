@@ -1,8 +1,9 @@
 #pragma once
 
-#include "params/switch-quantity.h"
-#include "widgets/button-widget.h"
-#include "widgets/dimensions.h"
+#include "switches.h"
+
+#include "panels/assets.h"
+#include "panels/dimensions.h"
 
 #include "rack.hpp"
 
@@ -27,6 +28,15 @@ struct Toggle {
 };
 
 struct Button {
+  template <typename T> struct ButtonWidget : public rack::app::SvgSwitch {
+    ButtonWidget() {
+      auto const prefix = std::string{T::svg_dir} + "/" + T::slug + "-";
+      addFrame(load_svg(prefix + "released"));
+      addFrame(load_svg(prefix + "pressed"));
+      shadow->opacity = 0.F;
+    }
+  };
+
   template <typename P, typename S> struct Config {
     static auto constexpr svg_dir = P::svg_dir;
     static auto constexpr slug = S::slug;
@@ -46,10 +56,10 @@ struct Button {
 
   static inline auto config(rack::engine::Module *module, int id,
                             std::string const &name, bool pressed = false)
-      -> SwitchQuantity<bool> * {
+      -> Switch::Quantity<bool> * {
     auto const default_value = static_cast<float>(pressed);
-    return module->configSwitch<SwitchQuantity<bool>>(id, 0.F, 1.F,
-                                                      default_value, name);
+    return module->configSwitch<Switch::Quantity<bool>>(id, 0.F, 1.F,
+                                                        default_value, name);
   }
 };
 
