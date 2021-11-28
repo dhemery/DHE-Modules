@@ -9,9 +9,9 @@
 #include "controls/knobs.h"
 #include "controls/ports.h"
 #include "controls/shape-controls.h"
+#include "controls/step-selection-controls.h"
 #include "controls/voltage-controls.h"
 #include "widgets/panel-widget.h"
-#include "widgets/step-selection-markers.h"
 
 #include "rack.hpp"
 
@@ -69,23 +69,16 @@ template <typename TSize> struct Panel : public PanelWidget<Panel<TSize>> {
                             loop_y);
 
     auto const positions = SelectionMarkerPositions{step_x, active_y, step_dx};
-    auto *start_marker = StartMarker::install(this, positions);
-    auto *end_marker = EndMarker::install(this, positions);
+    auto *start_marker = SelectionStartMarker::install(this, positions);
+    auto *end_marker = SelectionEndMarker::install(this, positions);
 
-    auto const update_selection_start = [start_marker, end_marker](int index) {
-      start_marker->set_start(index);
-      end_marker->set_start(index);
-    };
-    Knob::install<Small, int>(this, ParamId::SelectionStart, left, selection_y)
-        ->on_change(update_selection_start);
+    SelectionStartKnob::install<Small>(this, ParamId::SelectionStart, left,
+                                       selection_y, start_marker, end_marker);
 
-    auto const update_selection_length = [end_marker](int offset) {
-      end_marker->set_length(offset);
-    };
     auto constexpr selection_length_x = left + hp2mm(2.F);
-    Knob::install<Small, int>(this, ParamId::SelectionLength,
-                              selection_length_x, selection_y)
-        ->on_change(update_selection_length);
+    SelectionLengthKnob::install<Small>(this, ParamId::SelectionLength,
+                                        selection_length_x, selection_y,
+                                        end_marker);
 
     InPort::install(this, InputId::Gate, left, gate_y);
     Button::install<Momentary>(this, ParamId::Gate, left + button_port_distance,

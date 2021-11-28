@@ -6,11 +6,11 @@
 #include "controls/knobs.h"
 #include "controls/ports.h"
 #include "controls/shape-controls.h"
+#include "controls/step-selection-controls.h"
 #include "controls/switches.h"
 #include "controls/voltage-controls.h"
 #include "widgets/dimensions.h"
 #include "widgets/panel-widget.h"
-#include "widgets/step-selection-markers.h"
 
 #include "rack.hpp"
 
@@ -195,15 +195,13 @@ private:
   void add_step_selection() {
     auto const positions = SelectionMarkerPositions{
         step_block_left + step_width / 2.F, progress_light_y, step_width};
-    StartMarker::install(this, positions);
-    auto *end_marker = EndMarker::install(this, positions);
+    SelectionStartMarker::install(this, positions);
+    auto *end_marker = SelectionEndMarker::install(this, positions);
 
     auto constexpr length_x = global_inputs_left + port_radius + padding;
     auto constexpr length_y = global_controls_y(0);
-    Knob::install<Small, int>(this, ParamId::SelectionLength, length_x,
-                              length_y)
-        ->on_change(
-            [end_marker](int length) { end_marker->set_length(length); });
+    SelectionLengthKnob::install<Small>(this, ParamId::SelectionLength,
+                                        length_x, length_y, end_marker);
   }
 
   void add_global_outputs() {

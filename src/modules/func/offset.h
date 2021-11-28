@@ -10,35 +10,29 @@ namespace func {
 
 enum class OffsetRangeId { Unipolar5, Bipolar, Unipolar, Bipolar10 };
 
-namespace offset_ranges {
-static auto constexpr size = 4;
+namespace offsets {
 static auto constexpr ranges =
-    std::array<Range, size>{Range{0.F, 5.F}, BipolarVoltage::range,
-                            UnipolarVoltage::range, Range{-10.F, 10.F}};
+    std::array<Range, 4>{Range{0.F, 5.F}, BipolarVoltage::range,
+                         UnipolarVoltage::range, Range{-10.F, 10.F}};
 static auto constexpr labels =
-    std::array<char const *, size>{"0–5 V", "±5 V", "0–10 V", "±10 V"};
+    std::array<char const *, ranges.size()>{"0–5 V", "±5 V", "0–10 V", "±10 V"};
 
-static inline auto range(OffsetRangeId id) -> Range {
-  return ranges[static_cast<size_t>(id)];
-}
+} // namespace offsets
 
-static inline auto scale(float normalized, OffsetRangeId range_id) -> float {
-  return range(range_id).scale(normalized);
-}
+struct Offset {
+  static auto constexpr &ranges = offsets::ranges;
 
-static inline auto normalize(float scaled, OffsetRangeId range_id) -> float {
-  return range(range_id).normalize(scaled);
-}
+  static inline auto range(OffsetRangeId id) -> Range {
+    return ranges[static_cast<size_t>(id)];
+  }
 
-} // namespace offset_ranges
+  static inline auto scale(float normalized, OffsetRangeId range_id) -> float {
+    return range(range_id).scale(normalized);
+  }
 
-struct OffsetRanges {
-  using ValueType = OffsetRangeId;
-  static auto constexpr &labels = offset_ranges::labels;
-  static auto constexpr size = offset_ranges::size;
-  static auto constexpr stepper_slug = "offset-range";
-  static auto constexpr unit = voltage::unit;
+  static inline auto normalize(float scaled, OffsetRangeId range_id) -> float {
+    return range(range_id).normalize(scaled);
+  }
 };
-
 } // namespace func
 } // namespace dhe

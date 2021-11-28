@@ -26,14 +26,14 @@ private:
   auto add(int channel, float augend) const -> float {
     auto const rotation = signals_.operand(channel);
     auto const range_id = signals_.offset_range(channel);
-    auto const addend = offset_ranges::scale(rotation, range_id);
+    auto const addend = Offset::scale(rotation, range_id);
     return augend + addend;
   }
 
   auto multiply(int channel, float multiplicand) const -> float {
     auto const rotation = signals_.operand(channel);
     auto const range_id = signals_.multiplier_range(channel);
-    auto const multiplier = multiplier_ranges::scale(rotation, range_id);
+    auto const multiplier = Multiplier::scale(rotation, range_id);
     return multiplicand * multiplier;
   }
 

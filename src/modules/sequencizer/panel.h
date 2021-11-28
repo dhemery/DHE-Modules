@@ -10,11 +10,11 @@
 #include "controls/duration-controls.h"
 #include "controls/knobs.h"
 #include "controls/ports.h"
+#include "controls/step-selection-controls.h"
 #include "controls/switches.h"
 #include "signals/voltage-signals.h"
 #include "widgets/dimensions.h"
 #include "widgets/panel-widget.h"
-#include "widgets/step-selection-markers.h"
 
 #include "rack.hpp"
 
@@ -97,29 +97,20 @@ template <typename TSize> struct Panel : public PanelWidget<Panel<TSize>> {
 
     auto const positions = SelectionMarkerPositions{
         step_block_left + step_width / 2.F, progress_light_y, step_width};
-    auto *start_marker = StartMarker::install(this, positions);
-    auto *end_marker = EndMarker::install(this, positions);
-
-    auto const update_selection_start = [start_marker, end_marker](int index) {
-      start_marker->set_start(index);
-      end_marker->set_start(index);
-    };
-
-    auto const update_selection_length = [end_marker](int length) {
-      end_marker->set_length(length);
-    };
+    auto *start_marker = SelectionStartMarker::install(this, positions);
+    auto *end_marker = SelectionEndMarker::install(this, positions);
 
     auto constexpr selection_y = global_controls_y(2);
-    Knob::install<Small, int>(this, ParamId::SelectionStart,
-                              sequence_controls_x - hp2mm(0.2F), selection_y)
-        ->on_change(update_selection_start);
+    SelectionStartKnob::install<Small>(this, ParamId::SelectionStart,
+                                       sequence_controls_x - hp2mm(0.2F),
+                                       selection_y, start_marker, end_marker);
 
     auto constexpr selection_length_offset = 8.28F;
     auto constexpr selection_length_x =
         sequence_controls_x + selection_length_offset;
-    Knob::install<Small>(this, ParamId::SelectionLength, selection_length_x,
-                         selection_y)
-        ->on_change(update_selection_length);
+    SelectionLengthKnob::install<Small>(this, ParamId::SelectionLength,
+                                        selection_length_x, selection_y,
+                                        end_marker);
 
     auto constexpr gate_y = global_controls_y(3);
     InPort::install(this, InputId::Gate, sequence_controls_x, gate_y);

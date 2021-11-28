@@ -4,13 +4,12 @@
 #include "params/mapped-knob-quantity.h"
 #include "params/ranged-knob-quantity.h"
 #include "signals/linear-signals.h"
+#include "widgets/assets.h"
 #include "widgets/dimensions.h"
-#include "widgets/knob-widget.h"
 
 #include "rack.hpp"
 
 #include <string>
-#include <type_traits>
 
 namespace dhe {
 
@@ -31,72 +30,36 @@ struct Tiny {
 };
 
 struct Knob {
-  template <typename P, typename S, typename V> struct Config {
-    using ValueType = V;
-    static auto constexpr svg_dir = P::svg_dir;
-    static auto constexpr svg_file = S::svg_file;
+  template <typename Panel, typename Style>
+  struct Widget : public rack::app::SvgKnob {
+    Widget() {
+      auto knob_svg = load_svg(Panel::svg_dir, Style::svg_file);
+      setSvg(knob_svg);
+      minAngle = -0.83F * pi;
+      maxAngle = 0.83F * M_PI;
+      shadow->opacity = 0.F;
+    }
   };
 
-  template <typename P, typename S, typename V>
-  using Widget = KnobWidget<Config<P, S, V>>;
-
-  template <typename, typename = void>
-  struct DefinesIntRange : std::false_type {};
-
-  template <typename T>
-  struct DefinesIntRange<T, void_t<decltype(T::min), decltype(T::max)>>
-      : std::is_integral<decltype(T::min)> {};
-
-  template <typename, typename = void> struct HasKnobMap : std::false_type {};
-
-  template <typename T>
-  struct HasKnobMap<T, void_t<typename T::KnobMap>> : std::true_type {};
-
-  template <typename S, typename V = float, typename P>
-  static inline auto install(P *panel, int id, float xmm, float ymm)
-      -> KnobWidget<Config<P, S, V>> * {
-    auto *widget = rack::createParamCentered<Widget<P, S, V>>(
+  template <typename Style, typename Panel>
+  static inline auto install(Panel *panel, int id, float xmm, float ymm)
+      -> Widget<Panel, Style> * {
+    auto *widget = rack::createParamCentered<Widget<Panel, Style>>(
         mm2px(xmm, ymm), panel->getModule(), id);
-    widget->snap = std::is_integral<V>::value;
     panel->addParam(widget);
     return widget;
   }
-
-  // Configure a knob with the int range specified by T
-  template <typename T>
-  static inline auto config(rack::engine::Module *module, int id,
-                            std::string const &name, int value)
-      -> enable_if_t<DefinesIntRange<T>::value, RangedKnobQuantity<int> *> {
-    auto const min = static_cast<float>(T::min);
-    auto const max = static_cast<float>(T::max);
-    auto const default_value = static_cast<float>(value);
-    auto *q = module->configParam<RangedKnobQuantity<int>>(
-        id, min, max, default_value, name, T::unit);
-    q->snapEnabled = true;
-    return q;
-  }
-
-  // Configure a knob with display values mapped by T
-  template <typename T>
-  static inline auto config(rack::engine::Module *module, int id,
-                            std::string const &name,
-                            float value = T::KnobMap::default_value)
-      -> enable_if_t<HasKnobMap<T>::value, MappedKnobQuantity<T> *> {
-    auto const mapper = typename T::KnobMap{};
-    auto const default_rotation = mapper.to_value(value);
-    return module->configParam<MappedKnobQuantity<T>>(
-        id, 0.F, 1.F, default_rotation, name, T::KnobMap::unit);
-  }
 };
 
-template <typename R> struct LinearKnob {
+template <typename Scale> struct LinearKnob {
   static auto config(rack::engine::Module *module, int id,
                      std::string const &name,
-                     float default_value = R::default_value)
+                     float default_value = Scale::default_value)
       -> rack::engine::ParamQuantity * {
-    auto const default_rotation = R::range.normalize(default_value);
-    auto *q = module->configParam(id, 0.F, 1.F, default_rotation, name, R::unit,
-                                  0.F, R::range.size(), R::range.lower_bound());
+    auto const default_rotation = Scale::range.normalize(default_value);
+    auto *q = module->configParam(id, 0.F, 1.F, default_rotation, name,
+                                  Scale::unit, 0.F, Scale::range.size(),
+                                  Scale::range.lower_bound());
     return q;
   }
 };

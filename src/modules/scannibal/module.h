@@ -8,6 +8,7 @@
 #include "components/cxmath.h"
 #include "controls/knobs.h"
 #include "controls/shape-controls.h"
+#include "controls/step-selection-controls.h"
 #include "controls/switches.h"
 #include "controls/voltage-controls.h"
 #include "params/presets.h"
@@ -15,7 +16,6 @@
 #include "signals/duration-signals.h"
 #include "signals/linear-signals.h"
 #include "signals/shape-signals.h"
-#include "signals/step-selection.h"
 #include "signals/voltage-signals.h"
 
 #include "rack.hpp"
@@ -37,8 +37,7 @@ template <int N> class Module : public rack::engine::Module {
 public:
   Module() {
     config(ParamId::Count, InputId::Count, OutputId::Count, LightId::Count);
-    Knob::config<SelectionLength<N>>(this, ParamId::SelectionLength, "Steps",
-                                     N);
+    SelectionLengthKnob::config<N>(this, ParamId::SelectionLength, "Steps");
 
     configInput(InputId::InA, "A");
     configInput(InputId::InB, "B");

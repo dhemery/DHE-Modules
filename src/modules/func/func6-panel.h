@@ -1,13 +1,12 @@
 #pragma once
 
 #include "control-ids.h"
-#include "multiplier.h"
-#include "offset.h"
-#include "operation.h"
+#include "controls.h"
 
 #include "controls/knobs.h"
 #include "controls/ports.h"
 #include "controls/switches.h"
+#include "widgets/panel-widget.h"
 
 #include "rack.hpp"
 
@@ -43,25 +42,19 @@ public:
       auto const port_y = y + port_offset;
 
       InPort::install(this, InputId::Channel + row, column1, port_y);
-      Knob::install<Large>(this, ParamId::Operand + row, column3, y);
+      auto *operand_knob =
+          OperandKnob::install<Large>(this, ParamId::Operand + row, column3, y);
 
       OutPort::install(this, OutputId::Channel + row, column5, port_y);
 
-      auto *offset_range_stepper = Stepper::install<OffsetRanges>(
-          this, ParamId::OffsetRange + row, column4, y);
+      auto *offset_range_stepper = OffsetRangeStepper::install(
+          this, ParamId::OffsetRange + row, column4, y, operand_knob);
 
-      auto *multiplier_range_stepper = Stepper::install<MultiplierRanges>(
-          this, ParamId::MultiplierRange + row, column4, y);
+      auto *multiplier_range_stepper = MultiplierRangeStepper::install(
+          this, ParamId::MultiplierRange + row, column4, y, operand_knob);
 
-      auto const select_operation = [offset_range_stepper,
-                                     multiplier_range_stepper](Operation op) {
-        auto const is_multiply = op == Operation::Multiply;
-        multiplier_range_stepper->setVisible(is_multiply);
-        offset_range_stepper->setVisible(!is_multiply);
-      };
-      ThumbSwitch::install<Operations>(this, ParamId::Operation + row, column2,
-                                       y)
-          ->on_change(select_operation);
+      OperationSwitch::install(this, ParamId::Operation + row, column2, y,
+                               offset_range_stepper, multiplier_range_stepper);
     }
   }
 }; // namespace func

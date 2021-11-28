@@ -14,12 +14,12 @@
 #include "controls/duration-controls.h"
 #include "controls/knobs.h"
 #include "controls/shape-controls.h"
+#include "controls/step-selection-controls.h"
 #include "controls/switches.h"
 #include "controls/voltage-controls.h"
 #include "params/presets.h"
 #include "signals/duration-signals.h"
 #include "signals/shape-signals.h"
-#include "signals/step-selection.h"
 #include "signals/voltage-signals.h"
 
 #include "rack.hpp"
@@ -47,10 +47,9 @@ template <int N> struct Module : rack::engine::Module {
     Button::config(this, ParamId::Reset, "Reset");
     configInput(InputId::Reset, "Reset");
 
-    Knob::config<SelectionStart<N>>(this, ParamId::SelectionStart, "Start step",
-                                    0);
-    Knob::config<SelectionLength<N>>(this, ParamId::SelectionLength,
-                                     "Sequence length", N);
+    SelectionStartKnob::config<N>(this, ParamId::SelectionStart, "Start step");
+    SelectionLengthKnob::config<N>(this, ParamId::SelectionLength,
+                                   "Sequence length");
 
     auto *duration_range_switch =
         DurationRangeSwitch::config(this, ParamId::DurationRange,
