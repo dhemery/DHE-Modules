@@ -1,6 +1,6 @@
 #pragma once
 
-#include "gain.h"
+#include "linear-signals.h"
 
 namespace dhe {
 template <typename V = float, typename P> auto value_of(P const &param) -> V {

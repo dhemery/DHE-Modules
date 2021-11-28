@@ -6,6 +6,7 @@
 #include "controls/ports.h"
 #include "controls/shape-controls.h"
 #include "controls/switches.h"
+#include "controls/voltage-controls.h"
 #include "widgets/panel-widget.h"
 
 #include "rack.hpp"
@@ -38,7 +39,7 @@ struct Panel : public PanelWidget<Panel> {
     Knob::install<Medium>(this, ParamId::Curvature1, column3, y);
     y += dy;
     ShapeSwitch::install(this, ParamId::Shape1, column1, y);
-    ThumbSwitch::install<VoltageRanges>(this, ParamId::LevelRange1, column2, y);
+    VoltageRangeSwitch::install(this, ParamId::LevelRange1, column2, y);
     OutPort::install(this, OutputId::Taper1, column3, y);
 
     y += dy + panel_buffer;
@@ -52,7 +53,7 @@ struct Panel : public PanelWidget<Panel> {
     Knob::install<Medium>(this, ParamId::Curvature2, column3, y);
     y += dy;
     ShapeSwitch::install(this, ParamId::Shape2, column1, y);
-    ThumbSwitch::install<VoltageRanges>(this, ParamId::LevelRange2, column2, y);
+    VoltageRangeSwitch::install(this, ParamId::LevelRange2, column2, y);
     OutPort::install(this, OutputId::Taper2, column3, y);
   }
 };

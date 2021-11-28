@@ -1,6 +1,6 @@
 #pragma once
 
-#include "signals/gain.h"
+#include "signals/linear-signals.h"
 
 #include <array>
 

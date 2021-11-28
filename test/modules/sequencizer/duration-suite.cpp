@@ -2,7 +2,7 @@
 #include "modules/sequencizer/signals.h"
 
 #include "signals/duration-signals.h"
-#include "signals/gain.h"
+#include "signals/linear-signals.h"
 
 #include "dheunit/test.h"
 #include "helpers/assertions.h"

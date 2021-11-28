@@ -9,7 +9,8 @@
 #include "controls/ports.h"
 #include "controls/shape-controls.h"
 #include "controls/switches.h"
-#include "signals/voltages.h"
+#include "controls/voltage-controls.h"
+#include "signals/voltage-signals.h"
 #include "widgets/panel-widget.h"
 
 #include "rack.hpp"
@@ -38,7 +39,7 @@ struct Panel : public PanelWidget<Panel> {
 
     InPort::install(this, InputId::LevelCv, column1, y);
     Knob::install<Large>(this, ParamId::Level, column3, y);
-    ThumbSwitch::install<VoltageRanges>(this, ParamId::LevelRange, column5, y);
+    VoltageRangeSwitch::install(this, ParamId::LevelRange, column5, y);
 
     y += dy;
     InPort::install(this, InputId::CurvatureCv, column1, y);

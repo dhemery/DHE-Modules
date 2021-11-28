@@ -5,10 +5,11 @@
 #include "components/cxmath.h"
 #include "controls/knobs.h"
 #include "controls/switches.h"
+#include "controls/voltage-controls.h"
 #include "params/presets.h"
 #include "signals/basic.h"
-#include "signals/gain.h"
-#include "signals/voltages.h"
+#include "signals/linear-signals.h"
+#include "signals/voltage-signals.h"
 
 #include "rack.hpp"
 
@@ -19,31 +20,25 @@ struct Module : public rack::engine::Module {
   Module() {
     config(ParamId::Count, InputId::Count, OutputId::Count);
 
-    Knob::config<Percentage>(this, ParamId::Level, "Level", 50.F);
+    PercentageKnob::config(this, ParamId::Level, "Level", 50.F);
     configInput(InputId::LevelCv, "Level CV");
-    Knob::config<Attenuverter>(this, ParamId::LevelAv, "Level CV gain");
+    AttenuverterKnob::config(this, ParamId::LevelAv, "Level CV gain");
 
     auto *ccw_limit_knob =
-        Knob::config<Voltage>(this, ParamId::CcwLimit, "CCW limit", -5.F);
-    auto select_ccw_limit_range = [ccw_limit_knob](VoltageRangeId id) {
-      ccw_limit_knob->mapper().select_range(id);
-    };
-    Switch::config<VoltageRanges>(this, ParamId::CcwLimitRange,
-                                  "CCW limit range", VoltageRangeId::Bipolar)
-        ->on_change(select_ccw_limit_range);
+        VoltageKnob::config(this, ParamId::CcwLimit, "CCW limit", -5.F);
+    VoltageRangeSwitch::config(this, ParamId::CcwLimitRange, "CCW limit range",
+                               VoltageRangeId::Bipolar)
+        ->add_knob(ccw_limit_knob);
     configInput(InputId::CcwLimitCv, "CCW limit CV");
-    Knob::config<Attenuverter>(this, ParamId::CcwLimitAv, "CCW limit CV gain");
+    AttenuverterKnob::config(this, ParamId::CcwLimitAv, "CCW limit CV gain");
 
     auto *cw_limit_knob =
-        Knob::config<Voltage>(this, ParamId::CwLimit, "CW limit", 5.F);
-    auto select_cw_limit_range = [cw_limit_knob](VoltageRangeId id) {
-      cw_limit_knob->mapper().select_range(id);
-    };
-    Switch::config<VoltageRanges>(this, ParamId::CwLimitRange, "CW limit range",
-                                  VoltageRangeId::Bipolar)
-        ->on_change(select_cw_limit_range);
+        VoltageKnob::config(this, ParamId::CwLimit, "CW limit", 5.F);
+    VoltageRangeSwitch::config(this, ParamId::CwLimitRange, "CW limit range",
+                               VoltageRangeId::Bipolar)
+        ->add_knob(cw_limit_knob);
     configInput(InputId::CwLimitCv, "CW limit CV");
-    Knob::config<Attenuverter>(this, ParamId::CwLimitAv, "CW limit CV gain");
+    AttenuverterKnob::config(this, ParamId::CwLimitAv, "CW limit CV gain");
 
     configOutput(OutputId::Main, "Ranger");
   }

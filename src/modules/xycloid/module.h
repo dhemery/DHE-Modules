@@ -8,11 +8,11 @@
 #include "components/range.h"
 #include "controls/knobs.h"
 #include "controls/switches.h"
+#include "controls/voltage-controls.h"
 #include "params/presets.h"
 #include "signals/basic.h"
-#include "signals/gain.h"
-#include "signals/phase.h"
-#include "signals/voltages.h"
+#include "signals/linear-signals.h"
+#include "signals/voltage-signals.h"
 
 #include "rack.hpp"
 
@@ -27,7 +27,7 @@ public:
 
     Knob::config<ThrobSpeed>(this, ParamId::ThrobSpeed, "Speed", 1.F);
     configInput(InputId::ThrobSpeedCv, "Speed CV");
-    Knob::config<Attenuverter>(this, ParamId::ThrobSpeedAv, "Speed CV gain");
+    AttenuverterKnob::config(this, ParamId::ThrobSpeedAv, "Speed CV gain");
 
     auto *ratio_knob =
         Knob::config<WobbleRatio>(this, ParamId::WobbleRatio, "Ratio");
@@ -39,7 +39,7 @@ public:
     };
 
     configInput(InputId::WobbleRatioCv, "Ratio CV");
-    Knob::config<Attenuverter>(this, ParamId::WobbleRatioAv, "Ratio CV gain");
+    AttenuverterKnob::config(this, ParamId::WobbleRatioAv, "Ratio CV gain");
     Switch::config<WobbleRatioRanges>(this, ParamId::WobbleRatioRange,
                                       "Direction", WobbleRatioRangeId::Outward)
         ->on_change(select_ratio_range);
@@ -47,24 +47,24 @@ public:
                                      "Ratio mode", WobbleRatioMode::Free)
         ->on_change(select_ratio_mode);
 
-    Knob::config<Percentage>(this, ParamId::WobbleDepth, "Depth", 50.F);
+    PercentageKnob::config(this, ParamId::WobbleDepth, "Depth", 50.F);
     configInput(InputId::WobbleDepthCv, "Depth CV");
-    Knob::config<Attenuverter>(this, ParamId::WobbleDepthAv, "Depth CV gain");
+    AttenuverterKnob::config(this, ParamId::WobbleDepthAv, "Depth CV gain");
 
-    Knob::config<Phase>(this, ParamId::WobblePhaseOffset, "Phase");
+    PhaseKnob::config(this, ParamId::WobblePhaseOffset, "Phase");
     configInput(InputId::WobblePhaseOffsetCv, "Phase CV");
-    Knob::config<Attenuverter>(this, ParamId::WobblePhaseOffsetAv,
-                               "Phase CV gain");
+    AttenuverterKnob::config(this, ParamId::WobblePhaseOffsetAv,
+                             "Phase CV gain");
 
-    Knob::config<Gain>(this, ParamId::XGain, "X gain");
+    GainKnob::config(this, ParamId::XGain, "X gain");
     configInput(InputId::XGainCv, "X gain CV");
-    Switch::config<VoltageRanges>(this, ParamId::XRange, "X range",
-                                  VoltageRangeId::Bipolar);
+    VoltageRangeSwitch::config(this, ParamId::XRange, "X range",
+                               VoltageRangeId::Bipolar);
 
-    Knob::config<Gain>(this, ParamId::YGain, "Y gain");
+    GainKnob::config(this, ParamId::YGain, "Y gain");
     configInput(InputId::YGainCv, "Y gain CV");
-    Switch::config<VoltageRanges>(this, ParamId::YRange, "Y range",
-                                  VoltageRangeId::Bipolar);
+    VoltageRangeSwitch::config(this, ParamId::YRange, "Y range",
+                               VoltageRangeId::Bipolar);
 
     configOutput(OutputId::X, "X");
     configOutput(OutputId::Y, "Y");

@@ -15,11 +15,12 @@
 #include "controls/knobs.h"
 #include "controls/shape-controls.h"
 #include "controls/switches.h"
+#include "controls/voltage-controls.h"
 #include "params/presets.h"
 #include "signals/duration-signals.h"
 #include "signals/shape-signals.h"
 #include "signals/step-selection.h"
-#include "signals/voltages.h"
+#include "signals/voltage-signals.h"
 
 #include "rack.hpp"
 
@@ -64,6 +65,8 @@ public:
     auto *duration_range_switch =
         DurationRangeSwitch::config(this, ParamId::DurationRange,
                                     "Duration range", DurationRangeId::Medium);
+    auto *level_range_switch = VoltageRangeSwitch::config(
+        this, ParamId::LevelRange, "Level range", VoltageRangeId::Unipolar);
 
     for (auto step = 0; step < N; step++) {
       auto const step_name = "Step " + std::to_string(step + 1) + " ";
@@ -80,9 +83,9 @@ public:
                                   step_name + "start anchor mode",
                                   AnchorMode::Sample);
       auto *start_level_knob =
-          Knob::config<Voltage>(this, ParamId::StepStartAnchorLevel + step,
-                                step_name + "start level");
-      level_knobs.push_back(start_level_knob);
+          VoltageKnob::config(this, ParamId::StepStartAnchorLevel + step,
+                              step_name + "start level");
+      level_range_switch->add_knob(start_level_knob);
       Switch::config<AnchorSources>(this, ParamId::StepStartAnchorSource + step,
                                     step_name + "start anchor source",
                                     AnchorSource::Out);
@@ -90,9 +93,9 @@ public:
       Switch::config<AnchorModes>(this, ParamId::StepEndAnchorMode + step,
                                   step_name + "end anchor mode",
                                   AnchorMode::Track);
-      auto *end_level_knob = Knob::config<Voltage>(
+      auto *end_level_knob = VoltageKnob::config(
           this, ParamId::StepEndAnchorLevel + step, step_name + "end level");
-      level_knobs.push_back(end_level_knob);
+      level_range_switch->add_knob(end_level_knob);
       Switch::config<AnchorSources>(this, ParamId::StepEndAnchorSource + step,
                                     step_name + "end anchor source",
                                     AnchorSource::Level);
@@ -111,20 +114,10 @@ public:
       signals_.show_inactive(step);
     }
 
-    Knob::config<Attenuator>(this, ParamId::LevelMultiplier,
-                             "Level multiplier");
-    auto select_level_range = [level_knobs](VoltageRangeId id) {
-      for (auto *knob : level_knobs) {
-        knob->mapper().select_range(id);
-      }
-    };
-    Switch::config<VoltageRanges>(this, ParamId::LevelRange, "Level range",
-                                  VoltageRangeId::Unipolar)
-        ->on_change(select_level_range);
+    PercentageKnob::config(this, ParamId::LevelMultiplier, "Level multiplier");
     configInput(InputId::LevelAttenuationCV, "Level multiplier CV");
 
-    Knob::config<Gain>(this, ParamId::DurationMultiplier,
-                       "Duration multiplier");
+    GainKnob::config(this, ParamId::DurationMultiplier, "Duration multiplier");
     configInput(InputId::DurationMultiplierCV, "Duration multipler CV");
   }
 

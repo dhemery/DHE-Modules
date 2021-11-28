@@ -4,9 +4,10 @@
 
 #include "controls/buttons.h"
 #include "controls/switches.h"
+#include "controls/voltage-controls.h"
 #include "params/presets.h"
 #include "signals/basic.h"
-#include "signals/voltages.h"
+#include "signals/voltage-signals.h"
 
 #include "rack.hpp"
 
@@ -26,8 +27,8 @@ template <typename TEngine> struct Module : public rack::engine::Module {
     configInput(InputId::B + 1, "D");
     Button::config(this, ParamId::NegateB + 1, "Negate D");
 
-    Switch::config<VoltageRanges>(this, ParamId::LevelRange, "Level Range",
-                                  VoltageRangeId::Unipolar);
+    VoltageRangeSwitch::config(this, ParamId::LevelRange, "Level Range",
+                               VoltageRangeId::Unipolar);
 
     configOutput(OutputId::And + 0, "A AND B");
     configOutput(OutputId::Nand + 0, "A NAND B");

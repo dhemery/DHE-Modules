@@ -2,7 +2,7 @@
 
 #include "multiplier.h"
 #include "offset.h"
-#include "signals/voltages.h"
+#include "signals/voltage-signals.h"
 
 #include <array>
 
@@ -24,8 +24,7 @@ struct Operations {
 
 struct Operand {
   struct KnobMap {
-    static auto constexpr default_value =
-        BipolarVoltage::KnobMap::default_value;
+    static auto constexpr default_value = BipolarVoltage::scale(0.F);
     static auto constexpr unit = "";
 
     auto to_display(float value) const -> float {

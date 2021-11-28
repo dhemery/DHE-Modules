@@ -6,9 +6,9 @@
 #include "controls/switches.h"
 #include "params/presets.h"
 #include "signals/basic.h"
-#include "signals/gain.h"
+#include "signals/linear-signals.h"
 #include "signals/shape-signals.h"
-#include "signals/voltages.h"
+#include "signals/voltage-signals.h"
 
 #include "rack.hpp"
 
@@ -23,8 +23,8 @@ struct Module : public rack::engine::Module {
     configOutput(OutputId::Swave, "Swave");
 
     CurvatureKnob::config(this, ParamId::Curvature, "Curvature");
-    Knob::config<Attenuverter>(this, ParamId::CurvatureAv, "Curvature CV gain",
-                               0.F);
+    AttenuverterKnob::config(this, ParamId::CurvatureAv, "Curvature CV gain",
+                             0.F);
     configInput(InputId::CurvatureCv, "Curvature CV");
     ShapeSwitch::config(this, ParamId::Shape, "Shape", Shape::Id::J);
   }

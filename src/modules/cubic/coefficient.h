@@ -1,22 +1,17 @@
 #pragma once
 
 #include "components/range.h"
-#include "signals/ranged.h"
+#include "signals/linear-signals.h"
 
 namespace dhe {
 namespace cubic {
-namespace internal {
-static auto constexpr coefficient_range = Range{-2.F, 2.F};
+namespace coefficient {
+static auto constexpr range = Range{-2.F, 2.F};
+} // namespace coefficient
 
-struct CoefficientQuantity {
-  static auto constexpr default_value = 0.F;
-  static auto constexpr &range = coefficient_range;
-  static auto constexpr &display_range = coefficient_range;
-  static auto constexpr unit = "";
+struct Coefficient : LinearSignal<Coefficient> {
+  static auto constexpr &range = coefficient::range;
 };
-} // namespace internal
-
-struct Coefficient : LinearKnob<internal::CoefficientQuantity> {};
 
 } // namespace cubic
 } // namespace dhe

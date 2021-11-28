@@ -7,8 +7,7 @@
 #include "controls/ports.h"
 #include "controls/shape-controls.h"
 #include "controls/switches.h"
-#include "signals/shape-signals.h"
-#include "signals/voltages.h"
+#include "controls/voltage-controls.h"
 #include "widgets/dimensions.h"
 #include "widgets/panel-widget.h"
 #include "widgets/step-selection-markers.h"
@@ -215,8 +214,7 @@ private:
     auto constexpr step_phase_y = global_controls_y(3);
     auto constexpr out_y = global_controls_y(4);
 
-    ThumbSwitch::install<VoltageRanges>(this, ParamId::LevelRange, x,
-                                        polarity_y);
+    VoltageRangeSwitch::install(this, ParamId::LevelRange, x, polarity_y);
     OutPort::install(this, OutputIds::StepNumber, x, step_number_y);
     OutPort::install(this, OutputIds::StepPhase, x, step_phase_y);
     OutPort::install(this, OutputIds::Out, x, out_y);

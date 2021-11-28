@@ -9,11 +9,11 @@
 #include "components/sigmoid.h"
 #include "controls/knobs.h"
 #include "controls/switches.h"
+#include "controls/voltage-controls.h"
 #include "params/presets.h"
 #include "signals/basic.h"
-#include "signals/gain.h"
-#include "signals/phase.h"
-#include "signals/voltages.h"
+#include "signals/linear-signals.h"
+#include "signals/voltage-signals.h"
 
 #include "rack.hpp"
 
@@ -28,7 +28,7 @@ public:
     config(ParamId::Count, InputId::Count, OutputId::Count);
 
     Knob::config<SpinSpeed>(this, ParamId::SpinSpeed, "Speed", 1.F);
-    Knob::config<Attenuverter>(this, ParamId::SpinSpeedAv, "Speed CV gain");
+    AttenuverterKnob::config(this, ParamId::SpinSpeedAv, "Speed CV gain");
     configInput(InputId::SpinSpeedCv, "Speed CV");
 
     auto *ratio_knob =
@@ -40,26 +40,26 @@ public:
                                      "Ratio mode", BounceRatioMode::Free)
         ->on_change(select_ratio_mode);
 
-    Knob::config<Attenuverter>(this, ParamId::BounceRatioAv, "Ratio CV gain");
+    AttenuverterKnob::config(this, ParamId::BounceRatioAv, "Ratio CV gain");
     configInput(InputId::BounceRatioCv, "Ratio CV");
 
-    Knob::config<Percentage>(this, ParamId::BounceDepth, "Depth", 50.F);
-    Knob::config<Attenuverter>(this, ParamId::BounceDepthAv, "Depth CV gain");
+    PercentageKnob::config(this, ParamId::BounceDepth, "Depth", 50.F);
+    AttenuverterKnob::config(this, ParamId::BounceDepthAv, "Depth CV gain");
     configInput(InputId::BounceDepthCv, "Depth CV");
 
-    Knob::config<Phase>(this, ParamId::BouncePhaseOffset, "Phase");
-    Knob::config<Attenuverter>(this, ParamId::BouncePhaseOffsetAv,
-                               "Phase CV gain");
+    PhaseKnob::config(this, ParamId::BouncePhaseOffset, "Phase");
+    AttenuverterKnob::config(this, ParamId::BouncePhaseOffsetAv,
+                             "Phase CV gain");
     configInput(InputId::BouncePhaseOffsetCv, "Phase CV");
 
-    Knob::config<Gain>(this, ParamId::XGain, "X gain");
-    Switch::config<VoltageRanges>(this, ParamId::XRange, "X range",
-                                  VoltageRangeId::Bipolar);
+    GainKnob::config(this, ParamId::XGain, "X gain");
+    VoltageRangeSwitch::config(this, ParamId::XRange, "X range",
+                               VoltageRangeId::Bipolar);
     configInput(InputId::XGainCv, "X gain CV");
 
-    Knob::config<Gain>(this, ParamId::YGain, "Y gain");
-    Switch::config<VoltageRanges>(this, ParamId::YRange, "Y range",
-                                  VoltageRangeId::Bipolar);
+    GainKnob::config(this, ParamId::YGain, "Y gain");
+    VoltageRangeSwitch::config(this, ParamId::YRange, "Y range",
+                               VoltageRangeId::Bipolar);
     configInput(InputId::YGainCv, "Y gain CV");
 
     configOutput(OutputId::X, "X");
@@ -104,7 +104,7 @@ private:
     auto const rotation = rotation_of(params[ParamId::BounceDepth],
                                       inputs[InputId::BounceDepthCv],
                                       params[ParamId::BounceDepthAv]);
-    return Percentage::range.clamp(rotation);
+    return Rotation::range.clamp(rotation);
   }
 
   // radians

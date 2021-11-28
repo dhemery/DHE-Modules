@@ -2,8 +2,10 @@
 
 #include "control-ids.h"
 
+#include "controls/buttons.h"
 #include "controls/ports.h"
 #include "controls/switches.h"
+#include "controls/voltage-controls.h"
 #include "widgets/panel-widget.h"
 
 #include "rack.hpp"
@@ -43,8 +45,7 @@ template <typename S> struct Panel : public PanelWidget<Panel<S>> {
     InPort::install(this, InputId::A + 1, cd_outer_column, y);
 
     y = top + 0.5F * dy;
-    ThumbSwitch::install<VoltageRanges>(this, ParamId::LevelRange,
-                                        switch_column, y);
+    VoltageRangeSwitch::install(this, ParamId::LevelRange, switch_column, y);
 
     y = top + 1.F * dy;
     InPort::install(this, InputId::B + 0, ab_outer_column, y);

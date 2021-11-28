@@ -9,9 +9,8 @@
 #include "components/range.h"
 #include "signals/basic.h"
 #include "signals/duration-signals.h"
-#include "signals/gain.h"
 #include "signals/shape-signals.h"
-#include "signals/voltages.h"
+#include "signals/voltage-signals.h"
 
 #include <vector>
 

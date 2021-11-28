@@ -1,7 +1,7 @@
 #pragma once
 
 #include "components/range.h"
-#include "signals/voltages.h"
+#include "signals/voltage-signals.h"
 
 #include <array>
 
@@ -37,7 +37,7 @@ struct OffsetRanges {
   static auto constexpr &labels = offset_ranges::labels;
   static auto constexpr size = offset_ranges::size;
   static auto constexpr stepper_slug = "offset-range";
-  static auto constexpr unit = Voltage::unit;
+  static auto constexpr unit = voltage::unit;
 };
 
 } // namespace func

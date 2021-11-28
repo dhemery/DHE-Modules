@@ -5,6 +5,7 @@
 #include "controls/knobs.h"
 #include "controls/ports.h"
 #include "controls/switches.h"
+#include "controls/voltage-controls.h"
 #include "widgets/panel-widget.h"
 
 #include "rack.hpp"
@@ -46,8 +47,8 @@ struct Panel : public PanelWidget<Panel> {
     InPort::install(this, InputId::CwLimitCv, right, y);
 
     y += dy;
-    ThumbSwitch::install<VoltageRanges>(this, ParamId::CcwLimitRange, left, y);
-    ThumbSwitch::install<VoltageRanges>(this, ParamId::CwLimitRange, right, y);
+    VoltageRangeSwitch::install(this, ParamId::CcwLimitRange, left, y);
+    VoltageRangeSwitch::install(this, ParamId::CwLimitRange, right, y);
   }
 };
 } // namespace ranger

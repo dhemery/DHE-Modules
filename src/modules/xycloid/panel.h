@@ -7,6 +7,7 @@
 #include "controls/knobs.h"
 #include "controls/ports.h"
 #include "controls/switches.h"
+#include "controls/voltage-controls.h"
 #include "widgets/panel-widget.h"
 
 #include "rack.hpp"
@@ -63,13 +64,13 @@ struct Panel : public PanelWidget<Panel> {
     y += dy;
     InPort::install(this, InputId::XGainCv, column1, y);
     Knob::install<Small>(this, ParamId::XGain, column2, y);
-    ThumbSwitch::install<VoltageRanges>(this, ParamId::XRange, column3, y);
+    VoltageRangeSwitch::install(this, ParamId::XRange, column3, y);
     OutPort::install(this, OutputId::X, column4, y + output_port_offset);
 
     y += dy;
     InPort::install(this, InputId::YGainCv, column1, y);
     Knob::install<Small>(this, ParamId::YGain, column2, y);
-    ThumbSwitch::install<VoltageRanges>(this, ParamId::YRange, column3, y);
+    VoltageRangeSwitch::install(this, ParamId::YRange, column3, y);
     OutPort::install(this, OutputId::Y, column4, y + output_port_offset);
   }
 };

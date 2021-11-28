@@ -7,7 +7,7 @@
 #include "controls/knobs.h"
 #include "params/presets.h"
 #include "signals/basic.h"
-#include "signals/gain.h"
+#include "signals/linear-signals.h"
 
 #include "rack.hpp"
 
@@ -15,29 +15,34 @@ namespace dhe {
 
 namespace cubic {
 
+struct CoefficientKnob : LinearKnob<CoefficientKnob> {
+  static auto constexpr default_value = 0.F;
+  static auto constexpr &range = Coefficient::range;
+  static auto constexpr unit = "";
+};
+
 struct Module : public rack::engine::Module {
   Module() {
     config(ParamId::Count, InputId::Count, OutputId::Count);
 
-    Knob::config<Coefficient>(this, ParamId::ACoefficient,
-                              "X cubed coefficient");
+    CoefficientKnob::config(this, ParamId::ACoefficient, "X cubed coefficient");
     configInput(InputId::ACoefficientCv, "X cubed coefficient CV");
 
-    Knob::config<Coefficient>(this, ParamId::BCoefficient,
-                              "X squared coefficient");
+    CoefficientKnob::config(this, ParamId::BCoefficient,
+                            "X squared coefficient");
     configInput(InputId::BCoefficientCv, "X squared coefficient CV");
 
-    Knob::config<Coefficient>(this, ParamId::CCoefficient, "X coefficient");
+    CoefficientKnob::config(this, ParamId::CCoefficient, "X coefficient");
     configInput(InputId::CCoefficientCv, "X coefficient CV");
 
-    Knob::config<Coefficient>(this, ParamId::DCoefficient,
-                              "Constant coefficient");
+    CoefficientKnob::config(this, ParamId::DCoefficient,
+                            "Constant coefficient");
     configInput(InputId::DCoefficientCv, "Constant coefficient CV");
 
-    Knob::config<Gain>(this, ParamId::InputGain, "InPort gain");
+    GainKnob::config(this, ParamId::InputGain, "InPort gain");
     configInput(InputId::InputGainCv, "InPort gain CV");
 
-    Knob::config<Gain>(this, ParamId::OutputGain, "OutPort gain");
+    GainKnob::config(this, ParamId::OutputGain, "OutPort gain");
     configInput(InputId::OutputGainCv, "OutPort gain CV");
 
     configInput(InputId::Cubic, "Module");

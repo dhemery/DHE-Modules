@@ -15,11 +15,12 @@
 #include "controls/knobs.h"
 #include "controls/shape-controls.h"
 #include "controls/switches.h"
+#include "controls/voltage-controls.h"
 #include "params/presets.h"
 #include "signals/duration-signals.h"
 #include "signals/shape-signals.h"
 #include "signals/step-selection.h"
-#include "signals/voltages.h"
+#include "signals/voltage-signals.h"
 
 #include "rack.hpp"
 
@@ -51,10 +52,12 @@ template <int N> struct Module : rack::engine::Module {
     Knob::config<SelectionLength<N>>(this, ParamId::SelectionLength,
                                      "Sequence length", N);
 
-    auto level_knobs = std::vector<MappedKnobQuantity<Voltage> *>{};
     auto *duration_range_switch =
         DurationRangeSwitch::config(this, ParamId::DurationRange,
                                     "Duration range", DurationRangeId::Medium);
+
+    auto *level_range_switch = VoltageRangeSwitch::config(
+        this, ParamId::LevelRange, "Level range", VoltageRangeId::Unipolar);
 
     for (auto step = 0; step < N; step++) {
       auto const step_name =
@@ -66,9 +69,9 @@ template <int N> struct Module : rack::engine::Module {
       Switch::config<AdvanceModes>(this, ParamId::StepAdvanceMode + step,
                                    step_name + "advance mode",
                                    AdvanceMode::TimerExpires);
-      auto *level_knob = Knob::config<Voltage>(this, ParamId::StepLevel + step,
-                                               step_name + "level");
-      level_knobs.push_back(level_knob);
+      auto *level_knob = VoltageKnob::config(this, ParamId::StepLevel + step,
+                                             step_name + "level");
+      level_range_switch->add_knob(level_knob);
 
       ShapeSwitch::config(this, ParamId::StepShape + step, step_name + "shape",
                           Shape::Id::J);
@@ -84,15 +87,6 @@ template <int N> struct Module : rack::engine::Module {
 
       signals_.show_inactive(step);
     }
-
-    auto select_level_range = [level_knobs](VoltageRangeId id) {
-      for (auto *knob : level_knobs) {
-        knob->mapper().select_range(id);
-      }
-    };
-    Switch::config<VoltageRanges>(this, ParamId::LevelRange, "Level range",
-                                  VoltageRangeId::Unipolar)
-        ->on_change(select_level_range);
 
     configInput(InputId::Main, "AUX");
     configOutput(OutputId::Main, "Sequencer");

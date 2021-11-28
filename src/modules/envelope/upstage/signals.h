@@ -1,7 +1,9 @@
 #pragma once
 
+#include "control-ids.h"
+
 #include "signals/basic.h"
-#include "signals/voltages.h"
+#include "signals/voltage-signals.h"
 
 #include <vector>
 

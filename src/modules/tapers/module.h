@@ -6,11 +6,12 @@
 #include "controls/knobs.h"
 #include "controls/shape-controls.h"
 #include "controls/switches.h"
+#include "controls/voltage-controls.h"
 #include "params/presets.h"
 #include "signals/basic.h"
-#include "signals/gain.h"
+#include "signals/linear-signals.h"
 #include "signals/shape-signals.h"
-#include "signals/voltages.h"
+#include "signals/voltage-signals.h"
 
 #include "rack.hpp"
 
@@ -23,42 +24,32 @@ public:
     config(ParamId::Count, InputId::Count, OutputId::Count);
 
     auto *level_knob_1 =
-        Knob::config<Voltage>(this, ParamId::Level1, "Taper 1 level");
-    auto select_level_1_range = [level_knob_1](VoltageRangeId id) {
-      level_knob_1->mapper().select_range(id);
-    };
-    Switch::config<VoltageRanges>(this, ParamId::LevelRange1,
-                                  "Taper 1 level range",
-                                  VoltageRangeId::Bipolar)
-        ->on_change(select_level_1_range);
-    Knob::config<Attenuverter>(this, ParamId::LevelAv1,
-                               "Taper 1 level CV gain");
+        VoltageKnob::config(this, ParamId::Level1, "Taper 1 level");
+    VoltageRangeSwitch::config(this, ParamId::LevelRange1,
+                               "Taper 1 level range", VoltageRangeId::Bipolar)
+        ->add_knob(level_knob_1);
+    AttenuverterKnob::config(this, ParamId::LevelAv1, "Taper 1 level CV gain");
     configInput(InputId::LevelCv1, "Taper 1 level CV");
 
     CurvatureKnob::config(this, ParamId::Curvature1, "Taper 1 curvature");
-    Knob::config<Attenuverter>(this, ParamId::CurvatureAv1,
-                               "Taper 1 curvature CV gain");
+    AttenuverterKnob::config(this, ParamId::CurvatureAv1,
+                             "Taper 1 curvature CV gain");
     ShapeSwitch::config(this, ParamId::Shape1, "Taper 1 shape", Shape::Id::J);
     configInput(InputId::CurvatureCv1, "Taper 1 curvature CV");
 
     configOutput(OutputId::Taper1, "Taper 1");
 
     auto *level_knob_2 =
-        Knob::config<Voltage>(this, ParamId::Level2, "Taper 2 level");
-    auto select_level_2_range = [level_knob_2](VoltageRangeId id) {
-      level_knob_2->mapper().select_range(id);
-    };
-    Switch::config<VoltageRanges>(this, ParamId::LevelRange2,
-                                  "Taper 2 level range",
-                                  VoltageRangeId::Bipolar)
-        ->on_change(select_level_2_range);
-    Knob::config<Attenuverter>(this, ParamId::LevelAv2,
-                               "Taper 2 level CV gain");
+        VoltageKnob::config(this, ParamId::Level2, "Taper 2 level");
+    VoltageRangeSwitch::config(this, ParamId::LevelRange2,
+                               "Taper 2 level range", VoltageRangeId::Bipolar)
+        ->add_knob(level_knob_2);
+    AttenuverterKnob::config(this, ParamId::LevelAv2, "Taper 2 level CV gain");
     configInput(InputId::LevelCv2, "Taper 2 level CV");
 
     CurvatureKnob::config(this, ParamId::Curvature2, "Taper 2 curvature");
-    Knob::config<Attenuverter>(this, ParamId::CurvatureAv2,
-                               "Taper 2 curvature CV gain");
+    AttenuverterKnob::config(this, ParamId::CurvatureAv2,
+                             "Taper 2 curvature CV gain");
     ShapeSwitch::config(this, ParamId::Shape2, "Taper 2 shape", Shape::Id::J);
     configInput(InputId::CurvatureCv2, "Taper 2 curvature CV");
 

@@ -9,6 +9,7 @@
 #include "controls/knobs.h"
 #include "controls/ports.h"
 #include "controls/shape-controls.h"
+#include "controls/voltage-controls.h"
 #include "widgets/panel-widget.h"
 #include "widgets/step-selection-markers.h"
 
@@ -136,8 +137,7 @@ template <typename TSize> struct Panel : public PanelWidget<Panel<TSize>> {
 
     InPort::install(this, InputId::Main, right, eos_y);
 
-    ThumbSwitch::install<VoltageRanges>(this, ParamId::LevelRange, right,
-                                        level_y);
+    VoltageRangeSwitch::install(this, ParamId::LevelRange, right, level_y);
     DurationRangeSwitch::install(this, ParamId::DurationRange, right,
                                  duration_y);
     OutPort::install(this, OutputId::Main, right, out_y);

@@ -1,3 +1,5 @@
+#pragma once
+
 #include "modules/scannibal/generator.h"
 
 #include "components/range.h"

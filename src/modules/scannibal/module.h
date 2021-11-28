@@ -9,13 +9,14 @@
 #include "controls/knobs.h"
 #include "controls/shape-controls.h"
 #include "controls/switches.h"
+#include "controls/voltage-controls.h"
 #include "params/presets.h"
 #include "signals/basic.h"
 #include "signals/duration-signals.h"
-#include "signals/gain.h"
+#include "signals/linear-signals.h"
 #include "signals/shape-signals.h"
 #include "signals/step-selection.h"
-#include "signals/voltages.h"
+#include "signals/voltage-signals.h"
 
 #include "rack.hpp"
 
@@ -48,7 +49,8 @@ public:
     configOutput(OutputId::StepPhase, "Step phase");
     configOutput(OutputId::Out, "Scanner");
 
-    auto level_knobs = std::vector<MappedKnobQuantity<Voltage> *>{};
+    auto *level_range_switch = VoltageRangeSwitch::config(
+        this, ParamId::LevelRange, "Level range", VoltageRangeId::Unipolar);
 
     for (auto step = 0; step < N; step++) {
       auto const step_name = "Step " + std::to_string(step + 1) + " ";
@@ -57,9 +59,9 @@ public:
           this, ParamId::StepPhase0AnchorSource + step,
           step_name + "phase 0 anchor source", AnchorSource::Out);
       auto *phase_0_level_knob =
-          Knob::config<Voltage>(this, ParamId::StepPhase0AnchorLevel + step,
-                                step_name + "phase 0 level");
-      level_knobs.push_back(phase_0_level_knob);
+          VoltageKnob::config(this, ParamId::StepPhase0AnchorLevel + step,
+                              step_name + "phase 0 level");
+      level_range_switch->add_knob(phase_0_level_knob);
       configInput(InputId::StepPhase0AnchorLevelCv + step,
                   step_name + "phase 0 level CV");
       Switch::config<AnchorModes>(this, ParamId::StepPhase0AnchorMode + step,
@@ -70,9 +72,9 @@ public:
           this, ParamId::StepPhase1AnchorSource + step,
           step_name + "phase 1 anchor source", AnchorSource::Level);
       auto *phase_1_level_knob =
-          Knob::config<Voltage>(this, ParamId::StepPhase1AnchorLevel + step,
-                                step_name + "phase 1 level");
-      level_knobs.push_back(phase_1_level_knob);
+          VoltageKnob::config(this, ParamId::StepPhase1AnchorLevel + step,
+                              step_name + "phase 1 level");
+      level_range_switch->add_knob(phase_1_level_knob);
       configInput(InputId::StepPhase1AnchorLevelCv + step,
                   step_name + "phase 1 level CV");
       Switch::config<AnchorModes>(this, ParamId::StepPhase1AnchorMode + step,
@@ -85,20 +87,11 @@ public:
                             step_name + "curvature");
       configInput(InputId::StepCurvatureCv + step, step_name + "curvature CV");
 
-      Knob::config<Gain>(this, ParamId::StepDuration + step,
-                         step_name + "relative duration");
+      GainKnob::config(this, ParamId::StepDuration + step,
+                       step_name + "relative duration");
       configInput(InputId::StepDurationCv + step,
                   step_name + "relative duration CV");
     }
-
-    auto select_level_range = [level_knobs](VoltageRangeId id) {
-      for (auto *knob : level_knobs) {
-        knob->mapper().select_range(id);
-      }
-    };
-    Switch::config<VoltageRanges>(this, ParamId::LevelRange, "Level range",
-                                  VoltageRangeId::Unipolar)
-        ->on_change(select_level_range);
   }
 
   ~Module() override = default;

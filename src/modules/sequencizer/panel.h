@@ -11,7 +11,7 @@
 #include "controls/knobs.h"
 #include "controls/ports.h"
 #include "controls/switches.h"
-#include "signals/voltages.h"
+#include "signals/voltage-signals.h"
 #include "widgets/dimensions.h"
 #include "widgets/panel-widget.h"
 #include "widgets/step-selection-markers.h"
@@ -150,8 +150,8 @@ template <typename TSize> struct Panel : public PanelWidget<Panel<TSize>> {
                     level_y);
     Knob::install<Small>(this, ParamId::LevelMultiplier,
                          global_controls_center_x, level_y);
-    ThumbSwitch::install<VoltageRanges>(this, ParamId::LevelRange,
-                                        global_controls_right_x, level_y);
+    VoltageRangeSwitch::install(this, ParamId::LevelRange,
+                                global_controls_right_x, level_y);
 
     InPort::install(this, InputId::DurationMultiplierCV, global_controls_left_x,
                     global_duration_y);

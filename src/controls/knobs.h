@@ -3,6 +3,7 @@
 #include "components/meta.h"
 #include "params/mapped-knob-quantity.h"
 #include "params/ranged-knob-quantity.h"
+#include "signals/linear-signals.h"
 #include "widgets/dimensions.h"
 #include "widgets/knob-widget.h"
 
@@ -87,4 +88,48 @@ struct Knob {
         id, 0.F, 1.F, default_rotation, name, T::KnobMap::unit);
   }
 };
+
+template <typename R> struct LinearKnob {
+  static auto config(rack::engine::Module *module, int id,
+                     std::string const &name,
+                     float default_value = R::default_value)
+      -> rack::engine::ParamQuantity * {
+    auto const default_rotation = R::range.normalize(default_value);
+    auto *q = module->configParam(id, 0.F, 1.F, default_rotation, name, R::unit,
+                                  0.F, R::range.size(), R::range.lower_bound());
+    return q;
+  }
+};
+
+namespace linear {
+static auto constexpr attenuverter_knob_range = Range{-100.F, 100.F};
+static auto constexpr gain_knob_range = Range{0.F, 200.F};
+static auto constexpr percentage_knob_range = Range{0.F, 100.F};
+static auto constexpr phase_knob_range = Range{-180.F, 180.F};
+} // namespace linear
+
+struct AttenuverterKnob : LinearKnob<AttenuverterKnob> {
+  static auto constexpr default_value = 0.F;
+  static auto constexpr &range = linear::attenuverter_knob_range;
+  static auto constexpr unit = "%";
+};
+
+struct GainKnob : LinearKnob<GainKnob> {
+  static auto constexpr default_value = 100.F;
+  static auto constexpr &range = linear::gain_knob_range;
+  static auto constexpr unit = "%";
+};
+
+struct PercentageKnob : LinearKnob<PercentageKnob> {
+  static auto constexpr default_value = 100.F;
+  static auto constexpr &range = linear::percentage_knob_range;
+  static auto constexpr unit = "%";
+};
+
+struct PhaseKnob : LinearKnob<PhaseKnob> {
+  static auto constexpr default_value = 0.F;
+  static auto constexpr &range = linear::phase_knob_range;
+  static auto constexpr unit = "˚";
+};
+
 } // namespace dhe

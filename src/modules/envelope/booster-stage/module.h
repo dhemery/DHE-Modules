@@ -13,10 +13,11 @@
 #include "controls/knobs.h"
 #include "controls/shape-controls.h"
 #include "controls/switches.h"
+#include "controls/voltage-controls.h"
 #include "params/presets.h"
 #include "signals/duration-signals.h"
 #include "signals/shape-signals.h"
-#include "signals/voltages.h"
+#include "signals/voltage-signals.h"
 
 #include "rack.hpp"
 
@@ -30,13 +31,10 @@ struct Module : public rack::engine::Module {
     configInput(InputId::Envelope, "Stage");
     configOutput(OutputId::Envelope, "Stage");
 
-    auto *level_knob = Knob::config<Voltage>(this, ParamId::Level, "Level");
-    auto const select_level_range = [level_knob](VoltageRangeId id) {
-      level_knob->mapper().select_range(id);
-    };
-    Switch::config<VoltageRanges>(this, ParamId::LevelRange, "Level Range",
-                                  VoltageRangeId::Unipolar)
-        ->on_change(select_level_range);
+    auto *level_knob = VoltageKnob::config(this, ParamId::Level, "Level");
+    VoltageRangeSwitch::config(this, ParamId::LevelRange, "Level Range",
+                               VoltageRangeId::Unipolar)
+        ->add_knob(level_knob);
 
     configInput(InputId::LevelCv, "Level CV");
 

@@ -4,10 +4,12 @@
 #include "engine.h"
 #include "signals.h"
 
+#include "controls/buttons.h"
 #include "controls/knobs.h"
 #include "controls/switches.h"
+#include "controls/voltage-controls.h"
 #include "params/presets.h"
-#include "signals/voltages.h"
+#include "signals/voltage-signals.h"
 
 #include "rack.hpp"
 
@@ -19,13 +21,10 @@ struct Module : public rack::engine::Module {
   Module() {
     config(ParamId::Count, InputId::Count, OutputId::Count);
 
-    auto *level_knob = Knob::config<Voltage>(this, ParamId::Level, "Level");
-    auto select_level_range = [level_knob](VoltageRangeId id) {
-      level_knob->mapper().select_range(id);
-    };
-    Switch::config<VoltageRanges>(this, ParamId::LevelRange, "Level range",
-                                  VoltageRangeId::Unipolar)
-        ->on_change(select_level_range);
+    auto *level_knob = VoltageKnob::config(this, ParamId::Level, "Level");
+    VoltageRangeSwitch::config(this, ParamId::LevelRange, "Level range",
+                               VoltageRangeId::Unipolar)
+        ->add_knob(level_knob);
     configInput(InputId::LevelCv, "Level CV");
 
     configInput(InputId::Trigger, "Trigger");

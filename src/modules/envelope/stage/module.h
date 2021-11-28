@@ -7,6 +7,7 @@
 #include "controls/duration-controls.h"
 #include "controls/knobs.h"
 #include "controls/shape-controls.h"
+#include "controls/voltage-controls.h"
 #include "modules/envelope/mode/defer.h"
 #include "modules/envelope/mode/generate.h"
 #include "modules/envelope/mode/input.h"
@@ -23,7 +24,7 @@ struct Module : public rack::engine::Module {
     config(ParamId::Count, InputId::Count, OutputId::Count);
 
     MediumDurationKnob::config(this, ParamId::Duration, "Duration");
-    Knob::config<UnipolarVoltage>(this, ParamId::Level, "Level");
+    UnipolarKnob::config(this, ParamId::Level, "Level");
     CurvatureKnob::config(this, ParamId::Curvature, "Curvature");
 
     configInput(InputId::Envelope, "Stage");
