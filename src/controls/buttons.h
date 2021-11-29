@@ -30,13 +30,11 @@ struct Toggle {
 struct Button {
   using Quantity = Switch::Quantity;
 
-  template <typename Panel, typename Style>
-  struct Widget : public rack::app::SvgSwitch {
+  template <typename Panel, typename Style> struct Widget : Switch::Widget {
     Widget() {
       auto const prefix = std::string{Panel::svg_dir} + "/" + Style::slug + "-";
       addFrame(load_svg(prefix + "released"));
       addFrame(load_svg(prefix + "pressed"));
-      shadow->opacity = 0.F;
     }
   };
 

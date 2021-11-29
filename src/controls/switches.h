@@ -13,37 +13,9 @@ namespace dhe {
 struct Switch {
   using Quantity = rack::engine::SwitchQuantity;
 
-  template <typename Panel, typename Style>
-  struct Widget : public rack::app::SvgSwitch {
-    Widget() {
-      static auto const file_names = frame_file_names();
-      auto const panel_prefix = std::string{Panel::svg_dir} + "/";
-      for (auto const &file_name : file_names) {
-        addFrame(load_svg(panel_prefix + file_name));
-      }
-      shadow->opacity = 0.F;
-    }
-
-  private:
-    static inline auto frame_file_names() -> std::vector<std::string> {
-      auto names = std::vector<std::string>{};
-      auto const prefix = Style::slug + std::string{"-"};
-      auto const size = Style::size;
-      for (size_t position = 1; position <= size; position++) {
-        names.push_back(prefix + std::to_string(position));
-      }
-      return names;
-    }
+  struct Widget : rack::app::SvgSwitch {
+    Widget() { shadow->opacity = 0.F; }
   };
-
-  template <typename Style, typename Panel>
-  static inline auto install(Panel *panel, int id, float xmm, float ymm)
-      -> Widget<Panel, Style> * {
-    auto *widget = rack::createParamCentered<Widget<Panel, Style>>(
-        mm2px(xmm, ymm), panel->getModule(), id);
-    panel->addParam(widget);
-    return widget;
-  }
 
   template <typename Style>
   static inline auto config(rack::engine::Module *module, int id,
@@ -59,27 +31,24 @@ struct Switch {
 };
 
 struct ThumbSwitch {
-  template <typename Panel, int Size> struct Widget : rack::app::SvgSwitch {
+  template <typename Panel, int Size> struct Widget : Switch::Widget {
     Widget() {
       auto const prefix =
           std::string{Panel::svg_dir} + "/toggle-" + std::to_string(Size) + '-';
       for (auto position = 1; position <= Size; position++) {
         addFrame(load_svg(prefix + std::to_string(position)));
       }
-      shadow->opacity = 0.F;
     }
   };
 };
 
 struct Stepper {
-  template <typename Panel, typename Style>
-  struct Widget : rack::app::SvgSwitch {
+  template <typename Panel, typename Style> struct Widget : Switch::Widget {
     Widget() {
       auto const prefix = std::string{Panel::svg_dir} + "/" + Style::slug + '-';
       for (auto position = 1UL; position <= Style::size; position++) {
         addFrame(load_svg(prefix + std::to_string(position)));
       }
-      shadow->opacity = 0.F;
     }
   };
 

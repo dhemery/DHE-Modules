@@ -20,16 +20,14 @@ struct UnipolarKnob : LinearKnob<UnipolarKnob> {
   static auto constexpr unit = voltage::unit;
 };
 
-struct RescalableKnobQuantity : rack::engine::ParamQuantity {
-  void set_range(VoltageRangeId id) {
-    auto const range = Voltage::range(id);
-    displayOffset = range.lower_bound();
-    displayMultiplier = range.size();
-  }
-};
-
 struct VoltageKnob {
-  struct Quantity : RescalableKnobQuantity {};
+  struct Quantity : rack::engine::ParamQuantity {
+    void set_range(VoltageRangeId id) {
+      auto const range = Voltage::range(id);
+      displayOffset = range.lower_bound();
+      displayMultiplier = range.size();
+    }
+  };
 
   static auto config(rack::engine::Module *module, int param_id,
                      std::string const &name,
