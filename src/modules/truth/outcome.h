@@ -21,7 +21,7 @@ struct Outcomes {
   using ValueType = Outcome;
   static auto constexpr &labels = outcome::names;
   static auto constexpr size = outcome::size;
-  static auto constexpr stepper_slug = "outcome";
+  static auto constexpr slug = "outcome";
 };
 } // namespace truth
 } // namespace dhe

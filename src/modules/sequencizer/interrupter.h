@@ -30,7 +30,7 @@ struct InterruptModes {
   using ValueType = InterruptMode;
   static auto constexpr &labels = interrupt_mode::labels;
   static auto constexpr size = interrupt_mode::size;
-  static auto constexpr stepper_slug = "interrupt-mode";
+  static auto constexpr slug = "interrupt-mode";
 };
 
 template <typename Signals> struct Interrupter {

@@ -18,7 +18,7 @@ struct AnchorModes {
   using ValueType = AnchorMode;
   static auto constexpr &labels = anchor_mode::labels;
   static auto constexpr size = anchor_mode::size;
-  static auto constexpr stepper_slug = "anchor-mode";
+  static auto constexpr slug = "anchor-mode";
 };
 
 enum class AnchorSource {
@@ -48,7 +48,7 @@ struct AnchorSources {
   using ValueType = AnchorSource;
   static auto constexpr &labels = anchor_source::labels;
   static auto constexpr size = anchor_source::size;
-  static auto constexpr stepper_slug = "anchor-source";
+  static auto constexpr slug = "anchor-source";
 };
 
 static inline auto operator<<(std::ostream &os, AnchorSource s)

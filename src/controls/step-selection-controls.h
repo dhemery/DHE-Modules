@@ -1,7 +1,5 @@
 #pragma once
 
-#include "app/SvgKnob.hpp"
-#include "helpers.hpp"
 #include "knobs.h"
 
 #include "rack.hpp"

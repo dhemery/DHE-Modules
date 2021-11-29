@@ -36,7 +36,7 @@ struct SustainModes {
   using ValueType = SustainMode;
   static auto constexpr &labels = sustain_mode::labels;
   static auto constexpr size = sustain_mode::size;
-  static auto constexpr stepper_slug = "sustain-mode";
+  static auto constexpr slug = "sustain-mode";
 };
 
 template <typename Signals> class Sustainer {

@@ -25,7 +25,7 @@ struct GateModes {
   using ValueType = GateMode;
   static auto constexpr &labels = gate_mode::labels;
   static auto constexpr size = gate_mode::size;
-  static auto constexpr stepper_slug = "gate-mode";
+  static auto constexpr slug = "gate-mode";
 };
 
 static inline auto is_satisfied(GateMode condition, dhe::Latch const &gate)

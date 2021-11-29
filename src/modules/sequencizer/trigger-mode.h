@@ -36,7 +36,7 @@ struct TriggerModes {
   using ValueType = TriggerMode;
   static auto constexpr &labels = trigger_mode::labels;
   static auto constexpr size = trigger_mode::size;
-  static auto constexpr stepper_slug = "trigger-mode";
+  static auto constexpr slug = "trigger-mode";
 };
 
 static inline auto is_triggered(TriggerMode mode, dhe::Latch const &gate)

@@ -27,7 +27,7 @@ static inline auto label(GenerateMode mode) -> std::string {
 struct GenerateModes {
   using ValueType = GenerateMode;
   static auto constexpr size = generate_mode::size;
-  static auto constexpr stepper_slug = "generate-mode";
+  static auto constexpr slug = "generate-mode";
 
   static auto constexpr &labels = generate_mode::labels;
 };

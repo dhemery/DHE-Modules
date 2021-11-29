@@ -40,7 +40,7 @@ static inline auto name(AdvanceMode mode) -> std::string {
 struct AdvanceModes {
   using ValueType = AdvanceMode;
   static auto constexpr size = advance_mode::size;
-  static auto constexpr stepper_slug = "advance-mode";
+  static auto constexpr slug = "advance-mode";
   static auto constexpr &labels = advance_mode::labels;
 };
 
