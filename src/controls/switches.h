@@ -13,10 +13,11 @@ namespace dhe {
 struct Switch {
   using Quantity = rack::engine::SwitchQuantity;
 
-  template <typename T> struct Widget : public rack::app::SvgSwitch {
+  template <typename Panel, typename Style>
+  struct Widget : public rack::app::SvgSwitch {
     Widget() {
       static auto const file_names = frame_file_names();
-      auto const panel_prefix = std::string{T::svg_dir} + "/";
+      auto const panel_prefix = std::string{Panel::svg_dir} + "/";
       for (auto const &file_name : file_names) {
         addFrame(load_svg(panel_prefix + file_name));
       }
@@ -26,8 +27,8 @@ struct Switch {
   private:
     static inline auto frame_file_names() -> std::vector<std::string> {
       auto names = std::vector<std::string>{};
-      auto const prefix = T::slug + std::string{"-"};
-      auto const size = T::size;
+      auto const prefix = Style::slug + std::string{"-"};
+      auto const size = Style::size;
       for (size_t position = 1; position <= size; position++) {
         names.push_back(prefix + std::to_string(position));
       }
@@ -35,28 +36,21 @@ struct Switch {
     }
   };
 
-  template <typename P, typename S, typename V> struct Config {
-    using ValueType = typename V::ValueType;
-    static auto constexpr size = V::size;
-    static auto constexpr svg_dir = P::svg_dir;
-    static auto constexpr slug = S::slug;
-  };
-
-  template <typename V, typename S, typename P>
-  static inline auto install(P *panel, int id, float xmm, float ymm)
-      -> Widget<Config<P, S, V>> * {
-    auto *widget = rack::createParamCentered<Widget<Config<P, S, V>>>(
+  template <typename Style, typename Panel>
+  static inline auto install(Panel *panel, int id, float xmm, float ymm)
+      -> Widget<Panel, Style> * {
+    auto *widget = rack::createParamCentered<Widget<Panel, Style>>(
         mm2px(xmm, ymm), panel->getModule(), id);
     panel->addParam(widget);
     return widget;
   }
 
-  template <typename T>
+  template <typename Style>
   static inline auto config(rack::engine::Module *module, int id,
                             std::string const &name,
-                            typename T::ValueType value) -> Quantity * {
+                            typename Style::ValueType value) -> Quantity * {
     static auto const labels =
-        std::vector<std::string>{T::labels.cbegin(), T::labels.cend()};
+        std::vector<std::string>{Style::labels.cbegin(), Style::labels.cend()};
     auto const max = static_cast<float>(labels.size() - 1);
     auto const default_value = static_cast<float>(value);
     return module->configSwitch<Quantity>(id, 0.F, max, default_value, name,
