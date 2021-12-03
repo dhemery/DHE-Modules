@@ -1,2 +1,4 @@
 /public
 /.idea
+/.hugo_build.lock
+/resources/_gen
