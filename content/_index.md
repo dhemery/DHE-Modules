@@ -149,3 +149,4 @@ is a waveshaper with a unique sigmoid transfer function.
 - [Generating Multi-Stage Envelopes](/guides/generating-multi-stage-envelopes/)
 - [More Usage Ideas](/guides/)
 - [Technical Details](/technical/)
+- [DHE-Modules Source Code (on GitHub)](https://github.com/dhemery/DHE-Modules)
