@@ -146,14 +146,14 @@ Then I wondered:
 Might this function work well as a
 [waveshaper transfer function](#waveshaping)?
 And just like that, the idea for
-[_Swave_]({{ '/modules/swave/' | relative_url }})
+[_Swave_](/modules/swave/)
 was born.
 
 ## <span id="stages">Curved</span> Envelope Stages
 
-[_Stage_]({{ '/modules/stage/' | relative_url }})
+[_Stage_](/modules/stage/)
 and
-[_Booster Stage_]({{ '/modules/booster-stage/' | relative_url }})
+[_Booster Stage_](/modules/booster-stage/)
 use the normalised tunable sigmoid function
 to produce curved envelope stages.
 
@@ -191,7 +191,7 @@ it applies the shaping function in three steps:
 
 ## <span id="waveshaping">Waveshaping</span>
 
-[_Swave_]({{ '/modules/swave/' | relative_url }})
+[_Swave_](/modules/swave/)
 uses the normalized tunable sigmoid function
 to shape its input signal.
 

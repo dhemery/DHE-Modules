@@ -6,7 +6,7 @@ title: The Booster Stage Module
 Generates a single envelope stage.
 
 _Booster Stage_ features all of
-_[Stage's]({{ '/modules/stage/' | relative_url }})_
+_[Stage's](/modules/stage/)_
 functionality,
 enhanced by
 CV inputs,
@@ -15,20 +15,20 @@ buttons to inject triggers and other control signals,
 and more.
 
 Combine
-[_Stage_]({{ '/modules/stage/' | relative_url }}),
-[_Booster Stage_]({{ '/modules/booster-stage/' | relative_url }}),
-[_Hostage_]({{ '/modules/hostage/' | relative_url }}),
-and [_Upstage_]({{ '/modules/upstage/' | relative_url }})
+[_Stage_](/modules/stage/),
+[_Booster Stage_](/modules/booster-stage/),
+[_Hostage_](/modules/hostage/),
+and [_Upstage_](/modules/upstage/)
 modules
 to generate complex envelopes
 with any number of stages.
 
 See also:
 
-- [Generating Single-Stage Envelopes]({{ '/guides/generating-single-stage-envelopes/' | relative_url }})
-- [Generating Multi-Stage Envelopes]({{ '/guides/generating-multi-stage-envelopes/' | relative_url }})
-- [How Stages Work Together]({{ 'technical/how-stages-work-together' | relative_url }})
-- [J and S Curves]({{ '/technical/curves/' | relative_url }})
+- [Generating Single-Stage Envelopes](/guides/generating-single-stage-envelopes/)
+- [Generating Multi-Stage Envelopes](/guides/generating-multi-stage-envelopes/)
+- [How Stages Work Together](/technical/how-stages-work-together)
+- [J and S Curves](/technical/curves/)
 
 
 ## Controls
@@ -43,10 +43,10 @@ See also:
 
 - **CURVE:**
     The
-    [curvature]({{ '/technical/curves/' | relative_url }})
+    [curvature](/technical/curves/)
     of the envelope stage.
     The shape switch **(S / J)**
-    selects the [shape]({{ '/technical/curves/' | relative_url }})
+    selects the [shape](/technical/curves/)
     of the envelope stage.
 
 - **DURATION:**
@@ -116,7 +116,7 @@ See also:
     or (when deferring) the _IN_ signal.
 
 - **CV:**
-    A [control voltage]({{ '/technical/modulation/' | relative_url }})
+    A [control voltage](/technical/modulation/)
     signal to modulate the associated parameter.
 
 

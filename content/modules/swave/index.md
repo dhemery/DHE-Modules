@@ -16,8 +16,8 @@ in VCV Rack.
 _Swave_ does not apply anti-aliasing.
 
 See also:
-- [J and S Curves]({{ '/technical/curves/' | relative_url }})
-- [Normalized Tunable Sigmoid Function]({{ 'technical/sigmoid/' | relative_url }}):
+- [J and S Curves](/technical/curves/)
+- [Normalized Tunable Sigmoid Function](/technical/sigmoid/):
     the _transfer function_
     that _Swave_ applies
     to shape its input signals
@@ -27,7 +27,7 @@ See also:
     The curvature of the transfer function.
     The shape switch **(S / J)**
     selects the
-    [shape]({{ '/technical/curves/' | relative_url }})
+    [shape](/technical/curves/)
     of the transfer function.
 
 ## Ports
@@ -40,5 +40,5 @@ See also:
     The shaped signal.
 
 - **CV:**
-    A [control voltage]({{ '/technical/modulation/' | relative_url }}) signal
+    A [control voltage](/technical/modulation/) signal
     to modulate the _CURVE_ parameter.

@@ -4,7 +4,7 @@ title: Generating Single-Stage Envelopes
 
 You can create a simple envelopes
 with a single
-[_Stage_]({{ '/modules/stage/' | relative_url }})
+[_Stage_](/modules/stage/)
 module:
 
 - [Attack-and-Hold Envelopes](#ah)
@@ -13,12 +13,12 @@ module:
 
 For additional control and versatility,
 use a
-[_Booster Stage_]({{ '/modules/booster-stage' | relative_url }})
+[_Booster Stage_](/modules/booster-stage)
 instead of a _Stage_.
 
 **See also:**
-- [Generating Multi-Stage Envelopes]({{ '/guides/generating-multi-stage-envelopes/' | relative_url }})
-- [Techniques and Variations]({{ '/guides/techniques-and-variations/' | relative_url }}):
+- [Generating Multi-Stage Envelopes](/guides/generating-multi-stage-envelopes/)
+- [Techniques and Variations](/guides/techniques-and-variations/):
 how to wire multi-stage envelopes,
 how to add hold and sustain stages,
 and how to create

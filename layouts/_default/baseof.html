@@ -1,45 +1,38 @@
 <!DOCTYPE html>
 <html lang='{{ .Site.LanguageCode | default "en-us" }}'>
-    <head>
-        <meta charset='utf-8' />
-        <meta viewport='width=device-width' />
-        <meta viewport='initial-scale=1' />
-        <meta viewport='user-scalable=yes' />
-        <title>{{ .Title }}</title>
-        <link href='/favicon.ico' rel='icon' />
-        {{ $options := (dict "targetPath" "/css/screen.css") }}
-        {{ $style := resources.Get "scss/screen.scss" | resources.ToCSS $options }}
-        <link rel='stylesheet' href='{{ $style.Permalink }}'>
-        <link rel='stylesheet' href='/css/dracula.css'>
-    </head>
-    <body>
-        <header class='banner centered title'>
-            <h1><a href='/'>{{ .Site.Title }}</a></h1>
-            <h2>about software development</h2>
+
+<head>
+    <meta charset='utf-8' />
+    <meta viewport='width=device-width' />
+    <meta viewport='initial-scale=1' />
+    <meta viewport='user-scalable=yes' />
+    <title>{{ .Title }}</title>
+    <link href='/favicon.ico' rel='icon' />
+    {{ $options := (dict "targetPath" "/css/screen.css") }}
+    {{ $style := resources.Get "scss/screen.scss" | resources.ToCSS $options }}
+    <link rel='stylesheet' href='{{ $style.Permalink }}'>
+    <link rel='stylesheet' href='/css/dracula.css'>
+</head>
+
+<body>
+    <header class='banner centered title'>
+        <h1><a href='{{ "/" | relURL }}'>{{ .Site.Title }}</a></h1>
+        <h2>{{ .Site.Params.SubTitle }}</h2>
+    </header>
+
+    <main>
+        <header class='boxed'>
+            <h1 class='title'><a href='{{ .Permalink | absURL }}'>{{ .Title }}</a></h1>
+            {{ block "dateline" .}}{{ end }}
         </header>
+        {{ block "main" .}}{{ end }}
+    </main>
 
-        <nav class='centered chrome'>
-            <ul class='inline piped'>
-                <li><a href="/">Posts</a></li>
-                <li><a href="/tags">Tags</a></li>
-                <li><a href="https://dhemery.com">Dale</a></li>
-                <li><a href="https://dhemery.com/articles">Articles</a></li>
-                <li><a href="https://dhemery.com/contact">Connect</a></li>
-            </ul>
-        </nav>
+    <footer class='centered chrome'>
+        {{ block "copyright" . }}
+        <p role='copyright'>{{ .Site.Copyright }}</p>
+        {{ end }}
+    </footer>
+</body>
 
-        <main>
-            <header class='boxed'>
-                <h1 class='title'><a href='{{ .Permalink }}'>{{ .Title }}</a></h1>
-                {{ block "dateline" .}}{{ end }}
-            </header>
-            {{ block "main" .}}{{ end }}
-        </main>
-
-        <footer class='centered chrome'>
-            {{ block "copyright" . }}
-            <p role='copyright'>{{ .Site.Copyright }}</p>
-            {{ end }}
-        </footer>
-    </body>
 </html>

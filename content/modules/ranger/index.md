@@ -28,7 +28,7 @@ A modulatable knob with an adjustable, modulatable range.
     within the range specified by the _CCW_ and _CW_ knobs.
 
 - **CV:**
-    A [control voltage]({{ '/technical/modulation/' | relative_url }}) signal
+    A [control voltage](/technical/modulation/) signal
     to modulate the associated parameter. Each CV input has an attenuverter.
     
     Note that control voltage can drive any of Ranger's knobs beyond its normal limit.

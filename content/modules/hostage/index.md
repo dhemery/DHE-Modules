@@ -8,19 +8,19 @@ A hold stage lasts for the duration specified by the controls.
 A sustain stage lasts as long as the _GATE_ is up.
 
 Combine
-[_Stage_]({{ '/modules/stage/' | relative_url }}),
-[_Booster Stage_]({{ '/modules/booster-stage/' | relative_url }}),
-[_Hostage_]({{ '/modules/hostage/' | relative_url }}),
-and [_Upstage_]({{ '/modules/upstage/' | relative_url }})
+[_Stage_](/modules/stage/),
+[_Booster Stage_](/modules/booster-stage/),
+[_Hostage_](/modules/hostage/),
+and [_Upstage_](/modules/upstage/)
 modules
 to generate complex envelopes
 with any number of stages.
 
 See also:
 
-- [Generating Single-Stage Envelopes]({{ '/guides/generating-single-stage-envelopes/' | relative_url }})
-- [Generating Multi-Stage Envelopes]({{ '/guides/generating-multi-stage-envelopes/' | relative_url }})
-- [How Stages Work Together]({{ 'technical/how-stages-work-together' | relative_url }})
+- [Generating Single-Stage Envelopes](/guides/generating-single-stage-envelopes/)
+- [Generating Multi-Stage Envelopes](/guides/generating-multi-stage-envelopes/)
+- [How Stages Work Together](/technical/how-stages-work-together)
 
 ## Modes
 
@@ -120,7 +120,7 @@ See also:
     or (when deferring) the _IN_ signal.
 
 - **CV:**
-    A [control voltage]({{ '/technical/modulation/' | relative_url }})
+    A [control voltage](/technical/modulation/)
     signal to modulate the duration.
 
 ## Notes

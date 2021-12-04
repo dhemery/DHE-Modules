@@ -91,7 +91,7 @@ Please ***[READ THE WARNINGS CAREFULLY](#warnings)!***
 
 - **Alternate Fuzzy Logic.**
   For fuzzy logic based on Lofti Zadeh's more standard definitions of the same operators,
-  try **[_Fuzzy Logic Z_]({{ 'modules/fuzzy-logic-z/' | relative_url }} ).**  
+  try **[_Fuzzy Logic Z_](/modules/fuzzy-logic-z/).**  
 
 ## Voltage and Truth
 

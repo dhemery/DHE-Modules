@@ -3,10 +3,10 @@ title: Generating Multi-Stage Envelopes
 ---
 
 Combine
-[_Stage_]({{ '/modules/stage/' | relative_url }}),
-[_Booster Stage_]({{ '/modules/booster-stage/' | relative_url }}),
-[_Hostage_]({{ '/modules/hostage/' | relative_url }}),
-and [_Upstage_]({{ '/modules/upstage/' | relative_url }})
+[_Stage_](/modules/stage/),
+[_Booster Stage_](/modules/booster-stage/),
+[_Hostage_](/modules/hostage/),
+and [_Upstage_](/modules/upstage/)
 modules to generate complex, interesting, multi-stage envelopes.
 
 Here are some common envelope types:
@@ -18,7 +18,7 @@ Here are some common envelope types:
 - [More Stages Than You Can Count](#multi-stage)
 
 **For additional ideas:**
-see [Techniques and Variations]({{ '/guides/techniques-and-variations/' | relative_url }}),
+see [Techniques and Variations](/guides/techniques-and-variations/),
 which describes
 how to wire multi-stage envelopes,
 how to add hold and sustain stages,
@@ -32,7 +32,7 @@ and other interesting variations.
 
 <img class="envelope" src="ar.png" alt="Attack-Release Envelope" />
 
-- [Connect]({{ '/guides/techniques-and-variations/#wiring' | relative_url }}):
+- [Connect](/guides/techniques-and-variations/#wiring):
     1. A _Stage_ for the attack stage
     1. A _Stage_ for the release stage
 - To start the envelope at 0V,
@@ -45,7 +45,7 @@ and other interesting variations.
 
 <img class="envelope" src="ahr.png" alt="Attack-Hold-Release Envelope" />
 
-- [Connect]({{ '/guides/techniques-and-variations/#wiring' | relative_url }}):
+- [Connect](/guides/techniques-and-variations/#wiring):
     1. A _Stage_ for the attack stage
     1. A _Hostage_ for the hold stage
     1. A _Stage_ for the release stage
@@ -73,7 +73,7 @@ To generate a sustain stage,
 we need to wire one module a little differently than normal.
 Note the **bold** text below.
 
-- [Connect]({{ '/guides/techniques-and-variations/#wiring' | relative_url }}):
+- [Connect](/guides/techniques-and-variations/#wiring):
     1. A _Stage_ for the attack stage
     1. A _Stage_ for the decay stage
     1. A _Hostage_ for the sustain stage

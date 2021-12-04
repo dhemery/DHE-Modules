@@ -63,7 +63,7 @@ generates a pair of complex, evolving, pulsing LFO signals.
     _Blossom_ selects the range before applying the gain.
 
 - **CV:**
-    A [control voltage]({{ '/technical/modulation/' | relative_url }}) signal
+    A [control voltage](/technical/modulation/) signal
     to modulate the associated parameter.  Some CV signals have attenuverters.
 
 ## Plotting Blossom

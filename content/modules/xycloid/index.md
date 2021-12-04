@@ -103,7 +103,7 @@ See:
     _Xycloid_ selects the range before applying the gain.
 
 - **CV:**
-    A [control voltage]({{ '/technical/modulation/' | relative_url }}) signal
+    A [control voltage](/technical/modulation/) signal
     to modulate the associated parameter.  Some CV signals have attenuverters.
 
 ## Using Xycloid

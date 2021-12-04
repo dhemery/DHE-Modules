@@ -90,7 +90,7 @@ Please ***[READ THE WARNINGS CAREFULLY](#warnings)!***
 
 - **Alternate Fuzzy Logic.**
   For fuzzy logic based on the less common "hyperbolic paraboloid" fuzzy operators,
-  try **[_Fuzzy Logic H_]({{ 'modules/fuzzy-logic-h/' | relative_url }} ).**
+  try **[_Fuzzy Logic H_](/modules/fuzzy-logic-h/).**
 
 ## Voltage and Truth
 

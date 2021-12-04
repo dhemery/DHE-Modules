@@ -12,17 +12,17 @@ title: Techniques and Variations
 - [Variations](#variations).
 
 **See also:**
-- [How Stages Work Together]({{ 'technical/how-stages-work-together' | relative_url }}).
-- [Generating Multi-Stage Envelopes]({{ 'guides/generating-multi-stage-envelopes' | relative_url }}).
-- [Generating Single-Stage Envelopes]({{ 'guides/generating-multi-stage-envelopes' | relative_url }}).
+- [How Stages Work Together](/technical/how-stages-work-together).
+- [Generating Multi-Stage Envelopes](/guides/generating-multi-stage-envelopes).
+- [Generating Single-Stage Envelopes](/guides/generating-multi-stage-envelopes).
 
 ## <span id="wiring">Wiring</span> a Multi-Stage Envelope
 
 The usual way to wire
-[_Stage_]({{ '/modules/stage/' | relative_url }}),
-[_Booster Stage_]({{ '/modules/booster-stage/' | relative_url }}),
-[_Hostage_]({{ '/modules/hostage/' | relative_url }}),
-and [_Upstage_]({{ '/modules/upstage/' | relative_url }})
+[_Stage_](/modules/stage/),
+[_Booster Stage_](/modules/booster-stage/),
+[_Hostage_](/modules/hostage/),
+and [_Upstage_](/modules/upstage/)
 modules
 into multi-stage envelopes is:
 
@@ -97,9 +97,9 @@ _for a given duration._
 
 With a hold stage,
 you can generate an
-[Attack-Hold-Release]({{ 'guides/generating-multi-stage-envelopes#ahr' | relative_url }})
+[Attack-Hold-Release](/guides/generating-multi-stage-envelopes#ahr)
 or
-[Attack-Decay-Hold-Release]({{ 'guides/generating-multi-stage-envelopes#adhr' | relative_url }})
+[Attack-Decay-Hold-Release](/guides/generating-multi-stage-envelopes#adhr)
 Envelope.
 
 To generate a hold stage with _Hostage:_
@@ -124,7 +124,7 @@ _as long as the sustain gate is up._
 
 With a sustain stage,
 you can generate an
-[Attack-Decay-Sustain-Release]({{ 'guides/generating-multi-stage-envelopes#adsr' | relative_url }})
+[Attack-Decay-Sustain-Release](/guides/generating-multi-stage-envelopes#adsr)
 Envelope.
 
 The wiring for a sustain stage
@@ -147,7 +147,7 @@ as long as the gate remains up.
 ## <span id="retriggerable">Making</span> Envelopes Retriggerable
 
 Each multi-stage envelope shown in
-[Generating Multi-Stage Envelopes]({{ 'guides/generating-multi-stage-envelopes' | relative_url }})
+[Generating Multi-Stage Envelopes](/guides/generating-multi-stage-envelopes)
 is _retriggerable._
 If a trigger arrives
 while an envelope is in progress,
@@ -156,10 +156,10 @@ the new trigger
 and begins a new one.
 
 The general rule of retriggering for
-[_Stage_]({{ '/modules/stage/' | relative_url }}),
-[_Booster Stage_]({{ '/modules/booster-stage/' | relative_url }}),
-[_Hostage_]({{ '/modules/hostage/' | relative_url }}),
-and [_Upstage_]({{ '/modules/upstage/' | relative_url }})
+[_Stage_](/modules/stage/),
+[_Booster Stage_](/modules/booster-stage/),
+[_Hostage_](/modules/hostage/),
+and [_Upstage_](/modules/upstage/)
 modules is:
 
 > **Unless you
@@ -286,10 +286,10 @@ to control the loop.
 ## Variations
 - For additional versatility,
     replace any _Stage_ module with a
-    [_Booster Stage_]({{ '/modules/booster-stage/' | relative_url }}).
+    [_Booster Stage_](/modules/booster-stage/).
 - To start each envelope at a level other than 0V,
     connect an
-    [_Upstage_]({{ '/modules/upstage/' | relative_url }})
+    [_Upstage_](/modules/upstage/)
     or other voltage source.
 - To start each envelope
     at the level where the previous one ended,

@@ -1,14 +1,17 @@
 baseURL: "https://dhemery.github.io/DHE-Modules"
 languageCode: "en-us"
 title: DHE Modules
+params:
+    SubTitle: VCV Rack modules from Dale Emery
+    Repository: "https://github.com/dhemery/DHE-Modules/"
 copyright: © 2017–2021 Dale H. Emery
+canonifyUrls: true
 disableKinds:
-    - posts
+    - sections
     - taxonomy
     - term
+    - RSS
     - sitemap
-    - rss
-pygmentsUseClasses: true
 markup:
     goldmark:
         renderer:

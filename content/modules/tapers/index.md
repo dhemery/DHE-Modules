@@ -14,7 +14,7 @@ between the position of the knob
 and the device's output value.
 
 _Tapers_ can produce
-[linear, J-shaped, or S-shaped]({{ '/technical/curves/' | relative_url }})
+[linear, J-shaped, or S-shaped](/technical/curves/)
 tapers,
 as well as inverted J and S tapers.
 
@@ -42,7 +42,7 @@ approaches either extreme.
     inverts the shape of the curve.
 
     The shape switch **(S / J)**
-    selects the general [shape]({{ '/technical/curves/' | relative_url }})
+    selects the general [shape](/technical/curves/)
     of the transfer function.
 
 - **UNI / BI:**
@@ -57,7 +57,7 @@ approaches either extreme.
     to the position of the _LEVEL_ knob.
 
 - **CV:**
-    A [control voltage]({{ '/technical/modulation/' | relative_url }}) signal
+    A [control voltage](/technical/modulation/) signal
     to modulate the associated parameter. Each CV input has an attenuverter.
 
 ## Using Tapers

@@ -18,7 +18,7 @@ See:
 
 - [Controls](#controls) (below)
 - [Operation](#operation) (below)
-- [J and S Curves]({{ '/technical/curves/' | relative_url }})
+- [J and S Curves](/technical/curves/)
 
 ## Controls
 

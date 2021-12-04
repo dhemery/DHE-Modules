@@ -3,10 +3,10 @@ title: How Stages Work Together
 ---
 
 The
-[Stage]({{ '/modules/stage/' | relative_url }}),
-[Booster Stage]({{ '/modules/booster-stage/' | relative_url }}),
+[Stage](/modules/stage/),
+[Booster Stage](/modules/booster-stage/),
 and
-[Hostage]({{ '/modules/hostage/' | relative_url }})
+[Hostage](/modules/hostage/)
 modules
 can be chained together
 to create multi-stage envelopes.

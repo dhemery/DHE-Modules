@@ -19,7 +19,7 @@ See:
     for basic ideas about how to use these modules.
 - [Details](#details)
     for explanations of several non-intuitive aspects of these modules.
-- [J and S Curves]({{ '/technical/curves/' | relative_url }})
+- [J and S Curves](/technical/curves/)
 
 ## Controls
 

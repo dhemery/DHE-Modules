@@ -16,11 +16,11 @@ DHE Modules includes three _Sequencizer_ modules:
 The three modules operate identically, except for the number of steps.
 
 See:
-- [Sequencizer User Guide]({{ '/modules/sequencizer/user-guide/' | relative_url }})
+- [Sequencizer User Guide](/modules/sequencizer/user-guide/)
     for ideas about how to use the _Sequencizer_ modules.
 - [Factory Presets](#factory-presets)
     for descriptions of the presets included with the modules.
-- [J and S Curves]({{ '/technical/curves/' | relative_url }})
+- [J and S Curves](/technical/curves/)
 
 ## Controls
 

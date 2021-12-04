@@ -10,19 +10,19 @@ The transfer function comes in two shapes:
 - [J curves](#j-curves)
 - [S curves](#s-curves)
 
-[_Stage_]({{ '/modules/stage/' | relative_url }})
+[_Stage_](/modules/stage/)
 and
-[_Booster Stage_]({{ '/modules/booster-stage/' | relative_url }})
+[_Booster Stage_](/modules/booster-stage/)
 can generate J-shaped envelope stages.
 In addition,
 _Booster Stage_
 can generate S-shaped stages.
 
-[_Swave_]({{ '/modules/swave/' | relative_url }})
+[_Swave_](/modules/swave/)
 can apply a J- or S-shaped transfer function
 to shape its input.
 
-[_Tapers_]({{ '/modules/tapers/' | relative_url }})
+[_Tapers_](/modules/tapers/)
 can apply a J- or S-shaped taper
 to the position of its _LEVEL_ knob.
 
@@ -39,11 +39,11 @@ so sharp as to be nearly square.
 Each transfer function (J or S, positive or negative)
 is produced by
 Dino Dini's beautiful
-[**normalized tunable sigmoid function**]({{ 'technical/sigmoid/' | relative_url }}).
+[**normalized tunable sigmoid function**](/technical/sigmoid/).
 
-## J Curves
+# J Curves
 
-### Positive J Curves
+## Positive J Curves
 
 Rotating the _CURVE_ knob
 clockwise from the center
@@ -97,7 +97,7 @@ Extreme positive curvature
 makes the curve almost
 square at the end.
 
-### Negative J Curves
+## Negative J Curves
 
 Rotating the _CURVE_ knob
 counterclockwise from the center
@@ -164,9 +164,9 @@ _pushes the steep part of the curve to the left._
     about this.
     Or try it yourself.
 
-## S Curves
+# S Curves
 
-### Positive S Curves
+## Positive S Curves
 
 Rotating the _CURVE_ knob
 clockwise from the center
@@ -220,7 +220,7 @@ Extreme positive curvature
 makes the curve almost
 square just before and after the middle.
 
-### Negative S Curves
+## Negative S Curves
 
 Rotating the _CURVE_ knob
 counterclockwise from the center
