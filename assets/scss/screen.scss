@@ -29,8 +29,8 @@ $heading-3-size: 1rem;
 $detail-text-size: .75rem;
 
 $site-hue: 210;
-$dark: hsl($site-hue, 20%, 0%);
-$medium: hsl($site-hue, 20%, 60%);
+$dark: hsl($site-hue, 100%, 20%);
+$medium: hsl($site-hue, 0%, 60%);
 $light: hsl($site-hue, 20%, 92%);
 $lightest: hsl($site-hue, 5%, 98.5%);
 
@@ -161,7 +161,6 @@ hr { margin: 0; }
 img {
     border: 0;
     max-width: 100%;
-    height: auto;
 }
 
 li { margin: 0; }
