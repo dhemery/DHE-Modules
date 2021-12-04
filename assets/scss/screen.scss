@@ -18,7 +18,7 @@ main {
 $leading: 1.5;
 $inter-paragraph-space: 1rem;
 
-$text-font:  "Myriad Pro", Calibri, Helvetica, Arial, sans-serif;
+$text-font:  Helvetica, sans-serif;
 $text-size: 100%;
 $banner-title-size: 3rem;
 $banner-subtitle-size: 2rem;
@@ -170,27 +170,6 @@ ol, ul { list-style: none; }
 p, li, dt, dd { line-height: $leading; }
 
 p, ul, ol, blockquote { padding: 0; }
-
-// CWD-only starting from here
-
-.post-list {
-}
-
-.post-list-item {
-    margin: 1em auto;
-}
-
-.post-details {
-    font-size: $detail-text-size;
-    ul { padding-left: 0; }
-    li + li::before { content: ', '; }
-}
-
-.tag-list {
-    list-style-type: none;
-    li + li::before { content: ' | '; }
-}
-
 
 sup {
     font-size: smaller;
