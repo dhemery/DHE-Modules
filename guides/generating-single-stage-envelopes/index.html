@@ -1,0 +1,70 @@
+<!doctype html><html lang=en-us>
+<head>
+<meta charset=utf-8>
+<meta viewport="width=device-width">
+<meta viewport="initial-scale=1">
+<meta viewport="user-scalable=yes">
+<title>Generating Single-Stage Envelopes</title>
+<link href=https://dhemery.github.io/DHE-Modules/favicon.ico rel=icon>
+<link rel=stylesheet href=https://dhemery.github.io/DHE-Modules/css/screen.css>
+</head>
+<body>
+<header class="banner centered title">
+<h1><a href=https://dhemery.github.io/DHE-Modules/>DHE Modules</a></h1>
+<h2>VCV Rack modules from Dale Emery</h2>
+</header>
+<main>
+<header class=boxed>
+<h1 class=title><a href=https://dhemery.github.io/DHE-Modules/guides/generating-single-stage-envelopes/>Generating Single-Stage Envelopes</a></h1>
+</header>
+<section><p>You can create a simple envelopes
+with a single
+<a href=https://dhemery.github.io/DHE-Modules/modules/stage/><em>Stage</em></a>
+module:</p>
+<ul>
+<li><a href=#ah>Attack-and-Hold Envelopes</a></li>
+<li><a href=#dh>Decay-and-Hold Envelopes</a></li>
+</ul>
+<p>For additional control and versatility,
+use a
+<a href=https://dhemery.github.io/DHE-Modules/modules/booster-stage><em>Booster Stage</em></a>
+instead of a <em>Stage</em>.</p>
+<p><strong>See also:</strong></p>
+<ul>
+<li><a href=https://dhemery.github.io/DHE-Modules/guides/generating-multi-stage-envelopes/>Generating Multi-Stage Envelopes</a></li>
+<li><a href=https://dhemery.github.io/DHE-Modules/guides/techniques-and-variations/>Techniques and Variations</a>:
+how to wire multi-stage envelopes,
+how to add hold and sustain stages,
+and how to create
+retriggerable envelopes,
+uninterruptible envelopes,
+looping envelopes,
+and other interesting variations.</li>
+</ul>
+<h2 id=span-idahattack-and-holdspan-envelopes><span id=ah>Attack-and-Hold</span> Envelopes</h2>
+<img class=envelope src=ah.png alt="Attack and Hold Envelope">
+<ul>
+<li>Connect a trigger source to the <em>TRIG</em> input.</li>
+<li>Leave the <em>IN</em> input disconnected.</li>
+<li>Set the <em>LEVEL</em> knob to the desired <em>hold</em> voltage.</li>
+</ul>
+<h2 id=span-iddhdecay-and-holdspan-envelopes><span id=dh>Decay-and-Hold</span> Envelopes</h2>
+<p>This is very useful for plucks:</p>
+<img class=envelope src=dh.png alt="Decay and Hold Envelope">
+<ul>
+<li>Connect a trigger source to the <em>TRIG</em> input.</li>
+<li>Connect a voltage source to the <em>IN</em> input
+to supply the envelope&rsquo;s starting voltage.</li>
+<li>Set the <em>LEVEL</em> knob to the desired <em>hold</em> voltage.</li>
+</ul>
+<p><strong>Note:</strong>
+It may be useful to use the trigger signal
+to supply the envelope&rsquo;s starting voltage,
+as we&rsquo;ve done in this example.</p>
+</section>
+</main>
+<footer class="centered chrome">
+<p role=copyright>© 2017–2021 Dale H. Emery</p>
+</footer>
+</body>
+</html>

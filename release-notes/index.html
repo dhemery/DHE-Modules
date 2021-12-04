@@ -1,0 +1,215 @@
+<!doctype html><html lang=en-us>
+<head>
+<meta charset=utf-8>
+<meta viewport="width=device-width">
+<meta viewport="initial-scale=1">
+<meta viewport="user-scalable=yes">
+<title>Release Notes</title>
+<link href=https://dhemery.github.io/DHE-Modules/favicon.ico rel=icon>
+<link rel=stylesheet href=https://dhemery.github.io/DHE-Modules/css/screen.css>
+</head>
+<body>
+<header class="banner centered title">
+<h1><a href=https://dhemery.github.io/DHE-Modules/>DHE Modules</a></h1>
+<h2>VCV Rack modules from Dale Emery</h2>
+</header>
+<main>
+<header class=boxed>
+<h1 class=title><a href=https://dhemery.github.io/DHE-Modules/release-notes/>Release Notes</a></h1>
+</header>
+<section><h1 id=version-200>Version 2.0.0</h1>
+<p>November 2021</p>
+<ul>
+<li>Updated all modules to be compatible with VCV Rack 2.</li>
+<li>Hid the <a href=https://dhemery.github.io/DHE-Modules/modules/curve-sequencer><em>Curve Sequencer</em></a> modules from the module browser.
+Use <a href=https://dhemery.github.io/DHE-Modules/modules/sequencizer/><em>Sequencizer</em></a> instead.</li>
+</ul>
+<h1 id=version-151>Version 1.5.1</h1>
+<p>November 2020</p>
+<ul>
+<li>Updated the <em>Truth</em> modules
+<ul>
+<li>Changed the mechanism for making a truth table depend on its previous state (Q).
+This change removes the <em>A/Q</em> button from column 1
+and gives each result button two additional options: <em>Q</em> and <em>¬Q.</em>
+This allows creating a state-dependent truth table
+with fewer columns.</li>
+<li>Taught the modules how to upgrade existing presets
+to use the new result options instead of the <em>A/Q</em> button.</li>
+<li>Added override buttons to the <em>Q</em> and <em>¬Q</em> outputs.</li>
+<li>Moved each preset to the next lower-ranked <em>Truth</em> module.</li>
+<li>Added a <em>Truth 4</em> preset that implements a D latch with set and reset.</li>
+</ul>
+</li>
+</ul>
+<h1 id=version-150>Version 1.5.0</h1>
+<p>November 2020</p>
+<ul>
+<li>Added <em>Truth 2</em>.</li>
+<li>Added <a href=https://dhemery.github.io/DHE-Modules/modules/truth/><em>Truth 3</em></a>.</li>
+<li>Added <em>Truth 4</em>.</li>
+<li>Added <a href=https://dhemery.github.io/DHE-Modules/modules/buttons/><em>Buttons</em></a>.</li>
+</ul>
+<h1 id=version-140>Version 1.4.0</h1>
+<p>November 2020</p>
+<ul>
+<li>Added <a href=https://dhemery.github.io/DHE-Modules/modules/scannibal/><em>Scannibal 4</em></a>.</li>
+<li>Added <em>Scannibal 8</em>.</li>
+<li>Added <em>Scannibal 16</em>.</li>
+</ul>
+<h1 id=version-130>Version 1.3.0</h1>
+<p>October 2020</p>
+<ul>
+<li>Added <a href=https://dhemery.github.io/DHE-Modules/modules/sequencizer/><em>Sequencizer 4</em></a>.</li>
+<li>Added <em>Sequencizer 8</em>.</li>
+<li>Added <em>Sequencizer 16</em>.</li>
+<li>Changed the presentation of &ldquo;stepper&rdquo; controls.</li>
+</ul>
+<h1 id=version-120>Version 1.2.0</h1>
+<p>December 2019</p>
+<ul>
+<li>Added three new modes to the Curve Sequencer modules:
+<ul>
+<li><em>INPUT</em> mode copies the <em>IN</em> signal to the <em>OUT</em> port.</li>
+<li><em>LEVEL</em> mode copies the <em>LEVEL</em> voltage to the <em>OUT</em> port.</li>
+<li><em>CURVE</em> mode generates a curve that gradually approaches the <em>IN</em> signal.</li>
+</ul>
+</li>
+</ul>
+<h1 id=version-111>Version 1.1.1</h1>
+<p>November 2019</p>
+<ul>
+<li>Fixed an error in the <em>Ranger</em> GUI.</li>
+</ul>
+<h1 id=version-110>Version 1.1.0</h1>
+<p>November 2019</p>
+<ul>
+<li>Added <a href=https://dhemery.github.io/DHE-Modules/modules/curve-sequencer><em>Curve Sequencer 4</em></a>.</li>
+<li>Added <em>Curve Sequencer 8</em>.</li>
+<li>Added <em>Curve Sequencer 16</em>.</li>
+</ul>
+<h1 id=version-105>Version 1.0.5</h1>
+<p>August 2019</p>
+<ul>
+<li><em>Stage,</em> <em>Booster Stage,</em> and <em>Hostage.</em>
+<ul>
+<li>Fixed a defect that prevented these modules from retriggering
+while a stage was in progress.</li>
+</ul>
+</li>
+</ul>
+<h1 id=version-104>Version 1.0.4</h1>
+<p>July 2019</p>
+<ul>
+<li><em>Fuzzy Logic H</em> and <em>Fuzzy Logic Z</em>
+<ul>
+<li>Added a <em>UNI / BI</em> switch
+to allow operating
+on audio and other bipolar signals (-5V to 5V).</li>
+<li>The <em>OR</em> and <em>NOR</em> output port widgets for inputs <em>C</em> and <em>D</em>
+were incorrectly connected to the <em>XOR</em> and <em>XNOR</em> outputs.</li>
+</ul>
+</li>
+</ul>
+<h1 id=version-103>Version 1.0.3</h1>
+<p>June 2019</p>
+<ul>
+<li>Added <a href=https://dhemery.github.io/DHE-Modules/modules/fuzzy-logic-h><em>Fuzzy Logic H</em></a>.</li>
+<li>Added <a href=https://dhemery.github.io/DHE-Modules/modules/fuzzy-logic-z><em>Fuzzy Logic Z</em></a>.</li>
+</ul>
+<h1 id=version-102>Version 1.0.2</h1>
+<p>June 2019</p>
+<ul>
+<li>Added <a href=https://dhemery.github.io/DHE-Modules/modules/gator><em>Gator</em></a>.</li>
+</ul>
+<h1 id=version-101>Version 1.0.1</h1>
+<p>June 2019</p>
+<ul>
+<li>Xycloid
+<ul>
+<li>Added phase CV with attenuverter.</li>
+<li>Reordered controls to match Blossom.</li>
+</ul>
+</li>
+<li>Swave
+<ul>
+<li>Added a CV attenuverter.</li>
+</ul>
+</li>
+</ul>
+<h1 id=version-100>Version 1.0.0</h1>
+<p>May 2019</p>
+<ul>
+<li>All modules
+<ul>
+<li>Added parameter tooltips.</li>
+<li>Added the ability to specify parameter values via keyboard.</li>
+</ul>
+</li>
+<li>Ranger
+<ul>
+<li>Renamed and reoriented the limit controls to better convey their effects on the <strong>LEVEL</strong> knob.</li>
+</ul>
+</li>
+<li>Swave
+<ul>
+<li>Restored the shape switch.</li>
+</ul>
+</li>
+</ul>
+<h1 id=release-065>Release 0.6.5</h1>
+<p>March 2019</p>
+<ul>
+<li>Added <a href=https://dhemery.github.io/DHE-Modules/modules/blossom><em>Blossom</em></a>.</li>
+<li>Fixed a defect that caused the envelope generator modules
+to sometimes generate a single sample of the wrong voltage.
+When used to modulate volume,
+the result was a very nasty click.
+A huge thank you
+to Omri Cohen for finding and reporting this problem.</li>
+</ul>
+<h1 id=release-064>Release 0.6.4</h1>
+<p>January 2019</p>
+<ul>
+<li>Added <a href=https://dhemery.github.io/DHE-Modules/modules/func><em>Func</em></a>.</li>
+<li>Added <a href=https://dhemery.github.io/DHE-Modules/modules/func-6><em>Func 6</em></a>.</li>
+<li>Significantly improved performance of the envelope generator modules.</li>
+</ul>
+<h1 id=release-063>Release 0.6.3</h1>
+<p>November 2018</p>
+<ul>
+<li>Added <a href=https://dhemery.github.io/DHE-Modules/modules/ranger><em>Ranger</em></a>.</li>
+<li>Added <a href=https://dhemery.github.io/DHE-Modules/modules/tapers><em>Tapers</em></a>.</li>
+</ul>
+<h1 id=release-062>Release 0.6.2</h1>
+<p>October 2018</p>
+<ul>
+<li>Added a <em>PHASE</em> knob and a <em>RATIO</em> quantizer switch
+to <a href=https://dhemery.github.io/DHE-Modules/modules/xycloid><em>Xycloid</em></a>.</li>
+</ul>
+<h1 id=release-061>Release 0.6.1</h1>
+<p>July 2018</p>
+<ul>
+<li>Added <a href=https://dhemery.github.io/DHE-Modules/modules/cubic><em>Cubic</em></a>.</li>
+<li>Added <a href=https://dhemery.github.io/DHE-Modules/modules/xycloid><em>Xycloid</em></a>.</li>
+</ul>
+<h1 id=release-060>Release 0.6.0</h1>
+<p>March 2018</p>
+<ul>
+<li>Added <a href=https://dhemery.github.io/DHE-Modules/modules/booster-stage><em>Booster Stage</em></a>.</li>
+<li>Added <a href=https://dhemery.github.io/DHE-Modules/modules/hostage><em>Hostage</em></a>.</li>
+<li>Added <a href=https://dhemery.github.io/DHE-Modules/modules/swave><em>Swave</em></a>.</li>
+</ul>
+<h1 id=release-050>Release 0.5.0</h1>
+<p>February 2018</p>
+<ul>
+<li>Added <a href=https://dhemery.github.io/DHE-Modules/modules/stage><em>Stage</em></a>.</li>
+<li>Added <a href=https://dhemery.github.io/DHE-Modules/modules/upstage><em>Upstage</em></a>.</li>
+</ul>
+</section>
+</main>
+<footer class="centered chrome">
+<p role=copyright>© 2017–2021 Dale H. Emery</p>
+</footer>
+</body>
+</html>

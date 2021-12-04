@@ -1,0 +1,158 @@
+<!doctype html><html lang=en-us>
+<head>
+<meta charset=utf-8>
+<meta viewport="width=device-width">
+<meta viewport="initial-scale=1">
+<meta viewport="user-scalable=yes">
+<title>The Truth Modules</title>
+<link href=https://dhemery.github.io/DHE-Modules/favicon.ico rel=icon>
+<link rel=stylesheet href=https://dhemery.github.io/DHE-Modules/css/screen.css>
+</head>
+<body>
+<header class="banner centered title">
+<h1><a href=https://dhemery.github.io/DHE-Modules/>DHE Modules</a></h1>
+<h2>VCV Rack modules from Dale Emery</h2>
+</header>
+<main>
+<header class=boxed>
+<h1 class=title><a href=https://dhemery.github.io/DHE-Modules/modules/truth/>The Truth Modules</a></h1>
+</header>
+<section><img class=faceplate src=truth.svg alt="The Truth 3 Faceplate">
+<p>Customizable truth tables with 2, 3, or 4 inputs.</p>
+<p><em>Truth 3</em> is shown, and described below.
+<em>Truth 2</em> and <em>Truth 4</em> offer similar functionality,
+with 2 and 4 inputs, respectively.</p>
+<h2 id=controls>Controls</h2>
+<h3 id=inputs>Inputs</h3>
+<ul>
+<li>
+<p><strong>A</strong>, <strong>B</strong>, and <strong>C/GATE:</strong>
+The input signals for the truth table.
+A voltage above 0.5V (half a volt)
+is considered <em>high</em>.
+A voltage of 0.5V or below
+is considered <em>low</em>.</p>
+<p>Beside each input is an override button
+that sets the input signal high while pressed.</p>
+</li>
+</ul>
+<h3 id=the-truth-table>The Truth Table</h3>
+<h4 id=columns>Columns</h4>
+<ul>
+<li>
+<p>The <strong>A</strong> and <strong>B</strong> columns
+represent the <strong>A</strong> and <strong>B</strong> inputs.
+The column is true if the input is high.</p>
+</li>
+<li>
+<p>The third column represents the <em>condition</em> of the <strong>C/GATE</strong> input.
+The button at the top of the column
+selects a condition to apply to the <strong>C/GATE</strong> signal.
+When the signal satisfies the condition,
+the column is true.</p>
+<p>The conditions are:</p>
+<ul>
+<li><em>HIGH:</em> The gate is high.</li>
+<li><em>LOW:</em> The gate is low.</li>
+<li><em>RISE:</em> The gate rises.</li>
+<li><em>FALL:</em> The gate falls.</li>
+<li><em>EDGE:</em> The gate changes (rises or falls).</li>
+</ul>
+<p>See <a href=#usage-notes>Usage Notes</a> for ideas about how to use the conditions.</p>
+</li>
+<li>
+<p>The <strong>Q</strong> column
+selects the result of the truth table
+for each possible state of the inputs.</p>
+</li>
+</ul>
+<h4 id=rows>Rows</h4>
+<ul>
+<li>
+<p>Below the dark header row,
+the truth table has eight more rows,
+one for each possible state of the inputs.</p>
+</li>
+<li>
+<p>In each row,
+the first three columns
+represent a possible state of the three inputs.</p>
+</li>
+<li>
+<p>The button in the <strong>Q</strong> column
+selects the result of the truth table
+when the inputs match the row&rsquo;s state.
+The possible results are:</p>
+<ul>
+<li><em>T:</em> Emit 10V.</li>
+<li><em>F:</em> Emit 0V.</li>
+<li><em>Q:</em> Leave the output unchanged.</li>
+<li><em>¬Q:</em> Toggle the output.</li>
+</ul>
+</li>
+</ul>
+<h3 id=outputs>Outputs</h3>
+<ul>
+<li>
+<p>The <strong>Q</strong> output
+emits the result of the truth table
+for the given inputs.
+10V represents true,
+and 0V represents false.</p>
+</li>
+<li>
+<p><strong>¬Q:</strong> emits the negation of Q.</p>
+</li>
+<li>
+<p>Beside each output is a button
+that momentarily sets the output to true
+and the other output to false.</p>
+</li>
+</ul>
+<h2 id=usage-notes>Usage Notes</h2>
+<h3 id=level-triggered-vs-edge-triggered>Level-Triggered vs Edge-Triggered</h3>
+<p><strong>Level-Sensitive.</strong>
+The <em>HIGH</em> and <em>LOW</em> conditions
+make the table
+sensitive to the <em>level</em>
+of the <strong>C/GATE</strong> input.
+This makes the <strong>C/GATE</strong> input
+useful as an <em>enable</em> signal,
+such as for a <em>D Latch.</em></p>
+<p><strong>Edge-Triggered.</strong>
+The <em>RISE</em>, <em>FALL</em>, and <em>EDGE</em> conditions
+make the table <em>edge-triggered.</em>
+This makes the <strong>C/GATE</strong> input
+useful as a <em>clock</em> signal,
+allowing changes only at precise moments,
+when the clock rises or falls.</p>
+<p>Note that <em>RISE</em>, <em>FALL</em>, and <em>EDGE</em>
+are <em>single sample</em> events.</p>
+<h3 id=caution-selecting-the-q-result>Caution: Selecting the ¬Q Result</h3>
+<p>Because the <em>¬Q</em> result
+causes the table&rsquo;s output to toggle,
+it tends to be useful
+only for edge-triggered rows.
+That is, only when:</p>
+<ul>
+<li>The <strong>C/GATE</strong> button
+selects an edge-triggered condition
+(<em>RISE</em>, <em>FALL</em>, or <em>EDGE</em>).</li>
+<li>The row&rsquo;s value for the gate column is <em>T.</em></li>
+</ul>
+<p>To see why, consider:
+If the row is level-triggered,
+it might be selected
+for many samples in a row.
+On each sample,
+the output toggles,
+producing a square wave
+at the Nyquist frequency.
+That&rsquo;s probably not what you want.</p>
+</section>
+</main>
+<footer class="centered chrome">
+<p role=copyright>© 2017–2021 Dale H. Emery</p>
+</footer>
+</body>
+</html>

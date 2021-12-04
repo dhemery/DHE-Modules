@@ -1,0 +1,233 @@
+<!doctype html><html lang=en-us>
+<head>
+<meta charset=utf-8>
+<meta viewport="width=device-width">
+<meta viewport="initial-scale=1">
+<meta viewport="user-scalable=yes">
+<title>Normalized Tunable Sigmoid Function</title>
+<link href=https://dhemery.github.io/DHE-Modules/favicon.ico rel=icon>
+<link rel=stylesheet href=https://dhemery.github.io/DHE-Modules/css/screen.css>
+</head>
+<body>
+<header class="banner centered title">
+<h1><a href=https://dhemery.github.io/DHE-Modules/>DHE Modules</a></h1>
+<h2>VCV Rack modules from Dale Emery</h2>
+</header>
+<main>
+<header class=boxed>
+<h1 class=title><a href=https://dhemery.github.io/DHE-Modules/technical/sigmoid/>Normalized Tunable Sigmoid Function</a></h1>
+</header>
+<section><ul>
+<li><a href=#function>The Function</a></li>
+<li><a href=#stages>Curved Envelope Stages</a></li>
+<li><a href=#waveshaping>Waveshaping</a></li>
+<li><a href=#other>Other Uses</a></li>
+</ul>
+<p><strong>See also:</strong></p>
+<ul>
+<li><a href=https://www.desmos.com/calculator/aksjkh9das>Interact with the normalized tunable sigmoid function</a>
+on <em>Desmos.com,</em>
+a fun interactive graphing website.</li>
+<li><a href="https://www.youtube.com/watch?v=R5IZyQpYvZA">On Youtube</a>:
+Watch Dino Dini improve his original normalized tunable sigmoid function.
+<em>DHE Modules</em> uses the improved version.</li>
+</ul>
+<h2 id=span-idfunctionthespan-function><span id=function>The</span> Function</h2>
+<p>As I looked for a way
+to shape envelope stages,
+I stumbled across Dino Dini&rsquo;s beautiful
+<a href=#function><em>normalized tunable sigmoid function</em></a>:</p>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type=text/javascript></script>
+<blockquote>
+<p>$$y = \frac{x - kx}{k - 2k|x| + 1}$$</p>
+</blockquote>
+<p>By <em>beautiful,</em>
+I don&rsquo;t mean that the function looks nice
+(though it looks very nice).
+I mean that it has three features
+that make it enormously useful for my purposes:</p>
+<ul>
+<li><strong><a href=#normalized>Normalized</a>:</strong>
+It applies in a particularly useful way
+to numbers in two particularly useful ranges:
+[-1,1] and [0,1].</li>
+<li><strong><a href=#tunable>Tunable</a>:</strong>
+A single parameter
+(<em>k</em> or <em>curvature</em>)
+adjusts the curve
+in particularly useful ways.</li>
+<li><strong><a href=#sigmoid>Sigmoid</a>:</strong>
+It produces a particularly useful
+S-shaped curve.
+And because of the multiple ways it is normalized,
+it also produces a particularly useful
+J-shaped curve.</li>
+</ul>
+<p>Here is a graph
+of the the normalized tunable sigmoid function
+for inputs from -1 to 1,
+with each line representing a different curvature,
+from -0.95 (red) to 0.95 (violet):</p>
+<img src=sigmoid.png>
+<h3 id=normalized>Normalized</h3>
+<p>The function is <em>normalized</em> in two interesting ways:</p>
+<ul>
+<li>Given an input in the range [-1,1],
+it yields an output
+in the range [-1,1].</li>
+<li>Given an input in the range [0,1],
+it yields an output
+in the range [0,1].</li>
+</ul>
+<p>Note also that <em>for every value of k</em>:</p>
+<ul>
+<li>$$sigmoid(-1) = -1$$.</li>
+<li>$$sigmoid(0) = 0$$.</li>
+<li>$$sigmoid(1) = 1$$.</li>
+</ul>
+<p>If I can map some linear signal
+onto one of those &ldquo;normal&rdquo; ranges,
+I can apply the sigmoid function
+to shape the signal.</p>
+<p>This is how the <em>DHE Modules</em>
+create curved
+<a href=#stages>envelope stages</a>
+and <a href=#waveshaping>waveshaper transfer functions</a>.</p>
+<h3 id=tunable>Tunable</h3>
+<p>The normalized tunable sigmoid function
+has a parameter,
+<em>k,</em>
+which tunes the <em>curvature</em> of the function.
+Each line in the graph
+represents a different value of <em>k</em>.</p>
+<p>Positive <em>k</em>
+(from green to violet in the graph)
+gives a J shape
+over the range [0,1]
+and an inverted S shape
+over the range [-1,1].
+Negative <em>k</em>
+(from green to red in the graph)
+gives a shape
+that is nicely symmetrical
+to the positive <em>k</em>s
+<em>in either range.</em></p>
+<p>And when $$k=0$$,
+the function is linear:
+$$y=x$$.
+The output is the same as the input.</p>
+<p>By mapping each module&rsquo;s <em>CURVE</em> knob
+to this function parameter <em>k,</em>
+I give users control
+over the curvature
+of <a href=#stages>envelope stages</a>
+and <a href=#waveshaping>waveshaper transfer functions</a>.</p>
+<p><strong>Note:</strong>
+For S-shaped curves,
+the <em>DHE Modules</em>
+negate the tuning parameter <em>k</em>
+so that turning the <em>CURVE</em> knob clockwise
+gives an S curve
+instead of an inverted S curve.</p>
+<h3 id=sigmoid>Sigmoid</h3>
+<p>Originally I sought a function
+that could produce useful, symmetrical &ldquo;logarithmic&rdquo; curves
+for envelope stages.
+My initial attraction to this
+normalized tunable sigmoid function
+was that in the range [0,1]
+it produced exactly the kind of J curve
+I was looking for.</p>
+<p>But <a href=https://www.desmos.com/calculator/aksjkh9das>playing with this curve</a>
+got me thinking:
+What if my modules could produce
+<a href=#stages>S shaped envelope stages</a>?
+That would be a distinguishing feature!
+And this function made S shaped envelope stages easy.</p>
+<p>Then I wondered:
+Might this function work well as a
+<a href=#waveshaping>waveshaper transfer function</a>?
+And just like that, the idea for
+<a href=https://dhemery.github.io/DHE-Modules/modules/swave/><em>Swave</em></a>
+was born.</p>
+<h2 id=span-idstagescurvedspan-envelope-stages><span id=stages>Curved</span> Envelope Stages</h2>
+<p><a href=https://dhemery.github.io/DHE-Modules/modules/stage/><em>Stage</em></a>
+and
+<a href=https://dhemery.github.io/DHE-Modules/modules/booster-stage/><em>Booster Stage</em></a>
+use the normalised tunable sigmoid function
+to produce curved envelope stages.</p>
+<p>To produce an envelope stage,
+each module follows the same general procedure:</p>
+<ol>
+<li>Generate a <em>ramp</em> signal that progresses from 0 to 1
+over the duration of the stage</li>
+<li>Apply a shaping function
+to shape the ramp signal
+into a curve</li>
+<li>Map the curved ramp signal
+onto the desired output range</li>
+</ol>
+<p>For step 2,
+each module shapes the ramp signal
+by applying
+the normalized tunable sigmoid function.</p>
+<p><strong>J-Curved Envelope Stages:</strong>
+Given that the ramp signal is already in the range [0,1],
+shaping the stage into a J curve is easy:
+simply call the sigmoid function.</p>
+<p><strong>S-Curved Envelope Stages:</strong>
+<em>Booster Stage</em>
+can produce S-shaped stages.
+To do this,
+it applies the shaping function in three steps:</p>
+<ol>
+<li>Map the ramp signal from [0,1] to [-1,1]</li>
+<li>Apply the sigmoid function</li>
+<li>Map the shaped signal back to [0,1]
+before scaling it to the desired output range</li>
+</ol>
+<h2 id=span-idwaveshapingwaveshapingspan><span id=waveshaping>Waveshaping</span></h2>
+<p><a href=https://dhemery.github.io/DHE-Modules/modules/swave/><em>Swave</em></a>
+uses the normalized tunable sigmoid function
+to shape its input signal.</p>
+<p><strong>Note:</strong>
+<em>Swave</em> assumes that its input signal
+is in the range [-5V,5V],
+the standard range
+for audio and bipolar CV signals
+in VCV Rack.</p>
+<p>To shape its input signal,
+<em>Swave:</em></p>
+<ol>
+<li>Maps the signal
+from [-5V,5V]
+to the range [0,1] (for J-curved waveshaping)
+or [-1,1] (for S-curved waveshaping)</li>
+<li>Applies the sigmoid function
+to shape the signal</li>
+<li>Maps the shaped signal
+back to the range [-5V,5V]
+for output</li>
+</ol>
+<h2 id=span-idotherotherspan-uses><span id=other>Other</span> Uses</h2>
+<p>In addition to shaping signals and generating envelope stages,
+<em>DHE Modules</em> use the sigmoid function
+to give some knobs a <em>taper,</em>
+making the knobs more or less senstive
+at different parts of their rotation:</p>
+<ul>
+<li>Each <em>DURATION</em> knob has a <em>J taper,</em>
+making it
+less sensitive near the counterclockwise extreme
+and more sensitive near the clockwise extreme</li>
+<li>Each <em>CURVE</em> knob has an <em>S taper</em>,
+making it more sensitive in the center
+and less sensitive at the extremes</li>
+</ul>
+</section>
+</main>
+<footer class="centered chrome">
+<p role=copyright>© 2017–2021 Dale H. Emery</p>
+</footer>
+</body>
+</html>

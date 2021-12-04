@@ -1,0 +1,89 @@
+<!doctype html><html lang=en-us>
+<head>
+<meta charset=utf-8>
+<meta viewport="width=device-width">
+<meta viewport="initial-scale=1">
+<meta viewport="user-scalable=yes">
+<title>The Tapers Module</title>
+<link href=https://dhemery.github.io/DHE-Modules/favicon.ico rel=icon>
+<link rel=stylesheet href=https://dhemery.github.io/DHE-Modules/css/screen.css>
+</head>
+<body>
+<header class="banner centered title">
+<h1><a href=https://dhemery.github.io/DHE-Modules/>DHE Modules</a></h1>
+<h2>VCV Rack modules from Dale Emery</h2>
+</header>
+<main>
+<header class=boxed>
+<h1 class=title><a href=https://dhemery.github.io/DHE-Modules/modules/tapers/>The Tapers Module</a></h1>
+</header>
+<section><img class=faceplate src=tapers.svg alt="The Tapers Faceplate">
+<p>A pair of modulatable knobs with adjustable, modulatable tapers.</p>
+<p>A
+<em><a href=https://en.wikipedia.org/wiki/Potentiometer#Resistance%E2%80%93position_relationship:_%22taper%22>taper</a></em>
+is a
+<em><a href=https://en.wikipedia.org/wiki/Transfer_function>transfer function</a></em>
+that defines the relationship
+between the position of the knob
+and the device&rsquo;s output value.</p>
+<p><em>Tapers</em> can produce
+<a href=https://dhemery.github.io/DHE-Modules/technical/curves/>linear, J-shaped, or S-shaped</a>
+tapers,
+as well as inverted J and S tapers.</p>
+<p><strong>WARNING:</strong>
+Modulating a <em>LEVEL</em> knob beyond its normal range can generate outputs far
+outside the knob&rsquo;s normal range. This is especially true as the <em>CURVE</em> knob
+approaches either extreme.</p>
+<h2 id=controls>Controls</h2>
+<ul>
+<li>
+<p><strong>LEVEL:</strong>
+Selects a position
+along the transfer function
+defined by the <em>TAPER</em> panel.</p>
+</li>
+<li>
+<p><strong>CURVE:</strong>
+The curvature
+of the transfer function
+applied to the <em>LEVEL</em> knob.</p>
+<p>The center position
+produces a linear taper.
+Rotation away from the center
+increases the the curvature of the transfer function.
+Counterclockwise rotation
+inverts the shape of the curve.</p>
+<p>The shape switch <strong>(S / J)</strong>
+selects the general <a href=https://dhemery.github.io/DHE-Modules/technical/curves/>shape</a>
+of the transfer function.</p>
+</li>
+<li>
+<p><strong>UNI / BI:</strong>
+The voltage range of the output signal.
+0 to 10V (UNI)
+or -5 to 5V (BI).</p>
+</li>
+</ul>
+<h2 id=ports>Ports</h2>
+<ul>
+<li>
+<p><strong>OUT:</strong>
+The output voltage,
+determined by applying the transfer function
+to the position of the <em>LEVEL</em> knob.</p>
+</li>
+<li>
+<p><strong>CV:</strong>
+A <a href=https://dhemery.github.io/DHE-Modules/technical/modulation/>control voltage</a> signal
+to modulate the associated parameter. Each CV input has an attenuverter.</p>
+</li>
+</ul>
+<h2 id=using-tapers>Using Tapers</h2>
+<p>TBD</p>
+</section>
+</main>
+<footer class="centered chrome">
+<p role=copyright>© 2017–2021 Dale H. Emery</p>
+</footer>
+</body>
+</html>

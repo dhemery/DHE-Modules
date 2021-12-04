@@ -1,0 +1,113 @@
+<!doctype html><html lang=en-us>
+<head>
+<meta charset=utf-8>
+<meta viewport="width=device-width">
+<meta viewport="initial-scale=1">
+<meta viewport="user-scalable=yes">
+<title>The Gator Module</title>
+<link href=https://dhemery.github.io/DHE-Modules/favicon.ico rel=icon>
+<link rel=stylesheet href=https://dhemery.github.io/DHE-Modules/css/screen.css>
+</head>
+<body>
+<header class="banner centered title">
+<h1><a href=https://dhemery.github.io/DHE-Modules/>DHE Modules</a></h1>
+<h2>VCV Rack modules from Dale Emery</h2>
+</header>
+<main>
+<header class=boxed>
+<h1 class=title><a href=https://dhemery.github.io/DHE-Modules/modules/gator/>The Gator Module</a></h1>
+</header>
+<section><img class=faceplate src=gator.svg alt="The Gator Faceplate">
+<p>Computes eight common logic functions
+for up to 16 inputs.</p>
+<h2 id=controls>Controls</h2>
+<ul>
+<li><strong>Negate Buttons:</strong>
+Beside each input is a <em>negate</em> button
+that negates the input
+before computing the logic functions.</li>
+</ul>
+<h2 id=ports>Ports</h2>
+<ul>
+<li>
+<p><strong>Input ports:</strong>
+The 16 logic inputs.
+A voltage above 0.5V (half a volt)
+is considered <em>true</em>.
+A voltage of 0.5V or below
+is considered <em>false</em>.</p>
+</li>
+<li>
+<p><strong>AND:</strong>
+<em>True</em> if every input is <em>true</em>.</p>
+</li>
+<li>
+<p><strong>NAND:</strong>
+<em>True</em> if at least one input is <em>false</em>.</p>
+</li>
+<li>
+<p><strong>EVEN:</strong>
+<em>True</em> if the number of <em>true</em> inputs is even.</p>
+</li>
+<li>
+<p><strong>ODD:</strong>
+<em>True</em> if the number of <em>true</em> inputs is odd.</p>
+</li>
+<li>
+<p><strong>OR:</strong>
+<em>True</em> if at least one input is <em>true</em>.</p>
+</li>
+<li>
+<p><strong>NOR:</strong>
+<em>True</em> if every input is <em>false</em>.</p>
+</li>
+<li>
+<p><strong>XOR:</strong>
+<em>True</em> if exactly one input is <em>true</em>.
+See the note below
+about <a href=#the-meaning-of-xor>the meaning of <em>XOR</em></a>
+for more than two inputs.</p>
+</li>
+<li>
+<p><strong>XNOR:</strong>
+<em>True</em> if the number of <em>true</em> inputs is other than one.</p>
+</li>
+</ul>
+<h2 id=notes>Notes</h2>
+<ul>
+<li><strong>Inputs:</strong>
+<em>Gator</em> considers any input above 0.5V (half a volt)
+to be <em>true</em>,
+and any other voltage
+to be <em>false</em>.</li>
+<li><strong>Connected Inputs:</strong>
+When computing the logic functions,
+<em>Gator</em> considers only the <em>connected</em> inputs.
+If no inputs are connected,
+<em>Gator</em> emits 0V on all <em>OUT</em> ports.</li>
+<li><strong>Output:</strong>
+Each <em>Gator</em> output emits 10V
+if the corresponding logic function is <em>true</em>
+and 0V if the function is <em>false</em>.</li>
+</ul>
+<h2 id=the-meaning-of-xor>The Meaning of XOR</h2>
+<p>Opinions differ about the definition of &ldquo;exclusive or&rdquo; (XOR)
+for more than two inputs:</p>
+<ol>
+<li>Some people insist that it is undefined.</li>
+<li>Some people insist that it is <em>true</em> if the number of <em>true</em> inputs is odd.</li>
+<li>Some people insist that it is <em>true</em> if exactly one input is <em>true</em>.</li>
+</ol>
+<p>I chose the third definition (exactly one <em>true</em> input) for <em>XOR</em>,
+and added the <em>ODD</em> output
+to handle the second definition.
+I left the first definition unimplemented.
+At least, I think I did.
+Frankly, there&rsquo;s no way to know.</p>
+</section>
+</main>
+<footer class="centered chrome">
+<p role=copyright>© 2017–2021 Dale H. Emery</p>
+</footer>
+</body>
+</html>

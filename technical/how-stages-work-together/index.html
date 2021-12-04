@@ -1,0 +1,128 @@
+<!doctype html><html lang=en-us>
+<head>
+<meta charset=utf-8>
+<meta viewport="width=device-width">
+<meta viewport="initial-scale=1">
+<meta viewport="user-scalable=yes">
+<title>How Stages Work Together</title>
+<link href=https://dhemery.github.io/DHE-Modules/favicon.ico rel=icon>
+<link rel=stylesheet href=https://dhemery.github.io/DHE-Modules/css/screen.css>
+</head>
+<body>
+<header class="banner centered title">
+<h1><a href=https://dhemery.github.io/DHE-Modules/>DHE Modules</a></h1>
+<h2>VCV Rack modules from Dale Emery</h2>
+</header>
+<main>
+<header class=boxed>
+<h1 class=title><a href=https://dhemery.github.io/DHE-Modules/technical/how-stages-work-together/>How Stages Work Together</a></h1>
+</header>
+<section><p>The
+<a href=https://dhemery.github.io/DHE-Modules/modules/stage/>Stage</a>,
+<a href=https://dhemery.github.io/DHE-Modules/modules/booster-stage/>Booster Stage</a>,
+and
+<a href=https://dhemery.github.io/DHE-Modules/modules/hostage/>Hostage</a>
+modules
+can be chained together
+to create multi-stage envelopes.</p>
+<p>For a chain of individual modules
+to generate a sequence of stages,
+they must coordinate with each other
+in two ways:
+<em>Precedence</em> and <em>Sequence.</em></p>
+<ol>
+<li>
+<p><strong>Precedence:</strong>
+Whenever an module is generating a stage,
+all successor modules
+must forward that signal
+all the way through the chain
+to the final <em>OUT</em> output.</p>
+<p>That is, each module has <em>precedence</em>
+over all successor modules.
+When a module wants control,
+each successor module must <strong>defer</strong>
+to it.</p>
+</li>
+<li>
+<p><strong>Sequence:</strong>
+As each module completes its stage,
+it must hand off control
+to its successor
+to start the next stage.</p>
+</li>
+</ol>
+<h2 id=coordinating-precedence>Coordinating Precedence</h2>
+<p>Modules coordinate precedence
+through their <em>DEFER</em> and <em>ACTIVE</em> ports.</p>
+<p>In a typical configuration,
+each module&rsquo;s <em>ACTIVE</em> output
+is connected
+to its successor&rsquo;s <em>DEFER</em> input.
+And each module&rsquo;s <em>OUT</em> output
+is connected
+to its successor&rsquo;s <em>IN</em> input.</p>
+<p>When a module is generating a stage,
+it holds its <em>ACTIVE</em> gate high
+and sends the generated stage to its <em>OUT</em> output.</p>
+<p>When the next module
+receives this high gate signal at its <em>DEFER</em> input,
+it <em>defers</em> to its predecessor.
+It forwards its <em>IN</em> signal
+(the output from the predecessor)
+to its own <em>OUT</em> port.</p>
+<p>In this way,
+the first module&rsquo;s <em>OUT</em> signal
+makes its way
+to the second module&rsquo;s <em>OUT</em> output.</p>
+<p>In addition,
+while the second module is deferring,
+it holds its own <em>ACTIVE</em> gate high.
+This causes the <em>next</em> module to defer,
+and the next,
+and the next,
+all the way to the end of the chain.</p>
+<p>Through this chain of <em>ACTIVE/DEFER</em> signals,
+the highest precedence module
+assumes control
+of the entire chain&rsquo;s output.</p>
+<h2 id=coordinating-sequence>Coordinating Sequence</h2>
+<p>Modules coordinate sequence
+through their <em>TRIG</em> and <em>EOC</em> ports.</p>
+<p>In a typical configuration,
+each module&rsquo;s <em>EOC</em> output
+is connected
+to its successor&rsquo;s <em>TRIG</em> input.</p>
+<p>As each module completes its stage,
+it sends two important coordination signals:</p>
+<ul>
+<li>It lowers its <em>ACTIVE</em> gate
+which relinquishes its control
+over the successor modules.</li>
+<li>It sends a short pulse on its <em>EOC</em> output,
+which hands off control
+to its successor.</li>
+</ul>
+<p>And the next module reacts:</p>
+<ul>
+<li>Because its <em>DEFER</em> input is now low,
+it stops deferring.</li>
+<li>Because its <em>TRIG</em> input rose (because of the <em>EOC</em> pulse),
+it begins generating its own stage.</li>
+<li>Because it is actively generating a stage,
+it raises its own <em>ACTIVE</em> gate,
+giving <em>it</em> the highest precedence in the chain.
+And so all of the successor modules now defer to <em>it.</em></li>
+</ul>
+<p>In this way,
+the chain of modules
+creates a sequence of stages
+and sends each stage
+through the final <em>OUT</em> output of the chain.</p>
+</section>
+</main>
+<footer class="centered chrome">
+<p role=copyright>© 2017–2021 Dale H. Emery</p>
+</footer>
+</body>
+</html>

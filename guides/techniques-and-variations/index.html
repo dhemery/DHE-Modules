@@ -1,0 +1,300 @@
+<!doctype html><html lang=en-us>
+<head>
+<meta charset=utf-8>
+<meta viewport="width=device-width">
+<meta viewport="initial-scale=1">
+<meta viewport="user-scalable=yes">
+<title>Techniques and Variations</title>
+<link href=https://dhemery.github.io/DHE-Modules/favicon.ico rel=icon>
+<link rel=stylesheet href=https://dhemery.github.io/DHE-Modules/css/screen.css>
+</head>
+<body>
+<header class="banner centered title">
+<h1><a href=https://dhemery.github.io/DHE-Modules/>DHE Modules</a></h1>
+<h2>VCV Rack modules from Dale Emery</h2>
+</header>
+<main>
+<header class=boxed>
+<h1 class=title><a href=https://dhemery.github.io/DHE-Modules/guides/techniques-and-variations/>Techniques and Variations</a></h1>
+</header>
+<section><ul>
+<li><a href=#wiring>Wiring a Multi-Stage Envelope</a>.</li>
+<li><a href=#levels>Setting Levels</a>.</li>
+<li><a href=#hold>Adding a Hold Stage</a>.</li>
+<li><a href=#sustain>Adding a Sustain Stage</a>.</li>
+<li><a href=#retriggerable>Making Envelopes Retriggerable</a>.</li>
+<li><a href=#uninterruptible>Making Envelopes Uninterruptible</a>.</li>
+<li><a href=#loops>Creating a Looping Envelope</a>.</li>
+<li><a href=#variations>Variations</a>.</li>
+</ul>
+<p><strong>See also:</strong></p>
+<ul>
+<li><a href=https://dhemery.github.io/DHE-Modules/technical/how-stages-work-together>How Stages Work Together</a>.</li>
+<li><a href=https://dhemery.github.io/DHE-Modules/guides/generating-multi-stage-envelopes>Generating Multi-Stage Envelopes</a>.</li>
+<li><a href=https://dhemery.github.io/DHE-Modules/guides/generating-multi-stage-envelopes>Generating Single-Stage Envelopes</a>.</li>
+</ul>
+<h2 id=span-idwiringwiringspan-a-multi-stage-envelope><span id=wiring>Wiring</span> a Multi-Stage Envelope</h2>
+<p>The usual way to wire
+<a href=https://dhemery.github.io/DHE-Modules/modules/stage/><em>Stage</em></a>,
+<a href=https://dhemery.github.io/DHE-Modules/modules/booster-stage/><em>Booster Stage</em></a>,
+<a href=https://dhemery.github.io/DHE-Modules/modules/hostage/><em>Hostage</em></a>,
+and <a href=https://dhemery.github.io/DHE-Modules/modules/upstage/><em>Upstage</em></a>
+modules
+into multi-stage envelopes is:</p>
+<ol>
+<li><strong>Place the modules side-by-side in the order you want them to execute.</strong></li>
+<li><strong>Connect each output to the input on its right.</strong></li>
+</ol>
+<p>For example,
+suppose you want generate a four-stage envelope using <em>Stage</em> modules:</p>
+<img class=envelope src=disconnected.png alt="Four Stage Modules">
+<p>Notice how:</p>
+<ul>
+<li>The <em>ACTIVE</em> outputs line up with the <em>DEFER</em> inputs.</li>
+<li>The <em>EOC</em> outputs line up with the <em>TRIG</em> inputs.</li>
+<li>The <em>OUT</em> outputs line up with the <em>IN</em> inputs.</li>
+</ul>
+<p>That is your clue to wiring the modules together:</p>
+<ul>
+<li>Connect each module&rsquo;s <em>ACTIVE</em> output
+to its successor&rsquo;s <em>DEFER</em> input.</li>
+<li>Connect each module&rsquo;s <em>EOC</em> output
+to its successor&rsquo;s <em>TRIG</em> input.</li>
+<li>Connect each module&rsquo;s <em>OUT</em> output
+to its successor&rsquo;s <em>IN</em> input.</li>
+</ul>
+<p>Here is the result:</p>
+<img class=envelope src=connected.png alt="Four Connected Stage Modules">
+<p>Now all that remains is to
+connect a trigger source to the first stage,
+connect the final stage&rsquo;s output
+to whatever parameter you want your envelope to modulate,
+and adjust the levels, curves, and durations to taste.</p>
+<p><strong>Note:</strong>
+<em>Hostage</em> has a <em>GATE</em> port instead of a <em>TRIG</em> port.
+<em>Upstage</em> has a different set of ports.
+But even these modules' ports are arranged
+so that the usual wiring scheme —
+&ldquo;connect each module&rsquo;s outputs to its successor&rsquo;s inputs&rdquo; —
+usually applies.
+See the examples below for details and exceptions.</p>
+<h2 id=span-idlevelssettingspan-levels><span id=levels>Setting</span> Levels</h2>
+<ul>
+<li>
+<p>Each module&rsquo;s <em>LEVEL</em> knob
+determines the <em>ending</em> level
+of the stage it generates.</p>
+</li>
+<li>
+<p>The starting voltage of each stage
+is determined by the signal
+arriving at its <em>IN</em> input
+at the instant it is triggered.</p>
+</li>
+<li>
+<p>In this way,
+each stage begins
+where its predecessor ends.</p>
+</li>
+<li>
+<p>So to set each module&rsquo;s starting level,
+set the previous stage&rsquo;s
+ending level.</p>
+</li>
+</ul>
+<h2 id=span-idholdaddingspan-a-hold-stage><span id=hold>Adding</span> a Hold Stage</h2>
+<p>The <em>Hostage</em> module is designed specifically
+to create hold and sustain stages.</p>
+<p>A <em>hold stage</em>
+holds the envelope voltage constant
+<em>for a given duration.</em></p>
+<p>With a hold stage,
+you can generate an
+<a href=https://dhemery.github.io/DHE-Modules/guides/generating-multi-stage-envelopes#ahr>Attack-Hold-Release</a>
+or
+<a href=https://dhemery.github.io/DHE-Modules/guides/generating-multi-stage-envelopes#adhr>Attack-Decay-Hold-Release</a>
+Envelope.</p>
+<p>To generate a hold stage with <em>Hostage:</em></p>
+<ul>
+<li>Wire it into the chain of modules
+in the position where you want the the hold stage</li>
+<li>Set its mode to <em>HOLD.</em></li>
+</ul>
+<p><em>Hostage</em> holds the voltage
+at the level where the previous stage ended.
+It offers a knob, a range switch, and <em>CV</em> modulation
+to set the duration of the hold stage.</p>
+<h2 id=span-idsustainaddingspan-a-sustain-stage><span id=sustain>Adding</span> a Sustain Stage</h2>
+<p>The <em>Hostage</em> module is designed specifically
+to create hold and sustain stages.</p>
+<p>A <em>sustain stage</em>
+sustains a constant envelope voltage
+<em>as long as the sustain gate is up.</em></p>
+<p>With a sustain stage,
+you can generate an
+<a href=https://dhemery.github.io/DHE-Modules/guides/generating-multi-stage-envelopes#adsr>Attack-Decay-Sustain-Release</a>
+Envelope.</p>
+<p>The wiring for a sustain stage
+differs from the usual scheme.
+Note the <strong>bold text</strong> below.</p>
+<p>To generate a sustain stage with <em>Hostage:</em></p>
+<ul>
+<li>Wire it into the chain of modules
+in the position where you want the the sustain stage.</li>
+<li>Set its mode to <em>SUSTAIN.</em></li>
+<li><strong>Connect its <em>GATE</em> input
+to the same gate source
+that triggers the envelope.</strong></li>
+</ul>
+<p><em>Hostage</em> sustains the voltage
+at the level where the previous stage ended
+as long as the gate remains up.</p>
+<h2 id=span-idretriggerablemakingspan-envelopes-retriggerable><span id=retriggerable>Making</span> Envelopes Retriggerable</h2>
+<p>Each multi-stage envelope shown in
+<a href=https://dhemery.github.io/DHE-Modules/guides/generating-multi-stage-envelopes>Generating Multi-Stage Envelopes</a>
+is <em>retriggerable.</em>
+If a trigger arrives
+while an envelope is in progress,
+the new trigger
+<strong><em>interrupts the in-progress envelope</em></strong>
+and begins a new one.</p>
+<p>The general rule of retriggering for
+<a href=https://dhemery.github.io/DHE-Modules/modules/stage/><em>Stage</em></a>,
+<a href=https://dhemery.github.io/DHE-Modules/modules/booster-stage/><em>Booster Stage</em></a>,
+<a href=https://dhemery.github.io/DHE-Modules/modules/hostage/><em>Hostage</em></a>,
+and <a href=https://dhemery.github.io/DHE-Modules/modules/upstage/><em>Upstage</em></a>
+modules is:</p>
+<blockquote>
+<p><strong>Unless you
+<a href=#uninterruptible>take steps to suppress retriggers</a>
+while an envelope is in progress,
+the envelope is retriggerable.</strong></p>
+</blockquote>
+<p>For example,
+here is a retriggerable ADHR envelope:</p>
+<img class=envelope src=retriggerable.png alt="Retriggerable Envelope">
+<p>The cyan scope trace shows the envelope.
+The magenta trace shows the incoming triggers.</p>
+<p>Notice that when a new trigger arrives
+while the release stage is still in progress,
+the trigger interrupts the release stage
+and starts a new envelope.</p>
+<h2 id=span-iduninterruptiblemakingspan-envelopes-uninterruptible><span id=uninterruptible>Making</span> Envelopes Uninterruptible</h2>
+<p>If you want to prevent incoming triggers
+from interrupting in-progress envelopes:</p>
+<ul>
+<li>Insert an <em>Upstage</em> at the front of the chain.</li>
+<li>Rewire the trigger source
+so that the trigger signal passes through <em>Upstage</em>
+rather than going directly to the first stage.</li>
+<li>Connect <em>Upstage&rsquo;s</em> <em>WAIT</em> input
+to the final stage&rsquo;s <em>ACTIVE</em> output.</li>
+</ul>
+<p>For example,
+here is an uninterruptible ADHR envelope:</p>
+<img class=envelope src=uninterruptible.png alt="Uninterruptible Envelope">
+<p>The cyan scope trace shows the envelope.
+The magenta trace shows multiple triggers
+arriving during each iteration of the envelope.</p>
+<p>With this configuration,
+whenever an envelope is in progress,
+the final stage&rsquo;s <em>ACTIVE</em> signal
+tells <em>Upstage</em> to suppress incoming triggers.
+When the envelope finishes,
+<em>Upstage</em> resumes forwarding incoming triggers to the first stage.</p>
+<h2 id=span-idloopsloopingspan-envelopes><span id=loops>Looping</span> Envelopes</h2>
+<p>To generate a looping envelope,
+we need to</p>
+<ul>
+<li>Manually trigger the first envelope</li>
+<li>Configure the final stage
+to retrigger the envelope
+when it finishes</li>
+</ul>
+<p>And we might want a way to stop or retrigger a looping envelope.</p>
+<p><a href=#upstage-loops><em>Upstage</em></a> and <a href=#booster-stage-loops><em>Booster Stage</em></a>
+offer ways to control looping envelopes.</p>
+<h3 id=span-idupstage-loopscontrollingspan-loops-with-_upstage_><span id=upstage-loops>Controlling</span> Loops With <em>Upstage</em></h3>
+<ul>
+<li><a href=#wiring>Configure</a> a non-looping envelope in the usual way.</li>
+<li>Add an <em>Upstage</em> before the first stage.</li>
+<li>Connect the final stage&rsquo;s <em>EOC</em> output to <em>Upstage&rsquo;s</em> <em>TRIG</em> input.</li>
+<li>Connect <em>Upstage&rsquo;s</em> <em>TRIG</em> output to the first stage&rsquo;s <em>TRIG</em> input.</li>
+</ul>
+<p>Here is a looping ADHR envelope using <em>Upstage:</em></p>
+<img class=envelope src=loop-upstage.png alt="Looping with Upstage">
+<p>You can use <em>Upstage&rsquo;s</em> buttons
+to start, stop, and retrigger the loop.</p>
+<ul>
+<li><strong>To start the loop:</strong>
+Press the <em>TRIG</em> button.</li>
+<li><strong>To retrigger the loop:</strong>
+Press the <em>TRIG</em> button
+while the envelope is running.</li>
+<li><strong>To stop the loop:</strong>
+Press the <em>WAIT</em> button
+and hold it
+until the final stage finishes.</li>
+</ul>
+<p><strong>Weird Fact:</strong>
+You an also stop the loop
+by pressing the <em>TRIG</em> button
+(causing the loop to restart)
+and holding it until the final stage finishes.</p>
+<h3 id=span-idbooster-stage-loopscontrollingspan-loops-with-_booster-stage_><span id=booster-stage-loops>Controlling</span> Loops With <em>Booster Stage</em></h3>
+<ul>
+<li><a href=#wiring>Configure</a> a non-looping envelope in the usual way,
+<strong>using a <em>Booster Stage</em> as the first stage.</strong></li>
+<li>Connect the final stage&rsquo;s <em>EOC</em> output to <em>Booster Stage&rsquo;s</em> <em>TRIG</em> input.</li>
+</ul>
+<p>Here is a looping ADHR envelope using <em>Booster Stage:</em></p>
+<img class=envelope src=loop-booster-stage.png alt="Looping with Booster Stage">
+<p>You can use <em>Booster Stage&rsquo;s</em> buttons
+to start, stop, and retrigger the loop.</p>
+<ul>
+<li><strong>To start the loop:</strong>
+Press the <em>TRIG</em> button.</li>
+<li><strong>To retrigger the loop:</strong>
+Press the <em>TRIG</em> button
+while the envelope is running.</li>
+<li><strong>To stop the loop:</strong>
+Press and hold any <em>Booster Stage</em> button
+until the loop stops.</li>
+</ul>
+<p>I leave it as an exercise for the reader
+to discover
+when and at what voltage
+each button stops the envelope.</p>
+<p>If you want a gentler, more controlled stop,
+<a href=#upstage-loops>use <em>Upstage</em> and its <em>WAIT</em> button</a>
+to control the loop.</p>
+<h2 id=variations>Variations</h2>
+<ul>
+<li>For additional versatility,
+replace any <em>Stage</em> module with a
+<a href=https://dhemery.github.io/DHE-Modules/modules/booster-stage/><em>Booster Stage</em></a>.</li>
+<li>To start each envelope at a level other than 0V,
+connect an
+<a href=https://dhemery.github.io/DHE-Modules/modules/upstage/><em>Upstage</em></a>
+or other voltage source.</li>
+<li>To start each envelope
+at the level where the previous one ended,
+connect the the final stage&rsquo;s <em>OUT</em> output
+to the first stage&rsquo;s <em>IN</em> input.</li>
+<li>Follow Artur Karlov&rsquo;s lead and
+<a href="https://www.youtube.com/watch?v=jVLEKn55MGg">make a sick kick</a>.</li>
+<li>Generate audible waveforms
+by <a href=#loops>configuring a loop</a>
+with very short durations.</li>
+<li>Generate an envelope with seventeen stages.</li>
+<li>Configure a stage to trigger two or more successor stages.</li>
+<li>Vary something.</li>
+<li>Vary something else.</li>
+</ul>
+</section>
+</main>
+<footer class="centered chrome">
+<p role=copyright>© 2017–2021 Dale H. Emery</p>
+</footer>
+</body>
+</html>

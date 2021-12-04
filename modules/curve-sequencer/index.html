@@ -1,0 +1,381 @@
+<!doctype html><html lang=en-us>
+<head>
+<meta charset=utf-8>
+<meta viewport="width=device-width">
+<meta viewport="initial-scale=1">
+<meta viewport="user-scalable=yes">
+<title>The Curve Sequencer Modules</title>
+<link href=https://dhemery.github.io/DHE-Modules/favicon.ico rel=icon>
+<link rel=stylesheet href=https://dhemery.github.io/DHE-Modules/css/screen.css>
+</head>
+<body>
+<header class="banner centered title">
+<h1><a href=https://dhemery.github.io/DHE-Modules/>DHE Modules</a></h1>
+<h2>VCV Rack modules from Dale Emery</h2>
+</header>
+<main>
+<header class=boxed>
+<h1 class=title><a href=https://dhemery.github.io/DHE-Modules/modules/curve-sequencer/>The Curve Sequencer Modules</a></h1>
+</header>
+<section><img class=faceplate src=curve-sequencer.svg alt="The Curve Sequencer 4 Faceplate">
+<p>Generates a sequence of curves.</p>
+<p>DHE Modules includes three <em>Curve Sequencer</em> modules:</p>
+<ul>
+<li><em>Curve Sequencer 4</em> (shown).</li>
+<li><em>Curve Sequencer 8.</em></li>
+<li><em>Curve Sequencer 16.</em></li>
+</ul>
+<p>The three modules operate identically, except for the number of steps.</p>
+<p>See:</p>
+<ul>
+<li><a href=#factory-presets>Factory Presets</a>
+for descriptions of the presets included with the modules.</li>
+<li><a href=#usage-notes>Usage Notes</a>
+for basic ideas about how to use these modules.</li>
+<li><a href=#details>Details</a>
+for explanations of several non-intuitive aspects of these modules.</li>
+<li><a href=https://dhemery.github.io/DHE-Modules/technical/curves/>J and S Curves</a></li>
+</ul>
+<h2 id=controls>Controls</h2>
+<p>Each <em>Curve Sequencer</em> has controls for the overall sequence
+and controls for each step in the sequence.</p>
+<h3 id=sequence-controls>Sequence Controls</h3>
+<ul>
+<li>
+<p><strong>RUN:</strong>
+Determines whether the sequencer is running.</p>
+<p>If <em>RUN</em> falls
+while a sequence is in progress,
+the sequencer pauses the sequence.
+If <em>RUN</em> rises while a sequence is paused,
+the sequencer resumes the sequence.</p>
+</li>
+<li>
+<p><strong>LOOP:</strong>
+If <em>LOOP</em> is on when a sequence ends,
+the sequencer immediately begins a new sequence.</p>
+<p>If <em>LOOP</em> is off when a sequence ends,
+the sequencer becomes idle.</p>
+</li>
+<li>
+<p><strong>START</strong> and <strong>LENGTH</strong>
+select the steps of the sequence.</p>
+<p>Bracket-shaped markers next to the <em>ACTIVITY</em> lights
+indicate the currently selected steps.</p>
+</li>
+<li>
+<p><strong>GATE:</strong>
+Controls when a sequence starts,
+and may influence when the sequence advances.</p>
+<p>If <em>GATE</em> rises
+while the sequencer is idle,
+the sequencer starts the sequence,
+activating the first selected, enabled step.</p>
+<p>See the <em>ADVANCE</em> step controls
+for details of how an individual step
+may react to <em>GATE</em> conditions.</p>
+</li>
+<li>
+<p><strong>RESET:</strong>
+When <em>RESET</em> rises, the sequencer becomes idle,
+abandoning any paused or in-progress sequence.</p>
+<p>See <a href=#details>details</a>
+for explanations of several likely non-intuitive aspects of the <em>RESET</em> feature.</p>
+</li>
+<li>
+<p><strong>IN:</strong>
+The input signal to the curve sequencer.</p>
+</li>
+<li>
+<p><strong>OUT:</strong>
+The output signal from the curve sequencer.</p>
+</li>
+</ul>
+<h3 id=step-controls>Step Controls</h3>
+<ul>
+<li>
+<p><strong>ACTIVITY</strong> lights
+indicate which step is active (if any),
+and how far the active step has progressed.
+When a step starts, its light is red.
+If the step is in a timed mode
+(<em>CURVE, HOLD, INPUT, CHASE,</em> or <em>LEVEL</em>),
+the light transitions from red to green
+over the step&rsquo;s duration.
+Note that the light indicates <em>progress,</em>
+not <em>voltage.</em></p>
+</li>
+<li>
+<p><strong>MODE:</strong>
+Selects what kind of envelope stage this step generates:</p>
+<ul>
+<li>
+<p><em>CURVE</em> mode
+generates a curve
+ending at the <em>LEVEL</em> voltage.
+The <em>SHAPE,</em> <em>CURVE,</em> and <em>DURATION</em> controls
+govern the shape and duration of the curve.</p>
+</li>
+<li>
+<p><em>HOLD</em> mode
+holds the <em>OUT</em> port at its current voltage
+for the duration selected by the <em>DURATION</em> controls.</p>
+</li>
+<li>
+<p><em>SUSTAIN</em> mode
+sustains the <em>OUT</em> port at its current voltage
+until the <em>GATE</em> condition
+selected by the <em>ADVANCE</em> stepper occurs.</p>
+</li>
+<li>
+<p><em>INPUT</em> mode
+sends the <em>IN</em> signal to the <em>OUT</em> port
+for the duration selected by the <em>DURATION</em> controls.</p>
+</li>
+<li>
+<p><em>CHASE</em> mode
+generates a curve
+that progressively approaches
+the <em>IN</em> voltage.
+The <em>SHAPE,</em> <em>CURVE,</em> and <em>DURATION</em> controls
+govern the shape and duration of the approach.</p>
+</li>
+<li>
+<p><em>LEVEL</em> mode
+sends the <em>LEVEL</em> voltage to the <em>OUT</em> port.</p>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>ADVANCE:</strong>
+Selects the condition
+that triggers the sequencer
+to advance from this step to the next.</p>
+<ul>
+<li>
+<p><em>TIME:</em>
+The sequencer advances to the next step
+when this step completes its full duration.
+The state of the <em>GATE</em> is ignored.</p>
+<p>Selecting this option
+for a step in <em>SUSTAIN</em> mode
+disables the step.</p>
+</li>
+<li>
+<p><em>RISE:</em>
+If the <em>GATE</em> rises
+while this step is active,
+the sequencer advances to the next step.</p>
+</li>
+<li>
+<p><em>FALL:</em>
+If the <em>GATE</em> falls
+while this step is active,
+the sequencer advances to the next step.</p>
+</li>
+<li>
+<p><em>EDGE:</em>
+If the <em>GATE</em> rises or falls
+while this step is active,
+the sequencer advances to the next step.</p>
+</li>
+<li>
+<p><em>HIGH:</em>
+If the <em>GATE</em> is high
+while this step is active,
+the sequencer advances to the next step.</p>
+</li>
+<li>
+<p><em>LOW:</em>
+If the <em>GATE</em> is low
+while this step is active,
+the sequencer advances to the next step.</p>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>LEVEL:</strong>
+The voltage at which the curve ends.
+The range of each <em>LEVEL</em> knob
+is set by the common <strong>LEVEL RANGE</strong> switch
+(to the right of the <em>LEVEL</em> knobs).</p>
+</li>
+<li>
+<p><strong>SHAPE:</strong>
+Selects the shape of the curve.</p>
+</li>
+<li>
+<p><strong>CURVE:</strong>
+The curvature of the curve.</p>
+</li>
+<li>
+<p><strong>DURATION:</strong>
+The duration of the <em>CURVE</em> or <em>HOLD</em>.
+The range of each <em>DURATION</em> knob
+is set by the common <strong>DURATION RANGE</strong> switch
+(to the right of the <em>DURATION</em> knobs).</p>
+</li>
+<li>
+<p><strong>ENABLED:</strong>
+Determines whether the sequencer can enter this step.
+When <em>ENABLED</em> is off,
+the sequencer bypasses this step when advancing.</p>
+</li>
+</ul>
+<h2 id=factory-presets>Factory Presets</h2>
+<p>The <em>Curve Sequencer 4</em> module
+includes these factory presets:</p>
+<ul>
+<li><strong>AD:</strong>
+Generates an Attack Decay envelope.</li>
+<li><strong>ADHR:</strong>
+Generates an Attack Decay Hold Release envelope.</li>
+<li><strong>ADSR:</strong>
+Generates an Attack Decay Sustain Release envelope.</li>
+<li><strong>AHR:</strong>
+Generates an Attack Hold Release envelope.</li>
+<li><strong>ASR:</strong>
+Generates an Attack Sustain Release envelope.</li>
+<li><strong>Batman:</strong>
+Calls for help.</li>
+</ul>
+<h2 id=usage-notes>Usage Notes</h2>
+<p><strong>To create a traditional sequencer step.</strong>
+Select <em>LEVEL</em> mode
+and set the step to <em>ADVANCE</em> on <em>RISE.</em>
+Then set the duration longer than the clock cycle.
+Note that using the other <em>ADVANCE</em> options
+give you a great deal of flexibility
+compared to a traditional sequencer.</p>
+<p><strong><em>INPUT</em> mode</strong>
+essentially bypasses the sequencer
+for the duration of the step.</p>
+<p><strong><em>CHASE</em> mode</strong>
+generates a curve
+that chases a moving target:
+The voltage at the <em>IN</em> port.</p>
+<p><strong>To restart a sequence.</strong>
+To interrupt a sequence
+and start a new sequence,
+send a rising edge to both <em>RESET</em> and <em>GATE.</em>
+The rising <em>RESET</em> resets the sequencer to idle.
+The rising <em>GATE</em> immediately starts the next sequence.</p>
+<p><strong>To start a sequence at a specified voltage.</strong></p>
+<ul>
+<li>Feed the <em>IN</em> port a signal with the desired voltage.</li>
+<li>Send a rising edge to both <em>RESET</em> and <em>GATE.</em>
+The rising <em>RESET</em>
+copies the <em>IN</em> voltage to the <em>OUT</em> port.
+The rising <em>GATE</em> immediately starts a new sequence
+starting from the <em>OUT</em> port voltage.</li>
+</ul>
+<h2 id=set-a-series-of-adjacent-steps-to-advance-on-the-same-_gate_-value><strong>To skip a series of steps.</strong>
+Set a series of adjacent steps to advance on the same <em>GATE</em> value</h2>
+<p>either <em>HIGH</em> or <em>LOW</em>.
+If the selected value appears at the <em>GATE</em>
+while any of those steps is active,
+the sequencer immediately completes the active step
+and all of the successive steps with the same <em>ADVANCE</em> condition,
+and executes the next available step that has a different <em>ADVANCE</em> condition.</p>
+<p>For example, to generate an ADSR envelope
+that jumps to the Release step when the <em>GATE</em> goes low,
+set the <em>ADVANCE</em> condition
+of the Attack, Decay, and Sustain steps
+to <em>LOW.</em></p>
+<p><strong>To track the <em>IN</em> voltage.</strong>
+If <em>RESET</em> is high
+while the sequencer is idle,
+the sequencer copies the <em>IN</em> voltage to the <em>OUT</em> port.
+So if you want control the sequencer externally
+to &ldquo;track&rdquo; the <em>IN</em> signal:</p>
+<ul>
+<li>Send a rising signal to <em>RESET.</em>
+The sequencer interrupts any sequence in progress and becomes idle.</li>
+<li>Hold <em>RESET</em> high.
+As long as <em>RESET</em> is high
+and the sequencer is idle,
+the sequencer copies <em>IN</em> to <em>OUT</em>.</li>
+<li>Prevent <em>GATE</em> from rising.
+If <em>GATE</em> rises while the sequencer is idle,
+the sequencer starts a sequence
+and stops tracking <em>IN</em>
+(unless the first selected step is in <em>INPUT</em> mode).</li>
+<li>To stop tracking, set <em>RESET</em> low or send a rising signal to <em>GATE.</em></li>
+</ul>
+<p><strong>Pausing and resuming a sequence.</strong>
+Turning <em>RUN</em> off
+while a sequence is in progress
+<em>pauses</em> the sequence.
+When <em>RUN</em> turns on,
+the sequence resumes from the point where it was paused.</p>
+<h2 id=details>Details</h2>
+<p>Several aspects of the <em>Curve Sequencer</em> modules,
+though purposefully designed,
+may be unexpected:</p>
+<ul>
+<li>
+<p><strong><em>ADVANCE</em> options and <em>timed</em> modes.</strong>
+If the active step is in one of the <em>timed</em> modes
+(<em>CURVE, HOLD, INPUT, CHASE,</em> or <em>LEVEL</em>),
+the sequencer advances to the next step
+as soon as either or both of these things occurs:</p>
+<ul>
+<li>The active step completes its duration.</li>
+<li>The <em>GATE</em> satisfies the <em>ADVANCE</em> condition.</li>
+</ul>
+<p>If the active step completes its duration,
+the sequencer advances to the next step
+regardless of whether the <em>GATE</em>
+satisfies the <em>ADVANCE</em> condition.</p>
+<p>If the <em>GATE</em> satisfies the <em>ADVANCE</em> condition,
+the sequencer advances to the next step
+regardless of whether the active step
+regardless of whether the active step
+has completed its duration.</p>
+</li>
+<li>
+<p><strong>The starting voltage of each mode.</strong>
+A step in <em>CURVE, HOLD, SUSTAIN,</em> or <em>CHASE</em> mode
+starts at the current <em>OUT</em> port voltage.</p>
+<p>A step in <em>INPUT</em> mode
+starts at the the voltage at the <em>IN</em> port.
+and tracks the <em>IN</em> signal
+for the duration.</p>
+<p>A step in <em>LEVEL</em> mode
+starts at the voltage specified by the <em>LEVEL</em> controls
+and tracks the value of those controls
+for the duration.</p>
+</li>
+<li>
+<p><strong>Once started, a step always completes.</strong>
+Once a step starts,
+it always proceeds as if enabled,
+even if <em>ENABLED</em> is turned off while the step is in progress.</p>
+</li>
+<li>
+<p><strong><em>RESET</em> and <em>RUN.</em></strong>
+A rising <em>RESET</em>
+resets the sequencer to idle
+even while <em>RUN</em> is off.
+If <em>RUN</em> is on,
+a rising <em>RESET</em>
+abandons any sequence in progress.
+If <em>RUN</em> is off,
+a rising <em>RESET</em>
+abandons any paused sequence.</p>
+</li>
+<li>
+<p><strong><em>RESET,</em> idle mode, and the <em>IN</em> port.</strong>
+While the sequencer is idle
+and <em>RESET</em> is high,
+the sequencer copies the <em>IN</em> port voltage
+to the <em>OUT</em> port.</p>
+</li>
+</ul>
+</section>
+</main>
+<footer class="centered chrome">
+<p role=copyright>© 2017–2021 Dale H. Emery</p>
+</footer>
+</body>
+</html>

@@ -1,0 +1,179 @@
+<!doctype html><html lang=en-us>
+<head>
+<meta charset=utf-8>
+<meta viewport="width=device-width">
+<meta viewport="initial-scale=1">
+<meta viewport="user-scalable=yes">
+<title>The Fuzzy Logic H Module</title>
+<link href=https://dhemery.github.io/DHE-Modules/favicon.ico rel=icon>
+<link rel=stylesheet href=https://dhemery.github.io/DHE-Modules/css/screen.css>
+</head>
+<body>
+<header class="banner centered title">
+<h1><a href=https://dhemery.github.io/DHE-Modules/>DHE Modules</a></h1>
+<h2>VCV Rack modules from Dale Emery</h2>
+</header>
+<main>
+<header class=boxed>
+<h1 class=title><a href=https://dhemery.github.io/DHE-Modules/modules/fuzzy-logic-h/>The Fuzzy Logic H Module</a></h1>
+</header>
+<section><img class=faceplate src=fuzzy-logic-h.svg alt="The Fuzzy Logic H Faceplate">
+<p><em>Fuzzy Logic H</em> combines signals by applying fuzzy logic operators
+based on hyperbolic paraboloids.</p>
+<p><em>Fuzzy Logic H</em> is arranged in two independent columns
+with identical functionality.
+The left column (described below)
+applies the fuzzy logic operators to the A and B inputs.
+The right column applies the same operators to the C and D inputs.</p>
+<p><strong>WARNING:</strong>
+<em>Fuzzy Logic H</em>
+can produce <strong>very large output voltages</strong>
+if the input voltages
+are above or below the selected range.
+Please <em><strong><a href=#warnings>READ THE WARNINGS CAREFULLY</a>!</strong></em></p>
+<h2 id=controls>Controls</h2>
+<ul>
+<li>
+<p><strong>¬ button:</strong>
+Negates the corresponding input
+by applying the <em>NOT</em> unary operator
+before applying the binary operators.
+<em>NOT(x)</em> is defined as <em>1-x</em>.</p>
+</li>
+<li>
+<p><strong>UNI / BI:</strong>
+The input voltage range for which <em>Fuzzy Logic H</em> is well-behaved.
+0 to 10V (UNI)
+or -5 to 5V (BI).</p>
+<p>If the input signals are within the selected range,
+the output signals will also be within the selected range.</p>
+<p>Input signals
+above or below the selected range
+<strong><a href=#warnings>can produce very large output voltages</a>.</strong></p>
+</li>
+</ul>
+<h2 id=ports>Ports</h2>
+<ul>
+<li>
+<p><strong>A</strong> and <strong>B</strong>:
+The inputs to the operators.</p>
+</li>
+<li>
+<p><strong>AND:</strong>
+emits <em>A*B</em>.</p>
+</li>
+<li>
+<p><strong>OR:</strong>
+emits <em>A+B-(A*B)</em>.</p>
+</li>
+<li>
+<p><strong>XOR:</strong>
+emits <em>A+B-(2<em>A</em>B)</em>.</p>
+</li>
+<li>
+<p><strong>A ▶ B</strong> (A implies B):
+emits <em>1-A+(A*B)</em>.</p>
+</li>
+<li>
+<p><strong>A ◀ B</strong> (B implies A):
+emits <em>1-B+(A*B)</em>.</p>
+</li>
+<li>
+<p><strong>¬ port</strong>:
+Emits the negation of the operator it is grouped with.
+<em>NOT(x)</em> is defined as <em>1-x</em>.</p>
+</li>
+</ul>
+<h2 id=usage-ideas>Usage Ideas</h2>
+<ul>
+<li>
+<p><strong>Disconnected inputs.</strong>
+Leave one input disconnected.
+<em>Fuzzy Logic H</em> treates a disconnected input
+as a 0V input signal.
+How it interprets 0V depends on the position of the range switch.
+In <em>UNI</em> range (0V to 10V),
+0V means <em>absolutely false.</em>
+In <em>BI</em> range (-5V to 5V),
+0V means <em>half true</em>.</p>
+</li>
+<li>
+<p><strong>Sequences of Operators.</strong>
+Send the outputs of the A/B column
+to the C and D inputs
+(or vice versa)
+to form compound logic expressions.</p>
+</li>
+<li>
+<p><strong>Feedback Loops.</strong>
+Connect one or both inputs of each column
+to outputs from the other column.
+This can generate very complex output signals
+from simple input signals.
+<strong>WARNING:</strong>
+If any input voltage is above or below the selected range,
+feedback loops like this can generate
+<strong><a href=#warnings>very high output voltages</a>.</strong></p>
+</li>
+<li>
+<p><strong>Alternate Fuzzy Logic.</strong>
+For fuzzy logic based on Lofti Zadeh&rsquo;s more standard definitions of the same operators,
+try <strong><a href=https://dhemery.github.io/DHE-Modules/modules/fuzzy-logic-z/><em>Fuzzy Logic Z</em></a>.</strong></p>
+</li>
+</ul>
+<h2 id=voltage-and-truth>Voltage and Truth</h2>
+<ul>
+<li>
+<p><strong>Scaling the Inputs.</strong>
+Before applying the operators,
+<em>Fuzzy Logic H</em> scales its inputs
+from the selected range
+to the &ldquo;fuzzy logic&rdquo; range [0.0, 1.0],
+where 0.0 means <em>absolutely false</em>,
+1.0 means <em>absolutely true</em>,
+and a value in between
+represents some degree of truth.</p>
+</li>
+<li>
+<p><strong>Scaling the Outputs.</strong>
+After applying the fuzzy logic operators,
+<em>Fuzzy Logic H</em> scales each result
+to the range selected by the <em>UNI / BI</em> switch.</p>
+</li>
+<li>
+<p>It may be interesting to consider
+the meaning
+of signals above or below the selected input range.
+More true than absolutely true?
+More false than absolutely false?
+If you connect input signals outside the selected range,
+be sure to heed the warnings below.</p>
+</li>
+</ul>
+<h2 id=warnings>Warnings</h2>
+<p><strong><em>Fuzzy Logic H</em> can produce <em>VERY</em> large output voltages
+if the input voltages are above or below
+the selected range.</strong></p>
+<ul>
+<li><em>Fuzzy Logic H</em>
+is well-defined and well-behaved for input signals
+within in its selected range.
+If both input signals are in the selected range,
+all output signals will be in the selected range.</li>
+<li>Input signals above or below the selected range
+can produce large output signals.</li>
+<li>Input signals even <em>moderately</em> above or below the selected range
+can produce <em><strong>VERY</strong></em> large output signals.</li>
+<li>Feeding <em>Fuzzy Logic H</em>&rsquo;s outputs
+back into its inputs
+can produce <em><strong>VERY</strong></em> large output signals
+if the inputs are only <em>slightly</em>
+above or below the selected range.</li>
+</ul>
+</section>
+</main>
+<footer class="centered chrome">
+<p role=copyright>© 2017–2021 Dale H. Emery</p>
+</footer>
+</body>
+</html>

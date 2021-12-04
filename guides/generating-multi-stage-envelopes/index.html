@@ -1,0 +1,122 @@
+<!doctype html><html lang=en-us>
+<head>
+<meta charset=utf-8>
+<meta viewport="width=device-width">
+<meta viewport="initial-scale=1">
+<meta viewport="user-scalable=yes">
+<title>Generating Multi-Stage Envelopes</title>
+<link href=https://dhemery.github.io/DHE-Modules/favicon.ico rel=icon>
+<link rel=stylesheet href=https://dhemery.github.io/DHE-Modules/css/screen.css>
+</head>
+<body>
+<header class="banner centered title">
+<h1><a href=https://dhemery.github.io/DHE-Modules/>DHE Modules</a></h1>
+<h2>VCV Rack modules from Dale Emery</h2>
+</header>
+<main>
+<header class=boxed>
+<h1 class=title><a href=https://dhemery.github.io/DHE-Modules/guides/generating-multi-stage-envelopes/>Generating Multi-Stage Envelopes</a></h1>
+</header>
+<section><p>Combine
+<a href=https://dhemery.github.io/DHE-Modules/modules/stage/><em>Stage</em></a>,
+<a href=https://dhemery.github.io/DHE-Modules/modules/booster-stage/><em>Booster Stage</em></a>,
+<a href=https://dhemery.github.io/DHE-Modules/modules/hostage/><em>Hostage</em></a>,
+and <a href=https://dhemery.github.io/DHE-Modules/modules/upstage/><em>Upstage</em></a>
+modules to generate complex, interesting, multi-stage envelopes.</p>
+<p>Here are some common envelope types:</p>
+<ul>
+<li><a href=#ar>AR: Attack-Release Envelopes</a></li>
+<li><a href=#ahr>AHR: Attack-Hold-Release Envelopes</a></li>
+<li><a href=#adhr>ADHR: Attack-Decay-Hold-Relase Envelopes</a></li>
+<li><a href=#adsr>ADSR: Attack-Decay-Sustain-Release Evelopes</a></li>
+<li><a href=#multi-stage>More Stages Than You Can Count</a></li>
+</ul>
+<p><strong>For additional ideas:</strong>
+see <a href=https://dhemery.github.io/DHE-Modules/guides/techniques-and-variations/>Techniques and Variations</a>,
+which describes
+how to wire multi-stage envelopes,
+how to add hold and sustain stages,
+and how to create
+retriggerable envelopes,
+uninterruptible envelopes,
+looping envelopes,
+and other interesting variations.</p>
+<h2 id=span-idararspan-attack-release-envelopes><span id=ar>AR:</span> Attack-Release Envelopes</h2>
+<img class=envelope src=ar.png alt="Attack-Release Envelope">
+<ul>
+<li><a href=https://dhemery.github.io/DHE-Modules/guides/techniques-and-variations/#wiring>Connect</a>:
+<ol>
+<li>A <em>Stage</em> for the attack stage</li>
+<li>A <em>Stage</em> for the release stage</li>
+</ol>
+</li>
+<li>To start the envelope at 0V,
+leave the attack stage&rsquo;s <em>IN</em> input disconnected.</li>
+<li>To set the peak attack voltage,
+adjust the attack stage&rsquo;s <em>LEVEL.</em></li>
+<li>Set the release stage&rsquo;s <em>LEVEL</em> to 0V.</li>
+</ul>
+<h2 id=span-idahrahr-span-attack-hold-release-envelopes><span id=ahr>AHR: <span> Attack-Hold-Release Envelopes</h2>
+<img class=envelope src=ahr.png alt="Attack-Hold-Release Envelope">
+<ul>
+<li><a href=https://dhemery.github.io/DHE-Modules/guides/techniques-and-variations/#wiring>Connect</a>:
+<ol>
+<li>A <em>Stage</em> for the attack stage</li>
+<li>A <em>Hostage</em> for the hold stage</li>
+<li>A <em>Stage</em> for the release stage</li>
+</ol>
+</li>
+<li>Set <em>Hostage</em> to <em>HOLD</em> mode.</li>
+<li>To start the envelope at 0V,
+leave the attack <em>Stage&rsquo;s</em> <em>IN</em> input disconnected.</li>
+<li>Adjust the attack <em>Stage&rsquo;s</em> <em>LEVEL</em>
+to set the peak attack voltage.
+<em>This also sets the hold level.</em></li>
+<li>Set the release <em>Stage&rsquo;s</em> <em>LEVEL</em> to 0V.</li>
+</ul>
+<h2 id=span-idadhradhrspan-attack-decay-hold-release-envelopes><span id=adhr>ADHR:<span> Attack-Decay-Hold-Release Envelopes</h2>
+<img class=envelope src=adhr.png alt="Attack-Decay-Hold-Release Envelope">
+<p>To generate an Attack-Decay-Hold-Release (ADHR) envelope,
+start with an <a href=#ahr>Attack-Hold-Release envelope</a>
+and insert another <em>Stage</em> before the <em>Hostage:</em></p>
+<h2 id=span-idadsradsr-span-attack-decay-sustain-release-envelopes><span id=adsr>ADSR: <span> Attack-Decay-Sustain-Release Envelopes</h2>
+<img class=envelope src=adsr.png alt="Attack-Decay-Sustain-Release Envelope">
+<p>To generate a sustain stage,
+we need to wire one module a little differently than normal.
+Note the <strong>bold</strong> text below.</p>
+<ul>
+<li><a href=https://dhemery.github.io/DHE-Modules/guides/techniques-and-variations/#wiring>Connect</a>:
+<ol>
+<li>A <em>Stage</em> for the attack stage</li>
+<li>A <em>Stage</em> for the decay stage</li>
+<li>A <em>Hostage</em> for the sustain stage</li>
+<li>A <em>Stage</em> for the release stage</li>
+</ol>
+</li>
+<li><strong>Connect <em>Hostage&rsquo;s</em> <em>GATE</em> input
+to the same gate source
+that triggers the first stage.</strong>
+This configures the gate source
+to both <em>trigger</em> and <em>sustain</em> the envelope.</li>
+<li>Set <em>Hostage</em> to <em>SUSTAIN</em> mode.</li>
+<li>To start the envelope at 0V,
+leave the attack stage&rsquo;s <em>IN</em> input disconnected.</li>
+<li>Adjust the attack stage&rsquo;s <em>LEVEL</em>
+to set the peak attack voltage.</li>
+<li>Adjust the decay stage&rsquo;s <em>LEVEL</em>
+to set the sustain level.</li>
+<li>Set the release stage&rsquo;s <em>LEVEL</em> to 0V.</li>
+</ul>
+<p>Note that the envelope uses the LFO&rsquo;s square wave
+both to <em>trigger the envelope</em>
+and to <em>sustain it.</em></p>
+<h2 id=span-idmulti-stagemorespan-stages-than-you-can-count><span id=multi-stage>More</span> Stages Than You Can Count…</h2>
+<p>… unless you can count to eighteen.</p>
+<img class=envelope2 src=multi-stage.png height=auto max-width=740 alt="An Eighteen-Stage Envelope">
+</section>
+</main>
+<footer class="centered chrome">
+<p role=copyright>© 2017–2021 Dale H. Emery</p>
+</footer>
+</body>
+</html>

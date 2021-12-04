@@ -1,0 +1,173 @@
+<!doctype html><html lang=en-us>
+<head>
+<meta charset=utf-8>
+<meta viewport="width=device-width">
+<meta viewport="initial-scale=1">
+<meta viewport="user-scalable=yes">
+<title>The Hostage Module</title>
+<link href=https://dhemery.github.io/DHE-Modules/favicon.ico rel=icon>
+<link rel=stylesheet href=https://dhemery.github.io/DHE-Modules/css/screen.css>
+</head>
+<body>
+<header class="banner centered title">
+<h1><a href=https://dhemery.github.io/DHE-Modules/>DHE Modules</a></h1>
+<h2>VCV Rack modules from Dale Emery</h2>
+</header>
+<main>
+<header class=boxed>
+<h1 class=title><a href=https://dhemery.github.io/DHE-Modules/modules/hostage/>The Hostage Module</a></h1>
+</header>
+<section><img class=faceplate src=hostage.svg alt="The Hostage Faceplate">
+<p>Generates a hold or sustain envelope stage.
+A hold stage lasts for the duration specified by the controls.
+A sustain stage lasts as long as the <em>GATE</em> is up.</p>
+<p>Combine
+<a href=https://dhemery.github.io/DHE-Modules/modules/stage/><em>Stage</em></a>,
+<a href=https://dhemery.github.io/DHE-Modules/modules/booster-stage/><em>Booster Stage</em></a>,
+<a href=https://dhemery.github.io/DHE-Modules/modules/hostage/><em>Hostage</em></a>,
+and <a href=https://dhemery.github.io/DHE-Modules/modules/upstage/><em>Upstage</em></a>
+modules
+to generate complex envelopes
+with any number of stages.</p>
+<p>See also:</p>
+<ul>
+<li><a href=https://dhemery.github.io/DHE-Modules/guides/generating-single-stage-envelopes/>Generating Single-Stage Envelopes</a></li>
+<li><a href=https://dhemery.github.io/DHE-Modules/guides/generating-multi-stage-envelopes/>Generating Multi-Stage Envelopes</a></li>
+<li><a href=https://dhemery.github.io/DHE-Modules/technical/how-stages-work-together>How Stages Work Together</a></li>
+</ul>
+<h2 id=modes>Modes</h2>
+<ul>
+<li>
+<p>In <strong>SUSTAIN</strong> mode,
+the <em>GATE</em> signal acts as a sustain gate.
+When the gate rises,
+<em>Hostage</em> samples the <em>IN</em> signal,
+then generates a sustain stage
+at the sampled voltage
+until the gate falls.</p>
+</li>
+<li>
+<p>In <strong>HOLD</strong> mode,
+the <em>GATE</em> signal acts as a trigger.
+When triggered,
+<em>Hostage</em> samples the <em>IN</em> signal,
+then generates a hold stage
+at the sampled voltage
+for the specified duration.</p>
+</li>
+</ul>
+<h2 id=controls>Controls</h2>
+<ul>
+<li>
+<p><strong>SUSTAIN / HOLD:</strong>
+Selects <em>Hostage&rsquo;s</em> operating mode.</p>
+</li>
+<li>
+<p><strong>DURATION:</strong>
+The duration of the hold stage
+(when <em>Hostage</em> is in <em>HOLD</em> mode).</p>
+<p>The duration switch <strong>(1 / 10 / 100)</strong>
+sets the range of the <em>DURATION</em> knob.
+The switch labels
+indicate the maximum duration (seconds)
+for each range.
+For each range:</p>
+<ul>
+<li>The minimum duration
+is 1/1000 of the maximum:
+1ms, 10ms, or 100ms.</li>
+<li>Centering the knob gives a duration of
+1/10 of the maximum:
+100ms, 1s, or 10s.</li>
+</ul>
+<p>In <em>GATE</em> mode,
+<em>Hostage</em> ignores the <em>DURATION</em> controls.</p>
+</li>
+</ul>
+<h2 id=ports>Ports</h2>
+<ul>
+<li>
+<p><strong>DEFER:</strong>
+When the <em>DEFER</em> gate is up,
+<em>Hostage</em> <strong><em>defers</em></strong> to its <em>IN</em> signal,
+forwarding the <em>IN</em> signal
+directly to the <em>OUT</em> output.</p>
+<p>While <em>Hostage</em> is deferring
+it ignores incoming <em>GATE</em> signals.</p>
+<p>When it begins deferring,
+<em>Hostage</em> abandons any envelope stage
+it may have been generating.</p>
+</li>
+<li>
+<p><strong>GATE:</strong>
+Triggers a hold stage
+or sustains a sustain stage,
+depending on the current operating mode.</p>
+<p>While <em>Hostage</em> is deferring,
+it ignores the incoming <em>GATE</em> signal.</p>
+<p>In <em>SUSTAIN</em> mode,
+if the <em>GATE</em> is up
+when <em>Hostage</em> stops deferring,
+it begins a new sustain stage.
+If the <em>GATE</em> is down
+when <em>Hostage</em> stops deferring,
+it emits an <em>EOC</em> pulse.</p>
+</li>
+<li>
+<p><strong>IN:</strong>
+When <em>Hostage</em> generates a hold or sustain stage
+it emits the voltage
+that it sampled from the <em>IN</em> signal
+at the start of the stage.</p>
+<p>While <em>Hostage</em> is <em>deferring</em>,
+it forwards the <em>IN</em> signal directly to its <em>OUT</em> output.</p>
+</li>
+<li>
+<p><strong>ACTIVE:</strong>
+A 10V gate signal indicating that <em>Hostage</em>
+is either actively generating a stage
+or deferring to its <em>IN</em> signal.</p>
+</li>
+<li>
+<p><strong>EOC:</strong>
+When <em>Hostage</em> completes a stage
+it emits a 1 millisecond 10V pulse
+at its <em>EOC</em> output.</p>
+</li>
+<li>
+<p><strong>OUT:</strong>
+The generated stage signal
+or (when deferring) the <em>IN</em> signal.</p>
+</li>
+<li>
+<p><strong>CV:</strong>
+A <a href=https://dhemery.github.io/DHE-Modules/technical/modulation/>control voltage</a>
+signal to modulate the duration.</p>
+</li>
+</ul>
+<h2 id=notes>Notes</h2>
+<ul>
+<li>
+<p>While a stage is in progress,
+the <em>DURATION</em> knob, switch, and <em>CV</em> input
+are &ldquo;live.&rdquo;
+If the duration value changes,
+<em>Hostage</em> applies the new value
+to the remainder of the stage.</p>
+</li>
+<li>
+<p>Before <em>Hostage</em> becomes active for the first time
+(whether by a trigger, a gate, or a <em>DEFER</em> signal),
+it outputs 0V.</p>
+</li>
+<li>
+<p>Changing the mode abandons any stage in progress.</p>
+</li>
+</ul>
+</section>
+</main>
+<footer class="centered chrome">
+<p role=copyright>© 2017–2021 Dale H. Emery</p>
+</footer>
+</body>
+</html>

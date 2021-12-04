@@ -1,0 +1,70 @@
+<!doctype html><html lang=en-us>
+<head>
+<meta charset=utf-8>
+<meta viewport="width=device-width">
+<meta viewport="initial-scale=1">
+<meta viewport="user-scalable=yes">
+<title>The Swave Module</title>
+<link href=https://dhemery.github.io/DHE-Modules/favicon.ico rel=icon>
+<link rel=stylesheet href=https://dhemery.github.io/DHE-Modules/css/screen.css>
+</head>
+<body>
+<header class="banner centered title">
+<h1><a href=https://dhemery.github.io/DHE-Modules/>DHE Modules</a></h1>
+<h2>VCV Rack modules from Dale Emery</h2>
+</header>
+<main>
+<header class=boxed>
+<h1 class=title><a href=https://dhemery.github.io/DHE-Modules/modules/swave/>The Swave Module</a></h1>
+</header>
+<section><img class=faceplate src=swave.svg alt="The Swave Faceplate">
+<p>A waveshaper with a unique sigmoid transfer function.</p>
+<p><strong>Note:</strong>
+<em>Swave</em> assumes that its input signal
+is in the range [-5V,5V],
+the standard range
+for audio and bipolar CV signals
+in VCV Rack.</p>
+<p><strong>Note:</strong>
+<em>Swave</em> does not apply anti-aliasing.</p>
+<p>See also:</p>
+<ul>
+<li><a href=https://dhemery.github.io/DHE-Modules/technical/curves/>J and S Curves</a></li>
+<li><a href=https://dhemery.github.io/DHE-Modules/technical/sigmoid/>Normalized Tunable Sigmoid Function</a>:
+the <em>transfer function</em>
+that <em>Swave</em> applies
+to shape its input signals</li>
+</ul>
+<h2 id=controls>Controls</h2>
+<ul>
+<li><strong>CURVE:</strong>
+The curvature of the transfer function.
+The shape switch <strong>(S / J)</strong>
+selects the
+<a href=https://dhemery.github.io/DHE-Modules/technical/curves/>shape</a>
+of the transfer function.</li>
+</ul>
+<h2 id=ports>Ports</h2>
+<ul>
+<li>
+<p><strong>IN:</strong>
+The input signal to be shaped
+by the transfer function.</p>
+</li>
+<li>
+<p><strong>OUT:</strong>
+The shaped signal.</p>
+</li>
+<li>
+<p><strong>CV:</strong>
+A <a href=https://dhemery.github.io/DHE-Modules/technical/modulation/>control voltage</a> signal
+to modulate the <em>CURVE</em> parameter.</p>
+</li>
+</ul>
+</section>
+</main>
+<footer class="centered chrome">
+<p role=copyright>© 2017–2021 Dale H. Emery</p>
+</footer>
+</body>
+</html>

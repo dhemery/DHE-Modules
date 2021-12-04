@@ -1,0 +1,63 @@
+<!doctype html><html lang=en-us>
+<head>
+<meta charset=utf-8>
+<meta viewport="width=device-width">
+<meta viewport="initial-scale=1">
+<meta viewport="user-scalable=yes">
+<title>Modulation</title>
+<link href=https://dhemery.github.io/DHE-Modules/favicon.ico rel=icon>
+<link rel=stylesheet href=https://dhemery.github.io/DHE-Modules/css/screen.css>
+</head>
+<body>
+<header class="banner centered title">
+<h1><a href=https://dhemery.github.io/DHE-Modules/>DHE Modules</a></h1>
+<h2>VCV Rack modules from Dale Emery</h2>
+</header>
+<main>
+<header class=boxed>
+<h1 class=title><a href=https://dhemery.github.io/DHE-Modules/technical/modulation/>Modulation</a></h1>
+</header>
+<section><p>Many modules' parameter knobs can be modulated by control voltage (CV) signals.
+CV input ports may be accompanied by <a href=#attenuverters>attenuverters</a>.</p>
+<h2 id=calibration>Calibration</h2>
+<p>In DHE-Modules, modulation by CV is calibrated to expect a CV signal in the
+range [-5V,5V].</p>
+<ul>
+<li>A 0V CV signal yields the current value of the knob.</li>
+<li>A 5V CV signal yields the value as if the knob were rotated 50% clockwise of
+its actual position.</li>
+<li>A -5V CV signal yields the value as if the knob were rotated 50%
+counterclockwise of its actual position.</li>
+</ul>
+<p><strong>WARNING:</strong>
+Modulation can yield values far outside a knob&rsquo;s normal range.</p>
+<p>For example:</p>
+<ul>
+<li>With a knob in its center position, CV signals greater than 5V produce values
+higher than the knob&rsquo;s normal range.</li>
+<li>With a knob fully clockwise, positive CV signals produce values higher than
+the knob&rsquo;s normal range.</li>
+</ul>
+<h2 id=attenuverters>Attenuverters</h2>
+<p>A CV input port may be accompanied by a small <em>attenuverter</em> (<strong>- +</strong>) knob.
+This knob can attenuate and invert the effect of the CV signal on the modulated
+knob.</p>
+<ul>
+<li>Full clockwise rotation results in the CV signal having its full effect on
+the knob.</li>
+<li>Values between the full clockwise position and the center position attenuate
+the CV signal, lessening its effect.</li>
+<li>The center position fully attenuates the CV signal so that it has no effect.</li>
+<li>Fully counterclockwise inverts the CV signal, so that a positive voltage
+reduces the value of the knob and a negative voltage increases the value of
+the knob.</li>
+<li>Values between the full counterclockwise position and the center position
+both invert and attenuate the effect of the CV signal.</li>
+</ul>
+</section>
+</main>
+<footer class="centered chrome">
+<p role=copyright>© 2017–2021 Dale H. Emery</p>
+</footer>
+</body>
+</html>

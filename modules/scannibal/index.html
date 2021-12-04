@@ -1,0 +1,203 @@
+<!doctype html><html lang=en-us>
+<head>
+<meta charset=utf-8>
+<meta viewport="width=device-width">
+<meta viewport="initial-scale=1">
+<meta viewport="user-scalable=yes">
+<title>The Scannibal Modules</title>
+<link href=https://dhemery.github.io/DHE-Modules/favicon.ico rel=icon>
+<link rel=stylesheet href=https://dhemery.github.io/DHE-Modules/css/screen.css>
+</head>
+<body>
+<header class="banner centered title">
+<h1><a href=https://dhemery.github.io/DHE-Modules/>DHE Modules</a></h1>
+<h2>VCV Rack modules from Dale Emery</h2>
+</header>
+<main>
+<header class=boxed>
+<h1 class=title><a href=https://dhemery.github.io/DHE-Modules/modules/scannibal/>The Scannibal Modules</a></h1>
+</header>
+<section><img class=faceplate src=scannibal.svg alt="The Scanibal 4 Faceplate">
+<p>A scanned sequencer
+that offers flexible, precise control
+over the individual steps.</p>
+<p>DHE Modules includes three <em>Scannibal</em> modules:</p>
+<ul>
+<li><em>Scannibal 4</em> (shown).</li>
+<li><em>Scannibal 8.</em></li>
+<li><em>Scannibal 16.</em></li>
+</ul>
+<p>The three modules operate identically, except for the number of steps.</p>
+<p>See:</p>
+<ul>
+<li><a href=#controls>Controls</a> (below)</li>
+<li><a href=#operation>Operation</a> (below)</li>
+<li><a href=https://dhemery.github.io/DHE-Modules/technical/curves/>J and S Curves</a></li>
+</ul>
+<h2 id=controls>Controls</h2>
+<ul>
+<li><a href=#inputs>Inputs</a></li>
+<li><a href=#step-controls>Step controls</a></li>
+<li><a href=#global-controls>Global controls</a></li>
+<li><a href=#outputs>Outputs</a></li>
+</ul>
+<h3 id=inputs>Inputs</h3>
+<ul>
+<li>
+<p>The <strong>Φ</strong> input
+is the scanner phase signal
+that drives the module.
+<em>Scannibal</em> maps a 0–10V signal
+to the &ldquo;phase&rdquo; range: 0–1.
+Voltages outside of 0–10V
+are &ldquo;wrapped&rdquo; into the phase range.</p>
+</li>
+<li>
+<p><strong>A</strong>, <strong>B</strong>, and <strong>C:</strong>
+Three input signals
+that each anchor
+can sample or track.</p>
+</li>
+</ul>
+<h3 id=step-controls>Step Controls</h3>
+<ul>
+<li>
+<p>Each step has two &ldquo;anchors&rdquo;
+that determine the voltages
+between which the step interpolates.
+When the step phase is 0,
+the step emits the voltage
+reported by the <strong>Φ＝0</strong> anchor.
+When the step phase is 1,
+the step emits the voltage
+reported by the <strong>Φ＝1</strong> anchor.
+When the step phase is between 0 and 1,
+the step interpolates between the anchor voltages
+along a curve specified by the curve controls.</p>
+<p>Each anchor has three controls:</p>
+<ul>
+<li>
+<p>The <strong>MODE</strong> button (the top button)
+determines whether the anchor reports
+a sampled voltage or the current voltage.</p>
+<ul>
+<li>
+<p><em>SAMPL:</em>
+The anchor reports
+the voltage that it sampled from its source
+when the step became active.</p>
+</li>
+<li>
+<p><em>TRACK:</em>
+The anchor reports
+the current voltage
+of its source.</p>
+</li>
+</ul>
+</li>
+<li>
+<p>The <strong>SOURCE</strong> button (below the <strong>MODE</strong> button)
+specifies where the anchor gets the voltage it reports.
+The possible sources are:</p>
+<ul>
+<li>The anchor&rsquo;s <em>LEVEL</em> knob.</li>
+<li>The <em>A</em>, <em>B</em>, or <em>C</em> input port.</li>
+<li>The <em>OUT</em> port.</li>
+</ul>
+</li>
+<li>
+<p>The anchor <strong>LEVEL</strong> knob
+sets the voltage
+of the anchor&rsquo;s <em>level</em> source.
+The range of the knob
+is determined by the global <strong>UNI / BI</strong> range switch.
+This knob is used
+only when <em>LEVEL</em>
+is selected as the anchor&rsquo;s <em>SOURCE.</em></p>
+</li>
+</ul>
+</li>
+<li>
+<p>The <strong>[ Φ ]</strong> &ldquo;phase width&rdquo; knob
+increases or decreases
+the proportion of the scanner phase
+during which this step is active.
+Turning the knob clockwise
+makes the step active
+during more of the scanner phase.</p>
+<p>Setting a step&rsquo;s phase width to 0
+disables the step.
+Setting all steps' phase widths to 0
+pauses the sequence.</p>
+</li>
+<li>
+<p>The <strong>SHAPE</strong> button
+selects the shape (J or S)
+of the step&rsquo;s interpolation curve.</p>
+</li>
+<li>
+<p>The <strong>CURVE</strong> knob
+sets the curvature
+of the step&rsquo;s interpolation curve.</p>
+</li>
+</ul>
+<h3 id=global-controls>Global Controls</h3>
+<ul>
+<li>
+<p>The <strong>STEPS</strong> knob
+selects the steps that participate in the sequence.
+Bracket-shaped markers
+surround the <em>PROGRESS</em> lights
+of the selected steps.</p>
+</li>
+<li>
+<p>The <strong>UNI / BI</strong> switch
+selects the range of the anchors' <strong>LEVEL</strong> knobs.</p>
+</li>
+</ul>
+<h3 id=outputs>Outputs</h3>
+<ul>
+<li>
+<p><strong>PROGRESS</strong> lights
+at the top of the module
+show the step phase of the active step.
+The color of the light
+progresses from red at step phase 0
+to green at step phase 1.</p>
+</li>
+<li>
+<p><strong>STEP #</strong>
+identifies the active step,
+represented as \(\frac{10s}{N}\) volts,
+where</p>
+<ul>
+<li><em>s</em> is the number of the active step</li>
+<li><em>N</em> is the module&rsquo;s largest step number</li>
+</ul>
+<p>If every step&rsquo;s phase width is 0,
+the sequencer is paused,
+and the <em>STEP #</em> port emits 0V.</p>
+</li>
+<li>
+<p><strong>STEP Φ</strong>
+emits a signal that represents
+the step phase of the active step,
+from 0V at phase 0
+to 10V at phase 1.</p>
+</li>
+<li>
+<p><strong>OUT</strong>
+emits the voltage generated by the active step.</p>
+</li>
+</ul>
+<h2 id=operation>Operation</h2>
+<p>TBD</p> step and step phase
+<p>Phase width
+&ndash;></p>
+</section>
+</main>
+<footer class="centered chrome">
+<p role=copyright>© 2017–2021 Dale H. Emery</p>
+</footer>
+</body>
+</html>

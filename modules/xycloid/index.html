@@ -1,0 +1,167 @@
+<!doctype html><html lang=en-us>
+<head>
+<meta charset=utf-8>
+<meta viewport="width=device-width">
+<meta viewport="initial-scale=1">
+<meta viewport="user-scalable=yes">
+<title>The Xycloid Module</title>
+<link href=https://dhemery.github.io/DHE-Modules/favicon.ico rel=icon>
+<link rel=stylesheet href=https://dhemery.github.io/DHE-Modules/css/screen.css>
+</head>
+<body>
+<header class="banner centered title">
+<h1><a href=https://dhemery.github.io/DHE-Modules/>DHE Modules</a></h1>
+<h2>VCV Rack modules from Dale Emery</h2>
+</header>
+<main>
+<header class=boxed>
+<h1 class=title><a href=https://dhemery.github.io/DHE-Modules/modules/xycloid/>The Xycloid Module</a></h1>
+</header>
+<section><img class=faceplate src=xycloid.svg alt="The Xycloid Faceplate">
+<p>Xycloid
+traces a fixed point
+on the edge a circle
+rolling along the inside or outside
+of another circle.</p>
+<p>The resulting two-dimensional shape
+generates a pair of complex, evolving, pulsing LFO signals.</p>
+<p>See:</p>
+<ul>
+<li><strong><a href="https://www.youtube.com/watch?v=Kc0WctuFNvY">Throb, Wobble, and Accent</a>:</strong>
+My Xycloid tutorial on YouTube.</li>
+<li><strong><a href=v0.6.1/>The v0.6.1 manual</a>:</strong>
+More fun and less helpful than the current manual.</li>
+</ul>
+<h2 id=controls>Controls</h2>
+<ul>
+<li>
+<p><strong>SPEED:</strong>
+The throb cycle frequency.</p>
+</li>
+<li>
+<p><strong>RATIO:</strong>
+The number of wobble cycles
+per throb cycle.</p>
+<p><strong>Note:</strong>
+With the <em>IN / OUT</em> switch
+in the center position,
+the <em>RATIO</em> knob
+determines both the <em>rate</em> and <em>direction</em>
+in which the wobble angle advances.
+Clockwise rotation
+advances the wobble angle
+in the same direction
+as the throb angle.
+Counterclockwise rotation
+advances the wobble angle
+in the opposite direction.</p>
+</li>
+<li>
+<p><strong>FREE / LOCK:</strong>
+Determines whether to round the <em>RATIO</em> value
+to the nearest integer.</p>
+<p><em>LOCK</em> rounds the <em>RATIO</em> value
+to the nearest integer,
+causing <em>Xycloid&rsquo;s</em> pattern of accents
+to repeat on every throb cycle.</p>
+<p><em>FREE</em> allows non-integer <em>RATIO</em> values,
+which lets the accents
+vary from one throb cycle to the next.</p>
+</li>
+<li>
+<p><strong>DEPTH:</strong>
+The dominance of the wobble cycle in the output signals.</p>
+</li>
+<li>
+<p><strong>IN / OUT:</strong>
+Determines the direction in which
+the wobble angle advances
+compared to the throb angle.</p>
+<p><em>IN</em> advances the wobble angle
+in the same direction
+as the throb angle.
+This produces &ldquo;inward&rdquo; nodes
+when the <em>X</em> and <em>Y</em> signals
+are plotted on an X/Y graph.</p>
+<p><em>OUT</em> advances the wobble angle
+in the opposite direction
+from the throb angle.
+This produces &ldquo;outward&rdquo; nodes
+when the <em>X</em> and <em>Y</em> signals
+are plotted on an X/Y graph.</p>
+<p>With this switch in the center position
+the <em>RATIO</em> knob
+determines the direction
+in which the wobble angle advances.</p>
+</li>
+<li>
+<p><strong>PHASE:</strong>
+Offsets the phase of the wobble angle.</p>
+<p>This has the effect
+of shifting the accents
+produced when the wobble and throb cycles
+peak.</p>
+</li>
+</ul>
+<h2 id=ports>Ports</h2>
+<ul>
+<li>
+<p><strong>X OUT</strong> and <strong>Y OUT:</strong>
+The output signals.</p>
+<p>The polarity switch <strong>(UNI / BI)</strong>
+selects the voltage range of the associated output signal.
+0 to 10V (UNI)
+or -5 to 5V (BI).</p>
+<p>The <strong>GAIN</strong> knob applies gain (from 0 to 2)
+to the signal.</p>
+<p><em>Xycloid</em> selects the range before applying the gain.</p>
+</li>
+<li>
+<p><strong>CV:</strong>
+A <a href=https://dhemery.github.io/DHE-Modules/technical/modulation/>control voltage</a> signal
+to modulate the associated parameter. Some CV signals have attenuverters.</p>
+</li>
+</ul>
+<h2 id=using-xycloid>Using Xycloid</h2>
+<ul>
+<li>Adjust the <em>SPEED</em> knob to control the frequency of the throb cycle, and
+therefore the frequency of the overall pattern.</li>
+<li>Adjust the <em>RATIO</em> knob to control the number of wobble cycles within each
+throb cycle.</li>
+<li>Adjust the <em>DEPTH</em> knob to control whether the throb cycle, the wobble cycle,
+or neither cycle dominates the overall pattern</li>
+<li>Adjust the <em>PHASE</em> knob to shift the position of the wobbles within the throb
+cycle, which determines where the accents fall within each throb.</li>
+<li><em>FIXED</em> mode produces a whole number of wobbles for each throb. As a result,
+the pattern of accents repeats exactly from one throb cycle to the next.</li>
+<li><em>FREE</em> mode allows the pattern of wobbles to drift over time. This can
+create yet another, longer cycle in the pattern of accents.</li>
+<li>For extra chaos, modulate Xycloid&rsquo;s controls.</li>
+<li>For extra, extra chaos, use Xycloid&rsquo;s outputs to modulate its own controls.</li>
+</ul>
+<p>Xycloid&rsquo;s <em>X</em> and <em>Y</em> outputs are always <strong>similar, but never identical</strong> to
+each other. You can use relationship to create interesting interactions
+between parameters:</p>
+<ul>
+<li>Modulate two closely related parameters.</li>
+<li>Modulate two parameters that have nothing to do with each other.</li>
+<li>Modulate the same parameter on different modules.</li>
+</ul>
+<h2 id=plotting-xycloid>Plotting Xycloid</h2>
+<p>When plotted on a two-dimensional graph,
+Xycloid&rsquo;s <em>X</em> and <em>Y</em> signals
+produce a visually pleasing shape,
+which can be either a
+<em><a href=https://en.wikipedia.org/wiki/Hypotrochoid>hypotrochoid</a></em>
+or an
+<em><a href=https://en.wikipedia.org/wiki/Epitrochoid>epitrochoid</a>.</em></p>
+<p>To view the shape that Xycloid produces, connect its <em>X</em> and <em>Y</em> outputs to a
+Scope&rsquo;s <em>X</em> and <em>Y</em> inputs. Set the scope to <em>X x Y</em> mode. Note that the
+scope&rsquo;s <em>X/Y</em> mode can also be interesting.</p>
+</section>
+</main>
+<footer class="centered chrome">
+<p role=copyright>© 2017–2021 Dale H. Emery</p>
+</footer>
+</body>
+</html>

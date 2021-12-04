@@ -1,0 +1,67 @@
+<!doctype html><html lang=en-us>
+<head>
+<meta charset=utf-8>
+<meta viewport="width=device-width">
+<meta viewport="initial-scale=1">
+<meta viewport="user-scalable=yes">
+<title>The Ranger Module</title>
+<link href=https://dhemery.github.io/DHE-Modules/favicon.ico rel=icon>
+<link rel=stylesheet href=https://dhemery.github.io/DHE-Modules/css/screen.css>
+</head>
+<body>
+<header class="banner centered title">
+<h1><a href=https://dhemery.github.io/DHE-Modules/>DHE Modules</a></h1>
+<h2>VCV Rack modules from Dale Emery</h2>
+</header>
+<main>
+<header class=boxed>
+<h1 class=title><a href=https://dhemery.github.io/DHE-Modules/modules/ranger/>The Ranger Module</a></h1>
+</header>
+<section><img class=faceplate src=ranger.svg alt="The Ranger Faceplate">
+<p>A modulatable knob with an adjustable, modulatable range.</p>
+<h2 id=controls>Controls</h2>
+<ul>
+<li>
+<p><strong>LEVEL:</strong>
+Interpolates between the values
+set by the <em>CCW</em> and <em>CW</em> panels.</p>
+</li>
+<li>
+<p><strong>CCW:</strong>
+Sets the counterclockwise (CCW) end of the <em>LEVEL</em> knob&rsquo;s range.</p>
+</li>
+<li>
+<p><strong>CW:</strong>
+Sets the clockwise (CW) end of the <em>LEVEL</em> knob&rsquo;s range.</p>
+</li>
+<li>
+<p><strong>UNI / BI:</strong>
+The voltage range of the associated knob.
+0 to 10V (UNI)
+or -5 to 5V (BI).</p>
+</li>
+</ul>
+<h2 id=ports>Ports</h2>
+<ul>
+<li>
+<p><strong>OUT:</strong>
+The output voltage,
+selected by the <em>LEVEL</em> knob
+within the range specified by the <em>CCW</em> and <em>CW</em> knobs.</p>
+</li>
+<li>
+<p><strong>CV:</strong>
+A <a href=https://dhemery.github.io/DHE-Modules/technical/modulation/>control voltage</a> signal
+to modulate the associated parameter. Each CV input has an attenuverter.</p>
+<p>Note that control voltage can drive any of Ranger&rsquo;s knobs beyond its normal limit.</p>
+</li>
+</ul>
+<h2 id=using-ranger>Using Ranger</h2>
+<p>TBD</p>
+</section>
+</main>
+<footer class="centered chrome">
+<p role=copyright>© 2017–2021 Dale H. Emery</p>
+</footer>
+</body>
+</html>

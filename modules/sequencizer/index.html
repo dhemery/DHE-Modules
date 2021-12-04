@@ -1,0 +1,412 @@
+<!doctype html><html lang=en-us>
+<head>
+<meta charset=utf-8>
+<meta viewport="width=device-width">
+<meta viewport="initial-scale=1">
+<meta viewport="user-scalable=yes">
+<title>The Sequencizer Modules</title>
+<link href=https://dhemery.github.io/DHE-Modules/favicon.ico rel=icon>
+<link rel=stylesheet href=https://dhemery.github.io/DHE-Modules/css/screen.css>
+</head>
+<body>
+<header class="banner centered title">
+<h1><a href=https://dhemery.github.io/DHE-Modules/>DHE Modules</a></h1>
+<h2>VCV Rack modules from Dale Emery</h2>
+</header>
+<main>
+<header class=boxed>
+<h1 class=title><a href=https://dhemery.github.io/DHE-Modules/modules/sequencizer/>The Sequencizer Modules</a></h1>
+</header>
+<section><img class=faceplate src=sequencizer.svg alt="The Sequencizer 4 Faceplate">
+<p>A sequencer
+that offers flexible, precise control
+over the individual steps
+and the overall sequence.</p>
+<p>DHE Modules includes three <em>Sequencizer</em> modules:</p>
+<ul>
+<li><em>Sequencizer 4</em> (shown).</li>
+<li><em>Sequencizer 8.</em></li>
+<li><em>Sequencizer 16.</em></li>
+</ul>
+<p>The three modules operate identically, except for the number of steps.</p>
+<p>See:</p>
+<ul>
+<li><a href=https://dhemery.github.io/DHE-Modules/modules/sequencizer/user-guide/>Sequencizer User Guide</a>
+for ideas about how to use the <em>Sequencizer</em> modules.</li>
+<li><a href=#factory-presets>Factory Presets</a>
+for descriptions of the presets included with the modules.</li>
+<li><a href=https://dhemery.github.io/DHE-Modules/technical/curves/>J and S Curves</a></li>
+</ul>
+<h2 id=controls>Controls</h2>
+<ul>
+<li><a href=#sequence-controls>Sequence controls</a></li>
+<li><a href=#step-controls>Step controls</a></li>
+<li><a href=#inputs>Inputs</a></li>
+<li><a href=#outputs>Outputs</a></li>
+</ul>
+<h3 id=sequence-controls>Sequence Controls</h3>
+<img class=controls style=width:20mm src=sequence-controls.png alt="Sequence Controls">
+<ul>
+<li>
+<p><strong>RUN</strong>
+specifies whether the sequencer is running.</p>
+<p>If <em>RUN</em> falls
+while a sequence is in progress,
+the sequencer pauses the sequence.
+If <em>RUN</em> rises while a sequence is paused,
+the sequencer resumes the sequence.</p>
+</li>
+<li>
+<p><strong>LOOP:</strong>
+If <em>LOOP</em> is on when a sequence ends,
+the sequencer immediately begins a new sequence.</p>
+<p>If <em>LOOP</em> is off when a sequence ends,
+the sequencer becomes idle.</p>
+</li>
+<li>
+<p><strong>START</strong> and <strong>LENGTH</strong>
+select the steps of the sequence.</p>
+<p>Bracket-shaped markers next to the <em>PROGRESS</em> lights
+indicate the currently selected steps.</p>
+</li>
+<li>
+<p><strong>GATE</strong>
+controls when a sequence starts,
+and may influence when the sequence advances.</p>
+<p>If <em>GATE</em> rises
+while the sequencer is idle,
+the sequencer starts the sequence,
+activating the first selected, enabled step.</p>
+<p>See the <a href=#step-advancement-controls>step advancement controls</a>
+for details of how an individual step
+may react to <em>GATE</em> conditions.</p>
+</li>
+<li>
+<p><strong>RESET:</strong>
+When <em>RESET</em> rises, the sequencer
+abandons any paused or in-progress sequence,
+and either starts a new sequence
+or becomes idle,
+depending on <em>RUN.</em></p>
+</li>
+</ul>
+<h3 id=step-controls>Step Controls</h3>
+<h4 id=advancement-controls>Advancement Controls</h4>
+<img class=controls style=width:25mm src=advancement-controls.png alt="Advancement Controls">
+The advancement controls
+determine when the sequencer advances
+from this step to the next:
+<ul>
+<li>
+<p><strong>TRIG</strong>
+determines when the step generates an internal trigger.
+The <em>INT</em> and <em>SUST</em> settings (below)
+determine how the step
+reacts to these internal triggers.</p>
+<ul>
+<li>
+<p><em>RISE:</em>
+Triggers when the <em>GATE</em> rises.</p>
+</li>
+<li>
+<p><em>FALL:</em>
+Triggers when the <em>GATE</em> falls.</p>
+</li>
+<li>
+<p><em>EDGE:</em>
+Triggers when the <em>GATE</em> rises or falls.</p>
+</li>
+<li>
+<p><em>HIGH:</em>
+Triggers when the <em>GATE</em> is high.</p>
+</li>
+<li>
+<p><em>LOW:</em>
+Triggers when the <em>GATE</em> is low.</p>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>INT</strong>
+determines whether
+triggers interrupt the step
+while it is generating a curve.</p>
+<ul>
+<li>
+<p><em>OFF:</em>
+The step ignores all triggers
+while it is generating a curve.</p>
+</li>
+<li>
+<p><em>ON:</em>
+Triggers interrupt the curve.
+If a trigger occurs
+while the step is generating a curve,
+the sequence advances to the next step.</p>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>SUST</strong>
+determines whether
+the step sustains
+when it completes its curve.</p>
+<ul>
+<li>
+<p><em>OFF:</em>
+The step does not sustain.
+When the step completes its curve,
+the sequence automatically advances to the next step.</p>
+</li>
+<li>
+<p><em>ON:</em>
+When the step completes its curve,
+it sustains until a trigger occurs.
+While a step sustains,
+it emits the voltage reported by its <em>END</em> anchor.</p>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id=anchor-controls>Anchor Controls</h4>
+<img class=controls style=width:25mm src=anchor-controls.png alt="Anchor Controls">
+The step generates a curve
+that interpolates between the voltages
+reported by the _START_ and _END_ anchors.
+Each anchor has three controls:
+<ul>
+<li>
+<p>The <strong>MODE</strong> button (above the knob)
+determines whether the anchor reports
+a sampled voltage or the current voltage.</p>
+<ul>
+<li>
+<p><em>SAMPL:</em>
+The anchor reports
+the voltage that it sampled from its source
+when the step started.</p>
+</li>
+<li>
+<p><em>TRACK:</em>
+The anchor reports
+the current voltage
+of its source.</p>
+</li>
+</ul>
+</li>
+<li>
+<p>The anchor <strong>LEVEL</strong> knob
+sets the voltage
+of the anchor&rsquo;s <em>level</em> source.
+The global <em>LEVEL</em> knob and range switch (below)
+affect the value of this knob.
+This knob is used
+only when <em>LEVEL</em>
+is selected as the anchor&rsquo;s <em>SOURCE.</em></p>
+</li>
+<li>
+<p>The <strong>SOURCE</strong> button (below the knob)
+specifies where the anchor gets the voltage it reports.
+The possible sources are:</p>
+<ul>
+<li>The anchor&rsquo;s <em>LEVEL</em> knob.</li>
+<li>The <em>A</em>, <em>B</em>, or <em>C</em> input port.</li>
+<li>The <em>OUT</em> port.</li>
+</ul>
+</li>
+</ul>
+<img class=controls style=width:35mm src=level-controls.png alt="Global Level Controls">
+<ul>
+<li>
+<p>The global <strong>LEVEL</strong> knob
+sets a global attenuation factor (0–1)
+applied to every anchor&rsquo;s <em>LEVEL</em> source.
+This knob is modulated
+by the <a href=https://dhemery.github.io/DHE-Modules/technical/modulation/>control voltage</a> at the <em>CV</em> port.</p>
+</li>
+<li>
+<p><strong>UNI / BI</strong>
+selects the voltage range
+for every anchor <em>LEVEL</em> source.</p>
+</li>
+</ul>
+<h4 id=curve-controls>Curve Controls</h4>
+<img class=controls style=width:25mm src=curve-controls.png alt="Curve Controls">
+<ul>
+<li>
+<p>The step <strong>DUR</strong> knob
+sets the duration of the step&rsquo;s curve.
+The global duration multiplier knob and range switch (below)
+affect the value of this knob.</p>
+</li>
+<li>
+<p><strong>SHAPE</strong>
+selects the shape of the curve
+(J or S).</p>
+</li>
+<li>
+<p><strong>CURVE</strong>
+sets the curvature of the curve.</p>
+</li>
+</ul>
+<img class=controls style=width:35mm src=duration-controls.png alt="Global Duration Controls">
+<ul>
+<li>
+<p>The global <strong>DUR</strong> knob
+sets a global multiplier (0–2)
+applied to the duration of each step.
+This knob is modulated
+by the <a href=https://dhemery.github.io/DHE-Modules/technical/modulation/>control voltage</a> at the <em>CV</em> port.</p>
+<p>Note that though the multiplier
+may be as low as 0,
+the actual duration is never reduced
+below the minimum duration
+of the selected range.</p>
+</li>
+<li>
+<p><strong>1 / 10 / 100</strong> (the duration range switch)
+selects the global duration range
+for every step duration knob.
+The switch labels indicate the maximum duration (seconds) for each range.
+For each range:</p>
+<ul>
+<li>The minimum duration is 1/1000 of the maximum: 1ms, 10ms, or 100ms.</li>
+<li>Centering the step duration knob gives a duration of 1/10 of the maximum: 100ms, 1s, or 10s.</li>
+</ul>
+</li>
+</ul>
+<h4 id=execution-controls>Execution Controls</h4>
+<img class=controls style=width:36mm src=progress-lights.png alt="Progress Lights">
+<ul>
+<li>
+<p><strong>PROGRESS</strong> lights
+indicate which step is active (if any),
+and how far the active step has progressed
+in generating its curve.
+The light progresses from red to green
+over the curve&rsquo;s duration.</p>
+<p>Note that the light indicates <em>progress,</em>
+not <em>voltage.</em></p>
+</li>
+</ul>
+<img class=controls style=width:25mm src=enablement-controls.png alt="Enablement Controls">
+<ul>
+<li><strong>ON</strong> enables or disables the step.
+If a step is disabled,
+the sequencer bypasses the step when advancing.</li>
+</ul>
+<h3 id=inputs>Inputs</h3>
+<img class=controls style=width:35mm src=inputs.png alt=Inputs>
+<ul>
+<li><strong>A</strong>, <strong>B</strong>, and <strong>C:</strong>
+Three input signals
+that each <em>START</em> and <em>END</em> anchor
+can sample or track.</li>
+</ul>
+<h3 id=outputs>Outputs</h3>
+<img class=controls style=width:35mm src=step-state-outputs.png alt="Step State Outputs">
+<ul>
+<li>
+<p><strong>STEP #</strong>
+identifies the current step,
+represented as \(\frac{10s}{N}\) volts,
+where</p>
+<ul>
+<li><em>s</em> is the number of the current step</li>
+<li><em>N</em> is the module&rsquo;s largest step number</li>
+</ul>
+<p>For example, if all steps of a <em>Sequencer 4</em>
+are selected and enabled,
+and the sequencer is looping,
+the <em>STEP #</em> port will cycle through the values</p>
+<blockquote>
+<p>2.5V → 5.0V → 7.5V → 10.0V → 2.5V → …</p>
+</blockquote>
+<p>When the sequencer is idle,
+the <em>STEP#</em> port emits 0V.</p>
+</li>
+<li>
+<p><strong>CURVE</strong>
+emits 10V if the current step is generating a curve,
+and 0V otherwise.</p>
+</li>
+<li>
+<p><strong>SUST</strong>
+emits 10V if the current step is sustaining,
+and 0V otherwise.</p>
+</li>
+<li>
+<p><strong>STEP ∆</strong>
+<img class=controls style=width:35mm src=step-event-outputs.png alt="Step Event Outputs">
+emits a 10ms pulse
+when a step completes.</p>
+</li>
+<li>
+<p><strong>SEQ ∆</strong>
+emits a 10ms pulse
+when the sequence starts or loops.</p>
+</li>
+<li>
+<p><strong>OUT</strong>
+emits the voltage generated by the current step.</p>
+</li>
+</ul>
+<h2 id=factory-presets>Factory Presets</h2>
+<p><em>Sequencizer 4</em>
+includes a suite of
+envelope generator presets:</p>
+<ul>
+<li><strong>AD:</strong>
+Attack Decay.</li>
+<li><strong>ADBDSR:</strong>
+Attack Decay Break Decay Sustain Release.
+After the attack,
+the sequence decays to a &ldquo;break&rdquo; voltage,
+then decays to the sustain voltage.</li>
+<li><strong>ADHR:</strong>
+Attack Decay Hold Release.</li>
+<li><strong>ADSHR:</strong>
+Attack Decay Sustain Hold Release.</li>
+<li><strong>ADSR:</strong>
+Attack Decay Sustain Release.</li>
+<li><strong>AHDSR:</strong>
+Attack Hold Decay Sustain Release.</li>
+<li><strong>AHR:</strong>
+Attack Hold Release.</li>
+<li><strong>ASR:</strong>
+Attack Sustain Release.</li>
+<li><strong>DAR:</strong>
+Delay Attack Release.</li>
+<li><strong>DADSR:</strong>
+Delay Attack Decay Sustain Release.</li>
+<li><strong>DAHR:</strong>
+Delay Attack Hold Release.</li>
+<li><strong>DASR:</strong>
+Delay Attack Sustain Release.</li>
+</ul>
+<p>Each <em>Sequencizer</em> module
+includes these factory presets,
+which are primarily useful
+as starting points
+for your own variations:</p>
+<ul>
+<li><strong>Sample and Hold 100ms:</strong>
+A timed sample-and-hold sequence.
+Each step holds for 100ms.</li>
+<li><strong>Sample and Hold Gated:</strong>
+A gate-controlled sample-and-hold sequence.
+Each step holds until the gate rises.</li>
+<li><strong>Steps 100ms:</strong>
+A step sequencer with durations controlled by internal timers.
+Each step holds for 100ms.</li>
+<li><strong>Steps Gated:</strong>
+A traditional, gate-controlled step sequencer.
+Each step holds until the gate rises.</li>
+</ul>
+</section>
+</main>
+<footer class="centered chrome">
+<p role=copyright>© 2017–2021 Dale H. Emery</p>
+</footer>
+</body>
+</html>
