@@ -37,8 +37,7 @@ modules.each do |mod|
   file module_source_file
 
   module_svg_path = mod.slug.sub_ext('.svg')
-
-
+  
   faceplate_build_file = faceplates_build_dir / module_svg_path
   faceplate_build_dir = faceplate_build_file.dirname
   directory faceplate_build_dir

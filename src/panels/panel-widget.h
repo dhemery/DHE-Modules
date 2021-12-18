@@ -18,7 +18,7 @@ static inline auto constexpr mm2hp(float mm) -> float { return mm / mm_per_hp; }
 template <typename P> struct PanelWidget : public rack::app::ModuleWidget {
   PanelWidget(rack::engine::Module *module) {
     setModule(module);
-    setPanel(load_svg(P::svg_dir, P::panel_file));
+    setPanel(load_svg(P::panel_file));
     install_screws();
   }
 

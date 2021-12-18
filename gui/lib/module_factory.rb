@@ -21,7 +21,7 @@ class ModuleFactory
   def initialize(source_file)
     @source_file = Pathname(source_file)
     @dir = @source_file.dirname.basename
-    @slug = @dir / source_file.pathmap('%n')
+    @slug = @source_file.basename(".*")
     @faceplate_shapes = []
     @overlay_shapes = []
     @controls = []

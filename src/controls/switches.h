@@ -33,8 +33,8 @@ struct Switch {
 struct ThumbSwitch {
   template <typename Panel, int Size> struct Widget : Switch::Widget {
     Widget() {
-      auto const prefix =
-          std::string{Panel::svg_dir} + "/toggle-" + std::to_string(Size) + '-';
+      auto const prefix = std::string{Panel::svg_dir} + "/thumb-switch-" +
+                          std::to_string(Size) + '-';
       for (auto position = 1; position <= Size; position++) {
         addFrame(load_svg(prefix + std::to_string(position)));
       }

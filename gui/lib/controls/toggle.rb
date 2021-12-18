@@ -34,7 +34,7 @@ class Toggle
 
     def initialize(foreground:, background:, size:, position:)
       super(top: -(size * WIDTH) / 2.0, right: WIDTH / 2.0, bottom: (size * WIDTH) / 2.0, left: -WIDTH / 2.0)
-      @slug = Pathname("toggle-#{size}-#{position}")
+      @slug = Pathname("thumb-switch-#{size}-#{position}")
 
       housing_width = width - HOUSING_THICKNESS
       housing_height = height - HOUSING_THICKNESS

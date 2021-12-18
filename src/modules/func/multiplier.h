@@ -1,6 +1,7 @@
 #pragma once
 
 #include "signals/linear-signals.h"
+#include "signals/voltage-signals.h"
 
 #include <array>
 
@@ -10,11 +11,17 @@ namespace func {
 enum class MultiplierRangeId { Attenuator, Attenuverter, Gain, Gainuverter };
 
 namespace multipliers {
-static auto constexpr ranges = std::array<Range, 4>{
-    Attenuator::range, Attenuverter::range, Gain::range, {-2.F, 2.F}};
+static auto constexpr ranges = std::array<Range, 8>{Attenuator::range,
+                                                    Attenuverter::range,
+                                                    Gain::range,
+                                                    {-2.F, 2.F},
+                                                    Range{0.F, 5.F},
+                                                    BipolarVoltage::range,
+                                                    UnipolarVoltage::range,
+                                                    Range{-10.F, 10.F}};
 
-static auto constexpr labels =
-    std::array<char const *, ranges.size()>{"0–1", "±1", "0–2", "±2"};
+static auto constexpr labels = std::array<char const *, ranges.size()>{
+    "0–1", "±1", "0–2", "±2", "0–5", "±5", "0–10", "±10"};
 
 } // namespace multipliers
 

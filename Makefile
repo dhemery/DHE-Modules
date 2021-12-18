@@ -77,7 +77,6 @@ STAGING_PLUGIN_DIR = $(STAGING_USER_DIR)/plugins
 STAGING_PLUGIN_ZIP = $(STAGING_PLUGIN_DIR)/$(PLUGIN_ZIP_NAME)
 
 RACK_EXECUTABLE_PATH = $(RACK_APP)/Contents/MacOS/Rack
-RACK_SYSTEM_DIR = $(RACK_APP)/Contents/Resources
 
 $(STAGING_DIR) $(STAGING_PLUGIN_DIR):
 	mkdir -p $@
@@ -138,14 +137,3 @@ build/%.json: %
 .PHONY: tidy
 tidy: $(COMPILATION_DB)
 	clang-tidy -p=build $(SOURCES) $(TEST_SOURCES)
-
-
-IWYU := include-what-you-use
-IWYU += -Xiwyu --quoted_includes_first
-IWYU += -Xiwyu --mapping_file=.iwyu.libcxx.yaml
-IWYU += -Xiwyu --transitive_includes_only
-
-iwyu:
-	$(MAKE) -Bi CXX='$(IWYU)' $(OBJECTS) $(TEST_OBJECTS)
-
-check: tidy iwyu

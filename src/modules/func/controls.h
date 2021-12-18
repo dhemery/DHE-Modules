@@ -131,7 +131,7 @@ struct OffsetRangeStepper {
 };
 
 struct MultiplierRangeStepper {
-  static auto constexpr size = offsets::labels.size();
+  static auto constexpr size = multipliers::labels.size();
   static auto constexpr slug = "multiplier-range";
 
   template <typename Panel>
