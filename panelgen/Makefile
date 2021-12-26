@@ -1,0 +1,42 @@
+BUILD_DIR := _build
+FRAME_BUILD_DIR := $(BUILD_DIR)/frames
+IMAGE_BUILD_DIR := $(BUILD_DIR)/images
+
+BUILD_FILES := $(sort $(shell go run . -g -l))
+FRAME_BUILD_FILES := $(filter $(FRAME_BUILD_DIR)/%, $(BUILD_FILES))
+IMAGE_BUILD_FILES := $(filter $(IMAGE_BUILD_DIR)/%, $(BUILD_FILES))
+
+INSTALL_DIR := ..
+ASSET_INSTALL_DIR := $(INSTALL_DIR)/svg
+IMAGE_INSTALL_DIR := $(INSTALL_DIR)/images
+
+FACEPLATE_INSTALL_FILES := $(subst $(IMAGE_BUILD_DIR), $(ASSET_INSTALL_DIR), $(IMAGE_BUILD_FILES))
+FRAME_INSTALL_FILES := $(subst $(FRAME_BUILD_DIR), $(ASSET_INSTALL_DIR), $(FRAME_BUILD_FILES))
+IMAGE_INSTALL_FILES := $(subst $(IMAGE_BUILD_DIR), $(IMAGE_INSTALL_DIR), $(IMAGE_BUILD_FILES))
+
+build:
+	go run . -g
+
+.PHONY: build
+
+$(BUILD_FILES) &: build
+
+install: $(FACEPLATE_INSTALL_FILES) $(FRAME_INSTALL_FILES) $(IMAGE_INSTALL_FILES)
+.PHONY: install
+
+$(FACEPLATE_INSTALL_FILES): $(ASSET_INSTALL_DIR)/%: $(IMAGE_BUILD_DIR)/%
+$(FACEPLATE_INSTALL_FILES): INKSCAPE_FLAGS := --export-id=faceplate --export-id-only
+$(FRAME_INSTALL_FILES): $(ASSET_INSTALL_DIR)/%: $(FRAME_BUILD_DIR)/%
+$(IMAGE_INSTALL_FILES): $(IMAGE_INSTALL_DIR)/%: $(IMAGE_BUILD_DIR)/%
+
+$(INSTALL_DIR)/%:
+	@mkdir -p $(dir $@)
+	./scripts/install-svg.sh $< $@ $(INKSCAPE_FLAGS)
+
+clean:
+	rm -rf $(BUILD_DIR)
+
+clobber: clean
+	rm -rf $(INSTALL_DIR)
+
+.PHONY: clean clobber
